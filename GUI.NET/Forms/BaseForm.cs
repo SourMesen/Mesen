@@ -93,6 +93,31 @@ namespace Mesen.GUI.Forms
 
 		private void InitializeTabIndexes(Control container, ref int tabIndex)
 		{
+			if(Program.IsMono) {
+				if(container is TextBox) {
+					((TextBox)container).BorderStyle = BorderStyle.FixedSingle;
+				} else if(container is CheckBox) {
+					((CheckBox)container).FlatStyle = FlatStyle.Flat;
+				} else if(container is Button) {
+					((Button)container).FlatStyle = FlatStyle.Flat;
+					((Button)container).BackColor = ((Button)container).Enabled ? Color.FromArgb(230, 230, 230) : Color.FromArgb(180, 180, 180);
+					((Button)container).EnabledChanged += (object sender, EventArgs e) => {
+						((Button)sender).BackColor = ((Button)sender).Enabled ? Color.FromArgb(230, 230, 230) : Color.FromArgb(180, 180, 180);
+					};
+				} else if(container is ComboBox) {
+					((ComboBox)container).FlatStyle = FlatStyle.Flat;
+					((ComboBox)container).BackColor = ((ComboBox)container).Enabled ? Color.FromArgb(230, 230, 230) : Color.FromArgb(180, 180, 180);
+					((ComboBox)container).EnabledChanged += (object sender, EventArgs e) => {
+						((ComboBox)sender).BackColor = ((ComboBox)sender).Enabled ? Color.FromArgb(230, 230, 230) : Color.FromArgb(180, 180, 180);
+					};
+				} else if(container is TabPage) {
+					((TabPage)container).BackColor = Color.White;
+				} else if(container is MenuStrip) {
+					((MenuStrip)container).RenderMode = ToolStripRenderMode.System;
+				} else if(container is ToolStrip) {
+					((ToolStrip)container).RenderMode = ToolStripRenderMode.System;
+				}
+			}			
 			container.TabIndex = tabIndex;
 			tabIndex++;
 

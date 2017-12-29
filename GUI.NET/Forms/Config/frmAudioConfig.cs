@@ -21,8 +21,6 @@ namespace Mesen.GUI.Forms.Config
 			if(!Program.IsMono) {
 				this.trkReverbDelay.BackColor = System.Drawing.SystemColors.ControlLightLight;
 				this.trkReverbStrength.BackColor = System.Drawing.SystemColors.ControlLightLight;
-			} else {
-				this.chkEnableEqualizer.BackColor = System.Drawing.SystemColors.Control;				
 			}
 
 			Icon = Properties.Resources.Audio;

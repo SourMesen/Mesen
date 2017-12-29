@@ -305,7 +305,6 @@ namespace Mesen.GUI.Forms.Config
 			// 
 			this.lblMiscSettings.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.lblMiscSettings.AutoSize = true;
-			this.lblMiscSettings.Enabled = false;
 			this.lblMiscSettings.ForeColor = System.Drawing.SystemColors.GrayText;
 			this.lblMiscSettings.Location = new System.Drawing.Point(0, 191);
 			this.lblMiscSettings.Margin = new System.Windows.Forms.Padding(0, 0, 3, 0);
