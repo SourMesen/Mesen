@@ -31,30 +31,33 @@
 			this.picChrDrawnByte = new System.Windows.Forms.PictureBox();
 			this.lblChrDrawnByte = new System.Windows.Forms.Label();
 			this.lblCodeByte = new System.Windows.Forms.Label();
-			this.lblRead = new System.Windows.Forms.Label();
-			this.picRead = new System.Windows.Forms.PictureBox();
 			this.lblWrite = new System.Windows.Forms.Label();
-			this.lblExecute = new System.Windows.Forms.Label();
 			this.picCodeByte = new System.Windows.Forms.PictureBox();
 			this.picWrite = new System.Windows.Forms.PictureBox();
-			this.picExecute = new System.Windows.Forms.PictureBox();
 			this.picDataByte = new System.Windows.Forms.PictureBox();
 			this.picChrReadByte = new System.Windows.Forms.PictureBox();
 			this.lblChrReadByte = new System.Windows.Forms.Label();
 			this.lblDataByte = new System.Windows.Forms.Label();
-			this.btnReset = new System.Windows.Forms.Button();
 			this.label1 = new System.Windows.Forms.Label();
 			this.picLabelledByte = new System.Windows.Forms.PictureBox();
+			this.lblRead = new System.Windows.Forms.Label();
+			this.lblExecute = new System.Windows.Forms.Label();
+			this.picRead = new System.Windows.Forms.PictureBox();
+			this.picExecute = new System.Windows.Forms.PictureBox();
+			this.btnReset = new System.Windows.Forms.Button();
+			this.lblDmcDataByte = new System.Windows.Forms.Label();
+			this.picDmcDataByte = new System.Windows.Forms.PictureBox();
 			this.baseConfigPanel.SuspendLayout();
 			this.tableLayoutPanel1.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.picChrDrawnByte)).BeginInit();
-			((System.ComponentModel.ISupportInitialize)(this.picRead)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.picCodeByte)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.picWrite)).BeginInit();
-			((System.ComponentModel.ISupportInitialize)(this.picExecute)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.picDataByte)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.picChrReadByte)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.picLabelledByte)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.picRead)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.picExecute)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.picDmcDataByte)).BeginInit();
 			this.SuspendLayout();
 			// 
 			// baseConfigPanel
@@ -91,6 +94,8 @@
 			this.tableLayoutPanel1.Controls.Add(this.lblExecute, 0, 0);
 			this.tableLayoutPanel1.Controls.Add(this.picRead, 7, 0);
 			this.tableLayoutPanel1.Controls.Add(this.picExecute, 1, 0);
+			this.tableLayoutPanel1.Controls.Add(this.lblDmcDataByte, 6, 2);
+			this.tableLayoutPanel1.Controls.Add(this.picDmcDataByte, 7, 2);
 			this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
 			this.tableLayoutPanel1.Name = "tableLayoutPanel1";
@@ -136,27 +141,6 @@
 			this.lblCodeByte.TabIndex = 2;
 			this.lblCodeByte.Text = "Code Byte:";
 			// 
-			// lblRead
-			// 
-			this.lblRead.Anchor = System.Windows.Forms.AnchorStyles.Left;
-			this.lblRead.AutoSize = true;
-			this.lblRead.Location = new System.Drawing.Point(317, 12);
-			this.lblRead.Name = "lblRead";
-			this.lblRead.Size = new System.Drawing.Size(36, 13);
-			this.lblRead.TabIndex = 0;
-			this.lblRead.Text = "Read:";
-			// 
-			// picRead
-			// 
-			this.picRead.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.picRead.Cursor = System.Windows.Forms.Cursors.Hand;
-			this.picRead.Location = new System.Drawing.Point(416, 3);
-			this.picRead.Name = "picRead";
-			this.picRead.Size = new System.Drawing.Size(32, 32);
-			this.picRead.TabIndex = 5;
-			this.picRead.TabStop = false;
-			this.picRead.Click += new System.EventHandler(this.picColorPicker_Click);
-			// 
 			// lblWrite
 			// 
 			this.lblWrite.Anchor = System.Windows.Forms.AnchorStyles.Left;
@@ -166,16 +150,6 @@
 			this.lblWrite.Size = new System.Drawing.Size(35, 13);
 			this.lblWrite.TabIndex = 10;
 			this.lblWrite.Text = "Write:";
-			// 
-			// lblExecute
-			// 
-			this.lblExecute.Anchor = System.Windows.Forms.AnchorStyles.Left;
-			this.lblExecute.AutoSize = true;
-			this.lblExecute.Location = new System.Drawing.Point(3, 12);
-			this.lblExecute.Name = "lblExecute";
-			this.lblExecute.Size = new System.Drawing.Size(49, 13);
-			this.lblExecute.TabIndex = 11;
-			this.lblExecute.Text = "Execute:";
 			// 
 			// picCodeByte
 			// 
@@ -198,17 +172,6 @@
 			this.picWrite.TabIndex = 8;
 			this.picWrite.TabStop = false;
 			this.picWrite.Click += new System.EventHandler(this.picColorPicker_Click);
-			// 
-			// picExecute
-			// 
-			this.picExecute.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.picExecute.Cursor = System.Windows.Forms.Cursors.Hand;
-			this.picExecute.Location = new System.Drawing.Point(102, 3);
-			this.picExecute.Name = "picExecute";
-			this.picExecute.Size = new System.Drawing.Size(32, 32);
-			this.picExecute.TabIndex = 9;
-			this.picExecute.TabStop = false;
-			this.picExecute.Click += new System.EventHandler(this.picColorPicker_Click);
 			// 
 			// picDataByte
 			// 
@@ -252,16 +215,6 @@
 			this.lblDataByte.TabIndex = 1;
 			this.lblDataByte.Text = "Data Byte:";
 			// 
-			// btnReset
-			// 
-			this.btnReset.Location = new System.Drawing.Point(3, 3);
-			this.btnReset.Name = "btnReset";
-			this.btnReset.Size = new System.Drawing.Size(102, 23);
-			this.btnReset.TabIndex = 3;
-			this.btnReset.Text = "Use default colors";
-			this.btnReset.UseVisualStyleBackColor = true;
-			this.btnReset.Click += new System.EventHandler(this.btnReset_Click);
-			// 
 			// label1
 			// 
 			this.label1.Anchor = System.Windows.Forms.AnchorStyles.Left;
@@ -272,16 +225,89 @@
 			this.label1.TabIndex = 14;
 			this.label1.Text = "Labelled Byte:";
 			// 
-			// picLabelByte
+			// picLabelledByte
 			// 
 			this.picLabelledByte.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.picLabelledByte.Cursor = System.Windows.Forms.Cursors.Hand;
 			this.picLabelledByte.Location = new System.Drawing.Point(102, 41);
-			this.picLabelledByte.Name = "picLabelByte";
+			this.picLabelledByte.Name = "picLabelledByte";
 			this.picLabelledByte.Size = new System.Drawing.Size(32, 32);
 			this.picLabelledByte.TabIndex = 15;
 			this.picLabelledByte.TabStop = false;
 			this.picLabelledByte.Click += new System.EventHandler(this.picColorPicker_Click);
+			// 
+			// lblRead
+			// 
+			this.lblRead.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.lblRead.AutoSize = true;
+			this.lblRead.Location = new System.Drawing.Point(317, 12);
+			this.lblRead.Name = "lblRead";
+			this.lblRead.Size = new System.Drawing.Size(36, 13);
+			this.lblRead.TabIndex = 0;
+			this.lblRead.Text = "Read:";
+			// 
+			// lblExecute
+			// 
+			this.lblExecute.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.lblExecute.AutoSize = true;
+			this.lblExecute.Location = new System.Drawing.Point(3, 12);
+			this.lblExecute.Name = "lblExecute";
+			this.lblExecute.Size = new System.Drawing.Size(49, 13);
+			this.lblExecute.TabIndex = 11;
+			this.lblExecute.Text = "Execute:";
+			// 
+			// picRead
+			// 
+			this.picRead.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this.picRead.Cursor = System.Windows.Forms.Cursors.Hand;
+			this.picRead.Location = new System.Drawing.Point(416, 3);
+			this.picRead.Name = "picRead";
+			this.picRead.Size = new System.Drawing.Size(32, 32);
+			this.picRead.TabIndex = 5;
+			this.picRead.TabStop = false;
+			this.picRead.Click += new System.EventHandler(this.picColorPicker_Click);
+			// 
+			// picExecute
+			// 
+			this.picExecute.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this.picExecute.Cursor = System.Windows.Forms.Cursors.Hand;
+			this.picExecute.Location = new System.Drawing.Point(102, 3);
+			this.picExecute.Name = "picExecute";
+			this.picExecute.Size = new System.Drawing.Size(32, 32);
+			this.picExecute.TabIndex = 9;
+			this.picExecute.TabStop = false;
+			this.picExecute.Click += new System.EventHandler(this.picColorPicker_Click);
+			// 
+			// btnReset
+			// 
+			this.btnReset.Location = new System.Drawing.Point(3, 3);
+			this.btnReset.Name = "btnReset";
+			this.btnReset.Size = new System.Drawing.Size(102, 23);
+			this.btnReset.TabIndex = 3;
+			this.btnReset.Text = "Use default colors";
+			this.btnReset.UseVisualStyleBackColor = true;
+			this.btnReset.Click += new System.EventHandler(this.btnReset_Click);
+			// 
+			// lblDmcDataByte
+			// 
+			this.lblDmcDataByte.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.lblDmcDataByte.AutoSize = true;
+			this.lblDmcDataByte.Location = new System.Drawing.Point(317, 88);
+			this.lblDmcDataByte.Name = "lblDmcDataByte";
+			this.lblDmcDataByte.Size = new System.Drawing.Size(93, 13);
+			this.lblDmcDataByte.TabIndex = 16;
+			this.lblDmcDataByte.Text = "DMC sample byte:";
+			// 
+			// picDmcDataByte
+			// 
+			this.picDmcDataByte.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this.picDmcDataByte.Cursor = System.Windows.Forms.Cursors.Hand;
+			this.picDmcDataByte.Location = new System.Drawing.Point(416, 79);
+			this.picDmcDataByte.Name = "picDmcDataByte";
+			this.picDmcDataByte.Size = new System.Drawing.Size(32, 32);
+			this.picDmcDataByte.TabIndex = 17;
+			this.picDmcDataByte.TabStop = false;
+			this.picDmcDataByte.Click += new System.EventHandler(this.picColorPicker_Click);
 			// 
 			// frmMemoryViewerColors
 			// 
@@ -298,13 +324,14 @@
 			this.tableLayoutPanel1.ResumeLayout(false);
 			this.tableLayoutPanel1.PerformLayout();
 			((System.ComponentModel.ISupportInitialize)(this.picChrDrawnByte)).EndInit();
-			((System.ComponentModel.ISupportInitialize)(this.picRead)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.picCodeByte)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.picWrite)).EndInit();
-			((System.ComponentModel.ISupportInitialize)(this.picExecute)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.picDataByte)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.picChrReadByte)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.picLabelledByte)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.picRead)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.picExecute)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.picDmcDataByte)).EndInit();
 			this.ResumeLayout(false);
 
 		}
@@ -329,5 +356,7 @@
 		private System.Windows.Forms.Button btnReset;
 		private System.Windows.Forms.Label label1;
 		private System.Windows.Forms.PictureBox picLabelledByte;
+		private System.Windows.Forms.Label lblDmcDataByte;
+		private System.Windows.Forms.PictureBox picDmcDataByte;
 	}
 }

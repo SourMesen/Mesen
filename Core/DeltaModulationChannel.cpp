@@ -60,7 +60,7 @@ void DeltaModulationChannel::StartDmcTransfer()
 void DeltaModulationChannel::FillReadBuffer()
 {
 	if(_bytesRemaining > 0) {
-		_readBuffer = _memoryManager->Read(_currentAddr);
+		_readBuffer = _memoryManager->Read(_currentAddr, MemoryOperationType::DmcRead);
 		_bufferEmpty = false;
 
 		_currentAddr++;

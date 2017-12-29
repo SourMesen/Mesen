@@ -51,6 +51,7 @@ namespace Mesen.GUI.Debugger
 			this.mnuHighlightChrReadBytes.Checked = ConfigManager.Config.DebugInfo.RamHighlightChrReadBytes;
 			this.mnuHighlightCodeBytes.Checked = ConfigManager.Config.DebugInfo.RamHighlightCodeBytes;
 			this.mnuHighlightDataBytes.Checked = ConfigManager.Config.DebugInfo.RamHighlightDataBytes;
+			this.mnuHighlightDmcDataBytes.Checked = ConfigManager.Config.DebugInfo.RamHighlightDmcDataBytes;
 
 			this.UpdateFadeOptions();
 
@@ -133,6 +134,7 @@ namespace Mesen.GUI.Debugger
 						mnuHideReadBytes.Checked,
 						mnuHideWrittenBytes.Checked,
 						mnuHideExecutedBytes.Checked,
+						mnuHighlightDmcDataBytes.Checked,
 						mnuHighlightDataBytes.Checked,
 						mnuHighlightCodeBytes.Checked,
 						mnuHighlightLabelledBytes.Checked
@@ -239,6 +241,7 @@ namespace Mesen.GUI.Debugger
 			ConfigManager.Config.DebugInfo.RamHighlightChrReadBytes = this.mnuHighlightChrReadBytes.Checked;
 			ConfigManager.Config.DebugInfo.RamHighlightCodeBytes = this.mnuHighlightCodeBytes.Checked;
 			ConfigManager.Config.DebugInfo.RamHighlightDataBytes = this.mnuHighlightDataBytes.Checked;
+			ConfigManager.Config.DebugInfo.RamHighlightDmcDataBytes = this.mnuHighlightDmcDataBytes.Checked;
 
 			ConfigManager.ApplyChanges();
 		}

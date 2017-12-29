@@ -25,11 +25,12 @@ namespace Mesen.GUI.Debugger
 		bool _hideReadBytes;
 		bool _hideWrittenBytes;
 		bool _hideExecutedBytes;
+		bool _highlightDmcDataBytes;
 		bool _highlightDataBytes;
 		bool _highlightCodeBytes;
 		bool _highlightLabelledBytes;
 
-		public ByteColorProvider(DebugMemoryType memoryType, bool showExec, bool showWrite, bool showRead, int framesToFade, bool hideUnusedBytes, bool hideReadBytes, bool hideWrittenBytes, bool hideExecutedBytes, bool highlightDataBytes, bool highlightCodeBytes, bool highlightLabelledBytes)
+		public ByteColorProvider(DebugMemoryType memoryType, bool showExec, bool showWrite, bool showRead, int framesToFade, bool hideUnusedBytes, bool hideReadBytes, bool hideWrittenBytes, bool hideExecutedBytes, bool highlightDmcDataBytes, bool highlightDataBytes, bool highlightCodeBytes, bool highlightLabelledBytes)
 		{
 			_memoryType = memoryType;
 			_showExec = showExec;
@@ -40,6 +41,7 @@ namespace Mesen.GUI.Debugger
 			_hideReadBytes = hideReadBytes;
 			_hideWrittenBytes = hideWrittenBytes;
 			_hideExecutedBytes = hideExecutedBytes;
+			_highlightDmcDataBytes = highlightDmcDataBytes;
 			_highlightDataBytes = highlightDataBytes;
 			_highlightCodeBytes = highlightCodeBytes;
 			_highlightLabelledBytes = highlightLabelledBytes;
@@ -59,7 +61,7 @@ namespace Mesen.GUI.Debugger
 			_execCounts = InteropEmu.DebugGetMemoryAccessCountsEx((UInt32)firstByteIndex, (UInt32)(lastByteIndex - firstByteIndex + 1), _memoryType, MemoryOperationType.Exec);
 
 			_cdlData = null;
-			if(_highlightDataBytes || _highlightCodeBytes || _highlightLabelledBytes) {
+			if(_highlightDmcDataBytes || _highlightDataBytes || _highlightCodeBytes || _highlightLabelledBytes) {
 				switch(_memoryType) {
 					case DebugMemoryType.ChrRom:
 					case DebugMemoryType.PpuMemory:
@@ -115,6 +117,9 @@ namespace Mesen.GUI.Debugger
 				} else if((_cdlData[index] & 0x01) != 0 && _highlightCodeBytes) {
 					//Code
 					bgColor = ConfigManager.Config.DebugInfo.RamCodeByteColor;
+				} else if((_cdlData[index] & 0x40) != 0 && _highlightDmcDataBytes) {
+					//DMC channel Data
+					bgColor = ConfigManager.Config.DebugInfo.RamDmcDataByteColor;
 				} else if((_cdlData[index] & 0x02) != 0 && _highlightDataBytes) {
 					//Data
 					bgColor = ConfigManager.Config.DebugInfo.RamDataByteColor;

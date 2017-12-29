@@ -417,6 +417,13 @@ bool Debugger::PrivateProcessRamOperation(MemoryOperationType type, uint16_t &ad
 {
 	OperationInfo operationInfo { addr, (int16_t)value, type };
 
+	bool isDmcRead = false;
+	if(type == MemoryOperationType::DmcRead) {
+		//Used to flag the data in the CDL file
+		isDmcRead = true;
+		type = MemoryOperationType::Read;
+	}
+
 	ProcessCpuOperation(addr, value, type);
 
 	if(type == MemoryOperationType::ExecOpCode) {
@@ -471,6 +478,9 @@ bool Debugger::PrivateProcessRamOperation(MemoryOperationType type, uint16_t &ad
 			_codeDataLogger->SetFlag(absoluteAddr, CdlPrgFlags::Code);
 		} else if(type == MemoryOperationType::Read) {
 			_codeDataLogger->SetFlag(absoluteAddr, CdlPrgFlags::Data);
+			if(isDmcRead) {
+				_codeDataLogger->SetFlag(absoluteAddr, CdlPrgFlags::PcmData);
+			}
 		}
 	} else if(addr < 0x2000 || absoluteRamAddr >= 0) {
 		if(type == MemoryOperationType::Write) {

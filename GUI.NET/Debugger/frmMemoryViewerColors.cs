@@ -24,6 +24,7 @@ namespace Mesen.GUI.Debugger
 			picLabelledByte.BackColor = ConfigManager.Config.DebugInfo.RamLabelledByteColor;
 			picCodeByte.BackColor = ConfigManager.Config.DebugInfo.RamCodeByteColor;
 			picDataByte.BackColor = ConfigManager.Config.DebugInfo.RamDataByteColor;
+			picDmcDataByte.BackColor = ConfigManager.Config.DebugInfo.RamDmcDataByteColor;
 			picChrDrawnByte.BackColor = ConfigManager.Config.DebugInfo.RamChrDrawnByteColor;
 			picChrReadByte.BackColor = ConfigManager.Config.DebugInfo.RamChrReadByteColor;
 		}
@@ -51,6 +52,7 @@ namespace Mesen.GUI.Debugger
 				ConfigManager.Config.DebugInfo.RamLabelledByteColor = picLabelledByte.BackColor;
 				ConfigManager.Config.DebugInfo.RamCodeByteColor = picCodeByte.BackColor;
 				ConfigManager.Config.DebugInfo.RamDataByteColor = picDataByte.BackColor;
+				ConfigManager.Config.DebugInfo.RamDmcDataByteColor = picDmcDataByte.BackColor;
 				ConfigManager.Config.DebugInfo.RamChrDrawnByteColor = picChrDrawnByte.BackColor;
 				ConfigManager.Config.DebugInfo.RamChrReadByteColor = picChrReadByte.BackColor;
 				ConfigManager.ApplyChanges();
@@ -65,6 +67,7 @@ namespace Mesen.GUI.Debugger
 			picLabelledByte.BackColor = Color.LightPink;
 			picCodeByte.BackColor = Color.DarkSeaGreen;
 			picDataByte.BackColor = Color.LightSteelBlue;
+			picDmcDataByte.BackColor = Color.Gold;
 			picChrDrawnByte.BackColor = Color.DarkSeaGreen;
 			picChrReadByte.BackColor = Color.LightSteelBlue;
 		}
