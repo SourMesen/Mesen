@@ -43,11 +43,11 @@
 			this.radAnyAddress = new System.Windows.Forms.RadioButton();
 			this.lblAddressSign = new System.Windows.Forms.Label();
 			this.radRange = new System.Windows.Forms.RadioButton();
-			this.flowLayoutPanel4 = new System.Windows.Forms.FlowLayoutPanel();
-			this.lblFrom = new System.Windows.Forms.Label();
-			this.txtFrom = new System.Windows.Forms.TextBox();
-			this.lblTo = new System.Windows.Forms.Label();
+			this.tableLayoutPanel5 = new System.Windows.Forms.TableLayoutPanel();
 			this.txtTo = new System.Windows.Forms.TextBox();
+			this.lblTo = new System.Windows.Forms.Label();
+			this.txtFrom = new System.Windows.Forms.TextBox();
+			this.lblFrom = new System.Windows.Forms.Label();
 			this.tableLayoutPanel4 = new System.Windows.Forms.TableLayoutPanel();
 			this.flowLayoutPanel3 = new System.Windows.Forms.FlowLayoutPanel();
 			this.chkReadVram = new System.Windows.Forms.CheckBox();
@@ -63,7 +63,7 @@
 			((System.ComponentModel.ISupportInitialize)(this.picHelp)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.picExpressionWarning)).BeginInit();
 			this.tableLayoutPanel3.SuspendLayout();
-			this.flowLayoutPanel4.SuspendLayout();
+			this.tableLayoutPanel5.SuspendLayout();
 			this.tableLayoutPanel4.SuspendLayout();
 			this.flowLayoutPanel3.SuspendLayout();
 			this.flowLayoutPanel2.SuspendLayout();
@@ -202,7 +202,7 @@
 			this.tableLayoutPanel3.Controls.Add(this.radAnyAddress, 0, 2);
 			this.tableLayoutPanel3.Controls.Add(this.lblAddressSign, 1, 0);
 			this.tableLayoutPanel3.Controls.Add(this.radRange, 0, 1);
-			this.tableLayoutPanel3.Controls.Add(this.flowLayoutPanel4, 1, 1);
+			this.tableLayoutPanel3.Controls.Add(this.tableLayoutPanel5, 1, 1);
 			this.tableLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tableLayoutPanel3.Location = new System.Drawing.Point(60, 46);
 			this.tableLayoutPanel3.Margin = new System.Windows.Forms.Padding(0);
@@ -217,6 +217,7 @@
 			// 
 			// txtAddress
 			// 
+			this.txtAddress.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.txtAddress.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.txtAddress.Location = new System.Drawing.Point(85, 3);
 			this.txtAddress.Margin = new System.Windows.Forms.Padding(0, 3, 3, 3);
@@ -254,7 +255,7 @@
 			// 
 			this.radAnyAddress.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.radAnyAddress.AutoSize = true;
-			this.radAnyAddress.Location = new System.Drawing.Point(3, 53);
+			this.radAnyAddress.Location = new System.Drawing.Point(3, 52);
 			this.radAnyAddress.Name = "radAnyAddress";
 			this.radAnyAddress.Size = new System.Drawing.Size(43, 17);
 			this.radAnyAddress.TabIndex = 8;
@@ -285,33 +286,53 @@
 			this.radRange.Text = "Range:";
 			this.radRange.UseVisualStyleBackColor = true;
 			// 
-			// flowLayoutPanel4
+			// tableLayoutPanel5
 			// 
-			this.tableLayoutPanel3.SetColumnSpan(this.flowLayoutPanel4, 2);
-			this.flowLayoutPanel4.Controls.Add(this.lblFrom);
-			this.flowLayoutPanel4.Controls.Add(this.txtFrom);
-			this.flowLayoutPanel4.Controls.Add(this.lblTo);
-			this.flowLayoutPanel4.Controls.Add(this.txtTo);
-			this.flowLayoutPanel4.Location = new System.Drawing.Point(72, 26);
-			this.flowLayoutPanel4.Margin = new System.Windows.Forms.Padding(0);
-			this.flowLayoutPanel4.Name = "flowLayoutPanel4";
-			this.flowLayoutPanel4.Size = new System.Drawing.Size(205, 24);
-			this.flowLayoutPanel4.TabIndex = 11;
+			this.tableLayoutPanel5.ColumnCount = 4;
+			this.tableLayoutPanel3.SetColumnSpan(this.tableLayoutPanel5, 2);
+			this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+			this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+			this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+			this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+			this.tableLayoutPanel5.Controls.Add(this.txtTo, 3, 0);
+			this.tableLayoutPanel5.Controls.Add(this.lblTo, 2, 0);
+			this.tableLayoutPanel5.Controls.Add(this.txtFrom, 1, 0);
+			this.tableLayoutPanel5.Controls.Add(this.lblFrom, 0, 0);
+			this.tableLayoutPanel5.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.tableLayoutPanel5.Location = new System.Drawing.Point(72, 26);
+			this.tableLayoutPanel5.Margin = new System.Windows.Forms.Padding(0);
+			this.tableLayoutPanel5.Name = "tableLayoutPanel5";
+			this.tableLayoutPanel5.RowCount = 1;
+			this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+			this.tableLayoutPanel5.Size = new System.Drawing.Size(205, 23);
+			this.tableLayoutPanel5.TabIndex = 12;
 			// 
-			// lblFrom
+			// txtTo
 			// 
-			this.lblFrom.Anchor = System.Windows.Forms.AnchorStyles.Left;
-			this.lblFrom.AutoSize = true;
-			this.lblFrom.Location = new System.Drawing.Point(0, 6);
-			this.lblFrom.Margin = new System.Windows.Forms.Padding(0);
-			this.lblFrom.Name = "lblFrom";
-			this.lblFrom.Size = new System.Drawing.Size(39, 13);
-			this.lblFrom.TabIndex = 10;
-			this.lblFrom.Text = "From $";
+			this.txtTo.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this.txtTo.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.txtTo.Location = new System.Drawing.Point(134, 3);
+			this.txtTo.Margin = new System.Windows.Forms.Padding(0, 3, 3, 3);
+			this.txtTo.Name = "txtTo";
+			this.txtTo.Size = new System.Drawing.Size(68, 20);
+			this.txtTo.TabIndex = 13;
+			this.txtTo.Enter += new System.EventHandler(this.txtTo_Enter);
+			// 
+			// lblTo
+			// 
+			this.lblTo.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.lblTo.AutoSize = true;
+			this.lblTo.Location = new System.Drawing.Point(109, 5);
+			this.lblTo.Margin = new System.Windows.Forms.Padding(0);
+			this.lblTo.Name = "lblTo";
+			this.lblTo.Size = new System.Drawing.Size(25, 13);
+			this.lblTo.TabIndex = 11;
+			this.lblTo.Text = "to $";
 			// 
 			// txtFrom
 			// 
-			this.txtFrom.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.txtFrom.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this.txtFrom.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.txtFrom.Location = new System.Drawing.Point(39, 3);
 			this.txtFrom.Margin = new System.Windows.Forms.Padding(0, 3, 3, 3);
 			this.txtFrom.Name = "txtFrom";
@@ -319,26 +340,16 @@
 			this.txtFrom.TabIndex = 12;
 			this.txtFrom.Enter += new System.EventHandler(this.txtFrom_Enter);
 			// 
-			// lblTo
+			// lblFrom
 			// 
-			this.lblTo.Anchor = System.Windows.Forms.AnchorStyles.Left;
-			this.lblTo.AutoSize = true;
-			this.lblTo.Location = new System.Drawing.Point(109, 6);
-			this.lblTo.Margin = new System.Windows.Forms.Padding(0);
-			this.lblTo.Name = "lblTo";
-			this.lblTo.Size = new System.Drawing.Size(25, 13);
-			this.lblTo.TabIndex = 11;
-			this.lblTo.Text = "to $";
-			// 
-			// txtTo
-			// 
-			this.txtTo.Anchor = System.Windows.Forms.AnchorStyles.Left;
-			this.txtTo.Location = new System.Drawing.Point(134, 3);
-			this.txtTo.Margin = new System.Windows.Forms.Padding(0, 3, 3, 3);
-			this.txtTo.Name = "txtTo";
-			this.txtTo.Size = new System.Drawing.Size(68, 20);
-			this.txtTo.TabIndex = 13;
-			this.txtTo.Enter += new System.EventHandler(this.txtTo_Enter);
+			this.lblFrom.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.lblFrom.AutoSize = true;
+			this.lblFrom.Location = new System.Drawing.Point(0, 5);
+			this.lblFrom.Margin = new System.Windows.Forms.Padding(0);
+			this.lblFrom.Name = "lblFrom";
+			this.lblFrom.Size = new System.Drawing.Size(39, 13);
+			this.lblFrom.TabIndex = 10;
+			this.lblFrom.Text = "From $";
 			// 
 			// tableLayoutPanel4
 			// 
@@ -481,8 +492,8 @@
 			((System.ComponentModel.ISupportInitialize)(this.picExpressionWarning)).EndInit();
 			this.tableLayoutPanel3.ResumeLayout(false);
 			this.tableLayoutPanel3.PerformLayout();
-			this.flowLayoutPanel4.ResumeLayout(false);
-			this.flowLayoutPanel4.PerformLayout();
+			this.tableLayoutPanel5.ResumeLayout(false);
+			this.tableLayoutPanel5.PerformLayout();
 			this.tableLayoutPanel4.ResumeLayout(false);
 			this.tableLayoutPanel4.PerformLayout();
 			this.flowLayoutPanel3.ResumeLayout(false);
@@ -521,10 +532,10 @@
 		private System.Windows.Forms.Label lblAddressSign;
 		private System.Windows.Forms.PictureBox picExpressionWarning;
 		private System.Windows.Forms.RadioButton radRange;
-		private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel4;
 		private System.Windows.Forms.Label lblFrom;
 		private System.Windows.Forms.TextBox txtFrom;
 		private System.Windows.Forms.Label lblTo;
 		private System.Windows.Forms.TextBox txtTo;
+		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel5;
 	}
 }
