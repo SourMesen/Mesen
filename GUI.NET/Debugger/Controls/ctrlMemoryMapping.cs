@@ -103,7 +103,7 @@ namespace Mesen.GUI.Debugger.Controls
 					e.Graphics.RotateTransform(-90);
 					SizeF textSize = e.Graphics.MeasureString(byteOffset.ToString("X4"), new Font("Arial", 8));
 					e.Graphics.DrawString(byteOffset.ToString("X4"), new Font("Arial", 8), Brushes.Black, -rect.Height + (rect.Height - textSize.Width) / 2, currentPosition + 3);
-					e.Graphics.RotateTransform(90);
+					e.Graphics.ResetTransform();
 
 					textSize = e.Graphics.MeasureString(region.Name, new Font("Arial", 9));
 					e.Graphics.DrawString(region.Name, new Font("Arial", 9), Brushes.Black, currentPosition + 12 + ((length - 12) / 2 - textSize.Width / 2), rect.Height / 2 - 7);

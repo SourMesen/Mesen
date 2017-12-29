@@ -1334,9 +1334,9 @@ namespace Mesen.GUI.Debugger
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(1172, 687);
 			this.Controls.Add(this.splitContainer);
-			this.Controls.Add(this.ctrlPpuMemoryMapping);
-			this.Controls.Add(this.ctrlCpuMemoryMapping);
 			this.Controls.Add(this.menuStrip);
+			this.Controls.Add(this.ctrlCpuMemoryMapping);
+			this.Controls.Add(this.ctrlPpuMemoryMapping);
 			this.Controls.Add(this.statusStrip);
 			this.MainMenuStrip = this.menuStrip;
 			this.MinimumSize = new System.Drawing.Size(1000, 725);
