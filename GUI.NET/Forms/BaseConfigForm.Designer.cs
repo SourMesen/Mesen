@@ -80,13 +80,14 @@ namespace Mesen.GUI.Forms
 			// 
 			// flowLayoutPanel1
 			// 
-			this.flowLayoutPanel1.Controls.Add(this.btnOK);
 			this.flowLayoutPanel1.Controls.Add(this.btnCancel);
+			this.flowLayoutPanel1.Controls.Add(this.btnOK);
 			this.flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Right;
-			this.flowLayoutPanel1.Location = new System.Drawing.Point(162, 0);
-			this.flowLayoutPanel1.Margin = new System.Windows.Forms.Padding(0, 0, 0, 0);
+			this.flowLayoutPanel1.FlowDirection = System.Windows.Forms.FlowDirection.RightToLeft;
+			this.flowLayoutPanel1.Location = new System.Drawing.Point(121, 0);
+			this.flowLayoutPanel1.Margin = new System.Windows.Forms.Padding(0);
 			this.flowLayoutPanel1.Name = "flowLayoutPanel1";
-			this.flowLayoutPanel1.Size = new System.Drawing.Size(165, 29);
+			this.flowLayoutPanel1.Size = new System.Drawing.Size(206, 29);
 			this.flowLayoutPanel1.TabIndex = 2;
 			// 
 			// BaseConfigForm
