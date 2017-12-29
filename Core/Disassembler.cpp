@@ -512,7 +512,9 @@ string Disassembler::GetCode(AddressTypeInfo &addressInfo, uint32_t endAddr, uin
 			byteCode.clear();
 			code.clear();
 			effAddress.clear();
-			info->GetEffectiveAddressString(effAddress, cpuState, memoryManager.get(), labelManager.get());
+			if(showEffectiveAddresses) {
+				info->GetEffectiveAddressString(effAddress, cpuState, memoryManager.get(), labelManager.get());
+			}
 			info->ToString(code, memoryAddr, memoryManager.get(), labelManager.get());
 			info->GetByteCode(byteCode);
 
