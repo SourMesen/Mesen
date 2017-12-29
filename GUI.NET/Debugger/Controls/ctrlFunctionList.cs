@@ -138,11 +138,14 @@ namespace Mesen.GUI.Debugger.Controls
 		private void mnuFindOccurrences_Click(object sender, EventArgs e)
 		{
 			if(lstFunctions.SelectedItems.Count > 0) {
-				CodeLabel label = lstFunctions.SelectedItems[0].Tag as CodeLabel;
-				if(label != null) {
-					OnFindOccurrence?.Invoke(label.Label, null);
-				} else {
-					OnFindOccurrence?.Invoke("$" + ((int)lstFunctions.SelectedItems[0].SubItems[1].Tag).ToString("X4"), null);
+				int relativeAddress = (int)lstFunctions.SelectedItems[0].SubItems[1].Tag;
+				if(relativeAddress >= 0) {
+					CodeLabel label = lstFunctions.SelectedItems[0].Tag as CodeLabel;
+					if(label != null) {
+						OnFindOccurrence?.Invoke(label.Label, null);
+					} else {
+						OnFindOccurrence?.Invoke("$" + ((int)lstFunctions.SelectedItems[0].SubItems[1].Tag).ToString("X4"), null);
+					}
 				}
 			}
 		}
@@ -151,6 +154,12 @@ namespace Mesen.GUI.Debugger.Controls
 		{
 			mnuEditLabel.Enabled = lstFunctions.SelectedItems.Count == 1;
 			mnuFindOccurrences.Enabled = lstFunctions.SelectedItems.Count == 1;
+			if(lstFunctions.SelectedItems.Count == 1) {
+				int relativeAddress = (int)lstFunctions.SelectedItems[0].SubItems[1].Tag;
+				if(relativeAddress < 0) {
+					mnuFindOccurrences.Enabled = false;
+				}
+			}
 		}
 
 		private void mnuAddBreakpoint_Click(object sender, EventArgs e)
