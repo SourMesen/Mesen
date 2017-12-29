@@ -73,8 +73,6 @@ void Console::SaveBatteries()
 
 bool Console::Initialize(VirtualFile &romFile, VirtualFile &patchFile)
 {
-	SoundMixer::StopAudio();
-
 	if(!_romFilepath.empty() && _mapper) {
 		//Ensure we save any battery file before loading a new game
 		SaveBatteries();
@@ -82,7 +80,7 @@ bool Console::Initialize(VirtualFile &romFile, VirtualFile &patchFile)
 		//Save current game state before loading another one
 		SaveStateManager::SaveRecentGame(_mapper->GetRomName(), _romFilepath, _patchFilename);
 	}
-	
+
 	if(romFile.IsValid()) {
 		VideoDecoder::GetInstance()->StopThread();
 
@@ -100,6 +98,8 @@ bool Console::Initialize(VirtualFile &romFile, VirtualFile &patchFile)
 		BatteryManager::Initialize(FolderUtilities::GetFilename(romFile.GetFileName(), false));
 		shared_ptr<BaseMapper> mapper = MapperFactory::InitializeFromFile(romFile.GetFileName(), fileData);
 		if(mapper) {
+			SoundMixer::StopAudio();
+
 			if(_mapper) {
 				//Send notification only if a game was already running and we successfully loaded the new one
 				MessageManager::SendNotification(ConsoleNotificationType::GameStopped, (void*)1);
