@@ -947,7 +947,8 @@ namespace Mesen.GUI.Forms
 					mnuPlayMovie.Enabled = !netPlay && !moviePlaying && !movieRecording;
 					mnuStopMovie.Enabled = running && !netPlay && (moviePlaying || movieRecording);
 					mnuRecordMovie.Enabled = running && !moviePlaying && !movieRecording && !isNetPlayClient;
-					
+					mnuVsGameConfig.Enabled = !moviePlaying && !movieRecording;
+
 					bool waveRecording = InteropEmu.WaveIsRecording();
 					mnuWaveRecord.Enabled = running && !waveRecording;
 					mnuWaveStop.Enabled = running && waveRecording;

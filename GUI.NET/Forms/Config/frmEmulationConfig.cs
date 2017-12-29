@@ -18,6 +18,9 @@ namespace Mesen.GUI.Forms.Config
 		{
 			InitializeComponent();
 
+			tpgOverclocking.Enabled = !InteropEmu.MoviePlaying() && !InteropEmu.MovieRecording();
+			tpgAdvanced.Enabled = !InteropEmu.MoviePlaying() && !InteropEmu.MovieRecording();
+
 			ConfigManager.Config.EmulationInfo.EmulationSpeed = InteropEmu.GetEmulationSpeed();
 			Entity = ConfigManager.Config.EmulationInfo;
 
