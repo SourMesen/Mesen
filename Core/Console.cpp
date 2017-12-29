@@ -333,6 +333,7 @@ void Console::Reset(bool softReset)
 		//Resume from code break if needed (otherwise reset doesn't happen right away)
 		shared_ptr<Debugger> debugger = Instance->_debugger;
 		if(debugger) {
+			debugger->Suspend();
 			debugger->Run();
 		}
 	}
@@ -357,6 +358,7 @@ void Console::ResetComponents(bool softReset)
 		if(debugger) {
 			debugger->ResetCounters();
 			debugger->ProcessEvent(EventType::Reset);
+			debugger->Resume();
 		}
 	}
 }
