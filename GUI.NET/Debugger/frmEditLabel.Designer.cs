@@ -50,7 +50,7 @@
 			// 
 			this.tableLayoutPanel1.ColumnCount = 2;
 			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this.tableLayoutPanel1.Controls.Add(this.lblLabel, 0, 2);
 			this.tableLayoutPanel1.Controls.Add(this.lblComment, 0, 3);
 			this.tableLayoutPanel1.Controls.Add(this.txtComment, 1, 3);
