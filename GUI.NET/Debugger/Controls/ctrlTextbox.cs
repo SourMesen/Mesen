@@ -837,7 +837,8 @@ namespace Mesen.GUI.Debugger
 
 				if(lineProperties.BgColor.HasValue) {
 					using(Brush bgBrush = new SolidBrush(lineProperties.BgColor.Value)) {
-						g.FillRectangle(bgBrush, marginLeft, positionY + 1, codeStringLength, lineHeight-1);
+						int yOffset = Program.IsMono ? 2 : 1;
+						g.FillRectangle(bgBrush, marginLeft, positionY + yOffset, codeStringLength, lineHeight-1);
 					}
 				}
 				if(lineProperties.OutlineColor.HasValue) {
@@ -886,7 +887,7 @@ namespace Mesen.GUI.Debugger
 					float textLength = g.MeasureString(text, this._noteFont, int.MaxValue, StringFormat.GenericTypographic).Width;
 					g.DrawString(text, this._noteFont, fgBrush, (marginLeft + this.Width - textLength) / 2, positionY, StringFormat.GenericTypographic);
 					g.DrawLine(Pens.Black, marginLeft, positionY+lineHeight-2, marginLeft+this.Width, positionY+lineHeight-2);
-					g.TranslateTransform(-HorizontalScrollPosition * HorizontalScrollFactor, 0);
+					g.ResetTransform();
 				} else if(codeString.StartsWith("__") && codeString.EndsWith("__")) {
 					//Draw block end
 					g.TranslateTransform(HorizontalScrollPosition * HorizontalScrollFactor, 0);
@@ -894,7 +895,7 @@ namespace Mesen.GUI.Debugger
 					float textLength = g.MeasureString(text, this._noteFont, int.MaxValue, StringFormat.GenericTypographic).Width;
 					g.DrawString(text, this._noteFont, fgBrush, (marginLeft + this.Width - textLength) / 2, positionY + 4, StringFormat.GenericTypographic);
 					g.DrawLine(Pens.Black, marginLeft, positionY+2, marginLeft+this.Width, positionY+2);
-					g.TranslateTransform(-HorizontalScrollPosition * HorizontalScrollFactor, 0);
+					g.ResetTransform();
 				} else {
 					//Draw line content
 					g.DrawString(codeString, this.Font, fgBrush, marginLeft, positionY, StringFormat.GenericTypographic);
@@ -1060,7 +1061,7 @@ namespace Mesen.GUI.Debugger
 				currentLine++;
 			}
 
-			pe.Graphics.TranslateTransform(HorizontalScrollPosition * HorizontalScrollFactor, 0);
+			pe.Graphics.ResetTransform();
 
 			if(this.ShowLineNumbers) {
 				using(Brush brush = new SolidBrush(Color.FromArgb(235, 235, 235))) {

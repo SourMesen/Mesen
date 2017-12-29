@@ -51,7 +51,7 @@ namespace Mesen.GUI.Debugger.Controls
 					g.ScaleTransform(32, 32);
 					g.DrawImageUnscaled(source, 0, 0);
 
-					g.ScaleTransform(1f/32, 1f/32);
+					g.ResetTransform();
 					Font font = new Font(BaseControl.MonospaceFontFamily, BaseControl.DefaultFontSize - 2, GraphicsUnit.Pixel);
 					using(Brush bg = new SolidBrush(Color.FromArgb(150, Color.LightGray))) {
 						for(int y = 0; y < 8; y++) {

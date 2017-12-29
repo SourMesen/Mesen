@@ -78,7 +78,7 @@ namespace Mesen.GUI.Debugger
 					g.DrawImageUnscaled(source, -8, 4);
 
 					if(this.ShowColorIndexes) {
-						g.ScaleTransform(1f/42, 1f/42);
+						g.ResetTransform();
 						using(Brush bg = new SolidBrush(Color.FromArgb(150, Color.LightGray))) {
 							for(int y = 0; y < 8; y++) {
 								for(int x = 0; x < 8; x++) {
