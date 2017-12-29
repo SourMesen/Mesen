@@ -52,6 +52,8 @@ bool MovieRecorder::Record(RecordMovieOptions options)
 		BatteryManager::SetBatteryRecorder(nullptr);
 		Console::Resume();
 
+		MessageManager::DisplayMessage("Movies", "MovieRecordingTo", FolderUtilities::GetFilename(_filename, true));
+
 		return true;
 	}
 }
@@ -185,7 +187,11 @@ bool MovieRecorder::Stop()
 			_writer->AddFile(kvp.second, "Battery" + kvp.first);
 		}
 
-		return _writer->Save();
+		bool result = _writer->Save();
+		if(result) {
+			MessageManager::DisplayMessage("Movies", "MovieSaved", FolderUtilities::GetFilename(_filename, true));
+		}
+		return result;
 	}
 
 	return false;
