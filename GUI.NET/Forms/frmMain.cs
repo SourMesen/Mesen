@@ -86,7 +86,13 @@ namespace Mesen.GUI.Forms
 			var switches = new List<string>();
 			for(int i = 0; i < args.Length; i++) {
 				if(args[i] != null) {
-					string arg = args[i].Replace("--", "/").Replace("-", "/").Replace("=/", "=-");
+					string arg = args[i].Trim();
+					if(arg.StartsWith("--")) {
+						arg = "/" + arg.Substring(2);
+					} else if(arg.StartsWith("-")) {
+						arg = "/" + arg.Substring(1);
+					}
+
 					if(arg.StartsWith("/")) {
 						arg = arg.ToLowerInvariant();
 					}
