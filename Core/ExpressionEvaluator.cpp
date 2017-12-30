@@ -359,8 +359,8 @@ int32_t ExpressionEvaluator::Evaluate(vector<int> &rpnList, DebugState &state, E
 				case EvalOperators::Equal: token = left == right; resultType = EvalResultType::Boolean; break;
 				case EvalOperators::NotEqual: token = left != right; resultType = EvalResultType::Boolean; break;
 				case EvalOperators::BinaryAnd: token = left & right; break;
-				case EvalOperators::BinaryXor: token = left | right; break;
-				case EvalOperators::BinaryOr: token = left ^ right; break;
+				case EvalOperators::BinaryXor: token = left ^ right; break;
+				case EvalOperators::BinaryOr: token = left | right; break;
 				case EvalOperators::LogicalAnd: token = left && right; resultType = EvalResultType::Boolean; break;
 				case EvalOperators::LogicalOr: token = left || right; resultType = EvalResultType::Boolean; break;
 
