@@ -335,8 +335,19 @@ int32_t ExpressionEvaluator::Evaluate(vector<int> &rpnList, DebugState &state, E
 			resultType = EvalResultType::Numeric;
 			switch(token) {
 				case EvalOperators::Multiplication: token = left * right; break;
-				case EvalOperators::Division: token = left / right; break;
-				case EvalOperators::Modulo: token = left % right; break;
+				case EvalOperators::Division: 
+					if(right == 0) {
+						resultType = EvalResultType::DivideBy0;
+						return 0;
+					}
+					token = left / right; break;
+				case EvalOperators::Modulo:
+					if(right == 0) {
+						resultType = EvalResultType::DivideBy0;
+						return 0;
+					}
+					token = left % right;
+					break;
 				case EvalOperators::Addition: token = left + right; break;
 				case EvalOperators::Substration: token = left - right; break;
 				case EvalOperators::ShiftLeft: token = left << right; break;

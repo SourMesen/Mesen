@@ -69,7 +69,8 @@ enum EvalResultType
 {
 	Numeric = 0,
 	Boolean = 1,
-	Invalid = 2
+	Invalid = 2,
+	DivideBy0 = 3
 };
 
 class StringHasher

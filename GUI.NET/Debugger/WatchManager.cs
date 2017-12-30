@@ -35,6 +35,7 @@ namespace Mesen.GUI.Debugger
 					case EvalResultType.Numeric: newValue = useHex ? ("$" + result.ToString("X2")) : result.ToString(); break;
 					case EvalResultType.Boolean: newValue = result == 0 ? "false" : "true";	break;
 					case EvalResultType.Invalid: newValue = "<invalid expression>"; forceHasChanged = true; break;
+					case EvalResultType.DivideBy0: newValue = "<division by zero>"; forceHasChanged = true; break;
 				}
 
 				list.Add(new WatchValueInfo() { Expression = expression, Value = newValue, HasChanged = forceHasChanged || (i < _previousValues.Count ? (_previousValues[i].Value != newValue) : false) });
