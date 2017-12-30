@@ -273,6 +273,7 @@ uint8_t PPU::ReadRAM(uint16_t addr)
 
 				if((_state.VideoRamAddr & 0x3FFF) >= 0x3F00 && !EmulationSettings::CheckFlag(EmulationFlags::DisablePaletteRead)) {
 					returnValue = ReadPaletteRAM(_state.VideoRamAddr) | (_openBus & 0xC0);
+					Debugger::ProcessVramReadOperation(MemoryOperationType::Read, _state.VideoRamAddr & 0x3FFF, returnValue);
 					openBusMask = 0xC0;
 				} else {
 					openBusMask = 0x00;
@@ -358,6 +359,7 @@ void PPU::WriteRAM(uint16_t addr, uint8_t value)
 		case PPURegisters::VideoMemoryData:
 			if((_state.VideoRamAddr & 0x3FFF) >= 0x3F00) {
 				WritePaletteRAM(_state.VideoRamAddr, value);
+				Debugger::ProcessVramWriteOperation(_state.VideoRamAddr & 0x3FFF, value);
 			} else {
 				_mapper->WriteVRAM(_state.VideoRamAddr, value);
 			}
