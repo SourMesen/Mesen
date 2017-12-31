@@ -44,6 +44,8 @@
 			this.chkMatchCase = new System.Windows.Forms.CheckBox();
 			this.ctrlHexBox = new Be.Windows.Forms.HexBox();
 			this.toolTip = new System.Windows.Forms.ToolTip(this.components);
+			this.statusStrip = new System.Windows.Forms.StatusStrip();
+			this.lblLocation = new System.Windows.Forms.ToolStripStatusLabel();
 			this.tlpMain.SuspendLayout();
 			this.flowLayoutPanel1.SuspendLayout();
 			this.panelSearch.SuspendLayout();
@@ -52,6 +54,7 @@
 			((System.ComponentModel.ISupportInitialize)(this.picSearchNext)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.picSearchPrevious)).BeginInit();
 			this.flowLayoutPanel2.SuspendLayout();
+			this.statusStrip.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// tlpMain
@@ -63,12 +66,13 @@
 			this.tlpMain.Controls.Add(this.ctrlHexBox, 0, 1);
 			this.tlpMain.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tlpMain.Location = new System.Drawing.Point(0, 0);
+			this.tlpMain.Margin = new System.Windows.Forms.Padding(0);
 			this.tlpMain.Name = "tlpMain";
 			this.tlpMain.RowCount = 3;
 			this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this.tlpMain.Size = new System.Drawing.Size(543, 309);
+			this.tlpMain.Size = new System.Drawing.Size(543, 287);
 			this.tlpMain.TabIndex = 0;
 			// 
 			// flowLayoutPanel1
@@ -114,7 +118,7 @@
 			this.panelSearch.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.panelSearch.Controls.Add(this.tableLayoutPanel2);
 			this.panelSearch.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.panelSearch.Location = new System.Drawing.Point(3, 281);
+			this.panelSearch.Location = new System.Drawing.Point(3, 259);
 			this.panelSearch.Margin = new System.Windows.Forms.Padding(3, 0, 3, 0);
 			this.panelSearch.Name = "panelSearch";
 			this.panelSearch.Size = new System.Drawing.Size(537, 28);
@@ -249,23 +253,45 @@
 			this.ctrlHexBox.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.ctrlHexBox.InfoBackColor = System.Drawing.Color.DarkGray;
 			this.ctrlHexBox.LineInfoVisible = true;
-			this.ctrlHexBox.Location = new System.Drawing.Point(3, 30);
+			this.ctrlHexBox.Location = new System.Drawing.Point(0, 27);
+			this.ctrlHexBox.Margin = new System.Windows.Forms.Padding(0);
 			this.ctrlHexBox.Name = "ctrlHexBox";
 			this.ctrlHexBox.SelectionBackColor = System.Drawing.Color.RoyalBlue;
 			this.ctrlHexBox.ShadowSelectionColor = System.Drawing.Color.Orange;
-			this.ctrlHexBox.Size = new System.Drawing.Size(537, 248);
+			this.ctrlHexBox.Size = new System.Drawing.Size(543, 232);
 			this.ctrlHexBox.StringViewVisible = true;
 			this.ctrlHexBox.TabIndex = 2;
 			this.ctrlHexBox.UseFixedBytesPerLine = true;
 			this.ctrlHexBox.VScrollBarVisible = true;
+			this.ctrlHexBox.SelectionStartChanged += new System.EventHandler(this.ctrlHexBox_SelectionStartChanged);
+			this.ctrlHexBox.SelectionLengthChanged += new System.EventHandler(this.ctrlHexBox_SelectionLengthChanged);
 			this.ctrlHexBox.MouseLeave += new System.EventHandler(this.ctrlHexBox_MouseLeave);
 			this.ctrlHexBox.MouseMove += new System.Windows.Forms.MouseEventHandler(this.ctrlHexBox_MouseMove);
+			// 
+			// statusStrip
+			// 
+			this.statusStrip.BackColor = System.Drawing.SystemColors.ControlLightLight;
+			this.statusStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.lblLocation});
+			this.statusStrip.Location = new System.Drawing.Point(0, 287);
+			this.statusStrip.Name = "statusStrip";
+			this.statusStrip.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
+			this.statusStrip.Size = new System.Drawing.Size(543, 22);
+			this.statusStrip.SizingGrip = false;
+			this.statusStrip.TabIndex = 1;
+			// 
+			// lblLocation
+			// 
+			this.lblLocation.Name = "lblLocation";
+			this.lblLocation.Size = new System.Drawing.Size(0, 17);
 			// 
 			// ctrlHexViewer
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.Controls.Add(this.tlpMain);
+			this.Controls.Add(this.statusStrip);
+			this.Margin = new System.Windows.Forms.Padding(0);
 			this.Name = "ctrlHexViewer";
 			this.Size = new System.Drawing.Size(543, 309);
 			this.tlpMain.ResumeLayout(false);
@@ -280,7 +306,10 @@
 			((System.ComponentModel.ISupportInitialize)(this.picSearchPrevious)).EndInit();
 			this.flowLayoutPanel2.ResumeLayout(false);
 			this.flowLayoutPanel2.PerformLayout();
+			this.statusStrip.ResumeLayout(false);
+			this.statusStrip.PerformLayout();
 			this.ResumeLayout(false);
+			this.PerformLayout();
 
 		}
 
@@ -302,5 +331,7 @@
 		private System.Windows.Forms.Label lblSearchWarning;
 		private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel2;
 		private System.Windows.Forms.CheckBox chkMatchCase;
+		private System.Windows.Forms.StatusStrip statusStrip;
+		private System.Windows.Forms.ToolStripStatusLabel lblLocation;
 	}
 }

@@ -113,6 +113,7 @@
 			// 
 			this.ctrlHexViewer.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.ctrlHexViewer.Location = new System.Drawing.Point(0, 0);
+			this.ctrlHexViewer.Margin = new System.Windows.Forms.Padding(0);
 			this.ctrlHexViewer.Name = "ctrlHexViewer";
 			this.ctrlHexViewer.Size = new System.Drawing.Size(606, 318);
 			this.ctrlHexViewer.TabIndex = 0;
@@ -605,11 +606,14 @@
 			// 
 			// toolStrip1
 			// 
+			this.toolStrip1.BackColor = System.Drawing.SystemColors.ControlLightLight;
+			this.toolStrip1.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
 			this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.btnImport,
             this.btnExport});
 			this.toolStrip1.Location = new System.Drawing.Point(0, 0);
 			this.toolStrip1.Name = "toolStrip1";
+			this.toolStrip1.RenderMode = System.Windows.Forms.ToolStripRenderMode.System;
 			this.toolStrip1.Size = new System.Drawing.Size(606, 25);
 			this.toolStrip1.TabIndex = 3;
 			this.toolStrip1.Text = "toolStrip1";
@@ -650,6 +654,7 @@
 			this.tpgMemoryViewer.Controls.Add(this.panel1);
 			this.tpgMemoryViewer.Controls.Add(this.toolStrip1);
 			this.tpgMemoryViewer.Location = new System.Drawing.Point(4, 22);
+			this.tpgMemoryViewer.Margin = new System.Windows.Forms.Padding(0);
 			this.tpgMemoryViewer.Name = "tpgMemoryViewer";
 			this.tpgMemoryViewer.Size = new System.Drawing.Size(606, 343);
 			this.tpgMemoryViewer.TabIndex = 0;
@@ -662,6 +667,7 @@
 			this.panel1.Controls.Add(this.ctrlHexViewer);
 			this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.panel1.Location = new System.Drawing.Point(0, 25);
+			this.panel1.Margin = new System.Windows.Forms.Padding(0);
 			this.panel1.Name = "panel1";
 			this.panel1.Size = new System.Drawing.Size(606, 318);
 			this.panel1.TabIndex = 4;
@@ -670,6 +676,7 @@
 			// 
 			this.tpgAccessCounters.Controls.Add(this.ctrlMemoryAccessCounters);
 			this.tpgAccessCounters.Location = new System.Drawing.Point(4, 22);
+			this.tpgAccessCounters.Margin = new System.Windows.Forms.Padding(0);
 			this.tpgAccessCounters.Name = "tpgAccessCounters";
 			this.tpgAccessCounters.Size = new System.Drawing.Size(606, 343);
 			this.tpgAccessCounters.TabIndex = 1;
@@ -689,6 +696,7 @@
 			// 
 			this.tpgProfiler.Controls.Add(this.ctrlProfiler);
 			this.tpgProfiler.Location = new System.Drawing.Point(4, 22);
+			this.tpgProfiler.Margin = new System.Windows.Forms.Padding(0);
 			this.tpgProfiler.Name = "tpgProfiler";
 			this.tpgProfiler.Size = new System.Drawing.Size(606, 343);
 			this.tpgProfiler.TabIndex = 2;
@@ -699,6 +707,7 @@
 			// 
 			this.ctrlProfiler.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.ctrlProfiler.Location = new System.Drawing.Point(0, 0);
+			this.ctrlProfiler.Margin = new System.Windows.Forms.Padding(0);
 			this.ctrlProfiler.Name = "ctrlProfiler";
 			this.ctrlProfiler.Size = new System.Drawing.Size(606, 343);
 			this.ctrlProfiler.TabIndex = 0;

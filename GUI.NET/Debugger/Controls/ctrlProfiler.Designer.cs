@@ -50,6 +50,7 @@
 			this.tableLayoutPanel1.Controls.Add(this.lstFunctions, 0, 1);
 			this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
+			this.tableLayoutPanel1.Margin = new System.Windows.Forms.Padding(0, 0, 0, 0);
 			this.tableLayoutPanel1.Name = "tableLayoutPanel1";
 			this.tableLayoutPanel1.RowCount = 3;
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
@@ -93,9 +94,10 @@
 			this.lstFunctions.FullRowSelect = true;
 			this.lstFunctions.GridLines = true;
 			this.lstFunctions.HideSelection = false;
-			this.lstFunctions.Location = new System.Drawing.Point(3, 3);
+			this.lstFunctions.Location = new System.Drawing.Point(0, 0);
+			this.lstFunctions.Margin = new System.Windows.Forms.Padding(0, 0, 0, 0);
 			this.lstFunctions.Name = "lstFunctions";
-			this.lstFunctions.Size = new System.Drawing.Size(508, 272);
+			this.lstFunctions.Size = new System.Drawing.Size(514, 278);
 			this.lstFunctions.TabIndex = 7;
 			this.lstFunctions.UseCompatibleStateImageBehavior = false;
 			this.lstFunctions.View = System.Windows.Forms.View.Details;
@@ -132,6 +134,7 @@
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.Controls.Add(this.tableLayoutPanel1);
+			this.Margin = new System.Windows.Forms.Padding(0, 0, 0, 0);
 			this.Name = "ctrlProfiler";
 			this.Size = new System.Drawing.Size(514, 307);
 			this.tableLayoutPanel1.ResumeLayout(false);

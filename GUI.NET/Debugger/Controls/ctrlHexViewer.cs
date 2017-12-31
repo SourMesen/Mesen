@@ -347,5 +347,24 @@ namespace Mesen.GUI.Debugger.Controls
 		{
 			ByteMouseHover?.Invoke(-1);
 		}
+
+		private void UpdateLocationLabel()
+		{
+			if(ctrlHexBox.SelectionLength > 0) {
+				this.lblLocation.Text = $"Selection: ${ctrlHexBox.SelectionStart.ToString("X4")} - ${(ctrlHexBox.SelectionStart + ctrlHexBox.SelectionLength - 1).ToString("X4")} ({ctrlHexBox.SelectionLength} bytes)";
+			} else {
+				this.lblLocation.Text = $"Location: ${ctrlHexBox.SelectionStart.ToString("X4")}";
+			}
+		}
+
+		private void ctrlHexBox_SelectionStartChanged(object sender, EventArgs e)
+		{
+			UpdateLocationLabel();
+		}
+
+		private void ctrlHexBox_SelectionLengthChanged(object sender, EventArgs e)
+		{
+			UpdateLocationLabel();
+		}
 	}
 }

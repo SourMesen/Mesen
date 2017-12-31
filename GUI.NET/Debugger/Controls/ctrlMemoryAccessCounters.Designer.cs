@@ -33,21 +33,21 @@
 			this.cboMemoryType = new System.Windows.Forms.ComboBox();
 			this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
 			this.ctrlScrollableTextbox = new Mesen.GUI.Debugger.ctrlScrollableTextbox();
-			this.chkHighlightUninitRead = new System.Windows.Forms.CheckBox();
 			this.btnReset = new System.Windows.Forms.Button();
+			this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
+			this.picHelp = new System.Windows.Forms.PictureBox();
+			this.chkHighlightUninitRead = new System.Windows.Forms.CheckBox();
 			this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
 			this.flowLayoutPanel2 = new System.Windows.Forms.FlowLayoutPanel();
 			this.lblSort = new System.Windows.Forms.Label();
 			this.cboSort = new System.Windows.Forms.ComboBox();
-			this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
-			this.picHelp = new System.Windows.Forms.PictureBox();
 			this.toolTip = new System.Windows.Forms.ToolTip(this.components);
 			this.flowLayoutPanel1.SuspendLayout();
 			this.tableLayoutPanel1.SuspendLayout();
-			this.tableLayoutPanel2.SuspendLayout();
-			this.flowLayoutPanel2.SuspendLayout();
 			this.tableLayoutPanel3.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.picHelp)).BeginInit();
+			this.tableLayoutPanel2.SuspendLayout();
+			this.flowLayoutPanel2.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// flowLayoutPanel1
@@ -99,6 +99,7 @@
 			this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanel2, 0, 0);
 			this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
+			this.tableLayoutPanel1.Margin = new System.Windows.Forms.Padding(0, 0, 0, 0);
 			this.tableLayoutPanel1.Name = "tableLayoutPanel1";
 			this.tableLayoutPanel1.RowCount = 3;
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
@@ -114,14 +115,55 @@
 			this.tableLayoutPanel1.SetColumnSpan(this.ctrlScrollableTextbox, 2);
 			this.ctrlScrollableTextbox.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.ctrlScrollableTextbox.FontSize = 13F;
-			this.ctrlScrollableTextbox.Location = new System.Drawing.Point(3, 30);
+			this.ctrlScrollableTextbox.Location = new System.Drawing.Point(0, 27);
+			this.ctrlScrollableTextbox.Margin = new System.Windows.Forms.Padding(0, 0, 0, 0);
 			this.ctrlScrollableTextbox.Name = "ctrlScrollableTextbox";
 			this.ctrlScrollableTextbox.ShowContentNotes = false;
 			this.ctrlScrollableTextbox.ShowLineNumberNotes = false;
 			this.ctrlScrollableTextbox.ShowSingleContentLineNotes = true;
 			this.ctrlScrollableTextbox.ShowSingleLineLineNumberNotes = false;
-			this.ctrlScrollableTextbox.Size = new System.Drawing.Size(508, 245);
+			this.ctrlScrollableTextbox.Size = new System.Drawing.Size(514, 251);
 			this.ctrlScrollableTextbox.TabIndex = 0;
+			// 
+			// btnReset
+			// 
+			this.btnReset.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.btnReset.Location = new System.Drawing.Point(436, 281);
+			this.btnReset.Name = "btnReset";
+			this.btnReset.Size = new System.Drawing.Size(75, 23);
+			this.btnReset.TabIndex = 5;
+			this.btnReset.Text = "Reset Counts";
+			this.btnReset.UseVisualStyleBackColor = true;
+			this.btnReset.Click += new System.EventHandler(this.btnReset_Click);
+			// 
+			// tableLayoutPanel3
+			// 
+			this.tableLayoutPanel3.ColumnCount = 3;
+			this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+			this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+			this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+			this.tableLayoutPanel3.Controls.Add(this.picHelp, 1, 0);
+			this.tableLayoutPanel3.Controls.Add(this.chkHighlightUninitRead, 0, 0);
+			this.tableLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.tableLayoutPanel3.Location = new System.Drawing.Point(0, 278);
+			this.tableLayoutPanel3.Margin = new System.Windows.Forms.Padding(0);
+			this.tableLayoutPanel3.Name = "tableLayoutPanel3";
+			this.tableLayoutPanel3.RowCount = 1;
+			this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+			this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 29F));
+			this.tableLayoutPanel3.Size = new System.Drawing.Size(433, 29);
+			this.tableLayoutPanel3.TabIndex = 2;
+			// 
+			// picHelp
+			// 
+			this.picHelp.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.picHelp.Image = global::Mesen.GUI.Properties.Resources.Help;
+			this.picHelp.Location = new System.Drawing.Point(201, 6);
+			this.picHelp.Name = "picHelp";
+			this.picHelp.Size = new System.Drawing.Size(16, 16);
+			this.picHelp.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
+			this.picHelp.TabIndex = 5;
+			this.picHelp.TabStop = false;
 			// 
 			// chkHighlightUninitRead
 			// 
@@ -134,17 +176,6 @@
 			this.chkHighlightUninitRead.Text = "Highlight uninitialized memory reads";
 			this.chkHighlightUninitRead.UseVisualStyleBackColor = true;
 			this.chkHighlightUninitRead.CheckedChanged += new System.EventHandler(this.chkHighlightUninitRead_CheckedChanged);
-			// 
-			// btnReset
-			// 
-			this.btnReset.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.btnReset.Location = new System.Drawing.Point(436, 281);
-			this.btnReset.Name = "btnReset";
-			this.btnReset.Size = new System.Drawing.Size(75, 23);
-			this.btnReset.TabIndex = 5;
-			this.btnReset.Text = "Reset Counts";
-			this.btnReset.UseVisualStyleBackColor = true;
-			this.btnReset.Click += new System.EventHandler(this.btnReset_Click);
 			// 
 			// tableLayoutPanel2
 			// 
@@ -205,35 +236,6 @@
 			this.cboSort.TabIndex = 1;
 			this.cboSort.SelectedIndexChanged += new System.EventHandler(this.cboSort_SelectedIndexChanged);
 			// 
-			// tableLayoutPanel3
-			// 
-			this.tableLayoutPanel3.ColumnCount = 3;
-			this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-			this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-			this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel3.Controls.Add(this.picHelp, 1, 0);
-			this.tableLayoutPanel3.Controls.Add(this.chkHighlightUninitRead, 0, 0);
-			this.tableLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.tableLayoutPanel3.Location = new System.Drawing.Point(0, 278);
-			this.tableLayoutPanel3.Margin = new System.Windows.Forms.Padding(0, 0, 0, 0);
-			this.tableLayoutPanel3.Name = "tableLayoutPanel3";
-			this.tableLayoutPanel3.RowCount = 1;
-			this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-			this.tableLayoutPanel3.Size = new System.Drawing.Size(433, 29);
-			this.tableLayoutPanel3.TabIndex = 2;
-			// 
-			// picHelp
-			// 
-			this.picHelp.Anchor = System.Windows.Forms.AnchorStyles.Left;
-			this.picHelp.Image = global::Mesen.GUI.Properties.Resources.Help;
-			this.picHelp.Location = new System.Drawing.Point(201, 6);
-			this.picHelp.Name = "picHelp";
-			this.picHelp.Size = new System.Drawing.Size(16, 16);
-			this.picHelp.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
-			this.picHelp.TabIndex = 5;
-			this.picHelp.TabStop = false;
-			// 
 			// toolTip
 			// 
 			this.toolTip.AutomaticDelay = 0;
@@ -253,13 +255,13 @@
 			this.flowLayoutPanel1.PerformLayout();
 			this.tableLayoutPanel1.ResumeLayout(false);
 			this.tableLayoutPanel1.PerformLayout();
+			this.tableLayoutPanel3.ResumeLayout(false);
+			this.tableLayoutPanel3.PerformLayout();
+			((System.ComponentModel.ISupportInitialize)(this.picHelp)).EndInit();
 			this.tableLayoutPanel2.ResumeLayout(false);
 			this.tableLayoutPanel2.PerformLayout();
 			this.flowLayoutPanel2.ResumeLayout(false);
 			this.flowLayoutPanel2.PerformLayout();
-			this.tableLayoutPanel3.ResumeLayout(false);
-			this.tableLayoutPanel3.PerformLayout();
-			((System.ComponentModel.ISupportInitialize)(this.picHelp)).EndInit();
 			this.ResumeLayout(false);
 
 		}
