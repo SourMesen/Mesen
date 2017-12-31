@@ -60,6 +60,16 @@ namespace Mesen.GUI.Debugger
 			return _labels.ContainsKey(GetKey(address, type)) ? _labels[GetKey(address, type)] : null;
 		}
 
+		public static CodeLabel GetLabel(UInt16 relativeAddress)
+		{
+			AddressTypeInfo info = new AddressTypeInfo();
+			InteropEmu.DebugGetAbsoluteAddressAndType((UInt32)relativeAddress, ref info);
+			if(info.Address >= 0) {
+				return GetLabel((UInt32)info.Address, info.Type);
+			}
+			return null;
+		}
+
 		public static CodeLabel GetLabel(string label)
 		{
 			return _reverseLookup.ContainsKey(label) ? _reverseLookup[label] : null;

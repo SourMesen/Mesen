@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Mesen.GUI.Controls;
 using System.Collections.ObjectModel;
+using Mesen.GUI.Config;
 
 namespace Mesen.GUI.Debugger.Controls
 {
@@ -19,6 +20,10 @@ namespace Mesen.GUI.Debugger.Controls
 		public ctrlBreakpoints()
 		{
 			InitializeComponent();
+
+			mnuShowLabels.Checked = ConfigManager.Config.DebugInfo.ShowBreakpointLabels;
+			mnuShowLabels.CheckedChanged += mnuShowLabels_CheckedChanged;
+
 			BreakpointManager.BreakpointsChanged += BreakpointManager_OnBreakpointChanged;
 			mnuRemoveBreakpoint.Enabled = false;
 			mnuEditBreakpoint.Enabled = false;
@@ -45,14 +50,14 @@ namespace Mesen.GUI.Debugger.Controls
 			lstBreakpoints.BeginUpdate();
 			ReadOnlyCollection<Breakpoint> breakpoints = BreakpointManager.Breakpoints;
 			for(int i = 0; i < breakpoints.Count; i++) {
-				lstBreakpoints.Items[i].SubItems[2].Text = breakpoints[i].GetAddressString();
+				lstBreakpoints.Items[i].SubItems[2].Text = breakpoints[i].GetAddressString(mnuShowLabels.Checked);
 			}
 			lstBreakpoints.EndUpdate();
 		}
 
 		public void RefreshList()
 		{
-			lstBreakpoints.ItemChecked -= new System.Windows.Forms.ItemCheckedEventHandler(lstBreakpoints_ItemChecked);
+			lstBreakpoints.ItemChecked -= new ItemCheckedEventHandler(lstBreakpoints_ItemChecked);
 
 			int topIndex = lstBreakpoints.TopItem != null ? lstBreakpoints.TopItem.Index : 0;
 			lstBreakpoints.BeginUpdate();
@@ -62,7 +67,7 @@ namespace Mesen.GUI.Debugger.Controls
 				item.Tag = breakpoint;
 				item.Checked = breakpoint.Enabled;
 				item.SubItems.Add(breakpoint.Type.ToString());
-				item.SubItems.Add(breakpoint.GetAddressString());
+				item.SubItems.Add(breakpoint.GetAddressString(mnuShowLabels.Checked));
 				item.SubItems.Add(breakpoint.Condition);
 				lstBreakpoints.Items.Add(item);
 			}
@@ -71,7 +76,7 @@ namespace Mesen.GUI.Debugger.Controls
 				lstBreakpoints.TopItem = lstBreakpoints.Items[lstBreakpoints.Items.Count > topIndex ? topIndex : lstBreakpoints.Items.Count - 1];
 			}
 
-			lstBreakpoints.ItemChecked += new System.Windows.Forms.ItemCheckedEventHandler(lstBreakpoints_ItemChecked);
+			lstBreakpoints.ItemChecked += new ItemCheckedEventHandler(lstBreakpoints_ItemChecked);
 		}
 
 		private void lstBreakpoints_ColumnWidthChanging(object sender, ColumnWidthChangingEventArgs e)
@@ -148,6 +153,14 @@ namespace Mesen.GUI.Debugger.Controls
 			mnuRemoveBreakpoint.Enabled = (lstBreakpoints.SelectedItems.Count > 0);
 			mnuEditBreakpoint.Enabled = (lstBreakpoints.SelectedItems.Count == 1);
 			mnuGoToLocation.Enabled = (lstBreakpoints.SelectedItems.Count == 1 && ((Breakpoint)lstBreakpoints.SelectedItems[0].Tag).IsCpuBreakpoint);
+		}
+		
+		private void mnuShowLabels_CheckedChanged(object sender, EventArgs e)
+		{
+			ConfigManager.Config.DebugInfo.ShowBreakpointLabels = mnuShowLabels.Checked;
+			ConfigManager.ApplyChanges();
+
+			this.RefreshListAddresses();
 		}
 	}
 }

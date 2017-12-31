@@ -794,6 +794,11 @@ int32_t Debugger::GetAbsoluteChrAddress(uint32_t addr)
 	return _mapper->ToAbsoluteChrAddress(addr);
 }
 
+int32_t Debugger::GetRelativeChrAddress(uint32_t absoluteAddr)
+{
+	return _mapper->FromAbsoluteChrAddress(absoluteAddr);
+}
+
 void Debugger::SetNextStatement(uint16_t addr)
 {
 	if(_currentReadAddr) {

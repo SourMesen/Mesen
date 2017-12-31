@@ -186,6 +186,7 @@ public:
 	int32_t GetRelativeAddress(uint32_t addr, AddressType type);
 	int32_t GetAbsoluteAddress(uint32_t addr);	
 	int32_t GetAbsoluteChrAddress(uint32_t addr);
+	int32_t GetRelativeChrAddress(uint32_t addr);
 	void GetAbsoluteAddressAndType(uint32_t relativeAddr, AddressTypeInfo* info);
 
 	shared_ptr<Profiler> GetProfiler();

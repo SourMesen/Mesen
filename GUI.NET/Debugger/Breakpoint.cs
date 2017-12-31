@@ -29,31 +29,37 @@ namespace Mesen.GUI.Debugger
 		public bool IsAbsoluteAddress = false;
 		public string Condition = "";
 
-		public string GetAddressString()
+		public string GetAddressString(bool showLabel)
 		{
+			string addr = "";
 			switch(AddressType) {
 				case BreakpointAddressType.AnyAddress: return "<any>";
 				case BreakpointAddressType.SingleAddress:
 					if(IsAbsoluteAddress) {
 						int relativeAddress = this.GetRelativeAddress();
-						string addr = "";
 						if(relativeAddress >= 0) {
 							addr += "$" + this.GetRelativeAddress().ToString("X4") + " ";
 						}
 						addr += "[$" + Address.ToString("X4") + "]";
-						return addr;
 					} else {
-						return "$" + Address.ToString("X4");
+						addr = "$" + Address.ToString("X4");
 					}
+					break;
 
 				case BreakpointAddressType.AddressRange:
 					if(IsAbsoluteAddress) {
-						return $"[${StartAddress.ToString("X4")} - [${EndAddress.ToString("X4")}]";
+						addr = $"[${StartAddress.ToString("X4")}] - [${EndAddress.ToString("X4")}]";
 					} else {
-						return $"${StartAddress.ToString("X4")} - ${EndAddress.ToString("X4")}";
+						addr = $"${StartAddress.ToString("X4")} - ${EndAddress.ToString("X4")}";
 					}
+					break;
 			}
-			return string.Empty;
+
+			string label = GetAddressLabel();
+			if(showLabel && !string.IsNullOrWhiteSpace(label)) {
+				addr = label + $", {addr}";
+			}
+			return addr;
 		}
 
 		public void SetEnabled(bool enabled)
@@ -97,16 +103,36 @@ namespace Mesen.GUI.Debugger
 			}
 		}
 
-		public int GetRelativeAddress()
+		public string GetAddressLabel()
 		{
-			if(this.IsCpuBreakpoint) {
+			UInt32 address = AddressType == BreakpointAddressType.SingleAddress ? this.Address : this.StartAddress;
+
+			if(IsCpuBreakpoint) {
+				CodeLabel label;
 				if(this.IsAbsoluteAddress) {
-					return InteropEmu.DebugGetRelativeAddress((uint)this.Address, GUI.AddressType.PrgRom);
+					label = LabelManager.GetLabel(address, GUI.AddressType.PrgRom);
 				} else {
-					return (int)this.Address;
+					label = LabelManager.GetLabel((UInt16)address);
+				}
+				if(label != null) {
+					return label.Label;
 				}
 			}
-			return 0;
+			return string.Empty;
+		}
+
+		public int GetRelativeAddress()
+		{
+			UInt32 address = AddressType == BreakpointAddressType.SingleAddress ? this.Address : this.StartAddress;
+			if(this.IsAbsoluteAddress) {
+				if(IsCpuBreakpoint) {
+					return InteropEmu.DebugGetRelativeAddress(address, GUI.AddressType.PrgRom);
+				} else {
+					return InteropEmu.DebugGetRelativeChrAddress(address);
+				}
+			} else {
+				return (int)this.Address;
+			}
 		}
 
 		public bool Matches(int relativeAddress)

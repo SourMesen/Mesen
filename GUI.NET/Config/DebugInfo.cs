@@ -102,6 +102,7 @@ namespace Mesen.GUI.Config
 
 		public bool SplitView = false;
 		public bool HexDisplay = true;
+		public bool ShowBreakpointLabels = true;
 
 		public bool PpuAutoRefresh = true;
 		public bool PpuPartialDraw = false;
@@ -111,7 +112,7 @@ namespace Mesen.GUI.Config
 		public bool HighlightChrTile = false;
 		public int PpuDisplayCycle = 0;
 		public int PpuDisplayScanline = 241;
-
+		
 		public bool ShowCpuMemoryMapping = true;
 		public bool ShowPpuMemoryMapping = true;
 

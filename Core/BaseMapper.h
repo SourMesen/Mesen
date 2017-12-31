@@ -224,6 +224,7 @@ public:
 	int32_t ToAbsoluteSaveRamAddress(uint16_t addr);
 	int32_t ToAbsoluteWorkRamAddress(uint16_t addr);
 	int32_t ToAbsoluteChrAddress(uint16_t addr);
+	int32_t FromAbsoluteChrAddress(uint32_t addr);
 	int32_t FromAbsoluteAddress(uint32_t addr, AddressType type = AddressType::PrgRom);
 
 	NESHeader GetNesHeader();

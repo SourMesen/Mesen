@@ -41,6 +41,8 @@
 			this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
 			this.columnHeader4 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
 			this.colLastColumn = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+			this.mnuShowLabels = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripSeparator();
 			this.mnuBreakpoints.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -51,9 +53,11 @@
             this.mnuEditBreakpoint,
             this.mnuRemoveBreakpoint,
             this.toolStripMenuItem1,
-            this.mnuGoToLocation});
+            this.mnuGoToLocation,
+            this.toolStripMenuItem2,
+            this.mnuShowLabels});
 			this.mnuBreakpoints.Name = "mnuBreakpoints";
-			this.mnuBreakpoints.Size = new System.Drawing.Size(153, 120);
+			this.mnuBreakpoints.Size = new System.Drawing.Size(153, 148);
 			// 
 			// mnuAddBreakpoint
 			// 
@@ -144,6 +148,18 @@
 			this.colLastColumn.Text = "";
 			this.colLastColumn.Width = 29;
 			// 
+			// mnuShowLabels
+			// 
+			this.mnuShowLabels.CheckOnClick = true;
+			this.mnuShowLabels.Name = "mnuShowLabels";
+			this.mnuShowLabels.Size = new System.Drawing.Size(152, 22);
+			this.mnuShowLabels.Text = "Show Labels";
+			// 
+			// toolStripMenuItem2
+			// 
+			this.toolStripMenuItem2.Name = "toolStripMenuItem2";
+			this.toolStripMenuItem2.Size = new System.Drawing.Size(149, 6);
+			// 
 			// ctrlBreakpoints
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -170,5 +186,7 @@
 		private System.Windows.Forms.ToolStripMenuItem mnuGoToLocation;
 		private System.Windows.Forms.ToolStripMenuItem mnuEditBreakpoint;
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem1;
+		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem2;
+		private System.Windows.Forms.ToolStripMenuItem mnuShowLabels;
 	}
 }

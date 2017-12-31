@@ -994,6 +994,21 @@ int32_t BaseMapper::ToAbsoluteChrAddress(uint16_t addr)
 	return -1;
 }
 
+int32_t BaseMapper::FromAbsoluteChrAddress(uint32_t addr)
+{
+	uint8_t* ptrAddress = (_onlyChrRam ? _chrRam : _chrRom) + (addr & 0x3FFF);
+
+	for(int i = 0; i < 64; i++) {
+		uint8_t* pageAddress = _chrPages[i];
+		if(pageAddress != nullptr && ptrAddress >= pageAddress && ptrAddress <= pageAddress + 0xFF) {
+			return (i << 8) + (uint32_t)(ptrAddress - pageAddress);
+		}
+	}
+
+	//Address is currently not mapped
+	return -1;
+}
+
 int32_t BaseMapper::FromAbsoluteAddress(uint32_t addr, AddressType type)
 {
 	uint8_t* ptrAddress;
