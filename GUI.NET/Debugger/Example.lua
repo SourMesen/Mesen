@@ -1,4 +1,4 @@
-﻿--This is an example script to give an idea of how scripting work
+﻿--This is an example script to give a general idea of how to build scripts
 --Press F5 or click the Run button to execute it
 --Scripts must be written in Lua (https://www.lua.org)
 --This text editor contains an auto-complete feature for all Mesen-specific functions
