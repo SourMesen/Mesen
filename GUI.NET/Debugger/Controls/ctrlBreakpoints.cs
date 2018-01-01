@@ -21,13 +21,16 @@ namespace Mesen.GUI.Debugger.Controls
 		{
 			InitializeComponent();
 
-			mnuShowLabels.Checked = ConfigManager.Config.DebugInfo.ShowBreakpointLabels;
-			mnuShowLabels.CheckedChanged += mnuShowLabels_CheckedChanged;
+			bool designMode = (LicenseManager.UsageMode == LicenseUsageMode.Designtime);
+			if(!designMode) {
+				mnuShowLabels.Checked = ConfigManager.Config.DebugInfo.ShowBreakpointLabels;
+				mnuShowLabels.CheckedChanged += mnuShowLabels_CheckedChanged;
 
-			BreakpointManager.BreakpointsChanged += BreakpointManager_OnBreakpointChanged;
-			mnuRemoveBreakpoint.Enabled = false;
-			mnuEditBreakpoint.Enabled = false;
-			mnuGoToLocation.Enabled = false;
+				BreakpointManager.BreakpointsChanged += BreakpointManager_OnBreakpointChanged;
+				mnuRemoveBreakpoint.Enabled = false;
+				mnuEditBreakpoint.Enabled = false;
+				mnuGoToLocation.Enabled = false;
+			}
 		}
 
 		void BreakpointManager_OnBreakpointChanged(object sender, EventArgs e)
