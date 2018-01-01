@@ -115,7 +115,9 @@ private:
 	int32_t _curInstructionCycle;
 	int32_t _runToCycle;
 	bool _needRewind;
+	
 	vector<stringstream> _rewindCache;
+	vector<uint32_t> _rewindPrevInstructionCycleCache;
 
 	uint32_t _inputOverride[4];
 

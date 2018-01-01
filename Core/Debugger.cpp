@@ -429,6 +429,7 @@ bool Debugger::PrivateProcessRamOperation(MemoryOperationType type, uint16_t &ad
 	if(type == MemoryOperationType::ExecOpCode) {
 		if(_runToCycle == 0) {
 			_rewindCache.clear();
+			_rewindPrevInstructionCycleCache.clear();
 		}
 
 		if(_nextReadAddr != -1) {
@@ -444,8 +445,13 @@ bool Debugger::PrivateProcessRamOperation(MemoryOperationType type, uint16_t &ad
 		} else if(_needRewind) {
 			//Step back - Need to load a state, and then alter the current opcode based on the new program counter
 			if(!_rewindCache.empty()) {
+				//Restore the state, and the cycle number of the instruction that preceeded that state
+				//Otherwise, the target cycle number when building the next cache will be incorrect
 				Console::LoadState(_rewindCache.back());
+				_curInstructionCycle = _rewindPrevInstructionCycleCache.back();
+				
 				_rewindCache.pop_back();
+				_rewindPrevInstructionCycleCache.pop_back();
 				
 				//This state is for the instruction we want to stop on, break here.
 				_runToCycle = 0;
@@ -519,9 +525,10 @@ bool Debugger::PrivateProcessRamOperation(MemoryOperationType type, uint16_t &ad
 				RewindManager::StopRewinding(true);
 				_runToCycle = 0;
 				Step(1);
-			} else if(_runToCycle - CPU::GetCycleCount() < 100) {
+			} else if(_runToCycle - CPU::GetCycleCount() < 500) {
 				_rewindCache.push_back(stringstream());
 				Console::SaveState(_rewindCache.back());
+				_rewindPrevInstructionCycleCache.push_back(_prevInstructionCycle);
 			}
 		}
 
