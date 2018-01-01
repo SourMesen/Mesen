@@ -42,6 +42,7 @@
 			this.flpHighlight = new System.Windows.Forms.FlowLayoutPanel();
 			this.lblHighlight = new System.Windows.Forms.Label();
 			this.cboHighlightType = new System.Windows.Forms.ComboBox();
+			this.chkAutoPalette = new System.Windows.Forms.CheckBox();
 			this.grpTileInfo = new System.Windows.Forms.GroupBox();
 			this.tableLayoutPanel4 = new System.Windows.Forms.TableLayoutPanel();
 			this.txtTileAddress = new System.Windows.Forms.TextBox();
@@ -58,9 +59,9 @@
 			this.picChrBank1 = new System.Windows.Forms.PictureBox();
 			this.ctxMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this.mnuCopyHdPack = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuCopyToClipboard = new System.Windows.Forms.ToolStripMenuItem();
 			this.picChrBank2 = new System.Windows.Forms.PictureBox();
 			this.toolTip = new System.Windows.Forms.ToolTip(this.components);
-			this.mnuCopyToClipboard = new System.Windows.Forms.ToolStripMenuItem();
 			this.tableLayoutPanel3.SuspendLayout();
 			this.grpDisplayOptions.SuspendLayout();
 			this.tableLayoutPanel1.SuspendLayout();
@@ -103,7 +104,7 @@
 			this.grpDisplayOptions.Dock = System.Windows.Forms.DockStyle.Top;
 			this.grpDisplayOptions.Location = new System.Drawing.Point(269, 300);
 			this.grpDisplayOptions.Name = "grpDisplayOptions";
-			this.grpDisplayOptions.Size = new System.Drawing.Size(264, 133);
+			this.grpDisplayOptions.Size = new System.Drawing.Size(264, 162);
 			this.grpDisplayOptions.TabIndex = 4;
 			this.grpDisplayOptions.TabStop = false;
 			this.grpDisplayOptions.Text = "Display Options";
@@ -116,16 +117,18 @@
 			this.tableLayoutPanel1.Controls.Add(this.chkLargeSprites, 0, 3);
 			this.tableLayoutPanel1.Controls.Add(this.flowLayoutPanel2, 0, 0);
 			this.tableLayoutPanel1.Controls.Add(this.flpHighlight, 0, 2);
+			this.tableLayoutPanel1.Controls.Add(this.chkAutoPalette, 0, 4);
 			this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tableLayoutPanel1.Location = new System.Drawing.Point(3, 16);
 			this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-			this.tableLayoutPanel1.RowCount = 5;
+			this.tableLayoutPanel1.RowCount = 6;
+			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel1.Size = new System.Drawing.Size(258, 114);
+			this.tableLayoutPanel1.Size = new System.Drawing.Size(258, 143);
 			this.tableLayoutPanel1.TabIndex = 6;
 			// 
 			// flowLayoutPanel1
@@ -190,7 +193,7 @@
 			this.chkLargeSprites.TabIndex = 2;
 			this.chkLargeSprites.Text = "Display as 8x16 sprites";
 			this.chkLargeSprites.UseVisualStyleBackColor = true;
-			this.chkLargeSprites.Click += new System.EventHandler(this.chkLargeSprites_Click);
+			this.chkLargeSprites.CheckedChanged += new System.EventHandler(this.chkLargeSprites_CheckedChanged);
 			// 
 			// flowLayoutPanel2
 			// 
@@ -258,6 +261,17 @@
 			this.cboHighlightType.Size = new System.Drawing.Size(92, 21);
 			this.cboHighlightType.TabIndex = 1;
 			this.cboHighlightType.SelectedIndexChanged += new System.EventHandler(this.cboHighlightType_SelectedIndexChanged);
+			// 
+			// chkAutoPalette
+			// 
+			this.chkAutoPalette.AutoSize = true;
+			this.chkAutoPalette.Location = new System.Drawing.Point(3, 107);
+			this.chkAutoPalette.Name = "chkAutoPalette";
+			this.chkAutoPalette.Size = new System.Drawing.Size(221, 17);
+			this.chkAutoPalette.TabIndex = 8;
+			this.chkAutoPalette.Text = "Display tiles using their last known palette";
+			this.chkAutoPalette.UseVisualStyleBackColor = true;
+			this.chkAutoPalette.CheckedChanged += new System.EventHandler(this.chkAutoPalette_CheckedChanged);
 			// 
 			// grpTileInfo
 			// 
@@ -438,7 +452,7 @@
             this.mnuCopyHdPack,
             this.mnuCopyToClipboard});
 			this.ctxMenu.Name = "ctxMenu";
-			this.ctxMenu.Size = new System.Drawing.Size(248, 70);
+			this.ctxMenu.Size = new System.Drawing.Size(248, 48);
 			this.ctxMenu.Opening += new System.ComponentModel.CancelEventHandler(this.ctxMenu_Opening);
 			// 
 			// mnuCopyHdPack
@@ -447,6 +461,15 @@
 			this.mnuCopyHdPack.Size = new System.Drawing.Size(247, 22);
 			this.mnuCopyHdPack.Text = "Copy Tile (HD Pack Format)";
 			this.mnuCopyHdPack.Click += new System.EventHandler(this.mnuCopyHdPack_Click);
+			// 
+			// mnuCopyToClipboard
+			// 
+			this.mnuCopyToClipboard.Image = global::Mesen.GUI.Properties.Resources.Copy;
+			this.mnuCopyToClipboard.Name = "mnuCopyToClipboard";
+			this.mnuCopyToClipboard.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.C)));
+			this.mnuCopyToClipboard.Size = new System.Drawing.Size(247, 22);
+			this.mnuCopyToClipboard.Text = "Copy image to clipboard";
+			this.mnuCopyToClipboard.Click += new System.EventHandler(this.mnuCopyToClipboard_Click);
 			// 
 			// picChrBank2
 			// 
@@ -469,15 +492,6 @@
 			this.toolTip.AutoPopDelay = 32700;
 			this.toolTip.InitialDelay = 10;
 			this.toolTip.ReshowDelay = 10;
-			// 
-			// mnuCopyToClipboard
-			// 
-			this.mnuCopyToClipboard.Image = global::Mesen.GUI.Properties.Resources.Copy;
-			this.mnuCopyToClipboard.Name = "mnuCopyToClipboard";
-			this.mnuCopyToClipboard.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.C)));
-			this.mnuCopyToClipboard.Size = new System.Drawing.Size(247, 22);
-			this.mnuCopyToClipboard.Text = "Copy image to clipboard";
-			this.mnuCopyToClipboard.Click += new System.EventHandler(this.mnuCopyToClipboard_Click);
 			// 
 			// ctrlChrViewer
 			// 
@@ -546,5 +560,6 @@
 		private System.Windows.Forms.ToolStripMenuItem mnuCopyHdPack;
 		private ctrlTilePalette ctrlTilePalette;
 		private System.Windows.Forms.ToolStripMenuItem mnuCopyToClipboard;
+		private System.Windows.Forms.CheckBox chkAutoPalette;
 	}
 }

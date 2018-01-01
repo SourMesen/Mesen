@@ -110,6 +110,10 @@ namespace Mesen.GUI.Config
 		public bool ShowTileGrid = false;
 		public bool ShowAttributeGrid = false;
 		public bool HighlightChrTile = false;
+
+		public bool ChrViewerUseAutoPalette = true;
+		public bool ChrViewerUseLargeSprites = false;
+
 		public int PpuDisplayCycle = 0;
 		public int PpuDisplayScanline = 241;
 		

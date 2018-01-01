@@ -246,8 +246,83 @@ void MemoryDumper::GetNametable(int nametableIndex, uint32_t* frameBuffer, uint8
 	}
 }
 
-void MemoryDumper::GetChrBank(int bankIndex, uint32_t* frameBuffer, uint8_t palette, bool largeSprites, CdlHighlightType highlightType)
+void MemoryDumper::GatherChrPaletteInfo()
 {
+	uint16_t bgAddr = _ppu->GetState().ControlFlags.BackgroundPatternAddr;
+
+	uint32_t palettes[8];
+	for(int i = 0; i < 8; i++) {
+		palettes[i] =
+			_ppu->ReadPaletteRAM(0) |
+			(_ppu->ReadPaletteRAM(i * 4 + 1) << 8) |
+			(_ppu->ReadPaletteRAM(i * 4 + 2) << 16) |
+			(_ppu->ReadPaletteRAM(i * 4 + 3) << 24);
+	}
+
+	auto processTilePalette = [=](uint16_t tileAddr, uint8_t paletteIndex) {
+		TileKey key;
+		if(_mapper->HasChrRom()) {
+			key.TileIndex = _mapper->ToAbsoluteChrAddress(tileAddr) / 16;
+			key.IsChrRamTile = false;
+		} else {
+			_mapper->CopyChrRamTile(_mapper->ToAbsoluteChrAddress(tileAddr), key.TileData);
+			key.IsChrRamTile = true;
+		}
+		_paletteByTile[key] = palettes[paletteIndex];
+	};
+
+	//Nametables - Check all palette/tile combinations
+	for(int i = 0; i < 4; i++) {
+		uint16_t baseAddr = 0x2000 + i * 0x400;
+		uint16_t baseAttributeAddr = baseAddr + 960;
+		for(uint8_t y = 0; y < 30; y++) {
+			for(uint8_t x = 0; x < 32; x++) {
+				uint8_t tileIndex = _mapper->DebugReadVRAM(baseAddr + (y << 5) + x);
+				uint16_t tileAddr = bgAddr + (tileIndex << 4);
+				uint8_t attribute = _mapper->DebugReadVRAM(baseAttributeAddr + ((y & 0xFC) << 1) + (x >> 2));
+				uint8_t shift = (x & 0x02) | ((y & 0x02) << 1);
+				uint8_t paletteIndex = ((attribute >> shift) & 0x03);
+
+				processTilePalette(tileAddr, paletteIndex);
+			}
+		}
+	}
+
+	//Sprites - Check all sprites palettes
+	uint8_t *spriteRam = _ppu->GetSpriteRam();
+	uint16_t spriteAddr = _ppu->GetState().ControlFlags.SpritePatternAddr;
+	bool largeSprites = _ppu->GetState().ControlFlags.LargeSprites;
+	for(uint8_t y = 0; y < 8; y++) {
+		for(uint8_t x = 0; x < 8; x++) {
+			uint8_t ramAddr = ((y << 3) + x) << 2;
+			uint8_t tileIndex = spriteRam[ramAddr + 1];
+			uint8_t attributes = spriteRam[ramAddr + 2];
+
+			uint16_t tileAddr;
+			if(largeSprites) {
+				tileAddr = (tileIndex & 0x01 ? 0x1000 : 0x0000) + ((tileIndex & 0xFE) << 4);
+			} else {
+				tileAddr = spriteAddr + (tileIndex << 4);
+			}
+
+			uint8_t palette = (attributes & 0x03) | 0x04;
+			processTilePalette(tileAddr, palette);
+			if(largeSprites) {
+				processTilePalette(tileAddr + 16, palette);
+			}
+		}
+	}
+}
+
+void MemoryDumper::GetChrBank(int bankIndex, uint32_t* frameBuffer, uint8_t palette, bool largeSprites, CdlHighlightType highlightType, uint32_t* paletteBuffer)
+{
+	bool autoPalette = (palette & 0x80) == 0x80;
+	uint8_t paletteBaseAddr = (palette & 0x07) << 2;
+		uint32_t defaultPalette = _ppu->ReadPaletteRAM(0) |
+		(_ppu->ReadPaletteRAM(paletteBaseAddr + 1) << 8) |
+		(_ppu->ReadPaletteRAM(paletteBaseAddr + 2) << 16) |
+		(_ppu->ReadPaletteRAM(paletteBaseAddr + 3) << 24);
+	
 	uint32_t *rgbPalette = EmulationSettings::GetRgbPalette();
 	uint8_t chrBuffer[0x1000];
 	bool chrIsDrawn[0x1000];
@@ -279,7 +354,26 @@ void MemoryDumper::GetChrBank(int bankIndex, uint32_t* frameBuffer, uint8_t pale
 	for(uint8_t y = 0; y < 16; y++) {
 		for(uint8_t x = 0; x < 16; x++) {
 			uint8_t tileIndex = y * 16 + x;
-			uint8_t paletteBaseAddr = palette << 2;
+			uint32_t paletteData = defaultPalette;
+
+			if(autoPalette) {
+				TileKey key;
+				uint32_t absoluteTileIndex = bankIndex <= 1 ? _mapper->ToAbsoluteChrAddress(bankIndex * 0x1000 + tileIndex * 16) / 16 : ((bankIndex - 2) * 256 + tileIndex);
+				if(_mapper->HasChrRom()) {
+					key.TileIndex = absoluteTileIndex;
+					key.IsChrRamTile = false;
+				} else {
+					_mapper->CopyChrRamTile(absoluteTileIndex * 16, key.TileData);
+					key.IsChrRamTile = true;
+				}
+				auto result = _paletteByTile.find(key);
+				if(result != _paletteByTile.end()) {
+					paletteData = result->second;
+				}
+			}
+
+			paletteBuffer[tileIndex] = paletteData;
+
 			uint16_t tileAddr = tileIndex << 4;
 			for(uint8_t i = 0; i < 8; i++) {
 				uint8_t lowByte = chrBuffer[tileAddr + i];
@@ -298,7 +392,7 @@ void MemoryDumper::GetChrBank(int bankIndex, uint32_t* frameBuffer, uint8_t pale
 						position = (y << 10) + (x << 3) + (i << 7) + j;
 					}
 
-					frameBuffer[position] = rgbPalette[(color == 0 ? _ppu->ReadPaletteRAM(0) : _ppu->ReadPaletteRAM(paletteBaseAddr + color)) & 0x3F];
+					frameBuffer[position] = rgbPalette[(paletteData >> (8 * color)) & 0x3F];
 					if(highlightType != CdlHighlightType::None && isDrawn == (highlightType != CdlHighlightType::HighlightUsed)) {
 						frameBuffer[position] &= 0x4FFFFFFF;
 					}

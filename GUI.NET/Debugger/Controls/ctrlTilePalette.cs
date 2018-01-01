@@ -16,6 +16,7 @@ namespace Mesen.GUI.Debugger.Controls
 	public partial class ctrlTilePalette : BaseControl
 	{
 		private int _selectedPalette = -1;
+		private UInt32? _paletteColors = null;
 		private bool _allowSelection = false;
 		private int _hoverColor = -1;
 		private int _selectedColor = 0;
@@ -71,6 +72,22 @@ namespace Mesen.GUI.Debugger.Controls
 			}
 		}
 
+		[Browsable(false)]
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+		public UInt32? PaletteColors
+		{
+			get
+			{
+				return _paletteColors;
+			}
+			set
+			{
+				_paletteColors = value;
+				this.RefreshPalette();
+			}
+		}
+
+
 		public ctrlTilePalette()
 		{
 			InitializeComponent();
@@ -78,14 +95,26 @@ namespace Mesen.GUI.Debugger.Controls
 
 		public void RefreshPalette()
 		{
-			if(_selectedPalette < 0) {
+			if(_selectedPalette < 0 && !_paletteColors.HasValue) {
 				return;
 			}
 
-			byte[] paletteRam = InteropEmu.DebugGetMemoryState(DebugMemoryType.PaletteMemory);
-			int[] palette = InteropEmu.DebugGetPalette();
-			int[] currentPalette = new int[16];
-			Array.Copy(palette, _selectedPalette * 4, currentPalette, 0, 4);
+			int[] currentPalette = new int[4];
+			int[] paletteColorCodes = new int[4];
+			if(_paletteColors.HasValue) {
+				int[] paletteData = InteropEmu.GetRgbPalette();
+				for(int i = 0; i < 4; i++) {
+					paletteColorCodes[i] = (int)(_paletteColors.Value >> (8 * i)) & 0x3F;
+					currentPalette[i] = paletteData[paletteColorCodes[i]];
+				}
+			} else {
+				byte[] paletteRam = InteropEmu.DebugGetMemoryState(DebugMemoryType.PaletteMemory);
+				int[] palette = InteropEmu.DebugGetPalette();
+				Array.Copy(palette, _selectedPalette * 4, currentPalette, 0, 4);
+				for(int i = 0; i < 4; i++) {
+					paletteColorCodes[i] = paletteRam[_selectedPalette * 4 + i];
+				}
+			}
 
 			GCHandle handle = GCHandle.Alloc(currentPalette, GCHandleType.Pinned);
 			try {
@@ -107,7 +136,7 @@ namespace Mesen.GUI.Debugger.Controls
 								if(this.DisplayIndexes) {
 									g.DrawOutlinedString(i.ToString(), font, Brushes.Black, bg, 5+i*32, 2);
 								} else {
-									g.DrawOutlinedString(paletteRam[_selectedPalette*4 + i].ToString("X2"), font, Brushes.Black, bg, 14+i*32, 18);
+									g.DrawOutlinedString(paletteColorCodes[i].ToString("X2"), font, Brushes.Black, bg, 14+i*32, 18);
 								}
 							}
 						}

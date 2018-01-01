@@ -391,16 +391,19 @@ namespace Mesen.GUI
 			}
 		}
 
-		[DllImport(DLLPath, EntryPoint = "DebugGetChrBank")] private static extern void DebugGetChrBankWrapper(UInt32 bankIndex, IntPtr frameBuffer, Byte palette, [MarshalAs(UnmanagedType.I1)]bool largeSprites, CdlHighlightType highlightType);
-		public static byte[] DebugGetChrBank(int bankIndex, int palette, bool largeSprites, CdlHighlightType highlightType)
+		[DllImport(DLLPath, EntryPoint = "DebugGetChrBank")] private static extern void DebugGetChrBankWrapper(UInt32 bankIndex, IntPtr frameBuffer, Byte palette, [MarshalAs(UnmanagedType.I1)]bool largeSprites, CdlHighlightType highlightType, IntPtr paletteBuffer);
+		public static byte[] DebugGetChrBank(int bankIndex, int palette, bool largeSprites, CdlHighlightType highlightType, out UInt32[] paletteData)
 		{
 			byte[] frameData = new byte[128*128*4];
+			paletteData = new UInt32[16*16];
 
 			GCHandle hFrameData = GCHandle.Alloc(frameData, GCHandleType.Pinned);
+			GCHandle hPaletteData = GCHandle.Alloc(paletteData, GCHandleType.Pinned);
 			try {
-				InteropEmu.DebugGetChrBankWrapper((UInt32)bankIndex, hFrameData.AddrOfPinnedObject(), (Byte)palette, largeSprites, highlightType);
+				InteropEmu.DebugGetChrBankWrapper((UInt32)bankIndex, hFrameData.AddrOfPinnedObject(), (Byte)palette, largeSprites, highlightType, hPaletteData.AddrOfPinnedObject());
 			} finally {
 				hFrameData.Free();
+				hPaletteData.Free();
 			}
 
 			return frameData;

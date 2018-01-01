@@ -9,16 +9,19 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Runtime.InteropServices;
 using Mesen.GUI.Controls;
+using Mesen.GUI.Config;
 
 namespace Mesen.GUI.Debugger.Controls
 {
 	public partial class ctrlChrViewer : BaseControl
 	{
 		private byte[][] _chrPixelData = new byte[2][];
+		private UInt32[][] _paletteData = new UInt32[2][];
 		private int _selectedPalette = 0;
 		private int _chrSelection = 0;
 		private CdlHighlightType _highlightType = CdlHighlightType.None;
 		private bool _useLargeSprites = false;
+		private bool _useAutoPalette = false;
 		private Bitmap _tilePreview;
 		private Bitmap[] _chrBanks = new Bitmap[2];
 
@@ -51,6 +54,9 @@ namespace Mesen.GUI.Debugger.Controls
 				this.ctrlTilePalette.AllowSelection = true;
 				this.ctrlTilePalette.HighlightMouseOver = true;
 				this.ctrlTilePalette.DisplayIndexes = true;
+
+				this.chkAutoPalette.Checked = ConfigManager.Config.DebugInfo.ChrViewerUseAutoPalette;
+				this.chkLargeSprites.Checked = ConfigManager.Config.DebugInfo.ChrViewerUseLargeSprites;
 			}
 		}
 
@@ -88,7 +94,7 @@ namespace Mesen.GUI.Debugger.Controls
 		public void GetData()
 		{
 			for(int i = 0; i < 2; i++) {
-				_chrPixelData[i] = InteropEmu.DebugGetChrBank(i + _chrSelection * 2, _selectedPalette, _useLargeSprites, _highlightType);
+				_chrPixelData[i] = InteropEmu.DebugGetChrBank(i + _chrSelection * 2, _selectedPalette + (_useAutoPalette ? 0x80 : 0), _useLargeSprites, _highlightType, out _paletteData[i]);
 			}
 		}
 
@@ -189,14 +195,26 @@ namespace Mesen.GUI.Debugger.Controls
 		private void cboPalette_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			this._selectedPalette = this.cboPalette.SelectedIndex;
-			this.ctrlTilePalette.SelectedPalette = this._selectedPalette;
 			this.GetData();
 			this.RefreshViewer();
 		}
 
-		private void chkLargeSprites_Click(object sender, EventArgs e)
+		private void chkLargeSprites_CheckedChanged(object sender, EventArgs e)
 		{
+			ConfigManager.Config.DebugInfo.ChrViewerUseLargeSprites = this.chkLargeSprites.Checked;
+			ConfigManager.ApplyChanges();
+
 			this._useLargeSprites = this.chkLargeSprites.Checked;
+			this.GetData();
+			this.RefreshViewer();
+		}
+		
+		private void chkAutoPalette_CheckedChanged(object sender, EventArgs e)
+		{
+			ConfigManager.Config.DebugInfo.ChrViewerUseAutoPalette = this.chkAutoPalette.Checked;
+			ConfigManager.ApplyChanges();
+
+			this._useAutoPalette = this.chkAutoPalette.Checked;
 			this.GetData();
 			this.RefreshViewer();
 		}
@@ -258,6 +276,8 @@ namespace Mesen.GUI.Debugger.Controls
 			int tileY = tileIndex / 16;
 
 			int realIndex = GetLargeSpriteIndex(tileIndex);
+			ctrlTilePalette.PaletteColors = _paletteData[bottomBank ? 1 : 0][tileIndex];
+
 			this.txtTileIndex.Text = realIndex.ToString("X2");
 			this.txtTileAddress.Text = (baseAddress + realIndex * 16).ToString("X4");
 

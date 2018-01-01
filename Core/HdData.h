@@ -11,7 +11,6 @@ struct HdTileKey
 	uint8_t TileData[16];
 	uint32_t TileIndex;
 	bool IsChrRamTile = false;
-	bool ForDefaultKey = false;
 
 	HdTileKey GetKey(bool defaultKey)
 	{

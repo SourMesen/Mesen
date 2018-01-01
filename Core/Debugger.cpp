@@ -1161,5 +1161,7 @@ void Debugger::ProcessEvent(EventType type)
 				}
 			}
 		}
+	} else if(type == EventType::EndFrame) {
+		_memoryDumper->GatherChrPaletteInfo();
 	}
 }

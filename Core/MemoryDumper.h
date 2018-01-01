@@ -1,5 +1,6 @@
 #pragma once
 #include "stdafx.h"
+#include <unordered_map>
 #include "DebuggerTypes.h"
 
 class PPU;
@@ -8,6 +9,63 @@ class BaseMapper;
 class CodeDataLogger;
 class Debugger;
 class Disassembler;
+
+struct TileKey
+{
+	uint8_t TileData[16];
+	uint32_t TileIndex;
+	bool IsChrRamTile = false;
+
+	TileKey GetKey(bool defaultKey)
+	{
+		return *this;
+	}
+
+	uint32_t GetHashCode() const
+	{
+		if(IsChrRamTile) {
+			return CalculateHash(TileData, 16);
+		} else {
+			uint64_t key = TileIndex;
+			return CalculateHash((uint8_t*)&key, sizeof(key));
+		}
+	}
+
+	size_t operator() (const TileKey &tile) const
+	{
+		return tile.GetHashCode();
+	}
+
+	bool operator==(const TileKey &other) const
+	{
+		if(IsChrRamTile) {
+			return memcmp((uint8_t*)&TileData, (uint8_t*)&other.TileData, 16) == 0;
+		} else {
+			return TileIndex == other.TileIndex;
+		}
+	}
+
+	uint32_t CalculateHash(const uint8_t* key, size_t len) const
+	{
+		uint32_t result = 0;
+		for(size_t i = 0; i < len; i += 4) {
+			result += *((uint32_t*)key);
+			result = (result << 2) | (result >> 30);
+			key += 4;
+		}
+		return result;
+	}
+};
+
+namespace std {
+	template <> struct hash<TileKey>
+	{
+		size_t operator()(const TileKey& x) const
+		{
+			return x.GetHashCode();
+		}
+	};
+}
 
 class MemoryDumper
 {
@@ -19,13 +77,17 @@ private:
 	shared_ptr<CodeDataLogger> _codeDataLogger;
 	shared_ptr<Disassembler> _disassembler;
 
+	std::unordered_map<TileKey, uint32_t> _paletteByTile;
+
 public:
 	MemoryDumper(shared_ptr<PPU> ppu, shared_ptr<MemoryManager> memoryManager, shared_ptr<BaseMapper> mapper, shared_ptr<CodeDataLogger> codeDataLogger, Debugger *debugger, shared_ptr<Disassembler> disassembler);
+
+	void GatherChrPaletteInfo();
 
 	uint32_t GetMemorySize(DebugMemoryType type);
 	uint32_t GetMemoryState(DebugMemoryType type, uint8_t *buffer);
 	void GetNametable(int nametableIndex, uint32_t* frameBuffer, uint8_t* tileData, uint8_t* paletteData);
-	void GetChrBank(int bankIndex, uint32_t* frameBuffer, uint8_t palette, bool largeSprites, CdlHighlightType highlightType);
+	void GetChrBank(int bankIndex, uint32_t* frameBuffer, uint8_t palette, bool largeSprites, CdlHighlightType highlightType, uint32_t* paletteBuffer);
 	void GetSprites(uint32_t* frameBuffer);
 	void GetPalette(uint32_t* frameBuffer);
 
