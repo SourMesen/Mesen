@@ -287,18 +287,18 @@ namespace Mesen.GUI
 			return header;
 		}
 
-		[DllImport(DLLPath, EntryPoint = "DebugSaveRomToDisk")] public static extern void DebugSaveRomToDiskWrapper([MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(UTF8Marshaler))]string filename, [MarshalAs(UnmanagedType.I1)]bool saveAsIps, IntPtr headerBuffer);
-		public static void DebugSaveRomToDisk(string filename, bool saveAsIps = false, byte[] header = null)
+		[DllImport(DLLPath, EntryPoint = "DebugSaveRomToDisk")] public static extern void DebugSaveRomToDiskWrapper([MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(UTF8Marshaler))]string filename, [MarshalAs(UnmanagedType.I1)]bool saveAsIps, IntPtr headerBuffer, CdlStripFlag cdlStripFlag);
+		public static void DebugSaveRomToDisk(string filename, bool saveAsIps = false, byte[] header = null, CdlStripFlag cdlStripFlag = CdlStripFlag.StripNone)
 		{
 			if(header != null) {
 				GCHandle handle = GCHandle.Alloc(header, GCHandleType.Pinned);
 				try {
-					InteropEmu.DebugSaveRomToDiskWrapper(filename, saveAsIps, handle.AddrOfPinnedObject());
+					InteropEmu.DebugSaveRomToDiskWrapper(filename, saveAsIps, handle.AddrOfPinnedObject(), cdlStripFlag);
 				} finally {
 					handle.Free();
 				}
 			} else {
-				InteropEmu.DebugSaveRomToDiskWrapper(filename, saveAsIps, IntPtr.Zero);
+				InteropEmu.DebugSaveRomToDiskWrapper(filename, saveAsIps, IntPtr.Zero, cdlStripFlag);
 			}
 		}
 		
@@ -1038,6 +1038,13 @@ namespace Mesen.GUI
 		None = 0,
 		HighlightUsed = 1,
 		HighlightUnused = 2
+	}
+
+	public enum CdlStripFlag
+	{
+		StripNone = 0,
+		StripUnused = 1,
+		StripUsed = 2
 	}
 
 	public struct DebugState

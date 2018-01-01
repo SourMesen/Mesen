@@ -22,6 +22,13 @@ enum class CdlChrFlags
 	Read = 0x02,
 };
 
+enum class CdlStripFlag
+{
+	StripNone = 0,
+	StripUnused,
+	StripUsed,
+};
+
 struct CdlRatios
 {
 	float CodeRatio;
@@ -70,4 +77,6 @@ public:
 	bool IsDrawn(uint32_t absoluteAddr);
 
 	void GetCdlData(uint32_t offset, uint32_t length, DebugMemoryType memoryType, uint8_t* cdlData);
+
+	void StripData(uint8_t* romBuffer, CdlStripFlag flag);
 };

@@ -105,7 +105,7 @@ extern "C"
 	DllExport void __stdcall DebugStartCodeRunner(uint8_t* byteCode, uint32_t codeLength) { return GetDebugger()->StartCodeRunner(byteCode, codeLength); }
 	
 	DllExport void __stdcall DebugGetNesHeader(uint8_t* header) { GetDebugger()->GetNesHeader(header); }
-	DllExport void __stdcall DebugSaveRomToDisk(char* filename, bool saveIpsFile, uint8_t* header) { GetDebugger()->SaveRomToDisk(filename, saveIpsFile, header); }
+	DllExport void __stdcall DebugSaveRomToDisk(char* filename, bool saveIpsFile, uint8_t* header, CdlStripFlag cdlStripFlag) { GetDebugger()->SaveRomToDisk(filename, saveIpsFile, header, cdlStripFlag); }
 	DllExport bool __stdcall DebugHasPrgChrChanges() { return GetDebugger()->HasPrgChrChanges(); }
 	DllExport void __stdcall DebugRevertPrgChrChanges() { GetDebugger()->RevertPrgChrChanges(); }
 

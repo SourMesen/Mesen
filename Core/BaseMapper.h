@@ -228,7 +228,7 @@ public:
 	int32_t FromAbsoluteAddress(uint32_t addr, AddressType type = AddressType::PrgRom);
 
 	NESHeader GetNesHeader();
-	void SaveRomToDisk(string filename, bool saveAsIps, uint8_t* header);
+	void GetRomFileData(vector<uint8_t> &out, bool asIpsFile, uint8_t* header);
 	void RevertPrgChrChanges();
 	bool HasPrgChrChanges();
 };

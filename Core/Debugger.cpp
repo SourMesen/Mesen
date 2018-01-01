@@ -1013,9 +1013,18 @@ void Debugger::GetNesHeader(uint8_t* header)
 	memcpy(header, &nesHeader, sizeof(NESHeader));
 }
 
-void Debugger::SaveRomToDisk(string filename, bool saveAsIps, uint8_t* header)
+void Debugger::SaveRomToDisk(string filename, bool saveAsIps, uint8_t* header, CdlStripFlag cdlStripflag)
 {
-	_mapper->SaveRomToDisk(filename, saveAsIps, header);
+	vector<uint8_t> fileData;
+	_mapper->GetRomFileData(fileData, saveAsIps, header);
+
+	_codeDataLogger->StripData(fileData.data() + sizeof(NESHeader), cdlStripflag);
+
+	ofstream file(filename, ios::out | ios::binary);
+	if(file.good()) {
+		file.write((char*)fileData.data(), fileData.size());
+		file.close();
+	}
 }
 
 void Debugger::RevertPrgChrChanges()

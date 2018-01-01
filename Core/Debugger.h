@@ -219,7 +219,7 @@ public:
 	void StopCodeRunner();
 
 	void GetNesHeader(uint8_t* header);
-	void SaveRomToDisk(string filename, bool saveAsIps, uint8_t* header);
+	void SaveRomToDisk(string filename, bool saveAsIps, uint8_t* header, CdlStripFlag cdlStripflag);
 	void RevertPrgChrChanges();
 	bool HasPrgChrChanges();
 

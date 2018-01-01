@@ -187,3 +187,20 @@ void CodeDataLogger::GetCdlData(uint32_t offset, uint32_t length, DebugMemoryTyp
 		}
 	}
 }
+
+void CodeDataLogger::StripData(uint8_t *romBuffer, CdlStripFlag flag)
+{
+	if(flag == CdlStripFlag::StripUnused) {
+		for(uint32_t i = 0; i < _prgSize + _chrSize; i++) {
+			if(_cdlData[i] == 0) {
+				romBuffer[i] = 0;
+			}
+		}
+	} else if(flag == CdlStripFlag::StripUsed) {
+		for(uint32_t i = 0; i < _prgSize + _chrSize; i++) {
+			if(_cdlData[i] != 0) {
+				romBuffer[i] = 0;
+			}
+		}
+	}
+}

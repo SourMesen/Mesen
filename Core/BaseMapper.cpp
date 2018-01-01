@@ -1076,32 +1076,31 @@ NESHeader BaseMapper::GetNesHeader()
 	return _nesHeader;
 }
 
-void BaseMapper::SaveRomToDisk(string filename, bool saveAsIps, uint8_t* header)
+void BaseMapper::GetRomFileData(vector<uint8_t> &out, bool asIpsFile, uint8_t* header)
 {
-	ofstream file(filename, ios::out | ios::binary);
-	if(file.good()) {
+	if(header) {
+		//Get original rom with edited header
 		vector<uint8_t> originalFile;
 		Console::GetRomPath().ReadFile(originalFile);
-			
-		if(header) {
-			//Save original rom with edited header
-			file.write((char*)header, sizeof(NESHeader));
-			file.write((char*)originalFile.data()+sizeof(NESHeader), originalFile.size() - sizeof(NESHeader));
-		} else {
-			vector<uint8_t> newFile;
-			newFile.insert(newFile.end(), (uint8_t*)&_nesHeader, ((uint8_t*)&_nesHeader) + sizeof(NESHeader));
-			newFile.insert(newFile.end(), _prgRom, _prgRom + _prgSize);
-			newFile.insert(newFile.end(), _chrRom, _chrRom + _chrRomSize);
 
-			//Save edited rom
-			if(saveAsIps) {
-				vector<uint8_t> patchData = IpsPatcher::CreatePatch(originalFile, newFile);
-				file.write((char*)patchData.data(), patchData.size());
-			} else {
-				file.write((char*)newFile.data(), newFile.size());
-			}
+		out.insert(out.end(), header, header+sizeof(NESHeader));
+		out.insert(out.end(), originalFile.begin()+sizeof(NESHeader), originalFile.end());
+	} else {
+		vector<uint8_t> newFile;
+		newFile.insert(newFile.end(), (uint8_t*)&_nesHeader, ((uint8_t*)&_nesHeader) + sizeof(NESHeader));
+		newFile.insert(newFile.end(), _prgRom, _prgRom + _prgSize);
+		newFile.insert(newFile.end(), _chrRom, _chrRom + _chrRomSize);
+		
+		//Get edited rom
+		if(asIpsFile) {
+			vector<uint8_t> originalFile;
+			Console::GetRomPath().ReadFile(originalFile);
+
+			vector<uint8_t> patchData = IpsPatcher::CreatePatch(originalFile, newFile);
+			out.insert(out.end(), patchData.begin(), patchData.end());
+		} else {
+			out.insert(out.end(), newFile.begin(), newFile.end());
 		}
-		file.close();
 	}
 }
 

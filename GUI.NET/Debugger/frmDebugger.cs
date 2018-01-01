@@ -165,6 +165,9 @@ namespace Mesen.GUI.Debugger
 			mnuRevertChanges.Enabled = hasChanges;
 			mnuSaveRomAs.Enabled = romInfo.Format == RomFormat.iNes;
 			mnuEditHeader.Enabled = romInfo.Format == RomFormat.iNes;
+
+			mnuCdlStripUnusedData.Enabled = romInfo.Format == RomFormat.iNes;
+			mnuCdlStripUsedData.Enabled = romInfo.Format == RomFormat.iNes;
 		}
 
 		private void AutoLoadCdlFiles()
@@ -936,6 +939,18 @@ namespace Mesen.GUI.Debugger
 				}
 			}
 		}
+		
+		private void SaveRomWithCdlStripping(CdlStripFlag cdlStripFlag)
+		{
+			using(SaveFileDialog sfd = new SaveFileDialog()) {
+				sfd.SetFilter("NES roms (*.nes)|*.nes");
+				sfd.FileName = InteropEmu.GetRomInfo().GetRomName() + (cdlStripFlag == CdlStripFlag.StripUnused ? "_StripUnusedData.nes" : "_StripUsedData.nes");
+				sfd.InitialDirectory = ConfigManager.DebuggerFolder;
+				if(sfd.ShowDialog() == DialogResult.OK) {
+					InteropEmu.DebugSaveRomToDisk(sfd.FileName, false, null, cdlStripFlag);
+				}
+			}
+		}
 
 		private void mnuRevertChanges_Click(object sender, EventArgs e)
 		{
@@ -978,6 +993,16 @@ namespace Mesen.GUI.Debugger
 				items.Add(item);
 			}
 			this._lastCodeWindow.ContextMenuItems = items;
+		}
+
+		private void mnuCdlStripUsedData_Click(object sender, EventArgs e)
+		{
+			SaveRomWithCdlStripping(CdlStripFlag.StripUsed);
+		}
+
+		private void mnuCdlStripUnusedData_Click(object sender, EventArgs e)
+		{
+			SaveRomWithCdlStripping(CdlStripFlag.StripUnused);
 		}
 	}
 }
