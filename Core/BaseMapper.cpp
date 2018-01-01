@@ -1089,7 +1089,9 @@ void BaseMapper::GetRomFileData(vector<uint8_t> &out, bool asIpsFile, uint8_t* h
 		vector<uint8_t> newFile;
 		newFile.insert(newFile.end(), (uint8_t*)&_nesHeader, ((uint8_t*)&_nesHeader) + sizeof(NESHeader));
 		newFile.insert(newFile.end(), _prgRom, _prgRom + _prgSize);
-		newFile.insert(newFile.end(), _chrRom, _chrRom + _chrRomSize);
+		if(HasChrRom()) {
+			newFile.insert(newFile.end(), _chrRom, _chrRom + _chrRomSize);
+		}
 		
 		//Get edited rom
 		if(asIpsFile) {
