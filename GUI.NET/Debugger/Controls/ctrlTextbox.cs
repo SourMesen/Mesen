@@ -829,21 +829,26 @@ namespace Mesen.GUI.Debugger
 			//Adjust background color highlights based on number of spaces in front of content
 			marginLeft += (LineIndentations != null ? LineIndentations[currentLine] : 0);
 
+			bool isBlockStartOrEnd = codeString.StartsWith("--") && codeString.EndsWith("--") || codeString.StartsWith("__") && codeString.EndsWith("__");
+
 			Color textColor = Color.Black;
 			LineProperties lineProperties = GetLineStyle(currentLine);
-			if(lineProperties != null) {
-				//Process background, foreground, outline color and line symbol
-				textColor = lineProperties.FgColor ?? Color.Black;
+			if(!isBlockStartOrEnd) {
+				//Setup text and bg color (only if the line is not the start/end of a block)
+				if(lineProperties != null) {
+					//Process background, foreground, outline color and line symbol
+					textColor = lineProperties.FgColor ?? Color.Black;
 
-				if(lineProperties.BgColor.HasValue) {
-					using(Brush bgBrush = new SolidBrush(lineProperties.BgColor.Value)) {
-						int yOffset = Program.IsMono ? 2 : 1;
-						g.FillRectangle(bgBrush, marginLeft, positionY + yOffset, codeStringLength, lineHeight-1);
+					if(lineProperties.BgColor.HasValue) {
+						using(Brush bgBrush = new SolidBrush(lineProperties.BgColor.Value)) {
+							int yOffset = Program.IsMono ? 2 : 1;
+							g.FillRectangle(bgBrush, marginLeft, positionY + yOffset, codeStringLength, lineHeight-1);
+						}
 					}
-				}
-				if(lineProperties.OutlineColor.HasValue) {
-					using(Pen outlinePen = new Pen(lineProperties.OutlineColor.Value, 1)) {
-						g.DrawRectangle(outlinePen, marginLeft, positionY + 1, codeStringLength, lineHeight-1);
+					if(lineProperties.OutlineColor.HasValue) {
+						using(Pen outlinePen = new Pen(lineProperties.OutlineColor.Value, 1)) {
+							g.DrawRectangle(outlinePen, marginLeft, positionY + 1, codeStringLength, lineHeight-1);
+						}
 					}
 				}
 			}
