@@ -55,6 +55,7 @@ Debugger::Debugger(shared_ptr<Console> console, shared_ptr<CPU> cpu, shared_ptr<
 	_stepOverAddr = -1;
 	_stepCycleCount = -1;
 	_ppuStepCount = -1;
+	_breakRequested = false;
 
 	_preventResume = 0;
 	_stopFlag = false;
