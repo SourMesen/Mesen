@@ -151,7 +151,10 @@
 			this.ctrlTextbox.ShowLineInHex = false;
 			this.ctrlTextbox.ShowLineNumberNotes = false;
 			this.ctrlTextbox.ShowLineNumbers = true;
+			this.ctrlTextbox.ShowSingleContentLineNotes = true;
+			this.ctrlTextbox.ShowSingleLineLineNumberNotes = false;
 			this.ctrlTextbox.Size = new System.Drawing.Size(490, 141);
+			this.ctrlTextbox.StyleProvider = null;
 			this.ctrlTextbox.TabIndex = 1;
 			// 
 			// ctrlScrollableTextbox

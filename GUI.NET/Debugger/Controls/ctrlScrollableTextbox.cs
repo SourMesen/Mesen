@@ -15,6 +15,8 @@ namespace Mesen.GUI.Debugger
 	{
 		public event EventHandler ScrollPositionChanged;
 
+		private bool _showScrollbars = true;
+
 		public new event MouseEventHandler MouseUp
 		{
 			add { this.ctrlTextbox.MouseUp += value; }
@@ -73,6 +75,16 @@ namespace Mesen.GUI.Debugger
 			this.panelSearch.Location = new System.Drawing.Point(this.Width - this.panelSearch.Width - 20, -1);
 		}
 
+		public bool ShowScrollbars
+		{
+			set
+			{
+				this._showScrollbars = value;
+				this.hScrollBar.Visible = value;
+				this.vScrollBar.Visible = value;
+			}
+		}
+
 		public float FontSize
 		{
 			get { return this.ctrlTextbox.Font.SizeInPoints; }
@@ -112,7 +124,7 @@ namespace Mesen.GUI.Debugger
 
 		private void UpdateHorizontalScrollbar()
 		{
-			this.hScrollBar.Visible = this.ctrlTextbox.HorizontalScrollWidth > 0;
+			this.hScrollBar.Visible = this.ctrlTextbox.HorizontalScrollWidth > 0 && _showScrollbars;
 			int newMax = this.ctrlTextbox.HorizontalScrollWidth + this.hScrollBar.LargeChange - 1;
 			if(this.hScrollBar.Value > this.ctrlTextbox.HorizontalScrollWidth) {
 				this.hScrollBar.Value = this.ctrlTextbox.HorizontalScrollWidth;
@@ -147,9 +159,9 @@ namespace Mesen.GUI.Debugger
 			this.ctrlTextbox.ScrollToLineIndex(lineIndex);
 		}
 
-		public void ScrollToLineNumber(int lineNumber, eHistoryType historyType = eHistoryType.Always)
+		public void ScrollToLineNumber(int lineNumber, eHistoryType historyType = eHistoryType.Always, bool scrollToTop = false)
 		{
-			this.ctrlTextbox.ScrollToLineNumber(lineNumber, historyType);
+			this.ctrlTextbox.ScrollToLineNumber(lineNumber, historyType, scrollToTop);
 		}
 
 		public void CopySelection()

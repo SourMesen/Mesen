@@ -153,6 +153,11 @@ namespace Mesen.GUI.Debugger
 			}
 		}
 
+		public bool ShowScrollbars
+		{
+			set { this.ctrlCodeViewer.ShowScrollbars = value; }
+		}
+
 		public void SelectActiveAddress(UInt32 address)
 		{
 			this.SetActiveAddress(address);
@@ -345,14 +350,22 @@ namespace Mesen.GUI.Debugger
 		private bool _preventCloseTooltip = false;
 		private string _hoverLastWord = "";
 
-		private void ShowTooltip(string word, Dictionary<string, string> values)
+		private void ShowTooltip(string word, Dictionary<string, string> values, int address)
 		{
 			if(_hoverLastWord != word || _codeTooltip == null) {
 				if(!_preventCloseTooltip && _codeTooltip != null) {
 					_codeTooltip.Close();
 					_codeTooltip = null;
 				}
-				_codeTooltip = new frmCodeTooltip(values);
+
+				bool isPrgRom = false;
+				if(address >= 0 && ConfigManager.Config.DebugInfo.ShowCodePreview) {
+					AddressTypeInfo addressInfo = new AddressTypeInfo();
+					InteropEmu.DebugGetAbsoluteAddressAndType((UInt32)address, ref addressInfo);
+					isPrgRom = addressInfo.Type == AddressType.PrgRom;
+				}
+
+				_codeTooltip = new frmCodeTooltip(values, isPrgRom ? address : -1, isPrgRom ? _code : null);
 				_codeTooltip.Left = Cursor.Position.X + 10;
 				_codeTooltip.Top = Cursor.Position.Y + 10;
 				_codeTooltip.Show(this);
@@ -430,7 +443,7 @@ namespace Mesen.GUI.Debugger
 								{ "Value", $"${byteValue.ToString("X2")} (byte){Environment.NewLine}${wordValue.ToString("X4")} (word)" }
 							};
 
-			ShowTooltip(word, values);
+			ShowTooltip(word, values, (int)address);
 		}
 
 		private void DisplayLabelTooltip(string word, CodeLabel label)
@@ -438,9 +451,10 @@ namespace Mesen.GUI.Debugger
 			Int32 relativeAddress = InteropEmu.DebugGetRelativeAddress(label.Address, label.AddressType);
 			byte byteValue = relativeAddress >= 0 ? InteropEmu.DebugGetMemoryValue(DebugMemoryType.CpuMemory, (UInt32)relativeAddress) : (byte)0;
 			UInt16 wordValue = relativeAddress >= 0 ? (UInt16)(byteValue | (InteropEmu.DebugGetMemoryValue(DebugMemoryType.CpuMemory, (UInt32)relativeAddress+1) << 8)) : (UInt16)0;
+			int address = InteropEmu.DebugGetRelativeAddress(label.Address, label.AddressType);
 			var values = new Dictionary<string, string>() {
 							{ "Label", label.Label },
-							{ "Address", "$" + InteropEmu.DebugGetRelativeAddress(label.Address, label.AddressType).ToString("X4") },
+							{ "Address", "$" + address.ToString("X4") },
 							{ "Value", (relativeAddress >= 0 ? $"${byteValue.ToString("X2")} (byte){Environment.NewLine}${wordValue.ToString("X4")} (word)" : "n/a") },
 						};
 
@@ -448,7 +462,7 @@ namespace Mesen.GUI.Debugger
 				values["Comment"] = label.Comment;
 			}
 
-			ShowTooltip(word, values);
+			ShowTooltip(word, values, address);
 		}
 
 		private bool UpdateContextMenu(Point mouseLocation)

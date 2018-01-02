@@ -56,6 +56,7 @@ namespace Mesen.GUI.Debugger
 			this.mnuSplitView.Checked = ConfigManager.Config.DebugInfo.SplitView;
 			this.mnuPpuPartialDraw.Checked = ConfigManager.Config.DebugInfo.PpuPartialDraw;
 			this.mnuShowEffectiveAddresses.Checked = ConfigManager.Config.DebugInfo.ShowEffectiveAddresses;
+			this.mnuShowCodePreview.Checked = ConfigManager.Config.DebugInfo.ShowCodePreview;
 			this.mnuShowCpuMemoryMapping.Checked = ConfigManager.Config.DebugInfo.ShowCpuMemoryMapping;
 			this.mnuShowPpuMemoryMapping.Checked = ConfigManager.Config.DebugInfo.ShowPpuMemoryMapping;
 			this.mnuShowOnlyDisassembledCode.Checked = ConfigManager.Config.DebugInfo.ShowOnlyDisassembledCode;
@@ -681,6 +682,12 @@ namespace Mesen.GUI.Debugger
 		{
 			ctrlPpuMemoryMapping.Visible = mnuShowPpuMemoryMapping.Checked;
 			ConfigManager.Config.DebugInfo.ShowPpuMemoryMapping = mnuShowPpuMemoryMapping.Checked;
+			ConfigManager.ApplyChanges();
+		}
+		
+		private void mnuShowCodePreview_CheckedChanged(object sender, EventArgs e)
+		{
+			ConfigManager.Config.DebugInfo.ShowCodePreview = mnuShowCodePreview.Checked;
 			ConfigManager.ApplyChanges();
 		}
 

@@ -49,9 +49,9 @@ namespace Mesen.GUI.Debugger.Controls
 			this.ScrollableTextbox.GoToAddress();
 		}
 
-		public void ScrollToLineNumber(int lineNumber)
+		public void ScrollToLineNumber(int lineNumber, bool scrollToTop = false)
 		{
-			this.ScrollableTextbox.ScrollToLineNumber(lineNumber);
+			this.ScrollableTextbox.ScrollToLineNumber(lineNumber, eHistoryType.Always, scrollToTop);
 		}
 
 		public int GetCurrentLine()
