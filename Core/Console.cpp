@@ -141,7 +141,7 @@ bool Console::Initialize(VirtualFile &romFile, VirtualFile &patchFile)
 			
 			if(_hdData && (!_hdData->Tiles.empty() || !_hdData->Backgrounds.empty())) {
 				_ppu.reset(new HdPpu(_mapper.get(), _controlManager.get(), _hdData->Version));
-			} else if(NsfMapper::GetInstance()) {
+			} else if(std::dynamic_pointer_cast<NsfMapper>(_mapper)) {
 				//Disable most of the PPU for NSFs
 				_ppu.reset(new NsfPpu(_mapper.get(), _controlManager.get()));
 			} else {
