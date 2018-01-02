@@ -589,10 +589,10 @@ bool Debugger::SleepUntilResume()
 		stepCount = _stepCount.load();
 	}
 
-	if(stepCount == 0 && !_stopFlag && _suspendCount == 0) {
+	if((stepCount == 0 || _breakRequested) && !_stopFlag && _suspendCount == 0) {
 		//Break
 		auto lock = _breakLock.AcquireSafe();
-		
+				
 		if(_preventResume == 0) {
 			SoundMixer::StopAudio();
 			MessageManager::SendNotification(ConsoleNotificationType::CodeBreak);
@@ -604,7 +604,7 @@ bool Debugger::SleepUntilResume()
 		}
 
 		_executionStopped = true;
-		while((stepCount == 0 && !_stopFlag && _suspendCount == 0) || _preventResume > 0) {
+		while(((stepCount == 0 || _breakRequested) && !_stopFlag && _suspendCount == 0) || _preventResume > 0) {
 			std::this_thread::sleep_for(std::chrono::duration<int, std::milli>(10));
 			stepCount = _stepCount.load();
 		}
@@ -663,6 +663,16 @@ void Debugger::SetState(DebugState state)
 	if(state.CPU.PC != _cpu->GetState().PC) {
 		SetNextStatement(state.CPU.PC);
 	}
+}
+
+void Debugger::Break()
+{
+	_breakRequested = true;
+}
+
+void Debugger::ResumeFromBreak()
+{
+	_breakRequested = false;
 }
 
 void Debugger::PpuStep(uint32_t count)

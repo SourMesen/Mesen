@@ -21,7 +21,7 @@ public:
 			//Only attempt to break if this is done in a thread other than the main emulation thread
 			debugger->PreventResume();
 			if(!debugger->IsExecutionStopped()) {
-				debugger->Step(1);
+				debugger->Break();
 				while(!debugger->IsExecutionStopped()) {}
 				_needResume = true;
 			}
@@ -32,7 +32,7 @@ public:
 	{
 		if(!_isEmulationThread) {
 			if(_needResume) {
-				_debugger->Run();
+				_debugger->ResumeFromBreak();
 			}
 			_debugger->AllowResume();
 		}

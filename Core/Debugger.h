@@ -104,6 +104,7 @@ private:
 	atomic<uint8_t> _lastInstruction;
 	atomic<bool> _stepOut;
 	atomic<int32_t> _stepOverAddr;
+	atomic<bool> _breakRequested;
 
 	int32_t _ppuViewerScanline;
 	int32_t _ppuViewerCycle;
@@ -159,6 +160,9 @@ public:
 
 	void Suspend();
 	void Resume();
+
+	void Break();
+	void ResumeFromBreak();
 
 	void PpuStep(uint32_t count = 1);
 	void Step(uint32_t count = 1);
