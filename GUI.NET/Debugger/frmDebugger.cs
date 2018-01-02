@@ -587,6 +587,11 @@ namespace Mesen.GUI.Debugger
 		{
 			DebugWindowManager.OpenDebugWindow(DebugWindow.PpuViewer);
 		}
+		
+		private void mnuApuViewer_Click(object sender, EventArgs e)
+		{
+			DebugWindowManager.OpenDebugWindow(DebugWindow.ApuViewer);
+		}
 
 		private void ctrlCallstack_FunctionSelected(object sender, EventArgs e)
 		{

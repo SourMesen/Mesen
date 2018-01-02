@@ -155,6 +155,7 @@ public:
 
 	void GetCallstack(int32_t* callstackAbsolute, int32_t* callstackRelative);
 	
+	void GetApuState(ApuState *state);
 	void GetState(DebugState *state, bool includeMapperInfo = true);
 	void SetState(DebugState state);
 

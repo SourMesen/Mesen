@@ -202,6 +202,7 @@ namespace Mesen.GUI
 		[DllImport(DLLPath)] public static extern void DebugRelease();
 		[DllImport(DLLPath)] public static extern void DebugSetFlags(DebuggerFlags flags);
 		[DllImport(DLLPath)] public static extern void DebugGetState(ref DebugState state);
+		[DllImport(DLLPath)] public static extern void DebugGetApuState(ref ApuState state);
 		[DllImport(DLLPath)] public static extern void DebugSetState(DebugState state);
 		[DllImport(DLLPath)] public static extern void DebugSetBreakpoints([MarshalAs(UnmanagedType.LPArray, SizeParamIndex = 1)]InteropBreakpoint[] breakpoints, UInt32 length);
 		[DllImport(DLLPath)] public static extern void DebugSetLabel(UInt32 address, AddressType addressType, [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(UTF8Marshaler))]string label, [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(UTF8Marshaler))]string comment);
@@ -1205,6 +1206,7 @@ namespace Mesen.GUI
 		public Byte Duty;
 		public Byte DutyPosition;
 		public UInt16 Period;
+		public UInt16 Timer;
 
 		[MarshalAs(UnmanagedType.I1)]
 		public bool SweepEnabled;
@@ -1225,6 +1227,7 @@ namespace Mesen.GUI
 	public struct ApuTriangleState
 	{
 		public UInt16 Period;
+		public UInt16 Timer;
 		public Byte SequencePosition;
 
 		[MarshalAs(UnmanagedType.I1)]
@@ -1238,6 +1241,7 @@ namespace Mesen.GUI
 	public struct ApuNoiseState
 	{
 		public UInt16 Period;
+		public UInt16 Timer;
 		public UInt16 ShiftRegister;
 		[MarshalAs(UnmanagedType.I1)]		
 		public bool ModeFlag;
@@ -1253,6 +1257,7 @@ namespace Mesen.GUI
 
 	public struct ApuDmcState
 	{
+		public double SampleRate;
 		public UInt16 SampleAddr;
 		public UInt16 SampleLength;
 
@@ -1261,9 +1266,9 @@ namespace Mesen.GUI
 		[MarshalAs(UnmanagedType.I1)]
 		public bool IrqEnabled;
 		public UInt16 Period;
+		public UInt16 Timer;
 		public UInt16 BytesRemaining;
 
-		public double SampleRate;
 		public Byte OutputVolume;
 	}
 
@@ -1635,6 +1640,7 @@ namespace Mesen.GUI
 		OpenMemoryTools,
 		OpenScriptWindow,
 		OpenTraceLogger,
+		OpenApuViewer,
 	}
 
 	public struct InteropCheatInfo

@@ -35,6 +35,7 @@ extern "C"
 
 	DllExport void __stdcall DebugGetState(DebugState *state) { GetDebugger()->GetState(state); }
 	DllExport void __stdcall DebugSetState(DebugState state) { GetDebugger()->SetState(state); }
+	DllExport void __stdcall DebugGetApuState(ApuState *state) { GetDebugger()->GetApuState(state); }
 
 	DllExport void __stdcall DebugSetBreakpoints(Breakpoint breakpoints[], uint32_t length) { GetDebugger()->SetBreakpoints(breakpoints, length); }
 	DllExport void __stdcall DebugSetLabel(uint32_t address, AddressType addressType, char* label, char* comment) { GetDebugger()->GetLabelManager()->SetLabel(address, addressType, label, comment); }

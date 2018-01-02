@@ -96,6 +96,7 @@ public:
 		state.ModeFlag = _modeFlag;
 		state.OutputVolume = _lastOutput;
 		state.Period = _period;
+		state.Timer = _timer;
 		state.ShiftRegister = _shiftRegister;
 		return state;
 	}

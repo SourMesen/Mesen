@@ -161,6 +161,7 @@ struct ApuSquareState
 	uint8_t Duty;
 	uint8_t DutyPosition;
 	uint16_t Period;
+	uint16_t Timer;
 
 	bool SweepEnabled;
 	bool SweepNegate;
@@ -178,6 +179,7 @@ struct ApuSquareState
 struct ApuTriangleState
 {
 	uint16_t Period;
+	uint16_t Timer;
 	uint8_t SequencePosition;
 
 	bool Enabled;
@@ -190,6 +192,7 @@ struct ApuTriangleState
 struct ApuNoiseState
 {
 	uint16_t Period;
+	uint16_t Timer;
 	uint16_t ShiftRegister;
 	bool ModeFlag;
 
@@ -210,6 +213,7 @@ struct ApuDmcState
 	bool Loop;
 	bool IrqEnabled;
 	uint16_t Period;
+	uint16_t Timer;
 	uint16_t BytesRemaining;
 
 	uint8_t OutputVolume;

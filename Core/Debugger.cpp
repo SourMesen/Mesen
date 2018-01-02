@@ -645,6 +645,17 @@ void Debugger::PrivateProcessVramWriteOperation(uint16_t addr, uint8_t &value)
 	ProcessPpuOperation(addr, value, MemoryOperationType::Write);
 }
 
+void Debugger::GetApuState(ApuState *state)
+{
+	//Pause the emulation
+	DebugBreakHelper helper(this);
+
+	//Force APU to catch up before we retrieve its state
+	APU::StaticRun();
+
+	*state = _apu->GetState();
+}
+
 void Debugger::GetState(DebugState *state, bool includeMapperInfo)
 {
 	state->Model = _console->GetModel();

@@ -109,6 +109,7 @@ public:
 		state.LengthCounter = ApuLengthCounter::GetState();
 		state.OutputVolume = _lastOutput;
 		state.Period = _period;
+		state.Timer = _timer;
 		state.SequencePosition = _sequencePosition;
 		return state;
 	}

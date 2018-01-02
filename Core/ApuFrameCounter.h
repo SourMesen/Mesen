@@ -221,7 +221,7 @@ public:
 	{
 		ApuFrameCounterState state;
 		state.IrqEnabled = !_inhibitIRQ;
-		state.SequencePosition = _currentStep;
+		state.SequencePosition = std::min<uint8_t>(_currentStep, _stepMode ? 5 : 4);
 		state.FiveStepMode = _stepMode == 1;
 		return state;
 	}

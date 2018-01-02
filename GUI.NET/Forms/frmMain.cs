@@ -664,6 +664,7 @@ namespace Mesen.GUI.Forms
 
 			BindShortcut(mnuDebugDebugger, EmulatorShortcut.OpenDebugger, runningNotClient);
 			BindShortcut(mnuDebugger, EmulatorShortcut.OpenDebugger, runningNotClient);
+			BindShortcut(mnuApuViewer, EmulatorShortcut.OpenApuViewer, runningNotClient);
 			BindShortcut(mnuAssembler, EmulatorShortcut.OpenAssembler, runningNotClient);
 			BindShortcut(mnuMemoryViewer, EmulatorShortcut.OpenMemoryTools, runningNotClient);
 			BindShortcut(mnuPpuViewer, EmulatorShortcut.OpenPpuViewer, runningNotClient);
@@ -762,6 +763,7 @@ namespace Mesen.GUI.Forms
 				case EmulatorShortcut.TakeScreenshot: InteropEmu.TakeScreenshot(); break;
 				case EmulatorShortcut.LoadRandomGame: LoadRandomGame(); break;
 
+				case EmulatorShortcut.OpenApuViewer: DebugWindowManager.OpenDebugWindow(DebugWindow.ApuViewer); break;
 				case EmulatorShortcut.OpenAssembler: DebugWindowManager.OpenDebugWindow(DebugWindow.Assembler); break;
 				case EmulatorShortcut.OpenDebugger: DebugWindowManager.OpenDebugWindow(DebugWindow.Debugger); break;
 				case EmulatorShortcut.OpenTraceLogger: DebugWindowManager.OpenDebugWindow(DebugWindow.TraceLogger); break;

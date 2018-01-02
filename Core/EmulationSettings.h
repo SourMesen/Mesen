@@ -457,6 +457,8 @@ enum class EmulatorShortcut
 	OpenMemoryTools,
 	OpenScriptWindow,
 	OpenTraceLogger,
+	OpenApuViewer,
+	ShortcutCount
 };
 
 struct KeyCombination

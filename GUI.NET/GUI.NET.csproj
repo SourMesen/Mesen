@@ -289,6 +289,42 @@
     <Compile Include="Debugger\BreakpointManager.cs" />
     <Compile Include="Debugger\ChrByteColorProvider.cs" />
     <Compile Include="Debugger\ByteColorProvider.cs" />
+    <Compile Include="Debugger\Controls\ApuViewer\ctrlEnvelopeInfo.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Debugger\Controls\ApuViewer\ctrlEnvelopeInfo.Designer.cs">
+      <DependentUpon>ctrlEnvelopeInfo.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Debugger\Controls\ApuViewer\ctrlLengthCounterInfo.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Debugger\Controls\ApuViewer\ctrlLengthCounterInfo.Designer.cs">
+      <DependentUpon>ctrlLengthCounterInfo.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Debugger\Controls\ApuViewer\ctrlDmcInfo.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Debugger\Controls\ApuViewer\ctrlDmcInfo.Designer.cs">
+      <DependentUpon>ctrlDmcInfo.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Debugger\Controls\ApuViewer\ctrlFrameCounterInfo.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Debugger\Controls\ApuViewer\ctrlFrameCounterInfo.Designer.cs">
+      <DependentUpon>ctrlFrameCounterInfo.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Debugger\Controls\ApuViewer\ctrlNoiseInfo.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Debugger\Controls\ApuViewer\ctrlNoiseInfo.Designer.cs">
+      <DependentUpon>ctrlNoiseInfo.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Debugger\Controls\ApuViewer\ctrlTriangleInfo.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Debugger\Controls\ApuViewer\ctrlTriangleInfo.Designer.cs">
+      <DependentUpon>ctrlTriangleInfo.cs</DependentUpon>
+    </Compile>
     <Compile Include="Debugger\Controls\BaseScrollableTextboxUserControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -386,6 +422,12 @@
     <Compile Include="Debugger\Controls\ctrlScrollableTextbox.designer.cs">
       <DependentUpon>ctrlScrollableTextbox.cs</DependentUpon>
     </Compile>
+    <Compile Include="Debugger\Controls\ApuViewer\ctrlSquareInfo.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Debugger\Controls\ApuViewer\ctrlSquareInfo.Designer.cs">
+      <DependentUpon>ctrlSquareInfo.cs</DependentUpon>
+    </Compile>
     <Compile Include="Debugger\Controls\ctrlTextbox.cs" />
     <Compile Include="Debugger\Controls\ctrlTextbox.Designer.cs">
       <DependentUpon>ctrlTextbox.cs</DependentUpon>
@@ -480,6 +522,12 @@
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Debugger\FastColoredTextBox\VisualMarker.cs" />
+    <Compile Include="Debugger\frmApuViewer.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Debugger\frmApuViewer.Designer.cs">
+      <DependentUpon>frmApuViewer.cs</DependentUpon>
+    </Compile>
     <Compile Include="Debugger\frmAssembler.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -994,6 +1042,27 @@
     <EmbeddedResource Include="Controls\MesenNumericUpDown.resx">
       <DependentUpon>MesenNumericUpDown.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Debugger\Controls\ApuViewer\ctrlEnvelopeInfo.resx">
+      <DependentUpon>ctrlEnvelopeInfo.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Debugger\Controls\ApuViewer\ctrlLengthCounterInfo.resx">
+      <DependentUpon>ctrlLengthCounterInfo.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Debugger\Controls\ApuViewer\ctrlDmcInfo.resx">
+      <DependentUpon>ctrlDmcInfo.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Debugger\Controls\ApuViewer\ctrlFrameCounterInfo.resx">
+      <DependentUpon>ctrlFrameCounterInfo.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Debugger\Controls\ApuViewer\ctrlNoiseInfo.resx">
+      <DependentUpon>ctrlNoiseInfo.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Debugger\Controls\ApuViewer\ctrlTriangleInfo.resx">
+      <DependentUpon>ctrlTriangleInfo.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Debugger\Controls\ApuViewer\ctrlSquareInfo.resx">
+      <DependentUpon>ctrlSquareInfo.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Debugger\Example.lua" />
     <None Include="Resources\PipetteSmall.png" />
     <None Include="Resources\Enum.png" />
@@ -1103,6 +1172,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Debugger\FastColoredTextBox\ReplaceForm.resx">
       <DependentUpon>ReplaceForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Debugger\frmApuViewer.resx">
+      <DependentUpon>frmApuViewer.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Debugger\frmAssembler.resx">
       <DependentUpon>frmAssembler.cs</DependentUpon>

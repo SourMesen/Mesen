@@ -195,6 +195,7 @@ public:
 		state.LengthCounter = ApuLengthCounter::GetState();
 		state.OutputVolume = _lastOutput;
 		state.Period = _realPeriod;
+		state.Timer = _timer / 2;
 		state.SweepEnabled = _sweepEnabled;
 		state.SweepNegate = _sweepNegate;
 		state.SweepPeriod = _sweepPeriod;

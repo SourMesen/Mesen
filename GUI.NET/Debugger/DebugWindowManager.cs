@@ -26,6 +26,7 @@ namespace Mesen.GUI.Debugger
 					case DebugWindow.Assembler: frm = new frmAssembler(); break;
 					case DebugWindow.Debugger: frm = new frmDebugger(); break;
 					case DebugWindow.ScriptWindow: frm = new frmScript(); break;
+					case DebugWindow.ApuViewer: frm = new frmApuViewer(); break;
 				}
 				_openedWindows.Add(frm);
 				frm.FormClosed += Debugger_FormClosed;
@@ -86,6 +87,7 @@ namespace Mesen.GUI.Debugger
 				case DebugWindow.TraceLogger: return _openedWindows.ToList().Find((form) => form.GetType() == typeof(frmTraceLogger));
 				case DebugWindow.Assembler: return _openedWindows.ToList().Find((form) => form.GetType() == typeof(frmAssembler));
 				case DebugWindow.Debugger: return _openedWindows.ToList().Find((form) => form.GetType() == typeof(frmDebugger));
+				case DebugWindow.ApuViewer: return _openedWindows.ToList().Find((form) => form.GetType() == typeof(frmApuViewer));
 			}
 
 			return null;
@@ -110,5 +112,6 @@ namespace Mesen.GUI.Debugger
 		Assembler,
 		Debugger,
 		ScriptWindow,
+		ApuViewer
 	}
 }

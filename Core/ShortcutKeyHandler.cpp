@@ -111,7 +111,7 @@ void ShortcutKeyHandler::CheckMappedKeys()
 	_keyboardMode = EmulationSettings::IsKeyboardMode();
 
 	//Let the UI handle these shortcuts
-	for(uint64_t i = (uint64_t)EmulatorShortcut::SwitchDiskSide; i <= (uint64_t)EmulatorShortcut::OpenTraceLogger; i++) {
+	for(uint64_t i = (uint64_t)EmulatorShortcut::SwitchDiskSide; i < (uint64_t)EmulatorShortcut::ShortcutCount; i++) {
 		if(DetectKeyPress((EmulatorShortcut)i)) {
 			void* param = (void*)i;
 			MessageManager::SendNotification(ConsoleNotificationType::ExecuteShortcut, param);
