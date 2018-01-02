@@ -462,8 +462,24 @@ namespace Mesen.GUI.Debugger
 			ctrlConsoleStatus.ApplyChanges();
 			InteropEmu.DebugPpuStep(89341);
 		}
+		
+		private void ctrlDebuggerCode_OnScrollToAddress(ctrlDebuggerCode sender, AddressEventArgs args)
+		{
+			UInt16 addr = (UInt16)args.Address;
+			if(sender == ctrlDebuggerCode) {
+				if(!ConfigManager.Config.DebugInfo.SplitView) {
+					mnuSplitView.Checked = true;
+					ConfigManager.Config.DebugInfo.SplitView = true;
+					ConfigManager.ApplyChanges();
+					UpdateDebugger(false);
+				}
+				ctrlDebuggerCodeSplit.ScrollToLineNumber(addr);
+			} else {
+				ctrlDebuggerCode.ScrollToLineNumber(addr);
+			}
+		}
 
-		private void ctrlDebuggerCode_OnSetNextStatement(AddressEventArgs args)
+		private void ctrlDebuggerCode_OnSetNextStatement(ctrlDebuggerCode sender, AddressEventArgs args)
 		{
 			UInt16 addr = (UInt16)args.Address;
 			InteropEmu.DebugSetNextStatement(addr);

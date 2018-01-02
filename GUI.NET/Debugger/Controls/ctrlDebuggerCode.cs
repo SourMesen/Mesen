@@ -15,11 +15,12 @@ namespace Mesen.GUI.Debugger
 {
 	public partial class ctrlDebuggerCode : BaseScrollableTextboxUserControl
 	{
-		public delegate void AddressEventHandler(AddressEventArgs args);
+		public delegate void AddressEventHandler(ctrlDebuggerCode sender, AddressEventArgs args);
 		public delegate void WatchEventHandler(WatchEventArgs args);
 		public delegate void AssemblerEventHandler(AssemblerEventArgs args);
 		public event AssemblerEventHandler OnEditCode;
 		public event AddressEventHandler OnSetNextStatement;
+		public event AddressEventHandler OnScrollToAddress;
 		private DebugViewInfo _config;
 
 		List<int> _lineNumbers = new List<int>(10000);
@@ -485,6 +486,9 @@ namespace Mesen.GUI.Debugger
 				mnuGoToLocation.Enabled = true;
 				mnuGoToLocation.Text = $"Go to Location ({word})";
 
+				mnuShowInSplitView.Enabled = true;
+				mnuShowInSplitView.Text = $"Show in Split View ({word})";
+
 				mnuAddToWatch.Enabled = true;
 				mnuAddToWatch.Text = $"Add to Watch ({word})";
 
@@ -501,6 +505,8 @@ namespace Mesen.GUI.Debugger
 			} else {
 				mnuGoToLocation.Enabled = false;
 				mnuGoToLocation.Text = "Go to Location";
+				mnuShowInSplitView.Enabled = false;
+				mnuShowInSplitView.Text = "Show in Split View";
 				mnuAddToWatch.Enabled = false;
 				mnuAddToWatch.Text = "Add to Watch";
 				mnuFindOccurrences.Enabled = false;
@@ -523,6 +529,8 @@ namespace Mesen.GUI.Debugger
 					_newWatchValue = $"[{address}]";
 					_lastWord = address;
 
+					mnuShowInSplitView.Enabled = true;
+					mnuShowInSplitView.Text = $"Show in Split View ({address})";
 					mnuAddToWatch.Enabled = true;
 					mnuAddToWatch.Text = $"Add to Watch ({address})";
 					mnuFindOccurrences.Enabled = true;
@@ -560,7 +568,9 @@ namespace Mesen.GUI.Debugger
 		{
 			if(UpdateContextMenu(e.Location)) {
 				if(e.Button == MouseButtons.Left) {
-					if(ModifierKeys.HasFlag(Keys.Control)) {
+					if(ModifierKeys.HasFlag(Keys.Control) && ModifierKeys.HasFlag(Keys.Alt)) {
+						ShowInSplitView();
+					} else if(ModifierKeys.HasFlag(Keys.Control)) {
 						AddWatch();
 					} else if(ModifierKeys.HasFlag(Keys.Alt)) {
 						FindAllOccurrences(_lastWord, true, true);
@@ -724,6 +734,16 @@ namespace Mesen.GUI.Debugger
 			this.ctrlCodeViewer.ScrollToLineNumber((int)_lastClickedAddress);
 		}
 
+		private void mnuShowInSplitView_Click(object sender, EventArgs e)
+		{
+			ShowInSplitView();
+		}
+
+		private void ShowInSplitView()
+		{
+			this.OnScrollToAddress?.Invoke(this, new AddressEventArgs() { Address = (UInt32)_lastClickedAddress });
+		}
+
 		private void AddWatch()
 		{
 			WatchManager.AddWatch(_newWatchValue);
@@ -731,9 +751,7 @@ namespace Mesen.GUI.Debugger
 
 		private void mnuSetNextStatement_Click(object sender, EventArgs e)
 		{
-			if(this.OnSetNextStatement != null) {
-				this.OnSetNextStatement(new AddressEventArgs() { Address = (UInt32)this.ctrlCodeViewer.CurrentLine });
-			}
+			this.OnSetNextStatement?.Invoke(this, new AddressEventArgs() { Address = (UInt32)this.ctrlCodeViewer.CurrentLine });
 		}
 
 		private void ctrlCodeViewer_FontSizeChanged(object sender, EventArgs e)

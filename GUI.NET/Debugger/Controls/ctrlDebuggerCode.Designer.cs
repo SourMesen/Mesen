@@ -53,7 +53,9 @@
 			this.sepAddToWatch = new System.Windows.Forms.ToolStripSeparator();
 			this.mnuAddToWatch = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuFindOccurrences = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripSeparator();
 			this.mnuGoToLocation = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuShowInSplitView = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem3 = new System.Windows.Forms.ToolStripSeparator();
 			this.mnuNavigateBackward = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuNavigateForward = new System.Windows.Forms.ToolStripMenuItem();
@@ -101,12 +103,14 @@
             this.sepAddToWatch,
             this.mnuAddToWatch,
             this.mnuFindOccurrences,
+            this.toolStripMenuItem2,
             this.mnuGoToLocation,
+            this.mnuShowInSplitView,
             this.toolStripMenuItem3,
             this.mnuNavigateBackward,
             this.mnuNavigateForward});
 			this.contextMenuCode.Name = "contextMenuWatch";
-			this.contextMenuCode.Size = new System.Drawing.Size(259, 364);
+			this.contextMenuCode.Size = new System.Drawing.Size(259, 414);
 			this.contextMenuCode.Closed += new System.Windows.Forms.ToolStripDropDownClosedEventHandler(this.contextMenuCode_Closed);
 			this.contextMenuCode.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuCode_Opening);
 			// 
@@ -291,6 +295,11 @@
 			this.mnuFindOccurrences.Text = "Find Occurrences";
 			this.mnuFindOccurrences.Click += new System.EventHandler(this.mnuFindOccurrences_Click);
 			// 
+			// toolStripMenuItem2
+			// 
+			this.toolStripMenuItem2.Name = "toolStripMenuItem2";
+			this.toolStripMenuItem2.Size = new System.Drawing.Size(255, 6);
+			// 
 			// mnuGoToLocation
 			// 
 			this.mnuGoToLocation.Name = "mnuGoToLocation";
@@ -298,6 +307,15 @@
 			this.mnuGoToLocation.Size = new System.Drawing.Size(258, 22);
 			this.mnuGoToLocation.Text = "Go to Location";
 			this.mnuGoToLocation.Click += new System.EventHandler(this.mnuGoToLocation_Click);
+			// 
+			// mnuShowInSplitView
+			// 
+			this.mnuShowInSplitView.Image = global::Mesen.GUI.Properties.Resources.SplitView;
+			this.mnuShowInSplitView.Name = "mnuShowInSplitView";
+			this.mnuShowInSplitView.ShortcutKeyDisplayString = "Ctrl+Alt+Click";
+			this.mnuShowInSplitView.Size = new System.Drawing.Size(258, 22);
+			this.mnuShowInSplitView.Text = "Show in Split View";
+			this.mnuShowInSplitView.Click += new System.EventHandler(this.mnuShowInSplitView_Click);
 			// 
 			// toolStripMenuItem3
 			// 
@@ -548,5 +566,7 @@
 		private System.Windows.Forms.ToolStripMenuItem mnuEditSelectedCode;
 		private System.Windows.Forms.ToolStripMenuItem copySelectionToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem mnuEditInMemoryViewer;
+		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem2;
+		private System.Windows.Forms.ToolStripMenuItem mnuShowInSplitView;
 	}
 }
