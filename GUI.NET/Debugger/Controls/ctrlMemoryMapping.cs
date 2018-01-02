@@ -68,7 +68,7 @@ namespace Mesen.GUI.Debugger.Controls
 				addEmpty(state.WorkRamStart - 0x4020);
 				addWorkRam();
 			} else if(state.SaveRamStart > 0) {
-				addEmpty(state.WorkRamStart - 0x4020);
+				addEmpty(state.SaveRamStart - 0x4020);
 				addSaveRam();
 			}
 
