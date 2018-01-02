@@ -381,12 +381,8 @@ namespace Mesen.GUI.Debugger
 						while(scrollPos > 0 && _lineNumbers[scrollPos - 1] < 0) {
 							//Make sure any comment for the line is in scroll view
 							scrollPos--;
-							if(_contents[scrollPos].StartsWith("--")) {
+							if(_contents[scrollPos].StartsWith("--") || _contents[scrollPos].StartsWith("__")) {
 								//Reached the start of a block, stop going back up
-								break;
-							} else if(_contents[scrollPos].StartsWith("__")) {
-								//Reached the end of a block, go back down 1 line and stop
-								scrollPos++;
 								break;
 							}
 						}
