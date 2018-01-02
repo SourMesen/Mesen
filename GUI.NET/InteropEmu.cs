@@ -1075,6 +1075,11 @@ namespace Mesen.GUI
 
 		[MarshalAs(UnmanagedType.ByValArray, SizeConst = 8)]
 		public UInt32[] Nametables;
+
+		public Int32 WorkRamStart;
+		public Int32 WorkRamEnd;
+		public Int32 SaveRamStart;
+		public Int32 SaveRamEnd;
 	}
 
 	public struct PPUDebugState

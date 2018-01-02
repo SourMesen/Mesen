@@ -47,10 +47,38 @@ namespace Mesen.GUI.Debugger.Controls
 
 			regions.Add(new MemoryRegionInfo() { Name = "Internal RAM", Size = 0x2000, Color = Color.FromArgb(222, 222, 222) });
 			regions.Add(new MemoryRegionInfo() { Name = "CPU Registers", Size = 0x2020, Color = Color.FromArgb(222, 222, 222) });
-			regions.Add(new MemoryRegionInfo() { Name = "N/A", Size = 0x1FE0, Color = Color.FromArgb(222, 222, 222) });
-			regions.Add(new MemoryRegionInfo() { Name = "Work RAM", Size = 0x2000, Color = Color.FromArgb(0xCD, 0xDC, 0xFA) });
 
-			for(int i = 0; i < 0x8000 / state.PrgPageSize; i++) {
+			Action<int> addEmpty = (int size) => { regions.Add(new MemoryRegionInfo() { Name = "N/A", Size = size, Color = Color.FromArgb(222, 222, 222) }); };
+			Action addWorkRam = () => { regions.Add(new MemoryRegionInfo() { Name = "Work RAM", Size = state.WorkRamEnd - state.WorkRamStart, Color = Color.FromArgb(0xCD, 0xDC, 0xFA) }); };
+			Action addSaveRam = () => { regions.Add(new MemoryRegionInfo() { Name = "Save RAM", Size = state.SaveRamEnd - state.SaveRamStart, Color = Color.FromArgb(0xFA, 0xDC, 0xCD) }); };
+
+			if(state.SaveRamStart > 0 && state.WorkRamStart > 0) {
+				if(state.SaveRamStart > state.WorkRamStart) {
+					addEmpty(state.WorkRamStart - 0x4020);
+					addWorkRam();
+					addEmpty(state.SaveRamStart - state.WorkRamEnd);
+					addSaveRam();
+				} else {
+					addEmpty(state.SaveRamStart - 0x4020);
+					addSaveRam();
+					addEmpty(state.WorkRamStart - state.SaveRamEnd);
+					addWorkRam();
+				}
+			} else if(state.WorkRamStart > 0) {
+				addEmpty(state.WorkRamStart - 0x4020);
+				addWorkRam();
+			} else if(state.SaveRamStart > 0) {
+				addEmpty(state.WorkRamStart - 0x4020);
+				addSaveRam();
+			}
+
+			int currentAddress = regions.Sum((MemoryRegionInfo region) => region.Size);
+			if(currentAddress < 0x8000) {
+				addEmpty(0x8000 - currentAddress);
+				currentAddress = 0x8000;
+			}
+
+			for(int i = (currentAddress - 0x8000) / (int)state.PrgPageSize; i < 0x8000 / state.PrgPageSize; i++) {
 				string text = state.PrgSelectedPages[i] == 0xEEEEEEEE ? "N/A" : ("$" + state.PrgSelectedPages[i].ToString("X2"));
 				regions.Add(new MemoryRegionInfo() { Name = text, Size = (int)state.PrgPageSize, Color = i % 2 == 0 ? Color.FromArgb(0xC4, 0xE7, 0xD4) : Color.FromArgb(0xA4, 0xD7, 0xB4) });
 			}

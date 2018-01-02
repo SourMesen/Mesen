@@ -69,7 +69,7 @@ struct CartridgeState
 	uint32_t PrgRomSize;
 	uint32_t ChrRomSize;
 	uint32_t ChrRamSize;
-
+	
 	uint32_t PrgPageCount;
 	uint32_t PrgPageSize;
 	uint32_t PrgSelectedPages[64];
@@ -77,6 +77,11 @@ struct CartridgeState
 	uint32_t ChrPageSize;
 	uint32_t ChrSelectedPages[64];
 	uint32_t Nametables[8];
+
+	int32_t WorkRamStart;
+	int32_t WorkRamEnd;
+	int32_t SaveRamStart;
+	int32_t SaveRamEnd;
 };
 
 struct PPUControlFlags

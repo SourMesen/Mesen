@@ -1067,6 +1067,30 @@ CartridgeState BaseMapper::GetState()
 	for(int i = 0; i < 4; i++) {
 		state.Nametables[i] = _nametableIndexes[i];
 	}
+
+	state.WorkRamStart = -1;
+	state.WorkRamEnd = -1;
+	state.SaveRamStart = -1;
+	state.SaveRamEnd = -1;
+	for(int i = 0x40; i < 0x100; i++) {
+		int32_t address = ToAbsoluteWorkRamAddress(i << 8);
+		if(address >= 0) {
+			if(state.WorkRamStart < 0) {
+				state.WorkRamStart = i << 8;
+			} else {
+				state.WorkRamEnd = (i << 8) + 0x100;
+			}
+		} else {
+			address = ToAbsoluteSaveRamAddress(i << 8);
+			if(address >= 0) {
+				if(state.SaveRamStart < 0) {
+					state.SaveRamStart = i << 8;
+				} else {
+					state.SaveRamEnd = (i << 8) + 0x100;
+				}
+			}
+		}
+	}
 	
 	return state;
 }
