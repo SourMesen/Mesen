@@ -858,6 +858,7 @@
     <Message ID="EmulatorShortcutMappings_OpenMemoryTools">Ouvrir les outils mémoire</Message>
     <Message ID="EmulatorShortcutMappings_OpenScriptWindow">Ouvrir une fenêtre de script</Message>
     <Message ID="EmulatorShortcutMappings_OpenTraceLogger">Ouvrir l'enregistreur de trace</Message>
+    <Message ID="EmulatorShortcutMappings_OpenApuViewer">Ouvrir le visualiseur de l'APU</Message>
   </Messages>
   <Enums>
     <Enum ID="ControllerType">

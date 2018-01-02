@@ -158,10 +158,11 @@
     <Message ID="EmulatorShortcutMappings_OpenFile">Open File</Message>
     <Message ID="EmulatorShortcutMappings_OpenDebugger">Open Debugger</Message>
     <Message ID="EmulatorShortcutMappings_OpenAssembler">Open Assembler</Message>
-    <Message ID="EmulatorShortcutMappings_OpenPpuViewer">Open Ppu Viewer</Message>
+    <Message ID="EmulatorShortcutMappings_OpenPpuViewer">Open PPU Viewer</Message>
     <Message ID="EmulatorShortcutMappings_OpenMemoryTools">Open Memory Tools</Message>
     <Message ID="EmulatorShortcutMappings_OpenScriptWindow">Open Script Window</Message>
     <Message ID="EmulatorShortcutMappings_OpenTraceLogger">Open Trace Logger</Message>
+    <Message ID="EmulatorShortcutMappings_OpenApuViewer">Open APU Viewer</Message>
   </Messages>
   <Enums>
     <Enum ID="ControllerType">

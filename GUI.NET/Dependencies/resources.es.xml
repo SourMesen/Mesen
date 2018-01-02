@@ -841,10 +841,11 @@
     <Message ID="EmulatorShortcutMappings_OpenFile">Abrir archivo</Message>
     <Message ID="EmulatorShortcutMappings_OpenDebugger">Abrir depurador</Message>
     <Message ID="EmulatorShortcutMappings_OpenAssembler">Abrir ensamblador</Message>
-    <Message ID="EmulatorShortcutMappings_OpenPpuViewer">Abrir visor Ppu</Message>
+    <Message ID="EmulatorShortcutMappings_OpenPpuViewer">Abrir visor PPU</Message>
     <Message ID="EmulatorShortcutMappings_OpenMemoryTools">Abrir herramientas de memoria</Message>
     <Message ID="EmulatorShortcutMappings_OpenScriptWindow">Abrir ventana de script</Message>
     <Message ID="EmulatorShortcutMappings_OpenTraceLogger">Abrir trace logger</Message>
+    <Message ID="EmulatorShortcutMappings_OpenApuViewer">Abrir visor APU</Message>
   </Messages>
   <Enums>
     <Enum ID="ControllerType">

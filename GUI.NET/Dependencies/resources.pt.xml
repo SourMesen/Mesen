@@ -839,10 +839,11 @@
     <Message ID="EmulatorShortcutMappings_OpenFile">Abrir arquivo</Message>
     <Message ID="EmulatorShortcutMappings_OpenDebugger">Abrir depurador</Message>
     <Message ID="EmulatorShortcutMappings_OpenAssembler">Abrir Assembler</Message>
-    <Message ID="EmulatorShortcutMappings_OpenPpuViewer">Abrir visualizador Ppu</Message>
+    <Message ID="EmulatorShortcutMappings_OpenPpuViewer">Abrir visualizador PPU</Message>
     <Message ID="EmulatorShortcutMappings_OpenMemoryTools">Abrir ferramentas de memória</Message>
     <Message ID="EmulatorShortcutMappings_OpenScriptWindow">Abrir Script do Window</Message>
     <Message ID="EmulatorShortcutMappings_OpenTraceLogger">Abrir Trace Logger</Message>
+    <Message ID="EmulatorShortcutMappings_OpenApuViewer">Abrir visualizador APU</Message>
   </Messages>
   <Enums>
     <Enum ID="ControllerType">

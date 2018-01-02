@@ -843,10 +843,11 @@
     <Message ID="EmulatorShortcutMappings_OpenFile">Відкрити файл</Message>
     <Message ID="EmulatorShortcutMappings_OpenDebugger">Відкрити Debugger</Message>
     <Message ID="EmulatorShortcutMappings_OpenAssembler">Відкрити Assembler</Message>
-    <Message ID="EmulatorShortcutMappings_OpenPpuViewer">Відкрити Ppu Viewer</Message>
+    <Message ID="EmulatorShortcutMappings_OpenPpuViewer">Відкрити PPU Viewer</Message>
     <Message ID="EmulatorShortcutMappings_OpenMemoryTools">Відкрити Memory Tools</Message>
     <Message ID="EmulatorShortcutMappings_OpenScriptWindow">Відкрити Script Window</Message>
     <Message ID="EmulatorShortcutMappings_OpenTraceLogger">Відкрити Trace Logger</Message>
+    <Message ID="EmulatorShortcutMappings_OpenApuViewer">Відкрити APU Viewer</Message>
   </Messages>
   <Enums>
     <Enum ID="ControllerType">
