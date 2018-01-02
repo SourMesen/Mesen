@@ -750,11 +750,13 @@ public:
 	static void SetChannelVolume(AudioChannel channel, double volume)
 	{
 		_channelVolume[(int)channel] = volume;
+		_audioSettingsChanged = true;
 	}
 
 	static void SetMasterVolume(double volume)
 	{
 		_masterVolume = volume;
+		_audioSettingsChanged = true;
 	}
 
 	static void SetChannelPanning(AudioChannel channel, double panning)
