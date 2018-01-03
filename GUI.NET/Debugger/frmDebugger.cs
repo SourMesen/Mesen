@@ -59,8 +59,6 @@ namespace Mesen.GUI.Debugger
 			this.mnuShowCodePreview.Checked = ConfigManager.Config.DebugInfo.ShowCodePreview;
 			this.mnuShowCpuMemoryMapping.Checked = ConfigManager.Config.DebugInfo.ShowCpuMemoryMapping;
 			this.mnuShowPpuMemoryMapping.Checked = ConfigManager.Config.DebugInfo.ShowPpuMemoryMapping;
-			this.mnuShowOnlyDisassembledCode.Checked = ConfigManager.Config.DebugInfo.ShowOnlyDisassembledCode;
-			this.mnuHighlightUnexecutedCode.Checked = ConfigManager.Config.DebugInfo.HighlightUnexecutedCode;
 			this.mnuAutoLoadDbgFiles.Checked = ConfigManager.Config.DebugInfo.AutoLoadDbgFiles;
 			this.mnuAutoLoadCdlFiles.Checked = ConfigManager.Config.DebugInfo.AutoLoadCdlFiles;
 			this.mnuBreakOnReset.Checked = ConfigManager.Config.DebugInfo.BreakOnReset;
@@ -69,9 +67,13 @@ namespace Mesen.GUI.Debugger
 			this.mnuBreakOnBrk.Checked = ConfigManager.Config.DebugInfo.BreakOnBrk;
 			this.mnuBreakOnDebuggerFocus.Checked = ConfigManager.Config.DebugInfo.BreakOnDebuggerFocus;
 			this.mnuDisplayOpCodesInLowerCase.Checked = ConfigManager.Config.DebugInfo.DisplayOpCodesInLowerCase;
-			this.mnuDisassembleVerifiedCodeOnly.Checked = ConfigManager.Config.DebugInfo.DisassemblyType == DisassemblyType.VerifiedCode;
-			this.mnuDisassembleEverything.Checked = ConfigManager.Config.DebugInfo.DisassemblyType == DisassemblyType.Everything;
-			this.mnuDisassembleEverythingButData.Checked = ConfigManager.Config.DebugInfo.DisassemblyType == DisassemblyType.EverythingButData;
+
+			this.mnuDisassembleVerifiedData.Checked = ConfigManager.Config.DebugInfo.DisassembleVerifiedData;
+			this.mnuDisassembleUnidentifiedData.Checked = ConfigManager.Config.DebugInfo.DisassembleUnidentifiedData;
+
+			this.mnuShowVerifiedData.Checked = ConfigManager.Config.DebugInfo.ShowVerifiedData;
+			this.mnuShowUnidentifiedData.Checked = ConfigManager.Config.DebugInfo.ShowUnidentifiedData;
+
 			this.mnuRefreshWatchWhileRunning.Checked = ConfigManager.Config.DebugInfo.RefreshWatchWhileRunning;
 
 			if(ConfigManager.Config.DebugInfo.WindowWidth > -1) {
@@ -231,17 +233,23 @@ namespace Mesen.GUI.Debugger
 			if(mnuShowEffectiveAddresses.Checked) {
 				flags |= DebuggerFlags.ShowEffectiveAddresses;
 			}
-			if(mnuShowOnlyDisassembledCode.Checked) {
-				flags |= DebuggerFlags.ShowOnlyDisassembledCode;
-			}
 			if(mnuDisplayOpCodesInLowerCase.Checked) {
 				flags |= DebuggerFlags.DisplayOpCodesInLowerCase;
 			}
-			if(mnuDisassembleEverything.Checked) {
-				flags |= DebuggerFlags.DisassembleEverything;
-			} else if(mnuDisassembleEverythingButData.Checked) {
-				flags |= DebuggerFlags.DisassembleEverythingButData;
+
+			if(mnuDisassembleVerifiedData.Checked) {
+				flags |= DebuggerFlags.DisassembleVerifiedData;
 			}
+			if(mnuDisassembleUnidentifiedData.Checked) {
+				flags |= DebuggerFlags.DisassembleUnidentifiedData;
+			}
+			if(mnuShowVerifiedData.Checked) {
+				flags |= DebuggerFlags.ShowVerifiedData;
+			}
+			if(mnuShowUnidentifiedData.Checked) {
+				flags |= DebuggerFlags.ShowUnidentifiedData;
+			}
+
 			if(mnuBreakOnUnofficialOpcodes.Checked) {
 				flags |= DebuggerFlags.BreakOnUnofficialOpCode;
 			}
@@ -680,13 +688,6 @@ namespace Mesen.GUI.Debugger
 			UpdateDebugger(false);
 		}
 
-		private void mnuShowOnlyDisassembledCode_Click(object sender, EventArgs e)
-		{
-			ConfigManager.Config.DebugInfo.ShowOnlyDisassembledCode = mnuShowOnlyDisassembledCode.Checked;
-			ConfigManager.ApplyChanges();
-			UpdateDebugger(false);
-		}
-
 		private void mnuShowCpuMemoryMapping_Click(object sender, EventArgs e)
 		{
 			ctrlCpuMemoryMapping.Visible = mnuShowCpuMemoryMapping.Checked;
@@ -713,14 +714,6 @@ namespace Mesen.GUI.Debugger
 			ConfigManager.ApplyChanges();
 		}
 
-		private void mnuHighlightUnexecutedCode_Click(object sender, EventArgs e)
-		{
-			ConfigManager.Config.DebugInfo.HighlightUnexecutedCode = mnuHighlightUnexecutedCode.Checked;
-			ConfigManager.ApplyChanges();
-			ctrlDebuggerCode.UpdateLineColors();
-			ctrlDebuggerCodeSplit.UpdateLineColors();
-		}
-		
 		private void mnuBreakOnReset_Click(object sender, EventArgs e)
 		{
 			ConfigManager.Config.DebugInfo.BreakOnReset = mnuBreakOnReset.Checked;
@@ -872,31 +865,35 @@ namespace Mesen.GUI.Debugger
 			_lastCodeWindow.ScrollToLineNumber((int)sender);
 		}
 
-		private void SetDisassemblyType(DisassemblyType type, ToolStripMenuItem item)
+		private void UpdateDisassembleFlags()
 		{
-			mnuDisassembleVerifiedCodeOnly.Checked = mnuDisassembleEverything.Checked = mnuDisassembleEverythingButData.Checked = false;
-			item.Checked = true;
-
-			ConfigManager.Config.DebugInfo.DisassemblyType = type;
 			ConfigManager.ApplyChanges();
-
 			UpdateDebuggerFlags();
 			UpdateDebugger(false);
 		}
 
-		private void mnuDisassembleVerifiedCodeOnly_Click(object sender, EventArgs e)
+		private void mnuDisassembleVerifiedData_Click(object sender, EventArgs e)
 		{
-			SetDisassemblyType(DisassemblyType.VerifiedCode, sender as ToolStripMenuItem);
+			ConfigManager.Config.DebugInfo.DisassembleVerifiedData = mnuDisassembleVerifiedData.Checked;
+			UpdateDisassembleFlags();
 		}
 
-		private void mnuDisassembleEverything_Click(object sender, EventArgs e)
+		private void mnuDisassembleUnidentifiedData_Click(object sender, EventArgs e)
 		{
-			SetDisassemblyType(DisassemblyType.Everything, sender as ToolStripMenuItem);
+			ConfigManager.Config.DebugInfo.DisassembleUnidentifiedData = mnuDisassembleUnidentifiedData.Checked;
+			UpdateDisassembleFlags();
 		}
 
-		private void mnuDisassembleEverythingButData_Click(object sender, EventArgs e)
+		private void mnuShowVerifiedData_Click(object sender, EventArgs e)
 		{
-			SetDisassemblyType(DisassemblyType.EverythingButData, sender as ToolStripMenuItem);
+			ConfigManager.Config.DebugInfo.ShowVerifiedData = mnuShowVerifiedData.Checked;
+			UpdateDisassembleFlags();
+		}
+
+		private void mnuShowUnidentifiedData_Click(object sender, EventArgs e)
+		{
+			ConfigManager.Config.DebugInfo.ShowUnidentifiedData = mnuShowUnidentifiedData.Checked;
+			UpdateDisassembleFlags();
 		}
 
 		private void ctrlSplitContainerTop_PanelCollapsed(object sender, EventArgs e)
@@ -1037,6 +1034,15 @@ namespace Mesen.GUI.Debugger
 		private void mnuCdlStripUnusedData_Click(object sender, EventArgs e)
 		{
 			SaveRomWithCdlStripping(CdlStripFlag.StripUnused);
+		}
+
+		private void mnuConfigureColors_Click(object sender, EventArgs e)
+		{
+			using(frmDebuggerColors frm = new frmDebuggerColors()) {
+				if(frm.ShowDialog(this, this) == DialogResult.OK) {
+					this.UpdateDebugger(false, true);
+				}
+			}
 		}
 	}
 }

@@ -99,15 +99,17 @@ namespace Mesen.GUI.Debugger
 			this.mnuOptions = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuDisassemblyOptions = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuDisassemble = new System.Windows.Forms.ToolStripMenuItem();
-			this.mnuDisassembleVerifiedCodeOnly = new System.Windows.Forms.ToolStripMenuItem();
-			this.mnuDisassembleEverything = new System.Windows.Forms.ToolStripMenuItem();
-			this.mnuDisassembleEverythingButData = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuDisassembleVerifiedCode = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuDisassembleVerifiedData = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuDisassembleUnidentifiedData = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuShow = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuShowDisassembledCode = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuShowVerifiedData = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuShowUnidentifiedData = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem7 = new System.Windows.Forms.ToolStripSeparator();
 			this.mnuDisplayOpCodesInLowerCase = new System.Windows.Forms.ToolStripMenuItem();
-			this.mnuHighlightUnexecutedCode = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuShowEffectiveAddresses = new System.Windows.Forms.ToolStripMenuItem();
-			this.mnuShowOnlyDisassembledCode = new System.Windows.Forms.ToolStripMenuItem();
-			this.breakOptionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuBreakOptions = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuBreakOnReset = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuBreakOnUnofficialOpcodes = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuBreakOnBrk = new System.Windows.Forms.ToolStripMenuItem();
@@ -115,6 +117,7 @@ namespace Mesen.GUI.Debugger
 			this.mnuBreakOnOpen = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuBreakOnDebuggerFocus = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem12 = new System.Windows.Forms.ToolStripSeparator();
+			this.mnuConfigureColors = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuSplitView = new System.Windows.Forms.ToolStripMenuItem();
 			this.fontSizeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuIncreaseFontSize = new System.Windows.Forms.ToolStripMenuItem();
@@ -230,7 +233,7 @@ namespace Mesen.GUI.Debugger
 			this.ctrlSplitContainerTop.Panel2.Controls.Add(this.tlpFunctionLabelLists);
 			this.ctrlSplitContainerTop.Panel2MinSize = 150;
 			this.ctrlSplitContainerTop.Size = new System.Drawing.Size(1172, 400);
-			this.ctrlSplitContainerTop.SplitterDistance = 842;
+			this.ctrlSplitContainerTop.SplitterDistance = 821;
 			this.ctrlSplitContainerTop.SplitterWidth = 7;
 			this.ctrlSplitContainerTop.TabIndex = 3;
 			this.ctrlSplitContainerTop.PanelCollapsed += new System.EventHandler(this.ctrlSplitContainerTop_PanelCollapsed);
@@ -251,7 +254,7 @@ namespace Mesen.GUI.Debugger
 			this.tlpTop.Name = "tlpTop";
 			this.tlpTop.RowCount = 1;
 			this.tlpTop.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tlpTop.Size = new System.Drawing.Size(842, 400);
+			this.tlpTop.Size = new System.Drawing.Size(821, 400);
 			this.tlpTop.TabIndex = 2;
 			// 
 			// ctrlDebuggerCode
@@ -260,7 +263,7 @@ namespace Mesen.GUI.Debugger
 			this.ctrlDebuggerCode.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.ctrlDebuggerCode.Location = new System.Drawing.Point(3, 3);
 			this.ctrlDebuggerCode.Name = "ctrlDebuggerCode";
-			this.ctrlDebuggerCode.Size = new System.Drawing.Size(378, 394);
+			this.ctrlDebuggerCode.Size = new System.Drawing.Size(357, 394);
 			this.ctrlDebuggerCode.TabIndex = 2;
 			this.ctrlDebuggerCode.OnEditCode += new Mesen.GUI.Debugger.ctrlDebuggerCode.AssemblerEventHandler(this.ctrlDebuggerCode_OnEditCode);
 			this.ctrlDebuggerCode.OnSetNextStatement += new Mesen.GUI.Debugger.ctrlDebuggerCode.AddressEventHandler(this.ctrlDebuggerCode_OnSetNextStatement);
@@ -270,7 +273,7 @@ namespace Mesen.GUI.Debugger
 			// ctrlConsoleStatus
 			// 
 			this.ctrlConsoleStatus.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.ctrlConsoleStatus.Location = new System.Drawing.Point(384, 0);
+			this.ctrlConsoleStatus.Location = new System.Drawing.Point(363, 0);
 			this.ctrlConsoleStatus.Margin = new System.Windows.Forms.Padding(0);
 			this.ctrlConsoleStatus.Name = "ctrlConsoleStatus";
 			this.ctrlConsoleStatus.Size = new System.Drawing.Size(458, 400);
@@ -281,7 +284,7 @@ namespace Mesen.GUI.Debugger
 			// 
 			this.ctrlDebuggerCodeSplit.Code = null;
 			this.ctrlDebuggerCodeSplit.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.ctrlDebuggerCodeSplit.Location = new System.Drawing.Point(387, 3);
+			this.ctrlDebuggerCodeSplit.Location = new System.Drawing.Point(366, 3);
 			this.ctrlDebuggerCodeSplit.Name = "ctrlDebuggerCodeSplit";
 			this.ctrlDebuggerCodeSplit.Size = new System.Drawing.Size(1, 394);
 			this.ctrlDebuggerCodeSplit.TabIndex = 4;
@@ -304,7 +307,7 @@ namespace Mesen.GUI.Debugger
 			this.tlpFunctionLabelLists.RowCount = 2;
 			this.tlpFunctionLabelLists.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
 			this.tlpFunctionLabelLists.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-			this.tlpFunctionLabelLists.Size = new System.Drawing.Size(323, 400);
+			this.tlpFunctionLabelLists.Size = new System.Drawing.Size(344, 400);
 			this.tlpFunctionLabelLists.TabIndex = 5;
 			// 
 			// grpLabels
@@ -313,7 +316,7 @@ namespace Mesen.GUI.Debugger
 			this.grpLabels.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.grpLabels.Location = new System.Drawing.Point(3, 203);
 			this.grpLabels.Name = "grpLabels";
-			this.grpLabels.Size = new System.Drawing.Size(317, 194);
+			this.grpLabels.Size = new System.Drawing.Size(338, 194);
 			this.grpLabels.TabIndex = 6;
 			this.grpLabels.TabStop = false;
 			this.grpLabels.Text = "Labels";
@@ -323,7 +326,7 @@ namespace Mesen.GUI.Debugger
 			this.ctrlLabelList.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.ctrlLabelList.Location = new System.Drawing.Point(3, 16);
 			this.ctrlLabelList.Name = "ctrlLabelList";
-			this.ctrlLabelList.Size = new System.Drawing.Size(311, 175);
+			this.ctrlLabelList.Size = new System.Drawing.Size(332, 175);
 			this.ctrlLabelList.TabIndex = 0;
 			this.ctrlLabelList.OnFindOccurrence += new System.EventHandler(this.ctrlLabelList_OnFindOccurrence);
 			this.ctrlLabelList.OnLabelSelected += new System.EventHandler(this.ctrlLabelList_OnLabelSelected);
@@ -334,7 +337,7 @@ namespace Mesen.GUI.Debugger
 			this.grpFunctions.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.grpFunctions.Location = new System.Drawing.Point(3, 3);
 			this.grpFunctions.Name = "grpFunctions";
-			this.grpFunctions.Size = new System.Drawing.Size(317, 194);
+			this.grpFunctions.Size = new System.Drawing.Size(338, 194);
 			this.grpFunctions.TabIndex = 5;
 			this.grpFunctions.TabStop = false;
 			this.grpFunctions.Text = "Functions";
@@ -344,7 +347,7 @@ namespace Mesen.GUI.Debugger
 			this.ctrlFunctionList.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.ctrlFunctionList.Location = new System.Drawing.Point(3, 16);
 			this.ctrlFunctionList.Name = "ctrlFunctionList";
-			this.ctrlFunctionList.Size = new System.Drawing.Size(311, 175);
+			this.ctrlFunctionList.Size = new System.Drawing.Size(332, 175);
 			this.ctrlFunctionList.TabIndex = 0;
 			this.ctrlFunctionList.OnFindOccurrence += new System.EventHandler(this.ctrlFunctionList_OnFindOccurrence);
 			this.ctrlFunctionList.OnFunctionSelected += new System.EventHandler(this.ctrlFunctionList_OnFunctionSelected);
@@ -839,8 +842,9 @@ namespace Mesen.GUI.Debugger
 			// 
 			this.mnuOptions.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.mnuDisassemblyOptions,
-            this.breakOptionsToolStripMenuItem,
+            this.mnuBreakOptions,
             this.toolStripMenuItem12,
+            this.mnuConfigureColors,
             this.mnuSplitView,
             this.fontSizeToolStripMenuItem,
             this.toolStripMenuItem11,
@@ -862,11 +866,10 @@ namespace Mesen.GUI.Debugger
 			// 
 			this.mnuDisassemblyOptions.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.mnuDisassemble,
+            this.mnuShow,
             this.toolStripMenuItem7,
             this.mnuDisplayOpCodesInLowerCase,
-            this.mnuHighlightUnexecutedCode,
-            this.mnuShowEffectiveAddresses,
-            this.mnuShowOnlyDisassembledCode});
+            this.mnuShowEffectiveAddresses});
 			this.mnuDisassemblyOptions.Name = "mnuDisassemblyOptions";
 			this.mnuDisassemblyOptions.Size = new System.Drawing.Size(259, 22);
 			this.mnuDisassemblyOptions.Text = "Disassembly Options";
@@ -874,83 +877,106 @@ namespace Mesen.GUI.Debugger
 			// mnuDisassemble
 			// 
 			this.mnuDisassemble.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.mnuDisassembleVerifiedCodeOnly,
-            this.mnuDisassembleEverything,
-            this.mnuDisassembleEverythingButData});
+            this.mnuDisassembleVerifiedCode,
+            this.mnuDisassembleVerifiedData,
+            this.mnuDisassembleUnidentifiedData});
 			this.mnuDisassemble.Name = "mnuDisassemble";
-			this.mnuDisassemble.Size = new System.Drawing.Size(237, 22);
+			this.mnuDisassemble.Size = new System.Drawing.Size(236, 22);
 			this.mnuDisassemble.Text = "Disassemble...";
 			// 
-			// mnuDisassembleVerifiedCodeOnly
+			// mnuDisassembleVerifiedCode
 			// 
-			this.mnuDisassembleVerifiedCodeOnly.Name = "mnuDisassembleVerifiedCodeOnly";
-			this.mnuDisassembleVerifiedCodeOnly.Size = new System.Drawing.Size(235, 22);
-			this.mnuDisassembleVerifiedCodeOnly.Text = "Verified code only";
-			this.mnuDisassembleVerifiedCodeOnly.Click += new System.EventHandler(this.mnuDisassembleVerifiedCodeOnly_Click);
+			this.mnuDisassembleVerifiedCode.Checked = true;
+			this.mnuDisassembleVerifiedCode.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.mnuDisassembleVerifiedCode.Enabled = false;
+			this.mnuDisassembleVerifiedCode.Name = "mnuDisassembleVerifiedCode";
+			this.mnuDisassembleVerifiedCode.Size = new System.Drawing.Size(250, 22);
+			this.mnuDisassembleVerifiedCode.Text = "Verified Code";
 			// 
-			// mnuDisassembleEverything
+			// mnuDisassembleVerifiedData
 			// 
-			this.mnuDisassembleEverything.Name = "mnuDisassembleEverything";
-			this.mnuDisassembleEverything.Size = new System.Drawing.Size(235, 22);
-			this.mnuDisassembleEverything.Text = "Everything";
-			this.mnuDisassembleEverything.Click += new System.EventHandler(this.mnuDisassembleEverything_Click);
+			this.mnuDisassembleVerifiedData.CheckOnClick = true;
+			this.mnuDisassembleVerifiedData.Name = "mnuDisassembleVerifiedData";
+			this.mnuDisassembleVerifiedData.Size = new System.Drawing.Size(250, 22);
+			this.mnuDisassembleVerifiedData.Text = "Verified Data (not recommended)";
+			this.mnuDisassembleVerifiedData.Click += new System.EventHandler(this.mnuDisassembleVerifiedData_Click);
 			// 
-			// mnuDisassembleEverythingButData
+			// mnuDisassembleUnidentifiedData
 			// 
-			this.mnuDisassembleEverythingButData.Name = "mnuDisassembleEverythingButData";
-			this.mnuDisassembleEverythingButData.Size = new System.Drawing.Size(235, 22);
-			this.mnuDisassembleEverythingButData.Text = "Everything except verified data";
-			this.mnuDisassembleEverythingButData.Click += new System.EventHandler(this.mnuDisassembleEverythingButData_Click);
+			this.mnuDisassembleUnidentifiedData.CheckOnClick = true;
+			this.mnuDisassembleUnidentifiedData.Name = "mnuDisassembleUnidentifiedData";
+			this.mnuDisassembleUnidentifiedData.Size = new System.Drawing.Size(250, 22);
+			this.mnuDisassembleUnidentifiedData.Text = "Unidentified Code/Data";
+			this.mnuDisassembleUnidentifiedData.Click += new System.EventHandler(this.mnuDisassembleUnidentifiedData_Click);
+			// 
+			// mnuShow
+			// 
+			this.mnuShow.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.mnuShowDisassembledCode,
+            this.mnuShowVerifiedData,
+            this.mnuShowUnidentifiedData});
+			this.mnuShow.Name = "mnuShow";
+			this.mnuShow.Size = new System.Drawing.Size(236, 22);
+			this.mnuShow.Text = "Show...";
+			// 
+			// mnuShowDisassembledCode
+			// 
+			this.mnuShowDisassembledCode.Checked = true;
+			this.mnuShowDisassembledCode.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.mnuShowDisassembledCode.Enabled = false;
+			this.mnuShowDisassembledCode.Name = "mnuShowDisassembledCode";
+			this.mnuShowDisassembledCode.Size = new System.Drawing.Size(199, 22);
+			this.mnuShowDisassembledCode.Text = "Disassembled Code";
+			// 
+			// mnuShowVerifiedData
+			// 
+			this.mnuShowVerifiedData.CheckOnClick = true;
+			this.mnuShowVerifiedData.Name = "mnuShowVerifiedData";
+			this.mnuShowVerifiedData.Size = new System.Drawing.Size(199, 22);
+			this.mnuShowVerifiedData.Text = "Verified Data";
+			this.mnuShowVerifiedData.Click += new System.EventHandler(this.mnuShowVerifiedData_Click);
+			// 
+			// mnuShowUnidentifiedData
+			// 
+			this.mnuShowUnidentifiedData.CheckOnClick = true;
+			this.mnuShowUnidentifiedData.Name = "mnuShowUnidentifiedData";
+			this.mnuShowUnidentifiedData.Size = new System.Drawing.Size(199, 22);
+			this.mnuShowUnidentifiedData.Text = "Unidentified Code/Data";
+			this.mnuShowUnidentifiedData.Click += new System.EventHandler(this.mnuShowUnidentifiedData_Click);
 			// 
 			// toolStripMenuItem7
 			// 
 			this.toolStripMenuItem7.Name = "toolStripMenuItem7";
-			this.toolStripMenuItem7.Size = new System.Drawing.Size(234, 6);
+			this.toolStripMenuItem7.Size = new System.Drawing.Size(233, 6);
 			// 
 			// mnuDisplayOpCodesInLowerCase
 			// 
 			this.mnuDisplayOpCodesInLowerCase.CheckOnClick = true;
 			this.mnuDisplayOpCodesInLowerCase.Name = "mnuDisplayOpCodesInLowerCase";
-			this.mnuDisplayOpCodesInLowerCase.Size = new System.Drawing.Size(237, 22);
+			this.mnuDisplayOpCodesInLowerCase.Size = new System.Drawing.Size(236, 22);
 			this.mnuDisplayOpCodesInLowerCase.Text = "Display OP codes in lower case";
 			this.mnuDisplayOpCodesInLowerCase.Click += new System.EventHandler(this.mnuDisplayOpCodesInLowerCase_Click);
-			// 
-			// mnuHighlightUnexecutedCode
-			// 
-			this.mnuHighlightUnexecutedCode.CheckOnClick = true;
-			this.mnuHighlightUnexecutedCode.Name = "mnuHighlightUnexecutedCode";
-			this.mnuHighlightUnexecutedCode.Size = new System.Drawing.Size(237, 22);
-			this.mnuHighlightUnexecutedCode.Text = "Highlight Unexecuted Code";
-			this.mnuHighlightUnexecutedCode.Click += new System.EventHandler(this.mnuHighlightUnexecutedCode_Click);
 			// 
 			// mnuShowEffectiveAddresses
 			// 
 			this.mnuShowEffectiveAddresses.CheckOnClick = true;
 			this.mnuShowEffectiveAddresses.Name = "mnuShowEffectiveAddresses";
-			this.mnuShowEffectiveAddresses.Size = new System.Drawing.Size(237, 22);
+			this.mnuShowEffectiveAddresses.Size = new System.Drawing.Size(236, 22);
 			this.mnuShowEffectiveAddresses.Text = "Show Effective Addresses";
 			this.mnuShowEffectiveAddresses.Click += new System.EventHandler(this.mnuShowEffectiveAddresses_Click);
 			// 
-			// mnuShowOnlyDisassembledCode
+			// mnuBreakOptions
 			// 
-			this.mnuShowOnlyDisassembledCode.CheckOnClick = true;
-			this.mnuShowOnlyDisassembledCode.Name = "mnuShowOnlyDisassembledCode";
-			this.mnuShowOnlyDisassembledCode.Size = new System.Drawing.Size(237, 22);
-			this.mnuShowOnlyDisassembledCode.Text = "Show Only Disassembled Code";
-			this.mnuShowOnlyDisassembledCode.Click += new System.EventHandler(this.mnuShowOnlyDisassembledCode_Click);
-			// 
-			// breakOptionsToolStripMenuItem
-			// 
-			this.breakOptionsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+			this.mnuBreakOptions.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.mnuBreakOnReset,
             this.mnuBreakOnUnofficialOpcodes,
             this.mnuBreakOnBrk,
             this.toolStripMenuItem15,
             this.mnuBreakOnOpen,
             this.mnuBreakOnDebuggerFocus});
-			this.breakOptionsToolStripMenuItem.Name = "breakOptionsToolStripMenuItem";
-			this.breakOptionsToolStripMenuItem.Size = new System.Drawing.Size(259, 22);
-			this.breakOptionsToolStripMenuItem.Text = "Break Options";
+			this.mnuBreakOptions.Name = "mnuBreakOptions";
+			this.mnuBreakOptions.Size = new System.Drawing.Size(259, 22);
+			this.mnuBreakOptions.Text = "Break Options";
 			// 
 			// mnuBreakOnReset
 			// 
@@ -1001,6 +1027,14 @@ namespace Mesen.GUI.Debugger
 			// 
 			this.toolStripMenuItem12.Name = "toolStripMenuItem12";
 			this.toolStripMenuItem12.Size = new System.Drawing.Size(256, 6);
+			// 
+			// mnuConfigureColors
+			// 
+			this.mnuConfigureColors.Image = global::Mesen.GUI.Properties.Resources.PipetteSmall;
+			this.mnuConfigureColors.Name = "mnuConfigureColors";
+			this.mnuConfigureColors.Size = new System.Drawing.Size(259, 22);
+			this.mnuConfigureColors.Text = "Configure Colors";
+			this.mnuConfigureColors.Click += new System.EventHandler(this.mnuConfigureColors_Click);
 			// 
 			// mnuSplitView
 			// 
@@ -1511,15 +1545,13 @@ namespace Mesen.GUI.Debugger
 		private System.Windows.Forms.ToolStripMenuItem mnuDisableDefaultLabels;
 		private System.Windows.Forms.ToolStripMenuItem mnuBreakOnReset;
 		private System.Windows.Forms.ToolStripMenuItem mnuDisassemblyOptions;
-		private System.Windows.Forms.ToolStripMenuItem mnuHighlightUnexecutedCode;
 		private System.Windows.Forms.ToolStripMenuItem mnuShowEffectiveAddresses;
-		private System.Windows.Forms.ToolStripMenuItem mnuShowOnlyDisassembledCode;
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem7;
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem12;
 		private System.Windows.Forms.ToolStripMenuItem mnuDisassemble;
-		private System.Windows.Forms.ToolStripMenuItem mnuDisassembleVerifiedCodeOnly;
-		private System.Windows.Forms.ToolStripMenuItem mnuDisassembleEverything;
-		private System.Windows.Forms.ToolStripMenuItem mnuDisassembleEverythingButData;
+		private System.Windows.Forms.ToolStripMenuItem mnuDisassembleVerifiedCode;
+		private System.Windows.Forms.ToolStripMenuItem mnuDisassembleVerifiedData;
+		private System.Windows.Forms.ToolStripMenuItem mnuDisassembleUnidentifiedData;
 		private System.Windows.Forms.ToolStripMenuItem mnuDisplayOpCodesInLowerCase;
 		private ctrlWatch ctrlWatch;
 		private GUI.Controls.ctrlSplitContainer ctrlSplitContainerTop;
@@ -1532,7 +1564,7 @@ namespace Mesen.GUI.Debugger
 		private System.Windows.Forms.ToolStripMenuItem mnuAssembler;
 		private System.Windows.Forms.ToolStripMenuItem mnuCode;
 		private System.Windows.Forms.ToolStripMenuItem mnuRefreshWatchWhileRunning;
-		private System.Windows.Forms.ToolStripMenuItem breakOptionsToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem mnuBreakOptions;
 		private System.Windows.Forms.ToolStripMenuItem mnuBreakOnDebuggerFocus;
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem15;
 		private System.Windows.Forms.ToolStripMenuItem mnuStepBack;
@@ -1553,5 +1585,10 @@ namespace Mesen.GUI.Debugger
 		private System.Windows.Forms.ToolStripMenuItem mnuShowCodePreview;
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem18;
 		private System.Windows.Forms.ToolStripMenuItem mnuShowOpCodeTooltips;
+		private System.Windows.Forms.ToolStripMenuItem mnuShow;
+		private System.Windows.Forms.ToolStripMenuItem mnuShowDisassembledCode;
+		private System.Windows.Forms.ToolStripMenuItem mnuShowVerifiedData;
+		private System.Windows.Forms.ToolStripMenuItem mnuShowUnidentifiedData;
+		private System.Windows.Forms.ToolStripMenuItem mnuConfigureColors;
 	}
 }

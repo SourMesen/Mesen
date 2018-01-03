@@ -204,3 +204,11 @@ void CodeDataLogger::StripData(uint8_t *romBuffer, CdlStripFlag flag)
 		}
 	}
 }
+
+void CodeDataLogger::MarkPrgBytesAs(uint32_t start, uint32_t end, CdlPrgFlags type)
+{
+	for(uint32_t i = start; i <= end; i++) {
+		_cdlData[i] = (_cdlData[i] & 0xFC) | (int)type;
+	}
+	_debugger->UpdateCdlCache();
+}

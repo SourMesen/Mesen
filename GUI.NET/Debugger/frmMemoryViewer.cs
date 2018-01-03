@@ -85,7 +85,7 @@ namespace Mesen.GUI.Debugger
 		public void ShowAddress(int address)
 		{
 			tabMain.SelectedTab = tpgMemoryViewer;
-			cboMemoryType.SetEnumValue(DebugMemoryType.CpuMemory);
+			cboMemoryType.SelectedIndex = 0; //Select CPU Memory
 			ctrlHexViewer.GoToAddress(address);
 		}
 
@@ -437,6 +437,33 @@ namespace Mesen.GUI.Debugger
 				WatchManager.AddWatch(toAdd);
 			};
 
+			var mnuMarkSelectionAs = new ToolStripMenuItem();
+			var mnuMarkAsCode = new ToolStripMenuItem();
+			mnuMarkAsCode.Text = "Verified Code";
+			mnuMarkAsCode.Click += (s, e) => {
+				int startAddress = (int)hexBox.SelectionStart;
+				int endAddress = (int)(hexBox.SelectionStart + (hexBox.SelectionLength == 0 ? 0 : (hexBox.SelectionLength - 1)));
+				this.MarkSelectionAs(startAddress, endAddress, CdlPrgFlags.Code);
+			};
+			var mnuMarkAsData = new ToolStripMenuItem();
+			mnuMarkAsData.Text = "Verified Data";
+			mnuMarkAsData.Click += (s, e) => {
+				int startAddress = (int)hexBox.SelectionStart;
+				int endAddress = (int)(hexBox.SelectionStart + (hexBox.SelectionLength == 0 ? 0 : (hexBox.SelectionLength - 1)));
+				this.MarkSelectionAs(startAddress, endAddress, CdlPrgFlags.Data);
+			};
+			var mnuMarkAsUnidentifiedData = new ToolStripMenuItem();
+			mnuMarkAsUnidentifiedData.Text = "Unidentified Data";
+			mnuMarkAsUnidentifiedData.Click += (s, e) => {
+				int startAddress = (int)hexBox.SelectionStart;
+				int endAddress = (int)(hexBox.SelectionStart + (hexBox.SelectionLength == 0 ? 0 : (hexBox.SelectionLength - 1)));
+				this.MarkSelectionAs(startAddress, endAddress, CdlPrgFlags.None);
+			};
+
+			mnuMarkSelectionAs.DropDownItems.Add(mnuMarkAsCode);
+			mnuMarkSelectionAs.DropDownItems.Add(mnuMarkAsData);
+			mnuMarkSelectionAs.DropDownItems.Add(mnuMarkAsUnidentifiedData);
+
 			var mnuFreeze = new ToolStripMenuItem();
 			mnuFreeze.Click += (s, e) => {
 				UInt32 startAddress = (UInt32)hexBox.SelectionStart;
@@ -477,6 +504,25 @@ namespace Mesen.GUI.Debugger
 					mnuFreeze.Tag = false;
 				}
 
+				if(this._memoryType == DebugMemoryType.CpuMemory) {
+					int absStart = InteropEmu.DebugGetAbsoluteAddress(startAddress);
+					int absEnd = InteropEmu.DebugGetAbsoluteAddress(endAddress);
+
+					if(absStart >= 0 && absEnd >= 0 && absStart <= absEnd) {
+						mnuMarkSelectionAs.Text = "Mark selection as... (" + addressRange + ")";
+						mnuMarkSelectionAs.Enabled = true;
+					} else {
+						mnuMarkSelectionAs.Text = "Mark selection as...";
+						mnuMarkSelectionAs.Enabled = false;
+					}
+				} else if(this._memoryType == DebugMemoryType.PrgRom) {
+					mnuMarkSelectionAs.Text = "Mark selection as... (" + addressRange + ")";
+					mnuMarkSelectionAs.Enabled = true;
+				} else {
+					mnuMarkSelectionAs.Text = "Mark selection as...";
+					mnuMarkSelectionAs.Enabled = false;
+				}
+
 				bool disableEditLabel = false;
 				if(this._memoryType == DebugMemoryType.CpuMemory) {
 					AddressTypeInfo info = new AddressTypeInfo();
@@ -495,6 +541,24 @@ namespace Mesen.GUI.Debugger
 			hexBox.ContextMenuStrip.Items.Insert(0, mnuEditLabel);
 			hexBox.ContextMenuStrip.Items.Insert(0, mnuEditBreakpoint);
 			hexBox.ContextMenuStrip.Items.Insert(0, mnuAddWatch);
+			hexBox.ContextMenuStrip.Items.Insert(0, new ToolStripSeparator());
+			hexBox.ContextMenuStrip.Items.Insert(0, mnuMarkSelectionAs);
+		}
+
+		private void MarkSelectionAs(int start, int end, CdlPrgFlags type)
+		{
+			if(_memoryType == DebugMemoryType.CpuMemory) {
+				start = InteropEmu.DebugGetAbsoluteAddress((UInt32)start);
+				end = InteropEmu.DebugGetAbsoluteAddress((UInt32)end);
+			}
+
+			if(start >= 0 && end >= 0 && start <= end) {
+				InteropEmu.DebugMarkPrgBytesAs((UInt32)start, (UInt32)end, type);
+				frmDebugger debugger = DebugWindowManager.GetDebugger();
+				if(debugger != null) {
+					debugger.UpdateDebugger(false, false);
+				}
+			}
 		}
 
 		private void mnuColorProviderOptions_Click(object sender, EventArgs e)

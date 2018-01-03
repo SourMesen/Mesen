@@ -92,10 +92,10 @@ namespace Mesen.GUI.Debugger.Controls
 				_addresses = addresses;
 			}
 
-			public LineProperties GetLineStyle(int cpuAddress)
+			public LineProperties GetLineStyle(int cpuAddress, int lineIndex)
 			{
 				if(_addresses.Contains(cpuAddress)) {
-					return new LineProperties() { BgColor = Color.LightCoral };
+					return new LineProperties() { TextBgColor = Color.LightCoral };
 				}
 				return null;
 			}

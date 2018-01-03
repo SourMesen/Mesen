@@ -29,6 +29,11 @@
 		{
 			this.components = new System.ComponentModel.Container();
 			this.contextMenuCode = new System.Windows.Forms.ContextMenuStrip(this.components);
+			this.mnuMarkSelectionAs = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuMarkAsCode = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuMarkAsData = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuMarkAsUnidentifiedData = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem4 = new System.Windows.Forms.ToolStripSeparator();
 			this.mnuEditSelectedCode = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuEditSubroutine = new System.Windows.Forms.ToolStripMenuItem();
 			this.copySelectionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -87,6 +92,8 @@
 			// contextMenuCode
 			// 
 			this.contextMenuCode.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.mnuMarkSelectionAs,
+            this.toolStripMenuItem4,
             this.mnuEditSelectedCode,
             this.mnuEditSubroutine,
             this.copySelectionToolStripMenuItem,
@@ -110,9 +117,48 @@
             this.mnuNavigateBackward,
             this.mnuNavigateForward});
 			this.contextMenuCode.Name = "contextMenuWatch";
-			this.contextMenuCode.Size = new System.Drawing.Size(259, 414);
+			this.contextMenuCode.Size = new System.Drawing.Size(259, 442);
 			this.contextMenuCode.Closed += new System.Windows.Forms.ToolStripDropDownClosedEventHandler(this.contextMenuCode_Closed);
 			this.contextMenuCode.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuCode_Opening);
+			// 
+			// mnuMarkSelectionAs
+			// 
+			this.mnuMarkSelectionAs.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.mnuMarkAsCode,
+            this.mnuMarkAsData,
+            this.mnuMarkAsUnidentifiedData});
+			this.mnuMarkSelectionAs.Name = "mnuMarkSelectionAs";
+			this.mnuMarkSelectionAs.Size = new System.Drawing.Size(258, 22);
+			this.mnuMarkSelectionAs.Text = "Mark selection as...";
+			// 
+			// mnuMarkAsCode
+			// 
+			this.mnuMarkAsCode.Image = global::Mesen.GUI.Properties.Resources.Accept;
+			this.mnuMarkAsCode.Name = "mnuMarkAsCode";
+			this.mnuMarkAsCode.Size = new System.Drawing.Size(166, 22);
+			this.mnuMarkAsCode.Text = "Verified Code";
+			this.mnuMarkAsCode.Click += new System.EventHandler(this.mnuMarkAsCode_Click);
+			// 
+			// mnuMarkAsData
+			// 
+			this.mnuMarkAsData.Image = global::Mesen.GUI.Properties.Resources.CheatCode;
+			this.mnuMarkAsData.Name = "mnuMarkAsData";
+			this.mnuMarkAsData.Size = new System.Drawing.Size(166, 22);
+			this.mnuMarkAsData.Text = "Verified Data";
+			this.mnuMarkAsData.Click += new System.EventHandler(this.mnuMarkAsData_Click);
+			// 
+			// mnuMarkAsUnidentifiedData
+			// 
+			this.mnuMarkAsUnidentifiedData.Image = global::Mesen.GUI.Properties.Resources.Help;
+			this.mnuMarkAsUnidentifiedData.Name = "mnuMarkAsUnidentifiedData";
+			this.mnuMarkAsUnidentifiedData.Size = new System.Drawing.Size(166, 22);
+			this.mnuMarkAsUnidentifiedData.Text = "Unidentified Data";
+			this.mnuMarkAsUnidentifiedData.Click += new System.EventHandler(this.mnuMarkAsUnidentifiedData_Click);
+			// 
+			// toolStripMenuItem4
+			// 
+			this.toolStripMenuItem4.Name = "toolStripMenuItem4";
+			this.toolStripMenuItem4.Size = new System.Drawing.Size(255, 6);
 			// 
 			// mnuEditSelectedCode
 			// 
@@ -568,5 +614,10 @@
 		private System.Windows.Forms.ToolStripMenuItem mnuEditInMemoryViewer;
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem2;
 		private System.Windows.Forms.ToolStripMenuItem mnuShowInSplitView;
+		private System.Windows.Forms.ToolStripMenuItem mnuMarkSelectionAs;
+		private System.Windows.Forms.ToolStripMenuItem mnuMarkAsCode;
+		private System.Windows.Forms.ToolStripMenuItem mnuMarkAsData;
+		private System.Windows.Forms.ToolStripMenuItem mnuMarkAsUnidentifiedData;
+		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem4;
 	}
 }

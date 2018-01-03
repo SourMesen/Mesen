@@ -80,14 +80,7 @@ namespace Mesen.GUI.Config
 			}
 		}
 	}
-
-	public enum DisassemblyType
-	{
-		VerifiedCode,
-		Everything,
-		EverythingButData
-	}
-
+	
 	public class DebugInfo
 	{
 		private const int MaxRecentScripts = 10;
@@ -98,7 +91,12 @@ namespace Mesen.GUI.Config
 		public bool ShowOnlyDisassembledCode = true;
 		public bool DisplayOpCodesInLowerCase = false;
 		public bool ShowEffectiveAddresses = true;
-		public DisassemblyType DisassemblyType = DisassemblyType.VerifiedCode;
+
+		public bool DisassembleVerifiedData = false;
+		public bool DisassembleUnidentifiedData = false;
+
+		public bool ShowVerifiedData = false;
+		public bool ShowUnidentifiedData = false;
 
 		public bool SplitView = false;
 		public bool HexDisplay = true;
@@ -127,6 +125,15 @@ namespace Mesen.GUI.Config
 		public bool ShowBottomPanel = true;
 		public int LeftPanelWidth = 930;
 		public int TopPanelHeight = 450;
+
+		public XmlColor CodeVerifiedDataColor = Color.FromArgb(255, 252, 236);
+		public XmlColor CodeUnidentifiedDataColor = Color.FromArgb(255, 242, 242);
+		public XmlColor CodeUnexecutedCodeColor = Color.FromArgb(225, 244, 228);
+
+		public XmlColor CodeExecBreakpointColor = Color.FromArgb(140, 40, 40);
+		public XmlColor CodeWriteBreakpointColor = Color.FromArgb(40, 120, 80);
+		public XmlColor CodeReadBreakpointColor = Color.FromArgb(40, 40, 200);
+		public XmlColor CodeActiveStatementColor = Color.Yellow;
 
 		public bool RamAutoRefresh = true;
 		public int RamColumnCount = 2;
@@ -164,8 +171,6 @@ namespace Mesen.GUI.Config
 
 		public int BreakInCount = 1;
 		public bool BreakInPpuCycles = false;
-
-		public bool HighlightUnexecutedCode = true;
 
 		public bool FindOccurrencesMatchCase = false;
 		public bool FindOccurrencesMatchWholeWord = false;

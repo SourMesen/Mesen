@@ -540,6 +540,12 @@
     <Compile Include="Debugger\frmAssembler.Designer.cs">
       <DependentUpon>frmAssembler.cs</DependentUpon>
     </Compile>
+    <Compile Include="Debugger\frmDebuggerColors.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Debugger\frmDebuggerColors.Designer.cs">
+      <DependentUpon>frmDebuggerColors.cs</DependentUpon>
+    </Compile>
     <Compile Include="Debugger\frmOpCodeTooltip.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -1193,6 +1199,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Debugger\frmAssembler.resx">
       <DependentUpon>frmAssembler.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Debugger\frmDebuggerColors.resx">
+      <DependentUpon>frmDebuggerColors.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Debugger\frmOpCodeTooltip.resx">
       <DependentUpon>frmOpCodeTooltip.cs</DependentUpon>

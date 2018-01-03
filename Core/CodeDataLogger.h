@@ -8,6 +8,7 @@ class Debugger;
 
 enum class CdlPrgFlags
 {
+	None = 0x00,
 	Code = 0x01,
 	Data = 0x02,
 	IndirectCode = 0x10,
@@ -79,4 +80,6 @@ public:
 	void GetCdlData(uint32_t offset, uint32_t length, DebugMemoryType memoryType, uint8_t* cdlData);
 
 	void StripData(uint8_t* romBuffer, CdlStripFlag flag);
+
+	void MarkPrgBytesAs(uint32_t start, uint32_t end, CdlPrgFlags type);
 };

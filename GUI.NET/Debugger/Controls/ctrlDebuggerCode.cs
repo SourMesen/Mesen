@@ -28,6 +28,7 @@ namespace Mesen.GUI.Debugger
 		List<string> _codeNotes = new List<string>(10000);
 		List<string> _codeLines = new List<string>(10000);
 		private HashSet<int> _unexecutedAddresses = new HashSet<int>();
+		private HashSet<int> _verifiedDataAddresses = new HashSet<int>();
 		private HashSet<int> _speculativeCodeAddreses = new HashSet<int>();
 		Dictionary<int, string> _codeContent = new Dictionary<int, string>(10000);
 		Dictionary<int, string> _codeComments = new Dictionary<int, string>(10000);
@@ -255,11 +256,13 @@ namespace Mesen.GUI.Debugger
 				_codeByteCode.Clear();
 				_unexecutedAddresses.Clear();
 				_speculativeCodeAddreses.Clear();
+				_verifiedDataAddresses.Clear();
 
 				string[] token = new string[7];
 				int tokenIndex = 0;
 				int startPos = 0;
 				int endPos = 0;
+				int lineNumber = 0;
 
 				Action readToken = () => {
 					endPos = _code.IndexOf('\x1', endPos) + 1;
@@ -269,7 +272,7 @@ namespace Mesen.GUI.Debugger
 			
 				Action readLine = () => {
 					tokenIndex = 0;
-					readToken(); readToken(); readToken(); readToken(); readToken();  readToken();  readToken();
+					readToken(); readToken(); readToken(); readToken(); readToken();  readToken(); readToken();
 				};
 
 				Func<bool> processLine = () => {
@@ -281,13 +284,22 @@ namespace Mesen.GUI.Debugger
 					//1: Executed code
 					//2: Speculative Code
 					//4: Indented line
-					if(token[0] == "4") {
-						_unexecutedAddresses.Add(relativeAddress);
+					if(token[0] == "2") {
+						_speculativeCodeAddreses.Add(lineNumber);
+						_lineIndentations.Add(0);
+					} else if(token[0] == "4") {
+						_unexecutedAddresses.Add(lineNumber);
 						_lineIndentations.Add(20);
 					} else if(token[0] == "6") {
-						_speculativeCodeAddreses.Add(relativeAddress);
+						_speculativeCodeAddreses.Add(lineNumber);
 						_lineIndentations.Add(20);
 					} else if(token[0] == "5") {
+						_lineIndentations.Add(20);
+					} else if(token[0] == "8") {
+						_verifiedDataAddresses.Add(lineNumber);
+						_lineIndentations.Add(0);
+					} else if(token[0] == "9") {
+						_verifiedDataAddresses.Add(lineNumber);
 						_lineIndentations.Add(20);
 					} else {
 						_lineIndentations.Add(0);
@@ -305,6 +317,8 @@ namespace Mesen.GUI.Debugger
 					_codeByteCode[relativeAddress] = token[3];
 					_codeContent[relativeAddress] = token[4];
 					_codeComments[relativeAddress] = token[6];
+
+					lineNumber++;
 
 					return endPos < _code.Length;
 				};
@@ -655,8 +669,18 @@ namespace Mesen.GUI.Debugger
 		private void contextMenuCode_Opening(object sender, CancelEventArgs e)
 		{
 			UpdateContextMenuItemVisibility(true);
+
+			int startAddress, endAddress;
+			string range;
+			GetSelectedAddressRange(out startAddress, out endAddress, out range);
+			mnuMarkSelectionAs.Enabled = startAddress >= 0 && endAddress >= 0 && startAddress <= endAddress;
+			if(mnuMarkSelectionAs.Enabled) {
+				mnuMarkSelectionAs.Text = "Mark selection as... (" + range + ")";
+			} else {
+				mnuMarkSelectionAs.Text = "Mark selection as...";
+			}
 		}
-		
+
 		private void contextMenuCode_Closed(object sender, ToolStripDropDownClosedEventArgs e)
 		{
 			mnuEditSelectedCode.Enabled = true;
@@ -856,12 +880,6 @@ namespace Mesen.GUI.Debugger
 
 		class LineStyleProvider : ctrlTextbox.ILineStyleProvider
 		{
-			private Color _unexecutedColor = Color.FromArgb(183, 229, 190);
-			private Color _speculativeColor = Color.FromArgb(240, 220, 220);
-			private Color _execBpColor = Color.FromArgb(140, 40, 40);
-			private Color _writeBpColor = Color.FromArgb(40, 120, 80);
-			private Color _readBpColor = Color.FromArgb(40, 40, 200);
-
 			private ctrlDebuggerCode _code;
 
 			public LineStyleProvider(ctrlDebuggerCode code)
@@ -869,13 +887,25 @@ namespace Mesen.GUI.Debugger
 				_code = code;
 			}
 
-			public LineProperties GetLineStyle(int cpuAddress)
+			public LineProperties GetLineStyle(int cpuAddress, int lineNumber)
 			{
+				DebugInfo info = ConfigManager.Config.DebugInfo;
+				LineProperties props = null;
+				if(_code._currentActiveAddress.HasValue && cpuAddress == _code._currentActiveAddress) {
+					props = new LineProperties() { TextBgColor = info.CodeActiveStatementColor, Symbol = LineSymbol.Arrow };
+				} else if(_code._unexecutedAddresses.Contains(lineNumber)) {
+					props = new LineProperties() { LineBgColor = info.CodeUnexecutedCodeColor };
+				} else if(_code._speculativeCodeAddreses.Contains(lineNumber)) {
+					props = new LineProperties() { LineBgColor = info.CodeUnidentifiedDataColor };
+				} else if(_code._verifiedDataAddresses.Contains(lineNumber)) {
+					props = new LineProperties() { LineBgColor = info.CodeVerifiedDataColor };
+				}
+
 				foreach(Breakpoint breakpoint in BreakpointManager.Breakpoints) {
 					if(breakpoint.Matches(cpuAddress)) {
 						Color? fgColor = Color.White;
 						Color? bgColor = null;
-						Color bpColor = breakpoint.BreakOnExec ? _execBpColor : (breakpoint.BreakOnWrite ? _writeBpColor : _readBpColor);
+						Color bpColor = breakpoint.BreakOnExec ? info.CodeExecBreakpointColor : (breakpoint.BreakOnWrite ? info.CodeWriteBreakpointColor : info.CodeReadBreakpointColor);
 						Color? outlineColor = bpColor;
 						LineSymbol symbol;
 						if(breakpoint.Enabled) {
@@ -890,26 +920,20 @@ namespace Mesen.GUI.Debugger
 							fgColor = Color.Black;
 							bgColor = Color.Yellow;
 							symbol |= LineSymbol.Arrow;
-						} else if(_code._unexecutedAddresses.Contains((Int32)breakpoint.Address)) {
-							fgColor = Color.Black;
-							bgColor =  _unexecutedColor;
-						} else if(_code._speculativeCodeAddreses.Contains((Int32)breakpoint.Address)) {
-							fgColor = Color.Black;
-							bgColor =  _speculativeColor;
 						}
 
-						return new LineProperties() { FgColor = fgColor, BgColor = bgColor, OutlineColor = outlineColor, Symbol = symbol };
+						if(props == null) {
+							props = new LineProperties();
+						}
+						props.FgColor = fgColor;
+						props.TextBgColor = bgColor;
+						props.OutlineColor = outlineColor;
+						props.Symbol = symbol;
+						break;
 					}
 				}
 
-				if(_code._currentActiveAddress.HasValue && cpuAddress == _code._currentActiveAddress) {
-					return new LineProperties() { FgColor = Color.Black, BgColor = Color.Yellow, OutlineColor = null, Symbol = LineSymbol.Arrow };
-				} else if(ConfigManager.Config.DebugInfo.HighlightUnexecutedCode && _code._unexecutedAddresses.Contains(cpuAddress)) {
-					return new LineProperties() { FgColor = null, BgColor = _unexecutedColor, OutlineColor = null, Symbol = LineSymbol.None };
-				} else if(_code._speculativeCodeAddreses.Contains(cpuAddress)) {
-					return new LineProperties() { FgColor = null, BgColor = _speculativeColor, OutlineColor = null, Symbol = LineSymbol.None };
-				}
-				return null;
+				return props;
 			}
 		}
 
@@ -924,8 +948,60 @@ namespace Mesen.GUI.Debugger
 				DebugWindowManager.OpenMemoryViewer(_lastClickedAddress);
 			}
 		}
-	}
 
+		private void GetSelectedAddressRange(out int start, out int end, out string range)
+		{
+			int firstLineOfSelection = this.ctrlCodeViewer.SelectionStart;
+			while(this.ctrlCodeViewer.GetLineNumber(firstLineOfSelection) < 0) {
+				firstLineOfSelection++;
+			}
+			int firstLineAfterSelection = this.ctrlCodeViewer.SelectionStart + this.ctrlCodeViewer.SelectionLength + 1;
+			while(this.ctrlCodeViewer.GetLineNumber(firstLineAfterSelection) < 0) {
+				firstLineAfterSelection++;
+			}
+			start = this.ctrlCodeViewer.GetLineNumber(firstLineOfSelection);
+			end = this.ctrlCodeViewer.GetLineNumber(firstLineAfterSelection) - 1;
+
+			range = "";
+			if(start >= 0 && end >= 0) {
+				range = $"${start.ToString("X4")} - ${end.ToString("X4")}";
+				start = InteropEmu.DebugGetAbsoluteAddress((UInt32)start);
+				end = InteropEmu.DebugGetAbsoluteAddress((UInt32)end);
+			}
+		}
+
+		private void MarkSelectionAs(CdlPrgFlags type)
+		{
+			int startAddress, endAddress;
+			string range;
+			GetSelectedAddressRange(out startAddress, out endAddress, out range);
+
+			if(startAddress >= 0 && endAddress >= 0 && startAddress <= endAddress) {
+				InteropEmu.DebugMarkPrgBytesAs((UInt32)startAddress, (UInt32)endAddress, type);
+
+				frmDebugger debugger = DebugWindowManager.GetDebugger();
+				if(debugger != null) {
+					debugger.UpdateDebugger(false);
+				}
+			}
+		}
+
+		private void mnuMarkAsCode_Click(object sender, EventArgs e)
+		{
+			this.MarkSelectionAs(CdlPrgFlags.Code);
+		}
+
+		private void mnuMarkAsData_Click(object sender, EventArgs e)
+		{
+			this.MarkSelectionAs(CdlPrgFlags.Data);
+		}
+
+		private void mnuMarkAsUnidentifiedData_Click(object sender, EventArgs e)
+		{
+			this.MarkSelectionAs(CdlPrgFlags.None);
+		}
+	}
+	
 	public class WatchEventArgs : EventArgs
 	{
 		public string WatchValue { get; set; }

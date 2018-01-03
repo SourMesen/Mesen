@@ -4,14 +4,17 @@
 
 enum class DebuggerFlags
 {
+	None = 0x00,
 	PpuPartialDraw = 0x01,
 	ShowEffectiveAddresses = 0x02,
-	ShowOnlyDisassembledCode = 0x04,
-	DisplayOpCodesInLowerCase = 0x08,
-	DisassembleEverything = 0x10,
-	DisassembleEverythingButData = 0x20,
-	BreakOnBrk = 0x40,
-	BreakOnUnofficialOpCode = 0x80,
+	DisplayOpCodesInLowerCase = 0x04,
+	BreakOnBrk = 0x08,
+	BreakOnUnofficialOpCode = 0x10,
+
+	DisassembleVerifiedData = 0x20,
+	DisassembleUnidentifiedData = 0x40,
+	ShowVerifiedData = 0x80,
+	ShowUnidentifiedData = 0x100,
 };
 
 enum class AddressType

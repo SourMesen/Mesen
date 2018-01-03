@@ -265,6 +265,7 @@ namespace Mesen.GUI
 		[DllImport(DLLPath, EntryPoint = "DebugGetExecutionTrace")] private static extern IntPtr DebugGetExecutionTraceWrapper(UInt32 lineCount);
 		public static string DebugGetExecutionTrace(UInt32 lineCount) { return PtrToStringUtf8(InteropEmu.DebugGetExecutionTraceWrapper(lineCount)); }
 
+		[DllImport(DLLPath)] public static extern void DebugMarkPrgBytesAs(UInt32 start, UInt32 end, CdlPrgFlags type);
 		[DllImport(DLLPath)] [return: MarshalAs(UnmanagedType.I1)] public static extern bool DebugLoadCdlFile([MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(UTF8Marshaler))]string cdlFilepath);
 		[DllImport(DLLPath)] [return: MarshalAs(UnmanagedType.I1)] public static extern bool DebugSaveCdlFile([MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(UTF8Marshaler))]string cdlFilepath);
 		[DllImport(DLLPath)] public static extern void DebugGetCdlRatios(ref CdlRatios ratios);
@@ -1048,6 +1049,17 @@ namespace Mesen.GUI
 		StripUsed = 2
 	}
 
+	public enum CdlPrgFlags
+	{
+		None = 0x00,
+		Code = 0x01,
+		Data = 0x02,
+		IndirectCode = 0x10,
+		IndirectData = 0x20,
+		PcmData = 0x40,
+		SubEntryPoint = 0x80
+	}
+
 	public struct DebugState
 	{
 		public CPUState CPU;
@@ -1433,12 +1445,14 @@ namespace Mesen.GUI
 		None = 0x00,
 		PpuPartialDraw = 0x01,
 		ShowEffectiveAddresses = 0x02,
-		ShowOnlyDisassembledCode = 0x04,
-		DisplayOpCodesInLowerCase = 0x08,
-		DisassembleEverything = 0x10,
-		DisassembleEverythingButData = 0x20,
-		BreakOnBrk = 0x40,
-		BreakOnUnofficialOpCode = 0x80,
+		DisplayOpCodesInLowerCase = 0x04,
+		BreakOnBrk = 0x08,
+		BreakOnUnofficialOpCode = 0x10,
+
+		DisassembleVerifiedData = 0x20,
+		DisassembleUnidentifiedData = 0x40,
+		ShowVerifiedData = 0x80,
+		ShowUnidentifiedData = 0x100,
 	}
 
 	public struct InteropRomInfo

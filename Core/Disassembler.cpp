@@ -330,12 +330,12 @@ static const char* hexTable[256] = {
 };
 
 static string emptyString;
-void Disassembler::GetLine(string &out, string code, string comment, int32_t cpuAddress, int32_t absoluteAddress)
+void Disassembler::GetLine(string &out, string code, string comment, int32_t cpuAddress, int32_t absoluteAddress, DataType dataType)
 {
-	GetCodeLine(out, code, comment, cpuAddress, absoluteAddress, emptyString, emptyString, false, false);
+	GetCodeLine(out, code, comment, cpuAddress, absoluteAddress, emptyString, emptyString, dataType, false);
 }
 
-void Disassembler::GetCodeLine(string &out, string &code, string &comment, int32_t cpuAddress, int32_t absoluteAddress, string &byteCode, string &addressing, bool speculativeCode, bool isIndented)
+void Disassembler::GetCodeLine(string &out, string &code, string &comment, int32_t cpuAddress, int32_t absoluteAddress, string &byteCode, string &addressing, DataType dataType, bool isIndented)
 {
 	char buffer[1000];
 	int pos = 0;
@@ -369,9 +369,18 @@ void Disassembler::GetCodeLine(string &out, string &code, string &comment, int32
 	
 	//Fields:
 	//Flags | CpuAddress | AbsAddr | ByteCode | Code | Addressing | Comment
+	//
+	//Flags:
+	//1: Executed code
+	//2: Unidentified code/data
+	//4: Indented line
+	//8: Verified data
 	if(cpuAddress >= 0) {
-		if(speculativeCode) {
+		if(dataType == DataType::UnidentifiedData) {
 			writeChar(isIndented ? '6' : '2');
+			writeChar('\x1');
+		} else if(dataType == DataType::VerifiedData) {
+			writeChar(isIndented ? '9' : '8');
 			writeChar('\x1');
 		} else {
 			writeChar((_debugger->IsMarkedAsCode(cpuAddress) || absoluteAddress == -1) ? (isIndented ? '5' : '1') : (isIndented ? '4' : '0'));
@@ -381,7 +390,11 @@ void Disassembler::GetCodeLine(string &out, string &code, string &comment, int32
 		writeHex(hexTable[cpuAddress & 0xFF]);
 		writeChar('\x1');
 	} else {
-		writeChar('1');
+		if(dataType == DataType::VerifiedData) {
+			writeChar('8');
+		} else {
+			writeChar(dataType == DataType::UnidentifiedData ? '2' : '0');
+		}
 		writeChar('\x1');
 		writeChar('\x1');
 	}
@@ -418,25 +431,20 @@ void Disassembler::GetSubHeader(string &out, DisassemblyInfo *info, string &labe
 {
 	if(info->IsSubEntryPoint()) {
 		if(label.empty()) {
-			GetLine(out);
 			GetLine(out, "__sub start__");
 		} else {
-			GetLine(out);
 			GetLine(out, "__" + label + "()__");
 		}
 	} else if(relativeAddr == resetVector) {
-		GetLine(out);
-		GetLine(out, "--reset--");
+		GetLine(out, "__reset__");
 	} else if(relativeAddr == irqVector) {
-		GetLine(out);
-		GetLine(out, "--irq--");
+		GetLine(out, "__irq__");
 	} else if(relativeAddr == nmiVector) {
-		GetLine(out);
-		GetLine(out, "--nmi--");
+		GetLine(out, "__nmi__");
 	}
 }
 
-string Disassembler::GetCode(AddressTypeInfo &addressInfo, uint32_t endAddr, uint16_t memoryAddr, bool showEffectiveAddresses, bool showOnlyDiassembledCode, State& cpuState, shared_ptr<MemoryManager> memoryManager, shared_ptr<LabelManager> labelManager) 
+string Disassembler::GetCode(AddressTypeInfo &addressInfo, uint32_t endAddr, uint16_t memoryAddr, State& cpuState, shared_ptr<MemoryManager> memoryManager, shared_ptr<LabelManager> labelManager) 
 {
 	string output;
 	output.reserve(10000000);
@@ -444,6 +452,12 @@ string Disassembler::GetCode(AddressTypeInfo &addressInfo, uint32_t endAddr, uin
 	int32_t dbRelativeAddr = 0;
 	int32_t dbAbsoluteAddr = 0;
 	string dbBuffer;
+
+	bool showEffectiveAddresses = _debugger->CheckFlag(DebuggerFlags::ShowEffectiveAddresses);
+	bool disassembleVerifiedData = _debugger->CheckFlag(DebuggerFlags::DisassembleVerifiedData);
+	bool disassembleUnidentifiedData = _debugger->CheckFlag(DebuggerFlags::DisassembleUnidentifiedData);
+	bool showUnidentifiedData = _debugger->CheckFlag(DebuggerFlags::ShowUnidentifiedData);
+	bool showVerifiedData = _debugger->CheckFlag(DebuggerFlags::ShowVerifiedData);
 
 	uint16_t resetVector = memoryManager->DebugReadWord(CPU::ResetVector);
 	uint16_t nmiVector = memoryManager->DebugReadWord(CPU::NMIVector);
@@ -453,60 +467,74 @@ string Disassembler::GetCode(AddressTypeInfo &addressInfo, uint32_t endAddr, uin
 	uint8_t *source;
 	uint32_t mask = addressInfo.Type == AddressType::InternalRam ? 0x7FF : 0xFFFFFFFF;
 	uint32_t size;
-	uint8_t* internalRam = _memoryManager->GetInternalRAM();
 
 	GetInfo(addressInfo, &source, size, &cache);
 
-	string unknownBlockHeader = showOnlyDiassembledCode ? "----" : "__unknown block__";
 	uint32_t addr = addressInfo.Address;
 	uint32_t byteCount = 0;
-	bool skippingCode = false;
+	bool insideDataBlock = false;
 	shared_ptr<CodeDataLogger> cdl = _debugger->GetCodeDataLogger();
 	string label;
 	string commentString;
 	string commentLines;
 	shared_ptr<DisassemblyInfo> infoRef;
 	DisassemblyInfo* info;
-	bool speculativeCode;
+	DataType dataType;
 	string spaces = "  ";
 	string effAddress;
 	string code;
 	string byteCode;
+	bool isVerifiedData;
+	bool inVerifiedDataBlock = false;
+	bool emptyBlock = false;
+	
+	auto outputBytes = [this, &inVerifiedDataBlock, &output, &dbBuffer, &dbRelativeAddr, &dbAbsoluteAddr, &byteCount]() {
+		if(byteCount > 0) {
+			GetLine(output, dbBuffer, "", dbRelativeAddr, dbAbsoluteAddr, inVerifiedDataBlock ? DataType::VerifiedData : DataType::UnidentifiedData);
+			byteCount = 0;
+		}
+	};
+
+	auto endDataBlock = [this, outputBytes, &inVerifiedDataBlock, &emptyBlock, &output, &addr, &insideDataBlock, &memoryAddr]() {
+		outputBytes();
+		if(emptyBlock) {
+			GetLine(output, "", "", -1, -1, inVerifiedDataBlock ? DataType::VerifiedData : DataType::UnidentifiedData);
+		}
+		GetLine(output, "----", "", emptyBlock ? (uint16_t)(memoryAddr - 1) : -1, emptyBlock ? addr - 1 : -1, inVerifiedDataBlock ? DataType::VerifiedData : DataType::UnidentifiedData);
+		insideDataBlock = false;
+	};
+
 	while(addr <= endAddr) {
 		labelManager->GetLabelAndComment(memoryAddr, label, commentString);
 		commentLines.clear();
-		speculativeCode = false;
-
+		
 		if(commentString.find_first_of('\n') != string::npos) {
 			for(string &str : StringUtilities::Split(commentString, '\n')) {
-				GetLine(commentLines, "", str);
+				GetLine(commentLines, "", str, -1, -1, dataType);
 			}
 			commentString.clear();
 		}
 		
 		infoRef = (*cache)[addr&mask];
 
+		isVerifiedData = addressInfo.Type == AddressType::PrgRom && cdl->IsData(addr&mask);
 		info = infoRef.get();
-		if(!info && (_debugger->CheckFlag(DebuggerFlags::DisassembleEverything) || _debugger->CheckFlag(DebuggerFlags::DisassembleEverythingButData) && !cdl->IsData(addr))) {
-			speculativeCode = true;
+		if(!info && (disassembleUnidentifiedData && !isVerifiedData || disassembleVerifiedData && isVerifiedData)) {
+			dataType = isVerifiedData ? DataType::VerifiedData : DataType::UnidentifiedData;
 			info = new DisassemblyInfo(source + (addr & mask), false);
+		} else if(info) {
+			dataType = DataType::VerifiedCode;
 		}
-
-		if(info && addr + info->GetSize() <= endAddr) {
-			if(byteCount > 0) {
-				GetLine(output, dbBuffer, "", dbRelativeAddr, dbAbsoluteAddr);
-				byteCount = 0;
-			} 
-			
-			if(skippingCode) {
-				GetLine(output, unknownBlockHeader, "", (uint16_t)(memoryAddr - 1), addr - 1);
-				skippingCode = false;
+		
+		if(info && addr + info->GetSize() <= endAddr + 1) {
+			if(insideDataBlock) {
+				endDataBlock();
 			}
 
 			GetSubHeader(output, info, label, memoryAddr, resetVector, nmiVector, irqVector);
 			output += commentLines;
 			if(!label.empty()) {
-				GetLine(output, label + ":");
+				GetLine(output, label + ":", emptyString, -1, -1, dataType);
 			}
 			
 			byteCode.clear();
@@ -518,61 +546,77 @@ string Disassembler::GetCode(AddressTypeInfo &addressInfo, uint32_t endAddr, uin
 			info->ToString(code, memoryAddr, memoryManager.get(), labelManager.get());
 			info->GetByteCode(byteCode);
 
-			GetCodeLine(output, code, commentString, memoryAddr, source != internalRam ? addr : -1, byteCode, effAddress, speculativeCode, true);
+			GetCodeLine(output, code, commentString, memoryAddr, addressInfo.Type != AddressType::InternalRam ? addr : -1, byteCode, effAddress, dataType, true);
 
 			if(info->IsSubExitPoint()) {
-				GetLine(output, "__sub end__");
-				GetLine(output);
+				GetLine(output, "----");
 			}
 
-			if(speculativeCode) {
+			if(dataType == DataType::UnidentifiedData) {
 				//For unverified code, check if a verified instruction starts between the start of this instruction and its end.
 				//If so, we need to realign the disassembler to the start of the next verified instruction
 				for(uint32_t i = 0; i < info->GetSize(); i++) {
 					addr++;
 					memoryAddr++;
-					if(addr > endAddr || (*cache)[addr&mask]) {
-						//Verified code found, stop incrementing address counters
+					if(addr > endAddr || (*cache)[addr&mask] || (addressInfo.Type == AddressType::PrgRom && cdl->IsData(addr))) {
+						//Verified code or verified data found, stop incrementing address counters
 						break;
 					}
-				}				
+				}		
+				delete info;
 			} else {
 				addr += info->GetSize();
 				memoryAddr += info->GetSize();
 			}
 		} else {
-			if((!label.empty() || !commentString.empty()) && skippingCode) {
-				GetLine(output, unknownBlockHeader, "", (uint16_t)(memoryAddr - 1), addr - 1);
-				skippingCode = false;
-			} 
+			//This byte should be interpreted as data
+			if((!label.empty() || !commentString.empty()) && insideDataBlock) {
+				//We just found a label and we're inside a data block, end the block, then start a new one
+				endDataBlock();
+			}
 			
-			if(!skippingCode && showOnlyDiassembledCode) {
+			bool showData = (isVerifiedData && showVerifiedData) || (!isVerifiedData && showUnidentifiedData);
+			bool showEitherDataType = showVerifiedData || showUnidentifiedData;
+
+			if(inVerifiedDataBlock != isVerifiedData && insideDataBlock && showEitherDataType) {
+				//End of block (switching between verified data & unidentified data, while only either of them is set to be displayed)
+				endDataBlock();
+			} else if(inVerifiedDataBlock != isVerifiedData) {
+				outputBytes();
+			}
+
+			inVerifiedDataBlock = isVerifiedData;
+			dataType = showEitherDataType && inVerifiedDataBlock ? DataType::VerifiedData : DataType::UnidentifiedData;
+
+			if(!insideDataBlock) {
+				//Output block header 
 				if(label.empty()) {
-					GetLine(output, "__unknown block__", "", memoryAddr, addr);
+					GetLine(output, showEitherDataType && inVerifiedDataBlock ? "__data block__" : "__unidentified block__", "", showData ? -1 : memoryAddr, showData ? -1 : addr, dataType);
 					if(!commentString.empty()) {
-						GetLine(output, "", commentString);
+						GetLine(output, "", commentString, -1, -1, dataType);
 					}
 				} else {
-					GetLine(output, "__" + label + "__", "", memoryAddr, addr);
+					GetLine(output, "__" + label + "__", "", showData ? -1 : memoryAddr, showData ? -1 : addr, dataType);
 					if(!commentString.empty()) {
-						GetLine(output, "", commentString);
+						GetLine(output, "", commentString, -1, -1, dataType);
 					}
 					output += commentLines;
 				}
-				skippingCode = true;
+				insideDataBlock = true;
+				emptyBlock = true;
 			}
 
-			if(!showOnlyDiassembledCode) {
+			if(showData) {
+				//Output bytes in ".db" statements
 				if(byteCount >= 8 || ((!label.empty() || !commentString.empty()) && byteCount > 0)) {
-					GetLine(output, dbBuffer, "", dbRelativeAddr, dbAbsoluteAddr);
-					byteCount = 0;
+					outputBytes();
 				}
 
 				if(byteCount == 0) {
 					dbBuffer = ".db";
 					output += commentLines;
 					if(!label.empty()) {
-						GetLine(output, label + ":");
+						GetLine(output, label + ":", "", -1, -1, dataType);
 					}
 
 					dbRelativeAddr = memoryAddr;
@@ -582,27 +626,22 @@ string Disassembler::GetCode(AddressTypeInfo &addressInfo, uint32_t endAddr, uin
 				dbBuffer += " $" + HexUtilities::ToHex(source[addr&mask]);
 
 				if(!label.empty() || !commentString.empty()) {
-					GetLine(output, dbBuffer, commentString, dbRelativeAddr, dbAbsoluteAddr);
+					GetLine(output, dbBuffer, commentString, dbRelativeAddr, dbAbsoluteAddr, dataType);
 					byteCount = 0;
 				} else {
 					byteCount++;
 				}
+
+				emptyBlock = false;
 			}
 			addr++;
 			memoryAddr++;
 		}
-
-		if(speculativeCode) {
-			delete info;
-		}
 	}
 
-	if(byteCount > 0) {
-		GetLine(output, dbBuffer, "", dbRelativeAddr, dbAbsoluteAddr);
-	}
-
-	if(skippingCode) {
-		GetLine(output, "----", "", (uint16_t)(memoryAddr - 1), addr - 1);
+	if(insideDataBlock) {
+		//End the current data block if needed
+		endDataBlock();
 	}
 		
 	return output;

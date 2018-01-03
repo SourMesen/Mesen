@@ -754,9 +754,6 @@ void Debugger::GenerateCodeOutput()
 	_disassemblerOutput.clear();
 	_disassemblerOutput.reserve(10000);
 
-	bool showEffectiveAddresses = CheckFlag(DebuggerFlags::ShowEffectiveAddresses);
-	bool showOnlyDiassembledCode = CheckFlag(DebuggerFlags::ShowOnlyDisassembledCode);
-
 	for(uint32_t i = 0; i < 0x10000; i += 0x100) {
 		//Merge all sequential ranges into 1 chunk
 		AddressTypeInfo startInfo, currentInfo, endInfo;
@@ -776,7 +773,7 @@ void Debugger::GenerateCodeOutput()
 				i+=0x100;
 				GetAbsoluteAddressAndType(i + 0x100, &endInfo);
 			}
-			_disassemblerOutput += _disassembler->GetCode(startInfo, endAddr, startMemoryAddr, showEffectiveAddresses, showOnlyDiassembledCode, cpuState, _memoryManager, _labelManager);
+			_disassemblerOutput += _disassembler->GetCode(startInfo, endAddr, startMemoryAddr, cpuState, _memoryManager, _labelManager);
 		}
 	}
 }
