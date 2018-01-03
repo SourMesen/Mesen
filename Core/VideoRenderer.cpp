@@ -26,6 +26,11 @@ VideoRenderer::~VideoRenderer()
 	StopThread();
 }
 
+void VideoRenderer::Release()
+{
+	Instance.reset();
+}
+
 void VideoRenderer::StartThread()
 {
 	if(!_renderThread) {

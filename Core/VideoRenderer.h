@@ -27,6 +27,8 @@ public:
 	VideoRenderer();
 	~VideoRenderer();
 
+	static void Release();
+
 	void StartThread();
 	void StopThread();
 

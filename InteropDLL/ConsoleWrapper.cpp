@@ -313,6 +313,14 @@ namespace InteropEmu {
 		DllExport void __stdcall Release()
 		{
 			_shortcutKeyHandler.reset();
+			
+			Console::GetInstance()->Stop();
+
+			VideoDecoder::GetInstance()->StopThread();
+			VideoDecoder::Release();
+
+			VideoRenderer::GetInstance()->StopThread();
+			VideoRenderer::Release();
 
 			Console::Release();
 			GameServer::StopServer();
@@ -327,9 +335,6 @@ namespace InteropEmu {
 				delete _soundManager;
 				_soundManager = nullptr;
 			}
-
-			VideoDecoder::GetInstance()->StopThread();
-			VideoDecoder::Release();
 		}
 
 		DllExport void __stdcall TakeScreenshot() { VideoDecoder::GetInstance()->TakeScreenshot(); }
