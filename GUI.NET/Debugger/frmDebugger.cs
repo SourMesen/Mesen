@@ -707,6 +707,12 @@ namespace Mesen.GUI.Debugger
 			ConfigManager.ApplyChanges();
 		}
 
+		private void mnuShowOpCodeTooltips_CheckedChanged(object sender, EventArgs e)
+		{
+			ConfigManager.Config.DebugInfo.ShowOpCodeTooltips = mnuShowOpCodeTooltips.Checked;
+			ConfigManager.ApplyChanges();
+		}
+
 		private void mnuHighlightUnexecutedCode_Click(object sender, EventArgs e)
 		{
 			ConfigManager.Config.DebugInfo.HighlightUnexecutedCode = mnuHighlightUnexecutedCode.Checked;

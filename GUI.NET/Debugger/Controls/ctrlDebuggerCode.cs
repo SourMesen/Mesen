@@ -38,7 +38,7 @@ namespace Mesen.GUI.Debugger
 
 		private UInt32? _currentActiveAddress { get; set; } = null;
 
-		private frmCodeTooltip _codeTooltip = null;
+		private Form _codeTooltip = null;
 
 		public ctrlDebuggerCode()
 		{
@@ -359,14 +359,18 @@ namespace Mesen.GUI.Debugger
 					_codeTooltip = null;
 				}
 
-				bool isPrgRom = false;
-				if(address >= 0 && ConfigManager.Config.DebugInfo.ShowCodePreview) {
-					AddressTypeInfo addressInfo = new AddressTypeInfo();
-					InteropEmu.DebugGetAbsoluteAddressAndType((UInt32)address, ref addressInfo);
-					isPrgRom = addressInfo.Type == AddressType.PrgRom;
-				}
+				if(ConfigManager.Config.DebugInfo.ShowOpCodeTooltips && frmOpCodeTooltip.IsOpCode(word)) {
+					_codeTooltip = new frmOpCodeTooltip(word);
+				} else {
+					bool isPrgRom = false;
+					if(address >= 0 && ConfigManager.Config.DebugInfo.ShowCodePreview) {
+						AddressTypeInfo addressInfo = new AddressTypeInfo();
+						InteropEmu.DebugGetAbsoluteAddressAndType((UInt32)address, ref addressInfo);
+						isPrgRom = addressInfo.Type == AddressType.PrgRom;
+					}
 
-				_codeTooltip = new frmCodeTooltip(values, isPrgRom ? address : -1, isPrgRom ? _code : null);
+					_codeTooltip = new frmCodeTooltip(values, isPrgRom ? address : -1, isPrgRom ? _code : null);
+				}
 				_codeTooltip.Left = Cursor.Position.X + 10;
 				_codeTooltip.Top = Cursor.Position.Y + 10;
 				_codeTooltip.Show(this);
@@ -428,6 +432,8 @@ namespace Mesen.GUI.Debugger
 
 					if(label != null) {
 						DisplayLabelTooltip(word, label);
+					} else if(ConfigManager.Config.DebugInfo.ShowOpCodeTooltips && frmOpCodeTooltip.IsOpCode(word)) {
+						ShowTooltip(word, null, -1);
 					}
 				}
 				_previousLocation = e.Location;

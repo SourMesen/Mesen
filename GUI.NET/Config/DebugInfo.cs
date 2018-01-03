@@ -118,6 +118,7 @@ namespace Mesen.GUI.Config
 		public int PpuDisplayScanline = 241;
 
 		public bool ShowCodePreview = true;
+		public bool ShowOpCodeTooltips = false;
 
 		public bool ShowCpuMemoryMapping = true;
 		public bool ShowPpuMemoryMapping = true;
