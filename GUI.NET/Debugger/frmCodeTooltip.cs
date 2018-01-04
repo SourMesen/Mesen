@@ -35,6 +35,7 @@ namespace Mesen.GUI.Debugger
 		{
 			base.OnShown(e);
 
+			tlpMain.SuspendLayout();
 			int i = 0;
 			foreach(KeyValuePair<string, string> kvp in _values) {
 				tlpMain.RowStyles.Insert(1, new RowStyle());
@@ -74,7 +75,7 @@ namespace Mesen.GUI.Debugger
 				tlpMain.SetColumnSpan(codeWindow, 2);
 				tlpMain.Controls.Add(codeWindow);
 			}
-
+			tlpMain.ResumeLayout();
 			this.Width = this.tlpMain.Width;
 			this.Height = this.tlpMain.Height; 
 		}

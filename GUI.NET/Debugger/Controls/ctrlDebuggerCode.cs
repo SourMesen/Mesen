@@ -786,8 +786,10 @@ namespace Mesen.GUI.Debugger
 
 		private void ctrlCodeViewer_FontSizeChanged(object sender, EventArgs e)
 		{
-			_config.FontSize = this.FontSize;
-			UpdateConfig();
+			if(_config.FontSize != this.FontSize) {
+				_config.FontSize = this.FontSize;
+				UpdateConfig();
+			}
 		}
 
 		private void mnuEditLabel_Click(object sender, EventArgs e)

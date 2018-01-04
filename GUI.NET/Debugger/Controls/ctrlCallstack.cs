@@ -83,11 +83,12 @@ namespace Mesen.GUI.Debugger.Controls
 
 		private void UpdateList(List<StackInfo> stack)
 		{
-			if(this.lstCallstack.Items.Count != stack.Count) {
-				this.lstCallstack.Items.Clear();
-				for(int i = 0, len = stack.Count; i < len; i++) {
-					this.lstCallstack.Items.Add("").SubItems.AddRange(new string[] { "", "" });
-				}
+			this.lstCallstack.BeginUpdate();
+			while(this.lstCallstack.Items.Count > stack.Count) {
+				this.lstCallstack.Items.RemoveAt(this.lstCallstack.Items.Count - 1);
+			}
+			while(this.lstCallstack.Items.Count < stack.Count) {
+				this.lstCallstack.Items.Add("").SubItems.AddRange(new string[] { "", "" });
 			}
 
 			for(int i = 0, len = stack.Count; i < len; i++) {
@@ -106,6 +107,7 @@ namespace Mesen.GUI.Debugger.Controls
 					item.Font = new Font(item.Font, FontStyle.Regular);
 				}
 			}
+			this.lstCallstack.EndUpdate();
 		}
 
 		private void UpdateList()
