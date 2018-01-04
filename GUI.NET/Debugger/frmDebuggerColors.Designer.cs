@@ -53,9 +53,9 @@
 			this.picAddress = new System.Windows.Forms.PictureBox();
 			this.lblComment = new System.Windows.Forms.Label();
 			this.picComment = new System.Windows.Forms.PictureBox();
-			this.btnReset = new System.Windows.Forms.Button();
 			this.lblEffectiveAddress = new System.Windows.Forms.Label();
 			this.picEffectiveAddress = new System.Windows.Forms.PictureBox();
+			this.btnReset = new System.Windows.Forms.Button();
 			this.baseConfigPanel.SuspendLayout();
 			this.tableLayoutPanel1.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.picActiveStatement)).BeginInit();
@@ -110,14 +110,14 @@
 			this.tableLayoutPanel1.Controls.Add(this.picOpcode, 1, 4);
 			this.tableLayoutPanel1.Controls.Add(this.lblLabelDefinition, 3, 4);
 			this.tableLayoutPanel1.Controls.Add(this.picLabelDefinition, 4, 4);
-			this.tableLayoutPanel1.Controls.Add(this.lblImmediate, 6, 4);
-			this.tableLayoutPanel1.Controls.Add(this.picImmediate, 7, 4);
 			this.tableLayoutPanel1.Controls.Add(this.lblAddress, 0, 5);
 			this.tableLayoutPanel1.Controls.Add(this.picAddress, 1, 5);
-			this.tableLayoutPanel1.Controls.Add(this.lblComment, 3, 5);
-			this.tableLayoutPanel1.Controls.Add(this.picComment, 4, 5);
 			this.tableLayoutPanel1.Controls.Add(this.lblEffectiveAddress, 3, 2);
 			this.tableLayoutPanel1.Controls.Add(this.picEffectiveAddress, 4, 2);
+			this.tableLayoutPanel1.Controls.Add(this.lblImmediate, 3, 5);
+			this.tableLayoutPanel1.Controls.Add(this.lblComment, 6, 4);
+			this.tableLayoutPanel1.Controls.Add(this.picImmediate, 4, 5);
+			this.tableLayoutPanel1.Controls.Add(this.picComment, 7, 4);
 			this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
 			this.tableLayoutPanel1.Name = "tableLayoutPanel1";
@@ -338,7 +338,7 @@
 			// 
 			this.lblImmediate.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.lblImmediate.AutoSize = true;
-			this.lblImmediate.Location = new System.Drawing.Point(385, 146);
+			this.lblImmediate.Location = new System.Drawing.Point(194, 184);
 			this.lblImmediate.Name = "lblImmediate";
 			this.lblImmediate.Size = new System.Drawing.Size(88, 13);
 			this.lblImmediate.TabIndex = 29;
@@ -348,7 +348,7 @@
 			// 
 			this.picImmediate.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.picImmediate.Cursor = System.Windows.Forms.Cursors.Hand;
-			this.picImmediate.Location = new System.Drawing.Point(518, 137);
+			this.picImmediate.Location = new System.Drawing.Point(327, 175);
 			this.picImmediate.Name = "picImmediate";
 			this.picImmediate.Size = new System.Drawing.Size(32, 32);
 			this.picImmediate.TabIndex = 30;
@@ -380,7 +380,7 @@
 			// 
 			this.lblComment.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.lblComment.AutoSize = true;
-			this.lblComment.Location = new System.Drawing.Point(194, 184);
+			this.lblComment.Location = new System.Drawing.Point(385, 146);
 			this.lblComment.Name = "lblComment";
 			this.lblComment.Size = new System.Drawing.Size(51, 13);
 			this.lblComment.TabIndex = 33;
@@ -390,22 +390,12 @@
 			// 
 			this.picComment.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.picComment.Cursor = System.Windows.Forms.Cursors.Hand;
-			this.picComment.Location = new System.Drawing.Point(327, 175);
+			this.picComment.Location = new System.Drawing.Point(518, 137);
 			this.picComment.Name = "picComment";
 			this.picComment.Size = new System.Drawing.Size(32, 32);
 			this.picComment.TabIndex = 34;
 			this.picComment.TabStop = false;
 			this.picComment.Click += new System.EventHandler(this.picColorPicker_Click);
-			// 
-			// btnReset
-			// 
-			this.btnReset.Location = new System.Drawing.Point(3, 3);
-			this.btnReset.Name = "btnReset";
-			this.btnReset.Size = new System.Drawing.Size(102, 23);
-			this.btnReset.TabIndex = 3;
-			this.btnReset.Text = "Use default colors";
-			this.btnReset.UseVisualStyleBackColor = true;
-			this.btnReset.Click += new System.EventHandler(this.btnReset_Click);
 			// 
 			// lblEffectiveAddress
 			// 
@@ -427,6 +417,16 @@
 			this.picEffectiveAddress.TabIndex = 36;
 			this.picEffectiveAddress.TabStop = false;
 			this.picEffectiveAddress.Click += new System.EventHandler(this.picColorPicker_Click);
+			// 
+			// btnReset
+			// 
+			this.btnReset.Location = new System.Drawing.Point(3, 3);
+			this.btnReset.Name = "btnReset";
+			this.btnReset.Size = new System.Drawing.Size(102, 23);
+			this.btnReset.TabIndex = 3;
+			this.btnReset.Text = "Use default colors";
+			this.btnReset.UseVisualStyleBackColor = true;
+			this.btnReset.Click += new System.EventHandler(this.btnReset_Click);
 			// 
 			// frmDebuggerColors
 			// 
