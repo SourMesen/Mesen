@@ -33,7 +33,7 @@
 			this.picImmediate = new System.Windows.Forms.PictureBox();
 			this.picLabelDefinition = new System.Windows.Forms.PictureBox();
 			this.lblImmediate = new System.Windows.Forms.Label();
-			this.lblLabelDefinition = new System.Windows.Forms.Label();
+			this.lblLabel = new System.Windows.Forms.Label();
 			this.lblOpcode = new System.Windows.Forms.Label();
 			this.lblAddress = new System.Windows.Forms.Label();
 			this.lblComment = new System.Windows.Forms.Label();
@@ -65,7 +65,7 @@
 			this.tableLayoutPanel1.Controls.Add(this.picImmediate, 1, 2);
 			this.tableLayoutPanel1.Controls.Add(this.picLabelDefinition, 1, 1);
 			this.tableLayoutPanel1.Controls.Add(this.lblImmediate, 0, 2);
-			this.tableLayoutPanel1.Controls.Add(this.lblLabelDefinition, 0, 1);
+			this.tableLayoutPanel1.Controls.Add(this.lblLabel, 0, 1);
 			this.tableLayoutPanel1.Controls.Add(this.lblOpcode, 0, 0);
 			this.tableLayoutPanel1.Controls.Add(this.lblAddress, 0, 3);
 			this.tableLayoutPanel1.Controls.Add(this.lblComment, 0, 4);
@@ -137,15 +137,15 @@
 			this.lblImmediate.TabIndex = 4;
 			this.lblImmediate.Text = "Immediate Value:";
 			// 
-			// lblLabelDefinition
+			// lblLabel
 			// 
-			this.lblLabelDefinition.Anchor = System.Windows.Forms.AnchorStyles.Left;
-			this.lblLabelDefinition.AutoSize = true;
-			this.lblLabelDefinition.Location = new System.Drawing.Point(3, 50);
-			this.lblLabelDefinition.Name = "lblLabelDefinition";
-			this.lblLabelDefinition.Size = new System.Drawing.Size(83, 13);
-			this.lblLabelDefinition.TabIndex = 2;
-			this.lblLabelDefinition.Text = "Label Definition:";
+			this.lblLabel.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.lblLabel.AutoSize = true;
+			this.lblLabel.Location = new System.Drawing.Point(3, 50);
+			this.lblLabel.Name = "lblLabel";
+			this.lblLabel.Size = new System.Drawing.Size(36, 13);
+			this.lblLabel.TabIndex = 2;
+			this.lblLabel.Text = "Label:";
 			// 
 			// lblOpcode
 			// 
@@ -225,7 +225,7 @@
 
 		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
 		private System.Windows.Forms.Label lblImmediate;
-		private System.Windows.Forms.Label lblLabelDefinition;
+		private System.Windows.Forms.Label lblLabel;
 		private System.Windows.Forms.Label lblOpcode;
 		private System.Windows.Forms.Label lblAddress;
 		private System.Windows.Forms.Label lblComment;

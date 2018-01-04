@@ -28,6 +28,8 @@
 		private void InitializeComponent()
 		{
 			this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+			this.lblOpcode = new System.Windows.Forms.Label();
+			this.lblPauseBackgroundSettings = new System.Windows.Forms.Label();
 			this.picActiveStatement = new System.Windows.Forms.PictureBox();
 			this.lblActiveStatement = new System.Windows.Forms.Label();
 			this.lblExecBreakpoint = new System.Windows.Forms.Label();
@@ -42,7 +44,18 @@
 			this.picVerifiedData = new System.Windows.Forms.PictureBox();
 			this.lblReadBreakpoint = new System.Windows.Forms.Label();
 			this.picReadBreakpoint = new System.Windows.Forms.PictureBox();
+			this.picOpcode = new System.Windows.Forms.PictureBox();
+			this.lblLabelDefinition = new System.Windows.Forms.Label();
+			this.picLabelDefinition = new System.Windows.Forms.PictureBox();
+			this.lblImmediate = new System.Windows.Forms.Label();
+			this.picImmediate = new System.Windows.Forms.PictureBox();
+			this.lblAddress = new System.Windows.Forms.Label();
+			this.picAddress = new System.Windows.Forms.PictureBox();
+			this.lblComment = new System.Windows.Forms.Label();
+			this.picComment = new System.Windows.Forms.PictureBox();
 			this.btnReset = new System.Windows.Forms.Button();
+			this.lblEffectiveAddress = new System.Windows.Forms.Label();
+			this.picEffectiveAddress = new System.Windows.Forms.PictureBox();
 			this.baseConfigPanel.SuspendLayout();
 			this.tableLayoutPanel1.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.picActiveStatement)).BeginInit();
@@ -52,12 +65,18 @@
 			((System.ComponentModel.ISupportInitialize)(this.picUnexecutedCode)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.picVerifiedData)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.picReadBreakpoint)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.picOpcode)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.picLabelDefinition)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.picImmediate)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.picAddress)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.picComment)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.picEffectiveAddress)).BeginInit();
 			this.SuspendLayout();
 			// 
 			// baseConfigPanel
 			// 
 			this.baseConfigPanel.Controls.Add(this.btnReset);
-			this.baseConfigPanel.Location = new System.Drawing.Point(0, 116);
+			this.baseConfigPanel.Location = new System.Drawing.Point(0, 212);
 			this.baseConfigPanel.Size = new System.Drawing.Size(555, 29);
 			this.baseConfigPanel.Controls.SetChildIndex(this.btnReset, 0);
 			// 
@@ -72,6 +91,8 @@
 			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
 			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33334F));
 			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+			this.tableLayoutPanel1.Controls.Add(this.lblOpcode, 0, 4);
+			this.tableLayoutPanel1.Controls.Add(this.lblPauseBackgroundSettings, 0, 3);
 			this.tableLayoutPanel1.Controls.Add(this.picActiveStatement, 1, 2);
 			this.tableLayoutPanel1.Controls.Add(this.lblActiveStatement, 0, 2);
 			this.tableLayoutPanel1.Controls.Add(this.lblExecBreakpoint, 0, 1);
@@ -86,19 +107,53 @@
 			this.tableLayoutPanel1.Controls.Add(this.picVerifiedData, 1, 0);
 			this.tableLayoutPanel1.Controls.Add(this.lblReadBreakpoint, 6, 1);
 			this.tableLayoutPanel1.Controls.Add(this.picReadBreakpoint, 7, 1);
+			this.tableLayoutPanel1.Controls.Add(this.picOpcode, 1, 4);
+			this.tableLayoutPanel1.Controls.Add(this.lblLabelDefinition, 3, 4);
+			this.tableLayoutPanel1.Controls.Add(this.picLabelDefinition, 4, 4);
+			this.tableLayoutPanel1.Controls.Add(this.lblImmediate, 6, 4);
+			this.tableLayoutPanel1.Controls.Add(this.picImmediate, 7, 4);
+			this.tableLayoutPanel1.Controls.Add(this.lblAddress, 0, 5);
+			this.tableLayoutPanel1.Controls.Add(this.picAddress, 1, 5);
+			this.tableLayoutPanel1.Controls.Add(this.lblComment, 3, 5);
+			this.tableLayoutPanel1.Controls.Add(this.picComment, 4, 5);
+			this.tableLayoutPanel1.Controls.Add(this.lblEffectiveAddress, 3, 2);
+			this.tableLayoutPanel1.Controls.Add(this.picEffectiveAddress, 4, 2);
 			this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
 			this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-			this.tableLayoutPanel1.RowCount = 6;
+			this.tableLayoutPanel1.RowCount = 7;
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-			this.tableLayoutPanel1.Size = new System.Drawing.Size(555, 145);
+			this.tableLayoutPanel1.Size = new System.Drawing.Size(555, 241);
 			this.tableLayoutPanel1.TabIndex = 2;
+			// 
+			// lblOpcode
+			// 
+			this.lblOpcode.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.lblOpcode.AutoSize = true;
+			this.lblOpcode.Location = new System.Drawing.Point(3, 146);
+			this.lblOpcode.Name = "lblOpcode";
+			this.lblOpcode.Size = new System.Drawing.Size(48, 13);
+			this.lblOpcode.TabIndex = 25;
+			this.lblOpcode.Text = "Opcode:";
+			// 
+			// lblPauseBackgroundSettings
+			// 
+			this.lblPauseBackgroundSettings.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.lblPauseBackgroundSettings.AutoSize = true;
+			this.tableLayoutPanel1.SetColumnSpan(this.lblPauseBackgroundSettings, 3);
+			this.lblPauseBackgroundSettings.ForeColor = System.Drawing.SystemColors.GrayText;
+			this.lblPauseBackgroundSettings.Location = new System.Drawing.Point(0, 121);
+			this.lblPauseBackgroundSettings.Margin = new System.Windows.Forms.Padding(0, 0, 3, 0);
+			this.lblPauseBackgroundSettings.Name = "lblPauseBackgroundSettings";
+			this.lblPauseBackgroundSettings.Size = new System.Drawing.Size(97, 13);
+			this.lblPauseBackgroundSettings.TabIndex = 24;
+			this.lblPauseBackgroundSettings.Text = "Syntax Highlighting";
 			// 
 			// picActiveStatement
 			// 
@@ -247,6 +302,101 @@
 			this.picReadBreakpoint.TabStop = false;
 			this.picReadBreakpoint.Click += new System.EventHandler(this.picColorPicker_Click);
 			// 
+			// picOpcode
+			// 
+			this.picOpcode.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this.picOpcode.Cursor = System.Windows.Forms.Cursors.Hand;
+			this.picOpcode.Location = new System.Drawing.Point(136, 137);
+			this.picOpcode.Name = "picOpcode";
+			this.picOpcode.Size = new System.Drawing.Size(32, 32);
+			this.picOpcode.TabIndex = 26;
+			this.picOpcode.TabStop = false;
+			this.picOpcode.Click += new System.EventHandler(this.picColorPicker_Click);
+			// 
+			// lblLabelDefinition
+			// 
+			this.lblLabelDefinition.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.lblLabelDefinition.AutoSize = true;
+			this.lblLabelDefinition.Location = new System.Drawing.Point(194, 146);
+			this.lblLabelDefinition.Name = "lblLabelDefinition";
+			this.lblLabelDefinition.Size = new System.Drawing.Size(36, 13);
+			this.lblLabelDefinition.TabIndex = 27;
+			this.lblLabelDefinition.Text = "Label:";
+			// 
+			// picLabelDefinition
+			// 
+			this.picLabelDefinition.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this.picLabelDefinition.Cursor = System.Windows.Forms.Cursors.Hand;
+			this.picLabelDefinition.Location = new System.Drawing.Point(327, 137);
+			this.picLabelDefinition.Name = "picLabelDefinition";
+			this.picLabelDefinition.Size = new System.Drawing.Size(32, 32);
+			this.picLabelDefinition.TabIndex = 28;
+			this.picLabelDefinition.TabStop = false;
+			this.picLabelDefinition.Click += new System.EventHandler(this.picColorPicker_Click);
+			// 
+			// lblImmediate
+			// 
+			this.lblImmediate.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.lblImmediate.AutoSize = true;
+			this.lblImmediate.Location = new System.Drawing.Point(385, 146);
+			this.lblImmediate.Name = "lblImmediate";
+			this.lblImmediate.Size = new System.Drawing.Size(88, 13);
+			this.lblImmediate.TabIndex = 29;
+			this.lblImmediate.Text = "Immediate Value:";
+			// 
+			// picImmediate
+			// 
+			this.picImmediate.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this.picImmediate.Cursor = System.Windows.Forms.Cursors.Hand;
+			this.picImmediate.Location = new System.Drawing.Point(518, 137);
+			this.picImmediate.Name = "picImmediate";
+			this.picImmediate.Size = new System.Drawing.Size(32, 32);
+			this.picImmediate.TabIndex = 30;
+			this.picImmediate.TabStop = false;
+			this.picImmediate.Click += new System.EventHandler(this.picColorPicker_Click);
+			// 
+			// lblAddress
+			// 
+			this.lblAddress.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.lblAddress.AutoSize = true;
+			this.lblAddress.Location = new System.Drawing.Point(3, 184);
+			this.lblAddress.Name = "lblAddress";
+			this.lblAddress.Size = new System.Drawing.Size(77, 13);
+			this.lblAddress.TabIndex = 31;
+			this.lblAddress.Text = "Address value:";
+			// 
+			// picAddress
+			// 
+			this.picAddress.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this.picAddress.Cursor = System.Windows.Forms.Cursors.Hand;
+			this.picAddress.Location = new System.Drawing.Point(136, 175);
+			this.picAddress.Name = "picAddress";
+			this.picAddress.Size = new System.Drawing.Size(32, 32);
+			this.picAddress.TabIndex = 32;
+			this.picAddress.TabStop = false;
+			this.picAddress.Click += new System.EventHandler(this.picColorPicker_Click);
+			// 
+			// lblComment
+			// 
+			this.lblComment.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.lblComment.AutoSize = true;
+			this.lblComment.Location = new System.Drawing.Point(194, 184);
+			this.lblComment.Name = "lblComment";
+			this.lblComment.Size = new System.Drawing.Size(51, 13);
+			this.lblComment.TabIndex = 33;
+			this.lblComment.Text = "Comment";
+			// 
+			// picComment
+			// 
+			this.picComment.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this.picComment.Cursor = System.Windows.Forms.Cursors.Hand;
+			this.picComment.Location = new System.Drawing.Point(327, 175);
+			this.picComment.Name = "picComment";
+			this.picComment.Size = new System.Drawing.Size(32, 32);
+			this.picComment.TabIndex = 34;
+			this.picComment.TabStop = false;
+			this.picComment.Click += new System.EventHandler(this.picColorPicker_Click);
+			// 
 			// btnReset
 			// 
 			this.btnReset.Location = new System.Drawing.Point(3, 3);
@@ -257,11 +407,32 @@
 			this.btnReset.UseVisualStyleBackColor = true;
 			this.btnReset.Click += new System.EventHandler(this.btnReset_Click);
 			// 
+			// lblEffectiveAddress
+			// 
+			this.lblEffectiveAddress.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.lblEffectiveAddress.AutoSize = true;
+			this.lblEffectiveAddress.Location = new System.Drawing.Point(194, 88);
+			this.lblEffectiveAddress.Name = "lblEffectiveAddress";
+			this.lblEffectiveAddress.Size = new System.Drawing.Size(93, 13);
+			this.lblEffectiveAddress.TabIndex = 35;
+			this.lblEffectiveAddress.Text = "Effective Address:";
+			// 
+			// picEffectiveAddress
+			// 
+			this.picEffectiveAddress.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this.picEffectiveAddress.Cursor = System.Windows.Forms.Cursors.Hand;
+			this.picEffectiveAddress.Location = new System.Drawing.Point(327, 79);
+			this.picEffectiveAddress.Name = "picEffectiveAddress";
+			this.picEffectiveAddress.Size = new System.Drawing.Size(32, 32);
+			this.picEffectiveAddress.TabIndex = 36;
+			this.picEffectiveAddress.TabStop = false;
+			this.picEffectiveAddress.Click += new System.EventHandler(this.picColorPicker_Click);
+			// 
 			// frmDebuggerColors
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(555, 145);
+			this.ClientSize = new System.Drawing.Size(555, 241);
 			this.Controls.Add(this.tableLayoutPanel1);
 			this.Name = "frmDebuggerColors";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
@@ -278,6 +449,12 @@
 			((System.ComponentModel.ISupportInitialize)(this.picUnexecutedCode)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.picVerifiedData)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.picReadBreakpoint)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.picOpcode)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.picLabelDefinition)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.picImmediate)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.picAddress)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.picComment)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.picEffectiveAddress)).EndInit();
 			this.ResumeLayout(false);
 
 		}
@@ -300,5 +477,18 @@
 		private System.Windows.Forms.Button btnReset;
 		private System.Windows.Forms.Label lblReadBreakpoint;
 		private System.Windows.Forms.PictureBox picReadBreakpoint;
+		private System.Windows.Forms.Label lblPauseBackgroundSettings;
+		private System.Windows.Forms.Label lblOpcode;
+		private System.Windows.Forms.PictureBox picOpcode;
+		private System.Windows.Forms.Label lblLabelDefinition;
+		private System.Windows.Forms.PictureBox picLabelDefinition;
+		private System.Windows.Forms.Label lblImmediate;
+		private System.Windows.Forms.PictureBox picImmediate;
+		private System.Windows.Forms.Label lblAddress;
+		private System.Windows.Forms.PictureBox picAddress;
+		private System.Windows.Forms.Label lblComment;
+		private System.Windows.Forms.PictureBox picComment;
+		private System.Windows.Forms.Label lblEffectiveAddress;
+		private System.Windows.Forms.PictureBox picEffectiveAddress;
 	}
 }

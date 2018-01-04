@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Mesen.GUI.Config;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -39,6 +40,7 @@ namespace Mesen.GUI.Debugger
 
 	public partial class ctrlTextbox : Control
 	{
+		private Regex _codeRegex = new Regex("([a-z]{3})([*]{0,1})[ ]{0,1}([(]{0,1})(([#]{0,1}[$][0-9a-f]*)|([@_a-z]([@_a-z0-9])*)){0,1}([)]{0,1})(,X|,Y){0,1}([)]{0,1})", RegexOptions.IgnoreCase | RegexOptions.Compiled);
 		public event EventHandler ScrollPositionChanged;
 		private bool _disableScrollPositionChangedEvent;
 
@@ -836,13 +838,13 @@ namespace Mesen.GUI.Debugger
 			bool isBlockStart = codeString.StartsWith("__") && codeString.EndsWith("__");
 			bool isBlockEnd = codeString.StartsWith("--") && codeString.EndsWith("--");
 
-			Color textColor = Color.Black;
+			Color? textColor = null;
 			LineProperties lineProperties = GetLineStyle(currentLine);
 
 			//Setup text and bg color (only if the line is not the start/end of a block)
 			if(lineProperties != null) {
 				//Process background, foreground, outline color and line symbol
-				textColor = lineProperties.FgColor ?? Color.Black;
+				textColor = lineProperties.FgColor;
 
 				if(lineProperties.LineBgColor.HasValue) {
 					using(Brush bgBrush = new SolidBrush(lineProperties.LineBgColor.Value)) {
@@ -856,7 +858,20 @@ namespace Mesen.GUI.Debugger
 						}
 					}
 				}
+			}
 
+			if(currentLine >= this.SelectionStart && currentLine <= this.SelectionStart + this.SelectionLength) {
+				//Highlight current line
+				using(Brush brush = new SolidBrush(Color.FromArgb(150, 185, 210, 255))) {
+					int offset = currentLine - 1 == this.SelectedLine ? 1 : 0;
+					g.FillRectangle(brush, originalMargin, positionY + offset, Math.Max(_maxLineWidth, this.ClientRectangle.Width), lineHeight - offset);
+				}
+				if(currentLine == this.SelectedLine) {
+					g.DrawRectangle(Pens.Blue, originalMargin + 1, positionY + 1, Math.Max(_maxLineWidth, this.ClientRectangle.Width - originalMargin) - 1, lineHeight);
+				}
+			}
+
+			if(lineProperties != null) {
 				if(!isBlockStart && !isBlockEnd && lineProperties.TextBgColor.HasValue) {
 					using(Brush bgBrush = new SolidBrush(lineProperties.TextBgColor.Value)) {
 						int yOffset = Program.IsMono ? 2 : 1;
@@ -866,19 +881,8 @@ namespace Mesen.GUI.Debugger
 
 				if(!isBlockStart && !isBlockEnd && lineProperties.OutlineColor.HasValue) {
 					using(Pen outlinePen = new Pen(lineProperties.OutlineColor.Value, 1)) {
-						g.DrawRectangle(outlinePen, marginLeft, positionY + 1, codeStringLength, lineHeight-1);
+						g.DrawRectangle(outlinePen, marginLeft, positionY + 1, codeStringLength, lineHeight - 1);
 					}
-				}
-			}
-
-			if(currentLine >= this.SelectionStart && currentLine <= this.SelectionStart + this.SelectionLength) {
-				//Highlight current line
-				using(Brush brush = new SolidBrush(Color.FromArgb(150, 200, 200, 255))) {
-					int offset = currentLine - 1 == this.SelectedLine ? 1 : 0;
-					g.FillRectangle(brush, originalMargin, positionY + offset, Math.Max(_maxLineWidth, this.ClientRectangle.Width), lineHeight - offset);
-				}
-				if(currentLine == this.SelectedLine) {
-					g.DrawRectangle(Pens.Blue, originalMargin + 1, positionY + 1, Math.Max(_maxLineWidth, this.ClientRectangle.Width - originalMargin) - 1, lineHeight);
 				}
 			}
 
@@ -911,55 +915,82 @@ namespace Mesen.GUI.Debugger
 			}
 		}
 
-		private void DrawLineText(Graphics g, int currentLine, int marginLeft, int positionY, string codeString, string addressString, string commentString, float codeStringLength, float addressStringLength, Color textColor, int lineHeight)
+		private void DrawLineText(Graphics g, int currentLine, int marginLeft, int positionY, string codeString, string addressString, string commentString, float codeStringLength, float addressStringLength, Color? textColor, int lineHeight)
 		{
-			using(Brush fgBrush = new SolidBrush(textColor)) {
-				if(codeString.StartsWith("__") && codeString.EndsWith("__") || codeString.StartsWith("--") && codeString.EndsWith("--")) {
-					//Draw block start/end
-					g.TranslateTransform(HorizontalScrollPosition * HorizontalScrollFactor, 0);
-					string text = codeString.Substring(2, codeString.Length - 4);
-					float yOffset = codeString.StartsWith("__") ? 2 : -2;
-					if(text.Length > 0) {
-						SizeF size = g.MeasureString(text, this._noteFont, int.MaxValue, StringFormat.GenericTypographic);
-						float textLength = size.Width;
-						float textHeight = size.Height;
-						float positionX = (marginLeft + this.Width - textLength) / 2;
-						g.DrawLine(Pens.Black, marginLeft, yOffset + positionY + lineHeight / 2, marginLeft + this.Width, yOffset + positionY + lineHeight / 2);
-						yOffset = codeString.StartsWith("__") ? 3 : 2;
-						g.FillRectangle(Brushes.White, positionX - 4, yOffset + positionY, textLength + 8, textHeight);
-						g.DrawRectangle(Pens.Black, positionX - 4, yOffset + positionY, textLength + 8, textHeight);
-						g.DrawString(text, this._noteFont, fgBrush, positionX, yOffset + positionY, StringFormat.GenericTypographic);
-					} else {
-						g.DrawLine(Pens.Black, marginLeft, yOffset + positionY + lineHeight / 2, marginLeft + this.Width, yOffset + positionY + lineHeight / 2);
-					}
-					g.TranslateTransform(-HorizontalScrollPosition * HorizontalScrollFactor, 0);
+			DebugInfo info = ConfigManager.Config.DebugInfo;
+			
+			if(codeString.StartsWith("__") && codeString.EndsWith("__") || codeString.StartsWith("--") && codeString.EndsWith("--")) {
+				//Draw block start/end
+				g.TranslateTransform(HorizontalScrollPosition * HorizontalScrollFactor, 0);
+				string text = codeString.Substring(2, codeString.Length - 4);
+				float yOffset = codeString.StartsWith("__") ? 2 : -2;
+				if(text.Length > 0) {
+					SizeF size = g.MeasureString(text, this._noteFont, int.MaxValue, StringFormat.GenericTypographic);
+					float textLength = size.Width;
+					float textHeight = size.Height;
+					float positionX = (marginLeft + this.Width - textLength) / 2;
+					g.DrawLine(Pens.Black, marginLeft, yOffset + positionY + lineHeight / 2, marginLeft + this.Width, yOffset + positionY + lineHeight / 2);
+					yOffset = codeString.StartsWith("__") ? 3 : 2;
+					g.FillRectangle(Brushes.White, positionX - 4, yOffset + positionY, textLength + 8, textHeight);
+					g.DrawRectangle(Pens.Black, positionX - 4, yOffset + positionY, textLength + 8, textHeight);
+					g.DrawString(text, this._noteFont, Brushes.Black, positionX, yOffset + positionY, StringFormat.GenericTypographic);
 				} else {
-					//Draw line content
-					g.DrawString(codeString, this.Font, fgBrush, marginLeft, positionY, StringFormat.GenericTypographic);
-
-					if(!string.IsNullOrWhiteSpace(addressString)) {
-						using(Brush addressBrush = new SolidBrush(Color.SteelBlue)) {
-							g.DrawString(addressString, this.Font, addressBrush, marginLeft + codeStringLength, positionY, StringFormat.GenericTypographic);
-						}
-					}
-
-					if(!string.IsNullOrWhiteSpace(commentString)) {
-						using(Brush commentBrush = new SolidBrush(Color.DarkGreen)) {
-							int padding = Math.Max(CommentSpacingCharCount, codeString.Length + addressString.Length);
-							if(codeString.Length == 0 && addressString.Length == 0) {
-								//Draw comment left-aligned, next to the margin when there is no code on the line
-								padding = 0;
-							}
-							g.DrawString(commentString.PadLeft(padding+commentString.Length), this.Font, commentBrush, marginLeft, positionY, StringFormat.GenericTypographic);
-						}
-					}
-
-					if(this.ShowContentNotes && !this.ShowSingleContentLineNotes) {
-						g.DrawString(_contentNotes[currentLine], _noteFont, Brushes.Gray, marginLeft, positionY + this.Font.Size+3, StringFormat.GenericTypographic);
-					}
-					this.DrawHighlightedSearchString(g, codeString, marginLeft, positionY);
-					this.DrawHighlightedCompareString(g, codeString, currentLine, marginLeft, positionY);
+					g.DrawLine(Pens.Black, marginLeft, yOffset + positionY + lineHeight / 2, marginLeft + this.Width, yOffset + positionY + lineHeight / 2);
 				}
+				g.TranslateTransform(-HorizontalScrollPosition * HorizontalScrollFactor, 0);
+			} else {
+				//Draw line content
+				Color defaultColor = Color.FromArgb(60, 60, 60);
+				if(codeString.Length > 0) {
+					Match match = _codeRegex.Match(codeString);
+					if(match.Success && !codeString.EndsWith(":") && textColor == null) {
+						string opcode = match.Groups[1].Value;
+						string invalidStar = match.Groups[2].Value;
+						string paren1 = match.Groups[3].Value;
+						string operand = match.Groups[4].Value;
+						string paren2 = match.Groups[8].Value;
+						string indirect = match.Groups[9].Value;
+						string paren3 = match.Groups[10].Value;
+						List<string> parts = new List<string>() { opcode, invalidStar, " ", paren1, operand, paren2, indirect, paren3 };
+						Color operandColor = operand.Length > 0 ? (operand[0] == '#' ? (Color)info.AssemblerImmediateColor : (operand[0] == '$' ? (Color)info.AssemblerAddressColor : (Color)info.AssemblerLabelDefinitionColor)) : Color.Black;
+						List<Color> colors = new List<Color>() { info.AssemblerOpcodeColor, defaultColor, defaultColor, defaultColor, operandColor, defaultColor, defaultColor, defaultColor };
+
+						float xOffset = 0;
+						for(int i = 0; i < parts.Count; i++) {
+							using(Brush b = new SolidBrush(colors[i])) {
+								g.DrawString(parts[i], this.Font, b, marginLeft + xOffset, positionY, StringFormat.GenericTypographic);
+								xOffset += g.MeasureString("".PadLeft(parts[i].Length, 'w'), this.Font, Point.Empty, StringFormat.GenericTypographic).Width;
+							}
+						}
+					} else {
+						using(Brush fgBrush = new SolidBrush(codeString.EndsWith(":") ? (Color)info.AssemblerLabelDefinitionColor : (textColor ?? defaultColor))) {
+							g.DrawString(codeString, this.Font, fgBrush, marginLeft, positionY, StringFormat.GenericTypographic);
+						}
+					}
+				}
+
+				if(!string.IsNullOrWhiteSpace(addressString)) {
+					using(Brush addressBrush = new SolidBrush(info.CodeEffectiveAddressColor)) {
+						g.DrawString(addressString, this.Font, addressBrush, marginLeft + codeStringLength, positionY, StringFormat.GenericTypographic);
+					}
+				}
+
+				if(!string.IsNullOrWhiteSpace(commentString)) {
+					using(Brush commentBrush = new SolidBrush(info.AssemblerCommentColor)) {
+						int padding = Math.Max(CommentSpacingCharCount, codeString.Length + addressString.Length + 1);
+						if(codeString.Length == 0 && addressString.Length == 0) {
+							//Draw comment left-aligned, next to the margin when there is no code on the line
+							padding = 0;
+						}
+						g.DrawString(commentString.PadLeft(padding+commentString.Length), this.Font, commentBrush, marginLeft, positionY, StringFormat.GenericTypographic);
+					}
+				}
+
+				if(this.ShowContentNotes && !this.ShowSingleContentLineNotes) {
+					g.DrawString(_contentNotes[currentLine], _noteFont, Brushes.Gray, marginLeft, positionY + this.Font.Size+3, StringFormat.GenericTypographic);
+				}
+				this.DrawHighlightedSearchString(g, codeString, marginLeft, positionY);
+				this.DrawHighlightedCompareString(g, codeString, currentLine, marginLeft, positionY);
 			}
 		}
 

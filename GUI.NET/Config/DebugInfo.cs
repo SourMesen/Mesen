@@ -134,6 +134,7 @@ namespace Mesen.GUI.Config
 		public XmlColor CodeWriteBreakpointColor = Color.FromArgb(40, 120, 80);
 		public XmlColor CodeReadBreakpointColor = Color.FromArgb(40, 40, 200);
 		public XmlColor CodeActiveStatementColor = Color.Yellow;
+		public XmlColor CodeEffectiveAddressColor = Color.SteelBlue;
 
 		public bool RamAutoRefresh = true;
 		public int RamColumnCount = 2;
@@ -203,8 +204,8 @@ namespace Mesen.GUI.Config
 		public int ScriptZoom = 100;
 
 		public bool AssemblerCodeHighlighting = true;
-		public XmlColor AssemblerOpcodeColor = Color.DarkSlateGray;
-		public XmlColor AssemblerLabelDefinitionColor = Color.Blue;
+		public XmlColor AssemblerOpcodeColor = Color.FromArgb(22, 37, 37);
+		public XmlColor AssemblerLabelDefinitionColor = Color.FromArgb(0, 114, 174);
 		public XmlColor AssemblerImmediateColor = Color.Chocolate;
 		public XmlColor AssemblerAddressColor = Color.DarkRed;
 		public XmlColor AssemblerCommentColor = Color.Green;

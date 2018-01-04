@@ -26,6 +26,13 @@ namespace Mesen.GUI.Debugger
 			picWriteBreakpoint.BackColor = ConfigManager.Config.DebugInfo.CodeWriteBreakpointColor;
 			picReadBreakpoint.BackColor = ConfigManager.Config.DebugInfo.CodeReadBreakpointColor;
 			picActiveStatement.BackColor = ConfigManager.Config.DebugInfo.CodeActiveStatementColor;
+			picEffectiveAddress.BackColor = ConfigManager.Config.DebugInfo.CodeEffectiveAddressColor;
+
+			picOpcode.BackColor = ConfigManager.Config.DebugInfo.AssemblerOpcodeColor;
+			picLabelDefinition.BackColor = ConfigManager.Config.DebugInfo.AssemblerLabelDefinitionColor;
+			picImmediate.BackColor = ConfigManager.Config.DebugInfo.AssemblerImmediateColor;
+			picAddress.BackColor = ConfigManager.Config.DebugInfo.AssemblerAddressColor;
+			picComment.BackColor = ConfigManager.Config.DebugInfo.AssemblerCommentColor;
 		}
 
 		private void picColorPicker_Click(object sender, EventArgs e)
@@ -53,6 +60,13 @@ namespace Mesen.GUI.Debugger
 				ConfigManager.Config.DebugInfo.CodeWriteBreakpointColor = picWriteBreakpoint.BackColor;
 				ConfigManager.Config.DebugInfo.CodeReadBreakpointColor = picReadBreakpoint.BackColor;
 				ConfigManager.Config.DebugInfo.CodeActiveStatementColor = picActiveStatement.BackColor;
+				ConfigManager.Config.DebugInfo.CodeEffectiveAddressColor = picEffectiveAddress.BackColor;
+
+				ConfigManager.Config.DebugInfo.AssemblerOpcodeColor = picOpcode.BackColor;
+				ConfigManager.Config.DebugInfo.AssemblerLabelDefinitionColor = picLabelDefinition.BackColor;
+				ConfigManager.Config.DebugInfo.AssemblerImmediateColor = picImmediate.BackColor;
+				ConfigManager.Config.DebugInfo.AssemblerAddressColor = picAddress.BackColor;
+				ConfigManager.Config.DebugInfo.AssemblerCommentColor = picComment.BackColor;
 
 				ConfigManager.ApplyChanges();
 			}
@@ -68,6 +82,14 @@ namespace Mesen.GUI.Debugger
 			picWriteBreakpoint.BackColor = Color.FromArgb(40, 120, 80);
 			picReadBreakpoint.BackColor = Color.FromArgb(40, 40, 200);
 			picActiveStatement.BackColor = Color.Yellow;
+			picEffectiveAddress.BackColor = Color.SteelBlue;
+
+
+			picOpcode.BackColor = Color.FromArgb(22, 37, 37);
+			picLabelDefinition.BackColor = Color.FromArgb(0, 114, 174);
+			picImmediate.BackColor = Color.Chocolate;
+			picAddress.BackColor = Color.DarkRed;
+			picComment.BackColor = Color.Green;
 		}
 	}
 }

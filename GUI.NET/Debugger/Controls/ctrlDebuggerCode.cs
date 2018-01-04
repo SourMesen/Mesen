@@ -245,6 +245,7 @@ namespace Mesen.GUI.Debugger
 				}
 			}
 
+			result.Add("");
 			return result;
 		}
 
