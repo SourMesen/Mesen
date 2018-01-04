@@ -194,7 +194,7 @@
 			this.lblUnidentifiedData.Name = "lblUnidentifiedData";
 			this.lblUnidentifiedData.Size = new System.Drawing.Size(122, 13);
 			this.lblUnidentifiedData.TabIndex = 10;
-			this.lblUnidentifiedData.Text = "Unidentified Data/Code:";
+			this.lblUnidentifiedData.Text = "Unidentified Code/Data:";
 			// 
 			// picExecBreakpoint
 			// 

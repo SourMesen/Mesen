@@ -453,7 +453,7 @@ namespace Mesen.GUI.Debugger
 				this.MarkSelectionAs(startAddress, endAddress, CdlPrgFlags.Data);
 			};
 			var mnuMarkAsUnidentifiedData = new ToolStripMenuItem();
-			mnuMarkAsUnidentifiedData.Text = "Unidentified Data";
+			mnuMarkAsUnidentifiedData.Text = "Unidentified Code/Data";
 			mnuMarkAsUnidentifiedData.Click += (s, e) => {
 				int startAddress = (int)hexBox.SelectionStart;
 				int endAddress = (int)(hexBox.SelectionStart + (hexBox.SelectionLength == 0 ? 0 : (hexBox.SelectionLength - 1)));

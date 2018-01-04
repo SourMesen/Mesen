@@ -152,7 +152,7 @@
 			this.mnuMarkAsUnidentifiedData.Image = global::Mesen.GUI.Properties.Resources.Help;
 			this.mnuMarkAsUnidentifiedData.Name = "mnuMarkAsUnidentifiedData";
 			this.mnuMarkAsUnidentifiedData.Size = new System.Drawing.Size(166, 22);
-			this.mnuMarkAsUnidentifiedData.Text = "Unidentified Data";
+			this.mnuMarkAsUnidentifiedData.Text = "Unidentified Code/Data";
 			this.mnuMarkAsUnidentifiedData.Click += new System.EventHandler(this.mnuMarkAsUnidentifiedData_Click);
 			// 
 			// toolStripMenuItem4
