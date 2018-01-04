@@ -487,20 +487,21 @@ string Disassembler::GetCode(AddressTypeInfo &addressInfo, uint32_t endAddr, uin
 	bool isVerifiedData;
 	bool inVerifiedDataBlock = false;
 	bool emptyBlock = false;
+	bool showEitherDataType = showVerifiedData || showUnidentifiedData;
 	
-	auto outputBytes = [this, &inVerifiedDataBlock, &output, &dbBuffer, &dbRelativeAddr, &dbAbsoluteAddr, &byteCount]() {
+	auto outputBytes = [this, &showEitherDataType, &inVerifiedDataBlock, &output, &dbBuffer, &dbRelativeAddr, &dbAbsoluteAddr, &byteCount]() {
 		if(byteCount > 0) {
-			GetLine(output, dbBuffer, "", dbRelativeAddr, dbAbsoluteAddr, inVerifiedDataBlock ? DataType::VerifiedData : DataType::UnidentifiedData);
+			GetLine(output, dbBuffer, "", dbRelativeAddr, dbAbsoluteAddr, showEitherDataType && inVerifiedDataBlock ? DataType::VerifiedData : DataType::UnidentifiedData);
 			byteCount = 0;
 		}
 	};
 
-	auto endDataBlock = [this, outputBytes, &inVerifiedDataBlock, &emptyBlock, &output, &addr, &insideDataBlock, &memoryAddr]() {
+	auto endDataBlock = [this, outputBytes, &showEitherDataType, &inVerifiedDataBlock, &emptyBlock, &output, &addr, &insideDataBlock, &memoryAddr]() {
 		outputBytes();
 		if(emptyBlock) {
-			GetLine(output, "", "", -1, -1, inVerifiedDataBlock ? DataType::VerifiedData : DataType::UnidentifiedData);
+			GetLine(output, "", "", -1, -1, showEitherDataType && inVerifiedDataBlock ? DataType::VerifiedData : DataType::UnidentifiedData);
 		}
-		GetLine(output, "----", "", emptyBlock ? (uint16_t)(memoryAddr - 1) : -1, emptyBlock ? addr - 1 : -1, inVerifiedDataBlock ? DataType::VerifiedData : DataType::UnidentifiedData);
+		GetLine(output, "----", "", emptyBlock ? (uint16_t)(memoryAddr - 1) : -1, emptyBlock ? addr - 1 : -1, showEitherDataType && inVerifiedDataBlock ? DataType::VerifiedData : DataType::UnidentifiedData);
 		insideDataBlock = false;
 	};
 
@@ -576,7 +577,6 @@ string Disassembler::GetCode(AddressTypeInfo &addressInfo, uint32_t endAddr, uin
 			}
 			
 			bool showData = (isVerifiedData && showVerifiedData) || (!isVerifiedData && showUnidentifiedData);
-			bool showEitherDataType = showVerifiedData || showUnidentifiedData;
 
 			if(inVerifiedDataBlock != isVerifiedData && insideDataBlock && showEitherDataType) {
 				//End of block (switching between verified data & unidentified data, while only either of them is set to be displayed)
