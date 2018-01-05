@@ -1,15 +1,12 @@
 #include "stdafx.h"
+#include "Timer.h"
+
+#ifndef LIBRETRO
+
 #include <thread>
 
 #ifdef _WIN32
-	#include <Windows.h>
-#else 
-	#include <time.h>
-#endif
-
-#include "Timer.h"
-
-#ifdef _WIN32
+#include <Windows.h>
 
 Timer::Timer() 
 {
@@ -38,7 +35,8 @@ double Timer::GetElapsedMS()
 	return double(li.QuadPart - _start) / _frequency;
 }
 
-#else
+#else 
+#include <time.h>
 
 Timer::Timer() 
 {
@@ -74,3 +72,26 @@ void Timer::WaitUntil(double targetMillisecond)
 		}
 	}
 }
+
+#else 
+
+//This is not used by Libretro port, remove its dependencies
+
+Timer::Timer()
+{
+}
+
+void Timer::Reset()
+{
+}
+
+double Timer::GetElapsedMS()
+{
+	return 0.0;
+}
+
+void Timer::WaitUntil(double targetMillisecond)
+{
+}
+
+#endif

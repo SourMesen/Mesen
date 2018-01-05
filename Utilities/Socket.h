@@ -5,6 +5,7 @@
 class Socket
 {
 private:
+#ifndef LIBRETRO
 	#ifdef _WIN32
 	bool _cleanupWSA = false;
 	#endif
@@ -14,6 +15,7 @@ private:
 	char* _sendBuffer;
 	int _bufferPosition;
 	int32_t _UPnPPort = -1;
+#endif
 
 public:
 	Socket();
