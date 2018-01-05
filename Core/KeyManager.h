@@ -8,7 +8,7 @@ enum class MouseButton;
 class KeyManager
 {
 private:
-	static unique_ptr<IKeyManager> _keyManager;
+	static IKeyManager* _keyManager;
 	static MousePosition _mousePosition;
 	static atomic<int16_t> _xMouseMovement;
 	static atomic<int16_t> _yMouseMovement;

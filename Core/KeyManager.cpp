@@ -5,14 +5,14 @@
 #include "EmulationSettings.h"
 #include "PPU.h"
 
-unique_ptr<IKeyManager> KeyManager::_keyManager;
+IKeyManager* KeyManager::_keyManager;
 MousePosition KeyManager::_mousePosition;
 atomic<int16_t> KeyManager::_xMouseMovement;
 atomic<int16_t> KeyManager::_yMouseMovement;
 
 void KeyManager::RegisterKeyManager(IKeyManager* keyManager)
 {
-	_keyManager.reset(keyManager);
+	_keyManager = keyManager;
 }
 
 void KeyManager::RefreshKeyState()

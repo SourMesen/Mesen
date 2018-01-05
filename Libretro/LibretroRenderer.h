@@ -11,9 +11,8 @@ private:
 	bool _skipMode = false;
 
 public:
-	LibretroRenderer(retro_video_refresh_t sendFrame)
+	LibretroRenderer()
 	{
-		_sendFrame = sendFrame;
 		VideoRenderer::GetInstance()->RegisterRenderingDevice(this);
 	}
 
@@ -25,10 +24,15 @@ public:
 	// Inherited via IRenderingDevice
 	virtual void UpdateFrame(void *frameBuffer, uint32_t width, uint32_t height) override
 	{
-		if(!_skipMode) {
+		if(!_skipMode && _sendFrame) {
 			_sendFrame(frameBuffer, width, height, sizeof(uint32_t) * width);
 		}
 	}
+
+	void SetSendFrame(retro_video_refresh_t sendFrame)
+	{
+		_sendFrame = sendFrame;
+	}	
 
 	void SetSkipMode(bool skip)
 	{

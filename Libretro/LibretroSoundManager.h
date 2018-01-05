@@ -11,9 +11,8 @@ private:
 	bool _skipMode = false;
 
 public:
-	LibretroSoundManager(retro_audio_sample_t sendAudioSample)
+	LibretroSoundManager()
 	{
-		_sendAudioSample = sendAudioSample;
 		SoundMixer::RegisterAudioDevice(this);
 	}
 
@@ -25,11 +24,16 @@ public:
 	// Inherited via IAudioDevice
 	virtual void PlayBuffer(int16_t *soundBuffer, uint32_t sampleCount, uint32_t sampleRate, bool isStereo) override
 	{
-		if(!_skipMode) {
+		if(!_skipMode && _sendAudioSample) {
 			for(uint32_t i = 0; i < sampleCount; i++) {
 				_sendAudioSample(soundBuffer[i * 2], soundBuffer[i * 2 + 1]);
 			}
 		}
+	}
+
+	void SetSendAudioSample(retro_audio_sample_t sendAudioSample)
+	{
+		_sendAudioSample = sendAudioSample;
 	}
 
 	void SetSkipMode(bool skip)

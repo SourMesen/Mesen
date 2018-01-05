@@ -31,32 +31,45 @@ Things that ***may or may not*** be added in the future, in no particular order:
 -Support for more UNIF boards and more NES/Famicom input devices  
 -Debugger improvements (APU state display, etc.)  
 -Shaders  
--Libretro support  
 -TAS editor  
 
 # Compiling #
 
 ### Windows ###
-1) Open the solution in VS2015/2017
+
+#### *Standalone* ####
+1) Open the solution in VS2017
 2) Compile as Release/x64 or Release/x86  
 3) Run  
 
+#### *Libretro* ####
+1) Open the solution in VS2017
+2) Compile as Release/x64 or Release/x86  
+3) Use the "mesen_libretro.dll" file in bin/(x64 or x86)/Libretro/mesen_libretro.dll
+
+
 ### Linux ###
 
-To compile and run Mesen under Linux, you will need:
-* A recent version of clang/gcc
+#### *Standalone* ####
+
+To compile and run Mesen under Linux a recent version of clang/gcc.  Mesen requires a C++14, along with support for the filesystem API. Additionally, Mesen requires the following dependencies:
 * Mono 4.2.1+  (package: mono-devel)
 * SDL2  (package: libsdl2-dev)
 
 The makefile contains some more information at the top.  Running "make" will build the x64 version by default, and then "make run" should start the emulator.  
 LTO is supported under clang, which gives a large performance boost (25-30%+), so turning it on is highly recommended (see makefile for details).  
 
+#### *Libretro* ####
+
+To compile the libretro core you will need a recent version of clang/gcc.  Mesen requires a C++14, along with support for the filesystem API.
+
+Running "make libretro" will build the core and put it in "bin/mesen_libretro.(x64 or x86).so"
 
 ## LICENSE ##
 
 Mesen is available under the GPL V3 license.  Full text here: http://www.gnu.org/licenses/gpl-3.0.en.html
 
-Copyright (C) 2017 M. Bibaud
+Copyright (C) 2014-2018 M. Bibaud
 
 
 This program is free software: you can redistribute it and/or modify

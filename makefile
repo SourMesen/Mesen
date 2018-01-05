@@ -17,11 +17,14 @@
 #LTO gives a 25-30% performance boost, so use it whenever you can
 #Usage: LTO=true make
 
+MESENFLAGS=
+libretro : MESENFLAGS=-D LIBRETRO
+
 CPPC=clang++
-GCCOPTIONS=-fPIC -Wall --std=c++14 -O3
+GCCOPTIONS=-fPIC -Wall --std=c++14 -O3 $(MESENFLAGS)
 
 CC=clang
-CCOPTIONS=-fPIC -Wall -O3
+CCOPTIONS=-fPIC -Wall -O3 $(MESENFLAGS)
 
 AR=ar -rcs
 LINKFLAG=
@@ -46,6 +49,7 @@ endif
 
 OBJFOLDER=obj.$(MESENPLATFORM)
 SHAREDLIB=libMesenCore.$(MESENPLATFORM).dll
+LIBRETROLIB=mesen_libretro.$(MESENPLATFORM).so
 RELEASEFOLDER=bin/$(MESENPLATFORM)/Release
 
 COREOBJ=$(patsubst Core/%.cpp,Core/$(OBJFOLDER)/%.o,$(wildcard Core/*.cpp))
@@ -67,6 +71,9 @@ ui: InteropDLL/$(OBJFOLDER)/$(SHAREDLIB)
 	cp InteropDLL/$(OBJFOLDER)/$(SHAREDLIB) $(RELEASEFOLDER)/Dependencies/$(SHAREDLIB)	
 	cd $(RELEASEFOLDER)/Dependencies && zip ../Dependencies.zip *	
 	cd GUI.NET && xbuild /property:Configuration="Release" /property:Platform="$(MESENPLATFORM)" /property:PreBuildEvent="" /property:DefineConstants="HIDETESTMENU,DISABLEAUTOUPDATE"
+
+libretro: Libretro/$(OBJFOLDER)/$(LIBRETROLIB)
+	cp ./Libretro/$(OBJFOLDER)/$(LIBRETROLIB) ./bin
 
 core: InteropDLL/$(OBJFOLDER)/$(SHAREDLIB)
 
@@ -115,6 +122,15 @@ InteropDLL/$(OBJFOLDER)/$(SHAREDLIB): $(SEVENZIPOBJ) $(LUAOBJ) $(UTILOBJ) $(CORE
 	$(AR) InteropDLL/$(OBJFOLDER)/libCore.a $(COREOBJ)
 	cd InteropDLL/$(OBJFOLDER) && $(CPPC) $(GCCOPTIONS) $(LINKFLAG) -Wl,-z,defs -Wno-parentheses -Wno-switch -shared -o $(SHAREDLIB) ../*.cpp -L . -lMesenLinux -lCore -lUtilities -lLua -lSevenZip -pthread -lSDL2 -lstdc++fs
 
+
+Libretro/$(OBJFOLDER)/$(LIBRETROLIB): $(SEVENZIPOBJ) $(LUAOBJ) $(UTILOBJ) $(COREOBJ) Libretro/libretro.cpp
+	mkdir -p Libretro/$(OBJFOLDER)
+	$(AR) Libretro/$(OBJFOLDER)/libSevenZip.a $(SEVENZIPOBJ)
+	$(AR) Libretro/$(OBJFOLDER)/libLua.a $(LUAOBJ)
+	$(AR) Libretro/$(OBJFOLDER)/libUtilities.a $(UTILOBJ)
+	$(AR) Libretro/$(OBJFOLDER)/libCore.a $(COREOBJ)
+	cd Libretro/$(OBJFOLDER) && $(CPPC) $(GCCOPTIONS) $(LINKFLAG) -Wl,-z,defs -Wno-parentheses -Wno-switch -shared -o $(LIBRETROLIB) ../*.cpp -L . -lCore -lUtilities -lLua -lSevenZip -pthread -lstdc++fs
+
 debug:
 	MONO_LOG_LEVEL=debug mono $(RELEASEFOLDER)/Mesen.exe
 
@@ -128,5 +144,6 @@ clean:
 	rm Core/$(OBJFOLDER) -r -f
 	rm Linux/$(OBJFOLDER) -r -f
 	rm InteropDLL/$(OBJFOLDER) -r -f
+	rm Libretro/$(OBJFOLDER) -r -f
 	rm TestHelper/$(OBJFOLDER) -r -f
 	rm $(RELEASEFOLDER) -r -f
