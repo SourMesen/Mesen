@@ -122,16 +122,16 @@ extern "C" {
 			{ MesenRegion, "Region; Auto|NTSC|PAL|Dendy" },
 			{ MesenOverscanVertical, "Vertical Overscan; None|8px|16px" },
 			{ MesenOverscanHorizontal, "Horizontal Overscan; None|8px|16px" },
-			{ MesenAspectRatio ,  "Aspect Ratio; Auto|No Stretching|NTSC|PAL|4:3|16:9" },
-			{ MesenControllerTurboSpeed, "Controller Turbo Speed; Slow|Normal|Fast|Very Fast" },
-			{ MesenHdPacks, "Enable HD Packs; disabled|enabled" },
-			{ MesenNoSpriteLimit, "Remove sprite limit; disabled|enabled" },
+			{ MesenAspectRatio ,  "Aspect Ratio; Auto|No Stretching|NTSC|PAL" },
+			{ MesenControllerTurboSpeed, "Controller Turbo Speed; Fast|Very Fast|Slow|Normal" },
+			{ MesenHdPacks, "Enable HD Packs; enabled|disabled" },
+			{ MesenNoSpriteLimit, "Remove sprite limit; enabled|disabled" },
 			{ MesenFakeStereo, u8"Enable fake stereo effect; disabled|enabled" },
-			{ MesenMuteTriangleUltrasonic, u8"Reduce popping on Triangle channel; disabled|enabled" },
-			{ MesenReduceDmcPopping, u8"Reduce popping on DMC channel; disabled|enabled" },
+			{ MesenMuteTriangleUltrasonic, u8"Reduce popping on Triangle channel; enabled|disabled" },
+			{ MesenReduceDmcPopping, u8"Reduce popping on DMC channel; enabled|disabled" },
 			{ MesenSwapDutyCycle, u8"Swap Square channel duty cycles; disabled|enabled" },
 			{ MesenDisableNoiseModeFlag, u8"Disable Noise channel mode flag; disabled|enabled" },
-			{ MesenScreenRotation, u8"Screen Rotation; None|90°|180°|270°" },
+			{ MesenScreenRotation, u8"Screen Rotation; None|90\u00B0|180\u00B0|270\u00B0" },
 			{ MesenRamState, "Default power-on state for RAM; All 0s (Default)|All 1s|Random Values" },
 			{ MesenFdsAutoSelectDisk, "FDS: Automatically insert disks; disabled|enabled" },
 			{ MesenFdsFastForwardLoad, "FDS: Fast forward while loading; disabled|enabled" },
@@ -179,10 +179,16 @@ extern "C" {
 		info->timing.fps = Console::GetModel() == NesModel::NTSC ? 60.098811862348404716732985230828 : 50.006977968268290848936010226333;
 		info->timing.sample_rate = 48000;
 
+		float ratio = (float)EmulationSettings::GetAspectRatio();
+		if(ratio == 0.0f) {
+			ratio = 1.0f;
+		}
+		ratio *= (float)EmulationSettings::GetOverscanDimensions().GetScreenWidth() / EmulationSettings::GetOverscanDimensions().GetScreenHeight() / 256 * 240;
+
 		if(EmulationSettings::GetScreenRotation() % 180) {
-			info->geometry.aspect_ratio = (float)(1.0f / EmulationSettings::GetAspectRatio());
+			info->geometry.aspect_ratio = ratio == 0.0f ? 0.0f : 1.0f / ratio;
 		} else {
-			info->geometry.aspect_ratio = (float)EmulationSettings::GetAspectRatio();
+			info->geometry.aspect_ratio = ratio;
 		}
 
 		info->geometry.base_width = EmulationSettings::GetOverscanDimensions().GetScreenWidth();
@@ -355,10 +361,6 @@ extern "C" {
 				EmulationSettings::SetVideoAspectRatio(VideoAspectRatio::NTSC, 1.0);
 			} else if(value == "PAL") {
 				EmulationSettings::SetVideoAspectRatio(VideoAspectRatio::PAL, 1.0);
-			} else if(value == "4:3") {
-				EmulationSettings::SetVideoAspectRatio(VideoAspectRatio::Standard, 1.0);
-			} else if(value == "16:9") {
-				EmulationSettings::SetVideoAspectRatio(VideoAspectRatio::Widescreen, 1.0);
 			}
 		}
 
@@ -393,11 +395,11 @@ extern "C" {
 			string value = string(var.value);
 			if(value == "None") {
 				EmulationSettings::SetScreenRotation(0);
-			} else if(value == u8"90°") {
+			} else if(value == u8"90\u00B0") {
 				EmulationSettings::SetScreenRotation(90);
-			} else if(value == u8"180°") {
+			} else if(value == u8"180\u00B0") {
 				EmulationSettings::SetScreenRotation(180);
-			} else if(value == u8"270°") {
+			} else if(value == u8"270\u00B0") {
 				EmulationSettings::SetScreenRotation(270);
 			}
 		}
@@ -449,7 +451,7 @@ extern "C" {
 
 		retro_system_av_info avInfo = {};
 		setup_av_info(&avInfo);
-		retroEnv(RETRO_ENVIRONMENT_SET_SYSTEM_AV_INFO, &avInfo);
+		retroEnv(RETRO_ENVIRONMENT_SET_GEOMETRY, &avInfo);
 	}
 
 	RETRO_API void retro_run()
