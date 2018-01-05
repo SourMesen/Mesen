@@ -52,7 +52,7 @@ Things that ***may or may not*** be added in the future, in no particular order:
 
 #### *Standalone* ####
 
-To compile and run Mesen under Linux a recent version of clang/gcc.  Mesen requires a C++14, along with support for the filesystem API. Additionally, Mesen requires the following dependencies:
+To compile Mesen under Linux you will need a recent version of clang/gcc.  This is because Mesen requires a C++14 compiler, along with support for the filesystem API (C++17). Additionally, Mesen has the following dependencies:
 * Mono 4.2.1+  (package: mono-devel)
 * SDL2  (package: libsdl2-dev)
 
@@ -61,7 +61,7 @@ LTO is supported under clang, which gives a large performance boost (25-30%+), s
 
 #### *Libretro* ####
 
-To compile the libretro core you will need a recent version of clang/gcc.  Mesen requires a C++14, along with support for the filesystem API.
+To compile the libretro core you will need a recent version of clang/gcc.  This is because Mesen requires a C++14 compiler, along with support for the filesystem API (C++17).
 
 Running "make libretro" will build the core and put it in "bin/mesen_libretro.(x64 or x86).so".  
 LTO is supported under clang, which gives a large performance boost (25-30%+), so turning it on is highly recommended (see makefile for details).  
