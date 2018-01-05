@@ -123,13 +123,12 @@ InteropDLL/$(OBJFOLDER)/$(SHAREDLIB): $(SEVENZIPOBJ) $(LUAOBJ) $(UTILOBJ) $(CORE
 	cd InteropDLL/$(OBJFOLDER) && $(CPPC) $(GCCOPTIONS) $(LINKFLAG) -Wl,-z,defs -Wno-parentheses -Wno-switch -shared -o $(SHAREDLIB) ../*.cpp -L . -lMesenLinux -lCore -lUtilities -lLua -lSevenZip -pthread -lSDL2 -lstdc++fs
 
 
-Libretro/$(OBJFOLDER)/$(LIBRETROLIB): $(SEVENZIPOBJ) $(LUAOBJ) $(UTILOBJ) $(COREOBJ) Libretro/libretro.cpp
+Libretro/$(OBJFOLDER)/$(LIBRETROLIB): $(SEVENZIPOBJ) $(UTILOBJ) $(COREOBJ) Libretro/libretro.cpp
 	mkdir -p Libretro/$(OBJFOLDER)
 	$(AR) Libretro/$(OBJFOLDER)/libSevenZip.a $(SEVENZIPOBJ)
-	$(AR) Libretro/$(OBJFOLDER)/libLua.a $(LUAOBJ)
 	$(AR) Libretro/$(OBJFOLDER)/libUtilities.a $(UTILOBJ)
 	$(AR) Libretro/$(OBJFOLDER)/libCore.a $(COREOBJ)
-	cd Libretro/$(OBJFOLDER) && $(CPPC) $(GCCOPTIONS) $(LINKFLAG) -Wl,-z,defs -Wno-parentheses -Wno-switch -shared -o $(LIBRETROLIB) ../*.cpp -L . -lCore -lUtilities -lLua -lSevenZip -pthread -lstdc++fs
+	cd Libretro/$(OBJFOLDER) && $(CPPC) $(GCCOPTIONS) $(LINKFLAG) -Wl,-z,defs -Wno-parentheses -Wno-switch -shared -o $(LIBRETROLIB) ../*.cpp -L . -lCore -lUtilities -lSevenZip -pthread
 
 debug:
 	MONO_LOG_LEVEL=debug mono $(RELEASEFOLDER)/Mesen.exe
