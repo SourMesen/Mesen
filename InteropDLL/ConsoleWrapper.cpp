@@ -29,7 +29,7 @@
 #include "../Core/VsSystemActionManager.h"
 #include "../Core/KeyManager.h"
 
-#ifdef WIN32
+#ifdef _WIN32
 	#include "../Windows/Renderer.h"
 	#include "../Windows/SoundManager.h"
 	#include "../Windows/WindowsKeyManager.h"

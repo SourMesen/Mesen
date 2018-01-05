@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include <thread>
 
-#ifdef WIN32
+#ifdef _WIN32
 	#include <Windows.h>
 #else 
 	#include <time.h>
@@ -9,7 +9,7 @@
 
 #include "Timer.h"
 
-#ifdef WIN32
+#ifdef _WIN32
 
 Timer::Timer() 
 {

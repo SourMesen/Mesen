@@ -1,8 +1,10 @@
 #include "stdafx.h"
 
 //TODO: Use non-experimental namespace (once it is officially supported by VC & GCC)
+#ifndef LIBRETRO
 #include <experimental/filesystem>
 namespace fs = std::experimental::filesystem;
+#endif
 
 #include <unordered_set>
 #include <algorithm>
@@ -117,6 +119,7 @@ string FolderUtilities::GetRecentGamesFolder()
 	return folder;
 }
 
+#ifndef LIBRETRO
 void FolderUtilities::CreateFolder(string folder)
 {
 	fs::create_directory(fs::u8path(folder));
@@ -195,3 +198,56 @@ int64_t FolderUtilities::GetFileModificationTime(string filepath)
 {
 	return fs::last_write_time(fs::u8path(filepath)).time_since_epoch() / std::chrono::seconds(1);
 }
+#else
+
+//Libretro: Avoid using filesystem API.
+
+#ifdef _WIN32
+static const char* PATHSEPARATOR = "\\";
+#else 
+static const char* PATHSEPARATOR = "/";
+#endif
+
+void FolderUtilities::CreateFolder(string folder)
+{
+}
+
+vector<string> FolderUtilities::GetFolders(string rootFolder)
+{
+	return vector<string>();
+}
+
+vector<string> FolderUtilities::GetFilesInFolder(string rootFolder, std::unordered_set<string> extensions, bool recursive)
+{
+	return vector<string>();
+}
+
+string FolderUtilities::GetFilename(string filepath, bool includeExtension)
+{
+	size_t index = filepath.find_last_of(PATHSEPARATOR);
+	string filename = (index == std::string::basic_string::npos) ? filepath : filepath.substr(index + 1);
+	if(!includeExtension) {
+		filename = filename.substr(0, filename.find_last_of("."));
+	}
+	return filename;
+}
+
+string FolderUtilities::GetFolderName(string filepath)
+{
+	size_t index = filepath.find_last_of(PATHSEPARATOR);
+	return filepath.substr(0, index);
+}
+
+string FolderUtilities::CombinePath(string folder, string filename)
+{
+	if(folder.find_last_of(PATHSEPARATOR) != folder.length() - 1) {
+		folder += PATHSEPARATOR;
+	}
+	return folder + filename;
+}
+
+int64_t FolderUtilities::GetFileModificationTime(string filepath)
+{
+	return 0;
+}
+#endif
