@@ -193,6 +193,7 @@ void VideoDecoder::UpdateFrame(void *ppuOutputBuffer, HdPpuPixelInfo *hdPixelInf
 
 void VideoDecoder::StartThread()
 {
+#ifndef LIBRETRO
 	if(!_decodeThread) {	
 		_stopFlag = false;
 		_frameChanged = false;
@@ -201,10 +202,12 @@ void VideoDecoder::StartThread()
 		_hud.reset(new VideoHud());
 		_decodeThread.reset(new thread(&VideoDecoder::DecodeThread, this));
 	}
+#endif
 }
 
 void VideoDecoder::StopThread()
 {
+#ifndef LIBRETRO
 	_stopFlag = true;
 	if(_decodeThread) {
 		_waitForFrame.Signal();
@@ -225,6 +228,7 @@ void VideoDecoder::StopThread()
 		}
 		_ppuOutputBuffer = nullptr;
 	}
+#endif
 }
 
 bool VideoDecoder::IsRunning()

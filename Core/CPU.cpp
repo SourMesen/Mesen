@@ -234,6 +234,7 @@ uint16_t CPU::FetchOperand()
 		default: break;
 	}
 	
+#ifndef LIBRETRO
 	Debugger::BreakIfDebugging();
 	
 	if(NsfMapper::GetInstance()) {
@@ -243,6 +244,10 @@ uint16_t CPU::FetchOperand()
 	} else {
 		throw std::runtime_error("Invalid OP code - CPU crashed");
 	}
+#else 
+	return 0;
+#endif
+
 }
 
 void CPU::IncCycleCount()

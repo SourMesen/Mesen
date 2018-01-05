@@ -33,21 +33,25 @@ void VideoRenderer::Release()
 
 void VideoRenderer::StartThread()
 {
+#ifndef LIBRETRO
 	if(!_renderThread) {
 		_stopFlag = false;
 		_waitForRender.Reset();
 
 		_renderThread.reset(new std::thread(&VideoRenderer::RenderThread, this));
 	}
+#endif
 }
 
 void VideoRenderer::StopThread()
 {
+#ifndef LIBRETRO
 	_stopFlag = true;
 	if(_renderThread) {
 		_renderThread->join();
 		_renderThread.reset();
 	}
+#endif
 }
 
 void VideoRenderer::RenderThread()

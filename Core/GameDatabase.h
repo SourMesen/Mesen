@@ -16,8 +16,11 @@ private:
 
 	static void InitDatabase();
 	static void UpdateRomData(GameInfo &info, RomData &romData);
+	static void SetVsSystemDefaults(uint32_t prgCrc32);
 
 public:
+	static void LoadGameDb(vector<string> data);
+
 	static void InitializeInputDevices(string inputType, GameSystem system);
 	static void SetGameInfo(uint32_t romCrc, RomData &romData, bool updateRomData);
 	static bool GetiNesHeader(uint32_t romCrc, NESHeader &nesHeader);

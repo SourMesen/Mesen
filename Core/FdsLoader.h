@@ -54,11 +54,16 @@ private:
 		//For FDS, the PRG ROM is the FDS BIOS (8k)
 		vector<uint8_t> biosData;
 
-		ifstream biosFile("FdsBios.bin", ios::in | ios::binary);
+		ifstream biosFile(FolderUtilities::CombinePath(FolderUtilities::GetHomeFolder(), "FdsBios.bin"), ios::in | ios::binary);
 		if(biosFile) {
 			return vector<uint8_t>(std::istreambuf_iterator<char>(biosFile), {});
 		} else {
-			MessageManager::SendNotification(ConsoleNotificationType::FdsBiosNotFound);
+			biosFile.open(FolderUtilities::CombinePath(FolderUtilities::GetHomeFolder(), "disksys.rom"), ios::in | ios::binary);
+			if(biosFile) {
+				return vector<uint8_t>(std::istreambuf_iterator<char>(biosFile), {});
+			} else {
+				MessageManager::SendNotification(ConsoleNotificationType::FdsBiosNotFound);
+			}
 		}
 		return {};
 	}

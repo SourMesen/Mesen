@@ -261,6 +261,8 @@ void ControlManager::UpdateInputState()
 		_isLagging = true;
 	}
 
+	KeyManager::RefreshKeyState();
+
 	auto lock = _deviceLock.AcquireSafe();
 
 	//string log = "";

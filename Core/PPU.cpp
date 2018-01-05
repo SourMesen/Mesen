@@ -15,8 +15,6 @@ PPU::PPU(BaseMapper *mapper, ControlManager *controlManager)
 {
 	PPU::Instance = this;
 
-	EmulationSettings::SetPpuModel(PpuModel::Ppu2C02);
-
 	_mapper = mapper;
 	_controlManager = controlManager;
 	_outputBuffers[0] = new uint16_t[256 * 240];
@@ -992,7 +990,6 @@ void PPU::ProcessSpriteEvaluation()
 
 uint8_t PPU::ReadSpriteRam(uint8_t addr)
 {
-	//return _spriteRAM[addr];
 	if(!_enableOamDecay) {
 		return _spriteRAM[addr];
 	} else {
@@ -1026,6 +1023,9 @@ void PPU::SendFrame()
 
  	MessageManager::SendNotification(ConsoleNotificationType::PpuFrameDone, _currentOutputBuffer);
 
+#ifdef LIBRETRO
+	VideoDecoder::GetInstance()->UpdateFrameSync(_currentOutputBuffer);
+#else 
 	if(RewindManager::IsRewinding()) {
 		if(!RewindManager::IsStepBack()) {
 			VideoDecoder::GetInstance()->UpdateFrameSync(_currentOutputBuffer);
@@ -1033,7 +1033,6 @@ void PPU::SendFrame()
 	} else {
 		VideoDecoder::GetInstance()->UpdateFrame(_currentOutputBuffer);
 	}
-
 	//Switch output buffer.  VideoDecoder will decode the last frame while we build the new one.
 	//If VideoDecoder isn't fast enough, UpdateFrame will block until it is ready to accept a new frame.
 	_currentOutputBuffer = (_currentOutputBuffer == _outputBuffers[0]) ? _outputBuffers[1] : _outputBuffers[0];
@@ -1042,6 +1041,7 @@ void PPU::SendFrame()
 	}
 
 	_enableOamDecay = EmulationSettings::CheckFlag(EmulationFlags::EnableOamDecay);
+#endif
 }
 
 void PPU::BeginVBlank()

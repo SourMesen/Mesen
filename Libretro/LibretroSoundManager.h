@@ -1,0 +1,56 @@
+#pragma once
+#include "stdafx.h"
+#include "../Core/IAudioDevice.h"
+#include "../Core/SoundMixer.h"
+#include "libretro.h"
+
+class LibretroSoundManager : public IAudioDevice
+{
+private:
+	retro_audio_sample_t _sendAudioSample = nullptr;
+	bool _skipMode = false;
+
+public:
+	LibretroSoundManager(retro_audio_sample_t sendAudioSample)
+	{
+		_sendAudioSample = sendAudioSample;
+		SoundMixer::RegisterAudioDevice(this);
+	}
+
+	~LibretroSoundManager()
+	{
+		SoundMixer::RegisterAudioDevice(nullptr);
+	}
+
+	// Inherited via IAudioDevice
+	virtual void PlayBuffer(int16_t *soundBuffer, uint32_t sampleCount, uint32_t sampleRate, bool isStereo) override
+	{
+		if(!_skipMode) {
+			for(uint32_t i = 0; i < sampleCount; i++) {
+				_sendAudioSample(soundBuffer[i * 2], soundBuffer[i * 2 + 1]);
+			}
+		}
+	}
+
+	void SetSkipMode(bool skip)
+	{
+		_skipMode = skip;
+	}
+
+	virtual void Stop() override
+	{
+	}
+
+	virtual void Pause() override
+	{
+	}
+
+	virtual string GetAvailableDevices() override
+	{
+		return string();
+	}
+
+	virtual void SetAudioDevice(string deviceName) override
+	{
+	}
+};

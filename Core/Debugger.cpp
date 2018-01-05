@@ -840,31 +840,41 @@ void Debugger::SetNextStatement(uint16_t addr)
 
 void Debugger::ProcessPpuCycle()
 {
+#ifndef LIBRETRO
 	if(Debugger::Instance) {
 		Debugger::Instance->PrivateProcessPpuCycle();
 	}
+#endif
 }
 
 bool Debugger::ProcessRamOperation(MemoryOperationType type, uint16_t &addr, uint8_t &value)
 {
+#ifndef LIBRETRO
 	if(Debugger::Instance) {
 		return Debugger::Instance->PrivateProcessRamOperation(type, addr, value);
 	}
 	return true;
+#else
+	return true;
+#endif
 }
 
 void Debugger::ProcessVramReadOperation(MemoryOperationType type, uint16_t addr, uint8_t &value)
 {
+#ifndef LIBRETRO
 	if(Debugger::Instance) {
 		Debugger::Instance->PrivateProcessVramReadOperation(type, addr, value);
 	}
+#endif
 }
 
 void Debugger::ProcessVramWriteOperation(uint16_t addr, uint8_t &value)
 {
+#ifndef LIBRETRO
 	if(Debugger::Instance) {
 		Debugger::Instance->PrivateProcessVramWriteOperation(addr, value);
 	}
+#endif
 }
 
 void Debugger::GetCallstack(int32_t* callstackAbsolute, int32_t* callstackRelative)

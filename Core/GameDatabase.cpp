@@ -20,11 +20,52 @@ T GameDatabase::ToInt(string value)
 	return std::stoi(value);
 }
 
+void GameDatabase::LoadGameDb(vector<string> data)
+{
+	for(string &row : data) {
+		vector<string> values = StringUtilities::Split(row, ',');
+		if(values.size() >= 16) {
+			GameInfo gameInfo {
+				(uint32_t)std::stoll(values[0], nullptr, 16),
+				values[1],
+				values[2],
+				values[3],
+				values[4],
+				(uint16_t)ToInt<uint32_t>(values[5]),
+				ToInt<uint32_t>(values[6]),
+				ToInt<uint32_t>(values[7]),
+				ToInt<uint32_t>(values[8]),
+				ToInt<uint32_t>(values[9]),
+				ToInt<uint32_t>(values[10]),
+				ToInt<uint32_t>(values[11]) == 0 ? false : true,
+				values[12],
+				values[13],
+				values[14],
+				values[15]
+			};
+
+			if(gameInfo.MapperID == 65000) {
+				gameInfo.MapperID = UnifLoader::GetMapperID(gameInfo.Board);
+			}
+
+			if(!gameInfo.InputType.empty() && gameInfo.InputType[gameInfo.InputType.size() - 1] == '\r') {
+				gameInfo.InputType = gameInfo.InputType.substr(0, gameInfo.InputType.size() - 1);
+			}
+
+			_gameDatabase[gameInfo.Crc] = gameInfo;
+		}
+	}
+
+	MessageManager::Log();
+	MessageManager::Log("[DB] Initialized - " + std::to_string(_gameDatabase.size()) + " games in DB");
+}
+
 void GameDatabase::InitDatabase()
 {
 	if(_gameDatabase.size() == 0) {
 		string dbPath = FolderUtilities::CombinePath(FolderUtilities::GetHomeFolder(), "MesenDB.txt");
 		ifstream db(dbPath, ios::in | ios::binary);
+		vector<string> dbData;
 		while(db.good()) {
 			string lineContent;
 			std::getline(db, lineContent);
@@ -34,41 +75,9 @@ void GameDatabase::InitDatabase()
 			if(lineContent.empty() || lineContent[0] == '#') {
 				continue;
 			}
-			vector<string> values = StringUtilities::Split(lineContent, ',');
-			if(values.size() >= 16) {
-				GameInfo gameInfo{
-					(uint32_t)std::stoll(values[0], nullptr, 16),
-					values[1],
-					values[2],
-					values[3],
-					values[4],
-					(uint16_t)ToInt<uint32_t>(values[5]),
-					ToInt<uint32_t>(values[6]),
-					ToInt<uint32_t>(values[7]),
-					ToInt<uint32_t>(values[8]),
-					ToInt<uint32_t>(values[9]),
-					ToInt<uint32_t>(values[10]),
-					ToInt<uint32_t>(values[11]) == 0 ? false : true,
-					values[12],
-					values[13],
-					values[14],
-					values[15]
-				};
-
-				if(gameInfo.MapperID == 65000) {
-					gameInfo.MapperID = UnifLoader::GetMapperID(gameInfo.Board);
-				}
-
-				if(!gameInfo.InputType.empty() && gameInfo.InputType[gameInfo.InputType.size() - 1] == '\r') {
-					gameInfo.InputType = gameInfo.InputType.substr(0, gameInfo.InputType.size() - 1);
-				}
-
-				_gameDatabase[gameInfo.Crc] = gameInfo;
-			}
+			dbData.push_back(lineContent);
 		}
-
-		MessageManager::Log();
-		MessageManager::Log("[DB] Initialized - " + std::to_string(_gameDatabase.size()) + " games in DB");		
+		LoadGameDb(dbData);
 	}
 }
 
@@ -448,6 +457,10 @@ void GameDatabase::SetGameInfo(uint32_t romCrc, RomData &romData, bool updateRom
 		MessageManager::Log("[DB] Game not found in database");
 	}
 
+#ifdef LIBRETRO
+	SetVsSystemDefaults(romData.PrgCrc32);
+#endif
+
 	romData.DatabaseInfo = info;
 }
 
@@ -476,4 +489,219 @@ void GameDatabase::UpdateRomData(GameInfo &info, RomData &romData)
 			case 'a': romData.Mirroring = MirroringType::ScreenAOnly; break;
 		}
 	}
+}
+
+void GameDatabase::SetVsSystemDefaults(uint32_t prgCrc32)
+{
+	//Used by Libretro port since the data for VS system games is stored in the C# UI (needs to be refactored eventually)
+	VsInputType inputType = VsInputType::Default;
+	PpuModel model = PpuModel::Ppu2C03;
+	uint8_t defaultDip = 0;
+
+	switch(prgCrc32) {
+		case 0xEB2DBA63: case 0x98CFE016:
+			//TKOBoxing
+			inputType = VsInputType::TypeA;
+			model = PpuModel::Ppu2C04C;
+			break;
+
+		case 0x135ADF7C:
+			//RBIBaseball
+			inputType = VsInputType::TypeB;
+			model = PpuModel::Ppu2C04A;
+			break;
+
+		case 0xED588F00:
+			//"DuckHunt", use defaults
+			model = PpuModel::Ppu2C03;
+			break;
+
+		case 0x16D3F469:
+			//NinjaJajamaruKun
+			inputType = VsInputType::TypeC;
+			model = PpuModel::Ppu2C05A;
+			break;
+
+		case 0x8850924B:
+			//Tetris
+			model = PpuModel::Ppu2C03;
+			inputType = VsInputType::TypeB;
+			defaultDip = 32;
+			break;
+
+		case 0x8C0C2DF5:
+			//TopGun
+			inputType = VsInputType::TypeA;
+			model = PpuModel::Ppu2C05D;
+			break;
+
+		case 0x70901B25:
+			//Slalom
+			inputType = VsInputType::TypeA;
+			model = PpuModel::Ppu2C04B;
+			break;
+
+		case 0xCF36261E:
+			//SuperSkyKid
+			inputType = VsInputType::TypeC;
+			model = PpuModel::Ppu2C04A;
+			break;
+
+		case 0xE1AA8214:
+			//StarLuster
+			inputType = VsInputType::TypeA;
+			model = PpuModel::Ppu2C04A;
+			defaultDip = 32;
+			break;
+
+		case 0xD5D7EAC4:
+			//DrMario
+			inputType = VsInputType::TypeB;
+			model = PpuModel::Ppu2C04C;
+			break;
+
+		case 0xFFBEF374:
+			//Castlevania
+			inputType = VsInputType::TypeA;
+			model = PpuModel::Ppu2C04B;
+			break;
+
+		case 0xE2C0A2BE:
+			//Platoon
+			inputType = VsInputType::TypeA;
+			model = PpuModel::Ppu2C04A;
+			break;
+
+		case 0x29155E0C:
+			//ExciteBike
+			inputType = VsInputType::TypeA;
+			model = PpuModel::Ppu2C04D;
+			break;
+
+		case 0xCBE85490:
+			//ExciteBikeB
+			inputType = VsInputType::TypeA;
+			model = PpuModel::Ppu2C04C;
+			break;
+
+		case 0x07138C06:
+			//Clu Clu Land
+			inputType = VsInputType::TypeB;
+			model = PpuModel::Ppu2C04D;
+			break;
+
+		case 0x43A357EF:
+			//IceClimber
+			inputType = VsInputType::TypeB;
+			model = PpuModel::Ppu2C04D;
+			break;
+
+		case 0xD4EB5923:
+			//IceClimberB
+			inputType = VsInputType::TypeD;
+			model = PpuModel::Ppu2C04D;
+			break;
+
+		case 0x737DD1BF: case 0x4BF3972D: case 0x8B60CC58: case 0x8192C804:
+			//SuperMarioBros
+			inputType = VsInputType::TypeA;
+			model = PpuModel::Ppu2C04D;
+			break;
+
+		case 0xE528F651:
+			//Pinball
+			inputType = VsInputType::TypeE;
+			model = PpuModel::Ppu2C03;
+			break;
+
+		case 0xEC461DB9:
+			//PinballB
+			inputType = VsInputType::TypeA;
+			model = PpuModel::Ppu2C04A;
+			break;
+
+		case 0xAE8063EF:
+			//MachRiderFightingCourse, defaults
+			model = PpuModel::Ppu2C03;
+			break;
+
+		case 0x0B65A917: case 0x8A6A9848:
+			//MachRider
+			inputType = VsInputType::TypeA;
+			model = PpuModel::Ppu2C04B;
+			break;
+
+		case 0x46914E3E:
+			//Soccer
+			inputType = VsInputType::TypeB;
+			model = PpuModel::Ppu2C04C;
+			break;
+			
+		case 0x70433F2C:
+			//Battle City
+			inputType = VsInputType::TypeB;
+			model = PpuModel::Ppu2C04A;
+			break;
+
+		case 0xD99A2087:
+			//Gradius
+			inputType = VsInputType::TypeB;
+			model = PpuModel::Ppu2C04A;
+			break;
+
+		case 0x1E438D52:
+			//Goonies
+			inputType = VsInputType::TypeA;
+			model = PpuModel::Ppu2C04C;
+			break;
+
+		case 0xFF5135A3:
+			//HoganAlley
+			model = PpuModel::Ppu2C04A;
+			break;
+
+		case 0x17AE56BE:
+			//FreedomForce
+			model = PpuModel::Ppu2C04A;
+			break;
+
+		case 0xC99EC059:
+			//RaidBungelingBay
+			inputType = VsInputType::TypeD;
+			model = PpuModel::Ppu2C04B;
+			break;
+
+		case 0xF9D3B0A3: case 0x66BB838F: case 0x9924980A:
+			//SuperXevious
+			inputType = VsInputType::TypeA;
+			model = PpuModel::Ppu2C04A;
+			break;
+
+		case 0xA93A5AEE:
+			//Golf
+			inputType = VsInputType::TypeB;
+			model = PpuModel::Ppu2C03;
+			break;
+
+		case 0xCC2C4B5D: case 0x86167220:
+			//GolfB
+			inputType = VsInputType::TypeB;
+			model = PpuModel::Ppu2C04B;
+			break;
+
+		case 0xCA85E56D:
+			//MightyBombJack
+			inputType = VsInputType::TypeA;
+			model = PpuModel::Ppu2C05B;
+			break;
+
+		case 0xFE446787:
+			//Gumshoe
+			model = PpuModel::Ppu2C05C;
+			break;
+	}
+
+	EmulationSettings::SetPpuModel(model);
+	EmulationSettings::SetDipSwitches(defaultDip);
+	EmulationSettings::SetVsInputType(inputType);
 }

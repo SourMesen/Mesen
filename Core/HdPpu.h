@@ -155,13 +155,16 @@ public:
 	{
 		MessageManager::SendNotification(ConsoleNotificationType::PpuFrameDone, _currentOutputBuffer);
 
+#ifdef  LIBRETRO
+		VideoDecoder::GetInstance()->UpdateFrameSync(_currentOutputBuffer, _screenTiles);
+#else
 		if(RewindManager::IsRewinding()) {
 			VideoDecoder::GetInstance()->UpdateFrameSync(_currentOutputBuffer, _screenTiles);
 		} else {
 			VideoDecoder::GetInstance()->UpdateFrame(_currentOutputBuffer, _screenTiles);
 		}
-
 		_currentOutputBuffer = (_currentOutputBuffer == _outputBuffers[0]) ? _outputBuffers[1] : _outputBuffers[0];
 		_screenTiles = (_screenTiles == _screenTileBuffers[0]) ? _screenTileBuffers[1] : _screenTileBuffers[0];
+#endif
 	}
 };

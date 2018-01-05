@@ -37,12 +37,9 @@ VsControlManager* VsControlManager::GetInstance()
 void VsControlManager::StreamState(bool saving)
 {
 	ControlManager::StreamState(saving);
-	Stream(_prgChrSelectBit, _protectionCounter, _refreshState, _inputType);
-}
 
-void VsControlManager::SetInputType(VsInputType inputType)
-{
-	_inputType = inputType;
+	VsInputType unusedInputType = VsInputType::Default;
+	Stream(_prgChrSelectBit, _protectionCounter, _refreshState, unusedInputType);
 }
 
 void VsControlManager::GetMemoryRanges(MemoryRanges &ranges)
@@ -67,14 +64,15 @@ void VsControlManager::RemapControllerButtons()
 		return;
 	}
 
-	if(_inputType == VsInputType::TypeA) {
+	VsInputType inputType = EmulationSettings::GetVsInputType();
+	if(inputType == VsInputType::TypeA) {
 		BaseControlDevice::SwapButtons(controllers[0], StandardController::Buttons::Select, controllers[0], StandardController::Buttons::Start);
 		BaseControlDevice::SwapButtons(controllers[1], StandardController::Buttons::Select, controllers[1], StandardController::Buttons::Start);
-	} else if(_inputType == VsInputType::TypeB) {
+	} else if(inputType == VsInputType::TypeB) {
 		std::swap(controllers[0], controllers[1]);
 		BaseControlDevice::SwapButtons(controllers[1], StandardController::Buttons::Select, controllers[0], StandardController::Buttons::Start);
 		BaseControlDevice::SwapButtons(controllers[0], StandardController::Buttons::Select, controllers[1], StandardController::Buttons::Start);
-	} else if(_inputType == VsInputType::TypeC) {
+	} else if(inputType == VsInputType::TypeC) {
 		std::swap(controllers[0], controllers[1]);
 
 		if(controllers[0]->IsPressed(StandardController::Buttons::Start)) {
@@ -85,13 +83,13 @@ void VsControlManager::RemapControllerButtons()
 
 		controllers[0]->ClearBit(StandardController::Buttons::Start);
 		controllers[0]->ClearBit(StandardController::Buttons::Select);
-	} else if(_inputType == VsInputType::TypeD) {
+	} else if(inputType == VsInputType::TypeD) {
 		std::swap(controllers[0], controllers[1]);
 		BaseControlDevice::SwapButtons(controllers[1], StandardController::Buttons::Select, controllers[0], StandardController::Buttons::Start);
 		BaseControlDevice::SwapButtons(controllers[0], StandardController::Buttons::Select, controllers[1], StandardController::Buttons::Start);
 		controllers[0]->InvertBit(StandardController::Buttons::Select);
 		controllers[1]->InvertBit(StandardController::Buttons::Select);
-	} else if(_inputType == VsInputType::TypeE) {
+	} else if(inputType == VsInputType::TypeE) {
 		BaseControlDevice::SwapButtons(controllers[0], StandardController::Buttons::B, controllers[1], StandardController::Buttons::A);
 		BaseControlDevice::SwapButtons(controllers[0], StandardController::Buttons::Select, controllers[0], StandardController::Buttons::Start);
 		BaseControlDevice::SwapButtons(controllers[1], StandardController::Buttons::Select, controllers[1], StandardController::Buttons::Start);

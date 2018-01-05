@@ -63,11 +63,15 @@ void Console::Release()
 
 void Console::SaveBatteries()
 {
-	_mapper->SaveBattery();
+	if(_mapper) {
+		_mapper->SaveBattery();
+	}
 
-	shared_ptr<IBattery> device = std::dynamic_pointer_cast<IBattery>(_controlManager->GetControlDevice(BaseControlDevice::ExpDevicePort));
-	if(device) {
-		device->SaveBattery();
+	if(_controlManager) {
+		shared_ptr<IBattery> device = std::dynamic_pointer_cast<IBattery>(_controlManager->GetControlDevice(BaseControlDevice::ExpDevicePort));
+		if(device) {
+			device->SaveBattery();
+		}
 	}
 }
 
@@ -115,7 +119,10 @@ bool Console::Initialize(VirtualFile &romFile, VirtualFile &patchFile)
 				StopRecordingHdPack();
 			}
 
+#ifndef LIBRETRO
+			//Don't use auto-save manager for libretro
 			_autoSaveManager.reset(new AutoSaveManager());
+#endif
 
 			_mapper = mapper;
 			_memoryManager.reset(new MemoryManager(_mapper));
@@ -123,9 +130,18 @@ bool Console::Initialize(VirtualFile &romFile, VirtualFile &patchFile)
 			_apu.reset(new APU(_memoryManager.get()));
 
 			switch(_mapper->GetGameSystem()) {
-				case GameSystem::FDS: _systemActionManager.reset(new FdsSystemActionManager(Console::GetInstance(), _mapper)); break;
-				case GameSystem::VsUniSystem: _systemActionManager.reset(new VsSystemActionManager(Console::GetInstance())); break;
-				default: _systemActionManager.reset(new SystemActionManager(Console::GetInstance())); break;
+				case GameSystem::FDS:
+					EmulationSettings::SetPpuModel(PpuModel::Ppu2C02);
+					_systemActionManager.reset(new FdsSystemActionManager(Console::GetInstance(), _mapper));
+					break;
+				
+				case GameSystem::VsUniSystem:
+					_systemActionManager.reset(new VsSystemActionManager(Console::GetInstance()));
+					break;
+				
+				default: 
+					EmulationSettings::SetPpuModel(PpuModel::Ppu2C02);
+					_systemActionManager.reset(new SystemActionManager(Console::GetInstance())); break;
 			}
 
 			//Temporarely disable battery saves to prevent battery files from being created for the wrong game (for Battle Box & Turbo File)
@@ -397,6 +413,24 @@ void Console::Resume()
 		//Make sure debugger resumes if we try to pause the emu, otherwise we will get deadlocked.
 		debugger->Resume();
 	}
+}
+
+void Console::RunSingleFrame()
+{
+	//Used by Libretro
+	uint32_t lastFrameNumber = PPU::GetFrameCount();
+	_emulationThreadId = std::this_thread::get_id();
+	UpdateNesModel(false);
+
+	while(PPU::GetFrameCount() == lastFrameNumber) {
+		_cpu->Exec();
+	}
+
+	EmulationSettings::DisableOverclocking(_disableOcNextFrame || NsfMapper::GetInstance());
+	_disableOcNextFrame = false;
+
+	_systemActionManager->ProcessSystemActions();
+	_apu->EndFrame();
 }
 
 void Console::Run()
@@ -769,6 +803,44 @@ void Console::StopRecordingHdPack()
 		Instance->LoadState(saveState);
 		Console::Resume();
 	}
+}
+
+bool Console::UpdateHdPackMode()
+{
+	//Switch back and forth between HD PPU and regular PPU as needed
+	Console::Pause();
+
+	VirtualFile romFile = _romFilepath;
+	VirtualFile patchFile = _patchFilename;
+	LoadHdPack(romFile, patchFile);
+
+	bool isHdPackLoaded = std::dynamic_pointer_cast<HdPpu>(_ppu) != nullptr;
+	bool hdPackFound = _hdData && (!_hdData->Tiles.empty() || !_hdData->Backgrounds.empty());
+
+	bool modeChanged = false;
+	if(isHdPackLoaded != hdPackFound) {
+		std::stringstream saveState;
+		Instance->SaveState(saveState);
+
+		Instance->_memoryManager->UnregisterIODevice(Instance->_ppu.get());
+		Instance->_ppu.reset();
+		if(_hdData && (!_hdData->Tiles.empty() || !_hdData->Backgrounds.empty())) {
+			_ppu.reset(new HdPpu(_mapper.get(), _controlManager.get(), _hdData->Version));
+		} else if(std::dynamic_pointer_cast<NsfMapper>(_mapper)) {
+			//Disable most of the PPU for NSFs
+			_ppu.reset(new NsfPpu(_mapper.get(), _controlManager.get()));
+		} else {
+			_ppu.reset(new PPU(_mapper.get(), _controlManager.get()));
+		}
+		Instance->_memoryManager->RegisterIODevice(Instance->_ppu.get());
+
+		Instance->LoadState(saveState);
+		modeChanged = true;
+	}
+
+	Console::Resume();
+	
+	return modeChanged;
 }
 
 ConsoleFeatures Console::GetAvailableFeatures()

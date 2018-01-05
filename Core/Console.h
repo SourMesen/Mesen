@@ -68,13 +68,17 @@ class Console
 		void UpdateNesModel(bool sendNotification);
 		double GetFrameDelay();
 
-		void SaveBatteries();
-
 	public:
 		Console();
 		~Console();
+
+		void SaveBatteries();
+
 		void Run();
 		void Stop();
+		
+		void RunSingleFrame();
+		bool UpdateHdPackMode();
 
 		shared_ptr<SystemActionManager> GetSystemActionManager();
 

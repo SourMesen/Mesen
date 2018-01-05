@@ -10,22 +10,11 @@
 
 class BaseControlDevice;
 
-enum class VsInputType
-{
-	Default = 0,
-	TypeA = 1,
-	TypeB = 2,
-	TypeC = 3,
-	TypeD = 4,
-	TypeE = 5
-};
-
 class VsControlManager : public ControlManager
 {
 private:
 	static VsControlManager *_instance;
 	uint8_t _prgChrSelectBit;
-	VsInputType _inputType = VsInputType::Default;
 	bool _refreshState = false;
 
 	uint32_t _protectionCounter = 0;

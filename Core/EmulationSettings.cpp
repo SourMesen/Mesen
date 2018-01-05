@@ -18,7 +18,7 @@ uint64_t EmulationSettings::_flags = 0;
 bool EmulationSettings::_audioSettingsChanged = true;
 uint32_t EmulationSettings::_audioLatency = 50;
 double EmulationSettings::_channelVolume[11] = { 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0 };
-double EmulationSettings::_channelPanning[11] = { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 };
+double EmulationSettings::_channelPanning[11] = { 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0 };
 EqualizerFilterType EmulationSettings::_equalizerFilterType = EqualizerFilterType::None;
 vector<double> EmulationSettings::_bandGains = { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 };
 vector<double> EmulationSettings::_bands = { { 40,56,80,113,160,225,320,450,600,750,1000,2000,3000,4000,5000,6000,7000,10000,12500,15000 } };
@@ -64,6 +64,7 @@ std::unordered_map<uint32_t, vector<KeyCombination>> EmulationSettings::_shortcu
 
 RamPowerOnState EmulationSettings::_ramPowerOnState = RamPowerOnState::AllZeros;
 uint32_t EmulationSettings::_dipSwitches = 0;
+VsInputType EmulationSettings::_vsInputType = VsInputType::Default;
 
 InputDisplaySettings EmulationSettings::_inputDisplaySettings = { 0, InputDisplayPosition::TopLeft, false };
 

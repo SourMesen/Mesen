@@ -285,6 +285,16 @@ enum class PpuModel
 	Ppu2C05E = 10
 };
 
+enum class VsInputType
+{
+	Default = 0,
+	TypeA = 1,
+	TypeB = 2,
+	TypeC = 3,
+	TypeD = 4,
+	TypeE = 5
+};
+
 struct KeyMapping
 {
 	uint32_t A = 0;
@@ -634,6 +644,7 @@ private:
 
 	static RamPowerOnState _ramPowerOnState;
 	static uint32_t _dipSwitches;
+	static VsInputType _vsInputType;
 	
 	static SimpleLock _shortcutLock;
 	static SimpleLock _equalizerLock;
@@ -1405,6 +1416,16 @@ public:
 	static uint32_t GetDipSwitches()
 	{
 		return _dipSwitches;
+	}
+
+	static void SetVsInputType(VsInputType inputType)
+	{
+		_vsInputType = inputType;
+	}
+
+	static VsInputType GetVsInputType()
+	{
+		return _vsInputType;
 	}
 
 	static bool IsKeyboardMode()

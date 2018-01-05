@@ -557,7 +557,7 @@ namespace InteropEmu {
 			if(vs) {
 				EmulationSettings::SetPpuModel(model);
 				EmulationSettings::SetDipSwitches(dipSwitches);
-				vs->SetInputType(inputType);
+				EmulationSettings::SetVsInputType(inputType);
 			}
 		}
 
