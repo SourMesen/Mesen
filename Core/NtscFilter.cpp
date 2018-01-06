@@ -92,7 +92,7 @@ void NtscFilter::DoubleOutputHeight(uint32_t *ntscBuffer)
 			uint32_t prev = in[overscanLeft];
 			uint32_t next = y < 239 ? in[overscanLeft + rowWidth] : 0;
 			
-			*out = prev;
+			*out = 0xFF000000 | prev;
 
 			/* mix 24-bit rgb without losing low bits */
 			uint32_t mixed = (prev + next + ((prev ^ next) & 0x030303)) >> 1;
