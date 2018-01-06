@@ -583,6 +583,7 @@ extern "C" {
 		update_settings();
 
 		//Plug in 2 standard controllers by default, game database will switch the controller types for recognized games
+		EmulationSettings::SetMasterVolume(10.0);
 		EmulationSettings::SetControllerType(0, ControllerType::StandardController);
 		EmulationSettings::SetControllerType(1, ControllerType::StandardController);
 		EmulationSettings::SetControllerType(2, ControllerType::None);
