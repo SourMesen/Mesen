@@ -241,7 +241,7 @@ endif
 else
   OBJOUT   = -o
   LINKOUT  = -o 
-  LD = $(CC)
+  LD = $(CXX)
 endif
 
 include Makefile.common
