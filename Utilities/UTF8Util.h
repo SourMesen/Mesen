@@ -11,7 +11,7 @@ namespace utf8 {
 		static std::string encode(const std::u16string &wstr);
 	};
 		
-#ifdef _WIN32
+#if defined(_WIN32) && !defined(LIBRETRO)
 	class ifstream : public std::ifstream
 	{
 	public:
