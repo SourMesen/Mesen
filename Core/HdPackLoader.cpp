@@ -130,6 +130,10 @@ bool HdPackLoader::LoadPack()
 		InitializeGlobalConditions();
 
 		for(string lineContent : StringUtilities::Split(string(hdDefinition.data(), hdDefinition.data() + hdDefinition.size()), '\n')) {
+			if(lineContent.empty()) {
+				continue;
+			}
+
 			if(lineContent[lineContent.size() - 1] == '\r') {
 				lineContent = lineContent.substr(0, lineContent.size() - 1);
 			}
