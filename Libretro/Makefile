@@ -104,12 +104,19 @@ else ifeq ($(platform), vita)
    CXXFLAGS += -Wl,-q -Wall -O3
 	STATIC_LINKING = 1
 else
-   CC := gcc
+   CC = gcc
+   CXX = g++
    TARGET := $(TARGET_NAME)_libretro.dll
-   SHARED := -shared -static-libgcc -static-libstdc++ -s -Wl,--version-script=$(LIBRETRO_DIR)/link.T -Wl,--no-undefined
+   SHARED := -shared -s -Wl,--version-script=$(LIBRETRO_DIR)/link.T -Wl,--no-undefined
 endif
 
 LDFLAGS += $(LIBM)
+
+ifeq ($(LTO),true)
+   CFLAGS += -flto
+   CXXFLAGS += -flto
+   LD = g++
+endif
 
 ifeq ($(DEBUG), 1)
    CXXFLAGS += -O0 -g
