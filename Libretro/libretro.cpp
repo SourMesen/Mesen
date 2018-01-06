@@ -122,7 +122,7 @@ extern "C" {
 			{ MesenRegion, "Region; Auto|NTSC|PAL|Dendy" },
 			{ MesenOverscanVertical, "Vertical Overscan; None|8px|16px" },
 			{ MesenOverscanHorizontal, "Horizontal Overscan; None|8px|16px" },
-			{ MesenAspectRatio ,  "Aspect Ratio; Auto|No Stretching|NTSC|PAL" },
+			{ MesenAspectRatio ,  "Aspect Ratio; Auto|No Stretching|NTSC|PAL|4:3|16:9" },
 			{ MesenControllerTurboSpeed, "Controller Turbo Speed; Fast|Very Fast|Slow|Normal" },
 			{ MesenHdPacks, "Enable HD Packs; enabled|disabled" },
 			{ MesenNoSpriteLimit, "Remove sprite limit; enabled|disabled" },
@@ -361,6 +361,10 @@ extern "C" {
 				EmulationSettings::SetVideoAspectRatio(VideoAspectRatio::NTSC, 1.0);
 			} else if(value == "PAL") {
 				EmulationSettings::SetVideoAspectRatio(VideoAspectRatio::PAL, 1.0);
+			} else if(value == "4:3") {
+				EmulationSettings::SetVideoAspectRatio(VideoAspectRatio::Standard, 1.0);
+			} else if(value == "16:9") {
+				EmulationSettings::SetVideoAspectRatio(VideoAspectRatio::Widescreen, 1.0);
 			}
 		}
 
