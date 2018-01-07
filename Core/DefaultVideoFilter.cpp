@@ -79,7 +79,7 @@ void DefaultVideoFilter::DecodePpuBuffer(uint16_t *ppuOutputBuffer, uint32_t* ou
 
 void DefaultVideoFilter::ApplyFilter(uint16_t *ppuOutputBuffer)
 {
-	DecodePpuBuffer(ppuOutputBuffer, (uint32_t*)GetOutputBuffer(), true);
+	DecodePpuBuffer(ppuOutputBuffer, (uint32_t*)GetOutputBuffer(), EmulationSettings::GetVideoFilterType() <= VideoFilterType::BisqwitNtsc);
 }
 
 void DefaultVideoFilter::RgbToYiq(double r, double g, double b, double &y, double &i, double &q)
