@@ -1046,7 +1046,6 @@ void PPU::SendFrame()
 
 void PPU::BeginVBlank()
 {
-	SendFrame();
 	TriggerNmi();
 }
 
@@ -1078,7 +1077,6 @@ void PPU::Exec()
 		_cycle = 0;
 		if(++_scanline > _vblankEnd) {
 			_lastUpdatedPixel = -1;
-			_frameCount++;
 			_scanline = -1;
 			UpdateMinimumDrawCycles();
 		}
@@ -1095,6 +1093,9 @@ void PPU::Exec()
 		if(_scanline == -1) {
 			_statusFlags.SpriteOverflow = false;
 			_statusFlags.Sprite0Hit = false;
+		} else if(_scanline == 240) {
+			_frameCount++;
+			SendFrame();
 		} else if(_scanline == _nmiScanline) {
 			BeginVBlank();
 		}
