@@ -916,3 +916,19 @@ bool Console::IsRecordingTapeFile()
 
 	return false;
 }
+
+uint8_t* Console::GetRamBuffer(DebugMemoryType memoryType, uint32_t &size)
+{
+	//Only used by libretro port for achievements - should not be used by anything else.
+	switch(memoryType) {
+		case DebugMemoryType::InternalRam:
+			size = MemoryManager::InternalRAMSize;
+			return _memoryManager->GetInternalRAM();
+
+		case DebugMemoryType::SaveRam:
+			size = _mapper->GetMemorySize(DebugMemoryType::SaveRam);
+			return _mapper->GetSaveRam();
+	}
+
+	throw std::runtime_error("unsupported memory type");
+}

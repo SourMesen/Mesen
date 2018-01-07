@@ -12,6 +12,7 @@
 #include "../Core/VideoRenderer.h"
 #include "../Core/EmulationSettings.h"
 #include "../Core/CheatManager.h"
+#include "../Core/DebuggerTypes.h"
 #include "../Utilities/FolderUtilities.h"
 #include "../Utilities/HexUtilities.h"
 
@@ -131,7 +132,7 @@ extern "C" {
 			{ MesenReduceDmcPopping, u8"Reduce popping on DMC channel; enabled|disabled" },
 			{ MesenSwapDutyCycle, u8"Swap Square channel duty cycles; disabled|enabled" },
 			{ MesenDisableNoiseModeFlag, u8"Disable Noise channel mode flag; disabled|enabled" },
-			{ MesenScreenRotation, u8"Screen Rotation; None|90\u00B0|180\u00B0|270\u00B0" },
+			{ MesenScreenRotation, u8"Screen Rotation; None|90 degrees|180 degrees|270 degrees" },
 			{ MesenRamState, "Default power-on state for RAM; All 0s (Default)|All 1s|Random Values" },
 			{ MesenFdsAutoSelectDisk, "FDS: Automatically insert disks; disabled|enabled" },
 			{ MesenFdsFastForwardLoad, "FDS: Fast forward while loading; disabled|enabled" },
@@ -399,11 +400,11 @@ extern "C" {
 			string value = string(var.value);
 			if(value == "None") {
 				EmulationSettings::SetScreenRotation(0);
-			} else if(value == u8"90\u00B0") {
+			} else if(value == u8"90 degrees") {
 				EmulationSettings::SetScreenRotation(90);
-			} else if(value == u8"180\u00B0") {
+			} else if(value == u8"180 degrees") {
 				EmulationSettings::SetScreenRotation(180);
-			} else if(value == u8"270\u00B0") {
+			} else if(value == u8"270 degrees") {
 				EmulationSettings::SetScreenRotation(270);
 			}
 		}
@@ -671,11 +672,21 @@ extern "C" {
 
 	RETRO_API void *retro_get_memory_data(unsigned id)
 	{
+		uint32_t size;
+		switch(id) {
+			case RETRO_MEMORY_SAVE_RAM: return Console::GetInstance()->GetRamBuffer(DebugMemoryType::SaveRam, size);
+			case RETRO_MEMORY_SYSTEM_RAM: return Console::GetInstance()->GetRamBuffer(DebugMemoryType::InternalRam, size);
+		}
 		return nullptr;
 	}
 
 	RETRO_API size_t retro_get_memory_size(unsigned id)
 	{
-		return 0;
+		uint32_t size = 0;
+		switch(id) {
+			case RETRO_MEMORY_SAVE_RAM: Console::GetInstance()->GetRamBuffer(DebugMemoryType::SaveRam, size); break;
+			case RETRO_MEMORY_SYSTEM_RAM: Console::GetInstance()->GetRamBuffer(DebugMemoryType::InternalRam, size); break;
+		}
+		return size;
 	}
 }

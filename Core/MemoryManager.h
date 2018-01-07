@@ -10,7 +10,6 @@ class MemoryManager: public Snapshotable
 {
 	private:
 		static const int RAMSize = 0x10000;
-		static const int InternalRAMSize = 0x800;
 		static const int VRAMSize = 0x4000;
 		static const int NameTableScreenSize = 0x400;
 
@@ -32,6 +31,8 @@ class MemoryManager: public Snapshotable
 		void StreamState(bool saving) override;
 
 	public:
+		static const int InternalRAMSize = 0x800;
+
 		MemoryManager(shared_ptr<BaseMapper> mapper);
 		~MemoryManager();
 

@@ -23,6 +23,7 @@ struct HdPackData;
 enum class NesModel;
 enum class ScaleFilterType;
 enum class ConsoleFeatures;
+enum class DebugMemoryType;
 
 class Console
 {
@@ -144,4 +145,6 @@ class Console
 
 		static shared_ptr<Console> GetInstance();
 		static void Release();
+
+		uint8_t* GetRamBuffer(DebugMemoryType memoryType, uint32_t &size);
 };
