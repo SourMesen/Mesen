@@ -43,6 +43,7 @@ shared_ptr<Console> Console::Instance(new Console());
 
 Console::Console()
 {
+	_model = NesModel::NTSC;
 }
 
 Console::~Console()

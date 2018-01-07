@@ -51,7 +51,7 @@ class Console
 		unique_ptr<HdPackData> _hdData;
 		unique_ptr<HdAudioDevice> _hdAudioDevice;
 
-		NesModel _model = NesModel::NTSC;
+		NesModel _model;
 
 		string _romFilepath;
 		string _patchFilename;
