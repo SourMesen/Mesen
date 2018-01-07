@@ -250,6 +250,7 @@
       <Control ID="trkResolution">Resolució</Control>
       <Control ID="trkSharpness">Nitidesa</Control>
       <Control ID="chkMergeFields">Fusiona els camps</Control>
+      <Control ID="chkVerticalBlend">Apply Vertical Blending</Control>
 
       <Control ID="trkYFilterLength">Filtre Y (desenfocament horitzontal)</Control>
       <Control ID="trkIFilterLength">Filtre I (dispersió horitzontal)</Control>

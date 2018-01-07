@@ -83,31 +83,42 @@ void NtscFilter::DoubleOutputHeight(uint32_t *ntscBuffer)
 	int rowWidthOverscan = rowWidth - overscanLeft - overscanRight;
 
 	double scanlineIntensity = 1.0 - EmulationSettings::GetPictureSettings().ScanlineIntensity;
+	bool verticalBlend = EmulationSettings::GetNtscFilterSettings().VerticalBlend;
 
 	for(int y = PPU::ScreenHeight - 1 - overscan.Bottom; y >= (int)overscan.Top; y--) {
 		uint32_t const* in = ntscBuffer + y * rowWidth;
 		uint32_t* out = outputBuffer + (y - overscan.Top) * 2 * rowWidthOverscan;
 
-		for(int x = 0; x < rowWidthOverscan; x++) {
-			uint32_t prev = in[overscanLeft];
-			uint32_t next = y < 239 ? in[overscanLeft + rowWidth] : 0;
-			
-			*out = 0xFF000000 | prev;
+		if(verticalBlend || scanlineIntensity < 1.0) {
+			for(int x = 0; x < rowWidthOverscan; x++) {
+				uint32_t prev = in[overscanLeft];
+				uint32_t next = y < 239 ? in[overscanLeft + rowWidth] : 0;
 
-			/* mix 24-bit rgb without losing low bits */
-			uint32_t mixed = (prev + next + ((prev ^ next) & 0x030303)) >> 1;
+				*out = 0xFF000000 | prev;
 
-			if(scanlineIntensity < 1.0) {
-				uint8_t r = (mixed >> 16) & 0xFF, g = (mixed >> 8) & 0xFF, b = mixed & 0xFF;
-				r = (uint8_t)(r * scanlineIntensity);
-				g = (uint8_t)(g * scanlineIntensity);
-				b = (uint8_t)(b * scanlineIntensity);
-				*(out + rowWidthOverscan) = 0xFF000000 | (r << 16) | (g << 8) | b;
-			} else {
-				*(out + rowWidthOverscan) = 0xFF000000 | mixed;
+				/* mix 24-bit rgb without losing low bits */
+				uint32_t mixed;
+				if(verticalBlend) {
+					mixed = (prev + next + ((prev ^ next) & 0x030303)) >> 1;
+				} else {
+					mixed = prev;
+				}
+
+				if(scanlineIntensity < 1.0) {
+					uint8_t r = (mixed >> 16) & 0xFF, g = (mixed >> 8) & 0xFF, b = mixed & 0xFF;
+					r = (uint8_t)(r * scanlineIntensity);
+					g = (uint8_t)(g * scanlineIntensity);
+					b = (uint8_t)(b * scanlineIntensity);
+					*(out + rowWidthOverscan) = 0xFF000000 | (r << 16) | (g << 8) | b;
+				} else {
+					*(out + rowWidthOverscan) = 0xFF000000 | mixed;
+				}
+				in++;
+				out++;
 			}
-			in++;
-			out++;
+		} else {
+			memcpy(out, in+overscanLeft, rowWidthOverscan * sizeof(uint32_t));
+			memcpy(out + rowWidthOverscan, in + overscanLeft, rowWidthOverscan * sizeof(uint32_t));
 		}
 	}
 }

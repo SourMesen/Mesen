@@ -59,6 +59,7 @@ namespace Mesen.GUI.Forms.Config
 			AddBinding("NtscResolution", trkResolution);
 			AddBinding("NtscSharpness", trkSharpness);
 			AddBinding("NtscMergeFields", chkMergeFields);
+			AddBinding("NtscVerticalBlend", chkVerticalBlend);
 
 			AddBinding("NtscYFilterLength", trkYFilterLength);
 			AddBinding("NtscIFilterLength", trkIFilterLength);
@@ -109,10 +110,12 @@ namespace Mesen.GUI.Forms.Config
 			if(filter == VideoFilterType.NTSC) {
 				tlpNtscFilter1.Visible = true;
 				tlpNtscFilter2.Visible = false;
+				chkMergeFields.Visible = true;
 				grpNtscFilter.Visible = true;
 			} else if(filter == VideoFilterType.BisqwitNtsc || filter == VideoFilterType.BisqwitNtscHalfRes || filter == VideoFilterType.BisqwitNtscQuarterRes) {
-				tlpNtscFilter1.Visible = false;
+				tlpNtscFilter1.Visible = true;
 				tlpNtscFilter2.Visible = true;
+				chkMergeFields.Visible = false;
 				grpNtscFilter.Visible = true;
 			} else {
 				grpNtscFilter.Visible = false;
@@ -209,6 +212,7 @@ namespace Mesen.GUI.Forms.Config
 			trkResolution.Value = 0;
 			trkSharpness.Value = 0;
 			chkMergeFields.Checked = false;
+			chkVerticalBlend.Checked = true;
 
 			trkYFilterLength.Value = 0;
 			trkIFilterLength.Value = 50;

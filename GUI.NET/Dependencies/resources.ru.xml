@@ -249,6 +249,7 @@
       <Control ID="trkResolution">Разрешение</Control>
       <Control ID="trkSharpness">Резкость</Control>
       <Control ID="chkMergeFields">Слияние полей</Control>
+      <Control ID="chkVerticalBlend">Apply Vertical Blending</Control>
 
       <Control ID="trkYFilterLength">Y Filter (Horizontal Blur)</Control>
       <Control ID="trkIFilterLength">I Filter (Horizontal Bleed)</Control>

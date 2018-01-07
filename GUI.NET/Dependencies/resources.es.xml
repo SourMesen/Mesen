@@ -249,6 +249,7 @@
       <Control ID="trkResolution">Resolución</Control>
       <Control ID="trkSharpness">Nitidez</Control>
       <Control ID="chkMergeFields">Combinar imágenes alternas</Control>
+      <Control ID="chkVerticalBlend">Apply Vertical Blending</Control>
 
       <Control ID="trkYFilterLength">Filtro Y (Difuminado horizontal)</Control>
       <Control ID="trkIFilterLength">Filtro I (Dispersión horizontal)</Control>

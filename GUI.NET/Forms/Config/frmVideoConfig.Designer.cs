@@ -46,8 +46,9 @@ namespace Mesen.GUI.Forms.Config
 			this.chkFullscreenForceIntegerScale = new System.Windows.Forms.CheckBox();
 			this.chkShowFps = new System.Windows.Forms.CheckBox();
 			this.chkIntegerFpsMode = new System.Windows.Forms.CheckBox();
-			this.cboRefreshRate = new System.Windows.Forms.ComboBox();
+			this.flpRefreshRate = new System.Windows.Forms.FlowLayoutPanel();
 			this.lblRequestedRefreshRate = new System.Windows.Forms.Label();
+			this.cboRefreshRate = new System.Windows.Forms.ComboBox();
 			this.tabMain = new System.Windows.Forms.TabControl();
 			this.tpgGeneral = new System.Windows.Forms.TabPage();
 			this.tpgPicture = new System.Windows.Forms.TabPage();
@@ -67,6 +68,8 @@ namespace Mesen.GUI.Forms.Config
 			this.trkGamma = new Mesen.GUI.Controls.ctrlHorizontalTrackbar();
 			this.trkResolution = new Mesen.GUI.Controls.ctrlHorizontalTrackbar();
 			this.trkSharpness = new Mesen.GUI.Controls.ctrlHorizontalTrackbar();
+			this.tableLayoutPanel6 = new System.Windows.Forms.TableLayoutPanel();
+			this.chkVerticalBlend = new System.Windows.Forms.CheckBox();
 			this.chkMergeFields = new System.Windows.Forms.CheckBox();
 			this.grpCommon = new System.Windows.Forms.GroupBox();
 			this.tableLayoutPanel4 = new System.Windows.Forms.TableLayoutPanel();
@@ -130,11 +133,11 @@ namespace Mesen.GUI.Forms.Config
 			this.mnuPaletteSonyCxa2025As = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuPaletteUnsaturated = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuPaletteYuv = new System.Windows.Forms.ToolStripMenuItem();
-			this.flpRefreshRate = new System.Windows.Forms.FlowLayoutPanel();
 			this.tlpMain.SuspendLayout();
 			this.flowLayoutPanel7.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.picHdNesTooltip)).BeginInit();
 			this.flowLayoutPanel6.SuspendLayout();
+			this.flpRefreshRate.SuspendLayout();
 			this.tabMain.SuspendLayout();
 			this.tpgGeneral.SuspendLayout();
 			this.tpgPicture.SuspendLayout();
@@ -143,6 +146,7 @@ namespace Mesen.GUI.Forms.Config
 			this.grpNtscFilter.SuspendLayout();
 			this.tlpNtscFilter2.SuspendLayout();
 			this.tlpNtscFilter1.SuspendLayout();
+			this.tableLayoutPanel6.SuspendLayout();
 			this.grpCommon.SuspendLayout();
 			this.tableLayoutPanel4.SuspendLayout();
 			this.grpScanlines.SuspendLayout();
@@ -162,12 +166,11 @@ namespace Mesen.GUI.Forms.Config
 			this.tableLayoutPanel9.SuspendLayout();
 			this.contextPicturePresets.SuspendLayout();
 			this.contextPaletteList.SuspendLayout();
-			this.flpRefreshRate.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// baseConfigPanel
 			// 
-			this.baseConfigPanel.Location = new System.Drawing.Point(0, 402);
+			this.baseConfigPanel.Location = new System.Drawing.Point(0, 428);
 			this.baseConfigPanel.Size = new System.Drawing.Size(535, 29);
 			// 
 			// tlpMain
@@ -201,7 +204,7 @@ namespace Mesen.GUI.Forms.Config
 			this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tlpMain.Size = new System.Drawing.Size(521, 370);
+			this.tlpMain.Size = new System.Drawing.Size(521, 396);
 			this.tlpMain.TabIndex = 1;
 			// 
 			// chkUseExclusiveFullscreen
@@ -422,6 +425,29 @@ namespace Mesen.GUI.Forms.Config
 			this.chkIntegerFpsMode.Text = "Enable integer FPS mode (e.g: run at 60 fps instead of 60.1)";
 			this.chkIntegerFpsMode.UseVisualStyleBackColor = true;
 			// 
+			// flpRefreshRate
+			// 
+			this.tlpMain.SetColumnSpan(this.flpRefreshRate, 2);
+			this.flpRefreshRate.Controls.Add(this.lblRequestedRefreshRate);
+			this.flpRefreshRate.Controls.Add(this.cboRefreshRate);
+			this.flpRefreshRate.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.flpRefreshRate.Location = new System.Drawing.Point(30, 115);
+			this.flpRefreshRate.Margin = new System.Windows.Forms.Padding(30, 0, 0, 0);
+			this.flpRefreshRate.Name = "flpRefreshRate";
+			this.flpRefreshRate.Size = new System.Drawing.Size(491, 27);
+			this.flpRefreshRate.TabIndex = 26;
+			this.flpRefreshRate.Visible = false;
+			// 
+			// lblRequestedRefreshRate
+			// 
+			this.lblRequestedRefreshRate.Anchor = System.Windows.Forms.AnchorStyles.Right;
+			this.lblRequestedRefreshRate.AutoSize = true;
+			this.lblRequestedRefreshRate.Location = new System.Drawing.Point(3, 7);
+			this.lblRequestedRefreshRate.Name = "lblRequestedRefreshRate";
+			this.lblRequestedRefreshRate.Size = new System.Drawing.Size(128, 13);
+			this.lblRequestedRefreshRate.TabIndex = 17;
+			this.lblRequestedRefreshRate.Text = "Requested Refresh Rate:";
+			// 
 			// cboRefreshRate
 			// 
 			this.cboRefreshRate.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
@@ -437,16 +463,6 @@ namespace Mesen.GUI.Forms.Config
 			this.cboRefreshRate.Size = new System.Drawing.Size(68, 21);
 			this.cboRefreshRate.TabIndex = 25;
 			// 
-			// lblRequestedRefreshRate
-			// 
-			this.lblRequestedRefreshRate.Anchor = System.Windows.Forms.AnchorStyles.Right;
-			this.lblRequestedRefreshRate.AutoSize = true;
-			this.lblRequestedRefreshRate.Location = new System.Drawing.Point(3, 7);
-			this.lblRequestedRefreshRate.Name = "lblRequestedRefreshRate";
-			this.lblRequestedRefreshRate.Size = new System.Drawing.Size(128, 13);
-			this.lblRequestedRefreshRate.TabIndex = 17;
-			this.lblRequestedRefreshRate.Text = "Requested Refresh Rate:";
-			// 
 			// tabMain
 			// 
 			this.tabMain.Controls.Add(this.tpgGeneral);
@@ -458,7 +474,7 @@ namespace Mesen.GUI.Forms.Config
 			this.tabMain.Location = new System.Drawing.Point(0, 0);
 			this.tabMain.Name = "tabMain";
 			this.tabMain.SelectedIndex = 0;
-			this.tabMain.Size = new System.Drawing.Size(535, 402);
+			this.tabMain.Size = new System.Drawing.Size(535, 428);
 			this.tabMain.TabIndex = 2;
 			// 
 			// tpgGeneral
@@ -467,7 +483,7 @@ namespace Mesen.GUI.Forms.Config
 			this.tpgGeneral.Location = new System.Drawing.Point(4, 22);
 			this.tpgGeneral.Name = "tpgGeneral";
 			this.tpgGeneral.Padding = new System.Windows.Forms.Padding(3);
-			this.tpgGeneral.Size = new System.Drawing.Size(527, 376);
+			this.tpgGeneral.Size = new System.Drawing.Size(527, 402);
 			this.tpgGeneral.TabIndex = 0;
 			this.tpgGeneral.Text = "General";
 			this.tpgGeneral.UseVisualStyleBackColor = true;
@@ -478,7 +494,7 @@ namespace Mesen.GUI.Forms.Config
 			this.tpgPicture.Location = new System.Drawing.Point(4, 22);
 			this.tpgPicture.Name = "tpgPicture";
 			this.tpgPicture.Padding = new System.Windows.Forms.Padding(3);
-			this.tpgPicture.Size = new System.Drawing.Size(527, 376);
+			this.tpgPicture.Size = new System.Drawing.Size(527, 402);
 			this.tpgPicture.TabIndex = 3;
 			this.tpgPicture.Text = "Picture";
 			this.tpgPicture.UseVisualStyleBackColor = true;
@@ -502,7 +518,7 @@ namespace Mesen.GUI.Forms.Config
 			this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel5.Size = new System.Drawing.Size(521, 370);
+			this.tableLayoutPanel5.Size = new System.Drawing.Size(521, 396);
 			this.tableLayoutPanel5.TabIndex = 5;
 			// 
 			// tableLayoutPanel7
@@ -518,7 +534,7 @@ namespace Mesen.GUI.Forms.Config
 			this.tableLayoutPanel7.Name = "tableLayoutPanel7";
 			this.tableLayoutPanel7.RowCount = 1;
 			this.tableLayoutPanel7.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-			this.tableLayoutPanel7.Size = new System.Drawing.Size(260, 29);
+			this.tableLayoutPanel7.Size = new System.Drawing.Size(260, 55);
 			this.tableLayoutPanel7.TabIndex = 3;
 			// 
 			// btnSelectPreset
@@ -527,7 +543,7 @@ namespace Mesen.GUI.Forms.Config
 			this.btnSelectPreset.AutoSize = true;
 			this.btnSelectPreset.Image = global::Mesen.GUI.Properties.Resources.DownArrow;
 			this.btnSelectPreset.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.btnSelectPreset.Location = new System.Drawing.Point(158, 3);
+			this.btnSelectPreset.Location = new System.Drawing.Point(158, 29);
 			this.btnSelectPreset.Name = "btnSelectPreset";
 			this.btnSelectPreset.Padding = new System.Windows.Forms.Padding(0, 0, 3, 0);
 			this.btnSelectPreset.Size = new System.Drawing.Size(99, 23);
@@ -541,7 +557,7 @@ namespace Mesen.GUI.Forms.Config
 			// 
 			this.btnResetPictureSettings.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.btnResetPictureSettings.AutoSize = true;
-			this.btnResetPictureSettings.Location = new System.Drawing.Point(3, 3);
+			this.btnResetPictureSettings.Location = new System.Drawing.Point(3, 29);
 			this.btnResetPictureSettings.Name = "btnResetPictureSettings";
 			this.btnResetPictureSettings.Size = new System.Drawing.Size(75, 23);
 			this.btnResetPictureSettings.TabIndex = 3;
@@ -558,7 +574,7 @@ namespace Mesen.GUI.Forms.Config
 			this.grpNtscFilter.Margin = new System.Windows.Forms.Padding(2, 0, 0, 0);
 			this.grpNtscFilter.Name = "grpNtscFilter";
 			this.tableLayoutPanel5.SetRowSpan(this.grpNtscFilter, 3);
-			this.grpNtscFilter.Size = new System.Drawing.Size(259, 343);
+			this.grpNtscFilter.Size = new System.Drawing.Size(259, 369);
 			this.grpNtscFilter.TabIndex = 4;
 			this.grpNtscFilter.TabStop = false;
 			this.grpNtscFilter.Text = "NTSC Filter";
@@ -570,7 +586,7 @@ namespace Mesen.GUI.Forms.Config
 			this.tlpNtscFilter2.Controls.Add(this.trkYFilterLength, 0, 0);
 			this.tlpNtscFilter2.Controls.Add(this.trkIFilterLength, 0, 1);
 			this.tlpNtscFilter2.Controls.Add(this.trkQFilterLength, 0, 2);
-			this.tlpNtscFilter2.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.tlpNtscFilter2.Dock = System.Windows.Forms.DockStyle.Top;
 			this.tlpNtscFilter2.Location = new System.Drawing.Point(3, 16);
 			this.tlpNtscFilter2.Margin = new System.Windows.Forms.Padding(0);
 			this.tlpNtscFilter2.Name = "tlpNtscFilter2";
@@ -582,7 +598,7 @@ namespace Mesen.GUI.Forms.Config
 			this.tlpNtscFilter2.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tlpNtscFilter2.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tlpNtscFilter2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tlpNtscFilter2.Size = new System.Drawing.Size(253, 324);
+			this.tlpNtscFilter2.Size = new System.Drawing.Size(253, 298);
 			this.tlpNtscFilter2.TabIndex = 6;
 			// 
 			// trkYFilterLength
@@ -640,7 +656,7 @@ namespace Mesen.GUI.Forms.Config
 			this.tlpNtscFilter1.Controls.Add(this.trkGamma, 0, 3);
 			this.tlpNtscFilter1.Controls.Add(this.trkResolution, 0, 4);
 			this.tlpNtscFilter1.Controls.Add(this.trkSharpness, 0, 5);
-			this.tlpNtscFilter1.Controls.Add(this.chkMergeFields, 0, 6);
+			this.tlpNtscFilter1.Controls.Add(this.tableLayoutPanel6, 0, 6);
 			this.tlpNtscFilter1.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tlpNtscFilter1.Location = new System.Drawing.Point(3, 16);
 			this.tlpNtscFilter1.Margin = new System.Windows.Forms.Padding(0);
@@ -653,7 +669,7 @@ namespace Mesen.GUI.Forms.Config
 			this.tlpNtscFilter1.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tlpNtscFilter1.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tlpNtscFilter1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tlpNtscFilter1.Size = new System.Drawing.Size(253, 324);
+			this.tlpNtscFilter1.Size = new System.Drawing.Size(253, 350);
 			this.tlpNtscFilter1.TabIndex = 5;
 			// 
 			// trkArtifacts
@@ -746,10 +762,37 @@ namespace Mesen.GUI.Forms.Config
 			this.trkSharpness.Text = "Sharpness";
 			this.trkSharpness.Value = 0;
 			// 
+			// tableLayoutPanel6
+			// 
+			this.tableLayoutPanel6.ColumnCount = 2;
+			this.tableLayoutPanel6.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+			this.tableLayoutPanel6.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+			this.tableLayoutPanel6.Controls.Add(this.chkMergeFields, 0, 0);
+			this.tableLayoutPanel6.Controls.Add(this.chkVerticalBlend, 0, 1);
+			this.tableLayoutPanel6.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.tableLayoutPanel6.Location = new System.Drawing.Point(0, 300);
+			this.tableLayoutPanel6.Margin = new System.Windows.Forms.Padding(0);
+			this.tableLayoutPanel6.Name = "tableLayoutPanel6";
+			this.tableLayoutPanel6.RowCount = 2;
+			this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+			this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+			this.tableLayoutPanel6.Size = new System.Drawing.Size(253, 50);
+			this.tableLayoutPanel6.TabIndex = 30;
+			// 
+			// chkVerticalBlend
+			// 
+			this.chkVerticalBlend.AutoSize = true;
+			this.chkVerticalBlend.Location = new System.Drawing.Point(3, 28);
+			this.chkVerticalBlend.Name = "chkVerticalBlend";
+			this.chkVerticalBlend.Size = new System.Drawing.Size(134, 17);
+			this.chkVerticalBlend.TabIndex = 31;
+			this.chkVerticalBlend.Text = "Apply Vertical Blending";
+			this.chkVerticalBlend.UseVisualStyleBackColor = true;
+			// 
 			// chkMergeFields
 			// 
 			this.chkMergeFields.AutoSize = true;
-			this.chkMergeFields.Location = new System.Drawing.Point(3, 303);
+			this.chkMergeFields.Location = new System.Drawing.Point(3, 3);
 			this.chkMergeFields.Name = "chkMergeFields";
 			this.chkMergeFields.Size = new System.Drawing.Size(86, 17);
 			this.chkMergeFields.TabIndex = 30;
@@ -937,7 +980,7 @@ namespace Mesen.GUI.Forms.Config
 			this.tpgOverscan.Location = new System.Drawing.Point(4, 22);
 			this.tpgOverscan.Name = "tpgOverscan";
 			this.tpgOverscan.Padding = new System.Windows.Forms.Padding(3);
-			this.tpgOverscan.Size = new System.Drawing.Size(527, 376);
+			this.tpgOverscan.Size = new System.Drawing.Size(527, 402);
 			this.tpgOverscan.TabIndex = 1;
 			this.tpgOverscan.Text = "Overscan";
 			this.tpgOverscan.UseVisualStyleBackColor = true;
@@ -948,7 +991,7 @@ namespace Mesen.GUI.Forms.Config
 			this.grpCropping.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.grpCropping.Location = new System.Drawing.Point(3, 3);
 			this.grpCropping.Name = "grpCropping";
-			this.grpCropping.Size = new System.Drawing.Size(521, 370);
+			this.grpCropping.Size = new System.Drawing.Size(521, 396);
 			this.grpCropping.TabIndex = 8;
 			this.grpCropping.TabStop = false;
 			this.grpCropping.Text = "Video Cropping";
@@ -971,14 +1014,14 @@ namespace Mesen.GUI.Forms.Config
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 246F));
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-			this.tableLayoutPanel1.Size = new System.Drawing.Size(515, 351);
+			this.tableLayoutPanel1.Size = new System.Drawing.Size(515, 377);
 			this.tableLayoutPanel1.TabIndex = 0;
 			// 
 			// picOverscan
 			// 
 			this.picOverscan.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.picOverscan.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.picOverscan.Location = new System.Drawing.Point(129, 55);
+			this.picOverscan.Location = new System.Drawing.Point(129, 68);
 			this.picOverscan.Name = "picOverscan";
 			this.picOverscan.Size = new System.Drawing.Size(256, 240);
 			this.picOverscan.TabIndex = 1;
@@ -991,7 +1034,7 @@ namespace Mesen.GUI.Forms.Config
 			this.flowLayoutPanel3.Controls.Add(this.lblLeft);
 			this.flowLayoutPanel3.Controls.Add(this.nudOverscanLeft);
 			this.flowLayoutPanel3.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
-			this.flowLayoutPanel3.Location = new System.Drawing.Point(85, 158);
+			this.flowLayoutPanel3.Location = new System.Drawing.Point(85, 171);
 			this.flowLayoutPanel3.Margin = new System.Windows.Forms.Padding(0);
 			this.flowLayoutPanel3.Name = "flowLayoutPanel3";
 			this.flowLayoutPanel3.Size = new System.Drawing.Size(41, 33);
@@ -1046,7 +1089,7 @@ namespace Mesen.GUI.Forms.Config
 			this.flowLayoutPanel4.Controls.Add(this.lblTop);
 			this.flowLayoutPanel4.Controls.Add(this.nudOverscanTop);
 			this.flowLayoutPanel4.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
-			this.flowLayoutPanel4.Location = new System.Drawing.Point(236, 19);
+			this.flowLayoutPanel4.Location = new System.Drawing.Point(236, 32);
 			this.flowLayoutPanel4.Margin = new System.Windows.Forms.Padding(0);
 			this.flowLayoutPanel4.Name = "flowLayoutPanel4";
 			this.flowLayoutPanel4.Size = new System.Drawing.Size(41, 33);
@@ -1101,7 +1144,7 @@ namespace Mesen.GUI.Forms.Config
 			this.flowLayoutPanel5.Controls.Add(this.lblBottom);
 			this.flowLayoutPanel5.Controls.Add(this.nudOverscanBottom);
 			this.flowLayoutPanel5.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
-			this.flowLayoutPanel5.Location = new System.Drawing.Point(234, 298);
+			this.flowLayoutPanel5.Location = new System.Drawing.Point(234, 311);
 			this.flowLayoutPanel5.Margin = new System.Windows.Forms.Padding(0);
 			this.flowLayoutPanel5.Name = "flowLayoutPanel5";
 			this.flowLayoutPanel5.Size = new System.Drawing.Size(46, 33);
@@ -1156,7 +1199,7 @@ namespace Mesen.GUI.Forms.Config
 			this.flowLayoutPanel2.Controls.Add(this.lblRight);
 			this.flowLayoutPanel2.Controls.Add(this.nudOverscanRight);
 			this.flowLayoutPanel2.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
-			this.flowLayoutPanel2.Location = new System.Drawing.Point(388, 158);
+			this.flowLayoutPanel2.Location = new System.Drawing.Point(388, 171);
 			this.flowLayoutPanel2.Margin = new System.Windows.Forms.Padding(0);
 			this.flowLayoutPanel2.Name = "flowLayoutPanel2";
 			this.flowLayoutPanel2.Size = new System.Drawing.Size(41, 33);
@@ -1210,7 +1253,7 @@ namespace Mesen.GUI.Forms.Config
 			this.tpgPalette.Location = new System.Drawing.Point(4, 22);
 			this.tpgPalette.Name = "tpgPalette";
 			this.tpgPalette.Padding = new System.Windows.Forms.Padding(3);
-			this.tpgPalette.Size = new System.Drawing.Size(527, 376);
+			this.tpgPalette.Size = new System.Drawing.Size(527, 402);
 			this.tpgPalette.TabIndex = 2;
 			this.tpgPalette.Text = "Palette";
 			this.tpgPalette.UseVisualStyleBackColor = true;
@@ -1229,7 +1272,7 @@ namespace Mesen.GUI.Forms.Config
 			this.tableLayoutPanel3.RowCount = 2;
 			this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel3.Size = new System.Drawing.Size(521, 370);
+			this.tableLayoutPanel3.Size = new System.Drawing.Size(521, 396);
 			this.tableLayoutPanel3.TabIndex = 4;
 			// 
 			// tableLayoutPanel2
@@ -1328,7 +1371,7 @@ namespace Mesen.GUI.Forms.Config
 			this.tpgAdvanced.Location = new System.Drawing.Point(4, 22);
 			this.tpgAdvanced.Name = "tpgAdvanced";
 			this.tpgAdvanced.Padding = new System.Windows.Forms.Padding(3);
-			this.tpgAdvanced.Size = new System.Drawing.Size(527, 376);
+			this.tpgAdvanced.Size = new System.Drawing.Size(527, 402);
 			this.tpgAdvanced.TabIndex = 4;
 			this.tpgAdvanced.Text = "Advanced";
 			this.tpgAdvanced.UseVisualStyleBackColor = true;
@@ -1354,7 +1397,7 @@ namespace Mesen.GUI.Forms.Config
 			this.tableLayoutPanel9.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel9.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel9.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel9.Size = new System.Drawing.Size(521, 370);
+			this.tableLayoutPanel9.Size = new System.Drawing.Size(521, 396);
 			this.tableLayoutPanel9.TabIndex = 0;
 			// 
 			// chkDisableBackground
@@ -1547,24 +1590,11 @@ namespace Mesen.GUI.Forms.Config
 			this.mnuPaletteYuv.Text = "YUV v3 (by FirebrandX)";
 			this.mnuPaletteYuv.Click += new System.EventHandler(this.mnuPaletteYuv_Click);
 			// 
-			// flpRefreshRate
-			// 
-			this.tlpMain.SetColumnSpan(this.flpRefreshRate, 2);
-			this.flpRefreshRate.Controls.Add(this.lblRequestedRefreshRate);
-			this.flpRefreshRate.Controls.Add(this.cboRefreshRate);
-			this.flpRefreshRate.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.flpRefreshRate.Location = new System.Drawing.Point(30, 115);
-			this.flpRefreshRate.Margin = new System.Windows.Forms.Padding(30, 0, 0, 0);
-			this.flpRefreshRate.Name = "flpRefreshRate";
-			this.flpRefreshRate.Size = new System.Drawing.Size(491, 27);
-			this.flpRefreshRate.TabIndex = 26;
-			this.flpRefreshRate.Visible = false;
-			// 
 			// frmVideoConfig
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(535, 431);
+			this.ClientSize = new System.Drawing.Size(535, 457);
 			this.Controls.Add(this.tabMain);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
 			this.MaximizeBox = false;
@@ -1581,6 +1611,8 @@ namespace Mesen.GUI.Forms.Config
 			((System.ComponentModel.ISupportInitialize)(this.picHdNesTooltip)).EndInit();
 			this.flowLayoutPanel6.ResumeLayout(false);
 			this.flowLayoutPanel6.PerformLayout();
+			this.flpRefreshRate.ResumeLayout(false);
+			this.flpRefreshRate.PerformLayout();
 			this.tabMain.ResumeLayout(false);
 			this.tpgGeneral.ResumeLayout(false);
 			this.tpgPicture.ResumeLayout(false);
@@ -1590,7 +1622,8 @@ namespace Mesen.GUI.Forms.Config
 			this.grpNtscFilter.ResumeLayout(false);
 			this.tlpNtscFilter2.ResumeLayout(false);
 			this.tlpNtscFilter1.ResumeLayout(false);
-			this.tlpNtscFilter1.PerformLayout();
+			this.tableLayoutPanel6.ResumeLayout(false);
+			this.tableLayoutPanel6.PerformLayout();
 			this.grpCommon.ResumeLayout(false);
 			this.tableLayoutPanel4.ResumeLayout(false);
 			this.tableLayoutPanel4.PerformLayout();
@@ -1620,8 +1653,6 @@ namespace Mesen.GUI.Forms.Config
 			this.tableLayoutPanel9.PerformLayout();
 			this.contextPicturePresets.ResumeLayout(false);
 			this.contextPaletteList.ResumeLayout(false);
-			this.flpRefreshRate.ResumeLayout(false);
-			this.flpRefreshRate.PerformLayout();
 			this.ResumeLayout(false);
 
 		}
@@ -1729,5 +1760,7 @@ namespace Mesen.GUI.Forms.Config
 		private System.Windows.Forms.Label lblRequestedRefreshRate;
 		private System.Windows.Forms.ComboBox cboRefreshRate;
 		private System.Windows.Forms.FlowLayoutPanel flpRefreshRate;
+		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel6;
+		private System.Windows.Forms.CheckBox chkVerticalBlend;
 	}
 }

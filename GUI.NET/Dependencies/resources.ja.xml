@@ -251,6 +251,7 @@
       <Control ID="trkResolution">解像度</Control>
       <Control ID="trkSharpness">シャープネス</Control>
       <Control ID="chkMergeFields">画像をマージする</Control>
+      <Control ID="chkVerticalBlend">垂直ブレンドを使う</Control>
 
       <Control ID="trkYFilterLength">Y フィルター (ブラー)</Control>
       <Control ID="trkIFilterLength">I フィルター (色にじみ)</Control>

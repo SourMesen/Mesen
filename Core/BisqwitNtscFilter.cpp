@@ -99,7 +99,7 @@ void BisqwitNtscFilter::OnBeforeApplyFilter()
 	_qb = (int)(contrast * 1.667217e-6 * saturation / _qWidth);
 }
 
-void BisqwitNtscFilter::RecursiveBlend(int iterationCount, uint64_t *output, uint64_t *currentLine, uint64_t *nextLine, int pixelsPerCycle)
+void BisqwitNtscFilter::RecursiveBlend(int iterationCount, uint64_t *output, uint64_t *currentLine, uint64_t *nextLine, int pixelsPerCycle, bool verticalBlend)
 {
 	//Blend 2 pixels at once
 	uint32_t width = GetOverscan().GetScreenWidth() * pixelsPerCycle / 2;
@@ -108,7 +108,13 @@ void BisqwitNtscFilter::RecursiveBlend(int iterationCount, uint64_t *output, uin
 	if(scanlineIntensity < 1.0 && (iterationCount == 2 || _resDivider == 4)) {
 		//Most likely extremely inefficient scanlines, but works
 		for(uint32_t x = 0; x < width; x++) {
-			uint64_t mixed = ((((currentLine[x] ^ nextLine[x]) & 0xfefefefefefefefeL) >> 1) + (currentLine[x] & nextLine[x]));
+			uint64_t mixed;
+			if(verticalBlend) {
+				mixed = ((((currentLine[x] ^ nextLine[x]) & 0xfefefefefefefefeL) >> 1) + (currentLine[x] & nextLine[x]));
+			} else {
+				mixed = currentLine[x];
+			}
+			
 			uint8_t r = (mixed >> 16) & 0xFF, g = (mixed >> 8) & 0xFF, b = mixed & 0xFF;
 			uint8_t r2 = (mixed >> 48) & 0xFF, g2 = (mixed >> 40) & 0xFF, b2 = (mixed >> 32) & 0xFF;
 			r = (uint8_t)(r * scanlineIntensity);
@@ -121,15 +127,19 @@ void BisqwitNtscFilter::RecursiveBlend(int iterationCount, uint64_t *output, uin
 			output[x] = ((uint64_t)r2 << 48) | ((uint64_t)g2 << 40) | ((uint64_t)b2 << 32) | (r << 16) | (g << 8) | b;
 		}
 	} else {
-		for(uint32_t x = 0; x < width; x++) {
-			output[x] = ((((currentLine[x] ^ nextLine[x]) & 0xfefefefefefefefeL) >> 1) + (currentLine[x] & nextLine[x]));
+		if(verticalBlend) {
+			for(uint32_t x = 0; x < width; x++) {
+				output[x] = ((((currentLine[x] ^ nextLine[x]) & 0xfefefefefefefefeL) >> 1) + (currentLine[x] & nextLine[x]));
+			}
+		} else {
+			memcpy(output, currentLine, width * sizeof(uint64_t));
 		}
 	}
 
 	iterationCount /= 2;
 	if(iterationCount > 0) {
-		RecursiveBlend(iterationCount, output - width * iterationCount, currentLine, output, pixelsPerCycle);
-		RecursiveBlend(iterationCount, output + width * iterationCount, output, nextLine, pixelsPerCycle);
+		RecursiveBlend(iterationCount, output - width * iterationCount, currentLine, output, pixelsPerCycle, verticalBlend);
+		RecursiveBlend(iterationCount, output + width * iterationCount, output, nextLine, pixelsPerCycle, verticalBlend);
 	}
 }
 
@@ -192,12 +202,13 @@ void BisqwitNtscFilter::DecodeFrame(int startRow, int endRow, uint16_t *ppuOutpu
 	//Generate the missing vertical lines
 	outputBuffer = orgBuffer;
 	int lastRow = 239 - GetOverscan().Bottom;
+	bool verticalBlend = EmulationSettings::GetNtscFilterSettings().VerticalBlend;
 	for(int y = startRow; y <= endRow; y++) {
 		uint64_t* currentLine = (uint64_t*)outputBuffer;
 		uint64_t* nextLine = y == lastRow ? currentLine : (uint64_t*)(outputBuffer + rowPixelGap);
 		uint64_t* buffer = (uint64_t*)(outputBuffer + rowPixelGap / 2);
 		
-		RecursiveBlend(4 / _resDivider, buffer, currentLine, nextLine, pixelsPerCycle);
+		RecursiveBlend(4 / _resDivider, buffer, currentLine, nextLine, pixelsPerCycle, verticalBlend);
 
 		outputBuffer += rowPixelGap;
 	}

@@ -32,6 +32,7 @@ static std::unique_ptr<LibretroKeyManager> _keyManager;
 static std::unique_ptr<LibretroMessageManager> _messageManager;
 
 static const char* MesenNtscFilter = "mesen_ntsc_filter";
+static const char* MesenNtscVerticalBlend = "mesen_ntsc_vertical_blend";
 static const char* MesenPalette = "mesen_palette";
 static const char* MesenNoSpriteLimit = "mesen_nospritelimit";
 static const char* MesenOverclock = "mesen_overclock";
@@ -117,6 +118,7 @@ extern "C" {
 
 		static const struct retro_variable vars[] = {
 			{ MesenNtscFilter, "NTSC filter; Disabled|Composite (Blargg)|S-Video (Blargg)|RGB (Blargg)|Monochrome (Blargg)|Bisqwit 2x|Bisqwit 4x|Bisqwit 8x" },
+			{ MesenNtscVerticalBlend, "NTSC filter: Vertical blending; disabled|enabled" },
 			{ MesenPalette, "Palette; Default|Composite Direct (by FirebrandX)|Nes Classic|Nestopia (RGB)|Original Hardware (by FirebrandX)|PVM Style (by FirebrandX)|Sony CXA2025AS|Unsaturated v6 (by FirebrandX)|YUV v3 (by FirebrandX)" },
 			{ MesenOverclock, "Overclock; None|Low|Medium|High|Very High" },
 			{ MesenOverclockType, "Overclock Type; Before NMI (Recommended)|After NMI" },
@@ -241,6 +243,14 @@ extern "C" {
 			}
 		}
 		
+		bool verticalBlend = false;
+		var.key = MesenNtscVerticalBlend;
+		if(retroEnv(RETRO_ENVIRONMENT_GET_VARIABLE, &var)) {
+			if(string(var.value) == "enabled") {
+				verticalBlend = true;
+			}
+		}
+
 		var.key = MesenNtscFilter;
 		if(retroEnv(RETRO_ENVIRONMENT_GET_VARIABLE, &var)) {
 			string value = string(var.value);
@@ -248,27 +258,27 @@ extern "C" {
 				EmulationSettings::SetVideoFilterType(VideoFilterType::None);
 			} else if(value == "Composite (Blargg)") {
 				EmulationSettings::SetVideoFilterType(VideoFilterType::NTSC);
-				EmulationSettings::SetNtscFilterSettings(0, 0, 0, 0, 0, 0, false, 0, 0, 0);
+				EmulationSettings::SetNtscFilterSettings(0, 0, 0, 0, 0, 0, false, 0, 0, 0, verticalBlend);
 			} else if(value == "S-Video (Blargg)") {
 				EmulationSettings::SetVideoFilterType(VideoFilterType::NTSC);
-				EmulationSettings::SetNtscFilterSettings(-1.0, 0, -1.0, 0, 0.2, 0.2, false, 0, 0, 0);
+				EmulationSettings::SetNtscFilterSettings(-1.0, 0, -1.0, 0, 0.2, 0.2, false, 0, 0, 0, verticalBlend);
 			} else if(value == "RGB (Blargg)") {
 				EmulationSettings::SetVideoFilterType(VideoFilterType::NTSC);
 				EmulationSettings::SetPictureSettings(0, 0, 0, 0, 0);
-				EmulationSettings::SetNtscFilterSettings(-1.0, -1.0, -1.0, 0, 0.7, 0.2, false, 0, 0, 0);
+				EmulationSettings::SetNtscFilterSettings(-1.0, -1.0, -1.0, 0, 0.7, 0.2, false, 0, 0, 0, verticalBlend);
 			} else if(value == "Monochrome (Blargg)") {
 				EmulationSettings::SetVideoFilterType(VideoFilterType::NTSC);
 				EmulationSettings::SetPictureSettings(0, 0, -1.0, 0, 0);
-				EmulationSettings::SetNtscFilterSettings(-0.2, -0.1, -0.2, 0, 0.7, 0.2, false, 0, 0, 0);
+				EmulationSettings::SetNtscFilterSettings(-0.2, -0.1, -0.2, 0, 0.7, 0.2, false, 0, 0, 0, verticalBlend);
 			} else if(value == "Bisqwit 2x") {
 				EmulationSettings::SetVideoFilterType(VideoFilterType::BisqwitNtscQuarterRes);
-				EmulationSettings::SetNtscFilterSettings(0, 0, 0, 0, 0, 0, false, 0, 0, 0);
+				EmulationSettings::SetNtscFilterSettings(0, 0, 0, 0, 0, 0, false, 0, 0, 0, verticalBlend);
 			} else if(value == "Bisqwit 4x") {
 				EmulationSettings::SetVideoFilterType(VideoFilterType::BisqwitNtscHalfRes);
-				EmulationSettings::SetNtscFilterSettings(0, 0, 0, 0, 0, 0, false, 0, 0, 0);
+				EmulationSettings::SetNtscFilterSettings(0, 0, 0, 0, 0, 0, false, 0, 0, 0, verticalBlend);
 			} else if(value == "Bisqwit 8x") {
 				EmulationSettings::SetVideoFilterType(VideoFilterType::BisqwitNtsc);
-				EmulationSettings::SetNtscFilterSettings(0, 0, 0, 0, 0, 0, false, 0, 0, 0);
+				EmulationSettings::SetNtscFilterSettings(0, 0, 0, 0, 0, 0, false, 0, 0, 0, verticalBlend);
 			}
 		}
 
@@ -578,7 +588,6 @@ extern "C" {
 		}
 
 		//Expect the following structure:
-		// /system/MesenDB.txt (optional)
 		// /system/disksys.rom
 		// /system/HdPacks/*
 		// /saves/*.sav

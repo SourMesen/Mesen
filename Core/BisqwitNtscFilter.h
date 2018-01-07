@@ -39,7 +39,7 @@ private:
 	int8_t _signalLow[0x40];
 	int8_t _signalHigh[0x40];
 
-	void RecursiveBlend(int iterationCount, uint64_t *output, uint64_t *currentLine, uint64_t *nextLine, int pixelsPerCycle);
+	void RecursiveBlend(int iterationCount, uint64_t *output, uint64_t *currentLine, uint64_t *nextLine, int pixelsPerCycle, bool verticalBlend);
 	
 	void NtscDecodeLine(int width, const int8_t* signal, uint32_t* target, int phase0);
 	void NtscDecodeLineCustomRes(int width, const int8_t* signal, uint32_t* target, int phase0, int resDivider);

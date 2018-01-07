@@ -203,6 +203,7 @@ struct NtscFilterSettings
 	double Fringing = 0;
 	double Bleed = 0;
 	bool MergeFields = false;
+	bool VerticalBlend = false;
 
 	double YFilterLength = 0;
 	double IFilterLength = 0;
@@ -1130,7 +1131,7 @@ public:
 		return _pictureSettings;
 	}
 
-	static void SetNtscFilterSettings(double artifacts, double bleed, double fringing, double gamma, double resolution, double sharpness, bool mergeFields, double yFilterLength, double iFilterLength, double qFilterLength)
+	static void SetNtscFilterSettings(double artifacts, double bleed, double fringing, double gamma, double resolution, double sharpness, bool mergeFields, double yFilterLength, double iFilterLength, double qFilterLength, bool verticalBlend)
 	{
 		_ntscFilterSettings.Artifacts = artifacts;
 		_ntscFilterSettings.Bleed = bleed;
@@ -1144,6 +1145,8 @@ public:
 		_ntscFilterSettings.YFilterLength = yFilterLength;
 		_ntscFilterSettings.IFilterLength = iFilterLength;
 		_ntscFilterSettings.QFilterLength = qFilterLength;
+
+		_ntscFilterSettings.VerticalBlend = verticalBlend;
 	}
 
 	static NtscFilterSettings GetNtscFilterSettings()

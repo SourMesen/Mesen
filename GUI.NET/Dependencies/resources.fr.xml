@@ -250,6 +250,7 @@
       <Control ID="trkResolution">Résolution</Control>
       <Control ID="trkSharpness">Piqué</Control>
       <Control ID="chkMergeFields">Combiner les images alternées</Control>
+      <Control ID="chkVerticalBlend">Appliquer un blend vertical</Control>
 
       <Control ID="trkYFilterLength">Filtre Y (Flou horizontal)</Control>
       <Control ID="trkIFilterLength">Filtre I (Dispersion horizontale)</Control>
