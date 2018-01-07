@@ -252,6 +252,14 @@ namespace Mesen.GUI.Debugger
 		public bool UpdateCode(bool forceUpdate = false)
 		{
 			if(_codeChanged || forceUpdate) {
+				int centerLineIndex = ctrlCodeViewer.GetLineIndexAtPosition(this.Height / 2);
+				int centerLineAddress;
+				do {
+					//Save the address at the center of the debug view
+					centerLineAddress = ctrlCodeViewer.GetLineNumber(centerLineIndex);
+					centerLineIndex--;
+				} while(centerLineAddress < 0 && centerLineIndex > 0);
+
 				_codeContent.Clear();
 				_codeComments.Clear();
 				_codeByteCode.Clear();
@@ -346,6 +354,12 @@ namespace Mesen.GUI.Debugger
 
 				_codeChanged = false;
 				UpdateLineColors();
+
+				if(centerLineAddress >= 0) {
+					//Scroll to the same address as before, to prevent the code view from changing due to setting or banking changes, etc.
+					ctrlCodeViewer.ScrollToLineNumber(centerLineAddress, eHistoryType.None, false);
+				}
+
 				return true;
 			}
 			UpdateLineColors();
