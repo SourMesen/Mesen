@@ -524,4 +524,33 @@ protected:
 
 		return MemoryManager::GetOpenBus();
 	}
+
+public:
+	bool IsExtendedAttributes()
+	{
+		return _extendedRamMode == 1;
+	}
+
+	uint8_t GetExAttributeNtPalette(uint16_t ntAddr)
+	{
+		ntAddr &= 0x3FF;		
+		uint8_t value = InternalReadRam(0x5C00 + ntAddr);
+		return (value & 0xC0) >> 6;
+	}
+
+	uint32_t GetExAttributeAbsoluteTileAddr(uint16_t ntAddr, uint16_t chrAddr)
+	{
+		ntAddr &= 0x3FF;
+		uint8_t value = InternalReadRam(0x5C00 + ntAddr);
+
+		//"The pattern fetches ignore the standard CHR banking bits, and instead use the top two bits of $5130 and the bottom 6 bits from Expansion RAM to choose a 4KB bank to select the tile from."
+		uint16_t chrBank = ((value & 0x3F) | (_chrUpperBits << 6)) % (_chrRomSize / 0x1000);
+
+		return chrBank * 0x1000 + (chrAddr & 0xFFF);
+	}
+
+	uint8_t GetExAttributeTileData(uint16_t ntAddr, uint16_t chrAddr)
+	{
+		return _chrRom[GetExAttributeAbsoluteTileAddr(ntAddr, chrAddr)];
+	}
 };

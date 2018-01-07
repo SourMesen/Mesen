@@ -7,6 +7,7 @@
 #include "MemoryDumper.h"
 #include "VideoDecoder.h"
 #include "Disassembler.h"
+#include "MMC5.h"
 
 MemoryDumper::MemoryDumper(shared_ptr<PPU> ppu, shared_ptr<MemoryManager> memoryManager, shared_ptr<BaseMapper> mapper, shared_ptr<CodeDataLogger> codeDataLogger, Debugger* debugger, shared_ptr<Disassembler> disassembler)
 {
@@ -220,23 +221,36 @@ uint8_t MemoryDumper::GetMemoryValue(DebugMemoryType memoryType, uint32_t addres
 
 void MemoryDumper::GetNametable(int nametableIndex, uint32_t* frameBuffer, uint8_t* tileData, uint8_t* paletteData)
 {
+	shared_ptr<MMC5> mmc5 = std::dynamic_pointer_cast<MMC5>(_mapper);
 	uint32_t *rgbPalette = EmulationSettings::GetRgbPalette();
 	uint16_t bgAddr = _ppu->GetState().ControlFlags.BackgroundPatternAddr;
 	uint16_t baseAddr = 0x2000 + nametableIndex * 0x400;
 	uint16_t baseAttributeAddr = baseAddr + 960;
 	for(uint8_t y = 0; y < 30; y++) {
 		for(uint8_t x = 0; x < 32; x++) {
-			uint8_t tileIndex = _mapper->DebugReadVRAM(baseAddr + (y << 5) + x);
+			uint16_t ntIndex = (y << 5) + x;
+			uint8_t tileIndex = _mapper->DebugReadVRAM(baseAddr + ntIndex);
 			uint8_t attribute = _mapper->DebugReadVRAM(baseAttributeAddr + ((y & 0xFC) << 1) + (x >> 2));
 			tileData[y * 32 + x] = tileIndex;
 			paletteData[y * 32 + x] = attribute;
 			uint8_t shift = (x & 0x02) | ((y & 0x02) << 1);
 
-			uint8_t paletteBaseAddr = ((attribute >> shift) & 0x03) << 2;
+			uint8_t paletteBaseAddr;
+			if(mmc5 && mmc5->IsExtendedAttributes()) {
+				paletteBaseAddr = mmc5->GetExAttributeNtPalette(ntIndex) << 2;
+			} else {
+				paletteBaseAddr = ((attribute >> shift) & 0x03) << 2;
+			}
 			uint16_t tileAddr = bgAddr + (tileIndex << 4);
 			for(uint8_t i = 0; i < 8; i++) {
-				uint8_t lowByte = _mapper->DebugReadVRAM(tileAddr + i);
-				uint8_t highByte = _mapper->DebugReadVRAM(tileAddr + i + 8);
+				uint8_t lowByte, highByte;
+				if(mmc5 && mmc5->IsExtendedAttributes()) {
+					lowByte = mmc5->GetExAttributeTileData(ntIndex, tileAddr + i);
+					highByte = mmc5->GetExAttributeTileData(ntIndex, tileAddr + i + 8);
+				} else {
+					lowByte = _mapper->DebugReadVRAM(tileAddr + i);
+					highByte = _mapper->DebugReadVRAM(tileAddr + i + 8);
+				}
 				for(uint8_t j = 0; j < 8; j++) {
 					uint8_t color = ((lowByte >> (7 - j)) & 0x01) | (((highByte >> (7 - j)) & 0x01) << 1);
 					frameBuffer[(y << 11) + (x << 3) + (i << 8) + j] = rgbPalette[(color == 0 ? _ppu->ReadPaletteRAM(0) : _ppu->ReadPaletteRAM(paletteBaseAddr + color)) & 0x3F];
@@ -248,6 +262,7 @@ void MemoryDumper::GetNametable(int nametableIndex, uint32_t* frameBuffer, uint8
 
 void MemoryDumper::GatherChrPaletteInfo()
 {
+	shared_ptr<MMC5> mmc5 = std::dynamic_pointer_cast<MMC5>(_mapper);
 	uint16_t bgAddr = _ppu->GetState().ControlFlags.BackgroundPatternAddr;
 
 	uint32_t palettes[8];
@@ -259,13 +274,20 @@ void MemoryDumper::GatherChrPaletteInfo()
 			(_ppu->ReadPaletteRAM(i * 4 + 3) << 24);
 	}
 
-	auto processTilePalette = [=](uint16_t tileAddr, uint8_t paletteIndex) {
+	auto processTilePalette = [=](uint32_t tileAddr, uint8_t paletteIndex) {
 		TileKey key;
+		uint32_t absoluteAddr;
+		if(!mmc5 || !mmc5->IsExtendedAttributes()) {
+			absoluteAddr = _mapper->ToAbsoluteChrAddress(tileAddr);
+		} else {
+			absoluteAddr = tileAddr;
+		}
+
 		if(_mapper->HasChrRom()) {
-			key.TileIndex = _mapper->ToAbsoluteChrAddress(tileAddr) / 16;
+			key.TileIndex = absoluteAddr / 16;
 			key.IsChrRamTile = false;
 		} else {
-			_mapper->CopyChrRamTile(_mapper->ToAbsoluteChrAddress(tileAddr), key.TileData);
+			_mapper->CopyChrRamTile(absoluteAddr, key.TileData);
 			key.IsChrRamTile = true;
 		}
 		_paletteByTile[key] = palettes[paletteIndex];
@@ -277,11 +299,20 @@ void MemoryDumper::GatherChrPaletteInfo()
 		uint16_t baseAttributeAddr = baseAddr + 960;
 		for(uint8_t y = 0; y < 30; y++) {
 			for(uint8_t x = 0; x < 32; x++) {
-				uint8_t tileIndex = _mapper->DebugReadVRAM(baseAddr + (y << 5) + x);
-				uint16_t tileAddr = bgAddr + (tileIndex << 4);
-				uint8_t attribute = _mapper->DebugReadVRAM(baseAttributeAddr + ((y & 0xFC) << 1) + (x >> 2));
-				uint8_t shift = (x & 0x02) | ((y & 0x02) << 1);
-				uint8_t paletteIndex = ((attribute >> shift) & 0x03);
+				uint16_t ntIndex = (y << 5) + x;
+				uint8_t tileIndex = _mapper->DebugReadVRAM(baseAddr + ntIndex);
+
+				uint16_t tileAddr;			
+				uint8_t paletteIndex;
+				if(mmc5 && mmc5->IsExtendedAttributes()) {
+					paletteIndex = mmc5->GetExAttributeNtPalette(ntIndex);
+					tileAddr = mmc5->GetExAttributeAbsoluteTileAddr(ntIndex, tileIndex * 16);
+				} else {
+					uint8_t attribute = _mapper->DebugReadVRAM(baseAttributeAddr + ((y & 0xFC) << 1) + (x >> 2));
+					uint8_t shift = (x & 0x02) | ((y & 0x02) << 1);
+					paletteIndex = ((attribute >> shift) & 0x03);
+					tileAddr = bgAddr + (tileIndex << 4);
+				}
 
 				processTilePalette(tileAddr, paletteIndex);
 			}
