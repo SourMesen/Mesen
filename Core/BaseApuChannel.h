@@ -31,6 +31,7 @@ public:
 	{
 		_channel = channel;
 		_mixer = mixer;
+		_nesModel = NesModel::NTSC;
 		
 		Reset(false);
 	}

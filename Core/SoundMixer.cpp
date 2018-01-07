@@ -25,6 +25,7 @@ SoundMixer::SoundMixer()
 	_blipBufRight = blip_new(SoundMixer::MaxSamplesPerFrame);
 	_sampleRate = EmulationSettings::GetSampleRate();
 	_model = NesModel::NTSC;
+	_clockRate = CPU::GetClockRate(_model);
 
 	Reset();
 }
