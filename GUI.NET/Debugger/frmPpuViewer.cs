@@ -162,7 +162,7 @@ namespace Mesen.GUI.Debugger
 
 		protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
 		{
-			if(!this.nudScanline.Focused && !this.nudCycle.Focused) {
+			if(!this.nudScanline.ContainsFocus && !this.nudCycle.ContainsFocus) {
 				if(keyData == (Keys.Control | Keys.C)) {
 					if(this.tabMain.SelectedTab == tpgNametableViewer) {
 						ctrlNametableViewer.CopyToClipboard();
