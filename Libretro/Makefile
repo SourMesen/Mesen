@@ -248,8 +248,13 @@ include Makefile.common
 
 OBJECTS := $(SOURCES_C:.c=.o) $(SOURCES_CXX:.cpp=.o)
 
-CFLAGS   += -Wall -D LIBRETRO $(fpic)
-CXXFLAGS += -Wall -D LIBRETRO $(fpic) -std=c++14
+ifeq (,$(findstring windows_msvc2017,$(platform)))
+  CFLAGS   += -Wall
+  CXXFLAGS += -Wall
+endif
+
+CFLAGS   += -D LIBRETRO $(fpic)
+CXXFLAGS += -D LIBRETRO $(fpic) -std=c++14
 
 all: $(TARGET)
 
