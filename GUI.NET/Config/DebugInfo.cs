@@ -205,7 +205,7 @@ namespace Mesen.GUI.Config
 
 		public bool AssemblerCodeHighlighting = true;
 		public XmlColor AssemblerOpcodeColor = Color.FromArgb(22, 37, 37);
-		public XmlColor AssemblerLabelDefinitionColor = Color.FromArgb(0, 114, 174);
+		public XmlColor AssemblerLabelDefinitionColor = Color.Blue;
 		public XmlColor AssemblerImmediateColor = Color.Chocolate;
 		public XmlColor AssemblerAddressColor = Color.DarkRed;
 		public XmlColor AssemblerCommentColor = Color.Green;

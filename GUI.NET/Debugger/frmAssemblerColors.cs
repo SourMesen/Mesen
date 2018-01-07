@@ -54,7 +54,7 @@ namespace Mesen.GUI.Debugger
 		private void btnReset_Click(object sender, EventArgs e)
 		{
 			picOpcode.BackColor = Color.FromArgb(22, 37, 37);
-			picLabelDefinition.BackColor = Color.FromArgb(0, 114, 174);
+			picLabelDefinition.BackColor = Color.Blue;
 			picImmediate.BackColor = Color.Chocolate;
 			picAddress.BackColor = Color.DarkRed;
 			picComment.BackColor = Color.Green;
