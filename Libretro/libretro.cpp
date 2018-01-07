@@ -20,6 +20,7 @@ static retro_log_printf_t logCallback = nullptr;
 static retro_environment_t retroEnv = nullptr;
 static bool _hdPacksEnabled = false;
 static string _mesenVersion = "";
+int32_t _saveStateSize = -1;
 
 //Include game database as an array of strings (need an automated way to generate the include file)
 static vector<string> gameDb = {
@@ -504,9 +505,7 @@ extern "C" {
 
 	RETRO_API size_t retro_serialize_size()
 	{
-		std::stringstream ss;
-		Console::SaveState(ss);
-		return ss.str().size() * 2;
+		return _saveStateSize;
 	}
 
 	RETRO_API bool retro_serialize(void *data, size_t size)
@@ -515,7 +514,8 @@ extern "C" {
 		Console::SaveState(ss);
 		
 		string saveStateData = ss.str();
-		memcpy(data, saveStateData.c_str(), saveStateData.size());
+		memset(data, 0, size);
+		memcpy(data, saveStateData.c_str(), std::min(size, saveStateData.size()));
 
 		return true;
 	}
@@ -642,6 +642,15 @@ extern "C" {
 			setupPlayerButtons(3);
 
 			retroEnv(RETRO_ENVIRONMENT_SET_INPUT_DESCRIPTORS, desc.data());
+
+			//Savestates in Mesen may change size over time
+			//Retroarch doesn't like this for netplay or rewinding - it requires the states to always be the exact same size
+			//So we need to send a large enough size to Retroarch to ensure Mesen's state will always fit within that buffer.
+			std::stringstream ss;
+			Console::SaveState(ss);
+
+			//Round up to the next 1kb multiple
+			_saveStateSize = ((ss.str().size() * 2) + 0x400) & ~0x3FF;
 		}
 
 		return result;
