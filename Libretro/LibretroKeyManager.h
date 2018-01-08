@@ -11,6 +11,21 @@ private:
 	retro_input_state_t _getInputState = nullptr;
 	retro_input_poll_t _pollInput = nullptr;
 	bool _mouseButtons[3] = { false, false, false };
+	bool _wasPushed[16] = { };
+
+	bool ProcessAction(uint32_t button)
+	{
+		if(_getInputState(0, RETRO_DEVICE_JOYPAD, 0, button)) {
+			if(!_wasPushed[button]) {
+				//Newly pressed, process action
+				_wasPushed[button] = true;
+				return true;
+			}
+		} else {
+			_wasPushed[button] = false;
+		}
+		return false;
+	}
 
 public:
 	LibretroKeyManager()
@@ -59,18 +74,21 @@ public:
 
 			shared_ptr<FdsSystemActionManager> fdsSam = Console::GetInstance()->GetSystemActionManager<FdsSystemActionManager>();
 			if(fdsSam) {
-				if(_getInputState(0, RETRO_DEVICE_JOYPAD, 0, RETRO_DEVICE_ID_JOYPAD_L)) {
+				if(ProcessAction(RETRO_DEVICE_ID_JOYPAD_L)) {
 					fdsSam->InsertNextDisk();
-				} else if(_getInputState(0, RETRO_DEVICE_JOYPAD, 0, RETRO_DEVICE_ID_JOYPAD_R)) {
+				}
+				
+				if(ProcessAction(RETRO_DEVICE_ID_JOYPAD_R)) {
 					fdsSam->SwitchDiskSide();
 				}
 			}
 			
 			shared_ptr<VsSystemActionManager> vsSam = Console::GetInstance()->GetSystemActionManager<VsSystemActionManager>();
 			if(vsSam) {
-				if(_getInputState(0, RETRO_DEVICE_JOYPAD, 0, RETRO_DEVICE_ID_JOYPAD_L2)) {
+				if(ProcessAction(RETRO_DEVICE_ID_JOYPAD_L2)) {
 					vsSam->InsertCoin(0);
-				} else if(_getInputState(0, RETRO_DEVICE_JOYPAD, 0, RETRO_DEVICE_ID_JOYPAD_L2)) {
+				}
+				if(ProcessAction(RETRO_DEVICE_ID_JOYPAD_R2)) {
 					vsSam->InsertCoin(1);
 				}
 			}

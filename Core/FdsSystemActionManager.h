@@ -100,17 +100,21 @@ public:
 
 	void SwitchDiskSide()
 	{
-		shared_ptr<FDS> mapper = _mapper.lock();
-		if(mapper) {
-			InsertDisk(mapper->GetCurrentDisk() ^ 0x01);
+		if(!IsAutoInsertDiskEnabled()) {
+			shared_ptr<FDS> mapper = _mapper.lock();
+			if(mapper && mapper->IsDiskInserted()) {
+				InsertDisk(mapper->GetCurrentDisk() ^ 0x01);
+			}
 		}
 	}
 
 	void InsertNextDisk()
 	{
-		shared_ptr<FDS> mapper = _mapper.lock();
-		if(mapper) {
-			InsertDisk(((mapper->GetCurrentDisk() & 0xFE) + 2) % mapper->GetSideCount());
+		if(!IsAutoInsertDiskEnabled()) {
+			shared_ptr<FDS> mapper = _mapper.lock();
+			if(mapper) {
+				InsertDisk(((mapper->GetCurrentDisk() & 0xFE) + 2) % mapper->GetSideCount());
+			}
 		}
 	}
 

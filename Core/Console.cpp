@@ -189,7 +189,6 @@ bool Console::Initialize(VirtualFile &romFile, VirtualFile &patchFile)
 			ResetComponents(false);
 
 			_rewindManager.reset(new RewindManager());
-			_controlManager->UpdateInputState();
 
 			VideoDecoder::GetInstance()->StartThread();
 
@@ -378,6 +377,8 @@ void Console::ResetComponents(bool softReset)
 			debugger->Resume();
 		}
 	}
+
+	_controlManager->UpdateInputState();
 }
 
 void Console::Stop()
