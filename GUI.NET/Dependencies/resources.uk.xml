@@ -249,7 +249,7 @@
       <Control ID="trkResolution">Дозвіл</Control>
       <Control ID="trkSharpness">Рiзкiсть</Control>
       <Control ID="chkMergeFields">Злиття полів</Control>
-      <Control ID="chkVerticalBlend">Apply Vertical Blending</Control>
+      <Control ID="chkVerticalBlend">Застосувати вертикальне змішування</Control>
 
       <Control ID="trkYFilterLength">Y Фільтр (Розмиття по горизонталі)</Control>
       <Control ID="trkIFilterLength">I Фiльтр (Horizontal Bleed)</Control>
