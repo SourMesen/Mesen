@@ -188,7 +188,7 @@ std::unordered_map<string, string> MessageManager::_jaResources = {
 	{ "CouldNotLoadFile", u8"ファイルをロードできませんでした: %1" },
 	{ "EmulationMaximumSpeed", u8"最高速度" },
 	{ "EmulationSpeedPercent", u8"%1%" },
-	{ "FdsDiskInserted", u8"ディスク%1、%2面。" },
+	{ "FdsDiskInserted", u8"ディスク%1%2。" },
 	{ "Frame", u8"フレーム" },
 	{ "GameCrash", u8"ゲームは停止しました (%1)" },
 	{ "KeyboardModeDisabled", u8"キーボードモードを無効にしました。" },

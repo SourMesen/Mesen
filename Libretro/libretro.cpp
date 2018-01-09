@@ -119,7 +119,7 @@ extern "C" {
 		static const struct retro_variable vars[] = {
 			{ MesenNtscFilter, "NTSC filter; Disabled|Composite (Blargg)|S-Video (Blargg)|RGB (Blargg)|Monochrome (Blargg)|Bisqwit 2x|Bisqwit 4x|Bisqwit 8x" },
 			{ MesenNtscVerticalBlend, "NTSC filter: Vertical blending; disabled|enabled" },
-			{ MesenPalette, "Palette; Default|Composite Direct (by FirebrandX)|Nes Classic|Nestopia (RGB)|Original Hardware (by FirebrandX)|PVM Style (by FirebrandX)|Sony CXA2025AS|Unsaturated v6 (by FirebrandX)|YUV v3 (by FirebrandX)" },
+			{ MesenPalette, "Palette; Default|Composite Direct (by FirebrandX)|Nes Classic|Nestopia (RGB)|Original Hardware (by FirebrandX)|PVM Style (by FirebrandX)|Sony CXA2025AS|Unsaturated v6 (by FirebrandX)|YUV v3 (by FirebrandX)|Custom" },
 			{ MesenOverclock, "Overclock; None|Low|Medium|High|Very High" },
 			{ MesenOverclockType, "Overclock Type; Before NMI (Recommended)|After NMI" },
 			{ MesenRegion, "Region; Auto|NTSC|PAL|Dendy" },
@@ -187,6 +187,30 @@ extern "C" {
 				EmulationSettings::ClearFlags(flagValue);
 			} else {
 				EmulationSettings::SetFlags(flagValue);
+			}
+		}
+	}
+
+	void load_custom_palette()
+	{
+		//Setup default palette in case we can't load the custom one
+		EmulationSettings::SetRgbPalette(defaultPalette);
+
+		//Try to load the custom palette from the MesenPalette.pal file
+		string palettePath = FolderUtilities::CombinePath(FolderUtilities::GetHomeFolder(), "MesenPalette.pal");
+		uint8_t fileData[64 * 3] = {};
+		ifstream palette(palettePath, ios::binary || ios::in);
+		if(palette) {
+			palette.seekg(0, ios::end);
+			std::streampos fileSize = palette.tellg();
+			palette.seekg(0, ios::beg);
+			if(fileSize >= 64 * 3) {
+				palette.read((char*)fileData, 64 * 3);
+				uint32_t customPalette[64];
+				for(int i = 0; i < 64; i++) {
+					customPalette[i] = 0xFF000000 | fileData[i * 3 + 2] | (fileData[i * 3 + 1] << 8) | (fileData[i * 3] << 16);
+				}
+				EmulationSettings::SetRgbPalette(customPalette);
 			}
 		}
 	}
@@ -278,6 +302,8 @@ extern "C" {
 				EmulationSettings::SetRgbPalette(unsaturatedPalette);
 			} else if(value == "YUV v3 (by FirebrandX)") {
 				EmulationSettings::SetRgbPalette(yuvPalette);
+			} else if(value == "Custom") {
+				load_custom_palette();
 			}
 		}
 
