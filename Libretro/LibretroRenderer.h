@@ -48,7 +48,7 @@ public:
 		}
 	}
 	
-	static void GetSystemAudioVideoInfo(retro_system_av_info &info, int32_t newHeight, int32_t newWidth)
+	void GetSystemAudioVideoInfo(retro_system_av_info &info, int32_t maxHeight = 0, int32_t maxWidth = 0)
 	{
 		info.timing.fps = Console::GetModel() == NesModel::NTSC ? 60.098811862348404716732985230828 : 50.006977968268290848936010226333;
 		info.timing.sample_rate = 48000;
@@ -68,8 +68,8 @@ public:
 		info.geometry.base_width = EmulationSettings::GetOverscanDimensions().GetScreenWidth();
 		info.geometry.base_height = EmulationSettings::GetOverscanDimensions().GetScreenHeight();
 
-		info.geometry.max_width = newHeight;
-		info.geometry.max_height = newWidth;
+		info.geometry.max_width = maxWidth;
+		info.geometry.max_height = maxHeight;
 	}
 
 	void SetCallbacks(retro_video_refresh_t sendFrame, retro_environment_t retroEnv)

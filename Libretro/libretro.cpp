@@ -469,6 +469,10 @@ extern "C" {
 		EmulationSettings::SetControllerKeys(1, getKeyBindings(1));
 		EmulationSettings::SetControllerKeys(2, getKeyBindings(2));
 		EmulationSettings::SetControllerKeys(3, getKeyBindings(3));
+
+		retro_system_av_info avInfo = {};
+		_renderer->GetSystemAudioVideoInfo(avInfo);
+		retroEnv(RETRO_ENVIRONMENT_SET_GEOMETRY, &avInfo);
 	}
 
 	RETRO_API void retro_run()
