@@ -91,10 +91,9 @@ extern "C" {
 		_renderer.reset(new LibretroRenderer());
 		_soundManager.reset(new LibretroSoundManager());
 		_keyManager.reset(new LibretroKeyManager());
-		_messageManager.reset(new LibretroMessageManager(logCallback));
+		_messageManager.reset(new LibretroMessageManager(logCallback, retroEnv));
 
 		EmulationSettings::SetFlags(EmulationFlags::FdsAutoLoadDisk);
-		EmulationSettings::SetFlags(EmulationFlags::DisableOsd);
 		EmulationSettings::SetFlags(EmulationFlags::AutoConfigureInput);
 		EmulationSettings::SetSampleRate(48000);
 		EmulationSettings::SetAutoSaveOptions(0, false);

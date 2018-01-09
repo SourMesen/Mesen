@@ -1,6 +1,7 @@
 #pragma once
 #include "stdafx.h"
 #include "SystemActionManager.h"
+#include "MessageManager.h"
 #include "FDS.h"
 
 class FdsSystemActionManager : public SystemActionManager
@@ -95,6 +96,7 @@ public:
 				_insertDiskNumber = diskNumber;
 				_insertDiskDelay = 1;
 			}
+			MessageManager::DisplayMessage("FDS", "FdsDiskInserted", std::to_string(diskNumber / 2 + 1), diskNumber & 0x01 ? "B" : "A");
 		}
 	}
 

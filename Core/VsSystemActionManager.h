@@ -62,6 +62,7 @@ public:
 	void InsertCoin(uint8_t port)
 	{
 		_needInsertCoin[port] = VsSystemActionManager::InsertCoinFrameCount;
+		MessageManager::DisplayMessage("VS System", "CoinInsertedSlot", std::to_string(port + 1));
 	}
 
 	void SetServiceButtonState(bool pressed)

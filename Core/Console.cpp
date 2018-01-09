@@ -422,7 +422,7 @@ void Console::RunSingleFrame()
 	//Used by Libretro
 	uint32_t lastFrameNumber = PPU::GetFrameCount();
 	_emulationThreadId = std::this_thread::get_id();
-	UpdateNesModel(false);
+	UpdateNesModel(true);
 
 	while(PPU::GetFrameCount() == lastFrameNumber) {
 		_cpu->Exec();
