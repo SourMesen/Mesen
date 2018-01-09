@@ -147,7 +147,7 @@ extern "C" {
 
 	RETRO_API void retro_set_video_refresh(retro_video_refresh_t sendFrame)
 	{
-		_renderer->SetSendFrame(sendFrame);
+		_renderer->SetCallbacks(sendFrame, retroEnv);
 	}
 
 	RETRO_API void retro_set_audio_sample(retro_audio_sample_t sendAudioSample)
@@ -178,31 +178,6 @@ extern "C" {
 		Console::Reset(true);
 	}
 	
-	void setup_av_info(struct retro_system_av_info *info)
-	{
-		info->timing.fps = Console::GetModel() == NesModel::NTSC ? 60.098811862348404716732985230828 : 50.006977968268290848936010226333;
-		info->timing.sample_rate = 48000;
-
-		float ratio = (float)EmulationSettings::GetAspectRatio();
-		if(ratio == 0.0f) {
-			ratio = 1.0f;
-		}
-		ratio *= (float)EmulationSettings::GetOverscanDimensions().GetScreenWidth() / EmulationSettings::GetOverscanDimensions().GetScreenHeight() / 256 * 240;
-
-		if(EmulationSettings::GetScreenRotation() % 180) {
-			info->geometry.aspect_ratio = ratio == 0.0f ? 0.0f : 1.0f / ratio;
-		} else {
-			info->geometry.aspect_ratio = ratio;
-		}
-
-		info->geometry.base_width = EmulationSettings::GetOverscanDimensions().GetScreenWidth();
-		info->geometry.base_height = EmulationSettings::GetOverscanDimensions().GetScreenHeight();
-
-		//For HD packs:
-		info->geometry.max_width = 256 * 10;
-		info->geometry.max_height = 240 * 10;
-	}
-
 	void set_flag(const char* flagName, uint64_t flagValue)
 	{
 		struct retro_variable var = {};
@@ -464,10 +439,6 @@ extern "C" {
 		EmulationSettings::SetControllerKeys(1, getKeyBindings(1));
 		EmulationSettings::SetControllerKeys(2, getKeyBindings(2));
 		EmulationSettings::SetControllerKeys(3, getKeyBindings(3));
-
-		retro_system_av_info avInfo = {};
-		setup_av_info(&avInfo);
-		retroEnv(RETRO_ENVIRONMENT_SET_GEOMETRY, &avInfo);
 	}
 
 	RETRO_API void retro_run()
@@ -492,12 +463,8 @@ extern "C" {
 
 			bool hdPacksEnabled = EmulationSettings::CheckFlag(EmulationFlags::UseHdPacks);
 			if(hdPacksEnabled != _hdPacksEnabled) {
-				if(_hdPacksEnabled != hdPacksEnabled) {
-					//Try to load/unload HD pack when the flag is toggled
-					if(Console::GetInstance()->UpdateHdPackMode()) {
-						update_settings();
-					}
-				}
+				//Try to load/unload HD pack when the flag is toggled
+				Console::GetInstance()->UpdateHdPackMode();
 				_hdPacksEnabled = hdPacksEnabled;
 			}
 		}
@@ -685,7 +652,7 @@ extern "C" {
 
 	RETRO_API void retro_get_system_av_info(struct retro_system_av_info *info)
 	{
-		setup_av_info(info);		
+		_renderer->GetSystemAudioVideoInfo(*info, 256, 240);
 	}
 
 	RETRO_API void *retro_get_memory_data(unsigned id)
