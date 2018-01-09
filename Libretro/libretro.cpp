@@ -126,7 +126,7 @@ extern "C" {
 			{ MesenOverscanVertical, "Vertical Overscan; None|8px|16px" },
 			{ MesenOverscanHorizontal, "Horizontal Overscan; None|8px|16px" },
 			{ MesenAspectRatio ,  "Aspect Ratio; Auto|No Stretching|NTSC|PAL|4:3|16:9" },
-			{ MesenControllerTurboSpeed, "Controller Turbo Speed; Fast|Very Fast|Slow|Normal" },
+			{ MesenControllerTurboSpeed, "Controller Turbo Speed; Fast|Very Fast|Disabled|Slow|Normal" },
 			{ MesenHdPacks, "Enable HD Packs; enabled|disabled" },
 			{ MesenNoSpriteLimit, "Remove sprite limit; enabled|disabled" },
 			{ MesenFakeStereo, u8"Enable fake stereo effect; disabled|enabled" },
@@ -395,6 +395,7 @@ extern "C" {
 		}
 
 		int turboSpeed = 0;
+		bool turboEnabled = true;
 		var.key = MesenControllerTurboSpeed;
 		if(retroEnv(RETRO_ENVIRONMENT_GET_VARIABLE, &var)) {
 			string value = string(var.value);
@@ -406,6 +407,8 @@ extern "C" {
 				turboSpeed = 2;
 			} else if(value == "Very Fast") {
 				turboSpeed = 3;
+			} else if(value == "Disabled") {
+				turboEnabled = false;
 			}
 		}
 
@@ -418,8 +421,10 @@ extern "C" {
 			keyMappings.TurboSpeed = turboSpeed;
 			keyMappings.Mapping1.A = getKeyCode(port, RETRO_DEVICE_ID_JOYPAD_B);
 			keyMappings.Mapping1.B = getKeyCode(port, RETRO_DEVICE_ID_JOYPAD_Y);
-			keyMappings.Mapping1.TurboA = getKeyCode(port, RETRO_DEVICE_ID_JOYPAD_A);
-			keyMappings.Mapping1.TurboB = getKeyCode(port, RETRO_DEVICE_ID_JOYPAD_X);
+			if(turboEnabled) {
+				keyMappings.Mapping1.TurboA = getKeyCode(port, RETRO_DEVICE_ID_JOYPAD_A);
+				keyMappings.Mapping1.TurboB = getKeyCode(port, RETRO_DEVICE_ID_JOYPAD_X);
+			}
 			keyMappings.Mapping1.Start = getKeyCode(port, RETRO_DEVICE_ID_JOYPAD_START);
 			keyMappings.Mapping1.Select = getKeyCode(port, RETRO_DEVICE_ID_JOYPAD_SELECT);
 
