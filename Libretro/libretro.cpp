@@ -199,7 +199,7 @@ extern "C" {
 		//Try to load the custom palette from the MesenPalette.pal file
 		string palettePath = FolderUtilities::CombinePath(FolderUtilities::GetHomeFolder(), "MesenPalette.pal");
 		uint8_t fileData[64 * 3] = {};
-		ifstream palette(palettePath, ios::binary || ios::in);
+		ifstream palette(palettePath, ios::binary);
 		if(palette) {
 			palette.seekg(0, ios::end);
 			std::streampos fileSize = palette.tellg();
