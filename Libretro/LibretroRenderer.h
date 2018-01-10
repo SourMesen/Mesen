@@ -48,7 +48,7 @@ public:
 		}
 	}
 	
-	void GetSystemAudioVideoInfo(retro_system_av_info &info, int32_t maxHeight = 0, int32_t maxWidth = 0)
+	void GetSystemAudioVideoInfo(retro_system_av_info &info, int32_t maxWidth = 0, int32_t maxHeight = 0)
 	{
 		info.timing.fps = Console::GetModel() == NesModel::NTSC ? 60.098811862348404716732985230828 : 50.006977968268290848936010226333;
 		info.timing.sample_rate = 48000;
@@ -70,6 +70,11 @@ public:
 
 		info.geometry.max_width = maxWidth;
 		info.geometry.max_height = maxHeight;
+
+		if(maxHeight > 0 && maxWidth > 0) {
+			_previousWidth = maxWidth;
+			_previousHeight = maxHeight;
+		}
 	}
 
 	void SetCallbacks(retro_video_refresh_t sendFrame, retro_environment_t retroEnv)

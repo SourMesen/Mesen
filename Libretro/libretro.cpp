@@ -12,6 +12,7 @@
 #include "../Core/VideoRenderer.h"
 #include "../Core/EmulationSettings.h"
 #include "../Core/CheatManager.h"
+#include "../Core/HdData.h"
 #include "../Core/DebuggerTypes.h"
 #include "../Utilities/FolderUtilities.h"
 #include "../Utilities/HexUtilities.h"
@@ -973,7 +974,25 @@ extern "C" {
 
 	RETRO_API void retro_get_system_av_info(struct retro_system_av_info *info)
 	{
-		_renderer->GetSystemAudioVideoInfo(*info, 256, 240);
+		uint32_t scale = 1;
+		switch(EmulationSettings::GetVideoFilterType()) {
+			case VideoFilterType::NTSC: scale = 2; break;
+			case VideoFilterType::BisqwitNtscQuarterRes: scale = 2; break;
+			case VideoFilterType::BisqwitNtscHalfRes: scale = 4; break;
+			case VideoFilterType::BisqwitNtsc: scale = 8; break;
+			default: scale = 1; break;
+		}
+		
+		HdPackData* hdData = Console::GetHdData();
+		if(hdData != nullptr) {
+			scale = hdData->Scale;
+		}
+
+		if(scale <= 2) {
+			_renderer->GetSystemAudioVideoInfo(*info, NES_NTSC_OUT_WIDTH(256), 240 * 2);
+		} else {
+			_renderer->GetSystemAudioVideoInfo(*info, 256 * scale, 240 * scale);
+		}
 	}
 
 	RETRO_API void *retro_get_memory_data(unsigned id)
