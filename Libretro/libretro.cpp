@@ -18,6 +18,7 @@
 
 static retro_log_printf_t logCallback = nullptr;
 static retro_environment_t retroEnv = nullptr;
+static unsigned _inputDevices[5] = {};
 static bool _hdPacksEnabled = false;
 static string _mesenVersion = "";
 int32_t _saveStateSize = -1;
@@ -31,6 +32,25 @@ static std::unique_ptr<LibretroRenderer> _renderer;
 static std::unique_ptr<LibretroSoundManager> _soundManager;
 static std::unique_ptr<LibretroKeyManager> _keyManager;
 static std::unique_ptr<LibretroMessageManager> _messageManager;
+
+#define DEVICE_AUTO               RETRO_DEVICE_JOYPAD
+#define DEVICE_GAMEPAD            RETRO_DEVICE_SUBCLASS(RETRO_DEVICE_JOYPAD, 0)
+#define DEVICE_POWERPAD           RETRO_DEVICE_SUBCLASS(RETRO_DEVICE_JOYPAD, 1)
+#define DEVICE_FAMILYTRAINER      RETRO_DEVICE_SUBCLASS(RETRO_DEVICE_JOYPAD, 2)
+#define DEVICE_PARTYTAP           RETRO_DEVICE_SUBCLASS(RETRO_DEVICE_JOYPAD, 3)
+#define DEVICE_PACHINKO           RETRO_DEVICE_SUBCLASS(RETRO_DEVICE_JOYPAD, 4)
+#define DEVICE_EXCITINGBOXING     RETRO_DEVICE_SUBCLASS(RETRO_DEVICE_JOYPAD, 5)
+#define DEVICE_KONAMIHYPERSHOT    RETRO_DEVICE_SUBCLASS(RETRO_DEVICE_JOYPAD, 6)
+#define DEVICE_SNESGAMEPAD        RETRO_DEVICE_SUBCLASS(RETRO_DEVICE_JOYPAD, 7)
+#define DEVICE_ZAPPER             RETRO_DEVICE_SUBCLASS(RETRO_DEVICE_POINTER, 0)
+#define DEVICE_OEKAKIDS           RETRO_DEVICE_SUBCLASS(RETRO_DEVICE_POINTER, 1)
+#define DEVICE_BANDAIHYPERSHOT    RETRO_DEVICE_SUBCLASS(RETRO_DEVICE_POINTER, 2)
+#define DEVICE_ARKANOID           RETRO_DEVICE_SUBCLASS(RETRO_DEVICE_MOUSE, 0)
+#define DEVICE_HORITRACK          RETRO_DEVICE_SUBCLASS(RETRO_DEVICE_MOUSE, 1)
+#define DEVICE_SNESMOUSE          RETRO_DEVICE_SUBCLASS(RETRO_DEVICE_MOUSE, 2)
+#define DEVICE_ASCIITURBOFILE     RETRO_DEVICE_SUBCLASS(RETRO_DEVICE_NONE, 0)
+#define DEVICE_BATTLEBOX          RETRO_DEVICE_SUBCLASS(RETRO_DEVICE_NONE, 1)
+#define DEVICE_FOURPLAYERADAPTER  RETRO_DEVICE_SUBCLASS(RETRO_DEVICE_NONE, 2)
 
 static const char* MesenNtscFilter = "mesen_ntsc_filter";
 static const char* MesenNtscVerticalBlend = "mesen_ntsc_vertical_blend";
@@ -141,7 +161,68 @@ extern "C" {
 			{ NULL, NULL },
 		};
 
+		static const struct retro_controller_description pads1[] = {
+			{ "Auto", DEVICE_AUTO },
+			{ "Standard Controller", DEVICE_GAMEPAD },
+			{ "Zapper", DEVICE_ZAPPER },
+			{ "Power Pad", DEVICE_POWERPAD },
+			{ "Arkanoid", DEVICE_ARKANOID },
+			{ "SNES Controller", DEVICE_SNESGAMEPAD },
+			{ "SNES Mouse", DEVICE_SNESMOUSE },
+			{ NULL, 0 },
+		};
+
+		static const struct retro_controller_description pads2[] = {
+			{ "Auto", DEVICE_AUTO },
+			{ "Standard Controller", DEVICE_GAMEPAD },
+			{ "Zapper", DEVICE_ZAPPER },
+			{ "Power Pad", DEVICE_POWERPAD },
+			{ "Arkanoid", DEVICE_ARKANOID },
+			{ "SNES Controller", DEVICE_SNESGAMEPAD },
+			{ "SNES Mouse", DEVICE_SNESMOUSE },
+			{ NULL, 0 },
+		};
+
+		static const struct retro_controller_description pads3[] = {
+			{ "Auto", DEVICE_AUTO },
+			{ "Standard Controller", DEVICE_GAMEPAD },
+			{ NULL, 0 },
+		};
+
+		static const struct retro_controller_description pads4[] = {
+			{ "Auto", DEVICE_AUTO },
+			{ "Standard Controller", DEVICE_GAMEPAD },
+			{ NULL, 0 },
+		};
+		
+		static const struct retro_controller_description pads5[] = {
+			{ "Auto",     RETRO_DEVICE_JOYPAD },
+			{ "Arkanoid", DEVICE_ARKANOID },
+			{ "Ascii Turbo File", DEVICE_ASCIITURBOFILE },
+			{ "Bandai Hypershot", DEVICE_BANDAIHYPERSHOT },
+			{ "Battle Box", DEVICE_BATTLEBOX },
+			{ "Exciting Boxing", DEVICE_EXCITINGBOXING },
+			{ "Family Trainer", DEVICE_FAMILYTRAINER },
+			{ "Four Player Adapter", DEVICE_FOURPLAYERADAPTER },
+			{ "Hori Track", DEVICE_HORITRACK },
+			{ "Konami Hypershot", DEVICE_KONAMIHYPERSHOT },
+			{ "Pachinko", DEVICE_PACHINKO },
+			{ "Partytap", DEVICE_PARTYTAP },
+			{ "Oeka Kids Tablet", DEVICE_OEKAKIDS },			
+			{ NULL, 0 },
+		};
+		
+		static const struct retro_controller_info ports[] = {
+			{ pads1, 7 },
+			{ pads2, 7 },
+			{ pads3, 2 },
+			{ pads4, 2 },
+			{ pads5, 12 },
+			{ 0 },
+		};
+
 		retroEnv(RETRO_ENVIRONMENT_SET_VARIABLES, (void*)vars);
+		retroEnv(RETRO_ENVIRONMENT_SET_CONTROLLER_INFO, (void*)ports);
 	}
 
 	RETRO_API void retro_set_video_refresh(retro_video_refresh_t sendFrame)
@@ -166,10 +247,6 @@ extern "C" {
 	RETRO_API void retro_set_input_state(retro_input_state_t getInputState)
 	{
 		_keyManager->SetGetInputState(getInputState);
-	}
-
-	RETRO_API void retro_set_controller_port_device(unsigned port, unsigned device)
-	{
 	}
 
 	RETRO_API void retro_reset()
@@ -445,12 +522,22 @@ extern "C" {
 		auto getKeyBindings = [=](int port) {
 			KeyMappingSet keyMappings;
 			keyMappings.TurboSpeed = turboSpeed;
-			keyMappings.Mapping1.A = getKeyCode(port, RETRO_DEVICE_ID_JOYPAD_B);
-			keyMappings.Mapping1.B = getKeyCode(port, RETRO_DEVICE_ID_JOYPAD_Y);
-			if(turboEnabled) {
-				keyMappings.Mapping1.TurboA = getKeyCode(port, RETRO_DEVICE_ID_JOYPAD_A);
-				keyMappings.Mapping1.TurboB = getKeyCode(port, RETRO_DEVICE_ID_JOYPAD_X);
+			if(EmulationSettings::GetControllerType(port) == ControllerType::SnesController) {
+				keyMappings.Mapping1.LButton = getKeyCode(port, RETRO_DEVICE_ID_JOYPAD_L);
+				keyMappings.Mapping1.RButton = getKeyCode(port, RETRO_DEVICE_ID_JOYPAD_R);
+				keyMappings.Mapping1.A = getKeyCode(port, RETRO_DEVICE_ID_JOYPAD_A);
+				keyMappings.Mapping1.B = getKeyCode(port, RETRO_DEVICE_ID_JOYPAD_B);
+				keyMappings.Mapping1.TurboA = getKeyCode(port, RETRO_DEVICE_ID_JOYPAD_X);
+				keyMappings.Mapping1.TurboB = getKeyCode(port, RETRO_DEVICE_ID_JOYPAD_Y);
+			} else {
+				keyMappings.Mapping1.A = getKeyCode(port, RETRO_DEVICE_ID_JOYPAD_B);
+				keyMappings.Mapping1.B = getKeyCode(port, RETRO_DEVICE_ID_JOYPAD_Y);
+				if(turboEnabled) {
+					keyMappings.Mapping1.TurboA = getKeyCode(port, RETRO_DEVICE_ID_JOYPAD_A);
+					keyMappings.Mapping1.TurboB = getKeyCode(port, RETRO_DEVICE_ID_JOYPAD_X);
+				}
 			}
+
 			keyMappings.Mapping1.Start = getKeyCode(port, RETRO_DEVICE_ID_JOYPAD_START);
 			keyMappings.Mapping1.Select = getKeyCode(port, RETRO_DEVICE_ID_JOYPAD_SELECT);
 
@@ -459,8 +546,57 @@ extern "C" {
 			keyMappings.Mapping1.Left = getKeyCode(port, RETRO_DEVICE_ID_JOYPAD_LEFT);
 			keyMappings.Mapping1.Right = getKeyCode(port, RETRO_DEVICE_ID_JOYPAD_RIGHT);
 
-			if(port == 1) {
-				keyMappings.Mapping1.Microphone = getKeyCode(0, RETRO_DEVICE_ID_JOYPAD_L3);
+			if(port == 0) {
+				keyMappings.Mapping1.PartyTapButtons[0] = getKeyCode(4, RETRO_DEVICE_ID_JOYPAD_B);
+				keyMappings.Mapping1.PartyTapButtons[1] = getKeyCode(4, RETRO_DEVICE_ID_JOYPAD_A);
+				keyMappings.Mapping1.PartyTapButtons[2] = getKeyCode(4, RETRO_DEVICE_ID_JOYPAD_Y);
+				keyMappings.Mapping1.PartyTapButtons[3] = getKeyCode(4, RETRO_DEVICE_ID_JOYPAD_X);
+				keyMappings.Mapping1.PartyTapButtons[4] = getKeyCode(4, RETRO_DEVICE_ID_JOYPAD_L);
+				keyMappings.Mapping1.PartyTapButtons[5] = getKeyCode(4, RETRO_DEVICE_ID_JOYPAD_R);
+
+				unsigned powerPadPort = 0;
+				if(EmulationSettings::GetExpansionDevice() == ExpansionPortDevice::FamilyTrainerMat) {
+					powerPadPort = 4;
+				}
+
+				keyMappings.Mapping1.PowerPadButtons[0] = getKeyCode(powerPadPort, RETRO_DEVICE_ID_JOYPAD_B);
+				keyMappings.Mapping1.PowerPadButtons[1] = getKeyCode(powerPadPort, RETRO_DEVICE_ID_JOYPAD_A);
+				keyMappings.Mapping1.PowerPadButtons[2] = getKeyCode(powerPadPort, RETRO_DEVICE_ID_JOYPAD_Y);
+				keyMappings.Mapping1.PowerPadButtons[3] = getKeyCode(powerPadPort, RETRO_DEVICE_ID_JOYPAD_X);
+				keyMappings.Mapping1.PowerPadButtons[4] = getKeyCode(powerPadPort, RETRO_DEVICE_ID_JOYPAD_L);
+				keyMappings.Mapping1.PowerPadButtons[5] = getKeyCode(powerPadPort, RETRO_DEVICE_ID_JOYPAD_R);
+				keyMappings.Mapping1.PowerPadButtons[6] = getKeyCode(powerPadPort, RETRO_DEVICE_ID_JOYPAD_LEFT);
+				keyMappings.Mapping1.PowerPadButtons[7] = getKeyCode(powerPadPort, RETRO_DEVICE_ID_JOYPAD_RIGHT);
+				keyMappings.Mapping1.PowerPadButtons[8] = getKeyCode(powerPadPort, RETRO_DEVICE_ID_JOYPAD_UP);
+				keyMappings.Mapping1.PowerPadButtons[9] = getKeyCode(powerPadPort, RETRO_DEVICE_ID_JOYPAD_DOWN);
+				keyMappings.Mapping1.PowerPadButtons[10] = getKeyCode(powerPadPort, RETRO_DEVICE_ID_JOYPAD_SELECT);
+				keyMappings.Mapping1.PowerPadButtons[11] = getKeyCode(powerPadPort, RETRO_DEVICE_ID_JOYPAD_START);
+
+				keyMappings.Mapping1.PachinkoButtons[0] = getKeyCode(4, RETRO_DEVICE_ID_JOYPAD_R);
+				keyMappings.Mapping1.PachinkoButtons[1] = getKeyCode(4, RETRO_DEVICE_ID_JOYPAD_L);
+
+				keyMappings.Mapping1.ExcitingBoxingButtons[0] = getKeyCode(4, RETRO_DEVICE_ID_JOYPAD_B); //left hook
+				keyMappings.Mapping1.ExcitingBoxingButtons[1] = getKeyCode(4, RETRO_DEVICE_ID_JOYPAD_RIGHT); //move right
+				keyMappings.Mapping1.ExcitingBoxingButtons[2] = getKeyCode(4, RETRO_DEVICE_ID_JOYPAD_LEFT); //move left
+				keyMappings.Mapping1.ExcitingBoxingButtons[3] = getKeyCode(4, RETRO_DEVICE_ID_JOYPAD_A); //right hook
+				keyMappings.Mapping1.ExcitingBoxingButtons[4] = getKeyCode(4, RETRO_DEVICE_ID_JOYPAD_Y); //left jab
+				keyMappings.Mapping1.ExcitingBoxingButtons[5] = getKeyCode(4, RETRO_DEVICE_ID_JOYPAD_L); //body
+				keyMappings.Mapping1.ExcitingBoxingButtons[6] = getKeyCode(4, RETRO_DEVICE_ID_JOYPAD_X); //right jab
+				keyMappings.Mapping1.ExcitingBoxingButtons[7] = getKeyCode(4, RETRO_DEVICE_ID_JOYPAD_R); //straight
+			} else if(port == 1) {
+				keyMappings.Mapping1.Microphone = getKeyCode(1, RETRO_DEVICE_ID_JOYPAD_L3);
+				keyMappings.Mapping1.PowerPadButtons[0] = getKeyCode(1, RETRO_DEVICE_ID_JOYPAD_B);
+				keyMappings.Mapping1.PowerPadButtons[1] = getKeyCode(1, RETRO_DEVICE_ID_JOYPAD_A);
+				keyMappings.Mapping1.PowerPadButtons[2] = getKeyCode(1, RETRO_DEVICE_ID_JOYPAD_Y);
+				keyMappings.Mapping1.PowerPadButtons[3] = getKeyCode(1, RETRO_DEVICE_ID_JOYPAD_X);
+				keyMappings.Mapping1.PowerPadButtons[4] = getKeyCode(1, RETRO_DEVICE_ID_JOYPAD_L);
+				keyMappings.Mapping1.PowerPadButtons[5] = getKeyCode(1, RETRO_DEVICE_ID_JOYPAD_R);
+				keyMappings.Mapping1.PowerPadButtons[6] = getKeyCode(1, RETRO_DEVICE_ID_JOYPAD_LEFT);
+				keyMappings.Mapping1.PowerPadButtons[7] = getKeyCode(1, RETRO_DEVICE_ID_JOYPAD_RIGHT);
+				keyMappings.Mapping1.PowerPadButtons[8] = getKeyCode(1, RETRO_DEVICE_ID_JOYPAD_UP);
+				keyMappings.Mapping1.PowerPadButtons[9] = getKeyCode(1, RETRO_DEVICE_ID_JOYPAD_DOWN);
+				keyMappings.Mapping1.PowerPadButtons[10] = getKeyCode(1, RETRO_DEVICE_ID_JOYPAD_SELECT);
+				keyMappings.Mapping1.PowerPadButtons[11] = getKeyCode(1, RETRO_DEVICE_ID_JOYPAD_START);
 			}
 			return keyMappings;
 		};
@@ -570,6 +706,192 @@ extern "C" {
 
 	}
 
+	void update_input_descriptors()
+	{
+		vector<retro_input_descriptor> desc;
+
+		auto addDesc = [&desc](unsigned port, unsigned button, const char* name) {
+			retro_input_descriptor d = { port, RETRO_DEVICE_JOYPAD, 0, button, name };
+			desc.push_back(d);
+		};
+
+		auto setupPlayerButtons = [addDesc](int port) {
+			unsigned device = _inputDevices[port];
+			if(device == DEVICE_AUTO) {
+				if(port <= 3) {
+					switch(EmulationSettings::GetControllerType(port)) {
+						case ControllerType::StandardController: device = DEVICE_GAMEPAD; break;
+						case ControllerType::PowerPad: device = DEVICE_POWERPAD; break;
+						case ControllerType::SnesController: device = DEVICE_SNESGAMEPAD; break;
+						case ControllerType::SnesMouse: device = DEVICE_SNESMOUSE; break;
+						case ControllerType::Zapper: device = DEVICE_ZAPPER; break;
+						case ControllerType::ArkanoidController: device = DEVICE_ARKANOID; break;
+						default: return;
+					}
+				} else if(port == 4) {
+					switch(EmulationSettings::GetExpansionDevice()) {
+						case ExpansionPortDevice::ArkanoidController: device = DEVICE_ARKANOID; break;
+						case ExpansionPortDevice::BandaiHyperShot: device = DEVICE_BANDAIHYPERSHOT; break;
+						case ExpansionPortDevice::ExcitingBoxing: device = DEVICE_EXCITINGBOXING; break;
+						case ExpansionPortDevice::FamilyTrainerMat: device = DEVICE_FAMILYTRAINER; break;
+						case ExpansionPortDevice::HoriTrack: device = DEVICE_HORITRACK; break;
+						case ExpansionPortDevice::KonamiHyperShot: device = DEVICE_KONAMIHYPERSHOT; break;
+						case ExpansionPortDevice::OekaKidsTablet: device = DEVICE_OEKAKIDS; break;
+						case ExpansionPortDevice::Pachinko: device = DEVICE_PACHINKO; break;
+						case ExpansionPortDevice::PartyTap: device = DEVICE_PARTYTAP; break;
+						case ExpansionPortDevice::Zapper: device = DEVICE_ZAPPER; break;
+						case ExpansionPortDevice::BattleBox: device = DEVICE_BATTLEBOX; break;
+						case ExpansionPortDevice::AsciiTurboFile: device = DEVICE_ASCIITURBOFILE; break;
+						case ExpansionPortDevice::FourPlayerAdapter: device = DEVICE_FOURPLAYERADAPTER; break;
+						default: return;
+					}
+				}
+			}
+
+			if(device == DEVICE_GAMEPAD || device == DEVICE_SNESGAMEPAD) {
+				addDesc(port, RETRO_DEVICE_ID_JOYPAD_LEFT, "D-Pad Left");
+				addDesc(port, RETRO_DEVICE_ID_JOYPAD_UP, "D-Pad Up");
+				addDesc(port, RETRO_DEVICE_ID_JOYPAD_DOWN, "D-Pad Down");
+				addDesc(port, RETRO_DEVICE_ID_JOYPAD_RIGHT, "D-Pad Right");
+				if(device == DEVICE_SNESGAMEPAD) {
+					addDesc(port, RETRO_DEVICE_ID_JOYPAD_A, "A");
+					addDesc(port, RETRO_DEVICE_ID_JOYPAD_B, "B");
+					addDesc(port, RETRO_DEVICE_ID_JOYPAD_X, "X");
+					addDesc(port, RETRO_DEVICE_ID_JOYPAD_Y, "Y");
+					addDesc(port, RETRO_DEVICE_ID_JOYPAD_L, "L");
+					addDesc(port, RETRO_DEVICE_ID_JOYPAD_R, "R");
+				} else {
+					addDesc(port, RETRO_DEVICE_ID_JOYPAD_B, "A");
+					addDesc(port, RETRO_DEVICE_ID_JOYPAD_Y, "B");
+					addDesc(port, RETRO_DEVICE_ID_JOYPAD_A, "Turbo A");
+					addDesc(port, RETRO_DEVICE_ID_JOYPAD_X, "Turbo B");
+
+					if(port == 0) {
+						addDesc(port, RETRO_DEVICE_ID_JOYPAD_L, "(FDS) Insert Next Disk");
+						addDesc(port, RETRO_DEVICE_ID_JOYPAD_R, "(FDS) Switch Disk Side");
+						addDesc(port, RETRO_DEVICE_ID_JOYPAD_L2, "(VS) Insert Coin 1");
+						addDesc(port, RETRO_DEVICE_ID_JOYPAD_R2, "(VS) Insert Coin 2");
+					} else if(port == 1) {
+						addDesc(port, RETRO_DEVICE_ID_JOYPAD_L3, "(Famicom) Microphone");
+					}
+				}
+				addDesc(port, RETRO_DEVICE_ID_JOYPAD_START, "Start");
+				addDesc(port, RETRO_DEVICE_ID_JOYPAD_SELECT, "Select");
+			} else if(device == DEVICE_EXCITINGBOXING) {
+				addDesc(port, RETRO_DEVICE_ID_JOYPAD_B, "Left Hook");
+				addDesc(port, RETRO_DEVICE_ID_JOYPAD_A, "Right Hook");
+				addDesc(port, RETRO_DEVICE_ID_JOYPAD_Y, "Left Jab");
+				addDesc(port, RETRO_DEVICE_ID_JOYPAD_X, "Right Jab");
+				addDesc(port, RETRO_DEVICE_ID_JOYPAD_L, "Body");
+				addDesc(port, RETRO_DEVICE_ID_JOYPAD_R, "Straight");
+				addDesc(port, RETRO_DEVICE_ID_JOYPAD_LEFT, "Move Left");
+				addDesc(port, RETRO_DEVICE_ID_JOYPAD_RIGHT, "Move Right");
+			} else if(device == DEVICE_PARTYTAP) {
+				addDesc(port, RETRO_DEVICE_ID_JOYPAD_B, "Partytap P1");
+				addDesc(port, RETRO_DEVICE_ID_JOYPAD_A, "Partytap P2");
+				addDesc(port, RETRO_DEVICE_ID_JOYPAD_Y, "Partytap P3");
+				addDesc(port, RETRO_DEVICE_ID_JOYPAD_X, "Partytap P4");
+				addDesc(port, RETRO_DEVICE_ID_JOYPAD_L, "Partytap P5");
+				addDesc(port, RETRO_DEVICE_ID_JOYPAD_R, "Partytap P6");
+			} else if(device == DEVICE_FAMILYTRAINER || device == DEVICE_POWERPAD) {
+				addDesc(port, RETRO_DEVICE_ID_JOYPAD_B, "Powerpad B1");
+				addDesc(port, RETRO_DEVICE_ID_JOYPAD_A, "Powerpad B2");
+				addDesc(port, RETRO_DEVICE_ID_JOYPAD_Y, "Powerpad B3");
+				addDesc(port, RETRO_DEVICE_ID_JOYPAD_X, "Powerpad B4");
+				addDesc(port, RETRO_DEVICE_ID_JOYPAD_L, "Powerpad B5");
+				addDesc(port, RETRO_DEVICE_ID_JOYPAD_R, "Powerpad B6");
+				addDesc(port, RETRO_DEVICE_ID_JOYPAD_LEFT, "Powerpad B7");
+				addDesc(port, RETRO_DEVICE_ID_JOYPAD_RIGHT, "Powerpad B8");
+				addDesc(port, RETRO_DEVICE_ID_JOYPAD_UP, "Powerpad B9");
+				addDesc(port, RETRO_DEVICE_ID_JOYPAD_DOWN, "Powerpad B10");
+				addDesc(port, RETRO_DEVICE_ID_JOYPAD_SELECT, "Powerpad B11");
+				addDesc(port, RETRO_DEVICE_ID_JOYPAD_START, "Powerpad B12");
+			} else if(device == DEVICE_PACHINKO) {
+				addDesc(port, RETRO_DEVICE_ID_JOYPAD_L, "Release Trigger");
+				addDesc(port, RETRO_DEVICE_ID_JOYPAD_R, "Press Trigger");
+			}
+		};
+
+		setupPlayerButtons(0);
+		setupPlayerButtons(1);
+		setupPlayerButtons(2);
+		setupPlayerButtons(3);
+		setupPlayerButtons(4);
+
+		retro_input_descriptor end = { 0 };
+		desc.push_back(end);
+
+		retroEnv(RETRO_ENVIRONMENT_SET_INPUT_DESCRIPTORS, desc.data());
+	}
+
+	void update_core_controllers()
+	{
+		//Setup all "auto" ports
+		GameDatabase::InitializeInputDevices(Console::GetHashInfo().PrgChrCrc32Hash);
+
+		//TODO: Four Score		
+
+		for(int port = 0; port < 5; port++) {
+			if(_inputDevices[port] != DEVICE_AUTO) {
+				if(port <= 3) {
+					ControllerType type = ControllerType::StandardController;
+					switch(_inputDevices[port]) {
+						case RETRO_DEVICE_NONE: type = ControllerType::None; break;
+						case DEVICE_GAMEPAD: type = ControllerType::StandardController; break;
+						case DEVICE_ZAPPER: type = ControllerType::Zapper; break;
+						case DEVICE_POWERPAD: type = ControllerType::PowerPad; break;
+						case DEVICE_ARKANOID: type = ControllerType::ArkanoidController; break;
+						case DEVICE_SNESGAMEPAD: type = ControllerType::SnesController; break;
+						case DEVICE_SNESMOUSE: type = ControllerType::SnesMouse; break;
+					}
+					EmulationSettings::SetControllerType(port, type);
+				} else {
+					ExpansionPortDevice type = ExpansionPortDevice::None;
+					switch(_inputDevices[port]) {
+						case RETRO_DEVICE_NONE: type = ExpansionPortDevice::None; break;
+						case DEVICE_FAMILYTRAINER: type = ExpansionPortDevice::FamilyTrainerMat; break;
+						case DEVICE_PARTYTAP: type = ExpansionPortDevice::PartyTap; break;
+						case DEVICE_PACHINKO: type = ExpansionPortDevice::Pachinko; break;
+						case DEVICE_EXCITINGBOXING: type = ExpansionPortDevice::ExcitingBoxing; break;
+						case DEVICE_KONAMIHYPERSHOT: type = ExpansionPortDevice::KonamiHyperShot; break;
+						case DEVICE_OEKAKIDS: type = ExpansionPortDevice::OekaKidsTablet; break;
+						case DEVICE_BANDAIHYPERSHOT: type = ExpansionPortDevice::BandaiHyperShot; break;
+						case DEVICE_ARKANOID: type = ExpansionPortDevice::ArkanoidController; break;
+						case DEVICE_HORITRACK: type = ExpansionPortDevice::HoriTrack; break;
+						case DEVICE_ASCIITURBOFILE: type = ExpansionPortDevice::AsciiTurboFile; break;
+						case DEVICE_BATTLEBOX: type = ExpansionPortDevice::BattleBox; break;
+						case DEVICE_FOURPLAYERADAPTER: type = ExpansionPortDevice::FourPlayerAdapter; break;
+					}
+					EmulationSettings::SetExpansionDevice(type);
+				}
+			}
+		}
+
+		bool hasFourScore = false;
+		if(EmulationSettings::GetExpansionDevice() != ExpansionPortDevice::None) {
+			EmulationSettings::SetConsoleType(ConsoleType::Famicom);
+			if(EmulationSettings::GetExpansionDevice() == ExpansionPortDevice::FourPlayerAdapter) {
+				hasFourScore = true;
+			}
+		} else {
+			EmulationSettings::SetConsoleType(ConsoleType::Nes);
+			if(EmulationSettings::GetControllerType(2) != ControllerType::None || EmulationSettings::GetControllerType(3) != ControllerType::None) {
+				hasFourScore = true;
+			}
+		}
+
+		EmulationSettings::SetFlagState(EmulationFlags::HasFourScore, hasFourScore);
+	}
+
+	RETRO_API void retro_set_controller_port_device(unsigned port, unsigned device)
+	{
+		if(port < 5) {
+			_inputDevices[port] = device;
+			update_core_controllers();
+			update_input_descriptors();
+		}
+	}
+
 	RETRO_API bool retro_load_game(const struct retro_game_info *game)
 	{
 		char *systemFolder;
@@ -606,43 +928,8 @@ extern "C" {
 		bool result = Console::LoadROM(string(game->path));
 
 		if(result) {
-			vector<retro_input_descriptor> desc;
-
-			auto addDesc = [&desc](unsigned port, unsigned button, const char* name) {
-				retro_input_descriptor d = { port, RETRO_DEVICE_JOYPAD, 0, button, name };
-				desc.push_back(d);
-			};
-
-			auto setupPlayerButtons = [addDesc](int port) {
-				if(EmulationSettings::GetControllerType(port) != ControllerType::StandardController) {
-					return;
-				}
-
-				addDesc(port, RETRO_DEVICE_ID_JOYPAD_LEFT, "D-Pad Left");
-				addDesc(port, RETRO_DEVICE_ID_JOYPAD_UP, "D-Pad Up");
-				addDesc(port, RETRO_DEVICE_ID_JOYPAD_DOWN, "D-Pad Down");
-				addDesc(port, RETRO_DEVICE_ID_JOYPAD_RIGHT, "D-Pad Right");
-				addDesc(port, RETRO_DEVICE_ID_JOYPAD_B, "A");
-				addDesc(port, RETRO_DEVICE_ID_JOYPAD_A, "Turbo A");
-				addDesc(port, RETRO_DEVICE_ID_JOYPAD_X, "Turbo B");
-				addDesc(port, RETRO_DEVICE_ID_JOYPAD_Y, "B");
-				if(port == 0) {
-					addDesc(port, RETRO_DEVICE_ID_JOYPAD_L, "(FDS) Insert Next Disk");
-					addDesc(port, RETRO_DEVICE_ID_JOYPAD_R, "(FDS) Switch Disk Side");
-					addDesc(port, RETRO_DEVICE_ID_JOYPAD_L2, "(VS) Insert Coin 1");
-					addDesc(port, RETRO_DEVICE_ID_JOYPAD_R2, "(VS) Insert Coin 2");
-					addDesc(port, RETRO_DEVICE_ID_JOYPAD_L3, "(Famicom) Microphone");
-				}
-			};
-			retro_input_descriptor end = { 0 };
-			desc.push_back(end);
-
-			setupPlayerButtons(0);
-			setupPlayerButtons(1);
-			setupPlayerButtons(2);
-			setupPlayerButtons(3);
-
-			retroEnv(RETRO_ENVIRONMENT_SET_INPUT_DESCRIPTORS, desc.data());
+			update_core_controllers();
+			update_input_descriptors();			
 
 			//Savestates in Mesen may change size over time
 			//Retroarch doesn't like this for netplay or rewinding - it requires the states to always be the exact same size

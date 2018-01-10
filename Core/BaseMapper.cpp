@@ -524,6 +524,7 @@ void BaseMapper::Initialize(RomData &romData)
 	_gameSystem = romData.System;
 	_hashInfo.Crc32Hash = romData.Crc32;
 	_hashInfo.PrgCrc32Hash = romData.PrgCrc32;
+	_hashInfo.PrgChrCrc32Hash = romData.PrgChrCrc32;
 	_hashInfo.Sha1Hash = romData.Sha1;
 	_hashInfo.PrgChrMd5Hash = romData.PrgChrMd5;
 	switch(romData.BusConflicts) {

@@ -41,6 +41,7 @@ struct HashInfo
 {
 	uint32_t Crc32Hash = 0;
 	uint32_t PrgCrc32Hash = 0;
+	uint32_t PrgChrCrc32Hash = 0;
 	string Sha1Hash;
 	string PrgChrMd5Hash;
 };

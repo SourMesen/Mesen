@@ -159,7 +159,9 @@ public:
 		}
 
 		//Setup default controllers
-		GameDatabase::InitializeInputDevices("", GameSystem::FDS);
+		if(EmulationSettings::CheckFlag(EmulationFlags::AutoConfigureInput)) {
+			GameDatabase::InitializeInputDevices("", GameSystem::FDS);
+		}
 
 		return romData;
 	}
