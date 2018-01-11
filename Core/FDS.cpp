@@ -3,6 +3,7 @@
 #include "Console.h"
 #include "FDS.h"
 #include "CPU.h"
+#include "PPU.h"
 #include "FdsAudio.h"
 #include "MemoryManager.h"
 #include "BatteryManager.h"
@@ -140,14 +141,19 @@ uint8_t FDS::ReadRAM(uint16_t addr)
 			}
 		}
 
-		if(matchCount != 1) {
-			//More than 1 (or 0) disks match, can happen in unlicensed games - disable auto insert logic
+		if(matchCount > 1) {
+			//More than 1 disk matches, can happen in unlicensed games - disable auto insert logic
 			_disableAutoInsertDisk = true;
 		}
 
 		if(matchIndex >= 0) {
 			//Found a single match, insert it
 			_diskNumber = matchIndex;
+			if(_diskNumber != _previousDiskNumber) {
+				MessageManager::Log("[FDS] Disk automatically inserted: Disk " + std::to_string((_diskNumber / 2) + 1) + ((_diskNumber & 0x01) ? " Side B" : " Side A"));
+				_previousDiskNumber = _diskNumber;
+			}
+
 			if(matchIndex > 0) {
 				//Make sure we disable fast forward
 				_gameStarted = true;
@@ -156,36 +162,53 @@ uint8_t FDS::ReadRAM(uint16_t addr)
 
 		//Prevent disk from being switched again until the disk is actually read
 		_autoDiskSwitchCounter = -1;
+		_restartAutoInsertCounter = -1;
 	}
 
 	return BaseMapper::ReadRAM(addr);
 }
 
-void FDS::ProcessCpuClock()
+void FDS::ProcessAutoDiskInsert()
 {
 	if(IsAutoInsertDiskEnabled()) {
-		if(_autoDiskEjectCounter > 0) {
-			//After reading a disk, wait until this counter reaches 0 before
-			//automatically ejecting the disk the next time $4032 is read
-			_autoDiskEjectCounter--;
-			if(_autoDiskEjectCounter) {
-				EmulationSettings::SetFlags(EmulationFlags::ForceMaxSpeed);
-			} else {
-				EmulationSettings::ClearFlags(EmulationFlags::ForceMaxSpeed);
-			}
-		}
-		if(_autoDiskSwitchCounter > 0) {
-			//After ejecting the disk, wait a bit before we insert a new one
-			_autoDiskSwitchCounter--;
-			EmulationSettings::SetFlags(EmulationFlags::ForceMaxSpeed);
-			if(_autoDiskSwitchCounter == 0) {
-				//Insert a disk (real disk/side will be selected when game executes $E445
-				InsertDisk(0);
-				EmulationSettings::ClearFlags(EmulationFlags::ForceMaxSpeed);
+		uint32_t currentFrame = PPU::GetFrameCount();
+		if(_previousFrame != currentFrame) {
+			_previousFrame = currentFrame;
+			if(_autoDiskEjectCounter > 0) {
+				//After reading a disk, wait until this counter reaches 0 before
+				//automatically ejecting the disk the next time $4032 is read
+				_autoDiskEjectCounter--;
+				EmulationSettings::SetFlagState(EmulationFlags::ForceMaxSpeed, _autoDiskEjectCounter != 0);
+			} else if(_autoDiskSwitchCounter > 0) {
+				//After ejecting the disk, wait a bit before we insert a new one
+				_autoDiskSwitchCounter--;
+				EmulationSettings::SetFlagState(EmulationFlags::ForceMaxSpeed, _autoDiskSwitchCounter != 0);
+				if(_autoDiskSwitchCounter == 0) {
+					//Insert a disk (real disk/side will be selected when game executes $E445
+					MessageManager::Log("[FDS] Auto-inserted dummy disk.");
+					InsertDisk(0);
+
+					//Restart process after 200 frames if the game hasn't read the disk yet
+					_restartAutoInsertCounter = 200;
+				}
+			} else if(_restartAutoInsertCounter > 0) {
+				//After ejecting the disk, wait a bit before we insert a new one
+				_restartAutoInsertCounter--;
+				EmulationSettings::SetFlagState(EmulationFlags::ForceMaxSpeed, _restartAutoInsertCounter != 0);
+				if(_restartAutoInsertCounter == 0) {
+					//Wait a bit before ejecting the disk (eject in ~34 frames)
+					MessageManager::Log("[FDS] Game failed to load disk, try again.");
+					_previousDiskNumber = FDS::NoDiskInserted;
+					_autoDiskEjectCounter = 34;
+					_autoDiskSwitchCounter = -1;
+				}
 			}
 		}
 	}
+}
 
+void FDS::ProcessCpuClock()
+{
 	if(EmulationSettings::CheckFlag(EmulationFlags::FdsFastForwardOnLoad)) {
 		if(_scanningDisk || !_gameStarted) {
 			EmulationSettings::SetFlags(EmulationFlags::ForceMaxSpeed);
@@ -195,6 +218,8 @@ void FDS::ProcessCpuClock()
 	} else {
 		EmulationSettings::ClearFlags(EmulationFlags::ForceMaxSpeed);
 	}
+
+	ProcessAutoDiskInsert();
 
 	ClockIrq();
 	_audio->Clock();
@@ -285,8 +310,8 @@ void FDS::ProcessCpuClock()
 		if(_diskPosition >= GetFdsDiskSideSize(_diskNumber)) {
 			_motorOn = false;
 
-			//Wait a bit before ejecting the disk (better results in some games)
-			_autoDiskEjectCounter = 1000000;
+			//Wait a bit before ejecting the disk (eject in ~77 frames)
+			_autoDiskEjectCounter = 77;
 		} else {
 			_delay = 150;
 		}
@@ -415,11 +440,25 @@ uint8_t FDS::ReadRegister(uint16_t addr)
 				value |= (!IsDiskInserted() || !_scanningDisk) ? 0x02 : 0x00;  //Disk not ready
 				value |= !IsDiskInserted() ? 0x04 : 0x00;  //Disk not writable
 
-				if(IsAutoInsertDiskEnabled() && _autoDiskEjectCounter == 0 && _autoDiskSwitchCounter == -1) {
-					//Game tried to check if a disk was inserted or not - this is usually done when the disk needs to be changed
-					//Eject the current disk and insert a new one in 300k cycles (~10 frames)
-					_autoDiskSwitchCounter = 300000;
-					_diskNumber = NoDiskInserted;
+				if(IsAutoInsertDiskEnabled()) {
+					if(PPU::GetFrameCount() - _lastDiskCheckFrame < 100) {
+						_successiveChecks++;
+					} else {
+						_successiveChecks = 0;
+					}
+					_lastDiskCheckFrame = PPU::GetFrameCount();
+
+					if(_successiveChecks > 20 && _autoDiskEjectCounter == 0 && _autoDiskSwitchCounter == -1) {
+						//Game tried to check if a disk was inserted or not - this is usually done when the disk needs to be changed
+						//Eject the current disk and insert the new one in ~77 frames
+						_lastDiskCheckFrame = 0;
+						_successiveChecks = 0;
+						_autoDiskSwitchCounter = 77;
+						_previousDiskNumber = _diskNumber;
+						_diskNumber = NoDiskInserted;
+
+						MessageManager::Log("[FDS] Disk automatically ejected.");
+					}
 				}
 				return value;
 

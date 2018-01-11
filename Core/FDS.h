@@ -37,6 +37,11 @@ private:
 
 	int32_t _autoDiskEjectCounter = -1;
 	int32_t _autoDiskSwitchCounter = -1;
+	int32_t _restartAutoInsertCounter = -1;
+	uint32_t _previousFrame = 0;
+	int32_t _lastDiskCheckFrame = 0;
+	int32_t _successiveChecks = 0;
+	uint32_t _previousDiskNumber = FDS::NoDiskInserted;
 
 	uint8_t _extConWriteReg = 0;
 
@@ -84,6 +89,8 @@ protected:
 	uint32_t GetFdsDiskSideSize(uint8_t side);
 	uint8_t ReadFdsDisk();
 	void WriteFdsDisk(uint8_t value);
+
+	void ProcessAutoDiskInsert();
 
 	void ClockIrq();
 	
