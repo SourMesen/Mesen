@@ -171,6 +171,7 @@ uint8_t FDS::ReadRAM(uint16_t addr)
 void FDS::ProcessAutoDiskInsert()
 {
 	if(IsAutoInsertDiskEnabled()) {
+		bool fastForwardEnabled = EmulationSettings::CheckFlag(EmulationFlags::FdsFastForwardOnLoad);
 		uint32_t currentFrame = PPU::GetFrameCount();
 		if(_previousFrame != currentFrame) {
 			_previousFrame = currentFrame;
@@ -178,11 +179,11 @@ void FDS::ProcessAutoDiskInsert()
 				//After reading a disk, wait until this counter reaches 0 before
 				//automatically ejecting the disk the next time $4032 is read
 				_autoDiskEjectCounter--;
-				EmulationSettings::SetFlagState(EmulationFlags::ForceMaxSpeed, _autoDiskEjectCounter != 0);
+				EmulationSettings::SetFlagState(EmulationFlags::ForceMaxSpeed, fastForwardEnabled && _autoDiskEjectCounter != 0);
 			} else if(_autoDiskSwitchCounter > 0) {
 				//After ejecting the disk, wait a bit before we insert a new one
 				_autoDiskSwitchCounter--;
-				EmulationSettings::SetFlagState(EmulationFlags::ForceMaxSpeed, _autoDiskSwitchCounter != 0);
+				EmulationSettings::SetFlagState(EmulationFlags::ForceMaxSpeed, fastForwardEnabled && _autoDiskSwitchCounter != 0);
 				if(_autoDiskSwitchCounter == 0) {
 					//Insert a disk (real disk/side will be selected when game executes $E445
 					MessageManager::Log("[FDS] Auto-inserted dummy disk.");
@@ -194,7 +195,7 @@ void FDS::ProcessAutoDiskInsert()
 			} else if(_restartAutoInsertCounter > 0) {
 				//After ejecting the disk, wait a bit before we insert a new one
 				_restartAutoInsertCounter--;
-				EmulationSettings::SetFlagState(EmulationFlags::ForceMaxSpeed, _restartAutoInsertCounter != 0);
+				EmulationSettings::SetFlagState(EmulationFlags::ForceMaxSpeed, fastForwardEnabled && _restartAutoInsertCounter != 0);
 				if(_restartAutoInsertCounter == 0) {
 					//Wait a bit before ejecting the disk (eject in ~34 frames)
 					MessageManager::Log("[FDS] Game failed to load disk, try again.");
@@ -210,11 +211,7 @@ void FDS::ProcessAutoDiskInsert()
 void FDS::ProcessCpuClock()
 {
 	if(EmulationSettings::CheckFlag(EmulationFlags::FdsFastForwardOnLoad)) {
-		if(_scanningDisk || !_gameStarted) {
-			EmulationSettings::SetFlags(EmulationFlags::ForceMaxSpeed);
-		} else {
-			EmulationSettings::ClearFlags(EmulationFlags::ForceMaxSpeed);
-		}
+		EmulationSettings::SetFlagState(EmulationFlags::ForceMaxSpeed, _scanningDisk || !_gameStarted);
 	} else {
 		EmulationSettings::ClearFlags(EmulationFlags::ForceMaxSpeed);
 	}
