@@ -116,23 +116,29 @@ void GameDatabase::InitializeInputDevices(uint32_t romCrc)
 
 	auto result = _gameDatabase.find(romCrc);
 	if(result != _gameDatabase.end()) {
-		InitializeInputDevices(result->second.InputType, GetGameSystem(result->second.System));
+		InitializeInputDevices(result->second.InputType, GetGameSystem(result->second.System), true);
 	} else {
-		InitializeInputDevices("", GameSystem::NesNtsc);
+		InitializeInputDevices("", GameSystem::NesNtsc, true);
 	}
 }
 
-void GameDatabase::InitializeInputDevices(string inputType, GameSystem system)
+void GameDatabase::InitializeInputDevices(string inputType, GameSystem system, bool silent)
 {
 	ControllerType controllers[4] = { ControllerType::StandardController, ControllerType::StandardController, ControllerType::None, ControllerType::None };
 	ExpansionPortDevice expDevice = ExpansionPortDevice::None;
 	EmulationSettings::ClearFlags(EmulationFlags::HasFourScore);
-		
+	
+	auto log = [silent](string text) {
+		if(!silent) {
+			MessageManager::Log(text);
+		}
+	};
+
 	bool isVsSystem = system == GameSystem::VsUniSystem;
 	bool isFamicom = (system == GameSystem::Famicom || system == GameSystem::FDS || system == GameSystem::Dendy);
 
 	if(inputType.compare("Zapper") == 0) {
-		MessageManager::Log("[DB] Input: Zapper connected");
+		log("[DB] Input: Zapper connected");
 		if(isFamicom) {
 			expDevice = ExpansionPortDevice::Zapper;
 		} else {
@@ -144,7 +150,7 @@ void GameDatabase::InitializeInputDevices(string inputType, GameSystem system)
 			}
 		}
 	} else if(inputType.compare("FourPlayer") == 0) {
-		MessageManager::Log("[DB] Input: Four player adapter connected");
+		log("[DB] Input: Four player adapter connected");
 		EmulationSettings::SetFlags(EmulationFlags::HasFourScore);
 		if(isFamicom) {
 			expDevice = ExpansionPortDevice::FourPlayerAdapter;
@@ -153,72 +159,72 @@ void GameDatabase::InitializeInputDevices(string inputType, GameSystem system)
 			controllers[2] = controllers[3] = ControllerType::StandardController;
 		}
 	} else if(inputType.compare("Arkanoid") == 0) {
-		MessageManager::Log("[DB] Input: Arkanoid controller connected");
+		log("[DB] Input: Arkanoid controller connected");
 		if(isFamicom) {
 			expDevice = ExpansionPortDevice::ArkanoidController;
 		} else {
 			controllers[1] = ControllerType::ArkanoidController;
 		}
 	} else if(inputType.compare("OekaKidsTablet") == 0) {
-		MessageManager::Log("[DB] Input: Oeka Kids Tablet connected");
+		log("[DB] Input: Oeka Kids Tablet connected");
 		system = GameSystem::Famicom;
 		expDevice = ExpansionPortDevice::OekaKidsTablet;
 	} else if(inputType.compare("KonamiHypershot") == 0) {
-		MessageManager::Log("[DB] Input: Konami Hyper Shot connected");
+		log("[DB] Input: Konami Hyper Shot connected");
 		system = GameSystem::Famicom;
 		expDevice = ExpansionPortDevice::KonamiHyperShot;
 	} else if(inputType.compare("FamilyKeyboard") == 0) {
-		MessageManager::Log("[DB] Input: Family Basic Keyboard connected");
+		log("[DB] Input: Family Basic Keyboard connected");
 		system = GameSystem::Famicom;
 		expDevice = ExpansionPortDevice::FamilyBasicKeyboard;
 	} else if(inputType.compare("PartyTap") == 0) {
-		MessageManager::Log("[DB] Input: Party Tap connected");
+		log("[DB] Input: Party Tap connected");
 		system = GameSystem::Famicom;
 		expDevice = ExpansionPortDevice::PartyTap;
 	} else if(inputType.compare("Pachinko") == 0) {
-		MessageManager::Log("[DB] Input: Pachinko controller connected");
+		log("[DB] Input: Pachinko controller connected");
 		system = GameSystem::Famicom;
 		expDevice = ExpansionPortDevice::Pachinko;
 	} else if(inputType.compare("ExcitingBoxing") == 0) {
-		MessageManager::Log("[DB] Input: Exciting Boxing controller connected");
+		log("[DB] Input: Exciting Boxing controller connected");
 		system = GameSystem::Famicom;
 		expDevice = ExpansionPortDevice::ExcitingBoxing;
 	} else if(inputType.compare("SuborKeyboard") == 0) {
-		MessageManager::Log("[DB] Input: Subor mouse connected");
-		MessageManager::Log("[DB] Input: Subor keyboard connected");
+		log("[DB] Input: Subor mouse connected");
+		log("[DB] Input: Subor keyboard connected");
 		system = GameSystem::Famicom;
 		expDevice = ExpansionPortDevice::SuborKeyboard;
 		controllers[1] = ControllerType::SuborMouse;
 	} else if(inputType.compare("Mahjong") == 0) {
-		MessageManager::Log("[DB] Input: Jissen Mahjong controller connected");
+		log("[DB] Input: Jissen Mahjong controller connected");
 		system = GameSystem::Famicom;
 		expDevice = ExpansionPortDevice::JissenMahjong;
 	} else if(inputType.compare("BarCodeWorld") == 0) {
-		MessageManager::Log("[DB] Input: Barcode Battler barcode reader connected");
+		log("[DB] Input: Barcode Battler barcode reader connected");
 		system = GameSystem::Famicom;
 		expDevice = ExpansionPortDevice::BarcodeBattler;
 	} else if(inputType.compare("BandaiHypershot") == 0) {
-		MessageManager::Log("[DB] Input: Bandai Hyper Shot gun connected");
+		log("[DB] Input: Bandai Hyper Shot gun connected");
 		system = GameSystem::Famicom;
 		expDevice = ExpansionPortDevice::BandaiHyperShot;
 	} else if(inputType.compare("BattleBox") == 0) {
-		MessageManager::Log("[DB] Input: Battle Box connected");
+		log("[DB] Input: Battle Box connected");
 		system = GameSystem::Famicom;
 		expDevice = ExpansionPortDevice::BattleBox;
 	} else if(inputType.compare("TurboFile") == 0) {
-		MessageManager::Log("[DB] Input: Ascii Turbo File connected");
+		log("[DB] Input: Ascii Turbo File connected");
 		system = GameSystem::Famicom;
 		expDevice = ExpansionPortDevice::AsciiTurboFile;
 	} else if(inputType.compare("FamilyTrainer") == 0) {
-		MessageManager::Log("[DB] Input: Family Trainer mat connected");
+		log("[DB] Input: Family Trainer mat connected");
 		system = GameSystem::Famicom;
 		expDevice = ExpansionPortDevice::FamilyTrainerMat;
 	} else if(inputType.compare("PowerPad") == 0 || inputType.compare("FamilyFunFitness") == 0) {
-		MessageManager::Log("[DB] Input: Power Pad connected");
+		log("[DB] Input: Power Pad connected");
 		system = GameSystem::NesNtsc;
 		controllers[1] = ControllerType::PowerPad;
 	} else {
-		MessageManager::Log("[DB] Input: 2 standard controllers connected");
+		log("[DB] Input: 2 standard controllers connected");
 	}
 
 	isFamicom = (system == GameSystem::Famicom || system == GameSystem::FDS || system == GameSystem::Dendy);

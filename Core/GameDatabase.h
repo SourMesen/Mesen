@@ -21,7 +21,7 @@ private:
 public:
 	static void LoadGameDb(vector<string> data);
 
-	static void InitializeInputDevices(string inputType, GameSystem system);
+	static void InitializeInputDevices(string inputType, GameSystem system, bool silent = false);
 	static void InitializeInputDevices(uint32_t romCrc);
 	static void SetGameInfo(uint32_t romCrc, RomData &romData, bool updateRomData);
 	static bool GetiNesHeader(uint32_t romCrc, NESHeader &nesHeader);

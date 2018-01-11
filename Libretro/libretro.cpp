@@ -17,23 +17,6 @@
 #include "../Utilities/FolderUtilities.h"
 #include "../Utilities/HexUtilities.h"
 
-static retro_log_printf_t logCallback = nullptr;
-static retro_environment_t retroEnv = nullptr;
-static unsigned _inputDevices[5] = {};
-static bool _hdPacksEnabled = false;
-static string _mesenVersion = "";
-int32_t _saveStateSize = -1;
-
-//Include game database as an array of strings (need an automated way to generate the include file)
-static vector<string> gameDb = {
-#include "MesenDB.inc"
-};
-
-static std::unique_ptr<LibretroRenderer> _renderer;
-static std::unique_ptr<LibretroSoundManager> _soundManager;
-static std::unique_ptr<LibretroKeyManager> _keyManager;
-static std::unique_ptr<LibretroMessageManager> _messageManager;
-
 #define DEVICE_AUTO               RETRO_DEVICE_JOYPAD
 #define DEVICE_GAMEPAD            RETRO_DEVICE_SUBCLASS(RETRO_DEVICE_JOYPAD, 0)
 #define DEVICE_POWERPAD           RETRO_DEVICE_SUBCLASS(RETRO_DEVICE_JOYPAD, 1)
@@ -52,6 +35,23 @@ static std::unique_ptr<LibretroMessageManager> _messageManager;
 #define DEVICE_ASCIITURBOFILE     RETRO_DEVICE_SUBCLASS(RETRO_DEVICE_NONE, 0)
 #define DEVICE_BATTLEBOX          RETRO_DEVICE_SUBCLASS(RETRO_DEVICE_NONE, 1)
 #define DEVICE_FOURPLAYERADAPTER  RETRO_DEVICE_SUBCLASS(RETRO_DEVICE_NONE, 2)
+
+static retro_log_printf_t logCallback = nullptr;
+static retro_environment_t retroEnv = nullptr;
+static unsigned _inputDevices[5] = { DEVICE_AUTO, DEVICE_AUTO, DEVICE_AUTO, DEVICE_AUTO, DEVICE_AUTO };
+static bool _hdPacksEnabled = false;
+static string _mesenVersion = "";
+int32_t _saveStateSize = -1;
+
+//Include game database as an array of strings (need an automated way to generate the include file)
+static vector<string> gameDb = {
+#include "MesenDB.inc"
+};
+
+static std::unique_ptr<LibretroRenderer> _renderer;
+static std::unique_ptr<LibretroSoundManager> _soundManager;
+static std::unique_ptr<LibretroKeyManager> _keyManager;
+static std::unique_ptr<LibretroMessageManager> _messageManager;
 
 static const char* MesenNtscFilter = "mesen_ntsc_filter";
 static const char* MesenNtscVerticalBlend = "mesen_ntsc_vertical_blend";
@@ -886,7 +886,7 @@ extern "C" {
 
 	RETRO_API void retro_set_controller_port_device(unsigned port, unsigned device)
 	{
-		if(port < 5) {
+		if(port < 5 && _inputDevices[port] != device) {
 			_inputDevices[port] = device;
 			update_core_controllers();
 			update_input_descriptors();
