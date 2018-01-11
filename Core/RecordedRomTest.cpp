@@ -212,7 +212,6 @@ int32_t RecordedRomTest::Run(string filename)
 			return false;
 		}
 
-		EmulationSettings::SetFlags(EmulationFlags::ForceMaxSpeed);
 		EmulationSettings::SetMasterVolume(0);
 		
 		Console::Pause();
@@ -237,6 +236,7 @@ int32_t RecordedRomTest::Run(string filename)
 
 		//Start playing movie
 		if(Console::LoadROM(testRom)) {
+			EmulationSettings::SetFlags(EmulationFlags::ForceMaxSpeed);
 			_runningTest = true;
 			MovieManager::Play(testMovie);
 

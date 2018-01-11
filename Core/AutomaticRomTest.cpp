@@ -108,11 +108,11 @@ void AutomaticRomTest::ProcessNotification(ConsoleNotificationType type, void* p
 
 int32_t AutomaticRomTest::Run(string filename)
 {
-	EmulationSettings::SetFlags(EmulationFlags::ForceMaxSpeed);
 	EmulationSettings::SetMasterVolume(0);
 	Console::Pause();
 	if(Console::LoadROM(filename)) {
 		Console::Resume();
+		EmulationSettings::SetFlags(EmulationFlags::ForceMaxSpeed);
 		EmulationSettings::ClearFlags(EmulationFlags::Paused);
 		_signal.Wait();
 

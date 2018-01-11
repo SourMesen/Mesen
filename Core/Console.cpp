@@ -200,6 +200,7 @@ bool Console::Initialize(VirtualFile &romFile, VirtualFile &patchFile)
 			if(EmulationSettings::GetOverclockRate() != 100) {
 				MessageManager::DisplayMessage("ClockRate", std::to_string(EmulationSettings::GetOverclockRate()) + "%");
 			}
+			EmulationSettings::ClearFlags(EmulationFlags::ForceMaxSpeed);
 			return true;
 		}
 	}
@@ -553,6 +554,7 @@ void Console::Run()
 	VideoDecoder::GetInstance()->StopThread();
 
 	EmulationSettings::ClearFlags(EmulationFlags::Paused);
+	EmulationSettings::ClearFlags(EmulationFlags::ForceMaxSpeed);
 
 	_initialized = false;
 
