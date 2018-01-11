@@ -28,6 +28,7 @@ void MesenMovie::Stop()
 		EndMovie();
 		_playing = false;
 	}
+	EmulationSettings::SetInputPollScanline(241);
 	ControlManager::UnregisterInputProvider(this);
 }
 
@@ -212,6 +213,8 @@ void MesenMovie::ApplySettings()
 		EmulationSettings::SetRamPowerOnState(RamPowerOnState::AllZeros);
 	}
 
+	EmulationSettings::SetInputPollScanline(LoadInt(_settings, MovieKeys::InputPollScanline, 240));
+
 	EmulationSettings::SetZapperDetectionRadius(LoadInt(_settings, MovieKeys::ZapperDetectionRadius));
 	
 	uint32_t cpuClockRate = LoadInt(_settings, MovieKeys::CpuClockRate);
@@ -241,7 +244,7 @@ void MesenMovie::ApplySettings()
 	LoadCheats();
 }
 
-uint32_t MesenMovie::LoadInt(std::unordered_map<string, string> &settings, string name)
+uint32_t MesenMovie::LoadInt(std::unordered_map<string, string> &settings, string name, uint32_t defaultValue)
 {
 	auto result = settings.find(name);
 	if(result != settings.end()) {
@@ -249,10 +252,10 @@ uint32_t MesenMovie::LoadInt(std::unordered_map<string, string> &settings, strin
 			return (uint32_t)std::stoul(result->second);
 		} catch(std::exception ex) {
 			MessageManager::Log("[Movies] Invalid value for tag: " + name);
-			return 0;
+			return defaultValue;
 		}
 	} else {
-		return 0;
+		return defaultValue;
 	}
 }
 

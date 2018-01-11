@@ -101,6 +101,7 @@ void MovieRecorder::GetGameSettings(stringstream &out)
 	WriteInt(out, MovieKeys::CpuClockRate, EmulationSettings::GetOverclockRateSetting());
 	WriteInt(out, MovieKeys::ExtraScanlinesBeforeNmi, EmulationSettings::GetPpuExtraScanlinesBeforeNmi());
 	WriteInt(out, MovieKeys::ExtraScanlinesAfterNmi, EmulationSettings::GetPpuExtraScanlinesAfterNmi());
+	WriteInt(out, MovieKeys::InputPollScanline, EmulationSettings::GetInputPollScanline());
 	
 	if(EmulationSettings::GetOverclockRateSetting() != 100) {
 		WriteBool(out, MovieKeys::OverclockAdjustApu, EmulationSettings::GetOverclockAdjustApu());

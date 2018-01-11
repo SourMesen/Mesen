@@ -73,4 +73,5 @@ namespace MovieKeys
 	constexpr const char* RamPowerOnState = "RamPowerOnState";
 	constexpr const char* PpuModel = "PpuModel";
 	constexpr const char* DipSwitches = "DipSwitches";
+	constexpr const char* InputPollScanline = "InputPollScanline";
 };

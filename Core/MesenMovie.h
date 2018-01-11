@@ -27,7 +27,7 @@ private:
 	bool LoadGame();
 	void Stop();
 
-	uint32_t LoadInt(std::unordered_map<string, string> &settings, string name);
+	uint32_t LoadInt(std::unordered_map<string, string> &settings, string name, uint32_t defaultValue = 0);
 	bool LoadBool(std::unordered_map<string, string> &settings, string name);
 	string LoadString(std::unordered_map<string, string> &settings, string name);
 	void LoadCheats();
