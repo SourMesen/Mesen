@@ -40,7 +40,15 @@ BisqwitNtscFilter::BisqwitNtscFilter(int resDivider)
 			}
 
 			uint32_t* outputBuffer = (uint32_t*)GetOutputBuffer();
-			DecodeFrame(120, 239 - GetOverscan().Bottom, _ppuOutputBuffer, outputBuffer + GetOverscan().GetScreenWidth() * 64 / _resDivider / _resDivider * (120 - GetOverscan().Top), (_isOddFrame ? 8 : 0) + 327360);
+
+			//Adjust outputbuffer to start at the middle of the picture
+			if(_keepVerticalRes) {
+				outputBuffer += GetOverscan().GetScreenWidth() * 8 / _resDivider * (120 - GetOverscan().Top);
+			} else {
+				outputBuffer += GetOverscan().GetScreenWidth() * 64 / _resDivider / _resDivider * (120 - GetOverscan().Top);
+			}
+
+			DecodeFrame(120, 239 - GetOverscan().Bottom, _ppuOutputBuffer, outputBuffer, (_isOddFrame ? 8 : 0) + 327360);
 
 			_workDone = true;
 		}
@@ -68,13 +76,19 @@ void BisqwitNtscFilter::ApplyFilter(uint16_t *ppuOutputBuffer)
 FrameInfo BisqwitNtscFilter::GetFrameInfo()
 {
 	OverscanDimensions overscan = GetOverscan();
-	return{ overscan.GetScreenWidth()*8/_resDivider, overscan.GetScreenHeight()*8/_resDivider, PPU::ScreenWidth, PPU::ScreenHeight, 4 };
+	if(_keepVerticalRes) {
+		return { overscan.GetScreenWidth() * 8 / _resDivider, overscan.GetScreenHeight(), PPU::ScreenWidth, PPU::ScreenHeight, 4 };
+	} else {
+		return { overscan.GetScreenWidth() * 8 / _resDivider, overscan.GetScreenHeight() * 8 / _resDivider, PPU::ScreenWidth, PPU::ScreenHeight, 4 };
+	}
 }
 
 void BisqwitNtscFilter::OnBeforeApplyFilter()
 {
 	PictureSettings pictureSettings = EmulationSettings::GetPictureSettings();
 	NtscFilterSettings ntscSettings = EmulationSettings::GetNtscFilterSettings();
+
+	_keepVerticalRes = ntscSettings.KeepVerticalResolution;
 
 	const double pi = std::atan(1.0) * 4;
 	int contrast = (int)((pictureSettings.Contrast + 1.0) * (pictureSettings.Contrast + 1.0) * 167941);
@@ -183,7 +197,10 @@ void BisqwitNtscFilter::DecodeFrame(int startRow, int endRow, uint16_t *ppuOutpu
 	int pixelsPerCycle = 8 / _resDivider;
 	int phase = startPhase;
 	int8_t rowSignal[256 * _signalsPerPixel];
-	uint32_t rowPixelGap = GetOverscan().GetScreenWidth() * pixelsPerCycle * pixelsPerCycle;
+	uint32_t rowPixelGap = GetOverscan().GetScreenWidth() * pixelsPerCycle;
+	if(!_keepVerticalRes) {
+		rowPixelGap *= pixelsPerCycle;
+	}
 	
 	uint32_t* orgBuffer = outputBuffer;
 
@@ -199,18 +216,20 @@ void BisqwitNtscFilter::DecodeFrame(int startRow, int endRow, uint16_t *ppuOutpu
 		outputBuffer += rowPixelGap;
 	}
 
-	//Generate the missing vertical lines
-	outputBuffer = orgBuffer;
-	int lastRow = 239 - GetOverscan().Bottom;
-	bool verticalBlend = EmulationSettings::GetNtscFilterSettings().VerticalBlend;
-	for(int y = startRow; y <= endRow; y++) {
-		uint64_t* currentLine = (uint64_t*)outputBuffer;
-		uint64_t* nextLine = y == lastRow ? currentLine : (uint64_t*)(outputBuffer + rowPixelGap);
-		uint64_t* buffer = (uint64_t*)(outputBuffer + rowPixelGap / 2);
-		
-		RecursiveBlend(4 / _resDivider, buffer, currentLine, nextLine, pixelsPerCycle, verticalBlend);
+	if(!_keepVerticalRes) {
+		//Generate the missing vertical lines
+		outputBuffer = orgBuffer;
+		int lastRow = 239 - GetOverscan().Bottom;
+		bool verticalBlend = EmulationSettings::GetNtscFilterSettings().VerticalBlend;
+		for(int y = startRow; y <= endRow; y++) {
+			uint64_t* currentLine = (uint64_t*)outputBuffer;
+			uint64_t* nextLine = y == lastRow ? currentLine : (uint64_t*)(outputBuffer + rowPixelGap);
+			uint64_t* buffer = (uint64_t*)(outputBuffer + rowPixelGap / 2);
 
-		outputBuffer += rowPixelGap;
+			RecursiveBlend(4 / _resDivider, buffer, currentLine, nextLine, pixelsPerCycle, verticalBlend);
+
+			outputBuffer += rowPixelGap;
+		}
 	}
 }
 

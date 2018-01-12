@@ -18,6 +18,8 @@ private:
 	atomic<bool> _stopThread;
 	atomic<bool> _workDone;
 
+	bool _keepVerticalRes = false;
+
 	int _resDivider = 1;
 	bool _isOddFrame = false;
 	uint16_t *_ppuOutputBuffer = nullptr;

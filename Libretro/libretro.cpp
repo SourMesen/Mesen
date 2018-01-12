@@ -54,7 +54,6 @@ static std::unique_ptr<LibretroKeyManager> _keyManager;
 static std::unique_ptr<LibretroMessageManager> _messageManager;
 
 static const char* MesenNtscFilter = "mesen_ntsc_filter";
-static const char* MesenNtscVerticalBlend = "mesen_ntsc_vertical_blend";
 static const char* MesenPalette = "mesen_palette";
 static const char* MesenNoSpriteLimit = "mesen_nospritelimit";
 static const char* MesenOverclock = "mesen_overclock";
@@ -139,7 +138,6 @@ extern "C" {
 
 		static const struct retro_variable vars[] = {
 			{ MesenNtscFilter, "NTSC filter; Disabled|Composite (Blargg)|S-Video (Blargg)|RGB (Blargg)|Monochrome (Blargg)|Bisqwit 2x|Bisqwit 4x|Bisqwit 8x" },
-			{ MesenNtscVerticalBlend, "NTSC filter: Vertical blending; disabled|enabled" },
 			{ MesenPalette, "Palette; Default|Composite Direct (by FirebrandX)|Nes Classic|Nestopia (RGB)|Original Hardware (by FirebrandX)|PVM Style (by FirebrandX)|Sony CXA2025AS|Unsaturated v6 (by FirebrandX)|YUV v3 (by FirebrandX)|Custom" },
 			{ MesenOverclock, "Overclock; None|Low|Medium|High|Very High" },
 			{ MesenOverclockType, "Overclock Type; Before NMI (Recommended)|After NMI" },
@@ -320,14 +318,6 @@ extern "C" {
 			}
 		}
 		
-		bool verticalBlend = false;
-		var.key = MesenNtscVerticalBlend;
-		if(retroEnv(RETRO_ENVIRONMENT_GET_VARIABLE, &var)) {
-			if(string(var.value) == "enabled") {
-				verticalBlend = true;
-			}
-		}
-
 		var.key = MesenNtscFilter;
 		if(retroEnv(RETRO_ENVIRONMENT_GET_VARIABLE, &var)) {
 			string value = string(var.value);
@@ -335,27 +325,27 @@ extern "C" {
 				EmulationSettings::SetVideoFilterType(VideoFilterType::None);
 			} else if(value == "Composite (Blargg)") {
 				EmulationSettings::SetVideoFilterType(VideoFilterType::NTSC);
-				EmulationSettings::SetNtscFilterSettings(0, 0, 0, 0, 0, 0, false, 0, 0, 0, verticalBlend);
+				EmulationSettings::SetNtscFilterSettings(0, 0, 0, 0, 0, 0, false, 0, 0, 0, false, true);
 			} else if(value == "S-Video (Blargg)") {
 				EmulationSettings::SetVideoFilterType(VideoFilterType::NTSC);
-				EmulationSettings::SetNtscFilterSettings(-1.0, 0, -1.0, 0, 0.2, 0.2, false, 0, 0, 0, verticalBlend);
+				EmulationSettings::SetNtscFilterSettings(-1.0, 0, -1.0, 0, 0.2, 0.2, false, 0, 0, 0, false, true);
 			} else if(value == "RGB (Blargg)") {
 				EmulationSettings::SetVideoFilterType(VideoFilterType::NTSC);
 				EmulationSettings::SetPictureSettings(0, 0, 0, 0, 0);
-				EmulationSettings::SetNtscFilterSettings(-1.0, -1.0, -1.0, 0, 0.7, 0.2, false, 0, 0, 0, verticalBlend);
+				EmulationSettings::SetNtscFilterSettings(-1.0, -1.0, -1.0, 0, 0.7, 0.2, false, 0, 0, 0, false, true);
 			} else if(value == "Monochrome (Blargg)") {
 				EmulationSettings::SetVideoFilterType(VideoFilterType::NTSC);
 				EmulationSettings::SetPictureSettings(0, 0, -1.0, 0, 0);
-				EmulationSettings::SetNtscFilterSettings(-0.2, -0.1, -0.2, 0, 0.7, 0.2, false, 0, 0, 0, verticalBlend);
+				EmulationSettings::SetNtscFilterSettings(-0.2, -0.1, -0.2, 0, 0.7, 0.2, false, 0, 0, 0, false, true);
 			} else if(value == "Bisqwit 2x") {
 				EmulationSettings::SetVideoFilterType(VideoFilterType::BisqwitNtscQuarterRes);
-				EmulationSettings::SetNtscFilterSettings(0, 0, 0, 0, 0, 0, false, 0, 0, 0, verticalBlend);
+				EmulationSettings::SetNtscFilterSettings(0, 0, 0, 0, 0, 0, false, 0, 0, 0, false, true);
 			} else if(value == "Bisqwit 4x") {
 				EmulationSettings::SetVideoFilterType(VideoFilterType::BisqwitNtscHalfRes);
-				EmulationSettings::SetNtscFilterSettings(0, 0, 0, 0, 0, 0, false, 0, 0, 0, verticalBlend);
+				EmulationSettings::SetNtscFilterSettings(0, 0, 0, 0, 0, 0, false, 0, 0, 0, false, true);
 			} else if(value == "Bisqwit 8x") {
 				EmulationSettings::SetVideoFilterType(VideoFilterType::BisqwitNtsc);
-				EmulationSettings::SetNtscFilterSettings(0, 0, 0, 0, 0, 0, false, 0, 0, 0, verticalBlend);
+				EmulationSettings::SetNtscFilterSettings(0, 0, 0, 0, 0, 0, false, 0, 0, 0, false, true);
 			}
 		}
 
@@ -974,24 +964,26 @@ extern "C" {
 
 	RETRO_API void retro_get_system_av_info(struct retro_system_av_info *info)
 	{
-		uint32_t scale = 1;
+		uint32_t hscale = 1;
+		uint32_t vscale = 1;
 		switch(EmulationSettings::GetVideoFilterType()) {
-			case VideoFilterType::NTSC: scale = 2; break;
-			case VideoFilterType::BisqwitNtscQuarterRes: scale = 2; break;
-			case VideoFilterType::BisqwitNtscHalfRes: scale = 4; break;
-			case VideoFilterType::BisqwitNtsc: scale = 8; break;
-			default: scale = 1; break;
+			case VideoFilterType::NTSC: hscale = 2; break;
+			case VideoFilterType::BisqwitNtscQuarterRes: hscale = 2; break;
+			case VideoFilterType::BisqwitNtscHalfRes: hscale = 4; break;
+			case VideoFilterType::BisqwitNtsc: hscale = 8; break;
+			default: hscale = 1; break;
 		}
 		
 		HdPackData* hdData = Console::GetHdData();
 		if(hdData != nullptr) {
-			scale = hdData->Scale;
+			hscale = hdData->Scale;
+			vscale = hdData->Scale;
 		}
 
-		if(scale <= 2) {
-			_renderer->GetSystemAudioVideoInfo(*info, NES_NTSC_OUT_WIDTH(256), 240 * 2);
+		if(hscale <= 2) {
+			_renderer->GetSystemAudioVideoInfo(*info, NES_NTSC_OUT_WIDTH(256), 240 * vscale);
 		} else {
-			_renderer->GetSystemAudioVideoInfo(*info, 256 * scale, 240 * scale);
+			_renderer->GetSystemAudioVideoInfo(*info, 256 * hscale, 240 * vscale);
 		}
 	}
 

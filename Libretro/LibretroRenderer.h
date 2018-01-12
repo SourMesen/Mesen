@@ -33,7 +33,7 @@ public:
 		if(!_skipMode && _sendFrame) {
 			//Use Blargg's NTSC filter's max size as a minimum resolution, to prevent changing resolution too often
 			int32_t newWidth = std::max<int32_t>(width, NES_NTSC_OUT_WIDTH(256));
-			int32_t newHeight = std::max<int32_t>(height, 480);
+			int32_t newHeight = std::max<int32_t>(height, 240);
 			if(_previousWidth != newWidth || _previousHeight != newHeight) {
 				//Resolution change is needed
 				retro_system_av_info avInfo = {};
