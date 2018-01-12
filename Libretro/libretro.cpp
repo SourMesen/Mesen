@@ -616,8 +616,6 @@ extern "C" {
 			_soundManager->SetSkipMode(false);
 		}
 
-		Console::GetInstance()->RunSingleFrame();
-
 		bool updated = false;
 		if(retroEnv(RETRO_ENVIRONMENT_GET_VARIABLE_UPDATE, &updated) && updated) {
 			update_settings();
@@ -628,6 +626,15 @@ extern "C" {
 				Console::GetInstance()->UpdateHdPackMode();
 				_hdPacksEnabled = hdPacksEnabled;
 			}
+		}
+
+		Console::GetInstance()->RunSingleFrame();
+
+		if(updated) {
+			//Update geometry after running the frame, in case the console's region changed (affects "auto" aspect ratio)
+			retro_system_av_info avInfo = {};
+			_renderer->GetSystemAudioVideoInfo(avInfo);
+			retroEnv(RETRO_ENVIRONMENT_SET_GEOMETRY, &avInfo);
 		}
 	}
 
