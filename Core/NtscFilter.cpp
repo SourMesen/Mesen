@@ -90,7 +90,7 @@ void NtscFilter::GenerateArgbFrame(uint32_t *ntscBuffer)
 	int rowWidthOverscan = rowWidth - overscanLeft - overscanRight;
 
 	if(_keepVerticalRes) {
-		ntscBuffer += rowWidth * overscan.Top;
+		ntscBuffer += rowWidth * overscan.Top + overscanLeft;
 		for(uint32_t i = 0, len = overscan.GetScreenHeight(); i < len; i++) {
 			memcpy(outputBuffer, ntscBuffer, rowWidthOverscan * sizeof(uint32_t));
 			outputBuffer += rowWidthOverscan;
