@@ -15,10 +15,15 @@ namespace Be.Windows.Forms
 		Dictionary<TblKey, string> _tblRules;
 		Dictionary<string, TblKey> _reverseTblRules;
 		List<string> _stringList;
+		bool[] _hasPotentialRule = new bool[256];
 
 		public TblByteCharConverter(Dictionary<TblKey, string> tblRules)
 		{
 			this._tblRules = tblRules;
+			foreach(KeyValuePair<TblKey, string> kvp in tblRules) {
+				_hasPotentialRule[kvp.Key.Key & 0xFF] = true;
+			}
+
 			this._stringList = new List<string>();
 			this._reverseTblRules = new Dictionary<string, TblKey>();
 			foreach(KeyValuePair<TblKey, string> kvp in tblRules) {
@@ -43,6 +48,11 @@ namespace Be.Windows.Forms
 		/// <returns></returns>
 		public virtual string ToChar(UInt64 value, out int keyLength)
 		{
+			if(!_hasPotentialRule[value & 0xFF]) {
+				keyLength = 1;
+				return ".";
+			}
+
 			int byteCount = 8;
 			string result;
 			while(!_tblRules.TryGetValue(new TblKey() { Key = value, Length = byteCount }, out result) && byteCount > 0) {

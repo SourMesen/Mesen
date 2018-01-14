@@ -31,7 +31,6 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
-			this.components = new System.ComponentModel.Container();
 			this.ctrlHexViewer = new Mesen.GUI.Debugger.Controls.ctrlHexViewer();
 			this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
 			this.lblViewMemoryType = new System.Windows.Forms.Label();
@@ -78,8 +77,13 @@
 			this.mnuIncreaseFontSize = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuDecreaseFontSize = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuResetFontSize = new System.Windows.Forms.ToolStripMenuItem();
-			this.mnuRefresh = new System.Windows.Forms.ToolStripMenuItem();
+			this.autorefreshSpeedToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuAutoRefreshLow = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuAutoRefreshNormal = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuAutoRefreshHigh = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripSeparator();
+			this.mnuRefresh = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem9 = new System.Windows.Forms.ToolStripSeparator();
 			this.mnuAutoRefresh = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuShowCharacters = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuShowLabelInfoOnMouseOver = new System.Windows.Forms.ToolStripMenuItem();
@@ -98,7 +102,6 @@
 			this.ctrlMemoryAccessCounters = new Mesen.GUI.Debugger.Controls.ctrlMemoryAccessCounters();
 			this.tpgProfiler = new System.Windows.Forms.TabPage();
 			this.ctrlProfiler = new Mesen.GUI.Debugger.Controls.ctrlProfiler();
-			this.tmrRefresh = new System.Windows.Forms.Timer(this.components);
 			this.flowLayoutPanel1.SuspendLayout();
 			this.menuStrip1.SuspendLayout();
 			this.toolStrip1.SuspendLayout();
@@ -252,8 +255,10 @@
             this.toolStripMenuItem5,
             this.mnuConfigureColors,
             this.fontSizeToolStripMenuItem,
-            this.mnuRefresh,
+            this.autorefreshSpeedToolStripMenuItem,
             this.toolStripMenuItem2,
+            this.mnuRefresh,
+            this.toolStripMenuItem9,
             this.mnuAutoRefresh,
             this.mnuShowCharacters,
             this.mnuShowLabelInfoOnMouseOver});
@@ -518,6 +523,43 @@
 			this.mnuResetFontSize.Text = "Reset to Default";
 			this.mnuResetFontSize.Click += new System.EventHandler(this.mnuResetFontSize_Click);
 			// 
+			// autorefreshSpeedToolStripMenuItem
+			// 
+			this.autorefreshSpeedToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.mnuAutoRefreshLow,
+            this.mnuAutoRefreshNormal,
+            this.mnuAutoRefreshHigh});
+			this.autorefreshSpeedToolStripMenuItem.Image = global::Mesen.GUI.Properties.Resources.Speed;
+			this.autorefreshSpeedToolStripMenuItem.Name = "autorefreshSpeedToolStripMenuItem";
+			this.autorefreshSpeedToolStripMenuItem.Size = new System.Drawing.Size(248, 22);
+			this.autorefreshSpeedToolStripMenuItem.Text = "Auto-refresh Speed";
+			// 
+			// mnuAutoRefreshLow
+			// 
+			this.mnuAutoRefreshLow.Name = "mnuAutoRefreshLow";
+			this.mnuAutoRefreshLow.Size = new System.Drawing.Size(159, 22);
+			this.mnuAutoRefreshLow.Text = "Low (10 FPS)";
+			this.mnuAutoRefreshLow.Click += new System.EventHandler(this.mnuAutoRefreshSpeed_Click);
+			// 
+			// mnuAutoRefreshNormal
+			// 
+			this.mnuAutoRefreshNormal.Name = "mnuAutoRefreshNormal";
+			this.mnuAutoRefreshNormal.Size = new System.Drawing.Size(159, 22);
+			this.mnuAutoRefreshNormal.Text = "Normal (30 FPS)";
+			this.mnuAutoRefreshNormal.Click += new System.EventHandler(this.mnuAutoRefreshSpeed_Click);
+			// 
+			// mnuAutoRefreshHigh
+			// 
+			this.mnuAutoRefreshHigh.Name = "mnuAutoRefreshHigh";
+			this.mnuAutoRefreshHigh.Size = new System.Drawing.Size(159, 22);
+			this.mnuAutoRefreshHigh.Text = "High (60 FPS)";
+			this.mnuAutoRefreshHigh.Click += new System.EventHandler(this.mnuAutoRefreshSpeed_Click);
+			// 
+			// toolStripMenuItem2
+			// 
+			this.toolStripMenuItem2.Name = "toolStripMenuItem2";
+			this.toolStripMenuItem2.Size = new System.Drawing.Size(245, 6);
+			// 
 			// mnuRefresh
 			// 
 			this.mnuRefresh.Image = global::Mesen.GUI.Properties.Resources.Reset;
@@ -527,10 +569,10 @@
 			this.mnuRefresh.Text = "Refresh";
 			this.mnuRefresh.Click += new System.EventHandler(this.mnuRefresh_Click);
 			// 
-			// toolStripMenuItem2
+			// toolStripMenuItem9
 			// 
-			this.toolStripMenuItem2.Name = "toolStripMenuItem2";
-			this.toolStripMenuItem2.Size = new System.Drawing.Size(245, 6);
+			this.toolStripMenuItem9.Name = "toolStripMenuItem9";
+			this.toolStripMenuItem9.Size = new System.Drawing.Size(245, 6);
 			// 
 			// mnuAutoRefresh
 			// 
@@ -712,11 +754,6 @@
 			this.ctrlProfiler.Size = new System.Drawing.Size(606, 343);
 			this.ctrlProfiler.TabIndex = 0;
 			// 
-			// tmrRefresh
-			// 
-			this.tmrRefresh.Enabled = true;
-			this.tmrRefresh.Tick += new System.EventHandler(this.tmrRefresh_Tick);
-			// 
 			// frmMemoryViewer
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -778,7 +815,6 @@
 		private System.Windows.Forms.TabPage tpgMemoryViewer;
 		private System.Windows.Forms.TabPage tpgAccessCounters;
 		private Controls.ctrlMemoryAccessCounters ctrlMemoryAccessCounters;
-		private System.Windows.Forms.Timer tmrRefresh;
 		private System.Windows.Forms.TabPage tpgProfiler;
 		private Controls.ctrlProfiler ctrlProfiler;
 		private System.Windows.Forms.ToolStripMenuItem mnuLoadTblFile;
@@ -815,5 +851,10 @@
 		private System.Windows.Forms.ToolStripMenuItem mnuHighlightLabelledBytes;
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem8;
 		private System.Windows.Forms.ToolStripMenuItem mnuHighlightDmcDataBytes;
+		private System.Windows.Forms.ToolStripMenuItem autorefreshSpeedToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem mnuAutoRefreshLow;
+		private System.Windows.Forms.ToolStripMenuItem mnuAutoRefreshNormal;
+		private System.Windows.Forms.ToolStripMenuItem mnuAutoRefreshHigh;
+		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem9;
 	}
 }

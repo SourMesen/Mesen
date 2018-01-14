@@ -2425,24 +2425,18 @@ namespace Be.Windows.Forms
 			if (_lineInfoVisible)
 				PaintLineInfo(e.Graphics, _startByte, _endByte);
 
-			if (!_stringViewVisible)
-			{
-				PaintHex(e.Graphics, _startByte, _endByte);
-			}
-			else
-			{
-				PaintHexAndStringView(e.Graphics, _startByte, _endByte);
-				if (_shadowSelectionVisible)
-					PaintCurrentBytesSign(e.Graphics);
-			}
+			PaintHexAndStringView(e.Graphics, _startByte, _endByte);
+			if (_shadowSelectionVisible)
+				PaintCurrentBytesSign(e.Graphics);
+				
 			if (_columnInfoVisible)
 				PaintHeaderRow(e.Graphics);
 			if (_groupSeparatorVisible)
 				PaintColumnSeparator(e.Graphics);
 
 			if(_caretVisible && this.Focused && _keyInterpreter.GetType() != typeof(StringKeyInterpreter)) {
-				int caretWidth = (this.InsertActive) ? 1 : (int)_charSize.Width;
-				int caretHeight = (int)_charSize.Height;
+				float caretWidth = (this.InsertActive) ? 1 : _charSize.Width;
+				float caretHeight = _charSize.Height;
 				e.Graphics.DrawRectangle(Pens.Gray, _caretPos.X - 1, _caretPos.Y, caretWidth, caretHeight);
 			}
 		}
@@ -2509,63 +2503,10 @@ namespace Be.Windows.Forms
 			}
 		}
 
-		void PaintHex(Graphics g, long startByte, long endByte)
-		{
-			Brush selBrushBack = new SolidBrush(_selectionBackColor);
-
-			int counter = -1;
-			long intern_endByte = Math.Min(_byteProvider.Length - 1, endByte + _iHexMaxHBytes);
-
-			bool isKeyInterpreterActive = _keyInterpreter == null || _keyInterpreter.GetType() == typeof(KeyInterpreter);
-
-			if(this.ByteColorProvider != null) {
-				this.ByteColorProvider.Prepare(_startByte, intern_endByte);
-			}
-
-			bool prevSelected = false;
-			Color prevBgColor = Color.Transparent;
-
-			for (long i = startByte; i < intern_endByte + 1; i++)
-			{
-				counter++;
-				Point gridPoint = GetGridBytePoint(counter);
-				byte b = _byteProvider.ReadByte(i);
-
-				Color byteColor = this.ForeColor;
-				Color bgColor = Color.Transparent;
-				if(this.ByteColorProvider != null) {
-					byteColor = this.ByteColorProvider.GetByteColor(_startByte, i, out bgColor);
-				}
-
-				bool isSelectedByte = i >= _bytePos && i <= (_bytePos + _selectionLength - 1) && _selectionLength != 0;
-				using(Brush byteBrush = new SolidBrush(byteColor)) {
-					if(isSelectedByte && isKeyInterpreterActive) {
-						PaintHexStringSelected(g, b, byteBrush, selBrushBack, gridPoint, prevSelected);
-						prevSelected = true;
-					} else {
-						if(bgColor != Color.Transparent) {
-							using(Brush bgBrush = new SolidBrush(bgColor)) {
-								PaintHexStringSelected(g, b, byteBrush, bgBrush, gridPoint, prevBgColor == bgColor);
-							}
-						} else {
-							PaintHexString(g, b, byteBrush, gridPoint);
-						}
-						prevSelected = false;
-					}
-					prevBgColor = bgColor;
-				}
-			}
-		}
-
-		void PaintHexString(Graphics g, byte b, Brush brush, Point gridPoint)
+		void PaintHexString(Graphics g, string hexString, Brush brush, Point gridPoint)
 		{
 			PointF bytePointF = GetBytePointF(gridPoint);
-
-			string sB = ConvertByteToHex(b);
-
-			g.DrawString(sB.Substring(0, 1), Font, brush, bytePointF, _stringFormat);
-			bytePointF.X += _charSize.Width;
-			g.DrawString(sB.Substring(1, 1), Font, brush, bytePointF, _stringFormat);
+			g.DrawString(hexString, Font, brush, bytePointF, _stringFormat);
 		}
 
 		void PaintColumnInfo(Graphics g, byte b, Brush brush, int col)
@@ -2579,30 +2520,23 @@ namespace Be.Windows.Forms
 			g.DrawString(sB.Substring(1, 1), Font, brush, headerPointF, _stringFormat);
 		}
 
-		void PaintHexStringSelected(Graphics g, byte b, Brush brush, Brush brushBack, Point gridPoint, bool extendBack = false)
+		void PaintHexStringSelected(Graphics g, string hexString, Brush brush, Brush brushBack, Point gridPoint)
 		{
-			string sB = b.ToString(_hexStringFormat, System.Threading.Thread.CurrentThread.CurrentCulture);
-			if (sB.Length == 1)
-				sB = "0" + sB;
-
 			PointF bytePointF = GetBytePointF(gridPoint);
 
-			bool isFirstLineChar = (gridPoint.X == 0);
-			extendBack &= !isFirstLineChar;
-			float bcWidth = extendBack ? _charSize.Width * 3 : _charSize.Width * 2;
+			float width = hexString.Length * _charSize.Width;
+			float xPos = bytePointF.X - _charSize.Width / 2;
 
-			g.FillRectangle(brushBack, extendBack ? bytePointF.X - _charSize.Width : bytePointF.X, bytePointF.Y, bcWidth, _charSize.Height);
-			if(_selectionLength == 0 && _caretPos.Y == bytePointF.Y && _caretPos.X >= bytePointF.X && _caretPos.X <= bytePointF.X + bcWidth) {
+			g.FillRectangle(brushBack, xPos, bytePointF.Y, width, _charSize.Height);
+			if(_selectionLength == 0 && _caretPos.Y == bytePointF.Y && _caretPos.X >= bytePointF.X && _caretPos.X <= bytePointF.X + width) {
 				if(_caretVisible && this.Focused && _keyInterpreter.GetType() != typeof(StringKeyInterpreter)) {
 					//Redraw caret over background color
-					int caretWidth = (this.InsertActive) ? 1 : (int)_charSize.Width;
-					int caretHeight = (int)_charSize.Height;
+					float caretWidth = (this.InsertActive) ? 1 : _charSize.Width;
+					float caretHeight = (int)_charSize.Height;
 					g.FillRectangle(Brushes.Yellow, _caretPos.X - 1, _caretPos.Y, caretWidth, caretHeight);
 				}
 			}
-			g.DrawString(sB.Substring(0, 1), Font, brush, bytePointF, _stringFormat);
-			bytePointF.X += _charSize.Width;
-			g.DrawString(sB.Substring(1, 1), Font, brush, bytePointF, _stringFormat);
+			g.DrawString(hexString, Font, brush, bytePointF, _stringFormat);
 		}
 
 		Dictionary<int, float> _lineWidthCache = new Dictionary<int, float>();
@@ -2616,9 +2550,12 @@ namespace Be.Windows.Forms
 
 			int yPrevious = -1;
 			float xOffset = 0;
-			_lineWidthCache = new Dictionary<int, float>();
-			_xPosCache = new Dictionary<Point, float>();
-			_xPosList = new Dictionary<int, List<float>>();
+			Color defaultForeColor = this.ForeColor;
+			_lineWidthCache.Clear();
+			for(int i = 0; i < _xPosCache.Length; i++) {
+				_xPosCache[i] = -1;
+			}
+			_xPosList.Clear();
 			float xPrevious = 0;
 
 			Point? caretPoint = null;
@@ -2632,92 +2569,153 @@ namespace Be.Windows.Forms
 				this.ByteColorProvider.Prepare(_startByte, intern_endByte);
 			}
 
+			bool forceDraw = false;
+			float prevXOffset = 0;
 			bool prevSelected = false;
+			Color prevByteColor = Color.Transparent;
 			Color prevBgColor = Color.Transparent;
+			Color prevDrawnColor = Color.Transparent;
 
-			for(long i = startByte; i < intern_endByte + 1; i++) {
-				counter++;
-				Point gridPoint = GetGridBytePoint(counter);
-				PointF byteStringPointF = GetByteStringPointF(gridPoint);
-
-				if(yPrevious != gridPoint.Y) {
-					if(_xPosList.ContainsKey(yPrevious)) {
-						_xPosList[yPrevious].Add(xPrevious);
-					}
-					_xPosList[gridPoint.Y] = new List<float>();
-					_lineWidthCache[yPrevious] = _recStringView.Width + xOffset;
-					xOffset = 0;
+			Point gridPoint = GetGridBytePoint(0);
+			List<byte> bytesToDisplay = new List<byte>();
+			string stringToDisplay = string.Empty;
+			float caretWidth = 0;
+			Action<Color, Color> outputHex = (Color byteColor, Color bgColor) => {
+				StringBuilder sb = new StringBuilder();
+				foreach(byte b in bytesToDisplay) {
+					sb.Append(b.ToString("X2"));
+					sb.Append(" ");
 				}
-				yPrevious = gridPoint.Y;
 
-				byte b = _byteProvider.ReadByte(i);
-				bool isSelectedByte = i >= _bytePos && i <= (_bytePos + _selectionLength - 1) && _selectionLength != 0;
+				PointF bytePointF = GetBytePointF(gridPoint);
+				PointF byteStringPointF = GetByteStringPointF(gridPoint, false);
+				float xPos = byteStringPointF.X + prevXOffset;
 
-				using(Brush selBrushBack = new SolidBrush(_selectionBackColor)) {
-					Color byteColor = this.ForeColor;
+				//String view caret
+				Action drawCaret = () => {
+					if(_selectionLength == 0 && _caretPos.Y == bytePointF.Y && _caretPos.X >= xPos) {
+						if(_caretVisible && this.Focused && _keyInterpreter.GetType() == typeof(StringKeyInterpreter)) {
+							g.FillRectangle(Brushes.Yellow, _caretPos.X, _caretPos.Y, this.InsertActive ? 1 : caretWidth, _charSize.Height);
+							g.DrawRectangle(Pens.Gray, _caretPos.X, _caretPos.Y, this.InsertActive ? 1 : caretWidth, _charSize.Height);
+						}
+					}
+				};
+
+				using(Brush fgBrush = new SolidBrush(byteColor)) {
+					if(bgColor != Color.Transparent) {
+						using(Brush bgBrush = new SolidBrush(bgColor)) {
+							PaintHexStringSelected(g, sb.ToString(), fgBrush, bgBrush, gridPoint);
+
+							//Draw string view
+							SizeF stringSize = g.MeasureString(stringToDisplay, Font, 1000, _stringFormat);
+							g.FillRectangle(bgBrush, xPos, bytePointF.Y, stringSize.Width, _charSize.Height);
+							drawCaret();
+							g.DrawString(stringToDisplay, Font, fgBrush, new PointF(xPos, bytePointF.Y), _stringFormat);
+						}
+					} else {
+						PaintHexString(g, sb.ToString(), fgBrush, gridPoint);
+
+						//Draw string view
+						drawCaret();
+						g.DrawString(stringToDisplay, Font, fgBrush, new PointF(xPos, bytePointF.Y), _stringFormat);
+					}
+				}				
+
+				prevDrawnColor = bgColor;
+				bytesToDisplay = new List<byte>();
+				stringToDisplay = string.Empty;
+			};
+
+			using(Brush selBrushBack = new SolidBrush(_selectionBackColor)) {
+				for(long i = startByte; i < intern_endByte + 1; i++) {
+					Color byteColor = defaultForeColor;
 					Color bgColor = Color.Transparent;
+					bool isSelectedByte = i >= _bytePos && i <= (_bytePos + _selectionLength - 1) && _selectionLength != 0;
 					if(this.ByteColorProvider != null) {
 						byteColor = this.ByteColorProvider.GetByteColor(_startByte, i, out bgColor);
 					}
 
-					using(Brush byteBrush = new SolidBrush(byteColor)) {
-						if(isSelectedByte && isKeyInterpreterActive) {
-							PaintHexStringSelected(g, b, byteBrush, selBrushBack, gridPoint, prevSelected);
-							prevSelected = true;
-						} else {
-							if(bgColor != Color.Transparent) {
-								using(Brush bgBrush = new SolidBrush(bgColor)) {
-									PaintHexStringSelected(g, b, byteBrush, bgBrush, gridPoint, prevBgColor == bgColor);
-								}
-							} else {
-								PaintHexString(g, b, byteBrush, gridPoint);
-							}
-							prevSelected = false;
+					counter++;
+
+					Point currentPoint = GetGridBytePoint(counter);
+
+					bool lineChanged = false;
+					if(yPrevious != currentPoint.Y) {
+						if(_xPosList.ContainsKey(yPrevious)) {
+							_xPosList[yPrevious].Add(xPrevious);
 						}
-						prevBgColor = bgColor;
-
-						string s;
-						if(skipCount > 0) {
-							skipCount--;
-							s = "";
-						} else {
-							long len = _byteProvider.Length;
-							UInt64 tblValue = (UInt64)b;
-							for(int j = 1; j < 8; j++) {
-								if(len > i + j) {
-									tblValue += (UInt64)_byteProvider.ReadByte(i+j) << (8 * j);
-								}
-							}
-
-							int keyLength;
-							s = ByteCharConverter.ToChar(tblValue, out keyLength);
-							skipCount = keyLength - 1;
-						}
-
-						float width = (float)Math.Ceiling(g.MeasureString(s, Font, 1000, _stringFormat).Width);
-						float xPos = byteStringPointF.X+xOffset;
-						_xPosCache[gridPoint] = xPos;
-						_xPosList[gridPoint.Y].Add(xPos);
-
-						if(gridPoint == caretPoint) {
-							int caretWidth = (this.InsertActive) ? 1 : (int)width;
-							int caretHeight = (int)_charSize.Height;
-							g.FillRectangle(Brushes.Yellow, xPos - 1, _caretPos.Y, caretWidth, caretHeight);
-							g.DrawRectangle(Pens.Gray, xPos - 1, _caretPos.Y, caretWidth, caretHeight);
-						}
-
-						if(isSelectedByte && isStringKeyInterpreterActive) {
-							g.FillRectangle(selBrushBack, xPos, byteStringPointF.Y, width, _charSize.Height);
-							g.DrawString(s, Font, byteBrush, new PointF(xPos, byteStringPointF.Y), _stringFormat);
-						} else {
-							g.DrawString(s, Font, byteBrush, new PointF(xPos, byteStringPointF.Y), _stringFormat);
-						}
-
-						xOffset += width - _charSize.Width;
-						xPrevious = xPos + width;
+						_xPosList[currentPoint.Y] = new List<float>();
+						_lineWidthCache[yPrevious] = _recStringView.Width + xOffset;
+						xOffset = 0;
+						yPrevious = currentPoint.Y;
+						lineChanged = true;
 					}
+
+					if(forceDraw || lineChanged || byteColor != prevByteColor || bgColor != prevBgColor || prevSelected != isSelectedByte) {
+						outputHex(prevByteColor, prevSelected ? _selectionBackColor : prevBgColor);
+						gridPoint = GetGridBytePoint(counter);
+						prevXOffset = xOffset;
+						forceDraw = false;
+					}
+
+					byte b = _byteProvider.ReadByte(i);
+					bytesToDisplay.Add(b);
+
+					prevSelected = isSelectedByte;
+					prevBgColor = bgColor;
+					prevByteColor = byteColor;
+
+					if(!_stringViewVisible) {
+						continue;
+					}
+
+					string s;
+					if(skipCount > 0) {
+						skipCount--;
+						s = "";
+					} else {
+						long len = _byteProvider.Length;
+						UInt64 tblValue = (UInt64)b;
+						for(int j = 1; j < 8; j++) {
+							if(len > i + j) {
+								tblValue += (UInt64)_byteProvider.ReadByte(i + j) << (8 * j);
+							}
+						}
+
+						int keyLength;
+						s = ByteCharConverter.ToChar(tblValue, out keyLength);
+						skipCount = keyLength - 1;
+					}
+
+					float width;
+					if(!_measureCache.TryGetValue(s, out width)) {
+						width = g.MeasureString(s, Font, 1000, _stringFormat).Width;
+						_measureCache[s] = width;
+					}
+
+					PointF byteStringPointF = GetByteStringPointF(currentPoint, false);
+					float xPos = byteStringPointF.X + xOffset;
+					if(currentPoint.Y < 150) {
+						_xPosCache[currentPoint.Y * 64 + currentPoint.X] = xPos;
+					}
+					_xPosList[currentPoint.Y].Add(xPos);
+
+					if(currentPoint == caretPoint) {
+						caretWidth = width;
+					}
+
+					stringToDisplay += s;
+
+					if(s.Length > 1 || s.Length > 0 && s[0] > 127 || s[0] < 32) {
+						//Force draw if we hit a non-ascii character (to avoid minor positioning issues)
+						forceDraw = true;
+					}
+
+					xOffset += width - _charSize.Width;
+					xPrevious = xPos + width;
 				}
 			}
+			outputHex(prevByteColor, prevBgColor);
 		}
 
 		float GetLineWidth(int y)
@@ -2732,134 +2730,27 @@ namespace Be.Windows.Forms
 
 		void PaintCurrentBytesSign(Graphics g)
 		{
-			if(_keyInterpreter != null && _bytePos != -1 && Enabled) {
+			if(_selectionLength == 0 && _keyInterpreter != null && _bytePos != -1 && Enabled) {
 				if(_keyInterpreter.GetType() == typeof(KeyInterpreter)) {
-					if(_selectionLength == 0) {
-						Point gp = GetGridBytePoint(_bytePos - _startByte);
-						PointF pf = GetByteStringPointF(gp);
-						Point gp2 = GetGridBytePoint(_bytePos - _startByte + 1);
-						PointF pf2 = GetByteStringPointF(gp2);
+					Point gp = GetGridBytePoint(_bytePos - _startByte);
+					PointF pf = GetByteStringPointF(gp);
+					Point gp2 = GetGridBytePoint(_bytePos - _startByte + 1);
+					PointF pf2 = GetByteStringPointF(gp2);
 
-						Size s;
-						if(gp.X > gp2.X) {
-							s = new Size((int)(GetLineWidth(gp.Y) - (pf.X - _recStringView.X)), (int)_charSize.Height);
-						} else {
-							s = new Size((int)(pf2.X - pf.X), (int)_charSize.Height);
-						}
-						Rectangle r = new Rectangle((int)pf.X, (int)pf.Y, s.Width, s.Height);
-						PaintCurrentByteSign(g, r);
+					Size s;
+					if(gp.X > gp2.X) {
+						s = new Size((int)(GetLineWidth(gp.Y) - (pf.X - _recStringView.X)), (int)_charSize.Height);
 					} else {
-						int lineWidth = (int)(_recStringView.Width - _charSize.Width);
-
-						Point startSelGridPoint = GetGridBytePoint(_bytePos - _startByte);
-						PointF startSelPointF = GetByteStringPointF(startSelGridPoint);
-
-						Point endSelGridPoint = GetGridBytePoint(_bytePos - _startByte + _selectionLength);
-						PointF endSelPointF = GetByteStringPointF(endSelGridPoint);
-
-						int multiLine = endSelGridPoint.Y - startSelGridPoint.Y;
-						if(multiLine == 0) {
-							Rectangle singleLine = new Rectangle(
-								(int)startSelPointF.X,
-								(int)startSelPointF.Y,
-								(int)(endSelPointF.X - startSelPointF.X),
-								(int)_charSize.Height);
-
-							PaintCurrentByteSign(g, singleLine);
-						} else {
-							Rectangle firstLine = new Rectangle(
-								(int)startSelPointF.X,
-								(int)startSelPointF.Y,
-								(int)(_recStringView.X + GetLineWidth(startSelGridPoint.Y) - startSelPointF.X),
-								(int)_charSize.Height);
-
-							PaintCurrentByteSign(g, firstLine);
-
-							for(int i = 0; i < multiLine - 1; i++) {
-								Rectangle betweenLines = new Rectangle(
-									_recStringView.X,
-									(int)(startSelPointF.Y + _charSize.Height * (i + 1)),
-									(int)GetLineWidth(startSelGridPoint.Y + i + 1),
-									(int)(_charSize.Height));
-
-								PaintCurrentByteSign(g, betweenLines);
-							}
-
-							Rectangle lastLine = new Rectangle(
-								_recStringView.X,
-								(int)endSelPointF.Y,
-								(int)(endSelPointF.X - _recStringView.X),
-								(int)_charSize.Height);
-
-							PaintCurrentByteSign(g, lastLine);
-						}
+						s = new Size((int)(pf2.X - pf.X), (int)_charSize.Height);
 					}
+					Rectangle r = new Rectangle((int)pf.X, (int)pf.Y, s.Width, s.Height);
+					PaintCurrentByteSign(g, r);
 				} else {
-					if(_selectionLength == 0) {
-						Point gp = GetGridBytePoint(_bytePos - _startByte);
-						PointF pf = GetBytePointF(gp);
-						Size s = new Size((int)_charSize.Width * 2, (int)_charSize.Height);
-						Rectangle r = new Rectangle((int)pf.X, (int)pf.Y, s.Width, s.Height);
-						PaintCurrentByteSign(g, r);
-					} else {
-						int lineWidth = (int)(_recHex.Width - _charSize.Width * 5);
-
-						Point startSelGridPoint = GetGridBytePoint(_bytePos - _startByte);
-						PointF startSelPointF = GetBytePointF(startSelGridPoint);
-
-						Point endSelGridPoint = GetGridBytePoint(_bytePos - _startByte + _selectionLength - 1);
-						PointF endSelPointF = GetBytePointF(endSelGridPoint);
-
-						int multiLine = endSelGridPoint.Y - startSelGridPoint.Y;
-						if(multiLine == 0) {
-							Rectangle singleLine = new Rectangle(
-								(int)startSelPointF.X,
-								(int)startSelPointF.Y,
-								(int)(endSelPointF.X - startSelPointF.X + _charSize.Width * 2),
-								(int)_charSize.Height);
-
-							if(singleLine.IntersectsWith(_recHex)) {
-								singleLine.Intersect(_recHex);
-								PaintCurrentByteSign(g, singleLine);
-							}
-						} else {
-							Rectangle firstLine = new Rectangle(
-								(int)startSelPointF.X,
-								(int)startSelPointF.Y,
-								(int)(_recHex.X + lineWidth - startSelPointF.X + _charSize.Width * 2),
-								(int)_charSize.Height);
-
-							if(firstLine.IntersectsWith(_recHex)) {
-								firstLine.Intersect(_recHex);
-								PaintCurrentByteSign(g, firstLine);
-							}
-
-							if(multiLine > 1) {
-								Rectangle betweenLines = new Rectangle(
-									_recHex.X,
-									(int)(startSelPointF.Y + _charSize.Height),
-									(int)(lineWidth + _charSize.Width * 2),
-									(int)(_charSize.Height * (multiLine - 1)));
-
-								if(betweenLines.IntersectsWith(_recHex)) {
-									betweenLines.Intersect(_recHex);
-									PaintCurrentByteSign(g, betweenLines);
-								}
-
-							}
-
-							Rectangle lastLine = new Rectangle(
-								_recHex.X,
-								(int)endSelPointF.Y,
-								(int)(endSelPointF.X - _recHex.X + _charSize.Width * 2),
-								(int)_charSize.Height);
-
-							if(lastLine.IntersectsWith(_recHex)) {
-								lastLine.Intersect(_recHex);
-								PaintCurrentByteSign(g, lastLine);
-							}
-						}
-					}
+					Point gp = GetGridBytePoint(_bytePos - _startByte);
+					PointF pf = GetBytePointF(gp);
+					Size s = new Size((int)(_charSize.Width * 2), (int)_charSize.Height);
+					Rectangle r = new Rectangle((int)pf.X, (int)pf.Y, s.Width, s.Height);
+					PaintCurrentByteSign(g, r);
 				}
 			}
 		}
@@ -2933,7 +2824,7 @@ namespace Be.Windows.Forms
             {
                 charSize = this.CreateGraphics().MeasureString("A", Font, 100, _stringFormat);
             }
-			CharSize = new SizeF((float)Math.Ceiling(charSize.Width), (float)Math.Ceiling(charSize.Height));
+			CharSize = new SizeF((float)charSize.Width, (float)Math.Ceiling(charSize.Height));
 
             int requiredWidth = 0;
 
@@ -3063,14 +2954,17 @@ namespace Be.Windows.Forms
 			return new PointF(x, y);
 		}
 
-		Dictionary<Point, float> _xPosCache = new Dictionary<Point, float>();
+		float[] _xPosCache = new float[64 * 150];
 		Dictionary<int, List<float>> _xPosList = new Dictionary<int, List<float>>();
-		PointF GetByteStringPointF(Point gp)
+		PointF GetByteStringPointF(Point gp, bool useCache = true)
 		{
 			float x = (_charSize.Width) * gp.X + _recStringView.X;
 			float y = (gp.Y + 1) * _charSize.Height - _charSize.Height + _recStringView.Y;
-			if(_xPosCache.ContainsKey(gp)) {
-				return new PointF(_xPosCache[gp], y);
+
+			float cachedXPos = gp.Y > 0 && gp.Y < 150 ? _xPosCache[gp.Y * 64 + gp.X] : -1;
+
+			if(useCache && cachedXPos >= 0) {
+				return new PointF(cachedXPos, y);
 			} else {
 				return new PointF(x, y);
 			}
@@ -3121,8 +3015,11 @@ namespace Be.Windows.Forms
 				this.UpdateRectanglePositioning();
 				this.UpdateCaret();
 				this.Invalidate();
+
+				_measureCache = new Dictionary<string, float>();
 			}
 		}
+		Dictionary<string, float> _measureCache = new Dictionary<string, float>();
 
 		/// <summary>
 		/// Not used.

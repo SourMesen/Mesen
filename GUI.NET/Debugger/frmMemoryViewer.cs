@@ -22,6 +22,8 @@ namespace Mesen.GUI.Debugger
 		private DebugMemoryType _memoryType = DebugMemoryType.CpuMemory;
 		private int _previousIndex = -1;
 		private DebugWorkspace _previousWorkspace;
+		private bool _updating = false;
+		private DateTime _lastUpdate = DateTime.MinValue;
 
 		public frmMemoryViewer()
 		{
@@ -33,6 +35,8 @@ namespace Mesen.GUI.Debugger
 			base.OnLoad(e);
 
 			this.mnuAutoRefresh.Checked = ConfigManager.Config.DebugInfo.RamAutoRefresh;
+			UpdateRefreshSpeedMenu();
+
 			this.mnuShowCharacters.Checked = ConfigManager.Config.DebugInfo.RamShowCharacters;
 			this.mnuShowLabelInfoOnMouseOver.Checked = ConfigManager.Config.DebugInfo.RamShowLabelInfo;
 
@@ -106,6 +110,23 @@ namespace Mesen.GUI.Debugger
 		{
 			if(e.NotificationType == InteropEmu.ConsoleNotificationType.CodeBreak) {
 				this.BeginInvoke((MethodInvoker)(() => this.RefreshData()));
+			} else if(e.NotificationType == InteropEmu.ConsoleNotificationType.PpuViewerDisplayFrame) {
+				int refreshDelay = 90;
+				switch(ConfigManager.Config.DebugInfo.RamAutoRefreshSpeed) {
+					case RefreshSpeed.Low: refreshDelay= 90; break;
+					case RefreshSpeed.Normal: refreshDelay = 32; break;
+					case RefreshSpeed.High: refreshDelay = 16; break;
+				}
+
+				DateTime now = DateTime.Now;
+				if(!_updating && ConfigManager.Config.DebugInfo.RamAutoRefresh && (now - _lastUpdate).Milliseconds >= refreshDelay) {
+					_lastUpdate = now;
+					_updating = true;
+					this.BeginInvoke((Action)(() => {
+						this.RefreshData();
+						_updating = false;
+					}));
+				}
 			}
 		}
 
@@ -297,17 +318,8 @@ namespace Mesen.GUI.Debugger
 			}
 		}
 
-		private void tmrRefresh_Tick(object sender, EventArgs e)
-		{
-			if(this.mnuAutoRefresh.Checked) {
-				this.RefreshData();
-			}
-		}
-
 		private void tabMain_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			this.tmrRefresh.Interval = this.tabMain.SelectedTab == this.tpgMemoryViewer ? 100 : 500;
-
 			if(this.tabMain.SelectedTab == this.tpgProfiler) {
 				this.ctrlProfiler.RefreshData();
 			}
@@ -653,6 +665,27 @@ namespace Mesen.GUI.Debugger
 					_lastLabelTooltip = null;
 				}
 			}
+		}
+
+		private void mnuAutoRefreshSpeed_Click(object sender, EventArgs e)
+		{
+			if(sender == mnuAutoRefreshLow) {
+				ConfigManager.Config.DebugInfo.RamAutoRefreshSpeed = RefreshSpeed.Low;
+			} else if(sender == mnuAutoRefreshNormal) {
+				ConfigManager.Config.DebugInfo.RamAutoRefreshSpeed = RefreshSpeed.Normal;
+			} else if(sender == mnuAutoRefreshHigh) {
+				ConfigManager.Config.DebugInfo.RamAutoRefreshSpeed = RefreshSpeed.High;
+			}
+			ConfigManager.ApplyChanges();
+
+			UpdateRefreshSpeedMenu();
+		}
+
+		private void UpdateRefreshSpeedMenu()
+		{
+			mnuAutoRefreshLow.Checked = ConfigManager.Config.DebugInfo.RamAutoRefreshSpeed == RefreshSpeed.Low;
+			mnuAutoRefreshNormal.Checked = ConfigManager.Config.DebugInfo.RamAutoRefreshSpeed == RefreshSpeed.Normal;
+			mnuAutoRefreshHigh.Checked = ConfigManager.Config.DebugInfo.RamAutoRefreshSpeed == RefreshSpeed.High;
 		}
 	}
 }

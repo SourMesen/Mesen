@@ -137,6 +137,7 @@ namespace Mesen.GUI.Config
 		public XmlColor CodeEffectiveAddressColor = Color.SteelBlue;
 
 		public bool RamAutoRefresh = true;
+		public RefreshSpeed RamAutoRefreshSpeed = RefreshSpeed.Normal;
 		public int RamColumnCount = 2;
 		public float RamFontSize = BaseControl.DefaultFontSize;
 		public bool RamShowCharacters = true;
@@ -252,6 +253,12 @@ namespace Mesen.GUI.Config
 		LoadLastScript = 2
 	}
 
+	public enum RefreshSpeed
+	{
+		Low = 0,
+		Normal = 1,
+		High = 2
+	}
 
 	public class XmlColor
 	{

@@ -62,6 +62,7 @@ namespace Mesen.GUI.Debugger.Controls
 					};
 
 					this.ctrlHexBox.ByteProvider = _byteProvider;
+					this.ctrlHexBox.Refresh();
 
 					if(needInit) {
 						InitializeContextMenu?.Invoke(this.ctrlHexBox, EventArgs.Empty);
