@@ -19,11 +19,11 @@
       <Control ID="mnuVsGameConfig">Configuração de jogo VS</Control>
       <Control ID="mnuInsertCoin1">Inserir moeda (1)</Control>
       <Control ID="mnuInsertCoin2">Inserir moeda (2)</Control>
-      <Control ID="mnuInputBarcode">Input Barcode</Control>
-      <Control ID="mnuTapeRecorder">Tape Recorder</Control>
-      <Control ID="mnuLoadTapeFile">Load from file...</Control>
-      <Control ID="mnuStartRecordTapeFile">Record to file...</Control>
-      <Control ID="mnuStopRecordTapeFile">Stop recording</Control>
+      <Control ID="mnuInputBarcode">Entrar código de barra</Control>
+      <Control ID="mnuTapeRecorder">Gravador</Control>
+      <Control ID="mnuLoadTapeFile">Carregar do arquivo...</Control>
+      <Control ID="mnuStartRecordTapeFile">Gravar para o arquivo...</Control>
+      <Control ID="mnuStopRecordTapeFile">Parar gravação</Control>
       <Control ID="mnuOptions">Opções</Control>
       <Control ID="mnuEmulationSpeed">Velocidade</Control>
       <Control ID="mnuEmuSpeedNormal">Normal (100%)</Control>
@@ -89,7 +89,7 @@
       <Control ID="mnuTestStopRecording">Parar gravação</Control>
       <Control ID="mnuRunAllTests">Executar todos os testes</Control>
       <Control ID="mnuDebugger">Depurar</Control>
-      <Control ID="mnuLogWindow">Janela de log</Control>
+      <Control ID="mnuLogWindow">Janela de relatório</Control>
       <Control ID="mnuHdPackEditor">Criador de pacote de alta definição</Control>
       <Control ID="mnuTakeScreenshot">Captura de tela</Control>
       <Control ID="mnuRandomGame">Carregar jogo aleatório</Control>
@@ -112,7 +112,7 @@
       <Control ID="lblSlowMotion">Câmera lenta</Control>
       <Control ID="lblFastForward">Acelerar</Control>
     </Form>
-    <Form ID="frmLogWindow" Title="Janela de registro">
+    <Form ID="frmLogWindow" Title="Janela de relatório">
       <Control ID="btnClose">Fechar</Control>
     </Form>
     <Form ID="frmAudioConfig" Title="Opções de áudio">
@@ -184,7 +184,7 @@
       <Control ID="btnSetupP3">Configuração</Control>
       <Control ID="btnSetupExp">Configuração</Control>
       <Control ID="btnSetupCartridge">Configuração</Control>
-      <Control ID="lblCartridge">Cartridge:</Control>
+      <Control ID="lblCartridge">Cartucho:</Control>
       <Control ID="lblPlayer1">Jogador 1:</Control>
       <Control ID="lblPlayer2">Jogador 2:</Control>
       <Control ID="lblPlayer4">Jogador 4:</Control>
@@ -220,8 +220,8 @@
       <Control ID="chkFullscreenForceIntegerScale">Usar valores de escala inteira ao entrar no modo de tela cheia</Control>
       <Control ID="chkShowFps">Mostrar FPS</Control>
       <Control ID="chkUseHdPacks">Usar os pacotes de alta definição do HDNes</Control>
-      <Control ID="chkUseExclusiveFullscreen">Use exclusive fullscreen mode</Control>
-      <Control ID="lblRequestedRefreshRate">Requested Refresh Rate:</Control>
+      <Control ID="chkUseExclusiveFullscreen">Usar modo tela cheia exclusivo</Control>
+      <Control ID="lblRequestedRefreshRate">Taxa de atualização solicitada:</Control>
       <Control ID="tpgOverscan">Overscan</Control>
       <Control ID="grpCropping">Recorte</Control>
       <Control ID="lblLeft">Esquerda</Control>
@@ -249,7 +249,7 @@
       <Control ID="trkResolution">Resolução</Control>
       <Control ID="trkSharpness">Nitidez</Control>
       <Control ID="chkMergeFields">Combinar imagens alternadas</Control>
-      <Control ID="chkVerticalBlend">Apply Vertical Blending</Control>
+      <Control ID="chkVerticalBlend">Aplicar mistura vertical</Control>
       
       <Control ID="trkYFilterLength">Filtro Y (Desfoque horizontal)</Control>
       <Control ID="trkIFilterLength">Filtro I (Dispersão horizontal)</Control>
@@ -400,7 +400,7 @@
       <Control ID="chkDisableGameDatabase">Desabilitar a base de dados de jogos</Control>
       <Control ID="chkDisableOsd">Desativar exibição na tela (OSD)</Control>
 
-      <Control ID="chkAlwaysOnTop">Always display on top of other windows</Control>
+      <Control ID="chkAlwaysOnTop">Sempre exibir em cima de outras janelas</Control>
 
       <Control ID="tpgNsf">NSF</Control>
       <Control ID="chkNsfAutoDetectSilence">Reproduzir a faixa seguinte depois</Control>
@@ -588,12 +588,12 @@
       <Control ID="btnOk">CONFIRMAR</Control>
       <Control ID="lblCancel">Cancelar</Control>
     </Form>
-    <Form ID="frmRecordMovie" Title="Movie Recording Options">
-      <Control ID="lblSaveTo">Save to:</Control>
-      <Control ID="lblRecordFrom">Record from:</Control>
-      <Control ID="lblMovieInformation">Movie Information (optional)</Control>
-      <Control ID="lblAuthor">Author:</Control>
-      <Control ID="lblDescription">Description:</Control>
+    <Form ID="frmRecordMovie" Title="Opções de gravação de filme">
+      <Control ID="lblSaveTo">Salvar para:</Control>
+      <Control ID="lblRecordFrom">Gravar de:</Control>
+      <Control ID="lblMovieInformation">Informação do filme (opcional)</Control>
+      <Control ID="lblAuthor">Autor:</Control>
+      <Control ID="lblDescription">Descrição:</Control>
       <Control ID="btnBrowse">Procurar...</Control>
       <Control ID="btnOK">OK</Control>
       <Control ID="btnCancel">Cancelar</Control>
@@ -657,7 +657,7 @@
     <Form ID="frmPartyTapConfig">
     </Form>
     <Form ID="frmPowerPadConfig">
-      <Control ID="chkUseSideA">Use side A</Control>
+      <Control ID="chkUseSideA">Usar lado A</Control>
     </Form>
     <Form ID="frmSuborKeyboardConfig">
     </Form>
@@ -668,21 +668,21 @@
   </Forms>
   <UserControls>
     <UserControl ID="ctrlExcitingBoxingConfig">
-      <Control ID="lblLeftHook">Left Hook</Control>
-      <Control ID="lblRightHook">Right Hook</Control>
-      <Control ID="lblLeftJab">Left Jab</Control>
-      <Control ID="lblRightJab">Right Jab</Control>
-      <Control ID="lblStraight">Straight</Control>
-      <Control ID="lblBody">Body</Control>
-      <Control ID="lblMoveLeft">Move Left</Control>
-      <Control ID="lblMoveRight">Move Right</Control>
+      <Control ID="lblLeftHook">Gancho esquerdo</Control>
+      <Control ID="lblRightHook">Gancho direito</Control>
+      <Control ID="lblLeftJab">Jab esquerdo</Control>
+      <Control ID="lblRightJab">Jab direito</Control>
+      <Control ID="lblStraight">Direto</Control>
+      <Control ID="lblBody">Corpo</Control>
+      <Control ID="lblMoveLeft">Mover para esquerda</Control>
+      <Control ID="lblMoveRight">Mover para direita</Control>
     </UserControl>
     <UserControl ID="ctrlPachinkoConfig">
-      <Control ID="lblPress">Press</Control>
-      <Control ID="lblRelease">Release</Control>
+      <Control ID="lblPress">Precionar</Control>
+      <Control ID="lblRelease">Liberar</Control>
     </UserControl>
     <UserControl ID="ctrlBandaiMicrophone">
-      <Control ID="lblMicrophone">Microphone</Control>
+      <Control ID="lblMicrophone">Microfone</Control>
     </UserControl>
   </UserControls>
   <Messages>
@@ -696,7 +696,7 @@
     <Message ID="FilterTest">Arquivos de teste (*.mtp)|*.mtp|Todos os arquivos (*.*)|*.*</Message>
     <Message ID="FilterCheat">Todos os formatos suportados (*.cht, *.xml)|*.cht;*.xml</Message>
     <Message ID="FilterSavestate">Estados salvos do Mesen (*.mst)|*.mst|Todos os arquivos (*.*)|*.*</Message>
-    <Message ID="FilterTapeFiles">Family Basic Tape files (*.fbt)|*.fbt|Todos os arquivos (*.*)|*.*</Message>
+    <Message ID="FilterTapeFiles">Arquivos Family Basic Tape (*.fbt)|*.fbt|Todos os arquivos (*.*)|*.*</Message>
 
     <Message ID="LoadFromFile">Carregar de um arquivo...</Message>
     <Message ID="SaveToFile">Salvar para arquivo...</Message>
@@ -704,9 +704,9 @@
     <Message ID="ClearHistory">Limpar histórico</Message>
     <Message ID="LastFolderUsed">Última pasta usada</Message>
 
-    <Message ID="MouseModeEnabled">Mouse mode enabled - press ESC or pause to release the cursor.</Message>
-    <Message ID="BandaiMicrophone">Bandai Microphone</Message>
-    <Message ID="DatachBarcodeReader">Datach Barcode Reader</Message>
+    <Message ID="MouseModeEnabled">Modo mouse ativado - precione ESC ou Pause para liberar o cursor.</Message>
+    <Message ID="BandaiMicrophone">Micorfone Bandai</Message>
+    <Message ID="DatachBarcodeReader">Leitor de código de barras Datach</Message>
 
     <Message ID="Resume">Continuar</Message>
     <Message ID="Pause">Pausar</Message>
@@ -791,7 +791,7 @@
     <Message ID="EmulatorShortcutMappings_InsertNextDisk">FDS - Inserir próximo disco</Message>
     <Message ID="EmulatorShortcutMappings_InsertCoin1">VS - Inserir moeda (1)</Message>
     <Message ID="EmulatorShortcutMappings_InsertCoin2">VS - Inserir moeda (2)</Message>
-    <Message ID="EmulatorShortcutMappings_InputBarcode">Input Barcode</Message>
+    <Message ID="EmulatorShortcutMappings_InputBarcode">Entrar com código de barras</Message>
     <Message ID="EmulatorShortcutMappings_VsServiceButton">VS - Botão de serviço</Message>
     <Message ID="EmulatorShortcutMappings_MoveToNextStateSlot">Ir ao próximo estado salvo</Message>
     <Message ID="EmulatorShortcutMappings_MoveToPreviousStateSlot">Ir ao estado salvo anterior</Message>
@@ -814,10 +814,10 @@
     <Message ID="EmulatorShortcutMappings_ToggleFrameCounter">Alternar contador de quadro</Message>
     <Message ID="EmulatorShortcutMappings_ToggleLagCounter">Alternar contador de lagr</Message>
     <Message ID="EmulatorShortcutMappings_ToggleOsd">Alternar OSD (Menu na tela)</Message>
-    <Message ID="EmulatorShortcutMappings_ToggleAlwaysOnTop">Toggle Display on Top</Message>
+    <Message ID="EmulatorShortcutMappings_ToggleAlwaysOnTop">Alternar exibição na parte superior</Message>
     <Message ID="EmulatorShortcutMappings_ToggleBackground">Alternar camada de fundo</Message>
     <Message ID="EmulatorShortcutMappings_ToggleSprites">Alternar camada de sprite</Message>
-    <Message ID="EmulatorShortcutMappings_ToggleKeyboardMode">Toggle Keyboard Mode</Message>
+    <Message ID="EmulatorShortcutMappings_ToggleKeyboardMode">Alternar modo de teclado</Message>
     <Message ID="EmulatorShortcutMappings_MaxSpeed">Alternar velocidade máxima</Message>
     <Message ID="EmulatorShortcutMappings_LoadRandomGame">Carrear jogo aleatório</Message>
     <Message ID="EmulatorShortcutMappings_SaveStateSlot1">Salvar estado - Posição 1</Message>
@@ -852,10 +852,10 @@
       <Value ID="StandardController">Controle padrão</Value>
       <Value ID="Zapper">Zapper</Value>
       <Value ID="ArkanoidController">Controle Arkanoid</Value>
-      <Value ID="SnesController">SNES Controller</Value>
+      <Value ID="SnesController">Controle SNES</Value>
       <Value ID="PowerPad">Power Pad</Value>
-      <Value ID="SnesMouse">SNES Mouse</Value>
-      <Value ID="SuborMouse">Subor Mouse</Value>      
+      <Value ID="SnesMouse">Mouse SNES</Value>
+      <Value ID="SuborMouse">Mouse Subor</Value>      
     </Enum>
     <Enum ID="ExpansionPortDevice">
       <Value ID="None">Nenhum</Value>
@@ -865,12 +865,12 @@
       <Value ID="OekaKidsTablet">Tablet Oeka Kids</Value>
       <Value ID="FamilyTrainerMat">Family Trainer</Value>
       <Value ID="KonamiHyperShot">Konami Hyper Shot</Value>
-      <Value ID="FamilyBasicKeyboard">Family Basic Keyboard</Value>
+      <Value ID="FamilyBasicKeyboard">Teclado Family Basic</Value>
       <Value ID="PartyTap">Partytap</Value>
-      <Value ID="Pachinko">Pachinko Controller</Value>
+      <Value ID="Pachinko">Controle Pachinko</Value>
       <Value ID="ExcitingBoxing">Exciting Boxing Punching Bag</Value>
-      <Value ID="JissenMahjong">Jissen Mahjong Controller</Value>
-      <Value ID="SuborKeyboard">Subor Keyboard</Value>
+      <Value ID="JissenMahjong">Controle Jissen Mahjong</Value>
+      <Value ID="SuborKeyboard">Teclado Subor</Value>
       <Value ID="BarcodeBattler">Barcode Battler</Value>
       <Value ID="HoriTrack">Hori Track</Value>
       <Value ID="BandaiHyperShot">Bandai Hyper Shot</Value>
@@ -983,9 +983,9 @@
       <Value ID="CSCD">Camstudio (CSCD)</Value>
     </Enum>
     <Enum ID="RecordMovieFrom">
-      <Value ID="StartWithoutSaveData">Power on</Value>
-      <Value ID="StartWithSaveData">Power on, with save data</Value>
-      <Value ID="CurrentState">Current state</Value>
+      <Value ID="StartWithoutSaveData">Ligar</Value>
+      <Value ID="StartWithSaveData">Ligar, com dados de salvamento</Value>
+      <Value ID="CurrentState">Estado atual</Value>
     </Enum>
   </Enums>
 </Resources>
