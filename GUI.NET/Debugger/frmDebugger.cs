@@ -256,7 +256,8 @@ namespace Mesen.GUI.Debugger
 			if(mnuBreakOnBrk.Checked) {
 				flags |= DebuggerFlags.BreakOnBrk;
 			}
-			InteropEmu.DebugSetFlags(flags);
+
+			DebugWorkspaceManager.SetFlags(flags);
 			InteropEmu.SetFlag(EmulationFlags.DebuggerWindowEnabled, true);
 		}
 

@@ -1453,6 +1453,8 @@ namespace Mesen.GUI
 		DisassembleUnidentifiedData = 0x40,
 		ShowVerifiedData = 0x80,
 		ShowUnidentifiedData = 0x100,
+
+		IgnoreRedundantWrites= 0x200,
 	}
 
 	public struct InteropRomInfo

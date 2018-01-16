@@ -477,7 +477,13 @@ bool Debugger::PrivateProcessRamOperation(MemoryOperationType type, uint16_t &ad
 	int32_t absoluteRamAddr = addressInfo.Type == AddressType::WorkRam ? addressInfo.Address : -1;
 
 	if(addressInfo.Address >= 0 && type != MemoryOperationType::DummyRead) {
-		_memoryAccessCounter->ProcessMemoryAccess(addressInfo, type, _cpu->GetCycleCount());
+		if(type == MemoryOperationType::Write && CheckFlag(DebuggerFlags::IgnoreRedundantWrites)) {
+			if(_memoryManager->DebugRead(addr) != value) {
+				_memoryAccessCounter->ProcessMemoryAccess(addressInfo, type, _cpu->GetCycleCount());
+			}
+		} else {
+			_memoryAccessCounter->ProcessMemoryAccess(addressInfo, type, _cpu->GetCycleCount());
+		}
 	}
 
 	if(absoluteAddr >= 0) {

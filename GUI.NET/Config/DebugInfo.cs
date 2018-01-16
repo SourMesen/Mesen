@@ -138,6 +138,7 @@ namespace Mesen.GUI.Config
 
 		public bool RamAutoRefresh = true;
 		public RefreshSpeed RamAutoRefreshSpeed = RefreshSpeed.Normal;
+		public bool RamIgnoreRedundantWrites = false;
 		public int RamColumnCount = 2;
 		public float RamFontSize = BaseControl.DefaultFontSize;
 		public bool RamShowCharacters = true;

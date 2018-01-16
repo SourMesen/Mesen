@@ -98,5 +98,22 @@ namespace Mesen.GUI.Debugger
 			}
 			return _workspace;
 		}
+		
+		private static DebuggerFlags _flags = DebuggerFlags.None;
+		public static void SetFlags(DebuggerFlags flags)
+		{
+			_flags |= flags;
+			InteropEmu.DebugSetFlags(_flags);
+		}
+
+		public static void ClearFlags(DebuggerFlags flags = DebuggerFlags.None)
+		{
+			if(flags == DebuggerFlags.None) {
+				_flags = DebuggerFlags.None;
+			} else {
+				_flags &= ~flags;
+			}
+			InteropEmu.DebugSetFlags(_flags);
+		}
 	}
 }

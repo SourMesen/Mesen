@@ -37,6 +37,9 @@ namespace Mesen.GUI.Debugger
 			this.mnuAutoRefresh.Checked = ConfigManager.Config.DebugInfo.RamAutoRefresh;
 			UpdateRefreshSpeedMenu();
 
+			this.mnuIgnoreRedundantWrites.Checked = ConfigManager.Config.DebugInfo.RamIgnoreRedundantWrites;
+			this.UpdateFlags();
+
 			this.mnuShowCharacters.Checked = ConfigManager.Config.DebugInfo.RamShowCharacters;
 			this.mnuShowLabelInfoOnMouseOver.Checked = ConfigManager.Config.DebugInfo.RamShowLabelInfo;
 
@@ -70,7 +73,8 @@ namespace Mesen.GUI.Debugger
 			_notifListener = new InteropEmu.NotificationListener();
 			_notifListener.OnNotification += _notifListener_OnNotification;
 
-			this.mnuShowCharacters.CheckedChanged += new EventHandler(this.mnuShowCharacters_CheckedChanged);
+			this.mnuShowCharacters.CheckedChanged += this.mnuShowCharacters_CheckedChanged;
+			this.mnuIgnoreRedundantWrites.CheckedChanged += mnuIgnoreRedundantWrites_CheckedChanged;
 
 			if(!ConfigManager.Config.DebugInfo.MemoryViewerSize.IsEmpty) {
 				this.Size = ConfigManager.Config.DebugInfo.MemoryViewerSize;
@@ -84,6 +88,15 @@ namespace Mesen.GUI.Debugger
 			ConfigManager.Config.DebugInfo.MemoryViewerSize = this.WindowState == FormWindowState.Maximized ? this.RestoreBounds.Size : this.Size;
 			ConfigManager.ApplyChanges();
 			DebugWorkspaceManager.SaveWorkspace();
+		}
+
+		private void UpdateFlags()
+		{
+			if(mnuIgnoreRedundantWrites.Checked) {
+				DebugWorkspaceManager.SetFlags(DebuggerFlags.IgnoreRedundantWrites);
+			} else {
+				DebugWorkspaceManager.ClearFlags(DebuggerFlags.IgnoreRedundantWrites);
+			}
 		}
 
 		public void ShowAddress(int address)
@@ -108,25 +121,34 @@ namespace Mesen.GUI.Debugger
 
 		private void _notifListener_OnNotification(InteropEmu.NotificationEventArgs e)
 		{
-			if(e.NotificationType == InteropEmu.ConsoleNotificationType.CodeBreak) {
-				this.BeginInvoke((MethodInvoker)(() => this.RefreshData()));
-			} else if(e.NotificationType == InteropEmu.ConsoleNotificationType.PpuViewerDisplayFrame) {
-				int refreshDelay = 90;
-				switch(ConfigManager.Config.DebugInfo.RamAutoRefreshSpeed) {
-					case RefreshSpeed.Low: refreshDelay= 90; break;
-					case RefreshSpeed.Normal: refreshDelay = 32; break;
-					case RefreshSpeed.High: refreshDelay = 16; break;
-				}
+			switch(e.NotificationType) {
+				case InteropEmu.ConsoleNotificationType.CodeBreak:
+					this.BeginInvoke((MethodInvoker)(() => this.RefreshData()));
+					break;
+				
+				case InteropEmu.ConsoleNotificationType.GameReset:
+				case InteropEmu.ConsoleNotificationType.GameLoaded:
+					this.UpdateFlags();
+					break;
 
-				DateTime now = DateTime.Now;
-				if(!_updating && ConfigManager.Config.DebugInfo.RamAutoRefresh && (now - _lastUpdate).Milliseconds >= refreshDelay) {
-					_lastUpdate = now;
-					_updating = true;
-					this.BeginInvoke((Action)(() => {
-						this.RefreshData();
-						_updating = false;
-					}));
-				}
+				case InteropEmu.ConsoleNotificationType.PpuViewerDisplayFrame:
+					int refreshDelay = 90;
+					switch(ConfigManager.Config.DebugInfo.RamAutoRefreshSpeed) {
+						case RefreshSpeed.Low: refreshDelay= 90; break;
+						case RefreshSpeed.Normal: refreshDelay = 32; break;
+						case RefreshSpeed.High: refreshDelay = 16; break;
+					}
+
+					DateTime now = DateTime.Now;
+					if(!_updating && ConfigManager.Config.DebugInfo.RamAutoRefresh && (now - _lastUpdate).Milliseconds >= refreshDelay) {
+						_lastUpdate = now;
+						_updating = true;
+						this.BeginInvoke((Action)(() => {
+							this.RefreshData();
+							_updating = false;
+						}));
+					}
+					break;
 			}
 		}
 
@@ -244,6 +266,9 @@ namespace Mesen.GUI.Debugger
 		private void UpdateConfig()
 		{
 			ConfigManager.Config.DebugInfo.RamAutoRefresh = this.mnuAutoRefresh.Checked;
+
+			ConfigManager.Config.DebugInfo.RamIgnoreRedundantWrites = this.mnuIgnoreRedundantWrites.Checked;
+
 			ConfigManager.Config.DebugInfo.RamShowCharacters = this.mnuShowCharacters.Checked;
 			ConfigManager.Config.DebugInfo.RamShowLabelInfo = this.mnuShowLabelInfoOnMouseOver.Checked;
 			ConfigManager.Config.DebugInfo.RamFontSize = this.ctrlHexViewer.HexFont.Size;
@@ -356,6 +381,12 @@ namespace Mesen.GUI.Debugger
 		private void mnuShowCharacters_CheckedChanged(object sender, EventArgs e)
 		{
 			this.ctrlHexViewer.StringViewVisible = mnuShowCharacters.Checked;
+			this.UpdateConfig();
+		}
+
+		private void mnuIgnoreRedundantWrites_CheckedChanged(object sender, EventArgs e)
+		{
+			this.UpdateFlags();
 			this.UpdateConfig();
 		}
 
