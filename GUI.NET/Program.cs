@@ -137,10 +137,9 @@ namespace Mesen.GUI
 						singleInstance.ArgumentsReceived += (object sender, ArgumentsReceivedEventArgs e) => {
 							if(frmMain.IsHandleCreated) {
 								frmMain.BeginInvoke((MethodInvoker)(() => {
-								List<string> switches = frmMain.PreprocessCommandLineArguments(e.Args);
-								frmMain.ProcessCommandLineArguments(switches, false);
-								frmMain.LoadGameFromCommandLine(switches);
-							}));
+									frmMain.ProcessCommandLineArguments(frmMain.PreprocessCommandLineArguments(e.Args, true), false);
+									frmMain.LoadGameFromCommandLine(frmMain.PreprocessCommandLineArguments(e.Args, false));
+								}));
 							}
 						};
 

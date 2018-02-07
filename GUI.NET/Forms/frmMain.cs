@@ -55,7 +55,7 @@ namespace Mesen.GUI.Forms
 
 		private Dictionary<EmulatorShortcut, Func<bool>> _actionEnabledFuncs = new Dictionary<EmulatorShortcut, Func<bool>>();
 
-		private List<string> _commandLineArgs;
+		private string[] _commandLineArgs;
 		private bool _noAudio = false;
 		private bool _noVideo = false;
 		private bool _noInput = false;
@@ -74,14 +74,14 @@ namespace Mesen.GUI.Forms
 			_fonts.AddFontFile(Path.Combine(ConfigManager.HomeFolder, "Resources", "PixelFont.ttf"));
 			lblVersion.Font = new Font(_fonts.Families[0], 11);
 
-			_commandLineArgs = PreprocessCommandLineArguments(args);
+			_commandLineArgs = (string[])args.Clone();
 
 			Application.AddMessageFilter(this);
 			this.Resize += ResizeRecentGames;
 			this.FormClosed += (s, e) => Application.RemoveMessageFilter(this);
 		}
 
-		public List<string> PreprocessCommandLineArguments(string[] args)
+		public List<string> PreprocessCommandLineArguments(string[] args, bool toLower)
 		{
 			var switches = new List<string>();
 			for(int i = 0; i < args.Length; i++) {
@@ -93,7 +93,7 @@ namespace Mesen.GUI.Forms
 						arg = "/" + arg.Substring(1);
 					}
 
-					if(arg.StartsWith("/")) {
+					if(toLower) {
 						arg = arg.ToLowerInvariant();
 					}
 					switches.Add(arg);
@@ -157,7 +157,7 @@ namespace Mesen.GUI.Forms
 
 			InteropEmu.ScreenSize originalSize = InteropEmu.GetScreenSize(false);
 			VideoInfo.ApplyConfig();
-			this.ProcessCommandLineArguments(_commandLineArgs, true);
+			this.ProcessCommandLineArguments(this.PreprocessCommandLineArguments(_commandLineArgs, true), true);
 			VideoInfo.ApplyConfig();
 			InteropEmu.ScreenSize newSize = InteropEmu.GetScreenSize(false);
 			if(originalSize.Width != newSize.Width || originalSize.Height != newSize.Height) {
@@ -228,7 +228,7 @@ namespace Mesen.GUI.Forms
 				this.Size = ConfigManager.Config.WindowSize.Value;
 			}
 
-			this.LoadGameFromCommandLine(_commandLineArgs);
+			this.LoadGameFromCommandLine(this.PreprocessCommandLineArguments(_commandLineArgs, false));
 
 			this.menuStrip.VisibleChanged += new System.EventHandler(this.menuStrip_VisibleChanged);
 			this.UpdateRendererLocation();
@@ -242,7 +242,7 @@ namespace Mesen.GUI.Forms
 			//This is needed when DPI display settings is not set to 100%
 			_enableResize = true;
 
-			ProcessFullscreenSwitch(_commandLineArgs);
+			ProcessFullscreenSwitch(this.PreprocessCommandLineArguments(_commandLineArgs, true));
 		}
 
 		protected override void OnClosing(CancelEventArgs e)
