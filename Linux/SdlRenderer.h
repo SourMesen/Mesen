@@ -46,7 +46,7 @@ private:
 	uint32_t _nesFrameWidth = 0;
 	uint32_t _newFrameBufferSize = 0;
 
-	void Init();
+	bool Init();
 	void Cleanup();
 	void SetScreenSize(uint32_t width, uint32_t height);
 

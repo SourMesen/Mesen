@@ -7,7 +7,6 @@ SdlRenderer::SdlRenderer(void* windowHandle) : _windowHandle(windowHandle)
 {
 	_frameBuffer = nullptr;
 	SetScreenSize(256,240);
-	VideoRenderer::GetInstance()->RegisterRenderingDevice(this);
 	MessageManager::RegisterMessageManager(this);	
 }
 
@@ -22,17 +21,48 @@ void SdlRenderer::SetFullscreenMode(bool fullscreen, void* windowHandle, uint32_
 	//TODO: Implement exclusive fullscreen for Linux
 }
 
-void SdlRenderer::Init()
+bool SdlRenderer::Init()
 {
-	SDL_InitSubSystem(SDL_INIT_VIDEO);
+	auto log = [](const char* msg) {
+		MessageManager::Log(msg);
+		MessageManager::Log(SDL_GetError());		
+	};
+
+	if(SDL_InitSubSystem(SDL_INIT_VIDEO) != 0) {
+		log("[SDL] Failed to initialize video subsystem.");
+		return false;
+	};
+
 	_sdlWindow = SDL_CreateWindowFrom(_windowHandle);
+	if(!_sdlWindow) {
+		log("[SDL] Failed to create window from handle.");
+		return false;
+	}
 
 	//Hack to make this work properly - otherwise SDL_CreateRenderer never returns
 	_sdlWindow->flags |= SDL_WINDOW_OPENGL;
-	SDL_GL_LoadLibrary(NULL);
+
+	if(SDL_GL_LoadLibrary(NULL) != 0) {
+		log("[SDL] Failed to initialize OpenGL, attempting to continue with initialization.");
+	}
 
 	_sdlRenderer = SDL_CreateRenderer(_sdlWindow, -1, SDL_RENDERER_ACCELERATED);
+	if(!_sdlRenderer) {
+		log("[SDL] Failed to create accelerated renderer.");
+
+		MessageManager::Log("[SDL] Attempting to create software renderer...");
+		_sdlRenderer = SDL_CreateRenderer(_sdlWindow, -1, SDL_RENDERER_SOFTWARE);
+		if(!_sdlRenderer) {
+			log("[SDL] Failed to create software renderer.");
+			return false;
+		}		
+	}
+
 	_sdlTexture = SDL_CreateTexture(_sdlRenderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STREAMING, _nesFrameWidth, _nesFrameHeight);
+	if(!_sdlTexture) {
+		log("[SDL] Failed to create texture.");
+		return false;
+	}
 
 	_spriteFont.reset(new SpriteFont(_sdlRenderer, "Resources/Font.24.spritefont"));
 	_largeFont.reset(new SpriteFont(_sdlRenderer, "Resources/Font.64.spritefont"));
@@ -41,6 +71,8 @@ void SdlRenderer::Init()
 
 	_frameBuffer = new uint8_t[_nesFrameHeight*_nesFrameWidth*_bytesPerPixel];
 	memset(_frameBuffer, 0, _nesFrameHeight*_nesFrameWidth*_bytesPerPixel);
+
+	return true;
 }
 
 void SdlRenderer::Cleanup()
@@ -63,7 +95,11 @@ void SdlRenderer::Reset()
 {
 	_frameLock.Acquire();
 	Cleanup();
-	Init();
+	if(Init()) {
+		VideoRenderer::GetInstance()->RegisterRenderingDevice(this);
+	} else {
+		Cleanup();
+	}
 	_frameLock.Release();
 }
 
@@ -103,6 +139,10 @@ void SdlRenderer::UpdateFrame(void *frameBuffer, uint32_t width, uint32_t height
 
 void SdlRenderer::Render()
 {
+	if(!_sdlRenderer || !_sdlTexture) {
+		return;
+	}
+
 	bool paused = EmulationSettings::IsPaused();
 	if(_noUpdateCount > 10 || _frameChanged || paused || IsMessageShown()) {	
 		auto lock = _frameLock.AcquireSafe();
@@ -147,12 +187,16 @@ void SdlRenderer::DrawPauseScreen()
 {
 	uint32_t textureData = 0x222222AA;
 	SDL_Surface* surf = SDL_CreateRGBSurfaceFrom((void*)&textureData, 1, 1, 32, 4, 0xFF000000, 0x00FF0000, 0x0000FF00, 0x000000FF);
-	SDL_Texture* texture = SDL_CreateTextureFromSurface(_sdlRenderer, surf);
-	SDL_Rect source = {0, 0, 1, 1 };
-	SDL_Rect dest = {0, 0, (int)_screenWidth, (int)_screenHeight };
-	SDL_RenderCopy(_sdlRenderer, texture, &source, &dest);
-	SDL_DestroyTexture(texture);
-	SDL_FreeSurface(surf);
+	if(surf) {
+		SDL_Texture* texture = SDL_CreateTextureFromSurface(_sdlRenderer, surf);
+		if(texture) {
+			SDL_Rect source = {0, 0, 1, 1 };
+			SDL_Rect dest = {0, 0, (int)_screenWidth, (int)_screenHeight };
+			SDL_RenderCopy(_sdlRenderer, texture, &source, &dest);
+			SDL_DestroyTexture(texture);
+		}
+		SDL_FreeSurface(surf);
+	}
 
 	XMVECTOR stringDimensions = _largeFont->MeasureString(L"PAUSE");
 	float* measureF = (float*)&stringDimensions;
