@@ -113,6 +113,7 @@ namespace Mesen.GUI.Debugger
 				itemsToAdd[i-stackPointer-0x100] = new ListViewItem("$" + InteropEmu.DebugGetMemoryValue(DebugMemoryType.CpuMemory, i).ToString("X2"));
 			}
 			lstStack.Items.AddRange(itemsToAdd);
+			lstStack.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
 			lstStack.EndUpdate();
 		}
 
