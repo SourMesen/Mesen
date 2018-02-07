@@ -135,11 +135,13 @@ namespace Mesen.GUI
 
 						singleInstance.ListenForArgumentsFromSuccessiveInstances();
 						singleInstance.ArgumentsReceived += (object sender, ArgumentsReceivedEventArgs e) => {
-							frmMain.BeginInvoke((MethodInvoker)(() => {
+							if(frmMain.IsHandleCreated) {
+								frmMain.BeginInvoke((MethodInvoker)(() => {
 								List<string> switches = frmMain.PreprocessCommandLineArguments(e.Args);
 								frmMain.ProcessCommandLineArguments(switches, false);
 								frmMain.LoadGameFromCommandLine(switches);
 							}));
+							}
 						};
 
 						Application.Run(frmMain);
