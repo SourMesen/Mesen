@@ -78,10 +78,10 @@
 			this.cboMemoryType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.cboMemoryType.FormattingEnabled = true;
 			this.cboMemoryType.Items.AddRange(new object[] {
-            "Console RAM",
+            "CPU Memory",
             "PRG ROM",
-            "Cartridge Save RAM",
-            "Cartridge Work RAM"});
+            "Save RAM",
+            "Work RAM"});
 			this.cboMemoryType.Location = new System.Drawing.Point(42, 3);
 			this.cboMemoryType.Name = "cboMemoryType";
 			this.cboMemoryType.Size = new System.Drawing.Size(121, 21);
@@ -99,7 +99,7 @@
 			this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanel2, 0, 0);
 			this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
-			this.tableLayoutPanel1.Margin = new System.Windows.Forms.Padding(0, 0, 0, 0);
+			this.tableLayoutPanel1.Margin = new System.Windows.Forms.Padding(0);
 			this.tableLayoutPanel1.Name = "tableLayoutPanel1";
 			this.tableLayoutPanel1.RowCount = 3;
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
@@ -116,7 +116,7 @@
 			this.ctrlScrollableTextbox.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.ctrlScrollableTextbox.FontSize = 13F;
 			this.ctrlScrollableTextbox.Location = new System.Drawing.Point(0, 27);
-			this.ctrlScrollableTextbox.Margin = new System.Windows.Forms.Padding(0, 0, 0, 0);
+			this.ctrlScrollableTextbox.Margin = new System.Windows.Forms.Padding(0);
 			this.ctrlScrollableTextbox.Name = "ctrlScrollableTextbox";
 			this.ctrlScrollableTextbox.ShowContentNotes = false;
 			this.ctrlScrollableTextbox.ShowLineNumberNotes = false;

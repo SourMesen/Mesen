@@ -216,33 +216,32 @@ namespace Mesen.GUI.Debugger.Controls
 		{
 			if(lstLabels.SelectedItems.Count > 0) {
 				CodeLabel label = (CodeLabel)lstLabels.SelectedItems[0].SubItems[1].Tag;
-				if(label.AddressType == AddressType.PrgRom) {
+				if(label.AddressType == AddressType.InternalRam || label.AddressType == AddressType.Register) {
+					AddressTypeInfo info = new AddressTypeInfo();
+					InteropEmu.DebugGetAbsoluteAddressAndType(label.Address, ref info);
+					if(BreakpointManager.GetMatchingBreakpoint((Int32)label.Address, info) == null) {
+						BreakpointManager.AddBreakpoint(new Breakpoint() {
+							MemoryType = DebugMemoryType.CpuMemory,
+							BreakOnExec = true,
+							BreakOnRead = true,
+							BreakOnWrite = true,
+							Address = label.Address,
+							StartAddress = label.Address,
+							EndAddress = label.Address,
+							AddressType = BreakpointAddressType.SingleAddress
+						});
+					}
+				} else {
 					BreakpointManager.AddBreakpoint(new Breakpoint() {
+						MemoryType = DebugMemoryType.PrgRom,
 						BreakOnExec = true,
 						BreakOnRead = true,
 						BreakOnWrite = false,
 						Address = label.Address,
 						StartAddress = label.Address,
 						EndAddress = label.Address,
-						AddressType = BreakpointAddressType.SingleAddress,
-						IsAbsoluteAddress = true
+						AddressType = BreakpointAddressType.SingleAddress
 					});
-				} else {
-					int address = label.GetRelativeAddress();
-					if(address >= 0) {
-						if(BreakpointManager.GetMatchingBreakpoint(address) == null) {
-							BreakpointManager.AddBreakpoint(new Breakpoint() {
-								BreakOnExec = true,
-								BreakOnRead = true,
-								BreakOnWrite = true,
-								Address = (UInt32)address,
-								StartAddress = (UInt32)address,
-								EndAddress = (UInt32)address,
-								AddressType = BreakpointAddressType.SingleAddress,
-								IsAbsoluteAddress = true
-							});
-						}
-					}
 				}
 			}
 		}

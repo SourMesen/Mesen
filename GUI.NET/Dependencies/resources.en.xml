@@ -306,6 +306,19 @@
     </Enum>
     
     <!-- Resources below are used by the debugger only - no translation is needed -->
+    <Enum ID="DebugMemoryType">
+      <Value ID="CpuMemory">CPU Memory</Value>
+      <Value ID="PpuMemory">PPU Memory</Value>
+      <Value ID="PaletteMemory">Palette RAM</Value>
+      <Value ID="SpriteMemory">Sprite (OAM) RAM</Value>
+      <Value ID="SecondarySpriteMemory">Secondary OAM RAM</Value>
+      <Value ID="PrgRom">PRG ROM</Value>
+      <Value ID="ChrRom">CHR ROM</Value>
+      <Value ID="ChrRam">CHR RAM</Value>
+      <Value ID="WorkRam">Work RAM</Value>
+      <Value ID="SaveRam">Save RAM</Value>
+      <Value ID="InternalRam">Built-in NES RAM</Value>
+    </Enum>
     <Enum ID="StatusFlagFormat">
       <Value ID="Hexadecimal">Hexadecimal</Value>
       <Value ID="Text">Text</Value>

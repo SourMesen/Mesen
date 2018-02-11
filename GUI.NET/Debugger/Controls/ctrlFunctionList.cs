@@ -168,14 +168,14 @@ namespace Mesen.GUI.Debugger.Controls
 				CodeLabel label = lstFunctions.SelectedItems[0].Tag as CodeLabel;
 				int absoluteAddress = (int)lstFunctions.SelectedItems[0].SubItems[2].Tag;
 				BreakpointManager.AddBreakpoint(new Breakpoint() {
+					MemoryType = DebugMemoryType.PrgRom,
 					BreakOnExec = true,
 					BreakOnRead = false,
 					BreakOnWrite = false,
 					Address = (UInt32)absoluteAddress,
 					StartAddress = (UInt32)absoluteAddress,
 					EndAddress = (UInt32)absoluteAddress,
-					AddressType = BreakpointAddressType.SingleAddress,
-					IsAbsoluteAddress = true
+					AddressType = BreakpointAddressType.SingleAddress
 				});
 			}
 		}

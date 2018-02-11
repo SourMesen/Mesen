@@ -29,16 +29,17 @@ public:
 	Breakpoint();
 	~Breakpoint();
 
-	bool Matches(uint32_t memoryAddr, uint32_t absoluteAddr);
+	bool Matches(uint32_t memoryAddr, AddressTypeInfo &info);
+	bool Matches(uint32_t memoryAddr, PpuAddressTypeInfo &info);
 	bool HasBreakpointType(BreakpointType type);
 	string GetCondition();
 	bool HasCondition();
 	void ClearCondition();
 	
 private:
+	DebugMemoryType _memoryType;
 	BreakpointTypeFlags _type;
 	int32_t _startAddr;
 	int32_t _endAddr;
-	bool _isAbsoluteAddr;
 	char _condition[1000];
 };

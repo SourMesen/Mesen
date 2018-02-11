@@ -28,10 +28,24 @@ enum class AddressType
 	Register = 4
 };
 
+enum class PpuAddressType
+{
+	None = 0,
+	ChrRom = 1,
+	ChrRam = 2,
+	PaletteRam = 3
+};
+
 struct AddressTypeInfo
 {
 	int32_t Address;
 	AddressType Type;
+};
+
+struct PpuAddressTypeInfo
+{
+	int32_t Address;
+	PpuAddressType Type;
 };
 
 enum class DebugMemoryType

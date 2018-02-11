@@ -35,14 +35,14 @@
 			this.mnuRemoveBreakpoint = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
 			this.mnuGoToLocation = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripSeparator();
+			this.mnuShowLabels = new System.Windows.Forms.ToolStripMenuItem();
 			this.lstBreakpoints = new Mesen.GUI.Controls.MyListView();
 			this.columnHeader3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
 			this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
 			this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
 			this.columnHeader4 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
 			this.colLastColumn = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-			this.mnuShowLabels = new System.Windows.Forms.ToolStripMenuItem();
-			this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripSeparator();
 			this.mnuBreakpoints.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -57,14 +57,14 @@
             this.toolStripMenuItem2,
             this.mnuShowLabels});
 			this.mnuBreakpoints.Name = "mnuBreakpoints";
-			this.mnuBreakpoints.Size = new System.Drawing.Size(153, 148);
+			this.mnuBreakpoints.Size = new System.Drawing.Size(150, 126);
 			// 
 			// mnuAddBreakpoint
 			// 
 			this.mnuAddBreakpoint.Image = global::Mesen.GUI.Properties.Resources.Add;
 			this.mnuAddBreakpoint.Name = "mnuAddBreakpoint";
 			this.mnuAddBreakpoint.ShortcutKeys = System.Windows.Forms.Keys.Insert;
-			this.mnuAddBreakpoint.Size = new System.Drawing.Size(152, 22);
+			this.mnuAddBreakpoint.Size = new System.Drawing.Size(149, 22);
 			this.mnuAddBreakpoint.Text = "Add...";
 			this.mnuAddBreakpoint.Click += new System.EventHandler(this.mnuAddBreakpoint_Click);
 			// 
@@ -73,7 +73,7 @@
 			this.mnuEditBreakpoint.Image = global::Mesen.GUI.Properties.Resources.Edit;
 			this.mnuEditBreakpoint.Name = "mnuEditBreakpoint";
 			this.mnuEditBreakpoint.ShortcutKeys = System.Windows.Forms.Keys.F2;
-			this.mnuEditBreakpoint.Size = new System.Drawing.Size(152, 22);
+			this.mnuEditBreakpoint.Size = new System.Drawing.Size(149, 22);
 			this.mnuEditBreakpoint.Text = "Edit";
 			this.mnuEditBreakpoint.Click += new System.EventHandler(this.mnuEditBreakpoint_Click);
 			// 
@@ -82,21 +82,33 @@
 			this.mnuRemoveBreakpoint.Image = global::Mesen.GUI.Properties.Resources.Close;
 			this.mnuRemoveBreakpoint.Name = "mnuRemoveBreakpoint";
 			this.mnuRemoveBreakpoint.ShortcutKeys = System.Windows.Forms.Keys.Delete;
-			this.mnuRemoveBreakpoint.Size = new System.Drawing.Size(152, 22);
+			this.mnuRemoveBreakpoint.Size = new System.Drawing.Size(149, 22);
 			this.mnuRemoveBreakpoint.Text = "Remove";
 			this.mnuRemoveBreakpoint.Click += new System.EventHandler(this.mnuRemoveBreakpoint_Click);
 			// 
 			// toolStripMenuItem1
 			// 
 			this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-			this.toolStripMenuItem1.Size = new System.Drawing.Size(149, 6);
+			this.toolStripMenuItem1.Size = new System.Drawing.Size(146, 6);
 			// 
 			// mnuGoToLocation
 			// 
 			this.mnuGoToLocation.Name = "mnuGoToLocation";
-			this.mnuGoToLocation.Size = new System.Drawing.Size(152, 22);
+			this.mnuGoToLocation.Size = new System.Drawing.Size(149, 22);
 			this.mnuGoToLocation.Text = "Go to location";
 			this.mnuGoToLocation.Click += new System.EventHandler(this.mnuGoToLocation_Click);
+			// 
+			// toolStripMenuItem2
+			// 
+			this.toolStripMenuItem2.Name = "toolStripMenuItem2";
+			this.toolStripMenuItem2.Size = new System.Drawing.Size(146, 6);
+			// 
+			// mnuShowLabels
+			// 
+			this.mnuShowLabels.CheckOnClick = true;
+			this.mnuShowLabels.Name = "mnuShowLabels";
+			this.mnuShowLabels.Size = new System.Drawing.Size(149, 22);
+			this.mnuShowLabels.Text = "Show Labels";
 			// 
 			// lstBreakpoints
 			// 
@@ -131,7 +143,7 @@
 			// columnHeader1
 			// 
 			this.columnHeader1.Text = "Type";
-			this.columnHeader1.Width = 70;
+			this.columnHeader1.Width = 87;
 			// 
 			// columnHeader2
 			// 
@@ -147,18 +159,6 @@
 			// 
 			this.colLastColumn.Text = "";
 			this.colLastColumn.Width = 29;
-			// 
-			// mnuShowLabels
-			// 
-			this.mnuShowLabels.CheckOnClick = true;
-			this.mnuShowLabels.Name = "mnuShowLabels";
-			this.mnuShowLabels.Size = new System.Drawing.Size(152, 22);
-			this.mnuShowLabels.Text = "Show Labels";
-			// 
-			// toolStripMenuItem2
-			// 
-			this.toolStripMenuItem2.Name = "toolStripMenuItem2";
-			this.toolStripMenuItem2.Size = new System.Drawing.Size(149, 6);
 			// 
 			// ctrlBreakpoints
 			// 

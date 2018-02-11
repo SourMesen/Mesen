@@ -69,7 +69,7 @@ namespace Mesen.GUI.Debugger.Controls
 				ListViewItem item = new ListViewItem();
 				item.Tag = breakpoint;
 				item.Checked = breakpoint.Enabled;
-				item.SubItems.Add(breakpoint.Type.ToString());
+				item.SubItems.Add(breakpoint.ToReadableType());
 				item.SubItems.Add(breakpoint.GetAddressString(mnuShowLabels.Checked));
 				item.SubItems.Add(breakpoint.Condition);
 				lstBreakpoints.Items.Add(item);
@@ -140,7 +140,10 @@ namespace Mesen.GUI.Debugger.Controls
 		private void mnuGoToLocation_Click(object sender, EventArgs e)
 		{
 			if(BreakpointNavigation != null) {
-				BreakpointNavigation(lstBreakpoints.SelectedItems[0].Tag, null);
+				Breakpoint bp = lstBreakpoints.SelectedItems[0].Tag as Breakpoint;
+				if(bp.IsCpuBreakpoint && bp.GetRelativeAddress() >= 0) {
+					BreakpointNavigation(bp, null);
+				}
 			}
 		}
 
@@ -155,7 +158,11 @@ namespace Mesen.GUI.Debugger.Controls
 		{
 			mnuRemoveBreakpoint.Enabled = (lstBreakpoints.SelectedItems.Count > 0);
 			mnuEditBreakpoint.Enabled = (lstBreakpoints.SelectedItems.Count == 1);
-			mnuGoToLocation.Enabled = (lstBreakpoints.SelectedItems.Count == 1 && ((Breakpoint)lstBreakpoints.SelectedItems[0].Tag).IsCpuBreakpoint);
+			if(lstBreakpoints.SelectedItems.Count == 1) {
+				Breakpoint bp = lstBreakpoints.SelectedItems[0].Tag as Breakpoint;
+				mnuGoToLocation.Enabled = bp.IsCpuBreakpoint && bp.GetRelativeAddress() >= 0;
+			}
+			
 		}
 		
 		private void mnuShowLabels_CheckedChanged(object sender, EventArgs e)

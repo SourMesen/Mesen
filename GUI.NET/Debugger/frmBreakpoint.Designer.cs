@@ -28,17 +28,19 @@
 		private void InitializeComponent()
 		{
 			this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+			this.lblBreakpointType = new System.Windows.Forms.Label();
+			this.flowLayoutPanel2 = new System.Windows.Forms.FlowLayoutPanel();
+			this.chkRead = new System.Windows.Forms.CheckBox();
+			this.chkWrite = new System.Windows.Forms.CheckBox();
+			this.chkExec = new System.Windows.Forms.CheckBox();
 			this.lblBreakOn = new System.Windows.Forms.Label();
 			this.lblAddress = new System.Windows.Forms.Label();
-			this.chkEnabled = new System.Windows.Forms.CheckBox();
-			this.lblCondition = new System.Windows.Forms.Label();
 			this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
 			this.picHelp = new System.Windows.Forms.PictureBox();
 			this.txtCondition = new System.Windows.Forms.TextBox();
 			this.picExpressionWarning = new System.Windows.Forms.PictureBox();
 			this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
 			this.txtAddress = new System.Windows.Forms.TextBox();
-			this.chkAbsolute = new System.Windows.Forms.CheckBox();
 			this.radSpecificAddress = new System.Windows.Forms.RadioButton();
 			this.radAnyAddress = new System.Windows.Forms.RadioButton();
 			this.lblAddressSign = new System.Windows.Forms.Label();
@@ -49,60 +51,114 @@
 			this.txtFrom = new System.Windows.Forms.TextBox();
 			this.lblFrom = new System.Windows.Forms.Label();
 			this.tableLayoutPanel4 = new System.Windows.Forms.TableLayoutPanel();
-			this.flowLayoutPanel3 = new System.Windows.Forms.FlowLayoutPanel();
-			this.chkReadVram = new System.Windows.Forms.CheckBox();
-			this.chkWriteVram = new System.Windows.Forms.CheckBox();
-			this.radCpu = new System.Windows.Forms.RadioButton();
-			this.radPpu = new System.Windows.Forms.RadioButton();
-			this.flowLayoutPanel2 = new System.Windows.Forms.FlowLayoutPanel();
-			this.chkRead = new System.Windows.Forms.CheckBox();
-			this.chkWrite = new System.Windows.Forms.CheckBox();
-			this.chkExec = new System.Windows.Forms.CheckBox();
+			this.cboBreakpointType = new Mesen.GUI.Debugger.Controls.ComboBoxWithSeparator();
+			this.lblRange = new System.Windows.Forms.Label();
+			this.tableLayoutPanel6 = new System.Windows.Forms.TableLayoutPanel();
+			this.label1 = new System.Windows.Forms.Label();
+			this.lblCondition = new System.Windows.Forms.Label();
+			this.chkEnabled = new System.Windows.Forms.CheckBox();
+			this.baseConfigPanel.SuspendLayout();
 			this.tableLayoutPanel1.SuspendLayout();
+			this.flowLayoutPanel2.SuspendLayout();
 			this.tableLayoutPanel2.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.picHelp)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.picExpressionWarning)).BeginInit();
 			this.tableLayoutPanel3.SuspendLayout();
 			this.tableLayoutPanel5.SuspendLayout();
 			this.tableLayoutPanel4.SuspendLayout();
-			this.flowLayoutPanel3.SuspendLayout();
-			this.flowLayoutPanel2.SuspendLayout();
+			this.tableLayoutPanel6.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// baseConfigPanel
 			// 
-			this.baseConfigPanel.Location = new System.Drawing.Point(0, 171);
-			this.baseConfigPanel.Size = new System.Drawing.Size(493, 29);
+			this.baseConfigPanel.Controls.Add(this.chkEnabled);
+			this.baseConfigPanel.Location = new System.Drawing.Point(0, 193);
+			this.baseConfigPanel.Size = new System.Drawing.Size(423, 29);
+			this.baseConfigPanel.Controls.SetChildIndex(this.chkEnabled, 0);
 			// 
 			// tableLayoutPanel1
 			// 
 			this.tableLayoutPanel1.ColumnCount = 2;
 			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
 			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel1.Controls.Add(this.lblBreakOn, 0, 0);
-			this.tableLayoutPanel1.Controls.Add(this.lblAddress, 0, 1);
-			this.tableLayoutPanel1.Controls.Add(this.chkEnabled, 0, 3);
-			this.tableLayoutPanel1.Controls.Add(this.lblCondition, 0, 2);
-			this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanel2, 1, 2);
-			this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanel3, 1, 1);
+			this.tableLayoutPanel1.Controls.Add(this.lblBreakpointType, 0, 0);
+			this.tableLayoutPanel1.Controls.Add(this.flowLayoutPanel2, 1, 1);
+			this.tableLayoutPanel1.Controls.Add(this.lblBreakOn, 0, 1);
+			this.tableLayoutPanel1.Controls.Add(this.lblAddress, 0, 2);
+			this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanel2, 1, 3);
+			this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanel3, 1, 2);
 			this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanel4, 1, 0);
+			this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanel6, 0, 3);
 			this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
 			this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-			this.tableLayoutPanel1.RowCount = 5;
+			this.tableLayoutPanel1.RowCount = 6;
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-			this.tableLayoutPanel1.Size = new System.Drawing.Size(493, 200);
+			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this.tableLayoutPanel1.Size = new System.Drawing.Size(423, 222);
 			this.tableLayoutPanel1.TabIndex = 2;
+			// 
+			// lblBreakpointType
+			// 
+			this.lblBreakpointType.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.lblBreakpointType.AutoSize = true;
+			this.lblBreakpointType.Location = new System.Drawing.Point(3, 8);
+			this.lblBreakpointType.Margin = new System.Windows.Forms.Padding(3, 4, 3, 0);
+			this.lblBreakpointType.Name = "lblBreakpointType";
+			this.lblBreakpointType.Size = new System.Drawing.Size(88, 13);
+			this.lblBreakpointType.TabIndex = 12;
+			this.lblBreakpointType.Text = "Breakpoint Type:";
+			// 
+			// flowLayoutPanel2
+			// 
+			this.flowLayoutPanel2.Controls.Add(this.chkRead);
+			this.flowLayoutPanel2.Controls.Add(this.chkWrite);
+			this.flowLayoutPanel2.Controls.Add(this.chkExec);
+			this.flowLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.flowLayoutPanel2.Location = new System.Drawing.Point(94, 25);
+			this.flowLayoutPanel2.Margin = new System.Windows.Forms.Padding(0);
+			this.flowLayoutPanel2.Name = "flowLayoutPanel2";
+			this.flowLayoutPanel2.Size = new System.Drawing.Size(329, 23);
+			this.flowLayoutPanel2.TabIndex = 4;
+			// 
+			// chkRead
+			// 
+			this.chkRead.AutoSize = true;
+			this.chkRead.Location = new System.Drawing.Point(3, 3);
+			this.chkRead.Name = "chkRead";
+			this.chkRead.Size = new System.Drawing.Size(52, 17);
+			this.chkRead.TabIndex = 4;
+			this.chkRead.Text = "Read";
+			this.chkRead.UseVisualStyleBackColor = true;
+			// 
+			// chkWrite
+			// 
+			this.chkWrite.AutoSize = true;
+			this.chkWrite.Location = new System.Drawing.Point(61, 3);
+			this.chkWrite.Name = "chkWrite";
+			this.chkWrite.Size = new System.Drawing.Size(51, 17);
+			this.chkWrite.TabIndex = 5;
+			this.chkWrite.Text = "Write";
+			this.chkWrite.UseVisualStyleBackColor = true;
+			// 
+			// chkExec
+			// 
+			this.chkExec.AutoSize = true;
+			this.chkExec.Location = new System.Drawing.Point(118, 3);
+			this.chkExec.Name = "chkExec";
+			this.chkExec.Size = new System.Drawing.Size(73, 17);
+			this.chkExec.TabIndex = 3;
+			this.chkExec.Text = "Execution";
+			this.chkExec.UseVisualStyleBackColor = true;
 			// 
 			// lblBreakOn
 			// 
 			this.lblBreakOn.AutoSize = true;
-			this.lblBreakOn.Location = new System.Drawing.Point(3, 4);
+			this.lblBreakOn.Location = new System.Drawing.Point(3, 29);
 			this.lblBreakOn.Margin = new System.Windows.Forms.Padding(3, 4, 3, 0);
 			this.lblBreakOn.Name = "lblBreakOn";
 			this.lblBreakOn.Size = new System.Drawing.Size(53, 13);
@@ -112,33 +168,12 @@
 			// lblAddress
 			// 
 			this.lblAddress.AutoSize = true;
-			this.lblAddress.Location = new System.Drawing.Point(3, 51);
+			this.lblAddress.Location = new System.Drawing.Point(3, 53);
 			this.lblAddress.Margin = new System.Windows.Forms.Padding(3, 5, 3, 0);
 			this.lblAddress.Name = "lblAddress";
 			this.lblAddress.Size = new System.Drawing.Size(48, 13);
 			this.lblAddress.TabIndex = 3;
 			this.lblAddress.Text = "Address:";
-			// 
-			// chkEnabled
-			// 
-			this.chkEnabled.AutoSize = true;
-			this.tableLayoutPanel1.SetColumnSpan(this.chkEnabled, 2);
-			this.chkEnabled.Location = new System.Drawing.Point(3, 150);
-			this.chkEnabled.Name = "chkEnabled";
-			this.chkEnabled.Size = new System.Drawing.Size(65, 17);
-			this.chkEnabled.TabIndex = 2;
-			this.chkEnabled.Text = "Enabled";
-			this.chkEnabled.UseVisualStyleBackColor = true;
-			// 
-			// lblCondition
-			// 
-			this.lblCondition.Anchor = System.Windows.Forms.AnchorStyles.Left;
-			this.lblCondition.AutoSize = true;
-			this.lblCondition.Location = new System.Drawing.Point(3, 127);
-			this.lblCondition.Name = "lblCondition";
-			this.lblCondition.Size = new System.Drawing.Size(54, 13);
-			this.lblCondition.TabIndex = 7;
-			this.lblCondition.Text = "Condition:";
 			// 
 			// tableLayoutPanel2
 			// 
@@ -150,19 +185,19 @@
 			this.tableLayoutPanel2.Controls.Add(this.picHelp, 2, 0);
 			this.tableLayoutPanel2.Controls.Add(this.txtCondition, 0, 0);
 			this.tableLayoutPanel2.Controls.Add(this.picExpressionWarning, 1, 0);
-			this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.tableLayoutPanel2.Location = new System.Drawing.Point(60, 121);
+			this.tableLayoutPanel2.Location = new System.Drawing.Point(94, 123);
 			this.tableLayoutPanel2.Margin = new System.Windows.Forms.Padding(0);
 			this.tableLayoutPanel2.Name = "tableLayoutPanel2";
 			this.tableLayoutPanel2.RowCount = 1;
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel2.Size = new System.Drawing.Size(433, 26);
+			this.tableLayoutPanel2.Size = new System.Drawing.Size(329, 65);
 			this.tableLayoutPanel2.TabIndex = 10;
 			// 
 			// picHelp
 			// 
+			this.picHelp.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.picHelp.Image = global::Mesen.GUI.Properties.Resources.Help;
-			this.picHelp.Location = new System.Drawing.Point(412, 5);
+			this.picHelp.Location = new System.Drawing.Point(308, 24);
 			this.picHelp.Margin = new System.Windows.Forms.Padding(3, 5, 3, 3);
 			this.picHelp.Name = "picHelp";
 			this.picHelp.Size = new System.Drawing.Size(18, 18);
@@ -171,17 +206,21 @@
 			// 
 			// txtCondition
 			// 
+			this.txtCondition.AcceptsReturn = true;
 			this.txtCondition.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.txtCondition.Location = new System.Drawing.Point(3, 3);
 			this.txtCondition.MaxLength = 900;
+			this.txtCondition.Multiline = true;
 			this.txtCondition.Name = "txtCondition";
-			this.txtCondition.Size = new System.Drawing.Size(379, 20);
+			this.txtCondition.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+			this.txtCondition.Size = new System.Drawing.Size(275, 59);
 			this.txtCondition.TabIndex = 6;
 			// 
 			// picExpressionWarning
 			// 
+			this.picExpressionWarning.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.picExpressionWarning.Image = global::Mesen.GUI.Properties.Resources.Warning;
-			this.picExpressionWarning.Location = new System.Drawing.Point(388, 5);
+			this.picExpressionWarning.Location = new System.Drawing.Point(284, 24);
 			this.picExpressionWarning.Margin = new System.Windows.Forms.Padding(3, 5, 3, 3);
 			this.picExpressionWarning.Name = "picExpressionWarning";
 			this.picExpressionWarning.Size = new System.Drawing.Size(18, 18);
@@ -197,14 +236,12 @@
 			this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
 			this.tableLayoutPanel3.Controls.Add(this.txtAddress, 2, 0);
-			this.tableLayoutPanel3.Controls.Add(this.chkAbsolute, 3, 0);
 			this.tableLayoutPanel3.Controls.Add(this.radSpecificAddress, 0, 0);
 			this.tableLayoutPanel3.Controls.Add(this.radAnyAddress, 0, 2);
 			this.tableLayoutPanel3.Controls.Add(this.lblAddressSign, 1, 0);
 			this.tableLayoutPanel3.Controls.Add(this.radRange, 0, 1);
 			this.tableLayoutPanel3.Controls.Add(this.tableLayoutPanel5, 1, 1);
-			this.tableLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.tableLayoutPanel3.Location = new System.Drawing.Point(60, 46);
+			this.tableLayoutPanel3.Location = new System.Drawing.Point(94, 48);
 			this.tableLayoutPanel3.Margin = new System.Windows.Forms.Padding(0);
 			this.tableLayoutPanel3.Name = "tableLayoutPanel3";
 			this.tableLayoutPanel3.RowCount = 4;
@@ -212,32 +249,18 @@
 			this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel3.Size = new System.Drawing.Size(433, 75);
+			this.tableLayoutPanel3.Size = new System.Drawing.Size(271, 75);
 			this.tableLayoutPanel3.TabIndex = 11;
 			// 
 			// txtAddress
 			// 
 			this.txtAddress.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.txtAddress.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.txtAddress.Location = new System.Drawing.Point(85, 3);
 			this.txtAddress.Margin = new System.Windows.Forms.Padding(0, 3, 3, 3);
 			this.txtAddress.Name = "txtAddress";
-			this.txtAddress.Size = new System.Drawing.Size(189, 20);
+			this.txtAddress.Size = new System.Drawing.Size(64, 20);
 			this.txtAddress.TabIndex = 5;
 			this.txtAddress.Enter += new System.EventHandler(this.txtAddress_Enter);
-			// 
-			// chkAbsolute
-			// 
-			this.chkAbsolute.Anchor = System.Windows.Forms.AnchorStyles.Left;
-			this.chkAbsolute.AutoSize = true;
-			this.chkAbsolute.Location = new System.Drawing.Point(280, 17);
-			this.chkAbsolute.Margin = new System.Windows.Forms.Padding(3, 5, 3, 3);
-			this.chkAbsolute.Name = "chkAbsolute";
-			this.tableLayoutPanel3.SetRowSpan(this.chkAbsolute, 2);
-			this.chkAbsolute.Size = new System.Drawing.Size(150, 17);
-			this.chkAbsolute.TabIndex = 6;
-			this.chkAbsolute.Text = "Use PRG ROM addresses";
-			this.chkAbsolute.UseVisualStyleBackColor = true;
 			// 
 			// radSpecificAddress
 			// 
@@ -304,17 +327,17 @@
 			this.tableLayoutPanel5.Name = "tableLayoutPanel5";
 			this.tableLayoutPanel5.RowCount = 1;
 			this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel5.Size = new System.Drawing.Size(205, 23);
+			this.tableLayoutPanel5.Size = new System.Drawing.Size(199, 23);
 			this.tableLayoutPanel5.TabIndex = 12;
 			// 
 			// txtTo
 			// 
 			this.txtTo.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.txtTo.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.txtTo.Location = new System.Drawing.Point(134, 3);
+			this.txtTo.Location = new System.Drawing.Point(131, 3);
 			this.txtTo.Margin = new System.Windows.Forms.Padding(0, 3, 3, 3);
 			this.txtTo.Name = "txtTo";
-			this.txtTo.Size = new System.Drawing.Size(68, 20);
+			this.txtTo.Size = new System.Drawing.Size(65, 20);
 			this.txtTo.TabIndex = 13;
 			this.txtTo.Enter += new System.EventHandler(this.txtTo_Enter);
 			// 
@@ -322,7 +345,7 @@
 			// 
 			this.lblTo.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.lblTo.AutoSize = true;
-			this.lblTo.Location = new System.Drawing.Point(109, 5);
+			this.lblTo.Location = new System.Drawing.Point(106, 5);
 			this.lblTo.Margin = new System.Windows.Forms.Padding(0);
 			this.lblTo.Name = "lblTo";
 			this.lblTo.Size = new System.Drawing.Size(25, 13);
@@ -336,7 +359,7 @@
 			this.txtFrom.Location = new System.Drawing.Point(39, 3);
 			this.txtFrom.Margin = new System.Windows.Forms.Padding(0, 3, 3, 3);
 			this.txtFrom.Name = "txtFrom";
-			this.txtFrom.Size = new System.Drawing.Size(67, 20);
+			this.txtFrom.Size = new System.Drawing.Size(64, 20);
 			this.txtFrom.TabIndex = 12;
 			this.txtFrom.Enter += new System.EventHandler(this.txtFrom_Enter);
 			// 
@@ -356,127 +379,88 @@
 			this.tableLayoutPanel4.ColumnCount = 2;
 			this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
 			this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel4.Controls.Add(this.flowLayoutPanel3, 1, 1);
-			this.tableLayoutPanel4.Controls.Add(this.radCpu, 0, 0);
-			this.tableLayoutPanel4.Controls.Add(this.radPpu, 0, 1);
-			this.tableLayoutPanel4.Controls.Add(this.flowLayoutPanel2, 1, 0);
+			this.tableLayoutPanel4.Controls.Add(this.cboBreakpointType, 0, 0);
+			this.tableLayoutPanel4.Controls.Add(this.lblRange, 1, 0);
 			this.tableLayoutPanel4.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.tableLayoutPanel4.Location = new System.Drawing.Point(60, 0);
+			this.tableLayoutPanel4.Location = new System.Drawing.Point(94, 0);
 			this.tableLayoutPanel4.Margin = new System.Windows.Forms.Padding(0);
 			this.tableLayoutPanel4.Name = "tableLayoutPanel4";
-			this.tableLayoutPanel4.RowCount = 2;
-			this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this.tableLayoutPanel4.Size = new System.Drawing.Size(433, 46);
-			this.tableLayoutPanel4.TabIndex = 12;
+			this.tableLayoutPanel4.RowCount = 1;
+			this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+			this.tableLayoutPanel4.Size = new System.Drawing.Size(329, 25);
+			this.tableLayoutPanel4.TabIndex = 13;
 			// 
-			// flowLayoutPanel3
+			// cboBreakpointType
 			// 
-			this.flowLayoutPanel3.Controls.Add(this.chkReadVram);
-			this.flowLayoutPanel3.Controls.Add(this.chkWriteVram);
-			this.flowLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.flowLayoutPanel3.Location = new System.Drawing.Point(56, 23);
-			this.flowLayoutPanel3.Margin = new System.Windows.Forms.Padding(0);
-			this.flowLayoutPanel3.Name = "flowLayoutPanel3";
-			this.flowLayoutPanel3.Size = new System.Drawing.Size(377, 23);
-			this.flowLayoutPanel3.TabIndex = 5;
+			this.cboBreakpointType.FormattingEnabled = true;
+			this.cboBreakpointType.Location = new System.Drawing.Point(3, 3);
+			this.cboBreakpointType.Name = "cboBreakpointType";
+			this.cboBreakpointType.Size = new System.Drawing.Size(121, 21);
+			this.cboBreakpointType.TabIndex = 13;
+			this.cboBreakpointType.SelectedIndexChanged += new System.EventHandler(this.cboBreakpointType_SelectedIndexChanged);
 			// 
-			// chkReadVram
+			// lblRange
 			// 
-			this.chkReadVram.AutoSize = true;
-			this.chkReadVram.Location = new System.Drawing.Point(3, 3);
-			this.chkReadVram.Name = "chkReadVram";
-			this.chkReadVram.Size = new System.Drawing.Size(52, 17);
-			this.chkReadVram.TabIndex = 4;
-			this.chkReadVram.Text = "Read";
-			this.chkReadVram.UseVisualStyleBackColor = true;
-			this.chkReadVram.Enter += new System.EventHandler(this.chkWriteVram_Enter);
+			this.lblRange.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.lblRange.AutoSize = true;
+			this.lblRange.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
+			this.lblRange.Location = new System.Drawing.Point(130, 6);
+			this.lblRange.Name = "lblRange";
+			this.lblRange.Size = new System.Drawing.Size(40, 13);
+			this.lblRange.TabIndex = 6;
+			this.lblRange.Text = "(range)";
 			// 
-			// chkWriteVram
+			// tableLayoutPanel6
 			// 
-			this.chkWriteVram.AutoSize = true;
-			this.chkWriteVram.Location = new System.Drawing.Point(61, 3);
-			this.chkWriteVram.Name = "chkWriteVram";
-			this.chkWriteVram.Size = new System.Drawing.Size(51, 17);
-			this.chkWriteVram.TabIndex = 5;
-			this.chkWriteVram.Text = "Write";
-			this.chkWriteVram.UseVisualStyleBackColor = true;
-			this.chkWriteVram.Enter += new System.EventHandler(this.chkWriteVram_Enter);
+			this.tableLayoutPanel6.ColumnCount = 1;
+			this.tableLayoutPanel6.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+			this.tableLayoutPanel6.Controls.Add(this.label1, 0, 1);
+			this.tableLayoutPanel6.Controls.Add(this.lblCondition, 0, 0);
+			this.tableLayoutPanel6.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.tableLayoutPanel6.Location = new System.Drawing.Point(0, 123);
+			this.tableLayoutPanel6.Margin = new System.Windows.Forms.Padding(0);
+			this.tableLayoutPanel6.Name = "tableLayoutPanel6";
+			this.tableLayoutPanel6.RowCount = 2;
+			this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+			this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+			this.tableLayoutPanel6.Size = new System.Drawing.Size(94, 65);
+			this.tableLayoutPanel6.TabIndex = 14;
 			// 
-			// radCpu
+			// label1
 			// 
-			this.radCpu.AutoSize = true;
-			this.radCpu.Location = new System.Drawing.Point(3, 3);
-			this.radCpu.Name = "radCpu";
-			this.radCpu.Size = new System.Drawing.Size(50, 17);
-			this.radCpu.TabIndex = 0;
-			this.radCpu.TabStop = true;
-			this.radCpu.Text = "CPU:";
-			this.radCpu.UseVisualStyleBackColor = true;
-			this.radCpu.CheckedChanged += new System.EventHandler(this.radCpu_CheckedChanged);
+			this.label1.AutoSize = true;
+			this.label1.ForeColor = System.Drawing.SystemColors.GrayText;
+			this.label1.Location = new System.Drawing.Point(3, 32);
+			this.label1.Name = "label1";
+			this.label1.Size = new System.Drawing.Size(50, 13);
+			this.label1.TabIndex = 8;
+			this.label1.Text = "(optional)";
 			// 
-			// radPpu
+			// lblCondition
 			// 
-			this.radPpu.AutoSize = true;
-			this.radPpu.Location = new System.Drawing.Point(3, 26);
-			this.radPpu.Name = "radPpu";
-			this.radPpu.Size = new System.Drawing.Size(50, 17);
-			this.radPpu.TabIndex = 1;
-			this.radPpu.TabStop = true;
-			this.radPpu.Text = "PPU:";
-			this.radPpu.UseVisualStyleBackColor = true;
-			this.radPpu.CheckedChanged += new System.EventHandler(this.radPpu_CheckedChanged);
+			this.lblCondition.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.lblCondition.AutoSize = true;
+			this.lblCondition.Location = new System.Drawing.Point(3, 19);
+			this.lblCondition.Name = "lblCondition";
+			this.lblCondition.Size = new System.Drawing.Size(54, 13);
+			this.lblCondition.TabIndex = 7;
+			this.lblCondition.Text = "Condition:";
 			// 
-			// flowLayoutPanel2
+			// chkEnabled
 			// 
-			this.flowLayoutPanel2.Controls.Add(this.chkRead);
-			this.flowLayoutPanel2.Controls.Add(this.chkWrite);
-			this.flowLayoutPanel2.Controls.Add(this.chkExec);
-			this.flowLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.flowLayoutPanel2.Location = new System.Drawing.Point(56, 0);
-			this.flowLayoutPanel2.Margin = new System.Windows.Forms.Padding(0);
-			this.flowLayoutPanel2.Name = "flowLayoutPanel2";
-			this.flowLayoutPanel2.Size = new System.Drawing.Size(377, 23);
-			this.flowLayoutPanel2.TabIndex = 4;
-			// 
-			// chkRead
-			// 
-			this.chkRead.AutoSize = true;
-			this.chkRead.Location = new System.Drawing.Point(3, 3);
-			this.chkRead.Name = "chkRead";
-			this.chkRead.Size = new System.Drawing.Size(52, 17);
-			this.chkRead.TabIndex = 4;
-			this.chkRead.Text = "Read";
-			this.chkRead.UseVisualStyleBackColor = true;
-			this.chkRead.Enter += new System.EventHandler(this.chkRead_Enter);
-			// 
-			// chkWrite
-			// 
-			this.chkWrite.AutoSize = true;
-			this.chkWrite.Location = new System.Drawing.Point(61, 3);
-			this.chkWrite.Name = "chkWrite";
-			this.chkWrite.Size = new System.Drawing.Size(51, 17);
-			this.chkWrite.TabIndex = 5;
-			this.chkWrite.Text = "Write";
-			this.chkWrite.UseVisualStyleBackColor = true;
-			this.chkWrite.Enter += new System.EventHandler(this.chkRead_Enter);
-			// 
-			// chkExec
-			// 
-			this.chkExec.AutoSize = true;
-			this.chkExec.Location = new System.Drawing.Point(118, 3);
-			this.chkExec.Name = "chkExec";
-			this.chkExec.Size = new System.Drawing.Size(73, 17);
-			this.chkExec.TabIndex = 3;
-			this.chkExec.Text = "Execution";
-			this.chkExec.UseVisualStyleBackColor = true;
-			this.chkExec.Enter += new System.EventHandler(this.chkRead_Enter);
+			this.chkEnabled.AutoSize = true;
+			this.chkEnabled.Location = new System.Drawing.Point(6, 7);
+			this.chkEnabled.Name = "chkEnabled";
+			this.chkEnabled.Size = new System.Drawing.Size(119, 17);
+			this.chkEnabled.TabIndex = 2;
+			this.chkEnabled.Text = "Breakpoint Enabled";
+			this.chkEnabled.UseVisualStyleBackColor = true;
 			// 
 			// frmBreakpoint
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(493, 200);
+			this.ClientSize = new System.Drawing.Size(423, 222);
 			this.Controls.Add(this.tableLayoutPanel1);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
 			this.Name = "frmBreakpoint";
@@ -484,8 +468,12 @@
 			this.Text = "Breakpoint";
 			this.Controls.SetChildIndex(this.tableLayoutPanel1, 0);
 			this.Controls.SetChildIndex(this.baseConfigPanel, 0);
+			this.baseConfigPanel.ResumeLayout(false);
+			this.baseConfigPanel.PerformLayout();
 			this.tableLayoutPanel1.ResumeLayout(false);
 			this.tableLayoutPanel1.PerformLayout();
+			this.flowLayoutPanel2.ResumeLayout(false);
+			this.flowLayoutPanel2.PerformLayout();
 			this.tableLayoutPanel2.ResumeLayout(false);
 			this.tableLayoutPanel2.PerformLayout();
 			((System.ComponentModel.ISupportInitialize)(this.picHelp)).EndInit();
@@ -496,10 +484,8 @@
 			this.tableLayoutPanel5.PerformLayout();
 			this.tableLayoutPanel4.ResumeLayout(false);
 			this.tableLayoutPanel4.PerformLayout();
-			this.flowLayoutPanel3.ResumeLayout(false);
-			this.flowLayoutPanel3.PerformLayout();
-			this.flowLayoutPanel2.ResumeLayout(false);
-			this.flowLayoutPanel2.PerformLayout();
+			this.tableLayoutPanel6.ResumeLayout(false);
+			this.tableLayoutPanel6.PerformLayout();
 			this.ResumeLayout(false);
 
 		}
@@ -520,15 +506,8 @@
 		private System.Windows.Forms.CheckBox chkRead;
 		private System.Windows.Forms.CheckBox chkWrite;
 		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel3;
-		private System.Windows.Forms.CheckBox chkAbsolute;
 		private System.Windows.Forms.RadioButton radSpecificAddress;
 		private System.Windows.Forms.RadioButton radAnyAddress;
-		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel4;
-		private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel3;
-		private System.Windows.Forms.CheckBox chkReadVram;
-		private System.Windows.Forms.CheckBox chkWriteVram;
-		private System.Windows.Forms.RadioButton radCpu;
-		private System.Windows.Forms.RadioButton radPpu;
 		private System.Windows.Forms.Label lblAddressSign;
 		private System.Windows.Forms.PictureBox picExpressionWarning;
 		private System.Windows.Forms.RadioButton radRange;
@@ -537,5 +516,11 @@
 		private System.Windows.Forms.Label lblTo;
 		private System.Windows.Forms.TextBox txtTo;
 		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel5;
+		private System.Windows.Forms.Label lblBreakpointType;
+		private Mesen.GUI.Debugger.Controls.ComboBoxWithSeparator cboBreakpointType;
+		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel4;
+		private System.Windows.Forms.Label lblRange;
+		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel6;
+		private System.Windows.Forms.Label label1;
 	}
 }

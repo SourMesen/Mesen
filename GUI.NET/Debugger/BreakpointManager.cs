@@ -69,26 +69,24 @@ namespace Mesen.GUI.Debugger
 			RefreshBreakpoints(bp);
 		}
 
-		public static Breakpoint GetMatchingBreakpoint(int address)
+		public static Breakpoint GetMatchingBreakpoint(int relativeAddress, AddressTypeInfo info)
 		{
-			return Breakpoints.FirstOrDefault<Breakpoint>((bp) => { return bp.Matches(address); });
+			return Breakpoints.Where((bp) => bp.Matches(relativeAddress, info)).FirstOrDefault();
 		}
 
-		public static Breakpoint GetMatchingBreakpoint(UInt32 startAddress, UInt32 endAddress, bool ppuBreakpoint)
+		public static Breakpoint GetMatchingBreakpoint(UInt32 startAddress, UInt32 endAddress, DebugMemoryType memoryType)
 		{
 			bool isAddressRange = startAddress != endAddress;
 			return Breakpoints.Where((bp) =>
-					!bp.IsAbsoluteAddress &&
-					((!isAddressRange && bp.Address == startAddress) || (isAddressRange && bp.StartAddress == startAddress && bp.EndAddress == endAddress)) &&
-					((!ppuBreakpoint && (bp.BreakOnExec || bp.BreakOnRead || bp.BreakOnWrite)) ||
-					 (ppuBreakpoint && (bp.BreakOnReadVram || bp.BreakOnWriteVram)))
+					bp.MemoryType == memoryType &&
+					((!isAddressRange && bp.Address == startAddress) || (isAddressRange && bp.StartAddress == startAddress && bp.EndAddress == endAddress))					
 				).FirstOrDefault();
 		}
 
-		public static void ToggleBreakpoint(int address, bool toggleEnabled)
+		public static void ToggleBreakpoint(int relativeAddress, AddressTypeInfo info, bool toggleEnabled)
 		{
-			if(address >= 0) {
-				Breakpoint breakpoint = BreakpointManager.GetMatchingBreakpoint(address);
+			if(relativeAddress >= 0) {
+				Breakpoint breakpoint = BreakpointManager.GetMatchingBreakpoint(relativeAddress, info);
 				if(breakpoint != null) {
 					if(toggleEnabled) {
 						breakpoint.SetEnabled(!breakpoint.Enabled);
@@ -96,12 +94,29 @@ namespace Mesen.GUI.Debugger
 						BreakpointManager.RemoveBreakpoint(breakpoint);
 					}
 				} else {
-					breakpoint = new Breakpoint() {
-						BreakOnExec = true,
-						Address = (UInt32)address,
-						IsAbsoluteAddress = false,
-						Enabled = true
-					};
+					if(info.Address < 0 || info.Type == AddressType.InternalRam) {
+						breakpoint = new Breakpoint() {
+							MemoryType = DebugMemoryType.CpuMemory,
+							BreakOnExec = true,
+							BreakOnRead = true,
+							BreakOnWrite = true,
+							Address = (UInt32)relativeAddress,
+							Enabled = true
+						};
+					} else {
+						breakpoint = new Breakpoint() {
+							Enabled = true,
+							BreakOnExec = true,
+							Address = (UInt32)info.Address
+						};
+
+						if(info.Type != AddressType.PrgRom) {
+							breakpoint.BreakOnRead = true;
+							breakpoint.BreakOnWrite = true;
+						}
+
+						breakpoint.MemoryType = info.Type.ToMemoryType();
+					}
 					BreakpointManager.AddBreakpoint(breakpoint);
 				}
 			}

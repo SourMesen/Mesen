@@ -173,6 +173,11 @@ namespace Mesen.GUI.Debugger
 		{
 			get { return this.ctrlTextbox.CurrentLine; }
 		}
+		
+		public int SelectedLine
+		{
+			get { return this.ctrlTextbox.SelectedLine; }
+		}
 
 		public int LastSelectedLine
 		{

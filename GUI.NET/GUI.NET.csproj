@@ -355,6 +355,9 @@
     <Compile Include="Debugger\Controls\BaseScrollableTextboxUserControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Include="Debugger\Controls\ComboBoxWithSeparator.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Debugger\Controls\ctrlBreakpoints.cs">
       <SubType>UserControl</SubType>
     </Compile>

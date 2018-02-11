@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Mesen.GUI.Forms;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
@@ -7,18 +8,11 @@ using System.Threading.Tasks;
 
 namespace Mesen.GUI.Debugger
 {
-	public enum BreakpointAddressType
-	{
-		AnyAddress,
-		SingleAddress,
-		AddressRange,
-	}
 	public class Breakpoint
 	{
+		public DebugMemoryType MemoryType = DebugMemoryType.CpuMemory;
 		public bool BreakOnRead = false;
 		public bool BreakOnWrite = false;
-		public bool BreakOnReadVram = false;
-		public bool BreakOnWriteVram = false;
 		public bool BreakOnExec = true;
 
 		public bool Enabled = true;
@@ -26,7 +20,6 @@ namespace Mesen.GUI.Debugger
 		public UInt32 StartAddress;
 		public UInt32 EndAddress;
 		public BreakpointAddressType AddressType = BreakpointAddressType.SingleAddress;
-		public bool IsAbsoluteAddress = false;
 		public string Condition = "";
 
 		public string GetAddressString(bool showLabel)
@@ -38,11 +31,13 @@ namespace Mesen.GUI.Debugger
 					if(IsAbsoluteAddress) {
 						int relativeAddress = this.GetRelativeAddress();
 						if(relativeAddress >= 0) {
-							addr += "$" + this.GetRelativeAddress().ToString("X4") + " ";
+							addr += $"${relativeAddress.ToString("X4")} ";
+						} else {
+							addr += "N/A ";
 						}
-						addr += "[$" + Address.ToString("X4") + "]";
+						addr += $"[${Address.ToString("X4")}]";
 					} else {
-						addr = "$" + Address.ToString("X4");
+						addr = $"${Address.ToString("X4")}";
 					}
 					break;
 
@@ -68,39 +63,61 @@ namespace Mesen.GUI.Debugger
 			BreakpointManager.RefreshBreakpoints(this);
 		}
 
+		public bool IsAbsoluteAddress { get { return MemoryType != DebugMemoryType.CpuMemory && MemoryType != DebugMemoryType.PpuMemory; } }
+
 		public bool IsCpuBreakpoint
 		{
 			get
 			{
-				return 
-					Type.HasFlag(BreakpointType.Read) ||
-					Type.HasFlag(BreakpointType.Write) ||
-					Type.HasFlag(BreakpointType.Execute);
+				return
+					MemoryType == DebugMemoryType.CpuMemory ||
+					MemoryType == DebugMemoryType.WorkRam ||
+					MemoryType == DebugMemoryType.SaveRam ||
+					MemoryType == DebugMemoryType.PrgRom;
 			}
 		}
 
-		public BreakpointType Type
+		private BreakpointType Type
 		{
 			get
 			{
 				BreakpointType type = BreakpointType.Global;
 				if(BreakOnRead) {
-					type |= BreakpointType.Read;
+					type |= IsCpuBreakpoint ? BreakpointType.Read : BreakpointType.ReadVram;
 				}
 				if(BreakOnWrite) {
-					type |= BreakpointType.Write;
+					type |= IsCpuBreakpoint ? BreakpointType.Write : BreakpointType.WriteVram;
 				}
-				if(BreakOnExec) {
+				if(BreakOnExec && IsCpuBreakpoint) {
 					type |= BreakpointType.Execute;
-				}
-				if(BreakOnReadVram) {
-					type |= BreakpointType.ReadVram;
-				}
-				if(BreakOnWriteVram) {
-					type |= BreakpointType.WriteVram;
 				}
 				return type;
 			}
+		}
+
+		public string ToReadableType()
+		{
+			string type;
+
+			switch(MemoryType) {
+				default:
+				case DebugMemoryType.CpuMemory: type = "CPU"; break;
+				case DebugMemoryType.PpuMemory: type = "PPU"; break;
+				case DebugMemoryType.PrgRom: type = "PRG"; break;
+				case DebugMemoryType.WorkRam: type = "WRAM"; break;
+				case DebugMemoryType.SaveRam: type = "SRAM"; break;
+				case DebugMemoryType.ChrRam: type = "CHR"; break;
+				case DebugMemoryType.ChrRom: type = "CHR"; break;
+				case DebugMemoryType.PaletteMemory: type = "PAL"; break;
+			}
+
+			type += ":";
+			type += BreakOnRead ? "R" : "‒";
+			type += BreakOnWrite ? "W" : "‒";
+			if(IsCpuBreakpoint) {
+				type += BreakOnExec ? "X" : "‒";
+			}
+			return type;
 		}
 
 		public string GetAddressLabel()
@@ -110,7 +127,7 @@ namespace Mesen.GUI.Debugger
 			if(IsCpuBreakpoint) {
 				CodeLabel label;
 				if(this.IsAbsoluteAddress) {
-					label = LabelManager.GetLabel(address, GUI.AddressType.PrgRom);
+					label = LabelManager.GetLabel(address, this.MemoryType.ToAddressType());
 				} else {
 					label = LabelManager.GetLabel((UInt16)address);
 				}
@@ -126,25 +143,22 @@ namespace Mesen.GUI.Debugger
 			UInt32 address = AddressType == BreakpointAddressType.SingleAddress ? this.Address : this.StartAddress;
 			if(this.IsAbsoluteAddress) {
 				if(IsCpuBreakpoint) {
-					return InteropEmu.DebugGetRelativeAddress(address, GUI.AddressType.PrgRom);
+					return InteropEmu.DebugGetRelativeAddress(address, this.MemoryType.ToAddressType());
 				} else {
 					return InteropEmu.DebugGetRelativeChrAddress(address);
 				}
 			} else {
-				return (int)this.Address;
+				return -1;
 			}
 		}
 
-		public bool Matches(int relativeAddress)
+		public bool Matches(int relativeAddress, AddressTypeInfo info)
 		{
 			if(this.IsCpuBreakpoint) {
-				if(this.IsAbsoluteAddress) {
-					AddressTypeInfo addressTypeInfo = new AddressTypeInfo();
-					InteropEmu.DebugGetAbsoluteAddressAndType((uint)relativeAddress, ref addressTypeInfo);
-
-					return addressTypeInfo.Type == GUI.AddressType.PrgRom && addressTypeInfo.Address == this.Address;
-				} else {
+				if(this.MemoryType == DebugMemoryType.CpuMemory) {
 					return relativeAddress == this.Address;
+				} else {
+					return this.MemoryType == info.Type.ToMemoryType() && info.Address == this.Address;
 				}
 			}
 			return false;
@@ -153,8 +167,8 @@ namespace Mesen.GUI.Debugger
 		public InteropBreakpoint ToInteropBreakpoint()
 		{
 			InteropBreakpoint bp = new InteropBreakpoint() {
+				MemoryType = MemoryType,
 				Type = Type,
-				IsAbsoluteAddress = IsAbsoluteAddress
 			};
 			switch(AddressType) {
 				case BreakpointAddressType.AnyAddress:
@@ -174,9 +188,16 @@ namespace Mesen.GUI.Debugger
 			}
 
 			bp.Condition = new byte[1000];
-			byte[] condition = Encoding.UTF8.GetBytes(Condition);
+			byte[] condition = Encoding.UTF8.GetBytes(Condition.Replace(Environment.NewLine, " "));
 			Array.Copy(condition, bp.Condition, condition.Length);
 			return bp;
 		}
+	}
+
+	public enum BreakpointAddressType
+	{
+		AnyAddress,
+		SingleAddress,
+		AddressRange,
 	}
 }

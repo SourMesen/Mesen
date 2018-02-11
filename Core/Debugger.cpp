@@ -279,14 +279,35 @@ bool Debugger::HasMatchingBreakpoint(BreakpointType type, OperationInfo &operati
 		UpdateBreakpoints();
 	}
 
-	uint32_t absoluteAddr = _mapper->ToAbsoluteAddress(operationInfo.Address);
+	uint32_t absoluteAddr;
+	AddressTypeInfo info { -1, AddressType::InternalRam };
+	PpuAddressTypeInfo ppuInfo { -1, PpuAddressType::None };
+	switch(type) {
+		case BreakpointType::Execute:
+		case BreakpointType::ReadRam:
+		case BreakpointType::WriteRam:
+			GetAbsoluteAddressAndType(operationInfo.Address, &info);
+			absoluteAddr = info.Address;
+			break;
+
+		case BreakpointType::ReadVram:
+		case BreakpointType::WriteVram:
+			GetPpuAbsoluteAddressAndType(operationInfo.Address, &ppuInfo);
+			absoluteAddr = ppuInfo.Address;
+			break;
+	}
+
 	vector<Breakpoint> &breakpoints = _breakpoints[(int)type];
 
 	bool needState = true;
 	EvalResultType resultType;
 	for(size_t i = 0, len = breakpoints.size(); i < len; i++) {
 		Breakpoint &breakpoint = breakpoints[i];
-		if(type == BreakpointType::Global || breakpoint.Matches(operationInfo.Address, absoluteAddr)) {
+		if(
+			type == BreakpointType::Global || 
+			info.Address >= 0 && breakpoint.Matches(operationInfo.Address, info) ||
+			type >= BreakpointType::ReadVram && breakpoint.Matches(operationInfo.Address, ppuInfo)
+		) {
 			if(!breakpoint.HasCondition()) {
 				return true;
 			} else {
@@ -984,6 +1005,32 @@ void Debugger::GetAbsoluteAddressAndType(uint32_t relativeAddr, AddressTypeInfo*
 
 	info->Address = -1;
 	info->Type = AddressType::InternalRam;
+}
+
+void Debugger::GetPpuAbsoluteAddressAndType(uint32_t relativeAddr, PpuAddressTypeInfo* info)
+{
+	if(relativeAddr >= 0x3F00) {
+		info->Address = relativeAddr & 0x1F;
+		info->Type = PpuAddressType::PaletteRam;
+		return;
+	}
+
+	int32_t addr = _mapper->ToAbsoluteChrRomAddress(relativeAddr);
+	if(addr >= 0) {
+		info->Address = addr;
+		info->Type = PpuAddressType::ChrRom;
+		return;
+	}
+
+	addr = _mapper->ToAbsoluteChrRamAddress(relativeAddr);
+	if(addr >= 0) {
+		info->Address = addr;
+		info->Type = PpuAddressType::ChrRam;
+		return;
+	}
+
+	info->Address = -1;
+	info->Type = PpuAddressType::None;
 }
 
 void Debugger::SetPpuViewerScanlineCycle(int32_t scanline, int32_t cycle)

@@ -330,12 +330,12 @@ static const char* hexTable[256] = {
 };
 
 static string emptyString;
-void Disassembler::GetLine(string &out, string code, string comment, int32_t cpuAddress, int32_t absoluteAddress, DataType dataType)
+void Disassembler::GetLine(string &out, string code, string comment, int32_t cpuAddress, int32_t absoluteAddress, DataType dataType, char memoryType)
 {
-	GetCodeLine(out, code, comment, cpuAddress, absoluteAddress, emptyString, emptyString, dataType, false);
+	GetCodeLine(out, code, comment, cpuAddress, absoluteAddress, emptyString, emptyString, dataType, false, memoryType);
 }
 
-void Disassembler::GetCodeLine(string &out, string &code, string &comment, int32_t cpuAddress, int32_t absoluteAddress, string &byteCode, string &addressing, DataType dataType, bool isIndented)
+void Disassembler::GetCodeLine(string &out, string &code, string &comment, int32_t cpuAddress, int32_t absoluteAddress, string &byteCode, string &addressing, DataType dataType, bool isIndented, char memoryType)
 {
 	char buffer[1000];
 	int pos = 0;
@@ -398,6 +398,9 @@ void Disassembler::GetCodeLine(string &out, string &code, string &comment, int32
 		writeChar('\x1');
 		writeChar('\x1');
 	}
+
+	writeChar(memoryType);
+	writeChar('\x1');
 
 	if(absoluteAddress >= 0) {
 		if(absoluteAddress > 0xFFFFFF) {
@@ -465,6 +468,13 @@ string Disassembler::GetCode(AddressTypeInfo &addressInfo, uint32_t endAddr, uin
 
 	vector<shared_ptr<DisassemblyInfo>> *cache;
 	uint8_t *source;
+	char memoryType;
+	switch(addressInfo.Type) {
+		case AddressType::InternalRam: memoryType = 'N'; break;
+		case AddressType::PrgRom: memoryType = 'P'; break;
+		case AddressType::WorkRam: memoryType = 'W'; break;
+		case AddressType::SaveRam: memoryType = 'S'; break;
+	}
 	uint32_t mask = addressInfo.Type == AddressType::InternalRam ? 0x7FF : 0xFFFFFFFF;
 	uint32_t size;
 
@@ -489,19 +499,19 @@ string Disassembler::GetCode(AddressTypeInfo &addressInfo, uint32_t endAddr, uin
 	bool emptyBlock = false;
 	bool showEitherDataType = showVerifiedData || showUnidentifiedData;
 	
-	auto outputBytes = [this, &showEitherDataType, &inVerifiedDataBlock, &output, &dbBuffer, &dbRelativeAddr, &dbAbsoluteAddr, &byteCount]() {
+	auto outputBytes = [this, &showEitherDataType, &inVerifiedDataBlock, &output, &dbBuffer, &dbRelativeAddr, &dbAbsoluteAddr, &byteCount, memoryType]() {
 		if(byteCount > 0) {
-			GetLine(output, dbBuffer, "", dbRelativeAddr, dbAbsoluteAddr, showEitherDataType && inVerifiedDataBlock ? DataType::VerifiedData : DataType::UnidentifiedData);
+			GetLine(output, dbBuffer, "", dbRelativeAddr, dbAbsoluteAddr, showEitherDataType && inVerifiedDataBlock ? DataType::VerifiedData : DataType::UnidentifiedData, memoryType);
 			byteCount = 0;
 		}
 	};
 
-	auto endDataBlock = [this, outputBytes, &showEitherDataType, &inVerifiedDataBlock, &emptyBlock, &output, &addr, &insideDataBlock, &memoryAddr]() {
+	auto endDataBlock = [this, outputBytes, &showEitherDataType, &inVerifiedDataBlock, &emptyBlock, &output, &addr, &insideDataBlock, &memoryAddr, memoryType]() {
 		outputBytes();
 		if(emptyBlock) {
-			GetLine(output, "", "", -1, -1, showEitherDataType && inVerifiedDataBlock ? DataType::VerifiedData : DataType::UnidentifiedData);
+			GetLine(output, "", "", -1, -1, showEitherDataType && inVerifiedDataBlock ? DataType::VerifiedData : DataType::UnidentifiedData, memoryType);
 		}
-		GetLine(output, "----", "", emptyBlock ? (uint16_t)(memoryAddr - 1) : -1, emptyBlock ? addr - 1 : -1, showEitherDataType && inVerifiedDataBlock ? DataType::VerifiedData : DataType::UnidentifiedData);
+		GetLine(output, "----", "", emptyBlock ? (uint16_t)(memoryAddr - 1) : -1, emptyBlock ? addr - 1 : -1, showEitherDataType && inVerifiedDataBlock ? DataType::VerifiedData : DataType::UnidentifiedData, memoryType);
 		insideDataBlock = false;
 	};
 
@@ -511,7 +521,7 @@ string Disassembler::GetCode(AddressTypeInfo &addressInfo, uint32_t endAddr, uin
 		
 		if(commentString.find_first_of('\n') != string::npos) {
 			for(string &str : StringUtilities::Split(commentString, '\n')) {
-				GetLine(commentLines, "", str, -1, -1, dataType);
+				GetLine(commentLines, "", str, -1, -1, dataType, memoryType);
 			}
 			commentString.clear();
 		}
@@ -535,7 +545,7 @@ string Disassembler::GetCode(AddressTypeInfo &addressInfo, uint32_t endAddr, uin
 			GetSubHeader(output, info, label, memoryAddr, resetVector, nmiVector, irqVector);
 			output += commentLines;
 			if(!label.empty()) {
-				GetLine(output, label + ":", emptyString, -1, -1, dataType);
+				GetLine(output, label + ":", emptyString, -1, -1, dataType, memoryType);
 			}
 			
 			byteCode.clear();
@@ -547,7 +557,7 @@ string Disassembler::GetCode(AddressTypeInfo &addressInfo, uint32_t endAddr, uin
 			info->ToString(code, memoryAddr, memoryManager.get(), labelManager.get());
 			info->GetByteCode(byteCode);
 
-			GetCodeLine(output, code, commentString, memoryAddr, addressInfo.Type != AddressType::InternalRam ? addr : -1, byteCode, effAddress, dataType, true);
+			GetCodeLine(output, code, commentString, memoryAddr, addr & mask, byteCode, effAddress, dataType, true, memoryType);
 
 			if(info->IsSubExitPoint()) {
 				GetLine(output, "----");
@@ -591,14 +601,14 @@ string Disassembler::GetCode(AddressTypeInfo &addressInfo, uint32_t endAddr, uin
 			if(!insideDataBlock) {
 				//Output block header 
 				if(label.empty()) {
-					GetLine(output, showEitherDataType && inVerifiedDataBlock ? "__data block__" : "__unidentified block__", "", showData ? -1 : memoryAddr, showData ? -1 : addr, dataType);
+					GetLine(output, showEitherDataType && inVerifiedDataBlock ? "__data block__" : "__unidentified block__", "", showData ? -1 : memoryAddr, showData ? -1 : addr, dataType, memoryType);
 					if(!commentString.empty()) {
-						GetLine(output, "", commentString, -1, -1, dataType);
+						GetLine(output, "", commentString, -1, -1, dataType, memoryType);
 					}
 				} else {
-					GetLine(output, "__" + label + "__", "", showData ? -1 : memoryAddr, showData ? -1 : addr, dataType);
+					GetLine(output, "__" + label + "__", "", showData ? -1 : memoryAddr, showData ? -1 : addr, dataType, memoryType);
 					if(!commentString.empty()) {
-						GetLine(output, "", commentString, -1, -1, dataType);
+						GetLine(output, "", commentString, -1, -1, dataType, memoryType);
 					}
 					output += commentLines;
 				}
@@ -616,7 +626,7 @@ string Disassembler::GetCode(AddressTypeInfo &addressInfo, uint32_t endAddr, uin
 					dbBuffer = ".db";
 					output += commentLines;
 					if(!label.empty()) {
-						GetLine(output, label + ":", "", -1, -1, dataType);
+						GetLine(output, label + ":", "", -1, -1, dataType, memoryType);
 					}
 
 					dbRelativeAddr = memoryAddr;
@@ -626,7 +636,7 @@ string Disassembler::GetCode(AddressTypeInfo &addressInfo, uint32_t endAddr, uin
 				dbBuffer += " $" + HexUtilities::ToHex(source[addr&mask]);
 
 				if(!label.empty() || !commentString.empty()) {
-					GetLine(output, dbBuffer, commentString, dbRelativeAddr, dbAbsoluteAddr, dataType);
+					GetLine(output, dbBuffer, commentString, dbRelativeAddr, dbAbsoluteAddr, dataType, memoryType);
 					byteCount = 0;
 				} else {
 					byteCount++;

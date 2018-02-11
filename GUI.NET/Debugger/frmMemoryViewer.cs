@@ -20,7 +20,6 @@ namespace Mesen.GUI.Debugger
 	{
 		private InteropEmu.NotificationListener _notifListener;
 		private DebugMemoryType _memoryType = DebugMemoryType.CpuMemory;
-		private int _previousIndex = -1;
 		private DebugWorkspace _previousWorkspace;
 		private bool _updating = false;
 		private DateTime _lastUpdate = DateTime.MinValue;
@@ -67,8 +66,7 @@ namespace Mesen.GUI.Debugger
 			this.ctrlHexViewer.StringViewVisible = mnuShowCharacters.Checked;
 
 			UpdateImportButton();
-
-			this.cboMemoryType.SelectedIndex = 0;
+			InitMemoryTypeDropdown();
 
 			_notifListener = new InteropEmu.NotificationListener();
 			_notifListener.OnNotification += _notifListener_OnNotification;
@@ -88,6 +86,40 @@ namespace Mesen.GUI.Debugger
 			ConfigManager.Config.DebugInfo.MemoryViewerSize = this.WindowState == FormWindowState.Maximized ? this.RestoreBounds.Size : this.Size;
 			ConfigManager.ApplyChanges();
 			DebugWorkspaceManager.SaveWorkspace();
+		}
+
+		private void InitMemoryTypeDropdown()
+		{
+			cboMemoryType.Items.Add(ResourceHelper.GetEnumText(DebugMemoryType.CpuMemory));
+			cboMemoryType.Items.Add(ResourceHelper.GetEnumText(DebugMemoryType.PpuMemory));
+			cboMemoryType.Items.Add("-");
+
+			if(InteropEmu.DebugGetMemorySize(DebugMemoryType.PrgRom) > 0) {
+				cboMemoryType.Items.Add(ResourceHelper.GetEnumText(DebugMemoryType.PrgRom));
+			}
+			if(InteropEmu.DebugGetMemorySize(DebugMemoryType.WorkRam) > 0) {
+				cboMemoryType.Items.Add(ResourceHelper.GetEnumText(DebugMemoryType.WorkRam));
+			}
+			if(InteropEmu.DebugGetMemorySize(DebugMemoryType.SaveRam) > 0) {
+				cboMemoryType.Items.Add(ResourceHelper.GetEnumText(DebugMemoryType.SaveRam));
+			}
+
+			if(cboMemoryType.Items.Count > 3) {
+				cboMemoryType.Items.Add("-");
+			}
+
+			if(InteropEmu.DebugGetMemorySize(DebugMemoryType.ChrRom) > 0) {
+				cboMemoryType.Items.Add(ResourceHelper.GetEnumText(DebugMemoryType.ChrRom));
+			}
+
+			if(InteropEmu.DebugGetMemorySize(DebugMemoryType.ChrRam) > 0) {
+				cboMemoryType.Items.Add(ResourceHelper.GetEnumText(DebugMemoryType.ChrRam));
+			}
+
+			cboMemoryType.Items.Add(ResourceHelper.GetEnumText(DebugMemoryType.SpriteMemory));
+			cboMemoryType.Items.Add(ResourceHelper.GetEnumText(DebugMemoryType.SecondarySpriteMemory));
+
+			this.cboMemoryType.SelectedIndex = 0;
 		}
 
 		private void UpdateFlags()
@@ -154,21 +186,21 @@ namespace Mesen.GUI.Debugger
 
 		private void cboMemoryType_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			this._memoryType = (DebugMemoryType)this.cboMemoryType.SelectedIndex;
+			this._memoryType = this.cboMemoryType.GetEnumValue<DebugMemoryType>();
 			this.UpdateImportButton();
 			this.RefreshData();
 		}
 
 		private void UpdateByteColorProvider()
 		{
-			switch((DebugMemoryType)this.cboMemoryType.SelectedIndex) {
+			switch(this._memoryType) {
 				case DebugMemoryType.CpuMemory:
 				case DebugMemoryType.PrgRom:
 				case DebugMemoryType.WorkRam:
 				case DebugMemoryType.SaveRam:
 				case DebugMemoryType.InternalRam:
 					this.ctrlHexViewer.ByteColorProvider = new ByteColorProvider(
-						(DebugMemoryType)this.cboMemoryType.SelectedIndex,
+						this._memoryType,
 						mnuHighlightExecution.Checked,
 						mnuHighlightWrites.Checked,
 						mnuHightlightReads.Checked,
@@ -187,7 +219,7 @@ namespace Mesen.GUI.Debugger
 				case DebugMemoryType.PpuMemory:
 				case DebugMemoryType.ChrRom:
 					this.ctrlHexViewer.ByteColorProvider = new ChrByteColorProvider(
-						(DebugMemoryType)this.cboMemoryType.SelectedIndex,
+						this._memoryType,
 						mnuHighlightChrDrawnBytes.Checked,
 						mnuHighlightChrReadBytes.Checked
 					);
@@ -215,8 +247,7 @@ namespace Mesen.GUI.Debugger
 				this.ctrlMemoryAccessCounters.RefreshData();
 			} else if(this.tabMain.SelectedTab == this.tpgMemoryViewer) {
 				this.UpdateByteColorProvider();
-				this.ctrlHexViewer.SetData(InteropEmu.DebugGetMemoryState((DebugMemoryType)this.cboMemoryType.SelectedIndex));
-				this._previousIndex = this.cboMemoryType.SelectedIndex;
+				this.ctrlHexViewer.SetData(InteropEmu.DebugGetMemoryState(this._memoryType));
 			}
 		}
 
@@ -460,13 +491,11 @@ namespace Mesen.GUI.Debugger
 				UInt32 endAddress = (UInt32)(hexBox.SelectionStart + (hexBox.SelectionLength == 0 ? 0 : (hexBox.SelectionLength - 1)));
 				BreakpointAddressType addressType = startAddress == endAddress ? BreakpointAddressType.SingleAddress : BreakpointAddressType.AddressRange;
 
-				Breakpoint bp = BreakpointManager.GetMatchingBreakpoint(startAddress, endAddress, this._memoryType == DebugMemoryType.PpuMemory);
+				Breakpoint bp = BreakpointManager.GetMatchingBreakpoint(startAddress, endAddress, this._memoryType);
 				if(bp == null) {
-					bp = new Breakpoint() { Address = startAddress, StartAddress = startAddress, EndAddress = endAddress, AddressType = addressType, IsAbsoluteAddress = false };
-					if(this._memoryType == DebugMemoryType.CpuMemory) {
-						bp.BreakOnWrite = bp.BreakOnRead = true;
-					} else {
-						bp.BreakOnWriteVram = bp.BreakOnReadVram = true;
+					bp = new Breakpoint() { Address = startAddress, MemoryType = this._memoryType, StartAddress = startAddress, EndAddress = endAddress, AddressType = addressType, BreakOnWrite = true, BreakOnRead = true };
+					if(bp.IsCpuBreakpoint) {
+						bp.BreakOnExec = true;
 					}
 				}
 				BreakpointManager.EditBreakpoint(bp);
@@ -574,7 +603,17 @@ namespace Mesen.GUI.Debugger
 				}
 
 				mnuEditLabel.Enabled = !disableEditLabel && (this._memoryType == DebugMemoryType.CpuMemory || this.GetAddressType().HasValue);
-				mnuEditBreakpoint.Enabled = (this._memoryType == DebugMemoryType.CpuMemory || this._memoryType == DebugMemoryType.PpuMemory) && DebugWindowManager.GetDebugger() != null;
+				mnuEditBreakpoint.Enabled = DebugWindowManager.GetDebugger() != null && (
+					this._memoryType == DebugMemoryType.CpuMemory ||
+					this._memoryType == DebugMemoryType.PpuMemory ||
+					this._memoryType == DebugMemoryType.PrgRom ||
+					this._memoryType == DebugMemoryType.WorkRam ||
+					this._memoryType == DebugMemoryType.SaveRam ||
+					this._memoryType == DebugMemoryType.ChrRam ||
+					this._memoryType == DebugMemoryType.ChrRom ||
+					this._memoryType == DebugMemoryType.PaletteMemory
+				);
+
 				mnuAddWatch.Enabled = this._memoryType == DebugMemoryType.CpuMemory;
 				mnuFreeze.Enabled = this._memoryType == DebugMemoryType.CpuMemory;
 			};

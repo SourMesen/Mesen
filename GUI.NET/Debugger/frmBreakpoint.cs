@@ -20,36 +20,55 @@ namespace Mesen.GUI.Debugger
 
 			Entity = breakpoint;
 
-			if(breakpoint.Type >= BreakpointType.ReadVram) {
-				radPpu.Checked = true;
-			} else {
-				radCpu.Checked = true;
-			}
-
 			switch(breakpoint.AddressType) {
 				case BreakpointAddressType.AnyAddress: radAnyAddress.Checked = true; break;
 				case BreakpointAddressType.SingleAddress: radSpecificAddress.Checked = true; break;
 				case BreakpointAddressType.AddressRange: radRange.Checked = true; break;
 			}
 
+			AddBinding("MemoryType", cboBreakpointType);
 			AddBinding("Enabled", chkEnabled);
-			AddBinding("IsAbsoluteAddress", chkAbsolute);
 			AddBinding("Address", txtAddress);
 			AddBinding("StartAddress", txtFrom);
 			AddBinding("EndAddress", txtTo);
 			AddBinding("BreakOnRead", chkRead);
 			AddBinding("BreakOnWrite", chkWrite);
 			AddBinding("BreakOnExec", chkExec);
-			AddBinding("BreakOnReadVram", chkReadVram);
-			AddBinding("BreakOnWriteVram", chkWriteVram);
 			AddBinding("Condition", txtCondition);
 
-			this.toolTip.SetToolTip(this.picExpressionWarning, "Condition contains invalid syntax or symbols.");
+			cboBreakpointType.Items.Clear();
+			cboBreakpointType.Items.Add(ResourceHelper.GetEnumText(DebugMemoryType.CpuMemory));
+			cboBreakpointType.Items.Add(ResourceHelper.GetEnumText(DebugMemoryType.PpuMemory));
+			cboBreakpointType.Items.Add("-");
 
-			this.toolTip.SetToolTip(this.chkAbsolute, "Check to set an absolute address based on the exact address in PRG/CHR ROM (not CPU/PPU memory)");
+			if(InteropEmu.DebugGetMemorySize(DebugMemoryType.PrgRom) > 0) {
+				cboBreakpointType.Items.Add(ResourceHelper.GetEnumText(DebugMemoryType.PrgRom));
+			}
+			if(InteropEmu.DebugGetMemorySize(DebugMemoryType.WorkRam) > 0) {
+				cboBreakpointType.Items.Add(ResourceHelper.GetEnumText(DebugMemoryType.WorkRam));
+			}
+			if(InteropEmu.DebugGetMemorySize(DebugMemoryType.SaveRam) > 0) {
+				cboBreakpointType.Items.Add(ResourceHelper.GetEnumText(DebugMemoryType.SaveRam));
+			}
+
+			if(cboBreakpointType.Items.Count > 3) {
+				cboBreakpointType.Items.Add("-");
+			}
+
+			if(InteropEmu.DebugGetMemorySize(DebugMemoryType.ChrRom) > 0) {
+				cboBreakpointType.Items.Add(ResourceHelper.GetEnumText(DebugMemoryType.ChrRom));
+			}
+
+			if(InteropEmu.DebugGetMemorySize(DebugMemoryType.ChrRam) > 0) {
+				cboBreakpointType.Items.Add(ResourceHelper.GetEnumText(DebugMemoryType.ChrRam));
+			}
+
+			cboBreakpointType.Items.Add(ResourceHelper.GetEnumText(DebugMemoryType.PaletteMemory));
+
+			this.toolTip.SetToolTip(this.picExpressionWarning, "Condition contains invalid syntax or symbols.");
 			this.toolTip.SetToolTip(this.picHelp, frmBreakpoint.GetConditionTooltip(false));
 		}
-
+		
 		public static string GetConditionTooltip(bool forWatch)
 		{
 			string tooltip =
@@ -101,9 +120,9 @@ namespace Mesen.GUI.Debugger
 
 		protected override bool ValidateInput()
 		{
-			if(txtCondition.Text.Length > 0) {
+			if(txtCondition.Text.Trim().Length > 0) {
 				EvalResultType resultType;
-				InteropEmu.DebugEvaluateExpression(txtCondition.Text, out resultType);
+				InteropEmu.DebugEvaluateExpression(txtCondition.Text.Replace(Environment.NewLine, " "), out resultType);
 				if(resultType == EvalResultType.Invalid) {
 					picExpressionWarning.Visible = true;
 					return false;
@@ -111,48 +130,33 @@ namespace Mesen.GUI.Debugger
 			}
 			picExpressionWarning.Visible = false;
 
+			DebugMemoryType type = cboBreakpointType.GetEnumValue<DebugMemoryType>();
+			
+
+			int maxValue = InteropEmu.DebugGetMemorySize(type) - 1;
+
 			if(radRange.Checked) {
 				int start = 0, end = 0;
 				int.TryParse(txtFrom.Text, NumberStyles.HexNumber, null, out start);
 				int.TryParse(txtTo.Text, NumberStyles.HexNumber, null, out end);
-				if(end < start) {
+				if(end < start || end > maxValue || start > maxValue) {
 					return false;
 				}
 			}
 
-			return chkRead.Checked || chkWrite.Checked || chkExec.Checked || chkReadVram.Checked || chkWriteVram.Checked || txtCondition.Text.Length > 0;
+			if(int.TryParse(txtAddress.Text, NumberStyles.HexNumber, null, out int address)) {
+				if(address > maxValue) {
+					return false;
+				}
+			}
+
+			bool isCpuBreakpoint = new Breakpoint() { MemoryType = type }.IsCpuBreakpoint;
+			return chkRead.Checked || chkWrite.Checked || (chkExec.Checked && isCpuBreakpoint) || txtCondition.Text.Length > 0;
 		}
 
 		private void txtAddress_Enter(object sender, EventArgs e)
 		{
 			radSpecificAddress.Checked = true;
-		}
-
-		private void chkWriteVram_Enter(object sender, EventArgs e)
-		{
-			radPpu.Checked = true;
-		}
-
-		private void chkRead_Enter(object sender, EventArgs e)
-		{
-			radCpu.Checked = true;
-		}
-
-		private void radCpu_CheckedChanged(object sender, EventArgs e)
-		{
-			if(radCpu.Checked) {
-				chkReadVram.Checked = false;
-				chkWriteVram.Checked = false;
-			}
-		}
-
-		private void radPpu_CheckedChanged(object sender, EventArgs e)
-		{
-			if(radPpu.Checked) {
-				chkRead.Checked = false;
-				chkWrite.Checked = false;
-				chkExec.Checked = false;
-			}
 		}
 
 		private void txtFrom_Enter(object sender, EventArgs e)
@@ -163,6 +167,20 @@ namespace Mesen.GUI.Debugger
 		private void txtTo_Enter(object sender, EventArgs e)
 		{
 			radRange.Checked = true;
+		}
+
+
+		private void cboBreakpointType_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			DebugMemoryType type = cboBreakpointType.GetEnumValue<DebugMemoryType>();
+
+			bool isCpuBreakpoint = new Breakpoint() { MemoryType = type }.IsCpuBreakpoint;
+			chkExec.Visible = isCpuBreakpoint;
+
+			string maxValue = (InteropEmu.DebugGetMemorySize(type) - 1).ToString("X2");
+			string minValue = "".PadLeft(maxValue.Length, '0');
+
+			lblRange.Text = $"(range: ${minValue}-${maxValue})";
 		}
 	}
 }

@@ -34,7 +34,7 @@
 			this.ctrlHexViewer = new Mesen.GUI.Debugger.Controls.ctrlHexViewer();
 			this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
 			this.lblViewMemoryType = new System.Windows.Forms.Label();
-			this.cboMemoryType = new System.Windows.Forms.ComboBox();
+			this.cboMemoryType = new Mesen.GUI.Debugger.Controls.ComboBoxWithSeparator();
 			this.menuStrip1 = new System.Windows.Forms.MenuStrip();
 			this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuImport = new System.Windows.Forms.ToolStripMenuItem();
@@ -87,6 +87,8 @@
 			this.mnuAutoRefresh = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuShowCharacters = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuShowLabelInfoOnMouseOver = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem10 = new System.Windows.Forms.ToolStripSeparator();
+			this.mnuIgnoreRedundantWrites = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuFind = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuFindNext = new System.Windows.Forms.ToolStripMenuItem();
@@ -102,8 +104,6 @@
 			this.ctrlMemoryAccessCounters = new Mesen.GUI.Debugger.Controls.ctrlMemoryAccessCounters();
 			this.tpgProfiler = new System.Windows.Forms.TabPage();
 			this.ctrlProfiler = new Mesen.GUI.Debugger.Controls.ctrlProfiler();
-			this.mnuIgnoreRedundantWrites = new System.Windows.Forms.ToolStripMenuItem();
-			this.toolStripMenuItem10 = new System.Windows.Forms.ToolStripSeparator();
 			this.flowLayoutPanel1.SuspendLayout();
 			this.menuStrip1.SuspendLayout();
 			this.toolStrip1.SuspendLayout();
@@ -152,20 +152,9 @@
 			// 
 			// cboMemoryType
 			// 
+			this.cboMemoryType.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
 			this.cboMemoryType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.cboMemoryType.FormattingEnabled = true;
-			this.cboMemoryType.Items.AddRange(new object[] {
-            "CPU Memory",
-            "PPU Memory",
-            "Palette Memory",
-            "OAM Memory",
-            "Secondary OAM Memory",
-            "PRG ROM",
-            "CHR ROM",
-            "CHR RAM",
-            "Work RAM",
-            "Save RAM",
-            "NES RAM"});
 			this.cboMemoryType.Location = new System.Drawing.Point(42, 3);
 			this.cboMemoryType.Name = "cboMemoryType";
 			this.cboMemoryType.Size = new System.Drawing.Size(121, 21);
@@ -604,6 +593,18 @@
 			this.mnuShowLabelInfoOnMouseOver.Size = new System.Drawing.Size(256, 22);
 			this.mnuShowLabelInfoOnMouseOver.Text = "Show label tooltip on mouseover";
 			// 
+			// toolStripMenuItem10
+			// 
+			this.toolStripMenuItem10.Name = "toolStripMenuItem10";
+			this.toolStripMenuItem10.Size = new System.Drawing.Size(253, 6);
+			// 
+			// mnuIgnoreRedundantWrites
+			// 
+			this.mnuIgnoreRedundantWrites.CheckOnClick = true;
+			this.mnuIgnoreRedundantWrites.Name = "mnuIgnoreRedundantWrites";
+			this.mnuIgnoreRedundantWrites.Size = new System.Drawing.Size(256, 22);
+			this.mnuIgnoreRedundantWrites.Text = "Ignore writes that do not alter data";
+			// 
 			// toolStripMenuItem1
 			// 
 			this.toolStripMenuItem1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -758,18 +759,6 @@
 			this.ctrlProfiler.Size = new System.Drawing.Size(606, 343);
 			this.ctrlProfiler.TabIndex = 0;
 			// 
-			// mnuIgnoreRedundantWrites
-			// 
-			this.mnuIgnoreRedundantWrites.CheckOnClick = true;
-			this.mnuIgnoreRedundantWrites.Name = "mnuIgnoreRedundantWrites";
-			this.mnuIgnoreRedundantWrites.Size = new System.Drawing.Size(256, 22);
-			this.mnuIgnoreRedundantWrites.Text = "Ignore writes that do not alter data";
-			// 
-			// toolStripMenuItem10
-			// 
-			this.toolStripMenuItem10.Name = "toolStripMenuItem10";
-			this.toolStripMenuItem10.Size = new System.Drawing.Size(253, 6);
-			// 
 			// frmMemoryViewer
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -804,7 +793,7 @@
 		private Controls.ctrlHexViewer ctrlHexViewer;
 		private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
 		private System.Windows.Forms.Label lblViewMemoryType;
-		private System.Windows.Forms.ComboBox cboMemoryType;
+		private Mesen.GUI.Debugger.Controls.ComboBoxWithSeparator cboMemoryType;
 		private System.Windows.Forms.MenuStrip menuStrip1;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem1;
 		private System.Windows.Forms.ToolStripMenuItem mnuFind;

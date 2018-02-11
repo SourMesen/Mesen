@@ -1681,12 +1681,10 @@ namespace Mesen.GUI
 
 	public struct InteropBreakpoint
 	{
+		public DebugMemoryType MemoryType;
 		public BreakpointType Type;
 		public Int32 StartAddress;
 		public Int32 EndAddress;
-
-		[MarshalAs(UnmanagedType.I1)]
-		public bool IsAbsoluteAddress;
 
 		[MarshalAs(UnmanagedType.ByValArray, SizeConst = 1000)]
 		public byte[] Condition;
@@ -2003,6 +2001,33 @@ namespace Mesen.GUI
 		WorkRam = 2,
 		SaveRam = 3,
 		Register = 4
+	}
+
+	public static class AddressTypeExtensions
+	{
+		public static DebugMemoryType ToMemoryType(this AddressType type)
+		{
+			switch(type) {
+				case AddressType.InternalRam: return DebugMemoryType.InternalRam;
+				case AddressType.Register: return DebugMemoryType.CpuMemory;
+				case AddressType.PrgRom: return DebugMemoryType.PrgRom;
+				case AddressType.WorkRam: return DebugMemoryType.WorkRam;
+				case AddressType.SaveRam: return DebugMemoryType.SaveRam;
+			}
+			return DebugMemoryType.CpuMemory;
+		}
+
+		public static AddressType ToAddressType(this DebugMemoryType type)
+		{
+			switch(type) {
+				case DebugMemoryType.InternalRam: return AddressType.InternalRam;
+				case DebugMemoryType.CpuMemory: return AddressType.Register;
+				case DebugMemoryType.PrgRom: return AddressType.PrgRom;
+				case DebugMemoryType.WorkRam: return AddressType.WorkRam;
+				case DebugMemoryType.SaveRam: return AddressType.SaveRam;
+			}
+			return AddressType.Register;
+		}
 	}
 
 	public enum MemoryOperationType

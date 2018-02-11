@@ -392,7 +392,7 @@ namespace Mesen.GUI.Debugger
 
 		private void ToggleBreakpoint(bool toggleEnabled)
 		{
-			BreakpointManager.ToggleBreakpoint(_lastCodeWindow.GetCurrentLine(), toggleEnabled);
+			_lastCodeWindow.ToggleBreakpoint(toggleEnabled);
 		}
 		
 		private void UpdateLineColors()
@@ -667,7 +667,10 @@ namespace Mesen.GUI.Debugger
 		{
 			Breakpoint bp = (Breakpoint)sender;
 			if(bp.IsCpuBreakpoint) {
-				_lastCodeWindow.ScrollToLineNumber(bp.GetRelativeAddress());
+				int relAddress = bp.GetRelativeAddress();
+				if(relAddress >= 0) {
+					_lastCodeWindow.ScrollToLineNumber(relAddress);
+				}
 			}
 		}
 

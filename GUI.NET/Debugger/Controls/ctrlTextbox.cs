@@ -35,6 +35,7 @@ namespace Mesen.GUI.Debugger
 		public Color? TextBgColor;
 		public Color? FgColor;
 		public Color? OutlineColor;
+		public Color? AddressColor;
 		public LineSymbol Symbol;
 	}
 
@@ -889,28 +890,30 @@ namespace Mesen.GUI.Debugger
 			this.DrawLineText(g, currentLine, marginLeft, positionY, codeString, addressString, commentString, codeStringLength, addressStringLength, textColor, lineHeight);
 		}
 
-		private void DrawLineNumber(Graphics g, int currentLine, int marginLeft, int positionY)
+		private void DrawLineNumber(Graphics g, int currentLine, int marginLeft, int positionY, Color addressColor)
 		{
-			if(this.ShowLineNumberNotes && this.ShowSingleLineLineNumberNotes) {
-				//Display line note instead of line number
-				string lineNumber;
-				if(string.IsNullOrEmpty(_lineNumberNotes[currentLine])) {
-					lineNumber = _lineNumbers[currentLine] >= 0 ? _lineNumbers[currentLine].ToString(_showLineInHex ? "X4" : "") : "..";
+			using(Brush numberBrush = new SolidBrush(addressColor)) {
+				if(this.ShowLineNumberNotes && this.ShowSingleLineLineNumberNotes) {
+					//Display line note instead of line number
+					string lineNumber;
+					if(string.IsNullOrEmpty(_lineNumberNotes[currentLine])) {
+						lineNumber = _lineNumbers[currentLine] >= 0 ? _lineNumbers[currentLine].ToString(_showLineInHex ? "X4" : "") : "..";
+					} else {
+						lineNumber = _lineNumberNotes[currentLine];
+					}
+					float width = g.MeasureString(lineNumber, this.Font, int.MaxValue, StringFormat.GenericTypographic).Width;
+					g.DrawString(lineNumber, this.Font, numberBrush, marginLeft - width, positionY, StringFormat.GenericTypographic);
 				} else {
-					lineNumber = _lineNumberNotes[currentLine];
-				}
-				float width = g.MeasureString(lineNumber, this.Font, int.MaxValue, StringFormat.GenericTypographic).Width;
-				g.DrawString(lineNumber, this.Font, Brushes.Gray, marginLeft - width, positionY, StringFormat.GenericTypographic);
-			} else {
-				//Display line number
-				string lineNumber = _lineNumbers[currentLine] >= 0 ? _lineNumbers[currentLine].ToString(_showLineInHex ? "X4" : "") : "..";
-				float width = g.MeasureString(lineNumber, this.Font, int.MaxValue, StringFormat.GenericTypographic).Width;
-				g.DrawString(lineNumber, this.Font, Brushes.Gray, marginLeft - width, positionY, StringFormat.GenericTypographic);
+					//Display line number
+					string lineNumber = _lineNumbers[currentLine] >= 0 ? _lineNumbers[currentLine].ToString(_showLineInHex ? "X4" : "") : "..";
+					float width = g.MeasureString(lineNumber, this.Font, int.MaxValue, StringFormat.GenericTypographic).Width;
+					g.DrawString(lineNumber, this.Font, numberBrush, marginLeft - width, positionY, StringFormat.GenericTypographic);
 
-				if(this.ShowLineNumberNotes && !this.ShowSingleLineLineNumberNotes) {
-					//Display line note below line number
-					width = g.MeasureString(_lineNumberNotes[currentLine], _noteFont, int.MaxValue, StringFormat.GenericTypographic).Width;
-					g.DrawString(_lineNumberNotes[currentLine], _noteFont, Brushes.Gray, marginLeft - width, positionY+this.Font.Size+3, StringFormat.GenericTypographic);
+					if(this.ShowLineNumberNotes && !this.ShowSingleLineLineNumberNotes) {
+						//Display line note below line number
+						width = g.MeasureString(_lineNumberNotes[currentLine], _noteFont, int.MaxValue, StringFormat.GenericTypographic).Width;
+						g.DrawString(_lineNumberNotes[currentLine], _noteFont, numberBrush, marginLeft - width, positionY+this.Font.Size+3, StringFormat.GenericTypographic);
+					}
 				}
 			}
 		}
@@ -1083,9 +1086,11 @@ namespace Mesen.GUI.Debugger
 
 		private void DrawMargin(Graphics g, int currentLine, int marginLeft, int regularMargin, int positionY, int lineHeight)
 		{
+			LineProperties lineProperties = GetLineStyle(currentLine);
 			if(this.ShowLineNumbers) {
 				//Show line number
-				this.DrawLineNumber(g, currentLine, regularMargin, positionY);
+				Color lineNumberColor = lineProperties != null && lineProperties.AddressColor.HasValue ? lineProperties.AddressColor.Value : Color.Gray;
+				this.DrawLineNumber(g, currentLine, regularMargin, positionY, lineNumberColor);
 			}
 			if(this.ShowContentNotes && this.ShowSingleContentLineNotes) {
 				g.DrawString(_contentNotes[currentLine], this.Font, Brushes.Gray, regularMargin + 6, positionY, StringFormat.GenericTypographic);
@@ -1094,7 +1099,6 @@ namespace Mesen.GUI.Debugger
 			//Adjust background color highlights based on number of spaces in front of content
 			marginLeft += (LineIndentations != null ? LineIndentations[currentLine] : 0);
 
-			LineProperties lineProperties = GetLineStyle(currentLine);
 			if(lineProperties != null) {
 				this.DrawLineSymbols(g, positionY, lineProperties, lineHeight);
 			}
