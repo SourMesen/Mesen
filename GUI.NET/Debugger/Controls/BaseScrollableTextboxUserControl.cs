@@ -54,6 +54,17 @@ namespace Mesen.GUI.Debugger.Controls
 			this.ScrollableTextbox.ScrollToLineNumber(lineNumber, eHistoryType.Always, scrollToTop);
 		}
 
+		public void ScrollToLineIndex(int lineIndex)
+		{
+			this.ScrollableTextbox.ScrollToLineIndex(lineIndex);
+		}
+
+		public bool HideSelection
+		{
+			get { return this.ScrollableTextbox.HideSelection; }
+			set { this.ScrollableTextbox.HideSelection = value; }
+		}
+
 		public int GetCurrentLine()
 		{
 			return this.ScrollableTextbox.CurrentLine;

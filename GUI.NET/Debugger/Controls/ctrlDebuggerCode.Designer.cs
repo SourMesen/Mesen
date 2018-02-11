@@ -117,7 +117,7 @@
             this.mnuNavigateBackward,
             this.mnuNavigateForward});
 			this.contextMenuCode.Name = "contextMenuWatch";
-			this.contextMenuCode.Size = new System.Drawing.Size(259, 442);
+			this.contextMenuCode.Size = new System.Drawing.Size(259, 420);
 			this.contextMenuCode.Closed += new System.Windows.Forms.ToolStripDropDownClosedEventHandler(this.contextMenuCode_Closed);
 			this.contextMenuCode.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuCode_Opening);
 			// 
@@ -135,7 +135,7 @@
 			// 
 			this.mnuMarkAsCode.Image = global::Mesen.GUI.Properties.Resources.Accept;
 			this.mnuMarkAsCode.Name = "mnuMarkAsCode";
-			this.mnuMarkAsCode.Size = new System.Drawing.Size(166, 22);
+			this.mnuMarkAsCode.Size = new System.Drawing.Size(199, 22);
 			this.mnuMarkAsCode.Text = "Verified Code";
 			this.mnuMarkAsCode.Click += new System.EventHandler(this.mnuMarkAsCode_Click);
 			// 
@@ -143,7 +143,7 @@
 			// 
 			this.mnuMarkAsData.Image = global::Mesen.GUI.Properties.Resources.CheatCode;
 			this.mnuMarkAsData.Name = "mnuMarkAsData";
-			this.mnuMarkAsData.Size = new System.Drawing.Size(166, 22);
+			this.mnuMarkAsData.Size = new System.Drawing.Size(199, 22);
 			this.mnuMarkAsData.Text = "Verified Data";
 			this.mnuMarkAsData.Click += new System.EventHandler(this.mnuMarkAsData_Click);
 			// 
@@ -151,7 +151,7 @@
 			// 
 			this.mnuMarkAsUnidentifiedData.Image = global::Mesen.GUI.Properties.Resources.Help;
 			this.mnuMarkAsUnidentifiedData.Name = "mnuMarkAsUnidentifiedData";
-			this.mnuMarkAsUnidentifiedData.Size = new System.Drawing.Size(166, 22);
+			this.mnuMarkAsUnidentifiedData.Size = new System.Drawing.Size(199, 22);
 			this.mnuMarkAsUnidentifiedData.Text = "Unidentified Code/Data";
 			this.mnuMarkAsUnidentifiedData.Click += new System.EventHandler(this.mnuMarkAsUnidentifiedData_Click);
 			// 
@@ -391,10 +391,12 @@
 			this.ctrlCodeViewer.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.ctrlCodeViewer.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.ctrlCodeViewer.FontSize = 13F;
+			this.ctrlCodeViewer.HideSelection = false;
 			this.ctrlCodeViewer.Location = new System.Drawing.Point(0, 0);
 			this.ctrlCodeViewer.Name = "ctrlCodeViewer";
 			this.ctrlCodeViewer.ShowContentNotes = false;
 			this.ctrlCodeViewer.ShowLineNumberNotes = false;
+			this.ctrlCodeViewer.ShowScrollbars = true;
 			this.ctrlCodeViewer.ShowSingleContentLineNotes = true;
 			this.ctrlCodeViewer.ShowSingleLineLineNumberNotes = false;
 			this.ctrlCodeViewer.Size = new System.Drawing.Size(479, 150);

@@ -10,7 +10,27 @@ namespace Mesen.GUI.Debugger
 {
 	public class Breakpoint
 	{
-		public DebugMemoryType MemoryType = DebugMemoryType.CpuMemory;
+		private DebugMemoryType _memoryType = DebugMemoryType.CpuMemory;
+		private bool _isCpuBreakpoint = true;
+		private AddressType _equivalentAddressType = GUI.AddressType.InternalRam;
+
+		public DebugMemoryType MemoryType
+		{
+			get { return _memoryType; }
+			set
+			{
+				_memoryType = value;
+
+				_isCpuBreakpoint = value == DebugMemoryType.CpuMemory ||
+										value == DebugMemoryType.WorkRam ||
+										value == DebugMemoryType.SaveRam ||
+										value == DebugMemoryType.PrgRom;
+
+				if(_isCpuBreakpoint) {
+					_equivalentAddressType = value.ToAddressType();
+				}
+			}
+		}
 		public bool BreakOnRead = false;
 		public bool BreakOnWrite = false;
 		public bool BreakOnExec = true;
@@ -65,17 +85,7 @@ namespace Mesen.GUI.Debugger
 
 		public bool IsAbsoluteAddress { get { return MemoryType != DebugMemoryType.CpuMemory && MemoryType != DebugMemoryType.PpuMemory; } }
 
-		public bool IsCpuBreakpoint
-		{
-			get
-			{
-				return
-					MemoryType == DebugMemoryType.CpuMemory ||
-					MemoryType == DebugMemoryType.WorkRam ||
-					MemoryType == DebugMemoryType.SaveRam ||
-					MemoryType == DebugMemoryType.PrgRom;
-			}
-		}
+		public bool IsCpuBreakpoint { get { return this._isCpuBreakpoint; } }
 
 		private BreakpointType Type
 		{
@@ -152,13 +162,13 @@ namespace Mesen.GUI.Debugger
 			}
 		}
 
-		public bool Matches(int relativeAddress, AddressTypeInfo info)
+		public bool Matches(int relativeAddress, ref AddressTypeInfo info)
 		{
 			if(this.IsCpuBreakpoint) {
 				if(this.MemoryType == DebugMemoryType.CpuMemory) {
 					return relativeAddress == this.Address;
 				} else {
-					return this.MemoryType == info.Type.ToMemoryType() && info.Address == this.Address;
+					return _equivalentAddressType == info.Type && info.Address == this.Address;
 				}
 			}
 			return false;

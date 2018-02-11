@@ -14,6 +14,7 @@ namespace Mesen.GUI.Debugger
 {
 	public partial class frmCodeTooltip : Form
 	{
+		private ctrlDebuggerCode _codeWindow;
 		private Dictionary<string, string> _values;
 		private int _previewAddress;
 		private string _code;
@@ -63,21 +64,28 @@ namespace Mesen.GUI.Debugger
 			if(_previewAddress >= 0) {
 				tlpMain.RowStyles.Insert(1, new RowStyle());
 
-				ctrlDebuggerCode codeWindow = new ctrlDebuggerCode();
-				codeWindow.SetConfig(ConfigManager.Config.DebugInfo.LeftView);
-				codeWindow.Code = _code;
-				codeWindow.Dock = DockStyle.Fill;
-				codeWindow.ShowScrollbars = false;
-				codeWindow.ScrollToLineNumber(_previewAddress, true);
+				_codeWindow = new ctrlDebuggerCode();
+				_codeWindow.HideSelection = true;
+				_codeWindow.SetConfig(ConfigManager.Config.DebugInfo.LeftView);
+				_codeWindow.Code = _code;
+				_codeWindow.Dock = DockStyle.Fill;
+				_codeWindow.ShowScrollbars = false;
+				_codeWindow.ScrollToLineNumber(_previewAddress, true);
 
-				tlpMain.SetRow(codeWindow, i);
-				tlpMain.SetColumn(codeWindow, 0);
-				tlpMain.SetColumnSpan(codeWindow, 2);
-				tlpMain.Controls.Add(codeWindow);
+				tlpMain.SetRow(_codeWindow, i);
+				tlpMain.SetColumn(_codeWindow, 0);
+				tlpMain.SetColumnSpan(_codeWindow, 2);
+				tlpMain.Controls.Add(_codeWindow);
 			}
 			tlpMain.ResumeLayout();
 			this.Width = this.tlpMain.Width;
 			this.Height = this.tlpMain.Height; 
+		}
+
+		public void ScrollToLineIndex(int lineIndex)
+		{
+			_codeWindow?.ScrollToLineIndex(0);
+			_codeWindow?.ScrollToLineIndex(lineIndex);
 		}
 	}
 }

@@ -43,6 +43,7 @@ namespace Mesen.GUI.Debugger
 	{
 		private Regex _codeRegex = new Regex("([a-z]{3})([*]{0,1})[ ]{0,1}([(]{0,1})(([#]{0,1}[$][0-9a-f]*)|([@_a-z]([@_a-z0-9])*)){0,1}([)]{0,1})(,X|,Y){0,1}([)]{0,1})", RegexOptions.IgnoreCase | RegexOptions.Compiled);
 		public event EventHandler ScrollPositionChanged;
+		public event EventHandler SelectedLineChanged;
 		private bool _disableScrollPositionChangedEvent;
 
 		private const float HorizontalScrollFactor = 8;
@@ -161,6 +162,17 @@ namespace Mesen.GUI.Debugger
 			set
 			{
 				_showSingleLineLineNumberNotes = value;
+				this.Invalidate();
+			}
+		}
+
+		private bool _hideSelection = false;
+		public bool HideSelection
+		{
+			get { return _hideSelection; }
+			set
+			{
+				_hideSelection = value;
 				this.Invalidate();
 			}
 		}
@@ -571,6 +583,7 @@ namespace Mesen.GUI.Debugger
 				} else if(_selectedLine > this.GetLastVisibleLineIndex()) {
 					this.ScrollPosition = _selectedLine - this.GetNumberVisibleLines() + 1;
 				}
+				this.SelectedLineChanged?.Invoke(this, EventArgs.Empty);
 				this.Invalidate();
 			}
 		}
@@ -861,7 +874,7 @@ namespace Mesen.GUI.Debugger
 				}
 			}
 
-			if(currentLine >= this.SelectionStart && currentLine <= this.SelectionStart + this.SelectionLength) {
+			if(!this.HideSelection && currentLine >= this.SelectionStart && currentLine <= this.SelectionStart + this.SelectionLength) {
 				//Highlight current line
 				using(Brush brush = new SolidBrush(Color.FromArgb(150, 185, 210, 255))) {
 					int offset = currentLine - 1 == this.SelectedLine ? 1 : 0;

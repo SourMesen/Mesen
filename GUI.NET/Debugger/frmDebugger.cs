@@ -344,14 +344,17 @@ namespace Mesen.GUI.Debugger
 				_lastCodeWindow = ctrlDebuggerCode;
 			}
 
-			ctrlDebuggerCode.SetActiveAddress(state.CPU.DebugPC);
-			ctrlDebuggerCodeSplit.SetActiveAddress(state.CPU.DebugPC);
-
 			if(updateActiveAddress) {
 				_lastCodeWindow.SelectActiveAddress(state.CPU.DebugPC);
 			}
 
-			UpdateLineColors();
+			ctrlDebuggerCode.SetActiveAddress(state.CPU.DebugPC);
+			ctrlDebuggerCode.UpdateLineColors();
+
+			if(UpdateSplitView()) {
+				ctrlDebuggerCodeSplit.SetActiveAddress(state.CPU.DebugPC);
+				ctrlDebuggerCodeSplit.UpdateLineColors();
+			}
 
 			ctrlConsoleStatus.UpdateStatus(ref state);
 			ctrlWatch.UpdateWatch();
@@ -372,11 +375,13 @@ namespace Mesen.GUI.Debugger
 				_firstBreak = false;
 			}
 		}
+
 		private void ClearActiveStatement()
 		{
 			ctrlDebuggerCode.ClearActiveAddress();
+			ctrlDebuggerCode.UpdateLineColors();
 			ctrlDebuggerCodeSplit.ClearActiveAddress();
-			UpdateLineColors();
+			ctrlDebuggerCodeSplit.UpdateLineColors();
 		}
 
 		private void ToggleBreakpoint(bool toggleEnabled)
@@ -384,12 +389,6 @@ namespace Mesen.GUI.Debugger
 			_lastCodeWindow.ToggleBreakpoint(toggleEnabled);
 		}
 		
-		private void UpdateLineColors()
-		{
-			ctrlDebuggerCodeSplit.UpdateLineColors();
-			ctrlDebuggerCode.UpdateLineColors();
-		}
-
 		private void ResumeExecution()
 		{
 			ctrlConsoleStatus.ApplyChanges();
@@ -514,7 +513,8 @@ namespace Mesen.GUI.Debugger
 
 		private void BreakpointManager_BreakpointsChanged(object sender, EventArgs e)
 		{
-			UpdateLineColors();
+			ctrlDebuggerCodeSplit.UpdateLineColors();
+			ctrlDebuggerCode.UpdateLineColors();
 		}
 
 		private void ctrlDebuggerCode_Enter(object sender, EventArgs e)

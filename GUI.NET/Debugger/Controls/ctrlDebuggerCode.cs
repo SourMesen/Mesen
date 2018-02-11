@@ -26,6 +26,7 @@ namespace Mesen.GUI.Debugger
 		List<int> _lineNumbers = new List<int>(10000);
 		List<string> _lineNumberNotes = new List<string>(10000);
 		List<char> _lineMemoryType = new List<char>(10000);
+		List<int> _absoluteLineNumbers = new List<int>(10000);
 		List<string> _codeNotes = new List<string>(10000);
 		List<string> _codeLines = new List<string>(10000);
 		private HashSet<int> _unexecutedAddresses = new HashSet<int>();
@@ -158,6 +159,7 @@ namespace Mesen.GUI.Debugger
 
 		public bool ShowScrollbars
 		{
+			get { return this.ctrlCodeViewer.ShowScrollbars; }
 			set { this.ctrlCodeViewer.ShowScrollbars = value; }
 		}
 
@@ -170,18 +172,19 @@ namespace Mesen.GUI.Debugger
 		public void SetActiveAddress(UInt32 address)
 		{
 			_currentActiveAddress = address;
-			this.UpdateLineColors();
 		}
 		
 		public void ClearActiveAddress()
 		{
 			_currentActiveAddress = null;
-			this.UpdateLineColors();
 		}
 
 		public void UpdateLineColors()
 		{
 			this.ctrlCodeViewer.StyleProvider = new LineStyleProvider(this);
+			if(this.ShowScrollbars) {
+				this.ctrlCodeViewer.ScrollbarColorProvider = new ScrollbarColorProvider(this);
+			}
 		}
 
 		public List<string> GetCode(out int byteLength, ref int startAddress, int endAddress = -1)
@@ -261,6 +264,7 @@ namespace Mesen.GUI.Debugger
 					centerLineIndex--;
 				} while(centerLineAddress < 0 && centerLineIndex > 0);
 
+				_lineNumbers.Clear();
 				_codeContent.Clear();
 				_codeComments.Clear();
 				_codeByteCode.Clear();
@@ -268,7 +272,7 @@ namespace Mesen.GUI.Debugger
 				_speculativeCodeAddreses.Clear();
 				_verifiedDataAddresses.Clear();
 				_lineMemoryType.Clear();
-				_lineNumberNotes.Clear();
+				_absoluteLineNumbers.Clear();
 
 				string[] token = new string[8];
 				int tokenIndex = 0;
@@ -320,6 +324,7 @@ namespace Mesen.GUI.Debugger
 					_lineNumbers.Add(relativeAddress);
 					_lineMemoryType.Add(token[2][0]);
 					_lineNumberNotes.Add(string.IsNullOrWhiteSpace(token[3]) ? "" : (token[3].Length > 5 ? token[3].TrimStart('0').PadLeft(4, '0') : token[3]));
+					_absoluteLineNumbers.Add(this.ParseHexAddress(token[3]));
 					_codeNotes.Add(token[4]);
 					_codeLines.Add(token[5]);
 
@@ -348,7 +353,7 @@ namespace Mesen.GUI.Debugger
 				ctrlCodeViewer.TextLines = _codeLines.ToArray();
 
 				//These are all temporary and can be cleared right away
-				_lineNumbers.Clear();
+				_lineNumberNotes.Clear();
 				_codeNotes.Clear();
 				_codeLines.Clear();
 				_addressing.Clear();
@@ -639,15 +644,12 @@ namespace Mesen.GUI.Debugger
 		private AddressTypeInfo GetLineAddressTypeInfo(int lineNumber)
 		{
 			AddressTypeInfo info = new AddressTypeInfo();
-			if(Int32.TryParse(this._lineNumberNotes[lineNumber], System.Globalization.NumberStyles.AllowHexSpecifier, null, out info.Address)) {
-				switch(this._lineMemoryType[lineNumber]) {
-					case 'P': info.Type = AddressType.PrgRom; break;
-					case 'W': info.Type = AddressType.WorkRam; break;
-					case 'S': info.Type = AddressType.SaveRam; break;
-					case 'N': info.Type = AddressType.InternalRam; break;
-				}
-			} else {
-				info.Address = -1;
+			info.Address = this._absoluteLineNumbers[lineNumber];
+			switch(this._lineMemoryType[lineNumber]) {
+				case 'P': info.Type = AddressType.PrgRom; break;
+				case 'W': info.Type = AddressType.WorkRam; break;
+				case 'S': info.Type = AddressType.SaveRam; break;
+				case 'N': info.Type = AddressType.InternalRam; break;
 			}
 			return info;
 		}
@@ -723,16 +725,7 @@ namespace Mesen.GUI.Debugger
 		{
 			this.ctrlCodeViewer.ScrollToLineNumber((int)_currentActiveAddress.Value);
 		}
-
-		private void mnuShowOnlyDisassembledCode_Click(object sender, EventArgs e)
-		{
-			UpdateCode(true);
-			if(_currentActiveAddress.HasValue) {
-				SelectActiveAddress(_currentActiveAddress.Value);
-			}
-			this.UpdateConfig();
-		}
-		
+				
 		private void mnuShowLineNotes_Click(object sender, EventArgs e)
 		{
 			this.ctrlCodeViewer.ShowLineNumberNotes = this.mnuShowLineNotes.Checked;
@@ -919,78 +912,6 @@ namespace Mesen.GUI.Debugger
 			}
 		}
 
-
-		class LineStyleProvider : ctrlTextbox.ILineStyleProvider
-		{
-			private ctrlDebuggerCode _code;
-
-			public LineStyleProvider(ctrlDebuggerCode code)
-			{
-				_code = code;
-			}
-
-			public LineProperties GetLineStyle(int cpuAddress, int lineNumber)
-			{
-				DebugInfo info = ConfigManager.Config.DebugInfo;
-				LineProperties props = new LineProperties();
-				bool isActiveStatement = _code._currentActiveAddress.HasValue && _code.ctrlCodeViewer.GetLineIndex((int)_code._currentActiveAddress.Value) == lineNumber;
-				if(isActiveStatement) {
-					props.TextBgColor = info.CodeActiveStatementColor;
-					props.Symbol = LineSymbol.Arrow;
-				} else if(_code._unexecutedAddresses.Contains(lineNumber)) {
-					props.LineBgColor = info.CodeUnexecutedCodeColor;
-				} else if(_code._speculativeCodeAddreses.Contains(lineNumber)) {
-					props.LineBgColor = info.CodeUnidentifiedDataColor;
-				} else if(_code._verifiedDataAddresses.Contains(lineNumber)) {
-					props.LineBgColor = info.CodeVerifiedDataColor;
-				}
-
-				AddressTypeInfo addressInfo = _code.GetLineAddressTypeInfo(lineNumber);
-
-				foreach(Breakpoint breakpoint in BreakpointManager.Breakpoints) {
-					if(breakpoint.Matches(cpuAddress, addressInfo)) {
-						Color? fgColor = Color.White;
-						Color? bgColor = null;
-						Color bpColor = breakpoint.BreakOnExec ? info.CodeExecBreakpointColor : (breakpoint.BreakOnWrite ? info.CodeWriteBreakpointColor : info.CodeReadBreakpointColor);
-						Color? outlineColor = bpColor;
-						LineSymbol symbol;
-						if(breakpoint.Enabled) {
-							bgColor = bpColor;
-							symbol = LineSymbol.Circle;
-						} else {
-							fgColor = Color.Black;
-							symbol = LineSymbol.CircleOutline;
-						}
-
-
-						if(isActiveStatement) {
-							fgColor = Color.Black;
-							bgColor = Color.Yellow;
-							symbol |= LineSymbol.Arrow;
-						}
-
-						if(props == null) {
-							props = new LineProperties();
-						}
-						props.FgColor = fgColor;
-						props.TextBgColor = bgColor;
-						props.OutlineColor = outlineColor;
-						props.Symbol = symbol;
-						break;
-					}
-				}
-
-				switch(_code._lineMemoryType[lineNumber]) {
-					case 'P': props.AddressColor = Color.Gray; break;
-					case 'W': props.AddressColor = Color.DarkBlue; break;
-					case 'S': props.AddressColor = Color.DarkRed; break;
-					case 'N': props.AddressColor = Color.DarkGreen; break;
-				}
-
-				return props;
-			}
-		}
-
 		private void copySelectionToolStripMenuItem_Click(object sender, EventArgs e)
 		{
 			this.ctrlCodeViewer.CopySelection();
@@ -1054,8 +975,174 @@ namespace Mesen.GUI.Debugger
 		{
 			this.MarkSelectionAs(CdlPrgFlags.None);
 		}
+
+		class LineStyleProvider : ctrlTextbox.ILineStyleProvider
+		{
+			private ctrlDebuggerCode _code;
+
+			public LineStyleProvider(ctrlDebuggerCode code)
+			{
+				_code = code;
+			}
+
+			public LineProperties GetLineStyle(int cpuAddress, int lineNumber)
+			{
+				DebugInfo info = ConfigManager.Config.DebugInfo;
+				LineProperties props = new LineProperties();
+				bool isActiveStatement = _code._currentActiveAddress.HasValue && _code.ctrlCodeViewer.GetLineIndex((int)_code._currentActiveAddress.Value) == lineNumber;
+				if(isActiveStatement) {
+					props.TextBgColor = info.CodeActiveStatementColor;
+					props.Symbol = LineSymbol.Arrow;
+				} else if(_code._unexecutedAddresses.Contains(lineNumber)) {
+					props.LineBgColor = info.CodeUnexecutedCodeColor;
+				} else if(_code._speculativeCodeAddreses.Contains(lineNumber)) {
+					props.LineBgColor = info.CodeUnidentifiedDataColor;
+				} else if(_code._verifiedDataAddresses.Contains(lineNumber)) {
+					props.LineBgColor = info.CodeVerifiedDataColor;
+				}
+
+				AddressTypeInfo addressInfo = _code.GetLineAddressTypeInfo(lineNumber);
+
+				foreach(Breakpoint breakpoint in BreakpointManager.Breakpoints) {
+					if(breakpoint.Matches(cpuAddress, ref addressInfo)) {
+						Color? fgColor = Color.White;
+						Color? bgColor = null;
+						Color bpColor = breakpoint.BreakOnExec ? info.CodeExecBreakpointColor : (breakpoint.BreakOnWrite ? info.CodeWriteBreakpointColor : info.CodeReadBreakpointColor);
+						Color? outlineColor = bpColor;
+						LineSymbol symbol;
+						if(breakpoint.Enabled) {
+							bgColor = bpColor;
+							symbol = LineSymbol.Circle;
+						} else {
+							fgColor = Color.Black;
+							symbol = LineSymbol.CircleOutline;
+						}
+
+
+						if(isActiveStatement) {
+							fgColor = Color.Black;
+							bgColor = Color.Yellow;
+							symbol |= LineSymbol.Arrow;
+						}
+
+						if(props == null) {
+							props = new LineProperties();
+						}
+						props.FgColor = fgColor;
+						props.TextBgColor = bgColor;
+						props.OutlineColor = outlineColor;
+						props.Symbol = symbol;
+						break;
+					}
+				}
+
+				switch(_code._lineMemoryType[lineNumber]) {
+					case 'P': props.AddressColor = Color.Gray; break;
+					case 'W': props.AddressColor = Color.DarkBlue; break;
+					case 'S': props.AddressColor = Color.DarkRed; break;
+					case 'N': props.AddressColor = Color.DarkGreen; break;
+				}
+
+				return props;
+			}
+		}
+
+		class ScrollbarColorProvider : IScrollbarColorProvider
+		{
+			private Color _nesRamColor = Color.FromArgb(163, 222, 171);
+			private Dictionary<int, Color> _breakpointColors = new Dictionary<int, Color>();
+
+			private ctrlDebuggerCode _code;
+			public ScrollbarColorProvider(ctrlDebuggerCode code)
+			{
+				_code = code;
+				DebugInfo info = ConfigManager.Config.DebugInfo;
+				int len = _code._absoluteLineNumbers.Count;
+
+				AddressTypeInfo[] addressInfo = new AddressTypeInfo[len];
+				for(int i = 0; i < len; i++) {
+					addressInfo[i] = _code.GetLineAddressTypeInfo(i);
+				}
+
+				foreach(Breakpoint breakpoint in BreakpointManager.Breakpoints) {
+					for(int i = 0; i < len; i++) {
+						if(breakpoint.Matches(_code._lineNumbers[i], ref addressInfo[i])) {
+							Color bpColor = breakpoint.BreakOnExec ? info.CodeExecBreakpointColor : (breakpoint.BreakOnWrite ? info.CodeWriteBreakpointColor : info.CodeReadBreakpointColor);
+							_breakpointColors[i] = bpColor;
+						}
+					}
+				}
+			}
+
+			public Color GetBackgroundColor(float position)
+			{
+				DebugInfo info = ConfigManager.Config.DebugInfo;
+				int lineIndex = (int)((_code._lineMemoryType.Count - 1) * position);
+
+				switch(_code._lineMemoryType[lineIndex]) {
+					case 'N': return _nesRamColor;
+					case 'P':
+						if(_code._unexecutedAddresses.Contains(lineIndex)) {
+							return info.CodeUnexecutedCodeColor;
+						} else if(_code._verifiedDataAddresses.Contains(lineIndex)) {
+							return info.CodeVerifiedDataColor;
+						} else if(_code._speculativeCodeAddreses.Contains(lineIndex)) {
+							return info.CodeUnidentifiedDataColor;
+						}
+						return Color.White;
+
+					case 'W': return Color.LightSteelBlue;
+					case 'S': return Color.LightCoral;
+				}
+
+				return Color.Transparent;
+			}
+
+			public frmCodeTooltip GetPreview(int lineIndex)
+			{
+				if(lineIndex < _code._lineNumbers.Count) {
+					int cpuAddress = -1;
+					do {
+						cpuAddress = _code._lineNumbers[lineIndex];
+						lineIndex--;
+					} while(cpuAddress < 0 && lineIndex >= 0);
+
+					frmCodeTooltip frm = new frmCodeTooltip(new Dictionary<string, string>(), cpuAddress, _code._code);
+					return frm;
+				} else {
+					return null;
+				}
+			}
+
+			public int GetActiveLine()
+			{
+				if(_code._currentActiveAddress.HasValue) {
+					return _code.ctrlCodeViewer.GetLineIndex((int)_code._currentActiveAddress.Value);
+				} else {
+					return -1;
+				}
+			}
+
+			public int GetSelectedLine()
+			{
+				return _code.ctrlCodeViewer.SelectedLine;
+			}
+
+			public Color GetMarkerColor(float position, int linesPerPixel)
+			{
+				int lineIndex = (int)((_code._lineMemoryType.Count - 1) * position);
+
+				Color bpColor;
+				for(int i = 0; i < linesPerPixel; i++) {
+					if(_breakpointColors.TryGetValue(lineIndex + i, out bpColor)) {
+						return bpColor;
+					}
+				}
+				return Color.Transparent;
+			}
+		}
 	}
-	
+
 	public class WatchEventArgs : EventArgs
 	{
 		public string WatchValue { get; set; }

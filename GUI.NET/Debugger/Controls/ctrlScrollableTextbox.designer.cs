@@ -1,4 +1,6 @@
-﻿namespace Mesen.GUI.Debugger
+﻿using Mesen.GUI.Debugger.Controls;
+
+namespace Mesen.GUI.Debugger
 {
 	partial class ctrlScrollableTextbox
 	{
@@ -27,7 +29,7 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
-			this.vScrollBar = new System.Windows.Forms.VScrollBar();
+			this.vScrollBar = new Mesen.GUI.Debugger.Controls.ctrlCodeScrollbar();
 			this.panelSearch = new System.Windows.Forms.Panel();
 			this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
 			this.picCloseSearch = new System.Windows.Forms.PictureBox();
@@ -48,9 +50,11 @@
 			this.vScrollBar.Dock = System.Windows.Forms.DockStyle.Right;
 			this.vScrollBar.LargeChange = 20;
 			this.vScrollBar.Location = new System.Drawing.Point(490, 0);
+			this.vScrollBar.Maximum = 1;
 			this.vScrollBar.Name = "vScrollBar";
 			this.vScrollBar.Size = new System.Drawing.Size(18, 141);
 			this.vScrollBar.TabIndex = 0;
+			this.vScrollBar.Value = 0;
 			// 
 			// panelSearch
 			// 
@@ -180,7 +184,7 @@
 
 		#endregion
 
-		private System.Windows.Forms.VScrollBar vScrollBar;
+		private ctrlCodeScrollbar vScrollBar;
 		private ctrlTextbox ctrlTextbox;
 		private System.Windows.Forms.Panel panelSearch;
 		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;

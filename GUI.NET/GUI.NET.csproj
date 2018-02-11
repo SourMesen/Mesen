@@ -376,6 +376,9 @@
     <Compile Include="Debugger\Controls\ctrlAddressList.Designer.cs">
       <DependentUpon>ctrlAddressList.cs</DependentUpon>
     </Compile>
+    <Compile Include="Debugger\Controls\ctrlCodeScrollbar.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Debugger\Controls\ctrlFlagStatus.cs">
       <SubType>UserControl</SubType>
     </Compile>

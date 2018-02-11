@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Mesen.GUI.Controls;
+using Mesen.GUI.Debugger.Controls;
 
 namespace Mesen.GUI.Debugger
 {
@@ -46,7 +47,7 @@ namespace Mesen.GUI.Debugger
 			add { this.ctrlTextbox.MouseLeave += value; }
 			remove { this.ctrlTextbox.MouseLeave -= value; }
 		}
-
+		
 		public event EventHandler FontSizeChanged;
 
 		public ctrlScrollableTextbox()
@@ -63,6 +64,7 @@ namespace Mesen.GUI.Debugger
 			this.hScrollBar.ValueChanged += hScrollBar_ValueChanged;
 			this.vScrollBar.ValueChanged += vScrollBar_ValueChanged;
 			this.ctrlTextbox.ScrollPositionChanged += ctrlTextbox_ScrollPositionChanged;
+			this.ctrlTextbox.SelectedLineChanged += ctrlTextbox_SelectedLineChanged;
 
 			new ToolTip().SetToolTip(picCloseSearch, "Close");
 			new ToolTip().SetToolTip(picSearchNext, "Find Next (F3)");
@@ -77,12 +79,26 @@ namespace Mesen.GUI.Debugger
 
 		public bool ShowScrollbars
 		{
+			get
+			{
+				return this._showScrollbars;
+			}
 			set
 			{
 				this._showScrollbars = value;
 				this.hScrollBar.Visible = value;
 				this.vScrollBar.Visible = value;
 			}
+		}
+
+		public IScrollbarColorProvider ScrollbarColorProvider
+		{
+			set { this.vScrollBar.ColorProvider = value; }
+		}
+
+		private void ctrlTextbox_SelectedLineChanged(object sender, EventArgs e)
+		{
+			this.vScrollBar.Invalidate();
 		}
 
 		public float FontSize
@@ -119,7 +135,8 @@ namespace Mesen.GUI.Debugger
 
 		private void UpdateVerticalScrollbar()
 		{
-			this.vScrollBar.Maximum = Math.Max(0, this.ctrlTextbox.LineCount + this.vScrollBar.LargeChange - this.ctrlTextbox.GetNumberVisibleLines() + 1);
+			this.vScrollBar.Maximum = this.ctrlTextbox.LineCount;
+			this.vScrollBar.VisibleLineCount = this.ctrlTextbox.GetNumberVisibleLines();
 		}
 
 		private void UpdateHorizontalScrollbar()
@@ -369,6 +386,12 @@ namespace Mesen.GUI.Debugger
 			set { this.ctrlTextbox.ShowSingleLineLineNumberNotes = value; }
 		}
 
+		public bool HideSelection
+		{
+			get { return this.ctrlTextbox.HideSelection; }
+			set { this.ctrlTextbox.HideSelection = value; }
+		}
+		
 		public int LineCount { get { return this.ctrlTextbox.LineCount; } }
 		public int SelectionStart { get { return this.ctrlTextbox.SelectionStart; } }
 		public int SelectionLength { get { return this.ctrlTextbox.SelectionLength; } }
