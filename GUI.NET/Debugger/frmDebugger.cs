@@ -227,37 +227,26 @@ namespace Mesen.GUI.Debugger
 			}
 		}
 
+		private void SetFlag(DebuggerFlags flag, bool enabled)
+		{
+			if(enabled) {
+				DebugWorkspaceManager.SetFlags(flag);
+			} else {
+				DebugWorkspaceManager.ClearFlags(flag);
+			}
+		}
+
 		private void UpdateDebuggerFlags()
 		{
-			DebuggerFlags flags = mnuPpuPartialDraw.Checked ? DebuggerFlags.PpuPartialDraw : DebuggerFlags.None;
-			if(mnuShowEffectiveAddresses.Checked) {
-				flags |= DebuggerFlags.ShowEffectiveAddresses;
-			}
-			if(mnuDisplayOpCodesInLowerCase.Checked) {
-				flags |= DebuggerFlags.DisplayOpCodesInLowerCase;
-			}
-
-			if(mnuDisassembleVerifiedData.Checked) {
-				flags |= DebuggerFlags.DisassembleVerifiedData;
-			}
-			if(mnuDisassembleUnidentifiedData.Checked) {
-				flags |= DebuggerFlags.DisassembleUnidentifiedData;
-			}
-			if(mnuShowVerifiedData.Checked) {
-				flags |= DebuggerFlags.ShowVerifiedData;
-			}
-			if(mnuShowUnidentifiedData.Checked) {
-				flags |= DebuggerFlags.ShowUnidentifiedData;
-			}
-
-			if(mnuBreakOnUnofficialOpcodes.Checked) {
-				flags |= DebuggerFlags.BreakOnUnofficialOpCode;
-			}
-			if(mnuBreakOnBrk.Checked) {
-				flags |= DebuggerFlags.BreakOnBrk;
-			}
-
-			DebugWorkspaceManager.SetFlags(flags);
+			SetFlag(DebuggerFlags.PpuPartialDraw, mnuPpuPartialDraw.Checked);
+			SetFlag(DebuggerFlags.ShowEffectiveAddresses, mnuShowEffectiveAddresses.Checked);
+			SetFlag(DebuggerFlags.DisplayOpCodesInLowerCase, mnuDisplayOpCodesInLowerCase.Checked);
+			SetFlag(DebuggerFlags.DisassembleVerifiedData, mnuDisassembleVerifiedData.Checked);
+			SetFlag(DebuggerFlags.DisassembleUnidentifiedData, mnuDisassembleUnidentifiedData.Checked);
+			SetFlag(DebuggerFlags.ShowVerifiedData, mnuShowVerifiedData.Checked);
+			SetFlag(DebuggerFlags.ShowUnidentifiedData, mnuShowUnidentifiedData.Checked);
+			SetFlag(DebuggerFlags.BreakOnUnofficialOpCode, mnuBreakOnUnofficialOpcodes.Checked);
+			SetFlag(DebuggerFlags.BreakOnBrk, mnuBreakOnBrk.Checked);
 			InteropEmu.SetFlag(EmulationFlags.DebuggerWindowEnabled, true);
 		}
 
