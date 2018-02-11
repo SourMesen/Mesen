@@ -144,7 +144,8 @@ namespace Mesen.GUI.Debugger
 				}
 			}
 
-			if(int.TryParse(txtAddress.Text, NumberStyles.HexNumber, null, out int address)) {
+			int address;
+			if(int.TryParse(txtAddress.Text, NumberStyles.HexNumber, null, out address)) {
 				if(address > maxValue) {
 					return false;
 				}

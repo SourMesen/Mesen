@@ -319,6 +319,25 @@
       <Value ID="SaveRam">Save RAM</Value>
       <Value ID="InternalRam">Built-in NES RAM</Value>
     </Enum>
+    <Enum ID="AddrMode">
+      <Value ID="None">None</Value>
+      <Value ID="Acc">Accumulator</Value>
+      <Value ID="Imp">Implicit</Value>
+      <Value ID="Imm">Immediate</Value>
+      <Value ID="Rel">Relative</Value>
+      <Value ID="Zero">Zero Page</Value>
+      <Value ID="Abs">Absolute</Value>
+      <Value ID="ZeroX">Zero Page, X</Value>
+      <Value ID="ZeroY">Zero Page, Y</Value>
+      <Value ID="Ind">Indirect</Value>
+      <Value ID="IndX">Indexed Indirect</Value>
+      <Value ID="IndY">Indirect Indexed</Value>
+      <Value ID="IndYW">Indirect Indexed</Value>
+      <Value ID="AbsX">Absolute, X</Value>
+      <Value ID="AbsXW">Absolute, X</Value>
+      <Value ID="AbsY">Absolute, Y</Value>
+      <Value ID="AbsYW">Absolute, Y</Value>
+    </Enum>
     <Enum ID="StatusFlagFormat">
       <Value ID="Hexadecimal">Hexadecimal</Value>
       <Value ID="Text">Text</Value>

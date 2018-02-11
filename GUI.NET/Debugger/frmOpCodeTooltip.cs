@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Mesen.GUI.Controls;
 using Mesen.GUI.Config;
+using Mesen.GUI.Forms;
 
 namespace Mesen.GUI.Debugger
 {
@@ -102,11 +103,41 @@ namespace Mesen.GUI.Debugger
 			return _descriptions.TryGetValue(text.ToLowerInvariant(), out desc);
 		}
 
-		public frmOpCodeTooltip(string opcode)
+		public frmOpCodeTooltip(string opcode, int relativeAddress)
 		{
 			InitializeComponent();
 
 			OpCodeDesc desc = _descriptions[opcode.ToLowerInvariant()];
+
+			if(relativeAddress >= 0) {
+				byte opCode = InteropEmu.DebugGetMemoryValue(DebugMemoryType.CpuMemory, (UInt32)relativeAddress);
+
+				int opSize = 1;
+				switch(AddressingModes[opCode]) {
+					case AddrMode.Abs: case AddrMode.AbsX: case AddrMode.AbsXW: case AddrMode.AbsY: case AddrMode.AbsYW: case AddrMode.Ind:
+						opSize = 3;
+						break;
+
+					case AddrMode.Imm: case AddrMode.IndX: case AddrMode.IndY: case AddrMode.IndYW: case AddrMode.Rel: case AddrMode.Zero: case AddrMode.ZeroX: case AddrMode.ZeroY:
+						opSize = 2;
+						break;
+				}
+
+				string byteCode = "";
+				for(int i = 0; i < opSize; i++) {
+					byte value = InteropEmu.DebugGetMemoryValue(DebugMemoryType.CpuMemory, (UInt32)(relativeAddress + i));
+					byteCode += "$" + value.ToString("X2") + " ";
+				}
+
+				lblByteCode.Text = byteCode;
+				lblAddressingMode.Text = ResourceHelper.GetEnumText(AddressingModes[opCode]);
+				lblCycleCount.Text = OpCycles[opCode].ToString();
+				if(OpCycles[opCode] != OpCyclesCrossed[opCode]) {
+					lblCycleCount.Text += $" ({OpCyclesCrossed[opCode]} if page crossed)";
+				}
+			} else {
+				tlpOpCodeInfo.Visible = false;
+			}
 
 			ctrlFlagCarry.Letter = "C";
 			ctrlFlagDecimal.Letter = "D";
@@ -131,11 +162,11 @@ namespace Mesen.GUI.Debugger
 			base.OnShown(e);
 
 			this.Width = this.tlpMain.Width;
-			this.Height = this.tlpMain.Height; 
+			this.Height = this.tlpMain.Height;
 		}
 
 		[Flags]
-		enum CpuFlag { None = 0, Carry = 1, Decimal = 2, Interrupt = 4, Negative = 8, Overflow = 16, Zero = 32}
+		enum CpuFlag { None = 0, Carry = 1, Decimal = 2, Interrupt = 4, Negative = 8, Overflow = 16, Zero = 32 }
 
 		class OpCodeDesc
 		{
@@ -150,7 +181,70 @@ namespace Mesen.GUI.Debugger
 				Flags = flags;
 			}
 		}
+
+		enum AddrMode
+		{
+			None, Acc, Imp, Imm, Rel,
+			Zero, Abs, ZeroX, ZeroY,
+			Ind, IndX, IndY, IndYW,
+			AbsX, AbsXW, AbsY, AbsYW
+		}
+
+		private AddrMode[] AddressingModes = new AddrMode[256] {
+			AddrMode.Imp,  AddrMode.IndX,    AddrMode.None, AddrMode.IndX,    AddrMode.Zero,    AddrMode.Zero,    AddrMode.Zero,    AddrMode.Zero,    AddrMode.Imp,  AddrMode.Imm,  AddrMode.Acc,  AddrMode.Imm,  AddrMode.Abs,  AddrMode.Abs,  AddrMode.Abs,  AddrMode.Abs,
+			AddrMode.Rel,  AddrMode.IndY,    AddrMode.None, AddrMode.IndYW,   AddrMode.ZeroX,   AddrMode.ZeroX,   AddrMode.ZeroX,   AddrMode.ZeroX,   AddrMode.Imp,  AddrMode.AbsY, AddrMode.Imp,  AddrMode.AbsYW,AddrMode.AbsX, AddrMode.AbsX, AddrMode.AbsXW,AddrMode.AbsXW,
+			AddrMode.Abs,  AddrMode.IndX,    AddrMode.None, AddrMode.IndX,    AddrMode.Zero,    AddrMode.Zero,    AddrMode.Zero,    AddrMode.Zero,    AddrMode.Imp,  AddrMode.Imm,  AddrMode.Acc,  AddrMode.Imm,  AddrMode.Abs,  AddrMode.Abs,  AddrMode.Abs,  AddrMode.Abs,
+			AddrMode.Rel,  AddrMode.IndY,    AddrMode.None, AddrMode.IndYW,   AddrMode.ZeroX,   AddrMode.ZeroX,   AddrMode.ZeroX,   AddrMode.ZeroX,   AddrMode.Imp,  AddrMode.AbsY, AddrMode.Imp,  AddrMode.AbsYW,AddrMode.AbsX, AddrMode.AbsX, AddrMode.AbsXW,AddrMode.AbsXW,
+			AddrMode.Imp,  AddrMode.IndX,    AddrMode.None, AddrMode.IndX,    AddrMode.Zero,    AddrMode.Zero,    AddrMode.Zero,    AddrMode.Zero,    AddrMode.Imp,  AddrMode.Imm,  AddrMode.Acc,  AddrMode.Imm,  AddrMode.Abs,  AddrMode.Abs,  AddrMode.Abs,  AddrMode.Abs,
+			AddrMode.Rel,  AddrMode.IndY,    AddrMode.None, AddrMode.IndYW,   AddrMode.ZeroX,   AddrMode.ZeroX,   AddrMode.ZeroX,   AddrMode.ZeroX,   AddrMode.Imp,  AddrMode.AbsY, AddrMode.Imp,  AddrMode.AbsYW,AddrMode.AbsX, AddrMode.AbsX, AddrMode.AbsXW,AddrMode.AbsXW,
+			AddrMode.Imp,  AddrMode.IndX,    AddrMode.None, AddrMode.IndX,    AddrMode.Zero,    AddrMode.Zero,    AddrMode.Zero,    AddrMode.Zero,    AddrMode.Imp,  AddrMode.Imm,  AddrMode.Acc,  AddrMode.Imm,  AddrMode.Ind,  AddrMode.Abs,  AddrMode.Abs,  AddrMode.Abs,
+			AddrMode.Rel,  AddrMode.IndY,    AddrMode.None, AddrMode.IndYW,   AddrMode.ZeroX,   AddrMode.ZeroX,   AddrMode.ZeroX,   AddrMode.ZeroX,   AddrMode.Imp,  AddrMode.AbsY, AddrMode.Imp,  AddrMode.AbsYW,AddrMode.AbsX, AddrMode.AbsX, AddrMode.AbsXW,AddrMode.AbsXW,
+			AddrMode.Imm,  AddrMode.IndX,    AddrMode.Imm,  AddrMode.IndX,    AddrMode.Zero,    AddrMode.Zero,    AddrMode.Zero,    AddrMode.Zero,    AddrMode.Imp,  AddrMode.Imm,  AddrMode.Imp,  AddrMode.Imm,  AddrMode.Abs,  AddrMode.Abs,  AddrMode.Abs,  AddrMode.Abs,
+			AddrMode.Rel,  AddrMode.IndYW,   AddrMode.None, AddrMode.IndYW,   AddrMode.ZeroX,   AddrMode.ZeroX,   AddrMode.ZeroY,   AddrMode.ZeroY,   AddrMode.Imp,  AddrMode.AbsYW,AddrMode.Imp,  AddrMode.AbsYW,AddrMode.AbsXW,AddrMode.AbsXW,AddrMode.AbsYW,AddrMode.AbsYW,
+			AddrMode.Imm,  AddrMode.IndX,    AddrMode.Imm,  AddrMode.IndX,    AddrMode.Zero,    AddrMode.Zero,    AddrMode.Zero,    AddrMode.Zero,    AddrMode.Imp,  AddrMode.Imm,  AddrMode.Imp,  AddrMode.Imm,  AddrMode.Abs,  AddrMode.Abs,  AddrMode.Abs,  AddrMode.Abs,
+			AddrMode.Rel,  AddrMode.IndY,    AddrMode.None, AddrMode.IndY,    AddrMode.ZeroX,   AddrMode.ZeroX,   AddrMode.ZeroY,   AddrMode.ZeroY,   AddrMode.Imp,  AddrMode.AbsY, AddrMode.Imp,  AddrMode.AbsY, AddrMode.AbsX, AddrMode.AbsX, AddrMode.AbsY, AddrMode.AbsY,
+			AddrMode.Imm,  AddrMode.IndX,    AddrMode.Imm,  AddrMode.IndX,    AddrMode.Zero,    AddrMode.Zero,    AddrMode.Zero,    AddrMode.Zero,    AddrMode.Imp,  AddrMode.Imm,  AddrMode.Imp,  AddrMode.Imm,  AddrMode.Abs,  AddrMode.Abs,  AddrMode.Abs,  AddrMode.Abs,
+			AddrMode.Rel,  AddrMode.IndY,    AddrMode.None, AddrMode.IndYW,   AddrMode.ZeroX,   AddrMode.ZeroX,   AddrMode.ZeroX,   AddrMode.ZeroX,   AddrMode.Imp,  AddrMode.AbsY, AddrMode.Imp,  AddrMode.AbsYW,AddrMode.AbsX, AddrMode.AbsX, AddrMode.AbsXW,AddrMode.AbsXW,
+			AddrMode.Imm,  AddrMode.IndX,    AddrMode.Imm,  AddrMode.IndX,    AddrMode.Zero,    AddrMode.Zero,    AddrMode.Zero,    AddrMode.Zero,    AddrMode.Imp,  AddrMode.Imm,  AddrMode.Imp,  AddrMode.Imm,  AddrMode.Abs,  AddrMode.Abs,  AddrMode.Abs,  AddrMode.Abs,
+			AddrMode.Rel,  AddrMode.IndY,    AddrMode.None, AddrMode.IndYW,   AddrMode.ZeroX,   AddrMode.ZeroX,   AddrMode.ZeroX,   AddrMode.ZeroX,   AddrMode.Imp,  AddrMode.AbsY, AddrMode.Imp,  AddrMode.AbsYW,AddrMode.AbsX, AddrMode.AbsX, AddrMode.AbsXW,AddrMode.AbsXW,
+		};
+
+		private int[] OpCycles = new int[256] {
+			7, 6, 2, 8, 3, 3, 5, 5, 3, 2, 2, 2, 4, 4, 6, 6,
+			2, 5, 2, 8, 4, 4, 6, 6, 2, 4, 2, 7, 4, 4, 7, 7,
+			6, 6, 2, 8, 3, 3, 5, 5, 4, 2, 2, 2, 4, 4, 6, 6,
+			2, 5, 2, 8, 4, 4, 6, 6, 2, 4, 2, 7, 4, 4, 7, 7,
+			6, 6, 2, 8, 3, 3, 5, 5, 3, 2, 2, 2, 3, 4, 6, 6,
+			2, 5, 2, 8, 4, 4, 6, 6, 2, 4, 2, 7, 4, 4, 7, 7,
+			6, 6, 2, 8, 3, 3, 5, 5, 4, 2, 2, 2, 5, 4, 6, 6,
+			2, 5, 2, 8, 4, 4, 6, 6, 2, 4, 2, 7, 4, 4, 7, 7,
+			2, 6, 2, 6, 3, 3, 3, 3, 2, 2, 2, 2, 4, 4, 4, 4,
+			2, 6, 2, 6, 4, 4, 4, 4, 2, 5, 2, 5, 5, 5, 5, 5,
+			2, 6, 2, 6, 3, 3, 3, 3, 2, 2, 2, 2, 4, 4, 4, 4,
+			2, 5, 2, 5, 4, 4, 4, 4, 2, 4, 2, 4, 4, 4, 4, 4,
+			2, 6, 2, 8, 3, 3, 5, 5, 2, 2, 2, 2, 4, 4, 6, 6,
+			2, 5, 2, 8, 4, 4, 6, 6, 2, 4, 2, 7, 4, 4, 7, 7,
+			2, 6, 3, 8, 3, 3, 5, 5, 2, 2, 2, 2, 4, 4, 6, 6,
+			2, 5, 2, 8, 4, 4, 6, 6, 2, 4, 2, 7, 4, 4, 7, 7
+		};
+
+		private int[] OpCyclesCrossed = new int[256] {
+			7, 6, 2, 8, 3, 3, 5, 5, 3, 2, 2, 2, 4, 4, 6, 6,
+			3, 6, 2, 8, 4, 4, 6, 6, 2, 5, 2, 7, 5, 5, 7, 7,
+			6, 6, 2, 8, 3, 3, 5, 5, 4, 2, 2, 2, 4, 4, 6, 6,
+			3, 6, 2, 8, 4, 4, 6, 6, 2, 5, 2, 7, 5, 5, 7, 7,
+			6, 6, 2, 8, 3, 3, 5, 5, 3, 2, 2, 2, 3, 4, 6, 6,
+			3, 6, 2, 8, 4, 4, 6, 6, 2, 5, 2, 7, 5, 5, 7, 7,
+			6, 6, 2, 8, 3, 3, 5, 5, 4, 2, 2, 2, 5, 4, 6, 6,
+			3, 6, 2, 8, 4, 4, 6, 6, 2, 5, 2, 7, 5, 5, 7, 7,
+			2, 6, 2, 6, 3, 3, 3, 3, 2, 2, 2, 2, 4, 4, 4, 4,
+			3, 6, 2, 6, 4, 4, 4, 4, 2, 5, 2, 5, 5, 5, 5, 5,
+			2, 6, 2, 6, 3, 3, 3, 3, 2, 2, 2, 2, 4, 4, 4, 4,
+			3, 6, 2, 5, 4, 4, 4, 4, 2, 5, 2, 5, 5, 5, 5, 5,
+			2, 6, 2, 8, 3, 3, 5, 5, 2, 2, 2, 2, 4, 4, 6, 6,
+			3, 6, 2, 8, 4, 4, 6, 6, 2, 5, 2, 7, 5, 5, 7, 7,
+			2, 6, 3, 8, 3, 3, 5, 5, 2, 2, 2, 2, 4, 4, 6, 6,
+			3, 6, 2, 8, 4, 4, 6, 6, 2, 5, 2, 7, 5, 5, 7, 7,
+		};
 	}
-
-
 }

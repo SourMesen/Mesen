@@ -382,17 +382,18 @@ namespace Mesen.GUI.Debugger
 		private Point _previousLocation;
 		private bool _preventCloseTooltip = false;
 		private string _hoverLastWord = "";
+		private int _hoverLastLineAddress = -1;
 
-		private void ShowTooltip(string word, Dictionary<string, string> values, int address)
+		private void ShowTooltip(string word, Dictionary<string, string> values, int address, int lineAddress)
 		{
-			if(_hoverLastWord != word || _codeTooltip == null) {
+			if(_hoverLastWord != word || _hoverLastLineAddress != lineAddress || _codeTooltip == null) {
 				if(!_preventCloseTooltip && _codeTooltip != null) {
 					_codeTooltip.Close();
 					_codeTooltip = null;
 				}
 
 				if(ConfigManager.Config.DebugInfo.ShowOpCodeTooltips && frmOpCodeTooltip.IsOpCode(word)) {
-					_codeTooltip = new frmOpCodeTooltip(word);
+					_codeTooltip = new frmOpCodeTooltip(word, lineAddress);
 				} else {
 					bool isPrgRom = false;
 					if(address >= 0 && ConfigManager.Config.DebugInfo.ShowCodePreview) {
@@ -412,6 +413,7 @@ namespace Mesen.GUI.Debugger
 
 			_preventCloseTooltip = true;
 			_hoverLastWord = word;
+			_hoverLastLineAddress = lineAddress;
 		}
 		
 		private void ctrlCodeViewer_MouseLeave(object sender, EventArgs e)
@@ -465,7 +467,7 @@ namespace Mesen.GUI.Debugger
 					if(label != null) {
 						DisplayLabelTooltip(word, label);
 					} else if(ConfigManager.Config.DebugInfo.ShowOpCodeTooltips && frmOpCodeTooltip.IsOpCode(word)) {
-						ShowTooltip(word, null, -1);
+						ShowTooltip(word, null, -1, ctrlCodeViewer.GetLineNumberAtPosition(e.Y));
 					}
 				}
 				_previousLocation = e.Location;
@@ -482,7 +484,7 @@ namespace Mesen.GUI.Debugger
 								{ "Value", $"${byteValue.ToString("X2")} (byte){Environment.NewLine}${wordValue.ToString("X4")} (word)" }
 							};
 
-			ShowTooltip(word, values, (int)address);
+			ShowTooltip(word, values, (int)address, -1);
 		}
 
 		private void DisplayLabelTooltip(string word, CodeLabel label)
@@ -501,7 +503,7 @@ namespace Mesen.GUI.Debugger
 				values["Comment"] = label.Comment;
 			}
 
-			ShowTooltip(word, values, address);
+			ShowTooltip(word, values, address, -1);
 		}
 
 		private bool UpdateContextMenu(Point mouseLocation)
