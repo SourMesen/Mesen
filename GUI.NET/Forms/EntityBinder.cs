@@ -16,7 +16,7 @@ namespace Mesen.GUI.Forms
 	{
 		private Dictionary<string, Control> _bindings = new Dictionary<string, Control>();
 		private Dictionary<string, eNumberFormat> _fieldFormat = new Dictionary<string, eNumberFormat>();
-		private Dictionary<string, FieldInfo> _fieldInfo = null;
+		private Dictionary<string, FieldInfoWrapper> _fieldInfo = null;
 
 		public object Entity { get; set; }
 
@@ -34,10 +34,15 @@ namespace Mesen.GUI.Forms
 			}
 
 			if(_fieldInfo == null) {
-				_fieldInfo = new Dictionary<string, FieldInfo>();
+				_fieldInfo = new Dictionary<string, FieldInfoWrapper>();
+				PropertyInfo[] properties = BindedType.GetProperties();
+				foreach(PropertyInfo info in properties) {
+					_fieldInfo[info.Name] = new FieldInfoWrapper(info);
+				}
+
 				FieldInfo[] members = BindedType.GetFields();
 				foreach(FieldInfo info in members) {
-					_fieldInfo[info.Name] = info;
+					_fieldInfo[info.Name] = new FieldInfoWrapper(info);
 				}
 			}
 
@@ -61,7 +66,7 @@ namespace Mesen.GUI.Forms
 				if(!_fieldInfo.ContainsKey(kvp.Key)) {
 					throw new Exception("Invalid binding key");
 				} else {
-					FieldInfo field = _fieldInfo[kvp.Key];
+					FieldInfoWrapper field = _fieldInfo[kvp.Key];
 					eNumberFormat format = _fieldFormat[kvp.Key];
 					object value = field.GetValue(this.Entity);
 					if(kvp.Value is TextBox) {
@@ -146,7 +151,7 @@ namespace Mesen.GUI.Forms
 					throw new Exception("Invalid binding key");
 				} else {
 					try {
-						FieldInfo field = _fieldInfo[kvp.Key];
+						FieldInfoWrapper field = _fieldInfo[kvp.Key];
 						eNumberFormat format = _fieldFormat[kvp.Key];
 						if(kvp.Value is TextBox) {
 							object value = kvp.Value.Text;
@@ -228,6 +233,51 @@ namespace Mesen.GUI.Forms
 					} catch {
 						//Ignore exceptions caused by bad user input
 					}
+				}
+			}
+		}
+		private class FieldInfoWrapper
+		{
+			private FieldInfo _fieldInfo;
+			private PropertyInfo _propertyInfo;
+
+			public FieldInfoWrapper(PropertyInfo info)
+			{
+				_propertyInfo = info;
+			}
+
+			public FieldInfoWrapper(FieldInfo info)
+			{
+				_fieldInfo = info;
+			}
+
+			public Type FieldType
+			{
+				get
+				{
+					if(_fieldInfo != null) {
+						return _fieldInfo.FieldType;
+					} else {
+						return _propertyInfo.PropertyType;
+					}
+				}
+			}
+
+			public void SetValue(object obj, object value)
+			{
+				if(_fieldInfo != null) {
+					_fieldInfo.SetValue(obj, value);
+				} else {
+					_propertyInfo.SetValue(obj, value);
+				}
+			}
+
+			public object GetValue(object obj)
+			{
+				if(_fieldInfo != null) {
+					return _fieldInfo.GetValue(obj);
+				} else {
+					return _propertyInfo.GetValue(obj);
 				}
 			}
 		}

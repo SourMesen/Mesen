@@ -20,12 +20,7 @@ namespace Mesen.GUI.Debugger
 			set
 			{
 				_memoryType = value;
-
-				_isCpuBreakpoint = value == DebugMemoryType.CpuMemory ||
-										value == DebugMemoryType.WorkRam ||
-										value == DebugMemoryType.SaveRam ||
-										value == DebugMemoryType.PrgRom;
-
+				_isCpuBreakpoint = IsTypeCpuBreakpoint(value);
 				if(_isCpuBreakpoint) {
 					_equivalentAddressType = value.ToAddressType();
 				}
@@ -75,6 +70,16 @@ namespace Mesen.GUI.Debugger
 				addr = label + $", {addr}";
 			}
 			return addr;
+		}
+
+		public static bool IsTypeCpuBreakpoint(DebugMemoryType type)
+		{
+			return (
+				type == DebugMemoryType.CpuMemory ||
+				type == DebugMemoryType.WorkRam ||
+				type == DebugMemoryType.SaveRam ||
+				type == DebugMemoryType.PrgRom
+			);
 		}
 
 		public void SetEnabled(bool enabled)

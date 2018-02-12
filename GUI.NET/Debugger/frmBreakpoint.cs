@@ -151,8 +151,7 @@ namespace Mesen.GUI.Debugger
 				}
 			}
 
-			bool isCpuBreakpoint = new Breakpoint() { MemoryType = type }.IsCpuBreakpoint;
-			return chkRead.Checked || chkWrite.Checked || (chkExec.Checked && isCpuBreakpoint) || txtCondition.Text.Length > 0;
+			return chkRead.Checked || chkWrite.Checked || (chkExec.Checked && Breakpoint.IsTypeCpuBreakpoint(type)) || txtCondition.Text.Length > 0;
 		}
 
 		private void txtAddress_Enter(object sender, EventArgs e)
@@ -175,8 +174,7 @@ namespace Mesen.GUI.Debugger
 		{
 			DebugMemoryType type = cboBreakpointType.GetEnumValue<DebugMemoryType>();
 
-			bool isCpuBreakpoint = new Breakpoint() { MemoryType = type }.IsCpuBreakpoint;
-			chkExec.Visible = isCpuBreakpoint;
+			chkExec.Visible = Breakpoint.IsTypeCpuBreakpoint(type);
 
 			string maxValue = (InteropEmu.DebugGetMemorySize(type) - 1).ToString("X2");
 			string minValue = "".PadLeft(maxValue.Length, '0');
