@@ -385,6 +385,12 @@ namespace Mesen.GUI.Debugger
 			get { return this.ctrlTextbox.ShowSingleLineLineNumberNotes; }
 			set { this.ctrlTextbox.ShowSingleLineLineNumberNotes = value; }
 		}
+		
+		public bool ShowMemoryValues
+		{
+			get { return this.ctrlTextbox.ShowMemoryValues; }
+			set { this.ctrlTextbox.ShowMemoryValues = value; }
+		}
 
 		public bool HideSelection
 		{

@@ -163,6 +163,12 @@ namespace Mesen.GUI.Debugger
 			set { this.ctrlCodeViewer.ShowScrollbars = value; }
 		}
 
+		public bool ShowMemoryValues
+		{
+			get { return this.ctrlCodeViewer.ShowMemoryValues; }
+			set { this.ctrlCodeViewer.ShowMemoryValues = value; }
+		}
+
 		public void SelectActiveAddress(UInt32 address)
 		{
 			this.SetActiveAddress(address);

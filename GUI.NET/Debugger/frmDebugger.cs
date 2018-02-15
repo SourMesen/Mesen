@@ -75,6 +75,9 @@ namespace Mesen.GUI.Debugger
 			this.mnuShowUnidentifiedData.Checked = ConfigManager.Config.DebugInfo.ShowUnidentifiedData;
 
 			this.mnuRefreshWatchWhileRunning.Checked = ConfigManager.Config.DebugInfo.RefreshWatchWhileRunning;
+			this.mnuShowMemoryValues.Checked = ConfigManager.Config.DebugInfo.ShowMemoryValuesInCodeWindow;
+			ctrlDebuggerCode.ShowMemoryValues = mnuShowMemoryValues.Checked;
+			ctrlDebuggerCodeSplit.ShowMemoryValues = mnuShowMemoryValues.Checked;
 
 			if(ConfigManager.Config.DebugInfo.WindowWidth > -1) {
 				this.Width = ConfigManager.Config.DebugInfo.WindowWidth;
@@ -741,6 +744,15 @@ namespace Mesen.GUI.Debugger
 		{
 			ConfigManager.Config.DebugInfo.RefreshWatchWhileRunning = mnuRefreshWatchWhileRunning.Checked;
 			ConfigManager.ApplyChanges();
+		}
+
+		private void mnuShowMemoryValues_Click(object sender, EventArgs e)
+		{
+			ConfigManager.Config.DebugInfo.ShowMemoryValuesInCodeWindow = mnuShowMemoryValues.Checked;
+			ConfigManager.ApplyChanges();
+
+			ctrlDebuggerCode.ShowMemoryValues = mnuShowMemoryValues.Checked;
+			ctrlDebuggerCodeSplit.ShowMemoryValues = mnuShowMemoryValues.Checked;
 		}
 
 		private void mnuDisableDefaultLabels_Click(object sender, EventArgs e)

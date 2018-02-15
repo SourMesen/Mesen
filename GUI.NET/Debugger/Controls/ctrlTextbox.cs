@@ -41,7 +41,7 @@ namespace Mesen.GUI.Debugger
 
 	public partial class ctrlTextbox : Control
 	{
-		private Regex _codeRegex = new Regex("([a-z]{3})([*]{0,1})[ ]{0,1}([(]{0,1})(([#]{0,1}[$][0-9a-f]*)|([@_a-z]([@_a-z0-9])*)){0,1}([)]{0,1})(,X|,Y){0,1}([)]{0,1})", RegexOptions.IgnoreCase | RegexOptions.Compiled);
+		private Regex _codeRegex = new Regex("([a-z]{3})([*]{0,1})[ ]{0,1}([(]{0,1})(([#]{0,1}[$][0-9a-f]*)|([@_a-z]([@_a-z0-9])*)){0,1}([)]{0,1})(,X|,Y){0,1}([)]{0,1})(.*)", RegexOptions.IgnoreCase | RegexOptions.Compiled);
 		public event EventHandler ScrollPositionChanged;
 		public event EventHandler SelectedLineChanged;
 		private bool _disableScrollPositionChangedEvent;
@@ -162,6 +162,17 @@ namespace Mesen.GUI.Debugger
 			set
 			{
 				_showSingleLineLineNumberNotes = value;
+				this.Invalidate();
+			}
+		}
+
+		private bool _showMemoryValues = false;
+		public bool ShowMemoryValues
+		{
+			get { return _showMemoryValues; }
+			set
+			{
+				_showMemoryValues = value;
 				this.Invalidate();
 			}
 		}
@@ -956,10 +967,11 @@ namespace Mesen.GUI.Debugger
 				g.TranslateTransform(-HorizontalScrollPosition * HorizontalScrollFactor, 0);
 			} else {
 				//Draw line content
+				int characterCount = 0;
 				Color defaultColor = Color.FromArgb(60, 60, 60);
 				if(codeString.Length > 0) {
 					Match match = _codeRegex.Match(codeString);
-					if(match.Success && !codeString.EndsWith(":") && textColor == null) {
+					if(match.Success && !codeString.EndsWith(":")) {
 						string opcode = match.Groups[1].Value;
 						string invalidStar = match.Groups[2].Value;
 						string paren1 = match.Groups[3].Value;
@@ -967,17 +979,52 @@ namespace Mesen.GUI.Debugger
 						string paren2 = match.Groups[8].Value;
 						string indirect = match.Groups[9].Value;
 						string paren3 = match.Groups[10].Value;
-						List<string> parts = new List<string>() { opcode, invalidStar, " ", paren1, operand, paren2, indirect, paren3 };
+						string rest = match.Groups[11].Value;
 						Color operandColor = operand.Length > 0 ? (operand[0] == '#' ? (Color)info.AssemblerImmediateColor : (operand[0] == '$' ? (Color)info.AssemblerAddressColor : (Color)info.AssemblerLabelDefinitionColor)) : Color.Black;
 						List<Color> colors = new List<Color>() { info.AssemblerOpcodeColor, defaultColor, defaultColor, defaultColor, operandColor, defaultColor, defaultColor, defaultColor };
+						int codePartCount = colors.Count;
+
+						List<string> parts = new List<string>() { opcode, invalidStar, " ", paren1, operand, paren2, indirect, paren3 };
+						string memoryAddress = "";
+						if(!string.IsNullOrWhiteSpace(addressString)) {
+							colors.Add(info.CodeEffectiveAddressColor);
+							parts.Add(addressString);
+							memoryAddress = addressString.Substring(3).Trim();
+						} else if(operand.Length > 0 && operand[0] != '#') {
+							memoryAddress = operand.Trim();
+						}
+
+						if(this.ShowMemoryValues && memoryAddress.Length > 0) {
+							int address = -1;
+							if(memoryAddress[0] == '$') {
+								Int32.TryParse(memoryAddress.Substring(1), System.Globalization.NumberStyles.AllowHexSpecifier, null, out address);
+							} else {
+								//Label
+								CodeLabel label = LabelManager.GetLabel(memoryAddress);
+								if(label != null) {
+									address = label.GetRelativeAddress();
+								}
+							}
+
+							if(address >= 0) {
+								colors.Add(defaultColor);
+								parts.Add(" = $" + InteropEmu.DebugGetMemoryValue(DebugMemoryType.CpuMemory, (UInt32)address).ToString("X2"));
+							}
+						}
+
+						//Display the rest of the line (used by trace logger)
+						colors.Add(defaultColor);
+						parts.Add(rest);
 
 						float xOffset = 0;
 						for(int i = 0; i < parts.Count; i++) {
-							using(Brush b = new SolidBrush(colors[i])) {
+							using(Brush b = new SolidBrush(textColor.HasValue && i < codePartCount ? textColor.Value : colors[i])) {
 								g.DrawString(parts[i], this.Font, b, marginLeft + xOffset, positionY, StringFormat.GenericTypographic);
 								xOffset += g.MeasureString("".PadLeft(parts[i].Length, 'w'), this.Font, Point.Empty, StringFormat.GenericTypographic).Width;
+								characterCount += parts[i].Length;
 							}
 						}
+						codeStringLength = xOffset;
 					} else {
 						using(Brush fgBrush = new SolidBrush(codeString.EndsWith(":") ? (Color)info.AssemblerLabelDefinitionColor : (textColor ?? defaultColor))) {
 							g.DrawString(codeString, this.Font, fgBrush, marginLeft, positionY, StringFormat.GenericTypographic);
@@ -985,16 +1032,11 @@ namespace Mesen.GUI.Debugger
 					}
 				}
 
-				if(!string.IsNullOrWhiteSpace(addressString)) {
-					using(Brush addressBrush = new SolidBrush(info.CodeEffectiveAddressColor)) {
-						g.DrawString(addressString, this.Font, addressBrush, marginLeft + codeStringLength, positionY, StringFormat.GenericTypographic);
-					}
-				}
-
+				
 				if(!string.IsNullOrWhiteSpace(commentString)) {
 					using(Brush commentBrush = new SolidBrush(info.AssemblerCommentColor)) {
-						int padding = Math.Max(CommentSpacingCharCount, codeString.Length + addressString.Length + 1);
-						if(codeString.Length == 0 && addressString.Length == 0) {
+						int padding = Math.Max(CommentSpacingCharCount, characterCount + 1);
+						if(characterCount == 0) {
 							//Draw comment left-aligned, next to the margin when there is no code on the line
 							padding = 0;
 						}

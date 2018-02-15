@@ -184,6 +184,7 @@ namespace Mesen.GUI.Config
 		public bool DisableDefaultLabels = false;
 
 		public bool RefreshWatchWhileRunning = false;
+		public bool ShowMemoryValuesInCodeWindow = true;
 
 		public bool BreakOnOpen = true;
 		public bool BreakOnReset = true;
