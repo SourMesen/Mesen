@@ -42,7 +42,7 @@ namespace Mesen.GUI.Debugger.Controls
 					Color bgColor = this.ColorProvider.GetBackgroundColor(position);
 					if(bgColor != prevBgColor && i > 0) {
 						using(Brush brush = new SolidBrush(prevBgColor)) {
-							e.Graphics.FillRectangle(brush, left + 1, top - drawHeight, width - 2, drawHeight);
+							e.Graphics.FillRectangle(brush, left + 1, top - drawHeight, width - 1, drawHeight);
 							drawHeight = 0;
 						}
 					}
@@ -53,13 +53,15 @@ namespace Mesen.GUI.Debugger.Controls
 					}
 				}
 				using(Brush brush = new SolidBrush(prevBgColor)) {
-					e.Graphics.FillRectangle(brush, left + 1, e.ClipRectangle.Bottom - drawHeight, width - 2, drawHeight);
+					e.Graphics.FillRectangle(brush, left + 1, e.ClipRectangle.Bottom - drawHeight, width - 1, drawHeight);
 				}
+			} else {
+				e.Graphics.FillRectangle(Brushes.White, left + 1, e.ClipRectangle.Top, width - 1, e.ClipRectangle.Height);
 			}
 
 			float highlightTop = e.ClipRectangle.Top + e.ClipRectangle.Height * startPos - HighlightOffset;
 			using(SolidBrush brush = new SolidBrush(Color.FromArgb(120, 220, 220, 255))) {
-				e.Graphics.FillRectangle(brush, left + 1, highlightTop, width - 1, HighlightHeight);
+				e.Graphics.FillRectangle(brush, left + 1, highlightTop, width, HighlightHeight);
 				e.Graphics.DrawRectangle(Pens.DarkSlateGray, left + 1, highlightTop, width - 2, HighlightHeight);
 				e.Graphics.DrawRectangle(Pens.Gray, left + 2, highlightTop + 1, width - 4, HighlightHeight - 2);
 			}
