@@ -36,7 +36,7 @@ namespace Mesen.GUI.Debugger.Controls
 			if(this.ColorProvider != null) {
 				Color prevBgColor = Color.White;
 				int drawHeight = 0;
-				for(int i = 0; i < e.ClipRectangle.Height; i++) {
+				for(int i = 0; i < this.Height; i++) {
 					float top = e.ClipRectangle.Top + i;
 					float position = (float)i / this.Height;
 					Color bgColor = this.ColorProvider.GetBackgroundColor(position);
@@ -133,9 +133,9 @@ namespace Mesen.GUI.Debugger.Controls
 							_codeTooltip.ScrollToLineIndex(scrollPosition);
 						}
 						if(_codeTooltip != null) {
-							_codeTooltip.Show();
 							_codeTooltip.Left = p.X + 5;
 							_codeTooltip.Top = p.Y;
+							_codeTooltip.Show();
 						}
 						_lastPreviewScrollPosition = scrollPosition;
 					}
