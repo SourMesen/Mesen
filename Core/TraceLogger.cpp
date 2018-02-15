@@ -130,7 +130,16 @@ void TraceLogger::GetTraceRow(string &output, State &cpuState, PPUDebugState &pp
 	LabelManager* labelManager = _options.UseLabels ? _labelManager.get() : nullptr;
 	disassemblyInfo.ToString(code, cpuState.DebugPC, _memoryManager.get(), labelManager);
 	disassemblyInfo.GetEffectiveAddressString(code, cpuState, _memoryManager.get(), labelManager);
-	code += std::string(std::max(0, (int)(32 - code.size())), ' ');
+
+	int paddingSize = 32;
+	if(_options.ShowMemoryValues) {
+		int32_t value = disassemblyInfo.GetMemoryValue(cpuState, _memoryManager.get());
+		if(value >= 0) {
+			code += " = $" + HexUtilities::ToHex((uint8_t)value);
+		}
+		paddingSize += 6;
+	}
+	code += std::string(std::max(0, (int)(paddingSize - code.size())), ' ');
 	output += code;
 
 	if(_options.ShowRegisters) {

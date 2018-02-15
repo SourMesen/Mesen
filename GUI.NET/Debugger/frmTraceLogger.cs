@@ -40,6 +40,7 @@ namespace Mesen.GUI.Debugger
 			_entityBinder.AddBinding("ShowByteCode", chkShowByteCode);
 			_entityBinder.AddBinding("ShowCpuCycles", chkShowCpuCycles);
 			_entityBinder.AddBinding("ShowEffectiveAddresses", chkShowEffectiveAddresses);
+			_entityBinder.AddBinding("ShowMemoryValues", chkShowMemoryValues);
 			_entityBinder.AddBinding("ShowExtraInfo", chkShowExtraInfo);
 			_entityBinder.AddBinding("ShowPpuFrames", chkShowFrameCount);
 			_entityBinder.AddBinding("ShowPpuCycles", chkShowPpuCycles);

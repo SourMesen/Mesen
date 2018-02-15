@@ -1327,6 +1327,7 @@ namespace Mesen.GUI
 		[MarshalAs(UnmanagedType.I1)] public bool ShowExtraInfo;
 		[MarshalAs(UnmanagedType.I1)] public bool IndentCode;
 		[MarshalAs(UnmanagedType.I1)] public bool ShowEffectiveAddresses;
+		[MarshalAs(UnmanagedType.I1)] public bool ShowMemoryValues;
 		[MarshalAs(UnmanagedType.I1)] public bool UseLabels;
 		public StatusFlagFormat StatusFormat;
 

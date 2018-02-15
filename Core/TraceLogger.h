@@ -27,6 +27,7 @@ struct TraceLoggerOptions
 	bool ShowExtraInfo;
 	bool IndentCode;
 	bool ShowEffectiveAddresses;
+	bool ShowMemoryValues;
 	bool UseLabels;
 	StatusFlagFormat StatusFormat;
 
@@ -79,7 +80,6 @@ public:
 	TraceLogger(Debugger* debugger, shared_ptr<MemoryManager> memoryManager, shared_ptr<LabelManager> labelManager);
 	~TraceLogger();
 
-	
 	void Log(DebugState &state, DisassemblyInfo &disassemblyInfo, OperationInfo &operationInfo);
 	void LogNonExec(OperationInfo& operationInfo);
 	void SetOptions(TraceLoggerOptions options);

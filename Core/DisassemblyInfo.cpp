@@ -155,6 +155,24 @@ void DisassemblyInfo::SetSubEntryPoint()
 	_isSubEntryPoint = true;
 }
 
+int32_t DisassemblyInfo::GetMemoryValue(State& cpuState, MemoryManager* memoryManager)
+{
+	int32_t address = -1;
+	if(_opMode <= AddrMode::Abs) {
+		if(_opMode == AddrMode::Rel || _opMode == AddrMode::Abs || _opMode == AddrMode::Zero) {
+			address = GetOpAddr(cpuState.DebugPC);
+		}
+	} else {
+		address = GetEffectiveAddress(cpuState, memoryManager);
+	}
+
+	if(address >= 0 && address <= 0xFFFF) {
+		return memoryManager->DebugRead(address);
+	} else {
+		return -1;
+	}
+}
+
 void DisassemblyInfo::GetEffectiveAddressString(string &out, State& cpuState, MemoryManager* memoryManager, LabelManager* labelManager)
 {
 	if(_opMode <= AddrMode::Abs) {

@@ -34,6 +34,7 @@
 			this.btnStopLogging = new System.Windows.Forms.Button();
 			this.grpLogOptions = new System.Windows.Forms.GroupBox();
 			this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
+			this.chkShowMemoryValues = new System.Windows.Forms.CheckBox();
 			this.chkShowRegisters = new System.Windows.Forms.CheckBox();
 			this.chkIndentCode = new System.Windows.Forms.CheckBox();
 			this.chkUseLabels = new System.Windows.Forms.CheckBox();
@@ -44,15 +45,16 @@
 			this.chkShowPpuScanline = new System.Windows.Forms.CheckBox();
 			this.chkShowFrameCount = new System.Windows.Forms.CheckBox();
 			this.chkShowEffectiveAddresses = new System.Windows.Forms.CheckBox();
-			this.chkShowExtraInfo = new System.Windows.Forms.CheckBox();
 			this.cboStatusFlagFormat = new System.Windows.Forms.ComboBox();
 			this.tableLayoutPanel4 = new System.Windows.Forms.TableLayoutPanel();
 			this.picHelp = new System.Windows.Forms.PictureBox();
 			this.picExpressionWarning = new System.Windows.Forms.PictureBox();
 			this.lblCondition = new System.Windows.Forms.Label();
 			this.txtCondition = new System.Windows.Forms.TextBox();
+			this.chkShowExtraInfo = new System.Windows.Forms.CheckBox();
 			this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
 			this.grpExecutionLog = new System.Windows.Forms.GroupBox();
+			this.txtTraceLog = new Mesen.GUI.Debugger.ctrlScrollableTextbox();
 			this.tmrUpdateLog = new System.Windows.Forms.Timer(this.components);
 			this.menuStrip1 = new System.Windows.Forms.MenuStrip();
 			this.showToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -64,7 +66,6 @@
 			this.mnuAutoRefresh = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
 			this.mnuRefresh = new System.Windows.Forms.ToolStripMenuItem();
-			this.txtTraceLog = new Mesen.GUI.Debugger.ctrlScrollableTextbox();
 			this.tableLayoutPanel1.SuspendLayout();
 			this.grpLogOptions.SuspendLayout();
 			this.tableLayoutPanel2.SuspendLayout();
@@ -150,6 +151,7 @@
 			this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
 			this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
 			this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+			this.tableLayoutPanel2.Controls.Add(this.chkShowMemoryValues, 3, 1);
 			this.tableLayoutPanel2.Controls.Add(this.chkShowRegisters, 0, 0);
 			this.tableLayoutPanel2.Controls.Add(this.chkIndentCode, 0, 5);
 			this.tableLayoutPanel2.Controls.Add(this.chkUseLabels, 3, 5);
@@ -160,9 +162,9 @@
 			this.tableLayoutPanel2.Controls.Add(this.chkShowPpuScanline, 2, 1);
 			this.tableLayoutPanel2.Controls.Add(this.chkShowFrameCount, 1, 1);
 			this.tableLayoutPanel2.Controls.Add(this.chkShowEffectiveAddresses, 3, 0);
-			this.tableLayoutPanel2.Controls.Add(this.chkShowExtraInfo, 3, 1);
 			this.tableLayoutPanel2.Controls.Add(this.cboStatusFlagFormat, 1, 2);
 			this.tableLayoutPanel2.Controls.Add(this.tableLayoutPanel4, 0, 3);
+			this.tableLayoutPanel2.Controls.Add(this.chkShowExtraInfo, 3, 2);
 			this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tableLayoutPanel2.Location = new System.Drawing.Point(3, 16);
 			this.tableLayoutPanel2.Name = "tableLayoutPanel2";
@@ -173,8 +175,21 @@
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
 			this.tableLayoutPanel2.Size = new System.Drawing.Size(769, 127);
 			this.tableLayoutPanel2.TabIndex = 0;
+			// 
+			// chkShowMemoryValues
+			// 
+			this.chkShowMemoryValues.AutoSize = true;
+			this.chkShowMemoryValues.Checked = true;
+			this.chkShowMemoryValues.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.chkShowMemoryValues.Location = new System.Drawing.Point(332, 26);
+			this.chkShowMemoryValues.Name = "chkShowMemoryValues";
+			this.chkShowMemoryValues.Size = new System.Drawing.Size(128, 17);
+			this.chkShowMemoryValues.TabIndex = 17;
+			this.chkShowMemoryValues.Text = "Show Memory Values";
+			this.chkShowMemoryValues.UseVisualStyleBackColor = true;
 			// 
 			// chkShowRegisters
 			// 
@@ -289,18 +304,6 @@
 			this.chkShowEffectiveAddresses.Text = "Show Effective Addresses";
 			this.chkShowEffectiveAddresses.UseVisualStyleBackColor = true;
 			// 
-			// chkShowExtraInfo
-			// 
-			this.chkShowExtraInfo.AutoSize = true;
-			this.chkShowExtraInfo.Checked = true;
-			this.chkShowExtraInfo.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.chkShowExtraInfo.Location = new System.Drawing.Point(332, 26);
-			this.chkShowExtraInfo.Name = "chkShowExtraInfo";
-			this.chkShowExtraInfo.Size = new System.Drawing.Size(204, 17);
-			this.chkShowExtraInfo.TabIndex = 9;
-			this.chkShowExtraInfo.Text = "Additional information (IRQ, NMI, etc.)";
-			this.chkShowExtraInfo.UseVisualStyleBackColor = true;
-			// 
 			// cboStatusFlagFormat
 			// 
 			this.cboStatusFlagFormat.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
@@ -370,6 +373,18 @@
 			this.txtCondition.Size = new System.Drawing.Size(655, 20);
 			this.txtCondition.TabIndex = 15;
 			// 
+			// chkShowExtraInfo
+			// 
+			this.chkShowExtraInfo.AutoSize = true;
+			this.chkShowExtraInfo.Checked = true;
+			this.chkShowExtraInfo.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.chkShowExtraInfo.Location = new System.Drawing.Point(332, 49);
+			this.chkShowExtraInfo.Name = "chkShowExtraInfo";
+			this.chkShowExtraInfo.Size = new System.Drawing.Size(204, 17);
+			this.chkShowExtraInfo.TabIndex = 9;
+			this.chkShowExtraInfo.Text = "Additional information (IRQ, NMI, etc.)";
+			this.chkShowExtraInfo.UseVisualStyleBackColor = true;
+			// 
 			// tableLayoutPanel3
 			// 
 			this.tableLayoutPanel3.ColumnCount = 1;
@@ -396,6 +411,23 @@
 			this.grpExecutionLog.TabIndex = 2;
 			this.grpExecutionLog.TabStop = false;
 			this.grpExecutionLog.Text = "Execution Log";
+			// 
+			// txtTraceLog
+			// 
+			this.txtTraceLog.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this.txtTraceLog.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.txtTraceLog.FontSize = 13F;
+			this.txtTraceLog.HideSelection = false;
+			this.txtTraceLog.Location = new System.Drawing.Point(3, 16);
+			this.txtTraceLog.Name = "txtTraceLog";
+			this.txtTraceLog.ShowContentNotes = false;
+			this.txtTraceLog.ShowLineNumberNotes = false;
+			this.txtTraceLog.ShowMemoryValues = false;
+			this.txtTraceLog.ShowScrollbars = true;
+			this.txtTraceLog.ShowSingleContentLineNotes = true;
+			this.txtTraceLog.ShowSingleLineLineNumberNotes = false;
+			this.txtTraceLog.Size = new System.Drawing.Size(775, 246);
+			this.txtTraceLog.TabIndex = 0;
 			// 
 			// tmrUpdateLog
 			// 
@@ -487,20 +519,6 @@
 			this.mnuRefresh.Text = "Refresh";
 			this.mnuRefresh.Click += new System.EventHandler(this.mnuRefresh_Click);
 			// 
-			// txtTraceLog
-			// 
-			this.txtTraceLog.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.txtTraceLog.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.txtTraceLog.FontSize = 13F;
-			this.txtTraceLog.Location = new System.Drawing.Point(3, 16);
-			this.txtTraceLog.Name = "txtTraceLog";
-			this.txtTraceLog.ShowContentNotes = false;
-			this.txtTraceLog.ShowLineNumberNotes = false;
-			this.txtTraceLog.ShowSingleContentLineNotes = true;
-			this.txtTraceLog.ShowSingleLineLineNumberNotes = false;
-			this.txtTraceLog.Size = new System.Drawing.Size(775, 246);
-			this.txtTraceLog.TabIndex = 0;
-			// 
 			// frmTraceLogger
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -568,5 +586,6 @@
 		private System.Windows.Forms.PictureBox picExpressionWarning;
 		private System.Windows.Forms.PictureBox picHelp;
 		private ctrlScrollableTextbox txtTraceLog;
+		private System.Windows.Forms.CheckBox chkShowMemoryValues;
 	}
 }
