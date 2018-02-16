@@ -118,4 +118,6 @@ extern "C"
 	DllExport int32_t __stdcall DebugLoadScript(char* name, char* content, int32_t scriptId) { return GetDebugger()->LoadScript(name, content, scriptId); }
 	DllExport void __stdcall DebugRemoveScript(int32_t scriptId) { GetDebugger()->RemoveScript(scriptId); }
 	DllExport const char* __stdcall DebugGetScriptLog(int32_t scriptId) { return GetDebugger()->GetScriptLog(scriptId); }
+
+	DllExport void __stdcall DebugGetPpuRegisterWriteData(uint32_t* pictureBuffer, PpuRegisterWriteInfo *infoArray) { GetDebugger()->GetPpuRegisterWriteData(pictureBuffer, infoArray); }	
 };

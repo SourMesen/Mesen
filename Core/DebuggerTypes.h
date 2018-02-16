@@ -96,6 +96,14 @@ struct OperationInfo
 	MemoryOperationType OperationType;
 };
 
+struct PpuRegisterWriteInfo
+{
+	uint8_t Address;
+	uint8_t Value;
+	uint16_t Cycle;
+	int16_t Scanline;
+};
+
 enum class EventType
 {
 	Reset = 0,

@@ -400,6 +400,12 @@
     <Compile Include="Debugger\Controls\ctrlControllerInput.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Debugger\Controls\ctrlPpuWriteViewer.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Debugger\Controls\ctrlPpuWriteViewer.Designer.cs">
+      <DependentUpon>ctrlPpuWriteViewer.cs</DependentUpon>
+    </Compile>
     <Compile Include="Debugger\Controls\ctrlProfiler.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -1116,6 +1122,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Debugger\Controls\ctrlFlagStatus.resx">
       <DependentUpon>ctrlFlagStatus.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Debugger\Controls\ctrlPpuWriteViewer.resx">
+      <DependentUpon>ctrlPpuWriteViewer.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Debugger\Example.lua" />
     <None Include="Resources\PipetteSmall.png" />

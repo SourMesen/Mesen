@@ -441,6 +441,29 @@ namespace Mesen.GUI
 			return frameData;
 		}
 
+		[DllImport(DLLPath, EntryPoint = "DebugGetPpuRegisterWriteData")] private static extern void DebugGetPpuRegisterWriteDataWrapper(IntPtr frameBuffer, IntPtr infoArray);
+		public static void DebugGetPpuRegisterWriteData(out byte[] pictureData, out PpuRegisterWriteInfo[] ppuWrites)
+		{
+			pictureData = new byte[256 * 240 * 4];
+			ppuWrites = new PpuRegisterWriteInfo[1000];
+
+			GCHandle hPictureData = GCHandle.Alloc(pictureData, GCHandleType.Pinned);
+			GCHandle hPpuWrites = GCHandle.Alloc(ppuWrites, GCHandleType.Pinned);
+			try {
+				InteropEmu.DebugGetPpuRegisterWriteDataWrapper(hPictureData.AddrOfPinnedObject(), hPpuWrites.AddrOfPinnedObject());
+			} finally {
+				hPictureData.Free();
+				hPpuWrites.Free();
+			}
+
+			for(int i = 0; i < 1000; i++) {
+				if(ppuWrites[i].Cycle == 0xFFFF) {
+					Array.Resize(ref ppuWrites, i);
+					break;
+				}
+			}
+		}
+
 		[DllImport(DLLPath, EntryPoint = "DebugGetProfilerData")] private static extern void DebugGetProfilerDataWrapper(IntPtr profilerData, ProfilerDataType dataType);
 		public static Int64[] DebugGetProfilerData(ProfilerDataType dataType)
 		{
@@ -1058,6 +1081,14 @@ namespace Mesen.GUI
 		IndirectData = 0x20,
 		PcmData = 0x40,
 		SubEntryPoint = 0x80
+	}
+
+	public struct PpuRegisterWriteInfo
+	{
+		public byte Address;
+		public byte Value;
+		public UInt16 Cycle;
+		public Int16 Scanline;
 	}
 
 	public struct DebugState

@@ -23,12 +23,7 @@ namespace Mesen.GUI.Debugger.Controls
 		{
 			InitializeComponent();
 		}
-
-		protected override void OnLoad(EventArgs e)
-		{
- 			base.OnLoad(e);
-		}
-
+		
 		public void GetData()
 		{
 			this._paletteRam = InteropEmu.DebugGetMemoryState(DebugMemoryType.PaletteMemory);

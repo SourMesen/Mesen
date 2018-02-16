@@ -509,11 +509,6 @@ void Console::Run()
 
 				_systemActionManager->ProcessSystemActions();
 
-				shared_ptr<Debugger> debugger = _debugger;
-				if(debugger) {
-					debugger->ProcessEvent(EventType::StartFrame);
-				}
-
 				//Get next target time, and adjust based on whether we are ahead or behind
 				double timeLag = EmulationSettings::GetEmulationSpeed() == 0 ? 0 : clockTimer.GetElapsedMS() - targetTime;
 				UpdateNesModel(true);

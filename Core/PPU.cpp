@@ -1017,6 +1017,11 @@ void PPU::DebugSendFrame()
 	VideoDecoder::GetInstance()->UpdateFrame(_currentOutputBuffer);
 }
 
+void PPU::DebugCopyOutputBuffer(uint16_t *target)
+{
+	memcpy(target, _currentOutputBuffer, PPU::PixelCount * sizeof(uint16_t));
+}
+
 void PPU::SendFrame()
 {
 	UpdateGrayscaleAndIntensifyBits();
@@ -1036,9 +1041,6 @@ void PPU::SendFrame()
 	//Switch output buffer.  VideoDecoder will decode the last frame while we build the new one.
 	//If VideoDecoder isn't fast enough, UpdateFrame will block until it is ready to accept a new frame.
 	_currentOutputBuffer = (_currentOutputBuffer == _outputBuffers[0]) ? _outputBuffers[1] : _outputBuffers[0];
-	if(Debugger::IsEnabled()) {
-		memset(_currentOutputBuffer, 0, PPU::PixelCount * 2);
-	}
 
 	_enableOamDecay = EmulationSettings::CheckFlag(EmulationFlags::EnableOamDecay);
 #endif
@@ -1093,6 +1095,11 @@ void PPU::Exec()
 		if(_scanline == -1) {
 			_statusFlags.SpriteOverflow = false;
 			_statusFlags.Sprite0Hit = false;
+
+			if(Debugger::IsEnabled()) {
+				//Clear output buffer for "Draw partial frame" feature
+				memset(_currentOutputBuffer, 0, PPU::PixelCount * 2);
+			}
 		} else if(_scanline == 240) {
 			_frameCount++;
 			SendFrame();

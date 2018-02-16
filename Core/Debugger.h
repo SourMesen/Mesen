@@ -122,6 +122,8 @@ private:
 
 	uint32_t _inputOverride[4];
 
+	vector<PpuRegisterWriteInfo> _ppuRegisterWrites;
+
 private:
 	void UpdateBreakpoints();
 
@@ -232,8 +234,6 @@ public:
 
 	int32_t FindSubEntryPoint(uint16_t relativeAddress);
 	
-	static bool HasInputOverride(uint8_t port);
-	static uint32_t GetInputOverride(uint8_t port);
 	void SetInputOverride(uint8_t port, uint32_t state);
 
 	int32_t LoadScript(string name, string content, int32_t scriptId);
@@ -248,4 +248,6 @@ public:
 	void ProcessCpuOperation(uint16_t &addr, uint8_t &value, MemoryOperationType type);
 	void ProcessPpuOperation(uint16_t addr, uint8_t &value, MemoryOperationType type);
 	void ProcessEvent(EventType type);
+
+	void GetPpuRegisterWriteData(uint32_t* pictureBuffer, PpuRegisterWriteInfo *infoArray);
 };

@@ -170,6 +170,7 @@ class PPU : public IMemoryHandler, public Snapshotable
 		void Reset();
 
 		void DebugSendFrame();
+		void DebugCopyOutputBuffer(uint16_t *target);
 		PPUDebugState GetState();
 		void SetState(PPUDebugState state);
 

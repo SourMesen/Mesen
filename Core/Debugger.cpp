@@ -417,8 +417,12 @@ void Debugger::PrivateProcessPpuCycle()
 	if(PPU::GetCurrentCycle() == (uint32_t)_ppuViewerCycle && PPU::GetCurrentScanline() == _ppuViewerScanline) {
 		MessageManager::SendNotification(ConsoleNotificationType::PpuViewerDisplayFrame);
 	} 
-	if(PPU::GetCurrentCycle() == 0 && PPU::GetCurrentScanline() == 241) {
-		ProcessEvent(EventType::EndFrame);
+	if(PPU::GetCurrentCycle() == 0) {
+		if(PPU::GetCurrentScanline() == 241) {
+			ProcessEvent(EventType::EndFrame);
+		} else if(PPU::GetCurrentScanline() == 0) {
+			ProcessEvent(EventType::StartFrame);
+		}
 	}
 	
 	OperationInfo operationInfo { 0, 0, MemoryOperationType::DummyRead };
@@ -603,6 +607,10 @@ bool Debugger::PrivateProcessRamOperation(MemoryOperationType type, uint16_t &ad
 	if(type == MemoryOperationType::Write) {
 		if(_frozenAddresses[addr]) {
 			return false;
+		}
+
+		if(addr >= 0x2000 && addr <= 0x3FFF) {
+			_ppuRegisterWrites.push_back({ (uint8_t)(addr & 0x07), value, (uint16_t)_ppu->GetCurrentCycle(), (int16_t)_ppu->GetCurrentScanline() });
 		}
 	}
 
@@ -1261,5 +1269,26 @@ void Debugger::ProcessEvent(EventType type)
 		}
 	} else if(type == EventType::EndFrame) {
 		_memoryDumper->GatherChrPaletteInfo();
+	} else if(type == EventType::StartFrame) {
+		_ppuRegisterWrites.clear();
 	}
+}
+
+void Debugger::GetPpuRegisterWriteData(uint32_t* pictureBuffer, PpuRegisterWriteInfo *infoArray)
+{
+	DebugBreakHelper helper(this);
+
+	uint16_t *buffer = new uint16_t[PPU::PixelCount];
+	uint32_t *palette = EmulationSettings::GetRgbPalette();
+	_ppu->DebugCopyOutputBuffer(buffer);
+
+	for(int i = 0; i < PPU::PixelCount; i++) {
+		pictureBuffer[i] = palette[buffer[i] & 0x3F];
+	}
+
+	size_t j;
+	for(j = 0; j < _ppuRegisterWrites.size() && j < 999; j++) {
+		infoArray[j] = _ppuRegisterWrites[j];
+	}
+	infoArray[j] = { 0, 0, 0xFFFF, 0 };
 }

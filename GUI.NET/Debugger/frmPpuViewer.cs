@@ -86,6 +86,8 @@ namespace Mesen.GUI.Debugger
 				this.ctrlSpriteViewer.GetData();
 			} else if(_selectedTab == this.tpgPaletteViewer) {
 				this.ctrlPaletteViewer.GetData();
+			} else if(_selectedTab == this.tpgPpuRegisterWriteViewer) {
+				this.ctrlPpuWriteViewer.GetData();
 			}
 		}
 
@@ -100,12 +102,24 @@ namespace Mesen.GUI.Debugger
 				this.ctrlSpriteViewer.RefreshViewer();
 			} else if(_selectedTab == this.tpgPaletteViewer) {
 				this.ctrlPaletteViewer.RefreshViewer();
+			} else if(_selectedTab == this.tpgPpuRegisterWriteViewer) {
+				this.ctrlPpuWriteViewer.RefreshViewer();
 			}
+			
+			if(_selectedTab != this.tpgPpuRegisterWriteViewer) {
+				flpRefreshTiming.Visible = true;
+				SetUpdateScanlineCycle((int)nudScanline.Value, (int)nudCycle.Value);
+			} else {
+				flpRefreshTiming.Visible = false;
+				SetUpdateScanlineCycle(260, 340);
+			}
+
 			_refreshing = false;
 		}
 
 		private void mnuRefresh_Click(object sender, EventArgs e)
 		{
+			this.GetData();
 			this.RefreshViewers();
 		}
 		
