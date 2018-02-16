@@ -46,10 +46,16 @@ void BaseVideoFilter::OnBeforeApplyFilter()
 {
 }
 
-void BaseVideoFilter::SendFrame(uint16_t *ppuOutputBuffer)
+bool BaseVideoFilter::IsOddFrame()
+{
+	return _isOddFrame;
+}
+
+void BaseVideoFilter::SendFrame(uint16_t *ppuOutputBuffer, bool isOddFrame)
 {
 	_frameLock.Acquire();
 	_overscan = EmulationSettings::GetOverscanDimensions();
+	_isOddFrame = isOddFrame;
 	UpdateBufferSize();
 	OnBeforeApplyFilter();
 	ApplyFilter(ppuOutputBuffer);

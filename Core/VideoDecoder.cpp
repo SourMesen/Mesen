@@ -109,7 +109,7 @@ void VideoDecoder::DecodeFrame(bool synchronous)
 	if(_hdFilterEnabled) {
 		((HdVideoFilter*)_videoFilter.get())->SetHdScreenTiles(_hdScreenTiles);
 	}
-	_videoFilter->SendFrame(_ppuOutputBuffer);
+	_videoFilter->SendFrame(_ppuOutputBuffer, _isOddFrame);
 
 	uint32_t* outputBuffer = (uint32_t*)_videoFilter->GetOutputBuffer();
 	FrameInfo frameInfo = _videoFilter->GetFrameInfo();
@@ -167,6 +167,7 @@ uint32_t VideoDecoder::GetFrameCount()
 
 void VideoDecoder::UpdateFrameSync(void *ppuOutputBuffer, HdPpuPixelInfo *hdPixelInfo)
 {
+	_isOddFrame = (PPU::GetFrameCount() & 0x01) == 0x01;
 	_hdScreenTiles = hdPixelInfo;
 	_ppuOutputBuffer = (uint16_t*)ppuOutputBuffer;
 	DecodeFrame(true);
@@ -182,7 +183,8 @@ void VideoDecoder::UpdateFrame(void *ppuOutputBuffer, HdPpuPixelInfo *hdPixelInf
 		}
 		//At this point, we are sure that the decode thread is no longer busy
 	}
-
+	
+	_isOddFrame = (PPU::GetFrameCount() & 0x01) == 0x01;
 	_hdScreenTiles = hdPixelInfo;
 	_ppuOutputBuffer = (uint16_t*)ppuOutputBuffer;
 	_frameChanged = true;

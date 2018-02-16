@@ -21,7 +21,6 @@ private:
 	bool _keepVerticalRes = false;
 
 	int _resDivider = 1;
-	bool _isOddFrame = false;
 	uint16_t *_ppuOutputBuffer = nullptr;
 	
 	/* Ywidth, Iwidth and Qwidth are the filter widths for Y,I,Q respectively.

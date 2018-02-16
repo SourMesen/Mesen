@@ -48,7 +48,7 @@ BisqwitNtscFilter::BisqwitNtscFilter(int resDivider)
 				outputBuffer += GetOverscan().GetScreenWidth() * 64 / _resDivider / _resDivider * (120 - GetOverscan().Top);
 			}
 
-			DecodeFrame(120, 239 - GetOverscan().Bottom, _ppuOutputBuffer, outputBuffer, (_isOddFrame ? 8 : 0) + 327360);
+			DecodeFrame(120, 239 - GetOverscan().Bottom, _ppuOutputBuffer, outputBuffer, (IsOddFrame() ? 8 : 0) + 327360);
 
 			_workDone = true;
 		}
@@ -64,12 +64,11 @@ BisqwitNtscFilter::~BisqwitNtscFilter()
 
 void BisqwitNtscFilter::ApplyFilter(uint16_t *ppuOutputBuffer)
 {
-	_isOddFrame = !_isOddFrame;
 	_ppuOutputBuffer = ppuOutputBuffer;
 
 	_workDone = false;
 	_waitWork.Signal();
-	DecodeFrame(GetOverscan().Top, 120, ppuOutputBuffer, (uint32_t*)GetOutputBuffer(), (_isOddFrame ? 8 : 0) + GetOverscan().Top*341*8);
+	DecodeFrame(GetOverscan().Top, 120, ppuOutputBuffer, (uint32_t*)GetOutputBuffer(), (IsOddFrame() ? 8 : 0) + GetOverscan().Top*341*8);
 	while(!_workDone) {}
 }
 

@@ -12,19 +12,21 @@ private:
 	uint32_t _bufferSize = 0;
 	SimpleLock _frameLock;
 	OverscanDimensions _overscan;
+	bool _isOddFrame;
 
 	void UpdateBufferSize();
 
 protected:
 	virtual void ApplyFilter(uint16_t *ppuOutputBuffer) = 0;
 	virtual void OnBeforeApplyFilter();
+	bool IsOddFrame();
 
 public:
 	BaseVideoFilter();
 	virtual ~BaseVideoFilter();
 
 	uint8_t* GetOutputBuffer();
-	void SendFrame(uint16_t *ppuOutputBuffer);
+	void SendFrame(uint16_t *ppuOutputBuffer, bool isOddFrame);
 	void TakeScreenshot(VideoFilterType filterType);
 	void TakeScreenshot(VideoFilterType filterType, string filename, std::stringstream *stream = nullptr);
 
