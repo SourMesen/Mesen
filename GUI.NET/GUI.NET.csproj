@@ -1091,6 +1091,11 @@
     <Compile Include="ResourceManager.cs" />
     <Compile Include="RuntimeChecker.cs" />
     <Compile Include="SingleInstance.cs" />
+    <None Include="Resources\NavigateBack.png" />
+    <None Include="Resources\NavigateForward.png" />
+    <None Include="Resources\RunPpuFrame.png" />
+    <None Include="Resources\RunPpuCycle.png" />
+    <None Include="Resources\RunPpuScanline.png" />
     <None Include="Resources\Tape.png" />
     <None Include="Resources\DownArrowWin10.png" />
     <None Include="app.manifest" />

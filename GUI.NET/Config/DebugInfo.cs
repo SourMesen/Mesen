@@ -118,6 +118,8 @@ namespace Mesen.GUI.Config
 		public bool ShowCodePreview = true;
 		public bool ShowOpCodeTooltips = true;
 
+		public bool ShowToolbar = true;
+
 		public bool ShowCpuMemoryMapping = true;
 		public bool ShowPpuMemoryMapping = true;
 

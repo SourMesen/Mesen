@@ -370,7 +370,7 @@
 			// 
 			// mnuNavigateBackward
 			// 
-			this.mnuNavigateBackward.Image = global::Mesen.GUI.Properties.Resources.PreviousArrow;
+			this.mnuNavigateBackward.Image = global::Mesen.GUI.Properties.Resources.NavigateBack;
 			this.mnuNavigateBackward.Name = "mnuNavigateBackward";
 			this.mnuNavigateBackward.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.Left)));
 			this.mnuNavigateBackward.Size = new System.Drawing.Size(258, 22);
@@ -379,7 +379,7 @@
 			// 
 			// mnuNavigateForward
 			// 
-			this.mnuNavigateForward.Image = global::Mesen.GUI.Properties.Resources.NextArrow;
+			this.mnuNavigateForward.Image = global::Mesen.GUI.Properties.Resources.NavigateForward;
 			this.mnuNavigateForward.Name = "mnuNavigateForward";
 			this.mnuNavigateForward.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.Right)));
 			this.mnuNavigateForward.Size = new System.Drawing.Size(258, 22);

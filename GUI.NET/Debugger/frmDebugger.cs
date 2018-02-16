@@ -49,6 +49,8 @@ namespace Mesen.GUI.Debugger
 			BreakpointManager.BreakpointsChanged += BreakpointManager_BreakpointsChanged;
 			ctrlProfiler.OnFunctionSelected += ctrlProfiler_OnFunctionSelected;
 
+			this.InitToolbar();
+
 			this.UpdateWorkspace();
 			this.AutoLoadCdlFiles();
 			this.AutoLoadDbgFiles(true);
@@ -57,6 +59,7 @@ namespace Mesen.GUI.Debugger
 			this.mnuPpuPartialDraw.Checked = ConfigManager.Config.DebugInfo.PpuPartialDraw;
 			this.mnuShowEffectiveAddresses.Checked = ConfigManager.Config.DebugInfo.ShowEffectiveAddresses;
 			this.mnuShowCodePreview.Checked = ConfigManager.Config.DebugInfo.ShowCodePreview;
+			this.mnuShowToolbar.Checked = ConfigManager.Config.DebugInfo.ShowToolbar;
 			this.mnuShowCpuMemoryMapping.Checked = ConfigManager.Config.DebugInfo.ShowCpuMemoryMapping;
 			this.mnuShowPpuMemoryMapping.Checked = ConfigManager.Config.DebugInfo.ShowPpuMemoryMapping;
 			this.mnuAutoLoadDbgFiles.Checked = ConfigManager.Config.DebugInfo.AutoLoadDbgFiles;
@@ -84,6 +87,7 @@ namespace Mesen.GUI.Debugger
 				this.Height = ConfigManager.Config.DebugInfo.WindowHeight;
 			}
 
+			tsToolbar.Visible = mnuShowToolbar.Checked;
 			ctrlCpuMemoryMapping.Visible = mnuShowCpuMemoryMapping.Checked;
 			ctrlPpuMemoryMapping.Visible = mnuShowPpuMemoryMapping.Checked;
 
@@ -137,7 +141,45 @@ namespace Mesen.GUI.Debugger
 
 			UpdateDebuggerFlags();
 			UpdateCdlRatios();
+			UpdateFileOptions();
+
 			tmrCdlRatios.Start();
+		}
+
+		private void InitToolbar()
+		{
+			AddItemsToToolbar(
+				mnuSaveRom, mnuRevertChanges, null,
+				mnuImportLabels, mnuExportLabels, null,
+				mnuContinue, mnuBreak, null,
+				mnuStepInto, mnuStepOver, mnuStepOut, mnuStepBack, null,
+				mnuRunPpuCycle, mnuRunScanline, mnuRunOneFrame, null,
+				mnuToggleBreakpoint, mnuDisableEnableBreakpoint, null,
+				mnuFind, mnuFindPrev, mnuFindNext, null,
+				mnuApuViewer, mnuAssembler, mnuMemoryViewer, mnuPpuViewer, mnuScriptWindow, mnuTraceLogger, null,
+				mnuEditHeader, null,
+				mnuBreakIn
+			);
+		}
+
+		private void AddItemsToToolbar(params ToolStripMenuItem[] items)
+		{
+			foreach(ToolStripMenuItem item in items) {
+				if(item == null) {
+					tsToolbar.Items.Add("-");
+				} else {
+					ToolStripButton newItem = new ToolStripButton(item.Image);
+					if(item.Image == null) {
+						newItem.Text = item.Text;
+					}
+					newItem.ToolTipText = item.Text + (item.ShortcutKeys != Keys.None ? $" ({new KeysConverter().ConvertToString(item.ShortcutKeys)})" : "");
+					newItem.Click += (s, e) => item.PerformClick();
+					newItem.Enabled = item.Enabled;
+					item.EnabledChanged += (s, e) => newItem.Enabled = item.Enabled;
+					item.VisibleChanged += (s, e) => newItem.Visible = item.Visible;
+					tsToolbar.Items.Add(newItem);
+				}
+			}
 		}
 
 		protected override void OnActivated(EventArgs e)
@@ -263,7 +305,11 @@ namespace Mesen.GUI.Debugger
 					break;
 
 				case InteropEmu.ConsoleNotificationType.CodeBreak:
-					this.BeginInvoke((MethodInvoker)(() => UpdateDebugger()));
+					this.BeginInvoke((MethodInvoker)(() => {
+						UpdateDebugger();
+						mnuContinue.Enabled = true;
+						mnuBreak.Enabled = false;
+					}));
 					BreakpointManager.SetBreakpoints();
 					break;
 
@@ -394,6 +440,9 @@ namespace Mesen.GUI.Debugger
 		
 		private void ResumeExecution()
 		{
+			mnuContinue.Enabled = false;
+			mnuBreak.Enabled = true;
+
 			ctrlConsoleStatus.ApplyChanges();
 			ClearActiveStatement();
 			UpdateDebuggerFlags();
@@ -682,6 +731,13 @@ namespace Mesen.GUI.Debugger
 			ConfigManager.Config.DebugInfo.ShowEffectiveAddresses = mnuShowEffectiveAddresses.Checked;
 			ConfigManager.ApplyChanges();
 			UpdateDebugger(false);
+		}
+
+		private void mnuShowToolbar_Click(object sender, EventArgs e)
+		{
+			tsToolbar.Visible = mnuShowToolbar.Checked;
+			ConfigManager.Config.DebugInfo.ShowToolbar = mnuShowToolbar.Checked;
+			ConfigManager.ApplyChanges();
 		}
 
 		private void mnuShowCpuMemoryMapping_Click(object sender, EventArgs e)

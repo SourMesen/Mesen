@@ -523,6 +523,26 @@ namespace Mesen.GUI.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap NavigateBack {
+            get {
+                object obj = ResourceManager.GetObject("NavigateBack", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap NavigateForward {
+            get {
+                object obj = ResourceManager.GetObject("NavigateForward", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap NetPlay {
             get {
                 object obj = ResourceManager.GetObject("NetPlay", resourceCulture);
@@ -686,6 +706,36 @@ namespace Mesen.GUI.Properties {
         internal static System.Drawing.Bitmap Reset {
             get {
                 object obj = ResourceManager.GetObject("Reset", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap RunPpuCycle {
+            get {
+                object obj = ResourceManager.GetObject("RunPpuCycle", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap RunPpuFrame {
+            get {
+                object obj = ResourceManager.GetObject("RunPpuFrame", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap RunPpuScanline {
+            get {
+                object obj = ResourceManager.GetObject("RunPpuScanline", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
