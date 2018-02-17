@@ -1475,18 +1475,21 @@ namespace Mesen.GUI
 	public enum DebuggerFlags
 	{
 		None = 0x00,
+
 		PpuPartialDraw = 0x01,
-		ShowEffectiveAddresses = 0x02,
-		DisplayOpCodesInLowerCase = 0x04,
-		BreakOnBrk = 0x08,
-		BreakOnUnofficialOpCode = 0x10,
+		PpuShowPreviousFrame = 0x02,
 
-		DisassembleVerifiedData = 0x20,
-		DisassembleUnidentifiedData = 0x40,
-		ShowVerifiedData = 0x80,
-		ShowUnidentifiedData = 0x100,
+		ShowEffectiveAddresses = 0x04,
+		DisplayOpCodesInLowerCase = 0x08,
+		BreakOnBrk = 0x10,
+		BreakOnUnofficialOpCode = 0x20,
 
-		IgnoreRedundantWrites= 0x200,
+		DisassembleVerifiedData = 0x40,
+		DisassembleUnidentifiedData = 0x80,
+		ShowVerifiedData = 0x100,
+		ShowUnidentifiedData = 0x200,
+
+		IgnoreRedundantWrites = 0x400,
 	}
 
 	public struct InteropRomInfo

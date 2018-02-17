@@ -1269,6 +1269,9 @@ void Debugger::ProcessEvent(EventType type)
 	} else if(type == EventType::EndFrame) {
 		_memoryDumper->GatherChrPaletteInfo();
 	} else if(type == EventType::StartFrame) {
+		if(CheckFlag(DebuggerFlags::PpuPartialDraw)) {
+			_ppu->DebugUpdateFrameBuffer(CheckFlag(DebuggerFlags::PpuShowPreviousFrame));
+		}
 		_ppuRegisterWrites.clear();
 	}
 }

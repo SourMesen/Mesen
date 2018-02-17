@@ -1073,6 +1073,19 @@ void PPU::UpdateApuStatus()
 	}
 }
 
+void PPU::DebugUpdateFrameBuffer(bool toGrayscale)
+{
+	//Clear output buffer for "Draw partial frame" feature
+	if(toGrayscale) {
+		uint16_t *source = (_currentOutputBuffer == _outputBuffers[0]) ? _outputBuffers[1] : _outputBuffers[0];
+		for(int i = 0; i < PPU::PixelCount; i++) {
+			_currentOutputBuffer[i] = source[i] & 0x30;
+		}
+	} else {
+		memset(_currentOutputBuffer, 0, PPU::PixelCount * 2);
+	}
+}
+
 void PPU::Exec()
 {
 	if(_cycle > 339) {
@@ -1095,11 +1108,6 @@ void PPU::Exec()
 		if(_scanline == -1) {
 			_statusFlags.SpriteOverflow = false;
 			_statusFlags.Sprite0Hit = false;
-
-			if(Debugger::IsEnabled()) {
-				//Clear output buffer for "Draw partial frame" feature
-				memset(_currentOutputBuffer, 0, PPU::PixelCount * 2);
-			}
 		} else if(_scanline == 240) {
 			_frameCount++;
 			SendFrame();

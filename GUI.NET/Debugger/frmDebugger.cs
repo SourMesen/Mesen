@@ -57,6 +57,7 @@ namespace Mesen.GUI.Debugger
 
 			this.mnuSplitView.Checked = ConfigManager.Config.DebugInfo.SplitView;
 			this.mnuPpuPartialDraw.Checked = ConfigManager.Config.DebugInfo.PpuPartialDraw;
+			this.mnuPpuShowPreviousFrame.Checked = ConfigManager.Config.DebugInfo.PpuShowPreviousFrame;
 			this.mnuShowEffectiveAddresses.Checked = ConfigManager.Config.DebugInfo.ShowEffectiveAddresses;
 			this.mnuShowCodePreview.Checked = ConfigManager.Config.DebugInfo.ShowCodePreview;
 			this.mnuShowToolbar.Checked = ConfigManager.Config.DebugInfo.ShowToolbar;
@@ -284,6 +285,7 @@ namespace Mesen.GUI.Debugger
 		private void UpdateDebuggerFlags()
 		{
 			SetFlag(DebuggerFlags.PpuPartialDraw, mnuPpuPartialDraw.Checked);
+			SetFlag(DebuggerFlags.PpuShowPreviousFrame, mnuPpuShowPreviousFrame.Checked);
 			SetFlag(DebuggerFlags.ShowEffectiveAddresses, mnuShowEffectiveAddresses.Checked);
 			SetFlag(DebuggerFlags.DisplayOpCodesInLowerCase, mnuDisplayOpCodesInLowerCase.Checked);
 			SetFlag(DebuggerFlags.DisassembleVerifiedData, mnuDisassembleVerifiedData.Checked);
@@ -724,8 +726,15 @@ namespace Mesen.GUI.Debugger
 		{
 			ConfigManager.Config.DebugInfo.PpuPartialDraw = mnuPpuPartialDraw.Checked;
 			ConfigManager.ApplyChanges();
+			mnuPpuShowPreviousFrame.Enabled = mnuPpuPartialDraw.Checked;
 		}
 		
+		private void mnuShowPreviousFrame_Click(object sender, EventArgs e)
+		{
+			ConfigManager.Config.DebugInfo.PpuShowPreviousFrame = mnuPpuShowPreviousFrame.Checked;
+			ConfigManager.ApplyChanges();
+		}
+
 		private void mnuShowEffectiveAddresses_Click(object sender, EventArgs e)
 		{
 			ConfigManager.Config.DebugInfo.ShowEffectiveAddresses = mnuShowEffectiveAddresses.Checked;
