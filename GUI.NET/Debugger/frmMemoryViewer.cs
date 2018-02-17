@@ -542,7 +542,17 @@ namespace Mesen.GUI.Debugger
 				UInt32 endAddress = (UInt32)(hexBox.SelectionStart + (hexBox.SelectionLength == 0 ? 0 : (hexBox.SelectionLength - 1)));
 
 				for(UInt32 i = startAddress; i <= endAddress; i++) {
-					InteropEmu.DebugSetFreezeState((UInt16)i, (bool)mnuFreeze.Tag);
+					InteropEmu.DebugSetFreezeState((UInt16)i, true);
+				}
+			};
+
+			var mnuUnfreeze = new ToolStripMenuItem();
+			mnuUnfreeze.Click += (s, e) => {
+				UInt32 startAddress = (UInt32)hexBox.SelectionStart;
+				UInt32 endAddress = (UInt32)(hexBox.SelectionStart + (hexBox.SelectionLength == 0 ? 0 : (hexBox.SelectionLength - 1)));
+
+				for(UInt32 i = startAddress; i <= endAddress; i++) {
+					InteropEmu.DebugSetFreezeState((UInt16)i, false);
 				}
 			};
 
@@ -564,16 +574,15 @@ namespace Mesen.GUI.Debugger
 
 				if(this._memoryType == DebugMemoryType.CpuMemory) {
 					bool[] freezeState = InteropEmu.DebugGetFreezeState((UInt16)startAddress, (UInt16)(endAddress - startAddress + 1));
-					if(freezeState.All((frozen) => frozen)) {
-						mnuFreeze.Text = $"Unfreeze ({addressRange})";
-						mnuFreeze.Tag = false;
-					} else {
-						mnuFreeze.Text = $"Freeze ({addressRange})";
-						mnuFreeze.Tag = true;
-					}
+					mnuFreeze.Enabled = !freezeState.All((frozen) => frozen);
+					mnuUnfreeze.Enabled = freezeState.Any((frozen) => frozen);
+					mnuFreeze.Text = $"Freeze ({addressRange})";
+					mnuUnfreeze.Text = $"Unfreeze ({addressRange})";
 				} else {
 					mnuFreeze.Text = $"Freeze";
-					mnuFreeze.Tag = false;
+					mnuUnfreeze.Text = $"Unfreeze";
+					mnuFreeze.Enabled = false;
+					mnuUnfreeze.Enabled = false;
 				}
 
 				if(this._memoryType == DebugMemoryType.CpuMemory) {
@@ -615,11 +624,12 @@ namespace Mesen.GUI.Debugger
 				);
 
 				mnuAddWatch.Enabled = this._memoryType == DebugMemoryType.CpuMemory;
-				mnuFreeze.Enabled = this._memoryType == DebugMemoryType.CpuMemory;
 			};
 
 			hexBox.ContextMenuStrip.Items.Insert(0, new ToolStripSeparator());
 			hexBox.ContextMenuStrip.Items.Insert(0, mnuFreeze);
+			hexBox.ContextMenuStrip.Items.Insert(0, mnuUnfreeze);
+			hexBox.ContextMenuStrip.Items.Insert(0, new ToolStripSeparator());
 			hexBox.ContextMenuStrip.Items.Insert(0, mnuEditLabel);
 			hexBox.ContextMenuStrip.Items.Insert(0, mnuEditBreakpoint);
 			hexBox.ContextMenuStrip.Items.Insert(0, mnuAddWatch);
