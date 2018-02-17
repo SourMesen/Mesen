@@ -19,8 +19,11 @@ namespace Mesen.GUI.Debugger
 			InitializeComponent();
 
 			nudCount.Value = ConfigManager.Config.DebugInfo.BreakInCount;
-			radCpuInstructions.Checked = !ConfigManager.Config.DebugInfo.BreakInPpuCycles;
-			radPpuCycles.Checked = ConfigManager.Config.DebugInfo.BreakInPpuCycles;
+			radCpuInstructions.Checked = ConfigManager.Config.DebugInfo.BreakInMetric == BreakInMetric.CpuInstructions;
+			radCpuCycles.Checked = ConfigManager.Config.DebugInfo.BreakInMetric == BreakInMetric.CpuCycles;
+			radPpuCycles.Checked = ConfigManager.Config.DebugInfo.BreakInMetric == BreakInMetric.PpuCycles;
+			radScanlines.Checked = ConfigManager.Config.DebugInfo.BreakInMetric == BreakInMetric.Scanlines;
+			radFrames.Checked = ConfigManager.Config.DebugInfo.BreakInMetric == BreakInMetric.Frames;
 		}
 
 		protected override void OnShown(EventArgs e)
@@ -33,15 +36,24 @@ namespace Mesen.GUI.Debugger
 		{
 			base.OnFormClosed(e);
 			if(this.DialogResult == DialogResult.OK) {
-
+				UInt32 count = (UInt32)nudCount.Value;
+				ConfigManager.Config.DebugInfo.BreakInCount = (int)count;
 				if(radCpuInstructions.Checked) {
-					InteropEmu.DebugStepCycles((UInt32)nudCount.Value);
+					InteropEmu.DebugStep(count);
+					ConfigManager.Config.DebugInfo.BreakInMetric = BreakInMetric.CpuInstructions;
+				} else if(radCpuCycles.Checked) {
+					InteropEmu.DebugStepCycles(count);
+					ConfigManager.Config.DebugInfo.BreakInMetric = BreakInMetric.CpuCycles;
+				} else if(radPpuCycles.Checked) {
+					InteropEmu.DebugPpuStep(count);
+					ConfigManager.Config.DebugInfo.BreakInMetric = BreakInMetric.PpuCycles;
+				} else if(radScanlines.Checked) {
+					InteropEmu.DebugPpuStep(count * 341);
+					ConfigManager.Config.DebugInfo.BreakInMetric = BreakInMetric.Scanlines;
 				} else {
-					InteropEmu.DebugPpuStep((UInt32)nudCount.Value);
+					InteropEmu.DebugPpuStep(count * 89342);
+					ConfigManager.Config.DebugInfo.BreakInMetric = BreakInMetric.Frames;
 				}
-
-				ConfigManager.Config.DebugInfo.BreakInCount = (int)nudCount.Value;
-				ConfigManager.Config.DebugInfo.BreakInPpuCycles = radPpuCycles.Checked;
 				ConfigManager.ApplyChanges();
 			}
 		}

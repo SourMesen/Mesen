@@ -175,7 +175,7 @@ namespace Mesen.GUI.Config
 		public int WindowHeight = -1;
 
 		public int BreakInCount = 1;
-		public bool BreakInPpuCycles = false;
+		public BreakInMetric BreakInMetric = BreakInMetric.CpuCycles;
 
 		public bool FindOccurrencesMatchCase = false;
 		public bool FindOccurrencesMatchWholeWord = false;
@@ -262,6 +262,15 @@ namespace Mesen.GUI.Config
 		Low = 0,
 		Normal = 1,
 		High = 2
+	}
+
+	public enum BreakInMetric
+	{
+		CpuCycles,
+		CpuInstructions,
+		PpuCycles,
+		Scanlines,
+		Frames
 	}
 
 	public class XmlColor
