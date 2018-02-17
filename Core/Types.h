@@ -64,6 +64,15 @@ enum ChrSpecialPage
 	NametableB = 0x7001
 };
 
+enum class MirroringType
+{
+	Horizontal,
+	Vertical,
+	ScreenAOnly,
+	ScreenBOnly,
+	FourScreens
+};
+
 struct CartridgeState
 {
 	uint32_t PrgRomSize;
@@ -82,6 +91,8 @@ struct CartridgeState
 	int32_t WorkRamEnd;
 	int32_t SaveRamStart;
 	int32_t SaveRamEnd;
+
+	MirroringType Mirroring;
 };
 
 struct PPUControlFlags

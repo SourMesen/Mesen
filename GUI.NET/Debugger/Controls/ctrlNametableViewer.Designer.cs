@@ -34,6 +34,7 @@
 			this.mnuShowInChrViewer = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
 			this.mnuCopyHdPack = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuCopyNametableHdPack = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuCopyToClipboard = new System.Windows.Forms.ToolStripMenuItem();
 			this.grpTileInfo = new System.Windows.Forms.GroupBox();
 			this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
@@ -61,7 +62,9 @@
 			this.chkShowTileGrid = new System.Windows.Forms.CheckBox();
 			this.chkShowAttributeGrid = new System.Windows.Forms.CheckBox();
 			this.chkHighlightChrTile = new System.Windows.Forms.CheckBox();
-			this.mnuCopyNametableHdPack = new System.Windows.Forms.ToolStripMenuItem();
+			this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
+			this.lblMirroring = new System.Windows.Forms.Label();
+			this.lblMirroringType = new System.Windows.Forms.Label();
 			this.tableLayoutPanel1.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.picNametable)).BeginInit();
 			this.ctxMenu.SuspendLayout();
@@ -69,6 +72,7 @@
 			this.tableLayoutPanel2.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.picTile)).BeginInit();
 			this.flowLayoutPanel1.SuspendLayout();
+			this.tableLayoutPanel3.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// tableLayoutPanel1
@@ -79,14 +83,16 @@
 			this.tableLayoutPanel1.Controls.Add(this.picNametable, 0, 0);
 			this.tableLayoutPanel1.Controls.Add(this.grpTileInfo, 1, 0);
 			this.tableLayoutPanel1.Controls.Add(this.flowLayoutPanel1, 1, 1);
+			this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanel3, 0, 2);
 			this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
 			this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-			this.tableLayoutPanel1.RowCount = 3;
+			this.tableLayoutPanel1.RowCount = 4;
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this.tableLayoutPanel1.Size = new System.Drawing.Size(697, 486);
+			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+			this.tableLayoutPanel1.Size = new System.Drawing.Size(697, 508);
 			this.tableLayoutPanel1.TabIndex = 2;
 			// 
 			// picNametable
@@ -113,7 +119,7 @@
             this.mnuCopyNametableHdPack,
             this.mnuCopyToClipboard});
 			this.ctxMenu.Name = "ctxMenu";
-			this.ctxMenu.Size = new System.Drawing.Size(261, 120);
+			this.ctxMenu.Size = new System.Drawing.Size(261, 98);
 			this.ctxMenu.Opening += new System.ComponentModel.CancelEventHandler(this.ctxMenu_Opening);
 			// 
 			// mnuShowInChrViewer
@@ -137,6 +143,13 @@
 			this.mnuCopyHdPack.Text = "Copy Tile (HD Pack Format)";
 			this.mnuCopyHdPack.Click += new System.EventHandler(this.mnuCopyHdPack_Click);
 			// 
+			// mnuCopyNametableHdPack
+			// 
+			this.mnuCopyNametableHdPack.Name = "mnuCopyNametableHdPack";
+			this.mnuCopyNametableHdPack.Size = new System.Drawing.Size(260, 22);
+			this.mnuCopyNametableHdPack.Text = "Copy Nametable (HD Pack Format)";
+			this.mnuCopyNametableHdPack.Click += new System.EventHandler(this.mnuCopyNametableHdPack_Click);
+			// 
 			// mnuCopyToClipboard
 			// 
 			this.mnuCopyToClipboard.Image = global::Mesen.GUI.Properties.Resources.Copy;
@@ -150,7 +163,6 @@
 			// 
 			this.grpTileInfo.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
 			this.grpTileInfo.Controls.Add(this.tableLayoutPanel2);
-			this.grpTileInfo.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.grpTileInfo.Location = new System.Drawing.Point(525, 3);
 			this.grpTileInfo.Name = "grpTileInfo";
 			this.grpTileInfo.Size = new System.Drawing.Size(169, 375);
@@ -445,12 +457,41 @@
 			this.chkHighlightChrTile.UseVisualStyleBackColor = true;
 			this.chkHighlightChrTile.Click += new System.EventHandler(this.chkHighlightChrTile_Click);
 			// 
-			// mnuCopyNametableHdPack
+			// tableLayoutPanel3
 			// 
-			this.mnuCopyNametableHdPack.Name = "mnuCopyNametableHdPack";
-			this.mnuCopyNametableHdPack.Size = new System.Drawing.Size(260, 22);
-			this.mnuCopyNametableHdPack.Text = "Copy Nametable (HD Pack Format)";
-			this.mnuCopyNametableHdPack.Click += new System.EventHandler(this.mnuCopyNametableHdPack_Click);
+			this.tableLayoutPanel3.ColumnCount = 3;
+			this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+			this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+			this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+			this.tableLayoutPanel3.Controls.Add(this.lblMirroring, 0, 0);
+			this.tableLayoutPanel3.Controls.Add(this.lblMirroringType, 1, 0);
+			this.tableLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.tableLayoutPanel3.Location = new System.Drawing.Point(0, 490);
+			this.tableLayoutPanel3.Margin = new System.Windows.Forms.Padding(0, 0, 0, 0);
+			this.tableLayoutPanel3.Name = "tableLayoutPanel3";
+			this.tableLayoutPanel3.RowCount = 1;
+			this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+			this.tableLayoutPanel3.Size = new System.Drawing.Size(522, 18);
+			this.tableLayoutPanel3.TabIndex = 6;
+			// 
+			// lblMirroring
+			// 
+			this.lblMirroring.AutoSize = true;
+			this.lblMirroring.Location = new System.Drawing.Point(3, 0);
+			this.lblMirroring.Name = "lblMirroring";
+			this.lblMirroring.Size = new System.Drawing.Size(80, 13);
+			this.lblMirroring.TabIndex = 0;
+			this.lblMirroring.Text = "Mirroring Type: ";
+			// 
+			// lblMirroringType
+			// 
+			this.lblMirroringType.AutoSize = true;
+			this.lblMirroringType.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.lblMirroringType.Location = new System.Drawing.Point(89, 0);
+			this.lblMirroringType.Name = "lblMirroringType";
+			this.lblMirroringType.Size = new System.Drawing.Size(64, 13);
+			this.lblMirroringType.TabIndex = 1;
+			this.lblMirroringType.Text = "Horizontal";
 			// 
 			// ctrlNametableViewer
 			// 
@@ -458,7 +499,7 @@
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.Controls.Add(this.tableLayoutPanel1);
 			this.Name = "ctrlNametableViewer";
-			this.Size = new System.Drawing.Size(697, 486);
+			this.Size = new System.Drawing.Size(697, 508);
 			this.tableLayoutPanel1.ResumeLayout(false);
 			this.tableLayoutPanel1.PerformLayout();
 			((System.ComponentModel.ISupportInitialize)(this.picNametable)).EndInit();
@@ -470,6 +511,8 @@
 			((System.ComponentModel.ISupportInitialize)(this.picTile)).EndInit();
 			this.flowLayoutPanel1.ResumeLayout(false);
 			this.flowLayoutPanel1.PerformLayout();
+			this.tableLayoutPanel3.ResumeLayout(false);
+			this.tableLayoutPanel3.PerformLayout();
 			this.ResumeLayout(false);
 
 		}
@@ -510,5 +553,8 @@
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem1;
 		private System.Windows.Forms.ToolStripMenuItem mnuCopyToClipboard;
 		private System.Windows.Forms.ToolStripMenuItem mnuCopyNametableHdPack;
+		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel3;
+		private System.Windows.Forms.Label lblMirroring;
+		private System.Windows.Forms.Label lblMirroringType;
 	}
 }

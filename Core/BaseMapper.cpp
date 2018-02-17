@@ -1057,6 +1057,8 @@ CartridgeState BaseMapper::GetState()
 {
 	CartridgeState state;
 
+	state.Mirroring = _mirroringType;
+
 	state.PrgRomSize = _prgSize;
 	state.ChrRomSize = _onlyChrRam ? 0 : _chrRomSize;
 	state.ChrRamSize = _chrRamSize;

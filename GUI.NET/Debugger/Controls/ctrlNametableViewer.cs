@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using System.Runtime.InteropServices;
 using Mesen.GUI.Config;
 using Mesen.GUI.Controls;
+using Mesen.GUI.Forms;
 
 namespace Mesen.GUI.Debugger.Controls
 {
@@ -29,6 +30,7 @@ namespace Mesen.GUI.Debugger.Controls
 		private int _yScroll = 0;
 		private int _nametableIndex = 0;
 		private ctrlChrViewer _chrViewer;
+		private DebugState _state = new DebugState();
 
 		public ctrlNametableViewer()
 		{
@@ -51,6 +53,7 @@ namespace Mesen.GUI.Debugger.Controls
 		public void GetData()
 		{
 			InteropEmu.DebugGetPpuScroll(out _xScroll, out _yScroll);
+			InteropEmu.DebugGetState(ref _state);
 
 			for(int i = 0; i < 4; i++) {
 				InteropEmu.DebugGetNametable(i, out _nametablePixelData[i], out _tileData[i], out _attributeData[i]);
@@ -61,9 +64,8 @@ namespace Mesen.GUI.Debugger.Controls
 		{
 			_currentPpuAddress = -1;
 
-			DebugState state = new DebugState();
-			InteropEmu.DebugGetState(ref state);
-			int tileIndexOffset = state.PPU.ControlFlags.BackgroundPatternAddr == 0x1000 ? 256 : 0;
+			int tileIndexOffset = _state.PPU.ControlFlags.BackgroundPatternAddr == 0x1000 ? 256 : 0;
+			lblMirroringType.Text = ResourceHelper.GetEnumText(_state.Cartridge.Mirroring);
 
 			Bitmap target = new Bitmap(512, 480);
 			_nametableImage = new Bitmap(512, 480);

@@ -1123,6 +1123,17 @@ namespace Mesen.GUI
 		public Int32 WorkRamEnd;
 		public Int32 SaveRamStart;
 		public Int32 SaveRamEnd;
+
+		public MirroringType Mirroring;
+	}
+
+	public enum MirroringType
+	{
+		Horizontal,
+		Vertical,
+		ScreenAOnly,
+		ScreenBOnly,
+		FourScreens
 	}
 
 	public struct PPUDebugState

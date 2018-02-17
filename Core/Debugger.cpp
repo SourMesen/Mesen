@@ -743,7 +743,7 @@ void Debugger::Step(uint32_t count)
 void Debugger::StepCycles(uint32_t count)
 {
 	//Run CPU for [count] CYCLES before breaking again
-	PpuStep(count * (_console->GetModel() == NesModel::NTSC ? 3 : 3.2));
+	PpuStep((uint32_t)(count * (_console->GetModel() == NesModel::NTSC ? 3 : 3.2)));
 }
 
 void Debugger::StepOut()

@@ -1,15 +1,7 @@
 #pragma once
 #include "stdafx.h"
 #include <cmath>
-
-enum class MirroringType
-{
-	Horizontal,
-	Vertical,
-	ScreenAOnly,
-	ScreenBOnly,
-	FourScreens
-};
+#include "Types.h"
 
 enum class RomHeaderVersion
 {

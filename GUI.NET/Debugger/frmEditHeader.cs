@@ -194,7 +194,7 @@ namespace Mesen.GUI.Debugger
 			public uint PrgRom;
 			public uint ChrRom;
 
-			public MirroringType Mirroring;
+			public iNesMirroringType Mirroring;
 
 			public TvSystem System;
 			public bool HasTrainer;
@@ -467,12 +467,12 @@ namespace Mesen.GUI.Debugger
 				}
 			}
 
-			public MirroringType GetMirroringType()
+			public iNesMirroringType GetMirroringType()
 			{
 				if((_bytes[6] & 0x08) != 0) {
-					return MirroringType.FourScreens;
+					return iNesMirroringType.FourScreens;
 				} else {
-					return (_bytes[6] & 0x01) != 0 ? MirroringType.Vertical : MirroringType.Horizontal;
+					return (_bytes[6] & 0x01) != 0 ? iNesMirroringType.Vertical : iNesMirroringType.Horizontal;
 				}
 			}
 		}
@@ -484,7 +484,7 @@ namespace Mesen.GUI.Debugger
 			OldiNes = 2
 		}
 
-		private enum MirroringType
+		private enum iNesMirroringType
 		{
 			Horizontal = 0,
 			Vertical = 1,

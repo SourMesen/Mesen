@@ -368,9 +368,16 @@
       <Value ID="VsSystem">VS System</Value>
       <Value ID="Playchoice">Playchoice-10</Value>
     </Enum>
+    <Enum ID="iNesMirroringType">
+      <Value ID="Horizontal">Horizontal</Value>
+      <Value ID="Vertical">Vertical</Value>
+      <Value ID="FourScreens">Four Screens</Value>
+    </Enum>
     <Enum ID="MirroringType">
       <Value ID="Horizontal">Horizontal</Value>
       <Value ID="Vertical">Vertical</Value>
+      <Value ID="ScreenAOnly">Screen A</Value>
+      <Value ID="ScreenBOnly">Screen B</Value>
       <Value ID="FourScreens">Four Screens</Value>
     </Enum>
     <Enum ID="VsPpuType">
