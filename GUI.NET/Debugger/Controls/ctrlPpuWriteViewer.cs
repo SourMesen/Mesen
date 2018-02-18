@@ -28,10 +28,11 @@ namespace Mesen.GUI.Debugger.Controls
 			PpuRegisterWriteInfo[] writeInfoArray;
 			InteropEmu.DebugGetPpuRegisterWriteData(out _pictureData, out writeInfoArray);
 
-			_ppuRegisterWrites.Clear();
+			var writes = new Dictionary<int, PpuRegisterWriteInfo>();
 			for(int i = 0; i < writeInfoArray.Length; i++) {
-				_ppuRegisterWrites[(writeInfoArray[i].Scanline + 1) * 341 + writeInfoArray[i].Cycle] = writeInfoArray[i];
+				writes[(writeInfoArray[i].Scanline + 1) * 341 + writeInfoArray[i].Cycle] = writeInfoArray[i];
 			}
+			_ppuRegisterWrites = writes;
 		}
 
 		public void RefreshViewer()
