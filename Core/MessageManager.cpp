@@ -449,7 +449,7 @@ std::unordered_map<string, string> MessageManager::_ukResources = {
 	{ "VideoRecorderStarted", u8"Запис розпочато to: %1" },
 	{ "VideoRecorderStopped", u8"Запис збережена: %1" },
 
-	{ "Google Диск", u8"Google Drive" },
+	{ "GoogleDrive", u8"Google Диск" },
 	{ "SynchronizationStarted", u8"Синхронізацію розпочато." },
 	{ "SynchronizationFailed", u8"Синхронізація не вдалася." },
 	{ "SynchronizationCompleted", u8"Синхронізація завершена." }
