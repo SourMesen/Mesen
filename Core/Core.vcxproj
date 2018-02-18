@@ -518,6 +518,7 @@
     <ClInclude Include="BattleBox.h" />
     <ClInclude Include="ControlDeviceState.h" />
     <ClInclude Include="FdsSystemActionManager.h" />
+    <ClInclude Include="HdPackConditions.h" />
     <ClInclude Include="IBarcodeReader.h" />
     <ClInclude Include="IBattery.h" />
     <ClInclude Include="IInputProvider.h" />

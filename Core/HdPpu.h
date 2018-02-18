@@ -1,6 +1,7 @@
 #pragma once
 #include "stdafx.h"
 #include "PPU.h"
+#include "CPU.h"
 #include "HdNesPack.h"
 #include "VideoDecoder.h"
 #include "RewindManager.h"
@@ -10,10 +11,11 @@ class ControlManager;
 class HdPpu : public PPU
 {
 private:
-	HdPpuPixelInfo* _screenTileBuffers[2];
-	HdPpuPixelInfo* _screenTiles;
+	HdScreenInfo *_screenInfo[2];
+	HdScreenInfo *_info;
 	bool _isChrRam;
 	uint32_t _version;
+	HdPackData *_hdData = nullptr;
 
 protected:
 	void DrawPixel()
@@ -32,7 +34,7 @@ protected:
 				backgroundColor = (((_state.LowBitShift << _state.XScroll) & 0x8000) >> 15) | (((_state.HighBitShift << _state.XScroll) & 0x8000) >> 14);
 			}
 
-			HdPpuPixelInfo &tileInfo = _screenTiles[bufferOffset];
+			HdPpuPixelInfo &tileInfo = _info->ScreenTiles[bufferOffset];
 
 			tileInfo.Tile.PpuBackgroundColor = ReadPaletteRAM(0);
 			tileInfo.Tile.BgColorIndex = backgroundColor;
@@ -41,6 +43,9 @@ protected:
 			} else {
 				tileInfo.Tile.BgColor = ReadPaletteRAM(lastTile->PaletteOffset + backgroundColor);
 			}
+
+			tileInfo.XScroll = _state.XScroll;
+			tileInfo.TmpVideoRamAddr = _state.TmpVideoRamAddr;
 
 			if(_lastSprite && _flags.SpritesEnabled) {
 				int j = 0;
@@ -62,8 +67,7 @@ protected:
 						} else {
 							tileInfo.Sprite[j].OffsetY = sprite.OffsetY;
 						}
-
-
+						
 						tileInfo.Sprite[j].OffsetX = shift;
 						tileInfo.Sprite[j].HorizontalMirroring = sprite.HorizontalMirror;
 						tileInfo.Sprite[j].VerticalMirroring = sprite.VerticalMirror;
@@ -114,57 +118,50 @@ protected:
 		} else {
 			//"If the current VRAM address points in the range $3F00-$3FFF during forced blanking, the color indicated by this palette location will be shown on screen instead of the backdrop color."
 			pixel = ReadPaletteRAM(_state.VideoRamAddr) | _intensifyColorBits;
-			_screenTiles[bufferOffset].Tile.TileIndex = HdPpuTileInfo::NoTile;
-			_screenTiles[bufferOffset].SpriteCount = 0;
+			_info->ScreenTiles[bufferOffset].Tile.TileIndex = HdPpuTileInfo::NoTile;
+			_info->ScreenTiles[bufferOffset].SpriteCount = 0;
 		}
 	}
 
 public:
-	HdPpu(BaseMapper* mapper, ControlManager* controlManager, uint32_t version) : PPU(mapper, controlManager)
+	HdPpu(BaseMapper* mapper, ControlManager* controlManager, HdPackData* hdData) : PPU(mapper, controlManager)
 	{
 		_isChrRam = !_mapper->HasChrRom();
-		_version = version;
+		_hdData = hdData;
+		_version = _hdData->Version;
 
-		_screenTileBuffers[0] = new HdPpuPixelInfo[256 * 240];
-		_screenTileBuffers[1] = new HdPpuPixelInfo[256 * 240];
-
-		for(int i = 0; i < 256 * 240; i++) {
-			for(int j = 0; j < 2; j++) {
-				_screenTileBuffers[j][i].Tile.BackgroundPriority = false;
-				_screenTileBuffers[j][i].Tile.IsChrRamTile = _isChrRam;
-				_screenTileBuffers[j][i].Tile.HorizontalMirroring = false;
-				_screenTileBuffers[j][i].Tile.VerticalMirroring = false;
-
-				for(int k = 0; k < 4; k++) {
-					_screenTileBuffers[j][i].Sprite[k].IsChrRamTile = _isChrRam;
-				}
-			}
-		}
-
-		_screenTiles = _screenTileBuffers[0];
-
+		_screenInfo[0] = new HdScreenInfo(_isChrRam);
+		_screenInfo[1] = new HdScreenInfo(_isChrRam);
+		
+		_info = _screenInfo[0];
 	}
 
 	~HdPpu()
 	{
-		delete[] _screenTileBuffers[0];
-		delete[] _screenTileBuffers[1];
+		delete _screenInfo[0];
+		delete _screenInfo[1];
 	}
 
 	void SendFrame()
 	{
 		MessageManager::SendNotification(ConsoleNotificationType::PpuFrameDone, _currentOutputBuffer);
 
+		_info->FrameNumber = _frameCount;
+		_info->WatchedAddressValues.clear();
+		for(uint16_t address : _hdData->WatchedMemoryAddresses) {
+			_info->WatchedAddressValues[address] = CPU::DebugReadByte(address);
+		}
+
 #ifdef  LIBRETRO
-		VideoDecoder::GetInstance()->UpdateFrameSync(_currentOutputBuffer, _screenTiles);
+		VideoDecoder::GetInstance()->UpdateFrameSync(_currentOutputBuffer, _info);
 #else
 		if(RewindManager::IsRewinding()) {
-			VideoDecoder::GetInstance()->UpdateFrameSync(_currentOutputBuffer, _screenTiles);
+			VideoDecoder::GetInstance()->UpdateFrameSync(_currentOutputBuffer, _info);
 		} else {
-			VideoDecoder::GetInstance()->UpdateFrame(_currentOutputBuffer, _screenTiles);
+			VideoDecoder::GetInstance()->UpdateFrame(_currentOutputBuffer, _info);
 		}
 		_currentOutputBuffer = (_currentOutputBuffer == _outputBuffers[0]) ? _outputBuffers[1] : _outputBuffers[0];
-		_screenTiles = (_screenTiles == _screenTileBuffers[0]) ? _screenTileBuffers[1] : _screenTileBuffers[0];
+		_info = (_info == _screenInfo[0]) ? _screenInfo[1] : _screenInfo[0];
 #endif
 	}
 };

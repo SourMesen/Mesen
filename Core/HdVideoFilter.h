@@ -3,11 +3,12 @@
 #include "BaseVideoFilter.h"
 
 class HdNesPack;
+struct HdScreenInfo;
 
 class HdVideoFilter : public BaseVideoFilter
 {
 private:
-	HdPpuPixelInfo *_hdScreenTiles = nullptr;
+	HdScreenInfo *_hdScreenInfo = nullptr;
 	unique_ptr<HdNesPack> _hdNesPack = nullptr;
 
 public:
@@ -17,5 +18,5 @@ public:
 	FrameInfo GetFrameInfo() override;
 	OverscanDimensions GetOverscan() override;
 	
-	void SetHdScreenTiles(HdPpuPixelInfo *screenTiles);
+	void SetHdScreenTiles(HdScreenInfo *hdScreenInfo);
 };

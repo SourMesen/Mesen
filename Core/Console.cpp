@@ -157,7 +157,7 @@ bool Console::Initialize(VirtualFile &romFile, VirtualFile &patchFile)
 			BatteryManager::SetSaveEnabled(true);
 			
 			if(_hdData && (!_hdData->Tiles.empty() || !_hdData->Backgrounds.empty())) {
-				_ppu.reset(new HdPpu(_mapper.get(), _controlManager.get(), _hdData->Version));
+				_ppu.reset(new HdPpu(_mapper.get(), _controlManager.get(), _hdData.get()));
 			} else if(std::dynamic_pointer_cast<NsfMapper>(_mapper)) {
 				//Disable most of the PPU for NSFs
 				_ppu.reset(new NsfPpu(_mapper.get(), _controlManager.get()));
@@ -824,7 +824,7 @@ bool Console::UpdateHdPackMode()
 		Instance->_memoryManager->UnregisterIODevice(Instance->_ppu.get());
 		Instance->_ppu.reset();
 		if(_hdData && (!_hdData->Tiles.empty() || !_hdData->Backgrounds.empty())) {
-			_ppu.reset(new HdPpu(_mapper.get(), _controlManager.get(), _hdData->Version));
+			_ppu.reset(new HdPpu(_mapper.get(), _controlManager.get(), _hdData.get()));
 		} else if(std::dynamic_pointer_cast<NsfMapper>(_mapper)) {
 			//Disable most of the PPU for NSFs
 			_ppu.reset(new NsfPpu(_mapper.get(), _controlManager.get()));

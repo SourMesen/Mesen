@@ -1357,6 +1357,9 @@
     <ClInclude Include="MMC3_198.h">
       <Filter>Nes\Mappers\MMC</Filter>
     </ClInclude>
+    <ClInclude Include="HdPackConditions.h">
+      <Filter>HdPacks</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">

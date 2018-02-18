@@ -93,6 +93,9 @@ struct HdPpuPixelInfo
 	HdPpuTileInfo Tile;
 	vector<HdPpuTileInfo> Sprite;
 	int SpriteCount;
+	
+	uint16_t TmpVideoRamAddr;
+	uint8_t XScroll;
 
 	HdPpuPixelInfo()
 	{
@@ -102,131 +105,67 @@ struct HdPpuPixelInfo
 	}
 };
 
-enum class HdPackConditionType
+struct HdScreenInfo
 {
-	TileAtPosition,
-	SpriteAtPosition,
-	TileNearby,
-	SpriteNearby,
-	HorizontalMirroring,
-	VerticalMirroring,
-	BackgroundPriority,
+	HdPpuPixelInfo* ScreenTiles;
+	std::unordered_map<uint32_t, uint8_t> WatchedAddressValues;
+	uint32_t FrameNumber;
+
+	HdScreenInfo(const HdScreenInfo& that) = delete;
+
+	HdScreenInfo(bool isChrRam)
+	{
+		ScreenTiles = new HdPpuPixelInfo[PPU::PixelCount];
+
+		for(int i = 0; i < PPU::PixelCount; i++) {
+			ScreenTiles[i].Tile.BackgroundPriority = false;
+			ScreenTiles[i].Tile.IsChrRamTile = isChrRam;
+			ScreenTiles[i].Tile.HorizontalMirroring = false;
+			ScreenTiles[i].Tile.VerticalMirroring = false;
+
+			for(int j = 0; j < 4; j++) {
+				ScreenTiles[i].Sprite[j].IsChrRamTile = isChrRam;
+			}
+		}
+	}
+
+	~HdScreenInfo()
+	{
+		delete[] ScreenTiles;
+	}
 };
 
 struct HdPackCondition
 {
 	string Name;
-	HdPackConditionType Type;
-	int32_t TileX;
-	int32_t TileY;
-	uint32_t PaletteColors;
-	int32_t TileIndex;
-	uint8_t TileData[16];
-	bool IsBuiltInCondition;
 
-	bool CheckCondition(HdPpuPixelInfo *screenTiles, int x, int y, HdPpuTileInfo* tile)
+	virtual string GetConditionName() = 0;
+	virtual bool IsExcludedFromFile() { return false; }
+	virtual string ToString() = 0;
+
+	void ClearCache()
 	{
-		switch(Type) {
-			case HdPackConditionType::HorizontalMirroring:
-				return tile && tile->HorizontalMirroring;
-			
-			case HdPackConditionType::VerticalMirroring:
-				return tile && tile->VerticalMirroring;
-
-			case HdPackConditionType::BackgroundPriority:
-				return tile && tile->BackgroundPriority;
-
-			case HdPackConditionType::TileAtPosition:
-			case HdPackConditionType::SpriteAtPosition: {
-				int pixelIndex = (TileY << 8) + TileX;
-				if(pixelIndex < 0 || pixelIndex > PPU::PixelCount) {
-					return false;
-				}
-
-				if(Type == HdPackConditionType::TileAtPosition) {
-					HdPpuTileInfo &tile = screenTiles[pixelIndex].Tile;
-					if(TileIndex >= 0) {
-						return tile.PaletteColors == PaletteColors && tile.TileIndex == TileIndex;
-					} else {
-						return tile.PaletteColors == PaletteColors && memcmp(tile.TileData, TileData, sizeof(TileData)) == 0;
-					}
-				} else {
-					for(int i = 0; i < screenTiles[pixelIndex].SpriteCount; i++) {
-						HdPpuTileInfo &tile = screenTiles[pixelIndex].Sprite[i];
-						if(TileIndex >= 0) {
-							if(tile.PaletteColors == PaletteColors && tile.TileIndex == TileIndex) {
-								return true;
-							}
-						} else {
-							if(tile.PaletteColors == PaletteColors && memcmp(tile.TileData, TileData, sizeof(TileData)) == 0) {
-								return true;
-							}
-						}
-					}
-					return false;
-				}
-				break;
-			}
-
-			case HdPackConditionType::TileNearby: 
-			case HdPackConditionType::SpriteNearby: {
-				int pixelIndex = ((y + TileY) << 8) + TileX + x;
-				if(pixelIndex < 0 || pixelIndex > PPU::PixelCount) {
-					return false;
-				}
-
-				if(Type == HdPackConditionType::TileNearby) {
-					HdPpuTileInfo &tile = screenTiles[pixelIndex].Tile;
-					if(TileIndex >= 0) {
-						return tile.TileIndex == TileIndex;
-					} else {
-						return memcmp(tile.TileData, TileData, sizeof(TileData)) == 0;
-					}
-				} else {
-					for(int i = 0; i < screenTiles[pixelIndex].SpriteCount; i++) {
-						HdPpuTileInfo &tile = screenTiles[pixelIndex].Sprite[i];
-						if(TileIndex >= 0) {
-							if(tile.TileIndex == TileIndex) {
-								return true;
-							}
-						} else {
-							if(memcmp(tile.TileData, TileData, sizeof(TileData)) == 0) {
-								return true;
-							}
-						}
-					}
-				}
-				break;
-			}
-		}
-
-		return false;
+		_resultCache = -1;
 	}
 
-	string ToString()
+	bool CheckCondition(HdScreenInfo *screenInfo, int x, int y, HdPpuTileInfo* tile)
 	{
-		stringstream out;
-		out << "<condition>" << Name << ",";
-		switch(Type) {
-			case HdPackConditionType::TileAtPosition: out << "tileAtPosition"; break;
-			case HdPackConditionType::SpriteAtPosition: out << "spriteAtPosition"; break;
-			case HdPackConditionType::TileNearby: out << "tileNearby"; break;
-			case HdPackConditionType::SpriteNearby: out << "spriteNearby"; break;
-		}
-		out << ",";
-		out << TileX << ",";
-		out << TileY << ",";
-		if(TileIndex >= 0) {
-			out << TileIndex << ",";
+		if(_resultCache == -1) {
+			bool result = InternalCheckCondition(screenInfo, x, y, tile);
+			if(_useCache) {
+				_resultCache = result ? 1 : 0;
+			}
+			return result;
 		} else {
-			for(int i = 0; i < 16; i++) {
-				out << HexUtilities::ToHex(TileData[i]);
-			}
+			return (bool)_resultCache;
 		}
-		out << HexUtilities::ToHex(PaletteColors, true);
-		
-		return out.str();
 	}
+
+protected:
+	int8_t _resultCache = -1;
+	bool _useCache = false;
+
+	virtual bool InternalCheckCondition(HdScreenInfo *screenInfo, int x, int y, HdPpuTileInfo* tile) = 0;
 };
 
 struct HdPackTileInfo : public HdTileKey
@@ -244,11 +183,12 @@ struct HdPackTileInfo : public HdTileKey
 	uint32_t ChrBankId;
 
 	vector<HdPackCondition*> Conditions;
+	bool ForceDisableCache;
 
-	bool MatchesCondition(HdPpuPixelInfo *screenTiles, int x, int y, HdPpuTileInfo* tile)
+	bool MatchesCondition(HdScreenInfo *hdScreenInfo, int x, int y, HdPpuTileInfo* tile)
 	{
 		for(HdPackCondition* condition : Conditions) {
-			if(!condition->CheckCondition(screenTiles, x, y, tile)) {
+			if(!condition->CheckCondition(hdScreenInfo, x, y, tile)) {
 				return false;
 			}
 		}
@@ -360,6 +300,8 @@ struct HdBackgroundInfo
 	HdBackgroundFileData* Data;
 	uint8_t Brightness;
 	vector<HdPackCondition*> Conditions;
+	float HorizontalScrollRatio;
+	float VerticalScrollRatio;
 
 	uint32_t* data()
 	{
@@ -394,6 +336,7 @@ struct HdPackData
 	vector<unique_ptr<HdBackgroundFileData>> BackgroundFileData;
 	vector<unique_ptr<HdPackTileInfo>> Tiles;
 	vector<unique_ptr<HdPackCondition>> Conditions;
+	vector<uint16_t> WatchedMemoryAddresses;
 	std::unordered_map<HdTileKey, vector<HdPackTileInfo*>> TileByKey;
 	std::unordered_map<string, string> PatchesByHash;
 	std::unordered_map<int, string> BgmFilesById;
@@ -419,4 +362,6 @@ enum class HdPackOptions
 	None = 0,
 	NoSpriteLimit = 1,
 	AlternateRegisterRange = 2,
+	NoContours = 4,
+	DisableCache = 8,
 };

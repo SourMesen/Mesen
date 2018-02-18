@@ -13,7 +13,7 @@ class ScaleFilter;
 class RotateFilter;
 class IRenderingDevice;
 class VideoHud;
-struct HdPpuPixelInfo;
+struct HdScreenInfo;
 
 struct ScreenSize
 {
@@ -28,7 +28,7 @@ private:
 	static unique_ptr<VideoDecoder> Instance;
 
 	uint16_t *_ppuOutputBuffer = nullptr;
-	HdPpuPixelInfo *_hdScreenTiles = nullptr;
+	HdScreenInfo *_hdScreenInfo = nullptr;
 	bool _hdFilterEnabled = false;
 	bool _isOddFrame = false;
 
@@ -70,8 +70,8 @@ public:
 	FrameInfo GetFrameInfo();
 	void GetScreenSize(ScreenSize &size, bool ignoreScale);
 
-	void UpdateFrameSync(void* frameBuffer, HdPpuPixelInfo *screenTiles = nullptr);
-	void UpdateFrame(void* frameBuffer, HdPpuPixelInfo *screenTiles = nullptr);
+	void UpdateFrameSync(void* frameBuffer, HdScreenInfo *hdScreenInfo = nullptr);
+	void UpdateFrame(void* frameBuffer, HdScreenInfo *hdScreenInfo = nullptr);
 
 	bool IsRunning();
 	void StartThread();

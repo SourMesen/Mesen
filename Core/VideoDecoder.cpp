@@ -10,6 +10,7 @@
 #include "VideoRenderer.h"
 #include "RewindManager.h"
 #include "PPU.h"
+#include "HdData.h"
 #include "HdNesPack.h"
 #include "RotateFilter.h"
 
@@ -72,7 +73,7 @@ void VideoDecoder::UpdateVideoFilter()
 {
 	VideoFilterType newFilter = EmulationSettings::GetVideoFilterType();
 
-	if(_videoFilterType != newFilter || _videoFilter == nullptr || (_hdScreenTiles && !_hdFilterEnabled) || (!_hdScreenTiles && _hdFilterEnabled)) {
+	if(_videoFilterType != newFilter || _videoFilter == nullptr || (_hdScreenInfo && !_hdFilterEnabled) || (!_hdScreenInfo && _hdFilterEnabled)) {
 		_videoFilterType = newFilter;
 		_videoFilter.reset(new DefaultVideoFilter());
 		_scaleFilter.reset();
@@ -87,7 +88,7 @@ void VideoDecoder::UpdateVideoFilter()
 		}
 
 		_hdFilterEnabled = false;
-		if(_hdScreenTiles) {
+		if(_hdScreenInfo) {
 			_videoFilter.reset(new HdVideoFilter());
 			_hdFilterEnabled = true;
 		}
@@ -107,7 +108,7 @@ void VideoDecoder::DecodeFrame(bool synchronous)
 	UpdateVideoFilter();
 
 	if(_hdFilterEnabled) {
-		((HdVideoFilter*)_videoFilter.get())->SetHdScreenTiles(_hdScreenTiles);
+		((HdVideoFilter*)_videoFilter.get())->SetHdScreenTiles(_hdScreenInfo);
 	}
 	_videoFilter->SendFrame(_ppuOutputBuffer, _isOddFrame);
 
@@ -165,16 +166,16 @@ uint32_t VideoDecoder::GetFrameCount()
 	return _frameCount;
 }
 
-void VideoDecoder::UpdateFrameSync(void *ppuOutputBuffer, HdPpuPixelInfo *hdPixelInfo)
+void VideoDecoder::UpdateFrameSync(void *ppuOutputBuffer, HdScreenInfo *hdScreenInfo)
 {
 	_isOddFrame = (PPU::GetFrameCount() & 0x01) == 0x01;
-	_hdScreenTiles = hdPixelInfo;
+	_hdScreenInfo = hdScreenInfo;
 	_ppuOutputBuffer = (uint16_t*)ppuOutputBuffer;
 	DecodeFrame(true);
 	_frameCount++;
 }
 
-void VideoDecoder::UpdateFrame(void *ppuOutputBuffer, HdPpuPixelInfo *hdPixelInfo)
+void VideoDecoder::UpdateFrame(void *ppuOutputBuffer, HdScreenInfo *hdScreenInfo)
 {
 	if(_frameChanged) {
 		//Last frame isn't done decoding yet - sometimes Signal() introduces a 25-30ms delay
@@ -185,7 +186,7 @@ void VideoDecoder::UpdateFrame(void *ppuOutputBuffer, HdPpuPixelInfo *hdPixelInf
 	}
 	
 	_isOddFrame = (PPU::GetFrameCount() & 0x01) == 0x01;
-	_hdScreenTiles = hdPixelInfo;
+	_hdScreenInfo = hdScreenInfo;
 	_ppuOutputBuffer = (uint16_t*)ppuOutputBuffer;
 	_frameChanged = true;
 	_waitForFrame.Signal();
@@ -218,7 +219,7 @@ void VideoDecoder::StopThread()
 		_decodeThread.reset();
 
 		_hud.reset();
-		_hdScreenTiles = nullptr;
+		_hdScreenInfo = nullptr;
 		EmulationSettings::SetPpuModel(PpuModel::Ppu2C02);
 		UpdateVideoFilter();
 		if(_ppuOutputBuffer != nullptr) {

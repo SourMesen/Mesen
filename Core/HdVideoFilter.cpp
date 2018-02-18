@@ -27,24 +27,13 @@ OverscanDimensions HdVideoFilter::GetOverscan()
 	}
 }
 
-void HdVideoFilter::SetHdScreenTiles(HdPpuPixelInfo *screenTiles)
+void HdVideoFilter::SetHdScreenTiles(HdScreenInfo *hdScreenInfo)
 {
-	_hdScreenTiles = screenTiles;
+	_hdScreenInfo = hdScreenInfo;
 }
 
 void HdVideoFilter::ApplyFilter(uint16_t *ppuOutputBuffer)
 {
 	OverscanDimensions overscan = GetOverscan();
-	
-	uint32_t hdScale = _hdNesPack->GetScale();
-	uint32_t screenWidth = overscan.GetScreenWidth() * hdScale;
-
-	_hdNesPack->OnBeforeApplyFilter(_hdScreenTiles);
-	for(uint32_t i = overscan.Top, iMax = 240 - overscan.Bottom; i < iMax; i++) {
-		for(uint32_t j = overscan.Left, jMax = 256 - overscan.Right; j < jMax; j++) {
-			uint32_t bufferIndex = (i - overscan.Top) * screenWidth * hdScale + (j - overscan.Left) * hdScale;
-
-			_hdNesPack->GetPixels(_hdScreenTiles, j, i, _hdScreenTiles[i * 256 + j], (uint32_t*)GetOutputBuffer() + bufferIndex, screenWidth);
-		}
-	}
+	_hdNesPack->Process(_hdScreenInfo, (uint32_t*)GetOutputBuffer(), overscan);
 }

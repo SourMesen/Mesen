@@ -2,6 +2,7 @@
 #include "stdafx.h"
 #include "VirtualFile.h"
 #include "HdPackBuilder.h"
+#include "HdNesPack.h"
 
 HdPackBuilder* HdPackBuilder::_instance = nullptr;
 
@@ -217,7 +218,7 @@ void HdPackBuilder::SaveHdPack()
 	stringstream tileRows;
 	stringstream ss;
 	int pngIndex = 0;
-	ss << "<ver>100" << std::endl;
+	ss << "<ver>" << std::to_string(HdNesPack::CurrentVersion) << std::endl;
 	ss << "<scale>" << _hdData.Scale << std::endl;
 	ss << "<supportedRom>" << Console::GetHashInfo().Sha1Hash << std::endl;
 	if(_flags & HdPackRecordFlags::IgnoreOverscan) {
@@ -327,7 +328,7 @@ void HdPackBuilder::SaveHdPack()
 	savePng(-1);
 
 	for(unique_ptr<HdPackCondition> &condition : _hdData.Conditions) {
-		if(!condition->IsBuiltInCondition) {
+		if(!condition->IsExcludedFromFile()) {
 			ss << condition->ToString() << std::endl;
 		}
 	}

@@ -8,6 +8,10 @@
 #include "../Utilities/PNGHelper.h"
 #include "Console.h"
 #include "HdPackLoader.h"
+#include "HdPackConditions.h"
+#include "HdNesPack.h"
+
+#define checkConstraint(x, y) if(!(x)) { MessageManager::Log(y); return; }
 
 HdPackLoader::HdPackLoader()
 {
@@ -149,6 +153,10 @@ bool HdPackLoader::LoadPack()
 			vector<string> tokens;
 			if(lineContent.substr(0, 5) == "<ver>") {
 				_data->Version = stoi(lineContent.substr(5));
+				if(_data->Version > HdNesPack::CurrentVersion) {
+					MessageManager::Log("[HDPack] This HD Pack was built with a more recent version of Mesen - update Mesen to the latest version and try again.");
+					return false;
+				}
 			} else if(lineContent.substr(0, 7) == "<scale>") {
 				lineContent = lineContent.substr(7);
 				_data->Scale = std::stoi(lineContent);
@@ -210,22 +218,16 @@ bool HdPackLoader::ProcessImgTag(string src)
 
 void HdPackLoader::InitializeGlobalConditions()
 {
-	HdPackCondition* hmirror = new HdPackCondition();
+	HdPackCondition* hmirror = new HdPackHorizontalMirroringCondition();
 	hmirror->Name = "hmirror";
-	hmirror->Type = HdPackConditionType::HorizontalMirroring;
-	hmirror->IsBuiltInCondition = true;
 	_data->Conditions.push_back(unique_ptr<HdPackCondition>(hmirror));
 
-	HdPackCondition* vmirror = new HdPackCondition();
+	HdPackCondition* vmirror = new HdPackVerticalMirroringCondition();
 	vmirror->Name = "vmirror";
-	vmirror->Type = HdPackConditionType::VerticalMirroring;
-	vmirror->IsBuiltInCondition = true;
 	_data->Conditions.push_back(unique_ptr<HdPackCondition>(vmirror));
 
-	HdPackCondition* bgpriority = new HdPackCondition();
+	HdPackCondition* bgpriority = new HdPackBgPriorityCondition();
 	bgpriority->Name = "bgpriority";
-	bgpriority->Type = HdPackConditionType::BackgroundPriority;
-	bgpriority->IsBuiltInCondition = true;
 	_data->Conditions.push_back(unique_ptr<HdPackCondition>(bgpriority));
 }
 
@@ -242,10 +244,9 @@ void HdPackLoader::ProcessOverscanTag(vector<string> &tokens)
 
 void HdPackLoader::ProcessPatchTag(vector<string> &tokens)
 {
-	if(tokens[1].size() != 40) {
-		MessageManager::Log(string("[HDPack] Invalid SHA1 hash for patch (" + tokens[0] + "): " + tokens[1]));
-		return;
-	}
+	checkConstraint(tokens.size() >= 2, "[HDPack] Patch tag requires more parameters");
+	checkConstraint(tokens[1].size() == 40, string("[HDPack] Invalid SHA1 hash for patch (" + tokens[0] + "): " + tokens[1]));
+
 	vector<uint8_t> fileData;
 	if(!LoadFile(tokens[0], fileData)) {
 		MessageManager::Log(string("[HDPack] Patch file not found: " + tokens[1]));
@@ -287,6 +288,19 @@ void HdPackLoader::ProcessTileTag(vector<string> &tokens, vector<HdPackCondition
 	tileInfo->X = std::stoi(tokens[index++]);
 	tileInfo->Y = std::stoi(tokens[index++]);
 	tileInfo->Conditions = conditions;
+	tileInfo->ForceDisableCache = false;
+	for(HdPackCondition* condition : conditions) {
+		if(dynamic_cast<HdPackSpriteNearbyCondition*>(condition)) {
+			tileInfo->ForceDisableCache = true;
+			break;
+		} else if(dynamic_cast<HdPackTileNearbyCondition*>(condition)) {
+			HdPackTileNearbyCondition* tileNearby = dynamic_cast<HdPackTileNearbyCondition*>(condition);
+			if(tileNearby->TileX % 8 > 0 || tileNearby->TileY % 8 > 0) {
+				tileInfo->ForceDisableCache = true;
+				break;
+			}
+		}
+	}
 
 	if(_data->Version > 0) {
 		tileInfo->Brightness = (uint8_t)(std::stof(tokens[index++]) * 255);
@@ -317,10 +331,7 @@ void HdPackLoader::ProcessTileTag(vector<string> &tokens, vector<HdPackCondition
 		}
 	}
 
-	if(tileInfo->BitmapIndex > _hdNesBitmaps.size()) {
-		MessageManager::Log("[HDPack] Invalid bitmap index: " + std::to_string(tileInfo->BitmapIndex));
-		return;
-	}
+	checkConstraint(tileInfo->BitmapIndex < _hdNesBitmaps.size(), "[HDPack] Invalid bitmap index: " + std::to_string(tileInfo->BitmapIndex));
 
 	HdPackBitmapInfo &bitmapInfo = _hdNesBitmaps[tileInfo->BitmapIndex];
 	uint32_t bitmapOffset = tileInfo->Y * bitmapInfo.Width + tileInfo->X;
@@ -345,63 +356,111 @@ void HdPackLoader::ProcessOptionTag(vector<string> &tokens)
 			_data->OptionFlags |= (int)HdPackOptions::NoSpriteLimit;
 		} else if(token == "alternateRegisterRange") {
 			_data->OptionFlags |= (int)HdPackOptions::AlternateRegisterRange;
+		} else if(token == "disableContours") {
+			_data->OptionFlags |= (int)HdPackOptions::NoContours;
+		} else if(token == "disableCache") {
+			_data->OptionFlags |= (int)HdPackOptions::DisableCache;
+		} else {
+			MessageManager::Log("[HDPack] Invalid option: " + token);
 		}
 	}
 }
 
 void HdPackLoader::ProcessConditionTag(vector<string> &tokens)
 {
-	if(tokens.size() < 6) {
-		MessageManager::Log("[HDPack] Invalid condition tag");
-		return;
-	}
+	checkConstraint(tokens.size() >= 4, "[HDPack] Condition tag should contain at least 4 parameters");
 
-	HdPackCondition *condition = new HdPackCondition();
-	tokens[0].erase(tokens[0].find_last_not_of(" \n\r\t") + 1);
-	condition->Name = tokens[0];
+	unique_ptr<HdPackCondition> condition;
 
 	if(tokens[1] == "tileAtPosition") {
-		condition->Type = HdPackConditionType::TileAtPosition;
+		condition.reset(new HdPackTileAtPositionCondition());
 	} else if(tokens[1] == "tileNearby") {
-		condition->Type = HdPackConditionType::TileNearby;
+		condition.reset(new HdPackTileNearbyCondition());
 	} else if(tokens[1] == "spriteAtPosition") {
-		condition->Type = HdPackConditionType::SpriteAtPosition;
+		condition.reset(new HdPackSpriteAtPositionCondition());
 	} else if(tokens[1] == "spriteNearby") {
-		condition->Type = HdPackConditionType::SpriteNearby;
+		condition.reset(new HdPackSpriteNearbyCondition());
+	} else if(tokens[1] == "memoryCheck") {
+		condition.reset(new HdPackMemoryCheckCondition());
+	} else if(tokens[1] == "memoryCheckConstant") {
+		condition.reset(new HdPackMemoryCheckConstantCondition());
+	} else if(tokens[1] == "frameRange") {
+		condition.reset(new HdPackFrameRangeCondition());
 	} else {
 		MessageManager::Log("[HDPack] Invalid condition type: " + tokens[1]);
 		return;
 	}
 
+	tokens[0].erase(tokens[0].find_last_not_of(" \n\r\t") + 1);
+	condition->Name = tokens[0];
+
 	int index = 2;
-	switch(condition->Type) {
-		case HdPackConditionType::TileAtPosition:
-		case HdPackConditionType::SpriteAtPosition:
-		case HdPackConditionType::TileNearby:
-		case HdPackConditionType::SpriteNearby:
-			condition->TileX = std::stoi(tokens[index++]);
-			condition->TileY = std::stoi(tokens[index++]);
-			break;
-	}
+	if(dynamic_cast<HdPackBaseTileCondition*>(condition.get())) {
+		checkConstraint(tokens.size() >= 6, "[HDPack] Condition tag should contain at least 6 parameters");
 
-	string tileData = tokens[index++];
-	if(tileData.size() == 32) {
-		//CHR RAM tile, read the tile data
-		for(int i = 0; i < 16; i++) {
-			condition->TileData[i] = HexUtilities::FromHex(tileData.substr(i * 2, 2));
+		int x = std::stoi(tokens[index++]);
+		int y = std::stoi(tokens[index++]);
+		string token = tokens[index++];
+		int32_t tileIndex = -1;
+		string tileData;
+		if(token.size() == 32) {
+			tileData = token;
+		} else {
+			tileIndex = std::stoi(token);
 		}
-		condition->TileIndex = -1;
-	} else {
-		condition->TileIndex = std::stoi(tileData);
-	}
+		uint32_t palette = HexUtilities::FromHex(tokens[index++]);
 
-	condition->PaletteColors = HexUtilities::FromHex(tokens[index++]);
-	condition->IsBuiltInCondition = false;
-	_data->Conditions.push_back(unique_ptr<HdPackCondition>(condition));
+		((HdPackBaseTileCondition*)condition.get())->Initialize(x, y, palette, tileIndex, tileData);
+	} else if(dynamic_cast<HdPackBaseMemoryCondition*>(condition.get())) {
+		checkConstraint(_data->Version >= 101, "[HDPack] This feature requires version 101+ of HD Packs");
+		checkConstraint(tokens.size() >= 5, "[HDPack] Condition tag should contain at least 5 parameters");
+		
+		int operandA = HexUtilities::FromHex(tokens[index++]);
+		checkConstraint(operandA >= 0 && operandA <= 0xFFFF, "[HDPack] Out of range memoryCheck operand");
+
+		HdPackConditionOperator op;
+		string opString = tokens[index++];
+		if(opString == "==") {
+			op = HdPackConditionOperator::Equal;
+		} else if(opString == "!=") {
+			op = HdPackConditionOperator::NotEqual;
+		} else if(opString == ">") {
+			op = HdPackConditionOperator::GreaterThan;
+		} else if(opString == "<") {
+			op = HdPackConditionOperator::LowerThan;
+		}
+
+		int operandB = HexUtilities::FromHex(tokens[index++]);
+
+		if(dynamic_cast<HdPackMemoryCheckCondition*>(condition.get())) {
+			checkConstraint(operandB >= 0 && operandB <= 0xFFFF, "[HDPack] Out of range memoryCheck operand");
+			_data->WatchedMemoryAddresses.push_back(operandB);
+		} else if(dynamic_cast<HdPackMemoryCheckConstantCondition*>(condition.get())) {
+			checkConstraint(operandB >= 0 && operandB <= 0xFF, "[HDPack] Out of range memoryCheckConstant operand");
+		}
+		_data->WatchedMemoryAddresses.push_back(operandA);		
+		((HdPackBaseMemoryCondition*)condition.get())->Initialize(operandA, op, operandB);
+	} else if(dynamic_cast<HdPackFrameRangeCondition*>(condition.get())) {
+		checkConstraint(_data->Version >= 101, "[HDPack] This feature requires version 101+ of HD Packs");
+		checkConstraint(tokens.size() >= 4, "[HDPack] Condition tag should contain at least 4 parameters");
+
+		int operandA = HexUtilities::FromHex(tokens[index++]);
+		checkConstraint(operandA >= 0 && operandA <= 0xFFFF, "[HDPack] Out of range frameRange operand");
+
+		int operandB = HexUtilities::FromHex(tokens[index++]);
+		checkConstraint(operandB >= 0 && operandB <= 0xFFFF, "[HDPack] Out of range frameRange operand");
+
+		((HdPackFrameRangeCondition*)condition.get())->Initialize(operandA, operandB);
+	}
+	
+	HdPackCondition *cond = condition.get();
+	condition.release();
+	_data->Conditions.emplace_back(unique_ptr<HdPackCondition>(cond));
 }
 
 void HdPackLoader::ProcessBackgroundTag(vector<string> &tokens, vector<HdPackCondition*> conditions)
 {
+	checkConstraint(tokens.size() >= 2, "[HDPack] Background tag should contain at least 2 parameters");
 	HdBackgroundFileData* bgFileData = nullptr;
 	for(unique_ptr<HdBackgroundFileData> &bgData : _data->BackgroundFileData) {
 		if(bgData->PngName == tokens[0]) {
@@ -429,11 +488,30 @@ void HdPackLoader::ProcessBackgroundTag(vector<string> &tokens, vector<HdPackCon
 	if(bgFileData) {
 		backgroundInfo.Data = bgFileData;
 		backgroundInfo.Brightness = (uint8_t)(std::stof(tokens[1]) * 255);
-		backgroundInfo.Conditions = conditions;
+		backgroundInfo.HorizontalScrollRatio = 0;
+		backgroundInfo.VerticalScrollRatio = 0;
 
-		for(HdPackCondition* condition : backgroundInfo.Conditions) {
-			if(condition->Type == HdPackConditionType::SpriteNearby || condition->Type == HdPackConditionType::TileNearby) {
+		for(HdPackCondition* condition : conditions) {
+			if(
+				!dynamic_cast<HdPackTileAtPositionCondition*>(condition) &&
+				!dynamic_cast<HdPackSpriteAtPositionCondition*>(condition) &&
+				!dynamic_cast<HdPackMemoryCheckCondition*>(condition) &&
+				!dynamic_cast<HdPackMemoryCheckConstantCondition*>(condition) &&
+				!dynamic_cast<HdPackFrameRangeCondition*>(condition)
+			) {
 				MessageManager::Log("[HDPack] Invalid condition type for background: " + tokens[0]);
+				return;
+			} else {
+				backgroundInfo.Conditions.push_back(condition);
+			}
+		}
+
+		if(tokens.size() > 2) {
+			checkConstraint(_data->Version >= 101, "[HDPack] This feature requires version 101+ of HD Packs");
+
+			backgroundInfo.HorizontalScrollRatio = std::stof(tokens[2]);
+			if(tokens.size() > 3) {
+				backgroundInfo.VerticalScrollRatio = std::stof(tokens[3]);
 			}
 		}
 
@@ -463,7 +541,6 @@ int HdPackLoader::ProcessSoundTrack(string albumString, string trackString, stri
 	}
 
 	return album * 256 + track;
-
 }
 
 void HdPackLoader::ProcessBgmTag(vector<string> &tokens)
