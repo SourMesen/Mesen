@@ -75,8 +75,8 @@ namespace Mesen.GUI.Debugger.Controls
 		private frmCodeTooltip _tooltip = null;
 		private void picPicture_MouseMove(object sender, MouseEventArgs e)
 		{
-			int cycle = e.X * 341 / picPicture.Image.Width;
-			int scanline = e.Y * 262 / picPicture.Image.Height;
+			int cycle = e.X * 341 / (picPicture.Width - 2);
+			int scanline = e.Y * 262 / (picPicture.Height - 2);
 			if(scanline == 261) {
 				scanline = -1;
 			}
