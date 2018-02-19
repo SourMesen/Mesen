@@ -126,9 +126,7 @@ namespace Mesen.GUI.Debugger
 		{
 			List<InteropBreakpoint> breakpoints = new List<InteropBreakpoint>();
 			foreach(Breakpoint bp in Breakpoints) {
-				if(bp.Enabled) {
-					breakpoints.Add(bp.ToInteropBreakpoint());
-				}
+				breakpoints.Add(bp.ToInteropBreakpoint());
 			}
 			InteropEmu.DebugSetBreakpoints(breakpoints.ToArray(), (UInt32)breakpoints.Count);
 		}

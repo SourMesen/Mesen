@@ -57,6 +57,7 @@
 			this.label1 = new System.Windows.Forms.Label();
 			this.lblCondition = new System.Windows.Forms.Label();
 			this.chkEnabled = new System.Windows.Forms.CheckBox();
+			this.chkMarkOnEventViewer = new System.Windows.Forms.CheckBox();
 			this.baseConfigPanel.SuspendLayout();
 			this.tableLayoutPanel1.SuspendLayout();
 			this.flowLayoutPanel2.SuspendLayout();
@@ -72,8 +73,8 @@
 			// baseConfigPanel
 			// 
 			this.baseConfigPanel.Controls.Add(this.chkEnabled);
-			this.baseConfigPanel.Location = new System.Drawing.Point(0, 193);
-			this.baseConfigPanel.Size = new System.Drawing.Size(423, 29);
+			this.baseConfigPanel.Location = new System.Drawing.Point(0, 212);
+			this.baseConfigPanel.Size = new System.Drawing.Size(426, 29);
 			this.baseConfigPanel.Controls.SetChildIndex(this.chkEnabled, 0);
 			// 
 			// tableLayoutPanel1
@@ -81,6 +82,7 @@
 			this.tableLayoutPanel1.ColumnCount = 2;
 			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
 			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+			this.tableLayoutPanel1.Controls.Add(this.chkMarkOnEventViewer, 0, 5);
 			this.tableLayoutPanel1.Controls.Add(this.lblBreakpointType, 0, 0);
 			this.tableLayoutPanel1.Controls.Add(this.flowLayoutPanel2, 1, 1);
 			this.tableLayoutPanel1.Controls.Add(this.lblBreakOn, 0, 1);
@@ -99,7 +101,7 @@
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this.tableLayoutPanel1.Size = new System.Drawing.Size(423, 222);
+			this.tableLayoutPanel1.Size = new System.Drawing.Size(426, 241);
 			this.tableLayoutPanel1.TabIndex = 2;
 			// 
 			// lblBreakpointType
@@ -122,7 +124,7 @@
 			this.flowLayoutPanel2.Location = new System.Drawing.Point(94, 25);
 			this.flowLayoutPanel2.Margin = new System.Windows.Forms.Padding(0);
 			this.flowLayoutPanel2.Name = "flowLayoutPanel2";
-			this.flowLayoutPanel2.Size = new System.Drawing.Size(329, 23);
+			this.flowLayoutPanel2.Size = new System.Drawing.Size(332, 23);
 			this.flowLayoutPanel2.TabIndex = 4;
 			// 
 			// chkRead
@@ -387,11 +389,12 @@
 			this.tableLayoutPanel4.Name = "tableLayoutPanel4";
 			this.tableLayoutPanel4.RowCount = 1;
 			this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel4.Size = new System.Drawing.Size(329, 25);
+			this.tableLayoutPanel4.Size = new System.Drawing.Size(332, 25);
 			this.tableLayoutPanel4.TabIndex = 13;
 			// 
 			// cboBreakpointType
 			// 
+			this.cboBreakpointType.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
 			this.cboBreakpointType.FormattingEnabled = true;
 			this.cboBreakpointType.Location = new System.Drawing.Point(3, 3);
 			this.cboBreakpointType.Name = "cboBreakpointType";
@@ -451,16 +454,28 @@
 			this.chkEnabled.AutoSize = true;
 			this.chkEnabled.Location = new System.Drawing.Point(6, 7);
 			this.chkEnabled.Name = "chkEnabled";
-			this.chkEnabled.Size = new System.Drawing.Size(119, 17);
+			this.chkEnabled.Size = new System.Drawing.Size(104, 17);
 			this.chkEnabled.TabIndex = 2;
-			this.chkEnabled.Text = "Breakpoint Enabled";
+			this.chkEnabled.Text = "Break Execution";
 			this.chkEnabled.UseVisualStyleBackColor = true;
+			// 
+			// chkMarkOnEventViewer
+			// 
+			this.chkMarkOnEventViewer.AutoSize = true;
+			this.tableLayoutPanel1.SetColumnSpan(this.chkMarkOnEventViewer, 2);
+			this.chkMarkOnEventViewer.Location = new System.Drawing.Point(6, 194);
+			this.chkMarkOnEventViewer.Margin = new System.Windows.Forms.Padding(6, 6, 3, 3);
+			this.chkMarkOnEventViewer.Name = "chkMarkOnEventViewer";
+			this.chkMarkOnEventViewer.Size = new System.Drawing.Size(131, 17);
+			this.chkMarkOnEventViewer.TabIndex = 15;
+			this.chkMarkOnEventViewer.Text = "Mark on Event Viewer";
+			this.chkMarkOnEventViewer.UseVisualStyleBackColor = true;
 			// 
 			// frmBreakpoint
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(423, 222);
+			this.ClientSize = new System.Drawing.Size(426, 241);
 			this.Controls.Add(this.tableLayoutPanel1);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
 			this.Name = "frmBreakpoint";
@@ -522,5 +537,6 @@
 		private System.Windows.Forms.Label lblRange;
 		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel6;
 		private System.Windows.Forms.Label label1;
+		private System.Windows.Forms.CheckBox chkMarkOnEventViewer;
 	}
 }

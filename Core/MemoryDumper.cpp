@@ -223,7 +223,9 @@ void MemoryDumper::GetNametable(int nametableIndex, uint32_t* frameBuffer, uint8
 {
 	shared_ptr<MMC5> mmc5 = std::dynamic_pointer_cast<MMC5>(_mapper);
 	uint32_t *rgbPalette = EmulationSettings::GetRgbPalette();
-	uint16_t bgAddr = _ppu->GetState().ControlFlags.BackgroundPatternAddr;
+	PPUDebugState state;
+	_ppu->GetState(state);
+	uint16_t bgAddr = state.ControlFlags.BackgroundPatternAddr;
 	uint16_t baseAddr = 0x2000 + nametableIndex * 0x400;
 	uint16_t baseAttributeAddr = baseAddr + 960;
 	for(uint8_t y = 0; y < 30; y++) {
@@ -263,7 +265,10 @@ void MemoryDumper::GetNametable(int nametableIndex, uint32_t* frameBuffer, uint8
 void MemoryDumper::GatherChrPaletteInfo()
 {
 	shared_ptr<MMC5> mmc5 = std::dynamic_pointer_cast<MMC5>(_mapper);
-	uint16_t bgAddr = _ppu->GetState().ControlFlags.BackgroundPatternAddr;
+	PPUDebugState state;
+	_ppu->GetState(state);
+
+	uint16_t bgAddr = state.ControlFlags.BackgroundPatternAddr;
 
 	uint32_t palettes[8];
 	for(int i = 0; i < 8; i++) {
@@ -321,8 +326,8 @@ void MemoryDumper::GatherChrPaletteInfo()
 
 	//Sprites - Check all sprites palettes
 	uint8_t *spriteRam = _ppu->GetSpriteRam();
-	uint16_t spriteAddr = _ppu->GetState().ControlFlags.SpritePatternAddr;
-	bool largeSprites = _ppu->GetState().ControlFlags.LargeSprites;
+	uint16_t spriteAddr = state.ControlFlags.SpritePatternAddr;
+	bool largeSprites = state.ControlFlags.LargeSprites;
 	for(uint8_t y = 0; y < 8; y++) {
 		for(uint8_t x = 0; x < 8; x++) {
 			uint8_t ramAddr = ((y << 3) + x) << 2;
@@ -440,8 +445,11 @@ void MemoryDumper::GetSprites(uint32_t* frameBuffer)
 	uint8_t *spriteRam = _ppu->GetSpriteRam();
 	uint32_t *rgbPalette = EmulationSettings::GetRgbPalette();
 
-	uint16_t spriteAddr = _ppu->GetState().ControlFlags.SpritePatternAddr;
-	bool largeSprites = _ppu->GetState().ControlFlags.LargeSprites;
+	PPUDebugState state;
+	_ppu->GetState(state);
+
+	uint16_t spriteAddr = state.ControlFlags.SpritePatternAddr;
+	bool largeSprites = state.ControlFlags.LargeSprites;
 
 	for(uint8_t y = 0; y < 8; y++) {
 		for(uint8_t x = 0; x < 8; x++) {

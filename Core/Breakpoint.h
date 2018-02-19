@@ -35,11 +35,16 @@ public:
 	string GetCondition();
 	bool HasCondition();
 	void ClearCondition();
+
+	bool IsEnabled();
+	bool IsMarked();
 	
 private:
 	DebugMemoryType _memoryType;
 	BreakpointTypeFlags _type;
 	int32_t _startAddr;
 	int32_t _endAddr;
+	bool _enabled;
+	bool _markEvent;
 	char _condition[1000];
 };

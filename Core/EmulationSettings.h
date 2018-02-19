@@ -470,6 +470,7 @@ enum class EmulatorShortcut
 	OpenScriptWindow,
 	OpenTraceLogger,
 	OpenApuViewer,
+	OpenEventViewer,
 	ShortcutCount
 };
 

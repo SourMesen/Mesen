@@ -21,6 +21,7 @@ enum class ConsoleNotificationType
 	PpuViewerDisplayFrame = 15,
 	ExecuteShortcut = 16,
 	EmulationStopped = 17,
+	EventViewerDisplayFrame = 18,
 };
 
 class INotificationListener

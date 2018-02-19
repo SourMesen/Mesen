@@ -1,6 +1,6 @@
 ﻿namespace Mesen.GUI.Debugger.Controls
 {
-	partial class ctrlPpuWriteViewer
+	partial class ctrlEventViewerPpuView
 	{
 		/// <summary> 
 		/// Required designer variable.
@@ -51,7 +51,7 @@
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.Controls.Add(this.picPicture);
 			this.Name = "ctrlPpuWriteViewer";
-			this.Size = new System.Drawing.Size(686, 560);
+			this.Size = new System.Drawing.Size(686, 530);
 			((System.ComponentModel.ISupportInitialize)(this.picPicture)).EndInit();
 			this.ResumeLayout(false);
 

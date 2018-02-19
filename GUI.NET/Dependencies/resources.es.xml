@@ -847,6 +847,7 @@
     <Message ID="EmulatorShortcutMappings_OpenScriptWindow">Abrir ventana de script</Message>
     <Message ID="EmulatorShortcutMappings_OpenTraceLogger">Abrir trace logger</Message>
     <Message ID="EmulatorShortcutMappings_OpenApuViewer">Abrir visor APU</Message>
+    <Message ID="EmulatorShortcutMappings_OpenEventViewer">Open Event Viewer</Message>
   </Messages>
   <Enums>
     <Enum ID="ControllerType">

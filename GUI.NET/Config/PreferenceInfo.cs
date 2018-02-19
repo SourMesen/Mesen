@@ -127,6 +127,7 @@ namespace Mesen.GUI.Config
 				ShortcutKeys1.Add(new ShortcutKeyInfo(EmulatorShortcut.OpenScriptWindow, new KeyCombination() { Key1 = InteropEmu.GetKeyCode("Ctrl"), Key2 = InteropEmu.GetKeyCode("J") }));
 				ShortcutKeys1.Add(new ShortcutKeyInfo(EmulatorShortcut.OpenTraceLogger, new KeyCombination() { Key1 = InteropEmu.GetKeyCode("Ctrl"), Key2 = InteropEmu.GetKeyCode("N") }));
 				ShortcutKeys1.Add(new ShortcutKeyInfo(EmulatorShortcut.OpenApuViewer, new KeyCombination() { Key1 = InteropEmu.GetKeyCode("Ctrl"), Key2 = InteropEmu.GetKeyCode("U") }));
+				ShortcutKeys1.Add(new ShortcutKeyInfo(EmulatorShortcut.OpenEventViewer, new KeyCombination() { Key1 = InteropEmu.GetKeyCode("Ctrl"), Key2 = InteropEmu.GetKeyCode("E") }));
 
 				ShortcutKeys1.Add(new ShortcutKeyInfo(EmulatorShortcut.OpenFile, new KeyCombination() { Key1 = InteropEmu.GetKeyCode("Ctrl"), Key2 = InteropEmu.GetKeyCode("O") }));
 

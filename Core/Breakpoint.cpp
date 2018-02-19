@@ -91,3 +91,13 @@ void Breakpoint::ClearCondition()
 {
 	memset(_condition, 0, sizeof(_condition));
 }
+
+bool Breakpoint::IsEnabled()
+{
+	return _enabled;
+}
+
+bool Breakpoint::IsMarked()
+{
+	return _markEvent;
+}

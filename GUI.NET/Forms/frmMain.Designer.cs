@@ -185,6 +185,7 @@ namespace Mesen.GUI.Forms
 			this.mnuRandomGame = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuTakeScreenshot = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuDebug = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuApuViewer = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuAssembler = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuDebugDebugger = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuMemoryViewer = new System.Windows.Forms.ToolStripMenuItem();
@@ -202,7 +203,7 @@ namespace Mesen.GUI.Forms
 			this.mnuReportBug = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem5 = new System.Windows.Forms.ToolStripSeparator();
 			this.mnuAbout = new System.Windows.Forms.ToolStripMenuItem();
-			this.mnuApuViewer = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuEventViewer = new System.Windows.Forms.ToolStripMenuItem();
 			this.panelRenderer.SuspendLayout();
 			this.panelInfo.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.picIcon)).BeginInit();
@@ -1453,6 +1454,7 @@ namespace Mesen.GUI.Forms
             this.mnuAssembler,
             this.mnuDebugDebugger,
             this.mnuMemoryViewer,
+            this.mnuEventViewer,
             this.mnuPpuViewer,
             this.mnuScriptWindow,
             this.mnuTraceLogger,
@@ -1463,58 +1465,65 @@ namespace Mesen.GUI.Forms
 			this.mnuDebug.Text = "Debug";
 			this.mnuDebug.DropDownOpening += new System.EventHandler(this.mnuDebug_DropDownOpening);
 			// 
+			// mnuApuViewer
+			// 
+			this.mnuApuViewer.Image = global::Mesen.GUI.Properties.Resources.Audio;
+			this.mnuApuViewer.Name = "mnuApuViewer";
+			this.mnuApuViewer.Size = new System.Drawing.Size(165, 22);
+			this.mnuApuViewer.Text = "APU Viewer";
+			// 
 			// mnuAssembler
 			// 
 			this.mnuAssembler.Image = global::Mesen.GUI.Properties.Resources.Chip;
 			this.mnuAssembler.Name = "mnuAssembler";
-			this.mnuAssembler.Size = new System.Drawing.Size(162, 22);
+			this.mnuAssembler.Size = new System.Drawing.Size(165, 22);
 			this.mnuAssembler.Text = "Assembler";
 			// 
 			// mnuDebugDebugger
 			// 
 			this.mnuDebugDebugger.Image = global::Mesen.GUI.Properties.Resources.Bug;
 			this.mnuDebugDebugger.Name = "mnuDebugDebugger";
-			this.mnuDebugDebugger.Size = new System.Drawing.Size(162, 22);
+			this.mnuDebugDebugger.Size = new System.Drawing.Size(165, 22);
 			this.mnuDebugDebugger.Text = "Debugger";
 			// 
 			// mnuMemoryViewer
 			// 
 			this.mnuMemoryViewer.Image = global::Mesen.GUI.Properties.Resources.CheatCode;
 			this.mnuMemoryViewer.Name = "mnuMemoryViewer";
-			this.mnuMemoryViewer.Size = new System.Drawing.Size(162, 22);
+			this.mnuMemoryViewer.Size = new System.Drawing.Size(165, 22);
 			this.mnuMemoryViewer.Text = "Memory Tools";
 			// 
 			// mnuPpuViewer
 			// 
 			this.mnuPpuViewer.Image = global::Mesen.GUI.Properties.Resources.Video;
 			this.mnuPpuViewer.Name = "mnuPpuViewer";
-			this.mnuPpuViewer.Size = new System.Drawing.Size(162, 22);
+			this.mnuPpuViewer.Size = new System.Drawing.Size(165, 22);
 			this.mnuPpuViewer.Text = "PPU Viewer";
 			// 
 			// mnuScriptWindow
 			// 
 			this.mnuScriptWindow.Image = global::Mesen.GUI.Properties.Resources.Script;
 			this.mnuScriptWindow.Name = "mnuScriptWindow";
-			this.mnuScriptWindow.Size = new System.Drawing.Size(162, 22);
+			this.mnuScriptWindow.Size = new System.Drawing.Size(165, 22);
 			this.mnuScriptWindow.Text = "Script Window";
 			// 
 			// mnuTraceLogger
 			// 
 			this.mnuTraceLogger.Image = global::Mesen.GUI.Properties.Resources.LogWindow;
 			this.mnuTraceLogger.Name = "mnuTraceLogger";
-			this.mnuTraceLogger.Size = new System.Drawing.Size(162, 22);
+			this.mnuTraceLogger.Size = new System.Drawing.Size(165, 22);
 			this.mnuTraceLogger.Text = "Trace Logger";
 			// 
 			// toolStripMenuItem25
 			// 
 			this.toolStripMenuItem25.Name = "toolStripMenuItem25";
-			this.toolStripMenuItem25.Size = new System.Drawing.Size(159, 6);
+			this.toolStripMenuItem25.Size = new System.Drawing.Size(162, 6);
 			// 
 			// mnuEditHeader
 			// 
 			this.mnuEditHeader.Image = global::Mesen.GUI.Properties.Resources.Edit;
 			this.mnuEditHeader.Name = "mnuEditHeader";
-			this.mnuEditHeader.Size = new System.Drawing.Size(162, 22);
+			this.mnuEditHeader.Size = new System.Drawing.Size(165, 22);
 			this.mnuEditHeader.Text = "Edit iNES Header";
 			this.mnuEditHeader.Click += new System.EventHandler(this.mnuEditHeader_Click);
 			// 
@@ -1588,12 +1597,12 @@ namespace Mesen.GUI.Forms
 			this.mnuAbout.Text = "About";
 			this.mnuAbout.Click += new System.EventHandler(this.mnuAbout_Click);
 			// 
-			// mnuApuViewer
+			// mnuEventViewer
 			// 
-			this.mnuApuViewer.Image = global::Mesen.GUI.Properties.Resources.Audio;
-			this.mnuApuViewer.Name = "mnuApuViewer";
-			this.mnuApuViewer.Size = new System.Drawing.Size(162, 22);
-			this.mnuApuViewer.Text = "APU Viewer";
+			this.mnuEventViewer.Image = global::Mesen.GUI.Properties.Resources.NesEventViewer;
+			this.mnuEventViewer.Name = "mnuEventViewer";
+			this.mnuEventViewer.Size = new System.Drawing.Size(165, 22);
+			this.mnuEventViewer.Text = "NES Event Viewer";
 			// 
 			// frmMain
 			// 
@@ -1796,6 +1805,7 @@ namespace Mesen.GUI.Forms
 		private System.Windows.Forms.ToolStripMenuItem mnuStartRecordTapeFile;
 		private System.Windows.Forms.ToolStripMenuItem mnuStopRecordTapeFile;
 		private System.Windows.Forms.ToolStripMenuItem mnuApuViewer;
+		private System.Windows.Forms.ToolStripMenuItem mnuEventViewer;
 	}
 }
 

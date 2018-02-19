@@ -80,6 +80,8 @@ struct PPUDebugState
 	int32_t Scanline;
 	uint32_t Cycle;
 	uint32_t FrameCount;
+	uint32_t NmiScanline;
+	uint32_t ScanlineCount;
 };
 
 struct DebugState
@@ -98,9 +100,23 @@ struct OperationInfo
 	MemoryOperationType OperationType;
 };
 
-struct PpuRegisterWriteInfo
+enum class DebugEventType : uint8_t
 {
-	uint8_t Address;
+	None = 0,
+	PpuRegisterWrite,
+	PpuRegisterRead,
+	MapperRegisterWrite,
+	MapperRegisterRead,
+	Nmi,
+	Irq,
+	SpriteZeroHit,
+	Breakpoint,
+};
+
+struct DebugEventInfo
+{
+	DebugEventType Type;
+	uint16_t Address;
 	uint8_t Value;
 	uint16_t Cycle;
 	int16_t Scanline;
@@ -117,5 +133,6 @@ enum class EventType
 	StateLoaded = 6,
 	StateSaved = 7,
 	InputPolled = 8,
+	SpriteZeroHit = 9,
 	EventTypeSize
 };

@@ -163,6 +163,7 @@
     <Message ID="EmulatorShortcutMappings_OpenScriptWindow">Open Script Window</Message>
     <Message ID="EmulatorShortcutMappings_OpenTraceLogger">Open Trace Logger</Message>
     <Message ID="EmulatorShortcutMappings_OpenApuViewer">Open APU Viewer</Message>
+    <Message ID="EmulatorShortcutMappings_OpenEventViewer">Open Event Viewer</Message>
   </Messages>
   <Enums>
     <Enum ID="ControllerType">
@@ -379,6 +380,15 @@
       <Value ID="ScreenAOnly">Screen A</Value>
       <Value ID="ScreenBOnly">Screen B</Value>
       <Value ID="FourScreens">Four Screens</Value>
+    </Enum>
+    <Enum ID="DebugEventType">
+      <Value ID="PpuRegisterWrite">PPU Register Write</Value>
+      <Value ID="PpuRegisterRead">PPU Register Read</Value>
+      <Value ID="MapperRegisterWrite">Mapper Register Write</Value>
+      <Value ID="MapperRegisterRead">Mapper Register Read</Value>
+      <Value ID="Nmi">NMI</Value>
+      <Value ID="Irq">IRQ</Value>
+      <Value ID="SpriteZeroHit">Sprite 0 Hit</Value>
     </Enum>
     <Enum ID="VsPpuType">
       <Value ID="RP2C03B">RP2C03B</Value>

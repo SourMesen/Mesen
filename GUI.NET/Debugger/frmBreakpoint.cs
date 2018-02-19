@@ -28,6 +28,7 @@ namespace Mesen.GUI.Debugger
 
 			AddBinding("MemoryType", cboBreakpointType);
 			AddBinding("Enabled", chkEnabled);
+			AddBinding("MarkEvent", chkMarkOnEventViewer);
 			AddBinding("Address", txtAddress);
 			AddBinding("StartAddress", txtFrom);
 			AddBinding("EndAddress", txtTo);

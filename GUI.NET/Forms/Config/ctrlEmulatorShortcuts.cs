@@ -86,6 +86,7 @@ namespace Mesen.GUI.Forms.Config
 				EmulatorShortcut.OpenAssembler,
 				EmulatorShortcut.OpenApuViewer,
 				EmulatorShortcut.OpenMemoryTools,
+				EmulatorShortcut.OpenEventViewer,
 				EmulatorShortcut.OpenPpuViewer,
 				EmulatorShortcut.OpenScriptWindow,
 				EmulatorShortcut.OpenTraceLogger,

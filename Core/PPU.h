@@ -172,8 +172,8 @@ class PPU : public IMemoryHandler, public Snapshotable
 		void DebugSendFrame();
 		void DebugCopyOutputBuffer(uint16_t *target);
 		void DebugUpdateFrameBuffer(bool toGrayscale);
-		PPUDebugState GetState();
-		void SetState(PPUDebugState state);
+		void GetState(PPUDebugState &state);
+		void SetState(PPUDebugState &state);
 
 		void GetMemoryRanges(MemoryRanges &ranges) override
 		{

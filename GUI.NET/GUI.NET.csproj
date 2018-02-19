@@ -400,11 +400,11 @@
     <Compile Include="Debugger\Controls\ctrlControllerInput.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Debugger\Controls\ctrlPpuWriteViewer.cs">
+    <Compile Include="Debugger\Controls\ctrlEventViewerPpuView.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Debugger\Controls\ctrlPpuWriteViewer.Designer.cs">
-      <DependentUpon>ctrlPpuWriteViewer.cs</DependentUpon>
+    <Compile Include="Debugger\Controls\ctrlEventViewerPpuView.Designer.cs">
+      <DependentUpon>ctrlEventViewerPpuView.cs</DependentUpon>
     </Compile>
     <Compile Include="Debugger\Controls\ctrlProfiler.cs">
       <SubType>UserControl</SubType>
@@ -579,11 +579,23 @@
     <Compile Include="Debugger\frmAssembler.Designer.cs">
       <DependentUpon>frmAssembler.cs</DependentUpon>
     </Compile>
+    <Compile Include="Debugger\frmEventViewerColors.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Debugger\frmEventViewerColors.Designer.cs">
+      <DependentUpon>frmEventViewerColors.cs</DependentUpon>
+    </Compile>
     <Compile Include="Debugger\frmDebuggerColors.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Debugger\frmDebuggerColors.Designer.cs">
       <DependentUpon>frmDebuggerColors.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Debugger\frmEventViewer.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Debugger\frmEventViewer.Designer.cs">
+      <DependentUpon>frmEventViewer.cs</DependentUpon>
     </Compile>
     <Compile Include="Debugger\frmOpCodeTooltip.cs">
       <SubType>Form</SubType>
@@ -1091,6 +1103,7 @@
     <Compile Include="ResourceManager.cs" />
     <Compile Include="RuntimeChecker.cs" />
     <Compile Include="SingleInstance.cs" />
+    <None Include="Resources\NesEventViewer.png" />
     <None Include="Resources\NavigateBack.png" />
     <None Include="Resources\NavigateForward.png" />
     <None Include="Resources\RunPpuFrame.png" />
@@ -1128,8 +1141,8 @@
     <EmbeddedResource Include="Debugger\Controls\ctrlFlagStatus.resx">
       <DependentUpon>ctrlFlagStatus.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Debugger\Controls\ctrlPpuWriteViewer.resx">
-      <DependentUpon>ctrlPpuWriteViewer.cs</DependentUpon>
+    <EmbeddedResource Include="Debugger\Controls\ctrlEventViewerPpuView.resx">
+      <DependentUpon>ctrlEventViewerPpuView.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Debugger\Example.lua" />
     <None Include="Resources\PipetteSmall.png" />
@@ -1247,8 +1260,14 @@
     <EmbeddedResource Include="Debugger\frmAssembler.resx">
       <DependentUpon>frmAssembler.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Debugger\frmEventViewerColors.resx">
+      <DependentUpon>frmEventViewerColors.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Debugger\frmDebuggerColors.resx">
       <DependentUpon>frmDebuggerColors.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Debugger\frmEventViewer.resx">
+      <DependentUpon>frmEventViewer.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Debugger\frmOpCodeTooltip.resx">
       <DependentUpon>frmOpCodeTooltip.cs</DependentUpon>

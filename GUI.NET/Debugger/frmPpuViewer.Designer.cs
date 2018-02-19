@@ -49,8 +49,6 @@ namespace Mesen.GUI.Debugger
 			this.ctrlSpriteViewer = new Mesen.GUI.Debugger.Controls.ctrlSpriteViewer();
 			this.tpgPaletteViewer = new System.Windows.Forms.TabPage();
 			this.ctrlPaletteViewer = new Mesen.GUI.Debugger.Controls.ctrlPaletteViewer();
-			this.tpgPpuRegisterWriteViewer = new System.Windows.Forms.TabPage();
-			this.ctrlPpuWriteViewer = new Mesen.GUI.Debugger.Controls.ctrlPpuWriteViewer();
 			this.flpRefreshTiming = new System.Windows.Forms.FlowLayoutPanel();
 			this.lblShowFrameAt = new System.Windows.Forms.Label();
 			this.nudScanline = new Mesen.GUI.Controls.MesenNumericUpDown();
@@ -63,7 +61,6 @@ namespace Mesen.GUI.Debugger
 			this.tpgChrViewer.SuspendLayout();
 			this.tpgSpriteViewer.SuspendLayout();
 			this.tpgPaletteViewer.SuspendLayout();
-			this.tpgPpuRegisterWriteViewer.SuspendLayout();
 			this.flpRefreshTiming.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -109,14 +106,14 @@ namespace Mesen.GUI.Debugger
 			this.mnuRefresh.Image = global::Mesen.GUI.Properties.Resources.Reset;
 			this.mnuRefresh.Name = "mnuRefresh";
 			this.mnuRefresh.ShortcutKeys = System.Windows.Forms.Keys.F5;
-			this.mnuRefresh.Size = new System.Drawing.Size(152, 22);
+			this.mnuRefresh.Size = new System.Drawing.Size(141, 22);
 			this.mnuRefresh.Text = "Refresh";
 			this.mnuRefresh.Click += new System.EventHandler(this.mnuRefresh_Click);
 			// 
 			// toolStripMenuItem1
 			// 
 			this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-			this.toolStripMenuItem1.Size = new System.Drawing.Size(149, 6);
+			this.toolStripMenuItem1.Size = new System.Drawing.Size(138, 6);
 			// 
 			// mnuAutoRefresh
 			// 
@@ -124,7 +121,7 @@ namespace Mesen.GUI.Debugger
 			this.mnuAutoRefresh.CheckOnClick = true;
 			this.mnuAutoRefresh.CheckState = System.Windows.Forms.CheckState.Checked;
 			this.mnuAutoRefresh.Name = "mnuAutoRefresh";
-			this.mnuAutoRefresh.Size = new System.Drawing.Size(152, 22);
+			this.mnuAutoRefresh.Size = new System.Drawing.Size(141, 22);
 			this.mnuAutoRefresh.Text = "Auto-refresh";
 			this.mnuAutoRefresh.Click += new System.EventHandler(this.mnuAutoRefresh_Click);
 			// 
@@ -134,7 +131,6 @@ namespace Mesen.GUI.Debugger
 			this.tabMain.Controls.Add(this.tpgChrViewer);
 			this.tabMain.Controls.Add(this.tpgSpriteViewer);
 			this.tabMain.Controls.Add(this.tpgPaletteViewer);
-			this.tabMain.Controls.Add(this.tpgPpuRegisterWriteViewer);
 			this.tabMain.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tabMain.Location = new System.Drawing.Point(0, 24);
 			this.tabMain.Name = "tabMain";
@@ -148,7 +144,7 @@ namespace Mesen.GUI.Debugger
 			this.tpgNametableViewer.Controls.Add(this.ctrlNametableViewer);
 			this.tpgNametableViewer.Location = new System.Drawing.Point(4, 22);
 			this.tpgNametableViewer.Name = "tpgNametableViewer";
-			this.tpgNametableViewer.Size = new System.Drawing.Size(701, 532);
+			this.tpgNametableViewer.Size = new System.Drawing.Size(701, 525);
 			this.tpgNametableViewer.TabIndex = 0;
 			this.tpgNametableViewer.Text = "Nametable Viewer";
 			this.tpgNametableViewer.UseVisualStyleBackColor = true;
@@ -158,7 +154,7 @@ namespace Mesen.GUI.Debugger
 			this.ctrlNametableViewer.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.ctrlNametableViewer.Location = new System.Drawing.Point(0, 0);
 			this.ctrlNametableViewer.Name = "ctrlNametableViewer";
-			this.ctrlNametableViewer.Size = new System.Drawing.Size(701, 532);
+			this.ctrlNametableViewer.Size = new System.Drawing.Size(701, 525);
 			this.ctrlNametableViewer.TabIndex = 0;
 			this.ctrlNametableViewer.OnSelectChrTile += new System.EventHandler(this.ctrlNametableViewer_OnSelectChrTile);
 			// 
@@ -167,7 +163,7 @@ namespace Mesen.GUI.Debugger
 			this.tpgChrViewer.Controls.Add(this.ctrlChrViewer);
 			this.tpgChrViewer.Location = new System.Drawing.Point(4, 22);
 			this.tpgChrViewer.Name = "tpgChrViewer";
-			this.tpgChrViewer.Size = new System.Drawing.Size(701, 532);
+			this.tpgChrViewer.Size = new System.Drawing.Size(701, 525);
 			this.tpgChrViewer.TabIndex = 1;
 			this.tpgChrViewer.Text = "CHR Viewer";
 			this.tpgChrViewer.UseVisualStyleBackColor = true;
@@ -178,7 +174,7 @@ namespace Mesen.GUI.Debugger
 			this.ctrlChrViewer.Location = new System.Drawing.Point(0, 0);
 			this.ctrlChrViewer.Margin = new System.Windows.Forms.Padding(0);
 			this.ctrlChrViewer.Name = "ctrlChrViewer";
-			this.ctrlChrViewer.Size = new System.Drawing.Size(701, 532);
+			this.ctrlChrViewer.Size = new System.Drawing.Size(701, 525);
 			this.ctrlChrViewer.TabIndex = 2;
 			// 
 			// tpgSpriteViewer
@@ -186,7 +182,7 @@ namespace Mesen.GUI.Debugger
 			this.tpgSpriteViewer.Controls.Add(this.ctrlSpriteViewer);
 			this.tpgSpriteViewer.Location = new System.Drawing.Point(4, 22);
 			this.tpgSpriteViewer.Name = "tpgSpriteViewer";
-			this.tpgSpriteViewer.Size = new System.Drawing.Size(701, 532);
+			this.tpgSpriteViewer.Size = new System.Drawing.Size(701, 525);
 			this.tpgSpriteViewer.TabIndex = 2;
 			this.tpgSpriteViewer.Text = "Sprite Viewer";
 			this.tpgSpriteViewer.UseVisualStyleBackColor = true;
@@ -196,7 +192,7 @@ namespace Mesen.GUI.Debugger
 			this.ctrlSpriteViewer.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.ctrlSpriteViewer.Location = new System.Drawing.Point(0, 0);
 			this.ctrlSpriteViewer.Name = "ctrlSpriteViewer";
-			this.ctrlSpriteViewer.Size = new System.Drawing.Size(701, 532);
+			this.ctrlSpriteViewer.Size = new System.Drawing.Size(701, 525);
 			this.ctrlSpriteViewer.TabIndex = 0;
 			this.ctrlSpriteViewer.OnSelectTilePalette += new Mesen.GUI.Debugger.Controls.ctrlSpriteViewer.SelectTilePaletteHandler(this.ctrlSpriteViewer_OnSelectTilePalette);
 			// 
@@ -205,7 +201,7 @@ namespace Mesen.GUI.Debugger
 			this.tpgPaletteViewer.Controls.Add(this.ctrlPaletteViewer);
 			this.tpgPaletteViewer.Location = new System.Drawing.Point(4, 22);
 			this.tpgPaletteViewer.Name = "tpgPaletteViewer";
-			this.tpgPaletteViewer.Size = new System.Drawing.Size(701, 532);
+			this.tpgPaletteViewer.Size = new System.Drawing.Size(701, 525);
 			this.tpgPaletteViewer.TabIndex = 3;
 			this.tpgPaletteViewer.Text = "Palette Viewer";
 			this.tpgPaletteViewer.UseVisualStyleBackColor = true;
@@ -215,27 +211,8 @@ namespace Mesen.GUI.Debugger
 			this.ctrlPaletteViewer.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.ctrlPaletteViewer.Location = new System.Drawing.Point(0, 0);
 			this.ctrlPaletteViewer.Name = "ctrlPaletteViewer";
-			this.ctrlPaletteViewer.Size = new System.Drawing.Size(701, 532);
+			this.ctrlPaletteViewer.Size = new System.Drawing.Size(701, 525);
 			this.ctrlPaletteViewer.TabIndex = 0;
-			// 
-			// tpgPpuRegisterWriteViewer
-			// 
-			this.tpgPpuRegisterWriteViewer.Controls.Add(this.ctrlPpuWriteViewer);
-			this.tpgPpuRegisterWriteViewer.Location = new System.Drawing.Point(4, 22);
-			this.tpgPpuRegisterWriteViewer.Name = "tpgPpuRegisterWriteViewer";
-			this.tpgPpuRegisterWriteViewer.Padding = new System.Windows.Forms.Padding(3);
-			this.tpgPpuRegisterWriteViewer.Size = new System.Drawing.Size(701, 525);
-			this.tpgPpuRegisterWriteViewer.TabIndex = 4;
-			this.tpgPpuRegisterWriteViewer.Text = "PPU Register Write Viewer";
-			this.tpgPpuRegisterWriteViewer.UseVisualStyleBackColor = true;
-			// 
-			// ctrlPpuWriteViewer
-			// 
-			this.ctrlPpuWriteViewer.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.ctrlPpuWriteViewer.Location = new System.Drawing.Point(3, 3);
-			this.ctrlPpuWriteViewer.Name = "ctrlPpuWriteViewer";
-			this.ctrlPpuWriteViewer.Size = new System.Drawing.Size(695, 519);
-			this.ctrlPpuWriteViewer.TabIndex = 0;
 			// 
 			// flpRefreshTiming
 			// 
@@ -366,7 +343,6 @@ namespace Mesen.GUI.Debugger
 			this.tpgChrViewer.ResumeLayout(false);
 			this.tpgSpriteViewer.ResumeLayout(false);
 			this.tpgPaletteViewer.ResumeLayout(false);
-			this.tpgPpuRegisterWriteViewer.ResumeLayout(false);
 			this.flpRefreshTiming.ResumeLayout(false);
 			this.flpRefreshTiming.PerformLayout();
 			this.ResumeLayout(false);
@@ -398,7 +374,5 @@ namespace Mesen.GUI.Debugger
 		private System.Windows.Forms.Label lblCycle;
 		private MesenNumericUpDown nudCycle;
 		private System.Windows.Forms.Button btnReset;
-		private System.Windows.Forms.TabPage tpgPpuRegisterWriteViewer;
-		private Controls.ctrlPpuWriteViewer ctrlPpuWriteViewer;
 	}
 }

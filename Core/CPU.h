@@ -817,12 +817,14 @@ public:
 	void Reset(bool softReset, NesModel model);
 	void Exec();
 
-	State GetState() 
+	void GetState(State &state) 
 	{ 
-		State cpuState(_state);
-		cpuState.CycleCount = _cycleCount;
-		return cpuState; 
+		state = _state;
+		state.CycleCount = _cycleCount;
 	}
+
+	uint16_t GetDebugPC() { return _state.DebugPC; }
+	uint16_t GetPC() { return _state.PC; }
 
 	void SetState(State state)
 	{

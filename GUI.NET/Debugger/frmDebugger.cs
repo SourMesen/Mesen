@@ -157,7 +157,7 @@ namespace Mesen.GUI.Debugger
 				mnuRunPpuCycle, mnuRunScanline, mnuRunOneFrame, null,
 				mnuToggleBreakpoint, mnuDisableEnableBreakpoint, null,
 				mnuFind, mnuFindPrev, mnuFindNext, null,
-				mnuApuViewer, mnuAssembler, mnuMemoryViewer, mnuPpuViewer, mnuScriptWindow, mnuTraceLogger, null,
+				mnuApuViewer, mnuAssembler, mnuEventViewer, mnuMemoryViewer, mnuPpuViewer, mnuScriptWindow, mnuTraceLogger, null,
 				mnuEditHeader, null,
 				mnuBreakIn
 			);
@@ -563,6 +563,11 @@ namespace Mesen.GUI.Debugger
 		private void mnuMemoryViewer_Click(object sender, EventArgs e)
 		{
 			DebugWindowManager.OpenDebugWindow(DebugWindow.MemoryViewer);
+		}
+
+		private void mnuEventViewer_Click(object sender, EventArgs e)
+		{
+			DebugWindowManager.OpenDebugWindow(DebugWindow.EventViewer);
 		}
 
 		private void BreakpointManager_BreakpointsChanged(object sender, EventArgs e)

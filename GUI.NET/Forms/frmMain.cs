@@ -667,6 +667,7 @@ namespace Mesen.GUI.Forms
 			BindShortcut(mnuApuViewer, EmulatorShortcut.OpenApuViewer, runningNotClient);
 			BindShortcut(mnuAssembler, EmulatorShortcut.OpenAssembler, runningNotClient);
 			BindShortcut(mnuMemoryViewer, EmulatorShortcut.OpenMemoryTools, runningNotClient);
+			BindShortcut(mnuEventViewer, EmulatorShortcut.OpenEventViewer, runningNotClient);
 			BindShortcut(mnuPpuViewer, EmulatorShortcut.OpenPpuViewer, runningNotClient);
 			BindShortcut(mnuScriptWindow, EmulatorShortcut.OpenScriptWindow, runningNotClient);
 			BindShortcut(mnuTraceLogger, EmulatorShortcut.OpenTraceLogger, runningNotClient);
@@ -769,6 +770,7 @@ namespace Mesen.GUI.Forms
 				case EmulatorShortcut.OpenTraceLogger: DebugWindowManager.OpenDebugWindow(DebugWindow.TraceLogger); break;
 				case EmulatorShortcut.OpenPpuViewer: DebugWindowManager.OpenDebugWindow(DebugWindow.PpuViewer); break;
 				case EmulatorShortcut.OpenMemoryTools: DebugWindowManager.OpenDebugWindow(DebugWindow.MemoryViewer); break;
+				case EmulatorShortcut.OpenEventViewer: DebugWindowManager.OpenDebugWindow(DebugWindow.EventViewer); break;
 				case EmulatorShortcut.OpenScriptWindow: DebugWindowManager.OpenDebugWindow(DebugWindow.ScriptWindow); break;
 
 				case EmulatorShortcut.LoadStateFromFile: LoadStateFromFile(); break;

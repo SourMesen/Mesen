@@ -1053,6 +1053,16 @@ int32_t BaseMapper::FromAbsoluteAddress(uint32_t addr, AddressType type)
 	return -1;
 }
 
+bool BaseMapper::IsWriteRegister(uint16_t addr)
+{
+	return _isWriteRegisterAddr[addr];
+}
+
+bool BaseMapper::IsReadRegister(uint16_t addr)
+{
+	return _allowRegisterRead && _isReadRegisterAddr[addr];
+}
+
 CartridgeState BaseMapper::GetState()
 {
 	CartridgeState state;

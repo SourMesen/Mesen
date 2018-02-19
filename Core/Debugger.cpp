@@ -81,7 +81,6 @@ Debugger::Debugger(shared_ptr<Console> console, shared_ptr<CPU> cpu, shared_ptr<
 	_curInstructionCycle = 0;
 	_needRewind = false;
 
-	_bpUpdateNeeded = false;
 	_executionStopped = false;
 	_hideTopOfCallstack = false;
 
@@ -222,31 +221,7 @@ shared_ptr<Profiler> Debugger::GetProfiler()
 
 void Debugger::SetBreakpoints(Breakpoint breakpoints[], uint32_t length)
 {
-	_bpUpdateLock.AcquireSafe();
-
-	_newBreakpoints.clear();
-	_newBreakpoints.insert(_newBreakpoints.end(), breakpoints, breakpoints + length);	
-	_bpUpdateNeeded = true;
-
-	if(_executionStopped) {
-		UpdateBreakpoints();
-	} else {
-		bool hasBreakpoint[Debugger::BreakpointTypeCount]{ false,false,false,false,false,false };
-		for(Breakpoint &bp : _newBreakpoints) {
-			for(int i = 0; i < Debugger::BreakpointTypeCount; i++) {
-				hasBreakpoint[i] |= bp.HasBreakpointType((BreakpointType)i);
-			}
-		}
-
-		for(int i = 0; i < Debugger::BreakpointTypeCount; i++) {
-			_hasBreakpoint[i] = hasBreakpoint[i];
-		}
-	}
-}
-
-void Debugger::UpdateBreakpoints()
-{
-	_bpUpdateLock.AcquireSafe();
+	DebugBreakHelper helper(this);
 
 	for(int i = 0; i < Debugger::BreakpointTypeCount; i++) {
 		_breakpoints[i].clear();
@@ -255,28 +230,23 @@ void Debugger::UpdateBreakpoints()
 	}
 
 	ExpressionEvaluator expEval(this);
-	for(Breakpoint &bp : _newBreakpoints) {
+	for(uint32_t j = 0; j < length; j++) {
+		Breakpoint &bp = breakpoints[j];
 		for(int i = 0; i < Debugger::BreakpointTypeCount; i++) {
-			if(bp.HasBreakpointType((BreakpointType)i)) {
+			if((bp.IsMarked() || bp.IsEnabled()) && bp.HasBreakpointType((BreakpointType)i)) {
 				_breakpoints[i].push_back(bp);
 				_breakpointRpnList[i].push_back(*expEval.GetRpnList(bp.GetCondition()));
 				_hasBreakpoint[i] = true;
 			}
 		}
 	}
-
-	_bpUpdateNeeded = false;
 }
 
-bool Debugger::HasMatchingBreakpoint(BreakpointType type, OperationInfo &operationInfo)
+void Debugger::ProcessBreakpoints(BreakpointType type, OperationInfo &operationInfo)
 {
 	if(_runToCycle != 0) {
 		//Disable all breakpoints while stepping backwards
-		return false;
-	}
-
-	if(_bpUpdateNeeded) {
-		UpdateBreakpoints();
+		return;
 	}
 
 	uint32_t absoluteAddr;
@@ -299,17 +269,20 @@ bool Debugger::HasMatchingBreakpoint(BreakpointType type, OperationInfo &operati
 
 	vector<Breakpoint> &breakpoints = _breakpoints[(int)type];
 
+	bool needBreak = false;
+	bool needMark = false;
 	bool needState = true;
 	EvalResultType resultType;
 	for(size_t i = 0, len = breakpoints.size(); i < len; i++) {
 		Breakpoint &breakpoint = breakpoints[i];
 		if(
-			type == BreakpointType::Global || 
+			type == BreakpointType::Global ||
 			info.Address >= 0 && breakpoint.Matches(operationInfo.Address, info) ||
 			type >= BreakpointType::ReadVram && breakpoint.Matches(operationInfo.Address, ppuInfo)
 		) {
 			if(!breakpoint.HasCondition()) {
-				return true;
+				needMark |= breakpoint.IsMarked();
+				needBreak |= breakpoint.IsEnabled();
 			} else {
 				if(needState) {
 					GetState(&_debugState, false);
@@ -317,18 +290,33 @@ bool Debugger::HasMatchingBreakpoint(BreakpointType type, OperationInfo &operati
 				}
 				if(_breakpointRpnList[(int)type][i].size() > 0) {
 					if(_bpExpEval.Evaluate(_breakpointRpnList[(int)type][i], _debugState, resultType, operationInfo) != 0) {
-						return true;
+						needMark |= breakpoint.IsMarked();
+						needBreak |= breakpoint.IsEnabled();
 					}
 				} else {
 					if(_bpExpEval.Evaluate(breakpoint.GetCondition(), _debugState, resultType, operationInfo) != 0) {
-						return true;
+						needMark |= breakpoint.IsMarked();
+						needBreak |= breakpoint.IsEnabled();
 					}
 				}
 			}
 		}
+
+		if(needMark && needBreak) {
+			//No need to process remaining breakpoints
+			break;
+		}
 	}
 
-	return false;
+	if(needMark) {
+		_debugEvents.push_back({ DebugEventType::Breakpoint, operationInfo.Address, (uint8_t)operationInfo.Value, (uint16_t)_ppu->GetCurrentCycle(), (int16_t)_ppu->GetCurrentScanline() });
+	}
+
+	if(needBreak) {
+		//Found a matching breakpoint, stop execution
+		Step(1);
+		SleepUntilResume();
+	}
 }
 
 int32_t Debugger::EvaluateExpression(string expression, EvalResultType &resultType)
@@ -400,6 +388,13 @@ void Debugger::ProcessInterrupt(uint16_t cpuAddr, uint16_t destCpuAddr, bool for
 	}
 }
 
+void Debugger::StaticProcessEvent(EventType type)
+{
+	if(Debugger::Instance) {
+		Debugger::Instance->ProcessEvent(type);
+	}
+}
+
 void Debugger::ProcessStepConditions(uint32_t addr)
 {
 	if(_stepOut && _lastInstruction == 0x60) {
@@ -426,11 +421,12 @@ void Debugger::PrivateProcessPpuCycle()
 	}
 	
 	OperationInfo operationInfo { 0, 0, MemoryOperationType::DummyRead };
-	if(_hasBreakpoint[BreakpointType::Global] && HasMatchingBreakpoint(BreakpointType::Global, operationInfo)) {
-		//Found a matching breakpoint, stop execution
-		Step(1);
-		SleepUntilResume();
-	} else if(_ppuStepCount > 0) {
+	
+	if(_hasBreakpoint[BreakpointType::Global]) {
+		ProcessBreakpoints(BreakpointType::Global, operationInfo);
+	}
+
+	if(_ppuStepCount > 0) {
 		_ppuStepCount--;
 		if(_ppuStepCount == 0) {
 			Step(1);
@@ -594,10 +590,8 @@ bool Debugger::PrivateProcessRamOperation(MemoryOperationType type, uint16_t &ad
 			case MemoryOperationType::Write: breakpointType = BreakpointType::WriteRam; break;
 		}
 
-		if(_hasBreakpoint[breakpointType] && HasMatchingBreakpoint(breakpointType, operationInfo)) {
-			//Found a matching breakpoint, stop execution
-			Step(1);
-			SleepUntilResume();
+		if(_hasBreakpoint[breakpointType]) {
+			ProcessBreakpoints(breakpointType, operationInfo);
 		}
 	}
 
@@ -610,7 +604,15 @@ bool Debugger::PrivateProcessRamOperation(MemoryOperationType type, uint16_t &ad
 		}
 
 		if(addr >= 0x2000 && addr <= 0x3FFF) {
-			_ppuRegisterWrites.push_back({ (uint8_t)(addr & 0x07), value, (uint16_t)_ppu->GetCurrentCycle(), (int16_t)_ppu->GetCurrentScanline() });
+			_debugEvents.push_back({ DebugEventType::PpuRegisterWrite, addr, value, (uint16_t)_ppu->GetCurrentCycle(), (int16_t)_ppu->GetCurrentScanline() });
+		} else if(addr >= 0x4018 && _mapper->IsWriteRegister(addr)) {
+			_debugEvents.push_back({ DebugEventType::MapperRegisterWrite, addr, value, (uint16_t)_ppu->GetCurrentCycle(), (int16_t)_ppu->GetCurrentScanline() });
+		}
+	} else if(type == MemoryOperationType::Read) {
+		if(addr >= 0x2000 && addr <= 0x3FFF) {
+			_debugEvents.push_back({ DebugEventType::PpuRegisterRead, addr, value, (uint16_t)_ppu->GetCurrentCycle(), (int16_t)_ppu->GetCurrentScanline() });
+		} else if(addr >= 0x4018 && _mapper->IsReadRegister(addr)) {
+			_debugEvents.push_back({ DebugEventType::MapperRegisterRead, addr, value, (uint16_t)_ppu->GetCurrentCycle(), (int16_t)_ppu->GetCurrentScanline() });
 		}
 	}
 
@@ -657,11 +659,7 @@ void Debugger::PrivateProcessVramReadOperation(MemoryOperationType type, uint16_
 
 	if(_hasBreakpoint[BreakpointType::ReadVram]) {
 		OperationInfo operationInfo{ addr, value, type };
-		if(HasMatchingBreakpoint(BreakpointType::ReadVram, operationInfo)) {
-			//Found a matching breakpoint, stop execution
-			Step(1);
-			SleepUntilResume();
-		}
+		ProcessBreakpoints(BreakpointType::ReadVram, operationInfo);
 	}
 
 	ProcessPpuOperation(addr, value, MemoryOperationType::Read);
@@ -671,11 +669,7 @@ void Debugger::PrivateProcessVramWriteOperation(uint16_t addr, uint8_t &value)
 {
 	if(_hasBreakpoint[BreakpointType::WriteVram]) {
 		OperationInfo operationInfo{ addr, value, MemoryOperationType::Write };
-		if(HasMatchingBreakpoint(BreakpointType::WriteVram, operationInfo)) {
-			//Found a matching breakpoint, stop execution
-			Step(1);
-			SleepUntilResume();
-		}
+		ProcessBreakpoints(BreakpointType::WriteVram, operationInfo);
 	}
 
 	ProcessPpuOperation(addr, value, MemoryOperationType::Write);
@@ -695,8 +689,8 @@ void Debugger::GetApuState(ApuState *state)
 void Debugger::GetState(DebugState *state, bool includeMapperInfo)
 {
 	state->Model = _console->GetModel();
-	state->CPU = _cpu->GetState();
-	state->PPU = _ppu->GetState();
+	_cpu->GetState(state->CPU);
+	_ppu->GetState(state->PPU);
 	if(includeMapperInfo) {
 		state->Cartridge = _mapper->GetState();
 		state->APU = _apu->GetState();
@@ -707,7 +701,7 @@ void Debugger::SetState(DebugState state)
 {
 	_cpu->SetState(state.CPU);
 	_ppu->SetState(state.PPU);
-	if(state.CPU.PC != _cpu->GetState().PC) {
+	if(state.CPU.PC != _cpu->GetPC()) {
 		SetNextStatement(state.CPU.PC);
 	}
 }
@@ -758,7 +752,7 @@ void Debugger::StepOver()
 {
 	if(_lastInstruction == 0x20 || _lastInstruction == 0x00) {
 		//We are on a JSR/BRK instruction, need to continue until the following instruction
-		_stepOverAddr = _cpu->GetState().PC + (_lastInstruction == 0x20 ? 3 : 1);
+		_stepOverAddr = _cpu->GetPC() + (_lastInstruction == 0x20 ? 3 : 1);
 		Run();
 	} else {
 		//Except for JSR & BRK, StepOver behaves the same as StepTnto
@@ -784,7 +778,9 @@ void Debugger::Run()
 
 void Debugger::GenerateCodeOutput()
 {
-	State cpuState = _cpu->GetState();
+	State cpuState;
+	_cpu->GetState(cpuState);
+
 	_disassemblerOutput.clear();
 	_disassemblerOutput.reserve(10000);
 
@@ -1077,7 +1073,7 @@ void Debugger::StartCodeRunner(uint8_t *byteCode, uint32_t codeLength)
 {
 	_codeRunner.reset(new CodeRunner(vector<uint8_t>(byteCode, byteCode + codeLength), this));
 	_memoryManager->RegisterIODevice(_codeRunner.get());
-	_returnToAddress = _cpu->GetState().DebugPC;
+	_returnToAddress = _cpu->GetDebugPC();
 	SetNextStatement(CodeRunner::BaseAddress);
 }
 
@@ -1203,7 +1199,7 @@ void Debugger::ResetCounters()
 
 void Debugger::UpdateProgramCounter(uint16_t &addr, uint8_t &value)
 {
-	addr = _cpu->GetState().PC;
+	addr = _cpu->GetPC();
 	value = _memoryManager->DebugRead(addr, true);
 	_cpu->SetDebugPC(addr);
 }
@@ -1269,14 +1265,24 @@ void Debugger::ProcessEvent(EventType type)
 	} else if(type == EventType::EndFrame) {
 		_memoryDumper->GatherChrPaletteInfo();
 	} else if(type == EventType::StartFrame) {
+		//Update the event viewer
+		MessageManager::SendNotification(ConsoleNotificationType::EventViewerDisplayFrame);
+
+		//Clear the current frame/event log
 		if(CheckFlag(DebuggerFlags::PpuPartialDraw)) {
 			_ppu->DebugUpdateFrameBuffer(CheckFlag(DebuggerFlags::PpuShowPreviousFrame));
 		}
-		_ppuRegisterWrites.clear();
+		_debugEvents.clear();
+	} else if(type == EventType::Nmi) {
+		_debugEvents.push_back({ DebugEventType::Nmi, 0, 0, (uint16_t)_ppu->GetCurrentCycle(), (int16_t)_ppu->GetCurrentScanline() });
+	} else if(type == EventType::Irq) {
+		_debugEvents.push_back({ DebugEventType::Irq, 0, 0, (uint16_t)_ppu->GetCurrentCycle(), (int16_t)_ppu->GetCurrentScanline() });
+	} else if(type == EventType::SpriteZeroHit) {
+		_debugEvents.push_back({ DebugEventType::SpriteZeroHit, 0, 0, (uint16_t)_ppu->GetCurrentCycle(), (int16_t)_ppu->GetCurrentScanline() });
 	}
 }
 
-void Debugger::GetPpuRegisterWriteData(uint32_t* pictureBuffer, PpuRegisterWriteInfo *infoArray)
+void Debugger::GetDebugEvents(uint32_t* pictureBuffer, DebugEventInfo *infoArray)
 {
 	DebugBreakHelper helper(this);
 
@@ -1289,8 +1295,8 @@ void Debugger::GetPpuRegisterWriteData(uint32_t* pictureBuffer, PpuRegisterWrite
 	}
 
 	size_t j;
-	for(j = 0; j < _ppuRegisterWrites.size() && j < 999; j++) {
-		infoArray[j] = _ppuRegisterWrites[j];
+	for(j = 0; j < _debugEvents.size() && j < 999; j++) {
+		infoArray[j] = _debugEvents[j];
 	}
-	infoArray[j] = { 0, 0, 0xFFFF, 0 };
+	infoArray[j] = { DebugEventType::None, 0, 0, 0, 0 };
 }

@@ -844,6 +844,7 @@
     <Message ID="EmulatorShortcutMappings_OpenScriptWindow">スクリプトウインドウを開く</Message>
     <Message ID="EmulatorShortcutMappings_OpenTraceLogger">トレースロガーを開く</Message>
     <Message ID="EmulatorShortcutMappings_OpenApuViewer">APUビューアーを開く</Message>
+    <Message ID="EmulatorShortcutMappings_OpenEventViewer">イベントビューアーを開く</Message>
   </Messages>
   <Enums>
     <Enum ID="ControllerType">

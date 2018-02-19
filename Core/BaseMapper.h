@@ -37,8 +37,8 @@ private:
 	RomFormat _romFormat;
 
 	bool _allowRegisterRead = false;
-	uint8_t _isReadRegisterAddr[0x10000];
-	uint8_t _isWriteRegisterAddr[0x10000];
+	bool _isReadRegisterAddr[0x10000];
+	bool _isWriteRegisterAddr[0x10000];
 
 	uint8_t* _prgPages[0x100];
 	uint8_t* _chrPages[0x100];
@@ -228,6 +228,9 @@ public:
 	int32_t ToAbsoluteChrRomAddress(uint16_t addr);
 	int32_t FromAbsoluteChrAddress(uint32_t addr);
 	int32_t FromAbsoluteAddress(uint32_t addr, AddressType type = AddressType::PrgRom);
+
+	bool IsWriteRegister(uint16_t addr);
+	bool IsReadRegister(uint16_t addr);
 
 	NESHeader GetNesHeader();
 	void GetRomFileData(vector<uint8_t> &out, bool asIpsFile, uint8_t* header);

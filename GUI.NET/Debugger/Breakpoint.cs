@@ -31,6 +31,7 @@ namespace Mesen.GUI.Debugger
 		public bool BreakOnExec = true;
 
 		public bool Enabled = true;
+		public bool MarkEvent = false;
 		public UInt32 Address;
 		public UInt32 StartAddress;
 		public UInt32 EndAddress;
@@ -184,6 +185,8 @@ namespace Mesen.GUI.Debugger
 			InteropBreakpoint bp = new InteropBreakpoint() {
 				MemoryType = MemoryType,
 				Type = Type,
+				MarkEvent = MarkEvent,
+				Enabled = Enabled
 			};
 			switch(AddressType) {
 				case BreakpointAddressType.AnyAddress:

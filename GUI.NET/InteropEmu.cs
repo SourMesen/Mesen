@@ -441,24 +441,24 @@ namespace Mesen.GUI
 			return frameData;
 		}
 
-		[DllImport(DLLPath, EntryPoint = "DebugGetPpuRegisterWriteData")] private static extern void DebugGetPpuRegisterWriteDataWrapper(IntPtr frameBuffer, IntPtr infoArray);
-		public static void DebugGetPpuRegisterWriteData(out byte[] pictureData, out PpuRegisterWriteInfo[] ppuWrites)
+		[DllImport(DLLPath, EntryPoint = "DebugGetDebugEvents")] private static extern void DebugGetDebugEventsWrapper(IntPtr frameBuffer, IntPtr infoArray);
+		public static void DebugGetDebugEvents(out byte[] pictureData, out DebugEventInfo[] debugEvents)
 		{
 			pictureData = new byte[256 * 240 * 4];
-			ppuWrites = new PpuRegisterWriteInfo[1000];
+			debugEvents = new DebugEventInfo[1000];
 
 			GCHandle hPictureData = GCHandle.Alloc(pictureData, GCHandleType.Pinned);
-			GCHandle hPpuWrites = GCHandle.Alloc(ppuWrites, GCHandleType.Pinned);
+			GCHandle hDebugEvents = GCHandle.Alloc(debugEvents, GCHandleType.Pinned);
 			try {
-				InteropEmu.DebugGetPpuRegisterWriteDataWrapper(hPictureData.AddrOfPinnedObject(), hPpuWrites.AddrOfPinnedObject());
+				InteropEmu.DebugGetDebugEventsWrapper(hPictureData.AddrOfPinnedObject(), hDebugEvents.AddrOfPinnedObject());
 			} finally {
 				hPictureData.Free();
-				hPpuWrites.Free();
+				hDebugEvents.Free();
 			}
 
 			for(int i = 0; i < 1000; i++) {
-				if(ppuWrites[i].Cycle == 0xFFFF) {
-					Array.Resize(ref ppuWrites, i);
+				if(debugEvents[i].Type == DebugEventType.None) {
+					Array.Resize(ref debugEvents, i);
 					break;
 				}
 			}
@@ -859,6 +859,7 @@ namespace Mesen.GUI
 			PpuViewerDisplayFrame = 15,
 			ExecuteShortcut = 16,
 			EmulationStopped = 17,
+			EventViewerDisplayFrame = 18,
 		}
 
 		public enum ControllerType
@@ -1083,9 +1084,23 @@ namespace Mesen.GUI
 		SubEntryPoint = 0x80
 	}
 
-	public struct PpuRegisterWriteInfo
+	public enum DebugEventType : byte
 	{
-		public byte Address;
+		None = 0,
+		PpuRegisterWrite,
+		PpuRegisterRead,
+		MapperRegisterWrite,
+		MapperRegisterRead,
+		Nmi,
+		Irq,
+		SpriteZeroHit,
+		Breakpoint
+	}
+
+	public struct DebugEventInfo
+	{
+		public DebugEventType Type;
+		public UInt16 Address;
 		public byte Value;
 		public UInt16 Cycle;
 		public Int16 Scanline;
@@ -1144,6 +1159,8 @@ namespace Mesen.GUI
 		public Int32 Scanline;
 		public UInt32 Cycle;
 		public UInt32 FrameCount;
+		public UInt32 NmiScanline;
+		public UInt32 ScanlineCount;
 	}
 
 	public struct PPUState
@@ -1708,6 +1725,7 @@ namespace Mesen.GUI
 		OpenScriptWindow,
 		OpenTraceLogger,
 		OpenApuViewer,
+		OpenEventViewer,
 	}
 
 	public struct InteropCheatInfo
@@ -1731,6 +1749,12 @@ namespace Mesen.GUI
 		public BreakpointType Type;
 		public Int32 StartAddress;
 		public Int32 EndAddress;
+
+		[MarshalAs(UnmanagedType.I1)]
+		public bool Enabled;
+
+		[MarshalAs(UnmanagedType.I1)]
+		public bool MarkEvent;
 
 		[MarshalAs(UnmanagedType.ByValArray, SizeConst = 1000)]
 		public byte[] Condition;

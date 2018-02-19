@@ -134,19 +134,19 @@ void PPU::SetNesModel(NesModel model)
 	_vblankEnd += EmulationSettings::GetPpuExtraScanlinesAfterNmi() + EmulationSettings::GetPpuExtraScanlinesBeforeNmi();
 }
 
-PPUDebugState PPU::GetState()
+void PPU::GetState(PPUDebugState &state)
 {
-	PPUDebugState state;
 	state.ControlFlags = _flags;
 	state.StatusFlags = _statusFlags;
 	state.State = _state;
 	state.Cycle = _cycle;
 	state.Scanline = _scanline;
 	state.FrameCount = _frameCount;
-	return state;
+	state.NmiScanline = _nmiScanline;
+	state.ScanlineCount = _vblankEnd + 1;
 }
 
-void PPU::SetState(PPUDebugState state)
+void PPU::SetState(PPUDebugState &state)
 {
 	_flags = state.ControlFlags;
 	_statusFlags = state.StatusFlags;
@@ -731,6 +731,8 @@ uint8_t PPU::GetPixelColor()
 						//"... provided that background and sprite rendering are both enabled"
 						//"Should always miss when Y >= 239"
 						_statusFlags.Sprite0Hit = true;
+
+						Debugger::StaticProcessEvent(EventType::SpriteZeroHit);
 					}
 
 					if(EmulationSettings::GetSpritesEnabled() && (backgroundColor == 0 || !_spriteTiles[i].BackgroundPriority)) {

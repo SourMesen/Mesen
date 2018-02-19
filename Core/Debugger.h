@@ -63,14 +63,10 @@ private:
 	int _nextScriptId;
 	vector<shared_ptr<ScriptHost>> _scripts;
 	
-	bool _bpUpdateNeeded;
-	SimpleLock _bpUpdateLock;
-
 	atomic<int32_t> _preventResume;
 	atomic<bool> _stopFlag;
 	atomic<bool> _executionStopped;
 	atomic<int32_t> _suspendCount;
-	vector<Breakpoint> _newBreakpoints;
 	vector<Breakpoint> _breakpoints[BreakpointTypeCount];
 	vector<vector<int>> _breakpointRpnList[BreakpointTypeCount];
 	bool _hasBreakpoint[BreakpointTypeCount] = {};
@@ -122,16 +118,15 @@ private:
 
 	uint32_t _inputOverride[4];
 
-	vector<PpuRegisterWriteInfo> _ppuRegisterWrites;
+	vector<DebugEventInfo> _debugEvents;
+	vector<vector<int>> _debugEventMarkerRpn;
 
 private:
-	void UpdateBreakpoints();
-
 	void PrivateProcessPpuCycle();
 	bool PrivateProcessRamOperation(MemoryOperationType type, uint16_t &addr, uint8_t &value);
 	void PrivateProcessVramReadOperation(MemoryOperationType type, uint16_t addr, uint8_t &value);
 	void PrivateProcessVramWriteOperation(uint16_t addr, uint8_t &value);
-	bool HasMatchingBreakpoint(BreakpointType type, OperationInfo &operationInfo);
+	void ProcessBreakpoints(BreakpointType type, OperationInfo &operationInfo);
 	
 	void UpdateCallstack(uint32_t addr);
 	void PrivateProcessInterrupt(uint16_t cpuAddr, uint16_t destCpuAddr, bool forNmi);
@@ -158,7 +153,7 @@ public:
 	void GetCallstack(int32_t* callstackAbsolute, int32_t* callstackRelative);
 	
 	void GetApuState(ApuState *state);
-	void GetState(DebugState *state, bool includeMapperInfo = true);
+	__forceinline void GetState(DebugState *state, bool includeMapperInfo = true);
 	void SetState(DebugState state);
 
 	void Suspend();
@@ -212,6 +207,7 @@ public:
 	static void ProcessVramReadOperation(MemoryOperationType type, uint16_t addr, uint8_t &value);
 	static void ProcessVramWriteOperation(uint16_t addr, uint8_t &value);
 	static void ProcessPpuCycle();
+	static void StaticProcessEvent(EventType type);
 	
 	static void SetLastFramePpuScroll(uint16_t addr, uint8_t xScroll, bool updateHorizontalScrollOnly);
 	uint32_t GetPpuScroll();
@@ -249,5 +245,5 @@ public:
 	void ProcessPpuOperation(uint16_t addr, uint8_t &value, MemoryOperationType type);
 	void ProcessEvent(EventType type);
 
-	void GetPpuRegisterWriteData(uint32_t* pictureBuffer, PpuRegisterWriteInfo *infoArray);
+	void GetDebugEvents(uint32_t* pictureBuffer, DebugEventInfo *infoArray);
 };
