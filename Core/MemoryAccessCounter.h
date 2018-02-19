@@ -17,8 +17,8 @@ private:
 	vector<int32_t> _writeStamps[4];
 	vector<int32_t> _execStamps[4];
 
-	std::unordered_set<int32_t> _initWrites[4];
-	std::unordered_set<int32_t> _uninitReads[4];
+	vector<uint8_t> _initWrites[4];
+	vector<uint8_t> _uninitReads[4];
 
 	vector<int32_t>& GetArray(MemoryOperationType operationType, AddressType addressType, bool stampArray);
 	

@@ -24,6 +24,9 @@ MemoryAccessCounter::MemoryAccessCounter(Debugger* debugger)
 		_readStamps[i].insert(_readStamps[i].end(), memorySizes[i], 0);
 		_writeStamps[i].insert(_writeStamps[i].end(), memorySizes[i], 0);
 		_execStamps[i].insert(_execStamps[i].end(), memorySizes[i], 0);
+
+		_initWrites[i].insert(_initWrites[i].end(), memorySizes[i], 0);
+		_uninitReads[i].insert(_uninitReads[i].end(), memorySizes[i], 0);
 	}
 }
 
@@ -50,11 +53,11 @@ void MemoryAccessCounter::ProcessMemoryAccess(AddressTypeInfo &addressInfo, Memo
 
 	if(operation != MemoryOperationType::Write &&
 		(addressInfo.Type == AddressType::InternalRam || addressInfo.Type == AddressType::WorkRam) &&
-		_initWrites[index].find(addressInfo.Address) == _initWrites[index].end()) {
+		!_initWrites[index][addressInfo.Address]) {
 		//Mark address as read before being written to (if trying to read/execute)
-		_uninitReads[index].emplace(addressInfo.Address);
+		_uninitReads[index][addressInfo.Address] = true;
 	} else if(operation == MemoryOperationType::Write) {
-		_initWrites[index].emplace(addressInfo.Address);
+		_initWrites[index][addressInfo.Address] = true;
 	}
 }
 
@@ -75,8 +78,8 @@ void MemoryAccessCounter::ResetCounts()
 void MemoryAccessCounter::GetAccessCounts(AddressType memoryType, MemoryOperationType operationType, uint32_t counts[], bool forUninitReads)
 {
 	if(forUninitReads) {
-		for(int address : _uninitReads[(int)memoryType]) {
-			counts[address] = 1;
+		for(size_t i = 0, len = _uninitReads[(int)memoryType].size(); i < len; i++) {
+			counts[i] = _uninitReads[(int)memoryType][i];
 		}
 	} else {
 		memcpy(counts, GetArray(operationType, memoryType, false).data(), GetArray(operationType, memoryType, false).size() * sizeof(uint32_t));
