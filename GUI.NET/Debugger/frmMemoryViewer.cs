@@ -23,10 +23,13 @@ namespace Mesen.GUI.Debugger
 		private DebugWorkspace _previousWorkspace;
 		private bool _updating = false;
 		private DateTime _lastUpdate = DateTime.MinValue;
+		private TabPage _selectedTab;
 
 		public frmMemoryViewer()
 		{
 			InitializeComponent();
+
+			this._selectedTab = this.tabMain.SelectedTab;
 		}
 
 		protected override void OnLoad(EventArgs e)
@@ -171,6 +174,10 @@ namespace Mesen.GUI.Debugger
 						case RefreshSpeed.High: refreshDelay = 16; break;
 					}
 
+					if(_selectedTab == tpgProfiler) {
+						refreshDelay *= 10;
+					}
+
 					DateTime now = DateTime.Now;
 					if(!_updating && ConfigManager.Config.DebugInfo.RamAutoRefresh && (now - _lastUpdate).Milliseconds >= refreshDelay) {
 						_lastUpdate = now;
@@ -248,6 +255,8 @@ namespace Mesen.GUI.Debugger
 			} else if(this.tabMain.SelectedTab == this.tpgMemoryViewer) {
 				this.UpdateByteColorProvider();
 				this.ctrlHexViewer.SetData(InteropEmu.DebugGetMemoryState(this._memoryType));
+			} else if(this.tabMain.SelectedTab == this.tpgProfiler) {
+				this.ctrlProfiler.RefreshData();
 			}
 		}
 
@@ -376,9 +385,8 @@ namespace Mesen.GUI.Debugger
 
 		private void tabMain_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			if(this.tabMain.SelectedTab == this.tpgProfiler) {
-				this.ctrlProfiler.RefreshData();
-			}
+			_selectedTab = this.tabMain.SelectedTab;
+			this.RefreshData();
 		}
 
 		private void ctrlHexViewer_RequiredWidthChanged(object sender, EventArgs e)

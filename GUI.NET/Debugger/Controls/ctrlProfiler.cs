@@ -66,7 +66,11 @@ namespace Mesen.GUI.Debugger.Controls
 
 			lstFunctions.BeginUpdate();
 			lstFunctions.ListViewItemSorter = null;
-			lstFunctions.Items.Clear();			
+
+			int? topItemIndex = lstFunctions.TopItem?.Index;
+			int selectedIndex = lstFunctions.SelectedIndices.Count > 0 ? lstFunctions.SelectedIndices[0] : -1;
+
+			int itemNumber = 0;
 			for(UInt32 i = 0; i < _exclusiveTime.Length; i++) {
 				if(_exclusiveTime[i] > 0) {
 					string functionName;
@@ -83,29 +87,56 @@ namespace Mesen.GUI.Debugger.Controls
 						}
 					}
 
-					ListViewItem item = lstFunctions.Items.Add(functionName);
-					item.Tag = i;
+					ListViewItem item;
+					if(itemNumber >= lstFunctions.Items.Count) {
+						item = lstFunctions.Items.Add("");
+						item.SubItems.Add("");
+						item.SubItems.Add("");
+						item.SubItems.Add("");
+						item.SubItems.Add("");
+						item.SubItems.Add("");
+					} else {
+						item = lstFunctions.Items[itemNumber];
+					}
 
-					item.SubItems.Add(_callCount[i].ToString());
+					item.Text = functionName;
+
+					item.Tag = i;
+					item.Selected = false;
+					item.Focused = false;
+
+					item.SubItems[1].Text = _callCount[i].ToString();
 					item.SubItems[1].Tag = _callCount[i];
 
-					item.SubItems.Add(_inclusiveTime[i].ToString());
+					item.SubItems[2].Text = _inclusiveTime[i].ToString();
 					item.SubItems[2].Tag = _inclusiveTime[i];
 
-					double ratio = ((double)_inclusiveTime[i] / exclusiveTotal)*100;
-					item.SubItems.Add(ratio.ToString("0.00"));
+					double ratio = ((double)_inclusiveTime[i] / exclusiveTotal) *100;
+					item.SubItems[3].Text = ratio.ToString("0.00");
 					item.SubItems[3].Tag = (Int64)(ratio*100);
 
-					item.SubItems.Add(_exclusiveTime[i].ToString());
+					item.SubItems[4].Text = _exclusiveTime[i].ToString();
 					item.SubItems[4].Tag = _exclusiveTime[i];
 
 					ratio = ((double)_exclusiveTime[i] / exclusiveTotal)*100;
-					item.SubItems.Add(ratio.ToString("0.00"));
+					item.SubItems[5].Text = ratio.ToString("0.00");
 					item.SubItems[5].Tag = (Int64)(ratio*100);
+
+					itemNumber++;
 				}
 			}
+
 			lstFunctions.ListViewItemSorter = new ListComparer(_sortColumn, _sortOrder);
 			lstFunctions.EndUpdate();
+
+			if(topItemIndex.HasValue) {
+				lstFunctions.TopItem = lstFunctions.Items[topItemIndex.Value];
+			}
+
+			if(selectedIndex >= 0) {
+				lstFunctions.Items[selectedIndex].Selected = true;
+				lstFunctions.Items[selectedIndex].Focused = true;
+			}
 		}
 
 		private void btnReset_Click(object sender, EventArgs e)
@@ -113,14 +144,10 @@ namespace Mesen.GUI.Debugger.Controls
 			lock(_resetLock) {
 				InteropEmu.DebugResetProfiler();
 			}
+			lstFunctions.Items.Clear();
 			RefreshData();
 		}
-
-		private void btnRefresh_Click(object sender, EventArgs e)
-		{
-			this.RefreshData();
-		}
-
+		
 		private void lstFunctions_ColumnClick(object sender, ColumnClickEventArgs e)
 		{
 			if(_sortColumn == e.Column) {

@@ -28,7 +28,6 @@
 		private void InitializeComponent()
 		{
 			this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
-			this.btnRefresh = new System.Windows.Forms.Button();
 			this.btnReset = new System.Windows.Forms.Button();
 			this.lstFunctions = new Mesen.GUI.Controls.DoubleBufferedListView();
 			this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -45,12 +44,11 @@
 			this.tableLayoutPanel1.ColumnCount = 2;
 			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-			this.tableLayoutPanel1.Controls.Add(this.btnRefresh, 0, 2);
 			this.tableLayoutPanel1.Controls.Add(this.btnReset, 1, 2);
 			this.tableLayoutPanel1.Controls.Add(this.lstFunctions, 0, 1);
 			this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
-			this.tableLayoutPanel1.Margin = new System.Windows.Forms.Padding(0, 0, 0, 0);
+			this.tableLayoutPanel1.Margin = new System.Windows.Forms.Padding(0);
 			this.tableLayoutPanel1.Name = "tableLayoutPanel1";
 			this.tableLayoutPanel1.RowCount = 3;
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
@@ -58,16 +56,6 @@
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel1.Size = new System.Drawing.Size(514, 307);
 			this.tableLayoutPanel1.TabIndex = 3;
-			// 
-			// btnRefresh
-			// 
-			this.btnRefresh.Location = new System.Drawing.Point(3, 281);
-			this.btnRefresh.Name = "btnRefresh";
-			this.btnRefresh.Size = new System.Drawing.Size(75, 23);
-			this.btnRefresh.TabIndex = 8;
-			this.btnRefresh.Text = "Refresh";
-			this.btnRefresh.UseVisualStyleBackColor = true;
-			this.btnRefresh.Click += new System.EventHandler(this.btnRefresh_Click);
 			// 
 			// btnReset
 			// 
@@ -95,7 +83,7 @@
 			this.lstFunctions.GridLines = true;
 			this.lstFunctions.HideSelection = false;
 			this.lstFunctions.Location = new System.Drawing.Point(0, 0);
-			this.lstFunctions.Margin = new System.Windows.Forms.Padding(0, 0, 0, 0);
+			this.lstFunctions.Margin = new System.Windows.Forms.Padding(0);
 			this.lstFunctions.Name = "lstFunctions";
 			this.lstFunctions.Size = new System.Drawing.Size(514, 278);
 			this.lstFunctions.TabIndex = 7;
@@ -134,7 +122,7 @@
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.Controls.Add(this.tableLayoutPanel1);
-			this.Margin = new System.Windows.Forms.Padding(0, 0, 0, 0);
+			this.Margin = new System.Windows.Forms.Padding(0);
 			this.Name = "ctrlProfiler";
 			this.Size = new System.Drawing.Size(514, 307);
 			this.tableLayoutPanel1.ResumeLayout(false);
@@ -150,7 +138,6 @@
 		private System.Windows.Forms.ColumnHeader columnHeader4;
 		private System.Windows.Forms.ColumnHeader columnHeader2;
 		private System.Windows.Forms.ColumnHeader columnHeader3;
-		private System.Windows.Forms.Button btnRefresh;
 		private System.Windows.Forms.ColumnHeader columnHeader5;
 		private System.Windows.Forms.ColumnHeader columnHeader6;
 	}
