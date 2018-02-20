@@ -180,14 +180,16 @@ namespace Mesen.GUI.Debugger.Controls
 		private void lstBreakpoints_MouseDown(object sender, MouseEventArgs e)
 		{
 			ListViewHitTestInfo info = lstBreakpoints.HitTest(e.X, e.Y);
-			int row = info.Item.Index;
-			int col = info.Item.SubItems.IndexOf(info.SubItem);
+			if(info != null && info.Item != null) {
+				int row = info.Item.Index;
+				int col = info.Item.SubItems.IndexOf(info.SubItem);
 
-			if(col == 1 && row < lstBreakpoints.Items.Count) {
-				this.BeginInvoke((Action)(() => {
-					Breakpoint bp = lstBreakpoints.Items[row].Tag as Breakpoint;
-					bp?.SetMarked(!bp.MarkEvent);
-				}));
+				if(col == 1 && row < lstBreakpoints.Items.Count) {
+					this.BeginInvoke((Action)(() => {
+						Breakpoint bp = lstBreakpoints.Items[row].Tag as Breakpoint;
+						bp?.SetMarked(!bp.MarkEvent);
+					}));
+				}
 			}
 		}
 	}
