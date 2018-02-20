@@ -11,12 +11,13 @@ using System.Runtime.InteropServices;
 using Mesen.GUI.Controls;
 using Mesen.GUI.Forms;
 using Mesen.GUI.Config;
+using System.Collections.ObjectModel;
 
 namespace Mesen.GUI.Debugger.Controls
 {
 	public partial class ctrlEventViewerPpuView : BaseControl
 	{
-		private UInt32 _scanlineCount = 262;
+		private DebugState _state = new DebugState();
 		private byte[] _pictureData = null;
 		private Dictionary<int, DebugEventInfo> _debugEvents = new Dictionary<int, DebugEventInfo>();
 
@@ -29,7 +30,6 @@ namespace Mesen.GUI.Debugger.Controls
 		{
 			DebugState state = new DebugState();
 			InteropEmu.DebugGetState(ref state);
-			_scanlineCount = state.PPU.ScanlineCount;
 
 			DebugEventInfo[] eventInfoArray;
 			InteropEmu.DebugGetDebugEvents(out _pictureData, out eventInfoArray);
@@ -37,7 +37,9 @@ namespace Mesen.GUI.Debugger.Controls
 			for(int i = 0; i < eventInfoArray.Length; i++) {
 				debugEvents[(eventInfoArray[i].Scanline + 1) * 341 + eventInfoArray[i].Cycle] = eventInfoArray[i];
 			}
+
 			_debugEvents = debugEvents;
+			_state = state;
 		}
 
 		private bool ShowEvent(DebugEventType type)
@@ -60,7 +62,7 @@ namespace Mesen.GUI.Debugger.Controls
 			GCHandle handle = GCHandle.Alloc(this._pictureData, GCHandleType.Pinned);
 			try {
 				Bitmap source = new Bitmap(256, 240, 256*4, System.Drawing.Imaging.PixelFormat.Format32bppArgb, handle.AddrOfPinnedObject());
-				Bitmap target = new Bitmap(682, (int)_scanlineCount * 2);
+				Bitmap target = new Bitmap(682, (int)_state.PPU.ScanlineCount * 2);
 				this.picPicture.Width = target.Width + 2;
 				this.picPicture.Height = target.Height + 2;
 				this.Width = this.picPicture.Width + 2;
@@ -81,7 +83,7 @@ namespace Mesen.GUI.Debugger.Controls
 				};
 				
 				using(Graphics g = Graphics.FromImage(target)) {
-					g.Clear(Color.DimGray);
+					g.Clear(Color.Gray);
 					g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
 					g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.None;
 					g.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.Half;
@@ -89,28 +91,63 @@ namespace Mesen.GUI.Debugger.Controls
 					g.DrawImageUnscaled(source, 1, 1);
 
 					g.ResetTransform();
-					foreach(var kvp in _debugEvents) {
-						if(ShowEvent(kvp.Value.Type)) {
-							List<Color> colorList = colors[(int)kvp.Value.Type];
-							Color color = colorList[kvp.Value.Address % colorList.Count];
-							using(Brush b = new SolidBrush(ControlPaint.Dark(color))) {
-								g.FillRectangle(b, kvp.Value.Cycle * 2 - 2, kvp.Value.Scanline * 2, 6, 6);
-							}
-						}
+
+					int nmiStart = (int)(_state.PPU.NmiScanline + 1) * 2 + 1;
+					int nmiEnd = (int)(_state.PPU.SafeOamScanline + 1) * 2 + 2;
+					g.FillRectangle(Brushes.DimGray, 0, nmiStart, 682, nmiEnd - nmiStart);
+
+					g.DrawLine(Pens.Blue, 0, nmiStart, 682, nmiStart);
+					g.DrawLine(Pens.Red, 0, nmiEnd, 682, nmiEnd);
+
+					if(_state.PPU.Scanline > 0) {
+						int currentScanline = (_state.PPU.Scanline + 1) * 2 + 1;
+						g.FillRectangle(Brushes.Yellow, 0, currentScanline, 682, 2);
 					}
-					foreach(var kvp in _debugEvents) {
-						if(ShowEvent(kvp.Value.Type)) {
-							List<Color> colorList = colors[(int)kvp.Value.Type];
-							Color color = colorList[kvp.Value.Address % colorList.Count];
-							using(Brush b = new SolidBrush(color)) {
-								g.FillRectangle(b, kvp.Value.Cycle * 2, kvp.Value.Scanline * 2 + 2, 2, 2);
-							}
-						}
-					}
+
+					DrawEvents(g, colors);
 				}
 				this.picPicture.Image = target;
 			} finally {
 				handle.Free();
+			}
+		}
+
+		private void DrawEvents(Graphics g, List<List<Color>> colors)
+		{
+			var enumValues = Enum.GetValues(typeof(DebugEventType));
+			IGrouping<int, DebugEventInfo>[][] groupedEvents = new IGrouping<int, DebugEventInfo>[enumValues.Length][];
+			foreach(DebugEventType eventType in Enum.GetValues(typeof(DebugEventType))) {
+				if(ShowEvent(eventType)) {
+					List<Color> colorList = colors[(int)eventType];
+					groupedEvents[(int)eventType] = _debugEvents.Values.Where((v) => v.Type == eventType).GroupBy((v) => v.Address % colorList.Count).ToArray();
+				} else {
+					groupedEvents[(int)eventType] = null;
+				}
+			}
+
+			DrawEvents(g, colors, false, groupedEvents);
+			DrawEvents(g, colors, true, groupedEvents);
+		}
+
+		private static void DrawEvents(Graphics g, List<List<Color>> colors, bool drawFg, IGrouping<int, DebugEventInfo>[][] groupedEvents)
+		{
+			int size = drawFg ? 2 : 6;
+			int offset = drawFg ? 0 : 2;
+			foreach(DebugEventType eventType in Enum.GetValues(typeof(DebugEventType))) {
+				if(groupedEvents[(int)eventType] != null) {
+					foreach(var eventGroup in groupedEvents[(int)eventType]) {
+						List<Rectangle> rects = new List<Rectangle>(eventGroup.Count());
+						foreach(DebugEventInfo evt in eventGroup) {
+							rects.Add(new Rectangle(evt.Cycle * 2 - offset, evt.Scanline * 2 - offset + 2, size, size));
+						}
+
+						List<Color> colorList = colors[(int)eventType];
+						Color color = colorList[eventGroup.Key];
+						using(Brush b = new SolidBrush(drawFg ? color : ControlPaint.Dark(color))) {
+							g.FillRectangles(b, rects.ToArray());
+						}
+					}
+				}
 			}
 		}
 
@@ -119,7 +156,7 @@ namespace Mesen.GUI.Debugger.Controls
 		private void picPicture_MouseMove(object sender, MouseEventArgs e)
 		{
 			int cycle = e.X * 341 / (picPicture.Width - 2);
-			int scanline = e.Y * (int)_scanlineCount / (picPicture.Height - 2) - 1;
+			int scanline = e.Y * (int)_state.PPU.ScanlineCount / (picPicture.Height - 2) - 1;
 			
 			int[] offsets = new int[3] { 0, -1, 1 };
 
@@ -146,6 +183,20 @@ namespace Mesen.GUI.Debugger.Controls
 									case DebugEventType.PpuRegisterWrite:
 										values["Register"] = "$" + debugEvent.Address.ToString("X4");
 										values["Value"] = "$" + debugEvent.Value.ToString("X2");
+
+										if(debugEvent.PpuLatch >= 0) {
+											values["2nd Write"] = debugEvent.PpuLatch == 0 ? "false" : "true";
+										}
+										break;
+
+									case DebugEventType.Breakpoint:
+										ReadOnlyCollection<Breakpoint> breakpoints = BreakpointManager.Breakpoints;
+										if(debugEvent.BreakpointId >= 0 && debugEvent.BreakpointId < breakpoints.Count) {
+											Breakpoint bp = breakpoints[debugEvent.BreakpointId];
+											values["BP Type"] = bp.ToReadableType();
+											values["BP Addresses"] = bp.GetAddressString(true);
+											values["BP Condition"] = bp.Condition;
+										}
 										break;
 								}
 

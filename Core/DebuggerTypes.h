@@ -82,6 +82,7 @@ struct PPUDebugState
 	uint32_t FrameCount;
 	uint32_t NmiScanline;
 	uint32_t ScanlineCount;
+	uint32_t SafeOamScanline;
 };
 
 struct DebugState
@@ -115,11 +116,13 @@ enum class DebugEventType : uint8_t
 
 struct DebugEventInfo
 {
-	DebugEventType Type;
-	uint16_t Address;
-	uint8_t Value;
 	uint16_t Cycle;
 	int16_t Scanline;
+	uint16_t Address;
+	int16_t BreakpointId;
+	DebugEventType Type;
+	uint8_t Value;
+	int8_t PpuLatch;
 };
 
 enum class EventType

@@ -39,15 +39,17 @@ namespace Mesen.GUI.Debugger
 			base.OnLoad(e);
 
 			if(!this.DesignMode) {
-				this._notifListener = new InteropEmu.NotificationListener();
-				this._notifListener.OnNotification += this._notifListener_OnNotification;
-
 				this.GetData();
 				this.RefreshViewer();
+
+				DebugWorkspaceManager.GetWorkspace();
 
 				if(!ConfigManager.Config.DebugInfo.EventViewerSize.IsEmpty) {
 					this.Size = ConfigManager.Config.DebugInfo.EventViewerSize;
 				}
+
+				this._notifListener = new InteropEmu.NotificationListener();
+				this._notifListener.OnNotification += this._notifListener_OnNotification;
 			}
 		}
 
@@ -64,8 +66,8 @@ namespace Mesen.GUI.Debugger
 				this.GetData();
 				this.BeginInvoke((MethodInvoker)(() => this.RefreshViewer()));
 			} else if(e.NotificationType == InteropEmu.ConsoleNotificationType.EventViewerDisplayFrame) {
-				if(!_refreshing && (DateTime.Now - _lastUpdate).Milliseconds > 66) {
-					//Update at 15 fps most
+				if(!_refreshing && (DateTime.Now - _lastUpdate).Milliseconds >= 32) {
+					//Update at ~30 fps at most
 					this.GetData();
 					this.BeginInvoke((MethodInvoker)(() => this.RefreshViewer()));
 					_lastUpdate = DateTime.Now;
@@ -80,7 +82,9 @@ namespace Mesen.GUI.Debugger
 
 		private void RefreshViewer()
 		{
+			_refreshing = true;
 			ctrlEventViewerPpuView.RefreshViewer();
+			_refreshing = false;
 		}
 
 		private void mnuClose_Click(object sender, EventArgs e)

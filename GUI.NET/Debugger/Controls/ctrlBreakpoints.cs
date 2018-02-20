@@ -16,6 +16,7 @@ namespace Mesen.GUI.Debugger.Controls
 	public partial class ctrlBreakpoints : BaseControl
 	{
 		public event EventHandler BreakpointNavigation;
+		private Font _markedColumnFont;
 
 		public ctrlBreakpoints()
 		{
@@ -23,6 +24,8 @@ namespace Mesen.GUI.Debugger.Controls
 
 			bool designMode = (LicenseManager.UsageMode == LicenseUsageMode.Designtime);
 			if(!designMode) {
+				_markedColumnFont = new Font(this.Font.FontFamily, 13f);
+
 				mnuShowLabels.Checked = ConfigManager.Config.DebugInfo.ShowBreakpointLabels;
 				mnuShowLabels.CheckedChanged += mnuShowLabels_CheckedChanged;
 
@@ -53,7 +56,7 @@ namespace Mesen.GUI.Debugger.Controls
 			lstBreakpoints.BeginUpdate();
 			ReadOnlyCollection<Breakpoint> breakpoints = BreakpointManager.Breakpoints;
 			for(int i = 0; i < breakpoints.Count; i++) {
-				lstBreakpoints.Items[i].SubItems[2].Text = breakpoints[i].GetAddressString(mnuShowLabels.Checked);
+				lstBreakpoints.Items[i].SubItems[3].Text = breakpoints[i].GetAddressString(mnuShowLabels.Checked);
 			}
 			lstBreakpoints.EndUpdate();
 		}
@@ -69,6 +72,8 @@ namespace Mesen.GUI.Debugger.Controls
 				ListViewItem item = new ListViewItem();
 				item.Tag = breakpoint;
 				item.Checked = breakpoint.Enabled;
+				item.UseItemStyleForSubItems = false;
+				item.SubItems.Add(breakpoint.MarkEvent ? "☑" : "☐").Font = _markedColumnFont;
 				item.SubItems.Add(breakpoint.ToReadableType());
 				item.SubItems.Add(breakpoint.GetAddressString(mnuShowLabels.Checked));
 				item.SubItems.Add(breakpoint.Condition);
@@ -84,9 +89,6 @@ namespace Mesen.GUI.Debugger.Controls
 
 		private void lstBreakpoints_ColumnWidthChanging(object sender, ColumnWidthChangingEventArgs e)
 		{
-			if(e.ColumnIndex == 2) {
-				e.Cancel = true;
-			}
 			AdjustColumnWidth();
 		}
 
@@ -100,8 +102,10 @@ namespace Mesen.GUI.Debugger.Controls
 			lstBreakpoints.ColumnWidthChanging -= lstBreakpoints_ColumnWidthChanging;
 			lstBreakpoints.ColumnWidthChanged -= lstBreakpoints_ColumnWidthChanged;
 
+			lstBreakpoints.AutoResizeColumn(1, ColumnHeaderAutoResizeStyle.ColumnContent);
+
 			//Force watch values to take the full width of the list
-			int totalWidth = lstBreakpoints.Columns[0].Width + lstBreakpoints.Columns[1].Width + lstBreakpoints.Columns[2].Width + lstBreakpoints.Columns[3].Width;
+			int totalWidth = lstBreakpoints.Columns[0].Width + lstBreakpoints.Columns[1].Width + lstBreakpoints.Columns[2].Width + lstBreakpoints.Columns[3].Width + lstBreakpoints.Columns[4].Width;
 			colLastColumn.Width = lstBreakpoints.ClientSize.Width - totalWidth;
 
 			lstBreakpoints.ColumnWidthChanging += lstBreakpoints_ColumnWidthChanging;
@@ -171,6 +175,20 @@ namespace Mesen.GUI.Debugger.Controls
 			ConfigManager.ApplyChanges();
 
 			this.RefreshListAddresses();
+		}
+
+		private void lstBreakpoints_MouseDown(object sender, MouseEventArgs e)
+		{
+			ListViewHitTestInfo info = lstBreakpoints.HitTest(e.X, e.Y);
+			int row = info.Item.Index;
+			int col = info.Item.SubItems.IndexOf(info.SubItem);
+
+			if(col == 1 && row < lstBreakpoints.Items.Count) {
+				this.BeginInvoke((Action)(() => {
+					Breakpoint bp = lstBreakpoints.Items[row].Tag as Breakpoint;
+					bp?.SetMarked(!bp.MarkEvent);
+				}));
+			}
 		}
 	}
 }

@@ -136,6 +136,8 @@ private:
 
 	void RemoveExcessCallstackEntries();
 
+	void AddDebugEvent(DebugEventType type, uint16_t address = -1, uint8_t value = 0, int16_t breakpointId = -1, int8_t ppuLatch = -1);
+
 public:
 	Debugger(shared_ptr<Console> console, shared_ptr<CPU> cpu, shared_ptr<PPU> ppu, shared_ptr<APU> apu, shared_ptr<MemoryManager> memoryManager, shared_ptr<BaseMapper> mapper);
 	~Debugger();
@@ -246,4 +248,5 @@ public:
 	void ProcessEvent(EventType type);
 
 	void GetDebugEvents(uint32_t* pictureBuffer, DebugEventInfo *infoArray);
+	uint32_t GetDebugEventCount();
 };

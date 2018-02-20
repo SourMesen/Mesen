@@ -645,7 +645,7 @@ namespace Mesen.GUI.Debugger
 
 			InteropEmu.DebugSetFlags(0);
 			InteropEmu.SetFlag(EmulationFlags.DebuggerWindowEnabled, false);
-			InteropEmu.DebugSetBreakpoints(new InteropBreakpoint[0], 0);
+			BreakpointManager.SetBreakpoints();
 			InteropEmu.DebugRun();
 
 			ConfigManager.Config.DebugInfo.WindowWidth = this.WindowState == FormWindowState.Maximized ? this.RestoreBounds.Width : this.Width;

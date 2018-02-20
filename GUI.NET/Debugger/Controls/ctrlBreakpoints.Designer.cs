@@ -39,6 +39,7 @@
 			this.mnuShowLabels = new System.Windows.Forms.ToolStripMenuItem();
 			this.lstBreakpoints = new Mesen.GUI.Controls.MyListView();
 			this.columnHeader3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+			this.columnHeader5 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
 			this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
 			this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
 			this.columnHeader4 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -115,6 +116,7 @@
 			this.lstBreakpoints.CheckBoxes = true;
 			this.lstBreakpoints.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.columnHeader3,
+            this.columnHeader5,
             this.columnHeader1,
             this.columnHeader2,
             this.columnHeader4,
@@ -134,11 +136,17 @@
 			this.lstBreakpoints.ColumnWidthChanging += new System.Windows.Forms.ColumnWidthChangingEventHandler(this.lstBreakpoints_ColumnWidthChanging);
 			this.lstBreakpoints.SelectedIndexChanged += new System.EventHandler(this.lstBreakpoints_SelectedIndexChanged);
 			this.lstBreakpoints.DoubleClick += new System.EventHandler(this.lstBreakpoints_DoubleClick);
+			this.lstBreakpoints.MouseDown += new System.Windows.Forms.MouseEventHandler(this.lstBreakpoints_MouseDown);
 			// 
 			// columnHeader3
 			// 
 			this.columnHeader3.Text = "";
 			this.columnHeader3.Width = 21;
+			// 
+			// columnHeader5
+			// 
+			this.columnHeader5.Text = "M";
+			this.columnHeader5.Width = 25;
 			// 
 			// columnHeader1
 			// 
@@ -188,5 +196,6 @@
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem1;
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem2;
 		private System.Windows.Forms.ToolStripMenuItem mnuShowLabels;
+		private System.Windows.Forms.ColumnHeader columnHeader5;
 	}
 }

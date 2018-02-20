@@ -28,58 +28,58 @@
 		private void InitializeComponent()
 		{
 			this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+			this.lblBreakpoint = new System.Windows.Forms.Label();
+			this.lblPpuRegisters = new System.Windows.Forms.Label();
 			this.lblMapperWrite = new System.Windows.Forms.Label();
 			this.lblOthers = new System.Windows.Forms.Label();
 			this.picWrite2005 = new System.Windows.Forms.PictureBox();
-			this.lblWrite2006 = new System.Windows.Forms.Label();
-			this.lblWrite2003 = new System.Windows.Forms.Label();
 			this.lblWrite2001 = new System.Windows.Forms.Label();
 			this.picWrite2003 = new System.Windows.Forms.PictureBox();
 			this.picWrite2001 = new System.Windows.Forms.PictureBox();
 			this.picWrite2004 = new System.Windows.Forms.PictureBox();
-			this.lblWrite2004 = new System.Windows.Forms.Label();
-			this.lblRead2002 = new System.Windows.Forms.Label();
 			this.lblWrite2000 = new System.Windows.Forms.Label();
-			this.picRead2002 = new System.Windows.Forms.PictureBox();
 			this.picWrite2000 = new System.Windows.Forms.PictureBox();
-			this.lblWrite2005 = new System.Windows.Forms.Label();
-			this.picWrite2007 = new System.Windows.Forms.PictureBox();
 			this.picMapperRead = new System.Windows.Forms.PictureBox();
 			this.lblMapperRead = new System.Windows.Forms.Label();
 			this.picMapperWrite = new System.Windows.Forms.PictureBox();
 			this.lblIrq = new System.Windows.Forms.Label();
 			this.picIrq = new System.Windows.Forms.PictureBox();
-			this.lblWrite2007 = new System.Windows.Forms.Label();
 			this.picWrite2006 = new System.Windows.Forms.PictureBox();
 			this.lblNmi = new System.Windows.Forms.Label();
-			this.lblSpriteZeroHit = new System.Windows.Forms.Label();
 			this.picNmi = new System.Windows.Forms.PictureBox();
-			this.picSpriteZeroHit = new System.Windows.Forms.PictureBox();
-			this.btnReset = new System.Windows.Forms.Button();
+			this.lblWrite2003 = new System.Windows.Forms.Label();
+			this.lblWrite2005 = new System.Windows.Forms.Label();
+			this.lblWrite2004 = new System.Windows.Forms.Label();
+			this.lblWrite2006 = new System.Windows.Forms.Label();
+			this.lblRead2002 = new System.Windows.Forms.Label();
+			this.lblWrite2007 = new System.Windows.Forms.Label();
+			this.picWrite2007 = new System.Windows.Forms.PictureBox();
+			this.picRead2002 = new System.Windows.Forms.PictureBox();
 			this.lblRead2004 = new System.Windows.Forms.Label();
 			this.lblRead2007 = new System.Windows.Forms.Label();
 			this.picRead2004 = new System.Windows.Forms.PictureBox();
 			this.picRead2007 = new System.Windows.Forms.PictureBox();
-			this.lblPpuRegisters = new System.Windows.Forms.Label();
-			this.lblBreakpoint = new System.Windows.Forms.Label();
+			this.lblSpriteZeroHit = new System.Windows.Forms.Label();
+			this.picSpriteZeroHit = new System.Windows.Forms.PictureBox();
 			this.picBreakpoint = new System.Windows.Forms.PictureBox();
+			this.btnReset = new System.Windows.Forms.Button();
 			this.baseConfigPanel.SuspendLayout();
 			this.tableLayoutPanel1.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.picWrite2005)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.picWrite2003)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.picWrite2001)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.picWrite2004)).BeginInit();
-			((System.ComponentModel.ISupportInitialize)(this.picRead2002)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.picWrite2000)).BeginInit();
-			((System.ComponentModel.ISupportInitialize)(this.picWrite2007)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.picMapperRead)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.picMapperWrite)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.picIrq)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.picWrite2006)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.picNmi)).BeginInit();
-			((System.ComponentModel.ISupportInitialize)(this.picSpriteZeroHit)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.picWrite2007)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.picRead2002)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.picRead2004)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.picRead2007)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.picSpriteZeroHit)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.picBreakpoint)).BeginInit();
 			this.SuspendLayout();
 			// 
@@ -151,6 +151,29 @@
 			this.tableLayoutPanel1.Size = new System.Drawing.Size(406, 378);
 			this.tableLayoutPanel1.TabIndex = 2;
 			// 
+			// lblBreakpoint
+			// 
+			this.lblBreakpoint.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.lblBreakpoint.AutoSize = true;
+			this.lblBreakpoint.Location = new System.Drawing.Point(215, 318);
+			this.lblBreakpoint.Name = "lblBreakpoint";
+			this.lblBreakpoint.Size = new System.Drawing.Size(61, 13);
+			this.lblBreakpoint.TabIndex = 42;
+			this.lblBreakpoint.Text = "Breakpoint:";
+			// 
+			// lblPpuRegisters
+			// 
+			this.lblPpuRegisters.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.lblPpuRegisters.AutoSize = true;
+			this.tableLayoutPanel1.SetColumnSpan(this.lblPpuRegisters, 3);
+			this.lblPpuRegisters.ForeColor = System.Drawing.SystemColors.GrayText;
+			this.lblPpuRegisters.Location = new System.Drawing.Point(0, 7);
+			this.lblPpuRegisters.Margin = new System.Windows.Forms.Padding(0, 0, 3, 0);
+			this.lblPpuRegisters.Name = "lblPpuRegisters";
+			this.lblPpuRegisters.Size = new System.Drawing.Size(76, 13);
+			this.lblPpuRegisters.TabIndex = 41;
+			this.lblPpuRegisters.Text = "PPU Registers";
+			// 
 			// lblMapperWrite
 			// 
 			this.lblMapperWrite.Anchor = System.Windows.Forms.AnchorStyles.Left;
@@ -184,26 +207,6 @@
 			this.picWrite2005.TabIndex = 7;
 			this.picWrite2005.TabStop = false;
 			this.picWrite2005.Click += new System.EventHandler(this.picColorPicker_Click);
-			// 
-			// lblWrite2006
-			// 
-			this.lblWrite2006.Anchor = System.Windows.Forms.AnchorStyles.Left;
-			this.lblWrite2006.AutoSize = true;
-			this.lblWrite2006.Location = new System.Drawing.Point(215, 108);
-			this.lblWrite2006.Name = "lblWrite2006";
-			this.lblWrite2006.Size = new System.Drawing.Size(54, 13);
-			this.lblWrite2006.TabIndex = 4;
-			this.lblWrite2006.Text = "W: $2006";
-			// 
-			// lblWrite2003
-			// 
-			this.lblWrite2003.Anchor = System.Windows.Forms.AnchorStyles.Left;
-			this.lblWrite2003.AutoSize = true;
-			this.lblWrite2003.Location = new System.Drawing.Point(3, 70);
-			this.lblWrite2003.Name = "lblWrite2003";
-			this.lblWrite2003.Size = new System.Drawing.Size(54, 13);
-			this.lblWrite2003.TabIndex = 2;
-			this.lblWrite2003.Text = "W: $2003";
 			// 
 			// lblWrite2001
 			// 
@@ -248,26 +251,6 @@
 			this.picWrite2004.TabStop = false;
 			this.picWrite2004.Click += new System.EventHandler(this.picColorPicker_Click);
 			// 
-			// lblWrite2004
-			// 
-			this.lblWrite2004.Anchor = System.Windows.Forms.AnchorStyles.Left;
-			this.lblWrite2004.AutoSize = true;
-			this.lblWrite2004.Location = new System.Drawing.Point(215, 70);
-			this.lblWrite2004.Name = "lblWrite2004";
-			this.lblWrite2004.Size = new System.Drawing.Size(54, 13);
-			this.lblWrite2004.TabIndex = 1;
-			this.lblWrite2004.Text = "W: $2004";
-			// 
-			// lblRead2002
-			// 
-			this.lblRead2002.Anchor = System.Windows.Forms.AnchorStyles.Left;
-			this.lblRead2002.AutoSize = true;
-			this.lblRead2002.Location = new System.Drawing.Point(215, 146);
-			this.lblRead2002.Name = "lblRead2002";
-			this.lblRead2002.Size = new System.Drawing.Size(51, 13);
-			this.lblRead2002.TabIndex = 0;
-			this.lblRead2002.Text = "R: $2002";
-			// 
 			// lblWrite2000
 			// 
 			this.lblWrite2000.Anchor = System.Windows.Forms.AnchorStyles.Left;
@@ -277,17 +260,6 @@
 			this.lblWrite2000.Size = new System.Drawing.Size(54, 13);
 			this.lblWrite2000.TabIndex = 11;
 			this.lblWrite2000.Text = "W: $2000";
-			// 
-			// picRead2002
-			// 
-			this.picRead2002.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.picRead2002.Cursor = System.Windows.Forms.Cursors.Hand;
-			this.picRead2002.Location = new System.Drawing.Point(370, 137);
-			this.picRead2002.Name = "picRead2002";
-			this.picRead2002.Size = new System.Drawing.Size(32, 32);
-			this.picRead2002.TabIndex = 5;
-			this.picRead2002.TabStop = false;
-			this.picRead2002.Click += new System.EventHandler(this.picColorPicker_Click);
 			// 
 			// picWrite2000
 			// 
@@ -299,27 +271,6 @@
 			this.picWrite2000.TabIndex = 9;
 			this.picWrite2000.TabStop = false;
 			this.picWrite2000.Click += new System.EventHandler(this.picColorPicker_Click);
-			// 
-			// lblWrite2005
-			// 
-			this.lblWrite2005.Anchor = System.Windows.Forms.AnchorStyles.Left;
-			this.lblWrite2005.AutoSize = true;
-			this.lblWrite2005.Location = new System.Drawing.Point(3, 108);
-			this.lblWrite2005.Name = "lblWrite2005";
-			this.lblWrite2005.Size = new System.Drawing.Size(54, 13);
-			this.lblWrite2005.TabIndex = 16;
-			this.lblWrite2005.Text = "W: $2005";
-			// 
-			// picWrite2007
-			// 
-			this.picWrite2007.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.picWrite2007.Cursor = System.Windows.Forms.Cursors.Hand;
-			this.picWrite2007.Location = new System.Drawing.Point(157, 137);
-			this.picWrite2007.Name = "picWrite2007";
-			this.picWrite2007.Size = new System.Drawing.Size(32, 32);
-			this.picWrite2007.TabIndex = 17;
-			this.picWrite2007.TabStop = false;
-			this.picWrite2007.Click += new System.EventHandler(this.picColorPicker_Click);
 			// 
 			// picMapperRead
 			// 
@@ -374,16 +325,6 @@
 			this.picIrq.TabStop = false;
 			this.picIrq.Click += new System.EventHandler(this.picColorPicker_Click);
 			// 
-			// lblWrite2007
-			// 
-			this.lblWrite2007.Anchor = System.Windows.Forms.AnchorStyles.Left;
-			this.lblWrite2007.AutoSize = true;
-			this.lblWrite2007.Location = new System.Drawing.Point(3, 146);
-			this.lblWrite2007.Name = "lblWrite2007";
-			this.lblWrite2007.Size = new System.Drawing.Size(54, 13);
-			this.lblWrite2007.TabIndex = 35;
-			this.lblWrite2007.Text = "W: $2007";
-			// 
 			// picWrite2006
 			// 
 			this.picWrite2006.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
@@ -405,16 +346,6 @@
 			this.lblNmi.TabIndex = 29;
 			this.lblNmi.Text = "NMI:";
 			// 
-			// lblSpriteZeroHit
-			// 
-			this.lblSpriteZeroHit.Anchor = System.Windows.Forms.AnchorStyles.Left;
-			this.lblSpriteZeroHit.AutoSize = true;
-			this.lblSpriteZeroHit.Location = new System.Drawing.Point(3, 318);
-			this.lblSpriteZeroHit.Name = "lblSpriteZeroHit";
-			this.lblSpriteZeroHit.Size = new System.Drawing.Size(62, 13);
-			this.lblSpriteZeroHit.TabIndex = 33;
-			this.lblSpriteZeroHit.Text = "Sprite 0 Hit:";
-			// 
 			// picNmi
 			// 
 			this.picNmi.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
@@ -426,26 +357,87 @@
 			this.picNmi.TabStop = false;
 			this.picNmi.Click += new System.EventHandler(this.picColorPicker_Click);
 			// 
-			// picSpriteZeroHit
+			// lblWrite2003
 			// 
-			this.picSpriteZeroHit.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.picSpriteZeroHit.Cursor = System.Windows.Forms.Cursors.Hand;
-			this.picSpriteZeroHit.Location = new System.Drawing.Point(157, 309);
-			this.picSpriteZeroHit.Name = "picSpriteZeroHit";
-			this.picSpriteZeroHit.Size = new System.Drawing.Size(32, 32);
-			this.picSpriteZeroHit.TabIndex = 34;
-			this.picSpriteZeroHit.TabStop = false;
-			this.picSpriteZeroHit.Click += new System.EventHandler(this.picColorPicker_Click);
+			this.lblWrite2003.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.lblWrite2003.AutoSize = true;
+			this.lblWrite2003.Location = new System.Drawing.Point(3, 70);
+			this.lblWrite2003.Name = "lblWrite2003";
+			this.lblWrite2003.Size = new System.Drawing.Size(54, 13);
+			this.lblWrite2003.TabIndex = 2;
+			this.lblWrite2003.Text = "W: $2003";
 			// 
-			// btnReset
+			// lblWrite2005
 			// 
-			this.btnReset.Location = new System.Drawing.Point(3, 3);
-			this.btnReset.Name = "btnReset";
-			this.btnReset.Size = new System.Drawing.Size(102, 23);
-			this.btnReset.TabIndex = 3;
-			this.btnReset.Text = "Use default colors";
-			this.btnReset.UseVisualStyleBackColor = true;
-			this.btnReset.Click += new System.EventHandler(this.btnReset_Click);
+			this.lblWrite2005.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.lblWrite2005.AutoSize = true;
+			this.lblWrite2005.Location = new System.Drawing.Point(3, 108);
+			this.lblWrite2005.Name = "lblWrite2005";
+			this.lblWrite2005.Size = new System.Drawing.Size(54, 13);
+			this.lblWrite2005.TabIndex = 16;
+			this.lblWrite2005.Text = "W: $2005";
+			// 
+			// lblWrite2004
+			// 
+			this.lblWrite2004.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.lblWrite2004.AutoSize = true;
+			this.lblWrite2004.Location = new System.Drawing.Point(215, 70);
+			this.lblWrite2004.Name = "lblWrite2004";
+			this.lblWrite2004.Size = new System.Drawing.Size(54, 13);
+			this.lblWrite2004.TabIndex = 1;
+			this.lblWrite2004.Text = "W: $2004";
+			// 
+			// lblWrite2006
+			// 
+			this.lblWrite2006.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.lblWrite2006.AutoSize = true;
+			this.lblWrite2006.Location = new System.Drawing.Point(215, 108);
+			this.lblWrite2006.Name = "lblWrite2006";
+			this.lblWrite2006.Size = new System.Drawing.Size(54, 13);
+			this.lblWrite2006.TabIndex = 4;
+			this.lblWrite2006.Text = "W: $2006";
+			// 
+			// lblRead2002
+			// 
+			this.lblRead2002.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.lblRead2002.AutoSize = true;
+			this.lblRead2002.Location = new System.Drawing.Point(215, 146);
+			this.lblRead2002.Name = "lblRead2002";
+			this.lblRead2002.Size = new System.Drawing.Size(51, 13);
+			this.lblRead2002.TabIndex = 0;
+			this.lblRead2002.Text = "R: $2002";
+			// 
+			// lblWrite2007
+			// 
+			this.lblWrite2007.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.lblWrite2007.AutoSize = true;
+			this.lblWrite2007.Location = new System.Drawing.Point(3, 146);
+			this.lblWrite2007.Name = "lblWrite2007";
+			this.lblWrite2007.Size = new System.Drawing.Size(54, 13);
+			this.lblWrite2007.TabIndex = 35;
+			this.lblWrite2007.Text = "W: $2007";
+			// 
+			// picWrite2007
+			// 
+			this.picWrite2007.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this.picWrite2007.Cursor = System.Windows.Forms.Cursors.Hand;
+			this.picWrite2007.Location = new System.Drawing.Point(157, 137);
+			this.picWrite2007.Name = "picWrite2007";
+			this.picWrite2007.Size = new System.Drawing.Size(32, 32);
+			this.picWrite2007.TabIndex = 17;
+			this.picWrite2007.TabStop = false;
+			this.picWrite2007.Click += new System.EventHandler(this.picColorPicker_Click);
+			// 
+			// picRead2002
+			// 
+			this.picRead2002.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this.picRead2002.Cursor = System.Windows.Forms.Cursors.Hand;
+			this.picRead2002.Location = new System.Drawing.Point(370, 137);
+			this.picRead2002.Name = "picRead2002";
+			this.picRead2002.Size = new System.Drawing.Size(32, 32);
+			this.picRead2002.TabIndex = 5;
+			this.picRead2002.TabStop = false;
+			this.picRead2002.Click += new System.EventHandler(this.picColorPicker_Click);
 			// 
 			// lblRead2004
 			// 
@@ -489,28 +481,26 @@
 			this.picRead2007.TabStop = false;
 			this.picRead2007.Click += new System.EventHandler(this.picColorPicker_Click);
 			// 
-			// lblPpuRegisters
+			// lblSpriteZeroHit
 			// 
-			this.lblPpuRegisters.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.lblPpuRegisters.AutoSize = true;
-			this.tableLayoutPanel1.SetColumnSpan(this.lblPpuRegisters, 3);
-			this.lblPpuRegisters.ForeColor = System.Drawing.SystemColors.GrayText;
-			this.lblPpuRegisters.Location = new System.Drawing.Point(0, 7);
-			this.lblPpuRegisters.Margin = new System.Windows.Forms.Padding(0, 0, 3, 0);
-			this.lblPpuRegisters.Name = "lblPpuRegisters";
-			this.lblPpuRegisters.Size = new System.Drawing.Size(76, 13);
-			this.lblPpuRegisters.TabIndex = 41;
-			this.lblPpuRegisters.Text = "PPU Registers";
+			this.lblSpriteZeroHit.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.lblSpriteZeroHit.AutoSize = true;
+			this.lblSpriteZeroHit.Location = new System.Drawing.Point(3, 318);
+			this.lblSpriteZeroHit.Name = "lblSpriteZeroHit";
+			this.lblSpriteZeroHit.Size = new System.Drawing.Size(62, 13);
+			this.lblSpriteZeroHit.TabIndex = 33;
+			this.lblSpriteZeroHit.Text = "Sprite 0 Hit:";
 			// 
-			// lblBreakpoint
+			// picSpriteZeroHit
 			// 
-			this.lblBreakpoint.Anchor = System.Windows.Forms.AnchorStyles.Left;
-			this.lblBreakpoint.AutoSize = true;
-			this.lblBreakpoint.Location = new System.Drawing.Point(215, 318);
-			this.lblBreakpoint.Name = "lblBreakpoint";
-			this.lblBreakpoint.Size = new System.Drawing.Size(61, 13);
-			this.lblBreakpoint.TabIndex = 42;
-			this.lblBreakpoint.Text = "Breakpoint:";
+			this.picSpriteZeroHit.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this.picSpriteZeroHit.Cursor = System.Windows.Forms.Cursors.Hand;
+			this.picSpriteZeroHit.Location = new System.Drawing.Point(157, 309);
+			this.picSpriteZeroHit.Name = "picSpriteZeroHit";
+			this.picSpriteZeroHit.Size = new System.Drawing.Size(32, 32);
+			this.picSpriteZeroHit.TabIndex = 34;
+			this.picSpriteZeroHit.TabStop = false;
+			this.picSpriteZeroHit.Click += new System.EventHandler(this.picColorPicker_Click);
 			// 
 			// picBreakpoint
 			// 
@@ -521,6 +511,17 @@
 			this.picBreakpoint.Size = new System.Drawing.Size(32, 32);
 			this.picBreakpoint.TabIndex = 43;
 			this.picBreakpoint.TabStop = false;
+			this.picBreakpoint.Click += new System.EventHandler(this.picColorPicker_Click);
+			// 
+			// btnReset
+			// 
+			this.btnReset.Location = new System.Drawing.Point(3, 3);
+			this.btnReset.Name = "btnReset";
+			this.btnReset.Size = new System.Drawing.Size(102, 23);
+			this.btnReset.TabIndex = 3;
+			this.btnReset.Text = "Use default colors";
+			this.btnReset.UseVisualStyleBackColor = true;
+			this.btnReset.Click += new System.EventHandler(this.btnReset_Click);
 			// 
 			// frmEventViewerColors
 			// 
@@ -540,17 +541,17 @@
 			((System.ComponentModel.ISupportInitialize)(this.picWrite2003)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.picWrite2001)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.picWrite2004)).EndInit();
-			((System.ComponentModel.ISupportInitialize)(this.picRead2002)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.picWrite2000)).EndInit();
-			((System.ComponentModel.ISupportInitialize)(this.picWrite2007)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.picMapperRead)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.picMapperWrite)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.picIrq)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.picWrite2006)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.picNmi)).EndInit();
-			((System.ComponentModel.ISupportInitialize)(this.picSpriteZeroHit)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.picWrite2007)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.picRead2002)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.picRead2004)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.picRead2007)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.picSpriteZeroHit)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.picBreakpoint)).EndInit();
 			this.ResumeLayout(false);
 

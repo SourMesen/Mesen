@@ -89,6 +89,12 @@ namespace Mesen.GUI.Debugger
 			BreakpointManager.RefreshBreakpoints(this);
 		}
 
+		public void SetMarked(bool marked)
+		{
+			MarkEvent = marked;
+			BreakpointManager.RefreshBreakpoints(this);
+		}
+
 		public bool IsAbsoluteAddress { get { return MemoryType != DebugMemoryType.CpuMemory && MemoryType != DebugMemoryType.PpuMemory; } }
 
 		public bool IsCpuBreakpoint { get { return this._isCpuBreakpoint; } }
@@ -180,9 +186,10 @@ namespace Mesen.GUI.Debugger
 			return false;
 		}
 
-		public InteropBreakpoint ToInteropBreakpoint()
+		public InteropBreakpoint ToInteropBreakpoint(int breakpointId)
 		{
 			InteropBreakpoint bp = new InteropBreakpoint() {
+				Id = breakpointId,
 				MemoryType = MemoryType,
 				Type = Type,
 				MarkEvent = MarkEvent,

@@ -37,8 +37,7 @@ namespace Mesen.GUI.Debugger
 				_breakpoints = breakpoints.ToList();
 			}
 
-			//Don't refresh breakpoints, doing so will cause them to be enabled even if the debugger window is closed
-			//RefreshBreakpoints();
+			RefreshBreakpoints();
 		}
 
 		public static void EditBreakpoint(Breakpoint bp)
@@ -125,8 +124,8 @@ namespace Mesen.GUI.Debugger
 		public static void SetBreakpoints()
 		{
 			List<InteropBreakpoint> breakpoints = new List<InteropBreakpoint>();
-			foreach(Breakpoint bp in Breakpoints) {
-				breakpoints.Add(bp.ToInteropBreakpoint());
+			for(int i = 0; i < Breakpoints.Count; i++) {
+				breakpoints.Add(Breakpoints[i].ToInteropBreakpoint(i));
 			}
 			InteropEmu.DebugSetBreakpoints(breakpoints.ToArray(), (UInt32)breakpoints.Count);
 		}

@@ -112,18 +112,18 @@ namespace Mesen.GUI.Config
 		public bool EventViewerShowSpriteZeroHit = true;
 		public bool EventViewerShowMarkedBreakpoints = true;
 
-		public XmlColor EventViewerMapperRegisterWriteColor = Color.FromArgb(62, 194, 205);
-		public XmlColor EventViewerMapperRegisterReadColor = Color.FromArgb(189, 172, 44);
-		public XmlColor EventViewerNmiColor = Color.FromArgb(0, 255, 50);
-		public XmlColor EventViewerIrqColor = Color.FromArgb(249, 254, 172);
-		public XmlColor EventViewerSpriteZeroHitColor = Color.FromArgb(255, 0, 100);
-		public XmlColor EventViewerBreakpointColor = Color.FromArgb(200, 50, 200);
+		public XmlColor EventViewerMapperRegisterWriteColor = ColorTranslator.FromHtml("#007597");
+		public XmlColor EventViewerMapperRegisterReadColor = ColorTranslator.FromHtml("#C92929");
+		public XmlColor EventViewerNmiColor = ColorTranslator.FromHtml("#ABADAC");
+		public XmlColor EventViewerIrqColor = ColorTranslator.FromHtml("#F9FEAC");
+		public XmlColor EventViewerSpriteZeroHitColor = ColorTranslator.FromHtml("#9F93C6");
+		public XmlColor EventViewerBreakpointColor = ColorTranslator.FromHtml("#1898E4");
 		public XmlColor[] EventViewerPpuRegisterWriteColors = new XmlColor[8] {
-			Color.FromArgb(93, 179, 255), Color.FromArgb(200, 144, 255), Color.Red, Color.FromArgb(255, 131, 192),
-			Color.FromArgb(239, 154, 73), Color.FromArgb(133, 188, 47), Color.FromArgb(85, 199, 83), Color.FromArgb(60, 201, 140)
+			ColorTranslator.FromHtml("#FF5E5E"), ColorTranslator.FromHtml("#8E33FF"), Color.Red, ColorTranslator.FromHtml("#FF84E0"),
+			ColorTranslator.FromHtml("#FAFF39"), ColorTranslator.FromHtml("#2EFF28"), ColorTranslator.FromHtml("#3D2DFF"), ColorTranslator.FromHtml("#FF060D")
 		};
 		public XmlColor[] EventViewerPpuRegisterReadColors = new XmlColor[8] {
-			Color.Red, Color.Red, Color.FromArgb(143, 161, 255), Color.Red, Color.FromArgb(247, 133, 250), Color.Red, Color.Red, Color.FromArgb(255, 139, 127)
+			Color.Red, Color.Red, ColorTranslator.FromHtml("#FF8224"), Color.Red, ColorTranslator.FromHtml("#24A672"), Color.Red, Color.Red, ColorTranslator.FromHtml("#6AF0FF")
 		};
 
 		public bool PpuAutoRefresh = true;

@@ -143,7 +143,8 @@ void PPU::GetState(PPUDebugState &state)
 	state.Scanline = _scanline;
 	state.FrameCount = _frameCount;
 	state.NmiScanline = _nmiScanline;
-	state.ScanlineCount = _vblankEnd + 1;
+	state.ScanlineCount = _vblankEnd + 2;
+	state.SafeOamScanline = _nesModel == NesModel::NTSC ? _nmiScanline + 19 : _palSpriteEvalScanline;
 }
 
 void PPU::SetState(PPUDebugState &state)

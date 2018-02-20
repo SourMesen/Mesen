@@ -36,10 +36,12 @@ public:
 	bool HasCondition();
 	void ClearCondition();
 
+	uint32_t GetId();
 	bool IsEnabled();
 	bool IsMarked();
 	
 private:
+	uint32_t _id;
 	DebugMemoryType _memoryType;
 	BreakpointTypeFlags _type;
 	int32_t _startAddr;

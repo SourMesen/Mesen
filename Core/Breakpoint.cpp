@@ -92,6 +92,11 @@ void Breakpoint::ClearCondition()
 	memset(_condition, 0, sizeof(_condition));
 }
 
+uint32_t Breakpoint::GetId()
+{
+	return _id;
+}
+
 bool Breakpoint::IsEnabled()
 {
 	return _enabled;

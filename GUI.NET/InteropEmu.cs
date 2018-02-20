@@ -441,11 +441,12 @@ namespace Mesen.GUI
 			return frameData;
 		}
 
+		[DllImport(DLLPath)] private static extern UInt32 DebugGetDebugEventCount();
 		[DllImport(DLLPath, EntryPoint = "DebugGetDebugEvents")] private static extern void DebugGetDebugEventsWrapper(IntPtr frameBuffer, IntPtr infoArray);
 		public static void DebugGetDebugEvents(out byte[] pictureData, out DebugEventInfo[] debugEvents)
 		{
 			pictureData = new byte[256 * 240 * 4];
-			debugEvents = new DebugEventInfo[1000];
+			debugEvents = new DebugEventInfo[DebugGetDebugEventCount()];
 
 			GCHandle hPictureData = GCHandle.Alloc(pictureData, GCHandleType.Pinned);
 			GCHandle hDebugEvents = GCHandle.Alloc(debugEvents, GCHandleType.Pinned);
@@ -454,13 +455,6 @@ namespace Mesen.GUI
 			} finally {
 				hPictureData.Free();
 				hDebugEvents.Free();
-			}
-
-			for(int i = 0; i < 1000; i++) {
-				if(debugEvents[i].Type == DebugEventType.None) {
-					Array.Resize(ref debugEvents, i);
-					break;
-				}
 			}
 		}
 
@@ -1099,11 +1093,13 @@ namespace Mesen.GUI
 
 	public struct DebugEventInfo
 	{
-		public DebugEventType Type;
-		public UInt16 Address;
-		public byte Value;
 		public UInt16 Cycle;
 		public Int16 Scanline;
+		public UInt16 Address;
+		public Int16 BreakpointId;
+		public DebugEventType Type;
+		public byte Value;
+		public SByte PpuLatch;
 	}
 
 	public struct DebugState
@@ -1161,6 +1157,7 @@ namespace Mesen.GUI
 		public UInt32 FrameCount;
 		public UInt32 NmiScanline;
 		public UInt32 ScanlineCount;
+		public UInt32 SafeOamScanline;
 	}
 
 	public struct PPUState
@@ -1745,6 +1742,7 @@ namespace Mesen.GUI
 
 	public struct InteropBreakpoint
 	{
+		public Int32 Id;
 		public DebugMemoryType MemoryType;
 		public BreakpointType Type;
 		public Int32 StartAddress;

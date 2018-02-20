@@ -82,25 +82,25 @@ namespace Mesen.GUI.Debugger
 
 		private void btnReset_Click(object sender, EventArgs e)
 		{
-			picWrite2000.BackColor = Color.FromArgb(93, 179, 255);
-			picWrite2001.BackColor = Color.FromArgb(200, 144, 255);
-			picWrite2003.BackColor = Color.FromArgb(255, 131, 192);
-			picWrite2004.BackColor = Color.FromArgb(239, 154, 73);
-			picWrite2005.BackColor = Color.FromArgb(133, 188, 47);
-			picWrite2006.BackColor = Color.FromArgb(85, 199, 83);
-			picWrite2007.BackColor = Color.FromArgb(60, 201, 140);
+			picWrite2000.BackColor = ColorTranslator.FromHtml("#FF5E5E");
+			picWrite2001.BackColor = ColorTranslator.FromHtml("#8E33FF");
+			picWrite2003.BackColor = ColorTranslator.FromHtml("#FF84E0");
+			picWrite2004.BackColor = ColorTranslator.FromHtml("#FAFF39");
+			picWrite2005.BackColor = ColorTranslator.FromHtml("#2EFF28");
+			picWrite2006.BackColor = ColorTranslator.FromHtml("#3D2DFF");
+			picWrite2007.BackColor = ColorTranslator.FromHtml("#FF060D");
 
-			picRead2002.BackColor = Color.FromArgb(143, 161, 255);
-			picRead2004.BackColor = Color.FromArgb(247, 133, 250);
-			picRead2007.BackColor = Color.FromArgb(255, 139, 127);
+			picRead2002.BackColor = ColorTranslator.FromHtml("#FF8224");
+			picRead2004.BackColor = ColorTranslator.FromHtml("#24A672");
+			picRead2007.BackColor = ColorTranslator.FromHtml("#6AF0FF");
 
-			picMapperRead.BackColor = Color.FromArgb(189, 172, 44);
-			picMapperWrite.BackColor = Color.FromArgb(62, 194, 205);
+			picMapperRead.BackColor = ColorTranslator.FromHtml("#C92929");
+			picMapperWrite.BackColor = ColorTranslator.FromHtml("#007597");
 
-			picNmi.BackColor = Color.FromArgb(0, 255, 50);
-			picIrq.BackColor = Color.FromArgb(249, 254, 172);
-			picSpriteZeroHit.BackColor = Color.FromArgb(255, 0, 100);
-			picBreakpoint.BackColor = Color.FromArgb(200, 50, 200);
+			picNmi.BackColor = ColorTranslator.FromHtml("#ABADAC");
+			picIrq.BackColor = ColorTranslator.FromHtml("#F9FEAC");
+			picSpriteZeroHit.BackColor = ColorTranslator.FromHtml("#9F93C6");
+			picBreakpoint.BackColor = ColorTranslator.FromHtml("#1898E4");
 		}
 	}
 }
