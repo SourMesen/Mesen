@@ -1011,10 +1011,10 @@ namespace Mesen.GUI.Debugger
 
 				foreach(Breakpoint breakpoint in BreakpointManager.Breakpoints) {
 					if(breakpoint.Matches(cpuAddress, ref addressInfo)) {
-						Color? fgColor = Color.White;
+						Color fgColor = Color.White;
 						Color? bgColor = null;
 						Color bpColor = breakpoint.BreakOnExec ? info.CodeExecBreakpointColor : (breakpoint.BreakOnWrite ? info.CodeWriteBreakpointColor : info.CodeReadBreakpointColor);
-						Color? outlineColor = bpColor;
+						Color outlineColor = bpColor;
 						LineSymbol symbol;
 						if(breakpoint.Enabled) {
 							bgColor = bpColor;
@@ -1024,6 +1024,13 @@ namespace Mesen.GUI.Debugger
 							symbol = LineSymbol.CircleOutline;
 						}
 
+						if(breakpoint.MarkEvent) {
+							symbol |= LineSymbol.Mark;
+						}
+
+						if(!string.IsNullOrWhiteSpace(breakpoint.Condition)) {
+							symbol |= LineSymbol.Plus;
+						}
 
 						if(isActiveStatement) {
 							fgColor = Color.Black;

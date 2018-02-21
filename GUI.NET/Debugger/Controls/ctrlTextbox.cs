@@ -20,6 +20,8 @@ namespace Mesen.GUI.Debugger
 		Circle = 1,
 		CircleOutline = 2,
 		Arrow = 4,
+		Mark = 8,
+		Plus = 16
 	}
 
 	public enum eHistoryType
@@ -1054,24 +1056,61 @@ namespace Mesen.GUI.Debugger
 
 		private void DrawLineSymbols(Graphics g, int positionY, LineProperties lineProperties, int lineHeight)
 		{
+			int circleSize = lineHeight - 3;
+			if((circleSize % 2) == 1) {
+				circleSize++;
+			}
+			int circleOffsetY = positionY + 4;
+			int circleOffsetX = 3;
+
+			Action<Brush> drawPlus = (Brush b) => {
+				float barWidth = 2;
+				float centerPoint = circleSize / 2.0f - barWidth / 2.0f;
+				float barLength = circleSize - 6;
+				if((barLength % 2) == 1) {
+					barLength++;
+				}
+				float startOffset = (circleSize - barLength) / 2.0f;
+
+				g.FillRectangle(b, circleOffsetX + startOffset, circleOffsetY + centerPoint, barLength, barWidth);
+				g.FillRectangle(b, circleOffsetX + centerPoint, circleOffsetY + startOffset, barWidth, barLength);
+			};
+
 			if(lineProperties.Symbol.HasFlag(LineSymbol.Circle)) {
 				using(Brush brush = new SolidBrush(lineProperties.OutlineColor.Value)) {
-					g.FillEllipse(brush, 3, positionY + 4, lineHeight - 3, lineHeight - 3);
+					g.FillEllipse(brush, 3, circleOffsetY, circleSize, circleSize);
 				}
-			}
-			if(lineProperties.Symbol.HasFlag(LineSymbol.CircleOutline) && lineProperties.OutlineColor.HasValue) {
+				if(lineProperties.Symbol.HasFlag(LineSymbol.Plus)) {
+					drawPlus(Brushes.White);
+				}
+			} else if(lineProperties.Symbol.HasFlag(LineSymbol.CircleOutline) && lineProperties.OutlineColor.HasValue) {
 				using(Pen pen = new Pen(lineProperties.OutlineColor.Value, 1)) {
-					g.DrawEllipse(pen, 3, positionY + 4, lineHeight - 3, lineHeight - 3);
+					g.DrawEllipse(pen, 3, circleOffsetY, circleSize, circleSize);
+					if(lineProperties.Symbol.HasFlag(LineSymbol.Plus)) {
+						using(Brush b = new SolidBrush(lineProperties.OutlineColor.Value)) {
+							drawPlus(b);
+						}
+					}
 				}
 			}
+
+			if(lineProperties.Symbol.HasFlag(LineSymbol.Mark)) {
+				using(Brush b = new SolidBrush(ConfigManager.Config.DebugInfo.EventViewerBreakpointColor)) {
+					g.FillEllipse(b, circleOffsetX + circleSize * 3 / 4, positionY + 1, lineHeight / 2.0f, lineHeight / 2.0f);
+				}
+				g.DrawEllipse(Pens.Black, circleOffsetX + circleSize * 3 / 4, positionY + 1, lineHeight / 2.0f, lineHeight / 2.0f);
+			}
+
 			if(lineProperties.Symbol.HasFlag(LineSymbol.Arrow)) {
-				int arrowY = positionY + lineHeight / 2 + 1;
 				if(Program.IsMono) {
+					int arrowY = positionY + lineHeight / 2 + 1;
 					using(Brush brush = new SolidBrush(lineProperties.TextBgColor.Value)) {
 						g.FillRectangle(brush, 1, arrowY - lineHeight * 0.25f / 2, lineHeight - 1, lineHeight * 0.35f); 
 					}
 					g.DrawRectangle(Pens.Black, 1, arrowY - lineHeight * 0.25f / 2, lineHeight - 1, lineHeight * 0.35f); 
 				} else {
+					float arrowY = circleOffsetY + circleSize / 2.0f;
+					g.TranslateTransform(2, 0);
 					using(Pen pen = new Pen(Color.Black, lineHeight * 0.33f)) {
 						//Outline
 						g.DrawLine(pen, 3, arrowY, 3 + lineHeight * 0.25f, arrowY);
@@ -1086,6 +1125,7 @@ namespace Mesen.GUI.Debugger
 						pen.EndCap = System.Drawing.Drawing2D.LineCap.ArrowAnchor;
 						g.DrawLine(pen, 3 + lineHeight * 0.25f, arrowY, lineHeight * 0.75f + 1, arrowY);
 					}
+					g.TranslateTransform(-2, 0);
 				}
 			}
 		}
