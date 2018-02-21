@@ -241,7 +241,8 @@ uint16_t CPU::FetchOperand()
 		//Don't stop emulation on CPU crash when playing NSFs, reset cpu instead
 		Console::Reset(true);
 		return 0;
-	} else {
+	} else if(!Debugger::IsEnabled()) {
+		//Throw an error and stop emulation core (if debugger is not enabled)
 		throw std::runtime_error("Invalid OP code - CPU crashed");
 	}
 #else 

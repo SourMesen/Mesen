@@ -69,6 +69,7 @@ namespace Mesen.GUI.Debugger
 			this.mnuBreakOnOpen.Checked = ConfigManager.Config.DebugInfo.BreakOnOpen;
 			this.mnuBreakOnUnofficialOpcodes.Checked = ConfigManager.Config.DebugInfo.BreakOnUnofficialOpcodes;
 			this.mnuBreakOnBrk.Checked = ConfigManager.Config.DebugInfo.BreakOnBrk;
+			this.mnuBreakOnCrash.Checked = ConfigManager.Config.DebugInfo.BreakOnCrash;
 			this.mnuBreakOnDebuggerFocus.Checked = ConfigManager.Config.DebugInfo.BreakOnDebuggerFocus;
 			this.mnuDisplayOpCodesInLowerCase.Checked = ConfigManager.Config.DebugInfo.DisplayOpCodesInLowerCase;
 
@@ -803,7 +804,14 @@ namespace Mesen.GUI.Debugger
 			ConfigManager.Config.DebugInfo.BreakOnBrk = mnuBreakOnBrk.Checked;
 			ConfigManager.ApplyChanges();
 		}
-		
+
+		private void mnuBreakOnCrash_Click(object sender, EventArgs e)
+		{
+			ConfigManager.Config.DebugInfo.BreakOnCrash = mnuBreakOnCrash.Checked;
+			ConfigManager.ApplyChanges();
+			DebugInfo.ApplyConfig();
+		}
+
 		private void mnuBreakOnDebuggerFocus_Click(object sender, EventArgs e)
 		{
 			ConfigManager.Config.DebugInfo.BreakOnDebuggerFocus = mnuBreakOnDebuggerFocus.Checked;

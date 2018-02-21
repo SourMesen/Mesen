@@ -153,6 +153,11 @@ void Debugger::BreakIfDebugging()
 	if(Debugger::Instance != nullptr) {
 		Debugger::Instance->Step(1);
 		Debugger::Instance->SleepUntilResume();
+	} else if(EmulationSettings::CheckFlag(EmulationFlags::BreakOnCrash)) {
+		//When "Break on Crash" is enabled, open the debugger and break immediately if a crash occurs
+		Console::GetInstance()->GetDebugger(true);
+		Debugger::Instance->Step(1);
+		Debugger::Instance->SleepUntilResume();
 	}
 }
 
@@ -160,9 +165,14 @@ bool Debugger::LoadCdlFile(string cdlFilepath)
 {
 	if(_codeDataLogger->LoadCdlFile(cdlFilepath)) {
 		//Can't use DebugBreakHelper due to the fact this is called in the constructor
-		Console::Pause();
+		bool isEmulationThread = Console::GetEmulationThreadId() == std::this_thread::get_id();
+		if(!isEmulationThread) {
+			Console::Pause();
+		}
 		UpdateCdlCache();
-		Console::Resume();
+		if(!isEmulationThread) {
+			Console::Resume();
+		}
 		return true;
 	}
 	return false;

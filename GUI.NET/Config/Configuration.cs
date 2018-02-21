@@ -81,6 +81,7 @@ namespace Mesen.GUI.Config
 			AudioInfo.ApplyConfig();
 			PreferenceInfo.ApplyConfig();
 			EmulationInfo.ApplyConfig();
+			DebugInfo.ApplyConfig();
 
 			InteropEmu.SetNesModel(Region);
 		}

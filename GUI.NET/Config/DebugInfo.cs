@@ -218,6 +218,7 @@ namespace Mesen.GUI.Config
 		public bool BreakOnUnofficialOpcodes = true;
 		public bool BreakOnBrk = false;
 		public bool BreakOnDebuggerFocus = false;
+		public bool BreakOnCrash = false;
 
 		public TraceLoggerOptions TraceLoggerOptions;
 		public bool TraceAutoRefresh = true;
@@ -258,6 +259,11 @@ namespace Mesen.GUI.Config
 				UseLabels = false,
 				StatusFormat = StatusFlagFormat.Hexadecimal
 			};
+		}
+
+		static public void ApplyConfig()
+		{
+			InteropEmu.SetFlag(EmulationFlags.BreakOnCrash, ConfigManager.Config.DebugInfo.BreakOnCrash);
 		}
 
 		public void AddRecentScript(string scriptFile)

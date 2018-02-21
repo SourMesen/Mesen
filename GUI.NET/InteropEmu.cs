@@ -1491,6 +1491,7 @@ namespace Mesen.GUI
 		IntegerFpsMode = 0x2000000000000,
 
 		DebuggerWindowEnabled = 0x4000000000000,
+		BreakOnCrash = 0x8000000000000,
 
 		ForceMaxSpeed = 0x4000000000000000,
 		ConsoleMode = 0x8000000000000000,
