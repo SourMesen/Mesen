@@ -62,6 +62,12 @@ namespace Mesen.GUI.Debugger
 			base.OnFormClosing(e);
 		}
 
+		protected override void OnFormClosed(FormClosedEventArgs e)
+		{
+			base.OnFormClosed(e);
+			DebugWindowManager.CleanupDebugger();
+		}
+
 		protected override void OnShown(EventArgs e)
 		{
 			base.OnShown(e);

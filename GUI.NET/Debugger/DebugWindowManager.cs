@@ -95,14 +95,19 @@ namespace Mesen.GUI.Debugger
 			return null;
 		}
 
-		private static void Debugger_FormClosed(object sender, FormClosedEventArgs e)
+		public static void CleanupDebugger()
 		{
-			_openedWindows.Remove((Form)sender);
 			if(_openedWindows.Count == 0) {
 				//All windows have been closed, disable debugger
 				DebugWorkspaceManager.Clear();
 				InteropEmu.DebugRelease();
 			}
+		}
+
+		private static void Debugger_FormClosed(object sender, FormClosedEventArgs e)
+		{
+			_openedWindows.Remove((Form)sender);
+			CleanupDebugger();
 		}
 	}
 
