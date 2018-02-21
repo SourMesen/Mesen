@@ -65,6 +65,7 @@
 			this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
 			this.lblMirroring = new System.Windows.Forms.Label();
 			this.lblMirroringType = new System.Windows.Forms.Label();
+			this.chkUseGrayscalePalette = new System.Windows.Forms.CheckBox();
 			this.tableLayoutPanel1.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.picNametable)).BeginInit();
 			this.ctxMenu.SuspendLayout();
@@ -405,12 +406,13 @@
 			this.flowLayoutPanel1.Controls.Add(this.chkShowPpuScrollOverlay);
 			this.flowLayoutPanel1.Controls.Add(this.chkShowTileGrid);
 			this.flowLayoutPanel1.Controls.Add(this.chkShowAttributeGrid);
+			this.flowLayoutPanel1.Controls.Add(this.chkUseGrayscalePalette);
 			this.flowLayoutPanel1.Controls.Add(this.chkHighlightChrTile);
 			this.flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.flowLayoutPanel1.Location = new System.Drawing.Point(522, 381);
 			this.flowLayoutPanel1.Margin = new System.Windows.Forms.Padding(0);
 			this.flowLayoutPanel1.Name = "flowLayoutPanel1";
-			this.flowLayoutPanel1.Size = new System.Drawing.Size(175, 109);
+			this.flowLayoutPanel1.Size = new System.Drawing.Size(175, 129);
 			this.flowLayoutPanel1.TabIndex = 5;
 			// 
 			// chkShowPpuScrollOverlay
@@ -449,7 +451,7 @@
 			// chkHighlightChrTile
 			// 
 			this.chkHighlightChrTile.CheckAlign = System.Drawing.ContentAlignment.TopLeft;
-			this.chkHighlightChrTile.Location = new System.Drawing.Point(3, 72);
+			this.chkHighlightChrTile.Location = new System.Drawing.Point(3, 95);
 			this.chkHighlightChrTile.Name = "chkHighlightChrTile";
 			this.chkHighlightChrTile.Size = new System.Drawing.Size(150, 31);
 			this.chkHighlightChrTile.TabIndex = 4;
@@ -466,8 +468,8 @@
 			this.tableLayoutPanel3.Controls.Add(this.lblMirroring, 0, 0);
 			this.tableLayoutPanel3.Controls.Add(this.lblMirroringType, 1, 0);
 			this.tableLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.tableLayoutPanel3.Location = new System.Drawing.Point(0, 490);
-			this.tableLayoutPanel3.Margin = new System.Windows.Forms.Padding(0, 0, 0, 0);
+			this.tableLayoutPanel3.Location = new System.Drawing.Point(0, 510);
+			this.tableLayoutPanel3.Margin = new System.Windows.Forms.Padding(0);
 			this.tableLayoutPanel3.Name = "tableLayoutPanel3";
 			this.tableLayoutPanel3.RowCount = 1;
 			this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
@@ -492,6 +494,17 @@
 			this.lblMirroringType.Size = new System.Drawing.Size(64, 13);
 			this.lblMirroringType.TabIndex = 1;
 			this.lblMirroringType.Text = "Horizontal";
+			// 
+			// chkUseGrayscalePalette
+			// 
+			this.chkUseGrayscalePalette.AutoSize = true;
+			this.chkUseGrayscalePalette.Location = new System.Drawing.Point(3, 72);
+			this.chkUseGrayscalePalette.Name = "chkUseGrayscalePalette";
+			this.chkUseGrayscalePalette.Size = new System.Drawing.Size(131, 17);
+			this.chkUseGrayscalePalette.TabIndex = 5;
+			this.chkUseGrayscalePalette.Text = "Use Grayscale Palette";
+			this.chkUseGrayscalePalette.UseVisualStyleBackColor = true;
+			this.chkUseGrayscalePalette.Click += new System.EventHandler(this.chkUseGrayscalePalette_Click);
 			// 
 			// ctrlNametableViewer
 			// 
@@ -556,5 +569,6 @@
 		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel3;
 		private System.Windows.Forms.Label lblMirroring;
 		private System.Windows.Forms.Label lblMirroringType;
+		private System.Windows.Forms.CheckBox chkUseGrayscalePalette;
 	}
 }

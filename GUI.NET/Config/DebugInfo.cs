@@ -133,6 +133,7 @@ namespace Mesen.GUI.Config
 		public bool ShowTileGrid = false;
 		public bool ShowAttributeGrid = false;
 		public bool HighlightChrTile = false;
+		public bool NtViewerUseGrayscalePalette = false;
 
 		public bool ChrViewerUseAutoPalette = true;
 		public bool ChrViewerUseLargeSprites = false;

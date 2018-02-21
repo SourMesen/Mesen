@@ -219,7 +219,7 @@ uint8_t MemoryDumper::GetMemoryValue(DebugMemoryType memoryType, uint32_t addres
 	return 0;
 }
 
-void MemoryDumper::GetNametable(int nametableIndex, uint32_t* frameBuffer, uint8_t* tileData, uint8_t* paletteData)
+void MemoryDumper::GetNametable(int nametableIndex, bool useGrayscalePalette, uint32_t* frameBuffer, uint8_t* tileData, uint8_t* paletteData)
 {
 	shared_ptr<MMC5> mmc5 = std::dynamic_pointer_cast<MMC5>(_mapper);
 	uint32_t *rgbPalette = EmulationSettings::GetRgbPalette();
@@ -228,6 +228,7 @@ void MemoryDumper::GetNametable(int nametableIndex, uint32_t* frameBuffer, uint8
 	uint16_t bgAddr = state.ControlFlags.BackgroundPatternAddr;
 	uint16_t baseAddr = 0x2000 + nametableIndex * 0x400;
 	uint16_t baseAttributeAddr = baseAddr + 960;
+	uint8_t grayscalePalette[4] = { 0x0F, 0x00, 0x10, 0x20 };
 	for(uint8_t y = 0; y < 30; y++) {
 		for(uint8_t x = 0; x < 32; x++) {
 			uint16_t ntIndex = (y << 5) + x;
@@ -255,7 +256,11 @@ void MemoryDumper::GetNametable(int nametableIndex, uint32_t* frameBuffer, uint8
 				}
 				for(uint8_t j = 0; j < 8; j++) {
 					uint8_t color = ((lowByte >> (7 - j)) & 0x01) | (((highByte >> (7 - j)) & 0x01) << 1);
-					frameBuffer[(y << 11) + (x << 3) + (i << 8) + j] = rgbPalette[(color == 0 ? _ppu->ReadPaletteRAM(0) : _ppu->ReadPaletteRAM(paletteBaseAddr + color)) & 0x3F];
+					if(useGrayscalePalette) {
+						frameBuffer[(y << 11) + (x << 3) + (i << 8) + j] = rgbPalette[grayscalePalette[color]];
+					} else {
+						frameBuffer[(y << 11) + (x << 3) + (i << 8) + j] = rgbPalette[(color == 0 ? _ppu->ReadPaletteRAM(0) : _ppu->ReadPaletteRAM(paletteBaseAddr + color)) & 0x3F];
+					}
 				}
 			}
 		}
@@ -354,10 +359,16 @@ void MemoryDumper::GetChrBank(int bankIndex, uint32_t* frameBuffer, uint8_t pale
 {
 	bool autoPalette = (palette & 0x80) == 0x80;
 	uint8_t paletteBaseAddr = (palette & 0x07) << 2;
-		uint32_t defaultPalette = _ppu->ReadPaletteRAM(0) |
-		(_ppu->ReadPaletteRAM(paletteBaseAddr + 1) << 8) |
-		(_ppu->ReadPaletteRAM(paletteBaseAddr + 2) << 16) |
-		(_ppu->ReadPaletteRAM(paletteBaseAddr + 3) << 24);
+	uint32_t defaultPalette;
+	if(palette & 0x08) {
+		//Use grayscale palette
+		defaultPalette = 0x2010000F;
+	} else {
+		defaultPalette = _ppu->ReadPaletteRAM(0) |
+			(_ppu->ReadPaletteRAM(paletteBaseAddr + 1) << 8) |
+			(_ppu->ReadPaletteRAM(paletteBaseAddr + 2) << 16) |
+			(_ppu->ReadPaletteRAM(paletteBaseAddr + 3) << 24);
+	}
 	
 	uint32_t *rgbPalette = EmulationSettings::GetRgbPalette();
 	uint8_t chrBuffer[0x1000];

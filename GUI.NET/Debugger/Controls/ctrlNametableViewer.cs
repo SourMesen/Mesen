@@ -42,6 +42,7 @@ namespace Mesen.GUI.Debugger.Controls
 				chkShowTileGrid.Checked = ConfigManager.Config.DebugInfo.ShowTileGrid;
 				chkShowAttributeGrid.Checked = ConfigManager.Config.DebugInfo.ShowAttributeGrid;
 				chkHighlightChrTile.Checked = ConfigManager.Config.DebugInfo.HighlightChrTile;
+				chkUseGrayscalePalette.Checked = ConfigManager.Config.DebugInfo.NtViewerUseGrayscalePalette;
 			}
 		}
 
@@ -56,7 +57,7 @@ namespace Mesen.GUI.Debugger.Controls
 			InteropEmu.DebugGetState(ref _state);
 
 			for(int i = 0; i < 4; i++) {
-				InteropEmu.DebugGetNametable(i, out _nametablePixelData[i], out _tileData[i], out _attributeData[i]);
+				InteropEmu.DebugGetNametable(i, ConfigManager.Config.DebugInfo.NtViewerUseGrayscalePalette, out _nametablePixelData[i], out _tileData[i], out _attributeData[i]);
 			}
 		}
 
@@ -271,6 +272,14 @@ namespace Mesen.GUI.Debugger.Controls
 		{
 			ConfigManager.Config.DebugInfo.HighlightChrTile = chkHighlightChrTile.Checked;
 			ConfigManager.ApplyChanges();
+			this.RefreshViewer();
+		}
+
+		private void chkUseGrayscalePalette_Click(object sender, EventArgs e)
+		{
+			ConfigManager.Config.DebugInfo.NtViewerUseGrayscalePalette = chkUseGrayscalePalette.Checked;
+			ConfigManager.ApplyChanges();
+			this.GetData();
 			this.RefreshViewer();
 		}
 

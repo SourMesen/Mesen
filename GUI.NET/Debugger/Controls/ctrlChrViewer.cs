@@ -49,7 +49,7 @@ namespace Mesen.GUI.Debugger.Controls
 
 				this.toolTip.SetToolTip(this.picTileTooltip, "Click on the tile to draw with the selected color." + Environment.NewLine + "Right button draws the background color.");
 				this.toolTip.SetToolTip(this.picColorTooltip, "Click on a color (or press 1-4) to select it.");
-				this.toolTip.SetToolTip(this.picPaletteTooltip, "Press Shift-1 to Shift-8 to select the palette.");
+				this.toolTip.SetToolTip(this.picPaletteTooltip, "Press Shift-1 to Shift-9 to select the palette.");
 
 				this.ctrlTilePalette.AllowSelection = true;
 				this.ctrlTilePalette.HighlightMouseOver = true;

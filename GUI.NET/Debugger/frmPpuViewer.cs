@@ -176,7 +176,7 @@ namespace Mesen.GUI.Debugger
 					bool shift = keyData.HasFlag(Keys.Shift);
 					keyData &= ~Keys.Shift;
 
-					if(keyData >= Keys.D1 && keyData <= Keys.D8) {
+					if(keyData >= Keys.D1 && keyData <= Keys.D9) {
 						if(shift) {
 							this.ctrlChrViewer.SelectPalette(keyData - Keys.D1);
 						} else {
@@ -184,7 +184,7 @@ namespace Mesen.GUI.Debugger
 						}
 						return true;
 					}
-					if(keyData >= Keys.NumPad1 && keyData <= Keys.NumPad8) {
+					if(keyData >= Keys.NumPad1 && keyData <= Keys.NumPad9) {
 						if(shift) {
 							this.ctrlChrViewer.SelectPalette(keyData - Keys.NumPad1);
 						} else {

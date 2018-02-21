@@ -165,10 +165,11 @@
             "4",
             "5",
             "6",
-            "7"});
+            "7",
+            "Grayscale"});
 			this.cboPalette.Location = new System.Drawing.Point(52, 3);
 			this.cboPalette.Name = "cboPalette";
-			this.cboPalette.Size = new System.Drawing.Size(45, 21);
+			this.cboPalette.Size = new System.Drawing.Size(84, 21);
 			this.cboPalette.TabIndex = 1;
 			this.cboPalette.SelectedIndexChanged += new System.EventHandler(this.cboPalette_SelectedIndexChanged);
 			// 
@@ -176,7 +177,7 @@
 			// 
 			this.picPaletteTooltip.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.picPaletteTooltip.Image = global::Mesen.GUI.Properties.Resources.Help;
-			this.picPaletteTooltip.Location = new System.Drawing.Point(103, 7);
+			this.picPaletteTooltip.Location = new System.Drawing.Point(142, 7);
 			this.picPaletteTooltip.Margin = new System.Windows.Forms.Padding(3, 4, 3, 3);
 			this.picPaletteTooltip.Name = "picPaletteTooltip";
 			this.picPaletteTooltip.Size = new System.Drawing.Size(14, 14);
