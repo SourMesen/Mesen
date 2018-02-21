@@ -1319,7 +1319,7 @@ void Debugger::GetDebugEvents(uint32_t* pictureBuffer, DebugEventInfo *infoArray
 	for(int i = 0; i < PPU::PixelCount; i++) {
 		pictureBuffer[i] = palette[buffer[i] & 0x3F];
 	}
-	std::copy(_debugEvents.begin(), _debugEvents.end(), infoArray);
+	memcpy(infoArray, _debugEvents.data(), _debugEvents.size() * sizeof(DebugEventInfo));
 }
 
 uint32_t Debugger::GetDebugEventCount()

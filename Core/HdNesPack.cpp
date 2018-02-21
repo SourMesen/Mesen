@@ -65,7 +65,7 @@ void HdNesPack::DrawCustomBackground(uint32_t *outputBuffer, uint32_t x, uint32_
 	} else {
 		uint32_t *buffer = outputBuffer;
 		for(uint32_t i = 0; i < scale; i++) {
-			std::copy(pngData, pngData + scale, outputBuffer);
+			memcpy(outputBuffer, pngData, sizeof(uint32_t) * scale);
 			outputBuffer += screenWidth;
 			pngData += width;
 		}
