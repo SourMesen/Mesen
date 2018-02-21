@@ -102,7 +102,7 @@ private:
 	EvalOperators GetOperator(string token, bool unaryOperator);
 	bool CheckSpecialTokens(string expression, size_t &pos, string &output);
 	string GetNextToken(string expression, size_t &pos);	
-	bool ProcessSpecialOperator(EvalOperators evalOp, std::stack<EvalOperators> &opStack, vector<int> &outputQueue);
+	bool ProcessSpecialOperator(EvalOperators evalOp, std::stack<EvalOperators> &opStack, std::stack<int> &precedenceStack, vector<int> &outputQueue);
 	bool ToRpn(string expression, vector<int> &outputQueue);
 	int32_t PrivateEvaluate(string expression, DebugState &state, EvalResultType &resultType, OperationInfo &operationInfo, bool &success);
 	vector<int>* GetRpnList(string expression, vector<int> &output, bool& success);

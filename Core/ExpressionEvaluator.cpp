@@ -188,7 +188,7 @@ string ExpressionEvaluator::GetNextToken(string expression, size_t &pos)
 	return output;
 }
 	
-bool ExpressionEvaluator::ProcessSpecialOperator(EvalOperators evalOp, std::stack<EvalOperators> &opStack, vector<int> &outputQueue)
+bool ExpressionEvaluator::ProcessSpecialOperator(EvalOperators evalOp, std::stack<EvalOperators> &opStack, std::stack<int> &precedenceStack, vector<int> &outputQueue)
 {
 	if(opStack.empty()) {
 		return false;
@@ -196,6 +196,7 @@ bool ExpressionEvaluator::ProcessSpecialOperator(EvalOperators evalOp, std::stac
 	while(opStack.top() != evalOp) {
 		outputQueue.push_back(opStack.top());
 		opStack.pop();
+		precedenceStack.pop();
 
 		if(opStack.empty()) {
 			return false;
@@ -205,6 +206,7 @@ bool ExpressionEvaluator::ProcessSpecialOperator(EvalOperators evalOp, std::stac
 		outputQueue.push_back(opStack.top());
 	}
 	opStack.pop();
+	precedenceStack.pop();
 
 	return true;
 }
@@ -251,7 +253,7 @@ bool ExpressionEvaluator::ToRpn(string expression, vector<int> &outputQueue)
 			previousTokenIsOp = true;
 		} else if(token[0] == ')') {
 			parenthesisCount--;
-			if(!ProcessSpecialOperator(EvalOperators::Parenthesis, opStack, outputQueue)) {
+			if(!ProcessSpecialOperator(EvalOperators::Parenthesis, opStack, precedenceStack, outputQueue)) {
 				return false;
 			}
 		} else if(token[0] == '[') {
@@ -260,7 +262,7 @@ bool ExpressionEvaluator::ToRpn(string expression, vector<int> &outputQueue)
 			precedenceStack.push(0);
 		} else if(token[0] == ']') {
 			bracketCount--;
-			if(!ProcessSpecialOperator(EvalOperators::Bracket, opStack, outputQueue)) {
+			if(!ProcessSpecialOperator(EvalOperators::Bracket, opStack, precedenceStack, outputQueue)) {
 				return false;
 			}
 		} else if(token[0] == '{') {
@@ -269,7 +271,7 @@ bool ExpressionEvaluator::ToRpn(string expression, vector<int> &outputQueue)
 			precedenceStack.push(0);
 		} else if(token[0] == '}') {
 			braceCount--;
-			if(!ProcessSpecialOperator(EvalOperators::Braces, opStack, outputQueue)){
+			if(!ProcessSpecialOperator(EvalOperators::Braces, opStack, precedenceStack, outputQueue)){
 				return false;
 			}
 		} else {
