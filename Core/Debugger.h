@@ -126,7 +126,7 @@ private:
 	bool PrivateProcessRamOperation(MemoryOperationType type, uint16_t &addr, uint8_t &value);
 	void PrivateProcessVramReadOperation(MemoryOperationType type, uint16_t addr, uint8_t &value);
 	void PrivateProcessVramWriteOperation(uint16_t addr, uint8_t &value);
-	void ProcessBreakpoints(BreakpointType type, OperationInfo &operationInfo);
+	void ProcessBreakpoints(BreakpointType type, OperationInfo &operationInfo, bool allowBreak = true);
 	
 	void UpdateCallstack(uint32_t addr);
 	void PrivateProcessInterrupt(uint16_t cpuAddr, uint16_t destCpuAddr, bool forNmi);

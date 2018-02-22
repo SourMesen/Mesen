@@ -253,7 +253,7 @@ void Debugger::SetBreakpoints(Breakpoint breakpoints[], uint32_t length)
 	}
 }
 
-void Debugger::ProcessBreakpoints(BreakpointType type, OperationInfo &operationInfo)
+void Debugger::ProcessBreakpoints(BreakpointType type, OperationInfo &operationInfo, bool allowBreak)
 {
 	if(_runToCycle != 0) {
 		//Disable all breakpoints while stepping backwards
@@ -308,14 +308,8 @@ void Debugger::ProcessBreakpoints(BreakpointType type, OperationInfo &operationI
 					GetState(&_debugState, false);
 					needState = false;
 				}
-				if(_breakpointRpnList[(int)type][i].size() > 0) {
-					if(_bpExpEval.Evaluate(_breakpointRpnList[(int)type][i], _debugState, resultType, operationInfo) != 0) {
-						processBreakpoint(breakpoint);
-					}
-				} else {
-					if(_bpExpEval.Evaluate(breakpoint.GetCondition(), _debugState, resultType, operationInfo) != 0) {
-						processBreakpoint(breakpoint);
-					}
+				if(_bpExpEval.Evaluate(_breakpointRpnList[(int)type][i], _debugState, resultType, operationInfo) != 0) {
+					processBreakpoint(breakpoint);
 				}
 			}
 		}
@@ -330,7 +324,7 @@ void Debugger::ProcessBreakpoints(BreakpointType type, OperationInfo &operationI
 		AddDebugEvent(DebugEventType::Breakpoint, operationInfo.Address, (uint8_t)operationInfo.Value, markBreakpointId);
 	}
 
-	if(needBreak) {
+	if(needBreak && allowBreak) {
 		//Found a matching breakpoint, stop execution
 		Step(1);
 		SleepUntilResume();
@@ -601,7 +595,7 @@ bool Debugger::PrivateProcessRamOperation(MemoryOperationType type, uint16_t &ad
 		_profiler->ProcessCycle();
 	}
 
-	if(!breakDone && type != MemoryOperationType::DummyRead) {
+	if(type != MemoryOperationType::DummyRead) {
 		BreakpointType breakpointType = BreakpointType::Execute;
 		switch(type) {
 			case MemoryOperationType::Read: breakpointType = BreakpointType::ReadRam; break;
@@ -609,7 +603,7 @@ bool Debugger::PrivateProcessRamOperation(MemoryOperationType type, uint16_t &ad
 		}
 
 		if(_hasBreakpoint[breakpointType]) {
-			ProcessBreakpoints(breakpointType, operationInfo);
+			ProcessBreakpoints(breakpointType, operationInfo, !breakDone);
 		}
 	}
 
@@ -617,10 +611,6 @@ bool Debugger::PrivateProcessRamOperation(MemoryOperationType type, uint16_t &ad
 	_currentReadValue = nullptr;
 
 	if(type == MemoryOperationType::Write) {
-		if(_frozenAddresses[addr]) {
-			return false;
-		}
-
 		if(addr >= 0x2000 && addr <= 0x3FFF) {
 			if((addr & 0x07) == 5 || (addr & 0x07) == 6) {
 				GetState(&_debugState, false);
@@ -630,6 +620,10 @@ bool Debugger::PrivateProcessRamOperation(MemoryOperationType type, uint16_t &ad
 			}
 		} else if(addr >= 0x4018 && _mapper->IsWriteRegister(addr)) {
 			AddDebugEvent(DebugEventType::MapperRegisterWrite, addr, value);
+		}
+
+		if(_frozenAddresses[addr]) {
+			return false;
 		}
 	} else if(type == MemoryOperationType::Read) {
 		if(addr >= 0x2000 && addr <= 0x3FFF) {
