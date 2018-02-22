@@ -442,19 +442,25 @@ namespace Mesen.GUI
 		}
 
 		[DllImport(DLLPath)] private static extern UInt32 DebugGetDebugEventCount();
-		[DllImport(DLLPath, EntryPoint = "DebugGetDebugEvents")] private static extern void DebugGetDebugEventsWrapper(IntPtr frameBuffer, IntPtr infoArray);
+		[DllImport(DLLPath, EntryPoint = "DebugGetDebugEvents")] private static extern void DebugGetDebugEventsWrapper(IntPtr frameBuffer, IntPtr infoArray, ref UInt32 maxEventCount);
 		public static void DebugGetDebugEvents(out byte[] pictureData, out DebugEventInfo[] debugEvents)
 		{
 			pictureData = new byte[256 * 240 * 4];
-			debugEvents = new DebugEventInfo[DebugGetDebugEventCount()];
+			UInt32 maxEventCount = DebugGetDebugEventCount();
+			debugEvents = new DebugEventInfo[maxEventCount];
 
 			GCHandle hPictureData = GCHandle.Alloc(pictureData, GCHandleType.Pinned);
 			GCHandle hDebugEvents = GCHandle.Alloc(debugEvents, GCHandleType.Pinned);
 			try {
-				InteropEmu.DebugGetDebugEventsWrapper(hPictureData.AddrOfPinnedObject(), hDebugEvents.AddrOfPinnedObject());
+				InteropEmu.DebugGetDebugEventsWrapper(hPictureData.AddrOfPinnedObject(), hDebugEvents.AddrOfPinnedObject(), ref maxEventCount);
 			} finally {
 				hPictureData.Free();
 				hDebugEvents.Free();
+			}
+
+			if(maxEventCount < debugEvents.Length) {
+				//Remove the excess from the array if needed
+				Array.Resize(ref debugEvents, (int)maxEventCount);
 			}
 		}
 

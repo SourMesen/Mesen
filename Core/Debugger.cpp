@@ -1318,7 +1318,7 @@ void Debugger::AddDebugEvent(DebugEventType type, uint16_t address, uint8_t valu
 	});
 }
 
-void Debugger::GetDebugEvents(uint32_t* pictureBuffer, DebugEventInfo *infoArray)
+void Debugger::GetDebugEvents(uint32_t* pictureBuffer, DebugEventInfo *infoArray, uint32_t &maxEventCount)
 {
 	DebugBreakHelper helper(this);
 
@@ -1329,7 +1329,9 @@ void Debugger::GetDebugEvents(uint32_t* pictureBuffer, DebugEventInfo *infoArray
 	for(int i = 0; i < PPU::PixelCount; i++) {
 		pictureBuffer[i] = palette[buffer[i] & 0x3F];
 	}
-	memcpy(infoArray, _debugEvents.data(), _debugEvents.size() * sizeof(DebugEventInfo));
+	uint32_t eventCount = std::min(maxEventCount, (uint32_t)_debugEvents.size());
+	memcpy(infoArray, _debugEvents.data(), eventCount * sizeof(DebugEventInfo));
+	maxEventCount = eventCount;
 }
 
 uint32_t Debugger::GetDebugEventCount()

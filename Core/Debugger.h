@@ -247,6 +247,6 @@ public:
 	void ProcessPpuOperation(uint16_t addr, uint8_t &value, MemoryOperationType type);
 	void ProcessEvent(EventType type);
 
-	void GetDebugEvents(uint32_t* pictureBuffer, DebugEventInfo *infoArray);
+	void GetDebugEvents(uint32_t* pictureBuffer, DebugEventInfo *infoArray, uint32_t &maxEventCount);
 	uint32_t GetDebugEventCount();
 };

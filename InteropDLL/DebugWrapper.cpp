@@ -119,6 +119,6 @@ extern "C"
 	DllExport void __stdcall DebugRemoveScript(int32_t scriptId) { GetDebugger()->RemoveScript(scriptId); }
 	DllExport const char* __stdcall DebugGetScriptLog(int32_t scriptId) { return GetDebugger()->GetScriptLog(scriptId); }
 
-	DllExport void __stdcall DebugGetDebugEvents(uint32_t* pictureBuffer, DebugEventInfo *infoArray) { GetDebugger()->GetDebugEvents(pictureBuffer, infoArray); }
+	DllExport void __stdcall DebugGetDebugEvents(uint32_t* pictureBuffer, DebugEventInfo *infoArray, uint32_t &maxEventCount) { GetDebugger()->GetDebugEvents(pictureBuffer, infoArray, maxEventCount); }
 	DllExport uint32_t __stdcall DebugGetDebugEventCount() { return GetDebugger()->GetDebugEventCount(); }
 };
