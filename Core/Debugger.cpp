@@ -253,7 +253,8 @@ void Debugger::SetBreakpoints(Breakpoint breakpoints[], uint32_t length)
 			bool isEnabled = bp.IsEnabled() && EmulationSettings::CheckFlag(EmulationFlags::DebuggerWindowEnabled);
 			if((bp.IsMarked() || isEnabled) && bp.HasBreakpointType((BreakpointType)i)) {
 				_breakpoints[i].push_back(bp);
-				_breakpointRpnList[i].push_back(*expEval.GetRpnList(bp.GetCondition()));
+				vector<int> *rpnList = expEval.GetRpnList(bp.GetCondition());
+				_breakpointRpnList[i].push_back(rpnList ? *rpnList : vector<int>());
 				_hasBreakpoint[i] = true;
 			}
 		}
