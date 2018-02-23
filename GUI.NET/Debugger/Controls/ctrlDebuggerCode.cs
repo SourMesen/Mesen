@@ -1092,22 +1092,23 @@ namespace Mesen.GUI.Debugger
 				DebugInfo info = ConfigManager.Config.DebugInfo;
 				int lineIndex = (int)((_code._lineMemoryType.Count - 1) * position);
 
-				switch(_code._lineMemoryType[lineIndex]) {
-					case 'N': return _nesRamColor;
-					case 'P':
-						if(_code._unexecutedAddresses.Contains(lineIndex)) {
-							return info.CodeUnexecutedCodeColor;
-						} else if(_code._verifiedDataAddresses.Contains(lineIndex)) {
-							return info.CodeVerifiedDataColor;
-						} else if(_code._speculativeCodeAddreses.Contains(lineIndex)) {
-							return info.CodeUnidentifiedDataColor;
-						}
-						return Color.White;
+				if(lineIndex < _code._lineMemoryType.Count) {
+					switch(_code._lineMemoryType[lineIndex]) {
+						case 'N': return _nesRamColor;
+						case 'P':
+							if(_code._unexecutedAddresses.Contains(lineIndex)) {
+								return info.CodeUnexecutedCodeColor;
+							} else if(_code._verifiedDataAddresses.Contains(lineIndex)) {
+								return info.CodeVerifiedDataColor;
+							} else if(_code._speculativeCodeAddreses.Contains(lineIndex)) {
+								return info.CodeUnidentifiedDataColor;
+							}
+							return Color.White;
 
-					case 'W': return Color.LightSteelBlue;
-					case 'S': return Color.LightCoral;
+						case 'W': return Color.LightSteelBlue;
+						case 'S': return Color.LightCoral;
+					}
 				}
-
 				return Color.Transparent;
 			}
 
