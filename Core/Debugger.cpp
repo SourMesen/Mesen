@@ -270,6 +270,7 @@ void Debugger::ProcessBreakpoints(BreakpointType type, OperationInfo &operationI
 	uint32_t absoluteAddr;
 	AddressTypeInfo info { -1, AddressType::InternalRam };
 	PpuAddressTypeInfo ppuInfo { -1, PpuAddressType::None };
+	bool isPpuBreakpoint = false;
 	switch(type) {
 		case BreakpointType::Execute:
 		case BreakpointType::ReadRam:
@@ -282,6 +283,7 @@ void Debugger::ProcessBreakpoints(BreakpointType type, OperationInfo &operationI
 		case BreakpointType::WriteVram:
 			GetPpuAbsoluteAddressAndType(operationInfo.Address, &ppuInfo);
 			absoluteAddr = ppuInfo.Address;
+			isPpuBreakpoint = true;
 			break;
 	}
 
@@ -305,8 +307,8 @@ void Debugger::ProcessBreakpoints(BreakpointType type, OperationInfo &operationI
 		Breakpoint &breakpoint = breakpoints[i];
 		if(
 			type == BreakpointType::Global ||
-			info.Address >= 0 && breakpoint.Matches(operationInfo.Address, info) ||
-			type >= BreakpointType::ReadVram && breakpoint.Matches(operationInfo.Address, ppuInfo)
+			!isPpuBreakpoint && breakpoint.Matches(operationInfo.Address, info) ||
+			isPpuBreakpoint && breakpoint.Matches(operationInfo.Address, ppuInfo)
 		) {
 			if(!breakpoint.HasCondition()) {
 				processBreakpoint(breakpoint);
