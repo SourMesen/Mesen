@@ -174,6 +174,7 @@ namespace Mesen.GUI.Debugger.Controls
 								{ "Type", ResourceHelper.GetEnumText(debugEvent.Type) },
 								{ "Scanline", debugEvent.Scanline.ToString() },
 								{ "Cycle", debugEvent.Cycle.ToString() },
+								{ "PC", "$" + debugEvent.ProgramCounter.ToString("X4") },
 							};
 
 								switch(debugEvent.Type) {

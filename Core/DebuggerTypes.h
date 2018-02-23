@@ -118,6 +118,7 @@ struct DebugEventInfo
 {
 	uint16_t Cycle;
 	int16_t Scanline;
+	uint16_t ProgramCounter;
 	uint16_t Address;
 	int16_t BreakpointId;
 	DebugEventType Type;

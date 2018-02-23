@@ -1112,6 +1112,7 @@ namespace Mesen.GUI
 	{
 		public UInt16 Cycle;
 		public Int16 Scanline;
+		public UInt16 ProgramCounter;
 		public UInt16 Address;
 		public Int16 BreakpointId;
 		public DebugEventType Type;

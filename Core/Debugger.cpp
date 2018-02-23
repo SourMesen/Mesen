@@ -1314,6 +1314,7 @@ void Debugger::AddDebugEvent(DebugEventType type, uint16_t address, uint8_t valu
 	_debugEvents.push_back({
 		(uint16_t)_ppu->GetCurrentCycle(),
 		(int16_t)_ppu->GetCurrentScanline(),
+		_cpu->GetDebugPC(),
 		address,
 		breakpointId,
 		type,
