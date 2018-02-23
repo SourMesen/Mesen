@@ -20,6 +20,7 @@ namespace Mesen.GUI.Debugger
 	{
 		private bool _debuggerInitialized = false;
 		private bool _firstBreak = true;
+		private bool _doNotBringToFront = false;
 		private int _previousCycle = 0;
 
 		private InteropEmu.NotificationListener _notifListener;
@@ -415,9 +416,10 @@ namespace Mesen.GUI.Debugger
 			ctrlCpuMemoryMapping.UpdateCpuRegions(state.Cartridge);
 			ctrlPpuMemoryMapping.UpdatePpuRegions(state.Cartridge);
 
-			if(bringToFront) {
+			if(bringToFront && !_doNotBringToFront) {
 				this.BringToFront();
 			}
+			_doNotBringToFront = false;
 
 			if(_firstBreak) {
 				InteropEmu.SetFlag(EmulationFlags.ForceMaxSpeed, false);
@@ -434,6 +436,17 @@ namespace Mesen.GUI.Debugger
 			ctrlDebuggerCode.UpdateLineColors();
 			ctrlDebuggerCodeSplit.ClearActiveAddress();
 			ctrlDebuggerCodeSplit.UpdateLineColors();
+		}
+
+		public void TogglePause()
+		{
+			if(mnuBreak.Enabled) {
+				_doNotBringToFront = true;
+				ctrlConsoleStatus.ApplyChanges();
+				InteropEmu.DebugStep(1);
+			} else {
+				ResumeExecution();
+			}
 		}
 
 		private void ToggleBreakpoint(bool toggleEnabled)

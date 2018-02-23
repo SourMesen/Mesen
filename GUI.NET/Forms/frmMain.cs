@@ -1047,7 +1047,7 @@ namespace Mesen.GUI.Forms
 		{
 			frmDebugger debugger = DebugWindowManager.GetDebugger();
 			if(debugger != null) {
-				InteropEmu.DebugStep(1);
+				debugger.TogglePause();
 			} else {
 				if(InteropEmu.IsPaused()) {
 					InteropEmu.Resume();
