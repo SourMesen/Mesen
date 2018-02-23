@@ -1031,6 +1031,7 @@ namespace Mesen.GUI.Debugger
 						using(Brush fgBrush = new SolidBrush(codeString.EndsWith(":") ? (Color)info.AssemblerLabelDefinitionColor : (textColor ?? defaultColor))) {
 							g.DrawString(codeString, this.Font, fgBrush, marginLeft, positionY, StringFormat.GenericTypographic);
 						}
+						characterCount = codeString.Trim().Length;
 					}
 				}
 
