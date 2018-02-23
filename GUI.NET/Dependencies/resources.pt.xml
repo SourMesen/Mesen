@@ -295,8 +295,8 @@
       <Control ID="chkDisablePpuReset">Não reiniciar a PPU ao reiniciar o console (Comportamento do Famicom)</Control>
       <Control ID="chkUseNes101Hvc101Behavior">Utilizar comportamento do NES/HVC-101 (Top-loader / AV Famicom)</Control>
 
-      <Control ID="tpgOverclocking">Overclocking</Control>
-      <Control ID="grpOverclocking">Overclocking da CPU</Control>
+      <Control ID="tpgOverclocking">Overclock</Control>
+      <Control ID="grpOverclocking">Overclock da CPU</Control>
       <Control ID="lblOverclockWarning">ATENÇÃO: O overclock afeta a estabilidade da emulação e pode bloquear alguns jogos!</Control>
       <Control ID="lblClockRate">Multiplicar a frequência de clock: </Control>
       <Control ID="lblClockRatePercent">% (Recomendado: 100%)</Control>
@@ -598,8 +598,8 @@
       <Control ID="btnOK">OK</Control>
       <Control ID="btnCancel">Cancelar</Control>
     </Form>
-    <Form ID="frmInputBarCode" Title="Input Barcode...">
-      <Control ID="lblBarcode">Barcode:</Control>
+    <Form ID="frmInputBarCode" Title="Entrada de Código de barras...">
+      <Control ID="lblBarcode">Código de barras:</Control>
       <Control ID="btnOK">OK</Control>
       <Control ID="btnCancel">Cancelar</Control>
     </Form>
@@ -820,32 +820,32 @@
     <Message ID="EmulatorShortcutMappings_ToggleKeyboardMode">Alternar modo de teclado</Message>
     <Message ID="EmulatorShortcutMappings_MaxSpeed">Alternar velocidade máxima</Message>
     <Message ID="EmulatorShortcutMappings_LoadRandomGame">Carrear jogo aleatório</Message>
-    <Message ID="EmulatorShortcutMappings_SaveStateSlot1">Salvar estado - Posição 1</Message>
-    <Message ID="EmulatorShortcutMappings_SaveStateSlot2">Salvar estado - Posição 2</Message>
-    <Message ID="EmulatorShortcutMappings_SaveStateSlot3">Salvar estado - Posição 3</Message>
-    <Message ID="EmulatorShortcutMappings_SaveStateSlot4">Salvar estado - Posição 4</Message>
-    <Message ID="EmulatorShortcutMappings_SaveStateSlot5">Salvar estado - Posição 5</Message>
-    <Message ID="EmulatorShortcutMappings_SaveStateSlot6">Salvar estado - Posição 6</Message>
-    <Message ID="EmulatorShortcutMappings_SaveStateSlot7">Salvar estado - Posição 7</Message>
+    <Message ID="EmulatorShortcutMappings_SaveStateSlot1">Salvar estado - Compartimento 1</Message>
+    <Message ID="EmulatorShortcutMappings_SaveStateSlot2">Salvar estado - Compartimento 2</Message>
+    <Message ID="EmulatorShortcutMappings_SaveStateSlot3">Salvar estado - Compartimento 3</Message>
+    <Message ID="EmulatorShortcutMappings_SaveStateSlot4">Salvar estado - Compartimento 4</Message>
+    <Message ID="EmulatorShortcutMappings_SaveStateSlot5">Salvar estado - Compartimento 5</Message>
+    <Message ID="EmulatorShortcutMappings_SaveStateSlot6">Salvar estado - Compartimento 6</Message>
+    <Message ID="EmulatorShortcutMappings_SaveStateSlot7">Salvar estado - Compartimento 7</Message>
     <Message ID="EmulatorShortcutMappings_SaveStateToFile">Salvar estado para arquivo</Message>
-    <Message ID="EmulatorShortcutMappings_LoadStateSlot1">Carregar estado - Posição 1</Message>
-    <Message ID="EmulatorShortcutMappings_LoadStateSlot2">Carregar estado - Posição 2</Message>
-    <Message ID="EmulatorShortcutMappings_LoadStateSlot3">Carregar estado - Posição 3</Message>
-    <Message ID="EmulatorShortcutMappings_LoadStateSlot4">Carregar estado - Posição 4</Message>
-    <Message ID="EmulatorShortcutMappings_LoadStateSlot5">Carregar estado - Posição 5</Message>
-    <Message ID="EmulatorShortcutMappings_LoadStateSlot6">Carregar estado - Posição 6</Message>
-    <Message ID="EmulatorShortcutMappings_LoadStateSlot7">Carregar estado - Posição 7</Message>
-    <Message ID="EmulatorShortcutMappings_LoadStateSlot8">LCarregar estado - Posição 8</Message>
+    <Message ID="EmulatorShortcutMappings_LoadStateSlot1">Carregar estado - Compartimento 1</Message>
+    <Message ID="EmulatorShortcutMappings_LoadStateSlot2">Carregar estado - Compartimento 2</Message>
+    <Message ID="EmulatorShortcutMappings_LoadStateSlot3">Carregar estado - Compartimento 3</Message>
+    <Message ID="EmulatorShortcutMappings_LoadStateSlot4">Carregar estado - Compartimento 4</Message>
+    <Message ID="EmulatorShortcutMappings_LoadStateSlot5">Carregar estado - Compartimento 5</Message>
+    <Message ID="EmulatorShortcutMappings_LoadStateSlot6">Carregar estado - Compartimento 6</Message>
+    <Message ID="EmulatorShortcutMappings_LoadStateSlot7">Carregar estado - Compartimento 7</Message>
+    <Message ID="EmulatorShortcutMappings_LoadStateSlot8">Carregar estado - Compartimento 8</Message>
     <Message ID="EmulatorShortcutMappings_LoadStateFromFile">Carregar estado de arquivo</Message>
     <Message ID="EmulatorShortcutMappings_OpenFile">Abrir arquivo</Message>
     <Message ID="EmulatorShortcutMappings_OpenDebugger">Abrir depurador</Message>
     <Message ID="EmulatorShortcutMappings_OpenAssembler">Abrir Assembler</Message>
-    <Message ID="EmulatorShortcutMappings_OpenPpuViewer">Abrir visualizador PPU</Message>
+    <Message ID="EmulatorShortcutMappings_OpenPpuViewer">Abrir visualizador da PPU</Message>
     <Message ID="EmulatorShortcutMappings_OpenMemoryTools">Abrir ferramentas de memória</Message>
     <Message ID="EmulatorShortcutMappings_OpenScriptWindow">Abrir Script do Window</Message>
     <Message ID="EmulatorShortcutMappings_OpenTraceLogger">Abrir Trace Logger</Message>
-    <Message ID="EmulatorShortcutMappings_OpenApuViewer">Abrir visualizador APU</Message>
-    <Message ID="EmulatorShortcutMappings_OpenEventViewer">Open Event Viewer</Message>
+    <Message ID="EmulatorShortcutMappings_OpenApuViewer">Abrir visualizador da APU</Message>
+    <Message ID="EmulatorShortcutMappings_OpenEventViewer">Abrir visualizador de Evento</Message>
   </Messages>
   <Enums>
     <Enum ID="ControllerType">
