@@ -77,6 +77,8 @@
 			this.mnuIncreaseFontSize = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuDecreaseFontSize = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuResetFontSize = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem12 = new System.Windows.Forms.ToolStripSeparator();
+			this.mnuHighDensityMode = new System.Windows.Forms.ToolStripMenuItem();
 			this.autorefreshSpeedToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuAutoRefreshLow = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuAutoRefreshNormal = new System.Windows.Forms.ToolStripMenuItem();
@@ -94,9 +96,6 @@
 			this.mnuFindNext = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuFindPrev = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuGoTo = new System.Windows.Forms.ToolStripMenuItem();
-			this.toolStrip1 = new System.Windows.Forms.ToolStrip();
-			this.btnImport = new System.Windows.Forms.ToolStripButton();
-			this.btnExport = new System.Windows.Forms.ToolStripButton();
 			this.tabMain = new System.Windows.Forms.TabControl();
 			this.tpgMemoryViewer = new System.Windows.Forms.TabPage();
 			this.panel1 = new System.Windows.Forms.Panel();
@@ -106,7 +105,6 @@
 			this.ctrlProfiler = new Mesen.GUI.Debugger.Controls.ctrlProfiler();
 			this.flowLayoutPanel1.SuspendLayout();
 			this.menuStrip1.SuspendLayout();
-			this.toolStrip1.SuspendLayout();
 			this.tabMain.SuspendLayout();
 			this.tpgMemoryViewer.SuspendLayout();
 			this.panel1.SuspendLayout();
@@ -120,7 +118,7 @@
 			this.ctrlHexViewer.Location = new System.Drawing.Point(0, 0);
 			this.ctrlHexViewer.Margin = new System.Windows.Forms.Padding(0);
 			this.ctrlHexViewer.Name = "ctrlHexViewer";
-			this.ctrlHexViewer.Size = new System.Drawing.Size(606, 318);
+			this.ctrlHexViewer.Size = new System.Drawing.Size(606, 343);
 			this.ctrlHexViewer.TabIndex = 0;
 			this.ctrlHexViewer.RequiredWidthChanged += new System.EventHandler(this.ctrlHexViewer_RequiredWidthChanged);
 			this.ctrlHexViewer.InitializeContextMenu += new System.EventHandler(this.ctrlHexViewer_InitializeContextMenu);
@@ -133,7 +131,7 @@
 			this.flowLayoutPanel1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
 			this.flowLayoutPanel1.Controls.Add(this.lblViewMemoryType);
 			this.flowLayoutPanel1.Controls.Add(this.cboMemoryType);
-			this.flowLayoutPanel1.Location = new System.Drawing.Point(5, 0);
+			this.flowLayoutPanel1.Location = new System.Drawing.Point(0, 0);
 			this.flowLayoutPanel1.Margin = new System.Windows.Forms.Padding(0);
 			this.flowLayoutPanel1.Name = "flowLayoutPanel1";
 			this.flowLayoutPanel1.Size = new System.Drawing.Size(166, 27);
@@ -483,7 +481,9 @@
 			this.fontSizeToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.mnuIncreaseFontSize,
             this.mnuDecreaseFontSize,
-            this.mnuResetFontSize});
+            this.mnuResetFontSize,
+            this.toolStripMenuItem12,
+            this.mnuHighDensityMode});
 			this.fontSizeToolStripMenuItem.Image = global::Mesen.GUI.Properties.Resources.Font;
 			this.fontSizeToolStripMenuItem.Name = "fontSizeToolStripMenuItem";
 			this.fontSizeToolStripMenuItem.Size = new System.Drawing.Size(256, 22);
@@ -494,7 +494,7 @@
 			this.mnuIncreaseFontSize.Name = "mnuIncreaseFontSize";
 			this.mnuIncreaseFontSize.ShortcutKeyDisplayString = "Ctrl++";
 			this.mnuIncreaseFontSize.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Oemplus)));
-			this.mnuIncreaseFontSize.Size = new System.Drawing.Size(197, 22);
+			this.mnuIncreaseFontSize.Size = new System.Drawing.Size(217, 22);
 			this.mnuIncreaseFontSize.Text = "Increase";
 			this.mnuIncreaseFontSize.Click += new System.EventHandler(this.mnuIncreaseFontSize_Click);
 			// 
@@ -503,7 +503,7 @@
 			this.mnuDecreaseFontSize.Name = "mnuDecreaseFontSize";
 			this.mnuDecreaseFontSize.ShortcutKeyDisplayString = "Ctrl+-";
 			this.mnuDecreaseFontSize.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.OemMinus)));
-			this.mnuDecreaseFontSize.Size = new System.Drawing.Size(197, 22);
+			this.mnuDecreaseFontSize.Size = new System.Drawing.Size(217, 22);
 			this.mnuDecreaseFontSize.Text = "Decrease";
 			this.mnuDecreaseFontSize.Click += new System.EventHandler(this.mnuDecreaseFontSize_Click);
 			// 
@@ -512,9 +512,22 @@
 			this.mnuResetFontSize.Name = "mnuResetFontSize";
 			this.mnuResetFontSize.ShortcutKeyDisplayString = "Ctrl+0";
 			this.mnuResetFontSize.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.D0)));
-			this.mnuResetFontSize.Size = new System.Drawing.Size(197, 22);
+			this.mnuResetFontSize.Size = new System.Drawing.Size(217, 22);
 			this.mnuResetFontSize.Text = "Reset to Default";
 			this.mnuResetFontSize.Click += new System.EventHandler(this.mnuResetFontSize_Click);
+			// 
+			// toolStripMenuItem12
+			// 
+			this.toolStripMenuItem12.Name = "toolStripMenuItem12";
+			this.toolStripMenuItem12.Size = new System.Drawing.Size(214, 6);
+			// 
+			// mnuHighDensityMode
+			// 
+			this.mnuHighDensityMode.CheckOnClick = true;
+			this.mnuHighDensityMode.Name = "mnuHighDensityMode";
+			this.mnuHighDensityMode.Size = new System.Drawing.Size(217, 22);
+			this.mnuHighDensityMode.Text = "Use high text density mode";
+			this.mnuHighDensityMode.CheckedChanged += new System.EventHandler(this.mnuHighDensityMode_CheckedChanged);
 			// 
 			// autorefreshSpeedToolStripMenuItem
 			// 
@@ -651,38 +664,6 @@
 			this.mnuGoTo.Text = "Go To...";
 			this.mnuGoTo.Click += new System.EventHandler(this.mnuGoTo_Click);
 			// 
-			// toolStrip1
-			// 
-			this.toolStrip1.BackColor = System.Drawing.SystemColors.ControlLightLight;
-			this.toolStrip1.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
-			this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.btnImport,
-            this.btnExport});
-			this.toolStrip1.Location = new System.Drawing.Point(0, 0);
-			this.toolStrip1.Name = "toolStrip1";
-			this.toolStrip1.RenderMode = System.Windows.Forms.ToolStripRenderMode.System;
-			this.toolStrip1.Size = new System.Drawing.Size(606, 25);
-			this.toolStrip1.TabIndex = 3;
-			this.toolStrip1.Text = "toolStrip1";
-			// 
-			// btnImport
-			// 
-			this.btnImport.Image = global::Mesen.GUI.Properties.Resources.Import;
-			this.btnImport.ImageTransparentColor = System.Drawing.Color.Magenta;
-			this.btnImport.Name = "btnImport";
-			this.btnImport.Size = new System.Drawing.Size(63, 22);
-			this.btnImport.Text = "Import";
-			this.btnImport.Click += new System.EventHandler(this.mnuImport_Click);
-			// 
-			// btnExport
-			// 
-			this.btnExport.Image = global::Mesen.GUI.Properties.Resources.Export;
-			this.btnExport.ImageTransparentColor = System.Drawing.Color.Magenta;
-			this.btnExport.Name = "btnExport";
-			this.btnExport.Size = new System.Drawing.Size(60, 22);
-			this.btnExport.Text = "Export";
-			this.btnExport.Click += new System.EventHandler(this.mnuExport_Click);
-			// 
 			// tabMain
 			// 
 			this.tabMain.Controls.Add(this.tpgMemoryViewer);
@@ -699,7 +680,6 @@
 			// tpgMemoryViewer
 			// 
 			this.tpgMemoryViewer.Controls.Add(this.panel1);
-			this.tpgMemoryViewer.Controls.Add(this.toolStrip1);
 			this.tpgMemoryViewer.Location = new System.Drawing.Point(4, 22);
 			this.tpgMemoryViewer.Margin = new System.Windows.Forms.Padding(0);
 			this.tpgMemoryViewer.Name = "tpgMemoryViewer";
@@ -713,10 +693,10 @@
 			this.panel1.Controls.Add(this.flowLayoutPanel1);
 			this.panel1.Controls.Add(this.ctrlHexViewer);
 			this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.panel1.Location = new System.Drawing.Point(0, 25);
+			this.panel1.Location = new System.Drawing.Point(0, 0);
 			this.panel1.Margin = new System.Windows.Forms.Padding(0);
 			this.panel1.Name = "panel1";
-			this.panel1.Size = new System.Drawing.Size(606, 318);
+			this.panel1.Size = new System.Drawing.Size(606, 343);
 			this.panel1.TabIndex = 4;
 			// 
 			// tpgAccessCounters
@@ -774,11 +754,8 @@
 			this.flowLayoutPanel1.PerformLayout();
 			this.menuStrip1.ResumeLayout(false);
 			this.menuStrip1.PerformLayout();
-			this.toolStrip1.ResumeLayout(false);
-			this.toolStrip1.PerformLayout();
 			this.tabMain.ResumeLayout(false);
 			this.tpgMemoryViewer.ResumeLayout(false);
-			this.tpgMemoryViewer.PerformLayout();
 			this.panel1.ResumeLayout(false);
 			this.panel1.PerformLayout();
 			this.tpgAccessCounters.ResumeLayout(false);
@@ -813,9 +790,6 @@
 		private System.Windows.Forms.ToolStripMenuItem mnuImport;
 		private System.Windows.Forms.ToolStripMenuItem mnuExport;
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem3;
-		private System.Windows.Forms.ToolStrip toolStrip1;
-		private System.Windows.Forms.ToolStripButton btnImport;
-		private System.Windows.Forms.ToolStripButton btnExport;
 		private System.Windows.Forms.TabControl tabMain;
 		private System.Windows.Forms.TabPage tpgMemoryViewer;
 		private System.Windows.Forms.TabPage tpgAccessCounters;
@@ -863,5 +837,7 @@
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem9;
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem10;
 		private System.Windows.Forms.ToolStripMenuItem mnuIgnoreRedundantWrites;
+		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem12;
+		private System.Windows.Forms.ToolStripMenuItem mnuHighDensityMode;
 	}
 }

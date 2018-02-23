@@ -2824,7 +2824,7 @@ namespace Be.Windows.Forms
             {
                 charSize = this.CreateGraphics().MeasureString("A", Font, 100, _stringFormat);
             }
-			CharSize = new SizeF((float)charSize.Width, (float)Math.Ceiling(charSize.Height));
+			CharSize = new SizeF((float)charSize.Width, (float)Math.Ceiling(charSize.Height) * 100 / (this.HighDensityMode ? 133 : 100));
 
             int requiredWidth = 0;
 
@@ -3540,6 +3540,20 @@ namespace Be.Windows.Forms
                     CharSizeChanged(this, EventArgs.Empty);
             }
         } SizeF _charSize;
+
+	     public bool HighDensityMode
+        {
+            get { return _highDensityMode; }
+            set
+            {
+                if (_highDensityMode == value)
+                    return;
+                _highDensityMode = value;
+				    this.UpdateCaret();
+				    this.Invalidate();
+				    this.UpdateRectanglePositioning();
+            }
+        } bool _highDensityMode;
 
         /// <summary>
         /// Gets the width required for the content

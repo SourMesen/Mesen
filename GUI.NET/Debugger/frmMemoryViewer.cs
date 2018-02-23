@@ -37,6 +37,7 @@ namespace Mesen.GUI.Debugger
 			base.OnLoad(e);
 
 			this.mnuAutoRefresh.Checked = ConfigManager.Config.DebugInfo.RamAutoRefresh;
+			this.mnuHighDensityMode.Checked = ConfigManager.Config.DebugInfo.RamHighDensityTextMode;
 			UpdateRefreshSpeedMenu();
 
 			this.mnuIgnoreRedundantWrites.Checked = ConfigManager.Config.DebugInfo.RamIgnoreRedundantWrites;
@@ -347,11 +348,11 @@ namespace Mesen.GUI.Debugger
 				case DebugMemoryType.SpriteMemory:
 				case DebugMemoryType.WorkRam:
 				case DebugMemoryType.SaveRam:
-					btnImport.Enabled = mnuImport.Enabled = true;
+					mnuImport.Enabled = true;
 					break;
 
 				default:
-					btnImport.Enabled = mnuImport.Enabled = false;
+					mnuImport.Enabled = false;
 					break;
 			}
 		}
@@ -774,6 +775,13 @@ namespace Mesen.GUI.Debugger
 			mnuAutoRefreshLow.Checked = ConfigManager.Config.DebugInfo.RamAutoRefreshSpeed == RefreshSpeed.Low;
 			mnuAutoRefreshNormal.Checked = ConfigManager.Config.DebugInfo.RamAutoRefreshSpeed == RefreshSpeed.Normal;
 			mnuAutoRefreshHigh.Checked = ConfigManager.Config.DebugInfo.RamAutoRefreshSpeed == RefreshSpeed.High;
+		}
+
+		private void mnuHighDensityMode_CheckedChanged(object sender, EventArgs e)
+		{
+			ConfigManager.Config.DebugInfo.RamHighDensityTextMode = mnuHighDensityMode.Checked;
+			ConfigManager.ApplyChanges();
+			ctrlHexViewer.HighDensityMode = ConfigManager.Config.DebugInfo.RamHighDensityTextMode;
 		}
 	}
 }

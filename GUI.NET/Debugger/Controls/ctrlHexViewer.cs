@@ -336,6 +336,13 @@ namespace Mesen.GUI.Debugger.Controls
 			set { this.ctrlHexBox.ReadOnly = value; }
 		}
 
+		[Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+		public bool HighDensityMode
+		{
+			get { return this.ctrlHexBox.HighDensityMode; }
+			set { this.ctrlHexBox.HighDensityMode = value; }
+		}
+
 		public delegate void ByteMouseHoverHandler(int address);
 		public event ByteMouseHoverHandler ByteMouseHover; 
 		private void ctrlHexBox_MouseMove(object sender, MouseEventArgs e)
