@@ -1810,6 +1810,9 @@ namespace Be.Windows.Forms
 
 			PointF p = _keyInterpreter.GetCaretPointF(byteIndex);
 			p.X += _byteCharacterPos * _charSize.Width;
+			if(HighDensityMode) {
+				p.Y += _highDensityModeOffset;
+			}
 
 			_caretPos = p;
 		}
@@ -2527,7 +2530,12 @@ namespace Be.Windows.Forms
 			float width = hexString.Length * _charSize.Width;
 			float xPos = bytePointF.X - _charSize.Width / 2;
 
-			g.FillRectangle(brushBack, xPos, bytePointF.Y, width, _charSize.Height);
+			if(HighDensityMode) {
+				g.FillRectangle(brushBack, xPos, bytePointF.Y + _highDensityModeOffset, width, _charSize.Height);
+			} else {
+				g.FillRectangle(brushBack, xPos, bytePointF.Y, width, _charSize.Height);
+			}
+
 			if(_selectionLength == 0 && _caretPos.Y == bytePointF.Y && _caretPos.X >= bytePointF.X && _caretPos.X <= bytePointF.X + width) {
 				if(_caretVisible && this.Focused && _keyInterpreter.GetType() != typeof(StringKeyInterpreter)) {
 					//Redraw caret over background color
@@ -2593,7 +2601,8 @@ namespace Be.Windows.Forms
 
 				//String view caret
 				Action drawCaret = () => {
-					if(_selectionLength == 0 && _caretPos.Y == bytePointF.Y && _caretPos.X >= xPos) {
+					float yPos = bytePointF.Y + (HighDensityMode ? _highDensityModeOffset : 0);
+					if(_selectionLength == 0 && _caretPos.Y == yPos && _caretPos.X >= xPos) {
 						if(_caretVisible && this.Focused && _keyInterpreter.GetType() == typeof(StringKeyInterpreter)) {
 							g.FillRectangle(Brushes.Yellow, _caretPos.X, _caretPos.Y, this.InsertActive ? 1 : caretWidth, _charSize.Height);
 							g.DrawRectangle(Pens.Gray, _caretPos.X, _caretPos.Y, this.InsertActive ? 1 : caretWidth, _charSize.Height);
@@ -2824,7 +2833,8 @@ namespace Be.Windows.Forms
             {
                 charSize = this.CreateGraphics().MeasureString("A", Font, 100, _stringFormat);
             }
-			CharSize = new SizeF((float)charSize.Width, (float)Math.Ceiling(charSize.Height) * 100 / (this.HighDensityMode ? 133 : 100));
+			CharSize = new SizeF((float)charSize.Width, (float)Math.Ceiling(charSize.Height * 100 / (this.HighDensityMode ? 133 : 100)));
+			_highDensityModeOffset = ((float)Math.Ceiling(charSize.Height) - CharSize.Height) / 2;
 
             int requiredWidth = 0;
 
@@ -3554,11 +3564,12 @@ namespace Be.Windows.Forms
 				    this.UpdateRectanglePositioning();
             }
         } bool _highDensityMode;
+        float _highDensityModeOffset = 0f;
 
-        /// <summary>
-        /// Gets the width required for the content
-        /// </summary>
-        [DefaultValue(0), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+		  /// <summary>
+		  /// Gets the width required for the content
+		  /// </summary>
+		  [DefaultValue(0), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public int RequiredWidth
         {
             get { return _requiredWidth; }
