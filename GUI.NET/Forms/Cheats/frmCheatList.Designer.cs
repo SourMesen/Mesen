@@ -45,7 +45,7 @@ namespace Mesen.GUI.Forms.Cheats
 			this.mnuAddCheat = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuDeleteCheat = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuExportSelectedCheats = new System.Windows.Forms.ToolStripMenuItem();
-			this.tsCheatActions = new System.Windows.Forms.ToolStrip();
+			this.tsCheatActions = new Mesen.GUI.Controls.ctrlMesenToolStrip();
 			this.btnAddCheat = new System.Windows.Forms.ToolStripButton();
 			this.btnDelete = new System.Windows.Forms.ToolStripSplitButton();
 			this.btnDeleteCheat = new System.Windows.Forms.ToolStripMenuItem();
@@ -463,7 +463,7 @@ namespace Mesen.GUI.Forms.Cheats
 		private System.Windows.Forms.ToolStripMenuItem mnuDeleteCheat;
 		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
 		private System.Windows.Forms.SplitContainer splitContainer1;
-		private System.Windows.Forms.ToolStrip tsCheatActions;
+		private Mesen.GUI.Controls.ctrlMesenToolStrip tsCheatActions;
 		private System.Windows.Forms.ToolStripButton btnAddCheat;
 		private System.Windows.Forms.CheckBox chkDisableCheats;
 		private System.Windows.Forms.ListView lstGameList;

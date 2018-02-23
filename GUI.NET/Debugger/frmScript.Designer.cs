@@ -32,7 +32,7 @@
 		private void InitializeComponent()
 		{
 			this.components = new System.ComponentModel.Container();
-			this.mnuMain = new System.Windows.Forms.MenuStrip();
+			this.mnuMain = new Mesen.GUI.Controls.ctrlMesenMenuStrip();
 			this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuNewScript = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuOpen = new System.Windows.Forms.ToolStripMenuItem();
@@ -59,7 +59,7 @@
 			this.mnuBlankWindow = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuTutorialScript = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuAutoLoadLastScript = new System.Windows.Forms.ToolStripMenuItem();
-			this.toolStrip1 = new System.Windows.Forms.ToolStrip();
+			this.toolStrip1 = new Mesen.GUI.Controls.ctrlMesenToolStrip();
 			this.btnOpen = new System.Windows.Forms.ToolStripButton();
 			this.btnSave = new System.Windows.Forms.ToolStripButton();
 			this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
@@ -568,10 +568,10 @@
 
 		#endregion
 
-		private System.Windows.Forms.MenuStrip mnuMain;
+		private Mesen.GUI.Controls.ctrlMesenMenuStrip mnuMain;
 		private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem mnuOpen;
-		private System.Windows.Forms.ToolStrip toolStrip1;
+		private Mesen.GUI.Controls.ctrlMesenToolStrip toolStrip1;
 		private System.Windows.Forms.ToolStripButton btnRun;
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem1;
 		private System.Windows.Forms.ToolStripMenuItem mnuClose;

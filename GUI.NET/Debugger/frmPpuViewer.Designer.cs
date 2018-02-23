@@ -33,7 +33,7 @@ namespace Mesen.GUI.Debugger
 		/// </summary>
 		private void InitializeComponent()
 		{
-			this.menuStrip1 = new System.Windows.Forms.MenuStrip();
+			this.menuStrip1 = new Mesen.GUI.Controls.ctrlMesenMenuStrip();
 			this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuClose = new System.Windows.Forms.ToolStripMenuItem();
 			this.viewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -352,7 +352,7 @@ namespace Mesen.GUI.Debugger
 
 		#endregion
 
-		private System.Windows.Forms.MenuStrip menuStrip1;
+		private Mesen.GUI.Controls.ctrlMesenMenuStrip menuStrip1;
 		private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem mnuClose;
 		private System.Windows.Forms.ToolStripMenuItem viewToolStripMenuItem;

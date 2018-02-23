@@ -46,7 +46,7 @@
 			this.chkShowPpuRegisterWrites = new System.Windows.Forms.CheckBox();
 			this.chkShowMapperRegisterWrites = new System.Windows.Forms.CheckBox();
 			this.chkShowSpriteZero = new System.Windows.Forms.CheckBox();
-			this.menuStrip1 = new System.Windows.Forms.MenuStrip();
+			this.menuStrip1 = new Mesen.GUI.Controls.ctrlMesenMenuStrip();
 			this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuClose = new System.Windows.Forms.ToolStripMenuItem();
 			this.viewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -333,7 +333,7 @@
 		private System.Windows.Forms.TabControl tabMain;
 		private System.Windows.Forms.TabPage tpgPpuView;
 		private Controls.ctrlEventViewerPpuView ctrlEventViewerPpuView;
-		private System.Windows.Forms.MenuStrip menuStrip1;
+		private Mesen.GUI.Controls.ctrlMesenMenuStrip menuStrip1;
 		private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem mnuClose;
 		private System.Windows.Forms.ToolStripMenuItem viewToolStripMenuItem;

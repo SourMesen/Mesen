@@ -35,7 +35,7 @@
 			this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
 			this.lblViewMemoryType = new System.Windows.Forms.Label();
 			this.cboMemoryType = new Mesen.GUI.Debugger.Controls.ComboBoxWithSeparator();
-			this.menuStrip1 = new System.Windows.Forms.MenuStrip();
+			this.menuStrip1 = new Mesen.GUI.Controls.ctrlMesenMenuStrip();
 			this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuImport = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuExport = new System.Windows.Forms.ToolStripMenuItem();
@@ -771,7 +771,7 @@
 		private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
 		private System.Windows.Forms.Label lblViewMemoryType;
 		private Mesen.GUI.Debugger.Controls.ComboBoxWithSeparator cboMemoryType;
-		private System.Windows.Forms.MenuStrip menuStrip1;
+		private Mesen.GUI.Controls.ctrlMesenMenuStrip menuStrip1;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem1;
 		private System.Windows.Forms.ToolStripMenuItem mnuFind;
 		private System.Windows.Forms.ToolStripMenuItem mnuFindNext;

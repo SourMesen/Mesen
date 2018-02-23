@@ -56,7 +56,7 @@
 			this.grpExecutionLog = new System.Windows.Forms.GroupBox();
 			this.txtTraceLog = new Mesen.GUI.Debugger.ctrlScrollableTextbox();
 			this.tmrUpdateLog = new System.Windows.Forms.Timer(this.components);
-			this.menuStrip1 = new System.Windows.Forms.MenuStrip();
+			this.menuStrip1 = new Mesen.GUI.Controls.ctrlMesenMenuStrip();
 			this.showToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.logLinesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnu100Lines = new System.Windows.Forms.ToolStripMenuItem();
@@ -567,7 +567,7 @@
 		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel3;
 		private System.Windows.Forms.Timer tmrUpdateLog;
 		private System.Windows.Forms.GroupBox grpExecutionLog;
-		private System.Windows.Forms.MenuStrip menuStrip1;
+		private Mesen.GUI.Controls.ctrlMesenMenuStrip menuStrip1;
 		private System.Windows.Forms.ToolStripMenuItem showToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem logLinesToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem mnuAutoRefresh;

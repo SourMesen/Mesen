@@ -50,7 +50,7 @@ namespace Mesen.GUI.Debugger
 			this.ctrlBreakpoints = new Mesen.GUI.Debugger.Controls.ctrlBreakpoints();
 			this.grpCallstack = new System.Windows.Forms.GroupBox();
 			this.ctrlCallstack = new Mesen.GUI.Debugger.Controls.ctrlCallstack();
-			this.menuStrip = new System.Windows.Forms.MenuStrip();
+			this.menuStrip = new Mesen.GUI.Controls.ctrlMesenMenuStrip();
 			this.mnuFile = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuSaveRom = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuSaveRomAs = new System.Windows.Forms.ToolStripMenuItem();
@@ -169,7 +169,7 @@ namespace Mesen.GUI.Debugger
 			this.lblCyclesElapsed = new System.Windows.Forms.ToolStripStatusLabel();
 			this.ctrlPpuMemoryMapping = new Mesen.GUI.Debugger.Controls.ctrlMemoryMapping();
 			this.ctrlCpuMemoryMapping = new Mesen.GUI.Debugger.Controls.ctrlMemoryMapping();
-			this.tsToolbar = new System.Windows.Forms.ToolStrip();
+			this.tsToolbar = new Mesen.GUI.Controls.ctrlMesenToolStrip();
 			this.mnuShowMemoryValues = new System.Windows.Forms.ToolStripMenuItem();
 			((System.ComponentModel.ISupportInitialize)(this.splitContainer)).BeginInit();
 			this.splitContainer.Panel1.SuspendLayout();
@@ -1545,7 +1545,7 @@ namespace Mesen.GUI.Debugger
 		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel10;
 		private System.Windows.Forms.GroupBox grpBreakpoints;
 		private System.Windows.Forms.GroupBox grpWatch;
-		private System.Windows.Forms.MenuStrip menuStrip;
+		private Mesen.GUI.Controls.ctrlMesenMenuStrip menuStrip;
 		private System.Windows.Forms.ToolStripMenuItem mnuFile;
 		private System.Windows.Forms.ToolStripMenuItem debugToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem mnuContinue;
@@ -1674,7 +1674,7 @@ namespace Mesen.GUI.Debugger
 		private System.Windows.Forms.ToolStripMenuItem mnuShowVerifiedData;
 		private System.Windows.Forms.ToolStripMenuItem mnuShowUnidentifiedData;
 		private System.Windows.Forms.ToolStripMenuItem mnuConfigureColors;
-		private System.Windows.Forms.ToolStrip tsToolbar;
+		private Mesen.GUI.Controls.ctrlMesenToolStrip tsToolbar;
 		private System.Windows.Forms.ToolStripMenuItem mnuShowToolbar;
 		private System.Windows.Forms.ToolStripMenuItem mnuPpuShowPreviousFrame;
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem19;

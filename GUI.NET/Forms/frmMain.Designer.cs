@@ -40,7 +40,7 @@ namespace Mesen.GUI.Forms
 			this.ctrlRecentGames = new Mesen.GUI.Controls.ctrlRecentGames();
 			this.ctrlNsfPlayer = new Mesen.GUI.Controls.ctrlNsfPlayer();
 			this.ctrlRenderer = new Mesen.GUI.Controls.ctrlRenderer();
-			this.menuStrip = new System.Windows.Forms.MenuStrip();
+			this.menuStrip = new Mesen.GUI.Controls.ctrlMesenMenuStrip();
 			this.mnuFile = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuOpen = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem4 = new System.Windows.Forms.ToolStripSeparator();
@@ -1633,7 +1633,7 @@ namespace Mesen.GUI.Forms
 
 		#endregion
 
-		private System.Windows.Forms.MenuStrip menuStrip;
+		private Mesen.GUI.Controls.ctrlMesenMenuStrip menuStrip;
 		private System.Windows.Forms.ToolStripMenuItem mnuFile;
 		private System.Windows.Forms.ToolStripMenuItem mnuOpen;
 		private System.Windows.Forms.ToolStripMenuItem mnuGame;

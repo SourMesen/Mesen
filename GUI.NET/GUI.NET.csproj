@@ -272,6 +272,12 @@
     <Compile Include="Controls\ctrlLoadingRom.Designer.cs">
       <DependentUpon>ctrlLoadingRom.cs</DependentUpon>
     </Compile>
+    <Compile Include="Controls\ctrlMesenMenuStrip.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Controls\ctrlMesenToolStrip.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Controls\ctrlNsfPlayer.cs">
       <SubType>UserControl</SubType>
     </Compile>
