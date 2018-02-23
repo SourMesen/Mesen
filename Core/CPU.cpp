@@ -244,6 +244,8 @@ uint16_t CPU::FetchOperand()
 	} else if(!Debugger::IsEnabled()) {
 		//Throw an error and stop emulation core (if debugger is not enabled)
 		throw std::runtime_error("Invalid OP code - CPU crashed");
+	} else {
+		return 0;
 	}
 #else 
 	return 0;
