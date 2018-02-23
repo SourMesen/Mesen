@@ -1103,6 +1103,8 @@
     <Compile Include="ResourceManager.cs" />
     <Compile Include="RuntimeChecker.cs" />
     <Compile Include="SingleInstance.cs" />
+    <None Include="Resources\UnidentifiedData.png" />
+    <None Include="Resources\VerifiedData.png" />
     <None Include="Resources\NesEventViewer.png" />
     <None Include="Resources\NavigateBack.png" />
     <None Include="Resources\NavigateForward.png" />

@@ -159,29 +159,38 @@ namespace Mesen.GUI.Debugger
 				mnuRunPpuCycle, mnuRunScanline, mnuRunOneFrame, null,
 				mnuToggleBreakpoint, mnuDisableEnableBreakpoint, null,
 				mnuFind, mnuFindPrev, mnuFindNext, null,
-				mnuApuViewer, mnuAssembler, mnuEventViewer, mnuMemoryViewer, mnuPpuViewer, mnuScriptWindow, mnuTraceLogger, null,
-				mnuEditHeader, null,
-				mnuBreakIn
+				mnuApuViewer, mnuAssembler, mnuMemoryViewer, mnuEventViewer, mnuPpuViewer, mnuScriptWindow, mnuTraceLogger, null,
+				mnuEditHeader, null
 			);
+			AddItemToToolbar(mnuShowVerifiedData, "Show Verified Data");
+			AddItemToToolbar(mnuShowUnidentifiedData, "Show Unidentified Code/Data");
+			AddItemsToToolbar(null, mnuBreakIn);
+		}
+
+		private void AddItemToToolbar(ToolStripMenuItem item, string caption = null)
+		{
+			if(item == null) {
+				tsToolbar.Items.Add("-");
+			} else {
+				ToolStripButton newItem = new ToolStripButton(item.Image);
+				if(item.Image == null) {
+					newItem.Text = item.Text;
+				}
+				newItem.ToolTipText = (caption ?? item.Text) + (item.ShortcutKeys != Keys.None ? $" ({new KeysConverter().ConvertToString(item.ShortcutKeys)})" : "");
+				newItem.Click += (s, e) => item.PerformClick();
+				newItem.Checked = item.Checked;
+				newItem.Enabled = item.Enabled;
+				item.EnabledChanged += (s, e) => newItem.Enabled = item.Enabled;
+				item.CheckedChanged += (s, e) => newItem.Checked = item.Checked;
+				item.VisibleChanged += (s, e) => newItem.Visible = item.Visible;
+				tsToolbar.Items.Add(newItem);
+			}
 		}
 
 		private void AddItemsToToolbar(params ToolStripMenuItem[] items)
 		{
 			foreach(ToolStripMenuItem item in items) {
-				if(item == null) {
-					tsToolbar.Items.Add("-");
-				} else {
-					ToolStripButton newItem = new ToolStripButton(item.Image);
-					if(item.Image == null) {
-						newItem.Text = item.Text;
-					}
-					newItem.ToolTipText = item.Text + (item.ShortcutKeys != Keys.None ? $" ({new KeysConverter().ConvertToString(item.ShortcutKeys)})" : "");
-					newItem.Click += (s, e) => item.PerformClick();
-					newItem.Enabled = item.Enabled;
-					item.EnabledChanged += (s, e) => newItem.Enabled = item.Enabled;
-					item.VisibleChanged += (s, e) => newItem.Visible = item.Visible;
-					tsToolbar.Items.Add(newItem);
-				}
+				AddItemToToolbar(item);
 			}
 		}
 
