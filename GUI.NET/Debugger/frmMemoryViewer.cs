@@ -38,6 +38,7 @@ namespace Mesen.GUI.Debugger
 
 			this.mnuAutoRefresh.Checked = ConfigManager.Config.DebugInfo.RamAutoRefresh;
 			this.mnuHighDensityMode.Checked = ConfigManager.Config.DebugInfo.RamHighDensityTextMode;
+			this.mnuEnablePerByteNavigation.Checked = ConfigManager.Config.DebugInfo.RamEnablePerByteNavigation;
 			UpdateRefreshSpeedMenu();
 
 			this.mnuIgnoreRedundantWrites.Checked = ConfigManager.Config.DebugInfo.RamIgnoreRedundantWrites;
@@ -782,6 +783,13 @@ namespace Mesen.GUI.Debugger
 			ConfigManager.Config.DebugInfo.RamHighDensityTextMode = mnuHighDensityMode.Checked;
 			ConfigManager.ApplyChanges();
 			ctrlHexViewer.HighDensityMode = ConfigManager.Config.DebugInfo.RamHighDensityTextMode;
+		}
+
+		private void mnuEnablePerByteNavigation_CheckedChanged(object sender, EventArgs e)
+		{
+			ConfigManager.Config.DebugInfo.RamEnablePerByteNavigation = mnuEnablePerByteNavigation.Checked;
+			ConfigManager.ApplyChanges();
+			ctrlHexViewer.EnablePerByteNavigation = ConfigManager.Config.DebugInfo.RamEnablePerByteNavigation;
 		}
 	}
 }

@@ -343,6 +343,13 @@ namespace Mesen.GUI.Debugger.Controls
 			set { this.ctrlHexBox.HighDensityMode = value; }
 		}
 
+		[Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+		public bool EnablePerByteNavigation
+		{
+			get { return this.ctrlHexBox.EnablePerByteNavigation; }
+			set { this.ctrlHexBox.EnablePerByteNavigation = value; }
+		}		
+
 		public delegate void ByteMouseHoverHandler(int address);
 		public event ByteMouseHoverHandler ByteMouseHover; 
 		private void ctrlHexBox_MouseMove(object sender, MouseEventArgs e)

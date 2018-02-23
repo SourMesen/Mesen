@@ -838,14 +838,16 @@ namespace Be.Windows.Forms
 					if (pos == 0 && cp == 0)
 						return true;
 
-					if (cp > 0)
-					{
-						cp--;
-					}
-					else
-					{
+					if(_hexBox.EnablePerByteNavigation) {
 						pos = Math.Max(0, pos - 1);
-						cp++;
+						cp = 0;
+					} else {
+						if (cp > 0) {
+							cp--;
+						} else {
+							pos = Math.Max(0, pos - 1);
+							cp++;
+						}
 					}
 
 					_hexBox.SetPosition(pos, cp);
@@ -879,13 +881,10 @@ namespace Be.Windows.Forms
 					if (!(pos == _hexBox._byteProvider.Length && cp == 0))
 					{
 
-						if (cp > 0)
-						{
+						if(cp > 0 || _hexBox.EnablePerByteNavigation) {
 							pos = Math.Min(_hexBox._byteProvider.Length, pos + 1);
 							cp = 0;
-						}
-						else
-						{
+						} else {
 							cp++;
 						}
 
@@ -3565,6 +3564,8 @@ namespace Be.Windows.Forms
             }
         } bool _highDensityMode;
         float _highDensityModeOffset = 0f;
+
+        public bool EnablePerByteNavigation { get; set; }
 
 		  /// <summary>
 		  /// Gets the width required for the content

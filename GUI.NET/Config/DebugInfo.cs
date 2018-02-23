@@ -165,6 +165,7 @@ namespace Mesen.GUI.Config
 		public XmlColor CodeEffectiveAddressColor = Color.SteelBlue;
 
 		public bool RamHighDensityTextMode = false;
+		public bool RamEnablePerByteNavigation = false;
 		public bool RamAutoRefresh = true;
 		public RefreshSpeed RamAutoRefreshSpeed = RefreshSpeed.Normal;
 		public bool RamIgnoreRedundantWrites = false;

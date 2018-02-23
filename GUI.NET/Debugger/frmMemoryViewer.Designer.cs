@@ -91,6 +91,7 @@
 			this.mnuShowLabelInfoOnMouseOver = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem10 = new System.Windows.Forms.ToolStripSeparator();
 			this.mnuIgnoreRedundantWrites = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuEnablePerByteNavigation = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuFind = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuFindNext = new System.Windows.Forms.ToolStripMenuItem();
@@ -252,7 +253,8 @@
             this.mnuShowCharacters,
             this.mnuShowLabelInfoOnMouseOver,
             this.toolStripMenuItem10,
-            this.mnuIgnoreRedundantWrites});
+            this.mnuIgnoreRedundantWrites,
+            this.mnuEnablePerByteNavigation});
 			this.mnuView.Name = "mnuView";
 			this.mnuView.Size = new System.Drawing.Size(44, 20);
 			this.mnuView.Text = "View";
@@ -618,6 +620,14 @@
 			this.mnuIgnoreRedundantWrites.Size = new System.Drawing.Size(256, 22);
 			this.mnuIgnoreRedundantWrites.Text = "Ignore writes that do not alter data";
 			// 
+			// mnuEnablePerByteNavigation
+			// 
+			this.mnuEnablePerByteNavigation.CheckOnClick = true;
+			this.mnuEnablePerByteNavigation.Name = "mnuEnablePerByteNavigation";
+			this.mnuEnablePerByteNavigation.Size = new System.Drawing.Size(256, 22);
+			this.mnuEnablePerByteNavigation.Text = "Use per-byte left/right navigation";
+			this.mnuEnablePerByteNavigation.CheckedChanged += new System.EventHandler(this.mnuEnablePerByteNavigation_CheckedChanged);
+			// 
 			// toolStripMenuItem1
 			// 
 			this.toolStripMenuItem1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -839,5 +849,6 @@
 		private System.Windows.Forms.ToolStripMenuItem mnuIgnoreRedundantWrites;
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem12;
 		private System.Windows.Forms.ToolStripMenuItem mnuHighDensityMode;
+		private System.Windows.Forms.ToolStripMenuItem mnuEnablePerByteNavigation;
 	}
 }
