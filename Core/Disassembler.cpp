@@ -581,11 +581,6 @@ string Disassembler::GetCode(AddressTypeInfo &addressInfo, uint32_t endAddr, uin
 			}
 		} else {
 			//This byte should be interpreted as data
-			if((!label.empty() || !commentString.empty()) && insideDataBlock) {
-				//We just found a label and we're inside a data block, end the block, then start a new one
-				endDataBlock();
-			}
-			
 			bool showData = (isVerifiedData && showVerifiedData) || (!isVerifiedData && showUnidentifiedData);
 
 			if(inVerifiedDataBlock != isVerifiedData && insideDataBlock && showEitherDataType) {
@@ -602,15 +597,8 @@ string Disassembler::GetCode(AddressTypeInfo &addressInfo, uint32_t endAddr, uin
 				//Output block header 
 				if(label.empty()) {
 					GetLine(output, showEitherDataType && inVerifiedDataBlock ? "__data block__" : "__unidentified block__", "", showData ? -1 : memoryAddr, showData ? -1 : addr, dataType, memoryType);
-					if(!commentString.empty()) {
-						GetLine(output, "", commentString, -1, -1, dataType, memoryType);
-					}
 				} else {
 					GetLine(output, "__" + label + "__", "", showData ? -1 : memoryAddr, showData ? -1 : addr, dataType, memoryType);
-					if(!commentString.empty()) {
-						GetLine(output, "", commentString, -1, -1, dataType, memoryType);
-					}
-					output += commentLines;
 				}
 				insideDataBlock = true;
 				emptyBlock = true;
@@ -635,7 +623,7 @@ string Disassembler::GetCode(AddressTypeInfo &addressInfo, uint32_t endAddr, uin
 
 				dbBuffer += " $" + HexUtilities::ToHex(source[addr&mask]);
 
-				if(!label.empty() || !commentString.empty()) {
+				if(!commentString.empty()) {
 					GetLine(output, dbBuffer, commentString, dbRelativeAddr, dbAbsoluteAddr, dataType, memoryType);
 					byteCount = 0;
 				} else {
