@@ -28,6 +28,7 @@
 		private void InitializeComponent()
 		{
 			this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+			this.chkMarkOnEventViewer = new System.Windows.Forms.CheckBox();
 			this.lblBreakpointType = new System.Windows.Forms.Label();
 			this.flowLayoutPanel2 = new System.Windows.Forms.FlowLayoutPanel();
 			this.chkRead = new System.Windows.Forms.CheckBox();
@@ -57,7 +58,6 @@
 			this.label1 = new System.Windows.Forms.Label();
 			this.lblCondition = new System.Windows.Forms.Label();
 			this.chkEnabled = new System.Windows.Forms.CheckBox();
-			this.chkMarkOnEventViewer = new System.Windows.Forms.CheckBox();
 			this.baseConfigPanel.SuspendLayout();
 			this.tableLayoutPanel1.SuspendLayout();
 			this.flowLayoutPanel2.SuspendLayout();
@@ -103,6 +103,18 @@
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel1.Size = new System.Drawing.Size(426, 241);
 			this.tableLayoutPanel1.TabIndex = 2;
+			// 
+			// chkMarkOnEventViewer
+			// 
+			this.chkMarkOnEventViewer.AutoSize = true;
+			this.tableLayoutPanel1.SetColumnSpan(this.chkMarkOnEventViewer, 2);
+			this.chkMarkOnEventViewer.Location = new System.Drawing.Point(6, 194);
+			this.chkMarkOnEventViewer.Margin = new System.Windows.Forms.Padding(6, 6, 3, 3);
+			this.chkMarkOnEventViewer.Name = "chkMarkOnEventViewer";
+			this.chkMarkOnEventViewer.Size = new System.Drawing.Size(131, 17);
+			this.chkMarkOnEventViewer.TabIndex = 15;
+			this.chkMarkOnEventViewer.Text = "Mark on Event Viewer";
+			this.chkMarkOnEventViewer.UseVisualStyleBackColor = true;
 			// 
 			// lblBreakpointType
 			// 
@@ -458,18 +470,6 @@
 			this.chkEnabled.TabIndex = 2;
 			this.chkEnabled.Text = "Break Execution";
 			this.chkEnabled.UseVisualStyleBackColor = true;
-			// 
-			// chkMarkOnEventViewer
-			// 
-			this.chkMarkOnEventViewer.AutoSize = true;
-			this.tableLayoutPanel1.SetColumnSpan(this.chkMarkOnEventViewer, 2);
-			this.chkMarkOnEventViewer.Location = new System.Drawing.Point(6, 194);
-			this.chkMarkOnEventViewer.Margin = new System.Windows.Forms.Padding(6, 6, 3, 3);
-			this.chkMarkOnEventViewer.Name = "chkMarkOnEventViewer";
-			this.chkMarkOnEventViewer.Size = new System.Drawing.Size(131, 17);
-			this.chkMarkOnEventViewer.TabIndex = 15;
-			this.chkMarkOnEventViewer.Text = "Mark on Event Viewer";
-			this.chkMarkOnEventViewer.UseVisualStyleBackColor = true;
 			// 
 			// frmBreakpoint
 			// 

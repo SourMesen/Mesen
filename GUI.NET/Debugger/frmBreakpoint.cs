@@ -69,7 +69,33 @@ namespace Mesen.GUI.Debugger
 			this.toolTip.SetToolTip(this.picExpressionWarning, "Condition contains invalid syntax or symbols.");
 			this.toolTip.SetToolTip(this.picHelp, frmBreakpoint.GetConditionTooltip(false));
 		}
-		
+
+		protected override void OnLoad(EventArgs e)
+		{
+			base.OnLoad(e);
+
+			Breakpoint bp = (Breakpoint)this.Entity;
+			if(!BreakpointManager.Breakpoints.Contains(bp)) {
+				//This is a new breakpoint, make sure address fields are empty instead of 0
+				if(txtAddress.Text == "0") {
+					txtAddress.Text = "";
+				}
+				if(txtFrom.Text == "0") {
+					txtFrom.Text = "";
+				}
+				if(txtTo.Text == "0") {
+					txtTo.Text = "";
+				}
+			}
+			if(bp.Address == 0 && bp.AddressType != BreakpointAddressType.SingleAddress) {
+				txtAddress.Text = "";
+			}
+			if(bp.StartAddress == 0 && bp.EndAddress == 0 && bp.AddressType != BreakpointAddressType.AddressRange) {
+				txtFrom.Text = "";
+				txtTo.Text = "";
+			}
+		}
+
 		public static string GetConditionTooltip(bool forWatch)
 		{
 			string tooltip =
@@ -132,27 +158,34 @@ namespace Mesen.GUI.Debugger
 			picExpressionWarning.Visible = false;
 
 			DebugMemoryType type = cboBreakpointType.GetEnumValue<DebugMemoryType>();
-			
-
 			int maxValue = InteropEmu.DebugGetMemorySize(type) - 1;
 
-			if(radRange.Checked) {
-				int start = 0, end = 0;
-				int.TryParse(txtFrom.Text, NumberStyles.HexNumber, null, out start);
-				int.TryParse(txtTo.Text, NumberStyles.HexNumber, null, out end);
-				if(end < start || end > maxValue || start > maxValue) {
+			if(radSpecificAddress.Checked) {
+				if(ValidateAddress(txtAddress, maxValue) < 0) {
 					return false;
 				}
-			}
-
-			int address;
-			if(int.TryParse(txtAddress.Text, NumberStyles.HexNumber, null, out address)) {
-				if(address > maxValue) {
+			} else if(radRange.Checked) {
+				int start = ValidateAddress(txtFrom, maxValue);
+				int end = ValidateAddress(txtTo, maxValue);
+				
+				if(start < 0 || end < 0 || end < start) {
 					return false;
 				}
 			}
 
 			return chkRead.Checked || chkWrite.Checked || (chkExec.Checked && Breakpoint.IsTypeCpuBreakpoint(type)) || txtCondition.Text.Length > 0;
+		}
+
+		private int ValidateAddress(TextBox field, int maxValue)
+		{
+			int value = -1;
+			if(!int.TryParse(field.Text, NumberStyles.HexNumber, null, out value) || value > maxValue) {
+				field.ForeColor = Color.Red;
+				value = -1;
+			} else {
+				field.ForeColor = SystemColors.WindowText;
+			}
+			return value;
 		}
 
 		private void txtAddress_Enter(object sender, EventArgs e)
