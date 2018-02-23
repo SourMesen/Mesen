@@ -28,11 +28,11 @@ namespace Mesen.GUI.Debugger
 		private HashSet<string> _filesNotFound = new HashSet<string>();
 		private int _errorCount = 0;
 
-		private static Regex _segmentRegex = new Regex("seg\tid=([0-9]+),.*start=0x([0-9a-fA-F]+)", RegexOptions.Compiled);
-		private static Regex _segmentPrgRomRegex = new Regex("seg\tid=([0-9]+),.*start=0x([0-9a-fA-F]+),.*ooffs=([0-9]+)", RegexOptions.Compiled);
+		private static Regex _segmentRegex = new Regex("seg\tid=([0-9]+),.*start=0x([0-9a-fA-F]+),.*size=0x([0-9A-Fa-f]+)", RegexOptions.Compiled);
+		private static Regex _segmentPrgRomRegex = new Regex("seg\tid=([0-9]+),.*start=0x([0-9a-fA-F]+),.*size=0x([0-9A-Fa-f]+),.*ooffs=([0-9]+)", RegexOptions.Compiled);
 		private static Regex _lineRegex = new Regex("line\tid=([0-9]+),.*file=([0-9]+),.*line=([0-9]+),.*span=([0-9]+)", RegexOptions.Compiled);
 		private static Regex _fileRegex = new Regex("file\tid=([0-9]+),.*name=\"([^\"]+)\"", RegexOptions.Compiled);
-		private static Regex _spanRegex = new Regex("span\tid=([0-9]+),.*seg=([0-9]+),.*start=([0-9]+)", RegexOptions.Compiled);
+		private static Regex _spanRegex = new Regex("span\tid=([0-9]+),.*seg=([0-9]+),.*start=([0-9]+),.*size=([0-9]+)(,.*type=([0-9]+)){0,1}", RegexOptions.Compiled);
 		private static Regex _symbolRegex = new Regex("sym\tid=([0-9]+).*name=\"([0-9a-zA-Z@_]+)\",.*val=0x([0-9a-fA-F]+),.*seg=([0-9a-zA-Z]+)", RegexOptions.Compiled);
 
 		private static Regex _asmFirstLineRegex = new Regex(";(.*)", RegexOptions.Compiled);
@@ -46,13 +46,14 @@ namespace Mesen.GUI.Debugger
 			if(match.Success) {
 				SegmentInfo segment = new SegmentInfo() {
 					ID = Int32.Parse(match.Groups[1].Value),
-					Start = Int32.Parse(match.Groups[2].Value, System.Globalization.NumberStyles.HexNumber),
+					Start = Int32.Parse(match.Groups[2].Value, NumberStyles.HexNumber),
+					Size = Int32.Parse(match.Groups[3].Value, NumberStyles.HexNumber),
 					IsRam = true
 				};
 
 				match = _segmentPrgRomRegex.Match(row);
 				if(match.Success) {
-					segment.FileOffset = Int32.Parse(match.Groups[3].Value);
+					segment.FileOffset = Int32.Parse(match.Groups[4].Value);
 					segment.IsRam = false;
 				}
 
@@ -123,8 +124,10 @@ namespace Mesen.GUI.Debugger
 				SpanInfo span = new SpanInfo() {
 					ID = Int32.Parse(match.Groups[1].Value),
 					SegmentID = Int32.Parse(match.Groups[2].Value),
-					Offset = Int32.Parse(match.Groups[3].Value)
+					Offset = Int32.Parse(match.Groups[3].Value),
+					Size = Int32.Parse(match.Groups[4].Value)
 				};
+				span.IsData = match.Groups[6].Success;
 
 				_spans.Add(span.ID, span);
 				return true;
@@ -197,7 +200,8 @@ namespace Mesen.GUI.Debugger
 						continue;
 					}
 
-					bool isAsm = Path.GetExtension(_files[line.FileID].Name).StartsWith(".s");
+					string ext = Path.GetExtension(_files[line.FileID].Name).ToLower();
+					bool isAsm = ext != ".c" && ext != ".h";
 
 					string comment = "";
 					for(int i = line.LineNumber; i >= 0; i--) {
@@ -268,6 +272,30 @@ namespace Mesen.GUI.Debugger
 			LoadLabels();
 			LoadComments();
 
+			int prgSize = InteropEmu.DebugGetMemorySize(DebugMemoryType.PrgRom);
+			if(prgSize > 0) {
+				byte[] cdlFile = new byte[prgSize];
+				foreach(KeyValuePair<int, SpanInfo> kvp in _spans) {
+					SegmentInfo segment;
+					if(_segments.TryGetValue(kvp.Value.SegmentID, out segment)) {
+						if(!segment.IsRam && kvp.Value.Size != segment.Size) {
+							int prgAddress = kvp.Value.Offset + segment.FileOffset - iNesHeaderSize;
+
+							if(prgAddress >= 0 && prgAddress < prgSize) {
+								for(int i = 0; i < kvp.Value.Size; i++) {
+									if(cdlFile[prgAddress + i] == 0 && !kvp.Value.IsData && kvp.Value.Size <= 3) {
+										cdlFile[prgAddress + i] = (byte)0x01;
+									} else if(kvp.Value.IsData) {
+										cdlFile[prgAddress + i] = (byte)0x02;
+									}
+								}
+							}
+						}
+					}
+				}
+				InteropEmu.DebugSetCdlData(cdlFile);
+			}
+
 			LabelManager.SetLabels(_romLabels.Values);
 			LabelManager.SetLabels(_ramLabels.Values);
 
@@ -296,6 +324,7 @@ namespace Mesen.GUI.Debugger
 		{
 			public int ID;
 			public int Start;
+			public int Size;
 			public int FileOffset;
 			public bool IsRam;
 		}
@@ -321,6 +350,8 @@ namespace Mesen.GUI.Debugger
 			public int ID;
 			public int SegmentID;
 			public int Offset;
+			public int Size;
+			public bool IsData;
 		}
 
 		private class SymbolInfo

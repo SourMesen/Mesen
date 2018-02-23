@@ -76,6 +76,7 @@ extern "C"
 	DllExport bool __stdcall DebugSaveCdlFile(char* cdlFilepath) { return GetDebugger()->GetCodeDataLogger()->SaveCdlFile(cdlFilepath); }
 	DllExport void __stdcall DebugGetCdlRatios(CdlRatios* cdlRatios) { *cdlRatios = GetDebugger()->GetCodeDataLogger()->GetRatios(); }
 	DllExport void __stdcall DebugResetCdlLog() { GetDebugger()->ResetCdl(); }
+	DllExport void __stdcall DebugSetCdlData(uint8_t* cdlData, uint32_t length) { GetDebugger()->SetCdlData(cdlData, length); }
 	DllExport void __stdcall DebugGetCdlData(uint32_t offset, uint32_t length, DebugMemoryType memoryType, uint8_t* cdlData) { GetDebugger()->GetCodeDataLogger()->GetCdlData(offset, length, memoryType, cdlData); }
 	DllExport void __stdcall DebugMarkPrgBytesAs(uint32_t start, uint32_t end, CdlPrgFlags type) { GetDebugger()->GetCodeDataLogger()->MarkPrgBytesAs(start, end, type); }
 	

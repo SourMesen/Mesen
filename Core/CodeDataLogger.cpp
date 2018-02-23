@@ -41,28 +41,40 @@ bool CodeDataLogger::LoadCdlFile(string cdlFilepath)
 			cdlFile.read((char*)_cdlData, _prgSize + _chrSize);
 			cdlFile.close();
 
-			for(int i = 0, len = _prgSize; i < len; i++) {
-				if(IsCode(i)) {
-					_codeSize++;
-				} else if(IsData(i)) {
-					_dataSize++;
-				}
-			}
-
-			for(int i = 0, len = _chrSize; i < len; i++) {
-				if(IsDrawn(i) || IsRead(i)) {
-					_usedChrSize++;
-					if(IsDrawn(i)) {
-						_drawnChrSize++;
-					} else if(IsRead(i)) {
-						_readChrSize++;
-					}
-				}
-			}
+			CalculateStats();
+			
 			return true;
 		}
 	}
 	return false;
+}
+
+void CodeDataLogger::CalculateStats()
+{
+	_codeSize = 0;
+	_dataSize = 0;
+	_usedChrSize = 0;
+	_drawnChrSize = 0;
+	_readChrSize = 0;
+
+	for(int i = 0, len = _prgSize; i < len; i++) {
+		if(IsCode(i)) {
+			_codeSize++;
+		} else if(IsData(i)) {
+			_dataSize++;
+		}
+	}
+
+	for(int i = 0, len = _chrSize; i < len; i++) {
+		if(IsDrawn(i) || IsRead(i)) {
+			_usedChrSize++;
+			if(IsDrawn(i)) {
+				_drawnChrSize++;
+			} else if(IsRead(i)) {
+				_readChrSize++;
+			}
+		}
+	}
 }
 
 bool CodeDataLogger::SaveCdlFile(string cdlFilepath)
@@ -157,6 +169,14 @@ bool CodeDataLogger::IsRead(uint32_t absoluteAddr)
 bool CodeDataLogger::IsDrawn(uint32_t absoluteAddr)
 {
 	return (_cdlData[absoluteAddr + _prgSize] & (uint8_t)CdlChrFlags::Drawn) == (uint8_t)CdlChrFlags::Drawn;
+}
+
+void CodeDataLogger::SetCdlData(uint8_t *cdlData, uint32_t length)
+{
+	if(length <= _prgSize + _chrSize) {
+		memcpy(_cdlData, cdlData, length);
+		CalculateStats();
+	}
 }
 
 void CodeDataLogger::GetCdlData(uint32_t offset, uint32_t length, DebugMemoryType memoryType, uint8_t * cdlData)

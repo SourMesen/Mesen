@@ -57,6 +57,8 @@ private:
 
 	SimpleLock _lock;
 	
+	void CalculateStats();
+
 public:
 	CodeDataLogger(Debugger *debugger, uint32_t prgSize, uint32_t chrSize);
 	~CodeDataLogger();
@@ -77,6 +79,7 @@ public:
 	bool IsRead(uint32_t absoluteAddr);
 	bool IsDrawn(uint32_t absoluteAddr);
 
+	void SetCdlData(uint8_t *cdlData, uint32_t length);
 	void GetCdlData(uint32_t offset, uint32_t length, DebugMemoryType memoryType, uint8_t* cdlData);
 
 	void StripData(uint8_t* romBuffer, CdlStripFlag flag);

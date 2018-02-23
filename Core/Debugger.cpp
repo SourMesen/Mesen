@@ -178,6 +178,13 @@ bool Debugger::LoadCdlFile(string cdlFilepath)
 	return false;
 }
 
+void Debugger::SetCdlData(uint8_t* cdlData, uint32_t length)
+{
+	DebugBreakHelper helper(this);
+	_codeDataLogger->SetCdlData(cdlData, length);
+	UpdateCdlCache();
+}
+
 void Debugger::ResetCdl()
 {
 	DebugBreakHelper helper(this);

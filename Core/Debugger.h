@@ -173,6 +173,7 @@ public:
 	void Run();
 
 	bool LoadCdlFile(string cdlFilepath);
+	void SetCdlData(uint8_t* cdlData, uint32_t length);
 	void ResetCdl();
 	void UpdateCdlCache();
 	bool IsMarkedAsCode(uint16_t relativeAddress);
