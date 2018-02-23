@@ -437,7 +437,7 @@ void Debugger::PrivateProcessPpuCycle()
 	if(PPU::GetCurrentCycle() == 0) {
 		if(PPU::GetCurrentScanline() == 241) {
 			ProcessEvent(EventType::EndFrame);
-		} else if(PPU::GetCurrentScanline() == 0) {
+		} else if(PPU::GetCurrentScanline() == -1) {
 			ProcessEvent(EventType::StartFrame);
 		}
 	}
