@@ -61,8 +61,7 @@ namespace Mesen.GUI.Debugger.Controls
 		private void RefreshList()
 		{
 			Int64 exclusiveTotal = _exclusiveTime.Sum();
-			Int64 inclusiveTotal = _inclusiveTime.Sum();
-
+			
 			int hexCount = GetMaxAddrHexSize();
 
 			lstFunctions.BeginUpdate();
@@ -112,7 +111,7 @@ namespace Mesen.GUI.Debugger.Controls
 					item.SubItems[2].Text = _inclusiveTime[i].ToString();
 					item.SubItems[2].Tag = _inclusiveTime[i];
 
-					double ratio = ((double)_inclusiveTime[i] / inclusiveTotal) *100;
+					double ratio = ((double)_inclusiveTime[i] / exclusiveTotal) *100;
 					item.SubItems[3].Text = ratio.ToString("0.00");
 					item.SubItems[3].Tag = (Int64)(ratio*100);
 
