@@ -329,7 +329,7 @@
       <Control ID="lblPauseBackgroundSettings">ポーズ・バックグラウンド設定</Control>
       <Control ID="lblMiscSettings">その他</Control>
       <Control ID="chkAutoHideMenu">自動的にメニューバーを隠す</Control>
-      <Control ID="chkDisplayTitleBarInfo">タイトルバーに追加情報を表す。</Control>
+      <Control ID="chkDisplayTitleBarInfo">タイトルバーに追加情報を表す</Control>
 
       <Control ID="chkConfirmExitResetPower">リセットと再起度とMesenを終了する前に確認する</Control>
       <Control ID="chkPauseOnMovieEnd">動画が終わると自動的にポーズする</Control>
@@ -367,6 +367,7 @@
       <Control ID="chkFdsFastForwardOnLoad">ファミコンディスクシステムのゲームをディスクからロードする時に自動的に最高速度にする</Control>
       <Control ID="chkFdsAutoInsertDisk">ファミコンディスクシステムのゲーム中に自動的に該当するディスクを入れる</Control>
 
+      <Control ID="chkShowFullPathInRecents">最近開いたファイルのフルパスを表示する</Control>
       <Control ID="chkShowFrameCounter">フレームカウンタを表示する</Control>
       <Control ID="chkShowGameTimer">ゲームタイマーを表示する</Control>
       <Control ID="chkShowVsConfigOnLoad">VSゲームを起動する時に設定ウィンドウを表示する</Control>

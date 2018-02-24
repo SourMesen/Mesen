@@ -66,6 +66,8 @@ namespace Mesen.GUI.Forms.Config
 			AddBinding("AutoHideMenu", chkAutoHideMenu);
 			AddBinding("DisplayTitleBarInfo", chkDisplayTitleBarInfo);
 
+			AddBinding("ShowFullPathInRecents", chkShowFullPathInRecents);
+
 			AddBinding("ShowFrameCounter", chkShowFrameCounter);
 			AddBinding("ShowGameTimer", chkShowGameTimer);
 

@@ -378,6 +378,7 @@
       <Control ID="chkAutoSaveNotify">Mostrar una notificación en pantalla al hacer la copia de seguridad automática</Control>
       <Control ID="grpCloudSaves">Copia de seguridad online</Control>
 
+      <Control ID="chkShowFullPathInRecents">Show full file path in recent file list</Control>
       <Control ID="chkShowFrameCounter">Mostrar contador de fotogramas</Control>
       <Control ID="chkShowGameTimer">Mostrar tiempo de juego</Control>
       <Control ID="chkShowVsConfigOnLoad">Mostrar configuración del juego cuando se carguen juegos de VS System</Control>

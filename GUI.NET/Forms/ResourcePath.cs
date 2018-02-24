@@ -18,6 +18,18 @@ namespace Mesen.GUI.Forms
 
 		public string FileName { get { return Compressed ? InnerFile : System.IO.Path.GetFileName(Path); } }
 		public string Folder { get { return System.IO.Path.GetDirectoryName(Path); } }
+		
+		public string ReadablePath
+		{
+			get
+			{
+				if(Compressed) {
+					return $"{Path} ({InnerFile})";
+				} else {
+					return Path;
+				}
+			}
+		}
 
 		public override string ToString()
 		{

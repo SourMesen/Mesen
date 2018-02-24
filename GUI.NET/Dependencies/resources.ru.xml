@@ -365,6 +365,7 @@
       <Control ID="chkFdsFastForwardOnLoad">Использовать быструю загрузку FDS</Control>
       <Control ID="chkFdsAutoInsertDisk">Automatically switch disks for FDS games</Control>
       
+      <Control ID="chkShowFullPathInRecents">Show full file path in recent file list</Control>
       <Control ID="chkShowFrameCounter">Show frame counter</Control>
       <Control ID="chkShowGameTimer">Show game timer</Control>
       <Control ID="chkShowVsConfigOnLoad">Show game configuration dialog when loading VS System games</Control>

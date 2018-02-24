@@ -245,7 +245,6 @@ namespace Mesen.GUI.Forms
 							}
 
 							ConfigManager.Config.AddRecentFile(romFile, patchFileToApply);
-							UpdateRecentFiles();
 						}));
 					});
 
@@ -254,6 +253,11 @@ namespace Mesen.GUI.Forms
 			} else {
 				MesenMsgBox.Show("FileNotFound", MessageBoxButtons.OK, MessageBoxIcon.Error, romFile.Path);
 			}
+		}
+		
+		private void mnuRecentFiles_DropDownOpening(object sender, EventArgs e)
+		{
+			UpdateRecentFiles();
 		}
 
 		private void UpdateRecentFiles()
@@ -276,7 +280,6 @@ namespace Mesen.GUI.Forms
 			clearHistory.Image = Resources.Close;
 			clearHistory.Click += (object sender, EventArgs args) => {
 				ConfigManager.Config.RecentFiles = new List<RecentItem>();
-				UpdateRecentFiles();
 			};
 			mnuRecentFiles.DropDownItems.Add(clearHistory);
 		}

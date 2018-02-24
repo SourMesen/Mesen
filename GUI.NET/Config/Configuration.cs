@@ -159,7 +159,13 @@ namespace Mesen.GUI.Config
 
 		public override string ToString()
 		{
-			string text = Path.GetFileName(RomFile.FileName).Replace("&", "&&");
+			string text;
+			if(ConfigManager.Config.PreferenceInfo.ShowFullPathInRecents) {
+				text = RomFile.ReadablePath.Replace("&", "&&");
+			} else {
+				text = Path.GetFileName(RomFile.FileName).Replace("&", "&&");
+			}
+
 			if(PatchFile.HasValue) {
 				text += " [" + Path.GetFileName(PatchFile.Value) + "]";
 			}

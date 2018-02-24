@@ -127,14 +127,12 @@ namespace Mesen.GUI.Forms
 					ResourceHelper.UpdateEmuLanguage();
 					ResourceHelper.ApplyResources(this);
 					UpdateMenus();
-					UpdateRecentFiles();
 					InitializeNsfMode(true);
 					ctrlRecentGames.UpdateGameInfo();
 					TopMost = ConfigManager.Config.PreferenceInfo.AlwaysOnTop;
 				} else {
 					UpdateVideoSettings();
 					UpdateMenus();
-					UpdateRecentFiles();
 					UpdateViewerSize();
 				}
 			}

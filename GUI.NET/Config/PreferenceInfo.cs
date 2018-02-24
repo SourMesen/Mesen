@@ -58,6 +58,8 @@ namespace Mesen.GUI.Config
 		public bool DisableGameDatabase = false;
 		public bool DisableOsd = false;
 
+		public bool ShowFullPathInRecents = false;
+
 		public bool ShowFrameCounter = false;
 		public bool ShowGameTimer = false;
 		public bool ShowVsConfigOnLoad = false;
