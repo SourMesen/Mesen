@@ -376,11 +376,14 @@
 			this.hexBox.ByteColorProvider = null;
 			this.tableLayoutPanel1.SetColumnSpan(this.hexBox, 3);
 			this.hexBox.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.hexBox.EnablePerByteNavigation = false;
 			this.hexBox.Font = new System.Drawing.Font("Segoe UI", 9F);
+			this.hexBox.HighDensityMode = false;
 			this.hexBox.InfoBackColor = System.Drawing.Color.DarkGray;
 			this.hexBox.Location = new System.Drawing.Point(86, 196);
 			this.hexBox.Name = "hexBox";
 			this.hexBox.ReadOnly = true;
+			this.hexBox.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(192)))));
 			this.hexBox.ShadowSelectionColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(60)))), ((int)(((byte)(188)))), ((int)(((byte)(255)))));
 			this.hexBox.Size = new System.Drawing.Size(402, 18);
 			this.hexBox.TabIndex = 26;

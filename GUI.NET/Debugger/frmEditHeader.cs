@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Be.Windows.Forms;
+using Mesen.GUI.Controls;
 using Mesen.GUI.Forms;
 
 namespace Mesen.GUI.Debugger
@@ -18,6 +19,8 @@ namespace Mesen.GUI.Debugger
 		public frmEditHeader()
 		{
 			InitializeComponent();
+
+			this.hexBox.Font = new Font(BaseControl.MonospaceFontFamily, 10, FontStyle.Regular);
 
 			NesHeader header = NesHeader.FromBytes(InteropEmu.DebugGetNesHeader());
 			Entity = header;

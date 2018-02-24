@@ -2619,96 +2619,94 @@ namespace Be.Windows.Forms
 				stringToDisplay = string.Empty;
 			};
 
-			using(Brush selBrushBack = new SolidBrush(_selectionBackColor)) {
-				for(long i = startByte; i < intern_endByte + 1; i++) {
-					Color byteColor = defaultForeColor;
-					Color bgColor = Color.Transparent;
-					bool isSelectedByte = i >= _bytePos && i <= (_bytePos + _selectionLength - 1) && _selectionLength != 0;
-					if(this.ByteColorProvider != null) {
-						byteColor = this.ByteColorProvider.GetByteColor(_startByte, i, out bgColor);
-					}
-
-					counter++;
-
-					Point currentPoint = GetGridBytePoint(counter);
-
-					bool lineChanged = false;
-					if(yPrevious != currentPoint.Y) {
-						if(_xPosList.ContainsKey(yPrevious)) {
-							_xPosList[yPrevious].Add(xPrevious);
-						}
-						_xPosList[currentPoint.Y] = new List<float>();
-						_lineWidthCache[yPrevious] = _recStringView.Width + xOffset;
-						xOffset = 0;
-						yPrevious = currentPoint.Y;
-						lineChanged = true;
-					}
-
-					if(forceDraw || lineChanged || byteColor != prevByteColor || bgColor != prevBgColor || prevSelected != isSelectedByte) {
-						outputHex(prevByteColor, prevSelected ? _selectionBackColor : prevBgColor);
-						gridPoint = GetGridBytePoint(counter);
-						prevXOffset = xOffset;
-						forceDraw = false;
-					}
-
-					byte b = _byteProvider.ReadByte(i);
-					bytesToDisplay.Add(b);
-
-					prevSelected = isSelectedByte;
-					prevBgColor = bgColor;
-					prevByteColor = byteColor;
-
-					if(!_stringViewVisible) {
-						continue;
-					}
-
-					string s;
-					if(skipCount > 0) {
-						skipCount--;
-						s = "";
-					} else {
-						long len = _byteProvider.Length;
-						UInt64 tblValue = (UInt64)b;
-						for(int j = 1; j < 8; j++) {
-							if(len > i + j) {
-								tblValue += (UInt64)_byteProvider.ReadByte(i + j) << (8 * j);
-							}
-						}
-
-						int keyLength;
-						s = ByteCharConverter.ToChar(tblValue, out keyLength);
-						skipCount = keyLength - 1;
-					}
-
-					float width;
-					if(!_measureCache.TryGetValue(s, out width)) {
-						width = g.MeasureString(s, Font, 1000, _stringFormat).Width;
-						_measureCache[s] = width;
-					}
-
-					PointF byteStringPointF = GetByteStringPointF(currentPoint, false);
-					float xPos = byteStringPointF.X + xOffset;
-					if(currentPoint.Y < 150) {
-						_xPosCache[currentPoint.Y * 64 + currentPoint.X] = xPos;
-					}
-					_xPosList[currentPoint.Y].Add(xPos);
-
-					if(currentPoint == caretPoint) {
-						caretWidth = width;
-					}
-
-					stringToDisplay += s;
-
-					if(s.Length > 1 || s.Length > 0 && s[0] > 127 || s[0] < 32) {
-						//Force draw if we hit a non-ascii character (to avoid minor positioning issues)
-						forceDraw = true;
-					}
-
-					xOffset += width - _charSize.Width;
-					xPrevious = xPos + width;
+			for(long i = startByte; i < intern_endByte + 1; i++) {
+				Color byteColor = defaultForeColor;
+				Color bgColor = Color.Transparent;
+				bool isSelectedByte = i >= _bytePos && i <= (_bytePos + _selectionLength - 1) && _selectionLength != 0;
+				if(this.ByteColorProvider != null) {
+					byteColor = this.ByteColorProvider.GetByteColor(_startByte, i, out bgColor);
 				}
+
+				counter++;
+
+				Point currentPoint = GetGridBytePoint(counter);
+
+				bool lineChanged = false;
+				if(yPrevious != currentPoint.Y) {
+					if(_xPosList.ContainsKey(yPrevious)) {
+						_xPosList[yPrevious].Add(xPrevious);
+					}
+					_xPosList[currentPoint.Y] = new List<float>();
+					_lineWidthCache[yPrevious] = _recStringView.Width + xOffset;
+					xOffset = 0;
+					yPrevious = currentPoint.Y;
+					lineChanged = true;
+				}
+
+				if(forceDraw || lineChanged || byteColor != prevByteColor || bgColor != prevBgColor || prevSelected != isSelectedByte) {
+					outputHex(this.ByteColorProvider != null ? prevByteColor : (prevSelected ? _selectionForeColor : defaultForeColor), prevSelected ? _selectionBackColor : prevBgColor);
+					gridPoint = GetGridBytePoint(counter);
+					prevXOffset = xOffset;
+					forceDraw = false;
+				}
+
+				byte b = _byteProvider.ReadByte(i);
+				bytesToDisplay.Add(b);
+
+				prevSelected = isSelectedByte;
+				prevBgColor = bgColor;
+				prevByteColor = byteColor;
+
+				if(!_stringViewVisible) {
+					continue;
+				}
+
+				string s;
+				if(skipCount > 0) {
+					skipCount--;
+					s = "";
+				} else {
+					long len = _byteProvider.Length;
+					UInt64 tblValue = (UInt64)b;
+					for(int j = 1; j < 8; j++) {
+						if(len > i + j) {
+							tblValue += (UInt64)_byteProvider.ReadByte(i + j) << (8 * j);
+						}
+					}
+
+					int keyLength;
+					s = ByteCharConverter.ToChar(tblValue, out keyLength);
+					skipCount = keyLength - 1;
+				}
+
+				float width;
+				if(!_measureCache.TryGetValue(s, out width)) {
+					width = g.MeasureString(s, Font, 1000, _stringFormat).Width;
+					_measureCache[s] = width;
+				}
+
+				PointF byteStringPointF = GetByteStringPointF(currentPoint, false);
+				float xPos = byteStringPointF.X + xOffset;
+				if(currentPoint.Y < 150) {
+					_xPosCache[currentPoint.Y * 64 + currentPoint.X] = xPos;
+				}
+				_xPosList[currentPoint.Y].Add(xPos);
+
+				if(currentPoint == caretPoint) {
+					caretWidth = width;
+				}
+
+				stringToDisplay += s;
+
+				if(s.Length > 1 || s.Length > 0 && s[0] > 127 || s[0] < 32) {
+					//Force draw if we hit a non-ascii character (to avoid minor positioning issues)
+					forceDraw = true;
+				}
+
+				xOffset += width - _charSize.Width;
+				xPrevious = xPos + width;
 			}
-			outputHex(prevByteColor, prevBgColor);
+			outputHex(this.ByteColorProvider != null ? prevByteColor : (prevSelected ? _selectionForeColor : defaultForeColor), prevSelected ? _selectionBackColor : prevBgColor);
 		}
 
 		float GetLineWidth(int y)
@@ -2918,7 +2916,7 @@ namespace Be.Windows.Forms
             RequiredWidth = requiredWidth;
 
 			int vmax = (int)Math.Floor((double)_recHex.Height / (double)_charSize.Height);
-			SetVerticalByteCount(vmax);
+			SetVerticalByteCount(vmax > 0 ? vmax : 1);
 
 			_iHexMaxBytes = _iHexMaxHBytes * _iHexMaxVBytes;
 
