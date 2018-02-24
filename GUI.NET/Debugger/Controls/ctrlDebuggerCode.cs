@@ -597,8 +597,15 @@ namespace Mesen.GUI.Debugger
 			}
 		}
 
+		protected override bool ProcessKeyMessage(ref Message m)
+		{
+			this.UpdateContextMenuItemVisibility(mnuAddToWatch.Visible);
+			return base.ProcessKeyMessage(ref m);
+		}
+
 		public void UpdateContextMenuItemVisibility(bool visible)
 		{
+			mnuUndoPrgChrEdit.Enabled = InteropEmu.DebugHasUndoHistory();
 			mnuShowNextStatement.Enabled = _currentActiveAddress.HasValue;
 			mnuSetNextStatement.Enabled = _currentActiveAddress.HasValue;
 			mnuEditSelectedCode.Enabled = mnuEditSubroutine.Enabled = InteropEmu.DebugIsExecutionStopped() && ctrlCodeViewer.CurrentLine >= 0;
@@ -980,6 +987,17 @@ namespace Mesen.GUI.Debugger
 		private void mnuMarkAsUnidentifiedData_Click(object sender, EventArgs e)
 		{
 			this.MarkSelectionAs(CdlPrgFlags.None);
+		}
+
+		private void mnuUndoPrgChrEdit_Click(object sender, EventArgs e)
+		{
+			if(InteropEmu.DebugHasUndoHistory()) {
+				InteropEmu.DebugPerformUndo();
+				frmDebugger debugger = DebugWindowManager.GetDebugger();
+				if(debugger != null) {
+					debugger.UpdateDebugger(false);
+				}
+			}
 		}
 
 		class LineStyleProvider : ctrlTextbox.ILineStyleProvider

@@ -92,7 +92,7 @@
 			// 
 			// mnuEditLabel
 			// 
-			this.mnuEditLabel.Image = global::Mesen.GUI.Properties.Resources.Edit;
+			this.mnuEditLabel.Image = global::Mesen.GUI.Properties.Resources.EditLabel;
 			this.mnuEditLabel.Name = "mnuEditLabel";
 			this.mnuEditLabel.ShortcutKeys = System.Windows.Forms.Keys.F2;
 			this.mnuEditLabel.Size = new System.Drawing.Size(166, 22);

@@ -78,6 +78,7 @@
 			this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
 			this.picCloseOccurrenceList = new System.Windows.Forms.PictureBox();
 			this.lblSearchResult = new System.Windows.Forms.Label();
+			this.mnuUndoPrgChrEdit = new System.Windows.Forms.ToolStripMenuItem();
 			this.contextMenuCode.SuspendLayout();
 			this.contextMenuMargin.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.splitContainer)).BeginInit();
@@ -96,6 +97,7 @@
             this.toolStripMenuItem4,
             this.mnuEditSelectedCode,
             this.mnuEditSubroutine,
+            this.mnuUndoPrgChrEdit,
             this.copySelectionToolStripMenuItem,
             this.toolStripMenuItem7,
             this.mnuShowNextStatement,
@@ -117,7 +119,7 @@
             this.mnuNavigateBackward,
             this.mnuNavigateForward});
 			this.contextMenuCode.Name = "contextMenuWatch";
-			this.contextMenuCode.Size = new System.Drawing.Size(259, 420);
+			this.contextMenuCode.Size = new System.Drawing.Size(259, 464);
 			this.contextMenuCode.Closed += new System.Windows.Forms.ToolStripDropDownClosedEventHandler(this.contextMenuCode_Closed);
 			this.contextMenuCode.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuCode_Opening);
 			// 
@@ -296,6 +298,7 @@
 			// 
 			// mnuEditLabel
 			// 
+			this.mnuEditLabel.Image = global::Mesen.GUI.Properties.Resources.EditLabel;
 			this.mnuEditLabel.Name = "mnuEditLabel";
 			this.mnuEditLabel.ShortcutKeys = System.Windows.Forms.Keys.F2;
 			this.mnuEditLabel.Size = new System.Drawing.Size(258, 22);
@@ -396,6 +399,7 @@
 			this.ctrlCodeViewer.Name = "ctrlCodeViewer";
 			this.ctrlCodeViewer.ShowContentNotes = false;
 			this.ctrlCodeViewer.ShowLineNumberNotes = false;
+			this.ctrlCodeViewer.ShowMemoryValues = false;
 			this.ctrlCodeViewer.ShowScrollbars = true;
 			this.ctrlCodeViewer.ShowSingleContentLineNotes = true;
 			this.ctrlCodeViewer.ShowSingleLineLineNumberNotes = false;
@@ -548,6 +552,15 @@
 			this.lblSearchResult.TabIndex = 11;
 			this.lblSearchResult.Text = "Search results for: ";
 			// 
+			// mnuUndoPrgChrEdit
+			// 
+			this.mnuUndoPrgChrEdit.Image = global::Mesen.GUI.Properties.Resources.Undo;
+			this.mnuUndoPrgChrEdit.Name = "mnuUndoPrgChrEdit";
+			this.mnuUndoPrgChrEdit.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Z)));
+			this.mnuUndoPrgChrEdit.Size = new System.Drawing.Size(258, 22);
+			this.mnuUndoPrgChrEdit.Text = "Undo PRG/CHR Edit";
+			this.mnuUndoPrgChrEdit.Click += new System.EventHandler(this.mnuUndoPrgChrEdit_Click);
+			// 
 			// ctrlDebuggerCode
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -621,5 +634,6 @@
 		private System.Windows.Forms.ToolStripMenuItem mnuMarkAsData;
 		private System.Windows.Forms.ToolStripMenuItem mnuMarkAsUnidentifiedData;
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem4;
+		private System.Windows.Forms.ToolStripMenuItem mnuUndoPrgChrEdit;
 	}
 }

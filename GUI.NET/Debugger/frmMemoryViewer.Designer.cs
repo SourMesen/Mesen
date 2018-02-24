@@ -122,8 +122,6 @@
 			this.ctrlHexViewer.Size = new System.Drawing.Size(606, 343);
 			this.ctrlHexViewer.TabIndex = 0;
 			this.ctrlHexViewer.RequiredWidthChanged += new System.EventHandler(this.ctrlHexViewer_RequiredWidthChanged);
-			this.ctrlHexViewer.InitializeContextMenu += new System.EventHandler(this.ctrlHexViewer_InitializeContextMenu);
-			this.ctrlHexViewer.ByteChanged += new Be.Windows.Forms.DynamicByteProvider.ByteChangedHandler(this.ctrlHexViewer_ByteChanged);
 			this.ctrlHexViewer.ByteMouseHover += new Mesen.GUI.Debugger.Controls.ctrlHexViewer.ByteMouseHoverHandler(this.ctrlHexViewer_ByteMouseHover);
 			// 
 			// flowLayoutPanel1

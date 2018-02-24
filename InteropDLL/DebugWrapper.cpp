@@ -113,6 +113,9 @@ extern "C"
 	DllExport bool __stdcall DebugHasPrgChrChanges() { return GetDebugger()->HasPrgChrChanges(); }
 	DllExport void __stdcall DebugRevertPrgChrChanges() { GetDebugger()->RevertPrgChrChanges(); }
 
+	DllExport bool __stdcall DebugHasUndoHistory() { return GetDebugger()->GetMemoryDumper()->HasUndoHistory(); }
+	DllExport void __stdcall DebugPerformUndo() { GetDebugger()->GetMemoryDumper()->PerformUndo(); }
+
 	DllExport int32_t __stdcall DebugFindSubEntryPoint(uint16_t relativeAddress) { return GetDebugger()->FindSubEntryPoint(relativeAddress); }
 
 	DllExport void __stdcall DebugSetInputOverride(uint32_t port, uint32_t state) { GetDebugger()->SetInputOverride(port, state); }

@@ -77,12 +77,19 @@ private:
 	shared_ptr<CodeDataLogger> _codeDataLogger;
 	shared_ptr<Disassembler> _disassembler;
 
+	std::deque<vector<uint8_t>> _undoHistory;
+
 	std::unordered_map<TileKey, uint32_t> _paletteByTile;
+
+	void AddUndoHistory(vector<uint8_t>& originalRomData);
 
 public:
 	MemoryDumper(shared_ptr<PPU> ppu, shared_ptr<MemoryManager> memoryManager, shared_ptr<BaseMapper> mapper, shared_ptr<CodeDataLogger> codeDataLogger, Debugger *debugger, shared_ptr<Disassembler> disassembler);
 
 	void GatherChrPaletteInfo();
+
+	bool HasUndoHistory();
+	void PerformUndo();
 
 	uint32_t GetMemorySize(DebugMemoryType type);
 	uint32_t GetMemoryState(DebugMemoryType type, uint8_t *buffer);

@@ -45,6 +45,32 @@ void MemoryDumper::SetMemoryState(DebugMemoryType type, uint8_t *buffer)
 	}
 }
 
+bool MemoryDumper::HasUndoHistory()
+{
+	return _undoHistory.size() > 0;
+}
+
+void MemoryDumper::PerformUndo()
+{
+	if(!_undoHistory.empty()) {
+		_mapper->RestorePrgChrBackup(_undoHistory.back());
+		_undoHistory.pop_back();
+		_debugger->UpdateCdlCache();
+	}
+}
+
+void MemoryDumper::AddUndoHistory(vector<uint8_t> &originalRomData)
+{
+	vector<uint8_t> newData = _mapper->GetPrgChrCopy();
+	if(memcmp(originalRomData.data(), newData.data(), originalRomData.size()) != 0) {
+		//Add a step in the undo history
+		_undoHistory.push_back(originalRomData);
+		if(_undoHistory.size() > 100) {
+			_undoHistory.pop_front();
+		}
+	}
+}
+
 uint32_t MemoryDumper::GetMemorySize(DebugMemoryType type)
 {
 	switch(type) {
@@ -111,6 +137,7 @@ uint32_t MemoryDumper::GetMemoryState(DebugMemoryType type, uint8_t *buffer)
 
 void MemoryDumper::SetMemoryValues(DebugMemoryType memoryType, uint32_t address, uint8_t* data, int32_t length)
 {
+	vector<uint8_t> originalRomData = _mapper->GetPrgChrCopy();
 	for(int i = 0; i < length; i++) {
 		SetMemoryValue(memoryType, address+i, data[i], true);
 	}
@@ -125,10 +152,17 @@ void MemoryDumper::SetMemoryValues(DebugMemoryType memoryType, uint32_t address,
 			_disassembler->RebuildPrgRomCache(infoStart.Address, length);
 		}
 	}
+
+	AddUndoHistory(originalRomData);
 }
 
 void MemoryDumper::SetMemoryValue(DebugMemoryType memoryType, uint32_t address, uint8_t value, bool preventRebuildCache, bool disableSideEffects)
 {
+	vector<uint8_t> originalRomData;
+	if(!preventRebuildCache) {
+		originalRomData = _mapper->GetPrgChrCopy();
+	}
+	
 	switch(memoryType) {
 		case DebugMemoryType::CpuMemory:
 			if(disableSideEffects) {
@@ -167,6 +201,10 @@ void MemoryDumper::SetMemoryValue(DebugMemoryType memoryType, uint32_t address, 
 			break;
 
 		case DebugMemoryType::InternalRam: _memoryManager->DebugWrite(address, value); break;
+	}
+
+	if(!preventRebuildCache) {
+		AddUndoHistory(originalRomData);
 	}
 }
 

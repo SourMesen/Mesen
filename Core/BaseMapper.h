@@ -234,6 +234,9 @@ public:
 
 	NESHeader GetNesHeader();
 	void GetRomFileData(vector<uint8_t> &out, bool asIpsFile, uint8_t* header);
+
+	vector<uint8_t> GetPrgChrCopy();
+	void RestorePrgChrBackup(vector<uint8_t>& backupData);
 	void RevertPrgChrChanges();
 	bool HasPrgChrChanges();
 };

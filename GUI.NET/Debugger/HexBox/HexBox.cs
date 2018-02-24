@@ -2199,29 +2199,20 @@ namespace Be.Windows.Forms
 		{
 			if (!CanPaste()) return;
 
-			if (_selectionLength > 0)
-				_byteProvider.DeleteBytes(_bytePos, _selectionLength);
-
 			byte[] buffer = null;
 			IDataObject da = Clipboard.GetDataObject();
-			if (da.GetDataPresent("BinaryData"))
-			{
+			if(da.GetDataPresent("BinaryData")) {
 				System.IO.MemoryStream ms = (System.IO.MemoryStream)da.GetData("BinaryData");
 				buffer = new byte[ms.Length];
 				ms.Read(buffer, 0, buffer.Length);
-			}
-			else if (da.GetDataPresent(typeof(string)))
-			{
+			} else if(da.GetDataPresent(typeof(string))) {
 				string sBuffer = (string)da.GetData(typeof(string));
 				buffer = System.Text.Encoding.ASCII.GetBytes(sBuffer);
-			}
-			else
-			{
+			} else {
 				return;
 			}
 
-			_byteProvider.InsertBytes(_bytePos, buffer);
-
+			_byteProvider.WriteBytes(_bytePos, buffer);
 			SetPosition(_bytePos + buffer.Length, 0);
 
 			ReleaseSelection();
@@ -2236,12 +2227,6 @@ namespace Be.Windows.Forms
 		public bool CanPaste()
 		{
 			if (ReadOnly || !this.Enabled) return false;
-
-			if (_byteProvider == null || !_byteProvider.SupportsInsertBytes())
-				return false;
-
-			if (!_byteProvider.SupportsDeleteBytes() && _selectionLength > 0)
-				return false;
 
 			IDataObject da = Clipboard.GetDataObject();
 			if (da.GetDataPresent("BinaryData"))
@@ -3749,6 +3734,10 @@ namespace Be.Windows.Forms
 
 		void SetPosition(long bytePos, int byteCharacterPos)
 		{
+			if(bytePos > this._endByte) {
+				bytePos = this._endByte;
+			}
+
 			if (_byteCharacterPos != byteCharacterPos)
 			{
 				_byteCharacterPos = byteCharacterPos;

@@ -1161,6 +1161,25 @@ void BaseMapper::GetRomFileData(vector<uint8_t> &out, bool asIpsFile, uint8_t* h
 	}
 }
 
+vector<uint8_t> BaseMapper::GetPrgChrCopy()
+{
+	vector<uint8_t> data;
+	data.resize(_prgSize + (_onlyChrRam ? 0 : _chrRomSize));
+	memcpy(data.data(), _prgRom, _prgSize);
+	if(!_onlyChrRam) {
+		memcpy(data.data() + _prgSize, _chrRom, _chrRomSize);
+	}
+	return data;
+}
+
+void BaseMapper::RestorePrgChrBackup(vector<uint8_t> &backupData)
+{
+	memcpy(_prgRom, backupData.data(), _prgSize);
+	if(!_onlyChrRam) {
+		memcpy(_chrRom, backupData.data() + _prgSize, _chrRomSize);
+	}
+}
+
 void BaseMapper::RevertPrgChrChanges()
 {
 	memcpy(_prgRom, _originalPrgRom.data(), _originalPrgRom.size());

@@ -92,6 +92,9 @@ namespace Be.Windows.Forms
 		public delegate void ByteChangedHandler(int byteIndex, byte newValue, byte oldValue);
 		public event ByteChangedHandler ByteChanged;
 
+		public delegate void BytesChangedHandler(int byteIndex, byte[] values);
+		public event BytesChangedHandler BytesChanged;
+
 
 		/// <summary>
 		/// Reads a byte from the byte collection.
@@ -112,6 +115,14 @@ namespace Be.Windows.Forms
 				ByteChanged?.Invoke((int)index, value, _bytes[(int)index]);
 				_bytes[(int)index] = value;
 				OnChanged(EventArgs.Empty);
+			}
+		}
+
+		public void WriteBytes(long index, byte[] values)
+		{
+			BytesChanged?.Invoke((int)index, values);
+			for(int i = 0; i < values.Length && index + i < _bytes.Count; i++) {
+				_bytes[(int)index+i] = values[i];
 			}
 		}
 

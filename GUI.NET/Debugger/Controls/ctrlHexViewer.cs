@@ -18,6 +18,7 @@ namespace Mesen.GUI.Debugger.Controls
 	{
 		private FindOptions _findOptions;
 		private StaticByteProvider _byteProvider;
+		private DebugMemoryType _memoryType;
 
 		public ctrlHexViewer()
 		{
@@ -40,8 +41,11 @@ namespace Mesen.GUI.Debugger.Controls
 			return this._byteProvider != null ? this._byteProvider.Bytes.ToArray() : new byte[0];
 		}
 		
-		public void SetData(byte[] data)
+		public void RefreshData(DebugMemoryType memoryType)
 		{
+			_memoryType = memoryType;
+			byte[] data = InteropEmu.DebugGetMemoryState(this._memoryType);
+
 			if(data != null) {
 				bool changed = true;
 				if(this._byteProvider != null && data.Length == this._byteProvider.Bytes.Count) {
@@ -55,18 +59,17 @@ namespace Mesen.GUI.Debugger.Controls
 				}
 
 				if(changed) {
-					bool needInit = _byteProvider == null;
 					_byteProvider = new StaticByteProvider(data);
 					_byteProvider.ByteChanged += (int byteIndex, byte newValue, byte oldValue) => {
-						ByteChanged?.Invoke(byteIndex, newValue, oldValue);
+						InteropEmu.DebugSetMemoryValue(_memoryType, (UInt32)byteIndex, newValue);
+					};
+					_byteProvider.BytesChanged += (int byteIndex, byte[] values) => {
+						InteropEmu.DebugSetMemoryValues(_memoryType, (UInt32)byteIndex, values);
 					};
 
 					this.ctrlHexBox.ByteProvider = _byteProvider;
+					this.ctrlHexBox.ContextMenuStrip = this.ctxMenuStrip;
 					this.ctrlHexBox.Refresh();
-
-					if(needInit) {
-						InitializeContextMenu?.Invoke(this.ctrlHexBox, EventArgs.Empty);
-					}
 				}
 			}
 		}
@@ -304,10 +307,7 @@ namespace Mesen.GUI.Debugger.Controls
 			add { this.ctrlHexBox.RequiredWidthChanged += value; }
 			remove { this.ctrlHexBox.RequiredWidthChanged -= value; }
 		}
-
-		public event EventHandler InitializeContextMenu;
-		public event ByteChangedHandler ByteChanged;
-
+		
 		[Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public IByteCharConverter ByteCharConverter
 		{
@@ -380,6 +380,208 @@ namespace Mesen.GUI.Debugger.Controls
 		private void ctrlHexBox_SelectionLengthChanged(object sender, EventArgs e)
 		{
 			UpdateLocationLabel();
+		}
+
+		private AddressType? GetAddressType()
+		{
+			switch(_memoryType) {
+				case DebugMemoryType.InternalRam: return AddressType.InternalRam;
+				case DebugMemoryType.WorkRam: return AddressType.WorkRam;
+				case DebugMemoryType.SaveRam: return AddressType.SaveRam;
+				case DebugMemoryType.PrgRom: return AddressType.PrgRom;
+			}
+
+			return null;
+		}
+
+		private int SelectionStartAddress { get { return (int)ctrlHexBox.SelectionStart; } }
+		private int SelectionEndAddress { get { return (int)(ctrlHexBox.SelectionStart + (ctrlHexBox.SelectionLength == 0 ? 0 : (ctrlHexBox.SelectionLength - 1))); } }
+
+		private void MarkSelectionAs(int start, int end, CdlPrgFlags type)
+		{
+			if(_memoryType == DebugMemoryType.CpuMemory) {
+				start = InteropEmu.DebugGetAbsoluteAddress((UInt32)start);
+				end = InteropEmu.DebugGetAbsoluteAddress((UInt32)end);
+			}
+
+			if(start >= 0 && end >= 0 && start <= end) {
+				InteropEmu.DebugMarkPrgBytesAs((UInt32)start, (UInt32)end, type);
+				frmDebugger debugger = DebugWindowManager.GetDebugger();
+				if(debugger != null) {
+					debugger.UpdateDebugger(false, false);
+				}
+			}
+		}
+
+		private void mnuAddToWatch_Click(object sender, EventArgs e)
+		{
+			string[] toAdd = Enumerable.Range(SelectionStartAddress, SelectionEndAddress - SelectionStartAddress - 1).Select((num) => $"[${num.ToString("X4")}]").ToArray();
+			WatchManager.AddWatch(toAdd);
+		}
+
+		private void mnuEditBreakpoint_Click(object sender, EventArgs e)
+		{
+			UInt32 startAddress = (UInt32)SelectionStartAddress;
+			UInt32 endAddress = (UInt32)SelectionEndAddress;
+			BreakpointAddressType addressType = startAddress == endAddress ? BreakpointAddressType.SingleAddress : BreakpointAddressType.AddressRange;
+
+			Breakpoint bp = BreakpointManager.GetMatchingBreakpoint(startAddress, endAddress, this._memoryType);
+			if(bp == null) {
+				bp = new Breakpoint() { Address = startAddress, MemoryType = this._memoryType, StartAddress = startAddress, EndAddress = endAddress, AddressType = addressType, BreakOnWrite = true, BreakOnRead = true };
+				if(bp.IsCpuBreakpoint) {
+					bp.BreakOnExec = true;
+				}
+			}
+			BreakpointManager.EditBreakpoint(bp);
+		}
+
+		private void mnuEditLabel_Click(object sender, EventArgs e)
+		{
+			UInt32 address = (UInt32)ctrlHexBox.SelectionStart;
+			if(this._memoryType == DebugMemoryType.CpuMemory) {
+				AddressTypeInfo info = new AddressTypeInfo();
+				InteropEmu.DebugGetAbsoluteAddressAndType(address, ref info);
+				ctrlLabelList.EditLabel((UInt32)info.Address, info.Type);
+			} else {
+				ctrlLabelList.EditLabel(address, GetAddressType().Value);
+			}
+		}
+
+		private void mnuFreeze_Click(object sender, EventArgs e)
+		{
+			for(int i = SelectionStartAddress, end = SelectionEndAddress; i <= end; i++) {
+				InteropEmu.DebugSetFreezeState((UInt16)i, true);
+			}
+		}
+
+		private void mnuUnfreeze_Click(object sender, EventArgs e)
+		{
+			for(int i = SelectionStartAddress, end = SelectionEndAddress; i <= end; i++) {
+				InteropEmu.DebugSetFreezeState((UInt16)i, false);
+			}
+		}
+
+		private void mnuMarkAsCode_Click(object sender, EventArgs e)
+		{
+			this.MarkSelectionAs(SelectionStartAddress, SelectionEndAddress, CdlPrgFlags.Code);
+		}
+
+		private void mnuMarkAsData_Click(object sender, EventArgs e)
+		{
+			this.MarkSelectionAs(SelectionStartAddress, SelectionEndAddress, CdlPrgFlags.Data);
+		}
+
+		private void mnuMarkAsUnidentifiedData_Click(object sender, EventArgs e)
+		{
+			this.MarkSelectionAs(SelectionStartAddress, SelectionEndAddress, CdlPrgFlags.None);
+		}
+		
+		protected override bool ProcessKeyMessage(ref Message m)
+		{
+			this.UpdateActionAvailability();
+			return base.ProcessKeyMessage(ref m);
+		}
+		
+		private void UpdateActionAvailability()
+		{
+			UInt32 startAddress = (UInt32)SelectionStartAddress;
+			UInt32 endAddress = (UInt32)SelectionEndAddress;
+
+			string address = "$" + startAddress.ToString("X4");
+			string addressRange;
+			if(startAddress != endAddress) {
+				addressRange = "$" + startAddress.ToString("X4") + "-$" + endAddress.ToString("X4");
+			} else {
+				addressRange = address;
+			}
+
+			mnuEditLabel.Text = $"Edit Label ({address})";
+			mnuEditBreakpoint.Text = $"Edit Breakpoint ({addressRange})";
+			mnuAddToWatch.Text = $"Add to Watch ({addressRange})";
+
+			if(this._memoryType == DebugMemoryType.CpuMemory) {
+				bool[] freezeState = InteropEmu.DebugGetFreezeState((UInt16)startAddress, (UInt16)(endAddress - startAddress + 1));
+				mnuFreeze.Enabled = !freezeState.All((frozen) => frozen);
+				mnuUnfreeze.Enabled = freezeState.Any((frozen) => frozen);
+				mnuFreeze.Text = $"Freeze ({addressRange})";
+				mnuUnfreeze.Text = $"Unfreeze ({addressRange})";
+			} else {
+				mnuFreeze.Text = $"Freeze";
+				mnuUnfreeze.Text = $"Unfreeze";
+				mnuFreeze.Enabled = false;
+				mnuUnfreeze.Enabled = false;
+			}
+
+			if(this._memoryType == DebugMemoryType.CpuMemory) {
+				int absStart = InteropEmu.DebugGetAbsoluteAddress(startAddress);
+				int absEnd = InteropEmu.DebugGetAbsoluteAddress(endAddress);
+
+				if(absStart >= 0 && absEnd >= 0 && absStart <= absEnd) {
+					mnuMarkSelectionAs.Text = "Mark selection as... (" + addressRange + ")";
+					mnuMarkSelectionAs.Enabled = true;
+				} else {
+					mnuMarkSelectionAs.Text = "Mark selection as...";
+					mnuMarkSelectionAs.Enabled = false;
+				}
+			} else if(this._memoryType == DebugMemoryType.PrgRom) {
+				mnuMarkSelectionAs.Text = "Mark selection as... (" + addressRange + ")";
+				mnuMarkSelectionAs.Enabled = true;
+			} else {
+				mnuMarkSelectionAs.Text = "Mark selection as...";
+				mnuMarkSelectionAs.Enabled = false;
+			}
+
+			bool disableEditLabel = false;
+			if(this._memoryType == DebugMemoryType.CpuMemory) {
+				AddressTypeInfo info = new AddressTypeInfo();
+				InteropEmu.DebugGetAbsoluteAddressAndType(startAddress, ref info);
+				disableEditLabel = info.Address == -1;
+			}
+
+			mnuEditLabel.Enabled = !disableEditLabel && (this._memoryType == DebugMemoryType.CpuMemory || this.GetAddressType().HasValue);
+			mnuEditBreakpoint.Enabled = DebugWindowManager.GetDebugger() != null && (
+				this._memoryType == DebugMemoryType.CpuMemory ||
+				this._memoryType == DebugMemoryType.PpuMemory ||
+				this._memoryType == DebugMemoryType.PrgRom ||
+				this._memoryType == DebugMemoryType.WorkRam ||
+				this._memoryType == DebugMemoryType.SaveRam ||
+				this._memoryType == DebugMemoryType.ChrRam ||
+				this._memoryType == DebugMemoryType.ChrRom ||
+				this._memoryType == DebugMemoryType.PaletteMemory
+			);
+
+			mnuAddToWatch.Enabled = this._memoryType == DebugMemoryType.CpuMemory;
+
+			mnuCopy.Enabled = ctrlHexBox.CanCopy();
+			mnuPaste.Enabled = ctrlHexBox.CanPaste();
+			mnuSelectAll.Enabled = ctrlHexBox.CanSelectAll();
+			mnuUndo.Enabled = InteropEmu.DebugHasUndoHistory();
+		}
+
+		private void ctxMenuStrip_Opening(object sender, CancelEventArgs e)
+		{
+			this.UpdateActionAvailability();
+		}
+
+		private void mnuCopy_Click(object sender, EventArgs e)
+		{
+			ctrlHexBox.CopyHex();
+		}
+
+		private void mnuPaste_Click(object sender, EventArgs e)
+		{
+			ctrlHexBox.Paste();
+		}
+
+		private void mnuSelectAll_Click(object sender, EventArgs e)
+		{
+			ctrlHexBox.SelectAll();
+		}
+
+		private void mnuUndo_Click(object sender, EventArgs e)
+		{
+			InteropEmu.DebugPerformUndo();
+			this.RefreshData(_memoryType);
 		}
 	}
 }

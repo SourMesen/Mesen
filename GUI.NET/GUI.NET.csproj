@@ -714,8 +714,6 @@
     <Compile Include="Debugger\HexBox\DataBlock.cs" />
     <Compile Include="Debugger\HexBox\DataMap.cs" />
     <Compile Include="Debugger\HexBox\DynamicByteProvider.cs" />
-    <Compile Include="Debugger\HexBox\DynamicFileByteProvider.cs" />
-    <Compile Include="Debugger\HexBox\FileByteProvider.cs" />
     <Compile Include="Debugger\HexBox\FileDataBlock.cs" />
     <Compile Include="Debugger\HexBox\FindOptions.cs" />
     <Compile Include="Debugger\HexBox\HexBox.cs">
@@ -1109,6 +1107,9 @@
     <Compile Include="ResourceManager.cs" />
     <Compile Include="RuntimeChecker.cs" />
     <Compile Include="SingleInstance.cs" />
+    <None Include="Resources\SelectAll.png" />
+    <None Include="Resources\Paste.png" />
+    <None Include="Resources\EditLabel.png" />
     <None Include="Resources\UnidentifiedData.png" />
     <None Include="Resources\VerifiedData.png" />
     <None Include="Resources\NesEventViewer.png" />

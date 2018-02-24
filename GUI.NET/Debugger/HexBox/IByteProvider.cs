@@ -19,6 +19,9 @@ namespace Be.Windows.Forms
 		/// <param name="index">the index of the byte to write</param>
 		/// <param name="value">the byte to write</param>
 		void WriteByte(long index, byte value);
+
+		void WriteBytes(long index, byte[] values);
+
 		/// <summary>
 		/// Inserts bytes into the provider
 		/// </summary>

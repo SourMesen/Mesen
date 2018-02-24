@@ -33,14 +33,14 @@
 			this.mnuEdit = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuDelete = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
+			this.mnuAddBreakpoint = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuAddToWatch = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripSeparator();
 			this.mnuFindOccurrences = new System.Windows.Forms.ToolStripMenuItem();
 			this.lstLabels = new Mesen.GUI.Controls.DoubleBufferedListView();
 			this.colFunctionLabel = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
 			this.colFunctionAddress = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
 			this.colMemoryAddress = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-			this.mnuAddToWatch = new System.Windows.Forms.ToolStripMenuItem();
-			this.mnuAddBreakpoint = new System.Windows.Forms.ToolStripMenuItem();
-			this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripSeparator();
 			this.contextMenu.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -70,7 +70,7 @@
 			// 
 			// mnuEdit
 			// 
-			this.mnuEdit.Image = global::Mesen.GUI.Properties.Resources.Edit;
+			this.mnuEdit.Image = global::Mesen.GUI.Properties.Resources.EditLabel;
 			this.mnuEdit.Name = "mnuEdit";
 			this.mnuEdit.ShortcutKeys = System.Windows.Forms.Keys.F2;
 			this.mnuEdit.Size = new System.Drawing.Size(166, 22);
@@ -90,6 +90,27 @@
 			// 
 			this.toolStripMenuItem1.Name = "toolStripMenuItem1";
 			this.toolStripMenuItem1.Size = new System.Drawing.Size(163, 6);
+			// 
+			// mnuAddBreakpoint
+			// 
+			this.mnuAddBreakpoint.Image = global::Mesen.GUI.Properties.Resources.Breakpoint;
+			this.mnuAddBreakpoint.Name = "mnuAddBreakpoint";
+			this.mnuAddBreakpoint.Size = new System.Drawing.Size(166, 22);
+			this.mnuAddBreakpoint.Text = "Add breakpoint";
+			this.mnuAddBreakpoint.Click += new System.EventHandler(this.mnuAddBreakpoint_Click);
+			// 
+			// mnuAddToWatch
+			// 
+			this.mnuAddToWatch.Image = global::Mesen.GUI.Properties.Resources.Add;
+			this.mnuAddToWatch.Name = "mnuAddToWatch";
+			this.mnuAddToWatch.Size = new System.Drawing.Size(166, 22);
+			this.mnuAddToWatch.Text = "Add to watch";
+			this.mnuAddToWatch.Click += new System.EventHandler(this.mnuAddToWatch_Click);
+			// 
+			// toolStripMenuItem2
+			// 
+			this.toolStripMenuItem2.Name = "toolStripMenuItem2";
+			this.toolStripMenuItem2.Size = new System.Drawing.Size(163, 6);
 			// 
 			// mnuFindOccurrences
 			// 
@@ -133,27 +154,6 @@
 			// 
 			this.colMemoryAddress.Text = "ROM Addr";
 			this.colMemoryAddress.Width = 84;
-			// 
-			// mnuAddToWatch
-			// 
-			this.mnuAddToWatch.Image = global::Mesen.GUI.Properties.Resources.Add;
-			this.mnuAddToWatch.Name = "mnuAddToWatch";
-			this.mnuAddToWatch.Size = new System.Drawing.Size(166, 22);
-			this.mnuAddToWatch.Text = "Add to watch";
-			this.mnuAddToWatch.Click += new System.EventHandler(this.mnuAddToWatch_Click);
-			// 
-			// mnuAddBreakpoint
-			// 
-			this.mnuAddBreakpoint.Image = global::Mesen.GUI.Properties.Resources.Breakpoint;
-			this.mnuAddBreakpoint.Name = "mnuAddBreakpoint";
-			this.mnuAddBreakpoint.Size = new System.Drawing.Size(166, 22);
-			this.mnuAddBreakpoint.Text = "Add breakpoint";
-			this.mnuAddBreakpoint.Click += new System.EventHandler(this.mnuAddBreakpoint_Click);
-			// 
-			// toolStripMenuItem2
-			// 
-			this.toolStripMenuItem2.Name = "toolStripMenuItem2";
-			this.toolStripMenuItem2.Size = new System.Drawing.Size(163, 6);
 			// 
 			// ctrlLabelList
 			// 
