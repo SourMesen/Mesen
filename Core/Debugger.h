@@ -101,6 +101,7 @@ private:
 	atomic<bool> _stepOut;
 	atomic<int32_t> _stepOverAddr;
 	atomic<bool> _breakRequested;
+	atomic<int32_t> _breakOnScanline;
 
 	int32_t _ppuViewerScanline;
 	int32_t _ppuViewerCycle;
@@ -132,7 +133,7 @@ private:
 	void PrivateProcessInterrupt(uint16_t cpuAddr, uint16_t destCpuAddr, bool forNmi);
 
 	void ProcessStepConditions(uint32_t addr);
-	bool SleepUntilResume();
+	bool SleepUntilResume(BreakSource source = BreakSource::Break);
 
 	void RemoveExcessCallstackEntries();
 
@@ -171,6 +172,8 @@ public:
 	void StepOut();
 	void StepBack();
 	void Run();
+	
+	void BreakOnScanline(int16_t scanline);
 
 	bool LoadCdlFile(string cdlFilepath);
 	void SetCdlData(uint8_t* cdlData, uint32_t length);

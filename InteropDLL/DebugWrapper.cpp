@@ -48,6 +48,7 @@ extern "C"
 	DllExport void __stdcall DebugStepOut() { GetDebugger()->StepOut(); }
 	DllExport void __stdcall DebugStepBack() { GetDebugger()->StepBack(); }
 	DllExport void __stdcall DebugPpuStep(uint32_t count) { GetDebugger()->PpuStep(count); }
+	DllExport void __stdcall DebugBreakOnScanline(int32_t scanline) { GetDebugger()->BreakOnScanline(scanline); }
 	DllExport const char* __stdcall DebugGetCode(uint32_t &length) { return GetDebugger()->GetCode(length); }
 
 	DllExport void __stdcall DebugSetPpuViewerScanlineCycle(int32_t scanline, int32_t cycle) { return GetDebugger()->SetPpuViewerScanlineCycle(scanline, cycle); }

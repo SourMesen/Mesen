@@ -21,6 +21,12 @@ enum class DebuggerFlags
 	IgnoreRedundantWrites = 0x400,
 };
 
+enum class BreakSource
+{
+	Break = 0,
+	Pause = 1,
+};
+
 enum class AddressType
 {
 	InternalRam = 0,

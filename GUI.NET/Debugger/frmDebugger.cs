@@ -20,7 +20,6 @@ namespace Mesen.GUI.Debugger
 	{
 		private bool _debuggerInitialized = false;
 		private bool _firstBreak = true;
-		private bool _doNotBringToFront = false;
 		private int _previousCycle = 0;
 
 		private InteropEmu.NotificationListener _notifListener;
@@ -72,6 +71,8 @@ namespace Mesen.GUI.Debugger
 			this.mnuBreakOnBrk.Checked = ConfigManager.Config.DebugInfo.BreakOnBrk;
 			this.mnuBreakOnCrash.Checked = ConfigManager.Config.DebugInfo.BreakOnCrash;
 			this.mnuBreakOnDebuggerFocus.Checked = ConfigManager.Config.DebugInfo.BreakOnDebuggerFocus;
+			this.mnuBringToFrontOnBreak.Checked = ConfigManager.Config.DebugInfo.BringToFrontOnBreak;
+			this.mnuBringToFrontOnPause.Checked = ConfigManager.Config.DebugInfo.BringToFrontOnPause;
 			this.mnuDisplayOpCodesInLowerCase.Checked = ConfigManager.Config.DebugInfo.DisplayOpCodesInLowerCase;
 
 			this.mnuDisassembleVerifiedData.Checked = ConfigManager.Config.DebugInfo.DisassembleVerifiedData;
@@ -319,7 +320,12 @@ namespace Mesen.GUI.Debugger
 
 				case InteropEmu.ConsoleNotificationType.CodeBreak:
 					this.BeginInvoke((MethodInvoker)(() => {
-						UpdateDebugger();
+						BreakSource source = (BreakSource)e.Parameter.ToInt32();
+						bool bringToFront = (
+							source == BreakSource.Break && ConfigManager.Config.DebugInfo.BringToFrontOnBreak ||
+							source == BreakSource.Pause && ConfigManager.Config.DebugInfo.BringToFrontOnPause
+						);
+						UpdateDebugger(true, bringToFront);
 						mnuContinue.Enabled = true;
 						mnuBreak.Enabled = false;
 					}));
@@ -425,10 +431,9 @@ namespace Mesen.GUI.Debugger
 			ctrlCpuMemoryMapping.UpdateCpuRegions(state.Cartridge);
 			ctrlPpuMemoryMapping.UpdatePpuRegions(state.Cartridge);
 
-			if(bringToFront && !_doNotBringToFront) {
+			if(bringToFront) {
 				this.BringToFront();
 			}
-			_doNotBringToFront = false;
 
 			if(_firstBreak) {
 				InteropEmu.SetFlag(EmulationFlags.ForceMaxSpeed, false);
@@ -450,9 +455,8 @@ namespace Mesen.GUI.Debugger
 		public void TogglePause()
 		{
 			if(mnuBreak.Enabled) {
-				_doNotBringToFront = true;
 				ctrlConsoleStatus.ApplyChanges();
-				InteropEmu.DebugStep(1);
+				InteropEmu.DebugBreakOnScanline(241);
 			} else {
 				ResumeExecution();
 			}
@@ -837,6 +841,18 @@ namespace Mesen.GUI.Debugger
 		private void mnuBreakOnDebuggerFocus_Click(object sender, EventArgs e)
 		{
 			ConfigManager.Config.DebugInfo.BreakOnDebuggerFocus = mnuBreakOnDebuggerFocus.Checked;
+			ConfigManager.ApplyChanges();
+		}
+		
+		private void mnuBringToFrontOnPause_Click(object sender, EventArgs e)
+		{
+			ConfigManager.Config.DebugInfo.BringToFrontOnPause = mnuBringToFrontOnPause.Checked;
+			ConfigManager.ApplyChanges();
+		}
+
+		private void mnuBringToFrontOnBreak_Click(object sender, EventArgs e)
+		{
+			ConfigManager.Config.DebugInfo.BringToFrontOnBreak = mnuBringToFrontOnBreak.Checked;
 			ConfigManager.ApplyChanges();
 		}
 

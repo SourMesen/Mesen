@@ -212,6 +212,7 @@ namespace Mesen.GUI
 		[DllImport(DLLPath)] public static extern void DebugStepOut();
 		[DllImport(DLLPath)] public static extern void DebugStepOver();
 		[DllImport(DLLPath)] public static extern void DebugStepBack();
+		[DllImport(DLLPath)] public static extern void DebugBreakOnScanline(Int32 scanline);
 		[DllImport(DLLPath)] public static extern void DebugRun();
 		[DllImport(DLLPath)] [return: MarshalAs(UnmanagedType.I1)] public static extern bool DebugIsExecutionStopped();
 		[DllImport(DLLPath)] public static extern Int32 DebugGetRelativeAddress(UInt32 absoluteAddr, AddressType type);
@@ -303,7 +304,7 @@ namespace Mesen.GUI
 				InteropEmu.DebugSaveRomToDiskWrapper(filename, saveAsIps, IntPtr.Zero, cdlStripFlag);
 			}
 		}
-		
+
 		[DllImport(DLLPath, EntryPoint = "DebugGetCode")] private static extern IntPtr DebugGetCodeWrapper(ref UInt32 length);
 		public static string DebugGetCode(bool forceRefresh)
 		{
@@ -621,7 +622,7 @@ namespace Mesen.GUI
 			[MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(UTF8Marshaler))]string saveFolder,
 			ScaleFilterType filterType,
 			UInt32 scale,
-			HdPackRecordFlags flags, 
+			HdPackRecordFlags flags,
 			UInt32 chrRamBankSize);
 
 		[DllImport(DLLPath)] public static extern void HdBuilderStopRecording();
@@ -1334,7 +1335,7 @@ namespace Mesen.GUI
 		public UInt16 Period;
 		public UInt16 Timer;
 		public UInt16 ShiftRegister;
-		[MarshalAs(UnmanagedType.I1)]		
+		[MarshalAs(UnmanagedType.I1)]
 		public bool ModeFlag;
 
 		[MarshalAs(UnmanagedType.I1)]
@@ -2079,6 +2080,12 @@ namespace Mesen.GUI
 		WorkRam = 8,
 		SaveRam = 9,
 		InternalRam = 10
+	}
+
+	public enum BreakSource
+	{
+		Break = 0,
+		Pause = 1,
 	}
 
 	public enum AddressType

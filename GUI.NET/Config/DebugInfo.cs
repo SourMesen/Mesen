@@ -223,6 +223,9 @@ namespace Mesen.GUI.Config
 		public bool BreakOnDebuggerFocus = false;
 		public bool BreakOnCrash = false;
 
+		public bool BringToFrontOnPause = false;
+		public bool BringToFrontOnBreak = true;
+
 		public TraceLoggerOptions TraceLoggerOptions;
 		public bool TraceAutoRefresh = true;
 		public int TraceLineCount = 1000;

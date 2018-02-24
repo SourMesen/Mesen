@@ -177,7 +177,7 @@ void ShortcutKeyHandler::CheckMappedKeys()
 		if(EmulationSettings::CheckFlag(EmulationFlags::DebuggerWindowEnabled)) {
 			shared_ptr<Debugger> debugger = Console::GetInstance()->GetDebugger(false);
 			if(debugger) {
-				debugger->PpuStep(89341);
+				debugger->BreakOnScanline(241);
 			}
 		} else {
 			if(EmulationSettings::CheckFlag(EmulationFlags::Paused)) {

@@ -56,6 +56,7 @@ Debugger::Debugger(shared_ptr<Console> console, shared_ptr<CPU> cpu, shared_ptr<
 	_stepCycleCount = -1;
 	_ppuStepCount = -1;
 	_breakRequested = false;
+	_breakOnScanline = -2;
 
 	_preventResume = 0;
 	_stopFlag = false;
@@ -435,6 +436,10 @@ void Debugger::PrivateProcessPpuCycle()
 		MessageManager::SendNotification(ConsoleNotificationType::PpuViewerDisplayFrame);
 	} 
 	if(PPU::GetCurrentCycle() == 0) {
+		if(_breakOnScanline == PPU::GetCurrentScanline()) {
+			Step(1);
+			SleepUntilResume(BreakSource::Pause);
+		}
 		if(PPU::GetCurrentScanline() == 241) {
 			ProcessEvent(EventType::EndFrame);
 		} else if(PPU::GetCurrentScanline() == -1) {
@@ -646,7 +651,7 @@ bool Debugger::PrivateProcessRamOperation(MemoryOperationType type, uint16_t &ad
 	return true;
 }
 
-bool Debugger::SleepUntilResume()
+bool Debugger::SleepUntilResume(BreakSource source)
 {
 	int32_t stepCount = _stepCount.load();
 	if(stepCount > 0) {
@@ -660,7 +665,7 @@ bool Debugger::SleepUntilResume()
 				
 		if(_preventResume == 0) {
 			SoundMixer::StopAudio();
-			MessageManager::SendNotification(ConsoleNotificationType::CodeBreak);
+			MessageManager::SendNotification(ConsoleNotificationType::CodeBreak, (void*)(uint64_t)source);
 			ProcessEvent(EventType::CodeBreak);
 			_stepOverAddr = -1;
 			if(CheckFlag(DebuggerFlags::PpuPartialDraw)) {
@@ -749,6 +754,7 @@ void Debugger::PpuStep(uint32_t count)
 	_stepOverAddr = -1;
 	_stepCycleCount = -1;
 	_stepCount = -1;
+	_breakOnScanline = -2;
 }
 
 void Debugger::Step(uint32_t count)
@@ -759,6 +765,7 @@ void Debugger::Step(uint32_t count)
 	_stepCycleCount = -1;
 	_ppuStepCount = -1;
 	_stepCount = count;
+	_breakOnScanline = -2;
 }
 
 void Debugger::StepCycles(uint32_t count)
@@ -773,6 +780,7 @@ void Debugger::StepOut()
 	_stepOverAddr = -1;
 	_stepCycleCount = -1;
 	_stepCount = -1;
+	_breakOnScanline = -2;
 }
 
 void Debugger::StepOver()
@@ -801,6 +809,13 @@ void Debugger::Run()
 	//Resume execution after a breakpoint has been hit
 	_ppuStepCount = -1;
 	_stepCount = -1;
+	_breakOnScanline = -2;
+}
+
+void Debugger::BreakOnScanline(int16_t scanline)
+{
+	Run();
+	_breakOnScanline = scanline;
 }
 
 void Debugger::GenerateCodeOutput()
