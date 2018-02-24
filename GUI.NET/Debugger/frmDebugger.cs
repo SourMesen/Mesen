@@ -20,6 +20,7 @@ namespace Mesen.GUI.Debugger
 	{
 		private bool _debuggerInitialized = false;
 		private bool _firstBreak = true;
+		private bool _wasPaused = false;
 		private int _previousCycle = 0;
 
 		private InteropEmu.NotificationListener _notifListener;
@@ -42,6 +43,7 @@ namespace Mesen.GUI.Debugger
 				mnuCode.Visible = false;
 			}
 
+			_wasPaused = InteropEmu.IsPaused();
 			bool debuggerAlreadyRunning = InteropEmu.DebugIsDebuggerRunning();
 
 			ctrlConsoleStatus.OnStateChanged += ctrlConsoleStatus_OnStateChanged;
@@ -136,7 +138,7 @@ namespace Mesen.GUI.Debugger
 			_firstBreak = true;
 			if(!debuggerAlreadyRunning) {
 				InteropEmu.SetFlag(EmulationFlags.ForceMaxSpeed, true);
-				InteropEmu.DebugStep(5000);
+				InteropEmu.DebugStep((uint)(_wasPaused ? 1 : 5000));
 			} else {
 				//Break once to show code and then resume execution
 				InteropEmu.DebugStep(1);
@@ -437,7 +439,7 @@ namespace Mesen.GUI.Debugger
 
 			if(_firstBreak) {
 				InteropEmu.SetFlag(EmulationFlags.ForceMaxSpeed, false);
-				if(!ConfigManager.Config.DebugInfo.BreakOnOpen) {
+				if(!_wasPaused && !ConfigManager.Config.DebugInfo.BreakOnOpen) {
 					ResumeExecution();
 				}
 				_firstBreak = false;
@@ -673,6 +675,9 @@ namespace Mesen.GUI.Debugger
 			InteropEmu.DebugSetFlags(0);
 			InteropEmu.SetFlag(EmulationFlags.DebuggerWindowEnabled, false);
 			BreakpointManager.SetBreakpoints();
+			if(_wasPaused) {
+				InteropEmu.SetFlag(EmulationFlags.Paused, true);
+			}
 			InteropEmu.DebugRun();
 
 			ConfigManager.Config.DebugInfo.WindowWidth = this.WindowState == FormWindowState.Maximized ? this.RestoreBounds.Width : this.Width;
