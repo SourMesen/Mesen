@@ -2413,7 +2413,7 @@ namespace Be.Windows.Forms
 				PaintLineInfo(e.Graphics, _startByte, _endByte);
 
 			PaintHexAndStringView(e.Graphics, _startByte, _endByte);
-			if (_shadowSelectionVisible)
+			if (_shadowSelectionVisible && _stringViewVisible)
 				PaintCurrentBytesSign(e.Graphics);
 				
 			if (_columnInfoVisible)
