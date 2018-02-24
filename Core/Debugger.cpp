@@ -26,6 +26,10 @@
 #include "DebugHud.h"
 #include "StandardController.h"
 
+#ifndef UINT32_MAX
+#define UINT32_MAX  ((uint32_t)-1)
+#endif
+
 Debugger* Debugger::Instance = nullptr;
 const int Debugger::BreakpointTypeCount;
 string Debugger::_disassemblerOutput = "";
