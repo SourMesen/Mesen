@@ -47,6 +47,8 @@
 			this.chkVerticalBlank = new System.Windows.Forms.CheckBox();
 			this.lblXScroll = new System.Windows.Forms.Label();
 			this.txtXScroll = new System.Windows.Forms.TextBox();
+			this.label1 = new System.Windows.Forms.Label();
+			this.txtTmpAddr = new System.Windows.Forms.TextBox();
 			this.grpControlMask = new System.Windows.Forms.GroupBox();
 			this.tableLayoutPanel9 = new System.Windows.Forms.TableLayoutPanel();
 			this.chkDrawLeftSpr = new System.Windows.Forms.CheckBox();
@@ -193,7 +195,9 @@
 			// 
 			// tableLayoutPanel7
 			// 
-			this.tableLayoutPanel7.ColumnCount = 2;
+			this.tableLayoutPanel7.ColumnCount = 4;
+			this.tableLayoutPanel7.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+			this.tableLayoutPanel7.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
 			this.tableLayoutPanel7.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
 			this.tableLayoutPanel7.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this.tableLayoutPanel7.Controls.Add(this.txtNTAddr, 1, 3);
@@ -207,6 +211,8 @@
 			this.tableLayoutPanel7.Controls.Add(this.tableLayoutPanel5, 0, 5);
 			this.tableLayoutPanel7.Controls.Add(this.lblXScroll, 0, 4);
 			this.tableLayoutPanel7.Controls.Add(this.txtXScroll, 1, 4);
+			this.tableLayoutPanel7.Controls.Add(this.label1, 2, 2);
+			this.tableLayoutPanel7.Controls.Add(this.txtTmpAddr, 3, 2);
 			this.tableLayoutPanel7.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tableLayoutPanel7.Location = new System.Drawing.Point(3, 3);
 			this.tableLayoutPanel7.Margin = new System.Windows.Forms.Padding(3, 3, 0, 3);
@@ -229,7 +235,7 @@
 			this.txtNTAddr.Margin = new System.Windows.Forms.Padding(0);
 			this.txtNTAddr.Name = "txtNTAddr";
 			this.txtNTAddr.ReadOnly = true;
-			this.txtNTAddr.Size = new System.Drawing.Size(58, 20);
+			this.txtNTAddr.Size = new System.Drawing.Size(45, 20);
 			this.txtNTAddr.TabIndex = 1;
 			// 
 			// lblNTAddr
@@ -274,7 +280,7 @@
 			this.txtCycle.Margin = new System.Windows.Forms.Padding(0);
 			this.txtCycle.MaxLength = 3;
 			this.txtCycle.Name = "txtCycle";
-			this.txtCycle.Size = new System.Drawing.Size(58, 20);
+			this.txtCycle.Size = new System.Drawing.Size(45, 20);
 			this.txtCycle.TabIndex = 2;
 			this.txtCycle.TextChanged += new System.EventHandler(this.OnOptionChanged);
 			// 
@@ -283,7 +289,7 @@
 			this.txtVRAMAddr.Location = new System.Drawing.Point(66, 40);
 			this.txtVRAMAddr.Margin = new System.Windows.Forms.Padding(0);
 			this.txtVRAMAddr.Name = "txtVRAMAddr";
-			this.txtVRAMAddr.Size = new System.Drawing.Size(58, 20);
+			this.txtVRAMAddr.Size = new System.Drawing.Size(45, 20);
 			this.txtVRAMAddr.TabIndex = 6;
 			this.txtVRAMAddr.TextChanged += new System.EventHandler(this.OnOptionChanged);
 			// 
@@ -305,14 +311,14 @@
 			this.txtScanline.Margin = new System.Windows.Forms.Padding(0);
 			this.txtScanline.MaxLength = 3;
 			this.txtScanline.Name = "txtScanline";
-			this.txtScanline.Size = new System.Drawing.Size(58, 20);
+			this.txtScanline.Size = new System.Drawing.Size(45, 20);
 			this.txtScanline.TabIndex = 4;
 			this.txtScanline.TextChanged += new System.EventHandler(this.OnOptionChanged);
 			// 
 			// tableLayoutPanel5
 			// 
 			this.tableLayoutPanel5.ColumnCount = 3;
-			this.tableLayoutPanel7.SetColumnSpan(this.tableLayoutPanel5, 2);
+			this.tableLayoutPanel7.SetColumnSpan(this.tableLayoutPanel5, 4);
 			this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
 			this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
 			this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
@@ -395,9 +401,29 @@
 			this.txtXScroll.Location = new System.Drawing.Point(66, 80);
 			this.txtXScroll.Margin = new System.Windows.Forms.Padding(0);
 			this.txtXScroll.Name = "txtXScroll";
-			this.txtXScroll.Size = new System.Drawing.Size(58, 20);
+			this.txtXScroll.Size = new System.Drawing.Size(45, 20);
 			this.txtXScroll.TabIndex = 12;
 			this.txtXScroll.TextChanged += new System.EventHandler(this.OnOptionChanged);
+			// 
+			// label1
+			// 
+			this.label1.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.label1.AutoSize = true;
+			this.label1.Location = new System.Drawing.Point(111, 43);
+			this.label1.Margin = new System.Windows.Forms.Padding(0);
+			this.label1.Name = "label1";
+			this.label1.Size = new System.Drawing.Size(17, 13);
+			this.label1.TabIndex = 13;
+			this.label1.Text = "T:";
+			this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// txtTmpAddr
+			// 
+			this.txtTmpAddr.Location = new System.Drawing.Point(128, 40);
+			this.txtTmpAddr.Margin = new System.Windows.Forms.Padding(0);
+			this.txtTmpAddr.Name = "txtTmpAddr";
+			this.txtTmpAddr.Size = new System.Drawing.Size(45, 20);
+			this.txtTmpAddr.TabIndex = 14;
 			// 
 			// grpControlMask
 			// 
@@ -466,7 +492,7 @@
 			this.flowLayoutPanel7.Location = new System.Drawing.Point(0, 22);
 			this.flowLayoutPanel7.Margin = new System.Windows.Forms.Padding(0);
 			this.flowLayoutPanel7.Name = "flowLayoutPanel7";
-			this.flowLayoutPanel7.Size = new System.Drawing.Size(101, 22);
+			this.flowLayoutPanel7.Size = new System.Drawing.Size(96, 22);
 			this.flowLayoutPanel7.TabIndex = 22;
 			// 
 			// lblSprAddr
@@ -487,7 +513,7 @@
 			this.txtSprAddr.Margin = new System.Windows.Forms.Padding(0, 2, 0, 0);
 			this.txtSprAddr.MaxLength = 4;
 			this.txtSprAddr.Name = "txtSprAddr";
-			this.txtSprAddr.Size = new System.Drawing.Size(50, 20);
+			this.txtSprAddr.Size = new System.Drawing.Size(45, 20);
 			this.txtSprAddr.TabIndex = 1;
 			this.txtSprAddr.TextChanged += new System.EventHandler(this.OnOptionChanged);
 			// 
@@ -579,7 +605,7 @@
 			this.flowLayoutPanel6.Location = new System.Drawing.Point(0, 0);
 			this.flowLayoutPanel6.Margin = new System.Windows.Forms.Padding(0);
 			this.flowLayoutPanel6.Name = "flowLayoutPanel6";
-			this.flowLayoutPanel6.Size = new System.Drawing.Size(101, 22);
+			this.flowLayoutPanel6.Size = new System.Drawing.Size(96, 22);
 			this.flowLayoutPanel6.TabIndex = 21;
 			// 
 			// lblBGAddr
@@ -600,7 +626,7 @@
 			this.txtBGAddr.Margin = new System.Windows.Forms.Padding(1, 2, 0, 0);
 			this.txtBGAddr.MaxLength = 4;
 			this.txtBGAddr.Name = "txtBGAddr";
-			this.txtBGAddr.Size = new System.Drawing.Size(50, 20);
+			this.txtBGAddr.Size = new System.Drawing.Size(45, 20);
 			this.txtBGAddr.TabIndex = 1;
 			this.txtBGAddr.TextChanged += new System.EventHandler(this.OnOptionChanged);
 			// 
@@ -1443,5 +1469,7 @@
 		private System.Windows.Forms.CheckBox chkWriteToggle;
 		private System.Windows.Forms.Label lblXScroll;
 		private System.Windows.Forms.TextBox txtXScroll;
+		private System.Windows.Forms.Label label1;
+		private System.Windows.Forms.TextBox txtTmpAddr;
 	}
 }

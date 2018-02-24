@@ -98,6 +98,7 @@ namespace Mesen.GUI.Debugger
 			txtScanline.Text = state.Scanline.ToString();
 
 			txtVRAMAddr.Text = state.State.VideoRamAddr.ToString("X4");
+			txtTmpAddr.Text = state.State.TmpVideoRamAddr.ToString("X4");
 			txtNTAddr.Text = (0x2000 | (state.State.VideoRamAddr & 0x0FFF)).ToString("X4");
 
 			chkWriteToggle.Checked = state.State.WriteToggle;
@@ -166,6 +167,10 @@ namespace Mesen.GUI.Debugger
 				UInt16 vramAddr = 0;
 				UInt16.TryParse(txtVRAMAddr.Text, System.Globalization.NumberStyles.HexNumber, null, out vramAddr);
 				state.PPU.State.VideoRamAddr = vramAddr;
+
+				UInt16 tmpVramAddr = 0;
+				UInt16.TryParse(txtTmpAddr.Text, System.Globalization.NumberStyles.HexNumber, null, out tmpVramAddr);
+				state.PPU.State.TmpVideoRamAddr = tmpVramAddr;
 
 				state.PPU.State.WriteToggle = chkWriteToggle.Checked;
 
