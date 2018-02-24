@@ -284,7 +284,7 @@ namespace Be.Windows.Forms
 
 			protected virtual bool PreProcessWmKeyDown_Right(ref Message m)
 			{
-				return PerformPosMoveRight();
+				return PerformPosMoveRight(true);
 			}
 
 			protected virtual bool PreProcessWmKeyDown_Down(ref Message m)
@@ -726,7 +726,7 @@ namespace Be.Windows.Forms
 					else
 						_hexBox._byteProvider.WriteByte(pos, newcb);
 
-					PerformPosMoveRight();
+					PerformPosMoveRight(false);
 
 					_hexBox.Invalidate();
 					return true;
@@ -863,7 +863,7 @@ namespace Be.Windows.Forms
 				_hexBox.ScrollByteIntoView();
 				return true;
 			}
-			protected virtual bool PerformPosMoveRight()
+			protected virtual bool PerformPosMoveRight(bool allowNibbleSkip)
 			{
 				long pos = _hexBox._bytePos;
 				int cp = _hexBox._byteCharacterPos;
@@ -881,7 +881,7 @@ namespace Be.Windows.Forms
 					if (!(pos == _hexBox._byteProvider.Length && cp == 0))
 					{
 
-						if(cp > 0 || _hexBox.EnablePerByteNavigation) {
+						if(cp > 0 || (allowNibbleSkip && _hexBox.EnablePerByteNavigation)) {
 							pos = Math.Min(_hexBox._byteProvider.Length, pos + 1);
 							cp = 0;
 						} else {
