@@ -77,33 +77,35 @@ RomData iNesLoader::LoadRom(vector<uint8_t>& romFile, NESHeader *preloadedHeader
 
 	romData.PrgCrc32 = CRC32::GetCRC(romData.PrgRom.data(), romData.PrgRom.size());
 
-	MessageManager::Log("PRG+CHR CRC32: 0x" + HexUtilities::ToHex(romData.PrgChrCrc32));
+	Log("PRG+CHR CRC32: 0x" + HexUtilities::ToHex(romData.PrgChrCrc32));
 
 	if(romData.IsNes20Header) {
-		MessageManager::Log("[iNes] NES 2.0 file: Yes");
+		Log("[iNes] NES 2.0 file: Yes");
 	}
-	MessageManager::Log("[iNes] Mapper: " + std::to_string(romData.MapperID) + " Sub:" + std::to_string(romData.SubMapperID));
-	MessageManager::Log("[iNes] PRG ROM: " + std::to_string(romData.PrgRom.size()/1024) + " KB");
-	MessageManager::Log("[iNes] CHR ROM: " + std::to_string(romData.ChrRom.size()/1024) + " KB");
+	Log("[iNes] Mapper: " + std::to_string(romData.MapperID) + " Sub:" + std::to_string(romData.SubMapperID));
+	Log("[iNes] PRG ROM: " + std::to_string(romData.PrgRom.size()/1024) + " KB");
+	Log("[iNes] CHR ROM: " + std::to_string(romData.ChrRom.size()/1024) + " KB");
 	if(romData.ChrRamSize > 0 || romData.IsNes20Header) {
-		MessageManager::Log("[iNes] CHR RAM: " + std::to_string(romData.ChrRamSize / 1024) + " KB");
+		Log("[iNes] CHR RAM: " + std::to_string(romData.ChrRamSize / 1024) + " KB");
 	} else if(romData.ChrRom.size() == 0) {
-		MessageManager::Log("[iNes] CHR RAM: 8 KB");
+		Log("[iNes] CHR RAM: 8 KB");
 	}
 	if(romData.WorkRamSize > 0 || romData.IsNes20Header) {
-		MessageManager::Log("[iNes] Work RAM: " + std::to_string(romData.WorkRamSize / 1024) + " KB");
+		Log("[iNes] Work RAM: " + std::to_string(romData.WorkRamSize / 1024) + " KB");
 	}
 	if(romData.SaveRamSize > 0 || romData.IsNes20Header) {
-		MessageManager::Log("[iNes] Save RAM: " + std::to_string(romData.SaveRamSize / 1024) + " KB");
+		Log("[iNes] Save RAM: " + std::to_string(romData.SaveRamSize / 1024) + " KB");
 	}
 
-	MessageManager::Log("[iNes] Mirroring: " + string(romData.Mirroring == MirroringType::Horizontal ? "Horizontal" : romData.Mirroring == MirroringType::Vertical ? "Vertical" : "Four Screens"));
-	MessageManager::Log("[iNes] Battery: " + string(romData.HasBattery ? "Yes" : "No"));
+	Log("[iNes] Mirroring: " + string(romData.Mirroring == MirroringType::Horizontal ? "Horizontal" : romData.Mirroring == MirroringType::Vertical ? "Vertical" : "Four Screens"));
+	Log("[iNes] Battery: " + string(romData.HasBattery ? "Yes" : "No"));
 	if(romData.HasTrainer) {
-		MessageManager::Log("[iNes] Trainer: Yes");
+		Log("[iNes] Trainer: Yes");
 	}
 
-	GameDatabase::SetGameInfo(romData.PrgChrCrc32, romData, !EmulationSettings::CheckFlag(EmulationFlags::DisableGameDatabase) && header.GetRomHeaderVersion() != RomHeaderVersion::Nes2_0);
+	if(!_checkOnly) {
+		GameDatabase::SetGameInfo(romData.PrgChrCrc32, romData, !EmulationSettings::CheckFlag(EmulationFlags::DisableGameDatabase) && header.GetRomHeaderVersion() != RomHeaderVersion::Nes2_0);
+	}
 
 	return romData;
 }

@@ -178,6 +178,8 @@ private:
 	}
 
 public:
+	using NsfLoader::NsfLoader;
+
 	RomData LoadRom(vector<uint8_t>& romFile)
 	{
 		RomData romData;

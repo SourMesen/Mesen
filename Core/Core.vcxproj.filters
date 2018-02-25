@@ -1360,6 +1360,9 @@
     <ClInclude Include="HdPackConditions.h">
       <Filter>HdPacks</Filter>
     </ClInclude>
+    <ClInclude Include="BaseLoader.h">
+      <Filter>Nes\RomLoader</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">

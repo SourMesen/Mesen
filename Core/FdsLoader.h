@@ -8,8 +8,9 @@
 #include "MessageManager.h"
 #include "MapperFactory.h"
 #include "GameDatabase.h"
+#include "BaseLoader.h"
 
-class FdsLoader
+class FdsLoader : public BaseLoader
 {
 private:
 	const size_t FdsDiskSideCapacity = 65500;
@@ -62,13 +63,17 @@ private:
 			if(biosFile) {
 				return vector<uint8_t>(std::istreambuf_iterator<char>(biosFile), {});
 			} else {
-				MessageManager::SendNotification(ConsoleNotificationType::FdsBiosNotFound);
+				if(!_checkOnly) {
+					MessageManager::SendNotification(ConsoleNotificationType::FdsBiosNotFound);
+				}
 			}
 		}
 		return {};
 	}
 
 public:
+	using BaseLoader::BaseLoader;
+
 	vector<uint8_t> RebuildFdsFile(vector<vector<uint8_t>> diskData, bool needHeader)
 	{
 		vector<uint8_t> output;
@@ -159,7 +164,7 @@ public:
 		}
 
 		//Setup default controllers
-		if(EmulationSettings::CheckFlag(EmulationFlags::AutoConfigureInput)) {
+		if(!_checkOnly && EmulationSettings::CheckFlag(EmulationFlags::AutoConfigureInput)) {
 			GameDatabase::InitializeInputDevices("", GameSystem::FDS);
 		}
 

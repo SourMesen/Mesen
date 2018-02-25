@@ -1,5 +1,6 @@
 #pragma once
 #include "stdafx.h"
+#include <unordered_map>
 #include "../Utilities/CRC32.h"
 #include "../Utilities/md5.h"
 #include "../Utilities/HexUtilities.h"
@@ -8,9 +9,9 @@
 #include "UnifBoards.h"
 #include "MessageManager.h"
 #include "EmulationSettings.h"
-#include <unordered_map>
+#include "BaseLoader.h"
 
-class UnifLoader
+class UnifLoader : public BaseLoader
 {
 private:
 	static std::unordered_map<string, int> _boardMappings;
@@ -85,7 +86,7 @@ private:
 			if(_mapperName.size() > 0) {
 				romData.MapperID = GetMapperID(_mapperName);
 				if(romData.MapperID == UnifBoards::UnknownBoard) {
-					MessageManager::Log("[UNIF] Error: Unknown board");
+					Log("[UNIF] Error: Unknown board");
 				}
 			} else {
 				romData.Error = true;
@@ -139,6 +140,8 @@ private:
 	}
 
 public:
+	using BaseLoader::BaseLoader;
+
 	static int32_t GetMapperID(string mapperName)
 	{
 		string prefix = mapperName.substr(0, 4);
@@ -183,12 +186,12 @@ public:
 			romData.PrgChrCrc32 = CRC32::GetCRC(fullRom.data(), fullRom.size());
 			romData.PrgChrMd5 = GetMd5Sum(fullRom.data(), fullRom.size());
 
-			MessageManager::Log("PRG+CHR CRC32: 0x" + HexUtilities::ToHex(romData.PrgChrCrc32));
-			MessageManager::Log("[UNIF] Board Name: " + _mapperName);
-			MessageManager::Log("[UNIF] PRG ROM: " + std::to_string(romData.PrgRom.size() / 1024) + " KB");
-			MessageManager::Log("[UNIF] CHR ROM: " + std::to_string(romData.ChrRom.size() / 1024) + " KB");
+			Log("PRG+CHR CRC32: 0x" + HexUtilities::ToHex(romData.PrgChrCrc32));
+			Log("[UNIF] Board Name: " + _mapperName);
+			Log("[UNIF] PRG ROM: " + std::to_string(romData.PrgRom.size() / 1024) + " KB");
+			Log("[UNIF] CHR ROM: " + std::to_string(romData.ChrRom.size() / 1024) + " KB");
 			if(romData.ChrRom.size() == 0) {
-				MessageManager::Log("[UNIF] CHR RAM: 8 KB");
+				Log("[UNIF] CHR RAM: 8 KB");
 			}
 
 			string mirroringType;
@@ -200,13 +203,17 @@ public:
 				case MirroringType::FourScreens: mirroringType = "Four Screens"; break;
 			}
 
-			MessageManager::Log("[UNIF] Mirroring: " + mirroringType);
-			MessageManager::Log("[UNIF] Battery: " + string(romData.HasBattery ? "Yes" : "No"));
+			Log("[UNIF] Mirroring: " + mirroringType);
+			Log("[UNIF] Battery: " + string(romData.HasBattery ? "Yes" : "No"));
 
-			GameDatabase::SetGameInfo(romData.PrgChrCrc32, romData, !EmulationSettings::CheckFlag(EmulationFlags::DisableGameDatabase));
+			if(!_checkOnly) {
+				GameDatabase::SetGameInfo(romData.PrgChrCrc32, romData, !EmulationSettings::CheckFlag(EmulationFlags::DisableGameDatabase));
+			}
 
 			if(romData.MapperID == UnifBoards::UnknownBoard) {
-				MessageManager::DisplayMessage("Error", "UnsupportedMapper", "UNIF: " + _mapperName);
+				if(!_checkOnly) {
+					MessageManager::DisplayMessage("Error", "UnsupportedMapper", "UNIF: " + _mapperName);
+				}
 				romData.Error = true;
 			}
 		}

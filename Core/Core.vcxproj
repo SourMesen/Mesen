@@ -513,6 +513,7 @@
     <ClInclude Include="BandaiHyperShot.h" />
     <ClInclude Include="BandaiMicrophone.h" />
     <ClInclude Include="BarcodeBattlerReader.h" />
+    <ClInclude Include="BaseLoader.h" />
     <ClInclude Include="BaseRenderer.h" />
     <ClInclude Include="BatteryManager.h" />
     <ClInclude Include="BattleBox.h" />

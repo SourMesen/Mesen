@@ -231,7 +231,7 @@ namespace InteropEmu {
 				romInfo.Format = Console::GetRomFormat();
 				romInfo.IsChrRam = Console::IsChrRam();
 			} else {
-				RomLoader romLoader;
+				RomLoader romLoader(true);
 				if(romLoader.LoadFile(romPath)) {
 					RomData romData = romLoader.GetRomData();
 

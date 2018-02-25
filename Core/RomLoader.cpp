@@ -35,35 +35,35 @@ bool RomLoader::LoadFile(string filename, vector<uint8_t> &fileData)
 	string romName = FolderUtilities::GetFilename(filename, true);
 
 	uint32_t crc = CRC32::GetCRC(fileData.data(), fileData.size());
-	MessageManager::Log("");
-	MessageManager::Log("Loading rom: " + romName);
+	Log("");
+	Log("Loading rom: " + romName);
 	stringstream crcHex;
 	crcHex << std::hex << std::uppercase << std::setfill('0') << std::setw(8) << crc;
-	MessageManager::Log("File CRC32: 0x" + crcHex.str());
+	Log("File CRC32: 0x" + crcHex.str());
 
 	if(memcmp(fileData.data(), "NES\x1a", 4) == 0) {
-		iNesLoader loader;
+		iNesLoader loader(_checkOnly);
 		_romData = loader.LoadRom(fileData, nullptr);
 	} else if(memcmp(fileData.data(), "FDS\x1a", 4) == 0 || memcmp(fileData.data(), "\x1*NINTENDO-HVC*", 15) == 0) {
-		FdsLoader loader;
+		FdsLoader loader(_checkOnly);
 		_romData = loader.LoadRom(fileData, _filename);
 	} else if(memcmp(fileData.data(), "NESM\x1a", 5) == 0) {
-		NsfLoader loader;
+		NsfLoader loader(_checkOnly);
 		_romData = loader.LoadRom(fileData);
 	} else if(memcmp(fileData.data(), "NSFE", 4) == 0) {
-		NsfeLoader loader;
+		NsfeLoader loader(_checkOnly);
 		_romData = loader.LoadRom(fileData);
 	} else if(memcmp(fileData.data(), "UNIF", 4) == 0) {
-		UnifLoader loader;
+		UnifLoader loader(_checkOnly);
 		_romData = loader.LoadRom(fileData);
 	} else {
 		NESHeader header = {};
 		if(GameDatabase::GetiNesHeader(crc, header)) {
-			MessageManager::Log("[DB] Headerless ROM file found - using game database data.");
+			Log("[DB] Headerless ROM file found - using game database data.");
 			iNesLoader loader;
 			_romData = loader.LoadRom(fileData, &header);
 		} else {
-			MessageManager::Log("Invalid rom file.");
+			Log("Invalid rom file.");
 			_romData.Error = true;
 		}
 	}
@@ -100,7 +100,7 @@ string RomLoader::FindMatchingRomInFile(string filePath, HashInfo hashInfo)
 	shared_ptr<ArchiveReader> reader = ArchiveReader::GetReader(filePath);
 	if(reader) {
 		for(string file : reader->GetFileList(VirtualFile::RomExtensions)) {
-			RomLoader loader;
+			RomLoader loader(true);
 			vector<uint8_t> fileData;
 			if(loader.LoadFile(filePath)) {
 				if(hashInfo.Crc32Hash == loader._romData.Crc32 || hashInfo.Sha1Hash.compare(loader._romData.Sha1) == 0) {
@@ -109,7 +109,7 @@ string RomLoader::FindMatchingRomInFile(string filePath, HashInfo hashInfo)
 			}
 		}
 	} else {
-		RomLoader loader;
+		RomLoader loader(true);
 		vector<uint8_t> fileData;
 		if(loader.LoadFile(filePath)) {
 			if(hashInfo.Crc32Hash == loader._romData.Crc32 || hashInfo.Sha1Hash.compare(loader._romData.Sha1) == 0) {

@@ -1,8 +1,9 @@
 #pragma once
 #include "stdafx.h"
 #include "RomData.h"
+#include "BaseLoader.h"
 
-class NsfLoader
+class NsfLoader : public BaseLoader
 {
 private:
 	void Read(uint8_t* &data, uint8_t& dest)
@@ -51,27 +52,27 @@ protected:
 		}
 
 		//Log window output
-		MessageManager::Log("[NSF] Region: " + string(header.Flags == 0x00 ? "NTSC" : (header.Flags == 0x01 ? "PAL" : "NTSC & PAL")));
+		Log("[NSF] Region: " + string(header.Flags == 0x00 ? "NTSC" : (header.Flags == 0x01 ? "PAL" : "NTSC & PAL")));
 		if(header.PlaySpeedNtsc > 0) {
-			MessageManager::Log("[NSF] Play speed (NTSC): " + std::to_string(1000000.0 / (double)header.PlaySpeedNtsc) + " Hz");
+			Log("[NSF] Play speed (NTSC): " + std::to_string(1000000.0 / (double)header.PlaySpeedNtsc) + " Hz");
 		}
 		if(header.PlaySpeedPal > 0) {
-			MessageManager::Log("[NSF] Play speed (PAL): " + std::to_string(1000000.0 / (double)header.PlaySpeedPal) + " Hz");
+			Log("[NSF] Play speed (PAL): " + std::to_string(1000000.0 / (double)header.PlaySpeedPal) + " Hz");
 		}
-		MessageManager::Log("[NSF] Title: " + string(header.SongName));
-		MessageManager::Log("[NSF] Artist: " + string(header.ArtistName));
-		MessageManager::Log("[NSF] Copyright: " + string(header.CopyrightHolder));
-		MessageManager::Log("[NSF] Ripper: " + string(header.RipperName));
+		Log("[NSF] Title: " + string(header.SongName));
+		Log("[NSF] Artist: " + string(header.ArtistName));
+		Log("[NSF] Copyright: " + string(header.CopyrightHolder));
+		Log("[NSF] Ripper: " + string(header.RipperName));
 
 		stringstream ss;
 		ss << "[NSF] Load Address: 0x" << std::hex << std::uppercase << std::setfill('0') << std::setw(4) << header.LoadAddress;
-		MessageManager::Log(ss.str());
+		Log(ss.str());
 		ss = stringstream();
 		ss << "[NSF] Init Address: 0x" << std::hex << std::uppercase << std::setfill('0') << std::setw(4) << header.InitAddress;
-		MessageManager::Log(ss.str());
+		Log(ss.str());
 		ss = stringstream();
 		ss << "[NSF] Play Address: 0x" << std::hex << std::uppercase << std::setfill('0') << std::setw(4) << header.PlayAddress;
-		MessageManager::Log(ss.str());
+		Log(ss.str());
 
 		vector<string> chips;
 		if(header.SoundChips & 0x01) {
@@ -104,8 +105,8 @@ protected:
 			ss << chips[i];
 		}
 
-		MessageManager::Log("[NSF] Sound Chips: " + ss.str());
-		MessageManager::Log("[NSF] ROM size: " + std::to_string(romData.PrgRom.size() / 1024) + " KB");
+		Log("[NSF] Sound Chips: " + ss.str());
+		Log("[NSF] ROM size: " + std::to_string(romData.PrgRom.size() / 1024) + " KB");
 	}
 
 	void InitHeader(NsfHeader& header)
@@ -119,6 +120,8 @@ protected:
 	}
 
 public:
+	using BaseLoader::BaseLoader;
+
 	RomData LoadRom(vector<uint8_t>& romFile)
 	{
 		RomData romData;
