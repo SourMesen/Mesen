@@ -176,7 +176,8 @@ bool HdPackLoader::LoadPack()
 				ProcessBackgroundTag(tokens, conditions);
 			} else if(lineContent.substr(0, 11) == "<condition>") {
 				tokens = StringUtilities::Split(lineContent.substr(11), ',');
-				ProcessConditionTag(tokens);
+				ProcessConditionTag(tokens, false);
+				ProcessConditionTag(tokens, true);
 			} else if(lineContent.substr(0, 6) == "<tile>") {
 				tokens = StringUtilities::Split(lineContent.substr(6), ',');
 				ProcessTileTag(tokens, conditions);
@@ -222,13 +223,25 @@ void HdPackLoader::InitializeGlobalConditions()
 	hmirror->Name = "hmirror";
 	_data->Conditions.push_back(unique_ptr<HdPackCondition>(hmirror));
 
+	HdPackCondition* invHmirror = new HdPackHorizontalMirroringCondition();
+	invHmirror->Name = "!hmirror";
+	_data->Conditions.push_back(unique_ptr<HdPackCondition>(invHmirror));
+
 	HdPackCondition* vmirror = new HdPackVerticalMirroringCondition();
 	vmirror->Name = "vmirror";
 	_data->Conditions.push_back(unique_ptr<HdPackCondition>(vmirror));
 
+	HdPackCondition* invVmirror = new HdPackVerticalMirroringCondition();
+	invVmirror->Name = "!vmirror";
+	_data->Conditions.push_back(unique_ptr<HdPackCondition>(invVmirror));
+
 	HdPackCondition* bgpriority = new HdPackBgPriorityCondition();
 	bgpriority->Name = "bgpriority";
 	_data->Conditions.push_back(unique_ptr<HdPackCondition>(bgpriority));
+
+	HdPackCondition* invBgpriority = new HdPackBgPriorityCondition();
+	invBgpriority->Name = "!bgpriority";
+	_data->Conditions.push_back(unique_ptr<HdPackCondition>(invBgpriority));
 }
 
 void HdPackLoader::ProcessOverscanTag(vector<string> &tokens)
@@ -366,12 +379,14 @@ void HdPackLoader::ProcessOptionTag(vector<string> &tokens)
 	}
 }
 
-void HdPackLoader::ProcessConditionTag(vector<string> &tokens)
+void HdPackLoader::ProcessConditionTag(vector<string> &tokens, bool createInvertedCondition)
 {
 	checkConstraint(tokens.size() >= 4, "[HDPack] Condition tag should contain at least 4 parameters");
+	checkConstraint(tokens[0].size() > 0, "[HDPack] Condition name may not be empty");
+	checkConstraint(tokens[0].find_last_of('!') == string::npos, "[HDPack] Condition name may not contain '!' characters");
 
 	unique_ptr<HdPackCondition> condition;
-
+	
 	if(tokens[1] == "tileAtPosition") {
 		condition.reset(new HdPackTileAtPositionCondition());
 	} else if(tokens[1] == "tileNearby") {
@@ -393,6 +408,10 @@ void HdPackLoader::ProcessConditionTag(vector<string> &tokens)
 
 	tokens[0].erase(tokens[0].find_last_not_of(" \n\r\t") + 1);
 	condition->Name = tokens[0];
+
+	if(createInvertedCondition) {
+		condition->Name = "!" + condition->Name;
+	}
 
 	int index = 2;
 	if(dynamic_cast<HdPackBaseTileCondition*>(condition.get())) {

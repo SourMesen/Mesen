@@ -152,6 +152,10 @@ struct HdPackCondition
 	{
 		if(_resultCache == -1) {
 			bool result = InternalCheckCondition(screenInfo, x, y, tile);
+			if(Name[0] == '!') {
+				result = !result;
+			}
+
 			if(_useCache) {
 				_resultCache = result ? 1 : 0;
 			}

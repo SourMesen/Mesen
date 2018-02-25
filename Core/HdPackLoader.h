@@ -34,7 +34,7 @@ private:
 	bool ProcessImgTag(string src);
 	void ProcessPatchTag(vector<string> &tokens);
 	void ProcessOverscanTag(vector<string> &tokens);
-	void ProcessConditionTag(vector<string> &tokens);
+	void ProcessConditionTag(vector<string> &tokens, bool createInvertedCondition);
 	void ProcessTileTag(vector<string> &tokens, vector<HdPackCondition*> conditions);
 	void ProcessBackgroundTag(vector<string> &tokens, vector<HdPackCondition*> conditions);
 	void ProcessOptionTag(vector<string>& tokens);
