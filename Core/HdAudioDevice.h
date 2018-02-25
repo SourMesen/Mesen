@@ -16,6 +16,8 @@ private:
 	bool _trackError;
 	OggMixer* _oggMixer;
 	int32_t _lastBgmTrack;
+	uint8_t _bgmVolume;
+	uint8_t _sfxVolume;
 	
 	bool PlayBgmTrack(uint8_t track, uint32_t startOffset);
 	bool PlaySfx(uint8_t sfxNumber);

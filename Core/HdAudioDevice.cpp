@@ -8,7 +8,12 @@ HdAudioDevice::HdAudioDevice(HdPackData * hdData)
 	_album = 0;
 	_flags = 0;
 	_trackError = false;
+	_sfxVolume = 128;
+	_bgmVolume = 128;
+
 	_oggMixer = SoundMixer::GetOggMixer();
+	_oggMixer->SetBgmVolume(_bgmVolume);
+	_oggMixer->SetSfxVolume(_sfxVolume);
 }
 
 void HdAudioDevice::StreamState(bool saving)
@@ -19,12 +24,14 @@ void HdAudioDevice::StreamState(bool saving)
 		if(trackOffset < 0) {
 			_lastBgmTrack = -1;
 		}
-		Stream(_album, _lastBgmTrack, trackOffset);
+		Stream(_album, _lastBgmTrack, trackOffset, _sfxVolume, _bgmVolume);
 	} else {
-		Stream(_album, _lastBgmTrack, trackOffset);
+		Stream(_album, _lastBgmTrack, trackOffset, _sfxVolume, _bgmVolume);
 		if(_lastBgmTrack != -1 && trackOffset > 0) {
 			PlayBgmTrack(_lastBgmTrack, trackOffset);
 		}
+		_oggMixer->SetBgmVolume(_bgmVolume);
+		_oggMixer->SetSfxVolume(_sfxVolume);
 	}
 }
 
@@ -107,11 +114,17 @@ void HdAudioDevice::WriteRAM(uint16_t addr, uint8_t value)
 
 		//BGM Volume: 0 = mute, 255 = max
 		//Also has an immediate effect on currently playing BGM
-		case 2: _oggMixer->SetBgmVolume(value); break;
+		case 2: 
+			_bgmVolume = value;
+			_oggMixer->SetBgmVolume(value);
+			break;
 
 		//SFX Volume: 0 = mute, 255 = max
 		//Also has an immediate effect on all currently playing SFX
-		case 3: _oggMixer->SetSfxVolume(value); break;
+		case 3:
+			_sfxVolume = value;
+			_oggMixer->SetSfxVolume(value);
+			break;
 
 		//Album number: 0-255 (Allows for up to 64k BGM and SFX tracks)
 		//No immediate effect - only affects subsequent $4FFE/$4FFF writes
