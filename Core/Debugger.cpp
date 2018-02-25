@@ -365,9 +365,10 @@ void Debugger::RemoveExcessCallstackEntries()
 	}
 }
 
-void Debugger::UpdateCallstack(uint32_t addr)
+void Debugger::UpdateCallstack(uint8_t currentInstruction, uint32_t addr)
 {
 	_hideTopOfCallstack = false;
+
 	if((_lastInstruction == 0x60 || _lastInstruction == 0x40) && !_callstackRelative.empty()) {
 		//RTS & RTI
 		_callstackRelative.pop_back();
@@ -376,7 +377,9 @@ void Debugger::UpdateCallstack(uint32_t addr)
 		_callstackAbsolute.pop_back();
 
 		_profiler->UnstackFunction();
-	} else if(_lastInstruction == 0x20) {
+	}
+	
+	if(currentInstruction == 0x20) {
 		//JSR
 		RemoveExcessCallstackEntries();
 
@@ -591,8 +594,8 @@ bool Debugger::PrivateProcessRamOperation(MemoryOperationType type, uint16_t &ad
 			}
 		}
 
+		UpdateCallstack(value, addr);
 		_lastInstruction = value;
-		UpdateCallstack(addr);
 
 		breakDone = SleepUntilResume();
 
