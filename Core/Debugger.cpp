@@ -68,6 +68,8 @@ Debugger::Debugger(shared_ptr<Console> console, shared_ptr<CPU> cpu, shared_ptr<
 
 	_lastInstruction = 0;
 
+	_stepOutReturnAddress = -1;
+
 	_currentReadAddr = nullptr;
 	_currentReadValue = nullptr;
 	_nextReadAddr = -1;
@@ -87,8 +89,7 @@ Debugger::Debugger(shared_ptr<Console> console, shared_ptr<CPU> cpu, shared_ptr<
 	_needRewind = false;
 
 	_executionStopped = false;
-	_hideTopOfCallstack = false;
-
+	
 	_disassemblerOutput = "";
 	
 	memset(_inputOverride, 0, sizeof(_inputOverride));
@@ -365,21 +366,18 @@ void Debugger::RemoveExcessCallstackEntries()
 	}
 }
 
-void Debugger::UpdateCallstack(uint8_t currentInstruction, uint32_t addr)
+void Debugger::UpdateCallstack(uint8_t instruction, uint32_t addr)
 {
-	_hideTopOfCallstack = false;
-
-	if((_lastInstruction == 0x60 || _lastInstruction == 0x40) && !_callstackRelative.empty()) {
+	if((instruction == 0x60 || instruction == 0x40) && !_callstackRelative.empty()) {
 		//RTS & RTI
 		_callstackRelative.pop_back();
 		_callstackRelative.pop_back();
 		_callstackAbsolute.pop_back();
 		_callstackAbsolute.pop_back();
+		_subReturnAddresses.pop_back();
 
 		_profiler->UnstackFunction();
-	}
-	
-	if(currentInstruction == 0x20) {
+	} else if(instruction == 0x20) {
 		//JSR
 		RemoveExcessCallstackEntries();
 
@@ -390,9 +388,9 @@ void Debugger::UpdateCallstack(uint8_t currentInstruction, uint32_t addr)
 		_callstackAbsolute.push_back(_mapper->ToAbsoluteAddress(addr));
 		_callstackAbsolute.push_back(_mapper->ToAbsoluteAddress(targetAddr));
 
-		_hideTopOfCallstack = true;
-
 		_profiler->StackFunction(_mapper->ToAbsoluteAddress(addr), _mapper->ToAbsoluteAddress(targetAddr));
+
+		_subReturnAddresses.push_back(addr + 3);
 	}
 }
 
@@ -405,6 +403,8 @@ void Debugger::PrivateProcessInterrupt(uint16_t cpuAddr, uint16_t destCpuAddr, b
 
 	_callstackAbsolute.push_back(_mapper->ToAbsoluteAddress(cpuAddr));
 	_callstackAbsolute.push_back(_mapper->ToAbsoluteAddress(destCpuAddr));
+
+	_subReturnAddresses.push_back(cpuAddr);
 
 	_profiler->StackFunction(-1, _mapper->ToAbsoluteAddress(destCpuAddr));
 
@@ -427,9 +427,9 @@ void Debugger::StaticProcessEvent(EventType type)
 
 void Debugger::ProcessStepConditions(uint32_t addr)
 {
-	if(_stepOut && _lastInstruction == 0x60) {
-		//RTS found, set StepCount to 2 to break on the following instruction
-		Step(2);
+	if(_stepOut && (_lastInstruction == 0x60 || _lastInstruction == 0x40) && _stepOutReturnAddress == addr) {
+		//RTS/RTI found, if we're on the expected return address, break immediately
+		Step(1);
 	} else if(_stepOverAddr != -1 && addr == (uint32_t)_stepOverAddr) {
 		Step(1);
 	} else if(_stepCycleCount != -1 && abs(_cpu->GetCycleCount() - _stepCycleCount) < 100 && _cpu->GetCycleCount() >= _stepCycleCount) {
@@ -594,9 +594,7 @@ bool Debugger::PrivateProcessRamOperation(MemoryOperationType type, uint16_t &ad
 			}
 		}
 
-		UpdateCallstack(value, addr);
 		_lastInstruction = value;
-
 		breakDone = SleepUntilResume();
 
 		if(_codeRunner && !_codeRunner->IsRunning()) {
@@ -653,6 +651,8 @@ bool Debugger::PrivateProcessRamOperation(MemoryOperationType type, uint16_t &ad
 		} else if(addr >= 0x4018 && _mapper->IsReadRegister(addr)) {
 			AddDebugEvent(DebugEventType::MapperRegisterRead, addr, value);
 		}
+	} else if(type == MemoryOperationType::ExecOpCode) {
+		UpdateCallstack(_lastInstruction, addr);
 	}
 
 	return true;
@@ -762,6 +762,7 @@ void Debugger::PpuStep(uint32_t count)
 	_stepCycleCount = -1;
 	_stepCount = -1;
 	_breakOnScanline = -2;
+	_stepOut = false;
 }
 
 void Debugger::Step(uint32_t count)
@@ -783,7 +784,12 @@ void Debugger::StepCycles(uint32_t count)
 
 void Debugger::StepOut()
 {
+	if(_subReturnAddresses.empty()) {
+		return;
+	}
+
 	_stepOut = true;
+	_stepOutReturnAddress = _subReturnAddresses.back();
 	_stepOverAddr = -1;
 	_stepCycleCount = -1;
 	_stepCount = -1;
@@ -817,6 +823,7 @@ void Debugger::Run()
 	_ppuStepCount = -1;
 	_stepCount = -1;
 	_breakOnScanline = -2;
+	_stepOut = false;
 }
 
 void Debugger::BreakOnScanline(int16_t scanline)
@@ -958,7 +965,7 @@ void Debugger::ProcessVramWriteOperation(uint16_t addr, uint8_t &value)
 
 void Debugger::GetCallstack(int32_t* callstackAbsolute, int32_t* callstackRelative)
 {
-	int callstackSize = std::min(1022, (int)_callstackRelative.size() - (_hideTopOfCallstack ? 2 : 0));
+	int callstackSize = std::min(1022, (int)_callstackRelative.size());
 	for(int i = 0; i < callstackSize; i++) {
 		callstackAbsolute[i] = _callstackAbsolute[i];
 		

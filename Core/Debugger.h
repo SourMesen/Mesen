@@ -73,9 +73,11 @@ private:
 
 	vector<uint8_t> _frozenAddresses;
 
-	bool _hideTopOfCallstack;
 	deque<uint32_t> _callstackAbsolute;
 	deque<uint32_t> _callstackRelative;
+	deque<int32_t> _subReturnAddresses;
+
+	int32_t _stepOutReturnAddress;
 
 	unordered_set<uint32_t> _functionEntryPoints;
 
