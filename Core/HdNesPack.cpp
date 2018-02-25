@@ -292,7 +292,7 @@ void HdNesPack::GetPixels(uint32_t x, uint32_t y, HdPpuPixelInfo &pixelInfo, uin
 
 	if(hasSprite) {
 		for(int k = pixelInfo.SpriteCount - 1; k >= 0; k--) {
-			if(pixelInfo.Sprite[k].BackgroundPriority && pixelInfo.Sprite[k].SpriteColorIndex != 0) {
+			if(pixelInfo.Sprite[k].BackgroundPriority) {
 				hasBgSprite = true;
 				lowestBgSprite = k;
 
