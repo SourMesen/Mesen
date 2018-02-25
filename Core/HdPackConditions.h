@@ -230,7 +230,7 @@ struct HdPackTileNearbyCondition : public HdPackBaseTileCondition
 
 	bool InternalCheckCondition(HdScreenInfo *screenInfo, int x, int y, HdPpuTileInfo* tile) override
 	{
-		int pixelIndex = PixelOffset + (y << 8) + x;
+		int pixelIndex = PixelOffset + (y * 256) + x;
 		if(pixelIndex < 0 || pixelIndex > PPU::PixelCount) {
 			return false;
 		}
@@ -250,7 +250,10 @@ struct HdPackSpriteNearbyCondition : public HdPackBaseTileCondition
 
 	bool InternalCheckCondition(HdScreenInfo *screenInfo, int x, int y, HdPpuTileInfo* tile) override
 	{
-		int pixelIndex = PixelOffset + (y << 8) + x;
+		int xSign = tile && tile->HorizontalMirroring ? -1 : 1;
+		int ySign = tile && tile->VerticalMirroring ? -1 : 1;
+		int pixelIndex = PixelOffset + (y * 256 * ySign) + x * xSign;
+
 		if(pixelIndex < 0 || pixelIndex > PPU::PixelCount) {
 			return false;
 		}
