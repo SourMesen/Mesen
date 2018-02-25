@@ -341,6 +341,7 @@ namespace Mesen.GUI.Forms
 			this.mnuFile.ShortcutKeyDisplayString = "";
 			this.mnuFile.Size = new System.Drawing.Size(37, 20);
 			this.mnuFile.Text = "File";
+			this.mnuFile.DropDownOpening += new System.EventHandler(this.mnuFile_DropDownOpening);
 			// 
 			// mnuOpen
 			// 

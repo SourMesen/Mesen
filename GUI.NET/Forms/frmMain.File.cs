@@ -259,6 +259,11 @@ namespace Mesen.GUI.Forms
 		{
 			UpdateRecentFiles();
 		}
+		
+		private void mnuFile_DropDownOpening(object sender, EventArgs e)
+		{
+			mnuRecentFiles.Enabled = ConfigManager.Config.RecentFiles.Count > 0;
+		}
 
 		private void UpdateRecentFiles()
 		{
