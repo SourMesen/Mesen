@@ -357,8 +357,18 @@ namespace Mesen.GUI.Debugger.Controls
 				int ramAddr = i * 4;
 				int spriteY = _spriteRam[ramAddr];
 				int spriteX = _spriteRam[ramAddr+3];
+				int attributes = _spriteRam[ramAddr+2];
+				bool horizontalMirror = (attributes & 0x40) == 0x40;
+				bool verticalMirror = (attributes & 0x80) == 0x80;
+
 				if(spriteY >= 0 && spriteY < 240) {
-					sb.AppendLine(ToHdPackFormat(i) + "," + spriteX.ToString() + "," + spriteY.ToString());
+					sb.AppendLine(
+						ToHdPackFormat(i) + "," +
+						spriteX.ToString() + "," +
+						spriteY.ToString() + "," +
+						(horizontalMirror ? "Y" : "N") + "," +
+						(verticalMirror ? "Y" : "N")
+					);
 				}
 			}
 			if(sb.Length > 0) {
