@@ -12,7 +12,7 @@ class HdAudioDevice : public IMemoryHandler, public Snapshotable
 private:
 	HdPackData *_hdData;
 	uint8_t _album;
-	uint8_t _flags;
+	uint8_t _playbackOptions;
 	bool _trackError;
 	OggMixer* _oggMixer;
 	int32_t _lastBgmTrack;

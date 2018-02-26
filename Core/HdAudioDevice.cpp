@@ -6,7 +6,7 @@ HdAudioDevice::HdAudioDevice(HdPackData * hdData)
 {
 	_hdData = hdData;
 	_album = 0;
-	_flags = 0;
+	_playbackOptions = 0;
 	_trackError = false;
 	_sfxVolume = 128;
 	_bgmVolume = 128;
@@ -24,14 +24,15 @@ void HdAudioDevice::StreamState(bool saving)
 		if(trackOffset < 0) {
 			_lastBgmTrack = -1;
 		}
-		Stream(_album, _lastBgmTrack, trackOffset, _sfxVolume, _bgmVolume);
+		Stream(_album, _lastBgmTrack, trackOffset, _sfxVolume, _bgmVolume, _playbackOptions);
 	} else {
-		Stream(_album, _lastBgmTrack, trackOffset, _sfxVolume, _bgmVolume);
+		Stream(_album, _lastBgmTrack, trackOffset, _sfxVolume, _bgmVolume, _playbackOptions);
 		if(_lastBgmTrack != -1 && trackOffset > 0) {
 			PlayBgmTrack(_lastBgmTrack, trackOffset);
 		}
 		_oggMixer->SetBgmVolume(_bgmVolume);
 		_oggMixer->SetSfxVolume(_sfxVolume);
+		_oggMixer->SetPlaybackOptions(_playbackOptions);
 	}
 }
 
@@ -103,7 +104,10 @@ void HdAudioDevice::WriteRAM(uint16_t addr, uint8_t value)
 		//Playback Options
 		//Bit 0: Loop BGM
 		//Bit 1-7: Unused, reserved - must be 0
-		case 0: _oggMixer->SetPlaybackOptions(value); break;
+		case 0:
+			_playbackOptions = value;
+			_oggMixer->SetPlaybackOptions(_playbackOptions);
+			break;
 
 		//Playback Control
 		//Bit 0: Toggle Pause/Resume (only affects BGM)

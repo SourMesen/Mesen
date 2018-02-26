@@ -285,7 +285,6 @@ void HdNesPack::GetPixels(uint32_t x, uint32_t y, HdPpuPixelInfo &pixelInfo, uin
 		hdPackTileInfo = GetCachedMatchingTile(x, y, &pixelInfo.Tile);
 	}
 
-	bool hasBgSprite = false;
 	int lowestBgSprite = 999;
 	
 	DrawColor(_palette[pixelInfo.Tile.PpuBackgroundColor], outputBuffer, hdData->Scale, screenWidth);
@@ -293,8 +292,9 @@ void HdNesPack::GetPixels(uint32_t x, uint32_t y, HdPpuPixelInfo &pixelInfo, uin
 	if(hasSprite) {
 		for(int k = pixelInfo.SpriteCount - 1; k >= 0; k--) {
 			if(pixelInfo.Sprite[k].BackgroundPriority) {
-				hasBgSprite = true;
-				lowestBgSprite = k;
+				if(pixelInfo.Sprite[k].SpriteColorIndex != 0) {
+					lowestBgSprite = k;
+				}
 
 				hdPackSpriteInfo = GetMatchingTile(x, y, &pixelInfo.Sprite[k]);
 				if(hdPackSpriteInfo) {

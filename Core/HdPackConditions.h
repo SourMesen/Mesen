@@ -16,7 +16,7 @@ struct HdPackBaseTileCondition : public HdPackCondition
 	{
 		TileX = x;
 		TileY = y;
-		PixelOffset = (y << 8) + x;
+		PixelOffset = (y * 256) + x;
 		PaletteColors = palette;
 		TileIndex = tileIndex;
 		if(tileData.size() == 32) {
@@ -252,7 +252,7 @@ struct HdPackSpriteNearbyCondition : public HdPackBaseTileCondition
 	{
 		int xSign = tile && tile->HorizontalMirroring ? -1 : 1;
 		int ySign = tile && tile->VerticalMirroring ? -1 : 1;
-		int pixelIndex = PixelOffset + (y * 256 * ySign) + x * xSign;
+		int pixelIndex = ((y + TileY * ySign) * 256) + x + (TileX * xSign);
 
 		if(pixelIndex < 0 || pixelIndex > PPU::PixelCount) {
 			return false;
