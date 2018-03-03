@@ -1,4 +1,6 @@
 ﻿#include "SdlRenderer.h"
+#include "../Core/Console.h"
+#include "../Core/Debugger.h"
 #include "../Core/VideoRenderer.h"
 #include "../Core/VideoDecoder.h"
 #include "../Core/EmulationSettings.h"
@@ -143,7 +145,14 @@ void SdlRenderer::Render()
 		return;
 	}
 
-	bool paused = EmulationSettings::IsPaused();
+	bool paused = EmulationSettings::IsPaused() && Console::IsRunning();
+	bool disableOverlay = EmulationSettings::CheckFlag(EmulationFlags::HidePauseOverlay);
+	shared_ptr<Debugger> debugger = Console::GetInstance()->GetDebugger(false);
+	if(debugger && debugger->IsExecutionStopped()) {
+		paused = !debugger->CheckFlag(DebuggerFlags::HidePauseIcon);
+		disableOverlay = true;
+	}
+
 	if(_noUpdateCount > 10 || _frameChanged || paused || IsMessageShown()) {	
 		auto lock = _frameLock.AcquireSafe();
 
@@ -170,7 +179,7 @@ void SdlRenderer::Render()
 		SDL_RenderCopy(_sdlRenderer, _sdlTexture, &source, &dest);
 
 		if(paused && !EmulationSettings::CheckFlag(EmulationFlags::HidePauseOverlay)) {
-			DrawPauseScreen();
+			DrawPauseScreen(disableOverlay);
 		} else if(VideoDecoder::GetInstance()->IsRunning()) {
 			DrawCounters();
 		}
@@ -183,24 +192,29 @@ void SdlRenderer::Render()
 	}
 }
 
-void SdlRenderer::DrawPauseScreen()
+void SdlRenderer::DrawPauseScreen(bool disableOverlay)
 {
-	uint32_t textureData = 0x222222AA;
-	SDL_Surface* surf = SDL_CreateRGBSurfaceFrom((void*)&textureData, 1, 1, 32, 4, 0xFF000000, 0x00FF0000, 0x0000FF00, 0x000000FF);
-	if(surf) {
-		SDL_Texture* texture = SDL_CreateTextureFromSurface(_sdlRenderer, surf);
-		if(texture) {
-			SDL_Rect source = {0, 0, 1, 1 };
-			SDL_Rect dest = {0, 0, (int)_screenWidth, (int)_screenHeight };
-			SDL_RenderCopy(_sdlRenderer, texture, &source, &dest);
-			SDL_DestroyTexture(texture);
+	if(disableOverlay) {
+		DrawString("I", 15, 15, 106, 90, 205);
+		DrawString("I", 23, 15, 106, 90, 205);
+	} else {
+		uint32_t textureData = 0x222222AA;
+		SDL_Surface* surf = SDL_CreateRGBSurfaceFrom((void*)&textureData, 1, 1, 32, 4, 0xFF000000, 0x00FF0000, 0x0000FF00, 0x000000FF);
+		if(surf) {
+			SDL_Texture* texture = SDL_CreateTextureFromSurface(_sdlRenderer, surf);
+			if(texture) {
+				SDL_Rect source = { 0, 0, 1, 1 };
+				SDL_Rect dest = { 0, 0, (int)_screenWidth, (int)_screenHeight };
+				SDL_RenderCopy(_sdlRenderer, texture, &source, &dest);
+				SDL_DestroyTexture(texture);
+			}
+			SDL_FreeSurface(surf);
 		}
-		SDL_FreeSurface(surf);
-	}
 
-	XMVECTOR stringDimensions = _largeFont->MeasureString(L"PAUSE");
-	float* measureF = (float*)&stringDimensions;
-	_largeFont->DrawString(_sdlRenderer, L"PAUSE", (int)(_screenWidth / 2 - measureF[0] / 2), (int)(_screenHeight / 2 - measureF[1] / 2 - 8), 250, 235, 215);
+		XMVECTOR stringDimensions = _largeFont->MeasureString(L"PAUSE");
+		float* measureF = (float*)&stringDimensions;
+		_largeFont->DrawString(_sdlRenderer, L"PAUSE", (int)(_screenWidth / 2 - measureF[0] / 2), (int)(_screenHeight / 2 - measureF[1] / 2 - 8), 250, 235, 215);
+	}
 }
 
 void SdlRenderer::DrawString(std::wstring message, int x, int y, uint8_t r, uint8_t g, uint8_t b, uint8_t opacity)

@@ -64,6 +64,7 @@ namespace Mesen.GUI.Debugger
 			this.mnuSplitView.Checked = ConfigManager.Config.DebugInfo.SplitView;
 			this.mnuPpuPartialDraw.Checked = ConfigManager.Config.DebugInfo.PpuPartialDraw;
 			this.mnuPpuShowPreviousFrame.Checked = ConfigManager.Config.DebugInfo.PpuShowPreviousFrame;
+			this.mnuHidePauseIcon.Checked = ConfigManager.Config.DebugInfo.HidePauseIcon;
 			this.mnuShowEffectiveAddresses.Checked = ConfigManager.Config.DebugInfo.ShowEffectiveAddresses;
 			this.mnuShowCodePreview.Checked = ConfigManager.Config.DebugInfo.ShowCodePreview;
 			this.mnuShowToolbar.Checked = ConfigManager.Config.DebugInfo.ShowToolbar;
@@ -312,6 +313,7 @@ namespace Mesen.GUI.Debugger
 			SetFlag(DebuggerFlags.ShowUnidentifiedData, mnuShowUnidentifiedData.Checked);
 			SetFlag(DebuggerFlags.BreakOnUnofficialOpCode, mnuBreakOnUnofficialOpcodes.Checked);
 			SetFlag(DebuggerFlags.BreakOnBrk, mnuBreakOnBrk.Checked);
+			SetFlag(DebuggerFlags.HidePauseIcon, mnuHidePauseIcon.Checked);
 			InteropEmu.SetFlag(EmulationFlags.DebuggerWindowEnabled, true);
 		}
 
@@ -691,9 +693,9 @@ namespace Mesen.GUI.Debugger
 			}
 			InteropEmu.DebugRun();
 
-			ConfigManager.Config.DebugInfo.FontFamily = ctrlDebuggerCode.Font.FontFamily.Name;
-			ConfigManager.Config.DebugInfo.FontStyle = ctrlDebuggerCode.Font.Style;
-			ConfigManager.Config.DebugInfo.FontSize = ctrlDebuggerCode.Font.Size;
+			ConfigManager.Config.DebugInfo.FontFamily = ctrlDebuggerCode.BaseFont.FontFamily.Name;
+			ConfigManager.Config.DebugInfo.FontStyle = ctrlDebuggerCode.BaseFont.Style;
+			ConfigManager.Config.DebugInfo.FontSize = ctrlDebuggerCode.BaseFont.Size;
 			ConfigManager.Config.DebugInfo.WindowWidth = this.WindowState == FormWindowState.Maximized ? this.RestoreBounds.Width : this.Width;
 			ConfigManager.Config.DebugInfo.WindowHeight = this.WindowState == FormWindowState.Maximized ? this.RestoreBounds.Height : this.Height;
 			ConfigManager.Config.DebugInfo.TopPanelHeight = this.splitContainer.GetSplitterDistance();
@@ -771,6 +773,12 @@ namespace Mesen.GUI.Debugger
 		private void mnuTraceLogger_Click(object sender, EventArgs e)
 		{
 			DebugWindowManager.OpenDebugWindow(DebugWindow.TraceLogger);
+		}
+
+		private void mnuHidePauseIcon_Click(object sender, EventArgs e)
+		{
+			ConfigManager.Config.DebugInfo.HidePauseIcon = mnuHidePauseIcon.Checked;
+			ConfigManager.ApplyChanges();
 		}
 
 		private void mnuPpuPartialDraw_Click(object sender, EventArgs e)

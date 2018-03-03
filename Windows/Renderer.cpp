@@ -3,6 +3,7 @@
 #include "DirectXTK/SpriteBatch.h"
 #include "DirectXTK/SpriteFont.h"
 #include "../Core/Console.h"
+#include "../Core/Debugger.h"
 #include "../Core/PPU.h"
 #include "../Core/VideoRenderer.h"
 #include "../Core/VideoDecoder.h"
@@ -536,42 +537,54 @@ namespace NES
 		_spriteBatch->Draw(_pTextureSrv, destRect);
 	}
 
-	void Renderer::DrawPauseScreen()
+	void Renderer::DrawPauseScreen(bool disableOverlay)
 	{
-		RECT destRect;
-		destRect.left = 0;
-		destRect.top = 0;
-		destRect.right = _realScreenWidth;
-		destRect.bottom = _realScreenHeight;
+		if(disableOverlay) {
+			DrawString("I", 15, 15, Colors::SlateBlue, 2.0f, _font.get());
+			DrawString("I", 32, 15, Colors::SlateBlue, 2.0f, _font.get());
+		} else {
+			RECT destRect;
+			destRect.left = 0;
+			destRect.top = 0;
+			destRect.right = _realScreenWidth;
+			destRect.bottom = _realScreenHeight;
 
-		D3D11_MAPPED_SUBRESOURCE dd;
-		HRESULT hr = _pDeviceContext->Map(_overlayTexture, 0, D3D11_MAP_WRITE_DISCARD, 0, &dd);
-		if(FAILED(hr)) {
-			MessageManager::Log("(DrawPauseScreen) DeviceContext::Map() failed - Error:" + std::to_string(hr));
-			return;
-		}
-
-		uint8_t* surfacePointer = (uint8_t*)dd.pData;
-		for(uint32_t i = 0, len = 8; i < len; i++) {
-			//Gray transparent overlay
-			for(int j = 0; j < 8; j++) {
-				((uint32_t*)surfacePointer)[j] = 0xAA222222;
+			D3D11_MAPPED_SUBRESOURCE dd;
+			HRESULT hr = _pDeviceContext->Map(_overlayTexture, 0, D3D11_MAP_WRITE_DISCARD, 0, &dd);
+			if(FAILED(hr)) {
+				MessageManager::Log("(DrawPauseScreen) DeviceContext::Map() failed - Error:" + std::to_string(hr));
+				return;
 			}
-			surfacePointer += dd.RowPitch;
+
+			uint8_t* surfacePointer = (uint8_t*)dd.pData;
+			for(uint32_t i = 0, len = 8; i < len; i++) {
+				//Gray transparent overlay
+				for(int j = 0; j < 8; j++) {
+					((uint32_t*)surfacePointer)[j] = 0xAA222222;
+				}
+				surfacePointer += dd.RowPitch;
+			}
+			_pDeviceContext->Unmap(_overlayTexture, 0);
+
+			_spriteBatch->Draw(_pOverlaySrv, destRect);
+
+			XMVECTOR stringDimensions = _largeFont->MeasureString(L"PAUSE");
+			float x = (float)_screenWidth / 2 - stringDimensions.m128_f32[0] / 2;
+			float y = (float)_screenHeight / 2 - stringDimensions.m128_f32[1] / 2 - 8;
+			DrawString("PAUSE", x, y, Colors::AntiqueWhite, 1.0f, _largeFont.get());
 		}
-		_pDeviceContext->Unmap(_overlayTexture, 0);
-		
-		_spriteBatch->Draw(_pOverlaySrv, destRect);
-		
-		XMVECTOR stringDimensions = _largeFont->MeasureString(L"PAUSE");
-		float x = (float)_screenWidth / 2 - stringDimensions.m128_f32[0] / 2;
-		float y = (float)_screenHeight / 2 - stringDimensions.m128_f32[1] / 2 - 8;
-		DrawString("PAUSE", x, y, Colors::AntiqueWhite, 1.0f, _largeFont.get());
 	}
 
 	void Renderer::Render()
 	{
 		bool paused = EmulationSettings::IsPaused() && Console::IsRunning();
+		bool disableOverlay = EmulationSettings::CheckFlag(EmulationFlags::HidePauseOverlay);
+		shared_ptr<Debugger> debugger = Console::GetInstance()->GetDebugger(false);
+		if(debugger && debugger->IsExecutionStopped()) {
+			paused = !debugger->CheckFlag(DebuggerFlags::HidePauseIcon);
+			disableOverlay = true;
+		}
+
 		if(_noUpdateCount > 10 || _frameChanged || paused || IsMessageShown()) {
 			_noUpdateCount = 0;
 		
@@ -597,9 +610,11 @@ namespace NES
 			//Draw nes screen
 			DrawNESScreen();
 
-			if(paused && !EmulationSettings::CheckFlag(EmulationFlags::HidePauseOverlay)) {
-				DrawPauseScreen();
-			} else if(VideoDecoder::GetInstance()->IsRunning()) {
+			if(paused) {
+				DrawPauseScreen(disableOverlay);
+			}
+				
+			if(VideoDecoder::GetInstance()->IsRunning()) {
 				DrawCounters();
 			}
 

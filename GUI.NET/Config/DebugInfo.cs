@@ -134,6 +134,7 @@ namespace Mesen.GUI.Config
 		public bool PpuAutoRefresh = true;
 		public bool PpuPartialDraw = false;
 		public bool PpuShowPreviousFrame = false;
+		public bool HidePauseIcon = false;
 		public bool ShowPpuScrollOverlay = true;
 		public bool ShowTileGrid = false;
 		public bool ShowAttributeGrid = false;

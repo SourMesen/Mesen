@@ -50,7 +50,7 @@ private:
 	void Cleanup();
 	void SetScreenSize(uint32_t width, uint32_t height);
 
-	void DrawPauseScreen();
+	void DrawPauseScreen(bool disableOverlay);
 
 	float MeasureString(std::wstring text) override;
 	bool ContainsCharacter(wchar_t character) override;

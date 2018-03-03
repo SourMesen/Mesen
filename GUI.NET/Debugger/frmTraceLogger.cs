@@ -82,9 +82,9 @@ namespace Mesen.GUI.Debugger
 			debugInfo.TraceIndentCode = chkIndentCode.Checked;
 			debugInfo.TraceLoggerSize = this.WindowState == FormWindowState.Maximized ? this.RestoreBounds.Size : this.Size;
 
-			debugInfo.TraceFontFamily = txtTraceLog.Font.FontFamily.Name;
-			debugInfo.TraceFontSize = txtTraceLog.Font.Size;
-			debugInfo.TraceFontStyle = txtTraceLog.Font.Style;
+			debugInfo.TraceFontFamily = txtTraceLog.BaseFont.FontFamily.Name;
+			debugInfo.TraceFontSize = txtTraceLog.BaseFont.Size;
+			debugInfo.TraceFontStyle = txtTraceLog.BaseFont.Style;
 			debugInfo.TraceTextZoom = txtTraceLog.TextZoom;
 
 			_entityBinder.Entity = debugInfo.TraceLoggerOptions;

@@ -19,6 +19,8 @@ enum class DebuggerFlags
 	ShowUnidentifiedData = 0x200,
 
 	IgnoreRedundantWrites = 0x400,
+
+	HidePauseIcon = 0x800
 };
 
 enum class BreakSource
