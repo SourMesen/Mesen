@@ -169,6 +169,13 @@ namespace Mesen.GUI.Debugger
 			this.ctrlCodeViewer.ScrollToLineNumber((int)address, eHistoryType.OnScroll);
 		}
 
+		public void ScrollToActiveAddress()
+		{
+			if(_currentActiveAddress.HasValue) {
+				this.ctrlCodeViewer.ScrollToLineNumber((int)_currentActiveAddress.Value);
+			}
+		}
+
 		public void SetActiveAddress(UInt32 address)
 		{
 			_currentActiveAddress = address;
@@ -730,7 +737,7 @@ namespace Mesen.GUI.Debugger
 
 		private void mnuShowNextStatement_Click(object sender, EventArgs e)
 		{
-			this.ctrlCodeViewer.ScrollToLineNumber((int)_currentActiveAddress.Value);
+			this.ScrollToActiveAddress();
 		}
 				
 		private void mnuShowLineNotes_Click(object sender, EventArgs e)

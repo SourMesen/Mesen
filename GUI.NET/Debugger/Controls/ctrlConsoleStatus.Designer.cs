@@ -122,6 +122,8 @@
 			this.mnuGoToResetHandler = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuGoToInitHandler = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuGoToPlayHandler = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuGoToProgramCounter = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
 			this.tableLayoutPanel2.SuspendLayout();
 			this.grpPPUStatus.SuspendLayout();
 			this.tableLayoutPanel8.SuspendLayout();
@@ -1290,45 +1292,60 @@
             this.mnuGoToNmiHandler,
             this.mnuGoToResetHandler,
             this.mnuGoToInitHandler,
-            this.mnuGoToPlayHandler});
+            this.mnuGoToPlayHandler,
+            this.toolStripMenuItem1,
+            this.mnuGoToProgramCounter});
 			this.contextGoTo.Name = "contextGoTo";
-			this.contextGoTo.Size = new System.Drawing.Size(148, 114);
+			this.contextGoTo.Size = new System.Drawing.Size(167, 164);
 			this.contextGoTo.Opening += new System.ComponentModel.CancelEventHandler(this.contextGoTo_Opening);
 			// 
 			// mnuGoToIrqHandler
 			// 
 			this.mnuGoToIrqHandler.Name = "mnuGoToIrqHandler";
-			this.mnuGoToIrqHandler.Size = new System.Drawing.Size(147, 22);
+			this.mnuGoToIrqHandler.Size = new System.Drawing.Size(166, 22);
 			this.mnuGoToIrqHandler.Text = "IRQ Handler";
 			this.mnuGoToIrqHandler.Click += new System.EventHandler(this.mnuGoToIrqHandler_Click);
 			// 
 			// mnuGoToNmiHandler
 			// 
 			this.mnuGoToNmiHandler.Name = "mnuGoToNmiHandler";
-			this.mnuGoToNmiHandler.Size = new System.Drawing.Size(147, 22);
+			this.mnuGoToNmiHandler.Size = new System.Drawing.Size(166, 22);
 			this.mnuGoToNmiHandler.Text = "NMI Handler";
 			this.mnuGoToNmiHandler.Click += new System.EventHandler(this.mnuGoToNmiHandler_Click);
 			// 
 			// mnuGoToResetHandler
 			// 
 			this.mnuGoToResetHandler.Name = "mnuGoToResetHandler";
-			this.mnuGoToResetHandler.Size = new System.Drawing.Size(147, 22);
+			this.mnuGoToResetHandler.Size = new System.Drawing.Size(166, 22);
 			this.mnuGoToResetHandler.Text = "Reset Handler";
 			this.mnuGoToResetHandler.Click += new System.EventHandler(this.mnuGoToResetHandler_Click);
 			// 
 			// mnuGoToInitHandler
 			// 
 			this.mnuGoToInitHandler.Name = "mnuGoToInitHandler";
-			this.mnuGoToInitHandler.Size = new System.Drawing.Size(147, 22);
+			this.mnuGoToInitHandler.Size = new System.Drawing.Size(166, 22);
 			this.mnuGoToInitHandler.Text = "Init Handler";
 			this.mnuGoToInitHandler.Click += new System.EventHandler(this.mnuGoToInitHandler_Click);
 			// 
 			// mnuGoToPlayHandler
 			// 
 			this.mnuGoToPlayHandler.Name = "mnuGoToPlayHandler";
-			this.mnuGoToPlayHandler.Size = new System.Drawing.Size(147, 22);
+			this.mnuGoToPlayHandler.Size = new System.Drawing.Size(166, 22);
 			this.mnuGoToPlayHandler.Text = "Play Handler";
 			this.mnuGoToPlayHandler.Click += new System.EventHandler(this.mnuGoToPlayHandler_Click);
+			// 
+			// mnuGoToProgramCounter
+			// 
+			this.mnuGoToProgramCounter.Name = "mnuGoToProgramCounter";
+			this.mnuGoToProgramCounter.Size = new System.Drawing.Size(166, 22);
+			this.mnuGoToProgramCounter.Text = "Program Counter";
+			this.mnuGoToProgramCounter.ToolTipText = "Alt+*";
+			this.mnuGoToProgramCounter.Click += new System.EventHandler(this.mnuGoToProgramCounter_Click);
+			// 
+			// toolStripMenuItem1
+			// 
+			this.toolStripMenuItem1.Name = "toolStripMenuItem1";
+			this.toolStripMenuItem1.Size = new System.Drawing.Size(163, 6);
 			// 
 			// ctrlConsoleStatus
 			// 
@@ -1471,5 +1488,7 @@
 		private System.Windows.Forms.TextBox txtXScroll;
 		private System.Windows.Forms.Label label1;
 		private System.Windows.Forms.TextBox txtTmpAddr;
+		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem1;
+		private System.Windows.Forms.ToolStripMenuItem mnuGoToProgramCounter;
 	}
 }

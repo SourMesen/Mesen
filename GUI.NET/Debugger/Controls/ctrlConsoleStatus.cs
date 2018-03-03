@@ -281,6 +281,13 @@ namespace Mesen.GUI.Debugger
 		{
 			this.OnGotoLocation?.Invoke((int)InteropEmu.NsfGetHeader().PlayAddress, null);
 		}
+		
+		private void mnuGoToProgramCounter_Click(object sender, EventArgs e)
+		{
+			DebugState state = new DebugState();
+			InteropEmu.DebugGetState(ref state);
+			this.OnGotoLocation((int)state.CPU.DebugPC, null);
+		}
 
 		private void contextGoTo_Opening(object sender, CancelEventArgs e)
 		{

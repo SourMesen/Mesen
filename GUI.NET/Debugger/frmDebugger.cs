@@ -641,6 +641,13 @@ namespace Mesen.GUI.Debugger
 			int address = (InteropEmu.DebugGetMemoryValue(DebugMemoryType.CpuMemory, 0xFFFD) << 8) | InteropEmu.DebugGetMemoryValue(DebugMemoryType.CpuMemory, 0xFFFC);
 			_lastCodeWindow.ScrollToLineNumber(address);
 		}
+		
+		private void mnuGoToProgramCount_Click(object sender, EventArgs e)
+		{
+			DebugState state = new DebugState();
+			InteropEmu.DebugGetState(ref state);
+			_lastCodeWindow.ScrollToActiveAddress();
+		}
 
 		private void mnuIncreaseFontSize_Click(object sender, EventArgs e)
 		{
