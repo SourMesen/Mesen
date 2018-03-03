@@ -125,6 +125,7 @@ namespace Mesen.GUI.Forms.Config
 			this.lblDataLocation = new System.Windows.Forms.Label();
 			this.tpgAdvanced = new System.Windows.Forms.TabPage();
 			this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+			this.chkShowFullPathInRecents = new System.Windows.Forms.CheckBox();
 			this.chkAlwaysOnTop = new System.Windows.Forms.CheckBox();
 			this.chkDisableGameSelectionScreen = new System.Windows.Forms.CheckBox();
 			this.chkGameSelectionScreenResetGame = new System.Windows.Forms.CheckBox();
@@ -145,7 +146,6 @@ namespace Mesen.GUI.Forms.Config
 			this.lblUiDisplaySettings = new System.Windows.Forms.Label();
 			this.lblGameSelectionScreenSettings = new System.Windows.Forms.Label();
 			this.tmrSyncDateTime = new System.Windows.Forms.Timer(this.components);
-			this.chkShowFullPathInRecents = new System.Windows.Forms.CheckBox();
 			this.tlpMain.SuspendLayout();
 			this.flowLayoutPanel2.SuspendLayout();
 			this.tableLayoutPanel5.SuspendLayout();
@@ -454,7 +454,7 @@ namespace Mesen.GUI.Forms.Config
 			this.tabMain.Location = new System.Drawing.Point(0, 0);
 			this.tabMain.Name = "tabMain";
 			this.tabMain.SelectedIndex = 0;
-			this.tabMain.Size = new System.Drawing.Size(497, 448);
+			this.tabMain.Size = new System.Drawing.Size(497, 419);
 			this.tabMain.TabIndex = 2;
 			// 
 			// tpgGeneral
@@ -1420,7 +1420,7 @@ namespace Mesen.GUI.Forms.Config
 			this.tpgAdvanced.Location = new System.Drawing.Point(4, 22);
 			this.tpgAdvanced.Name = "tpgAdvanced";
 			this.tpgAdvanced.Padding = new System.Windows.Forms.Padding(3);
-			this.tpgAdvanced.Size = new System.Drawing.Size(489, 422);
+			this.tpgAdvanced.Size = new System.Drawing.Size(489, 393);
 			this.tpgAdvanced.TabIndex = 1;
 			this.tpgAdvanced.Text = "Advanced";
 			this.tpgAdvanced.UseVisualStyleBackColor = true;
@@ -1468,8 +1468,19 @@ namespace Mesen.GUI.Forms.Config
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel1.Size = new System.Drawing.Size(483, 416);
+			this.tableLayoutPanel1.Size = new System.Drawing.Size(483, 387);
 			this.tableLayoutPanel1.TabIndex = 0;
+			// 
+			// chkShowFullPathInRecents
+			// 
+			this.chkShowFullPathInRecents.AutoSize = true;
+			this.chkShowFullPathInRecents.Location = new System.Drawing.Point(13, 204);
+			this.chkShowFullPathInRecents.Margin = new System.Windows.Forms.Padding(13, 3, 3, 3);
+			this.chkShowFullPathInRecents.Name = "chkShowFullPathInRecents";
+			this.chkShowFullPathInRecents.Size = new System.Drawing.Size(184, 17);
+			this.chkShowFullPathInRecents.TabIndex = 30;
+			this.chkShowFullPathInRecents.Text = "Show full file path in recent file list";
+			this.chkShowFullPathInRecents.UseVisualStyleBackColor = true;
 			// 
 			// chkAlwaysOnTop
 			// 
@@ -1707,17 +1718,6 @@ namespace Mesen.GUI.Forms.Config
 			this.tmrSyncDateTime.Enabled = true;
 			this.tmrSyncDateTime.Tick += new System.EventHandler(this.tmrSyncDateTime_Tick);
 			// 
-			// chkShowFullPathInRecents
-			// 
-			this.chkShowFullPathInRecents.AutoSize = true;
-			this.chkShowFullPathInRecents.Location = new System.Drawing.Point(13, 204);
-			this.chkShowFullPathInRecents.Margin = new System.Windows.Forms.Padding(13, 3, 3, 3);
-			this.chkShowFullPathInRecents.Name = "chkShowFullPathInRecents";
-			this.chkShowFullPathInRecents.Size = new System.Drawing.Size(184, 17);
-			this.chkShowFullPathInRecents.TabIndex = 30;
-			this.chkShowFullPathInRecents.Text = "Show full file path in recent file list";
-			this.chkShowFullPathInRecents.UseVisualStyleBackColor = true;
-			// 
 			// frmPreferences
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1731,8 +1731,8 @@ namespace Mesen.GUI.Forms.Config
 			this.Name = "frmPreferences";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
 			this.Text = "Preferences";
-			this.Controls.SetChildIndex(this.tabMain, 0);
 			this.Controls.SetChildIndex(this.baseConfigPanel, 0);
+			this.Controls.SetChildIndex(this.tabMain, 0);
 			this.tlpMain.ResumeLayout(false);
 			this.tlpMain.PerformLayout();
 			this.flowLayoutPanel2.ResumeLayout(false);
