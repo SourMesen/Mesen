@@ -72,6 +72,7 @@ namespace Mesen.GUI.Debugger
 		{
 			_config = config;
 
+			mnuPrgShowInline.Checked = false;
 			mnuPrgAddressReplace.Checked = false;
 			mnuPrgAddressBelow.Checked = false;
 			mnuHidePrgAddresses.Checked = false;
@@ -101,19 +102,29 @@ namespace Mesen.GUI.Debugger
 			}
 
 			switch(config.PrgAddressPosition) {
+				case PrgAddressPosition.Inline:
+					this.ctrlCodeViewer.ShowCompactPrgAddresses = true;
+					this.ctrlCodeViewer.ShowLineNumberNotes = false;
+					this.ctrlCodeViewer.ShowSingleLineLineNumberNotes = false;
+					this.mnuPrgShowInline.Checked = true;
+					break;
+
 				case PrgAddressPosition.Replace:
+					this.ctrlCodeViewer.ShowCompactPrgAddresses = false;
 					this.ctrlCodeViewer.ShowLineNumberNotes = true;
 					this.ctrlCodeViewer.ShowSingleLineLineNumberNotes = true;
 					this.mnuPrgAddressReplace.Checked = true;
 					break;
 
 				case PrgAddressPosition.Below:
+					this.ctrlCodeViewer.ShowCompactPrgAddresses = false;
 					this.ctrlCodeViewer.ShowLineNumberNotes = true;
 					this.ctrlCodeViewer.ShowSingleLineLineNumberNotes = false;
 					this.mnuPrgAddressBelow.Checked = true;
 					break;
 
 				case PrgAddressPosition.Hidden:
+					this.ctrlCodeViewer.ShowCompactPrgAddresses = false;
 					this.ctrlCodeViewer.ShowLineNumberNotes = false;
 					this.ctrlCodeViewer.ShowSingleLineLineNumberNotes = false;
 					this.mnuHidePrgAddresses.Checked = true;
@@ -882,6 +893,12 @@ namespace Mesen.GUI.Debugger
 		private void mnuHideByteCode_Click(object sender, EventArgs e)
 		{
 			_config.ByteCodePosition = ByteCodePosition.Hidden;
+			this.UpdateConfig();
+		}
+		
+		private void mnuShowInlineCompactDisplay_Click(object sender, EventArgs e)
+		{
+			_config.PrgAddressPosition = PrgAddressPosition.Inline;
 			this.UpdateConfig();
 		}
 

@@ -24,7 +24,8 @@ namespace Mesen.GUI.Config
 	{
 		Hidden,
 		Replace,
-		Below
+		Below,
+		Inline
 	}
 
 	public class DebugViewInfo

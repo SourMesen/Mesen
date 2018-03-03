@@ -67,6 +67,7 @@ namespace Mesen.GUI.Debugger
 		private bool _showSingleLineLineNumberNotes = false;
 		private bool _showContentNotes = false;
 		private bool _showSingleLineContentNotes = true;
+		private bool _showCompactPrgAddresses = false;
 		private int _selectionStart = 0;
 		private int _selectionLength = 0;
 		private int _scrollPosition = 0;
@@ -177,6 +178,16 @@ namespace Mesen.GUI.Debugger
 			set
 			{
 				_showSingleLineContentNotes = value;
+				this.Invalidate();
+			}
+		}
+
+		public bool ShowCompactPrgAddresses
+		{
+			get { return _showCompactPrgAddresses; }
+			set
+			{
+				_showCompactPrgAddresses = value;
 				this.Invalidate();
 			}
 		}
@@ -483,10 +494,13 @@ namespace Mesen.GUI.Debugger
 				}
 			}
 		}
-
+		
 		private int GetMargin(Graphics g, bool getExtendedMargin)
 		{
 			int marginWidth = getExtendedMargin && this.ShowContentNotes && this.ShowSingleContentLineNotes ? _marginWidth + _extendedMarginWidth : _marginWidth;
+			if(ShowCompactPrgAddresses) {
+				marginWidth += 4;
+			}
 			return (this.ShowLineNumbers ? (int)(g.MeasureString("".PadLeft(marginWidth, 'W'), this.Font, int.MaxValue, StringFormat.GenericTypographic).Width) : 0) - 1;
 		}
 
@@ -965,9 +979,14 @@ namespace Mesen.GUI.Debugger
 				} else {
 					//Display line number
 					string lineNumber = _lineNumbers[currentLine] >= 0 ? _lineNumbers[currentLine].ToString(_showLineInHex ? "X4" : "") : "..";
+
+					if(ShowCompactPrgAddresses && _lineNumberNotes[currentLine].Length > 3) {
+						lineNumber += " [" + _lineNumberNotes[currentLine].Substring(0, _lineNumberNotes[currentLine].Length - 3) + "]";
+					}
+
 					float width = g.MeasureString(lineNumber, this.Font, int.MaxValue, StringFormat.GenericTypographic).Width;
 					g.DrawString(lineNumber, this.Font, numberBrush, marginLeft - width, positionY, StringFormat.GenericTypographic);
-
+					
 					if(this.ShowLineNumberNotes && !this.ShowSingleLineLineNumberNotes) {
 						//Display line note below line number
 						width = g.MeasureString(_lineNumberNotes[currentLine], _noteFont, int.MaxValue, StringFormat.GenericTypographic).Width;
