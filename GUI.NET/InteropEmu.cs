@@ -1551,6 +1551,8 @@ namespace Mesen.GUI
 
 		[MarshalAs(UnmanagedType.I1)]
 		public bool IsChrRam;
+
+		public UInt16 MapperId;
 	}
 
 	public enum RomFormat
@@ -1569,6 +1571,7 @@ namespace Mesen.GUI
 		public UInt32 PrgCrc32;
 		public RomFormat Format;
 		public bool IsChrRam;
+		public UInt16 MapperId;
 
 		public RomInfo(InteropRomInfo romInfo)
 		{
@@ -1577,6 +1580,7 @@ namespace Mesen.GUI
 			this.PrgCrc32 = romInfo.PrgCrc32;
 			this.Format = romInfo.Format;
 			this.IsChrRam = romInfo.IsChrRam;
+			this.MapperId = romInfo.MapperId;
 		}
 
 		public string GetRomName()

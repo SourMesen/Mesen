@@ -725,6 +725,11 @@ RomFormat BaseMapper::GetRomFormat()
 	return _romFormat;
 }
 
+uint16_t BaseMapper::GetMapperId()
+{
+	return _mapperID;
+}
+
 HashInfo BaseMapper::GetHashInfo()
 {
 	return _hashInfo;

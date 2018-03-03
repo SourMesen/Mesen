@@ -43,6 +43,9 @@ namespace Mesen.GUI.Debugger
 						_workspace.Breakpoints = new List<Breakpoint>();
 						_workspace.Labels = new List<CodeLabel>();
 						_workspace.WatchValues = new List<string>();
+						LabelManager.ResetLabels();
+						WatchManager.WatchEntries = _workspace.WatchValues;
+						BreakpointManager.SetBreakpoints(_workspace.Breakpoints);
 						_workspace.Save();
 						Clear();
 					}
@@ -63,7 +66,7 @@ namespace Mesen.GUI.Debugger
 					if(_workspace.Labels.Count == 0) {
 						LabelManager.ResetLabels();
 						if(!ConfigManager.Config.DebugInfo.DisableDefaultLabels) {
-							LabelManager.SetDefaultLabels(InteropEmu.FdsGetSideCount() > 0);
+							LabelManager.SetDefaultLabels(InteropEmu.GetRomInfo().MapperId);
 						}
 					} else {
 						LabelManager.ResetLabels();

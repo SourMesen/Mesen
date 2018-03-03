@@ -934,7 +934,18 @@ namespace Mesen.GUI.Debugger
 		{
 			if(MessageBox.Show("This operation will empty the watch window, remove all breakpoints, and reset labels to their default state." + Environment.NewLine + "Are you sure?", "", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK) {
 				DebugWorkspaceManager.ResetWorkspace();
+				UpdateWorkspace();
+				UpdateDebugger(false);
+			}
+		}
+
+		private void mnuResetLabels_Click(object sender, EventArgs e)
+		{
+			if(MessageBox.Show("This operation will reset labels to their default state." + Environment.NewLine + "Are you sure?", "", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK) {
 				LabelManager.ResetLabels();
+				if(!ConfigManager.Config.DebugInfo.DisableDefaultLabels) {
+					LabelManager.SetDefaultLabels(InteropEmu.GetRomInfo().MapperId);
+				}
 				UpdateWorkspace();
 				UpdateDebugger(false);
 			}

@@ -304,6 +304,15 @@ RomFormat Console::GetRomFormat()
 	}
 }
 
+uint16_t Console::GetMapperId()
+{
+	if(Instance->_mapper) {
+		return Instance->_mapper->GetMapperId();
+	} else {
+		return 0;
+	}
+}
+
 bool Console::IsChrRam()
 {
 	if(Instance->_mapper) {

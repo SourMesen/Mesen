@@ -124,6 +124,7 @@ class Console
 		static VirtualFile GetPatchFile();
 		static bool IsChrRam();
 		static RomFormat GetRomFormat();
+		static uint16_t GetMapperId();
 		static HashInfo GetHashInfo();
 		static NesModel GetModel();
 

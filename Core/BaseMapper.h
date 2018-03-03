@@ -175,6 +175,7 @@ public:
 	HashInfo GetHashInfo();
 	string GetRomName();
 	RomFormat GetRomFormat();
+	uint16_t GetMapperId();
 
 	__forceinline uint8_t ReadRAM(uint16_t addr) override;
 	uint8_t DebugReadRAM(uint16_t addr);

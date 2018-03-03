@@ -75,6 +75,7 @@ namespace InteropEmu {
 		uint32_t PrgCrc32;
 		RomFormat Format;
 		bool IsChrRam;
+		uint16_t MapperId;
 	};
 
 	extern "C" {
@@ -230,6 +231,7 @@ namespace InteropEmu {
 				romInfo.PrgCrc32 = Console::GetHashInfo().PrgCrc32Hash;
 				romInfo.Format = Console::GetRomFormat();
 				romInfo.IsChrRam = Console::IsChrRam();
+				romInfo.MapperId = Console::GetMapperId();
 			} else {
 				RomLoader romLoader(true);
 				if(romLoader.LoadFile(romPath)) {
@@ -241,6 +243,7 @@ namespace InteropEmu {
 					romInfo.PrgCrc32 = romData.PrgCrc32;
 					romInfo.Format = RomFormat::Unknown;
 					romInfo.IsChrRam = romData.ChrRom.size() == 0;
+					romInfo.MapperId = 0;
 				} else {
 					_returnString = "";
 					romInfo.RomName = _returnString.c_str();
@@ -248,6 +251,7 @@ namespace InteropEmu {
 					romInfo.PrgCrc32 = 0;
 					romInfo.Format = RomFormat::Unknown;
 					romInfo.IsChrRam = false;
+					romInfo.MapperId = 0;
 				}
 			}
 		}
