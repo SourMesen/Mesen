@@ -33,7 +33,7 @@ namespace Mesen.GUI.Debugger
 				this.Size = debugInfo.TraceLoggerSize;
 			}
 
-			txtTraceLog.Font = new Font(debugInfo.TraceFontFamily, debugInfo.TraceFontSize, debugInfo.TraceFontStyle);
+			txtTraceLog.BaseFont = new Font(debugInfo.TraceFontFamily, debugInfo.TraceFontSize, debugInfo.TraceFontStyle);
 			txtTraceLog.TextZoom = debugInfo.TraceTextZoom;
 
 			mnuAutoRefresh.Checked = debugInfo.TraceAutoRefresh;
@@ -300,7 +300,7 @@ namespace Mesen.GUI.Debugger
 
 		private void mnuSelectFont_Click(object sender, EventArgs e)
 		{
-			txtTraceLog.Font = FontDialogHelper.SelectFont(txtTraceLog.Font);
+			txtTraceLog.BaseFont = FontDialogHelper.SelectFont(txtTraceLog.BaseFont);
 		}
 	}
 }

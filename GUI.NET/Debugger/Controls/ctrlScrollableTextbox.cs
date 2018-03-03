@@ -101,7 +101,7 @@ namespace Mesen.GUI.Debugger
 		}
 
 		[Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-		public override Font Font
+		public Font BaseFont
 		{
 			get { return this.ctrlTextbox.BaseFont; }
 			set

@@ -22,15 +22,15 @@ namespace Mesen.GUI.Debugger.Controls
 
 		[Browsable(false)]
 		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-		public override Font Font
+		public Font BaseFont
 		{
-			get { return this.ScrollableTextbox.Font; }
-			set { this.ScrollableTextbox.Font = value; }
+			get { return this.ScrollableTextbox.BaseFont; }
+			set { this.ScrollableTextbox.BaseFont = value; }
 		}
 
 		public int TextZoom
 		{
-			get { return this.ScrollableTextbox.TextZoom; }
+			get { return this.ScrollableTextbox?.TextZoom ?? 100; }
 			set { this.ScrollableTextbox.TextZoom = value; }
 		}
 

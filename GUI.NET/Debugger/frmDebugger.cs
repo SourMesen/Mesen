@@ -52,8 +52,8 @@ namespace Mesen.GUI.Debugger
 			ctrlProfiler.OnFunctionSelected += ctrlProfiler_OnFunctionSelected;
 
 			Font font = new Font(ConfigManager.Config.DebugInfo.FontFamily, ConfigManager.Config.DebugInfo.FontSize, ConfigManager.Config.DebugInfo.FontStyle);
-			ctrlDebuggerCode.Font = font;
-			ctrlDebuggerCodeSplit.Font = font;
+			ctrlDebuggerCode.BaseFont = font;
+			ctrlDebuggerCodeSplit.BaseFont = font;
 
 			this.InitToolbar();
 
@@ -1187,8 +1187,8 @@ namespace Mesen.GUI.Debugger
 
 		private void mnuSelectFont_Click(object sender, EventArgs e)
 		{
-			ctrlDebuggerCode.Font = FontDialogHelper.SelectFont(ctrlDebuggerCode.Font);
-			ctrlDebuggerCodeSplit.Font = ctrlDebuggerCode.Font;
+			ctrlDebuggerCode.BaseFont = FontDialogHelper.SelectFont(ctrlDebuggerCode.Font);
+			ctrlDebuggerCodeSplit.BaseFont = ctrlDebuggerCode.BaseFont;
 		}
 	}
 }
