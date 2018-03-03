@@ -30,7 +30,7 @@ namespace Mesen.GUI.Debugger.Controls
 			}
 		}
 
-		public Font BaseFont { get => ctrlScrollableTextbox.Font; set => ctrlScrollableTextbox.Font = value; }
+		public Font BaseFont { get => ctrlScrollableTextbox.BaseFont; set => ctrlScrollableTextbox.BaseFont = value; }
 		public int TextZoom { get => ctrlScrollableTextbox.TextZoom; set => ctrlScrollableTextbox.TextZoom = value; }
 
 		public void RefreshData()

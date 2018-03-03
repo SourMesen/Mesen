@@ -119,6 +119,7 @@ namespace Mesen.GUI.Debugger
 			set {
 				if(this.ctrlTextbox.TextZoom != value) {
 					this.ctrlTextbox.TextZoom = value;
+					UpdateHorizontalScrollbar();
 					if(this.TextZoomChanged != null) {
 						this.TextZoomChanged(this, null);
 					}

@@ -137,7 +137,6 @@ namespace Mesen.GUI.Debugger
 			set
 			{
 				_baseFont = value;
-				UpdateHorizontalScrollWidth();
 				this.UpdateFont();
 				this.Invalidate();
 			}
@@ -170,6 +169,7 @@ namespace Mesen.GUI.Debugger
 			_font = new Font(this.BaseFont.FontFamily, this.BaseFont.Size * this.TextZoom / 100f, this.BaseFont.Style);
 			_noteFont = new Font(this.BaseFont.FontFamily, this.BaseFont.Size * this.TextZoom * 0.75f / 100f);
 			FontHeight = this._font.Height;
+			UpdateHorizontalScrollWidth();
 		}
 
 		public bool ShowSingleContentLineNotes

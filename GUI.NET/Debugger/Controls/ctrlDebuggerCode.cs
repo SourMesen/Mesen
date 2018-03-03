@@ -1096,7 +1096,7 @@ namespace Mesen.GUI.Debugger
 
 		class ScrollbarColorProvider : IScrollbarColorProvider
 		{
-			private Color _nesRamColor = Color.FromArgb(163, 222, 171);
+			private Color _nesRamColor = Color.FromArgb(213, 255, 213);
 			private Dictionary<int, Color> _breakpointColors = new Dictionary<int, Color>();
 
 			private ctrlDebuggerCode _code;
@@ -1139,8 +1139,8 @@ namespace Mesen.GUI.Debugger
 							}
 							return Color.White;
 
-						case 'W': return Color.LightSteelBlue;
-						case 'S': return Color.LightCoral;
+						case 'W': return Color.Lavender;
+						case 'S': return Color.MistyRose;
 					}
 				}
 				return Color.Transparent;

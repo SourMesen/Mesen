@@ -47,14 +47,18 @@ namespace Mesen.GUI.Debugger
 			// 
 			// vScrollBar
 			// 
+			this.vScrollBar.ColorProvider = null;
 			this.vScrollBar.Dock = System.Windows.Forms.DockStyle.Right;
 			this.vScrollBar.LargeChange = 20;
 			this.vScrollBar.Location = new System.Drawing.Point(490, 0);
 			this.vScrollBar.Maximum = 1;
+			this.vScrollBar.MaximumSize = new System.Drawing.Size(18, 0);
+			this.vScrollBar.MinimumSize = new System.Drawing.Size(18, 0);
 			this.vScrollBar.Name = "vScrollBar";
 			this.vScrollBar.Size = new System.Drawing.Size(18, 141);
 			this.vScrollBar.TabIndex = 0;
 			this.vScrollBar.Value = 0;
+			this.vScrollBar.VisibleLineCount = 1;
 			// 
 			// panelSearch
 			// 
@@ -148,13 +152,16 @@ namespace Mesen.GUI.Debugger
 			// ctrlTextbox
 			// 
 			this.ctrlTextbox.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.ctrlTextbox.HideSelection = false;
 			this.ctrlTextbox.HorizontalScrollWidth = 0;
 			this.ctrlTextbox.Location = new System.Drawing.Point(0, 0);
 			this.ctrlTextbox.Name = "ctrlTextbox";
+			this.ctrlTextbox.ShowCompactPrgAddresses = false;
 			this.ctrlTextbox.ShowContentNotes = false;
 			this.ctrlTextbox.ShowLineInHex = false;
 			this.ctrlTextbox.ShowLineNumberNotes = false;
 			this.ctrlTextbox.ShowLineNumbers = true;
+			this.ctrlTextbox.ShowMemoryValues = false;
 			this.ctrlTextbox.ShowSingleContentLineNotes = true;
 			this.ctrlTextbox.ShowSingleLineLineNumberNotes = false;
 			this.ctrlTextbox.Size = new System.Drawing.Size(490, 141);

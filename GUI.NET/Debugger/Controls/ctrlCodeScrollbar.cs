@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,6 +13,11 @@ namespace Mesen.GUI.Debugger.Controls
 	{
 		public event EventHandler ValueChanged;
 
+		private Timer _tmrScroll;
+		private bool _scrollUp = false;
+
+		private const int _buttonSize = 15;
+
 		private IScrollbarColorProvider _colorProvider = null;
 		public IScrollbarColorProvider ColorProvider
 		{
@@ -22,6 +28,22 @@ namespace Mesen.GUI.Debugger.Controls
 		public ctrlCodeScrollbar()
 		{
 			this.DoubleBuffered = true;
+			this._tmrScroll = new Timer();
+			this._tmrScroll.Tick += tmrScroll_Tick;
+		}
+
+		private void tmrScroll_Tick(object sender, EventArgs e)
+		{
+			_tmrScroll.Interval = 50;
+			if(this._scrollUp) {
+				if(this.Value > 0) {
+					this.Value--;
+				}
+			} else {
+				if(this.Value < this.Maximum) {
+					this.Value++;
+				}
+			}
 		}
 
 		protected override void OnPaint(PaintEventArgs e)
@@ -32,13 +54,16 @@ namespace Mesen.GUI.Debugger.Controls
 			int width = e.ClipRectangle.Width;
 			e.Graphics.FillRectangle(Brushes.DimGray, e.ClipRectangle);
 
+			int barTop = e.ClipRectangle.Top + _buttonSize;
+			int barHeight = this.Height - _buttonSize * 2;
+
 			float startPos = (float)this.Value / this.Maximum;
 			if(this.ColorProvider != null) {
 				Color prevBgColor = Color.White;
 				int drawHeight = 0;
-				for(int i = 0; i < this.Height; i++) {
-					float top = e.ClipRectangle.Top + i;
-					float position = (float)i / this.Height;
+				for(int i = 0; i < barHeight; i++) {
+					float top = barTop + i;
+					float position = (float)i / barHeight;
 					Color bgColor = this.ColorProvider.GetBackgroundColor(position);
 					if(bgColor != prevBgColor && i > 0) {
 						using(Brush brush = new SolidBrush(prevBgColor)) {
@@ -53,38 +78,38 @@ namespace Mesen.GUI.Debugger.Controls
 					}
 				}
 				using(Brush brush = new SolidBrush(prevBgColor)) {
-					e.Graphics.FillRectangle(brush, left + 1, e.ClipRectangle.Bottom - drawHeight, width - 1, drawHeight);
+					e.Graphics.FillRectangle(brush, left + 1, barTop + barHeight- drawHeight, width - 1, drawHeight);
 				}
 			} else {
-				e.Graphics.FillRectangle(Brushes.White, left + 1, e.ClipRectangle.Top, width - 1, e.ClipRectangle.Height);
+				e.Graphics.FillRectangle(Brushes.White, left + 1, barTop, width - 1, barHeight);
 			}
 
-			float highlightTop = e.ClipRectangle.Top + e.ClipRectangle.Height * startPos - HighlightOffset;
+			float highlightTop = barTop + barHeight * startPos - HighlightOffset;
 			using(SolidBrush brush = new SolidBrush(Color.FromArgb(120, 220, 220, 255))) {
-				e.Graphics.FillRectangle(brush, left + 1, highlightTop, width, HighlightHeight);
-				e.Graphics.DrawRectangle(Pens.DarkSlateGray, left + 1, highlightTop, width - 2, HighlightHeight);
-				e.Graphics.DrawRectangle(Pens.Gray, left + 2, highlightTop + 1, width - 4, HighlightHeight - 2);
+				e.Graphics.FillRectangle(brush, left + 1, highlightTop, width, HighlightHeight - 2);
+				e.Graphics.DrawRectangle(Pens.DarkSlateGray, left + 1, highlightTop, width - 2, HighlightHeight - 2);
+				e.Graphics.DrawRectangle(Pens.Gray, left + 2, highlightTop + 1, width - 4, HighlightHeight - 4);
 			}
 
 			if(this.ColorProvider != null) {
 				int selectedIndex = this.ColorProvider.GetSelectedLine();
 				if(selectedIndex >= 0) {
-					int selectedTop = selectedIndex * this.Height / this.Maximum;
+					int selectedTop = selectedIndex * barHeight / this.Maximum + barTop;
 					e.Graphics.FillRectangle(Brushes.LightBlue, left + 1, selectedTop - 1, width - 2, 3);
 					e.Graphics.DrawRectangle(Pens.DimGray, left + 1, selectedTop - 1, width - 2, 3);
 				}
 
 				int activeIndex = this.ColorProvider.GetActiveLine();
 				if(activeIndex >= 0) {
-					int activeTop = activeIndex * this.Height / this.Maximum;
+					int activeTop = activeIndex * barHeight / this.Maximum + barTop;
 					e.Graphics.FillRectangle(Brushes.Yellow, left + 1, activeTop - 1, width - 2, 3);
 					e.Graphics.DrawRectangle(Pens.DimGray, left + 1, activeTop - 1, width - 2, 3);
 				}
 
-				int linesPerPixel = (int)Math.Ceiling((float)this.Maximum / this.Height);
-				for(int i = 0; i < e.ClipRectangle.Height; i++) {
-					float top = e.ClipRectangle.Top + i;
-					float position = (float)i / this.Height;
+				int linesPerPixel = (int)Math.Ceiling((float)this.Maximum / barHeight);
+				for(int i = 0; i < barHeight; i++) {
+					float top = barTop + i;
+					float position = (float)i / barHeight;
 					Color markerColor = this.ColorProvider.GetMarkerColor(position, linesPerPixel);
 					if(markerColor != Color.Transparent) {
 						using(Brush brush = new SolidBrush(markerColor)) {
@@ -93,19 +118,52 @@ namespace Mesen.GUI.Debugger.Controls
 					}
 				}
 			}
+
+			int arrowWidth = 10;
+			int arrowHeight = 5;
+			e.Graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
+			e.Graphics.FillRectangle(Brushes.Gainsboro, e.ClipRectangle.Left + 1, e.ClipRectangle.Top, this.Width - 1, _buttonSize);
+			e.Graphics.FillRectangle(Brushes.Gainsboro, e.ClipRectangle.Left + 1, e.ClipRectangle.Bottom - _buttonSize, this.Width - 1, _buttonSize);
+			e.Graphics.DrawLine(Pens.DimGray, e.ClipRectangle.Left + 1, e.ClipRectangle.Top + _buttonSize, e.ClipRectangle.Left + width, e.ClipRectangle.Top + _buttonSize);
+			e.Graphics.DrawLine(Pens.DimGray, e.ClipRectangle.Left + 1, e.ClipRectangle.Bottom - _buttonSize, e.ClipRectangle.Left + width, e.ClipRectangle.Bottom - _buttonSize);
+			e.Graphics.DrawLine(Pens.DimGray, e.ClipRectangle.Left + 1, e.ClipRectangle.Bottom, e.ClipRectangle.Left + width, e.ClipRectangle.Bottom);
+			e.Graphics.TranslateTransform(5, (_buttonSize - arrowHeight) / 2);
+			e.Graphics.FillPolygon(Brushes.DimGray, new Point[] { new Point(left, e.ClipRectangle.Top + arrowHeight), new Point(left + arrowWidth, e.ClipRectangle.Top + arrowHeight), new Point(left + arrowWidth / 2, e.ClipRectangle.Top) }, FillMode.Winding);
+			e.Graphics.TranslateTransform(0, -(_buttonSize - arrowHeight));
+			e.Graphics.FillPolygon(Brushes.DimGray, new Point[] { new Point(left, e.ClipRectangle.Bottom - arrowHeight), new Point(left + arrowWidth, e.ClipRectangle.Bottom - arrowHeight), new Point(left + arrowWidth / 2, e.ClipRectangle.Bottom) }, FillMode.Winding);
 		}
 
 		private bool _mouseDown = false;
 		protected override void OnMouseDown(MouseEventArgs e)
 		{
 			base.OnMouseDown(e);
-			this.UpdatePosition(e.Y);
-			this._mouseDown = true;
+
+			if(e.Y > _buttonSize && e.Y < (this.Height - _buttonSize)) {
+				this.UpdatePosition(e.Y);
+				this._mouseDown = true;
+			} else {
+				if(e.Y <= _buttonSize) {
+					if(this.Value > 0) {
+						this._scrollUp = true;
+						this.Value--;
+						this._tmrScroll.Interval = 350;
+						this._tmrScroll.Start();
+					}
+				} else {
+					if(this.Value < this.Maximum) {
+						this._scrollUp = false;
+						this.Value++;
+						this._tmrScroll.Interval = 350;
+						this._tmrScroll.Start();
+					}
+				}
+			}
 
 			if(_codeTooltip != null) {
 				_codeTooltip.Close();
 				_codeTooltip = null;
 			}
+
 			_lastPreviewScrollPosition = -1;
 		}
 
@@ -113,6 +171,7 @@ namespace Mesen.GUI.Debugger.Controls
 		{
 			base.OnMouseUp(e);
 			this._mouseDown = false;
+			this._tmrScroll.Stop();
 		}
 
 		frmCodeTooltip _codeTooltip = null;
@@ -123,8 +182,8 @@ namespace Mesen.GUI.Debugger.Controls
 			if(this._mouseDown) {
 				this.UpdatePosition(e.Y);
 			} else {
-				if(this.ColorProvider != null) {
-					int scrollPosition = Math.Max(0, (e.Y - this.Top) * this.Maximum / this.Height);
+				if(this.ColorProvider != null && e.Y > _buttonSize && e.Y < (this.Height - _buttonSize)) {
+					int scrollPosition = Math.Max(0, (e.Y - this.Top - _buttonSize) * this.Maximum / (this.Height - _buttonSize * 2));
 					if(_lastPreviewScrollPosition != scrollPosition) {
 						Point p = this.PointToScreen(new Point(this.ClientRectangle.Right, e.Y));
 						if(_codeTooltip == null) {
@@ -151,9 +210,10 @@ namespace Mesen.GUI.Debugger.Controls
 				_codeTooltip = null;
 			}
 			_lastPreviewScrollPosition = -1;
+			_tmrScroll.Stop();
 		}
 
-		private int HighlightHeight { get { return Math.Max(6, (int)(((float)this.VisibleLineCount / this.Maximum) * this.Height)); } }
+		private int HighlightHeight { get { return Math.Max(8, (int)(((float)this.VisibleLineCount / this.Maximum) * this.Height)); } }
 		private int HighlightOffset
 		{
 			get
@@ -169,7 +229,7 @@ namespace Mesen.GUI.Debugger.Controls
 
 		private void UpdatePosition(int y)
 		{
-			this.Value = Math.Max(0 , y - HighlightHeight / 2 + HighlightOffset - this.Top) * this.Maximum / this.Height;
+			this.Value = Math.Max(0 , y - HighlightHeight / 2 + HighlightOffset - this.Top - _buttonSize) * this.Maximum / (this.Height - _buttonSize * 2);
 		}
 
 		private int _value = 0;
