@@ -499,19 +499,21 @@ string Disassembler::GetCode(AddressTypeInfo &addressInfo, uint32_t endAddr, uin
 	bool emptyBlock = false;
 	bool showEitherDataType = showVerifiedData || showUnidentifiedData;
 	
-	auto outputBytes = [this, &showEitherDataType, &inVerifiedDataBlock, &output, &dbBuffer, &dbRelativeAddr, &dbAbsoluteAddr, &byteCount, memoryType]() {
+	auto outputBytes = [this, &showEitherDataType, &addressInfo, &inVerifiedDataBlock, &output, &dbBuffer, &dbRelativeAddr, &dbAbsoluteAddr, &byteCount, memoryType]() {
+		DataType type = addressInfo.Type == AddressType::PrgRom ? (showEitherDataType && inVerifiedDataBlock ? DataType::VerifiedData : DataType::UnidentifiedData) : DataType::VerifiedCode;
 		if(byteCount > 0) {
-			GetLine(output, dbBuffer, "", dbRelativeAddr, dbAbsoluteAddr, showEitherDataType && inVerifiedDataBlock ? DataType::VerifiedData : DataType::UnidentifiedData, memoryType);
+			GetLine(output, dbBuffer, "", dbRelativeAddr, dbAbsoluteAddr, type, memoryType);
 			byteCount = 0;
 		}
 	};
 
-	auto endDataBlock = [this, outputBytes, &showEitherDataType, &inVerifiedDataBlock, &emptyBlock, &output, &addr, &insideDataBlock, &memoryAddr, memoryType]() {
+	auto endDataBlock = [this, outputBytes, &addressInfo, &showEitherDataType, &inVerifiedDataBlock, &emptyBlock, &output, &addr, &insideDataBlock, &memoryAddr, memoryType]() {
 		outputBytes();
+		DataType type = addressInfo.Type == AddressType::PrgRom ? (showEitherDataType && inVerifiedDataBlock ? DataType::VerifiedData : DataType::UnidentifiedData) : DataType::VerifiedCode;
 		if(emptyBlock) {
-			GetLine(output, "", "", -1, -1, showEitherDataType && inVerifiedDataBlock ? DataType::VerifiedData : DataType::UnidentifiedData, memoryType);
+			GetLine(output, "", "", -1, -1, type, memoryType);
 		}
-		GetLine(output, "----", "", emptyBlock ? (uint16_t)(memoryAddr - 1) : -1, emptyBlock ? addr - 1 : -1, showEitherDataType && inVerifiedDataBlock ? DataType::VerifiedData : DataType::UnidentifiedData, memoryType);
+		GetLine(output, "----", "", emptyBlock ? (uint16_t)(memoryAddr - 1) : -1, emptyBlock ? addr - 1 : -1, type, memoryType);
 		insideDataBlock = false;
 	};
 
@@ -531,7 +533,7 @@ string Disassembler::GetCode(AddressTypeInfo &addressInfo, uint32_t endAddr, uin
 		isVerifiedData = addressInfo.Type == AddressType::PrgRom && cdl->IsData(addr&mask);
 		info = infoRef.get();
 		if(!info && (disassembleUnidentifiedData && !isVerifiedData || disassembleVerifiedData && isVerifiedData)) {
-			dataType = isVerifiedData ? DataType::VerifiedData : DataType::UnidentifiedData;
+			dataType = isVerifiedData ? DataType::VerifiedData : (addressInfo.Type == AddressType::PrgRom ? DataType::UnidentifiedData : DataType::VerifiedCode);
 			info = new DisassemblyInfo(source + (addr & mask), false);
 		} else if(info) {
 			dataType = DataType::VerifiedCode;
@@ -591,12 +593,23 @@ string Disassembler::GetCode(AddressTypeInfo &addressInfo, uint32_t endAddr, uin
 			}
 
 			inVerifiedDataBlock = isVerifiedData;
-			dataType = showEitherDataType && inVerifiedDataBlock ? DataType::VerifiedData : DataType::UnidentifiedData;
+			dataType = addressInfo.Type == AddressType::PrgRom ? (showEitherDataType && inVerifiedDataBlock ? DataType::VerifiedData : DataType::UnidentifiedData) : DataType::VerifiedCode;
 
 			if(!insideDataBlock) {
 				//Output block header 
 				if(label.empty()) {
-					GetLine(output, showEitherDataType && inVerifiedDataBlock ? "__data block__" : "__unidentified block__", "", showData ? -1 : memoryAddr, showData ? -1 : addr, dataType, memoryType);
+					string blockName;
+					if(addressInfo.Type == AddressType::InternalRam) {
+						blockName = "__NES RAM__";
+					} else if(addressInfo.Type == AddressType::SaveRam) {
+						blockName = "__Save RAM__";
+					} else if(addressInfo.Type == AddressType::WorkRam) {
+						blockName = "__Work RAM__";
+					} else {
+						blockName = showEitherDataType && inVerifiedDataBlock ? "__data block__" : "__unidentified block__";
+					}
+
+					GetLine(output, blockName, "", showData ? -1 : memoryAddr, showData ? -1 : addr, dataType, memoryType);
 				} else {
 					GetLine(output, "__" + label + "__", "", showData ? -1 : memoryAddr, showData ? -1 : addr, dataType, memoryType);
 				}
