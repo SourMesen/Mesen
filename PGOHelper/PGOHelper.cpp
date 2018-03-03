@@ -41,6 +41,7 @@ extern "C" {
 	void __stdcall LoadROM(const char* filename, char* patchFile);
 	void __stdcall Run();
 	void __stdcall Stop();
+	void __stdcall DebugInitialize();
 }
 
 int main(int argc, char* argv[])
@@ -93,6 +94,7 @@ int main(int argc, char* argv[])
 			std::cout << "Running: " << testRoms[i] << std::endl;
 			SetVideoFilter(filterTypes[i % 13]);
 			LoadROM(testRoms[i], "");
+			DebugInitialize();
 		}
 		std::this_thread::sleep_for(std::chrono::duration<int, std::milli>(5000));
 		Stop();
