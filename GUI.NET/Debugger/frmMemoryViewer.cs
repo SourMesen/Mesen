@@ -36,33 +36,39 @@ namespace Mesen.GUI.Debugger
 		{
 			base.OnLoad(e);
 
-			this.mnuAutoRefresh.Checked = ConfigManager.Config.DebugInfo.RamAutoRefresh;
-			this.mnuHighDensityMode.Checked = ConfigManager.Config.DebugInfo.RamHighDensityTextMode;
-			this.mnuEnablePerByteNavigation.Checked = ConfigManager.Config.DebugInfo.RamEnablePerByteNavigation;
+			DebugInfo config = ConfigManager.Config.DebugInfo;
+
+			this.mnuAutoRefresh.Checked = config.RamAutoRefresh;
+			this.mnuHighDensityMode.Checked = config.RamHighDensityTextMode;
+			this.mnuEnablePerByteNavigation.Checked = config.RamEnablePerByteNavigation;
 			UpdateRefreshSpeedMenu();
 
-			this.mnuIgnoreRedundantWrites.Checked = ConfigManager.Config.DebugInfo.RamIgnoreRedundantWrites;
+			this.mnuIgnoreRedundantWrites.Checked = config.RamIgnoreRedundantWrites;
 			this.UpdateFlags();
 
-			this.mnuShowCharacters.Checked = ConfigManager.Config.DebugInfo.RamShowCharacters;
-			this.mnuShowLabelInfoOnMouseOver.Checked = ConfigManager.Config.DebugInfo.RamShowLabelInfo;
+			this.mnuShowCharacters.Checked = config.RamShowCharacters;
+			this.mnuShowLabelInfoOnMouseOver.Checked = config.RamShowLabelInfo;
 
-			this.ctrlHexViewer.SetFontSize((int)ConfigManager.Config.DebugInfo.RamFontSize);
-			
-			this.mnuHighlightExecution.Checked = ConfigManager.Config.DebugInfo.RamHighlightExecution;
-			this.mnuHightlightReads.Checked = ConfigManager.Config.DebugInfo.RamHighlightReads;
-			this.mnuHighlightWrites.Checked = ConfigManager.Config.DebugInfo.RamHighlightWrites;
-			this.mnuHideUnusedBytes.Checked = ConfigManager.Config.DebugInfo.RamHideUnusedBytes;
-			this.mnuHideReadBytes.Checked = ConfigManager.Config.DebugInfo.RamHideReadBytes;
-			this.mnuHideWrittenBytes.Checked = ConfigManager.Config.DebugInfo.RamHideWrittenBytes;
-			this.mnuHideExecutedBytes.Checked = ConfigManager.Config.DebugInfo.RamHideExecutedBytes;
+			this.ctrlHexViewer.TextZoom = config.RamTextZoom;
+			this.ctrlHexViewer.BaseFont = new Font(config.RamFontFamily, config.RamFontSize, config.RamFontStyle);
 
-			this.mnuHighlightLabelledBytes.Checked = ConfigManager.Config.DebugInfo.RamHighlightLabelledBytes;
-			this.mnuHighlightChrDrawnBytes.Checked = ConfigManager.Config.DebugInfo.RamHighlightChrDrawnBytes;
-			this.mnuHighlightChrReadBytes.Checked = ConfigManager.Config.DebugInfo.RamHighlightChrReadBytes;
-			this.mnuHighlightCodeBytes.Checked = ConfigManager.Config.DebugInfo.RamHighlightCodeBytes;
-			this.mnuHighlightDataBytes.Checked = ConfigManager.Config.DebugInfo.RamHighlightDataBytes;
-			this.mnuHighlightDmcDataBytes.Checked = ConfigManager.Config.DebugInfo.RamHighlightDmcDataBytes;
+			this.ctrlMemoryAccessCounters.BaseFont = new Font(config.RamFontFamily, config.RamFontSize, config.RamFontStyle);
+			this.ctrlMemoryAccessCounters.TextZoom = config.RamTextZoom;
+
+			this.mnuHighlightExecution.Checked = config.RamHighlightExecution;
+			this.mnuHightlightReads.Checked = config.RamHighlightReads;
+			this.mnuHighlightWrites.Checked = config.RamHighlightWrites;
+			this.mnuHideUnusedBytes.Checked = config.RamHideUnusedBytes;
+			this.mnuHideReadBytes.Checked = config.RamHideReadBytes;
+			this.mnuHideWrittenBytes.Checked = config.RamHideWrittenBytes;
+			this.mnuHideExecutedBytes.Checked = config.RamHideExecutedBytes;
+
+			this.mnuHighlightLabelledBytes.Checked = config.RamHighlightLabelledBytes;
+			this.mnuHighlightChrDrawnBytes.Checked = config.RamHighlightChrDrawnBytes;
+			this.mnuHighlightChrReadBytes.Checked = config.RamHighlightChrReadBytes;
+			this.mnuHighlightCodeBytes.Checked = config.RamHighlightCodeBytes;
+			this.mnuHighlightDataBytes.Checked = config.RamHighlightDataBytes;
+			this.mnuHighlightDmcDataBytes.Checked = config.RamHighlightDmcDataBytes;
 
 			this.UpdateFadeOptions();
 
@@ -88,6 +94,9 @@ namespace Mesen.GUI.Debugger
 		{
 			base.OnFormClosing(e);
 			UpdateConfig();
+			ConfigManager.Config.DebugInfo.RamFontFamily = ctrlHexViewer.BaseFont.FontFamily.Name;
+			ConfigManager.Config.DebugInfo.RamFontStyle = ctrlHexViewer.BaseFont.Style;
+			ConfigManager.Config.DebugInfo.RamFontSize = ctrlHexViewer.BaseFont.Size;
 			ConfigManager.Config.DebugInfo.MemoryViewerSize = this.WindowState == FormWindowState.Maximized ? this.RestoreBounds.Size : this.Size;
 			ConfigManager.ApplyChanges();
 			DebugWorkspaceManager.SaveWorkspace();
@@ -284,19 +293,22 @@ namespace Mesen.GUI.Debugger
 
 		private void mnuIncreaseFontSize_Click(object sender, EventArgs e)
 		{
-			this.ctrlHexViewer.IncreaseFontSize();
+			this.ctrlHexViewer.TextZoom += 10;
+			this.ctrlMemoryAccessCounters.TextZoom += 10;
 			this.UpdateConfig();
 		}
 
 		private void mnuDecreaseFontSize_Click(object sender, EventArgs e)
 		{
-			this.ctrlHexViewer.DecreaseFontSize();
+			this.ctrlHexViewer.TextZoom -= 10;
+			this.ctrlMemoryAccessCounters.TextZoom -= 10;
 			this.UpdateConfig();
 		}
 
 		private void mnuResetFontSize_Click(object sender, EventArgs e)
 		{
-			this.ctrlHexViewer.ResetFontSize();
+			this.ctrlHexViewer.TextZoom = 100;
+			this.ctrlMemoryAccessCounters.TextZoom = 100;
 			this.UpdateConfig();
 		}
 
@@ -313,7 +325,11 @@ namespace Mesen.GUI.Debugger
 
 			ConfigManager.Config.DebugInfo.RamShowCharacters = this.mnuShowCharacters.Checked;
 			ConfigManager.Config.DebugInfo.RamShowLabelInfo = this.mnuShowLabelInfoOnMouseOver.Checked;
-			ConfigManager.Config.DebugInfo.RamFontSize = this.ctrlHexViewer.HexFont.Size;
+
+			ConfigManager.Config.DebugInfo.RamTextZoom = this.ctrlHexViewer.TextZoom;
+			ConfigManager.Config.DebugInfo.RamFontFamily = this.ctrlHexViewer.BaseFont.FontFamily.Name;
+			ConfigManager.Config.DebugInfo.RamFontSize = this.ctrlHexViewer.BaseFont.Size;
+			ConfigManager.Config.DebugInfo.RamFontStyle = this.ctrlHexViewer.BaseFont.Style;
 
 			ConfigManager.Config.DebugInfo.RamHighlightExecution = this.mnuHighlightExecution.Checked;
 			ConfigManager.Config.DebugInfo.RamHighlightReads = this.mnuHightlightReads.Checked;
@@ -589,6 +605,12 @@ namespace Mesen.GUI.Debugger
 			ConfigManager.Config.DebugInfo.RamEnablePerByteNavigation = mnuEnablePerByteNavigation.Checked;
 			ConfigManager.ApplyChanges();
 			ctrlHexViewer.EnablePerByteNavigation = ConfigManager.Config.DebugInfo.RamEnablePerByteNavigation;
+		}
+
+		private void mnuSelectFont_Click(object sender, EventArgs e)
+		{
+			ctrlHexViewer.BaseFont = FontDialogHelper.SelectFont(ctrlHexViewer.BaseFont);
+			ctrlMemoryAccessCounters.BaseFont = ctrlHexViewer.BaseFont;
 		}
 	}
 }

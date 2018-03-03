@@ -78,6 +78,8 @@
 			this.mnuDecreaseFontSize = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuResetFontSize = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem12 = new System.Windows.Forms.ToolStripSeparator();
+			this.mnuSelectFont = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem13 = new System.Windows.Forms.ToolStripSeparator();
 			this.mnuHighDensityMode = new System.Windows.Forms.ToolStripMenuItem();
 			this.autorefreshSpeedToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuAutoRefreshLow = new System.Windows.Forms.ToolStripMenuItem();
@@ -115,12 +117,14 @@
 			// 
 			// ctrlHexViewer
 			// 
+			this.ctrlHexViewer.BaseFont = new System.Drawing.Font("Consolas", 10F);
 			this.ctrlHexViewer.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.ctrlHexViewer.Location = new System.Drawing.Point(0, 0);
 			this.ctrlHexViewer.Margin = new System.Windows.Forms.Padding(0);
 			this.ctrlHexViewer.Name = "ctrlHexViewer";
 			this.ctrlHexViewer.Size = new System.Drawing.Size(606, 343);
 			this.ctrlHexViewer.TabIndex = 0;
+			this.ctrlHexViewer.TextZoom = 100;
 			this.ctrlHexViewer.RequiredWidthChanged += new System.EventHandler(this.ctrlHexViewer_RequiredWidthChanged);
 			this.ctrlHexViewer.ByteMouseHover += new Mesen.GUI.Debugger.Controls.ctrlHexViewer.ByteMouseHoverHandler(this.ctrlHexViewer_ByteMouseHover);
 			// 
@@ -483,11 +487,13 @@
             this.mnuDecreaseFontSize,
             this.mnuResetFontSize,
             this.toolStripMenuItem12,
+            this.mnuSelectFont,
+            this.toolStripMenuItem13,
             this.mnuHighDensityMode});
 			this.fontSizeToolStripMenuItem.Image = global::Mesen.GUI.Properties.Resources.Font;
 			this.fontSizeToolStripMenuItem.Name = "fontSizeToolStripMenuItem";
 			this.fontSizeToolStripMenuItem.Size = new System.Drawing.Size(256, 22);
-			this.fontSizeToolStripMenuItem.Text = "Text Size";
+			this.fontSizeToolStripMenuItem.Text = "Font Options";
 			// 
 			// mnuIncreaseFontSize
 			// 
@@ -520,6 +526,18 @@
 			// 
 			this.toolStripMenuItem12.Name = "toolStripMenuItem12";
 			this.toolStripMenuItem12.Size = new System.Drawing.Size(214, 6);
+			// 
+			// mnuSelectFont
+			// 
+			this.mnuSelectFont.Name = "mnuSelectFont";
+			this.mnuSelectFont.Size = new System.Drawing.Size(217, 22);
+			this.mnuSelectFont.Text = "Select Font...";
+			this.mnuSelectFont.Click += new System.EventHandler(this.mnuSelectFont_Click);
+			// 
+			// toolStripMenuItem13
+			// 
+			this.toolStripMenuItem13.Name = "toolStripMenuItem13";
+			this.toolStripMenuItem13.Size = new System.Drawing.Size(214, 6);
 			// 
 			// mnuHighDensityMode
 			// 
@@ -848,5 +866,7 @@
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem12;
 		private System.Windows.Forms.ToolStripMenuItem mnuHighDensityMode;
 		private System.Windows.Forms.ToolStripMenuItem mnuEnablePerByteNavigation;
+		private System.Windows.Forms.ToolStripMenuItem mnuSelectFont;
+		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem13;
 	}
 }

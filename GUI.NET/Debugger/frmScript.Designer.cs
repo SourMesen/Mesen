@@ -78,6 +78,8 @@
 			this.statusStrip1 = new System.Windows.Forms.StatusStrip();
 			this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
 			this.lblScriptActive = new System.Windows.Forms.ToolStripStatusLabel();
+			this.toolStripMenuItem6 = new System.Windows.Forms.ToolStripSeparator();
+			this.mnuSelectFont = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuMain.SuspendLayout();
 			this.toolStrip1.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.txtScriptContent)).BeginInit();
@@ -190,11 +192,13 @@
 			this.fontSizeToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.mnuIncreaseFontSize,
             this.mnuDecreaseFontSize,
-            this.mnuResetFontSize});
+            this.mnuResetFontSize,
+            this.toolStripMenuItem6,
+            this.mnuSelectFont});
 			this.fontSizeToolStripMenuItem.Image = global::Mesen.GUI.Properties.Resources.Font;
 			this.fontSizeToolStripMenuItem.Name = "fontSizeToolStripMenuItem";
 			this.fontSizeToolStripMenuItem.Size = new System.Drawing.Size(173, 22);
-			this.fontSizeToolStripMenuItem.Text = "Text Size";
+			this.fontSizeToolStripMenuItem.Text = "Font Options";
 			// 
 			// mnuIncreaseFontSize
 			// 
@@ -202,7 +206,7 @@
 			this.mnuIncreaseFontSize.ShortcutKeyDisplayString = "Ctrl++";
 			this.mnuIncreaseFontSize.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Oemplus)));
 			this.mnuIncreaseFontSize.Size = new System.Drawing.Size(197, 22);
-			this.mnuIncreaseFontSize.Text = "Increase";
+			this.mnuIncreaseFontSize.Text = "Increase Size";
 			this.mnuIncreaseFontSize.Click += new System.EventHandler(this.mnuIncreaseFontSize_Click);
 			// 
 			// mnuDecreaseFontSize
@@ -211,7 +215,7 @@
 			this.mnuDecreaseFontSize.ShortcutKeyDisplayString = "Ctrl+-";
 			this.mnuDecreaseFontSize.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.OemMinus)));
 			this.mnuDecreaseFontSize.Size = new System.Drawing.Size(197, 22);
-			this.mnuDecreaseFontSize.Text = "Decrease";
+			this.mnuDecreaseFontSize.Text = "Decrease Size";
 			this.mnuDecreaseFontSize.Click += new System.EventHandler(this.mnuDecreaseFontSize_Click);
 			// 
 			// mnuResetFontSize
@@ -392,7 +396,7 @@
         '\'',
         '\''};
 			this.txtScriptContent.AutoIndentChars = false;
-			this.txtScriptContent.AutoIndentCharsPatterns = "\n^\\s*[\\w\\.]+(\\s\\w+)?\\s*(?<range>=)\\s*(?<range>.+)\n";
+			this.txtScriptContent.AutoIndentCharsPatterns = "\r\n^\\s*[\\w\\.]+(\\s\\w+)?\\s*(?<range>=)\\s*(?<range>.+)\r\n";
 			this.txtScriptContent.AutoIndentExistingLines = false;
 			this.txtScriptContent.AutoScrollMinSize = new System.Drawing.Size(43, 14);
 			this.txtScriptContent.BackBrush = null;
@@ -405,6 +409,7 @@
 			this.txtScriptContent.Cursor = System.Windows.Forms.Cursors.IBeam;
 			this.txtScriptContent.DisabledColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
 			this.txtScriptContent.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.txtScriptContent.Font = new System.Drawing.Font("Courier New", 9.75F);
 			this.txtScriptContent.IsReplaceMode = false;
 			this.txtScriptContent.Language = FastColoredTextBoxNS.Language.Lua;
 			this.txtScriptContent.LeftBracket = '(';
@@ -535,6 +540,18 @@
 			this.lblScriptActive.Text = "Script is running";
 			this.lblScriptActive.Visible = false;
 			// 
+			// toolStripMenuItem6
+			// 
+			this.toolStripMenuItem6.Name = "toolStripMenuItem6";
+			this.toolStripMenuItem6.Size = new System.Drawing.Size(194, 6);
+			// 
+			// mnuSelectFont
+			// 
+			this.mnuSelectFont.Name = "mnuSelectFont";
+			this.mnuSelectFont.Size = new System.Drawing.Size(197, 22);
+			this.mnuSelectFont.Text = "Select Font...";
+			this.mnuSelectFont.Click += new System.EventHandler(this.mnuSelectFont_Click);
+			// 
 			// frmScript
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -614,5 +631,7 @@
 		private System.Windows.Forms.ToolStripMenuItem mnuBlankWindow;
 		private System.Windows.Forms.ToolStripMenuItem mnuTutorialScript;
 		private System.Windows.Forms.ToolStripMenuItem mnuAutoLoadLastScript;
+		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem6;
+		private System.Windows.Forms.ToolStripMenuItem mnuSelectFont;
 	}
 }

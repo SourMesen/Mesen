@@ -24,7 +24,7 @@ namespace Mesen.GUI.Debugger.Controls
 		{
 			InitializeComponent();
 
-			this.ctrlHexBox.Font = new Font(BaseControl.MonospaceFontFamily, 10, FontStyle.Regular);
+			this.BaseFont = new Font(BaseControl.MonospaceFontFamily, 10, FontStyle.Regular);
 			this.ctrlHexBox.SelectionForeColor = Color.White;
 			this.ctrlHexBox.SelectionBackColor = Color.FromArgb(31, 123, 205);
 			this.ctrlHexBox.ShadowSelectionColor = Color.FromArgb(100, 60, 128, 200);
@@ -100,26 +100,36 @@ namespace Mesen.GUI.Debugger.Controls
 			get { return this.ctrlHexBox.Font; }
 		}
 
-		public void IncreaseFontSize()
+		private int _textZoom = 100;
+		public int TextZoom
 		{
-			this.SetFontSize(Math.Min(40, this.ctrlHexBox.Font.Size + 1));
+			get { return _textZoom; }
+			set
+			{
+				if(value >= 30 && value <= 500) {
+					_textZoom = value;
+					this.UpdateFont();
+				}
+			}
 		}
 
-		public void DecreaseFontSize()
-		{
-			this.SetFontSize(Math.Max(6, this.ctrlHexBox.Font.Size - 1));
+		private Font _baseFont = new Font(BaseControl.MonospaceFontFamily, BaseControl.DefaultFontSize, FontStyle.Regular); 
+		public Font BaseFont {
+			get { return _baseFont; }
+			set
+			{
+				if(!value.Equals(_baseFont)) {
+					_baseFont = value;
+					this.UpdateFont();
+				}
+			}
 		}
 
-		public void SetFontSize(float size)
+		public void UpdateFont()
 		{
-			this.ctrlHexBox.Font = new Font(BaseControl.MonospaceFontFamily, size);
+			this.ctrlHexBox.Font = new Font(BaseFont.FontFamily, BaseFont.Size * _textZoom / 100f, BaseFont.Style);
 		}
-
-		public void ResetFontSize()
-		{
-			this.SetFontSize(BaseControl.DefaultFontSize);
-		}
-
+		
 		public void GoToAddress(int address)
 		{
 			this.ctrlHexBox.ScrollByteIntoView(GetData().Length - 1);
@@ -182,9 +192,9 @@ namespace Mesen.GUI.Debugger.Controls
 			switch(keyData) {
 				case Keys.Control | Keys.F: this.OpenSearchBox(true); return true;
 				case Keys.Escape: this.CloseSearchBox(); return true;
-				case Keys.Control | Keys.Oemplus: this.IncreaseFontSize(); return true;
-				case Keys.Control | Keys.OemMinus: this.DecreaseFontSize(); return true;
-				case Keys.Control | Keys.D0: this.ResetFontSize(); return true;
+				case Keys.Control | Keys.Oemplus: this.TextZoom += 10; return true;
+				case Keys.Control | Keys.OemMinus: this.TextZoom -= 10; return true;
+				case Keys.Control | Keys.D0: this.TextZoom = 100; return true;
 			}
 
 			return base.ProcessCmdKey(ref msg, keyData);

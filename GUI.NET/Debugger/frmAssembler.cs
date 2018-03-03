@@ -32,13 +32,15 @@ namespace Mesen.GUI.Debugger
 		{
 			InitializeComponent();
 
-			if(!ConfigManager.Config.DebugInfo.AssemblerSize.IsEmpty) {
-				this.Size = ConfigManager.Config.DebugInfo.AssemblerSize;
-			}
-			mnuEnableSyntaxHighlighting.Checked = ConfigManager.Config.DebugInfo.AssemblerCodeHighlighting;
+			DebugInfo config = ConfigManager.Config.DebugInfo;
 
-			txtCode.Font = new Font(BaseControl.MonospaceFontFamily, BaseControl.DefaultFontSize);
-			txtCode.Zoom = ConfigManager.Config.DebugInfo.AssemblerZoom;
+			if(!config.AssemblerSize.IsEmpty) {
+				this.Size = config.AssemblerSize;
+			}
+			mnuEnableSyntaxHighlighting.Checked = config.AssemblerCodeHighlighting;
+
+			txtCode.Font = new Font(config.AssemblerFontFamily, config.AssemblerFontSize, config.AssemblerFontStyle);
+			txtCode.Zoom = config.AssemblerZoom;
 
 			UpdateCodeHighlighting();
 
@@ -345,6 +347,9 @@ namespace Mesen.GUI.Debugger
 			ConfigManager.Config.DebugInfo.AssemblerSize = this.WindowState == FormWindowState.Maximized ? this.RestoreBounds.Size : this.Size;
 			ConfigManager.Config.DebugInfo.AssemblerCodeHighlighting = mnuEnableSyntaxHighlighting.Checked;
 			ConfigManager.Config.DebugInfo.AssemblerZoom = txtCode.Zoom;
+			ConfigManager.Config.DebugInfo.AssemblerFontFamily = txtCode.OriginalFont.FontFamily.Name;
+			ConfigManager.Config.DebugInfo.AssemblerFontSize = txtCode.OriginalFont.Size;
+			ConfigManager.Config.DebugInfo.AssemblerFontStyle = txtCode.OriginalFont.Style;
 			ConfigManager.ApplyChanges();
 		}
 
@@ -369,19 +374,25 @@ namespace Mesen.GUI.Debugger
 		
 		private void mnuIncreaseFontSize_Click(object sender, EventArgs e)
 		{
-			txtCode.ChangeFontSize(2);
+			txtCode.Zoom += 10;
 		}
 
 		private void mnuDecreaseFontSize_Click(object sender, EventArgs e)
 		{
-			txtCode.ChangeFontSize(-2);
+			txtCode.Zoom -= 10;
 		}
 
 		private void mnuResetFontSize_Click(object sender, EventArgs e)
 		{
-			txtCode.RestoreFontSize();
+			txtCode.Zoom = 100;
 		}
-		
+
+		private void mnuSelectFont_Click(object sender, EventArgs e)
+		{
+			txtCode.Font = FontDialogHelper.SelectFont(txtCode.OriginalFont);
+			txtCode.Zoom = txtCode.Zoom;
+		}
+
 		private void mnuCopy_Click(object sender, EventArgs e)
 		{
 			txtCode.Copy();

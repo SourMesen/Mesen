@@ -149,13 +149,13 @@ namespace FastColoredTextBoxNS
             SetStyle(ControlStyles.UserPaint, true);
             SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
             SetStyle(ControlStyles.ResizeRedraw, true);
-            //append monospace font
-            //Font = new Font("Consolas", 9.75f, FontStyle.Regular, GraphicsUnit.Point);
-            Font = new Font(FontFamily.GenericMonospace, 9.75f);
             //create one line
             InitTextSource(CreateTextSource());
             if (lines.Count == 0)
                 lines.InsertLine(0, lines.CreateLine());
+            //append monospace font
+            //Font = new Font("Consolas", 9.75f, FontStyle.Regular, GraphicsUnit.Point);
+            Font = new Font(FontFamily.GenericMonospace, 9.75f);
             selection = new Range(this) {Start = new Place(0, 0)};
             //default settings
             Cursor = Cursors.IBeam;
@@ -1503,10 +1503,10 @@ namespace FastColoredTextBoxNS
         {
             BaseFont = newFont;
             //check monospace font
-            SizeF sizeM = GetCharSize(BaseFont, 'M');
+            /*SizeF sizeM = GetCharSize(BaseFont, 'M');
             SizeF sizeDot = GetCharSize(BaseFont, '.');
             if (sizeM != sizeDot)
-                BaseFont = new Font("Courier New", BaseFont.SizeInPoints, FontStyle.Regular, GraphicsUnit.Point);
+                BaseFont = new Font("Courier New", BaseFont.SizeInPoints, FontStyle.Regular, GraphicsUnit.Point);*/
             //clac size
             SizeF size = GetCharSize(BaseFont, 'M');
             CharWidth = (int) Math.Round(size.Width*1f /*0.85*/) - 1 /*0*/;
@@ -3891,6 +3891,7 @@ namespace FastColoredTextBoxNS
         }
 
         Font originalFont;
+        public Font OriginalFont { get { return originalFont; } }
 
         public void RestoreFontSize()
         {
@@ -5532,9 +5533,11 @@ namespace FastColoredTextBoxNS
         {
             get { return zoom; }
             set {
-                zoom = value;
-                DoZoom(zoom / 100f);
-                OnZoomChanged();
+                if(value >= 30 && value <= 500) {
+                   zoom = value;
+                   DoZoom(zoom / 100f);
+                   OnZoomChanged();
+                }
             }
         }
 

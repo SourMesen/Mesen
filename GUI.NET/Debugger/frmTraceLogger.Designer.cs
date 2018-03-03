@@ -58,6 +58,12 @@
 			this.tmrUpdateLog = new System.Windows.Forms.Timer(this.components);
 			this.menuStrip1 = new Mesen.GUI.Controls.ctrlMesenMenuStrip();
 			this.showToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.fontSizeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuIncreaseFontSize = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuDecreaseFontSize = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuResetFontSize = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem12 = new System.Windows.Forms.ToolStripSeparator();
+			this.mnuSelectFont = new System.Windows.Forms.ToolStripMenuItem();
 			this.logLinesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnu100Lines = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnu1000Lines = new System.Windows.Forms.ToolStripMenuItem();
@@ -416,7 +422,6 @@
 			// 
 			this.txtTraceLog.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.txtTraceLog.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.txtTraceLog.FontSize = 13F;
 			this.txtTraceLog.HideSelection = false;
 			this.txtTraceLog.Location = new System.Drawing.Point(3, 16);
 			this.txtTraceLog.Name = "txtTraceLog";
@@ -447,6 +452,7 @@
 			// showToolStripMenuItem
 			// 
 			this.showToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.fontSizeToolStripMenuItem,
             this.logLinesToolStripMenuItem,
             this.mnuAutoRefresh,
             this.toolStripMenuItem1,
@@ -454,6 +460,58 @@
 			this.showToolStripMenuItem.Name = "showToolStripMenuItem";
 			this.showToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
 			this.showToolStripMenuItem.Text = "View";
+			// 
+			// fontSizeToolStripMenuItem
+			// 
+			this.fontSizeToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.mnuIncreaseFontSize,
+            this.mnuDecreaseFontSize,
+            this.mnuResetFontSize,
+            this.toolStripMenuItem12,
+            this.mnuSelectFont});
+			this.fontSizeToolStripMenuItem.Image = global::Mesen.GUI.Properties.Resources.Font;
+			this.fontSizeToolStripMenuItem.Name = "fontSizeToolStripMenuItem";
+			this.fontSizeToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+			this.fontSizeToolStripMenuItem.Text = "Font Options";
+			// 
+			// mnuIncreaseFontSize
+			// 
+			this.mnuIncreaseFontSize.Name = "mnuIncreaseFontSize";
+			this.mnuIncreaseFontSize.ShortcutKeyDisplayString = "Ctrl++";
+			this.mnuIncreaseFontSize.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Oemplus)));
+			this.mnuIncreaseFontSize.Size = new System.Drawing.Size(197, 22);
+			this.mnuIncreaseFontSize.Text = "Increase Size";
+			this.mnuIncreaseFontSize.Click += new System.EventHandler(this.mnuIncreaseFontSize_Click);
+			// 
+			// mnuDecreaseFontSize
+			// 
+			this.mnuDecreaseFontSize.Name = "mnuDecreaseFontSize";
+			this.mnuDecreaseFontSize.ShortcutKeyDisplayString = "Ctrl+-";
+			this.mnuDecreaseFontSize.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.OemMinus)));
+			this.mnuDecreaseFontSize.Size = new System.Drawing.Size(197, 22);
+			this.mnuDecreaseFontSize.Text = "Decrease Size";
+			this.mnuDecreaseFontSize.Click += new System.EventHandler(this.mnuDecreaseFontSize_Click);
+			// 
+			// mnuResetFontSize
+			// 
+			this.mnuResetFontSize.Name = "mnuResetFontSize";
+			this.mnuResetFontSize.ShortcutKeyDisplayString = "Ctrl+0";
+			this.mnuResetFontSize.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.D0)));
+			this.mnuResetFontSize.Size = new System.Drawing.Size(197, 22);
+			this.mnuResetFontSize.Text = "Reset to Default";
+			this.mnuResetFontSize.Click += new System.EventHandler(this.mnuResetFontSize_Click);
+			// 
+			// toolStripMenuItem12
+			// 
+			this.toolStripMenuItem12.Name = "toolStripMenuItem12";
+			this.toolStripMenuItem12.Size = new System.Drawing.Size(194, 6);
+			// 
+			// mnuSelectFont
+			// 
+			this.mnuSelectFont.Name = "mnuSelectFont";
+			this.mnuSelectFont.Size = new System.Drawing.Size(197, 22);
+			this.mnuSelectFont.Text = "Select Font...";
+			this.mnuSelectFont.Click += new System.EventHandler(this.mnuSelectFont_Click);
 			// 
 			// logLinesToolStripMenuItem
 			// 
@@ -463,7 +521,7 @@
             this.mnu10000Lines,
             this.mnu30000Lines});
 			this.logLinesToolStripMenuItem.Name = "logLinesToolStripMenuItem";
-			this.logLinesToolStripMenuItem.Size = new System.Drawing.Size(141, 22);
+			this.logLinesToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
 			this.logLinesToolStripMenuItem.Text = "Line Count";
 			// 
 			// mnu100Lines
@@ -502,20 +560,20 @@
 			this.mnuAutoRefresh.CheckOnClick = true;
 			this.mnuAutoRefresh.CheckState = System.Windows.Forms.CheckState.Checked;
 			this.mnuAutoRefresh.Name = "mnuAutoRefresh";
-			this.mnuAutoRefresh.Size = new System.Drawing.Size(141, 22);
+			this.mnuAutoRefresh.Size = new System.Drawing.Size(152, 22);
 			this.mnuAutoRefresh.Text = "Auto-refresh";
 			// 
 			// toolStripMenuItem1
 			// 
 			this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-			this.toolStripMenuItem1.Size = new System.Drawing.Size(138, 6);
+			this.toolStripMenuItem1.Size = new System.Drawing.Size(149, 6);
 			// 
 			// mnuRefresh
 			// 
 			this.mnuRefresh.Image = global::Mesen.GUI.Properties.Resources.Reset;
 			this.mnuRefresh.Name = "mnuRefresh";
 			this.mnuRefresh.ShortcutKeys = System.Windows.Forms.Keys.F5;
-			this.mnuRefresh.Size = new System.Drawing.Size(141, 22);
+			this.mnuRefresh.Size = new System.Drawing.Size(152, 22);
 			this.mnuRefresh.Text = "Refresh";
 			this.mnuRefresh.Click += new System.EventHandler(this.mnuRefresh_Click);
 			// 
@@ -587,5 +645,11 @@
 		private System.Windows.Forms.PictureBox picHelp;
 		private ctrlScrollableTextbox txtTraceLog;
 		private System.Windows.Forms.CheckBox chkShowMemoryValues;
+		private System.Windows.Forms.ToolStripMenuItem fontSizeToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem mnuIncreaseFontSize;
+		private System.Windows.Forms.ToolStripMenuItem mnuDecreaseFontSize;
+		private System.Windows.Forms.ToolStripMenuItem mnuResetFontSize;
+		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem12;
+		private System.Windows.Forms.ToolStripMenuItem mnuSelectFont;
 	}
 }

@@ -33,6 +33,9 @@ namespace Mesen.GUI.Debugger
 				this.Size = debugInfo.TraceLoggerSize;
 			}
 
+			txtTraceLog.Font = new Font(debugInfo.TraceFontFamily, debugInfo.TraceFontSize, debugInfo.TraceFontStyle);
+			txtTraceLog.TextZoom = debugInfo.TraceTextZoom;
+
 			mnuAutoRefresh.Checked = debugInfo.TraceAutoRefresh;
 			_lineCount = debugInfo.TraceLineCount;
 
@@ -60,7 +63,6 @@ namespace Mesen.GUI.Debugger
 			base.OnLoad(e);
 
 			UpdateMenu();
-			txtTraceLog.FontSize = 10;
 			tmrUpdateLog.Start();
 			RefreshLog(true);
 		}
@@ -79,6 +81,12 @@ namespace Mesen.GUI.Debugger
 			debugInfo.TraceLineCount = _lineCount;
 			debugInfo.TraceIndentCode = chkIndentCode.Checked;
 			debugInfo.TraceLoggerSize = this.WindowState == FormWindowState.Maximized ? this.RestoreBounds.Size : this.Size;
+
+			debugInfo.TraceFontFamily = txtTraceLog.Font.FontFamily.Name;
+			debugInfo.TraceFontSize = txtTraceLog.Font.Size;
+			debugInfo.TraceFontStyle = txtTraceLog.Font.Style;
+			debugInfo.TraceTextZoom = txtTraceLog.TextZoom;
+
 			_entityBinder.Entity = debugInfo.TraceLoggerOptions;
 			_entityBinder.UpdateObject();
 			debugInfo.TraceLoggerOptions = (TraceLoggerOptions)_entityBinder.Entity;
@@ -134,7 +142,6 @@ namespace Mesen.GUI.Debugger
 				System.Diagnostics.Process.Start(_lastFilename);
 			} catch { }
 		}
-
 
 		protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
 		{
@@ -274,6 +281,26 @@ namespace Mesen.GUI.Debugger
 		private void mnuRefresh_Click(object sender, EventArgs e)
 		{
 			RefreshLog(false);
+		}
+
+		private void mnuIncreaseFontSize_Click(object sender, EventArgs e)
+		{
+			txtTraceLog.TextZoom += 10;
+		}
+
+		private void mnuDecreaseFontSize_Click(object sender, EventArgs e)
+		{
+			txtTraceLog.TextZoom -= 10;
+		}
+
+		private void mnuResetFontSize_Click(object sender, EventArgs e)
+		{
+			txtTraceLog.TextZoom = 100;
+		}
+
+		private void mnuSelectFont_Click(object sender, EventArgs e)
+		{
+			txtTraceLog.Font = FontDialogHelper.SelectFont(txtTraceLog.Font);
 		}
 	}
 }

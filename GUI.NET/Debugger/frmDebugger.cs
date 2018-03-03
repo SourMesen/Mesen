@@ -51,6 +51,10 @@ namespace Mesen.GUI.Debugger
 			BreakpointManager.BreakpointsChanged += BreakpointManager_BreakpointsChanged;
 			ctrlProfiler.OnFunctionSelected += ctrlProfiler_OnFunctionSelected;
 
+			Font font = new Font(ConfigManager.Config.DebugInfo.FontFamily, ConfigManager.Config.DebugInfo.FontSize, ConfigManager.Config.DebugInfo.FontStyle);
+			ctrlDebuggerCode.Font = font;
+			ctrlDebuggerCodeSplit.Font = font;
+
 			this.InitToolbar();
 
 			this.UpdateWorkspace();
@@ -640,17 +644,17 @@ namespace Mesen.GUI.Debugger
 
 		private void mnuIncreaseFontSize_Click(object sender, EventArgs e)
 		{
-			_lastCodeWindow.FontSize++;
+			_lastCodeWindow.TextZoom += 10;
 		}
 
 		private void mnuDecreaseFontSize_Click(object sender, EventArgs e)
 		{
-			_lastCodeWindow.FontSize--;
+			_lastCodeWindow.TextZoom -= 10;
 		}
 
 		private void mnuResetFontSize_Click(object sender, EventArgs e)
 		{
-			_lastCodeWindow.FontSize = BaseControl.DefaultFontSize;
+			_lastCodeWindow.TextZoom = 100;
 		}
 
 		private void mnuClose_Click(object sender, EventArgs e)
@@ -680,6 +684,9 @@ namespace Mesen.GUI.Debugger
 			}
 			InteropEmu.DebugRun();
 
+			ConfigManager.Config.DebugInfo.FontFamily = ctrlDebuggerCode.Font.FontFamily.Name;
+			ConfigManager.Config.DebugInfo.FontStyle = ctrlDebuggerCode.Font.Style;
+			ConfigManager.Config.DebugInfo.FontSize = ctrlDebuggerCode.Font.Size;
 			ConfigManager.Config.DebugInfo.WindowWidth = this.WindowState == FormWindowState.Maximized ? this.RestoreBounds.Width : this.Width;
 			ConfigManager.Config.DebugInfo.WindowHeight = this.WindowState == FormWindowState.Maximized ? this.RestoreBounds.Height : this.Height;
 			ConfigManager.Config.DebugInfo.TopPanelHeight = this.splitContainer.GetSplitterDistance();
@@ -1169,6 +1176,12 @@ namespace Mesen.GUI.Debugger
 					this.UpdateDebugger(false, true);
 				}
 			}
+		}
+
+		private void mnuSelectFont_Click(object sender, EventArgs e)
+		{
+			ctrlDebuggerCode.Font = FontDialogHelper.SelectFont(ctrlDebuggerCode.Font);
+			ctrlDebuggerCodeSplit.Font = ctrlDebuggerCode.Font;
 		}
 	}
 }

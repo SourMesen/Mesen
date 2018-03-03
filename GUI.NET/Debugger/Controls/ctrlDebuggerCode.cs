@@ -120,8 +120,8 @@ namespace Mesen.GUI.Debugger
 					break;
 			}
 
-			if(this.FontSize != config.FontSize) {
-				this.FontSize = config.FontSize;
+			if(this.TextZoom != config.TextZoom) {
+				this.TextZoom = config.TextZoom;
 			}
 		}
 
@@ -129,12 +129,6 @@ namespace Mesen.GUI.Debugger
 		{
 			this.SetConfig(_config);
 			ConfigManager.ApplyChanges();
-		}
-
-		public override float FontSize
-		{
-			get { return base.FontSize; }
-			set { base.FontSize=value; UpdateConfig(); }
 		}
 
 		protected override ctrlScrollableTextbox ScrollableTextbox
@@ -822,12 +816,10 @@ namespace Mesen.GUI.Debugger
 			this.OnSetNextStatement?.Invoke(this, new AddressEventArgs() { Address = (UInt32)this.ctrlCodeViewer.CurrentLine });
 		}
 
-		private void ctrlCodeViewer_FontSizeChanged(object sender, EventArgs e)
+		private void ctrlCodeViewer_TextZoomChanged(object sender, EventArgs e)
 		{
-			if(_config.FontSize != this.FontSize) {
-				_config.FontSize = this.FontSize;
-				UpdateConfig();
-			}
+			_config.TextZoom = this.TextZoom;
+			UpdateConfig();
 		}
 
 		private void mnuEditLabel_Click(object sender, EventArgs e)

@@ -31,7 +31,7 @@ namespace Mesen.GUI.Config
 	{
 		public ByteCodePosition ByteCodePosition = ByteCodePosition.Hidden;
 		public PrgAddressPosition PrgAddressPosition = PrgAddressPosition.Hidden;
-		public float FontSize = BaseControl.DefaultFontSize;
+		public int TextZoom = 100;
 	}
 
 	public class DebugWorkspace
@@ -87,6 +87,10 @@ namespace Mesen.GUI.Config
 
 		public DebugViewInfo LeftView;
 		public DebugViewInfo RightView;
+
+		public string FontFamily = BaseControl.MonospaceFontFamily;
+		public FontStyle FontStyle = FontStyle.Regular;
+		public float FontSize = BaseControl.DefaultFontSize;
 
 		public bool ShowOnlyDisassembledCode = true;
 		public bool DisplayOpCodesInLowerCase = false;
@@ -170,7 +174,12 @@ namespace Mesen.GUI.Config
 		public RefreshSpeed RamAutoRefreshSpeed = RefreshSpeed.Normal;
 		public bool RamIgnoreRedundantWrites = false;
 		public int RamColumnCount = 2;
+
+		public string RamFontFamily = BaseControl.MonospaceFontFamily;
+		public FontStyle RamFontStyle = FontStyle.Regular;
 		public float RamFontSize = BaseControl.DefaultFontSize;
+		public int RamTextZoom = 100;
+
 		public bool RamShowCharacters = true;
 		public bool RamShowLabelInfo = true;
 		public bool RamHighlightExecution = true;
@@ -232,12 +241,20 @@ namespace Mesen.GUI.Config
 		public bool TraceIndentCode = false;
 		public Size TraceLoggerSize = new Size(0, 0);
 
+		public string TraceFontFamily = BaseControl.MonospaceFontFamily;
+		public FontStyle TraceFontStyle = FontStyle.Regular;
+		public float TraceFontSize = BaseControl.DefaultFontSize;
+		public int TraceTextZoom = 100;
+
 		public Size ScriptWindowSize = new Size(0, 0);
 		public int ScriptCodeWindowHeight = 0;
 		public List<string> RecentScripts = new List<string>();
 		public bool SaveScriptBeforeRun = true;
 		public ScriptStartupBehavior ScriptStartupBehavior = ScriptStartupBehavior.ShowTutorial;
 		public bool AutoLoadLastScript = true;
+		public string ScriptFontFamily = BaseControl.MonospaceFontFamily;
+		public FontStyle ScriptFontStyle = FontStyle.Regular;
+		public float ScriptFontSize = BaseControl.DefaultFontSize;
 		public int ScriptZoom = 100;
 
 		public bool AssemblerCodeHighlighting = true;
@@ -247,6 +264,9 @@ namespace Mesen.GUI.Config
 		public XmlColor AssemblerAddressColor = Color.DarkRed;
 		public XmlColor AssemblerCommentColor = Color.Green;
 		public Size AssemblerSize = new Size(0, 0);
+		public string AssemblerFontFamily = BaseControl.MonospaceFontFamily;
+		public FontStyle AssemblerFontStyle = FontStyle.Regular;
+		public float AssemblerFontSize = BaseControl.DefaultFontSize;
 		public int AssemblerZoom = 100;
 
 		public DebugInfo()

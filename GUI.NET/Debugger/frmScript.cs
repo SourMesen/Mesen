@@ -30,6 +30,8 @@ namespace Mesen.GUI.Debugger
 		{
 			InitializeComponent();
 
+			DebugInfo config = ConfigManager.Config.DebugInfo;
+
 			_popupMenu = new AutocompleteMenu(txtScriptContent, this);
 			_popupMenu.ImageList = new ImageList();
 			_popupMenu.ImageList.Images.Add(Resources.Enum);
@@ -67,13 +69,13 @@ namespace Mesen.GUI.Debugger
 
 			UpdateRecentScripts();
 			
-			mnuTutorialScript.Checked = ConfigManager.Config.DebugInfo.ScriptStartupBehavior == ScriptStartupBehavior.ShowTutorial;
-			mnuBlankWindow.Checked = ConfigManager.Config.DebugInfo.ScriptStartupBehavior == ScriptStartupBehavior.ShowBlankWindow;
-			mnuAutoLoadLastScript.Checked = ConfigManager.Config.DebugInfo.ScriptStartupBehavior == ScriptStartupBehavior.LoadLastScript;
+			mnuTutorialScript.Checked = config.ScriptStartupBehavior == ScriptStartupBehavior.ShowTutorial;
+			mnuBlankWindow.Checked = config.ScriptStartupBehavior == ScriptStartupBehavior.ShowBlankWindow;
+			mnuAutoLoadLastScript.Checked = config.ScriptStartupBehavior == ScriptStartupBehavior.LoadLastScript;
 			
 			if(!forceBlank) {
 				if(mnuAutoLoadLastScript.Checked && mnuRecentScripts.DropDownItems.Count > 0) {
-					string scriptToLoad = ConfigManager.Config.DebugInfo.RecentScripts.Where((s) => File.Exists(s)).FirstOrDefault();
+					string scriptToLoad = config.RecentScripts.Where((s) => File.Exists(s)).FirstOrDefault();
 					if(scriptToLoad != null) {
 						LoadScriptFile(scriptToLoad, false);
 					}
@@ -88,20 +90,21 @@ namespace Mesen.GUI.Debugger
 				}
 			}
 
-			if(!ConfigManager.Config.DebugInfo.ScriptWindowSize.IsEmpty) {
-				this.Size = ConfigManager.Config.DebugInfo.ScriptWindowSize;
+			if(!config.ScriptWindowSize.IsEmpty) {
+				this.Size = config.ScriptWindowSize;
 			}
-			mnuSaveBeforeRun.Checked = ConfigManager.Config.DebugInfo.SaveScriptBeforeRun;
+			mnuSaveBeforeRun.Checked = config.SaveScriptBeforeRun;
 
-			if(ConfigManager.Config.DebugInfo.ScriptCodeWindowHeight >= ctrlSplit.Panel1MinSize) {
-				if(ConfigManager.Config.DebugInfo.ScriptCodeWindowHeight == Int32.MaxValue) {
+			if(config.ScriptCodeWindowHeight >= ctrlSplit.Panel1MinSize) {
+				if(config.ScriptCodeWindowHeight == Int32.MaxValue) {
 					ctrlSplit.CollapsePanel();
 				} else {
-					ctrlSplit.SplitterDistance = ConfigManager.Config.DebugInfo.ScriptCodeWindowHeight;
+					ctrlSplit.SplitterDistance = config.ScriptCodeWindowHeight;
 				}
 			}
-			txtScriptContent.Font = new Font(BaseControl.MonospaceFontFamily, BaseControl.DefaultFontSize);
-			txtScriptContent.Zoom = ConfigManager.Config.DebugInfo.ScriptZoom;
+
+			txtScriptContent.Font = new Font(config.ScriptFontFamily, config.ScriptFontSize, config.ScriptFontStyle);
+			txtScriptContent.Zoom = config.ScriptZoom;
 
 			if(!this.DesignMode) {
 				this._notifListener = new InteropEmu.NotificationListener();
@@ -140,6 +143,9 @@ namespace Mesen.GUI.Debugger
 			}
 			ConfigManager.Config.DebugInfo.ScriptCodeWindowHeight = ctrlSplit.Panel2.Height <= 2 ? Int32.MaxValue : ctrlSplit.SplitterDistance;
 			ConfigManager.Config.DebugInfo.ScriptZoom = txtScriptContent.Zoom;
+			ConfigManager.Config.DebugInfo.ScriptFontFamily = txtScriptContent.OriginalFont.FontFamily.Name;
+			ConfigManager.Config.DebugInfo.ScriptFontStyle = txtScriptContent.OriginalFont.Style;
+			ConfigManager.Config.DebugInfo.ScriptFontSize = txtScriptContent.OriginalFont.Size;
 			ConfigManager.Config.DebugInfo.AutoLoadLastScript = mnuAutoLoadLastScript.Checked;
 			ConfigManager.ApplyChanges();
 
@@ -391,17 +397,23 @@ namespace Mesen.GUI.Debugger
 
 		private void mnuIncreaseFontSize_Click(object sender, EventArgs e)
 		{
-			txtScriptContent.ChangeFontSize(2);
+			txtScriptContent.Zoom += 10;
 		}
 
 		private void mnuDecreaseFontSize_Click(object sender, EventArgs e)
 		{
-			txtScriptContent.ChangeFontSize(-2);
+			txtScriptContent.Zoom -= 10;
 		}
 
 		private void mnuResetFontSize_Click(object sender, EventArgs e)
 		{
-			txtScriptContent.RestoreFontSize();
+			txtScriptContent.Zoom = 100;
+		}
+		
+		private void mnuSelectFont_Click(object sender, EventArgs e)
+		{
+			txtScriptContent.Font = FontDialogHelper.SelectFont(txtScriptContent.OriginalFont);
+			txtScriptContent.Zoom = txtScriptContent.Zoom;
 		}
 
 		private void mnuNewScript_Click(object sender, EventArgs e)

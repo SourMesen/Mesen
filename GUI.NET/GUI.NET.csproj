@@ -573,6 +573,7 @@
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Debugger\FastColoredTextBox\VisualMarker.cs" />
+    <Compile Include="Debugger\FontDialogHelper.cs" />
     <Compile Include="Debugger\frmApuViewer.cs">
       <SubType>Form</SubType>
     </Compile>

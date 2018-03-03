@@ -393,7 +393,6 @@
 			// 
 			this.ctrlCodeViewer.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.ctrlCodeViewer.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.ctrlCodeViewer.FontSize = 13F;
 			this.ctrlCodeViewer.HideSelection = false;
 			this.ctrlCodeViewer.Location = new System.Drawing.Point(0, 0);
 			this.ctrlCodeViewer.Name = "ctrlCodeViewer";
@@ -411,7 +410,7 @@
 			this.ctrlCodeViewer.MouseDown += new System.Windows.Forms.MouseEventHandler(this.ctrlCodeViewer_MouseDown);
 			this.ctrlCodeViewer.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.ctrlCodeViewer_MouseDoubleClick);
 			this.ctrlCodeViewer.MouseLeave += new System.EventHandler(this.ctrlCodeViewer_MouseLeave);
-			this.ctrlCodeViewer.FontSizeChanged += new System.EventHandler(this.ctrlCodeViewer_FontSizeChanged);
+			this.ctrlCodeViewer.TextZoomChanged += new System.EventHandler(this.ctrlCodeViewer_TextZoomChanged);
 			// 
 			// contextMenuMargin
 			// 

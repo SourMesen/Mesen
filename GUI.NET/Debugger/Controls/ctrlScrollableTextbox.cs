@@ -48,7 +48,7 @@ namespace Mesen.GUI.Debugger
 			remove { this.ctrlTextbox.MouseLeave -= value; }
 		}
 		
-		public event EventHandler FontSizeChanged;
+		public event EventHandler TextZoomChanged;
 
 		public ctrlScrollableTextbox()
 		{
@@ -59,7 +59,6 @@ namespace Mesen.GUI.Debugger
 
 			this.ctrlTextbox.ShowLineNumbers = true;
 			this.ctrlTextbox.ShowLineInHex = true;
-			this.ctrlTextbox.Font = new System.Drawing.Font(BaseControl.MonospaceFontFamily, 13F);
 			
 			this.hScrollBar.ValueChanged += hScrollBar_ValueChanged;
 			this.vScrollBar.ValueChanged += vScrollBar_ValueChanged;
@@ -101,18 +100,27 @@ namespace Mesen.GUI.Debugger
 			this.vScrollBar.Invalidate();
 		}
 
-		public float FontSize
+		[Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+		public override Font Font
 		{
-			get { return this.ctrlTextbox.Font.SizeInPoints; }
+			get { return this.ctrlTextbox.BaseFont; }
 			set
 			{
-				if(value >= 6 && value <= 20) {
-					this.ctrlTextbox.Font = new Font(BaseControl.MonospaceFontFamily, value);
-					UpdateHorizontalScrollbar();
-					this.ctrlTextbox.Invalidate();
+				this.ctrlTextbox.BaseFont = value;
+				UpdateHorizontalScrollbar();
+				this.ctrlTextbox.Invalidate();
+			}
+		}
 
-					if(this.FontSizeChanged != null) {
-						this.FontSizeChanged(this, null);
+		[Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+		public int TextZoom
+		{
+			get { return this.ctrlTextbox.TextZoom; }
+			set {
+				if(this.ctrlTextbox.TextZoom != value) {
+					this.ctrlTextbox.TextZoom = value;
+					if(this.TextZoomChanged != null) {
+						this.TextZoomChanged(this, null);
 					}
 				}
 			}
@@ -291,15 +299,15 @@ namespace Mesen.GUI.Debugger
 					return true;
 
 				case Keys.Control | Keys.Oemplus:
-					this.FontSize++;
+					this.TextZoom += 10;
 					return true;
 
 				case Keys.Control | Keys.OemMinus:
-					this.FontSize--;
+					this.TextZoom -= 10;
 					return true;
 
 				case Keys.Control | Keys.D0:
-					this.FontSize = BaseControl.DefaultFontSize;
+					this.TextZoom = 100;
 					return true;
 			}
 

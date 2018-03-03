@@ -20,13 +20,18 @@ namespace Mesen.GUI.Debugger.Controls
 			}
 		}
 
-		[DefaultValue(13F)]
 		[Browsable(false)]
 		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-		virtual public float FontSize
+		public override Font Font
 		{
-			get { return this.ScrollableTextbox.FontSize; }
-			set { this.ScrollableTextbox.FontSize = value; }
+			get { return this.ScrollableTextbox.Font; }
+			set { this.ScrollableTextbox.Font = value; }
+		}
+
+		public int TextZoom
+		{
+			get { return this.ScrollableTextbox.TextZoom; }
+			set { this.ScrollableTextbox.TextZoom = value; }
 		}
 
 		public void OpenSearchBox()

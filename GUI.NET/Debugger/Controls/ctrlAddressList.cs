@@ -20,7 +20,6 @@ namespace Mesen.GUI.Debugger.Controls
 		{
 			InitializeComponent();
 			this.ctrlDataViewer.MarginWidth = 5;
-			this.ctrlDataViewer.FontSize = BaseControl.DefaultFontSize;
 		}
 
 		protected override ctrlScrollableTextbox ScrollableTextbox

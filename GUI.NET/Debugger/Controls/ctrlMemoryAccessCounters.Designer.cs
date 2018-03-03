@@ -114,7 +114,6 @@
 			this.ctrlScrollableTextbox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.tableLayoutPanel1.SetColumnSpan(this.ctrlScrollableTextbox, 2);
 			this.ctrlScrollableTextbox.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.ctrlScrollableTextbox.FontSize = 13F;
 			this.ctrlScrollableTextbox.Location = new System.Drawing.Point(0, 27);
 			this.ctrlScrollableTextbox.Margin = new System.Windows.Forms.Padding(0);
 			this.ctrlScrollableTextbox.Name = "ctrlScrollableTextbox";

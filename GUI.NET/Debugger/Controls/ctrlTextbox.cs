@@ -1,4 +1,5 @@
 ﻿using Mesen.GUI.Config;
+using Mesen.GUI.Controls;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -83,6 +84,7 @@ namespace Mesen.GUI.Debugger
 			InitializeComponent();
 			this.ResizeRedraw = true;
 			this.DoubleBuffered = true;
+			this.UpdateFont();
 		}
 		
 		public string[] Comments;
@@ -126,16 +128,47 @@ namespace Mesen.GUI.Debugger
 		//Cache Font.Height value because accessing it is slow
 		private new int FontHeight { get; set; }
 
-		public override Font Font
+		private Font _baseFont = new Font(BaseControl.MonospaceFontFamily, BaseControl.DefaultFontSize);
+		[Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+		public Font BaseFont
 		{
-			get { return base.Font; }
+			get { return _baseFont; }
 			set
 			{
-				base.Font = value;
-				this.FontHeight = value.Height;
-				_noteFont = new Font(value.FontFamily, value.Size * 0.75f);
+				_baseFont = value;
 				UpdateHorizontalScrollWidth();
+				this.UpdateFont();
+				this.Invalidate();
 			}
+		}
+
+		private Font _font = new Font(BaseControl.MonospaceFontFamily, BaseControl.DefaultFontSize);
+		[Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+		public override Font Font
+		{
+			get { return this._font; }
+			set { throw new Exception("Do not use"); }
+		}
+
+		private int _textZoom = 100;
+		[Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+		public int TextZoom
+		{
+			get { return this._textZoom; }
+			set
+			{
+				if(value >= 30 && value <= 500) {
+					this._textZoom = value;
+					UpdateFont();
+				}
+			}
+		}
+
+		private void UpdateFont()
+		{
+			_font = new Font(this.BaseFont.FontFamily, this.BaseFont.Size * this.TextZoom / 100f, this.BaseFont.Style);
+			_noteFont = new Font(this.BaseFont.FontFamily, this.BaseFont.Size * this.TextZoom * 0.75f / 100f);
+			FontHeight = this._font.Height;
 		}
 
 		public bool ShowSingleContentLineNotes
@@ -1203,8 +1236,7 @@ namespace Mesen.GUI.Debugger
 		protected override void OnPaint(PaintEventArgs pe)
 		{
 			int lineHeight = this.LineHeight;
-			pe.Graphics.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAlias;
-			pe.Graphics.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.HighQuality;
+			pe.Graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
 			Rectangle rect = this.ClientRectangle;
 			pe.Graphics.FillRectangle(Brushes.White, rect);
 
