@@ -383,7 +383,7 @@ namespace Mesen.GUI.Debugger
 			set { this.ctrlTextbox.ShowContentNotes = value; }
 		}
 
-		public bool ShowCompactPrgAddresses { get => this.ctrlTextbox.ShowCompactPrgAddresses; set => this.ctrlTextbox.ShowCompactPrgAddresses = value; }
+		public bool ShowCompactPrgAddresses { get { return this.ctrlTextbox.ShowCompactPrgAddresses; } set { this.ctrlTextbox.ShowCompactPrgAddresses = value; } }
 
 		public bool ShowLineNumberNotes
 		{

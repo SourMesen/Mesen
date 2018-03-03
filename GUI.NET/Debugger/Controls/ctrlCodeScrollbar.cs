@@ -28,6 +28,7 @@ namespace Mesen.GUI.Debugger.Controls
 		public ctrlCodeScrollbar()
 		{
 			this.DoubleBuffered = true;
+			this.ResizeRedraw = true;
 			this._tmrScroll = new Timer();
 			this._tmrScroll.Tick += tmrScroll_Tick;
 		}
@@ -121,16 +122,17 @@ namespace Mesen.GUI.Debugger.Controls
 
 			int arrowWidth = 10;
 			int arrowHeight = 5;
+			int bottom = barTop + barHeight + _buttonSize;
 			e.Graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
 			e.Graphics.FillRectangle(Brushes.Gainsboro, e.ClipRectangle.Left + 1, e.ClipRectangle.Top, this.Width - 1, _buttonSize);
-			e.Graphics.FillRectangle(Brushes.Gainsboro, e.ClipRectangle.Left + 1, e.ClipRectangle.Bottom - _buttonSize, this.Width - 1, _buttonSize);
+			e.Graphics.FillRectangle(Brushes.Gainsboro, e.ClipRectangle.Left + 1, bottom - _buttonSize, this.Width - 1, _buttonSize);
 			e.Graphics.DrawLine(Pens.DimGray, e.ClipRectangle.Left + 1, e.ClipRectangle.Top + _buttonSize, e.ClipRectangle.Left + width, e.ClipRectangle.Top + _buttonSize);
-			e.Graphics.DrawLine(Pens.DimGray, e.ClipRectangle.Left + 1, e.ClipRectangle.Bottom - _buttonSize, e.ClipRectangle.Left + width, e.ClipRectangle.Bottom - _buttonSize);
-			e.Graphics.DrawLine(Pens.DimGray, e.ClipRectangle.Left + 1, e.ClipRectangle.Bottom, e.ClipRectangle.Left + width, e.ClipRectangle.Bottom);
+			e.Graphics.DrawLine(Pens.DimGray, e.ClipRectangle.Left + 1, bottom - _buttonSize, e.ClipRectangle.Left + width, bottom - _buttonSize);
+			e.Graphics.DrawLine(Pens.DimGray, e.ClipRectangle.Left + 1, bottom, e.ClipRectangle.Left + width, bottom);
 			e.Graphics.TranslateTransform(5, (_buttonSize - arrowHeight) / 2);
 			e.Graphics.FillPolygon(Brushes.DimGray, new Point[] { new Point(left, e.ClipRectangle.Top + arrowHeight), new Point(left + arrowWidth, e.ClipRectangle.Top + arrowHeight), new Point(left + arrowWidth / 2, e.ClipRectangle.Top) }, FillMode.Winding);
 			e.Graphics.TranslateTransform(0, -(_buttonSize - arrowHeight));
-			e.Graphics.FillPolygon(Brushes.DimGray, new Point[] { new Point(left, e.ClipRectangle.Bottom - arrowHeight), new Point(left + arrowWidth, e.ClipRectangle.Bottom - arrowHeight), new Point(left + arrowWidth / 2, e.ClipRectangle.Bottom) }, FillMode.Winding);
+			e.Graphics.FillPolygon(Brushes.DimGray, new Point[] { new Point(left, bottom - arrowHeight), new Point(left + arrowWidth, bottom - arrowHeight), new Point(left + arrowWidth / 2, bottom) }, FillMode.Winding);
 		}
 
 		private bool _mouseDown = false;
