@@ -93,8 +93,7 @@
 			this.flowLayoutPanel4 = new System.Windows.Forms.FlowLayoutPanel();
 			this.lblSP = new System.Windows.Forms.Label();
 			this.txtSP = new System.Windows.Forms.TextBox();
-			this.lstStack = new Mesen.GUI.Controls.DoubleBufferedListView();
-			this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+			this.txtStack = new System.Windows.Forms.TextBox();
 			this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
 			this.lblA = new System.Windows.Forms.Label();
 			this.txtA = new System.Windows.Forms.TextBox();
@@ -122,8 +121,8 @@
 			this.mnuGoToResetHandler = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuGoToInitHandler = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuGoToPlayHandler = new System.Windows.Forms.ToolStripMenuItem();
-			this.mnuGoToProgramCounter = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
+			this.mnuGoToProgramCounter = new System.Windows.Forms.ToolStripMenuItem();
 			this.tableLayoutPanel2.SuspendLayout();
 			this.grpPPUStatus.SuspendLayout();
 			this.tableLayoutPanel8.SuspendLayout();
@@ -976,7 +975,7 @@
 			this.tableLayoutPanel6.ColumnCount = 1;
 			this.tableLayoutPanel6.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this.tableLayoutPanel6.Controls.Add(this.flowLayoutPanel4, 0, 0);
-			this.tableLayoutPanel6.Controls.Add(this.lstStack, 0, 1);
+			this.tableLayoutPanel6.Controls.Add(this.txtStack, 0, 1);
 			this.tableLayoutPanel6.Location = new System.Drawing.Point(2, 15);
 			this.tableLayoutPanel6.Name = "tableLayoutPanel6";
 			this.tableLayoutPanel6.RowCount = 2;
@@ -1018,26 +1017,18 @@
 			this.txtSP.TabIndex = 1;
 			this.txtSP.TextChanged += new System.EventHandler(this.OnOptionChanged);
 			// 
-			// lstStack
+			// txtStack
 			// 
-			this.lstStack.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.columnHeader1});
-			this.lstStack.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.lstStack.FullRowSelect = true;
-			this.lstStack.GridLines = true;
-			this.lstStack.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.None;
-			this.lstStack.Location = new System.Drawing.Point(3, 23);
-			this.lstStack.Margin = new System.Windows.Forms.Padding(3, 2, 3, 0);
-			this.lstStack.Name = "lstStack";
-			this.lstStack.Size = new System.Drawing.Size(65, 66);
-			this.lstStack.TabIndex = 4;
-			this.lstStack.UseCompatibleStateImageBehavior = false;
-			this.lstStack.View = System.Windows.Forms.View.Details;
-			// 
-			// columnHeader1
-			// 
-			this.columnHeader1.Text = "Value";
-			this.columnHeader1.Width = 35;
+			this.txtStack.BackColor = System.Drawing.SystemColors.Window;
+			this.txtStack.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.txtStack.Location = new System.Drawing.Point(0, 21);
+			this.txtStack.Margin = new System.Windows.Forms.Padding(0, 0, 0, 0);
+			this.txtStack.Multiline = true;
+			this.txtStack.Name = "txtStack";
+			this.txtStack.ReadOnly = true;
+			this.txtStack.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+			this.txtStack.Size = new System.Drawing.Size(71, 68);
+			this.txtStack.TabIndex = 4;
 			// 
 			// flowLayoutPanel1
 			// 
@@ -1296,7 +1287,7 @@
             this.toolStripMenuItem1,
             this.mnuGoToProgramCounter});
 			this.contextGoTo.Name = "contextGoTo";
-			this.contextGoTo.Size = new System.Drawing.Size(167, 164);
+			this.contextGoTo.Size = new System.Drawing.Size(167, 142);
 			this.contextGoTo.Opening += new System.ComponentModel.CancelEventHandler(this.contextGoTo_Opening);
 			// 
 			// mnuGoToIrqHandler
@@ -1334,6 +1325,11 @@
 			this.mnuGoToPlayHandler.Text = "Play Handler";
 			this.mnuGoToPlayHandler.Click += new System.EventHandler(this.mnuGoToPlayHandler_Click);
 			// 
+			// toolStripMenuItem1
+			// 
+			this.toolStripMenuItem1.Name = "toolStripMenuItem1";
+			this.toolStripMenuItem1.Size = new System.Drawing.Size(163, 6);
+			// 
 			// mnuGoToProgramCounter
 			// 
 			this.mnuGoToProgramCounter.Name = "mnuGoToProgramCounter";
@@ -1341,11 +1337,6 @@
 			this.mnuGoToProgramCounter.Text = "Program Counter";
 			this.mnuGoToProgramCounter.ToolTipText = "Alt+*";
 			this.mnuGoToProgramCounter.Click += new System.EventHandler(this.mnuGoToProgramCounter_Click);
-			// 
-			// toolStripMenuItem1
-			// 
-			this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-			this.toolStripMenuItem1.Size = new System.Drawing.Size(163, 6);
 			// 
 			// ctrlConsoleStatus
 			// 
@@ -1379,6 +1370,7 @@
 			this.tableLayoutPanel4.PerformLayout();
 			this.grpStack.ResumeLayout(false);
 			this.tableLayoutPanel6.ResumeLayout(false);
+			this.tableLayoutPanel6.PerformLayout();
 			this.flowLayoutPanel4.ResumeLayout(false);
 			this.flowLayoutPanel4.PerformLayout();
 			this.flowLayoutPanel1.ResumeLayout(false);
@@ -1447,7 +1439,6 @@
 		private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel4;
 		private System.Windows.Forms.Label lblSP;
 		private System.Windows.Forms.TextBox txtSP;
-		private Mesen.GUI.Controls.DoubleBufferedListView lstStack;
 		private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
 		private System.Windows.Forms.Label lblA;
 		private System.Windows.Forms.TextBox txtA;
@@ -1457,7 +1448,6 @@
 		private System.Windows.Forms.TextBox txtY;
 		private System.Windows.Forms.Label lblPC;
 		private System.Windows.Forms.TextBox txtPC;
-		private System.Windows.Forms.ColumnHeader columnHeader1;
 		private System.Windows.Forms.Label lblCycleCount;
 		private System.Windows.Forms.TextBox txtCycleCount;
 		private System.Windows.Forms.Button btnUndo;
@@ -1490,5 +1480,6 @@
 		private System.Windows.Forms.TextBox txtTmpAddr;
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem1;
 		private System.Windows.Forms.ToolStripMenuItem mnuGoToProgramCounter;
+		private System.Windows.Forms.TextBox txtStack;
 	}
 }
