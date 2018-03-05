@@ -169,3 +169,6 @@ $RECYCLE.BIN/
 *.VC.db
 *.VC.db-wal
 *.VC.db-shm
+
+Docs/public/
+Docs/*.exe

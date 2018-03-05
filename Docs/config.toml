@@ -1,0 +1,24 @@
+baseURL = ""
+relativeURLS = true
+uglyURLs = true
+languageCode = "en-us"
+title = "Mesen Documentation"
+theme = "learn"
+
+[outputs]
+home = [ "HTML", "RSS", "JSON"]
+
+[params]
+themeVariant = "green"
+
+[[menu.shortcuts]] 
+name = "<img style='vertical-align: middle' src='/images/favicon.png'/> <span style='display: inline;vertical-align: middle'>Website</span>"
+identifier = "website"
+url = "https://www.mesen.ca"
+weight = 9
+
+[[menu.shortcuts]] 
+name = "<i class='fa fa-github'></i> GitHub"
+identifier = "github"
+url = "https://github.com/SourMesen/Mesen"
+weight = 10
