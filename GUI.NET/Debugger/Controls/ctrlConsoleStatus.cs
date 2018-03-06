@@ -108,7 +108,7 @@ namespace Mesen.GUI.Debugger
 		private void UpdateStack(UInt16 stackPointer)
 		{
 			StringBuilder sb = new StringBuilder();
-			for(UInt32 i = (UInt32)0x100 + stackPointer; i < 0x200; i++) {
+			for(UInt32 i = (UInt32)0x100 + stackPointer + 1; i < 0x200; i++) {
 				sb.Append("$");
 				sb.Append(InteropEmu.DebugGetMemoryValue(DebugMemoryType.CpuMemory, i).ToString("X2"));
 				sb.Append(", ");
