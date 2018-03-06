@@ -3732,8 +3732,8 @@ namespace Be.Windows.Forms
 
 		void SetPosition(long bytePos, int byteCharacterPos)
 		{
-			if(bytePos > this._endByte) {
-				bytePos = this._endByte;
+			if(bytePos >= this._byteProvider.Length) {
+				bytePos = this._byteProvider.Length - 1;
 			}
 
 			if (_byteCharacterPos != byteCharacterPos)
