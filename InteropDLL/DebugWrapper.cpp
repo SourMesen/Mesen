@@ -63,7 +63,7 @@ extern "C"
 	DllExport void __stdcall DebugGetSprites(uint32_t *frameBuffer) { GetDebugger()->GetMemoryDumper()->GetSprites(frameBuffer); }
 	DllExport void __stdcall DebugGetPalette(uint32_t *frameBuffer) { GetDebugger()->GetMemoryDumper()->GetPalette(frameBuffer); }
 	
-	DllExport void __stdcall DebugGetCallstack(int32_t *callstackAbsolute, int32_t *callstackRelative) { GetDebugger()->GetCallstack(callstackAbsolute, callstackRelative); }
+	DllExport void __stdcall DebugGetCallstack(StackFrameInfo *callstackArray, uint32_t &callstackSize) { GetDebugger()->GetCallstack(callstackArray, callstackSize); }
 	DllExport int32_t __stdcall DebugGetFunctionEntryPointCount() { return GetDebugger()->GetFunctionEntryPointCount(); }
 	DllExport void __stdcall DebugGetFunctionEntryPoints(int32_t *entryPoints, int32_t maxCount) { GetDebugger()->GetFunctionEntryPoints(entryPoints, maxCount); }
 	

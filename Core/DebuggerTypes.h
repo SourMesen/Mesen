@@ -148,3 +148,19 @@ enum class EventType
 	SpriteZeroHit = 9,
 	EventTypeSize
 };
+
+enum class StackFrameFlags : uint8_t
+{
+	None = 0,
+	Nmi = 1,
+	Irq = 2
+};
+
+struct StackFrameInfo
+{
+	int32_t JumpSourceAbsolute;
+	int32_t JumpTargetAbsolute;
+	uint16_t JumpSource;
+	uint16_t JumpTarget;
+	StackFrameFlags Flags;
+};

@@ -23,8 +23,7 @@ namespace Mesen.GUI.Debugger.Controls
 
 		public event EventHandler FunctionSelected;
 
-		private Int32[] _absoluteCallstack;
-		private Int32[] _relativeCallstack;
+		private StackFrameInfo[] _stackFrames;
 		private Int32 _programCounter;
 
 		public ctrlCallstack()
@@ -43,7 +42,7 @@ namespace Mesen.GUI.Debugger.Controls
 			int nmiHandler = InteropEmu.DebugGetMemoryValue(DebugMemoryType.CpuMemory, 0xFFFA) | (InteropEmu.DebugGetMemoryValue(DebugMemoryType.CpuMemory, 0xFFFB) << 8);
 			int irqHandler = InteropEmu.DebugGetMemoryValue(DebugMemoryType.CpuMemory, 0xFFFE) | (InteropEmu.DebugGetMemoryValue(DebugMemoryType.CpuMemory, 0xFFFF) << 8);
 
-			InteropEmu.DebugGetCallstack(out _absoluteCallstack, out _relativeCallstack);
+			_stackFrames = InteropEmu.DebugGetCallstack();
 			DebugState state = new DebugState();
 			InteropEmu.DebugGetState(ref state);
 			_programCounter = state.CPU.DebugPC;
@@ -51,23 +50,19 @@ namespace Mesen.GUI.Debugger.Controls
 			int relDestinationAddr = -1, absDestinationAddr = -1;
 
 			List<StackInfo> stack = new List<StackInfo>();
-			for(int i = 0, len = _relativeCallstack.Length; i < len; i+=2) {
-				if(_relativeCallstack[i] == -2) {
-					break;
-				}
-
-				int relSubEntryAddr = i == 0 ? -1 : _relativeCallstack[i-1] & 0xFFFF;
-				int absSubEntryAddr = i == 0 ? -1 : _absoluteCallstack[i-1];
+			for(int i = 0, len = _stackFrames.Length; i < len; i++) {
+				int relSubEntryAddr = i == 0 ? -1 : _stackFrames[i-1].JumpTarget;
+				int absSubEntryAddr = i == 0 ? -1 : _stackFrames[i-1].JumpTargetAbsolute;
 
 				stack.Add(new StackInfo() {
 					SubName = this.GetFunctionName(relSubEntryAddr, absSubEntryAddr, nmiHandler, irqHandler),
-					IsMapped = (_relativeCallstack[i] & 0x10000) != 0x10000,
-					CurrentRelativeAddr = _relativeCallstack[i] & 0xFFFF,
-					CurrentAbsoluteAddr = _absoluteCallstack[i]
+					IsMapped = _stackFrames[i].JumpSourceAbsolute < 0 ? false : InteropEmu.DebugGetRelativeAddress((uint)_stackFrames[i].JumpSourceAbsolute, AddressType.PrgRom) >= 0,
+					CurrentRelativeAddr = _stackFrames[i].JumpSource,
+					CurrentAbsoluteAddr = _stackFrames[i].JumpSourceAbsolute
 				});
 
-				relDestinationAddr = _relativeCallstack[i+1] & 0xFFFF;
-				absDestinationAddr = _absoluteCallstack[i+1];
+				relDestinationAddr = _stackFrames[i].JumpTarget;
+				absDestinationAddr = _stackFrames[i].JumpTargetAbsolute;
 			}
 
 			//Add current location
@@ -109,12 +104,7 @@ namespace Mesen.GUI.Debugger.Controls
 			}
 			this.lstCallstack.EndUpdate();
 		}
-
-		private void UpdateList()
-		{
-
-		}
-
+		
 		private string GetFunctionName(int relSubEntryAddr, int absSubEntryAddr, int nmiHandler, int irqHandler)
 		{
 			if(relSubEntryAddr < 0) {
@@ -122,7 +112,7 @@ namespace Mesen.GUI.Debugger.Controls
 			}
 
 			string funcName;
-			CodeLabel label = LabelManager.GetLabel((UInt32)absSubEntryAddr, AddressType.PrgRom);
+			CodeLabel label = absSubEntryAddr >= 0 ? LabelManager.GetLabel((UInt32)absSubEntryAddr, AddressType.PrgRom) : null;
 			if(label != null) {
 				funcName = label.Label + (relSubEntryAddr >= 0 ? (" ($" + relSubEntryAddr.ToString("X4") + ")") : "");
 			} else {
@@ -143,10 +133,8 @@ namespace Mesen.GUI.Debugger.Controls
 				if(this.lstCallstack.SelectedIndices[0] == 0) {
 					this.FunctionSelected(_programCounter, null);
 				} else {
-					Int32 address = _relativeCallstack[(this.lstCallstack.Items.Count - 1 - this.lstCallstack.SelectedIndices[0]) * 2];
-					if((address & 0x10000) == 0) {
-						this.FunctionSelected?.Invoke(address & 0xFFFF, null);
-					}
+					StackFrameInfo stackFrameInfo = _stackFrames[(this.lstCallstack.Items.Count - 1 - this.lstCallstack.SelectedIndices[0])];
+					this.FunctionSelected?.Invoke((int)stackFrameInfo.JumpSource, null);
 				}
 			}
 		}

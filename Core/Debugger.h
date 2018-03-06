@@ -73,8 +73,7 @@ private:
 
 	vector<uint8_t> _frozenAddresses;
 
-	deque<uint32_t> _callstackAbsolute;
-	deque<uint32_t> _callstackRelative;
+	deque<StackFrameInfo> _callstack;
 	deque<int32_t> _subReturnAddresses;
 
 	int32_t _stepOutReturnAddress;
@@ -131,13 +130,12 @@ private:
 	void PrivateProcessVramWriteOperation(uint16_t addr, uint8_t &value);
 	void ProcessBreakpoints(BreakpointType type, OperationInfo &operationInfo, bool allowBreak = true);
 	
+	void AddCallstackFrame(uint16_t source, uint16_t target, StackFrameFlags flags);
 	void UpdateCallstack(uint8_t currentInstruction, uint32_t addr);
 	void PrivateProcessInterrupt(uint16_t cpuAddr, uint16_t destCpuAddr, bool forNmi);
 
 	void ProcessStepConditions(uint32_t addr);
 	bool SleepUntilResume(BreakSource source = BreakSource::Break);
-
-	void RemoveExcessCallstackEntries();
 
 	void AddDebugEvent(DebugEventType type, uint16_t address = -1, uint8_t value = 0, int16_t breakpointId = -1, int8_t ppuLatch = -1);
 
@@ -155,7 +153,7 @@ public:
 	void GetFunctionEntryPoints(int32_t* entryPoints, int32_t maxCount);
 	int32_t GetFunctionEntryPointCount();
 
-	void GetCallstack(int32_t* callstackAbsolute, int32_t* callstackRelative);
+	void GetCallstack(StackFrameInfo* callstackArray, uint32_t &callstackSize);
 	
 	void GetApuState(ApuState *state);
 	__forceinline void GetState(DebugState *state, bool includeMapperInfo = true);

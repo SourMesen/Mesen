@@ -355,55 +355,75 @@ int32_t Debugger::EvaluateExpression(string expression, EvalResultType &resultTy
 	return _watchExpEval.Evaluate(expression, state, resultType, operationInfo);
 }
 
-void Debugger::RemoveExcessCallstackEntries()
-{
-	while(_callstackRelative.size() >= 1022) {
-		//Ensure callstack stays below 512 entries - some games never call RTI, causing an infinite stack
-		_callstackRelative.pop_front();
-		_callstackRelative.pop_front();
-		_callstackAbsolute.pop_front();
-		_callstackAbsolute.pop_front();
-	}
-}
-
 void Debugger::UpdateCallstack(uint8_t instruction, uint32_t addr)
 {
-	if((instruction == 0x60 || instruction == 0x40) && !_callstackRelative.empty()) {
-		//RTS & RTI
-		_callstackRelative.pop_back();
-		_callstackRelative.pop_back();
-		_callstackAbsolute.pop_back();
-		_callstackAbsolute.pop_back();
+	if((instruction == 0x60 || instruction == 0x40) && !_callstack.empty()) {
+		//RTS & RTI		
+		uint16_t expectedReturnAddress = _callstack[_callstack.size() - 1].JumpSource;
+
+		_callstack.pop_back();
 		_subReturnAddresses.pop_back();
+
+		int spOffset = instruction == 0x40 ? 2 : 1; //RTI has an extra byte on the stack (flags)
+
+		uint16_t targetAddr = _memoryManager->DebugReadWord(0x100 + ((_debugState.CPU.SP + spOffset) & 0xFF));
+		if(targetAddr < expectedReturnAddress || targetAddr - expectedReturnAddress > 3) {
+			//Mismatch, pop that stack frame and add the new one
+			if(!_callstack.empty()) {
+				bool foundMatch = false;
+				for(int i = (int)_callstack.size() - 1; i >= 0; i--) {
+					if(targetAddr > _callstack[i].JumpSource && targetAddr < _callstack[i].JumpSource + 3) {
+						//Found a matching stack frame, unstack until that point
+						foundMatch = true;
+						for(int j = (int)_callstack.size() - i - 1; j >= 0; j--) {
+							_callstack.pop_back();
+							_subReturnAddresses.pop_back();
+						}
+						break;
+					}
+				}
+				if(!foundMatch) {
+					//Couldn't find a matching frame, replace the current one
+					AddCallstackFrame(expectedReturnAddress, targetAddr, StackFrameFlags::None);
+					_subReturnAddresses.push_back(expectedReturnAddress + 3);
+				}
+			}
+		}
 
 		_profiler->UnstackFunction();
 	} else if(instruction == 0x20) {
 		//JSR
-		RemoveExcessCallstackEntries();
-
 		uint16_t targetAddr = _memoryManager->DebugRead(addr + 1) | (_memoryManager->DebugRead(addr + 2) << 8);
-		_callstackRelative.push_back(addr);
-		_callstackRelative.push_back(targetAddr);
-
-		_callstackAbsolute.push_back(_mapper->ToAbsoluteAddress(addr));
-		_callstackAbsolute.push_back(_mapper->ToAbsoluteAddress(targetAddr));
-
-		_profiler->StackFunction(_mapper->ToAbsoluteAddress(addr), _mapper->ToAbsoluteAddress(targetAddr));
-
+		AddCallstackFrame(addr, targetAddr, StackFrameFlags::None);
 		_subReturnAddresses.push_back(addr + 3);
+		
+		_profiler->StackFunction(_mapper->ToAbsoluteAddress(addr), _mapper->ToAbsoluteAddress(targetAddr));
 	}
+}
+
+void Debugger::AddCallstackFrame(uint16_t source, uint16_t target, StackFrameFlags flags)
+{
+	if(_callstack.size() >= 511) {
+		//Ensure callstack stays below 512 entries - games can use various tricks that could keep making the callstack grow
+		_callstack.pop_front();
+		_subReturnAddresses.pop_front();
+	}
+
+	StackFrameInfo stackFrame;
+	stackFrame.JumpSource = source;
+	stackFrame.JumpSourceAbsolute = _mapper->ToAbsoluteAddress(source);
+
+	stackFrame.JumpTarget = target;
+	stackFrame.JumpTargetAbsolute = _mapper->ToAbsoluteAddress(target);
+
+	stackFrame.Flags = flags;
+
+	_callstack.push_back(stackFrame);
 }
 
 void Debugger::PrivateProcessInterrupt(uint16_t cpuAddr, uint16_t destCpuAddr, bool forNmi)
 {
-	RemoveExcessCallstackEntries();
-
-	_callstackRelative.push_back(cpuAddr | (forNmi ? 0x40000 : 0x20000));
-	_callstackRelative.push_back(destCpuAddr);
-
-	_callstackAbsolute.push_back(_mapper->ToAbsoluteAddress(cpuAddr));
-	_callstackAbsolute.push_back(_mapper->ToAbsoluteAddress(destCpuAddr));
-
+	AddCallstackFrame(cpuAddr, destCpuAddr, forNmi ? StackFrameFlags::Nmi : StackFrameFlags::Irq);
 	_subReturnAddresses.push_back(cpuAddr);
 
 	_profiler->StackFunction(-1, _mapper->ToAbsoluteAddress(destCpuAddr));
@@ -963,21 +983,15 @@ void Debugger::ProcessVramWriteOperation(uint16_t addr, uint8_t &value)
 #endif
 }
 
-void Debugger::GetCallstack(int32_t* callstackAbsolute, int32_t* callstackRelative)
+void Debugger::GetCallstack(StackFrameInfo* callstackArray, uint32_t &callstackSize)
 {
-	int callstackSize = std::min(1022, (int)_callstackRelative.size());
-	for(int i = 0; i < callstackSize; i++) {
-		callstackAbsolute[i] = _callstackAbsolute[i];
-		
-		int32_t relativeAddr = _callstackRelative[i];
-		if(_mapper->FromAbsoluteAddress(_callstackAbsolute[i]) == -1) {
-			//Mark address as an unmapped memory addr
-			relativeAddr |= 0x10000;
-		}
-		callstackRelative[i] = relativeAddr;
+	DebugBreakHelper helper(this);
+	int i = 0;
+	for(StackFrameInfo &info : _callstack) {
+		callstackArray[i] = info;
+		i++;
 	}
-	callstackAbsolute[callstackSize] = -2;
-	callstackRelative[callstackSize] = -2;
+	callstackSize = i;
 }
 
 int32_t Debugger::GetFunctionEntryPointCount()

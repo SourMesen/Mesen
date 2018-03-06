@@ -579,20 +579,21 @@ namespace Mesen.GUI
 			return cdlData;
 		}
 
-		[DllImport(DLLPath, EntryPoint = "DebugGetCallstack")] private static extern void DebugGetCallstackWrapper(IntPtr callstackAbsolute, IntPtr callstackRelative);
-		public static void DebugGetCallstack(out Int32[] callstackAbsolute, out Int32[] callstackRelative)
+		[DllImport(DLLPath, EntryPoint = "DebugGetCallstack")] private static extern void DebugGetCallstackWrapper(IntPtr callstackArray, ref UInt32 callstackSize);
+		public static StackFrameInfo[] DebugGetCallstack()
 		{
-			callstackAbsolute = new Int32[1024];
-			callstackRelative = new Int32[1024];
+			StackFrameInfo[] callstack = new StackFrameInfo[512];
+			UInt32 callstackSize = 0;
 
-			GCHandle hAbsolute = GCHandle.Alloc(callstackAbsolute, GCHandleType.Pinned);
-			GCHandle hRelative = GCHandle.Alloc(callstackRelative, GCHandleType.Pinned);
+			GCHandle hCallstack = GCHandle.Alloc(callstack, GCHandleType.Pinned);
 			try {
-				InteropEmu.DebugGetCallstackWrapper(hAbsolute.AddrOfPinnedObject(), hRelative.AddrOfPinnedObject());
+				InteropEmu.DebugGetCallstackWrapper(hCallstack.AddrOfPinnedObject(), ref callstackSize);
 			} finally {
-				hAbsolute.Free();
-				hRelative.Free();
+				hCallstack.Free();
 			}
+			Array.Resize(ref callstack, (int)callstackSize);
+
+			return callstack;
 		}
 		[DllImport(DLLPath)] private static extern Int32 DebugGetFunctionEntryPointCount();
 		[DllImport(DLLPath, EntryPoint = "DebugGetFunctionEntryPoints")] private static extern void DebugGetFunctionEntryPointsWrapper(IntPtr callstackAbsolute, Int32 maxCount);
@@ -1123,6 +1124,22 @@ namespace Mesen.GUI
 		public byte Value;
 		public SByte PpuLatch;
 	}
+
+	public enum StackFrameFlags : byte
+	{
+		None = 0,
+		Nmi = 1,
+		Irq = 2
+	}
+
+	public struct StackFrameInfo
+	{
+		public Int32 JumpSourceAbsolute;
+		public Int32 JumpTargetAbsolute;
+		public UInt16 JumpSource;
+		public UInt16 JumpTarget;
+		public StackFrameFlags Flags;
+	};
 
 	public struct DebugState
 	{
