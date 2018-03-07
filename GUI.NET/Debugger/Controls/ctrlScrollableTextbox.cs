@@ -190,9 +190,9 @@ namespace Mesen.GUI.Debugger
 			this.ctrlTextbox.ScrollToLineNumber(lineNumber, historyType, scrollToTop);
 		}
 
-		public void CopySelection()
+		public void CopySelection(bool copyLineNumbers, bool copyContentNotes)
 		{
-			this.ctrlTextbox.CopySelection();
+			this.ctrlTextbox.CopySelection(copyLineNumbers, copyContentNotes);
 		}
 		
 		public int CurrentLine

@@ -62,6 +62,7 @@ namespace Mesen.GUI.Debugger
 			this.mnuExportLabels = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem16 = new System.Windows.Forms.ToolStripSeparator();
 			this.mnuResetWorkspace = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuResetLabels = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem10 = new System.Windows.Forms.ToolStripSeparator();
 			this.mnuAutoLoadDbgFiles = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuAutoLoadCdlFiles = new System.Windows.Forms.ToolStripMenuItem();
@@ -125,15 +126,7 @@ namespace Mesen.GUI.Debugger
 			this.mnuBringToFrontOnBreak = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuBringToFrontOnPause = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem12 = new System.Windows.Forms.ToolStripSeparator();
-			this.mnuConfigureColors = new System.Windows.Forms.ToolStripMenuItem();
-			this.mnuSplitView = new System.Windows.Forms.ToolStripMenuItem();
-			this.fontSizeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.mnuIncreaseFontSize = new System.Windows.Forms.ToolStripMenuItem();
-			this.mnuDecreaseFontSize = new System.Windows.Forms.ToolStripMenuItem();
-			this.mnuResetFontSize = new System.Windows.Forms.ToolStripMenuItem();
-			this.toolStripMenuItem21 = new System.Windows.Forms.ToolStripSeparator();
-			this.mnuSelectFont = new System.Windows.Forms.ToolStripMenuItem();
-			this.toolStripMenuItem11 = new System.Windows.Forms.ToolStripSeparator();
+			this.mnuShowOptions = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuShowToolbar = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuShowCpuMemoryMapping = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuShowPpuMemoryMapping = new System.Windows.Forms.ToolStripMenuItem();
@@ -142,6 +135,18 @@ namespace Mesen.GUI.Debugger
 			this.toolStripMenuItem18 = new System.Windows.Forms.ToolStripSeparator();
 			this.mnuShowCodePreview = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuShowOpCodeTooltips = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuCopyOptions = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuCopyAddresses = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuCopyByteCode = new System.Windows.Forms.ToolStripMenuItem();
+			this.fontSizeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuIncreaseFontSize = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuDecreaseFontSize = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuResetFontSize = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem21 = new System.Windows.Forms.ToolStripSeparator();
+			this.mnuSelectFont = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuConfigureColors = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuSplitView = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem11 = new System.Windows.Forms.ToolStripSeparator();
 			this.toolStripMenuItem6 = new System.Windows.Forms.ToolStripSeparator();
 			this.mnuHidePauseIcon = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuPpuPartialDraw = new System.Windows.Forms.ToolStripMenuItem();
@@ -180,7 +185,6 @@ namespace Mesen.GUI.Debugger
 			this.ctrlPpuMemoryMapping = new Mesen.GUI.Debugger.Controls.ctrlMemoryMapping();
 			this.ctrlCpuMemoryMapping = new Mesen.GUI.Debugger.Controls.ctrlMemoryMapping();
 			this.tsToolbar = new Mesen.GUI.Controls.ctrlMesenToolStrip();
-			this.mnuResetLabels = new System.Windows.Forms.ToolStripMenuItem();
 			((System.ComponentModel.ISupportInitialize)(this.splitContainer)).BeginInit();
 			this.splitContainer.Panel1.SuspendLayout();
 			this.splitContainer.Panel2.SuspendLayout();
@@ -226,7 +230,7 @@ namespace Mesen.GUI.Debugger
 			this.splitContainer.Panel2.Controls.Add(this.tableLayoutPanel10);
 			this.splitContainer.Panel2MinSize = 100;
 			this.splitContainer.Size = new System.Drawing.Size(1172, 573);
-			this.splitContainer.SplitterDistance = 407;
+			this.splitContainer.SplitterDistance = 400;
 			this.splitContainer.SplitterWidth = 7;
 			this.splitContainer.TabIndex = 1;
 			this.splitContainer.TabStop = false;
@@ -249,7 +253,7 @@ namespace Mesen.GUI.Debugger
 			// 
 			this.ctrlSplitContainerTop.Panel2.Controls.Add(this.tlpFunctionLabelLists);
 			this.ctrlSplitContainerTop.Panel2MinSize = 150;
-			this.ctrlSplitContainerTop.Size = new System.Drawing.Size(1172, 407);
+			this.ctrlSplitContainerTop.Size = new System.Drawing.Size(1172, 400);
 			this.ctrlSplitContainerTop.SplitterDistance = 750;
 			this.ctrlSplitContainerTop.SplitterWidth = 7;
 			this.ctrlSplitContainerTop.TabIndex = 3;
@@ -271,7 +275,7 @@ namespace Mesen.GUI.Debugger
 			this.tlpTop.Name = "tlpTop";
 			this.tlpTop.RowCount = 1;
 			this.tlpTop.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tlpTop.Size = new System.Drawing.Size(750, 407);
+			this.tlpTop.Size = new System.Drawing.Size(750, 400);
 			this.tlpTop.TabIndex = 2;
 			// 
 			// ctrlDebuggerCode
@@ -283,7 +287,7 @@ namespace Mesen.GUI.Debugger
 			this.ctrlDebuggerCode.Name = "ctrlDebuggerCode";
 			this.ctrlDebuggerCode.ShowMemoryValues = false;
 			this.ctrlDebuggerCode.ShowScrollbars = true;
-			this.ctrlDebuggerCode.Size = new System.Drawing.Size(286, 401);
+			this.ctrlDebuggerCode.Size = new System.Drawing.Size(286, 394);
 			this.ctrlDebuggerCode.TabIndex = 2;
 			this.ctrlDebuggerCode.TextZoom = 100;
 			this.ctrlDebuggerCode.OnEditCode += new Mesen.GUI.Debugger.ctrlDebuggerCode.AssemblerEventHandler(this.ctrlDebuggerCode_OnEditCode);
@@ -297,7 +301,7 @@ namespace Mesen.GUI.Debugger
 			this.ctrlConsoleStatus.Location = new System.Drawing.Point(292, 0);
 			this.ctrlConsoleStatus.Margin = new System.Windows.Forms.Padding(0);
 			this.ctrlConsoleStatus.Name = "ctrlConsoleStatus";
-			this.ctrlConsoleStatus.Size = new System.Drawing.Size(458, 407);
+			this.ctrlConsoleStatus.Size = new System.Drawing.Size(458, 400);
 			this.ctrlConsoleStatus.TabIndex = 3;
 			this.ctrlConsoleStatus.OnGotoLocation += new System.EventHandler(this.ctrlConsoleStatus_OnGotoLocation);
 			// 
@@ -310,7 +314,7 @@ namespace Mesen.GUI.Debugger
 			this.ctrlDebuggerCodeSplit.Name = "ctrlDebuggerCodeSplit";
 			this.ctrlDebuggerCodeSplit.ShowMemoryValues = false;
 			this.ctrlDebuggerCodeSplit.ShowScrollbars = true;
-			this.ctrlDebuggerCodeSplit.Size = new System.Drawing.Size(1, 401);
+			this.ctrlDebuggerCodeSplit.Size = new System.Drawing.Size(1, 394);
 			this.ctrlDebuggerCodeSplit.TabIndex = 4;
 			this.ctrlDebuggerCodeSplit.TextZoom = 100;
 			this.ctrlDebuggerCodeSplit.Visible = false;
@@ -332,16 +336,16 @@ namespace Mesen.GUI.Debugger
 			this.tlpFunctionLabelLists.RowCount = 2;
 			this.tlpFunctionLabelLists.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
 			this.tlpFunctionLabelLists.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-			this.tlpFunctionLabelLists.Size = new System.Drawing.Size(415, 407);
+			this.tlpFunctionLabelLists.Size = new System.Drawing.Size(415, 400);
 			this.tlpFunctionLabelLists.TabIndex = 5;
 			// 
 			// grpLabels
 			// 
 			this.grpLabels.Controls.Add(this.ctrlLabelList);
 			this.grpLabels.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.grpLabels.Location = new System.Drawing.Point(3, 206);
+			this.grpLabels.Location = new System.Drawing.Point(3, 203);
 			this.grpLabels.Name = "grpLabels";
-			this.grpLabels.Size = new System.Drawing.Size(409, 198);
+			this.grpLabels.Size = new System.Drawing.Size(409, 194);
 			this.grpLabels.TabIndex = 6;
 			this.grpLabels.TabStop = false;
 			this.grpLabels.Text = "Labels";
@@ -351,7 +355,7 @@ namespace Mesen.GUI.Debugger
 			this.ctrlLabelList.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.ctrlLabelList.Location = new System.Drawing.Point(3, 16);
 			this.ctrlLabelList.Name = "ctrlLabelList";
-			this.ctrlLabelList.Size = new System.Drawing.Size(403, 179);
+			this.ctrlLabelList.Size = new System.Drawing.Size(403, 175);
 			this.ctrlLabelList.TabIndex = 0;
 			this.ctrlLabelList.OnFindOccurrence += new System.EventHandler(this.ctrlLabelList_OnFindOccurrence);
 			this.ctrlLabelList.OnLabelSelected += new System.EventHandler(this.ctrlLabelList_OnLabelSelected);
@@ -362,7 +366,7 @@ namespace Mesen.GUI.Debugger
 			this.grpFunctions.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.grpFunctions.Location = new System.Drawing.Point(3, 3);
 			this.grpFunctions.Name = "grpFunctions";
-			this.grpFunctions.Size = new System.Drawing.Size(409, 197);
+			this.grpFunctions.Size = new System.Drawing.Size(409, 194);
 			this.grpFunctions.TabIndex = 5;
 			this.grpFunctions.TabStop = false;
 			this.grpFunctions.Text = "Functions";
@@ -372,7 +376,7 @@ namespace Mesen.GUI.Debugger
 			this.ctrlFunctionList.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.ctrlFunctionList.Location = new System.Drawing.Point(3, 16);
 			this.ctrlFunctionList.Name = "ctrlFunctionList";
-			this.ctrlFunctionList.Size = new System.Drawing.Size(403, 178);
+			this.ctrlFunctionList.Size = new System.Drawing.Size(403, 175);
 			this.ctrlFunctionList.TabIndex = 0;
 			this.ctrlFunctionList.OnFindOccurrence += new System.EventHandler(this.ctrlFunctionList_OnFindOccurrence);
 			this.ctrlFunctionList.OnFunctionSelected += new System.EventHandler(this.ctrlFunctionList_OnFunctionSelected);
@@ -403,7 +407,7 @@ namespace Mesen.GUI.Debugger
 			this.tableLayoutPanel10.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this.tableLayoutPanel10.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel10.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this.tableLayoutPanel10.Size = new System.Drawing.Size(1172, 159);
+			this.tableLayoutPanel10.Size = new System.Drawing.Size(1172, 166);
 			this.tableLayoutPanel10.TabIndex = 0;
 			// 
 			// grpWatch
@@ -412,7 +416,7 @@ namespace Mesen.GUI.Debugger
 			this.grpWatch.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.grpWatch.Location = new System.Drawing.Point(3, 3);
 			this.grpWatch.Name = "grpWatch";
-			this.grpWatch.Size = new System.Drawing.Size(384, 153);
+			this.grpWatch.Size = new System.Drawing.Size(384, 160);
 			this.grpWatch.TabIndex = 2;
 			this.grpWatch.TabStop = false;
 			this.grpWatch.Text = "Watch";
@@ -422,7 +426,7 @@ namespace Mesen.GUI.Debugger
 			this.ctrlWatch.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.ctrlWatch.Location = new System.Drawing.Point(3, 16);
 			this.ctrlWatch.Name = "ctrlWatch";
-			this.ctrlWatch.Size = new System.Drawing.Size(378, 134);
+			this.ctrlWatch.Size = new System.Drawing.Size(378, 141);
 			this.ctrlWatch.TabIndex = 0;
 			// 
 			// grpBreakpoints
@@ -431,7 +435,7 @@ namespace Mesen.GUI.Debugger
 			this.grpBreakpoints.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.grpBreakpoints.Location = new System.Drawing.Point(393, 3);
 			this.grpBreakpoints.Name = "grpBreakpoints";
-			this.grpBreakpoints.Size = new System.Drawing.Size(384, 153);
+			this.grpBreakpoints.Size = new System.Drawing.Size(384, 160);
 			this.grpBreakpoints.TabIndex = 3;
 			this.grpBreakpoints.TabStop = false;
 			this.grpBreakpoints.Text = "Breakpoints";
@@ -441,7 +445,7 @@ namespace Mesen.GUI.Debugger
 			this.ctrlBreakpoints.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.ctrlBreakpoints.Location = new System.Drawing.Point(3, 16);
 			this.ctrlBreakpoints.Name = "ctrlBreakpoints";
-			this.ctrlBreakpoints.Size = new System.Drawing.Size(378, 134);
+			this.ctrlBreakpoints.Size = new System.Drawing.Size(378, 141);
 			this.ctrlBreakpoints.TabIndex = 0;
 			this.ctrlBreakpoints.BreakpointNavigation += new System.EventHandler(this.ctrlBreakpoints_BreakpointNavigation);
 			// 
@@ -451,7 +455,7 @@ namespace Mesen.GUI.Debugger
 			this.grpCallstack.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.grpCallstack.Location = new System.Drawing.Point(783, 3);
 			this.grpCallstack.Name = "grpCallstack";
-			this.grpCallstack.Size = new System.Drawing.Size(386, 153);
+			this.grpCallstack.Size = new System.Drawing.Size(386, 160);
 			this.grpCallstack.TabIndex = 4;
 			this.grpCallstack.TabStop = false;
 			this.grpCallstack.Text = "Call Stack";
@@ -461,7 +465,7 @@ namespace Mesen.GUI.Debugger
 			this.ctrlCallstack.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.ctrlCallstack.Location = new System.Drawing.Point(3, 16);
 			this.ctrlCallstack.Name = "ctrlCallstack";
-			this.ctrlCallstack.Size = new System.Drawing.Size(380, 134);
+			this.ctrlCallstack.Size = new System.Drawing.Size(380, 141);
 			this.ctrlCallstack.TabIndex = 0;
 			this.ctrlCallstack.FunctionSelected += new System.EventHandler(this.ctrlCallstack_FunctionSelected);
 			// 
@@ -576,6 +580,13 @@ namespace Mesen.GUI.Debugger
 			this.mnuResetWorkspace.Size = new System.Drawing.Size(207, 22);
 			this.mnuResetWorkspace.Text = "Reset Workspace";
 			this.mnuResetWorkspace.Click += new System.EventHandler(this.mnuResetWorkspace_Click);
+			// 
+			// mnuResetLabels
+			// 
+			this.mnuResetLabels.Name = "mnuResetLabels";
+			this.mnuResetLabels.Size = new System.Drawing.Size(207, 22);
+			this.mnuResetLabels.Text = "Reset Labels";
+			this.mnuResetLabels.Click += new System.EventHandler(this.mnuResetLabels_Click);
 			// 
 			// toolStripMenuItem10
 			// 
@@ -896,18 +907,12 @@ namespace Mesen.GUI.Debugger
             this.mnuDisassemblyOptions,
             this.mnuBreakOptions,
             this.toolStripMenuItem12,
+            this.mnuShowOptions,
+            this.mnuCopyOptions,
+            this.fontSizeToolStripMenuItem,
             this.mnuConfigureColors,
             this.mnuSplitView,
-            this.fontSizeToolStripMenuItem,
             this.toolStripMenuItem11,
-            this.mnuShowToolbar,
-            this.mnuShowCpuMemoryMapping,
-            this.mnuShowPpuMemoryMapping,
-            this.mnuShowFunctionLabelLists,
-            this.mnuShowBottomPanel,
-            this.toolStripMenuItem18,
-            this.mnuShowCodePreview,
-            this.mnuShowOpCodeTooltips,
             this.toolStripMenuItem6,
             this.mnuHidePauseIcon,
             this.mnuPpuPartialDraw,
@@ -1130,22 +1135,108 @@ namespace Mesen.GUI.Debugger
 			this.toolStripMenuItem12.Name = "toolStripMenuItem12";
 			this.toolStripMenuItem12.Size = new System.Drawing.Size(263, 6);
 			// 
-			// mnuConfigureColors
+			// mnuShowOptions
 			// 
-			this.mnuConfigureColors.Image = global::Mesen.GUI.Properties.Resources.PipetteSmall;
-			this.mnuConfigureColors.Name = "mnuConfigureColors";
-			this.mnuConfigureColors.Size = new System.Drawing.Size(266, 22);
-			this.mnuConfigureColors.Text = "Configure Colors";
-			this.mnuConfigureColors.Click += new System.EventHandler(this.mnuConfigureColors_Click);
+			this.mnuShowOptions.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.mnuShowToolbar,
+            this.mnuShowCpuMemoryMapping,
+            this.mnuShowPpuMemoryMapping,
+            this.mnuShowFunctionLabelLists,
+            this.mnuShowBottomPanel,
+            this.toolStripMenuItem18,
+            this.mnuShowCodePreview,
+            this.mnuShowOpCodeTooltips});
+			this.mnuShowOptions.Image = global::Mesen.GUI.Properties.Resources.Cog;
+			this.mnuShowOptions.Name = "mnuShowOptions";
+			this.mnuShowOptions.Size = new System.Drawing.Size(266, 22);
+			this.mnuShowOptions.Text = "Show...";
 			// 
-			// mnuSplitView
+			// mnuShowToolbar
 			// 
-			this.mnuSplitView.CheckOnClick = true;
-			this.mnuSplitView.Image = global::Mesen.GUI.Properties.Resources.SplitView;
-			this.mnuSplitView.Name = "mnuSplitView";
-			this.mnuSplitView.Size = new System.Drawing.Size(266, 22);
-			this.mnuSplitView.Text = "Split View";
-			this.mnuSplitView.Click += new System.EventHandler(this.mnuSplitView_Click);
+			this.mnuShowToolbar.CheckOnClick = true;
+			this.mnuShowToolbar.Name = "mnuShowToolbar";
+			this.mnuShowToolbar.Size = new System.Drawing.Size(259, 22);
+			this.mnuShowToolbar.Text = "Show Toolbar";
+			this.mnuShowToolbar.Click += new System.EventHandler(this.mnuShowToolbar_Click);
+			// 
+			// mnuShowCpuMemoryMapping
+			// 
+			this.mnuShowCpuMemoryMapping.CheckOnClick = true;
+			this.mnuShowCpuMemoryMapping.Name = "mnuShowCpuMemoryMapping";
+			this.mnuShowCpuMemoryMapping.Size = new System.Drawing.Size(259, 22);
+			this.mnuShowCpuMemoryMapping.Text = "Show CPU Memory Mapping";
+			this.mnuShowCpuMemoryMapping.Click += new System.EventHandler(this.mnuShowCpuMemoryMapping_Click);
+			// 
+			// mnuShowPpuMemoryMapping
+			// 
+			this.mnuShowPpuMemoryMapping.CheckOnClick = true;
+			this.mnuShowPpuMemoryMapping.Name = "mnuShowPpuMemoryMapping";
+			this.mnuShowPpuMemoryMapping.Size = new System.Drawing.Size(259, 22);
+			this.mnuShowPpuMemoryMapping.Text = "Show PPU Memory Mapping";
+			this.mnuShowPpuMemoryMapping.Click += new System.EventHandler(this.mnuShowPpuMemoryMapping_Click);
+			// 
+			// mnuShowFunctionLabelLists
+			// 
+			this.mnuShowFunctionLabelLists.CheckOnClick = true;
+			this.mnuShowFunctionLabelLists.Name = "mnuShowFunctionLabelLists";
+			this.mnuShowFunctionLabelLists.Size = new System.Drawing.Size(259, 22);
+			this.mnuShowFunctionLabelLists.Text = "Show Function/Label Lists";
+			this.mnuShowFunctionLabelLists.Click += new System.EventHandler(this.mnuShowFunctionLabelLists_Click);
+			// 
+			// mnuShowBottomPanel
+			// 
+			this.mnuShowBottomPanel.CheckOnClick = true;
+			this.mnuShowBottomPanel.Name = "mnuShowBottomPanel";
+			this.mnuShowBottomPanel.Size = new System.Drawing.Size(259, 22);
+			this.mnuShowBottomPanel.Text = "Show Watch/Breakpoints/Callstack";
+			this.mnuShowBottomPanel.Click += new System.EventHandler(this.mnuShowBottomPanel_Click);
+			// 
+			// toolStripMenuItem18
+			// 
+			this.toolStripMenuItem18.Name = "toolStripMenuItem18";
+			this.toolStripMenuItem18.Size = new System.Drawing.Size(256, 6);
+			// 
+			// mnuShowCodePreview
+			// 
+			this.mnuShowCodePreview.CheckOnClick = true;
+			this.mnuShowCodePreview.Name = "mnuShowCodePreview";
+			this.mnuShowCodePreview.Size = new System.Drawing.Size(259, 22);
+			this.mnuShowCodePreview.Text = "Show Code Preview in Tooltips";
+			this.mnuShowCodePreview.CheckedChanged += new System.EventHandler(this.mnuShowCodePreview_CheckedChanged);
+			// 
+			// mnuShowOpCodeTooltips
+			// 
+			this.mnuShowOpCodeTooltips.CheckOnClick = true;
+			this.mnuShowOpCodeTooltips.Name = "mnuShowOpCodeTooltips";
+			this.mnuShowOpCodeTooltips.Size = new System.Drawing.Size(259, 22);
+			this.mnuShowOpCodeTooltips.Text = "Show OP Code Info Tooltips";
+			this.mnuShowOpCodeTooltips.CheckedChanged += new System.EventHandler(this.mnuShowOpCodeTooltips_CheckedChanged);
+			// 
+			// mnuCopyOptions
+			// 
+			this.mnuCopyOptions.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.mnuCopyAddresses,
+            this.mnuCopyByteCode});
+			this.mnuCopyOptions.Image = global::Mesen.GUI.Properties.Resources.Copy;
+			this.mnuCopyOptions.Name = "mnuCopyOptions";
+			this.mnuCopyOptions.Size = new System.Drawing.Size(266, 22);
+			this.mnuCopyOptions.Text = "Copy Options";
+			// 
+			// mnuCopyAddresses
+			// 
+			this.mnuCopyAddresses.CheckOnClick = true;
+			this.mnuCopyAddresses.Name = "mnuCopyAddresses";
+			this.mnuCopyAddresses.Size = new System.Drawing.Size(159, 22);
+			this.mnuCopyAddresses.Text = "Copy Addresses";
+			this.mnuCopyAddresses.Click += new System.EventHandler(this.mnuCopyAddresses_Click);
+			// 
+			// mnuCopyByteCode
+			// 
+			this.mnuCopyByteCode.CheckOnClick = true;
+			this.mnuCopyByteCode.Name = "mnuCopyByteCode";
+			this.mnuCopyByteCode.Size = new System.Drawing.Size(159, 22);
+			this.mnuCopyByteCode.Text = "Copy Byte Code";
+			this.mnuCopyByteCode.Click += new System.EventHandler(this.mnuCopyByteCode_Click);
 			// 
 			// fontSizeToolStripMenuItem
 			// 
@@ -1199,71 +1290,27 @@ namespace Mesen.GUI.Debugger
 			this.mnuSelectFont.Text = "Select Font...";
 			this.mnuSelectFont.Click += new System.EventHandler(this.mnuSelectFont_Click);
 			// 
+			// mnuConfigureColors
+			// 
+			this.mnuConfigureColors.Image = global::Mesen.GUI.Properties.Resources.PipetteSmall;
+			this.mnuConfigureColors.Name = "mnuConfigureColors";
+			this.mnuConfigureColors.Size = new System.Drawing.Size(266, 22);
+			this.mnuConfigureColors.Text = "Configure Colors";
+			this.mnuConfigureColors.Click += new System.EventHandler(this.mnuConfigureColors_Click);
+			// 
+			// mnuSplitView
+			// 
+			this.mnuSplitView.CheckOnClick = true;
+			this.mnuSplitView.Image = global::Mesen.GUI.Properties.Resources.SplitView;
+			this.mnuSplitView.Name = "mnuSplitView";
+			this.mnuSplitView.Size = new System.Drawing.Size(266, 22);
+			this.mnuSplitView.Text = "Split View";
+			this.mnuSplitView.Click += new System.EventHandler(this.mnuSplitView_Click);
+			// 
 			// toolStripMenuItem11
 			// 
 			this.toolStripMenuItem11.Name = "toolStripMenuItem11";
 			this.toolStripMenuItem11.Size = new System.Drawing.Size(263, 6);
-			// 
-			// mnuShowToolbar
-			// 
-			this.mnuShowToolbar.CheckOnClick = true;
-			this.mnuShowToolbar.Name = "mnuShowToolbar";
-			this.mnuShowToolbar.Size = new System.Drawing.Size(266, 22);
-			this.mnuShowToolbar.Text = "Show Toolbar";
-			this.mnuShowToolbar.Click += new System.EventHandler(this.mnuShowToolbar_Click);
-			// 
-			// mnuShowCpuMemoryMapping
-			// 
-			this.mnuShowCpuMemoryMapping.CheckOnClick = true;
-			this.mnuShowCpuMemoryMapping.Name = "mnuShowCpuMemoryMapping";
-			this.mnuShowCpuMemoryMapping.Size = new System.Drawing.Size(266, 22);
-			this.mnuShowCpuMemoryMapping.Text = "Show CPU Memory Mapping";
-			this.mnuShowCpuMemoryMapping.Click += new System.EventHandler(this.mnuShowCpuMemoryMapping_Click);
-			// 
-			// mnuShowPpuMemoryMapping
-			// 
-			this.mnuShowPpuMemoryMapping.CheckOnClick = true;
-			this.mnuShowPpuMemoryMapping.Name = "mnuShowPpuMemoryMapping";
-			this.mnuShowPpuMemoryMapping.Size = new System.Drawing.Size(266, 22);
-			this.mnuShowPpuMemoryMapping.Text = "Show PPU Memory Mapping";
-			this.mnuShowPpuMemoryMapping.Click += new System.EventHandler(this.mnuShowPpuMemoryMapping_Click);
-			// 
-			// mnuShowFunctionLabelLists
-			// 
-			this.mnuShowFunctionLabelLists.CheckOnClick = true;
-			this.mnuShowFunctionLabelLists.Name = "mnuShowFunctionLabelLists";
-			this.mnuShowFunctionLabelLists.Size = new System.Drawing.Size(266, 22);
-			this.mnuShowFunctionLabelLists.Text = "Show Function/Label Lists";
-			this.mnuShowFunctionLabelLists.Click += new System.EventHandler(this.mnuShowFunctionLabelLists_Click);
-			// 
-			// mnuShowBottomPanel
-			// 
-			this.mnuShowBottomPanel.CheckOnClick = true;
-			this.mnuShowBottomPanel.Name = "mnuShowBottomPanel";
-			this.mnuShowBottomPanel.Size = new System.Drawing.Size(266, 22);
-			this.mnuShowBottomPanel.Text = "Show Watch/Breakpoints/Callstack";
-			this.mnuShowBottomPanel.Click += new System.EventHandler(this.mnuShowBottomPanel_Click);
-			// 
-			// toolStripMenuItem18
-			// 
-			this.toolStripMenuItem18.Name = "toolStripMenuItem18";
-			this.toolStripMenuItem18.Size = new System.Drawing.Size(263, 6);
-			// 
-			// mnuShowCodePreview
-			// 
-			this.mnuShowCodePreview.CheckOnClick = true;
-			this.mnuShowCodePreview.Name = "mnuShowCodePreview";
-			this.mnuShowCodePreview.Size = new System.Drawing.Size(266, 22);
-			this.mnuShowCodePreview.Text = "Show Code Preview in Tooltips";
-			this.mnuShowCodePreview.CheckedChanged += new System.EventHandler(this.mnuShowCodePreview_CheckedChanged);
-			// 
-			// mnuShowOpCodeTooltips
-			// 
-			this.mnuShowOpCodeTooltips.CheckOnClick = true;
-			this.mnuShowOpCodeTooltips.Name = "mnuShowOpCodeTooltips";
-			this.mnuShowOpCodeTooltips.Size = new System.Drawing.Size(266, 22);
-			this.mnuShowOpCodeTooltips.Text = "Show OP Code Info Tooltips";
-			this.mnuShowOpCodeTooltips.CheckedChanged += new System.EventHandler(this.mnuShowOpCodeTooltips_CheckedChanged);
 			// 
 			// toolStripMenuItem6
 			// 
@@ -1578,13 +1625,6 @@ namespace Mesen.GUI.Debugger
 			this.tsToolbar.Text = "toolStrip1";
 			this.tsToolbar.Visible = false;
 			// 
-			// mnuResetLabels
-			// 
-			this.mnuResetLabels.Name = "mnuResetLabels";
-			this.mnuResetLabels.Size = new System.Drawing.Size(207, 22);
-			this.mnuResetLabels.Text = "Reset Labels";
-			this.mnuResetLabels.Click += new System.EventHandler(this.mnuResetLabels_Click);
-			// 
 			// frmDebugger
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1779,5 +1819,9 @@ namespace Mesen.GUI.Debugger
 		private System.Windows.Forms.ToolStripMenuItem mnuGoToProgramCount;
 		private System.Windows.Forms.ToolStripMenuItem mnuHidePauseIcon;
 		private System.Windows.Forms.ToolStripMenuItem mnuResetLabels;
+		private System.Windows.Forms.ToolStripMenuItem mnuShowOptions;
+		private System.Windows.Forms.ToolStripMenuItem mnuCopyOptions;
+		private System.Windows.Forms.ToolStripMenuItem mnuCopyAddresses;
+		private System.Windows.Forms.ToolStripMenuItem mnuCopyByteCode;
 	}
 }

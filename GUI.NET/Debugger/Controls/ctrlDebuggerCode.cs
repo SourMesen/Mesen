@@ -943,7 +943,7 @@ namespace Mesen.GUI.Debugger
 
 		private void copySelectionToolStripMenuItem_Click(object sender, EventArgs e)
 		{
-			this.ctrlCodeViewer.CopySelection();
+			this.ctrlCodeViewer.CopySelection(ConfigManager.Config.DebugInfo.CopyAddresses, ConfigManager.Config.DebugInfo.CopyByteCode);
 		}
 
 		private void mnuEditInMemoryViewer_Click(object sender, EventArgs e)

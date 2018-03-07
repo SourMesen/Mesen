@@ -131,6 +131,9 @@ namespace Mesen.GUI.Config
 			Color.Red, Color.Red, ColorTranslator.FromHtml("#FF8224"), Color.Red, ColorTranslator.FromHtml("#24A672"), Color.Red, Color.Red, ColorTranslator.FromHtml("#6AF0FF")
 		};
 
+		public bool CopyAddresses = false;
+		public bool CopyByteCode = false;
+
 		public bool PpuAutoRefresh = true;
 		public bool PpuPartialDraw = false;
 		public bool PpuShowPreviousFrame = false;

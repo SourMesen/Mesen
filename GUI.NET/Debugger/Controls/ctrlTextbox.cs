@@ -860,7 +860,7 @@ namespace Mesen.GUI.Debugger
 			base.OnMouseMove(e);
 		}
 
-		public void CopySelection()
+		public void CopySelection(bool copyLineNumbers, bool copyContentNotes)
 		{
 			StringBuilder sb = new StringBuilder();
 			for(int i = this.SelectionStart, end = this.SelectionStart + this.SelectionLength; i <= end; i++) {
@@ -881,7 +881,15 @@ namespace Mesen.GUI.Debugger
 				}
 
 				codeString = codeString.PadRight(padding);
-				sb.AppendLine(indent + codeString + commentString);
+
+				string line = indent + codeString + commentString;
+				if(copyContentNotes && _contentNotes[i].Length > 0) {
+					line = _contentNotes[i].PadRight(13) + line;
+				}
+				if(copyLineNumbers && _lineNumbers[i] >= 0) {
+					line = _lineNumbers[i].ToString("X4") + "  " + line;
+				}
+				sb.AppendLine(line);
 			}
 			Clipboard.SetText(sb.ToString());
 		}
