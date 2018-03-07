@@ -20,11 +20,12 @@ namespace Mesen.GUI.Controls
 
 		protected override void OnItemCheck(ItemCheckEventArgs e)
 		{
-			if(this._preventCheck) {
+			if(this._preventCheck || Control.ModifierKeys.HasFlag(Keys.Control) || Control.ModifierKeys.HasFlag(Keys.Shift)) {
 				e.NewValue = e.CurrentValue;
 				this._preventCheck = false;
-			} else
+			} else {
 				base.OnItemCheck(e);
+			}
 		}
 
 		protected override void OnMouseDown(MouseEventArgs e)
