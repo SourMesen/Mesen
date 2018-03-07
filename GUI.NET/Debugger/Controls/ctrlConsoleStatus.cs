@@ -114,7 +114,9 @@ namespace Mesen.GUI.Debugger
 				sb.Append(", ");
 			}
 			string stack = sb.ToString();
-			stack = stack.Substring(0, stack.Length - 2);
+			if(stack.Length > 2) {
+				stack = stack.Substring(0, stack.Length - 2);
+			}
 			txtStack.Text = stack;
 		}
 
