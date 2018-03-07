@@ -153,9 +153,14 @@ bool Console::Initialize(VirtualFile &romFile, VirtualFile &patchFile)
 				_controlManager.reset(new ControlManager(_systemActionManager, _mapper->GetMapperControlDevice()));
 			}
 			_controlManager->UpdateControlDevices();
+#ifdef LIBRETRO
+			if (_mapper->GetGameSystem() == GameSystem::FDS)
+				BatteryManager::SetSaveEnabled(true);
+#else
 			//Re-enable battery saves
 			BatteryManager::SetSaveEnabled(true);
-			
+#endif
+
 			if(_hdData && (!_hdData->Tiles.empty() || !_hdData->Backgrounds.empty())) {
 				_ppu.reset(new HdPpu(_mapper.get(), _controlManager.get(), _hdData.get()));
 			} else if(std::dynamic_pointer_cast<NsfMapper>(_mapper)) {
