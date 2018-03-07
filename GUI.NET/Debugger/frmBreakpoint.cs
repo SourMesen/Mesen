@@ -70,9 +70,9 @@ namespace Mesen.GUI.Debugger
 			this.toolTip.SetToolTip(this.picHelp, frmBreakpoint.GetConditionTooltip(false));
 		}
 
-		protected override void OnLoad(EventArgs e)
+		protected override void OnShown(EventArgs e)
 		{
-			base.OnLoad(e);
+			base.OnShown(e);
 
 			Breakpoint bp = (Breakpoint)this.Entity;
 			if(!BreakpointManager.Breakpoints.Contains(bp)) {
@@ -93,6 +93,16 @@ namespace Mesen.GUI.Debugger
 			if(bp.StartAddress == 0 && bp.EndAddress == 0 && bp.AddressType != BreakpointAddressType.AddressRange) {
 				txtFrom.Text = "";
 				txtTo.Text = "";
+			}
+
+			if(bp.AddressType == BreakpointAddressType.AddressRange) {
+				txtFrom.Focus();
+				txtFrom.SelectionStart = 0;
+				txtFrom.SelectionLength = 0;
+			} else {
+				txtAddress.Focus();
+				txtAddress.SelectionStart = 0;
+				txtAddress.SelectionLength = 0;
 			}
 		}
 
