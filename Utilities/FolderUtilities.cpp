@@ -191,7 +191,12 @@ string FolderUtilities::GetFolderName(string filepath)
 
 string FolderUtilities::CombinePath(string folder, string filename)
 {
-	return (fs::u8path(folder) / fs::u8path(filename)).u8string();
+	//Windows supports forward slashes for paths, too.  And fs::u8path is abnormally slow.
+	if(folder[folder.length() - 1] != '/') {
+		return folder + "/" + filename;
+	} else {
+		return folder + filename;
+	}
 }
 
 int64_t FolderUtilities::GetFileModificationTime(string filepath)

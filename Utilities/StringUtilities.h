@@ -7,12 +7,14 @@ public:
 	static vector<string> Split(string input, char delimiter)
 	{
 		vector<string> result;
-		size_t index;
-		while((index = input.find(delimiter)) != string::npos) {
-			result.push_back(input.substr(0, index));
-			input = input.substr(index + 1, input.size() - index - 1);
+		size_t index = 0;
+		size_t lastIndex = 0;
+		while((index = input.find(delimiter, index)) != string::npos) {
+			result.push_back(input.substr(lastIndex, index - lastIndex));
+			index++;
+			lastIndex = index;
 		}
-		result.push_back(input);
+		result.push_back(input.substr(lastIndex));
 		return result;
 	}
 };

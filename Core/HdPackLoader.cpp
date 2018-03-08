@@ -349,12 +349,11 @@ void HdPackLoader::ProcessTileTag(vector<string> &tokens, vector<HdPackCondition
 	HdPackBitmapInfo &bitmapInfo = _hdNesBitmaps[tileInfo->BitmapIndex];
 	uint32_t bitmapOffset = tileInfo->Y * bitmapInfo.Width + tileInfo->X;
 	uint32_t* pngData = (uint32_t*)bitmapInfo.PixelData.data();
+	
+	tileInfo->HdTileData.resize(64 * _data->Scale * _data->Scale);
 	for(uint32_t y = 0; y < 8 * _data->Scale; y++) {
-		for(uint32_t x = 0; x < 8 * _data->Scale; x++) {
-			tileInfo->HdTileData.push_back(pngData[bitmapOffset]);
-			bitmapOffset++;
-		}
-		bitmapOffset += bitmapInfo.Width - 8 * _data->Scale;
+		memcpy(tileInfo->HdTileData.data() + (y * 8 * _data->Scale), pngData + bitmapOffset, 8 * _data->Scale * sizeof(uint32_t));
+		bitmapOffset += bitmapInfo.Width;
 	}
 
 	tileInfo->UpdateFlags();
