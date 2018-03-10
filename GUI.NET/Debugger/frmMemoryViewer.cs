@@ -30,6 +30,7 @@ namespace Mesen.GUI.Debugger
 			InitializeComponent();
 
 			this._selectedTab = this.tabMain.SelectedTab;
+			this.InitShortcuts();
 		}
 
 		protected override void OnLoad(EventArgs e)
@@ -100,6 +101,23 @@ namespace Mesen.GUI.Debugger
 			ConfigManager.Config.DebugInfo.MemoryViewerSize = this.WindowState == FormWindowState.Maximized ? this.RestoreBounds.Size : this.Size;
 			ConfigManager.ApplyChanges();
 			DebugWorkspaceManager.SaveWorkspace();
+		}
+
+		private void InitShortcuts()
+		{
+			mnuIncreaseFontSize.InitShortcut(this, nameof(DebuggerShortcutsConfig.IncreaseFontSize));
+			mnuDecreaseFontSize.InitShortcut(this, nameof(DebuggerShortcutsConfig.DecreaseFontSize));
+			mnuResetFontSize.InitShortcut(this, nameof(DebuggerShortcutsConfig.ResetFontSize));
+
+			mnuImport.InitShortcut(this, nameof(DebuggerShortcutsConfig.MemoryViewer_Import));
+			mnuExport.InitShortcut(this, nameof(DebuggerShortcutsConfig.MemoryViewer_Export));
+
+			mnuRefresh.InitShortcut(this, nameof(DebuggerShortcutsConfig.Refresh));
+
+			mnuGoTo.InitShortcut(this, nameof(DebuggerShortcutsConfig.GoTo));
+			mnuFind.InitShortcut(this, nameof(DebuggerShortcutsConfig.Find));
+			mnuFindNext.InitShortcut(this, nameof(DebuggerShortcutsConfig.FindNext));
+			mnuFindPrev.InitShortcut(this, nameof(DebuggerShortcutsConfig.FindPrev));
 		}
 
 		private void InitMemoryTypeDropdown()

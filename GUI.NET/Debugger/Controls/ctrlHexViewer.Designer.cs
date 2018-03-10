@@ -326,7 +326,7 @@
             this.toolStripMenuItem5,
             this.mnuSelectAll});
 			this.ctxMenuStrip.Name = "ctxMenuStrip";
-			this.ctxMenuStrip.Size = new System.Drawing.Size(175, 276);
+			this.ctxMenuStrip.Size = new System.Drawing.Size(175, 254);
 			this.ctxMenuStrip.Opening += new System.ComponentModel.CancelEventHandler(this.ctxMenuStrip_Opening);
 			// 
 			// mnuMarkSelectionAs
@@ -343,7 +343,6 @@
 			// 
 			this.mnuMarkAsCode.Image = global::Mesen.GUI.Properties.Resources.Accept;
 			this.mnuMarkAsCode.Name = "mnuMarkAsCode";
-			this.mnuMarkAsCode.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.D1)));
 			this.mnuMarkAsCode.Size = new System.Drawing.Size(235, 22);
 			this.mnuMarkAsCode.Text = "Verified Code";
 			this.mnuMarkAsCode.Click += new System.EventHandler(this.mnuMarkAsCode_Click);
@@ -352,7 +351,6 @@
 			// 
 			this.mnuMarkAsData.Image = global::Mesen.GUI.Properties.Resources.VerifiedData;
 			this.mnuMarkAsData.Name = "mnuMarkAsData";
-			this.mnuMarkAsData.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.D2)));
 			this.mnuMarkAsData.Size = new System.Drawing.Size(235, 22);
 			this.mnuMarkAsData.Text = "Verified Data";
 			this.mnuMarkAsData.Click += new System.EventHandler(this.mnuMarkAsData_Click);
@@ -361,7 +359,6 @@
 			// 
 			this.mnuMarkAsUnidentifiedData.Image = global::Mesen.GUI.Properties.Resources.UnidentifiedData;
 			this.mnuMarkAsUnidentifiedData.Name = "mnuMarkAsUnidentifiedData";
-			this.mnuMarkAsUnidentifiedData.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.D3)));
 			this.mnuMarkAsUnidentifiedData.Size = new System.Drawing.Size(235, 22);
 			this.mnuMarkAsUnidentifiedData.Text = "Unidentified Code/Data";
 			this.mnuMarkAsUnidentifiedData.Click += new System.EventHandler(this.mnuMarkAsUnidentifiedData_Click);
@@ -404,7 +401,6 @@
 			// 
 			this.mnuFreeze.Image = global::Mesen.GUI.Properties.Resources.Stop;
 			this.mnuFreeze.Name = "mnuFreeze";
-			this.mnuFreeze.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Q)));
 			this.mnuFreeze.Size = new System.Drawing.Size(174, 22);
 			this.mnuFreeze.Text = "Freeze";
 			this.mnuFreeze.Click += new System.EventHandler(this.mnuFreeze_Click);
@@ -413,7 +409,6 @@
 			// 
 			this.mnuUnfreeze.Image = global::Mesen.GUI.Properties.Resources.Play;
 			this.mnuUnfreeze.Name = "mnuUnfreeze";
-			this.mnuUnfreeze.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.W)));
 			this.mnuUnfreeze.Size = new System.Drawing.Size(174, 22);
 			this.mnuUnfreeze.Text = "Unfreeze";
 			this.mnuUnfreeze.Click += new System.EventHandler(this.mnuUnfreeze_Click);
@@ -427,7 +422,6 @@
 			// 
 			this.mnuUndo.Image = global::Mesen.GUI.Properties.Resources.Undo;
 			this.mnuUndo.Name = "mnuUndo";
-			this.mnuUndo.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Z)));
 			this.mnuUndo.Size = new System.Drawing.Size(174, 22);
 			this.mnuUndo.Text = "Undo";
 			this.mnuUndo.Click += new System.EventHandler(this.mnuUndo_Click);
@@ -441,7 +435,6 @@
 			// 
 			this.mnuCopy.Image = global::Mesen.GUI.Properties.Resources.Copy;
 			this.mnuCopy.Name = "mnuCopy";
-			this.mnuCopy.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.C)));
 			this.mnuCopy.Size = new System.Drawing.Size(174, 22);
 			this.mnuCopy.Text = "Copy";
 			this.mnuCopy.Click += new System.EventHandler(this.mnuCopy_Click);
@@ -450,7 +443,6 @@
 			// 
 			this.mnuPaste.Image = global::Mesen.GUI.Properties.Resources.Paste;
 			this.mnuPaste.Name = "mnuPaste";
-			this.mnuPaste.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.V)));
 			this.mnuPaste.Size = new System.Drawing.Size(174, 22);
 			this.mnuPaste.Text = "Paste";
 			this.mnuPaste.Click += new System.EventHandler(this.mnuPaste_Click);
@@ -464,7 +456,6 @@
 			// 
 			this.mnuSelectAll.Image = global::Mesen.GUI.Properties.Resources.SelectAll;
 			this.mnuSelectAll.Name = "mnuSelectAll";
-			this.mnuSelectAll.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.A)));
 			this.mnuSelectAll.Size = new System.Drawing.Size(174, 22);
 			this.mnuSelectAll.Text = "Select All";
 			this.mnuSelectAll.Click += new System.EventHandler(this.mnuSelectAll_Click);

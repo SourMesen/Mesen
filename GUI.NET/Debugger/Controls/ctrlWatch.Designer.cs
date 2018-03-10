@@ -93,8 +93,6 @@
 			// 
 			this.mnuRemoveWatch.Image = global::Mesen.GUI.Properties.Resources.Close;
 			this.mnuRemoveWatch.Name = "mnuRemoveWatch";
-			this.mnuRemoveWatch.ShortcutKeyDisplayString = "";
-			this.mnuRemoveWatch.ShortcutKeys = System.Windows.Forms.Keys.Delete;
 			this.mnuRemoveWatch.Size = new System.Drawing.Size(183, 22);
 			this.mnuRemoveWatch.Text = "Remove";
 			this.mnuRemoveWatch.Click += new System.EventHandler(this.mnuRemoveWatch_Click);

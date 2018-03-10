@@ -25,6 +25,7 @@ namespace Mesen.GUI.Debugger.Controls
 			InitializeComponent();
 
 			this.BaseFont = new Font(BaseControl.MonospaceFontFamily, 10, FontStyle.Regular);
+			this.ctrlHexBox.ContextMenuStrip = this.ctxMenuStrip;
 			this.ctrlHexBox.SelectionForeColor = Color.White;
 			this.ctrlHexBox.SelectionBackColor = Color.FromArgb(31, 123, 205);
 			this.ctrlHexBox.ShadowSelectionColor = Color.FromArgb(100, 60, 128, 200);
@@ -33,7 +34,27 @@ namespace Mesen.GUI.Debugger.Controls
 
 			if(LicenseManager.UsageMode != LicenseUsageMode.Designtime) {
 				this.cboNumberColumns.SelectedIndex = ConfigManager.Config.DebugInfo.RamColumnCount;
+				this.InitShortcuts();
 			}
+		}
+
+		private void InitShortcuts()
+		{
+			mnuFreeze.InitShortcut(this, nameof(DebuggerShortcutsConfig.MemoryViewer_Freeze));
+			mnuUnfreeze.InitShortcut(this, nameof(DebuggerShortcutsConfig.MemoryViewer_Unfreeze));
+
+			mnuAddToWatch.InitShortcut(this, nameof(DebuggerShortcutsConfig.MemoryViewer_AddToWatch));
+			mnuEditBreakpoint.InitShortcut(this, nameof(DebuggerShortcutsConfig.MemoryViewer_EditBreakpoint));
+			mnuEditLabel.InitShortcut(this, nameof(DebuggerShortcutsConfig.MemoryViewer_EditLabel));
+
+			mnuUndo.InitShortcut(this, nameof(DebuggerShortcutsConfig.Undo));
+			mnuCopy.InitShortcut(this, nameof(DebuggerShortcutsConfig.Copy));
+			mnuPaste.InitShortcut(this, nameof(DebuggerShortcutsConfig.Paste));
+			mnuSelectAll.InitShortcut(this, nameof(DebuggerShortcutsConfig.SelectAll));
+
+			mnuMarkAsCode.InitShortcut(this, nameof(DebuggerShortcutsConfig.MarkAsCode));
+			mnuMarkAsData.InitShortcut(this, nameof(DebuggerShortcutsConfig.MarkAsData));
+			mnuMarkAsUnidentifiedData.InitShortcut(this, nameof(DebuggerShortcutsConfig.MarkAsUnidentified));
 		}
 
 		public byte[] GetData()
@@ -68,7 +89,6 @@ namespace Mesen.GUI.Debugger.Controls
 					};
 
 					this.ctrlHexBox.ByteProvider = _byteProvider;
-					this.ctrlHexBox.ContextMenuStrip = this.ctxMenuStrip;
 					this.ctrlHexBox.Refresh();
 				}
 			}
@@ -189,12 +209,27 @@ namespace Mesen.GUI.Debugger.Controls
 
 		protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
 		{
-			switch(keyData) {
-				case Keys.Control | Keys.F: this.OpenSearchBox(true); return true;
-				case Keys.Escape: this.CloseSearchBox(); return true;
-				case Keys.Control | Keys.Oemplus: this.TextZoom += 10; return true;
-				case Keys.Control | Keys.OemMinus: this.TextZoom -= 10; return true;
-				case Keys.Control | Keys.D0: this.TextZoom = 100; return true;
+			this.UpdateActionAvailability();
+
+			if(keyData == ConfigManager.Config.DebugInfo.Shortcuts.Find) {
+				this.OpenSearchBox(true);
+				return true;
+			} else if(keyData == ConfigManager.Config.DebugInfo.Shortcuts.IncreaseFontSize) {
+				this.TextZoom += 10;
+				return true;
+			} else if(keyData == ConfigManager.Config.DebugInfo.Shortcuts.DecreaseFontSize) {
+				this.TextZoom -= 10;
+				return true;
+			} else if(keyData == ConfigManager.Config.DebugInfo.Shortcuts.ResetFontSize) {
+				this.TextZoom = 100;
+				return true;
+			}
+
+			if(this.cboSearch.Focused) {
+				if(keyData == Keys.Escape) {
+					this.CloseSearchBox();
+					return true;
+				}
 			}
 
 			return base.ProcessCmdKey(ref msg, keyData);
@@ -462,6 +497,7 @@ namespace Mesen.GUI.Debugger.Controls
 			for(int i = SelectionStartAddress, end = SelectionEndAddress; i <= end; i++) {
 				InteropEmu.DebugSetFreezeState((UInt16)i, true);
 			}
+			this.ctrlHexBox.Invalidate();
 		}
 
 		private void mnuUnfreeze_Click(object sender, EventArgs e)
@@ -469,6 +505,7 @@ namespace Mesen.GUI.Debugger.Controls
 			for(int i = SelectionStartAddress, end = SelectionEndAddress; i <= end; i++) {
 				InteropEmu.DebugSetFreezeState((UInt16)i, false);
 			}
+			this.ctrlHexBox.Invalidate();
 		}
 
 		private void mnuMarkAsCode_Click(object sender, EventArgs e)
@@ -484,12 +521,6 @@ namespace Mesen.GUI.Debugger.Controls
 		private void mnuMarkAsUnidentifiedData_Click(object sender, EventArgs e)
 		{
 			this.MarkSelectionAs(SelectionStartAddress, SelectionEndAddress, CdlPrgFlags.None);
-		}
-		
-		protected override bool ProcessKeyMessage(ref Message m)
-		{
-			this.UpdateActionAvailability();
-			return base.ProcessKeyMessage(ref m);
 		}
 		
 		private void UpdateActionAvailability()

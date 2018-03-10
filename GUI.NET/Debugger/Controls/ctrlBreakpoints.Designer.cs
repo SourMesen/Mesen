@@ -64,7 +64,6 @@
 			// 
 			this.mnuAddBreakpoint.Image = global::Mesen.GUI.Properties.Resources.Add;
 			this.mnuAddBreakpoint.Name = "mnuAddBreakpoint";
-			this.mnuAddBreakpoint.ShortcutKeys = System.Windows.Forms.Keys.Insert;
 			this.mnuAddBreakpoint.Size = new System.Drawing.Size(149, 22);
 			this.mnuAddBreakpoint.Text = "Add...";
 			this.mnuAddBreakpoint.Click += new System.EventHandler(this.mnuAddBreakpoint_Click);
@@ -73,7 +72,6 @@
 			// 
 			this.mnuEditBreakpoint.Image = global::Mesen.GUI.Properties.Resources.Edit;
 			this.mnuEditBreakpoint.Name = "mnuEditBreakpoint";
-			this.mnuEditBreakpoint.ShortcutKeys = System.Windows.Forms.Keys.F2;
 			this.mnuEditBreakpoint.Size = new System.Drawing.Size(149, 22);
 			this.mnuEditBreakpoint.Text = "Edit";
 			this.mnuEditBreakpoint.Click += new System.EventHandler(this.mnuEditBreakpoint_Click);
@@ -82,7 +80,6 @@
 			// 
 			this.mnuRemoveBreakpoint.Image = global::Mesen.GUI.Properties.Resources.Close;
 			this.mnuRemoveBreakpoint.Name = "mnuRemoveBreakpoint";
-			this.mnuRemoveBreakpoint.ShortcutKeys = System.Windows.Forms.Keys.Delete;
 			this.mnuRemoveBreakpoint.Size = new System.Drawing.Size(149, 22);
 			this.mnuRemoveBreakpoint.Text = "Remove";
 			this.mnuRemoveBreakpoint.Click += new System.EventHandler(this.mnuRemoveBreakpoint_Click);

@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Collections;
 using Mesen.GUI.Controls;
+using Mesen.GUI.Config;
 
 namespace Mesen.GUI.Debugger.Controls
 {
@@ -42,6 +43,22 @@ namespace Mesen.GUI.Debugger.Controls
 		{
 			InitializeComponent();
 			lstLabels.ListViewItemSorter = new LabelComparer(0, false);
+
+			bool designMode = (LicenseManager.UsageMode == LicenseUsageMode.Designtime);
+			if(!designMode) {
+				this.InitShortcuts();
+			}
+		}
+
+		private void InitShortcuts()
+		{
+			mnuAdd.InitShortcut(this, nameof(DebuggerShortcutsConfig.LabelList_Add));
+			mnuEdit.InitShortcut(this, nameof(DebuggerShortcutsConfig.LabelList_Edit));
+			mnuDelete.InitShortcut(this, nameof(DebuggerShortcutsConfig.LabelList_Delete));
+
+			mnuAddToWatch.InitShortcut(this, nameof(DebuggerShortcutsConfig.LabelList_AddToWatch));
+			mnuAddBreakpoint.InitShortcut(this, nameof(DebuggerShortcutsConfig.LabelList_AddBreakpoint));
+			mnuFindOccurrences.InitShortcut(this, nameof(DebuggerShortcutsConfig.LabelList_FindOccurrences));
 		}
 
 		public static void EditLabel(UInt32 address, AddressType type)
@@ -143,8 +160,8 @@ namespace Mesen.GUI.Debugger.Controls
 				}
 			}
 		}
-
-		private void mnuActions_Opening(object sender, CancelEventArgs e)
+		
+		private void lstLabels_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			mnuDelete.Enabled = lstLabels.SelectedItems.Count > 0;
 			mnuEdit.Enabled = lstLabels.SelectedItems.Count == 1;

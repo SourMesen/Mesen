@@ -82,15 +82,7 @@ namespace Mesen.GUI.Forms.Config
 				EmulatorShortcut.DecreaseSpeed,
 
 				EmulatorShortcut.OpenFile,
-				EmulatorShortcut.OpenDebugger,
-				EmulatorShortcut.OpenAssembler,
-				EmulatorShortcut.OpenApuViewer,
-				EmulatorShortcut.OpenMemoryTools,
-				EmulatorShortcut.OpenEventViewer,
-				EmulatorShortcut.OpenPpuViewer,
-				EmulatorShortcut.OpenScriptWindow,
-				EmulatorShortcut.OpenTraceLogger,
-				
+								
 				EmulatorShortcut.MoveToNextStateSlot,
 				EmulatorShortcut.MoveToPreviousStateSlot,
 				EmulatorShortcut.SaveState,

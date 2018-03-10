@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Collections;
 using Mesen.GUI.Controls;
+using Mesen.GUI.Config;
 
 namespace Mesen.GUI.Debugger.Controls
 {
@@ -20,6 +21,18 @@ namespace Mesen.GUI.Debugger.Controls
 		public ctrlFunctionList()
 		{
 			InitializeComponent();
+
+			bool designMode = (LicenseManager.UsageMode == LicenseUsageMode.Designtime);
+			if(!designMode) {
+				this.InitShortcuts();
+			}
+		}
+
+		private void InitShortcuts()
+		{
+			mnuEditLabel.InitShortcut(this, nameof(DebuggerShortcutsConfig.FunctionList_EditLabel));
+			mnuAddBreakpoint.InitShortcut(this, nameof(DebuggerShortcutsConfig.FunctionList_AddBreakpoint));
+			mnuFindOccurrences.InitShortcut(this, nameof(DebuggerShortcutsConfig.FunctionList_FindOccurrences));
 		}
 
 		private class FunctionComparer : IComparer
@@ -149,8 +162,8 @@ namespace Mesen.GUI.Debugger.Controls
 				}
 			}
 		}
-
-		private void contextMenuStrip_Opening(object sender, CancelEventArgs e)
+		
+		private void lstFunctions_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			mnuEditLabel.Enabled = lstFunctions.SelectedItems.Count == 1;
 			mnuFindOccurrences.Enabled = lstFunctions.SelectedItems.Count == 1;

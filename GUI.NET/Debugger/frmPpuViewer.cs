@@ -28,6 +28,13 @@ namespace Mesen.GUI.Debugger
 			this._selectedTab = this.tpgNametableViewer;
 			this.mnuAutoRefresh.Checked = ConfigManager.Config.DebugInfo.PpuAutoRefresh;
 			this.ctrlNametableViewer.Connect(this.ctrlChrViewer);
+
+			this.InitShortcuts();
+		}
+
+		private void InitShortcuts()
+		{
+			mnuRefresh.InitShortcut(this, nameof(DebuggerShortcutsConfig.Refresh));
 		}
 
 		protected override void OnLoad(EventArgs e)
@@ -164,7 +171,7 @@ namespace Mesen.GUI.Debugger
 		protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
 		{
 			if(!this.nudScanline.ContainsFocus && !this.nudCycle.ContainsFocus) {
-				if(keyData == (Keys.Control | Keys.C)) {
+				if(keyData == ConfigManager.Config.DebugInfo.Shortcuts.Copy) {
 					if(this.tabMain.SelectedTab == tpgNametableViewer) {
 						ctrlNametableViewer.CopyToClipboard();
 					} else if(this.tabMain.SelectedTab == tpgChrViewer) {

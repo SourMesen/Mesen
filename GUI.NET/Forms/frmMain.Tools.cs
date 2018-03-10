@@ -209,5 +209,50 @@ namespace Mesen.GUI.Forms
 		{
 			InteropEmu.NetPlaySelectController(0xFF);
 		}
+
+		private void mnuApuViewer_Click(object sender, EventArgs e)
+		{
+			DebugWindowManager.OpenDebugWindow(DebugWindow.ApuViewer);
+		}
+
+		private void mnuAssembler_Click(object sender, EventArgs e)
+		{
+			DebugWindowManager.OpenDebugWindow(DebugWindow.Assembler);
+		}
+
+		private void mnuDebugger_Click(object sender, EventArgs e)
+		{
+			DebugWindowManager.OpenDebugWindow(DebugWindow.Debugger);
+		}
+
+		private void mnuDebugDebugger_Click(object sender, EventArgs e)
+		{
+			DebugWindowManager.OpenDebugWindow(DebugWindow.Debugger);
+		}
+
+		private void mnuMemoryViewer_Click(object sender, EventArgs e)
+		{
+			DebugWindowManager.OpenDebugWindow(DebugWindow.MemoryViewer);
+		}
+
+		private void mnuEventViewer_Click(object sender, EventArgs e)
+		{
+			DebugWindowManager.OpenDebugWindow(DebugWindow.EventViewer);
+		}
+
+		private void mnuPpuViewer_Click(object sender, EventArgs e)
+		{
+			DebugWindowManager.OpenDebugWindow(DebugWindow.PpuViewer);
+		}
+
+		private void mnuScriptWindow_Click(object sender, EventArgs e)
+		{
+			DebugWindowManager.OpenDebugWindow(DebugWindow.ScriptWindow);
+		}
+
+		private void mnuTraceLogger_Click(object sender, EventArgs e)
+		{
+			DebugWindowManager.OpenDebugWindow(DebugWindow.TraceLogger);
+		}
 	}
 }

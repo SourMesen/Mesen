@@ -57,6 +57,20 @@ namespace Mesen.GUI.Debugger
 			ctrlHexBox.ByteProvider = new StaticByteProvider(new byte[0]);
 
 			txtStartAddress.Text = _startAddress.ToString("X4");
+
+			this.InitShortcuts();
+		}
+
+		private void InitShortcuts()
+		{
+			mnuIncreaseFontSize.InitShortcut(this, nameof(DebuggerShortcutsConfig.IncreaseFontSize));
+			mnuDecreaseFontSize.InitShortcut(this, nameof(DebuggerShortcutsConfig.DecreaseFontSize));
+			mnuResetFontSize.InitShortcut(this, nameof(DebuggerShortcutsConfig.ResetFontSize));
+
+			mnuPaste.InitShortcut(this, nameof(DebuggerShortcutsConfig.Paste));
+			mnuCopy.InitShortcut(this, nameof(DebuggerShortcutsConfig.Copy));
+			mnuCut.InitShortcut(this, nameof(DebuggerShortcutsConfig.Cut));
+			mnuSelectAll.InitShortcut(this, nameof(DebuggerShortcutsConfig.SelectAll));
 		}
 
 		protected override void OnLoad(EventArgs e)

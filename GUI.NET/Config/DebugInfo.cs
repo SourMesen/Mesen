@@ -274,6 +274,8 @@ namespace Mesen.GUI.Config
 		public float AssemblerFontSize = BaseControl.DefaultFontSize;
 		public int AssemblerZoom = 100;
 
+		public DebuggerShortcutsConfig Shortcuts = new DebuggerShortcutsConfig();
+
 		public DebugInfo()
 		{
 			LeftView = new DebugViewInfo();

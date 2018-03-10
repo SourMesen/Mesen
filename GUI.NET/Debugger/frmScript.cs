@@ -109,7 +109,27 @@ namespace Mesen.GUI.Debugger
 			if(!this.DesignMode) {
 				this._notifListener = new InteropEmu.NotificationListener();
 				this._notifListener.OnNotification += this._notifListener_OnNotification;
+
+				this.InitShortcuts();
 			}
+		}
+
+		private void InitShortcuts()
+		{
+			mnuOpen.InitShortcut(this, nameof(DebuggerShortcutsConfig.ScriptWindow_OpenScript));
+			mnuSave.InitShortcut(this, nameof(DebuggerShortcutsConfig.ScriptWindow_SaveScript));
+			mnuNewScript.InitShortcut(this, nameof(DebuggerShortcutsConfig.OpenScriptWindow));
+			mnuRun.InitShortcut(this, nameof(DebuggerShortcutsConfig.ScriptWindow_RunScript));
+			mnuStop.InitShortcut(this, nameof(DebuggerShortcutsConfig.ScriptWindow_StopScript));
+
+			mnuIncreaseFontSize.InitShortcut(this, nameof(DebuggerShortcutsConfig.IncreaseFontSize));
+			mnuDecreaseFontSize.InitShortcut(this, nameof(DebuggerShortcutsConfig.DecreaseFontSize));
+			mnuResetFontSize.InitShortcut(this, nameof(DebuggerShortcutsConfig.ResetFontSize));
+
+			mnuPaste.InitShortcut(this, nameof(DebuggerShortcutsConfig.Paste));
+			mnuCopy.InitShortcut(this, nameof(DebuggerShortcutsConfig.Copy));
+			mnuCut.InitShortcut(this, nameof(DebuggerShortcutsConfig.Cut));
+			mnuSelectAll.InitShortcut(this, nameof(DebuggerShortcutsConfig.SelectAll));
 		}
 
 		private void _notifListener_OnNotification(InteropEmu.NotificationEventArgs e)
@@ -150,14 +170,6 @@ namespace Mesen.GUI.Debugger
 			ConfigManager.ApplyChanges();
 
 			base.OnClosing(e);
-		}
-
-		protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
-		{
-			if(keyData == Keys.Escape) {
-				StopScript();
-			}
-			return base.ProcessCmdKey(ref msg, keyData);
 		}
 
 		private void LoadScript()

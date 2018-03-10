@@ -662,15 +662,15 @@ namespace Mesen.GUI.Forms
 			BindShortcut(mnuTakeScreenshot, EmulatorShortcut.TakeScreenshot, runningNotNsf);
 			BindShortcut(mnuRandomGame, EmulatorShortcut.LoadRandomGame);
 
-			BindShortcut(mnuDebugDebugger, EmulatorShortcut.OpenDebugger, runningNotClient);
-			BindShortcut(mnuDebugger, EmulatorShortcut.OpenDebugger, runningNotClient);
-			BindShortcut(mnuApuViewer, EmulatorShortcut.OpenApuViewer, runningNotClient);
-			BindShortcut(mnuAssembler, EmulatorShortcut.OpenAssembler, runningNotClient);
-			BindShortcut(mnuMemoryViewer, EmulatorShortcut.OpenMemoryTools, runningNotClient);
-			BindShortcut(mnuEventViewer, EmulatorShortcut.OpenEventViewer, runningNotClient);
-			BindShortcut(mnuPpuViewer, EmulatorShortcut.OpenPpuViewer, runningNotClient);
-			BindShortcut(mnuScriptWindow, EmulatorShortcut.OpenScriptWindow, runningNotClient);
-			BindShortcut(mnuTraceLogger, EmulatorShortcut.OpenTraceLogger, runningNotClient);
+			mnuDebugDebugger.InitShortcut(this, nameof(DebuggerShortcutsConfig.OpenDebugger));
+			mnuDebugger.InitShortcut(this, nameof(DebuggerShortcutsConfig.OpenDebugger));
+			mnuApuViewer.InitShortcut(this, nameof(DebuggerShortcutsConfig.OpenApuViewer));
+			mnuAssembler.InitShortcut(this, nameof(DebuggerShortcutsConfig.OpenAssembler));
+			mnuMemoryViewer.InitShortcut(this, nameof(DebuggerShortcutsConfig.OpenMemoryTools));
+			mnuEventViewer.InitShortcut(this, nameof(DebuggerShortcutsConfig.OpenEventViewer));
+			mnuPpuViewer.InitShortcut(this, nameof(DebuggerShortcutsConfig.OpenPpuViewer));
+			mnuScriptWindow.InitShortcut(this, nameof(DebuggerShortcutsConfig.OpenScriptWindow));
+			mnuTraceLogger.InitShortcut(this, nameof(DebuggerShortcutsConfig.OpenTraceLogger));
 		}
 		
 		private void BindShortcut(ToolStripMenuItem item, EmulatorShortcut shortcut, Func<bool> isActionEnabled = null)
@@ -763,15 +763,6 @@ namespace Mesen.GUI.Forms
 
 				case EmulatorShortcut.TakeScreenshot: InteropEmu.TakeScreenshot(); break;
 				case EmulatorShortcut.LoadRandomGame: LoadRandomGame(); break;
-
-				case EmulatorShortcut.OpenApuViewer: DebugWindowManager.OpenDebugWindow(DebugWindow.ApuViewer); break;
-				case EmulatorShortcut.OpenAssembler: DebugWindowManager.OpenDebugWindow(DebugWindow.Assembler); break;
-				case EmulatorShortcut.OpenDebugger: DebugWindowManager.OpenDebugWindow(DebugWindow.Debugger); break;
-				case EmulatorShortcut.OpenTraceLogger: DebugWindowManager.OpenDebugWindow(DebugWindow.TraceLogger); break;
-				case EmulatorShortcut.OpenPpuViewer: DebugWindowManager.OpenDebugWindow(DebugWindow.PpuViewer); break;
-				case EmulatorShortcut.OpenMemoryTools: DebugWindowManager.OpenDebugWindow(DebugWindow.MemoryViewer); break;
-				case EmulatorShortcut.OpenEventViewer: DebugWindowManager.OpenDebugWindow(DebugWindow.EventViewer); break;
-				case EmulatorShortcut.OpenScriptWindow: DebugWindowManager.OpenDebugWindow(DebugWindow.ScriptWindow); break;
 
 				case EmulatorShortcut.LoadStateFromFile: LoadStateFromFile(); break;
 				case EmulatorShortcut.SaveStateToFile: SaveStateToFile(); break;
@@ -984,6 +975,9 @@ namespace Mesen.GUI.Forms
 					mnuStopRecordTapeFile.Enabled = tapeRecording;
 
 					mnuDebugger.Visible = !devMode;
+					mnuDebugger.Enabled = !devMode;
+					mnuDebugDebugger.Enabled = devMode;
+
 					mnuHdPackEditor.Enabled = !netPlay && running;
 
 					mnuNetPlay.Enabled = !InteropEmu.IsNsf();

@@ -43,6 +43,8 @@ namespace Mesen.GUI.Debugger.Controls
 				chkShowAttributeGrid.Checked = ConfigManager.Config.DebugInfo.ShowAttributeGrid;
 				chkHighlightChrTile.Checked = ConfigManager.Config.DebugInfo.HighlightChrTile;
 				chkUseGrayscalePalette.Checked = ConfigManager.Config.DebugInfo.NtViewerUseGrayscalePalette;
+
+				mnuCopyToClipboard.InitShortcut(this, nameof(DebuggerShortcutsConfig.Copy));
 			}
 		}
 

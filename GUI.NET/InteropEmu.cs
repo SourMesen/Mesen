@@ -1761,7 +1761,10 @@ namespace Mesen.GUI
 		LoadStateFromFile,
 
 		OpenFile,
-		OpenDebugger,
+
+		
+		//Deprecated shortcuts
+		OpenDebugger = 0xFFFF,
 		OpenAssembler,
 		OpenPpuViewer,
 		OpenMemoryTools,

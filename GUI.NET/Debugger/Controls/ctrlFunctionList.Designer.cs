@@ -61,6 +61,7 @@
 			this.lstFunctions.TabIndex = 2;
 			this.lstFunctions.UseCompatibleStateImageBehavior = false;
 			this.lstFunctions.View = System.Windows.Forms.View.Details;
+			this.lstFunctions.SelectedIndexChanged += new System.EventHandler(this.lstFunctions_SelectedIndexChanged);
 			this.lstFunctions.DoubleClick += new System.EventHandler(this.lstFunctions_DoubleClick);
 			// 
 			// colFunctionLabel
@@ -87,14 +88,12 @@
             this.toolStripMenuItem2,
             this.mnuFindOccurrences});
 			this.contextMenuStrip.Name = "contextMenuStrip";
-			this.contextMenuStrip.Size = new System.Drawing.Size(167, 104);
-			this.contextMenuStrip.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStrip_Opening);
+			this.contextMenuStrip.Size = new System.Drawing.Size(167, 82);
 			// 
 			// mnuEditLabel
 			// 
 			this.mnuEditLabel.Image = global::Mesen.GUI.Properties.Resources.EditLabel;
 			this.mnuEditLabel.Name = "mnuEditLabel";
-			this.mnuEditLabel.ShortcutKeys = System.Windows.Forms.Keys.F2;
 			this.mnuEditLabel.Size = new System.Drawing.Size(166, 22);
 			this.mnuEditLabel.Text = "Edit Label";
 			this.mnuEditLabel.Click += new System.EventHandler(this.mnuEditLabel_Click);

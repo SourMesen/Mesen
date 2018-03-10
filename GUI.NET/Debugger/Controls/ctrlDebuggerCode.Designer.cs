@@ -37,7 +37,7 @@
 			this.mnuEditSelectedCode = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuEditSubroutine = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuUndoPrgChrEdit = new System.Windows.Forms.ToolStripMenuItem();
-			this.copySelectionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuCopySelection = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem7 = new System.Windows.Forms.ToolStripSeparator();
 			this.mnuShowNextStatement = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuSetNextStatement = new System.Windows.Forms.ToolStripMenuItem();
@@ -99,7 +99,7 @@
             this.mnuEditSelectedCode,
             this.mnuEditSubroutine,
             this.mnuUndoPrgChrEdit,
-            this.copySelectionToolStripMenuItem,
+            this.mnuCopySelection,
             this.toolStripMenuItem7,
             this.mnuShowNextStatement,
             this.mnuSetNextStatement,
@@ -175,7 +175,6 @@
 			// 
 			this.mnuEditSubroutine.Image = global::Mesen.GUI.Properties.Resources.Edit;
 			this.mnuEditSubroutine.Name = "mnuEditSubroutine";
-			this.mnuEditSubroutine.ShortcutKeys = System.Windows.Forms.Keys.F4;
 			this.mnuEditSubroutine.Size = new System.Drawing.Size(258, 22);
 			this.mnuEditSubroutine.Text = "Edit Subroutine";
 			this.mnuEditSubroutine.Click += new System.EventHandler(this.mnuEditSubroutine_Click);
@@ -184,19 +183,17 @@
 			// 
 			this.mnuUndoPrgChrEdit.Image = global::Mesen.GUI.Properties.Resources.Undo;
 			this.mnuUndoPrgChrEdit.Name = "mnuUndoPrgChrEdit";
-			this.mnuUndoPrgChrEdit.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Z)));
 			this.mnuUndoPrgChrEdit.Size = new System.Drawing.Size(258, 22);
 			this.mnuUndoPrgChrEdit.Text = "Undo PRG/CHR Edit";
 			this.mnuUndoPrgChrEdit.Click += new System.EventHandler(this.mnuUndoPrgChrEdit_Click);
 			// 
-			// copySelectionToolStripMenuItem
+			// mnuCopySelection
 			// 
-			this.copySelectionToolStripMenuItem.Image = global::Mesen.GUI.Properties.Resources.Copy;
-			this.copySelectionToolStripMenuItem.Name = "copySelectionToolStripMenuItem";
-			this.copySelectionToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.C)));
-			this.copySelectionToolStripMenuItem.Size = new System.Drawing.Size(258, 22);
-			this.copySelectionToolStripMenuItem.Text = "Copy Selection";
-			this.copySelectionToolStripMenuItem.Click += new System.EventHandler(this.copySelectionToolStripMenuItem_Click);
+			this.mnuCopySelection.Image = global::Mesen.GUI.Properties.Resources.Copy;
+			this.mnuCopySelection.Name = "mnuCopySelection";
+			this.mnuCopySelection.Size = new System.Drawing.Size(258, 22);
+			this.mnuCopySelection.Text = "Copy Selection";
+			this.mnuCopySelection.Click += new System.EventHandler(this.mnuCopySelection_Click);
 			// 
 			// toolStripMenuItem7
 			// 
@@ -207,7 +204,6 @@
 			// 
 			this.mnuShowNextStatement.Name = "mnuShowNextStatement";
 			this.mnuShowNextStatement.ShortcutKeyDisplayString = "Alt+*";
-			this.mnuShowNextStatement.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.Multiply)));
 			this.mnuShowNextStatement.Size = new System.Drawing.Size(258, 22);
 			this.mnuShowNextStatement.Text = "Show Next Statement";
 			this.mnuShowNextStatement.Click += new System.EventHandler(this.mnuShowNextStatement_Click);
@@ -215,8 +211,6 @@
 			// mnuSetNextStatement
 			// 
 			this.mnuSetNextStatement.Name = "mnuSetNextStatement";
-			this.mnuSetNextStatement.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift) 
-            | System.Windows.Forms.Keys.F10)));
 			this.mnuSetNextStatement.Size = new System.Drawing.Size(258, 22);
 			this.mnuSetNextStatement.Text = "Set Next Statement";
 			this.mnuSetNextStatement.Click += new System.EventHandler(this.mnuSetNextStatement_Click);
@@ -318,7 +312,6 @@
 			// 
 			this.mnuEditLabel.Image = global::Mesen.GUI.Properties.Resources.EditLabel;
 			this.mnuEditLabel.Name = "mnuEditLabel";
-			this.mnuEditLabel.ShortcutKeys = System.Windows.Forms.Keys.F2;
 			this.mnuEditLabel.Size = new System.Drawing.Size(258, 22);
 			this.mnuEditLabel.Text = "Edit Label";
 			this.mnuEditLabel.Click += new System.EventHandler(this.mnuEditLabel_Click);
@@ -327,7 +320,6 @@
 			// 
 			this.mnuEditInMemoryViewer.Image = global::Mesen.GUI.Properties.Resources.CheatCode;
 			this.mnuEditInMemoryViewer.Name = "mnuEditInMemoryViewer";
-			this.mnuEditInMemoryViewer.ShortcutKeys = System.Windows.Forms.Keys.F1;
 			this.mnuEditInMemoryViewer.Size = new System.Drawing.Size(258, 22);
 			this.mnuEditInMemoryViewer.Text = "Edit in Memory Viewer";
 			this.mnuEditInMemoryViewer.Click += new System.EventHandler(this.mnuEditInMemoryViewer_Click);
@@ -393,7 +385,6 @@
 			// 
 			this.mnuNavigateBackward.Image = global::Mesen.GUI.Properties.Resources.NavigateBack;
 			this.mnuNavigateBackward.Name = "mnuNavigateBackward";
-			this.mnuNavigateBackward.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.Left)));
 			this.mnuNavigateBackward.Size = new System.Drawing.Size(258, 22);
 			this.mnuNavigateBackward.Text = "Navigate Backward";
 			this.mnuNavigateBackward.Click += new System.EventHandler(this.mnuNavigateBackward_Click);
@@ -402,7 +393,6 @@
 			// 
 			this.mnuNavigateForward.Image = global::Mesen.GUI.Properties.Resources.NavigateForward;
 			this.mnuNavigateForward.Name = "mnuNavigateForward";
-			this.mnuNavigateForward.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.Right)));
 			this.mnuNavigateForward.Size = new System.Drawing.Size(258, 22);
 			this.mnuNavigateForward.Text = "Navigate Forward";
 			this.mnuNavigateForward.Click += new System.EventHandler(this.mnuNavigateForward_Click);
@@ -634,7 +624,7 @@
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem7;
 		private System.Windows.Forms.ToolStripMenuItem mnuEditSubroutine;
 		private System.Windows.Forms.ToolStripMenuItem mnuEditSelectedCode;
-		private System.Windows.Forms.ToolStripMenuItem copySelectionToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem mnuCopySelection;
 		private System.Windows.Forms.ToolStripMenuItem mnuEditInMemoryViewer;
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem2;
 		private System.Windows.Forms.ToolStripMenuItem mnuShowInSplitView;

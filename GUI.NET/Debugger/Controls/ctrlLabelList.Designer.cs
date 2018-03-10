@@ -56,14 +56,12 @@
             this.toolStripMenuItem2,
             this.mnuFindOccurrences});
 			this.contextMenu.Name = "contextMenu";
-			this.contextMenu.Size = new System.Drawing.Size(167, 170);
-			this.contextMenu.Opening += new System.ComponentModel.CancelEventHandler(this.mnuActions_Opening);
+			this.contextMenu.Size = new System.Drawing.Size(167, 148);
 			// 
 			// mnuAdd
 			// 
 			this.mnuAdd.Image = global::Mesen.GUI.Properties.Resources.Add;
 			this.mnuAdd.Name = "mnuAdd";
-			this.mnuAdd.ShortcutKeys = System.Windows.Forms.Keys.Insert;
 			this.mnuAdd.Size = new System.Drawing.Size(166, 22);
 			this.mnuAdd.Text = "Add";
 			this.mnuAdd.Click += new System.EventHandler(this.mnuAdd_Click);
@@ -72,7 +70,6 @@
 			// 
 			this.mnuEdit.Image = global::Mesen.GUI.Properties.Resources.EditLabel;
 			this.mnuEdit.Name = "mnuEdit";
-			this.mnuEdit.ShortcutKeys = System.Windows.Forms.Keys.F2;
 			this.mnuEdit.Size = new System.Drawing.Size(166, 22);
 			this.mnuEdit.Text = "Edit";
 			this.mnuEdit.Click += new System.EventHandler(this.mnuEdit_Click);
@@ -81,7 +78,6 @@
 			// 
 			this.mnuDelete.Image = global::Mesen.GUI.Properties.Resources.Close;
 			this.mnuDelete.Name = "mnuDelete";
-			this.mnuDelete.ShortcutKeys = System.Windows.Forms.Keys.Delete;
 			this.mnuDelete.Size = new System.Drawing.Size(166, 22);
 			this.mnuDelete.Text = "Delete";
 			this.mnuDelete.Click += new System.EventHandler(this.mnuDelete_Click);
@@ -139,6 +135,7 @@
 			this.lstLabels.UseCompatibleStateImageBehavior = false;
 			this.lstLabels.View = System.Windows.Forms.View.Details;
 			this.lstLabels.ColumnClick += new System.Windows.Forms.ColumnClickEventHandler(this.lstLabels_ColumnClick);
+			this.lstLabels.SelectedIndexChanged += new System.EventHandler(this.lstLabels_SelectedIndexChanged);
 			this.lstLabels.DoubleClick += new System.EventHandler(this.lstLabels_DoubleClick);
 			// 
 			// colFunctionLabel

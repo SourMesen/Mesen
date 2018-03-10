@@ -147,12 +147,13 @@ namespace Mesen.GUI.Debugger
 			this.mnuConfigureColors = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuSplitView = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem11 = new System.Windows.Forms.ToolStripSeparator();
-			this.toolStripMenuItem6 = new System.Windows.Forms.ToolStripSeparator();
 			this.mnuHidePauseIcon = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuPpuPartialDraw = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuPpuShowPreviousFrame = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem19 = new System.Windows.Forms.ToolStripSeparator();
 			this.mnuRefreshWatchWhileRunning = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem6 = new System.Windows.Forms.ToolStripSeparator();
+			this.mnuPreferences = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuApuViewer = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuAssembler = new System.Windows.Forms.ToolStripMenuItem();
@@ -336,7 +337,7 @@ namespace Mesen.GUI.Debugger
 			this.tlpFunctionLabelLists.RowCount = 2;
 			this.tlpFunctionLabelLists.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
 			this.tlpFunctionLabelLists.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-			this.tlpFunctionLabelLists.Size = new System.Drawing.Size(415, 400);
+			this.tlpFunctionLabelLists.Size = new System.Drawing.Size(418, 400);
 			this.tlpFunctionLabelLists.TabIndex = 5;
 			// 
 			// grpLabels
@@ -345,7 +346,7 @@ namespace Mesen.GUI.Debugger
 			this.grpLabels.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.grpLabels.Location = new System.Drawing.Point(3, 203);
 			this.grpLabels.Name = "grpLabels";
-			this.grpLabels.Size = new System.Drawing.Size(409, 194);
+			this.grpLabels.Size = new System.Drawing.Size(412, 194);
 			this.grpLabels.TabIndex = 6;
 			this.grpLabels.TabStop = false;
 			this.grpLabels.Text = "Labels";
@@ -355,7 +356,7 @@ namespace Mesen.GUI.Debugger
 			this.ctrlLabelList.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.ctrlLabelList.Location = new System.Drawing.Point(3, 16);
 			this.ctrlLabelList.Name = "ctrlLabelList";
-			this.ctrlLabelList.Size = new System.Drawing.Size(403, 175);
+			this.ctrlLabelList.Size = new System.Drawing.Size(406, 175);
 			this.ctrlLabelList.TabIndex = 0;
 			this.ctrlLabelList.OnFindOccurrence += new System.EventHandler(this.ctrlLabelList_OnFindOccurrence);
 			this.ctrlLabelList.OnLabelSelected += new System.EventHandler(this.ctrlLabelList_OnLabelSelected);
@@ -366,7 +367,7 @@ namespace Mesen.GUI.Debugger
 			this.grpFunctions.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.grpFunctions.Location = new System.Drawing.Point(3, 3);
 			this.grpFunctions.Name = "grpFunctions";
-			this.grpFunctions.Size = new System.Drawing.Size(409, 194);
+			this.grpFunctions.Size = new System.Drawing.Size(412, 194);
 			this.grpFunctions.TabIndex = 5;
 			this.grpFunctions.TabStop = false;
 			this.grpFunctions.Text = "Functions";
@@ -376,7 +377,7 @@ namespace Mesen.GUI.Debugger
 			this.ctrlFunctionList.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.ctrlFunctionList.Location = new System.Drawing.Point(3, 16);
 			this.ctrlFunctionList.Name = "ctrlFunctionList";
-			this.ctrlFunctionList.Size = new System.Drawing.Size(403, 175);
+			this.ctrlFunctionList.Size = new System.Drawing.Size(406, 175);
 			this.ctrlFunctionList.TabIndex = 0;
 			this.ctrlFunctionList.OnFindOccurrence += new System.EventHandler(this.ctrlFunctionList_OnFindOccurrence);
 			this.ctrlFunctionList.OnFunctionSelected += new System.EventHandler(this.ctrlFunctionList_OnFunctionSelected);
@@ -504,7 +505,6 @@ namespace Mesen.GUI.Debugger
 			// 
 			this.mnuSaveRom.Image = global::Mesen.GUI.Properties.Resources.Floppy;
 			this.mnuSaveRom.Name = "mnuSaveRom";
-			this.mnuSaveRom.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.S)));
 			this.mnuSaveRom.Size = new System.Drawing.Size(208, 22);
 			this.mnuSaveRom.Text = "Save ROM";
 			this.mnuSaveRom.Click += new System.EventHandler(this.mnuSaveRom_Click);
@@ -665,8 +665,7 @@ namespace Mesen.GUI.Debugger
 			this.mnuContinue.Enabled = false;
 			this.mnuContinue.Image = global::Mesen.GUI.Properties.Resources.Play;
 			this.mnuContinue.Name = "mnuContinue";
-			this.mnuContinue.ShortcutKeys = System.Windows.Forms.Keys.F5;
-			this.mnuContinue.Size = new System.Drawing.Size(258, 22);
+			this.mnuContinue.Size = new System.Drawing.Size(212, 22);
 			this.mnuContinue.Text = "Continue";
 			this.mnuContinue.Click += new System.EventHandler(this.mnuContinue_Click);
 			// 
@@ -675,10 +674,8 @@ namespace Mesen.GUI.Debugger
 			this.mnuBreak.Enabled = false;
 			this.mnuBreak.Image = global::Mesen.GUI.Properties.Resources.Pause;
 			this.mnuBreak.Name = "mnuBreak";
-			this.mnuBreak.ShortcutKeyDisplayString = "Ctrl+Alt+Break";
-			this.mnuBreak.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Alt) 
-            | System.Windows.Forms.Keys.Cancel)));
-			this.mnuBreak.Size = new System.Drawing.Size(258, 22);
+			this.mnuBreak.ShortcutKeyDisplayString = "";
+			this.mnuBreak.Size = new System.Drawing.Size(212, 22);
 			this.mnuBreak.Text = "Break";
 			this.mnuBreak.Click += new System.EventHandler(this.mnuBreak_Click);
 			// 
@@ -686,8 +683,7 @@ namespace Mesen.GUI.Debugger
 			// 
 			this.mnuStepInto.Image = global::Mesen.GUI.Properties.Resources.StepInto;
 			this.mnuStepInto.Name = "mnuStepInto";
-			this.mnuStepInto.ShortcutKeys = System.Windows.Forms.Keys.F11;
-			this.mnuStepInto.Size = new System.Drawing.Size(258, 22);
+			this.mnuStepInto.Size = new System.Drawing.Size(212, 22);
 			this.mnuStepInto.Text = "Step Into";
 			this.mnuStepInto.Click += new System.EventHandler(this.mnuStepInto_Click);
 			// 
@@ -695,8 +691,7 @@ namespace Mesen.GUI.Debugger
 			// 
 			this.mnuStepOver.Image = global::Mesen.GUI.Properties.Resources.StepOver;
 			this.mnuStepOver.Name = "mnuStepOver";
-			this.mnuStepOver.ShortcutKeys = System.Windows.Forms.Keys.F10;
-			this.mnuStepOver.Size = new System.Drawing.Size(258, 22);
+			this.mnuStepOver.Size = new System.Drawing.Size(212, 22);
 			this.mnuStepOver.Text = "Step Over";
 			this.mnuStepOver.Click += new System.EventHandler(this.mnuStepOver_Click);
 			// 
@@ -704,8 +699,7 @@ namespace Mesen.GUI.Debugger
 			// 
 			this.mnuStepOut.Image = global::Mesen.GUI.Properties.Resources.StepOut;
 			this.mnuStepOut.Name = "mnuStepOut";
-			this.mnuStepOut.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Shift | System.Windows.Forms.Keys.F11)));
-			this.mnuStepOut.Size = new System.Drawing.Size(258, 22);
+			this.mnuStepOut.Size = new System.Drawing.Size(212, 22);
 			this.mnuStepOut.Text = "Step Out";
 			this.mnuStepOut.Click += new System.EventHandler(this.mnuStepOut_Click);
 			// 
@@ -713,22 +707,20 @@ namespace Mesen.GUI.Debugger
 			// 
 			this.mnuStepBack.Image = global::Mesen.GUI.Properties.Resources.StepBack;
 			this.mnuStepBack.Name = "mnuStepBack";
-			this.mnuStepBack.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Shift | System.Windows.Forms.Keys.F10)));
-			this.mnuStepBack.Size = new System.Drawing.Size(258, 22);
+			this.mnuStepBack.Size = new System.Drawing.Size(212, 22);
 			this.mnuStepBack.Text = "Step Back";
 			this.mnuStepBack.Click += new System.EventHandler(this.mnuStepBack_Click);
 			// 
 			// toolStripMenuItem1
 			// 
 			this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-			this.toolStripMenuItem1.Size = new System.Drawing.Size(255, 6);
+			this.toolStripMenuItem1.Size = new System.Drawing.Size(209, 6);
 			// 
 			// mnuToggleBreakpoint
 			// 
 			this.mnuToggleBreakpoint.Image = global::Mesen.GUI.Properties.Resources.Breakpoint;
 			this.mnuToggleBreakpoint.Name = "mnuToggleBreakpoint";
-			this.mnuToggleBreakpoint.ShortcutKeys = System.Windows.Forms.Keys.F9;
-			this.mnuToggleBreakpoint.Size = new System.Drawing.Size(258, 22);
+			this.mnuToggleBreakpoint.Size = new System.Drawing.Size(212, 22);
 			this.mnuToggleBreakpoint.Text = "Toggle Breakpoint";
 			this.mnuToggleBreakpoint.Click += new System.EventHandler(this.mnuToggleBreakpoint_Click);
 			// 
@@ -736,22 +728,20 @@ namespace Mesen.GUI.Debugger
 			// 
 			this.mnuDisableEnableBreakpoint.Image = global::Mesen.GUI.Properties.Resources.BreakpointDisabled;
 			this.mnuDisableEnableBreakpoint.Name = "mnuDisableEnableBreakpoint";
-			this.mnuDisableEnableBreakpoint.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.F9)));
-			this.mnuDisableEnableBreakpoint.Size = new System.Drawing.Size(258, 22);
+			this.mnuDisableEnableBreakpoint.Size = new System.Drawing.Size(212, 22);
 			this.mnuDisableEnableBreakpoint.Text = "Disable/Enable Breakpoint";
 			this.mnuDisableEnableBreakpoint.Click += new System.EventHandler(this.mnuDisableEnableBreakpoint_Click);
 			// 
 			// toolStripMenuItem2
 			// 
 			this.toolStripMenuItem2.Name = "toolStripMenuItem2";
-			this.toolStripMenuItem2.Size = new System.Drawing.Size(255, 6);
+			this.toolStripMenuItem2.Size = new System.Drawing.Size(209, 6);
 			// 
 			// mnuRunPpuCycle
 			// 
 			this.mnuRunPpuCycle.Image = global::Mesen.GUI.Properties.Resources.RunPpuCycle;
 			this.mnuRunPpuCycle.Name = "mnuRunPpuCycle";
-			this.mnuRunPpuCycle.ShortcutKeys = System.Windows.Forms.Keys.F6;
-			this.mnuRunPpuCycle.Size = new System.Drawing.Size(258, 22);
+			this.mnuRunPpuCycle.Size = new System.Drawing.Size(212, 22);
 			this.mnuRunPpuCycle.Text = "Run one PPU cycle";
 			this.mnuRunPpuCycle.Click += new System.EventHandler(this.mnuRunPpuCycle_Click);
 			// 
@@ -759,8 +749,7 @@ namespace Mesen.GUI.Debugger
 			// 
 			this.mnuRunScanline.Image = global::Mesen.GUI.Properties.Resources.RunPpuScanline;
 			this.mnuRunScanline.Name = "mnuRunScanline";
-			this.mnuRunScanline.ShortcutKeys = System.Windows.Forms.Keys.F7;
-			this.mnuRunScanline.Size = new System.Drawing.Size(258, 22);
+			this.mnuRunScanline.Size = new System.Drawing.Size(212, 22);
 			this.mnuRunScanline.Text = "Run one scanline";
 			this.mnuRunScanline.Click += new System.EventHandler(this.mnuRunScanline_Click);
 			// 
@@ -768,21 +757,19 @@ namespace Mesen.GUI.Debugger
 			// 
 			this.mnuRunOneFrame.Image = global::Mesen.GUI.Properties.Resources.RunPpuFrame;
 			this.mnuRunOneFrame.Name = "mnuRunOneFrame";
-			this.mnuRunOneFrame.ShortcutKeys = System.Windows.Forms.Keys.F8;
-			this.mnuRunOneFrame.Size = new System.Drawing.Size(258, 22);
+			this.mnuRunOneFrame.Size = new System.Drawing.Size(212, 22);
 			this.mnuRunOneFrame.Text = "Run one frame";
 			this.mnuRunOneFrame.Click += new System.EventHandler(this.mnuRunOneFrame_Click);
 			// 
 			// toolStripMenuItem8
 			// 
 			this.toolStripMenuItem8.Name = "toolStripMenuItem8";
-			this.toolStripMenuItem8.Size = new System.Drawing.Size(255, 6);
+			this.toolStripMenuItem8.Size = new System.Drawing.Size(209, 6);
 			// 
 			// mnuBreakIn
 			// 
 			this.mnuBreakIn.Name = "mnuBreakIn";
-			this.mnuBreakIn.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.B)));
-			this.mnuBreakIn.Size = new System.Drawing.Size(258, 22);
+			this.mnuBreakIn.Size = new System.Drawing.Size(212, 22);
 			this.mnuBreakIn.Text = "Break in...";
 			this.mnuBreakIn.Click += new System.EventHandler(this.mnuBreakIn_Click);
 			// 
@@ -803,8 +790,7 @@ namespace Mesen.GUI.Debugger
 			// 
 			this.mnuFind.Image = global::Mesen.GUI.Properties.Resources.Find;
 			this.mnuFind.Name = "mnuFind";
-			this.mnuFind.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.F)));
-			this.mnuFind.Size = new System.Drawing.Size(255, 22);
+			this.mnuFind.Size = new System.Drawing.Size(183, 22);
 			this.mnuFind.Text = "Find...";
 			this.mnuFind.Click += new System.EventHandler(this.mnuFind_Click);
 			// 
@@ -812,8 +798,7 @@ namespace Mesen.GUI.Debugger
 			// 
 			this.mnuFindNext.Image = global::Mesen.GUI.Properties.Resources.NextArrow;
 			this.mnuFindNext.Name = "mnuFindNext";
-			this.mnuFindNext.ShortcutKeys = System.Windows.Forms.Keys.F3;
-			this.mnuFindNext.Size = new System.Drawing.Size(255, 22);
+			this.mnuFindNext.Size = new System.Drawing.Size(183, 22);
 			this.mnuFindNext.Text = "Find Next";
 			this.mnuFindNext.Click += new System.EventHandler(this.mnuFindNext_Click);
 			// 
@@ -821,22 +806,19 @@ namespace Mesen.GUI.Debugger
 			// 
 			this.mnuFindPrev.Image = global::Mesen.GUI.Properties.Resources.PreviousArrow;
 			this.mnuFindPrev.Name = "mnuFindPrev";
-			this.mnuFindPrev.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Shift | System.Windows.Forms.Keys.F3)));
-			this.mnuFindPrev.Size = new System.Drawing.Size(255, 22);
+			this.mnuFindPrev.Size = new System.Drawing.Size(183, 22);
 			this.mnuFindPrev.Text = "Find Previous";
 			this.mnuFindPrev.Click += new System.EventHandler(this.mnuFindPrev_Click);
 			// 
 			// toolStripMenuItem9
 			// 
 			this.toolStripMenuItem9.Name = "toolStripMenuItem9";
-			this.toolStripMenuItem9.Size = new System.Drawing.Size(252, 6);
+			this.toolStripMenuItem9.Size = new System.Drawing.Size(180, 6);
 			// 
 			// mnuFindAllOccurrences
 			// 
 			this.mnuFindAllOccurrences.Name = "mnuFindAllOccurrences";
-			this.mnuFindAllOccurrences.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift) 
-            | System.Windows.Forms.Keys.F)));
-			this.mnuFindAllOccurrences.Size = new System.Drawing.Size(255, 22);
+			this.mnuFindAllOccurrences.Size = new System.Drawing.Size(183, 22);
 			this.mnuFindAllOccurrences.Text = "Find All Occurrences";
 			this.mnuFindAllOccurrences.Click += new System.EventHandler(this.mnuFindAllOccurrences_Click);
 			// 
@@ -851,53 +833,52 @@ namespace Mesen.GUI.Debugger
             this.toolStripMenuItem23,
             this.mnuGoToProgramCount});
 			this.mnuGoTo.Name = "mnuGoTo";
-			this.mnuGoTo.Size = new System.Drawing.Size(255, 22);
+			this.mnuGoTo.Size = new System.Drawing.Size(183, 22);
 			this.mnuGoTo.Text = "Go To...";
 			// 
 			// mnuGoToAddress
 			// 
 			this.mnuGoToAddress.Name = "mnuGoToAddress";
-			this.mnuGoToAddress.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.G)));
-			this.mnuGoToAddress.Size = new System.Drawing.Size(201, 22);
+			this.mnuGoToAddress.Size = new System.Drawing.Size(166, 22);
 			this.mnuGoToAddress.Text = "Address";
 			this.mnuGoToAddress.Click += new System.EventHandler(this.mnuGoToAddress_Click);
 			// 
 			// toolStripMenuItem22
 			// 
 			this.toolStripMenuItem22.Name = "toolStripMenuItem22";
-			this.toolStripMenuItem22.Size = new System.Drawing.Size(198, 6);
+			this.toolStripMenuItem22.Size = new System.Drawing.Size(163, 6);
 			// 
 			// mnuGoToIrqHandler
 			// 
 			this.mnuGoToIrqHandler.Name = "mnuGoToIrqHandler";
-			this.mnuGoToIrqHandler.Size = new System.Drawing.Size(201, 22);
+			this.mnuGoToIrqHandler.Size = new System.Drawing.Size(166, 22);
 			this.mnuGoToIrqHandler.Text = "IRQ Handler";
 			this.mnuGoToIrqHandler.Click += new System.EventHandler(this.mnuGoToIrqHandler_Click);
 			// 
 			// mnuGoToNmiHandler
 			// 
 			this.mnuGoToNmiHandler.Name = "mnuGoToNmiHandler";
-			this.mnuGoToNmiHandler.Size = new System.Drawing.Size(201, 22);
+			this.mnuGoToNmiHandler.Size = new System.Drawing.Size(166, 22);
 			this.mnuGoToNmiHandler.Text = "NMI Handler";
 			this.mnuGoToNmiHandler.Click += new System.EventHandler(this.mnuGoToNmiHandler_Click);
 			// 
 			// mnuGoToResetHandler
 			// 
 			this.mnuGoToResetHandler.Name = "mnuGoToResetHandler";
-			this.mnuGoToResetHandler.Size = new System.Drawing.Size(201, 22);
+			this.mnuGoToResetHandler.Size = new System.Drawing.Size(166, 22);
 			this.mnuGoToResetHandler.Text = "Reset Handler";
 			this.mnuGoToResetHandler.Click += new System.EventHandler(this.mnuGoToResetHandler_Click);
 			// 
 			// toolStripMenuItem23
 			// 
 			this.toolStripMenuItem23.Name = "toolStripMenuItem23";
-			this.toolStripMenuItem23.Size = new System.Drawing.Size(198, 6);
+			this.toolStripMenuItem23.Size = new System.Drawing.Size(163, 6);
 			// 
 			// mnuGoToProgramCount
 			// 
 			this.mnuGoToProgramCount.Name = "mnuGoToProgramCount";
-			this.mnuGoToProgramCount.ShortcutKeyDisplayString = "Alt+*";
-			this.mnuGoToProgramCount.Size = new System.Drawing.Size(201, 22);
+			this.mnuGoToProgramCount.ShortcutKeyDisplayString = "";
+			this.mnuGoToProgramCount.Size = new System.Drawing.Size(166, 22);
 			this.mnuGoToProgramCount.Text = "Program Counter";
 			this.mnuGoToProgramCount.Click += new System.EventHandler(this.mnuGoToProgramCount_Click);
 			// 
@@ -913,12 +894,13 @@ namespace Mesen.GUI.Debugger
             this.mnuConfigureColors,
             this.mnuSplitView,
             this.toolStripMenuItem11,
-            this.toolStripMenuItem6,
             this.mnuHidePauseIcon,
             this.mnuPpuPartialDraw,
             this.mnuPpuShowPreviousFrame,
             this.toolStripMenuItem19,
-            this.mnuRefreshWatchWhileRunning});
+            this.mnuRefreshWatchWhileRunning,
+            this.toolStripMenuItem6,
+            this.mnuPreferences});
 			this.mnuOptions.Name = "mnuOptions";
 			this.mnuOptions.Size = new System.Drawing.Size(61, 20);
 			this.mnuOptions.Text = "Options";
@@ -987,7 +969,7 @@ namespace Mesen.GUI.Debugger
 			this.mnuShowDisassembledCode.CheckState = System.Windows.Forms.CheckState.Checked;
 			this.mnuShowDisassembledCode.Enabled = false;
 			this.mnuShowDisassembledCode.Name = "mnuShowDisassembledCode";
-			this.mnuShowDisassembledCode.Size = new System.Drawing.Size(235, 22);
+			this.mnuShowDisassembledCode.Size = new System.Drawing.Size(199, 22);
 			this.mnuShowDisassembledCode.Text = "Disassembled Code";
 			// 
 			// mnuShowVerifiedData
@@ -995,8 +977,7 @@ namespace Mesen.GUI.Debugger
 			this.mnuShowVerifiedData.CheckOnClick = true;
 			this.mnuShowVerifiedData.Image = global::Mesen.GUI.Properties.Resources.VerifiedData;
 			this.mnuShowVerifiedData.Name = "mnuShowVerifiedData";
-			this.mnuShowVerifiedData.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.D1)));
-			this.mnuShowVerifiedData.Size = new System.Drawing.Size(235, 22);
+			this.mnuShowVerifiedData.Size = new System.Drawing.Size(199, 22);
 			this.mnuShowVerifiedData.Text = "Verified Data";
 			this.mnuShowVerifiedData.Click += new System.EventHandler(this.mnuShowVerifiedData_Click);
 			// 
@@ -1005,8 +986,7 @@ namespace Mesen.GUI.Debugger
 			this.mnuShowUnidentifiedData.CheckOnClick = true;
 			this.mnuShowUnidentifiedData.Image = global::Mesen.GUI.Properties.Resources.UnidentifiedData;
 			this.mnuShowUnidentifiedData.Name = "mnuShowUnidentifiedData";
-			this.mnuShowUnidentifiedData.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.D2)));
-			this.mnuShowUnidentifiedData.Size = new System.Drawing.Size(235, 22);
+			this.mnuShowUnidentifiedData.Size = new System.Drawing.Size(199, 22);
 			this.mnuShowUnidentifiedData.Text = "Unidentified Code/Data";
 			this.mnuShowUnidentifiedData.Click += new System.EventHandler(this.mnuShowUnidentifiedData_Click);
 			// 
@@ -1146,7 +1126,7 @@ namespace Mesen.GUI.Debugger
             this.toolStripMenuItem18,
             this.mnuShowCodePreview,
             this.mnuShowOpCodeTooltips});
-			this.mnuShowOptions.Image = global::Mesen.GUI.Properties.Resources.Cog;
+			this.mnuShowOptions.Image = global::Mesen.GUI.Properties.Resources.DipSwitches;
 			this.mnuShowOptions.Name = "mnuShowOptions";
 			this.mnuShowOptions.Size = new System.Drawing.Size(266, 22);
 			this.mnuShowOptions.Text = "Show...";
@@ -1254,39 +1234,36 @@ namespace Mesen.GUI.Debugger
 			// mnuIncreaseFontSize
 			// 
 			this.mnuIncreaseFontSize.Name = "mnuIncreaseFontSize";
-			this.mnuIncreaseFontSize.ShortcutKeyDisplayString = "Ctrl++";
-			this.mnuIncreaseFontSize.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Oemplus)));
-			this.mnuIncreaseFontSize.Size = new System.Drawing.Size(197, 22);
+			this.mnuIncreaseFontSize.ShortcutKeyDisplayString = "";
+			this.mnuIncreaseFontSize.Size = new System.Drawing.Size(157, 22);
 			this.mnuIncreaseFontSize.Text = "Increase Size";
 			this.mnuIncreaseFontSize.Click += new System.EventHandler(this.mnuIncreaseFontSize_Click);
 			// 
 			// mnuDecreaseFontSize
 			// 
 			this.mnuDecreaseFontSize.Name = "mnuDecreaseFontSize";
-			this.mnuDecreaseFontSize.ShortcutKeyDisplayString = "Ctrl+-";
-			this.mnuDecreaseFontSize.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.OemMinus)));
-			this.mnuDecreaseFontSize.Size = new System.Drawing.Size(197, 22);
+			this.mnuDecreaseFontSize.ShortcutKeyDisplayString = "";
+			this.mnuDecreaseFontSize.Size = new System.Drawing.Size(157, 22);
 			this.mnuDecreaseFontSize.Text = "Decrease Size";
 			this.mnuDecreaseFontSize.Click += new System.EventHandler(this.mnuDecreaseFontSize_Click);
 			// 
 			// mnuResetFontSize
 			// 
 			this.mnuResetFontSize.Name = "mnuResetFontSize";
-			this.mnuResetFontSize.ShortcutKeyDisplayString = "Ctrl+0";
-			this.mnuResetFontSize.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.D0)));
-			this.mnuResetFontSize.Size = new System.Drawing.Size(197, 22);
+			this.mnuResetFontSize.ShortcutKeyDisplayString = "";
+			this.mnuResetFontSize.Size = new System.Drawing.Size(157, 22);
 			this.mnuResetFontSize.Text = "Reset to Default";
 			this.mnuResetFontSize.Click += new System.EventHandler(this.mnuResetFontSize_Click);
 			// 
 			// toolStripMenuItem21
 			// 
 			this.toolStripMenuItem21.Name = "toolStripMenuItem21";
-			this.toolStripMenuItem21.Size = new System.Drawing.Size(194, 6);
+			this.toolStripMenuItem21.Size = new System.Drawing.Size(154, 6);
 			// 
 			// mnuSelectFont
 			// 
 			this.mnuSelectFont.Name = "mnuSelectFont";
-			this.mnuSelectFont.Size = new System.Drawing.Size(197, 22);
+			this.mnuSelectFont.Size = new System.Drawing.Size(157, 22);
 			this.mnuSelectFont.Text = "Select Font...";
 			this.mnuSelectFont.Click += new System.EventHandler(this.mnuSelectFont_Click);
 			// 
@@ -1311,11 +1288,6 @@ namespace Mesen.GUI.Debugger
 			// 
 			this.toolStripMenuItem11.Name = "toolStripMenuItem11";
 			this.toolStripMenuItem11.Size = new System.Drawing.Size(263, 6);
-			// 
-			// toolStripMenuItem6
-			// 
-			this.toolStripMenuItem6.Name = "toolStripMenuItem6";
-			this.toolStripMenuItem6.Size = new System.Drawing.Size(263, 6);
 			// 
 			// mnuHidePauseIcon
 			// 
@@ -1354,6 +1326,19 @@ namespace Mesen.GUI.Debugger
 			this.mnuRefreshWatchWhileRunning.Text = "Refresh watch while running";
 			this.mnuRefreshWatchWhileRunning.Click += new System.EventHandler(this.mnuRefreshWatchWhileRunning_Click);
 			// 
+			// toolStripMenuItem6
+			// 
+			this.toolStripMenuItem6.Name = "toolStripMenuItem6";
+			this.toolStripMenuItem6.Size = new System.Drawing.Size(263, 6);
+			// 
+			// mnuPreferences
+			// 
+			this.mnuPreferences.Image = global::Mesen.GUI.Properties.Resources.Cog;
+			this.mnuPreferences.Name = "mnuPreferences";
+			this.mnuPreferences.Size = new System.Drawing.Size(266, 22);
+			this.mnuPreferences.Text = "Configure shortcut keys...";
+			this.mnuPreferences.Click += new System.EventHandler(this.mnuPreferences_Click);
+			// 
 			// toolsToolStripMenuItem
 			// 
 			this.toolsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -1376,8 +1361,7 @@ namespace Mesen.GUI.Debugger
 			// 
 			this.mnuApuViewer.Image = global::Mesen.GUI.Properties.Resources.Audio;
 			this.mnuApuViewer.Name = "mnuApuViewer";
-			this.mnuApuViewer.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.U)));
-			this.mnuApuViewer.Size = new System.Drawing.Size(205, 22);
+			this.mnuApuViewer.Size = new System.Drawing.Size(171, 22);
 			this.mnuApuViewer.Text = "APU Viewer";
 			this.mnuApuViewer.Click += new System.EventHandler(this.mnuApuViewer_Click);
 			// 
@@ -1385,8 +1369,7 @@ namespace Mesen.GUI.Debugger
 			// 
 			this.mnuAssembler.Image = global::Mesen.GUI.Properties.Resources.Chip;
 			this.mnuAssembler.Name = "mnuAssembler";
-			this.mnuAssembler.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.K)));
-			this.mnuAssembler.Size = new System.Drawing.Size(205, 22);
+			this.mnuAssembler.Size = new System.Drawing.Size(171, 22);
 			this.mnuAssembler.Text = "Assembler";
 			this.mnuAssembler.Click += new System.EventHandler(this.mnuAssembler_Click);
 			// 
@@ -1394,8 +1377,7 @@ namespace Mesen.GUI.Debugger
 			// 
 			this.mnuMemoryViewer.Image = global::Mesen.GUI.Properties.Resources.CheatCode;
 			this.mnuMemoryViewer.Name = "mnuMemoryViewer";
-			this.mnuMemoryViewer.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.M)));
-			this.mnuMemoryViewer.Size = new System.Drawing.Size(205, 22);
+			this.mnuMemoryViewer.Size = new System.Drawing.Size(171, 22);
 			this.mnuMemoryViewer.Text = "Memory Tools";
 			this.mnuMemoryViewer.Click += new System.EventHandler(this.mnuMemoryViewer_Click);
 			// 
@@ -1403,8 +1385,7 @@ namespace Mesen.GUI.Debugger
 			// 
 			this.mnuEventViewer.Image = global::Mesen.GUI.Properties.Resources.NesEventViewer;
 			this.mnuEventViewer.Name = "mnuEventViewer";
-			this.mnuEventViewer.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.E)));
-			this.mnuEventViewer.Size = new System.Drawing.Size(205, 22);
+			this.mnuEventViewer.Size = new System.Drawing.Size(171, 22);
 			this.mnuEventViewer.Text = "NES Event Viewer";
 			this.mnuEventViewer.Click += new System.EventHandler(this.mnuEventViewer_Click);
 			// 
@@ -1412,8 +1393,7 @@ namespace Mesen.GUI.Debugger
 			// 
 			this.mnuPpuViewer.Image = global::Mesen.GUI.Properties.Resources.Video;
 			this.mnuPpuViewer.Name = "mnuPpuViewer";
-			this.mnuPpuViewer.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.P)));
-			this.mnuPpuViewer.Size = new System.Drawing.Size(205, 22);
+			this.mnuPpuViewer.Size = new System.Drawing.Size(171, 22);
 			this.mnuPpuViewer.Text = "PPU Viewer";
 			this.mnuPpuViewer.Click += new System.EventHandler(this.mnuNametableViewer_Click);
 			// 
@@ -1421,8 +1401,7 @@ namespace Mesen.GUI.Debugger
 			// 
 			this.mnuScriptWindow.Image = global::Mesen.GUI.Properties.Resources.Script;
 			this.mnuScriptWindow.Name = "mnuScriptWindow";
-			this.mnuScriptWindow.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.J)));
-			this.mnuScriptWindow.Size = new System.Drawing.Size(205, 22);
+			this.mnuScriptWindow.Size = new System.Drawing.Size(171, 22);
 			this.mnuScriptWindow.Text = "Script Window";
 			this.mnuScriptWindow.Click += new System.EventHandler(this.mnuScriptWindow_Click);
 			// 
@@ -1430,28 +1409,27 @@ namespace Mesen.GUI.Debugger
 			// 
 			this.mnuTraceLogger.Image = global::Mesen.GUI.Properties.Resources.LogWindow;
 			this.mnuTraceLogger.Name = "mnuTraceLogger";
-			this.mnuTraceLogger.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.N)));
-			this.mnuTraceLogger.Size = new System.Drawing.Size(205, 22);
+			this.mnuTraceLogger.Size = new System.Drawing.Size(171, 22);
 			this.mnuTraceLogger.Text = "Trace Logger";
 			this.mnuTraceLogger.Click += new System.EventHandler(this.mnuTraceLogger_Click);
 			// 
 			// toolStripMenuItem13
 			// 
 			this.toolStripMenuItem13.Name = "toolStripMenuItem13";
-			this.toolStripMenuItem13.Size = new System.Drawing.Size(202, 6);
+			this.toolStripMenuItem13.Size = new System.Drawing.Size(168, 6);
 			// 
 			// mnuEditHeader
 			// 
 			this.mnuEditHeader.Image = global::Mesen.GUI.Properties.Resources.Edit;
 			this.mnuEditHeader.Name = "mnuEditHeader";
-			this.mnuEditHeader.Size = new System.Drawing.Size(205, 22);
+			this.mnuEditHeader.Size = new System.Drawing.Size(171, 22);
 			this.mnuEditHeader.Text = "Edit iNES Header";
 			this.mnuEditHeader.Click += new System.EventHandler(this.mnuEditHeader_Click);
 			// 
 			// toolStripMenuItem17
 			// 
 			this.toolStripMenuItem17.Name = "toolStripMenuItem17";
-			this.toolStripMenuItem17.Size = new System.Drawing.Size(202, 6);
+			this.toolStripMenuItem17.Size = new System.Drawing.Size(168, 6);
 			// 
 			// mnuCodeDataLogger
 			// 
@@ -1464,7 +1442,7 @@ namespace Mesen.GUI.Debugger
             this.toolStripMenuItem5,
             this.mnuCdlGenerateRom});
 			this.mnuCodeDataLogger.Name = "mnuCodeDataLogger";
-			this.mnuCodeDataLogger.Size = new System.Drawing.Size(205, 22);
+			this.mnuCodeDataLogger.Size = new System.Drawing.Size(171, 22);
 			this.mnuCodeDataLogger.Text = "Code/Data Logger";
 			// 
 			// autoLoadsaveCDLFileToolStripMenuItem
@@ -1736,7 +1714,6 @@ namespace Mesen.GUI.Debugger
 		private Controls.ctrlMemoryMapping ctrlPpuMemoryMapping;
 		private System.Windows.Forms.ToolStripMenuItem mnuShowCpuMemoryMapping;
 		private System.Windows.Forms.ToolStripMenuItem mnuShowPpuMemoryMapping;
-		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem6;
 		private System.Windows.Forms.TableLayoutPanel tlpFunctionLabelLists;
 		private System.Windows.Forms.GroupBox grpLabels;
 		private System.Windows.Forms.GroupBox grpFunctions;
@@ -1823,5 +1800,7 @@ namespace Mesen.GUI.Debugger
 		private System.Windows.Forms.ToolStripMenuItem mnuCopyOptions;
 		private System.Windows.Forms.ToolStripMenuItem mnuCopyAddresses;
 		private System.Windows.Forms.ToolStripMenuItem mnuCopyByteCode;
+		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem6;
+		private System.Windows.Forms.ToolStripMenuItem mnuPreferences;
 	}
 }

@@ -48,6 +48,31 @@ namespace Mesen.GUI.Debugger
 			InitializeComponent();
 			this.lstSearchResult.Font = new System.Drawing.Font(BaseControl.MonospaceFontFamily, 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));			
 			splitContainer.Panel2Collapsed = true;
+
+			bool designMode = (LicenseManager.UsageMode == LicenseUsageMode.Designtime);
+			if(!designMode) {
+				this.InitShortcuts();
+			}
+		}
+
+		private void InitShortcuts()
+		{
+			mnuEditInMemoryViewer.InitShortcut(this, nameof(DebuggerShortcutsConfig.CodeWindow_EditInMemoryViewer));
+			mnuEditLabel.InitShortcut(this, nameof(DebuggerShortcutsConfig.CodeWindow_EditLabel));
+			mnuEditSelectedCode.InitShortcut(this, nameof(DebuggerShortcutsConfig.CodeWindow_EditSelectedCode));
+			mnuEditSubroutine.InitShortcut(this, nameof(DebuggerShortcutsConfig.CodeWindow_EditSubroutine));
+			mnuNavigateBackward.InitShortcut(this, nameof(DebuggerShortcutsConfig.CodeWindow_NavigateBack));
+			mnuNavigateForward.InitShortcut(this, nameof(DebuggerShortcutsConfig.CodeWindow_NavigateForward));
+			mnuSetNextStatement.InitShortcut(this, nameof(DebuggerShortcutsConfig.CodeWindow_SetNextStatement));
+			mnuShowNextStatement.InitShortcut(this, nameof(DebuggerShortcutsConfig.GoToProgramCounter));
+			mnuToggleBreakpoint.InitShortcut(this, nameof(DebuggerShortcutsConfig.CodeWindow_ToggleBreakpoint));
+
+			mnuUndoPrgChrEdit.InitShortcut(this, nameof(DebuggerShortcutsConfig.Undo));
+			mnuCopySelection.InitShortcut(this, nameof(DebuggerShortcutsConfig.Copy));
+
+			mnuMarkAsCode.InitShortcut(this, nameof(DebuggerShortcutsConfig.MarkAsCode));
+			mnuMarkAsData.InitShortcut(this, nameof(DebuggerShortcutsConfig.MarkAsData));
+			mnuMarkAsUnidentifiedData.InitShortcut(this, nameof(DebuggerShortcutsConfig.MarkAsUnidentified));
 		}
 
 		[Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
@@ -609,10 +634,10 @@ namespace Mesen.GUI.Debugger
 			}
 		}
 
-		protected override bool ProcessKeyMessage(ref Message m)
+		protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
 		{
 			this.UpdateContextMenuItemVisibility(mnuAddToWatch.Visible);
-			return base.ProcessKeyMessage(ref m);
+			return base.ProcessCmdKey(ref msg, keyData);
 		}
 
 		public void UpdateContextMenuItemVisibility(bool visible)
@@ -941,7 +966,7 @@ namespace Mesen.GUI.Debugger
 			}
 		}
 
-		private void copySelectionToolStripMenuItem_Click(object sender, EventArgs e)
+		private void mnuCopySelection_Click(object sender, EventArgs e)
 		{
 			this.ctrlCodeViewer.CopySelection(ConfigManager.Config.DebugInfo.CopyAddresses, ConfigManager.Config.DebugInfo.CopyByteCode);
 		}

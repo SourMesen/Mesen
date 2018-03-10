@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Mesen.GUI.Controls;
 using Mesen.GUI.Debugger.Controls;
+using Mesen.GUI.Config;
 
 namespace Mesen.GUI.Debugger
 {
@@ -224,6 +225,12 @@ namespace Mesen.GUI.Debugger
 		protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
 		{
 			if(!this.cboSearch.Focused) {
+				if(keyData == ConfigManager.Config.DebugInfo.Shortcuts.SelectAll) {
+					this.ctrlTextbox.SelectionStart = 0;
+					this.ctrlTextbox.SelectionLength = this.ctrlTextbox.LineCount;
+					return true;
+				}
+
 				switch(keyData) {
 					case Keys.Right | Keys.Shift:
 					case Keys.Down | Keys.Shift:
@@ -255,11 +262,6 @@ namespace Mesen.GUI.Debugger
 						this.ctrlTextbox.MoveSelectionDown(this.ctrlTextbox.LineCount);
 						break;
 
-					case Keys.A | Keys.Control:
-						this.ctrlTextbox.SelectionStart = 0;
-						this.ctrlTextbox.SelectionLength = this.ctrlTextbox.LineCount;
-						break;
-
 					case Keys.Home:
 						this.ctrlTextbox.SelectionStart = 0;
 						this.ctrlTextbox.SelectionLength = 0;
@@ -270,6 +272,20 @@ namespace Mesen.GUI.Debugger
 						this.ctrlTextbox.SelectionLength = 0;
 						return true;
 				}
+			}
+
+			if(keyData == ConfigManager.Config.DebugInfo.Shortcuts.IncreaseFontSize) {
+				this.TextZoom += 10;
+				return true;
+			} else if(keyData == ConfigManager.Config.DebugInfo.Shortcuts.DecreaseFontSize) {
+				this.TextZoom -= 10;
+				return true;
+			} else if(keyData == ConfigManager.Config.DebugInfo.Shortcuts.ResetFontSize) {
+				this.TextZoom = 100;
+				return true;
+			} else if(keyData == ConfigManager.Config.DebugInfo.Shortcuts.Find) {
+				this.OpenSearchBox(true);
+				return true;
 			}
 
 			switch(keyData) {
@@ -291,25 +307,12 @@ namespace Mesen.GUI.Debugger
 					this.ctrlTextbox.SelectionLength = 0;
 					return true;
 
-				case Keys.Control | Keys.F:
-					this.OpenSearchBox(true);
-					return true;
-
 				case Keys.Escape:
-					this.CloseSearchBox();
-					return true;
-
-				case Keys.Control | Keys.Oemplus:
-					this.TextZoom += 10;
-					return true;
-
-				case Keys.Control | Keys.OemMinus:
-					this.TextZoom -= 10;
-					return true;
-
-				case Keys.Control | Keys.D0:
-					this.TextZoom = 100;
-					return true;
+					if(this.cboSearch.Focused) {
+						this.CloseSearchBox();
+						return true;
+					}
+					break;
 			}
 
 			return base.ProcessCmdKey(ref msg, keyData);

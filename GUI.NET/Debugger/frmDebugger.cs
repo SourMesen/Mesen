@@ -55,6 +55,7 @@ namespace Mesen.GUI.Debugger
 			ctrlDebuggerCode.BaseFont = font;
 			ctrlDebuggerCodeSplit.BaseFont = font;
 
+			this.InitShortcuts();
 			this.InitToolbar();
 
 			this.UpdateWorkspace();
@@ -159,6 +160,48 @@ namespace Mesen.GUI.Debugger
 			tmrCdlRatios.Start();
 		}
 
+		private void InitShortcuts()
+		{
+			mnuIncreaseFontSize.InitShortcut(this, nameof(DebuggerShortcutsConfig.IncreaseFontSize));
+			mnuDecreaseFontSize.InitShortcut(this, nameof(DebuggerShortcutsConfig.DecreaseFontSize));
+			mnuResetFontSize.InitShortcut(this, nameof(DebuggerShortcutsConfig.ResetFontSize));
+
+			mnuSaveRom.InitShortcut(this, nameof(DebuggerShortcutsConfig.SaveRom));
+			mnuSaveRomAs.InitShortcut(this, nameof(DebuggerShortcutsConfig.SaveRomAs));
+			mnuSaveAsIps.InitShortcut(this, nameof(DebuggerShortcutsConfig.SaveEditAsIps));
+			mnuRevertChanges.InitShortcut(this, nameof(DebuggerShortcutsConfig.RevertPrgChrChanges));
+
+			mnuContinue.InitShortcut(this, nameof(DebuggerShortcutsConfig.Continue));
+			mnuBreak.InitShortcut(this, nameof(DebuggerShortcutsConfig.Break));
+			mnuBreakIn.InitShortcut(this, nameof(DebuggerShortcutsConfig.BreakIn));
+
+			mnuStepBack.InitShortcut(this, nameof(DebuggerShortcutsConfig.StepBack));
+			mnuStepOut.InitShortcut(this, nameof(DebuggerShortcutsConfig.StepOut));
+			mnuStepInto.InitShortcut(this, nameof(DebuggerShortcutsConfig.StepInto));
+			mnuStepOver.InitShortcut(this, nameof(DebuggerShortcutsConfig.StepOver));
+
+			mnuRunPpuCycle.InitShortcut(this, nameof(DebuggerShortcutsConfig.RunPpuCycle));
+			mnuRunScanline.InitShortcut(this, nameof(DebuggerShortcutsConfig.RunPpuScanline));
+			mnuRunOneFrame.InitShortcut(this, nameof(DebuggerShortcutsConfig.RunPpuFrame));
+
+			mnuGoToAddress.InitShortcut(this, nameof(DebuggerShortcutsConfig.GoTo));
+			mnuFind.InitShortcut(this, nameof(DebuggerShortcutsConfig.Find));
+			mnuFindNext.InitShortcut(this, nameof(DebuggerShortcutsConfig.FindNext));
+			mnuFindPrev.InitShortcut(this, nameof(DebuggerShortcutsConfig.FindPrev));
+			mnuFindAllOccurrences.InitShortcut(this, nameof(DebuggerShortcutsConfig.FindOccurrences));
+
+			mnuShowVerifiedData.InitShortcut(this, nameof(DebuggerShortcutsConfig.ToggleVerifiedData));
+			mnuShowUnidentifiedData.InitShortcut(this, nameof(DebuggerShortcutsConfig.ToggleUnidentifiedCodeData));
+
+			mnuApuViewer.InitShortcut(this, nameof(DebuggerShortcutsConfig.OpenApuViewer));
+			mnuAssembler.InitShortcut(this, nameof(DebuggerShortcutsConfig.OpenAssembler));
+			mnuEventViewer.InitShortcut(this, nameof(DebuggerShortcutsConfig.OpenEventViewer));
+			mnuMemoryViewer.InitShortcut(this, nameof(DebuggerShortcutsConfig.OpenMemoryTools));
+			mnuPpuViewer.InitShortcut(this, nameof(DebuggerShortcutsConfig.OpenPpuViewer));
+			mnuScriptWindow.InitShortcut(this, nameof(DebuggerShortcutsConfig.OpenScriptWindow));
+			mnuTraceLogger.InitShortcut(this, nameof(DebuggerShortcutsConfig.OpenTraceLogger));
+		}
+
 		private void InitToolbar()
 		{
 			AddItemsToToolbar(
@@ -186,10 +229,11 @@ namespace Mesen.GUI.Debugger
 				if(item.Image == null) {
 					newItem.Text = item.Text;
 				}
-				newItem.ToolTipText = (caption ?? item.Text) + (item.ShortcutKeys != Keys.None ? $" ({new KeysConverter().ConvertToString(item.ShortcutKeys)})" : "");
+				newItem.ToolTipText = (caption ?? item.Text) + (item.ShortcutKeys != Keys.None ? $" ({DebuggerShortcutsConfig.GetShortcutDisplay(item.ShortcutKeys)})" : "");
 				newItem.Click += (s, e) => item.PerformClick();
 				newItem.Checked = item.Checked;
 				newItem.Enabled = item.Enabled;
+				newItem.MouseEnter += (s, e) => newItem.ToolTipText = (caption ?? item.Text) + (item.ShortcutKeys != Keys.None ? $" ({DebuggerShortcutsConfig.GetShortcutDisplay(item.ShortcutKeys)})" : "");
 				item.EnabledChanged += (s, e) => newItem.Enabled = item.Enabled;
 				item.CheckedChanged += (s, e) => newItem.Checked = item.Checked;
 				item.VisibleChanged += (s, e) => newItem.Visible = item.Visible;
@@ -1222,6 +1266,13 @@ namespace Mesen.GUI.Debugger
 		{
 			ctrlDebuggerCode.BaseFont = FontDialogHelper.SelectFont(ctrlDebuggerCode.Font);
 			ctrlDebuggerCodeSplit.BaseFont = ctrlDebuggerCode.BaseFont;
+		}
+
+		private void mnuPreferences_Click(object sender, EventArgs e)
+		{
+			using(frmDbgPreferences frm = new frmDbgPreferences()) {
+				frm.ShowDialog(sender, this);
+			}
 		}
 	}
 }

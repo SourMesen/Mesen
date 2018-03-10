@@ -33,10 +33,20 @@ namespace Mesen.GUI.Debugger.Controls
 				mnuRemoveBreakpoint.Enabled = false;
 				mnuEditBreakpoint.Enabled = false;
 				mnuGoToLocation.Enabled = false;
+
+				InitShortcuts();
 			}
 		}
 
-		void BreakpointManager_OnBreakpointChanged(object sender, EventArgs e)
+		private void InitShortcuts()
+		{
+			mnuAddBreakpoint.InitShortcut(this, nameof(DebuggerShortcutsConfig.BreakpointList_Add));
+			mnuEditBreakpoint.InitShortcut(this, nameof(DebuggerShortcutsConfig.BreakpointList_Edit));
+			mnuRemoveBreakpoint.InitShortcut(this, nameof(DebuggerShortcutsConfig.BreakpointList_Delete));
+			mnuGoToLocation.InitShortcut(this, nameof(DebuggerShortcutsConfig.BreakpointList_GoToLocation));
+		}
+
+		private void BreakpointManager_OnBreakpointChanged(object sender, EventArgs e)
 		{
 			if(this.InvokeRequired) {
 				this.BeginInvoke((Action)(() => RefreshList()));

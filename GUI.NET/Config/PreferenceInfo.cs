@@ -122,15 +122,6 @@ namespace Mesen.GUI.Config
 				ShortcutKeys1.Add(new ShortcutKeyInfo(EmulatorShortcut.SetScale5x, new KeyCombination() { Key1 = InteropEmu.GetKeyCode("Alt"), Key2 = InteropEmu.GetKeyCode("5") }));
 				ShortcutKeys1.Add(new ShortcutKeyInfo(EmulatorShortcut.SetScale6x, new KeyCombination() { Key1 = InteropEmu.GetKeyCode("Alt"), Key2 = InteropEmu.GetKeyCode("6") }));
 
-				ShortcutKeys1.Add(new ShortcutKeyInfo(EmulatorShortcut.OpenAssembler, new KeyCombination() { Key1 = InteropEmu.GetKeyCode("Ctrl"), Key2 = InteropEmu.GetKeyCode("A") }));
-				ShortcutKeys1.Add(new ShortcutKeyInfo(EmulatorShortcut.OpenDebugger, new KeyCombination() { Key1 = InteropEmu.GetKeyCode("Ctrl"), Key2 = InteropEmu.GetKeyCode("D") }));
-				ShortcutKeys1.Add(new ShortcutKeyInfo(EmulatorShortcut.OpenMemoryTools, new KeyCombination() { Key1 = InteropEmu.GetKeyCode("Ctrl"), Key2 = InteropEmu.GetKeyCode("M") }));
-				ShortcutKeys1.Add(new ShortcutKeyInfo(EmulatorShortcut.OpenPpuViewer, new KeyCombination() { Key1 = InteropEmu.GetKeyCode("Ctrl"), Key2 = InteropEmu.GetKeyCode("P") }));
-				ShortcutKeys1.Add(new ShortcutKeyInfo(EmulatorShortcut.OpenScriptWindow, new KeyCombination() { Key1 = InteropEmu.GetKeyCode("Ctrl"), Key2 = InteropEmu.GetKeyCode("J") }));
-				ShortcutKeys1.Add(new ShortcutKeyInfo(EmulatorShortcut.OpenTraceLogger, new KeyCombination() { Key1 = InteropEmu.GetKeyCode("Ctrl"), Key2 = InteropEmu.GetKeyCode("N") }));
-				ShortcutKeys1.Add(new ShortcutKeyInfo(EmulatorShortcut.OpenApuViewer, new KeyCombination() { Key1 = InteropEmu.GetKeyCode("Ctrl"), Key2 = InteropEmu.GetKeyCode("U") }));
-				ShortcutKeys1.Add(new ShortcutKeyInfo(EmulatorShortcut.OpenEventViewer, new KeyCombination() { Key1 = InteropEmu.GetKeyCode("Ctrl"), Key2 = InteropEmu.GetKeyCode("E") }));
-
 				ShortcutKeys1.Add(new ShortcutKeyInfo(EmulatorShortcut.OpenFile, new KeyCombination() { Key1 = InteropEmu.GetKeyCode("Ctrl"), Key2 = InteropEmu.GetKeyCode("O") }));
 
 				ShortcutKeys1.Add(new ShortcutKeyInfo(EmulatorShortcut.SaveStateSlot1, new KeyCombination() { Key1 = InteropEmu.GetKeyCode("Shift"), Key2 = InteropEmu.GetKeyCode("F1") }));

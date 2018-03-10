@@ -217,7 +217,6 @@
 			// 
 			this.mnuCopyToClipboard.Image = global::Mesen.GUI.Properties.Resources.Copy;
 			this.mnuCopyToClipboard.Name = "mnuCopyToClipboard";
-			this.mnuCopyToClipboard.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.C)));
 			this.mnuCopyToClipboard.Size = new System.Drawing.Size(254, 22);
 			this.mnuCopyToClipboard.Text = "Copy image to clipboard";
 			this.mnuCopyToClipboard.Click += new System.EventHandler(this.mnuCopyToClipboard_Click);

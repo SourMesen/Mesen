@@ -192,7 +192,6 @@
 			// 
 			this.mnuImport.Image = global::Mesen.GUI.Properties.Resources.Import;
 			this.mnuImport.Name = "mnuImport";
-			this.mnuImport.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.O)));
 			this.mnuImport.Size = new System.Drawing.Size(181, 22);
 			this.mnuImport.Text = "Import";
 			this.mnuImport.Click += new System.EventHandler(this.mnuImport_Click);
@@ -201,7 +200,6 @@
 			// 
 			this.mnuExport.Image = global::Mesen.GUI.Properties.Resources.Export;
 			this.mnuExport.Name = "mnuExport";
-			this.mnuExport.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.S)));
 			this.mnuExport.Size = new System.Drawing.Size(181, 22);
 			this.mnuExport.Text = "Export";
 			this.mnuExport.Click += new System.EventHandler(this.mnuExport_Click);
@@ -277,7 +275,7 @@
 			// 
 			this.mnuHighlightExecution.CheckOnClick = true;
 			this.mnuHighlightExecution.Name = "mnuHighlightExecution";
-			this.mnuHighlightExecution.Size = new System.Drawing.Size(133, 22);
+			this.mnuHighlightExecution.Size = new System.Drawing.Size(152, 22);
 			this.mnuHighlightExecution.Text = "Execution";
 			this.mnuHighlightExecution.Click += new System.EventHandler(this.mnuColorProviderOptions_Click);
 			// 
@@ -285,7 +283,7 @@
 			// 
 			this.mnuHighlightWrites.CheckOnClick = true;
 			this.mnuHighlightWrites.Name = "mnuHighlightWrites";
-			this.mnuHighlightWrites.Size = new System.Drawing.Size(133, 22);
+			this.mnuHighlightWrites.Size = new System.Drawing.Size(152, 22);
 			this.mnuHighlightWrites.Text = "Writes";
 			this.mnuHighlightWrites.Click += new System.EventHandler(this.mnuColorProviderOptions_Click);
 			// 
@@ -293,14 +291,14 @@
 			// 
 			this.mnuHightlightReads.CheckOnClick = true;
 			this.mnuHightlightReads.Name = "mnuHightlightReads";
-			this.mnuHightlightReads.Size = new System.Drawing.Size(133, 22);
+			this.mnuHightlightReads.Size = new System.Drawing.Size(152, 22);
 			this.mnuHightlightReads.Text = "Reads";
 			this.mnuHightlightReads.Click += new System.EventHandler(this.mnuColorProviderOptions_Click);
 			// 
 			// toolStripMenuItem6
 			// 
 			this.toolStripMenuItem6.Name = "toolStripMenuItem6";
-			this.toolStripMenuItem6.Size = new System.Drawing.Size(130, 6);
+			this.toolStripMenuItem6.Size = new System.Drawing.Size(149, 6);
 			// 
 			// fadeSpeedToolStripMenuItem
 			// 
@@ -312,7 +310,7 @@
             this.toolStripMenuItem7,
             this.mnuCustomFadeSpeed});
 			this.fadeSpeedToolStripMenuItem.Name = "fadeSpeedToolStripMenuItem";
-			this.fadeSpeedToolStripMenuItem.Size = new System.Drawing.Size(133, 22);
+			this.fadeSpeedToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
 			this.fadeSpeedToolStripMenuItem.Text = "Fade speed";
 			// 
 			// mnuFadeSlow
@@ -498,8 +496,7 @@
 			// mnuIncreaseFontSize
 			// 
 			this.mnuIncreaseFontSize.Name = "mnuIncreaseFontSize";
-			this.mnuIncreaseFontSize.ShortcutKeyDisplayString = "Ctrl++";
-			this.mnuIncreaseFontSize.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Oemplus)));
+			this.mnuIncreaseFontSize.ShortcutKeyDisplayString = "";
 			this.mnuIncreaseFontSize.Size = new System.Drawing.Size(217, 22);
 			this.mnuIncreaseFontSize.Text = "Increase";
 			this.mnuIncreaseFontSize.Click += new System.EventHandler(this.mnuIncreaseFontSize_Click);
@@ -507,8 +504,7 @@
 			// mnuDecreaseFontSize
 			// 
 			this.mnuDecreaseFontSize.Name = "mnuDecreaseFontSize";
-			this.mnuDecreaseFontSize.ShortcutKeyDisplayString = "Ctrl+-";
-			this.mnuDecreaseFontSize.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.OemMinus)));
+			this.mnuDecreaseFontSize.ShortcutKeyDisplayString = "";
 			this.mnuDecreaseFontSize.Size = new System.Drawing.Size(217, 22);
 			this.mnuDecreaseFontSize.Text = "Decrease";
 			this.mnuDecreaseFontSize.Click += new System.EventHandler(this.mnuDecreaseFontSize_Click);
@@ -516,8 +512,7 @@
 			// mnuResetFontSize
 			// 
 			this.mnuResetFontSize.Name = "mnuResetFontSize";
-			this.mnuResetFontSize.ShortcutKeyDisplayString = "Ctrl+0";
-			this.mnuResetFontSize.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.D0)));
+			this.mnuResetFontSize.ShortcutKeyDisplayString = "";
 			this.mnuResetFontSize.Size = new System.Drawing.Size(217, 22);
 			this.mnuResetFontSize.Text = "Reset to Default";
 			this.mnuResetFontSize.Click += new System.EventHandler(this.mnuResetFontSize_Click);
@@ -588,7 +583,6 @@
 			// 
 			this.mnuRefresh.Image = global::Mesen.GUI.Properties.Resources.Reset;
 			this.mnuRefresh.Name = "mnuRefresh";
-			this.mnuRefresh.ShortcutKeys = System.Windows.Forms.Keys.F5;
 			this.mnuRefresh.Size = new System.Drawing.Size(256, 22);
 			this.mnuRefresh.Text = "Refresh";
 			this.mnuRefresh.Click += new System.EventHandler(this.mnuRefresh_Click);
@@ -659,8 +653,7 @@
 			// 
 			this.mnuFind.Image = global::Mesen.GUI.Properties.Resources.Find;
 			this.mnuFind.Name = "mnuFind";
-			this.mnuFind.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.F)));
-			this.mnuFind.Size = new System.Drawing.Size(196, 22);
+			this.mnuFind.Size = new System.Drawing.Size(152, 22);
 			this.mnuFind.Text = "Find...";
 			this.mnuFind.Click += new System.EventHandler(this.mnuFind_Click);
 			// 
@@ -668,8 +661,7 @@
 			// 
 			this.mnuFindNext.Image = global::Mesen.GUI.Properties.Resources.NextArrow;
 			this.mnuFindNext.Name = "mnuFindNext";
-			this.mnuFindNext.ShortcutKeys = System.Windows.Forms.Keys.F3;
-			this.mnuFindNext.Size = new System.Drawing.Size(196, 22);
+			this.mnuFindNext.Size = new System.Drawing.Size(152, 22);
 			this.mnuFindNext.Text = "Find Next";
 			this.mnuFindNext.Click += new System.EventHandler(this.mnuFindNext_Click);
 			// 
@@ -677,16 +669,14 @@
 			// 
 			this.mnuFindPrev.Image = global::Mesen.GUI.Properties.Resources.PreviousArrow;
 			this.mnuFindPrev.Name = "mnuFindPrev";
-			this.mnuFindPrev.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Shift | System.Windows.Forms.Keys.F3)));
-			this.mnuFindPrev.Size = new System.Drawing.Size(196, 22);
+			this.mnuFindPrev.Size = new System.Drawing.Size(152, 22);
 			this.mnuFindPrev.Text = "Find Previous";
 			this.mnuFindPrev.Click += new System.EventHandler(this.mnuFindPrev_Click);
 			// 
 			// mnuGoTo
 			// 
 			this.mnuGoTo.Name = "mnuGoTo";
-			this.mnuGoTo.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.G)));
-			this.mnuGoTo.Size = new System.Drawing.Size(196, 22);
+			this.mnuGoTo.Size = new System.Drawing.Size(152, 22);
 			this.mnuGoTo.Text = "Go To...";
 			this.mnuGoTo.Click += new System.EventHandler(this.mnuGoTo_Click);
 			// 
@@ -738,12 +728,14 @@
 			// 
 			// ctrlMemoryAccessCounters
 			// 
+			this.ctrlMemoryAccessCounters.BaseFont = new System.Drawing.Font("Consolas", 12F);
 			this.ctrlMemoryAccessCounters.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.ctrlMemoryAccessCounters.Location = new System.Drawing.Point(0, 0);
 			this.ctrlMemoryAccessCounters.Margin = new System.Windows.Forms.Padding(0);
 			this.ctrlMemoryAccessCounters.Name = "ctrlMemoryAccessCounters";
 			this.ctrlMemoryAccessCounters.Size = new System.Drawing.Size(606, 343);
 			this.ctrlMemoryAccessCounters.TabIndex = 0;
+			this.ctrlMemoryAccessCounters.TextZoom = 100;
 			// 
 			// tpgProfiler
 			// 

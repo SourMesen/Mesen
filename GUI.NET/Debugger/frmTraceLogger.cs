@@ -56,6 +56,16 @@ namespace Mesen.GUI.Debugger
 
 			this.toolTip.SetToolTip(this.picExpressionWarning, "Condition contains invalid syntax or symbols.");
 			this.toolTip.SetToolTip(this.picHelp, "When a condition is given, instructions will only be logged by the trace logger if the condition returns a value not equal to 0 or false." + Environment.NewLine + Environment.NewLine + frmBreakpoint.GetConditionTooltip(false));
+
+			this.InitShortcuts();
+		}
+
+		private void InitShortcuts()
+		{
+			mnuIncreaseFontSize.InitShortcut(this, nameof(DebuggerShortcutsConfig.IncreaseFontSize));
+			mnuDecreaseFontSize.InitShortcut(this, nameof(DebuggerShortcutsConfig.DecreaseFontSize));
+			mnuResetFontSize.InitShortcut(this, nameof(DebuggerShortcutsConfig.ResetFontSize));
+			mnuRefresh.InitShortcut(this, nameof(DebuggerShortcutsConfig.Refresh));
 		}
 
 		protected override void OnLoad(EventArgs e)
@@ -145,19 +155,16 @@ namespace Mesen.GUI.Debugger
 
 		protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
 		{
-			switch(keyData) {
-				case Keys.C | Keys.Control:
-					if(_previousTrace != null && !this.txtCondition.Focused && txtTraceLog.SelectionStart >= 0) {
-						string[] lines = _previousTrace.Split('\n');
-						StringBuilder sb = new StringBuilder();
-						for(int i = txtTraceLog.SelectionStart, end = txtTraceLog.SelectionStart + txtTraceLog.SelectionLength; i <= end && i < lines.Length; i++) {
-							sb.AppendLine(lines[i]);
-						}
-						Clipboard.SetText(sb.ToString());
-						return true;
+			if(keyData == ConfigManager.Config.DebugInfo.Shortcuts.Copy) {
+				if(_previousTrace != null && !this.txtCondition.Focused && txtTraceLog.SelectionStart >= 0) {
+					string[] lines = _previousTrace.Split('\n');
+					StringBuilder sb = new StringBuilder();
+					for(int i = txtTraceLog.SelectionStart, end = txtTraceLog.SelectionStart + txtTraceLog.SelectionLength; i <= end && i < lines.Length; i++) {
+						sb.AppendLine(lines[i]);
 					}
-					break;
-
+					Clipboard.SetText(sb.ToString());
+					return true;
+				}
 			}
 			return base.ProcessCmdKey(ref msg, keyData);
 		}

@@ -362,42 +362,38 @@
             this.toolStripMenuItem5,
             this.mnuSelectAll});
 			this.contextMenu.Name = "contextMenu";
-			this.contextMenu.Size = new System.Drawing.Size(165, 98);
+			this.contextMenu.Size = new System.Drawing.Size(123, 98);
 			// 
 			// mnuCopy
 			// 
 			this.mnuCopy.Name = "mnuCopy";
-			this.mnuCopy.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.C)));
-			this.mnuCopy.Size = new System.Drawing.Size(164, 22);
+			this.mnuCopy.Size = new System.Drawing.Size(122, 22);
 			this.mnuCopy.Text = "Copy";
 			this.mnuCopy.Click += new System.EventHandler(this.mnuCopy_Click);
 			// 
 			// mnuCut
 			// 
 			this.mnuCut.Name = "mnuCut";
-			this.mnuCut.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.X)));
-			this.mnuCut.Size = new System.Drawing.Size(164, 22);
+			this.mnuCut.Size = new System.Drawing.Size(122, 22);
 			this.mnuCut.Text = "Cut";
 			this.mnuCut.Click += new System.EventHandler(this.mnuCut_Click);
 			// 
 			// mnuPaste
 			// 
 			this.mnuPaste.Name = "mnuPaste";
-			this.mnuPaste.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.V)));
-			this.mnuPaste.Size = new System.Drawing.Size(164, 22);
+			this.mnuPaste.Size = new System.Drawing.Size(122, 22);
 			this.mnuPaste.Text = "Paste";
 			this.mnuPaste.Click += new System.EventHandler(this.mnuPaste_Click);
 			// 
 			// toolStripMenuItem5
 			// 
 			this.toolStripMenuItem5.Name = "toolStripMenuItem5";
-			this.toolStripMenuItem5.Size = new System.Drawing.Size(161, 6);
+			this.toolStripMenuItem5.Size = new System.Drawing.Size(119, 6);
 			// 
 			// mnuSelectAll
 			// 
 			this.mnuSelectAll.Name = "mnuSelectAll";
-			this.mnuSelectAll.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.A)));
-			this.mnuSelectAll.Size = new System.Drawing.Size(164, 22);
+			this.mnuSelectAll.Size = new System.Drawing.Size(122, 22);
 			this.mnuSelectAll.Text = "Select All";
 			this.mnuSelectAll.Click += new System.EventHandler(this.mnuSelectAll_Click);
 			// 
@@ -485,39 +481,36 @@
 			// mnuIncreaseFontSize
 			// 
 			this.mnuIncreaseFontSize.Name = "mnuIncreaseFontSize";
-			this.mnuIncreaseFontSize.ShortcutKeyDisplayString = "Ctrl++";
-			this.mnuIncreaseFontSize.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Oemplus)));
-			this.mnuIncreaseFontSize.Size = new System.Drawing.Size(197, 22);
+			this.mnuIncreaseFontSize.ShortcutKeyDisplayString = "";
+			this.mnuIncreaseFontSize.Size = new System.Drawing.Size(157, 22);
 			this.mnuIncreaseFontSize.Text = "Increase Size";
 			this.mnuIncreaseFontSize.Click += new System.EventHandler(this.mnuIncreaseFontSize_Click);
 			// 
 			// mnuDecreaseFontSize
 			// 
 			this.mnuDecreaseFontSize.Name = "mnuDecreaseFontSize";
-			this.mnuDecreaseFontSize.ShortcutKeyDisplayString = "Ctrl+-";
-			this.mnuDecreaseFontSize.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.OemMinus)));
-			this.mnuDecreaseFontSize.Size = new System.Drawing.Size(197, 22);
+			this.mnuDecreaseFontSize.ShortcutKeyDisplayString = "";
+			this.mnuDecreaseFontSize.Size = new System.Drawing.Size(157, 22);
 			this.mnuDecreaseFontSize.Text = "Decrease Size";
 			this.mnuDecreaseFontSize.Click += new System.EventHandler(this.mnuDecreaseFontSize_Click);
 			// 
 			// mnuResetFontSize
 			// 
 			this.mnuResetFontSize.Name = "mnuResetFontSize";
-			this.mnuResetFontSize.ShortcutKeyDisplayString = "Ctrl+0";
-			this.mnuResetFontSize.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.D0)));
-			this.mnuResetFontSize.Size = new System.Drawing.Size(197, 22);
+			this.mnuResetFontSize.ShortcutKeyDisplayString = "";
+			this.mnuResetFontSize.Size = new System.Drawing.Size(157, 22);
 			this.mnuResetFontSize.Text = "Reset to Default";
 			this.mnuResetFontSize.Click += new System.EventHandler(this.mnuResetFontSize_Click);
 			// 
 			// toolStripMenuItem2
 			// 
 			this.toolStripMenuItem2.Name = "toolStripMenuItem2";
-			this.toolStripMenuItem2.Size = new System.Drawing.Size(194, 6);
+			this.toolStripMenuItem2.Size = new System.Drawing.Size(154, 6);
 			// 
 			// mnuSelectFont
 			// 
 			this.mnuSelectFont.Name = "mnuSelectFont";
-			this.mnuSelectFont.Size = new System.Drawing.Size(197, 22);
+			this.mnuSelectFont.Size = new System.Drawing.Size(157, 22);
 			this.mnuSelectFont.Text = "Select Font...";
 			this.mnuSelectFont.Click += new System.EventHandler(this.mnuSelectFont_Click);
 			// 

@@ -464,14 +464,6 @@ enum class EmulatorShortcut
 	LoadStateFromFile,
 
 	OpenFile,
-	OpenDebugger,
-	OpenAssembler,
-	OpenPpuViewer,
-	OpenMemoryTools,
-	OpenScriptWindow,
-	OpenTraceLogger,
-	OpenApuViewer,
-	OpenEventViewer,
 	ShortcutCount
 };
 

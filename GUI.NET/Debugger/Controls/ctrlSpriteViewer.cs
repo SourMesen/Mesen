@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using System.Runtime.InteropServices;
 using Mesen.GUI.Controls;
 using System.Drawing.Imaging;
+using Mesen.GUI.Config;
 
 namespace Mesen.GUI.Debugger.Controls
 {
@@ -35,6 +36,11 @@ namespace Mesen.GUI.Debugger.Controls
 
 			picPreview.Image = new Bitmap(256, 240, PixelFormat.Format32bppArgb);
 			picSprites.Image = new Bitmap(256, 512, PixelFormat.Format32bppArgb);
+
+			bool designMode = (LicenseManager.UsageMode == LicenseUsageMode.Designtime);
+			if(!designMode) {
+				mnuCopyToClipboard.InitShortcut(this, nameof(DebuggerShortcutsConfig.Copy));
+			}
 		}
 		
 		public void GetData()

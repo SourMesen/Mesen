@@ -15,10 +15,22 @@ namespace Mesen.GUI.Forms
 		private System.ComponentModel.IContainer components;
 		private bool _iconSet = false;
 
+		public delegate bool ProcessCmdKeyHandler(Keys keyData);
+		public event ProcessCmdKeyHandler OnProcessCmdKey;
 
 		public BaseForm()
 		{
 			InitializeComponent();
+		}
+
+		protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
+		{
+			bool? result = OnProcessCmdKey?.Invoke(keyData);
+			if(result == true) {
+				return true;
+			} else {
+				return base.ProcessCmdKey(ref msg, keyData);
+			}
 		}
 
 		public void Show(object sender, IWin32Window owner = null)
