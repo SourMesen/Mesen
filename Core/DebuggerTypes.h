@@ -27,6 +27,7 @@ enum class BreakSource
 {
 	Break = 0,
 	Pause = 1,
+	BreakAfterSuspend = 2,
 };
 
 enum class AddressType

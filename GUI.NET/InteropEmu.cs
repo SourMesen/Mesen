@@ -2115,6 +2115,7 @@ namespace Mesen.GUI
 	{
 		Break = 0,
 		Pause = 1,
+		BreakAfterSuspend = 2,
 	}
 
 	public enum AddressType

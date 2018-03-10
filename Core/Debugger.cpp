@@ -684,6 +684,10 @@ bool Debugger::SleepUntilResume(BreakSource source)
 	if(stepCount > 0) {
 		_stepCount--;
 		stepCount = _stepCount.load();
+	} else if(stepCount == 0) {
+		//If stepCount was already 0 when we enter the function, it means
+		//Debugger::Suspend() and Debugger::Resume() were called by another thread
+		source = BreakSource::BreakAfterSuspend;
 	}
 
 	if((stepCount == 0 || _breakRequested) && !_stopFlag && _suspendCount == 0) {
