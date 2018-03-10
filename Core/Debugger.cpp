@@ -60,6 +60,7 @@ Debugger::Debugger(shared_ptr<Console> console, shared_ptr<CPU> cpu, shared_ptr<
 	_stepCycleCount = -1;
 	_ppuStepCount = -1;
 	_breakRequested = false;
+	_pausedForDebugHelper = false;
 	_breakOnScanline = -2;
 
 	_preventResume = 0;
@@ -705,10 +706,12 @@ bool Debugger::SleepUntilResume(BreakSource source)
 		}
 
 		_executionStopped = true;
+		_pausedForDebugHelper = _breakRequested;
 		while(((stepCount == 0 || _breakRequested) && !_stopFlag && _suspendCount == 0) || _preventResume > 0) {
 			std::this_thread::sleep_for(std::chrono::duration<int, std::milli>(10));
 			stepCount = _stepCount.load();
 		}
+		_pausedForDebugHelper = false;
 		_executionStopped = false;
 		return true;
 	}
@@ -1039,6 +1042,11 @@ shared_ptr<MemoryAccessCounter> Debugger::GetMemoryAccessCounter()
 bool Debugger::IsExecutionStopped()
 {
 	return _executionStopped || _console->IsPaused();
+}
+
+bool Debugger::IsPauseIconShown()
+{
+	return IsExecutionStopped() && !CheckFlag(DebuggerFlags::HidePauseIcon) && _preventResume == 0 && !_pausedForDebugHelper;
 }
 
 void Debugger::PreventResume()

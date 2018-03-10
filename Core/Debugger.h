@@ -101,7 +101,10 @@ private:
 	atomic<uint8_t> _lastInstruction;
 	atomic<bool> _stepOut;
 	atomic<int32_t> _stepOverAddr;
+	
 	atomic<bool> _breakRequested;
+	bool _pausedForDebugHelper;
+
 	atomic<int32_t> _breakOnScanline;
 
 	int32_t _ppuViewerScanline;
@@ -187,6 +190,7 @@ public:
 
 	bool IsExecutionStopped();
 
+	bool IsPauseIconShown();
 	void PreventResume();
 	void AllowResume();
 

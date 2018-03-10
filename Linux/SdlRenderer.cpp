@@ -149,7 +149,7 @@ void SdlRenderer::Render()
 	bool disableOverlay = EmulationSettings::CheckFlag(EmulationFlags::HidePauseOverlay);
 	shared_ptr<Debugger> debugger = Console::GetInstance()->GetDebugger(false);
 	if(debugger && debugger->IsExecutionStopped()) {
-		paused = !debugger->CheckFlag(DebuggerFlags::HidePauseIcon);
+		paused = debugger->IsPauseIconShown();
 		disableOverlay = true;
 	}
 
