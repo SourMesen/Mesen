@@ -248,6 +248,21 @@ namespace Mesen.GUI.Debugger
 			}
 		}
 
+		protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
+		{
+			if(keyData == ConfigManager.Config.DebugInfo.Shortcuts.ToggleBreakContinue) {
+				if(mnuBreak.Enabled) {
+					ctrlConsoleStatus.ApplyChanges();
+					InteropEmu.DebugStep(1);
+				} else {
+					ResumeExecution();
+				}
+				return true;
+			}
+
+			return base.ProcessCmdKey(ref msg, keyData);
+		}
+
 		protected override void OnActivated(EventArgs e)
 		{
 			base.OnActivated(e);

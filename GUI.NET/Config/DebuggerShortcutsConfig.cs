@@ -73,6 +73,8 @@ namespace Mesen.GUI.Config
 		public XmlKeys Continue = Keys.F5;
 		[ShortcutName("Break")]
 		public XmlKeys Break = Keys.Control | Keys.Alt | Keys.Cancel;
+		[ShortcutName("Toggle Break/Continue")]
+		public XmlKeys ToggleBreakContinue = Keys.Escape;
 		[ShortcutName("Step Into")]
 		public XmlKeys StepInto = Keys.F11;
 		[ShortcutName("Step Over")]

@@ -64,9 +64,10 @@ namespace Mesen.GUI.Debugger
 				GetMember(nameof(DebuggerShortcutsConfig.ScriptWindow_StopScript))
 			};
 
-			ctrlDbgShortcutsDebugger.Shortcuts = new FieldInfo[41] {
+			ctrlDbgShortcutsDebugger.Shortcuts = new FieldInfo[42] {
 				GetMember(nameof(DebuggerShortcutsConfig.Continue)),
 				GetMember(nameof(DebuggerShortcutsConfig.Break)),
+				GetMember(nameof(DebuggerShortcutsConfig.ToggleBreakContinue)),
 				GetMember(nameof(DebuggerShortcutsConfig.StepInto)),
 				GetMember(nameof(DebuggerShortcutsConfig.StepOver)),
 				GetMember(nameof(DebuggerShortcutsConfig.StepOut)),
