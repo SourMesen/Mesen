@@ -41,6 +41,7 @@ namespace Mesen.GUI.Debugger
 
 			this.mnuAutoRefresh.Checked = config.RamAutoRefresh;
 			this.mnuHighDensityMode.Checked = config.RamHighDensityTextMode;
+			this.mnuByteEditingMode.Checked = config.RamByteEditingMode;
 			this.mnuEnablePerByteNavigation.Checked = config.RamEnablePerByteNavigation;
 			UpdateRefreshSpeedMenu();
 
@@ -629,6 +630,13 @@ namespace Mesen.GUI.Debugger
 		{
 			ctrlHexViewer.BaseFont = FontDialogHelper.SelectFont(ctrlHexViewer.BaseFont);
 			ctrlMemoryAccessCounters.BaseFont = ctrlHexViewer.BaseFont;
+		}
+
+		private void mnuByteEditingMode_CheckedChanged(object sender, EventArgs e)
+		{
+			ConfigManager.Config.DebugInfo.RamByteEditingMode = mnuByteEditingMode.Checked;
+			ConfigManager.ApplyChanges();
+			ctrlHexViewer.ByteEditingMode = ConfigManager.Config.DebugInfo.RamByteEditingMode;
 		}
 	}
 }

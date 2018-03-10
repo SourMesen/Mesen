@@ -34,6 +34,11 @@ namespace Be.Windows.Forms
 			_bytes = bytes;
 		}
 
+		public void SetData(byte[] data)
+		{
+			_bytes = new List<byte>(data);
+		}
+
 		/// <summary>
 		/// Raises the Changed event.
 		/// </summary>
@@ -95,14 +100,19 @@ namespace Be.Windows.Forms
 		public delegate void BytesChangedHandler(int byteIndex, byte[] values);
 		public event BytesChangedHandler BytesChanged;
 
-
 		/// <summary>
 		/// Reads a byte from the byte collection.
 		/// </summary>
 		/// <param name="index">the index of the byte to read</param>
 		/// <returns>the byte</returns>
 		public byte ReadByte(long index)
-		{ return _bytes[(int)index]; }
+		{
+			if(_partialPos == index) {
+				return _partialValue;
+			} else {
+				return _bytes[(int)index];
+			}
+		}
 
 		/// <summary>
 		/// Write a byte into the byte collection.
@@ -111,6 +121,10 @@ namespace Be.Windows.Forms
 		/// <param name="value">the byte</param>
 		public void WriteByte(long index, byte value)
 		{
+			if(index == _partialPos) {
+				_partialPos = -1;
+			}
+
 			if(_bytes[(int)index] != value) {
 				ByteChanged?.Invoke((int)index, value, _bytes[(int)index]);
 				_bytes[(int)index] = value;
@@ -120,9 +134,27 @@ namespace Be.Windows.Forms
 
 		public void WriteBytes(long index, byte[] values)
 		{
+			_partialPos = -1;
 			BytesChanged?.Invoke((int)index, values);
 			for(int i = 0; i < values.Length && index + i < _bytes.Count; i++) {
 				_bytes[(int)index+i] = values[i];
+			}
+		}
+
+		long _partialPos = -1;
+		byte _partialValue = 0;
+		public void PartialWriteByte(long index, byte value)
+		{
+			//Wait for a full byte to be written
+			_partialPos = index;
+			_partialValue = value;
+		}
+
+		public void CommitWriteByte()
+		{
+			if(_partialPos >= 0) {
+				WriteByte(_partialPos, _partialValue);
+				_partialPos = -1;
 			}
 		}
 

@@ -175,6 +175,7 @@ namespace Mesen.GUI.Config
 
 		public bool RamHighDensityTextMode = false;
 		public bool RamEnablePerByteNavigation = false;
+		public bool RamByteEditingMode = false;
 		public bool RamAutoRefresh = true;
 		public RefreshSpeed RamAutoRefreshSpeed = RefreshSpeed.Normal;
 		public bool RamIgnoreRedundantWrites = false;

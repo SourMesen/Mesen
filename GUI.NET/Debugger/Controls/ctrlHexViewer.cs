@@ -25,6 +25,7 @@ namespace Mesen.GUI.Debugger.Controls
 			InitializeComponent();
 
 			this.BaseFont = new Font(BaseControl.MonospaceFontFamily, 10, FontStyle.Regular);
+			this.ctrlHexBox.ByteEditingMode = true;
 			this.ctrlHexBox.ContextMenuStrip = this.ctxMenuStrip;
 			this.ctrlHexBox.SelectionForeColor = Color.White;
 			this.ctrlHexBox.SelectionBackColor = Color.FromArgb(31, 123, 205);
@@ -80,15 +81,18 @@ namespace Mesen.GUI.Debugger.Controls
 				}
 
 				if(changed) {
-					_byteProvider = new StaticByteProvider(data);
-					_byteProvider.ByteChanged += (int byteIndex, byte newValue, byte oldValue) => {
-						InteropEmu.DebugSetMemoryValue(_memoryType, (UInt32)byteIndex, newValue);
-					};
-					_byteProvider.BytesChanged += (int byteIndex, byte[] values) => {
-						InteropEmu.DebugSetMemoryValues(_memoryType, (UInt32)byteIndex, values);
-					};
-
-					this.ctrlHexBox.ByteProvider = _byteProvider;
+					if(_byteProvider == null) {
+						_byteProvider = new StaticByteProvider(data);
+						_byteProvider.ByteChanged += (int byteIndex, byte newValue, byte oldValue) => {
+							InteropEmu.DebugSetMemoryValue(_memoryType, (UInt32)byteIndex, newValue);
+						};
+						_byteProvider.BytesChanged += (int byteIndex, byte[] values) => {
+							InteropEmu.DebugSetMemoryValues(_memoryType, (UInt32)byteIndex, values);
+						};
+						this.ctrlHexBox.ByteProvider = _byteProvider;
+					} else {
+						_byteProvider.SetData(data);
+					}
 					this.ctrlHexBox.Refresh();
 				}
 			}
@@ -393,7 +397,14 @@ namespace Mesen.GUI.Debugger.Controls
 		{
 			get { return this.ctrlHexBox.EnablePerByteNavigation; }
 			set { this.ctrlHexBox.EnablePerByteNavigation = value; }
-		}		
+		}
+
+		[Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+		public bool ByteEditingMode
+		{
+			get { return this.ctrlHexBox.ByteEditingMode; }
+			set { this.ctrlHexBox.ByteEditingMode = value; }
+		}
 
 		public delegate void ByteMouseHoverHandler(int address);
 		public event ByteMouseHoverHandler ByteMouseHover; 

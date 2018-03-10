@@ -721,10 +721,16 @@ namespace Be.Windows.Forms
 						sNewCb = sCb.Substring(0, 1) + sNewCb;
 					byte newcb = byte.Parse(sNewCb, System.Globalization.NumberStyles.AllowHexSpecifier, System.Threading.Thread.CurrentThread.CurrentCulture);
 
-					if (isInsertMode)
+					if(isInsertMode) {
 						_hexBox._byteProvider.InsertBytes(pos, new byte[] { newcb });
-					else
-						_hexBox._byteProvider.WriteByte(pos, newcb);
+					} else {
+						if(cp == 1 || !_hexBox.ByteEditingMode) {
+							_hexBox._byteProvider.WriteByte(pos, newcb);
+						} else {
+							//First char in byte, do not update the changes right away
+							_hexBox._byteProvider.PartialWriteByte(pos, newcb);
+						}
+					}
 
 					PerformPosMoveRight(false);
 
@@ -1848,7 +1854,7 @@ namespace Be.Windows.Forms
 			{
 				BytePositionInfo bpi = GetHexBytePositionInfo(p);
 				pos = bpi.Index;
-				cp = bpi.CharacterPosition;
+				cp = ByteEditingMode ? 0 : bpi.CharacterPosition;
 
 				SetPosition(pos, cp);
 
@@ -1882,13 +1888,18 @@ namespace Be.Windows.Forms
 			int iX = (int)x;
 			int iY = (int)y;
 
-			int hPos = (iX / 3 + 1);
+			//Offset by half a character to make the selection more intuitive (e.g half the white space belongs to the left byte, the other to the right)
+			float pos = (x + 0.5f) / 3 + 1;
+			int hPos = (int)pos;
 
 			bytePos = Math.Min(_byteProvider.Length,
 				_startByte + (_iHexMaxHBytes * (iY + 1) - _iHexMaxHBytes) + hPos - 1);
-			byteCharaterPos = (iX % 3);
-			if (byteCharaterPos > 1)
+
+			if(pos - Math.Floor(pos) > 0.5f) {
 				byteCharaterPos = 1;
+			} else {
+				byteCharaterPos = 0;
+			}
 
 			if (bytePos == _byteProvider.Length)
 				byteCharaterPos = 0;
@@ -3047,6 +3058,9 @@ namespace Be.Windows.Forms
 		#endregion
 
 		#region Properties
+
+		public bool ByteEditingMode { get; set; } = false;
+
 		/// <summary>
 		/// Gets or sets the background color for the disabled control.
 		/// </summary>
@@ -3743,6 +3757,7 @@ namespace Be.Windows.Forms
 
 			if (bytePos != _bytePos)
 			{
+				_byteProvider.CommitWriteByte();
 				_bytePos = bytePos;
 				CheckCurrentLineChanged();
 				CheckCurrentPositionInLineChanged();
@@ -4097,6 +4112,10 @@ namespace Be.Windows.Forms
 			System.Diagnostics.Debug.WriteLine("OnLostFocus()", "HexBox");
 
 			base.OnLostFocus(e);
+
+			if(_byteProvider != null) {
+				_byteProvider.CommitWriteByte();
+			}
 
 			DestroyCaret();
 		}

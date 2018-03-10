@@ -22,6 +22,9 @@ namespace Be.Windows.Forms
 
 		void WriteBytes(long index, byte[] values);
 
+		void PartialWriteByte(long index, byte value);
+		void CommitWriteByte();
+
 		/// <summary>
 		/// Inserts bytes into the provider
 		/// </summary>

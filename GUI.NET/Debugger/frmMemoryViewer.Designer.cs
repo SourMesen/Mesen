@@ -106,6 +106,7 @@
 			this.ctrlMemoryAccessCounters = new Mesen.GUI.Debugger.Controls.ctrlMemoryAccessCounters();
 			this.tpgProfiler = new System.Windows.Forms.TabPage();
 			this.ctrlProfiler = new Mesen.GUI.Debugger.Controls.ctrlProfiler();
+			this.mnuByteEditingMode = new System.Windows.Forms.ToolStripMenuItem();
 			this.flowLayoutPanel1.SuspendLayout();
 			this.menuStrip1.SuspendLayout();
 			this.tabMain.SuspendLayout();
@@ -254,7 +255,8 @@
             this.mnuShowLabelInfoOnMouseOver,
             this.toolStripMenuItem10,
             this.mnuIgnoreRedundantWrites,
-            this.mnuEnablePerByteNavigation});
+            this.mnuEnablePerByteNavigation,
+            this.mnuByteEditingMode});
 			this.mnuView.Name = "mnuView";
 			this.mnuView.Size = new System.Drawing.Size(44, 20);
 			this.mnuView.Text = "View";
@@ -275,7 +277,7 @@
 			// 
 			this.mnuHighlightExecution.CheckOnClick = true;
 			this.mnuHighlightExecution.Name = "mnuHighlightExecution";
-			this.mnuHighlightExecution.Size = new System.Drawing.Size(152, 22);
+			this.mnuHighlightExecution.Size = new System.Drawing.Size(133, 22);
 			this.mnuHighlightExecution.Text = "Execution";
 			this.mnuHighlightExecution.Click += new System.EventHandler(this.mnuColorProviderOptions_Click);
 			// 
@@ -283,7 +285,7 @@
 			// 
 			this.mnuHighlightWrites.CheckOnClick = true;
 			this.mnuHighlightWrites.Name = "mnuHighlightWrites";
-			this.mnuHighlightWrites.Size = new System.Drawing.Size(152, 22);
+			this.mnuHighlightWrites.Size = new System.Drawing.Size(133, 22);
 			this.mnuHighlightWrites.Text = "Writes";
 			this.mnuHighlightWrites.Click += new System.EventHandler(this.mnuColorProviderOptions_Click);
 			// 
@@ -291,14 +293,14 @@
 			// 
 			this.mnuHightlightReads.CheckOnClick = true;
 			this.mnuHightlightReads.Name = "mnuHightlightReads";
-			this.mnuHightlightReads.Size = new System.Drawing.Size(152, 22);
+			this.mnuHightlightReads.Size = new System.Drawing.Size(133, 22);
 			this.mnuHightlightReads.Text = "Reads";
 			this.mnuHightlightReads.Click += new System.EventHandler(this.mnuColorProviderOptions_Click);
 			// 
 			// toolStripMenuItem6
 			// 
 			this.toolStripMenuItem6.Name = "toolStripMenuItem6";
-			this.toolStripMenuItem6.Size = new System.Drawing.Size(149, 6);
+			this.toolStripMenuItem6.Size = new System.Drawing.Size(130, 6);
 			// 
 			// fadeSpeedToolStripMenuItem
 			// 
@@ -310,7 +312,7 @@
             this.toolStripMenuItem7,
             this.mnuCustomFadeSpeed});
 			this.fadeSpeedToolStripMenuItem.Name = "fadeSpeedToolStripMenuItem";
-			this.fadeSpeedToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+			this.fadeSpeedToolStripMenuItem.Size = new System.Drawing.Size(133, 22);
 			this.fadeSpeedToolStripMenuItem.Text = "Fade speed";
 			// 
 			// mnuFadeSlow
@@ -653,7 +655,7 @@
 			// 
 			this.mnuFind.Image = global::Mesen.GUI.Properties.Resources.Find;
 			this.mnuFind.Name = "mnuFind";
-			this.mnuFind.Size = new System.Drawing.Size(152, 22);
+			this.mnuFind.Size = new System.Drawing.Size(145, 22);
 			this.mnuFind.Text = "Find...";
 			this.mnuFind.Click += new System.EventHandler(this.mnuFind_Click);
 			// 
@@ -661,7 +663,7 @@
 			// 
 			this.mnuFindNext.Image = global::Mesen.GUI.Properties.Resources.NextArrow;
 			this.mnuFindNext.Name = "mnuFindNext";
-			this.mnuFindNext.Size = new System.Drawing.Size(152, 22);
+			this.mnuFindNext.Size = new System.Drawing.Size(145, 22);
 			this.mnuFindNext.Text = "Find Next";
 			this.mnuFindNext.Click += new System.EventHandler(this.mnuFindNext_Click);
 			// 
@@ -669,14 +671,14 @@
 			// 
 			this.mnuFindPrev.Image = global::Mesen.GUI.Properties.Resources.PreviousArrow;
 			this.mnuFindPrev.Name = "mnuFindPrev";
-			this.mnuFindPrev.Size = new System.Drawing.Size(152, 22);
+			this.mnuFindPrev.Size = new System.Drawing.Size(145, 22);
 			this.mnuFindPrev.Text = "Find Previous";
 			this.mnuFindPrev.Click += new System.EventHandler(this.mnuFindPrev_Click);
 			// 
 			// mnuGoTo
 			// 
 			this.mnuGoTo.Name = "mnuGoTo";
-			this.mnuGoTo.Size = new System.Drawing.Size(152, 22);
+			this.mnuGoTo.Size = new System.Drawing.Size(145, 22);
 			this.mnuGoTo.Text = "Go To...";
 			this.mnuGoTo.Click += new System.EventHandler(this.mnuGoTo_Click);
 			// 
@@ -756,6 +758,14 @@
 			this.ctrlProfiler.Name = "ctrlProfiler";
 			this.ctrlProfiler.Size = new System.Drawing.Size(606, 343);
 			this.ctrlProfiler.TabIndex = 0;
+			// 
+			// mnuByteEditingMode
+			// 
+			this.mnuByteEditingMode.CheckOnClick = true;
+			this.mnuByteEditingMode.Name = "mnuByteEditingMode";
+			this.mnuByteEditingMode.Size = new System.Drawing.Size(256, 22);
+			this.mnuByteEditingMode.Text = "Use per-byte editing mode";
+			this.mnuByteEditingMode.CheckedChanged += new System.EventHandler(this.mnuByteEditingMode_CheckedChanged);
 			// 
 			// frmMemoryViewer
 			// 
@@ -860,5 +870,6 @@
 		private System.Windows.Forms.ToolStripMenuItem mnuEnablePerByteNavigation;
 		private System.Windows.Forms.ToolStripMenuItem mnuSelectFont;
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem13;
+		private System.Windows.Forms.ToolStripMenuItem mnuByteEditingMode;
 	}
 }
