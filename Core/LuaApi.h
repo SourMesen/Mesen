@@ -18,12 +18,8 @@ public:
 
 	static int ReadMemory(lua_State *lua);
 	static int WriteMemory(lua_State *lua);
-	static int DebugReadMemory(lua_State *lua);
-	static int DebugWriteMemory(lua_State *lua);
 	static int ReadMemoryWord(lua_State *lua);
 	static int WriteMemoryWord(lua_State *lua);
-	static int DebugReadMemoryWord(lua_State *lua);
-	static int DebugWriteMemoryWord(lua_State *lua);
 	static int RevertPrgChrChanges(lua_State *lua);
 
 	static int RegisterMemoryCallback(lua_State *lua);
@@ -36,6 +32,8 @@ public:
 	static int DrawPixel(lua_State *lua);
 	static int DrawRectangle(lua_State *lua);
 	static int ClearScreen(lua_State *lua);
+	static int GetScreenBuffer(lua_State *lua);
+	static int SetScreenBuffer(lua_State *lua);
 	static int GetPixel(lua_State *lua);
 	static int GetMouseState(lua_State *lua);
 

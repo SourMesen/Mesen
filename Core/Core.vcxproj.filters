@@ -1363,6 +1363,9 @@
     <ClInclude Include="BaseLoader.h">
       <Filter>Nes\RomLoader</Filter>
     </ClInclude>
+    <ClInclude Include="DrawScreenBufferCommand.h">
+      <Filter>Debugger\Scripting\DebugHud</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">

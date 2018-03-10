@@ -22,5 +22,6 @@ public:
 	void DrawPixel(int x, int y, int color, int frameCount);
 	void DrawLine(int x, int y, int x2, int y2, int color, int frameCount);
 	void DrawRectangle(int x, int y, int width, int height, int color, bool fill, int frameCount);
+	void DrawScreenBuffer(uint32_t* screenBuffer);
 	void DrawString(int x, int y, string text, int color, int backColor, int frameCount);
 };

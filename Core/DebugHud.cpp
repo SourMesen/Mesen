@@ -6,6 +6,7 @@
 #include "DrawPixelCommand.h"
 #include "DrawRectangleCommand.h"
 #include "DrawStringCommand.h"
+#include "DrawScreenBufferCommand.h"
 
 DebugHud* DebugHud::_instance = nullptr;
 
@@ -59,6 +60,12 @@ void DebugHud::DrawRectangle(int x, int y, int width, int height, int color, boo
 {
 	auto lock = _commandLock.AcquireSafe();
 	_commands.push_back(shared_ptr<DrawRectangleCommand>(new DrawRectangleCommand(x, y, width, height, color, fill, frameCount)));
+}
+
+void DebugHud::DrawScreenBuffer(uint32_t* screenBuffer)
+{
+	auto lock = _commandLock.AcquireSafe();
+	_commands.push_back(shared_ptr<DrawScreenBufferCommand>(new DrawScreenBufferCommand(screenBuffer)));
 }
 
 void DebugHud::DrawString(int x, int y, string text, int color, int backColor, int frameCount)

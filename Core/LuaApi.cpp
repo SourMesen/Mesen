@@ -73,6 +73,8 @@ int LuaApi::GetLibrary(lua_State *lua)
 		{ "drawLine", LuaApi::DrawLine },
 		{ "drawRectangle", LuaApi::DrawRectangle },
 		{ "clearScreen", LuaApi::ClearScreen },
+		{ "getScreenBuffer", LuaApi::GetScreenBuffer },
+		{ "setScreenBuffer", LuaApi::SetScreenBuffer },
 		{ "getPixel", LuaApi::GetPixel },
 		{ "getMouseState", LuaApi::GetMouseState },
 		{ "log", LuaApi::Log },
@@ -354,6 +356,38 @@ int LuaApi::ClearScreen(lua_State *lua)
 	LuaCallHelper l(lua);
 	checkparams();
 	DebugHud::GetInstance()->ClearScreen();
+	return l.ReturnCount();
+}
+
+int LuaApi::GetScreenBuffer(lua_State *lua)
+{
+	LuaCallHelper l(lua);
+	
+	uint32_t *palette = EmulationSettings::GetRgbPalette();
+	lua_newtable(lua);
+	for(int y = 0; y < PPU::ScreenHeight; y++) {
+		for(int x = 0; x < PPU::ScreenWidth; x++) {
+			lua_pushnumber(lua, palette[PPU::GetPixel(x, y) & 0x3F] & 0xFFFFFF);
+			lua_rawseti(lua, -2, (y << 8) + x);
+		}
+	}
+
+	return 1;
+}
+
+int LuaApi::SetScreenBuffer(lua_State *lua)
+{
+	LuaCallHelper l(lua);
+
+	uint32_t pixels[PPU::PixelCount] = {};
+	luaL_checktype(lua, 1, LUA_TTABLE);
+	for(int i = 0; i < PPU::PixelCount; i++) {
+		lua_rawgeti(lua, 1, i);
+		pixels[i] = l.ReadInteger() ^ 0xFF000000;
+	}
+	
+	DebugHud::GetInstance()->DrawScreenBuffer(pixels);
+
 	return l.ReturnCount();
 }
 
