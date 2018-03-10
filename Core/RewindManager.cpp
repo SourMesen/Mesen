@@ -204,12 +204,10 @@ void RewindManager::Stop()
 void RewindManager::ProcessEndOfFrame()
 {
 	if(_rewindState >= RewindState::Starting) {
-		if(_currentHistory.FrameCount <= 0) {
-			if(_rewindState == RewindState::Debugging) {
-				Stop();
-			} else {
-				PopHistory();
-			}
+		if(_currentHistory.FrameCount <= 0 && _rewindState != RewindState::Debugging) {
+			//If we're debugging, we want to keep running the emulation to the end of the next frame (even if it's incomplete)
+			//Otherwise the emulation might diverge due to missing inputs.
+			PopHistory();
 		}
 	} else if(_currentHistory.FrameCount >= RewindManager::BufferSize) {
 		AddHistoryBlock();
