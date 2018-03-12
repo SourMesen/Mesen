@@ -25,7 +25,6 @@ namespace Mesen.GUI.Debugger.Controls
 			InitializeComponent();
 
 			this.BaseFont = new Font(BaseControl.MonospaceFontFamily, 10, FontStyle.Regular);
-			this.ctrlHexBox.ByteEditingMode = true;
 			this.ctrlHexBox.ContextMenuStrip = this.ctxMenuStrip;
 			this.ctrlHexBox.SelectionForeColor = Color.White;
 			this.ctrlHexBox.SelectionBackColor = Color.FromArgb(31, 123, 205);
