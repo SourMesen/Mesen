@@ -358,9 +358,65 @@ void HdNesPack::Process(HdScreenInfo *hdScreenInfo, uint32_t* outputBuffer, Over
 	for(uint32_t i = overscan.Top, iMax = 240 - overscan.Bottom; i < iMax; i++) {
 		OnLineStart(hdScreenInfo->ScreenTiles[i << 8]);
 		uint32_t bufferIndex = (i - overscan.Top) * screenWidth * hdScale;
+		uint32_t lineStartIndex = bufferIndex;
 		for(uint32_t j = overscan.Left, jMax = 256 - overscan.Right; j < jMax; j++) {
 			GetPixels(j, i, hdScreenInfo->ScreenTiles[i * 256 + j], outputBuffer + bufferIndex, screenWidth);
 			bufferIndex += hdScale;
+		}
+
+		ProcessGrayscaleAndEmphasis(hdScreenInfo->ScreenTiles[i * 256], outputBuffer + lineStartIndex, screenWidth);
+	}
+}
+
+void HdNesPack::ProcessGrayscaleAndEmphasis(HdPpuPixelInfo &pixelInfo, uint32_t* outputBuffer, uint32_t hdScreenWidth)
+{
+	//Apply grayscale/emphasis bits on a scanline level (less accurate, but shouldn't cause issues and simpler to implement)
+	uint32_t scale = GetScale();
+	if(pixelInfo.Grayscale) {
+		uint32_t* out = outputBuffer;
+		for(uint32_t y = 0; y < scale; y++) {
+			for(uint32_t x = 0; x < hdScreenWidth; x++) {
+				uint32_t &rgbValue = out[x];
+				uint8_t average = (((rgbValue >> 16) & 0xFF) + ((rgbValue >> 8) & 0xFF) + (rgbValue & 0xFF)) / 3;
+				rgbValue = (rgbValue & 0xFF000000) | (average << 16) | (average << 8) | average;
+			}
+			out += hdScreenWidth;
+		}
+	}
+
+	if(pixelInfo.EmphasisBits) {
+		uint8_t emphasisBits = pixelInfo.EmphasisBits;
+		double red = 1.0, green = 1.0, blue = 1.0;
+		if(emphasisBits & 0x01) {
+			//Intensify red
+			red *= 1.1;
+			green *= 0.9;
+			blue *= 0.9;
+		}
+		if(emphasisBits & 0x02) {
+			//Intensify green
+			green *= 1.1;
+			red *= 0.9;
+			blue *= 0.9;
+		}
+		if(emphasisBits & 0x04) {
+			//Intensify blue
+			blue *= 1.1;
+			red *= 0.9;
+			green *= 0.9;
+		}
+
+		uint32_t* out = outputBuffer;
+		for(uint32_t y = 0; y < scale; y++) {
+			for(uint32_t x = 0; x < hdScreenWidth; x++) {
+				uint32_t &rgbValue = out[x];
+
+				rgbValue = 0xFF000000 |
+					(std::min<uint16_t>((uint16_t)(((rgbValue >> 16) & 0xFF) * red), 255) << 16) |
+					(std::min<uint16_t>((uint16_t)(((rgbValue >> 8) & 0xFF) * green), 255) << 8) |
+					std::min<uint16_t>((uint16_t)((rgbValue & 0xFF) * blue), 255);
+			}
+			out += hdScreenWidth;
 		}
 	}
 }

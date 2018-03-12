@@ -36,6 +36,8 @@ protected:
 
 			HdPpuPixelInfo &tileInfo = _info->ScreenTiles[bufferOffset];
 
+			tileInfo.Grayscale = _paletteRamMask == 0x30;
+			tileInfo.EmphasisBits = _intensifyColorBits >> 6;
 			tileInfo.Tile.PpuBackgroundColor = ReadPaletteRAM(0);
 			tileInfo.Tile.BgColorIndex = backgroundColor;
 			if(backgroundColor == 0) {

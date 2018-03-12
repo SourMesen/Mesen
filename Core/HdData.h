@@ -96,6 +96,8 @@ struct HdPpuPixelInfo
 	
 	uint16_t TmpVideoRamAddr;
 	uint8_t XScroll;
+	uint8_t EmphasisBits;
+	bool Grayscale;
 
 	HdPpuPixelInfo()
 	{

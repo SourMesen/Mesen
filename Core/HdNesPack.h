@@ -30,6 +30,7 @@ private:
 	void OnLineStart(HdPpuPixelInfo &lineFirstPixel);
 	void OnBeforeApplyFilter();
 	__forceinline void GetPixels(uint32_t x, uint32_t y, HdPpuPixelInfo &pixelInfo, uint32_t *outputBuffer, uint32_t screenWidth);
+	__forceinline void ProcessGrayscaleAndEmphasis(HdPpuPixelInfo &pixelInfo, uint32_t* outputBuffer, uint32_t hdScreenWidth);
 
 public:
 	static const uint32_t CurrentVersion = 101;
