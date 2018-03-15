@@ -108,6 +108,7 @@ namespace Mesen.GUI.Config
 		public bool ShowBreakpointLabels = true;
 
 		public Size EventViewerSize = new Size(0, 0);
+		public bool EventViewerRefreshOnBreak = true;
 		public bool EventViewerShowPpuRegisterWrites = true;
 		public bool EventViewerShowPpuRegisterReads = true;
 		public bool EventViewerShowMapperRegisterWrites = true;
@@ -135,6 +136,7 @@ namespace Mesen.GUI.Config
 		public bool CopyByteCode = false;
 
 		public bool PpuAutoRefresh = true;
+		public bool PpuRefreshOnBreak = true;
 		public bool PpuPartialDraw = false;
 		public bool PpuShowPreviousFrame = false;
 		public bool HidePauseIcon = false;

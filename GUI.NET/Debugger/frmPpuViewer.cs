@@ -27,6 +27,7 @@ namespace Mesen.GUI.Debugger
 
 			this._selectedTab = this.tpgNametableViewer;
 			this.mnuAutoRefresh.Checked = ConfigManager.Config.DebugInfo.PpuAutoRefresh;
+			this.mnuRefreshOnBreak.Checked = ConfigManager.Config.DebugInfo.PpuRefreshOnBreak;
 			this.ctrlNametableViewer.Connect(this.ctrlChrViewer);
 
 			this.InitShortcuts();
@@ -70,7 +71,7 @@ namespace Mesen.GUI.Debugger
 
 		private void _notifListener_OnNotification(InteropEmu.NotificationEventArgs e)
 		{
-			if(e.NotificationType == InteropEmu.ConsoleNotificationType.CodeBreak) {
+			if(e.NotificationType == InteropEmu.ConsoleNotificationType.CodeBreak && ConfigManager.Config.DebugInfo.PpuRefreshOnBreak) {
 				this.GetData();
 				this.BeginInvoke((MethodInvoker)(() => this.RefreshViewers()));
 			} else if(e.NotificationType == InteropEmu.ConsoleNotificationType.PpuViewerDisplayFrame) {
@@ -125,6 +126,12 @@ namespace Mesen.GUI.Debugger
 		private void mnuAutoRefresh_Click(object sender, EventArgs e)
 		{
 			ConfigManager.Config.DebugInfo.PpuAutoRefresh = this.mnuAutoRefresh.Checked;
+			ConfigManager.ApplyChanges();
+		}
+
+		private void mnuRefreshOnBreak_Click(object sender, EventArgs e)
+		{
+			ConfigManager.Config.DebugInfo.PpuRefreshOnBreak = this.mnuRefreshOnBreak.Checked;
 			ConfigManager.ApplyChanges();
 		}
 

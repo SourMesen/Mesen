@@ -24,6 +24,7 @@ namespace Mesen.GUI.Debugger
 			InitializeComponent();
 
 			this._selectedTab = this.tpgPpuView;
+			this.mnuRefreshOnBreak.Checked = ConfigManager.Config.DebugInfo.EventViewerRefreshOnBreak;
 			this.chkShowPpuRegisterWrites.Checked = ConfigManager.Config.DebugInfo.EventViewerShowPpuRegisterWrites;
 			this.chkShowPpuRegisterReads.Checked = ConfigManager.Config.DebugInfo.EventViewerShowPpuRegisterReads;
 			this.chkShowIrq.Checked = ConfigManager.Config.DebugInfo.EventViewerShowIrq;
@@ -62,7 +63,7 @@ namespace Mesen.GUI.Debugger
 
 		private void _notifListener_OnNotification(InteropEmu.NotificationEventArgs e)
 		{
-			if(e.NotificationType == InteropEmu.ConsoleNotificationType.CodeBreak) {
+			if(e.NotificationType == InteropEmu.ConsoleNotificationType.CodeBreak && ConfigManager.Config.DebugInfo.EventViewerRefreshOnBreak) {
 				this.GetData();
 				this.BeginInvoke((MethodInvoker)(() => this.RefreshViewer()));
 			} else if(e.NotificationType == InteropEmu.ConsoleNotificationType.EventViewerDisplayFrame) {
@@ -95,6 +96,12 @@ namespace Mesen.GUI.Debugger
 		private void tabMain_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			this._selectedTab = this.tabMain.SelectedTab;
+		}
+
+		private void mnuRefreshOnBreak_Click(object sender, EventArgs e)
+		{
+			ConfigManager.Config.DebugInfo.EventViewerRefreshOnBreak = this.mnuRefreshOnBreak.Checked;
+			ConfigManager.ApplyChanges();
 		}
 
 		private void chkShowPpuRegisterWrites_Click(object sender, EventArgs e)

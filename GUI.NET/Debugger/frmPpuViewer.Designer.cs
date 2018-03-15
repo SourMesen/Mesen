@@ -55,6 +55,7 @@ namespace Mesen.GUI.Debugger
 			this.lblCycle = new System.Windows.Forms.Label();
 			this.nudCycle = new Mesen.GUI.Controls.MesenNumericUpDown();
 			this.btnReset = new System.Windows.Forms.Button();
+			this.mnuRefreshOnBreak = new System.Windows.Forms.ToolStripMenuItem();
 			this.menuStrip1.SuspendLayout();
 			this.tabMain.SuspendLayout();
 			this.tpgNametableViewer.SuspendLayout();
@@ -96,7 +97,8 @@ namespace Mesen.GUI.Debugger
 			this.viewToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.mnuRefresh,
             this.toolStripMenuItem1,
-            this.mnuAutoRefresh});
+            this.mnuAutoRefresh,
+            this.mnuRefreshOnBreak});
 			this.viewToolStripMenuItem.Name = "viewToolStripMenuItem";
 			this.viewToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
 			this.viewToolStripMenuItem.Text = "View";
@@ -105,14 +107,14 @@ namespace Mesen.GUI.Debugger
 			// 
 			this.mnuRefresh.Image = global::Mesen.GUI.Properties.Resources.Reset;
 			this.mnuRefresh.Name = "mnuRefresh";
-			this.mnuRefresh.Size = new System.Drawing.Size(152, 22);
+			this.mnuRefresh.Size = new System.Drawing.Size(198, 22);
 			this.mnuRefresh.Text = "Refresh";
 			this.mnuRefresh.Click += new System.EventHandler(this.mnuRefresh_Click);
 			// 
 			// toolStripMenuItem1
 			// 
 			this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-			this.toolStripMenuItem1.Size = new System.Drawing.Size(149, 6);
+			this.toolStripMenuItem1.Size = new System.Drawing.Size(195, 6);
 			// 
 			// mnuAutoRefresh
 			// 
@@ -120,7 +122,7 @@ namespace Mesen.GUI.Debugger
 			this.mnuAutoRefresh.CheckOnClick = true;
 			this.mnuAutoRefresh.CheckState = System.Windows.Forms.CheckState.Checked;
 			this.mnuAutoRefresh.Name = "mnuAutoRefresh";
-			this.mnuAutoRefresh.Size = new System.Drawing.Size(152, 22);
+			this.mnuAutoRefresh.Size = new System.Drawing.Size(198, 22);
 			this.mnuAutoRefresh.Text = "Auto-refresh";
 			this.mnuAutoRefresh.Click += new System.EventHandler(this.mnuAutoRefresh_Click);
 			// 
@@ -320,6 +322,14 @@ namespace Mesen.GUI.Debugger
 			this.btnReset.UseVisualStyleBackColor = true;
 			this.btnReset.Click += new System.EventHandler(this.btnReset_Click);
 			// 
+			// mnuRefreshOnBreak
+			// 
+			this.mnuRefreshOnBreak.CheckOnClick = true;
+			this.mnuRefreshOnBreak.Name = "mnuRefreshOnBreak";
+			this.mnuRefreshOnBreak.Size = new System.Drawing.Size(198, 22);
+			this.mnuRefreshOnBreak.Text = "Refresh on pause/break";
+			this.mnuRefreshOnBreak.Click += new System.EventHandler(this.mnuRefreshOnBreak_Click);
+			// 
 			// frmPpuViewer
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -373,5 +383,6 @@ namespace Mesen.GUI.Debugger
 		private System.Windows.Forms.Label lblCycle;
 		private MesenNumericUpDown nudCycle;
 		private System.Windows.Forms.Button btnReset;
+		private System.Windows.Forms.ToolStripMenuItem mnuRefreshOnBreak;
 	}
 }

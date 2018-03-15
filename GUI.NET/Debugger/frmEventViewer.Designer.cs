@@ -51,6 +51,8 @@
 			this.mnuClose = new System.Windows.Forms.ToolStripMenuItem();
 			this.viewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuConfigureColors = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
+			this.mnuRefreshOnBreak = new System.Windows.Forms.ToolStripMenuItem();
 			this.tabMain.SuspendLayout();
 			this.tpgPpuView.SuspendLayout();
 			this.tableLayoutPanel1.SuspendLayout();
@@ -291,7 +293,9 @@
 			// viewToolStripMenuItem
 			// 
 			this.viewToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.mnuConfigureColors});
+            this.mnuConfigureColors,
+            this.toolStripMenuItem1,
+            this.mnuRefreshOnBreak});
 			this.viewToolStripMenuItem.Name = "viewToolStripMenuItem";
 			this.viewToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
 			this.viewToolStripMenuItem.Text = "View";
@@ -300,9 +304,22 @@
 			// 
 			this.mnuConfigureColors.Image = global::Mesen.GUI.Properties.Resources.PipetteSmall;
 			this.mnuConfigureColors.Name = "mnuConfigureColors";
-			this.mnuConfigureColors.Size = new System.Drawing.Size(164, 22);
+			this.mnuConfigureColors.Size = new System.Drawing.Size(198, 22);
 			this.mnuConfigureColors.Text = "Configure Colors";
 			this.mnuConfigureColors.Click += new System.EventHandler(this.mnuConfigureColors_Click);
+			// 
+			// toolStripMenuItem1
+			// 
+			this.toolStripMenuItem1.Name = "toolStripMenuItem1";
+			this.toolStripMenuItem1.Size = new System.Drawing.Size(195, 6);
+			// 
+			// mnuRefreshOnBreak
+			// 
+			this.mnuRefreshOnBreak.CheckOnClick = true;
+			this.mnuRefreshOnBreak.Name = "mnuRefreshOnBreak";
+			this.mnuRefreshOnBreak.Size = new System.Drawing.Size(198, 22);
+			this.mnuRefreshOnBreak.Text = "Refresh on pause/break";
+			this.mnuRefreshOnBreak.Click += new System.EventHandler(this.mnuRefreshOnBreak_Click);
 			// 
 			// frmEventViewer
 			// 
@@ -350,5 +367,7 @@
 		private System.Windows.Forms.CheckBox chkBreakpoints;
 		private System.Windows.Forms.ToolStripMenuItem mnuConfigureColors;
 		private System.Windows.Forms.GroupBox grpShow;
+		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem1;
+		private System.Windows.Forms.ToolStripMenuItem mnuRefreshOnBreak;
 	}
 }
