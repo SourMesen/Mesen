@@ -162,11 +162,15 @@ namespace Mesen.GUI.Debugger
 
 		private void mnuConfigureColors_Click(object sender, EventArgs e)
 		{
-			using(frmEventViewerColors frm = new frmEventViewerColors()) {
-				if(frm.ShowDialog(this, this) == DialogResult.OK) {
+			if(frmEventViewerColors.Instance != null) {
+				frmEventViewerColors.Instance.BringToFront();
+			} else {
+				frmEventViewerColors frm = new frmEventViewerColors();
+				frm.Show(this, this);
+				frm.FormClosed += (s, evt) => {
 					this.GetData();
 					this.RefreshViewer();
-				}
+				};
 			}
 		}
 

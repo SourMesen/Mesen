@@ -14,9 +14,12 @@ namespace Mesen.GUI.Debugger
 {
 	public partial class frmEventViewerColors : BaseConfigForm
 	{
+		public static frmEventViewerColors Instance { get; private set; }
 		public frmEventViewerColors()
 		{
 			InitializeComponent();
+
+			Instance = this;
 
 			picMapperWrite.BackColor = ConfigManager.Config.DebugInfo.EventViewerMapperRegisterWriteColor;
 			picMapperRead.BackColor = ConfigManager.Config.DebugInfo.EventViewerMapperRegisterReadColor;
@@ -78,6 +81,8 @@ namespace Mesen.GUI.Debugger
 
 				ConfigManager.ApplyChanges();
 			}
+
+			Instance = null;
 		}
 
 		private void btnReset_Click(object sender, EventArgs e)
