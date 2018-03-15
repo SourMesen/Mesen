@@ -6,7 +6,7 @@
 class UnRom512 : public BaseMapper
 {
 private:
-	bool _oneScreenMirroring;
+	bool _enableMirroringBit;
 
 protected:
 	virtual uint16_t GetPRGPageSize() override { return 0x4000; }
@@ -20,16 +20,16 @@ protected:
 	{
 		SelectPRGPage(1, -1);
 		if(IsNes20()) {
-			_oneScreenMirroring = GetMirroringType() == MirroringType::ScreenAOnly;			
+			_enableMirroringBit = GetMirroringType() == MirroringType::ScreenAOnly;			
 		} else {
-			_oneScreenMirroring = GetMirroringType() == MirroringType::FourScreens;
+			_enableMirroringBit = GetMirroringType() == MirroringType::FourScreens;
 		}
 	}
 
 	void SetDefaultNametables(uint8_t* nametableA, uint8_t* nametableB) override
 	{
 		BaseMapper::SetDefaultNametables(nametableA, nametableB);
-		if(IsNes20() && !_oneScreenMirroring && _chrRam && _chrRamSize >= 0x8000) {
+		if(GetMirroringType() == MirroringType::FourScreens && _chrRam && _chrRamSize >= 0x8000) {
 			//InfiniteNesLives four-screen mirroring variation, last 8kb of CHR RAM is always mapped to 0x2000-0x3FFF (0x3EFF due to palette)
 			//This "breaks" the "UNROM512_4screen_test" test ROM - was the ROM actually tested on this board? Seems to contradict hardware specs
 			SetPpuMemoryMapping(0x2000, 0x3FFF, _chrRam + 0x6000);
@@ -42,7 +42,7 @@ protected:
 			SelectPRGPage(0, value & 0x1F);
 			SelectCHRPage(0, (value >> 5) & 0x03);
 
-			if(_oneScreenMirroring) {
+			if(_enableMirroringBit) {
 				SetMirroringType(value & 0x80 ? MirroringType::ScreenBOnly : MirroringType::ScreenAOnly);
 			}
 		} else {
