@@ -506,7 +506,7 @@ namespace Mesen.GUI.Debugger
 
 			address.Address = (UInt32)currentAddr;
 
-			frmGoToLine frm = new frmGoToLine(address);
+			frmGoToLine frm = new frmGoToLine(address, 4);
 			frm.StartPosition = FormStartPosition.Manual;
 			Point topLeft = this.PointToScreen(new Point(0, 0));
 			frm.Location = new Point(topLeft.X + (this.Width - frm.Width) / 2, topLeft.Y + (this.Height - frm.Height) / 2);
