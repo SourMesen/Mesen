@@ -24,6 +24,7 @@ namespace Mesen.GUI.Debugger.Controls
 		private bool _useAutoPalette = false;
 		private Bitmap _tilePreview;
 		private Bitmap[] _chrBanks = new Bitmap[2];
+		private HdPackCopyHelper _hdCopyHelper = new HdPackCopyHelper();
 
 		private bool _bottomBank = false;
 		private int _tileIndex = 0;
@@ -98,6 +99,7 @@ namespace Mesen.GUI.Debugger.Controls
 			for(int i = 0; i < 2; i++) {
 				_chrPixelData[i] = InteropEmu.DebugGetChrBank(i + _chrSelection * 2, _selectedPalette + (_useAutoPalette ? 0x80 : 0), _useLargeSprites, _highlightType, out _paletteData[i]);
 			}
+			_hdCopyHelper.RefreshData();
 		}
 
 		public void RefreshViewer(bool refreshPreview = false)
@@ -419,23 +421,7 @@ namespace Mesen.GUI.Debugger.Controls
 
 			int tileIndex = GetLargeSpriteIndex(_tileIndex);
 
-			bool isChrRam = InteropEmu.DebugGetMemorySize(DebugMemoryType.ChrRom) == 0;
-			DebugMemoryType memType = ppuMemory ? DebugMemoryType.PpuMemory : (isChrRam ? DebugMemoryType.ChrRam : DebugMemoryType.ChrRom);
-			StringBuilder sb = new StringBuilder();
-			if(isChrRam) {
-				for(int i = 0; i < 16; i++) {
-					sb.Append(InteropEmu.DebugGetMemoryValue(memType, (UInt32)(baseAddress + tileIndex * 16 + i)).ToString("X2"));
-				}
-			} else {
-				int absoluteTileIndex = ppuMemory ? InteropEmu.DebugGetAbsoluteChrAddress((uint)(baseAddress+tileIndex*16))/16 : (baseAddress / 16 + tileIndex);
-				sb.Append(absoluteTileIndex.ToString());
-			}
-			sb.Append(",");
-			for(int i = 0; i < 4; i++) {
-				sb.Append(InteropEmu.DebugGetMemoryValue(DebugMemoryType.PaletteMemory, (uint)(this._selectedPalette * 4 + i)).ToString("X2"));
-			}
-
-			_copyData = sb.ToString();
+			_copyData = _hdCopyHelper.ToHdPackFormat(baseAddress + tileIndex * 16, this._selectedPalette & 0x07, false, this.cboChrSelection.SelectedIndex > 0); 
 		}
 
 		private void mnuCopyToClipboard_Click(object sender, EventArgs e)

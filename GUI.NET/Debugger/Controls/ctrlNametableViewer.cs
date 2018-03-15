@@ -31,6 +31,7 @@ namespace Mesen.GUI.Debugger.Controls
 		private int _nametableIndex = 0;
 		private ctrlChrViewer _chrViewer;
 		private DebugState _state = new DebugState();
+		private HdPackCopyHelper _hdCopyHelper = new HdPackCopyHelper();
 
 		public ctrlNametableViewer()
 		{
@@ -61,6 +62,8 @@ namespace Mesen.GUI.Debugger.Controls
 			for(int i = 0; i < 4; i++) {
 				InteropEmu.DebugGetNametable(i, ConfigManager.Config.DebugInfo.NtViewerUseGrayscalePalette, out _nametablePixelData[i], out _tileData[i], out _attributeData[i]);
 			}
+
+			_hdCopyHelper.RefreshData();
 		}
 
 		public void RefreshViewer()
@@ -296,31 +299,16 @@ namespace Mesen.GUI.Debugger.Controls
 			int x = nametableTileIndex % 32;
 			int y = nametableTileIndex / 32;
 
-			int baseAddress = 0x2000 + _nametableIndex * 0x400;
 			int tileIndex = _tileData[_nametableIndex][nametableTileIndex];
 			int attributeData = _attributeData[_nametableIndex][nametableTileIndex];
 			int shift = (x & 0x02) | ((y & 0x02) << 1);
-			int paletteBaseAddr = ((attributeData >> shift) & 0x03) << 2;
+			int palette = (attributeData >> shift) & 0x03;
 			DebugState state = new DebugState();
 			InteropEmu.DebugGetState(ref state);
 			int bgAddr = state.PPU.ControlFlags.BackgroundPatternAddr;
 			int tileAddr = bgAddr + tileIndex * 16;
 
-			bool isChrRam = InteropEmu.DebugGetMemorySize(DebugMemoryType.ChrRom) == 0;
-			StringBuilder sb = new StringBuilder();
-			if(isChrRam) {
-				for(int i = 0; i < 16; i++) {
-					sb.Append(InteropEmu.DebugGetMemoryValue(DebugMemoryType.PpuMemory, (uint)(tileAddr + i)).ToString("X2"));
-				}
-			} else {
-				int absoluteTileIndex = InteropEmu.DebugGetAbsoluteChrAddress((uint)tileAddr) / 16;
-				sb.Append(absoluteTileIndex.ToString());
-			}
-			sb.Append(",");
-			for(int i = 0; i < 4; i++) {
-				sb.Append(InteropEmu.DebugGetMemoryValue(DebugMemoryType.PaletteMemory, (uint)(paletteBaseAddr + i)).ToString("X2"));
-			}
-			return sb.ToString();
+			return _hdCopyHelper.ToHdPackFormat(tileAddr, palette, false, false);
 		}
 
 		private void ctxMenu_Opening(object sender, CancelEventArgs e)

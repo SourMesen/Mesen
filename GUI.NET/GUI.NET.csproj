@@ -725,6 +725,7 @@
     <Compile Include="Debugger\frmTraceLogger.Designer.cs">
       <DependentUpon>frmTraceLogger.cs</DependentUpon>
     </Compile>
+    <Compile Include="Debugger\HdPackCopyHelper.cs" />
     <Compile Include="Debugger\HexBox\BuiltInContextMenu.cs">
       <SubType>Component</SubType>
     </Compile>

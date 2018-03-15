@@ -29,6 +29,7 @@ namespace Mesen.GUI.Debugger.Controls
 		private bool _copyPreview = false;
 		private Bitmap _imgSprites;
 		private Bitmap _screenPreview = new Bitmap(256, 240, PixelFormat.Format32bppArgb);
+		private HdPackCopyHelper _hdCopyHelper = new HdPackCopyHelper();
 
 		public ctrlSpriteViewer()
 		{
@@ -52,6 +53,8 @@ namespace Mesen.GUI.Debugger.Controls
 
 			_spriteRam = InteropEmu.DebugGetMemoryState(DebugMemoryType.SpriteMemory);
 			_spritePixelData = InteropEmu.DebugGetSprites();
+
+			_hdCopyHelper.RefreshData();
 		}
 
 		public void RefreshViewer()
@@ -226,10 +229,8 @@ namespace Mesen.GUI.Debugger.Controls
 		private string ToHdPackFormat(int spriteIndex)
 		{
 			int ramAddr = spriteIndex * 4;
-			int spriteY = _spriteRam[ramAddr];
 			int tileIndex = _spriteRam[ramAddr + 1];
 			int palette = (_spriteRam[ramAddr + 2] & 0x03) + 4;
-			int spriteX = _spriteRam[ramAddr + 3];
 
 			int tileAddr;
 			if(_largeSprites) {
@@ -238,22 +239,7 @@ namespace Mesen.GUI.Debugger.Controls
 				tileAddr = _spritePatternAddr + (tileIndex << 4);
 			}
 
-			bool isChrRam = InteropEmu.DebugGetMemorySize(DebugMemoryType.ChrRom) == 0;
-			StringBuilder sb = new StringBuilder();
-			if(isChrRam) {
-				for(int i = 0; i < 16; i++) {
-					sb.Append(InteropEmu.DebugGetMemoryValue(DebugMemoryType.PpuMemory, (UInt32)(tileAddr + i)).ToString("X2"));
-				}
-			} else {
-				int absoluteTileIndex = InteropEmu.DebugGetAbsoluteChrAddress((uint)tileAddr) / 16;
-				sb.Append(absoluteTileIndex.ToString());
-			}
-			sb.Append(",FF");
-			for(int i = 1; i < 4; i++) {
-				sb.Append(InteropEmu.DebugGetMemoryValue(DebugMemoryType.PaletteMemory, (uint)(palette * 4 + i)).ToString("X2"));
-			}
-
-			return sb.ToString();
+			return _hdCopyHelper.ToHdPackFormat(tileAddr, palette, true, false);
 		}
 
 		private void picPreview_MouseMove(object sender, MouseEventArgs e)
