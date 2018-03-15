@@ -84,7 +84,7 @@ namespace Mesen.GUI.Debugger.Controls
 				}
 
 				if(changed) {
-					if(_byteProvider == null) {
+					if(_byteProvider == null || _byteProvider.Length != data.Length) {
 						_byteProvider = new StaticByteProvider(data);
 						_byteProvider.ByteChanged += (int byteIndex, byte newValue, byte oldValue) => {
 							InteropEmu.DebugSetMemoryValue(_memoryType, (UInt32)byteIndex, newValue);
