@@ -1,5 +1,6 @@
 #pragma once
 #include "stdafx.h"
+#include <unordered_set>
 #include "PPU.h"
 #include "../Utilities/HexUtilities.h"
 
@@ -342,7 +343,7 @@ struct HdPackData
 	vector<unique_ptr<HdBackgroundFileData>> BackgroundFileData;
 	vector<unique_ptr<HdPackTileInfo>> Tiles;
 	vector<unique_ptr<HdPackCondition>> Conditions;
-	vector<uint16_t> WatchedMemoryAddresses;
+	std::unordered_set<uint32_t> WatchedMemoryAddresses;
 	std::unordered_map<HdTileKey, vector<HdPackTileInfo*>> TileByKey;
 	std::unordered_map<string, string> PatchesByHash;
 	std::unordered_map<int, string> BgmFilesById;

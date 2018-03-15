@@ -5,6 +5,7 @@
 #include "HdNesPack.h"
 #include "VideoDecoder.h"
 #include "RewindManager.h"
+#include "HdPackConditions.h"
 
 class ControlManager;
 
@@ -150,8 +151,16 @@ public:
 
 		_info->FrameNumber = _frameCount;
 		_info->WatchedAddressValues.clear();
-		for(uint16_t address : _hdData->WatchedMemoryAddresses) {
-			_info->WatchedAddressValues[address] = CPU::DebugReadByte(address);
+		for(uint32_t address : _hdData->WatchedMemoryAddresses) {
+			if(address & HdPackBaseMemoryCondition::PpuMemoryMarker) {
+				if((address & 0x3FFF) >= 0x3F00) {
+					_info->WatchedAddressValues[address] = ReadPaletteRAM(address);
+				} else {
+					_info->WatchedAddressValues[address] = _mapper->DebugReadVRAM(address & 0x3FFF, true);
+				}
+			} else {
+				_info->WatchedAddressValues[address] = CPU::DebugReadByte(address);
+			}
 		}
 
 #ifdef  LIBRETRO

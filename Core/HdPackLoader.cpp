@@ -394,9 +394,9 @@ void HdPackLoader::ProcessConditionTag(vector<string> &tokens, bool createInvert
 		condition.reset(new HdPackSpriteAtPositionCondition());
 	} else if(tokens[1] == "spriteNearby") {
 		condition.reset(new HdPackSpriteNearbyCondition());
-	} else if(tokens[1] == "memoryCheck") {
+	} else if(tokens[1] == "memoryCheck" || tokens[1] == "ppuMemoryCheck") {
 		condition.reset(new HdPackMemoryCheckCondition());
-	} else if(tokens[1] == "memoryCheckConstant") {
+	} else if(tokens[1] == "memoryCheckConstant" || tokens[1] == "ppuMemoryCheckConstant") {
 		condition.reset(new HdPackMemoryCheckConstantCondition());
 	} else if(tokens[1] == "frameRange") {
 		condition.reset(new HdPackFrameRangeCondition());
@@ -433,8 +433,15 @@ void HdPackLoader::ProcessConditionTag(vector<string> &tokens, bool createInvert
 		checkConstraint(_data->Version >= 101, "[HDPack] This feature requires version 101+ of HD Packs");
 		checkConstraint(tokens.size() >= 5, "[HDPack] Condition tag should contain at least 5 parameters");
 		
-		int operandA = HexUtilities::FromHex(tokens[index++]);
-		checkConstraint(operandA >= 0 && operandA <= 0xFFFF, "[HDPack] Out of range memoryCheck operand");
+		bool usePpuMemory = tokens[1].substr(0, 3) == "ppu";
+		uint32_t operandA = HexUtilities::FromHex(tokens[index++]);
+
+		if(usePpuMemory) {
+			checkConstraint(operandA >= 0 && operandA <= 0x3FFF, "[HDPack] Out of range memoryCheck operand");
+			operandA |= HdPackBaseMemoryCondition::PpuMemoryMarker;
+		} else {
+			checkConstraint(operandA >= 0 && operandA <= 0xFFFF, "[HDPack] Out of range memoryCheck operand");
+		}
 
 		HdPackConditionOperator op;
 		string opString = tokens[index++];
@@ -448,15 +455,20 @@ void HdPackLoader::ProcessConditionTag(vector<string> &tokens, bool createInvert
 			op = HdPackConditionOperator::LowerThan;
 		}
 
-		int operandB = HexUtilities::FromHex(tokens[index++]);
+		uint32_t operandB = HexUtilities::FromHex(tokens[index++]);
 
 		if(dynamic_cast<HdPackMemoryCheckCondition*>(condition.get())) {
-			checkConstraint(operandB >= 0 && operandB <= 0xFFFF, "[HDPack] Out of range memoryCheck operand");
-			_data->WatchedMemoryAddresses.push_back(operandB);
+			if(usePpuMemory) {
+				checkConstraint(operandB >= 0 && operandB <= 0x3FFF, "[HDPack] Out of range memoryCheck operand");
+				operandB |= HdPackBaseMemoryCondition::PpuMemoryMarker;
+			} else {
+				checkConstraint(operandB >= 0 && operandB <= 0xFFFF, "[HDPack] Out of range memoryCheck operand");
+			}
+			_data->WatchedMemoryAddresses.emplace(operandB);
 		} else if(dynamic_cast<HdPackMemoryCheckConstantCondition*>(condition.get())) {
 			checkConstraint(operandB >= 0 && operandB <= 0xFF, "[HDPack] Out of range memoryCheckConstant operand");
 		}
-		_data->WatchedMemoryAddresses.push_back(operandA);		
+		_data->WatchedMemoryAddresses.emplace(operandA);
 		((HdPackBaseMemoryCondition*)condition.get())->Initialize(operandA, op, operandB);
 	} else if(dynamic_cast<HdPackFrameRangeCondition*>(condition.get())) {
 		checkConstraint(_data->Version >= 101, "[HDPack] This feature requires version 101+ of HD Packs");

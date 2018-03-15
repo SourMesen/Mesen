@@ -56,6 +56,7 @@ enum class HdPackConditionOperator
 
 struct HdPackBaseMemoryCondition : public HdPackCondition
 {
+	static const uint32_t PpuMemoryMarker = 0x80000000;
 	uint32_t OperandA;
 	HdPackConditionOperator Operator;
 	uint32_t OperandB;
@@ -67,11 +68,16 @@ struct HdPackBaseMemoryCondition : public HdPackCondition
 		OperandB = operandB;
 	}
 
+	bool IsPpuCondition()
+	{
+		return (OperandA & HdPackBaseMemoryCondition::PpuMemoryMarker) != 0;
+	}
+
 	string ToString() override
 	{
 		stringstream out;
 		out << "<condition>" << Name << "," << GetConditionName() << ",";
-		out << OperandA << ",";
+		out << HexUtilities::ToHex(OperandA & 0xFFFF) << ",";
 		switch(Operator) {
 			case HdPackConditionOperator::Equal: out << "=="; break;
 			case HdPackConditionOperator::NotEqual: out << "!="; break;
@@ -79,7 +85,7 @@ struct HdPackBaseMemoryCondition : public HdPackCondition
 			case HdPackConditionOperator::LowerThan: out << "<"; break;
 		}
 		out << ",";
-		out << OperandB;
+		out << HexUtilities::ToHex(OperandB);
 
 		return out.str();
 	}
@@ -124,7 +130,7 @@ struct HdPackBgPriorityCondition : public HdPackCondition
 struct HdPackMemoryCheckCondition : public HdPackBaseMemoryCondition
 {
 	HdPackMemoryCheckCondition() { _useCache = true; }
-	string GetConditionName() override { return "memoryCheck"; }
+	string GetConditionName() override { return IsPpuCondition() ? "ppuMemoryCheck" : "memoryCheck"; }
 
 	bool InternalCheckCondition(HdScreenInfo *screenInfo, int x, int y, HdPpuTileInfo* tile) override
 	{
@@ -141,7 +147,7 @@ struct HdPackMemoryCheckCondition : public HdPackBaseMemoryCondition
 struct HdPackMemoryCheckConstantCondition : public HdPackBaseMemoryCondition
 {
 	HdPackMemoryCheckConstantCondition() { _useCache = true; }
-	string GetConditionName() override { return "memoryCheckConstant"; }
+	string GetConditionName() override { return IsPpuCondition() ? "ppuMemoryCheckConstant" : "memoryCheckConstant"; }
 
 	bool InternalCheckCondition(HdScreenInfo *screenInfo, int x, int y, HdPpuTileInfo* tile) override
 	{
