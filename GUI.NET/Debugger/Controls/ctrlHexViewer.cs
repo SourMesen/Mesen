@@ -64,7 +64,11 @@ namespace Mesen.GUI.Debugger.Controls
 		
 		public void RefreshData(DebugMemoryType memoryType)
 		{
-			_memoryType = memoryType;
+			if(_memoryType != memoryType) {
+				_memoryType = memoryType;
+				_byteProvider = null;
+			}
+
 			byte[] data = InteropEmu.DebugGetMemoryState(this._memoryType);
 
 			if(data != null) {
