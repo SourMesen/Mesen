@@ -93,6 +93,9 @@ namespace Mesen.GUI.Config
 
 		[ShortcutName("Break In...")]
 		public XmlKeys BreakIn = Keys.Control | Keys.B;
+		[ShortcutName("Break On...")]
+		public XmlKeys BreakOn = Keys.Alt | Keys.B;
+
 		[ShortcutName("Find Occurrences")]
 		public XmlKeys FindOccurrences = Keys.Control | Keys.Shift | Keys.F;
 		[ShortcutName("Go To Program Counter")]

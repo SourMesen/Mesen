@@ -64,7 +64,7 @@ namespace Mesen.GUI.Debugger
 				GetMember(nameof(DebuggerShortcutsConfig.ScriptWindow_StopScript))
 			};
 
-			ctrlDbgShortcutsDebugger.Shortcuts = new FieldInfo[42] {
+			ctrlDbgShortcutsDebugger.Shortcuts = new FieldInfo[43] {
 				GetMember(nameof(DebuggerShortcutsConfig.Continue)),
 				GetMember(nameof(DebuggerShortcutsConfig.Break)),
 				GetMember(nameof(DebuggerShortcutsConfig.ToggleBreakContinue)),
@@ -76,6 +76,7 @@ namespace Mesen.GUI.Debugger
 				GetMember(nameof(DebuggerShortcutsConfig.RunPpuScanline)),
 				GetMember(nameof(DebuggerShortcutsConfig.RunPpuFrame)),
 				GetMember(nameof(DebuggerShortcutsConfig.BreakIn)),
+				GetMember(nameof(DebuggerShortcutsConfig.BreakOn)),
 				GetMember(nameof(DebuggerShortcutsConfig.FindOccurrences)),
 				GetMember(nameof(DebuggerShortcutsConfig.GoToProgramCounter)),
 				GetMember(nameof(DebuggerShortcutsConfig.CodeWindow_SetNextStatement)),

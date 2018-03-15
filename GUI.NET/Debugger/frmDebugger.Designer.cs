@@ -186,6 +186,7 @@ namespace Mesen.GUI.Debugger
 			this.ctrlPpuMemoryMapping = new Mesen.GUI.Debugger.Controls.ctrlMemoryMapping();
 			this.ctrlCpuMemoryMapping = new Mesen.GUI.Debugger.Controls.ctrlMemoryMapping();
 			this.tsToolbar = new Mesen.GUI.Controls.ctrlMesenToolStrip();
+			this.mnuBreakOn = new System.Windows.Forms.ToolStripMenuItem();
 			((System.ComponentModel.ISupportInitialize)(this.splitContainer)).BeginInit();
 			this.splitContainer.Panel1.SuspendLayout();
 			this.splitContainer.Panel2.SuspendLayout();
@@ -655,7 +656,8 @@ namespace Mesen.GUI.Debugger
             this.mnuRunScanline,
             this.mnuRunOneFrame,
             this.toolStripMenuItem8,
-            this.mnuBreakIn});
+            this.mnuBreakIn,
+            this.mnuBreakOn});
 			this.debugToolStripMenuItem.Name = "debugToolStripMenuItem";
 			this.debugToolStripMenuItem.Size = new System.Drawing.Size(54, 20);
 			this.debugToolStripMenuItem.Text = "Debug";
@@ -1603,6 +1605,13 @@ namespace Mesen.GUI.Debugger
 			this.tsToolbar.Text = "toolStrip1";
 			this.tsToolbar.Visible = false;
 			// 
+			// mnuBreakOn
+			// 
+			this.mnuBreakOn.Name = "mnuBreakOn";
+			this.mnuBreakOn.Size = new System.Drawing.Size(212, 22);
+			this.mnuBreakOn.Text = "Break on...";
+			this.mnuBreakOn.Click += new System.EventHandler(this.mnuBreakOn_Click);
+			// 
 			// frmDebugger
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1802,5 +1811,6 @@ namespace Mesen.GUI.Debugger
 		private System.Windows.Forms.ToolStripMenuItem mnuCopyByteCode;
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem6;
 		private System.Windows.Forms.ToolStripMenuItem mnuPreferences;
+		private System.Windows.Forms.ToolStripMenuItem mnuBreakOn;
 	}
 }

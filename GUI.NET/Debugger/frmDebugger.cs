@@ -174,6 +174,7 @@ namespace Mesen.GUI.Debugger
 			mnuContinue.InitShortcut(this, nameof(DebuggerShortcutsConfig.Continue));
 			mnuBreak.InitShortcut(this, nameof(DebuggerShortcutsConfig.Break));
 			mnuBreakIn.InitShortcut(this, nameof(DebuggerShortcutsConfig.BreakIn));
+			mnuBreakOn.InitShortcut(this, nameof(DebuggerShortcutsConfig.BreakOn));
 
 			mnuStepBack.InitShortcut(this, nameof(DebuggerShortcutsConfig.StepBack));
 			mnuStepOut.InitShortcut(this, nameof(DebuggerShortcutsConfig.StepOut));
@@ -217,7 +218,7 @@ namespace Mesen.GUI.Debugger
 			);
 			AddItemToToolbar(mnuShowVerifiedData, "Show Verified Data");
 			AddItemToToolbar(mnuShowUnidentifiedData, "Show Unidentified Code/Data");
-			AddItemsToToolbar(null, mnuBreakIn);
+			AddItemsToToolbar(null, mnuBreakIn, null, mnuBreakOn);
 		}
 
 		private void AddItemToToolbar(ToolStripMenuItem item, string caption = null)
@@ -1062,6 +1063,13 @@ namespace Mesen.GUI.Debugger
 		private void mnuBreakIn_Click(object sender, EventArgs e)
 		{
 			using(frmBreakIn frm = new frmBreakIn()) {
+				frm.ShowDialog();
+			}
+		}
+		
+		private void mnuBreakOn_Click(object sender, EventArgs e)
+		{
+			using(frmBreakOn frm = new frmBreakOn()) {
 				frm.ShowDialog();
 			}
 		}

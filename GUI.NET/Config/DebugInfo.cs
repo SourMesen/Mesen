@@ -222,6 +222,8 @@ namespace Mesen.GUI.Config
 		public int BreakInCount = 1;
 		public BreakInMetric BreakInMetric = BreakInMetric.CpuCycles;
 
+		public int BreakOnValue = 241;
+
 		public bool FindOccurrencesMatchCase = false;
 		public bool FindOccurrencesMatchWholeWord = false;
 		public string FindOccurrencesLastSearch = string.Empty;
