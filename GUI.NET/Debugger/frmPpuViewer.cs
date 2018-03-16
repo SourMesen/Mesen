@@ -71,16 +71,28 @@ namespace Mesen.GUI.Debugger
 
 		private void _notifListener_OnNotification(InteropEmu.NotificationEventArgs e)
 		{
-			if(e.NotificationType == InteropEmu.ConsoleNotificationType.CodeBreak && ConfigManager.Config.DebugInfo.PpuRefreshOnBreak) {
-				this.GetData();
-				this.BeginInvoke((MethodInvoker)(() => this.RefreshViewers()));
-			} else if(e.NotificationType == InteropEmu.ConsoleNotificationType.PpuViewerDisplayFrame) {
-				if(ConfigManager.Config.DebugInfo.PpuAutoRefresh && !_refreshing && (DateTime.Now - _lastUpdate).Milliseconds > 66) {
-					//Update at 15 fps most
-					this.GetData();
-					this.BeginInvoke((MethodInvoker)(() => this.RefreshViewers()));
-					_lastUpdate = DateTime.Now;
-				}
+			switch(e.NotificationType) {
+				case InteropEmu.ConsoleNotificationType.CodeBreak:
+				case InteropEmu.ConsoleNotificationType.GamePaused:
+					if(ConfigManager.Config.DebugInfo.PpuRefreshOnBreak) {
+						this.GetData();
+						this.BeginInvoke((MethodInvoker)(() => this.RefreshViewers()));
+					}
+					break;
+
+				case InteropEmu.ConsoleNotificationType.PpuViewerDisplayFrame:
+					if(ConfigManager.Config.DebugInfo.PpuAutoRefresh && !_refreshing && (DateTime.Now - _lastUpdate).Milliseconds > 66) {
+						//Update at 15 fps most
+						this.GetData();
+						this.BeginInvoke((MethodInvoker)(() => this.RefreshViewers()));
+						_lastUpdate = DateTime.Now;
+					}
+					break;
+
+				case InteropEmu.ConsoleNotificationType.GameLoaded:
+					//Configuration is lost when debugger is restarted (when switching game or power cycling)
+					InteropEmu.DebugSetPpuViewerScanlineCycle(ConfigManager.Config.DebugInfo.PpuDisplayScanline, ConfigManager.Config.DebugInfo.PpuDisplayCycle);
+					break;
 			}
 		}
 

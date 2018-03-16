@@ -63,16 +63,23 @@ namespace Mesen.GUI.Debugger
 
 		private void _notifListener_OnNotification(InteropEmu.NotificationEventArgs e)
 		{
-			if(e.NotificationType == InteropEmu.ConsoleNotificationType.CodeBreak && ConfigManager.Config.DebugInfo.EventViewerRefreshOnBreak) {
-				this.GetData();
-				this.BeginInvoke((MethodInvoker)(() => this.RefreshViewer()));
-			} else if(e.NotificationType == InteropEmu.ConsoleNotificationType.EventViewerDisplayFrame) {
-				if(!_refreshing && (DateTime.Now - _lastUpdate).Milliseconds >= 32) {
-					//Update at ~30 fps at most
-					this.GetData();
-					this.BeginInvoke((MethodInvoker)(() => this.RefreshViewer()));
-					_lastUpdate = DateTime.Now;
-				}
+			switch(e.NotificationType) {
+				case InteropEmu.ConsoleNotificationType.CodeBreak:
+				case InteropEmu.ConsoleNotificationType.GamePaused:
+					if(ConfigManager.Config.DebugInfo.EventViewerRefreshOnBreak) {
+						this.GetData();
+						this.BeginInvoke((MethodInvoker)(() => this.RefreshViewer()));
+					}
+					break;
+
+				case InteropEmu.ConsoleNotificationType.EventViewerDisplayFrame:
+					if(!_refreshing && (DateTime.Now - _lastUpdate).Milliseconds >= 32) {
+						//Update at ~30 fps at most
+						this.GetData();
+						this.BeginInvoke((MethodInvoker)(() => this.RefreshViewer()));
+						_lastUpdate = DateTime.Now;
+					}
+					break;
 			}
 		}
 
