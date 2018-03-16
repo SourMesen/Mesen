@@ -19,7 +19,11 @@ namespace Mesen.GUI.Debugger
 		};
 
 		private Keys _shortcutKeys = Keys.None;
-		public Keys ShortcutKeys { get => _shortcutKeys; set => _shortcutKeys = value; }
+		public Keys ShortcutKeys
+		{
+			get { return this._shortcutKeys; }
+			set { this._shortcutKeys = value; }
+		}
 
 		public frmDbgShortcutGetKey()
 		{
