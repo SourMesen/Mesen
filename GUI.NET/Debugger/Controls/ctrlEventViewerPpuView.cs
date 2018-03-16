@@ -19,7 +19,9 @@ namespace Mesen.GUI.Debugger.Controls
 	{
 		private DebugState _state = new DebugState();
 		private byte[] _pictureData = null;
-		private Dictionary<int, DebugEventInfo> _debugEvents = new Dictionary<int, DebugEventInfo>();
+		private Dictionary<int, List<DebugEventInfo>> _debugEventsByCycle = new Dictionary<int, List<DebugEventInfo>>();
+		private DebugEventInfo[] _debugEvents = new DebugEventInfo[0];
+
 
 		public ctrlEventViewerPpuView()
 		{
@@ -33,12 +35,18 @@ namespace Mesen.GUI.Debugger.Controls
 
 			DebugEventInfo[] eventInfoArray;
 			InteropEmu.DebugGetDebugEvents(out _pictureData, out eventInfoArray);
-			var debugEvents = new Dictionary<int, DebugEventInfo>();
+			var debugEvents = new Dictionary<int, List<DebugEventInfo>>();
 			for(int i = 0; i < eventInfoArray.Length; i++) {
-				debugEvents[(eventInfoArray[i].Scanline + 1) * 341 + eventInfoArray[i].Cycle] = eventInfoArray[i];
+				int frameCycle = (eventInfoArray[i].Scanline + 1) * 341 + eventInfoArray[i].Cycle;
+				List<DebugEventInfo> infoList;
+				if(!debugEvents.TryGetValue(frameCycle, out infoList)) {
+					infoList = new List<DebugEventInfo>();
+					debugEvents[frameCycle] = infoList;
+				}
+				infoList.Add(eventInfoArray[i]);
 			}
-
-			_debugEvents = debugEvents;
+			_debugEvents = eventInfoArray;
+			_debugEventsByCycle = debugEvents;
 			_state = state;
 		}
 
@@ -119,7 +127,7 @@ namespace Mesen.GUI.Debugger.Controls
 			foreach(DebugEventType eventType in Enum.GetValues(typeof(DebugEventType))) {
 				if(ShowEvent(eventType)) {
 					List<Color> colorList = colors[(int)eventType];
-					groupedEvents[(int)eventType] = _debugEvents.Values.Where((v) => v.Type == eventType).GroupBy((v) => v.Address % colorList.Count).ToArray();
+					groupedEvents[(int)eventType] = _debugEvents.Where((v) => v.Type == eventType).GroupBy((v) => v.Address % colorList.Count).ToArray();
 				} else {
 					groupedEvents[(int)eventType] = null;
 				}
@@ -164,54 +172,58 @@ namespace Mesen.GUI.Debugger.Controls
 				for(int x = 0; x < 3; x++) {
 					int key = (scanline + offsets[y] + 1) * 341 + cycle + offsets[x];
 
-					DebugEventInfo debugEvent;
-					if(_debugEvents.TryGetValue(key, out debugEvent)) {
-						if(ShowEvent(debugEvent.Type)) {
-							if(key != _lastKey) {
-								ResetTooltip();
+					List<DebugEventInfo> eventList;
+					if(_debugEventsByCycle.TryGetValue(key, out eventList)) {
+						foreach(DebugEventInfo debugEvent in eventList) {
+							if(ShowEvent(debugEvent.Type)) {
+								if(key != _lastKey) {
+									ResetTooltip();
 
-								Dictionary<string, string> values = new Dictionary<string, string>() {
-								{ "Type", ResourceHelper.GetEnumText(debugEvent.Type) },
-								{ "Scanline", debugEvent.Scanline.ToString() },
-								{ "Cycle", debugEvent.Cycle.ToString() },
-								{ "PC", "$" + debugEvent.ProgramCounter.ToString("X4") },
-							};
+									Dictionary<string, string> values = new Dictionary<string, string>() {
+									{ "Type", ResourceHelper.GetEnumText(debugEvent.Type) },
+									{ "Scanline", debugEvent.Scanline.ToString() },
+									{ "Cycle", debugEvent.Cycle.ToString() },
+									{ "PC", "$" + debugEvent.ProgramCounter.ToString("X4") },
+								};
 
-								switch(debugEvent.Type) {
-									case DebugEventType.MapperRegisterRead:
-									case DebugEventType.MapperRegisterWrite:
-									case DebugEventType.PpuRegisterRead:
-									case DebugEventType.PpuRegisterWrite:
-										values["Register"] = "$" + debugEvent.Address.ToString("X4");
-										values["Value"] = "$" + debugEvent.Value.ToString("X2");
+									switch(debugEvent.Type) {
+										case DebugEventType.MapperRegisterRead:
+										case DebugEventType.MapperRegisterWrite:
+										case DebugEventType.PpuRegisterRead:
+										case DebugEventType.PpuRegisterWrite:
+											values["Register"] = "$" + debugEvent.Address.ToString("X4");
+											values["Value"] = "$" + debugEvent.Value.ToString("X2");
 
-										if(debugEvent.PpuLatch >= 0) {
-											values["2nd Write"] = debugEvent.PpuLatch == 0 ? "false" : "true";
-										}
-										break;
+											if(debugEvent.PpuLatch >= 0) {
+												values["2nd Write"] = debugEvent.PpuLatch == 0 ? "false" : "true";
+											}
+											break;
 
-									case DebugEventType.Breakpoint:
-										ReadOnlyCollection<Breakpoint> breakpoints = BreakpointManager.Breakpoints;
-										if(debugEvent.BreakpointId >= 0 && debugEvent.BreakpointId < breakpoints.Count) {
-											Breakpoint bp = breakpoints[debugEvent.BreakpointId];
-											values["BP Type"] = bp.ToReadableType();
-											values["BP Addresses"] = bp.GetAddressString(true);
-											values["BP Condition"] = bp.Condition;
-										}
-										break;
+										case DebugEventType.Breakpoint:
+											ReadOnlyCollection<Breakpoint> breakpoints = BreakpointManager.Breakpoints;
+											if(debugEvent.BreakpointId >= 0 && debugEvent.BreakpointId < breakpoints.Count) {
+												Breakpoint bp = breakpoints[debugEvent.BreakpointId];
+												values["BP Type"] = bp.ToReadableType();
+												values["BP Addresses"] = bp.GetAddressString(true);
+												if(bp.Condition.Length > 0) {
+													values["BP Condition"] = bp.Condition;
+												}
+											}
+											break;
+									}
+
+									_tooltip = new frmCodeTooltip(values);
+									Point location = PointToScreen(e.Location);
+									location.Offset(10, 10);
+									_tooltip.Location = location;
+									_tooltip.Show();
+									_lastKey = key;
 								}
 
-								_tooltip = new frmCodeTooltip(values);
-								Point location = PointToScreen(e.Location);
-								location.Offset(10, 10);
-								_tooltip.Location = location;
-								_tooltip.Show();
-								_lastKey = key;
+								//Found a matching write to display, stop processing
+								return;
 							}
-
-							//Found a matching write to display, stop processing
-							return;
-						}						
+						}
 					}
 				}
 			}
