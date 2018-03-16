@@ -338,22 +338,22 @@ bool BaseMapper::HasBattery()
 
 void BaseMapper::LoadBattery()
 {
-	if(HasBattery()) {
+	if(HasBattery() && _saveRamSize > 0) {
 		BatteryManager::LoadBattery(".sav", _saveRam, _saveRamSize);
 	}
 
-	if(_hasChrBattery) {
+	if(_hasChrBattery && _chrRamSize > 0) {
 		BatteryManager::LoadBattery(".sav.chr", _chrRam, _chrRamSize);
 	}
 }
 
 void BaseMapper::SaveBattery()
 {
-	if(HasBattery()) {
+	if(HasBattery() && _saveRamSize > 0) {
 		BatteryManager::SaveBattery(".sav", _saveRam, _saveRamSize);
 	}
 
-	if(_hasChrBattery) {
+	if(_hasChrBattery && _chrRamSize > 0) {
 		BatteryManager::SaveBattery(".sav.chr", _chrRam, _chrRamSize);
 	}
 }
@@ -478,16 +478,12 @@ void BaseMapper::Initialize(RomData &romData)
 	_romFilename = romData.Filename;
 	_batteryFilename = GetBatteryFilename();
 	
-	_hasBattery = (romData.HasBattery || ForceBattery());
+	_hasBattery = romData.HasBattery;
 
 	if(romData.SaveRamSize == -1 || ForceSaveRamSize()) {
 		_saveRamSize = GetSaveRamSize();
 	} else {
 		_saveRamSize = romData.SaveRamSize;
-	}
-
-	if(_saveRamSize == 0) {
-		_hasBattery = false;
 	}
 
 	if(romData.WorkRamSize == -1 || ForceWorkRamSize()) {

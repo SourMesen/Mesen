@@ -90,7 +90,6 @@ protected:
 	//Save ram is battery backed and saved to disk
 	virtual uint32_t GetSaveRamSize() { return HasBattery() ? 0x2000 : 0; }
 	virtual uint32_t GetSaveRamPageSize() { return 0x2000; }
-	virtual bool ForceBattery() { return false; }
 	virtual bool ForceChrBattery() { return false; }
 	
 	virtual bool ForceSaveRamSize() { return false; }

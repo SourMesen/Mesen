@@ -33,12 +33,6 @@ protected:
 		UpdateRamAccess();
 	}
 
-	virtual bool ForceBattery() override
-	{
-		//Patch: Force battery, because some headers are marked as having no battery even though the game expects one
-		return true;
-	}
-
 	void WriteRegister(uint16_t addr, uint8_t value) override
 	{
 		switch(addr) {
