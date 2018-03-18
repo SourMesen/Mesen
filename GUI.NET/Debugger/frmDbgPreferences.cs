@@ -19,7 +19,7 @@ namespace Mesen.GUI.Debugger
 		{
 			InitializeComponent();
 
-			ctrlDbgShortcutsShared.Shortcuts = new FieldInfo[24] {
+			ctrlDbgShortcutsShared.Shortcuts = new FieldInfo[] {
 				GetMember(nameof(DebuggerShortcutsConfig.IncreaseFontSize)),
 				GetMember(nameof(DebuggerShortcutsConfig.DecreaseFontSize)),
 				GetMember(nameof(DebuggerShortcutsConfig.ResetFontSize)),
@@ -47,7 +47,7 @@ namespace Mesen.GUI.Debugger
 				GetMember(nameof(DebuggerShortcutsConfig.OpenTraceLogger))
 			};
 
-			ctrlDbgShortcutsMemoryViewer.Shortcuts = new FieldInfo[7] {
+			ctrlDbgShortcutsMemoryViewer.Shortcuts = new FieldInfo[] {
 				GetMember(nameof(DebuggerShortcutsConfig.MemoryViewer_Freeze)),
 				GetMember(nameof(DebuggerShortcutsConfig.MemoryViewer_Unfreeze)),
 				GetMember(nameof(DebuggerShortcutsConfig.MemoryViewer_AddToWatch)),
@@ -57,14 +57,14 @@ namespace Mesen.GUI.Debugger
 				GetMember(nameof(DebuggerShortcutsConfig.MemoryViewer_Export))
 			};
 
-			ctrlDbgShortcutsScriptWindow.Shortcuts = new FieldInfo[4] {
+			ctrlDbgShortcutsScriptWindow.Shortcuts = new FieldInfo[] {
 				GetMember(nameof(DebuggerShortcutsConfig.ScriptWindow_OpenScript)),
 				GetMember(nameof(DebuggerShortcutsConfig.ScriptWindow_SaveScript)),
 				GetMember(nameof(DebuggerShortcutsConfig.ScriptWindow_RunScript)),
 				GetMember(nameof(DebuggerShortcutsConfig.ScriptWindow_StopScript))
 			};
 
-			ctrlDbgShortcutsDebugger.Shortcuts = new FieldInfo[43] {
+			ctrlDbgShortcutsDebugger.Shortcuts = new FieldInfo[] {
 				GetMember(nameof(DebuggerShortcutsConfig.Continue)),
 				GetMember(nameof(DebuggerShortcutsConfig.Break)),
 				GetMember(nameof(DebuggerShortcutsConfig.ToggleBreakContinue)),
@@ -88,6 +88,7 @@ namespace Mesen.GUI.Debugger
 				GetMember(nameof(DebuggerShortcutsConfig.CodeWindow_NavigateForward)),
 				GetMember(nameof(DebuggerShortcutsConfig.CodeWindow_ToggleBreakpoint)),
 				GetMember(nameof(DebuggerShortcutsConfig.CodeWindow_DisableEnableBreakpoint)),
+				GetMember(nameof(DebuggerShortcutsConfig.CodeWindow_SwitchView)),
 				GetMember(nameof(DebuggerShortcutsConfig.FunctionList_EditLabel)),
 				GetMember(nameof(DebuggerShortcutsConfig.FunctionList_AddBreakpoint)),
 				GetMember(nameof(DebuggerShortcutsConfig.FunctionList_FindOccurrences)),

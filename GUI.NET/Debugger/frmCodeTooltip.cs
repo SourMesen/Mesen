@@ -9,26 +9,29 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Mesen.GUI.Controls;
 using Mesen.GUI.Config;
+using Mesen.GUI.Debugger.Controls;
 
 namespace Mesen.GUI.Debugger
 {
 	public partial class frmCodeTooltip : Form
 	{
-		private ctrlDebuggerCode _codeWindow;
+		private ICodeViewer _codeViewer;
 		private Dictionary<string, string> _values;
-		private int _previewAddress;
+		private AddressTypeInfo? _previewAddress;
 		private string _code;
+		private Ld65DbgImporter _symbolProvider;
 
 		protected override bool ShowWithoutActivation
 		{
 			get { return true; }
 		}
 
-		public frmCodeTooltip(Dictionary<string, string> values, int previewAddress = -1, string code = null)
+		public frmCodeTooltip(Dictionary<string, string> values, AddressTypeInfo? previewAddress = null, string code = null, Ld65DbgImporter symbolProvider = null)
 		{
 			_values = values;
 			_previewAddress = previewAddress;
 			_code = code;
+			_symbolProvider = symbolProvider;
 			InitializeComponent();
 		}
 
@@ -61,31 +64,33 @@ namespace Mesen.GUI.Debugger
 				i++;
 			}
 
-			if(_previewAddress >= 0) {
+			if(_previewAddress.HasValue) {
 				tlpMain.RowStyles.Insert(1, new RowStyle());
 
-				_codeWindow = new ctrlDebuggerCode();
-				_codeWindow.HideSelection = true;
-				_codeWindow.SetConfig(ConfigManager.Config.DebugInfo.LeftView);
-				_codeWindow.Code = _code;
-				_codeWindow.Dock = DockStyle.Fill;
-				_codeWindow.ShowScrollbars = false;
-				_codeWindow.ScrollToLineNumber(_previewAddress, true);
+				if(_code != null) {
+					_codeViewer = new ctrlDebuggerCode();
+					(_codeViewer as ctrlDebuggerCode).Code = _code;
+				} else {
+					_codeViewer = new ctrlSourceViewer();
+					(_codeViewer as ctrlSourceViewer).HideFileDropdown = true;
+				}
 
-				tlpMain.SetRow(_codeWindow, i);
-				tlpMain.SetColumn(_codeWindow, 0);
-				tlpMain.SetColumnSpan(_codeWindow, 2);
-				tlpMain.Controls.Add(_codeWindow);
+				_codeViewer.SymbolProvider = _symbolProvider;
+				_codeViewer.CodeViewer.HideSelection = true;
+				_codeViewer.CodeViewer.ShowScrollbars = false;
+				_codeViewer.ScrollToAddress(_previewAddress.Value, true);
+				_codeViewer.SetConfig(ConfigManager.Config.DebugInfo.LeftView);
+
+				Control control = _codeViewer as Control;
+				control.Dock = DockStyle.Fill;
+				tlpMain.SetRow(control, i);
+				tlpMain.SetColumn(control, 0);
+				tlpMain.SetColumnSpan(control, 2);
+				tlpMain.Controls.Add(control);
 			}
 			tlpMain.ResumeLayout();
 			this.Width = this.tlpMain.Width;
 			this.Height = this.tlpMain.Height; 
-		}
-
-		public void ScrollToLineIndex(int lineIndex)
-		{
-			_codeWindow?.ScrollToLineIndex(0);
-			_codeWindow?.ScrollToLineIndex(lineIndex);
 		}
 	}
 }

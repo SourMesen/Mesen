@@ -124,6 +124,8 @@ namespace Mesen.GUI.Config
 		public XmlKeys CodeWindow_ToggleBreakpoint = Keys.F9;
 		[ShortcutName("Code Window: Disable/Enable Breakpoint")]
 		public XmlKeys CodeWindow_DisableEnableBreakpoint = Keys.Control | Keys.F9;
+		[ShortcutName("Code Window: Switch View (Disassembly / Source View)")]
+		public XmlKeys CodeWindow_SwitchView = Keys.Control | Keys.Q;
 
 		[ShortcutName("Function List: Edit Label")]
 		public XmlKeys FunctionList_EditLabel = Keys.F2;

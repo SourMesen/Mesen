@@ -84,7 +84,7 @@ namespace Mesen.GUI.Debugger
 
 		public static void ToggleBreakpoint(int relativeAddress, AddressTypeInfo info, bool toggleEnabled)
 		{
-			if(relativeAddress >= 0) {
+			if(relativeAddress >= 0 || info.Address >= 0) {
 				Breakpoint breakpoint = BreakpointManager.GetMatchingBreakpoint(relativeAddress, info);
 				if(breakpoint != null) {
 					if(toggleEnabled) {

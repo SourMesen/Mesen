@@ -20,20 +20,6 @@ namespace Mesen.GUI.Debugger.Controls
 			}
 		}
 
-		[Browsable(false)]
-		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-		public Font BaseFont
-		{
-			get { return this.ScrollableTextbox.BaseFont; }
-			set { this.ScrollableTextbox.BaseFont = value; }
-		}
-
-		public int TextZoom
-		{
-			get { return this.ScrollableTextbox?.TextZoom ?? 100; }
-			set { this.ScrollableTextbox.TextZoom = value; }
-		}
-
 		public void OpenSearchBox()
 		{
 			this.ScrollableTextbox.OpenSearchBox();
@@ -80,9 +66,9 @@ namespace Mesen.GUI.Debugger.Controls
 			this.ScrollableTextbox.ScrollToLineNumber(0);
 		}
 
-		public string GetWordUnderLocation(Point position, bool useCompareText = false)
+		public string GetWordUnderLocation(Point position)
 		{
-			return this.ScrollableTextbox.GetWordUnderLocation(position, useCompareText);
+			return this.ScrollableTextbox.GetWordUnderLocation(position);
 		}
 	}
 }

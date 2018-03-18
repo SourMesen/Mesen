@@ -24,7 +24,7 @@ namespace Mesen.GUI.Debugger
 		private int _previousCycle = 0;
 
 		private InteropEmu.NotificationListener _notifListener;
-		private ctrlDebuggerCode _lastCodeWindow;
+		private ICodeViewer _lastCodeWindow;
 		private Size _minimumSize;
 
 		public frmDebugger()
@@ -51,9 +51,27 @@ namespace Mesen.GUI.Debugger
 			BreakpointManager.BreakpointsChanged += BreakpointManager_BreakpointsChanged;
 			ctrlProfiler.OnFunctionSelected += ctrlProfiler_OnFunctionSelected;
 
+			ctrlDebuggerCode.CodeViewerActions.OnSetNextStatement += ctrlDebuggerCode_OnSetNextStatement;
+			ctrlDebuggerCode.CodeViewerActions.OnShowInSplitView += ctrlDebuggerCode_OnShowInSplitView;
+			ctrlDebuggerCode.CodeViewerActions.OnSwitchView += ctrlDebuggerCode_OnSwitchView;
+
+			ctrlDebuggerCodeSplit.CodeViewerActions.OnSetNextStatement += ctrlDebuggerCode_OnSetNextStatement;
+			ctrlDebuggerCodeSplit.CodeViewerActions.OnShowInSplitView += ctrlDebuggerCode_OnShowInSplitView;
+			ctrlDebuggerCodeSplit.CodeViewerActions.OnSwitchView += ctrlDebuggerCode_OnSwitchView;
+
+			ctrlSourceViewer.CodeViewerActions.OnSetNextStatement += ctrlDebuggerCode_OnSetNextStatement;
+			ctrlSourceViewer.CodeViewerActions.OnShowInSplitView += ctrlDebuggerCode_OnShowInSplitView;
+			ctrlSourceViewer.CodeViewerActions.OnSwitchView += ctrlDebuggerCode_OnSwitchView;
+
+			ctrlSourceViewerSplit.CodeViewerActions.OnSetNextStatement += ctrlDebuggerCode_OnSetNextStatement;
+			ctrlSourceViewerSplit.CodeViewerActions.OnShowInSplitView += ctrlDebuggerCode_OnShowInSplitView;
+			ctrlSourceViewerSplit.CodeViewerActions.OnSwitchView += ctrlDebuggerCode_OnSwitchView;
+
 			Font font = new Font(ConfigManager.Config.DebugInfo.FontFamily, ConfigManager.Config.DebugInfo.FontSize, ConfigManager.Config.DebugInfo.FontStyle);
-			ctrlDebuggerCode.BaseFont = font;
-			ctrlDebuggerCodeSplit.BaseFont = font;
+			ctrlDebuggerCode.CodeViewer.BaseFont = font;
+			ctrlDebuggerCodeSplit.CodeViewer.BaseFont = font;
+			ctrlSourceViewer.CodeViewer.BaseFont = font;
+			ctrlSourceViewerSplit.CodeViewer.BaseFont = font;
 
 			this.InitShortcuts();
 			this.InitToolbar();
@@ -127,7 +145,9 @@ namespace Mesen.GUI.Debugger
 			_lastCodeWindow = ctrlDebuggerCode;
 
 			this.ctrlDebuggerCode.SetConfig(ConfigManager.Config.DebugInfo.LeftView);
+			this.ctrlSourceViewer.SetConfig(ConfigManager.Config.DebugInfo.LeftView);
 			this.ctrlDebuggerCodeSplit.SetConfig(ConfigManager.Config.DebugInfo.RightView);
+			this.ctrlSourceViewerSplit.SetConfig(ConfigManager.Config.DebugInfo.RightView);
 
 			this.toolTip.SetToolTip(this.picWatchHelp, frmBreakpoint.GetConditionTooltip(true));
 
@@ -214,7 +234,8 @@ namespace Mesen.GUI.Debugger
 				mnuToggleBreakpoint, mnuDisableEnableBreakpoint, null,
 				mnuFind, mnuFindPrev, mnuFindNext, null,
 				mnuApuViewer, mnuAssembler, mnuMemoryViewer, mnuEventViewer, mnuPpuViewer, mnuScriptWindow, mnuTraceLogger, null,
-				mnuEditHeader, null
+				mnuEditHeader, null,
+				mnuSplitView, null
 			);
 			AddItemToToolbar(mnuShowVerifiedData, "Show Verified Data");
 			AddItemToToolbar(mnuShowUnidentifiedData, "Show Unidentified Code/Data");
@@ -316,12 +337,16 @@ namespace Mesen.GUI.Debugger
 
 		private void AutoLoadDbgFiles(bool silent)
 		{
+			ctrlSourceViewer.SymbolProvider = null;
+			ctrlSourceViewerSplit.SymbolProvider = null;
+			ctrlDebuggerCode.SymbolProvider = null;
+			ctrlDebuggerCodeSplit.SymbolProvider = null;
+
 			if(ConfigManager.Config.DebugInfo.AutoLoadDbgFiles) {
 				RomInfo info = InteropEmu.GetRomInfo();
 				string dbgPath = Path.Combine(info.RomFile.Folder, info.GetRomName() + ".dbg");
 				if(File.Exists(dbgPath)) {
-					Ld65DbgImporter dbgImporter = new Ld65DbgImporter();
-					dbgImporter.Import(dbgPath, silent);
+					ImportDbgFile(dbgPath, silent);
 				} else {
 					string mlbPath = Path.Combine(info.RomFile.Folder, info.GetRomName() + ".mlb");
 					if(File.Exists(mlbPath)) {
@@ -329,6 +354,24 @@ namespace Mesen.GUI.Debugger
 					}
 				}
 			}
+
+			if(ctrlSourceViewer.SymbolProvider == null) {
+				ctrlSourceViewer.Visible = false;
+				ctrlSourceViewerSplit.Visible = false;
+				ctrlDebuggerCode.Visible = true;
+				ctrlDebuggerCodeSplit.Visible = true;
+				ctrlDebuggerCode.Focus();
+			}
+		}
+
+		private void ImportDbgFile(string dbgPath, bool silent)
+		{
+			Ld65DbgImporter dbgImporter = new Ld65DbgImporter();
+			dbgImporter.Import(dbgPath, silent);
+			ctrlDebuggerCode.SymbolProvider = dbgImporter;
+			ctrlDebuggerCodeSplit.SymbolProvider = dbgImporter;
+			ctrlSourceViewer.SymbolProvider = dbgImporter;
+			ctrlSourceViewerSplit.SymbolProvider = dbgImporter;
 		}
 
 		private void UpdateWorkspace()
@@ -479,7 +522,7 @@ namespace Mesen.GUI.Debugger
 				}
 				ctrlDebuggerCodeSplit.UpdateCode(true);
 			} else {
-				_lastCodeWindow = ctrlDebuggerCode;
+				_lastCodeWindow = ctrlSourceViewer.Visible ? (ICodeViewer)ctrlSourceViewer : (ICodeViewer)ctrlDebuggerCode;
 			}
 
 			if(updateActiveAddress) {
@@ -487,10 +530,12 @@ namespace Mesen.GUI.Debugger
 			}
 
 			ctrlDebuggerCode.SetActiveAddress(state.CPU.DebugPC);
+			ctrlSourceViewer.SetActiveAddress(state.CPU.DebugPC);
 			ctrlDebuggerCode.UpdateLineColors();
 
 			if(UpdateSplitView()) {
 				ctrlDebuggerCodeSplit.SetActiveAddress(state.CPU.DebugPC);
+				ctrlSourceViewerSplit.SetActiveAddress(state.CPU.DebugPC);
 				ctrlDebuggerCodeSplit.UpdateLineColors();
 			}
 
@@ -520,6 +565,9 @@ namespace Mesen.GUI.Debugger
 			ctrlDebuggerCode.UpdateLineColors();
 			ctrlDebuggerCodeSplit.ClearActiveAddress();
 			ctrlDebuggerCodeSplit.UpdateLineColors();
+
+			ctrlSourceViewer.ClearActiveAddress();
+			ctrlSourceViewerSplit.ClearActiveAddress();
 		}
 
 		public void TogglePause()
@@ -534,7 +582,7 @@ namespace Mesen.GUI.Debugger
 
 		private void ToggleBreakpoint(bool toggleEnabled)
 		{
-			_lastCodeWindow.ToggleBreakpoint(toggleEnabled);
+			_lastCodeWindow.CodeViewerActions.ToggleBreakpoint(toggleEnabled);
 		}
 		
 		private void ResumeExecution()
@@ -611,42 +659,88 @@ namespace Mesen.GUI.Debugger
 			InteropEmu.DebugPpuStep(89341);
 		}
 		
-		private void ctrlDebuggerCode_OnScrollToAddress(ctrlDebuggerCode sender, AddressEventArgs args)
+		private void ctrlDebuggerCode_OnShowInSplitView(ICodeViewer sender, AddressEventArgs args)
 		{
+			if(!ConfigManager.Config.DebugInfo.SplitView) {
+				mnuSplitView.Checked = true;
+				ConfigManager.Config.DebugInfo.SplitView = true;
+				ConfigManager.ApplyChanges();
+				UpdateDebugger(false);
+			}
+
 			UInt16 addr = (UInt16)args.Address;
-			if(sender == ctrlDebuggerCode) {
-				if(!ConfigManager.Config.DebugInfo.SplitView) {
-					mnuSplitView.Checked = true;
-					ConfigManager.Config.DebugInfo.SplitView = true;
-					ConfigManager.ApplyChanges();
-					UpdateDebugger(false);
+			if(sender == ctrlDebuggerCode || sender == ctrlSourceViewer) {
+				if(ctrlSourceViewerSplit.Visible) {
+					ctrlSourceViewerSplit.ScrollToLineNumber(addr);
+				} else {
+					ctrlDebuggerCodeSplit.ScrollToLineNumber(addr);
 				}
-				ctrlDebuggerCodeSplit.ScrollToLineNumber(addr);
 			} else {
-				ctrlDebuggerCode.ScrollToLineNumber(addr);
+				if(ctrlSourceViewer.Visible) {
+					ctrlSourceViewer.ScrollToLineNumber(addr);
+				} else {
+					ctrlDebuggerCode.ScrollToLineNumber(addr);
+				}
 			}
 		}
 
-		private void ctrlDebuggerCode_OnSetNextStatement(ctrlDebuggerCode sender, AddressEventArgs args)
+		private void ctrlDebuggerCode_OnSetNextStatement(AddressEventArgs args)
 		{
 			UInt16 addr = (UInt16)args.Address;
 			InteropEmu.DebugSetNextStatement(addr);
 			this.UpdateDebugger();
 		}
 
+		private void ctrlDebuggerCode_OnSwitchView(ICodeViewer sender)
+		{
+			if(ctrlDebuggerCode == sender) {
+				ctrlDebuggerCode.Visible = false;
+				ctrlSourceViewer.Visible = true;
+				if(ctrlDebuggerCode.CodeViewer.CurrentLine >= 0) {
+					ctrlSourceViewer.ScrollToLineNumber(ctrlDebuggerCode.CodeViewer.CurrentLine);
+				}
+				ctrlSourceViewer.Focus();
+				ctrlSourceViewer.SetConfig(ConfigManager.Config.DebugInfo.LeftView);
+			} else if(ctrlSourceViewer == sender) {
+				ctrlSourceViewer.Visible = false;
+				ctrlDebuggerCode.Visible = true;
+				if(ctrlDebuggerCode.CodeViewer.CurrentLine >= 0) {
+					ctrlDebuggerCode.ScrollToLineNumber(ctrlDebuggerCode.CodeViewer.CurrentLine);
+				}
+				ctrlDebuggerCode.Focus();
+				ctrlDebuggerCode.SetConfig(ConfigManager.Config.DebugInfo.LeftView);
+			} else if(ctrlSourceViewerSplit == sender) {
+				ctrlSourceViewerSplit.Visible = false;
+				ctrlDebuggerCodeSplit.Visible = true;
+				if(ctrlSourceViewerSplit.CodeViewer.CurrentLine >= 0) {
+					ctrlDebuggerCodeSplit.ScrollToLineNumber(ctrlSourceViewerSplit.CodeViewer.CurrentLine);
+				}
+				ctrlDebuggerCodeSplit.Focus();
+				ctrlDebuggerCodeSplit.SetConfig(ConfigManager.Config.DebugInfo.RightView);
+			} else {
+				ctrlDebuggerCodeSplit.Visible = false;
+				ctrlSourceViewerSplit.Visible = true;
+				if(ctrlDebuggerCodeSplit.CodeViewer.CurrentLine >= 0) {
+					ctrlSourceViewerSplit.ScrollToLineNumber(ctrlDebuggerCodeSplit.CodeViewer.CurrentLine);
+				}
+				ctrlSourceViewerSplit.Focus();
+				ctrlSourceViewerSplit.SetConfig(ConfigManager.Config.DebugInfo.RightView);
+			}
+		}
+
 		private void mnuFind_Click(object sender, EventArgs e)
 		{
-			_lastCodeWindow.OpenSearchBox();
+			_lastCodeWindow.CodeViewer.OpenSearchBox();
 		}
 		
 		private void mnuFindNext_Click(object sender, EventArgs e)
 		{
-			_lastCodeWindow.FindNext();
+			_lastCodeWindow.CodeViewer.FindNext();
 		}
 
 		private void mnuFindPrev_Click(object sender, EventArgs e)
 		{
-			_lastCodeWindow.FindPrevious();
+			_lastCodeWindow.CodeViewer.FindPrevious();
 		}
 
 		private void mnuSplitView_Click(object sender, EventArgs e)
@@ -671,21 +765,19 @@ namespace Mesen.GUI.Debugger
 		{
 			ctrlDebuggerCodeSplit.UpdateLineColors();
 			ctrlDebuggerCode.UpdateLineColors();
+
+			ctrlSourceViewer.RefreshViewer();
+			ctrlSourceViewerSplit.RefreshViewer();
 		}
 
 		private void ctrlDebuggerCode_Enter(object sender, EventArgs e)
 		{
-			_lastCodeWindow = ctrlDebuggerCode;
-		}
-
-		private void ctrlDebuggerCodeSplit_Enter(object sender, EventArgs e)
-		{
-			_lastCodeWindow = ctrlDebuggerCodeSplit;
+			_lastCodeWindow = (ICodeViewer)sender;
 		}
 
 		private void mnuGoToAddress_Click(object sender, EventArgs e)
 		{
-			_lastCodeWindow.GoToAddress();
+			_lastCodeWindow.CodeViewer.GoToAddress();
 		}
 
 		private void mnuGoToIrqHandler_Click(object sender, EventArgs e)
@@ -708,24 +800,22 @@ namespace Mesen.GUI.Debugger
 		
 		private void mnuGoToProgramCount_Click(object sender, EventArgs e)
 		{
-			DebugState state = new DebugState();
-			InteropEmu.DebugGetState(ref state);
-			_lastCodeWindow.ScrollToActiveAddress();
+			_lastCodeWindow.CodeViewerActions.ScrollToActiveAddress();
 		}
 
 		private void mnuIncreaseFontSize_Click(object sender, EventArgs e)
 		{
-			_lastCodeWindow.TextZoom += 10;
+			_lastCodeWindow.CodeViewer.TextZoom += 10;
 		}
 
 		private void mnuDecreaseFontSize_Click(object sender, EventArgs e)
 		{
-			_lastCodeWindow.TextZoom -= 10;
+			_lastCodeWindow.CodeViewer.TextZoom -= 10;
 		}
 
 		private void mnuResetFontSize_Click(object sender, EventArgs e)
 		{
-			_lastCodeWindow.TextZoom = 100;
+			_lastCodeWindow.CodeViewer.TextZoom = 100;
 		}
 
 		private void mnuClose_Click(object sender, EventArgs e)
@@ -755,9 +845,9 @@ namespace Mesen.GUI.Debugger
 			}
 			InteropEmu.DebugRun();
 
-			ConfigManager.Config.DebugInfo.FontFamily = ctrlDebuggerCode.BaseFont.FontFamily.Name;
-			ConfigManager.Config.DebugInfo.FontStyle = ctrlDebuggerCode.BaseFont.Style;
-			ConfigManager.Config.DebugInfo.FontSize = ctrlDebuggerCode.BaseFont.Size;
+			ConfigManager.Config.DebugInfo.FontFamily = ctrlDebuggerCode.CodeViewer.BaseFont.FontFamily.Name;
+			ConfigManager.Config.DebugInfo.FontStyle = ctrlDebuggerCode.CodeViewer.BaseFont.Style;
+			ConfigManager.Config.DebugInfo.FontSize = ctrlDebuggerCode.CodeViewer.BaseFont.Size;
 			ConfigManager.Config.DebugInfo.WindowWidth = this.WindowState == FormWindowState.Maximized ? this.RestoreBounds.Width : this.Width;
 			ConfigManager.Config.DebugInfo.WindowHeight = this.WindowState == FormWindowState.Maximized ? this.RestoreBounds.Height : this.Height;
 			ConfigManager.Config.DebugInfo.TopPanelHeight = this.splitContainer.GetSplitterDistance();
@@ -1034,8 +1124,7 @@ namespace Mesen.GUI.Debugger
 				if(ext == ".mlb") {
 					MesenLabelFile.Import(ofd.FileName);
 				} else {
-					Ld65DbgImporter dbgImporter = new Ld65DbgImporter();
-					dbgImporter.Import(ofd.FileName);
+					ImportDbgFile(ofd.FileName, false);
 				}					
 			}
 		}
@@ -1253,8 +1342,13 @@ namespace Mesen.GUI.Debugger
 
 		private void mnuCode_DropDownOpening(object sender, EventArgs e)
 		{
-			this._lastCodeWindow.UpdateContextMenuItemVisibility(false);
-			mnuCode.DropDownItems.AddRange(this._lastCodeWindow.ContextMenuItems.ToArray());
+			this._lastCodeWindow.CodeViewerActions.UpdateContextMenuItemVisibility(false);
+
+			List<ToolStripItem> items = new List<ToolStripItem>();
+			foreach(ToolStripItem item in this._lastCodeWindow.CodeViewerActions.contextMenu.Items) {
+				items.Add(item);
+			}
+			mnuCode.DropDownItems.AddRange(items.ToArray());
 		}
 
 		private void mnuCode_DropDownClosed(object sender, EventArgs e)
@@ -1263,7 +1357,7 @@ namespace Mesen.GUI.Debugger
 			foreach(ToolStripItem item in mnuCode.DropDownItems) {
 				items.Add(item);
 			}
-			this._lastCodeWindow.ContextMenuItems = items;
+			this._lastCodeWindow.CodeViewerActions.contextMenu.Items.AddRange(items.ToArray());
 		}
 
 		private void mnuCdlStripUsedData_Click(object sender, EventArgs e)
@@ -1287,8 +1381,10 @@ namespace Mesen.GUI.Debugger
 
 		private void mnuSelectFont_Click(object sender, EventArgs e)
 		{
-			ctrlDebuggerCode.BaseFont = FontDialogHelper.SelectFont(ctrlDebuggerCode.Font);
-			ctrlDebuggerCodeSplit.BaseFont = ctrlDebuggerCode.BaseFont;
+			ctrlDebuggerCode.CodeViewer.BaseFont = FontDialogHelper.SelectFont(ctrlDebuggerCode.CodeViewer.BaseFont);
+			ctrlDebuggerCodeSplit.CodeViewer.BaseFont = ctrlDebuggerCode.CodeViewer.BaseFont;
+			ctrlSourceViewer.CodeViewer.BaseFont = ctrlDebuggerCode.CodeViewer.BaseFont;
+			ctrlSourceViewerSplit.CodeViewer.BaseFont = ctrlDebuggerCode.CodeViewer.BaseFont;
 		}
 
 		private void mnuPreferences_Click(object sender, EventArgs e)

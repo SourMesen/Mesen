@@ -30,6 +30,7 @@ namespace Mesen.GUI.Config
 
 	public class DebugViewInfo
 	{
+		public bool ShowSourceAsComments = false;
 		public ByteCodePosition ByteCodePosition = ByteCodePosition.Hidden;
 		public PrgAddressPosition PrgAddressPosition = PrgAddressPosition.Hidden;
 		public int TextZoom = 100;

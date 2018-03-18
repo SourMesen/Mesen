@@ -176,7 +176,7 @@ namespace Mesen.GUI.Debugger.Controls
 			this._tmrScroll.Stop();
 		}
 
-		frmCodeTooltip _codeTooltip = null;
+		frmCodePreviewTooltip _codeTooltip = null;
 		int _lastPreviewScrollPosition = -1;
 		protected override void OnMouseMove(MouseEventArgs e)
 		{
@@ -269,6 +269,6 @@ namespace Mesen.GUI.Debugger.Controls
 		Color GetMarkerColor(float position, int linesPerPixel);
 		int GetActiveLine();
 		int GetSelectedLine();
-		frmCodeTooltip GetPreview(int lineIndex);
+		frmCodePreviewTooltip GetPreview(int lineIndex);
 	}
 }

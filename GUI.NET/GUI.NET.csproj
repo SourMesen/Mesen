@@ -323,6 +323,7 @@
     <Compile Include="Debugger\BreakpointManager.cs" />
     <Compile Include="Debugger\ChrByteColorProvider.cs" />
     <Compile Include="Debugger\ByteColorProvider.cs" />
+    <Compile Include="Debugger\CodeTooltipManager.cs" />
     <Compile Include="Debugger\Controls\ApuViewer\ctrlEnvelopeInfo.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -362,6 +363,12 @@
     <Compile Include="Debugger\Controls\BaseScrollableTextboxUserControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Include="Debugger\Controls\CodeViewerActions.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Debugger\Controls\CodeViewerActions.Designer.cs">
+      <DependentUpon>CodeViewerActions.cs</DependentUpon>
+    </Compile>
     <Compile Include="Debugger\Controls\ComboBoxWithSeparator.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -391,6 +398,12 @@
     </Compile>
     <Compile Include="Debugger\Controls\ctrlDbgShortcuts.Designer.cs">
       <DependentUpon>ctrlDbgShortcuts.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Debugger\Controls\ctrlFindOccurrences.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Debugger\Controls\ctrlFindOccurrences.Designer.cs">
+      <DependentUpon>ctrlFindOccurrences.cs</DependentUpon>
     </Compile>
     <Compile Include="Debugger\Controls\ctrlFlagStatus.cs">
       <SubType>UserControl</SubType>
@@ -437,6 +450,12 @@
     </Compile>
     <Compile Include="Debugger\Controls\ctrlPaletteViewer.Designer.cs">
       <DependentUpon>ctrlPaletteViewer.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Debugger\Controls\ctrlSourceViewer.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Debugger\Controls\ctrlSourceViewer.Designer.cs">
+      <DependentUpon>ctrlSourceViewer.cs</DependentUpon>
     </Compile>
     <Compile Include="Debugger\Controls\ctrlSpriteViewer.cs">
       <SubType>UserControl</SubType>
@@ -502,6 +521,7 @@
     <Compile Include="Debugger\Controls\ctrlWatch.Designer.cs">
       <DependentUpon>ctrlWatch.cs</DependentUpon>
     </Compile>
+    <Compile Include="Debugger\Controls\ICodeViewer.cs" />
     <Compile Include="Debugger\ctrlPaletteDisplay.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -598,6 +618,12 @@
     </Compile>
     <Compile Include="Debugger\frmBreakOn.Designer.cs">
       <DependentUpon>frmBreakOn.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Debugger\frmCodePreviewTooltip.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Debugger\frmCodePreviewTooltip.Designer.cs">
+      <DependentUpon>frmCodePreviewTooltip.cs</DependentUpon>
     </Compile>
     <Compile Include="Debugger\frmDbgPreferences.cs">
       <SubType>Form</SubType>
@@ -1134,6 +1160,7 @@
     <Compile Include="ResourceManager.cs" />
     <Compile Include="RuntimeChecker.cs" />
     <Compile Include="SingleInstance.cs" />
+    <None Include="Resources\SwitchView.png" />
     <None Include="Resources\SelectAll.png" />
     <None Include="Resources\Paste.png" />
     <None Include="Resources\EditLabel.png" />
@@ -1174,14 +1201,23 @@
     <EmbeddedResource Include="Debugger\Controls\ApuViewer\ctrlSquareInfo.resx">
       <DependentUpon>ctrlSquareInfo.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Debugger\Controls\CodeViewerActions.resx">
+      <DependentUpon>CodeViewerActions.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Debugger\Controls\ctrlDbgShortcuts.resx">
       <DependentUpon>ctrlDbgShortcuts.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Debugger\Controls\ctrlFindOccurrences.resx">
+      <DependentUpon>ctrlFindOccurrences.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Debugger\Controls\ctrlFlagStatus.resx">
       <DependentUpon>ctrlFlagStatus.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Debugger\Controls\ctrlEventViewerPpuView.resx">
       <DependentUpon>ctrlEventViewerPpuView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Debugger\Controls\ctrlSourceViewer.resx">
+      <DependentUpon>ctrlSourceViewer.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Debugger\Example.lua" />
     <None Include="Resources\PipetteSmall.png" />
@@ -1301,6 +1337,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Debugger\frmBreakOn.resx">
       <DependentUpon>frmBreakOn.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Debugger\frmCodePreviewTooltip.resx">
+      <DependentUpon>frmCodePreviewTooltip.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Debugger\frmDbgPreferences.resx">
       <DependentUpon>frmDbgPreferences.cs</DependentUpon>

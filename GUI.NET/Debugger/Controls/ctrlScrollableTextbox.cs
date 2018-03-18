@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using Mesen.GUI.Controls;
 using Mesen.GUI.Debugger.Controls;
 using Mesen.GUI.Config;
+using System.Globalization;
 
 namespace Mesen.GUI.Debugger
 {
@@ -55,20 +56,23 @@ namespace Mesen.GUI.Debugger
 		{
 			InitializeComponent();
 
-			this.panelSearch.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)));
-			this.panelSearch.Location = new System.Drawing.Point(this.Width - this.panelSearch.Width - 20, -1);
+			bool designMode = (LicenseManager.UsageMode == LicenseUsageMode.Designtime);
+			if(!designMode) {
+				this.panelSearch.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)));
+				this.panelSearch.Location = new System.Drawing.Point(this.Width - this.panelSearch.Width - 20, -1);
 
-			this.ctrlTextbox.ShowLineNumbers = true;
-			this.ctrlTextbox.ShowLineInHex = true;
-			
-			this.hScrollBar.ValueChanged += hScrollBar_ValueChanged;
-			this.vScrollBar.ValueChanged += vScrollBar_ValueChanged;
-			this.ctrlTextbox.ScrollPositionChanged += ctrlTextbox_ScrollPositionChanged;
-			this.ctrlTextbox.SelectedLineChanged += ctrlTextbox_SelectedLineChanged;
+				this.ctrlTextbox.ShowLineNumbers = true;
+				this.ctrlTextbox.ShowLineInHex = true;
 
-			new ToolTip().SetToolTip(picCloseSearch, "Close");
-			new ToolTip().SetToolTip(picSearchNext, "Find Next (F3)");
-			new ToolTip().SetToolTip(picSearchPrevious, "Find Previous (Shift-F3)");
+				this.hScrollBar.ValueChanged += hScrollBar_ValueChanged;
+				this.vScrollBar.ValueChanged += vScrollBar_ValueChanged;
+				this.ctrlTextbox.ScrollPositionChanged += ctrlTextbox_ScrollPositionChanged;
+				this.ctrlTextbox.SelectedLineChanged += ctrlTextbox_SelectedLineChanged;
+
+				new ToolTip().SetToolTip(picCloseSearch, "Close");
+				new ToolTip().SetToolTip(picSearchNext, "Find Next (F3)");
+				new ToolTip().SetToolTip(picSearchPrevious, "Find Previous (Shift-F3)");
+			}
 		}
 
 		protected override void OnResize(EventArgs e)
@@ -128,9 +132,9 @@ namespace Mesen.GUI.Debugger
 			}
 		}
 
-		public string GetWordUnderLocation(Point position, bool useCompareText = false)
+		public string GetWordUnderLocation(Point position)
 		{
-			return this.ctrlTextbox.GetWordUnderLocation(position, useCompareText);
+			return this.ctrlTextbox.GetWordUnderLocation(position);
 		}
 
 		private void ctrlTextbox_ScrollPositionChanged(object sender, EventArgs e)
@@ -171,6 +175,15 @@ namespace Mesen.GUI.Debugger
 			return this.ctrlTextbox.GetLineIndexAtPosition(yPos);
 		}
 
+		public string GetLineNoteAtLineIndex(int lineIndex)
+		{
+			if(lineIndex >= 0 && lineIndex < this.ctrlTextbox.LineNumberNotes.Length) {
+				return this.ctrlTextbox.LineNumberNotes[lineIndex];
+			} else {
+				return "";
+			}
+		}
+
 		public int GetLineNumber(int lineIndex)
 		{
 			return this.ctrlTextbox.GetLineNumber(lineIndex);
@@ -181,9 +194,9 @@ namespace Mesen.GUI.Debugger
 			return this.GetLineNumber(this.GetLineIndexAtPosition(yPos));
 		}
 
-		public void ScrollToLineIndex(int lineIndex)
+		public void ScrollToLineIndex(int lineIndex, bool scrollToTop = false)
 		{
-			this.ctrlTextbox.ScrollToLineIndex(lineIndex);
+			this.ctrlTextbox.ScrollToLineIndex(lineIndex, eHistoryType.Always, scrollToTop);
 		}
 
 		public void ScrollToLineNumber(int lineNumber, eHistoryType historyType = eHistoryType.Always, bool scrollToTop = false)
@@ -411,7 +424,13 @@ namespace Mesen.GUI.Debugger
 			get { return this.ctrlTextbox.HideSelection; }
 			set { this.ctrlTextbox.HideSelection = value; }
 		}
-		
+
+		public bool CodeHighlightingEnabled
+		{
+			get { return this.ctrlTextbox.CodeHighlightingEnabled; }
+			set { this.ctrlTextbox.CodeHighlightingEnabled = value; }
+		}
+
 		public int LineCount { get { return this.ctrlTextbox.LineCount; } }
 		public int SelectionStart { get { return this.ctrlTextbox.SelectionStart; } }
 		public int SelectionLength { get { return this.ctrlTextbox.SelectionLength; } }
@@ -528,6 +547,23 @@ namespace Mesen.GUI.Debugger
 		public void NavigateBackward()
 		{
 			this.ctrlTextbox.NavigateBackward();
+		}
+
+		public bool GetNoteRangeAtLocation(int yPos, out int rangeStart, out int rangeEnd)
+		{
+			rangeStart = -1;
+			rangeEnd = -1;
+			int lineIndex = GetLineIndexAtPosition(yPos);
+			if(Int32.TryParse(GetLineNoteAtLineIndex(lineIndex), NumberStyles.AllowHexSpecifier, null, out rangeStart)) {
+				while(lineIndex < LineCount - 2 && string.IsNullOrWhiteSpace(GetLineNoteAtLineIndex(lineIndex + 1))) {
+					lineIndex++;
+				}
+				if(Int32.TryParse(GetLineNoteAtLineIndex(lineIndex + 1), NumberStyles.AllowHexSpecifier, null, out rangeEnd)) {
+					rangeEnd--;
+					return true;
+				}
+			}
+			return false;
 		}
 	}
 }

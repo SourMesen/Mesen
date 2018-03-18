@@ -44,7 +44,7 @@ namespace Mesen.GUI.Debugger
 
 	public partial class ctrlTextbox : Control
 	{
-		private Regex _codeRegex = new Regex("([a-z]{3})([*]{0,1})[ ]{0,1}([(]{0,1})(([#]{0,1}[$][0-9a-f]*)|([@_a-z]([@_a-z0-9])*)){0,1}([)]{0,1})(,X|,Y){0,1}([)]{0,1})(.*)", RegexOptions.IgnoreCase | RegexOptions.Compiled);
+		private Regex _codeRegex = new Regex("^([a-z]{3})([*]{0,1})($|[ ])+([(]{0,1})(([$][0-9a-f]*)|(#[@$:_0-9a-z]*)|([@_a-z]([@_a-z0-9])*)){0,1}([)]{0,1})(,X|,Y){0,1}([)]{0,1})(.*)", RegexOptions.IgnoreCase | RegexOptions.Compiled);
 		public event EventHandler ScrollPositionChanged;
 		public event EventHandler SelectedLineChanged;
 		private bool _disableScrollPositionChangedEvent;
@@ -291,6 +291,10 @@ namespace Mesen.GUI.Debugger
 				_lineNumberNotes = value;
 				this.Invalidate();
 			}
+			get
+			{
+				return _lineNumberNotes;
+			}
 		}
 
 		public string Header
@@ -310,6 +314,8 @@ namespace Mesen.GUI.Debugger
 				this.Invalidate();
 			}
 		}
+
+		public bool CodeHighlightingEnabled { get; set; } = true;
 
 		public List<Tuple<int, int, string>> FindAllOccurrences(string text, bool matchWholeWord, bool matchCase)
 		{
@@ -398,6 +404,7 @@ namespace Mesen.GUI.Debugger
 		public interface ILineStyleProvider
 		{
 			LineProperties GetLineStyle(int cpuAddress, int lineIndex);
+			string GetLineComment(int lineIndex);
 		}
 
 		private ILineStyleProvider _styleProvider;
@@ -451,10 +458,17 @@ namespace Mesen.GUI.Debugger
 					//Line isn't currently visible, scroll it to the middle of the viewport
 					if(scrollToTop) {
 						int scrollPos = lineIndex;
-						while(scrollPos > 0 && _lineNumbers[scrollPos - 1] < 0) {
+						while(scrollPos > 0 && _lineNumbers[scrollPos - 1] < 0 && string.IsNullOrWhiteSpace(_lineNumberNotes[scrollPos - 1])) {
 							//Make sure any comment for the line is in scroll view
+							bool emptyLine = string.IsNullOrWhiteSpace(_contents[scrollPos]) && string.IsNullOrWhiteSpace(this.Comments[scrollPos]);
+							if(emptyLine) {
+								//If there's a blank line, stop scrolling up
+								scrollPos++;
+								break;
+							}
+
 							scrollPos--;
-							if(_contents[scrollPos].StartsWith("--") || _contents[scrollPos].StartsWith("__")) {
+							if(emptyLine || _contents[scrollPos].StartsWith("--") || _contents[scrollPos].StartsWith("__")) {
 								//Reached the start of a block, stop going back up
 								break;
 							}
@@ -533,7 +547,7 @@ namespace Mesen.GUI.Debugger
 				}
 
 				if(positionX >= 0 && lineIndex < _contents.Length) {
-					string text = this.GetFullWidthString(lineIndex);
+					string text = this.GetFullWidthString(lineIndex).Trim();
 					//Adjust background color highlights based on number of spaces in front of content
 					positionX -= (LineIndentations != null ? LineIndentations[lineIndex] : 0);
 
@@ -551,21 +565,22 @@ namespace Mesen.GUI.Debugger
 			return false;
 		}
 
-		public string GetWordUnderLocation(Point position, bool useCompareText = false)
+		char[] _wordDelimiters = new char[] { ' ', ',', '|', ';', '(', ')', '.', '-', ':', '+', '<', '>', '#', '*', '/', '&', '[', ']', '~', '%' };
+		public string GetWordUnderLocation(Point position)
 		{
 			int charIndex; 
 			int lineIndex;
 			if(this.GetCharIndex(position, out charIndex, out lineIndex)) {
-				string text = (useCompareText && _compareContents != null) ? _compareContents[lineIndex] : this.GetFullWidthString(lineIndex);
-				List<char> wordDelimiters = new List<char>(new char[] { ' ', ',', '|', ';', '(', ')', '.', '-', ':' });
-				if(wordDelimiters.Contains(text[charIndex])) {
+				string text = this.GetFullWidthString(lineIndex).Trim();
+				
+				if(_wordDelimiters.Contains(text[charIndex])) {
 					return string.Empty;
 				} else {
-					int endIndex = text.IndexOfAny(wordDelimiters.ToArray(), charIndex);
+					int endIndex = text.IndexOfAny(_wordDelimiters, charIndex);
 					if(endIndex == -1) {
 						endIndex = text.Length;
 					}
-					int startIndex = text.LastIndexOfAny(wordDelimiters.ToArray(), charIndex);
+					int startIndex = text.LastIndexOfAny(_wordDelimiters, charIndex);
 					return text.Substring(startIndex + 1, endIndex - startIndex - 1);
 				}
 			}
@@ -805,7 +820,6 @@ namespace Mesen.GUI.Debugger
 		bool _mouseDragging;
 		protected override void OnMouseDown(MouseEventArgs e)
 		{
-			base.OnMouseDown(e);
 			this.Focus();
 
 			if(e.Button == MouseButtons.XButton1) {
@@ -835,6 +849,7 @@ namespace Mesen.GUI.Debugger
 					this.SelectionLength = 0;
 				}
 			}
+			base.OnMouseDown(e);
 		}
 
 		protected override void OnMouseUp(MouseEventArgs e)
@@ -1028,20 +1043,34 @@ namespace Mesen.GUI.Debugger
 				}
 				g.TranslateTransform(-HorizontalScrollPosition * HorizontalScrollFactor, 0);
 			} else {
+				if(StyleProvider != null) {
+					string symbolComment = StyleProvider.GetLineComment(currentLine);
+					if(symbolComment != null) {
+						symbolComment = symbolComment.Replace("\t", "  ");
+					}
+
+					if(symbolComment != _lastSymbolComment) {
+						commentString = symbolComment ?? commentString;
+						if(symbolComment != null) {
+							_lastSymbolComment = symbolComment;
+						}
+					}
+				}
+
 				//Draw line content
 				int characterCount = 0;
 				Color defaultColor = Color.FromArgb(60, 60, 60);
 				if(codeString.Length > 0) {
-					Match match = _codeRegex.Match(codeString);
-					if(match.Success && !codeString.EndsWith(":")) {
+					Match match = CodeHighlightingEnabled ? _codeRegex.Match(codeString) : null;
+					if(match != null && match.Success && !codeString.EndsWith(":")) {
 						string opcode = match.Groups[1].Value;
 						string invalidStar = match.Groups[2].Value;
-						string paren1 = match.Groups[3].Value;
-						string operand = match.Groups[4].Value;
-						string paren2 = match.Groups[8].Value;
-						string indirect = match.Groups[9].Value;
-						string paren3 = match.Groups[10].Value;
-						string rest = match.Groups[11].Value;
+						string paren1 = match.Groups[4].Value;
+						string operand = match.Groups[5].Value;
+						string paren2 = match.Groups[10].Value;
+						string indirect = match.Groups[11].Value;
+						string paren3 = match.Groups[12].Value;
+						string rest = match.Groups[13].Value;
 						Color operandColor = operand.Length > 0 ? (operand[0] == '#' ? (Color)info.AssemblerImmediateColor : (operand[0] == '$' ? (Color)info.AssemblerAddressColor : (Color)info.AssemblerLabelDefinitionColor)) : Color.Black;
 						List<Color> colors = new List<Color>() { info.AssemblerOpcodeColor, defaultColor, defaultColor, defaultColor, operandColor, defaultColor, defaultColor, defaultColor };
 						int codePartCount = colors.Count;
@@ -1080,7 +1109,7 @@ namespace Mesen.GUI.Debugger
 
 						float xOffset = 0;
 						for(int i = 0; i < parts.Count; i++) {
-							using(Brush b = new SolidBrush(textColor.HasValue && i < codePartCount ? textColor.Value : colors[i])) {
+							using(Brush b = new SolidBrush(textColor.HasValue && (i < codePartCount || i == parts.Count - 1) ? textColor.Value : colors[i])) {
 								g.DrawString(parts[i], this.Font, b, marginLeft + xOffset, positionY, StringFormat.GenericTypographic);
 								xOffset += g.MeasureString("".PadLeft(parts[i].Length, 'w'), this.Font, Point.Empty, StringFormat.GenericTypographic).Width;
 								characterCount += parts[i].Length;
@@ -1095,7 +1124,6 @@ namespace Mesen.GUI.Debugger
 					}
 				}
 
-				
 				if(!string.IsNullOrWhiteSpace(commentString)) {
 					using(Brush commentBrush = new SolidBrush(info.AssemblerCommentColor)) {
 						int padding = Math.Max(CommentSpacingCharCount, characterCount + 1);
@@ -1114,6 +1142,7 @@ namespace Mesen.GUI.Debugger
 				this.DrawHighlightedCompareString(g, codeString, currentLine, marginLeft, positionY);
 			}
 		}
+		string _lastSymbolComment = null;
 
 		private void DrawLineSymbols(Graphics g, int positionY, LineProperties lineProperties, int lineHeight)
 		{
@@ -1262,6 +1291,7 @@ namespace Mesen.GUI.Debugger
 
 		protected override void OnPaint(PaintEventArgs pe)
 		{
+			_lastSymbolComment = null;
 			int lineHeight = this.LineHeight;
 			pe.Graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
 			Rectangle rect = this.ClientRectangle;

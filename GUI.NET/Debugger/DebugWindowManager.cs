@@ -43,7 +43,7 @@ namespace Mesen.GUI.Debugger
 			frm.Show();
 		}
 
-		public static void OpenMemoryViewer(int address)
+		public static void OpenMemoryViewer(int address, bool usePrgRom)
 		{
 			frmMemoryViewer frm = GetMemoryViewer();
 			if(frm == null) {
@@ -52,7 +52,7 @@ namespace Mesen.GUI.Debugger
 				_openedWindows.Add(frm);
 			}
 			frm.Show();
-			frm.ShowAddress(address);
+			frm.ShowAddress(address, usePrgRom);
 		}
 
 		public static void OpenScriptWindow(bool forceBlank)

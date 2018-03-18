@@ -94,6 +94,11 @@ namespace Mesen.GUI.Debugger.Controls
 				_addresses = addresses;
 			}
 
+			public string GetLineComment(int lineIndex)
+			{
+				return null;
+			}
+
 			public LineProperties GetLineStyle(int cpuAddress, int lineIndex)
 			{
 				if(_addresses.Contains(cpuAddress)) {

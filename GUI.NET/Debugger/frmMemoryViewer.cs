@@ -165,13 +165,18 @@ namespace Mesen.GUI.Debugger
 			}
 		}
 
-		public void ShowAddress(int address)
+		public void ShowAddress(int address, bool usePrgRom)
 		{
 			tabMain.SelectedTab = tpgMemoryViewer;
-			cboMemoryType.SelectedIndex = 0; //Select CPU Memory
-			ctrlHexViewer.GoToAddress(address);
+			if(usePrgRom) {
+				cboMemoryType.SetEnumValue(DebugMemoryType.PrgRom);
+				ctrlHexViewer.GoToAddress(address);
+			} else {
+				cboMemoryType.SetEnumValue(DebugMemoryType.CpuMemory);
+				ctrlHexViewer.GoToAddress(address);
+			}
 		}
-
+		
 		private void InitTblMappings()
 		{
 			DebugWorkspace workspace = DebugWorkspaceManager.GetWorkspace();
