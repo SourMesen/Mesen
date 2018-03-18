@@ -1003,11 +1003,13 @@ void Debugger::GetCallstack(StackFrameInfo* callstackArray, uint32_t &callstackS
 
 int32_t Debugger::GetFunctionEntryPointCount()
 {
+	DebugBreakHelper helper(this);
 	return (int32_t)_functionEntryPoints.size();
 }
 
 void Debugger::GetFunctionEntryPoints(int32_t* entryPoints, int32_t maxCount)
 {
+	DebugBreakHelper helper(this);
 	int32_t i = 0;
 	for(auto itt = _functionEntryPoints.begin(); itt != _functionEntryPoints.end(); itt++) {
 		entryPoints[i] = *itt;
