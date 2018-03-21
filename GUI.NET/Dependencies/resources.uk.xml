@@ -382,7 +382,7 @@
       <Control ID="tpgSaveData">Збереження</Control>
       <Control ID="grpAutomaticSaves">Збереження</Control>
       <Control ID="chkAutoSave">Автоматично створювати збереження через</Control>
-      <Control ID="lblAutoSave">хвилин (натисніть F8 для завантаження)</Control>
+      <Control ID="lblAutoSave">хвилин</Control>
       <Control ID="chkAutoSaveNotify">Сповіщати при збереженні</Control>
       <Control ID="chkAllowMismatchingSaveStates">Allow save states to be loaded on modified ROMs (e.g IPS patches)</Control>
 
@@ -833,6 +833,9 @@
     <Message ID="EmulatorShortcutMappings_SaveStateSlot5">Save State - Slot 5</Message>
     <Message ID="EmulatorShortcutMappings_SaveStateSlot6">Save State - Slot 6</Message>
     <Message ID="EmulatorShortcutMappings_SaveStateSlot7">Save State - Slot 7</Message>
+    <Message ID="EmulatorShortcutMappings_SaveStateSlot8">Save State - Slot 8</Message>
+    <Message ID="EmulatorShortcutMappings_SaveStateSlot9">Save State - Slot 9</Message>
+    <Message ID="EmulatorShortcutMappings_SaveStateSlot10">Save State - Slot 10</Message>
     <Message ID="EmulatorShortcutMappings_SaveStateToFile">Зберегти стан в файл</Message>
     <Message ID="EmulatorShortcutMappings_LoadStateSlot1">Load State - Slot 1</Message>
     <Message ID="EmulatorShortcutMappings_LoadStateSlot2">Load State - Slot 2</Message>
@@ -842,6 +845,9 @@
     <Message ID="EmulatorShortcutMappings_LoadStateSlot6">Load State - Slot 6</Message>
     <Message ID="EmulatorShortcutMappings_LoadStateSlot7">Load State - Slot 7</Message>
     <Message ID="EmulatorShortcutMappings_LoadStateSlot8">Load State - Slot 8</Message>
+    <Message ID="EmulatorShortcutMappings_LoadStateSlot9">Load State - Slot 9</Message>
+    <Message ID="EmulatorShortcutMappings_LoadStateSlot10">Load State - Slot 10</Message>
+    <Message ID="EmulatorShortcutMappings_LoadStateSlotAuto">Load State - Auto Save Slot</Message>
     <Message ID="EmulatorShortcutMappings_LoadStateFromFile">Завантажити стан з файлу</Message>
     <Message ID="EmulatorShortcutMappings_OpenFile">Відкрити файл</Message>
     <Message ID="EmulatorShortcutMappings_OpenDebugger">Відкрити Debugger</Message>

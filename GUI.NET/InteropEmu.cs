@@ -1750,6 +1750,9 @@ namespace Mesen.GUI
 		SaveStateSlot5,
 		SaveStateSlot6,
 		SaveStateSlot7,
+		SaveStateSlot8,
+		SaveStateSlot9,
+		SaveStateSlot10,
 		SaveStateToFile,
 
 		LoadStateSlot1,
@@ -1760,6 +1763,9 @@ namespace Mesen.GUI
 		LoadStateSlot6,
 		LoadStateSlot7,
 		LoadStateSlot8,
+		LoadStateSlot9,
+		LoadStateSlot10,
+		LoadStateSlotAuto,
 		LoadStateFromFile,
 
 		OpenFile,

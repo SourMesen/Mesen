@@ -384,7 +384,7 @@
       <Control ID="tpgSaveData">Sauvegardes</Control>
       <Control ID="grpAutomaticSaves">Sauvegardes d'état</Control>
       <Control ID="chkAutoSave">Créer une sauvegarde d'état à chaque</Control>
-      <Control ID="lblAutoSave">minutes (Appuyer sur F8 pour charger)</Control>
+      <Control ID="lblAutoSave">minutes</Control>
       <Control ID="chkAutoSaveNotify">Afficher une notification à l'écran au moment de la sauvegarde automatique</Control>
       <Control ID="chkAllowMismatchingSaveStates">Permettre le chargement de sauvegardes créés dans un autre ROM (ex: IPS)</Control>
 
@@ -844,6 +844,9 @@
     <Message ID="EmulatorShortcutMappings_SaveStateSlot5">Sauvegarde d'état - Position 5</Message>
     <Message ID="EmulatorShortcutMappings_SaveStateSlot6">Sauvegarde d'état - Position 6</Message>
     <Message ID="EmulatorShortcutMappings_SaveStateSlot7">Sauvegarde d'état - Position 7</Message>
+    <Message ID="EmulatorShortcutMappings_SaveStateSlot8">Sauvegarde d'état - Position 8</Message>
+    <Message ID="EmulatorShortcutMappings_SaveStateSlot9">Sauvegarde d'état - Position 9</Message>
+    <Message ID="EmulatorShortcutMappings_SaveStateSlot10">Sauvegarde d'état - Position 10</Message>
     <Message ID="EmulatorShortcutMappings_SaveStateToFile">Sauvergarde l'état dans un fichier</Message>
     <Message ID="EmulatorShortcutMappings_LoadStateSlot1">Chargement d'état - Position 1</Message>
     <Message ID="EmulatorShortcutMappings_LoadStateSlot2">Chargement d'état - Position 2</Message>
@@ -853,6 +856,9 @@
     <Message ID="EmulatorShortcutMappings_LoadStateSlot6">Chargement d'état - Position 6</Message>
     <Message ID="EmulatorShortcutMappings_LoadStateSlot7">Chargement d'état - Position 7</Message>
     <Message ID="EmulatorShortcutMappings_LoadStateSlot8">Chargement d'état - Position 8</Message>
+    <Message ID="EmulatorShortcutMappings_LoadStateSlot9">Chargement d'état - Position 9</Message>
+    <Message ID="EmulatorShortcutMappings_LoadStateSlot10">Chargement d'état - Position 10</Message>
+    <Message ID="EmulatorShortcutMappings_LoadStateSlotAuto">Chargement d'état - Sauvegarde auto</Message>
     <Message ID="EmulatorShortcutMappings_LoadStateFromFile">Charger l'état à partir d'un fichier</Message>
     <Message ID="EmulatorShortcutMappings_OpenFile">Ouvrir un fichier</Message>
     <Message ID="EmulatorShortcutMappings_OpenDebugger">Ouvrir le débogueur</Message>

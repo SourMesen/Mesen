@@ -774,6 +774,9 @@ namespace Mesen.GUI.Forms
 				case EmulatorShortcut.SaveStateSlot5: SaveState(5); break;
 				case EmulatorShortcut.SaveStateSlot6: SaveState(6); break;
 				case EmulatorShortcut.SaveStateSlot7: SaveState(7); break;
+				case EmulatorShortcut.SaveStateSlot8: SaveState(8); break;
+				case EmulatorShortcut.SaveStateSlot9: SaveState(9); break;
+				case EmulatorShortcut.SaveStateSlot10: SaveState(10); break;
 				case EmulatorShortcut.LoadStateSlot1: LoadState(1); break;
 				case EmulatorShortcut.LoadStateSlot2: LoadState(2); break;
 				case EmulatorShortcut.LoadStateSlot3: LoadState(3); break;
@@ -782,6 +785,9 @@ namespace Mesen.GUI.Forms
 				case EmulatorShortcut.LoadStateSlot6: LoadState(6); break;
 				case EmulatorShortcut.LoadStateSlot7: LoadState(7); break;
 				case EmulatorShortcut.LoadStateSlot8: LoadState(8); break;
+				case EmulatorShortcut.LoadStateSlot9: LoadState(9); break;
+				case EmulatorShortcut.LoadStateSlot10: LoadState(10); break;
+				case EmulatorShortcut.LoadStateSlotAuto: LoadState(11); break;
 			}
 
 			if(restoreFullscreen && _frmFullscreenRenderer == null) {

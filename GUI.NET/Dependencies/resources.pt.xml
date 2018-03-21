@@ -372,7 +372,7 @@
       <Control ID="tpgSaveData">Cópias de segurança</Control>
       <Control ID="grpAutomaticSaves">Salvar estado</Control>
       <Control ID="chkAutoSave">Salvar estado do jogo automaticamente a cada</Control>
-      <Control ID="lblAutoSave">minutos (Aperte F8 para carregar)</Control>
+      <Control ID="lblAutoSave">minutos</Control>
       <Control ID="chkAutoSaveNotify">Mostrar uma notificação na tela ao fazer a cópia de segurança automática</Control>
       <Control ID="chkAllowMismatchingSaveStates">Allow save states to be loaded on modified ROMs (e.g IPS patches)</Control>
       <Control ID="grpCloudSaves">Cópia de segurança online</Control>
@@ -829,6 +829,9 @@
     <Message ID="EmulatorShortcutMappings_SaveStateSlot5">Salvar estado - Compartimento 5</Message>
     <Message ID="EmulatorShortcutMappings_SaveStateSlot6">Salvar estado - Compartimento 6</Message>
     <Message ID="EmulatorShortcutMappings_SaveStateSlot7">Salvar estado - Compartimento 7</Message>
+    <Message ID="EmulatorShortcutMappings_SaveStateSlot8">Salvar estado - Compartimento 8</Message>
+    <Message ID="EmulatorShortcutMappings_SaveStateSlot9">Salvar estado - Compartimento 9</Message>
+    <Message ID="EmulatorShortcutMappings_SaveStateSlot10">Salvar estado - Compartimento 10</Message>
     <Message ID="EmulatorShortcutMappings_SaveStateToFile">Salvar estado para arquivo</Message>
     <Message ID="EmulatorShortcutMappings_LoadStateSlot1">Carregar estado - Compartimento 1</Message>
     <Message ID="EmulatorShortcutMappings_LoadStateSlot2">Carregar estado - Compartimento 2</Message>
@@ -838,6 +841,9 @@
     <Message ID="EmulatorShortcutMappings_LoadStateSlot6">Carregar estado - Compartimento 6</Message>
     <Message ID="EmulatorShortcutMappings_LoadStateSlot7">Carregar estado - Compartimento 7</Message>
     <Message ID="EmulatorShortcutMappings_LoadStateSlot8">Carregar estado - Compartimento 8</Message>
+    <Message ID="EmulatorShortcutMappings_LoadStateSlot9">Carregar estado - Compartimento 9</Message>
+    <Message ID="EmulatorShortcutMappings_LoadStateSlot10">Carregar estado - Compartimento 10</Message>
+    <Message ID="EmulatorShortcutMappings_LoadStateSlotAuto">Load State - Auto Save Slot</Message>
     <Message ID="EmulatorShortcutMappings_LoadStateFromFile">Carregar estado de arquivo</Message>
     <Message ID="EmulatorShortcutMappings_OpenFile">Abrir arquivo</Message>
     <Message ID="EmulatorShortcutMappings_OpenDebugger">Abrir depurador</Message>

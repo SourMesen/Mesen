@@ -13,7 +13,7 @@ namespace Mesen.GUI.Forms
 {
 	partial class frmMain
 	{
-		const int NumberOfSaveSlots = 7;
+		const int NumberOfSaveSlots = 10;
 		private void UpdateStateMenu(ToolStripMenuItem menu, bool forSave)
 		{
 			if(this.InvokeRequired) {
@@ -22,11 +22,14 @@ namespace Mesen.GUI.Forms
 				for(uint i = 1; i <= frmMain.NumberOfSaveSlots + (forSave ? 0 : 1); i++) {
 					Int64 fileTime = InteropEmu.GetStateInfo(i);
 					string label;
+					bool isAutoSaveSlot = i == NumberOfSaveSlots + 1;
+					string slotName = isAutoSaveSlot ? "Auto" : i.ToString();
+
 					if(fileTime == 0) {
-						label = i.ToString() + ". " + ResourceHelper.GetMessage("EmptyState");
+						label = slotName + ". " + ResourceHelper.GetMessage("EmptyState");
 					} else {
 						DateTime dateTime = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddSeconds(fileTime).ToLocalTime();
-						label = i.ToString() + ". " + dateTime.ToShortDateString() + " " + dateTime.ToShortTimeString();
+						label = slotName + ". " + dateTime.ToShortDateString() + " " + dateTime.ToShortTimeString();
 					}
 
 					if(i == NumberOfSaveSlots + 1) {
@@ -42,9 +45,7 @@ namespace Mesen.GUI.Forms
 		private void InitializeStateMenu(ToolStripMenuItem menu, bool forSave)
 		{
 			Action<uint> addSaveStateInfo = (i) => {
-				string label = i.ToString() + ". " + ResourceHelper.GetMessage("EmptyState");
-
-				ToolStripMenuItem item = new ToolStripMenuItem(label);
+				ToolStripMenuItem item = new ToolStripMenuItem();
 				menu.DropDownItems.Add(item);
 
 				if(forSave) {

@@ -374,7 +374,7 @@
       <Control ID="tpgSaveData">Copias de seguridad</Control>
       <Control ID="grpAutomaticSaves">Guardado de estado</Control>
       <Control ID="chkAutoSave">Crear una copia de seguridad de cada estado</Control>
-      <Control ID="lblAutoSave">minutos (Pulse F8 para cargar)</Control>
+      <Control ID="lblAutoSave">minutos</Control>
       <Control ID="chkAutoSaveNotify">Mostrar una notificación en pantalla al hacer la copia de seguridad automática</Control>
       <Control ID="chkAllowMismatchingSaveStates">Allow save states to be loaded on modified ROMs (e.g IPS patches)</Control>
       <Control ID="grpCloudSaves">Copia de seguridad online</Control>
@@ -831,6 +831,9 @@
     <Message ID="EmulatorShortcutMappings_SaveStateSlot5">Guardar partida - Hueco 5</Message>
     <Message ID="EmulatorShortcutMappings_SaveStateSlot6">Guardar partida - Hueco 6</Message>
     <Message ID="EmulatorShortcutMappings_SaveStateSlot7">Guardar partida - Hueco 7</Message>
+    <Message ID="EmulatorShortcutMappings_SaveStateSlot8">Guardar partida - Hueco 8</Message>
+    <Message ID="EmulatorShortcutMappings_SaveStateSlot9">Guardar partida - Hueco 9</Message>
+    <Message ID="EmulatorShortcutMappings_SaveStateSlot10">Guardar partida - Hueco 10</Message>
     <Message ID="EmulatorShortcutMappings_SaveStateToFile">Guardar partida en archivo</Message>
     <Message ID="EmulatorShortcutMappings_LoadStateSlot1">Cargar partida - Hueco 1</Message>
     <Message ID="EmulatorShortcutMappings_LoadStateSlot2">Cargar partida - Hueco 2</Message>
@@ -840,6 +843,9 @@
     <Message ID="EmulatorShortcutMappings_LoadStateSlot6">Cargar partida - Hueco 6</Message>
     <Message ID="EmulatorShortcutMappings_LoadStateSlot7">Cargar partida - Hueco 7</Message>
     <Message ID="EmulatorShortcutMappings_LoadStateSlot8">Cargar partida - Hueco 8</Message>
+    <Message ID="EmulatorShortcutMappings_LoadStateSlot9">Cargar partida - Hueco 9</Message>
+    <Message ID="EmulatorShortcutMappings_LoadStateSlot10">Cargar partida - Hueco 10</Message>
+    <Message ID="EmulatorShortcutMappings_LoadStateSlotAuto">Load State - Auto Save Slot</Message>
     <Message ID="EmulatorShortcutMappings_LoadStateFromFile">Cargar partida de archivo</Message>
     <Message ID="EmulatorShortcutMappings_OpenFile">Abrir archivo</Message>
     <Message ID="EmulatorShortcutMappings_OpenDebugger">Abrir depurador</Message>

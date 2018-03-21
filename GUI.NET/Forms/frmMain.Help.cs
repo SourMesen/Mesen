@@ -75,6 +75,23 @@ namespace Mesen.GUI.Forms
 					}
 				}
 
+				if(oldVersion <= new Version("0.9.4")) {
+					ShortcutKeyInfo oldLoadAutoSlot1 = ConfigManager.Config.PreferenceInfo.ShortcutKeys1.Where(o => o.Shortcut == EmulatorShortcut.LoadStateSlot8).FirstOrDefault();
+					ShortcutKeyInfo oldLoadAutoSlot2 = ConfigManager.Config.PreferenceInfo.ShortcutKeys2.Where(o => o.Shortcut == EmulatorShortcut.LoadStateSlot8).FirstOrDefault();
+					ShortcutKeyInfo newLoadAutoSlot1 = ConfigManager.Config.PreferenceInfo.ShortcutKeys1.Where(o => o.Shortcut == EmulatorShortcut.LoadStateSlotAuto).FirstOrDefault();
+					ShortcutKeyInfo newLoadAutoSlot2 = ConfigManager.Config.PreferenceInfo.ShortcutKeys2.Where(o => o.Shortcut == EmulatorShortcut.LoadStateSlotAuto).FirstOrDefault();
+
+					//Copy old "Load State - Slot 8" shortcut to "Load State - Auto Save Slot"
+					if(oldLoadAutoSlot1 != null && !oldLoadAutoSlot1.KeyCombination.IsEmpty && newLoadAutoSlot1 == null) {
+						ConfigManager.Config.PreferenceInfo.ShortcutKeys1.Add(new ShortcutKeyInfo(EmulatorShortcut.LoadStateSlotAuto, oldLoadAutoSlot1.KeyCombination));
+						oldLoadAutoSlot1.KeyCombination = new KeyCombination();
+					}
+					if(oldLoadAutoSlot2 != null && !oldLoadAutoSlot2.KeyCombination.IsEmpty && newLoadAutoSlot2 == null) {
+						ConfigManager.Config.PreferenceInfo.ShortcutKeys2.Add(new ShortcutKeyInfo(EmulatorShortcut.LoadStateSlotAuto, oldLoadAutoSlot2.KeyCombination));
+						oldLoadAutoSlot2.KeyCombination = new KeyCombination();
+					}
+				}
+
 				ConfigManager.Config.MesenVersion = InteropEmu.GetMesenVersion();
 				ConfigManager.ApplyChanges();
 

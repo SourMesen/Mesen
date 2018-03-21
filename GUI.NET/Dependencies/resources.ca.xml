@@ -375,7 +375,7 @@
       <Control ID="tpgSaveData">Còpies de seguretat</Control>
       <Control ID="grpAutomaticSaves">Desat de partida</Control>
       <Control ID="chkAutoSave">Desa automàticament cada</Control>
-      <Control ID="lblAutoSave">minuts (prem F8 per a carregar-la)</Control>
+      <Control ID="lblAutoSave">minuts</Control>
       <Control ID="chkAutoSaveNotify">Mostrar una notificación en pantalla al hacer la copia de seguridad automática</Control>
       <Control ID="chkAllowMismatchingSaveStates">Allow save states to be loaded on modified ROMs (e.g IPS patches)</Control>
       
@@ -814,6 +814,9 @@
     <Message ID="EmulatorShortcutMappings_SaveStateSlot5">Desa la partida - Posició 5</Message>
     <Message ID="EmulatorShortcutMappings_SaveStateSlot6">Desa la partida - Posició 6</Message>
     <Message ID="EmulatorShortcutMappings_SaveStateSlot7">Desa la partida - Posició 7</Message>
+    <Message ID="EmulatorShortcutMappings_SaveStateSlot8">Desa la partida - Posició 8</Message>
+    <Message ID="EmulatorShortcutMappings_SaveStateSlot9">Desa la partida - Posició 9</Message>
+    <Message ID="EmulatorShortcutMappings_SaveStateSlot10">Desa la partida - Posició 10</Message>
     <Message ID="EmulatorShortcutMappings_SaveStateToFile">Desa la partida a un fitxer</Message>
     <Message ID="EmulatorShortcutMappings_LoadStateSlot1">Carrega la partida - Posició 1</Message>
     <Message ID="EmulatorShortcutMappings_LoadStateSlot2">Carrega la partida - Posició 2</Message>
@@ -823,6 +826,9 @@
     <Message ID="EmulatorShortcutMappings_LoadStateSlot6">Carrega la partida - Posició 6</Message>
     <Message ID="EmulatorShortcutMappings_LoadStateSlot7">Carrega la partida - Posició 7</Message>
     <Message ID="EmulatorShortcutMappings_LoadStateSlot8">Carrega la partida - Posició 8</Message>
+    <Message ID="EmulatorShortcutMappings_LoadStateSlot9">Carrega la partida - Posició 9</Message>
+    <Message ID="EmulatorShortcutMappings_LoadStateSlot10">Carrega la partida - Posició 10</Message>
+    <Message ID="EmulatorShortcutMappings_LoadStateSlotAuto">Load State - Auto Save Slot</Message>
     <Message ID="EmulatorShortcutMappings_LoadStateFromFile">Carrega la partida des d'un fitxer</Message>
     <Message ID="EmulatorShortcutMappings_OpenFile">Obre un fitxer</Message>
     <Message ID="EmulatorShortcutMappings_OpenDebugger">Obre el depurador</Message>

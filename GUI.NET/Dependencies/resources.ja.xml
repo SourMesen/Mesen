@@ -384,7 +384,7 @@
       <Control ID="tpgSaveData">セーブデータ</Control>
       <Control ID="grpAutomaticSaves">クイックセーブ</Control>
       <Control ID="chkAutoSave">オートクイックセーブを</Control>
-      <Control ID="lblAutoSave">分おきにする（F8でクイックロード）</Control>
+      <Control ID="lblAutoSave">分おきにする</Control>
       <Control ID="chkAutoSaveNotify">オートクイックセーブする際、通信を表示する</Control>
       <Control ID="chkAllowMismatchingSaveStates">違うROMで作られたクイックセーブをロード可能にする</Control>
 
@@ -828,6 +828,9 @@
     <Message ID="EmulatorShortcutMappings_SaveStateSlot5">クイックセーブスロット５に保存する</Message>
     <Message ID="EmulatorShortcutMappings_SaveStateSlot6">クイックセーブスロット６に保存する</Message>
     <Message ID="EmulatorShortcutMappings_SaveStateSlot7">クイックセーブスロット７に保存する</Message>
+    <Message ID="EmulatorShortcutMappings_SaveStateSlot8">クイックセーブスロット８に保存する</Message>
+    <Message ID="EmulatorShortcutMappings_SaveStateSlot9">クイックセーブスロット９に保存する</Message>
+    <Message ID="EmulatorShortcutMappings_SaveStateSlot10">クイックセーブスロット１０に保存する</Message>
     <Message ID="EmulatorShortcutMappings_SaveStateToFile">クイックセーブデータをファイルに保存する</Message>
     <Message ID="EmulatorShortcutMappings_LoadStateSlot1">クイックセーブスロット１からロードする</Message>
     <Message ID="EmulatorShortcutMappings_LoadStateSlot2">クイックセーブスロット２からロードする</Message>
@@ -837,6 +840,9 @@
     <Message ID="EmulatorShortcutMappings_LoadStateSlot6">クイックセーブスロット６からロードする</Message>
     <Message ID="EmulatorShortcutMappings_LoadStateSlot7">クイックセーブスロット７からロードする</Message>
     <Message ID="EmulatorShortcutMappings_LoadStateSlot8">クイックセーブスロット８からロードする</Message>
+    <Message ID="EmulatorShortcutMappings_LoadStateSlot9">クイックセーブスロット９からロードする</Message>
+    <Message ID="EmulatorShortcutMappings_LoadStateSlot10">クイックセーブスロット１０からロードする</Message>
+    <Message ID="EmulatorShortcutMappings_LoadStateSlotAuto">自動クイックセーブスロットからロードする</Message>
     <Message ID="EmulatorShortcutMappings_LoadStateFromFile">クイックセーブデータをファイルからロードする</Message>
     <Message ID="EmulatorShortcutMappings_OpenFile">ファイルを開く</Message>
     <Message ID="EmulatorShortcutMappings_OpenDebugger">デバッガを開く</Message>
