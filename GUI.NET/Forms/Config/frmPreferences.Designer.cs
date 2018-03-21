@@ -146,6 +146,7 @@ namespace Mesen.GUI.Forms.Config
 			this.lblUiDisplaySettings = new System.Windows.Forms.Label();
 			this.lblGameSelectionScreenSettings = new System.Windows.Forms.Label();
 			this.tmrSyncDateTime = new System.Windows.Forms.Timer(this.components);
+			this.chkAllowMismatchingSaveStates = new Mesen.GUI.Controls.ctrlRiskyOption();
 			this.tlpMain.SuspendLayout();
 			this.flowLayoutPanel2.SuspendLayout();
 			this.tableLayoutPanel5.SuspendLayout();
@@ -517,9 +518,9 @@ namespace Mesen.GUI.Forms.Config
 			// 
 			this.grpCloudSaves.Controls.Add(this.tlpCloudSaves);
 			this.grpCloudSaves.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.grpCloudSaves.Location = new System.Drawing.Point(3, 76);
+			this.grpCloudSaves.Location = new System.Drawing.Point(3, 99);
 			this.grpCloudSaves.Name = "grpCloudSaves";
-			this.grpCloudSaves.Size = new System.Drawing.Size(477, 308);
+			this.grpCloudSaves.Size = new System.Drawing.Size(477, 285);
 			this.grpCloudSaves.TabIndex = 2;
 			this.grpCloudSaves.TabStop = false;
 			this.grpCloudSaves.Text = "Cloud Saves";
@@ -536,7 +537,7 @@ namespace Mesen.GUI.Forms.Config
 			this.tlpCloudSaves.RowCount = 2;
 			this.tlpCloudSaves.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tlpCloudSaves.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this.tlpCloudSaves.Size = new System.Drawing.Size(471, 289);
+			this.tlpCloudSaves.Size = new System.Drawing.Size(471, 266);
 			this.tlpCloudSaves.TabIndex = 0;
 			// 
 			// tlpCloudSaveDesc
@@ -688,32 +689,34 @@ namespace Mesen.GUI.Forms.Config
 			this.grpAutomaticSaves.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.grpAutomaticSaves.Location = new System.Drawing.Point(3, 3);
 			this.grpAutomaticSaves.Name = "grpAutomaticSaves";
-			this.grpAutomaticSaves.Size = new System.Drawing.Size(477, 67);
+			this.grpAutomaticSaves.Size = new System.Drawing.Size(477, 90);
 			this.grpAutomaticSaves.TabIndex = 3;
 			this.grpAutomaticSaves.TabStop = false;
-			this.grpAutomaticSaves.Text = "Automatic Save States";
+			this.grpAutomaticSaves.Text = "Save States";
 			// 
 			// tableLayoutPanel4
 			// 
 			this.tableLayoutPanel4.ColumnCount = 1;
 			this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel4.Controls.Add(this.chkAutoSaveNotify, 0, 2);
+			this.tableLayoutPanel4.Controls.Add(this.chkAllowMismatchingSaveStates, 0, 2);
+			this.tableLayoutPanel4.Controls.Add(this.chkAutoSaveNotify, 0, 1);
 			this.tableLayoutPanel4.Controls.Add(this.flpAutoSave, 0, 0);
 			this.tableLayoutPanel4.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tableLayoutPanel4.Location = new System.Drawing.Point(3, 16);
 			this.tableLayoutPanel4.Name = "tableLayoutPanel4";
-			this.tableLayoutPanel4.RowCount = 3;
+			this.tableLayoutPanel4.RowCount = 4;
+			this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel4.Size = new System.Drawing.Size(471, 48);
+			this.tableLayoutPanel4.Size = new System.Drawing.Size(471, 71);
 			this.tableLayoutPanel4.TabIndex = 0;
 			// 
 			// chkAutoSaveNotify
 			// 
 			this.chkAutoSaveNotify.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.chkAutoSaveNotify.AutoSize = true;
-			this.chkAutoSaveNotify.Location = new System.Drawing.Point(15, 27);
+			this.chkAutoSaveNotify.Location = new System.Drawing.Point(15, 26);
 			this.chkAutoSaveNotify.Margin = new System.Windows.Forms.Padding(15, 3, 3, 3);
 			this.chkAutoSaveNotify.Name = "chkAutoSaveNotify";
 			this.chkAutoSaveNotify.Size = new System.Drawing.Size(240, 17);
@@ -1718,6 +1721,17 @@ namespace Mesen.GUI.Forms.Config
 			this.tmrSyncDateTime.Enabled = true;
 			this.tmrSyncDateTime.Tick += new System.EventHandler(this.tmrSyncDateTime_Tick);
 			// 
+			// chkAllowMismatchingSaveStates
+			// 
+			this.chkAllowMismatchingSaveStates.Checked = false;
+			this.chkAllowMismatchingSaveStates.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.chkAllowMismatchingSaveStates.Location = new System.Drawing.Point(0, 46);
+			this.chkAllowMismatchingSaveStates.MinimumSize = new System.Drawing.Size(0, 21);
+			this.chkAllowMismatchingSaveStates.Name = "chkAllowMismatchingSaveStates";
+			this.chkAllowMismatchingSaveStates.Size = new System.Drawing.Size(471, 23);
+			this.chkAllowMismatchingSaveStates.TabIndex = 7;
+			this.chkAllowMismatchingSaveStates.Text = "Allow save states to be loaded on modified ROMs (e.g IPS patches)";
+			// 
 			// frmPreferences
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1907,5 +1921,6 @@ namespace Mesen.GUI.Forms.Config
 		private System.Windows.Forms.CheckBox chkGameOverride;
 		private System.Windows.Forms.CheckBox chkAlwaysOnTop;
 		private System.Windows.Forms.CheckBox chkShowFullPathInRecents;
+		private ctrlRiskyOption chkAllowMismatchingSaveStates;
 	}
 }

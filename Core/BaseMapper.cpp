@@ -706,29 +706,17 @@ shared_ptr<BaseControlDevice> BaseMapper::GetMapperControlDevice()
 	return _mapperControlDevice;
 }
 
-GameSystem BaseMapper::GetGameSystem()
+MapperInfo BaseMapper::GetMapperInfo()
 {
-	return _gameSystem;
-}
-
-string BaseMapper::GetRomName()
-{
-	return _romName;
-}
-
-RomFormat BaseMapper::GetRomFormat()
-{
-	return _romFormat;
-}
-
-uint16_t BaseMapper::GetMapperId()
-{
-	return _mapperID;
-}
-
-HashInfo BaseMapper::GetHashInfo()
-{
-	return _hashInfo;
+	return {
+		_romName,
+		_romFormat,
+		_gameSystem,
+		_mapperID,
+		_subMapperID,
+		_hashInfo,
+		HasChrRam()
+	};
 }
 
 MirroringType BaseMapper::GetMirroringType()

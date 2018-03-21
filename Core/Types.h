@@ -292,3 +292,52 @@ public:
 
 	RecordMovieFrom RecordFrom = RecordMovieFrom::StartWithoutSaveData;
 };
+
+enum class GameSystem
+{
+	NesNtsc,
+	NesPal,
+	Famicom,
+	Dendy,
+	VsUniSystem,
+	Playchoice,
+	FDS,
+	Unknown,
+};
+
+enum class BusConflictType
+{
+	Default = 0,
+	Yes,
+	No
+};
+
+struct HashInfo
+{
+	uint32_t Crc32Hash = 0;
+	uint32_t PrgCrc32Hash = 0;
+	uint32_t PrgChrCrc32Hash = 0;
+	string Sha1Hash;
+	string PrgChrMd5Hash;
+};
+
+enum class RomFormat
+{
+	Unknown = 0,
+	iNes = 1,
+	Unif = 2,
+	Fds = 3,
+	Nsf = 4,
+};
+
+struct MapperInfo
+{
+	string RomName;
+	RomFormat RomFormat;
+	GameSystem GameSystem;
+	uint16_t MapperId;
+	uint8_t SubMapperId;
+
+	HashInfo Hash;
+	bool UsesChrRam;
+};

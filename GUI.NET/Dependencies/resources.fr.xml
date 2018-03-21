@@ -382,10 +382,11 @@
       <Control ID="colBinding2">Raccourci #2</Control>
 
       <Control ID="tpgSaveData">Sauvegardes</Control>
-      <Control ID="grpAutomaticSaves">Sauvegarde d'état automatique</Control>
+      <Control ID="grpAutomaticSaves">Sauvegardes d'état</Control>
       <Control ID="chkAutoSave">Créer une sauvegarde d'état à chaque</Control>
       <Control ID="lblAutoSave">minutes (Appuyer sur F8 pour charger)</Control>
       <Control ID="chkAutoSaveNotify">Afficher une notification à l'écran au moment de la sauvegarde automatique</Control>
+      <Control ID="chkAllowMismatchingSaveStates">Permettre le chargement de sauvegardes créés dans un autre ROM (ex: IPS)</Control>
 
       <Control ID="grpCloudSaves">Sauvegarde en ligne</Control>
       <Control ID="lblGoogleDriveIntegration">Mesen peut utiliser Google Drive pour mettre vos sauvegardes dans votre compte Google Drive.  Lorsque l'intégration est activée, toutes les données de sauvegarde de vos jeux (fichiers .sav et sauvegardes rapides) sont facilement accessibles à partir de n'importe quel ordinateur.</Control>

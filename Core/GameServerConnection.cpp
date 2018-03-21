@@ -39,7 +39,8 @@ GameServerConnection::~GameServerConnection()
 void GameServerConnection::SendGameInformation()
 {
 	Console::Pause();
-	GameInformationMessage gameInfo(Console::GetRomName(), Console::GetHashInfo().Crc32Hash, _controllerPort, EmulationSettings::CheckFlag(EmulationFlags::Paused));
+	MapperInfo mapperInfo = Console::GetMapperInfo();
+	GameInformationMessage gameInfo(mapperInfo.RomName, mapperInfo.Hash.Crc32Hash, _controllerPort, EmulationSettings::CheckFlag(EmulationFlags::Paused));
 	SendNetMessage(gameInfo);
 	SaveStateMessage saveState;
 	SendNetMessage(saveState);
@@ -96,7 +97,7 @@ void GameServerConnection::ProcessHandshakeResponse(HandShakeMessage* message)
 
 		MessageManager::DisplayMessage("NetPlay", _connectionData->PlayerName + " (" + playerPortMessage + ") connected.");
 
-		if(Console::GetRomName().size() > 0) {
+		if(Console::GetMapperInfo().RomName.size() > 0) {
 			SendGameInformation();
 		}
 

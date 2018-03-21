@@ -373,10 +373,12 @@
       <Control ID="colBinding2">Drecera #2</Control>
       
       <Control ID="tpgSaveData">Còpies de seguretat</Control>
-      <Control ID="grpAutomaticSaves">Desat de partida automàtic</Control>
+      <Control ID="grpAutomaticSaves">Desat de partida</Control>
       <Control ID="chkAutoSave">Desa automàticament cada</Control>
       <Control ID="lblAutoSave">minuts (prem F8 per a carregar-la)</Control>
       <Control ID="chkAutoSaveNotify">Mostrar una notificación en pantalla al hacer la copia de seguridad automática</Control>
+      <Control ID="chkAllowMismatchingSaveStates">Allow save states to be loaded on modified ROMs (e.g IPS patches)</Control>
+      
       <Control ID="grpCloudSaves">Còpies de seguretat al núvol</Control>
 
       <Control ID="chkShowFullPathInRecents">Show full file path in recent file list</Control>

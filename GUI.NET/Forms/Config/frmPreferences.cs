@@ -59,6 +59,7 @@ namespace Mesen.GUI.Forms.Config
 			AddBinding("AutoSave", chkAutoSave);
 			AddBinding("AutoSaveDelay", nudAutoSave);
 			AddBinding("AutoSaveNotify", chkAutoSaveNotify);
+			AddBinding("AllowMismatchingSaveStates", chkAllowMismatchingSaveStates);
 
 			AddBinding("DisplayMovieIcons", chkDisplayMovieIcons);
 			AddBinding("HidePauseOverlay", chkHidePauseOverlay);

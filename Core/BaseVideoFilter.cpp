@@ -113,7 +113,7 @@ void BaseVideoFilter::TakeScreenshot(VideoFilterType filterType, string filename
 
 void BaseVideoFilter::TakeScreenshot(VideoFilterType filterType)
 {
-	string romFilename = FolderUtilities::GetFilename(Console::GetRomName(), false);
+	string romFilename = FolderUtilities::GetFilename(Console::GetMapperInfo().RomName, false);
 
 	int counter = 0;
 	string baseFilename = FolderUtilities::CombinePath(FolderUtilities::GetScreenshotFolder(), romFilename);

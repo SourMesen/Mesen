@@ -120,12 +120,8 @@ class Console
 		static bool LoadROM(string romName, HashInfo hashInfo);
 		static string FindMatchingRom(string romName, HashInfo hashInfo);
 		static VirtualFile GetRomPath();
-		static string GetRomName();
 		static VirtualFile GetPatchFile();
-		static bool IsChrRam();
-		static RomFormat GetRomFormat();
-		static uint16_t GetMapperId();
-		static HashInfo GetHashInfo();
+		static MapperInfo Console::GetMapperInfo();
 		static NesModel GetModel();
 
 		static uint32_t GetLagCounter();

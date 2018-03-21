@@ -674,17 +674,19 @@ int LuaApi::GetRomInfo(lua_State *lua)
 	LuaCallHelper l(lua);
 	checkparams();
 
+	MapperInfo mapperInfo = Console::GetMapperInfo();
+
 	lua_newtable(lua);
-	lua_pushstringvalue(name, Console::GetRomName());
+	lua_pushstringvalue(name, mapperInfo.RomName);
 	lua_pushstringvalue(path, ((string)Console::GetRomPath()));
 
-	HashInfo hashInfo = Console::GetHashInfo();
+	HashInfo hashInfo = mapperInfo.Hash;
 	lua_pushintvalue(fileCrc32Hash, hashInfo.Crc32Hash);
 	lua_pushstringvalue(fileSha1Hash, hashInfo.Sha1Hash);
 	lua_pushintvalue(prgChrCrc32Hash, hashInfo.PrgCrc32Hash);
 	lua_pushstringvalue(prgChrMd5Hash, hashInfo.PrgChrMd5Hash);
-	lua_pushintvalue(format, Console::GetRomFormat());
-	lua_pushboolvalue(isChrRam, Console::IsChrRam());
+	lua_pushintvalue(format, mapperInfo.RomFormat);
+	lua_pushboolvalue(isChrRam, mapperInfo.UsesChrRam);
 	return 1;
 }
 

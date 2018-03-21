@@ -372,10 +372,11 @@
       <Control ID="colBinding2">Atajo #2</Control>
 
       <Control ID="tpgSaveData">Copias de seguridad</Control>
-      <Control ID="grpAutomaticSaves">Guardado de estado automático</Control>
+      <Control ID="grpAutomaticSaves">Guardado de estado</Control>
       <Control ID="chkAutoSave">Crear una copia de seguridad de cada estado</Control>
       <Control ID="lblAutoSave">minutos (Pulse F8 para cargar)</Control>
       <Control ID="chkAutoSaveNotify">Mostrar una notificación en pantalla al hacer la copia de seguridad automática</Control>
+      <Control ID="chkAllowMismatchingSaveStates">Allow save states to be loaded on modified ROMs (e.g IPS patches)</Control>
       <Control ID="grpCloudSaves">Copia de seguridad online</Control>
 
       <Control ID="chkShowFullPathInRecents">Show full file path in recent file list</Control>

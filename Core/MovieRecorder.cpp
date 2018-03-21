@@ -73,7 +73,7 @@ void MovieRecorder::GetGameSettings(stringstream &out)
 	if(patchFile.IsValid()) {
 		WriteString(out, MovieKeys::PatchFile, patchFile.GetFileName());
 		WriteString(out, MovieKeys::PatchFileSha1, patchFile.GetSha1Hash());
-		WriteString(out, MovieKeys::PatchedRomSha1, Console::GetHashInfo().Sha1Hash);
+		WriteString(out, MovieKeys::PatchedRomSha1, Console::GetMapperInfo().Hash.Sha1Hash);
 	}
 
 	switch(model) {

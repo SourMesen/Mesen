@@ -38,7 +38,7 @@ HdPackBuilder::HdPackBuilder(string saveFolder, ScaleFilterType filterType, uint
 		_hdData.Scale = scale;
 	}
 
-	_romName = FolderUtilities::GetFilename(Console::GetRomName(), false);
+	_romName = FolderUtilities::GetFilename(Console::GetMapperInfo().RomName, false);
 	_instance = this;
 }
 
@@ -220,7 +220,7 @@ void HdPackBuilder::SaveHdPack()
 	int pngIndex = 0;
 	ss << "<ver>" << std::to_string(HdNesPack::CurrentVersion) << std::endl;
 	ss << "<scale>" << _hdData.Scale << std::endl;
-	ss << "<supportedRom>" << Console::GetHashInfo().Sha1Hash << std::endl;
+	ss << "<supportedRom>" << Console::GetMapperInfo().Hash.Sha1Hash << std::endl;
 	if(_flags & HdPackRecordFlags::IgnoreOverscan) {
 		OverscanDimensions overscan = EmulationSettings::GetOverscanDimensions();
 		ss << "<overscan>" << overscan.Top << "," << overscan.Right << "," << overscan.Bottom << "," << overscan.Left << std::endl;

@@ -100,7 +100,7 @@ uint8_t VsControlManager::ReadRAM(uint16_t addr)
 {
 	uint8_t value = 0;
 
-	uint32_t crc = Console::GetHashInfo().PrgCrc32Hash;
+	uint32_t crc = Console::GetMapperInfo().Hash.PrgCrc32Hash;
 
 	switch(addr) {
 		case 0x4016: {

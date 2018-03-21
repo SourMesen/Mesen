@@ -227,11 +227,12 @@ namespace InteropEmu {
 			if(romPath.empty()) {
 				_returnString = Console::GetRomPath();
 				romInfo.RomName = _returnString.c_str();
-				romInfo.Crc32 = Console::GetHashInfo().Crc32Hash;
-				romInfo.PrgCrc32 = Console::GetHashInfo().PrgCrc32Hash;
-				romInfo.Format = Console::GetRomFormat();
-				romInfo.IsChrRam = Console::IsChrRam();
-				romInfo.MapperId = Console::GetMapperId();
+				MapperInfo mapperInfo = Console::GetMapperInfo();
+				romInfo.Crc32 = mapperInfo.Hash.Crc32Hash;
+				romInfo.PrgCrc32 = mapperInfo.Hash.PrgCrc32Hash;
+				romInfo.Format = mapperInfo.RomFormat;
+				romInfo.IsChrRam = mapperInfo.UsesChrRam;
+				romInfo.MapperId = mapperInfo.MapperId;
 			} else {
 				RomLoader romLoader(true);
 				if(romLoader.LoadFile(romPath)) {

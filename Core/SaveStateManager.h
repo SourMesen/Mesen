@@ -11,7 +11,7 @@ private:
 	static string GetStateFilepath(int stateIndex);	
 
 public:
-	static const uint32_t FileFormatVersion = 7;
+	static const uint32_t FileFormatVersion = 8;
 
 	static uint64_t GetStateInfo(int stateIndex);
 

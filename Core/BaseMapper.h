@@ -170,11 +170,7 @@ public:
 	virtual void SetDefaultNametables(uint8_t* nametableA, uint8_t* nametableB);
 
 	shared_ptr<BaseControlDevice> GetMapperControlDevice();
-	GameSystem GetGameSystem();
-	HashInfo GetHashInfo();
-	string GetRomName();
-	RomFormat GetRomFormat();
-	uint16_t GetMapperId();
+	MapperInfo GetMapperInfo();
 
 	__forceinline uint8_t ReadRAM(uint16_t addr) override;
 	uint8_t DebugReadRAM(uint16_t addr);

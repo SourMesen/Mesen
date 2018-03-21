@@ -83,7 +83,7 @@ bool Console::Initialize(VirtualFile &romFile, VirtualFile &patchFile)
 		SaveBatteries();
 
 		//Save current game state before loading another one
-		SaveStateManager::SaveRecentGame(_mapper->GetRomName(), _romFilepath, _patchFilename);
+		SaveStateManager::SaveRecentGame(GetMapperInfo().RomName, _romFilepath, _patchFilename);
 	}
 
 	if(romFile.IsValid()) {
@@ -130,7 +130,9 @@ bool Console::Initialize(VirtualFile &romFile, VirtualFile &patchFile)
 			_cpu.reset(new CPU(_memoryManager.get()));
 			_apu.reset(new APU(_memoryManager.get()));
 
-			switch(_mapper->GetGameSystem()) {
+			GameSystem system = _mapper->GetMapperInfo().GameSystem;
+
+			switch(system) {
 				case GameSystem::FDS:
 					EmulationSettings::SetPpuModel(PpuModel::Ppu2C02);
 					_systemActionManager.reset(new FdsSystemActionManager(Console::GetInstance(), _mapper));
@@ -147,7 +149,7 @@ bool Console::Initialize(VirtualFile &romFile, VirtualFile &patchFile)
 
 			//Temporarely disable battery saves to prevent battery files from being created for the wrong game (for Battle Box & Turbo File)
 			BatteryManager::SetSaveEnabled(false);
-			if(_mapper->GetGameSystem() == GameSystem::VsUniSystem) {
+			if(system == GameSystem::VsUniSystem) {
 				_controlManager.reset(new VsControlManager(_systemActionManager, _mapper->GetMapperControlDevice()));
 			} else {
 				_controlManager.reset(new ControlManager(_systemActionManager, _mapper->GetMapperControlDevice()));
@@ -196,7 +198,7 @@ bool Console::Initialize(VirtualFile &romFile, VirtualFile &patchFile)
 
 			string modelName = _model == NesModel::PAL ? "PAL" : (_model == NesModel::Dendy ? "Dendy" : "NTSC");
 			string messageTitle = MessageManager::Localize("GameLoaded") + " (" + modelName + ")";
-			MessageManager::DisplayMessage(messageTitle, FolderUtilities::GetFilename(_mapper->GetRomName(), false));
+			MessageManager::DisplayMessage(messageTitle, FolderUtilities::GetFilename(GetMapperInfo().RomName, false));
 			if(EmulationSettings::GetOverclockRate() != 100) {
 				MessageManager::DisplayMessage("ClockRate", std::to_string(EmulationSettings::GetOverclockRate()) + "%");
 			}
@@ -206,7 +208,7 @@ bool Console::Initialize(VirtualFile &romFile, VirtualFile &patchFile)
 	}
 
 	//Reset battery source to current game if new game failed to load
-	BatteryManager::Initialize(FolderUtilities::GetFilename(GetRomName(), false));
+	BatteryManager::Initialize(FolderUtilities::GetFilename(GetMapperInfo().RomName, false));
 	if(_mapper) {
 		VideoDecoder::GetInstance()->StartThread();
 	}
@@ -227,7 +229,7 @@ bool Console::LoadROM(string romName, HashInfo hashInfo)
 {
 	string currentRomFilepath = Console::GetRomPath().GetFilePath();
 	if(!currentRomFilepath.empty()) {
-		HashInfo gameHashInfo = Instance->_mapper->GetHashInfo();
+		HashInfo gameHashInfo = Console::GetMapperInfo().Hash;
 		if(gameHashInfo.Crc32Hash == hashInfo.Crc32Hash || gameHashInfo.Sha1Hash.compare(hashInfo.Sha1Hash) == 0 || gameHashInfo.PrgChrMd5Hash.compare(hashInfo.PrgChrMd5Hash) == 0) {
 			//Current game matches, power cycle game and return
 			Instance->PowerCycle();
@@ -246,7 +248,7 @@ string Console::FindMatchingRom(string romName, HashInfo hashInfo)
 {
 	VirtualFile currentRom = Console::GetRomPath();
 	if(currentRom.IsValid() && !Console::GetPatchFile().IsValid()) {
-		HashInfo gameHashInfo = Instance->_mapper->GetHashInfo();
+		HashInfo gameHashInfo = Console::GetMapperInfo().Hash;
 		if(gameHashInfo.Crc32Hash == hashInfo.Crc32Hash || gameHashInfo.Sha1Hash.compare(hashInfo.Sha1Hash) == 0 || gameHashInfo.PrgChrMd5Hash.compare(hashInfo.PrgChrMd5Hash) == 0) {
 			//Current game matches
 			return currentRom;
@@ -281,55 +283,20 @@ VirtualFile Console::GetRomPath()
 	return static_cast<VirtualFile>(Instance->_romFilepath);
 }
 
-string Console::GetRomName()
-{
-	if(Instance->_mapper) {
-		return Instance->_mapper->GetRomName();
-	} else {
-		return "";
-	}
-}
-
 VirtualFile Console::GetPatchFile()
 {
 	return Instance ? (VirtualFile)Instance->_patchFilename : VirtualFile();
 }
 
-RomFormat Console::GetRomFormat()
+MapperInfo Console::GetMapperInfo()
 {
 	if(Instance->_mapper) {
-		return Instance->_mapper->GetRomFormat();
+		return Instance->_mapper->GetMapperInfo();
 	} else {
-		return RomFormat::Unknown;
+		return { };
 	}
 }
 
-uint16_t Console::GetMapperId()
-{
-	if(Instance->_mapper) {
-		return Instance->_mapper->GetMapperId();
-	} else {
-		return 0;
-	}
-}
-
-bool Console::IsChrRam()
-{
-	if(Instance->_mapper) {
-		return Instance->_mapper->HasChrRam();
-	} else {
-		return false;
-	}
-}
-
-HashInfo Console::GetHashInfo()
-{
-	if(Instance->_mapper) {
-		return Instance->_mapper->GetHashInfo();
-	} else {
-		return {};
-	}
-}
 NesModel Console::GetModel()
 {
 	return Instance->_model;
@@ -543,7 +510,7 @@ void Console::Run()
 	}
 
 	if(!crashed) {
-		SaveStateManager::SaveRecentGame(_mapper->GetRomName(), _romFilepath, _patchFilename);
+		SaveStateManager::SaveRecentGame(GetMapperInfo().RomName, _romFilepath, _patchFilename);
 	}
 
 	_rewindManager.reset();
@@ -606,7 +573,7 @@ void Console::UpdateNesModel(bool sendNotification)
 
 	NesModel model = EmulationSettings::GetNesModel();
 	if(model == NesModel::Auto) {
-		switch(_mapper->GetGameSystem()) {
+		switch(_mapper->GetMapperInfo().GameSystem) {
 			case GameSystem::NesPal: model = NesModel::PAL; break;
 			case GameSystem::Dendy: model = NesModel::Dendy; break;
 			default: model = NesModel::NTSC; break;

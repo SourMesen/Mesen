@@ -10,34 +10,6 @@ enum class RomHeaderVersion
 	OldiNes = 2
 };
 
-enum class GameSystem
-{
-	NesNtsc,
-	NesPal,
-	Famicom,
-	Dendy,
-	VsUniSystem,
-	Playchoice,
-	FDS,
-	Unknown,
-};
-
-enum class BusConflictType
-{
-	Default = 0,
-	Yes,
-	No
-};
-
-struct HashInfo
-{
-	uint32_t Crc32Hash = 0;
-	uint32_t PrgCrc32Hash = 0;
-	uint32_t PrgChrCrc32Hash = 0;
-	string Sha1Hash;
-	string PrgChrMd5Hash;
-};
-
 struct NESHeader
 {
 	/*
@@ -276,15 +248,6 @@ struct GameInfo
 	string InputType;
 	string BusConflicts;
 	string SubmapperID;
-};
-
-enum class RomFormat
-{
-	Unknown = 0,
-	iNes = 1,
-	Unif = 2,
-	Fds = 3,
-	Nsf = 4,
 };
 
 struct RomData

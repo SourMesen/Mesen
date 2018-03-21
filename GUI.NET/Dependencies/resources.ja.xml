@@ -382,10 +382,11 @@
       <Control ID="colBinding2">ショートカットキー2</Control>
 
       <Control ID="tpgSaveData">セーブデータ</Control>
-      <Control ID="grpAutomaticSaves">オートクイックセーブ</Control>
+      <Control ID="grpAutomaticSaves">クイックセーブ</Control>
       <Control ID="chkAutoSave">オートクイックセーブを</Control>
       <Control ID="lblAutoSave">分おきにする（F8でクイックロード）</Control>
       <Control ID="chkAutoSaveNotify">オートクイックセーブする際、通信を表示する</Control>
+      <Control ID="chkAllowMismatchingSaveStates">違うROMで作られたクイックセーブをロード可能にする</Control>
 
       <Control ID="grpCloudSaves">クラウドバックアップ</Control>
       <Control ID="lblGoogleDriveIntegration">MesenはGoogle Driveを利用することでクラウドバックアップが出来ます。　Google Drive同期を有効にすれば、ゲームのセーブデータはGoogle Driveにバックアップされ、どんなパソコンからでもアクセスが可能になります。</Control>

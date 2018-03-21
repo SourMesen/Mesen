@@ -23,6 +23,7 @@ namespace Mesen.GUI.Config
 		public bool AutoSave = true;
 		public Int32 AutoSaveDelay = 5;
 		public bool AutoSaveNotify = false;
+		public bool AllowMismatchingSaveStates = false;
 
 		public bool FdsAutoLoadDisk = true;
 		public bool FdsFastForwardOnLoad = false;
@@ -176,6 +177,7 @@ namespace Mesen.GUI.Config
 			InteropEmu.SetFlag(EmulationFlags.PauseWhenInBackground, preferenceInfo.PauseWhenInBackground);
 			InteropEmu.SetFlag(EmulationFlags.DisableGameDatabase, preferenceInfo.DisableGameDatabase);
 			InteropEmu.SetFlag(EmulationFlags.DisableOsd, preferenceInfo.DisableOsd);
+			InteropEmu.SetFlag(EmulationFlags.AllowMismatchingSaveStates, preferenceInfo.AllowMismatchingSaveStates);			
 
 			InteropEmu.SetFlag(EmulationFlags.ShowFrameCounter, preferenceInfo.ShowFrameCounter);
 			InteropEmu.SetFlag(EmulationFlags.ShowGameTimer, preferenceInfo.ShowGameTimer);

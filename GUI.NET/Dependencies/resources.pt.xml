@@ -370,10 +370,11 @@
       <Control ID="colBinding1">Atalho #1</Control>
       <Control ID="colBinding2">Atalho #2</Control>
       <Control ID="tpgSaveData">Cópias de segurança</Control>
-      <Control ID="grpAutomaticSaves">Salvar estado automático</Control>
+      <Control ID="grpAutomaticSaves">Salvar estado</Control>
       <Control ID="chkAutoSave">Salvar estado do jogo automaticamente a cada</Control>
       <Control ID="lblAutoSave">minutos (Aperte F8 para carregar)</Control>
       <Control ID="chkAutoSaveNotify">Mostrar uma notificação na tela ao fazer a cópia de segurança automática</Control>
+      <Control ID="chkAllowMismatchingSaveStates">Allow save states to be loaded on modified ROMs (e.g IPS patches)</Control>
       <Control ID="grpCloudSaves">Cópia de segurança online</Control>
 
       <Control ID="chkShowFullPathInRecents">Show full file path in recent file list</Control>

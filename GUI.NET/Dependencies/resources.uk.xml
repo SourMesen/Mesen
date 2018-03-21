@@ -380,10 +380,11 @@
       <Control ID="colBinding2">Варiант #2</Control>
 
       <Control ID="tpgSaveData">Збереження</Control>
-      <Control ID="grpAutomaticSaves">Автоматичні збереження</Control>
+      <Control ID="grpAutomaticSaves">Збереження</Control>
       <Control ID="chkAutoSave">Автоматично створювати збереження через</Control>
       <Control ID="lblAutoSave">хвилин (натисніть F8 для завантаження)</Control>
       <Control ID="chkAutoSaveNotify">Сповіщати при збереженні</Control>
+      <Control ID="chkAllowMismatchingSaveStates">Allow save states to be loaded on modified ROMs (e.g IPS patches)</Control>
 
       <Control ID="grpCloudSaves">Хмарнi збереження</Control>
       <Control ID="lblGoogleDriveIntegration">Mesen має можливість інтеграції з Google Drive . Коли інтеграція з Google Drive включена, ваші збереження стають доступні з будь-якого комп'ютера і можуть бути синхронізовані між комп'ютерами. Також, збереження зберігаються на Google Drive можуть бути відновлені якщо ви видалите їх зі свого комп'ютера.</Control>
