@@ -112,6 +112,7 @@ namespace Mesen.GUI.Forms.Config
 				EmulatorShortcut.LoadStateSlot10,
 				EmulatorShortcut.LoadStateSlotAuto,
 				EmulatorShortcut.LoadStateFromFile,
+				EmulatorShortcut.LoadLastSession,
 			};
 
 			HashSet<string> keyCombinations = new HashSet<string>();

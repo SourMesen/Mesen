@@ -1768,6 +1768,8 @@ namespace Mesen.GUI
 		LoadStateSlotAuto,
 		LoadStateFromFile,
 
+		LoadLastSession,
+
 		OpenFile,
 
 		

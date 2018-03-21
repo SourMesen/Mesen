@@ -629,6 +629,11 @@ namespace Mesen.GUI.Forms
 			Func<bool> runningVsSystem = () => { return _emuThread != null && InteropEmu.IsVsSystem() && !InteropEmu.MoviePlaying() && !InteropEmu.IsConnected(); };
 			Func<bool> hasBarcodeReader = () => { return InteropEmu.GetAvailableFeatures().HasFlag(ConsoleFeatures.BarcodeReader) && !InteropEmu.IsConnected(); };
 
+			Func<bool> enableLoadLastSession = () => {
+				string recentGameFile = _currentRomPath.HasValue ? Path.Combine(ConfigManager.RecentGamesFolder, Path.GetFileNameWithoutExtension(_currentRomPath.Value.FileName) + ".rgd") : "";
+				return _emuThread != null && File.Exists(recentGameFile) && !ConfigManager.Config.PreferenceInfo.DisableGameSelectionScreen;
+			};
+			
 			BindShortcut(mnuOpen, EmulatorShortcut.OpenFile);
 			BindShortcut(mnuExit, EmulatorShortcut.Exit);
 			BindShortcut(mnuIncreaseSpeed, EmulatorShortcut.IncreaseSpeed, notClient);
@@ -658,6 +663,8 @@ namespace Mesen.GUI.Forms
 			BindShortcut(mnuScale6x, EmulatorShortcut.SetScale6x);
 
 			BindShortcut(mnuFullscreen, EmulatorShortcut.ToggleFullscreen);
+
+			BindShortcut(mnuLoadLastSession, EmulatorShortcut.LoadLastSession, enableLoadLastSession);
 
 			BindShortcut(mnuTakeScreenshot, EmulatorShortcut.TakeScreenshot, runningNotNsf);
 			BindShortcut(mnuRandomGame, EmulatorShortcut.LoadRandomGame);
@@ -788,6 +795,8 @@ namespace Mesen.GUI.Forms
 				case EmulatorShortcut.LoadStateSlot9: LoadState(9); break;
 				case EmulatorShortcut.LoadStateSlot10: LoadState(10); break;
 				case EmulatorShortcut.LoadStateSlotAuto: LoadState(11); break;
+
+				case EmulatorShortcut.LoadLastSession: LoadLastSession(); break;
 			}
 
 			if(restoreFullscreen && _frmFullscreenRenderer == null) {

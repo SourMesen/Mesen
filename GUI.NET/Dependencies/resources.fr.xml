@@ -6,6 +6,7 @@
       <Control ID="mnuOpen">Ouvrir</Control>
       <Control ID="mnuSaveState">Sauvegarder</Control>
       <Control ID="mnuLoadState">Charger</Control>
+      <Control ID="mnuLoadLastSession">Charger la session précédente</Control>
       <Control ID="mnuRecentFiles">Fichier récents</Control>
       <Control ID="mnuExit">Quitter</Control>
       <Control ID="mnuGame">Jeu</Control>
@@ -860,6 +861,7 @@
     <Message ID="EmulatorShortcutMappings_LoadStateSlot10">Chargement d'état - Position 10</Message>
     <Message ID="EmulatorShortcutMappings_LoadStateSlotAuto">Chargement d'état - Sauvegarde auto</Message>
     <Message ID="EmulatorShortcutMappings_LoadStateFromFile">Charger l'état à partir d'un fichier</Message>
+    <Message ID="EmulatorShortcutMappings_LoadLastSession">Charger la session précédente</Message>
     <Message ID="EmulatorShortcutMappings_OpenFile">Ouvrir un fichier</Message>
     <Message ID="EmulatorShortcutMappings_OpenDebugger">Ouvrir le débogueur</Message>
     <Message ID="EmulatorShortcutMappings_OpenAssembler">Ouvrir l'assembleur</Message>

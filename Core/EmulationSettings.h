@@ -471,6 +471,8 @@ enum class EmulatorShortcut
 	LoadStateSlotAuto,
 	LoadStateFromFile,
 
+	LoadLastSession,
+
 	OpenFile,
 	ShortcutCount
 };

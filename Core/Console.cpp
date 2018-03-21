@@ -81,9 +81,6 @@ bool Console::Initialize(VirtualFile &romFile, VirtualFile &patchFile)
 	if(!_romFilepath.empty() && _mapper) {
 		//Ensure we save any battery file before loading a new game
 		SaveBatteries();
-
-		//Save current game state before loading another one
-		SaveStateManager::SaveRecentGame(GetMapperInfo().RomName, _romFilepath, _patchFilename);
 	}
 
 	if(romFile.IsValid()) {
@@ -111,6 +108,11 @@ bool Console::Initialize(VirtualFile &romFile, VirtualFile &patchFile)
 			}
 
 			if(_romFilepath != (string)romFile || _patchFilename != (string)patchFile) {
+				//Save current game state before loading another one
+				if(_mapper) {
+					SaveStateManager::SaveRecentGame(GetMapperInfo().RomName, _romFilepath, _patchFilename);
+				}
+
 				_romFilepath = romFile;
 				_patchFilename = patchFile;
 				

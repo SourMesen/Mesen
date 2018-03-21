@@ -6,6 +6,7 @@
       <Control ID="mnuOpen">Abrir</Control>
       <Control ID="mnuSaveState">Guardar</Control>
       <Control ID="mnuLoadState">Cargar</Control>
+      <Control ID="mnuLoadLastSession">Load Last Session</Control>
       <Control ID="mnuRecentFiles">Archivos recientes</Control>
       <Control ID="mnuExit">Salir</Control>
       <Control ID="mnuGame">Juego</Control>
@@ -847,6 +848,7 @@
     <Message ID="EmulatorShortcutMappings_LoadStateSlot10">Cargar partida - Hueco 10</Message>
     <Message ID="EmulatorShortcutMappings_LoadStateSlotAuto">Load State - Auto Save Slot</Message>
     <Message ID="EmulatorShortcutMappings_LoadStateFromFile">Cargar partida de archivo</Message>
+    <Message ID="EmulatorShortcutMappings_LoadLastSession">Load Last Session</Message>
     <Message ID="EmulatorShortcutMappings_OpenFile">Abrir archivo</Message>
     <Message ID="EmulatorShortcutMappings_OpenDebugger">Abrir depurador</Message>
     <Message ID="EmulatorShortcutMappings_OpenAssembler">Abrir ensamblador</Message>

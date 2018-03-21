@@ -6,6 +6,7 @@
       <Control ID="mnuOpen">開く</Control>
       <Control ID="mnuSaveState">クイックセーブ</Control>
       <Control ID="mnuLoadState">クイックロード</Control>
+      <Control ID="mnuLoadLastSession">前セッションをロードする</Control>
       <Control ID="mnuRecentFiles">最近開いたファイル</Control>
       <Control ID="mnuExit">終了</Control>
       <Control ID="mnuGame">ゲーム</Control>
@@ -844,6 +845,7 @@
     <Message ID="EmulatorShortcutMappings_LoadStateSlot10">クイックセーブスロット１０からロードする</Message>
     <Message ID="EmulatorShortcutMappings_LoadStateSlotAuto">自動クイックセーブスロットからロードする</Message>
     <Message ID="EmulatorShortcutMappings_LoadStateFromFile">クイックセーブデータをファイルからロードする</Message>
+    <Message ID="EmulatorShortcutMappings_LoadLastSession">前セッションをロードする</Message>
     <Message ID="EmulatorShortcutMappings_OpenFile">ファイルを開く</Message>
     <Message ID="EmulatorShortcutMappings_OpenDebugger">デバッガを開く</Message>
     <Message ID="EmulatorShortcutMappings_OpenAssembler">アセンブラを開く</Message>

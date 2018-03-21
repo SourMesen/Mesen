@@ -6,6 +6,7 @@
       <Control ID="mnuOpen">Відкрити</Control>
       <Control ID="mnuSaveState">Зберегти</Control>
       <Control ID="mnuLoadState">Завантажити</Control>
+      <Control ID="mnuLoadLastSession">Load Last Session</Control>
       <Control ID="mnuRecentFiles">Недавнi файлы</Control>
       <Control ID="mnuExit">Вихід</Control>
       <Control ID="mnuGame">Гра</Control>
@@ -849,6 +850,7 @@
     <Message ID="EmulatorShortcutMappings_LoadStateSlot10">Load State - Slot 10</Message>
     <Message ID="EmulatorShortcutMappings_LoadStateSlotAuto">Load State - Auto Save Slot</Message>
     <Message ID="EmulatorShortcutMappings_LoadStateFromFile">Завантажити стан з файлу</Message>
+    <Message ID="EmulatorShortcutMappings_LoadLastSession">Load Last Session</Message>
     <Message ID="EmulatorShortcutMappings_OpenFile">Відкрити файл</Message>
     <Message ID="EmulatorShortcutMappings_OpenDebugger">Відкрити Debugger</Message>
     <Message ID="EmulatorShortcutMappings_OpenAssembler">Відкрити Assembler</Message>

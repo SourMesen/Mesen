@@ -127,6 +127,14 @@ namespace Mesen.GUI.Forms
 			UpdateStateMenu(mnuLoadState, false);
 		}
 
+		private void LoadLastSession()
+		{
+			string recentGameFile = Path.Combine(ConfigManager.RecentGamesFolder, Path.GetFileNameWithoutExtension(_currentRomPath.Value.FileName) + ".rgd");
+			if(File.Exists(recentGameFile)) {
+				InteropEmu.LoadRecentGame(recentGameFile, false);
+			}
+		}
+
 		private void OpenFile()
 		{
 			using(OpenFileDialog ofd = new OpenFileDialog()) {
@@ -264,6 +272,7 @@ namespace Mesen.GUI.Forms
 		private void mnuFile_DropDownOpening(object sender, EventArgs e)
 		{
 			mnuRecentFiles.Enabled = ConfigManager.Config.RecentFiles.Count > 0;
+			mnuLoadLastSession.Visible = !ConfigManager.Config.PreferenceInfo.DisableGameSelectionScreen;
 		}
 
 		private void UpdateRecentFiles()

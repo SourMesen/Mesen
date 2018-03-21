@@ -6,6 +6,7 @@
       <Control ID="mnuOpen">Obre</Control>
       <Control ID="mnuSaveState">Desa</Control>
       <Control ID="mnuLoadState">Carrega</Control>
+      <Control ID="mnuLoadLastSession">Load Last Session</Control>
       <Control ID="mnuRecentFiles">Fitxers recents</Control>
       <Control ID="mnuExit">Surt</Control>
       <Control ID="mnuGame">Joc</Control>
@@ -830,6 +831,7 @@
     <Message ID="EmulatorShortcutMappings_LoadStateSlot10">Carrega la partida - Posició 10</Message>
     <Message ID="EmulatorShortcutMappings_LoadStateSlotAuto">Load State - Auto Save Slot</Message>
     <Message ID="EmulatorShortcutMappings_LoadStateFromFile">Carrega la partida des d'un fitxer</Message>
+    <Message ID="EmulatorShortcutMappings_LoadLastSession">Load Last Session</Message>
     <Message ID="EmulatorShortcutMappings_OpenFile">Obre un fitxer</Message>
     <Message ID="EmulatorShortcutMappings_OpenDebugger">Obre el depurador</Message>
     <Message ID="EmulatorShortcutMappings_OpenAssembler">Obre l'assemblador</Message>
