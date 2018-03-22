@@ -83,6 +83,7 @@ namespace Mesen.GUI.Debugger
 			this.mnuSplitView.Checked = ConfigManager.Config.DebugInfo.SplitView;
 			this.mnuCopyAddresses.Checked = ConfigManager.Config.DebugInfo.CopyAddresses;
 			this.mnuCopyByteCode.Checked = ConfigManager.Config.DebugInfo.CopyByteCode;
+			this.mnuCopyComments.Checked = ConfigManager.Config.DebugInfo.CopyComments;
 			this.mnuPpuPartialDraw.Checked = ConfigManager.Config.DebugInfo.PpuPartialDraw;
 			this.mnuPpuShowPreviousFrame.Checked = ConfigManager.Config.DebugInfo.PpuShowPreviousFrame;
 			this.mnuHidePauseIcon.Checked = ConfigManager.Config.DebugInfo.HidePauseIcon;
@@ -936,6 +937,12 @@ namespace Mesen.GUI.Debugger
 		private void mnuCopyByteCode_Click(object sender, EventArgs e)
 		{
 			ConfigManager.Config.DebugInfo.CopyByteCode = mnuCopyByteCode.Checked;
+			ConfigManager.ApplyChanges();
+		}
+		
+		private void mnuCopyComments_Click(object sender, EventArgs e)
+		{
+			ConfigManager.Config.DebugInfo.CopyComments = mnuCopyComments.Checked;
 			ConfigManager.ApplyChanges();
 		}
 

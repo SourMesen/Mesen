@@ -135,6 +135,7 @@ namespace Mesen.GUI.Config
 
 		public bool CopyAddresses = false;
 		public bool CopyByteCode = false;
+		public bool CopyComments = false;
 
 		public bool PpuAutoRefresh = true;
 		public bool PpuRefreshOnBreak = true;

@@ -318,7 +318,7 @@ namespace Mesen.GUI.Debugger.Controls
 
 		private void mnuCopySelection_Click(object sender, EventArgs e)
 		{
-			Viewer.CodeViewer.CopySelection(ConfigManager.Config.DebugInfo.CopyAddresses, ConfigManager.Config.DebugInfo.CopyByteCode);
+			Viewer.CodeViewer.CopySelection(ConfigManager.Config.DebugInfo.CopyAddresses, ConfigManager.Config.DebugInfo.CopyByteCode, ConfigManager.Config.DebugInfo.CopyComments);
 		}
 		
 		private void mnuShowNextStatement_Click(object sender, EventArgs e)
