@@ -46,14 +46,14 @@ namespace Mesen.GUI.Forms
 				}
 			}
 
-			bool needPause = ConfigManager.Config.PreferenceInfo.PauseWhenInBackground && focusedForm == null;
+			bool inBackground = focusedForm == null;
 			if(focusedForm != null) {
-				needPause |= ConfigManager.Config.PreferenceInfo.PauseWhenInMenusAndConfig && focusedForm is BaseForm && ((BaseForm)focusedForm)._inMenu > 0;
-				needPause |= ConfigManager.Config.PreferenceInfo.PauseWhenInMenusAndConfig && !(focusedForm is BaseInputForm) && !focusedForm.GetType().FullName.Contains("Debugger");
-				needPause |= ConfigManager.Config.PreferenceInfo.PauseWhenInDebuggingTools && focusedForm.GetType().FullName.Contains("Debugger");
+				inBackground |= ConfigManager.Config.PreferenceInfo.PauseWhenInMenusAndConfig && focusedForm is BaseForm && ((BaseForm)focusedForm)._inMenu > 0;
+				inBackground |= ConfigManager.Config.PreferenceInfo.PauseWhenInMenusAndConfig && !(focusedForm is BaseInputForm) && !focusedForm.GetType().FullName.Contains("Debugger");
+				inBackground |= ConfigManager.Config.PreferenceInfo.PauseWhenInDebuggingTools && focusedForm.GetType().FullName.Contains("Debugger");
 			}
 
-			InteropEmu.SetFlag(EmulationFlags.InBackground, needPause);
+			InteropEmu.SetFlag(EmulationFlags.InBackground, inBackground);
 		}
 
 		protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
