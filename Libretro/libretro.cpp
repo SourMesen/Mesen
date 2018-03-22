@@ -825,7 +825,7 @@ extern "C" {
 	void update_core_controllers()
 	{
 		//Setup all "auto" ports
-		GameDatabase::InitializeInputDevices(Console::GetHashInfo().PrgChrCrc32Hash);
+		GameDatabase::InitializeInputDevices(Console::GetMapperInfo().Hash.PrgChrCrc32Hash);
 
 		//TODO: Four Score		
 
