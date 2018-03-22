@@ -159,7 +159,7 @@ namespace Mesen.GUI.Config
 					InteropEmu.GetKeyCode("Y"), InteropEmu.GetKeyCode("Z"), InteropEmu.GetKeyCode("0"), InteropEmu.GetKeyCode("1"),
 					InteropEmu.GetKeyCode("2"), InteropEmu.GetKeyCode("3"), InteropEmu.GetKeyCode("4"), InteropEmu.GetKeyCode("5"),
 					InteropEmu.GetKeyCode("6"), InteropEmu.GetKeyCode("7"), InteropEmu.GetKeyCode("8"), InteropEmu.GetKeyCode("9"),
-					InteropEmu.GetKeyCode("Enter"), InteropEmu.GetKeyCode("Spacebar"), InteropEmu.GetKeyCode("Delete"), InteropEmu.GetKeyCode("Insert"),
+					InteropEmu.GetKeyCode("Enter"), InteropEmu.GetKeyCode("Spacebar"), InteropEmu.GetKeyCode("Backspace"), InteropEmu.GetKeyCode("Insert"),
 					InteropEmu.GetKeyCode("Esc"), InteropEmu.GetKeyCode("Ctrl"), InteropEmu.GetKeyCode("Menu"), InteropEmu.GetKeyCode("Shift"),
 					InteropEmu.GetKeyCode("["), InteropEmu.GetKeyCode("]"),
 					InteropEmu.GetKeyCode("Up Arrow"), InteropEmu.GetKeyCode("Down Arrow"), InteropEmu.GetKeyCode("Left Arrow"), InteropEmu.GetKeyCode("Right Arrow"),
@@ -167,7 +167,7 @@ namespace Mesen.GUI.Config
 					InteropEmu.GetKeyCode("="), InteropEmu.GetKeyCode("/"), InteropEmu.GetKeyCode("-"), InteropEmu.GetKeyCode("`"),
 					InteropEmu.GetKeyCode("F1"), InteropEmu.GetKeyCode("F2"), InteropEmu.GetKeyCode("F3"), InteropEmu.GetKeyCode("F4"),
 					InteropEmu.GetKeyCode("F5"), InteropEmu.GetKeyCode("F6"), InteropEmu.GetKeyCode("F7"), InteropEmu.GetKeyCode("F8"),
-					InteropEmu.GetKeyCode("\\"), InteropEmu.GetKeyCode("Backspace"), InteropEmu.GetKeyCode("F9"), InteropEmu.GetKeyCode("Alt"),
+					InteropEmu.GetKeyCode("\\"), InteropEmu.GetKeyCode("Delete"), InteropEmu.GetKeyCode("F9"), InteropEmu.GetKeyCode("Alt"),
 					InteropEmu.GetKeyCode("Home"), InteropEmu.GetKeyCode("End")
 				}
 			};
