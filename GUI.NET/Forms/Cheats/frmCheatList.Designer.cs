@@ -210,7 +210,6 @@ namespace Mesen.GUI.Forms.Cheats
 			this.lstCheats.TabIndex = 1;
 			this.lstCheats.UseCompatibleStateImageBehavior = false;
 			this.lstCheats.View = System.Windows.Forms.View.Details;
-			this.lstCheats.ItemChecked += new System.Windows.Forms.ItemCheckedEventHandler(this.lstCheats_ItemChecked);
 			this.lstCheats.SelectedIndexChanged += new System.EventHandler(this.lstCheats_SelectedIndexChanged);
 			this.lstCheats.DoubleClick += new System.EventHandler(this.lstCheats_DoubleClick);
 			// 
@@ -233,7 +232,7 @@ namespace Mesen.GUI.Forms.Cheats
             this.mnuDeleteCheat,
             this.mnuExportSelectedCheats});
 			this.contextMenuCheats.Name = "contextMenuCheats";
-			this.contextMenuCheats.Size = new System.Drawing.Size(160, 92);
+			this.contextMenuCheats.Size = new System.Drawing.Size(160, 70);
 			// 
 			// mnuAddCheat
 			// 
@@ -416,6 +415,7 @@ namespace Mesen.GUI.Forms.Cheats
 			this.chkDisableCheats.TabIndex = 3;
 			this.chkDisableCheats.Text = "Disable all cheats";
 			this.chkDisableCheats.UseVisualStyleBackColor = true;
+			this.chkDisableCheats.CheckedChanged += new System.EventHandler(this.chkDisableCheats_CheckedChanged);
 			// 
 			// frmCheatList
 			// 

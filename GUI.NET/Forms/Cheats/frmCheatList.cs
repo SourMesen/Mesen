@@ -125,8 +125,10 @@ namespace Mesen.GUI.Forms.Cheats
 
 		private void UpdateCheatList()
 		{
-			lstCheats.Sorting = SortOrder.Ascending;
+			lstCheats.BeginUpdate();
+			lstCheats.Sorting = SortOrder.None;
 			lstCheats.Items.Clear();
+			lstCheats.ItemChecked -= lstCheats_ItemChecked;
 			if(_selectedItem != null) {
 				string crc32 = _selectedItem.Crc;
 				foreach(CheatInfo cheat in _cheats) {
@@ -138,6 +140,9 @@ namespace Mesen.GUI.Forms.Cheats
 					}
 				}
 			}
+			lstCheats.Sorting = SortOrder.Ascending;
+			lstCheats.ItemChecked += lstCheats_ItemChecked;
+			lstCheats.EndUpdate();
 		}
 
 		private void lstGameList_SelectedIndexChanged(object sender, EventArgs e)
@@ -172,6 +177,7 @@ namespace Mesen.GUI.Forms.Cheats
 				frmCheat frm = new frmCheat((CheatInfo)lstCheats.SelectedItems[0].Tag);
 				if(frm.ShowDialog() == DialogResult.OK) {
 					UpdateGameList();
+					CheatInfo.ApplyCheats(_cheats, chkDisableCheats.Checked);
 				}
 			}
 		}
@@ -180,6 +186,7 @@ namespace Mesen.GUI.Forms.Cheats
 		{
 			if(e.Item.Tag is CheatInfo) {
 				((CheatInfo)e.Item.Tag).Enabled = e.Item.Checked;
+				CheatInfo.ApplyCheats(_cheats, chkDisableCheats.Checked);
 			}
 		}
 
@@ -191,11 +198,14 @@ namespace Mesen.GUI.Forms.Cheats
 
 		private void DeleteSelectedCheats()
 		{
-			foreach(ListViewItem item in lstCheats.SelectedItems) {
-				CheatInfo cheat = item.Tag as CheatInfo;
-				_cheats.Remove(cheat);
+			if(lstCheats.SelectedItems.Count > 0) {
+				foreach(ListViewItem item in lstCheats.SelectedItems) {
+					CheatInfo cheat = item.Tag as CheatInfo;
+					_cheats.Remove(cheat);
+				}
+				CheatInfo.ApplyCheats(_cheats, chkDisableCheats.Checked);
+				UpdateGameList();
 			}
-			UpdateGameList();
 		}
 
 		private void btnDeleteCheat_Click(object sender, EventArgs e)
@@ -209,6 +219,7 @@ namespace Mesen.GUI.Forms.Cheats
 				CheatInfo cheat = ((ListViewItem)item).Tag as CheatInfo;
 				_cheats.Remove(cheat);
 			}
+			CheatInfo.ApplyCheats(_cheats, chkDisableCheats.Checked);
 			UpdateGameList();
 		}
 		
@@ -230,6 +241,7 @@ namespace Mesen.GUI.Forms.Cheats
 			frm.FormClosing += (o, evt) => {
 				if(frm.DialogResult == DialogResult.OK && frm.ImportedCheats != null) {
 					AddCheats(frm.ImportedCheats);
+					CheatInfo.ApplyCheats(_cheats, chkDisableCheats.Checked);
 				}
 			};
 			frm.ShowDialog(sender, this);
@@ -250,6 +262,7 @@ namespace Mesen.GUI.Forms.Cheats
 				}
 
 				UpdateGameList(cheats[0].GameCrc);
+				CheatInfo.ApplyCheats(_cheats, chkDisableCheats.Checked);
 			}
 		}
 
@@ -297,6 +310,11 @@ namespace Mesen.GUI.Forms.Cheats
 		private void btnExport_ButtonClick(object sender, EventArgs e)
 		{
 			btnExport.ShowDropDown();
+		}
+
+		private void chkDisableCheats_CheckedChanged(object sender, EventArgs e)
+		{
+			CheatInfo.ApplyCheats(_cheats, chkDisableCheats.Checked);
 		}
 	}
 

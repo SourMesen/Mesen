@@ -26,15 +26,7 @@ namespace Mesen.GUI.Forms
 				_validateTimer.Start();
 			}
 		}
-
-		public new bool ShowInTaskbar
-		{
-			set
-			{
-				base.ShowInTaskbar = false;
-			}
-		}
-
+		
 		protected override void OnLoad(EventArgs e)
 		{
 			base.OnLoad(e);

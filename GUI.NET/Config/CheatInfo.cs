@@ -65,10 +65,15 @@ namespace Mesen.GUI.Config
 
 		public static void ApplyCheats()
 		{
-			if(!ConfigManager.Config.DisableAllCheats) {
+			ApplyCheats(ConfigManager.Config.Cheats, ConfigManager.Config.DisableAllCheats);
+		}
+
+		public static void ApplyCheats(List<CheatInfo> cheatList, bool disableCheats)
+		{
+			if(!disableCheats) {
 				string crc = InteropEmu.GetRomInfo().GetPrgCrcString();
 
-				InteropCheatInfo[] cheats = ConfigManager.Config.Cheats.Where(c => c.GameCrc == crc && c.Enabled).Select(cheat => cheat.ToInterop()).ToArray();
+				InteropCheatInfo[] cheats = cheatList.Where(c => c.GameCrc == crc && c.Enabled).Select(cheat => cheat.ToInterop()).ToArray();
 				InteropEmu.SetCheats(cheats, (UInt32)cheats.Length);
 								
 				if(cheats.Length > 0) {

@@ -87,9 +87,7 @@ namespace Mesen.GUI.Forms
 				_cheatListWindow = new frmCheatList();
 				_cheatListWindow.Show(sender, this);
 				_cheatListWindow.FormClosed += (s, evt) => {
-					if(_cheatListWindow.DialogResult == DialogResult.OK) {
-						CheatInfo.ApplyCheats();
-					}
+					CheatInfo.ApplyCheats();
 					_cheatListWindow = null;
 				};
 			} else {
