@@ -1,987 +1,992 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Resources>
-  <Forms>
-    <Form ID="frmMain" Title="Mesen">
-      <Control ID="mnuFile">Fitxer</Control>
-      <Control ID="mnuOpen">Obre</Control>
-      <Control ID="mnuSaveState">Desa</Control>
-      <Control ID="mnuLoadState">Carrega</Control>
-      <Control ID="mnuLoadLastSession">Load Last Session</Control>
-      <Control ID="mnuRecentFiles">Fitxers recents</Control>
-      <Control ID="mnuExit">Surt</Control>
-      <Control ID="mnuGame">Joc</Control>
-      <Control ID="mnuPause">Pausa</Control>
-      <Control ID="mnuReset">Reinicia el joc</Control>
-      <Control ID="mnuPowerCycle">Atura i reinicia el joc</Control>
-      <Control ID="mnuPowerOff">Atura el joc</Control>
-      <Control ID="mnuSwitchDiskSide">Canvia la cara del disc</Control>
-      <Control ID="mnuSelectDisk">Escull el disc</Control>
-      <Control ID="mnuEjectDisk">Expulsa el disc</Control>
-      <Control ID="mnuVsGameConfig">Configuració de joc VS</Control>
-      <Control ID="mnuInsertCoin1">Insereix moneda (1)</Control>
-      <Control ID="mnuInsertCoin2">Insereix moneda (2)</Control>
-      <Control ID="mnuInputBarcode">Introdueix un codi de barres</Control>
-      <Control ID="mnuTapeRecorder">Enregistrador de dades</Control>
-      <Control ID="mnuLoadTapeFile">Carrega des d'un fitxer...</Control>
-      <Control ID="mnuStartRecordTapeFile">Enregistra al fitxer...</Control>
-      <Control ID="mnuStopRecordTapeFile">Atura</Control>
-      <Control ID="mnuOptions">Opcions</Control>
-      <Control ID="mnuEmulationSpeed">Velocitat</Control>
-      <Control ID="mnuEmuSpeedNormal">Normal (100%)</Control>
-      <Control ID="mnuIncreaseSpeed">Augmenta la velocitat</Control>
-      <Control ID="mnuDecreaseSpeed">Redueix la velocitat</Control>
-      <Control ID="mnuEmuSpeedMaximumSpeed">Velocitat màxima</Control>
-      <Control ID="mnuEmuSpeedTriple">Triple (300%)</Control>
-      <Control ID="mnuEmuSpeedDouble">Doble (200%)</Control>
-      <Control ID="mnuEmuSpeedHalf">Meitat (50%)</Control>
-      <Control ID="mnuEmuSpeedQuarter">Quart (25%)</Control>
-      <Control ID="mnuShowFPS">Mostra FPS</Control>
-      <Control ID="mnuVideoScale">Mida de vídeo</Control>
-      <Control ID="mnuScale1x">1x</Control>
-      <Control ID="mnuScale2x">2x</Control>
-      <Control ID="mnuScale3x">3x</Control>
-      <Control ID="mnuScale4x">4x</Control>
-      <Control ID="mnuScaleCustom">Personalitzada</Control>
-      <Control ID="mnuFullscreen">Pantalla completa</Control>
-      <Control ID="mnuVideoFilter">Filtre de vídeo</Control>
-      <Control ID="mnuNoneFilter">Cap</Control>
-      <Control ID="mnuNtscFilter">NTSC</Control>
-      <Control ID="mnuBilinearInterpolation">Fes servir interpolació bilineal</Control>
-      <Control ID="mnuAudioConfig">So</Control>
-      <Control ID="mnuInput">Comandaments</Control>
-      <Control ID="mnuRegion">Regió</Control>
-      <Control ID="mnuRegionAuto">Auto</Control>
-      <Control ID="mnuRegionNtsc">NTSC</Control>
-      <Control ID="mnuRegionPal">PAL</Control>
-      <Control ID="mnuRegionDendy">Dendy</Control>
-      <Control ID="mnuVideoConfig">Vídeo</Control>
-      <Control ID="mnuEmulationConfig">Emulació</Control>
-      <Control ID="mnuPreferences">Preferències</Control>
-      <Control ID="mnuTools">Utilitats</Control>
-      <Control ID="mnuNetPlay">Joc en línia</Control>
-      <Control ID="mnuStartServer">Inicia un servidor</Control>
-      <Control ID="mnuConnect">Conecta a un servidor</Control>
-      <Control ID="mnuNetPlaySelectController">Comandament</Control>
-      <Control ID="mnuNetPlayPlayer1">Jugador 1</Control>
-      <Control ID="mnuNetPlayPlayer2">Jugador 2</Control>
-      <Control ID="mnuNetPlayPlayer3">Jugador 3</Control>
-      <Control ID="mnuNetPlayPlayer4">Jugador 4</Control>
-      <Control ID="mnuNetPlayPlayer5">Port d'extensió</Control>
-      <Control ID="mnuNetPlaySpectator">Espectador</Control>
-      <Control ID="mnuFindServer">Cerca un servidor públic...</Control>
-      <Control ID="mnuProfile">Configura el teu perfil</Control>
-      <Control ID="mnuMovies">Pel·lícules</Control>
-      <Control ID="mnuPlayMovie">Reprodueix...</Control>
-      <Control ID="mnuRecordMovie">Enregistra...</Control>
-      <Control ID="mnuStopMovie">Atura</Control>
-      <Control ID="mnuSoundRecorder">Enregistrador de so</Control>
-      <Control ID="mnuWaveRecord">Enregistra...</Control>
-      <Control ID="mnuWaveStop">Atura</Control>
-      <Control ID="mnuVideoRecorder">Enregistrador de vídeo</Control>
-      <Control ID="mnuAviRecord">Enregistra...</Control>
-      <Control ID="mnuAviStop">Atura</Control>
-      <Control ID="mnuCheats">Trucs</Control>
-      <Control ID="mnuTests">Proves</Control>
-      <Control ID="mnuTestRun">Inicia...</Control>
-      <Control ID="mnuTestRecordFrom">Enregistra des...</Control>
-      <Control ID="mnuTestRecordStart">Del principi</Control>
-      <Control ID="mnuTestRecordNow">D'ara</Control>
-      <Control ID="mnuTestRecordMovie">Vídeo</Control>
-      <Control ID="mnuTestRecordTest">Prova</Control>
-      <Control ID="mnuTestStopRecording">Atura l'enregistrament</Control>
-      <Control ID="mnuRunAllTests">Executa tots els tests</Control>
-      <Control ID="mnuDebugger">Depurador</Control>
-      <Control ID="mnuLogWindow">Finestra del registre</Control>
-      <Control ID="mnuHdPackEditor">Creador de paquets d'alta resolució</Control>
-      <Control ID="mnuTakeScreenshot">Captura de pantalla</Control>
-      <Control ID="mnuRandomGame">Carrega un joc a l'atzar</Control>
-      <Control ID="mnuHelp">Ajuda</Control>
-      <Control ID="mnuOnlineHelp">Ajuda en línia</Control>
-      <Control ID="mnuCheckForUpdates">Cerca actualitzacions</Control>
-      <Control ID="mnuReportBug">Envia un error</Control>
-      <Control ID="mnuHelpWindow">Opcions de la línia d'ordres</Control>
-      <Control ID="mnuAbout">Quant a...</Control>
+	<Forms>
+		<Form ID="frmMain" Title="Mesen">
+			<Control ID="mnuFile">Fitxer</Control>
+			<Control ID="mnuOpen">Obre</Control>
+			<Control ID="mnuSaveState">Desa</Control>
+			<Control ID="mnuLoadState">Carrega</Control>
+			<Control ID="mnuLoadLastSession">Load Last Session</Control>
+			<Control ID="mnuRecentFiles">Fitxers recents</Control>
+			<Control ID="mnuExit">Surt</Control>
+			<Control ID="mnuGame">Joc</Control>
+			<Control ID="mnuPause">Pausa</Control>
+			<Control ID="mnuReset">Reinicia el joc</Control>
+			<Control ID="mnuPowerCycle">Atura i reinicia el joc</Control>
+			<Control ID="mnuPowerOff">Atura el joc</Control>
+			<Control ID="mnuSwitchDiskSide">Canvia la cara del disc</Control>
+			<Control ID="mnuSelectDisk">Escull el disc</Control>
+			<Control ID="mnuEjectDisk">Expulsa el disc</Control>
+			<Control ID="mnuVsGameConfig">Configuració de joc VS</Control>
+			<Control ID="mnuInsertCoin1">Insereix moneda (1)</Control>
+			<Control ID="mnuInsertCoin2">Insereix moneda (2)</Control>
+			<Control ID="mnuInputBarcode">Introdueix un codi de barres</Control>
+			<Control ID="mnuTapeRecorder">Enregistrador de dades</Control>
+			<Control ID="mnuLoadTapeFile">Carrega des d'un fitxer...</Control>
+			<Control ID="mnuStartRecordTapeFile">Enregistra al fitxer...</Control>
+			<Control ID="mnuStopRecordTapeFile">Atura</Control>
+			<Control ID="mnuOptions">Opcions</Control>
+			<Control ID="mnuEmulationSpeed">Velocitat</Control>
+			<Control ID="mnuEmuSpeedNormal">Normal (100%)</Control>
+			<Control ID="mnuIncreaseSpeed">Augmenta la velocitat</Control>
+			<Control ID="mnuDecreaseSpeed">Redueix la velocitat</Control>
+			<Control ID="mnuEmuSpeedMaximumSpeed">Velocitat màxima</Control>
+			<Control ID="mnuEmuSpeedTriple">Triple (300%)</Control>
+			<Control ID="mnuEmuSpeedDouble">Doble (200%)</Control>
+			<Control ID="mnuEmuSpeedHalf">Meitat (50%)</Control>
+			<Control ID="mnuEmuSpeedQuarter">Quart (25%)</Control>
+			<Control ID="mnuShowFPS">Mostra FPS</Control>
+			<Control ID="mnuVideoScale">Mida de vídeo</Control>
+			<Control ID="mnuScale1x">1x</Control>
+			<Control ID="mnuScale2x">2x</Control>
+			<Control ID="mnuScale3x">3x</Control>
+			<Control ID="mnuScale4x">4x</Control>
+			<Control ID="mnuScaleCustom">Personalitzada</Control>
+			<Control ID="mnuFullscreen">Pantalla completa</Control>
+			<Control ID="mnuVideoFilter">Filtre de vídeo</Control>
+			<Control ID="mnuNoneFilter">Cap</Control>
+			<Control ID="mnuNtscFilter">NTSC</Control>
+			<Control ID="mnuBilinearInterpolation">Fes servir interpolació bilineal</Control>
+			<Control ID="mnuAudioConfig">So</Control>
+			<Control ID="mnuInput">Comandaments</Control>
+			<Control ID="mnuRegion">Regió</Control>
+			<Control ID="mnuRegionAuto">Auto</Control>
+			<Control ID="mnuRegionNtsc">NTSC</Control>
+			<Control ID="mnuRegionPal">PAL</Control>
+			<Control ID="mnuRegionDendy">Dendy</Control>
+			<Control ID="mnuVideoConfig">Vídeo</Control>
+			<Control ID="mnuEmulationConfig">Emulació</Control>
+			<Control ID="mnuPreferences">Preferències</Control>
+			<Control ID="mnuTools">Utilitats</Control>
+			<Control ID="mnuNetPlay">Joc en línia</Control>
+			<Control ID="mnuStartServer">Inicia un servidor</Control>
+			<Control ID="mnuConnect">Conecta a un servidor</Control>
+			<Control ID="mnuNetPlaySelectController">Comandament</Control>
+			<Control ID="mnuNetPlayPlayer1">Jugador 1</Control>
+			<Control ID="mnuNetPlayPlayer2">Jugador 2</Control>
+			<Control ID="mnuNetPlayPlayer3">Jugador 3</Control>
+			<Control ID="mnuNetPlayPlayer4">Jugador 4</Control>
+			<Control ID="mnuNetPlayPlayer5">Port d'extensió</Control>
+			<Control ID="mnuNetPlaySpectator">Espectador</Control>
+			<Control ID="mnuFindServer">Cerca un servidor públic...</Control>
+			<Control ID="mnuProfile">Configura el teu perfil</Control>
+			<Control ID="mnuMovies">Pel·lícules</Control>
+			<Control ID="mnuPlayMovie">Reprodueix...</Control>
+			<Control ID="mnuRecordMovie">Enregistra...</Control>
+			<Control ID="mnuStopMovie">Atura</Control>
+			<Control ID="mnuSoundRecorder">Enregistrador de so</Control>
+			<Control ID="mnuWaveRecord">Enregistra...</Control>
+			<Control ID="mnuWaveStop">Atura</Control>
+			<Control ID="mnuVideoRecorder">Enregistrador de vídeo</Control>
+			<Control ID="mnuAviRecord">Enregistra...</Control>
+			<Control ID="mnuAviStop">Atura</Control>
+			<Control ID="mnuCheats">Trucs</Control>
+			<Control ID="mnuTests">Proves</Control>
+			<Control ID="mnuTestRun">Inicia...</Control>
+			<Control ID="mnuTestRecordFrom">Enregistra des...</Control>
+			<Control ID="mnuTestRecordStart">Del principi</Control>
+			<Control ID="mnuTestRecordNow">D'ara</Control>
+			<Control ID="mnuTestRecordMovie">Vídeo</Control>
+			<Control ID="mnuTestRecordTest">Prova</Control>
+			<Control ID="mnuTestStopRecording">Atura l'enregistrament</Control>
+			<Control ID="mnuRunAllTests">Executa tots els tests</Control>
+			<Control ID="mnuDebugger">Depurador</Control>
+			<Control ID="mnuLogWindow">Finestra del registre</Control>
+			<Control ID="mnuHdPackEditor">Creador de paquets d'alta resolució</Control>
+			<Control ID="mnuTakeScreenshot">Captura de pantalla</Control>
+			<Control ID="mnuRandomGame">Carrega un joc a l'atzar</Control>
+			<Control ID="mnuHelp">Ajuda</Control>
+			<Control ID="mnuOnlineHelp">Ajuda en línia</Control>
+			<Control ID="mnuCheckForUpdates">Cerca actualitzacions</Control>
+			<Control ID="mnuReportBug">Envia un error</Control>
+			<Control ID="mnuHelpWindow">Opcions de la línia d'ordres</Control>
+			<Control ID="mnuAbout">Quant a...</Control>
 
-      <!-- Archive Load Message -->
-      <Control ID="lblExtractingFile">Extraient fitxer, si us plau, esperi...</Control>
+			<!-- Archive Load Message -->
+			<Control ID="lblExtractingFile">Extraient fitxer, si us plau, esperi...</Control>
 
-      <!-- NSF Player -->
-      <Control ID="lblTitle">Títol</Control>
-      <Control ID="lblArtist">Artista</Control>
-      <Control ID="lblCopyright">Drets d'autor</Control>
-      <Control ID="lblSoundChips">Xip de so</Control>
-      <Control ID="lblRecording">REC</Control>
-      <Control ID="lblSlowMotion">Càmera lenta</Control>
-      <Control ID="lblFastForward">Avanç ràpid</Control>
-    </Form>
-    <Form ID="frmLogWindow" Title="Finestra del registre">
-      <Control ID="btnClose">Tanca</Control>
-    </Form>
-    <Form ID="frmAudioConfig" Title="Opcions de so">
-      <Control ID="tpgGeneral">General</Control>
-      <Control ID="tpgAdvanced">Avançat</Control>
-      <Control ID="chkSwapDutyCycles">Inverteix els cicles dels canals quadrats (imita clons antics)</Control>
-      <Control ID="chkSilenceTriangleHighFreq">Silencia les freqüències ultrasòniques al canal de triangle (redueix els "esclafits")</Control>
-      <Control ID="chkReduceDmcPopping">Redueix els "esclafits" al canal DMC</Control>
-      <Control ID="chkDisableNoiseModeFlag">Desactiva el mode alternatiu del canal de soroll</Control>
-      <Control ID="tpgEffects">Efectes</Control>
-      <Control ID="grpStereo">Estèreo</Control>
-      <Control ID="radStereoDisabled">Desactivat</Control>
-      <Control ID="radStereoDelay">Retard</Control>
-      <Control ID="radStereoPanning">Panoràmic</Control>
-      <Control ID="lblStereoDelayMs">ms</Control>
-      <Control ID="lblStereoPanningAngle">(angle en graus)</Control>
-      <Control ID="chkCrossFeedEnabled">Activa la mescla de canals:</Control>
-      <Control ID="grpReverb">Reverberació</Control>
-      <Control ID="chkReverbEnabled">Activa la reverberació</Control>
-      <Control ID="lblReverbDelay">Retard:</Control>
-      <Control ID="lblReverbStrength">Força:</Control>
-      <Control ID="chkMuteSoundInBackground">Atura el so quan Mesen es trobi en segon pla</Control>
-      <Control ID="chkReduceSoundInBackground">Abaixa el volum quan Mesen es trobi en segon pla</Control>
-      <Control ID="chkEnableAudio">Activa el so</Control>
-      <Control ID="lblSampleRate">Freqüència de mostratge:</Control>
-      <Control ID="lblLatencyMs">ms</Control>
-      <Control ID="lblLatencyWarning">Valors baixos poden causar problemes de so</Control>
-      <Control ID="lblAudioLatency">Latència:</Control>
-      <Control ID="lblAudioDevice">Dispositiu:</Control>
-      <Control ID="tpgVolume">Volum</Control>
-      <Control ID="grpVolume">Volum</Control>
-      <Control ID="btnReset">Restableix</Control>
-      <Control ID="btnOK">D'acord</Control>
-      <Control ID="btnCancel">Cancel·la</Control>
-      <Control ID="trkDmcVol">DMC</Control>
-      <Control ID="trkNoiseVol">Soroll</Control>
-      <Control ID="trkTriangleVol">Triangle</Control>
-      <Control ID="trkSquare2Vol">Quadrat 2</Control>
-      <Control ID="trkSquare1Vol">Quadrat 1</Control>
-      <Control ID="trkMaster">Mestre</Control>
-      <Control ID="trkFdsVol">FDS</Control>
-      <Control ID="trkMmc5Vol">MMC5</Control>
-      <Control ID="trkVrc6Vol">VRC6</Control>
-      <Control ID="trkVrc7Vol">VRC7</Control>
-      <Control ID="trkNamco163Vol">Namco</Control>
-      <Control ID="trkSunsoft5b">Sunsoft</Control>
+			<!-- NSF Player -->
+			<Control ID="lblTitle">Títol</Control>
+			<Control ID="lblArtist">Artista</Control>
+			<Control ID="lblCopyright">Drets d'autor</Control>
+			<Control ID="lblSoundChips">Xip de so</Control>
+			<Control ID="lblRecording">REC</Control>
+			<Control ID="lblSlowMotion">Càmera lenta</Control>
+			<Control ID="lblFastForward">Avanç ràpid</Control>
+		</Form>
+		<Form ID="frmLogWindow" Title="Finestra del registre">
+			<Control ID="btnClose">Tanca</Control>
+		</Form>
+		<Form ID="frmAudioConfig" Title="Opcions de so">
+			<Control ID="tpgGeneral">General</Control>
+			<Control ID="tpgAdvanced">Avançat</Control>
+			<Control ID="chkSwapDutyCycles">Inverteix els cicles dels canals quadrats (imita clons antics)</Control>
+			<Control ID="chkSilenceTriangleHighFreq">Silencia les freqüències ultrasòniques al canal de triangle (redueix els "esclafits")</Control>
+			<Control ID="chkReduceDmcPopping">Redueix els "esclafits" al canal DMC</Control>
+			<Control ID="chkDisableNoiseModeFlag">Desactiva el mode alternatiu del canal de soroll</Control>
+			<Control ID="tpgEffects">Efectes</Control>
+			<Control ID="grpStereo">Estèreo</Control>
+			<Control ID="radStereoDisabled">Desactivat</Control>
+			<Control ID="radStereoDelay">Retard</Control>
+			<Control ID="radStereoPanning">Panoràmic</Control>
+			<Control ID="lblStereoDelayMs">ms</Control>
+			<Control ID="lblStereoPanningAngle">(angle en graus)</Control>
+			<Control ID="chkCrossFeedEnabled">Activa la mescla de canals:</Control>
+			<Control ID="grpReverb">Reverberació</Control>
+			<Control ID="chkReverbEnabled">Activa la reverberació</Control>
+			<Control ID="lblReverbDelay">Retard:</Control>
+			<Control ID="lblReverbStrength">Força:</Control>
+			<Control ID="chkMuteSoundInBackground">Atura el so quan Mesen es trobi en segon pla</Control>
+			<Control ID="chkReduceSoundInBackground">Abaixa el volum quan Mesen es trobi en segon pla</Control>
+			<Control ID="chkEnableAudio">Activa el so</Control>
+			<Control ID="lblSampleRate">Freqüència de mostratge:</Control>
+			<Control ID="lblLatencyMs">ms</Control>
+			<Control ID="lblLatencyWarning">Valors baixos poden causar problemes de so</Control>
+			<Control ID="lblAudioLatency">Latència:</Control>
+			<Control ID="lblAudioDevice">Dispositiu:</Control>
+			<Control ID="tpgVolume">Volum</Control>
+			<Control ID="grpVolume">Volum</Control>
+			<Control ID="btnReset">Restableix</Control>
+			<Control ID="btnOK">D'acord</Control>
+			<Control ID="btnCancel">Cancel·la</Control>
+			<Control ID="trkDmcVol">DMC</Control>
+			<Control ID="trkNoiseVol">Soroll</Control>
+			<Control ID="trkTriangleVol">Triangle</Control>
+			<Control ID="trkSquare2Vol">Quadrat 2</Control>
+			<Control ID="trkSquare1Vol">Quadrat 1</Control>
+			<Control ID="trkMaster">Mestre</Control>
+			<Control ID="trkFdsVol">FDS</Control>
+			<Control ID="trkMmc5Vol">MMC5</Control>
+			<Control ID="trkVrc6Vol">VRC6</Control>
+			<Control ID="trkVrc7Vol">VRC7</Control>
+			<Control ID="trkNamco163Vol">Namco</Control>
+			<Control ID="trkSunsoft5b">Sunsoft</Control>
 
-      <Control ID="tpgPanning">Panoramització</Control>
-      <Control ID="trkDmcPan">DMC</Control>
-      <Control ID="trkNoisePan">Soroll</Control>
-      <Control ID="trkTrianglePan">Triangle</Control>
-      <Control ID="trkSquare2Pan">Quadrat 2</Control>
-      <Control ID="trkSquare1Pan">Quadrat 1</Control>
-      <Control ID="trkFdsPan">FDS</Control>
-      <Control ID="trkMmc5Pan">MMC5</Control>
-      <Control ID="trkVrc6Pan">VRC6</Control>
-      <Control ID="trkVrc7Pan">VRC7</Control>
-      <Control ID="trkNamcoPan">Namco</Control>
-      <Control ID="trkSunsoftPan">Sunsoft</Control>
+			<Control ID="tpgPanning">Panoramització</Control>
+			<Control ID="trkDmcPan">DMC</Control>
+			<Control ID="trkNoisePan">Soroll</Control>
+			<Control ID="trkTrianglePan">Triangle</Control>
+			<Control ID="trkSquare2Pan">Quadrat 2</Control>
+			<Control ID="trkSquare1Pan">Quadrat 1</Control>
+			<Control ID="trkFdsPan">FDS</Control>
+			<Control ID="trkMmc5Pan">MMC5</Control>
+			<Control ID="trkVrc6Pan">VRC6</Control>
+			<Control ID="trkVrc7Pan">VRC7</Control>
+			<Control ID="trkNamcoPan">Namco</Control>
+			<Control ID="trkSunsoftPan">Sunsoft</Control>
 
-      <Control ID="tpgEqualizer">Equalitzador</Control>
-      <Control ID="chkEnableEqualizer">Activa l'equalitzador</Control>
-    </Form>
-    <Form ID="frmInputConfig" Title="Opcions de comandaments">
-      <Control ID="btnOK">D'acord</Control>
-      <Control ID="btnCancel">Cancel·la</Control>
-      <Control ID="tpgControllers">Comandaments</Control>
-      <Control ID="btnSetupP4">Configuració</Control>
-      <Control ID="btnSetupP3">Configuració</Control>
-      <Control ID="btnSetupExp">Configuració</Control>
-      <Control ID="btnSetupCartridge">Configuració</Control>
-      <Control ID="lblCartridge">Cartridge:</Control>
-      <Control ID="lblPlayer1">Jugador 1:</Control>
-      <Control ID="lblPlayer2">Jugador 2:</Control>
-      <Control ID="lblPlayer4">Jugador 4:</Control>
-      <Control ID="lblPlayer3">Jugador 3:</Control>
-      <Control ID="btnSetupP1">Configuració</Control>
-      <Control ID="btnSetupP2">Configuració</Control>
-      <Control ID="lblNesType">Tipus de consola:</Control>
-      <Control ID="lblExpansionPort">Port d'expansió:</Control>
-      <Control ID="chkFourScore">Fes servir accesori per a 4 jugadors</Control>
-      <Control ID="chkAutoConfigureInput">Configura els comandaments automàticament quan es carregui un joc</Control>
-      <Control ID="tpgEmulatorKeys">Accessos directes</Control>
+			<Control ID="tpgEqualizer">Equalitzador</Control>
+			<Control ID="chkEnableEqualizer">Activa l'equalitzador</Control>
+		</Form>
+		<Form ID="frmInputConfig" Title="Opcions de comandaments">
+			<Control ID="btnOK">D'acord</Control>
+			<Control ID="btnCancel">Cancel·la</Control>
+			<Control ID="tpgControllers">Comandaments</Control>
+			<Control ID="btnSetupP4">Configuració</Control>
+			<Control ID="btnSetupP3">Configuració</Control>
+			<Control ID="btnSetupExp">Configuració</Control>
+			<Control ID="btnSetupCartridge">Configuració</Control>
+			<Control ID="lblCartridge">Cartridge:</Control>
+			<Control ID="lblPlayer1">Jugador 1:</Control>
+			<Control ID="lblPlayer2">Jugador 2:</Control>
+			<Control ID="lblPlayer4">Jugador 4:</Control>
+			<Control ID="lblPlayer3">Jugador 3:</Control>
+			<Control ID="btnSetupP1">Configuració</Control>
+			<Control ID="btnSetupP2">Configuració</Control>
+			<Control ID="lblNesType">Tipus de consola:</Control>
+			<Control ID="lblExpansionPort">Port d'expansió:</Control>
+			<Control ID="chkFourScore">Fes servir accesori per a 4 jugadors</Control>
+			<Control ID="chkAutoConfigureInput">Configura els comandaments automàticament quan es carregui un joc</Control>
+			<Control ID="tpgEmulatorKeys">Accessos directes</Control>
 
-      <Control ID="tpgAdvanced">Avançat</Control>
-      <Control ID="grpDisplayInput">Comandaments en pantalla</Control>
-      <Control ID="chkDisplayPort1">Jugador 1</Control>
-      <Control ID="chkDisplayPort2">Jugador 2</Control>
-      <Control ID="chkDisplayPort3">Jugador 3</Control>
-      <Control ID="chkDisplayPort4">Jugador 4</Control>
-      <Control ID="lblDisplayPosition">Posició de pantalla:</Control>
-      <Control ID="chkDisplayInputHorizontally">Mostra horitzontalment</Control>
+			<Control ID="tpgAdvanced">Avançat</Control>
+			<Control ID="grpDisplayInput">Comandaments en pantalla</Control>
+			<Control ID="chkDisplayPort1">Jugador 1</Control>
+			<Control ID="chkDisplayPort2">Jugador 2</Control>
+			<Control ID="chkDisplayPort3">Jugador 3</Control>
+			<Control ID="chkDisplayPort4">Jugador 4</Control>
+			<Control ID="lblDisplayPosition">Posició de pantalla:</Control>
+			<Control ID="chkDisplayInputHorizontally">Mostra horitzontalment</Control>
 
-      <Control ID="lblKeyBinding">Advertència: La vostra configuració actual conté assignacions conflictives - algunes tecles del vostre teclat o botons del comandament han estat assignats a múltiples botons al comandament de la NES. Si això no ha estat intencionat, us preguem que reviseu i corregiu les vostres assignacions.</Control>
-    </Form>
-    <Form ID="frmVideoConfig" Title="Opcions de vídeo">
-      <Control ID="tpgGeneral">General</Control>
-      <Control ID="lblVideoScale">Escala:</Control>
-      <Control ID="lblVideoFilter">Filtre:</Control>
-      <Control ID="chkIntegerFpsMode">Activa el mode 60.0/50.0 FPS (ex. s'executa a 60.0 FPS en comptes de 60.1 en mode NTSC)</Control>
-      <Control ID="chkVerticalSync">Activa la sincronització vertical</Control>
-      <Control ID="lblDisplayRatio">Relació d'aspecte:</Control>
-      <Control ID="lblCustomRatio">Relació personalitzada:</Control>
-      <Control ID="chkBilinearInterpolation">Fes servir la interpolació bilineal</Control>
-      <Control ID="chkFullscreenForceIntegerScale">Fes servir valors enters d'escalat al mode de pantalla completa</Control>
-      <Control ID="chkShowFps">Mostra els FPS</Control>
-      <Control ID="chkUseHdPacks">Fes servir els paquets d'alta resolució d'HDNes</Control>
-      <Control ID="chkUseExclusiveFullscreen">Fes servir el mode de pantalla completa exclusiva</Control>
-      <Control ID="lblRequestedRefreshRate">Requested Refresh Rate:</Control>
-      <Control ID="tpgOverscan">Sobreescaneig</Control>
-      <Control ID="grpCropping">Retall de vídeo</Control>
-      <Control ID="lblLeft">Esquerra</Control>
-      <Control ID="lblTop">Amunt</Control>
-      <Control ID="lblBottom">Avall</Control>
-      <Control ID="lblRight">Dreta</Control>
-      <Control ID="tpgPalette">Paleta de colors</Control>
-      <Control ID="mnuDefaultPalette">Per defecte (NTSC)</Control>
-      <Control ID="btnSelectPalette">Escollir una paleta...</Control>
-      <Control ID="btnExportPalette">Exportar fitxer .pal</Control>
-      <Control ID="btnLoadPalFile">Carregar fitxer .pal</Control>
-      <Control ID="chkUseCustomVsPalette">Fes servir aquesta paleta per a jocs de VS System</Control>
-      <Control ID="tpgPicture">Imatge</Control>
-      <Control ID="btnSelectPreset">Tria una plantilla...</Control>
-      <Control ID="grpCommon">Paràmetres comuns</Control>
-      <Control ID="trkBrightness">Brillantor</Control>
-      <Control ID="trkContrast">Contrast</Control>
-      <Control ID="trkHue">Tonalitat</Control>
-      <Control ID="trkSaturation">Saturació</Control>
-      <Control ID="grpNtscFilter">Paràmetres de filtre NTSC</Control>
-      <Control ID="trkArtifacts">Artefactes</Control>
-      <Control ID="trkBleed">Dispersió dels colors</Control>
-      <Control ID="trkFringing">Franges de distorsió</Control>
-      <Control ID="trkGamma">Gamma</Control>
-      <Control ID="trkResolution">Resolució</Control>
-      <Control ID="trkSharpness">Nitidesa</Control>
-      <Control ID="chkMergeFields">Fusiona els camps</Control>
-      <Control ID="chkVerticalBlend">Apply Vertical Blending</Control>
+			<Control ID="lblKeyBinding">Advertència: La vostra configuració actual conté assignacions conflictives - algunes tecles del vostre teclat o botons del comandament han estat assignats a múltiples botons al comandament de la NES. Si això no ha estat intencionat, us preguem que reviseu i corregiu les vostres assignacions.</Control>
+		</Form>
+		<Form ID="frmVideoConfig" Title="Opcions de vídeo">
+			<Control ID="tpgGeneral">General</Control>
+			<Control ID="lblVideoScale">Escala:</Control>
+			<Control ID="lblVideoFilter">Filtre:</Control>
+			<Control ID="chkIntegerFpsMode">Activa el mode 60.0/50.0 FPS (ex. s'executa a 60.0 FPS en comptes de 60.1 en mode NTSC)</Control>
+			<Control ID="chkVerticalSync">Activa la sincronització vertical</Control>
+			<Control ID="lblDisplayRatio">Relació d'aspecte:</Control>
+			<Control ID="lblCustomRatio">Relació personalitzada:</Control>
+			<Control ID="chkBilinearInterpolation">Fes servir la interpolació bilineal</Control>
+			<Control ID="chkFullscreenForceIntegerScale">Fes servir valors enters d'escalat al mode de pantalla completa</Control>
+			<Control ID="chkShowFps">Mostra els FPS</Control>
+			<Control ID="chkUseHdPacks">Fes servir els paquets d'alta resolució d'HDNes</Control>
+			<Control ID="chkUseExclusiveFullscreen">Fes servir el mode de pantalla completa exclusiva</Control>
+			<Control ID="lblRequestedRefreshRate">Requested Refresh Rate:</Control>
+			<Control ID="tpgOverscan">Sobreescaneig</Control>
+			<Control ID="grpCropping">Retall de vídeo</Control>
+			<Control ID="lblLeft">Esquerra</Control>
+			<Control ID="lblTop">Amunt</Control>
+			<Control ID="lblBottom">Avall</Control>
+			<Control ID="lblRight">Dreta</Control>
+			<Control ID="tpgPalette">Paleta de colors</Control>
+			<Control ID="mnuDefaultPalette">Per defecte (NTSC)</Control>
+			<Control ID="btnSelectPalette">Escollir una paleta...</Control>
+			<Control ID="btnExportPalette">Exportar fitxer .pal</Control>
+			<Control ID="btnLoadPalFile">Carregar fitxer .pal</Control>
+			<Control ID="chkUseCustomVsPalette">Fes servir aquesta paleta per a jocs de VS System</Control>
+			<Control ID="tpgPicture">Imatge</Control>
+			<Control ID="btnSelectPreset">Tria una plantilla...</Control>
+			<Control ID="grpCommon">Paràmetres comuns</Control>
+			<Control ID="trkBrightness">Brillantor</Control>
+			<Control ID="trkContrast">Contrast</Control>
+			<Control ID="trkHue">Tonalitat</Control>
+			<Control ID="trkSaturation">Saturació</Control>
+			<Control ID="grpNtscFilter">Paràmetres de filtre NTSC</Control>
+			<Control ID="trkArtifacts">Artefactes</Control>
+			<Control ID="trkBleed">Dispersió dels colors</Control>
+			<Control ID="trkFringing">Franges de distorsió</Control>
+			<Control ID="trkGamma">Gamma</Control>
+			<Control ID="trkResolution">Resolució</Control>
+			<Control ID="trkSharpness">Nitidesa</Control>
+			<Control ID="chkMergeFields">Fusiona els camps</Control>
+			<Control ID="chkVerticalBlend">Apply Vertical Blending</Control>
 
-      <Control ID="trkYFilterLength">Filtre Y (desenfocament horitzontal)</Control>
-      <Control ID="trkIFilterLength">Filtre I (dispersió horitzontal)</Control>
-      <Control ID="trkQFilterLength">Filtre Q (dispersió horitzontal)</Control>
+			<Control ID="trkYFilterLength">Filtre Y (desenfocament horitzontal)</Control>
+			<Control ID="trkIFilterLength">Filtre I (dispersió horitzontal)</Control>
+			<Control ID="trkQFilterLength">Filtre Q (dispersió horitzontal)</Control>
 
-      <Control ID="grpScanlines">Línies d'escaneig</Control>
-      <Control ID="trkScanlines">Línies d'escaneig</Control>
-      <Control ID="btnResetPictureSettings">Restableix</Control>
-      <Control ID="mnuPresetComposite">Compost</Control>
-      <Control ID="mnuPresetSVideo">S-Video</Control>
-      <Control ID="menuPresetRgb">RGB</Control>
-      <Control ID="mnuPresetMonochrome">Monocrom</Control>
+			<Control ID="grpScanlines">Línies d'escaneig</Control>
+			<Control ID="trkScanlines">Línies d'escaneig</Control>
+			<Control ID="btnResetPictureSettings">Restableix</Control>
+			<Control ID="mnuPresetComposite">Compost</Control>
+			<Control ID="mnuPresetSVideo">S-Video</Control>
+			<Control ID="menuPresetRgb">RGB</Control>
+			<Control ID="mnuPresetMonochrome">Monocrom</Control>
 
-      <Control ID="tpgAdvanced">Avançat</Control>
-      <Control ID="lblScreenRotation">Rotació de la pantalla:</Control>
-      <Control ID="chkDisableBackground">Desactiva el fons</Control>
-      <Control ID="chkDisableSprites">Desactiva els sprites</Control>
-      <Control ID="chkForceBackgroundFirstColumn">Força l'aparició del fons a la primera columna</Control>
-      <Control ID="chkForceSpritesFirstColumn">Força l'aparició dels sprites a la primera columna</Control>
+			<Control ID="tpgAdvanced">Avançat</Control>
+			<Control ID="lblScreenRotation">Rotació de la pantalla:</Control>
+			<Control ID="chkDisableBackground">Desactiva el fons</Control>
+			<Control ID="chkDisableSprites">Desactiva els sprites</Control>
+			<Control ID="chkForceBackgroundFirstColumn">Força l'aparició del fons a la primera columna</Control>
+			<Control ID="chkForceSpritesFirstColumn">Força l'aparició dels sprites a la primera columna</Control>
 
-      <Control ID="btnOK">D'acord</Control>
-      <Control ID="btnCancel">Cancel·la</Control>
-    </Form>
-    <Form ID="frmEmulationConfig" Title="Paràmetres d'emulació">
-      <Control ID="tpgGeneral">General</Control>
-      <Control ID="lblEmuSpeedHint">%  (0 = Velocitat màxima)</Control>
-      <Control ID="lblTurboSpeedHint">%  (0 = Velocitat màxima)</Control>
-      <Control ID="lblTurboSpeed">Velocitat de l'avanç ràpid:</Control>
-      <Control ID="lblEmulationSpeed">Velocitat d'emulació:</Control>
-      <Control ID="lblRewindSpeedHint">%  (0 = Velocitat màxima)</Control>
-      <Control ID="lblRewindSpeed">Velocitat del rebobinat:</Control>
+			<Control ID="btnOK">D'acord</Control>
+			<Control ID="btnCancel">Cancel·la</Control>
+		</Form>
+		<Form ID="frmEmulationConfig" Title="Paràmetres d'emulació">
+			<Control ID="tpgGeneral">General</Control>
+			<Control ID="lblEmuSpeedHint">%  (0 = Velocitat màxima)</Control>
+			<Control ID="lblTurboSpeedHint">%  (0 = Velocitat màxima)</Control>
+			<Control ID="lblTurboSpeed">Velocitat de l'avanç ràpid:</Control>
+			<Control ID="lblEmulationSpeed">Velocitat d'emulació:</Control>
+			<Control ID="lblRewindSpeedHint">%  (0 = Velocitat màxima)</Control>
+			<Control ID="lblRewindSpeed">Velocitat del rebobinat:</Control>
 
-      <Control ID="tpgAdvanced">Avançat</Control>
-      <Control ID="chkUseAlternativeMmc3Irq">Fes servir el comportament alternatiu de les IRQ de MMC3</Control>
-      <Control ID="chkAllowInvalidInput">Permet entrades invàlides (ex. Amunt+Avall i Esquerra+Dreta alhora)</Control>
-      <Control ID="lblRamPowerOnState">Estat inicial de la memòria durant l'arrancada:</Control>
-      <Control ID="chkRemoveSpriteLimit">Elimina el límit de sprites (redueix les pampallugues en certs jocs)</Control>
-      <Control ID="chkAdaptiveSpriteLimit">Torna a activar el límit de sprites quan faci falta per tal de prevenir errors gràfics</Control>
-      <Control ID="chkEnableOamDecay">Activa l'emulació de la degradació de la memòria OAM</Control>
-      <Control ID="chkDisablePpu2004Reads">Impedeix la lectura del valor $2004 de la PPU (comportament de la Famicom)</Control>
-      <Control ID="chkDisableOamAddrBug">Desactiva l'emulació d'errors OAMADDR de la PPU</Control>
-      <Control ID="chkDisablePaletteRead">Impedeix la lectura de la paleta de la PPU</Control>
-      <Control ID="chkDisablePpuReset">No reestableixis la PPU al reiniciar la consola (comportament de la Famicom)</Control>
-      <Control ID="chkUseNes101Hvc101Behavior">Simula el comportament de la NES/HVC-101 (Top-loader / AV Famicom)</Control>
+			<Control ID="tpgAdvanced">Avançat</Control>
+			<Control ID="chkUseAlternativeMmc3Irq">Fes servir el comportament alternatiu de les IRQ de MMC3</Control>
+			<Control ID="chkAllowInvalidInput">Permet entrades invàlides (ex. Amunt+Avall i Esquerra+Dreta alhora)</Control>
+			<Control ID="lblRamPowerOnState">Estat inicial de la memòria durant l'arrancada:</Control>
+			<Control ID="chkRemoveSpriteLimit">Elimina el límit de sprites (redueix les pampallugues en certs jocs)</Control>
+			<Control ID="chkAdaptiveSpriteLimit">Torna a activar el límit de sprites quan faci falta per tal de prevenir errors gràfics</Control>
+			<Control ID="chkEnableOamDecay">Activa l'emulació de la degradació de la memòria OAM</Control>
+			<Control ID="chkDisablePpu2004Reads">Impedeix la lectura del valor $2004 de la PPU (comportament de la Famicom)</Control>
+			<Control ID="chkDisableOamAddrBug">Desactiva l'emulació d'errors OAMADDR de la PPU</Control>
+			<Control ID="chkDisablePaletteRead">Impedeix la lectura de la paleta de la PPU</Control>
+			<Control ID="chkDisablePpuReset">No reestableixis la PPU al reiniciar la consola (comportament de la Famicom)</Control>
+			<Control ID="chkUseNes101Hvc101Behavior">Simula el comportament de la NES/HVC-101 (Top-loader / AV Famicom)</Control>
 
-      <Control ID="tpgOverclocking">Forçament</Control>
-      <Control ID="grpOverclocking">Forçament de CPU</Control>
-      <Control ID="lblOverclockWarning">ADVERTÈNCIA: El forçament de la CPU afecta a l'estabilitat de la emulació i pot causar fallades en alguns jocs.</Control>
-      <Control ID="lblClockRate">Multiplicador de la freqüència de rellotge: </Control>
-      <Control ID="lblClockRatePercent">% (Recomanat: 100%)</Control>
+			<Control ID="tpgOverclocking">Forçament</Control>
+			<Control ID="grpOverclocking">Forçament de CPU</Control>
+			<Control ID="lblOverclockWarning">ADVERTÈNCIA: El forçament de la CPU afecta a l'estabilitat de la emulació i pot causar fallades en alguns jocs.</Control>
+			<Control ID="lblClockRate">Multiplicador de la freqüència de rellotge: </Control>
+			<Control ID="lblClockRatePercent">% (Recomanat: 100%)</Control>
 
-      <Control ID="grpPpuTiming">Sincronització de la PPU</Control>
-      <Control ID="lblExtraScanlinesBeforeNmi">Nombre de línies d'escaneig addicionals abans d'NMI: </Control>
-      <Control ID="lblExtraScanlinesAfterNmi">Nombre de línies d'escaneig addicionals després d'NMI: </Control>
-      <Control ID="lblEffectiveClockRate">Freqüència de rellotge (NTSC): </Control>
-      <Control ID="lblEffectiveClockRatePal">Freqüència de rellotge (PAL): </Control>
-      <Control ID="lblEffectiveClockRateDendy">Freqüència de rellotge (Dendy): </Control>
+			<Control ID="grpPpuTiming">Sincronització de la PPU</Control>
+			<Control ID="lblExtraScanlinesBeforeNmi">Nombre de línies d'escaneig addicionals abans d'NMI: </Control>
+			<Control ID="lblExtraScanlinesAfterNmi">Nombre de línies d'escaneig addicionals després d'NMI: </Control>
+			<Control ID="lblEffectiveClockRate">Freqüència de rellotge (NTSC): </Control>
+			<Control ID="lblEffectiveClockRatePal">Freqüència de rellotge (PAL): </Control>
+			<Control ID="lblEffectiveClockRateDendy">Freqüència de rellotge (Dendy): </Control>
 
-      <Control ID="chkOverclockAdjustApu">No realitzis el forçament a l'APU (evita el canvi del to provocat pel forçament)</Control>
+			<Control ID="chkOverclockAdjustApu">No realitzis el forçament a l'APU (evita el canvi del to provocat pel forçament)</Control>
 
-      <Control ID="chkShowLagCounter">Veure el comptador de retard</Control>
-      <Control ID="btnResetLagCounter">Restableix el comptador</Control>
+			<Control ID="chkShowLagCounter">Veure el comptador de retard</Control>
+			<Control ID="btnResetLagCounter">Restableix el comptador</Control>
 
-      <Control ID="btnOK">D'acord</Control>
-      <Control ID="btnCancel">Cancel·la</Control>
-    </Form>
-    <Form ID="frmPreferences" Title="Preferencias">
-      <Control ID="tpgGeneral">General</Control>
-      <Control ID="lblDisplayLanguage">Idioma de pantalla:</Control>
-      <Control ID="chkSingleInstance">Permet només una sola instància de Mesen alhora</Control>
-      <Control ID="chkAutomaticallyCheckForUpdates">Cerca actualitzacions automàticament</Control>
+			<Control ID="btnOK">D'acord</Control>
+			<Control ID="btnCancel">Cancel·la</Control>
+		</Form>
+		<Form ID="frmPreferences" Title="Preferencias">
+			<Control ID="tpgGeneral">General</Control>
+			<Control ID="lblDisplayLanguage">Idioma de pantalla:</Control>
+			<Control ID="chkSingleInstance">Permet només una sola instància de Mesen alhora</Control>
+			<Control ID="chkAutomaticallyCheckForUpdates">Cerca actualitzacions automàticament</Control>
 
-      <Control ID="chkDeveloperMode">Activa el mode de desenvolupador</Control>
+			<Control ID="chkDeveloperMode">Activa el mode de desenvolupador</Control>
 
-      <Control ID="lblPauseBackgroundSettings">Comportament en segon pla</Control>
-      <Control ID="lblMiscSettings">Configuracions diverses</Control>
-      <Control ID="chkAutoHideMenu">Amaga la barra de menú automàticament</Control>
-      <Control ID="chkDisplayTitleBarInfo">Mostra informació addicional a la barra de títol</Control>
+			<Control ID="lblPauseBackgroundSettings">Comportament en segon pla</Control>
+			<Control ID="lblMiscSettings">Configuracions diverses</Control>
+			<Control ID="chkAutoHideMenu">Amaga la barra de menú automàticament</Control>
+			<Control ID="chkDisplayTitleBarInfo">Mostra informació addicional a la barra de títol</Control>
 
-      <Control ID="chkConfirmExitResetPower">Confirma abans d'un reinici/aturada o abans de sortir de Mesen</Control>
-      <Control ID="chkPauseOnMovieEnd">Pausa l'emulació en acabar una pel·lícula</Control>
-      <Control ID="chkAllowBackgroundInput">Permet l'entrada d'ordres encara que Mesen es trobi en segon pla</Control>
-      <Control ID="chkPauseWhenInBackground">Pausa l'emulació quan Mesen es trobi en segon pla</Control>
-      <Control ID="chkAutoLoadIps">Carrega els pedaços IPS/BPS automàticament</Control>
-      <Control ID="chkHidePauseOverlay">Amaga la pantalla de pausa</Control>
-      <Control ID="chkDisplayMovieIcons">Mostra una icona d'iniciar/gravar al reproduir o gravar una pel·lícula</Control>
-      <Control ID="btnOpenMesenFolder">Obre la carpeta de Mesen</Control>
-      <Control ID="btnResetSettings">Restableix tot</Control>
+			<Control ID="chkConfirmExitResetPower">Confirma abans d'un reinici/aturada o abans de sortir de Mesen</Control>
+			<Control ID="chkPauseOnMovieEnd">Pausa l'emulació en acabar una pel·lícula</Control>
+			<Control ID="chkAllowBackgroundInput">Permet l'entrada d'ordres encara que Mesen es trobi en segon pla</Control>
 
-      <Control ID="tpgFiles">Fitxers/Carpetes</Control>
-      <Control ID="grpFileAssociations">Associació de fitxers</Control>
-      <Control ID="chkNesFormat">.NES</Control>
-      <Control ID="chkFdsFormat">.FDS (Famicom Disk System)</Control>
-      <Control ID="chkMmoFormat">.MMO (Pel·lícules de Mesen)</Control>
-      <Control ID="chkMstFormat">.MST (Partides guardades de Mesen)</Control>
-      
-      <Control ID="grpDataStorageLocation">Carpeta d'emmagatzematge</Control>
-      <Control ID="radStorageDocuments">Desa les dades de Mesen al meu perfil d'usuari</Control>
-      <Control ID="radStoragePortable">Desa les dades de Mesen a la mateixa carpeta que l'aplicació</Control>
-      <Control ID="lblDataLocation">Carpeta:</Control>
+			<Control ID="lblPauseIn">Pause when in:</Control>
+			<Control ID="chkPauseWhenInBackground">Background</Control>
+			<Control ID="chkPauseInMenuAndConfig">Menus and config dialogs</Control>
+			<Control ID="chkPauseInDebugger">Debugging tools</Control>
 
-      <Control ID="grpPathOverrides">Localització de les carpetes d'emmagatzematge</Control>
-      <Control ID="chkGameOverride">Jocs:</Control>
-      <Control ID="chkAviOverride">Enregistraments de vídeo:</Control>
-      <Control ID="chkScreenshotsOverride">Captures de pantalla:</Control>
-      <Control ID="chkSaveDataOverride">Partides guardades:</Control>
-      <Control ID="chkWaveOverride">Enregistraments de so:</Control>
-      <Control ID="chkSaveStatesOverride">Partides guardades (instantànies):</Control>
-      <Control ID="chkMoviesOverride">Pel·lícules:</Control>
+			<Control ID="chkAutoLoadIps">Carrega els pedaços IPS/BPS automàticament</Control>
+			<Control ID="chkHidePauseOverlay">Amaga la pantalla de pausa</Control>
+			<Control ID="chkDisplayMovieIcons">Mostra una icona d'iniciar/gravar al reproduir o gravar una pel·lícula</Control>
+			<Control ID="btnOpenMesenFolder">Obre la carpeta de Mesen</Control>
+			<Control ID="btnResetSettings">Restableix tot</Control>
 
-      <Control ID="tpgAdvanced">Avançat</Control>
-      <Control ID="chkFdsAutoLoadDisk">Insereix automàticament la cara A del disc 1 al carregar un joc de la FDS</Control>
-      <Control ID="chkFdsFastForwardOnLoad">Activa l'avanç ràpid automàticament en jocs de la FDS mentre el disc o la BIOS es carreguen</Control>
-      <Control ID="chkFdsAutoInsertDisk">Canvia automàticament de disc en jocs de la FDS</Control>
-      
-      <Control ID="tpgShortcuts">Dreceres</Control>
-      <Control ID="lblShortcutWarning">Advertència: La vostra configuració actual conté assignacions conflictives. Si això no ha estat intencionat, us preguem que reviseu i corregiu les vostres assignacions.</Control>
-      <Control ID="colAction">Acció</Control>
-      <Control ID="colBinding1">Drecera #1</Control>
-      <Control ID="colBinding2">Drecera #2</Control>
-      
-      <Control ID="tpgSaveData">Còpies de seguretat</Control>
-      <Control ID="grpAutomaticSaves">Desat de partida</Control>
-      <Control ID="chkAutoSave">Desa automàticament cada</Control>
-      <Control ID="lblAutoSave">minuts</Control>
-      <Control ID="chkAutoSaveNotify">Mostrar una notificación en pantalla al hacer la copia de seguridad automática</Control>
-      <Control ID="chkAllowMismatchingSaveStates">Allow save states to be loaded on modified ROMs (e.g IPS patches)</Control>
-      
-      <Control ID="grpCloudSaves">Còpies de seguretat al núvol</Control>
+			<Control ID="tpgFiles">Fitxers/Carpetes</Control>
+			<Control ID="grpFileAssociations">Associació de fitxers</Control>
+			<Control ID="chkNesFormat">.NES</Control>
+			<Control ID="chkFdsFormat">.FDS (Famicom Disk System)</Control>
+			<Control ID="chkMmoFormat">.MMO (Pel·lícules de Mesen)</Control>
+			<Control ID="chkMstFormat">.MST (Partides guardades de Mesen)</Control>
 
-      <Control ID="chkShowFullPathInRecents">Show full file path in recent file list</Control>
-      <Control ID="chkShowFrameCounter">Mostra el comptador de fotogrames</Control>
-      <Control ID="chkShowGameTimer">Mostra el comptador de temps de joc</Control>
-      <Control ID="chkShowVsConfigOnLoad">Mostra la configuració del joc quan es carreguin jocs de VS System</Control>
+			<Control ID="grpDataStorageLocation">Carpeta d'emmagatzematge</Control>
+			<Control ID="radStorageDocuments">Desa les dades de Mesen al meu perfil d'usuari</Control>
+			<Control ID="radStoragePortable">Desa les dades de Mesen a la mateixa carpeta que l'aplicació</Control>
+			<Control ID="lblDataLocation">Carpeta:</Control>
 
-      <Control ID="lblRewind">Permet rebobinar fins a</Control>
-      <Control ID="lblRewindMinutes">minuts (ús de memòria ≈1MB/min)</Control>
+			<Control ID="grpPathOverrides">Localització de les carpetes d'emmagatzematge</Control>
+			<Control ID="chkGameOverride">Jocs:</Control>
+			<Control ID="chkAviOverride">Enregistraments de vídeo:</Control>
+			<Control ID="chkScreenshotsOverride">Captures de pantalla:</Control>
+			<Control ID="chkSaveDataOverride">Partides guardades:</Control>
+			<Control ID="chkWaveOverride">Enregistraments de so:</Control>
+			<Control ID="chkSaveStatesOverride">Partides guardades (instantànies):</Control>
+			<Control ID="chkMoviesOverride">Pel·lícules:</Control>
 
-      <Control ID="tpgCloudSave">Desa al núvol</Control>
-      <Control ID="lblGoogleDriveIntegration">Mesen pot utilitzar Google Drive per a emmagatzemar les vostres partides guardades al núvol. Quan s'activa aquesta integració, totes les partides guardades són fàcilment accessibles des de qualsevol ordinador, ja que se sincronitzen entre ells. A més, les partides guardades a Google Drive es poden recuperar en cas que s'esborrin del vostre ordinador.</Control>
-      <Control ID="lblIntegrationOK">La integració amb Google Drive es troba activa.</Control>
-      <Control ID="btnDisableIntegration">Desactiva la integració amb Google Drive</Control>
-      <Control ID="btnEnableIntegration">Activa la integració amb Google Drive</Control>
-      <Control ID="lblLastSync">Darrera sincronització: </Control>
-      <Control ID="btnResync">Resincronitza</Control>
+			<Control ID="tpgAdvanced">Avançat</Control>
+			<Control ID="chkFdsAutoLoadDisk">Insereix automàticament la cara A del disc 1 al carregar un joc de la FDS</Control>
+			<Control ID="chkFdsFastForwardOnLoad">Activa l'avanç ràpid automàticament en jocs de la FDS mentre el disc o la BIOS es carreguen</Control>
+			<Control ID="chkFdsAutoInsertDisk">Canvia automàticament de disc en jocs de la FDS</Control>
 
-      <Control ID="lblFdsSettings">Configuració de Famicom Disk System</Control>
-      <Control ID="lblUiDisplaySettings">Configuració de la interfície d'usuari</Control>
-      <Control ID="lblGameSelectionScreenSettings">Configuració de la pantalla de selecció de jocs</Control>
-      <Control ID="chkGameSelectionScreenResetGame">Inicia els jocs des de zero en comptes de reprendre la sessió de joc anterior</Control>
-      <Control ID="chkDisableGameSelectionScreen">Desactiva la pantalla de selecció de jocs</Control>
+			<Control ID="tpgShortcuts">Dreceres</Control>
+			<Control ID="lblShortcutWarning">Advertència: La vostra configuració actual conté assignacions conflictives. Si això no ha estat intencionat, us preguem que reviseu i corregiu les vostres assignacions.</Control>
+			<Control ID="colAction">Acció</Control>
+			<Control ID="colBinding1">Drecera #1</Control>
+			<Control ID="colBinding2">Drecera #2</Control>
 
-      <Control ID="chkDisableGameDatabase">Desactiva la base de dades de jocs integrada</Control>
-      <Control ID="chkDisableOsd">Desactiva la visualització en pantalla (OSD)</Control>
+			<Control ID="tpgSaveData">Còpies de seguretat</Control>
+			<Control ID="grpAutomaticSaves">Desat de partida</Control>
+			<Control ID="chkAutoSave">Desa automàticament cada</Control>
+			<Control ID="lblAutoSave">minuts</Control>
+			<Control ID="chkAutoSaveNotify">Mostrar una notificación en pantalla al hacer la copia de seguridad automática</Control>
+			<Control ID="chkAllowMismatchingSaveStates">Allow save states to be loaded on modified ROMs (e.g IPS patches)</Control>
 
-      <Control ID="chkAlwaysOnTop">Always display on top of other windows</Control>
+			<Control ID="grpCloudSaves">Còpies de seguretat al núvol</Control>
 
-      <Control ID="tpgNsf">NSF</Control>
-      <Control ID="chkNsfAutoDetectSilence">Reprodueix la següent pista després de</Control>
-      <Control ID="lblNsfMillisecondsOfSilence">mil·lisegons de silenci</Control>
-      <Control ID="chkNsfMoveToNextTrackAfterTime">Limita la duració de pistes a</Control>
-      <Control ID="lblNsfSeconds">segons</Control>
-      <Control ID="chkNsfDisableApuIrqs">Desactiva les IRQs de l'APU (recomanat)</Control>
+			<Control ID="chkShowFullPathInRecents">Show full file path in recent file list</Control>
+			<Control ID="chkShowFrameCounter">Mostra el comptador de fotogrames</Control>
+			<Control ID="chkShowGameTimer">Mostra el comptador de temps de joc</Control>
+			<Control ID="chkShowVsConfigOnLoad">Mostra la configuració del joc quan es carreguin jocs de VS System</Control>
 
-      <Control ID="btnOK">D'acord</Control>
-      <Control ID="btnCancel">Cancel·la</Control>
-    </Form>
-    <Form ID="frmServerConfig" Title="Configuració del servidor">
-      <Control ID="txtPort">8888</Control>
-      <Control ID="lblPort">Port:</Control>
-      <Control ID="chkPublicServer">Servidor públic</Control>
-      <Control ID="lblServerName">Nom del servidor:</Control>
-      <Control ID="chkSpectator">Permet espectadors</Control>
-      <Control ID="lblMaxPlayers">Nombre màxim de jugadors:</Control>
-      <Control ID="lblPassword">Contrasenya:</Control>
-      <Control ID="btnOK">D'acord</Control>
-      <Control ID="btnCancel">Cancel·la</Control>
-    </Form>
-    <Form ID="frmClientConfig" Title="Connexió a un servidor">
-      <Control ID="txtPort">8888</Control>
-      <Control ID="lblHost">Servidor:</Control>
-      <Control ID="lblPort">Port:</Control>
-      <Control ID="chkSpectator">Uneix-t'hi com a espectador</Control>
-      <Control ID="btnOK">D'acord</Control>
-      <Control ID="btnCancel">Cancel·la</Control>
-    </Form>
-    <Form ID="frmCheatImportFromDb" Title="Tria un joc">
-      <Control ID="lblSearch">Cerca</Control>
-      <Control ID="btnOK">D'acord</Control>
-      <Control ID="btnCancel">Cancel·la</Control>
-    </Form>
-    <Form ID="frmCheatImport" Title="Importació de trucs">
-      <Control ID="grpImportOptions">Opcions d'importació</Control>
-      <Control ID="lblCheatFile">Fitxer de trucs:</Control>
-      <Control ID="lblGame">Joc:</Control>
-      <Control ID="btnBrowseCheat">Navega...</Control>
-      <Control ID="btnBrowseGame">Navega...</Control>
-      <Control ID="btnImport">Importa</Control>
-      <Control ID="btnCancel">Cancel·la</Control>
-    </Form>
-    <Form ID="frmCheatList" Title="Llista de trucs">
-      <Control ID="tabCheats">Trucs</Control>
-      <Control ID="chkCurrentGameOnly">Mostra només trucs per al joc actual</Control>
-      <Control ID="btnAddCheat">Afegeix un truc</Control>
-      <Control ID="btnDelete">Elimina</Control>
-      <Control ID="btnDeleteCheat">Elimina els trucs seleccionats</Control>
-      <Control ID="btnDeleteGameCheats">Elimina tots els trucs del joc seleccionat</Control>
-      <Control ID="mnuAddCheat">Afegeix un truc</Control>
-      <Control ID="mnuDeleteGameCheats">Elimina</Control>
-      <Control ID="mnuDeleteCheat">Elimina</Control>
-      <Control ID="colGameName">Joc</Control>
-      <Control ID="colCheatName">Nom del truc</Control>
-      <Control ID="colCode">Truc</Control>
-      <Control ID="btnImportCheatDB">Des de la base de dades de trucs</Control>
-      <Control ID="btnImportFromFile">Des d'un fitxer (XML, CHT)</Control>
-      <Control ID="btnImport">Importa</Control>
-      <Control ID="btnExport">Exporta</Control>
-      <Control ID="btnExportAllCheats">Tots els trucs</Control>
-      <Control ID="btnExportGame">Joc seleccionat</Control>
-      <Control ID="mnuExportGame">Exporta</Control>
-      <Control ID="btnExportSelectedCheats">Trucs seleccionats</Control>
-      <Control ID="mnuExportSelectedCheats">Exporta</Control>
-      <Control ID="tpgCheatFinder">Cercador de trucs</Control>
-      <Control ID="btnReset">Restableix</Control>
-      <Control ID="btnUndo">Desfés</Control>
-      <Control ID="lblCurrentValue">El valor actual és</Control>
-      <Control ID="lblPreviousValue">El darrer valor era</Control>
-      <Control ID="btnAddCurrentFilter">Afegeix filtre</Control>
-      <Control ID="btnAddPrevFilter">Afegeix filtre</Control>
-      <Control ID="btnCreateCheat">Crea un truc</Control>
-      <Control ID="mnuCreateCheat">Crea un truc</Control>
-      <Control ID="lblAtAddress">a</Control>
-      <Control ID="chkPauseGameWhileWindowActive">Pausa el joc automàticament mentre aquesta finestra estigui activa</Control>
-      <Control ID="chkDisableCheats">Desactiva tots els trucs</Control>
-      <Control ID="btnOK">D'acord</Control>
-      <Control ID="btnCancel">Cancel·la</Control>
-    </Form>
-    <Form ID="frmCheat" Title="Edició de trucs">
-      <Control ID="label2">Joc:</Control>
-      <Control ID="label1">Nom del truc:</Control>
-      <Control ID="grpCode">Truc</Control>
-      <Control ID="radCustom">Personalitzat:</Control>
-      <Control ID="radGameGenie">Game Genie:</Control>
-      <Control ID="radProActionRocky">Pro Action Rocky:</Control>
-      <Control ID="lblAddress">Adreça:</Control>
-      <Control ID="lblNewValue">Nou valor:</Control>
-      <Control ID="radRelativeAddress">Memòria RAM</Control>
-      <Control ID="radAbsoluteAddress">Memòria ROM</Control>
-      <Control ID="chkCompareValue">Comparar valor</Control>
-      <Control ID="btnBrowse">Navega...</Control>
-      <Control ID="chkEnabled">Truc activat</Control>
-      <Control ID="btnOK">D'acord</Control>
-      <Control ID="btnCancel">Cancel·la</Control>
-    </Form>
-    <Form ID="frmAbout" Title="Quant a...">
-      <Control ID="labelProductName">Mesen</Control>
-      <Control ID="labelCopyright">© 2017 M. Bibaud (aka Sour)</Control>
-      <Control ID="lblWebsite">Lloc web:</Control>
-      <Control ID="lblLink">www.mesen.ca</Control>
-      <Control ID="labelVersion">Versió: 0.9.4 (Beta)</Control>
-      <Control ID="lblDonate">Si desitgeu col·laborar amb Mesen, si us plau, considereu fer un donatiu.&#xA;Gràcies pel vostre suport.</Control>
-      <Control ID="okButton">&amp;D'acord</Control>
-    </Form>
-    <Form ID="frmVsGameConfig" Title="Configuració de joc VS">
-      <Control ID="lblGame">Joc</Control>
-      <Control ID="lblPpuModel">Model de PPU</Control>
-      <Control ID="grpDipSwitches">Interruptors DIP</Control>
-    </Form>
-    <Form ID="frmUpdatePrompt" Title="Mesen - Actualització disponible">
-      <Control ID="lblLatestVersion">Darrera versió: </Control>
-      <Control ID="lblCurrentVersion">Versió actual: </Control>
-      <Control ID="lblChangeLog">Llista de canvis</Control>
-      <Control ID="lblDonate">Si desitgeu col·laborar amb Mesen, si us plau, considereu fer un donatiu. Gràcies!</Control>
-      <Control ID="btnUpdate">Actualitza</Control>
-      <Control ID="btnCancel">Cancel·la</Control>
-    </Form>
-    <Form ID="frmGetKey" Title="Nova assignació...">
-      <Control ID="lblSetKeyMessage">Prem qualsevol tecla del teclat o botó del comandament per a assignar-lo a aquest botó.</Control>
-    </Form>
-    <Form ID="frmPlayerProfile" Title="Perfil del jugador">
-      <Control ID="lblName">Nom</Control>
-      <Control ID="btnOK">D'acord</Control>
-      <Control ID="btnCancel">Cancel·la</Control>
-    </Form>
-    <Form ID="frmSelectRom" Title="Selecció de joc...">
-      <Control ID="btnCancel">Cancel·la</Control>
-      <Control ID="btnOK">D'acord</Control>
-      <Control ID="lblSearch">Cerca</Control>
-    </Form>
-    <Form ID="frmRecordAvi" Title="Enregistrador de vídeo">
-      <Control ID="lblAviFile">Desa a:</Control>
-      <Control ID="lblCodec">Còdec de vídeo:</Control>
-      <Control ID="lblCompressionLevel">Nivell de compressió:</Control>
-      <Control ID="lblLowCompression">baix&#13;(ràpid)</Control>
-      <Control ID="lblHighCompression">alt&#13;(lent)</Control>
-      <Control ID="btnBrowse">Navega...</Control>
-      <Control ID="btnOK">D'acord</Control>
-      <Control ID="btnCancel">Cancel·la</Control>
-    </Form>
-    <Form ID="frmHdPackEditor" Title="Creador de paquets d'alta resolució">
-      <Control ID="grpPreview">Previsualització del banc CHR</Control>
-      <Control ID="lblChrBank">Banc CHR:</Control>
-      <Control ID="grpOptions">Opcions de gravació</Control>
-      <Control ID="lblBankSize">Mida del banc CHR:</Control>
-      <Control ID="lblScale">Escalat/Filtre:</Control>
-      <Control ID="chkSortByFrequency">Ordena les pàgines per freqüència d'ús</Control>
-      <Control ID="chkLargeSprites">Fes servir sprites de 8x16</Control>
-      <Control ID="chkGroupBlankTiles">Agrupa les tiles buides</Control>
-      <Control ID="chkIgnoreOverscan">Ignora les tiles a les franges exteriors de la pantalla (sobreescaneig)</Control>
-      <Control ID="lblFolder">Desa a:</Control>
-      <Control ID="btnSelectFolder">Navega...</Control>
-      <Control ID="btnStartRecording">Comença la gravació</Control>
-      <Control ID="btnStopRecording">Atura la gravació</Control>
-      <Control ID="btnOpenFolder">Obre la carpeta destinatària</Control>
-    </Form>
-    <Form ID="frmHelp" Title="Opcions de la línia d'ordres">
-      <Control ID="grpExample">Exemple d'ús</Control>
-      <Control ID="tpgGeneral">General</Control>
-      <Control ID="tpgVideoOptions">Opcions de vídeo</Control>
-      <Control ID="tpgAudioOptions">Opcions de so</Control>
-      <Control ID="tpgEmulationOptions">Opcions de l'emulació</Control>
-      <Control ID="lblExplanation">Això iniciarà Mesen en mode de pantalla completa i amb la rom "MyGame.nes" carregada. A més, farà servir el filtre NTSC ajustat a una escala de 2x i configurarà les opcions de sobreescaneig. El paràmetre "DoNotSaveSettings" s'utilitza per evitar que els canvis efectuats des de la línia d'ordres es desin permanentment a la configuració de Mesen.</Control>
-      <Control ID="txtGeneralOptions">/fullscreen - Inicia Mesen en pantalla completa&#13;&#10;/DoNotSaveSettings - Evita que els canvis es desin (útil per a evitar que les opcions de la línia d'ordres es converteixin en la configuració per defecte)</Control>
-    </Form>
-    <Form ID="frmRecordMovie" Title="Movie Recording Options">
-      <Control ID="lblSaveTo">Save to:</Control>
-      <Control ID="lblRecordFrom">Record from:</Control>
-      <Control ID="lblMovieInformation">Movie Information (optional)</Control>
-      <Control ID="lblAuthor">Author:</Control>
-      <Control ID="lblDescription">Description:</Control>
-      <Control ID="btnBrowse">Navega...</Control>
-      <Control ID="btnOK">D'acord</Control>
-      <Control ID="btnCancel">Cancel·la</Control>
-    </Form>
-    <Form ID="frmInputBarCode" Title="Introducció d'un codi de barres...">
-      <Control ID="lblBarcode">Codi de barres:</Control>
-      <Control ID="btnOK">D'acord</Control>
-      <Control ID="btnCancel">Cancel·la</Control>
-    </Form>
-    <Form ID="BaseInputConfigForm">
-      <Control ID="lblHint">Les pestanyes amb una icona contenen per aquest jugador.&#13;&#10;Cada botó es pot assignar a fins a 4 tecles de teclat o botons de comandament diferents.</Control>
-      <Control ID="tpgSet1">Distribució #1</Control>
-      <Control ID="tpgSet2">Distribució #2</Control>
-      <Control ID="tpgSet3">Distribució #3</Control>
-      <Control ID="tpgSet4">Distribució #4</Control>
-      <Control ID="btnSetDefault">Use Default Bindings</Control>
-      <Control ID="btnClear">Esborra les asignacions</Control>
-      <Control ID="btnOK">D'acord</Control>
-      <Control ID="btnCancel">Cancel·la</Control>
-    </Form>
-    <Form ID="frmControllerConfig">
-      <Control ID="lblTurboSpeed">Velocitat del mode turbo:</Control>
-      <Control ID="lblTurboFast">Ràpida</Control>
-      <Control ID="lblSlow">Lenta</Control>
-      <Control ID="btnSelectPreset">Tria una plantilla...</Control>
-      <Control ID="mnuKeyboard">Teclat</Control>
-      <Control ID="mnuWasdLayout">Distribució WASD</Control>
-      <Control ID="mnuArrowLayout">Distribució de tecles de direcció</Control>
-      <Control ID="mnuFceuxLayout">Distribució per defecte de FCEUX</Control>
-      <Control ID="mnuNestopiaLayout">Distribució per defecte de Nestopia</Control>
-      <Control ID="mnuXboxController">Comandament de l'Xbox</Control>
-      <Control ID="mnuXboxLayout1">Comandament #1</Control>
-      <Control ID="mnuXboxLayout2">Comandament #2</Control>
-      <Control ID="mnuPs4Controller">Comandament de la PS4</Control>
-      <Control ID="mnuPs4Layout1">Comandament #1</Control>
-      <Control ID="mnuPs4Layout2">Comandament #2</Control>
-      <Control ID="mnuSnes30Controller">Comandament SNES30</Control>
-      <Control ID="mnuSnes30Layout1">Comandament #1</Control>
-      <Control ID="mnuSnes30Layout2">Comandament #2</Control>
-    </Form>
-    <Form ID="frmZapperConfig">
-      <Control ID="lblSmall">Curt</Control>
-      <Control ID="lblLarge">Llarg</Control>
-      <Control ID="lblDetectRadius">Radi de detecció lumínica:</Control>
-      <Control ID="btnOK">D'acord</Control>
-      <Control ID="btnCancel">Cancel·la</Control>
-    </Form>
-    <Form ID="frmMouseConfig">
-      <Control ID="lblLow">Low</Control>
-      <Control ID="lblHigh">High</Control>
-      <Control ID="lblSensitivity">Sensitivity:</Control>
-      <Control ID="btnOK">D'acord</Control>
-      <Control ID="btnCancel">Cancel·la</Control>
-    </Form>
-    <Form ID="frmExcitingBoxingConfig">
-    </Form>
-    <Form ID="frmFamilyBasicKeyboardConfig">
-    </Form>
-    <Form ID="frmJissenMahjongConfig">
-    </Form>
-    <Form ID="frmPartyTapConfig">
-    </Form>
-    <Form ID="frmPowerPadConfig">
-      <Control ID="chkUseSideA">Use side A</Control>
-    </Form>
-    <Form ID="frmSuborKeyboardConfig">
-    </Form>
-    <Form ID="frmPachinkoConfig">
-    </Form>
-    <Form ID="frmBandaiMicrophone">
-    </Form>
-  </Forms>
-  <UserControls>
-    <UserControl ID="ctrlExcitingBoxingConfig">
-      <Control ID="lblLeftHook">Left Hook</Control>
-      <Control ID="lblRightHook">Right Hook</Control>
-      <Control ID="lblLeftJab">Left Jab</Control>
-      <Control ID="lblRightJab">Right Jab</Control>
-      <Control ID="lblStraight">Straight</Control>
-      <Control ID="lblBody">Body</Control>
-      <Control ID="lblMoveLeft">Move Left</Control>
-      <Control ID="lblMoveRight">Move Right</Control>
-    </UserControl>
-    <UserControl ID="ctrlPachinkoConfig">
-      <Control ID="lblPress">Press</Control>
-      <Control ID="lblRelease">Release</Control>
-    </UserControl>
-    <UserControl ID="ctrlBandaiMicrophone">
-      <Control ID="lblMicrophone">Microphone</Control>
-    </UserControl>
-  </UserControls>
-  <Messages>
-    <Message ID="FilterAll">Tots els fitxers (*.*)|*.*</Message>
-    <Message ID="FilterMovie">Pel·lícules (*.mmo)|*.mmo|Tots els fitxers (*.*)|*.*</Message>
-    <Message ID="FilterWave">Fitxers de so (*.wav)|*.wav|Tots els fitxers(*.*)|*.*</Message>
-    <Message ID="FilterAvi">Fitxers de vídeo (*.avi)|*.avi|Tots els fitxers (*.*)|*.*</Message>
-    <Message ID="FilterPalette">Fitxers de paleta (*.pal)|*.pal|Tots els fitxers (*.*)|*.*</Message>
-    <Message ID="FilterRom">Tots els formats suportats (*.nes, *.zip, *.7z, *.fds, *.nsf, *.nsfe, *.unf)|*.NES;*.ZIP;*.7z;*.FDS;*.NSF;*.NSFE;*.UNF|Roms de NES (*.nes, *.unf)|*.NES;*.UNF|Roms de Famicom Disk System (*.fds)|*.FDS|Fitxers NSF (*.nsf, *.nsfe)|*.NSF;*.NSFE|Arxius comprimits (*.zip)|*.ZIP|Arxius 7-Zip (*.7z)|*.7z|Tots els fitxers (*.*)|*.*</Message>
-    <Message ID="FilterRomIps">Tots els formats suportats (*.nes, *.zip, *.7z, *.fds, *.nsf, *.nsfe, *.unf, *.ips, *.bps, *.ups)|*.NES;*.ZIP;*.7z;*.IPS;*.BPS;*.UPS;*.FDS;*.NSF;*.NSFE;*.UNF|Roms de NES(*.nes, *.unf)|*.NES;*.UNF|Roms de Famicom Disk System (*.fds)|*.FDS|Fitxers NSF (*.nsf, *.nsfe)|*.NSF;*.NSFE|Arxius comprimits (*.zip)|*.ZIP|Arxius 7-Zip (*.7z)|*.7z|Pedaços IPS/UPS/BPS (*.ips, *.bps, *.ups)|*.IPS;*.BPS;*.UPS|Tots els fitxers (*.*)|*.*</Message>
-    <Message ID="FilterTest">Fitxers de proves (*.mtp)|*.mtp|Tots els fitxers (*.*)|*.*</Message>
-    <Message ID="FilterCheat">Tots els formats suportats (*.cht, *.xml)|*.cht;*.xml</Message>
-    <Message ID="FilterSavestate">Partides guardades de Mesen (*.mst)|*.mst|Tots els fitxers (*.*)|*.*</Message>
-    <Message ID="FilterTapeFiles">Fitxers de cassets Family Basic (*.fbt)|*.fbt|Tots els fitxers (*.*)|*.*</Message>
+			<Control ID="lblRewind">Permet rebobinar fins a</Control>
+			<Control ID="lblRewindMinutes">minuts (ús de memòria ≈1MB/min)</Control>
 
-    <Message ID="LoadFromFile">Carrega des d'un fitxer...</Message>
-    <Message ID="SaveToFile">Desa al fitxer...</Message>
+			<Control ID="tpgCloudSave">Desa al núvol</Control>
+			<Control ID="lblGoogleDriveIntegration">Mesen pot utilitzar Google Drive per a emmagatzemar les vostres partides guardades al núvol. Quan s'activa aquesta integració, totes les partides guardades són fàcilment accessibles des de qualsevol ordinador, ja que se sincronitzen entre ells. A més, les partides guardades a Google Drive es poden recuperar en cas que s'esborrin del vostre ordinador.</Control>
+			<Control ID="lblIntegrationOK">La integració amb Google Drive es troba activa.</Control>
+			<Control ID="btnDisableIntegration">Desactiva la integració amb Google Drive</Control>
+			<Control ID="btnEnableIntegration">Activa la integració amb Google Drive</Control>
+			<Control ID="lblLastSync">Darrera sincronització: </Control>
+			<Control ID="btnResync">Resincronitza</Control>
 
-    <Message ID="ClearHistory">Esborra el registre</Message>
-    <Message ID="LastFolderUsed">Darrera carpeta utilitzada</Message>
+			<Control ID="lblFdsSettings">Configuració de Famicom Disk System</Control>
+			<Control ID="lblUiDisplaySettings">Configuració de la interfície d'usuari</Control>
+			<Control ID="lblGameSelectionScreenSettings">Configuració de la pantalla de selecció de jocs</Control>
+			<Control ID="chkGameSelectionScreenResetGame">Inicia els jocs des de zero en comptes de reprendre la sessió de joc anterior</Control>
+			<Control ID="chkDisableGameSelectionScreen">Desactiva la pantalla de selecció de jocs</Control>
 
-    <Message ID="MouseModeEnabled">Mouse mode enabled - press ESC or pause to release the cursor.</Message>
-    <Message ID="BandaiMicrophone">Bandai Microphone</Message>
-    <Message ID="DatachBarcodeReader">Datach Barcode Reader</Message>
+			<Control ID="chkDisableGameDatabase">Desactiva la base de dades de jocs integrada</Control>
+			<Control ID="chkDisableOsd">Desactiva la visualització en pantalla (OSD)</Control>
 
-    <Message ID="Resume">Continua</Message>
-    <Message ID="Pause">Pausa</Message>
-    <Message ID="StartServer">Inicia un servidor</Message>
-    <Message ID="StopServer">Atura el servidor</Message>
-    <Message ID="ConnectToServer">Connecta a un servidor</Message>
-    <Message ID="Disconnect">Desconnecta</Message>
-    <Message ID="PlayerNumber">Jugador {0}</Message>
+			<Control ID="chkAlwaysOnTop">Always display on top of other windows</Control>
 
-    <Message ID="CheatsFound">{0} jocs i {1} trucs presents a la base de dades</Message>
-    <Message ID="CheatsImported">S'han importat {0} trucs per al joc {1}.</Message>
+			<Control ID="tpgNsf">NSF</Control>
+			<Control ID="chkNsfAutoDetectSilence">Reprodueix la següent pista després de</Control>
+			<Control ID="lblNsfMillisecondsOfSilence">mil·lisegons de silenci</Control>
+			<Control ID="chkNsfMoveToNextTrackAfterTime">Limita la duració de pistes a</Control>
+			<Control ID="lblNsfSeconds">segons</Control>
+			<Control ID="chkNsfDisableApuIrqs">Desactiva les IRQs de l'APU (recomanat)</Control>
 
-    <Message ID="RomsFound">S'han trobat {0} roms</Message>
+			<Control ID="btnOK">D'acord</Control>
+			<Control ID="btnCancel">Cancel·la</Control>
+		</Form>
+		<Form ID="frmServerConfig" Title="Configuració del servidor">
+			<Control ID="txtPort">8888</Control>
+			<Control ID="lblPort">Port:</Control>
+			<Control ID="chkPublicServer">Servidor públic</Control>
+			<Control ID="lblServerName">Nom del servidor:</Control>
+			<Control ID="chkSpectator">Permet espectadors</Control>
+			<Control ID="lblMaxPlayers">Nombre màxim de jugadors:</Control>
+			<Control ID="lblPassword">Contrasenya:</Control>
+			<Control ID="btnOK">D'acord</Control>
+			<Control ID="btnCancel">Cancel·la</Control>
+		</Form>
+		<Form ID="frmClientConfig" Title="Connexió a un servidor">
+			<Control ID="txtPort">8888</Control>
+			<Control ID="lblHost">Servidor:</Control>
+			<Control ID="lblPort">Port:</Control>
+			<Control ID="chkSpectator">Uneix-t'hi com a espectador</Control>
+			<Control ID="btnOK">D'acord</Control>
+			<Control ID="btnCancel">Cancel·la</Control>
+		</Form>
+		<Form ID="frmCheatImportFromDb" Title="Tria un joc">
+			<Control ID="lblSearch">Cerca</Control>
+			<Control ID="btnOK">D'acord</Control>
+			<Control ID="btnCancel">Cancel·la</Control>
+		</Form>
+		<Form ID="frmCheatImport" Title="Importació de trucs">
+			<Control ID="grpImportOptions">Opcions d'importació</Control>
+			<Control ID="lblCheatFile">Fitxer de trucs:</Control>
+			<Control ID="lblGame">Joc:</Control>
+			<Control ID="btnBrowseCheat">Navega...</Control>
+			<Control ID="btnBrowseGame">Navega...</Control>
+			<Control ID="btnImport">Importa</Control>
+			<Control ID="btnCancel">Cancel·la</Control>
+		</Form>
+		<Form ID="frmCheatList" Title="Llista de trucs">
+			<Control ID="tabCheats">Trucs</Control>
+			<Control ID="chkCurrentGameOnly">Mostra només trucs per al joc actual</Control>
+			<Control ID="btnAddCheat">Afegeix un truc</Control>
+			<Control ID="btnDelete">Elimina</Control>
+			<Control ID="btnDeleteCheat">Elimina els trucs seleccionats</Control>
+			<Control ID="btnDeleteGameCheats">Elimina tots els trucs del joc seleccionat</Control>
+			<Control ID="mnuAddCheat">Afegeix un truc</Control>
+			<Control ID="mnuDeleteGameCheats">Elimina</Control>
+			<Control ID="mnuDeleteCheat">Elimina</Control>
+			<Control ID="colGameName">Joc</Control>
+			<Control ID="colCheatName">Nom del truc</Control>
+			<Control ID="colCode">Truc</Control>
+			<Control ID="btnImportCheatDB">Des de la base de dades de trucs</Control>
+			<Control ID="btnImportFromFile">Des d'un fitxer (XML, CHT)</Control>
+			<Control ID="btnImport">Importa</Control>
+			<Control ID="btnExport">Exporta</Control>
+			<Control ID="btnExportAllCheats">Tots els trucs</Control>
+			<Control ID="btnExportGame">Joc seleccionat</Control>
+			<Control ID="mnuExportGame">Exporta</Control>
+			<Control ID="btnExportSelectedCheats">Trucs seleccionats</Control>
+			<Control ID="mnuExportSelectedCheats">Exporta</Control>
+			<Control ID="tpgCheatFinder">Cercador de trucs</Control>
+			<Control ID="btnReset">Restableix</Control>
+			<Control ID="btnUndo">Desfés</Control>
+			<Control ID="lblCurrentValue">El valor actual és</Control>
+			<Control ID="lblPreviousValue">El darrer valor era</Control>
+			<Control ID="btnAddCurrentFilter">Afegeix filtre</Control>
+			<Control ID="btnAddPrevFilter">Afegeix filtre</Control>
+			<Control ID="btnCreateCheat">Crea un truc</Control>
+			<Control ID="mnuCreateCheat">Crea un truc</Control>
+			<Control ID="lblAtAddress">a</Control>
+			<Control ID="chkPauseGameWhileWindowActive">Pausa el joc automàticament mentre aquesta finestra estigui activa</Control>
+			<Control ID="chkDisableCheats">Desactiva tots els trucs</Control>
+			<Control ID="btnOK">D'acord</Control>
+			<Control ID="btnCancel">Cancel·la</Control>
+		</Form>
+		<Form ID="frmCheat" Title="Edició de trucs">
+			<Control ID="label2">Joc:</Control>
+			<Control ID="label1">Nom del truc:</Control>
+			<Control ID="grpCode">Truc</Control>
+			<Control ID="radCustom">Personalitzat:</Control>
+			<Control ID="radGameGenie">Game Genie:</Control>
+			<Control ID="radProActionRocky">Pro Action Rocky:</Control>
+			<Control ID="lblAddress">Adreça:</Control>
+			<Control ID="lblNewValue">Nou valor:</Control>
+			<Control ID="radRelativeAddress">Memòria RAM</Control>
+			<Control ID="radAbsoluteAddress">Memòria ROM</Control>
+			<Control ID="chkCompareValue">Comparar valor</Control>
+			<Control ID="btnBrowse">Navega...</Control>
+			<Control ID="chkEnabled">Truc activat</Control>
+			<Control ID="btnOK">D'acord</Control>
+			<Control ID="btnCancel">Cancel·la</Control>
+		</Form>
+		<Form ID="frmAbout" Title="Quant a...">
+			<Control ID="labelProductName">Mesen</Control>
+			<Control ID="labelCopyright">© 2017 M. Bibaud (aka Sour)</Control>
+			<Control ID="lblWebsite">Lloc web:</Control>
+			<Control ID="lblLink">www.mesen.ca</Control>
+			<Control ID="labelVersion">Versió: 0.9.4 (Beta)</Control>
+			<Control ID="lblDonate">Si desitgeu col·laborar amb Mesen, si us plau, considereu fer un donatiu.&#xA;Gràcies pel vostre suport.</Control>
+			<Control ID="okButton">&amp;D'acord</Control>
+		</Form>
+		<Form ID="frmVsGameConfig" Title="Configuració de joc VS">
+			<Control ID="lblGame">Joc</Control>
+			<Control ID="lblPpuModel">Model de PPU</Control>
+			<Control ID="grpDipSwitches">Interruptors DIP</Control>
+		</Form>
+		<Form ID="frmUpdatePrompt" Title="Mesen - Actualització disponible">
+			<Control ID="lblLatestVersion">Darrera versió: </Control>
+			<Control ID="lblCurrentVersion">Versió actual: </Control>
+			<Control ID="lblChangeLog">Llista de canvis</Control>
+			<Control ID="lblDonate">Si desitgeu col·laborar amb Mesen, si us plau, considereu fer un donatiu. Gràcies!</Control>
+			<Control ID="btnUpdate">Actualitza</Control>
+			<Control ID="btnCancel">Cancel·la</Control>
+		</Form>
+		<Form ID="frmGetKey" Title="Nova assignació...">
+			<Control ID="lblSetKeyMessage">Prem qualsevol tecla del teclat o botó del comandament per a assignar-lo a aquest botó.</Control>
+		</Form>
+		<Form ID="frmPlayerProfile" Title="Perfil del jugador">
+			<Control ID="lblName">Nom</Control>
+			<Control ID="btnOK">D'acord</Control>
+			<Control ID="btnCancel">Cancel·la</Control>
+		</Form>
+		<Form ID="frmSelectRom" Title="Selecció de joc...">
+			<Control ID="btnCancel">Cancel·la</Control>
+			<Control ID="btnOK">D'acord</Control>
+			<Control ID="lblSearch">Cerca</Control>
+		</Form>
+		<Form ID="frmRecordAvi" Title="Enregistrador de vídeo">
+			<Control ID="lblAviFile">Desa a:</Control>
+			<Control ID="lblCodec">Còdec de vídeo:</Control>
+			<Control ID="lblCompressionLevel">Nivell de compressió:</Control>
+			<Control ID="lblLowCompression">baix&#13;(ràpid)</Control>
+			<Control ID="lblHighCompression">alt&#13;(lent)</Control>
+			<Control ID="btnBrowse">Navega...</Control>
+			<Control ID="btnOK">D'acord</Control>
+			<Control ID="btnCancel">Cancel·la</Control>
+		</Form>
+		<Form ID="frmHdPackEditor" Title="Creador de paquets d'alta resolució">
+			<Control ID="grpPreview">Previsualització del banc CHR</Control>
+			<Control ID="lblChrBank">Banc CHR:</Control>
+			<Control ID="grpOptions">Opcions de gravació</Control>
+			<Control ID="lblBankSize">Mida del banc CHR:</Control>
+			<Control ID="lblScale">Escalat/Filtre:</Control>
+			<Control ID="chkSortByFrequency">Ordena les pàgines per freqüència d'ús</Control>
+			<Control ID="chkLargeSprites">Fes servir sprites de 8x16</Control>
+			<Control ID="chkGroupBlankTiles">Agrupa les tiles buides</Control>
+			<Control ID="chkIgnoreOverscan">Ignora les tiles a les franges exteriors de la pantalla (sobreescaneig)</Control>
+			<Control ID="lblFolder">Desa a:</Control>
+			<Control ID="btnSelectFolder">Navega...</Control>
+			<Control ID="btnStartRecording">Comença la gravació</Control>
+			<Control ID="btnStopRecording">Atura la gravació</Control>
+			<Control ID="btnOpenFolder">Obre la carpeta destinatària</Control>
+		</Form>
+		<Form ID="frmHelp" Title="Opcions de la línia d'ordres">
+			<Control ID="grpExample">Exemple d'ús</Control>
+			<Control ID="tpgGeneral">General</Control>
+			<Control ID="tpgVideoOptions">Opcions de vídeo</Control>
+			<Control ID="tpgAudioOptions">Opcions de so</Control>
+			<Control ID="tpgEmulationOptions">Opcions de l'emulació</Control>
+			<Control ID="lblExplanation">Això iniciarà Mesen en mode de pantalla completa i amb la rom "MyGame.nes" carregada. A més, farà servir el filtre NTSC ajustat a una escala de 2x i configurarà les opcions de sobreescaneig. El paràmetre "DoNotSaveSettings" s'utilitza per evitar que els canvis efectuats des de la línia d'ordres es desin permanentment a la configuració de Mesen.</Control>
+			<Control ID="txtGeneralOptions">/fullscreen - Inicia Mesen en pantalla completa&#13;&#10;/DoNotSaveSettings - Evita que els canvis es desin (útil per a evitar que les opcions de la línia d'ordres es converteixin en la configuració per defecte)</Control>
+		</Form>
+		<Form ID="frmRecordMovie" Title="Movie Recording Options">
+			<Control ID="lblSaveTo">Save to:</Control>
+			<Control ID="lblRecordFrom">Record from:</Control>
+			<Control ID="lblMovieInformation">Movie Information (optional)</Control>
+			<Control ID="lblAuthor">Author:</Control>
+			<Control ID="lblDescription">Description:</Control>
+			<Control ID="btnBrowse">Navega...</Control>
+			<Control ID="btnOK">D'acord</Control>
+			<Control ID="btnCancel">Cancel·la</Control>
+		</Form>
+		<Form ID="frmInputBarCode" Title="Introducció d'un codi de barres...">
+			<Control ID="lblBarcode">Codi de barres:</Control>
+			<Control ID="btnOK">D'acord</Control>
+			<Control ID="btnCancel">Cancel·la</Control>
+		</Form>
+		<Form ID="BaseInputConfigForm">
+			<Control ID="lblHint">Les pestanyes amb una icona contenen per aquest jugador.&#13;&#10;Cada botó es pot assignar a fins a 4 tecles de teclat o botons de comandament diferents.</Control>
+			<Control ID="tpgSet1">Distribució #1</Control>
+			<Control ID="tpgSet2">Distribució #2</Control>
+			<Control ID="tpgSet3">Distribució #3</Control>
+			<Control ID="tpgSet4">Distribució #4</Control>
+			<Control ID="btnSetDefault">Use Default Bindings</Control>
+			<Control ID="btnClear">Esborra les asignacions</Control>
+			<Control ID="btnOK">D'acord</Control>
+			<Control ID="btnCancel">Cancel·la</Control>
+		</Form>
+		<Form ID="frmControllerConfig">
+			<Control ID="lblTurboSpeed">Velocitat del mode turbo:</Control>
+			<Control ID="lblTurboFast">Ràpida</Control>
+			<Control ID="lblSlow">Lenta</Control>
+			<Control ID="btnSelectPreset">Tria una plantilla...</Control>
+			<Control ID="mnuKeyboard">Teclat</Control>
+			<Control ID="mnuWasdLayout">Distribució WASD</Control>
+			<Control ID="mnuArrowLayout">Distribució de tecles de direcció</Control>
+			<Control ID="mnuFceuxLayout">Distribució per defecte de FCEUX</Control>
+			<Control ID="mnuNestopiaLayout">Distribució per defecte de Nestopia</Control>
+			<Control ID="mnuXboxController">Comandament de l'Xbox</Control>
+			<Control ID="mnuXboxLayout1">Comandament #1</Control>
+			<Control ID="mnuXboxLayout2">Comandament #2</Control>
+			<Control ID="mnuPs4Controller">Comandament de la PS4</Control>
+			<Control ID="mnuPs4Layout1">Comandament #1</Control>
+			<Control ID="mnuPs4Layout2">Comandament #2</Control>
+			<Control ID="mnuSnes30Controller">Comandament SNES30</Control>
+			<Control ID="mnuSnes30Layout1">Comandament #1</Control>
+			<Control ID="mnuSnes30Layout2">Comandament #2</Control>
+		</Form>
+		<Form ID="frmZapperConfig">
+			<Control ID="lblSmall">Curt</Control>
+			<Control ID="lblLarge">Llarg</Control>
+			<Control ID="lblDetectRadius">Radi de detecció lumínica:</Control>
+			<Control ID="btnOK">D'acord</Control>
+			<Control ID="btnCancel">Cancel·la</Control>
+		</Form>
+		<Form ID="frmMouseConfig">
+			<Control ID="lblLow">Low</Control>
+			<Control ID="lblHigh">High</Control>
+			<Control ID="lblSensitivity">Sensitivity:</Control>
+			<Control ID="btnOK">D'acord</Control>
+			<Control ID="btnCancel">Cancel·la</Control>
+		</Form>
+		<Form ID="frmExcitingBoxingConfig">
+		</Form>
+		<Form ID="frmFamilyBasicKeyboardConfig">
+		</Form>
+		<Form ID="frmJissenMahjongConfig">
+		</Form>
+		<Form ID="frmPartyTapConfig">
+		</Form>
+		<Form ID="frmPowerPadConfig">
+			<Control ID="chkUseSideA">Use side A</Control>
+		</Form>
+		<Form ID="frmSuborKeyboardConfig">
+		</Form>
+		<Form ID="frmPachinkoConfig">
+		</Form>
+		<Form ID="frmBandaiMicrophone">
+		</Form>
+	</Forms>
+	<UserControls>
+		<UserControl ID="ctrlExcitingBoxingConfig">
+			<Control ID="lblLeftHook">Left Hook</Control>
+			<Control ID="lblRightHook">Right Hook</Control>
+			<Control ID="lblLeftJab">Left Jab</Control>
+			<Control ID="lblRightJab">Right Jab</Control>
+			<Control ID="lblStraight">Straight</Control>
+			<Control ID="lblBody">Body</Control>
+			<Control ID="lblMoveLeft">Move Left</Control>
+			<Control ID="lblMoveRight">Move Right</Control>
+		</UserControl>
+		<UserControl ID="ctrlPachinkoConfig">
+			<Control ID="lblPress">Press</Control>
+			<Control ID="lblRelease">Release</Control>
+		</UserControl>
+		<UserControl ID="ctrlBandaiMicrophone">
+			<Control ID="lblMicrophone">Microphone</Control>
+		</UserControl>
+	</UserControls>
+	<Messages>
+		<Message ID="FilterAll">Tots els fitxers (*.*)|*.*</Message>
+		<Message ID="FilterMovie">Pel·lícules (*.mmo)|*.mmo|Tots els fitxers (*.*)|*.*</Message>
+		<Message ID="FilterWave">Fitxers de so (*.wav)|*.wav|Tots els fitxers(*.*)|*.*</Message>
+		<Message ID="FilterAvi">Fitxers de vídeo (*.avi)|*.avi|Tots els fitxers (*.*)|*.*</Message>
+		<Message ID="FilterPalette">Fitxers de paleta (*.pal)|*.pal|Tots els fitxers (*.*)|*.*</Message>
+		<Message ID="FilterRom">Tots els formats suportats (*.nes, *.zip, *.7z, *.fds, *.nsf, *.nsfe, *.unf)|*.NES;*.ZIP;*.7z;*.FDS;*.NSF;*.NSFE;*.UNF|Roms de NES (*.nes, *.unf)|*.NES;*.UNF|Roms de Famicom Disk System (*.fds)|*.FDS|Fitxers NSF (*.nsf, *.nsfe)|*.NSF;*.NSFE|Arxius comprimits (*.zip)|*.ZIP|Arxius 7-Zip (*.7z)|*.7z|Tots els fitxers (*.*)|*.*</Message>
+		<Message ID="FilterRomIps">Tots els formats suportats (*.nes, *.zip, *.7z, *.fds, *.nsf, *.nsfe, *.unf, *.ips, *.bps, *.ups)|*.NES;*.ZIP;*.7z;*.IPS;*.BPS;*.UPS;*.FDS;*.NSF;*.NSFE;*.UNF|Roms de NES(*.nes, *.unf)|*.NES;*.UNF|Roms de Famicom Disk System (*.fds)|*.FDS|Fitxers NSF (*.nsf, *.nsfe)|*.NSF;*.NSFE|Arxius comprimits (*.zip)|*.ZIP|Arxius 7-Zip (*.7z)|*.7z|Pedaços IPS/UPS/BPS (*.ips, *.bps, *.ups)|*.IPS;*.BPS;*.UPS|Tots els fitxers (*.*)|*.*</Message>
+		<Message ID="FilterTest">Fitxers de proves (*.mtp)|*.mtp|Tots els fitxers (*.*)|*.*</Message>
+		<Message ID="FilterCheat">Tots els formats suportats (*.cht, *.xml)|*.cht;*.xml</Message>
+		<Message ID="FilterSavestate">Partides guardades de Mesen (*.mst)|*.mst|Tots els fitxers (*.*)|*.*</Message>
+		<Message ID="FilterTapeFiles">Fitxers de cassets Family Basic (*.fbt)|*.fbt|Tots els fitxers (*.*)|*.*</Message>
 
-    <Message ID="RiskyOptionHint">(no recomanat)</Message>
+		<Message ID="LoadFromFile">Carrega des d'un fitxer...</Message>
+		<Message ID="SaveToFile">Desa al fitxer...</Message>
 
-    <Message ID="ResetSettingsConfirmation">ADVERTÈNCIA: Esteu a punt de restablir la configuració SENCERA, fet que no es podrà revertir!&#xA;&#xA;Esteu segurs que voleu continuar?</Message>
+		<Message ID="ClearHistory">Esborra el registre</Message>
+		<Message ID="LastFolderUsed">Darrera carpeta utilitzada</Message>
 
-    <Message ID="RandomGameNoGameFound">Mesen ha sigut incapaç de trobar cap joc.</Message>
+		<Message ID="MouseModeEnabled">Mouse mode enabled - press ESC or pause to release the cursor.</Message>
+		<Message ID="BandaiMicrophone">Bandai Microphone</Message>
+		<Message ID="DatachBarcodeReader">Datach Barcode Reader</Message>
 
-    <Message ID="CannotWriteToFolder">Incapaç d'escriure a la carpeta escollida - si us plau trieu una altra carpeta i torneu-ho a provar.&#xA;&#xA;Detalls:&#xA;{0}</Message>
-    <Message ID="InvalidPaths">Les carpetes següents són invàlides:&#xA;&#xA;{0}&#xA;&#xA;Si us plau, introduïu carpetes vàlides i torneu-ho a provar.</Message>
-    <Message ID="CopyMesenDataPrompt">Tots els fitxers es copiaran des de:&#xA;&#xA;{0}&#xA;a la carpeta&#xA;{1}&#xA;&#xA;Un cop s'hagi finalitzat la còpia, Mesen es reiniciarà.&#xA;Voleu continuar?</Message>
+		<Message ID="Resume">Continua</Message>
+		<Message ID="Pause">Pausa</Message>
+		<Message ID="StartServer">Inicia un servidor</Message>
+		<Message ID="StopServer">Atura el servidor</Message>
+		<Message ID="ConnectToServer">Connecta a un servidor</Message>
+		<Message ID="Disconnect">Desconnecta</Message>
+		<Message ID="PlayerNumber">Jugador {0}</Message>
 
-    <Message ID="NsfNextTrack">Pista següent (Manteniu per avançar ràpidament)</Message>
-    <Message ID="NsfUnnamedTrack">[sense nom]</Message>
-    <Message ID="NsfUnknownField">[desconegut]</Message>
-    <Message ID="CouldNotInstallRuntime">El paquet Visual C++ Redistributable per a Visual Studio 2015 no s'ha pogut instal·lar correctament.</Message>
-    <Message ID="EmptyState">&lt;No hi ha còpia de seguretat&gt;</Message>
-    <Message ID="ErrorWhileCheckingUpdates">S'ha produït un error durant la cerca d'actualitzacions. Comproveu la vostra connexió a la xarxa i proveu-ho de nou.&#xA;&#xA;Detalls de l'error:&#xA;{0}</Message>
-    <Message ID="AutoUpdateDisabledMessage">Les actualitzacions automàtiques no estan activades en aquesta compilació - si us plau, descarregueu-vos la darrera versió del codi font i torneu a compilar Mesen per a obtenir les darreres actualitzacions.</Message>
-    <Message ID="FdsBiosNotFound">No s'ha trobat una bios necessària per a poder jugar a jocs de la FDS.&#xA;&#xA;Voleu seleccionar-ne una manualment?</Message>
-    <Message ID="FdsDiskSide">Disc {0} Cara {1}</Message>
-    <Message ID="FileNotFound">Fitxer no trobat: {0}</Message>
-    <Message ID="InvalidFdsBios">La bios seleccionada no és vàlida.</Message>
-    
-    <Message ID="HDNesTooltip">Aquesta opció permet a Mesen carregar els paquets d'alta resolució d'HDNes que trobi.&#xA;&#xA;Els paquets d'alta resolució han d'estar a la carpeta "HdPacks" dins d'una altra carpeta amb el mateix nom que la ROM.&#xA;Exemple: Posem per cas que tenim una rom anomenada "LaMevaRom.nes", el seu paquet hauria d'estar a "HdPacks\LaMevaRom\hires.txt".</Message>
-    <Message ID="HdPackBuilderScaleHelp">Tria el tipus d'escalat i filtre de vídeo que s'utilitzaran quan es generin els fitxers PNG&#xA;per al paquet d'alta resolució. Fes servir els filtres de preescalat per a generar les tiles&#xA;a una escala major sense aplicar cap transformació als píxels.</Message>
-    <Message ID="HdPackBuilderBankSizeHelp">Aquesta opció només està disponible per a jocs de RAM de tipus CHR. Els jocs de RAM de tipus CHR no tenen&#xA;"bancs" fixos - van sent creats dinàmicament pel codi del joc.&#xA;Aquesta opció altera el funcionament a l'hora d'agrupar les tiles&#xA;als fitxers PNG - un banc petit normalment donarà a lloc a menys fitxers &#xA;PNG (tot i que depenent en el codi del joc, valors més alts poden produir millors resultats).</Message>
-    <Message ID="HdPackBuilderFrequencyHelp">Quan aquesta opció està activada, les tiles als fitxers PNG s'ordenen per la&#xA;freqüència amb les que es mostren a la pantalla mentre s'estigui gravant (les paletes &#xA;més comunes s'agruparan conjuntament al primer fitxer per a un nombre de banc &#xA;específic. Si aquesta casella està desmarcada, els fitxers PNG s'ordenaran per paleta - &#xA;en aquest cas, cada fitxer PNG contindrà només 4 colors diferents.</Message>
-    <Message ID="HdPackBuilderGroupBlankHelp">Aquesta opció agrupa totes les tiles buides seqüencialment als mateixos fitxers&#xA;PNG - això ajuda a reduir el nombre de fitxers PNG produïts, ja que s'eliminen &#xA;fitxers PNG gairebé buits.</Message>
-    <Message ID="HdPackBuilderLargeSpritesHelp">Si està activada, aquesta opció altera l'ordre d'aparició dels bancs CHR&#xA;que sols continguin sprites per tal de fer que els sprites siguin més fàcils d'editar al fitxer PNG.</Message>
-    <Message ID="HdPackBuilderIgnoreOverscanHelp">Quan aquesta opció està activada, qualsevol píxel a l'àrea de sobreescaneig serà ignorat.&#xA;Això és útil en jocs que contenen errors a la franja exterior de la pantalla.&#xA;Combinacions de paleta incorrectes degudes a aquests errors seran ignorades i no es mostraran als fitxers PNG.</Message>
+		<Message ID="CheatsFound">{0} jocs i {1} trucs presents a la base de dades</Message>
+		<Message ID="CheatsImported">S'han importat {0} trucs per al joc {1}.</Message>
 
-    <Message ID="MesenUpToDate">Ja feu servir la versió més recent de Mesen.</Message>
-    <Message ID="PatchAndReset">Voleu aplicar el pedaç i reiniciar el joc?</Message>
-    <Message ID="SelectRomIps">Si us plau, seleccioni la ROM corresponent al pedaç IPS/UPS/BPS.</Message>
-    <Message ID="UnableToDownload">No es pot descarregar el fitxer. Comproveu la vostra connexió a la xarxa i proveu-ho de nou.&#xA;&#xA;Detalls de l'error:&#xA;{0}</Message>
-    <Message ID="UnableToStartMissingDependencies">Mesen no s'ha pogut obrir perquè ha sigut incapaç de carregar la llibreria MesenCore.dll a causa de manca de dependències.</Message>
-    <Message ID="UnableToStartMissingFiles">Mesen ha estat incapaç d'obrir-se perquè falten fitxers.&#xA;&#xA;Error: No s'ha trobat la llibreria MesenCore.dll.</Message>
-    <Message ID="UnexpectedError">S'ha produït un error inesperat.&#xA;&#xA;Detalls de l'error:&#xA;{0}</Message>
-    <Message ID="UpdateDownloadFailed">Descàrrega fallida - el fitxer sembla estar corromput. Si us plau, visiteu el lloc web de Mesen per a descarregar-vos la darrera versió manualment.</Message>
-    <Message ID="UpgradeSuccess">L'actualització s'ha realitzat amb èxit.</Message>
-    <Message ID="UpdaterNotFound">El procés d'actualització no pot començar perquè falten fitxers.</Message>
-    <Message ID="Net45NotFound">Microsoft .NET Framework 4.5 no ha sigut trobat. Si us plau, descarregueu-vos la darrera versió de .NET Framework des del lloc web de Microsoft i torneu-ho a provar.</Message>
+		<Message ID="RomsFound">S'han trobat {0} roms</Message>
 
-    <Message ID="GoogleDriveIntegrationError">Mesen ha estat incapaç de connectar-se al vostre compte de Google Drive, si us plau, torneu-ho a provar.</Message>
+		<Message ID="RiskyOptionHint">(no recomanat)</Message>
 
-    <Message ID="InvalidCheatFile">El fitxer seleccionat ({0}) no és un fitxer de trucs vàlid.</Message>
-    <Message ID="InvalidXmlFile">El fitxer seleccionat ({0}) no és un fitxer XML vàlid.</Message>
-    <Message ID="NoMatchingCheats">El fitxer seleccionat ({0}) no conté cap truc corresponent al joc seleccionat.</Message>
+		<Message ID="ResetSettingsConfirmation">ADVERTÈNCIA: Esteu a punt de restablir la configuració SENCERA, fet que no es podrà revertir!&#xA;&#xA;Esteu segurs que voleu continuar?</Message>
 
-    <Message ID="ConfirmReset">Esteu segurs de voler reiniciar el joc?</Message>
-    <Message ID="ConfirmPowerCycle">Esteu segurs de voler aturar i reiniciar el joc?</Message>
-    <Message ID="ConfirmExit">Esteu segurs de voler sortir?</Message>
+		<Message ID="RandomGameNoGameFound">Mesen ha sigut incapaç de trobar cap joc.</Message>
 
-    <Message ID="EmulatorShortcutMappings_FastForward">Avanç ràpid</Message>
-    <Message ID="EmulatorShortcutMappings_ToggleFastForward">Activa/Desactiva l'avanç ràpid</Message>
-    <Message ID="EmulatorShortcutMappings_Rewind">Rebobina</Message>
-    <Message ID="EmulatorShortcutMappings_ToggleRewind">Activa/Desactiva el rebobinat</Message>
-    <Message ID="EmulatorShortcutMappings_RewindTenSecs">Rebobina 10 segons</Message>
-    <Message ID="EmulatorShortcutMappings_RewindOneMin">Rebobina 1 minut</Message>
-    <Message ID="EmulatorShortcutMappings_IncreaseSpeed">Augmenta la velocitat</Message>
-    <Message ID="EmulatorShortcutMappings_DecreaseSpeed">Redueix la velocitat</Message>
-    <Message ID="EmulatorShortcutMappings_Pause">Pausa</Message>
-    <Message ID="EmulatorShortcutMappings_Reset">Reinicia el joc</Message>
-    <Message ID="EmulatorShortcutMappings_PowerCycle">Atura i reinicia el joc</Message>
-    <Message ID="EmulatorShortcutMappings_PowerOff">Atura el joc</Message>
-    <Message ID="EmulatorShortcutMappings_Exit">Surt</Message>
-    <Message ID="EmulatorShortcutMappings_TakeScreenshot">Captura de pantalla</Message>
-    <Message ID="EmulatorShortcutMappings_SwitchDiskSide">FDS - Canvia la cara del disc</Message>
-    <Message ID="EmulatorShortcutMappings_InsertNextDisk">FDS - Insereix el següent disc</Message>
-    <Message ID="EmulatorShortcutMappings_InsertCoin1">VS - Insereix moneda (1)</Message>
-    <Message ID="EmulatorShortcutMappings_InsertCoin2">VS - Insereix moneda (2)</Message>
-    <Message ID="EmulatorShortcutMappings_InputBarcode">Input Barcode</Message>
-    <Message ID="EmulatorShortcutMappings_VsServiceButton">VS - Botó de servei</Message>
-    <Message ID="EmulatorShortcutMappings_MoveToNextStateSlot">Selecciona la següent partida guardada</Message>
-    <Message ID="EmulatorShortcutMappings_MoveToPreviousStateSlot">Selecciona l'anterior partida guardada</Message>
-    <Message ID="EmulatorShortcutMappings_SaveState">Desa a la partida guardada seleccionada</Message>
-    <Message ID="EmulatorShortcutMappings_LoadState">Carrega la partida guardada seleccionada</Message>
-    <Message ID="EmulatorShortcutMappings_ToggleCheats">Activa/Desactiva els trucs</Message>
-    <Message ID="EmulatorShortcutMappings_ToggleAudio">Activa/Desactiva el so</Message>
-    <Message ID="EmulatorShortcutMappings_RunSingleFrame">Avança un sol fotograma</Message>
+		<Message ID="CannotWriteToFolder">Incapaç d'escriure a la carpeta escollida - si us plau trieu una altra carpeta i torneu-ho a provar.&#xA;&#xA;Detalls:&#xA;{0}</Message>
+		<Message ID="InvalidPaths">Les carpetes següents són invàlides:&#xA;&#xA;{0}&#xA;&#xA;Si us plau, introduïu carpetes vàlides i torneu-ho a provar.</Message>
+		<Message ID="CopyMesenDataPrompt">Tots els fitxers es copiaran des de:&#xA;&#xA;{0}&#xA;a la carpeta&#xA;{1}&#xA;&#xA;Un cop s'hagi finalitzat la còpia, Mesen es reiniciarà.&#xA;Voleu continuar?</Message>
 
-    <Message ID="EmulatorShortcutMappings_EjectDisk">FDS - Expulsa el disc</Message>
-    <Message ID="EmulatorShortcutMappings_SetScale1x">Mida de vídeo 1x</Message>
-    <Message ID="EmulatorShortcutMappings_SetScale2x">Mida de vídeo 2x</Message>
-    <Message ID="EmulatorShortcutMappings_SetScale3x">Mida de vídeo 3x</Message>
-    <Message ID="EmulatorShortcutMappings_SetScale4x">Mida de vídeo 4x</Message>
-    <Message ID="EmulatorShortcutMappings_SetScale5x">Mida de vídeo 5x</Message>
-    <Message ID="EmulatorShortcutMappings_SetScale6x">Mida de vídeo 6x</Message>
-    <Message ID="EmulatorShortcutMappings_ToggleFullscreen">Activa/Desactiva el mode de pantalla completa</Message>
-    <Message ID="EmulatorShortcutMappings_ToggleFps">Mostra/Amaga els FPS</Message>
-    <Message ID="EmulatorShortcutMappings_ToggleGameTimer">Mostra/Amaga el comptador de temps de joc</Message>
-    <Message ID="EmulatorShortcutMappings_ToggleFrameCounter">Mostra/Amaga el comptador de fotogrames</Message>
-    <Message ID="EmulatorShortcutMappings_ToggleLagCounter">Mostra/Amaga el comptador de latència</Message>
-    <Message ID="EmulatorShortcutMappings_ToggleOsd">Mostra/Amaga la visualització en pantalla (OSD)</Message>
-    <Message ID="EmulatorShortcutMappings_ToggleAlwaysOnTop">Toggle Display on Top</Message>
-    <Message ID="EmulatorShortcutMappings_ToggleBackground">Mostra/Amaga la capa de fons</Message>
-    <Message ID="EmulatorShortcutMappings_ToggleSprites">Mostra/Amaga la capa de sprites</Message>
-    <Message ID="EmulatorShortcutMappings_ToggleKeyboardMode">Toggle Keyboard Mode</Message>
-    <Message ID="EmulatorShortcutMappings_MaxSpeed">Activa/Desactiva la velocitat màxima</Message>
-    <Message ID="EmulatorShortcutMappings_LoadRandomGame">Carrega un joc a l'atzar</Message>
-    <Message ID="EmulatorShortcutMappings_SaveStateSlot1">Desa la partida - Posició 1</Message>
-    <Message ID="EmulatorShortcutMappings_SaveStateSlot2">Desa la partida - Posició 2</Message>
-    <Message ID="EmulatorShortcutMappings_SaveStateSlot3">Desa la partida - Posició 3</Message>
-    <Message ID="EmulatorShortcutMappings_SaveStateSlot4">Desa la partida - Posició 4</Message>
-    <Message ID="EmulatorShortcutMappings_SaveStateSlot5">Desa la partida - Posició 5</Message>
-    <Message ID="EmulatorShortcutMappings_SaveStateSlot6">Desa la partida - Posició 6</Message>
-    <Message ID="EmulatorShortcutMappings_SaveStateSlot7">Desa la partida - Posició 7</Message>
-    <Message ID="EmulatorShortcutMappings_SaveStateSlot8">Desa la partida - Posició 8</Message>
-    <Message ID="EmulatorShortcutMappings_SaveStateSlot9">Desa la partida - Posició 9</Message>
-    <Message ID="EmulatorShortcutMappings_SaveStateSlot10">Desa la partida - Posició 10</Message>
-    <Message ID="EmulatorShortcutMappings_SaveStateToFile">Desa la partida a un fitxer</Message>
-    <Message ID="EmulatorShortcutMappings_LoadStateSlot1">Carrega la partida - Posició 1</Message>
-    <Message ID="EmulatorShortcutMappings_LoadStateSlot2">Carrega la partida - Posició 2</Message>
-    <Message ID="EmulatorShortcutMappings_LoadStateSlot3">Carrega la partida - Posició 3</Message>
-    <Message ID="EmulatorShortcutMappings_LoadStateSlot4">Carrega la partida - Posició 4</Message>
-    <Message ID="EmulatorShortcutMappings_LoadStateSlot5">Carrega la partida - Posició 5</Message>
-    <Message ID="EmulatorShortcutMappings_LoadStateSlot6">Carrega la partida - Posició 6</Message>
-    <Message ID="EmulatorShortcutMappings_LoadStateSlot7">Carrega la partida - Posició 7</Message>
-    <Message ID="EmulatorShortcutMappings_LoadStateSlot8">Carrega la partida - Posició 8</Message>
-    <Message ID="EmulatorShortcutMappings_LoadStateSlot9">Carrega la partida - Posició 9</Message>
-    <Message ID="EmulatorShortcutMappings_LoadStateSlot10">Carrega la partida - Posició 10</Message>
-    <Message ID="EmulatorShortcutMappings_LoadStateSlotAuto">Load State - Auto Save Slot</Message>
-    <Message ID="EmulatorShortcutMappings_LoadStateFromFile">Carrega la partida des d'un fitxer</Message>
-    <Message ID="EmulatorShortcutMappings_LoadLastSession">Load Last Session</Message>
-    <Message ID="EmulatorShortcutMappings_OpenFile">Obre un fitxer</Message>
-    <Message ID="EmulatorShortcutMappings_OpenDebugger">Obre el depurador</Message>
-    <Message ID="EmulatorShortcutMappings_OpenAssembler">Obre l'assemblador</Message>
-    <Message ID="EmulatorShortcutMappings_OpenPpuViewer">Obre el visor de la PPU</Message>
-    <Message ID="EmulatorShortcutMappings_OpenMemoryTools">Obre les eines de memòria</Message>
-    <Message ID="EmulatorShortcutMappings_OpenScriptWindow">Obre la finestra de scripts</Message>
-    <Message ID="EmulatorShortcutMappings_OpenTraceLogger">Obre l'enregistrador de rastres</Message>
-    <Message ID="EmulatorShortcutMappings_OpenApuViewer">Open APU Viewer</Message>
-    <Message ID="EmulatorShortcutMappings_OpenEventViewer">Open Event Viewer</Message>
-  </Messages>
-  <Enums>
-    <Enum ID="ControllerType">
-      <Value ID="None">Cap</Value>
-      <Value ID="StandardController">Comandament estàndard</Value>
-      <Value ID="Zapper">Zapper</Value>
-      <Value ID="ArkanoidController">Comandament Arkanoid</Value>
-      <Value ID="SnesController">SNES Controller</Value>
-      <Value ID="PowerPad">Power Pad</Value>
-      <Value ID="SnesMouse">SNES Mouse</Value>
-      <Value ID="SuborMouse">Subor Mouse</Value>
-    </Enum>
-    <Enum ID="ExpansionPortDevice">
-      <Value ID="None">Cap</Value>
-      <Value ID="Zapper">Zapper</Value>
-      <Value ID="FourPlayerAdapter">Adaptador per a 4 jugadors</Value>
-      <Value ID="ArkanoidController">Comandament Arkanoid</Value>
-      <Value ID="OekaKidsTablet">Tauleta Oeka Kids</Value>
-      <Value ID="FamilyTrainerMat">Family Trainer</Value>
-      <Value ID="KonamiHyperShot">Konami Hyper Shot</Value>
-      <Value ID="FamilyBasicKeyboard">Teclat Family Basic</Value>
-      <Value ID="PartyTap">Partytap</Value>
-      <Value ID="Pachinko">Comandament Pachinko</Value>
-      <Value ID="ExcitingBoxing">Exciting Boxing Punching Bag</Value>
-      <Value ID="JissenMahjong">Comandament Jissen Mahjong</Value>
-      <Value ID="SuborKeyboard">Teclat Subor</Value>
-      <Value ID="BarcodeBattler">Barcode Battler</Value>
-      <Value ID="HoriTrack">Hori Track</Value>
-      <Value ID="BandaiHyperShot">Bandai Hyper Shot</Value>
-      <Value ID="AsciiTurboFile">Turbo File</Value>
-      <Value ID="BattleBox">Battle Box</Value>
-    </Enum>
-    <Enum ID="VideoAspectRatio">
-      <Value ID="NoStretching">Per defecte (no estirar)</Value>
-      <Value ID="Auto">Auto (8:7 o 11:8 segons el joc)</Value>
-      <Value ID="NTSC">NTSC (8:7)</Value>
-      <Value ID="PAL">PAL (11:8)</Value>
-      <Value ID="Standard">Estàndard (4:3)</Value>
-      <Value ID="Widescreen">Pantalla panoràmica (16:9)</Value>
-      <Value ID="Custom">Personalitzat</Value>
-    </Enum>
-    <Enum ID="VideoRefreshRates">
-      <Value ID="_50">50 Hz</Value>
-      <Value ID="_60">60 Hz</Value>
-      <Value ID="_100">100 Hz</Value>
-      <Value ID="_120">120 Hz</Value>
-      <Value ID="_200">200 Hz</Value>
-      <Value ID="_240">240 Hz</Value>
-    </Enum>
-    <Enum ID="ScreenRotation">
-      <Value ID="None">Cap</Value>
-      <Value ID="_90Degrees">90°</Value>
-      <Value ID="_180Degrees">180°</Value>
-      <Value ID="_270Degrees">270°</Value>
-    </Enum>
-    <Enum ID="VideoFilterType">
-      <Value ID="None">Cap</Value>
-      <Value ID="NTSC">NTSC</Value>
-      <Value ID="BisqwitNtscQuarterRes">NTSC (Bisqwit) - 2x</Value>
-      <Value ID="BisqwitNtscHalfRes">NTSC (Bisqwit) - 4x</Value>
-      <Value ID="BisqwitNtsc">NTSC (Bisqwit) - 8x</Value>
-      <Value ID="xBRZ2x">xBRZ 2x</Value>
-      <Value ID="xBRZ3x">xBRZ 3x</Value>
-      <Value ID="xBRZ4x">xBRZ 4x</Value>
-      <Value ID="xBRZ5x">xBRZ 5x</Value>
-      <Value ID="xBRZ6x">xBRZ 6x</Value>
-      <Value ID="HQ2x">HQ 2x</Value>
-      <Value ID="HQ3x">HQ 3x</Value>
-      <Value ID="HQ4x">HQ 4x</Value>
-      <Value ID="Scale2x">Escalat 2x</Value>
-      <Value ID="Scale3x">Escalat 3x</Value>
-      <Value ID="Scale4x">Escalat 4x</Value>
-      <Value ID="_2xSai">2xSai</Value>
-      <Value ID="Super2xSai">Super2xSai</Value>
-      <Value ID="SuperEagle">SuperEagle</Value>
-      <Value ID="Prescale2x">Preescalat 2x</Value>
-      <Value ID="Prescale3x">Preescalat 3x</Value>
-      <Value ID="Prescale4x">Preescalat 4x</Value>
-      <Value ID="Prescale6x">Preescalat 6x</Value>
-      <Value ID="Prescale8x">Preescalat 8x</Value>
-      <Value ID="Prescale10x">Preescalat 10x</Value>
-    </Enum>
-    <Enum ID="ConsoleType">
-      <Value ID="Nes">NES</Value>
-      <Value ID="Famicom">Famicom</Value>
-    </Enum>
-    <Enum ID="PpuModel">
-      <Value ID="Ppu2C03">RP2C03</Value>
-      <Value ID="Ppu2C04A">RP2C04-0001</Value>
-      <Value ID="Ppu2C04B">RP2C04-0002</Value>
-      <Value ID="Ppu2C04C">RP2C04-0003</Value>
-      <Value ID="Ppu2C04D">RP2C04-0004</Value>
-      <Value ID="Ppu2C05A">RP2C05-01</Value>
-      <Value ID="Ppu2C05B">RP2C05-02</Value>
-      <Value ID="Ppu2C05C">RP2C05-03</Value>
-      <Value ID="Ppu2C05D">RP2C05-04</Value>
-      <Value ID="Ppu2C05E">RP2C05-05</Value>
-    </Enum>
-    <Enum ID="InputDisplayPosition">
-      <Value ID="TopLeft">A dalt a l'esquerra</Value>
-      <Value ID="TopRight">A dalt a la dreta</Value>
-      <Value ID="BottomLeft">A baix a l'esquerra</Value>
-      <Value ID="BottomRight">A baix a la dreta</Value>
-    </Enum>
-    <Enum ID="RamPowerOnState">
-      <Value ID="AllZeros">Tots els bits a 0 (Per defecte)</Value>
-      <Value ID="AllOnes">Tots els bits a 1</Value>
-      <Value ID="Random">Valors aleatoris</Value>
-    </Enum>
-    <Enum ID="CheatCurrentFilterType">
-      <Value ID="Smaller">Més petit que</Value>
-      <Value ID="Equal">Igual a</Value>
-      <Value ID="NotEqual">Diferent a</Value>
-      <Value ID="Greater">Més gran que</Value>
-    </Enum>
-    <Enum ID="CheatPrevFilterType">
-      <Value ID="Smaller">Més petit</Value>
-      <Value ID="Equal">Igual</Value>
-      <Value ID="NotEqual">Diferent</Value>
-      <Value ID="Greater">Més gran</Value>
-    </Enum>
-    <Enum ID="Language">
-      <Value ID="SystemDefault">Idioma del compte d'usuari</Value>
-      <Value ID="English">English</Value>
-      <Value ID="French">Français</Value>
-      <Value ID="Japanese">日本語</Value>
-      <Value ID="Portuguese">Português</Value>
-      <Value ID="Russian">Русский</Value>
-      <Value ID="Spanish">Español</Value>
-      <Value ID="Ukrainian">Українська</Value>
-      <Value ID="Catalan">Català</Value>
-    </Enum>
-    <Enum ID="VideoCodec">
-      <Value ID="None">Cap (vídeo sense compressió)</Value>
-      <Value ID="ZMBV">Zip Motion Block Video (ZMBV)</Value>
-      <Value ID="CSCD">Camstudio (CSCD)</Value>
-    </Enum>
-    <Enum ID="RecordMovieFrom">
-      <Value ID="StartWithoutSaveData">Power on</Value>
-      <Value ID="StartWithSaveData">Power on, with save data</Value>
-      <Value ID="CurrentState">Current state</Value>
-    </Enum>
-  </Enums>
+		<Message ID="NsfNextTrack">Pista següent (Manteniu per avançar ràpidament)</Message>
+		<Message ID="NsfUnnamedTrack">[sense nom]</Message>
+		<Message ID="NsfUnknownField">[desconegut]</Message>
+		<Message ID="CouldNotInstallRuntime">El paquet Visual C++ Redistributable per a Visual Studio 2015 no s'ha pogut instal·lar correctament.</Message>
+		<Message ID="EmptyState">&lt;No hi ha còpia de seguretat&gt;</Message>
+		<Message ID="ErrorWhileCheckingUpdates">S'ha produït un error durant la cerca d'actualitzacions. Comproveu la vostra connexió a la xarxa i proveu-ho de nou.&#xA;&#xA;Detalls de l'error:&#xA;{0}</Message>
+		<Message ID="AutoUpdateDisabledMessage">Les actualitzacions automàtiques no estan activades en aquesta compilació - si us plau, descarregueu-vos la darrera versió del codi font i torneu a compilar Mesen per a obtenir les darreres actualitzacions.</Message>
+		<Message ID="FdsBiosNotFound">No s'ha trobat una bios necessària per a poder jugar a jocs de la FDS.&#xA;&#xA;Voleu seleccionar-ne una manualment?</Message>
+		<Message ID="FdsDiskSide">Disc {0} Cara {1}</Message>
+		<Message ID="FileNotFound">Fitxer no trobat: {0}</Message>
+		<Message ID="InvalidFdsBios">La bios seleccionada no és vàlida.</Message>
+
+		<Message ID="HDNesTooltip">Aquesta opció permet a Mesen carregar els paquets d'alta resolució d'HDNes que trobi.&#xA;&#xA;Els paquets d'alta resolució han d'estar a la carpeta "HdPacks" dins d'una altra carpeta amb el mateix nom que la ROM.&#xA;Exemple: Posem per cas que tenim una rom anomenada "LaMevaRom.nes", el seu paquet hauria d'estar a "HdPacks\LaMevaRom\hires.txt".</Message>
+		<Message ID="HdPackBuilderScaleHelp">Tria el tipus d'escalat i filtre de vídeo que s'utilitzaran quan es generin els fitxers PNG&#xA;per al paquet d'alta resolució. Fes servir els filtres de preescalat per a generar les tiles&#xA;a una escala major sense aplicar cap transformació als píxels.</Message>
+		<Message ID="HdPackBuilderBankSizeHelp">Aquesta opció només està disponible per a jocs de RAM de tipus CHR. Els jocs de RAM de tipus CHR no tenen&#xA;"bancs" fixos - van sent creats dinàmicament pel codi del joc.&#xA;Aquesta opció altera el funcionament a l'hora d'agrupar les tiles&#xA;als fitxers PNG - un banc petit normalment donarà a lloc a menys fitxers &#xA;PNG (tot i que depenent en el codi del joc, valors més alts poden produir millors resultats).</Message>
+		<Message ID="HdPackBuilderFrequencyHelp">Quan aquesta opció està activada, les tiles als fitxers PNG s'ordenen per la&#xA;freqüència amb les que es mostren a la pantalla mentre s'estigui gravant (les paletes &#xA;més comunes s'agruparan conjuntament al primer fitxer per a un nombre de banc &#xA;específic. Si aquesta casella està desmarcada, els fitxers PNG s'ordenaran per paleta - &#xA;en aquest cas, cada fitxer PNG contindrà només 4 colors diferents.</Message>
+		<Message ID="HdPackBuilderGroupBlankHelp">Aquesta opció agrupa totes les tiles buides seqüencialment als mateixos fitxers&#xA;PNG - això ajuda a reduir el nombre de fitxers PNG produïts, ja que s'eliminen &#xA;fitxers PNG gairebé buits.</Message>
+		<Message ID="HdPackBuilderLargeSpritesHelp">Si està activada, aquesta opció altera l'ordre d'aparició dels bancs CHR&#xA;que sols continguin sprites per tal de fer que els sprites siguin més fàcils d'editar al fitxer PNG.</Message>
+		<Message ID="HdPackBuilderIgnoreOverscanHelp">Quan aquesta opció està activada, qualsevol píxel a l'àrea de sobreescaneig serà ignorat.&#xA;Això és útil en jocs que contenen errors a la franja exterior de la pantalla.&#xA;Combinacions de paleta incorrectes degudes a aquests errors seran ignorades i no es mostraran als fitxers PNG.</Message>
+
+		<Message ID="MesenUpToDate">Ja feu servir la versió més recent de Mesen.</Message>
+		<Message ID="PatchAndReset">Voleu aplicar el pedaç i reiniciar el joc?</Message>
+		<Message ID="SelectRomIps">Si us plau, seleccioni la ROM corresponent al pedaç IPS/UPS/BPS.</Message>
+		<Message ID="UnableToDownload">No es pot descarregar el fitxer. Comproveu la vostra connexió a la xarxa i proveu-ho de nou.&#xA;&#xA;Detalls de l'error:&#xA;{0}</Message>
+		<Message ID="UnableToStartMissingDependencies">Mesen no s'ha pogut obrir perquè ha sigut incapaç de carregar la llibreria MesenCore.dll a causa de manca de dependències.</Message>
+		<Message ID="UnableToStartMissingFiles">Mesen ha estat incapaç d'obrir-se perquè falten fitxers.&#xA;&#xA;Error: No s'ha trobat la llibreria MesenCore.dll.</Message>
+		<Message ID="UnexpectedError">S'ha produït un error inesperat.&#xA;&#xA;Detalls de l'error:&#xA;{0}</Message>
+		<Message ID="UpdateDownloadFailed">Descàrrega fallida - el fitxer sembla estar corromput. Si us plau, visiteu el lloc web de Mesen per a descarregar-vos la darrera versió manualment.</Message>
+		<Message ID="UpgradeSuccess">L'actualització s'ha realitzat amb èxit.</Message>
+		<Message ID="UpdaterNotFound">El procés d'actualització no pot començar perquè falten fitxers.</Message>
+		<Message ID="Net45NotFound">Microsoft .NET Framework 4.5 no ha sigut trobat. Si us plau, descarregueu-vos la darrera versió de .NET Framework des del lloc web de Microsoft i torneu-ho a provar.</Message>
+
+		<Message ID="GoogleDriveIntegrationError">Mesen ha estat incapaç de connectar-se al vostre compte de Google Drive, si us plau, torneu-ho a provar.</Message>
+
+		<Message ID="InvalidCheatFile">El fitxer seleccionat ({0}) no és un fitxer de trucs vàlid.</Message>
+		<Message ID="InvalidXmlFile">El fitxer seleccionat ({0}) no és un fitxer XML vàlid.</Message>
+		<Message ID="NoMatchingCheats">El fitxer seleccionat ({0}) no conté cap truc corresponent al joc seleccionat.</Message>
+
+		<Message ID="ConfirmReset">Esteu segurs de voler reiniciar el joc?</Message>
+		<Message ID="ConfirmPowerCycle">Esteu segurs de voler aturar i reiniciar el joc?</Message>
+		<Message ID="ConfirmExit">Esteu segurs de voler sortir?</Message>
+
+		<Message ID="EmulatorShortcutMappings_FastForward">Avanç ràpid</Message>
+		<Message ID="EmulatorShortcutMappings_ToggleFastForward">Activa/Desactiva l'avanç ràpid</Message>
+		<Message ID="EmulatorShortcutMappings_Rewind">Rebobina</Message>
+		<Message ID="EmulatorShortcutMappings_ToggleRewind">Activa/Desactiva el rebobinat</Message>
+		<Message ID="EmulatorShortcutMappings_RewindTenSecs">Rebobina 10 segons</Message>
+		<Message ID="EmulatorShortcutMappings_RewindOneMin">Rebobina 1 minut</Message>
+		<Message ID="EmulatorShortcutMappings_IncreaseSpeed">Augmenta la velocitat</Message>
+		<Message ID="EmulatorShortcutMappings_DecreaseSpeed">Redueix la velocitat</Message>
+		<Message ID="EmulatorShortcutMappings_Pause">Pausa</Message>
+		<Message ID="EmulatorShortcutMappings_Reset">Reinicia el joc</Message>
+		<Message ID="EmulatorShortcutMappings_PowerCycle">Atura i reinicia el joc</Message>
+		<Message ID="EmulatorShortcutMappings_PowerOff">Atura el joc</Message>
+		<Message ID="EmulatorShortcutMappings_Exit">Surt</Message>
+		<Message ID="EmulatorShortcutMappings_TakeScreenshot">Captura de pantalla</Message>
+		<Message ID="EmulatorShortcutMappings_SwitchDiskSide">FDS - Canvia la cara del disc</Message>
+		<Message ID="EmulatorShortcutMappings_InsertNextDisk">FDS - Insereix el següent disc</Message>
+		<Message ID="EmulatorShortcutMappings_InsertCoin1">VS - Insereix moneda (1)</Message>
+		<Message ID="EmulatorShortcutMappings_InsertCoin2">VS - Insereix moneda (2)</Message>
+		<Message ID="EmulatorShortcutMappings_InputBarcode">Input Barcode</Message>
+		<Message ID="EmulatorShortcutMappings_VsServiceButton">VS - Botó de servei</Message>
+		<Message ID="EmulatorShortcutMappings_MoveToNextStateSlot">Selecciona la següent partida guardada</Message>
+		<Message ID="EmulatorShortcutMappings_MoveToPreviousStateSlot">Selecciona l'anterior partida guardada</Message>
+		<Message ID="EmulatorShortcutMappings_SaveState">Desa a la partida guardada seleccionada</Message>
+		<Message ID="EmulatorShortcutMappings_LoadState">Carrega la partida guardada seleccionada</Message>
+		<Message ID="EmulatorShortcutMappings_ToggleCheats">Activa/Desactiva els trucs</Message>
+		<Message ID="EmulatorShortcutMappings_ToggleAudio">Activa/Desactiva el so</Message>
+		<Message ID="EmulatorShortcutMappings_RunSingleFrame">Avança un sol fotograma</Message>
+
+		<Message ID="EmulatorShortcutMappings_EjectDisk">FDS - Expulsa el disc</Message>
+		<Message ID="EmulatorShortcutMappings_SetScale1x">Mida de vídeo 1x</Message>
+		<Message ID="EmulatorShortcutMappings_SetScale2x">Mida de vídeo 2x</Message>
+		<Message ID="EmulatorShortcutMappings_SetScale3x">Mida de vídeo 3x</Message>
+		<Message ID="EmulatorShortcutMappings_SetScale4x">Mida de vídeo 4x</Message>
+		<Message ID="EmulatorShortcutMappings_SetScale5x">Mida de vídeo 5x</Message>
+		<Message ID="EmulatorShortcutMappings_SetScale6x">Mida de vídeo 6x</Message>
+		<Message ID="EmulatorShortcutMappings_ToggleFullscreen">Activa/Desactiva el mode de pantalla completa</Message>
+		<Message ID="EmulatorShortcutMappings_ToggleFps">Mostra/Amaga els FPS</Message>
+		<Message ID="EmulatorShortcutMappings_ToggleGameTimer">Mostra/Amaga el comptador de temps de joc</Message>
+		<Message ID="EmulatorShortcutMappings_ToggleFrameCounter">Mostra/Amaga el comptador de fotogrames</Message>
+		<Message ID="EmulatorShortcutMappings_ToggleLagCounter">Mostra/Amaga el comptador de latència</Message>
+		<Message ID="EmulatorShortcutMappings_ToggleOsd">Mostra/Amaga la visualització en pantalla (OSD)</Message>
+		<Message ID="EmulatorShortcutMappings_ToggleAlwaysOnTop">Toggle Display on Top</Message>
+		<Message ID="EmulatorShortcutMappings_ToggleBackground">Mostra/Amaga la capa de fons</Message>
+		<Message ID="EmulatorShortcutMappings_ToggleSprites">Mostra/Amaga la capa de sprites</Message>
+		<Message ID="EmulatorShortcutMappings_ToggleKeyboardMode">Toggle Keyboard Mode</Message>
+		<Message ID="EmulatorShortcutMappings_MaxSpeed">Activa/Desactiva la velocitat màxima</Message>
+		<Message ID="EmulatorShortcutMappings_LoadRandomGame">Carrega un joc a l'atzar</Message>
+		<Message ID="EmulatorShortcutMappings_SaveStateSlot1">Desa la partida - Posició 1</Message>
+		<Message ID="EmulatorShortcutMappings_SaveStateSlot2">Desa la partida - Posició 2</Message>
+		<Message ID="EmulatorShortcutMappings_SaveStateSlot3">Desa la partida - Posició 3</Message>
+		<Message ID="EmulatorShortcutMappings_SaveStateSlot4">Desa la partida - Posició 4</Message>
+		<Message ID="EmulatorShortcutMappings_SaveStateSlot5">Desa la partida - Posició 5</Message>
+		<Message ID="EmulatorShortcutMappings_SaveStateSlot6">Desa la partida - Posició 6</Message>
+		<Message ID="EmulatorShortcutMappings_SaveStateSlot7">Desa la partida - Posició 7</Message>
+		<Message ID="EmulatorShortcutMappings_SaveStateSlot8">Desa la partida - Posició 8</Message>
+		<Message ID="EmulatorShortcutMappings_SaveStateSlot9">Desa la partida - Posició 9</Message>
+		<Message ID="EmulatorShortcutMappings_SaveStateSlot10">Desa la partida - Posició 10</Message>
+		<Message ID="EmulatorShortcutMappings_SaveStateToFile">Desa la partida a un fitxer</Message>
+		<Message ID="EmulatorShortcutMappings_LoadStateSlot1">Carrega la partida - Posició 1</Message>
+		<Message ID="EmulatorShortcutMappings_LoadStateSlot2">Carrega la partida - Posició 2</Message>
+		<Message ID="EmulatorShortcutMappings_LoadStateSlot3">Carrega la partida - Posició 3</Message>
+		<Message ID="EmulatorShortcutMappings_LoadStateSlot4">Carrega la partida - Posició 4</Message>
+		<Message ID="EmulatorShortcutMappings_LoadStateSlot5">Carrega la partida - Posició 5</Message>
+		<Message ID="EmulatorShortcutMappings_LoadStateSlot6">Carrega la partida - Posició 6</Message>
+		<Message ID="EmulatorShortcutMappings_LoadStateSlot7">Carrega la partida - Posició 7</Message>
+		<Message ID="EmulatorShortcutMappings_LoadStateSlot8">Carrega la partida - Posició 8</Message>
+		<Message ID="EmulatorShortcutMappings_LoadStateSlot9">Carrega la partida - Posició 9</Message>
+		<Message ID="EmulatorShortcutMappings_LoadStateSlot10">Carrega la partida - Posició 10</Message>
+		<Message ID="EmulatorShortcutMappings_LoadStateSlotAuto">Load State - Auto Save Slot</Message>
+		<Message ID="EmulatorShortcutMappings_LoadStateFromFile">Carrega la partida des d'un fitxer</Message>
+		<Message ID="EmulatorShortcutMappings_LoadLastSession">Load Last Session</Message>
+		<Message ID="EmulatorShortcutMappings_OpenFile">Obre un fitxer</Message>
+		<Message ID="EmulatorShortcutMappings_OpenDebugger">Obre el depurador</Message>
+		<Message ID="EmulatorShortcutMappings_OpenAssembler">Obre l'assemblador</Message>
+		<Message ID="EmulatorShortcutMappings_OpenPpuViewer">Obre el visor de la PPU</Message>
+		<Message ID="EmulatorShortcutMappings_OpenMemoryTools">Obre les eines de memòria</Message>
+		<Message ID="EmulatorShortcutMappings_OpenScriptWindow">Obre la finestra de scripts</Message>
+		<Message ID="EmulatorShortcutMappings_OpenTraceLogger">Obre l'enregistrador de rastres</Message>
+		<Message ID="EmulatorShortcutMappings_OpenApuViewer">Open APU Viewer</Message>
+		<Message ID="EmulatorShortcutMappings_OpenEventViewer">Open Event Viewer</Message>
+	</Messages>
+	<Enums>
+		<Enum ID="ControllerType">
+			<Value ID="None">Cap</Value>
+			<Value ID="StandardController">Comandament estàndard</Value>
+			<Value ID="Zapper">Zapper</Value>
+			<Value ID="ArkanoidController">Comandament Arkanoid</Value>
+			<Value ID="SnesController">SNES Controller</Value>
+			<Value ID="PowerPad">Power Pad</Value>
+			<Value ID="SnesMouse">SNES Mouse</Value>
+			<Value ID="SuborMouse">Subor Mouse</Value>
+		</Enum>
+		<Enum ID="ExpansionPortDevice">
+			<Value ID="None">Cap</Value>
+			<Value ID="Zapper">Zapper</Value>
+			<Value ID="FourPlayerAdapter">Adaptador per a 4 jugadors</Value>
+			<Value ID="ArkanoidController">Comandament Arkanoid</Value>
+			<Value ID="OekaKidsTablet">Tauleta Oeka Kids</Value>
+			<Value ID="FamilyTrainerMat">Family Trainer</Value>
+			<Value ID="KonamiHyperShot">Konami Hyper Shot</Value>
+			<Value ID="FamilyBasicKeyboard">Teclat Family Basic</Value>
+			<Value ID="PartyTap">Partytap</Value>
+			<Value ID="Pachinko">Comandament Pachinko</Value>
+			<Value ID="ExcitingBoxing">Exciting Boxing Punching Bag</Value>
+			<Value ID="JissenMahjong">Comandament Jissen Mahjong</Value>
+			<Value ID="SuborKeyboard">Teclat Subor</Value>
+			<Value ID="BarcodeBattler">Barcode Battler</Value>
+			<Value ID="HoriTrack">Hori Track</Value>
+			<Value ID="BandaiHyperShot">Bandai Hyper Shot</Value>
+			<Value ID="AsciiTurboFile">Turbo File</Value>
+			<Value ID="BattleBox">Battle Box</Value>
+		</Enum>
+		<Enum ID="VideoAspectRatio">
+			<Value ID="NoStretching">Per defecte (no estirar)</Value>
+			<Value ID="Auto">Auto (8:7 o 11:8 segons el joc)</Value>
+			<Value ID="NTSC">NTSC (8:7)</Value>
+			<Value ID="PAL">PAL (11:8)</Value>
+			<Value ID="Standard">Estàndard (4:3)</Value>
+			<Value ID="Widescreen">Pantalla panoràmica (16:9)</Value>
+			<Value ID="Custom">Personalitzat</Value>
+		</Enum>
+		<Enum ID="VideoRefreshRates">
+			<Value ID="_50">50 Hz</Value>
+			<Value ID="_60">60 Hz</Value>
+			<Value ID="_100">100 Hz</Value>
+			<Value ID="_120">120 Hz</Value>
+			<Value ID="_200">200 Hz</Value>
+			<Value ID="_240">240 Hz</Value>
+		</Enum>
+		<Enum ID="ScreenRotation">
+			<Value ID="None">Cap</Value>
+			<Value ID="_90Degrees">90°</Value>
+			<Value ID="_180Degrees">180°</Value>
+			<Value ID="_270Degrees">270°</Value>
+		</Enum>
+		<Enum ID="VideoFilterType">
+			<Value ID="None">Cap</Value>
+			<Value ID="NTSC">NTSC</Value>
+			<Value ID="BisqwitNtscQuarterRes">NTSC (Bisqwit) - 2x</Value>
+			<Value ID="BisqwitNtscHalfRes">NTSC (Bisqwit) - 4x</Value>
+			<Value ID="BisqwitNtsc">NTSC (Bisqwit) - 8x</Value>
+			<Value ID="xBRZ2x">xBRZ 2x</Value>
+			<Value ID="xBRZ3x">xBRZ 3x</Value>
+			<Value ID="xBRZ4x">xBRZ 4x</Value>
+			<Value ID="xBRZ5x">xBRZ 5x</Value>
+			<Value ID="xBRZ6x">xBRZ 6x</Value>
+			<Value ID="HQ2x">HQ 2x</Value>
+			<Value ID="HQ3x">HQ 3x</Value>
+			<Value ID="HQ4x">HQ 4x</Value>
+			<Value ID="Scale2x">Escalat 2x</Value>
+			<Value ID="Scale3x">Escalat 3x</Value>
+			<Value ID="Scale4x">Escalat 4x</Value>
+			<Value ID="_2xSai">2xSai</Value>
+			<Value ID="Super2xSai">Super2xSai</Value>
+			<Value ID="SuperEagle">SuperEagle</Value>
+			<Value ID="Prescale2x">Preescalat 2x</Value>
+			<Value ID="Prescale3x">Preescalat 3x</Value>
+			<Value ID="Prescale4x">Preescalat 4x</Value>
+			<Value ID="Prescale6x">Preescalat 6x</Value>
+			<Value ID="Prescale8x">Preescalat 8x</Value>
+			<Value ID="Prescale10x">Preescalat 10x</Value>
+		</Enum>
+		<Enum ID="ConsoleType">
+			<Value ID="Nes">NES</Value>
+			<Value ID="Famicom">Famicom</Value>
+		</Enum>
+		<Enum ID="PpuModel">
+			<Value ID="Ppu2C03">RP2C03</Value>
+			<Value ID="Ppu2C04A">RP2C04-0001</Value>
+			<Value ID="Ppu2C04B">RP2C04-0002</Value>
+			<Value ID="Ppu2C04C">RP2C04-0003</Value>
+			<Value ID="Ppu2C04D">RP2C04-0004</Value>
+			<Value ID="Ppu2C05A">RP2C05-01</Value>
+			<Value ID="Ppu2C05B">RP2C05-02</Value>
+			<Value ID="Ppu2C05C">RP2C05-03</Value>
+			<Value ID="Ppu2C05D">RP2C05-04</Value>
+			<Value ID="Ppu2C05E">RP2C05-05</Value>
+		</Enum>
+		<Enum ID="InputDisplayPosition">
+			<Value ID="TopLeft">A dalt a l'esquerra</Value>
+			<Value ID="TopRight">A dalt a la dreta</Value>
+			<Value ID="BottomLeft">A baix a l'esquerra</Value>
+			<Value ID="BottomRight">A baix a la dreta</Value>
+		</Enum>
+		<Enum ID="RamPowerOnState">
+			<Value ID="AllZeros">Tots els bits a 0 (Per defecte)</Value>
+			<Value ID="AllOnes">Tots els bits a 1</Value>
+			<Value ID="Random">Valors aleatoris</Value>
+		</Enum>
+		<Enum ID="CheatCurrentFilterType">
+			<Value ID="Smaller">Més petit que</Value>
+			<Value ID="Equal">Igual a</Value>
+			<Value ID="NotEqual">Diferent a</Value>
+			<Value ID="Greater">Més gran que</Value>
+		</Enum>
+		<Enum ID="CheatPrevFilterType">
+			<Value ID="Smaller">Més petit</Value>
+			<Value ID="Equal">Igual</Value>
+			<Value ID="NotEqual">Diferent</Value>
+			<Value ID="Greater">Més gran</Value>
+		</Enum>
+		<Enum ID="Language">
+			<Value ID="SystemDefault">Idioma del compte d'usuari</Value>
+			<Value ID="English">English</Value>
+			<Value ID="French">Français</Value>
+			<Value ID="Japanese">日本語</Value>
+			<Value ID="Portuguese">Português</Value>
+			<Value ID="Russian">Русский</Value>
+			<Value ID="Spanish">Español</Value>
+			<Value ID="Ukrainian">Українська</Value>
+			<Value ID="Catalan">Català</Value>
+		</Enum>
+		<Enum ID="VideoCodec">
+			<Value ID="None">Cap (vídeo sense compressió)</Value>
+			<Value ID="ZMBV">Zip Motion Block Video (ZMBV)</Value>
+			<Value ID="CSCD">Camstudio (CSCD)</Value>
+		</Enum>
+		<Enum ID="RecordMovieFrom">
+			<Value ID="StartWithoutSaveData">Power on</Value>
+			<Value ID="StartWithSaveData">Power on, with save data</Value>
+			<Value ID="CurrentState">Current state</Value>
+		</Enum>
+	</Enums>
 </Resources>

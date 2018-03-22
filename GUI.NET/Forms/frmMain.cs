@@ -1265,5 +1265,20 @@ namespace Mesen.GUI.Forms
 				this.menuStrip.Visible = nsfPlayerPosition.Y < 30;
 			}
 		}
+
+		private void mnu_DropDownOpened(object sender, EventArgs e)
+		{
+			_inMenu++;
+		}
+
+		private void mnu_DropDownClosed(object sender, EventArgs e)
+		{
+			Task.Run(() => {
+				Thread.Sleep(100);
+				this.BeginInvoke((Action)(() => {
+					_inMenu--;
+				}));
+			});
+		}
 	}
 }

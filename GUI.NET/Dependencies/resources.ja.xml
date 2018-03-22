@@ -1,1001 +1,1006 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <Resources>
-  <Forms>
-    <Form ID="frmMain" Title="Mesen">
-      <Control ID="mnuFile">ファイル</Control>
-      <Control ID="mnuOpen">開く</Control>
-      <Control ID="mnuSaveState">クイックセーブ</Control>
-      <Control ID="mnuLoadState">クイックロード</Control>
-      <Control ID="mnuLoadLastSession">前セッションをロードする</Control>
-      <Control ID="mnuRecentFiles">最近開いたファイル</Control>
-      <Control ID="mnuExit">終了</Control>
-      <Control ID="mnuGame">ゲーム</Control>
-      <Control ID="mnuPause">ポーズ</Control>
-      <Control ID="mnuReset">リセット</Control>
-      <Control ID="mnuPowerCycle">停止と再起動</Control>
-      <Control ID="mnuPowerOff">ゲームを停止する</Control>
-      <Control ID="mnuSwitchDiskSide">A面B面切り替え</Control>
-      <Control ID="mnuSelectDisk">ディスク選択</Control>
-      <Control ID="mnuEjectDisk">ディスクを取り出す</Control>
-      <Control ID="mnuVsGameConfig">VSゲームの設定</Control>
-      <Control ID="mnuInsertCoin1">インサートコイン 1</Control>
-      <Control ID="mnuInsertCoin2">インサートコイン 2</Control>
-      <Control ID="mnuInputBarcode">バーコードを入力</Control>
-      <Control ID="mnuTapeRecorder">テープレコーダー</Control>
-      <Control ID="mnuLoadTapeFile">ファイルから再生する</Control>
-      <Control ID="mnuStartRecordTapeFile">ファイルに録音する</Control>
-      <Control ID="mnuStopRecordTapeFile">録音を停止する</Control>
-      <Control ID="mnuOptions">設定</Control>
-      <Control ID="mnuEmulationSpeed">速度</Control>
-      <Control ID="mnuEmuSpeedNormal">通常　(100%)</Control>
-      <Control ID="mnuIncreaseSpeed">速度を上げる</Control>
-      <Control ID="mnuDecreaseSpeed">速度を下げる</Control>
-      <Control ID="mnuEmuSpeedMaximumSpeed">最高速度</Control>
-      <Control ID="mnuEmuSpeedTriple">300%</Control>
-      <Control ID="mnuEmuSpeedDouble">200%</Control>
-      <Control ID="mnuEmuSpeedHalf">50%</Control>
-      <Control ID="mnuEmuSpeedQuarter">25%</Control>
-      <Control ID="mnuShowFPS">フレームレート表示</Control>
-      <Control ID="mnuVideoScale">映像サイズ</Control>
-      <Control ID="mnuScale1x">１倍</Control>
-      <Control ID="mnuScale2x">２倍</Control>
-      <Control ID="mnuScale3x">３倍</Control>
-      <Control ID="mnuScale4x">４倍</Control>
-      <Control ID="mnuScale5x">５倍</Control>
-      <Control ID="mnuScale6x">６倍</Control>
-      <Control ID="mnuScaleCustom">カスタム</Control>
-      <Control ID="mnuFullscreen">全画面表示</Control>
-      <Control ID="mnuVideoFilter">画面エフェクト</Control>
-      <Control ID="mnuNoneFilter">なし</Control>
-      <Control ID="mnuNtscFilter">NTSC</Control>
-      <Control ID="mnuBilinearInterpolation">バイリニア補間</Control>
-      <Control ID="mnuAudioConfig">音声</Control>
-      <Control ID="mnuInput">コントローラ</Control>
-      <Control ID="mnuRegion">地域</Control>
-      <Control ID="mnuRegionAuto">Auto</Control>
-      <Control ID="mnuRegionNtsc">NTSC</Control>
-      <Control ID="mnuRegionPal">PAL</Control>
-      <Control ID="mnuRegionDendy">Dendy</Control>
-      <Control ID="mnuVideoConfig">映像</Control>
-      <Control ID="mnuEmulationConfig">エミュレーション</Control>
-      <Control ID="mnuPreferences">設定</Control>
-      <Control ID="mnuTools">ツール</Control>
-      <Control ID="mnuNetPlay">ネットプレイ</Control>
-      <Control ID="mnuStartServer">サーバを起動する</Control>
-      <Control ID="mnuConnect">サーバに接続</Control>
-      <Control ID="mnuNetPlaySelectController">コントローラを選ぶ</Control>
-      <Control ID="mnuNetPlayPlayer1">プレーヤー　1</Control>
-      <Control ID="mnuNetPlayPlayer2">プレーヤー　2</Control>
-      <Control ID="mnuNetPlayPlayer3">プレーヤー　3</Control>
-      <Control ID="mnuNetPlayPlayer4">プレーヤー　4</Control>
-      <Control ID="mnuNetPlaySpectator">観客</Control>
-      <Control ID="mnuFindServer">公開セーバリストを見る</Control>
-      <Control ID="mnuProfile">プロファイル設定</Control>
-      <Control ID="mnuMovies">動画</Control>
-      <Control ID="mnuPlayMovie">再生</Control>
-      <Control ID="mnuRecordMovie">録画</Control>
-      <Control ID="mnuStopMovie">停止</Control>
-      <Control ID="mnuSoundRecorder">サウンドレコーダー</Control>
-      <Control ID="mnuWaveRecord">録音</Control>
-      <Control ID="mnuWaveStop">停止</Control>
-      <Control ID="mnuVideoRecorder">動画レコーダー</Control>
-      <Control ID="mnuAviRecord">録画</Control>
-      <Control ID="mnuAviStop">停止</Control>
-      <Control ID="mnuCheats">チートコード</Control>
-      <Control ID="mnuTests">テスト</Control>
-      <Control ID="mnuTestRun">Run...</Control>
-      <Control ID="mnuTestRecordFrom">Record from...</Control>
-      <Control ID="mnuTestRecordStart">Start</Control>
-      <Control ID="mnuTestRecordNow">Now</Control>
-      <Control ID="mnuTestRecordMovie">Movie</Control>
-      <Control ID="mnuTestRecordTest">Test</Control>
-      <Control ID="mnuTestStopRecording">Stop recording</Control>
-      <Control ID="mnuRunAllTests">Run all tests</Control>
-      <Control ID="mnuDebugger">デバッガ</Control>
-      <Control ID="mnuLogWindow">ログウィンドウ</Control>
-      <Control ID="mnuHdPackEditor">HDパック作成</Control>
-      <Control ID="mnuTakeScreenshot">スクリーンショットを撮る</Control>
-      <Control ID="mnuRandomGame">ランダムゲームを開く</Control>
-      <Control ID="mnuHelp">ヘルプ</Control>
-      <Control ID="mnuOnlineHelp">オンラインヘルプ</Control>
-      <Control ID="mnuCheckForUpdates">アップデートの確認</Control>
-      <Control ID="mnuReportBug">バグレポート</Control>
-      <Control ID="mnuHelpWindow">コマンドラインオプション</Control>
-      <Control ID="mnuAbout">Mesenとは</Control>
+	<Forms>
+		<Form ID="frmMain" Title="Mesen">
+			<Control ID="mnuFile">ファイル</Control>
+			<Control ID="mnuOpen">開く</Control>
+			<Control ID="mnuSaveState">クイックセーブ</Control>
+			<Control ID="mnuLoadState">クイックロード</Control>
+			<Control ID="mnuLoadLastSession">前セッションをロードする</Control>
+			<Control ID="mnuRecentFiles">最近開いたファイル</Control>
+			<Control ID="mnuExit">終了</Control>
+			<Control ID="mnuGame">ゲーム</Control>
+			<Control ID="mnuPause">ポーズ</Control>
+			<Control ID="mnuReset">リセット</Control>
+			<Control ID="mnuPowerCycle">停止と再起動</Control>
+			<Control ID="mnuPowerOff">ゲームを停止する</Control>
+			<Control ID="mnuSwitchDiskSide">A面B面切り替え</Control>
+			<Control ID="mnuSelectDisk">ディスク選択</Control>
+			<Control ID="mnuEjectDisk">ディスクを取り出す</Control>
+			<Control ID="mnuVsGameConfig">VSゲームの設定</Control>
+			<Control ID="mnuInsertCoin1">インサートコイン 1</Control>
+			<Control ID="mnuInsertCoin2">インサートコイン 2</Control>
+			<Control ID="mnuInputBarcode">バーコードを入力</Control>
+			<Control ID="mnuTapeRecorder">テープレコーダー</Control>
+			<Control ID="mnuLoadTapeFile">ファイルから再生する</Control>
+			<Control ID="mnuStartRecordTapeFile">ファイルに録音する</Control>
+			<Control ID="mnuStopRecordTapeFile">録音を停止する</Control>
+			<Control ID="mnuOptions">設定</Control>
+			<Control ID="mnuEmulationSpeed">速度</Control>
+			<Control ID="mnuEmuSpeedNormal">通常　(100%)</Control>
+			<Control ID="mnuIncreaseSpeed">速度を上げる</Control>
+			<Control ID="mnuDecreaseSpeed">速度を下げる</Control>
+			<Control ID="mnuEmuSpeedMaximumSpeed">最高速度</Control>
+			<Control ID="mnuEmuSpeedTriple">300%</Control>
+			<Control ID="mnuEmuSpeedDouble">200%</Control>
+			<Control ID="mnuEmuSpeedHalf">50%</Control>
+			<Control ID="mnuEmuSpeedQuarter">25%</Control>
+			<Control ID="mnuShowFPS">フレームレート表示</Control>
+			<Control ID="mnuVideoScale">映像サイズ</Control>
+			<Control ID="mnuScale1x">１倍</Control>
+			<Control ID="mnuScale2x">２倍</Control>
+			<Control ID="mnuScale3x">３倍</Control>
+			<Control ID="mnuScale4x">４倍</Control>
+			<Control ID="mnuScale5x">５倍</Control>
+			<Control ID="mnuScale6x">６倍</Control>
+			<Control ID="mnuScaleCustom">カスタム</Control>
+			<Control ID="mnuFullscreen">全画面表示</Control>
+			<Control ID="mnuVideoFilter">画面エフェクト</Control>
+			<Control ID="mnuNoneFilter">なし</Control>
+			<Control ID="mnuNtscFilter">NTSC</Control>
+			<Control ID="mnuBilinearInterpolation">バイリニア補間</Control>
+			<Control ID="mnuAudioConfig">音声</Control>
+			<Control ID="mnuInput">コントローラ</Control>
+			<Control ID="mnuRegion">地域</Control>
+			<Control ID="mnuRegionAuto">Auto</Control>
+			<Control ID="mnuRegionNtsc">NTSC</Control>
+			<Control ID="mnuRegionPal">PAL</Control>
+			<Control ID="mnuRegionDendy">Dendy</Control>
+			<Control ID="mnuVideoConfig">映像</Control>
+			<Control ID="mnuEmulationConfig">エミュレーション</Control>
+			<Control ID="mnuPreferences">設定</Control>
+			<Control ID="mnuTools">ツール</Control>
+			<Control ID="mnuNetPlay">ネットプレイ</Control>
+			<Control ID="mnuStartServer">サーバを起動する</Control>
+			<Control ID="mnuConnect">サーバに接続</Control>
+			<Control ID="mnuNetPlaySelectController">コントローラを選ぶ</Control>
+			<Control ID="mnuNetPlayPlayer1">プレーヤー　1</Control>
+			<Control ID="mnuNetPlayPlayer2">プレーヤー　2</Control>
+			<Control ID="mnuNetPlayPlayer3">プレーヤー　3</Control>
+			<Control ID="mnuNetPlayPlayer4">プレーヤー　4</Control>
+			<Control ID="mnuNetPlaySpectator">観客</Control>
+			<Control ID="mnuFindServer">公開セーバリストを見る</Control>
+			<Control ID="mnuProfile">プロファイル設定</Control>
+			<Control ID="mnuMovies">動画</Control>
+			<Control ID="mnuPlayMovie">再生</Control>
+			<Control ID="mnuRecordMovie">録画</Control>
+			<Control ID="mnuStopMovie">停止</Control>
+			<Control ID="mnuSoundRecorder">サウンドレコーダー</Control>
+			<Control ID="mnuWaveRecord">録音</Control>
+			<Control ID="mnuWaveStop">停止</Control>
+			<Control ID="mnuVideoRecorder">動画レコーダー</Control>
+			<Control ID="mnuAviRecord">録画</Control>
+			<Control ID="mnuAviStop">停止</Control>
+			<Control ID="mnuCheats">チートコード</Control>
+			<Control ID="mnuTests">テスト</Control>
+			<Control ID="mnuTestRun">Run...</Control>
+			<Control ID="mnuTestRecordFrom">Record from...</Control>
+			<Control ID="mnuTestRecordStart">Start</Control>
+			<Control ID="mnuTestRecordNow">Now</Control>
+			<Control ID="mnuTestRecordMovie">Movie</Control>
+			<Control ID="mnuTestRecordTest">Test</Control>
+			<Control ID="mnuTestStopRecording">Stop recording</Control>
+			<Control ID="mnuRunAllTests">Run all tests</Control>
+			<Control ID="mnuDebugger">デバッガ</Control>
+			<Control ID="mnuLogWindow">ログウィンドウ</Control>
+			<Control ID="mnuHdPackEditor">HDパック作成</Control>
+			<Control ID="mnuTakeScreenshot">スクリーンショットを撮る</Control>
+			<Control ID="mnuRandomGame">ランダムゲームを開く</Control>
+			<Control ID="mnuHelp">ヘルプ</Control>
+			<Control ID="mnuOnlineHelp">オンラインヘルプ</Control>
+			<Control ID="mnuCheckForUpdates">アップデートの確認</Control>
+			<Control ID="mnuReportBug">バグレポート</Control>
+			<Control ID="mnuHelpWindow">コマンドラインオプション</Control>
+			<Control ID="mnuAbout">Mesenとは</Control>
 
-      <!-- Archive Load Message -->
-      <Control ID="lblExtractingFile">ファイルを抽出中です。しばらく待ってください。</Control>
+			<!-- Archive Load Message -->
+			<Control ID="lblExtractingFile">ファイルを抽出中です。しばらく待ってください。</Control>
 
-      <!-- NSF Player -->
-      <Control ID="lblTitle">タイトル</Control>
-      <Control ID="lblArtist">作者</Control>
-      <Control ID="lblCopyright">コピーライト</Control>
-      <Control ID="lblSoundChips">音源チップ</Control>
-      <Control ID="lblRecording">録音中</Control>
-      <Control ID="lblSlowMotion">スローモーション</Control>
-      <Control ID="lblFastForward">早送り</Control>
-    </Form>
-    <Form ID="frmLogWindow" Title="ログウィンドウ">
-      <Control ID="btnClose">閉じる</Control>
-    </Form>
-    <Form ID="frmAudioConfig" Title="音声設定">
-      <Control ID="tpgGeneral">全般</Control>
-      <Control ID="tpgAdvanced">詳細設定</Control>
-      <Control ID="chkSwapDutyCycles">Squareチャンネルのデューティサイクルをスワップする</Control>
-      <Control ID="chkSilenceTriangleHighFreq">Triangleチャンネルが超音波を出す場合、ミュートする　（ポップノイズを軽減する）</Control>
-      <Control ID="chkReduceDmcPopping">DMCチャンネルのポップノイズを軽減する</Control>
-      <Control ID="chkDisableNoiseModeFlag">Noiseチャンネルのモードフラッグを無効にする</Control>
-      <Control ID="tpgEffects">エフェクト</Control>
-      <Control ID="grpStereo">ステレオ</Control>
-      <Control ID="radStereoDisabled">無効</Control>
-      <Control ID="radStereoDelay">ディレイ</Control>
-      <Control ID="radStereoPanning">パニング</Control>
-      <Control ID="lblStereoDelayMs">ミリ秒</Control>
-      <Control ID="lblStereoPanningAngle">(角度)</Control>
-      <Control ID="chkCrossFeedEnabled">クロスフィード：</Control>
-      <Control ID="grpReverb">残響</Control>
-      <Control ID="chkReverbEnabled">残響を有効にする</Control>
-      <Control ID="lblReverbDelay">ディレイ:</Control>
-      <Control ID="lblReverbStrength">強度:</Control>
-      <Control ID="chkMuteSoundInBackground">Mesenが最前面ではない時、音声をミュートにする</Control>
-      <Control ID="chkReduceSoundInBackground">Mesenが最前面ではない時、音声を低くする</Control>
-      <Control ID="chkEnableAudio">音声オン</Control>
-      <Control ID="lblSampleRate">サンプルレート:</Control>
-      <Control ID="lblLatencyMs">ミリ秒</Control>
-      <Control ID="lblLatencyWarning">低すぎる場合は、音声にノイズが発生することがある</Control>
-      <Control ID="lblAudioLatency">レイテンシ:</Control>
-      <Control ID="lblAudioDevice">デバイス:</Control>
-      <Control ID="tpgVolume">音量ミキサー</Control>
-      <Control ID="grpVolume">音量ミキサー</Control>
-      <Control ID="btnReset">リセット</Control>
-      <Control ID="btnOK">OK</Control>
-      <Control ID="btnCancel">キャンセル</Control>
-      <Control ID="trkDmcVol">DMC</Control>
-      <Control ID="trkNoiseVol">Noise</Control>
-      <Control ID="trkTriangleVol">Triangle</Control>
-      <Control ID="trkSquare2Vol">Square 2</Control>
-      <Control ID="trkSquare1Vol">Square 1</Control>
-      <Control ID="trkMaster">マスター</Control>
-      <Control ID="trkFdsVol">FDS</Control>
-      <Control ID="trkMmc5Vol">MMC5</Control>
-      <Control ID="trkVrc6Vol">VRC6</Control>
-      <Control ID="trkVrc7Vol">VRC7</Control>
-      <Control ID="trkNamco163Vol">Namco</Control>
-      <Control ID="trkSunsoft5b">Sunsoft</Control>
+			<!-- NSF Player -->
+			<Control ID="lblTitle">タイトル</Control>
+			<Control ID="lblArtist">作者</Control>
+			<Control ID="lblCopyright">コピーライト</Control>
+			<Control ID="lblSoundChips">音源チップ</Control>
+			<Control ID="lblRecording">録音中</Control>
+			<Control ID="lblSlowMotion">スローモーション</Control>
+			<Control ID="lblFastForward">早送り</Control>
+		</Form>
+		<Form ID="frmLogWindow" Title="ログウィンドウ">
+			<Control ID="btnClose">閉じる</Control>
+		</Form>
+		<Form ID="frmAudioConfig" Title="音声設定">
+			<Control ID="tpgGeneral">全般</Control>
+			<Control ID="tpgAdvanced">詳細設定</Control>
+			<Control ID="chkSwapDutyCycles">Squareチャンネルのデューティサイクルをスワップする</Control>
+			<Control ID="chkSilenceTriangleHighFreq">Triangleチャンネルが超音波を出す場合、ミュートする　（ポップノイズを軽減する）</Control>
+			<Control ID="chkReduceDmcPopping">DMCチャンネルのポップノイズを軽減する</Control>
+			<Control ID="chkDisableNoiseModeFlag">Noiseチャンネルのモードフラッグを無効にする</Control>
+			<Control ID="tpgEffects">エフェクト</Control>
+			<Control ID="grpStereo">ステレオ</Control>
+			<Control ID="radStereoDisabled">無効</Control>
+			<Control ID="radStereoDelay">ディレイ</Control>
+			<Control ID="radStereoPanning">パニング</Control>
+			<Control ID="lblStereoDelayMs">ミリ秒</Control>
+			<Control ID="lblStereoPanningAngle">(角度)</Control>
+			<Control ID="chkCrossFeedEnabled">クロスフィード：</Control>
+			<Control ID="grpReverb">残響</Control>
+			<Control ID="chkReverbEnabled">残響を有効にする</Control>
+			<Control ID="lblReverbDelay">ディレイ:</Control>
+			<Control ID="lblReverbStrength">強度:</Control>
+			<Control ID="chkMuteSoundInBackground">Mesenが最前面ではない時、音声をミュートにする</Control>
+			<Control ID="chkReduceSoundInBackground">Mesenが最前面ではない時、音声を低くする</Control>
+			<Control ID="chkEnableAudio">音声オン</Control>
+			<Control ID="lblSampleRate">サンプルレート:</Control>
+			<Control ID="lblLatencyMs">ミリ秒</Control>
+			<Control ID="lblLatencyWarning">低すぎる場合は、音声にノイズが発生することがある</Control>
+			<Control ID="lblAudioLatency">レイテンシ:</Control>
+			<Control ID="lblAudioDevice">デバイス:</Control>
+			<Control ID="tpgVolume">音量ミキサー</Control>
+			<Control ID="grpVolume">音量ミキサー</Control>
+			<Control ID="btnReset">リセット</Control>
+			<Control ID="btnOK">OK</Control>
+			<Control ID="btnCancel">キャンセル</Control>
+			<Control ID="trkDmcVol">DMC</Control>
+			<Control ID="trkNoiseVol">Noise</Control>
+			<Control ID="trkTriangleVol">Triangle</Control>
+			<Control ID="trkSquare2Vol">Square 2</Control>
+			<Control ID="trkSquare1Vol">Square 1</Control>
+			<Control ID="trkMaster">マスター</Control>
+			<Control ID="trkFdsVol">FDS</Control>
+			<Control ID="trkMmc5Vol">MMC5</Control>
+			<Control ID="trkVrc6Vol">VRC6</Control>
+			<Control ID="trkVrc7Vol">VRC7</Control>
+			<Control ID="trkNamco163Vol">Namco</Control>
+			<Control ID="trkSunsoft5b">Sunsoft</Control>
 
-      <Control ID="tpgPanning">パンニング</Control>
-      <Control ID="trkDmcPan">DMC</Control>
-      <Control ID="trkNoisePan">Noise</Control>
-      <Control ID="trkTrianglePan">Triangle</Control>
-      <Control ID="trkSquare2Pan">Square 2</Control>
-      <Control ID="trkSquare1Pan">Square 1</Control>
-      <Control ID="trkFdsPan">FDS</Control>
-      <Control ID="trkMmc5Pan">MMC5</Control>
-      <Control ID="trkVrc6Pan">VRC6</Control>
-      <Control ID="trkVrc7Pan">VRC7</Control>
-      <Control ID="trkNamcoPan">Namco</Control>
-      <Control ID="trkSunsoftPan">Sunsoft</Control>
+			<Control ID="tpgPanning">パンニング</Control>
+			<Control ID="trkDmcPan">DMC</Control>
+			<Control ID="trkNoisePan">Noise</Control>
+			<Control ID="trkTrianglePan">Triangle</Control>
+			<Control ID="trkSquare2Pan">Square 2</Control>
+			<Control ID="trkSquare1Pan">Square 1</Control>
+			<Control ID="trkFdsPan">FDS</Control>
+			<Control ID="trkMmc5Pan">MMC5</Control>
+			<Control ID="trkVrc6Pan">VRC6</Control>
+			<Control ID="trkVrc7Pan">VRC7</Control>
+			<Control ID="trkNamcoPan">Namco</Control>
+			<Control ID="trkSunsoftPan">Sunsoft</Control>
 
-      <Control ID="tpgEqualizer">イコライザー</Control>
-      <Control ID="chkEnableEqualizer">イコライザーを有効にする</Control>      
-    </Form>
-    <Form ID="frmInputConfig" Title="コントローラ設定">
-      <Control ID="btnOK">OK</Control>
-      <Control ID="btnCancel">キャンセル</Control>
-      <Control ID="tpgControllers">コントローラ</Control>
-      <Control ID="btnSetupP4">設定</Control>
-      <Control ID="btnSetupP3">設定</Control>
-      <Control ID="btnSetupExp">設定</Control>
-      <Control ID="btnSetupCartridge">設定</Control>
-      <Control ID="lblCartridge">ロムカセット:</Control>
-      <Control ID="lblPlayer1">プレーヤー 1:</Control>
-      <Control ID="lblPlayer2">プレーヤー 2:</Control>
-      <Control ID="lblPlayer4">プレーヤー 4:</Control>
-      <Control ID="lblPlayer3">プレーヤー 3:</Control>
-      <Control ID="btnSetupP1">設定</Control>
-      <Control ID="btnSetupP2">設定</Control>
-      <Control ID="lblNesType">ゲーム機:</Control>
-      <Control ID="lblExpansionPort">拡張ポート:</Control>
-      <Control ID="chkFourScore">Four Scoreを使う</Control>
-      <Control ID="tpgEmulatorKeys">ショートカットキー</Control>
-      <Control ID="chkAutoConfigureInput">ゲームをロードする時、自動的に一番適切なコントローラを選ぶ</Control>
+			<Control ID="tpgEqualizer">イコライザー</Control>
+			<Control ID="chkEnableEqualizer">イコライザーを有効にする</Control>
+		</Form>
+		<Form ID="frmInputConfig" Title="コントローラ設定">
+			<Control ID="btnOK">OK</Control>
+			<Control ID="btnCancel">キャンセル</Control>
+			<Control ID="tpgControllers">コントローラ</Control>
+			<Control ID="btnSetupP4">設定</Control>
+			<Control ID="btnSetupP3">設定</Control>
+			<Control ID="btnSetupExp">設定</Control>
+			<Control ID="btnSetupCartridge">設定</Control>
+			<Control ID="lblCartridge">ロムカセット:</Control>
+			<Control ID="lblPlayer1">プレーヤー 1:</Control>
+			<Control ID="lblPlayer2">プレーヤー 2:</Control>
+			<Control ID="lblPlayer4">プレーヤー 4:</Control>
+			<Control ID="lblPlayer3">プレーヤー 3:</Control>
+			<Control ID="btnSetupP1">設定</Control>
+			<Control ID="btnSetupP2">設定</Control>
+			<Control ID="lblNesType">ゲーム機:</Control>
+			<Control ID="lblExpansionPort">拡張ポート:</Control>
+			<Control ID="chkFourScore">Four Scoreを使う</Control>
+			<Control ID="tpgEmulatorKeys">ショートカットキー</Control>
+			<Control ID="chkAutoConfigureInput">ゲームをロードする時、自動的に一番適切なコントローラを選ぶ</Control>
 
-      <Control ID="tpgAdvanced">詳細設定</Control>
-      <Control ID="grpDisplayInput">コントローラ表示</Control>
-      <Control ID="chkDisplayPort1">プレーヤー1</Control>
-      <Control ID="chkDisplayPort2">プレーヤー2</Control>
-      <Control ID="chkDisplayPort3">プレーヤー3</Control>
-      <Control ID="chkDisplayPort4">プレーヤー4</Control>
-      <Control ID="lblDisplayPosition">表示位置：</Control>
-      <Control ID="chkDisplayInputHorizontally">水平表示</Control>
+			<Control ID="tpgAdvanced">詳細設定</Control>
+			<Control ID="grpDisplayInput">コントローラ表示</Control>
+			<Control ID="chkDisplayPort1">プレーヤー1</Control>
+			<Control ID="chkDisplayPort2">プレーヤー2</Control>
+			<Control ID="chkDisplayPort3">プレーヤー3</Control>
+			<Control ID="chkDisplayPort4">プレーヤー4</Control>
+			<Control ID="lblDisplayPosition">表示位置：</Control>
+			<Control ID="chkDisplayInputHorizontally">水平表示</Control>
 
-      <Control ID="lblKeyBinding">注意：　使っている設定の中には同じキーが複数のボタン―にマッピングされています。　間違いでこの設定にした場合は、設定を確認して直してください。</Control>
-    </Form>
-    <Form ID="frmVideoConfig" Title="映像設定">
-      <Control ID="tpgGeneral">全般</Control>
-      <Control ID="lblVideoScale">画面サイズ:</Control>
-      <Control ID="lblVideoFilter">画面エフェクト:</Control>
-      <Control ID="chkIntegerFpsMode">60.0 fpsモードを有効にする　（普段の60.1fpsに対して）</Control>
-      <Control ID="chkBilinearInterpolation">バイリニア補間を有効にする</Control>
-      <Control ID="chkVerticalSync">垂直同期を有効にする</Control>
-      <Control ID="lblDisplayRatio">画面アスペクト:</Control>
-      <Control ID="lblCustomRatio">アスペクトレシオ:</Control>
-      <Control ID="chkFullscreenForceIntegerScale">全画面表示モードに入る時、画面サイズの倍率を整数にする</Control>
-      <Control ID="chkShowFps">フレームレート表示</Control>
-      <Control ID="chkUseHdPacks">HDNesのHDパックを使う</Control>
-      <Control ID="chkUseExclusiveFullscreen">排他的なフルスクリーンモードを使う</Control>
-      <Control ID="lblRequestedRefreshRate">リフレッシュレート:</Control>
-      <Control ID="tpgOverscan">オーバースキャン</Control>
-      <Control ID="grpCropping">オーバースキャン</Control>
-      <Control ID="lblLeft">左</Control>
-      <Control ID="lblTop">上</Control>
-      <Control ID="lblBottom">下</Control>
-      <Control ID="lblRight">右</Control>
-      <Control ID="tpgPalette">パレット</Control>
-      <Control ID="mnuDefaultPalette">デフォルト (NTSC)</Control>
-      <Control ID="btnSelectPalette">プリセットを選ぶ...</Control>
-      <Control ID="btnExportPalette">.palファイルにエクスポートする</Control>
-      <Control ID="btnLoadPalFile">.palファイルをロードする</Control>
-      <Control ID="chkUseCustomVsPalette">VS Systemのゲームにもこのパレットを使う</Control>
-      <Control ID="tpgPicture">画像</Control>
-      <Control ID="btnSelectPreset">プリセットを選ぶ...</Control>
-      <Control ID="grpCommon">共通設定</Control>
-      <Control ID="trkBrightness">明るさ</Control>
-      <Control ID="trkContrast">コントラスト</Control>
-      <Control ID="trkHue">色相</Control>
-      <Control ID="trkSaturation">彩度</Control>
-      <Control ID="grpNtscFilter">NTSCエフェクトの設定</Control>
-      <Control ID="trkArtifacts">アーティファクト</Control>
-      <Control ID="trkBleed">色にじみ</Control>
-      <Control ID="trkFringing">フリンジ</Control>
-      <Control ID="trkGamma">ガンマ</Control>
-      <Control ID="trkResolution">解像度</Control>
-      <Control ID="trkSharpness">シャープネス</Control>
-      <Control ID="chkMergeFields">画像をマージする</Control>
-      <Control ID="chkVerticalBlend">垂直ブレンドを使う</Control>
+			<Control ID="lblKeyBinding">注意：　使っている設定の中には同じキーが複数のボタン―にマッピングされています。　間違いでこの設定にした場合は、設定を確認して直してください。</Control>
+		</Form>
+		<Form ID="frmVideoConfig" Title="映像設定">
+			<Control ID="tpgGeneral">全般</Control>
+			<Control ID="lblVideoScale">画面サイズ:</Control>
+			<Control ID="lblVideoFilter">画面エフェクト:</Control>
+			<Control ID="chkIntegerFpsMode">60.0 fpsモードを有効にする　（普段の60.1fpsに対して）</Control>
+			<Control ID="chkBilinearInterpolation">バイリニア補間を有効にする</Control>
+			<Control ID="chkVerticalSync">垂直同期を有効にする</Control>
+			<Control ID="lblDisplayRatio">画面アスペクト:</Control>
+			<Control ID="lblCustomRatio">アスペクトレシオ:</Control>
+			<Control ID="chkFullscreenForceIntegerScale">全画面表示モードに入る時、画面サイズの倍率を整数にする</Control>
+			<Control ID="chkShowFps">フレームレート表示</Control>
+			<Control ID="chkUseHdPacks">HDNesのHDパックを使う</Control>
+			<Control ID="chkUseExclusiveFullscreen">排他的なフルスクリーンモードを使う</Control>
+			<Control ID="lblRequestedRefreshRate">リフレッシュレート:</Control>
+			<Control ID="tpgOverscan">オーバースキャン</Control>
+			<Control ID="grpCropping">オーバースキャン</Control>
+			<Control ID="lblLeft">左</Control>
+			<Control ID="lblTop">上</Control>
+			<Control ID="lblBottom">下</Control>
+			<Control ID="lblRight">右</Control>
+			<Control ID="tpgPalette">パレット</Control>
+			<Control ID="mnuDefaultPalette">デフォルト (NTSC)</Control>
+			<Control ID="btnSelectPalette">プリセットを選ぶ...</Control>
+			<Control ID="btnExportPalette">.palファイルにエクスポートする</Control>
+			<Control ID="btnLoadPalFile">.palファイルをロードする</Control>
+			<Control ID="chkUseCustomVsPalette">VS Systemのゲームにもこのパレットを使う</Control>
+			<Control ID="tpgPicture">画像</Control>
+			<Control ID="btnSelectPreset">プリセットを選ぶ...</Control>
+			<Control ID="grpCommon">共通設定</Control>
+			<Control ID="trkBrightness">明るさ</Control>
+			<Control ID="trkContrast">コントラスト</Control>
+			<Control ID="trkHue">色相</Control>
+			<Control ID="trkSaturation">彩度</Control>
+			<Control ID="grpNtscFilter">NTSCエフェクトの設定</Control>
+			<Control ID="trkArtifacts">アーティファクト</Control>
+			<Control ID="trkBleed">色にじみ</Control>
+			<Control ID="trkFringing">フリンジ</Control>
+			<Control ID="trkGamma">ガンマ</Control>
+			<Control ID="trkResolution">解像度</Control>
+			<Control ID="trkSharpness">シャープネス</Control>
+			<Control ID="chkMergeFields">画像をマージする</Control>
+			<Control ID="chkVerticalBlend">垂直ブレンドを使う</Control>
 
-      <Control ID="trkYFilterLength">Y フィルター (ブラー)</Control>
-      <Control ID="trkIFilterLength">I フィルター (色にじみ)</Control>
-      <Control ID="trkQFilterLength">Q フィルター (色にじみ)</Control>
-      
-      <Control ID="grpScanlines">走査線</Control>
-      <Control ID="trkScanlines">走査線</Control>
-      <Control ID="btnResetPictureSettings">リセット</Control>
-      <Control ID="mnuPresetComposite">コンポジット</Control>
-      <Control ID="mnuPresetSVideo">S端子</Control>
-      <Control ID="menuPresetRgb">RGB</Control>
-      <Control ID="mnuPresetMonochrome">モノクロ</Control>
+			<Control ID="trkYFilterLength">Y フィルター (ブラー)</Control>
+			<Control ID="trkIFilterLength">I フィルター (色にじみ)</Control>
+			<Control ID="trkQFilterLength">Q フィルター (色にじみ)</Control>
 
-      <Control ID="tpgAdvanced">詳細設定</Control>
-      <Control ID="lblScreenRotation">画面の回転:</Control>
-      <Control ID="chkDisableBackground">バックグラウンドを隠す</Control>
-      <Control ID="chkDisableSprites">スプライトを隠す</Control>
-      <Control ID="chkForceBackgroundFirstColumn">ゲームの設定を無視して、画面の一番左側にバックグラウンドを表す</Control>
-      <Control ID="chkForceSpritesFirstColumn">ゲームの設定を無視して、画面の一番左側にスプライトを表す</Control>
+			<Control ID="grpScanlines">走査線</Control>
+			<Control ID="trkScanlines">走査線</Control>
+			<Control ID="btnResetPictureSettings">リセット</Control>
+			<Control ID="mnuPresetComposite">コンポジット</Control>
+			<Control ID="mnuPresetSVideo">S端子</Control>
+			<Control ID="menuPresetRgb">RGB</Control>
+			<Control ID="mnuPresetMonochrome">モノクロ</Control>
 
-      <Control ID="btnOK">OK</Control>
-      <Control ID="btnCancel">キャンセル</Control>
-    </Form>
-    <Form ID="frmEmulationConfig" Title="エミュレーション設定">
-      <Control ID="tpgGeneral">全般</Control>
-      <Control ID="lblEmuSpeedHint">%  (0 = 最高速度)</Control>
-      <Control ID="lblEmulationSpeed">エミュレーションの速度:</Control>
-      <Control ID="lblTurboSpeedHint">%  (0 = 最高速度)</Control>
-      <Control ID="lblTurboSpeed">早送りの速度:</Control>
-      <Control ID="lblRewindSpeedHint">%  (0 = 最高速度)</Control>
-      <Control ID="lblRewindSpeed">巻き戻しの速度:</Control>
+			<Control ID="tpgAdvanced">詳細設定</Control>
+			<Control ID="lblScreenRotation">画面の回転:</Control>
+			<Control ID="chkDisableBackground">バックグラウンドを隠す</Control>
+			<Control ID="chkDisableSprites">スプライトを隠す</Control>
+			<Control ID="chkForceBackgroundFirstColumn">ゲームの設定を無視して、画面の一番左側にバックグラウンドを表す</Control>
+			<Control ID="chkForceSpritesFirstColumn">ゲームの設定を無視して、画面の一番左側にスプライトを表す</Control>
 
-      <Control ID="tpgAdvanced">詳細設定</Control>
-      <Control ID="chkUseAlternativeMmc3Irq">MMC3AのIRQ仕様を使う</Control>
-      <Control ID="chkAllowInvalidInput">コントローラでは不可能インプットを可能にする　（同時に上と下や右と左）</Control>
-      <Control ID="chkRemoveSpriteLimit">スプライトの制限を解除　(点滅を軽減する)</Control>
-      <Control ID="chkAdaptiveSpriteLimit">必要な時だけにスプライトの制限を戻す（制限解除による映像バグの発生率を軽減する）</Control>
-      <Control ID="chkEnableOamDecay">オブジェクト・アトリビュート・メモリーの崩壊現象を再現する</Control>
-      <Control ID="chkDisablePpu2004Reads">PPUの$2004を読み込み不可能にする　（ファミコン同様）</Control>
-      <Control ID="chkDisableOamAddrBug">PPUのOAMADDRバグを無効にする</Control>
-      <Control ID="chkDisablePaletteRead">PPUのパレットラムを読み込み不可能にする</Control>
-      <Control ID="chkDisablePpuReset">ゲーム機をリセットする時に、PPUをリセットしない　（ファミコン同様）</Control>
-      <Control ID="chkUseNes101Hvc101Behavior">AV仕様ファミコン（HVC-101とNES-101）の仕様を使う</Control>
+			<Control ID="btnOK">OK</Control>
+			<Control ID="btnCancel">キャンセル</Control>
+		</Form>
+		<Form ID="frmEmulationConfig" Title="エミュレーション設定">
+			<Control ID="tpgGeneral">全般</Control>
+			<Control ID="lblEmuSpeedHint">%  (0 = 最高速度)</Control>
+			<Control ID="lblEmulationSpeed">エミュレーションの速度:</Control>
+			<Control ID="lblTurboSpeedHint">%  (0 = 最高速度)</Control>
+			<Control ID="lblTurboSpeed">早送りの速度:</Control>
+			<Control ID="lblRewindSpeedHint">%  (0 = 最高速度)</Control>
+			<Control ID="lblRewindSpeed">巻き戻しの速度:</Control>
 
-      <Control ID="lblRamPowerOnState">起動時のメモリの状態 : </Control>
+			<Control ID="tpgAdvanced">詳細設定</Control>
+			<Control ID="chkUseAlternativeMmc3Irq">MMC3AのIRQ仕様を使う</Control>
+			<Control ID="chkAllowInvalidInput">コントローラでは不可能インプットを可能にする　（同時に上と下や右と左）</Control>
+			<Control ID="chkRemoveSpriteLimit">スプライトの制限を解除　(点滅を軽減する)</Control>
+			<Control ID="chkAdaptiveSpriteLimit">必要な時だけにスプライトの制限を戻す（制限解除による映像バグの発生率を軽減する）</Control>
+			<Control ID="chkEnableOamDecay">オブジェクト・アトリビュート・メモリーの崩壊現象を再現する</Control>
+			<Control ID="chkDisablePpu2004Reads">PPUの$2004を読み込み不可能にする　（ファミコン同様）</Control>
+			<Control ID="chkDisableOamAddrBug">PPUのOAMADDRバグを無効にする</Control>
+			<Control ID="chkDisablePaletteRead">PPUのパレットラムを読み込み不可能にする</Control>
+			<Control ID="chkDisablePpuReset">ゲーム機をリセットする時に、PPUをリセットしない　（ファミコン同様）</Control>
+			<Control ID="chkUseNes101Hvc101Behavior">AV仕様ファミコン（HVC-101とNES-101）の仕様を使う</Control>
 
-      <Control ID="tpgOverclocking">オーバークロック</Control>
-      <Control ID="grpOverclocking">オーバークロック</Control>
-      <Control ID="lblOverclockWarning">警告: オーバークロックをすることでエミュレーションの精度は下がる。　ゲームがバグる可能性は高い。</Control>
-      <Control ID="lblClockRate">クロックレートの倍率： </Control>
-      <Control ID="lblClockRatePercent">% (デフォルト： 100%)</Control>
-      <Control ID="chkOverclockAdjustApu">APUのオーバークロックを無効にする (オーバークロックによる音声のピッチ変化を中和)</Control>
+			<Control ID="lblRamPowerOnState">起動時のメモリの状態 : </Control>
 
-      <Control ID="grpPpuTiming">PPUタイミング</Control>
-      <Control ID="lblExtraScanlinesBeforeNmi">NMIの前の追加走査線数: </Control>
-      <Control ID="lblExtraScanlinesAfterNmi">NMIの後の追加走査線数: </Control>
-      <Control ID="lblEffectiveClockRate">クロックレート (NTSC) : </Control>
-      <Control ID="lblEffectiveClockRatePal">クロックレート (PAL) : </Control>
-      <Control ID="lblEffectiveClockRateDendy">クロックレート (Dendy) : </Control>
+			<Control ID="tpgOverclocking">オーバークロック</Control>
+			<Control ID="grpOverclocking">オーバークロック</Control>
+			<Control ID="lblOverclockWarning">警告: オーバークロックをすることでエミュレーションの精度は下がる。　ゲームがバグる可能性は高い。</Control>
+			<Control ID="lblClockRate">クロックレートの倍率： </Control>
+			<Control ID="lblClockRatePercent">% (デフォルト： 100%)</Control>
+			<Control ID="chkOverclockAdjustApu">APUのオーバークロックを無効にする (オーバークロックによる音声のピッチ変化を中和)</Control>
 
-      <Control ID="chkShowLagCounter">ラグカウンタを表示する</Control>
-      <Control ID="btnResetLagCounter">カウンタをリセットする</Control>
+			<Control ID="grpPpuTiming">PPUタイミング</Control>
+			<Control ID="lblExtraScanlinesBeforeNmi">NMIの前の追加走査線数: </Control>
+			<Control ID="lblExtraScanlinesAfterNmi">NMIの後の追加走査線数: </Control>
+			<Control ID="lblEffectiveClockRate">クロックレート (NTSC) : </Control>
+			<Control ID="lblEffectiveClockRatePal">クロックレート (PAL) : </Control>
+			<Control ID="lblEffectiveClockRateDendy">クロックレート (Dendy) : </Control>
 
-      <Control ID="btnOK">OK</Control>
-      <Control ID="btnCancel">キャンセル</Control>
-    </Form>
-    <Form ID="frmPreferences" Title="設定">
-      <Control ID="tpgGeneral">全般</Control>
-      <Control ID="lblDisplayLanguage">言語:</Control>
-      <Control ID="chkSingleInstance">Mesenを単一インスタンスモードにする</Control>
-      <Control ID="chkAutomaticallyCheckForUpdates">自動的にアップデートを確認</Control>
+			<Control ID="chkShowLagCounter">ラグカウンタを表示する</Control>
+			<Control ID="btnResetLagCounter">カウンタをリセットする</Control>
 
-      <Control ID="chkDeveloperMode">開発者モードを有効にする</Control>
-      
-      <Control ID="lblPauseBackgroundSettings">ポーズ・バックグラウンド設定</Control>
-      <Control ID="lblMiscSettings">その他</Control>
-      <Control ID="chkAutoHideMenu">自動的にメニューバーを隠す</Control>
-      <Control ID="chkDisplayTitleBarInfo">タイトルバーに追加情報を表す</Control>
+			<Control ID="btnOK">OK</Control>
+			<Control ID="btnCancel">キャンセル</Control>
+		</Form>
+		<Form ID="frmPreferences" Title="設定">
+			<Control ID="tpgGeneral">全般</Control>
+			<Control ID="lblDisplayLanguage">言語:</Control>
+			<Control ID="chkSingleInstance">Mesenを単一インスタンスモードにする</Control>
+			<Control ID="chkAutomaticallyCheckForUpdates">自動的にアップデートを確認</Control>
 
-      <Control ID="chkConfirmExitResetPower">リセットと再起度とMesenを終了する前に確認する</Control>
-      <Control ID="chkPauseOnMovieEnd">動画が終わると自動的にポーズする</Control>
-      <Control ID="chkAllowBackgroundInput">Mesenが最前面ではない時でも、コントローラの入力を受け付ける</Control>
-      <Control ID="chkPauseWhenInBackground">Mesenが最前面ではない時、自動的にポーズする</Control>
-      <Control ID="chkAutoLoadIps">自動的にパッチファイル（IPS・BPS）をロードする</Control>
-      <Control ID="chkHidePauseOverlay">ポーズ画面を隠す</Control>
-      <Control ID="chkDisplayMovieIcons">動画の録画や再生の際、アイコンを表示する</Control>
-      <Control ID="btnOpenMesenFolder">Mesenのフォルダを開く</Control>
-      <Control ID="btnResetSettings">初期化</Control>
-      
-      <Control ID="tpgFiles">ファイル・フォルダ</Control>
-      <Control ID="grpFileAssociations">ファイルの関連付け</Control>
-      <Control ID="chkNesFormat">.NES (ファミコン)</Control>
-      <Control ID="chkFdsFormat">.FDS (ファミコンディスクシステム)</Control>
-      <Control ID="chkMmoFormat">.MMO (Mesenの動画)</Control>
-      <Control ID="chkMstFormat">.MST (Mesenのクイックセーブ)</Control>
+			<Control ID="chkDeveloperMode">開発者モードを有効にする</Control>
 
-      <Control ID="grpDataStorageLocation">データの保存先</Control>
-      <Control ID="radStorageDocuments">プロファイルフォルダに保存する</Control>
-      <Control ID="radStoragePortable">Mesenのフォルダに保存する</Control>
-      <Control ID="lblDataLocation">保存先:</Control>
+			<Control ID="lblPauseBackgroundSettings">ポーズ・バックグラウンド設定</Control>
+			<Control ID="lblMiscSettings">その他</Control>
+			<Control ID="chkAutoHideMenu">自動的にメニューバーを隠す</Control>
+			<Control ID="chkDisplayTitleBarInfo">タイトルバーに追加情報を表す</Control>
 
-      <Control ID="grpPathOverrides">デフォルトフォルダの変更</Control>
-      <Control ID="chkGameOverride">ゲーム:</Control>
-      <Control ID="chkAviOverride">録画:</Control>
-      <Control ID="chkScreenshotsOverride">スクリーンショット:</Control>
-      <Control ID="chkSaveDataOverride">セーブデータ:</Control>
-      <Control ID="chkWaveOverride">録音:</Control>
-      <Control ID="chkSaveStatesOverride">クイックセーブ:</Control>
-      <Control ID="chkMoviesOverride">映画:</Control>
-      
-      <Control ID="tpgAdvanced">詳細設定</Control>
-      <Control ID="chkFdsAutoLoadDisk">ファミコンディスクシステムのゲームをロードする時に自動的にディスク１のA面を入れる</Control>
-      <Control ID="chkFdsFastForwardOnLoad">ファミコンディスクシステムのゲームをディスクからロードする時に自動的に最高速度にする</Control>
-      <Control ID="chkFdsAutoInsertDisk">ファミコンディスクシステムのゲーム中に自動的に該当するディスクを入れる</Control>
+			<Control ID="chkConfirmExitResetPower">リセットと再起度とMesenを終了する前に確認する</Control>
+			<Control ID="chkPauseOnMovieEnd">動画が終わると自動的にポーズする</Control>
+			<Control ID="chkAllowBackgroundInput">Mesenが最前面ではない時でも、コントローラの入力を受け付ける</Control>
 
-      <Control ID="chkShowFullPathInRecents">最近開いたファイルのフルパスを表示する</Control>
-      <Control ID="chkShowFrameCounter">フレームカウンタを表示する</Control>
-      <Control ID="chkShowGameTimer">ゲームタイマーを表示する</Control>
-      <Control ID="chkShowVsConfigOnLoad">VSゲームを起動する時に設定ウィンドウを表示する</Control>
+			<Control ID="lblPauseIn">自動ポーズ条件：</Control>
+			<Control ID="chkPauseWhenInBackground">最前面ではない時</Control>
+			<Control ID="chkPauseInMenuAndConfig">メニューと設定画面</Control>
+			<Control ID="chkPauseInDebugger">デバッグツール</Control>
 
-      <Control ID="lblRewind">巻き戻し用データの</Control>
-      <Control ID="lblRewindMinutes">分をキープする (メモリの使用量：１分に約１MB)</Control>
+			<Control ID="chkAutoLoadIps">自動的にパッチファイル（IPS・BPS）をロードする</Control>
+			<Control ID="chkHidePauseOverlay">ポーズ画面を隠す</Control>
+			<Control ID="chkDisplayMovieIcons">動画の録画や再生の際、アイコンを表示する</Control>
+			<Control ID="btnOpenMesenFolder">Mesenのフォルダを開く</Control>
+			<Control ID="btnResetSettings">初期化</Control>
 
-      <Control ID="tpgShortcuts"> ショートカットキー </Control>
-      <Control ID="lblShortcutWarning">注意：　使っている設定の中には同じマッピングが何回もあります。　間違いでこの設定にした場合は、設定を確認して直してください。</Control>
-      <Control ID="colAction">機能</Control>
-      <Control ID="colBinding1">ショートカットキー1</Control>
-      <Control ID="colBinding2">ショートカットキー2</Control>
+			<Control ID="tpgFiles">ファイル・フォルダ</Control>
+			<Control ID="grpFileAssociations">ファイルの関連付け</Control>
+			<Control ID="chkNesFormat">.NES (ファミコン)</Control>
+			<Control ID="chkFdsFormat">.FDS (ファミコンディスクシステム)</Control>
+			<Control ID="chkMmoFormat">.MMO (Mesenの動画)</Control>
+			<Control ID="chkMstFormat">.MST (Mesenのクイックセーブ)</Control>
 
-      <Control ID="tpgSaveData">セーブデータ</Control>
-      <Control ID="grpAutomaticSaves">クイックセーブ</Control>
-      <Control ID="chkAutoSave">オートクイックセーブを</Control>
-      <Control ID="lblAutoSave">分おきにする</Control>
-      <Control ID="chkAutoSaveNotify">オートクイックセーブする際、通信を表示する</Control>
-      <Control ID="chkAllowMismatchingSaveStates">違うROMで作られたクイックセーブをロード可能にする</Control>
+			<Control ID="grpDataStorageLocation">データの保存先</Control>
+			<Control ID="radStorageDocuments">プロファイルフォルダに保存する</Control>
+			<Control ID="radStoragePortable">Mesenのフォルダに保存する</Control>
+			<Control ID="lblDataLocation">保存先:</Control>
 
-      <Control ID="grpCloudSaves">クラウドバックアップ</Control>
-      <Control ID="lblGoogleDriveIntegration">MesenはGoogle Driveを利用することでクラウドバックアップが出来ます。　Google Drive同期を有効にすれば、ゲームのセーブデータはGoogle Driveにバックアップされ、どんなパソコンからでもアクセスが可能になります。</Control>
-      <Control ID="lblIntegrationOK">Google Drive同期は有効です。</Control>
-      <Control ID="btnDisableIntegration">Google Drive同期を無効にする</Control>
-      <Control ID="btnEnableIntegration">Google Drive同期を有効にする</Control>
-      <Control ID="btnResync">同期</Control>
-      <Control ID="lblLastSync">最終同期： </Control>
+			<Control ID="grpPathOverrides">デフォルトフォルダの変更</Control>
+			<Control ID="chkGameOverride">ゲーム:</Control>
+			<Control ID="chkAviOverride">録画:</Control>
+			<Control ID="chkScreenshotsOverride">スクリーンショット:</Control>
+			<Control ID="chkSaveDataOverride">セーブデータ:</Control>
+			<Control ID="chkWaveOverride">録音:</Control>
+			<Control ID="chkSaveStatesOverride">クイックセーブ:</Control>
+			<Control ID="chkMoviesOverride">映画:</Control>
 
-      <Control ID="lblFdsSettings">ファミコンディスクシステム設定</Control>
-      <Control ID="lblUiDisplaySettings">ユーザーインターフェイス表示設定</Control>
-      <Control ID="lblGameSelectionScreenSettings">ゲーム選択画面設定</Control>
-      <Control ID="chkGameSelectionScreenResetGame">初めからゲームを実行する</Control>
-      <Control ID="chkDisableGameSelectionScreen">ゲーム選択画面を無効にする</Control>
+			<Control ID="tpgAdvanced">詳細設定</Control>
+			<Control ID="chkFdsAutoLoadDisk">ファミコンディスクシステムのゲームをロードする時に自動的にディスク１のA面を入れる</Control>
+			<Control ID="chkFdsFastForwardOnLoad">ファミコンディスクシステムのゲームをディスクからロードする時に自動的に最高速度にする</Control>
+			<Control ID="chkFdsAutoInsertDisk">ファミコンディスクシステムのゲーム中に自動的に該当するディスクを入れる</Control>
 
-      <Control ID="chkDisableGameDatabase">ゲームデータベースを無効にする</Control>
-      <Control ID="chkDisableOsd">オンスクリーン表示を無効にする</Control>
+			<Control ID="chkShowFullPathInRecents">最近開いたファイルのフルパスを表示する</Control>
+			<Control ID="chkShowFrameCounter">フレームカウンタを表示する</Control>
+			<Control ID="chkShowGameTimer">ゲームタイマーを表示する</Control>
+			<Control ID="chkShowVsConfigOnLoad">VSゲームを起動する時に設定ウィンドウを表示する</Control>
 
-      <Control ID="chkAlwaysOnTop">他のウインドウより常に手前に表示する</Control>
+			<Control ID="lblRewind">巻き戻し用データの</Control>
+			<Control ID="lblRewindMinutes">分をキープする (メモリの使用量：１分に約１MB)</Control>
 
-      <Control ID="tpgNsf">NSF</Control>
-      <Control ID="chkNsfAutoDetectSilence">無音検出：</Control>
-      <Control ID="lblNsfMillisecondsOfSilence">ミリ秒間で無音の場合、次の曲を再生</Control>
-      <Control ID="chkNsfMoveToNextTrackAfterTime">曲の最大長さを</Control>
-      <Control ID="lblNsfSeconds">秒に固定する</Control>
-      <Control ID="chkNsfDisableApuIrqs">APUのIRQを無効にする （推奨）</Control>
+			<Control ID="tpgShortcuts"> ショートカットキー </Control>
+			<Control ID="lblShortcutWarning">注意：　使っている設定の中には同じマッピングが何回もあります。　間違いでこの設定にした場合は、設定を確認して直してください。</Control>
+			<Control ID="colAction">機能</Control>
+			<Control ID="colBinding1">ショートカットキー1</Control>
+			<Control ID="colBinding2">ショートカットキー2</Control>
 
-      <Control ID="btnOK">OK</Control>
-      <Control ID="btnCancel">キャンセル</Control>
-    </Form>
-    <Form ID="frmServerConfig" Title="サーバを起動する">
-      <Control ID="lblPort">ポート:</Control>
-      <Control ID="chkPublicServer">公開サーバ</Control>
-      <Control ID="lblServerName">サーバ名:</Control>
-      <Control ID="chkSpectator">観客として接続するのは可能にする</Control>
-      <Control ID="lblMaxPlayers">プレーヤーの最大数:</Control>
-      <Control ID="lblPassword">パスワード:</Control>
-      <Control ID="btnOK">OK</Control>
-      <Control ID="btnCancel">キャンセル</Control>
-    </Form>
-    <Form ID="frmClientConfig" Title="サーバに接続">
-      <Control ID="lblHost">ホスト:</Control>
-      <Control ID="lblPort">ポート:</Control>
-      <Control ID="chkSpectator">観客として接続する</Control>
-      <Control ID="btnOK">OK</Control>
-      <Control ID="btnCancel">キャンセル</Control>
-    </Form>
-    <Form ID="frmCheatImport" Title="インポート">
-      <Control ID="grpImportOptions">インポート設定</Control>
-      <Control ID="lblCheatFile">チートコードファイル：</Control>
-      <Control ID="lblGame">ゲーム：</Control>
-      <Control ID="btnBrowseCheat">参照...</Control>
-      <Control ID="btnBrowseGame">参照...</Control>
-      <Control ID="btnImport">インポート</Control>
-      <Control ID="btnCancel">キャンセル</Control>
-    </Form>
-    <Form ID="frmCheatImportFromDb" Title="ゲーム選択">
-      <Control ID="lblSearch">検索：</Control>
-      <Control ID="btnOK">インポート</Control>
-      <Control ID="btnCancel">キャンセル</Control>
-    </Form>
-    <Form ID="frmCheatList" Title="チートコード">
-      <Control ID="tabCheats">チートコード</Control>
-      <Control ID="btnAddCheat">コード追加</Control>
-      <Control ID="btnDelete">削除</Control>
-      <Control ID="btnDeleteCheat">選択中のコードを削除</Control>
-      <Control ID="btnDeleteGameCheats">選択中のコードを削除</Control>
-      <Control ID="mnuAddCheat">コード追加</Control>
-      <Control ID="mnuDeleteGameCheats">削除</Control>
-      <Control ID="mnuDeleteCheat">削除</Control>
-      <Control ID="colGameName">ゲーム</Control>
-      <Control ID="colCheatName">コード名</Control>
-      <Control ID="colCode">コード</Control>
-      <Control ID="btnImport">インポート</Control>
-      <Control ID="btnImportCheatDB">Mesenのチートコードリストから</Control>
-      <Control ID="btnImportFromFile">ファイルから</Control>
-      <Control ID="btnExport">エクスポート</Control>
-      <Control ID="btnExportAllCheats">全てのコードをエクスポートする</Control>
-      <Control ID="btnExportGame">選択中のゲームのコードをエクスポートする</Control>
-      <Control ID="mnuExportGame">エクスポート</Control>
-      <Control ID="btnExportSelectedCheats">選択中のコードをエクスポートする</Control>
-      <Control ID="mnuExportSelectedCheats">エクスポート</Control>
-      <Control ID="chkDisableCheats">チートコード機能を無効にする</Control>
+			<Control ID="tpgSaveData">セーブデータ</Control>
+			<Control ID="grpAutomaticSaves">クイックセーブ</Control>
+			<Control ID="chkAutoSave">オートクイックセーブを</Control>
+			<Control ID="lblAutoSave">分おきにする</Control>
+			<Control ID="chkAutoSaveNotify">オートクイックセーブする際、通信を表示する</Control>
+			<Control ID="chkAllowMismatchingSaveStates">違うROMで作られたクイックセーブをロード可能にする</Control>
 
-      <Control ID="tpgCheatFinder">コードファインダー</Control>
-      <Control ID="btnReset">リセット</Control>
-      <Control ID="btnUndo">元に戻す</Control>
-      <Control ID="lblCurrentValue">現在の数値は</Control>
-      <Control ID="lblPreviousValue">前回の数値は現在の数値</Control>
-      <Control ID="btnAddCurrentFilter">フィルター追加</Control>
-      <Control ID="btnAddPrevFilter">フィルター追加</Control>
-      <Control ID="btnCreateCheat">コード作成</Control>
-      <Control ID="mnuCreateCheat">コード作成</Control>
-      <Control ID="lblAtAddress"></Control>
-      <Control ID="chkPauseGameWhileWindowActive">このウィンドウがアクティブの時、自動的にゲームをポーズする</Control>
-      
-      <Control ID="btnOK">OK</Control>
-      <Control ID="btnCancel">キャンセル</Control>
-    </Form>
-    <Form ID="frmCheat" Title="コード">
-      <Control ID="label2">ゲーム:</Control>
-      <Control ID="label1">コード名:</Control>
-      <Control ID="grpCode">コード</Control>
-      <Control ID="radCustom">カスタム:</Control>
-      <Control ID="radGameGenie">Game Genie:</Control>
-      <Control ID="radProActionRocky">Pro Action Rocky:</Control>
-      <Control ID="lblAddress">メモリアドレス:</Control>
-      <Control ID="lblNewValue">バイト値:</Control>
-      <Control ID="radRelativeAddress">メモリ</Control>
-      <Control ID="radAbsoluteAddress">ゲームのコード</Control>
-      <Control ID="chkCompareValue">比較値</Control>
-      <Control ID="btnBrowse">参照...</Control>
-      <Control ID="chkEnabled">コードを有効にする</Control>
-      <Control ID="btnOK">OK</Control>
-      <Control ID="btnCancel">キャンセル</Control>
-    </Form>
-    <Form ID="frmAbout" Title="Mesenとは">
-      <Control ID="labelProductName">Mesen</Control>
-      <Control ID="labelCopyright">© 2017 M. Bibaud (aka Sour)</Control>
-      <Control ID="lblWebsite">サイト:</Control>
-      <Control ID="lblLink">www.mesen.ca</Control>
-      <Control ID="labelVersion">バージョン: 0.9.4 (ベータ版)</Control>
-      <Control ID="lblDonate">応援ありがとうございます！</Control>
-      <Control ID="okButton">&amp;OK</Control>
-    </Form>
-    <Form ID="frmUpdatePrompt" Title="Mesen ー アップデート可能">
-      <Control ID="lblLatestVersion">最新バージョン： </Control>
-      <Control ID="lblCurrentVersion">現在のバージョン： </Control>
-      <Control ID="lblChangeLog">更新歴</Control>
-      <Control ID="lblDonate">応援ありがとうございます！</Control>
-      <Control ID="btnUpdate">更新</Control>
-      <Control ID="btnCancel">キャンセル</Control>
-    </Form>
-    <Form ID="frmSelectRom" Title="ゲーム選択">
-      <Control ID="lblSearch">検索：</Control>
-      <Control ID="btnOK">OK</Control>
-      <Control ID="btnCancel">キャンセル</Control>
-    </Form>
-    <Form ID="frmGetKey" Title="キーマッピング">
-      <Control ID="lblSetKeyMessage">キーボードのキーやコントローラのボタンを押してください。</Control>
-    </Form>
-    <Form ID="frmPlayerProfile" Title="プロファイル">
-      <Control ID="lblName">プレーヤー名：</Control>
-      <Control ID="btnOK">OK</Control>
-      <Control ID="btnCancel">キャンセル</Control>
-    </Form>
-    <Form ID="frmRecordAvi" Title="動画レコーダー">
-      <Control ID="lblAviFile">保存先：</Control>
-      <Control ID="lblCodec">ビデオコーデック：</Control>
-      <Control ID="lblCompressionLevel">圧縮レベル：</Control>
-      <Control ID="lblLowCompression">低い&#13;(早い)</Control>
-      <Control ID="lblHighCompression">高い&#13;(遅い)</Control>
-      <Control ID="btnBrowse">参照...</Control>
-      <Control ID="btnOK">OK</Control>
-      <Control ID="btnCancel">キャンセル</Control>
-    </Form>
-    <Form ID="frmHdPackEditor" Title="HDパック作成">
-      <Control ID="grpPreview">CHRバンクプレビュー</Control>
-      <Control ID="lblChrBank">CHRバンク:</Control>
-      <Control ID="grpOptions">設定</Control>
-      <Control ID="lblBankSize">CHRバンクのサイズ:</Control>
-      <Control ID="lblScale">映像サイズ/画面エフェクト:</Control>
-      <Control ID="chkSortByFrequency">タイルを使用頻度順に並べ替えする</Control>
-      <Control ID="chkLargeSprites">8x16スプライト表示モードを使う</Control>
-      <Control ID="chkGroupBlankTiles">空っぽなタイルとまとめて保存する</Control>
-      <Control ID="chkIgnoreOverscan">オーバースキャンの中にあるタイルを無視する</Control>
-      <Control ID="lblFolder">セーブフォルダ:</Control>
-      <Control ID="btnSelectFolder">参照...</Control>
-      <Control ID="btnStartRecording">開始</Control>
-      <Control ID="btnStopRecording">停止</Control>
-      <Control ID="btnOpenFolder">セーブフォルダを開く</Control>
-    </Form>
-    <Form ID="frmHelp" Title="コマンドラインオプション">
-      <Control ID="grpExample">使い方</Control>
-      <Control ID="tpgGeneral">全般</Control>
-      <Control ID="tpgVideoOptions">映像</Control>
-      <Control ID="tpgAudioOptions">音声</Control>
-      <Control ID="tpgEmulationOptions">エミュレーション</Control>
-      <Control ID="lblExplanation">Mesenを全画面表示の状態で"MyGame.nes"を起動する. 画面エフェクトをNTSCにして、映像サイズを2xにして、オーバースキャン設定を変更する。</Control>
-      <Control ID="txtGeneralOptions">/fullscreen - 全画面表示の状態で起動する&#13;&#10;/DoNotSaveSettings - 設定のセーブ機能を無効にする</Control>
-    </Form>
-    <Form ID="frmCopyFiles" Title="しばらくお待ちください">
-      <Control ID="lblCopying">ファイル：</Control>
-    </Form>
-    <Form ID="frmConfigWizard" Title="Mesen - 設定">
-      <Control ID="lblMesen">Mesen - ファミコンエミュレータ</Control>
-      <Control ID="lblConfigWizard">セットアップウィザード</Control>
-      <Control ID="lblInitialSetup">Mesenの初期設定を行います。</Control>
-      <Control ID="lblStorageLocation">データの保存先</Control>
-      <Control ID="lblStorageHint">Mesenのデータの保存先を選んでください：</Control>
-      <Control ID="radStorageDocuments">プロファイルフォルダに保存する</Control>
-      <Control ID="radStoragePortable">Mesenのフォルダに保存する</Control>
-      <Control ID="lblDataLocation">保存先 :</Control>
-      <Control ID="lblInputMappings">コントローラ設定</Control>
-      <Control ID="lblInputHint">使いたいコントローラを選んでください：</Control>
-      <Control ID="lblMiscOptions">その他</Control>
-      <Control ID="chkCreateShortcut">デスクトップにショートカットを作る</Control>
-      <Control ID="btnOk">確認</Control>
-      <Control ID="lblCancel">キャンセル</Control>
-    </Form>
-    <Form ID="frmRecordMovie" Title="録画設定">
-      <Control ID="lblSaveTo">保存先：</Control>
-      <Control ID="lblRecordFrom">録画開始時点：</Control>
-      <Control ID="lblMovieInformation">映画情報　（任意）</Control>
-      <Control ID="lblAuthor">作者：</Control>
-      <Control ID="lblDescription">説明：</Control>
-      <Control ID="btnBrowse">参照...</Control>
-      <Control ID="btnOK">OK</Control>
-      <Control ID="btnCancel">キャンセル</Control>
-    </Form>
-    <Form ID="frmInputBarCode" Title="バーコードを入力">
-      <Control ID="lblBarcode">バーコード：</Control>
-      <Control ID="btnOK">入力</Control>
-      <Control ID="btnCancel">キャンセル</Control>
-    </Form>
-    <Form ID="BaseInputConfigForm">
-      <Control ID="lblHint">アイコンの付いてあるタブにはマッピングが設定されています。&#13;&#10;コントローラのボタンはキーボードのキーとゲームパッドのボタンを同時にマッピング出来ます。</Control>
-      <Control ID="tpgSet1">キーセット 1</Control>
-      <Control ID="tpgSet2">キーセット 2</Control>
-      <Control ID="tpgSet3">キーセット 3</Control>
-      <Control ID="tpgSet4">キーセット 4</Control>
-      <Control ID="btnClear">キーセットを削除</Control>
-      <Control ID="btnSetDefault">初期化</Control>
-      <Control ID="btnOK">OK</Control>
-      <Control ID="btnCancel">キャンセル</Control>
-    </Form>
-    <Form ID="frmControllerConfig">
-      <Control ID="lblTurboSpeed">ターボの速度:</Control>
-      <Control ID="lblTurboFast">速い</Control>
-      <Control ID="lblSlow">遅い</Control>
+			<Control ID="grpCloudSaves">クラウドバックアップ</Control>
+			<Control ID="lblGoogleDriveIntegration">MesenはGoogle Driveを利用することでクラウドバックアップが出来ます。　Google Drive同期を有効にすれば、ゲームのセーブデータはGoogle Driveにバックアップされ、どんなパソコンからでもアクセスが可能になります。</Control>
+			<Control ID="lblIntegrationOK">Google Drive同期は有効です。</Control>
+			<Control ID="btnDisableIntegration">Google Drive同期を無効にする</Control>
+			<Control ID="btnEnableIntegration">Google Drive同期を有効にする</Control>
+			<Control ID="btnResync">同期</Control>
+			<Control ID="lblLastSync">最終同期： </Control>
 
-      <Control ID="btnSelectPreset">プリセットを選ぶ..</Control>
-      <Control ID="mnuKeyboard">キーボード</Control>
-      <Control ID="mnuWasdLayout">WSADレイアウト</Control>
-      <Control ID="mnuArrowLayout">アローキーレイアウト</Control>
-      <Control ID="mnuFceuxLayout">FCEUXのデフォルトレイアウト</Control>
-      <Control ID="mnuNestopiaLayout">Nestopiaのデフォルトレイアウト</Control>
-      <Control ID="mnuXboxController">Xboxコントローラ</Control>
-      <Control ID="mnuXboxLayout1">コントローラ１</Control>
-      <Control ID="mnuXboxLayout2">コントローラ２</Control>
-      <Control ID="mnuPs4Controller">PS4コントローラ</Control>
-      <Control ID="mnuPs4Layout1">コントローラ１</Control>
-      <Control ID="mnuPs4Layout2">コントローラ２</Control>
-      <Control ID="mnuSnes30Controller">SFC30コントローラ</Control>
-      <Control ID="mnuSnes30Layout1">コントローラ１</Control>
-      <Control ID="mnuSnes30Layout2">コントローラ２</Control>
-    </Form>
-    <Form ID="frmZapperConfig">
-      <Control ID="lblSmall">小</Control>
-      <Control ID="lblLarge">大</Control>
-      <Control ID="lblDetectRadius">光検出範囲:</Control>
-      <Control ID="btnOK">OK</Control>
-      <Control ID="btnCancel">キャンセル</Control>
-    </Form>
-    <Form ID="frmMouseConfig">
-      <Control ID="lblLow">低い</Control>
-      <Control ID="lblHigh">高い</Control>
-      <Control ID="lblSensitivity">感度：</Control>
-      <Control ID="btnOK">OK</Control>
-      <Control ID="btnCancel">キャンセル</Control>
-    </Form>
-    <Form ID="frmExcitingBoxingConfig">
-    </Form>
-    <Form ID="frmFamilyBasicKeyboardConfig">
-    </Form>
-    <Form ID="frmJissenMahjongConfig">
-    </Form>
-    <Form ID="frmPartyTapConfig">
-    </Form>
-    <Form ID="frmPowerPadConfig">
-      <Control ID="chkUseSideA">A面を使う</Control>
-    </Form>
-    <Form ID="frmSuborKeyboardConfig">
-    </Form>
-    <Form ID="frmPachinkoConfig">
-    </Form>
-    <Form ID="frmBandaiMicrophone">
-    </Form>
-  </Forms>
-  <UserControls>
-    <UserControl ID="ctrlExcitingBoxingConfig">
-      <Control ID="lblLeftHook">Left Hook</Control>
-      <Control ID="lblRightHook">Right Hook</Control>
-      <Control ID="lblLeftJab">Left Jab</Control>
-      <Control ID="lblRightJab">Right Jab</Control>
-      <Control ID="lblStraight">Straight</Control>
-      <Control ID="lblBody">Body</Control>
-      <Control ID="lblMoveLeft">Move Left</Control>
-      <Control ID="lblMoveRight">Move Right</Control>
-    </UserControl>
-    <UserControl ID="ctrlPachinkoConfig">
-      <Control ID="lblPress">押す</Control>
-      <Control ID="lblRelease">放す</Control>
-    </UserControl>
-    <UserControl ID="ctrlBandaiMicrophone">
-      <Control ID="lblMicrophone">マイク</Control>
-    </UserControl>
-  </UserControls>
-  <Messages>
-    <Message ID="FilterAll">すべてのファイル (*.*)|*.*</Message>
-    <Message ID="FilterMovie">動画 (*.mmo)|*.mmo|すべてのファイル (*.*)|*.*</Message>
-    <Message ID="FilterWave">WAVファイル (*.wav)|*.wav|すべてのファイル (*.*)|*.*</Message>
-    <Message ID="FilterAvi">AVIファイル (*.avi)|*.avi|すべてのファイル (*.*)|*.*</Message>
-    <Message ID="FilterPalette">パレットファイル (*.pal)|*.pal|すべてのファイル (*.*)|*.*</Message>
-    <Message ID="FilterRom">対応するすべてのファイル (*.nes, *.zip, *.7z, *.fds, *.nsf, *.nsfe, *.unf)|*.NES;*.ZIP;*.FDS;*.7z;*.NSF;*.NSFE;*.UNF|ファミコンゲーム (*.nes, *.unf)|*.NES;*.UNF|ファミコンディスクシステムのゲーム (*.fds)|*.FDS|NSFファイル (*.nsf, *.nsfe)|*.NSF;*.NSFE|ZIPファイル (*.zip)|*.ZIP|7-Zipファイル (*.7z)|*.7z|すべてのファイル (*.*)|*.*</Message>
-    <Message ID="FilterRomIps">対応するすべてのファイル (*.nes, *.zip, *.7z, *.fds, *.nsf, *.nsfe, *.unf, *.ips, *.bps, *.ups)|*.NES;*.ZIP;*.7z;*.IPS;*.BPS;*.UPS;*.FDS;*.NSF;*.NSFE;*.UNF|ファミコンゲーム (*.nes, *.unf)|*.NES;*.UNF|ファミコンディスクシステムのゲーム (*.fds)|*.FDS|NSFファイル (*.nsf, *.nsfe)|*.NSF;*.NSFE|ZIPファイル (*.zip)|*.ZIP|7-Zipファイル (*.7z)|*.7z|パッチファイル (*.ips, *.bps, *.ups)|*.IPS;*.BPS;*.UPS|すべてのファイル (*.*)|*.*</Message>
-    <Message ID="FilterTest">テストファイル (*.mtp)|*.mtp|すべてのファイル (*.*)|*.*</Message>
-    <Message ID="FilterCheat">対応するすべてのファイル (*.cht, *.xml)|*.cht;*.xml</Message>
-    <Message ID="FilterSavestate">Mesenのクイックセーブデータ (*.mst)|*.mst|すべてのファイル (*.*)|*.*</Message>
-    <Message ID="FilterTapeFiles">Family Basicテープファイル (*.fbt)|*.fbt|すべてのファイル (*.*)|*.*</Message>
+			<Control ID="lblFdsSettings">ファミコンディスクシステム設定</Control>
+			<Control ID="lblUiDisplaySettings">ユーザーインターフェイス表示設定</Control>
+			<Control ID="lblGameSelectionScreenSettings">ゲーム選択画面設定</Control>
+			<Control ID="chkGameSelectionScreenResetGame">初めからゲームを実行する</Control>
+			<Control ID="chkDisableGameSelectionScreen">ゲーム選択画面を無効にする</Control>
 
-    <Message ID="LoadFromFile">ファイルからロードする…</Message>
-    <Message ID="SaveToFile">ファイルに保存する…</Message>
+			<Control ID="chkDisableGameDatabase">ゲームデータベースを無効にする</Control>
+			<Control ID="chkDisableOsd">オンスクリーン表示を無効にする</Control>
 
-    <Message ID="ClearHistory">履歴を消去</Message>
-    <Message ID="LastFolderUsed">最後に使用したフォルダ</Message>
+			<Control ID="chkAlwaysOnTop">他のウインドウより常に手前に表示する</Control>
 
-    <Message ID="MouseModeEnabled">マウスモード有効。 無効にするにはESCやポースボタンを使ってください。</Message>
-    <Message ID="BandaiMicrophone">Bandaiマイクロフォン</Message>
-    <Message ID="DatachBarcodeReader">Datachバーコードリーダー</Message>
-    
-    <Message ID="Resume">再開</Message>
-    <Message ID="Pause">ポーズ</Message>
-    <Message ID="StartServer">サーバを起動する</Message>
-    <Message ID="StopServer">サーバを停止する</Message>
-    <Message ID="ConnectToServer">サーバに接続する</Message>
-    <Message ID="Disconnect">切断</Message>
-    <Message ID="PlayerNumber">プレーヤー {0}</Message>
+			<Control ID="tpgNsf">NSF</Control>
+			<Control ID="chkNsfAutoDetectSilence">無音検出：</Control>
+			<Control ID="lblNsfMillisecondsOfSilence">ミリ秒間で無音の場合、次の曲を再生</Control>
+			<Control ID="chkNsfMoveToNextTrackAfterTime">曲の最大長さを</Control>
+			<Control ID="lblNsfSeconds">秒に固定する</Control>
+			<Control ID="chkNsfDisableApuIrqs">APUのIRQを無効にする （推奨）</Control>
 
-    <Message ID="RomsFound">{0}個</Message>
+			<Control ID="btnOK">OK</Control>
+			<Control ID="btnCancel">キャンセル</Control>
+		</Form>
+		<Form ID="frmServerConfig" Title="サーバを起動する">
+			<Control ID="lblPort">ポート:</Control>
+			<Control ID="chkPublicServer">公開サーバ</Control>
+			<Control ID="lblServerName">サーバ名:</Control>
+			<Control ID="chkSpectator">観客として接続するのは可能にする</Control>
+			<Control ID="lblMaxPlayers">プレーヤーの最大数:</Control>
+			<Control ID="lblPassword">パスワード:</Control>
+			<Control ID="btnOK">OK</Control>
+			<Control ID="btnCancel">キャンセル</Control>
+		</Form>
+		<Form ID="frmClientConfig" Title="サーバに接続">
+			<Control ID="lblHost">ホスト:</Control>
+			<Control ID="lblPort">ポート:</Control>
+			<Control ID="chkSpectator">観客として接続する</Control>
+			<Control ID="btnOK">OK</Control>
+			<Control ID="btnCancel">キャンセル</Control>
+		</Form>
+		<Form ID="frmCheatImport" Title="インポート">
+			<Control ID="grpImportOptions">インポート設定</Control>
+			<Control ID="lblCheatFile">チートコードファイル：</Control>
+			<Control ID="lblGame">ゲーム：</Control>
+			<Control ID="btnBrowseCheat">参照...</Control>
+			<Control ID="btnBrowseGame">参照...</Control>
+			<Control ID="btnImport">インポート</Control>
+			<Control ID="btnCancel">キャンセル</Control>
+		</Form>
+		<Form ID="frmCheatImportFromDb" Title="ゲーム選択">
+			<Control ID="lblSearch">検索：</Control>
+			<Control ID="btnOK">インポート</Control>
+			<Control ID="btnCancel">キャンセル</Control>
+		</Form>
+		<Form ID="frmCheatList" Title="チートコード">
+			<Control ID="tabCheats">チートコード</Control>
+			<Control ID="btnAddCheat">コード追加</Control>
+			<Control ID="btnDelete">削除</Control>
+			<Control ID="btnDeleteCheat">選択中のコードを削除</Control>
+			<Control ID="btnDeleteGameCheats">選択中のコードを削除</Control>
+			<Control ID="mnuAddCheat">コード追加</Control>
+			<Control ID="mnuDeleteGameCheats">削除</Control>
+			<Control ID="mnuDeleteCheat">削除</Control>
+			<Control ID="colGameName">ゲーム</Control>
+			<Control ID="colCheatName">コード名</Control>
+			<Control ID="colCode">コード</Control>
+			<Control ID="btnImport">インポート</Control>
+			<Control ID="btnImportCheatDB">Mesenのチートコードリストから</Control>
+			<Control ID="btnImportFromFile">ファイルから</Control>
+			<Control ID="btnExport">エクスポート</Control>
+			<Control ID="btnExportAllCheats">全てのコードをエクスポートする</Control>
+			<Control ID="btnExportGame">選択中のゲームのコードをエクスポートする</Control>
+			<Control ID="mnuExportGame">エクスポート</Control>
+			<Control ID="btnExportSelectedCheats">選択中のコードをエクスポートする</Control>
+			<Control ID="mnuExportSelectedCheats">エクスポート</Control>
+			<Control ID="chkDisableCheats">チートコード機能を無効にする</Control>
 
-    <Message ID="RiskyOptionHint">（推奨されません）</Message>
+			<Control ID="tpgCheatFinder">コードファインダー</Control>
+			<Control ID="btnReset">リセット</Control>
+			<Control ID="btnUndo">元に戻す</Control>
+			<Control ID="lblCurrentValue">現在の数値は</Control>
+			<Control ID="lblPreviousValue">前回の数値は現在の数値</Control>
+			<Control ID="btnAddCurrentFilter">フィルター追加</Control>
+			<Control ID="btnAddPrevFilter">フィルター追加</Control>
+			<Control ID="btnCreateCheat">コード作成</Control>
+			<Control ID="mnuCreateCheat">コード作成</Control>
+			<Control ID="lblAtAddress"></Control>
+			<Control ID="chkPauseGameWhileWindowActive">このウィンドウがアクティブの時、自動的にゲームをポーズする</Control>
 
-    <Message ID="ResetSettingsConfirmation">注意：全ての設定が初期化されます。&#xA;&#xA;よろしいですか？</Message>
+			<Control ID="btnOK">OK</Control>
+			<Control ID="btnCancel">キャンセル</Control>
+		</Form>
+		<Form ID="frmCheat" Title="コード">
+			<Control ID="label2">ゲーム:</Control>
+			<Control ID="label1">コード名:</Control>
+			<Control ID="grpCode">コード</Control>
+			<Control ID="radCustom">カスタム:</Control>
+			<Control ID="radGameGenie">Game Genie:</Control>
+			<Control ID="radProActionRocky">Pro Action Rocky:</Control>
+			<Control ID="lblAddress">メモリアドレス:</Control>
+			<Control ID="lblNewValue">バイト値:</Control>
+			<Control ID="radRelativeAddress">メモリ</Control>
+			<Control ID="radAbsoluteAddress">ゲームのコード</Control>
+			<Control ID="chkCompareValue">比較値</Control>
+			<Control ID="btnBrowse">参照...</Control>
+			<Control ID="chkEnabled">コードを有効にする</Control>
+			<Control ID="btnOK">OK</Control>
+			<Control ID="btnCancel">キャンセル</Control>
+		</Form>
+		<Form ID="frmAbout" Title="Mesenとは">
+			<Control ID="labelProductName">Mesen</Control>
+			<Control ID="labelCopyright">© 2017 M. Bibaud (aka Sour)</Control>
+			<Control ID="lblWebsite">サイト:</Control>
+			<Control ID="lblLink">www.mesen.ca</Control>
+			<Control ID="labelVersion">バージョン: 0.9.4 (ベータ版)</Control>
+			<Control ID="lblDonate">応援ありがとうございます！</Control>
+			<Control ID="okButton">&amp;OK</Control>
+		</Form>
+		<Form ID="frmUpdatePrompt" Title="Mesen ー アップデート可能">
+			<Control ID="lblLatestVersion">最新バージョン： </Control>
+			<Control ID="lblCurrentVersion">現在のバージョン： </Control>
+			<Control ID="lblChangeLog">更新歴</Control>
+			<Control ID="lblDonate">応援ありがとうございます！</Control>
+			<Control ID="btnUpdate">更新</Control>
+			<Control ID="btnCancel">キャンセル</Control>
+		</Form>
+		<Form ID="frmSelectRom" Title="ゲーム選択">
+			<Control ID="lblSearch">検索：</Control>
+			<Control ID="btnOK">OK</Control>
+			<Control ID="btnCancel">キャンセル</Control>
+		</Form>
+		<Form ID="frmGetKey" Title="キーマッピング">
+			<Control ID="lblSetKeyMessage">キーボードのキーやコントローラのボタンを押してください。</Control>
+		</Form>
+		<Form ID="frmPlayerProfile" Title="プロファイル">
+			<Control ID="lblName">プレーヤー名：</Control>
+			<Control ID="btnOK">OK</Control>
+			<Control ID="btnCancel">キャンセル</Control>
+		</Form>
+		<Form ID="frmRecordAvi" Title="動画レコーダー">
+			<Control ID="lblAviFile">保存先：</Control>
+			<Control ID="lblCodec">ビデオコーデック：</Control>
+			<Control ID="lblCompressionLevel">圧縮レベル：</Control>
+			<Control ID="lblLowCompression">低い&#13;(早い)</Control>
+			<Control ID="lblHighCompression">高い&#13;(遅い)</Control>
+			<Control ID="btnBrowse">参照...</Control>
+			<Control ID="btnOK">OK</Control>
+			<Control ID="btnCancel">キャンセル</Control>
+		</Form>
+		<Form ID="frmHdPackEditor" Title="HDパック作成">
+			<Control ID="grpPreview">CHRバンクプレビュー</Control>
+			<Control ID="lblChrBank">CHRバンク:</Control>
+			<Control ID="grpOptions">設定</Control>
+			<Control ID="lblBankSize">CHRバンクのサイズ:</Control>
+			<Control ID="lblScale">映像サイズ/画面エフェクト:</Control>
+			<Control ID="chkSortByFrequency">タイルを使用頻度順に並べ替えする</Control>
+			<Control ID="chkLargeSprites">8x16スプライト表示モードを使う</Control>
+			<Control ID="chkGroupBlankTiles">空っぽなタイルとまとめて保存する</Control>
+			<Control ID="chkIgnoreOverscan">オーバースキャンの中にあるタイルを無視する</Control>
+			<Control ID="lblFolder">セーブフォルダ:</Control>
+			<Control ID="btnSelectFolder">参照...</Control>
+			<Control ID="btnStartRecording">開始</Control>
+			<Control ID="btnStopRecording">停止</Control>
+			<Control ID="btnOpenFolder">セーブフォルダを開く</Control>
+		</Form>
+		<Form ID="frmHelp" Title="コマンドラインオプション">
+			<Control ID="grpExample">使い方</Control>
+			<Control ID="tpgGeneral">全般</Control>
+			<Control ID="tpgVideoOptions">映像</Control>
+			<Control ID="tpgAudioOptions">音声</Control>
+			<Control ID="tpgEmulationOptions">エミュレーション</Control>
+			<Control ID="lblExplanation">Mesenを全画面表示の状態で"MyGame.nes"を起動する. 画面エフェクトをNTSCにして、映像サイズを2xにして、オーバースキャン設定を変更する。</Control>
+			<Control ID="txtGeneralOptions">/fullscreen - 全画面表示の状態で起動する&#13;&#10;/DoNotSaveSettings - 設定のセーブ機能を無効にする</Control>
+		</Form>
+		<Form ID="frmCopyFiles" Title="しばらくお待ちください">
+			<Control ID="lblCopying">ファイル：</Control>
+		</Form>
+		<Form ID="frmConfigWizard" Title="Mesen - 設定">
+			<Control ID="lblMesen">Mesen - ファミコンエミュレータ</Control>
+			<Control ID="lblConfigWizard">セットアップウィザード</Control>
+			<Control ID="lblInitialSetup">Mesenの初期設定を行います。</Control>
+			<Control ID="lblStorageLocation">データの保存先</Control>
+			<Control ID="lblStorageHint">Mesenのデータの保存先を選んでください：</Control>
+			<Control ID="radStorageDocuments">プロファイルフォルダに保存する</Control>
+			<Control ID="radStoragePortable">Mesenのフォルダに保存する</Control>
+			<Control ID="lblDataLocation">保存先 :</Control>
+			<Control ID="lblInputMappings">コントローラ設定</Control>
+			<Control ID="lblInputHint">使いたいコントローラを選んでください：</Control>
+			<Control ID="lblMiscOptions">その他</Control>
+			<Control ID="chkCreateShortcut">デスクトップにショートカットを作る</Control>
+			<Control ID="btnOk">確認</Control>
+			<Control ID="lblCancel">キャンセル</Control>
+		</Form>
+		<Form ID="frmRecordMovie" Title="録画設定">
+			<Control ID="lblSaveTo">保存先：</Control>
+			<Control ID="lblRecordFrom">録画開始時点：</Control>
+			<Control ID="lblMovieInformation">映画情報　（任意）</Control>
+			<Control ID="lblAuthor">作者：</Control>
+			<Control ID="lblDescription">説明：</Control>
+			<Control ID="btnBrowse">参照...</Control>
+			<Control ID="btnOK">OK</Control>
+			<Control ID="btnCancel">キャンセル</Control>
+		</Form>
+		<Form ID="frmInputBarCode" Title="バーコードを入力">
+			<Control ID="lblBarcode">バーコード：</Control>
+			<Control ID="btnOK">入力</Control>
+			<Control ID="btnCancel">キャンセル</Control>
+		</Form>
+		<Form ID="BaseInputConfigForm">
+			<Control ID="lblHint">アイコンの付いてあるタブにはマッピングが設定されています。&#13;&#10;コントローラのボタンはキーボードのキーとゲームパッドのボタンを同時にマッピング出来ます。</Control>
+			<Control ID="tpgSet1">キーセット 1</Control>
+			<Control ID="tpgSet2">キーセット 2</Control>
+			<Control ID="tpgSet3">キーセット 3</Control>
+			<Control ID="tpgSet4">キーセット 4</Control>
+			<Control ID="btnClear">キーセットを削除</Control>
+			<Control ID="btnSetDefault">初期化</Control>
+			<Control ID="btnOK">OK</Control>
+			<Control ID="btnCancel">キャンセル</Control>
+		</Form>
+		<Form ID="frmControllerConfig">
+			<Control ID="lblTurboSpeed">ターボの速度:</Control>
+			<Control ID="lblTurboFast">速い</Control>
+			<Control ID="lblSlow">遅い</Control>
 
-    <Message ID="RandomGameNoGameFound">Mesenはゲームファイルを見つかりませんでした。</Message>
+			<Control ID="btnSelectPreset">プリセットを選ぶ..</Control>
+			<Control ID="mnuKeyboard">キーボード</Control>
+			<Control ID="mnuWasdLayout">WSADレイアウト</Control>
+			<Control ID="mnuArrowLayout">アローキーレイアウト</Control>
+			<Control ID="mnuFceuxLayout">FCEUXのデフォルトレイアウト</Control>
+			<Control ID="mnuNestopiaLayout">Nestopiaのデフォルトレイアウト</Control>
+			<Control ID="mnuXboxController">Xboxコントローラ</Control>
+			<Control ID="mnuXboxLayout1">コントローラ１</Control>
+			<Control ID="mnuXboxLayout2">コントローラ２</Control>
+			<Control ID="mnuPs4Controller">PS4コントローラ</Control>
+			<Control ID="mnuPs4Layout1">コントローラ１</Control>
+			<Control ID="mnuPs4Layout2">コントローラ２</Control>
+			<Control ID="mnuSnes30Controller">SFC30コントローラ</Control>
+			<Control ID="mnuSnes30Layout1">コントローラ１</Control>
+			<Control ID="mnuSnes30Layout2">コントローラ２</Control>
+		</Form>
+		<Form ID="frmZapperConfig">
+			<Control ID="lblSmall">小</Control>
+			<Control ID="lblLarge">大</Control>
+			<Control ID="lblDetectRadius">光検出範囲:</Control>
+			<Control ID="btnOK">OK</Control>
+			<Control ID="btnCancel">キャンセル</Control>
+		</Form>
+		<Form ID="frmMouseConfig">
+			<Control ID="lblLow">低い</Control>
+			<Control ID="lblHigh">高い</Control>
+			<Control ID="lblSensitivity">感度：</Control>
+			<Control ID="btnOK">OK</Control>
+			<Control ID="btnCancel">キャンセル</Control>
+		</Form>
+		<Form ID="frmExcitingBoxingConfig">
+		</Form>
+		<Form ID="frmFamilyBasicKeyboardConfig">
+		</Form>
+		<Form ID="frmJissenMahjongConfig">
+		</Form>
+		<Form ID="frmPartyTapConfig">
+		</Form>
+		<Form ID="frmPowerPadConfig">
+			<Control ID="chkUseSideA">A面を使う</Control>
+		</Form>
+		<Form ID="frmSuborKeyboardConfig">
+		</Form>
+		<Form ID="frmPachinkoConfig">
+		</Form>
+		<Form ID="frmBandaiMicrophone">
+		</Form>
+	</Forms>
+	<UserControls>
+		<UserControl ID="ctrlExcitingBoxingConfig">
+			<Control ID="lblLeftHook">Left Hook</Control>
+			<Control ID="lblRightHook">Right Hook</Control>
+			<Control ID="lblLeftJab">Left Jab</Control>
+			<Control ID="lblRightJab">Right Jab</Control>
+			<Control ID="lblStraight">Straight</Control>
+			<Control ID="lblBody">Body</Control>
+			<Control ID="lblMoveLeft">Move Left</Control>
+			<Control ID="lblMoveRight">Move Right</Control>
+		</UserControl>
+		<UserControl ID="ctrlPachinkoConfig">
+			<Control ID="lblPress">押す</Control>
+			<Control ID="lblRelease">放す</Control>
+		</UserControl>
+		<UserControl ID="ctrlBandaiMicrophone">
+			<Control ID="lblMicrophone">マイク</Control>
+		</UserControl>
+	</UserControls>
+	<Messages>
+		<Message ID="FilterAll">すべてのファイル (*.*)|*.*</Message>
+		<Message ID="FilterMovie">動画 (*.mmo)|*.mmo|すべてのファイル (*.*)|*.*</Message>
+		<Message ID="FilterWave">WAVファイル (*.wav)|*.wav|すべてのファイル (*.*)|*.*</Message>
+		<Message ID="FilterAvi">AVIファイル (*.avi)|*.avi|すべてのファイル (*.*)|*.*</Message>
+		<Message ID="FilterPalette">パレットファイル (*.pal)|*.pal|すべてのファイル (*.*)|*.*</Message>
+		<Message ID="FilterRom">対応するすべてのファイル (*.nes, *.zip, *.7z, *.fds, *.nsf, *.nsfe, *.unf)|*.NES;*.ZIP;*.FDS;*.7z;*.NSF;*.NSFE;*.UNF|ファミコンゲーム (*.nes, *.unf)|*.NES;*.UNF|ファミコンディスクシステムのゲーム (*.fds)|*.FDS|NSFファイル (*.nsf, *.nsfe)|*.NSF;*.NSFE|ZIPファイル (*.zip)|*.ZIP|7-Zipファイル (*.7z)|*.7z|すべてのファイル (*.*)|*.*</Message>
+		<Message ID="FilterRomIps">対応するすべてのファイル (*.nes, *.zip, *.7z, *.fds, *.nsf, *.nsfe, *.unf, *.ips, *.bps, *.ups)|*.NES;*.ZIP;*.7z;*.IPS;*.BPS;*.UPS;*.FDS;*.NSF;*.NSFE;*.UNF|ファミコンゲーム (*.nes, *.unf)|*.NES;*.UNF|ファミコンディスクシステムのゲーム (*.fds)|*.FDS|NSFファイル (*.nsf, *.nsfe)|*.NSF;*.NSFE|ZIPファイル (*.zip)|*.ZIP|7-Zipファイル (*.7z)|*.7z|パッチファイル (*.ips, *.bps, *.ups)|*.IPS;*.BPS;*.UPS|すべてのファイル (*.*)|*.*</Message>
+		<Message ID="FilterTest">テストファイル (*.mtp)|*.mtp|すべてのファイル (*.*)|*.*</Message>
+		<Message ID="FilterCheat">対応するすべてのファイル (*.cht, *.xml)|*.cht;*.xml</Message>
+		<Message ID="FilterSavestate">Mesenのクイックセーブデータ (*.mst)|*.mst|すべてのファイル (*.*)|*.*</Message>
+		<Message ID="FilterTapeFiles">Family Basicテープファイル (*.fbt)|*.fbt|すべてのファイル (*.*)|*.*</Message>
 
-    <Message ID="CannotWriteToFolder">指定されたフォルダに書き込むことは出来ません。他のフォルダを選択してください。&#xA;&#xA;エラーの詳細:&#xA;{0}</Message>
-    <Message ID="InvalidPaths">次のフォルダには書き込むことが出来ません：&#xA;&#xA;{0}&#xA;&#xA;書き込むことが出来るフォルダを選択してください。</Message>
-    <Message ID="CopyMesenDataPrompt">全てのファイルが&#xA;{0}&#xA;から&#xA;{1}&#xA;にコピーされます。&#xA;&#xA;コピーが終わったら、Mesenが再起動します.&#xA;よろしいですか？</Message>
+		<Message ID="LoadFromFile">ファイルからロードする…</Message>
+		<Message ID="SaveToFile">ファイルに保存する…</Message>
 
-    <Message ID="CheatsFound">ゲーム{0}個とチートコード{1}個を見つけました</Message>
-    <Message ID="CheatsImported">{1}用のチートコード{0}個がインポートされました。.</Message>
+		<Message ID="ClearHistory">履歴を消去</Message>
+		<Message ID="LastFolderUsed">最後に使用したフォルダ</Message>
 
-    <Message ID="NsfNextTrack">次の曲　(長押しで早送り)</Message>
-    <Message ID="NsfUnnamedTrack">[名無し]</Message>
-    <Message ID="NsfUnknownField">[不明]</Message>
+		<Message ID="MouseModeEnabled">マウスモード有効。 無効にするにはESCやポースボタンを使ってください。</Message>
+		<Message ID="BandaiMicrophone">Bandaiマイクロフォン</Message>
+		<Message ID="DatachBarcodeReader">Datachバーコードリーダー</Message>
 
-    <Message ID="CouldNotInstallRuntime">Microsoft Visual Studio 2015のVisual C++再頒布可能パッケージはインストールできませんでした。</Message>
-    <Message ID="EmptyState">&lt;なし&gt;</Message>
-    <Message ID="ErrorWhileCheckingUpdates">アップデートを確認する時にエラーが発生しました。ネット接続を確認してから、再試行してください。&#xA;&#xA;エラーの詳細:&#xA;{0}</Message>
-    <Message ID="AutoUpdateDisabledMessage">このビルドでは自動更新は出来ません。最新版を使うためにはコードの最新版をダウンロードしてビルドしてください。</Message>
-    <Message ID="FdsBiosNotFound">ファミコンディスクシステム(FDS)のゲームをロードするためにFDSのBIOSファイルは必要です。&#xA;&#xA;FDSのBIOSファイルを選びますか？</Message>
-    <Message ID="FdsDiskSide">ディスク{0} {1}面</Message>
-    <Message ID="FileNotFound">ファイルが見つかりません: {0}</Message>
-    <Message ID="InvalidFdsBios">選んだBIOSファイルは使えません。</Message>
-    
-    <Message ID="HDNesTooltip">このオプションを有効にすれば、MesenはHDNesのようにHDパックをロード出来るようになります。&#xA;&#xA;HDパックはMesenのフォルダの中にある「HdPacks」のフォルダにゲームと同じ名前のサブフォルダに置くと自動的にロードされます。&#xA;例）ゲームファイルは「MyRom.nes」なら、「HdPacks\MyRom」にHDパックを置くとロードされます。</Message>
-    <Message ID="HdPackBuilderScaleHelp">Selects the scale and video filter to use when generating the PNG files&#xA;for the HD Pack. Use the "Prescale" filters to generate the tiles&#xA;at a larger scale without applying any transformation to the pixels.</Message>
-    <Message ID="HdPackBuilderBankSizeHelp">This option is only available for CHR RAM games.  CHR RAM games have no&#xA;fixed "banks" - they are dynamically created by the game's code.&#xA;This option alters the HD Pack Builder's behavior when grouping the tiles into &#xA;the PNG files - a smaller bank size will usually result in less PNG &#xA;files (but depending on the game's code, larger values may produce &#xA;better results).</Message>
-    <Message ID="HdPackBuilderFrequencyHelp">When this option is enabled, the tiles in PNG files are sorted by the&#xA;frequency at which they are shown on the screen while recording (more &#xA;common palettes will be grouped together in the first PNG for a specific bank &#xA;number. If this option is unchecked, the PNGs will be sorted by palette - &#xA;each PNG will only contain up to 4 different colors in this case.</Message>
-    <Message ID="HdPackBuilderGroupBlankHelp">This option groups all the blank tiles sequentially into the same PNG&#xA;files - this helps reduce the number of PNG files produced by removing &#xA;almost-empty PNG files containing only blank tiles.</Message>
-    <Message ID="HdPackBuilderLargeSpritesHelp">When enabled, this option will alter the display order of CHR banks&#xA;that contain only sprites to make the sprites easier to edit in the PNG file.</Message>
-    <Message ID="HdPackBuilderIgnoreOverscanHelp">When enabled, this will make the builder ignore any pixels in the overscan area.&#xA;This is useful in games that contain glitches on the outer edge of the screen.&#xA;Incorrect palette combinations due to these glitches will be ignored and won't be shown in the PNG files.</Message>
+		<Message ID="Resume">再開</Message>
+		<Message ID="Pause">ポーズ</Message>
+		<Message ID="StartServer">サーバを起動する</Message>
+		<Message ID="StopServer">サーバを停止する</Message>
+		<Message ID="ConnectToServer">サーバに接続する</Message>
+		<Message ID="Disconnect">切断</Message>
+		<Message ID="PlayerNumber">プレーヤー {0}</Message>
 
-    <Message ID="MesenUpToDate">既にMesenの最新のバージョンを使っています。</Message>
-    <Message ID="PatchAndReset">パッチファイルを当てて、ゲームをリセットしますか？</Message>
-    <Message ID="SelectRomIps">パッチファイルに合うゲームファイルを選んでください。</Message>
-    <Message ID="UnableToDownload">ファイルをダウンロードできませんでした。ネット接続を確認してから、再試行してください。&#xA;&#xA;エラーの詳細:&#xA;{0}</Message>
-    <Message ID="UnableToStartMissingDependencies">MesenはMesenCore.dllをロード出来なかったため、起動できませんでした。</Message>
-    <Message ID="UnableToStartMissingFiles">必要なファイルはロード出来なかったため、Mesenは起動できません。&#xA;&#xA;エラー: MesenCore.dllはロードできません。</Message>
-    <Message ID="UnexpectedError">予期しないエラーが発生しました。&#xA;&#xA;エラーの詳細:&#xA;{0}</Message>
-    <Message ID="UpdateDownloadFailed">ダウンロードは失敗しました。　Mesenのサイトに行って、新しいバージョンをダウンロードしてください。</Message>
-    <Message ID="UpdaterNotFound">必要不可欠なファイルがないため、アップデートは出来なかった。</Message>
-    <Message ID="UpgradeSuccess">アップデートは完了しました。</Message>
-    <Message ID="Net45NotFound">Microsoft .NET Framework 4.5はインストールされていないため、Mesenは起動できません。Microsoft .NET Frameworkの最新版をMicrosoftのサイトからダウンロードして、インストールしてください。</Message>
+		<Message ID="RomsFound">{0}個</Message>
 
-    <Message ID="GoogleDriveIntegrationError">MesenはGoogle Driveにアクセス出来ませんでした。</Message>
+		<Message ID="RiskyOptionHint">（推奨されません）</Message>
 
-    <Message ID="InvalidCheatFile">このファイル（{0}）にはチートコードを見つかりませんでした。</Message>
-    <Message ID="InvalidXmlFile">このファイル（{0}）はXMLファイルではないため読めませんでした.</Message>
-    <Message ID="NoMatchingCheats">このファイル（{0}）に選択されたゲームに該当するチートコードを見つかりませんでした。</Message>
+		<Message ID="ResetSettingsConfirmation">注意：全ての設定が初期化されます。&#xA;&#xA;よろしいですか？</Message>
 
-    <Message ID="ConfirmReset">ゲームをリセットします。よろしいですか？</Message>
-    <Message ID="ConfirmPowerCycle">ゲームを停止して再起動します。よろしいですか？</Message>
-    <Message ID="ConfirmExit">Mesenを終了します。よろしいですか？</Message>
+		<Message ID="RandomGameNoGameFound">Mesenはゲームファイルを見つかりませんでした。</Message>
 
-    <Message ID="EmulatorShortcutMappings_FastForward">早送り（押し続ける間だけ）</Message>
-    <Message ID="EmulatorShortcutMappings_ToggleFastForward">早送りをオン・オフにする</Message>
-    <Message ID="EmulatorShortcutMappings_Rewind">巻き戻す（押し続ける間だけ）</Message>
-    <Message ID="EmulatorShortcutMappings_ToggleRewind">巻き戻しをオン・オフにする</Message>
-    <Message ID="EmulatorShortcutMappings_RewindTenSecs">１０秒前に戻る</Message>
-    <Message ID="EmulatorShortcutMappings_RewindOneMin">１分前に戻る</Message>
-    <Message ID="EmulatorShortcutMappings_IncreaseSpeed">速度を上げる</Message>
-    <Message ID="EmulatorShortcutMappings_DecreaseSpeed">速度を下げる</Message>
-    <Message ID="EmulatorShortcutMappings_Pause">ポーズ</Message>
-    <Message ID="EmulatorShortcutMappings_Reset">リセット</Message>
-    <Message ID="EmulatorShortcutMappings_PowerCycle">停止と再起動</Message>
-    <Message ID="EmulatorShortcutMappings_PowerOff">ゲームを停止する</Message>
-    <Message ID="EmulatorShortcutMappings_Exit">終了</Message>
-    <Message ID="EmulatorShortcutMappings_TakeScreenshot">スクリーンショットを撮る</Message>
-    <Message ID="EmulatorShortcutMappings_SwitchDiskSide">FDS - A面B面切り替え</Message>
-    <Message ID="EmulatorShortcutMappings_InsertNextDisk">FDS - 次のディスクを入れる</Message>    
-    <Message ID="EmulatorShortcutMappings_InsertCoin1">VS - インサートコイン 1</Message>
-    <Message ID="EmulatorShortcutMappings_InsertCoin2">VS - インサートコイン 2</Message>
-    <Message ID="EmulatorShortcutMappings_InputBarcode">バーコードを入力</Message>
-    <Message ID="EmulatorShortcutMappings_VsServiceButton">VS - サービスボタン</Message>
-    <Message ID="EmulatorShortcutMappings_MoveToNextStateSlot">次のクイックセーブスロットを選ぶ</Message>
-    <Message ID="EmulatorShortcutMappings_MoveToPreviousStateSlot">前のクイックセーブスロットを選ぶ</Message>
-    <Message ID="EmulatorShortcutMappings_SaveState">選択中スロットにクイックセーブ</Message>
-    <Message ID="EmulatorShortcutMappings_LoadState">選択中スロットからクイックロード</Message>
-    <Message ID="EmulatorShortcutMappings_ToggleCheats">チートコードを無効・有効にする</Message>
-    <Message ID="EmulatorShortcutMappings_ToggleAudio">音声を無効・有効にする</Message>
-    <Message ID="EmulatorShortcutMappings_RunSingleFrame">次のフレームを表す</Message>
+		<Message ID="CannotWriteToFolder">指定されたフォルダに書き込むことは出来ません。他のフォルダを選択してください。&#xA;&#xA;エラーの詳細:&#xA;{0}</Message>
+		<Message ID="InvalidPaths">次のフォルダには書き込むことが出来ません：&#xA;&#xA;{0}&#xA;&#xA;書き込むことが出来るフォルダを選択してください。</Message>
+		<Message ID="CopyMesenDataPrompt">全てのファイルが&#xA;{0}&#xA;から&#xA;{1}&#xA;にコピーされます。&#xA;&#xA;コピーが終わったら、Mesenが再起動します.&#xA;よろしいですか？</Message>
 
-    <Message ID="EmulatorShortcutMappings_EjectDisk">FDS - ディスクを取り出す</Message>
-    <Message ID="EmulatorShortcutMappings_SetScale1x">映像サイズ １倍</Message>
-    <Message ID="EmulatorShortcutMappings_SetScale2x">映像サイズ ２倍</Message>
-    <Message ID="EmulatorShortcutMappings_SetScale3x">映像サイズ ３倍</Message>
-    <Message ID="EmulatorShortcutMappings_SetScale4x">映像サイズ ４倍</Message>
-    <Message ID="EmulatorShortcutMappings_SetScale5x">映像サイズ ５倍</Message>
-    <Message ID="EmulatorShortcutMappings_SetScale6x">映像サイズ ６倍</Message>
-    <Message ID="EmulatorShortcutMappings_ToggleFullscreen">全画面表示</Message>
-    <Message ID="EmulatorShortcutMappings_ToggleFps">フレームレート表示</Message>
-    <Message ID="EmulatorShortcutMappings_ToggleGameTimer">ゲームタイマー表示</Message>
-    <Message ID="EmulatorShortcutMappings_ToggleFrameCounter">フレームカウンタ表示</Message>
-    <Message ID="EmulatorShortcutMappings_ToggleLagCounter">ラグカウンタ表示</Message>
-    <Message ID="EmulatorShortcutMappings_ToggleOsd">オンスクリーン表示を無効・有効にする</Message>
-    <Message ID="EmulatorShortcutMappings_ToggleAlwaysOnTop">手前に表示を無効・有効にする</Message>
-    <Message ID="EmulatorShortcutMappings_ToggleBackground">バックグラウンドレイヤー表示</Message>
-    <Message ID="EmulatorShortcutMappings_ToggleSprites">スプライトレイヤー表示</Message>
-    <Message ID="EmulatorShortcutMappings_ToggleKeyboardMode">キーボードモードを無効・有効にする</Message>
-    <Message ID="EmulatorShortcutMappings_MaxSpeed">最高速度を無効・有効にする</Message>
-    <Message ID="EmulatorShortcutMappings_LoadRandomGame">ランダムゲームを開く</Message>
-    <Message ID="EmulatorShortcutMappings_SaveStateSlot1">クイックセーブスロット１に保存する</Message>
-    <Message ID="EmulatorShortcutMappings_SaveStateSlot2">クイックセーブスロット２に保存する</Message>
-    <Message ID="EmulatorShortcutMappings_SaveStateSlot3">クイックセーブスロット３に保存する</Message>
-    <Message ID="EmulatorShortcutMappings_SaveStateSlot4">クイックセーブスロット４に保存する</Message>
-    <Message ID="EmulatorShortcutMappings_SaveStateSlot5">クイックセーブスロット５に保存する</Message>
-    <Message ID="EmulatorShortcutMappings_SaveStateSlot6">クイックセーブスロット６に保存する</Message>
-    <Message ID="EmulatorShortcutMappings_SaveStateSlot7">クイックセーブスロット７に保存する</Message>
-    <Message ID="EmulatorShortcutMappings_SaveStateSlot8">クイックセーブスロット８に保存する</Message>
-    <Message ID="EmulatorShortcutMappings_SaveStateSlot9">クイックセーブスロット９に保存する</Message>
-    <Message ID="EmulatorShortcutMappings_SaveStateSlot10">クイックセーブスロット１０に保存する</Message>
-    <Message ID="EmulatorShortcutMappings_SaveStateToFile">クイックセーブデータをファイルに保存する</Message>
-    <Message ID="EmulatorShortcutMappings_LoadStateSlot1">クイックセーブスロット１からロードする</Message>
-    <Message ID="EmulatorShortcutMappings_LoadStateSlot2">クイックセーブスロット２からロードする</Message>
-    <Message ID="EmulatorShortcutMappings_LoadStateSlot3">クイックセーブスロット３からロードする</Message>
-    <Message ID="EmulatorShortcutMappings_LoadStateSlot4">クイックセーブスロット４からロードする</Message>
-    <Message ID="EmulatorShortcutMappings_LoadStateSlot5">クイックセーブスロット５からロードする</Message>
-    <Message ID="EmulatorShortcutMappings_LoadStateSlot6">クイックセーブスロット６からロードする</Message>
-    <Message ID="EmulatorShortcutMappings_LoadStateSlot7">クイックセーブスロット７からロードする</Message>
-    <Message ID="EmulatorShortcutMappings_LoadStateSlot8">クイックセーブスロット８からロードする</Message>
-    <Message ID="EmulatorShortcutMappings_LoadStateSlot9">クイックセーブスロット９からロードする</Message>
-    <Message ID="EmulatorShortcutMappings_LoadStateSlot10">クイックセーブスロット１０からロードする</Message>
-    <Message ID="EmulatorShortcutMappings_LoadStateSlotAuto">自動クイックセーブスロットからロードする</Message>
-    <Message ID="EmulatorShortcutMappings_LoadStateFromFile">クイックセーブデータをファイルからロードする</Message>
-    <Message ID="EmulatorShortcutMappings_LoadLastSession">前セッションをロードする</Message>
-    <Message ID="EmulatorShortcutMappings_OpenFile">ファイルを開く</Message>
-    <Message ID="EmulatorShortcutMappings_OpenDebugger">デバッガを開く</Message>
-    <Message ID="EmulatorShortcutMappings_OpenAssembler">アセンブラを開く</Message>
-    <Message ID="EmulatorShortcutMappings_OpenPpuViewer">PPUビューアーを開く</Message>
-    <Message ID="EmulatorShortcutMappings_OpenMemoryTools">メモリツールを開く</Message>
-    <Message ID="EmulatorShortcutMappings_OpenScriptWindow">スクリプトウインドウを開く</Message>
-    <Message ID="EmulatorShortcutMappings_OpenTraceLogger">トレースロガーを開く</Message>
-    <Message ID="EmulatorShortcutMappings_OpenApuViewer">APUビューアーを開く</Message>
-    <Message ID="EmulatorShortcutMappings_OpenEventViewer">イベントビューアーを開く</Message>
-  </Messages>
-  <Enums>
-    <Enum ID="ControllerType">
-      <Value ID="None">なし</Value>
-      <Value ID="StandardController">ファミコンコントローラ</Value>
-      <Value ID="Zapper">ガン</Value>
-      <Value ID="ArkanoidController">Arkanoidコントローラ</Value>
-      <Value ID="SnesController">スーパーファミコンコントローラ</Value>
-      <Value ID="PowerPad">パワーパッド</Value>
-      <Value ID="SnesMouse">スーパーファミコマウス</Value>
-      <Value ID="SuborMouse">Suborマウス</Value>
-    </Enum>
-    <Enum ID="ExpansionPortDevice">
-      <Value ID="None">なし</Value>
-      <Value ID="Zapper">ガン</Value>
-      <Value ID="FourPlayerAdapter">4-Player Adapter</Value>
-      <Value ID="ArkanoidController">Arkanoidコントローラ</Value>
-      <Value ID="OekaKidsTablet">おえかきっずタブレット</Value>
-      <Value ID="FamilyTrainerMat">ファミリートレーナー</Value>
-      <Value ID="KonamiHyperShot">Konamiハイパーショット</Value>
-      <Value ID="FamilyBasicKeyboard">Family Basicキーボード</Value>
-      <Value ID="PartyTap">Partytap</Value>
-      <Value ID="Pachinko">パチンココントローラ</Value>
-      <Value ID="ExcitingBoxing">エキサイティングボクシングエアバッグ</Value>
-      <Value ID="JissenMahjong">実践麻雀コントローラ</Value>
-      <Value ID="SuborKeyboard">Suborキーボード</Value>
-      <Value ID="BarcodeBattler">バーコードバトラー</Value>
-      <Value ID="HoriTrack">ホリトラク</Value>
-      <Value ID="BandaiHyperShot">Bandaiハイパーショット</Value>
-      <Value ID="AsciiTurboFile">Turbo File</Value>
-      <Value ID="BattleBox">バトルボックス</Value>
-    </Enum>
-    <Enum ID="VideoAspectRatio">
-      <Value ID="NoStretching">デフォルト (1:1)</Value>
-      <Value ID="Auto">自動的 (ゲーム8:7や11:8を使う)</Value>
-      <Value ID="NTSC">NTSC (8:7)</Value>
-      <Value ID="PAL">PAL (11:8)</Value>
-      <Value ID="Standard">ノーマル (4:3)</Value>
-      <Value ID="Widescreen">ワイド (16:9)</Value>
-      <Value ID="Custom">カスタム</Value>
-    </Enum>
-    <Enum ID="VideoRefreshRates">
-      <Value ID="_50">50 Hz</Value>
-      <Value ID="_60">60 Hz</Value>
-      <Value ID="_100">100 Hz</Value>
-      <Value ID="_120">120 Hz</Value>
-      <Value ID="_200">200 Hz</Value>
-      <Value ID="_240">240 Hz</Value>
-    </Enum>
-    <Enum ID="ScreenRotation">
-      <Value ID="None">なし</Value>
-      <Value ID="_90Degrees">90度</Value>
-      <Value ID="_180Degrees">180度</Value>
-      <Value ID="_270Degrees">270度</Value>
-    </Enum>
-    <Enum ID="VideoFilterType">
-      <Value ID="None">なし</Value>
-      <Value ID="NTSC">NTSC</Value>
-      <Value ID="BisqwitNtscQuarterRes">NTSC (Bisqwit) - 2x</Value>
-      <Value ID="BisqwitNtscHalfRes">NTSC (Bisqwit) - 4x</Value>
-      <Value ID="BisqwitNtsc">NTSC (Bisqwit) - 8x</Value>
-      <Value ID="xBRZ2x">xBRZ 2x</Value>
-      <Value ID="xBRZ3x">xBRZ 3x</Value>
-      <Value ID="xBRZ4x">xBRZ 4x</Value>
-      <Value ID="xBRZ5x">xBRZ 5x</Value>
-      <Value ID="xBRZ6x">xBRZ 6x</Value>
-      <Value ID="HQ2x">HQ 2x</Value>
-      <Value ID="HQ3x">HQ 3x</Value>
-      <Value ID="HQ4x">HQ 4x</Value>
-      <Value ID="Scale2x">Scale 2x</Value>
-      <Value ID="Scale3x">Scale 3x</Value>
-      <Value ID="Scale4x">Scale 4x</Value>
-      <Value ID="_2xSai">2xSai</Value>
-      <Value ID="Super2xSai">Super2xSai</Value>
-      <Value ID="SuperEagle">SuperEagle</Value>
-      <Value ID="Prescale2x">Prescale 2x</Value>
-      <Value ID="Prescale3x">Prescale 3x</Value>
-      <Value ID="Prescale4x">Prescale 4x</Value>
-      <Value ID="Prescale6x">Prescale 6x</Value>
-      <Value ID="Prescale8x">Prescale 8x</Value>
-      <Value ID="Prescale10x">Prescale 10x</Value>
-    </Enum>
-    <Enum ID="ConsoleType">
-      <Value ID="Nes">NES</Value>
-      <Value ID="Famicom">ファミコン</Value>
-    </Enum>
-    <Enum ID="PpuModel">
-      <Value ID="Ppu2C03">RP2C03</Value>
-      <Value ID="Ppu2C04A">RP2C04-0001</Value>
-      <Value ID="Ppu2C04B">RP2C04-0002</Value>
-      <Value ID="Ppu2C04C">RP2C04-0003</Value>
-      <Value ID="Ppu2C04D">RP2C04-0004</Value>
-      <Value ID="Ppu2C05A">RP2C05-01</Value>
-      <Value ID="Ppu2C05B">RP2C05-02</Value>
-      <Value ID="Ppu2C05C">RP2C05-03</Value>
-      <Value ID="Ppu2C05D">RP2C05-04</Value>
-      <Value ID="Ppu2C05E">RP2C05-05</Value>
-    </Enum>
-    <Enum ID="InputDisplayPosition">
-      <Value ID="TopLeft">左上</Value>
-      <Value ID="TopRight">右上</Value>
-      <Value ID="BottomLeft">左下</Value>
-      <Value ID="BottomRight">右下</Value>
-    </Enum>
-    <Enum ID="Language">
-      <Value ID="SystemDefault">ユーザーアカウントのデフォルト</Value>
-      <Value ID="English">English</Value>
-      <Value ID="French">Français</Value>
-      <Value ID="Japanese">日本語</Value>
-      <Value ID="Portuguese">Português</Value>
-      <Value ID="Russian">Русский</Value>
-      <Value ID="Spanish">Español</Value>
-      <Value ID="Ukrainian">Українська</Value>
-      <Value ID="Catalan">Català</Value>
-    </Enum>
-    <Enum ID="RamPowerOnState">
-      <Value ID="AllZeros">ビット全てを０にする　（デフォルト）</Value>
-      <Value ID="AllOnes">ビット全てを１にする</Value>
-      <Value ID="Random">乱数</Value>
-    </Enum>
-    <Enum ID="CheatCurrentFilterType">
-      <Value ID="Smaller">次の数値より小さい</Value>
-      <Value ID="Equal">次の数値と同じ</Value>
-      <Value ID="NotEqual">次の数値とは違う</Value>
-      <Value ID="Greater">次の数値より大きい</Value>
-    </Enum>
-    <Enum ID="CheatPrevFilterType">
-      <Value ID="Smaller">より小さい</Value>
-      <Value ID="Equal">と同じ</Value>
-      <Value ID="NotEqual">とは違う</Value>
-      <Value ID="Greater">より大きい</Value>
-    </Enum>
-    <Enum ID="VideoCodec">
-      <Value ID="None">圧縮なし</Value>
-      <Value ID="ZMBV">Zip Motion Block Video (ZMBV)</Value>
-      <Value ID="CSCD">Camstudio (CSCD)</Value>
-    </Enum>
-    <Enum ID="RecordMovieFrom">
-      <Value ID="StartWithoutSaveData">パワーオンから</Value>
-      <Value ID="StartWithSaveData">パワーオンから　（セーブデータ付き）</Value>
-      <Value ID="CurrentState">今から</Value>
-    </Enum>
-  </Enums>
+		<Message ID="CheatsFound">ゲーム{0}個とチートコード{1}個を見つけました</Message>
+		<Message ID="CheatsImported">{1}用のチートコード{0}個がインポートされました。.</Message>
+
+		<Message ID="NsfNextTrack">次の曲　(長押しで早送り)</Message>
+		<Message ID="NsfUnnamedTrack">[名無し]</Message>
+		<Message ID="NsfUnknownField">[不明]</Message>
+
+		<Message ID="CouldNotInstallRuntime">Microsoft Visual Studio 2015のVisual C++再頒布可能パッケージはインストールできませんでした。</Message>
+		<Message ID="EmptyState">&lt;なし&gt;</Message>
+		<Message ID="ErrorWhileCheckingUpdates">アップデートを確認する時にエラーが発生しました。ネット接続を確認してから、再試行してください。&#xA;&#xA;エラーの詳細:&#xA;{0}</Message>
+		<Message ID="AutoUpdateDisabledMessage">このビルドでは自動更新は出来ません。最新版を使うためにはコードの最新版をダウンロードしてビルドしてください。</Message>
+		<Message ID="FdsBiosNotFound">ファミコンディスクシステム(FDS)のゲームをロードするためにFDSのBIOSファイルは必要です。&#xA;&#xA;FDSのBIOSファイルを選びますか？</Message>
+		<Message ID="FdsDiskSide">ディスク{0} {1}面</Message>
+		<Message ID="FileNotFound">ファイルが見つかりません: {0}</Message>
+		<Message ID="InvalidFdsBios">選んだBIOSファイルは使えません。</Message>
+
+		<Message ID="HDNesTooltip">このオプションを有効にすれば、MesenはHDNesのようにHDパックをロード出来るようになります。&#xA;&#xA;HDパックはMesenのフォルダの中にある「HdPacks」のフォルダにゲームと同じ名前のサブフォルダに置くと自動的にロードされます。&#xA;例）ゲームファイルは「MyRom.nes」なら、「HdPacks\MyRom」にHDパックを置くとロードされます。</Message>
+		<Message ID="HdPackBuilderScaleHelp">Selects the scale and video filter to use when generating the PNG files&#xA;for the HD Pack. Use the "Prescale" filters to generate the tiles&#xA;at a larger scale without applying any transformation to the pixels.</Message>
+		<Message ID="HdPackBuilderBankSizeHelp">This option is only available for CHR RAM games.  CHR RAM games have no&#xA;fixed "banks" - they are dynamically created by the game's code.&#xA;This option alters the HD Pack Builder's behavior when grouping the tiles into &#xA;the PNG files - a smaller bank size will usually result in less PNG &#xA;files (but depending on the game's code, larger values may produce &#xA;better results).</Message>
+		<Message ID="HdPackBuilderFrequencyHelp">When this option is enabled, the tiles in PNG files are sorted by the&#xA;frequency at which they are shown on the screen while recording (more &#xA;common palettes will be grouped together in the first PNG for a specific bank &#xA;number. If this option is unchecked, the PNGs will be sorted by palette - &#xA;each PNG will only contain up to 4 different colors in this case.</Message>
+		<Message ID="HdPackBuilderGroupBlankHelp">This option groups all the blank tiles sequentially into the same PNG&#xA;files - this helps reduce the number of PNG files produced by removing &#xA;almost-empty PNG files containing only blank tiles.</Message>
+		<Message ID="HdPackBuilderLargeSpritesHelp">When enabled, this option will alter the display order of CHR banks&#xA;that contain only sprites to make the sprites easier to edit in the PNG file.</Message>
+		<Message ID="HdPackBuilderIgnoreOverscanHelp">When enabled, this will make the builder ignore any pixels in the overscan area.&#xA;This is useful in games that contain glitches on the outer edge of the screen.&#xA;Incorrect palette combinations due to these glitches will be ignored and won't be shown in the PNG files.</Message>
+
+		<Message ID="MesenUpToDate">既にMesenの最新のバージョンを使っています。</Message>
+		<Message ID="PatchAndReset">パッチファイルを当てて、ゲームをリセットしますか？</Message>
+		<Message ID="SelectRomIps">パッチファイルに合うゲームファイルを選んでください。</Message>
+		<Message ID="UnableToDownload">ファイルをダウンロードできませんでした。ネット接続を確認してから、再試行してください。&#xA;&#xA;エラーの詳細:&#xA;{0}</Message>
+		<Message ID="UnableToStartMissingDependencies">MesenはMesenCore.dllをロード出来なかったため、起動できませんでした。</Message>
+		<Message ID="UnableToStartMissingFiles">必要なファイルはロード出来なかったため、Mesenは起動できません。&#xA;&#xA;エラー: MesenCore.dllはロードできません。</Message>
+		<Message ID="UnexpectedError">予期しないエラーが発生しました。&#xA;&#xA;エラーの詳細:&#xA;{0}</Message>
+		<Message ID="UpdateDownloadFailed">ダウンロードは失敗しました。　Mesenのサイトに行って、新しいバージョンをダウンロードしてください。</Message>
+		<Message ID="UpdaterNotFound">必要不可欠なファイルがないため、アップデートは出来なかった。</Message>
+		<Message ID="UpgradeSuccess">アップデートは完了しました。</Message>
+		<Message ID="Net45NotFound">Microsoft .NET Framework 4.5はインストールされていないため、Mesenは起動できません。Microsoft .NET Frameworkの最新版をMicrosoftのサイトからダウンロードして、インストールしてください。</Message>
+
+		<Message ID="GoogleDriveIntegrationError">MesenはGoogle Driveにアクセス出来ませんでした。</Message>
+
+		<Message ID="InvalidCheatFile">このファイル（{0}）にはチートコードを見つかりませんでした。</Message>
+		<Message ID="InvalidXmlFile">このファイル（{0}）はXMLファイルではないため読めませんでした.</Message>
+		<Message ID="NoMatchingCheats">このファイル（{0}）に選択されたゲームに該当するチートコードを見つかりませんでした。</Message>
+
+		<Message ID="ConfirmReset">ゲームをリセットします。よろしいですか？</Message>
+		<Message ID="ConfirmPowerCycle">ゲームを停止して再起動します。よろしいですか？</Message>
+		<Message ID="ConfirmExit">Mesenを終了します。よろしいですか？</Message>
+
+		<Message ID="EmulatorShortcutMappings_FastForward">早送り（押し続ける間だけ）</Message>
+		<Message ID="EmulatorShortcutMappings_ToggleFastForward">早送りをオン・オフにする</Message>
+		<Message ID="EmulatorShortcutMappings_Rewind">巻き戻す（押し続ける間だけ）</Message>
+		<Message ID="EmulatorShortcutMappings_ToggleRewind">巻き戻しをオン・オフにする</Message>
+		<Message ID="EmulatorShortcutMappings_RewindTenSecs">１０秒前に戻る</Message>
+		<Message ID="EmulatorShortcutMappings_RewindOneMin">１分前に戻る</Message>
+		<Message ID="EmulatorShortcutMappings_IncreaseSpeed">速度を上げる</Message>
+		<Message ID="EmulatorShortcutMappings_DecreaseSpeed">速度を下げる</Message>
+		<Message ID="EmulatorShortcutMappings_Pause">ポーズ</Message>
+		<Message ID="EmulatorShortcutMappings_Reset">リセット</Message>
+		<Message ID="EmulatorShortcutMappings_PowerCycle">停止と再起動</Message>
+		<Message ID="EmulatorShortcutMappings_PowerOff">ゲームを停止する</Message>
+		<Message ID="EmulatorShortcutMappings_Exit">終了</Message>
+		<Message ID="EmulatorShortcutMappings_TakeScreenshot">スクリーンショットを撮る</Message>
+		<Message ID="EmulatorShortcutMappings_SwitchDiskSide">FDS - A面B面切り替え</Message>
+		<Message ID="EmulatorShortcutMappings_InsertNextDisk">FDS - 次のディスクを入れる</Message>
+		<Message ID="EmulatorShortcutMappings_InsertCoin1">VS - インサートコイン 1</Message>
+		<Message ID="EmulatorShortcutMappings_InsertCoin2">VS - インサートコイン 2</Message>
+		<Message ID="EmulatorShortcutMappings_InputBarcode">バーコードを入力</Message>
+		<Message ID="EmulatorShortcutMappings_VsServiceButton">VS - サービスボタン</Message>
+		<Message ID="EmulatorShortcutMappings_MoveToNextStateSlot">次のクイックセーブスロットを選ぶ</Message>
+		<Message ID="EmulatorShortcutMappings_MoveToPreviousStateSlot">前のクイックセーブスロットを選ぶ</Message>
+		<Message ID="EmulatorShortcutMappings_SaveState">選択中スロットにクイックセーブ</Message>
+		<Message ID="EmulatorShortcutMappings_LoadState">選択中スロットからクイックロード</Message>
+		<Message ID="EmulatorShortcutMappings_ToggleCheats">チートコードを無効・有効にする</Message>
+		<Message ID="EmulatorShortcutMappings_ToggleAudio">音声を無効・有効にする</Message>
+		<Message ID="EmulatorShortcutMappings_RunSingleFrame">次のフレームを表す</Message>
+
+		<Message ID="EmulatorShortcutMappings_EjectDisk">FDS - ディスクを取り出す</Message>
+		<Message ID="EmulatorShortcutMappings_SetScale1x">映像サイズ １倍</Message>
+		<Message ID="EmulatorShortcutMappings_SetScale2x">映像サイズ ２倍</Message>
+		<Message ID="EmulatorShortcutMappings_SetScale3x">映像サイズ ３倍</Message>
+		<Message ID="EmulatorShortcutMappings_SetScale4x">映像サイズ ４倍</Message>
+		<Message ID="EmulatorShortcutMappings_SetScale5x">映像サイズ ５倍</Message>
+		<Message ID="EmulatorShortcutMappings_SetScale6x">映像サイズ ６倍</Message>
+		<Message ID="EmulatorShortcutMappings_ToggleFullscreen">全画面表示</Message>
+		<Message ID="EmulatorShortcutMappings_ToggleFps">フレームレート表示</Message>
+		<Message ID="EmulatorShortcutMappings_ToggleGameTimer">ゲームタイマー表示</Message>
+		<Message ID="EmulatorShortcutMappings_ToggleFrameCounter">フレームカウンタ表示</Message>
+		<Message ID="EmulatorShortcutMappings_ToggleLagCounter">ラグカウンタ表示</Message>
+		<Message ID="EmulatorShortcutMappings_ToggleOsd">オンスクリーン表示を無効・有効にする</Message>
+		<Message ID="EmulatorShortcutMappings_ToggleAlwaysOnTop">手前に表示を無効・有効にする</Message>
+		<Message ID="EmulatorShortcutMappings_ToggleBackground">バックグラウンドレイヤー表示</Message>
+		<Message ID="EmulatorShortcutMappings_ToggleSprites">スプライトレイヤー表示</Message>
+		<Message ID="EmulatorShortcutMappings_ToggleKeyboardMode">キーボードモードを無効・有効にする</Message>
+		<Message ID="EmulatorShortcutMappings_MaxSpeed">最高速度を無効・有効にする</Message>
+		<Message ID="EmulatorShortcutMappings_LoadRandomGame">ランダムゲームを開く</Message>
+		<Message ID="EmulatorShortcutMappings_SaveStateSlot1">クイックセーブスロット１に保存する</Message>
+		<Message ID="EmulatorShortcutMappings_SaveStateSlot2">クイックセーブスロット２に保存する</Message>
+		<Message ID="EmulatorShortcutMappings_SaveStateSlot3">クイックセーブスロット３に保存する</Message>
+		<Message ID="EmulatorShortcutMappings_SaveStateSlot4">クイックセーブスロット４に保存する</Message>
+		<Message ID="EmulatorShortcutMappings_SaveStateSlot5">クイックセーブスロット５に保存する</Message>
+		<Message ID="EmulatorShortcutMappings_SaveStateSlot6">クイックセーブスロット６に保存する</Message>
+		<Message ID="EmulatorShortcutMappings_SaveStateSlot7">クイックセーブスロット７に保存する</Message>
+		<Message ID="EmulatorShortcutMappings_SaveStateSlot8">クイックセーブスロット８に保存する</Message>
+		<Message ID="EmulatorShortcutMappings_SaveStateSlot9">クイックセーブスロット９に保存する</Message>
+		<Message ID="EmulatorShortcutMappings_SaveStateSlot10">クイックセーブスロット１０に保存する</Message>
+		<Message ID="EmulatorShortcutMappings_SaveStateToFile">クイックセーブデータをファイルに保存する</Message>
+		<Message ID="EmulatorShortcutMappings_LoadStateSlot1">クイックセーブスロット１からロードする</Message>
+		<Message ID="EmulatorShortcutMappings_LoadStateSlot2">クイックセーブスロット２からロードする</Message>
+		<Message ID="EmulatorShortcutMappings_LoadStateSlot3">クイックセーブスロット３からロードする</Message>
+		<Message ID="EmulatorShortcutMappings_LoadStateSlot4">クイックセーブスロット４からロードする</Message>
+		<Message ID="EmulatorShortcutMappings_LoadStateSlot5">クイックセーブスロット５からロードする</Message>
+		<Message ID="EmulatorShortcutMappings_LoadStateSlot6">クイックセーブスロット６からロードする</Message>
+		<Message ID="EmulatorShortcutMappings_LoadStateSlot7">クイックセーブスロット７からロードする</Message>
+		<Message ID="EmulatorShortcutMappings_LoadStateSlot8">クイックセーブスロット８からロードする</Message>
+		<Message ID="EmulatorShortcutMappings_LoadStateSlot9">クイックセーブスロット９からロードする</Message>
+		<Message ID="EmulatorShortcutMappings_LoadStateSlot10">クイックセーブスロット１０からロードする</Message>
+		<Message ID="EmulatorShortcutMappings_LoadStateSlotAuto">自動クイックセーブスロットからロードする</Message>
+		<Message ID="EmulatorShortcutMappings_LoadStateFromFile">クイックセーブデータをファイルからロードする</Message>
+		<Message ID="EmulatorShortcutMappings_LoadLastSession">前セッションをロードする</Message>
+		<Message ID="EmulatorShortcutMappings_OpenFile">ファイルを開く</Message>
+		<Message ID="EmulatorShortcutMappings_OpenDebugger">デバッガを開く</Message>
+		<Message ID="EmulatorShortcutMappings_OpenAssembler">アセンブラを開く</Message>
+		<Message ID="EmulatorShortcutMappings_OpenPpuViewer">PPUビューアーを開く</Message>
+		<Message ID="EmulatorShortcutMappings_OpenMemoryTools">メモリツールを開く</Message>
+		<Message ID="EmulatorShortcutMappings_OpenScriptWindow">スクリプトウインドウを開く</Message>
+		<Message ID="EmulatorShortcutMappings_OpenTraceLogger">トレースロガーを開く</Message>
+		<Message ID="EmulatorShortcutMappings_OpenApuViewer">APUビューアーを開く</Message>
+		<Message ID="EmulatorShortcutMappings_OpenEventViewer">イベントビューアーを開く</Message>
+	</Messages>
+	<Enums>
+		<Enum ID="ControllerType">
+			<Value ID="None">なし</Value>
+			<Value ID="StandardController">ファミコンコントローラ</Value>
+			<Value ID="Zapper">ガン</Value>
+			<Value ID="ArkanoidController">Arkanoidコントローラ</Value>
+			<Value ID="SnesController">スーパーファミコンコントローラ</Value>
+			<Value ID="PowerPad">パワーパッド</Value>
+			<Value ID="SnesMouse">スーパーファミコマウス</Value>
+			<Value ID="SuborMouse">Suborマウス</Value>
+		</Enum>
+		<Enum ID="ExpansionPortDevice">
+			<Value ID="None">なし</Value>
+			<Value ID="Zapper">ガン</Value>
+			<Value ID="FourPlayerAdapter">4-Player Adapter</Value>
+			<Value ID="ArkanoidController">Arkanoidコントローラ</Value>
+			<Value ID="OekaKidsTablet">おえかきっずタブレット</Value>
+			<Value ID="FamilyTrainerMat">ファミリートレーナー</Value>
+			<Value ID="KonamiHyperShot">Konamiハイパーショット</Value>
+			<Value ID="FamilyBasicKeyboard">Family Basicキーボード</Value>
+			<Value ID="PartyTap">Partytap</Value>
+			<Value ID="Pachinko">パチンココントローラ</Value>
+			<Value ID="ExcitingBoxing">エキサイティングボクシングエアバッグ</Value>
+			<Value ID="JissenMahjong">実践麻雀コントローラ</Value>
+			<Value ID="SuborKeyboard">Suborキーボード</Value>
+			<Value ID="BarcodeBattler">バーコードバトラー</Value>
+			<Value ID="HoriTrack">ホリトラク</Value>
+			<Value ID="BandaiHyperShot">Bandaiハイパーショット</Value>
+			<Value ID="AsciiTurboFile">Turbo File</Value>
+			<Value ID="BattleBox">バトルボックス</Value>
+		</Enum>
+		<Enum ID="VideoAspectRatio">
+			<Value ID="NoStretching">デフォルト (1:1)</Value>
+			<Value ID="Auto">自動的 (ゲーム8:7や11:8を使う)</Value>
+			<Value ID="NTSC">NTSC (8:7)</Value>
+			<Value ID="PAL">PAL (11:8)</Value>
+			<Value ID="Standard">ノーマル (4:3)</Value>
+			<Value ID="Widescreen">ワイド (16:9)</Value>
+			<Value ID="Custom">カスタム</Value>
+		</Enum>
+		<Enum ID="VideoRefreshRates">
+			<Value ID="_50">50 Hz</Value>
+			<Value ID="_60">60 Hz</Value>
+			<Value ID="_100">100 Hz</Value>
+			<Value ID="_120">120 Hz</Value>
+			<Value ID="_200">200 Hz</Value>
+			<Value ID="_240">240 Hz</Value>
+		</Enum>
+		<Enum ID="ScreenRotation">
+			<Value ID="None">なし</Value>
+			<Value ID="_90Degrees">90度</Value>
+			<Value ID="_180Degrees">180度</Value>
+			<Value ID="_270Degrees">270度</Value>
+		</Enum>
+		<Enum ID="VideoFilterType">
+			<Value ID="None">なし</Value>
+			<Value ID="NTSC">NTSC</Value>
+			<Value ID="BisqwitNtscQuarterRes">NTSC (Bisqwit) - 2x</Value>
+			<Value ID="BisqwitNtscHalfRes">NTSC (Bisqwit) - 4x</Value>
+			<Value ID="BisqwitNtsc">NTSC (Bisqwit) - 8x</Value>
+			<Value ID="xBRZ2x">xBRZ 2x</Value>
+			<Value ID="xBRZ3x">xBRZ 3x</Value>
+			<Value ID="xBRZ4x">xBRZ 4x</Value>
+			<Value ID="xBRZ5x">xBRZ 5x</Value>
+			<Value ID="xBRZ6x">xBRZ 6x</Value>
+			<Value ID="HQ2x">HQ 2x</Value>
+			<Value ID="HQ3x">HQ 3x</Value>
+			<Value ID="HQ4x">HQ 4x</Value>
+			<Value ID="Scale2x">Scale 2x</Value>
+			<Value ID="Scale3x">Scale 3x</Value>
+			<Value ID="Scale4x">Scale 4x</Value>
+			<Value ID="_2xSai">2xSai</Value>
+			<Value ID="Super2xSai">Super2xSai</Value>
+			<Value ID="SuperEagle">SuperEagle</Value>
+			<Value ID="Prescale2x">Prescale 2x</Value>
+			<Value ID="Prescale3x">Prescale 3x</Value>
+			<Value ID="Prescale4x">Prescale 4x</Value>
+			<Value ID="Prescale6x">Prescale 6x</Value>
+			<Value ID="Prescale8x">Prescale 8x</Value>
+			<Value ID="Prescale10x">Prescale 10x</Value>
+		</Enum>
+		<Enum ID="ConsoleType">
+			<Value ID="Nes">NES</Value>
+			<Value ID="Famicom">ファミコン</Value>
+		</Enum>
+		<Enum ID="PpuModel">
+			<Value ID="Ppu2C03">RP2C03</Value>
+			<Value ID="Ppu2C04A">RP2C04-0001</Value>
+			<Value ID="Ppu2C04B">RP2C04-0002</Value>
+			<Value ID="Ppu2C04C">RP2C04-0003</Value>
+			<Value ID="Ppu2C04D">RP2C04-0004</Value>
+			<Value ID="Ppu2C05A">RP2C05-01</Value>
+			<Value ID="Ppu2C05B">RP2C05-02</Value>
+			<Value ID="Ppu2C05C">RP2C05-03</Value>
+			<Value ID="Ppu2C05D">RP2C05-04</Value>
+			<Value ID="Ppu2C05E">RP2C05-05</Value>
+		</Enum>
+		<Enum ID="InputDisplayPosition">
+			<Value ID="TopLeft">左上</Value>
+			<Value ID="TopRight">右上</Value>
+			<Value ID="BottomLeft">左下</Value>
+			<Value ID="BottomRight">右下</Value>
+		</Enum>
+		<Enum ID="Language">
+			<Value ID="SystemDefault">ユーザーアカウントのデフォルト</Value>
+			<Value ID="English">English</Value>
+			<Value ID="French">Français</Value>
+			<Value ID="Japanese">日本語</Value>
+			<Value ID="Portuguese">Português</Value>
+			<Value ID="Russian">Русский</Value>
+			<Value ID="Spanish">Español</Value>
+			<Value ID="Ukrainian">Українська</Value>
+			<Value ID="Catalan">Català</Value>
+		</Enum>
+		<Enum ID="RamPowerOnState">
+			<Value ID="AllZeros">ビット全てを０にする　（デフォルト）</Value>
+			<Value ID="AllOnes">ビット全てを１にする</Value>
+			<Value ID="Random">乱数</Value>
+		</Enum>
+		<Enum ID="CheatCurrentFilterType">
+			<Value ID="Smaller">次の数値より小さい</Value>
+			<Value ID="Equal">次の数値と同じ</Value>
+			<Value ID="NotEqual">次の数値とは違う</Value>
+			<Value ID="Greater">次の数値より大きい</Value>
+		</Enum>
+		<Enum ID="CheatPrevFilterType">
+			<Value ID="Smaller">より小さい</Value>
+			<Value ID="Equal">と同じ</Value>
+			<Value ID="NotEqual">とは違う</Value>
+			<Value ID="Greater">より大きい</Value>
+		</Enum>
+		<Enum ID="VideoCodec">
+			<Value ID="None">圧縮なし</Value>
+			<Value ID="ZMBV">Zip Motion Block Video (ZMBV)</Value>
+			<Value ID="CSCD">Camstudio (CSCD)</Value>
+		</Enum>
+		<Enum ID="RecordMovieFrom">
+			<Value ID="StartWithoutSaveData">パワーオンから</Value>
+			<Value ID="StartWithSaveData">パワーオンから　（セーブデータ付き）</Value>
+			<Value ID="CurrentState">今から</Value>
+		</Enum>
+	</Enums>
 </Resources>

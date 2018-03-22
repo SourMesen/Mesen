@@ -10,6 +10,8 @@ namespace Mesen.GUI.Config
 
 		public bool SingleInstance = true;
 		public bool PauseWhenInBackground = false;
+		public bool PauseWhenInMenusAndConfig = false;
+		public bool PauseWhenInDebuggingTools = false;
 		public bool AllowBackgroundInput = false;
 		public bool AutoLoadIpsPatches = true;
 		public bool AllowInvalidInput = false;
@@ -174,7 +176,7 @@ namespace Mesen.GUI.Config
 			InteropEmu.SetFlag(EmulationFlags.FdsAutoInsertDisk, preferenceInfo.FdsAutoInsertDisk);
 			InteropEmu.SetFlag(EmulationFlags.PauseOnMovieEnd, preferenceInfo.PauseOnMovieEnd);
 			InteropEmu.SetFlag(EmulationFlags.AllowBackgroundInput, preferenceInfo.AllowBackgroundInput);
-			InteropEmu.SetFlag(EmulationFlags.PauseWhenInBackground, preferenceInfo.PauseWhenInBackground);
+			InteropEmu.SetFlag(EmulationFlags.PauseWhenInBackground, preferenceInfo.PauseWhenInBackground || preferenceInfo.PauseWhenInMenusAndConfig || preferenceInfo.PauseWhenInDebuggingTools);
 			InteropEmu.SetFlag(EmulationFlags.DisableGameDatabase, preferenceInfo.DisableGameDatabase);
 			InteropEmu.SetFlag(EmulationFlags.DisableOsd, preferenceInfo.DisableOsd);
 			InteropEmu.SetFlag(EmulationFlags.AllowMismatchingSaveStates, preferenceInfo.AllowMismatchingSaveStates);			

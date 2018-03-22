@@ -46,6 +46,9 @@ namespace Mesen.GUI.Forms.Config
 			AddBinding("FdsAutoInsertDisk", chkFdsAutoInsertDisk);
 
 			AddBinding("PauseWhenInBackground", chkPauseWhenInBackground);
+			AddBinding("PauseWhenInMenusAndConfig", chkPauseInMenuAndConfig);
+			AddBinding("PauseWhenInDebuggingTools", chkPauseInDebugger);
+
 			AddBinding("AllowBackgroundInput", chkAllowBackgroundInput);
 			AddBinding("ConfirmExitResetPower", chkConfirmExitResetPower);			
 

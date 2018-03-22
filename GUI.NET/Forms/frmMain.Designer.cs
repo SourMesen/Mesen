@@ -46,6 +46,7 @@ namespace Mesen.GUI.Forms
 			this.toolStripMenuItem4 = new System.Windows.Forms.ToolStripSeparator();
 			this.mnuSaveState = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuLoadState = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuLoadLastSession = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem7 = new System.Windows.Forms.ToolStripSeparator();
 			this.mnuRecentFiles = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem6 = new System.Windows.Forms.ToolStripSeparator();
@@ -204,7 +205,6 @@ namespace Mesen.GUI.Forms
 			this.mnuReportBug = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem5 = new System.Windows.Forms.ToolStripSeparator();
 			this.mnuAbout = new System.Windows.Forms.ToolStripMenuItem();
-			this.mnuLoadLastSession = new System.Windows.Forms.ToolStripMenuItem();
 			this.panelRenderer.SuspendLayout();
 			this.panelInfo.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.picIcon)).BeginInit();
@@ -343,7 +343,9 @@ namespace Mesen.GUI.Forms
 			this.mnuFile.ShortcutKeyDisplayString = "";
 			this.mnuFile.Size = new System.Drawing.Size(37, 20);
 			this.mnuFile.Text = "File";
+			this.mnuFile.DropDownClosed += new System.EventHandler(this.mnu_DropDownClosed);
 			this.mnuFile.DropDownOpening += new System.EventHandler(this.mnuFile_DropDownOpening);
+			this.mnuFile.DropDownOpened += new System.EventHandler(this.mnu_DropDownOpened);
 			// 
 			// mnuOpen
 			// 
@@ -370,6 +372,12 @@ namespace Mesen.GUI.Forms
 			this.mnuLoadState.Size = new System.Drawing.Size(166, 22);
 			this.mnuLoadState.Text = "Load State";
 			this.mnuLoadState.DropDownOpening += new System.EventHandler(this.mnuLoadState_DropDownOpening);
+			// 
+			// mnuLoadLastSession
+			// 
+			this.mnuLoadLastSession.Name = "mnuLoadLastSession";
+			this.mnuLoadLastSession.Size = new System.Drawing.Size(166, 22);
+			this.mnuLoadLastSession.Text = "Load Last Session";
 			// 
 			// toolStripMenuItem7
 			// 
@@ -417,7 +425,9 @@ namespace Mesen.GUI.Forms
 			this.mnuGame.Name = "mnuGame";
 			this.mnuGame.Size = new System.Drawing.Size(50, 20);
 			this.mnuGame.Text = "Game";
+			this.mnuGame.DropDownClosed += new System.EventHandler(this.mnu_DropDownClosed);
 			this.mnuGame.DropDownOpening += new System.EventHandler(this.mnuGame_DropDownOpening);
+			this.mnuGame.DropDownOpened += new System.EventHandler(this.mnu_DropDownOpened);
 			// 
 			// mnuPause
 			// 
@@ -576,6 +586,8 @@ namespace Mesen.GUI.Forms
 			this.mnuOptions.Name = "mnuOptions";
 			this.mnuOptions.Size = new System.Drawing.Size(61, 20);
 			this.mnuOptions.Text = "Options";
+			this.mnuOptions.DropDownClosed += new System.EventHandler(this.mnu_DropDownClosed);
+			this.mnuOptions.DropDownOpened += new System.EventHandler(this.mnu_DropDownOpened);
 			// 
 			// mnuEmulationSpeed
 			// 
@@ -1107,6 +1119,8 @@ namespace Mesen.GUI.Forms
 			this.mnuTools.Name = "mnuTools";
 			this.mnuTools.Size = new System.Drawing.Size(47, 20);
 			this.mnuTools.Text = "Tools";
+			this.mnuTools.DropDownClosed += new System.EventHandler(this.mnu_DropDownClosed);
+			this.mnuTools.DropDownOpened += new System.EventHandler(this.mnu_DropDownOpened);
 			// 
 			// mnuNetPlay
 			// 
@@ -1468,7 +1482,9 @@ namespace Mesen.GUI.Forms
 			this.mnuDebug.Name = "mnuDebug";
 			this.mnuDebug.Size = new System.Drawing.Size(54, 20);
 			this.mnuDebug.Text = "Debug";
+			this.mnuDebug.DropDownClosed += new System.EventHandler(this.mnu_DropDownClosed);
 			this.mnuDebug.DropDownOpening += new System.EventHandler(this.mnuDebug_DropDownOpening);
+			this.mnuDebug.DropDownOpened += new System.EventHandler(this.mnu_DropDownOpened);
 			// 
 			// mnuApuViewer
 			// 
@@ -1561,6 +1577,8 @@ namespace Mesen.GUI.Forms
 			this.mnuHelp.Name = "mnuHelp";
 			this.mnuHelp.Size = new System.Drawing.Size(44, 20);
 			this.mnuHelp.Text = "Help";
+			this.mnuHelp.DropDownClosed += new System.EventHandler(this.mnu_DropDownClosed);
+			this.mnuHelp.DropDownOpened += new System.EventHandler(this.mnu_DropDownOpened);
 			// 
 			// mnuOnlineHelp
 			// 
@@ -1616,12 +1634,6 @@ namespace Mesen.GUI.Forms
 			this.mnuAbout.Size = new System.Drawing.Size(198, 22);
 			this.mnuAbout.Text = "About";
 			this.mnuAbout.Click += new System.EventHandler(this.mnuAbout_Click);
-			// 
-			// mnuLoadLastSession
-			// 
-			this.mnuLoadLastSession.Name = "mnuLoadLastSession";
-			this.mnuLoadLastSession.Size = new System.Drawing.Size(166, 22);
-			this.mnuLoadLastSession.Text = "Load Last Session";
 			// 
 			// frmMain
 			// 

@@ -1,1006 +1,1011 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Resources>
-  <Forms>
-    <Form ID="frmMain" Title="Mesen">
-      <Control ID="mnuFile">Файл</Control>
-      <Control ID="mnuOpen">Відкрити</Control>
-      <Control ID="mnuSaveState">Зберегти</Control>
-      <Control ID="mnuLoadState">Завантажити</Control>
-      <Control ID="mnuLoadLastSession">Load Last Session</Control>
-      <Control ID="mnuRecentFiles">Недавнi файлы</Control>
-      <Control ID="mnuExit">Вихід</Control>
-      <Control ID="mnuGame">Гра</Control>
-      <Control ID="mnuPause">Пауза</Control>
-      <Control ID="mnuReset">Скидання</Control>
-      <Control ID="mnuPowerCycle">Цикл включення</Control>
-      <Control ID="mnuPowerOff">Power Off</Control>
-      <Control ID="mnuSwitchDiskSide">Змінити сторону диска</Control>
-      <Control ID="mnuSelectDisk">Вибрати диск</Control>
-      <Control ID="mnuEjectDisk">Вилучити диск</Control>
-      <Control ID="mnuVsGameConfig">Конфігурація VS</Control>
-      <Control ID="mnuInsertCoin1">Вставити монету в слот 1</Control>
-      <Control ID="mnuInsertCoin2">Вставити монету в слот 2</Control>
-      <Control ID="mnuInputBarcode">Input Barcode</Control>
-      <Control ID="mnuTapeRecorder">Tape Recorder</Control>
-      <Control ID="mnuLoadTapeFile">Load from file...</Control>
-      <Control ID="mnuStartRecordTapeFile">Record to file...</Control>
-      <Control ID="mnuStopRecordTapeFile">Stop recording</Control>
-      <Control ID="mnuOptions">Опції</Control>
-      <Control ID="mnuEmulationSpeed">Швидкість емуляції</Control>
-      <Control ID="mnuEmuSpeedNormal">Нормальна (100%)</Control>
-      <Control ID="mnuIncreaseSpeed">Збiльшити швидкiсть</Control>
-      <Control ID="mnuDecreaseSpeed">Зменшити швидкiсть</Control>
-      <Control ID="mnuEmuSpeedMaximumSpeed">Максимальна швидкiсть</Control>
-      <Control ID="mnuEmuSpeedTriple">Потрiйна (300%)</Control>
-      <Control ID="mnuEmuSpeedDouble">Подвiйна (200%)</Control>
-      <Control ID="mnuEmuSpeedHalf">Половина (50%)</Control>
-      <Control ID="mnuEmuSpeedQuarter">Чверть (25%)</Control>
-      <Control ID="mnuShowFPS">Показувати FPS</Control>
-      <Control ID="mnuVideoScale">Розмір екрану</Control>
-      <Control ID="mnuScale1x">1x</Control>
-      <Control ID="mnuScale2x">2x</Control>
-      <Control ID="mnuScale3x">3x</Control>
-      <Control ID="mnuScale4x">4x</Control>
-      <Control ID="mnuScaleCustom">Вручну</Control>
-      <Control ID="mnuFullscreen">Повний екран</Control>
-      <Control ID="mnuVideoFilter">Фільтр зображення</Control>
-      <Control ID="mnuNoneFilter">Немає</Control>
-      <Control ID="mnuNtscFilter">NTSC</Control>
-      <Control ID="mnuBilinearInterpolation">Білінійна інтерполяція</Control>
-      <Control ID="mnuAudioConfig">Звук</Control>
-      <Control ID="mnuInput">Пристрої введення</Control>
-      <Control ID="mnuRegion">Регiон</Control>
-      <Control ID="mnuRegionAuto">Авто</Control>
-      <Control ID="mnuRegionNtsc">NTSC</Control>
-      <Control ID="mnuRegionPal">PAL</Control>
-      <Control ID="mnuRegionDendy">Dendy</Control>
-      <Control ID="mnuVideoConfig">Вiдео</Control>
-      <Control ID="mnuEmulationConfig">Емуляція</Control>
-      <Control ID="mnuPreferences">Налаштування</Control>
-      <Control ID="mnuTools">Утиліти</Control>
-      <Control ID="mnuNetPlay">Гра по мережі</Control>
-      <Control ID="mnuStartServer">Запустити сервер</Control>
-      <Control ID="mnuConnect">Підключитися до сервера</Control>
-      <Control ID="mnuNetPlaySelectController">Вибрати контроллер</Control>
-      <Control ID="mnuNetPlayPlayer1">Гравець 1</Control>
-      <Control ID="mnuNetPlayPlayer2">Гравець 2</Control>
-      <Control ID="mnuNetPlayPlayer3">Гравець 3</Control>
-      <Control ID="mnuNetPlayPlayer4">Гравець 4</Control>
-      <Control ID="mnuNetPlaySpectator">Спостерігач</Control>
-      <Control ID="mnuFindServer">Знайти сервер...</Control>
-      <Control ID="mnuProfile">Налаштувати профіль</Control>
-      <Control ID="mnuMovies">Записи</Control>
-      <Control ID="mnuPlayMovie">Програти</Control>
-      <Control ID="mnuRecordMovie">Записати</Control>
-      <Control ID="mnuStopMovie">Зупинити запис</Control>
-      <Control ID="mnuSoundRecorder">Запис звуку</Control>
-      <Control ID="mnuWaveRecord">Почати</Control>
-      <Control ID="mnuWaveStop">Зупинити</Control>
-      <Control ID="mnuVideoRecorder">Відеомагнітофон</Control>
-      <Control ID="mnuAviRecord">Почати</Control>
-      <Control ID="mnuAviStop">Зупинити</Control>      
-      <Control ID="mnuCheats">Чити</Control>
-      <Control ID="mnuTests">Тести</Control>
-      <Control ID="mnuTestRun">Запустити...</Control>
-      <Control ID="mnuTestRecordFrom">Записати</Control>
-      <Control ID="mnuTestRecordStart">Спочатку</Control>
-      <Control ID="mnuTestRecordNow">Негайно</Control>
-      <Control ID="mnuTestRecordMovie">Iз запису</Control>
-      <Control ID="mnuTestRecordTest">Тест</Control>
-      <Control ID="mnuTestStopRecording">Зупинити запис</Control>
-      <Control ID="mnuRunAllTests">Запустіті всі тести</Control>
-      <Control ID="mnuDebugger">Налагодження</Control>
-      <Control ID="mnuLogWindow">Лог</Control>
-      <Control ID="mnuHdPackEditor">HD Pack Builder</Control>
-      <Control ID="mnuTakeScreenshot">Зробити скріншот</Control>
-      <Control ID="mnuRandomGame">Завантажити випадкову гру</Control>
-      <Control ID="mnuHelp">Допомога</Control>
-      <Control ID="mnuOnlineHelp">Online Help</Control>
-      <Control ID="mnuCheckForUpdates">Перевірити оновлення</Control>
-      <Control ID="mnuReportBug">Повідомити про помилку</Control>
-      <Control ID="mnuHelpWindow">Параметри командного рядка</Control>
-      <Control ID="mnuAbout">Про програму</Control>
+	<Forms>
+		<Form ID="frmMain" Title="Mesen">
+			<Control ID="mnuFile">Файл</Control>
+			<Control ID="mnuOpen">Відкрити</Control>
+			<Control ID="mnuSaveState">Зберегти</Control>
+			<Control ID="mnuLoadState">Завантажити</Control>
+			<Control ID="mnuLoadLastSession">Load Last Session</Control>
+			<Control ID="mnuRecentFiles">Недавнi файлы</Control>
+			<Control ID="mnuExit">Вихід</Control>
+			<Control ID="mnuGame">Гра</Control>
+			<Control ID="mnuPause">Пауза</Control>
+			<Control ID="mnuReset">Скидання</Control>
+			<Control ID="mnuPowerCycle">Цикл включення</Control>
+			<Control ID="mnuPowerOff">Power Off</Control>
+			<Control ID="mnuSwitchDiskSide">Змінити сторону диска</Control>
+			<Control ID="mnuSelectDisk">Вибрати диск</Control>
+			<Control ID="mnuEjectDisk">Вилучити диск</Control>
+			<Control ID="mnuVsGameConfig">Конфігурація VS</Control>
+			<Control ID="mnuInsertCoin1">Вставити монету в слот 1</Control>
+			<Control ID="mnuInsertCoin2">Вставити монету в слот 2</Control>
+			<Control ID="mnuInputBarcode">Input Barcode</Control>
+			<Control ID="mnuTapeRecorder">Tape Recorder</Control>
+			<Control ID="mnuLoadTapeFile">Load from file...</Control>
+			<Control ID="mnuStartRecordTapeFile">Record to file...</Control>
+			<Control ID="mnuStopRecordTapeFile">Stop recording</Control>
+			<Control ID="mnuOptions">Опції</Control>
+			<Control ID="mnuEmulationSpeed">Швидкість емуляції</Control>
+			<Control ID="mnuEmuSpeedNormal">Нормальна (100%)</Control>
+			<Control ID="mnuIncreaseSpeed">Збiльшити швидкiсть</Control>
+			<Control ID="mnuDecreaseSpeed">Зменшити швидкiсть</Control>
+			<Control ID="mnuEmuSpeedMaximumSpeed">Максимальна швидкiсть</Control>
+			<Control ID="mnuEmuSpeedTriple">Потрiйна (300%)</Control>
+			<Control ID="mnuEmuSpeedDouble">Подвiйна (200%)</Control>
+			<Control ID="mnuEmuSpeedHalf">Половина (50%)</Control>
+			<Control ID="mnuEmuSpeedQuarter">Чверть (25%)</Control>
+			<Control ID="mnuShowFPS">Показувати FPS</Control>
+			<Control ID="mnuVideoScale">Розмір екрану</Control>
+			<Control ID="mnuScale1x">1x</Control>
+			<Control ID="mnuScale2x">2x</Control>
+			<Control ID="mnuScale3x">3x</Control>
+			<Control ID="mnuScale4x">4x</Control>
+			<Control ID="mnuScaleCustom">Вручну</Control>
+			<Control ID="mnuFullscreen">Повний екран</Control>
+			<Control ID="mnuVideoFilter">Фільтр зображення</Control>
+			<Control ID="mnuNoneFilter">Немає</Control>
+			<Control ID="mnuNtscFilter">NTSC</Control>
+			<Control ID="mnuBilinearInterpolation">Білінійна інтерполяція</Control>
+			<Control ID="mnuAudioConfig">Звук</Control>
+			<Control ID="mnuInput">Пристрої введення</Control>
+			<Control ID="mnuRegion">Регiон</Control>
+			<Control ID="mnuRegionAuto">Авто</Control>
+			<Control ID="mnuRegionNtsc">NTSC</Control>
+			<Control ID="mnuRegionPal">PAL</Control>
+			<Control ID="mnuRegionDendy">Dendy</Control>
+			<Control ID="mnuVideoConfig">Вiдео</Control>
+			<Control ID="mnuEmulationConfig">Емуляція</Control>
+			<Control ID="mnuPreferences">Налаштування</Control>
+			<Control ID="mnuTools">Утиліти</Control>
+			<Control ID="mnuNetPlay">Гра по мережі</Control>
+			<Control ID="mnuStartServer">Запустити сервер</Control>
+			<Control ID="mnuConnect">Підключитися до сервера</Control>
+			<Control ID="mnuNetPlaySelectController">Вибрати контроллер</Control>
+			<Control ID="mnuNetPlayPlayer1">Гравець 1</Control>
+			<Control ID="mnuNetPlayPlayer2">Гравець 2</Control>
+			<Control ID="mnuNetPlayPlayer3">Гравець 3</Control>
+			<Control ID="mnuNetPlayPlayer4">Гравець 4</Control>
+			<Control ID="mnuNetPlaySpectator">Спостерігач</Control>
+			<Control ID="mnuFindServer">Знайти сервер...</Control>
+			<Control ID="mnuProfile">Налаштувати профіль</Control>
+			<Control ID="mnuMovies">Записи</Control>
+			<Control ID="mnuPlayMovie">Програти</Control>
+			<Control ID="mnuRecordMovie">Записати</Control>
+			<Control ID="mnuStopMovie">Зупинити запис</Control>
+			<Control ID="mnuSoundRecorder">Запис звуку</Control>
+			<Control ID="mnuWaveRecord">Почати</Control>
+			<Control ID="mnuWaveStop">Зупинити</Control>
+			<Control ID="mnuVideoRecorder">Відеомагнітофон</Control>
+			<Control ID="mnuAviRecord">Почати</Control>
+			<Control ID="mnuAviStop">Зупинити</Control>
+			<Control ID="mnuCheats">Чити</Control>
+			<Control ID="mnuTests">Тести</Control>
+			<Control ID="mnuTestRun">Запустити...</Control>
+			<Control ID="mnuTestRecordFrom">Записати</Control>
+			<Control ID="mnuTestRecordStart">Спочатку</Control>
+			<Control ID="mnuTestRecordNow">Негайно</Control>
+			<Control ID="mnuTestRecordMovie">Iз запису</Control>
+			<Control ID="mnuTestRecordTest">Тест</Control>
+			<Control ID="mnuTestStopRecording">Зупинити запис</Control>
+			<Control ID="mnuRunAllTests">Запустіті всі тести</Control>
+			<Control ID="mnuDebugger">Налагодження</Control>
+			<Control ID="mnuLogWindow">Лог</Control>
+			<Control ID="mnuHdPackEditor">HD Pack Builder</Control>
+			<Control ID="mnuTakeScreenshot">Зробити скріншот</Control>
+			<Control ID="mnuRandomGame">Завантажити випадкову гру</Control>
+			<Control ID="mnuHelp">Допомога</Control>
+			<Control ID="mnuOnlineHelp">Online Help</Control>
+			<Control ID="mnuCheckForUpdates">Перевірити оновлення</Control>
+			<Control ID="mnuReportBug">Повідомити про помилку</Control>
+			<Control ID="mnuHelpWindow">Параметри командного рядка</Control>
+			<Control ID="mnuAbout">Про програму</Control>
 
-      <!-- Archive Load Message -->
-      <Control ID="lblExtractingFile">Витяг файлу, будь ласка почекайте</Control>
+			<!-- Archive Load Message -->
+			<Control ID="lblExtractingFile">Витяг файлу, будь ласка почекайте</Control>
 
-      <!-- NSF Player -->
-      <Control ID="lblTitle">Назва</Control>
-      <Control ID="lblArtist">Автор</Control>
-      <Control ID="lblCopyright">Copyright</Control>
-      <Control ID="lblSoundChips">Звукові чіпи</Control>
-      <Control ID="lblRecording">REC</Control>
-      <Control ID="lblSlowMotion">Сповільнений Рух</Control>
-      <Control ID="lblFastForward">Перемотування Вперед</Control>
-    </Form>
-    <Form ID="frmLogWindow" Title="Лог">
-      <Control ID="btnClose">Закрити</Control>
-    </Form>
-    <Form ID="frmAudioConfig" Title="Звук">
-      <Control ID="tpgGeneral">Загальнi</Control>
-      <Control ID="tpgAdvanced">Розширені</Control>
-      <Control ID="chkSwapDutyCycles">Переплутана шпаруватість (як на старих клонах)</Control>
-      <Control ID="chkSilenceTriangleHighFreq">Заглушати ультразвукові частоти на каналі triangle (зменшує "трiск")</Control>
-      <Control ID="chkReduceDmcPopping">Зменшити клацання на каналі DMC</Control>
-      <Control ID="chkDisableNoiseModeFlag">Відключити прапор режиму шумового каналу</Control>
-      <Control ID="tpgEffects">Ефекти</Control>
-      <Control ID="grpStereo">Стерео</Control>
-      <Control ID="radStereoDisabled">Відключити</Control>
-      <Control ID="radStereoDelay">Затримка</Control>
-      <Control ID="radStereoPanning">Панорамування</Control>
-      <Control ID="lblStereoDelayMs">мс</Control>
-      <Control ID="lblStereoPanningAngle">кут в градусах</Control>
-      <Control ID="chkCrossFeedEnabled">Включити кільцювання:</Control>
-      <Control ID="grpReverb">Відлуння</Control>
-      <Control ID="chkReverbEnabled">Включена</Control>
-      <Control ID="lblReverbDelay">Затримка :</Control>
-      <Control ID="lblReverbStrength">Сила :</Control>
-      <Control ID="chkMuteSoundInBackground">Відключати звук при втраті фокуса</Control>
-      <Control ID="chkReduceSoundInBackground">Приглушати звук при потере фокуса</Control>
-      <Control ID="chkEnableAudio">Увімкнути звук</Control>
-      <Control ID="lblSampleRate">Частота дискретизації:</Control>
-      <Control ID="lblLatencyMs">мс</Control>
-      <Control ID="lblLatencyWarning">Низькі значення можуть викликати проблеми зі звуком</Control>
-      <Control ID="lblAudioLatency">Затримка:</Control>
-      <Control ID="lblAudioDevice">Пристрій:</Control>
-      <Control ID="tpgVolume">Гучність</Control>
-      <Control ID="grpVolume">Гучність</Control>
-      <Control ID="btnReset">Скидання</Control>
-      <Control ID="btnOK">OK</Control>
-      <Control ID="btnCancel">Відміна</Control>
-      <Control ID="trkDmcVol">DMC</Control>
-      <Control ID="trkNoiseVol">Noise</Control>
-      <Control ID="trkTriangleVol">Triangle</Control>
-      <Control ID="trkSquare2Vol">Square 2</Control>
-      <Control ID="trkSquare1Vol">Square 1</Control>
-      <Control ID="trkMaster">Загальна</Control>
-      <Control ID="trkFdsVol">FDS</Control>
-      <Control ID="trkMmc5Vol">MMC5</Control>
-      <Control ID="trkVrc6Vol">VRC6</Control>
-      <Control ID="trkVrc7Vol">VRC7</Control>
-      <Control ID="trkNamco163Vol">Namco</Control>
-      <Control ID="trkSunsoft5b">Sunsoft</Control>
+			<!-- NSF Player -->
+			<Control ID="lblTitle">Назва</Control>
+			<Control ID="lblArtist">Автор</Control>
+			<Control ID="lblCopyright">Copyright</Control>
+			<Control ID="lblSoundChips">Звукові чіпи</Control>
+			<Control ID="lblRecording">REC</Control>
+			<Control ID="lblSlowMotion">Сповільнений Рух</Control>
+			<Control ID="lblFastForward">Перемотування Вперед</Control>
+		</Form>
+		<Form ID="frmLogWindow" Title="Лог">
+			<Control ID="btnClose">Закрити</Control>
+		</Form>
+		<Form ID="frmAudioConfig" Title="Звук">
+			<Control ID="tpgGeneral">Загальнi</Control>
+			<Control ID="tpgAdvanced">Розширені</Control>
+			<Control ID="chkSwapDutyCycles">Переплутана шпаруватість (як на старих клонах)</Control>
+			<Control ID="chkSilenceTriangleHighFreq">Заглушати ультразвукові частоти на каналі triangle (зменшує "трiск")</Control>
+			<Control ID="chkReduceDmcPopping">Зменшити клацання на каналі DMC</Control>
+			<Control ID="chkDisableNoiseModeFlag">Відключити прапор режиму шумового каналу</Control>
+			<Control ID="tpgEffects">Ефекти</Control>
+			<Control ID="grpStereo">Стерео</Control>
+			<Control ID="radStereoDisabled">Відключити</Control>
+			<Control ID="radStereoDelay">Затримка</Control>
+			<Control ID="radStereoPanning">Панорамування</Control>
+			<Control ID="lblStereoDelayMs">мс</Control>
+			<Control ID="lblStereoPanningAngle">кут в градусах</Control>
+			<Control ID="chkCrossFeedEnabled">Включити кільцювання:</Control>
+			<Control ID="grpReverb">Відлуння</Control>
+			<Control ID="chkReverbEnabled">Включена</Control>
+			<Control ID="lblReverbDelay">Затримка :</Control>
+			<Control ID="lblReverbStrength">Сила :</Control>
+			<Control ID="chkMuteSoundInBackground">Відключати звук при втраті фокуса</Control>
+			<Control ID="chkReduceSoundInBackground">Приглушати звук при потере фокуса</Control>
+			<Control ID="chkEnableAudio">Увімкнути звук</Control>
+			<Control ID="lblSampleRate">Частота дискретизації:</Control>
+			<Control ID="lblLatencyMs">мс</Control>
+			<Control ID="lblLatencyWarning">Низькі значення можуть викликати проблеми зі звуком</Control>
+			<Control ID="lblAudioLatency">Затримка:</Control>
+			<Control ID="lblAudioDevice">Пристрій:</Control>
+			<Control ID="tpgVolume">Гучність</Control>
+			<Control ID="grpVolume">Гучність</Control>
+			<Control ID="btnReset">Скидання</Control>
+			<Control ID="btnOK">OK</Control>
+			<Control ID="btnCancel">Відміна</Control>
+			<Control ID="trkDmcVol">DMC</Control>
+			<Control ID="trkNoiseVol">Noise</Control>
+			<Control ID="trkTriangleVol">Triangle</Control>
+			<Control ID="trkSquare2Vol">Square 2</Control>
+			<Control ID="trkSquare1Vol">Square 1</Control>
+			<Control ID="trkMaster">Загальна</Control>
+			<Control ID="trkFdsVol">FDS</Control>
+			<Control ID="trkMmc5Vol">MMC5</Control>
+			<Control ID="trkVrc6Vol">VRC6</Control>
+			<Control ID="trkVrc7Vol">VRC7</Control>
+			<Control ID="trkNamco163Vol">Namco</Control>
+			<Control ID="trkSunsoft5b">Sunsoft</Control>
 
-      <Control ID="tpgPanning">Панорамування</Control>
-      <Control ID="trkDmcPan">DMC</Control>
-      <Control ID="trkNoisePan">Шум</Control>
-      <Control ID="trkTrianglePan">Трикутник</Control>
-      <Control ID="trkSquare2Pan">Квадрат 2</Control>
-      <Control ID="trkSquare1Pan">Квадрат 1</Control>
-      <Control ID="trkFdsPan">FDS</Control>
-      <Control ID="trkMmc5Pan">MMC5</Control>
-      <Control ID="trkVrc6Pan">VRC6</Control>
-      <Control ID="trkVrc7Pan">VRC7</Control>
-      <Control ID="trkNamcoPan">Namco</Control>
-      <Control ID="trkSunsoftPan">Sunsoft</Control>
+			<Control ID="tpgPanning">Панорамування</Control>
+			<Control ID="trkDmcPan">DMC</Control>
+			<Control ID="trkNoisePan">Шум</Control>
+			<Control ID="trkTrianglePan">Трикутник</Control>
+			<Control ID="trkSquare2Pan">Квадрат 2</Control>
+			<Control ID="trkSquare1Pan">Квадрат 1</Control>
+			<Control ID="trkFdsPan">FDS</Control>
+			<Control ID="trkMmc5Pan">MMC5</Control>
+			<Control ID="trkVrc6Pan">VRC6</Control>
+			<Control ID="trkVrc7Pan">VRC7</Control>
+			<Control ID="trkNamcoPan">Namco</Control>
+			<Control ID="trkSunsoftPan">Sunsoft</Control>
 
-      <Control ID="tpgEqualizer">Еквалайзер</Control>
-      <Control ID="chkEnableEqualizer">Увімкнути еквалайзер</Control>
-    </Form>
-    <Form ID="frmInputConfig" Title="Пристрої введення">
-      <Control ID="btnOK">OK</Control>
-      <Control ID="btnCancel">Отмена</Control>
-      <Control ID="tpgControllers">Контролери</Control>
-      <Control ID="btnSetupP4">Налаштувати</Control>
-      <Control ID="btnSetupP3">Налаштувати</Control>
-      <Control ID="btnSetupExp">Налаштувати</Control>
-      <Control ID="btnSetupCartridge">Налаштувати</Control>
-      <Control ID="lblCartridge">Cartridge:</Control>
-      <Control ID="lblPlayer1">Контролер 1:</Control>
-      <Control ID="lblPlayer2">Контролер 2:</Control>
-      <Control ID="lblPlayer4">Контролер 4:</Control>
-      <Control ID="lblPlayer3">Контролер 3:</Control>
-      <Control ID="btnSetupP1">Налаштувати</Control>
-      <Control ID="btnSetupP2">Налаштувати</Control>
-      <Control ID="lblNesType">Тип консолі :</Control>
-      <Control ID="lblExpansionPort">Порт розширення :</Control>
-      <Control ID="chkFourScore">Використовувати NES Four Score</Control>
-      <Control ID="chkAutoConfigureInput">Автоматично налаштовувати контролери при завантаженні гри</Control>
-      <Control ID="tpgEmulatorKeys">Емуляторні ключі</Control>
+			<Control ID="tpgEqualizer">Еквалайзер</Control>
+			<Control ID="chkEnableEqualizer">Увімкнути еквалайзер</Control>
+		</Form>
+		<Form ID="frmInputConfig" Title="Пристрої введення">
+			<Control ID="btnOK">OK</Control>
+			<Control ID="btnCancel">Отмена</Control>
+			<Control ID="tpgControllers">Контролери</Control>
+			<Control ID="btnSetupP4">Налаштувати</Control>
+			<Control ID="btnSetupP3">Налаштувати</Control>
+			<Control ID="btnSetupExp">Налаштувати</Control>
+			<Control ID="btnSetupCartridge">Налаштувати</Control>
+			<Control ID="lblCartridge">Cartridge:</Control>
+			<Control ID="lblPlayer1">Контролер 1:</Control>
+			<Control ID="lblPlayer2">Контролер 2:</Control>
+			<Control ID="lblPlayer4">Контролер 4:</Control>
+			<Control ID="lblPlayer3">Контролер 3:</Control>
+			<Control ID="btnSetupP1">Налаштувати</Control>
+			<Control ID="btnSetupP2">Налаштувати</Control>
+			<Control ID="lblNesType">Тип консолі :</Control>
+			<Control ID="lblExpansionPort">Порт розширення :</Control>
+			<Control ID="chkFourScore">Використовувати NES Four Score</Control>
+			<Control ID="chkAutoConfigureInput">Автоматично налаштовувати контролери при завантаженні гри</Control>
+			<Control ID="tpgEmulatorKeys">Емуляторні ключі</Control>
 
-      <Control ID="tpgAdvanced">Розширені</Control>
-      <Control ID="grpDisplayInput">Відображати введення</Control>
-      <Control ID="chkDisplayPort1">Порт 1</Control>
-      <Control ID="chkDisplayPort2">Порт 2</Control>
-      <Control ID="chkDisplayPort3">Порт 3</Control>
-      <Control ID="chkDisplayPort4">Порт 4</Control>
-      <Control ID="lblDisplayPosition">Позиція :</Control>
-      <Control ID="chkDisplayInputHorizontally">Відображати горизонтально</Control>
+			<Control ID="tpgAdvanced">Розширені</Control>
+			<Control ID="grpDisplayInput">Відображати введення</Control>
+			<Control ID="chkDisplayPort1">Порт 1</Control>
+			<Control ID="chkDisplayPort2">Порт 2</Control>
+			<Control ID="chkDisplayPort3">Порт 3</Control>
+			<Control ID="chkDisplayPort4">Порт 4</Control>
+			<Control ID="lblDisplayPosition">Позиція :</Control>
+			<Control ID="chkDisplayInputHorizontally">Відображати горизонтально</Control>
 
-      <Control ID="lblKeyBinding">Увага: Ваша поточна конфігурація містить конфліктуючі поєднання клавіш - деякі фізичні кнопки на вашому ключовому словнику або геймпадi відображаються на кількох кнопках на контролері NES. Якщо це не навмисне, перегляньте та виправте ключi.</Control>
-    </Form>
-    <Form ID="frmVideoConfig" Title="Налаштування вiдео">
-      <Control ID="tpgGeneral">Загальнi</Control>
-      <Control ID="lblVideoScale">Розмір :</Control>
-      <Control ID="lblVideoFilter">Фiльтр :</Control>
-      <Control ID="chkIntegerFpsMode">Увімкнути ціле число режиму FPS (e.g: працювати в 60 fps замiсть 60.1)</Control>
-      <Control ID="chkVerticalSync">Включити вертикальну синхронізацію</Control>
-      <Control ID="lblDisplayRatio">Співвідношення сторін :</Control>
-      <Control ID="lblCustomRatio">Користувацьке співвідношення:</Control>
-      <Control ID="chkBilinearInterpolation">Білінійна інтерполяція</Control>
-      <Control ID="chkFullscreenForceIntegerScale">Використовуйте цілі значення масштабу при введенні повноекранного режиму</Control>
-      <Control ID="chkShowFps">Показувати FPS</Control>
-      <Control ID="chkUseHdPacks">Використовувати HDNes HD packs</Control>
-      <Control ID="chkUseExclusiveFullscreen">Використовувати ексклюзивний режим повного екрану</Control>
-      <Control ID="lblRequestedRefreshRate">Запитувана частота оновлення:</Control>
-      <Control ID="tpgOverscan">Overscan</Control>
-      <Control ID="grpCropping">Overscan</Control>
-      <Control ID="lblLeft">Злiва</Control>
-      <Control ID="lblTop">Зверху</Control>
-      <Control ID="lblBottom">Знизу</Control>
-      <Control ID="lblRight">Справа</Control>
-      <Control ID="tpgPalette">Палiтра</Control>
-      <Control ID="mnuDefaultPalette">За замовчуванням (NTSC)</Control>
-      <Control ID="btnSelectPalette">Вибрати палітру</Control>
-      <Control ID="btnExportPalette">Експорт .pal</Control>
-      <Control ID="btnLoadPalFile">Завантажити .pal</Control>
-      <Control ID="chkUseCustomVsPalette">Використовуйте цю палітру для системних ігор VS</Control>
-      <Control ID="tpgPicture">Зображення</Control>
-      <Control ID="btnSelectPreset">Шаблони</Control>
-      <Control ID="grpCommon">Загальні налаштування</Control>
-      <Control ID="trkBrightness">Яркiсть</Control>
-      <Control ID="trkContrast">Контраст</Control>
-      <Control ID="trkHue">Відтінок</Control>
-      <Control ID="trkSaturation">Насиченість</Control>
-      <Control ID="grpNtscFilter">NTSC фiльтр</Control>
-      <Control ID="trkArtifacts">Артефакти</Control>
-      <Control ID="trkBleed">Вицвітання</Control>
-      <Control ID="trkFringing">Окантування</Control>
-      <Control ID="trkGamma">Гамма</Control>
-      <Control ID="trkResolution">Дозвіл</Control>
-      <Control ID="trkSharpness">Рiзкiсть</Control>
-      <Control ID="chkMergeFields">Злиття полів</Control>
-      <Control ID="chkVerticalBlend">Застосувати вертикальне змішування</Control>
+			<Control ID="lblKeyBinding">Увага: Ваша поточна конфігурація містить конфліктуючі поєднання клавіш - деякі фізичні кнопки на вашому ключовому словнику або геймпадi відображаються на кількох кнопках на контролері NES. Якщо це не навмисне, перегляньте та виправте ключi.</Control>
+		</Form>
+		<Form ID="frmVideoConfig" Title="Налаштування вiдео">
+			<Control ID="tpgGeneral">Загальнi</Control>
+			<Control ID="lblVideoScale">Розмір :</Control>
+			<Control ID="lblVideoFilter">Фiльтр :</Control>
+			<Control ID="chkIntegerFpsMode">Увімкнути ціле число режиму FPS (e.g: працювати в 60 fps замiсть 60.1)</Control>
+			<Control ID="chkVerticalSync">Включити вертикальну синхронізацію</Control>
+			<Control ID="lblDisplayRatio">Співвідношення сторін :</Control>
+			<Control ID="lblCustomRatio">Користувацьке співвідношення:</Control>
+			<Control ID="chkBilinearInterpolation">Білінійна інтерполяція</Control>
+			<Control ID="chkFullscreenForceIntegerScale">Використовуйте цілі значення масштабу при введенні повноекранного режиму</Control>
+			<Control ID="chkShowFps">Показувати FPS</Control>
+			<Control ID="chkUseHdPacks">Використовувати HDNes HD packs</Control>
+			<Control ID="chkUseExclusiveFullscreen">Використовувати ексклюзивний режим повного екрану</Control>
+			<Control ID="lblRequestedRefreshRate">Запитувана частота оновлення:</Control>
+			<Control ID="tpgOverscan">Overscan</Control>
+			<Control ID="grpCropping">Overscan</Control>
+			<Control ID="lblLeft">Злiва</Control>
+			<Control ID="lblTop">Зверху</Control>
+			<Control ID="lblBottom">Знизу</Control>
+			<Control ID="lblRight">Справа</Control>
+			<Control ID="tpgPalette">Палiтра</Control>
+			<Control ID="mnuDefaultPalette">За замовчуванням (NTSC)</Control>
+			<Control ID="btnSelectPalette">Вибрати палітру</Control>
+			<Control ID="btnExportPalette">Експорт .pal</Control>
+			<Control ID="btnLoadPalFile">Завантажити .pal</Control>
+			<Control ID="chkUseCustomVsPalette">Використовуйте цю палітру для системних ігор VS</Control>
+			<Control ID="tpgPicture">Зображення</Control>
+			<Control ID="btnSelectPreset">Шаблони</Control>
+			<Control ID="grpCommon">Загальні налаштування</Control>
+			<Control ID="trkBrightness">Яркiсть</Control>
+			<Control ID="trkContrast">Контраст</Control>
+			<Control ID="trkHue">Відтінок</Control>
+			<Control ID="trkSaturation">Насиченість</Control>
+			<Control ID="grpNtscFilter">NTSC фiльтр</Control>
+			<Control ID="trkArtifacts">Артефакти</Control>
+			<Control ID="trkBleed">Вицвітання</Control>
+			<Control ID="trkFringing">Окантування</Control>
+			<Control ID="trkGamma">Гамма</Control>
+			<Control ID="trkResolution">Дозвіл</Control>
+			<Control ID="trkSharpness">Рiзкiсть</Control>
+			<Control ID="chkMergeFields">Злиття полів</Control>
+			<Control ID="chkVerticalBlend">Застосувати вертикальне змішування</Control>
 
-      <Control ID="trkYFilterLength">Y Фільтр (Розмиття по горизонталі)</Control>
-      <Control ID="trkIFilterLength">I Фiльтр (Horizontal Bleed)</Control>
-      <Control ID="trkQFilterLength">Q Фiльтр (Horizontal Bleed)</Control>
+			<Control ID="trkYFilterLength">Y Фільтр (Розмиття по горизонталі)</Control>
+			<Control ID="trkIFilterLength">I Фiльтр (Horizontal Bleed)</Control>
+			<Control ID="trkQFilterLength">Q Фiльтр (Horizontal Bleed)</Control>
 
-      <Control ID="grpScanlines">Scanlines</Control>
-      <Control ID="trkScanlines">Scanlines</Control>
-      <Control ID="btnResetPictureSettings">Скидання</Control>
-      <Control ID="mnuPresetComposite">Композитний</Control>
-      <Control ID="mnuPresetSVideo">S-Video</Control>
-      <Control ID="menuPresetRgb">RGB</Control>
-      <Control ID="mnuPresetMonochrome">Монохромний</Control>
+			<Control ID="grpScanlines">Scanlines</Control>
+			<Control ID="trkScanlines">Scanlines</Control>
+			<Control ID="btnResetPictureSettings">Скидання</Control>
+			<Control ID="mnuPresetComposite">Композитний</Control>
+			<Control ID="mnuPresetSVideo">S-Video</Control>
+			<Control ID="menuPresetRgb">RGB</Control>
+			<Control ID="mnuPresetMonochrome">Монохромний</Control>
 
-      <Control ID="tpgAdvanced">Розширенi</Control>
-      <Control ID="lblScreenRotation">Поворот екрана:</Control>
-      <Control ID="chkDisableBackground">Відключити фон</Control>
-      <Control ID="chkDisableSprites">Відключити спрайти</Control>
-      <Control ID="chkForceBackgroundFirstColumn">Примусово показувати фон у першому стовпці</Control>
-      <Control ID="chkForceSpritesFirstColumn">Примусово показувати спрайти у першому стовпці</Control>
+			<Control ID="tpgAdvanced">Розширенi</Control>
+			<Control ID="lblScreenRotation">Поворот екрана:</Control>
+			<Control ID="chkDisableBackground">Відключити фон</Control>
+			<Control ID="chkDisableSprites">Відключити спрайти</Control>
+			<Control ID="chkForceBackgroundFirstColumn">Примусово показувати фон у першому стовпці</Control>
+			<Control ID="chkForceSpritesFirstColumn">Примусово показувати спрайти у першому стовпці</Control>
 
-      <Control ID="btnOK">OK</Control>
-      <Control ID="btnCancel">Відміна</Control>
-    </Form>
-    <Form ID="frmEmulationConfig" Title="Налаштування емуляції">
-      <Control ID="tpgGeneral">Загальні</Control>
-      <Control ID="lblEmuSpeedHint">%  (0 = Максимальна швидкiсть)</Control>
-      <Control ID="lblEmulationSpeed">Швидкість емуляції :</Control>
-      <Control ID="lblTurboSpeedHint">%  (0 = Максимальна швидкiсть)</Control>
-      <Control ID="lblTurboSpeed">Перемотка:</Control>
-      <Control ID="lblRewindSpeedHint">%  (0 = Максимальна швидкiсть)</Control>
-      <Control ID="lblRewindSpeed">Швидкість перемотування:</Control>
+			<Control ID="btnOK">OK</Control>
+			<Control ID="btnCancel">Відміна</Control>
+		</Form>
+		<Form ID="frmEmulationConfig" Title="Налаштування емуляції">
+			<Control ID="tpgGeneral">Загальні</Control>
+			<Control ID="lblEmuSpeedHint">%  (0 = Максимальна швидкiсть)</Control>
+			<Control ID="lblEmulationSpeed">Швидкість емуляції :</Control>
+			<Control ID="lblTurboSpeedHint">%  (0 = Максимальна швидкiсть)</Control>
+			<Control ID="lblTurboSpeed">Перемотка:</Control>
+			<Control ID="lblRewindSpeedHint">%  (0 = Максимальна швидкiсть)</Control>
+			<Control ID="lblRewindSpeed">Швидкість перемотування:</Control>
 
-      <Control ID="tpgAdvanced">Розширені</Control>
-      <Control ID="chkUseAlternativeMmc3Irq">Використовувати альтернативний IRQ MMC3</Control>
-      <Control ID="chkAllowInvalidInput">Дозволити неприпустимі комбінації (Вниз+Вгору і Ліворуч+Вправо)</Control>
-      <Control ID="lblRamPowerOnState">Вміст ОЗУ при включенні : </Control>
-      <Control ID="chkRemoveSpriteLimit">Відключити ліміт спрайтів (зменшує мерехтіння)</Control>
-      <Control ID="chkAdaptiveSpriteLimit">Автоматичне повторне ввімкнення обмеження спрайтiв якщо це необхідно щоб запобігти графічних збоїв коли це можливо</Control>
-      <Control ID="chkEnableOamDecay">Enable OAM RAM decay</Control>
-      <Control ID="chkDisablePpu2004Reads">Вiдключити читання PPU $2004 (Поведiнка Famicom)</Control>
-      <Control ID="chkDisableOamAddrBug">Вiдключити PPU OAMADDR баг эмуляцiї</Control>
-      <Control ID="chkDisablePaletteRead">Вiдключити PPU читання палiтри</Control>
-      <Control ID="chkDisablePpuReset">Не скидувати PPU при перезавантаженні консолі (Поведiнка Famicom)</Control>
-      <Control ID="chkUseNes101Hvc101Behavior">Використовувати NES/HVC-101 (Top-loader / AV Famicom) поведінку</Control>
+			<Control ID="tpgAdvanced">Розширені</Control>
+			<Control ID="chkUseAlternativeMmc3Irq">Використовувати альтернативний IRQ MMC3</Control>
+			<Control ID="chkAllowInvalidInput">Дозволити неприпустимі комбінації (Вниз+Вгору і Ліворуч+Вправо)</Control>
+			<Control ID="lblRamPowerOnState">Вміст ОЗУ при включенні : </Control>
+			<Control ID="chkRemoveSpriteLimit">Відключити ліміт спрайтів (зменшує мерехтіння)</Control>
+			<Control ID="chkAdaptiveSpriteLimit">Автоматичне повторне ввімкнення обмеження спрайтiв якщо це необхідно щоб запобігти графічних збоїв коли це можливо</Control>
+			<Control ID="chkEnableOamDecay">Enable OAM RAM decay</Control>
+			<Control ID="chkDisablePpu2004Reads">Вiдключити читання PPU $2004 (Поведiнка Famicom)</Control>
+			<Control ID="chkDisableOamAddrBug">Вiдключити PPU OAMADDR баг эмуляцiї</Control>
+			<Control ID="chkDisablePaletteRead">Вiдключити PPU читання палiтри</Control>
+			<Control ID="chkDisablePpuReset">Не скидувати PPU при перезавантаженні консолі (Поведiнка Famicom)</Control>
+			<Control ID="chkUseNes101Hvc101Behavior">Використовувати NES/HVC-101 (Top-loader / AV Famicom) поведінку</Control>
 
-      <Control ID="tpgOverclocking">Розгін</Control>
-      <Control ID="grpOverclocking">Розгін CPU</Control>
-      <Control ID="lblOverclockWarning">УВАГА: Розгін може викликати помилки в деяких іграх!</Control>
-      <Control ID="lblClockRate">Тактова частота : </Control>
-      <Control ID="lblClockRatePercent">% (За замовчуванням: 100%)</Control>
+			<Control ID="tpgOverclocking">Розгін</Control>
+			<Control ID="grpOverclocking">Розгін CPU</Control>
+			<Control ID="lblOverclockWarning">УВАГА: Розгін може викликати помилки в деяких іграх!</Control>
+			<Control ID="lblClockRate">Тактова частота : </Control>
+			<Control ID="lblClockRatePercent">% (За замовчуванням: 100%)</Control>
 
-      <Control ID="grpPpuTiming">Конфігурація PPU</Control>
-      <Control ID="lblExtraScanlinesBeforeNmi">Додаткові scanlines до NMI : </Control>
-      <Control ID="lblExtraScanlinesAfterNmi">Додаткові scanlines пiсля NMI : </Control>
-      <Control ID="lblEffectiveClockRate">Тактова частота (NTSC) : </Control>
-      <Control ID="lblEffectiveClockRatePal">Тактова частота (PAL) : </Control>
-      <Control ID="lblEffectiveClockRateDendy">Тактова частота (Dendy) : </Control>
+			<Control ID="grpPpuTiming">Конфігурація PPU</Control>
+			<Control ID="lblExtraScanlinesBeforeNmi">Додаткові scanlines до NMI : </Control>
+			<Control ID="lblExtraScanlinesAfterNmi">Додаткові scanlines пiсля NMI : </Control>
+			<Control ID="lblEffectiveClockRate">Тактова частота (NTSC) : </Control>
+			<Control ID="lblEffectiveClockRatePal">Тактова частота (PAL) : </Control>
+			<Control ID="lblEffectiveClockRateDendy">Тактова частота (Dendy) : </Control>
 
-      <Control ID="chkOverclockAdjustApu">Не розганяти APU (Запобігає зміні тону звуку)</Control>
+			<Control ID="chkOverclockAdjustApu">Не розганяти APU (Запобігає зміні тону звуку)</Control>
 
-      <Control ID="chkShowLagCounter">Показувати лічильник лага</Control>
-      <Control ID="btnResetLagCounter">Скинути лічильник лага</Control>
+			<Control ID="chkShowLagCounter">Показувати лічильник лага</Control>
+			<Control ID="btnResetLagCounter">Скинути лічильник лага</Control>
 
-      <Control ID="btnOK">OK</Control>
-      <Control ID="btnCancel">Вiдмiна</Control>
-    </Form>
-    <Form ID="frmPreferences" Title="Налаштування">
-      <Control ID="tpgGeneral">Загальні</Control>
-      <Control ID="lblDisplayLanguage">Мова :</Control>
-      <Control ID="chkSingleInstance">Запускати тільки одну копію Mesen</Control>
-      <Control ID="chkAutomaticallyCheckForUpdates">Автоматично перевіряти оновлення</Control>
+			<Control ID="btnOK">OK</Control>
+			<Control ID="btnCancel">Вiдмiна</Control>
+		</Form>
+		<Form ID="frmPreferences" Title="Налаштування">
+			<Control ID="tpgGeneral">Загальні</Control>
+			<Control ID="lblDisplayLanguage">Мова :</Control>
+			<Control ID="chkSingleInstance">Запускати тільки одну копію Mesen</Control>
+			<Control ID="chkAutomaticallyCheckForUpdates">Автоматично перевіряти оновлення</Control>
 
-      <Control ID="chkDeveloperMode">Увімкнути режим розробника</Control>
+			<Control ID="chkDeveloperMode">Увімкнути режим розробника</Control>
 
-      <Control ID="lblPauseBackgroundSettings">Пауза/Фонові настройки</Control>
-      <Control ID="lblMiscSettings">Різнi настройки</Control>
-      <Control ID="chkAutoHideMenu">Автоматично приховувати панель меню</Control>
-      <Control ID="chkDisplayTitleBarInfo">Відображення додаткової інформації в рядку заголовка</Control>
+			<Control ID="lblPauseBackgroundSettings">Пауза/Фонові настройки</Control>
+			<Control ID="lblMiscSettings">Різнi настройки</Control>
+			<Control ID="chkAutoHideMenu">Автоматично приховувати панель меню</Control>
+			<Control ID="chkDisplayTitleBarInfo">Відображення додаткової інформації в рядку заголовка</Control>
 
-      <Control ID="chkConfirmExitResetPower">Відобразити діалогове вікно підтвердження перед скиданням/перезавантаженням/вихiдом</Control>
-      <Control ID="chkPauseOnMovieEnd">Ставити на паузу після програвання запису</Control>
-      <Control ID="chkAllowBackgroundInput">Дозволити введення в тлі</Control>
-      <Control ID="chkPauseWhenInBackground">Ставити на паузу при втраті фокуса</Control>
-      <Control ID="chkAutoLoadIps">Автоматично завантажувати IPS/BPS</Control>
-      <Control ID="chkHidePauseOverlay">Приховати екран паузи</Control>
-      <Control ID="chkDisplayMovieIcons">Відображати значок відтворення/запису при відтворенні або запису відео</Control>
-      <Control ID="btnOpenMesenFolder">Відкрити папку Mesen</Control>
-      <Control ID="btnResetSettings">Скинути всі налаштування</Control>
-      
-      <Control ID="tpgFiles">Файли/Папки</Control>
-      <Control ID="grpFileAssociations">Асоціації файлів</Control>
-      <Control ID="chkNesFormat">.NES</Control>
-      <Control ID="chkFdsFormat">.FDS (Famicom Disk System)</Control>
-      <Control ID="chkMmoFormat">.MMO (Записи)</Control>
-      <Control ID="chkMstFormat">.MST (Збереження)</Control>
+			<Control ID="chkConfirmExitResetPower">Відобразити діалогове вікно підтвердження перед скиданням/перезавантаженням/вихiдом</Control>
+			<Control ID="chkPauseOnMovieEnd">Ставити на паузу після програвання запису</Control>
+			<Control ID="chkAllowBackgroundInput">Дозволити введення в тлі</Control>
 
-      <Control ID="grpDataStorageLocation">Папка зберігання даних</Control>
-      <Control ID="radStorageDocuments">Зберігати дані Mesen у моєму профілі користувача</Control>
-      <Control ID="radStoragePortable">Зберігати дані в тій же папці що і Mesen</Control>
-      <Control ID="lblDataLocation">Папка:</Control>
+			<Control ID="lblPauseIn">Pause when in:</Control>
+			<Control ID="chkPauseWhenInBackground">Background</Control>
+			<Control ID="chkPauseInMenuAndConfig">Menus and config dialogs</Control>
+			<Control ID="chkPauseInDebugger">Debugging tools</Control>
 
-      <Control ID="grpPathOverrides">Перепам'ятовування папок</Control>
-      <Control ID="chkGameOverride">Iгри:</Control>
-      <Control ID="chkAviOverride">Вiдео:</Control>
-      <Control ID="chkScreenshotsOverride">Скріншоти:</Control>
-      <Control ID="chkSaveDataOverride">Save Data:</Control>
-      <Control ID="chkWaveOverride">Аудiо:</Control>
-      <Control ID="chkSaveStatesOverride">Save States:</Control>
-      <Control ID="chkMoviesOverride">Фільми:</Control>
-      
-      <Control ID="tpgAdvanced">Розширені</Control>
-      <Control ID="chkFdsAutoLoadDisk">Автоматично вставляти диск 1 стороною А при завантаженні FDS</Control>
-      <Control ID="chkFdsFastForwardOnLoad">Використовувати швидке завантаження FDS</Control>
-      <Control ID="chkFdsAutoInsertDisk">Автоматичне перемикання дисків для FDS ігор</Control>
+			<Control ID="chkAutoLoadIps">Автоматично завантажувати IPS/BPS</Control>
+			<Control ID="chkHidePauseOverlay">Приховати екран паузи</Control>
+			<Control ID="chkDisplayMovieIcons">Відображати значок відтворення/запису при відтворенні або запису відео</Control>
+			<Control ID="btnOpenMesenFolder">Відкрити папку Mesen</Control>
+			<Control ID="btnResetSettings">Скинути всі налаштування</Control>
 
-      <Control ID="chkShowFullPathInRecents">Show full file path in recent file list</Control>
-      <Control ID="chkShowFrameCounter">Показувати Лічильник Кадрів</Control>
-      <Control ID="chkShowGameTimer">Показати таймер гри</Control>
-      <Control ID="chkShowVsConfigOnLoad">Показати діалогове вікно налаштування гри під час завантаження системних ігор VS</Control>
-      
-      <Control ID="lblRewind">Зберігати дані перемотування за останні</Control>
-      <Control ID="lblRewindMinutes">хвилин (Використання Пам'яті ≈1 МБ/хв)</Control>
+			<Control ID="tpgFiles">Файли/Папки</Control>
+			<Control ID="grpFileAssociations">Асоціації файлів</Control>
+			<Control ID="chkNesFormat">.NES</Control>
+			<Control ID="chkFdsFormat">.FDS (Famicom Disk System)</Control>
+			<Control ID="chkMmoFormat">.MMO (Записи)</Control>
+			<Control ID="chkMstFormat">.MST (Збереження)</Control>
 
-      <Control ID="tpgShortcuts">Гарячі клавіші</Control>
-      <Control ID="lblShortcutWarning">Warning: Your current configuration contains conflicting key bindings. If this is not intentional, please review and correct your key bindings.</Control>
-      <Control ID="colAction">Дія</Control>
-      <Control ID="colBinding1">Варiант #1</Control>
-      <Control ID="colBinding2">Варiант #2</Control>
+			<Control ID="grpDataStorageLocation">Папка зберігання даних</Control>
+			<Control ID="radStorageDocuments">Зберігати дані Mesen у моєму профілі користувача</Control>
+			<Control ID="radStoragePortable">Зберігати дані в тій же папці що і Mesen</Control>
+			<Control ID="lblDataLocation">Папка:</Control>
 
-      <Control ID="tpgSaveData">Збереження</Control>
-      <Control ID="grpAutomaticSaves">Збереження</Control>
-      <Control ID="chkAutoSave">Автоматично створювати збереження через</Control>
-      <Control ID="lblAutoSave">хвилин</Control>
-      <Control ID="chkAutoSaveNotify">Сповіщати при збереженні</Control>
-      <Control ID="chkAllowMismatchingSaveStates">Allow save states to be loaded on modified ROMs (e.g IPS patches)</Control>
+			<Control ID="grpPathOverrides">Перепам'ятовування папок</Control>
+			<Control ID="chkGameOverride">Iгри:</Control>
+			<Control ID="chkAviOverride">Вiдео:</Control>
+			<Control ID="chkScreenshotsOverride">Скріншоти:</Control>
+			<Control ID="chkSaveDataOverride">Save Data:</Control>
+			<Control ID="chkWaveOverride">Аудiо:</Control>
+			<Control ID="chkSaveStatesOverride">Save States:</Control>
+			<Control ID="chkMoviesOverride">Фільми:</Control>
 
-      <Control ID="grpCloudSaves">Хмарнi збереження</Control>
-      <Control ID="lblGoogleDriveIntegration">Mesen має можливість інтеграції з Google Drive . Коли інтеграція з Google Drive включена, ваші збереження стають доступні з будь-якого комп'ютера і можуть бути синхронізовані між комп'ютерами. Також, збереження зберігаються на Google Drive можуть бути відновлені якщо ви видалите їх зі свого комп'ютера.</Control>
-      <Control ID="lblIntegrationOK">Iнтеграція с Google Drive включена</Control>
-      <Control ID="btnDisableIntegration">Вимкнути інтеграцію</Control>
-      <Control ID="btnEnableIntegration">Увімкнути інтеграцію</Control>
-      <Control ID="lblLastSync">Востаннє синхронізовано : </Control>
-      <Control ID="btnResync">Синхронізувати</Control>
+			<Control ID="tpgAdvanced">Розширені</Control>
+			<Control ID="chkFdsAutoLoadDisk">Автоматично вставляти диск 1 стороною А при завантаженні FDS</Control>
+			<Control ID="chkFdsFastForwardOnLoad">Використовувати швидке завантаження FDS</Control>
+			<Control ID="chkFdsAutoInsertDisk">Автоматичне перемикання дисків для FDS ігор</Control>
 
-      <Control ID="lblFdsSettings">Famicom Disk System Налаштування</Control>
-      <Control ID="lblUiDisplaySettings">Налаштування дисплея інтерфейсу користувача</Control>
-      <Control ID="lblGameSelectionScreenSettings">Налаштування екрана вибору гри</Control>
-      <Control ID="chkGameSelectionScreenResetGame">Почати гру з включення замiсть того щоб вiдновити попереднiй сеанс гри</Control>
-      <Control ID="chkDisableGameSelectionScreen">Вимкнути екран вибору гри</Control>
-      
-      <Control ID="chkDisableGameDatabase">Відключити вбудовану базу даних</Control>
-      <Control ID="chkDisableOsd">Вимкнути екранне меню (OSD)</Control>
+			<Control ID="chkShowFullPathInRecents">Show full file path in recent file list</Control>
+			<Control ID="chkShowFrameCounter">Показувати Лічильник Кадрів</Control>
+			<Control ID="chkShowGameTimer">Показати таймер гри</Control>
+			<Control ID="chkShowVsConfigOnLoad">Показати діалогове вікно налаштування гри під час завантаження системних ігор VS</Control>
 
-      <Control ID="chkAlwaysOnTop">Always display on top of other windows</Control>
+			<Control ID="lblRewind">Зберігати дані перемотування за останні</Control>
+			<Control ID="lblRewindMinutes">хвилин (Використання Пам'яті ≈1 МБ/хв)</Control>
 
-      <Control ID="tpgNsf">NSF</Control>
-      <Control ID="chkNsfAutoDetectSilence">Переходити на наступний трек після</Control>
-      <Control ID="lblNsfMillisecondsOfSilence">мілісекунд тиші</Control>
-      <Control ID="chkNsfMoveToNextTrackAfterTime">Обмежити тривалість відтворення</Control>
-      <Control ID="lblNsfSeconds">секундами</Control>
-      <Control ID="chkNsfDisableApuIrqs">Відключити IRQs APU (Рекомендовано)</Control>
+			<Control ID="tpgShortcuts">Гарячі клавіші</Control>
+			<Control ID="lblShortcutWarning">Warning: Your current configuration contains conflicting key bindings. If this is not intentional, please review and correct your key bindings.</Control>
+			<Control ID="colAction">Дія</Control>
+			<Control ID="colBinding1">Варiант #1</Control>
+			<Control ID="colBinding2">Варiант #2</Control>
 
-      <Control ID="btnOK">OK</Control>
-      <Control ID="btnCancel">Вiдмiна</Control>
-    </Form>
-    <Form ID="frmServerConfig" Title="Налаштування сервера">
-      <Control ID="txtPort">8888</Control>
-      <Control ID="lblPort">Порт:</Control>
-      <Control ID="chkPublicServer">Публічний сервер</Control>
-      <Control ID="lblServerName">Назва :</Control>
-      <Control ID="chkSpectator">Дозволити спостерігачів</Control>
-      <Control ID="lblMaxPlayers">Максимально гравців :</Control>
-      <Control ID="lblPassword">Пароль:</Control>
-      <Control ID="btnOK">OK</Control>
-      <Control ID="btnCancel">Вiдмiна</Control>
-    </Form>
-    <Form ID="frmClientConfig" Title="Підключення до сервера">
-      <Control ID="txtPort">8888</Control>
-      <Control ID="lblHost">Iм'я сервера:</Control>
-      <Control ID="lblPort">Порт:</Control>
-      <Control ID="chkSpectator">Ввійти як спостерігач</Control>
-      <Control ID="btnOK">OK</Control>
-      <Control ID="btnCancel">Вiдмiна</Control>
-    </Form>
-    <Form ID="frmCheatImport" Title="Iмпорт читов">
-      <Control ID="grpImportOptions">Налаштування імпорту</Control>
-      <Control ID="lblCheatFile">Файл:</Control>
-      <Control ID="lblGame">Гра:</Control>
-      <Control ID="btnBrowseCheat">Вибрати...</Control>
-      <Control ID="btnBrowseGame">Вибрати...</Control>
-      <Control ID="btnImport">Iмпорт</Control>
-      <Control ID="btnCancel">Вiдмiна</Control>
-    </Form>
-    <Form ID="frmCheatImportFromDb" Title="Вибір гри...">
-      <Control ID="lblSearch">Пошук :</Control>
-      <Control ID="btnOK">Iмпорт</Control>
-      <Control ID="btnCancel">Вiдео</Control>
-    </Form>
-    <Form ID="frmCheatList" Title="Чіти">
-      <Control ID="tabCheats">Чiти</Control>
-      <Control ID="btnAddCheat">Додати чiт</Control>
-      <Control ID="btnDelete">Видалити</Control>
-      <Control ID="btnDeleteCheat">Видалити вибрані чіти</Control>
-      <Control ID="btnDeleteGameCheats">Видалити всі чіти для обраної гри</Control>
-      <Control ID="mnuAddCheat">Додати чiт</Control>
-      <Control ID="mnuDeleteGameCheats">Видалити</Control>
-      <Control ID="mnuDeleteCheat">Видалити</Control>
-      <Control ID="colGameName">Гра</Control>
-      <Control ID="colCheatName">Опис чiта</Control>
-      <Control ID="colCode">Код</Control>
-      <Control ID="btnImport">Iмпорт</Control>
-      <Control ID="btnImportCheatDB">З бази даних</Control>
-      <Control ID="btnImportFromFile">З файлу (XML, CHT)</Control>
-      <Control ID="btnExport">Експорт</Control>
-      <Control ID="btnExportAllCheats">Всi чіти</Control>
-      <Control ID="btnExportGame">Для обраної гри</Control>
-      <Control ID="mnuExportGame">Експорт</Control>
-      <Control ID="btnExportSelectedCheats">Обрані чiты</Control>
-      <Control ID="mnuExportSelectedCheats">Експорт</Control>
-      <Control ID="chkDisableCheats">Відключити всі чіти</Control>
+			<Control ID="tpgSaveData">Збереження</Control>
+			<Control ID="grpAutomaticSaves">Збереження</Control>
+			<Control ID="chkAutoSave">Автоматично створювати збереження через</Control>
+			<Control ID="lblAutoSave">хвилин</Control>
+			<Control ID="chkAutoSaveNotify">Сповіщати при збереженні</Control>
+			<Control ID="chkAllowMismatchingSaveStates">Allow save states to be loaded on modified ROMs (e.g IPS patches)</Control>
 
-      <Control ID="tpgCheatFinder">Пошук чiтiв</Control>
-      <Control ID="btnReset">Скидання</Control>
-      <Control ID="btnUndo">Вiдмiна</Control>
-      <Control ID="lblCurrentValue">Поточне значення</Control>
-      <Control ID="lblPreviousValue">Попереднє значення</Control>
-      <Control ID="btnAddCurrentFilter">Додати фiльтр</Control>
-      <Control ID="btnAddPrevFilter">Додати фiльтр</Control>
-      <Control ID="btnCreateCheat">Створити чiт</Control>
-      <Control ID="mnuCreateCheat">Створити чiт</Control>
-      <Control ID="lblAtAddress"></Control>
-      <Control ID="chkPauseGameWhileWindowActive">Ставити на паузу коли вікно не активно</Control>
+			<Control ID="grpCloudSaves">Хмарнi збереження</Control>
+			<Control ID="lblGoogleDriveIntegration">Mesen має можливість інтеграції з Google Drive . Коли інтеграція з Google Drive включена, ваші збереження стають доступні з будь-якого комп'ютера і можуть бути синхронізовані між комп'ютерами. Також, збереження зберігаються на Google Drive можуть бути відновлені якщо ви видалите їх зі свого комп'ютера.</Control>
+			<Control ID="lblIntegrationOK">Iнтеграція с Google Drive включена</Control>
+			<Control ID="btnDisableIntegration">Вимкнути інтеграцію</Control>
+			<Control ID="btnEnableIntegration">Увімкнути інтеграцію</Control>
+			<Control ID="lblLastSync">Востаннє синхронізовано : </Control>
+			<Control ID="btnResync">Синхронізувати</Control>
 
-      <Control ID="btnOK">OK</Control>
-      <Control ID="btnCancel">Вiдмiна</Control>
-    </Form>
-    <Form ID="frmCheat" Title="Додати чiт">
-      <Control ID="label2">Гра:</Control>
-      <Control ID="label1">Опис чiта :</Control>
-      <Control ID="grpCode">Код</Control>
-      <Control ID="radCustom">Вручну :</Control>
-      <Control ID="radGameGenie">Game Genie :</Control>
-      <Control ID="radProActionRocky">Pro Action Rocky :</Control>
-      <Control ID="lblAddress">Адрес :</Control>
-      <Control ID="lblNewValue">Нове значення :</Control>
-      <Control ID="radRelativeAddress">Пам'ять</Control>
-      <Control ID="radAbsoluteAddress">Game Code</Control>
-      <Control ID="chkCompareValue">Порівняти значення</Control>
-      <Control ID="btnBrowse">Вибрати</Control>
-      <Control ID="chkEnabled">Чiт активований</Control>
-      <Control ID="btnOK">OK</Control>
-      <Control ID="btnCancel">Вiдмiна</Control>
-    </Form>
-    <Form ID="frmAbout" Title="Про програму">
-      <Control ID="labelProductName">Mesen</Control>
-      <Control ID="labelCopyright">© 2017 M. Bibaud (aka Sour)</Control>
-      <Control ID="lblWebsite">Сайт:</Control>
-      <Control ID="lblLink">www.mesen.ca</Control>
-      <Control ID="labelVersion">Версiя: 0.9.4 (Beta)</Control>
-      <Control ID="lblDonate">Якщо ви хочете підтримати Mesen, будь ласка підтримайте.&#xA;Дякую за вашу підтримку!</Control>
-      <Control ID="okButton">&amp;OK</Control>
-    </Form>
-    <Form ID="frmVsGameConfig" Title="Конфігурація VS">
-      <Control ID="lblGame">Гра</Control>
-      <Control ID="lblPpuModel">Модель PPU</Control>
-      <Control ID="grpDipSwitches">DIP Switches</Control>
-    </Form>
-    <Form ID="frmUpdatePrompt" Title="Mesen - Доступно оновлення">
-      <Control ID="lblLatestVersion">Остання версія : </Control>
-      <Control ID="lblCurrentVersion">Поточна версія : </Control>
-      <Control ID="lblChangeLog">Cписок змін</Control>
-      <Control ID="lblDonate">Якщо ви хочете підтримати Mesen, будь ласка підтримайте. Дякую!</Control>
-      <Control ID="btnUpdate">Оновити</Control>
-      <Control ID="btnCancel">Вiдмiна</Control>
-    </Form>
-    <Form ID="frmSelectRom" Title="Вибрати гру">
-      <Control ID="lblSearch">Пошук :</Control>
-      <Control ID="btnOK">ОК</Control>
-      <Control ID="btnCancel">Вiдмiна</Control>
-    </Form>
-    <Form ID="frmGetKey" Title="Налаштування клавіш...">
-      <Control ID="lblSetKeyMessage">Натисніть будь-яку клавішу на клавіатурі або контролері.</Control>...">
-    </Form>
-    <Form ID="frmPlayerProfile" Title="Профіль">
-      <Control ID="lblName">Iм'я :</Control>
-      <Control ID="btnOK">ОК</Control>
-      <Control ID="btnCancel">Вiдмiна</Control>
-    </Form>
-    <Form ID="frmRecordAvi" Title="Відеомагнітофон">
-      <Control ID="lblAviFile">Зберегти до:</Control>
-      <Control ID="lblCodec">Вiдео кодек:</Control>
-      <Control ID="lblCompressionLevel">Рівень Стиснення:</Control>
-      <Control ID="lblLowCompression">низький&#13;(швидко)</Control>
-      <Control ID="lblHighCompression">високий&#13;(повiльно)</Control>
-      <Control ID="btnBrowse">Огляд...</Control>
-      <Control ID="btnOK">OK</Control>
-      <Control ID="btnCancel">Вiдмiна</Control>
-    </Form>
-    <Form ID="frmHdPackEditor" Title="HD Pack Будівельник">
-      <Control ID="grpPreview">CHR Bank Попередній перегляд</Control>
-      <Control ID="lblChrBank">CHR Bank:</Control>
-      <Control ID="grpOptions">Параметри запису</Control>
-      <Control ID="lblBankSize">CHR Розмiр Банку:</Control>
-      <Control ID="lblScale">Масштаб/Фiльтр:</Control>
-      <Control ID="chkSortByFrequency">Сортування сторінок за частотою використання</Control>
-      <Control ID="chkLargeSprites">Використовувати режим відображення спрайтiв 8x16</Control>
-      <Control ID="chkGroupBlankTiles">Групувати порожнi тайли</Control>
-      <Control ID="chkIgnoreOverscan">Ignore tiles at the edges of the screen (overscan)</Control>
-      <Control ID="lblFolder">Зберегти папку:</Control>
-      <Control ID="btnSelectFolder">Огляд...</Control>
-      <Control ID="btnStartRecording">Почати запис</Control>
-      <Control ID="btnStopRecording">Зупинити запис</Control>
-      <Control ID="btnOpenFolder">Вiдкрити папку збережень</Control>
-    </Form>
-    <Form ID="frmHelp" Title="Параметри командного рядка">
-      <Control ID="grpExample">Приклад використання</Control>
-      <Control ID="tpgGeneral">Загальний</Control>
-      <Control ID="tpgVideoOptions">Вiдео Опцiї</Control>
-      <Control ID="tpgAudioOptions">Аудiо Опцiї</Control>
-      <Control ID="tpgEmulationOptions">Опцiї Эмуляцiї</Control>
-      <Control ID="lblExplanation">Це запустить Mesen у повноекранному режимi з "MyGame.nes" завантаженим ромом.  Вiн також буде використовувати фiльтр NTSC, встановлений у 2x масштабi та налаштує параметри Overscan. Прапор "DoNotSaveSettings" використовується для запобігання перемикання командного рядка від випадкової зміни налаштувань Mesen.</Control>
-      <Control ID="txtGeneralOptions">/fullscreen - Запустити Mesen у повноекранному режимi&#13;&#10;/DoNotSaveSettings - Заборонити збереження налаштувань на диску (корисно щоб запобігти становленню параметрів командного рядка за замовчуванням)</Control>
-    </Form>
-    <Form ID="frmCopyFiles" Title="Please wait...">
-      <Control ID="lblCopying">Копіювання:</Control>
-    </Form>
-    <Form ID="frmConfigWizard" Title="Mesen - Configuration">
-      <Control ID="lblMesen">Mesen - NES Эмулятор</Control>
-      <Control ID="lblConfigWizard">Майстер конфігурації</Control>
-      <Control ID="lblInitialSetup">Будь ласка почекайте щоб виконати початкову настройку Mesen.</Control>
-      <Control ID="lblStorageLocation">Місце зберігання даних</Control>
-      <Control ID="lblStorageHint">Виберіть де ви хочете зберегти дані Mesen:</Control>
-      <Control ID="radStorageDocuments">Зберігати дані в моєму профілі користувача</Control>
-      <Control ID="radStoragePortable">Зберігати дані в тій же папці що і програма</Control>
-      <Control ID="lblDataLocation">Папка:</Control>
-      <Control ID="lblInputMappings">Налаштування введення</Control>
-      <Control ID="lblInputHint">Виберіть бажанi методи введення:</Control>
-      <Control ID="lblMiscOptions">Інші параметри</Control>
-      <Control ID="chkCreateShortcut">Створити ярлик на робочому столі</Control>
-      <Control ID="btnOk">ПIДТВЕРДИТИ</Control>
-      <Control ID="lblCancel">Скасувати</Control>
-    </Form>
-    <Form ID="frmRecordMovie" Title="Movie Recording Options">
-      <Control ID="lblSaveTo">Save to:</Control>
-      <Control ID="lblRecordFrom">Record from:</Control>
-      <Control ID="lblMovieInformation">Movie Information (optional)</Control>
-      <Control ID="lblAuthor">Author:</Control>
-      <Control ID="lblDescription">Description:</Control>
-      <Control ID="btnBrowse">Огляд...</Control>
-      <Control ID="btnOK">OK</Control>
-      <Control ID="btnCancel">Вiдмiна</Control>
-    </Form>
-    <Form ID="frmInputBarCode" Title="Input Barcode...">
-      <Control ID="lblBarcode">Barcode:</Control>
-      <Control ID="btnOK">OK</Control>
-      <Control ID="btnCancel">Вiдмiна</Control>
-    </Form>
-    <Form ID="BaseInputConfigForm">
-      <Control ID="lblHint">Вкладки з піктограмою містять ключові прив'язки для цього гравця.&#13;&#10;Кожна кнопка може бути віднесена до 4 різних клавіш клавіатури або геймпада.</Control>
-      <Control ID="tpgSet1">Контролер #1</Control>
-      <Control ID="tpgSet2">Контролер #2</Control>
-      <Control ID="tpgSet3">Контролер #3</Control>
-      <Control ID="tpgSet4">Контролер #4</Control>
-      <Control ID="btnSetDefault">Use Default Bindings</Control>
-      <Control ID="btnClear">Очистити</Control>
-      <Control ID="btnOK">OK</Control>
-      <Control ID="btnCancel">Відміна</Control>
-    </Form>
-    <Form ID="frmControllerConfig">
-      <Control ID="lblTurboSpeed">Швидкість турбо-кнопок:</Control>
-      <Control ID="lblTurboFast">Швидко</Control>
-      <Control ID="lblSlow">Повiльно</Control>
+			<Control ID="lblFdsSettings">Famicom Disk System Налаштування</Control>
+			<Control ID="lblUiDisplaySettings">Налаштування дисплея інтерфейсу користувача</Control>
+			<Control ID="lblGameSelectionScreenSettings">Налаштування екрана вибору гри</Control>
+			<Control ID="chkGameSelectionScreenResetGame">Почати гру з включення замiсть того щоб вiдновити попереднiй сеанс гри</Control>
+			<Control ID="chkDisableGameSelectionScreen">Вимкнути екран вибору гри</Control>
 
-      <Control ID="btnSelectPreset">Пресети</Control>
-      <Control ID="mnuKeyboard">Клавіатура</Control>
-      <Control ID="mnuWasdLayout">WSAD розкладка</Control>
-      <Control ID="mnuArrowLayout">Курсорні клавіші</Control>
-      <Control ID="mnuFceuxLayout">FCEUX</Control>
-      <Control ID="mnuNestopiaLayout">Nestopia</Control>
-      <Control ID="mnuXboxController">Xbox геймпад</Control>
-      <Control ID="mnuXboxLayout1">Контролер #1</Control>
-      <Control ID="mnuXboxLayout2">Контролер #2</Control>
-      <Control ID="mnuPs4Controller">PS4 геймпад</Control>
-      <Control ID="mnuPs4Layout1">Контролер #1</Control>
-      <Control ID="mnuPs4Layout2">Контролер #2</Control>
-      <Control ID="mnuSnes30Controller">SNES30 геймпад</Control>
-      <Control ID="mnuSnes30Layout1">Контролер #1</Control>
-      <Control ID="mnuSnes30Layout2">Контролер #2</Control>
-    </Form>
-    <Form ID="frmZapperConfig">
-      <Control ID="lblSmall">Малий</Control>
-      <Control ID="lblLarge">Великий</Control>
-      <Control ID="lblDetectRadius">Радіус виявлення світла:</Control>
-      <Control ID="btnOK">OK</Control>
-      <Control ID="btnCancel">Відміна</Control>
-    </Form>
-    <Form ID="frmMouseConfig">
-      <Control ID="lblLow">Low</Control>
-      <Control ID="lblHigh">High</Control>
-      <Control ID="lblSensitivity">Sensitivity:</Control>
-      <Control ID="btnOK">OK</Control>
-      <Control ID="btnCancel">Відміна</Control>
-    </Form>
-    <Form ID="frmExcitingBoxingConfig">
-    </Form>
-    <Form ID="frmFamilyBasicKeyboardConfig">
-    </Form>
-    <Form ID="frmJissenMahjongConfig">
-    </Form>
-    <Form ID="frmPartyTapConfig">
-    </Form>
-    <Form ID="frmPowerPadConfig">
-      <Control ID="chkUseSideA">Use side A</Control>
-    </Form>
-    <Form ID="frmSuborKeyboardConfig">
-    </Form>
-    <Form ID="frmPachinkoConfig">
-    </Form>
-    <Form ID="frmBandaiMicrophone">
-    </Form>
-  </Forms>
-  <UserControls>
-    <UserControl ID="ctrlExcitingBoxingConfig">
-      <Control ID="lblLeftHook">Left Hook</Control>
-      <Control ID="lblRightHook">Right Hook</Control>
-      <Control ID="lblLeftJab">Left Jab</Control>
-      <Control ID="lblRightJab">Right Jab</Control>
-      <Control ID="lblStraight">Straight</Control>
-      <Control ID="lblBody">Body</Control>
-      <Control ID="lblMoveLeft">Move Left</Control>
-      <Control ID="lblMoveRight">Move Right</Control>
-    </UserControl>
-    <UserControl ID="ctrlPachinkoConfig">
-      <Control ID="lblPress">Press</Control>
-      <Control ID="lblRelease">Release</Control>
-    </UserControl>
-    <UserControl ID="ctrlBandaiMicrophone">
-      <Control ID="lblMicrophone">Microphone</Control>
-    </UserControl>
-  </UserControls>
-  <Messages>
-    <Message ID="FilterAll">Всi файли (*.*)|*.*</Message>
-    <Message ID="FilterMovie">Записи (*.mmo)|*.mmo|All Files (*.*)|*.*</Message>
-    <Message ID="FilterWave">Wave файли (*.wav)|*.wav|All Files (*.*)|*.*</Message>
-    <Message ID="FilterAvi">Avi файли (*.avi)|*.avi|All Files (*.*)|*.*</Message>
-    <Message ID="FilterPalette">Файли палiтр (*.pal)|*.pal|All Files (*.*)|*.*</Message>
-    <Message ID="FilterRom">Всі підтримувані формати (*.nes, *.zip, *.7z, *.nsf, *.nsfe, *.fds, *.unf)|*.NES;*.ZIP;*.7z;*.FDS;*.NSF;*.NSFE;*.UNF|NES Roms (*.nes, *.unf)|*.NES;*.UNF|Famicom Disk System Roms (*.fds)|*.FDS|NSF files (*.nsf, *.nsfe)|*.nsf;*.nsfe|ZIP Archives (*.zip)|*.ZIP|7-Zip Archives (*.7z)|*.7z|All (*.*)|*.*</Message>
-    <Message ID="FilterRomIps">Всі підтримувані формати (*.nes, *.zip, *.7z, *.fds, *.nsf, *.nsfe, *.unf, *.ips, *.bps, *.ups)|*.NES;*.ZIP;*.7z;*.IPS;*.BPS;*.UPS;*.FDS;*.NSF;*.NSFE;*.UNF|NES Roms (*.nes, *.unf)|*.NES;*.UNF|Famicom Disk System Roms (*.fds)|*.FDS|NSF files (*.nsf, *.nsfe)|*.nsf;*.nsfe|ZIP Archives (*.zip)|*.ZIP|7-Zip Archives (*.7z)|*.7z|IPS/UPS/BPS Patches (*.ips, *.bps, *.ups)|*.IPS;*.BPS;*.UPS|All (*.*)|*.*</Message>
-    <Message ID="FilterTest">Test files (*.mtp)|*.mtp|All (*.*)|*.*</Message>
-    <Message ID="FilterCheat">Всі підтримувані формати (*.cht, *.xml)|*.cht;*.xml</Message>
-    <Message ID="FilterSavestate">Mesen Savestates (*.mst)|*.mst|All Files (*.*)|*.*</Message>
-    <Message ID="FilterTapeFiles">Family Basic Tape files (*.fbt)|*.fbt|All Files (*.*)|*.*</Message>
+			<Control ID="chkDisableGameDatabase">Відключити вбудовану базу даних</Control>
+			<Control ID="chkDisableOsd">Вимкнути екранне меню (OSD)</Control>
 
-    <Message ID="LoadFromFile">Завантажитти з файлу...</Message>
-    <Message ID="SaveToFile">Зберегти в файл...</Message>
+			<Control ID="chkAlwaysOnTop">Always display on top of other windows</Control>
 
-    <Message ID="ClearHistory">Очистити історію</Message>
-    <Message ID="LastFolderUsed">Використовувана остання папка</Message>
+			<Control ID="tpgNsf">NSF</Control>
+			<Control ID="chkNsfAutoDetectSilence">Переходити на наступний трек після</Control>
+			<Control ID="lblNsfMillisecondsOfSilence">мілісекунд тиші</Control>
+			<Control ID="chkNsfMoveToNextTrackAfterTime">Обмежити тривалість відтворення</Control>
+			<Control ID="lblNsfSeconds">секундами</Control>
+			<Control ID="chkNsfDisableApuIrqs">Відключити IRQs APU (Рекомендовано)</Control>
 
-    <Message ID="MouseModeEnabled">Mouse mode enabled - press ESC or pause to release the cursor.</Message>
-    <Message ID="BandaiMicrophone">Bandai Microphone</Message>
-    <Message ID="DatachBarcodeReader">Datach Barcode Reader</Message>
-   
-    <Message ID="Resume">Продовжити</Message>
-    <Message ID="Pause">Пауза</Message>
-    <Message ID="StartServer">Запустити сервер</Message>
-    <Message ID="StopServer">Зупинити сервер</Message>
-    <Message ID="ConnectToServer">Пiдключитися к серверу</Message>
-    <Message ID="Disconnect">Відключитися</Message>
-    <Message ID="PlayerNumber">Гравець {0}</Message>
+			<Control ID="btnOK">OK</Control>
+			<Control ID="btnCancel">Вiдмiна</Control>
+		</Form>
+		<Form ID="frmServerConfig" Title="Налаштування сервера">
+			<Control ID="txtPort">8888</Control>
+			<Control ID="lblPort">Порт:</Control>
+			<Control ID="chkPublicServer">Публічний сервер</Control>
+			<Control ID="lblServerName">Назва :</Control>
+			<Control ID="chkSpectator">Дозволити спостерігачів</Control>
+			<Control ID="lblMaxPlayers">Максимально гравців :</Control>
+			<Control ID="lblPassword">Пароль:</Control>
+			<Control ID="btnOK">OK</Control>
+			<Control ID="btnCancel">Вiдмiна</Control>
+		</Form>
+		<Form ID="frmClientConfig" Title="Підключення до сервера">
+			<Control ID="txtPort">8888</Control>
+			<Control ID="lblHost">Iм'я сервера:</Control>
+			<Control ID="lblPort">Порт:</Control>
+			<Control ID="chkSpectator">Ввійти як спостерігач</Control>
+			<Control ID="btnOK">OK</Control>
+			<Control ID="btnCancel">Вiдмiна</Control>
+		</Form>
+		<Form ID="frmCheatImport" Title="Iмпорт читов">
+			<Control ID="grpImportOptions">Налаштування імпорту</Control>
+			<Control ID="lblCheatFile">Файл:</Control>
+			<Control ID="lblGame">Гра:</Control>
+			<Control ID="btnBrowseCheat">Вибрати...</Control>
+			<Control ID="btnBrowseGame">Вибрати...</Control>
+			<Control ID="btnImport">Iмпорт</Control>
+			<Control ID="btnCancel">Вiдмiна</Control>
+		</Form>
+		<Form ID="frmCheatImportFromDb" Title="Вибір гри...">
+			<Control ID="lblSearch">Пошук :</Control>
+			<Control ID="btnOK">Iмпорт</Control>
+			<Control ID="btnCancel">Вiдео</Control>
+		</Form>
+		<Form ID="frmCheatList" Title="Чіти">
+			<Control ID="tabCheats">Чiти</Control>
+			<Control ID="btnAddCheat">Додати чiт</Control>
+			<Control ID="btnDelete">Видалити</Control>
+			<Control ID="btnDeleteCheat">Видалити вибрані чіти</Control>
+			<Control ID="btnDeleteGameCheats">Видалити всі чіти для обраної гри</Control>
+			<Control ID="mnuAddCheat">Додати чiт</Control>
+			<Control ID="mnuDeleteGameCheats">Видалити</Control>
+			<Control ID="mnuDeleteCheat">Видалити</Control>
+			<Control ID="colGameName">Гра</Control>
+			<Control ID="colCheatName">Опис чiта</Control>
+			<Control ID="colCode">Код</Control>
+			<Control ID="btnImport">Iмпорт</Control>
+			<Control ID="btnImportCheatDB">З бази даних</Control>
+			<Control ID="btnImportFromFile">З файлу (XML, CHT)</Control>
+			<Control ID="btnExport">Експорт</Control>
+			<Control ID="btnExportAllCheats">Всi чіти</Control>
+			<Control ID="btnExportGame">Для обраної гри</Control>
+			<Control ID="mnuExportGame">Експорт</Control>
+			<Control ID="btnExportSelectedCheats">Обрані чiты</Control>
+			<Control ID="mnuExportSelectedCheats">Експорт</Control>
+			<Control ID="chkDisableCheats">Відключити всі чіти</Control>
 
-    <Message ID="RomsFound">{0} Знайдені ROM  файли</Message>
+			<Control ID="tpgCheatFinder">Пошук чiтiв</Control>
+			<Control ID="btnReset">Скидання</Control>
+			<Control ID="btnUndo">Вiдмiна</Control>
+			<Control ID="lblCurrentValue">Поточне значення</Control>
+			<Control ID="lblPreviousValue">Попереднє значення</Control>
+			<Control ID="btnAddCurrentFilter">Додати фiльтр</Control>
+			<Control ID="btnAddPrevFilter">Додати фiльтр</Control>
+			<Control ID="btnCreateCheat">Створити чiт</Control>
+			<Control ID="mnuCreateCheat">Створити чiт</Control>
+			<Control ID="lblAtAddress"></Control>
+			<Control ID="chkPauseGameWhileWindowActive">Ставити на паузу коли вікно не активно</Control>
 
-    <Message ID="RiskyOptionHint">(не рекомендовано)</Message>
+			<Control ID="btnOK">OK</Control>
+			<Control ID="btnCancel">Вiдмiна</Control>
+		</Form>
+		<Form ID="frmCheat" Title="Додати чiт">
+			<Control ID="label2">Гра:</Control>
+			<Control ID="label1">Опис чiта :</Control>
+			<Control ID="grpCode">Код</Control>
+			<Control ID="radCustom">Вручну :</Control>
+			<Control ID="radGameGenie">Game Genie :</Control>
+			<Control ID="radProActionRocky">Pro Action Rocky :</Control>
+			<Control ID="lblAddress">Адрес :</Control>
+			<Control ID="lblNewValue">Нове значення :</Control>
+			<Control ID="radRelativeAddress">Пам'ять</Control>
+			<Control ID="radAbsoluteAddress">Game Code</Control>
+			<Control ID="chkCompareValue">Порівняти значення</Control>
+			<Control ID="btnBrowse">Вибрати</Control>
+			<Control ID="chkEnabled">Чiт активований</Control>
+			<Control ID="btnOK">OK</Control>
+			<Control ID="btnCancel">Вiдмiна</Control>
+		</Form>
+		<Form ID="frmAbout" Title="Про програму">
+			<Control ID="labelProductName">Mesen</Control>
+			<Control ID="labelCopyright">© 2017 M. Bibaud (aka Sour)</Control>
+			<Control ID="lblWebsite">Сайт:</Control>
+			<Control ID="lblLink">www.mesen.ca</Control>
+			<Control ID="labelVersion">Версiя: 0.9.4 (Beta)</Control>
+			<Control ID="lblDonate">Якщо ви хочете підтримати Mesen, будь ласка підтримайте.&#xA;Дякую за вашу підтримку!</Control>
+			<Control ID="okButton">&amp;OK</Control>
+		</Form>
+		<Form ID="frmVsGameConfig" Title="Конфігурація VS">
+			<Control ID="lblGame">Гра</Control>
+			<Control ID="lblPpuModel">Модель PPU</Control>
+			<Control ID="grpDipSwitches">DIP Switches</Control>
+		</Form>
+		<Form ID="frmUpdatePrompt" Title="Mesen - Доступно оновлення">
+			<Control ID="lblLatestVersion">Остання версія : </Control>
+			<Control ID="lblCurrentVersion">Поточна версія : </Control>
+			<Control ID="lblChangeLog">Cписок змін</Control>
+			<Control ID="lblDonate">Якщо ви хочете підтримати Mesen, будь ласка підтримайте. Дякую!</Control>
+			<Control ID="btnUpdate">Оновити</Control>
+			<Control ID="btnCancel">Вiдмiна</Control>
+		</Form>
+		<Form ID="frmSelectRom" Title="Вибрати гру">
+			<Control ID="lblSearch">Пошук :</Control>
+			<Control ID="btnOK">ОК</Control>
+			<Control ID="btnCancel">Вiдмiна</Control>
+		</Form>
+		<Form ID="frmGetKey" Title="Налаштування клавіш...">
+			<Control ID="lblSetKeyMessage">Натисніть будь-яку клавішу на клавіатурі або контролері.</Control>...">
+		</Form>
+		<Form ID="frmPlayerProfile" Title="Профіль">
+			<Control ID="lblName">Iм'я :</Control>
+			<Control ID="btnOK">ОК</Control>
+			<Control ID="btnCancel">Вiдмiна</Control>
+		</Form>
+		<Form ID="frmRecordAvi" Title="Відеомагнітофон">
+			<Control ID="lblAviFile">Зберегти до:</Control>
+			<Control ID="lblCodec">Вiдео кодек:</Control>
+			<Control ID="lblCompressionLevel">Рівень Стиснення:</Control>
+			<Control ID="lblLowCompression">низький&#13;(швидко)</Control>
+			<Control ID="lblHighCompression">високий&#13;(повiльно)</Control>
+			<Control ID="btnBrowse">Огляд...</Control>
+			<Control ID="btnOK">OK</Control>
+			<Control ID="btnCancel">Вiдмiна</Control>
+		</Form>
+		<Form ID="frmHdPackEditor" Title="HD Pack Будівельник">
+			<Control ID="grpPreview">CHR Bank Попередній перегляд</Control>
+			<Control ID="lblChrBank">CHR Bank:</Control>
+			<Control ID="grpOptions">Параметри запису</Control>
+			<Control ID="lblBankSize">CHR Розмiр Банку:</Control>
+			<Control ID="lblScale">Масштаб/Фiльтр:</Control>
+			<Control ID="chkSortByFrequency">Сортування сторінок за частотою використання</Control>
+			<Control ID="chkLargeSprites">Використовувати режим відображення спрайтiв 8x16</Control>
+			<Control ID="chkGroupBlankTiles">Групувати порожнi тайли</Control>
+			<Control ID="chkIgnoreOverscan">Ignore tiles at the edges of the screen (overscan)</Control>
+			<Control ID="lblFolder">Зберегти папку:</Control>
+			<Control ID="btnSelectFolder">Огляд...</Control>
+			<Control ID="btnStartRecording">Почати запис</Control>
+			<Control ID="btnStopRecording">Зупинити запис</Control>
+			<Control ID="btnOpenFolder">Вiдкрити папку збережень</Control>
+		</Form>
+		<Form ID="frmHelp" Title="Параметри командного рядка">
+			<Control ID="grpExample">Приклад використання</Control>
+			<Control ID="tpgGeneral">Загальний</Control>
+			<Control ID="tpgVideoOptions">Вiдео Опцiї</Control>
+			<Control ID="tpgAudioOptions">Аудiо Опцiї</Control>
+			<Control ID="tpgEmulationOptions">Опцiї Эмуляцiї</Control>
+			<Control ID="lblExplanation">Це запустить Mesen у повноекранному режимi з "MyGame.nes" завантаженим ромом.  Вiн також буде використовувати фiльтр NTSC, встановлений у 2x масштабi та налаштує параметри Overscan. Прапор "DoNotSaveSettings" використовується для запобігання перемикання командного рядка від випадкової зміни налаштувань Mesen.</Control>
+			<Control ID="txtGeneralOptions">/fullscreen - Запустити Mesen у повноекранному режимi&#13;&#10;/DoNotSaveSettings - Заборонити збереження налаштувань на диску (корисно щоб запобігти становленню параметрів командного рядка за замовчуванням)</Control>
+		</Form>
+		<Form ID="frmCopyFiles" Title="Please wait...">
+			<Control ID="lblCopying">Копіювання:</Control>
+		</Form>
+		<Form ID="frmConfigWizard" Title="Mesen - Configuration">
+			<Control ID="lblMesen">Mesen - NES Эмулятор</Control>
+			<Control ID="lblConfigWizard">Майстер конфігурації</Control>
+			<Control ID="lblInitialSetup">Будь ласка почекайте щоб виконати початкову настройку Mesen.</Control>
+			<Control ID="lblStorageLocation">Місце зберігання даних</Control>
+			<Control ID="lblStorageHint">Виберіть де ви хочете зберегти дані Mesen:</Control>
+			<Control ID="radStorageDocuments">Зберігати дані в моєму профілі користувача</Control>
+			<Control ID="radStoragePortable">Зберігати дані в тій же папці що і програма</Control>
+			<Control ID="lblDataLocation">Папка:</Control>
+			<Control ID="lblInputMappings">Налаштування введення</Control>
+			<Control ID="lblInputHint">Виберіть бажанi методи введення:</Control>
+			<Control ID="lblMiscOptions">Інші параметри</Control>
+			<Control ID="chkCreateShortcut">Створити ярлик на робочому столі</Control>
+			<Control ID="btnOk">ПIДТВЕРДИТИ</Control>
+			<Control ID="lblCancel">Скасувати</Control>
+		</Form>
+		<Form ID="frmRecordMovie" Title="Movie Recording Options">
+			<Control ID="lblSaveTo">Save to:</Control>
+			<Control ID="lblRecordFrom">Record from:</Control>
+			<Control ID="lblMovieInformation">Movie Information (optional)</Control>
+			<Control ID="lblAuthor">Author:</Control>
+			<Control ID="lblDescription">Description:</Control>
+			<Control ID="btnBrowse">Огляд...</Control>
+			<Control ID="btnOK">OK</Control>
+			<Control ID="btnCancel">Вiдмiна</Control>
+		</Form>
+		<Form ID="frmInputBarCode" Title="Input Barcode...">
+			<Control ID="lblBarcode">Barcode:</Control>
+			<Control ID="btnOK">OK</Control>
+			<Control ID="btnCancel">Вiдмiна</Control>
+		</Form>
+		<Form ID="BaseInputConfigForm">
+			<Control ID="lblHint">Вкладки з піктограмою містять ключові прив'язки для цього гравця.&#13;&#10;Кожна кнопка може бути віднесена до 4 різних клавіш клавіатури або геймпада.</Control>
+			<Control ID="tpgSet1">Контролер #1</Control>
+			<Control ID="tpgSet2">Контролер #2</Control>
+			<Control ID="tpgSet3">Контролер #3</Control>
+			<Control ID="tpgSet4">Контролер #4</Control>
+			<Control ID="btnSetDefault">Use Default Bindings</Control>
+			<Control ID="btnClear">Очистити</Control>
+			<Control ID="btnOK">OK</Control>
+			<Control ID="btnCancel">Відміна</Control>
+		</Form>
+		<Form ID="frmControllerConfig">
+			<Control ID="lblTurboSpeed">Швидкість турбо-кнопок:</Control>
+			<Control ID="lblTurboFast">Швидко</Control>
+			<Control ID="lblSlow">Повiльно</Control>
 
-    <Message ID="ResetSettingsConfirmation">Попередження: це скине ВСІ налаштування і не може бути скасовано!&#xA;&#xA;Продовжити?</Message>
+			<Control ID="btnSelectPreset">Пресети</Control>
+			<Control ID="mnuKeyboard">Клавіатура</Control>
+			<Control ID="mnuWasdLayout">WSAD розкладка</Control>
+			<Control ID="mnuArrowLayout">Курсорні клавіші</Control>
+			<Control ID="mnuFceuxLayout">FCEUX</Control>
+			<Control ID="mnuNestopiaLayout">Nestopia</Control>
+			<Control ID="mnuXboxController">Xbox геймпад</Control>
+			<Control ID="mnuXboxLayout1">Контролер #1</Control>
+			<Control ID="mnuXboxLayout2">Контролер #2</Control>
+			<Control ID="mnuPs4Controller">PS4 геймпад</Control>
+			<Control ID="mnuPs4Layout1">Контролер #1</Control>
+			<Control ID="mnuPs4Layout2">Контролер #2</Control>
+			<Control ID="mnuSnes30Controller">SNES30 геймпад</Control>
+			<Control ID="mnuSnes30Layout1">Контролер #1</Control>
+			<Control ID="mnuSnes30Layout2">Контролер #2</Control>
+		</Form>
+		<Form ID="frmZapperConfig">
+			<Control ID="lblSmall">Малий</Control>
+			<Control ID="lblLarge">Великий</Control>
+			<Control ID="lblDetectRadius">Радіус виявлення світла:</Control>
+			<Control ID="btnOK">OK</Control>
+			<Control ID="btnCancel">Відміна</Control>
+		</Form>
+		<Form ID="frmMouseConfig">
+			<Control ID="lblLow">Low</Control>
+			<Control ID="lblHigh">High</Control>
+			<Control ID="lblSensitivity">Sensitivity:</Control>
+			<Control ID="btnOK">OK</Control>
+			<Control ID="btnCancel">Відміна</Control>
+		</Form>
+		<Form ID="frmExcitingBoxingConfig">
+		</Form>
+		<Form ID="frmFamilyBasicKeyboardConfig">
+		</Form>
+		<Form ID="frmJissenMahjongConfig">
+		</Form>
+		<Form ID="frmPartyTapConfig">
+		</Form>
+		<Form ID="frmPowerPadConfig">
+			<Control ID="chkUseSideA">Use side A</Control>
+		</Form>
+		<Form ID="frmSuborKeyboardConfig">
+		</Form>
+		<Form ID="frmPachinkoConfig">
+		</Form>
+		<Form ID="frmBandaiMicrophone">
+		</Form>
+	</Forms>
+	<UserControls>
+		<UserControl ID="ctrlExcitingBoxingConfig">
+			<Control ID="lblLeftHook">Left Hook</Control>
+			<Control ID="lblRightHook">Right Hook</Control>
+			<Control ID="lblLeftJab">Left Jab</Control>
+			<Control ID="lblRightJab">Right Jab</Control>
+			<Control ID="lblStraight">Straight</Control>
+			<Control ID="lblBody">Body</Control>
+			<Control ID="lblMoveLeft">Move Left</Control>
+			<Control ID="lblMoveRight">Move Right</Control>
+		</UserControl>
+		<UserControl ID="ctrlPachinkoConfig">
+			<Control ID="lblPress">Press</Control>
+			<Control ID="lblRelease">Release</Control>
+		</UserControl>
+		<UserControl ID="ctrlBandaiMicrophone">
+			<Control ID="lblMicrophone">Microphone</Control>
+		</UserControl>
+	</UserControls>
+	<Messages>
+		<Message ID="FilterAll">Всi файли (*.*)|*.*</Message>
+		<Message ID="FilterMovie">Записи (*.mmo)|*.mmo|All Files (*.*)|*.*</Message>
+		<Message ID="FilterWave">Wave файли (*.wav)|*.wav|All Files (*.*)|*.*</Message>
+		<Message ID="FilterAvi">Avi файли (*.avi)|*.avi|All Files (*.*)|*.*</Message>
+		<Message ID="FilterPalette">Файли палiтр (*.pal)|*.pal|All Files (*.*)|*.*</Message>
+		<Message ID="FilterRom">Всі підтримувані формати (*.nes, *.zip, *.7z, *.nsf, *.nsfe, *.fds, *.unf)|*.NES;*.ZIP;*.7z;*.FDS;*.NSF;*.NSFE;*.UNF|NES Roms (*.nes, *.unf)|*.NES;*.UNF|Famicom Disk System Roms (*.fds)|*.FDS|NSF files (*.nsf, *.nsfe)|*.nsf;*.nsfe|ZIP Archives (*.zip)|*.ZIP|7-Zip Archives (*.7z)|*.7z|All (*.*)|*.*</Message>
+		<Message ID="FilterRomIps">Всі підтримувані формати (*.nes, *.zip, *.7z, *.fds, *.nsf, *.nsfe, *.unf, *.ips, *.bps, *.ups)|*.NES;*.ZIP;*.7z;*.IPS;*.BPS;*.UPS;*.FDS;*.NSF;*.NSFE;*.UNF|NES Roms (*.nes, *.unf)|*.NES;*.UNF|Famicom Disk System Roms (*.fds)|*.FDS|NSF files (*.nsf, *.nsfe)|*.nsf;*.nsfe|ZIP Archives (*.zip)|*.ZIP|7-Zip Archives (*.7z)|*.7z|IPS/UPS/BPS Patches (*.ips, *.bps, *.ups)|*.IPS;*.BPS;*.UPS|All (*.*)|*.*</Message>
+		<Message ID="FilterTest">Test files (*.mtp)|*.mtp|All (*.*)|*.*</Message>
+		<Message ID="FilterCheat">Всі підтримувані формати (*.cht, *.xml)|*.cht;*.xml</Message>
+		<Message ID="FilterSavestate">Mesen Savestates (*.mst)|*.mst|All Files (*.*)|*.*</Message>
+		<Message ID="FilterTapeFiles">Family Basic Tape files (*.fbt)|*.fbt|All Files (*.*)|*.*</Message>
 
-    <Message ID="RandomGameNoGameFound">Mesen не зміг знайти будь-які ігри для завантаження.</Message>
+		<Message ID="LoadFromFile">Завантажитти з файлу...</Message>
+		<Message ID="SaveToFile">Зберегти в файл...</Message>
 
-    <Message ID="CannotWriteToFolder">Вибрану папку не можна записати - будь ласка виберіть іншу папку та спробуйте знову.&#xA;&#xA;Подробиці:&#xA;{0}</Message>
-    <Message ID="InvalidPaths">Наступні переопределені шляхи є недійсними:&#xA;&#xA;{0}&#xA;&#xA;Будь ласка використовуйте дійсні та доступні для запису папки та повторіть спробу.</Message>
-    <Message ID="CopyMesenDataPrompt">Всі файли будуть скопійовані з:&#xA;&#xA;{0}&#xA;to&#xA;{1}&#xA;&#xA;Після того як копія буде завершена, Mesen перезавантажиться.&#xA;Продовжити?</Message>
+		<Message ID="ClearHistory">Очистити історію</Message>
+		<Message ID="LastFolderUsed">Використовувана остання папка</Message>
 
-    <Message ID="CheatsFound">iгр {0}, читiв {1}</Message>
-    <Message ID="CheatsImported">{0} читiв імпортовано для {1}.</Message>
+		<Message ID="MouseModeEnabled">Mouse mode enabled - press ESC or pause to release the cursor.</Message>
+		<Message ID="BandaiMicrophone">Bandai Microphone</Message>
+		<Message ID="DatachBarcodeReader">Datach Barcode Reader</Message>
 
-    <Message ID="NsfNextTrack">Наступний трек (Затисніть для перемотування)</Message>
-    <Message ID="NsfUnnamedTrack">&lt;безіменний&gt;</Message>
-    <Message ID="NsfUnknownField">&lt;невідомий&gt;</Message>
+		<Message ID="Resume">Продовжити</Message>
+		<Message ID="Pause">Пауза</Message>
+		<Message ID="StartServer">Запустити сервер</Message>
+		<Message ID="StopServer">Зупинити сервер</Message>
+		<Message ID="ConnectToServer">Пiдключитися к серверу</Message>
+		<Message ID="Disconnect">Відключитися</Message>
+		<Message ID="PlayerNumber">Гравець {0}</Message>
 
-    <Message ID="CouldNotInstallRuntime">The Visual Studio Runtime не встановлений.</Message>
-    <Message ID="EmptyState">&lt;пусто&gt;</Message>
-    <Message ID="ErrorWhileCheckingUpdates">Не вдалося перевірити оновлення. Перевірте ваше з'єднання з інтернетом і спробуйте ще раз.&#xA;&#xA;Детально:&#xA;{0}</Message>
-    <Message ID="AutoUpdateDisabledMessage">Автоматичні оновлення не включені в цій збірці - будь ласка завантажте останню версію коду та перекомпілюйте Mesen щоб отримати останні оновлення.</Message>
-    <Message ID="FdsBiosNotFound">FDS BIOS не знайдений. BIOS необхідний для запуску FDS игр.&#xA;&#xA;Вибрати BIOS зараз?</Message>
-    <Message ID="FdsDiskSide">Диск {0} Сторона {1}</Message>
-    <Message ID="FileNotFound">Файл не знайдено: {0}</Message>
-    <Message ID="InvalidFdsBios">Обраний биос некоректний.</Message>
-    
-    <Message ID="HDNesTooltip">Дана опція дозволяє використовувати HD packs для емулятора HDNes якщо вони знайдени.&#xA;&#xA;HD Packs повинні бути поміщені в папку "HdPacks" в папці з ім'ям збігається з ім'ям ROM.&#xA;наприклад: HD Pack для MyRom.nes повинні лежати в "HdPacks\MyRom\hires.txt".</Message>
-    <Message ID="HdPackBuilderScaleHelp">Selects the scale and video filter to use when generating the PNG files&#xA;for the HD Pack. Use the "Prescale" filters to generate the tiles&#xA;at a larger scale without applying any transformation to the pixels.</Message>
-    <Message ID="HdPackBuilderBankSizeHelp">This option is only available for CHR RAM games.  CHR RAM games have no&#xA;fixed "banks" - they are dynamically created by the game's code.&#xA;This option alters the HD Pack Builder's behavior when grouping the tiles into &#xA;the PNG files - a smaller bank size will usually result in less PNG &#xA;files (but depending on the game's code, larger values may produce &#xA;better results).</Message>
-    <Message ID="HdPackBuilderFrequencyHelp">When this option is enabled, the tiles in PNG files are sorted by the&#xA;frequency at which they are shown on the screen while recording (more &#xA;common palettes will be grouped together in the first PNG for a specific bank &#xA;number. If this option is unchecked, the PNGs will be sorted by palette - &#xA;each PNG will only contain up to 4 different colors in this case.</Message>
-    <Message ID="HdPackBuilderGroupBlankHelp">This option groups all the blank tiles sequentially into the same PNG&#xA;files - this helps reduce the number of PNG files produced by removing &#xA;almost-empty PNG files containing only blank tiles.</Message>
-    <Message ID="HdPackBuilderLargeSpritesHelp">When enabled, this option will alter the display order of CHR banks&#xA;that contain only sprites to make the sprites easier to edit in the PNG file.</Message>
-    <Message ID="HdPackBuilderIgnoreOverscanHelp">When enabled, this will make the builder ignore any pixels in the overscan area.&#xA;This is useful in games that contain glitches on the outer edge of the screen.&#xA;Incorrect palette combinations due to these glitches will be ignored and won't be shown in the PNG files.</Message>
+		<Message ID="RomsFound">{0} Знайдені ROM  файли</Message>
 
-    <Message ID="MesenUpToDate">Ви використовуєте останню версію Mesen</Message>
-    <Message ID="PatchAndReset">Пропатчити і скинути поточну гру?</Message>
-    <Message ID="SelectRomIps">Будь ласка, оберіть ROM відповідний IPS/UPS.</Message>
-    <Message ID="UnableToDownload">Неможливо завантажити файл. Перевірте ваше з'єднання з інтернетом і спробуйте ще раз.&#xA;&#xA;Детально:&#xA;{0}</Message>
-    <Message ID="UnableToStartMissingDependencies">Mesen could not launch because it was unable to load MesenCore.dll due to missing dependencies.</Message>
-    <Message ID="UnableToStartMissingFiles">Mesen не може запуститися через відсутні файли.&#xA;&#xA;Помилка: MesenCore.dll не знайдений.</Message>
-    <Message ID="UnexpectedError">Невідома помилка.&#xA;&#xA;Детально:&#xA;{0}</Message>
-    <Message ID="UpdateDownloadFailed">Завантаження не вдалася - файл пошкоджений. Будь ласка відвідайте сайт Mesen і завантажте останню версію вручну.</Message>
-    <Message ID="UpgradeSuccess">Оновлення пройшло успішно.</Message>
-    <Message ID="UpdaterNotFound">Оновлення не може бути розпочато через відсутніх файлів</Message>
-    <Message ID="Net45NotFound">Microsoft .NET Framework 4.5 не знайдений. Будь ласка завантажте і встановіть останню версію .NET Framework з сайту Microsoft і спробуйте знову.</Message>
+		<Message ID="RiskyOptionHint">(не рекомендовано)</Message>
 
-    <Message ID="GoogleDriveIntegrationError">Mesen не зміг підключитися до вашого аккаунту Google Drive - спробуйте ще раз.</Message>
+		<Message ID="ResetSettingsConfirmation">Попередження: це скине ВСІ налаштування і не може бути скасовано!&#xA;&#xA;Продовжити?</Message>
 
-    <Message ID="InvalidCheatFile">Обраний Cheat файл ({0}) не є коректним.</Message>
-    <Message ID="InvalidXmlFile">Обраний XML файл ({0}) не є коректним.</Message>
-    <Message ID="NoMatchingCheats">Обраний Cheat файл ({0}) не містить читiв для даної гри.</Message>
+		<Message ID="RandomGameNoGameFound">Mesen не зміг знайти будь-які ігри для завантаження.</Message>
 
-    <Message ID="ConfirmReset">Ви впевнені що хочете скинути?</Message>
-    <Message ID="ConfirmPowerCycle">Ви впевнені що хочете зупинити та перезапустити?</Message>
-    <Message ID="ConfirmExit">Ви впевнені що хочете вийти?</Message>
+		<Message ID="CannotWriteToFolder">Вибрану папку не можна записати - будь ласка виберіть іншу папку та спробуйте знову.&#xA;&#xA;Подробиці:&#xA;{0}</Message>
+		<Message ID="InvalidPaths">Наступні переопределені шляхи є недійсними:&#xA;&#xA;{0}&#xA;&#xA;Будь ласка використовуйте дійсні та доступні для запису папки та повторіть спробу.</Message>
+		<Message ID="CopyMesenDataPrompt">Всі файли будуть скопійовані з:&#xA;&#xA;{0}&#xA;to&#xA;{1}&#xA;&#xA;Після того як копія буде завершена, Mesen перезавантажиться.&#xA;Продовжити?</Message>
 
-    <Message ID="EmulatorShortcutMappings_FastForward">Швидке перемотування</Message>
-    <Message ID="EmulatorShortcutMappings_ToggleFastForward">Переключити перемотування вперед</Message>
-    <Message ID="EmulatorShortcutMappings_Rewind">Перемотка</Message>
-    <Message ID="EmulatorShortcutMappings_ToggleRewind">Переключити перемотування</Message>
-    <Message ID="EmulatorShortcutMappings_RewindTenSecs">Перемотати 10 секунд</Message>
-    <Message ID="EmulatorShortcutMappings_RewindOneMin">Перемотати 1 хвилину</Message>
-    <Message ID="EmulatorShortcutMappings_IncreaseSpeed">Збільшити Швидкість</Message>
-    <Message ID="EmulatorShortcutMappings_DecreaseSpeed">Зменшити Швидкість</Message>
-    <Message ID="EmulatorShortcutMappings_Pause">Пауза</Message>
-    <Message ID="EmulatorShortcutMappings_Reset">Скидання</Message>
-    <Message ID="EmulatorShortcutMappings_PowerCycle">Цикл включення</Message>
-    <Message ID="EmulatorShortcutMappings_PowerOff">Power Off</Message>
-    <Message ID="EmulatorShortcutMappings_Exit">Вихід</Message>
-    <Message ID="EmulatorShortcutMappings_TakeScreenshot">Зробити скріншот</Message>
-    <Message ID="EmulatorShortcutMappings_SwitchDiskSide">FDS - Перевернути диск</Message>
-    <Message ID="EmulatorShortcutMappings_InsertNextDisk">FDS - Вставити наступний диск</Message>
-    <Message ID="EmulatorShortcutMappings_InsertCoin1">VS - Вставити монету в слот 1</Message>
-    <Message ID="EmulatorShortcutMappings_InsertCoin2">VS - Вставити монету в слот 2</Message>
-    <Message ID="EmulatorShortcutMappings_InputBarcode">Input Barcode</Message>
-    <Message ID="EmulatorShortcutMappings_VsServiceButton">VS - Сервісна кнопка</Message>
-    <Message ID="EmulatorShortcutMappings_MoveToNextStateSlot">Наступний слот для збережень</Message>
-    <Message ID="EmulatorShortcutMappings_MoveToPreviousStateSlot">Попередній слот для збережень</Message>
-    <Message ID="EmulatorShortcutMappings_SaveState">Зберегти</Message>
-    <Message ID="EmulatorShortcutMappings_LoadState">Завантажити</Message>
-    <Message ID="EmulatorShortcutMappings_ToggleCheats">Включити/Виключити Чит Коди</Message>
-    <Message ID="EmulatorShortcutMappings_ToggleAudio">Увімкнути/Вимкнути звук</Message>
-    <Message ID="EmulatorShortcutMappings_RunSingleFrame">Запуск Одного Кадру</Message>
+		<Message ID="CheatsFound">iгр {0}, читiв {1}</Message>
+		<Message ID="CheatsImported">{0} читiв імпортовано для {1}.</Message>
 
-    <Message ID="EmulatorShortcutMappings_EjectDisk">FDS - Витягти диск</Message>
-    <Message ID="EmulatorShortcutMappings_SetScale1x">Встановити масштаб 1x</Message>
-    <Message ID="EmulatorShortcutMappings_SetScale2x">Встановити масштаб 2x</Message>
-    <Message ID="EmulatorShortcutMappings_SetScale3x">Встановити масштаб 3x</Message>
-    <Message ID="EmulatorShortcutMappings_SetScale4x">Встановити масштаб 4x</Message>
-    <Message ID="EmulatorShortcutMappings_SetScale5x">Встановити масштаб 5x</Message>
-    <Message ID="EmulatorShortcutMappings_SetScale6x">Встановити масштаб 6x</Message>
-    <Message ID="EmulatorShortcutMappings_ToggleFullscreen">Переключити повноекранний режим</Message>
-    <Message ID="EmulatorShortcutMappings_ToggleFps">Переключити лічильник FPS</Message>
-    <Message ID="EmulatorShortcutMappings_ToggleGameTimer">Переключити таймер гри</Message>
-    <Message ID="EmulatorShortcutMappings_ToggleFrameCounter">Переключити лічильник кадрів</Message>
-    <Message ID="EmulatorShortcutMappings_ToggleLagCounter">Переключити лічильник лагiв</Message>
-    <Message ID="EmulatorShortcutMappings_ToggleOsd">Переключити OSD (Екранне меню)</Message>
-    <Message ID="EmulatorShortcutMappings_ToggleAlwaysOnTop">Toggle Display on Top</Message>
-    <Message ID="EmulatorShortcutMappings_ToggleBackground">Переключити Background</Message>
-    <Message ID="EmulatorShortcutMappings_ToggleSprites">Переключити Sprite Layer</Message>
-    <Message ID="EmulatorShortcutMappings_ToggleKeyboardMode">Toggle Keyboard Mode</Message>
-    <Message ID="EmulatorShortcutMappings_MaxSpeed">Переключити максимальну швидкість</Message>
-    <Message ID="EmulatorShortcutMappings_LoadRandomGame">Завантажити випадкову гру</Message>
-    <Message ID="EmulatorShortcutMappings_SaveStateSlot1">Save State - Slot 1</Message>
-    <Message ID="EmulatorShortcutMappings_SaveStateSlot2">Save State - Slot 2</Message>
-    <Message ID="EmulatorShortcutMappings_SaveStateSlot3">Save State - Slot 3</Message>
-    <Message ID="EmulatorShortcutMappings_SaveStateSlot4">Save State - Slot 4</Message>
-    <Message ID="EmulatorShortcutMappings_SaveStateSlot5">Save State - Slot 5</Message>
-    <Message ID="EmulatorShortcutMappings_SaveStateSlot6">Save State - Slot 6</Message>
-    <Message ID="EmulatorShortcutMappings_SaveStateSlot7">Save State - Slot 7</Message>
-    <Message ID="EmulatorShortcutMappings_SaveStateSlot8">Save State - Slot 8</Message>
-    <Message ID="EmulatorShortcutMappings_SaveStateSlot9">Save State - Slot 9</Message>
-    <Message ID="EmulatorShortcutMappings_SaveStateSlot10">Save State - Slot 10</Message>
-    <Message ID="EmulatorShortcutMappings_SaveStateToFile">Зберегти стан в файл</Message>
-    <Message ID="EmulatorShortcutMappings_LoadStateSlot1">Load State - Slot 1</Message>
-    <Message ID="EmulatorShortcutMappings_LoadStateSlot2">Load State - Slot 2</Message>
-    <Message ID="EmulatorShortcutMappings_LoadStateSlot3">Load State - Slot 3</Message>
-    <Message ID="EmulatorShortcutMappings_LoadStateSlot4">Load State - Slot 4</Message>
-    <Message ID="EmulatorShortcutMappings_LoadStateSlot5">Load State - Slot 5</Message>
-    <Message ID="EmulatorShortcutMappings_LoadStateSlot6">Load State - Slot 6</Message>
-    <Message ID="EmulatorShortcutMappings_LoadStateSlot7">Load State - Slot 7</Message>
-    <Message ID="EmulatorShortcutMappings_LoadStateSlot8">Load State - Slot 8</Message>
-    <Message ID="EmulatorShortcutMappings_LoadStateSlot9">Load State - Slot 9</Message>
-    <Message ID="EmulatorShortcutMappings_LoadStateSlot10">Load State - Slot 10</Message>
-    <Message ID="EmulatorShortcutMappings_LoadStateSlotAuto">Load State - Auto Save Slot</Message>
-    <Message ID="EmulatorShortcutMappings_LoadStateFromFile">Завантажити стан з файлу</Message>
-    <Message ID="EmulatorShortcutMappings_LoadLastSession">Load Last Session</Message>
-    <Message ID="EmulatorShortcutMappings_OpenFile">Відкрити файл</Message>
-    <Message ID="EmulatorShortcutMappings_OpenDebugger">Відкрити Debugger</Message>
-    <Message ID="EmulatorShortcutMappings_OpenAssembler">Відкрити Assembler</Message>
-    <Message ID="EmulatorShortcutMappings_OpenPpuViewer">Відкрити PPU Viewer</Message>
-    <Message ID="EmulatorShortcutMappings_OpenMemoryTools">Відкрити Memory Tools</Message>
-    <Message ID="EmulatorShortcutMappings_OpenScriptWindow">Відкрити Script Window</Message>
-    <Message ID="EmulatorShortcutMappings_OpenTraceLogger">Відкрити Trace Logger</Message>
-    <Message ID="EmulatorShortcutMappings_OpenApuViewer">Відкрити APU Viewer</Message>
-    <Message ID="EmulatorShortcutMappings_OpenEventViewer">Відкрити Event Viewer</Message>
-  </Messages>
-  <Enums>
-    <Enum ID="ControllerType">
-      <Value ID="None">Пусто</Value>
-      <Value ID="StandardController">Стандартний контролер</Value>
-      <Value ID="Zapper">Zapper</Value>
-      <Value ID="ArkanoidController">Arkanoid</Value>
-      <Value ID="SnesController">SNES Controller</Value>
-      <Value ID="PowerPad">Power Pad</Value>
-      <Value ID="SnesMouse">SNES Mouse</Value>
-      <Value ID="SuborMouse">Subor Mouse</Value>
-    </Enum>
-    <Enum ID="ExpansionPortDevice">
-      <Value ID="None">Пусто</Value>
-      <Value ID="Zapper">Zapper</Value>
-      <Value ID="FourPlayerAdapter">Адаптер на 4 гравців</Value>
-      <Value ID="ArkanoidController">Arkanoid</Value>
-      <Value ID="OekaKidsTablet">Oeka Kids Tablet</Value>
-      <Value ID="FamilyTrainerMat">Family Trainer</Value>
-      <Value ID="KonamiHyperShot">Konami Hyper Shot</Value>
-      <Value ID="FamilyBasicKeyboard">Family Basic Keyboard</Value>
-      <Value ID="PartyTap">Partytap</Value>
-      <Value ID="Pachinko">Pachinko Controller</Value>
-      <Value ID="ExcitingBoxing">Exciting Boxing Punching Bag</Value>
-      <Value ID="JissenMahjong">Jissen Mahjong Controller</Value>
-      <Value ID="SuborKeyboard">Subor Keyboard</Value>
-      <Value ID="BarcodeBattler">Barcode Battler</Value>
-      <Value ID="HoriTrack">Hori Track</Value>
-      <Value ID="BandaiHyperShot">Bandai Hyper Shot</Value>
-      <Value ID="AsciiTurboFile">Turbo File</Value>
-      <Value ID="BattleBox">Battle Box</Value>
-    </Enum>
-    <Enum ID="VideoAspectRatio">
-      <Value ID="NoStretching">Default (Не Розтягувати)</Value>
-      <Value ID="Auto">Auto (8:7 або 11:8 на основі гри)</Value>
-      <Value ID="NTSC">NTSC (8:7)</Value>
-      <Value ID="PAL">PAL (11:8)</Value>
-      <Value ID="Standard">Стандарт (4:3)</Value>
-      <Value ID="Widescreen">Широкий екран (16:9)</Value>
-      <Value ID="Custom">Custom</Value>
-    </Enum>
-    <Enum ID="VideoRefreshRates">
-      <Value ID="_50">50 Hz</Value>
-      <Value ID="_60">60 Hz</Value>
-      <Value ID="_100">100 Hz</Value>
-      <Value ID="_120">120 Hz</Value>
-      <Value ID="_200">200 Hz</Value>
-      <Value ID="_240">240 Hz</Value>
-    </Enum>
-    <Enum ID="ScreenRotation">
-      <Value ID="None">Нiякий</Value>
-      <Value ID="_90Degrees">90°</Value>
-      <Value ID="_180Degrees">180°</Value>
-      <Value ID="_270Degrees">270°</Value>
-    </Enum>
-    <Enum ID="VideoFilterType">
-      <Value ID="None">Відсутнє</Value>
-      <Value ID="NTSC">NTSC</Value>
-      <Value ID="BisqwitNtscQuarterRes">NTSC (Bisqwit) - 2x</Value>
-      <Value ID="BisqwitNtscHalfRes">NTSC (Bisqwit) - 4x</Value>
-      <Value ID="BisqwitNtsc">NTSC (Bisqwit) - 8x</Value>
-      <Value ID="xBRZ2x">xBRZ 2x</Value>
-      <Value ID="xBRZ3x">xBRZ 3x</Value>
-      <Value ID="xBRZ4x">xBRZ 4x</Value>
-      <Value ID="xBRZ5x">xBRZ 5x</Value>
-      <Value ID="xBRZ6x">xBRZ 6x</Value>
-      <Value ID="HQ2x">HQ 2x</Value>
-      <Value ID="HQ3x">HQ 3x</Value>
-      <Value ID="HQ4x">HQ 4x</Value>
-      <Value ID="Scale2x">Scale2x</Value>
-      <Value ID="Scale3x">Scale3x</Value>
-      <Value ID="Scale4x">Scale4x</Value>
-      <Value ID="_2xSai">2xSai</Value>
-      <Value ID="Super2xSai">Super2xSai</Value>
-      <Value ID="SuperEagle">SuperEagle</Value>
-      <Value ID="Prescale2x">Prescale 2x</Value>
-      <Value ID="Prescale3x">Prescale 3x</Value>
-      <Value ID="Prescale4x">Prescale 4x</Value>
-      <Value ID="Prescale6x">Prescale 6x</Value>
-      <Value ID="Prescale8x">Prescale 8x</Value>
-      <Value ID="Prescale10x">Prescale 10x</Value>
-    </Enum>
-    <Enum ID="ConsoleType">
-      <Value ID="Nes">NES</Value>
-      <Value ID="Famicom">Famicom</Value>
-    </Enum>
-    <Enum ID="PpuModel">
-      <Value ID="Ppu2C03">RP2C03</Value>
-      <Value ID="Ppu2C04A">RP2C04-0001</Value>
-      <Value ID="Ppu2C04B">RP2C04-0002</Value>
-      <Value ID="Ppu2C04C">RP2C04-0003</Value>
-      <Value ID="Ppu2C04D">RP2C04-0004</Value>
-      <Value ID="Ppu2C05A">RP2C05-01</Value>
-      <Value ID="Ppu2C05B">RP2C05-02</Value>
-      <Value ID="Ppu2C05C">RP2C05-03</Value>
-      <Value ID="Ppu2C05D">RP2C05-04</Value>
-      <Value ID="Ppu2C05E">RP2C05-05</Value>
-    </Enum>
-    <Enum ID="InputDisplayPosition">
-      <Value ID="TopLeft">Зверху злiва</Value>
-      <Value ID="TopRight">Зверху справа</Value>
-      <Value ID="BottomLeft">Снизу злiва</Value>
-      <Value ID="BottomRight">Снизу справа</Value>
-    </Enum>
-    <Enum ID="Language">
-      <Value ID="SystemDefault">Використовувати мову за замовчуванням</Value>
-      <Value ID="English">English</Value>
-      <Value ID="French">Français</Value>
-      <Value ID="Japanese">日本語</Value>
-      <Value ID="Portuguese">Português</Value>
-      <Value ID="Russian">Русский</Value>
-      <Value ID="Spanish">Español</Value>
-      <Value ID="Ukrainian">Українська</Value>
-      <Value ID="Catalan">Català</Value>
-    </Enum>
-    <Enum ID="RamPowerOnState">
-      <Value ID="AllZeros">Всi 0 (По умолчанию)</Value>
-      <Value ID="AllOnes">Всi 1</Value>
-      <Value ID="Random">Випадкові значення</Value>
-    </Enum>
-    <Enum ID="CheatCurrentFilterType">
-      <Value ID="Smaller">Менше нiж</Value>
-      <Value ID="Equal">Дорівнює</Value>
-      <Value ID="NotEqual">Не дорівнює</Value>
-      <Value ID="Greater">Більше ніж</Value>
-    </Enum>
-    <Enum ID="CheatPrevFilterType">
-      <Value ID="Smaller">Менше</Value>
-      <Value ID="Equal">Дорівнює</Value>
-      <Value ID="NotEqual">Не дорівнює</Value>
-      <Value ID="Greater">Бiльше</Value>
-    </Enum>
-    <Enum ID="VideoCodec">
-      <Value ID="None">Немає (Нестислено)</Value>
-      <Value ID="ZMBV">Zip Motion Block Video (ZMBV)</Value>
-      <Value ID="CSCD">Camstudio (CSCD)</Value>
-    </Enum>
-    <Enum ID="RecordMovieFrom">
-      <Value ID="StartWithoutSaveData">Power on</Value>
-      <Value ID="StartWithSaveData">Power on, with save data</Value>
-      <Value ID="CurrentState">Current state</Value>
-    </Enum>
-  </Enums>
+		<Message ID="NsfNextTrack">Наступний трек (Затисніть для перемотування)</Message>
+		<Message ID="NsfUnnamedTrack">&lt;безіменний&gt;</Message>
+		<Message ID="NsfUnknownField">&lt;невідомий&gt;</Message>
+
+		<Message ID="CouldNotInstallRuntime">The Visual Studio Runtime не встановлений.</Message>
+		<Message ID="EmptyState">&lt;пусто&gt;</Message>
+		<Message ID="ErrorWhileCheckingUpdates">Не вдалося перевірити оновлення. Перевірте ваше з'єднання з інтернетом і спробуйте ще раз.&#xA;&#xA;Детально:&#xA;{0}</Message>
+		<Message ID="AutoUpdateDisabledMessage">Автоматичні оновлення не включені в цій збірці - будь ласка завантажте останню версію коду та перекомпілюйте Mesen щоб отримати останні оновлення.</Message>
+		<Message ID="FdsBiosNotFound">FDS BIOS не знайдений. BIOS необхідний для запуску FDS игр.&#xA;&#xA;Вибрати BIOS зараз?</Message>
+		<Message ID="FdsDiskSide">Диск {0} Сторона {1}</Message>
+		<Message ID="FileNotFound">Файл не знайдено: {0}</Message>
+		<Message ID="InvalidFdsBios">Обраний биос некоректний.</Message>
+
+		<Message ID="HDNesTooltip">Дана опція дозволяє використовувати HD packs для емулятора HDNes якщо вони знайдени.&#xA;&#xA;HD Packs повинні бути поміщені в папку "HdPacks" в папці з ім'ям збігається з ім'ям ROM.&#xA;наприклад: HD Pack для MyRom.nes повинні лежати в "HdPacks\MyRom\hires.txt".</Message>
+		<Message ID="HdPackBuilderScaleHelp">Selects the scale and video filter to use when generating the PNG files&#xA;for the HD Pack. Use the "Prescale" filters to generate the tiles&#xA;at a larger scale without applying any transformation to the pixels.</Message>
+		<Message ID="HdPackBuilderBankSizeHelp">This option is only available for CHR RAM games.  CHR RAM games have no&#xA;fixed "banks" - they are dynamically created by the game's code.&#xA;This option alters the HD Pack Builder's behavior when grouping the tiles into &#xA;the PNG files - a smaller bank size will usually result in less PNG &#xA;files (but depending on the game's code, larger values may produce &#xA;better results).</Message>
+		<Message ID="HdPackBuilderFrequencyHelp">When this option is enabled, the tiles in PNG files are sorted by the&#xA;frequency at which they are shown on the screen while recording (more &#xA;common palettes will be grouped together in the first PNG for a specific bank &#xA;number. If this option is unchecked, the PNGs will be sorted by palette - &#xA;each PNG will only contain up to 4 different colors in this case.</Message>
+		<Message ID="HdPackBuilderGroupBlankHelp">This option groups all the blank tiles sequentially into the same PNG&#xA;files - this helps reduce the number of PNG files produced by removing &#xA;almost-empty PNG files containing only blank tiles.</Message>
+		<Message ID="HdPackBuilderLargeSpritesHelp">When enabled, this option will alter the display order of CHR banks&#xA;that contain only sprites to make the sprites easier to edit in the PNG file.</Message>
+		<Message ID="HdPackBuilderIgnoreOverscanHelp">When enabled, this will make the builder ignore any pixels in the overscan area.&#xA;This is useful in games that contain glitches on the outer edge of the screen.&#xA;Incorrect palette combinations due to these glitches will be ignored and won't be shown in the PNG files.</Message>
+
+		<Message ID="MesenUpToDate">Ви використовуєте останню версію Mesen</Message>
+		<Message ID="PatchAndReset">Пропатчити і скинути поточну гру?</Message>
+		<Message ID="SelectRomIps">Будь ласка, оберіть ROM відповідний IPS/UPS.</Message>
+		<Message ID="UnableToDownload">Неможливо завантажити файл. Перевірте ваше з'єднання з інтернетом і спробуйте ще раз.&#xA;&#xA;Детально:&#xA;{0}</Message>
+		<Message ID="UnableToStartMissingDependencies">Mesen could not launch because it was unable to load MesenCore.dll due to missing dependencies.</Message>
+		<Message ID="UnableToStartMissingFiles">Mesen не може запуститися через відсутні файли.&#xA;&#xA;Помилка: MesenCore.dll не знайдений.</Message>
+		<Message ID="UnexpectedError">Невідома помилка.&#xA;&#xA;Детально:&#xA;{0}</Message>
+		<Message ID="UpdateDownloadFailed">Завантаження не вдалася - файл пошкоджений. Будь ласка відвідайте сайт Mesen і завантажте останню версію вручну.</Message>
+		<Message ID="UpgradeSuccess">Оновлення пройшло успішно.</Message>
+		<Message ID="UpdaterNotFound">Оновлення не може бути розпочато через відсутніх файлів</Message>
+		<Message ID="Net45NotFound">Microsoft .NET Framework 4.5 не знайдений. Будь ласка завантажте і встановіть останню версію .NET Framework з сайту Microsoft і спробуйте знову.</Message>
+
+		<Message ID="GoogleDriveIntegrationError">Mesen не зміг підключитися до вашого аккаунту Google Drive - спробуйте ще раз.</Message>
+
+		<Message ID="InvalidCheatFile">Обраний Cheat файл ({0}) не є коректним.</Message>
+		<Message ID="InvalidXmlFile">Обраний XML файл ({0}) не є коректним.</Message>
+		<Message ID="NoMatchingCheats">Обраний Cheat файл ({0}) не містить читiв для даної гри.</Message>
+
+		<Message ID="ConfirmReset">Ви впевнені що хочете скинути?</Message>
+		<Message ID="ConfirmPowerCycle">Ви впевнені що хочете зупинити та перезапустити?</Message>
+		<Message ID="ConfirmExit">Ви впевнені що хочете вийти?</Message>
+
+		<Message ID="EmulatorShortcutMappings_FastForward">Швидке перемотування</Message>
+		<Message ID="EmulatorShortcutMappings_ToggleFastForward">Переключити перемотування вперед</Message>
+		<Message ID="EmulatorShortcutMappings_Rewind">Перемотка</Message>
+		<Message ID="EmulatorShortcutMappings_ToggleRewind">Переключити перемотування</Message>
+		<Message ID="EmulatorShortcutMappings_RewindTenSecs">Перемотати 10 секунд</Message>
+		<Message ID="EmulatorShortcutMappings_RewindOneMin">Перемотати 1 хвилину</Message>
+		<Message ID="EmulatorShortcutMappings_IncreaseSpeed">Збільшити Швидкість</Message>
+		<Message ID="EmulatorShortcutMappings_DecreaseSpeed">Зменшити Швидкість</Message>
+		<Message ID="EmulatorShortcutMappings_Pause">Пауза</Message>
+		<Message ID="EmulatorShortcutMappings_Reset">Скидання</Message>
+		<Message ID="EmulatorShortcutMappings_PowerCycle">Цикл включення</Message>
+		<Message ID="EmulatorShortcutMappings_PowerOff">Power Off</Message>
+		<Message ID="EmulatorShortcutMappings_Exit">Вихід</Message>
+		<Message ID="EmulatorShortcutMappings_TakeScreenshot">Зробити скріншот</Message>
+		<Message ID="EmulatorShortcutMappings_SwitchDiskSide">FDS - Перевернути диск</Message>
+		<Message ID="EmulatorShortcutMappings_InsertNextDisk">FDS - Вставити наступний диск</Message>
+		<Message ID="EmulatorShortcutMappings_InsertCoin1">VS - Вставити монету в слот 1</Message>
+		<Message ID="EmulatorShortcutMappings_InsertCoin2">VS - Вставити монету в слот 2</Message>
+		<Message ID="EmulatorShortcutMappings_InputBarcode">Input Barcode</Message>
+		<Message ID="EmulatorShortcutMappings_VsServiceButton">VS - Сервісна кнопка</Message>
+		<Message ID="EmulatorShortcutMappings_MoveToNextStateSlot">Наступний слот для збережень</Message>
+		<Message ID="EmulatorShortcutMappings_MoveToPreviousStateSlot">Попередній слот для збережень</Message>
+		<Message ID="EmulatorShortcutMappings_SaveState">Зберегти</Message>
+		<Message ID="EmulatorShortcutMappings_LoadState">Завантажити</Message>
+		<Message ID="EmulatorShortcutMappings_ToggleCheats">Включити/Виключити Чит Коди</Message>
+		<Message ID="EmulatorShortcutMappings_ToggleAudio">Увімкнути/Вимкнути звук</Message>
+		<Message ID="EmulatorShortcutMappings_RunSingleFrame">Запуск Одного Кадру</Message>
+
+		<Message ID="EmulatorShortcutMappings_EjectDisk">FDS - Витягти диск</Message>
+		<Message ID="EmulatorShortcutMappings_SetScale1x">Встановити масштаб 1x</Message>
+		<Message ID="EmulatorShortcutMappings_SetScale2x">Встановити масштаб 2x</Message>
+		<Message ID="EmulatorShortcutMappings_SetScale3x">Встановити масштаб 3x</Message>
+		<Message ID="EmulatorShortcutMappings_SetScale4x">Встановити масштаб 4x</Message>
+		<Message ID="EmulatorShortcutMappings_SetScale5x">Встановити масштаб 5x</Message>
+		<Message ID="EmulatorShortcutMappings_SetScale6x">Встановити масштаб 6x</Message>
+		<Message ID="EmulatorShortcutMappings_ToggleFullscreen">Переключити повноекранний режим</Message>
+		<Message ID="EmulatorShortcutMappings_ToggleFps">Переключити лічильник FPS</Message>
+		<Message ID="EmulatorShortcutMappings_ToggleGameTimer">Переключити таймер гри</Message>
+		<Message ID="EmulatorShortcutMappings_ToggleFrameCounter">Переключити лічильник кадрів</Message>
+		<Message ID="EmulatorShortcutMappings_ToggleLagCounter">Переключити лічильник лагiв</Message>
+		<Message ID="EmulatorShortcutMappings_ToggleOsd">Переключити OSD (Екранне меню)</Message>
+		<Message ID="EmulatorShortcutMappings_ToggleAlwaysOnTop">Toggle Display on Top</Message>
+		<Message ID="EmulatorShortcutMappings_ToggleBackground">Переключити Background</Message>
+		<Message ID="EmulatorShortcutMappings_ToggleSprites">Переключити Sprite Layer</Message>
+		<Message ID="EmulatorShortcutMappings_ToggleKeyboardMode">Toggle Keyboard Mode</Message>
+		<Message ID="EmulatorShortcutMappings_MaxSpeed">Переключити максимальну швидкість</Message>
+		<Message ID="EmulatorShortcutMappings_LoadRandomGame">Завантажити випадкову гру</Message>
+		<Message ID="EmulatorShortcutMappings_SaveStateSlot1">Save State - Slot 1</Message>
+		<Message ID="EmulatorShortcutMappings_SaveStateSlot2">Save State - Slot 2</Message>
+		<Message ID="EmulatorShortcutMappings_SaveStateSlot3">Save State - Slot 3</Message>
+		<Message ID="EmulatorShortcutMappings_SaveStateSlot4">Save State - Slot 4</Message>
+		<Message ID="EmulatorShortcutMappings_SaveStateSlot5">Save State - Slot 5</Message>
+		<Message ID="EmulatorShortcutMappings_SaveStateSlot6">Save State - Slot 6</Message>
+		<Message ID="EmulatorShortcutMappings_SaveStateSlot7">Save State - Slot 7</Message>
+		<Message ID="EmulatorShortcutMappings_SaveStateSlot8">Save State - Slot 8</Message>
+		<Message ID="EmulatorShortcutMappings_SaveStateSlot9">Save State - Slot 9</Message>
+		<Message ID="EmulatorShortcutMappings_SaveStateSlot10">Save State - Slot 10</Message>
+		<Message ID="EmulatorShortcutMappings_SaveStateToFile">Зберегти стан в файл</Message>
+		<Message ID="EmulatorShortcutMappings_LoadStateSlot1">Load State - Slot 1</Message>
+		<Message ID="EmulatorShortcutMappings_LoadStateSlot2">Load State - Slot 2</Message>
+		<Message ID="EmulatorShortcutMappings_LoadStateSlot3">Load State - Slot 3</Message>
+		<Message ID="EmulatorShortcutMappings_LoadStateSlot4">Load State - Slot 4</Message>
+		<Message ID="EmulatorShortcutMappings_LoadStateSlot5">Load State - Slot 5</Message>
+		<Message ID="EmulatorShortcutMappings_LoadStateSlot6">Load State - Slot 6</Message>
+		<Message ID="EmulatorShortcutMappings_LoadStateSlot7">Load State - Slot 7</Message>
+		<Message ID="EmulatorShortcutMappings_LoadStateSlot8">Load State - Slot 8</Message>
+		<Message ID="EmulatorShortcutMappings_LoadStateSlot9">Load State - Slot 9</Message>
+		<Message ID="EmulatorShortcutMappings_LoadStateSlot10">Load State - Slot 10</Message>
+		<Message ID="EmulatorShortcutMappings_LoadStateSlotAuto">Load State - Auto Save Slot</Message>
+		<Message ID="EmulatorShortcutMappings_LoadStateFromFile">Завантажити стан з файлу</Message>
+		<Message ID="EmulatorShortcutMappings_LoadLastSession">Load Last Session</Message>
+		<Message ID="EmulatorShortcutMappings_OpenFile">Відкрити файл</Message>
+		<Message ID="EmulatorShortcutMappings_OpenDebugger">Відкрити Debugger</Message>
+		<Message ID="EmulatorShortcutMappings_OpenAssembler">Відкрити Assembler</Message>
+		<Message ID="EmulatorShortcutMappings_OpenPpuViewer">Відкрити PPU Viewer</Message>
+		<Message ID="EmulatorShortcutMappings_OpenMemoryTools">Відкрити Memory Tools</Message>
+		<Message ID="EmulatorShortcutMappings_OpenScriptWindow">Відкрити Script Window</Message>
+		<Message ID="EmulatorShortcutMappings_OpenTraceLogger">Відкрити Trace Logger</Message>
+		<Message ID="EmulatorShortcutMappings_OpenApuViewer">Відкрити APU Viewer</Message>
+		<Message ID="EmulatorShortcutMappings_OpenEventViewer">Відкрити Event Viewer</Message>
+	</Messages>
+	<Enums>
+		<Enum ID="ControllerType">
+			<Value ID="None">Пусто</Value>
+			<Value ID="StandardController">Стандартний контролер</Value>
+			<Value ID="Zapper">Zapper</Value>
+			<Value ID="ArkanoidController">Arkanoid</Value>
+			<Value ID="SnesController">SNES Controller</Value>
+			<Value ID="PowerPad">Power Pad</Value>
+			<Value ID="SnesMouse">SNES Mouse</Value>
+			<Value ID="SuborMouse">Subor Mouse</Value>
+		</Enum>
+		<Enum ID="ExpansionPortDevice">
+			<Value ID="None">Пусто</Value>
+			<Value ID="Zapper">Zapper</Value>
+			<Value ID="FourPlayerAdapter">Адаптер на 4 гравців</Value>
+			<Value ID="ArkanoidController">Arkanoid</Value>
+			<Value ID="OekaKidsTablet">Oeka Kids Tablet</Value>
+			<Value ID="FamilyTrainerMat">Family Trainer</Value>
+			<Value ID="KonamiHyperShot">Konami Hyper Shot</Value>
+			<Value ID="FamilyBasicKeyboard">Family Basic Keyboard</Value>
+			<Value ID="PartyTap">Partytap</Value>
+			<Value ID="Pachinko">Pachinko Controller</Value>
+			<Value ID="ExcitingBoxing">Exciting Boxing Punching Bag</Value>
+			<Value ID="JissenMahjong">Jissen Mahjong Controller</Value>
+			<Value ID="SuborKeyboard">Subor Keyboard</Value>
+			<Value ID="BarcodeBattler">Barcode Battler</Value>
+			<Value ID="HoriTrack">Hori Track</Value>
+			<Value ID="BandaiHyperShot">Bandai Hyper Shot</Value>
+			<Value ID="AsciiTurboFile">Turbo File</Value>
+			<Value ID="BattleBox">Battle Box</Value>
+		</Enum>
+		<Enum ID="VideoAspectRatio">
+			<Value ID="NoStretching">Default (Не Розтягувати)</Value>
+			<Value ID="Auto">Auto (8:7 або 11:8 на основі гри)</Value>
+			<Value ID="NTSC">NTSC (8:7)</Value>
+			<Value ID="PAL">PAL (11:8)</Value>
+			<Value ID="Standard">Стандарт (4:3)</Value>
+			<Value ID="Widescreen">Широкий екран (16:9)</Value>
+			<Value ID="Custom">Custom</Value>
+		</Enum>
+		<Enum ID="VideoRefreshRates">
+			<Value ID="_50">50 Hz</Value>
+			<Value ID="_60">60 Hz</Value>
+			<Value ID="_100">100 Hz</Value>
+			<Value ID="_120">120 Hz</Value>
+			<Value ID="_200">200 Hz</Value>
+			<Value ID="_240">240 Hz</Value>
+		</Enum>
+		<Enum ID="ScreenRotation">
+			<Value ID="None">Нiякий</Value>
+			<Value ID="_90Degrees">90°</Value>
+			<Value ID="_180Degrees">180°</Value>
+			<Value ID="_270Degrees">270°</Value>
+		</Enum>
+		<Enum ID="VideoFilterType">
+			<Value ID="None">Відсутнє</Value>
+			<Value ID="NTSC">NTSC</Value>
+			<Value ID="BisqwitNtscQuarterRes">NTSC (Bisqwit) - 2x</Value>
+			<Value ID="BisqwitNtscHalfRes">NTSC (Bisqwit) - 4x</Value>
+			<Value ID="BisqwitNtsc">NTSC (Bisqwit) - 8x</Value>
+			<Value ID="xBRZ2x">xBRZ 2x</Value>
+			<Value ID="xBRZ3x">xBRZ 3x</Value>
+			<Value ID="xBRZ4x">xBRZ 4x</Value>
+			<Value ID="xBRZ5x">xBRZ 5x</Value>
+			<Value ID="xBRZ6x">xBRZ 6x</Value>
+			<Value ID="HQ2x">HQ 2x</Value>
+			<Value ID="HQ3x">HQ 3x</Value>
+			<Value ID="HQ4x">HQ 4x</Value>
+			<Value ID="Scale2x">Scale2x</Value>
+			<Value ID="Scale3x">Scale3x</Value>
+			<Value ID="Scale4x">Scale4x</Value>
+			<Value ID="_2xSai">2xSai</Value>
+			<Value ID="Super2xSai">Super2xSai</Value>
+			<Value ID="SuperEagle">SuperEagle</Value>
+			<Value ID="Prescale2x">Prescale 2x</Value>
+			<Value ID="Prescale3x">Prescale 3x</Value>
+			<Value ID="Prescale4x">Prescale 4x</Value>
+			<Value ID="Prescale6x">Prescale 6x</Value>
+			<Value ID="Prescale8x">Prescale 8x</Value>
+			<Value ID="Prescale10x">Prescale 10x</Value>
+		</Enum>
+		<Enum ID="ConsoleType">
+			<Value ID="Nes">NES</Value>
+			<Value ID="Famicom">Famicom</Value>
+		</Enum>
+		<Enum ID="PpuModel">
+			<Value ID="Ppu2C03">RP2C03</Value>
+			<Value ID="Ppu2C04A">RP2C04-0001</Value>
+			<Value ID="Ppu2C04B">RP2C04-0002</Value>
+			<Value ID="Ppu2C04C">RP2C04-0003</Value>
+			<Value ID="Ppu2C04D">RP2C04-0004</Value>
+			<Value ID="Ppu2C05A">RP2C05-01</Value>
+			<Value ID="Ppu2C05B">RP2C05-02</Value>
+			<Value ID="Ppu2C05C">RP2C05-03</Value>
+			<Value ID="Ppu2C05D">RP2C05-04</Value>
+			<Value ID="Ppu2C05E">RP2C05-05</Value>
+		</Enum>
+		<Enum ID="InputDisplayPosition">
+			<Value ID="TopLeft">Зверху злiва</Value>
+			<Value ID="TopRight">Зверху справа</Value>
+			<Value ID="BottomLeft">Снизу злiва</Value>
+			<Value ID="BottomRight">Снизу справа</Value>
+		</Enum>
+		<Enum ID="Language">
+			<Value ID="SystemDefault">Використовувати мову за замовчуванням</Value>
+			<Value ID="English">English</Value>
+			<Value ID="French">Français</Value>
+			<Value ID="Japanese">日本語</Value>
+			<Value ID="Portuguese">Português</Value>
+			<Value ID="Russian">Русский</Value>
+			<Value ID="Spanish">Español</Value>
+			<Value ID="Ukrainian">Українська</Value>
+			<Value ID="Catalan">Català</Value>
+		</Enum>
+		<Enum ID="RamPowerOnState">
+			<Value ID="AllZeros">Всi 0 (По умолчанию)</Value>
+			<Value ID="AllOnes">Всi 1</Value>
+			<Value ID="Random">Випадкові значення</Value>
+		</Enum>
+		<Enum ID="CheatCurrentFilterType">
+			<Value ID="Smaller">Менше нiж</Value>
+			<Value ID="Equal">Дорівнює</Value>
+			<Value ID="NotEqual">Не дорівнює</Value>
+			<Value ID="Greater">Більше ніж</Value>
+		</Enum>
+		<Enum ID="CheatPrevFilterType">
+			<Value ID="Smaller">Менше</Value>
+			<Value ID="Equal">Дорівнює</Value>
+			<Value ID="NotEqual">Не дорівнює</Value>
+			<Value ID="Greater">Бiльше</Value>
+		</Enum>
+		<Enum ID="VideoCodec">
+			<Value ID="None">Немає (Нестислено)</Value>
+			<Value ID="ZMBV">Zip Motion Block Video (ZMBV)</Value>
+			<Value ID="CSCD">Camstudio (CSCD)</Value>
+		</Enum>
+		<Enum ID="RecordMovieFrom">
+			<Value ID="StartWithoutSaveData">Power on</Value>
+			<Value ID="StartWithSaveData">Power on, with save data</Value>
+			<Value ID="CurrentState">Current state</Value>
+		</Enum>
+	</Enums>
 </Resources>

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Mesen.GUI.Config;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
@@ -11,16 +12,48 @@ namespace Mesen.GUI.Forms
 {
 	public class BaseForm : Form
 	{
+		public delegate bool ProcessCmdKeyHandler(Keys keyData);
+		public event ProcessCmdKeyHandler OnProcessCmdKey;
+
 		protected ToolTip toolTip;
 		private System.ComponentModel.IContainer components;
 		private bool _iconSet = false;
+		protected int _inMenu = 0;
+		private static Timer _tmrUpdateBackground;
 
-		public delegate bool ProcessCmdKeyHandler(Keys keyData);
-		public event ProcessCmdKeyHandler OnProcessCmdKey;
+		static BaseForm()
+		{
+			bool designMode = (LicenseManager.UsageMode == LicenseUsageMode.Designtime);
+			if(!designMode) {
+				_tmrUpdateBackground = new Timer();
+				_tmrUpdateBackground.Start();
+				_tmrUpdateBackground.Tick += tmrUpdateBackground_Tick;
+			}
+		}
 
 		public BaseForm()
 		{
 			InitializeComponent();
+		}
+		
+		private static void tmrUpdateBackground_Tick(object sender, EventArgs e)
+		{
+			Form focusedForm = null;
+			foreach(Form form in Application.OpenForms) {
+				if(form.ContainsFocus) {
+					focusedForm = form;
+					break;
+				}
+			}
+
+			bool needPause = ConfigManager.Config.PreferenceInfo.PauseWhenInBackground && focusedForm == null;
+			if(focusedForm != null) {
+				needPause |= ConfigManager.Config.PreferenceInfo.PauseWhenInMenusAndConfig && focusedForm is BaseForm && ((BaseForm)focusedForm)._inMenu > 0;
+				needPause |= ConfigManager.Config.PreferenceInfo.PauseWhenInMenusAndConfig && !(focusedForm is BaseInputForm) && !focusedForm.GetType().FullName.Contains("Debugger");
+				needPause |= ConfigManager.Config.PreferenceInfo.PauseWhenInDebuggingTools && focusedForm.GetType().FullName.Contains("Debugger");
+			}
+
+			InteropEmu.SetFlag(EmulationFlags.InBackground, needPause);
 		}
 
 		protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
