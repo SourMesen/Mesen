@@ -121,7 +121,7 @@ class Console
 		static string FindMatchingRom(string romName, HashInfo hashInfo);
 		static VirtualFile GetRomPath();
 		static VirtualFile GetPatchFile();
-		static MapperInfo Console::GetMapperInfo();
+		static MapperInfo GetMapperInfo();
 		static NesModel GetModel();
 
 		static uint32_t GetLagCounter();
