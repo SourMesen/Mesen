@@ -21,7 +21,7 @@ MESENFLAGS=
 libretro : MESENFLAGS=-D LIBRETRO
 
 CPPC=clang++
-GCCOPTIONS=-fPIC -Wall --std=c++14 -O3 $(MESENFLAGS)
+GCCOPTIONS=-fPIC -Wall --std=c++14 -O3 $(MESENFLAGS) -Wno-parentheses -Wno-switch
 
 CC=clang
 CCOPTIONS=-fPIC -Wall -O3 $(MESENFLAGS)
@@ -90,7 +90,7 @@ testhelper: InteropDLL/$(OBJFOLDER)/$(SHAREDLIB)
 	$(AR) TestHelper/$(OBJFOLDER)/libMesenLinux.a $(LINUXOBJ) $(LIBEVDEVOBJ)
 	$(AR) TestHelper/$(OBJFOLDER)/libUtilities.a $(UTILOBJ)
 	$(AR) TestHelper/$(OBJFOLDER)/libCore.a $(COREOBJ)	
-	cd TestHelper/$(OBJFOLDER) && $(CPPC) $(GCCOPTIONS) $(LINKFLAG) -Wl,-z,defs -Wno-parentheses -Wno-switch -o testhelper ../*.cpp ../../InteropDLL/ConsoleWrapper.cpp -L ./ -lCore -lMesenLinux -lUtilities -lSevenZip -pthread -lSDL2 -lstdc++fs
+	cd TestHelper/$(OBJFOLDER) && $(CPPC) $(GCCOPTIONS) $(LINKFLAG) -Wl,-z,defs -o testhelper ../*.cpp ../../InteropDLL/ConsoleWrapper.cpp -L ./ -lCore -lMesenLinux -lUtilities -lSevenZip -pthread -lSDL2 -lstdc++fs
 
 SevenZip/$(OBJFOLDER)/%.o: SevenZip/%.c
 	mkdir -p SevenZip/$(OBJFOLDER) && cd SevenZip/$(OBJFOLDER) && $(CC) $(CCOPTIONS) -c $(patsubst SevenZip/%, ../%, $<)
@@ -107,11 +107,11 @@ Utilities/$(OBJFOLDER)/%.o: Utilities/KreedSaiEagle/%.cpp
 Utilities/$(OBJFOLDER)/%.o: Utilities/Scale2x/%.cpp
 	mkdir -p Utilities/$(OBJFOLDER) && cd Utilities/$(OBJFOLDER) && $(CPPC) $(GCCOPTIONS) -c $(patsubst Utilities/%, ../%, $<)
 Core/$(OBJFOLDER)/%.o: Core/%.cpp
-	mkdir -p Core/$(OBJFOLDER) && cd Core/$(OBJFOLDER) && $(CPPC) $(GCCOPTIONS) -Wno-parentheses -Wno-switch -c $(patsubst Core/%, ../%, $<)
+	mkdir -p Core/$(OBJFOLDER) && cd Core/$(OBJFOLDER) && $(CPPC) $(GCCOPTIONS)  -c $(patsubst Core/%, ../%, $<)
 Linux/$(OBJFOLDER)/%.o: Linux/%.cpp
-	mkdir -p Linux/$(OBJFOLDER) && cd Linux/$(OBJFOLDER) && $(CPPC) $(GCCOPTIONS) -Wno-parentheses -Wno-switch -c $(patsubst Linux/%, ../%, $<)
+	mkdir -p Linux/$(OBJFOLDER) && cd Linux/$(OBJFOLDER) && $(CPPC) $(GCCOPTIONS) -c $(patsubst Linux/%, ../%, $<)
 Linux/$(OBJFOLDER)/%.o: Linux/libevdev/%.c
-	mkdir -p Linux/$(OBJFOLDER) && cd Linux/$(OBJFOLDER) && $(CC) $(CCOPTIONS) -Wno-parentheses -Wno-switch -c $(patsubst Linux/%, ../%, $<)
+	mkdir -p Linux/$(OBJFOLDER) && cd Linux/$(OBJFOLDER) && $(CC) $(CCOPTIONS) -c $(patsubst Linux/%, ../%, $<)
 
 InteropDLL/$(OBJFOLDER)/$(SHAREDLIB): $(SEVENZIPOBJ) $(LUAOBJ) $(UTILOBJ) $(COREOBJ) $(LIBEVDEVOBJ) $(LINUXOBJ) InteropDLL/ConsoleWrapper.cpp InteropDLL/DebugWrapper.cpp
 	mkdir -p InteropDLL/$(OBJFOLDER)
@@ -120,7 +120,7 @@ InteropDLL/$(OBJFOLDER)/$(SHAREDLIB): $(SEVENZIPOBJ) $(LUAOBJ) $(UTILOBJ) $(CORE
 	$(AR) InteropDLL/$(OBJFOLDER)/libMesenLinux.a $(LINUXOBJ) $(LIBEVDEVOBJ)
 	$(AR) InteropDLL/$(OBJFOLDER)/libUtilities.a $(UTILOBJ)
 	$(AR) InteropDLL/$(OBJFOLDER)/libCore.a $(COREOBJ)
-	cd InteropDLL/$(OBJFOLDER) && $(CPPC) $(GCCOPTIONS) $(LINKFLAG) -Wl,-z,defs -Wno-parentheses -Wno-switch -shared -o $(SHAREDLIB) ../*.cpp -L . -lMesenLinux -lCore -lUtilities -lLua -lSevenZip -pthread -lSDL2 -lstdc++fs
+	cd InteropDLL/$(OBJFOLDER) && $(CPPC) $(GCCOPTIONS) $(LINKFLAG) -Wl,-z,defs -shared -o $(SHAREDLIB) ../*.cpp -L . -lMesenLinux -lCore -lUtilities -lLua -lSevenZip -pthread -lSDL2 -lstdc++fs
 
 
 Libretro/$(OBJFOLDER)/$(LIBRETROLIB): $(SEVENZIPOBJ) $(UTILOBJ) $(COREOBJ) Libretro/libretro.cpp
@@ -128,7 +128,7 @@ Libretro/$(OBJFOLDER)/$(LIBRETROLIB): $(SEVENZIPOBJ) $(UTILOBJ) $(COREOBJ) Libre
 	$(AR) Libretro/$(OBJFOLDER)/libSevenZip.a $(SEVENZIPOBJ)
 	$(AR) Libretro/$(OBJFOLDER)/libUtilities.a $(UTILOBJ)
 	$(AR) Libretro/$(OBJFOLDER)/libCore.a $(COREOBJ)
-	cd Libretro/$(OBJFOLDER) && $(CPPC) $(GCCOPTIONS) $(LINKFLAG) -Wl,-z,defs -Wno-parentheses -Wno-switch -shared -o $(LIBRETROLIB) ../*.cpp -L . -lCore -lUtilities -lSevenZip -pthread
+	cd Libretro/$(OBJFOLDER) && $(CPPC) $(GCCOPTIONS) $(LINKFLAG) -Wl,-z,defs -shared -o $(LIBRETROLIB) ../*.cpp -L . -lCore -lUtilities -lSevenZip -pthread
 
 debug:
 	MONO_LOG_LEVEL=debug mono $(RELEASEFOLDER)/Mesen.exe

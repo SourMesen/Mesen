@@ -292,6 +292,7 @@ void HdPackLoader::ProcessTileTag(vector<string> &tokens, vector<HdPackCondition
 				tileInfo->TileData[i] = HexUtilities::FromHex(tileData.substr(i * 2, 2));
 			}
 			tileInfo->IsChrRamTile = true;
+			tileInfo->TileIndex = -1;
 		} else {
 			tileInfo->TileIndex = std::stoi(tileData);
 			tileInfo->IsChrRamTile = false;
@@ -453,6 +454,8 @@ void HdPackLoader::ProcessConditionTag(vector<string> &tokens, bool createInvert
 			op = HdPackConditionOperator::GreaterThan;
 		} else if(opString == "<") {
 			op = HdPackConditionOperator::LowerThan;
+		} else {
+			checkConstraint(false, "[HDPack] Invalid operator.");
 		}
 
 		uint32_t operandB = HexUtilities::FromHex(tokens[index++]);

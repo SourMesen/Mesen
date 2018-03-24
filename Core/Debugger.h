@@ -137,7 +137,7 @@ private:
 	void UpdateCallstack(uint8_t currentInstruction, uint32_t addr);
 	void PrivateProcessInterrupt(uint16_t cpuAddr, uint16_t destCpuAddr, bool forNmi);
 
-	void ProcessStepConditions(uint32_t addr);
+	void ProcessStepConditions(uint16_t addr);
 	bool SleepUntilResume(BreakSource source = BreakSource::Break);
 
 	void AddDebugEvent(DebugEventType type, uint16_t address = -1, uint8_t value = 0, int16_t breakpointId = -1, int8_t ppuLatch = -1);

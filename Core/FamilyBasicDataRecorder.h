@@ -7,7 +7,7 @@
 class FamilyBasicDataRecorder : public BaseControlDevice
 {
 private:
-	static const uint32_t SamplingRate = 88;
+	static const int32_t SamplingRate = 88;
 	vector<uint8_t> _data;
 	vector<uint8_t> _fileData;
 	bool _enabled = false;

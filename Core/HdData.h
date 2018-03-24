@@ -6,11 +6,11 @@
 
 struct HdTileKey
 {
-	static const uint32_t NoTile = -1;
+	static const int32_t NoTile = -1;
 
 	uint32_t PaletteColors;
 	uint8_t TileData[16];
-	uint32_t TileIndex;
+	int32_t TileIndex;
 	bool IsChrRamTile = false;
 
 	HdTileKey GetKey(bool defaultKey)

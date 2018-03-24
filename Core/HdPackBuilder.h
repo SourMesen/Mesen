@@ -31,7 +31,7 @@ private:
 	uint32_t _flags;
 
 	//Used to group blank tiles together
-	int _blankTileIndex = 0;
+	uint32_t _blankTileIndex = 0;
 	int _blankTilePalette = 0;
 
 	void AddTile(HdPackTileInfo *tile, uint32_t usageCount);

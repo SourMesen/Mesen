@@ -468,7 +468,7 @@ string Disassembler::GetCode(AddressTypeInfo &addressInfo, uint32_t endAddr, uin
 
 	vector<shared_ptr<DisassemblyInfo>> *cache;
 	uint8_t *source;
-	char memoryType;
+	char memoryType = 'P';
 	switch(addressInfo.Type) {
 		case AddressType::InternalRam: memoryType = 'N'; break;
 		case AddressType::PrgRom: memoryType = 'P'; break;
@@ -489,7 +489,7 @@ string Disassembler::GetCode(AddressTypeInfo &addressInfo, uint32_t endAddr, uin
 	string commentLines;
 	shared_ptr<DisassemblyInfo> infoRef;
 	DisassemblyInfo* info;
-	DataType dataType;
+	DataType dataType = DataType::UnidentifiedData;
 	string spaces = "  ";
 	string effAddress;
 	string code;

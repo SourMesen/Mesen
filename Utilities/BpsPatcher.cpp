@@ -4,9 +4,9 @@
 #include "BpsPatcher.h"
 #include "CRC32.h"
 
-uint64_t BpsPatcher::ReadBase128Number(std::istream &file)
+int64_t BpsPatcher::ReadBase128Number(std::istream &file)
 {
-	uint64_t result = 0;
+	int64_t result = 0;
 	int shift = 0;
 	uint8_t buffer;
 	while(true) {
@@ -19,7 +19,7 @@ uint64_t BpsPatcher::ReadBase128Number(std::istream &file)
 		if(buffer & 0x80) {
 			break;
 		}
-		result += (uint64_t)1 << shift;
+		result += (int64_t)1 << shift;
 	}
 
 	return result;
@@ -47,14 +47,14 @@ bool BpsPatcher::PatchBuffer(std::istream &bpsFile, vector<uint8_t> &input, vect
 		return false;
 	}
 
-	uint64_t inputFileSize = ReadBase128Number(bpsFile);
-	uint64_t outputFileSize = ReadBase128Number(bpsFile);
+	int64_t inputFileSize = ReadBase128Number(bpsFile);
+	int64_t outputFileSize = ReadBase128Number(bpsFile);
 	if(inputFileSize == -1 || outputFileSize == -1) {
 		//Invalid file
 		return false;
 	}
 
-	uint64_t metadataSize = ReadBase128Number(bpsFile);
+	int64_t metadataSize = ReadBase128Number(bpsFile);
 	bpsFile.seekg(metadataSize, std::ios::cur);
 
 	output.resize((size_t)outputFileSize);
@@ -63,7 +63,7 @@ bool BpsPatcher::PatchBuffer(std::istream &bpsFile, vector<uint8_t> &input, vect
 	uint32_t inputRelativeOffset = 0;
 	uint32_t outputRelativeOffset = 0;
 	while((size_t)bpsFile.tellg() < fileSize - 12) {
-		uint64_t data = ReadBase128Number(bpsFile);
+		int64_t data = ReadBase128Number(bpsFile);
 		if(data == -1) {
 			//Invalid file
 			return false;
@@ -92,7 +92,7 @@ bool BpsPatcher::PatchBuffer(std::istream &bpsFile, vector<uint8_t> &input, vect
 
 			case 2: {
 				//SourceCopy
-				uint32_t data = (uint32_t)ReadBase128Number(bpsFile);
+				int32_t data = (int32_t)ReadBase128Number(bpsFile);
 				inputRelativeOffset += (data & 1 ? -1 : +1) * (data >> 1);
 				while(length--) {
 					output[outputOffset++] = input[inputRelativeOffset++];
@@ -102,7 +102,7 @@ bool BpsPatcher::PatchBuffer(std::istream &bpsFile, vector<uint8_t> &input, vect
 
 			case 3: {
 				//TargetCopy
-				uint32_t data = (uint32_t)ReadBase128Number(bpsFile);
+				int32_t data = (int32_t)ReadBase128Number(bpsFile);
 				outputRelativeOffset += (data & 1 ? -1 : +1) * (data >> 1);
 				while(length--) {
 					output[outputOffset++] = output[outputRelativeOffset++];

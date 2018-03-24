@@ -4,9 +4,9 @@
 #include "UpsPatcher.h"
 #include "CRC32.h"
 
-uint64_t UpsPatcher::ReadBase128Number(std::istream &file)
+int64_t UpsPatcher::ReadBase128Number(std::istream &file)
 {
-	uint64_t result = 0;
+	int64_t result = 0;
 	int shift = 0;
 	uint8_t buffer;
 	while(true) {
@@ -19,7 +19,7 @@ uint64_t UpsPatcher::ReadBase128Number(std::istream &file)
 		if(buffer & 0x80) {
 			break;
 		}
-		result += (uint64_t)1 << shift;
+		result += (int64_t)1 << shift;
 	}
 
 	return result;
@@ -47,8 +47,8 @@ bool UpsPatcher::PatchBuffer(std::istream &upsFile, vector<uint8_t> &input, vect
 		return false;
 	}
 
-	uint64_t inputFileSize = ReadBase128Number(upsFile);
-	uint64_t outputFileSize = ReadBase128Number(upsFile);
+	int64_t inputFileSize = ReadBase128Number(upsFile);
+	int64_t outputFileSize = ReadBase128Number(upsFile);
 	if(inputFileSize == -1 || outputFileSize == -1) {
 		//Invalid file
 		return false;
@@ -59,7 +59,7 @@ bool UpsPatcher::PatchBuffer(std::istream &upsFile, vector<uint8_t> &input, vect
 
 	uint32_t pos = 0;
 	while((size_t)upsFile.tellg() < fileSize - 12) {
-		uint32_t offset = (uint32_t)ReadBase128Number(upsFile);
+		int32_t offset = (int32_t)ReadBase128Number(upsFile);
 		if(offset == -1) {
 			//Invalid file
 			return false;

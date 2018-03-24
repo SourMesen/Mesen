@@ -226,7 +226,7 @@ void RewindManager::ProcessFrame(void * frameBuffer, uint32_t width, uint32_t he
 
 		_videoHistoryBuilder.push_back(vector<uint32_t>((uint32_t*)frameBuffer, (uint32_t*)frameBuffer + width*height));
 
-		if(_videoHistoryBuilder.size() == _historyBackup.front().FrameCount) {
+		if(_videoHistoryBuilder.size() == (size_t)_historyBackup.front().FrameCount) {
 			for(int i = (int)_videoHistoryBuilder.size() - 1; i >= 0; i--) {
 				_videoHistory.push_front(_videoHistoryBuilder[i]);
 			}

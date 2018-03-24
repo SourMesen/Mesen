@@ -159,10 +159,10 @@ class PPU : public IMemoryHandler, public Snapshotable
 		void StreamState(bool saving) override;
 
 	public:
-		static const uint32_t ScreenWidth = 256;
-		static const uint32_t ScreenHeight = 240;
-		static const uint32_t PixelCount = 256*240;
-		static const uint32_t OutputBufferSize = 256*240*2;
+		static const int32_t ScreenWidth = 256;
+		static const int32_t ScreenHeight = 240;
+		static const int32_t PixelCount = 256*240;
+		static const int32_t OutputBufferSize = 256*240*2;
 
 		PPU(BaseMapper *mapper, ControlManager *controlManager);
 		virtual ~PPU();

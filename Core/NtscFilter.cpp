@@ -14,13 +14,25 @@ NtscFilter::NtscFilter()
 FrameInfo NtscFilter::GetFrameInfo()
 {
 	OverscanDimensions overscan = GetOverscan();
-	int overscanLeft = overscan.Left > 0 ? NES_NTSC_OUT_WIDTH(overscan.Left) : 0;
-	int overscanRight = overscan.Right > 0 ? NES_NTSC_OUT_WIDTH(overscan.Right) : 0;
+	uint32_t overscanLeft = overscan.Left > 0 ? NES_NTSC_OUT_WIDTH(overscan.Left) : 0;
+	uint32_t overscanRight = overscan.Right > 0 ? NES_NTSC_OUT_WIDTH(overscan.Right) : 0;
 
 	if(_keepVerticalRes) {
-		return { NES_NTSC_OUT_WIDTH(PPU::ScreenWidth) - overscanLeft - overscanRight, (PPU::ScreenHeight - overscan.Top - overscan.Bottom), NES_NTSC_OUT_WIDTH(PPU::ScreenWidth), PPU::ScreenHeight, 4 };
+		return {
+			(NES_NTSC_OUT_WIDTH(PPU::ScreenWidth) - overscanLeft - overscanRight),
+			(PPU::ScreenHeight - overscan.Top - overscan.Bottom),
+			NES_NTSC_OUT_WIDTH(PPU::ScreenWidth),
+			PPU::ScreenHeight,
+			4
+		};
 	} else {
-		return { NES_NTSC_OUT_WIDTH(PPU::ScreenWidth) - overscanLeft - overscanRight, (PPU::ScreenHeight - overscan.Top - overscan.Bottom) * 2, NES_NTSC_OUT_WIDTH(PPU::ScreenWidth), PPU::ScreenHeight * 2, 4 };
+		return {
+			NES_NTSC_OUT_WIDTH(PPU::ScreenWidth) - overscanLeft - overscanRight,
+			(PPU::ScreenHeight - overscan.Top - overscan.Bottom) * 2,
+			NES_NTSC_OUT_WIDTH(PPU::ScreenWidth),
+			PPU::ScreenHeight * 2,
+			4
+		};
 	}
 }
 

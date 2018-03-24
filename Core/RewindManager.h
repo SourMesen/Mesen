@@ -18,7 +18,7 @@ enum class RewindState
 class RewindManager : public INotificationListener, public IInputProvider, public IInputRecorder
 {
 private:
-	static const uint32_t BufferSize = 30; //Number of frames between each save state
+	static const int32_t BufferSize = 30; //Number of frames between each save state
 	static RewindManager* _instance;
 	std::deque<RewindData> _history;
 	std::deque<RewindData> _historyBackup;

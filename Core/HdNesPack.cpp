@@ -29,12 +29,12 @@ void HdNesPack::BlendColors(uint8_t output[4], uint8_t input[4])
 
 uint32_t HdNesPack::AdjustBrightness(uint8_t input[4], uint16_t brightness)
 {
-	uint8_t output[4];
-	output[0] = std::min(255, (brightness * input[0]) >> 8);
-	output[1] = std::min(255, (brightness * input[1]) >> 8);
-	output[2] = std::min(255, (brightness * input[2]) >> 8);
-	output[3] = input[3];
-	return *((uint32_t*)output);
+	return (
+		std::min(255, (brightness * input[0]) >> 8) |
+		(std::min(255, (brightness * input[1]) >> 8) << 8) |
+		(std::min(255, (brightness * input[2]) >> 8) << 16) |
+		(input[3] << 24)
+	);
 }
 
 void HdNesPack::DrawColor(uint32_t color, uint32_t *outputBuffer, uint32_t scale, uint32_t screenWidth)

@@ -275,7 +275,6 @@ void Debugger::ProcessBreakpoints(BreakpointType type, OperationInfo &operationI
 		return;
 	}
 
-	uint32_t absoluteAddr;
 	AddressTypeInfo info { -1, AddressType::InternalRam };
 	PpuAddressTypeInfo ppuInfo { -1, PpuAddressType::None };
 	bool isPpuBreakpoint = false;
@@ -284,13 +283,11 @@ void Debugger::ProcessBreakpoints(BreakpointType type, OperationInfo &operationI
 		case BreakpointType::ReadRam:
 		case BreakpointType::WriteRam:
 			GetAbsoluteAddressAndType(operationInfo.Address, &info);
-			absoluteAddr = info.Address;
 			break;
 
 		case BreakpointType::ReadVram:
 		case BreakpointType::WriteVram:
 			GetPpuAbsoluteAddressAndType(operationInfo.Address, &ppuInfo);
-			absoluteAddr = ppuInfo.Address;
 			isPpuBreakpoint = true;
 			break;
 	}
@@ -446,7 +443,7 @@ void Debugger::StaticProcessEvent(EventType type)
 	}
 }
 
-void Debugger::ProcessStepConditions(uint32_t addr)
+void Debugger::ProcessStepConditions(uint16_t addr)
 {
 	if(_stepOut && (_lastInstruction == 0x60 || _lastInstruction == 0x40) && _stepOutReturnAddress == addr) {
 		//RTS/RTI found, if we're on the expected return address, break immediately
