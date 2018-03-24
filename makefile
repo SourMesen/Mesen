@@ -13,7 +13,7 @@
 #-----------------------
 # Link Time Optimization
 #-----------------------
-#LTO is supported for clang only
+#LTO is supported for clang and gcc (but only seems to help for clang?)
 #LTO gives a 25-30% performance boost, so use it whenever you can
 #Usage: LTO=true make
 
@@ -25,9 +25,6 @@ GCCOPTIONS=-fPIC -Wall --std=c++14 -O3 $(MESENFLAGS) -Wno-parentheses -Wno-switc
 
 CC=clang
 CCOPTIONS=-fPIC -Wall -O3 $(MESENFLAGS)
-
-AR=ar -rcs
-LINKFLAG=
 
 ifeq ($(MESENPLATFORM),x86)
 	MESENPLATFORM=x86
@@ -41,10 +38,8 @@ else
 endif
 
 ifeq ($(LTO),true)
-	AR=llvm-ar q
 	CCOPTIONS += -flto
 	GCCOPTIONS += -flto
-	LINKFLAG=-fuse-ld=gold
 endif
 
 OBJFOLDER=obj.$(MESENPLATFORM)
@@ -85,12 +80,8 @@ rungametests:
 
 testhelper: InteropDLL/$(OBJFOLDER)/$(SHAREDLIB)
 	mkdir -p TestHelper/$(OBJFOLDER)
-	$(AR) TestHelper/$(OBJFOLDER)/libSevenZip.a $(SEVENZIPOBJ)
-	$(AR) TestHelper/$(OBJFOLDER)/libLua.a $(LUAOBJ)
-	$(AR) TestHelper/$(OBJFOLDER)/libMesenLinux.a $(LINUXOBJ) $(LIBEVDEVOBJ)
-	$(AR) TestHelper/$(OBJFOLDER)/libUtilities.a $(UTILOBJ)
-	$(AR) TestHelper/$(OBJFOLDER)/libCore.a $(COREOBJ)	
-	cd TestHelper/$(OBJFOLDER) && $(CPPC) $(GCCOPTIONS) $(LINKFLAG) -Wl,-z,defs -o testhelper ../*.cpp ../../InteropDLL/ConsoleWrapper.cpp -L ./ -lCore -lMesenLinux -lUtilities -lSevenZip -pthread -lSDL2 -lstdc++fs
+	$(CPPC) $(GCCOPTIONS) -Wl,-z,defs -o testhelper TestHelper/*.cpp InteropDLL/ConsoleWrapper.cpp $(SEVENZIPOBJ) $(LUAOBJ) $(LINUXOBJ) $(LIBEVDEVOBJ) $(UTILOBJ) $(COREOBJ) -pthread -lSDL2 -lstdc++fs
+	mv testhelper TestHelper/$(OBJFOLDER)
 
 SevenZip/$(OBJFOLDER)/%.o: SevenZip/%.c
 	mkdir -p SevenZip/$(OBJFOLDER) && cd SevenZip/$(OBJFOLDER) && $(CC) $(CCOPTIONS) -c $(patsubst SevenZip/%, ../%, $<)
@@ -115,20 +106,14 @@ Linux/$(OBJFOLDER)/%.o: Linux/libevdev/%.c
 
 InteropDLL/$(OBJFOLDER)/$(SHAREDLIB): $(SEVENZIPOBJ) $(LUAOBJ) $(UTILOBJ) $(COREOBJ) $(LIBEVDEVOBJ) $(LINUXOBJ) InteropDLL/ConsoleWrapper.cpp InteropDLL/DebugWrapper.cpp
 	mkdir -p InteropDLL/$(OBJFOLDER)
-	$(AR) InteropDLL/$(OBJFOLDER)/libSevenZip.a $(SEVENZIPOBJ)
-	$(AR) InteropDLL/$(OBJFOLDER)/libLua.a $(LUAOBJ)
-	$(AR) InteropDLL/$(OBJFOLDER)/libMesenLinux.a $(LINUXOBJ) $(LIBEVDEVOBJ)
-	$(AR) InteropDLL/$(OBJFOLDER)/libUtilities.a $(UTILOBJ)
-	$(AR) InteropDLL/$(OBJFOLDER)/libCore.a $(COREOBJ)
-	cd InteropDLL/$(OBJFOLDER) && $(CPPC) $(GCCOPTIONS) $(LINKFLAG) -Wl,-z,defs -shared -o $(SHAREDLIB) ../*.cpp -L . -lMesenLinux -lCore -lUtilities -lLua -lSevenZip -pthread -lSDL2 -lstdc++fs
+	$(CPPC) $(GCCOPTIONS) -Wl,-z,defs -shared -o $(SHAREDLIB) InteropDLL/*.cpp $(SEVENZIPOBJ) $(LUAOBJ) $(LINUXOBJ) $(LIBEVDEVOBJ) $(UTILOBJ) $(COREOBJ) -pthread -lSDL2 -lstdc++fs
+	mv $(SHAREDLIB) InteropDLL/$(OBJFOLDER)
 
 
-Libretro/$(OBJFOLDER)/$(LIBRETROLIB): $(SEVENZIPOBJ) $(UTILOBJ) $(COREOBJ) Libretro/libretro.cpp
+Libretro/$(OBJFOLDER)/$(LIBRETROLIB): $(SEVENZIPOBJ) $(UTILOBJ) $(COREOBJ) $(LUAOBJ) Libretro/libretro.cpp
 	mkdir -p Libretro/$(OBJFOLDER)
-	$(AR) Libretro/$(OBJFOLDER)/libSevenZip.a $(SEVENZIPOBJ)
-	$(AR) Libretro/$(OBJFOLDER)/libUtilities.a $(UTILOBJ)
-	$(AR) Libretro/$(OBJFOLDER)/libCore.a $(COREOBJ)
-	cd Libretro/$(OBJFOLDER) && $(CPPC) $(GCCOPTIONS) $(LINKFLAG) -Wl,-z,defs -shared -o $(LIBRETROLIB) ../*.cpp -L . -lCore -lUtilities -lSevenZip -pthread
+	$(CPPC) $(GCCOPTIONS) -Wl,-z,defs -shared -o $(LIBRETROLIB) Libretro/*.cpp $(SEVENZIPOBJ) $(UTILOBJ) $(COREOBJ) $(LUAOBJ) -pthread
+	mv $(LIBRETROLIB) Libretro/$(OBJFOLDER) 
 
 debug:
 	MONO_LOG_LEVEL=debug mono $(RELEASEFOLDER)/Mesen.exe
