@@ -333,8 +333,8 @@ enum class RomFormat
 struct MapperInfo
 {
 	string RomName;
-	RomFormat RomFormat;
-	GameSystem GameSystem;
+	RomFormat Format;
+	GameSystem System;
 	uint16_t MapperId;
 	uint8_t SubMapperId;
 

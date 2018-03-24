@@ -685,7 +685,7 @@ int LuaApi::GetRomInfo(lua_State *lua)
 	lua_pushstringvalue(fileSha1Hash, hashInfo.Sha1Hash);
 	lua_pushintvalue(prgChrCrc32Hash, hashInfo.PrgCrc32Hash);
 	lua_pushstringvalue(prgChrMd5Hash, hashInfo.PrgChrMd5Hash);
-	lua_pushintvalue(format, mapperInfo.RomFormat);
+	lua_pushintvalue(format, mapperInfo.Format);
 	lua_pushboolvalue(isChrRam, mapperInfo.UsesChrRam);
 	return 1;
 }

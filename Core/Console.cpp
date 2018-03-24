@@ -132,7 +132,7 @@ bool Console::Initialize(VirtualFile &romFile, VirtualFile &patchFile)
 			_cpu.reset(new CPU(_memoryManager.get()));
 			_apu.reset(new APU(_memoryManager.get()));
 
-			GameSystem system = _mapper->GetMapperInfo().GameSystem;
+			GameSystem system = _mapper->GetMapperInfo().System;
 
 			switch(system) {
 				case GameSystem::FDS:
@@ -575,7 +575,7 @@ void Console::UpdateNesModel(bool sendNotification)
 
 	NesModel model = EmulationSettings::GetNesModel();
 	if(model == NesModel::Auto) {
-		switch(_mapper->GetMapperInfo().GameSystem) {
+		switch(_mapper->GetMapperInfo().System) {
 			case GameSystem::NesPal: model = NesModel::PAL; break;
 			case GameSystem::Dendy: model = NesModel::Dendy; break;
 			default: model = NesModel::NTSC; break;

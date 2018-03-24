@@ -230,7 +230,7 @@ namespace InteropEmu {
 				MapperInfo mapperInfo = Console::GetMapperInfo();
 				romInfo.Crc32 = mapperInfo.Hash.Crc32Hash;
 				romInfo.PrgCrc32 = mapperInfo.Hash.PrgCrc32Hash;
-				romInfo.Format = mapperInfo.RomFormat;
+				romInfo.Format = mapperInfo.Format;
 				romInfo.IsChrRam = mapperInfo.UsesChrRam;
 				romInfo.MapperId = mapperInfo.MapperId;
 			} else {
