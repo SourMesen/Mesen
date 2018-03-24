@@ -57,10 +57,10 @@ namespace Mesen.GUI.Config
 		public XmlKeys OpenAssembler = Keys.Control | Keys.K;
 		[ShortcutName("Open Debugger")]
 		public XmlKeys OpenDebugger = Keys.Control | Keys.D;
+		[ShortcutName("Open Event Viewer")]
+		public XmlKeys OpenEventViewer = Keys.Control | Keys.E;
 		[ShortcutName("Open Memory Tools")]
 		public XmlKeys OpenMemoryTools = Keys.Control | Keys.M;
-		[ShortcutName("Open NES Event Viewer")]
-		public XmlKeys OpenEventViewer = Keys.Control | Keys.E;
 		[ShortcutName("Open PPU Viewer")]
 		public XmlKeys OpenPpuViewer = Keys.Control | Keys.P;
 		[ShortcutName("Open Script Window")]

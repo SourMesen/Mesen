@@ -132,7 +132,7 @@ Mesen has a number of shortcut keys that you may find useful:
 * <kbd>**Ctrl-L**</kbd>: Manually load a save state from a file.
 * <kbd>**Alt-1 to Alt-6**</kbd>: Change the video scale.
 
-Additionally, there are a large number of customizable [shortcut keys](/configuration/preferences#shortcut-keys) in the [preferences](/configuration/preferences.html).
+The [shortcut keys](/configuration/preferences.html#shortcut-keys) can be customized in the [preferences](/configuration/preferences.html).
 
 <div class="clear"></div>
 

@@ -44,7 +44,7 @@ namespace Mesen.GUI.Debugger
 
 	public partial class ctrlTextbox : Control
 	{
-		private Regex _codeRegex = new Regex("^([a-z]{3})([*]{0,1})($|[ ])+([(]{0,1})(([$][0-9a-f]*)|(#[@$:_0-9a-z]*)|([@_a-z]([@_a-z0-9])*)){0,1}([)]{0,1})(,X|,Y){0,1}([)]{0,1})(.*)", RegexOptions.IgnoreCase | RegexOptions.Compiled);
+		private Regex _codeRegex = new Regex("^([a-z]{3})([*]{0,1})($|[ ]){1}([(]{0,1})(([$][0-9a-f]*)|(#[@$:_0-9a-z]*)|([@_a-z]([@_a-z0-9])*)){0,1}([)]{0,1})(,X|,Y){0,1}([)]{0,1})(.*)", RegexOptions.IgnoreCase | RegexOptions.Compiled);
 		public event EventHandler ScrollPositionChanged;
 		public event EventHandler SelectedLineChanged;
 		private bool _disableScrollPositionChangedEvent;

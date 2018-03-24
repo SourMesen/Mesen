@@ -24,9 +24,40 @@ The memory viewer offers read and write access to all types of ROM and RAM:
 * Work RAM
 * Save RAM
 
+**Note:** Only memory types that are available for the currently loaded ROM will be shown in the dropdown.
+
 {{% notice tip %}}
 PRG ROM and CHR ROM *are* writable from the memory viewer.  Any change will remain in effect until a power cycle. If you want to save your PRG/CHR ROM modifications to a .nes file, or as an IPS patch, you can use the **<kbd>File&rarr;Save</kbd>** or **<kbd>File&rarr;Save edits as IPS</kbd>** commands in the [debugger window](/debugging/debugger.html).
 {{% /notice %}}
+
+### Highlighting ###
+
+There are a number of highlighting/coloring options in the memory viewer.  
+
+<kbd>**View&rarr;Memory Access Highlighting**</kbd> has coloring options for addresses that were recently read, written or executed (colored in <span class="blue">blue</span>, <span class="red">red</span> and <span class="green">green</span>, respectively). A fade-out period can also be configured, after which the byte will revert to its normal black color.  
+
+<kbd>**View&rarr;Data Type Highlighting**</kbd> offers options to change the background color of specific bytes based on their type.</span>.
+
+<kbd>**View&rarr;De-emphasize**</kbd> offers options to display bytes matching certain conditions (unused, read, written or executed) in <span class="gray">gray</span>.
+
+The `Ignore writes that do not alter data` option prevents CPU writes from being highlighted when the value being written matches the one already present in memory.
+
+**Note:** It is possible to customize the colors used by the memory viewer in <kbd>**View&rarr;Configure Colors**</kbd>
+
+### Options ###
+
+#### Display Options ###
+
+* **Auto-refresh speed:** Configures the speed at which the memory view refreshes.
+* **Select Font:** Allows you to select which font to use in the memory view.
+* **Use high text density mode:** When enabled, the vertical space between every row is reduced, allowing more bytes to be shown on the screen at once.
+* **Show characters:** When enabled, a character representation of the binary data is shown on the right. This can be combined with TBL files to find/edit in-game dialog in the memory tools.
+* **Show label tooltip on mouseover:** When enabled, bytes for which a label exists will have a tooltip with the label's information.
+
+#### Other Options ####
+
+* **Use per-byte left/right navigation**: When enabled, pressing the left or right arrows more directly to the next byte, instead of the next nibble.
+* **Use per-byte editing mode**: When enabled, it is no longer possible to select individual nibbles and a full byte's value must be written before it takes effect. (Normally, edits are applied immediately once either nibble is modified)
 
 ### Editing Memory Values ###
 
@@ -39,14 +70,6 @@ There are 2 ways to edit memory values:
 ### Importing / Exporting ###
 
 For most types of memory, it is possible to export its contents to a binary file as well as import it back from a file.  Use the `Import` and `Export` commands to do this.
-
-### Highlighting ###
-
-There are a number of highlighting/coloring options in the memory viewer.  
-
-<kbd>**View&rarr;Highlight**</kbd> has coloring options for addresses that were recently read, written or executed (colored in <span class="blue">blue</span>, <span class="red">red</span> and <span class="green">green</span>, respectively). A fade-out period can also be configured, after which the byte will revert to its normal black color.  
-
-<kbd>**View&rarr;De-emphasize**</kbd> offers options to display bytes matching certain conditions (unused, read, written or executed) in <span class="gray">gray</span>.
 
 ### Freezing values ###
 

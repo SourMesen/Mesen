@@ -1472,8 +1472,8 @@ namespace Mesen.GUI.Forms
             this.mnuApuViewer,
             this.mnuAssembler,
             this.mnuDebugDebugger,
-            this.mnuMemoryViewer,
             this.mnuEventViewer,
+            this.mnuMemoryViewer,
             this.mnuPpuViewer,
             this.mnuScriptWindow,
             this.mnuTraceLogger,
@@ -1490,7 +1490,7 @@ namespace Mesen.GUI.Forms
 			// 
 			this.mnuApuViewer.Image = global::Mesen.GUI.Properties.Resources.Audio;
 			this.mnuApuViewer.Name = "mnuApuViewer";
-			this.mnuApuViewer.Size = new System.Drawing.Size(165, 22);
+			this.mnuApuViewer.Size = new System.Drawing.Size(162, 22);
 			this.mnuApuViewer.Text = "APU Viewer";
 			this.mnuApuViewer.Click += new System.EventHandler(this.mnuApuViewer_Click);
 			// 
@@ -1498,7 +1498,7 @@ namespace Mesen.GUI.Forms
 			// 
 			this.mnuAssembler.Image = global::Mesen.GUI.Properties.Resources.Chip;
 			this.mnuAssembler.Name = "mnuAssembler";
-			this.mnuAssembler.Size = new System.Drawing.Size(165, 22);
+			this.mnuAssembler.Size = new System.Drawing.Size(162, 22);
 			this.mnuAssembler.Text = "Assembler";
 			this.mnuAssembler.Click += new System.EventHandler(this.mnuAssembler_Click);
 			// 
@@ -1506,7 +1506,7 @@ namespace Mesen.GUI.Forms
 			// 
 			this.mnuDebugDebugger.Image = global::Mesen.GUI.Properties.Resources.Bug;
 			this.mnuDebugDebugger.Name = "mnuDebugDebugger";
-			this.mnuDebugDebugger.Size = new System.Drawing.Size(165, 22);
+			this.mnuDebugDebugger.Size = new System.Drawing.Size(162, 22);
 			this.mnuDebugDebugger.Text = "Debugger";
 			this.mnuDebugDebugger.Click += new System.EventHandler(this.mnuDebugDebugger_Click);
 			// 
@@ -1514,7 +1514,7 @@ namespace Mesen.GUI.Forms
 			// 
 			this.mnuMemoryViewer.Image = global::Mesen.GUI.Properties.Resources.CheatCode;
 			this.mnuMemoryViewer.Name = "mnuMemoryViewer";
-			this.mnuMemoryViewer.Size = new System.Drawing.Size(165, 22);
+			this.mnuMemoryViewer.Size = new System.Drawing.Size(162, 22);
 			this.mnuMemoryViewer.Text = "Memory Tools";
 			this.mnuMemoryViewer.Click += new System.EventHandler(this.mnuMemoryViewer_Click);
 			// 
@@ -1522,15 +1522,15 @@ namespace Mesen.GUI.Forms
 			// 
 			this.mnuEventViewer.Image = global::Mesen.GUI.Properties.Resources.NesEventViewer;
 			this.mnuEventViewer.Name = "mnuEventViewer";
-			this.mnuEventViewer.Size = new System.Drawing.Size(165, 22);
-			this.mnuEventViewer.Text = "NES Event Viewer";
+			this.mnuEventViewer.Size = new System.Drawing.Size(162, 22);
+			this.mnuEventViewer.Text = "Event Viewer";
 			this.mnuEventViewer.Click += new System.EventHandler(this.mnuEventViewer_Click);
 			// 
 			// mnuPpuViewer
 			// 
 			this.mnuPpuViewer.Image = global::Mesen.GUI.Properties.Resources.Video;
 			this.mnuPpuViewer.Name = "mnuPpuViewer";
-			this.mnuPpuViewer.Size = new System.Drawing.Size(165, 22);
+			this.mnuPpuViewer.Size = new System.Drawing.Size(162, 22);
 			this.mnuPpuViewer.Text = "PPU Viewer";
 			this.mnuPpuViewer.Click += new System.EventHandler(this.mnuPpuViewer_Click);
 			// 
@@ -1538,7 +1538,7 @@ namespace Mesen.GUI.Forms
 			// 
 			this.mnuScriptWindow.Image = global::Mesen.GUI.Properties.Resources.Script;
 			this.mnuScriptWindow.Name = "mnuScriptWindow";
-			this.mnuScriptWindow.Size = new System.Drawing.Size(165, 22);
+			this.mnuScriptWindow.Size = new System.Drawing.Size(162, 22);
 			this.mnuScriptWindow.Text = "Script Window";
 			this.mnuScriptWindow.Click += new System.EventHandler(this.mnuScriptWindow_Click);
 			// 
@@ -1546,20 +1546,20 @@ namespace Mesen.GUI.Forms
 			// 
 			this.mnuTraceLogger.Image = global::Mesen.GUI.Properties.Resources.LogWindow;
 			this.mnuTraceLogger.Name = "mnuTraceLogger";
-			this.mnuTraceLogger.Size = new System.Drawing.Size(165, 22);
+			this.mnuTraceLogger.Size = new System.Drawing.Size(162, 22);
 			this.mnuTraceLogger.Text = "Trace Logger";
 			this.mnuTraceLogger.Click += new System.EventHandler(this.mnuTraceLogger_Click);
 			// 
 			// toolStripMenuItem25
 			// 
 			this.toolStripMenuItem25.Name = "toolStripMenuItem25";
-			this.toolStripMenuItem25.Size = new System.Drawing.Size(162, 6);
+			this.toolStripMenuItem25.Size = new System.Drawing.Size(159, 6);
 			// 
 			// mnuEditHeader
 			// 
 			this.mnuEditHeader.Image = global::Mesen.GUI.Properties.Resources.Edit;
 			this.mnuEditHeader.Name = "mnuEditHeader";
-			this.mnuEditHeader.Size = new System.Drawing.Size(165, 22);
+			this.mnuEditHeader.Size = new System.Drawing.Size(162, 22);
 			this.mnuEditHeader.Text = "Edit iNES Header";
 			this.mnuEditHeader.Click += new System.EventHandler(this.mnuEditHeader_Click);
 			// 

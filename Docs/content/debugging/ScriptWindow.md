@@ -1,6 +1,6 @@
 ---
 title: Script Window
-weight: 17
+weight: 16
 chapter: false
 ---
 

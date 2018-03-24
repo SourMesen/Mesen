@@ -158,14 +158,14 @@
 			this.cboPalette.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.cboPalette.FormattingEnabled = true;
 			this.cboPalette.Items.AddRange(new object[] {
-            "0",
-            "1",
-            "2",
-            "3",
-            "4",
-            "5",
-            "6",
-            "7",
+            "Tile 0",
+            "Tile 1",
+            "Tile 2",
+            "Tile 3",
+            "Sprite 0",
+            "Sprite 1",
+            "Sprite 2",
+            "Sprite 3",
             "Grayscale"});
 			this.cboPalette.Location = new System.Drawing.Point(52, 3);
 			this.cboPalette.Name = "cboPalette";
@@ -213,15 +213,15 @@
 			this.lblChrSelection.AutoSize = true;
 			this.lblChrSelection.Location = new System.Drawing.Point(3, 7);
 			this.lblChrSelection.Name = "lblChrSelection";
-			this.lblChrSelection.Size = new System.Drawing.Size(73, 13);
+			this.lblChrSelection.Size = new System.Drawing.Size(80, 13);
 			this.lblChrSelection.TabIndex = 0;
-			this.lblChrSelection.Text = "Chr Selection:";
+			this.lblChrSelection.Text = "CHR Selection:";
 			// 
 			// cboChrSelection
 			// 
 			this.cboChrSelection.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.cboChrSelection.FormattingEnabled = true;
-			this.cboChrSelection.Location = new System.Drawing.Point(82, 3);
+			this.cboChrSelection.Location = new System.Drawing.Point(89, 3);
 			this.cboChrSelection.Name = "cboChrSelection";
 			this.cboChrSelection.Size = new System.Drawing.Size(150, 21);
 			this.cboChrSelection.TabIndex = 1;
@@ -453,13 +453,13 @@
             this.mnuCopyHdPack,
             this.mnuCopyToClipboard});
 			this.ctxMenu.Name = "ctxMenu";
-			this.ctxMenu.Size = new System.Drawing.Size(248, 48);
+			this.ctxMenu.Size = new System.Drawing.Size(222, 48);
 			this.ctxMenu.Opening += new System.ComponentModel.CancelEventHandler(this.ctxMenu_Opening);
 			// 
 			// mnuCopyHdPack
 			// 
 			this.mnuCopyHdPack.Name = "mnuCopyHdPack";
-			this.mnuCopyHdPack.Size = new System.Drawing.Size(247, 22);
+			this.mnuCopyHdPack.Size = new System.Drawing.Size(221, 22);
 			this.mnuCopyHdPack.Text = "Copy Tile (HD Pack Format)";
 			this.mnuCopyHdPack.Click += new System.EventHandler(this.mnuCopyHdPack_Click);
 			// 
@@ -467,7 +467,7 @@
 			// 
 			this.mnuCopyToClipboard.Image = global::Mesen.GUI.Properties.Resources.Copy;
 			this.mnuCopyToClipboard.Name = "mnuCopyToClipboard";
-			this.mnuCopyToClipboard.Size = new System.Drawing.Size(247, 22);
+			this.mnuCopyToClipboard.Size = new System.Drawing.Size(221, 22);
 			this.mnuCopyToClipboard.Text = "Copy image to clipboard";
 			this.mnuCopyToClipboard.Click += new System.EventHandler(this.mnuCopyToClipboard_Click);
 			// 

@@ -234,7 +234,7 @@ namespace Mesen.GUI.Debugger
 				mnuRunPpuCycle, mnuRunScanline, mnuRunOneFrame, null,
 				mnuToggleBreakpoint, mnuDisableEnableBreakpoint, null,
 				mnuFind, mnuFindPrev, mnuFindNext, null,
-				mnuApuViewer, mnuAssembler, mnuMemoryViewer, mnuEventViewer, mnuPpuViewer, mnuScriptWindow, mnuTraceLogger, null,
+				mnuApuViewer, mnuAssembler, mnuEventViewer, mnuMemoryViewer, mnuPpuViewer, mnuScriptWindow, mnuTraceLogger, null,
 				mnuEditHeader, null,
 				mnuSplitView, null
 			);

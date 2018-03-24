@@ -14,30 +14,20 @@ The debugger is the main part of the debugging tools available in Mesen. This wi
 
 ## General Usage Tips ##
 
-Generally speaking, the debugger tries to mimic the look and feel of Visual Studio in a lot of ways, including a lot of keyboard shortcuts (especially if you use the C# shortcut settings in Visual Studio).  If you are familiar with any version of VS, the debugger should be easy to use.   
-
 Most elements in the debugger's interface have right-click menu options - make sure you explore the right-click options available in each list and window.
 
 Watch expressions, breakpoints and labels are automatically saved on a per-rom basis in a **Workspace**.  
 You can completely reset the workspace for a specific rom by using the **<kbd>File&rarr;Workspace&rarr;Reset Workspace</kbd>** command.
 
-### Shortcuts ###
 
-Use keyboard and mouse shortcuts to speed things up:
+## Customizing the debugger ##
 
-#### General ####
+All keyboard shortcuts can be customized in **<kbd>Options&rarr;Customize Shortcut Keys</kbd>**  
 
-- <kbd>**F9**</kbd> to add/remove a breakpoint to the current line of code.
-- <kbd>**Left-clicking**</kbd> on the left-most portion of the margin in the code window will set a breakpoint for that line.
+The font used in the code window can be customized in **<kbd>Options&rarr;Font Options&rarr;Select Font</kbd>**  
+The colors used for syntax highlighting can be changed in **<kbd>Options&rarr;Configure Colors</kbd>**
 
-#### Search and navigation ####
-
-* <kbd>**Ctrl+F**</kbd>: To perform an incremental search in the code window.
-* <kbd>**Ctrl-Shift-F**</kbd>: Find all occurrences of an address or label in the code window.
-* <kbd>**Ctrl-G**</kbd>: Go to a specific address.
-* <kbd>**Double-click**</kbd> on an address to navigate to it.
-* <kbd>**Back/Forward**</kbd> mouse buttons (on a 5-button mouse) allow you to go back and forth in the navigation history.
-
+Various portions of the debugger can be hidden/shown via **<kbd>Options&rarr;Show</kbd>**
   
 ## Code Window ##
 
@@ -52,26 +42,30 @@ The code window displays the disassembled code and contains a number of features
 
 * Several options control what is shown in the code window, and how it is shown - see [Display Options](#display-options) below.
 * Labels and comments defined in the label list are shown in the code.
-* Single-line comments appear on the left, multi-line comments appear on top.
+* Single-line comments appear on the right, multi-line comments appear on top.
 * The instruction that's currently executing is highlighted in yellow.
 * Mouse-hovering any label or address will display a tooltip giving additional information (label, comment, current value in memory, etc.)
 * You can alter the flow of execution by using the `Set Next Statement` command to change the next instruction to be executed.
 
-### Display Options ###
+### Disassembly Options ###
 
 **Disassemble...**:  
 
-* **Verified code only**: The strictest disassembly mode - this will cause the dissassembler to only disassemble bytes that it knows to be actual code. Everything else will be treated as data.
-* **Everything**: In this mode, the disassembler will attempt to disassemble absolutely everything, including bytes that are marked as data.
-* **Everything except verified data**: In this mode, the disassembler will disassemble everything *except* bytes that have been used/marked as data.
+* **Verified Code**: (Always enabled) Bytes that are known by the debugger to be valid code will be disassembled as code.
+* **Verified Data**: Bytes that are known to be data will be disassembled as code (enabling this is not recommended).
+* **Unidentified Code/Data**: Bytes that have not been used yet by the CPU will be disassembled as code.
+
+**Show...**:
+
+* **Disassembled Code**: (Always enabled) Any portions of the CPU memory that has been disassembled (based on the previous options) will be shown in the code window.
+* **Verified Data**: Verified data blocks will be shown (every byte of the block will be shown in the code window).  Note: this has no effect if verified code is disassembled based on the previous options.
+* **Unidentified Code/Data**: Blocks of bytes that are not marked as data nor code will be shown (every byte of the block will be shown in the code window).  Note: this has no effect if unidentified blocks are disassembled based on the previous options.
 
 **Display OP codes in lower case**: When enabled, OP codes are displayed in lowercase letters
 
-**Highlight Unexecuted Code**: When enabled, code that has been identified by the disassembler as code but hasn't been executed yet will be highlighted in green.
-
 **Show Effective Addresses**: When enabled, the resulting address of indirect addressing modes (e.g `LDA $3321, Y`) will be displayed next to the instruction in blue. e.g: `@ $3323`
 
-**Show Only Disassembled Code**: When enabled, everything that has not been disassembled (e.g because it has not been confirmed to be actual code, or because it is data) will be hidden from the code window.
+**Show Memory Values**: When enabled, every line of code that refers to a specific address in memory will display that address' current value on the right. 
 
 **Byte Code Display**: When enabled, the byte code matching the instructions will be displayed next to them (either on the left, or on the line below based on your selection)
 
@@ -154,7 +148,8 @@ For example, if you have a label called "velocity" that points to 1-byte value a
 	<span>Breakpoint List</span>
 </div></div>
 
-Breakpoints define conditions under which the execution of the game's code will be suspended.  Any number of breakpoints can be defined. To quickly add or remove a breakpoint for the current line of code, press F9 in the code window.
+Breakpoints define conditions under which the execution of the game's code will be suspended.  Any number of breakpoints can be defined.
+You can also make a breakpoint appear as a mark on the [Event Viewer](/debugging/eventviewer.html) by checking the `M` column.
 
 **To add a breakpoint**, right-click the breakpoint list and select **Add**.  
 **To edit a breakpoint**, double-click on it in the list.  
@@ -171,17 +166,24 @@ Breakpoints define conditions under which the execution of the game's code will 
 
 Breakpoints can be set to trigger based on CPU/PPU memory accesses at specific memory addresses. 
 
+**Breakpoint Type**  
+Select the type of memory for which you want to set a breakpoint.  The valid range of addresses for the breakpoint will vary based on the selected memory type.
+
 **Break On**  
-Select whether this breakpoint should occur based on CPU or PPU accesses, and which types of accesses should trigger the breakpoint.
+Select which types of accesses (read, write or execute) should trigger the breakpoint.
 
 **Address**  
 Select which address or address range this breakpoint should apply to.  
 It is also possible to specify no address at all by selecting **Any** - in this case, breakpoints will be evaluated on every CPU cycle.  
 
-**Use PRG ROM addresses**: This option makes it so the addresses apply to the PRG ROM itself, instead of their mappings in CPU memory.
-
 **Condition** (optional)  
 Conditions allow you to use the same expression syntax as the one used in the [Watch Window](#watch-window) to cause a breakpoint to trigger under very specific conditions.
+
+**Mark on Event Viewer**  
+When enabled, a mark will be visible on the [Event Viewer](/debugging/eventviewer.html) whenever this breakpoint's conditions are met. This can be used to add marks to the event viewer based on a variety of conditions by using conditional breakpoints.
+
+**Break Execution**  
+This enables the breakpoint - if this is disabled, the execution will not break when the breakpoint is hit.
 
 **Examples**  
 To break when the sum of the X and Y registers is 5:
@@ -227,8 +229,12 @@ The label list displays every label defined in alphabetical order.
 **To add a label**, right-click in the label list and select `Add`.  
 **To edit a label**, right-click in the label list and select `Edit`.  
 **To delete a label**, right-click in the label list and select `Delete`.  
+**To add a breakpoint to a label**, right-click in the label list and select `Add breakpoint`.  
+**To add the label to the watch**, right-click in the label list and select `Add to watch`.  
 **To find where a label is used**, right-click in the label list and select `Find Occurrences`.  
 **To view the code** at the label's location, double-click on the label in the list.  
+
+**Note:** Labels shown in gray color and italic font are currently not mapped in CPU memory.
 
 ### Editing Labels ###
 
@@ -239,7 +245,7 @@ The label list displays every label defined in alphabetical order.
 
 Various types of labels can be defined:
 
-- **Internal RAM**: Used for labels residing in the $0000-$1FFF memory range (the NES' built-in RAM)
+- **NES RAM (2 KB)**: Used for labels residing in the $0000-$1FFF memory range (the NES' built-in RAM)
 - **PRG ROM**: Used for constants, data, code labels and functions in PRG ROM - the address value represents the offset from the start of PRG ROM (which can exceed $FFFF)
 - **Work RAM**: Used for variables in work ram (also called PRG RAM without battery backup) - the address value represents the offset from the start of the ram chip. 
 - **Save RAM**: Used for variables in work ram (also called battery-backed PRG RAM) - the address value represents the offset from the start of the ram chip.
@@ -267,9 +273,37 @@ Unlike the label list, which only displays labels, the function list displays al
 </div></div>
 
 The CPU and PPU memory mappings are visual aids that display information about the currently selected PRG/CHR banks and the nametable configuration.  
-The banking configuration represents Mesen's internal representation of the mapper in use, which may not exactly match the mapper's specs.  
-For example, a mapper with 2x 8kb + 1x 16kb PRG banking is emulated as 4x 8kb internally, so it will appear as 4 8kb banks.
 
+The banking configuration represents Mesen's internal representation of the mapper in use, which may not exactly match the mapper's specs.
+For example, a mapper with 2x 8 KB + 1x 16 KB PRG banking is emulated as 4x 8 KB internally, so it will appear as four 8 KB banks.
+
+## Other Options ##
+
+### Display Options ###
+
+The `Show...` submenu contains a number of options to show/hide various elements on the UI.
+Specifically, the toolbar, CPU/PPU memory mappings, function/label lists, watch list, breakpoint list and the call stack window.
+
+Additionally, two special tooltip windows can be enabled here:
+
+* **Show Code Preview in Tooltips**: When enabled, label/address tooltips will now show a preview of the code at the target location.
+* **Show OP Code Info Tooltips**: When enabled, putting the mouse over an OP code will display a tooltip containing information about the OP code and which CPU flags are affected by it.
+
+### Break Options ###
+
+The `Break Options` submenu contains a number of options to configure under which conditions the debugger will break (even when no breakpoint is hit).  
+Additionally, you can configure whether or not the debugger window gets focused when a break or pause occurs.
+
+### Copy Options ###
+
+These options configure which portions of the code is copied into the clipboard when copying code from the code window.
+
+### Misc. Options ###
+
+* **Hide Pause Icon**: When enabled, the pause icon that is normally shown whenever execution is paused will be hidden.
+* **Draw Partial Frame**: When enabled, the emulator's main window will display the current partially-drawn frame instead of the last complete frame.
+* **Show previous frame behind current**: When enabled along with `Draw Partial Frame`, the previous frame's data will be shown behind the current frame.
+* **Refresh watch while running**: When enabled, the watch window will continuously refresh itself while the emulation is running (instead of only updating when the execution breaks)
 
 ## How To: Edit Code ##
 

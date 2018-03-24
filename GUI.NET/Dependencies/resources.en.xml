@@ -314,7 +314,14 @@
     </Enum>
     
     <!-- Resources below are used by the debugger only - no translation is needed -->
-    <Enum ID="DebugMemoryType">
+	  <Enum ID="AddressType">
+		  <Value ID="InternalRam">NES RAM (2 KB)</Value>
+		  <Value ID="PrgRom">PRG ROM</Value>
+		  <Value ID="WorkRam">Work RAM</Value>
+		  <Value ID="SaveRam">Save RAM</Value>
+		  <Value ID="Register">Register</Value>
+	  </Enum>
+	  <Enum ID="DebugMemoryType">
       <Value ID="CpuMemory">CPU Memory</Value>
       <Value ID="PpuMemory">PPU Memory</Value>
       <Value ID="PaletteMemory">Palette RAM</Value>
@@ -325,7 +332,7 @@
       <Value ID="ChrRam">CHR RAM</Value>
       <Value ID="WorkRam">Work RAM</Value>
       <Value ID="SaveRam">Save RAM</Value>
-      <Value ID="InternalRam">Built-in NES RAM</Value>
+      <Value ID="InternalRam">NES RAM (2 KB)</Value>
     </Enum>
     <Enum ID="AddrMode">
       <Value ID="None">None</Value>

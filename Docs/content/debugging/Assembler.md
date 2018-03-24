@@ -1,6 +1,6 @@
 ---
 title: Assembler
-weight: 16
+weight: 12
 chapter: false
 ---
 

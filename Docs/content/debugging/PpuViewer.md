@@ -1,6 +1,6 @@
 ---
 title: PPU Viewer
-weight: 10
+weight: 15
 pre: ""
 chapter: false
 ---
@@ -26,6 +26,7 @@ There are also a number of display options:
 * **Show PPU Scroll Overlay**: Shows a blue rectangular overlay showing the current scroll position of the screen.
 * **Show Tile Grid**: Displays a 8x8 pixels <span class="red">red</span> grid.
 * **Show Attribute Grid**: Displays a 16x16 pixels <span class="blue">blue</span> grid.
+* **Use Grayscale Palette**: Forces the nametables to be shown in a 4-color grayscale palette.
 * **Highlight tile selected in CHR viewer**: When enabled, click on a tile in the CHR viewer to select it, all occurrences of that tile will then be marked by a <span class="red">red</span> rectangle in the nametable viewer. 
 
 <kbd>**Double-click**</kbd> on a tile in the nametable viewer to view/edit it in the CHR Viewer.
@@ -46,11 +47,11 @@ You can <kbd>**right-click**</kbd> on a tile to copy the tile's information (bas
 
 ### Display Options ###
 
-* **Chr Selection**: Select which portion of CHR memory to display in the viewer - by default, the portions of CHR memory mapped to the $0000-$1FFF range in PPU memory are shown.
-* **Palette Selection**: Selects which palette to use to render the tiles - the first 4 palettes are for tiles, the last 4 palettes are for sprites.
+* **CHR Selection**: Select which portion of CHR memory to display in the viewer - by default, the portions of CHR memory mapped to the $0000-$1FFF range in PPU memory are shown.
+* **Palette Selection**: Selects which palette to use to render the tiles - the first 4 palettes are for tiles, the last 4 palettes are for sprites.  There is also a 9th palette named "Grayscale" which forces the CHR viewer to display tiles in a 4-color grayscale palette.
 * **Highlight**: This option allows tiles to be highlighted/dimmed based on the CDL file's current data.  This makes it possible to highlight/dim tiles that have never been drawn by the PPU, or vice versa.  *This option is only available for CHR ROM games*.
 * **Display as 16x8 sprites**: When enabled, changes the display order of the tiles to make it easier to visualize 16x8 sprites.
-
+* **Display tiles using their last known palette**: When enabled, any tile that has appeared in nametable memory since the debugger was opened will be shown using their last known palette (this overrides the palette selection dropdown for those tiles)
 
 ### Editing Tiles ###
 

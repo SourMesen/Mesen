@@ -23,9 +23,13 @@ chapter: false
 
 **Pause when a movie finishes playing**: When enabled, the emulator will automatically pause when a movie ends its playback.
 
-**Pause emulation when in background**: When enabled, the emulator will automatically pause when in the background.
-
 **Allow input when in background**: When enabled, gamepad input can still be used even if the window is in the background. *This does not work for keyboard key bindings.*
+
+**Pause when in**: 
+
+* **Background**: When enabled, the emulator will automatically pause when in the background.
+* **Menu and config dialogs**: When enabled, the emulator will automatically pause when in menus or configuration dialogs.
+* **Debugging tools**: When enabled, the emulator will automatically pause when in debugging tools.
 
 ### Misc. Settings ###
 
@@ -149,6 +153,8 @@ The FDS (Famicom Disk System) is a Famicom-specific add-on that allows games to 
 **Disable on-screen display (OSD)**: When enabled, all on-screen messages are disabled.
 
 **Display additional information in title bar**: When enabled, additional information is shown in the title bar (such as filter, scale, etc.), next to the game's name.
+
+**Show full file path in recent file list**: When enabled, the recent files menu will display the file's full path instead of just its name.
 
 **Show frame counter**: When enabled, the number of frames emulated since the last reset will be shown on the screen.
 

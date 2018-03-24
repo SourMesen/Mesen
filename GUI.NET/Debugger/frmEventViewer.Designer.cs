@@ -330,7 +330,7 @@
 			this.Controls.Add(this.menuStrip1);
 			this.MinimumSize = new System.Drawing.Size(945, 627);
 			this.Name = "frmEventViewer";
-			this.Text = "NES Event Viewer";
+			this.Text = "Event Viewer";
 			this.tabMain.ResumeLayout(false);
 			this.tpgPpuView.ResumeLayout(false);
 			this.tableLayoutPanel1.ResumeLayout(false);

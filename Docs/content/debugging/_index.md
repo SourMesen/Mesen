@@ -7,8 +7,10 @@ toc: false
 
 The debugging capabilities of Mesen are split across a number of different tools, including the debugger itself:
 
+[APU Viewer](/debugging/apuviewer.html): Displays every detail of the APU's current state for each channel.  
 [Assembler](/debugging/assembler.html): Allows you to edit a game's code or run custom code on-the-fly.  
 [Debugger](/debugging/debugger.html): View the code, add breakpoints, labels, watch values, and much more.   
+[Event Viewer](/debugging/eventviewer.html): Visualize the timing of a variety of events (register read/writes, nmi, irq, etc.).  
 [Memory Tools](/debugging/memorytools.html): Contains a hex editor and performance profiler.      
 [PPU Viewer](/debugging/ppuviewer.html):  Displays information on the nametables, sprites, CHR banks and palette. Contains a CHR graphic editor and a palette editor.    
 [Script Window](/debugging/scriptwindow.html):  Allows the execution of Lua scripts, which can communicate with the emulation via an API.   
