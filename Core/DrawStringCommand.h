@@ -122,14 +122,15 @@ private:
 protected:
 	void InternalDraw()
 	{
-		int x = _x;
+		int startX = (int)(_x * _xScale / _yScale);
+		int x = startX;
 		int y = _y;
 		for(char c : _text) {
 			if(c == '\n') {
-				x = _x;
+				x = startX;
 				y += 9;
 			} else if(c == '\t') {
-				x += (_tabSpace - (((x - _x) / 8) % _tabSpace)) * 8;
+				x += (_tabSpace - (((x - startX) / 8) % _tabSpace)) * 8;
 			} else {
 				int ch = GetCharNumber(c);
 				int width = GetCharWidth(c);
@@ -151,7 +152,7 @@ protected:
 
 public:
 	DrawStringCommand(int x, int y, string text, int color, int backColor, int frameCount) :
-		DrawCommand(frameCount), _x(x), _y(y), _color(color), _backColor(backColor), _text(text)
+		DrawCommand(frameCount, true), _x(x), _y(y), _color(color), _backColor(backColor), _text(text)
 	{
 		//Invert alpha byte - 0 = opaque, 255 = transparent (this way, no need to specifiy alpha channel all the time)
 		_color = (~color & 0xFF000000) | (color & 0xFFFFFF);

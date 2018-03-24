@@ -26,7 +26,7 @@ public:
 	virtual ~BaseVideoFilter();
 
 	uint8_t* GetOutputBuffer();
-	void SendFrame(uint16_t *ppuOutputBuffer, bool isOddFrame);
+	void SendFrame(uint16_t *ppuOutputBuffer, uint32_t frameNumber);
 	void TakeScreenshot(VideoFilterType filterType);
 	void TakeScreenshot(VideoFilterType filterType, string filename, std::stringstream *stream = nullptr);
 

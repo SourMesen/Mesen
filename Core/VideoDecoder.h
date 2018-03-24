@@ -30,7 +30,7 @@ private:
 	uint16_t *_ppuOutputBuffer = nullptr;
 	HdScreenInfo *_hdScreenInfo = nullptr;
 	bool _hdFilterEnabled = false;
-	bool _isOddFrame = false;
+	uint32_t _frameNumber = 0;
 
 	unique_ptr<thread> _decodeThread;
 	unique_ptr<VideoHud> _hud;

@@ -71,10 +71,6 @@ void DefaultVideoFilter::DecodePpuBuffer(uint16_t *ppuOutputBuffer, uint32_t* ou
 			}
 		}
 	}
-
-	if(DebugHud::GetInstance()) {
-		DebugHud::GetInstance()->Draw(outputBuffer, overscan);
-	}
 }
 
 void DefaultVideoFilter::ApplyFilter(uint16_t *ppuOutputBuffer)

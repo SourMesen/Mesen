@@ -7,6 +7,7 @@
 #include "StandardController.h"
 #include "ScaleFilter.h"
 #include "RotateFilter.h"
+#include "DebugHud.h"
 
 BaseVideoFilter::BaseVideoFilter()
 {
@@ -51,14 +52,17 @@ bool BaseVideoFilter::IsOddFrame()
 	return _isOddFrame;
 }
 
-void BaseVideoFilter::SendFrame(uint16_t *ppuOutputBuffer, bool isOddFrame)
+void BaseVideoFilter::SendFrame(uint16_t *ppuOutputBuffer, uint32_t frameNumber)
 {
 	_frameLock.Acquire();
 	_overscan = EmulationSettings::GetOverscanDimensions();
-	_isOddFrame = isOddFrame;
+	_isOddFrame = frameNumber % 2;
 	UpdateBufferSize();
 	OnBeforeApplyFilter();
 	ApplyFilter(ppuOutputBuffer);
+	if(DebugHud::GetInstance()) {
+		DebugHud::GetInstance()->Draw((uint32_t*)_outputBuffer, _overscan, GetFrameInfo().Width, frameNumber);
+	}
 	_frameLock.Release();
 }
 

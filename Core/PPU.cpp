@@ -1112,8 +1112,8 @@ void PPU::Exec()
 			//Switch to alternate output buffer (VideoDecoder may still be decoding the last frame buffer)
 			_currentOutputBuffer = (_currentOutputBuffer == _outputBuffers[0]) ? _outputBuffers[1] : _outputBuffers[0];
 		} else if(_scanline == 240) {
-			_frameCount++;
 			SendFrame();
+			_frameCount++;
 		} else if(_scanline == _nmiScanline) {
 			BeginVBlank();
 		}
