@@ -104,7 +104,7 @@ namespace Mesen.GUI.Config
 		public bool ShowVerifiedData = false;
 		public bool ShowUnidentifiedData = false;
 
-		public bool ShowCommentsInLabelList = true;
+		public bool ShowCommentsInLabelList = false;
 
 		public bool SplitView = false;
 		public bool HexDisplay = true;

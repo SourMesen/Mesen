@@ -93,11 +93,11 @@ namespace Mesen.GUI.Debugger.Controls
 						updating = true;
 					}
 					if(relativeAddress >= 0) {
-						item.SubItems[0].Text = "$" + relativeAddress.ToString("X4");
+						item.SubItems[1].Text = "$" + relativeAddress.ToString("X4");
 						item.ForeColor = Color.Black;
 						item.Font = new Font(item.Font, FontStyle.Regular);
 					} else {
-						item.SubItems[0].Text = "[n/a]";
+						item.SubItems[1].Text = "[n/a]";
 						item.ForeColor = Color.Gray;
 						item.Font = new Font(item.Font, FontStyle.Italic);
 					}
