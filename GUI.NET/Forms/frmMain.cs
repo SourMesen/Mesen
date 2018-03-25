@@ -1028,8 +1028,15 @@ namespace Mesen.GUI.Forms
 					mnuStopRecordTapeFile.Enabled = tapeRecording;
 
 					mnuDebugger.Visible = !devMode;
-					mnuDebugger.Enabled = !devMode;
-					mnuDebugDebugger.Enabled = devMode;
+					mnuDebugger.Enabled = !devMode && running;
+					mnuDebugDebugger.Enabled = devMode && running;
+					mnuApuViewer.Enabled = running;
+					mnuAssembler.Enabled = running;
+					mnuMemoryViewer.Enabled = running;
+					mnuEventViewer.Enabled = running;
+					mnuPpuViewer.Enabled = running;
+					mnuScriptWindow.Enabled = running;
+					mnuTraceLogger.Enabled = running;
 
 					mnuHdPackEditor.Enabled = !netPlay && running;
 
