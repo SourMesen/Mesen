@@ -6,7 +6,7 @@
 			<Control ID="mnuOpen">Abrir</Control>
 			<Control ID="mnuSaveState">Salvar estado</Control>
 			<Control ID="mnuLoadState">Carregar estado</Control>
-			<Control ID="mnuLoadLastSession">Load Last Session</Control>
+			<Control ID="mnuLoadLastSession">Carregar a última sessão</Control>
 			<Control ID="mnuRecentFiles">Arquivos recentes</Control>
 			<Control ID="mnuExit">Sair</Control>
 			<Control ID="mnuGame">Jogo</Control>
@@ -334,10 +334,10 @@
 			<Control ID="chkPauseOnMovieEnd">Pausar a emulação ao finalizar o vídeo</Control>
 			<Control ID="chkAllowBackgroundInput">Permitir comandos enquanto o Mesen estiver em segundo plano</Control>
 
-			<Control ID="lblPauseIn">Pause when in:</Control>
-			<Control ID="chkPauseWhenInBackground">Background</Control>
-			<Control ID="chkPauseInMenuAndConfig">Menus and config dialogs</Control>
-			<Control ID="chkPauseInDebugger">Debugging tools</Control>
+			<Control ID="lblPauseIn">Pausa quando estiver em:</Control>
+			<Control ID="chkPauseWhenInBackground">Segundo plano</Control>
+			<Control ID="chkPauseInMenuAndConfig">Menus e diálogos de configuração</Control>
+			<Control ID="chkPauseInDebugger">Ferramentas de depuração</Control>
 
 			<Control ID="chkAutoLoadIps">Carregar os arquivos IPS/BPS automaticamente</Control>
 			<Control ID="chkHidePauseOverlay">Ocultar a tela de pausa</Control>
@@ -380,10 +380,10 @@
 			<Control ID="chkAutoSave">Salvar estado do jogo automaticamente a cada</Control>
 			<Control ID="lblAutoSave">minutos</Control>
 			<Control ID="chkAutoSaveNotify">Mostrar uma notificação na tela ao fazer a cópia de segurança automática</Control>
-			<Control ID="chkAllowMismatchingSaveStates">Allow save states to be loaded on modified ROMs (e.g IPS patches)</Control>
+			<Control ID="chkAllowMismatchingSaveStates">Permitir que os estados de salvamento sejam carregados em ROMs modificadas (ex:, com patches IPS)</Control>
 			<Control ID="grpCloudSaves">Cópia de segurança online</Control>
 
-			<Control ID="chkShowFullPathInRecents">Show full file path in recent file list</Control>
+			<Control ID="chkShowFullPathInRecents">Mostrar o caminho completo do arquivo na lista de arquivos recentes</Control>
 			<Control ID="chkShowFrameCounter">Mostrar contador de quadros</Control>
 			<Control ID="chkShowGameTimer">Mostrar tempo de jogo</Control>
 			<Control ID="chkShowVsConfigOnLoad">Mostrar caixa de diálogo de configuração do jogo ao carregar jogos do sistema VS</Control>
@@ -849,9 +849,9 @@
 		<Message ID="EmulatorShortcutMappings_LoadStateSlot8">Carregar estado - Compartimento 8</Message>
 		<Message ID="EmulatorShortcutMappings_LoadStateSlot9">Carregar estado - Compartimento 9</Message>
 		<Message ID="EmulatorShortcutMappings_LoadStateSlot10">Carregar estado - Compartimento 10</Message>
-		<Message ID="EmulatorShortcutMappings_LoadStateSlotAuto">Load State - Auto Save Slot</Message>
+		<Message ID="EmulatorShortcutMappings_LoadStateSlotAuto">Carregar estado - Compartimento de salvamento automático</Message>
 		<Message ID="EmulatorShortcutMappings_LoadStateFromFile">Carregar estado de arquivo</Message>
-		<Message ID="EmulatorShortcutMappings_LoadLastSession">Load Last Session</Message>
+		<Message ID="EmulatorShortcutMappings_LoadLastSession">Carregar a última sessão</Message>
 		<Message ID="EmulatorShortcutMappings_OpenFile">Abrir arquivo</Message>
 		<Message ID="EmulatorShortcutMappings_OpenDebugger">Abrir depurador</Message>
 		<Message ID="EmulatorShortcutMappings_OpenAssembler">Abrir Assembler</Message>
