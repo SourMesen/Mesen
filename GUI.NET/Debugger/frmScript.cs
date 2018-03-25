@@ -196,7 +196,7 @@ namespace Mesen.GUI.Debugger
 			return true;
 		}
 
-		private void LoadScriptFile(string filepath, bool runScript = true)
+		public void LoadScriptFile(string filepath, bool runScript = true)
 		{
 			if(File.Exists(filepath)) {
 				if(!SavePrompt()) {

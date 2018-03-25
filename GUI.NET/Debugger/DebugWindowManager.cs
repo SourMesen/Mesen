@@ -55,12 +55,13 @@ namespace Mesen.GUI.Debugger
 			frm.ShowAddress(address, usePrgRom);
 		}
 
-		public static void OpenScriptWindow(bool forceBlank)
+		public static frmScript OpenScriptWindow(bool forceBlank)
 		{
 			frmScript frm = new frmScript(forceBlank);
 			_openedWindows.Add(frm);
 			frm.FormClosed += Debugger_FormClosed;
 			frm.Show();
+			return frm;
 		}
 
 		public static frmDebugger GetDebugger()

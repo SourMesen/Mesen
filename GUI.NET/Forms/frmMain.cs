@@ -8,6 +8,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -31,8 +32,9 @@ namespace Mesen.GUI.Forms
 		private frmCheatList _cheatListWindow;
 		private frmHdPackEditor _hdPackEditorWindow;
 		private ResourcePath? _currentRomPath = null;
-		private Image _pauseButton = Mesen.GUI.Properties.Resources.Pause;
-		private Image _playButton = Mesen.GUI.Properties.Resources.Play;
+		List<string> _luaScriptsToLoad = new List<string>();
+		private Image _pauseButton = Resources.Pause;
+		private Image _playButton = Resources.Play;
 		private string _currentGame = null;
 		private bool _customSize = false;
 		private double? _switchOptionScale = null;
@@ -119,23 +121,58 @@ namespace Mesen.GUI.Forms
 
 		public void LoadGameFromCommandLine(List<string> switches)
 		{
-			foreach(string arg in switches) {
-				if(arg != null) {
-					string path = arg;
+			Func<string, bool, string> getValidPath = (string path, bool forLua) => {
+				path = path.Trim();
+				if(path.ToLower().EndsWith(".lua") == forLua) {
 					try {
-						if(File.Exists(path)) {
-							this.LoadFile(path);
-							break;
+						if(!File.Exists(path)) {
+							//Try loading file as a relative path to the folder Mesen was started from
+							path = Path.Combine(Program.OriginalFolder, path);
 						}
-
-						//Try loading file as a relative path to the folder Mesen was started from
-						path = Path.Combine(Program.OriginalFolder, path);
-						if(File.Exists(path)) {
-							this.LoadFile(path);
-							break;
-						}
+						return path;
 					} catch { }
 				}
+				return null;
+			};
+
+			//Check if any Lua scripts were specified
+			_luaScriptsToLoad = new List<string>();
+			foreach(string arg in switches) {
+				string path = getValidPath(arg, true);
+				if(path != null) {
+					_luaScriptsToLoad.Add(path);
+				}
+			}
+
+			bool fileLoaded = false;
+			foreach(string arg in switches) {
+				string path = getValidPath(arg, false);
+				if(path != null) {
+					this.LoadFile(path);
+					fileLoaded = true;
+					break;
+				}
+			}
+
+			if(!fileLoaded) {
+				if(_emuThread == null) {
+					//When no ROM is loaded, only process Lua scripts if a ROM was specified as a command line param
+					_luaScriptsToLoad.Clear();
+				} else {
+					//No game was specified, but a game is running already, load the scripts right away
+					LoadLuaScripts();
+				}
+			}
+		}
+
+		private void LoadLuaScripts()
+		{
+			if(_luaScriptsToLoad.Count > 0) {
+				foreach(string luaScript in _luaScriptsToLoad) {
+					frmScript scriptWindow = DebugWindowManager.OpenScriptWindow(true);
+					scriptWindow.LoadScriptFile(luaScript);
+				}
+				_luaScriptsToLoad.Clear();
 			}
 		}
 
@@ -521,6 +558,7 @@ namespace Mesen.GUI.Forms
 					this.StartEmuThread();
 					this.BeginInvoke((MethodInvoker)(() => {
 						UpdateViewerSize();
+						LoadLuaScripts();
 					}));
 
 					Task.Run(() => {
