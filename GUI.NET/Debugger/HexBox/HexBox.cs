@@ -2612,7 +2612,8 @@ namespace Be.Windows.Forms
 
 							//Draw string view
 							SizeF stringSize = g.MeasureString(stringToDisplay, Font, 1000, _stringFormat);
-							g.FillRectangle(bgBrush, xPos, bytePointF.Y, stringSize.Width, _charSize.Height);
+							float yPos = bytePointF.Y + (HighDensityMode ? _highDensityModeOffset : 0);
+							g.FillRectangle(bgBrush, xPos, yPos, stringSize.Width, _charSize.Height);
 							drawCaret();
 							g.DrawString(stringToDisplay, Font, fgBrush, new PointF(xPos, bytePointF.Y), _stringFormat);
 						}
