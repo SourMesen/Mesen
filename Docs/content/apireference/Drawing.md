@@ -133,3 +133,32 @@ y - *Integer* Y position
 **Description**  
 Returns the color (in ARGB format) of the PPU's output for the specified location.
 
+
+## getScreenBuffer ##
+
+**Syntax**  
+
+    emu.getScreenBuffer()
+
+**Return value**  
+*Array* 32-bit integers in ARGB format
+
+**Description**  
+Returns an array of ARGB values for the entire screen (256px by 240px) - can be used with [emu.setScreenBuffer()](#setscreenbuffer) to alter the frame.
+
+
+## setScreenBuffer ##
+
+**Syntax**  
+
+    emu.setScreenBuffer(screenBuffer)
+
+**Parameters**  
+screenBuffer - *Array* An array of 32-bit integers in ARGB format
+	
+**Return value**  
+*None*
+
+**Description**  
+Replaces the current frame with the contents of the specified array.
+

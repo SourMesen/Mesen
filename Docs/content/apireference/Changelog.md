@@ -5,10 +5,21 @@ pre: ""
 chapter: false
 ---
 
+## Changes between 0.9.4 and 0.9.5 ##
+
+### New features ###
+
+* New functions: 
+
+	* **<kbd>[getScreenBuffer](/apireference/drawing.html#getscreenbuffer)</kbd>**
+	* **<kbd>[setScreenBuffer](/apireference/drawing.html#setscreenbuffer)</kbd>**
+
 ## Changes between 0.9.3 and 0.9.4 ##
 
 ### New features ###
+
 * New functions: 
+
 	* **<kbd>[getLogWindowLog](/apireference/misc.html#getlogwindowlog)</kbd>**
 	* **<kbd>[getRomInfo](/apireference/misc.html#getrominfo)</kbd>**
 	* **<kbd>[getScriptDataFolder](/apireference/misc.html#getscriptdatafolder)</kbd>**

@@ -109,8 +109,10 @@ Available shortcuts:
 * **Load State**: Load the game's state from the currently selected slot.
 * **Save State - Slot X**: Save the game's state to the matching slot.
 * **Load State - Slot X**: Load the game's state from the matching slot.
+* **Load State - Auto Save Slot**: Load the game's state from the auto save slot.
 * **Save State to File**: Save the game's state to a user-specified file.
 * **Load State from File**: Load the game's state from a user-specified file.
+* **Load Last Session**: Restores the game to the state it was the last time you stopped playing it.
 
 ## Folders and File Associations ##
 
