@@ -35,12 +35,14 @@
 			this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
 			this.mnuAddBreakpoint = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuAddToWatch = new System.Windows.Forms.ToolStripMenuItem();
-			this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripSeparator();
 			this.mnuFindOccurrences = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripSeparator();
+			this.mnuShowComments = new System.Windows.Forms.ToolStripMenuItem();
 			this.lstLabels = new Mesen.GUI.Controls.DoubleBufferedListView();
 			this.colFunctionLabel = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
 			this.colFunctionAddress = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
 			this.colMemoryAddress = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+			this.colComment = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
 			this.contextMenu.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -53,10 +55,11 @@
             this.toolStripMenuItem1,
             this.mnuAddBreakpoint,
             this.mnuAddToWatch,
+            this.mnuFindOccurrences,
             this.toolStripMenuItem2,
-            this.mnuFindOccurrences});
+            this.mnuShowComments});
 			this.contextMenu.Name = "contextMenu";
-			this.contextMenu.Size = new System.Drawing.Size(167, 148);
+			this.contextMenu.Size = new System.Drawing.Size(167, 170);
 			// 
 			// mnuAdd
 			// 
@@ -103,11 +106,6 @@
 			this.mnuAddToWatch.Text = "Add to watch";
 			this.mnuAddToWatch.Click += new System.EventHandler(this.mnuAddToWatch_Click);
 			// 
-			// toolStripMenuItem2
-			// 
-			this.toolStripMenuItem2.Name = "toolStripMenuItem2";
-			this.toolStripMenuItem2.Size = new System.Drawing.Size(163, 6);
-			// 
 			// mnuFindOccurrences
 			// 
 			this.mnuFindOccurrences.Image = global::Mesen.GUI.Properties.Resources.Find;
@@ -116,12 +114,26 @@
 			this.mnuFindOccurrences.Text = "Find Occurrences";
 			this.mnuFindOccurrences.Click += new System.EventHandler(this.mnuFindOccurrences_Click);
 			// 
+			// toolStripMenuItem2
+			// 
+			this.toolStripMenuItem2.Name = "toolStripMenuItem2";
+			this.toolStripMenuItem2.Size = new System.Drawing.Size(163, 6);
+			// 
+			// mnuShowComments
+			// 
+			this.mnuShowComments.CheckOnClick = true;
+			this.mnuShowComments.Name = "mnuShowComments";
+			this.mnuShowComments.Size = new System.Drawing.Size(166, 22);
+			this.mnuShowComments.Text = "Show Comments";
+			this.mnuShowComments.Click += new System.EventHandler(this.mnuShowComments_Click);
+			// 
 			// lstLabels
 			// 
 			this.lstLabels.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.colFunctionLabel,
             this.colFunctionAddress,
-            this.colMemoryAddress});
+            this.colMemoryAddress,
+            this.colComment});
 			this.lstLabels.ContextMenuStrip = this.contextMenu;
 			this.lstLabels.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.lstLabels.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -130,7 +142,7 @@
 			this.lstLabels.HideSelection = false;
 			this.lstLabels.Location = new System.Drawing.Point(0, 0);
 			this.lstLabels.Name = "lstLabels";
-			this.lstLabels.Size = new System.Drawing.Size(275, 112);
+			this.lstLabels.Size = new System.Drawing.Size(341, 112);
 			this.lstLabels.TabIndex = 2;
 			this.lstLabels.UseCompatibleStateImageBehavior = false;
 			this.lstLabels.View = System.Windows.Forms.View.Details;
@@ -152,13 +164,17 @@
 			this.colMemoryAddress.Text = "ROM Addr";
 			this.colMemoryAddress.Width = 84;
 			// 
+			// colComment
+			// 
+			this.colComment.Text = "Comment";
+			// 
 			// ctrlLabelList
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.Controls.Add(this.lstLabels);
 			this.Name = "ctrlLabelList";
-			this.Size = new System.Drawing.Size(275, 112);
+			this.Size = new System.Drawing.Size(341, 112);
 			this.contextMenu.ResumeLayout(false);
 			this.ResumeLayout(false);
 
@@ -179,5 +195,7 @@
 		private System.Windows.Forms.ToolStripMenuItem mnuAddBreakpoint;
 		private System.Windows.Forms.ToolStripMenuItem mnuAddToWatch;
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem2;
+		private System.Windows.Forms.ColumnHeader colComment;
+		private System.Windows.Forms.ToolStripMenuItem mnuShowComments;
 	}
 }

@@ -31,11 +31,12 @@ namespace Mesen.GUI.Debugger.Controls
 
 			public int Compare(object x, object y)
 			{
-				if(_sortOrder) {
-					return String.Compare(((ListViewItem)y).SubItems[_columnIndex].Text, ((ListViewItem)x).SubItems[_columnIndex].Text);
-				} else {
-					return String.Compare(((ListViewItem)x).SubItems[_columnIndex].Text, ((ListViewItem)y).SubItems[_columnIndex].Text);
+				int result = String.Compare(((ListViewItem)x).SubItems[_columnIndex].Text, ((ListViewItem)y).SubItems[_columnIndex].Text);
+				if(result == 0 && (_columnIndex == 0 || _columnIndex == 3)) {
+					result = String.Compare(((ListViewItem)x).SubItems[2].Text, ((ListViewItem)y).SubItems[2].Text);
 				}
+
+				return result * (_sortOrder ? -1 : 1);
 			}
 		}
 
@@ -47,6 +48,7 @@ namespace Mesen.GUI.Debugger.Controls
 			bool designMode = (LicenseManager.UsageMode == LicenseUsageMode.Designtime);
 			if(!designMode) {
 				this.InitShortcuts();
+				mnuShowComments.Checked = ConfigManager.Config.DebugInfo.ShowCommentsInLabelList;
 			}
 		}
 
@@ -113,7 +115,7 @@ namespace Mesen.GUI.Debugger.Controls
 			List<CodeLabel> labels = LabelManager.GetLabels();
 			List<ListViewItem> items = new List<ListViewItem>(labels.Count);
 			foreach(CodeLabel label in labels) {
-				if(label.Label.Length > 0) {
+				if(label.Label.Length > 0 || ConfigManager.Config.DebugInfo.ShowCommentsInLabelList) {
 					ListViewItem item = new ListViewItem(label.Label);
 
 					Int32 relativeAddress = label.GetRelativeAddress();
@@ -134,6 +136,7 @@ namespace Mesen.GUI.Debugger.Controls
 					}
 					absAddress += "$" + label.Address.ToString("X4");
 					item.SubItems.Add(absAddress);
+					item.SubItems.Add(ConfigManager.Config.DebugInfo.ShowCommentsInLabelList ? label.Comment : "");
 					item.SubItems[1].Tag = label;
 
 					item.Tag = relativeAddress;
@@ -145,6 +148,12 @@ namespace Mesen.GUI.Debugger.Controls
 			lstLabels.Items.Clear();
 			lstLabels.Items.AddRange(items.ToArray());
 			lstLabels.Sort();
+
+			colComment.AutoResize(ColumnHeaderAutoResizeStyle.ColumnContent);
+			if(!ConfigManager.Config.DebugInfo.ShowCommentsInLabelList) {
+				colComment.Width = 0;
+			}
+
 			lstLabels.EndUpdate();
 
 			_listItems = items;
@@ -269,6 +278,13 @@ namespace Mesen.GUI.Debugger.Controls
 				CodeLabel label = (CodeLabel)lstLabels.SelectedItems[0].SubItems[1].Tag;
 				WatchManager.AddWatch("[" + label.Label + "]");
 			}			
+		}
+
+		private void mnuShowComments_Click(object sender, EventArgs e)
+		{
+			ConfigManager.Config.DebugInfo.ShowCommentsInLabelList = mnuShowComments.Checked;
+			ConfigManager.ApplyChanges();
+			this.UpdateLabelList();
 		}
 	}
 }
