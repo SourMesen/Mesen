@@ -454,6 +454,10 @@ void HdPackLoader::ProcessConditionTag(vector<string> &tokens, bool createInvert
 			op = HdPackConditionOperator::GreaterThan;
 		} else if(opString == "<") {
 			op = HdPackConditionOperator::LowerThan;
+		} else if(opString == "<=") {
+			op = HdPackConditionOperator::LowerThanOrEqual;
+		} else if(opString == ">=") {
+			op = HdPackConditionOperator::GreaterThanOrEqual;
 		} else {
 			checkConstraint(false, "[HDPack] Invalid operator.");
 		}

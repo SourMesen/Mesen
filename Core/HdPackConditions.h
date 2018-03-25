@@ -51,7 +51,9 @@ enum class HdPackConditionOperator
 	Equal = 0,
 	NotEqual = 1,
 	GreaterThan = 2,
-	LowerThan = 3
+	LowerThan = 3,
+	LowerThanOrEqual = 4,
+	GreaterThanOrEqual = 5,
 };
 
 struct HdPackBaseMemoryCondition : public HdPackCondition
@@ -83,6 +85,8 @@ struct HdPackBaseMemoryCondition : public HdPackCondition
 			case HdPackConditionOperator::NotEqual: out << "!="; break;
 			case HdPackConditionOperator::GreaterThan: out << ">"; break;
 			case HdPackConditionOperator::LowerThan: out << "<"; break;
+			case HdPackConditionOperator::LowerThanOrEqual: out << "<="; break;
+			case HdPackConditionOperator::GreaterThanOrEqual: out << ">="; break;
 		}
 		out << ",";
 		out << HexUtilities::ToHex(OperandB);
@@ -139,6 +143,8 @@ struct HdPackMemoryCheckCondition : public HdPackBaseMemoryCondition
 			case HdPackConditionOperator::NotEqual: return screenInfo->WatchedAddressValues[OperandA] != screenInfo->WatchedAddressValues[OperandB];
 			case HdPackConditionOperator::GreaterThan: return screenInfo->WatchedAddressValues[OperandA] > screenInfo->WatchedAddressValues[OperandB];
 			case HdPackConditionOperator::LowerThan: return screenInfo->WatchedAddressValues[OperandA] < screenInfo->WatchedAddressValues[OperandB];
+			case HdPackConditionOperator::LowerThanOrEqual: return screenInfo->WatchedAddressValues[OperandA] <= screenInfo->WatchedAddressValues[OperandB];
+			case HdPackConditionOperator::GreaterThanOrEqual: return screenInfo->WatchedAddressValues[OperandA] >= screenInfo->WatchedAddressValues[OperandB];
 		}
 		return false;
 	}
@@ -156,6 +162,8 @@ struct HdPackMemoryCheckConstantCondition : public HdPackBaseMemoryCondition
 			case HdPackConditionOperator::NotEqual: return screenInfo->WatchedAddressValues[OperandA] != OperandB;
 			case HdPackConditionOperator::GreaterThan: return screenInfo->WatchedAddressValues[OperandA] > OperandB;
 			case HdPackConditionOperator::LowerThan: return screenInfo->WatchedAddressValues[OperandA] < OperandB;
+			case HdPackConditionOperator::LowerThanOrEqual: return screenInfo->WatchedAddressValues[OperandA] <= OperandB;
+			case HdPackConditionOperator::GreaterThanOrEqual: return screenInfo->WatchedAddressValues[OperandA] >= OperandB;
 		}
 		return false;
 	}
