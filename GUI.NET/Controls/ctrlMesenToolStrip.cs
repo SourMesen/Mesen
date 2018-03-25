@@ -13,7 +13,7 @@ namespace Mesen.GUI.Controls
 		protected override void WndProc(ref Message m)
 		{
 			if(m.Msg == WM_MOUSEACTIVATE && this.CanFocus && !this.Focused) {
-				this.Focus();
+				this.FindForm()?.Focus();
 			}
 			base.WndProc(ref m);
 		}
