@@ -44,14 +44,14 @@ Before you start recording, select the options you want to use and the location 
 
 ## File Format (hires.txt) ##
 
-The following are the specifications for the hires.txt file, as of version "100".
+The following are the specifications for the hires.txt file, as of version "101".
 
 ### &lt;ver&gt; tag ###
 
 **Syntax**: `<ver>[integer]`  
-**Example**: `<ver>100`
+**Example**: `<ver>101`
 
-The format's version number -- this is currently 100 for Mesen.
+The format's version number -- this is currently 101 for Mesen.
 
 ### &lt;scale&gt; tag ###
 
@@ -85,24 +85,69 @@ Specifies a PNG file that contains tile graphics -- each `<img>` tag is indexed 
 
 ### &lt;condition&gt; tag ###
 
+HD Packs support a number of conditionals that can be used to replace graphics when certain conditions are met.  
+This is useful to resolve conflicts that can occur in some games (where the same tile & palette can be reused in multiple distinct objects), etc.  
+The sections below describe every available condition type.
+
+#### Built-in Conditions ####
+
+A number of built-in conditions can be used to check the value of some flags:  
+
+* `hmirror`: True if the current pixel is a sprite pixel, and the sprite is mirrored horizontally.
+* `vmirror`: True if the current pixel is a sprite pixel, and the sprite is mirrored vertically.
+* `bgpriority`: True if the current pixel is a sprite pixel, and the sprite is marked as a background priority sprite.
+
+**Example:** `[hmirror]<tile>...`
+
+#### tileNearby / spriteNearby ####
+
+The tileNearby and spriteNearby conditions are used to check whether a specific tile or sprite exists in the vicinity of the current pixel. If a matching tile/sprite is found, the condition will be true.  
+
 **Syntax**: `<condition>[name - text], [conditionType - text], [x value - integer], [y value - integer], [tile data], [palette data - hex]`  
 **Example (CHR ROM)**: `<condition>myCondition,tileNearby,8,0,10,0F100017`  
 **Example (CHR RAM)**: `<condition>myCondition,tileNearby,8,0,D2C2C2C7CF2FFEFC2C3C3C3830D00000,0F100017`
+
+**Notes**:  
+`tileNearby` and `spriteNearby` use positive or negative X/Y offsets to the current position. e.g:  
+`<condition>myCondition2,tileNearby,-8,0,[tile data],[palette data]`  
+In this case, `myCondition2` will be true if the tile 8 pixels to the left of the current tile matches the tile+palette data specified.
 
 For CHR ROM games, `tile data` is an integer representing the position of the original tile in CHR ROM.  
 For CHR RAM games, `tile data` is a 32-character hexadecimal string representing all 16 bytes of the tile.  
 `palette data` is always an 8-character hexadecimal string representing all 4 bytes of the palette used for the tile.  For sprites, the first byte is always "FF".
 
-`conditionType` can be any of: `tileAtPosition`, `tileNearby`, `spriteAtPosition` and `spriteNearby`. 
+#### tileAtPosition / spriteAtPosition ####
 
+The tileAtPosition and spriteAtPosition conditions are used to check whether a specific tile or sprite exists at the specified coordinates. If a matching tile/sprite is found, the condition will be true.  
+
+**Syntax**: `<condition>[name - text], [conditionType - text], [x value - integer], [y value - integer], [tile data], [palette data - hex]`  
+**Example (CHR ROM)**: `<condition>myCondition,tileAtPosition,8,0,10,0F100017`  
+**Example (CHR RAM)**: `<condition>myCondition,tileAtPosition,8,0,D2C2C2C7CF2FFEFC2C3C3C3830D00000,0F100017`
+
+**Notes**:  
 `tileAtPosition` and `spriteAtPosition` use the X/Y parameters as screen coordinates. e.g:  
 `<condition>myCondition,tileAtPosition,10,10,[tile data],[palette data]`  
 In this case, `myCondition` will be true if the tile at position 10,10 on the NES' screen (256x240 resolution) matches the tile+palette data given.
 
-`tileNearby` and `spriteNearby` use positive or negative X/Y offsets to the current position. e.g:  
-`<condition>myCondition2,tileNearby,-8,0,[tile data],[palette data]`  
-In this case, `myCondition2` will be true if the tile 8 pixels to the left of the current tile matches the tile+palette data specified.
+For CHR ROM games, `tile data` is an integer representing the position of the original tile in CHR ROM.  
+For CHR RAM games, `tile data` is a 32-character hexadecimal string representing all 16 bytes of the tile.  
+`palette data` is always an 8-character hexadecimal string representing all 4 bytes of the palette used for the tile.  For sprites, the first byte is always "FF".
 
+#### memoryCheck / ppuMemoryCheck ####
+
+The memoryCheck and ppuMemoryCheck conditions are used to compare the value stored at 2 different memory addresses together. (Use the `ppuMemoryCheck` variant to check PPU memory)
+
+**Syntax**: `<condition>[name - text], [conditionType - text], [memory address 1 - integer], [operator - string], [memory address 2 - integer]`  
+**Supported operators**: `==`, `!=`, `>`, `<`, `>=`, `<=`  
+**Example**: `<condition>myCondition,memoryCheck,8FFF,>,8000` (If the value stored at $8FFF is greater than the value stored at $8000, the condition will be true)
+
+#### memoryCheckConstant / ppuMemoryCheckConstant ####
+
+The memoryCheck and ppuMemoryCheck conditions are used to compare the value stored at a memory address with a constant.  (Use the `ppuMemoryCheckConstant` variant to check PPU memory)
+
+**Syntax**: `<condition>[name - text], [conditionType - text], [memory address - integer], [operator - string], [constant - integer]`  
+**Supported operators**: `==`, `!=`, `>`, `<`, `>=`, `<=`  
+**Example**: `<condition>myCondition,memoryCheck,8FFF,==,3F` (If the value stored at $8FFF is equal to $3F, the condition will be true)
 
 ### &lt;tile&gt; tag ###
 
@@ -120,21 +165,24 @@ The `tile data` and `palette data` are used to identify the original tile, while
 `brightness` can be used to reuse the same HD tile for multiple original tiles -- this can be useful when a game has fade in and out effects.  
 When `default tile` is enabled (with `Y`), the tile is marked as the `default tile` for all palettes.  Whenever a tile appears on the screen that matches the tile data, but has no rules matching its palette data, the default tile will be used instead.
 
-
 ### &lt;background&gt; tag ###
 
-**Syntax**: `<background>[name - text], [brightness level - 0.0 to 1.0]`  
-**Example**: `<background>myBackground.png,1.0`
+**Syntax**: `<background>[name - text], [brightness level - 0.0 to 1.0], [horizontal scroll ratio (optional) - float], [vertical scroll ratio (optional) - float]`  
+**Example**: `<background>myBackground.png,1.0,0,0`
 
 `<background>` tags meant to be used alongside conditions to add a background image under certain conditions (e.g on a specific screen, for example).
 
+The `Horizontal Scroll Ratio` and `Vertical Scroll Ratio` parameters are optional and can be used to specify at what speed the background picture should scroll compared to the NES' scrolling.  
+This can be used to create simple parallax scrolling effects.
 
 ### &lt;options&gt; tag ###
 
-**Syntax**: `<options>[option1 - text], [...]`  
+**Syntax**: `<options>[option1 - text], [option2 - text], [...]`  
 **Example**: `<options>disableSpriteLimit`
 
-Currently, the only flag available is `disableSpriteLimit` which forces the emulator to disable the sprite limit when the HD pack is loaded.
+**Available options**:  
+`disableSpriteLimit`: Forces the emulator to disable the sprite limit when the HD pack is loaded.  
+`disableContours`: Disables the outline effect around sprites/tiles when using <background>s.  
 
 ### &lt;bgm&gt; tag ###
 
@@ -164,23 +212,67 @@ The first matching rule (in the order they are written in the `hires.txt` file) 
 You can also make it so multiple conditions must be met for a rule to be used by joining each condition name with a &:  
 `[cond1&cond2]<tile>...`
 
+It is also possible to invert the result of a condition by prepending a an exclamation mark (`!`) to it:  
+`[!myCondition]<tile>...`
+
 ## Replacing audio in games ##
 
 Audio replacement in HD packs in Mesen works in a similar fashion to the MSU-1 for the SNES.  It adds a number of read/write registers in memory and they can be used to play OGG files specified via `<bgm>` and `<sfx>` tags.  
 
-`TO BE COMPLETED`.
+### Register Write Operations ###
 
-### $4100/$3002: Playback Options ###
+#### $4100: Playback Options ####
 
-### $4101/$3012: Playback Control ###
+This register allows you to set the BGM loop flag (bit 0) on or off.
 
-### $4102/$3022: BGM Volume ###
+#### $4101: Playback Control ####
 
-### $4103/$3032: SFX Volume ###
+This register allows you to pause/resume or stop sounds.
 
-### $4104/$3042: Album Number ###
+**Bit 0**: When set, pauses/resumes the BGM track.  
+**Bit 1**: When set, the BGM track is stopped.  
+**Bit 2**: When set, all SFX tracks are stopped.  
 
-### $4105/$3052: Play BGM Track ###
+#### $4102: BGM Volume ####
 
-### $4106/$3062: Play SFX Track ###
+Sets the current volume for the BGM tracks (0: Muted, 255: Maximum volume).  
+Setting this register affects the currently playing BGM track - this can be used for fade in/out effects.
 
+#### $4103: SFX Volume ####
+
+Sets the current volume for the SFX tracks (0: Muted, 255: Maximum volume).  
+Setting this register affects all currently playing SFX - this can be used for fade in/out effects.
+
+#### $4104: Album Number ####
+
+Selects the current album (0 - 255).  
+This allows up to 65536 BGM and SFX tracks to be defined.  
+Writing to this register has no immediate effect - only subsequent writes to the `Play BGM Track` and `Play SFX Track` registers will be affected.
+
+#### $4105: Play BGM Track ####
+
+Starts playback of the specified BGM track from the specified album (based on the `Album Number` register).  
+Only a single BGM track can be playing at any given time.
+
+#### $4106: Play SFX Track ####
+
+Starts playback of the specified SFX track from the specified album (based on the `Album Number` register).  
+Any number of SFX tracks can be played at once.
+
+### Register Read Operations ###
+
+#### $4100: Status ####
+
+This register returns the current playback status.  
+
+**Bit 0**: Set when a BGM track is currently playing.  
+**Bit 1**: Set when at least one SFX track is currently playing.  
+**Bit 2**: Set if an error occurred (e.g the last play BGM/SFX failed because the specified Album+Track number combination was invalid)
+
+#### $4101: Revision Number ####
+
+Returns the current revision of the HD Audio API.  This value is currently set to `1`.
+
+#### $4102/$4103/$4104: Signature ####
+
+These registers return the ASCII string `NEA` (NES Enhanced Audio) - this can be used to detect whether or not the audio API is available.
