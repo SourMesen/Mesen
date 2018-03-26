@@ -4074,8 +4074,16 @@ namespace Be.Windows.Forms
 		/// <param name="e">An EventArgs that contains the event data.</param>
 		protected override void OnMouseWheel(MouseEventArgs e)
 		{
-			int linesToScroll = -(e.Delta * SystemInformation.MouseWheelScrollLines / 120);
-			this.PerformScrollLines(linesToScroll);
+			if(_byteProvider != null && !this.ReadOnly && Control.ModifierKeys == Keys.Shift) {
+				//Allow the user to change the value of the byte under the cursor by hold Alt & using the mouse wheel
+				BytePositionInfo? byteUnderCursor = GetBytePositionInfo(e.Location);
+				if(byteUnderCursor.HasValue) {
+					_byteProvider.WriteByte(byteUnderCursor.Value.Index, (byte)(_byteProvider.ReadByte(byteUnderCursor.Value.Index) + (e.Delta > 0 ? 1 : -1)));
+				}
+			} else {
+				int linesToScroll = -(e.Delta * SystemInformation.MouseWheelScrollLines / 120);
+				this.PerformScrollLines(linesToScroll);
+			}
 
 			base.OnMouseWheel(e);
 		}
