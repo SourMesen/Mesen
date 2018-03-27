@@ -284,6 +284,7 @@ namespace Mesen.GUI.Config
 		public int AssemblerZoom = 100;
 
 		public DebuggerShortcutsConfig Shortcuts = new DebuggerShortcutsConfig();
+		public DebugImportConfig ImportConfig = new DebugImportConfig();
 
 		public DebugInfo()
 		{
@@ -321,6 +322,20 @@ namespace Mesen.GUI.Config
 			}
 			ConfigManager.ApplyChanges();
 		}
+	}
+
+	public class DebugImportConfig
+	{
+		public bool DbgImportRamLabels = true;
+		public bool DbgImportPrgRomLabels = true;
+		public bool DbgImportComments = true;
+
+		public bool MlbImportInternalRamLabels = true;
+		public bool MlbImportWorkRamLabels = true;
+		public bool MlbImportSaveRamLabels = true;
+		public bool MlbImportRegisterLabels = true;
+		public bool MlbImportPrgRomLabels = true;
+		public bool MlbImportComments = true;
 	}
 
 	public enum ScriptStartupBehavior

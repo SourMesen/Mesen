@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Mesen.GUI.Config;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
@@ -21,6 +22,8 @@ namespace Mesen.GUI.Debugger
 				{ AddressType.WorkRam, new Dictionary<uint, CodeLabel>() }
 			};
 
+			DebugImportConfig config = ConfigManager.Config.DebugInfo.ImportConfig;
+
 			char[] separator = new char[1] { ':' };
 			foreach(string row in File.ReadAllLines(path, Encoding.UTF8)) {
 				string[] rowData = row.Split(separator, 4);
@@ -29,17 +32,18 @@ namespace Mesen.GUI.Debugger
 					continue;
 				}
 				AddressType type;
+				bool importLabel = false;
 				switch(rowData[0][0]) {
-					case 'G': type = AddressType.Register; break;
-					case 'R': type = AddressType.InternalRam; break;
-					case 'P': type = AddressType.PrgRom; break;
-					case 'S': type = AddressType.SaveRam; break;
-					case 'W': type = AddressType.WorkRam; break;
+					case 'G': type = AddressType.Register; importLabel = config.MlbImportRegisterLabels; break;
+					case 'R': type = AddressType.InternalRam; importLabel = config.MlbImportInternalRamLabels; break;
+					case 'P': type = AddressType.PrgRom; importLabel = config.MlbImportPrgRomLabels; break;
+					case 'S': type = AddressType.SaveRam; importLabel = config.MlbImportSaveRamLabels; break;
+					case 'W': type = AddressType.WorkRam; importLabel = config.MlbImportWorkRamLabels; break;
 					default: continue;
 				}
 
 				uint address;
-				if(UInt32.TryParse(rowData[1], NumberStyles.HexNumber, CultureInfo.InvariantCulture, out address)) {
+				if(importLabel && UInt32.TryParse(rowData[1], NumberStyles.HexNumber, CultureInfo.InvariantCulture, out address)) {
 					CodeLabel codeLabel;
 					if(!labels[type].TryGetValue(address, out codeLabel)) {
 						codeLabel = new CodeLabel();
@@ -50,7 +54,7 @@ namespace Mesen.GUI.Debugger
 						labels[type][address] = codeLabel;
 					}
 
-					if(rowData.Length > 3) {
+					if(rowData.Length > 3 && config.MlbImportComments) {
 						codeLabel.Comment = rowData[3].Replace("\\n", "\n");
 					}
 					codeLabel.Label = rowData[2].Replace("\\n", "\n").Replace("\n", "");

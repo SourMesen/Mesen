@@ -7,6 +7,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Mesen.GUI.Config;
 using Mesen.GUI.Forms;
 
 namespace Mesen.GUI.Debugger
@@ -440,9 +441,6 @@ namespace Mesen.GUI.Debugger
 
 			LoadFileData(basePath);
 
-			LoadLabels();
-			LoadComments();
-
 			int prgSize = InteropEmu.DebugGetMemorySize(DebugMemoryType.PrgRom);
 			if(prgSize > 0) {
 				byte[] cdlFile = new byte[prgSize];
@@ -493,11 +491,24 @@ namespace Mesen.GUI.Debugger
 				}
 			}
 
-			LabelManager.SetLabels(_romLabels.Values);
-			LabelManager.SetLabels(_ramLabels.Values);
+			LoadLabels();
+
+			int labelCount = 0;
+
+			DebugImportConfig config = ConfigManager.Config.DebugInfo.ImportConfig;
+			if(config.DbgImportComments) {
+				LoadComments();
+			}
+			if(config.DbgImportPrgRomLabels) {
+				LabelManager.SetLabels(_romLabels.Values);
+				labelCount += _romLabels.Count;
+			}
+			if(config.DbgImportRamLabels) {
+				LabelManager.SetLabels(_ramLabels.Values);
+				labelCount += _ramLabels.Count;
+			}
 
 			if(!silent) {
-				int labelCount = _romLabels.Count + _ramLabels.Count;
 				if(_errorCount > 0) {
 					_errorCount -= _filesNotFound.Count;
 					string message = $"Import completed with {labelCount} labels imported";

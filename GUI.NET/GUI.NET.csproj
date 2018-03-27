@@ -655,6 +655,12 @@
     <Compile Include="Debugger\frmDbgShortcutGetKey.Designer.cs">
       <DependentUpon>frmDbgShortcutGetKey.cs</DependentUpon>
     </Compile>
+    <Compile Include="Debugger\frmImportSettings.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Debugger\frmImportSettings.Designer.cs">
+      <DependentUpon>frmImportSettings.cs</DependentUpon>
+    </Compile>
     <Compile Include="Debugger\frmOpCodeTooltip.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -1355,6 +1361,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Debugger\frmDbgShortcutGetKey.resx">
       <DependentUpon>frmDbgShortcutGetKey.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Debugger\frmImportSettings.resx">
+      <DependentUpon>frmImportSettings.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Debugger\frmOpCodeTooltip.resx">
       <DependentUpon>frmOpCodeTooltip.cs</DependentUpon>

@@ -1400,5 +1400,12 @@ namespace Mesen.GUI.Debugger
 				frm.ShowDialog(sender, this);
 			}
 		}
+
+		private void mnuImportSettings_Click(object sender, EventArgs e)
+		{
+			using(frmImportSettings frm = new frmImportSettings()) {
+				frm.ShowDialog(sender, this);
+			}
+		}
 	}
 }
