@@ -443,11 +443,10 @@ namespace Mesen.GUI.Debugger.Controls
 				mnuShowSourceAsComments.Visible = false;
 			}
 
-			if(Viewer.SymbolProvider == null) {
-				mnuShowSourceAsComments.Visible = false;
-				mnuSwitchView.Visible = false;
-				sepSwitchView.Visible = false;
-			}
+			bool hasSymbolProvider = Viewer.SymbolProvider != null;
+			mnuShowSourceAsComments.Visible = hasSymbolProvider;
+			mnuSwitchView.Visible = hasSymbolProvider;
+			sepSwitchView.Visible = hasSymbolProvider;
 		}
 
 		private bool UpdateContextMenu(Point mouseLocation)
