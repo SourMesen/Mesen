@@ -484,6 +484,9 @@ namespace Mesen.GUI.Debugger
 			new List<string> {"func","emu.getScreenBuffer","emu.getScreenBuffer()","", "*Array* 32-bit integers in ARGB format", "Returns an array of ARGB values for the entire screen (256px by 240px) - can be used with emu.setScreenBuffer() to alter the frame."},
 			new List<string> {"func","emu.setScreenBuffer","emu.setScreenBuffer(screenBuffer)", "screenBuffer - *Array* An array of 32-bit integers in ARGB format", "","Replaces the current frame with the contents of the specified array."},
 
+			new List<string> {"func","emu.getAccessCounters","emu.getAccessCounters(counterMemType, counterOpType)", "counterMemType - *Enum* A value from the emu.counterMemType enum\ncounterOpType - *Enum* A value from the emu.counterOpType enum\n", "*Array* 32-bit integers", "Returns an array of counters for the specified memory and operation types."},
+			new List<string> {"func","emu.resetAccessCounters","emu.resetAccessCounters()", "", "", "Resets all access counters."},
+
 			new List<string> {"func","emu.saveSavestate","emu.saveSavestate()","","*String* A string containing a binary blob representing the emulation's current state.","Creates a savestate and returns it as a binary string. (The savestate is not saved on disk)\n Note: this can only be called from within a “startFrame” event callback or “cpuExec” memory callback."},
 			new List<string> {"func","emu.loadSavestate","emu.loadSavestate(savestate)","savestate - *String* A binary blob representing a savestate, as returned by saveSavestate()","","Loads the specified savestate.\nNote: this can only be called from within a “startFrame” event callback or “cpuExec” memory callback."},
 			new List<string> {"func","emu.saveSavestateAsync","emu.saveSavestateAsync()","slotNumber - *Integer* A slot number to which the savestate data will be stored (slotNumber must be >= 0)","","Queues a save savestate request. As soon at the emulator is able to process the request, it will be saved into the specified slot.\nThis API is asynchronous because save states can only be taken in-between 2 CPU instructions, not in the middle of an instruction.\nWhen called while the CPU is in-between 2 instructions (e.g: inside the callback of an cpuExec or startFrame event),\nthe save state will be taken immediately and its data will be available via getSavestateData right after the call to saveSavestateAsync.\nThe savestate can be loaded by calling the loadSavestateAsync function."},
@@ -534,6 +537,15 @@ namespace Mesen.GUI.Debugger
 			new List<string> {"enum","emu.memType.saveRam","Save RAM - Range varies by game","","",""},
 			new List<string> {"enum","emu.memType.cpuDebug","CPU memory - $0000 to $FFFF","","","Same as \"memType.cpu\" but does NOT cause any side-effects."},
 			new List<string> {"enum","emu.memType.ppuDebug","PPU memory - $0000 to $3FFF","","","Same as \"memType.ppu\" but does NOT cause any side-effects."},
+			new List<string> {"enum","emu.counterMemType","emu.counterMemType.[value]","","","Values:\nnesRam = 0,\nprgRom = 1,\nworkRam = 2,\nsaveRam = 3\n\nUsed by getAccessCounters calls."},
+			new List<string> {"enum","emu.counterMemType.nesRam","Returns access counter data for the built-in 2 KB NES RAM","","",""},
+			new List<string> {"enum","emu.counterMemType.prgRom","Returns access counter data for PRG ROM","","",""},
+			new List<string> {"enum","emu.counterMemType.workRam", "Returns access counter data for Work RAM", "","",""},
+			new List<string> {"enum","emu.counterMemType.saveRam", "Returns access counter data for Save RAM", "","",""},
+			new List<string> {"enum","emu.counterOpType","emu.counterOpType.[value]","","","Values:\nread = 0,\nwrite = 1,\nexec = 2\n\nUsed by getAccessCounters calls."},
+			new List<string> {"enum","emu.counterOpType.read","Returns access counter data for reads","","",""},
+			new List<string> {"enum","emu.counterOpType.write","Returns access counter data for writes","","",""},
+			new List<string> {"enum","emu.counterOpType.exec", "Returns access counter data for executed bytes", "","",""},
 		};
 	}
 

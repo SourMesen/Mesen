@@ -19,6 +19,7 @@
 #include "PPU.h"
 #include "CheatManager.h"
 #include "KeyManager.h"
+#include "MemoryAccessCounter.h"
 
 #define lua_pushintvalue(name, value) lua_pushliteral(lua, #name); lua_pushinteger(lua, (int)value); lua_settable(lua, -3);
 #define lua_pushdoublevalue(name, value) lua_pushliteral(lua, #name); lua_pushnumber(lua, (double)value); lua_settable(lua, -3);
@@ -96,6 +97,8 @@ int LuaApi::GetLibrary(lua_State *lua)
 		{ "setInput", LuaApi::SetInput },
 		{ "addCheat", LuaApi::AddCheat },
 		{ "clearCheats", LuaApi::ClearCheats },
+		{ "getAccessCounters", LuaApi::GetAccessCounters },
+		{ "resetAccessCounters", LuaApi::ResetAccessCounters },
 		{ "setState", LuaApi::SetState },
 		{ "getState", LuaApi::GetState },
 		{ "getScriptDataFolder", LuaApi::GetScriptDataFolder },
@@ -130,6 +133,21 @@ int LuaApi::GetLibrary(lua_State *lua)
 	lua_pushintvalue(cpuExec, CallbackType::CpuExec);
 	lua_pushintvalue(ppuRead, CallbackType::PpuRead);
 	lua_pushintvalue(ppuWrite, CallbackType::PpuWrite);
+	lua_settable(lua, -3);
+
+	lua_pushliteral(lua, "counterMemType");
+	lua_newtable(lua);
+	lua_pushintvalue(nesRam, AddressType::InternalRam);
+	lua_pushintvalue(prgRom, AddressType::PrgRom);
+	lua_pushintvalue(workRam, AddressType::WorkRam);
+	lua_pushintvalue(saveRam, AddressType::SaveRam);
+	lua_settable(lua, -3);
+
+	lua_pushliteral(lua, "counterOpType");
+	lua_newtable(lua);
+	lua_pushintvalue(read, MemoryOperationType::Read);
+	lua_pushintvalue(write, MemoryOperationType::Write);
+	lua_pushintvalue(exec, MemoryOperationType::ExecOpCode);
 	lua_settable(lua, -3);
 
 	lua_pushliteral(lua, "eventType");
@@ -367,7 +385,7 @@ int LuaApi::GetScreenBuffer(lua_State *lua)
 	lua_newtable(lua);
 	for(int y = 0; y < PPU::ScreenHeight; y++) {
 		for(int x = 0; x < PPU::ScreenWidth; x++) {
-			lua_pushnumber(lua, palette[PPU::GetPixel(x, y) & 0x3F] & 0xFFFFFF);
+			lua_pushinteger(lua, palette[PPU::GetPixel(x, y) & 0x3F] & 0xFFFFFF);
 			lua_rawseti(lua, -2, (y << 8) + x);
 		}
 	}
@@ -654,6 +672,45 @@ int LuaApi::ClearCheats(lua_State *lua)
 	LuaCallHelper l(lua);
 	checkparams();
 	CheatManager::GetInstance()->ClearCodes();
+	return l.ReturnCount();
+}
+
+int LuaApi::GetAccessCounters(lua_State *lua)
+{
+	LuaCallHelper l(lua);
+	l.ForceParamCount(2);
+	MemoryOperationType operationType = (MemoryOperationType)l.ReadInteger();
+	AddressType memoryType = (AddressType)l.ReadInteger();
+	errorCond(operationType >= MemoryOperationType::ExecOperand, "Invalid operation type");
+	errorCond(memoryType >= AddressType::Register, "Invalid memory type");
+	checkparams();
+
+	uint32_t size = 0;
+	switch(memoryType) {
+		case AddressType::InternalRam: size = 0x2000; break;
+		case AddressType::PrgRom: size = _debugger->GetMemoryDumper()->GetMemorySize(DebugMemoryType::PrgRom); break;
+		case AddressType::WorkRam: size = _debugger->GetMemoryDumper()->GetMemorySize(DebugMemoryType::WorkRam); break;
+		case AddressType::SaveRam: size = _debugger->GetMemoryDumper()->GetMemorySize(DebugMemoryType::SaveRam); break;
+	}
+
+	vector<uint32_t> counts;
+	counts.resize(size, 0);
+	_debugger->GetMemoryAccessCounter()->GetAccessCounts(memoryType, operationType, counts.data(), false);
+
+	lua_newtable(lua);
+	for(uint32_t i = 0; i < size; i++) {
+		lua_pushinteger(lua, counts[i]);
+		lua_rawseti(lua, -2, i);
+	}
+
+	return 1;
+}
+
+int LuaApi::ResetAccessCounters(lua_State *lua)
+{
+	LuaCallHelper l(lua);
+	checkparams();
+	_debugger->GetMemoryAccessCounter()->ResetCounts();
 	return l.ReturnCount();
 }
 
