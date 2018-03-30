@@ -1311,7 +1311,7 @@ namespace Mesen.GUI.Debugger
 				using(Brush lightGrayBrush = new SolidBrush(Color.FromArgb(240, 240, 240))) {
 					pe.Graphics.FillRectangle(lightGrayBrush, marginLeft, 0, Math.Max(_maxLineWidth, rect.Right), lineHeight);
 				}
-				pe.Graphics.DrawString(_header, this.Font, Brushes.Gray, marginLeft, positionY);
+				pe.Graphics.DrawString(_header, this.Font, Brushes.Gray, marginLeft, positionY, StringFormat.GenericTypographic);
 				positionY += lineHeight;
 			}
 

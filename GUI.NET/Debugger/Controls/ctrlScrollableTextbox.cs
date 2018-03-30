@@ -239,8 +239,7 @@ namespace Mesen.GUI.Debugger
 		{
 			if(!this.cboSearch.Focused) {
 				if(keyData == ConfigManager.Config.DebugInfo.Shortcuts.SelectAll) {
-					this.ctrlTextbox.SelectionStart = 0;
-					this.ctrlTextbox.SelectionLength = this.ctrlTextbox.LineCount;
+					this.SelectAll();
 					return true;
 				}
 
@@ -330,7 +329,13 @@ namespace Mesen.GUI.Debugger
 
 			return base.ProcessCmdKey(ref msg, keyData);
 		}
-		
+
+		public void SelectAll()
+		{
+			this.ctrlTextbox.SelectionStart = 0;
+			this.ctrlTextbox.SelectionLength = this.ctrlTextbox.LineCount;
+		}
+
 		private void vScrollBar_ValueChanged(object sender, EventArgs e)
 		{
 			this.ctrlTextbox.ScrollPosition = this.vScrollBar.Value;

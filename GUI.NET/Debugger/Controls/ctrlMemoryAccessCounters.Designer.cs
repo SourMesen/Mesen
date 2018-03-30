@@ -37,18 +37,22 @@
 			this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
 			this.picHelp = new System.Windows.Forms.PictureBox();
 			this.chkHighlightUninitRead = new System.Windows.Forms.CheckBox();
+			this.chkHideUnusedAddresses = new System.Windows.Forms.CheckBox();
 			this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
 			this.flowLayoutPanel2 = new System.Windows.Forms.FlowLayoutPanel();
 			this.lblSort = new System.Windows.Forms.Label();
 			this.cboSort = new System.Windows.Forms.ComboBox();
 			this.toolTip = new System.Windows.Forms.ToolTip(this.components);
-			this.chkHideUnusedAddresses = new System.Windows.Forms.CheckBox();
+			this.ctxMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
+			this.mnuCopy = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuSelectAll = new System.Windows.Forms.ToolStripMenuItem();
 			this.flowLayoutPanel1.SuspendLayout();
 			this.tableLayoutPanel1.SuspendLayout();
 			this.tableLayoutPanel3.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.picHelp)).BeginInit();
 			this.tableLayoutPanel2.SuspendLayout();
 			this.flowLayoutPanel2.SuspendLayout();
+			this.ctxMenu.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// flowLayoutPanel1
@@ -110,6 +114,7 @@
 			this.ctrlScrollableTextbox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.ctrlScrollableTextbox.CodeHighlightingEnabled = true;
 			this.tableLayoutPanel1.SetColumnSpan(this.ctrlScrollableTextbox, 2);
+			this.ctrlScrollableTextbox.ContextMenuStrip = this.ctxMenu;
 			this.ctrlScrollableTextbox.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.ctrlScrollableTextbox.HideSelection = false;
 			this.ctrlScrollableTextbox.Location = new System.Drawing.Point(0, 27);
@@ -179,6 +184,18 @@
 			this.chkHighlightUninitRead.UseVisualStyleBackColor = true;
 			this.chkHighlightUninitRead.CheckedChanged += new System.EventHandler(this.chkOption_CheckedChanged);
 			// 
+			// chkHideUnusedAddresses
+			// 
+			this.chkHideUnusedAddresses.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.chkHideUnusedAddresses.AutoSize = true;
+			this.chkHideUnusedAddresses.Location = new System.Drawing.Point(3, 3);
+			this.chkHideUnusedAddresses.Name = "chkHideUnusedAddresses";
+			this.chkHideUnusedAddresses.Size = new System.Drawing.Size(137, 17);
+			this.chkHideUnusedAddresses.TabIndex = 6;
+			this.chkHideUnusedAddresses.Text = "Hide unused addresses";
+			this.chkHideUnusedAddresses.UseVisualStyleBackColor = true;
+			this.chkHideUnusedAddresses.CheckedChanged += new System.EventHandler(this.chkOption_CheckedChanged);
+			// 
 			// tableLayoutPanel2
 			// 
 			this.tableLayoutPanel2.AutoSize = true;
@@ -245,17 +262,29 @@
 			this.toolTip.InitialDelay = 10;
 			this.toolTip.ReshowDelay = 10;
 			// 
-			// chkHideUnusedAddresses
+			// ctxMenu
 			// 
-			this.chkHideUnusedAddresses.Anchor = System.Windows.Forms.AnchorStyles.Left;
-			this.chkHideUnusedAddresses.AutoSize = true;
-			this.chkHideUnusedAddresses.Location = new System.Drawing.Point(3, 3);
-			this.chkHideUnusedAddresses.Name = "chkHideUnusedAddresses";
-			this.chkHideUnusedAddresses.Size = new System.Drawing.Size(137, 17);
-			this.chkHideUnusedAddresses.TabIndex = 6;
-			this.chkHideUnusedAddresses.Text = "Hide unused addresses";
-			this.chkHideUnusedAddresses.UseVisualStyleBackColor = true;
-			this.chkHideUnusedAddresses.CheckedChanged += new System.EventHandler(this.chkOption_CheckedChanged);
+			this.ctxMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.mnuCopy,
+            this.mnuSelectAll});
+			this.ctxMenu.Name = "ctxMenu";
+			this.ctxMenu.Size = new System.Drawing.Size(123, 48);
+			// 
+			// mnuCopy
+			// 
+			this.mnuCopy.Image = global::Mesen.GUI.Properties.Resources.Copy;
+			this.mnuCopy.Name = "mnuCopy";
+			this.mnuCopy.Size = new System.Drawing.Size(122, 22);
+			this.mnuCopy.Text = "Copy";
+			this.mnuCopy.Click += new System.EventHandler(this.mnuCopy_Click);
+			// 
+			// mnuSelectAll
+			// 
+			this.mnuSelectAll.Image = global::Mesen.GUI.Properties.Resources.SelectAll;
+			this.mnuSelectAll.Name = "mnuSelectAll";
+			this.mnuSelectAll.Size = new System.Drawing.Size(122, 22);
+			this.mnuSelectAll.Text = "Select All";
+			this.mnuSelectAll.Click += new System.EventHandler(this.mnuSelectAll_Click);
 			// 
 			// ctrlMemoryAccessCounters
 			// 
@@ -276,6 +305,7 @@
 			this.tableLayoutPanel2.PerformLayout();
 			this.flowLayoutPanel2.ResumeLayout(false);
 			this.flowLayoutPanel2.PerformLayout();
+			this.ctxMenu.ResumeLayout(false);
 			this.ResumeLayout(false);
 
 		}
@@ -297,5 +327,8 @@
 		private System.Windows.Forms.PictureBox picHelp;
 		private System.Windows.Forms.ToolTip toolTip;
 		private System.Windows.Forms.CheckBox chkHideUnusedAddresses;
+		private System.Windows.Forms.ContextMenuStrip ctxMenu;
+		private System.Windows.Forms.ToolStripMenuItem mnuCopy;
+		private System.Windows.Forms.ToolStripMenuItem mnuSelectAll;
 	}
 }

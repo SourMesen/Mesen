@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Mesen.GUI.Controls;
 using Mesen.GUI.Forms;
+using Mesen.GUI.Config;
 
 namespace Mesen.GUI.Debugger.Controls
 {
@@ -26,9 +27,16 @@ namespace Mesen.GUI.Debugger.Controls
 
 			bool designMode = (LicenseManager.UsageMode == LicenseUsageMode.Designtime);
 			if(!designMode) {
+				InitShortcuts();
 				InitMemoryTypeDropdown();
 				cboSort.SelectedIndex = 0;
 			}
+		}
+
+		public void InitShortcuts()
+		{
+			mnuCopy.InitShortcut(this, nameof(DebuggerShortcutsConfig.Copy));
+			mnuSelectAll.InitShortcut(this, nameof(DebuggerShortcutsConfig.SelectAll));
 		}
 
 		public void InitMemoryTypeDropdown()
@@ -112,7 +120,7 @@ namespace Mesen.GUI.Debugger.Controls
 			} else {
 				ctrlScrollableTextbox.StyleProvider = null;
 			}
-			ctrlScrollableTextbox.Header = "Read".PadRight(12) + "Write".PadRight(12) + "Execute".PadRight(12);
+			ctrlScrollableTextbox.Header = " " + "Read".PadRight(12) + "Write".PadRight(12) + "Execute";
 			ctrlScrollableTextbox.LineNumbers = addresses.ToArray();
 			ctrlScrollableTextbox.TextLines = content.ToArray();
 		}
@@ -230,7 +238,7 @@ namespace Mesen.GUI.Debugger.Controls
 				get
 				{
 					if(this._needRecalc) {
-						_content = (_readCount == 0 ? "0" : _readCount.ToString()).PadRight(12) +
+						_content = " " + (_readCount == 0 ? "0" : _readCount.ToString()).PadRight(12) +
 									(_writeCount == 0 ? "0" : _writeCount.ToString()).PadRight(12) +
 									(_execCount == 0 ? "0" : _execCount.ToString());
 						_needRecalc = false;
@@ -240,6 +248,16 @@ namespace Mesen.GUI.Debugger.Controls
 			}
 
 			public bool UninitRead { get; set; }
+		}
+
+		private void mnuCopy_Click(object sender, EventArgs e)
+		{
+			ctrlScrollableTextbox.CopySelection(true, false, false);
+		}
+
+		private void mnuSelectAll_Click(object sender, EventArgs e)
+		{
+			ctrlScrollableTextbox.SelectAll();
 		}
 	}
 }
