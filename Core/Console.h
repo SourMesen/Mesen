@@ -143,5 +143,5 @@ class Console
 		static shared_ptr<Console> GetInstance();
 		static void Release();
 
-		uint8_t* GetRamBuffer(DebugMemoryType memoryType, uint32_t &size);
+		uint8_t* GetRamBuffer(DebugMemoryType memoryType, uint32_t &size, int32_t &startAddr);
 };

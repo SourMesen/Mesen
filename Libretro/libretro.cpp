@@ -41,7 +41,9 @@ static retro_environment_t retroEnv = nullptr;
 static unsigned _inputDevices[5] = { DEVICE_AUTO, DEVICE_AUTO, DEVICE_AUTO, DEVICE_AUTO, DEVICE_AUTO };
 static bool _hdPacksEnabled = false;
 static string _mesenVersion = "";
-int32_t _saveStateSize = -1;
+static int32_t _saveStateSize = -1;
+static struct retro_memory_descriptor _descriptors[3];
+static struct retro_memory_map _memoryMap;
 
 //Include game database as an array of strings (need an automated way to generate the include file)
 static vector<string> gameDb = {
@@ -880,6 +882,45 @@ extern "C" {
 
 		EmulationSettings::SetFlagState(EmulationFlags::HasFourScore, hasFourScore);
 	}
+	
+	void retro_set_memory_maps()
+	{
+		//Expose internal RAM and work/save RAM for retroachievements
+		memset(_descriptors, 0, sizeof(_descriptors));
+		memset(&_memoryMap, 0, sizeof(_memoryMap));
+
+		uint32_t i = 0;
+		uint32_t size = 0;
+		int32_t startAddr = 0;
+		uint8_t* internalRam = Console::GetInstance()->GetRamBuffer(DebugMemoryType::InternalRam, size, startAddr);
+		_descriptors[i].ptr = internalRam;
+		_descriptors[i].start = startAddr;
+		_descriptors[i].len = size;
+		_descriptors[i].select = 0;
+		i++;
+
+		uint8_t* saveRam = Console::GetInstance()->GetRamBuffer(DebugMemoryType::SaveRam, size, startAddr);
+		if(size > 0 && startAddr > 0) {
+			_descriptors[i].ptr = saveRam;
+			_descriptors[i].start = startAddr;
+			_descriptors[i].len = size;
+			_descriptors[i].select = 0;
+			i++;
+		}
+
+		uint8_t* workRam = Console::GetInstance()->GetRamBuffer(DebugMemoryType::WorkRam, size, startAddr);
+		if(size > 0 && startAddr > 0) {
+			_descriptors[i].ptr = workRam;
+			_descriptors[i].start = startAddr;
+			_descriptors[i].len = size;
+			_descriptors[i].select = 0;
+			i++;
+		}
+
+		_memoryMap.descriptors = _descriptors;
+		_memoryMap.num_descriptors = i;
+		retroEnv(RETRO_ENVIRONMENT_SET_MEMORY_MAPS, &_memoryMap);
+	}
 
 	RETRO_API void retro_set_controller_port_device(unsigned port, unsigned device)
 	{
@@ -927,7 +968,7 @@ extern "C" {
 
 		if(result) {
 			update_core_controllers();
-			update_input_descriptors();			
+			update_input_descriptors();
 
 			//Savestates in Mesen may change size over time
 			//Retroarch doesn't like this for netplay or rewinding - it requires the states to always be the exact same size
@@ -937,6 +978,7 @@ extern "C" {
 
 			//Round up to the next 1kb multiple
 			_saveStateSize = ((ss.str().size() * 2) + 0x400) & ~0x3FF;
+			retro_set_memory_maps();
 		}
 
 		return result;
@@ -997,9 +1039,10 @@ extern "C" {
 	RETRO_API void *retro_get_memory_data(unsigned id)
 	{
 		uint32_t size;
+		int32_t startAddr;
 		switch(id) {
-			case RETRO_MEMORY_SAVE_RAM: return Console::GetInstance()->GetRamBuffer(DebugMemoryType::SaveRam, size);
-			case RETRO_MEMORY_SYSTEM_RAM: return Console::GetInstance()->GetRamBuffer(DebugMemoryType::InternalRam, size);
+			case RETRO_MEMORY_SAVE_RAM: return Console::GetInstance()->GetRamBuffer(DebugMemoryType::SaveRam, size, startAddr);
+			case RETRO_MEMORY_SYSTEM_RAM: return Console::GetInstance()->GetRamBuffer(DebugMemoryType::InternalRam, size, startAddr);
 		}
 		return nullptr;
 	}
@@ -1007,9 +1050,10 @@ extern "C" {
 	RETRO_API size_t retro_get_memory_size(unsigned id)
 	{
 		uint32_t size = 0;
+		int32_t startAddr;
 		switch(id) {
-			case RETRO_MEMORY_SAVE_RAM: Console::GetInstance()->GetRamBuffer(DebugMemoryType::SaveRam, size); break;
-			case RETRO_MEMORY_SYSTEM_RAM: Console::GetInstance()->GetRamBuffer(DebugMemoryType::InternalRam, size); break;
+			case RETRO_MEMORY_SAVE_RAM: Console::GetInstance()->GetRamBuffer(DebugMemoryType::SaveRam, size, startAddr); break;
+			case RETRO_MEMORY_SYSTEM_RAM: Console::GetInstance()->GetRamBuffer(DebugMemoryType::InternalRam, size, startAddr); break;
 		}
 		return size;
 	}
