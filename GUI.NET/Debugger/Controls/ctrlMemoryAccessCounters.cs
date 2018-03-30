@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Mesen.GUI.Controls;
+using Mesen.GUI.Forms;
 
 namespace Mesen.GUI.Debugger.Controls
 {
@@ -25,6 +26,17 @@ namespace Mesen.GUI.Debugger.Controls
 
 			bool designMode = (LicenseManager.UsageMode == LicenseUsageMode.Designtime);
 			if(!designMode) {
+				cboMemoryType.Items.Add(ResourceHelper.GetEnumText(AddressType.InternalRam));
+				if(InteropEmu.DebugGetMemorySize(DebugMemoryType.PrgRom) > 0) {
+					cboMemoryType.Items.Add(ResourceHelper.GetEnumText(AddressType.PrgRom));
+				}
+				if(InteropEmu.DebugGetMemorySize(DebugMemoryType.WorkRam) > 0) {
+					cboMemoryType.Items.Add(ResourceHelper.GetEnumText(AddressType.WorkRam));
+				}
+				if(InteropEmu.DebugGetMemorySize(DebugMemoryType.SaveRam) > 0) {
+					cboMemoryType.Items.Add(ResourceHelper.GetEnumText(AddressType.SaveRam));
+				}
+
 				cboMemoryType.SelectedIndex = 0;
 				cboSort.SelectedIndex = 0;
 			}
@@ -41,8 +53,8 @@ namespace Mesen.GUI.Debugger.Controls
 
 			int[] uninitReads = InteropEmu.DebugGetMemoryAccessCounts(_memoryType, MemoryOperationType.Read, true);
 
-			int[] addresses = new int[readCounts.Length];
-			string[] content = new string[readCounts.Length];
+			List<int> addresses = new List<int>(readCounts.Length);
+			List<string> content = new List<string>(readCounts.Length);
 
 			if(_data == null || _data.Length != readCounts.Length) {
 				_data = new MemoryCountData[readCounts.Length];
@@ -70,9 +82,12 @@ namespace Mesen.GUI.Debugger.Controls
 				case SortType.UninitRead: Array.Sort(data.Select((e) => e.UninitRead ? -e.ReadCount : (Int32.MaxValue - e.ReadCount)).ToArray<int>(), data); break;
 			}
 
+			bool hideUnusedAddresses = chkHideUnusedAddresses.Checked;
 			for(int i = 0; i < readCounts.Length; i++) {
-				addresses[i] = data[i].Address;
-				content[i] = data[i].Content;
+				if(!hideUnusedAddresses || !data[i].Empty) {
+					addresses.Add(data[i].Address);
+					content.Add(data[i].Content);
+				}
 			}
 
 			if(chkHighlightUninitRead.Checked) {
@@ -81,8 +96,8 @@ namespace Mesen.GUI.Debugger.Controls
 				ctrlScrollableTextbox.StyleProvider = null;
 			}
 			ctrlScrollableTextbox.Header = "Read".PadRight(12) + "Write".PadRight(12) + "Execute".PadRight(12);
-			ctrlScrollableTextbox.LineNumbers = addresses;
-			ctrlScrollableTextbox.TextLines = content;
+			ctrlScrollableTextbox.LineNumbers = addresses.ToArray();
+			ctrlScrollableTextbox.TextLines = content.ToArray();
 		}
 
 		private class LineStyleProvider : ctrlTextbox.ILineStyleProvider
@@ -110,14 +125,7 @@ namespace Mesen.GUI.Debugger.Controls
 
 		private void cboMemoryType_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			switch(this.cboMemoryType.SelectedIndex) {
-				default:
-				case 0: _memoryType = AddressType.InternalRam; break;
-				case 1: _memoryType = AddressType.PrgRom; break;
-				case 2: _memoryType = AddressType.SaveRam; break;
-				case 3: _memoryType = AddressType.WorkRam; break;
-			}
-
+			_memoryType = cboMemoryType.GetEnumValue<AddressType>();
 			RefreshData();
 		}
 
@@ -127,7 +135,7 @@ namespace Mesen.GUI.Debugger.Controls
 			RefreshData();
 		}
 		
-		private void chkHighlightUninitRead_CheckedChanged(object sender, EventArgs e)
+		private void chkOption_CheckedChanged(object sender, EventArgs e)
 		{
 			RefreshData();
 		}
@@ -192,6 +200,8 @@ namespace Mesen.GUI.Debugger.Controls
 					};
 				}
 			}
+
+			public bool Empty { get { return ReadCount == 0 && WriteCount == 0 && ExecCount == 0; } }
 
 			public string Content
 			{

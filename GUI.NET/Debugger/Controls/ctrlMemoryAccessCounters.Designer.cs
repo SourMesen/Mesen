@@ -42,6 +42,7 @@
 			this.lblSort = new System.Windows.Forms.Label();
 			this.cboSort = new System.Windows.Forms.ComboBox();
 			this.toolTip = new System.Windows.Forms.ToolTip(this.components);
+			this.chkHideUnusedAddresses = new System.Windows.Forms.CheckBox();
 			this.flowLayoutPanel1.SuspendLayout();
 			this.tableLayoutPanel1.SuspendLayout();
 			this.tableLayoutPanel3.SuspendLayout();
@@ -77,11 +78,6 @@
 			// 
 			this.cboMemoryType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.cboMemoryType.FormattingEnabled = true;
-			this.cboMemoryType.Items.AddRange(new object[] {
-            "CPU Memory",
-            "PRG ROM",
-            "Save RAM",
-            "Work RAM"});
 			this.cboMemoryType.Location = new System.Drawing.Point(42, 3);
 			this.cboMemoryType.Name = "cboMemoryType";
 			this.cboMemoryType.Size = new System.Drawing.Size(121, 21);
@@ -112,21 +108,26 @@
 			// ctrlScrollableTextbox
 			// 
 			this.ctrlScrollableTextbox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this.ctrlScrollableTextbox.CodeHighlightingEnabled = true;
 			this.tableLayoutPanel1.SetColumnSpan(this.ctrlScrollableTextbox, 2);
 			this.ctrlScrollableTextbox.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.ctrlScrollableTextbox.HideSelection = false;
 			this.ctrlScrollableTextbox.Location = new System.Drawing.Point(0, 27);
 			this.ctrlScrollableTextbox.Margin = new System.Windows.Forms.Padding(0);
 			this.ctrlScrollableTextbox.Name = "ctrlScrollableTextbox";
+			this.ctrlScrollableTextbox.ShowCompactPrgAddresses = false;
 			this.ctrlScrollableTextbox.ShowContentNotes = false;
 			this.ctrlScrollableTextbox.ShowLineNumberNotes = false;
+			this.ctrlScrollableTextbox.ShowMemoryValues = false;
+			this.ctrlScrollableTextbox.ShowScrollbars = true;
 			this.ctrlScrollableTextbox.ShowSingleContentLineNotes = true;
 			this.ctrlScrollableTextbox.ShowSingleLineLineNumberNotes = false;
-			this.ctrlScrollableTextbox.Size = new System.Drawing.Size(514, 251);
+			this.ctrlScrollableTextbox.Size = new System.Drawing.Size(514, 233);
 			this.ctrlScrollableTextbox.TabIndex = 0;
 			// 
 			// btnReset
 			// 
-			this.btnReset.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.btnReset.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.btnReset.Location = new System.Drawing.Point(436, 281);
 			this.btnReset.Name = "btnReset";
 			this.btnReset.Size = new System.Drawing.Size(75, 23);
@@ -141,23 +142,25 @@
 			this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
 			this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
 			this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel3.Controls.Add(this.picHelp, 1, 0);
-			this.tableLayoutPanel3.Controls.Add(this.chkHighlightUninitRead, 0, 0);
+			this.tableLayoutPanel3.Controls.Add(this.picHelp, 1, 1);
+			this.tableLayoutPanel3.Controls.Add(this.chkHighlightUninitRead, 0, 1);
+			this.tableLayoutPanel3.Controls.Add(this.chkHideUnusedAddresses, 0, 0);
 			this.tableLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.tableLayoutPanel3.Location = new System.Drawing.Point(0, 278);
+			this.tableLayoutPanel3.Location = new System.Drawing.Point(0, 260);
 			this.tableLayoutPanel3.Margin = new System.Windows.Forms.Padding(0);
 			this.tableLayoutPanel3.Name = "tableLayoutPanel3";
-			this.tableLayoutPanel3.RowCount = 1;
+			this.tableLayoutPanel3.RowCount = 3;
+			this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 29F));
-			this.tableLayoutPanel3.Size = new System.Drawing.Size(433, 29);
+			this.tableLayoutPanel3.Size = new System.Drawing.Size(433, 47);
 			this.tableLayoutPanel3.TabIndex = 2;
 			// 
 			// picHelp
 			// 
 			this.picHelp.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.picHelp.Image = global::Mesen.GUI.Properties.Resources.Help;
-			this.picHelp.Location = new System.Drawing.Point(201, 6);
+			this.picHelp.Location = new System.Drawing.Point(201, 26);
 			this.picHelp.Name = "picHelp";
 			this.picHelp.Size = new System.Drawing.Size(16, 16);
 			this.picHelp.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
@@ -168,13 +171,13 @@
 			// 
 			this.chkHighlightUninitRead.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.chkHighlightUninitRead.AutoSize = true;
-			this.chkHighlightUninitRead.Location = new System.Drawing.Point(3, 6);
+			this.chkHighlightUninitRead.Location = new System.Drawing.Point(3, 26);
 			this.chkHighlightUninitRead.Name = "chkHighlightUninitRead";
 			this.chkHighlightUninitRead.Size = new System.Drawing.Size(192, 17);
 			this.chkHighlightUninitRead.TabIndex = 4;
 			this.chkHighlightUninitRead.Text = "Highlight uninitialized memory reads";
 			this.chkHighlightUninitRead.UseVisualStyleBackColor = true;
-			this.chkHighlightUninitRead.CheckedChanged += new System.EventHandler(this.chkHighlightUninitRead_CheckedChanged);
+			this.chkHighlightUninitRead.CheckedChanged += new System.EventHandler(this.chkOption_CheckedChanged);
 			// 
 			// tableLayoutPanel2
 			// 
@@ -242,6 +245,18 @@
 			this.toolTip.InitialDelay = 10;
 			this.toolTip.ReshowDelay = 10;
 			// 
+			// chkHideUnusedAddresses
+			// 
+			this.chkHideUnusedAddresses.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.chkHideUnusedAddresses.AutoSize = true;
+			this.chkHideUnusedAddresses.Location = new System.Drawing.Point(3, 3);
+			this.chkHideUnusedAddresses.Name = "chkHideUnusedAddresses";
+			this.chkHideUnusedAddresses.Size = new System.Drawing.Size(137, 17);
+			this.chkHideUnusedAddresses.TabIndex = 6;
+			this.chkHideUnusedAddresses.Text = "Hide unused addresses";
+			this.chkHideUnusedAddresses.UseVisualStyleBackColor = true;
+			this.chkHideUnusedAddresses.CheckedChanged += new System.EventHandler(this.chkOption_CheckedChanged);
+			// 
 			// ctrlMemoryAccessCounters
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -281,5 +296,6 @@
 		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel3;
 		private System.Windows.Forms.PictureBox picHelp;
 		private System.Windows.Forms.ToolTip toolTip;
+		private System.Windows.Forms.CheckBox chkHideUnusedAddresses;
 	}
 }
