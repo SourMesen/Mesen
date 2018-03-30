@@ -4,7 +4,7 @@
 #
 # Automatically generated database based on Nestopia's DB and NesCartDB
 #
-# Generated on 2017-11-19 using:
+# Generated on 2018-03-30 using:
 #     -NesCartDB (dated 2017-08-21)
 #     -Nestopia UE's latest DB (dated 2015-10-22) 
 # 
@@ -1939,7 +1939,7 @@ A0230D75,NesNtsc,NES-UNROM,NES-UNROM-09,,2,128,,8,0,0,0,v,,,
 A038AFF2,NesPal,NES-TLROM,NES-TLROM-03,MMC3C,4,128,128,,0,0,0,,,,
 A03A422B,NesNtsc,NES-CNROM,NES-CN-ROM-256-05,,3,32,32,,0,0,0,v,,,
 A0568E1D,NesNtsc,NES-UNROM,NES-UN-ROM-06,,2,128,,8,0,0,0,v,,,
-A058219D,NesNtsc,NES-SKEPROM,NES-SKEPROM-01,MMC1B2,1,128,128,,8,0,0,,,,
+A058219D,NesNtsc,NES-SKEPROM,NES-SKEPROM-01,MMC1B2,1,128,128,,0,8,1,,,,
 A07C1F81,Famicom,BANDAI-NROM-128,UNK-BANDAI-KIN,,0,16,8,,0,0,0,v,,,
 A08B4701,Famicom,BANDAI-NROM-128,UNK-BANDAI-KIN,,0,16,8,,0,0,0,v,,,
 A08D7CA9,Famicom,,,,0,32,8,,0,0,0,v,,,
