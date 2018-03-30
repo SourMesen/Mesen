@@ -26,20 +26,37 @@ namespace Mesen.GUI.Debugger.Controls
 
 			bool designMode = (LicenseManager.UsageMode == LicenseUsageMode.Designtime);
 			if(!designMode) {
-				cboMemoryType.Items.Add(ResourceHelper.GetEnumText(AddressType.InternalRam));
-				if(InteropEmu.DebugGetMemorySize(DebugMemoryType.PrgRom) > 0) {
-					cboMemoryType.Items.Add(ResourceHelper.GetEnumText(AddressType.PrgRom));
-				}
-				if(InteropEmu.DebugGetMemorySize(DebugMemoryType.WorkRam) > 0) {
-					cboMemoryType.Items.Add(ResourceHelper.GetEnumText(AddressType.WorkRam));
-				}
-				if(InteropEmu.DebugGetMemorySize(DebugMemoryType.SaveRam) > 0) {
-					cboMemoryType.Items.Add(ResourceHelper.GetEnumText(AddressType.SaveRam));
-				}
-
-				cboMemoryType.SelectedIndex = 0;
+				InitMemoryTypeDropdown();
 				cboSort.SelectedIndex = 0;
 			}
+		}
+
+		public void InitMemoryTypeDropdown()
+		{
+			cboMemoryType.SelectedIndexChanged -= cboMemoryType_SelectedIndexChanged;
+
+			AddressType originalValue = cboMemoryType.GetEnumValue<AddressType>();
+
+			cboMemoryType.BeginUpdate();
+			cboMemoryType.Items.Clear();
+
+			cboMemoryType.Items.Add(ResourceHelper.GetEnumText(AddressType.InternalRam));
+			if(InteropEmu.DebugGetMemorySize(DebugMemoryType.PrgRom) > 0) {
+				cboMemoryType.Items.Add(ResourceHelper.GetEnumText(AddressType.PrgRom));
+			}
+			if(InteropEmu.DebugGetMemorySize(DebugMemoryType.WorkRam) > 0) {
+				cboMemoryType.Items.Add(ResourceHelper.GetEnumText(AddressType.WorkRam));
+			}
+			if(InteropEmu.DebugGetMemorySize(DebugMemoryType.SaveRam) > 0) {
+				cboMemoryType.Items.Add(ResourceHelper.GetEnumText(AddressType.SaveRam));
+			}
+
+			cboMemoryType.SelectedIndex = 0;
+			cboMemoryType.SetEnumValue(originalValue);
+			cboMemoryType.SelectedIndexChanged += cboMemoryType_SelectedIndexChanged;
+			cboMemoryType.EndUpdate();
+
+			UpdateMemoryType();
 		}
 
 		public Font BaseFont { get { return ctrlScrollableTextbox.BaseFont; } set { ctrlScrollableTextbox.BaseFont = value; } }
@@ -124,6 +141,11 @@ namespace Mesen.GUI.Debugger.Controls
 		}
 
 		private void cboMemoryType_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			UpdateMemoryType();
+		}
+
+		private void UpdateMemoryType()
 		{
 			_memoryType = cboMemoryType.GetEnumValue<AddressType>();
 			RefreshData();

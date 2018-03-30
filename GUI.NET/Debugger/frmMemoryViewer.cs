@@ -123,6 +123,13 @@ namespace Mesen.GUI.Debugger
 
 		private void InitMemoryTypeDropdown()
 		{
+			cboMemoryType.SelectedIndexChanged -= this.cboMemoryType_SelectedIndexChanged;
+
+			DebugMemoryType originalValue = cboMemoryType.GetEnumValue<DebugMemoryType>();
+
+			cboMemoryType.BeginUpdate();
+			cboMemoryType.Items.Clear();
+
 			cboMemoryType.Items.Add(ResourceHelper.GetEnumText(DebugMemoryType.CpuMemory));
 			cboMemoryType.Items.Add(ResourceHelper.GetEnumText(DebugMemoryType.PpuMemory));
 			cboMemoryType.Items.Add("-");
@@ -153,7 +160,12 @@ namespace Mesen.GUI.Debugger
 			cboMemoryType.Items.Add(ResourceHelper.GetEnumText(DebugMemoryType.SpriteMemory));
 			cboMemoryType.Items.Add(ResourceHelper.GetEnumText(DebugMemoryType.SecondarySpriteMemory));
 
-			this.cboMemoryType.SelectedIndex = 0;
+			cboMemoryType.SelectedIndex = 0;
+			cboMemoryType.SetEnumValue(originalValue);
+			cboMemoryType.SelectedIndexChanged += this.cboMemoryType_SelectedIndexChanged;
+
+			cboMemoryType.EndUpdate();
+			UpdateMemoryType();
 		}
 
 		private void UpdateFlags()
@@ -199,6 +211,10 @@ namespace Mesen.GUI.Debugger
 				
 				case InteropEmu.ConsoleNotificationType.GameReset:
 				case InteropEmu.ConsoleNotificationType.GameLoaded:
+					this.BeginInvoke((Action)(() => {
+						this.InitMemoryTypeDropdown();
+						ctrlMemoryAccessCounters.InitMemoryTypeDropdown();
+					}));
 					this.UpdateFlags();
 					break;
 
@@ -228,6 +244,11 @@ namespace Mesen.GUI.Debugger
 		}
 
 		private void cboMemoryType_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			UpdateMemoryType();
+		}
+
+		private void UpdateMemoryType()
 		{
 			this._memoryType = this.cboMemoryType.GetEnumValue<DebugMemoryType>();
 			this.UpdateImportButton();

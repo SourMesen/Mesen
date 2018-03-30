@@ -160,6 +160,10 @@ namespace Mesen.GUI.Forms
 
 		public static T GetEnumValue<T>(this ComboBox cbo)
 		{
+			if(cbo.SelectedItem == null) {
+				return default(T);
+			}
+
 			foreach(Enum value in Enum.GetValues(typeof(T))) {
 				if(ResourceHelper.GetEnumText(value) == cbo.SelectedItem.ToString()) {
 					return (T)(object)value;
