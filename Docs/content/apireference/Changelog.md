@@ -13,7 +13,14 @@ chapter: false
 
 	* **<kbd>[getScreenBuffer](/apireference/drawing.html#getscreenbuffer)</kbd>**
 	* **<kbd>[setScreenBuffer](/apireference/drawing.html#setscreenbuffer)</kbd>**
+	* **<kbd>[getAccessCounters](/apireference/misc.html#getaccesscounters)</kbd>**
+	* **<kbd>[resetAccessCounters](/apireference/misc.html#resetaccesscounters)</kbd>**
 
+* New enums: 
+	
+	* **<kbd>[counterMemType](/apireference/enums.html#countermemtype)</kbd>**
+	* **<kbd>[counterOpType](/apireference/enums.html#counteroptype)</kbd>**
+	
 ## Changes between 0.9.3 and 0.9.4 ##
 
 ### New features ###

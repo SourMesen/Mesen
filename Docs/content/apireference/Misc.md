@@ -144,6 +144,38 @@ Activates a game genie cheat code (6 or 8 characters).
 Removes all active cheat codes (has no impact on cheat codes saved within the UI)
 
 
+## Access Counters ##
+
+### getAccessCounters ###
+
+**Syntax**  
+
+    emu.getAccessCounters(counterMemType, counterOpType)
+
+**Parameters**  
+counterMemType - *Enum* A value from the [emu.counterMemType](/apireference/enums.html#countermemtype) enum  
+counterOpType - *Enum* A value from the [emu.counterOpType](/apireference/enums.html#counteroptype) enum  
+	
+**Return value**  
+*Array* 32-bit integers
+
+**Description**  
+Returns an array of access counters for the specified memory and operation types.
+
+
+### resetAccessCounters ###
+
+**Syntax**  
+
+    emu.resetAccessCounters()
+
+**Return value**  
+*None* 
+
+**Description**  
+Resets all access counters.
+
+
 ## Misc ##
 
 ### getLogWindowLog ###

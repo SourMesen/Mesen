@@ -484,7 +484,7 @@ namespace Mesen.GUI.Debugger
 			new List<string> {"func","emu.getScreenBuffer","emu.getScreenBuffer()","", "*Array* 32-bit integers in ARGB format", "Returns an array of ARGB values for the entire screen (256px by 240px) - can be used with emu.setScreenBuffer() to alter the frame."},
 			new List<string> {"func","emu.setScreenBuffer","emu.setScreenBuffer(screenBuffer)", "screenBuffer - *Array* An array of 32-bit integers in ARGB format", "","Replaces the current frame with the contents of the specified array."},
 
-			new List<string> {"func","emu.getAccessCounters","emu.getAccessCounters(counterMemType, counterOpType)", "counterMemType - *Enum* A value from the emu.counterMemType enum\ncounterOpType - *Enum* A value from the emu.counterOpType enum\n", "*Array* 32-bit integers", "Returns an array of counters for the specified memory and operation types."},
+			new List<string> {"func","emu.getAccessCounters","emu.getAccessCounters(counterMemType, counterOpType)", "counterMemType - *Enum* A value from the emu.counterMemType enum\ncounterOpType - *Enum* A value from the emu.counterOpType enum", "*Array* 32-bit integers", "Returns an array of access counters for the specified memory and operation types."},
 			new List<string> {"func","emu.resetAccessCounters","emu.resetAccessCounters()", "", "", "Resets all access counters."},
 
 			new List<string> {"func","emu.saveSavestate","emu.saveSavestate()","","*String* A string containing a binary blob representing the emulation's current state.","Creates a savestate and returns it as a binary string. (The savestate is not saved on disk)\n Note: this can only be called from within a “startFrame” event callback or “cpuExec” memory callback."},

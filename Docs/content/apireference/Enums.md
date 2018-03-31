@@ -89,3 +89,40 @@ ppuDebug = 257        PPU memory - $0000 to $3FFF          Same as memType.ppu b
 
 **Description**  
 Used by [read](/apireference/memoryaccess.html#read-readword) / [write](/apireference/memoryaccess.html#write-writeword) calls.
+
+
+## counterMemType ##
+
+**Syntax** 
+
+	emu.counterMemType.[value]
+
+**Values**
+
+```text
+nesRam = 0,
+prgRom = 1,
+workRam = 2,
+saveRam = 3
+```	
+
+**Description**  
+Used by [getAccessCounters](/apireference/misc.html#getaccesscounters) calls.
+
+
+## counterOpType ##
+
+**Syntax** 
+
+	emu.counterOpType.[value]
+
+**Values**
+
+```text
+read = 0,
+write = 1,
+exec = 2
+```	
+
+**Description**  
+Used by [getAccessCounters](/apireference/misc.html#getaccesscounters) calls.
