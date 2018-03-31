@@ -289,6 +289,11 @@ namespace Mesen.GUI.Forms
 				return;
 			}
 
+			//Stop menu update timer, and process all pending events before stopping the core
+			//This prevents some rare crashes on shutdown
+			menuTimer.Stop();
+			Application.DoEvents();
+
 			if(_notifListener != null) {
 				_notifListener.Dispose();
 				_notifListener = null;

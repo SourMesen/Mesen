@@ -395,7 +395,7 @@ namespace Mesen.GUI.Debugger
 
 		private void ctrlCodeViewer_ScrollPositionChanged(object sender, EventArgs e)
 		{
-			_tooltipManager.Close(true);
+			_tooltipManager?.Close(true);
 		}
 
 		private void ctrlCodeViewer_MouseDoubleClick(object sender, MouseEventArgs e)

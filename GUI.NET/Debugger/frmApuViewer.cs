@@ -20,6 +20,10 @@ namespace Mesen.GUI.Debugger
 
 			if(LicenseManager.UsageMode != LicenseUsageMode.Designtime) {
 				tmrUpdate.Start();
+
+				if(Program.IsMono) {
+					this.Width = (int)(this.Width * 1.2);
+				}
 			}
 		}
 
