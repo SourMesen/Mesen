@@ -29,7 +29,6 @@ Packages are available here: https://aur.archlinux.org/packages/mesen
 Things that ***may or may not*** be added in the future, in no particular order:
 
 -Support for more UNIF boards and more NES/Famicom input devices  
--Debugger improvements (APU state display, etc.)  
 -Shaders  
 -TAS editor  
 
@@ -38,12 +37,12 @@ Things that ***may or may not*** be added in the future, in no particular order:
 ### Windows ###
 
 #### *Standalone* ####
-1) Open the solution in VS2017
+1) Open the solution in VS2017  
 2) Compile as Release/x64 or Release/x86  
 3) Run  
 
 #### *Libretro* ####
-1) Open the solution in VS2017
+1) Open the solution in VS2017  
 2) Compile as Libretro/x64 or Libretro/x86  
 3) Use the "mesen_libretro.dll" file in bin/(x64 or x86)/Libretro/mesen_libretro.dll
 
@@ -65,6 +64,8 @@ To compile the libretro core you will need a recent version of clang/gcc.  This 
 
 Running "make libretro" will build the core and put it in "bin/mesen_libretro.(x64 or x86).so".  
 LTO is supported under clang, which gives a large performance boost (25-30%+), so turning it on is highly recommended (see makefile for details).  
+
+**Note:** There is also another makefile in the Libretro folder - this is used by the RetroArch's buildbot to build the core.  You can also try using this makefile if you are having issues with the one in the root folder.
 
 ## LICENSE ##
 

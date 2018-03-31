@@ -513,10 +513,10 @@
 		</Form>
 		<Form ID="frmAbout" Title="Quant a...">
 			<Control ID="labelProductName">Mesen</Control>
-			<Control ID="labelCopyright">© 2017 M. Bibaud (aka Sour)</Control>
+			<Control ID="labelCopyright">© 2018 M. Bibaud (aka Sour)</Control>
 			<Control ID="lblWebsite">Lloc web:</Control>
 			<Control ID="lblLink">www.mesen.ca</Control>
-			<Control ID="labelVersion">Versió: 0.9.4 (Beta)</Control>
+			<Control ID="labelVersion">Versió: 0.9.5 (Beta)</Control>
 			<Control ID="lblDonate">Si desitgeu col·laborar amb Mesen, si us plau, considereu fer un donatiu.&#xA;Gràcies pel vostre suport.</Control>
 			<Control ID="okButton">&amp;D'acord</Control>
 		</Form>

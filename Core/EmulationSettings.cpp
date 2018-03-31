@@ -3,10 +3,10 @@
 #include "Console.h"
 #include "RewindManager.h"
 
-//Version 0.9.4
+//Version 0.9.5
 uint16_t EmulationSettings::_versionMajor = 0;
 uint8_t EmulationSettings::_versionMinor = 9;
-uint8_t EmulationSettings::_versionRevision = 4;
+uint8_t EmulationSettings::_versionRevision = 5;
 
 Language EmulationSettings::_displayLanguage = Language::English;
 

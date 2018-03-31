@@ -10,7 +10,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Mesen")]
 [assembly: AssemblyProduct("DependencyPacker")]
-[assembly: AssemblyCopyright("Copyright © Mesen 2017")]
+[assembly: AssemblyCopyright("Copyright © Mesen 2018")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
