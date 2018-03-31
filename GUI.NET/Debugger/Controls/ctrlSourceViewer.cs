@@ -302,7 +302,7 @@ namespace Mesen.GUI.Debugger.Controls
 
 		private void ctrlCodeViewer_ScrollPositionChanged(object sender, EventArgs e)
 		{
-			_tooltipManager.Close(true);
+			_tooltipManager?.Close(true);
 		}
 
 		public void ScrollToAddress(AddressTypeInfo addressInfo, bool scrollToTop = false)
