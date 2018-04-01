@@ -10,8 +10,12 @@ protected:
 
 	void InitMapper() override
 	{
-		WriteRegister(0x8000, 0);
 		SelectCHRPage(0, 0);
+	}
+
+	void Reset(bool softReset) override
+	{
+		WriteRegister(0x8000, 0);
 	}
 
 	void WriteRegister(uint16_t addr, uint8_t value) override
@@ -33,7 +37,8 @@ protected:
 				bank |= subBank;
 				SelectPRGPage(0, bank);
 				SelectPRGPage(1, bank + 1);
-				SelectPRGPage(2, bank + ((addr & 0x02) ? 0 : 1));
+				bank = ((addr & 0x02) ? bank : 0xFE) | subBank;
+				SelectPRGPage(2, bank + 0);
 				SelectPRGPage(3, bank + 1);
 				break;
 
