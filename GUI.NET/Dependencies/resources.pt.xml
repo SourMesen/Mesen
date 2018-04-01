@@ -138,7 +138,7 @@
 			<Control ID="chkMuteSoundInBackground">Silenciar o Mesen quando estiver em segundo plano</Control>
 			<Control ID="chkReduceSoundInBackground">Reduzir o volume do Mesen quando estiver em segundo plano</Control>
 			<Control ID="chkEnableAudio">Ativar o som</Control>
-			<Control ID="lblSampleRate">Frequência de amostra:</Control>
+			<Control ID="lblSampleRate">Frequência da amostra:</Control>
 			<Control ID="lblLatencyMs">ms</Control>
 			<Control ID="lblLatencyWarning">Valores baixos podem causar problemas no som</Control>
 			<Control ID="lblAudioLatency">Latência:</Control>
@@ -288,7 +288,7 @@
 			<Control ID="chkAllowInvalidInput">Permitir as entradas inválidas (Cima+Baixo e Esquerda+Direita ao mesmo tempo)</Control>
 			<Control ID="lblRamPowerOnState">Estado inicial da memória durante o início:</Control>
 			<Control ID="chkRemoveSpriteLimit">Eliminar o limite de sprites (Reduz os "flashes" em alguns jogos)</Control>
-			<Control ID="chkAdaptiveSpriteLimit">Reativar automaticamente o limite de sprite conforme necessário para evitar falhas gráficas quando possível</Control>
+			<Control ID="chkAdaptiveSpriteLimit">Reativar automaticamente o limite de sprite caso precisar para evitar falhas gráficas quando possível</Control>
 			<Control ID="chkEnableOamDecay">Ativar declínio da RAM OAM</Control>
 			<Control ID="chkDisablePpu2004Reads">Desativar leitura da PPU $2004 (Comportamento do Famicom)</Control>
 			<Control ID="chkDisableOamAddrBug">Desativar emulação do erro OAMADDR da PPU</Control>
@@ -309,7 +309,7 @@
 			<Control ID="lblEffectiveClockRatePal">Frequência de clock (PAL): </Control>
 			<Control ID="lblEffectiveClockRateDendy">Frequência de clock (Dendy): </Control>
 
-			<Control ID="chkOverclockAdjustApu">Não realizar overclock a APU (Previne a troca de tom causado por overclocking)</Control>
+			<Control ID="chkOverclockAdjustApu">Não realizar overclock da APU (Previne a troca de tom causado por overclocking)</Control>
 
 			<Control ID="chkShowLagCounter">Ver contador de lag</Control>
 			<Control ID="btnResetLagCounter">Reiniciar contador de lag</Control>
@@ -342,7 +342,7 @@
 			<Control ID="chkAutoLoadIps">Carregar os arquivos IPS/BPS automaticamente</Control>
 			<Control ID="chkHidePauseOverlay">Ocultar a tela de pausa</Control>
 			<Control ID="chkDisplayMovieIcons">Exibir ícone de reprodução/gravação ao reproduzir ou gravar um filme</Control>
-			<Control ID="btnOpenMesenFolder">Abrir a pasta de Mesen</Control>
+			<Control ID="btnOpenMesenFolder">Abrir a pasta do Mesen</Control>
 			<Control ID="btnResetSettings">Restaurar todas as configurações</Control>
 
 			<Control ID="tpgFiles">Arquivos/Pastas</Control>
@@ -380,7 +380,7 @@
 			<Control ID="chkAutoSave">Salvar estado do jogo automaticamente a cada</Control>
 			<Control ID="lblAutoSave">minutos</Control>
 			<Control ID="chkAutoSaveNotify">Mostrar uma notificação na tela ao fazer a cópia de segurança automática</Control>
-			<Control ID="chkAllowMismatchingSaveStates">Permitir que os estados de salvamento sejam carregados em ROMs modificadas (ex:, com patches IPS)</Control>
+			<Control ID="chkAllowMismatchingSaveStates">Permitir carregamento de estados em ROMs modificadas (ex: com patches IPS)</Control>
 			<Control ID="grpCloudSaves">Cópia de segurança online</Control>
 
 			<Control ID="chkShowFullPathInRecents">Mostrar o caminho completo do arquivo na lista de arquivos recentes</Control>
@@ -411,9 +411,9 @@
 			<Control ID="chkAlwaysOnTop">Sempre exibir em cima de outras janelas</Control>
 
 			<Control ID="tpgNsf">NSF</Control>
-			<Control ID="chkNsfAutoDetectSilence">Reproduzir a faixa seguinte depois</Control>
+			<Control ID="chkNsfAutoDetectSilence">Reproduzir a faixa seguinte depois de</Control>
 			<Control ID="lblNsfMillisecondsOfSilence">milissegundos de silêncio</Control>
-			<Control ID="chkNsfMoveToNextTrackAfterTime">Limitar a duração da faixa a</Control>
+			<Control ID="chkNsfMoveToNextTrackAfterTime">Limitar a duração da faixa em</Control>
 			<Control ID="lblNsfSeconds">segundos</Control>
 			<Control ID="chkNsfDisableApuIrqs">Desabilitar as IRQs da APU (Recomendado)</Control>
 
@@ -466,7 +466,7 @@
 			<Control ID="colGameName">Jogo</Control>
 			<Control ID="colCheatName">Nome do cheat</Control>
 			<Control ID="colCode">Cheat</Control>
-			<Control ID="btnImportCheatDB">Da lista de cheats de Mesen</Control>
+			<Control ID="btnImportCheatDB">Da lista de cheats do Mesen</Control>
 			<Control ID="btnImportFromFile">De um arquivo</Control>
 			<Control ID="btnImport">Importar</Control>
 			<Control ID="btnExport">Exportar</Control>
@@ -512,7 +512,7 @@
 			<Control ID="labelCopyright">© 2018 M. Bibaud (aka Sour)</Control>
 			<Control ID="lblWebsite">Site:</Control>
 			<Control ID="lblLink">www.mesen.ca</Control>
-			<Control ID="labelVersion">Versão: 0.9.5 (Beta)</Control>
+			<Control ID="labelVersion">Versão: 0.9.4 (Beta)</Control>
 			<Control ID="lblDonate">Caso queira apoiar o Mesen, por favor, considere fazer uma doação ao projeto.&#xA;Obrigado pelo seu apoio!</Control>
 			<Control ID="okButton">&amp;OK</Control>
 		</Form>
@@ -766,7 +766,7 @@
 		<Message ID="UnableToStartMissingDependencies">Mesen não pode iniciar pois foi incapaz de carregar MesenCore.dll devido a falta de dependências.</Message>
 		<Message ID="UnableToStartMissingFiles">Mesen não pode iniciar devido a falta de arquivos.&#xA;&#xA;Erro: Não se encontra o arquivo MesenCore.dll.</Message>
 		<Message ID="UnexpectedError">Houve um erro inesperado.&#xA;&#xA;Detalhes do erro:&#xA;{0}</Message>
-		<Message ID="UpdateDownloadFailed">Erro ao baixar - o arquivo parece estar danificado. Por favor, visite o site de Mesen para baixar manualmente a versão mais recente.</Message>
+		<Message ID="UpdateDownloadFailed">Erro ao baixar - o arquivo parece estar danificado. Por favor, visite o site do Mesen para baixar manualmente a versão mais recente.</Message>
 		<Message ID="UpgradeSuccess">A atualização foi realizada com sucesso.</Message>
 		<Message ID="UpdaterNotFound">O processo de atualização não se pode iniciar porque faltam alguns arquivos.</Message>
 		<Message ID="Net45NotFound">Microsoft .NET Framework 4.5 não foi encontrado. Por favor, baixe a versão mais recente de .NET Framework do site da Microsoft e tente novamente.</Message>
