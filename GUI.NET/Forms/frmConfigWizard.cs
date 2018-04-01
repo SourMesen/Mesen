@@ -16,7 +16,7 @@ using Mesen.GUI.Config;
 
 namespace Mesen.GUI.Forms
 {
-	public partial class frmConfigWizard : BaseForm
+	public partial class frmConfigWizard : Form
 	{
 		private PrivateFontCollection _fonts = new PrivateFontCollection();
 
@@ -24,6 +24,7 @@ namespace Mesen.GUI.Forms
 		{
 			InitializeComponent();
 
+			this.Icon = Properties.Resources.MesenIcon;
 			lblLocation.Text = ConfigManager.DefaultDocumentsFolder;
 			lblLocation.ForeColor = Color.FromArgb(61,125,255);
 			lblCancel.ForeColor = Color.FromArgb(61, 125, 255);

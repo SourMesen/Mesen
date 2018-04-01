@@ -1,7 +1,7 @@
 Mesen is a cross-platform NES/Famicom emulator for Windows & Linux built in C++ and C#.
 
 If you want to support this project, please consider making a donation:  
-<a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=W97QP2LYC9H4W"><img src="https://www.paypalobjects.com/en_US/i/btn/btn_donate_LG.gif" title="Donate to this project using Paypal" alt="Donate to this project using Paypal"/></a>
+<a href="https://www.mesen.ca/Donate.php"><img src="https://www.mesen.ca/images/donate.png" alt="Donate"></a>
 
 [Website (https://www.mesen.ca)](https://www.mesen.ca)  
 [Documentation (https://www.mesen.ca/docs)](https://www.mesen.ca/docs)
