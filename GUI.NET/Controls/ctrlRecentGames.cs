@@ -83,7 +83,6 @@ namespace Mesen.GUI.Controls
 		public void Initialize()
 		{
 			_initialized = true;
-			tmrInput.Enabled = true;
 			_recentGames = new List<RecentGameInfo>();
 			_currentIndex = 0;
 
@@ -117,8 +116,10 @@ namespace Mesen.GUI.Controls
 
 			if(_recentGames.Count == 0) {
 				this.Visible = false;
+				tmrInput.Enabled = false;
 			} else {
 				UpdateGameInfo();
+				tmrInput.Enabled = true;
 			}
 		}
 

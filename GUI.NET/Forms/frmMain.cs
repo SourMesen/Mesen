@@ -596,7 +596,9 @@ namespace Mesen.GUI.Forms
 						if(_hdPackEditorWindow != null) {
 							_hdPackEditorWindow.Close();
 						}
-						ctrlRecentGames.Initialize();
+						if(!ConfigManager.Config.PreferenceInfo.DisableGameSelectionScreen) {
+							ctrlRecentGames.Initialize();
+						}
 						if(e.Parameter == IntPtr.Zero) {
 							//We are completely stopping the emulation, close fullscreen mode
 							StopExclusiveFullscreenMode();
