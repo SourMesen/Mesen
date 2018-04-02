@@ -14,13 +14,21 @@ protected:
 
 	void InitMapper() override
 	{
+		MMC3::InitMapper();
+		AddRegisterRange(0x5FF0, 0x5FF2, MemoryOperation::Write);
+	}
+
+	void Reset(bool softReset) override
+	{
+		MMC3::ResetMmc3();
+
 		_exRegs[0] = 0x24;
 		_exRegs[1] = 0x9F;
 		_exRegs[2] = 0;
 
-		MMC3::InitMapper();
-
-		AddRegisterRange(0x5FF0, 0x5FF2, MemoryOperation::Write);
+		_registers[6] = 0;
+		_registers[7] = 1;
+		UpdateState();
 	}
 
 	void StreamState(bool saving) override
