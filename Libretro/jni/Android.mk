@@ -1,17 +1,21 @@
 LOCAL_PATH := $(call my-dir)
 
-LIBRETRO_DIR    += ../
-SEVENZIP_DIR    += ../../SevenZip
-LUA_DIR         += ../../Lua
-CORE_DIR        += ../../Core
-UTIL_DIR        += ../../Utilities
+LIBRETRO_DIR := ../
+SEVENZIP_DIR := ../../SevenZip
+LUA_DIR      := ../../Lua
+CORE_DIR     := ../../Core
+UTIL_DIR     := ../../Utilities
+
+INCFLAGS     :=
+SOURCES_C    :=
+SOURCES_CXX  :=
+
+include $(CLEAR_VARS)
 
 GIT_VERSION ?= " $(shell git rev-parse --short HEAD || echo unknown)"
 ifneq ($(GIT_VERSION)," unknown")
    LOCAL_CXXFLAGS += -DGIT_VERSION=\"$(GIT_VERSION)\"
 endif
-
-include $(CLEAR_VARS)
 
 HAVE_NETWORK = 1
 LOCAL_MODULE    := libretro
@@ -31,11 +35,13 @@ endif
 
 include ../Makefile.common
 
+COREFLAGS := -DINLINE=inline -DHAVE_STDINT_H -DHAVE_INTTYPES_H -DLIBRETRO -DNDEBUG -D_USE_MATH_DEFINES -I$(CORE_DIR) -DDISABLE_DEBUGGER -DDISABLE_TIMEKEEPING -Wno-multichar $(INCFLAGS)
+
 LOCAL_SRC_FILES := $(SOURCES_CXX) $(SOURCES_C)
-LOCAL_CFLAGS += -DINLINE=inline -DHAVE_STDINT_H -DHAVE_INTTYPES_H -DLIBRETRO -DNDEBUG -D_USE_MATH_DEFINES -I$(CORE_DIR) -DDISABLE_DEBUGGER -DDISABLE_TIMEKEEPING -Wno-multichar
-LOCAL_CXXFLAGS += -DINLINE=inline -DHAVE_STDINT_H -DHAVE_INTTYPES_H -DLIBRETRO -DNDEBUG -D_USE_MATH_DEFINES -I$(CORE_DIR) -DDISABLE_DEBUGGER -DDISABLE_TIMEKEEPING -Wno-multichar -std=c++11 -frtti -fexceptions
-LOCAL_C_INCLUDES = $(INCFLAGS)
-LOCAL_CXX_INCLUDES = $(INCFLAGS)
+LOCAL_CFLAGS := $(COREFLAGS)
+LOCAL_CXXFLAGS := $(COREFLAGS) -std=c++11
+LOCAL_CPP_FEATURES := exceptions rtti
+LOCAL_LDLIBS += -latomic
 
 include $(BUILD_SHARED_LIBRARY)
 
