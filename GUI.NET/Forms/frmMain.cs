@@ -129,7 +129,9 @@ namespace Mesen.GUI.Forms
 							//Try loading file as a relative path to the folder Mesen was started from
 							path = Path.Combine(Program.OriginalFolder, path);
 						}
-						return path;
+						if(File.Exists(path)) {
+							return path;
+						}
 					} catch { }
 				}
 				return null;
