@@ -114,6 +114,17 @@ Debugger::~Debugger()
 	_stopFlag = true;
 
 	Console::Pause();
+
+	{
+		auto lock = _scriptLock.AcquireSafe();
+		for(shared_ptr<ScriptHost> script : _scripts) {
+			//Send a ScriptEnded event to all active scripts
+			script->ProcessEvent(EventType::ScriptEnded);
+		}
+		_scripts.clear();
+		_hasScript = false;
+	}
+
 	if(Debugger::Instance == this) {
 		Debugger::Instance = nullptr;
 	}
@@ -1245,6 +1256,9 @@ int Debugger::LoadScript(string name, string content, int32_t scriptId)
 			return script->GetScriptId() == scriptId;
 		});
 		if(result != _scripts.end()) {
+			//Send a ScriptEnded event before reloading the code
+			(*result)->ProcessEvent(EventType::ScriptEnded);
+
 			(*result)->LoadScript(name, content, this);
 			return scriptId;
 		}
@@ -1257,7 +1271,14 @@ void Debugger::RemoveScript(int32_t scriptId)
 {
 	DebugBreakHelper helper(this);
 	auto lock = _scriptLock.AcquireSafe();
-	_scripts.erase(std::remove_if(_scripts.begin(), _scripts.end(), [=](const shared_ptr<ScriptHost>& script) { return script->GetScriptId() == scriptId; }), _scripts.end());
+	_scripts.erase(std::remove_if(_scripts.begin(), _scripts.end(), [=](const shared_ptr<ScriptHost>& script) {
+		if(script->GetScriptId() == scriptId) {
+			//Send a ScriptEnded event before unloading the script
+			script->ProcessEvent(EventType::ScriptEnded);
+			return true;
+		}
+		return false;
+	}), _scripts.end());
 	_hasScript = _scripts.size() > 0;
 }
 

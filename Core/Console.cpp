@@ -546,6 +546,8 @@ void Console::Run()
 	_hdPackBuilder.reset();
 	_hdData.reset();
 
+	_debugger.reset();
+
 	_stopLock.Release();
 	_runLock.Release();
 

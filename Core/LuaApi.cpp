@@ -161,6 +161,7 @@ int LuaApi::GetLibrary(lua_State *lua)
 	lua_pushintvalue(stateLoaded, EventType::StateLoaded);
 	lua_pushintvalue(stateSaved, EventType::StateSaved);
 	lua_pushintvalue(inputPolled, EventType::InputPolled);
+	lua_pushintvalue(scriptEnded, EventType::ScriptEnded);
 	lua_settable(lua, -3);
 
 	lua_pushliteral(lua, "executeCountType");

@@ -22,7 +22,9 @@ endFrame = 4,       Triggered at the end of a frame (cycle 0, scanline 241)
 codeBreak = 5,      Triggered when code execution breaks (e.g due to a breakpoint, etc.)
 stateLoaded = 6,    Triggered when a user manually loads a savestate
 stateSaved = 7,     Triggered when a user manually saves a savestate
-inputPolled = 8     Triggered when the emulation core polls the state of the input devices for the next frame
+inputPolled = 8,    Triggered when the emulation core polls the state of the input devices for the next frame
+spriteZeroHit = 9,  Triggered when the PPU sets the sprite zero hit flag 
+scriptEnded = 10    Triggered when the current Lua script ends (script window closed, execution stopped, etc.)
 ```
 
 **Description**  

@@ -147,6 +147,7 @@ enum class EventType
 	StateSaved = 7,
 	InputPolled = 8,
 	SpriteZeroHit = 9,
+	ScriptEnded = 10,
 	EventTypeSize
 };
 
