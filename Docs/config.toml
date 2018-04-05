@@ -4,6 +4,7 @@ uglyURLs = true
 languageCode = "en-us"
 title = "Mesen Documentation"
 theme = "learn"
+publishDir = "docs"
 
 [outputs]
 home = [ "HTML", "RSS", "JSON"]

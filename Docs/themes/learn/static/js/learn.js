@@ -26,7 +26,7 @@ function getScrollBarWidth() {
 };
 
 function setMenuHeight() {
-    $('#sidebar .highlightable').height($('#sidebar').innerHeight() - $('#header-wrapper').height() - 40);
+    $('#sidebar .highlightable').height($('#sidebar').innerHeight() - $('#header-wrapper').height() - 68);
     $('#sidebar .highlightable').perfectScrollbar('update');
 }
 
