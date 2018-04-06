@@ -4,7 +4,7 @@
 #
 # Automatically generated database based on Nestopia's DB and NesCartDB
 #
-# Generated on 2018-03-30 using:
+# Generated on 2018-04-06 using:
 #     -NesCartDB (dated 2017-08-21)
 #     -Nestopia UE's latest DB (dated 2015-10-22) 
 # 
@@ -2076,6 +2076,7 @@ AAED295C,NesNtsc,NES-SEROM,NES-SEROM-02,MMC1A,1,32,32,,0,0,0,,,,
 AAF49344,Famicom,,,,1,128,128,,0,0,0,,,,
 AB2006B4,NesNtsc,NES-CNROM,NES-CN-ROM-256-05,,3,32,16,,0,0,0,v,,,
 AB2AC325,NesPal,NES-SLROM,NES-SLROM-06,MMC1B2,1,128,128,,0,0,0,,,,
+AB4083BB,Famicom,,,,219,128,128,,0,0,0,,,,
 AB41445E,NesNtsc,NES-TLROM,NES-TLROM-03,MMC3C,4,128,128,,0,0,0,,,,
 AB47A50E,Famicom,HVC-UNROM,HVC-UNROM-02,,2,128,,8,0,0,0,h,,,
 AB671224,NesPal,NES-SLROM,NES-SLROM-06,MMC1B2,1,128,128,,0,0,0,,,,
@@ -2696,7 +2697,7 @@ DD8ED0F7,Famicom,BANDAI-74*161/161/32,BA カメン,,70,128,128,,0,0,0,v,,,
 DDA190F9,NesPal,,,,146,32,32,,0,0,0,v,,,
 DDC6D9C9,NesPal,NES-TLROM,NES-TLROM-03,MMC3C,4,128,128,,0,0,0,,,,
 DDCBDA16,Famicom,,,,150,64,64,,0,0,0,,Zapper,,
-DDCFB058,Famicom,,,,187,256,512,,0,0,0,,,,
+DDCFB058,Famicom,,,,121,256,512,,0,0,0,,,,
 DDD90C39,NesNtsc,NES-TLROM,NES-TLROM-03,MMC3B,4,128,128,,0,0,0,,,,
 DDDC56B8,Famicom,,,,240,128,128,,0,8,1,h,,,
 DE25B90F,NesNtsc,NES-UNROM,NES-UN-ROM-04,,2,128,,8,0,0,0,v,,,
