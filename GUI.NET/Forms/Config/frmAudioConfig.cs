@@ -109,6 +109,8 @@ namespace Mesen.GUI.Forms.Config
 			AddBinding("CrossFeedEnabled", chkCrossFeedEnabled);
 			AddBinding("CrossFeedRatio", nudCrossFeedRatio);
 
+			UpdateLatencyWarning();
+
 			//TODO: Uncomment when equalizer presets are implemented
 			/*cboEqualizerFilterType.Items.RemoveAt(0); //Remove "None" from dropdown
 			if(cboEqualizerFilterType.SelectedItem == null) {
@@ -125,9 +127,34 @@ namespace Mesen.GUI.Forms.Config
 		protected override bool ValidateInput()
 		{
 			UpdateObject();
+			if(((AudioInfo)Entity).AudioLatency < 15) {
+				((AudioInfo)Entity).AudioLatency = 15;
+			} else if(((AudioInfo)Entity).AudioLatency > 300) {
+				((AudioInfo)Entity).AudioLatency = 300;
+			}
 			AudioInfo.ApplyConfig();
 
 			return true;
+		}
+
+		private void UpdateLatencyWarning()
+		{
+			picLatencyWarning.Visible = nudLatency.Value <= 30;
+			lblLatencyWarning.Visible = nudLatency.Value <= 30;
+		}
+
+		private void nudLatency_ValueChanged(object sender, EventArgs e)
+		{
+			UpdateLatencyWarning();
+		}
+
+		private void nudLatency_Leave(object sender, EventArgs e)
+		{
+			if(nudLatency.Value < 15) {
+				nudLatency.Value = 15;
+			} else if(nudLatency.Value > 300) {
+				nudLatency.Value = 300;
+			}
 		}
 
 		private void btnReset_Click(object sender, EventArgs e)
@@ -141,12 +168,6 @@ namespace Mesen.GUI.Forms.Config
 		private void chkMuteWhenInBackground_CheckedChanged(object sender, EventArgs e)
 		{
 			chkReduceSoundInBackground.Enabled = !chkMuteSoundInBackground.Checked;
-		}
-
-		private void nudLatency_ValueChanged(object sender, EventArgs e)
-		{
-			picLatencyWarning.Visible = nudLatency.Value <= 30;
-			lblLatencyWarning.Visible = nudLatency.Value <= 30;
 		}
 
 		private void cboEqualizerPreset_SelectedIndexChanged(object sender, EventArgs e)

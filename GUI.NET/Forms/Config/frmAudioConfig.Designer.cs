@@ -574,13 +574,13 @@ namespace Mesen.GUI.Forms.Config
             0});
 			this.nudLatency.Location = new System.Drawing.Point(3, 3);
 			this.nudLatency.Maximum = new decimal(new int[] {
-            300,
+            9999,
             0,
             0,
             0});
 			this.nudLatency.MaximumSize = new System.Drawing.Size(10000, 20);
 			this.nudLatency.Minimum = new decimal(new int[] {
-            15,
+            0,
             0,
             0,
             0});
@@ -593,6 +593,7 @@ namespace Mesen.GUI.Forms.Config
             0,
             0});
 			this.nudLatency.ValueChanged += new System.EventHandler(this.nudLatency_ValueChanged);
+			this.nudLatency.Leave += new System.EventHandler(this.nudLatency_Leave);
 			// 
 			// btnReset
 			// 
