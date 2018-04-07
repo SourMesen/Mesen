@@ -122,12 +122,12 @@ run:
 	mono $(RELEASEFOLDER)/Mesen.exe
 
 clean:
-	rm Lua/$(OBJFOLDER) -r -f
-	rm SevenZip/$(OBJFOLDER) -r -f
-	rm Utilities/$(OBJFOLDER) -r -f
-	rm Core/$(OBJFOLDER) -r -f
-	rm Linux/$(OBJFOLDER) -r -f
-	rm InteropDLL/$(OBJFOLDER) -r -f
-	rm Libretro/$(OBJFOLDER) -r -f
-	rm TestHelper/$(OBJFOLDER) -r -f
-	rm $(RELEASEFOLDER) -r -f
+	rm -rf Lua/$(OBJFOLDER)
+	rm -rf SevenZip/$(OBJFOLDER)
+	rm -rf Utilities/$(OBJFOLDER)
+	rm -rf Core/$(OBJFOLDER)
+	rm -rf Linux/$(OBJFOLDER)
+	rm -rf InteropDLL/$(OBJFOLDER)
+	rm -rf Libretro/$(OBJFOLDER)
+	rm -rf TestHelper/$(OBJFOLDER)
+	rm -rf $(RELEASEFOLDER)
