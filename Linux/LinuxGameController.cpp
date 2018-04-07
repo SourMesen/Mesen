@@ -1,6 +1,6 @@
 #include "../Core/MessageManager.h"
 #include "LinuxGameController.h"
-#include "libevdev/libevdev.h"
+#include <libevdev/libevdev.h>
 #include <unistd.h>
 #include <stdio.h>
 #include <string.h>

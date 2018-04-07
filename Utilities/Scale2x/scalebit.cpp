@@ -39,7 +39,7 @@
 #include <assert.h>
 #include <stdlib.h>
 
-#ifndef __MACH__
+#if !(defined(__MACH__) || defined(__FreeBSD__))
 #include <malloc.h>
 #endif
 

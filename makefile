@@ -50,10 +50,18 @@ RELEASEFOLDER=bin/$(MESENPLATFORM)/Release
 COREOBJ=$(patsubst Core/%.cpp,Core/$(OBJFOLDER)/%.o,$(wildcard Core/*.cpp))
 UTILOBJ=$(patsubst Utilities/%.cpp,Utilities/$(OBJFOLDER)/%.o,$(wildcard Utilities/*.cpp)) $(patsubst Utilities/HQX/%.cpp,Utilities/$(OBJFOLDER)/%.o,$(wildcard Utilities/HQX/*.cpp)) $(patsubst Utilities/xBRZ/%.cpp,Utilities/$(OBJFOLDER)/%.o,$(wildcard Utilities/xBRZ/*.cpp)) $(patsubst Utilities/KreedSaiEagle/%.cpp,Utilities/$(OBJFOLDER)/%.o,$(wildcard Utilities/KreedSaiEagle/*.cpp)) $(patsubst Utilities/Scale2x/%.cpp,Utilities/$(OBJFOLDER)/%.o,$(wildcard Utilities/Scale2x/*.cpp))
 LINUXOBJ=$(patsubst Linux/%.cpp,Linux/$(OBJFOLDER)/%.o,$(wildcard Linux/*.cpp)) 
-LIBEVDEVOBJ=$(patsubst Linux/libevdev/%.c,Linux/$(OBJFOLDER)/%.o,$(wildcard Linux/libevdev/*.c))
 SEVENZIPOBJ=$(patsubst SevenZip/%.c,SevenZip/$(OBJFOLDER)/%.o,$(wildcard SevenZip/*.c))
 LUAOBJ=$(patsubst Lua/%.c,Lua/$(OBJFOLDER)/%.o,$(wildcard Lua/*.c))
-
+ifeq ($(SYSTEM_LIBEVDEV), true)
+	LIBEVDEVLIB=$(shell pkg-config --libs libevdev)
+	LIBEVDEVINC=$(shell pkg-config --cflags libevdev)
+else
+	LIBEVDEVOBJ=$(patsubst Linux/libevdev/%.c,Linux/$(OBJFOLDER)/%.o,$(wildcard Linux/libevdev/*.c))
+	LIBEVDEVINC=-I../
+endif
+SDL2LIB=$(shell sdl2-config --libs)
+SDL2INC=$(shell sdl2-config --cflags)
+FSLIB=-lstdc++fs
 
 all: ui
 
@@ -80,7 +88,7 @@ rungametests:
 
 testhelper: InteropDLL/$(OBJFOLDER)/$(SHAREDLIB)
 	mkdir -p TestHelper/$(OBJFOLDER)
-	$(CPPC) $(GCCOPTIONS) -Wl,-z,defs -o testhelper TestHelper/*.cpp InteropDLL/ConsoleWrapper.cpp $(SEVENZIPOBJ) $(LUAOBJ) $(LINUXOBJ) $(LIBEVDEVOBJ) $(UTILOBJ) $(COREOBJ) -pthread -lSDL2 -lstdc++fs
+	$(CPPC) $(GCCOPTIONS) -Wl,-z,defs -o testhelper TestHelper/*.cpp InteropDLL/ConsoleWrapper.cpp $(SEVENZIPOBJ) $(LUAOBJ) $(LINUXOBJ) $(LIBEVDEVOBJ) $(UTILOBJ) $(COREOBJ) -pthread $(FSLIB) $(SDL2LIB) $(LIBEVDEVLIB)
 	mv testhelper TestHelper/$(OBJFOLDER)
 
 SevenZip/$(OBJFOLDER)/%.o: SevenZip/%.c
@@ -100,19 +108,19 @@ Utilities/$(OBJFOLDER)/%.o: Utilities/Scale2x/%.cpp
 Core/$(OBJFOLDER)/%.o: Core/%.cpp
 	mkdir -p Core/$(OBJFOLDER) && cd Core/$(OBJFOLDER) && $(CPPC) $(GCCOPTIONS)  -c $(patsubst Core/%, ../%, $<)
 Linux/$(OBJFOLDER)/%.o: Linux/%.cpp
-	mkdir -p Linux/$(OBJFOLDER) && cd Linux/$(OBJFOLDER) && $(CPPC) $(GCCOPTIONS) -c $(patsubst Linux/%, ../%, $<)
+	mkdir -p Linux/$(OBJFOLDER) && cd Linux/$(OBJFOLDER) && $(CPPC) $(GCCOPTIONS) -c $(patsubst Linux/%, ../%, $<) $(SDL2INC) $(LIBEVDEVINC)
 Linux/$(OBJFOLDER)/%.o: Linux/libevdev/%.c
 	mkdir -p Linux/$(OBJFOLDER) && cd Linux/$(OBJFOLDER) && $(CC) $(CCOPTIONS) -c $(patsubst Linux/%, ../%, $<)
 
 InteropDLL/$(OBJFOLDER)/$(SHAREDLIB): $(SEVENZIPOBJ) $(LUAOBJ) $(UTILOBJ) $(COREOBJ) $(LIBEVDEVOBJ) $(LINUXOBJ) InteropDLL/ConsoleWrapper.cpp InteropDLL/DebugWrapper.cpp
 	mkdir -p InteropDLL/$(OBJFOLDER)
-	$(CPPC) $(GCCOPTIONS) -Wl,-z,defs -shared -o $(SHAREDLIB) InteropDLL/*.cpp $(SEVENZIPOBJ) $(LUAOBJ) $(LINUXOBJ) $(LIBEVDEVOBJ) $(UTILOBJ) $(COREOBJ) -pthread -lSDL2 -lstdc++fs
+	$(CPPC) $(GCCOPTIONS) -Wl,-z,defs -shared -o $(SHAREDLIB) InteropDLL/*.cpp $(SEVENZIPOBJ) $(LUAOBJ) $(LINUXOBJ) $(LIBEVDEVOBJ) $(UTILOBJ) $(COREOBJ) $(SDL2INC) -pthread $(FSLIB) $(SDL2LIB) $(LIBEVDEVLIB)
 	mv $(SHAREDLIB) InteropDLL/$(OBJFOLDER)
 
 
 Libretro/$(OBJFOLDER)/$(LIBRETROLIB): $(SEVENZIPOBJ) $(UTILOBJ) $(COREOBJ) $(LUAOBJ) Libretro/libretro.cpp
 	mkdir -p Libretro/$(OBJFOLDER)
-	$(CPPC) $(GCCOPTIONS) -Wl,-z,defs -shared -o $(LIBRETROLIB) Libretro/*.cpp $(SEVENZIPOBJ) $(UTILOBJ) $(COREOBJ) $(LUAOBJ) -pthread
+	$(CPPC) $(GCCOPTIONS) -Wl,-z,defs -shared -o $(LIBRETROLIB) Libretro/*.cpp $(SEVENZIPOBJ) $(UTILOBJ) $(COREOBJ) $(LUAOBJ) -pthread $(FSLIB)
 	mv $(LIBRETROLIB) Libretro/$(OBJFOLDER) 
 
 debug:
@@ -122,12 +130,12 @@ run:
 	mono $(RELEASEFOLDER)/Mesen.exe
 
 clean:
-	rm Lua/$(OBJFOLDER) -r -f
-	rm SevenZip/$(OBJFOLDER) -r -f
-	rm Utilities/$(OBJFOLDER) -r -f
-	rm Core/$(OBJFOLDER) -r -f
-	rm Linux/$(OBJFOLDER) -r -f
-	rm InteropDLL/$(OBJFOLDER) -r -f
-	rm Libretro/$(OBJFOLDER) -r -f
-	rm TestHelper/$(OBJFOLDER) -r -f
-	rm $(RELEASEFOLDER) -r -f
+	rm -rf Lua/$(OBJFOLDER)
+	rm -rf SevenZip/$(OBJFOLDER)
+	rm -rf Utilities/$(OBJFOLDER)
+	rm -rf Core/$(OBJFOLDER)
+	rm -rf Linux/$(OBJFOLDER)
+	rm -rf InteropDLL/$(OBJFOLDER)
+	rm -rf Libretro/$(OBJFOLDER)
+	rm -rf TestHelper/$(OBJFOLDER)
+	rm -rf $(RELEASEFOLDER)
