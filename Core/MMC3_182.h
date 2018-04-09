@@ -32,8 +32,8 @@ protected:
 				MMC3::WriteRegister(0xC000, value); 
 				MMC3::WriteRegister(0xC001, value);
 				break;
-			case 0xE000: MMC3::WriteRegister(0xE000, value);
-			case 0xE001: MMC3::WriteRegister(0xE001, value);
+			case 0xE000: MMC3::WriteRegister(0xE000, value); break;
+			case 0xE001: MMC3::WriteRegister(0xE001, value); break;
 		}
 	}
 };
