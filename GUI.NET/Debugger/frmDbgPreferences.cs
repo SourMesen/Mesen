@@ -65,6 +65,8 @@ namespace Mesen.GUI.Debugger
 			};
 
 			ctrlDbgShortcutsDebugger.Shortcuts = new FieldInfo[] {
+				GetMember(nameof(DebuggerShortcutsConfig.Reset)),
+				GetMember(nameof(DebuggerShortcutsConfig.PowerCycle)),
 				GetMember(nameof(DebuggerShortcutsConfig.Continue)),
 				GetMember(nameof(DebuggerShortcutsConfig.Break)),
 				GetMember(nameof(DebuggerShortcutsConfig.ToggleBreakContinue)),

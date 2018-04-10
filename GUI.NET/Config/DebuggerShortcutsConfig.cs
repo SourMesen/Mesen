@@ -69,6 +69,11 @@ namespace Mesen.GUI.Config
 		public XmlKeys OpenTraceLogger = Keys.Control | Keys.J;
 
 		//Debugger window
+		[ShortcutName("Reset")]
+		public XmlKeys Reset = Keys.Control | Keys.R;
+		[ShortcutName("Power Cycle")]
+		public XmlKeys PowerCycle = Keys.Control | Keys.T;
+
 		[ShortcutName("Continue")]
 		public XmlKeys Continue = Keys.F5;
 		[ShortcutName("Break")]

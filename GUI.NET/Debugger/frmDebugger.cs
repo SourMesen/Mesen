@@ -192,6 +192,9 @@ namespace Mesen.GUI.Debugger
 			mnuSaveAsIps.InitShortcut(this, nameof(DebuggerShortcutsConfig.SaveEditAsIps));
 			mnuRevertChanges.InitShortcut(this, nameof(DebuggerShortcutsConfig.RevertPrgChrChanges));
 
+			mnuReset.InitShortcut(this, nameof(DebuggerShortcutsConfig.Reset));
+			mnuPowerCycle.InitShortcut(this, nameof(DebuggerShortcutsConfig.PowerCycle));
+
 			mnuContinue.InitShortcut(this, nameof(DebuggerShortcutsConfig.Continue));
 			mnuBreak.InitShortcut(this, nameof(DebuggerShortcutsConfig.Break));
 			mnuBreakIn.InitShortcut(this, nameof(DebuggerShortcutsConfig.BreakIn));
@@ -1406,6 +1409,16 @@ namespace Mesen.GUI.Debugger
 			using(frmImportSettings frm = new frmImportSettings()) {
 				frm.ShowDialog(sender, this);
 			}
+		}
+
+		private void mnuReset_Click(object sender, EventArgs e)
+		{
+			InteropEmu.Reset();
+		}
+
+		private void mnuPowerCycle_Click(object sender, EventArgs e)
+		{
+			InteropEmu.PowerCycle();
 		}
 	}
 }
