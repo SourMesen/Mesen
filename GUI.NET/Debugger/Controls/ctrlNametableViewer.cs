@@ -19,6 +19,10 @@ namespace Mesen.GUI.Debugger.Controls
 		public event EventHandler OnSelectChrTile;
 
 		private byte[][] _nametablePixelData = new byte[4][];
+
+		private byte[][] _prevTileData = new byte[4][];
+		private byte[][] _prevAttributeData = new byte[4][];
+
 		private byte[][] _tileData = new byte[4][];
 		private byte[][] _attributeData = new byte[4][];
 		private Bitmap _gridOverlay;
@@ -58,6 +62,12 @@ namespace Mesen.GUI.Debugger.Controls
 		{
 			InteropEmu.DebugGetPpuScroll(out _xScroll, out _yScroll);
 			InteropEmu.DebugGetState(ref _state);
+
+			//Keep a copy of the previous frame to highlight modifications
+			for(int i = 0; i < 4; i++) {
+				_prevTileData[i] = _tileData[i] != null ? (byte[])_tileData[i].Clone() : null;
+				_prevAttributeData[i] = _attributeData[i] != null ? (byte[])_attributeData[i].Clone() : null;
+			}
 
 			for(int i = 0; i < 4; i++) {
 				InteropEmu.DebugGetNametable(i, ConfigManager.Config.DebugInfo.NtViewerUseGrayscalePalette, out _nametablePixelData[i], out _tileData[i], out _attributeData[i]);
@@ -125,9 +135,47 @@ namespace Mesen.GUI.Debugger.Controls
 				if(chkShowPpuScrollOverlay.Checked) {
 					DrawScrollOverlay(_xScroll, _yScroll, g);
 				}
+				
+				if(chkHighlightAttributeEdits.Checked || chkHighlightTileEdits.Checked) {
+					DrawEditHighlights(g);
+				}
 			}
 
 			this.picNametable.Image = target;
+		}
+
+		private void DrawEditHighlights(Graphics g)
+		{
+			using(Brush redBrush = new SolidBrush(Color.FromArgb(128, Color.Red))) {
+				using(Brush yellowBrush = new SolidBrush(Color.FromArgb(128, Color.Yellow))) {
+					for(int nt = 0; nt < 4; nt++) {
+						if(_prevTileData[nt] == null || _prevAttributeData[nt] == null) {
+							continue;
+						}
+
+						for(int y = 0; y < 30; y++) {
+							for(int x = 0; x < 32; x++) {
+								int tileX = ((nt % 2 == 1) ? x + 32 : x) * 8;
+								int tileY = ((nt >= 2) ? y + 30 : y) * 8;
+								if(chkHighlightTileEdits.Checked && _prevTileData[nt][y * 32 + x] != _tileData[nt][y * 32 + x]) {
+									g.FillRectangle(redBrush, tileX, tileY, 8, 8);
+									g.DrawRectangle(Pens.Red, tileX, tileY, 8, 8);
+								}
+
+								if(chkHighlightAttributeEdits.Checked) {
+									int shift = (x & 0x02) | ((y & 0x02) << 1);
+									int attribute = (_attributeData[nt][y * 32 + x] >> shift) & 0x03;
+									int prevAttribute = (_prevAttributeData[nt][y * 32 + x] >> shift) & 0x03;
+									if(prevAttribute != attribute) {
+										g.FillRectangle(yellowBrush, tileX, tileY, 8, 8);
+										g.DrawRectangle(Pens.Yellow, tileX, tileY, 8, 8);
+									}
+								}
+							}
+						}
+					}
+				}
+			}
 		}
 
 		private void HighlightChrViewerTile(int tileIndexOffset, Graphics dest, int nametableIndex)
