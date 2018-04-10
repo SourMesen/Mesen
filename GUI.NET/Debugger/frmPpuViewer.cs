@@ -21,9 +21,15 @@ namespace Mesen.GUI.Debugger
 		private TabPage _selectedTab;
 		private bool _refreshing = false;
 
+		private static int _nextPpuViewerId = 0;
+		private int _ppuViewerId = 0;
+
 		public frmPpuViewer()
 		{
 			InitializeComponent();
+
+			_ppuViewerId = _nextPpuViewerId;
+			_nextPpuViewerId++;
 
 			this._selectedTab = this.tpgNametableViewer;
 			this.mnuAutoRefresh.Checked = ConfigManager.Config.DebugInfo.PpuAutoRefresh;
@@ -49,7 +55,7 @@ namespace Mesen.GUI.Debugger
 				this.nudScanline.Value = ConfigManager.Config.DebugInfo.PpuDisplayScanline;
 				this.nudCycle.Value = ConfigManager.Config.DebugInfo.PpuDisplayCycle;
 
-				InteropEmu.DebugSetPpuViewerScanlineCycle((int)this.nudScanline.Value, (int)this.nudCycle.Value);
+				InteropEmu.DebugSetPpuViewerScanlineCycle(_ppuViewerId, (int)this.nudScanline.Value, (int)this.nudCycle.Value);
 
 				this.ctrlNametableViewer.GetData();
 				this.ctrlChrViewer.GetData();
@@ -67,6 +73,7 @@ namespace Mesen.GUI.Debugger
 		{
 			base.OnFormClosing(e);
 			this._notifListener.OnNotification -= this._notifListener_OnNotification;
+			InteropEmu.DebugClearPpuViewerSettings(_ppuViewerId);
 		}
 
 		private void _notifListener_OnNotification(InteropEmu.NotificationEventArgs e)
@@ -81,17 +88,19 @@ namespace Mesen.GUI.Debugger
 					break;
 
 				case InteropEmu.ConsoleNotificationType.PpuViewerDisplayFrame:
-					if(ConfigManager.Config.DebugInfo.PpuAutoRefresh && !_refreshing && (DateTime.Now - _lastUpdate).Milliseconds > 66) {
-						//Update at 15 fps most
-						this.GetData();
-						this.BeginInvoke((MethodInvoker)(() => this.RefreshViewers()));
-						_lastUpdate = DateTime.Now;
+					if(e.Parameter.ToInt32() == _ppuViewerId) {
+						if(ConfigManager.Config.DebugInfo.PpuAutoRefresh && !_refreshing && (DateTime.Now - _lastUpdate).Milliseconds > 66) {
+							//Update at 15 fps most
+							this.GetData();
+							this.BeginInvoke((MethodInvoker)(() => this.RefreshViewers()));
+							_lastUpdate = DateTime.Now;
+						}
 					}
 					break;
 
 				case InteropEmu.ConsoleNotificationType.GameLoaded:
 					//Configuration is lost when debugger is restarted (when switching game or power cycling)
-					InteropEmu.DebugSetPpuViewerScanlineCycle(ConfigManager.Config.DebugInfo.PpuDisplayScanline, ConfigManager.Config.DebugInfo.PpuDisplayCycle);
+					InteropEmu.DebugSetPpuViewerScanlineCycle(_ppuViewerId, ConfigManager.Config.DebugInfo.PpuDisplayScanline, ConfigManager.Config.DebugInfo.PpuDisplayCycle);
 					break;
 			}
 		}
@@ -152,7 +161,7 @@ namespace Mesen.GUI.Debugger
 			scanline = Math.Min(260, Math.Max(-1, scanline));
 			cycle = Math.Min(340, Math.Max(0, cycle));
 
-			InteropEmu.DebugSetPpuViewerScanlineCycle(scanline, cycle);
+			InteropEmu.DebugSetPpuViewerScanlineCycle(_ppuViewerId, scanline, cycle);
 			ConfigManager.Config.DebugInfo.PpuDisplayScanline = scanline;
 			ConfigManager.Config.DebugInfo.PpuDisplayCycle = cycle;
 			ConfigManager.ApplyChanges();

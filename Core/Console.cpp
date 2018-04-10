@@ -435,6 +435,8 @@ void Console::Run()
 
 	UpdateNesModel(true);
 
+	_running = true;
+
 	bool crashed = false;
 	try {
 		while(true) {
@@ -511,6 +513,10 @@ void Console::Run()
 		MessageManager::DisplayMessage("Error", "GameCrash", ex.what());
 	}
 
+	_running = false;
+
+	MessageManager::SendNotification(ConsoleNotificationType::BeforeEmulationStop);
+
 	if(!crashed) {
 		SaveStateManager::SaveRecentGame(GetMapperInfo().RomName, _romFilepath, _patchFilename);
 	}
@@ -559,12 +565,12 @@ void Console::Run()
 
 bool Console::IsRunning()
 {
-	return !Instance->_stopLock.IsFree();
+	return !Instance->_stopLock.IsFree() && Instance->_running;
 }
 
 bool Console::IsPaused()
 {
-	return _runLock.IsFree() || !_pauseLock.IsFree();
+	return _runLock.IsFree() || !_pauseLock.IsFree() || !_running;
 }
 
 void Console::UpdateNesModel(bool sendNotification)

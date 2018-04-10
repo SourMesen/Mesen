@@ -57,6 +57,7 @@ class Console
 		string _patchFilename;
 
 		bool _stop = false;
+		bool _running = false;
 
 		bool _disableOcNextFrame = false;
 

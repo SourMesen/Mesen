@@ -711,24 +711,7 @@ void MessageManager::UnregisterNotificationListener(INotificationListener* notif
 void MessageManager::SendNotification(ConsoleNotificationType type, void* parameter)
 {
 	auto lock = _notificationLock.AcquireSafe();
-
-	//Iterate on a copy to prevent issues if a notification causes a listener to unregister itself
-	vector<INotificationListener*> listeners = MessageManager::_notificationListeners;
-	vector<INotificationListener*> processedListeners;
-
-	for(size_t i = 0, len = listeners.size(); i < len; i++) {
-		INotificationListener* notificationListener = listeners[i];
-		if(std::find(processedListeners.begin(), processedListeners.end(), notificationListener) == processedListeners.end()) {
-			//Only send notification if it hasn't been processed already
-			notificationListener->ProcessNotification(type, parameter);
-		}
-		processedListeners.push_back(notificationListener);
-
-		if(len != MessageManager::_notificationListeners.size()) {
-			//Vector changed, start from the beginning again (can occur when sending a notification caused listeners to unregister themselves)
-			i = 0;
-			len = MessageManager::_notificationListeners.size();
-			listeners = MessageManager::_notificationListeners;
-		}
+	for(INotificationListener *notificationListener : MessageManager::_notificationListeners) {
+		notificationListener->ProcessNotification(type, parameter);
 	}
 }

@@ -253,7 +253,8 @@ namespace Mesen.GUI
 		}
 
 		[DllImport(DLLPath)] public static extern void DebugGetAbsoluteAddressAndType(UInt32 relativeAddr, ref AddressTypeInfo addressTypeInfo);
-		[DllImport(DLLPath)] public static extern void DebugSetPpuViewerScanlineCycle(Int32 scanline, Int32 cycle);
+		[DllImport(DLLPath)] public static extern void DebugSetPpuViewerScanlineCycle(Int32 ppuViewerId, Int32 scanline, Int32 cycle);
+		[DllImport(DLLPath)] public static extern void DebugClearPpuViewerSettings(Int32 ppuViewerId);
 
 		[DllImport(DLLPath)] public static extern void DebugSetFreezeState(UInt16 address, [MarshalAs(UnmanagedType.I1)]bool frozen);
 
@@ -876,6 +877,7 @@ namespace Mesen.GUI
 			ExecuteShortcut = 16,
 			EmulationStopped = 17,
 			EventViewerDisplayFrame = 18,
+			BeforeEmulationStop = 19,
 		}
 
 		public enum ControllerType
@@ -1049,7 +1051,10 @@ namespace Mesen.GUI
 
 			public void Dispose()
 			{
-				InteropEmu.UnregisterNotificationCallback(_notificationListener);
+				Task.Run(() => {
+					//Unregister the callback in another thread, to prevent deadlocks
+					InteropEmu.UnregisterNotificationCallback(_notificationListener);
+				});
 			}
 
 			public void ProcessNotification(int type, IntPtr parameter)

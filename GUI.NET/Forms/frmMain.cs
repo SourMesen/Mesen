@@ -608,8 +608,8 @@ namespace Mesen.GUI.Forms
 					}));
 					break;
 
-				case InteropEmu.ConsoleNotificationType.EmulationStopped:
-					this.BeginInvoke((Action)(() => {
+				case InteropEmu.ConsoleNotificationType.BeforeEmulationStop:
+					this.Invoke((Action)(() => {
 						DebugWindowManager.CloseAll();
 					}));
 					break;
@@ -777,7 +777,7 @@ namespace Mesen.GUI.Forms
 				case EmulatorShortcut.Pause: PauseEmu(); break;
 				case EmulatorShortcut.Reset: this.ResetEmu(); break;
 				case EmulatorShortcut.PowerCycle: this.PowerCycleEmu(); break;
-				case EmulatorShortcut.PowerOff: InteropEmu.Stop(); break;
+				case EmulatorShortcut.PowerOff: Task.Run(() => InteropEmu.Stop()); break;
 				case EmulatorShortcut.Exit: this.Close(); break;
 
 				case EmulatorShortcut.ToggleCheats: ToggleCheats(); break;

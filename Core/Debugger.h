@@ -107,8 +107,8 @@ private:
 
 	atomic<int32_t> _breakOnScanline;
 
-	int32_t _ppuViewerScanline;
-	int32_t _ppuViewerCycle;
+	bool _proccessPpuCycle[341];
+	std::unordered_map<int, int> _ppuViewerUpdateCycle;
 
 	uint16_t _ppuScrollX;
 	uint16_t _ppuScrollY;
@@ -141,6 +141,8 @@ private:
 	bool SleepUntilResume(BreakSource source = BreakSource::Break);
 
 	void AddDebugEvent(DebugEventType type, uint16_t address = -1, uint8_t value = 0, int16_t breakpointId = -1, int8_t ppuLatch = -1);
+
+	void UpdatePpuCyclesToProcess();
 
 public:
 	Debugger(shared_ptr<Console> console, shared_ptr<CPU> cpu, shared_ptr<PPU> ppu, shared_ptr<APU> apu, shared_ptr<MemoryManager> memoryManager, shared_ptr<BaseMapper> mapper);
@@ -186,7 +188,9 @@ public:
 	shared_ptr<CodeDataLogger> GetCodeDataLogger();
 
 	void SetNextStatement(uint16_t addr);
-	void SetPpuViewerScanlineCycle(int32_t scanline, int32_t cycle);
+
+	void SetPpuViewerScanlineCycle(int32_t ppuViewerId, int32_t scanline, int32_t cycle);
+	void ClearPpuViewerSettings(int32_t ppuViewer);
 
 	bool IsExecutionStopped();
 

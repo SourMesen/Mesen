@@ -79,9 +79,6 @@ Debugger::Debugger(shared_ptr<Console> console, shared_ptr<CPU> cpu, shared_ptr<
 	_ppuScrollX = 0;
 	_ppuScrollY = 0;
 
-	_ppuViewerScanline = 241;
-	_ppuViewerCycle = 0;
-
 	_flags = 0;
 
 	_runToCycle = 0;
@@ -103,6 +100,8 @@ Debugger::Debugger(shared_ptr<Console> console, shared_ptr<CPU> cpu, shared_ptr<
 
 	_hasScript = false;
 	_nextScriptId = 0;
+
+	UpdatePpuCyclesToProcess();
 
 	Debugger::Instance = this;
 }
@@ -468,21 +467,27 @@ void Debugger::ProcessStepConditions(uint16_t addr)
 
 void Debugger::PrivateProcessPpuCycle()
 {
-	if(PPU::GetCurrentCycle() == (uint32_t)_ppuViewerCycle && PPU::GetCurrentScanline() == _ppuViewerScanline) {
-		MessageManager::SendNotification(ConsoleNotificationType::PpuViewerDisplayFrame);
-	} 
-	if(PPU::GetCurrentCycle() == 0) {
-		if(_breakOnScanline == PPU::GetCurrentScanline()) {
-			Step(1);
-			SleepUntilResume(BreakSource::Pause);
+	if(_proccessPpuCycle[PPU::GetCurrentCycle()]) {
+		int32_t currentCycle = (PPU::GetCurrentCycle() << 9) + PPU::GetCurrentScanline();
+		for(auto updateCycle : _ppuViewerUpdateCycle) {
+			if(updateCycle.second == currentCycle) {
+				MessageManager::SendNotification(ConsoleNotificationType::PpuViewerDisplayFrame, (void*)(uint64_t)updateCycle.first);
+			}
 		}
-		if(PPU::GetCurrentScanline() == 241) {
-			ProcessEvent(EventType::EndFrame);
-		} else if(PPU::GetCurrentScanline() == -1) {
-			ProcessEvent(EventType::StartFrame);
+
+		if(PPU::GetCurrentCycle() == 0) {
+			if(_breakOnScanline == PPU::GetCurrentScanline()) {
+				Step(1);
+				SleepUntilResume(BreakSource::Pause);
+			}
+			if(PPU::GetCurrentScanline() == 241) {
+				ProcessEvent(EventType::EndFrame);
+			} else if(PPU::GetCurrentScanline() == -1) {
+				ProcessEvent(EventType::StartFrame);
+			}
 		}
 	}
-	
+
 	OperationInfo operationInfo { 0, 0, MemoryOperationType::DummyRead };
 	
 	if(_hasBreakpoint[BreakpointType::Global]) {
@@ -1128,10 +1133,27 @@ void Debugger::GetPpuAbsoluteAddressAndType(uint32_t relativeAddr, PpuAddressTyp
 	info->Type = PpuAddressType::None;
 }
 
-void Debugger::SetPpuViewerScanlineCycle(int32_t scanline, int32_t cycle)
+void Debugger::UpdatePpuCyclesToProcess()
 {
-	_ppuViewerScanline = scanline;
-	_ppuViewerCycle = cycle;
+	memset(_proccessPpuCycle, 0, sizeof(_proccessPpuCycle));
+	for(auto updateCycle : _ppuViewerUpdateCycle) {
+		_proccessPpuCycle[updateCycle.second] = true;
+	}
+	_proccessPpuCycle[0] = true;
+}
+
+void Debugger::SetPpuViewerScanlineCycle(int32_t ppuViewerId, int32_t scanline, int32_t cycle)
+{
+	DebugBreakHelper helper(this);
+	_ppuViewerUpdateCycle[ppuViewerId] = (cycle << 9) + scanline;
+	UpdatePpuCyclesToProcess();
+}
+
+void Debugger::ClearPpuViewerSettings(int32_t ppuViewer)
+{
+	DebugBreakHelper helper(this);
+	_ppuViewerUpdateCycle.erase(ppuViewer);
+	UpdatePpuCyclesToProcess();
 }
 
 void Debugger::SetLastFramePpuScroll(uint16_t addr, uint8_t xScroll, bool updateHorizontalScrollOnly)
