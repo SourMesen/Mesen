@@ -48,6 +48,8 @@ namespace Mesen.GUI.Debugger.Controls
 				chkShowAttributeGrid.Checked = ConfigManager.Config.DebugInfo.ShowAttributeGrid;
 				chkHighlightChrTile.Checked = ConfigManager.Config.DebugInfo.HighlightChrTile;
 				chkUseGrayscalePalette.Checked = ConfigManager.Config.DebugInfo.NtViewerUseGrayscalePalette;
+				chkHighlightTileUpdates.Checked = ConfigManager.Config.DebugInfo.NtViewerHighlightTileUpdates;
+				chkHighlightAttributeUpdates.Checked = ConfigManager.Config.DebugInfo.NtViewerHighlightAttributeUpdates;
 
 				mnuCopyToClipboard.InitShortcut(this, nameof(DebuggerShortcutsConfig.Copy));
 			}
@@ -136,7 +138,7 @@ namespace Mesen.GUI.Debugger.Controls
 					DrawScrollOverlay(_xScroll, _yScroll, g);
 				}
 				
-				if(chkHighlightAttributeEdits.Checked || chkHighlightTileEdits.Checked) {
+				if(chkHighlightAttributeUpdates.Checked || chkHighlightTileUpdates.Checked) {
 					DrawEditHighlights(g);
 				}
 			}
@@ -157,12 +159,12 @@ namespace Mesen.GUI.Debugger.Controls
 							for(int x = 0; x < 32; x++) {
 								int tileX = ((nt % 2 == 1) ? x + 32 : x) * 8;
 								int tileY = ((nt >= 2) ? y + 30 : y) * 8;
-								if(chkHighlightTileEdits.Checked && _prevTileData[nt][y * 32 + x] != _tileData[nt][y * 32 + x]) {
+								if(chkHighlightTileUpdates.Checked && _prevTileData[nt][y * 32 + x] != _tileData[nt][y * 32 + x]) {
 									g.FillRectangle(redBrush, tileX, tileY, 8, 8);
 									g.DrawRectangle(Pens.Red, tileX, tileY, 8, 8);
 								}
 
-								if(chkHighlightAttributeEdits.Checked) {
+								if(chkHighlightAttributeUpdates.Checked) {
 									int shift = (x & 0x02) | ((y & 0x02) << 1);
 									int attribute = (_attributeData[nt][y * 32 + x] >> shift) & 0x03;
 									int prevAttribute = (_prevAttributeData[nt][y * 32 + x] >> shift) & 0x03;
@@ -333,6 +335,20 @@ namespace Mesen.GUI.Debugger.Controls
 			ConfigManager.Config.DebugInfo.NtViewerUseGrayscalePalette = chkUseGrayscalePalette.Checked;
 			ConfigManager.ApplyChanges();
 			this.GetData();
+			this.RefreshViewer();
+		}
+
+		private void chkHighlightTileUpdates_Click(object sender, EventArgs e)
+		{
+			ConfigManager.Config.DebugInfo.NtViewerHighlightTileUpdates = chkHighlightTileUpdates.Checked;
+			ConfigManager.ApplyChanges();
+			this.RefreshViewer();
+		}
+
+		private void chkHighlightAttributeUpdates_Click(object sender, EventArgs e)
+		{
+			ConfigManager.Config.DebugInfo.NtViewerHighlightAttributeUpdates = chkHighlightAttributeUpdates.Checked;
+			ConfigManager.ApplyChanges();
 			this.RefreshViewer();
 		}
 

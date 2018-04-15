@@ -62,8 +62,8 @@
 			this.chkShowTileGrid = new System.Windows.Forms.CheckBox();
 			this.chkShowAttributeGrid = new System.Windows.Forms.CheckBox();
 			this.chkUseGrayscalePalette = new System.Windows.Forms.CheckBox();
-			this.chkHighlightTileEdits = new System.Windows.Forms.CheckBox();
-			this.chkHighlightAttributeEdits = new System.Windows.Forms.CheckBox();
+			this.chkHighlightTileUpdates = new System.Windows.Forms.CheckBox();
+			this.chkHighlightAttributeUpdates = new System.Windows.Forms.CheckBox();
 			this.chkHighlightChrTile = new System.Windows.Forms.CheckBox();
 			this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
 			this.lblMirroring = new System.Windows.Forms.Label();
@@ -408,8 +408,8 @@
 			this.flowLayoutPanel1.Controls.Add(this.chkShowTileGrid);
 			this.flowLayoutPanel1.Controls.Add(this.chkShowAttributeGrid);
 			this.flowLayoutPanel1.Controls.Add(this.chkUseGrayscalePalette);
-			this.flowLayoutPanel1.Controls.Add(this.chkHighlightTileEdits);
-			this.flowLayoutPanel1.Controls.Add(this.chkHighlightAttributeEdits);
+			this.flowLayoutPanel1.Controls.Add(this.chkHighlightTileUpdates);
+			this.flowLayoutPanel1.Controls.Add(this.chkHighlightAttributeUpdates);
 			this.flowLayoutPanel1.Controls.Add(this.chkHighlightChrTile);
 			this.flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.flowLayoutPanel1.Location = new System.Drawing.Point(522, 351);
@@ -463,25 +463,27 @@
 			this.chkUseGrayscalePalette.UseVisualStyleBackColor = true;
 			this.chkUseGrayscalePalette.Click += new System.EventHandler(this.chkUseGrayscalePalette_Click);
 			// 
-			// chkHighlightTileEdits
+			// chkHighlightTileUpdates
 			// 
-			this.chkHighlightTileEdits.AutoSize = true;
-			this.chkHighlightTileEdits.Location = new System.Drawing.Point(3, 95);
-			this.chkHighlightTileEdits.Name = "chkHighlightTileEdits";
-			this.chkHighlightTileEdits.Size = new System.Drawing.Size(113, 17);
-			this.chkHighlightTileEdits.TabIndex = 6;
-			this.chkHighlightTileEdits.Text = "Highlight Tile Edits";
-			this.chkHighlightTileEdits.UseVisualStyleBackColor = true;
+			this.chkHighlightTileUpdates.AutoSize = true;
+			this.chkHighlightTileUpdates.Location = new System.Drawing.Point(3, 95);
+			this.chkHighlightTileUpdates.Name = "chkHighlightTileUpdates";
+			this.chkHighlightTileUpdates.Size = new System.Drawing.Size(130, 17);
+			this.chkHighlightTileUpdates.TabIndex = 6;
+			this.chkHighlightTileUpdates.Text = "Highlight Tile Updates";
+			this.chkHighlightTileUpdates.UseVisualStyleBackColor = true;
+			this.chkHighlightTileUpdates.Click += new System.EventHandler(this.chkHighlightTileUpdates_Click);
 			// 
-			// chkHighlightAttributeEdits
+			// chkHighlightAttributeUpdates
 			// 
-			this.chkHighlightAttributeEdits.AutoSize = true;
-			this.chkHighlightAttributeEdits.Location = new System.Drawing.Point(3, 118);
-			this.chkHighlightAttributeEdits.Name = "chkHighlightAttributeEdits";
-			this.chkHighlightAttributeEdits.Size = new System.Drawing.Size(135, 17);
-			this.chkHighlightAttributeEdits.TabIndex = 7;
-			this.chkHighlightAttributeEdits.Text = "Highlight Attribute Edits";
-			this.chkHighlightAttributeEdits.UseVisualStyleBackColor = true;
+			this.chkHighlightAttributeUpdates.AutoSize = true;
+			this.chkHighlightAttributeUpdates.Location = new System.Drawing.Point(3, 118);
+			this.chkHighlightAttributeUpdates.Name = "chkHighlightAttributeUpdates";
+			this.chkHighlightAttributeUpdates.Size = new System.Drawing.Size(152, 17);
+			this.chkHighlightAttributeUpdates.TabIndex = 7;
+			this.chkHighlightAttributeUpdates.Text = "Highlight Attribute Updates";
+			this.chkHighlightAttributeUpdates.UseVisualStyleBackColor = true;
+			this.chkHighlightAttributeUpdates.Click += new System.EventHandler(this.chkHighlightAttributeUpdates_Click);
 			// 
 			// chkHighlightChrTile
 			// 
@@ -594,7 +596,7 @@
 		private System.Windows.Forms.Label lblMirroring;
 		private System.Windows.Forms.Label lblMirroringType;
 		private System.Windows.Forms.CheckBox chkUseGrayscalePalette;
-		private System.Windows.Forms.CheckBox chkHighlightTileEdits;
-		private System.Windows.Forms.CheckBox chkHighlightAttributeEdits;
+		private System.Windows.Forms.CheckBox chkHighlightTileUpdates;
+		private System.Windows.Forms.CheckBox chkHighlightAttributeUpdates;
 	}
 }
