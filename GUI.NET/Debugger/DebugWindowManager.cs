@@ -11,6 +11,8 @@ namespace Mesen.GUI.Debugger
 	{
 		private static HashSet<Form> _openedWindows = new HashSet<Form>();
 
+		public static bool ScriptWindowOpened { get { return _openedWindows.Any(wnd => wnd is frmScript); } }
+
 		public static void OpenDebugWindow(DebugWindow window)
 		{
 			Form existingWindow = GetExistingSingleInstanceWindow(window);

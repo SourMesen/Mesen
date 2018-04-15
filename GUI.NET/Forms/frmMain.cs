@@ -805,7 +805,6 @@ namespace Mesen.GUI.Forms
 		private void ToggleFullscreen()
 		{
 			SetFullscreenState(!_fullscreenMode);
-			mnuFullscreen.Checked = _fullscreenMode;
 		}
 
 		private void ToggleMaxSpeed()
@@ -1163,9 +1162,9 @@ namespace Mesen.GUI.Forms
 
 		private void ctrlRenderer_DoubleClick(object sender, EventArgs e)
 		{
-			if(!CursorManager.NeedMouseIcon && !CursorManager.AllowMouseCapture) {
+			if(!CursorManager.NeedMouseIcon && !CursorManager.AllowMouseCapture && !DebugWindowManager.ScriptWindowOpened) {
 				//Disable double clicking (used to switch to fullscreen mode) when using a mouse-controlled device
-				SetFullscreenState(!_fullscreenMode);
+				ToggleFullscreen();
 			}
 		}
 
