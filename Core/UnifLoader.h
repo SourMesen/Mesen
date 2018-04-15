@@ -207,7 +207,7 @@ public:
 			Log("[UNIF] Battery: " + string(romData.HasBattery ? "Yes" : "No"));
 
 			if(!_checkOnly) {
-				GameDatabase::SetGameInfo(romData.PrgChrCrc32, romData, !EmulationSettings::CheckFlag(EmulationFlags::DisableGameDatabase));
+				GameDatabase::SetGameInfo(romData.PrgChrCrc32, romData, !EmulationSettings::CheckFlag(EmulationFlags::DisableGameDatabase), false);
 			}
 
 			if(romData.MapperID == UnifBoards::UnknownBoard) {

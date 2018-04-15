@@ -23,7 +23,7 @@ public:
 
 	static void InitializeInputDevices(string inputType, GameSystem system, bool silent = false);
 	static void InitializeInputDevices(uint32_t romCrc);
-	static void SetGameInfo(uint32_t romCrc, RomData &romData, bool updateRomData);
+	static void SetGameInfo(uint32_t romCrc, RomData &romData, bool updateRomData, bool forHeaderlessRom);
 	static bool GetiNesHeader(uint32_t romCrc, NESHeader &nesHeader);
 	static bool GetDbRomSize(uint32_t romCrc, uint32_t &prgSize, uint32_t &chrSize);
 };

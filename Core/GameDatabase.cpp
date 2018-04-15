@@ -406,7 +406,7 @@ bool GameDatabase::GetiNesHeader(uint32_t romCrc, NESHeader &nesHeader)
 	return false;
 }
 
-void GameDatabase::SetGameInfo(uint32_t romCrc, RomData &romData, bool updateRomData)
+void GameDatabase::SetGameInfo(uint32_t romCrc, RomData &romData, bool updateRomData, bool forHeaderlessRom)
 {	
 	GameInfo info = {};
 
@@ -415,8 +415,14 @@ void GameDatabase::SetGameInfo(uint32_t romCrc, RomData &romData, bool updateRom
 	auto result = _gameDatabase.find(romCrc);
 
 	if(result != _gameDatabase.end()) {
-		MessageManager::Log("[DB] Game found in database");
 		info = result->second;
+		if(!forHeaderlessRom && info.Board == "UNK") {
+			//Boards marked as UNK should only be used for headerless roms (since their data is unverified)
+			romData.DatabaseInfo = {};
+			return;
+		}
+
+		MessageManager::Log("[DB] Game found in database");
 
 		if(info.MapperID < UnifBoards::UnknownBoard) {
 			MessageManager::Log("[DB] Mapper: " + std::to_string(info.MapperID) + "  Sub: " + std::to_string(GetSubMapper(info)));
