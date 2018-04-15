@@ -295,6 +295,7 @@
 			<Control ID="chkDisablePaletteRead">Вiдключити PPU читання палiтри</Control>
 			<Control ID="chkDisablePpuReset">Не скидувати PPU при перезавантаженні консолі (Поведiнка Famicom)</Control>
 			<Control ID="chkUseNes101Hvc101Behavior">Використовувати NES/HVC-101 (Top-loader / AV Famicom) поведінку</Control>
+			<Control ID="chkMapperRandomPowerOnState">Randomize power-on state for mappers</Control>
 
 			<Control ID="tpgOverclocking">Розгін</Control>
 			<Control ID="grpOverclocking">Розгін CPU</Control>

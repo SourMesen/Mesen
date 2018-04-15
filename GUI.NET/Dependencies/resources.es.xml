@@ -295,7 +295,8 @@
 			<Control ID="chkDisablePaletteRead">Impedir la reproducción de la paleta de la PPU</Control>
 			<Control ID="chkDisablePpuReset">No resetear la PPU al resetear la consola (Famicom)</Control>
 			<Control ID="chkUseNes101Hvc101Behavior">Simular el comportamiento de NES/HVC-101 (Top-loader / AV Famicom)</Control>
-
+			<Control ID="chkMapperRandomPowerOnState">Randomize power-on state for mappers</Control>
+			
 			<Control ID="tpgOverclocking">Overclocking</Control>
 			<Control ID="grpOverclocking">Overclocking de CPU</Control>
 			<Control ID="lblOverclockWarning">ATENCIÓN: ¡El overclocking afecta a la estabilidad de la emulación y puede bloquear algunos juegos!</Control>

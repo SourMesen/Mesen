@@ -1540,6 +1540,8 @@ namespace Mesen.GUI
 
 		AllowMismatchingSaveStates = 0x10000000000000,
 
+		RandomizeMapperPowerOnState = 0x20000000000000,
+
 		ForceMaxSpeed = 0x4000000000000000,
 		ConsoleMode = 0x8000000000000000,
 	}

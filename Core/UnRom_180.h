@@ -11,8 +11,6 @@ protected:
 	void InitMapper() override
 	{
 		SelectPRGPage(0, 0);
-		SelectPRGPage(1, -1);
-
 		SelectCHRPage(0, 0);
 	}
 

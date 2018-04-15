@@ -14,7 +14,7 @@ protected:
 	void InitMapper() override
 	{
 		SelectPRGPage(0, 0);
-		SelectCHRPage(0, 0);
+		SelectCHRPage(0, GetPowerOnByte());
 
 		//Needed for mighty bomb jack (j)
 		_vramOpenBusValue = 0xFF;

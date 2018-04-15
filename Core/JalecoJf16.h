@@ -11,10 +11,10 @@ protected:
 
 	void InitMapper() override
 	{
-		SelectPRGPage(0, 0);
+		SelectPRGPage(0, GetPowerOnByte());
 		SelectPRGPage(1, -1);
 
-		SelectCHRPage(0, 0);
+		SelectCHRPage(0, GetPowerOnByte());
 	}
 
 	void WriteRegister(uint16_t addr, uint8_t value) override

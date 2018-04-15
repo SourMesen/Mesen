@@ -12,15 +12,13 @@ class MMC4 : public MMC2
 		{
 			_leftLatch = 1;
 			_rightLatch = 1;
-			_leftChrPage[0] = 0;
-			_leftChrPage[1] = 0;
-			_rightChrPage[0] = 0;
-			_rightChrPage[1] = 0;
+			_leftChrPage[0] = GetPowerOnByte() & 0x1F;
+			_leftChrPage[1] = GetPowerOnByte() & 0x1F;
+			_rightChrPage[0] = GetPowerOnByte() & 0x1F;
+			_rightChrPage[1] = GetPowerOnByte() & 0x1F;
+			_needChrUpdate = false;
 
-			SelectPRGPage(0, 0);
 			SelectPRGPage(1, -1);
-			SelectCHRPage(0, 0);
-			SelectCHRPage(0, 1);
 		}
 		
 	public:

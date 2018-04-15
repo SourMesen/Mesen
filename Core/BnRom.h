@@ -10,7 +10,7 @@ protected:
 
 	void InitMapper() override
 	{
-		SelectPRGPage(0, 0);
+		SelectPRGPage(0, GetPowerOnByte());
 		SelectCHRPage(0, 0);
 	}
 

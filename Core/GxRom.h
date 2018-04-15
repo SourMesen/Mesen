@@ -10,8 +10,8 @@ class GxRom : public BaseMapper
 
 		void InitMapper() override 
 		{
-			SelectPRGPage(0, 0);
-			SelectCHRPage(0, 0);
+			SelectPRGPage(0, GetPowerOnByte() & 0x03);
+			SelectCHRPage(0, GetPowerOnByte() & 0x03);
 		}
 
 		void WriteRegister(uint16_t addr, uint8_t value) override

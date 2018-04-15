@@ -68,21 +68,26 @@ class MMC3 : public BaseMapper
 
 		void ResetMmc3()
 		{
-			_state.Reg8000 = 0;
-			_state.RegA000 = 0;
-			_state.RegA001 = 0;
-			_chrMode = 0;
-			_prgMode = 0;
-			_currentRegister = 0;
-			memset(_registers, 0, sizeof(_registers));
+			_state.Reg8000 = GetPowerOnByte();
+			_state.RegA000 = GetPowerOnByte();
+			_state.RegA001 = GetPowerOnByte();
+			
+			_chrMode = GetPowerOnByte() & 0x01;
+			_prgMode = GetPowerOnByte() & 0x01;
+			
+			_currentRegister = GetPowerOnByte();
+			
+			for(int i = 0; i < sizeof(_registers); i++) {
+				_registers[i] = GetPowerOnByte();
+			}
 
-			_irqCounter = 0;
-			_irqReloadValue = 0;
-			_irqReload = false;
-			_irqEnabled = false;
+			_irqCounter = GetPowerOnByte();
+			_irqReloadValue = GetPowerOnByte();
+			_irqReload = GetPowerOnByte() & 0x01;
+			_irqEnabled = GetPowerOnByte() & 0x01;
 
-			_wramEnabled = false;
-			_wramWriteProtected = false;
+			_wramEnabled = GetPowerOnByte() & 0x01;
+			_wramWriteProtected = GetPowerOnByte() & 0x01;
 
 			_needIrq = false;
 		}

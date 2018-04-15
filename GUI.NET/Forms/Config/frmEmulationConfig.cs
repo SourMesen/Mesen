@@ -38,6 +38,7 @@ namespace Mesen.GUI.Forms.Config
 			AddBinding("DisablePpuReset", chkDisablePpuReset);
 			AddBinding("EnableOamDecay", chkEnableOamDecay);
 			AddBinding("UseNes101Hvc101Behavior", chkUseNes101Hvc101Behavior);
+			AddBinding("EnableMapperRandomPowerOnState", chkMapperRandomPowerOnState);
 
 			AddBinding("OverclockRate", nudOverclockRate);
 			AddBinding("OverclockAdjustApu", chkOverclockAdjustApu);

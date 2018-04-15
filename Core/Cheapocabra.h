@@ -24,7 +24,7 @@ protected:
 			BaseMapper::InitializeRam(_extraNametables[i], 0x400);
 			AddNametable(4 + i, _extraNametables[i]);
 		}
-		_reg = 0;
+		_reg = GetPowerOnByte();
 		UpdateState();
 	}
 

@@ -134,6 +134,8 @@ protected:
 	uint32_t GetPRGPageCount();
 	uint32_t GetCHRPageCount();
 
+	uint8_t GetPowerOnByte(uint8_t defaultValue = 0);
+	
 	void RestoreOriginalPrgRam();
 	void InitializeChrRam(int32_t chrRamSize = -1);
 

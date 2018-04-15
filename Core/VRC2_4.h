@@ -85,12 +85,15 @@ class VRC2_4 : public BaseMapper
 		{
 			DetectVariant();
 
-			_prgMode = 0;
-			_prgReg0 = 0;
-			_prgReg1 = 0;
+			_prgMode = GetPowerOnByte() & 0x01;
+			_prgReg0 = GetPowerOnByte() & 0x1F;
+			_prgReg1 = GetPowerOnByte() & 0x1F;
 			_hasIRQ = false;
-			memset(_loCHRRegs, 0, sizeof(_loCHRRegs));
-			memset(_hiCHRRegs, 0, sizeof(_hiCHRRegs));
+
+			for(int i = 0; i < 8; i++) {
+				_loCHRRegs[i] = GetPowerOnByte() & 0x0F;
+				_hiCHRRegs[i] = GetPowerOnByte() & 0x1F;
+			}
 
 			UpdateState();
 		}

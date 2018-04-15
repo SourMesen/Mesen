@@ -330,6 +330,18 @@ void BaseMapper::InitializeRam(void* data, uint32_t length)
 			break;
 	}
 }
+
+uint8_t BaseMapper::GetPowerOnByte(uint8_t defaultValue)
+{
+	if(EmulationSettings::CheckFlag(EmulationFlags::RandomizeMapperPowerOnState)) {
+		std::random_device rd;
+		std::mt19937 mt(rd());
+		std::uniform_int_distribution<> dist(0, 255);
+		return dist(mt);
+	} else {
+		return defaultValue;
+	}
+}
 		
 bool BaseMapper::HasBattery()
 {
