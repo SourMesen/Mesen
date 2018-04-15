@@ -30,6 +30,20 @@ namespace Mesen.GUI.Debugger
 		{
 			InitializeComponent();
 
+			List<string> builtInScripts = new List<string> { "DmcCapture.lua", "DrawMode.lua", "GameBoyMode.lua", "Grid.lua", "ReverseMode.lua", "SpriteBox.lua" };
+			foreach(string script in builtInScripts) {
+				ToolStripItem item = mnuBuiltInScripts.DropDownItems.Add(script);
+				item.Click += (s, e) => {
+					LoadBuiltInScript(item.Text);
+				};
+			}
+
+			tsToolbar.AddItemsToToolbar(
+				mnuOpen, mnuSave, null,
+				mnuRun, mnuStop, null,
+				mnuBuiltInScripts
+			);
+
 			DebugInfo config = ConfigManager.Config.DebugInfo;
 
 			_popupMenu = new AutocompleteMenu(txtScriptContent, this);
@@ -80,13 +94,7 @@ namespace Mesen.GUI.Debugger
 						LoadScriptFile(scriptToLoad, false);
 					}
 				} else if(mnuTutorialScript.Checked) {
-					using(Stream stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("Mesen.GUI.Debugger.Example.lua")) {
-						using(StreamReader reader = new StreamReader(stream)) {
-							txtScriptContent.Text = reader.ReadToEnd();
-							_originalText = txtScriptContent.Text;
-							txtScriptContent.ClearUndo();
-						}
-					}
+					LoadBuiltInScript("Example.lua");
 				}
 			}
 
@@ -194,6 +202,18 @@ namespace Mesen.GUI.Debugger
 				}
 			}
 			return true;
+		}
+		
+		private void LoadBuiltInScript(string name)
+		{
+			if(!SavePrompt()) {
+				return;
+			}
+
+			this.Text = $"{name} - Script Window";
+			txtScriptContent.Text = ResourceManager.ReadZippedResource(name);
+			_originalText = txtScriptContent.Text;
+			txtScriptContent.ClearUndo();
 		}
 
 		public void LoadScriptFile(string filepath, bool runScript = true)
@@ -311,11 +331,6 @@ namespace Mesen.GUI.Debugger
 			LoadScript();
 		}
 
-		private void btnRun_Click(object sender, EventArgs e)
-		{
-			RunScript();
-		}
-
 		private void mnuClose_Click(object sender, EventArgs e)
 		{
 			this.Close();
@@ -326,7 +341,7 @@ namespace Mesen.GUI.Debugger
 			RunScript();
 		}
 
-		private void btnSave_Click(object sender, EventArgs e)
+		private void mnuSave_Click(object sender, EventArgs e)
 		{
 			SaveScript();
 		}
@@ -336,17 +351,7 @@ namespace Mesen.GUI.Debugger
 			SaveAs(Path.GetFileName(this._filePath));
 		}
 
-		private void btnOpen_Click(object sender, EventArgs e)
-		{
-			LoadScript();
-		}
-
 		private void mnuStop_Click(object sender, EventArgs e)
-		{
-			StopScript();
-		}
-
-		private void btnStop_Click(object sender, EventArgs e)
 		{
 			StopScript();
 		}
@@ -364,7 +369,7 @@ namespace Mesen.GUI.Debugger
 				}
 			}
 
-			mnuSave.Enabled = btnSave.Enabled = txtScriptContent.Text != _originalText;
+			mnuSave.Enabled = txtScriptContent.Text != _originalText;
 
 			if(_filePath != null && File.Exists(_filePath) && mnuAutoReload.Checked) {
 				if(_lastTimestamp < File.GetLastWriteTime(_filePath)) {

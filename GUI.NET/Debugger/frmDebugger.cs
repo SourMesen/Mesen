@@ -229,7 +229,7 @@ namespace Mesen.GUI.Debugger
 
 		private void InitToolbar()
 		{
-			AddItemsToToolbar(
+			tsToolbar.AddItemsToToolbar(
 				mnuSaveRom, mnuRevertChanges, null,
 				mnuImportLabels, mnuExportLabels, null,
 				mnuContinue, mnuBreak, null,
@@ -241,37 +241,9 @@ namespace Mesen.GUI.Debugger
 				mnuEditHeader, null,
 				mnuSplitView, null
 			);
-			AddItemToToolbar(mnuShowVerifiedData, "Show Verified Data");
-			AddItemToToolbar(mnuShowUnidentifiedData, "Show Unidentified Code/Data");
-			AddItemsToToolbar(null, mnuBreakIn, null, mnuBreakOn);
-		}
-
-		private void AddItemToToolbar(ToolStripMenuItem item, string caption = null)
-		{
-			if(item == null) {
-				tsToolbar.Items.Add("-");
-			} else {
-				ToolStripButton newItem = new ToolStripButton(item.Image);
-				if(item.Image == null) {
-					newItem.Text = item.Text;
-				}
-				newItem.ToolTipText = (caption ?? item.Text) + (item.ShortcutKeys != Keys.None ? $" ({DebuggerShortcutsConfig.GetShortcutDisplay(item.ShortcutKeys)})" : "");
-				newItem.Click += (s, e) => item.PerformClick();
-				newItem.Checked = item.Checked;
-				newItem.Enabled = item.Enabled;
-				newItem.MouseEnter += (s, e) => newItem.ToolTipText = (caption ?? item.Text) + (item.ShortcutKeys != Keys.None ? $" ({DebuggerShortcutsConfig.GetShortcutDisplay(item.ShortcutKeys)})" : "");
-				item.EnabledChanged += (s, e) => newItem.Enabled = item.Enabled;
-				item.CheckedChanged += (s, e) => newItem.Checked = item.Checked;
-				item.VisibleChanged += (s, e) => newItem.Visible = item.Visible;
-				tsToolbar.Items.Add(newItem);
-			}
-		}
-
-		private void AddItemsToToolbar(params ToolStripMenuItem[] items)
-		{
-			foreach(ToolStripMenuItem item in items) {
-				AddItemToToolbar(item);
-			}
+			tsToolbar.AddItemToToolbar(mnuShowVerifiedData, "Show Verified Data");
+			tsToolbar.AddItemToToolbar(mnuShowUnidentifiedData, "Show Unidentified Code/Data");
+			tsToolbar.AddItemsToToolbar(null, mnuBreakIn, null, mnuBreakOn);
 		}
 
 		protected override bool ProcessCmdKey(ref Message msg, Keys keyData)

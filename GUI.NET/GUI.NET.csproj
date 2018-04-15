@@ -1168,6 +1168,24 @@
     <Compile Include="RuntimeChecker.cs" />
     <Compile Include="SingleInstance.cs" />
     <Compile Include="TestRunner.cs" />
+    <None Include="Dependencies\LuaScripts\DmcCapture.lua">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Dependencies\LuaScripts\DrawMode.lua">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Dependencies\LuaScripts\GameBoyMode.lua">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Dependencies\LuaScripts\Grid.lua">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Dependencies\LuaScripts\ReverseMode.lua">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Dependencies\LuaScripts\SpriteBox.lua">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Resources\SwitchView.png" />
     <None Include="Resources\SelectAll.png" />
     <None Include="Resources\Paste.png" />
@@ -1227,7 +1245,9 @@
     <EmbeddedResource Include="Debugger\Controls\ctrlSourceViewer.resx">
       <DependentUpon>ctrlSourceViewer.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Debugger\Example.lua" />
+    <EmbeddedResource Include="Dependencies\LuaScripts\Example.lua">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
     <None Include="Resources\PipetteSmall.png" />
     <None Include="Resources\Enum.png" />
     <None Include="Resources\Script.png" />

@@ -66,6 +66,21 @@ namespace Mesen.GUI
 			return null;
 		}
 
+		public static string ReadZippedResource(string filename)
+		{
+			ZipArchive zip = new ZipArchive(Assembly.GetExecutingAssembly().GetManifestResourceStream("Mesen.GUI.Dependencies.Dependencies.zip"));
+			foreach(ZipArchiveEntry entry in zip.Entries) {
+				if(entry.Name == filename) {
+					using(Stream stream = entry.Open()) {
+						using(StreamReader reader = new StreamReader(stream)) {
+							return reader.ReadToEnd();
+						}
+					}
+				}
+			}
+			return null;
+		}
+
 		private static void CleanupOldFiles()
 		{
 			try {

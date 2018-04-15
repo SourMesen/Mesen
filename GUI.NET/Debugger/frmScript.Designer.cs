@@ -39,6 +39,7 @@
 			this.mnuSave = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuSaveAs = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
+			this.mnuBuiltInScripts = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuRecentScripts = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripSeparator();
 			this.mnuClose = new System.Windows.Forms.ToolStripMenuItem();
@@ -61,12 +62,7 @@
 			this.mnuBlankWindow = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuTutorialScript = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuAutoLoadLastScript = new System.Windows.Forms.ToolStripMenuItem();
-			this.toolStrip1 = new Mesen.GUI.Controls.ctrlMesenToolStrip();
-			this.btnOpen = new System.Windows.Forms.ToolStripButton();
-			this.btnSave = new System.Windows.Forms.ToolStripButton();
-			this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
-			this.btnRun = new System.Windows.Forms.ToolStripButton();
-			this.btnStop = new System.Windows.Forms.ToolStripButton();
+			this.tsToolbar = new Mesen.GUI.Controls.ctrlMesenToolStrip();
 			this.txtScriptContent = new FastColoredTextBoxNS.FastColoredTextBox();
 			this.contextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this.mnuCopy = new System.Windows.Forms.ToolStripMenuItem();
@@ -81,7 +77,6 @@
 			this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
 			this.lblScriptActive = new System.Windows.Forms.ToolStripStatusLabel();
 			this.mnuMain.SuspendLayout();
-			this.toolStrip1.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.txtScriptContent)).BeginInit();
 			this.contextMenu.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.ctrlSplit)).BeginInit();
@@ -111,6 +106,7 @@
             this.mnuSave,
             this.mnuSaveAs,
             this.toolStripMenuItem1,
+            this.mnuBuiltInScripts,
             this.mnuRecentScripts,
             this.toolStripMenuItem2,
             this.mnuClose});
@@ -140,7 +136,7 @@
 			this.mnuSave.Name = "mnuSave";
 			this.mnuSave.Size = new System.Drawing.Size(178, 22);
 			this.mnuSave.Text = "Save";
-			this.mnuSave.Click += new System.EventHandler(this.btnSave_Click);
+			this.mnuSave.Click += new System.EventHandler(this.mnuSave_Click);
 			// 
 			// mnuSaveAs
 			// 
@@ -153,6 +149,13 @@
 			// 
 			this.toolStripMenuItem1.Name = "toolStripMenuItem1";
 			this.toolStripMenuItem1.Size = new System.Drawing.Size(175, 6);
+			// 
+			// mnuBuiltInScripts
+			// 
+			this.mnuBuiltInScripts.Image = global::Mesen.GUI.Properties.Resources.LogWindow;
+			this.mnuBuiltInScripts.Name = "mnuBuiltInScripts";
+			this.mnuBuiltInScripts.Size = new System.Drawing.Size(178, 22);
+			this.mnuBuiltInScripts.Text = "Built-in Scripts";
 			// 
 			// mnuRecentScripts
 			// 
@@ -326,66 +329,14 @@
 			this.mnuAutoLoadLastScript.Text = "Load the last script loaded";
 			this.mnuAutoLoadLastScript.Click += new System.EventHandler(this.mnuAutoLoadLastScript_Click);
 			// 
-			// toolStrip1
+			// tsToolbar
 			// 
-			this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.btnOpen,
-            this.btnSave,
-            this.toolStripSeparator1,
-            this.btnRun,
-            this.btnStop});
-			this.toolStrip1.Location = new System.Drawing.Point(0, 24);
-			this.toolStrip1.Name = "toolStrip1";
-			this.toolStrip1.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
-			this.toolStrip1.Size = new System.Drawing.Size(965, 25);
-			this.toolStrip1.TabIndex = 1;
-			this.toolStrip1.Text = "toolStrip1";
-			// 
-			// btnOpen
-			// 
-			this.btnOpen.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-			this.btnOpen.Image = global::Mesen.GUI.Properties.Resources.FolderOpen;
-			this.btnOpen.ImageTransparentColor = System.Drawing.Color.Magenta;
-			this.btnOpen.Name = "btnOpen";
-			this.btnOpen.Size = new System.Drawing.Size(23, 22);
-			this.btnOpen.Text = "Open";
-			this.btnOpen.Click += new System.EventHandler(this.btnOpen_Click);
-			// 
-			// btnSave
-			// 
-			this.btnSave.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-			this.btnSave.Image = global::Mesen.GUI.Properties.Resources.Floppy;
-			this.btnSave.ImageTransparentColor = System.Drawing.Color.Magenta;
-			this.btnSave.Name = "btnSave";
-			this.btnSave.Size = new System.Drawing.Size(23, 22);
-			this.btnSave.Text = "Save";
-			this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
-			// 
-			// toolStripSeparator1
-			// 
-			this.toolStripSeparator1.Name = "toolStripSeparator1";
-			this.toolStripSeparator1.Size = new System.Drawing.Size(6, 25);
-			// 
-			// btnRun
-			// 
-			this.btnRun.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-			this.btnRun.Image = global::Mesen.GUI.Properties.Resources.Play;
-			this.btnRun.ImageTransparentColor = System.Drawing.Color.Magenta;
-			this.btnRun.Name = "btnRun";
-			this.btnRun.Size = new System.Drawing.Size(23, 22);
-			this.btnRun.Text = "Run";
-			this.btnRun.Click += new System.EventHandler(this.btnRun_Click);
-			// 
-			// btnStop
-			// 
-			this.btnStop.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-			this.btnStop.Image = global::Mesen.GUI.Properties.Resources.Stop;
-			this.btnStop.ImageTransparentColor = System.Drawing.Color.Magenta;
-			this.btnStop.Name = "btnStop";
-			this.btnStop.Size = new System.Drawing.Size(23, 22);
-			this.btnStop.Text = "Stop";
-			this.btnStop.ToolTipText = "Stop";
-			this.btnStop.Click += new System.EventHandler(this.btnStop_Click);
+			this.tsToolbar.Location = new System.Drawing.Point(0, 24);
+			this.tsToolbar.Name = "tsToolbar";
+			this.tsToolbar.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
+			this.tsToolbar.Size = new System.Drawing.Size(965, 25);
+			this.tsToolbar.TabIndex = 1;
+			this.tsToolbar.Text = "toolStrip1";
 			// 
 			// txtScriptContent
 			// 
@@ -414,7 +365,6 @@
 			this.txtScriptContent.Cursor = System.Windows.Forms.Cursors.IBeam;
 			this.txtScriptContent.DisabledColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
 			this.txtScriptContent.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.txtScriptContent.Font = new System.Drawing.Font("Courier New", 9.75F);
 			this.txtScriptContent.IsReplaceMode = false;
 			this.txtScriptContent.Language = FastColoredTextBoxNS.Language.Lua;
 			this.txtScriptContent.LeftBracket = '(';
@@ -547,7 +497,7 @@
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(965, 587);
 			this.Controls.Add(this.ctrlSplit);
-			this.Controls.Add(this.toolStrip1);
+			this.Controls.Add(this.tsToolbar);
 			this.Controls.Add(this.mnuMain);
 			this.Controls.Add(this.statusStrip1);
 			this.MainMenuStrip = this.mnuMain;
@@ -556,8 +506,6 @@
 			this.Text = "Script Window";
 			this.mnuMain.ResumeLayout(false);
 			this.mnuMain.PerformLayout();
-			this.toolStrip1.ResumeLayout(false);
-			this.toolStrip1.PerformLayout();
 			((System.ComponentModel.ISupportInitialize)(this.txtScriptContent)).EndInit();
 			this.contextMenu.ResumeLayout(false);
 			this.ctrlSplit.Panel1.ResumeLayout(false);
@@ -577,21 +525,16 @@
 		private Mesen.GUI.Controls.ctrlMesenMenuStrip mnuMain;
 		private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem mnuOpen;
-		private Mesen.GUI.Controls.ctrlMesenToolStrip toolStrip1;
-		private System.Windows.Forms.ToolStripButton btnRun;
+		private Mesen.GUI.Controls.ctrlMesenToolStrip tsToolbar;
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem1;
 		private System.Windows.Forms.ToolStripMenuItem mnuClose;
 		private System.Windows.Forms.ToolStripMenuItem scriptToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem mnuRun;
 		private FastColoredTextBoxNS.FastColoredTextBox txtScriptContent;
-		private System.Windows.Forms.ToolStripButton btnSave;
-		private System.Windows.Forms.ToolStripButton btnOpen;
-		private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
 		private System.Windows.Forms.ToolStripMenuItem mnuSave;
 		private System.Windows.Forms.ToolStripMenuItem mnuRecentScripts;
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem2;
 		private System.Windows.Forms.ToolStripMenuItem mnuStop;
-		private System.Windows.Forms.ToolStripButton btnStop;
 		private GUI.Controls.ctrlSplitContainer ctrlSplit;
 		private System.Windows.Forms.TextBox txtLog;
 		private System.Windows.Forms.Timer tmrLog;
@@ -622,5 +565,6 @@
 		private System.Windows.Forms.ToolStripMenuItem mnuAutoLoadLastScript;
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem6;
 		private System.Windows.Forms.ToolStripMenuItem mnuSelectFont;
+		private System.Windows.Forms.ToolStripMenuItem mnuBuiltInScripts;
 	}
 }
