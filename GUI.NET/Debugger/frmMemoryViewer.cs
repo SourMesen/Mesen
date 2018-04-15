@@ -218,7 +218,7 @@ namespace Mesen.GUI.Debugger
 					this.UpdateFlags();
 					break;
 
-				case InteropEmu.ConsoleNotificationType.PpuViewerDisplayFrame:
+				case InteropEmu.ConsoleNotificationType.PpuFrameDone:
 					int refreshDelay = 90;
 					switch(ConfigManager.Config.DebugInfo.RamAutoRefreshSpeed) {
 						case RefreshSpeed.Low: refreshDelay= 90; break;
