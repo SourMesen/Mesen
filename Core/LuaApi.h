@@ -41,6 +41,7 @@ public:
 	static int DisplayMessage(lua_State *lua);
 	
 	static int Reset(lua_State *lua);
+	static int Stop(lua_State *lua);
 	static int Break(lua_State *lua);
 	static int Resume(lua_State *lua);
 	static int Execute(lua_State *lua);

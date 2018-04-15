@@ -81,6 +81,7 @@ int LuaApi::GetLibrary(lua_State *lua)
 		{ "log", LuaApi::Log },
 		{ "displayMessage", LuaApi::DisplayMessage },
 		{ "reset", LuaApi::Reset },
+	   { "stop", LuaApi::Stop },
 		{ "breakExecution", LuaApi::Break },
 		{ "resume", LuaApi::Resume },
 		{ "execute", LuaApi::Execute },
@@ -461,6 +462,15 @@ int LuaApi::Reset(lua_State *lua)
 	LuaCallHelper l(lua);
 	checkparams();
 	Console::Reset(true);
+	return l.ReturnCount();
+}
+
+int LuaApi::Stop(lua_State *lua)
+{
+	LuaCallHelper l(lua);
+	int32_t stopCode = l.ReadInteger(0);
+	checkminparams(0);
+	Console::GetInstance()->Stop(stopCode);
 	return l.ReturnCount();
 }
 

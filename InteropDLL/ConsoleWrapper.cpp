@@ -132,6 +132,7 @@ namespace InteropEmu {
 
 
 		DllExport bool __stdcall IsRunning() { return Console::IsRunning(); }
+		DllExport int32_t __stdcall GetStopCode() { return Console::GetInstance()->GetStopCode(); }
 
 		DllExport void __stdcall LoadROM(char* filename, char* patchFile) { Console::LoadROM((string)filename, (string)patchFile); }
 		DllExport void __stdcall AddKnownGameFolder(char* folder) { FolderUtilities::AddKnownGameFolder(folder); }

@@ -82,28 +82,7 @@ namespace Mesen.GUI.Forms
 			this.Resize += ResizeRecentGames;
 			this.FormClosed += (s, e) => Application.RemoveMessageFilter(this);
 		}
-
-		public List<string> PreprocessCommandLineArguments(string[] args, bool toLower)
-		{
-			var switches = new List<string>();
-			for(int i = 0; i < args.Length; i++) {
-				if(args[i] != null) {
-					string arg = args[i].Trim();
-					if(arg.StartsWith("--")) {
-						arg = "/" + arg.Substring(2);
-					} else if(arg.StartsWith("-")) {
-						arg = "/" + arg.Substring(1);
-					}
-
-					if(toLower) {
-						arg = arg.ToLowerInvariant();
-					}
-					switches.Add(arg);
-				}
-			}
-			return switches;
-		}
-
+		
 		public void ProcessCommandLineArguments(List<string> switches, bool forStartup)
 		{
 			if(forStartup) {
@@ -121,42 +100,13 @@ namespace Mesen.GUI.Forms
 
 		public void LoadGameFromCommandLine(List<string> switches)
 		{
-			Func<string, bool, string> getValidPath = (string path, bool forLua) => {
-				path = path.Trim();
-				if(path.ToLower().EndsWith(".lua") == forLua) {
-					try {
-						if(!File.Exists(path)) {
-							//Try loading file as a relative path to the folder Mesen was started from
-							path = Path.Combine(Program.OriginalFolder, path);
-						}
-						if(File.Exists(path)) {
-							return path;
-						}
-					} catch { }
-				}
-				return null;
-			};
+			string romPath;
+			CommandLineHelper.GetRomPathFromCommandLine(switches, out romPath, out _luaScriptsToLoad);
 
-			//Check if any Lua scripts were specified
-			_luaScriptsToLoad = new List<string>();
-			foreach(string arg in switches) {
-				string path = getValidPath(arg, true);
-				if(path != null) {
-					_luaScriptsToLoad.Add(path);
-				}
-			}
+			if(romPath != null) {
+				this.LoadFile(romPath);
+			} else {
 
-			bool fileLoaded = false;
-			foreach(string arg in switches) {
-				string path = getValidPath(arg, false);
-				if(path != null) {
-					this.LoadFile(path);
-					fileLoaded = true;
-					break;
-				}
-			}
-
-			if(!fileLoaded) {
 				if(_emuThread == null) {
 					//When no ROM is loaded, only process Lua scripts if a ROM was specified as a command line param
 					_luaScriptsToLoad.Clear();
@@ -196,7 +146,7 @@ namespace Mesen.GUI.Forms
 
 			InteropEmu.ScreenSize originalSize = InteropEmu.GetScreenSize(false);
 			VideoInfo.ApplyConfig();
-			this.ProcessCommandLineArguments(this.PreprocessCommandLineArguments(_commandLineArgs, true), true);
+			this.ProcessCommandLineArguments(CommandLineHelper.PreprocessCommandLineArguments(_commandLineArgs, true), true);
 			VideoInfo.ApplyConfig();
 			InteropEmu.ScreenSize newSize = InteropEmu.GetScreenSize(false);
 			if(originalSize.Width != newSize.Width || originalSize.Height != newSize.Height) {
@@ -267,7 +217,7 @@ namespace Mesen.GUI.Forms
 				this.Size = ConfigManager.Config.WindowSize.Value;
 			}
 
-			this.LoadGameFromCommandLine(this.PreprocessCommandLineArguments(_commandLineArgs, false));
+			this.LoadGameFromCommandLine(CommandLineHelper.PreprocessCommandLineArguments(_commandLineArgs, false));
 
 			this.menuStrip.VisibleChanged += new System.EventHandler(this.menuStrip_VisibleChanged);
 			this.UpdateRendererLocation();
@@ -281,7 +231,7 @@ namespace Mesen.GUI.Forms
 			//This is needed when DPI display settings is not set to 100%
 			_enableResize = true;
 
-			ProcessFullscreenSwitch(this.PreprocessCommandLineArguments(_commandLineArgs, true));
+			ProcessFullscreenSwitch(CommandLineHelper.PreprocessCommandLineArguments(_commandLineArgs, true));
 		}
 
 		protected override void OnClosing(CancelEventArgs e)

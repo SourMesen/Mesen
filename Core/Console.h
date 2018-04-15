@@ -58,6 +58,7 @@ class Console
 
 		bool _stop = false;
 		bool _running = false;
+		int32_t _stopCode = 0;
 
 		bool _disableOcNextFrame = false;
 
@@ -77,7 +78,9 @@ class Console
 		void SaveBatteries();
 
 		void Run();
-		void Stop();
+		void Stop(int stopCode = 0);
+		
+		int32_t GetStopCode();
 		
 		void RunSingleFrame();
 		bool UpdateHdPackMode();

@@ -129,6 +129,11 @@ namespace Mesen.GUI
 					return;
 				}
 
+				if(CommandLineHelper.PreprocessCommandLineArguments(args, true).Contains("/testrunner")) {
+					Environment.ExitCode = TestRunner.Run(args);
+					return;
+				}
+
 				using(SingleInstance singleInstance = new SingleInstance()) {
 					if(singleInstance.FirstInstance || !ConfigManager.Config.PreferenceInfo.SingleInstance) {
 						frmMain frmMain = new frmMain(args);
@@ -137,8 +142,8 @@ namespace Mesen.GUI
 						singleInstance.ArgumentsReceived += (object sender, ArgumentsReceivedEventArgs e) => {
 							if(frmMain.IsHandleCreated) {
 								frmMain.BeginInvoke((MethodInvoker)(() => {
-									frmMain.ProcessCommandLineArguments(frmMain.PreprocessCommandLineArguments(e.Args, true), false);
-									frmMain.LoadGameFromCommandLine(frmMain.PreprocessCommandLineArguments(e.Args, false));
+									frmMain.ProcessCommandLineArguments(CommandLineHelper.PreprocessCommandLineArguments(e.Args, true), false);
+									frmMain.LoadGameFromCommandLine(CommandLineHelper.PreprocessCommandLineArguments(e.Args, false));
 								}));
 							}
 						};

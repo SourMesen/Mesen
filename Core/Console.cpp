@@ -360,9 +360,10 @@ void Console::ResetComponents(bool softReset)
 	_controlManager->UpdateInputState();
 }
 
-void Console::Stop()
+void Console::Stop(int stopCode)
 {
 	_stop = true;
+	_stopCode = stopCode;
 
 	shared_ptr<Debugger> debugger = _debugger;
 	if(debugger) {
@@ -510,6 +511,7 @@ void Console::Run()
 		}
 	} catch(const std::runtime_error &ex) {
 		crashed = true;
+		_stopCode = -1;
 		MessageManager::DisplayMessage("Error", "GameCrash", ex.what());
 	}
 
@@ -724,6 +726,11 @@ bool Console::IsDebuggerAttached()
 void Console::SetNextFrameOverclockStatus(bool disabled)
 {
 	Instance->_disableOcNextFrame = disabled;
+}
+
+int32_t Console::GetStopCode()
+{
+	return _stopCode;
 }
 
 HdPackData* Console::GetHdData()
