@@ -77,9 +77,14 @@ class MMC3 : public BaseMapper
 			
 			_currentRegister = GetPowerOnByte();
 			
-			for(int i = 0; i < sizeof(_registers); i++) {
-				_registers[i] = GetPowerOnByte();
-			}
+			_registers[0] = GetPowerOnByte(0);
+			_registers[1] = GetPowerOnByte(2);
+			_registers[2] = GetPowerOnByte(4);
+			_registers[3] = GetPowerOnByte(5);
+			_registers[4] = GetPowerOnByte(6);
+			_registers[5] = GetPowerOnByte(7);
+			_registers[6] = GetPowerOnByte(0);
+			_registers[7] = GetPowerOnByte(1);
 
 			_irqCounter = GetPowerOnByte();
 			_irqReloadValue = GetPowerOnByte();
