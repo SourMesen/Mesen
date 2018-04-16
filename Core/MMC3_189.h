@@ -12,7 +12,7 @@ private:
 	
 	virtual void WriteRegister(uint16_t addr, uint8_t value) override
 	{
-		if(addr <= 0x4FFF) {
+		if(addr <= 0x7FFF) {
 			_prgReg = value;
 			UpdateState();
 		} else {
