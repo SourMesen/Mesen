@@ -8,41 +8,64 @@ class MMC3_115 : public MMC3
 private:
 	uint8_t _prgReg = 0;
 	uint8_t _chrReg = 0;
+	uint8_t _protectionReg = 0;
 
 protected:
-	virtual uint16_t RegisterStartAddress() override { return 0x6000; }
+	bool AllowRegisterRead() override { return true; }
 
-	virtual void SelectCHRPage(uint16_t slot, uint16_t page, ChrMemoryType memoryType = ChrMemoryType::Default) override
+	void InitMapper() override
+	{
+		AddRegisterRange(0x4100, 0x7FFF, MemoryOperation::Write);
+		AddRegisterRange(0x5000, 0x5FFF, MemoryOperation::Read);
+		RemoveRegisterRange(0x8000, 0xFFFF, MemoryOperation::Read);
+
+		MMC3::InitMapper();
+	}
+
+	void SelectCHRPage(uint16_t slot, uint16_t page, ChrMemoryType memoryType = ChrMemoryType::Default) override
 	{
 		page |= (_chrReg << 8);
 		BaseMapper::SelectCHRPage(slot, page);
 	}
 
-	virtual void UpdateState() override
+	void UpdateState() override
 	{
 		MMC3::UpdateState();
 
 		if(_prgReg & 0x80) {
-			SelectPRGPage(0, (_prgReg & 0x0F) << 1);
-			SelectPRGPage(1, ((_prgReg & 0x0F) << 1) + 1);
+			if(_prgReg & 0x20) {
+				SelectPrgPage4x(0, ((_prgReg & 0x0F) >> 1) << 2);				
+			} else {
+				SelectPrgPage2x(0, (_prgReg & 0x0F) << 1);
+				SelectPrgPage2x(1, (_prgReg & 0x0F) << 1);
+			}
 		}
 	}
 
-	virtual void WriteRegister(uint16_t addr, uint8_t value) override
+	uint8_t ReadRegister(uint16_t addr) override
+	{
+		return _protectionReg;
+	}
+
+	void WriteRegister(uint16_t addr, uint8_t value) override
 	{
 		if(addr < 0x8000) {
-			if(addr & 0x01) {
-				_chrReg = value & 0x01;
+			if(addr == 0x5080) {
+				_protectionReg = value;
 			} else {
-				_prgReg = value;
+				if(addr & 0x01) {
+					_chrReg = value & 0x01;
+				} else {
+					_prgReg = value;
+				}
+				UpdateState();
 			}
-			UpdateState();
 		} else {
 			MMC3::WriteRegister(addr, value);
 		}
 	}
-
-	virtual void StreamState(bool saving) override
+	
+	void StreamState(bool saving) override
 	{
 		MMC3::StreamState(saving);
 		Stream(_prgReg, _chrReg);
