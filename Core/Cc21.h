@@ -6,17 +6,30 @@ class Cc21 : public BaseMapper
 {
 protected:
 	uint16_t GetPRGPageSize() override { return 0x8000; }
-	uint16_t GetCHRPageSize() override { return 0x2000; }
+	uint16_t GetCHRPageSize() override { return 0x1000; }
 
 	void InitMapper() override
 	{
 		SelectPRGPage(0, 0);
 		SelectCHRPage(0, 0);
+		SelectCHRPage(1, 0);
 	}
 
 	void WriteRegister(uint16_t addr, uint8_t value) override
 	{
-		SelectCHRPage(0, addr & 0xFF);
-		SetMirroringType(addr & 0x02 ? MirroringType::ScreenBOnly : MirroringType::ScreenAOnly);
+		uint8_t latch = addr;
+		if(addr == 0x8000) {
+			latch = value;
+		}
+
+		if(_chrRomSize == 0x2000) {
+			SelectCHRPage(0, latch & 0x01);
+			SelectCHRPage(1, latch & 0x01);
+		} else {
+			//Overdumped roms
+			SelectChrPage2x(0, (latch & 0x01) << 1);
+		}
+
+		SetMirroringType(latch & 0x01 ? MirroringType::ScreenBOnly : MirroringType::ScreenAOnly);
 	}
 };
