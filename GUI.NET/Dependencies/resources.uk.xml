@@ -253,11 +253,11 @@
 			<Control ID="chkVerticalBlend">Застосувати вертикальне змішування</Control>
 
 			<Control ID="trkYFilterLength">Y Фільтр (Розмиття по горизонталі)</Control>
-			<Control ID="trkIFilterLength">I Фiльтр (Horizontal Bleed)</Control>
-			<Control ID="trkQFilterLength">Q Фiльтр (Horizontal Bleed)</Control>
+			<Control ID="trkIFilterLength">I Фiльтр (Горизонтальна дисперсія)</Control>
+			<Control ID="trkQFilterLength">Q Фiльтр (Горизонтальна дисперсія)</Control>
 
-			<Control ID="grpScanlines">Scanlines</Control>
-			<Control ID="trkScanlines">Scanlines</Control>
+			<Control ID="grpScanlines">Сканування ліній</Control>
+			<Control ID="trkScanlines">Сканування ліній</Control>
 			<Control ID="btnResetPictureSettings">Скидання</Control>
 			<Control ID="mnuPresetComposite">Композитний</Control>
 			<Control ID="mnuPresetSVideo">S-Video</Control>
@@ -332,7 +332,7 @@
 			<Control ID="chkDisplayTitleBarInfo">Відображення додаткової інформації в рядку заголовка</Control>
 
 			<Control ID="chkConfirmExitResetPower">Підтвердження перед перезавантаженням/вимиканням/вихiдом Mesen</Control>
-			<Control ID="chkPauseOnMovieEnd">Ставити на паузу після програвання запису</Control>
+			<Control ID="chkPauseOnMovieEnd">Призупинити емуляцію в кiнцi запису</Control>
 			<Control ID="chkAllowBackgroundInput">Дозволити введення в фоновому режимі</Control>
 
 			<Control ID="lblPauseIn">Пауза, коли у:</Control>
@@ -341,10 +341,10 @@
 			<Control ID="chkPauseInDebugger">Налагоджувальні інструменти</Control>
 
 			<Control ID="chkAutoLoadIps">Завантажувати файли IPS/BPS автоматично</Control>
-			<Control ID="chkHidePauseOverlay">Приховати екран паузи</Control>
+			<Control ID="chkHidePauseOverlay">Не відображати екран паузи</Control>
 			<Control ID="chkDisplayMovieIcons">Відображати значок відтворення/запису при відтворенні або запису відео</Control>
 			<Control ID="btnOpenMesenFolder">Відкрити папку Mesen</Control>
-			<Control ID="btnResetSettings">Скинути всі налаштування</Control>
+			<Control ID="btnResetSettings">Скинути конфігурацію</Control>
 
 			<Control ID="tpgFiles">Файли/Папки</Control>
 			<Control ID="grpFileAssociations">Асоціації файлів</Control>
@@ -364,7 +364,7 @@
 			<Control ID="chkScreenshotsOverride">Скріншоти:</Control>
 			<Control ID="chkSaveDataOverride">Save Data:</Control>
 			<Control ID="chkWaveOverride">Аудiо:</Control>
-			<Control ID="chkSaveStatesOverride">Save States:</Control>
+			<Control ID="chkSaveStatesOverride">Стани зображення:</Control>
 			<Control ID="chkMoviesOverride">Фільми:</Control>
 
 			<Control ID="tpgAdvanced">Розширені</Control>
