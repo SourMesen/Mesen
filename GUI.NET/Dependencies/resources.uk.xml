@@ -522,7 +522,7 @@
 		<Form ID="frmVsGameConfig" Title="Конфігурація VS">
 			<Control ID="lblGame">Гра</Control>
 			<Control ID="lblPpuModel">Модель PPU</Control>
-			<Control ID="grpDipSwitches">DIP Switches</Control>
+			<Control ID="grpDipSwitches">Перемикачі DIP</Control>
 		</Form>
 		<Form ID="frmUpdatePrompt" Title="Mesen - Доступно оновлення">
 			<Control ID="lblLatestVersion">Остання версія : </Control>
@@ -630,7 +630,7 @@
 			<Control ID="lblTurboFast">Швидко</Control>
 			<Control ID="lblSlow">Повiльно</Control>
 
-			<Control ID="btnSelectPreset">Пресети</Control>
+			<Control ID="btnSelectPreset">Виберіть зумовлений пресет...</Control>
 			<Control ID="mnuKeyboard">Клавіатура</Control>
 			<Control ID="mnuWasdLayout">WSAD розкладка</Control>
 			<Control ID="mnuArrowLayout">Курсорні клавіші</Control>
@@ -748,7 +748,7 @@
 		<Message ID="NsfUnknownField">&lt;невідомий&gt;</Message>
 
 		<Message ID="CouldNotInstallRuntime">The Visual Studio Runtime був встановлений неправильно.</Message>
-		<Message ID="EmptyState">&lt;пусто&gt;</Message>
+		<Message ID="EmptyState">&lt;немає резервної копії&gt;</Message>
 		<Message ID="ErrorWhileCheckingUpdates">Не вдалося перевірити оновлення. Перевірте ваше з'єднання з інтернетом і спробуйте ще раз.&#xA;&#xA;Детально:&#xA;{0}</Message>
 		<Message ID="AutoUpdateDisabledMessage">Автоматичні оновлення не включені в цій збірці - будь ласка завантажте останню версію коду та перекомпілюйте Mesen щоб отримати останні оновлення.</Message>
 		<Message ID="FdsBiosNotFound">Біос для FDS не був знайдений. Біос потрібен, щоб грати в ігри FDS.&#xA;&#xA;Ви хочете вибрати BIOS зараз?</Message>
@@ -799,7 +799,7 @@
 		<Message ID="EmulatorShortcutMappings_PowerCycle">Цикл включення</Message>
 		<Message ID="EmulatorShortcutMappings_PowerOff">Вимкнення</Message>
 		<Message ID="EmulatorShortcutMappings_Exit">Вихід</Message>
-		<Message ID="EmulatorShortcutMappings_TakeScreenshot">Зробити скріншот</Message>
+		<Message ID="EmulatorShortcutMappings_TakeScreenshot">Скріншот</Message>
 		<Message ID="EmulatorShortcutMappings_SwitchDiskSide">FDS - Зміна боку диска</Message>
 		<Message ID="EmulatorShortcutMappings_InsertNextDisk">FDS - Вставити наступний диск</Message>
 		<Message ID="EmulatorShortcutMappings_InsertCoin1">VS - Вставити монету в слот 1</Message>
@@ -810,11 +810,11 @@
 		<Message ID="EmulatorShortcutMappings_MoveToPreviousStateSlot">Попередній слот для збережень</Message>
 		<Message ID="EmulatorShortcutMappings_SaveState">Зберегти</Message>
 		<Message ID="EmulatorShortcutMappings_LoadState">Завантажити</Message>
-		<Message ID="EmulatorShortcutMappings_ToggleCheats">Включити/Виключити Чит Коди</Message>
+		<Message ID="EmulatorShortcutMappings_ToggleCheats">Увімкнути/Вимкнути всі коди</Message>
 		<Message ID="EmulatorShortcutMappings_ToggleAudio">Увімкнути/Вимкнути звук</Message>
-		<Message ID="EmulatorShortcutMappings_RunSingleFrame">Запуск Одного Кадру</Message>
+		<Message ID="EmulatorShortcutMappings_RunSingleFrame">Перемістити вперед один кадр</Message>
 
-		<Message ID="EmulatorShortcutMappings_EjectDisk">FDS - Видалити диск</Message>
+		<Message ID="EmulatorShortcutMappings_EjectDisk">FDS - Витягти диск</Message>
 		<Message ID="EmulatorShortcutMappings_SetScale1x">Встановити масштаб 1x</Message>
 		<Message ID="EmulatorShortcutMappings_SetScale2x">Встановити масштаб 2x</Message>
 		<Message ID="EmulatorShortcutMappings_SetScale3x">Встановити масштаб 3x</Message>
