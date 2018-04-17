@@ -413,11 +413,11 @@
 			<Control ID="chkAlwaysOnTop">Завжди відображати поверх інших вікон</Control>
 
 			<Control ID="tpgNsf">NSF</Control>
-			<Control ID="chkNsfAutoDetectSilence">Переходити на наступний трек після</Control>
+			<Control ID="chkNsfAutoDetectSilence">Відтворити наступний трек після</Control>
 			<Control ID="lblNsfMillisecondsOfSilence">мілісекунд тиші</Control>
-			<Control ID="chkNsfMoveToNextTrackAfterTime">Обмежити тривалість відтворення</Control>
-			<Control ID="lblNsfSeconds">секундами</Control>
-			<Control ID="chkNsfDisableApuIrqs">Відключити IRQs APU (Рекомендовано)</Control>
+			<Control ID="chkNsfMoveToNextTrackAfterTime">Обмежити тривалість доріжок до</Control>
+			<Control ID="lblNsfSeconds">секунд</Control>
+			<Control ID="chkNsfDisableApuIrqs">Відключити переривання APU (Рекомендується)</Control>
 
 			<Control ID="btnOK">OK</Control>
 			<Control ID="btnCancel">Вiдмiна</Control>
@@ -564,7 +564,7 @@
 			<Control ID="chkSortByFrequency">Сортувати за частотою використання</Control>
 			<Control ID="chkLargeSprites">Використовувати режим відображення 8x16 для спрайтів</Control>
 			<Control ID="chkGroupBlankTiles">Групувати порожнi тайли</Control>
-			<Control ID="chkIgnoreOverscan">Ігнорувати плитки у вікні перегляду оверскан</Control>
+			<Control ID="chkIgnoreOverscan">Ігнорувати плитки на краях екрану оверскан</Control>
 			<Control ID="lblFolder">Папка резервування:</Control>
 			<Control ID="btnSelectFolder">Перегляд папки...</Control>
 			<Control ID="btnStartRecording">Почати запис</Control>
