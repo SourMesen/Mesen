@@ -95,7 +95,7 @@
 			<Control ID="mnuTakeScreenshot">Зробити скріншот</Control>
 			<Control ID="mnuRandomGame">Завантажити випадкову гру</Control>
 			<Control ID="mnuHelp">Допомога</Control>
-			<Control ID="mnuOnlineHelp">Online Help</Control>
+			<Control ID="mnuOnlineHelp">Онлайн допомога</Control>
 			<Control ID="mnuCheckForUpdates">Перевірити оновлення</Control>
 			<Control ID="mnuReportBug">Повідомити про помилку</Control>
 			<Control ID="mnuHelpWindow">Параметри командного рядка</Control>
@@ -214,11 +214,11 @@
 			<Control ID="lblVideoScale">Розмір :</Control>
 			<Control ID="lblVideoFilter">Фiльтр :</Control>
 			<Control ID="chkIntegerFpsMode">Увімкнути ціле число режиму FPS (e.g: працювати в 60 fps замiсть 60.1)</Control>
-			<Control ID="chkVerticalSync">Включити вертикальну синхронізацію</Control>
+			<Control ID="chkVerticalSync">Увімкнути вертикальну синхронізацію</Control>
 			<Control ID="lblDisplayRatio">Співвідношення сторін :</Control>
 			<Control ID="lblCustomRatio">Користувацьке співвідношення:</Control>
 			<Control ID="chkBilinearInterpolation">Білінійна інтерполяція</Control>
-			<Control ID="chkFullscreenForceIntegerScale">Використовуйте цілі значення масштабу при введенні повноекранного режиму</Control>
+			<Control ID="chkFullscreenForceIntegerScale">Використовувати цілі значення масштабу при введенні повноекранного режиму</Control>
 			<Control ID="chkShowFps">Показувати FPS</Control>
 			<Control ID="chkUseHdPacks">Використовувати HDNes HD packs</Control>
 			<Control ID="chkUseExclusiveFullscreen">Використовувати ексклюзивний режим повного екрану</Control>
@@ -231,10 +231,10 @@
 			<Control ID="lblRight">Справа</Control>
 			<Control ID="tpgPalette">Палiтра</Control>
 			<Control ID="mnuDefaultPalette">За замовчуванням (NTSC)</Control>
-			<Control ID="btnSelectPalette">Вибрати палітру</Control>
-			<Control ID="btnExportPalette">Експорт .pal</Control>
-			<Control ID="btnLoadPalFile">Завантажити .pal</Control>
-			<Control ID="chkUseCustomVsPalette">Використовуйте цю палітру для системних ігор VS</Control>
+			<Control ID="btnSelectPalette">Виберіть палітру...</Control>
+			<Control ID="btnExportPalette">Експортувати файл .pal</Control>
+			<Control ID="btnLoadPalFile">Завантажити файл .pal</Control>
+			<Control ID="chkUseCustomVsPalette">Використовувати цю палітру для системних ігор VS</Control>
 			<Control ID="tpgPicture">Зображення</Control>
 			<Control ID="btnSelectPreset">Шаблони</Control>
 			<Control ID="grpCommon">Загальні налаштування</Control>
@@ -253,11 +253,11 @@
 			<Control ID="chkVerticalBlend">Застосувати вертикальне змішування</Control>
 
 			<Control ID="trkYFilterLength">Y Фільтр (Розмиття по горизонталі)</Control>
-			<Control ID="trkIFilterLength">I Фiльтр (Horizontal Bleed)</Control>
-			<Control ID="trkQFilterLength">Q Фiльтр (Horizontal Bleed)</Control>
+			<Control ID="trkIFilterLength">I Фiльтр (Горизонтальна дисперсія)</Control>
+			<Control ID="trkQFilterLength">Q Фiльтр (Горизонтальна дисперсія)</Control>
 
-			<Control ID="grpScanlines">Scanlines</Control>
-			<Control ID="trkScanlines">Scanlines</Control>
+			<Control ID="grpScanlines">Сканування ліній</Control>
+			<Control ID="trkScanlines">Сканування ліній</Control>
 			<Control ID="btnResetPictureSettings">Скидання</Control>
 			<Control ID="mnuPresetComposite">Композитний</Control>
 			<Control ID="mnuPresetSVideo">S-Video</Control>
@@ -265,11 +265,11 @@
 			<Control ID="mnuPresetMonochrome">Монохромний</Control>
 
 			<Control ID="tpgAdvanced">Розширенi</Control>
-			<Control ID="lblScreenRotation">Поворот екрана:</Control>
-			<Control ID="chkDisableBackground">Відключити фон</Control>
-			<Control ID="chkDisableSprites">Відключити спрайти</Control>
-			<Control ID="chkForceBackgroundFirstColumn">Примусово показувати фон у першому стовпці</Control>
-			<Control ID="chkForceSpritesFirstColumn">Примусово показувати спрайти у першому стовпці</Control>
+			<Control ID="lblScreenRotation">Обертання екрана:</Control>
+			<Control ID="chkDisableBackground">Вимкнути фон</Control>
+			<Control ID="chkDisableSprites">Вимкнути спрайти</Control>
+			<Control ID="chkForceBackgroundFirstColumn">Примусове відображення фону в першому стовпчику</Control>
+			<Control ID="chkForceSpritesFirstColumn">Примусове відображення спрайтiв у першому стовпці</Control>
 
 			<Control ID="btnOK">OK</Control>
 			<Control ID="btnCancel">Відміна</Control>
@@ -288,14 +288,14 @@
 			<Control ID="chkAllowInvalidInput">Дозволити неприпустимі комбінації (Вниз+Вгору і Ліворуч+Вправо)</Control>
 			<Control ID="lblRamPowerOnState">Вміст ОЗУ при включенні : </Control>
 			<Control ID="chkRemoveSpriteLimit">Відключити ліміт спрайтів (зменшує мерехтіння)</Control>
-			<Control ID="chkAdaptiveSpriteLimit">Автоматичне повторне ввімкнення обмеження спрайтiв якщо це необхідно щоб запобігти графічних збоїв коли це можливо</Control>
-			<Control ID="chkEnableOamDecay">Enable OAM RAM decay</Control>
-			<Control ID="chkDisablePpu2004Reads">Вiдключити читання PPU $2004 (Поведiнка Famicom)</Control>
-			<Control ID="chkDisableOamAddrBug">Вiдключити PPU OAMADDR баг эмуляцiї</Control>
-			<Control ID="chkDisablePaletteRead">Вiдключити PPU читання палiтри</Control>
-			<Control ID="chkDisablePpuReset">Не скидувати PPU при перезавантаженні консолі (Поведiнка Famicom)</Control>
-			<Control ID="chkUseNes101Hvc101Behavior">Використовувати NES/HVC-101 (Top-loader / AV Famicom) поведінку</Control>
-			<Control ID="chkMapperRandomPowerOnState">Randomize power-on state for mappers</Control>
+			<Control ID="chkAdaptiveSpriteLimit">Автоматичне повторне ввімкнення обмеження спрайтiв якщо потрібно щоб зменшити проблеми з графікою</Control>
+			<Control ID="chkEnableOamDecay">Увімкнути емуляцію погіршення пам'яті OAM</Control>
+			<Control ID="chkDisablePpu2004Reads">Запобігання ведення реєстру PPU $2004 (Famicom)</Control>
+			<Control ID="chkDisableOamAddrBug">Вимкнути емуляцію помилок OAMADDR з PPU</Control>
+			<Control ID="chkDisablePaletteRead">Запобігання читання з палітри PPU</Control>
+			<Control ID="chkDisablePpuReset">Не перезавантажити PPU при скиданні консолі (Famicom)</Control>
+			<Control ID="chkUseNes101Hvc101Behavior">Імітувати поведінку NES/HVC-101 (Top-loader / AV Famicom) поведінку</Control>
+			<Control ID="chkMapperRandomPowerOnState">Почати гру з маппером у випадковому стані</Control>
 
 			<Control ID="tpgOverclocking">Розгін</Control>
 			<Control ID="grpOverclocking">Розгін CPU</Control>
@@ -321,7 +321,7 @@
 		<Form ID="frmPreferences" Title="Налаштування">
 			<Control ID="tpgGeneral">Загальні</Control>
 			<Control ID="lblDisplayLanguage">Мова :</Control>
-			<Control ID="chkSingleInstance">Запускати тільки одну копію Mesen</Control>
+			<Control ID="chkSingleInstance">Дозволити лише одну копію Mesen одночасно</Control>
 			<Control ID="chkAutomaticallyCheckForUpdates">Автоматично перевіряти оновлення</Control>
 
 			<Control ID="chkDeveloperMode">Увімкнути режим розробника</Control>
@@ -331,20 +331,20 @@
 			<Control ID="chkAutoHideMenu">Автоматично приховувати панель меню</Control>
 			<Control ID="chkDisplayTitleBarInfo">Відображення додаткової інформації в рядку заголовка</Control>
 
-			<Control ID="chkConfirmExitResetPower">Відобразити діалогове вікно підтвердження перед скиданням/перезавантаженням/вихiдом</Control>
-			<Control ID="chkPauseOnMovieEnd">Ставити на паузу після програвання запису</Control>
-			<Control ID="chkAllowBackgroundInput">Дозволити введення в тлі</Control>
+			<Control ID="chkConfirmExitResetPower">Підтвердження перед перезавантаженням/вимиканням/вихiдом Mesen</Control>
+			<Control ID="chkPauseOnMovieEnd">Призупинити емуляцію в кiнцi запису</Control>
+			<Control ID="chkAllowBackgroundInput">Дозволити введення в фоновому режимі</Control>
 
-			<Control ID="lblPauseIn">Pause when in:</Control>
-			<Control ID="chkPauseWhenInBackground">Background</Control>
-			<Control ID="chkPauseInMenuAndConfig">Menus and config dialogs</Control>
-			<Control ID="chkPauseInDebugger">Debugging tools</Control>
+			<Control ID="lblPauseIn">Пауза, коли у:</Control>
+			<Control ID="chkPauseWhenInBackground">Фон</Control>
+			<Control ID="chkPauseInMenuAndConfig">Меню і опції</Control>
+			<Control ID="chkPauseInDebugger">Налагоджувальні інструменти</Control>
 
-			<Control ID="chkAutoLoadIps">Автоматично завантажувати IPS/BPS</Control>
-			<Control ID="chkHidePauseOverlay">Приховати екран паузи</Control>
+			<Control ID="chkAutoLoadIps">Завантажувати файли IPS/BPS автоматично</Control>
+			<Control ID="chkHidePauseOverlay">Не відображати екран паузи</Control>
 			<Control ID="chkDisplayMovieIcons">Відображати значок відтворення/запису при відтворенні або запису відео</Control>
 			<Control ID="btnOpenMesenFolder">Відкрити папку Mesen</Control>
-			<Control ID="btnResetSettings">Скинути всі налаштування</Control>
+			<Control ID="btnResetSettings">Скинути конфігурацію</Control>
 
 			<Control ID="tpgFiles">Файли/Папки</Control>
 			<Control ID="grpFileAssociations">Асоціації файлів</Control>
@@ -364,7 +364,7 @@
 			<Control ID="chkScreenshotsOverride">Скріншоти:</Control>
 			<Control ID="chkSaveDataOverride">Save Data:</Control>
 			<Control ID="chkWaveOverride">Аудiо:</Control>
-			<Control ID="chkSaveStatesOverride">Save States:</Control>
+			<Control ID="chkSaveStatesOverride">Стани зображення:</Control>
 			<Control ID="chkMoviesOverride">Фільми:</Control>
 
 			<Control ID="tpgAdvanced">Розширені</Control>
@@ -372,16 +372,16 @@
 			<Control ID="chkFdsFastForwardOnLoad">Використовувати швидке завантаження FDS</Control>
 			<Control ID="chkFdsAutoInsertDisk">Автоматичне перемикання дисків для FDS ігор</Control>
 
-			<Control ID="chkShowFullPathInRecents">Show full file path in recent file list</Control>
-			<Control ID="chkShowFrameCounter">Показувати Лічильник Кадрів</Control>
+			<Control ID="chkShowFullPathInRecents">Показати повний шлях для останніх файлів</Control>
+			<Control ID="chkShowFrameCounter">Показати лічильник кадрів</Control>
 			<Control ID="chkShowGameTimer">Показати таймер гри</Control>
-			<Control ID="chkShowVsConfigOnLoad">Показати діалогове вікно налаштування гри під час завантаження системних ігор VS</Control>
+			<Control ID="chkShowVsConfigOnLoad">Відображення діалогового вікна конфігурації гри при завантаженні системних ігор VS</Control>
 
 			<Control ID="lblRewind">Зберігати дані перемотування за останні</Control>
 			<Control ID="lblRewindMinutes">хвилин (Використання Пам'яті ≈1 МБ/хв)</Control>
 
 			<Control ID="tpgShortcuts">Гарячі клавіші</Control>
-			<Control ID="lblShortcutWarning">Warning: Your current configuration contains conflicting key bindings. If this is not intentional, please review and correct your key bindings.</Control>
+			<Control ID="lblShortcutWarning">Попередження: Ваша поточна конфігурація містить конфліктуючі прив'язки клавіш. Якщо це не навмисне, перегляньте та виправте прив'язки клавіш.</Control>
 			<Control ID="colAction">Дія</Control>
 			<Control ID="colBinding1">Варiант #1</Control>
 			<Control ID="colBinding2">Варiант #2</Control>
@@ -391,7 +391,7 @@
 			<Control ID="chkAutoSave">Автоматично створювати збереження через</Control>
 			<Control ID="lblAutoSave">хвилин</Control>
 			<Control ID="chkAutoSaveNotify">Сповіщати при збереженні</Control>
-			<Control ID="chkAllowMismatchingSaveStates">Allow save states to be loaded on modified ROMs (e.g IPS patches)</Control>
+			<Control ID="chkAllowMismatchingSaveStates">Дозволити збереження станів завантаження на модифіковані РОМи (наприклад IPS патчi)</Control>
 
 			<Control ID="grpCloudSaves">Хмарнi збереження</Control>
 			<Control ID="lblGoogleDriveIntegration">Mesen має можливість інтеграції з Google Drive . Коли інтеграція з Google Drive включена, ваші збереження стають доступні з будь-якого комп'ютера і можуть бути синхронізовані між комп'ютерами. Також, збереження зберігаються на Google Drive можуть бути відновлені якщо ви видалите їх зі свого комп'ютера.</Control>
@@ -404,20 +404,20 @@
 			<Control ID="lblFdsSettings">Famicom Disk System Налаштування</Control>
 			<Control ID="lblUiDisplaySettings">Налаштування дисплея інтерфейсу користувача</Control>
 			<Control ID="lblGameSelectionScreenSettings">Налаштування екрана вибору гри</Control>
-			<Control ID="chkGameSelectionScreenResetGame">Почати гру з включення замiсть того щоб вiдновити попереднiй сеанс гри</Control>
+			<Control ID="chkGameSelectionScreenResetGame">Відновити гру з самого початку (замість продовження попередньої гри)</Control>
 			<Control ID="chkDisableGameSelectionScreen">Вимкнути екран вибору гри</Control>
 
-			<Control ID="chkDisableGameDatabase">Відключити вбудовану базу даних</Control>
-			<Control ID="chkDisableOsd">Вимкнути екранне меню (OSD)</Control>
+			<Control ID="chkDisableGameDatabase">Відключити ігрову базу даних</Control>
+			<Control ID="chkDisableOsd">Відключення екранних повідомлень (OSD)</Control>
 
-			<Control ID="chkAlwaysOnTop">Always display on top of other windows</Control>
+			<Control ID="chkAlwaysOnTop">Завжди відображати поверх інших вікон</Control>
 
 			<Control ID="tpgNsf">NSF</Control>
-			<Control ID="chkNsfAutoDetectSilence">Переходити на наступний трек після</Control>
+			<Control ID="chkNsfAutoDetectSilence">Відтворити наступний трек після</Control>
 			<Control ID="lblNsfMillisecondsOfSilence">мілісекунд тиші</Control>
-			<Control ID="chkNsfMoveToNextTrackAfterTime">Обмежити тривалість відтворення</Control>
-			<Control ID="lblNsfSeconds">секундами</Control>
-			<Control ID="chkNsfDisableApuIrqs">Відключити IRQs APU (Рекомендовано)</Control>
+			<Control ID="chkNsfMoveToNextTrackAfterTime">Обмежити тривалість доріжок до</Control>
+			<Control ID="lblNsfSeconds">секунд</Control>
+			<Control ID="chkNsfDisableApuIrqs">Відключити переривання APU (Рекомендується)</Control>
 
 			<Control ID="btnOK">OK</Control>
 			<Control ID="btnCancel">Вiдмiна</Control>
@@ -522,7 +522,7 @@
 		<Form ID="frmVsGameConfig" Title="Конфігурація VS">
 			<Control ID="lblGame">Гра</Control>
 			<Control ID="lblPpuModel">Модель PPU</Control>
-			<Control ID="grpDipSwitches">DIP Switches</Control>
+			<Control ID="grpDipSwitches">Перемикачі DIP</Control>
 		</Form>
 		<Form ID="frmUpdatePrompt" Title="Mesen - Доступно оновлення">
 			<Control ID="lblLatestVersion">Остання версія : </Control>
@@ -561,12 +561,12 @@
 			<Control ID="grpOptions">Параметри запису</Control>
 			<Control ID="lblBankSize">CHR Розмiр Банку:</Control>
 			<Control ID="lblScale">Масштаб/Фiльтр:</Control>
-			<Control ID="chkSortByFrequency">Сортування сторінок за частотою використання</Control>
-			<Control ID="chkLargeSprites">Використовувати режим відображення спрайтiв 8x16</Control>
+			<Control ID="chkSortByFrequency">Сортувати за частотою використання</Control>
+			<Control ID="chkLargeSprites">Використовувати режим відображення 8x16 для спрайтів</Control>
 			<Control ID="chkGroupBlankTiles">Групувати порожнi тайли</Control>
-			<Control ID="chkIgnoreOverscan">Ignore tiles at the edges of the screen (overscan)</Control>
-			<Control ID="lblFolder">Зберегти папку:</Control>
-			<Control ID="btnSelectFolder">Огляд...</Control>
+			<Control ID="chkIgnoreOverscan">Ігнорувати плитки на краях екрану оверскан</Control>
+			<Control ID="lblFolder">Папка резервування:</Control>
+			<Control ID="btnSelectFolder">Перегляд папки...</Control>
 			<Control ID="btnStartRecording">Почати запис</Control>
 			<Control ID="btnStopRecording">Зупинити запис</Control>
 			<Control ID="btnOpenFolder">Вiдкрити папку збережень</Control>
@@ -580,7 +580,7 @@
 			<Control ID="lblExplanation">Це запустить Mesen у повноекранному режимi з "MyGame.nes" завантаженим ромом.  Вiн також буде використовувати фiльтр NTSC, встановлений у 2x масштабi та налаштує параметри Overscan. Прапор "DoNotSaveSettings" використовується для запобігання перемикання командного рядка від випадкової зміни налаштувань Mesen.</Control>
 			<Control ID="txtGeneralOptions">/fullscreen - Запустити Mesen у повноекранному режимi&#13;&#10;/DoNotSaveSettings - Заборонити збереження налаштувань на диску (корисно щоб запобігти становленню параметрів командного рядка за замовчуванням)</Control>
 		</Form>
-		<Form ID="frmCopyFiles" Title="Please wait...">
+		<Form ID="frmCopyFiles" Title="Будь ласка зачекайте...">
 			<Control ID="lblCopying">Копіювання:</Control>
 		</Form>
 		<Form ID="frmConfigWizard" Title="Mesen - Configuration">
@@ -599,18 +599,18 @@
 			<Control ID="btnOk">ПIДТВЕРДИТИ</Control>
 			<Control ID="lblCancel">Скасувати</Control>
 		</Form>
-		<Form ID="frmRecordMovie" Title="Movie Recording Options">
-			<Control ID="lblSaveTo">Save to:</Control>
-			<Control ID="lblRecordFrom">Record from:</Control>
-			<Control ID="lblMovieInformation">Movie Information (optional)</Control>
-			<Control ID="lblAuthor">Author:</Control>
-			<Control ID="lblDescription">Description:</Control>
+		<Form ID="frmRecordMovie" Title="Параметри запису відео">
+			<Control ID="lblSaveTo">Зберегти до:</Control>
+			<Control ID="lblRecordFrom">Запис із:</Control>
+			<Control ID="lblMovieInformation">Інформація про вiдео (необов'язково)</Control>
+			<Control ID="lblAuthor">Автор:</Control>
+			<Control ID="lblDescription">Опис:</Control>
 			<Control ID="btnBrowse">Огляд...</Control>
 			<Control ID="btnOK">OK</Control>
 			<Control ID="btnCancel">Вiдмiна</Control>
 		</Form>
-		<Form ID="frmInputBarCode" Title="Input Barcode...">
-			<Control ID="lblBarcode">Barcode:</Control>
+		<Form ID="frmInputBarCode" Title="Введіть штрих-код...">
+			<Control ID="lblBarcode">Штрих-код :</Control>
 			<Control ID="btnOK">OK</Control>
 			<Control ID="btnCancel">Вiдмiна</Control>
 		</Form>
@@ -620,7 +620,7 @@
 			<Control ID="tpgSet2">Контролер #2</Control>
 			<Control ID="tpgSet3">Контролер #3</Control>
 			<Control ID="tpgSet4">Контролер #4</Control>
-			<Control ID="btnSetDefault">Use Default Bindings</Control>
+			<Control ID="btnSetDefault">Використовувати прив'язки за замовчуванням</Control>
 			<Control ID="btnClear">Очистити</Control>
 			<Control ID="btnOK">OK</Control>
 			<Control ID="btnCancel">Відміна</Control>
@@ -630,7 +630,7 @@
 			<Control ID="lblTurboFast">Швидко</Control>
 			<Control ID="lblSlow">Повiльно</Control>
 
-			<Control ID="btnSelectPreset">Пресети</Control>
+			<Control ID="btnSelectPreset">Виберіть зумовлений пресет...</Control>
 			<Control ID="mnuKeyboard">Клавіатура</Control>
 			<Control ID="mnuWasdLayout">WSAD розкладка</Control>
 			<Control ID="mnuArrowLayout">Курсорні клавіші</Control>
@@ -654,9 +654,9 @@
 			<Control ID="btnCancel">Відміна</Control>
 		</Form>
 		<Form ID="frmMouseConfig">
-			<Control ID="lblLow">Low</Control>
-			<Control ID="lblHigh">High</Control>
-			<Control ID="lblSensitivity">Sensitivity:</Control>
+			<Control ID="lblLow">Низький</Control>
+			<Control ID="lblHigh">Високий</Control>
+			<Control ID="lblSensitivity">Чутливість:</Control>
 			<Control ID="btnOK">OK</Control>
 			<Control ID="btnCancel">Відміна</Control>
 		</Form>
@@ -669,7 +669,7 @@
 		<Form ID="frmPartyTapConfig">
 		</Form>
 		<Form ID="frmPowerPadConfig">
-			<Control ID="chkUseSideA">Use side A</Control>
+			<Control ID="chkUseSideA">Використовуйте сторону А</Control>
 		</Form>
 		<Form ID="frmSuborKeyboardConfig">
 		</Form>
@@ -680,18 +680,18 @@
 	</Forms>
 	<UserControls>
 		<UserControl ID="ctrlExcitingBoxingConfig">
-			<Control ID="lblLeftHook">Left Hook</Control>
-			<Control ID="lblRightHook">Right Hook</Control>
-			<Control ID="lblLeftJab">Left Jab</Control>
-			<Control ID="lblRightJab">Right Jab</Control>
-			<Control ID="lblStraight">Straight</Control>
+			<Control ID="lblLeftHook">Лiвий хук</Control>
+			<Control ID="lblRightHook">Правий хук</Control>
+			<Control ID="lblLeftJab">Лiвий джеб</Control>
+			<Control ID="lblRightJab">Правий джеб</Control>
+			<Control ID="lblStraight">Прямий</Control>
 			<Control ID="lblBody">Body</Control>
-			<Control ID="lblMoveLeft">Move Left</Control>
-			<Control ID="lblMoveRight">Move Right</Control>
+			<Control ID="lblMoveLeft">Рухати ліворуч</Control>
+			<Control ID="lblMoveRight">Рухати праворуч</Control>
 		</UserControl>
 		<UserControl ID="ctrlPachinkoConfig">
-			<Control ID="lblPress">Press</Control>
-			<Control ID="lblRelease">Release</Control>
+			<Control ID="lblPress">Натиснути</Control>
+			<Control ID="lblRelease">Вiдпустити</Control>
 		</UserControl>
 		<UserControl ID="ctrlBandaiMicrophone">
 			<Control ID="lblMicrophone">Microphone</Control>
@@ -747,22 +747,22 @@
 		<Message ID="NsfUnnamedTrack">&lt;безіменний&gt;</Message>
 		<Message ID="NsfUnknownField">&lt;невідомий&gt;</Message>
 
-		<Message ID="CouldNotInstallRuntime">The Visual Studio Runtime не встановлений.</Message>
-		<Message ID="EmptyState">&lt;пусто&gt;</Message>
+		<Message ID="CouldNotInstallRuntime">The Visual Studio Runtime був встановлений неправильно.</Message>
+		<Message ID="EmptyState">&lt;немає резервної копії&gt;</Message>
 		<Message ID="ErrorWhileCheckingUpdates">Не вдалося перевірити оновлення. Перевірте ваше з'єднання з інтернетом і спробуйте ще раз.&#xA;&#xA;Детально:&#xA;{0}</Message>
 		<Message ID="AutoUpdateDisabledMessage">Автоматичні оновлення не включені в цій збірці - будь ласка завантажте останню версію коду та перекомпілюйте Mesen щоб отримати останні оновлення.</Message>
-		<Message ID="FdsBiosNotFound">FDS BIOS не знайдений. BIOS необхідний для запуску FDS игр.&#xA;&#xA;Вибрати BIOS зараз?</Message>
+		<Message ID="FdsBiosNotFound">Біос для FDS не був знайдений. Біос потрібен, щоб грати в ігри FDS.&#xA;&#xA;Ви хочете вибрати BIOS зараз?</Message>
 		<Message ID="FdsDiskSide">Диск {0} Сторона {1}</Message>
 		<Message ID="FileNotFound">Файл не знайдено: {0}</Message>
 		<Message ID="InvalidFdsBios">Обраний биос некоректний.</Message>
 
 		<Message ID="HDNesTooltip">Дана опція дозволяє використовувати HD packs для емулятора HDNes якщо вони знайдени.&#xA;&#xA;HD Packs повинні бути поміщені в папку "HdPacks" в папці з ім'ям збігається з ім'ям ROM.&#xA;наприклад: HD Pack для MyRom.nes повинні лежати в "HdPacks\MyRom\hires.txt".</Message>
-		<Message ID="HdPackBuilderScaleHelp">Selects the scale and video filter to use when generating the PNG files&#xA;for the HD Pack. Use the "Prescale" filters to generate the tiles&#xA;at a larger scale without applying any transformation to the pixels.</Message>
-		<Message ID="HdPackBuilderBankSizeHelp">This option is only available for CHR RAM games.  CHR RAM games have no&#xA;fixed "banks" - they are dynamically created by the game's code.&#xA;This option alters the HD Pack Builder's behavior when grouping the tiles into &#xA;the PNG files - a smaller bank size will usually result in less PNG &#xA;files (but depending on the game's code, larger values may produce &#xA;better results).</Message>
-		<Message ID="HdPackBuilderFrequencyHelp">When this option is enabled, the tiles in PNG files are sorted by the&#xA;frequency at which they are shown on the screen while recording (more &#xA;common palettes will be grouped together in the first PNG for a specific bank &#xA;number. If this option is unchecked, the PNGs will be sorted by palette - &#xA;each PNG will only contain up to 4 different colors in this case.</Message>
-		<Message ID="HdPackBuilderGroupBlankHelp">This option groups all the blank tiles sequentially into the same PNG&#xA;files - this helps reduce the number of PNG files produced by removing &#xA;almost-empty PNG files containing only blank tiles.</Message>
-		<Message ID="HdPackBuilderLargeSpritesHelp">When enabled, this option will alter the display order of CHR banks&#xA;that contain only sprites to make the sprites easier to edit in the PNG file.</Message>
-		<Message ID="HdPackBuilderIgnoreOverscanHelp">When enabled, this will make the builder ignore any pixels in the overscan area.&#xA;This is useful in games that contain glitches on the outer edge of the screen.&#xA;Incorrect palette combinations due to these glitches will be ignored and won't be shown in the PNG files.</Message>
+		<Message ID="HdPackBuilderScaleHelp">Вибирає розмір і фільтр для використання при створенні файлів PNG&#xA;для HD Pack. Використовуйте фільтри «Prescale» для генерації зображення&#xA;з великим розміром без застосування фільтра до пікселів.</Message>
+		<Message ID="HdPackBuilderBankSizeHelp">Цей параметр доступний лише для iгр типу CHR RAM. Ігри типу CHR RAM не мають&#xA;визначених "банкiв" - вони динамічно генеруються за допомогою коду.&#xA;Цей параметр змінює поведінку HD Pack Builder при групуванні в&#xA;файли PNG - менший розмір банку як правило призводить до зменшення кількості PNG&#xA;файлiв (але в залежності від коду гри, великі значення можуть призвести &#xA;кращі результати).</Message>
+		<Message ID="HdPackBuilderFrequencyHelp">Якщо увімкнено, плитки в PNG файлах сортуються за допомогою&#xA;частоти при якій вони відображаються на екрані під час запису (більш &#xA;загальні палітри будуть згруповані в першому PNG для певного номера банку. Якщо цей параметр не буде позначено, PNG буде сортовано за палітрою - &#xA;кожний PNG може містити до 4 різних кольорів у цьому випадку.</Message>
+		<Message ID="HdPackBuilderGroupBlankHelp">Ця опція об'єднує все порожні плитки послідовно в тi самi PNG&#xA;файли - це допомагає зменшити кількість PNG файлiв створених видаленням &#xA;майже пустих PNG файлiв що містять лише порожні плитки.</Message>
+		<Message ID="HdPackBuilderLargeSpritesHelp">Якщо увімкнено, ця опція змінить порядок відображення CHR банкiв&#xA;що містять лише спрайти щоб легше редагувати у PNG файлi.</Message>
+		<Message ID="HdPackBuilderIgnoreOverscanHelp">Якщо увімкнено, будівельник буде ігнорувати будь-які пікселі в області перегляду.&#xA;Це корисно в іграх які містять глюки на зовнішньому краю екрана.&#xA;Неправильні комбінації палітр через цi глюки будуть проігноровані і не будуть відображатися в файлах PNG.</Message>
 
 		<Message ID="MesenUpToDate">Ви використовуєте останню версію Mesen</Message>
 		<Message ID="PatchAndReset">Пропатчити і скинути поточну гру?</Message>
@@ -787,9 +787,9 @@
 		<Message ID="ConfirmExit">Ви впевнені що хочете вийти?</Message>
 
 		<Message ID="EmulatorShortcutMappings_FastForward">Швидке перемотування</Message>
-		<Message ID="EmulatorShortcutMappings_ToggleFastForward">Переключити перемотування вперед</Message>
+		<Message ID="EmulatorShortcutMappings_ToggleFastForward">Увімкнути/Вимкнути перемотування вперед</Message>
 		<Message ID="EmulatorShortcutMappings_Rewind">Перемотка</Message>
-		<Message ID="EmulatorShortcutMappings_ToggleRewind">Переключити перемотування</Message>
+		<Message ID="EmulatorShortcutMappings_ToggleRewind">Увімкнути/Вимкнути перемотування</Message>
 		<Message ID="EmulatorShortcutMappings_RewindTenSecs">Перемотати 10 секунд</Message>
 		<Message ID="EmulatorShortcutMappings_RewindOneMin">Перемотати 1 хвилину</Message>
 		<Message ID="EmulatorShortcutMappings_IncreaseSpeed">Збільшити Швидкість</Message>
@@ -797,22 +797,22 @@
 		<Message ID="EmulatorShortcutMappings_Pause">Пауза</Message>
 		<Message ID="EmulatorShortcutMappings_Reset">Скидання</Message>
 		<Message ID="EmulatorShortcutMappings_PowerCycle">Цикл включення</Message>
-		<Message ID="EmulatorShortcutMappings_PowerOff">Power Off</Message>
+		<Message ID="EmulatorShortcutMappings_PowerOff">Вимкнення</Message>
 		<Message ID="EmulatorShortcutMappings_Exit">Вихід</Message>
-		<Message ID="EmulatorShortcutMappings_TakeScreenshot">Зробити скріншот</Message>
-		<Message ID="EmulatorShortcutMappings_SwitchDiskSide">FDS - Перевернути диск</Message>
+		<Message ID="EmulatorShortcutMappings_TakeScreenshot">Скріншот</Message>
+		<Message ID="EmulatorShortcutMappings_SwitchDiskSide">FDS - Зміна боку диска</Message>
 		<Message ID="EmulatorShortcutMappings_InsertNextDisk">FDS - Вставити наступний диск</Message>
 		<Message ID="EmulatorShortcutMappings_InsertCoin1">VS - Вставити монету в слот 1</Message>
 		<Message ID="EmulatorShortcutMappings_InsertCoin2">VS - Вставити монету в слот 2</Message>
-		<Message ID="EmulatorShortcutMappings_InputBarcode">Input Barcode</Message>
+		<Message ID="EmulatorShortcutMappings_InputBarcode">Введення штрих-коду</Message>
 		<Message ID="EmulatorShortcutMappings_VsServiceButton">VS - Сервісна кнопка</Message>
 		<Message ID="EmulatorShortcutMappings_MoveToNextStateSlot">Наступний слот для збережень</Message>
 		<Message ID="EmulatorShortcutMappings_MoveToPreviousStateSlot">Попередній слот для збережень</Message>
 		<Message ID="EmulatorShortcutMappings_SaveState">Зберегти</Message>
 		<Message ID="EmulatorShortcutMappings_LoadState">Завантажити</Message>
-		<Message ID="EmulatorShortcutMappings_ToggleCheats">Включити/Виключити Чит Коди</Message>
+		<Message ID="EmulatorShortcutMappings_ToggleCheats">Увімкнути/Вимкнути всі коди</Message>
 		<Message ID="EmulatorShortcutMappings_ToggleAudio">Увімкнути/Вимкнути звук</Message>
-		<Message ID="EmulatorShortcutMappings_RunSingleFrame">Запуск Одного Кадру</Message>
+		<Message ID="EmulatorShortcutMappings_RunSingleFrame">Перемістити вперед один кадр</Message>
 
 		<Message ID="EmulatorShortcutMappings_EjectDisk">FDS - Витягти диск</Message>
 		<Message ID="EmulatorShortcutMappings_SetScale1x">Встановити масштаб 1x</Message>
@@ -821,51 +821,51 @@
 		<Message ID="EmulatorShortcutMappings_SetScale4x">Встановити масштаб 4x</Message>
 		<Message ID="EmulatorShortcutMappings_SetScale5x">Встановити масштаб 5x</Message>
 		<Message ID="EmulatorShortcutMappings_SetScale6x">Встановити масштаб 6x</Message>
-		<Message ID="EmulatorShortcutMappings_ToggleFullscreen">Переключити повноекранний режим</Message>
-		<Message ID="EmulatorShortcutMappings_ToggleFps">Переключити лічильник FPS</Message>
-		<Message ID="EmulatorShortcutMappings_ToggleGameTimer">Переключити таймер гри</Message>
-		<Message ID="EmulatorShortcutMappings_ToggleFrameCounter">Переключити лічильник кадрів</Message>
-		<Message ID="EmulatorShortcutMappings_ToggleLagCounter">Переключити лічильник лагiв</Message>
-		<Message ID="EmulatorShortcutMappings_ToggleOsd">Переключити OSD (Екранне меню)</Message>
-		<Message ID="EmulatorShortcutMappings_ToggleAlwaysOnTop">Toggle Display on Top</Message>
-		<Message ID="EmulatorShortcutMappings_ToggleBackground">Переключити Background</Message>
-		<Message ID="EmulatorShortcutMappings_ToggleSprites">Переключити Sprite Layer</Message>
-		<Message ID="EmulatorShortcutMappings_ToggleKeyboardMode">Toggle Keyboard Mode</Message>
-		<Message ID="EmulatorShortcutMappings_MaxSpeed">Переключити максимальну швидкість</Message>
+		<Message ID="EmulatorShortcutMappings_ToggleFullscreen">Увімкнути/вимкнути повноекранний режим</Message>
+		<Message ID="EmulatorShortcutMappings_ToggleFps">Увімкнути/вимкнути лічильник кадрiв</Message>
+		<Message ID="EmulatorShortcutMappings_ToggleGameTimer">Увімкнути/вимкнути таймер гри</Message>
+		<Message ID="EmulatorShortcutMappings_ToggleFrameCounter">Увімкнути/вимкнути лічильник кадрів</Message>
+		<Message ID="EmulatorShortcutMappings_ToggleLagCounter">Увімкнути/вимкнути лічильник відставання</Message>
+		<Message ID="EmulatorShortcutMappings_ToggleOsd">Увімкнути/вимкнути OSD (Екранне меню)</Message>
+		<Message ID="EmulatorShortcutMappings_ToggleAlwaysOnTop">Увімкнути/вимкнути дисплей на передньому плані</Message>
+		<Message ID="EmulatorShortcutMappings_ToggleBackground">Увімкнути/вимкнути фон</Message>
+		<Message ID="EmulatorShortcutMappings_ToggleSprites">Увімкнути/вимкнути спрайти</Message>
+		<Message ID="EmulatorShortcutMappings_ToggleKeyboardMode">Увімкнути/вимкнути максимальну швидкість</Message>
+		<Message ID="EmulatorShortcutMappings_MaxSpeed">Увімкнути/вимкнути максимальну швидкість</Message>
 		<Message ID="EmulatorShortcutMappings_LoadRandomGame">Завантажити випадкову гру</Message>
-		<Message ID="EmulatorShortcutMappings_SaveStateSlot1">Save State - Slot 1</Message>
-		<Message ID="EmulatorShortcutMappings_SaveStateSlot2">Save State - Slot 2</Message>
-		<Message ID="EmulatorShortcutMappings_SaveStateSlot3">Save State - Slot 3</Message>
-		<Message ID="EmulatorShortcutMappings_SaveStateSlot4">Save State - Slot 4</Message>
-		<Message ID="EmulatorShortcutMappings_SaveStateSlot5">Save State - Slot 5</Message>
-		<Message ID="EmulatorShortcutMappings_SaveStateSlot6">Save State - Slot 6</Message>
-		<Message ID="EmulatorShortcutMappings_SaveStateSlot7">Save State - Slot 7</Message>
-		<Message ID="EmulatorShortcutMappings_SaveStateSlot8">Save State - Slot 8</Message>
-		<Message ID="EmulatorShortcutMappings_SaveStateSlot9">Save State - Slot 9</Message>
-		<Message ID="EmulatorShortcutMappings_SaveStateSlot10">Save State - Slot 10</Message>
+		<Message ID="EmulatorShortcutMappings_SaveStateSlot1">Збереження стану - Слот 1</Message>
+		<Message ID="EmulatorShortcutMappings_SaveStateSlot2">Збереження стану - Слот 2</Message>
+		<Message ID="EmulatorShortcutMappings_SaveStateSlot3">Збереження стану - Слот 3</Message>
+		<Message ID="EmulatorShortcutMappings_SaveStateSlot4">Збереження стану - Слот 4</Message>
+		<Message ID="EmulatorShortcutMappings_SaveStateSlot5">Збереження стану - Слот 5</Message>
+		<Message ID="EmulatorShortcutMappings_SaveStateSlot6">Збереження стану - Слот 6</Message>
+		<Message ID="EmulatorShortcutMappings_SaveStateSlot7">Збереження стану - Слот 7</Message>
+		<Message ID="EmulatorShortcutMappings_SaveStateSlot8">Збереження стану - Слот 8</Message>
+		<Message ID="EmulatorShortcutMappings_SaveStateSlot9">Збереження стану - Слот 9</Message>
+		<Message ID="EmulatorShortcutMappings_SaveStateSlot10">Збереження стану - Слот 10</Message>
 		<Message ID="EmulatorShortcutMappings_SaveStateToFile">Зберегти стан в файл</Message>
-		<Message ID="EmulatorShortcutMappings_LoadStateSlot1">Load State - Slot 1</Message>
-		<Message ID="EmulatorShortcutMappings_LoadStateSlot2">Load State - Slot 2</Message>
-		<Message ID="EmulatorShortcutMappings_LoadStateSlot3">Load State - Slot 3</Message>
-		<Message ID="EmulatorShortcutMappings_LoadStateSlot4">Load State - Slot 4</Message>
-		<Message ID="EmulatorShortcutMappings_LoadStateSlot5">Load State - Slot 5</Message>
-		<Message ID="EmulatorShortcutMappings_LoadStateSlot6">Load State - Slot 6</Message>
-		<Message ID="EmulatorShortcutMappings_LoadStateSlot7">Load State - Slot 7</Message>
-		<Message ID="EmulatorShortcutMappings_LoadStateSlot8">Load State - Slot 8</Message>
-		<Message ID="EmulatorShortcutMappings_LoadStateSlot9">Load State - Slot 9</Message>
-		<Message ID="EmulatorShortcutMappings_LoadStateSlot10">Load State - Slot 10</Message>
-		<Message ID="EmulatorShortcutMappings_LoadStateSlotAuto">Load State - Auto Save Slot</Message>
+		<Message ID="EmulatorShortcutMappings_LoadStateSlot1">Завантаження стану - Слот 1</Message>
+		<Message ID="EmulatorShortcutMappings_LoadStateSlot2">Завантаження стану - Слот 2</Message>
+		<Message ID="EmulatorShortcutMappings_LoadStateSlot3">Завантаження стану - Слот 3</Message>
+		<Message ID="EmulatorShortcutMappings_LoadStateSlot4">Завантаження стану - Слот 4</Message>
+		<Message ID="EmulatorShortcutMappings_LoadStateSlot5">Завантаження стану - Слот 5</Message>
+		<Message ID="EmulatorShortcutMappings_LoadStateSlot6">Завантаження стану - Слот 6</Message>
+		<Message ID="EmulatorShortcutMappings_LoadStateSlot7">Завантаження стану - Слот 7</Message>
+		<Message ID="EmulatorShortcutMappings_LoadStateSlot8">Завантаження стану - Слот 8</Message>
+		<Message ID="EmulatorShortcutMappings_LoadStateSlot9">Завантаження стану - Слот 9</Message>
+		<Message ID="EmulatorShortcutMappings_LoadStateSlot10">Завантаження стану - Слот 10</Message>
+		<Message ID="EmulatorShortcutMappings_LoadStateSlotAuto">Завантаження стану - Автозавантаження</Message>
 		<Message ID="EmulatorShortcutMappings_LoadStateFromFile">Завантажити стан з файлу</Message>
-		<Message ID="EmulatorShortcutMappings_LoadLastSession">Load Last Session</Message>
+		<Message ID="EmulatorShortcutMappings_LoadLastSession">Завантажити останню сесію</Message>
 		<Message ID="EmulatorShortcutMappings_OpenFile">Відкрити файл</Message>
-		<Message ID="EmulatorShortcutMappings_OpenDebugger">Відкрити Debugger</Message>
-		<Message ID="EmulatorShortcutMappings_OpenAssembler">Відкрити Assembler</Message>
-		<Message ID="EmulatorShortcutMappings_OpenPpuViewer">Відкрити PPU Viewer</Message>
-		<Message ID="EmulatorShortcutMappings_OpenMemoryTools">Відкрити Memory Tools</Message>
-		<Message ID="EmulatorShortcutMappings_OpenScriptWindow">Відкрити Script Window</Message>
-		<Message ID="EmulatorShortcutMappings_OpenTraceLogger">Відкрити Trace Logger</Message>
-		<Message ID="EmulatorShortcutMappings_OpenApuViewer">Відкрити APU Viewer</Message>
-		<Message ID="EmulatorShortcutMappings_OpenEventViewer">Відкрити Event Viewer</Message>
+		<Message ID="EmulatorShortcutMappings_OpenDebugger">Відкрити налагоджувач</Message>
+		<Message ID="EmulatorShortcutMappings_OpenAssembler">Відкрити асемблер</Message>
+		<Message ID="EmulatorShortcutMappings_OpenPpuViewer">Відкрити переглядач PPU</Message>
+		<Message ID="EmulatorShortcutMappings_OpenMemoryTools">Відкрити iнструменти відкритої пам'яті</Message>
+		<Message ID="EmulatorShortcutMappings_OpenScriptWindow">Відкрити вікно сценарію</Message>
+		<Message ID="EmulatorShortcutMappings_OpenTraceLogger">Відкрити записувач трасування</Message>
+		<Message ID="EmulatorShortcutMappings_OpenApuViewer">Відкрити переглядач APU</Message>
+		<Message ID="EmulatorShortcutMappings_OpenEventViewer">Відкрити переглядач подій</Message>
 	</Messages>
 	<Enums>
 		<Enum ID="ControllerType">
@@ -899,13 +899,13 @@
 			<Value ID="BattleBox">Battle Box</Value>
 		</Enum>
 		<Enum ID="VideoAspectRatio">
-			<Value ID="NoStretching">Default (Не Розтягувати)</Value>
+			<Value ID="NoStretching">За замовчуванням (Без розтягування)</Value>
 			<Value ID="Auto">Auto (8:7 або 11:8 на основі гри)</Value>
 			<Value ID="NTSC">NTSC (8:7)</Value>
 			<Value ID="PAL">PAL (11:8)</Value>
 			<Value ID="Standard">Стандарт (4:3)</Value>
 			<Value ID="Widescreen">Широкий екран (16:9)</Value>
-			<Value ID="Custom">Custom</Value>
+			<Value ID="Custom">Користувацьке</Value>
 		</Enum>
 		<Enum ID="VideoRefreshRates">
 			<Value ID="_50">50 Hz</Value>
