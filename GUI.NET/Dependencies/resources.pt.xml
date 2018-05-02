@@ -79,7 +79,7 @@
 			<Control ID="mnuSoundRecorder">Gravar som</Control>
 			<Control ID="mnuWaveRecord">Gravar...</Control>
 			<Control ID="mnuWaveStop">Parar</Control>
-			<Control ID="mnuCheats">Cheats</Control>
+			<Control ID="mnuCheats">Trapaças</Control>
 			<Control ID="mnuTests">Testes</Control>
 			<Control ID="mnuTestRun">Iniciar...</Control>
 			<Control ID="mnuTestRecordFrom">Gravar a partir de...</Control>
@@ -295,7 +295,7 @@
 			<Control ID="chkDisablePaletteRead">Desativar leitura da paleta da PPU</Control>
 			<Control ID="chkDisablePpuReset">Não reiniciar a PPU ao reiniciar o console (Comportamento do Famicom)</Control>
 			<Control ID="chkUseNes101Hvc101Behavior">Utilizar comportamento do NES/HVC-101 (Top-loader / AV Famicom)</Control>
-			<Control ID="chkMapperRandomPowerOnState">Randomize power-on state for mappers</Control>
+			<Control ID="chkMapperRandomPowerOnState">Aleatorizar o estado de ativação para mapeadores</Control>
 
 			<Control ID="tpgOverclocking">Overclock</Control>
 			<Control ID="grpOverclocking">Overclock da CPU</Control>
@@ -440,71 +440,71 @@
 			<Control ID="btnOK">OK</Control>
 			<Control ID="btnCancel">Cancelar</Control>
 		</Form>
-		<Form ID="frmCheatImportFromDb" Title="Importar cheats de BBDD">
+		<Form ID="frmCheatImportFromDb" Title="Importar trapaças de BBDD">
 			<Control ID="lblSearch">Buscar</Control>
 			<Control ID="btnOK">OK</Control>
 			<Control ID="btnCancel">Cancelar</Control>
 		</Form>
-		<Form ID="frmCheatImport" Title="Importar Cheats">
+		<Form ID="frmCheatImport" Title="Importar trapaças">
 			<Control ID="grpImportOptions">Importar opções</Control>
-			<Control ID="lblCheatFile">Arquivo de cheat:</Control>
+			<Control ID="lblCheatFile">Arquivo de trapaça:</Control>
 			<Control ID="lblGame">Jogo:</Control>
 			<Control ID="btnBrowseCheat">Procurar...</Control>
 			<Control ID="btnBrowseGame">Procurar...</Control>
 			<Control ID="btnImport">Importar</Control>
 			<Control ID="btnCancel">Cancelar</Control>
 		</Form>
-		<Form ID="frmCheatList" Title="Lista de cheats">
-			<Control ID="tabCheats">Cheats</Control>
-			<Control ID="chkCurrentGameOnly">Mostrar apenas os cheats para o jogo atual</Control>
-			<Control ID="btnAddCheat">Adicionar cheat</Control>
+		<Form ID="frmCheatList" Title="Lista de trapaças">
+			<Control ID="tabCheats">Trapaças</Control>
+			<Control ID="chkCurrentGameOnly">Mostrar apenas as trapaças para o jogo atual</Control>
+			<Control ID="btnAddCheat">Adicionar trapaça</Control>
 			<Control ID="btnDelete">Excluir</Control>
-			<Control ID="btnDeleteCheat">Excluir os cheats selecionados</Control>
-			<Control ID="btnDeleteGameCheats">Excluir todos os cheats do jogo selecionado</Control>
-			<Control ID="mnuAddCheat">Adicionar cheat</Control>
+			<Control ID="btnDeleteCheat">Excluir as trapaças selecionadas</Control>
+			<Control ID="btnDeleteGameCheats">Excluir todas as trapaças do jogo selecionado</Control>
+			<Control ID="mnuAddCheat">Adicionar trapaça</Control>
 			<Control ID="mnuDeleteGameCheats">Excluir</Control>
 			<Control ID="mnuDeleteCheat">Excluir</Control>
 			<Control ID="colGameName">Jogo</Control>
-			<Control ID="colCheatName">Nome do cheat</Control>
-			<Control ID="colCode">Cheat</Control>
-			<Control ID="btnImportCheatDB">Da lista de cheats do Mesen</Control>
+			<Control ID="colCheatName">Nome da trapaça</Control>
+			<Control ID="colCode">Trapaça</Control>
+			<Control ID="btnImportCheatDB">Da lista de trapaças do Mesen</Control>
 			<Control ID="btnImportFromFile">De um arquivo</Control>
 			<Control ID="btnImport">Importar</Control>
 			<Control ID="btnExport">Exportar</Control>
-			<Control ID="btnExportAllCheats">Todos os cheats</Control>
+			<Control ID="btnExportAllCheats">Todas as trapaças</Control>
 			<Control ID="btnExportGame">Jogo selecionado</Control>
 			<Control ID="mnuExportGame">Exportar</Control>
-			<Control ID="btnExportSelectedCheats">Cheats selecionados</Control>
+			<Control ID="btnExportSelectedCheats">Trapaças selecionadas</Control>
 			<Control ID="mnuExportSelectedCheats">Exportar</Control>
-			<Control ID="tpgCheatFinder">Pesquisa de cheats</Control>
+			<Control ID="tpgCheatFinder">Pesquisa de trapaças</Control>
 			<Control ID="btnReset">Reiniciar</Control>
 			<Control ID="btnUndo">Desfazer</Control>
 			<Control ID="lblCurrentValue">O valor atual é</Control>
 			<Control ID="lblPreviousValue">O valor anterior é</Control>
 			<Control ID="btnAddCurrentFilter">Adicionar filtro atual</Control>
 			<Control ID="btnAddPrevFilter">Adicionar filtro anterior</Control>
-			<Control ID="btnCreateCheat">Criar um cheat</Control>
-			<Control ID="mnuCreateCheat">Criar um cheat</Control>
+			<Control ID="btnCreateCheat">Criar uma trapaça</Control>
+			<Control ID="mnuCreateCheat">Criar uma trapaça</Control>
 			<Control ID="lblAtAddress">a</Control>
 			<Control ID="chkPauseGameWhileWindowActive">Pausar o jogo automaticamente quando a janela estiver ativada</Control>
-			<Control ID="chkDisableCheats">Desabilitar todos os cheats</Control>
+			<Control ID="chkDisableCheats">Desabilitar todas as trapaças</Control>
 			<Control ID="btnOK">OK</Control>
 			<Control ID="btnCancel">Cancelar</Control>
 		</Form>
-		<Form ID="frmCheat" Title="Cheat">
+		<Form ID="frmCheat" Title="Trapaça">
 			<Control ID="label2">Jogo:</Control>
-			<Control ID="label1">Nome do cheat:</Control>
-			<Control ID="grpCode">Cheat</Control>
+			<Control ID="label1">Nome da trapaça:</Control>
+			<Control ID="grpCode">Trapaça</Control>
 			<Control ID="radCustom">Personalizado:</Control>
 			<Control ID="radGameGenie">Game Genie:</Control>
 			<Control ID="radProActionRocky">Pro Action Rocky:</Control>
 			<Control ID="lblAddress">Direção:</Control>
 			<Control ID="lblNewValue">Novo valor:</Control>
 			<Control ID="radRelativeAddress">Memória</Control>
-			<Control ID="radAbsoluteAddress">Cheat do jogo</Control>
+			<Control ID="radAbsoluteAddress">Trapaça do jogo</Control>
 			<Control ID="chkCompareValue">Comparar valor</Control>
 			<Control ID="btnBrowse">Procurar...</Control>
-			<Control ID="chkEnabled">Cheat ativado</Control>
+			<Control ID="chkEnabled">Trapaça ativada</Control>
 			<Control ID="btnOK">OK</Control>
 			<Control ID="btnCancel">Cancelar</Control>
 		</Form>
@@ -513,7 +513,7 @@
 			<Control ID="labelCopyright">© 2018 M. Bibaud (aka Sour)</Control>
 			<Control ID="lblWebsite">Site:</Control>
 			<Control ID="lblLink">www.mesen.ca</Control>
-			<Control ID="labelVersion">Versão: 0.9.4 (Beta)</Control>
+			<Control ID="labelVersion">Versão: 0.9.5 (Beta)</Control>
 			<Control ID="lblDonate">Caso queira apoiar o Mesen, por favor, considere fazer uma doação ao projeto.&#xA;Obrigado pelo seu apoio!</Control>
 			<Control ID="okButton">&amp;OK</Control>
 		</Form>
@@ -716,7 +716,7 @@
 		<Message ID="MouseModeEnabled">Modo mouse ativado - precione ESC ou Pause para liberar o cursor.</Message>
 		<Message ID="BandaiMicrophone">Micorfone Bandai</Message>
 		<Message ID="DatachBarcodeReader">Leitor de código de barras Datach</Message>
-
+    
 		<Message ID="Resume">Continuar</Message>
 		<Message ID="Pause">Pausar</Message>
 		<Message ID="StartServer">Iniciar servidor</Message>
@@ -724,9 +724,7 @@
 		<Message ID="ConnectToServer">Conectar a um servidor</Message>
 		<Message ID="Disconnect">Desconectar</Message>
 		<Message ID="PlayerNumber">Jogador {0}</Message>
-
-		<Message ID="CheatsFound">{0} e {1} cheats de jogos presentes na base de dados</Message>
-		<Message ID="CheatsImported">{0} cheats foram importados para o jogo {1}.</Message>
+		<Message ID="ExpansionDevice">Dispositivo de expansão</Message>
 
 		<Message ID="RomsFound">{0} roms encontradas</Message>
 
@@ -740,9 +738,13 @@
 		<Message ID="InvalidPaths">As seguintes substituições de pastas são inválidas:&#xA;&#xA;{0}&#xA;&#xA;Use pastas válidas e graváveis ​​e tente novamente.</Message>
 		<Message ID="CopyMesenDataPrompt">Todos os arquivos serão copiados de:&#xA;&#xA;{0}&#xA;para&#xA;{1}&#xA;&#xA;Uma vez que a cópia esteja completa, o Mesen reiniciará.&#xA;Continuar?</Message>
 
+		<Message ID="CheatsFound">{0} e {1} trapaças de jogos presentes na base de dados</Message>
+		<Message ID="CheatsImported">{0} trapaças foram importadas para o jogo {1}.</Message>
+
 		<Message ID="NsfNextTrack">Faixa seguinte (Esperar para jogar mais rápido)</Message>
 		<Message ID="NsfUnnamedTrack">[sem nome]</Message>
 		<Message ID="NsfUnknownField">[desconhecido]</Message>
+
 		<Message ID="CouldNotInstallRuntime">O Pacote Redistribuível do Visual C++ para Visual Studio 2015 não foi instalado corretamente.</Message>
 		<Message ID="EmptyState">&lt;Não há estado salvo&gt;</Message>
 		<Message ID="ErrorWhileCheckingUpdates">Houve um erro na busca por atualizações. Verifique sua conexão com a internet e tente de novo.&#xA;&#xA;Detalhes do erro:&#xA;{0}</Message>
@@ -751,7 +753,7 @@
 		<Message ID="FdsDiskSide">Disco {0} Cara {1}</Message>
 		<Message ID="FileNotFound">Arquivo não encontrado: {0}</Message>
 		<Message ID="InvalidFdsBios">A bios selecionada é inválida.</Message>
-
+    
 		<Message ID="HDNesTooltip">Esta opção permite os pacotes de gráficos de alta resolução sejam carregados no mesmo formato que os do emulador HDNes.&#xA;&#xA;Os pacotes de alta resolução devem ser colocados nos "HdPacks" em uma subpasta com o mesmo nome da ROM.&#xA;Exemplo: Um pacote para "MinhaRom.nes" deve ser colocado em "HdPacks\MinhaRom\hires.txt".</Message>
 		<Message ID="HdPackBuilderScaleHelp">Seleciona a escala e o filtro de vídeo a serem usados ​​ao gerar os arquivos PNG&#xA;para o Pacote HD. Usa os filtros "Preescala" para gerar os tiles&#xA;em uma escala maior sem aplicar qualquer transformação aos pixels.</Message>
 		<Message ID="HdPackBuilderBankSizeHelp">Esta opção está disponível apenas para jogos de RAM CHR.  Jogos de RAM CHR não tem "bancos"&#xA;fixos - eles são criados dinamicamente pelo código do jogo.&#xA;Esta opção altera o comportamento do Criador de Pacotes de Alta Definição agrupando os tiles em &#xA;arquivos PNG - um tamanho de banco menor geralmente resultará em menos arquivos PNG &#xA;(mas, dependendo do código do jogo, valores maiores podem produzir &#xA;melhores resultados).</Message>
@@ -774,9 +776,9 @@
 
 		<Message ID="GoogleDriveIntegrationError">Mesen não foi capaz de conectar a sua conta do Google Drive, por favor tente novamente.</Message>
 
-		<Message ID="InvalidCheatFile">O arquivo selecionado ({0}) não é um arquivo de cheats válido.</Message>
+		<Message ID="InvalidCheatFile">O arquivo selecionado ({0}) não é um arquivo de trapaças válido.</Message>
 		<Message ID="InvalidXmlFile">O arquivo selecionado ({0}) não é um arquivo XML válido.</Message>
-		<Message ID="NoMatchingCheats">O arquivo de cheats selecionado ({0}) não contém cheats que pertencem ao jogo selecionado.</Message>
+		<Message ID="NoMatchingCheats">O arquivo de trapaças selecionado ({0}) não contém trapaças que pertencem ao jogo selecionado.</Message>
 
 		<Message ID="ConfirmReset">Tem certeza de que deseja reiniciar?</Message>
 		<Message ID="ConfirmPowerCycle">Tem certeza de que deseja parar e reiniciar?</Message>
@@ -806,7 +808,7 @@
 		<Message ID="EmulatorShortcutMappings_MoveToPreviousStateSlot">Ir ao estado salvo anterior</Message>
 		<Message ID="EmulatorShortcutMappings_SaveState">Salvar estado</Message>
 		<Message ID="EmulatorShortcutMappings_LoadState">Carregar estado</Message>
-		<Message ID="EmulatorShortcutMappings_ToggleCheats">Ativar/Desativar códigos de cheat</Message>
+		<Message ID="EmulatorShortcutMappings_ToggleCheats">Ativar/Desativar códigos de trapaça</Message>
 		<Message ID="EmulatorShortcutMappings_ToggleAudio">Ativar/Desativar áudio</Message>
 		<Message ID="EmulatorShortcutMappings_RunSingleFrame">Executar um só quadro</Message>
 
@@ -827,6 +829,7 @@
 		<Message ID="EmulatorShortcutMappings_ToggleBackground">Alternar camada de fundo</Message>
 		<Message ID="EmulatorShortcutMappings_ToggleSprites">Alternar camada de sprite</Message>
 		<Message ID="EmulatorShortcutMappings_ToggleKeyboardMode">Alternar modo de teclado</Message>
+    
 		<Message ID="EmulatorShortcutMappings_MaxSpeed">Alternar velocidade máxima</Message>
 		<Message ID="EmulatorShortcutMappings_LoadRandomGame">Carrear jogo aleatório</Message>
 		<Message ID="EmulatorShortcutMappings_SaveStateSlot1">Salvar estado - Compartimento 1</Message>
@@ -966,35 +969,36 @@
 			<Value ID="BottomLeft">Inferior esquerdo</Value>
 			<Value ID="BottomRight">Inferior direito</Value>
 		</Enum>
-		<Enum ID="RamPowerOnState">
-			<Value ID="AllZeros">Todos os bits a 0 (Padrão)</Value>
-			<Value ID="AllOnes">Todos os bits a 1</Value>
-			<Value ID="Random">Valores aleatórios</Value>
-		</Enum>
-		<Enum ID="CheatCurrentFilterType">
-			<Value ID="Smaller">Menor que</Value>
-			<Value ID="Equal">Igual que</Value>
-			<Value ID="NotEqual">Não igual que</Value>
-			<Value ID="Greater">Maior que</Value>
-		</Enum>
-		<Enum ID="CheatPrevFilterType">
-			<Value ID="Smaller">Menor</Value>
-			<Value ID="Equal">Igual</Value>
-			<Value ID="NotEqual">Não igual</Value>
-			<Value ID="Greater">Maior</Value>
-		</Enum>
 		<Enum ID="Language">
-			<Value ID="SystemDefault">Definir como idioma padrão</Value>
+			<Value ID="SystemDefault">Valor padrão do usuário</Value>
 			<Value ID="English">English</Value>
 			<Value ID="French">Français</Value>
 			<Value ID="Japanese">日本語</Value>
-			<Value ID="Portuguese">Português-BR</Value>
+			<Value ID="Portuguese">Português Brasileiro</Value>
 			<Value ID="Russian">Русский</Value>
 			<Value ID="Spanish">Español</Value>
 			<Value ID="Ukrainian">Українська</Value>
 			<Value ID="Catalan">Català</Value>
-		</Enum>
-		<Enum ID="VideoCodec">
+    </Enum>
+    <Enum ID="RamPowerOnState">
+      <Value ID="AllZeros">Todos os 0 (Padrão)</Value>
+      <Value ID="AllOnes">Todos os 1</Value>
+      <Value ID="Random">Valores aleatórios</Value>
+    </Enum>
+    <Enum ID="CheatCurrentFilterType">
+      <Value ID="Smaller">Menor que</Value>
+      <Value ID="Equal">Igual a</Value>
+      <Value ID="NotEqual">Não igual a</Value>
+      <Value ID="Greater">Maior que</Value>
+    </Enum>
+    <Enum ID="CheatPrevFilterType">
+      <Value ID="Smaller">Menor</Value>
+      <Value ID="Equal">Igual</Value>
+      <Value ID="NotEqual">Não igual</Value>
+      <Value ID="Greater">Maior</Value>
+    </Enum>
+    <Enum ID="VideoCodec">
+
 			<Value ID="None">Nenhum (Sem comprimir)</Value>
 			<Value ID="ZMBV">Zip Motion Block Video (ZMBV)</Value>
 			<Value ID="CSCD">Camstudio (CSCD)</Value>
