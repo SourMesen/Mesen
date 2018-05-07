@@ -6,7 +6,7 @@ If you want to support this project, please consider making a donation:
 
 [![Donate](https://www.mesen.ca/images/donate.png)](https://www.mesen.ca/Donate.php)
 
-[Website (https://www.mesen.ca)](https://www.mesen.ca)  
+[Website (https://www.mesen.ca)](https://www.mesen.ca)
 [Documentation (https://www.mesen.ca/docs)](https://www.mesen.ca/docs)
 
 ## Releases
@@ -17,9 +17,9 @@ The latest version is available on the [website](https://www.mesen.ca).  Older r
 
 ### Ubuntu
 
-The official releases (same downloads as the Windows builds above) also contain the Linux version of Mesen, built under Ubuntu 16 - you should be able to use that in most cases if you are using Ubuntu.  
+The official releases (same downloads as the Windows builds above) also contain the Linux version of Mesen, built under Ubuntu 16 - you should be able to use that in most cases if you are using Ubuntu.
 
-The Linux version is a standard .NET executable file and requires Mono to run - you may need to configure your environment to allow it to automatically run .exe files through Mono, or manually run Mesen by using mono (e.g: "mono Mesen.exe").  
+The Linux version is a standard .NET executable file and requires Mono to run - you may need to configure your environment to allow it to automatically run .exe files through Mono, or manually run Mesen by using mono (e.g: "mono Mesen.exe").
 
 The following packages need to be installed to run Mesen:
 
@@ -35,9 +35,9 @@ Packages are available here: <https://aur.archlinux.org/packages/mesen>
 
 Things that ***may or may not*** be added in the future, in no particular order:
 
-* Support for more UNIF boards and more NES/Famicom input devices  
-* Shaders  
-* TAS editor  
+* Support for more UNIF boards and more NES/Famicom input devices
+* Shaders
+* TAS editor
 
 ## Compiling
 
@@ -45,14 +45,14 @@ Things that ***may or may not*** be added in the future, in no particular order:
 
 #### *Standalone*
 
-1) Open the solution in VS2017  
-2) Compile as Release/x64 or Release/x86  
-3) Run  
+1) Open the solution in VS2017
+2) Compile as Release/x64 or Release/x86
+3) Run
 
 #### *Libretro*
 
-1) Open the solution in VS2017  
-2) Compile as Libretro/x64 or Libretro/x86  
+1) Open the solution in VS2017
+2) Compile as Libretro/x64 or Libretro/x86
 3) Use the "mesen_libretro.dll" file in bin/(x64 or x86)/Libretro/mesen_libretro.dll
 
 ### Linux
@@ -64,21 +64,21 @@ To compile Mesen under Linux you will need a recent version of clang/gcc.  This 
 * Mono 4.2.1+  (package: mono-devel)
 * SDL2  (package: libsdl2-dev)
 
-The makefile contains some more information at the top.  Running "make" will build the x64 version by default, and then "make run" should start the emulator.  
-LTO is supported under clang, which gives a large performance boost (25-30%+), so turning it on is highly recommended (see makefile for details).  
+The makefile contains some more information at the top.  Running "make" will build the x64 version by default, and then "make run" should start the emulator.
+LTO is supported under clang, which gives a large performance boost (25-30%+), so turning it on is highly recommended (see makefile for details).
 
 #### *Libretro*
 
 To compile the libretro core you will need a recent version of clang/gcc.  This is because Mesen requires a C++14 compiler, along with support for the filesystem API (C++17).
 
-Running "make libretro" will build the core and put it in "bin/mesen_libretro.(x64 or x86).so".  
-LTO is supported under clang, which gives a large performance boost (25-30%+), so turning it on is highly recommended (see makefile for details).  
+Running "make libretro" will build the core and put it in "bin/mesen_libretro.(x64 or x86).so".
+LTO is supported under clang, which gives a large performance boost (25-30%+), so turning it on is highly recommended (see makefile for details).
 
 **Note:** There is also another makefile in the Libretro folder - this is used by the RetroArch's buildbot to build the core.  You can also try using this makefile if you are having issues with the one in the root folder.
 
 ## License
 
-Mesen is available under the GPL V3 license.  Full text here: http://www.gnu.org/licenses/gpl-3.0.en.html
+Mesen is available under the GPL V3 license.  Full text here: <http://www.gnu.org/licenses/gpl-3.0.en.html>
 
 Copyright (C) 2014-2018 M. Bibaud
 
