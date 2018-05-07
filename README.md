@@ -2,8 +2,9 @@
 
 Mesen is a cross-platform NES/Famicom emulator for Windows & Linux built in C++ and C#.
 
-If you want to support this project, please consider making a donation:  
-<a href="https://www.mesen.ca/Donate.php"><img src="https://www.mesen.ca/images/donate.png" alt="Donate"></a>
+If you want to support this project, please consider making a donation:
+
+[![Donate](https://www.mesen.ca/images/donate.png)](https://www.mesen.ca/Donate.php)
 
 [Website (https://www.mesen.ca)](https://www.mesen.ca)  
 [Documentation (https://www.mesen.ca/docs)](https://www.mesen.ca/docs)
@@ -21,6 +22,7 @@ The official releases (same downloads as the Windows builds above) also contain 
 The Linux version is a standard .NET executable file and requires Mono to run - you may need to configure your environment to allow it to automatically run .exe files through Mono, or manually run Mesen by using mono (e.g: "mono Mesen.exe").  
 
 The following packages need to be installed to run Mesen:
+
 * mono-complete
 * libsdl2-2.0
 * gnome-themes-standard
@@ -33,9 +35,9 @@ Packages are available here: <https://aur.archlinux.org/packages/mesen>
 
 Things that ***may or may not*** be added in the future, in no particular order:
 
--Support for more UNIF boards and more NES/Famicom input devices  
--Shaders  
--TAS editor  
+* Support for more UNIF boards and more NES/Famicom input devices  
+* Shaders  
+* TAS editor  
 
 ## Compiling
 
