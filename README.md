@@ -1,3 +1,5 @@
+# Mesen
+
 Mesen is a cross-platform NES/Famicom emulator for Windows & Linux built in C++ and C#.
 
 If you want to support this project, please consider making a donation:  
@@ -6,13 +8,14 @@ If you want to support this project, please consider making a donation:
 [Website (https://www.mesen.ca)](https://www.mesen.ca)  
 [Documentation (https://www.mesen.ca/docs)](https://www.mesen.ca/docs)
 
-# Releases #
+## Releases
 
-### Windows ###
+### Windows
 
 The latest version is available on the [website](https://www.mesen.ca).  Older releases are available from the [releases tab on GitHub](https://github.com/SourMesen/Mesen/releases).
 
-### Ubuntu ###
+### Ubuntu
+
 The official releases (same downloads as the Windows builds above) also contain the Linux version of Mesen, built under Ubuntu 16 - you should be able to use that in most cases if you are using Ubuntu.  
 
 The Linux version is a standard .NET executable file and requires Mono to run - you may need to configure your environment to allow it to automatically run .exe files through Mono, or manually run Mesen by using mono (e.g: "mono Mesen.exe").  
@@ -22,43 +25,47 @@ The following packages need to be installed to run Mesen:
 * libsdl2-2.0
 * gnome-themes-standard
 
-### Arch Linux ###  
-Packages are available here: https://aur.archlinux.org/packages/mesen
+### Arch Linux
 
-# Roadmap #
+Packages are available here: <https://aur.archlinux.org/packages/mesen>
+
+## Roadmap
+
 Things that ***may or may not*** be added in the future, in no particular order:
 
 -Support for more UNIF boards and more NES/Famicom input devices  
 -Shaders  
 -TAS editor  
 
-# Compiling #
+## Compiling
 
-### Windows ###
+### Windows
 
-#### *Standalone* ####
+#### *Standalone*
+
 1) Open the solution in VS2017  
 2) Compile as Release/x64 or Release/x86  
 3) Run  
 
-#### *Libretro* ####
+#### *Libretro*
+
 1) Open the solution in VS2017  
 2) Compile as Libretro/x64 or Libretro/x86  
 3) Use the "mesen_libretro.dll" file in bin/(x64 or x86)/Libretro/mesen_libretro.dll
 
+### Linux
 
-### Linux ###
-
-#### *Standalone* ####
+#### *Standalone*
 
 To compile Mesen under Linux you will need a recent version of clang/gcc.  This is because Mesen requires a C++14 compiler, along with support for the filesystem API (C++17). Additionally, Mesen has the following dependencies:
+
 * Mono 4.2.1+  (package: mono-devel)
 * SDL2  (package: libsdl2-dev)
 
 The makefile contains some more information at the top.  Running "make" will build the x64 version by default, and then "make run" should start the emulator.  
 LTO is supported under clang, which gives a large performance boost (25-30%+), so turning it on is highly recommended (see makefile for details).  
 
-#### *Libretro* ####
+#### *Libretro*
 
 To compile the libretro core you will need a recent version of clang/gcc.  This is because Mesen requires a C++14 compiler, along with support for the filesystem API (C++17).
 
@@ -67,12 +74,11 @@ LTO is supported under clang, which gives a large performance boost (25-30%+), s
 
 **Note:** There is also another makefile in the Libretro folder - this is used by the RetroArch's buildbot to build the core.  You can also try using this makefile if you are having issues with the one in the root folder.
 
-## LICENSE ##
+## License
 
 Mesen is available under the GPL V3 license.  Full text here: http://www.gnu.org/licenses/gpl-3.0.en.html
 
 Copyright (C) 2014-2018 M. Bibaud
-
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
