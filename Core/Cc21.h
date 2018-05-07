@@ -17,7 +17,7 @@ protected:
 
 	void WriteRegister(uint16_t addr, uint8_t value) override
 	{
-		uint8_t latch = addr;
+		uint8_t latch = (uint8_t)addr;
 		if(addr == 0x8000) {
 			latch = value;
 		}
