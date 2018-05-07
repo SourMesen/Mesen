@@ -140,7 +140,7 @@ extern "C" {
 
 		static const struct retro_variable vars[] = {
 			{ MesenNtscFilter, "NTSC filter; Disabled|Composite (Blargg)|S-Video (Blargg)|RGB (Blargg)|Monochrome (Blargg)|Bisqwit 2x|Bisqwit 4x|Bisqwit 8x" },
-			{ MesenPalette, "Palette; Default|Composite Direct (by FirebrandX)|Nes Classic|Nestopia (RGB)|Original Hardware (by FirebrandX)|PVM Style (by FirebrandX)|Sony CXA2025AS|Unsaturated v6 (by FirebrandX)|YUV v3 (by FirebrandX)|Custom" },
+			{ MesenPalette, "Palette; Default|Composite Direct (by FirebrandX)|Nes Classic|Nestopia (RGB)|Original Hardware (by FirebrandX)|PVM Style (by FirebrandX)|Sony CXA2025AS|Unsaturated v6 (by FirebrandX)|YUV v3 (by FirebrandX)|Custom|Raw" },
 			{ MesenOverclock, "Overclock; None|Low|Medium|High|Very High" },
 			{ MesenOverclockType, "Overclock Type; Before NMI (Recommended)|After NMI" },
 			{ MesenRegion, "Region; Auto|NTSC|PAL|Dendy" },
@@ -374,6 +374,9 @@ extern "C" {
 				EmulationSettings::SetRgbPalette(yuvPalette);
 			} else if(value == "Custom") {
 				load_custom_palette();
+			} else if(value == "Raw") {
+				//Using the raw palette replaces the NTSC filters, if one is selected
+				EmulationSettings::SetVideoFilterType(VideoFilterType::Raw);
 			}
 		}
 

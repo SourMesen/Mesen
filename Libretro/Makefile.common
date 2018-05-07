@@ -44,6 +44,7 @@ SOURCES_CXX := $(LIBRETRO_DIR)/libretro.cpp \
                $(CORE_DIR)/Debugger.cpp \
                $(CORE_DIR)/DebugHud.cpp \
                $(CORE_DIR)/DefaultVideoFilter.cpp \
+					$(CORE_DIR)/RawVideoFilter.cpp \
                $(CORE_DIR)/DeltaModulationChannel.cpp \
                $(CORE_DIR)/Disassembler.cpp \
                $(CORE_DIR)/DisassemblyInfo.cpp \

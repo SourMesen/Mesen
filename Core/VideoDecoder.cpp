@@ -3,6 +3,7 @@
 #include "VideoDecoder.h"
 #include "EmulationSettings.h"
 #include "DefaultVideoFilter.h"
+#include "RawVideoFilter.h"
 #include "BisqwitNtscFilter.h"
 #include "NtscFilter.h"
 #include "HdVideoFilter.h"
@@ -84,6 +85,7 @@ void VideoDecoder::UpdateVideoFilter()
 			case VideoFilterType::BisqwitNtsc: _videoFilter.reset(new BisqwitNtscFilter(1)); break;
 			case VideoFilterType::BisqwitNtscHalfRes: _videoFilter.reset(new BisqwitNtscFilter(2)); break;
 			case VideoFilterType::BisqwitNtscQuarterRes: _videoFilter.reset(new BisqwitNtscFilter(4)); break;
+			case VideoFilterType::Raw: _videoFilter.reset(new RawVideoFilter()); break;
 			default: _scaleFilter = ScaleFilter::GetScaleFilter(_videoFilterType); break;
 		}
 

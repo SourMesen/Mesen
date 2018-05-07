@@ -529,6 +529,7 @@
     <ClInclude Include="MMC3_198.h" />
     <ClInclude Include="MovieRecorder.h" />
     <ClInclude Include="AsciiTurboFile.h" />
+    <ClInclude Include="RawVideoFilter.h" />
     <ClInclude Include="SystemActionManager.h" />
     <ClInclude Include="DatachBarcodeReader.h" />
     <ClInclude Include="DebugHud.h" />
@@ -941,6 +942,7 @@
     <ClCompile Include="MovieRecorder.cpp" />
     <ClCompile Include="OggMixer.cpp" />
     <ClCompile Include="OggReader.cpp" />
+    <ClCompile Include="RawVideoFilter.cpp" />
     <ClCompile Include="RecordedRomTest.cpp" />
     <ClCompile Include="AutoSaveManager.cpp" />
     <ClCompile Include="AviRecorder.cpp" />
