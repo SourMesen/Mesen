@@ -1180,6 +1180,12 @@
     <None Include="Dependencies\LuaScripts\Grid.lua">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="Dependencies\LuaScripts\LogParallax.lua">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Dependencies\LuaScripts\ModifyScreen.lua">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Dependencies\LuaScripts\ReverseMode.lua">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
