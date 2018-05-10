@@ -1150,7 +1150,7 @@ namespace Mesen.GUI.Forms
 		private void frmMain_DragEnter(object sender, DragEventArgs e)
 		{
 			try {
-				if(e.Data.GetDataPresent(DataFormats.FileDrop)) {
+				if(e.Data != null && e.Data.GetDataPresent(DataFormats.FileDrop)) {
 					e.Effect = DragDropEffects.Copy;
 				} else {
 					InteropEmu.DisplayMessage("Error", "Unsupported operation.");
