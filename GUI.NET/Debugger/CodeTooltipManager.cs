@@ -32,6 +32,10 @@ namespace Mesen.GUI.Debugger
 
 		public void ShowTooltip(string word, Dictionary<string, string> values, int lineAddress, AddressTypeInfo? previewAddress)
 		{
+			if(ConfigManager.Config.DebugInfo.OnlyShowTooltipsOnShift && Control.ModifierKeys != Keys.Shift) {
+				return;
+			}
+
 			if(_hoverLastWord != word || _hoverLastLineAddress != lineAddress || _codeTooltip == null) {
 				if(!_preventCloseTooltip && _codeTooltip != null) {
 					_codeTooltip.Close();

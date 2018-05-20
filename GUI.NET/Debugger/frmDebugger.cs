@@ -89,6 +89,8 @@ namespace Mesen.GUI.Debugger
 			this.mnuHidePauseIcon.Checked = ConfigManager.Config.DebugInfo.HidePauseIcon;
 			this.mnuShowEffectiveAddresses.Checked = ConfigManager.Config.DebugInfo.ShowEffectiveAddresses;
 			this.mnuShowCodePreview.Checked = ConfigManager.Config.DebugInfo.ShowCodePreview;
+			this.mnuShowOpCodeTooltips.Checked = ConfigManager.Config.DebugInfo.ShowOpCodeTooltips;
+			this.mnuOnlyShowTooltipOnShift.Checked = ConfigManager.Config.DebugInfo.OnlyShowTooltipsOnShift;
 			this.mnuShowToolbar.Checked = ConfigManager.Config.DebugInfo.ShowToolbar;
 			this.mnuShowCpuMemoryMapping.Checked = ConfigManager.Config.DebugInfo.ShowCpuMemoryMapping;
 			this.mnuShowPpuMemoryMapping.Checked = ConfigManager.Config.DebugInfo.ShowPpuMemoryMapping;
@@ -977,6 +979,12 @@ namespace Mesen.GUI.Debugger
 		private void mnuShowOpCodeTooltips_CheckedChanged(object sender, EventArgs e)
 		{
 			ConfigManager.Config.DebugInfo.ShowOpCodeTooltips = mnuShowOpCodeTooltips.Checked;
+			ConfigManager.ApplyChanges();
+		}
+
+		private void mnuTooltipShowOnShift_CheckedChanged(object sender, EventArgs e)
+		{
+			ConfigManager.Config.DebugInfo.OnlyShowTooltipsOnShift = mnuOnlyShowTooltipOnShift.Checked;
 			ConfigManager.ApplyChanges();
 		}
 

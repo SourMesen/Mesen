@@ -141,9 +141,11 @@ namespace Mesen.GUI.Debugger
 			this.mnuShowPpuMemoryMapping = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuShowFunctionLabelLists = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuShowBottomPanel = new System.Windows.Forms.ToolStripMenuItem();
-			this.toolStripMenuItem18 = new System.Windows.Forms.ToolStripSeparator();
+			this.mnuTooltipOptions = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuShowCodePreview = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuShowOpCodeTooltips = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem18 = new System.Windows.Forms.ToolStripSeparator();
+			this.mnuOnlyShowTooltipOnShift = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuCopyOptions = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuCopyAddresses = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuCopyByteCode = new System.Windows.Forms.ToolStripMenuItem();
@@ -982,6 +984,7 @@ namespace Mesen.GUI.Debugger
             this.mnuBreakOptions,
             this.toolStripMenuItem12,
             this.mnuShowOptions,
+            this.mnuTooltipOptions,
             this.mnuCopyOptions,
             this.fontSizeToolStripMenuItem,
             this.mnuConfigureColors,
@@ -1215,10 +1218,7 @@ namespace Mesen.GUI.Debugger
             this.mnuShowCpuMemoryMapping,
             this.mnuShowPpuMemoryMapping,
             this.mnuShowFunctionLabelLists,
-            this.mnuShowBottomPanel,
-            this.toolStripMenuItem18,
-            this.mnuShowCodePreview,
-            this.mnuShowOpCodeTooltips});
+            this.mnuShowBottomPanel});
 			this.mnuShowOptions.Image = global::Mesen.GUI.Properties.Resources.DipSwitches;
 			this.mnuShowOptions.Name = "mnuShowOptions";
 			this.mnuShowOptions.Size = new System.Drawing.Size(266, 22);
@@ -1228,7 +1228,7 @@ namespace Mesen.GUI.Debugger
 			// 
 			this.mnuShowToolbar.CheckOnClick = true;
 			this.mnuShowToolbar.Name = "mnuShowToolbar";
-			this.mnuShowToolbar.Size = new System.Drawing.Size(259, 22);
+			this.mnuShowToolbar.Size = new System.Drawing.Size(263, 22);
 			this.mnuShowToolbar.Text = "Show Toolbar";
 			this.mnuShowToolbar.Click += new System.EventHandler(this.mnuShowToolbar_Click);
 			// 
@@ -1236,7 +1236,7 @@ namespace Mesen.GUI.Debugger
 			// 
 			this.mnuShowCpuMemoryMapping.CheckOnClick = true;
 			this.mnuShowCpuMemoryMapping.Name = "mnuShowCpuMemoryMapping";
-			this.mnuShowCpuMemoryMapping.Size = new System.Drawing.Size(259, 22);
+			this.mnuShowCpuMemoryMapping.Size = new System.Drawing.Size(263, 22);
 			this.mnuShowCpuMemoryMapping.Text = "Show CPU Memory Mapping";
 			this.mnuShowCpuMemoryMapping.Click += new System.EventHandler(this.mnuShowCpuMemoryMapping_Click);
 			// 
@@ -1244,7 +1244,7 @@ namespace Mesen.GUI.Debugger
 			// 
 			this.mnuShowPpuMemoryMapping.CheckOnClick = true;
 			this.mnuShowPpuMemoryMapping.Name = "mnuShowPpuMemoryMapping";
-			this.mnuShowPpuMemoryMapping.Size = new System.Drawing.Size(259, 22);
+			this.mnuShowPpuMemoryMapping.Size = new System.Drawing.Size(263, 22);
 			this.mnuShowPpuMemoryMapping.Text = "Show PPU Memory Mapping";
 			this.mnuShowPpuMemoryMapping.Click += new System.EventHandler(this.mnuShowPpuMemoryMapping_Click);
 			// 
@@ -1252,7 +1252,7 @@ namespace Mesen.GUI.Debugger
 			// 
 			this.mnuShowFunctionLabelLists.CheckOnClick = true;
 			this.mnuShowFunctionLabelLists.Name = "mnuShowFunctionLabelLists";
-			this.mnuShowFunctionLabelLists.Size = new System.Drawing.Size(259, 22);
+			this.mnuShowFunctionLabelLists.Size = new System.Drawing.Size(263, 22);
 			this.mnuShowFunctionLabelLists.Text = "Show Function/Label Lists";
 			this.mnuShowFunctionLabelLists.Click += new System.EventHandler(this.mnuShowFunctionLabelLists_Click);
 			// 
@@ -1260,20 +1260,27 @@ namespace Mesen.GUI.Debugger
 			// 
 			this.mnuShowBottomPanel.CheckOnClick = true;
 			this.mnuShowBottomPanel.Name = "mnuShowBottomPanel";
-			this.mnuShowBottomPanel.Size = new System.Drawing.Size(259, 22);
-			this.mnuShowBottomPanel.Text = "Show Watch/Breakpoints/Callstack";
+			this.mnuShowBottomPanel.Size = new System.Drawing.Size(263, 22);
+			this.mnuShowBottomPanel.Text = "Show Watch/Breakpoints/Call Stack";
 			this.mnuShowBottomPanel.Click += new System.EventHandler(this.mnuShowBottomPanel_Click);
 			// 
-			// toolStripMenuItem18
+			// mnuTooltipOptions
 			// 
-			this.toolStripMenuItem18.Name = "toolStripMenuItem18";
-			this.toolStripMenuItem18.Size = new System.Drawing.Size(256, 6);
+			this.mnuTooltipOptions.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.mnuShowCodePreview,
+            this.mnuShowOpCodeTooltips,
+            this.toolStripMenuItem18,
+            this.mnuOnlyShowTooltipOnShift});
+			this.mnuTooltipOptions.Image = global::Mesen.GUI.Properties.Resources.Comment;
+			this.mnuTooltipOptions.Name = "mnuTooltipOptions";
+			this.mnuTooltipOptions.Size = new System.Drawing.Size(266, 22);
+			this.mnuTooltipOptions.Text = "Tooltip Options";
 			// 
 			// mnuShowCodePreview
 			// 
 			this.mnuShowCodePreview.CheckOnClick = true;
 			this.mnuShowCodePreview.Name = "mnuShowCodePreview";
-			this.mnuShowCodePreview.Size = new System.Drawing.Size(259, 22);
+			this.mnuShowCodePreview.Size = new System.Drawing.Size(307, 22);
 			this.mnuShowCodePreview.Text = "Show Code Preview in Tooltips";
 			this.mnuShowCodePreview.CheckedChanged += new System.EventHandler(this.mnuShowCodePreview_CheckedChanged);
 			// 
@@ -1281,9 +1288,22 @@ namespace Mesen.GUI.Debugger
 			// 
 			this.mnuShowOpCodeTooltips.CheckOnClick = true;
 			this.mnuShowOpCodeTooltips.Name = "mnuShowOpCodeTooltips";
-			this.mnuShowOpCodeTooltips.Size = new System.Drawing.Size(259, 22);
+			this.mnuShowOpCodeTooltips.Size = new System.Drawing.Size(307, 22);
 			this.mnuShowOpCodeTooltips.Text = "Show OP Code Info Tooltips";
 			this.mnuShowOpCodeTooltips.CheckedChanged += new System.EventHandler(this.mnuShowOpCodeTooltips_CheckedChanged);
+			// 
+			// toolStripMenuItem18
+			// 
+			this.toolStripMenuItem18.Name = "toolStripMenuItem18";
+			this.toolStripMenuItem18.Size = new System.Drawing.Size(304, 6);
+			// 
+			// mnuOnlyShowTooltipOnShift
+			// 
+			this.mnuOnlyShowTooltipOnShift.CheckOnClick = true;
+			this.mnuOnlyShowTooltipOnShift.Name = "mnuOnlyShowTooltipOnShift";
+			this.mnuOnlyShowTooltipOnShift.Size = new System.Drawing.Size(307, 22);
+			this.mnuOnlyShowTooltipOnShift.Text = "Only show tooltips when Shift key is pressed";
+			this.mnuOnlyShowTooltipOnShift.CheckedChanged += new System.EventHandler(this.mnuTooltipShowOnShift_CheckedChanged);
 			// 
 			// mnuCopyOptions
 			// 
@@ -1876,7 +1896,6 @@ namespace Mesen.GUI.Debugger
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem5;
 		private System.Windows.Forms.ToolStripMenuItem mnuApuViewer;
 		private System.Windows.Forms.ToolStripMenuItem mnuShowCodePreview;
-		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem18;
 		private System.Windows.Forms.ToolStripMenuItem mnuShowOpCodeTooltips;
 		private System.Windows.Forms.ToolStripMenuItem mnuShow;
 		private System.Windows.Forms.ToolStripMenuItem mnuShowDisassembledCode;
@@ -1916,5 +1935,8 @@ namespace Mesen.GUI.Debugger
 		private System.Windows.Forms.ToolStripMenuItem mnuReset;
 		private System.Windows.Forms.ToolStripMenuItem mnuPowerCycle;
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem24;
+		private System.Windows.Forms.ToolStripMenuItem mnuTooltipOptions;
+		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem18;
+		private System.Windows.Forms.ToolStripMenuItem mnuOnlyShowTooltipOnShift;
 	}
 }

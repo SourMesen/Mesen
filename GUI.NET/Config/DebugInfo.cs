@@ -160,6 +160,7 @@ namespace Mesen.GUI.Config
 
 		public bool ShowCodePreview = true;
 		public bool ShowOpCodeTooltips = true;
+		public bool OnlyShowTooltipsOnShift = false;
 
 		public bool ShowToolbar = true;
 
