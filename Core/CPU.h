@@ -184,7 +184,7 @@ private:
 	uint8_t SP() { return _state.SP; }
 	void SetSP(uint8_t value) { _state.SP = value; }
 	uint8_t PS() { return _state.PS; }
-	void SetPS(uint8_t value) { _state.PS = (value & 0xCF) | PSFlags::Reserved; }
+	void SetPS(uint8_t value) { _state.PS = value & 0xCF; }
 	uint16_t PC() { return _state.PC; }
 	void SetPC(uint16_t value) { _state.PC = value; }
 
@@ -484,7 +484,7 @@ private:
 
 	void PHA() { Push(A()); }
 	void PHP() {
-		uint8_t flags = PS() | PSFlags::Break;
+		uint8_t flags = PS() | PSFlags::Break | PSFlags::Reserved;
 		Push((uint8_t)flags);
 	}
 	void PLA() { 

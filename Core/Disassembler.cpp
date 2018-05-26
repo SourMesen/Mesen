@@ -556,7 +556,7 @@ string Disassembler::GetCode(AddressTypeInfo &addressInfo, uint32_t endAddr, uin
 			if(showEffectiveAddresses) {
 				info->GetEffectiveAddressString(effAddress, cpuState, memoryManager.get(), labelManager.get());
 			}
-			info->ToString(code, memoryAddr, memoryManager.get(), labelManager.get());
+			info->ToString(code, memoryAddr, memoryManager.get(), labelManager.get(), false);
 			info->GetByteCode(byteCode);
 
 			GetCodeLine(output, code, commentString, memoryAddr, addr & mask, byteCode, effAddress, dataType, true, memoryType);

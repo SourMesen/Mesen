@@ -33,7 +33,7 @@ DisassemblyInfo::DisassemblyInfo()
 {
 }
 
-void DisassemblyInfo::ToString(string &out, uint32_t memoryAddr, MemoryManager* memoryManager, LabelManager* labelManager)
+void DisassemblyInfo::ToString(string &out, uint32_t memoryAddr, MemoryManager* memoryManager, LabelManager* labelManager, bool extendZeroPage)
 {
 	char buffer[500];
 	uint8_t opCode = _byteCode[0];
@@ -54,6 +54,12 @@ void DisassemblyInfo::ToString(string &out, uint32_t memoryAddr, MemoryManager* 
 	if(_opSize == 2 && _opMode != AddrMode::Rel) {
 		memcpy(operandBuffer + 1, hexTable[opAddr], 2);
 		operandLength = 3;
+		if(extendZeroPage && (_opMode == AddrMode::Zero || _opMode == AddrMode::ZeroX || _opMode == AddrMode::ZeroY || 
+									 _opMode == AddrMode::IndY|| _opMode == AddrMode::IndYW || _opMode == AddrMode::IndX)) {
+			operandBuffer[3] = '0';
+			operandBuffer[4] = '0';
+			operandLength += 2;
+		}
 	} else {
 		memcpy(operandBuffer + 1, hexTable[opAddr >> 8], 2);
 		memcpy(operandBuffer + 3, hexTable[opAddr & 0xFF], 2);

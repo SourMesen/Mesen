@@ -82,7 +82,36 @@ namespace Mesen.GUI.Config
 			}
 		}
 	}
-	
+
+	public enum StatusFlagFormat
+	{
+		Hexadecimal = 0,
+		Text = 1,
+		CompactText = 2
+	}
+
+	public class TraceLoggerOptions
+	{
+		public bool ShowByteCode;
+		public bool ShowRegisters;
+		public bool ShowCpuCycles;
+		public bool ShowPpuCycles;
+		public bool ShowPpuScanline;
+		public bool ShowPpuFrames;
+		public bool ShowExtraInfo;
+		public bool IndentCode;
+		public bool ShowEffectiveAddresses;
+		public bool ShowMemoryValues;
+		public bool UseLabels;
+		public bool ExtendZeroPage;
+		public bool UseWindowsEol = !Program.IsMono;
+		
+		public StatusFlagFormat StatusFormat;
+
+		public bool OverrideFormat;
+		public string Format;
+	}
+
 	public class DebugInfo
 	{
 		private const int MaxRecentScripts = 10;
@@ -255,7 +284,6 @@ namespace Mesen.GUI.Config
 		public TraceLoggerOptions TraceLoggerOptions;
 		public bool TraceAutoRefresh = true;
 		public int TraceLineCount = 1000;
-		public bool TraceIndentCode = false;
 		public Size TraceLoggerSize = new Size(0, 0);
 
 		public string TraceFontFamily = BaseControl.MonospaceFontFamily;

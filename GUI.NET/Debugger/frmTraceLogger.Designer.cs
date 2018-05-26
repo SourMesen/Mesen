@@ -34,24 +34,31 @@
 			this.btnStopLogging = new System.Windows.Forms.Button();
 			this.grpLogOptions = new System.Windows.Forms.GroupBox();
 			this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
+			this.tableLayoutPanel5 = new System.Windows.Forms.TableLayoutPanel();
+			this.chkOverrideFormat = new System.Windows.Forms.CheckBox();
+			this.picFormatHelp = new System.Windows.Forms.PictureBox();
+			this.lblFormat = new System.Windows.Forms.Label();
+			this.txtFormat = new System.Windows.Forms.TextBox();
 			this.chkShowMemoryValues = new System.Windows.Forms.CheckBox();
 			this.chkShowRegisters = new System.Windows.Forms.CheckBox();
-			this.chkIndentCode = new System.Windows.Forms.CheckBox();
-			this.chkUseLabels = new System.Windows.Forms.CheckBox();
 			this.chkShowByteCode = new System.Windows.Forms.CheckBox();
-			this.label1 = new System.Windows.Forms.Label();
 			this.chkShowCpuCycles = new System.Windows.Forms.CheckBox();
 			this.chkShowPpuCycles = new System.Windows.Forms.CheckBox();
 			this.chkShowPpuScanline = new System.Windows.Forms.CheckBox();
 			this.chkShowFrameCount = new System.Windows.Forms.CheckBox();
 			this.chkShowEffectiveAddresses = new System.Windows.Forms.CheckBox();
-			this.cboStatusFlagFormat = new System.Windows.Forms.ComboBox();
 			this.tableLayoutPanel4 = new System.Windows.Forms.TableLayoutPanel();
 			this.picHelp = new System.Windows.Forms.PictureBox();
 			this.picExpressionWarning = new System.Windows.Forms.PictureBox();
 			this.lblCondition = new System.Windows.Forms.Label();
 			this.txtCondition = new System.Windows.Forms.TextBox();
 			this.chkShowExtraInfo = new System.Windows.Forms.CheckBox();
+			this.chkIndentCode = new System.Windows.Forms.CheckBox();
+			this.chkUseLabels = new System.Windows.Forms.CheckBox();
+			this.label1 = new System.Windows.Forms.Label();
+			this.cboStatusFlagFormat = new System.Windows.Forms.ComboBox();
+			this.chkUseWindowsEol = new System.Windows.Forms.CheckBox();
+			this.chkExtendZeroPage = new System.Windows.Forms.CheckBox();
 			this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
 			this.grpExecutionLog = new System.Windows.Forms.GroupBox();
 			this.txtTraceLog = new Mesen.GUI.Debugger.ctrlScrollableTextbox();
@@ -75,6 +82,8 @@
 			this.tableLayoutPanel1.SuspendLayout();
 			this.grpLogOptions.SuspendLayout();
 			this.tableLayoutPanel2.SuspendLayout();
+			this.tableLayoutPanel5.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.picFormatHelp)).BeginInit();
 			this.tableLayoutPanel4.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.picHelp)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.picExpressionWarning)).BeginInit();
@@ -94,21 +103,21 @@
 			this.tableLayoutPanel1.Controls.Add(this.btnStopLogging, 1, 0);
 			this.tableLayoutPanel1.Controls.Add(this.grpLogOptions, 0, 1);
 			this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.tableLayoutPanel1.Location = new System.Drawing.Point(3, 274);
+			this.tableLayoutPanel1.Location = new System.Drawing.Point(3, 200);
 			this.tableLayoutPanel1.Name = "tableLayoutPanel1";
 			this.tableLayoutPanel1.RowCount = 3;
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-			this.tableLayoutPanel1.Size = new System.Drawing.Size(781, 181);
+			this.tableLayoutPanel1.Size = new System.Drawing.Size(706, 182);
 			this.tableLayoutPanel1.TabIndex = 0;
 			// 
 			// btnOpenTrace
 			// 
 			this.btnOpenTrace.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.btnOpenTrace.Enabled = false;
-			this.btnOpenTrace.Location = new System.Drawing.Point(683, 3);
+			this.btnOpenTrace.Location = new System.Drawing.Point(608, 3);
 			this.btnOpenTrace.Name = "btnOpenTrace";
 			this.btnOpenTrace.Size = new System.Drawing.Size(95, 23);
 			this.btnOpenTrace.TabIndex = 2;
@@ -145,57 +154,130 @@
 			this.grpLogOptions.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.grpLogOptions.Location = new System.Drawing.Point(3, 32);
 			this.grpLogOptions.Name = "grpLogOptions";
-			this.grpLogOptions.Size = new System.Drawing.Size(775, 146);
+			this.grpLogOptions.Size = new System.Drawing.Size(700, 150);
 			this.grpLogOptions.TabIndex = 3;
 			this.grpLogOptions.TabStop = false;
 			this.grpLogOptions.Text = "Log Options";
 			// 
 			// tableLayoutPanel2
 			// 
-			this.tableLayoutPanel2.ColumnCount = 4;
+			this.tableLayoutPanel2.ColumnCount = 7;
 			this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
 			this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
 			this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
 			this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+			this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+			this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+			this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+			this.tableLayoutPanel2.Controls.Add(this.tableLayoutPanel5, 0, 4);
 			this.tableLayoutPanel2.Controls.Add(this.chkShowMemoryValues, 3, 1);
 			this.tableLayoutPanel2.Controls.Add(this.chkShowRegisters, 0, 0);
-			this.tableLayoutPanel2.Controls.Add(this.chkIndentCode, 0, 5);
-			this.tableLayoutPanel2.Controls.Add(this.chkUseLabels, 3, 5);
 			this.tableLayoutPanel2.Controls.Add(this.chkShowByteCode, 0, 1);
-			this.tableLayoutPanel2.Controls.Add(this.label1, 0, 2);
 			this.tableLayoutPanel2.Controls.Add(this.chkShowCpuCycles, 1, 0);
 			this.tableLayoutPanel2.Controls.Add(this.chkShowPpuCycles, 2, 0);
 			this.tableLayoutPanel2.Controls.Add(this.chkShowPpuScanline, 2, 1);
 			this.tableLayoutPanel2.Controls.Add(this.chkShowFrameCount, 1, 1);
 			this.tableLayoutPanel2.Controls.Add(this.chkShowEffectiveAddresses, 3, 0);
-			this.tableLayoutPanel2.Controls.Add(this.cboStatusFlagFormat, 1, 2);
-			this.tableLayoutPanel2.Controls.Add(this.tableLayoutPanel4, 0, 3);
-			this.tableLayoutPanel2.Controls.Add(this.chkShowExtraInfo, 3, 2);
+			this.tableLayoutPanel2.Controls.Add(this.tableLayoutPanel4, 0, 5);
+			this.tableLayoutPanel2.Controls.Add(this.chkShowExtraInfo, 4, 0);
+			this.tableLayoutPanel2.Controls.Add(this.chkIndentCode, 0, 2);
+			this.tableLayoutPanel2.Controls.Add(this.chkUseLabels, 2, 2);
+			this.tableLayoutPanel2.Controls.Add(this.label1, 4, 2);
+			this.tableLayoutPanel2.Controls.Add(this.cboStatusFlagFormat, 5, 2);
+			this.tableLayoutPanel2.Controls.Add(this.chkUseWindowsEol, 3, 2);
+			this.tableLayoutPanel2.Controls.Add(this.chkExtendZeroPage, 4, 1);
 			this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tableLayoutPanel2.Location = new System.Drawing.Point(3, 16);
 			this.tableLayoutPanel2.Name = "tableLayoutPanel2";
-			this.tableLayoutPanel2.RowCount = 6;
+			this.tableLayoutPanel2.RowCount = 8;
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 5F));
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-			this.tableLayoutPanel2.Size = new System.Drawing.Size(769, 127);
+			this.tableLayoutPanel2.Size = new System.Drawing.Size(694, 131);
 			this.tableLayoutPanel2.TabIndex = 0;
+			// 
+			// tableLayoutPanel5
+			// 
+			this.tableLayoutPanel5.ColumnCount = 5;
+			this.tableLayoutPanel2.SetColumnSpan(this.tableLayoutPanel5, 7);
+			this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+			this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+			this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+			this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+			this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+			this.tableLayoutPanel5.Controls.Add(this.chkOverrideFormat, 0, 0);
+			this.tableLayoutPanel5.Controls.Add(this.picFormatHelp, 4, 0);
+			this.tableLayoutPanel5.Controls.Add(this.lblFormat, 0, 0);
+			this.tableLayoutPanel5.Controls.Add(this.txtFormat, 2, 0);
+			this.tableLayoutPanel5.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.tableLayoutPanel5.Location = new System.Drawing.Point(0, 78);
+			this.tableLayoutPanel5.Margin = new System.Windows.Forms.Padding(0);
+			this.tableLayoutPanel5.Name = "tableLayoutPanel5";
+			this.tableLayoutPanel5.RowCount = 1;
+			this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+			this.tableLayoutPanel5.Size = new System.Drawing.Size(694, 25);
+			this.tableLayoutPanel5.TabIndex = 18;
+			// 
+			// chkOverrideFormat
+			// 
+			this.chkOverrideFormat.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.chkOverrideFormat.AutoSize = true;
+			this.chkOverrideFormat.Location = new System.Drawing.Point(51, 5);
+			this.chkOverrideFormat.Margin = new System.Windows.Forms.Padding(3, 5, 3, 3);
+			this.chkOverrideFormat.Name = "chkOverrideFormat";
+			this.chkOverrideFormat.Size = new System.Drawing.Size(66, 17);
+			this.chkOverrideFormat.TabIndex = 18;
+			this.chkOverrideFormat.Text = "Override";
+			this.chkOverrideFormat.UseVisualStyleBackColor = true;
+			this.chkOverrideFormat.CheckedChanged += new System.EventHandler(this.chkOverrideFormat_CheckedChanged);
+			// 
+			// picFormatHelp
+			// 
+			this.picFormatHelp.Image = global::Mesen.GUI.Properties.Resources.Help;
+			this.picFormatHelp.Location = new System.Drawing.Point(673, 5);
+			this.picFormatHelp.Margin = new System.Windows.Forms.Padding(3, 5, 3, 3);
+			this.picFormatHelp.Name = "picFormatHelp";
+			this.picFormatHelp.Size = new System.Drawing.Size(18, 17);
+			this.picFormatHelp.TabIndex = 17;
+			this.picFormatHelp.TabStop = false;
+			// 
+			// lblFormat
+			// 
+			this.lblFormat.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.lblFormat.AutoSize = true;
+			this.lblFormat.Location = new System.Drawing.Point(3, 6);
+			this.lblFormat.Name = "lblFormat";
+			this.lblFormat.Size = new System.Drawing.Size(42, 13);
+			this.lblFormat.TabIndex = 14;
+			this.lblFormat.Text = "Format:";
+			// 
+			// txtFormat
+			// 
+			this.txtFormat.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.txtFormat.Location = new System.Drawing.Point(123, 3);
+			this.txtFormat.Name = "txtFormat";
+			this.txtFormat.Size = new System.Drawing.Size(544, 20);
+			this.txtFormat.TabIndex = 15;
+			this.txtFormat.TextChanged += new System.EventHandler(this.txtFormat_TextChanged);
 			// 
 			// chkShowMemoryValues
 			// 
+			this.chkShowMemoryValues.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.chkShowMemoryValues.AutoSize = true;
 			this.chkShowMemoryValues.Checked = true;
 			this.chkShowMemoryValues.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.chkShowMemoryValues.Location = new System.Drawing.Point(332, 26);
+			this.chkShowMemoryValues.Location = new System.Drawing.Point(301, 26);
 			this.chkShowMemoryValues.Name = "chkShowMemoryValues";
 			this.chkShowMemoryValues.Size = new System.Drawing.Size(128, 17);
 			this.chkShowMemoryValues.TabIndex = 17;
 			this.chkShowMemoryValues.Text = "Show Memory Values";
 			this.chkShowMemoryValues.UseVisualStyleBackColor = true;
+			this.chkShowMemoryValues.CheckedChanged += new System.EventHandler(this.chkOptions_CheckedChanged);
 			// 
 			// chkShowRegisters
 			// 
@@ -208,30 +290,11 @@
 			this.chkShowRegisters.TabIndex = 2;
 			this.chkShowRegisters.Text = "Registers";
 			this.chkShowRegisters.UseVisualStyleBackColor = true;
-			// 
-			// chkIndentCode
-			// 
-			this.chkIndentCode.AutoSize = true;
-			this.tableLayoutPanel2.SetColumnSpan(this.chkIndentCode, 3);
-			this.chkIndentCode.Location = new System.Drawing.Point(3, 107);
-			this.chkIndentCode.Name = "chkIndentCode";
-			this.chkIndentCode.Size = new System.Drawing.Size(194, 17);
-			this.chkIndentCode.TabIndex = 8;
-			this.chkIndentCode.Text = "Indent code based on stack pointer";
-			this.chkIndentCode.UseVisualStyleBackColor = true;
-			// 
-			// chkUseLabels
-			// 
-			this.chkUseLabels.AutoSize = true;
-			this.chkUseLabels.Location = new System.Drawing.Point(332, 107);
-			this.chkUseLabels.Name = "chkUseLabels";
-			this.chkUseLabels.Size = new System.Drawing.Size(79, 17);
-			this.chkUseLabels.TabIndex = 11;
-			this.chkUseLabels.Text = "Use Labels";
-			this.chkUseLabels.UseVisualStyleBackColor = true;
+			this.chkShowRegisters.CheckedChanged += new System.EventHandler(this.chkOptions_CheckedChanged);
 			// 
 			// chkShowByteCode
 			// 
+			this.chkShowByteCode.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.chkShowByteCode.AutoSize = true;
 			this.chkShowByteCode.Checked = true;
 			this.chkShowByteCode.CheckState = System.Windows.Forms.CheckState.Checked;
@@ -241,88 +304,77 @@
 			this.chkShowByteCode.TabIndex = 4;
 			this.chkShowByteCode.Text = "Byte Code";
 			this.chkShowByteCode.UseVisualStyleBackColor = true;
-			// 
-			// label1
-			// 
-			this.label1.Anchor = System.Windows.Forms.AnchorStyles.Left;
-			this.label1.AutoSize = true;
-			this.label1.Location = new System.Drawing.Point(3, 53);
-			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(98, 13);
-			this.label1.TabIndex = 12;
-			this.label1.Text = "Status Flag Format:";
+			this.chkShowByteCode.CheckedChanged += new System.EventHandler(this.chkOptions_CheckedChanged);
 			// 
 			// chkShowCpuCycles
 			// 
 			this.chkShowCpuCycles.AutoSize = true;
 			this.chkShowCpuCycles.Checked = true;
 			this.chkShowCpuCycles.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.chkShowCpuCycles.Location = new System.Drawing.Point(107, 3);
+			this.chkShowCpuCycles.Location = new System.Drawing.Point(84, 3);
 			this.chkShowCpuCycles.Name = "chkShowCpuCycles";
 			this.chkShowCpuCycles.Size = new System.Drawing.Size(82, 17);
 			this.chkShowCpuCycles.TabIndex = 3;
 			this.chkShowCpuCycles.Text = "CPU Cycles";
 			this.chkShowCpuCycles.UseVisualStyleBackColor = true;
+			this.chkShowCpuCycles.CheckedChanged += new System.EventHandler(this.chkOptions_CheckedChanged);
 			// 
 			// chkShowPpuCycles
 			// 
 			this.chkShowPpuCycles.AutoSize = true;
 			this.chkShowPpuCycles.Checked = true;
 			this.chkShowPpuCycles.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.chkShowPpuCycles.Location = new System.Drawing.Point(234, 3);
+			this.chkShowPpuCycles.Location = new System.Drawing.Point(203, 3);
 			this.chkShowPpuCycles.Name = "chkShowPpuCycles";
 			this.chkShowPpuCycles.Size = new System.Drawing.Size(77, 17);
 			this.chkShowPpuCycles.TabIndex = 5;
 			this.chkShowPpuCycles.Text = "PPU Cycle";
 			this.chkShowPpuCycles.UseVisualStyleBackColor = true;
+			this.chkShowPpuCycles.CheckedChanged += new System.EventHandler(this.chkOptions_CheckedChanged);
 			// 
 			// chkShowPpuScanline
 			// 
+			this.chkShowPpuScanline.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.chkShowPpuScanline.AutoSize = true;
 			this.chkShowPpuScanline.Checked = true;
 			this.chkShowPpuScanline.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.chkShowPpuScanline.Location = new System.Drawing.Point(234, 26);
+			this.chkShowPpuScanline.Location = new System.Drawing.Point(203, 26);
 			this.chkShowPpuScanline.Name = "chkShowPpuScanline";
 			this.chkShowPpuScanline.Size = new System.Drawing.Size(92, 17);
 			this.chkShowPpuScanline.TabIndex = 6;
 			this.chkShowPpuScanline.Text = "PPU Scanline";
 			this.chkShowPpuScanline.UseVisualStyleBackColor = true;
+			this.chkShowPpuScanline.CheckedChanged += new System.EventHandler(this.chkOptions_CheckedChanged);
 			// 
 			// chkShowFrameCount
 			// 
+			this.chkShowFrameCount.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.chkShowFrameCount.AutoSize = true;
-			this.chkShowFrameCount.Location = new System.Drawing.Point(107, 26);
+			this.chkShowFrameCount.Location = new System.Drawing.Point(84, 26);
 			this.chkShowFrameCount.Name = "chkShowFrameCount";
 			this.chkShowFrameCount.Size = new System.Drawing.Size(86, 17);
 			this.chkShowFrameCount.TabIndex = 7;
 			this.chkShowFrameCount.Text = "Frame Count";
 			this.chkShowFrameCount.UseVisualStyleBackColor = true;
+			this.chkShowFrameCount.CheckedChanged += new System.EventHandler(this.chkOptions_CheckedChanged);
 			// 
 			// chkShowEffectiveAddresses
 			// 
 			this.chkShowEffectiveAddresses.AutoSize = true;
 			this.chkShowEffectiveAddresses.Checked = true;
 			this.chkShowEffectiveAddresses.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.chkShowEffectiveAddresses.Location = new System.Drawing.Point(332, 3);
+			this.chkShowEffectiveAddresses.Location = new System.Drawing.Point(301, 3);
 			this.chkShowEffectiveAddresses.Name = "chkShowEffectiveAddresses";
 			this.chkShowEffectiveAddresses.Size = new System.Drawing.Size(150, 17);
 			this.chkShowEffectiveAddresses.TabIndex = 10;
 			this.chkShowEffectiveAddresses.Text = "Show Effective Addresses";
 			this.chkShowEffectiveAddresses.UseVisualStyleBackColor = true;
-			// 
-			// cboStatusFlagFormat
-			// 
-			this.cboStatusFlagFormat.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.cboStatusFlagFormat.FormattingEnabled = true;
-			this.cboStatusFlagFormat.Location = new System.Drawing.Point(107, 49);
-			this.cboStatusFlagFormat.Name = "cboStatusFlagFormat";
-			this.cboStatusFlagFormat.Size = new System.Drawing.Size(121, 21);
-			this.cboStatusFlagFormat.TabIndex = 13;
+			this.chkShowEffectiveAddresses.CheckedChanged += new System.EventHandler(this.chkOptions_CheckedChanged);
 			// 
 			// tableLayoutPanel4
 			// 
 			this.tableLayoutPanel4.ColumnCount = 4;
-			this.tableLayoutPanel2.SetColumnSpan(this.tableLayoutPanel4, 4);
+			this.tableLayoutPanel2.SetColumnSpan(this.tableLayoutPanel4, 7);
 			this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
 			this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
@@ -332,18 +384,18 @@
 			this.tableLayoutPanel4.Controls.Add(this.lblCondition, 0, 0);
 			this.tableLayoutPanel4.Controls.Add(this.txtCondition, 1, 0);
 			this.tableLayoutPanel4.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.tableLayoutPanel4.Location = new System.Drawing.Point(0, 73);
+			this.tableLayoutPanel4.Location = new System.Drawing.Point(0, 103);
 			this.tableLayoutPanel4.Margin = new System.Windows.Forms.Padding(0);
 			this.tableLayoutPanel4.Name = "tableLayoutPanel4";
 			this.tableLayoutPanel4.RowCount = 1;
 			this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel4.Size = new System.Drawing.Size(769, 25);
+			this.tableLayoutPanel4.Size = new System.Drawing.Size(694, 25);
 			this.tableLayoutPanel4.TabIndex = 16;
 			// 
 			// picHelp
 			// 
 			this.picHelp.Image = global::Mesen.GUI.Properties.Resources.Help;
-			this.picHelp.Location = new System.Drawing.Point(748, 5);
+			this.picHelp.Location = new System.Drawing.Point(673, 5);
 			this.picHelp.Margin = new System.Windows.Forms.Padding(3, 5, 3, 3);
 			this.picHelp.Name = "picHelp";
 			this.picHelp.Size = new System.Drawing.Size(18, 17);
@@ -353,7 +405,7 @@
 			// picExpressionWarning
 			// 
 			this.picExpressionWarning.Image = global::Mesen.GUI.Properties.Resources.Warning;
-			this.picExpressionWarning.Location = new System.Drawing.Point(724, 5);
+			this.picExpressionWarning.Location = new System.Drawing.Point(649, 5);
 			this.picExpressionWarning.Margin = new System.Windows.Forms.Padding(3, 5, 3, 3);
 			this.picExpressionWarning.Name = "picExpressionWarning";
 			this.picExpressionWarning.Size = new System.Drawing.Size(18, 17);
@@ -376,7 +428,7 @@
 			this.txtCondition.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.txtCondition.Location = new System.Drawing.Point(63, 3);
 			this.txtCondition.Name = "txtCondition";
-			this.txtCondition.Size = new System.Drawing.Size(655, 20);
+			this.txtCondition.Size = new System.Drawing.Size(580, 20);
 			this.txtCondition.TabIndex = 15;
 			// 
 			// chkShowExtraInfo
@@ -384,12 +436,84 @@
 			this.chkShowExtraInfo.AutoSize = true;
 			this.chkShowExtraInfo.Checked = true;
 			this.chkShowExtraInfo.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.chkShowExtraInfo.Location = new System.Drawing.Point(332, 49);
+			this.tableLayoutPanel2.SetColumnSpan(this.chkShowExtraInfo, 2);
+			this.chkShowExtraInfo.Location = new System.Drawing.Point(462, 3);
 			this.chkShowExtraInfo.Name = "chkShowExtraInfo";
 			this.chkShowExtraInfo.Size = new System.Drawing.Size(204, 17);
 			this.chkShowExtraInfo.TabIndex = 9;
 			this.chkShowExtraInfo.Text = "Additional information (IRQ, NMI, etc.)";
 			this.chkShowExtraInfo.UseVisualStyleBackColor = true;
+			this.chkShowExtraInfo.CheckedChanged += new System.EventHandler(this.chkOptions_CheckedChanged);
+			// 
+			// chkIndentCode
+			// 
+			this.chkIndentCode.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.chkIndentCode.AutoSize = true;
+			this.tableLayoutPanel2.SetColumnSpan(this.chkIndentCode, 2);
+			this.chkIndentCode.Location = new System.Drawing.Point(3, 51);
+			this.chkIndentCode.Name = "chkIndentCode";
+			this.chkIndentCode.Size = new System.Drawing.Size(194, 17);
+			this.chkIndentCode.TabIndex = 8;
+			this.chkIndentCode.Text = "Indent code based on stack pointer";
+			this.chkIndentCode.UseVisualStyleBackColor = true;
+			this.chkIndentCode.CheckedChanged += new System.EventHandler(this.chkOptions_CheckedChanged);
+			// 
+			// chkUseLabels
+			// 
+			this.chkUseLabels.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.chkUseLabels.AutoSize = true;
+			this.chkUseLabels.Location = new System.Drawing.Point(203, 51);
+			this.chkUseLabels.Name = "chkUseLabels";
+			this.chkUseLabels.Size = new System.Drawing.Size(79, 17);
+			this.chkUseLabels.TabIndex = 11;
+			this.chkUseLabels.Text = "Use Labels";
+			this.chkUseLabels.UseVisualStyleBackColor = true;
+			this.chkUseLabels.CheckedChanged += new System.EventHandler(this.chkOptions_CheckedChanged);
+			// 
+			// label1
+			// 
+			this.label1.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.label1.AutoSize = true;
+			this.label1.Location = new System.Drawing.Point(462, 53);
+			this.label1.Name = "label1";
+			this.label1.Size = new System.Drawing.Size(98, 13);
+			this.label1.TabIndex = 12;
+			this.label1.Text = "Status Flag Format:";
+			// 
+			// cboStatusFlagFormat
+			// 
+			this.tableLayoutPanel2.SetColumnSpan(this.cboStatusFlagFormat, 2);
+			this.cboStatusFlagFormat.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.cboStatusFlagFormat.FormattingEnabled = true;
+			this.cboStatusFlagFormat.Location = new System.Drawing.Point(566, 49);
+			this.cboStatusFlagFormat.Name = "cboStatusFlagFormat";
+			this.cboStatusFlagFormat.Size = new System.Drawing.Size(121, 21);
+			this.cboStatusFlagFormat.TabIndex = 13;
+			this.cboStatusFlagFormat.SelectedIndexChanged += new System.EventHandler(this.cboStatusFlagFormat_SelectedIndexChanged);
+			// 
+			// chkUseWindowsEol
+			// 
+			this.chkUseWindowsEol.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.chkUseWindowsEol.AutoSize = true;
+			this.chkUseWindowsEol.Location = new System.Drawing.Point(301, 51);
+			this.chkUseWindowsEol.Name = "chkUseWindowsEol";
+			this.chkUseWindowsEol.Size = new System.Drawing.Size(155, 17);
+			this.chkUseWindowsEol.TabIndex = 19;
+			this.chkUseWindowsEol.Text = "Use Windows EOL (CR LF)";
+			this.chkUseWindowsEol.UseVisualStyleBackColor = true;
+			// 
+			// chkExtendZeroPage
+			// 
+			this.chkExtendZeroPage.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.chkExtendZeroPage.AutoSize = true;
+			this.tableLayoutPanel2.SetColumnSpan(this.chkExtendZeroPage, 2);
+			this.chkExtendZeroPage.Location = new System.Drawing.Point(462, 26);
+			this.chkExtendZeroPage.Name = "chkExtendZeroPage";
+			this.chkExtendZeroPage.Size = new System.Drawing.Size(205, 17);
+			this.chkExtendZeroPage.TabIndex = 20;
+			this.chkExtendZeroPage.Text = "Show zero page addresses as 2 bytes";
+			this.chkExtendZeroPage.UseVisualStyleBackColor = true;
+			this.chkExtendZeroPage.CheckedChanged += new System.EventHandler(this.chkOptions_CheckedChanged);
 			// 
 			// tableLayoutPanel3
 			// 
@@ -404,7 +528,7 @@
 			this.tableLayoutPanel3.RowCount = 2;
 			this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this.tableLayoutPanel3.Size = new System.Drawing.Size(787, 458);
+			this.tableLayoutPanel3.Size = new System.Drawing.Size(712, 385);
 			this.tableLayoutPanel3.TabIndex = 1;
 			// 
 			// grpExecutionLog
@@ -413,7 +537,7 @@
 			this.grpExecutionLog.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.grpExecutionLog.Location = new System.Drawing.Point(3, 3);
 			this.grpExecutionLog.Name = "grpExecutionLog";
-			this.grpExecutionLog.Size = new System.Drawing.Size(781, 265);
+			this.grpExecutionLog.Size = new System.Drawing.Size(706, 191);
 			this.grpExecutionLog.TabIndex = 2;
 			this.grpExecutionLog.TabStop = false;
 			this.grpExecutionLog.Text = "Execution Log";
@@ -421,6 +545,7 @@
 			// txtTraceLog
 			// 
 			this.txtTraceLog.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this.txtTraceLog.CodeHighlightingEnabled = true;
 			this.txtTraceLog.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.txtTraceLog.HideSelection = false;
 			this.txtTraceLog.Location = new System.Drawing.Point(3, 16);
@@ -432,7 +557,7 @@
 			this.txtTraceLog.ShowScrollbars = true;
 			this.txtTraceLog.ShowSingleContentLineNotes = true;
 			this.txtTraceLog.ShowSingleLineLineNumberNotes = false;
-			this.txtTraceLog.Size = new System.Drawing.Size(775, 246);
+			this.txtTraceLog.Size = new System.Drawing.Size(700, 172);
 			this.txtTraceLog.TabIndex = 0;
 			// 
 			// tmrUpdateLog
@@ -446,7 +571,7 @@
             this.showToolStripMenuItem});
 			this.menuStrip1.Location = new System.Drawing.Point(0, 0);
 			this.menuStrip1.Name = "menuStrip1";
-			this.menuStrip1.Size = new System.Drawing.Size(787, 24);
+			this.menuStrip1.Size = new System.Drawing.Size(712, 24);
 			this.menuStrip1.TabIndex = 2;
 			this.menuStrip1.Text = "menuStrip1";
 			// 
@@ -578,10 +703,10 @@
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(787, 482);
+			this.ClientSize = new System.Drawing.Size(712, 409);
 			this.Controls.Add(this.tableLayoutPanel3);
 			this.Controls.Add(this.menuStrip1);
-			this.MinimumSize = new System.Drawing.Size(669, 448);
+			this.MinimumSize = new System.Drawing.Size(728, 448);
 			this.Name = "frmTraceLogger";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
 			this.Text = "Trace Logger";
@@ -589,6 +714,9 @@
 			this.grpLogOptions.ResumeLayout(false);
 			this.tableLayoutPanel2.ResumeLayout(false);
 			this.tableLayoutPanel2.PerformLayout();
+			this.tableLayoutPanel5.ResumeLayout(false);
+			this.tableLayoutPanel5.PerformLayout();
+			((System.ComponentModel.ISupportInitialize)(this.picFormatHelp)).EndInit();
 			this.tableLayoutPanel4.ResumeLayout(false);
 			this.tableLayoutPanel4.PerformLayout();
 			((System.ComponentModel.ISupportInitialize)(this.picHelp)).EndInit();
@@ -648,5 +776,12 @@
 		private System.Windows.Forms.ToolStripMenuItem mnuResetFontSize;
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem12;
 		private System.Windows.Forms.ToolStripMenuItem mnuSelectFont;
+		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel5;
+		private System.Windows.Forms.PictureBox picFormatHelp;
+		private System.Windows.Forms.Label lblFormat;
+		private System.Windows.Forms.TextBox txtFormat;
+		private System.Windows.Forms.CheckBox chkOverrideFormat;
+		private System.Windows.Forms.CheckBox chkUseWindowsEol;
+		private System.Windows.Forms.CheckBox chkExtendZeroPage;
 	}
 }

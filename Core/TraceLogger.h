@@ -9,29 +9,44 @@ class LabelManager;
 class ExpressionEvaluator;
 class Debugger;
 
-enum class StatusFlagFormat
+enum class RowDataType
 {
-	Hexadecimal = 0,
-	Text = 1,
-	CompactText = 2
+	Text = 0,
+	ByteCode,
+	Disassembly,
+	EffectiveAddress,
+	MemoryValue,
+	Align,
+	PC,
+	A,
+	X,
+	Y,
+	SP,
+	PS,
+	Cycle,
+	Scanline,
+	FrameCount,
+	CycleCount
+};
+
+struct RowPart
+{
+	RowDataType DataType;
+	string Text;
+	bool DisplayInHex;
+	int MinWidth;
 };
 
 struct TraceLoggerOptions
 {
-	bool ShowByteCode;
-	bool ShowRegisters;
-	bool ShowCpuCycles;
-	bool ShowPpuCycles;
-	bool ShowPpuScanline;
-	bool ShowPpuFrames;
 	bool ShowExtraInfo;
 	bool IndentCode;
-	bool ShowEffectiveAddresses;
-	bool ShowMemoryValues;
 	bool UseLabels;
-	StatusFlagFormat StatusFormat;
+	bool UseWindowsEol;
+	bool ExtendZeroPage;
 
 	char Condition[1000];
+	char Format[1000];
 };
 
 class TraceLogger
@@ -52,6 +67,8 @@ private:
 	shared_ptr<ExpressionEvaluator> _expEvaluator;
 	vector<int> _conditionRpnList;
 
+	vector<RowPart> _rowParts;
+
 	bool _pendingLog;
 	DebugState _lastState;
 	DisassemblyInfo _lastDisassemblyInfo;
@@ -70,11 +87,14 @@ private:
 
 	SimpleLock _lock;
 	
-	void GetStatusFlag(string &output, uint8_t ps);
+	void GetStatusFlag(string &output, uint8_t ps, RowPart& part);
 	void AddRow(DisassemblyInfo &disassemblyInfo, DebugState &state);
 	bool ConditionMatches(DebugState &state, DisassemblyInfo &disassemblyInfo, OperationInfo &operationInfo);
 	
-	void GetTraceRow(string &output, State &cpuState, PPUDebugState &ppuState, DisassemblyInfo &disassemblyInfo, bool forceByteCode);
+	void GetTraceRow(string &output, State &cpuState, PPUDebugState &ppuState, DisassemblyInfo &disassemblyInfo);
+	
+	template<typename T> void WriteValue(string &output, T value, RowPart& rowPart);
+	template<> void WriteValue(string &output, string value, RowPart& rowPart);
 
 public:
 	TraceLogger(Debugger* debugger, shared_ptr<MemoryManager> memoryManager, shared_ptr<LabelManager> labelManager);

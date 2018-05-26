@@ -44,7 +44,7 @@ namespace Mesen.GUI.Debugger
 
 	public partial class ctrlTextbox : Control
 	{
-		private Regex _codeRegex = new Regex("^([a-z]{3})([*]{0,1})($|[ ]){1}([(]{0,1})(([$][0-9a-f]*)|(#[@$:_0-9a-z]*)|([@_a-z]([@_a-z0-9])*)){0,1}([)]{0,1})(,X|,Y){0,1}([)]{0,1})(.*)", RegexOptions.IgnoreCase | RegexOptions.Compiled);
+		private Regex _codeRegex = new Regex("^(\\s*)([a-z]{3})([*]{0,1})($|[ ]){1}([(]{0,1})(([$][0-9a-f]*)|(#[@$:_0-9a-z]*)|([@_a-z]([@_a-z0-9])*)){0,1}([)]{0,1})(,X|,Y){0,1}([)]{0,1})(.*)", RegexOptions.IgnoreCase | RegexOptions.Compiled);
 		public event EventHandler ScrollPositionChanged;
 		public event EventHandler SelectedLineChanged;
 		private bool _disableScrollPositionChangedEvent;
@@ -1066,19 +1066,20 @@ namespace Mesen.GUI.Debugger
 				if(codeString.Length > 0) {
 					Match match = CodeHighlightingEnabled ? _codeRegex.Match(codeString) : null;
 					if(match != null && match.Success && !codeString.EndsWith(":")) {
-						string opcode = match.Groups[1].Value;
-						string invalidStar = match.Groups[2].Value;
-						string paren1 = match.Groups[4].Value;
-						string operand = match.Groups[5].Value;
-						string paren2 = match.Groups[10].Value;
-						string indirect = match.Groups[11].Value;
-						string paren3 = match.Groups[12].Value;
-						string rest = match.Groups[13].Value;
+						string padding = match.Groups[1].Value;
+						string opcode = match.Groups[2].Value;
+						string invalidStar = match.Groups[3].Value;
+						string paren1 = match.Groups[5].Value;
+						string operand = match.Groups[6].Value;
+						string paren2 = match.Groups[11].Value;
+						string indirect = match.Groups[12].Value;
+						string paren3 = match.Groups[13].Value;
+						string rest = match.Groups[14].Value;
 						Color operandColor = operand.Length > 0 ? (operand[0] == '#' ? (Color)info.AssemblerImmediateColor : (operand[0] == '$' ? (Color)info.AssemblerAddressColor : (Color)info.AssemblerLabelDefinitionColor)) : Color.Black;
-						List<Color> colors = new List<Color>() { info.AssemblerOpcodeColor, defaultColor, defaultColor, defaultColor, operandColor, defaultColor, defaultColor, defaultColor };
+						List<Color> colors = new List<Color>() { defaultColor, info.AssemblerOpcodeColor, defaultColor, defaultColor, defaultColor, operandColor, defaultColor, defaultColor, defaultColor };
 						int codePartCount = colors.Count;
 
-						List<string> parts = new List<string>() { opcode, invalidStar, " ", paren1, operand, paren2, indirect, paren3 };
+						List<string> parts = new List<string>() { padding, opcode, invalidStar, " ", paren1, operand, paren2, indirect, paren3 };
 						string memoryAddress = "";
 						if(!string.IsNullOrWhiteSpace(addressString)) {
 							colors.Add(info.CodeEffectiveAddressColor);

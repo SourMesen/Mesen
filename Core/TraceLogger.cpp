@@ -1,4 +1,5 @@
 #include "stdafx.h"
+#include <regex>
 #include "TraceLogger.h"
 #include "DisassemblyInfo.h"
 #include "DebuggerTypes.h"
@@ -36,6 +37,7 @@ void TraceLogger::SetOptions(TraceLoggerOptions options)
 {
 	_options = options;
 	string condition = _options.Condition;
+	string format = _options.Format;
 	
 	auto lock = _lock.AcquireSafe();
 	_conditionRpnList.clear();
@@ -43,6 +45,68 @@ void TraceLogger::SetOptions(TraceLoggerOptions options)
 		vector<int> *rpnList = _expEvaluator->GetRpnList(condition);
 		if(rpnList) {
 			_conditionRpnList = *rpnList;
+		}
+	}
+
+	_rowParts.clear();
+
+	std::regex formatRegex = std::regex("(\\[([^,[]*?)(,([\\d]*)(h){0,1})?\\])|([^[]*)", std::regex_constants::icase);
+	std::sregex_iterator start = std::sregex_iterator(format.cbegin(), format.cend(), formatRegex);
+	std::sregex_iterator end = std::sregex_iterator();
+
+	for(std::sregex_iterator it = start; it != end; it++) {
+		const std::smatch& match = *it;
+
+		if(match.str(1) == "") {
+			RowPart part = {};
+			part.DataType = RowDataType::Text;
+			part.Text = match.str(6);
+			_rowParts.push_back(part);
+		} else {
+			RowPart part = {};
+			
+			string dataType = match.str(2);
+			if(dataType == "ByteCode") {
+				part.DataType = RowDataType::ByteCode;
+			} else if(dataType == "Disassembly") {
+				part.DataType = RowDataType::Disassembly;
+			} else if(dataType == "EffectiveAddress") {
+				part.DataType = RowDataType::EffectiveAddress;
+			} else if(dataType == "MemoryValue") {
+				part.DataType = RowDataType::MemoryValue;
+			} else if(dataType == "Align") {
+				part.DataType = RowDataType::Align;
+			} else if(dataType == "PC") {
+				part.DataType = RowDataType::PC;
+			} else if(dataType == "A") {
+				part.DataType = RowDataType::A;
+			} else if(dataType == "X") {
+				part.DataType = RowDataType::X;
+			} else if(dataType == "Y") {
+				part.DataType = RowDataType::Y;
+			} else if(dataType == "P") {
+				part.DataType = RowDataType::PS;
+			} else if(dataType == "SP") {
+				part.DataType = RowDataType::SP;
+			} else if(dataType == "Cycle") {
+				part.DataType = RowDataType::Cycle;
+			} else if(dataType == "Scanline") {
+				part.DataType = RowDataType::Scanline;
+			} else if(dataType == "FrameCount") {
+				part.DataType = RowDataType::FrameCount;
+			} else if(dataType == "CycleCount") {
+				part.DataType = RowDataType::CycleCount;
+			}
+
+			if(!match.str(4).empty()) {
+				try {
+					part.MinWidth = std::stoi(match.str(4));
+				} catch(std::exception) {
+				}
+			}
+			part.DisplayInHex = match.str(5) == "h";
+
+			_rowParts.push_back(part);
 		}
 	}
 }
@@ -80,96 +144,118 @@ void TraceLogger::LogStatic(string log)
 		//Flush current buffer
 		_instance->_outputFile << _instance->_outputBuffer;
 		_instance->_outputBuffer.clear();
-
-		_instance->_outputFile << " - [" << log << " - Cycle: " << std::to_string(CPU::GetCycleCount()) << "]";
+		_instance->_outputFile << "[" << log << " - Cycle: " << std::to_string(CPU::GetCycleCount()) << "]" << (_instance->_options.UseWindowsEol ? "\r\n" : "\n");
 	}
 }
 
-void TraceLogger::GetStatusFlag(string &output, uint8_t ps)
+void TraceLogger::GetStatusFlag(string &output, uint8_t ps, RowPart& part)
 {
-	output += " P:";
-	if(_options.StatusFormat == StatusFlagFormat::Hexadecimal) {
-		output.append(HexUtilities::ToHex(ps));
+	if(part.DisplayInHex) {
+		WriteValue(output, ps, part);
 	} else {
-		constexpr char activeStatusLetters[8] = { 'N', 'V', 'B', '-', 'D', 'I', 'Z', 'C' };
-		constexpr char inactiveStatusLetters[8] = { 'n', 'v', 'b', '-', 'd', 'i', 'z', 'c' };
+		constexpr char activeStatusLetters[8] = { 'N', 'V', '-', '-', 'D', 'I', 'Z', 'C' };
+		constexpr char inactiveStatusLetters[8] = { 'n', 'v', '-', '-', 'd', 'i', 'z', 'c' };
 		int padding = 6;
+		string flags;
 		for(int i = 0; i < 8; i++) {
 			if(ps & 0x80) {
-				output += activeStatusLetters[i];
-				padding--;
-			} else if(_options.StatusFormat == StatusFlagFormat::Text) {
-				output += inactiveStatusLetters[i];
-				padding--;
+				flags += activeStatusLetters[i];
+			} else if(part.MinWidth >= 8) {
+				flags += inactiveStatusLetters[i];
 			}
 			ps <<= 1;
 		}
-		if(padding > 0) {
-			output += string(padding, ' ');
-		}
+		WriteValue(output, flags, part);
 	}
 }
 
-void TraceLogger::GetTraceRow(string &output, State &cpuState, PPUDebugState &ppuState, DisassemblyInfo &disassemblyInfo, bool forceByteCode)
+template<typename T>
+void TraceLogger::WriteValue(string &output, T value, RowPart& rowPart)
 {
-	output += HexUtilities::ToHex(cpuState.DebugPC) + "  ";
-
-	if(_options.ShowByteCode || forceByteCode) {
-		string byteCode;
-		disassemblyInfo.GetByteCode(byteCode);
-		output += byteCode + std::string(13 - byteCode.size(), ' ');
+	string str = rowPart.DisplayInHex ? HexUtilities::ToHex(value) : std::to_string(value);
+	output += str;
+	if(rowPart.MinWidth > str.size()) {
+		output += std::string(rowPart.MinWidth - str.size(), ' ');
 	}
+}
 
-	int indentLevel = 0;
-	if(_options.IndentCode) {
-		indentLevel = 0xFF - cpuState.SP;
-		output += std::string(indentLevel, ' ');
+template<>
+void TraceLogger::WriteValue(string &output, string value, RowPart& rowPart)
+{
+	output += value;
+	if(rowPart.MinWidth > value.size()) {
+		output += std::string(rowPart.MinWidth - value.size(), ' ');
 	}
+}
 
-	string code;
-	LabelManager* labelManager = _options.UseLabels ? _labelManager.get() : nullptr;
-	disassemblyInfo.ToString(code, cpuState.DebugPC, _memoryManager.get(), labelManager);
-	disassemblyInfo.GetEffectiveAddressString(code, cpuState, _memoryManager.get(), labelManager);
+void TraceLogger::GetTraceRow(string &output, State &cpuState, PPUDebugState &ppuState, DisassemblyInfo &disassemblyInfo)
+{
+	size_t originalSize = output.size();
+	for(RowPart& rowPart : _rowParts) {
+		switch(rowPart.DataType) {
+			case RowDataType::Text: output += rowPart.Text; break;
 
-	int paddingSize = 32;
-	if(_options.ShowMemoryValues) {
-		int32_t value = disassemblyInfo.GetMemoryValue(cpuState, _memoryManager.get());
-		if(value >= 0) {
-			code += " = $" + HexUtilities::ToHex((uint8_t)value);
+			case RowDataType::ByteCode: {
+				string byteCode;
+				disassemblyInfo.GetByteCode(byteCode);
+				if(!rowPart.DisplayInHex) {
+					//Remove $ marks if not in "hex" mode (but still display the bytes as hex)
+					byteCode.erase(std::remove(byteCode.begin(), byteCode.end(), '$'), byteCode.end());
+				}
+				WriteValue(output, byteCode, rowPart);
+				break;
+			}
+
+			case RowDataType::Disassembly: {
+				int indentLevel = 0;
+				string code;
+				
+				if(_options.IndentCode) {
+					indentLevel = 0xFF - cpuState.SP;
+					code = std::string(indentLevel, ' ');
+				}
+				
+				LabelManager* labelManager = _options.UseLabels ? _labelManager.get() : nullptr;
+				disassemblyInfo.ToString(code, cpuState.DebugPC, _memoryManager.get(), labelManager, _options.ExtendZeroPage);
+				WriteValue(output, code, rowPart);
+				break;
+			}
+			
+			case RowDataType::EffectiveAddress:{
+				string effectiveAddress;
+				disassemblyInfo.GetEffectiveAddressString(effectiveAddress, cpuState, _memoryManager.get(), _options.UseLabels ? _labelManager.get() : nullptr);
+				WriteValue(output, effectiveAddress, rowPart);
+				break;
+			}
+
+			case RowDataType::MemoryValue:{
+				int32_t value = disassemblyInfo.GetMemoryValue(cpuState, _memoryManager.get());
+				if(value >= 0) {
+					output += rowPart.DisplayInHex ? "= $" : "= ";
+					WriteValue(output, (uint8_t)value, rowPart);
+				}
+				break;
+			}
+
+			case RowDataType::Align:
+				if(output.size() - originalSize < rowPart.MinWidth) {
+					output += std::string(rowPart.MinWidth - (output.size() - originalSize), ' ');
+				}
+				break;
+
+			case RowDataType::PC: WriteValue(output, cpuState.DebugPC, rowPart); break;
+			case RowDataType::A: WriteValue(output, cpuState.A, rowPart); break;
+			case RowDataType::X: WriteValue(output, cpuState.X, rowPart); break;
+			case RowDataType::Y: WriteValue(output, cpuState.Y, rowPart); break;
+			case RowDataType::SP: WriteValue(output, cpuState.SP, rowPart); break;
+			case RowDataType::PS: GetStatusFlag(output, cpuState.PS, rowPart); break;
+			case RowDataType::Cycle: WriteValue(output, ppuState.Cycle, rowPart); break;
+			case RowDataType::Scanline: WriteValue(output, ppuState.Scanline, rowPart); break;
+			case RowDataType::FrameCount: WriteValue(output, ppuState.FrameCount, rowPart); break;
+			case RowDataType::CycleCount: WriteValue(output, cpuState.CycleCount, rowPart); break;
 		}
-		paddingSize += 6;
 	}
-	code += std::string(std::max(0, (int)(paddingSize - code.size())), ' ');
-	output += code;
-
-	if(_options.ShowRegisters) {
-		output += " A:" + HexUtilities::ToHex(cpuState.A) +
-			" X:" + HexUtilities::ToHex(cpuState.X) +
-			" Y:" + HexUtilities::ToHex(cpuState.Y);
-
-		GetStatusFlag(output, cpuState.PS);
-
-		output += " SP:" + HexUtilities::ToHex(cpuState.SP);
-	}
-
-	if(_options.ShowPpuCycles) {
-		string str = std::to_string(ppuState.Cycle);
-		output += " CYC:" + std::string(3 - str.size(), ' ') + str;
-	}
-
-	if(_options.ShowPpuScanline) {
-		string str = std::to_string(ppuState.Scanline);
-		output += " SL:" + std::string(3 - str.size(), ' ') + str;
-	}
-
-	if(_options.ShowPpuFrames) {
-		output += " FC:" + std::to_string(ppuState.FrameCount);
-	}
-
-	if(_options.ShowCpuCycles) {
-		output += " CPU Cycle:" + std::to_string(cpuState.CycleCount);
-	}
-	output += "\n";
+	output += _options.UseWindowsEol ? "\r\n" : "\n";
 }
 
 bool TraceLogger::ConditionMatches(DebugState &state, DisassemblyInfo &disassemblyInfo, OperationInfo &operationInfo)
@@ -202,7 +288,7 @@ void TraceLogger::AddRow(DisassemblyInfo &disassemblyInfo, DebugState &state)
 	}
 
 	if(_logToFile) {
-		GetTraceRow(_outputBuffer, state.CPU, state.PPU, disassemblyInfo, false);
+		GetTraceRow(_outputBuffer, state.CPU, state.PPU, disassemblyInfo);
 		if(_outputBuffer.size() > 32768) {
 			_outputFile << _outputBuffer;
 			_outputBuffer.clear();
@@ -244,7 +330,11 @@ const char* TraceLogger::GetExecutionTrace(uint32_t lineCount)
 	
 	for(int i = 0; i < (int)lineCount; i++) {
 		int index = (startPos + i) % ExecutionLogSize;
-		GetTraceRow(_executionTrace, _cpuStateCacheCopy[index], _ppuStateCacheCopy[index], _disassemblyCacheCopy[index], true);
+		_executionTrace += HexUtilities::ToHex(_cpuStateCacheCopy[index].DebugPC) + "\x1";
+		string byteCode;
+		_disassemblyCacheCopy[index].GetByteCode(byteCode);
+		_executionTrace += byteCode + "\x1";
+		GetTraceRow(_executionTrace, _cpuStateCacheCopy[index], _ppuStateCacheCopy[index], _disassemblyCacheCopy[index]);
 	}
 
 	return _executionTrace.c_str();

@@ -101,7 +101,7 @@ void CPU::Reset(bool softReset, NesModel model)
 		_state.SP = 0xFD;
 		_state.X = 0;
 		_state.Y = 0;
-		_state.PS = PSFlags::Reserved | PSFlags::Interrupt;
+		_state.PS = PSFlags::Interrupt;
 
 		_runIrq = false;
 	}
@@ -136,7 +136,7 @@ void CPU::IRQ()
 	Push((uint16_t)(PC()));
 
 	if(_state.NMIFlag) {
-		Push((uint8_t)PS());
+		Push((uint8_t)(PS() | PSFlags::Reserved));
 		SetFlags(PSFlags::Interrupt);
 
 		SetPC(MemoryReadWord(CPU::NMIVector));
@@ -145,7 +145,7 @@ void CPU::IRQ()
 		TraceLogger::LogStatic("NMI");
 		Debugger::ProcessInterrupt(originalPc, _state.PC, true);
 	} else {
-		Push((uint8_t)PS());
+		Push((uint8_t)(PS() | PSFlags::Reserved));
 		SetFlags(PSFlags::Interrupt);
 		SetPC(MemoryReadWord(CPU::IRQVector));
 
@@ -157,7 +157,7 @@ void CPU::IRQ()
 void CPU::BRK() {
 	Push((uint16_t)(PC() + 1));
 
-	uint8_t flags = PS() | PSFlags::Break;
+	uint8_t flags = PS() | PSFlags::Break | PSFlags::Reserved;
 	if(_state.NMIFlag) {
 		Push((uint8_t)flags);
 		SetFlags(PSFlags::Interrupt);

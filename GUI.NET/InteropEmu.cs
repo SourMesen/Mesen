@@ -264,7 +264,7 @@ namespace Mesen.GUI
 
 		[DllImport(DLLPath)] public static extern void DebugStartTraceLogger([MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(UTF8Marshaler))]string filename);
 		[DllImport(DLLPath)] public static extern void DebugStopTraceLogger();
-		[DllImport(DLLPath)] public static extern void DebugSetTraceOptions(TraceLoggerOptions options);
+		[DllImport(DLLPath)] public static extern void DebugSetTraceOptions(InteropTraceLoggerOptions options);
 		[DllImport(DLLPath, EntryPoint = "DebugGetExecutionTrace")] private static extern IntPtr DebugGetExecutionTraceWrapper(UInt32 lineCount);
 		public static string DebugGetExecutionTrace(UInt32 lineCount) { return PtrToStringUtf8(InteropEmu.DebugGetExecutionTraceWrapper(lineCount)); }
 
@@ -1409,32 +1409,20 @@ namespace Mesen.GUI
 		public ApuFrameCounterState FrameCounter;
 	}
 
-	public enum StatusFlagFormat
-	{
-		Hexadecimal = 0,
-		Text = 1,
-		CompactText = 2
-	}
-
 	[Serializable]
-	public struct TraceLoggerOptions
+	public struct InteropTraceLoggerOptions
 	{
-		[MarshalAs(UnmanagedType.I1)] public bool ShowByteCode;
-		[MarshalAs(UnmanagedType.I1)] public bool ShowRegisters;
-		[MarshalAs(UnmanagedType.I1)] public bool ShowCpuCycles;
-		[MarshalAs(UnmanagedType.I1)] public bool ShowPpuCycles;
-		[MarshalAs(UnmanagedType.I1)] public bool ShowPpuScanline;
-		[MarshalAs(UnmanagedType.I1)] public bool ShowPpuFrames;
 		[MarshalAs(UnmanagedType.I1)] public bool ShowExtraInfo;
 		[MarshalAs(UnmanagedType.I1)] public bool IndentCode;
-		[MarshalAs(UnmanagedType.I1)] public bool ShowEffectiveAddresses;
-		[MarshalAs(UnmanagedType.I1)] public bool ShowMemoryValues;
 		[MarshalAs(UnmanagedType.I1)] public bool UseLabels;
-		public StatusFlagFormat StatusFormat;
+		[MarshalAs(UnmanagedType.I1)] public bool UseWindowsEol;
+		[MarshalAs(UnmanagedType.I1)] public bool ExtendZeroPage;
 
-		[NonSerialized]
 		[MarshalAs(UnmanagedType.ByValArray, SizeConst = 1000)]
 		public byte[] Condition;
+
+		[MarshalAs(UnmanagedType.ByValArray, SizeConst = 1000)]
+		public byte[] Format;
 	}
 
 	public enum ProfilerDataType

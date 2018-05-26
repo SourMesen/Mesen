@@ -23,6 +23,7 @@ namespace Mesen.GUI.Debugger
 		private int _previousCycleCount;
 		private string _previousTrace;
 		private volatile bool _refreshRunning;
+		private bool _initialized;
 
 		public frmTraceLogger()
 		{
@@ -51,13 +52,40 @@ namespace Mesen.GUI.Debugger
 			_entityBinder.AddBinding("ShowRegisters", chkShowRegisters);
 			_entityBinder.AddBinding("IndentCode", chkIndentCode);
 			_entityBinder.AddBinding("UseLabels", chkUseLabels);
+			_entityBinder.AddBinding("ExtendZeroPage", chkExtendZeroPage);
+			_entityBinder.AddBinding("UseWindowsEol", chkUseWindowsEol);
 			_entityBinder.AddBinding("StatusFormat", cboStatusFlagFormat);
+			_entityBinder.AddBinding("OverrideFormat", chkOverrideFormat);
 			_entityBinder.UpdateUI();
 
 			this.toolTip.SetToolTip(this.picExpressionWarning, "Condition contains invalid syntax or symbols.");
 			this.toolTip.SetToolTip(this.picHelp, "When a condition is given, instructions will only be logged by the trace logger if the condition returns a value not equal to 0 or false." + Environment.NewLine + Environment.NewLine + frmBreakpoint.GetConditionTooltip(false));
+			this.toolTip.SetToolTip(this.picFormatHelp,
+				"You can customize the trace logger's output by enabling the 'Override' option and altering the format." + Environment.NewLine + Environment.NewLine +
+				"The following tags are available: " + Environment.NewLine +
+				"[ByteCode]: The byte code for the instruction (1 to 3 bytes)." + Environment.NewLine +
+				"[Disassembly]: The disassembly for the current instruction." + Environment.NewLine +
+				"[EffectiveAddress]: The effective address used for indirect addressing modes." + Environment.NewLine +
+				"[MemoryValue]: The value stored at the memory location referred to by the instruction." + Environment.NewLine +
+				"[PC]: Program Counter" + Environment.NewLine +
+				"[A]: A register" + Environment.NewLine +
+				"[X]: X register" + Environment.NewLine +
+				"[Y]: Y register" + Environment.NewLine +
+				"[SP]: Stack Pointer" + Environment.NewLine +
+				"[P]: Processor Flags" + Environment.NewLine +
+				"[Cycle]: The current PPU cycle." + Environment.NewLine +
+				"[Scanline]: The current PPU scanline." + Environment.NewLine +
+				"[FrameCount]: The current PPU frame." + Environment.NewLine +
+				"[CycleCount]: The current CPU cycle (32-bit signed value, resets to 0 at power on)" + Environment.NewLine + Environment.NewLine +
+				"You can also specify some options by using a comma. e.g:" + Environment.NewLine +
+				"[Cycle,3] will display the cycle and pad out the output to always be 3 characters wide." + Environment.NewLine +
+				"[Scanline,h] will display the scanline in hexadecimal." + Environment.NewLine +
+				"[Align,50]: Align is a special tag that is useful when trying to align some content. [Align,50] will make the next tag start on column 50."
+			);
 
 			this.InitShortcuts();
+
+			this._initialized = true;
 		}
 
 		private void InitShortcuts()
@@ -74,7 +102,7 @@ namespace Mesen.GUI.Debugger
 
 			UpdateMenu();
 			tmrUpdateLog.Start();
-			RefreshLog(true);
+			RefreshLog(true, true);
 		}
 
 		protected override void OnFormClosing(FormClosingEventArgs e)
@@ -89,7 +117,6 @@ namespace Mesen.GUI.Debugger
 			DebugInfo debugInfo = ConfigManager.Config.DebugInfo;
 			debugInfo.TraceAutoRefresh = mnuAutoRefresh.Checked;
 			debugInfo.TraceLineCount = _lineCount;
-			debugInfo.TraceIndentCode = chkIndentCode.Checked;
 			debugInfo.TraceLoggerSize = this.WindowState == FormWindowState.Maximized ? this.RestoreBounds.Size : this.Size;
 
 			debugInfo.TraceFontFamily = txtTraceLog.BaseFont.FontFamily.Name;
@@ -97,9 +124,7 @@ namespace Mesen.GUI.Debugger
 			debugInfo.TraceFontStyle = txtTraceLog.BaseFont.Style;
 			debugInfo.TraceTextZoom = txtTraceLog.TextZoom;
 
-			_entityBinder.Entity = debugInfo.TraceLoggerOptions;
 			_entityBinder.UpdateObject();
-			debugInfo.TraceLoggerOptions = (TraceLoggerOptions)_entityBinder.Entity;
 
 			ConfigManager.ApplyChanges();
 
@@ -108,14 +133,84 @@ namespace Mesen.GUI.Debugger
 			}
 		}
 
+		protected void UpdateFormatOptions()
+		{
+			if(!chkOverrideFormat.Checked) {
+				string format = "[PC,h] ";
+				if(chkShowByteCode.Checked) {
+					format += "[ByteCode,11h] ";
+				}
+				format += "[Disassembly]";
+				int alignValue = 40;
+				if(chkShowEffectiveAddresses.Checked) {
+					format += "[EffectiveAddress]";
+					alignValue += 8;
+				}
+				if(chkShowMemoryValues.Checked) {
+					format += " [MemoryValue,h]";
+					alignValue += 6;
+				}
+				format += "[Align," + alignValue.ToString() + "] ";
+
+				if(chkShowRegisters.Checked) {
+					format += "A:[A,h] X:[X,h] Y:[Y,h] ";
+					switch(cboStatusFlagFormat.GetEnumValue<StatusFlagFormat>()) {
+						case StatusFlagFormat.Hexadecimal: format += "P:[P,h]"; break;
+						case StatusFlagFormat.CompactText: format += "P:[P]"; break;
+						case StatusFlagFormat.Text: format += "P:[P,8]"; break;
+					}
+					format += " SP:[SP,h] ";
+				}
+				if(chkShowPpuCycles.Checked) {
+					format += "CYC:[Cycle,3] ";
+				}
+				if(chkShowPpuScanline.Checked) {
+					format += "SL:[Scanline,3] ";
+				}
+				if(chkShowFrameCount.Checked) {
+					format += "FC:[FrameCount] ";
+				}
+				if(chkShowCpuCycles.Checked) {
+					format += "CPU Cycle:[CycleCount]";
+				}
+				txtFormat.Text = format.Trim();
+			}
+
+			txtFormat.ReadOnly = !chkOverrideFormat.Checked;
+			chkShowByteCode.Enabled = !chkOverrideFormat.Checked;
+			chkShowRegisters.Enabled = !chkOverrideFormat.Checked;
+			chkShowPpuCycles.Enabled = !chkOverrideFormat.Checked;
+			chkShowPpuScanline.Enabled = !chkOverrideFormat.Checked;
+			chkShowFrameCount.Enabled = !chkOverrideFormat.Checked;
+			chkShowCpuCycles.Enabled = !chkOverrideFormat.Checked;
+			chkShowEffectiveAddresses.Enabled = !chkOverrideFormat.Checked;
+			chkShowMemoryValues.Enabled = !chkOverrideFormat.Checked;
+			cboStatusFlagFormat.Enabled = !chkOverrideFormat.Checked;
+
+			if(_initialized) {
+				RefreshLog(false, true);
+			}
+		}
+
 		private void SetOptions()
 		{
-			_entityBinder.Entity = ConfigManager.Config.DebugInfo.TraceLoggerOptions;
 			_entityBinder.UpdateObject();
 			TraceLoggerOptions options = (TraceLoggerOptions)_entityBinder.Entity;
-			options.Condition = Encoding.UTF8.GetBytes(txtCondition.Text);
-			Array.Resize(ref options.Condition, 1000);
-			InteropEmu.DebugSetTraceOptions(options);
+
+			InteropTraceLoggerOptions interopOptions = new InteropTraceLoggerOptions();
+			interopOptions.IndentCode = options.IndentCode;
+			interopOptions.ShowExtraInfo = options.ShowExtraInfo;
+			interopOptions.UseLabels = options.UseLabels;
+			interopOptions.UseWindowsEol = options.UseWindowsEol;
+			interopOptions.ExtendZeroPage = options.ExtendZeroPage;
+
+			interopOptions.Condition = Encoding.UTF8.GetBytes(txtCondition.Text);
+			Array.Resize(ref interopOptions.Condition, 1000);
+
+			interopOptions.Format = Encoding.UTF8.GetBytes(txtFormat.Text.Replace("\t", "\\t"));
+			Array.Resize(ref interopOptions.Format, 1000);
+
+			InteropEmu.DebugSetTraceOptions(interopOptions);
 		}
 
 		private void btnStartLogging_Click(object sender, EventArgs e)
@@ -169,7 +264,7 @@ namespace Mesen.GUI.Debugger
 			return base.ProcessCmdKey(ref msg, keyData);
 		}
 		
-		private void RefreshLog(bool scrollToBottom)
+		private void RefreshLog(bool scrollToBottom, bool forceUpdate)
 		{
 			if(_refreshRunning) {
 				return;
@@ -184,7 +279,7 @@ namespace Mesen.GUI.Debugger
 				//Update trace log in another thread for performance
 				DebugState state = new DebugState();
 				InteropEmu.DebugGetState(ref state);
-				if(_previousCycleCount != state.CPU.CycleCount) {
+				if(_previousCycleCount != state.CPU.CycleCount || forceUpdate) {
 					string newTrace = InteropEmu.DebugGetExecutionTrace((UInt32)_lineCount);
 					_previousCycleCount = state.CPU.CycleCount;
 					_previousTrace = newTrace;
@@ -207,16 +302,34 @@ namespace Mesen.GUI.Debugger
 					List<string> lineContent = new List<string>(30000);
 					List<int> indent = new List<int>(30000);
 
+					bool showByteCode = false;
 					char[] splitter = new char[] { ' ' };
 					while(readLine()) {
-						programCounter.Add(Int32.Parse(line.Substring(0, 4), System.Globalization.NumberStyles.HexNumber));
-						byteCode.Add(line.Substring(6, 11));
-						lineContent.Add(line.Substring(19));
-						indent.Add(6);
+						string[] parts = line.Split('\x1');
+						programCounter.Add(Int32.Parse(parts[0], System.Globalization.NumberStyles.HexNumber));
+						byteCode.Add(parts[1]);
+
+						string content = parts[2];
+						while(true) {
+							string str = content.TrimStart();
+							if(str.StartsWith(parts[0])) {
+								content = str.Substring(4);
+							} else if(str.StartsWith(parts[1])) {
+								content = str.Substring(11);
+								showByteCode = true;
+							} else if(str.StartsWith(parts[1].Replace("$", ""))) {
+								content = str.Substring(8);
+								showByteCode = true;
+							} else {
+								break;
+							}
+						}
+						lineContent.Add(content);
+						indent.Add(0);
 					}
 					this.BeginInvoke((Action)(() => {
-						txtTraceLog.ShowContentNotes = chkShowByteCode.Checked;
-						txtTraceLog.ShowSingleContentLineNotes = chkShowByteCode.Checked;
+						txtTraceLog.ShowContentNotes = showByteCode;
+						txtTraceLog.ShowSingleContentLineNotes = showByteCode;
 
 						txtTraceLog.LineIndentations = indent.ToArray();
 						txtTraceLog.LineNumbers = programCounter.ToArray();
@@ -257,7 +370,7 @@ namespace Mesen.GUI.Debugger
 			}
 
 			if(mnuAutoRefresh.Checked) {
-				RefreshLog(false);
+				RefreshLog(false, false);
 			}
 		}
 
@@ -287,7 +400,7 @@ namespace Mesen.GUI.Debugger
 
 		private void mnuRefresh_Click(object sender, EventArgs e)
 		{
-			RefreshLog(false);
+			RefreshLog(false, true);
 		}
 
 		private void mnuIncreaseFontSize_Click(object sender, EventArgs e)
@@ -308,6 +421,36 @@ namespace Mesen.GUI.Debugger
 		private void mnuSelectFont_Click(object sender, EventArgs e)
 		{
 			txtTraceLog.BaseFont = FontDialogHelper.SelectFont(txtTraceLog.BaseFont);
+		}
+
+		private void chkOptions_CheckedChanged(object sender, EventArgs e)
+		{
+			UpdateFormatOptions();
+		}
+
+		private void cboStatusFlagFormat_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			UpdateFormatOptions();
+		}
+
+		private void txtFormat_TextChanged(object sender, EventArgs e)
+		{
+			if(chkOverrideFormat.Checked) {
+				//Only save format string when override flag is set
+				((TraceLoggerOptions)_entityBinder.Entity).Format = txtFormat.Text;
+			}
+		}
+
+		private void chkOverrideFormat_CheckedChanged(object sender, EventArgs e)
+		{
+			if(chkOverrideFormat.Checked) {
+				string format = ((TraceLoggerOptions)_entityBinder.Entity).Format;
+				if(string.IsNullOrWhiteSpace(format)) {
+					format = txtFormat.Text;
+				}
+				txtFormat.Text = format;
+			}
+			UpdateFormatOptions();
 		}
 	}
 }
