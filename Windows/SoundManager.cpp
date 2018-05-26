@@ -15,7 +15,7 @@ SoundManager::SoundManager(HWND hwnd)
 	if(InitializeDirectSound(44100, false)) {
 		SoundMixer::RegisterAudioDevice(this);
 	} else {
-		MessageManager::DisplayMessage("Error", "Could not initialize audio system");
+		MessageManager::DisplayMessage("Error", "CouldNotInitializeAudioSystem");
 	}
 }
 
@@ -78,12 +78,14 @@ bool SoundManager::InitializeDirectSound(uint32_t sampleRate, bool isStereo)
 	// Initialize the direct sound interface pointer for the default sound device.
 	result = DirectSoundCreate8(&_audioDeviceID, &_directSound, NULL);
 	if(FAILED(result)) {
+		MessageManager::Log("[Audio] Failed to create direct sound device.");
 		return false;
 	}
 
 	// Set the cooperative level to priority so the format of the primary sound buffer can be modified.
 	result = _directSound->SetCooperativeLevel(_hWnd, DSSCL_PRIORITY);
 	if(FAILED(result)) {
+		MessageManager::Log("[Audio] Failed to set cooperative level.");
 		return false;
 	}
 
@@ -98,6 +100,7 @@ bool SoundManager::InitializeDirectSound(uint32_t sampleRate, bool isStereo)
 	// Get control of the primary sound buffer on the default sound device.
 	result = _directSound->CreateSoundBuffer(&bufferDesc, &_primaryBuffer, NULL);
 	if(FAILED(result)) {
+		MessageManager::Log("[Audio] Failed to create primary sound buffer.");
 		return false;
 	}
 
@@ -116,6 +119,7 @@ bool SoundManager::InitializeDirectSound(uint32_t sampleRate, bool isStereo)
 	// Set the primary buffer to be the wave format specified.
 	result = _primaryBuffer->SetFormat(&waveFormat);
 	if(FAILED(result)) {
+		MessageManager::Log("[Audio] Failed to set the sound format.");
 		return false;
 	}
 
@@ -131,18 +135,21 @@ bool SoundManager::InitializeDirectSound(uint32_t sampleRate, bool isStereo)
 	IDirectSoundBuffer* tempBuffer;
 	result = _directSound->CreateSoundBuffer(&bufferDesc, &tempBuffer, NULL);
 	if(FAILED(result)) {
+		MessageManager::Log("[Audio] Failed to create temporary sound buffer.");
 		return false;
 	}
 
 	// Test the buffer format against the direct sound 8 interface and create the secondary buffer.
 	result = tempBuffer->QueryInterface(IID_IDirectSoundBuffer8, (LPVOID*)&_secondaryBuffer);
 	if(FAILED(result)) {
+		MessageManager::Log("[Audio] Failed to obtain secondary sound buffer.");
 		return false;
 	}
 
 	// Set volume of the buffer to 100%.
 	result = _secondaryBuffer->SetVolume(DSBVOLUME_MAX);
 	if(FAILED(result)) {
+		MessageManager::Log("[Audio] Failed to set volume of the secondary sound buffer.");
 		return false;
 	}
 
