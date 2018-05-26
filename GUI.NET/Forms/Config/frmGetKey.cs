@@ -44,22 +44,36 @@ namespace Mesen.GUI.Forms.Config
 			InteropEmu.DisableAllKeys(false);
 			base.OnFormClosing(e);
 		}
-		
+
+		private void SelectKeyCombination(KeyCombination key)
+		{
+			if(!string.IsNullOrWhiteSpace(key.ToString())) {
+				ShortcutKey = key;
+				this.Close();
+			}
+		}
+
 		private void tmrCheckKey_Tick(object sender, EventArgs e)
 		{	
 			List<UInt32> scanCodes = InteropEmu.GetPressedKeys();
 
-			KeyCombination key = new KeyCombination(_prevScanCodes);
-			lblCurrentKeys.Text = key.ToString();
-
-			if(_singleKeyMode && _prevScanCodes.Count > 0 || scanCodes.Count < _prevScanCodes.Count) {
-				if(!string.IsNullOrWhiteSpace(key.ToString())) {
-					ShortcutKey = key;
-					this.Close();
+			if(_singleKeyMode) {
+				if(scanCodes.Count >= 1) {
+					//Always use the largest scancode (when multiple buttons are pressed at once)
+					scanCodes = new List<UInt32> { scanCodes.OrderBy(code => -code).First() };
+					this.SelectKeyCombination(new KeyCombination(scanCodes));
 				}
-			}
+			} else {
+				KeyCombination key = new KeyCombination(_prevScanCodes);
+				lblCurrentKeys.Text = key.ToString();
 
-			_prevScanCodes = scanCodes;
+				if(scanCodes.Count < _prevScanCodes.Count) {
+					//Confirm key selection when the user releases a key
+					this.SelectKeyCombination(key);
+				}
+
+				_prevScanCodes = scanCodes;
+			}
 		}
 	}
 }
