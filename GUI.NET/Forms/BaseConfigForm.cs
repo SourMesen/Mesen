@@ -34,6 +34,8 @@ namespace Mesen.GUI.Forms
 			UpdateUI();
 		}
 
+		protected override bool IsConfigForm { get { return true; } }
+
 		protected void UpdateUI()
 		{
 			_binder.UpdateUI();

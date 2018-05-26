@@ -35,7 +35,9 @@ namespace Mesen.GUI.Forms
 		{
 			InitializeComponent();
 		}
-		
+
+		protected virtual bool IsConfigForm { get { return false; } }
+
 		private static void tmrUpdateBackground_Tick(object sender, EventArgs e)
 		{
 			Form focusedForm = null;
@@ -48,7 +50,7 @@ namespace Mesen.GUI.Forms
 
 			bool inBackground = focusedForm == null;
 			if(focusedForm != null) {
-				inBackground |= ConfigManager.Config.PreferenceInfo.PauseWhenInMenusAndConfig && focusedForm is BaseForm && ((BaseForm)focusedForm)._inMenu > 0;
+				inBackground |= ConfigManager.Config.PreferenceInfo.PauseWhenInMenusAndConfig && focusedForm is BaseForm && (((BaseForm)focusedForm)._inMenu > 0 || ((BaseForm)focusedForm).IsConfigForm);
 				inBackground |= ConfigManager.Config.PreferenceInfo.PauseWhenInMenusAndConfig && !(focusedForm is BaseInputForm) && !focusedForm.GetType().FullName.Contains("Debugger");
 				inBackground |= ConfigManager.Config.PreferenceInfo.PauseWhenInDebuggingTools && focusedForm.GetType().FullName.Contains("Debugger");
 			}

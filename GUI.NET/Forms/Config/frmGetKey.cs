@@ -37,6 +37,8 @@ namespace Mesen.GUI.Forms.Config
 			InteropEmu.DisableAllKeys(true);
 		}
 
+		protected override bool IsConfigForm { get { return true; } }
+
 		protected override void OnFormClosing(FormClosingEventArgs e)
 		{
 			InteropEmu.DisableAllKeys(false);
