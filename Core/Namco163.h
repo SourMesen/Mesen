@@ -58,7 +58,21 @@ protected:
 	void InitMapper() override
 	{
 		switch(_mapperID) {
-			case 19: _variant = NamcoVariant::Namco163; _autoDetectVariant = true; break;
+			case 19:
+				_variant = NamcoVariant::Namco163;
+				if(_databaseInfo.Board == "NAMCOT-163") {
+					_variant = NamcoVariant::Namco163;
+					_autoDetectVariant = false;
+				} else if(_databaseInfo.Board == "NAMCOT-175") {
+					_variant = NamcoVariant::Namco175;
+					_autoDetectVariant = false;
+				} else if(_databaseInfo.Board == "NAMCOT-340") {
+					_variant = NamcoVariant::Namco340;
+					_autoDetectVariant = false;
+				} else {
+					_autoDetectVariant = true;
+				}
+				break;
 			case 210: 
 				switch(_subMapperID) {
 					case 0: _variant = NamcoVariant::Unknown; _autoDetectVariant = true; break;
