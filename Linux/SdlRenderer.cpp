@@ -195,8 +195,8 @@ void SdlRenderer::Render()
 void SdlRenderer::DrawPauseScreen(bool disableOverlay)
 {
 	if(disableOverlay) {
-		DrawString(L"I", 15, 15, 106, 90, 205);
-		DrawString(L"I", 23, 15, 106, 90, 205);
+		DrawString(L"I", 15, 15, 106, 90, 205, 168);
+		DrawString(L"I", 23, 15, 106, 90, 205, 168);
 	} else {
 		uint32_t textureData = 0x222222AA;
 		SDL_Surface* surf = SDL_CreateRGBSurfaceFrom((void*)&textureData, 1, 1, 32, 4, 0xFF000000, 0x00FF0000, 0x0000FF00, 0x000000FF);

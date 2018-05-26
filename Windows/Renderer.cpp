@@ -540,8 +540,9 @@ namespace NES
 	void Renderer::DrawPauseScreen(bool disableOverlay)
 	{
 		if(disableOverlay) {
-			DrawString("I", 15, 15, Colors::SlateBlue, 2.0f, _font.get());
-			DrawString("I", 32, 15, Colors::SlateBlue, 2.0f, _font.get());
+			const static XMVECTORF32 transparentBlue = { { { 0.415686309f, 0.352941185f, 0.803921640f, 0.66f } } };
+			DrawString("I", 15, 15, transparentBlue, 2.0f, _font.get());
+			DrawString("I", 32, 15, transparentBlue, 2.0f, _font.get());
 		} else {
 			RECT destRect;
 			destRect.left = 0;
