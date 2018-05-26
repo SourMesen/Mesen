@@ -100,8 +100,8 @@ namespace Mesen.GUI.Debugger
 
 		private void picPalette_MouseDown(object sender, MouseEventArgs e)
 		{
-			float xPos = (float)e.X / picPalette.Image.Width;
-			float yPos = (float)e.Y / picPalette.Image.Height;
+			float xPos = (float)e.X / picPalette.Width;
+			float yPos = (float)e.Y / picPalette.Height;
 
 			float y = yPos < 0.5 ? yPos : (yPos - 0.5f);
 			float x = yPos < 0.5 ? xPos : (xPos + 1);
