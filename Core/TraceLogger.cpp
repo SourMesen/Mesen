@@ -33,6 +33,25 @@ TraceLogger::~TraceLogger()
 	_instance = nullptr;
 }
 
+template<typename T>
+void TraceLogger::WriteValue(string &output, T value, RowPart& rowPart)
+{
+	string str = rowPart.DisplayInHex ? HexUtilities::ToHex(value) : std::to_string(value);
+	output += str;
+	if(rowPart.MinWidth > str.size()) {
+		output += std::string(rowPart.MinWidth - str.size(), ' ');
+	}
+}
+
+template<>
+void TraceLogger::WriteValue(string &output, string value, RowPart& rowPart)
+{
+	output += value;
+	if(rowPart.MinWidth > value.size()) {
+		output += std::string(rowPart.MinWidth - value.size(), ' ');
+	}
+}
+
 void TraceLogger::SetOptions(TraceLoggerOptions options)
 {
 	_options = options;
@@ -155,7 +174,6 @@ void TraceLogger::GetStatusFlag(string &output, uint8_t ps, RowPart& part)
 	} else {
 		constexpr char activeStatusLetters[8] = { 'N', 'V', '-', '-', 'D', 'I', 'Z', 'C' };
 		constexpr char inactiveStatusLetters[8] = { 'n', 'v', '-', '-', 'd', 'i', 'z', 'c' };
-		int padding = 6;
 		string flags;
 		for(int i = 0; i < 8; i++) {
 			if(ps & 0x80) {
@@ -166,25 +184,6 @@ void TraceLogger::GetStatusFlag(string &output, uint8_t ps, RowPart& part)
 			ps <<= 1;
 		}
 		WriteValue(output, flags, part);
-	}
-}
-
-template<typename T>
-void TraceLogger::WriteValue(string &output, T value, RowPart& rowPart)
-{
-	string str = rowPart.DisplayInHex ? HexUtilities::ToHex(value) : std::to_string(value);
-	output += str;
-	if(rowPart.MinWidth > str.size()) {
-		output += std::string(rowPart.MinWidth - str.size(), ' ');
-	}
-}
-
-template<>
-void TraceLogger::WriteValue(string &output, string value, RowPart& rowPart)
-{
-	output += value;
-	if(rowPart.MinWidth > value.size()) {
-		output += std::string(rowPart.MinWidth - value.size(), ' ');
 	}
 }
 

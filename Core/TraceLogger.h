@@ -94,7 +94,6 @@ private:
 	void GetTraceRow(string &output, State &cpuState, PPUDebugState &ppuState, DisassemblyInfo &disassemblyInfo);
 	
 	template<typename T> void WriteValue(string &output, T value, RowPart& rowPart);
-	template<> void WriteValue(string &output, string value, RowPart& rowPart);
 
 public:
 	TraceLogger(Debugger* debugger, shared_ptr<MemoryManager> memoryManager, shared_ptr<LabelManager> labelManager);
