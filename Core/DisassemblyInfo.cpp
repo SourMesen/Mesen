@@ -52,13 +52,15 @@ void DisassemblyInfo::ToString(string &out, uint32_t memoryAddr, MemoryManager* 
 
 	operandBuffer[0] = '$';
 	if(_opSize == 2 && _opMode != AddrMode::Rel) {
-		memcpy(operandBuffer + 1, hexTable[opAddr], 2);
-		operandLength = 3;
-		if(extendZeroPage && (_opMode == AddrMode::Zero || _opMode == AddrMode::ZeroX || _opMode == AddrMode::ZeroY || 
-									 _opMode == AddrMode::IndY|| _opMode == AddrMode::IndYW || _opMode == AddrMode::IndX)) {
-			operandBuffer[3] = '0';
-			operandBuffer[4] = '0';
-			operandLength += 2;
+		if(extendZeroPage && (_opMode == AddrMode::Zero || _opMode == AddrMode::ZeroX || _opMode == AddrMode::ZeroY ||
+									 _opMode == AddrMode::IndY || _opMode == AddrMode::IndYW || _opMode == AddrMode::IndX)) {
+			operandBuffer[1] = '0';
+			operandBuffer[2] = '0';
+			memcpy(operandBuffer + 3, hexTable[opAddr], 2);
+			operandLength = 5;
+		} else {
+			memcpy(operandBuffer + 1, hexTable[opAddr], 2);
+			operandLength = 3;
 		}
 	} else {
 		memcpy(operandBuffer + 1, hexTable[opAddr >> 8], 2);
