@@ -474,7 +474,7 @@ namespace Mesen.GUI.Debugger.Controls
 
 		private void mnuAddToWatch_Click(object sender, EventArgs e)
 		{
-			string[] toAdd = Enumerable.Range(SelectionStartAddress, SelectionEndAddress - SelectionStartAddress - 1).Select((num) => $"[${num.ToString("X4")}]").ToArray();
+			string[] toAdd = Enumerable.Range(SelectionStartAddress, SelectionEndAddress - SelectionStartAddress + 1).Select((num) => $"[${num.ToString("X4")}]").ToArray();
 			WatchManager.AddWatch(toAdd);
 		}
 
