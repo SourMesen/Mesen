@@ -69,7 +69,7 @@ void TraceLogger::SetOptions(TraceLoggerOptions options)
 
 	_rowParts.clear();
 
-	std::regex formatRegex = std::regex("(\\[([^,[]*?)(,([\\d]*)(h){0,1})?\\])|([^[]*)", std::regex_constants::icase);
+	std::regex formatRegex = std::regex("(\\[\\s*([^[]*?)\\s*(,\\s*([\\d]*)\\s*(h){0,1}){0,1}\\s*\\])|([^[]*)", std::regex_constants::icase);
 	std::sregex_iterator start = std::sregex_iterator(format.cbegin(), format.cend(), formatRegex);
 	std::sregex_iterator end = std::sregex_iterator();
 
@@ -115,6 +115,9 @@ void TraceLogger::SetOptions(TraceLoggerOptions options)
 				part.DataType = RowDataType::FrameCount;
 			} else if(dataType == "CycleCount") {
 				part.DataType = RowDataType::CycleCount;
+			} else {
+				part.DataType = RowDataType::Text;
+				part.Text = "[Invalid tag]";
 			}
 
 			if(!match.str(4).empty()) {
