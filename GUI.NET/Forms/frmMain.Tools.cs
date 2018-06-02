@@ -112,7 +112,7 @@ namespace Mesen.GUI.Forms
 				MesenMsgBox.Show("RandomGameNoGameFound", MessageBoxButtons.OK, MessageBoxIcon.Information);
 			} else {
 				Random random = new Random();
-				string randomGame = gameRoms[random.Next(gameRoms.Count - 1)];
+				string randomGame = gameRoms[random.Next(gameRoms.Count)];
 				LoadFile(randomGame);
 			}
 		}
