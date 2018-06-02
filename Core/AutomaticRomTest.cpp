@@ -14,12 +14,14 @@ AutomaticRomTest::AutomaticRomTest()
 	_running = true;
 	_errorCode = 0;
 	MessageManager::RegisterNotificationListener(this);
+	ControlManager::RegisterInputProvider(this);
 }
 
 AutomaticRomTest::~AutomaticRomTest()
 {
 	_running = false;
 	MessageManager::UnregisterNotificationListener(this);
+	ControlManager::UnregisterInputProvider(this);
 }
 
 void AutomaticRomTest::ProcessNotification(ConsoleNotificationType type, void* parameter)
@@ -139,29 +141,32 @@ bool AutomaticRomTest::Running()
 	return _running;
 }
 
-uint8_t AutomaticRomTest::GetControllerState(uint8_t port)
+bool AutomaticRomTest::SetInput(BaseControlDevice* device)
 {
-	if(port == 0) {
+	if(device->GetPort() == 0) {
 		uint32_t frameNumber = PPU::GetFrameCount();
+		ControlDeviceState state;
 
 		if(frameNumber <= 1800) {
 			if(frameNumber % 30 < 10) {
 				//Press 1 button for 10 frames every second
 				if((frameNumber / 30) % 8 != 1) {
-					return 1 << ((frameNumber / 60) % 8);
+					state.State.push_back(1 << ((frameNumber / 60) % 8));
 				}
 			}
 		} else {
 			if(frameNumber % 30 < 10) {
 				if((frameNumber / 30) % 2) {
-					return 0x01;
+					state.State.push_back(0x01);
 				} else {
-					return 0x08;
+					state.State.push_back(0x08);
 				}
 			}
 		}
-		return 0;
-	} else {
-		return 0;
+		if(state.State.empty()) {
+			state.State.push_back(0);
+		}
+		device->SetRawState(state);
 	}
+	return true;
 }

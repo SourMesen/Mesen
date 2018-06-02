@@ -1,9 +1,10 @@
 #pragma once
 #include "stdafx.h"
 #include "INotificationListener.h"
+#include "IInputProvider.h"
 #include "../Utilities/AutoResetEvent.h"
 
-class AutomaticRomTest : public INotificationListener
+class AutomaticRomTest : public INotificationListener, public IInputProvider
 {
 private:
 	AutoResetEvent _signal;
@@ -19,5 +20,7 @@ public:
 	int32_t Run(string filename);
 
 	static bool Running();
-	static uint8_t GetControllerState(uint8_t port);
+
+	// Inherited via IInputProvider
+	virtual bool SetInput(BaseControlDevice * device) override;
 };
