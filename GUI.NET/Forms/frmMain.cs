@@ -637,6 +637,7 @@ namespace Mesen.GUI.Forms
 
 			Func<bool> runningNotNsf = () => { return _emuThread != null && !InteropEmu.IsNsf(); };
 			Func<bool> runningFdsNoAutoInsert = () => { return _emuThread != null && InteropEmu.FdsGetSideCount() > 0 && !InteropEmu.FdsIsAutoInsertDiskEnabled() && !InteropEmu.MoviePlaying() && !InteropEmu.IsConnected(); };
+			Func<bool> runningFdsMultipleDisks = () => { return runningFdsNoAutoInsert() && InteropEmu.FdsGetSideCount() > 1; };
 			Func<bool> runningVsSystem = () => { return _emuThread != null && InteropEmu.IsVsSystem() && !InteropEmu.MoviePlaying() && !InteropEmu.IsConnected(); };
 			Func<bool> hasBarcodeReader = () => { return InteropEmu.GetAvailableFeatures().HasFlag(ConsoleFeatures.BarcodeReader) && !InteropEmu.IsConnected(); };
 
@@ -656,7 +657,7 @@ namespace Mesen.GUI.Forms
 			BindShortcut(mnuPowerCycle, EmulatorShortcut.PowerCycle, runningNotClientNotMovie);
 			BindShortcut(mnuPowerOff, EmulatorShortcut.PowerOff, runningNotClient);
 
-			BindShortcut(mnuSwitchDiskSide, EmulatorShortcut.SwitchDiskSide, runningFdsNoAutoInsert);
+			BindShortcut(mnuSwitchDiskSide, EmulatorShortcut.SwitchDiskSide, runningFdsMultipleDisks);
 			BindShortcut(mnuEjectDisk, EmulatorShortcut.EjectDisk, runningFdsNoAutoInsert);
 
 			BindShortcut(mnuInsertCoin1, EmulatorShortcut.InsertCoin1, runningVsSystem);

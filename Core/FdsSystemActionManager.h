@@ -105,7 +105,7 @@ public:
 		if(!IsAutoInsertDiskEnabled()) {
 			shared_ptr<FDS> mapper = _mapper.lock();
 			if(mapper && mapper->IsDiskInserted()) {
-				InsertDisk(mapper->GetCurrentDisk() ^ 0x01);
+				InsertDisk((mapper->GetCurrentDisk() ^ 0x01) % mapper->GetSideCount());
 			}
 		}
 	}

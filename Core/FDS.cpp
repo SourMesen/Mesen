@@ -532,7 +532,7 @@ void FDS::EjectDisk()
 void FDS::InsertDisk(uint32_t diskNumber)
 {
 	if(_diskNumber == FDS::NoDiskInserted) {
-		_diskNumber = diskNumber;
+		_diskNumber = diskNumber % GetSideCount();
 	}
 }
 
