@@ -202,6 +202,16 @@ namespace NES
 
 	HRESULT Renderer::CreateNesBuffers()
 	{
+		// Setup the viewport
+		D3D11_VIEWPORT vp;
+		vp.Width = (FLOAT)_realScreenWidth;
+		vp.Height = (FLOAT)_realScreenHeight;
+		vp.MinDepth = 0.0f;
+		vp.MaxDepth = 1.0f;
+		vp.TopLeftX = 0;
+		vp.TopLeftY = 0;
+		_pDeviceContext->RSSetViewports(1, &vp);
+
 		_textureBuffer[0] = new uint8_t[_nesFrameWidth*_nesFrameHeight * 4];
 		_textureBuffer[1] = new uint8_t[_nesFrameWidth*_nesFrameHeight * 4];
 		memset(_textureBuffer[0], 0, _nesFrameWidth*_nesFrameHeight * 4);
@@ -375,16 +385,6 @@ namespace NES
 	
 		_pDeviceContext->OMSetBlendState(_pAlphaEnableBlendingState, blendFactor, 0xffffffff);
 		_pDeviceContext->OMSetDepthStencilState(_pDepthDisabledStencilState, 1);
-
-		// Setup the viewport
-		D3D11_VIEWPORT vp;
-		vp.Width = (FLOAT)2560;
-		vp.Height = (FLOAT)1440;
-		vp.MinDepth = 0.0f;
-		vp.MaxDepth = 1.0f;
-		vp.TopLeftX = 0;
-		vp.TopLeftY = 0;
-		_pDeviceContext->RSSetViewports(1, &vp);
 
 		hr = CreateNesBuffers();
 		if(FAILED(hr)) {
