@@ -30,6 +30,7 @@ namespace Mesen.GUI.Forms.Config
 		private void InitializeComponent()
 		{
 			this.components = new System.ComponentModel.Container();
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmVideoConfig));
 			this.tlpMain = new System.Windows.Forms.TableLayoutPanel();
 			this.chkUseExclusiveFullscreen = new System.Windows.Forms.CheckBox();
 			this.lblVideoScale = new System.Windows.Forms.Label();
@@ -69,8 +70,8 @@ namespace Mesen.GUI.Forms.Config
 			this.trkResolution = new Mesen.GUI.Controls.ctrlHorizontalTrackbar();
 			this.trkSharpness = new Mesen.GUI.Controls.ctrlHorizontalTrackbar();
 			this.tableLayoutPanel6 = new System.Windows.Forms.TableLayoutPanel();
-			this.chkVerticalBlend = new System.Windows.Forms.CheckBox();
 			this.chkMergeFields = new System.Windows.Forms.CheckBox();
+			this.chkVerticalBlend = new System.Windows.Forms.CheckBox();
 			this.grpCommon = new System.Windows.Forms.GroupBox();
 			this.tableLayoutPanel4 = new System.Windows.Forms.TableLayoutPanel();
 			this.chkBilinearInterpolation = new System.Windows.Forms.CheckBox();
@@ -84,7 +85,8 @@ namespace Mesen.GUI.Forms.Config
 			this.cboFilter = new System.Windows.Forms.ComboBox();
 			this.lblVideoFilter = new System.Windows.Forms.Label();
 			this.tpgOverscan = new System.Windows.Forms.TabPage();
-			this.grpCropping = new System.Windows.Forms.GroupBox();
+			this.tabOverscan = new System.Windows.Forms.TabControl();
+			this.tpgOverscanGlobal = new System.Windows.Forms.TabPage();
 			this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
 			this.picOverscan = new System.Windows.Forms.PictureBox();
 			this.flowLayoutPanel3 = new System.Windows.Forms.FlowLayoutPanel();
@@ -99,6 +101,23 @@ namespace Mesen.GUI.Forms.Config
 			this.flowLayoutPanel2 = new System.Windows.Forms.FlowLayoutPanel();
 			this.lblRight = new System.Windows.Forms.Label();
 			this.nudOverscanRight = new Mesen.GUI.Controls.MesenNumericUpDown();
+			this.tpgOverscanGameSpecific = new System.Windows.Forms.TabPage();
+			this.groupBox1 = new System.Windows.Forms.GroupBox();
+			this.tableLayoutPanel10 = new System.Windows.Forms.TableLayoutPanel();
+			this.picGameSpecificOverscan = new System.Windows.Forms.PictureBox();
+			this.flowLayoutPanel8 = new System.Windows.Forms.FlowLayoutPanel();
+			this.lblGameSpecificOverscanLeft = new System.Windows.Forms.Label();
+			this.nudGameSpecificOverscanLeft = new Mesen.GUI.Controls.MesenNumericUpDown();
+			this.flowLayoutPanel9 = new System.Windows.Forms.FlowLayoutPanel();
+			this.lblGameSpecificOverscanTop = new System.Windows.Forms.Label();
+			this.nudGameSpecificOverscanTop = new Mesen.GUI.Controls.MesenNumericUpDown();
+			this.flowLayoutPanel10 = new System.Windows.Forms.FlowLayoutPanel();
+			this.lblGameSpecificOverscanBottom = new System.Windows.Forms.Label();
+			this.nudGameSpecificOverscanBottom = new Mesen.GUI.Controls.MesenNumericUpDown();
+			this.flowLayoutPanel11 = new System.Windows.Forms.FlowLayoutPanel();
+			this.lblGameSpecificOverscanRight = new System.Windows.Forms.Label();
+			this.nudGameSpecificOverscanRight = new Mesen.GUI.Controls.MesenNumericUpDown();
+			this.chkEnableGameSpecificOverscan = new System.Windows.Forms.CheckBox();
 			this.tpgPalette = new System.Windows.Forms.TabPage();
 			this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
 			this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
@@ -133,6 +152,7 @@ namespace Mesen.GUI.Forms.Config
 			this.mnuPaletteSonyCxa2025As = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuPaletteUnsaturated = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuPaletteYuv = new System.Windows.Forms.ToolStripMenuItem();
+			this.imageList = new System.Windows.Forms.ImageList(this.components);
 			this.tlpMain.SuspendLayout();
 			this.flowLayoutPanel7.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.picHdNesTooltip)).BeginInit();
@@ -152,13 +172,22 @@ namespace Mesen.GUI.Forms.Config
 			this.grpScanlines.SuspendLayout();
 			this.tableLayoutPanel8.SuspendLayout();
 			this.tpgOverscan.SuspendLayout();
-			this.grpCropping.SuspendLayout();
+			this.tabOverscan.SuspendLayout();
+			this.tpgOverscanGlobal.SuspendLayout();
 			this.tableLayoutPanel1.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.picOverscan)).BeginInit();
 			this.flowLayoutPanel3.SuspendLayout();
 			this.flowLayoutPanel4.SuspendLayout();
 			this.flowLayoutPanel5.SuspendLayout();
 			this.flowLayoutPanel2.SuspendLayout();
+			this.tpgOverscanGameSpecific.SuspendLayout();
+			this.groupBox1.SuspendLayout();
+			this.tableLayoutPanel10.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.picGameSpecificOverscan)).BeginInit();
+			this.flowLayoutPanel8.SuspendLayout();
+			this.flowLayoutPanel9.SuspendLayout();
+			this.flowLayoutPanel10.SuspendLayout();
+			this.flowLayoutPanel11.SuspendLayout();
 			this.tpgPalette.SuspendLayout();
 			this.tableLayoutPanel3.SuspendLayout();
 			this.tableLayoutPanel2.SuspendLayout();
@@ -779,16 +808,6 @@ namespace Mesen.GUI.Forms.Config
 			this.tableLayoutPanel6.Size = new System.Drawing.Size(253, 50);
 			this.tableLayoutPanel6.TabIndex = 30;
 			// 
-			// chkVerticalBlend
-			// 
-			this.chkVerticalBlend.AutoSize = true;
-			this.chkVerticalBlend.Location = new System.Drawing.Point(3, 28);
-			this.chkVerticalBlend.Name = "chkVerticalBlend";
-			this.chkVerticalBlend.Size = new System.Drawing.Size(134, 17);
-			this.chkVerticalBlend.TabIndex = 31;
-			this.chkVerticalBlend.Text = "Apply Vertical Blending";
-			this.chkVerticalBlend.UseVisualStyleBackColor = true;
-			// 
 			// chkMergeFields
 			// 
 			this.chkMergeFields.AutoSize = true;
@@ -798,6 +817,16 @@ namespace Mesen.GUI.Forms.Config
 			this.chkMergeFields.TabIndex = 30;
 			this.chkMergeFields.Text = "Merge Fields";
 			this.chkMergeFields.UseVisualStyleBackColor = true;
+			// 
+			// chkVerticalBlend
+			// 
+			this.chkVerticalBlend.AutoSize = true;
+			this.chkVerticalBlend.Location = new System.Drawing.Point(3, 28);
+			this.chkVerticalBlend.Name = "chkVerticalBlend";
+			this.chkVerticalBlend.Size = new System.Drawing.Size(134, 17);
+			this.chkVerticalBlend.TabIndex = 31;
+			this.chkVerticalBlend.Text = "Apply Vertical Blending";
+			this.chkVerticalBlend.UseVisualStyleBackColor = true;
 			// 
 			// grpCommon
 			// 
@@ -976,7 +1005,7 @@ namespace Mesen.GUI.Forms.Config
 			// 
 			// tpgOverscan
 			// 
-			this.tpgOverscan.Controls.Add(this.grpCropping);
+			this.tpgOverscan.Controls.Add(this.tabOverscan);
 			this.tpgOverscan.Location = new System.Drawing.Point(4, 22);
 			this.tpgOverscan.Name = "tpgOverscan";
 			this.tpgOverscan.Padding = new System.Windows.Forms.Padding(3);
@@ -985,16 +1014,28 @@ namespace Mesen.GUI.Forms.Config
 			this.tpgOverscan.Text = "Overscan";
 			this.tpgOverscan.UseVisualStyleBackColor = true;
 			// 
-			// grpCropping
+			// tabOverscan
 			// 
-			this.grpCropping.Controls.Add(this.tableLayoutPanel1);
-			this.grpCropping.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.grpCropping.Location = new System.Drawing.Point(3, 3);
-			this.grpCropping.Name = "grpCropping";
-			this.grpCropping.Size = new System.Drawing.Size(521, 396);
-			this.grpCropping.TabIndex = 8;
-			this.grpCropping.TabStop = false;
-			this.grpCropping.Text = "Video Cropping";
+			this.tabOverscan.Controls.Add(this.tpgOverscanGlobal);
+			this.tabOverscan.Controls.Add(this.tpgOverscanGameSpecific);
+			this.tabOverscan.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.tabOverscan.ImageList = this.imageList;
+			this.tabOverscan.Location = new System.Drawing.Point(3, 3);
+			this.tabOverscan.Name = "tabOverscan";
+			this.tabOverscan.SelectedIndex = 0;
+			this.tabOverscan.Size = new System.Drawing.Size(521, 396);
+			this.tabOverscan.TabIndex = 1;
+			// 
+			// tpgOverscanGlobal
+			// 
+			this.tpgOverscanGlobal.Controls.Add(this.tableLayoutPanel1);
+			this.tpgOverscanGlobal.Location = new System.Drawing.Point(4, 22);
+			this.tpgOverscanGlobal.Name = "tpgOverscanGlobal";
+			this.tpgOverscanGlobal.Padding = new System.Windows.Forms.Padding(3);
+			this.tpgOverscanGlobal.Size = new System.Drawing.Size(513, 370);
+			this.tpgOverscanGlobal.TabIndex = 0;
+			this.tpgOverscanGlobal.Text = "Global";
+			this.tpgOverscanGlobal.UseVisualStyleBackColor = true;
 			// 
 			// tableLayoutPanel1
 			// 
@@ -1008,20 +1049,21 @@ namespace Mesen.GUI.Forms.Config
 			this.tableLayoutPanel1.Controls.Add(this.flowLayoutPanel5, 1, 2);
 			this.tableLayoutPanel1.Controls.Add(this.flowLayoutPanel2, 2, 1);
 			this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.tableLayoutPanel1.Location = new System.Drawing.Point(3, 16);
+			this.tableLayoutPanel1.Location = new System.Drawing.Point(3, 3);
 			this.tableLayoutPanel1.Name = "tableLayoutPanel1";
 			this.tableLayoutPanel1.RowCount = 3;
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 246F));
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-			this.tableLayoutPanel1.Size = new System.Drawing.Size(515, 377);
+			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+			this.tableLayoutPanel1.Size = new System.Drawing.Size(507, 364);
 			this.tableLayoutPanel1.TabIndex = 0;
 			// 
 			// picOverscan
 			// 
 			this.picOverscan.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.picOverscan.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.picOverscan.Location = new System.Drawing.Point(129, 68);
+			this.picOverscan.Location = new System.Drawing.Point(125, 62);
 			this.picOverscan.Name = "picOverscan";
 			this.picOverscan.Size = new System.Drawing.Size(256, 240);
 			this.picOverscan.TabIndex = 1;
@@ -1034,7 +1076,7 @@ namespace Mesen.GUI.Forms.Config
 			this.flowLayoutPanel3.Controls.Add(this.lblLeft);
 			this.flowLayoutPanel3.Controls.Add(this.nudOverscanLeft);
 			this.flowLayoutPanel3.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
-			this.flowLayoutPanel3.Location = new System.Drawing.Point(85, 171);
+			this.flowLayoutPanel3.Location = new System.Drawing.Point(81, 165);
 			this.flowLayoutPanel3.Margin = new System.Windows.Forms.Padding(0);
 			this.flowLayoutPanel3.Name = "flowLayoutPanel3";
 			this.flowLayoutPanel3.Size = new System.Drawing.Size(41, 33);
@@ -1089,7 +1131,7 @@ namespace Mesen.GUI.Forms.Config
 			this.flowLayoutPanel4.Controls.Add(this.lblTop);
 			this.flowLayoutPanel4.Controls.Add(this.nudOverscanTop);
 			this.flowLayoutPanel4.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
-			this.flowLayoutPanel4.Location = new System.Drawing.Point(236, 32);
+			this.flowLayoutPanel4.Location = new System.Drawing.Point(232, 26);
 			this.flowLayoutPanel4.Margin = new System.Windows.Forms.Padding(0);
 			this.flowLayoutPanel4.Name = "flowLayoutPanel4";
 			this.flowLayoutPanel4.Size = new System.Drawing.Size(41, 33);
@@ -1144,7 +1186,7 @@ namespace Mesen.GUI.Forms.Config
 			this.flowLayoutPanel5.Controls.Add(this.lblBottom);
 			this.flowLayoutPanel5.Controls.Add(this.nudOverscanBottom);
 			this.flowLayoutPanel5.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
-			this.flowLayoutPanel5.Location = new System.Drawing.Point(234, 311);
+			this.flowLayoutPanel5.Location = new System.Drawing.Point(230, 305);
 			this.flowLayoutPanel5.Margin = new System.Windows.Forms.Padding(0);
 			this.flowLayoutPanel5.Name = "flowLayoutPanel5";
 			this.flowLayoutPanel5.Size = new System.Drawing.Size(46, 33);
@@ -1199,7 +1241,7 @@ namespace Mesen.GUI.Forms.Config
 			this.flowLayoutPanel2.Controls.Add(this.lblRight);
 			this.flowLayoutPanel2.Controls.Add(this.nudOverscanRight);
 			this.flowLayoutPanel2.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
-			this.flowLayoutPanel2.Location = new System.Drawing.Point(388, 171);
+			this.flowLayoutPanel2.Location = new System.Drawing.Point(384, 165);
 			this.flowLayoutPanel2.Margin = new System.Windows.Forms.Padding(0);
 			this.flowLayoutPanel2.Name = "flowLayoutPanel2";
 			this.flowLayoutPanel2.Size = new System.Drawing.Size(41, 33);
@@ -1246,6 +1288,298 @@ namespace Mesen.GUI.Forms.Config
             0,
             0});
 			this.nudOverscanRight.ValueChanged += new System.EventHandler(this.nudOverscan_ValueChanged);
+			// 
+			// tpgOverscanGameSpecific
+			// 
+			this.tpgOverscanGameSpecific.Controls.Add(this.groupBox1);
+			this.tpgOverscanGameSpecific.Location = new System.Drawing.Point(4, 22);
+			this.tpgOverscanGameSpecific.Name = "tpgOverscanGameSpecific";
+			this.tpgOverscanGameSpecific.Padding = new System.Windows.Forms.Padding(3);
+			this.tpgOverscanGameSpecific.Size = new System.Drawing.Size(513, 370);
+			this.tpgOverscanGameSpecific.TabIndex = 1;
+			this.tpgOverscanGameSpecific.Text = "Game-Specific";
+			this.tpgOverscanGameSpecific.UseVisualStyleBackColor = true;
+			// 
+			// groupBox1
+			// 
+			this.groupBox1.Controls.Add(this.tableLayoutPanel10);
+			this.groupBox1.Controls.Add(this.chkEnableGameSpecificOverscan);
+			this.groupBox1.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.groupBox1.Location = new System.Drawing.Point(3, 3);
+			this.groupBox1.Name = "groupBox1";
+			this.groupBox1.Padding = new System.Windows.Forms.Padding(3, 5, 3, 3);
+			this.groupBox1.Size = new System.Drawing.Size(507, 364);
+			this.groupBox1.TabIndex = 0;
+			this.groupBox1.TabStop = false;
+			// 
+			// tableLayoutPanel10
+			// 
+			this.tableLayoutPanel10.ColumnCount = 3;
+			this.tableLayoutPanel10.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+			this.tableLayoutPanel10.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 262F));
+			this.tableLayoutPanel10.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+			this.tableLayoutPanel10.Controls.Add(this.picGameSpecificOverscan, 1, 1);
+			this.tableLayoutPanel10.Controls.Add(this.flowLayoutPanel8, 0, 1);
+			this.tableLayoutPanel10.Controls.Add(this.flowLayoutPanel9, 1, 0);
+			this.tableLayoutPanel10.Controls.Add(this.flowLayoutPanel10, 1, 2);
+			this.tableLayoutPanel10.Controls.Add(this.flowLayoutPanel11, 2, 1);
+			this.tableLayoutPanel10.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.tableLayoutPanel10.Location = new System.Drawing.Point(3, 18);
+			this.tableLayoutPanel10.Name = "tableLayoutPanel10";
+			this.tableLayoutPanel10.RowCount = 3;
+			this.tableLayoutPanel10.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+			this.tableLayoutPanel10.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 246F));
+			this.tableLayoutPanel10.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+			this.tableLayoutPanel10.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+			this.tableLayoutPanel10.Size = new System.Drawing.Size(501, 343);
+			this.tableLayoutPanel10.TabIndex = 1;
+			// 
+			// picGameSpecificOverscan
+			// 
+			this.picGameSpecificOverscan.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this.picGameSpecificOverscan.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.picGameSpecificOverscan.Location = new System.Drawing.Point(122, 51);
+			this.picGameSpecificOverscan.Name = "picGameSpecificOverscan";
+			this.picGameSpecificOverscan.Size = new System.Drawing.Size(256, 240);
+			this.picGameSpecificOverscan.TabIndex = 1;
+			this.picGameSpecificOverscan.TabStop = false;
+			// 
+			// flowLayoutPanel8
+			// 
+			this.flowLayoutPanel8.Anchor = System.Windows.Forms.AnchorStyles.Right;
+			this.flowLayoutPanel8.AutoSize = true;
+			this.flowLayoutPanel8.Controls.Add(this.lblGameSpecificOverscanLeft);
+			this.flowLayoutPanel8.Controls.Add(this.nudGameSpecificOverscanLeft);
+			this.flowLayoutPanel8.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
+			this.flowLayoutPanel8.Location = new System.Drawing.Point(78, 154);
+			this.flowLayoutPanel8.Margin = new System.Windows.Forms.Padding(0);
+			this.flowLayoutPanel8.Name = "flowLayoutPanel8";
+			this.flowLayoutPanel8.Size = new System.Drawing.Size(41, 33);
+			this.flowLayoutPanel8.TabIndex = 1;
+			// 
+			// lblGameSpecificOverscanLeft
+			// 
+			this.lblGameSpecificOverscanLeft.AutoSize = true;
+			this.lblGameSpecificOverscanLeft.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.lblGameSpecificOverscanLeft.Location = new System.Drawing.Point(3, 0);
+			this.lblGameSpecificOverscanLeft.Name = "lblGameSpecificOverscanLeft";
+			this.lblGameSpecificOverscanLeft.Size = new System.Drawing.Size(35, 13);
+			this.lblGameSpecificOverscanLeft.TabIndex = 0;
+			this.lblGameSpecificOverscanLeft.Text = "Left";
+			this.lblGameSpecificOverscanLeft.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+			// 
+			// nudGameSpecificOverscanLeft
+			// 
+			this.nudGameSpecificOverscanLeft.DecimalPlaces = 0;
+			this.nudGameSpecificOverscanLeft.Enabled = false;
+			this.nudGameSpecificOverscanLeft.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+			this.nudGameSpecificOverscanLeft.Location = new System.Drawing.Point(0, 13);
+			this.nudGameSpecificOverscanLeft.Margin = new System.Windows.Forms.Padding(0);
+			this.nudGameSpecificOverscanLeft.Maximum = new decimal(new int[] {
+            100,
+            0,
+            0,
+            0});
+			this.nudGameSpecificOverscanLeft.MaximumSize = new System.Drawing.Size(10000, 20);
+			this.nudGameSpecificOverscanLeft.Minimum = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+			this.nudGameSpecificOverscanLeft.Name = "nudGameSpecificOverscanLeft";
+			this.nudGameSpecificOverscanLeft.Size = new System.Drawing.Size(41, 20);
+			this.nudGameSpecificOverscanLeft.TabIndex = 2;
+			this.nudGameSpecificOverscanLeft.Value = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+			this.nudGameSpecificOverscanLeft.ValueChanged += new System.EventHandler(this.nudGameSpecificOverscan_ValueChanged);
+			// 
+			// flowLayoutPanel9
+			// 
+			this.flowLayoutPanel9.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
+			this.flowLayoutPanel9.AutoSize = true;
+			this.flowLayoutPanel9.Controls.Add(this.lblGameSpecificOverscanTop);
+			this.flowLayoutPanel9.Controls.Add(this.nudGameSpecificOverscanTop);
+			this.flowLayoutPanel9.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
+			this.flowLayoutPanel9.Location = new System.Drawing.Point(229, 15);
+			this.flowLayoutPanel9.Margin = new System.Windows.Forms.Padding(0);
+			this.flowLayoutPanel9.Name = "flowLayoutPanel9";
+			this.flowLayoutPanel9.Size = new System.Drawing.Size(41, 33);
+			this.flowLayoutPanel9.TabIndex = 2;
+			// 
+			// lblGameSpecificOverscanTop
+			// 
+			this.lblGameSpecificOverscanTop.AutoSize = true;
+			this.lblGameSpecificOverscanTop.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.lblGameSpecificOverscanTop.Location = new System.Drawing.Point(3, 0);
+			this.lblGameSpecificOverscanTop.Name = "lblGameSpecificOverscanTop";
+			this.lblGameSpecificOverscanTop.Size = new System.Drawing.Size(35, 13);
+			this.lblGameSpecificOverscanTop.TabIndex = 0;
+			this.lblGameSpecificOverscanTop.Text = "Top";
+			this.lblGameSpecificOverscanTop.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+			// 
+			// nudGameSpecificOverscanTop
+			// 
+			this.nudGameSpecificOverscanTop.DecimalPlaces = 0;
+			this.nudGameSpecificOverscanTop.Enabled = false;
+			this.nudGameSpecificOverscanTop.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+			this.nudGameSpecificOverscanTop.Location = new System.Drawing.Point(0, 13);
+			this.nudGameSpecificOverscanTop.Margin = new System.Windows.Forms.Padding(0);
+			this.nudGameSpecificOverscanTop.Maximum = new decimal(new int[] {
+            100,
+            0,
+            0,
+            0});
+			this.nudGameSpecificOverscanTop.MaximumSize = new System.Drawing.Size(10000, 20);
+			this.nudGameSpecificOverscanTop.Minimum = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+			this.nudGameSpecificOverscanTop.Name = "nudGameSpecificOverscanTop";
+			this.nudGameSpecificOverscanTop.Size = new System.Drawing.Size(41, 20);
+			this.nudGameSpecificOverscanTop.TabIndex = 2;
+			this.nudGameSpecificOverscanTop.Value = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+			this.nudGameSpecificOverscanTop.ValueChanged += new System.EventHandler(this.nudGameSpecificOverscan_ValueChanged);
+			// 
+			// flowLayoutPanel10
+			// 
+			this.flowLayoutPanel10.Anchor = System.Windows.Forms.AnchorStyles.Top;
+			this.flowLayoutPanel10.AutoSize = true;
+			this.flowLayoutPanel10.Controls.Add(this.lblGameSpecificOverscanBottom);
+			this.flowLayoutPanel10.Controls.Add(this.nudGameSpecificOverscanBottom);
+			this.flowLayoutPanel10.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
+			this.flowLayoutPanel10.Location = new System.Drawing.Point(227, 294);
+			this.flowLayoutPanel10.Margin = new System.Windows.Forms.Padding(0);
+			this.flowLayoutPanel10.Name = "flowLayoutPanel10";
+			this.flowLayoutPanel10.Size = new System.Drawing.Size(46, 33);
+			this.flowLayoutPanel10.TabIndex = 3;
+			// 
+			// lblGameSpecificOverscanBottom
+			// 
+			this.lblGameSpecificOverscanBottom.AutoSize = true;
+			this.lblGameSpecificOverscanBottom.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.lblGameSpecificOverscanBottom.Location = new System.Drawing.Point(3, 0);
+			this.lblGameSpecificOverscanBottom.Name = "lblGameSpecificOverscanBottom";
+			this.lblGameSpecificOverscanBottom.Size = new System.Drawing.Size(40, 13);
+			this.lblGameSpecificOverscanBottom.TabIndex = 0;
+			this.lblGameSpecificOverscanBottom.Text = "Bottom";
+			this.lblGameSpecificOverscanBottom.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+			// 
+			// nudGameSpecificOverscanBottom
+			// 
+			this.nudGameSpecificOverscanBottom.DecimalPlaces = 0;
+			this.nudGameSpecificOverscanBottom.Enabled = false;
+			this.nudGameSpecificOverscanBottom.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+			this.nudGameSpecificOverscanBottom.Location = new System.Drawing.Point(0, 13);
+			this.nudGameSpecificOverscanBottom.Margin = new System.Windows.Forms.Padding(0);
+			this.nudGameSpecificOverscanBottom.Maximum = new decimal(new int[] {
+            100,
+            0,
+            0,
+            0});
+			this.nudGameSpecificOverscanBottom.MaximumSize = new System.Drawing.Size(10000, 20);
+			this.nudGameSpecificOverscanBottom.Minimum = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+			this.nudGameSpecificOverscanBottom.Name = "nudGameSpecificOverscanBottom";
+			this.nudGameSpecificOverscanBottom.Size = new System.Drawing.Size(41, 20);
+			this.nudGameSpecificOverscanBottom.TabIndex = 2;
+			this.nudGameSpecificOverscanBottom.Value = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+			this.nudGameSpecificOverscanBottom.ValueChanged += new System.EventHandler(this.nudGameSpecificOverscan_ValueChanged);
+			// 
+			// flowLayoutPanel11
+			// 
+			this.flowLayoutPanel11.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.flowLayoutPanel11.AutoSize = true;
+			this.flowLayoutPanel11.Controls.Add(this.lblGameSpecificOverscanRight);
+			this.flowLayoutPanel11.Controls.Add(this.nudGameSpecificOverscanRight);
+			this.flowLayoutPanel11.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
+			this.flowLayoutPanel11.Location = new System.Drawing.Point(381, 154);
+			this.flowLayoutPanel11.Margin = new System.Windows.Forms.Padding(0);
+			this.flowLayoutPanel11.Name = "flowLayoutPanel11";
+			this.flowLayoutPanel11.Size = new System.Drawing.Size(41, 33);
+			this.flowLayoutPanel11.TabIndex = 0;
+			// 
+			// lblGameSpecificOverscanRight
+			// 
+			this.lblGameSpecificOverscanRight.AutoSize = true;
+			this.lblGameSpecificOverscanRight.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.lblGameSpecificOverscanRight.Location = new System.Drawing.Point(3, 0);
+			this.lblGameSpecificOverscanRight.Name = "lblGameSpecificOverscanRight";
+			this.lblGameSpecificOverscanRight.Size = new System.Drawing.Size(35, 13);
+			this.lblGameSpecificOverscanRight.TabIndex = 0;
+			this.lblGameSpecificOverscanRight.Text = "Right";
+			this.lblGameSpecificOverscanRight.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+			// 
+			// nudGameSpecificOverscanRight
+			// 
+			this.nudGameSpecificOverscanRight.DecimalPlaces = 0;
+			this.nudGameSpecificOverscanRight.Enabled = false;
+			this.nudGameSpecificOverscanRight.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+			this.nudGameSpecificOverscanRight.Location = new System.Drawing.Point(0, 13);
+			this.nudGameSpecificOverscanRight.Margin = new System.Windows.Forms.Padding(0);
+			this.nudGameSpecificOverscanRight.Maximum = new decimal(new int[] {
+            100,
+            0,
+            0,
+            0});
+			this.nudGameSpecificOverscanRight.MaximumSize = new System.Drawing.Size(10000, 20);
+			this.nudGameSpecificOverscanRight.Minimum = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+			this.nudGameSpecificOverscanRight.Name = "nudGameSpecificOverscanRight";
+			this.nudGameSpecificOverscanRight.Size = new System.Drawing.Size(41, 20);
+			this.nudGameSpecificOverscanRight.TabIndex = 1;
+			this.nudGameSpecificOverscanRight.Value = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+			this.nudGameSpecificOverscanRight.ValueChanged += new System.EventHandler(this.nudGameSpecificOverscan_ValueChanged);
+			// 
+			// chkEnableGameSpecificOverscan
+			// 
+			this.chkEnableGameSpecificOverscan.AutoSize = true;
+			this.chkEnableGameSpecificOverscan.BackColor = System.Drawing.SystemColors.ControlLightLight;
+			this.chkEnableGameSpecificOverscan.Location = new System.Drawing.Point(6, -1);
+			this.chkEnableGameSpecificOverscan.Name = "chkEnableGameSpecificOverscan";
+			this.chkEnableGameSpecificOverscan.Padding = new System.Windows.Forms.Padding(5, 0, 0, 0);
+			this.chkEnableGameSpecificOverscan.Size = new System.Drawing.Size(218, 17);
+			this.chkEnableGameSpecificOverscan.TabIndex = 0;
+			this.chkEnableGameSpecificOverscan.Text = "Enable game-specific overscan settings";
+			this.chkEnableGameSpecificOverscan.UseVisualStyleBackColor = false;
+			this.chkEnableGameSpecificOverscan.CheckedChanged += new System.EventHandler(this.chkEnableGameSpecificOverscan_CheckedChanged);
 			// 
 			// tpgPalette
 			// 
@@ -1590,6 +1924,12 @@ namespace Mesen.GUI.Forms.Config
 			this.mnuPaletteYuv.Text = "YUV v3 (by FirebrandX)";
 			this.mnuPaletteYuv.Click += new System.EventHandler(this.mnuPaletteYuv_Click);
 			// 
+			// imageList
+			// 
+			this.imageList.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imageList.ImageStream")));
+			this.imageList.TransparentColor = System.Drawing.Color.Transparent;
+			this.imageList.Images.SetKeyName(0, "Exclamation.png");
+			// 
 			// frmVideoConfig
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1631,7 +1971,8 @@ namespace Mesen.GUI.Forms.Config
 			this.tableLayoutPanel8.ResumeLayout(false);
 			this.tableLayoutPanel8.PerformLayout();
 			this.tpgOverscan.ResumeLayout(false);
-			this.grpCropping.ResumeLayout(false);
+			this.tabOverscan.ResumeLayout(false);
+			this.tpgOverscanGlobal.ResumeLayout(false);
 			this.tableLayoutPanel1.ResumeLayout(false);
 			this.tableLayoutPanel1.PerformLayout();
 			((System.ComponentModel.ISupportInitialize)(this.picOverscan)).EndInit();
@@ -1643,6 +1984,20 @@ namespace Mesen.GUI.Forms.Config
 			this.flowLayoutPanel5.PerformLayout();
 			this.flowLayoutPanel2.ResumeLayout(false);
 			this.flowLayoutPanel2.PerformLayout();
+			this.tpgOverscanGameSpecific.ResumeLayout(false);
+			this.groupBox1.ResumeLayout(false);
+			this.groupBox1.PerformLayout();
+			this.tableLayoutPanel10.ResumeLayout(false);
+			this.tableLayoutPanel10.PerformLayout();
+			((System.ComponentModel.ISupportInitialize)(this.picGameSpecificOverscan)).EndInit();
+			this.flowLayoutPanel8.ResumeLayout(false);
+			this.flowLayoutPanel8.PerformLayout();
+			this.flowLayoutPanel9.ResumeLayout(false);
+			this.flowLayoutPanel9.PerformLayout();
+			this.flowLayoutPanel10.ResumeLayout(false);
+			this.flowLayoutPanel10.PerformLayout();
+			this.flowLayoutPanel11.ResumeLayout(false);
+			this.flowLayoutPanel11.PerformLayout();
 			this.tpgPalette.ResumeLayout(false);
 			this.tableLayoutPanel3.ResumeLayout(false);
 			this.tableLayoutPanel3.PerformLayout();
@@ -1668,7 +2023,6 @@ namespace Mesen.GUI.Forms.Config
 		private System.Windows.Forms.TabControl tabMain;
 		private System.Windows.Forms.TabPage tpgGeneral;
 		private System.Windows.Forms.TabPage tpgOverscan;
-		private System.Windows.Forms.GroupBox grpCropping;
 		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
 		private System.Windows.Forms.PictureBox picOverscan;
 		private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel3;
@@ -1762,5 +2116,25 @@ namespace Mesen.GUI.Forms.Config
 		private System.Windows.Forms.FlowLayoutPanel flpRefreshRate;
 		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel6;
 		private System.Windows.Forms.CheckBox chkVerticalBlend;
+		private System.Windows.Forms.TabControl tabOverscan;
+		private System.Windows.Forms.TabPage tpgOverscanGlobal;
+		private System.Windows.Forms.TabPage tpgOverscanGameSpecific;
+		private System.Windows.Forms.GroupBox groupBox1;
+		private System.Windows.Forms.CheckBox chkEnableGameSpecificOverscan;
+		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel10;
+		private System.Windows.Forms.PictureBox picGameSpecificOverscan;
+		private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel8;
+		private System.Windows.Forms.Label lblGameSpecificOverscanLeft;
+		private MesenNumericUpDown nudGameSpecificOverscanLeft;
+		private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel9;
+		private System.Windows.Forms.Label lblGameSpecificOverscanTop;
+		private MesenNumericUpDown nudGameSpecificOverscanTop;
+		private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel10;
+		private System.Windows.Forms.Label lblGameSpecificOverscanBottom;
+		private MesenNumericUpDown nudGameSpecificOverscanBottom;
+		private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel11;
+		private System.Windows.Forms.Label lblGameSpecificOverscanRight;
+		private MesenNumericUpDown nudGameSpecificOverscanRight;
+		private System.Windows.Forms.ImageList imageList;
 	}
 }

@@ -14,8 +14,8 @@ namespace Mesen.GUI.Config
 		public bool ShowFPS = false;
 		[MinMax(0, 100)] public UInt32 OverscanLeft = 0;
 		[MinMax(0, 100)] public UInt32 OverscanRight = 0;
-		[MinMax(0, 100)] public UInt32 OverscanTop = 8;
-		[MinMax(0, 100)] public UInt32 OverscanBottom = 8;
+		[MinMax(0, 100)] public UInt32 OverscanTop = 0;
+		[MinMax(0, 100)] public UInt32 OverscanBottom = 0;
 		[MinMax(0.1, 10.0)] public double VideoScale = 2;
 		public VideoFilterType VideoFilter = VideoFilterType.None;
 		public bool UseBilinearInterpolation = false;
@@ -64,6 +64,17 @@ namespace Mesen.GUI.Config
 		{
 		}
 
+		static public void ApplyOverscanConfig()
+		{
+			GameSpecificInfo gameSpecificInfo = GameSpecificInfo.GetGameSpecificInfo();
+			if(gameSpecificInfo != null && gameSpecificInfo.OverrideOverscan) {
+				InteropEmu.SetOverscanDimensions(gameSpecificInfo.OverscanLeft, gameSpecificInfo.OverscanRight, gameSpecificInfo.OverscanTop, gameSpecificInfo.OverscanBottom);
+			} else {
+				VideoInfo videoInfo = ConfigManager.Config.VideoInfo;
+				InteropEmu.SetOverscanDimensions(videoInfo.OverscanLeft, videoInfo.OverscanRight, videoInfo.OverscanTop, videoInfo.OverscanBottom);
+			}
+		}
+
 		static public void ApplyConfig()
 		{
 			VideoInfo videoInfo = ConfigManager.Config.VideoInfo;
@@ -80,8 +91,7 @@ namespace Mesen.GUI.Config
 
 			InteropEmu.SetFlag(EmulationFlags.UseCustomVsPalette, videoInfo.UseCustomVsPalette);
 
-			InteropEmu.SetOverscanDimensions(videoInfo.OverscanLeft, videoInfo.OverscanRight, videoInfo.OverscanTop, videoInfo.OverscanBottom);
-
+			VideoInfo.ApplyOverscanConfig();
 			InteropEmu.SetScreenRotation((UInt32)videoInfo.ScreenRotation);
 
 			InteropEmu.SetExclusiveRefreshRate((UInt32)videoInfo.ExclusiveFullscreenRefreshRate);

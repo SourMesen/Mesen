@@ -82,7 +82,8 @@ namespace Mesen.GUI.Forms.Config
 			btnSelectPreset.Image = BaseControl.DownArrow;
 			btnSelectPalette.Image = BaseControl.DownArrow;
 
-			UpdateOverscanImage();
+			UpdateOverscanImage(picOverscan, (int)nudOverscanTop.Value, (int)nudOverscanBottom.Value, (int)nudOverscanLeft.Value, (int)nudOverscanRight.Value);
+			UpdateOverscanImage(picGameSpecificOverscan, (int)nudGameSpecificOverscanTop.Value, (int)nudGameSpecificOverscanBottom.Value, (int)nudGameSpecificOverscanLeft.Value, (int)nudGameSpecificOverscanRight.Value);
 
 			ResourceHelper.ApplyResources(this, contextPaletteList);
 			ResourceHelper.ApplyResources(this, contextPicturePresets);
@@ -91,6 +92,42 @@ namespace Mesen.GUI.Forms.Config
 				//Not available in the linux build (for now)
 				chkUseExclusiveFullscreen.Visible = false;
 			}
+		}
+
+		protected override void OnLoad(EventArgs e)
+		{
+			base.OnLoad(e);
+
+			//Do this after we localize the form
+			InitializeGameSpecificOverscanTab();
+		}
+
+		private void InitializeGameSpecificOverscanTab()
+		{
+			RomInfo romInfo = InteropEmu.GetRomInfo();
+			if(romInfo.PrgCrc32 == 0) {
+				chkEnableGameSpecificOverscan.Enabled = false;
+			} else {
+				chkEnableGameSpecificOverscan.Text += " (" + romInfo.GetRomName() + ")";
+
+				GameSpecificInfo info = GameSpecificInfo.GetGameSpecificInfo();
+				if(info != null) {
+					chkEnableGameSpecificOverscan.Checked = info.OverrideOverscan;
+					if(chkEnableGameSpecificOverscan.Checked) {
+						tabOverscan.SelectedTab = tpgOverscanGameSpecific;
+					}
+					nudGameSpecificOverscanTop.Value = info.OverscanTop;
+					nudGameSpecificOverscanBottom.Value = info.OverscanBottom;
+					nudGameSpecificOverscanLeft.Value = info.OverscanLeft;
+					nudGameSpecificOverscanRight.Value = info.OverscanRight;
+				}
+			}
+
+			//Change name to share resources with global overscan tab
+			lblGameSpecificOverscanBottom.Name = "lblBottom";
+			lblGameSpecificOverscanLeft.Name = "lblLeft";
+			lblGameSpecificOverscanRight.Name = "lblRight";
+			lblGameSpecificOverscanTop.Name = "lblTop";
 		}
 
 		private void UpdatePalette()
@@ -122,13 +159,31 @@ namespace Mesen.GUI.Forms.Config
 			}
 
 			VideoInfo.ApplyConfig();
+
+			if(chkEnableGameSpecificOverscan.Checked) {
+				InteropEmu.SetOverscanDimensions(
+					(UInt32)nudGameSpecificOverscanLeft.Value,
+					(UInt32)nudGameSpecificOverscanRight.Value,
+					(UInt32)nudGameSpecificOverscanTop.Value,
+					(UInt32)nudGameSpecificOverscanBottom.Value
+				);
+			}
+
 			return true;
 		}
 
 		protected override void OnFormClosed(FormClosedEventArgs e)
 		{
-			if(DialogResult == System.Windows.Forms.DialogResult.OK) {
+			if(DialogResult == DialogResult.OK) {
 				UpdatePalette();
+
+				GameSpecificInfo.SetGameSpecificOverscan(
+					chkEnableGameSpecificOverscan.Checked,
+					(UInt32)nudGameSpecificOverscanTop.Value,
+					(UInt32)nudGameSpecificOverscanBottom.Value,
+					(UInt32)nudGameSpecificOverscanLeft.Value,
+					(UInt32)nudGameSpecificOverscanRight.Value
+				);
 			}
 			base.OnFormClosed(e);
 			VideoInfo.ApplyConfig();
@@ -176,23 +231,28 @@ namespace Mesen.GUI.Forms.Config
 			}
 		}
 
-		private void UpdateOverscanImage()
+		private void UpdateOverscanImage(PictureBox picture, int top, int bottom, int left, int right)
 		{
-			Bitmap overscan = new Bitmap(picOverscan.Width - 2, picOverscan.Height - 2);
+			Bitmap overscan = new Bitmap(picture.Width - 2, picture.Height - 2);
 
 			using(Graphics g = Graphics.FromImage(overscan)) {
 				g.Clear(Color.DarkGray);
 
-				Rectangle fg = new Rectangle((int)nudOverscanLeft.Value, (int)nudOverscanTop.Value, 256 - (int)nudOverscanLeft.Value - (int)nudOverscanRight.Value, 240 - (int)nudOverscanTop.Value - (int)nudOverscanBottom.Value);
+				Rectangle fg = new Rectangle(left, top, 256 - left - right, 240 - top - bottom);
 				g.ScaleTransform((float)overscan.Width / 256, (float)overscan.Height / 240);
 				g.FillRectangle(Brushes.LightCyan, fg);
 			}
-			picOverscan.Image = overscan;
+			picture.Image = overscan;
 		}
 
 		private void nudOverscan_ValueChanged(object sender, EventArgs e)
 		{
-			UpdateOverscanImage();
+			UpdateOverscanImage(picOverscan, (int)nudOverscanTop.Value, (int)nudOverscanBottom.Value, (int)nudOverscanLeft.Value, (int)nudOverscanRight.Value);
+		}
+
+		private void nudGameSpecificOverscan_ValueChanged(object sender, EventArgs e)
+		{
+			UpdateOverscanImage(picGameSpecificOverscan, (int)nudGameSpecificOverscanTop.Value, (int)nudGameSpecificOverscanBottom.Value, (int)nudGameSpecificOverscanLeft.Value, (int)nudGameSpecificOverscanRight.Value);
 		}
 
 		private void btnResetPictureSettings_Click(object sender, EventArgs e)
@@ -437,6 +497,15 @@ namespace Mesen.GUI.Forms.Config
 		private void chkUseExclusiveFullscreen_CheckedChanged(object sender, EventArgs e)
 		{
 			flpRefreshRate.Visible = chkUseExclusiveFullscreen.Checked;
+		}
+
+		private void chkEnableGameSpecificOverscan_CheckedChanged(object sender, EventArgs e)
+		{
+			tpgOverscanGameSpecific.ImageIndex = chkEnableGameSpecificOverscan.Checked ? 0 : -1;
+			nudGameSpecificOverscanBottom.Enabled = chkEnableGameSpecificOverscan.Checked;
+			nudGameSpecificOverscanLeft.Enabled = chkEnableGameSpecificOverscan.Checked;
+			nudGameSpecificOverscanRight.Enabled = chkEnableGameSpecificOverscan.Checked;
+			nudGameSpecificOverscanTop.Enabled = chkEnableGameSpecificOverscan.Checked;
 		}
 	}
 }

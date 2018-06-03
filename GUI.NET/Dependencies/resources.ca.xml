@@ -223,7 +223,9 @@
 			<Control ID="chkUseExclusiveFullscreen">Fes servir el mode de pantalla completa exclusiva</Control>
 			<Control ID="lblRequestedRefreshRate">Requested Refresh Rate:</Control>
 			<Control ID="tpgOverscan">Sobreescaneig</Control>
-			<Control ID="grpCropping">Retall de vídeo</Control>
+			<Control ID="tpgOverscanGlobal">Global</Control>
+			<Control ID="tpgOverscanGameSpecific">Game-Specific</Control>
+			<Control ID="chkEnableGameSpecificOverscan">Enable game-specific overscan settings</Control>
 			<Control ID="lblLeft">Esquerra</Control>
 			<Control ID="lblTop">Amunt</Control>
 			<Control ID="lblBottom">Avall</Control>

@@ -224,7 +224,9 @@
 			<Control ID="chkUseExclusiveFullscreen">Use exclusive fullscreen mode</Control>
 			<Control ID="lblRequestedRefreshRate">Requested Refresh Rate:</Control>
 			<Control ID="tpgOverscan">Overscan</Control>
-			<Control ID="grpCropping">Video Cropping</Control>
+			<Control ID="tpgOverscanGlobal">Global</Control>
+			<Control ID="tpgOverscanGameSpecific">Game-Specific</Control>
+			<Control ID="chkEnableGameSpecificOverscan">Enable game-specific overscan settings</Control>
 			<Control ID="lblLeft">Left</Control>
 			<Control ID="lblTop">Top</Control>
 			<Control ID="lblBottom">Bottom</Control>

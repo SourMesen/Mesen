@@ -224,7 +224,9 @@
 			<Control ID="chkUseExclusiveFullscreen">排他的なフルスクリーンモードを使う</Control>
 			<Control ID="lblRequestedRefreshRate">リフレッシュレート:</Control>
 			<Control ID="tpgOverscan">オーバースキャン</Control>
-			<Control ID="grpCropping">オーバースキャン</Control>
+			<Control ID="tpgOverscanGlobal">全般</Control>
+			<Control ID="tpgOverscanGameSpecific">ゲーム別</Control>
+			<Control ID="chkEnableGameSpecificOverscan">実行中のゲームのオーバースキャン設定を指定する</Control>
 			<Control ID="lblLeft">左</Control>
 			<Control ID="lblTop">上</Control>
 			<Control ID="lblBottom">下</Control>

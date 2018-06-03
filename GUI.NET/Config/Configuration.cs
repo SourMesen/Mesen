@@ -32,6 +32,7 @@ namespace Mesen.GUI.Config
 		public DebugInfo DebugInfo;
 		public AviRecordInfo AviRecordInfo;
 		public MovieRecordInfo MovieRecordInfo;
+		public List<GameSpecificInfo> GameSpecificSettings;
 		public Point? WindowLocation;
 		public Size? WindowSize;
 
@@ -51,6 +52,7 @@ namespace Mesen.GUI.Config
 			DebugInfo = new DebugInfo();
 			AviRecordInfo = new AviRecordInfo();
 			MovieRecordInfo = new MovieRecordInfo();
+			GameSpecificSettings = new List<GameSpecificInfo>();
 		}
 
 		~Configuration()

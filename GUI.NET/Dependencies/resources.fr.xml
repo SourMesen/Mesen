@@ -223,7 +223,9 @@
 			<Control ID="chkUseExclusiveFullscreen">Utiliser le mode plein écran exclusif</Control>
 			<Control ID="lblRequestedRefreshRate">Taux de rafraîchissement :</Control>
 			<Control ID="tpgOverscan">Overscan</Control>
-			<Control ID="grpCropping">Overscan</Control>
+			<Control ID="tpgOverscanGlobal">Global</Control>
+			<Control ID="tpgOverscanGameSpecific">Spécifique au jeu</Control>
+			<Control ID="chkEnableGameSpecificOverscan">Configurer l'overscan spécifiquement pour ce jeu</Control>
 			<Control ID="lblLeft">Gauche</Control>
 			<Control ID="lblTop">Haut</Control>
 			<Control ID="lblBottom">Bas</Control>

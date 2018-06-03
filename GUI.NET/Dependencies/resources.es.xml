@@ -222,7 +222,9 @@
 			<Control ID="chkUseExclusiveFullscreen">Usar modo exclusivo de pantalla completa</Control>
 			<Control ID="lblRequestedRefreshRate">Frecuencia de actualización solicitada:</Control>
 			<Control ID="tpgOverscan">Overscan</Control>
-			<Control ID="grpCropping">Recorte</Control>
+			<Control ID="tpgOverscanGlobal">Global</Control>
+			<Control ID="tpgOverscanGameSpecific">Game-Specific</Control>
+			<Control ID="chkEnableGameSpecificOverscan">Enable game-specific overscan settings</Control>
 			<Control ID="lblLeft">Izquierda</Control>
 			<Control ID="lblTop">Arriba</Control>
 			<Control ID="lblBottom">Abajo</Control>
