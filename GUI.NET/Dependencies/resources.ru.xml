@@ -41,7 +41,6 @@
 			<Control ID="mnuScale2x">2x</Control>
 			<Control ID="mnuScale3x">3x</Control>
 			<Control ID="mnuScale4x">4x</Control>
-			<Control ID="mnuScaleCustom">Вручную</Control>
 			<Control ID="mnuFullscreen">Полный экран</Control>
 			<Control ID="mnuVideoFilter">Фильтр изображения</Control>
 			<Control ID="mnuNoneFilter">Нет</Control>
@@ -196,7 +195,6 @@
 			<Control ID="lblExpansionPort">Порт расширения :</Control>
 			<Control ID="chkFourScore">Использовать NES Four Score</Control>
 			<Control ID="chkAutoConfigureInput">Автоматически настраивать контроллеры при загрузке игры</Control>
-			<Control ID="tpgEmulatorKeys">Emulator Keys</Control>
 
 			<Control ID="tpgAdvanced">Расширенные</Control>
 			<Control ID="grpDisplayInput">Отображать ввод</Control>
@@ -230,6 +228,7 @@
 			<Control ID="lblBottom">Снизу</Control>
 			<Control ID="lblRight">Справа</Control>
 			<Control ID="tpgPalette">Палитра</Control>
+			<Control ID="chkShowColorIndexes">Show color indexes</Control>
 			<Control ID="mnuDefaultPalette">По умолчанию (NTSC)</Control>
 			<Control ID="btnSelectPalette">Выбрать палитру</Control>
 			<Control ID="btnExportPalette">Экспорт .pal</Control>
@@ -261,7 +260,7 @@
 			<Control ID="btnResetPictureSettings">Сброс</Control>
 			<Control ID="mnuPresetComposite">Composite</Control>
 			<Control ID="mnuPresetSVideo">S-Video</Control>
-			<Control ID="menuPresetRgb">RGB</Control>
+			<Control ID="mnuPresetRgb">RGB</Control>
 			<Control ID="mnuPresetMonochrome">Monochrome</Control>
 
 			<Control ID="tpgAdvanced">Advanced</Control>
@@ -423,7 +422,6 @@
 			<Control ID="btnCancel">Отмена</Control>
 		</Form>
 		<Form ID="frmServerConfig" Title="Настройка сервера">
-			<Control ID="txtPort">8888</Control>
 			<Control ID="lblPort">Порт:</Control>
 			<Control ID="chkPublicServer">Публичный сервер</Control>
 			<Control ID="lblServerName">Название :</Control>
@@ -434,7 +432,6 @@
 			<Control ID="btnCancel">Отмена</Control>
 		</Form>
 		<Form ID="frmClientConfig" Title="Подключение к серверу">
-			<Control ID="txtPort">8888</Control>
 			<Control ID="lblHost">Имя сервера:</Control>
 			<Control ID="lblPort">Порт:</Control>
 			<Control ID="chkSpectator">Войти как наблюдатель</Control>
@@ -573,7 +570,7 @@
 		</Form>
 		<Form ID="frmHelp" Title="Command-line Options">
 			<Control ID="grpExample">Usage example</Control>
-			<Control ID="tpgGeneral">General</Control>
+			<Control ID="tpgGeneralOptions">General</Control>
 			<Control ID="tpgVideoOptions">Video Options</Control>
 			<Control ID="tpgAudioOptions">Audio Options</Control>
 			<Control ID="tpgEmulationOptions">Emulation Options</Control>

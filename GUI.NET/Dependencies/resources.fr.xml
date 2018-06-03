@@ -41,7 +41,6 @@
 			<Control ID="mnuScale2x">2x</Control>
 			<Control ID="mnuScale3x">3x</Control>
 			<Control ID="mnuScale4x">4x</Control>
-			<Control ID="mnuScaleCustom">Personalisé</Control>
 			<Control ID="mnuFullscreen">Plein écran</Control>
 			<Control ID="mnuVideoFilter">Filtre vidéo</Control>
 			<Control ID="mnuNoneFilter">Aucun</Control>
@@ -197,7 +196,6 @@
 			<Control ID="lblExpansionPort">Port d'extension :</Control>
 			<Control ID="chkFourScore">Utiliser l'accessoire pour 4 joueurs</Control>
 			<Control ID="chkAutoConfigureInput">Configurer les manettes automatiquement au chargement d'un jeu</Control>
-			<Control ID="tpgEmulatorKeys">Raccourcis de l'émulateur</Control>
 
 			<Control ID="tpgAdvanced">Avancé</Control>
 			<Control ID="grpDisplayInput">Affichage des manettes</Control>
@@ -231,6 +229,7 @@
 			<Control ID="lblBottom">Bas</Control>
 			<Control ID="lblRight">Droite</Control>
 			<Control ID="tpgPalette">Palette</Control>
+			<Control ID="chkShowColorIndexes">Afficher l'indexe des couleurs</Control>
 			<Control ID="mnuDefaultPalette">Défaut (NTSC)</Control>
 			<Control ID="btnSelectPalette">Choisir une palette...</Control>
 			<Control ID="btnExportPalette">Exporter fichier .pal</Control>
@@ -262,7 +261,7 @@
 			<Control ID="btnResetPictureSettings">Réinitialiser</Control>
 			<Control ID="mnuPresetComposite">Composite</Control>
 			<Control ID="mnuPresetSVideo">S-Vidéo</Control>
-			<Control ID="menuPresetRgb">RGB</Control>
+			<Control ID="mnuPresetRgb">RGB</Control>
 			<Control ID="mnuPresetMonochrome">Monochrome</Control>
 
 			<Control ID="tpgAdvanced">Avancé</Control>
@@ -426,7 +425,6 @@
 			<Control ID="btnCancel">Annuler</Control>
 		</Form>
 		<Form ID="frmServerConfig" Title="Démarrer un serveur de jeu">
-			<Control ID="txtPort">8888</Control>
 			<Control ID="lblPort">Port:</Control>
 			<Control ID="chkPublicServer">Serveur publique</Control>
 			<Control ID="lblServerName">Nom du serveur :</Control>
@@ -437,7 +435,6 @@
 			<Control ID="btnCancel">Annuler</Control>
 		</Form>
 		<Form ID="frmClientConfig" Title="Connexion à un serveur">
-			<Control ID="txtPort">8888</Control>
 			<Control ID="lblHost">Serveur hôte:</Control>
 			<Control ID="lblPort">Port:</Control>
 			<Control ID="chkSpectator">Se joindre en tant que spectateur</Control>
@@ -585,7 +582,7 @@
 		</Form>
 		<Form ID="frmHelp" Title="Options de ligne de commande">
 			<Control ID="grpExample">Exemple d'utilisation</Control>
-			<Control ID="tpgGeneral">Général</Control>
+			<Control ID="tpgGeneralOptions">Général</Control>
 			<Control ID="tpgVideoOptions">Options vidéo</Control>
 			<Control ID="tpgAudioOptions">Options audio</Control>
 			<Control ID="tpgEmulationOptions">Options d'émulation</Control>

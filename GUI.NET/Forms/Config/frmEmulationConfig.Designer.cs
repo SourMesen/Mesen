@@ -528,8 +528,7 @@ namespace Mesen.GUI.Forms.Config
 			this.chkAdaptiveSpriteLimit.Name = "chkAdaptiveSpriteLimit";
 			this.chkAdaptiveSpriteLimit.Size = new System.Drawing.Size(442, 17);
 			this.chkAdaptiveSpriteLimit.TabIndex = 10;
-			this.chkAdaptiveSpriteLimit.Text = "Automatically re-enable sprite limit as needed to prevent graphical glitches when" +
-    " possible";
+			this.chkAdaptiveSpriteLimit.Text = "Automatically re-enable sprite limit as needed to prevent graphical glitches when possible";
 			this.chkAdaptiveSpriteLimit.UseVisualStyleBackColor = true;
 			// 
 			// tpgOverclocking

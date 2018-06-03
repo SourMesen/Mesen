@@ -43,7 +43,6 @@
 			<Control ID="mnuScale4x">４倍</Control>
 			<Control ID="mnuScale5x">５倍</Control>
 			<Control ID="mnuScale6x">６倍</Control>
-			<Control ID="mnuScaleCustom">カスタム</Control>
 			<Control ID="mnuFullscreen">全画面表示</Control>
 			<Control ID="mnuVideoFilter">画面エフェクト</Control>
 			<Control ID="mnuNoneFilter">なし</Control>
@@ -197,7 +196,6 @@
 			<Control ID="lblNesType">ゲーム機:</Control>
 			<Control ID="lblExpansionPort">拡張ポート:</Control>
 			<Control ID="chkFourScore">Four Scoreを使う</Control>
-			<Control ID="tpgEmulatorKeys">ショートカットキー</Control>
 			<Control ID="chkAutoConfigureInput">ゲームをロードする時、自動的に一番適切なコントローラを選ぶ</Control>
 
 			<Control ID="tpgAdvanced">詳細設定</Control>
@@ -232,6 +230,7 @@
 			<Control ID="lblBottom">下</Control>
 			<Control ID="lblRight">右</Control>
 			<Control ID="tpgPalette">パレット</Control>
+			<Control ID="chkShowColorIndexes">色のインデックスを表示する</Control>
 			<Control ID="mnuDefaultPalette">デフォルト (NTSC)</Control>
 			<Control ID="btnSelectPalette">プリセットを選ぶ...</Control>
 			<Control ID="btnExportPalette">.palファイルにエクスポートする</Control>
@@ -263,7 +262,7 @@
 			<Control ID="btnResetPictureSettings">リセット</Control>
 			<Control ID="mnuPresetComposite">コンポジット</Control>
 			<Control ID="mnuPresetSVideo">S端子</Control>
-			<Control ID="menuPresetRgb">RGB</Control>
+			<Control ID="mnuPresetRgb">RGB</Control>
 			<Control ID="mnuPresetMonochrome">モノクロ</Control>
 
 			<Control ID="tpgAdvanced">詳細設定</Control>
@@ -568,7 +567,7 @@
 		</Form>
 		<Form ID="frmHelp" Title="コマンドラインオプション">
 			<Control ID="grpExample">使い方</Control>
-			<Control ID="tpgGeneral">全般</Control>
+			<Control ID="tpgGeneralOptions">全般</Control>
 			<Control ID="tpgVideoOptions">映像</Control>
 			<Control ID="tpgAudioOptions">音声</Control>
 			<Control ID="tpgEmulationOptions">エミュレーション</Control>

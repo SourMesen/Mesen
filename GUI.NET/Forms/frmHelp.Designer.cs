@@ -102,9 +102,7 @@
 			this.txtGeneralOptions.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
 			this.txtGeneralOptions.Size = new System.Drawing.Size(568, 210);
 			this.txtGeneralOptions.TabIndex = 3;
-			this.txtGeneralOptions.Text = "/fullscreen - Start Mesen in fullscreen mode\r\n/DoNotSaveSettings - Prevent settin" +
-    "gs from being saved to the disk (useful to prevent command line options from bec" +
-    "oming the default settings)";
+			this.txtGeneralOptions.Text = "/fullscreen - Start Mesen in fullscreen mode\r\n/DoNotSaveSettings - Prevent settings from being saved to the disk (useful to prevent command line options from becoming the default settings)";
 			// 
 			// grpExample
 			// 
@@ -142,8 +140,7 @@
 			this.lblExample.Name = "lblExample";
 			this.lblExample.Size = new System.Drawing.Size(556, 38);
 			this.lblExample.TabIndex = 0;
-			this.lblExample.Text = "Mesen C:\\Games\\MyGame.nes /fullscreen /VideoFilter=NTSC /VideoScale=2 /OverscanTo" +
-    "p=8 /OverscanBottom=8 /OverscanLeft=0 /OverscanRight=0 /DoNotSaveSettings";
+			this.lblExample.Text = "Mesen C:\\Games\\MyGame.nes /fullscreen /VideoFilter=NTSC /VideoScale=2 /OverscanTop=8 /OverscanBottom=8 /OverscanLeft=0 /OverscanRight=0 /DoNotSaveSettings";
 			// 
 			// lblExplanation
 			// 

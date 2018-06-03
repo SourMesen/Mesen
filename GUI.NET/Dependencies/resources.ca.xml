@@ -41,7 +41,6 @@
 			<Control ID="mnuScale2x">2x</Control>
 			<Control ID="mnuScale3x">3x</Control>
 			<Control ID="mnuScale4x">4x</Control>
-			<Control ID="mnuScaleCustom">Personalitzada</Control>
 			<Control ID="mnuFullscreen">Pantalla completa</Control>
 			<Control ID="mnuVideoFilter">Filtre de vídeo</Control>
 			<Control ID="mnuNoneFilter">Cap</Control>
@@ -197,7 +196,6 @@
 			<Control ID="lblExpansionPort">Port d'expansió:</Control>
 			<Control ID="chkFourScore">Fes servir accesori per a 4 jugadors</Control>
 			<Control ID="chkAutoConfigureInput">Configura els comandaments automàticament quan es carregui un joc</Control>
-			<Control ID="tpgEmulatorKeys">Accessos directes</Control>
 
 			<Control ID="tpgAdvanced">Avançat</Control>
 			<Control ID="grpDisplayInput">Comandaments en pantalla</Control>
@@ -231,6 +229,7 @@
 			<Control ID="lblBottom">Avall</Control>
 			<Control ID="lblRight">Dreta</Control>
 			<Control ID="tpgPalette">Paleta de colors</Control>
+			<Control ID="chkShowColorIndexes">Show color indexes</Control>
 			<Control ID="mnuDefaultPalette">Per defecte (NTSC)</Control>
 			<Control ID="btnSelectPalette">Escollir una paleta...</Control>
 			<Control ID="btnExportPalette">Exportar fitxer .pal</Control>
@@ -262,7 +261,7 @@
 			<Control ID="btnResetPictureSettings">Restableix</Control>
 			<Control ID="mnuPresetComposite">Compost</Control>
 			<Control ID="mnuPresetSVideo">S-Video</Control>
-			<Control ID="menuPresetRgb">RGB</Control>
+			<Control ID="mnuPresetRgb">RGB</Control>
 			<Control ID="mnuPresetMonochrome">Monocrom</Control>
 
 			<Control ID="tpgAdvanced">Avançat</Control>
@@ -297,7 +296,7 @@
 			<Control ID="chkDisablePpuReset">No reestableixis la PPU al reiniciar la consola (comportament de la Famicom)</Control>
 			<Control ID="chkUseNes101Hvc101Behavior">Simula el comportament de la NES/HVC-101 (Top-loader / AV Famicom)</Control>
 			<Control ID="chkMapperRandomPowerOnState">Randomize power-on state for mappers</Control>
-			
+
 			<Control ID="tpgOverclocking">Forçament</Control>
 			<Control ID="grpOverclocking">Forçament de CPU</Control>
 			<Control ID="lblOverclockWarning">ADVERTÈNCIA: El forçament de la CPU afecta a l'estabilitat de la emulació i pot causar fallades en alguns jocs.</Control>
@@ -426,7 +425,6 @@
 			<Control ID="btnCancel">Cancel·la</Control>
 		</Form>
 		<Form ID="frmServerConfig" Title="Configuració del servidor">
-			<Control ID="txtPort">8888</Control>
 			<Control ID="lblPort">Port:</Control>
 			<Control ID="chkPublicServer">Servidor públic</Control>
 			<Control ID="lblServerName">Nom del servidor:</Control>
@@ -437,7 +435,6 @@
 			<Control ID="btnCancel">Cancel·la</Control>
 		</Form>
 		<Form ID="frmClientConfig" Title="Connexió a un servidor">
-			<Control ID="txtPort">8888</Control>
 			<Control ID="lblHost">Servidor:</Control>
 			<Control ID="lblPort">Port:</Control>
 			<Control ID="chkSpectator">Uneix-t'hi com a espectador</Control>
@@ -575,7 +572,7 @@
 		</Form>
 		<Form ID="frmHelp" Title="Opcions de la línia d'ordres">
 			<Control ID="grpExample">Exemple d'ús</Control>
-			<Control ID="tpgGeneral">General</Control>
+			<Control ID="tpgGeneralOptions">General</Control>
 			<Control ID="tpgVideoOptions">Opcions de vídeo</Control>
 			<Control ID="tpgAudioOptions">Opcions de so</Control>
 			<Control ID="tpgEmulationOptions">Opcions de l'emulació</Control>

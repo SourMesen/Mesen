@@ -32,7 +32,6 @@ namespace Mesen.GUI.Forms
 		private static Language _language;
 		private static XmlDocument _resources = new XmlDocument();
 		private static XmlDocument _enResources = new XmlDocument();
-		private static XmlDocument _originalEnglishResources = null;
 
 		public static Language GetCurrentLanguage()
 		{
@@ -135,16 +134,7 @@ namespace Mesen.GUI.Forms
 
 		public static void ApplyResources(Form form, string formName)
 		{
-			if(form is frmMain && _originalEnglishResources == null) {
-				_originalEnglishResources = BuildResourceFile(form);
-			}
-
-			XmlNode baseNode = null;
-			if(form is frmMain && _language == Language.English) {
-				baseNode = _originalEnglishResources.SelectSingleNode("/Resources/Forms/Form[@ID='" + formName + "']");
-			} else {
-				baseNode = _resources.SelectSingleNode("/Resources/Forms/Form[@ID='" + formName + "']");
-			}
+			XmlNode baseNode = _resources.SelectSingleNode("/Resources/Forms/Form[@ID='" + formName + "']");
 
 			if(baseNode != null) {
 				if(baseNode.Attributes["Title"] != null) {

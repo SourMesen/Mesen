@@ -151,8 +151,7 @@
 			this.lblShortcutWarning.Name = "lblShortcutWarning";
 			this.lblShortcutWarning.Size = new System.Drawing.Size(418, 28);
 			this.lblShortcutWarning.TabIndex = 1;
-			this.lblShortcutWarning.Text = "Warning: Your current configuration contains conflicting key bindings. If this is" +
-    " not intentional, please review and correct your key bindings.";
+			this.lblShortcutWarning.Text = "Warning: Your current configuration contains conflicting key bindings. If this is not intentional, please review and correct your key bindings.";
 			// 
 			// ctrlEmulatorShortcuts
 			// 

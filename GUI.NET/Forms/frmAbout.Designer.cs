@@ -166,8 +166,7 @@
 			this.lblDonate.Name = "lblDonate";
 			this.lblDonate.Size = new System.Drawing.Size(271, 26);
 			this.lblDonate.TabIndex = 30;
-			this.lblDonate.Text = "If you want to support Mesen, please consider donating.\r\nThank you for your suppo" +
-    "rt!";
+			this.lblDonate.Text = "If you want to support Mesen, please consider donating.\r\nThank you for your support!";
 			// 
 			// picDonate
 			// 

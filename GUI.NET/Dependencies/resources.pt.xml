@@ -41,7 +41,6 @@
 			<Control ID="mnuScale2x">2x</Control>
 			<Control ID="mnuScale3x">3x</Control>
 			<Control ID="mnuScale4x">4x</Control>
-			<Control ID="mnuScaleCustom">Personalizar</Control>
 			<Control ID="mnuFullscreen">Tela cheia</Control>
 			<Control ID="mnuVideoFilter">Filtro de vídeo</Control>
 			<Control ID="mnuNoneFilter">Nenhum</Control>
@@ -196,7 +195,6 @@
 			<Control ID="lblExpansionPort">Porta de expansão:</Control>
 			<Control ID="chkFourScore">Utilizar acessório para 4 jogadores</Control>
 			<Control ID="chkAutoConfigureInput">Configurar controles automaticamente ao carregar um jogo</Control>
-			<Control ID="tpgEmulatorKeys">Acessos diretos</Control>
 
 			<Control ID="tpgAdvanced">Avançado</Control>
 			<Control ID="grpDisplayInput">Controladores de tela</Control>
@@ -230,6 +228,7 @@
 			<Control ID="lblBottom">Abaixo</Control>
 			<Control ID="lblRight">Direita</Control>
 			<Control ID="tpgPalette">Paleta</Control>
+			<Control ID="chkShowColorIndexes">Show color indexes</Control>
 			<Control ID="mnuDefaultPalette">Por padrão (NTSC)</Control>
 			<Control ID="btnSelectPalette">Escolher uma paleta...</Control>
 			<Control ID="btnExportPalette">Exportar arquivo .pal</Control>
@@ -261,7 +260,7 @@
 			<Control ID="btnResetPictureSettings">Reiniciar</Control>
 			<Control ID="mnuPresetComposite">Composto</Control>
 			<Control ID="mnuPresetSVideo">S-Video</Control>
-			<Control ID="menuPresetRgb">RGB</Control>
+			<Control ID="mnuPresetRgb">RGB</Control>
 			<Control ID="mnuPresetMonochrome">Monocromo</Control>
 
 			<Control ID="tpgAdvanced">Avançado</Control>
@@ -422,7 +421,6 @@
 			<Control ID="btnCancel">Cancelar</Control>
 		</Form>
 		<Form ID="frmServerConfig" Title="Iniciar um servidor de jogos">
-			<Control ID="txtPort">8888</Control>
 			<Control ID="lblPort">Port:</Control>
 			<Control ID="chkPublicServer">Servidor público</Control>
 			<Control ID="lblServerName">Nome do servidor:</Control>
@@ -433,7 +431,6 @@
 			<Control ID="btnCancel">Cancelar</Control>
 		</Form>
 		<Form ID="frmClientConfig" Title="Conexão a um servidor">
-			<Control ID="txtPort">8888</Control>
 			<Control ID="lblHost">Servidor host:</Control>
 			<Control ID="lblPort">Port:</Control>
 			<Control ID="chkSpectator">Entrar como espectador</Control>
@@ -571,7 +568,7 @@
 		</Form>
 		<Form ID="frmHelp" Title="Opções de linha de comando">
 			<Control ID="grpExample">Exemplo de uso</Control>
-			<Control ID="tpgGeneral">Geral</Control>
+			<Control ID="tpgGeneralOptions">Geral</Control>
 			<Control ID="tpgVideoOptions">Opções de vídeo</Control>
 			<Control ID="tpgAudioOptions">Opções de áudio</Control>
 			<Control ID="tpgEmulationOptions">Opções de emulação</Control>
@@ -716,7 +713,7 @@
 		<Message ID="MouseModeEnabled">Modo mouse ativado - precione ESC ou Pause para liberar o cursor.</Message>
 		<Message ID="BandaiMicrophone">Micorfone Bandai</Message>
 		<Message ID="DatachBarcodeReader">Leitor de código de barras Datach</Message>
-    
+
 		<Message ID="Resume">Continuar</Message>
 		<Message ID="Pause">Pausar</Message>
 		<Message ID="StartServer">Iniciar servidor</Message>
@@ -753,7 +750,7 @@
 		<Message ID="FdsDiskSide">Disco {0} Cara {1}</Message>
 		<Message ID="FileNotFound">Arquivo não encontrado: {0}</Message>
 		<Message ID="InvalidFdsBios">A bios selecionada é inválida.</Message>
-    
+
 		<Message ID="HDNesTooltip">Esta opção permite os pacotes de gráficos de alta resolução sejam carregados no mesmo formato que os do emulador HDNes.&#xA;&#xA;Os pacotes de alta resolução devem ser colocados nos "HdPacks" em uma subpasta com o mesmo nome da ROM.&#xA;Exemplo: Um pacote para "MinhaRom.nes" deve ser colocado em "HdPacks\MinhaRom\hires.txt".</Message>
 		<Message ID="HdPackBuilderScaleHelp">Seleciona a escala e o filtro de vídeo a serem usados ​​ao gerar os arquivos PNG&#xA;para o Pacote HD. Usa os filtros "Preescala" para gerar os tiles&#xA;em uma escala maior sem aplicar qualquer transformação aos pixels.</Message>
 		<Message ID="HdPackBuilderBankSizeHelp">Esta opção está disponível apenas para jogos de RAM CHR.  Jogos de RAM CHR não tem "bancos"&#xA;fixos - eles são criados dinamicamente pelo código do jogo.&#xA;Esta opção altera o comportamento do Criador de Pacotes de Alta Definição agrupando os tiles em &#xA;arquivos PNG - um tamanho de banco menor geralmente resultará em menos arquivos PNG &#xA;(mas, dependendo do código do jogo, valores maiores podem produzir &#xA;melhores resultados).</Message>
@@ -829,7 +826,7 @@
 		<Message ID="EmulatorShortcutMappings_ToggleBackground">Alternar camada de fundo</Message>
 		<Message ID="EmulatorShortcutMappings_ToggleSprites">Alternar camada de sprite</Message>
 		<Message ID="EmulatorShortcutMappings_ToggleKeyboardMode">Alternar modo de teclado</Message>
-    
+
 		<Message ID="EmulatorShortcutMappings_MaxSpeed">Alternar velocidade máxima</Message>
 		<Message ID="EmulatorShortcutMappings_LoadRandomGame">Carrear jogo aleatório</Message>
 		<Message ID="EmulatorShortcutMappings_SaveStateSlot1">Salvar estado - Compartimento 1</Message>
@@ -979,25 +976,25 @@
 			<Value ID="Spanish">Español</Value>
 			<Value ID="Ukrainian">Українська</Value>
 			<Value ID="Catalan">Català</Value>
-    </Enum>
-    <Enum ID="RamPowerOnState">
-      <Value ID="AllZeros">Todos os 0 (Padrão)</Value>
-      <Value ID="AllOnes">Todos os 1</Value>
-      <Value ID="Random">Valores aleatórios</Value>
-    </Enum>
-    <Enum ID="CheatCurrentFilterType">
-      <Value ID="Smaller">Menor que</Value>
-      <Value ID="Equal">Igual a</Value>
-      <Value ID="NotEqual">Não igual a</Value>
-      <Value ID="Greater">Maior que</Value>
-    </Enum>
-    <Enum ID="CheatPrevFilterType">
-      <Value ID="Smaller">Menor</Value>
-      <Value ID="Equal">Igual</Value>
-      <Value ID="NotEqual">Não igual</Value>
-      <Value ID="Greater">Maior</Value>
-    </Enum>
-    <Enum ID="VideoCodec">
+		</Enum>
+		<Enum ID="RamPowerOnState">
+			<Value ID="AllZeros">Todos os 0 (Padrão)</Value>
+			<Value ID="AllOnes">Todos os 1</Value>
+			<Value ID="Random">Valores aleatórios</Value>
+		</Enum>
+		<Enum ID="CheatCurrentFilterType">
+			<Value ID="Smaller">Menor que</Value>
+			<Value ID="Equal">Igual a</Value>
+			<Value ID="NotEqual">Não igual a</Value>
+			<Value ID="Greater">Maior que</Value>
+		</Enum>
+		<Enum ID="CheatPrevFilterType">
+			<Value ID="Smaller">Menor</Value>
+			<Value ID="Equal">Igual</Value>
+			<Value ID="NotEqual">Não igual</Value>
+			<Value ID="Greater">Maior</Value>
+		</Enum>
+		<Enum ID="VideoCodec">
 
 			<Value ID="None">Nenhum (Sem comprimir)</Value>
 			<Value ID="ZMBV">Zip Motion Block Video (ZMBV)</Value>

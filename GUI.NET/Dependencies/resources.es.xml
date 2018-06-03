@@ -41,7 +41,6 @@
 			<Control ID="mnuScale2x">2x</Control>
 			<Control ID="mnuScale3x">3x</Control>
 			<Control ID="mnuScale4x">4x</Control>
-			<Control ID="mnuScaleCustom">Personalizar</Control>
 			<Control ID="mnuFullscreen">Pantalla completa</Control>
 			<Control ID="mnuVideoFilter">Filtro de video</Control>
 			<Control ID="mnuNoneFilter">Ninguno</Control>
@@ -196,7 +195,6 @@
 			<Control ID="lblExpansionPort">Puerto de extensión:</Control>
 			<Control ID="chkFourScore">Utilizar accesorio para 4 jugadores</Control>
 			<Control ID="chkAutoConfigureInput">Configurar controles automáticamente al cargar un juego</Control>
-			<Control ID="tpgEmulatorKeys">Accesos directos</Control>
 
 			<Control ID="tpgAdvanced">Avanzado</Control>
 			<Control ID="grpDisplayInput">Controladores de pantalla</Control>
@@ -230,6 +228,7 @@
 			<Control ID="lblBottom">Abajo</Control>
 			<Control ID="lblRight">Derecha</Control>
 			<Control ID="tpgPalette">Paleta</Control>
+			<Control ID="chkShowColorIndexes">Show color indexes</Control>
 			<Control ID="mnuDefaultPalette">Por defecto (NTSC)</Control>
 			<Control ID="btnSelectPalette">Elegir una paleta...</Control>
 			<Control ID="btnExportPalette">Exportar archivo .pal</Control>
@@ -261,7 +260,7 @@
 			<Control ID="btnResetPictureSettings">Reiniciar</Control>
 			<Control ID="mnuPresetComposite">Compuesto</Control>
 			<Control ID="mnuPresetSVideo">S-Video</Control>
-			<Control ID="menuPresetRgb">RGB</Control>
+			<Control ID="mnuPresetRgb">RGB</Control>
 			<Control ID="mnuPresetMonochrome">Monocromo</Control>
 
 			<Control ID="tpgAdvanced">Avanzado</Control>
@@ -296,7 +295,7 @@
 			<Control ID="chkDisablePpuReset">No resetear la PPU al resetear la consola (Famicom)</Control>
 			<Control ID="chkUseNes101Hvc101Behavior">Simular el comportamiento de NES/HVC-101 (Top-loader / AV Famicom)</Control>
 			<Control ID="chkMapperRandomPowerOnState">Randomize power-on state for mappers</Control>
-			
+
 			<Control ID="tpgOverclocking">Overclocking</Control>
 			<Control ID="grpOverclocking">Overclocking de CPU</Control>
 			<Control ID="lblOverclockWarning">ATENCIÓN: ¡El overclocking afecta a la estabilidad de la emulación y puede bloquear algunos juegos!</Control>
@@ -424,7 +423,6 @@
 			<Control ID="btnCancel">Cancelar</Control>
 		</Form>
 		<Form ID="frmServerConfig" Title="Iniciar un servidor de juegos">
-			<Control ID="txtPort">8888</Control>
 			<Control ID="lblPort">Puerto:</Control>
 			<Control ID="chkPublicServer">Servidor público</Control>
 			<Control ID="lblServerName">Nombre del servidor:</Control>
@@ -435,7 +433,6 @@
 			<Control ID="btnCancel">Cancelar</Control>
 		</Form>
 		<Form ID="frmClientConfig" Title="Conexión a un servidor">
-			<Control ID="txtPort">8888</Control>
 			<Control ID="lblHost">Servidor host:</Control>
 			<Control ID="lblPort">Puerto:</Control>
 			<Control ID="chkSpectator">Unirse como espectador</Control>
@@ -573,7 +570,7 @@
 		</Form>
 		<Form ID="frmHelp" Title="Opciones de linea de comandos">
 			<Control ID="grpExample">Ejemplo de uso</Control>
-			<Control ID="tpgGeneral">General</Control>
+			<Control ID="tpgGeneralOptions">General</Control>
 			<Control ID="tpgVideoOptions">Opciones de video</Control>
 			<Control ID="tpgAudioOptions">Opciones de audio</Control>
 			<Control ID="tpgEmulationOptions">Opciones de emulación</Control>
