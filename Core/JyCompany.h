@@ -228,6 +228,7 @@ protected:
 			for(int i = 0; i < 4; i++) {
 				if(_disableNtRam || (_ntLowRegs[i] & 0x80) != (_ntRamSelectBit & 0x80)) {
 					SetPpuMemoryMapping(0x2000 + 0x400 * i, 0x23FF + 0x400 * i, _ntLowRegs[i] | (_ntHighRegs[i] << 8), ChrMemoryType::ChrRom);
+					SetPpuMemoryMapping(0x3000 + 0x400 * i, 0x33FF + 0x400 * i, _ntLowRegs[i] | (_ntHighRegs[i] << 8), ChrMemoryType::ChrRom);
 				} else {
 					SetNametable(i, _ntLowRegs[i] & 0x01);
 				}

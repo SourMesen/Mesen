@@ -54,6 +54,12 @@ protected:
 		_audio.Clock();
 	}
 
+	void SetPpuMapping(uint8_t bank, uint8_t page)
+	{
+		SetPpuMemoryMapping(0x2000 + bank * 0x400, 0x23FF + bank * 0x400, page);
+		SetPpuMemoryMapping(0x3000 + bank * 0x400, 0x33FF + bank * 0x400, page);
+	}
+
 	void UpdatePpuBanking()
 	{
 		uint8_t mask = (_bankingMode & 0x20) ? 0xFE : 0xFF;
@@ -99,34 +105,34 @@ protected:
 			switch(_bankingMode & 0x2F) {
 				case 0x20:
 				case 0x27:
-					SetPpuMemoryMapping(0x2000, 0x23FF, _chrRegisters[6] & 0xFE);
-					SetPpuMemoryMapping(0x2400, 0x27FF, (_chrRegisters[6] & 0xFE) | 1);
-					SetPpuMemoryMapping(0x2800, 0x2BFF, _chrRegisters[7] & 0xFE);
-					SetPpuMemoryMapping(0x2C00, 0x2FFF, (_chrRegisters[7] & 0xFE) | 1);
+					SetPpuMapping(0, _chrRegisters[6] & 0xFE);
+					SetPpuMapping(1, (_chrRegisters[6] & 0xFE) | 1);
+					SetPpuMapping(2, _chrRegisters[7] & 0xFE);
+					SetPpuMapping(3, (_chrRegisters[7] & 0xFE) | 1);
 					break;
 
 				case 0x23:
 				case 0x24:
-					SetPpuMemoryMapping(0x2000, 0x23FF, (_chrRegisters[6] & 0xFE));
-					SetPpuMemoryMapping(0x2400, 0x27FF, (_chrRegisters[7] & 0xFE));
-					SetPpuMemoryMapping(0x2800, 0x2BFF, (_chrRegisters[6] & 0xFE) | 1);
-					SetPpuMemoryMapping(0x2C00, 0x2FFF, (_chrRegisters[7] & 0xFE) | 1);
+					SetPpuMapping(0, (_chrRegisters[6] & 0xFE));
+					SetPpuMapping(1, (_chrRegisters[7] & 0xFE));
+					SetPpuMapping(2, (_chrRegisters[6] & 0xFE) | 1);
+					SetPpuMapping(3, (_chrRegisters[7] & 0xFE) | 1);
 					break;
 
 				case 0x28:
 				case 0x2F:
-					SetPpuMemoryMapping(0x2000, 0x23FF, _chrRegisters[6] & 0xFE);
-					SetPpuMemoryMapping(0x2400, 0x27FF, _chrRegisters[6] & 0xFE);
-					SetPpuMemoryMapping(0x2800, 0x2BFF, _chrRegisters[7] & 0xFE);
-					SetPpuMemoryMapping(0x2C00, 0x2FFF, _chrRegisters[7] & 0xFE);
+					SetPpuMapping(0, _chrRegisters[6] & 0xFE);
+					SetPpuMapping(1, _chrRegisters[6] & 0xFE);
+					SetPpuMapping(2, _chrRegisters[7] & 0xFE);
+					SetPpuMapping(3, _chrRegisters[7] & 0xFE);
 					break;
 
 				case 0x2B:
 				case 0x2C:
-					SetPpuMemoryMapping(0x2000, 0x23FF, (_chrRegisters[6] & 0xFE) | 1);
-					SetPpuMemoryMapping(0x2400, 0x27FF, (_chrRegisters[7] & 0xFE) | 1);
-					SetPpuMemoryMapping(0x2800, 0x2BFF, (_chrRegisters[6] & 0xFE) | 1);
-					SetPpuMemoryMapping(0x2C00, 0x2FFF, (_chrRegisters[7] & 0xFE) | 1);
+					SetPpuMapping(0, (_chrRegisters[6] & 0xFE) | 1);
+					SetPpuMapping(1, (_chrRegisters[7] & 0xFE) | 1);
+					SetPpuMapping(2, (_chrRegisters[6] & 0xFE) | 1);
+					SetPpuMapping(3, (_chrRegisters[7] & 0xFE) | 1);
 					break;
 
 				default:
@@ -134,27 +140,27 @@ protected:
 						case 0:
 						case 6:
 						case 7:
-							SetPpuMemoryMapping(0x2000, 0x23FF, _chrRegisters[6]);
-							SetPpuMemoryMapping(0x2400, 0x27FF, _chrRegisters[6]);
-							SetPpuMemoryMapping(0x2800, 0x2BFF, _chrRegisters[7]);
-							SetPpuMemoryMapping(0x2C00, 0x2FFF, _chrRegisters[7]);
+							SetPpuMapping(0, _chrRegisters[6]);
+							SetPpuMapping(1, _chrRegisters[6]);
+							SetPpuMapping(2, _chrRegisters[7]);
+							SetPpuMapping(3, _chrRegisters[7]);
 							break;
 
 						case 1:
 						case 5:
-							SetPpuMemoryMapping(0x2000, 0x23FF, _chrRegisters[4]);
-							SetPpuMemoryMapping(0x2400, 0x27FF, _chrRegisters[5]);
-							SetPpuMemoryMapping(0x2800, 0x2BFF, _chrRegisters[6]);
-							SetPpuMemoryMapping(0x2C00, 0x2FFF, _chrRegisters[7]);
+							SetPpuMapping(0, _chrRegisters[4]);
+							SetPpuMapping(1, _chrRegisters[5]);
+							SetPpuMapping(2, _chrRegisters[6]);
+							SetPpuMapping(3, _chrRegisters[7]);
 							break;
 
 						case 2:
 						case 3:
 						case 4:
-							SetPpuMemoryMapping(0x2000, 0x23FF, _chrRegisters[6]);
-							SetPpuMemoryMapping(0x2400, 0x27FF, _chrRegisters[7]);
-							SetPpuMemoryMapping(0x2800, 0x2BFF, _chrRegisters[6]);
-							SetPpuMemoryMapping(0x2C00, 0x2FFF, _chrRegisters[7]);
+							SetPpuMapping(0, _chrRegisters[6]);
+							SetPpuMapping(1, _chrRegisters[7]);
+							SetPpuMapping(2, _chrRegisters[6]);
+							SetPpuMapping(3, _chrRegisters[7]);
 							break;
 					}
 					break;

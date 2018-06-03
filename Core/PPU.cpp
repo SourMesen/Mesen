@@ -60,6 +60,7 @@ void PPU::Reset()
 	_currentTile = {};
 	_nextTile = {};
 
+	_ppuBusAddress = 0;
 	_intensifyColorBits = 0;
 	_paletteRamMask = 0x3F;
 	_lastUpdatedPixel = -1;
@@ -170,11 +171,11 @@ void PPU::SetState(PPUDebugState &state)
 void PPU::UpdateVideoRamAddr()
 {
 	if(_scanline >= 240 || !IsRenderingEnabled()) {
-		_state.VideoRamAddr += _flags.VerticalWrite ? 32 : 1;
+		_state.VideoRamAddr = (_state.VideoRamAddr + (_flags.VerticalWrite ? 32 : 1)) & 0x7FFF;
 
 		//Trigger memory read when setting the vram address - needed by MMC3 IRQ counter
 		//"Should be clocked when A12 changes to 1 via $2007 read/write"
-		_mapper->ReadVRAM(_state.VideoRamAddr, MemoryOperationType::Read);
+		SetBusAddress(_state.VideoRamAddr & 0x3FFF);
 	} else {
 		//"During rendering (on the pre-render line and the visible lines 0-239, provided either background or sprite rendering is enabled), "
 		//it will update v in an odd way, triggering a coarse X increment and a Y increment simultaneously"
@@ -268,7 +269,7 @@ uint8_t PPU::ReadRAM(uint16_t addr)
 				openBusMask = 0xFF;
 			} else {
 				returnValue = _memoryReadBuffer;
-				_memoryReadBuffer = _mapper->ReadVRAM(_state.VideoRamAddr, MemoryOperationType::Read);
+				_memoryReadBuffer = ReadVram(_ppuBusAddress & 0x3FFF, MemoryOperationType::Read);
 
 				if((_state.VideoRamAddr & 0x3FFF) >= 0x3F00 && !EmulationSettings::CheckFlag(EmulationFlags::DisablePaletteRead)) {
 					returnValue = ReadPaletteRAM(_state.VideoRamAddr) | (_openBus & 0xC0);
@@ -360,7 +361,7 @@ void PPU::WriteRAM(uint16_t addr, uint8_t value)
 				WritePaletteRAM(_state.VideoRamAddr, value);
 				Debugger::ProcessVramWriteOperation(_state.VideoRamAddr & 0x3FFF, value);
 			} else {
-				_mapper->WriteVRAM(_state.VideoRamAddr, value);
+				_mapper->WriteVRAM(_ppuBusAddress & 0x3FFF, value);
 			}
 			UpdateVideoRamAddr();
 			break;
@@ -541,6 +542,24 @@ uint16_t PPU::GetAttributeAddr()
 	return 0x23C0 | (_state.VideoRamAddr & 0x0C00) | ((_state.VideoRamAddr >> 4) & 0x38) | ((_state.VideoRamAddr >> 2) & 0x07);
 }
 
+void PPU::SetBusAddress(uint16_t addr)
+{
+	_ppuBusAddress = addr;
+	_mapper->NotifyVRAMAddressChange(addr);
+}
+
+uint8_t PPU::ReadVram(uint16_t addr, MemoryOperationType type)
+{
+	SetBusAddress(addr);
+	return _mapper->ReadVRAM(addr, type);
+}
+
+void PPU::WriteVram(uint16_t addr, uint8_t value)
+{
+	SetBusAddress(addr);
+	_mapper->WriteVRAM(addr, value);
+}
+
 void PPU::LoadTileInfo()
 {
 	if(IsRenderingEnabled()) {
@@ -552,7 +571,7 @@ void PPU::LoadTileInfo()
 				_state.LowBitShift |= _nextTile.LowByte;
 				_state.HighBitShift |= _nextTile.HighByte;
 
-				uint8_t tileIndex = _mapper->ReadVRAM(GetNameTableAddr());
+				uint8_t tileIndex = ReadVram(GetNameTableAddr());
 				_nextTile.TileAddr = (tileIndex << 4) | (_state.VideoRamAddr >> 12) | _flags.BackgroundPatternAddr;
 				_nextTile.OffsetY = _state.VideoRamAddr >> 12;
 				break;
@@ -560,17 +579,17 @@ void PPU::LoadTileInfo()
 
 			case 2: {
 				uint8_t shift = ((_state.VideoRamAddr >> 4) & 0x04) | (_state.VideoRamAddr & 0x02);
-				_nextTile.PaletteOffset = ((_mapper->ReadVRAM(GetAttributeAddr()) >> shift) & 0x03) << 2;
+				_nextTile.PaletteOffset = ((ReadVram(GetAttributeAddr()) >> shift) & 0x03) << 2;
 				break;
 			}
 
 			case 3:
-				_nextTile.LowByte = _mapper->ReadVRAM(_nextTile.TileAddr);
+				_nextTile.LowByte = ReadVram(_nextTile.TileAddr);
 				_nextTile.AbsoluteTileAddr = _mapper->ToAbsoluteChrAddress(_nextTile.TileAddr);
 				break;
 
 			case 5:
-				_nextTile.HighByte = _mapper->ReadVRAM(_nextTile.TileAddr + 8);
+				_nextTile.HighByte = ReadVram(_nextTile.TileAddr + 8);
 				break;
 		}
 	}
@@ -609,8 +628,8 @@ void PPU::LoadSprite(uint8_t spriteY, uint8_t tileIndex, uint8_t attributes, uin
 			info.HighByte = _mapper->DebugReadVRAM(tileAddr + 8);
 		} else {
 			fetchLastSprite = false;
-			info.LowByte = _mapper->ReadVRAM(tileAddr);
-			info.HighByte = _mapper->ReadVRAM(tileAddr + 8);
+			info.LowByte = ReadVram(tileAddr);
+			info.HighByte = ReadVram(tileAddr + 8);
 		}
 		info.TileAddr = tileAddr;
 		info.AbsoluteTileAddr = _mapper->ToAbsoluteChrAddress(tileAddr);
@@ -635,8 +654,8 @@ void PPU::LoadSprite(uint8_t spriteY, uint8_t tileIndex, uint8_t attributes, uin
 			tileAddr = ((tileIndex << 4) | _flags.SpritePatternAddr) + lineOffset;
 		}
 
-		_mapper->ReadVRAM(tileAddr);
-		_mapper->ReadVRAM(tileAddr + 8);
+		ReadVram(tileAddr);
+		ReadVram(tileAddr + 8);
 	}
 
 	_spriteIndex++;
@@ -841,10 +860,10 @@ void PPU::ProcessScanline()
 				LoadSpriteTileInfo();
 			} else if((_cycle - 257) % 8 == 0) {
 				//Garbage NT sprite fetch (257, 265, 273, etc.) - Required for proper MC-ACC IRQs (MMC3 clone)
-				_mapper->ReadVRAM(GetNameTableAddr());
+				ReadVram(GetNameTableAddr());
 			} else if((_cycle - 259) % 8 == 0) {
 				//Garbage AT sprite fetch
-				_mapper->ReadVRAM(GetAttributeAddr());
+				ReadVram(GetAttributeAddr());
 			}
 
 			if(_scanline == -1 && _cycle >= 280 && _cycle <= 304) {
@@ -868,7 +887,7 @@ void PPU::ProcessScanline()
 		}
 	} else if(_cycle == 337 || _cycle == 339) {
 		if(IsRenderingEnabled()) {
-			_mapper->ReadVRAM(GetNameTableAddr());
+			ReadVram(GetNameTableAddr());
 
 			if(_scanline == -1 && _nesModel == NesModel::NTSC && _cycle == 339 && (_frameCount & 0x01)) {
 				//This behavior is NTSC-specific - PAL frames are always the same number of cycles
@@ -1158,9 +1177,13 @@ void PPU::UpdateState()
 		if(_updateVramAddrDelay == 0) {
 			_state.VideoRamAddr = _updateVramAddr;
 
-			//Trigger memory read when setting the vram address - needed by MMC3 IRQ counter
-			//"4) Should be clocked when A12 changes to 1 via $2006 write"
-			_mapper->ReadVRAM(_state.VideoRamAddr, MemoryOperationType::Read);
+			if(_scanline >= 240 || !IsRenderingEnabled()) {
+				//Only set the VRAM address on the bus if the PPU is rendering
+				//More info here: https://forums.nesdev.com/viewtopic.php?p=132145#p132145
+				//Trigger bus address change when setting the vram address - needed by MMC3 IRQ counter
+				//"4) Should be clocked when A12 changes to 1 via $2006 write"
+				SetBusAddress(_state.VideoRamAddr & 0x3FFF);
+			}
 		} else {
 			_needStateUpdate = true;
 		}
@@ -1228,7 +1251,8 @@ void PPU::StreamState(bool saving)
 		_nextTile.PaletteOffset, _nextTile.TileAddr, _previousTile.LowByte, _previousTile.HighByte, _previousTile.PaletteOffset, _spriteIndex, _spriteCount,
 		_secondaryOAMAddr, _sprite0Visible, _oamCopybuffer, _spriteInRange, _sprite0Added, _spriteAddrH, _spriteAddrL, _oamCopyDone, _nesModel, unusedSpriteDmaAddr,
 		unusedSpriteDmaCounter, _prevRenderingEnabled, _renderingEnabled, _openBus, _ignoreVramRead, unusedSkipScrollIncrement, paletteRam, spriteRam, secondarySpriteRam,
-		openBusDecayStamp, _cyclesNeeded, disablePpu2004Reads, disablePaletteRead, disableOamAddrBug, _overflowBugCounter, _updateVramAddr, _updateVramAddrDelay, _needStateUpdate);
+		openBusDecayStamp, _cyclesNeeded, disablePpu2004Reads, disablePaletteRead, disableOamAddrBug, _overflowBugCounter, _updateVramAddr, _updateVramAddrDelay,
+		_needStateUpdate, _ppuBusAddress);
 
 	for(int i = 0; i < 64; i++) {
 		Stream(_spriteTiles[i].SpriteX, _spriteTiles[i].LowByte, _spriteTiles[i].HighByte, _spriteTiles[i].PaletteOffset, _spriteTiles[i].HorizontalMirror, _spriteTiles[i].BackgroundPriority);

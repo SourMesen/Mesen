@@ -686,6 +686,11 @@ void BaseMapper::SetNametable(uint8_t index, uint8_t nametableIndex)
 	_nametableIndexes[index] = nametableIndex;
 
 	SetPpuMemoryMapping(0x2000 + index * 0x400, 0x2000 + (index + 1) * 0x400 - 1, GetNametable(nametableIndex));
+	
+	//Mirror $2000-$2FFF to $3000-$3FFF, while keeping a distinction between the addresses
+	//Previously, $3000-$3FFF was being "redirected" to $2000-$2FFF to avoid MMC3 IRQ issues (which is incorrect)
+	//More info here: https://forums.nesdev.com/viewtopic.php?p=132145#p132145
+	SetPpuMemoryMapping(0x3000 + index * 0x400, 0x3000 + (index + 1) * 0x400 - 1, GetNametable(nametableIndex));
 }
 
 void BaseMapper::SetNametables(uint8_t nametable1Index, uint8_t nametable2Index, uint8_t nametable3Index, uint8_t nametable4Index)
@@ -790,16 +795,6 @@ void BaseMapper::WritePrgRam(uint16_t addr, uint8_t value)
 	}
 }
 
-void BaseMapper::ProcessVramAccess(uint16_t &addr)
-{
-	addr &= 0x3FFF;
-	if(addr >= 0x3000) {
-		//Need to mirror 0x3000 writes to 0x2000, this appears to be how hardware behaves
-		//Required for proper MMC3 IRQ timing in Burai Fighter
-		addr -= 0x1000;
-	}
-}
-
 void BaseMapper::NotifyVRAMAddressChange(uint16_t addr)
 {
 	//This is called when the VRAM addr on the PPU memory bus changes
@@ -818,7 +813,7 @@ uint8_t BaseMapper::InternalReadVRAM(uint16_t addr)
 
 uint8_t BaseMapper::DebugReadVRAM(uint16_t addr, bool disableSideEffects)
 {
-	ProcessVramAccess(addr);
+	addr &= 0x3FFF;
 	if(!disableSideEffects) {
 		NotifyVRAMAddressChange(addr);
 	}
@@ -832,7 +827,7 @@ uint8_t BaseMapper::MapperReadVRAM(uint16_t addr, MemoryOperationType operationT
 
 void BaseMapper::DebugWriteVRAM(uint16_t addr, uint8_t value, bool disableSideEffects)
 {
-	ProcessVramAccess(addr);
+	addr &= 0x3FFF;
 	if(disableSideEffects) {
 		if(_chrPages[addr >> 8]) {
 			//Always allow writes when side-effects are disabled
@@ -848,9 +843,7 @@ void BaseMapper::DebugWriteVRAM(uint16_t addr, uint8_t value, bool disableSideEf
 
 void BaseMapper::WriteVRAM(uint16_t addr, uint8_t value)
 {
-	ProcessVramAccess(addr);
 	Debugger::ProcessVramWriteOperation(addr, value);
-	NotifyVRAMAddressChange(addr);
 
 	if(_chrPageAccessType[addr >> 8] & MemoryAccessType::Write) {
 		_chrPages[addr >> 8][(uint8_t)addr] = value;

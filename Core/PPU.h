@@ -63,6 +63,7 @@ class PPU : public IMemoryHandler, public Snapshotable
 
 		SpriteInfo *_lastSprite; //used by HD ppu
 
+		uint16_t _ppuBusAddress;
 		TileInfo _currentTile;
 		TileInfo _nextTile;
 		TileInfo _previousTile;
@@ -155,6 +156,10 @@ class PPU : public IMemoryHandler, public Snapshotable
 				return (PPURegisters)(addr & 0x07);
 			}
 		}
+
+		__forceinline void SetBusAddress(uint16_t addr);
+		__forceinline uint8_t ReadVram(uint16_t addr, MemoryOperationType type = MemoryOperationType::PpuRenderingRead);
+		__forceinline void WriteVram(uint16_t addr, uint8_t value);
 
 		void StreamState(bool saving) override;
 
