@@ -192,7 +192,7 @@ void ShortcutKeyHandler::CheckMappedKeys()
 		}
 	}
 
-	if(!isNetplayClient && !EmulationSettings::CheckFlag(NsfPlayerEnabled)) {
+	if(!isNetplayClient && !MovieManager::Recording() && !EmulationSettings::CheckFlag(NsfPlayerEnabled)) {
 		if(DetectKeyPress(EmulatorShortcut::ToggleRewind)) {
 			if(RewindManager::IsRewinding()) {
 				RewindManager::StopRewinding();
