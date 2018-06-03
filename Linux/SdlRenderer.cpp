@@ -214,6 +214,13 @@ void SdlRenderer::DrawPauseScreen(bool disableOverlay)
 		XMVECTOR stringDimensions = _largeFont->MeasureString(L"PAUSE");
 		float* measureF = (float*)&stringDimensions;
 		_largeFont->DrawString(_sdlRenderer, L"PAUSE", (int)(_screenWidth / 2 - measureF[0] / 2), (int)(_screenHeight / 2 - measureF[1] / 2 - 8), 250, 235, 215);
+
+		string utf8Message = EmulationSettings::GetPauseScreenMessage();
+		if(utf8Message.size() > 0) {
+			std::wstring message = utf8::utf8::decode(utf8Message);
+			float width = MeasureString(message);
+			DrawString(message, _screenWidth - width - 20, _screenHeight - 40);
+		}
 	}
 }
 

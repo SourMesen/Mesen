@@ -12,6 +12,8 @@ Language EmulationSettings::_displayLanguage = Language::English;
 
 const vector<uint32_t> EmulationSettings::_speedValues = { { 1, 3, 6, 12, 25, 50, 75, 100, 150, 200, 250, 300, 350, 400, 450, 500, 750, 1000, 2000, 4000 } };
 
+string EmulationSettings::_pauseScreenMessage;
+
 SimpleLock EmulationSettings::_lock;
 uint64_t EmulationSettings::_flags = 0;
 

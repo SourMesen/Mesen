@@ -725,6 +725,8 @@
 		<Message ID="Disconnect">Відключитися</Message>
 		<Message ID="PlayerNumber">Гравець {0}</Message>
 
+		<Message ID="PressToExitFullscreen">Press {0} to exit fullscreen</Message>
+
 		<Message ID="RomsFound">{0} Знайдені ROM  файли</Message>
 
 		<Message ID="RiskyOptionHint">(не рекомендовано)</Message>

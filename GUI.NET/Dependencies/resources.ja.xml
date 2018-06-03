@@ -722,6 +722,8 @@
 		<Message ID="Disconnect">切断</Message>
 		<Message ID="PlayerNumber">プレーヤー {0}</Message>
 
+		<Message ID="PressToExitFullscreen">全画面表示モードを終了: {0}</Message>
+
 		<Message ID="RomsFound">{0}個</Message>
 
 		<Message ID="RiskyOptionHint">（推奨されません）</Message>

@@ -737,6 +737,8 @@
 		<Message ID="Disconnect">Deconnexion</Message>
 		<Message ID="PlayerNumber">Joueur {0}</Message>
 
+		<Message ID="PressToExitFullscreen">Quitter le mode plein écran: {0}</Message>
+
 		<Message ID="RomsFound">{0} roms trouvés</Message>
 
 		<Message ID="RiskyOptionHint">(déconseillé)</Message>

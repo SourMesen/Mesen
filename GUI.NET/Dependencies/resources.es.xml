@@ -727,6 +727,8 @@
 		<Message ID="CheatsFound">{0} y {1} trucos de juegos presentes en la base de datos</Message>
 		<Message ID="CheatsImported">{0} trucos se importaron para el juego {1}.</Message>
 
+		<Message ID="PressToExitFullscreen">Press {0} to exit fullscreen</Message>
+
 		<Message ID="RomsFound">{0} roms encontradas</Message>
 
 		<Message ID="RiskyOptionHint">(no recomendado)</Message>

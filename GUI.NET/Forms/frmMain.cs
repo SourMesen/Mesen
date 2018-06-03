@@ -440,6 +440,19 @@ namespace Mesen.GUI.Forms
 				enabled = false;
 			}
 
+			//Setup message to show on screen when paused while in fullscreen (instructions to revert to windowed mode)
+			InteropEmu.SetPauseScreenMessage("");
+			if(enabled) {
+				ShortcutKeyInfo shortcut = ConfigManager.Config.PreferenceInfo.ShortcutKeys1.Find(ski => ski.Shortcut == EmulatorShortcut.ToggleFullscreen);
+				if(shortcut == null || shortcut.KeyCombination.IsEmpty) {
+					shortcut = ConfigManager.Config.PreferenceInfo.ShortcutKeys2.Find(ski => ski.Shortcut == EmulatorShortcut.ToggleFullscreen);
+				}
+
+				if(shortcut != null && !shortcut.KeyCombination.IsEmpty) {
+					InteropEmu.SetPauseScreenMessage(ResourceHelper.GetMessage("PressToExitFullscreen", shortcut.KeyCombination.ToString()));
+				}
+			}
+
 			bool saveState = !_fullscreenMode;
 			_fullscreenMode = enabled;
 			mnuFullscreen.Checked = enabled;

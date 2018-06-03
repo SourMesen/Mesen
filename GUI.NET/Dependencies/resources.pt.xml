@@ -723,6 +723,8 @@
 		<Message ID="PlayerNumber">Jogador {0}</Message>
 		<Message ID="ExpansionDevice">Dispositivo de expansão</Message>
 
+		<Message ID="PressToExitFullscreen">Press {0} to exit fullscreen</Message>
+
 		<Message ID="RomsFound">{0} roms encontradas</Message>
 
 		<Message ID="RiskyOptionHint">(Não recomendado)</Message>

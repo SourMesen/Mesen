@@ -577,6 +577,8 @@ private:
 	static uint32_t _currentPalette[64];
 	static uint8_t _paletteLut[11][64];
 
+	static string _pauseScreenMessage;
+
 	static uint64_t _flags;
 
 	static Language _displayLanguage;
@@ -1459,5 +1461,15 @@ public:
 			_keyboardModeEnabled = false;
 			MessageManager::DisplayMessage("Input", "KeyboardModeDisabled");
 		}
+	}
+
+	static void SetPauseScreenMessage(string message)
+	{
+		_pauseScreenMessage = message;
+	}
+
+	static string GetPauseScreenMessage()
+	{
+		return _pauseScreenMessage;
 	}
 };

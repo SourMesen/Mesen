@@ -573,6 +573,13 @@ namespace NES
 			float x = (float)_screenWidth / 2 - stringDimensions.m128_f32[0] / 2;
 			float y = (float)_screenHeight / 2 - stringDimensions.m128_f32[1] / 2 - 8;
 			DrawString("PAUSE", x, y, Colors::AntiqueWhite, 1.0f, _largeFont.get());
+
+			string utf8Message = EmulationSettings::GetPauseScreenMessage();
+			if(utf8Message.size() > 0) {
+				std::wstring message = utf8::utf8::decode(utf8Message);
+				float width = MeasureString(message);
+				DrawString(message, _screenWidth - width - 20, _screenHeight - 40, Colors::AntiqueWhite, 1.0f, _font.get());
+			}
 		}
 	}
 

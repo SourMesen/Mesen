@@ -710,6 +710,8 @@
 		<Message ID="CheatsFound">{0} jocs i {1} trucs presents a la base de dades</Message>
 		<Message ID="CheatsImported">S'han importat {0} trucs per al joc {1}.</Message>
 
+		<Message ID="PressToExitFullscreen">Press {0} to exit fullscreen</Message>
+
 		<Message ID="RomsFound">S'han trobat {0} roms</Message>
 
 		<Message ID="RiskyOptionHint">(no recomanat)</Message>
