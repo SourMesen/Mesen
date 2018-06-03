@@ -56,25 +56,6 @@ namespace Mesen.GUI.Forms
 					ConfigManager.Config.Cheats = ConfigManager.Config.Cheats.Where((cheat) => cheat.GameCrc != "00000000" && cheat.GameCrc.Length == 8).ToList();
 				}
 				
-				if(oldVersion <= new Version("0.9.3")) {
-					//Version 0.9.3-
-					//Set default keys for some of the new controller types
-					KeyPresets presets = new KeyPresets();
-					if(ConfigManager.Config.InputInfo.Controllers.Count > 0 && ConfigManager.Config.InputInfo.Controllers[0].Keys.Count > 0) {
-						ConfigManager.Config.InputInfo.Controllers[0].Keys[0].ExcitingBoxingButtons = presets.ExcitingBoxing.ExcitingBoxingButtons;
-						ConfigManager.Config.InputInfo.Controllers[0].Keys[0].FamilyBasicKeyboardButtons = presets.FamilyBasic.FamilyBasicKeyboardButtons;
-						ConfigManager.Config.InputInfo.Controllers[0].Keys[0].JissenMahjongButtons = presets.JissenMahjong.JissenMahjongButtons;
-						ConfigManager.Config.InputInfo.Controllers[0].Keys[0].PachinkoButtons = presets.Pachinko.PachinkoButtons;
-						ConfigManager.Config.InputInfo.Controllers[0].Keys[0].PartyTapButtons = presets.PartyTap.PartyTapButtons;
-						ConfigManager.Config.InputInfo.Controllers[0].Keys[0].PowerPadButtons = presets.PowerPad.PowerPadButtons;
-						if(ConfigManager.Config.InputInfo.Controllers.Count > 1 && ConfigManager.Config.InputInfo.Controllers[1].Keys.Count > 0) {
-							ConfigManager.Config.InputInfo.Controllers[1].Keys[0].PowerPadButtons = presets.PowerPad.PowerPadButtons;
-						}
-						ConfigManager.Config.InputInfo.Controllers[0].Keys[0].SuborKeyboardButtons = presets.SuborKeyboard.SuborKeyboardButtons;
-						ConfigManager.Config.InputInfo.Controllers[0].Keys[0].BandaiMicrophoneButtons = presets.BandaiMicrophone.BandaiMicrophoneButtons;
-					}
-				}
-
 				if(oldVersion <= new Version("0.9.4")) {
 					ShortcutKeyInfo oldLoadAutoSlot1 = ConfigManager.Config.PreferenceInfo.ShortcutKeys1.Where(o => o.Shortcut == EmulatorShortcut.LoadStateSlot8).FirstOrDefault();
 					ShortcutKeyInfo oldLoadAutoSlot2 = ConfigManager.Config.PreferenceInfo.ShortcutKeys2.Where(o => o.Shortcut == EmulatorShortcut.LoadStateSlot8).FirstOrDefault();
@@ -89,6 +70,25 @@ namespace Mesen.GUI.Forms
 					if(oldLoadAutoSlot2 != null && !oldLoadAutoSlot2.KeyCombination.IsEmpty && newLoadAutoSlot2 == null) {
 						ConfigManager.Config.PreferenceInfo.ShortcutKeys2.Add(new ShortcutKeyInfo(EmulatorShortcut.LoadStateSlotAuto, oldLoadAutoSlot2.KeyCombination));
 						oldLoadAutoSlot2.KeyCombination = new KeyCombination();
+					}
+				}
+
+				if(oldVersion <= new Version("0.9.5")) {
+					//Version 0.9.5-
+					//Reset the default keys for the new controller types (to reduce settings.xml size)
+					KeyPresets presets = new KeyPresets();
+					if(ConfigManager.Config.InputInfo.Controllers.Count > 0 && ConfigManager.Config.InputInfo.Controllers[0].Keys.Count > 0) {
+						ConfigManager.Config.InputInfo.Controllers[0].Keys[0].ExcitingBoxingButtons = presets.ExcitingBoxing.ExcitingBoxingButtons;
+						ConfigManager.Config.InputInfo.Controllers[0].Keys[0].FamilyBasicKeyboardButtons = presets.FamilyBasic.FamilyBasicKeyboardButtons;
+						ConfigManager.Config.InputInfo.Controllers[0].Keys[0].JissenMahjongButtons = presets.JissenMahjong.JissenMahjongButtons;
+						ConfigManager.Config.InputInfo.Controllers[0].Keys[0].PachinkoButtons = presets.Pachinko.PachinkoButtons;
+						ConfigManager.Config.InputInfo.Controllers[0].Keys[0].PartyTapButtons = presets.PartyTap.PartyTapButtons;
+						ConfigManager.Config.InputInfo.Controllers[0].Keys[0].PowerPadButtons = presets.PowerPad.PowerPadButtons;
+						if(ConfigManager.Config.InputInfo.Controllers.Count > 1 && ConfigManager.Config.InputInfo.Controllers[1].Keys.Count > 0) {
+							ConfigManager.Config.InputInfo.Controllers[1].Keys[0].PowerPadButtons = presets.PowerPad.PowerPadButtons;
+						}
+						ConfigManager.Config.InputInfo.Controllers[0].Keys[0].SuborKeyboardButtons = presets.SuborKeyboard.SuborKeyboardButtons;
+						ConfigManager.Config.InputInfo.Controllers[0].Keys[0].BandaiMicrophoneButtons = presets.BandaiMicrophone.BandaiMicrophoneButtons;
 					}
 				}
 

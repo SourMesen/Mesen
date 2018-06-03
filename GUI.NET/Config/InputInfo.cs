@@ -28,14 +28,14 @@ namespace Mesen.GUI.Config
 		public UInt32 LButton;
 		public UInt32 RButton;
 
-		public UInt32[] PowerPadButtons = new UInt32[12];
-		public UInt32[] FamilyBasicKeyboardButtons = new UInt32[72];
-		public UInt32[] PartyTapButtons = new UInt32[6];
-		public UInt32[] PachinkoButtons = new UInt32[2];
-		public UInt32[] ExcitingBoxingButtons = new UInt32[8];
-		public UInt32[] JissenMahjongButtons = new UInt32[21];
-		public UInt32[] SuborKeyboardButtons = new UInt32[99];
-		public UInt32[] BandaiMicrophoneButtons = new UInt32[3];
+		[XmlElement("PowerPad")] public XmlIntArray PowerPadButtons = new UInt32[12];
+		[XmlElement("FamilyBasic")] public XmlIntArray FamilyBasicKeyboardButtons = new UInt32[72];
+		[XmlElement("PartyTap")] public XmlIntArray PartyTapButtons = new UInt32[6];
+		[XmlElement("Pachinko")] public XmlIntArray PachinkoButtons = new UInt32[2];
+		[XmlElement("ExcitingBoxing")] public XmlIntArray ExcitingBoxingButtons = new UInt32[8];
+		[XmlElement("JissenMahjong")] public XmlIntArray JissenMahjongButtons = new UInt32[21];
+		[XmlElement("SuborKeyboard")] public XmlIntArray SuborKeyboardButtons = new UInt32[99];
+		[XmlElement("BandaiMicrophone")] public XmlIntArray BandaiMicrophoneButtons = new UInt32[3];
 
 		public KeyMappings()
 		{
@@ -44,14 +44,14 @@ namespace Mesen.GUI.Config
 		public KeyMappings Clone()
 		{
 			KeyMappings clone = (KeyMappings)this.MemberwiseClone();
-			clone.PowerPadButtons = (UInt32[])this.PowerPadButtons.Clone();
-			clone.FamilyBasicKeyboardButtons = (UInt32[])this.FamilyBasicKeyboardButtons.Clone();
-			clone.PartyTapButtons = (UInt32[])this.PartyTapButtons.Clone();
-			clone.PachinkoButtons = (UInt32[])this.PachinkoButtons.Clone();
-			clone.ExcitingBoxingButtons = (UInt32[])this.ExcitingBoxingButtons.Clone();
-			clone.JissenMahjongButtons = (UInt32[])this.JissenMahjongButtons.Clone();
-			clone.SuborKeyboardButtons = (UInt32[])this.SuborKeyboardButtons.Clone();			
-			clone.BandaiMicrophoneButtons = (UInt32[])this.BandaiMicrophoneButtons.Clone();			
+			clone.PowerPadButtons = this.PowerPadButtons.Clone();
+			clone.FamilyBasicKeyboardButtons = this.FamilyBasicKeyboardButtons.Clone();
+			clone.PartyTapButtons = this.PartyTapButtons.Clone();
+			clone.PachinkoButtons = this.PachinkoButtons.Clone();
+			clone.ExcitingBoxingButtons = this.ExcitingBoxingButtons.Clone();
+			clone.JissenMahjongButtons = this.JissenMahjongButtons.Clone();
+			clone.SuborKeyboardButtons = this.SuborKeyboardButtons.Clone();			
+			clone.BandaiMicrophoneButtons = this.BandaiMicrophoneButtons.Clone();			
 			return clone;
 		}
 
@@ -222,6 +222,90 @@ namespace Mesen.GUI.Config
 			InteropEmu.SetMouseSensitivity(InteropEmu.MouseDevice.HoriTrack, (inputInfo.HoriTrack.Sensitivity + 1) / 2.0);
 			InteropEmu.SetMouseSensitivity(InteropEmu.MouseDevice.SnesMouse, (inputInfo.SnesMouse.Sensitivity + 1) / 2.0);
 			InteropEmu.SetMouseSensitivity(InteropEmu.MouseDevice.SuborMouse, (inputInfo.SuborMouse.Sensitivity + 1) / 2.0);
+		}
+	}
+
+	public class XmlIntArray
+	{
+		private List<UInt32> _values = new List<UInt32>();
+
+		public XmlIntArray() { }
+
+		public XmlIntArray(List<UInt32> values)
+		{
+			_values = new List<UInt32>(values);
+			KeyCount = _values.Count;
+		}
+
+		public XmlIntArray(UInt32[] values)
+		{
+			_values = new List<UInt32>(values);
+			KeyCount = _values.Count;
+		}
+
+		[XmlIgnore]
+		public List<UInt32> Values
+		{
+			get { return new List<UInt32>(_values); }
+		}
+
+		public XmlIntArray Clone()
+		{
+			return new XmlIntArray(this.Values);
+		}
+
+		public static implicit operator List<UInt32>(XmlIntArray x)
+		{
+			return new List<UInt32>(x.Values);
+		}
+
+		public static implicit operator UInt32[](XmlIntArray x)
+		{
+			return x.Values.ToArray();
+		}
+
+		public static implicit operator XmlIntArray(List<UInt32> values)
+		{
+			return new XmlIntArray(values);
+		}
+
+		public static implicit operator XmlIntArray(UInt32[] values)
+		{
+			return new XmlIntArray(values);
+		}
+
+		[XmlElement(Order = 0)]
+		public int KeyCount;
+
+		[XmlElement("Values", Order = 1)]
+		public string IntValues
+		{
+			get { return _values.Any(v => v > 0) ? string.Join(",", _values) : ""; }
+			set
+			{
+				try {
+					if(!string.IsNullOrWhiteSpace(value)) {
+						List<UInt32> values = new List<UInt32>();
+						foreach(string val in value.Split(',')) {
+							values.Add(UInt32.Parse(val));
+						}
+						while(values.Count < KeyCount) {
+							values.Add(0);
+						}
+						_values = values;
+					} else {
+						_values = new List<UInt32>(new UInt32[KeyCount]);
+					}
+				} catch {
+					_values = new List<UInt32>(new UInt32[KeyCount]);
+				}
+			}
+		}
+
+		public UInt32 this[int index]
+		{
+			get { return _values[index]; }
+			set { _values[index] = value; }
 		}
 	}
 }

@@ -484,7 +484,7 @@ namespace Mesen.GUI.Forms.Config
 								}
 								break;
 							case InteropEmu.ControllerType.PowerPad:
-								foreach(UInt32 button in mappings.PowerPadButtons) {
+								foreach(UInt32 button in mappings.PowerPadButtons.Values) {
 									countMapping(i, button);
 								}
 								break;
@@ -497,27 +497,27 @@ namespace Mesen.GUI.Forms.Config
 				foreach(KeyMappings mappings in inputInfo.Controllers[0].Keys) {
 					switch(inputInfo.ExpansionPortDevice) {
 						case InteropEmu.ExpansionPortDevice.ExcitingBoxing:
-							foreach(UInt32 button in mappings.ExcitingBoxingButtons) {
+							foreach(UInt32 button in mappings.ExcitingBoxingButtons.Values) {
 								countMapping(4, button);
 							}
 							break;
 						case InteropEmu.ExpansionPortDevice.FamilyTrainerMat:
-							foreach(UInt32 button in mappings.PowerPadButtons) {
+							foreach(UInt32 button in mappings.PowerPadButtons.Values) {
 								countMapping(4, button);
 							}
 							break;
 						case InteropEmu.ExpansionPortDevice.JissenMahjong:
-							foreach(UInt32 button in mappings.JissenMahjongButtons) {
+							foreach(UInt32 button in mappings.JissenMahjongButtons.Values) {
 								countMapping(4, button);
 							}
 							break;
 						case InteropEmu.ExpansionPortDevice.Pachinko:
-							foreach(UInt32 button in mappings.PachinkoButtons) {
+							foreach(UInt32 button in mappings.PachinkoButtons.Values) {
 								countMapping(4, button);
 							}
 							break;
 						case InteropEmu.ExpansionPortDevice.PartyTap:
-							foreach(UInt32 button in mappings.PartyTapButtons) {
+							foreach(UInt32 button in mappings.PartyTapButtons.Values) {
 								countMapping(4, button);
 							}
 							break;
@@ -528,7 +528,7 @@ namespace Mesen.GUI.Forms.Config
 			if(_hasCartridgeInput && btnSetupCartridge.Enabled) {
 				//Bandai microphone
 				foreach(KeyMappings mappings in inputInfo.Controllers[0].Keys) {
-					foreach(UInt32 button in mappings.BandaiMicrophoneButtons) {
+					foreach(UInt32 button in mappings.BandaiMicrophoneButtons.Values) {
 						countMapping(5, button);
 					}
 				}
