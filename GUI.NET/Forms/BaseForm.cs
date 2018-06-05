@@ -228,7 +228,6 @@ namespace Mesen.GUI.Forms
 			// 
 			// BaseForm
 			// 
-			this.ClientSize = new System.Drawing.Size(284, 262);
 			this.Name = "BaseForm";
 			this.ResumeLayout(false);
 

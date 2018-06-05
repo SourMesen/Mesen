@@ -1403,5 +1403,22 @@ namespace Mesen.GUI.Debugger
 		{
 			InteropEmu.PowerCycle();
 		}
+
+		protected override void OnResize(EventArgs e)
+		{
+			base.OnResize(e);
+
+			if(lblPrgAnalysis != null) {
+				if(this.Width - this._minimumSize.Width < 100) {
+					if(lblPrgAnalysis.Text != "PRG:") {
+						lblPrgAnalysis.Text = "PRG:";
+						lblChrAnalysis.Text = "CHR:";
+					}
+				} else if(lblPrgAnalysis.Text == "PRG:") {
+					lblPrgAnalysis.Text = "PRG analysis:";
+					lblChrAnalysis.Text = "CHR analysis:";
+				}
+			}
+		}
 	}
 }

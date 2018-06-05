@@ -1737,7 +1737,7 @@ namespace Mesen.GUI.Debugger
 			this.Controls.Add(this.tsToolbar);
 			this.Controls.Add(this.menuStrip);
 			this.MainMenuStrip = this.menuStrip;
-			this.MinimumSize = new System.Drawing.Size(1000, 725);
+			this.MinimumSize = new System.Drawing.Size(850, 685);
 			this.Name = "frmDebugger";
 			this.Text = "Debugger";
 			this.splitContainer.Panel1.ResumeLayout(false);

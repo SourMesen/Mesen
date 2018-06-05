@@ -94,7 +94,6 @@ namespace Mesen.GUI.Forms
 			// 
 			this.AcceptButton = this.btnOK;
 			this.CancelButton = this.btnCancel;
-			this.ClientSize = new System.Drawing.Size(327, 262);
 			this.Controls.Add(this.baseConfigPanel);
 			this.Name = "BaseConfigForm";
 			this.baseConfigPanel.ResumeLayout(false);
