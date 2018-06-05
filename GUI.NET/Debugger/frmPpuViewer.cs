@@ -36,6 +36,11 @@ namespace Mesen.GUI.Debugger
 			this.mnuRefreshOnBreak.Checked = ConfigManager.Config.DebugInfo.PpuRefreshOnBreak;
 			this.ctrlNametableViewer.Connect(this.ctrlChrViewer);
 
+			if(ConfigManager.Config.DebugInfo.PpuWindowLocation.HasValue) {
+				this.StartPosition = FormStartPosition.Manual;
+				this.Location = ConfigManager.Config.DebugInfo.PpuWindowLocation.Value;
+			}
+
 			this.InitShortcuts();
 		}
 
@@ -73,6 +78,8 @@ namespace Mesen.GUI.Debugger
 		{
 			base.OnFormClosing(e);
 			this._notifListener.OnNotification -= this._notifListener_OnNotification;
+			ConfigManager.Config.DebugInfo.PpuWindowLocation = this.WindowState == FormWindowState.Maximized ? this.RestoreBounds.Location : this.Location;
+			ConfigManager.ApplyChanges();
 			InteropEmu.DebugClearPpuViewerSettings(_ppuViewerId);
 		}
 

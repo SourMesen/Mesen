@@ -31,7 +31,9 @@ namespace Mesen.GUI.Debugger
 
 			DebugInfo debugInfo = ConfigManager.Config.DebugInfo;
 			if(!debugInfo.TraceLoggerSize.IsEmpty) {
+				this.StartPosition = FormStartPosition.Manual;
 				this.Size = debugInfo.TraceLoggerSize;
+				this.Location = debugInfo.TraceLoggerLocation;
 			}
 
 			txtTraceLog.BaseFont = new Font(debugInfo.TraceFontFamily, debugInfo.TraceFontSize, debugInfo.TraceFontStyle);
@@ -118,6 +120,7 @@ namespace Mesen.GUI.Debugger
 			debugInfo.TraceAutoRefresh = mnuAutoRefresh.Checked;
 			debugInfo.TraceLineCount = _lineCount;
 			debugInfo.TraceLoggerSize = this.WindowState == FormWindowState.Maximized ? this.RestoreBounds.Size : this.Size;
+			debugInfo.TraceLoggerLocation = this.WindowState == FormWindowState.Maximized ? this.RestoreBounds.Location : this.Location;
 
 			debugInfo.TraceFontFamily = txtTraceLog.BaseFont.FontFamily.Name;
 			debugInfo.TraceFontSize = txtTraceLog.BaseFont.Size;

@@ -24,6 +24,11 @@ namespace Mesen.GUI.Debugger
 				if(Program.IsMono) {
 					this.Width = (int)(this.Width * 1.2);
 				}
+
+				if(ConfigManager.Config.DebugInfo.ApuViewerLocation.HasValue) {
+					this.StartPosition = FormStartPosition.Manual;
+					this.Location = ConfigManager.Config.DebugInfo.ApuViewerLocation.Value;
+				}
 			}
 		}
 
@@ -33,6 +38,9 @@ namespace Mesen.GUI.Debugger
 
 			//Restore normal volume settings
 			AudioInfo.ApplyConfig();
+
+			ConfigManager.Config.DebugInfo.ApuViewerLocation = this.WindowState == FormWindowState.Maximized ? this.RestoreBounds.Location : this.Location;
+			ConfigManager.ApplyChanges();
 		}
 
 		private void tmrUpdate_Tick(object sender, EventArgs e)

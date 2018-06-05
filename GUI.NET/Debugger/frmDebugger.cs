@@ -118,8 +118,10 @@ namespace Mesen.GUI.Debugger
 			ctrlDebuggerCodeSplit.ShowMemoryValues = mnuShowMemoryValues.Checked;
 
 			if(ConfigManager.Config.DebugInfo.WindowWidth > -1) {
+				this.StartPosition = FormStartPosition.Manual;
 				this.Width = ConfigManager.Config.DebugInfo.WindowWidth;
 				this.Height = ConfigManager.Config.DebugInfo.WindowHeight;
+				this.Location = ConfigManager.Config.DebugInfo.WindowLocation;
 			}
 
 			tsToolbar.Visible = mnuShowToolbar.Checked;
@@ -826,6 +828,7 @@ namespace Mesen.GUI.Debugger
 			ConfigManager.Config.DebugInfo.FontFamily = ctrlDebuggerCode.CodeViewer.BaseFont.FontFamily.Name;
 			ConfigManager.Config.DebugInfo.FontStyle = ctrlDebuggerCode.CodeViewer.BaseFont.Style;
 			ConfigManager.Config.DebugInfo.FontSize = ctrlDebuggerCode.CodeViewer.BaseFont.Size;
+			ConfigManager.Config.DebugInfo.WindowLocation = this.WindowState == FormWindowState.Maximized ? this.RestoreBounds.Location : this.Location;
 			ConfigManager.Config.DebugInfo.WindowWidth = this.WindowState == FormWindowState.Maximized ? this.RestoreBounds.Width : this.Width;
 			ConfigManager.Config.DebugInfo.WindowHeight = this.WindowState == FormWindowState.Maximized ? this.RestoreBounds.Height : this.Height;
 			ConfigManager.Config.DebugInfo.TopPanelHeight = this.splitContainer.GetSplitterDistance();

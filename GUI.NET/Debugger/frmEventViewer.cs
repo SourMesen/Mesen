@@ -46,7 +46,9 @@ namespace Mesen.GUI.Debugger
 				DebugWorkspaceManager.GetWorkspace();
 
 				if(!ConfigManager.Config.DebugInfo.EventViewerSize.IsEmpty) {
+					this.StartPosition = FormStartPosition.Manual;
 					this.Size = ConfigManager.Config.DebugInfo.EventViewerSize;
+					this.Location = ConfigManager.Config.DebugInfo.EventViewerLocation;
 				}
 
 				this._notifListener = new InteropEmu.NotificationListener();
@@ -59,6 +61,7 @@ namespace Mesen.GUI.Debugger
 			base.OnFormClosing(e);
 			this._notifListener.OnNotification -= this._notifListener_OnNotification;
 			ConfigManager.Config.DebugInfo.EventViewerSize = this.WindowState == FormWindowState.Maximized ? this.RestoreBounds.Size : this.Size;
+			ConfigManager.Config.DebugInfo.EventViewerLocation = this.WindowState == FormWindowState.Maximized ? this.RestoreBounds.Location : this.Location;
 		}
 
 		private void _notifListener_OnNotification(InteropEmu.NotificationEventArgs e)

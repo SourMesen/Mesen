@@ -35,7 +35,9 @@ namespace Mesen.GUI.Debugger
 			DebugInfo config = ConfigManager.Config.DebugInfo;
 
 			if(!config.AssemblerSize.IsEmpty) {
+				this.StartPosition = FormStartPosition.Manual;
 				this.Size = config.AssemblerSize;
+				this.Location = config.AssemblerLocation;
 			}
 			mnuEnableSyntaxHighlighting.Checked = config.AssemblerCodeHighlighting;
 
@@ -359,6 +361,7 @@ namespace Mesen.GUI.Debugger
 
 			base.OnClosing(e);
 			ConfigManager.Config.DebugInfo.AssemblerSize = this.WindowState == FormWindowState.Maximized ? this.RestoreBounds.Size : this.Size;
+			ConfigManager.Config.DebugInfo.AssemblerLocation = this.WindowState == FormWindowState.Maximized ? this.RestoreBounds.Location : this.Location;
 			ConfigManager.Config.DebugInfo.AssemblerCodeHighlighting = mnuEnableSyntaxHighlighting.Checked;
 			ConfigManager.Config.DebugInfo.AssemblerZoom = txtCode.Zoom;
 			ConfigManager.Config.DebugInfo.AssemblerFontFamily = txtCode.OriginalFont.FontFamily.Name;

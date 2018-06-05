@@ -99,7 +99,9 @@ namespace Mesen.GUI.Debugger
 			}
 
 			if(!config.ScriptWindowSize.IsEmpty) {
+				this.StartPosition = FormStartPosition.Manual;
 				this.Size = config.ScriptWindowSize;
+				this.Location = config.ScriptWindowLocation;
 			}
 			mnuSaveBeforeRun.Checked = config.SaveScriptBeforeRun;
 
@@ -161,6 +163,7 @@ namespace Mesen.GUI.Debugger
 				InteropEmu.DebugRemoveScript(_scriptId);
 			}
 			ConfigManager.Config.DebugInfo.ScriptWindowSize = this.WindowState == FormWindowState.Maximized ? this.RestoreBounds.Size : this.Size;
+			ConfigManager.Config.DebugInfo.ScriptWindowLocation = this.WindowState == FormWindowState.Maximized ? this.RestoreBounds.Location : this.Location;
 			ConfigManager.Config.DebugInfo.SaveScriptBeforeRun = mnuSaveBeforeRun.Checked;
 			if(mnuAutoLoadLastScript.Checked) {
 				ConfigManager.Config.DebugInfo.ScriptStartupBehavior = ScriptStartupBehavior.LoadLastScript;

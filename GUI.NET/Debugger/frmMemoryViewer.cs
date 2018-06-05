@@ -79,7 +79,7 @@ namespace Mesen.GUI.Debugger
 			this.ctrlHexViewer.StringViewVisible = mnuShowCharacters.Checked;
 
 			UpdateImportButton();
-			InitMemoryTypeDropdown();
+			InitMemoryTypeDropdown(true);
 
 			_notifListener = new InteropEmu.NotificationListener();
 			_notifListener.OnNotification += _notifListener_OnNotification;
@@ -88,7 +88,9 @@ namespace Mesen.GUI.Debugger
 			this.mnuIgnoreRedundantWrites.CheckedChanged += mnuIgnoreRedundantWrites_CheckedChanged;
 
 			if(!ConfigManager.Config.DebugInfo.MemoryViewerSize.IsEmpty) {
+				this.StartPosition = FormStartPosition.Manual;
 				this.Size = ConfigManager.Config.DebugInfo.MemoryViewerSize;
+				this.Location = ConfigManager.Config.DebugInfo.MemoryViewerLocation;
 			}
 		}
 
@@ -100,6 +102,8 @@ namespace Mesen.GUI.Debugger
 			ConfigManager.Config.DebugInfo.RamFontStyle = ctrlHexViewer.BaseFont.Style;
 			ConfigManager.Config.DebugInfo.RamFontSize = ctrlHexViewer.BaseFont.Size;
 			ConfigManager.Config.DebugInfo.MemoryViewerSize = this.WindowState == FormWindowState.Maximized ? this.RestoreBounds.Size : this.Size;
+			ConfigManager.Config.DebugInfo.MemoryViewerLocation = this.WindowState == FormWindowState.Maximized ? this.RestoreBounds.Location : this.Location;
+			ConfigManager.Config.DebugInfo.RamMemoryType = cboMemoryType.GetEnumValue<DebugMemoryType>();
 			ConfigManager.ApplyChanges();
 			DebugWorkspaceManager.SaveWorkspace();
 		}
@@ -121,11 +125,11 @@ namespace Mesen.GUI.Debugger
 			mnuFindPrev.InitShortcut(this, nameof(DebuggerShortcutsConfig.FindPrev));
 		}
 
-		private void InitMemoryTypeDropdown()
+		private void InitMemoryTypeDropdown(bool forStartup)
 		{
 			cboMemoryType.SelectedIndexChanged -= this.cboMemoryType_SelectedIndexChanged;
 
-			DebugMemoryType originalValue = cboMemoryType.GetEnumValue<DebugMemoryType>();
+			DebugMemoryType originalValue = forStartup ? ConfigManager.Config.DebugInfo.RamMemoryType : cboMemoryType.GetEnumValue<DebugMemoryType>();
 
 			cboMemoryType.BeginUpdate();
 			cboMemoryType.Items.Clear();
@@ -212,7 +216,7 @@ namespace Mesen.GUI.Debugger
 				case InteropEmu.ConsoleNotificationType.GameReset:
 				case InteropEmu.ConsoleNotificationType.GameLoaded:
 					this.BeginInvoke((Action)(() => {
-						this.InitMemoryTypeDropdown();
+						this.InitMemoryTypeDropdown(false);
 						ctrlMemoryAccessCounters.InitMemoryTypeDropdown();
 					}));
 					this.UpdateFlags();

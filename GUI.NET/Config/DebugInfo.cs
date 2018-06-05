@@ -140,6 +140,7 @@ namespace Mesen.GUI.Config
 		public bool ShowBreakpointLabels = true;
 
 		public Size EventViewerSize = new Size(0, 0);
+		public Point EventViewerLocation;
 		public bool EventViewerRefreshOnBreak = true;
 		public bool EventViewerShowPpuRegisterWrites = true;
 		public bool EventViewerShowPpuRegisterReads = true;
@@ -168,6 +169,7 @@ namespace Mesen.GUI.Config
 		public bool CopyByteCode = false;
 		public bool CopyComments = false;
 
+		public Point? PpuWindowLocation = null;
 		public bool PpuAutoRefresh = true;
 		public bool PpuRefreshOnBreak = true;
 		public bool PpuPartialDraw = false;
@@ -249,9 +251,13 @@ namespace Mesen.GUI.Config
 		public XmlColor RamDmcDataByteColor = Color.Gold;
 		public XmlColor RamChrDrawnByteColor = Color.DarkSeaGreen;
 		public XmlColor RamChrReadByteColor = Color.LightSteelBlue;
+		public DebugMemoryType RamMemoryType = DebugMemoryType.CpuMemory;
 
 		public Size MemoryViewerSize = new Size(0, 0);
+		public Point MemoryViewerLocation;
+		public Point? ApuViewerLocation;
 
+		public Point WindowLocation;
 		public int WindowWidth = -1;
 		public int WindowHeight = -1;
 
@@ -285,6 +291,7 @@ namespace Mesen.GUI.Config
 		public bool TraceAutoRefresh = true;
 		public int TraceLineCount = 1000;
 		public Size TraceLoggerSize = new Size(0, 0);
+		public Point TraceLoggerLocation;
 
 		public string TraceFontFamily = BaseControl.MonospaceFontFamily;
 		public FontStyle TraceFontStyle = FontStyle.Regular;
@@ -292,6 +299,7 @@ namespace Mesen.GUI.Config
 		public int TraceTextZoom = 100;
 
 		public Size ScriptWindowSize = new Size(0, 0);
+		public Point ScriptWindowLocation;
 		public int ScriptCodeWindowHeight = 0;
 		public List<string> RecentScripts = new List<string>();
 		public bool SaveScriptBeforeRun = true;
@@ -309,6 +317,7 @@ namespace Mesen.GUI.Config
 		public XmlColor AssemblerAddressColor = Color.DarkRed;
 		public XmlColor AssemblerCommentColor = Color.Green;
 		public Size AssemblerSize = new Size(0, 0);
+		public Point AssemblerLocation;
 		public string AssemblerFontFamily = BaseControl.MonospaceFontFamily;
 		public FontStyle AssemblerFontStyle = FontStyle.Regular;
 		public float AssemblerFontSize = BaseControl.DefaultFontSize;
