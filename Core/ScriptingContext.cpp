@@ -78,7 +78,7 @@ void ScriptingContext::RegisterMemoryCallback(CallbackType type, int startAddr, 
 		}
 	}
 
-	for(int i = startAddr; i < endAddr; i++) {
+	for(int i = startAddr; i <= endAddr; i++) {
 		_callbacks[(int)type][i].push_back(reference);
 	}
 }
@@ -97,7 +97,7 @@ void ScriptingContext::UnregisterMemoryCallback(CallbackType type, int startAddr
 		}
 	}
 
-	for(int i = startAddr; i < endAddr; i++) {
+	for(int i = startAddr; i <= endAddr; i++) {
 		vector<int> &refs = _callbacks[(int)type][i];
 		refs.erase(std::remove(refs.begin(), refs.end(), reference), refs.end());
 	}
