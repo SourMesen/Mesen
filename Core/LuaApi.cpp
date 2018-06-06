@@ -248,11 +248,17 @@ int LuaApi::RevertPrgChrChanges(lua_State *lua)
 int LuaApi::RegisterMemoryCallback(lua_State *lua)
 {
 	LuaCallHelper l(lua);
-	int endAddr = l.ReadInteger();
-	int startAddr = l.ReadInteger();
+	l.ForceParamCount(4);
+	int32_t endAddr = l.ReadInteger(-1);
+	int32_t startAddr = l.ReadInteger();
 	CallbackType type = (CallbackType)l.ReadInteger();
 	int reference = l.GetReference();
-	checkparams();
+	checkminparams(3);
+
+	if(endAddr == -1) {
+		endAddr = startAddr;
+	}
+
 	errorCond(startAddr > endAddr, "start address must be <= end address");
 	errorCond(type < CallbackType::CpuRead || type > CallbackType::PpuWrite, "the specified type is invalid");
 	errorCond(reference == LUA_NOREF, "the specified function could not be found");
@@ -265,11 +271,19 @@ int LuaApi::RegisterMemoryCallback(lua_State *lua)
 int LuaApi::UnregisterMemoryCallback(lua_State *lua)
 {
 	LuaCallHelper l(lua);
+	l.ForceParamCount(4);
+
 	int endAddr = l.ReadInteger();
 	int startAddr = l.ReadInteger();
 	CallbackType type = (CallbackType)l.ReadInteger();
 	int reference = l.ReadInteger();
-	checkparams();
+
+	checkminparams(3);
+
+	if(endAddr == -1) {
+		endAddr = startAddr;
+	}
+
 	errorCond(startAddr > endAddr, "start address must be <= end address");
 	errorCond(type < CallbackType::CpuRead || type > CallbackType::PpuWrite, "the specified type is invalid");
 	errorCond(reference == LUA_NOREF, "function reference is invalid");
