@@ -660,7 +660,10 @@ namespace Mesen.GUI.Debugger
 		private void mnuRunOneFrame_Click(object sender, EventArgs e)
 		{
 			ctrlConsoleStatus.ApplyChanges();
-			InteropEmu.DebugPpuStep(89341);
+			NesModel model = InteropEmu.GetNesModel();
+			int extraScanlines = (int)(ConfigManager.Config.EmulationInfo.PpuExtraScanlinesAfterNmi + ConfigManager.Config.EmulationInfo.PpuExtraScanlinesBeforeNmi);
+			int cycleCount = ((model == NesModel.NTSC ? 262 : 312) + extraScanlines) * 341;
+			InteropEmu.DebugPpuStep((UInt32)cycleCount);
 		}
 		
 		private void ctrlDebuggerCode_OnShowInSplitView(ICodeViewer sender, AddressEventArgs args)

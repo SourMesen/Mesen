@@ -169,6 +169,7 @@ namespace Mesen.GUI
 		[DllImport(DLLPath)] public static extern void SetReverbParameters(double strength, double delay);
 		[DllImport(DLLPath)] public static extern void SetCrossFeedRatio(UInt32 ratio);
 
+		[DllImport(DLLPath)] public static extern NesModel GetNesModel();
 		[DllImport(DLLPath)] public static extern void SetNesModel(NesModel model);
 		[DllImport(DLLPath)] public static extern void SetEmulationSpeed(UInt32 emulationSpeed);
 		[DllImport(DLLPath)] public static extern void IncreaseEmulationSpeed();
