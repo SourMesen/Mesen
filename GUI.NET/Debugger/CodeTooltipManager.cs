@@ -78,7 +78,9 @@ namespace Mesen.GUI.Debugger
 				{ "Value", $"${byteValue.ToString("X2")} (byte){Environment.NewLine}${wordValue.ToString("X4")} (word)" }
 			};
 
-			this.ShowTooltip(word, values, -1, new AddressTypeInfo() { Address = (int)address, Type = AddressType.Register });
+			AddressTypeInfo addressInfo = new AddressTypeInfo();
+			InteropEmu.DebugGetAbsoluteAddressAndType(address, ref addressInfo);
+			this.ShowTooltip(word, values, -1, addressInfo);
 		}
 
 		private void DisplayLabelTooltip(string word, CodeLabel label)
