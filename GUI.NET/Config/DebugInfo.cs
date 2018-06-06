@@ -136,6 +136,7 @@ namespace Mesen.GUI.Config
 		public bool ShowCommentsInLabelList = false;
 
 		public bool SplitView = false;
+		public bool VerticalLayout = false;
 		public bool HexDisplay = true;
 		public bool ShowBreakpointLabels = true;
 

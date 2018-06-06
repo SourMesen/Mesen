@@ -14,12 +14,20 @@ namespace Mesen.GUI.Controls
 		public event EventHandler PanelExpanded;
 		private int _originalDistance = 0;
 		private int _originalMinSize = 0;
+		private bool _collapsed = false;
 		private bool _preventExpand = false;
+		private bool _hidePanel2 = false;
 
 		public ctrlSplitContainer()
 		{
 			this.DoubleBuffered = true;
 			this.SplitterMoving += ctrlSplitContainer_SplitterMoving;
+		}
+
+		public bool HidePanel2
+		{
+			get { return _hidePanel2; }
+			set { _hidePanel2 = value; this.Invalidate(); }
 		}
 
 		private void ctrlSplitContainer_SplitterMoving(object sender, SplitterCancelEventArgs e)
@@ -35,6 +43,10 @@ namespace Mesen.GUI.Controls
 		protected override void OnPaint(PaintEventArgs e)
 		{
 			base.OnPaint(e);
+
+			if(_hidePanel2) {
+				return;
+			}
 
 			if(this.Orientation == Orientation.Horizontal) {
 				int top = this.SplitterDistance + 1;
@@ -55,6 +67,10 @@ namespace Mesen.GUI.Controls
 		{
 			base.OnDoubleClick(e);
 
+			if(_hidePanel2) {
+				return;
+			}
+
 			if(_originalMinSize == 0) {
 				this.CollapsePanel();
 				_preventExpand = true;
@@ -65,6 +81,10 @@ namespace Mesen.GUI.Controls
 
 		public void ExpandPanel()
 		{
+			if(_hidePanel2 || !_collapsed) {
+				return;
+			}
+
 			if(this.FixedPanel == FixedPanel.Panel1) {
 				throw new Exception("Not implemented");
 			} else if(this.FixedPanel == FixedPanel.Panel2) {
@@ -74,14 +94,20 @@ namespace Mesen.GUI.Controls
 					_originalMinSize = 0;
 				}
 				this.PanelExpanded?.Invoke(this, EventArgs.Empty);
+				_collapsed = false;
 			}
 		}
 
 		public void CollapsePanel()
 		{
+			if(_collapsed) {
+				return;
+			}
+
 			if(this.FixedPanel == FixedPanel.Panel1) {
 				throw new Exception("Not implemented");
 			} else if(this.FixedPanel == FixedPanel.Panel2) {
+				_collapsed = true;
 				_originalDistance = this.SplitterDistance;
 				_originalMinSize = this.Panel2MinSize;
 				this.Panel2MinSize = 2;
@@ -100,6 +126,10 @@ namespace Mesen.GUI.Controls
 		protected override void OnResize(EventArgs e)
 		{
 			base.OnResize(e);
+
+			if(_hidePanel2) {
+				return;
+			}
 
 			//Horrible patch to fix what looks like a resize bug in SplitContainers
 			//Resizing the window sometimes doesn't resize the inner panels properly
@@ -149,6 +179,10 @@ namespace Mesen.GUI.Controls
 		{
 			base.OnMouseUp(e);
 			this.Panel1.Focus();
+
+			if(_hidePanel2) {
+				return;
+			}
 
 			if(!_preventExpand && _originalMinSize > 0) {
 				this.ExpandPanel();

@@ -1169,6 +1169,7 @@
     <Compile Include="RuntimeChecker.cs" />
     <Compile Include="SingleInstance.cs" />
     <Compile Include="TestRunner.cs" />
+    <None Include="Resources\VerticalLayout.png" />
     <None Include="Dependencies\LuaScripts\DmcCapture.lua">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

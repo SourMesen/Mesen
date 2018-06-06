@@ -26,6 +26,7 @@ namespace Mesen.GUI.Debugger
 		private InteropEmu.NotificationListener _notifListener;
 		private ICodeViewer _lastCodeWindow;
 		private Size _minimumSize;
+		private int _topPanelMinSize;
 
 		public frmDebugger()
 		{
@@ -37,6 +38,7 @@ namespace Mesen.GUI.Debugger
  			base.OnLoad(e);
 
 			_minimumSize = this.MinimumSize;
+			_topPanelMinSize = splitContainer.Panel1MinSize;
 			 
 			if(Program.IsMono) {
 				//This doesn't work in Mono (menu is blank) - hide it for now
@@ -147,6 +149,8 @@ namespace Mesen.GUI.Debugger
 				mnuShowBottomPanel.Checked = true;
 			}
 
+			this.mnuUseVerticalLayout.Checked = ConfigManager.Config.DebugInfo.VerticalLayout;
+
 			_lastCodeWindow = ctrlDebuggerCode;
 
 			this.ctrlDebuggerCode.SetConfig(ConfigManager.Config.DebugInfo.LeftView);
@@ -243,7 +247,7 @@ namespace Mesen.GUI.Debugger
 				mnuFind, mnuFindPrev, mnuFindNext, null,
 				mnuApuViewer, mnuAssembler, mnuEventViewer, mnuMemoryViewer, mnuPpuViewer, mnuScriptWindow, mnuTraceLogger, null,
 				mnuEditHeader, null,
-				mnuSplitView, null
+				mnuSplitView, mnuUseVerticalLayout, null
 			);
 			tsToolbar.AddItemToToolbar(mnuShowVerifiedData, "Show Verified Data");
 			tsToolbar.AddItemToToolbar(mnuShowUnidentifiedData, "Show Unidentified Code/Data");
@@ -452,14 +456,34 @@ namespace Mesen.GUI.Debugger
 				tlpTop.ColumnStyles[1].SizeType = SizeType.Percent;
 				tlpTop.ColumnStyles[0].Width = 50f;
 				tlpTop.ColumnStyles[1].Width = 50f;
-				this.MinimumSize = new Size(_minimumSize.Width + 250, _minimumSize.Height);
+				this.UpdateMinimumSize();
 			} else {
 				tlpTop.ColumnStyles[1].SizeType = SizeType.Absolute;
 				tlpTop.ColumnStyles[1].Width = 0f;
-				this.MinimumSize = _minimumSize;
+				this.UpdateMinimumSize();
 			}
 			ctrlDebuggerCodeSplit.Visible = mnuSplitView.Checked;
 			return mnuSplitView.Checked;
+		}
+
+		private void UpdateMinimumSize()
+		{
+			int minWidth, minHeight;
+			if(mnuSplitView.Checked) {
+				minWidth = _minimumSize.Width + 250;
+			} else {
+				minWidth = _minimumSize.Width;
+			}
+
+			if(mnuUseVerticalLayout.Checked) {
+				minHeight = _minimumSize.Height + 150;
+				splitContainer.Panel1MinSize = _topPanelMinSize + 100;
+			} else {
+				minHeight = _minimumSize.Height;
+				splitContainer.Panel1MinSize = _topPanelMinSize;
+			}
+
+			this.MinimumSize = new Size(minWidth, minHeight);
 		}
 
 		private void UpdateVectorAddresses()
@@ -1419,6 +1443,27 @@ namespace Mesen.GUI.Debugger
 					lblChrAnalysis.Text = "CHR analysis:";
 				}
 			}
+		}
+
+		private void mnuUseVerticalLayout_CheckedChanged(object sender, EventArgs e)
+		{
+			ConfigManager.Config.DebugInfo.VerticalLayout = this.mnuUseVerticalLayout.Checked;
+			ConfigManager.ApplyChanges();
+
+			if(mnuUseVerticalLayout.Checked) {
+				this.ctrlSplitContainerTop.HidePanel2 = true;
+				this.ctrlSplitContainerTop.CollapsePanel();
+				this.tlpVerticalLayout.Controls.Add(this.grpLabels, 0, 0);
+				this.tlpVerticalLayout.Controls.Add(this.grpFunctions, 1, 0);
+			} else {
+				this.tlpFunctionLabelLists.Controls.Add(this.grpLabels, 0, 1);
+				this.tlpFunctionLabelLists.Controls.Add(this.grpFunctions, 0, 0);
+				this.ctrlSplitContainerTop.HidePanel2 = false;
+				this.ctrlSplitContainerTop.ExpandPanel();
+			}
+
+			mnuShowFunctionLabelLists.Enabled = !mnuUseVerticalLayout.Checked;
+			this.UpdateMinimumSize();
 		}
 	}
 }
