@@ -42,7 +42,7 @@ vector<int32_t>& MemoryAccessCounter::GetArray(MemoryOperationType operationType
 	}
 }
 
-void MemoryAccessCounter::ProcessMemoryAccess(AddressTypeInfo &addressInfo, MemoryOperationType operation, int32_t cpuCycle)
+bool MemoryAccessCounter::ProcessMemoryAccess(AddressTypeInfo &addressInfo, MemoryOperationType operation, int32_t cpuCycle)
 {
 	int index = (int)addressInfo.Type;
 	vector<int> &counts = GetArray(operation, addressInfo.Type, false);
@@ -51,14 +51,15 @@ void MemoryAccessCounter::ProcessMemoryAccess(AddressTypeInfo &addressInfo, Memo
 	vector<int> &stamps = GetArray(operation, addressInfo.Type, true);
 	stamps.data()[addressInfo.Address] = cpuCycle;
 
-	if(operation != MemoryOperationType::Write &&
-		(addressInfo.Type == AddressType::InternalRam || addressInfo.Type == AddressType::WorkRam) &&
-		!_initWrites[index][addressInfo.Address]) {
+	if(operation == MemoryOperationType::Write) {
+		_initWrites[index][addressInfo.Address] = true;
+	} else if((addressInfo.Type == AddressType::InternalRam || addressInfo.Type == AddressType::WorkRam) && !_initWrites[index][addressInfo.Address]) {
 		//Mark address as read before being written to (if trying to read/execute)
 		_uninitReads[index][addressInfo.Address] = true;
-	} else if(operation == MemoryOperationType::Write) {
-		_initWrites[index][addressInfo.Address] = true;
+		return true;
 	}
+
+	return false;
 }
 
 void MemoryAccessCounter::ResetCounts()

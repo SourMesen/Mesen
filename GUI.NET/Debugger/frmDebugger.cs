@@ -102,6 +102,7 @@ namespace Mesen.GUI.Debugger
 			this.mnuBreakOnOpen.Checked = ConfigManager.Config.DebugInfo.BreakOnOpen;
 			this.mnuBreakOnUnofficialOpcodes.Checked = ConfigManager.Config.DebugInfo.BreakOnUnofficialOpcodes;
 			this.mnuBreakOnBrk.Checked = ConfigManager.Config.DebugInfo.BreakOnBrk;
+			this.mnuBreakOnUninitMemoryRead.Checked = ConfigManager.Config.DebugInfo.BreakOnUninitMemoryRead;
 			this.mnuBreakOnCrash.Checked = ConfigManager.Config.DebugInfo.BreakOnCrash;
 			this.mnuBreakOnDebuggerFocus.Checked = ConfigManager.Config.DebugInfo.BreakOnDebuggerFocus;
 			this.mnuBringToFrontOnBreak.Checked = ConfigManager.Config.DebugInfo.BringToFrontOnBreak;
@@ -402,6 +403,7 @@ namespace Mesen.GUI.Debugger
 			SetFlag(DebuggerFlags.ShowUnidentifiedData, mnuShowUnidentifiedData.Checked);
 			SetFlag(DebuggerFlags.BreakOnUnofficialOpCode, mnuBreakOnUnofficialOpcodes.Checked);
 			SetFlag(DebuggerFlags.BreakOnBrk, mnuBreakOnBrk.Checked);
+			SetFlag(DebuggerFlags.BreakOnUninitMemoryRead, mnuBreakOnUninitMemoryRead.Checked);
 			SetFlag(DebuggerFlags.HidePauseIcon, mnuHidePauseIcon.Checked);
 			InteropEmu.SetFlag(EmulationFlags.DebuggerWindowEnabled, true);
 		}
@@ -1034,12 +1036,21 @@ namespace Mesen.GUI.Debugger
 		{
 			ConfigManager.Config.DebugInfo.BreakOnUnofficialOpcodes = mnuBreakOnUnofficialOpcodes.Checked;
 			ConfigManager.ApplyChanges();
+			UpdateDebuggerFlags();
 		}
 
 		private void mnuBreakOnBrk_Click(object sender, EventArgs e)
 		{
 			ConfigManager.Config.DebugInfo.BreakOnBrk = mnuBreakOnBrk.Checked;
 			ConfigManager.ApplyChanges();
+			UpdateDebuggerFlags();
+		}
+
+		private void mnuBreakOnUninitMemoryRead_Click(object sender, EventArgs e)
+		{
+			ConfigManager.Config.DebugInfo.BreakOnUninitMemoryRead = mnuBreakOnUninitMemoryRead.Checked;
+			ConfigManager.ApplyChanges();
+			UpdateDebuggerFlags();
 		}
 
 		private void mnuBreakOnCrash_Click(object sender, EventArgs e)

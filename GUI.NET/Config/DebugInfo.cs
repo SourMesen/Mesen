@@ -284,6 +284,7 @@ namespace Mesen.GUI.Config
 		public bool BreakOnBrk = false;
 		public bool BreakOnDebuggerFocus = false;
 		public bool BreakOnCrash = false;
+		public bool BreakOnUninitMemoryRead = false;
 
 		public bool BringToFrontOnPause = false;
 		public bool BringToFrontOnBreak = true;

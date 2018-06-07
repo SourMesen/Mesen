@@ -12,15 +12,16 @@ enum class DebuggerFlags
 	DisplayOpCodesInLowerCase = 0x08,
 	BreakOnBrk = 0x10,
 	BreakOnUnofficialOpCode = 0x20,
+	BreakOnUninitMemoryRead = 0x40,
 
-	DisassembleVerifiedData = 0x40,
-	DisassembleUnidentifiedData = 0x80,
-	ShowVerifiedData = 0x100,
-	ShowUnidentifiedData = 0x200,
+	DisassembleVerifiedData = 0x80,
+	DisassembleUnidentifiedData = 0x100,
+	ShowVerifiedData = 0x200,
+	ShowUnidentifiedData = 0x400,
 
-	IgnoreRedundantWrites = 0x400,
+	IgnoreRedundantWrites = 0x800,
 
-	HidePauseIcon = 0x800
+	HidePauseIcon = 0x1000
 };
 
 enum class BreakSource

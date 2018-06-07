@@ -86,6 +86,9 @@ Debugger::Debugger(shared_ptr<Console> console, shared_ptr<CPU> cpu, shared_ptr<
 	_curInstructionCycle = 0;
 	_needRewind = false;
 
+	//Only enable break on uninitialized reads when debugger is opened at power on/reset
+	_enableBreakOnUninitRead = _cpu->GetPC() == 0;
+
 	_executionStopped = false;
 	
 	_disassemblerOutput = "";
@@ -571,7 +574,13 @@ bool Debugger::PrivateProcessRamOperation(MemoryOperationType type, uint16_t &ad
 				_memoryAccessCounter->ProcessMemoryAccess(addressInfo, type, _cpu->GetCycleCount());
 			}
 		} else {
-			_memoryAccessCounter->ProcessMemoryAccess(addressInfo, type, _cpu->GetCycleCount());
+			if(_memoryAccessCounter->ProcessMemoryAccess(addressInfo, type, _cpu->GetCycleCount())) {
+				if(_enableBreakOnUninitRead && CheckFlag(DebuggerFlags::BreakOnUninitMemoryRead)) {
+					//Break on uninit memory read
+					Step(1);
+					breakDone = SleepUntilResume();
+				}
+			}
 		}
 	}
 
@@ -1403,6 +1412,8 @@ void Debugger::ProcessEvent(EventType type)
 		AddDebugEvent(DebugEventType::Irq);
 	} else if(type == EventType::SpriteZeroHit) {
 		AddDebugEvent(DebugEventType::SpriteZeroHit);
+	} else if(type == EventType::Reset) {
+		_enableBreakOnUninitRead = true;
 	}
 }
 

@@ -25,7 +25,7 @@ private:
 public:
 	MemoryAccessCounter(Debugger* debugger);
 
-	void ProcessMemoryAccess(AddressTypeInfo &addressInfo, MemoryOperationType operation, int32_t cpuCycle);
+	bool ProcessMemoryAccess(AddressTypeInfo &addressInfo, MemoryOperationType operation, int32_t cpuCycle);
 	void ResetCounts();
 	
 	void GetAccessCounts(AddressType memoryType, MemoryOperationType operationType, uint32_t counts[], bool forUninitReads);

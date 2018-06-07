@@ -102,6 +102,8 @@ private:
 	atomic<bool> _stepOut;
 	atomic<int32_t> _stepOverAddr;
 	
+	bool _enableBreakOnUninitRead;
+	
 	atomic<bool> _breakRequested;
 	bool _pausedForDebugHelper;
 
