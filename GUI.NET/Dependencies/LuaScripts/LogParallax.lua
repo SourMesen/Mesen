@@ -15,5 +15,5 @@ function onScroll(address, value)
   emu.drawLine(0, state.ppu.scanline, 256, state.ppu.scanline, color, 1)
 end;
 
-emu.addMemoryCallback(onScroll, emu.memCallbackType.cpuWrite, PPUSCROLL, PPUSCROLL);
+emu.addMemoryCallback(onScroll, emu.memCallbackType.cpuWrite, PPUSCROLL);
 emu.displayMessage("Script", "Log Parallax")

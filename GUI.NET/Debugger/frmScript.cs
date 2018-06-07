@@ -30,7 +30,7 @@ namespace Mesen.GUI.Debugger
 		{
 			InitializeComponent();
 
-			List<string> builtInScripts = new List<string> { "DmcCapture.lua", "DrawMode.lua", "Example.lua", "GameBoyMode.lua", "Grid.lua", "LogParallax.lua", "ModifyScreen.lua", "ReverseMode.lua", "SpriteBox.lua" };
+			List<string> builtInScripts = new List<string> { "DmcCapture.lua", "DrawMode.lua", "Example.lua", "GameBoyMode.lua", "Grid.lua", "LogParallax.lua", "ModifyScreen.lua", "NtscSafeArea.lua", "ReverseMode.lua", "SpriteBox.lua" };
 			foreach(string script in builtInScripts) {
 				ToolStripItem item = mnuBuiltInScripts.DropDownItems.Add(script);
 				item.Click += (s, e) => {

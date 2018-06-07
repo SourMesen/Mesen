@@ -1169,6 +1169,9 @@
     <Compile Include="RuntimeChecker.cs" />
     <Compile Include="SingleInstance.cs" />
     <Compile Include="TestRunner.cs" />
+    <None Include="Dependencies\LuaScripts\NtscSafeArea.lua">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Resources\VerticalLayout.png" />
     <None Include="Dependencies\LuaScripts\DmcCapture.lua">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
