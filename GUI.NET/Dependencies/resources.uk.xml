@@ -409,6 +409,7 @@
 			<Control ID="chkDisableGameSelectionScreen">Вимкнути екран вибору гри</Control>
 
 			<Control ID="chkDisableGameDatabase">Відключити ігрову базу даних</Control>
+			<Control ID="chkDisableHighResolutionTimer">Disable high resolution timer</Control>
 			<Control ID="chkDisableOsd">Відключення екранних повідомлень (OSD)</Control>
 
 			<Control ID="chkAlwaysOnTop">Завжди відображати поверх інших вікон</Control>

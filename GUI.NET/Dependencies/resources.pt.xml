@@ -408,6 +408,7 @@
 			<Control ID="chkDisableGameSelectionScreen">Desativar a tela de seleção do jogo</Control>
 
 			<Control ID="chkDisableGameDatabase">Desabilitar a base de dados de jogos</Control>
+			<Control ID="chkDisableHighResolutionTimer">Disable high resolution timer</Control>
 			<Control ID="chkDisableOsd">Desativar exibição na tela (OSD)</Control>
 
 			<Control ID="chkAlwaysOnTop">Sempre exibir em cima de outras janelas</Control>

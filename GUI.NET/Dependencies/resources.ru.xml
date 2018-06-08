@@ -409,6 +409,7 @@
 			<Control ID="chkDisableGameSelectionScreen">Disable game selection screen</Control>
 
 			<Control ID="chkDisableGameDatabase">Отключить встроенную базу данных</Control>
+			<Control ID="chkDisableHighResolutionTimer">Disable high resolution timer</Control>
 			<Control ID="chkDisableOsd">Disable on-screen display (OSD)</Control>
 
 			<Control ID="chkAlwaysOnTop">Always display on top of other windows</Control>

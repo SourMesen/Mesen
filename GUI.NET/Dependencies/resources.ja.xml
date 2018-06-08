@@ -411,6 +411,7 @@
 			<Control ID="chkDisableGameSelectionScreen">ゲーム選択画面を無効にする</Control>
 
 			<Control ID="chkDisableGameDatabase">ゲームデータベースを無効にする</Control>
+			<Control ID="chkDisableHighResolutionTimer">高解像度タイマを無効にする</Control>
 			<Control ID="chkDisableOsd">オンスクリーン表示を無効にする</Control>
 
 			<Control ID="chkAlwaysOnTop">他のウインドウより常に手前に表示する</Control>

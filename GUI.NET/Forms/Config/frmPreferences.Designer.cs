@@ -32,7 +32,6 @@ namespace Mesen.GUI.Forms.Config
 			this.components = new System.ComponentModel.Container();
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmPreferences));
 			this.tlpMain = new System.Windows.Forms.TableLayoutPanel();
-			this.chkPauseOnMovieEnd = new System.Windows.Forms.CheckBox();
 			this.chkDeveloperMode = new System.Windows.Forms.CheckBox();
 			this.lblPauseBackgroundSettings = new System.Windows.Forms.Label();
 			this.chkSingleInstance = new System.Windows.Forms.CheckBox();
@@ -54,6 +53,7 @@ namespace Mesen.GUI.Forms.Config
 			this.chkPauseWhenInBackground = new System.Windows.Forms.CheckBox();
 			this.chkPauseInMenuAndConfig = new System.Windows.Forms.CheckBox();
 			this.chkPauseInDebugger = new System.Windows.Forms.CheckBox();
+			this.chkPauseOnMovieEnd = new System.Windows.Forms.CheckBox();
 			this.chkAllowBackgroundInput = new System.Windows.Forms.CheckBox();
 			this.tabMain = new System.Windows.Forms.TabControl();
 			this.tpgGeneral = new System.Windows.Forms.TabPage();
@@ -151,6 +151,7 @@ namespace Mesen.GUI.Forms.Config
 			this.lblUiDisplaySettings = new System.Windows.Forms.Label();
 			this.lblGameSelectionScreenSettings = new System.Windows.Forms.Label();
 			this.tmrSyncDateTime = new System.Windows.Forms.Timer(this.components);
+			this.chkDisableHighResolutionTimer = new Mesen.GUI.Controls.ctrlRiskyOption();
 			this.tlpMain.SuspendLayout();
 			this.flowLayoutPanel2.SuspendLayout();
 			this.tableLayoutPanel5.SuspendLayout();
@@ -191,7 +192,7 @@ namespace Mesen.GUI.Forms.Config
 			// 
 			// baseConfigPanel
 			// 
-			this.baseConfigPanel.Location = new System.Drawing.Point(0, 419);
+			this.baseConfigPanel.Location = new System.Drawing.Point(0, 440);
 			this.baseConfigPanel.Size = new System.Drawing.Size(497, 29);
 			// 
 			// tlpMain
@@ -238,17 +239,6 @@ namespace Mesen.GUI.Forms.Config
 			this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
 			this.tlpMain.Size = new System.Drawing.Size(483, 387);
 			this.tlpMain.TabIndex = 1;
-			// 
-			// chkPauseOnMovieEnd
-			// 
-			this.chkPauseOnMovieEnd.AutoSize = true;
-			this.chkPauseOnMovieEnd.Location = new System.Drawing.Point(13, 143);
-			this.chkPauseOnMovieEnd.Margin = new System.Windows.Forms.Padding(13, 3, 3, 3);
-			this.chkPauseOnMovieEnd.Name = "chkPauseOnMovieEnd";
-			this.chkPauseOnMovieEnd.Size = new System.Drawing.Size(199, 17);
-			this.chkPauseOnMovieEnd.TabIndex = 29;
-			this.chkPauseOnMovieEnd.Text = "Pause when a movie finishes playing";
-			this.chkPauseOnMovieEnd.UseVisualStyleBackColor = true;
 			// 
 			// chkDeveloperMode
 			// 
@@ -483,6 +473,17 @@ namespace Mesen.GUI.Forms.Config
 			this.chkPauseInDebugger.Text = "Debugging tools";
 			this.chkPauseInDebugger.UseVisualStyleBackColor = true;
 			// 
+			// chkPauseOnMovieEnd
+			// 
+			this.chkPauseOnMovieEnd.AutoSize = true;
+			this.chkPauseOnMovieEnd.Location = new System.Drawing.Point(13, 143);
+			this.chkPauseOnMovieEnd.Margin = new System.Windows.Forms.Padding(13, 3, 3, 3);
+			this.chkPauseOnMovieEnd.Name = "chkPauseOnMovieEnd";
+			this.chkPauseOnMovieEnd.Size = new System.Drawing.Size(199, 17);
+			this.chkPauseOnMovieEnd.TabIndex = 29;
+			this.chkPauseOnMovieEnd.Text = "Pause when a movie finishes playing";
+			this.chkPauseOnMovieEnd.UseVisualStyleBackColor = true;
+			// 
 			// chkAllowBackgroundInput
 			// 
 			this.chkAllowBackgroundInput.AutoSize = true;
@@ -506,7 +507,7 @@ namespace Mesen.GUI.Forms.Config
 			this.tabMain.Location = new System.Drawing.Point(0, 0);
 			this.tabMain.Name = "tabMain";
 			this.tabMain.SelectedIndex = 0;
-			this.tabMain.Size = new System.Drawing.Size(497, 419);
+			this.tabMain.Size = new System.Drawing.Size(497, 440);
 			this.tabMain.TabIndex = 2;
 			// 
 			// tpgGeneral
@@ -1485,7 +1486,7 @@ namespace Mesen.GUI.Forms.Config
 			this.tpgAdvanced.Location = new System.Drawing.Point(4, 22);
 			this.tpgAdvanced.Name = "tpgAdvanced";
 			this.tpgAdvanced.Padding = new System.Windows.Forms.Padding(3);
-			this.tpgAdvanced.Size = new System.Drawing.Size(489, 393);
+			this.tpgAdvanced.Size = new System.Drawing.Size(489, 414);
 			this.tpgAdvanced.TabIndex = 1;
 			this.tpgAdvanced.Text = "Advanced";
 			this.tpgAdvanced.UseVisualStyleBackColor = true;
@@ -1494,27 +1495,29 @@ namespace Mesen.GUI.Forms.Config
 			// 
 			this.tableLayoutPanel1.ColumnCount = 1;
 			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel1.Controls.Add(this.chkShowFullPathInRecents, 0, 9);
-			this.tableLayoutPanel1.Controls.Add(this.chkAlwaysOnTop, 0, 6);
-			this.tableLayoutPanel1.Controls.Add(this.chkDisableGameSelectionScreen, 0, 15);
-			this.tableLayoutPanel1.Controls.Add(this.chkGameSelectionScreenResetGame, 0, 14);
+			this.tableLayoutPanel1.Controls.Add(this.chkDisableHighResolutionTimer, 0, 1);
+			this.tableLayoutPanel1.Controls.Add(this.chkShowFullPathInRecents, 0, 10);
+			this.tableLayoutPanel1.Controls.Add(this.chkAlwaysOnTop, 0, 7);
+			this.tableLayoutPanel1.Controls.Add(this.chkDisableGameSelectionScreen, 0, 16);
+			this.tableLayoutPanel1.Controls.Add(this.chkGameSelectionScreenResetGame, 0, 15);
 			this.tableLayoutPanel1.Controls.Add(this.chkDisableGameDatabase, 0, 0);
-			this.tableLayoutPanel1.Controls.Add(this.chkFdsAutoLoadDisk, 0, 2);
-			this.tableLayoutPanel1.Controls.Add(this.chkFdsFastForwardOnLoad, 0, 3);
-			this.tableLayoutPanel1.Controls.Add(this.chkDisplayTitleBarInfo, 0, 8);
-			this.tableLayoutPanel1.Controls.Add(this.flowLayoutPanel6, 0, 16);
-			this.tableLayoutPanel1.Controls.Add(this.chkFdsAutoInsertDisk, 0, 4);
-			this.tableLayoutPanel1.Controls.Add(this.chkShowGameTimer, 0, 11);
-			this.tableLayoutPanel1.Controls.Add(this.chkShowFrameCounter, 0, 10);
-			this.tableLayoutPanel1.Controls.Add(this.chkShowVsConfigOnLoad, 0, 12);
-			this.tableLayoutPanel1.Controls.Add(this.chkDisableOsd, 0, 7);
-			this.tableLayoutPanel1.Controls.Add(this.lblFdsSettings, 0, 1);
-			this.tableLayoutPanel1.Controls.Add(this.lblUiDisplaySettings, 0, 5);
-			this.tableLayoutPanel1.Controls.Add(this.lblGameSelectionScreenSettings, 0, 13);
+			this.tableLayoutPanel1.Controls.Add(this.chkFdsAutoLoadDisk, 0, 3);
+			this.tableLayoutPanel1.Controls.Add(this.chkFdsFastForwardOnLoad, 0, 4);
+			this.tableLayoutPanel1.Controls.Add(this.chkDisplayTitleBarInfo, 0, 9);
+			this.tableLayoutPanel1.Controls.Add(this.flowLayoutPanel6, 0, 17);
+			this.tableLayoutPanel1.Controls.Add(this.chkFdsAutoInsertDisk, 0, 5);
+			this.tableLayoutPanel1.Controls.Add(this.chkShowGameTimer, 0, 12);
+			this.tableLayoutPanel1.Controls.Add(this.chkShowFrameCounter, 0, 11);
+			this.tableLayoutPanel1.Controls.Add(this.chkShowVsConfigOnLoad, 0, 13);
+			this.tableLayoutPanel1.Controls.Add(this.chkDisableOsd, 0, 8);
+			this.tableLayoutPanel1.Controls.Add(this.lblFdsSettings, 0, 2);
+			this.tableLayoutPanel1.Controls.Add(this.lblUiDisplaySettings, 0, 6);
+			this.tableLayoutPanel1.Controls.Add(this.lblGameSelectionScreenSettings, 0, 14);
 			this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tableLayoutPanel1.Location = new System.Drawing.Point(3, 3);
 			this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-			this.tableLayoutPanel1.RowCount = 18;
+			this.tableLayoutPanel1.RowCount = 19;
+			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
@@ -1533,13 +1536,13 @@ namespace Mesen.GUI.Forms.Config
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel1.Size = new System.Drawing.Size(483, 387);
+			this.tableLayoutPanel1.Size = new System.Drawing.Size(483, 408);
 			this.tableLayoutPanel1.TabIndex = 0;
 			// 
 			// chkShowFullPathInRecents
 			// 
 			this.chkShowFullPathInRecents.AutoSize = true;
-			this.chkShowFullPathInRecents.Location = new System.Drawing.Point(13, 204);
+			this.chkShowFullPathInRecents.Location = new System.Drawing.Point(13, 227);
 			this.chkShowFullPathInRecents.Margin = new System.Windows.Forms.Padding(13, 3, 3, 3);
 			this.chkShowFullPathInRecents.Name = "chkShowFullPathInRecents";
 			this.chkShowFullPathInRecents.Size = new System.Drawing.Size(184, 17);
@@ -1550,7 +1553,7 @@ namespace Mesen.GUI.Forms.Config
 			// chkAlwaysOnTop
 			// 
 			this.chkAlwaysOnTop.AutoSize = true;
-			this.chkAlwaysOnTop.Location = new System.Drawing.Point(13, 135);
+			this.chkAlwaysOnTop.Location = new System.Drawing.Point(13, 158);
 			this.chkAlwaysOnTop.Margin = new System.Windows.Forms.Padding(13, 3, 3, 3);
 			this.chkAlwaysOnTop.Name = "chkAlwaysOnTop";
 			this.chkAlwaysOnTop.Size = new System.Drawing.Size(210, 17);
@@ -1561,7 +1564,7 @@ namespace Mesen.GUI.Forms.Config
 			// chkDisableGameSelectionScreen
 			// 
 			this.chkDisableGameSelectionScreen.AutoSize = true;
-			this.chkDisableGameSelectionScreen.Location = new System.Drawing.Point(13, 339);
+			this.chkDisableGameSelectionScreen.Location = new System.Drawing.Point(13, 362);
 			this.chkDisableGameSelectionScreen.Margin = new System.Windows.Forms.Padding(13, 3, 3, 3);
 			this.chkDisableGameSelectionScreen.Name = "chkDisableGameSelectionScreen";
 			this.chkDisableGameSelectionScreen.Size = new System.Drawing.Size(170, 17);
@@ -1572,7 +1575,7 @@ namespace Mesen.GUI.Forms.Config
 			// chkGameSelectionScreenResetGame
 			// 
 			this.chkGameSelectionScreenResetGame.AutoSize = true;
-			this.chkGameSelectionScreenResetGame.Location = new System.Drawing.Point(13, 316);
+			this.chkGameSelectionScreenResetGame.Location = new System.Drawing.Point(13, 339);
 			this.chkGameSelectionScreenResetGame.Margin = new System.Windows.Forms.Padding(13, 3, 3, 3);
 			this.chkGameSelectionScreenResetGame.Name = "chkGameSelectionScreenResetGame";
 			this.chkGameSelectionScreenResetGame.Size = new System.Drawing.Size(388, 17);
@@ -1594,7 +1597,7 @@ namespace Mesen.GUI.Forms.Config
 			// chkFdsAutoLoadDisk
 			// 
 			this.chkFdsAutoLoadDisk.AutoSize = true;
-			this.chkFdsAutoLoadDisk.Location = new System.Drawing.Point(13, 46);
+			this.chkFdsAutoLoadDisk.Location = new System.Drawing.Point(13, 69);
 			this.chkFdsAutoLoadDisk.Margin = new System.Windows.Forms.Padding(13, 3, 3, 3);
 			this.chkFdsAutoLoadDisk.Name = "chkFdsAutoLoadDisk";
 			this.chkFdsAutoLoadDisk.Size = new System.Drawing.Size(303, 17);
@@ -1605,7 +1608,7 @@ namespace Mesen.GUI.Forms.Config
 			// chkFdsFastForwardOnLoad
 			// 
 			this.chkFdsFastForwardOnLoad.AutoSize = true;
-			this.chkFdsFastForwardOnLoad.Location = new System.Drawing.Point(13, 69);
+			this.chkFdsFastForwardOnLoad.Location = new System.Drawing.Point(13, 92);
 			this.chkFdsFastForwardOnLoad.Margin = new System.Windows.Forms.Padding(13, 3, 3, 3);
 			this.chkFdsFastForwardOnLoad.Name = "chkFdsFastForwardOnLoad";
 			this.chkFdsFastForwardOnLoad.Size = new System.Drawing.Size(342, 17);
@@ -1616,7 +1619,7 @@ namespace Mesen.GUI.Forms.Config
 			// chkDisplayTitleBarInfo
 			// 
 			this.chkDisplayTitleBarInfo.AutoSize = true;
-			this.chkDisplayTitleBarInfo.Location = new System.Drawing.Point(13, 181);
+			this.chkDisplayTitleBarInfo.Location = new System.Drawing.Point(13, 204);
 			this.chkDisplayTitleBarInfo.Margin = new System.Windows.Forms.Padding(13, 3, 3, 3);
 			this.chkDisplayTitleBarInfo.Name = "chkDisplayTitleBarInfo";
 			this.chkDisplayTitleBarInfo.Size = new System.Drawing.Size(210, 17);
@@ -1630,7 +1633,7 @@ namespace Mesen.GUI.Forms.Config
 			this.flowLayoutPanel6.Controls.Add(this.nudRewindBufferSize);
 			this.flowLayoutPanel6.Controls.Add(this.lblRewindMinutes);
 			this.flowLayoutPanel6.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.flowLayoutPanel6.Location = new System.Drawing.Point(0, 362);
+			this.flowLayoutPanel6.Location = new System.Drawing.Point(0, 385);
 			this.flowLayoutPanel6.Margin = new System.Windows.Forms.Padding(0, 3, 0, 0);
 			this.flowLayoutPanel6.Name = "flowLayoutPanel6";
 			this.flowLayoutPanel6.Size = new System.Drawing.Size(483, 23);
@@ -1690,7 +1693,7 @@ namespace Mesen.GUI.Forms.Config
 			// chkFdsAutoInsertDisk
 			// 
 			this.chkFdsAutoInsertDisk.AutoSize = true;
-			this.chkFdsAutoInsertDisk.Location = new System.Drawing.Point(13, 92);
+			this.chkFdsAutoInsertDisk.Location = new System.Drawing.Point(13, 115);
 			this.chkFdsAutoInsertDisk.Margin = new System.Windows.Forms.Padding(13, 3, 3, 3);
 			this.chkFdsAutoInsertDisk.Name = "chkFdsAutoInsertDisk";
 			this.chkFdsAutoInsertDisk.Size = new System.Drawing.Size(221, 17);
@@ -1701,7 +1704,7 @@ namespace Mesen.GUI.Forms.Config
 			// chkShowGameTimer
 			// 
 			this.chkShowGameTimer.AutoSize = true;
-			this.chkShowGameTimer.Location = new System.Drawing.Point(13, 250);
+			this.chkShowGameTimer.Location = new System.Drawing.Point(13, 273);
 			this.chkShowGameTimer.Margin = new System.Windows.Forms.Padding(13, 3, 3, 3);
 			this.chkShowGameTimer.Name = "chkShowGameTimer";
 			this.chkShowGameTimer.Size = new System.Drawing.Size(107, 17);
@@ -1712,7 +1715,7 @@ namespace Mesen.GUI.Forms.Config
 			// chkShowFrameCounter
 			// 
 			this.chkShowFrameCounter.AutoSize = true;
-			this.chkShowFrameCounter.Location = new System.Drawing.Point(13, 227);
+			this.chkShowFrameCounter.Location = new System.Drawing.Point(13, 250);
 			this.chkShowFrameCounter.Margin = new System.Windows.Forms.Padding(13, 3, 3, 3);
 			this.chkShowFrameCounter.Name = "chkShowFrameCounter";
 			this.chkShowFrameCounter.Size = new System.Drawing.Size(121, 17);
@@ -1723,7 +1726,7 @@ namespace Mesen.GUI.Forms.Config
 			// chkShowVsConfigOnLoad
 			// 
 			this.chkShowVsConfigOnLoad.AutoSize = true;
-			this.chkShowVsConfigOnLoad.Location = new System.Drawing.Point(13, 273);
+			this.chkShowVsConfigOnLoad.Location = new System.Drawing.Point(13, 296);
 			this.chkShowVsConfigOnLoad.Margin = new System.Windows.Forms.Padding(13, 3, 3, 3);
 			this.chkShowVsConfigOnLoad.Name = "chkShowVsConfigOnLoad";
 			this.chkShowVsConfigOnLoad.Size = new System.Drawing.Size(331, 17);
@@ -1734,7 +1737,7 @@ namespace Mesen.GUI.Forms.Config
 			// chkDisableOsd
 			// 
 			this.chkDisableOsd.AutoSize = true;
-			this.chkDisableOsd.Location = new System.Drawing.Point(13, 158);
+			this.chkDisableOsd.Location = new System.Drawing.Point(13, 181);
 			this.chkDisableOsd.Margin = new System.Windows.Forms.Padding(13, 3, 3, 3);
 			this.chkDisableOsd.Name = "chkDisableOsd";
 			this.chkDisableOsd.Size = new System.Drawing.Size(178, 17);
@@ -1747,7 +1750,7 @@ namespace Mesen.GUI.Forms.Config
 			this.lblFdsSettings.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.lblFdsSettings.AutoSize = true;
 			this.lblFdsSettings.ForeColor = System.Drawing.SystemColors.GrayText;
-			this.lblFdsSettings.Location = new System.Drawing.Point(0, 30);
+			this.lblFdsSettings.Location = new System.Drawing.Point(0, 53);
 			this.lblFdsSettings.Margin = new System.Windows.Forms.Padding(0, 0, 3, 0);
 			this.lblFdsSettings.Name = "lblFdsSettings";
 			this.lblFdsSettings.Size = new System.Drawing.Size(151, 13);
@@ -1759,7 +1762,7 @@ namespace Mesen.GUI.Forms.Config
 			this.lblUiDisplaySettings.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.lblUiDisplaySettings.AutoSize = true;
 			this.lblUiDisplaySettings.ForeColor = System.Drawing.SystemColors.GrayText;
-			this.lblUiDisplaySettings.Location = new System.Drawing.Point(0, 119);
+			this.lblUiDisplaySettings.Location = new System.Drawing.Point(0, 142);
 			this.lblUiDisplaySettings.Margin = new System.Windows.Forms.Padding(0, 0, 3, 0);
 			this.lblUiDisplaySettings.Name = "lblUiDisplaySettings";
 			this.lblUiDisplaySettings.Size = new System.Drawing.Size(96, 13);
@@ -1771,7 +1774,7 @@ namespace Mesen.GUI.Forms.Config
 			this.lblGameSelectionScreenSettings.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.lblGameSelectionScreenSettings.AutoSize = true;
 			this.lblGameSelectionScreenSettings.ForeColor = System.Drawing.SystemColors.GrayText;
-			this.lblGameSelectionScreenSettings.Location = new System.Drawing.Point(0, 300);
+			this.lblGameSelectionScreenSettings.Location = new System.Drawing.Point(0, 323);
 			this.lblGameSelectionScreenSettings.Margin = new System.Windows.Forms.Padding(0, 0, 3, 0);
 			this.lblGameSelectionScreenSettings.Name = "lblGameSelectionScreenSettings";
 			this.lblGameSelectionScreenSettings.Size = new System.Drawing.Size(160, 13);
@@ -1783,11 +1786,22 @@ namespace Mesen.GUI.Forms.Config
 			this.tmrSyncDateTime.Enabled = true;
 			this.tmrSyncDateTime.Tick += new System.EventHandler(this.tmrSyncDateTime_Tick);
 			// 
+			// chkDisableHighResolutionTimer
+			// 
+			this.chkDisableHighResolutionTimer.Checked = false;
+			this.chkDisableHighResolutionTimer.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.chkDisableHighResolutionTimer.Location = new System.Drawing.Point(0, 23);
+			this.chkDisableHighResolutionTimer.MinimumSize = new System.Drawing.Size(0, 21);
+			this.chkDisableHighResolutionTimer.Name = "chkDisableHighResolutionTimer";
+			this.chkDisableHighResolutionTimer.Size = new System.Drawing.Size(483, 23);
+			this.chkDisableHighResolutionTimer.TabIndex = 31;
+			this.chkDisableHighResolutionTimer.Text = "Disable high resolution timer";
+			// 
 			// frmPreferences
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(497, 448);
+			this.ClientSize = new System.Drawing.Size(497, 469);
 			this.Controls.Add(this.tabMain);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
 			this.MaximizeBox = false;
@@ -1979,5 +1993,6 @@ namespace Mesen.GUI.Forms.Config
 		private System.Windows.Forms.Label lblPauseIn;
 		private System.Windows.Forms.CheckBox chkPauseInMenuAndConfig;
 		private System.Windows.Forms.CheckBox chkPauseInDebugger;
+		private ctrlRiskyOption chkDisableHighResolutionTimer;
 	}
 }

@@ -59,6 +59,7 @@ namespace Mesen.GUI.Config
 		public bool AlwaysOnTop = false;
 
 		public bool DisableGameDatabase = false;
+		public bool DisableHighResolutionTimer = false;
 		public bool DisableOsd = false;
 
 		public bool ShowFullPathInRecents = false;
@@ -178,6 +179,7 @@ namespace Mesen.GUI.Config
 			InteropEmu.SetFlag(EmulationFlags.AllowBackgroundInput, preferenceInfo.AllowBackgroundInput);
 			InteropEmu.SetFlag(EmulationFlags.PauseWhenInBackground, preferenceInfo.PauseWhenInBackground || preferenceInfo.PauseWhenInMenusAndConfig || preferenceInfo.PauseWhenInDebuggingTools);
 			InteropEmu.SetFlag(EmulationFlags.DisableGameDatabase, preferenceInfo.DisableGameDatabase);
+			InteropEmu.SetFlag(EmulationFlags.UseHighResolutionTimer, !preferenceInfo.DisableHighResolutionTimer);
 			InteropEmu.SetFlag(EmulationFlags.DisableOsd, preferenceInfo.DisableOsd);
 			InteropEmu.SetFlag(EmulationFlags.AllowMismatchingSaveStates, preferenceInfo.AllowMismatchingSaveStates);			
 

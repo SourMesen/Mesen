@@ -472,6 +472,7 @@ void Console::Run()
 					_runLock.Release();
 
 					PlatformUtilities::EnableScreensaver();
+					PlatformUtilities::RestoreTimerResolution();
 					while(paused && !_stop) {
 						//Sleep until emulation is resumed
 						std::this_thread::sleep_for(std::chrono::duration<int, std::milli>(30));
@@ -486,6 +487,12 @@ void Console::Run()
 					PlatformUtilities::DisableScreensaver();
 					_runLock.Acquire();
 					MessageManager::SendNotification(ConsoleNotificationType::GameResumed);
+				}
+
+				if(EmulationSettings::CheckFlag(EmulationFlags::UseHighResolutionTimer)) {
+					PlatformUtilities::EnableHighResolutionTimer();
+				} else {
+					PlatformUtilities::RestoreTimerResolution();
 				}
 
 				_systemActionManager->ProcessSystemActions();
@@ -529,6 +536,7 @@ void Console::Run()
 	MovieManager::Stop();
 	SoundMixer::StopRecording();
 	PlatformUtilities::EnableScreensaver();
+	PlatformUtilities::RestoreTimerResolution();
 
 	_autoSaveManager.reset();
 

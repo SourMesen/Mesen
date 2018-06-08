@@ -57,6 +57,7 @@ namespace Mesen.GUI.Forms.Config
 			AddBinding("AlwaysOnTop", chkAlwaysOnTop);
 
 			AddBinding("DisableGameDatabase", chkDisableGameDatabase);
+			AddBinding("DisableHighResolutionTimer", chkDisableHighResolutionTimer);
 			AddBinding("DisableOsd", chkDisableOsd);
 
 			AddBinding("AutoSave", chkAutoSave);
@@ -104,6 +105,11 @@ namespace Mesen.GUI.Forms.Config
 			UpdateLocationText();
 			UpdateFolderOverrideUi();
 			UpdateCloudDisplay();
+
+			if(Program.IsMono) {
+				//This option does nothing on Linux, hide it.
+				chkDisableHighResolutionTimer.Visible = false;
+			}
 		}
 
 		protected override void UpdateConfig()
