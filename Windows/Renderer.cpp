@@ -578,7 +578,7 @@ namespace NES
 			if(utf8Message.size() > 0) {
 				std::wstring message = utf8::utf8::decode(utf8Message);
 				float width = MeasureString(message);
-				DrawString(message, _screenWidth - width - 20, _screenHeight - 40, Colors::AntiqueWhite, 1.0f, _font.get());
+				DrawString(message, (float)_screenWidth - width - 20, (float)_screenHeight - 40, Colors::AntiqueWhite, 1.0f, _font.get());
 			}
 		}
 	}

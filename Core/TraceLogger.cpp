@@ -38,7 +38,7 @@ void TraceLogger::WriteValue(string &output, T value, RowPart& rowPart)
 {
 	string str = rowPart.DisplayInHex ? HexUtilities::ToHex(value) : std::to_string(value);
 	output += str;
-	if(rowPart.MinWidth > str.size()) {
+	if(rowPart.MinWidth > (int)str.size()) {
 		output += std::string(rowPart.MinWidth - str.size(), ' ');
 	}
 }
@@ -47,7 +47,7 @@ template<>
 void TraceLogger::WriteValue(string &output, string value, RowPart& rowPart)
 {
 	output += value;
-	if(rowPart.MinWidth > value.size()) {
+	if(rowPart.MinWidth > (int)value.size()) {
 		output += std::string(rowPart.MinWidth - value.size(), ' ');
 	}
 }
@@ -192,7 +192,7 @@ void TraceLogger::GetStatusFlag(string &output, uint8_t ps, RowPart& part)
 
 void TraceLogger::GetTraceRow(string &output, State &cpuState, PPUDebugState &ppuState, DisassemblyInfo &disassemblyInfo)
 {
-	size_t originalSize = output.size();
+	int originalSize = (int)output.size();
 	for(RowPart& rowPart : _rowParts) {
 		switch(rowPart.DataType) {
 			case RowDataType::Text: output += rowPart.Text; break;
@@ -240,7 +240,7 @@ void TraceLogger::GetTraceRow(string &output, State &cpuState, PPUDebugState &pp
 			}
 
 			case RowDataType::Align:
-				if(output.size() - originalSize < rowPart.MinWidth) {
+				if((int)output.size() - originalSize < rowPart.MinWidth) {
 					output += std::string(rowPart.MinWidth - (output.size() - originalSize), ' ');
 				}
 				break;
