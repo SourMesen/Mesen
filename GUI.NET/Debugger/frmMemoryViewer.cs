@@ -24,6 +24,7 @@ namespace Mesen.GUI.Debugger
 		private bool _updating = false;
 		private DateTime _lastUpdate = DateTime.MinValue;
 		private TabPage _selectedTab;
+		private bool _formClosed;
 
 		public frmMemoryViewer()
 		{
@@ -106,6 +107,13 @@ namespace Mesen.GUI.Debugger
 			ConfigManager.Config.DebugInfo.RamMemoryType = cboMemoryType.GetEnumValue<DebugMemoryType>();
 			ConfigManager.ApplyChanges();
 			DebugWorkspaceManager.SaveWorkspace();
+
+			if(this._notifListener != null) {
+				this._notifListener.Dispose();
+				this._notifListener = null;
+			}
+
+			_formClosed = true;
 		}
 
 		private void InitShortcuts()
@@ -216,6 +224,9 @@ namespace Mesen.GUI.Debugger
 				case InteropEmu.ConsoleNotificationType.GameReset:
 				case InteropEmu.ConsoleNotificationType.GameLoaded:
 					this.BeginInvoke((Action)(() => {
+						if(_formClosed) {
+							return;
+						}
 						this.InitMemoryTypeDropdown(false);
 						ctrlMemoryAccessCounters.InitMemoryTypeDropdown();
 					}));
@@ -306,6 +317,10 @@ namespace Mesen.GUI.Debugger
 
 		private void RefreshData()
 		{
+			if(_formClosed) {
+				return;
+			}
+
 			if(DebugWorkspaceManager.GetWorkspace() != this._previousWorkspace) {
 				this.InitTblMappings();
 				_previousWorkspace = DebugWorkspaceManager.GetWorkspace();

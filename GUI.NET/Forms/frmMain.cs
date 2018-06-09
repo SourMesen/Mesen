@@ -52,6 +52,7 @@ namespace Mesen.GUI.Forms
 		private float _yFactor = 1;
 		private bool _enableResize = false;
 		private bool _overrideWindowSize = false;
+		private bool _shuttingDown = false;
 
 		private frmFullscreenRenderer _frmFullscreenRenderer = null;
 
@@ -240,6 +241,8 @@ namespace Mesen.GUI.Forms
 				e.Cancel = true;
 				return;
 			}
+
+			_shuttingDown = true;
 
 			//Stop menu update timer, and process all pending events before stopping the core
 			//This prevents some rare crashes on shutdown
@@ -913,6 +916,10 @@ namespace Mesen.GUI.Forms
 
 		private void UpdateMenus()
 		{
+			if(_shuttingDown) {
+				return;
+			}
+
 			try {
 				if(this.InvokeRequired) {
 					this.BeginInvoke((MethodInvoker)(() => this.UpdateMenus()));
