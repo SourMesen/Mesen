@@ -342,6 +342,16 @@ namespace Mesen.GUI.Debugger
 		{
 			_tooltipManager.Close(true);
 		}
+		
+		private Breakpoint GetCurrentLineBreakpoint()
+		{
+			AddressTypeInfo addressInfo = GetAddressInfo(ctrlCodeViewer.SelectedLine);
+			if(addressInfo.Address >= 0) {
+				int relativeAddress = InteropEmu.DebugGetRelativeAddress((uint)addressInfo.Address, addressInfo.Type);
+				return BreakpointManager.GetMatchingBreakpoint(relativeAddress, addressInfo);
+			}
+			return null;
+		}
 
 		private void ctrlCodeViewer_MouseMove(object sender, MouseEventArgs e)
 		{
@@ -366,16 +376,13 @@ namespace Mesen.GUI.Debugger
 			_codeViewerActions.ProcessMouseUp(e.Location, e.Button);
 		}
 
-		Breakpoint _lineBreakpoint = null;
 		private void ctrlCodeViewer_MouseDown(object sender, MouseEventArgs e)
 		{
 			_tooltipManager.Close(true);
 
-			int relativeAddress = ctrlCodeViewer.GetLineNumberAtPosition(e.Y);
-			AddressTypeInfo info = GetAddressInfo(ctrlCodeViewer.GetLineIndexAtPosition(e.Y));
-			_lineBreakpoint = BreakpointManager.GetMatchingBreakpoint(relativeAddress, info);
-
 			if(e.Button == MouseButtons.Left && e.Location.X < this.ctrlCodeViewer.CodeMargin / 4) {
+				int relativeAddress = ctrlCodeViewer.GetLineNumberAtPosition(e.Y);
+				AddressTypeInfo info = GetAddressInfo(ctrlCodeViewer.GetLineIndexAtPosition(e.Y));
 				BreakpointManager.ToggleBreakpoint(relativeAddress, info, false);
 			}
 		}
@@ -412,26 +419,28 @@ namespace Mesen.GUI.Debugger
 
 		private void contextMenuMargin_Opening(object sender, CancelEventArgs e)
 		{
-			if(_lineBreakpoint == null) {
+			Breakpoint bp = GetCurrentLineBreakpoint();
+			if(bp == null) {
 				e.Cancel = true;
 			} else {
-				mnuDisableBreakpoint.Text = _lineBreakpoint.Enabled ? "Disable breakpoint" : "Enable breakpoint";
+				mnuDisableBreakpoint.Text = bp.Enabled ? "Disable breakpoint" : "Enable breakpoint";
 			}
 		}
 
 		private void mnuRemoveBreakpoint_Click(object sender, EventArgs e)
 		{
-			BreakpointManager.RemoveBreakpoint(_lineBreakpoint);
+			BreakpointManager.RemoveBreakpoint(GetCurrentLineBreakpoint());
 		}
 
 		private void mnuEditBreakpoint_Click(object sender, EventArgs e)
 		{
-			BreakpointManager.EditBreakpoint(_lineBreakpoint);
+			BreakpointManager.EditBreakpoint(GetCurrentLineBreakpoint());
 		}
 
 		private void mnuDisableBreakpoint_Click(object sender, EventArgs e)
 		{
-			_lineBreakpoint.SetEnabled(!_lineBreakpoint.Enabled);
+			Breakpoint bp = GetCurrentLineBreakpoint();
+			bp.SetEnabled(!bp.Enabled);
 		}
 
 		private void ctrlCodeViewer_TextZoomChanged(object sender, EventArgs e)
