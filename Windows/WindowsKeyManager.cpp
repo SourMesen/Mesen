@@ -244,6 +244,7 @@ WindowsKeyManager::WindowsKeyManager(HWND hWnd)
 WindowsKeyManager::~WindowsKeyManager()
 {
 	_stopUpdateDeviceThread = true;
+	_stopSignal.Signal();
 	_updateDeviceThread.join();
 }
 
@@ -265,7 +266,8 @@ void WindowsKeyManager::StartUpdateDeviceThread()
 				_directInput->UpdateDeviceList();
 				Console::Resume();
 			}
-			std::this_thread::sleep_for(std::chrono::duration<int, std::milli>(5000));
+
+			_stopSignal.Wait(5000);
 		}
 	});
 }

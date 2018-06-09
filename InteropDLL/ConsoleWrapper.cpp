@@ -44,7 +44,7 @@ IAudioDevice *_soundManager = nullptr;
 IKeyManager *_keyManager = nullptr;
 unique_ptr<ShortcutKeyHandler> _shortcutKeyHandler;
 
-void*  _windowHandle = nullptr;
+void* _windowHandle = nullptr;
 void* _viewerHandle = nullptr;
 string _returnString;
 string _logString;
@@ -341,6 +341,11 @@ namespace InteropEmu {
 				delete _soundManager;
 				_soundManager = nullptr;
 			}
+			if(_keyManager) {
+				delete _keyManager;
+				_keyManager = nullptr;
+			}
+			_shortcutKeyHandler.reset();
 		}
 
 		DllExport void __stdcall TakeScreenshot() { VideoDecoder::GetInstance()->TakeScreenshot(); }
