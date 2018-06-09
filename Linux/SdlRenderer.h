@@ -34,6 +34,7 @@ private:
 	VideoResizeFilter _resizeFilter = VideoResizeFilter::NearestNeighbor;
 
 	SimpleLock _frameLock;
+	SimpleLock _reinitLock;
 	uint8_t* _frameBuffer;
 
 	const uint32_t _bytesPerPixel = 4;
@@ -45,6 +46,8 @@ private:
 	uint32_t _nesFrameHeight = 0;
 	uint32_t _nesFrameWidth = 0;
 	uint32_t _newFrameBufferSize = 0;
+
+	bool _vsyncEnabled = false;
 
 	bool Init();
 	void Cleanup();

@@ -48,12 +48,14 @@ bool SdlRenderer::Init()
 		log("[SDL] Failed to initialize OpenGL, attempting to continue with initialization.");
 	}
 
-	_sdlRenderer = SDL_CreateRenderer(_sdlWindow, -1, SDL_RENDERER_ACCELERATED);
+	uint32_t baseFlags = _vsyncEnabled ? SDL_RENDERER_PRESENTVSYNC : 0;
+
+	_sdlRenderer = SDL_CreateRenderer(_sdlWindow, -1, baseFlags | SDL_RENDERER_ACCELERATED);
 	if(!_sdlRenderer) {
 		log("[SDL] Failed to create accelerated renderer.");
 
 		MessageManager::Log("[SDL] Attempting to create software renderer...");
-		_sdlRenderer = SDL_CreateRenderer(_sdlWindow, -1, SDL_RENDERER_SOFTWARE);
+		_sdlRenderer = SDL_CreateRenderer(_sdlWindow, -1, baseFlags | SDL_RENDERER_SOFTWARE);
 		if(!_sdlRenderer) {
 			log("[SDL] Failed to create software renderer.");
 			return false;
@@ -95,14 +97,12 @@ void SdlRenderer::Cleanup()
 
 void SdlRenderer::Reset()
 {
-	_frameLock.Acquire();
 	Cleanup();
 	if(Init()) {
 		VideoRenderer::GetInstance()->RegisterRenderingDevice(this);
 	} else {
 		Cleanup();
 	}
-	_frameLock.Release();
 }
 
 void SdlRenderer::SetScreenSize(uint32_t width, uint32_t height)
@@ -110,8 +110,10 @@ void SdlRenderer::SetScreenSize(uint32_t width, uint32_t height)
 	ScreenSize screenSize;
 	VideoDecoder::GetInstance()->GetScreenSize(screenSize, false);
 
-	if(_screenHeight != (uint32_t)screenSize.Height || _screenWidth != (uint32_t)screenSize.Width || _nesFrameHeight != height || _nesFrameWidth != width || _resizeFilter != EmulationSettings::GetVideoResizeFilter()) {
-		_frameLock.Acquire();
+	if(_screenHeight != (uint32_t)screenSize.Height || _screenWidth != (uint32_t)screenSize.Width || _nesFrameHeight != height || _nesFrameWidth != width || _resizeFilter != EmulationSettings::GetVideoResizeFilter() || _vsyncEnabled != EmulationSettings::CheckFlag(EmulationFlags::VerticalSync)) {
+		_reinitLock.Acquire();
+
+		_vsyncEnabled = EmulationSettings::CheckFlag(EmulationFlags::VerticalSync);
 
 		_nesFrameHeight = height;
 		_nesFrameWidth = width;
@@ -126,14 +128,14 @@ void SdlRenderer::SetScreenSize(uint32_t width, uint32_t height)
 		_screenBufferSize = _screenHeight*_screenWidth;
 
 		Reset();
-		_frameLock.Release();
+		_reinitLock.Release();
 	}	
 }
 
 void SdlRenderer::UpdateFrame(void *frameBuffer, uint32_t width, uint32_t height)
 {
-	_frameLock.Acquire();
 	SetScreenSize(width, height);
+	_frameLock.Acquire();
 	memcpy(_frameBuffer, frameBuffer, width*height*_bytesPerPixel);
 	_frameChanged = true;	
 	_frameLock.Release();
@@ -154,18 +156,21 @@ void SdlRenderer::Render()
 	}
 
 	if(_noUpdateCount > 10 || _frameChanged || paused || IsMessageShown()) {	
-		auto lock = _frameLock.AcquireSafe();
+		auto lock = _reinitLock.AcquireSafe();
 
 		SDL_RenderClear(_sdlRenderer);
 
 		uint8_t *textureBuffer;
 		int rowPitch;
 		SDL_LockTexture(_sdlTexture, nullptr, (void**)&textureBuffer, &rowPitch);
-		uint32_t* ppuFrameBuffer = (uint32_t*)_frameBuffer;
-		for(uint32_t i = 0, iMax = _nesFrameHeight; i < iMax; i++) {
-			memcpy(textureBuffer, ppuFrameBuffer, _nesFrameWidth*_bytesPerPixel);
-			ppuFrameBuffer += _nesFrameWidth;
-			textureBuffer += rowPitch;
+		{
+			auto frameLock = _frameLock.AcquireSafe();
+			uint32_t* ppuFrameBuffer = (uint32_t*)_frameBuffer;
+			for(uint32_t i = 0, iMax = _nesFrameHeight; i < iMax; i++) {
+				memcpy(textureBuffer, ppuFrameBuffer, _nesFrameWidth*_bytesPerPixel);
+				ppuFrameBuffer += _nesFrameWidth;
+				textureBuffer += rowPitch;
+			}
 		}
 		SDL_UnlockTexture(_sdlTexture);
 
