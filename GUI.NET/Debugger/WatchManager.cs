@@ -12,7 +12,7 @@ namespace Mesen.GUI.Debugger
 		public static event EventHandler WatchChanged;
 		private static List<string> _watchEntries = new List<string>();
 		private static List<WatchValueInfo> _previousValues = new List<WatchValueInfo>();
-		private static Regex _arrayWatchRegex = new Regex(@"\[((\$\d+)|(\d+)|([@_a-zA-Z0-9]+))\s*,\s*(\d+)\]", RegexOptions.Compiled);
+		private static Regex _arrayWatchRegex = new Regex(@"\[((\$[0-9A-Fa-f]+)|(\d+)|([@_a-zA-Z0-9]+))\s*,\s*(\d+)\]", RegexOptions.Compiled);
 
 		public static List<string> WatchEntries
 		{
@@ -64,6 +64,10 @@ namespace Mesen.GUI.Debugger
 				address = int.Parse(match.Groups[3].Value);
 			} else {
 				CodeLabel label = LabelManager.GetLabel(match.Groups[4].Value);
+				if(label == null) {
+					forceHasChanged = true;
+					return "<invalid label>";
+				}
 				address = label.GetRelativeAddress();
 			}
 			int elemCount = int.Parse(match.Groups[5].Value);
