@@ -60,7 +60,7 @@ namespace Mesen.GUI.Debugger
 			_codeViewer.CodeViewer.HideSelection = true;
 			_codeViewer.CodeViewer.ShowScrollbars = false;
 			_codeViewer.CodeViewer.ScrollToLineIndex(_lineIndex, true);
-			_codeViewer.SetConfig(ConfigManager.Config.DebugInfo.LeftView);
+			_codeViewer.SetConfig(ConfigManager.Config.DebugInfo.LeftView, true);
 
 			Control control = _codeViewer as Control;
 			control.Dock = DockStyle.Fill;

@@ -255,8 +255,7 @@ namespace Mesen.GUI.Config
 			}
 
 			Keys keys = (XmlKeys)typeof(DebuggerShortcutsConfig).GetField(fieldName).GetValue(ConfigManager.Config.DebugInfo.Shortcuts);
-
-			if(keys != Keys.None && !ToolStripManager.IsValidShortcut(keys)) {
+			if((keys != Keys.None && !ToolStripManager.IsValidShortcut(keys)) || Program.IsMono) {
 				//Support normally invalid shortcut keys as a shortcut
 				item.ShortcutKeys = Keys.None;
 				item.ShortcutKeyDisplayString = GetShortcutDisplay(keys);
@@ -264,7 +263,7 @@ namespace Mesen.GUI.Config
 				Form parentForm = parent.FindForm();
 				if(parentForm is BaseForm) {
 					ProcessCmdKeyHandler onProcessCmdKeyHandler = (Keys keyData) => {
-						if(keyData == keys) {
+						if(parent.ContainsFocus && keyData == keys) {
 							item.PerformClick();
 							return true;
 						}

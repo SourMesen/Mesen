@@ -24,16 +24,19 @@ namespace Mesen.GUI.Debugger.Controls
 			InitializeComponent();
 			
 			this.toolTip.SetToolTip(chkHighlightUninitRead, "The uninitialized memory reads highlight will only be accurate if the debugger was active when the game was loaded (or if the game has been power cycled since)");
+		}
 
-			bool designMode = (LicenseManager.UsageMode == LicenseUsageMode.Designtime);
-			if(!designMode) {
-				InitShortcuts();
+		protected override void OnLoad(EventArgs e)
+		{
+			base.OnLoad(e);
+			if(!IsDesignMode) {
 				InitMemoryTypeDropdown();
 				cboSort.SelectedIndex = 0;
+				InitShortcuts();
 			}
 		}
 
-		public void InitShortcuts()
+		private void InitShortcuts()
 		{
 			mnuCopy.InitShortcut(this, nameof(DebuggerShortcutsConfig.Copy));
 			mnuSelectAll.InitShortcut(this, nameof(DebuggerShortcutsConfig.SelectAll));

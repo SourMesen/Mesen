@@ -37,13 +37,16 @@ namespace Mesen.GUI.Debugger.Controls
 
 			picPreview.Image = new Bitmap(256, 240, PixelFormat.Format32bppArgb);
 			picSprites.Image = new Bitmap(256, 512, PixelFormat.Format32bppArgb);
+		}
 
-			bool designMode = (LicenseManager.UsageMode == LicenseUsageMode.Designtime);
-			if(!designMode) {
+		protected override void OnLoad(EventArgs e)
+		{
+			base.OnLoad(e);
+			if(!IsDesignMode) {
 				mnuCopyToClipboard.InitShortcut(this, nameof(DebuggerShortcutsConfig.Copy));
 			}
 		}
-		
+
 		public void GetData()
 		{
 			DebugState state = new DebugState();

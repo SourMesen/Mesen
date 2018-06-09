@@ -31,10 +31,15 @@ namespace Mesen.GUI.Debugger.Controls
 			this.ctrlHexBox.ShadowSelectionColor = Color.FromArgb(100, 60, 128, 200);
 			this.ctrlHexBox.InfoBackColor = Color.FromArgb(235, 235, 235);
 			this.ctrlHexBox.InfoForeColor = Color.Gray;
+		}
 
-			if(LicenseManager.UsageMode != LicenseUsageMode.Designtime) {
+		protected override void OnLoad(EventArgs e)
+		{
+			base.OnLoad(e);
+
+			if(!IsDesignMode) {
 				this.cboNumberColumns.SelectedIndex = ConfigManager.Config.DebugInfo.RamColumnCount;
-				this.InitShortcuts();
+				InitShortcuts();
 			}
 		}
 

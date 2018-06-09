@@ -115,13 +115,15 @@ namespace Mesen.GUI.Debugger
 
 			txtScriptContent.Font = new Font(config.ScriptFontFamily, config.ScriptFontSize, config.ScriptFontStyle);
 			txtScriptContent.Zoom = config.ScriptZoom;
+		}
 
-			if(!this.DesignMode) {
-				this._notifListener = new InteropEmu.NotificationListener();
-				this._notifListener.OnNotification += this._notifListener_OnNotification;
+		protected override void OnLoad(EventArgs e)
+		{
+			base.OnLoad(e);
+			this._notifListener = new InteropEmu.NotificationListener();
+			this._notifListener.OnNotification += this._notifListener_OnNotification;
 
-				this.InitShortcuts();
-			}
+			this.InitShortcuts();
 		}
 
 		private void InitShortcuts()

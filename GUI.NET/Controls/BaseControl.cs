@@ -2,6 +2,7 @@ using System.Windows.Forms;
 using System.Drawing;
 using Mesen.GUI;
 using System;
+using System.ComponentModel;
 
 namespace Mesen.GUI.Controls
 {
@@ -17,6 +18,21 @@ namespace Mesen.GUI.Controls
 					return "DroidSansMono";
 				} else {
 					return "Consolas";
+				}
+			}
+		}
+
+		public bool IsDesignMode
+		{
+			get
+			{
+				try {
+					return (
+						LicenseManager.UsageMode == LicenseUsageMode.Designtime ||
+						System.Diagnostics.Process.GetCurrentProcess().ProcessName == "devenv"
+					);
+				} catch {
+					return false;
 				}
 			}
 		}

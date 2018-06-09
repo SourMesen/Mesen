@@ -40,8 +40,6 @@ namespace Mesen.GUI.Debugger
 				this.StartPosition = FormStartPosition.Manual;
 				this.Location = ConfigManager.Config.DebugInfo.PpuWindowLocation.Value;
 			}
-
-			this.InitShortcuts();
 		}
 
 		private void InitShortcuts()
@@ -71,6 +69,8 @@ namespace Mesen.GUI.Debugger
 				this.ctrlChrViewer.RefreshViewer();
 				this.ctrlSpriteViewer.RefreshViewer();
 				this.ctrlPaletteViewer.RefreshViewer();
+
+				this.InitShortcuts();
 			}
 		}
 

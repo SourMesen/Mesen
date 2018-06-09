@@ -21,9 +21,12 @@ namespace Mesen.GUI.Debugger.Controls
 		public ctrlBreakpoints()
 		{
 			InitializeComponent();
+		}
 
-			bool designMode = (LicenseManager.UsageMode == LicenseUsageMode.Designtime);
-			if(!designMode) {
+		protected override void OnLoad(EventArgs e)
+		{
+			base.OnLoad(e);
+			if(!IsDesignMode) {
 				_markedColumnFont = new Font(this.Font.FontFamily, 13f);
 
 				mnuShowLabels.Checked = ConfigManager.Config.DebugInfo.ShowBreakpointLabels;

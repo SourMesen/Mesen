@@ -29,14 +29,13 @@ namespace Mesen.GUI.Debugger
 		public frmMemoryViewer()
 		{
 			InitializeComponent();
-
-			this._selectedTab = this.tabMain.SelectedTab;
-			this.InitShortcuts();
 		}
 
 		protected override void OnLoad(EventArgs e)
 		{
 			base.OnLoad(e);
+
+			this._selectedTab = this.tabMain.SelectedTab;
 
 			DebugInfo config = ConfigManager.Config.DebugInfo;
 
@@ -93,6 +92,8 @@ namespace Mesen.GUI.Debugger
 				this.Size = ConfigManager.Config.DebugInfo.MemoryViewerSize;
 				this.Location = ConfigManager.Config.DebugInfo.MemoryViewerLocation;
 			}
+
+			this.InitShortcuts();
 		}
 
 		protected override void OnFormClosing(FormClosingEventArgs e)

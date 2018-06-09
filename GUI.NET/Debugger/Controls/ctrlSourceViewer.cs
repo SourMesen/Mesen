@@ -10,10 +10,11 @@ using System.Windows.Forms;
 using static Mesen.GUI.Debugger.Ld65DbgImporter;
 using System.IO;
 using Mesen.GUI.Config;
+using Mesen.GUI.Controls;
 
 namespace Mesen.GUI.Debugger.Controls
 {
-	public partial class ctrlSourceViewer : UserControl, ICodeViewer
+	public partial class ctrlSourceViewer : BaseControl, ICodeViewer
 	{
 		private UInt32? _currentActiveAddress { get; set; } = null;
 		private CodeTooltipManager _tooltipManager = null;
@@ -24,11 +25,14 @@ namespace Mesen.GUI.Debugger.Controls
 		public ctrlSourceViewer()
 		{
 			InitializeComponent();
+			_tooltipManager = new CodeTooltipManager(this, this.ctrlCodeViewer);
+		}
 
-			bool designMode = (LicenseManager.UsageMode == LicenseUsageMode.Designtime);
-			if(!designMode) {
+		protected override void OnLoad(EventArgs e)
+		{
+			base.OnLoad(e);
+			if(!IsDesignMode) {
 				_codeViewerActions = new CodeViewerActions(this, true);
-				_tooltipManager = new CodeTooltipManager(this, this.ctrlCodeViewer);
 			}
 		}
 
@@ -38,10 +42,12 @@ namespace Mesen.GUI.Debugger.Controls
 			this.ctrlCodeViewer.Focus();
 		}
 
-		public void SetConfig(DebugViewInfo config)
+		public void SetConfig(DebugViewInfo config, bool disableActions = false)
 		{
 			_config = config;
-			_codeViewerActions.InitMenu(config);
+			if(!disableActions) {
+				_codeViewerActions.InitMenu(config);
+			}
 			if(this.ctrlCodeViewer.TextZoom != config.TextZoom) {
 				this.ctrlCodeViewer.TextZoom = config.TextZoom;
 			}
@@ -171,7 +177,7 @@ namespace Mesen.GUI.Debugger.Controls
 		public AddressTypeInfo GetAddressInfo(int lineIndex)
 		{
 			return new AddressTypeInfo() {
-				Address = _symbolProvider.GetPrgAddress(CurrentFile.ID, lineIndex),
+				Address = _symbolProvider?.GetPrgAddress(CurrentFile.ID, lineIndex) ?? -1,
 				Type = AddressType.PrgRom
 			};
 		}

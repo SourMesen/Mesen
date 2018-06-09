@@ -21,12 +21,14 @@ namespace Mesen.GUI.Debugger
 			InitializeComponent();
 
 			this.DoubleBuffered = true;
+		}
 
-			bool designMode = (LicenseManager.UsageMode == LicenseUsageMode.Designtime);
-			if(!designMode) {
+		protected override void OnLoad(EventArgs e)
+		{
+			base.OnLoad(e);
+			if(!IsDesignMode) {
 				this.mnuHexDisplay.Checked = ConfigManager.Config.DebugInfo.HexDisplay;
 				WatchManager.WatchChanged += WatchManager_WatchChanged;
-
 				mnuRemoveWatch.InitShortcut(this, nameof(DebuggerShortcutsConfig.WatchList_Delete));
 			}
 		}

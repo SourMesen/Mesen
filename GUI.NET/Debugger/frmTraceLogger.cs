@@ -85,8 +85,6 @@ namespace Mesen.GUI.Debugger
 				"[Align,50]: Align is a special tag that is useful when trying to align some content. [Align,50] will make the next tag start on column 50."
 			);
 
-			this.InitShortcuts();
-
 			this._initialized = true;
 		}
 
@@ -105,6 +103,8 @@ namespace Mesen.GUI.Debugger
 			UpdateMenu();
 			tmrUpdateLog.Start();
 			RefreshLog(true, true);
+
+			InitShortcuts();
 		}
 
 		protected override void OnFormClosing(FormClosingEventArgs e)

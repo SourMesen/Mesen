@@ -44,11 +44,14 @@ namespace Mesen.GUI.Debugger.Controls
 		{
 			InitializeComponent();
 			lstLabels.ListViewItemSorter = new LabelComparer(0, false);
+		}
 
-			bool designMode = (LicenseManager.UsageMode == LicenseUsageMode.Designtime);
-			if(!designMode) {
-				this.InitShortcuts();
+		protected override void OnLoad(EventArgs e)
+		{
+			base.OnLoad(e);
+			if(!IsDesignMode) {
 				mnuShowComments.Checked = ConfigManager.Config.DebugInfo.ShowCommentsInLabelList;
+				InitShortcuts();
 			}
 		}
 

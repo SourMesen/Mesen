@@ -42,27 +42,28 @@ namespace Mesen.GUI.Debugger.Controls
 
 		private void InitShortcuts()
 		{
-			mnuEditInMemoryViewer.InitShortcut(this, nameof(DebuggerShortcutsConfig.CodeWindow_EditInMemoryViewer));
-			mnuEditLabel.InitShortcut(this, nameof(DebuggerShortcutsConfig.CodeWindow_EditLabel));
-			mnuSetNextStatement.InitShortcut(this, nameof(DebuggerShortcutsConfig.CodeWindow_SetNextStatement));
-			mnuShowNextStatement.InitShortcut(this, nameof(DebuggerShortcutsConfig.GoToProgramCounter));
-			mnuToggleBreakpoint.InitShortcut(this, nameof(DebuggerShortcutsConfig.CodeWindow_ToggleBreakpoint));
+			Control parent = (Control)Viewer;
+			mnuEditInMemoryViewer.InitShortcut(parent, nameof(DebuggerShortcutsConfig.CodeWindow_EditInMemoryViewer));
+			mnuEditLabel.InitShortcut(parent, nameof(DebuggerShortcutsConfig.CodeWindow_EditLabel));
+			mnuSetNextStatement.InitShortcut(parent, nameof(DebuggerShortcutsConfig.CodeWindow_SetNextStatement));
+			mnuShowNextStatement.InitShortcut(parent, nameof(DebuggerShortcutsConfig.GoToProgramCounter));
+			mnuToggleBreakpoint.InitShortcut(parent, nameof(DebuggerShortcutsConfig.CodeWindow_ToggleBreakpoint));
 
-			mnuUndoPrgChrEdit.InitShortcut(this, nameof(DebuggerShortcutsConfig.Undo));
-			mnuCopySelection.InitShortcut(this, nameof(DebuggerShortcutsConfig.Copy));
+			mnuUndoPrgChrEdit.InitShortcut(parent, nameof(DebuggerShortcutsConfig.Undo));
+			mnuCopySelection.InitShortcut(parent, nameof(DebuggerShortcutsConfig.Copy));
 
-			mnuSwitchView.InitShortcut(this, nameof(DebuggerShortcutsConfig.CodeWindow_SwitchView));
+			mnuSwitchView.InitShortcut(parent, nameof(DebuggerShortcutsConfig.CodeWindow_SwitchView));
 
 			if(!SourceView) {
-				mnuNavigateBackward.InitShortcut(this, nameof(DebuggerShortcutsConfig.CodeWindow_NavigateBack));
-				mnuNavigateForward.InitShortcut(this, nameof(DebuggerShortcutsConfig.CodeWindow_NavigateForward));
+				mnuNavigateBackward.InitShortcut(parent, nameof(DebuggerShortcutsConfig.CodeWindow_NavigateBack));
+				mnuNavigateForward.InitShortcut(parent, nameof(DebuggerShortcutsConfig.CodeWindow_NavigateForward));
 
-				mnuEditSelectedCode.InitShortcut(this, nameof(DebuggerShortcutsConfig.CodeWindow_EditSelectedCode));
-				mnuEditSubroutine.InitShortcut(this, nameof(DebuggerShortcutsConfig.CodeWindow_EditSubroutine));
+				mnuEditSelectedCode.InitShortcut(parent, nameof(DebuggerShortcutsConfig.CodeWindow_EditSelectedCode));
+				mnuEditSubroutine.InitShortcut(parent, nameof(DebuggerShortcutsConfig.CodeWindow_EditSubroutine));
 
-				mnuMarkAsCode.InitShortcut(this, nameof(DebuggerShortcutsConfig.MarkAsCode));
-				mnuMarkAsData.InitShortcut(this, nameof(DebuggerShortcutsConfig.MarkAsData));
-				mnuMarkAsUnidentifiedData.InitShortcut(this, nameof(DebuggerShortcutsConfig.MarkAsUnidentified));
+				mnuMarkAsCode.InitShortcut(parent, nameof(DebuggerShortcutsConfig.MarkAsCode));
+				mnuMarkAsData.InitShortcut(parent, nameof(DebuggerShortcutsConfig.MarkAsData));
+				mnuMarkAsUnidentifiedData.InitShortcut(parent, nameof(DebuggerShortcutsConfig.MarkAsUnidentified));
 			}
 		}
 

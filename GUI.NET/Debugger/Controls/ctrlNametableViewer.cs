@@ -50,7 +50,13 @@ namespace Mesen.GUI.Debugger.Controls
 				chkUseGrayscalePalette.Checked = ConfigManager.Config.DebugInfo.NtViewerUseGrayscalePalette;
 				chkHighlightTileUpdates.Checked = ConfigManager.Config.DebugInfo.NtViewerHighlightTileUpdates;
 				chkHighlightAttributeUpdates.Checked = ConfigManager.Config.DebugInfo.NtViewerHighlightAttributeUpdates;
+			}
+		}
 
+		protected override void OnLoad(EventArgs e)
+		{
+			base.OnLoad(e);
+			if(!IsDesignMode) {
 				mnuCopyToClipboard.InitShortcut(this, nameof(DebuggerShortcutsConfig.Copy));
 			}
 		}

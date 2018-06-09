@@ -59,8 +59,6 @@ namespace Mesen.GUI.Debugger
 			ctrlHexBox.ByteProvider = new StaticByteProvider(new byte[0]);
 
 			txtStartAddress.Text = _startAddress.ToString("X4");
-
-			this.InitShortcuts();
 		}
 
 		private void InitShortcuts()
@@ -95,6 +93,7 @@ namespace Mesen.GUI.Debugger
 			toolTip.SetToolTip(picStartAddressWarning, "Warning: Start address is invalid.  Must be a valid hexadecimal string.");
 
 			UpdateWindow();
+			InitShortcuts();
 		}
 
 		private void UpdateCodeHighlighting()

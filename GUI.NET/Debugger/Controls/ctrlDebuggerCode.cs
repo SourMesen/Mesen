@@ -45,9 +45,12 @@ namespace Mesen.GUI.Debugger
 		{
 			InitializeComponent();
 			_tooltipManager = new CodeTooltipManager(this, this.ctrlCodeViewer);
+		}
 
-			bool designMode = (LicenseManager.UsageMode == LicenseUsageMode.Designtime);
-			if(!designMode) {
+		protected override void OnLoad(EventArgs e)
+		{
+			base.OnLoad(e);
+			if(!IsDesignMode) {
 				_codeViewerActions = new CodeViewerActions(this, false);
 
 				ctrlFindOccurrences.Viewer = this;
@@ -55,11 +58,12 @@ namespace Mesen.GUI.Debugger
 			}
 		}
 
-		public void SetConfig(DebugViewInfo config)
+		public void SetConfig(DebugViewInfo config, bool disableActions = false)
 		{
 			_config = config;
-
-			_codeViewerActions.InitMenu(config);
+			if(!disableActions) {
+				_codeViewerActions.InitMenu(config);
+			}
 
 			if(this.ctrlCodeViewer.TextZoom != config.TextZoom) {
 				this.ctrlCodeViewer.TextZoom = config.TextZoom;
@@ -390,12 +394,14 @@ namespace Mesen.GUI.Debugger
 		public AddressTypeInfo GetAddressInfo(int lineNumber)
 		{
 			AddressTypeInfo info = new AddressTypeInfo();
-			info.Address = this._absoluteLineNumbers[lineNumber];
-			switch(this._lineMemoryType[lineNumber]) {
-				case 'P': info.Type = AddressType.PrgRom; break;
-				case 'W': info.Type = AddressType.WorkRam; break;
-				case 'S': info.Type = AddressType.SaveRam; break;
-				case 'N': info.Type = AddressType.InternalRam; break;
+			if(lineNumber < this._absoluteLineNumbers.Count) {
+				info.Address = this._absoluteLineNumbers[lineNumber];
+				switch(this._lineMemoryType[lineNumber]) {
+					case 'P': info.Type = AddressType.PrgRom; break;
+					case 'W': info.Type = AddressType.WorkRam; break;
+					case 'S': info.Type = AddressType.SaveRam; break;
+					case 'N': info.Type = AddressType.InternalRam; break;
+				}
 			}
 			return info;
 		}

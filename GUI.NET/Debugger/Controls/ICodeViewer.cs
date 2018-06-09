@@ -15,7 +15,7 @@ namespace Mesen.GUI.Debugger.Controls
 	{
 		void ScrollToLineNumber(int lineNumber, bool scrollToTop = false);
 		void ScrollToAddress(AddressTypeInfo addressInfo, bool scrollToTop = false);
-		void SetConfig(DebugViewInfo config);
+		void SetConfig(DebugViewInfo config, bool disableActions = false);
 		void EditSubroutine();
 		void EditSelectedCode();
 

@@ -21,10 +21,13 @@ namespace Mesen.GUI.Debugger.Controls
 		public ctrlFunctionList()
 		{
 			InitializeComponent();
+		}
 
-			bool designMode = (LicenseManager.UsageMode == LicenseUsageMode.Designtime);
-			if(!designMode) {
-				this.InitShortcuts();
+		protected override void OnLoad(EventArgs e)
+		{
+			base.OnLoad(e);
+			if(!IsDesignMode) {
+				InitShortcuts();
 			}
 		}
 

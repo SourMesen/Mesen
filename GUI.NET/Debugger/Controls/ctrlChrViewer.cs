@@ -58,7 +58,13 @@ namespace Mesen.GUI.Debugger.Controls
 
 				this.chkAutoPalette.Checked = ConfigManager.Config.DebugInfo.ChrViewerUseAutoPalette;
 				this.chkLargeSprites.Checked = ConfigManager.Config.DebugInfo.ChrViewerUseLargeSprites;
+			}
+		}
 
+		protected override void OnLoad(EventArgs e)
+		{
+			base.OnLoad(e);
+			if(!IsDesignMode) {
 				mnuCopyToClipboard.InitShortcut(this, nameof(DebuggerShortcutsConfig.Copy));
 			}
 		}

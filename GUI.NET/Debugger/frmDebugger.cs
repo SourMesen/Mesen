@@ -53,22 +53,6 @@ namespace Mesen.GUI.Debugger
 			BreakpointManager.BreakpointsChanged += BreakpointManager_BreakpointsChanged;
 			ctrlProfiler.OnFunctionSelected += ctrlProfiler_OnFunctionSelected;
 
-			ctrlDebuggerCode.CodeViewerActions.OnSetNextStatement += ctrlDebuggerCode_OnSetNextStatement;
-			ctrlDebuggerCode.CodeViewerActions.OnShowInSplitView += ctrlDebuggerCode_OnShowInSplitView;
-			ctrlDebuggerCode.CodeViewerActions.OnSwitchView += ctrlDebuggerCode_OnSwitchView;
-
-			ctrlDebuggerCodeSplit.CodeViewerActions.OnSetNextStatement += ctrlDebuggerCode_OnSetNextStatement;
-			ctrlDebuggerCodeSplit.CodeViewerActions.OnShowInSplitView += ctrlDebuggerCode_OnShowInSplitView;
-			ctrlDebuggerCodeSplit.CodeViewerActions.OnSwitchView += ctrlDebuggerCode_OnSwitchView;
-
-			ctrlSourceViewer.CodeViewerActions.OnSetNextStatement += ctrlDebuggerCode_OnSetNextStatement;
-			ctrlSourceViewer.CodeViewerActions.OnShowInSplitView += ctrlDebuggerCode_OnShowInSplitView;
-			ctrlSourceViewer.CodeViewerActions.OnSwitchView += ctrlDebuggerCode_OnSwitchView;
-
-			ctrlSourceViewerSplit.CodeViewerActions.OnSetNextStatement += ctrlDebuggerCode_OnSetNextStatement;
-			ctrlSourceViewerSplit.CodeViewerActions.OnShowInSplitView += ctrlDebuggerCode_OnShowInSplitView;
-			ctrlSourceViewerSplit.CodeViewerActions.OnSwitchView += ctrlDebuggerCode_OnSwitchView;
-
 			Font font = new Font(ConfigManager.Config.DebugInfo.FontFamily, ConfigManager.Config.DebugInfo.FontSize, ConfigManager.Config.DebugInfo.FontStyle);
 			ctrlDebuggerCode.CodeViewer.BaseFont = font;
 			ctrlDebuggerCodeSplit.CodeViewer.BaseFont = font;
@@ -154,11 +138,6 @@ namespace Mesen.GUI.Debugger
 
 			_lastCodeWindow = ctrlDebuggerCode;
 
-			this.ctrlDebuggerCode.SetConfig(ConfigManager.Config.DebugInfo.LeftView);
-			this.ctrlSourceViewer.SetConfig(ConfigManager.Config.DebugInfo.LeftView);
-			this.ctrlDebuggerCodeSplit.SetConfig(ConfigManager.Config.DebugInfo.RightView);
-			this.ctrlSourceViewerSplit.SetConfig(ConfigManager.Config.DebugInfo.RightView);
-
 			this.toolTip.SetToolTip(this.picWatchHelp,
 				frmBreakpoint.GetConditionTooltip(true) + Environment.NewLine + Environment.NewLine +
 				"Additionally, the watch window supports a syntax to display X bytes starting from a specific address. e.g:" + Environment.NewLine +
@@ -193,6 +172,38 @@ namespace Mesen.GUI.Debugger
 			UpdateFileOptions();
 
 			tmrCdlRatios.Start();
+		}
+
+		protected override void OnShown(EventArgs e)
+		{
+			base.OnShown(e);
+
+			ctrlDebuggerCode.CodeViewerActions.OnSetNextStatement += ctrlDebuggerCode_OnSetNextStatement;
+			ctrlDebuggerCode.CodeViewerActions.OnShowInSplitView += ctrlDebuggerCode_OnShowInSplitView;
+			ctrlDebuggerCode.CodeViewerActions.OnSwitchView += ctrlDebuggerCode_OnSwitchView;
+
+			ctrlDebuggerCodeSplit.CodeViewerActions.OnSetNextStatement += ctrlDebuggerCode_OnSetNextStatement;
+			ctrlDebuggerCodeSplit.CodeViewerActions.OnShowInSplitView += ctrlDebuggerCode_OnShowInSplitView;
+			ctrlDebuggerCodeSplit.CodeViewerActions.OnSwitchView += ctrlDebuggerCode_OnSwitchView;
+
+			ctrlSourceViewer.Visible = true;
+			ctrlSourceViewerSplit.Visible = true;
+
+			ctrlSourceViewer.CodeViewerActions.OnSetNextStatement += ctrlDebuggerCode_OnSetNextStatement;
+			ctrlSourceViewer.CodeViewerActions.OnShowInSplitView += ctrlDebuggerCode_OnShowInSplitView;
+			ctrlSourceViewer.CodeViewerActions.OnSwitchView += ctrlDebuggerCode_OnSwitchView;
+
+			ctrlSourceViewerSplit.CodeViewerActions.OnSetNextStatement += ctrlDebuggerCode_OnSetNextStatement;
+			ctrlSourceViewerSplit.CodeViewerActions.OnShowInSplitView += ctrlDebuggerCode_OnShowInSplitView;
+			ctrlSourceViewerSplit.CodeViewerActions.OnSwitchView += ctrlDebuggerCode_OnSwitchView;
+
+			ctrlDebuggerCode.SetConfig(ConfigManager.Config.DebugInfo.LeftView);
+			ctrlSourceViewer.SetConfig(ConfigManager.Config.DebugInfo.LeftView);
+			ctrlDebuggerCodeSplit.SetConfig(ConfigManager.Config.DebugInfo.RightView);
+			ctrlSourceViewerSplit.SetConfig(ConfigManager.Config.DebugInfo.RightView);
+
+			ctrlSourceViewer.Visible = false;
+			ctrlSourceViewerSplit.Visible = false;
 		}
 
 		private void InitShortcuts()
