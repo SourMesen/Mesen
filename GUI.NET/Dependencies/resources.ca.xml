@@ -806,6 +806,7 @@
 		<Message ID="EmulatorShortcutMappings_SetScale6x">Mida de vídeo 6x</Message>
 		<Message ID="EmulatorShortcutMappings_ToggleFullscreen">Activa/Desactiva el mode de pantalla completa</Message>
 		<Message ID="EmulatorShortcutMappings_ToggleFps">Mostra/Amaga els FPS</Message>
+		<Message ID="EmulatorShortcutMappings_ToggleDebugInfo">Toggle Debug Information</Message>
 		<Message ID="EmulatorShortcutMappings_ToggleGameTimer">Mostra/Amaga el comptador de temps de joc</Message>
 		<Message ID="EmulatorShortcutMappings_ToggleFrameCounter">Mostra/Amaga el comptador de fotogrames</Message>
 		<Message ID="EmulatorShortcutMappings_ToggleLagCounter">Mostra/Amaga el comptador de latència</Message>

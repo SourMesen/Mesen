@@ -1369,6 +1369,9 @@
     <ClInclude Include="RawVideoFilter.h">
       <Filter>VideoDecoder</Filter>
     </ClInclude>
+    <ClInclude Include="BaseSoundManager.h">
+      <Filter>Misc</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -1634,6 +1637,9 @@
     </ClCompile>
     <ClCompile Include="RawVideoFilter.cpp">
       <Filter>VideoDecoder</Filter>
+    </ClCompile>
+    <ClCompile Include="BaseSoundManager.cpp">
+      <Filter>Misc</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

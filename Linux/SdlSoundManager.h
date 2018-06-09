@@ -1,8 +1,8 @@
 ﻿#pragma once
 #include <SDL2/SDL.h>
-#include "../Core/IAudioDevice.h"
+#include "../Core/BaseSoundManager.h"
 
-class SdlSoundManager : public IAudioDevice
+class SdlSoundManager : public BaseSoundManager
 {
 public:
 	SdlSoundManager();
@@ -12,12 +12,15 @@ public:
 	void Pause();
 	void Stop();
 
+	void ProcessEndOfFrame();
+
 	string GetAvailableDevices();
 	void SetAudioDevice(string deviceName);
 
 private:
 	vector<string> GetAvailableDeviceInfo();
 	bool InitializeAudio(uint32_t sampleRate, bool isStereo);
+	void Release();
 
 	static void FillAudioBuffer(void *userData, uint8_t *stream, int len);
 
@@ -30,8 +33,6 @@ private:
 	bool _needReset = false;
 
 	uint16_t _previousLatency = 0;
-	uint32_t _sampleRate = 0;
-	bool _isStereo = false;
 
 	uint8_t* _buffer = nullptr;
 	uint32_t _writePosition = 0;

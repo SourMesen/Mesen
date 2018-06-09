@@ -1,11 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Drawing.Imaging;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Mesen.GUI.Config
 {
@@ -14,7 +7,7 @@ namespace Mesen.GUI.Config
 		public string AudioDevice = "";
 		public bool EnableAudio = true;
 
-		[MinMax(15, 300)] public UInt32 AudioLatency = 50;
+		[MinMax(15, 300)] public UInt32 AudioLatency = 60;
 
 		[MinMax(0, 100)] public UInt32 MasterVolume = 25;
 		[MinMax(0, 100)] public UInt32 Square1Volume = 100;
@@ -41,7 +34,7 @@ namespace Mesen.GUI.Config
 		[MinMax(-100, 100)] public Int32 Namco163Panning = 0;
 		[MinMax(-100, 100)] public Int32 Sunsoft5bPanning = 0;
 
-		[ValidValues(11025, 22050, 44100, 48000, 96000)] public UInt32 SampleRate = 44100;
+		[ValidValues(11025, 22050, 44100, 48000, 96000)] public UInt32 SampleRate = 48000;
 		public bool ReduceSoundInBackground = true;
 		public bool MuteSoundInBackground = false;
 		public bool SwapDutyCycles = false;

@@ -22,7 +22,7 @@ namespace orfanidis_eq {
 class SoundMixer : public Snapshotable
 {
 public:
-	static const uint32_t CycleLength = 1000;
+	static const uint32_t CycleLength = 10000;
 	static const uint32_t BitsPerSample = 16;
 
 private:
@@ -66,6 +66,8 @@ private:
 
 	bool _hasPanning;
 
+	double _previousTargetRate;
+
 	double GetChannelOutput(AudioChannel channel, bool forRightChannel);
 	int16_t GetOutputVolume(bool forRightChannel);
 	void EndFrame(uint32_t time);
@@ -74,6 +76,7 @@ private:
 	
 	void UpdateEqualizers(bool forceUpdate);
 	void ApplyEqualizer(orfanidis_eq::eq1* equalizer, size_t sampleCount);
+	void UpdateTargetSampleRate();
 
 protected:
 	virtual void StreamState(bool saving) override;
@@ -101,4 +104,7 @@ public:
 	static void RegisterAudioDevice(IAudioDevice *audioDevice);
 
 	static OggMixer* GetOggMixer();
+
+	static AudioStatistics GetStatistics();
+	static void ProcessEndOfFrame();
 };

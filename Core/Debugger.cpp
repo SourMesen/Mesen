@@ -23,7 +23,6 @@
 #include "RewindManager.h"
 #include "DebugBreakHelper.h"
 #include "ScriptHost.h"
-#include "DebugHud.h"
 #include "StandardController.h"
 
 #ifndef UINT32_MAX
@@ -52,7 +51,6 @@ Debugger::Debugger(shared_ptr<Console> console, shared_ptr<CPU> cpu, shared_ptr<
 	_memoryAccessCounter.reset(new MemoryAccessCounter(this));
 	_profiler.reset(new Profiler(this));
 	_traceLogger.reset(new TraceLogger(this, memoryManager, _labelManager));
-	_debugHud.reset(new DebugHud());
 
 	_stepOut = false;
 	_stepCount = -1;

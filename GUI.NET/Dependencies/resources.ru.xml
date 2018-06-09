@@ -825,6 +825,7 @@
 		<Message ID="EmulatorShortcutMappings_SetScale6x">Set Scale 6x</Message>
 		<Message ID="EmulatorShortcutMappings_ToggleFullscreen">Toggle Fullscreen Mode</Message>
 		<Message ID="EmulatorShortcutMappings_ToggleFps">Toggle FPS Counter</Message>
+		<Message ID="EmulatorShortcutMappings_ToggleDebugInfo">Toggle Debug Information</Message>
 		<Message ID="EmulatorShortcutMappings_ToggleGameTimer">Toggle Game Timer</Message>
 		<Message ID="EmulatorShortcutMappings_ToggleFrameCounter">Toggle Frame Counter</Message>
 		<Message ID="EmulatorShortcutMappings_ToggleLagCounter">Toggle Lag Counter</Message>

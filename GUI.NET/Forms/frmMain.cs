@@ -755,6 +755,7 @@ namespace Mesen.GUI.Forms
 				case EmulatorShortcut.ToggleLagCounter: ToggleLagCounter(); break;
 				case EmulatorShortcut.ToggleOsd: ToggleOsd(); break;
 				case EmulatorShortcut.ToggleAlwaysOnTop: ToggleAlwaysOnTop(); break;
+				case EmulatorShortcut.ToggleDebugInfo: ToggleDebugInfo(); break;
 				case EmulatorShortcut.MaxSpeed: ToggleMaxSpeed(); break;
 				case EmulatorShortcut.ToggleFullscreen: ToggleFullscreen(); restoreFullscreen = false; break;
 
@@ -890,6 +891,13 @@ namespace Mesen.GUI.Forms
 		{
 			ConfigManager.Config.VideoInfo.DisableBackground = !ConfigManager.Config.VideoInfo.DisableBackground;
 			VideoInfo.ApplyConfig();
+			ConfigManager.ApplyChanges();
+		}
+
+		private void ToggleDebugInfo()
+		{
+			ConfigManager.Config.PreferenceInfo.DisplayDebugInfo = !ConfigManager.Config.PreferenceInfo.DisplayDebugInfo;
+			PreferenceInfo.ApplyConfig();
 			ConfigManager.ApplyChanges();
 		}
 

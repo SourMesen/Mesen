@@ -123,10 +123,13 @@ bool SoundManager::InitializeDirectSound(uint32_t sampleRate, bool isStereo)
 		return false;
 	}
 
+	int32_t requestedByteLatency = (int32_t)((float)(sampleRate * EmulationSettings::GetAudioLatency()) / 1000.0f * waveFormat.nBlockAlign);
+	_bufferSize = (int32_t)std::ceil((double)requestedByteLatency * 2 / 0x10000) * 0x10000;
+
 	// Set the buffer description of the secondary sound buffer that the wave file will be loaded onto.
 	bufferDesc.dwSize = sizeof(DSBUFFERDESC);
 	bufferDesc.dwFlags = DSBCAPS_CTRLPOSITIONNOTIFY | DSBCAPS_GETCURRENTPOSITION2 | DSBCAPS_GLOBALFOCUS | DSBCAPS_LOCSOFTWARE | DSBCAPS_CTRLVOLUME | DSBCAPS_CTRLFREQUENCY;
-	bufferDesc.dwBufferBytes = 0xFFFF;
+	bufferDesc.dwBufferBytes = _bufferSize;
 	bufferDesc.dwReserved = 0;
 	bufferDesc.lpwfxFormat = &waveFormat;
 	bufferDesc.guid3DAlgorithm = GUID_NULL;
@@ -160,7 +163,6 @@ bool SoundManager::InitializeDirectSound(uint32_t sampleRate, bool isStereo)
 
 	return true;
 }
-
 
 void SoundManager::Release()
 {
@@ -204,7 +206,7 @@ void SoundManager::CopyToSecondaryBuffer(uint8_t *data, uint32_t size)
 	DWORD bufferBSize;
 
 	_secondaryBuffer->Lock(_lastWriteOffset, size, (void**)&bufferPtrA, (DWORD*)&bufferASize, (void**)&bufferPtrB, (DWORD*)&bufferBSize, 0);
-	_lastWriteOffset += size;
+	_lastWriteOffset = (_lastWriteOffset + size) % _bufferSize;
 
 	memcpy(bufferPtrA, data, bufferASize);
 	if(bufferPtrB && bufferBSize > 0) {
@@ -228,7 +230,9 @@ void SoundManager::Stop()
 		_secondaryBuffer->Stop();
 		ClearSecondaryBuffer();
 	}
+
 	_playing = false;
+	ResetStats();
 }
 
 void SoundManager::Play()
@@ -239,56 +243,62 @@ void SoundManager::Play()
 	}
 }
 
-void SoundManager::PlayBuffer(int16_t *soundBuffer, uint32_t sampleCount, uint32_t sampleRate, bool isStereo)
+void SoundManager::ValidateWriteCursor(DWORD safeWriteCursor)
 {
-	uint32_t bytesPerSample = (SoundMixer::BitsPerSample / 8);
-	if(_sampleRate != sampleRate || _isStereo != isStereo || _needReset) {
-		Release();
-		InitializeDirectSound(sampleRate, isStereo);
-		_secondaryBuffer->SetFrequency(sampleRate);
-		_emulationSpeed = 100;
+	int32_t writeGap = _lastWriteOffset - safeWriteCursor;
+	if(writeGap < -10000) {
+		writeGap += _bufferSize;
+	} else if(writeGap < 0) {
+		_bufferUnderrunEventCount++;
+		_lastWriteOffset = safeWriteCursor;
 	}
+}
 
-	uint32_t emulationSpeed = EmulationSettings::GetEmulationSpeed();
-	if(emulationSpeed != _emulationSpeed) {
-		uint32_t targetRate = sampleRate;
-		if(emulationSpeed > 0 && emulationSpeed < 100) {
-			targetRate = (uint32_t)(targetRate * ((double)emulationSpeed / 100.0));
-		}
-		_secondaryBuffer->SetFrequency(targetRate);
-		_emulationSpeed = emulationSpeed;
-	}
-
-	if(isStereo) {
-		bytesPerSample *= 2;
-	}
-
-	uint32_t soundBufferSize = sampleCount * bytesPerSample;
-
-	int32_t byteLatency = (int32_t)((float)(sampleRate * EmulationSettings::GetAudioLatency()) / 1000.0f * bytesPerSample);
+void SoundManager::ProcessEndOfFrame()
+{
 	DWORD currentPlayCursor;
 	DWORD safeWriteCursor;
 	_secondaryBuffer->GetCurrentPosition(&currentPlayCursor, &safeWriteCursor);
+	ValidateWriteCursor(safeWriteCursor);
 
-	if(safeWriteCursor > _lastWriteOffset && safeWriteCursor - _lastWriteOffset < 10000) {
-		_lastWriteOffset = (uint16_t)safeWriteCursor;
+	uint32_t emulationSpeed = EmulationSettings::GetEmulationSpeed();
+	uint32_t targetRate = _sampleRate;
+	if(emulationSpeed > 0 && emulationSpeed < 100) {
+		//Slow down playback when playing at less than 100%
+		targetRate = (uint32_t)(targetRate * ((double)emulationSpeed / 100.0));
 	}
+	_secondaryBuffer->SetFrequency((DWORD)(targetRate));
 
-	int32_t playWriteByteLatency = (_lastWriteOffset - currentPlayCursor);
-	if(playWriteByteLatency < 0) {
-		playWriteByteLatency = 0xFFFF + playWriteByteLatency;
-	}
+	ProcessLatency(currentPlayCursor, _lastWriteOffset);
 
-	if(byteLatency != _previousLatency) {
+	if(_averageLatency > 0 && emulationSpeed <= 100 && emulationSpeed > 0 && std::abs(_averageLatency - EmulationSettings::GetAudioLatency()) > 50) {
+		//Latency is way off (over 50ms gap), stop audio & start again
 		Stop();
-		_previousLatency = byteLatency;
-	} else if(playWriteByteLatency > byteLatency * 3) {
-		_secondaryBuffer->SetCurrentPosition(_lastWriteOffset - byteLatency);
+	}
+}
+
+void SoundManager::PlayBuffer(int16_t *soundBuffer, uint32_t sampleCount, uint32_t sampleRate, bool isStereo)
+{
+	uint32_t bytesPerSample = (SoundMixer::BitsPerSample / 8) * (isStereo ? 2 : 1);
+	uint32_t latency = EmulationSettings::GetAudioLatency();
+	if(_sampleRate != sampleRate || _isStereo != isStereo || _needReset || latency != _previousLatency) {
+		_previousLatency = latency;
+		Release();
+		InitializeDirectSound(sampleRate, isStereo);
+		_secondaryBuffer->SetFrequency(sampleRate);
 	}
 
-	CopyToSecondaryBuffer((uint8_t*)soundBuffer, soundBufferSize);
+	DWORD currentPlayCursor, safeWriteCursor;
+	_secondaryBuffer->GetCurrentPosition(&currentPlayCursor, &safeWriteCursor);
+	ValidateWriteCursor(safeWriteCursor);
 
-	if(!_playing && _lastWriteOffset >= byteLatency) {
-		Play();
+	uint32_t soundBufferSize = sampleCount * bytesPerSample;
+	CopyToSecondaryBuffer((uint8_t*)soundBuffer, soundBufferSize);
+	
+	if(!_playing) {
+		DWORD byteLatency = (int32_t)((float)(sampleRate * latency) / 1000.0f * bytesPerSample);
+		if(_lastWriteOffset >= byteLatency / 2) {
+			Play();
+		}
 	}
 }

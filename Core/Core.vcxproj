@@ -515,6 +515,7 @@
     <ClInclude Include="BarcodeBattlerReader.h" />
     <ClInclude Include="BaseLoader.h" />
     <ClInclude Include="BaseRenderer.h" />
+    <ClInclude Include="BaseSoundManager.h" />
     <ClInclude Include="BatteryManager.h" />
     <ClInclude Include="BattleBox.h" />
     <ClInclude Include="ControlDeviceState.h" />
@@ -927,6 +928,7 @@
     <ClCompile Include="Assembler.cpp" />
     <ClCompile Include="AutomaticRomTest.cpp" />
     <ClCompile Include="BaseRenderer.cpp" />
+    <ClCompile Include="BaseSoundManager.cpp" />
     <ClCompile Include="BatteryManager.cpp" />
     <ClCompile Include="DebugHud.cpp" />
     <ClCompile Include="DrawRectangleCommand.h" />

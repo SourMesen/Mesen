@@ -8,7 +8,7 @@
 #include "DrawStringCommand.h"
 #include "DrawScreenBufferCommand.h"
 
-DebugHud* DebugHud::_instance = nullptr;
+DebugHud* DebugHud::_instance = new DebugHud();
 
 DebugHud::DebugHud()
 {

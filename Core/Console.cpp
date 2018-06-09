@@ -38,6 +38,7 @@
 #include "IBattery.h"
 #include "KeyManager.h"
 #include "BatteryManager.h"
+#include "DebugHud.h"
 
 shared_ptr<Console> Console::Instance(new Console());
 
@@ -100,7 +101,7 @@ bool Console::Initialize(VirtualFile &romFile, VirtualFile &patchFile)
 		BatteryManager::Initialize(FolderUtilities::GetFilename(romFile.GetFileName(), false));
 		shared_ptr<BaseMapper> mapper = MapperFactory::InitializeFromFile(romFile.GetFileName(), fileData);
 		if(mapper) {
-			SoundMixer::StopAudio();
+			SoundMixer::StopAudio(true);
 
 			if(_mapper) {
 				//Send notification only if a game was already running and we successfully loaded the new one
@@ -336,6 +337,8 @@ void Console::Reset(bool softReset)
 
 void Console::ResetComponents(bool softReset)
 {
+	SoundMixer::StopAudio(true);
+
 	_memoryManager->Reset(softReset);
 	if(!EmulationSettings::CheckFlag(EmulationFlags::DisablePpuReset) || !softReset) {
 		_ppu->Reset();
@@ -418,7 +421,13 @@ void Console::RunSingleFrame()
 void Console::Run()
 {
 	Timer clockTimer;
+	Timer lastFrameTimer;
 	double targetTime;
+	double timeLagData[16] = {};
+	int timeLagDataIndex = 0;
+	double lastFrameMin = 9999;
+	double lastFrameMax = 0;
+
 	uint32_t lastFrameNumber = -1;
 	
 	_autoSaveManager.reset(new AutoSaveManager());
@@ -445,6 +454,14 @@ void Console::Run()
 
 			uint32_t currentFrameNumber = PPU::GetFrameCount();
 			if(currentFrameNumber != lastFrameNumber) {
+				SoundMixer::ProcessEndOfFrame();
+
+				bool displayDebugInfo = EmulationSettings::CheckFlag(EmulationFlags::DisplayDebugInfo);
+				if(displayDebugInfo) {
+					DisplayDebugInformation(clockTimer, lastFrameTimer, lastFrameMin, lastFrameMax, timeLagData);
+				}
+				lastFrameTimer.Reset();
+
 				_rewindManager->ProcessEndOfFrame();
 				EmulationSettings::DisableOverclocking(_disableOcNextFrame || NsfMapper::GetInstance());
 				_disableOcNextFrame = false;
@@ -487,6 +504,7 @@ void Console::Run()
 					PlatformUtilities::DisableScreensaver();
 					_runLock.Acquire();
 					MessageManager::SendNotification(ConsoleNotificationType::GameResumed);
+					lastFrameTimer.Reset();
 				}
 
 				if(EmulationSettings::CheckFlag(EmulationFlags::UseHighResolutionTimer)) {
@@ -499,6 +517,10 @@ void Console::Run()
 
 				//Get next target time, and adjust based on whether we are ahead or behind
 				double timeLag = EmulationSettings::GetEmulationSpeed() == 0 ? 0 : clockTimer.GetElapsedMS() - targetTime;
+				if(displayDebugInfo) {
+					timeLagData[timeLagDataIndex] = timeLag;
+					timeLagDataIndex = (timeLagDataIndex + 1) & 0x0F;
+				}
 				UpdateNesModel(true);
 				targetTime = GetFrameDelay();
 
@@ -938,4 +960,63 @@ uint8_t* Console::GetRamBuffer(DebugMemoryType memoryType, uint32_t &size, int32
 	}
 
 	throw std::runtime_error("unsupported memory type");
+}
+
+void Console::DisplayDebugInformation(Timer &clockTimer, Timer &lastFrameTimer, double &lastFrameMin, double &lastFrameMax, double *timeLagData)
+{
+	AudioStatistics stats = SoundMixer::GetStatistics();
+	DebugHud* hud = DebugHud::GetInstance();
+	hud->DrawRectangle(8, 8, 115, 40, 0x40000000, true, 1);
+	hud->DrawRectangle(8, 8, 115, 40, 0xFFFFFF, false, 1);
+
+	hud->DrawString(10, 10, "Audio Stats", 0xFFFFFF, 0xFF000000, 1);
+	hud->DrawString(10, 21, "Latency: ", 0xFFFFFF, 0xFF000000, 1);
+	
+	int color = (stats.AverageLatency > 0 && std::abs(stats.AverageLatency - EmulationSettings::GetAudioLatency()) > 3) ? 0xFF0000 : 0xFFFFFF;
+	std::stringstream ss;
+	ss << std::fixed << std::setprecision(2) << stats.AverageLatency << " ms";
+	hud->DrawString(54, 21, ss.str(), color, 0xFF000000, 1);
+
+	hud->DrawString(10, 30, "Underruns: " + std::to_string(stats.BufferUnderrunEventCount), 0xFFFFFF, 0xFF000000, 1);
+	hud->DrawString(10, 39, "Buffer Size: " + std::to_string(stats.BufferSize / 1024) + "kb", 0xFFFFFF, 0xFF000000, 1);
+
+	hud->DrawRectangle(136, 8, 115, 58, 0x40000000, true, 1);
+	hud->DrawRectangle(136, 8, 115, 58, 0xFFFFFF, false, 1);
+	hud->DrawString(138, 10, "Video Stats", 0xFFFFFF, 0xFF000000, 1);
+
+	ss = std::stringstream();
+	ss << "Exec Time: " << std::fixed << std::setprecision(2) << clockTimer.GetElapsedMS() << " ms";
+	hud->DrawString(138, 21, ss.str(), 0xFFFFFF, 0xFF000000, 1);
+
+	double avgTimeLag = 0;
+	for(int i = 0; i < 16; i++) {
+		avgTimeLag += timeLagData[i];
+	}
+	avgTimeLag /= 16;
+
+	ss = std::stringstream();
+	ss << "Time Gap: " << std::fixed << std::setprecision(2) << avgTimeLag << " ms";
+	hud->DrawString(138, 30, ss.str(), 0xFFFFFF, 0xFF000000, 1);
+
+	double lastFrame = lastFrameTimer.GetElapsedMS();
+
+	ss = std::stringstream();
+	ss << "Last Frame: " << std::fixed << std::setprecision(2) << lastFrame << " ms";
+	hud->DrawString(138, 39, ss.str(), 0xFFFFFF, 0xFF000000, 1);
+
+	if(PPU::GetFrameCount() > 60) {
+		lastFrameMin = (std::min)(lastFrame, lastFrameMin);
+		lastFrameMax = (std::max)(lastFrame, lastFrameMax);
+	} else {
+		lastFrameMin = 9999;
+		lastFrameMax = 0;
+	}
+
+	ss = std::stringstream();
+	ss << "Min Delay: " << std::fixed << std::setprecision(2) << ((lastFrameMin < 9999) ? lastFrameMin : 0.0) << " ms";
+	hud->DrawString(138, 48, ss.str(), 0xFFFFFF, 0xFF000000, 1);
+
+	ss = std::stringstream();
+	ss << "Max Delay: " << std::fixed << std::setprecision(2) << lastFrameMax << " ms";
+	hud->DrawString(138, 57, ss.str(), 0xFFFFFF, 0xFF000000, 1);
 }

@@ -823,6 +823,7 @@
 		<Message ID="EmulatorShortcutMappings_SetScale6x">Establecer escala 6x</Message>
 		<Message ID="EmulatorShortcutMappings_ToggleFullscreen">Alternar pantalla completa</Message>
 		<Message ID="EmulatorShortcutMappings_ToggleFps">Alternar contador de FPS</Message>
+		<Message ID="EmulatorShortcutMappings_ToggleDebugInfo">Toggle Debug Information</Message>
 		<Message ID="EmulatorShortcutMappings_ToggleGameTimer">Alternar temporizador de juego</Message>
 		<Message ID="EmulatorShortcutMappings_ToggleFrameCounter">Alternar contador de frames</Message>
 		<Message ID="EmulatorShortcutMappings_ToggleLagCounter">Alternar contador de lag</Message>

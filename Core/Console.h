@@ -19,6 +19,7 @@ class AutoSaveManager;
 class HdPackBuilder;
 class HdAudioDevice;
 class SystemActionManager;
+class Timer;
 struct HdPackData;
 enum class NesModel;
 enum class ScaleFilterType;
@@ -70,6 +71,7 @@ class Console
 		bool Initialize(VirtualFile &romFile, VirtualFile &patchFile);
 		void UpdateNesModel(bool sendNotification);
 		double GetFrameDelay();
+		void DisplayDebugInformation(Timer &clockTimer, Timer &lastFrameTimer, double &lastFrameMin, double &lastFrameMax, double *timeLagData);
 
 	public:
 		Console();

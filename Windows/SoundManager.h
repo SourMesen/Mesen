@@ -1,7 +1,7 @@
 #pragma once
 
 #include "stdafx.h"
-#include "../Core/IAudioDevice.h"
+#include "../Core/BaseSoundManager.h"
 
 struct SoundDeviceInfo
 {
@@ -9,13 +9,14 @@ struct SoundDeviceInfo
 	GUID guid;
 };
 
-class SoundManager : public IAudioDevice
+class SoundManager : public BaseSoundManager
 {
 public:
 	SoundManager(HWND hWnd);
 	~SoundManager();
 
 	void Release();
+	void ProcessEndOfFrame();
 	void PlayBuffer(int16_t *soundBuffer, uint32_t bufferSize, uint32_t sampleRate, bool isStereo);
 	void Play();	
 	void Pause();
@@ -30,18 +31,16 @@ private:
 	bool InitializeDirectSound(uint32_t sampleRate, bool isStereo);
 	void ClearSecondaryBuffer();
 	void CopyToSecondaryBuffer(uint8_t *data, uint32_t size);
+	void ValidateWriteCursor(DWORD safeWriteCursor);
 
 private:
 	HWND _hWnd;
 	GUID _audioDeviceID;
 	bool _needReset = false;
-
-	uint16_t _lastWriteOffset = 0;
-	uint16_t _previousLatency = 0;
-	uint32_t _sampleRate = 0;
-	bool _isStereo = false;
+	
+	DWORD _lastWriteOffset = 0;
+	uint32_t _previousLatency = 0;
 	bool _playing = false;
-	uint32_t _emulationSpeed = 100;
 
 	IDirectSound8* _directSound;
 	IDirectSoundBuffer* _primaryBuffer;

@@ -92,10 +92,13 @@ void SoundMixer::Reset()
 
 	UpdateRates(true);
 	UpdateEqualizers(true);
+
+	_previousTargetRate = _sampleRate;
 }
 
 void SoundMixer::PlayAudioBuffer(uint32_t time)
 {
+	UpdateTargetSampleRate();
 	EndFrame(time);
 
 	size_t sampleCount = blip_read_samples(_blipBufLeft, _outputBuffer, SoundMixer::MaxSamplesPerFrame, 1);
@@ -191,10 +194,19 @@ void SoundMixer::UpdateRates(bool forceUpdate)
 		}
 	}
 
+	AudioStatistics stats = GetStatistics();
+	int32_t requestedLatency = (int32_t)EmulationSettings::GetAudioLatency();
+	double targetRate = _sampleRate;
+	if(stats.AverageLatency > requestedLatency + 2) {
+		targetRate *= 1.005;
+	} else if(stats.AverageLatency < requestedLatency - 2) {
+		targetRate *= 0.995;
+	}
+
 	if(_clockRate != newRate || forceUpdate) {
 		_clockRate = newRate;
-		blip_set_rates(_blipBufLeft, _clockRate, _sampleRate);
-		blip_set_rates(_blipBufRight, _clockRate, _sampleRate);
+		blip_set_rates(_blipBufLeft, _clockRate, targetRate);
+		blip_set_rates(_blipBufRight, _clockRate, targetRate);
 		if(_oggMixer) {
 			_oggMixer->SetSampleRate(_sampleRate);
 		}
@@ -381,4 +393,42 @@ OggMixer* SoundMixer::GetOggMixer()
 		_oggMixer.reset(new OggMixer());
 	}
 	return _oggMixer.get();
+}
+
+AudioStatistics SoundMixer::GetStatistics()
+{
+	if(SoundMixer::AudioDevice) {
+		return SoundMixer::AudioDevice->GetStatistics();
+	} else {
+		return AudioStatistics();
+	}
+}
+
+void SoundMixer::ProcessEndOfFrame()
+{
+	if(SoundMixer::AudioDevice) {
+		SoundMixer::AudioDevice->ProcessEndOfFrame();
+	}
+}
+
+void SoundMixer::UpdateTargetSampleRate()
+{
+	AudioStatistics stats = GetStatistics();
+	if(stats.AverageLatency > 0 && EmulationSettings::GetEmulationSpeed() == 100) {
+		int32_t requestedLatency = (int32_t)EmulationSettings::GetAudioLatency();
+		double targetRate = _sampleRate;
+
+		//Try to stay within +/- 2ms of requested latency
+		if(stats.AverageLatency > requestedLatency + 2) {
+			targetRate *= 0.995;
+		} else if(stats.AverageLatency < requestedLatency - 2) {
+			targetRate *= 1.005;
+		}
+
+		if(targetRate != _previousTargetRate) {
+			blip_set_rates(_blipBufLeft, _clockRate, targetRate);
+			blip_set_rates(_blipBufRight, _clockRate, targetRate);
+			_previousTargetRate = targetRate;
+		}
+	}
 }

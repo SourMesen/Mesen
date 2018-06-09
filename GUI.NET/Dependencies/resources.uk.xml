@@ -825,6 +825,7 @@
 		<Message ID="EmulatorShortcutMappings_SetScale6x">Встановити масштаб 6x</Message>
 		<Message ID="EmulatorShortcutMappings_ToggleFullscreen">Увімкнути/вимкнути повноекранний режим</Message>
 		<Message ID="EmulatorShortcutMappings_ToggleFps">Увімкнути/вимкнути лічильник кадрiв</Message>
+		<Message ID="EmulatorShortcutMappings_ToggleDebugInfo">Toggle Debug Information</Message>
 		<Message ID="EmulatorShortcutMappings_ToggleGameTimer">Увімкнути/вимкнути таймер гри</Message>
 		<Message ID="EmulatorShortcutMappings_ToggleFrameCounter">Увімкнути/вимкнути лічильник кадрів</Message>
 		<Message ID="EmulatorShortcutMappings_ToggleLagCounter">Увімкнути/вимкнути лічильник відставання</Message>

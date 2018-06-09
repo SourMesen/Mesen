@@ -837,6 +837,7 @@
 		<Message ID="EmulatorShortcutMappings_SetScale6x">Taille de l'image 6x</Message>
 		<Message ID="EmulatorShortcutMappings_ToggleFullscreen">Activer/désactiver le mode plein écran</Message>
 		<Message ID="EmulatorShortcutMappings_ToggleFps">Activer/désactiver le compteur FPS</Message>
+		<Message ID="EmulatorShortcutMappings_ToggleDebugInfo">Activer/désactiver l'info de debug</Message>
 		<Message ID="EmulatorShortcutMappings_ToggleGameTimer">Activer/désactiver le compteur de temps</Message>
 		<Message ID="EmulatorShortcutMappings_ToggleFrameCounter">Activer/désactiver le compteur d'images</Message>
 		<Message ID="EmulatorShortcutMappings_ToggleLagCounter">Activer/désactiver le compteur de lag</Message>

@@ -822,6 +822,7 @@
 		<Message ID="EmulatorShortcutMappings_SetScale6x">映像サイズ ６倍</Message>
 		<Message ID="EmulatorShortcutMappings_ToggleFullscreen">全画面表示</Message>
 		<Message ID="EmulatorShortcutMappings_ToggleFps">フレームレート表示</Message>
+		<Message ID="EmulatorShortcutMappings_ToggleDebugInfo">デバッグ情報表示</Message>
 		<Message ID="EmulatorShortcutMappings_ToggleGameTimer">ゲームタイマー表示</Message>
 		<Message ID="EmulatorShortcutMappings_ToggleFrameCounter">フレームカウンタ表示</Message>
 		<Message ID="EmulatorShortcutMappings_ToggleLagCounter">ラグカウンタ表示</Message>

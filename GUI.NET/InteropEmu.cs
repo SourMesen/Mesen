@@ -1533,6 +1533,7 @@ namespace Mesen.GUI
 		RandomizeMapperPowerOnState = 0x20000000000000,
 
 		UseHighResolutionTimer = 0x40000000000000,
+		DisplayDebugInfo = 0x80000000000000,
 
 		ForceMaxSpeed = 0x4000000000000000,
 		ConsoleMode = 0x8000000000000000,
@@ -1749,6 +1750,7 @@ namespace Mesen.GUI
 		ToggleAlwaysOnTop,
 		ToggleSprites,
 		ToggleBackground,
+		ToggleDebugInfo,
 
 		LoadRandomGame,
 		SaveStateSlot1,

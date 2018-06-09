@@ -6,16 +6,13 @@
 SdlSoundManager::SdlSoundManager()
 {
 	if(InitializeAudio(44100, false)) {
-		_buffer = new uint8_t[0xFFFF];		
 		SoundMixer::RegisterAudioDevice(this);
 	}
 }
 
 SdlSoundManager::~SdlSoundManager()
 {
-	if(_buffer) {
-		delete[] _buffer;
-	}
+	Release();
 }
 
 void SdlSoundManager::FillAudioBuffer(void *userData, uint8_t *stream, int len)
@@ -23,6 +20,20 @@ void SdlSoundManager::FillAudioBuffer(void *userData, uint8_t *stream, int len)
 	SdlSoundManager* soundManager = (SdlSoundManager*)userData;
 
 	soundManager->ReadFromBuffer(stream, len);
+}
+
+void SdlSoundManager::Release()
+{
+	if(_audioDeviceID != 0) {
+		Stop();
+		SDL_CloseAudioDevice(_audioDeviceID);
+	}
+
+	if(_buffer) {
+		delete[] _buffer;
+		_buffer = nullptr;
+		_bufferSize = 0;
+	}
 }
 
 bool SdlSoundManager::InitializeAudio(uint32_t sampleRate, bool isStereo)
@@ -35,6 +46,12 @@ bool SdlSoundManager::InitializeAudio(uint32_t sampleRate, bool isStereo)
 
 	_sampleRate = sampleRate;
 	_isStereo = isStereo;
+	_previousLatency = EmulationSettings::GetAudioLatency();
+
+	int bytesPerSample = 2 * (isStereo ? 2 : 1);
+	int32_t requestedByteLatency = (int32_t)((float)(sampleRate * EmulationSettings::GetAudioLatency()) / 1000.0f * bytesPerSample);
+	_bufferSize = (int32_t)std::ceil((double)requestedByteLatency * 2 / 0x10000) * 0x10000;
+	_buffer = new uint8_t[_bufferSize];
 
 	SDL_AudioSpec audioSpec;
 	SDL_memset(&audioSpec, 0, sizeof(audioSpec));
@@ -97,62 +114,50 @@ void SdlSoundManager::SetAudioDevice(string deviceName)
 
 void SdlSoundManager::ReadFromBuffer(uint8_t* output, uint32_t len)
 {
-	if(_readPosition + len < 65536) {
+	if(_readPosition + len < _bufferSize) {
 		memcpy(output, _buffer+_readPosition, len);
 		_readPosition += len;
 	} else {
-		int remainingBytes = (65536 - _readPosition);
+		int remainingBytes = (_bufferSize - _readPosition);
 		memcpy(output, _buffer+_readPosition, remainingBytes);
 		memcpy(output+remainingBytes, _buffer, len - remainingBytes);
 		_readPosition = len - remainingBytes;
+	}
+
+	if(_readPosition >= _writePosition && _readPosition - _writePosition < _bufferSize / 2) {
+		_bufferUnderrunEventCount++;
 	}
 }
 
 void SdlSoundManager::WriteToBuffer(uint8_t* input, uint32_t len)
 {
-	if(_writePosition + len < 65536) {
+	if(_writePosition + len < _bufferSize) {
 		memcpy(_buffer+_writePosition, input, len);
 		_writePosition += len;
 	} else {
-		int remainingBytes = 65536 - _writePosition;
+		int remainingBytes = _bufferSize - _writePosition;
 		memcpy(_buffer+_writePosition, input, remainingBytes);
 		memcpy(_buffer, ((uint8_t*)input)+remainingBytes, len - remainingBytes);
 		_writePosition = len - remainingBytes;
 	}
 }
-
 void SdlSoundManager::PlayBuffer(int16_t *soundBuffer, uint32_t sampleCount, uint32_t sampleRate, bool isStereo)
 {
-	uint32_t bytesPerSample = (SoundMixer::BitsPerSample / 8);
-	if(_sampleRate != sampleRate || _isStereo != isStereo || _needReset) {
-		Stop();
+	uint32_t bytesPerSample = (SoundMixer::BitsPerSample / 8) * (isStereo ? 2 : 1);
+	uint32_t latency = EmulationSettings::GetAudioLatency();
+	if(_sampleRate != sampleRate || _isStereo != isStereo || _needReset || _previousLatency != latency) {
+		Release();
 		InitializeAudio(sampleRate, isStereo);
-	}
-
-	if(isStereo) {
-		bytesPerSample *= 2;
-	}
-
-	int32_t byteLatency = (int32_t)((float)(sampleRate * EmulationSettings::GetAudioLatency()) / 1000.0f * bytesPerSample);
-	if(byteLatency != _previousLatency) {
-		Stop();
-		_previousLatency = byteLatency;
 	}
 
 	WriteToBuffer((uint8_t*)soundBuffer, sampleCount * bytesPerSample);
 
+	int32_t byteLatency = (int32_t)((float)(sampleRate * latency) / 1000.0f * bytesPerSample);
 	int32_t playWriteByteLatency = _writePosition - _readPosition;
 	if(playWriteByteLatency < 0) {
-		playWriteByteLatency = 0xFFFF - _readPosition + _writePosition;
+		playWriteByteLatency = _bufferSize - _readPosition + _writePosition;
 	}
 
-	if(playWriteByteLatency > byteLatency * 3) {
-		//Out of sync, resync
-		Stop();
-		WriteToBuffer((uint8_t*)soundBuffer, sampleCount * bytesPerSample);
-		playWriteByteLatency = _writePosition - _readPosition;
-	}
-	
 	if(playWriteByteLatency > byteLatency) {
 		//Start playing
 		SDL_PauseAudioDevice(_audioDeviceID, 0);
@@ -167,6 +172,19 @@ void SdlSoundManager::Pause()
 void SdlSoundManager::Stop()
 {
 	Pause();
+
 	_readPosition = 0;
 	_writePosition = 0;
+	ResetStats();
+}
+
+void SdlSoundManager::ProcessEndOfFrame()
+{
+	ProcessLatency(_readPosition, _writePosition);
+
+	uint32_t emulationSpeed = EmulationSettings::GetEmulationSpeed();
+	if(_averageLatency > 0 && emulationSpeed <= 100 && emulationSpeed > 0 && std::abs(_averageLatency - EmulationSettings::GetAudioLatency()) > 50) {
+		//Latency is way off (over 50ms gap), stop audio & start again
+		Stop();
+	}
 }

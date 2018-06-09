@@ -60,9 +60,9 @@ void BaseVideoFilter::SendFrame(uint16_t *ppuOutputBuffer, uint32_t frameNumber)
 	UpdateBufferSize();
 	OnBeforeApplyFilter();
 	ApplyFilter(ppuOutputBuffer);
-	if(DebugHud::GetInstance()) {
-		DebugHud::GetInstance()->Draw((uint32_t*)_outputBuffer, _overscan, GetFrameInfo().Width, frameNumber);
-	}
+
+	DebugHud::GetInstance()->Draw((uint32_t*)_outputBuffer, _overscan, GetFrameInfo().Width, frameNumber);
+	
 	_frameLock.Release();
 }
 

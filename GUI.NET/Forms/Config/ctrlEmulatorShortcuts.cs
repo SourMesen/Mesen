@@ -65,6 +65,7 @@ namespace Mesen.GUI.Forms.Config
 				EmulatorShortcut.SetScale6x,
 				EmulatorShortcut.ToggleFullscreen,
 
+				EmulatorShortcut.ToggleDebugInfo,
 				EmulatorShortcut.ToggleFps,
 				EmulatorShortcut.ToggleGameTimer,
 				EmulatorShortcut.ToggleFrameCounter,

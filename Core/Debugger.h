@@ -28,7 +28,6 @@ class Profiler;
 class CodeRunner;
 class BaseMapper;
 class ScriptHost;
-class DebugHud;
 
 class Debugger
 {
@@ -49,7 +48,6 @@ private:
 	shared_ptr<TraceLogger> _traceLogger;
 	shared_ptr<Profiler> _profiler;
 	unique_ptr<CodeRunner> _codeRunner;
-	unique_ptr<DebugHud> _debugHud;
 
 	shared_ptr<Console> _console;
 	shared_ptr<CPU> _cpu;

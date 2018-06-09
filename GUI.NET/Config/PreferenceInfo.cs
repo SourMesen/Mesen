@@ -46,6 +46,8 @@ namespace Mesen.GUI.Config
 		public bool NsfRepeat = false;
 		public bool NsfShuffle = false;
 
+		public bool DisplayDebugInfo = false;
+
 		public bool PauseOnMovieEnd = true;
 		public bool AutomaticallyCheckForUpdates = true;
 
@@ -194,6 +196,8 @@ namespace Mesen.GUI.Config
 			InteropEmu.NsfSetNsfConfig(preferenceInfo.NsfAutoDetectSilence ? preferenceInfo.NsfAutoDetectSilenceDelay : 0, preferenceInfo.NsfMoveToNextTrackAfterTime ? preferenceInfo.NsfMoveToNextTrackTime : -1, preferenceInfo.NsfDisableApuIrqs);
 			InteropEmu.SetFlag(EmulationFlags.NsfRepeat, preferenceInfo.NsfRepeat);
 			InteropEmu.SetFlag(EmulationFlags.NsfShuffle, preferenceInfo.NsfShuffle);
+
+			InteropEmu.SetFlag(EmulationFlags.DisplayDebugInfo, preferenceInfo.DisplayDebugInfo);
 
 			InteropEmu.SetAutoSaveOptions(preferenceInfo.AutoSave ? (uint)preferenceInfo.AutoSaveDelay : 0, preferenceInfo.AutoSaveNotify);
 

@@ -90,6 +90,11 @@ namespace Mesen.GUI.Forms
 						ConfigManager.Config.InputInfo.Controllers[0].Keys[0].SuborKeyboardButtons = presets.SuborKeyboard.SuborKeyboardButtons;
 						ConfigManager.Config.InputInfo.Controllers[0].Keys[0].BandaiMicrophoneButtons = presets.BandaiMicrophone.BandaiMicrophoneButtons;
 					}
+
+					//Set the audio latency setting back to a sane default (since the way the code uses the value has changed)
+					if(ConfigManager.Config.AudioInfo.AudioLatency < 60) {
+						ConfigManager.Config.AudioInfo.AudioLatency = 60;
+					}
 				}
 
 				ConfigManager.Config.MesenVersion = InteropEmu.GetMesenVersion();
