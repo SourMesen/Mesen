@@ -498,7 +498,7 @@ namespace Mesen.GUI.Debugger
 
 			public string GetLineComment(int lineNumber)
 			{
-				if(_code.SymbolProvider != null && _code._config.ShowSourceAsComments) {
+				if(_code.SymbolProvider != null && _code._config?.ShowSourceAsComments == true) {
 					AddressTypeInfo addressInfo = _code.GetAddressInfo(lineNumber);
 					if(addressInfo.Type == AddressType.PrgRom) {
 						return _code.SymbolProvider.GetSourceCodeLine(addressInfo.Address);

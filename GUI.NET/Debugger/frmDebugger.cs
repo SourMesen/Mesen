@@ -178,6 +178,11 @@ namespace Mesen.GUI.Debugger
 		{
 			base.OnShown(e);
 
+			ctrlDebuggerCode.Visible = true;
+			ctrlDebuggerCodeSplit.Visible = true;
+			ctrlSourceViewer.Visible = true;
+			ctrlSourceViewerSplit.Visible = true;
+
 			ctrlDebuggerCode.CodeViewerActions.OnSetNextStatement += ctrlDebuggerCode_OnSetNextStatement;
 			ctrlDebuggerCode.CodeViewerActions.OnShowInSplitView += ctrlDebuggerCode_OnShowInSplitView;
 			ctrlDebuggerCode.CodeViewerActions.OnSwitchView += ctrlDebuggerCode_OnSwitchView;
@@ -185,9 +190,6 @@ namespace Mesen.GUI.Debugger
 			ctrlDebuggerCodeSplit.CodeViewerActions.OnSetNextStatement += ctrlDebuggerCode_OnSetNextStatement;
 			ctrlDebuggerCodeSplit.CodeViewerActions.OnShowInSplitView += ctrlDebuggerCode_OnShowInSplitView;
 			ctrlDebuggerCodeSplit.CodeViewerActions.OnSwitchView += ctrlDebuggerCode_OnSwitchView;
-
-			ctrlSourceViewer.Visible = true;
-			ctrlSourceViewerSplit.Visible = true;
 
 			ctrlSourceViewer.CodeViewerActions.OnSetNextStatement += ctrlDebuggerCode_OnSetNextStatement;
 			ctrlSourceViewer.CodeViewerActions.OnShowInSplitView += ctrlDebuggerCode_OnShowInSplitView;
