@@ -122,14 +122,16 @@ string FolderUtilities::GetRecentGamesFolder()
 #ifndef LIBRETRO
 void FolderUtilities::CreateFolder(string folder)
 {
-	fs::create_directory(fs::u8path(folder));
+	std::error_code errorCode;
+	fs::create_directory(fs::u8path(folder), errorCode);
 }
 
 vector<string> FolderUtilities::GetFolders(string rootFolder)
 {
 	vector<string> folders;
 
-	if(!fs::is_directory(fs::u8path(rootFolder))) {
+	std::error_code errorCode;
+	if(!fs::is_directory(fs::u8path(rootFolder), errorCode)) {
 		return folders;
 	} 
 
@@ -138,7 +140,7 @@ vector<string> FolderUtilities::GetFolders(string rootFolder)
 			//Prevent excessive recursion
 			i.disable_recursion_pending();
 		} else {
-			if(fs::is_directory(i->path())) {
+			if(fs::is_directory(i->path(), errorCode)) {
 				folders.push_back(i->path().u8string());
 			}
 		}
@@ -152,7 +154,8 @@ vector<string> FolderUtilities::GetFilesInFolder(string rootFolder, std::unorder
 	vector<string> files;
 	vector<string> folders = { { rootFolder } };
 
-	if(!fs::is_directory(fs::u8path(rootFolder))) {
+	std::error_code errorCode;
+	if(!fs::is_directory(fs::u8path(rootFolder), errorCode)) {
 		return files;
 	}
 
@@ -201,7 +204,8 @@ string FolderUtilities::CombinePath(string folder, string filename)
 
 int64_t FolderUtilities::GetFileModificationTime(string filepath)
 {
-	return fs::last_write_time(fs::u8path(filepath)).time_since_epoch() / std::chrono::seconds(1);
+	std::error_code errorCode;
+	return fs::last_write_time(fs::u8path(filepath), errorCode).time_since_epoch() / std::chrono::seconds(1);
 }
 #else
 
