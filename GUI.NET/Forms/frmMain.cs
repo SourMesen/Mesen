@@ -242,6 +242,17 @@ namespace Mesen.GUI.Forms
 				return;
 			}
 
+			if(!_shuttingDown && Program.IsMono) {
+				//This appears to prevent Mono from locking up when closing the form
+				Task.Run(() => {
+					StopEmu();
+					_shuttingDown = true;
+					this.BeginInvoke((Action)(() => this.Close()));
+				});
+				e.Cancel = true;
+				return;
+			}
+
 			_shuttingDown = true;
 
 			//Stop menu update timer, and process all pending events before stopping the core

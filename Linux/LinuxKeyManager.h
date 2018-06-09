@@ -3,6 +3,7 @@
 #include <vector>
 #include <thread>
 #include "../Core/IKeyManager.h"
+#include "../Utilities/AutoResetEvent.h"
 
 class LinuxGameController;
 
@@ -24,6 +25,7 @@ private:
 
 	std::thread _updateDeviceThread;
 	atomic<bool> _stopUpdateDeviceThread; 
+	AutoResetEvent _stopSignal;
 	bool _disableAllKeys;
 
 	void StartUpdateDeviceThread();

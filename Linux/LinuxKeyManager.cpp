@@ -270,6 +270,7 @@ LinuxKeyManager::LinuxKeyManager()
 LinuxKeyManager::~LinuxKeyManager()
 {
 	_stopUpdateDeviceThread = true;
+	_stopSignal.Signal();
 	_updateDeviceThread.join();
 }
 
@@ -387,7 +388,7 @@ void LinuxKeyManager::StartUpdateDeviceThread()
 				Console::Resume();
 			}
 
-			std::this_thread::sleep_for(std::chrono::duration<int, std::milli>(2000));
+			_stopSignal.Wait(2000);
 		}
 	});
 }	
