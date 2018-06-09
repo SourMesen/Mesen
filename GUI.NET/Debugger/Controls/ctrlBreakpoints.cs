@@ -55,12 +55,6 @@ namespace Mesen.GUI.Debugger.Controls
 			}
 		}
 
-		protected override void OnLoad(EventArgs e)
-		{
-			base.OnLoad(e);
-			AdjustColumnWidth();
-		}
-
 		public void RefreshListAddresses()
 		{
 			lstBreakpoints.BeginUpdate();
@@ -95,31 +89,6 @@ namespace Mesen.GUI.Debugger.Controls
 			}
 
 			lstBreakpoints.ItemChecked += new ItemCheckedEventHandler(lstBreakpoints_ItemChecked);
-		}
-
-		private void lstBreakpoints_ColumnWidthChanging(object sender, ColumnWidthChangingEventArgs e)
-		{
-			AdjustColumnWidth();
-		}
-
-		private void lstBreakpoints_ColumnWidthChanged(object sender, ColumnWidthChangedEventArgs e)
-		{
-			AdjustColumnWidth();
-		}
-
-		private void AdjustColumnWidth()
-		{
-			lstBreakpoints.ColumnWidthChanging -= lstBreakpoints_ColumnWidthChanging;
-			lstBreakpoints.ColumnWidthChanged -= lstBreakpoints_ColumnWidthChanged;
-
-			lstBreakpoints.AutoResizeColumn(1, ColumnHeaderAutoResizeStyle.ColumnContent);
-
-			//Force watch values to take the full width of the list
-			int totalWidth = lstBreakpoints.Columns[0].Width + lstBreakpoints.Columns[1].Width + lstBreakpoints.Columns[2].Width + lstBreakpoints.Columns[3].Width + lstBreakpoints.Columns[4].Width;
-			colLastColumn.Width = lstBreakpoints.ClientSize.Width - totalWidth;
-
-			lstBreakpoints.ColumnWidthChanging += lstBreakpoints_ColumnWidthChanging;
-			lstBreakpoints.ColumnWidthChanged += lstBreakpoints_ColumnWidthChanged;
 		}
 
 		private void lstBreakpoints_ItemChecked(object sender, ItemCheckedEventArgs e)

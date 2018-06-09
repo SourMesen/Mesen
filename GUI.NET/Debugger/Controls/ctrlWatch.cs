@@ -40,38 +40,6 @@ namespace Mesen.GUI.Debugger
 			}
 		}
 
-		protected override void OnLoad(EventArgs e)
-		{
-			base.OnLoad(e);
-			AdjustColumnWidth();
-		}
-
-		private void lstWatch_ColumnWidthChanging(object sender, ColumnWidthChangingEventArgs e)
-		{
-			if(e.ColumnIndex == 2) {
-				e.Cancel = true;
-			}
-			AdjustColumnWidth();
-		}
-
-		private void lstWatch_ColumnWidthChanged(object sender, ColumnWidthChangedEventArgs e)
-		{
-			AdjustColumnWidth();
-		}
-
-		private void AdjustColumnWidth()
-		{
-			lstWatch.ColumnWidthChanging -= lstWatch_ColumnWidthChanging;
-			lstWatch.ColumnWidthChanged -= lstWatch_ColumnWidthChanged;
-
-			//Force watch values to take the full width of the list
-			int totalWidth = lstWatch.Columns[0].Width + lstWatch.Columns[1].Width;
-			lstWatch.Columns[2].Width = lstWatch.ClientSize.Width - totalWidth;
-
-			lstWatch.ColumnWidthChanging += lstWatch_ColumnWidthChanging;
-			lstWatch.ColumnWidthChanged += lstWatch_ColumnWidthChanged;
-		}
-
 		public void UpdateWatch()
 		{
 			List<WatchValueInfo> watchContent = WatchManager.GetWatchContent(mnuHexDisplay.Checked);
@@ -98,8 +66,12 @@ namespace Mesen.GUI.Debugger
 					item.SubItems[0].Text = watchContent[i].Expression;
 					item.SubItems[1].Text = watchContent[i].Value.ToString();
 					item.SubItems[1].ForeColor = watchContent[i].HasChanged ? Color.Red : Color.Black;
-					//item.Selected = false;
 				}
+			}
+
+			lstWatch.AutoResizeColumn(1, ColumnHeaderAutoResizeStyle.ColumnContent);
+			if(colValue.Width < 100) {
+				colValue.Width = 100;
 			}
 
 			lstWatch.EndUpdate();

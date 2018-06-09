@@ -38,12 +38,11 @@
 			this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripSeparator();
 			this.mnuShowLabels = new System.Windows.Forms.ToolStripMenuItem();
 			this.lstBreakpoints = new Mesen.GUI.Controls.MyListView();
-			this.columnHeader3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-			this.columnHeader5 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-			this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-			this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-			this.columnHeader4 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-			this.colLastColumn = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+			this.colEnabled = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+			this.colMarker = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+			this.colType = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+			this.colAddress = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+			this.colCondition = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
 			this.mnuBreakpoints.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -112,12 +111,11 @@
 			// 
 			this.lstBreakpoints.CheckBoxes = true;
 			this.lstBreakpoints.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.columnHeader3,
-            this.columnHeader5,
-            this.columnHeader1,
-            this.columnHeader2,
-            this.columnHeader4,
-            this.colLastColumn});
+            this.colEnabled,
+            this.colMarker,
+            this.colType,
+            this.colAddress,
+            this.colCondition});
 			this.lstBreakpoints.ContextMenuStrip = this.mnuBreakpoints;
 			this.lstBreakpoints.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.lstBreakpoints.FullRowSelect = true;
@@ -129,41 +127,34 @@
 			this.lstBreakpoints.TabIndex = 7;
 			this.lstBreakpoints.UseCompatibleStateImageBehavior = false;
 			this.lstBreakpoints.View = System.Windows.Forms.View.Details;
-			this.lstBreakpoints.ColumnWidthChanged += new System.Windows.Forms.ColumnWidthChangedEventHandler(this.lstBreakpoints_ColumnWidthChanged);
-			this.lstBreakpoints.ColumnWidthChanging += new System.Windows.Forms.ColumnWidthChangingEventHandler(this.lstBreakpoints_ColumnWidthChanging);
 			this.lstBreakpoints.SelectedIndexChanged += new System.EventHandler(this.lstBreakpoints_SelectedIndexChanged);
 			this.lstBreakpoints.DoubleClick += new System.EventHandler(this.lstBreakpoints_DoubleClick);
 			this.lstBreakpoints.MouseDown += new System.Windows.Forms.MouseEventHandler(this.lstBreakpoints_MouseDown);
 			// 
-			// columnHeader3
+			// colEnabled
 			// 
-			this.columnHeader3.Text = "";
-			this.columnHeader3.Width = 21;
+			this.colEnabled.Text = "";
+			this.colEnabled.Width = 21;
 			// 
-			// columnHeader5
+			// colMarker
 			// 
-			this.columnHeader5.Text = "M";
-			this.columnHeader5.Width = 25;
+			this.colMarker.Text = "M";
+			this.colMarker.Width = 25;
 			// 
-			// columnHeader1
+			// colType
 			// 
-			this.columnHeader1.Text = "Type";
-			this.columnHeader1.Width = 87;
+			this.colType.Text = "Type";
+			this.colType.Width = 87;
 			// 
-			// columnHeader2
+			// colAddress
 			// 
-			this.columnHeader2.Text = "Address";
-			this.columnHeader2.Width = 108;
+			this.colAddress.Text = "Address";
+			this.colAddress.Width = 108;
 			// 
-			// columnHeader4
+			// colCondition
 			// 
-			this.columnHeader4.Text = "Condition";
-			this.columnHeader4.Width = 142;
-			// 
-			// colLastColumn
-			// 
-			this.colLastColumn.Text = "";
-			this.colLastColumn.Width = 29;
+			this.colCondition.Text = "Condition";
+			this.colCondition.Width = 142;
 			// 
 			// ctrlBreakpoints
 			// 
@@ -180,19 +171,18 @@
 		#endregion
 
 		private Mesen.GUI.Controls.MyListView lstBreakpoints;
-		private System.Windows.Forms.ColumnHeader columnHeader1;
-		private System.Windows.Forms.ColumnHeader columnHeader2;
-		private System.Windows.Forms.ColumnHeader colLastColumn;
+		private System.Windows.Forms.ColumnHeader colType;
+		private System.Windows.Forms.ColumnHeader colAddress;
 		private System.Windows.Forms.ContextMenuStrip mnuBreakpoints;
 		private System.Windows.Forms.ToolStripMenuItem mnuAddBreakpoint;
 		private System.Windows.Forms.ToolStripMenuItem mnuRemoveBreakpoint;
-		private System.Windows.Forms.ColumnHeader columnHeader3;
-		private System.Windows.Forms.ColumnHeader columnHeader4;
+		private System.Windows.Forms.ColumnHeader colEnabled;
+		private System.Windows.Forms.ColumnHeader colCondition;
 		private System.Windows.Forms.ToolStripMenuItem mnuGoToLocation;
 		private System.Windows.Forms.ToolStripMenuItem mnuEditBreakpoint;
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem1;
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem2;
 		private System.Windows.Forms.ToolStripMenuItem mnuShowLabels;
-		private System.Windows.Forms.ColumnHeader columnHeader5;
+		private System.Windows.Forms.ColumnHeader colMarker;
 	}
 }

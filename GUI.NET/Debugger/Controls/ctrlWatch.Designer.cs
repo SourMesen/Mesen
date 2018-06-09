@@ -31,9 +31,8 @@
 			this.components = new System.ComponentModel.Container();
 			System.Windows.Forms.ListViewItem listViewItem1 = new System.Windows.Forms.ListViewItem("");
 			this.lstWatch = new Mesen.GUI.Controls.WatchList();
-			this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-			this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-			this.colLastColumn = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+			this.colName = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+			this.colValue = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
 			this.contextMenuWatch = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this.mnuRemoveWatch = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
@@ -44,9 +43,8 @@
 			// lstWatch
 			// 
 			this.lstWatch.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.columnHeader1,
-            this.columnHeader2,
-            this.colLastColumn});
+            this.colName,
+            this.colValue});
 			this.lstWatch.ContextMenuStrip = this.contextMenuWatch;
 			this.lstWatch.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.lstWatch.FullRowSelect = true;
@@ -66,19 +64,15 @@
 			this.lstWatch.Click += new System.EventHandler(this.lstWatch_Click);
 			this.lstWatch.DoubleClick += new System.EventHandler(this.lstWatch_DoubleClick);
 			// 
-			// columnHeader1
+			// colName
 			// 
-			this.columnHeader1.Text = "Name";
-			this.columnHeader1.Width = 180;
+			this.colName.Text = "Name";
+			this.colName.Width = 180;
 			// 
-			// columnHeader2
+			// colValue
 			// 
-			this.columnHeader2.Text = "Value";
-			this.columnHeader2.Width = 110;
-			// 
-			// colLastColumn
-			// 
-			this.colLastColumn.Text = "";
+			this.colValue.Text = "Value";
+			this.colValue.Width = 110;
 			// 
 			// contextMenuWatch
 			// 
@@ -87,7 +81,7 @@
             this.toolStripMenuItem1,
             this.mnuHexDisplay});
 			this.contextMenuWatch.Name = "contextMenuWatch";
-			this.contextMenuWatch.Size = new System.Drawing.Size(184, 76);
+			this.contextMenuWatch.Size = new System.Drawing.Size(184, 54);
 			// 
 			// mnuRemoveWatch
 			// 
@@ -127,12 +121,11 @@
 		#endregion
 
 		private Mesen.GUI.Controls.WatchList lstWatch;
-		private System.Windows.Forms.ColumnHeader columnHeader1;
-		private System.Windows.Forms.ColumnHeader columnHeader2;
+		private System.Windows.Forms.ColumnHeader colName;
+		private System.Windows.Forms.ColumnHeader colValue;
 		private System.Windows.Forms.ContextMenuStrip contextMenuWatch;
 		private System.Windows.Forms.ToolStripMenuItem mnuRemoveWatch;
 		private System.Windows.Forms.ToolStripMenuItem mnuHexDisplay;
-		private System.Windows.Forms.ColumnHeader colLastColumn;
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem1;
 	}
 }
