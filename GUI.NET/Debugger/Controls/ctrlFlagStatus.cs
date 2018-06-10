@@ -15,6 +15,10 @@ namespace Mesen.GUI.Debugger.Controls
 		public ctrlFlagStatus()
 		{
 			InitializeComponent();
+			if(Program.IsMono) {
+				lblLetter.Padding = Padding.Empty;
+				lblLetter.Width = 16;
+			}
 		}
 
 		public bool Active
