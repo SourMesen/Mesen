@@ -2212,11 +2212,11 @@ namespace Be.Windows.Forms
 
 			byte[] buffer = null;
 			IDataObject da = Clipboard.GetDataObject();
-			if(da.GetDataPresent("BinaryData")) {
+			if(da != null && da.GetDataPresent("BinaryData")) {
 				System.IO.MemoryStream ms = (System.IO.MemoryStream)da.GetData("BinaryData");
 				buffer = new byte[ms.Length];
 				ms.Read(buffer, 0, buffer.Length);
-			} else if(da.GetDataPresent(typeof(string))) {
+			} else if(da != null && da.GetDataPresent(typeof(string))) {
 				string sBuffer = (string)da.GetData(typeof(string));
 				buffer = System.Text.Encoding.ASCII.GetBytes(sBuffer);
 			} else {
@@ -2240,6 +2240,9 @@ namespace Be.Windows.Forms
 			if (ReadOnly || !this.Enabled) return false;
 
 			IDataObject da = Clipboard.GetDataObject();
+			if(da == null) {
+				return false;
+			}
 			if (da.GetDataPresent("BinaryData"))
 				return true;
 			else if (da.GetDataPresent(typeof(string)))
@@ -2256,6 +2259,9 @@ namespace Be.Windows.Forms
 
 			byte[] buffer = null;
 			IDataObject da = Clipboard.GetDataObject();
+			if(da == null) {
+				return false;
+			}
 			if (da.GetDataPresent(typeof(string)))
 			{
 				string hexString = (string)da.GetData(typeof(string));
@@ -2274,7 +2280,7 @@ namespace Be.Windows.Forms
 
 			byte[] buffer = null;
 			IDataObject da = Clipboard.GetDataObject();
-			if (da.GetDataPresent(typeof(string)))
+			if (da != null && da.GetDataPresent(typeof(string)))
 			{
 				string hexString = (string)da.GetData(typeof(string));
 				buffer = ConvertHexToBytes(hexString);
