@@ -20,19 +20,24 @@ namespace Mesen.GUI.Debugger
 		private AddressTypeInfo? _previewAddress;
 		private string _code;
 		private Ld65DbgImporter _symbolProvider;
+		private Form _parentForm;
 
 		protected override bool ShowWithoutActivation
 		{
 			get { return true; }
 		}
 
-		public frmCodeTooltip(Dictionary<string, string> values, AddressTypeInfo? previewAddress = null, string code = null, Ld65DbgImporter symbolProvider = null)
+		public frmCodeTooltip(Form parent, Dictionary<string, string> values, AddressTypeInfo? previewAddress = null, string code = null, Ld65DbgImporter symbolProvider = null)
 		{
+			_parentForm = parent;
 			_values = values;
 			_previewAddress = previewAddress;
 			_code = code;
 			_symbolProvider = symbolProvider;
 			InitializeComponent();
+			this.TopLevel = false;
+			this.Parent = _parentForm;
+			_parentForm.Controls.Add(this);
 		}
 
 		protected override void OnShown(EventArgs e)
@@ -91,6 +96,7 @@ namespace Mesen.GUI.Debugger
 			tlpMain.ResumeLayout();
 			this.Width = this.tlpMain.Width;
 			this.Height = this.tlpMain.Height; 
+			this.BringToFront();
 		}
 	}
 }

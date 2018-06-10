@@ -30,7 +30,7 @@ namespace Mesen.GUI.Debugger.Controls
 			this.DoubleBuffered = true;
 			this.ResizeRedraw = true;
 			this._tmrScroll = new Timer();
-			this._tmrScroll.Tick += tmrScroll_Tick;
+			this._tmrScroll.Tick += tmrScroll_Tick;			
 		}
 
 		private void tmrScroll_Tick(object sender, EventArgs e)
@@ -51,11 +51,13 @@ namespace Mesen.GUI.Debugger.Controls
 		{
 			base.OnPaint(e);
 
-			int left = e.ClipRectangle.Left;
-			int width = e.ClipRectangle.Width;
-			e.Graphics.FillRectangle(Brushes.DimGray, e.ClipRectangle);
+			Rectangle rect = this.ClientRectangle;
 
-			int barTop = e.ClipRectangle.Top + _buttonSize;
+			int left = rect.Left;
+			int width = rect.Width;
+			e.Graphics.FillRectangle(Brushes.DimGray, rect);
+
+			int barTop = rect.Top + _buttonSize;
 			int barHeight = this.Height - _buttonSize * 2;
 
 			float startPos = (float)this.Value / this.Maximum;
@@ -124,13 +126,13 @@ namespace Mesen.GUI.Debugger.Controls
 			int arrowHeight = 5;
 			int bottom = barTop + barHeight + _buttonSize;
 			e.Graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
-			e.Graphics.FillRectangle(Brushes.Gainsboro, e.ClipRectangle.Left + 1, e.ClipRectangle.Top, this.Width - 1, _buttonSize);
-			e.Graphics.FillRectangle(Brushes.Gainsboro, e.ClipRectangle.Left + 1, bottom - _buttonSize, this.Width - 1, _buttonSize);
-			e.Graphics.DrawLine(Pens.DimGray, e.ClipRectangle.Left + 1, e.ClipRectangle.Top + _buttonSize, e.ClipRectangle.Left + width, e.ClipRectangle.Top + _buttonSize);
-			e.Graphics.DrawLine(Pens.DimGray, e.ClipRectangle.Left + 1, bottom - _buttonSize, e.ClipRectangle.Left + width, bottom - _buttonSize);
-			e.Graphics.DrawLine(Pens.DimGray, e.ClipRectangle.Left + 1, bottom, e.ClipRectangle.Left + width, bottom);
+			e.Graphics.FillRectangle(Brushes.Gainsboro, rect.Left + 1, rect.Top, this.Width - 1, _buttonSize);
+			e.Graphics.FillRectangle(Brushes.Gainsboro, rect.Left + 1, bottom - _buttonSize, this.Width - 1, _buttonSize);
+			e.Graphics.DrawLine(Pens.DimGray, rect.Left + 1, rect.Top + _buttonSize, rect.Left + width, rect.Top + _buttonSize);
+			e.Graphics.DrawLine(Pens.DimGray, rect.Left + 1, bottom - _buttonSize, rect.Left + width, bottom - _buttonSize);
+			e.Graphics.DrawLine(Pens.DimGray, rect.Left + 1, bottom, rect.Left + width, bottom);
 			e.Graphics.TranslateTransform(5, (_buttonSize - arrowHeight) / 2);
-			e.Graphics.FillPolygon(Brushes.DimGray, new Point[] { new Point(left, e.ClipRectangle.Top + arrowHeight), new Point(left + arrowWidth, e.ClipRectangle.Top + arrowHeight), new Point(left + arrowWidth / 2, e.ClipRectangle.Top) }, FillMode.Winding);
+			e.Graphics.FillPolygon(Brushes.DimGray, new Point[] { new Point(left, rect.Top + arrowHeight), new Point(left + arrowWidth, rect.Top + arrowHeight), new Point(left + arrowWidth / 2, rect.Top) }, FillMode.Winding);
 			e.Graphics.TranslateTransform(0, -(_buttonSize - arrowHeight));
 			e.Graphics.FillPolygon(Brushes.DimGray, new Point[] { new Point(left, bottom - arrowHeight), new Point(left + arrowWidth, bottom - arrowHeight), new Point(left + arrowWidth / 2, bottom) }, FillMode.Winding);
 		}
@@ -188,6 +190,7 @@ namespace Mesen.GUI.Debugger.Controls
 					int scrollPosition = Math.Max(0, (e.Y - this.Top - _buttonSize) * this.Maximum / (this.Height - _buttonSize * 2));
 					if(_lastPreviewScrollPosition != scrollPosition) {
 						Point p = this.PointToScreen(new Point(this.ClientRectangle.Right, e.Y));
+						p = this.FindForm().PointToClient(p);
 						if(_codeTooltip == null) {
 							_codeTooltip = this.ColorProvider.GetPreview(scrollPosition);
 							_codeTooltip.FormClosed += (s, evt) => { _codeTooltip = null; };
@@ -197,7 +200,10 @@ namespace Mesen.GUI.Debugger.Controls
 						if(_codeTooltip != null) {
 							_codeTooltip.Left = p.X + 5;
 							_codeTooltip.Top = p.Y;
-							_codeTooltip.Show();
+							if(!_codeTooltip.Visible) {
+								_codeTooltip.Show();
+								this.Parent.Focus();
+							}
 						}
 						_lastPreviewScrollPosition = scrollPosition;
 					}
@@ -214,6 +220,7 @@ namespace Mesen.GUI.Debugger.Controls
 			}
 			_lastPreviewScrollPosition = -1;
 			_tmrScroll.Stop();
+			this.Parent.Focus();
 		}
 
 		private int HighlightHeight { get { return Math.Max(8, (int)(((float)this.VisibleLineCount / this.Maximum) * this.Height)); } }

@@ -623,11 +623,12 @@ namespace Mesen.GUI.Debugger
 					if(!string.IsNullOrWhiteSpace(label.Comment)) {
 						values["Comment"] = label.Comment;
 					}
-					_tooltip = new frmCodeTooltip(values);
-					_tooltip.Left = Cursor.Position.X + 10;
-					_tooltip.Top = Cursor.Position.Y + 10;
-					_tooltip.Show(this);
 
+					_tooltip = new frmCodeTooltip(this, values);
+					Point p = this.PointToClient(new Point(Cursor.Position.X + 10, Cursor.Position.Y + 10));
+					_tooltip.Location = p;
+					_tooltip.Show();
+					ctrlHexViewer.Focus();
 					_lastLabelTooltip = label;
 				}
 			} else {

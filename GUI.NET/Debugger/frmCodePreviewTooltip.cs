@@ -21,19 +21,25 @@ namespace Mesen.GUI.Debugger
 		private string _code;
 		private Ld65DbgImporter _symbolProvider;
 		private Ld65DbgImporter.FileInfo _selectedFile;
+		private Form _parentForm;
 
 		protected override bool ShowWithoutActivation
 		{
 			get { return true; }
 		}
 
-		public frmCodePreviewTooltip(int lineIndex, string code = null, Ld65DbgImporter symbolProvider = null, Ld65DbgImporter.FileInfo selectedFile = null)
+		public frmCodePreviewTooltip(Form parent, int lineIndex, string code = null, Ld65DbgImporter symbolProvider = null, Ld65DbgImporter.FileInfo selectedFile = null)
 		{
+			_parentForm = parent;
 			_code = code;
 			_symbolProvider = symbolProvider;
 			_lineIndex = lineIndex;
 			_selectedFile = selectedFile;
 			InitializeComponent();
+
+			this.TopLevel = false;
+			this.Parent = _parentForm;
+			_parentForm.Controls.Add(this);
 		}
 
 		protected override void OnShown(EventArgs e)
@@ -71,7 +77,8 @@ namespace Mesen.GUI.Debugger
 
 			tlpMain.ResumeLayout();
 			this.Width = this.tlpMain.Width;
-			this.Height = this.tlpMain.Height; 
+			this.Height = this.tlpMain.Height;
+			this.BringToFront();
 		}
 
 		public void ScrollToLineIndex(int lineIndex)

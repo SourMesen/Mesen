@@ -303,12 +303,12 @@ namespace Mesen.GUI.Debugger.Controls
 
 		private void ctrlCodeViewer_MouseLeave(object sender, EventArgs e)
 		{
-			_tooltipManager.Close(true);
+			_tooltipManager.Close();
 		}
 
 		private void ctrlCodeViewer_ScrollPositionChanged(object sender, EventArgs e)
 		{
-			_tooltipManager?.Close(true);
+			_tooltipManager?.Close();
 		}
 
 		public void ScrollToAddress(AddressTypeInfo addressInfo, bool scrollToTop = false)
@@ -465,7 +465,7 @@ namespace Mesen.GUI.Debugger.Controls
 					while(lineIndex > 0 && _viewer.CodeViewer.GetLineNumber(lineIndex) < 0) {
 						lineIndex--;
 					}
-					return new frmCodePreviewTooltip(lineIndex, null, _viewer.SymbolProvider, _viewer.CurrentFile);
+					return new frmCodePreviewTooltip(_viewer.FindForm(), lineIndex, null, _viewer.SymbolProvider, _viewer.CurrentFile);
 				} else {
 					return null;
 				}

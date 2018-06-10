@@ -16,6 +16,7 @@ namespace Mesen.GUI.Debugger
 	public partial class frmOpCodeTooltip : Form
 	{
 		static private Dictionary<string, OpCodeDesc> _descriptions;
+		private Form _parentForm;
 
 		protected override bool ShowWithoutActivation
 		{
@@ -103,8 +104,9 @@ namespace Mesen.GUI.Debugger
 			return _descriptions.TryGetValue(text.ToLowerInvariant(), out desc);
 		}
 
-		public frmOpCodeTooltip(string opcode, int relativeAddress)
+		public frmOpCodeTooltip(Form parent, string opcode, int relativeAddress)
 		{
+			_parentForm = parent;
 			InitializeComponent();
 
 			OpCodeDesc desc = _descriptions[opcode.ToLowerInvariant()];
@@ -155,6 +157,10 @@ namespace Mesen.GUI.Debugger
 			ctrlFlagNegative.Active = desc.Flags.HasFlag(CpuFlag.Negative);
 			ctrlFlagOverflow.Active = desc.Flags.HasFlag(CpuFlag.Overflow);
 			ctrlFlagZero.Active = desc.Flags.HasFlag(CpuFlag.Zero);
+
+			this.TopLevel = false;
+			this.Parent = _parentForm;
+			_parentForm.Controls.Add(this);
 		}
 
 		protected override void OnShown(EventArgs e)
@@ -163,6 +169,7 @@ namespace Mesen.GUI.Debugger
 
 			this.Width = this.tlpMain.Width;
 			this.Height = this.tlpMain.Height;
+			this.BringToFront();
 		}
 
 		[Flags]

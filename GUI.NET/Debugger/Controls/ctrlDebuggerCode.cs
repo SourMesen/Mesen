@@ -344,7 +344,7 @@ namespace Mesen.GUI.Debugger
 
 		private void ctrlCodeViewer_MouseLeave(object sender, EventArgs e)
 		{
-			_tooltipManager.Close(true);
+			_tooltipManager.Close();
 		}
 		
 		private Breakpoint GetCurrentLineBreakpoint()
@@ -382,7 +382,7 @@ namespace Mesen.GUI.Debugger
 
 		private void ctrlCodeViewer_MouseDown(object sender, MouseEventArgs e)
 		{
-			_tooltipManager.Close(true);
+			_tooltipManager.Close();
 
 			if(e.Button == MouseButtons.Left && e.Location.X < this.ctrlCodeViewer.CodeMargin / 4) {
 				int relativeAddress = ctrlCodeViewer.GetLineNumberAtPosition(e.Y);
@@ -408,7 +408,7 @@ namespace Mesen.GUI.Debugger
 
 		private void ctrlCodeViewer_ScrollPositionChanged(object sender, EventArgs e)
 		{
-			_tooltipManager?.Close(true);
+			_tooltipManager?.Close();
 		}
 
 		private void ctrlCodeViewer_MouseDoubleClick(object sender, MouseEventArgs e)
@@ -631,7 +631,7 @@ namespace Mesen.GUI.Debugger
 					while(lineIndex > 0 && _code._lineNumbers[lineIndex] < 0) {
 						lineIndex--;
 					}
-					return new frmCodePreviewTooltip(lineIndex, _code._code);
+					return new frmCodePreviewTooltip(_code.FindForm(), lineIndex, _code._code);
 				} else {
 					return null;
 				}

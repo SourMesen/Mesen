@@ -13,7 +13,6 @@ namespace Mesen.GUI.Debugger
 {
 	class CodeTooltipManager
 	{
-		private bool _preventCloseTooltip = false;
 		private string _hoverLastWord = "";
 		private int _hoverLastLineAddress = -1;
 		private Point _previousLocation;
@@ -36,36 +35,40 @@ namespace Mesen.GUI.Debugger
 				return;
 			}
 
+			Form parentForm = _owner.FindForm();
+
 			if(_hoverLastWord != word || _hoverLastLineAddress != lineAddress || _codeTooltip == null) {
-				if(!_preventCloseTooltip && _codeTooltip != null) {
+				if(_codeTooltip != null) {
 					_codeTooltip.Close();
 					_codeTooltip = null;
 				}
 
 				if(ConfigManager.Config.DebugInfo.ShowOpCodeTooltips && frmOpCodeTooltip.IsOpCode(word)) {
-					_codeTooltip = new frmOpCodeTooltip(word, lineAddress);
+					_codeTooltip = new frmOpCodeTooltip(parentForm, word, lineAddress);
 				} else {
-					_codeTooltip = new frmCodeTooltip(values, previewAddress.HasValue && previewAddress.Value.Type == AddressType.PrgRom ? previewAddress : null, Code, SymbolProvider);
+					_codeTooltip = new frmCodeTooltip(parentForm, values, previewAddress.HasValue && previewAddress.Value.Type == AddressType.PrgRom ? previewAddress : null, Code, SymbolProvider);
 				}
-				_codeTooltip.Left = Cursor.Position.X + 10;
-				_codeTooltip.Top = Cursor.Position.Y + 10;
-				_codeTooltip.Show(_owner);
 			}
-			_codeTooltip.Left = Cursor.Position.X + 10;
-			_codeTooltip.Top = Cursor.Position.Y + 10;
+			Point p = parentForm.PointToClient(new Point(Cursor.Position.X + 10, Cursor.Position.Y + 10));
+			_codeTooltip.Location = p;
 
-			_preventCloseTooltip = true;
+			if(!_codeTooltip.Visible) {
+				_codeTooltip.Show();
+			}
+
+			_owner.Focus();
+
 			_hoverLastWord = word;
 			_hoverLastLineAddress = lineAddress;
 		}
 
-		public void Close(bool forceClose = false)
+		public void Close()
 		{
-			if((!_preventCloseTooltip || forceClose) && _codeTooltip != null) {
+			if(_codeTooltip != null) {
 				_codeTooltip.Close();
 				_codeTooltip = null;
+				_owner.Focus();
 			}
-			_preventCloseTooltip = false;
 		}
 
 		public void DisplayAddressTooltip(string word, UInt32 address)
@@ -138,7 +141,7 @@ namespace Mesen.GUI.Debugger
 		public void ProcessMouseMove(Point location)
 		{
 			if(_previousLocation != location) {
-				this.Close();
+				bool closeExistingPopup = true;
 
 				_previousLocation = location;
 
@@ -154,11 +157,14 @@ namespace Mesen.GUI.Debugger
 							CodeLabel label = LabelManager.GetLabel((UInt32)info.Address, info.Type);
 							if(label == null) {
 								DisplayAddressTooltip(word, address);
+								closeExistingPopup = false;
 							} else {
 								DisplayLabelTooltip(word, label);
+								closeExistingPopup = false;
 							}
 						} else {
 							DisplayAddressTooltip(word, address);
+							closeExistingPopup = false;
 						}
 					} catch { }
 				} else {
@@ -182,7 +188,12 @@ namespace Mesen.GUI.Debugger
 
 					if(ConfigManager.Config.DebugInfo.ShowOpCodeTooltips && frmOpCodeTooltip.IsOpCode(word)) {
 						ShowTooltip(word, null, -1, new AddressTypeInfo() { Address = address, Type = AddressType.Register });
+						closeExistingPopup = false;
 					}
+				}
+
+				if(closeExistingPopup) {
+					this.Close();
 				}
 			}
 		}
