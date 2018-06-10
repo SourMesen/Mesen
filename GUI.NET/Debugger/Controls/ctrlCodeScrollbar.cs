@@ -190,6 +190,7 @@ namespace Mesen.GUI.Debugger.Controls
 						Point p = this.PointToScreen(new Point(this.ClientRectangle.Right, e.Y));
 						if(_codeTooltip == null) {
 							_codeTooltip = this.ColorProvider.GetPreview(scrollPosition);
+							_codeTooltip.FormClosed += (s, evt) => { _codeTooltip = null; };
 						} else {
 							_codeTooltip.ScrollToLineIndex(scrollPosition);
 						}
