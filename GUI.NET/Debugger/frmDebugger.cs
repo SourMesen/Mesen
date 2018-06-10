@@ -35,11 +35,11 @@ namespace Mesen.GUI.Debugger
 
 		protected override void OnLoad(EventArgs e)
 		{
- 			base.OnLoad(e);
+			base.OnLoad(e);
 
 			_minimumSize = this.MinimumSize;
 			_topPanelMinSize = splitContainer.Panel1MinSize;
-			 
+
 			if(Program.IsMono) {
 				//This doesn't work in Mono (menu is blank) - hide it for now
 				mnuCode.Visible = false;
@@ -66,7 +66,20 @@ namespace Mesen.GUI.Debugger
 			this.AutoLoadCdlFiles();
 			this.AutoLoadDbgFiles(true);
 
-			this.mnuSplitView.Checked = ConfigManager.Config.DebugInfo.SplitView;
+			if(!Program.IsMono) {
+				this.mnuSplitView.Checked = ConfigManager.Config.DebugInfo.SplitView;
+			} else {
+				Task.Run(() => {
+					//Wait 2 seconds before we turn split view on (otherwise Mono tends to cause GDI-related crashes)
+					System.Threading.Thread.Sleep(500);
+					this.BeginInvoke((Action)(() => {
+						this.mnuSplitView.Checked = ConfigManager.Config.DebugInfo.SplitView;
+						if(this.mnuSplitView.Checked) {
+							this.UpdateDebugger(false, false);
+						}
+					}));
+				});
+			}
 			this.mnuCopyAddresses.Checked = ConfigManager.Config.DebugInfo.CopyAddresses;
 			this.mnuCopyByteCode.Checked = ConfigManager.Config.DebugInfo.CopyByteCode;
 			this.mnuCopyComments.Checked = ConfigManager.Config.DebugInfo.CopyComments;
