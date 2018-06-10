@@ -233,11 +233,11 @@ extern "C" {
 
 	RETRO_API void retro_set_audio_sample(retro_audio_sample_t sendAudioSample)
 	{
-		_soundManager->SetSendAudioSample(sendAudioSample);
 	}
 
 	RETRO_API void retro_set_audio_sample_batch(retro_audio_sample_batch_t audioSampleBatch)
 	{
+		_soundManager->SetSendAudioBuffer(audioSampleBatch);
 	}
 
 	RETRO_API void retro_set_input_poll(retro_input_poll_t pollInput)
