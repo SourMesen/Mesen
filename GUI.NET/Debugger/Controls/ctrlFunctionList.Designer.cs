@@ -61,6 +61,8 @@
 			this.lstFunctions.TabIndex = 2;
 			this.lstFunctions.UseCompatibleStateImageBehavior = false;
 			this.lstFunctions.View = System.Windows.Forms.View.Details;
+			this.lstFunctions.RetrieveVirtualItem += new System.Windows.Forms.RetrieveVirtualItemEventHandler(this.lstFunctions_RetrieveVirtualItem);
+			this.lstFunctions.SearchForVirtualItem += new System.Windows.Forms.SearchForVirtualItemEventHandler(this.lstFunctions_SearchForVirtualItem);
 			this.lstFunctions.SelectedIndexChanged += new System.EventHandler(this.lstFunctions_SelectedIndexChanged);
 			this.lstFunctions.DoubleClick += new System.EventHandler(this.lstFunctions_DoubleClick);
 			// 

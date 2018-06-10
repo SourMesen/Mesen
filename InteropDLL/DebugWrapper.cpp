@@ -39,6 +39,7 @@ extern "C"
 
 	DllExport void __stdcall DebugSetBreakpoints(Breakpoint breakpoints[], uint32_t length) { GetDebugger()->SetBreakpoints(breakpoints, length); }
 	DllExport void __stdcall DebugSetLabel(uint32_t address, AddressType addressType, char* label, char* comment) { GetDebugger()->GetLabelManager()->SetLabel(address, addressType, label, comment); }
+	DllExport void __stdcall DebugDeleteLabels() { GetDebugger()->GetLabelManager()->DeleteLabels(); }
 
 	DllExport bool __stdcall DebugIsExecutionStopped() { return GetDebugger()->IsExecutionStopped(); }
 	DllExport void __stdcall DebugRun() { GetDebugger()->Run(); }

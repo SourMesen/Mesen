@@ -17,33 +17,14 @@ namespace Mesen.GUI.Debugger.Controls
 	{
 		public event EventHandler OnFindOccurrence;
 		public event EventHandler OnLabelSelected;
+
 		private List<ListViewItem> _listItems = new List<ListViewItem>();
-
-		private class LabelComparer : IComparer
-		{
-			private int _columnIndex;
-			private bool _sortOrder;
-			public LabelComparer(int columnIndex, bool sortOrder)
-			{
-				_columnIndex = columnIndex;
-				_sortOrder = sortOrder;
-			}
-
-			public int Compare(object x, object y)
-			{
-				int result = String.Compare(((ListViewItem)x).SubItems[_columnIndex].Text, ((ListViewItem)y).SubItems[_columnIndex].Text);
-				if(result == 0 && (_columnIndex == 0 || _columnIndex == 3)) {
-					result = String.Compare(((ListViewItem)x).SubItems[2].Text, ((ListViewItem)y).SubItems[2].Text);
-				}
-
-				return result * (_sortOrder ? -1 : 1);
-			}
-		}
+		private int _sortColumn = 0;
+		private bool _descSort = false;
 
 		public ctrlLabelList()
 		{
 			InitializeComponent();
-			lstLabels.ListViewItemSorter = new LabelComparer(0, false);
 		}
 
 		protected override void OnLoad(EventArgs e)
@@ -83,33 +64,52 @@ namespace Mesen.GUI.Debugger.Controls
 			}
 		}
 
+		public int CompareLabels(ListViewItem x, ListViewItem y)
+		{
+			int result = String.Compare(((ListViewItem)x).SubItems[_sortColumn].Text, ((ListViewItem)y).SubItems[_sortColumn].Text);
+			if(result == 0 && (_sortColumn == 0 || _sortColumn == 3)) {
+				result = String.Compare(((ListViewItem)x).SubItems[2].Text, ((ListViewItem)y).SubItems[2].Text);
+			}
+			return result * (_descSort ? -1 : 1);
+		}
+
+		private void SortItems()
+		{
+			_listItems.Sort(CompareLabels);
+		}
+
 		public void UpdateLabelListAddresses()
 		{
-			bool updating = false;
+			bool needUpdate = false;
+			Font italicFont = null;
+			Font regularFont = null;
+
 			foreach(ListViewItem item in _listItems) {
 				CodeLabel label = (CodeLabel)item.SubItems[1].Tag;
 
 				Int32 relativeAddress = InteropEmu.DebugGetRelativeAddress(label.Address, label.AddressType);
 				if(relativeAddress != (Int32)item.Tag) {
-					if(!updating) {
-						lstLabels.BeginUpdate();
-						updating = true;
-					}
+					needUpdate = true;
 					if(relativeAddress >= 0) {
 						item.SubItems[1].Text = "$" + relativeAddress.ToString("X4");
 						item.ForeColor = Color.Black;
-						item.Font = new Font(item.Font, FontStyle.Regular);
+						if(regularFont == null) {
+							regularFont = new Font(item.Font, FontStyle.Regular);
+						}
+						item.Font = regularFont;
 					} else {
 						item.SubItems[1].Text = "[n/a]";
 						item.ForeColor = Color.Gray;
-						item.Font = new Font(item.Font, FontStyle.Italic);
+						if(italicFont == null) {
+							italicFont = new Font(item.Font, FontStyle.Italic);
+						}
+						item.Font = italicFont;
 					}
 					item.Tag = relativeAddress;
 				}
 			}
-			if(updating) {
-				lstLabels.Sort();
-				lstLabels.EndUpdate();
+			if(needUpdate) {
+				SortItems();
 			}
 		}
 
@@ -117,6 +117,7 @@ namespace Mesen.GUI.Debugger.Controls
 		{
 			List<CodeLabel> labels = LabelManager.GetLabels();
 			List<ListViewItem> items = new List<ListViewItem>(labels.Count);
+			Font italicFont = null;
 			foreach(CodeLabel label in labels) {
 				if(label.Label.Length > 0 || ConfigManager.Config.DebugInfo.ShowCommentsInLabelList) {
 					ListViewItem item = new ListViewItem(label.Label);
@@ -127,18 +128,20 @@ namespace Mesen.GUI.Debugger.Controls
 					} else {
 						item.SubItems.Add("[n/a]");
 						item.ForeColor = Color.Gray;
-						item.Font = new Font(item.Font, FontStyle.Italic);
+						if(italicFont == null) {
+							italicFont = new Font(item.Font, FontStyle.Italic);
+						}
+						item.Font = italicFont;
 					}
-					string absAddress = string.Empty;
+					string prefix = string.Empty;
 					switch(label.AddressType) {
-						case AddressType.InternalRam: absAddress += "RAM: "; break;
-						case AddressType.PrgRom: absAddress += "PRG: "; break;
-						case AddressType.Register: absAddress += "REG: "; break;
-						case AddressType.SaveRam: absAddress += "SRAM: "; break;
-						case AddressType.WorkRam: absAddress += "WRAM: "; break;
+						case AddressType.InternalRam: prefix = "RAM: $"; break;
+						case AddressType.PrgRom: prefix = "PRG: $"; break;
+						case AddressType.Register: prefix = "REG: $"; break;
+						case AddressType.SaveRam: prefix = "SRAM: $"; break;
+						case AddressType.WorkRam: prefix = "WRAM: $"; break;
 					}
-					absAddress += "$" + label.Address.ToString("X4");
-					item.SubItems.Add(absAddress);
+					item.SubItems.Add(prefix + label.Address.ToString("X4"));
 					item.SubItems.Add(ConfigManager.Config.DebugInfo.ShowCommentsInLabelList ? label.Comment : "");
 					item.SubItems[1].Tag = label;
 
@@ -147,25 +150,29 @@ namespace Mesen.GUI.Debugger.Controls
 				}
 			}
 
+			_listItems = items;
+			SortItems();
+
 			lstLabels.BeginUpdate();
-			lstLabels.Items.Clear();
-			lstLabels.Items.AddRange(items.ToArray());
-			lstLabels.Sort();
+			lstLabels.VirtualMode = true;
+			lstLabels.VirtualListSize = items.Count;
+			lstLabels.EndUpdate();
 
 			colComment.AutoResize(ColumnHeaderAutoResizeStyle.ColumnContent);
 			if(!ConfigManager.Config.DebugInfo.ShowCommentsInLabelList) {
 				colComment.Width = 0;
 			}
+		}
 
-			lstLabels.EndUpdate();
-
-			_listItems = items;
+		private ListViewItem GetSelectedItem()
+		{
+			return _listItems[lstLabels.SelectedIndices[0]];
 		}
 
 		private void lstLabels_DoubleClick(object sender, EventArgs e)
 		{
-			if(lstLabels.SelectedItems.Count > 0) {
-				Int32 relativeAddress = (Int32)lstLabels.SelectedItems[0].Tag;
+			if(lstLabels.SelectedIndices.Count > 0) {
+				Int32 relativeAddress = (Int32)GetSelectedItem().Tag;
 
 				if(relativeAddress >= 0) {
 					OnLabelSelected?.Invoke(relativeAddress, e);
@@ -175,20 +182,20 @@ namespace Mesen.GUI.Debugger.Controls
 		
 		private void lstLabels_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			mnuDelete.Enabled = lstLabels.SelectedItems.Count > 0;
-			mnuEdit.Enabled = lstLabels.SelectedItems.Count == 1;
-			mnuFindOccurrences.Enabled = lstLabels.SelectedItems.Count == 1;
-			mnuAddToWatch.Enabled = lstLabels.SelectedItems.Count == 1;
-			mnuAddBreakpoint.Enabled = lstLabels.SelectedItems.Count == 1;
+			mnuDelete.Enabled = lstLabels.SelectedIndices.Count > 0;
+			mnuEdit.Enabled = lstLabels.SelectedIndices.Count == 1;
+			mnuFindOccurrences.Enabled = lstLabels.SelectedIndices.Count == 1;
+			mnuAddToWatch.Enabled = lstLabels.SelectedIndices.Count == 1;
+			mnuAddBreakpoint.Enabled = lstLabels.SelectedIndices.Count == 1;
 		}
 
 		private void mnuDelete_Click(object sender, EventArgs e)
 		{
-			if(lstLabels.SelectedItems.Count > 0) {
+			if(lstLabels.SelectedIndices.Count > 0) {
 				int topIndex = lstLabels.TopItem.Index;
 				int lastSelectedIndex = lstLabels.SelectedIndices[lstLabels.SelectedIndices.Count - 1];
-				for(int i = lstLabels.SelectedItems.Count - 1; i >= 0; i--) {
-					CodeLabel label = (CodeLabel)lstLabels.SelectedItems[i].SubItems[1].Tag;
+				for(int i = lstLabels.SelectedIndices.Count - 1; i >= 0; i--) {
+					CodeLabel label = (CodeLabel)GetSelectedItem().SubItems[1].Tag;
 					LabelManager.DeleteLabel(label.Address, label.AddressType, i == 0);
 				}
 				
@@ -201,8 +208,8 @@ namespace Mesen.GUI.Debugger.Controls
 				} else if(lstLabels.Items.Count > 0) {
 					lstLabels.Items[lstLabels.Items.Count - 1].Selected = true;
 				}
-				if(lstLabels.SelectedItems.Count > 0) {
-					lstLabels.SelectedItems[0].Focused = true;
+				if(lstLabels.SelectedIndices.Count > 0) {
+					GetSelectedItem().Focused = true;
 				}
 			}
 		}
@@ -219,32 +226,32 @@ namespace Mesen.GUI.Debugger.Controls
 
 		private void mnuEdit_Click(object sender, EventArgs e)
 		{
-			if(lstLabels.SelectedItems.Count > 0) {
-				CodeLabel label = (CodeLabel)lstLabels.SelectedItems[0].SubItems[1].Tag;
+			if(lstLabels.SelectedIndices.Count > 0) {
+				CodeLabel label = (CodeLabel)GetSelectedItem().SubItems[1].Tag;
 				EditLabel(label.Address, label.AddressType);
 			}
 		}
 
 		private void mnuFindOccurrences_Click(object sender, EventArgs e)
 		{
-			OnFindOccurrence?.Invoke(lstLabels.SelectedItems[0].SubItems[1].Tag, null);
+			OnFindOccurrence?.Invoke(GetSelectedItem().SubItems[1].Tag, null);
 		}
 
-		int _prevSortColumn = 0;
-		bool _descSort = false;
 		private void lstLabels_ColumnClick(object sender, ColumnClickEventArgs e)
 		{
-			if(_prevSortColumn == e.Column) {
+			lstLabels.BeginUpdate();
+			if(_sortColumn == e.Column) {
 				_descSort = !_descSort;
 			}
-			lstLabels.ListViewItemSorter = new LabelComparer(e.Column, _descSort);
-			_prevSortColumn = e.Column;
+			_sortColumn = e.Column;
+			SortItems();
+			lstLabels.EndUpdate();
 		}
 
 		private void mnuAddBreakpoint_Click(object sender, EventArgs e)
 		{
-			if(lstLabels.SelectedItems.Count > 0) {
-				CodeLabel label = (CodeLabel)lstLabels.SelectedItems[0].SubItems[1].Tag;
+			if(lstLabels.SelectedIndices.Count > 0) {
+				CodeLabel label = (CodeLabel)GetSelectedItem().SubItems[1].Tag;
 				if(label.AddressType == AddressType.InternalRam || label.AddressType == AddressType.Register) {
 					AddressTypeInfo info = new AddressTypeInfo();
 					InteropEmu.DebugGetAbsoluteAddressAndType(label.Address, ref info);
@@ -277,8 +284,8 @@ namespace Mesen.GUI.Debugger.Controls
 
 		private void mnuAddToWatch_Click(object sender, EventArgs e)
 		{
-			if(lstLabels.SelectedItems.Count > 0) {
-				CodeLabel label = (CodeLabel)lstLabels.SelectedItems[0].SubItems[1].Tag;
+			if(lstLabels.SelectedIndices.Count > 0) {
+				CodeLabel label = (CodeLabel)GetSelectedItem().SubItems[1].Tag;
 				WatchManager.AddWatch("[" + label.Label + "]");
 			}			
 		}
@@ -288,6 +295,21 @@ namespace Mesen.GUI.Debugger.Controls
 			ConfigManager.Config.DebugInfo.ShowCommentsInLabelList = mnuShowComments.Checked;
 			ConfigManager.ApplyChanges();
 			this.UpdateLabelList();
+		}
+
+		private void lstLabels_RetrieveVirtualItem(object sender, RetrieveVirtualItemEventArgs e)
+		{
+			e.Item = _listItems[e.ItemIndex];
+		}
+
+		private void lstLabels_SearchForVirtualItem(object sender, SearchForVirtualItemEventArgs e)
+		{
+			for(int i = 0; i < _listItems.Count; i++) {
+				if(_listItems[i].Text.StartsWith(e.Text, StringComparison.InvariantCultureIgnoreCase)) {
+					e.Index = i;
+					return;
+				}
+			}
 		}
 	}
 }

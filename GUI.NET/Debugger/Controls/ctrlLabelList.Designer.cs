@@ -147,6 +147,8 @@
 			this.lstLabels.UseCompatibleStateImageBehavior = false;
 			this.lstLabels.View = System.Windows.Forms.View.Details;
 			this.lstLabels.ColumnClick += new System.Windows.Forms.ColumnClickEventHandler(this.lstLabels_ColumnClick);
+			this.lstLabels.RetrieveVirtualItem += new System.Windows.Forms.RetrieveVirtualItemEventHandler(this.lstLabels_RetrieveVirtualItem);
+			this.lstLabels.SearchForVirtualItem += new System.Windows.Forms.SearchForVirtualItemEventHandler(this.lstLabels_SearchForVirtualItem);
 			this.lstLabels.SelectedIndexChanged += new System.EventHandler(this.lstLabels_SelectedIndexChanged);
 			this.lstLabels.DoubleClick += new System.EventHandler(this.lstLabels_DoubleClick);
 			// 

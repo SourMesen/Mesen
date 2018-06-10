@@ -499,15 +499,17 @@ namespace Mesen.GUI.Debugger
 			if(config.DbgImportComments) {
 				LoadComments();
 			}
+			List<CodeLabel> labels = new List<CodeLabel>(_romLabels.Count + _ramLabels.Count);
 			if(config.DbgImportPrgRomLabels) {
-				LabelManager.SetLabels(_romLabels.Values);
+				labels.AddRange(_romLabels.Values);
 				labelCount += _romLabels.Count;
 			}
 			if(config.DbgImportRamLabels) {
-				LabelManager.SetLabels(_ramLabels.Values);
+				labels.AddRange(_ramLabels.Values);
 				labelCount += _ramLabels.Count;
 			}
-
+			LabelManager.SetLabels(labels);
+			
 			if(!silent) {
 				if(_errorCount > 0) {
 					_errorCount -= _filesNotFound.Count;

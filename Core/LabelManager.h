@@ -33,7 +33,8 @@ public:
 	LabelManager(shared_ptr<BaseMapper> mapper);
 
 	void SetLabel(uint32_t address, AddressType addressType, string label, string comment);
-	
+	void DeleteLabels();
+
 	int32_t GetLabelRelativeAddress(string label);
 
 	string GetLabel(uint16_t relativeAddr, bool checkRegisters);

@@ -8,6 +8,13 @@ LabelManager::LabelManager(shared_ptr<BaseMapper> mapper)
 	_mapper = mapper;
 }
 
+void LabelManager::DeleteLabels()
+{
+	_codeComments.clear();
+	_codeLabels.clear();
+	_codeLabelReverseLookup.clear();
+}
+
 void LabelManager::SetLabel(uint32_t address, AddressType addressType, string label, string comment)
 {
 	address = GetLabelAddress(address, addressType);

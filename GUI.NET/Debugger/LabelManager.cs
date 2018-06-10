@@ -50,16 +50,16 @@ namespace Mesen.GUI.Debugger
 
 		public static void ResetLabels()
 		{
-			foreach(CodeLabel label in _labels.Values.ToList<CodeLabel>()) {
-				DeleteLabel(label.Address, label.AddressType, false);
-			}
+			InteropEmu.DebugDeleteLabels();
 			_labels.Clear();
 			_reverseLookup.Clear();
 		}
 
 		public static CodeLabel GetLabel(UInt32 address, AddressType type)
 		{
-			return _labels.ContainsKey(GetKey(address, type)) ? _labels[GetKey(address, type)] : null;
+			CodeLabel label;
+			_labels.TryGetValue(GetKey(address, type), out label);
+			return label;
 		}
 
 		public static CodeLabel GetLabel(UInt16 relativeAddress)
@@ -99,13 +99,14 @@ namespace Mesen.GUI.Debugger
 
 		public static bool SetLabel(UInt32 address, AddressType type, string label, string comment, bool raiseEvent = true)
 		{
-			if(_labels.ContainsKey(GetKey(address, type))) {
-				_reverseLookup.Remove(_labels[GetKey(address, type)].Label);
+			string key = GetKey(address, type);
+			if(_labels.ContainsKey(key)) {
+				_reverseLookup.Remove(_labels[key].Label);
 			}
 
-			_labels[GetKey(address, type)] = new CodeLabel() { Address = address, AddressType = type, Label = label, Comment = comment };
+			_labels[key] = new CodeLabel() { Address = address, AddressType = type, Label = label, Comment = comment };
 			if(label.Length > 0) {
-				_reverseLookup[label] = _labels[GetKey(address, type)];
+				_reverseLookup[label] = _labels[key];
 			}
 
 			InteropEmu.DebugSetLabel(address, type, label, comment.Replace(Environment.NewLine, "\n"));
@@ -118,10 +119,11 @@ namespace Mesen.GUI.Debugger
 
 		public static void DeleteLabel(UInt32 address, AddressType type, bool raiseEvent)
 		{
-			if(_labels.ContainsKey(GetKey(address, type))) {
-				_reverseLookup.Remove(_labels[GetKey(address, type)].Label);
+			string key = GetKey(address, type);
+			if(_labels.ContainsKey(key)) {
+				_reverseLookup.Remove(_labels[key].Label);
 			}
-			if(_labels.Remove(GetKey(address, type))) {
+			if(_labels.Remove(key)) {
 				InteropEmu.DebugSetLabel(address, type, string.Empty, string.Empty);
 				if(raiseEvent) {
 					OnLabelUpdated?.Invoke(null, null);

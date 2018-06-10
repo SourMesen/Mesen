@@ -63,9 +63,13 @@ namespace Mesen.GUI.Debugger
 
 			int labelCount = 0;
 			foreach(KeyValuePair<AddressType, Dictionary<UInt32, CodeLabel>> kvp in labels) {
-				LabelManager.SetLabels(kvp.Value.Values);
 				labelCount += kvp.Value.Values.Count;
 			}
+			List<CodeLabel> codeLabels = new List<CodeLabel>();
+			foreach(KeyValuePair<AddressType, Dictionary<UInt32, CodeLabel>> kvp in labels) {
+				codeLabels.AddRange(kvp.Value.Values);
+			}
+			LabelManager.SetLabels(codeLabels);
 
 			if(!silent) {
 				MessageBox.Show($"Import completed with {labelCount} labels imported.", "Mesen", MessageBoxButtons.OK, MessageBoxIcon.Information);

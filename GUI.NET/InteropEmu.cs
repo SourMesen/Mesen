@@ -209,6 +209,7 @@ namespace Mesen.GUI
 		[DllImport(DLLPath)] public static extern void DebugSetState(DebugState state);
 		[DllImport(DLLPath)] public static extern void DebugSetBreakpoints([MarshalAs(UnmanagedType.LPArray, SizeParamIndex = 1)]InteropBreakpoint[] breakpoints, UInt32 length);
 		[DllImport(DLLPath)] public static extern void DebugSetLabel(UInt32 address, AddressType addressType, [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(UTF8Marshaler))]string label, [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(UTF8Marshaler))]string comment);
+		[DllImport(DLLPath)] public static extern void DebugDeleteLabels();
 		[DllImport(DLLPath)] public static extern void DebugStep(UInt32 count);
 		[DllImport(DLLPath)] public static extern void DebugPpuStep(UInt32 count);
 		[DllImport(DLLPath)] public static extern void DebugStepCycles(UInt32 count);

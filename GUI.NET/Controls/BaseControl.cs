@@ -22,15 +22,16 @@ namespace Mesen.GUI.Controls
 			}
 		}
 
+		private static bool? _isDesignMode = null;
 		public bool IsDesignMode
 		{
 			get
 			{
 				try {
-					return (
-						LicenseManager.UsageMode == LicenseUsageMode.Designtime ||
-						System.Diagnostics.Process.GetCurrentProcess().ProcessName == "devenv"
-					);
+					if(!_isDesignMode.HasValue) {
+						_isDesignMode = System.Diagnostics.Process.GetCurrentProcess().ProcessName == "devenv";
+					}
+					return _isDesignMode.Value || LicenseManager.UsageMode == LicenseUsageMode.Designtime;
 				} catch {
 					return false;
 				}
