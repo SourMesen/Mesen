@@ -57,4 +57,13 @@ public:
 	virtual void SetAudioDevice(string deviceName) override
 	{
 	}
+
+	virtual void ProcessEndOfFrame() override
+	{
+	}
+
+	virtual AudioStatistics GetStatistics() override
+	{
+		return AudioStatistics();
+	}
 };
