@@ -67,19 +67,6 @@ namespace Mesen.GUI.Forms.Config
 			lblEffectiveClockRateValueDendy.Text = (1773448 * clockRateMultiplierDendy / 100000000).ToString("#.####") + " mhz (" + ((int)clockRateMultiplierDendy).ToString() + "%)";
 		}
 
-		private void OverclockConfig_Validated(object sender, EventArgs e)
-		{
-			if(string.IsNullOrWhiteSpace(nudExtraScanlinesAfterNmi.Text)) {
-				nudExtraScanlinesAfterNmi.Value = 0;
-			}
-			if(string.IsNullOrWhiteSpace(nudExtraScanlinesBeforeNmi.Text)) {
-				nudExtraScanlinesBeforeNmi.Value = 0;
-			}
-			if(string.IsNullOrWhiteSpace(nudOverclockRate.Text)) {
-				nudOverclockRate.Value = 100;
-			}
-		}
-
 		private void btnResetLagCounter_Click(object sender, EventArgs e)
 		{
 			InteropEmu.ResetLagCounter();

@@ -127,11 +127,6 @@ namespace Mesen.GUI.Forms.Config
 		protected override bool ValidateInput()
 		{
 			UpdateObject();
-			if(((AudioInfo)Entity).AudioLatency < 15) {
-				((AudioInfo)Entity).AudioLatency = 15;
-			} else if(((AudioInfo)Entity).AudioLatency > 300) {
-				((AudioInfo)Entity).AudioLatency = 300;
-			}
 			AudioInfo.ApplyConfig();
 
 			return true;
@@ -146,15 +141,6 @@ namespace Mesen.GUI.Forms.Config
 		private void nudLatency_ValueChanged(object sender, EventArgs e)
 		{
 			UpdateLatencyWarning();
-		}
-
-		private void nudLatency_Leave(object sender, EventArgs e)
-		{
-			if(nudLatency.Value < 15) {
-				nudLatency.Value = 15;
-			} else if(nudLatency.Value > 300) {
-				nudLatency.Value = 300;
-			}
 		}
 
 		private void btnReset_Click(object sender, EventArgs e)

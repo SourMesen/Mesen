@@ -17,7 +17,6 @@ namespace Mesen.GUI.Forms.Config
 	public partial class frmVideoConfig : BaseConfigForm
 	{
 		private Int32[] _paletteData;
-		int _lastScaleInputNumber = -1;
 		
 		public frmVideoConfig()
 		{
@@ -457,36 +456,6 @@ namespace Mesen.GUI.Forms.Config
 			VideoAspectRatio ratio = cboAspectRatio.GetEnumValue<VideoAspectRatio>();
 			lblCustomRatio.Visible = ratio == VideoAspectRatio.Custom;
 			nudCustomRatio.Visible = ratio == VideoAspectRatio.Custom;
-		}
-
-		private void nudScale_ValueChanged(object sender, EventArgs e)
-		{
-			if(nudScale.Value > 10) {
-				if(_lastScaleInputNumber < 0) {
-					nudScale.Value = 10;
-				} else {
-					//Set pressed key as scale, keep same decimals
-					nudScale.Value = Math.Min(10, nudScale.Value - (int)nudScale.Value + _lastScaleInputNumber);
-				}
-			}
-		}
-
-		private void nudScale_KeyDown(object sender, KeyEventArgs e)
-		{
-			//Used in ValueChanged to make field more user-friendly
-			if(e.KeyCode >= Keys.NumPad0 && e.KeyCode <= Keys.NumPad9) {
-				_lastScaleInputNumber = (int)e.KeyCode - (int)Keys.NumPad0;
-			} else if(e.KeyCode >= Keys.D0 && e.KeyCode <= Keys.D9) {
-				_lastScaleInputNumber = (int)e.KeyCode - (int)Keys.D0;
-			} else {
-				_lastScaleInputNumber = -1;
-			}
-		}
-
-		private void nudScale_Click(object sender, EventArgs e)
-		{
-			//Used in ValueChanged to make field more user-friendly
-			_lastScaleInputNumber = -1;
 		}
 
 		private void chkShowColorIndexes_CheckedChanged(object sender, EventArgs e)

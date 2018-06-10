@@ -423,7 +423,7 @@ namespace Mesen.GUI.Forms.Config
 			// 
 			this.chkMuteSoundInBackground.AutoSize = true;
 			this.tableLayoutPanel2.SetColumnSpan(this.chkMuteSoundInBackground, 2);
-			this.chkMuteSoundInBackground.Location = new System.Drawing.Point(3, 109);
+			this.chkMuteSoundInBackground.Location = new System.Drawing.Point(3, 110);
 			this.chkMuteSoundInBackground.Name = "chkMuteSoundInBackground";
 			this.chkMuteSoundInBackground.Size = new System.Drawing.Size(182, 17);
 			this.chkMuteSoundInBackground.TabIndex = 14;
@@ -435,7 +435,7 @@ namespace Mesen.GUI.Forms.Config
 			// 
 			this.chkReduceSoundInBackground.AutoSize = true;
 			this.tableLayoutPanel2.SetColumnSpan(this.chkReduceSoundInBackground, 2);
-			this.chkReduceSoundInBackground.Location = new System.Drawing.Point(3, 132);
+			this.chkReduceSoundInBackground.Location = new System.Drawing.Point(3, 133);
 			this.chkReduceSoundInBackground.Name = "chkReduceSoundInBackground";
 			this.chkReduceSoundInBackground.Size = new System.Drawing.Size(201, 17);
 			this.chkReduceSoundInBackground.TabIndex = 13;
@@ -468,7 +468,7 @@ namespace Mesen.GUI.Forms.Config
 			// 
 			this.lblAudioLatency.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.lblAudioLatency.AutoSize = true;
-			this.lblAudioLatency.Location = new System.Drawing.Point(3, 86);
+			this.lblAudioLatency.Location = new System.Drawing.Point(3, 87);
 			this.lblAudioLatency.Name = "lblAudioLatency";
 			this.lblAudioLatency.Size = new System.Drawing.Size(48, 13);
 			this.lblAudioLatency.TabIndex = 0;
@@ -527,14 +527,14 @@ namespace Mesen.GUI.Forms.Config
 			this.tableLayoutPanel7.Name = "tableLayoutPanel7";
 			this.tableLayoutPanel7.RowCount = 1;
 			this.tableLayoutPanel7.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel7.Size = new System.Drawing.Size(386, 26);
+			this.tableLayoutPanel7.Size = new System.Drawing.Size(386, 27);
 			this.tableLayoutPanel7.TabIndex = 15;
 			// 
 			// lblLatencyWarning
 			// 
 			this.lblLatencyWarning.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.lblLatencyWarning.AutoSize = true;
-			this.lblLatencyWarning.Location = new System.Drawing.Point(98, 6);
+			this.lblLatencyWarning.Location = new System.Drawing.Point(98, 7);
 			this.lblLatencyWarning.Margin = new System.Windows.Forms.Padding(0, 0, 3, 0);
 			this.lblLatencyWarning.Name = "lblLatencyWarning";
 			this.lblLatencyWarning.Size = new System.Drawing.Size(192, 13);
@@ -557,7 +557,7 @@ namespace Mesen.GUI.Forms.Config
 			// 
 			this.lblLatencyMs.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.lblLatencyMs.AutoSize = true;
-			this.lblLatencyMs.Location = new System.Drawing.Point(54, 6);
+			this.lblLatencyMs.Location = new System.Drawing.Point(54, 7);
 			this.lblLatencyMs.Name = "lblLatencyMs";
 			this.lblLatencyMs.Size = new System.Drawing.Size(20, 13);
 			this.lblLatencyMs.TabIndex = 2;
@@ -574,18 +574,18 @@ namespace Mesen.GUI.Forms.Config
             0});
 			this.nudLatency.Location = new System.Drawing.Point(3, 3);
 			this.nudLatency.Maximum = new decimal(new int[] {
-            9999,
+            300,
             0,
             0,
             0});
 			this.nudLatency.MaximumSize = new System.Drawing.Size(10000, 20);
 			this.nudLatency.Minimum = new decimal(new int[] {
-            0,
+            15,
             0,
             0,
             0});
 			this.nudLatency.Name = "nudLatency";
-			this.nudLatency.Size = new System.Drawing.Size(45, 20);
+			this.nudLatency.Size = new System.Drawing.Size(45, 21);
 			this.nudLatency.TabIndex = 1;
 			this.nudLatency.Value = new decimal(new int[] {
             100,
@@ -593,7 +593,6 @@ namespace Mesen.GUI.Forms.Config
             0,
             0});
 			this.nudLatency.ValueChanged += new System.EventHandler(this.nudLatency_ValueChanged);
-			this.nudLatency.Leave += new System.EventHandler(this.nudLatency_Leave);
 			// 
 			// btnReset
 			// 
@@ -1465,7 +1464,7 @@ namespace Mesen.GUI.Forms.Config
             0,
             0});
 			this.nudStereoDelay.Name = "nudStereoDelay";
-			this.nudStereoDelay.Size = new System.Drawing.Size(45, 20);
+			this.nudStereoDelay.Size = new System.Drawing.Size(45, 21);
 			this.nudStereoDelay.TabIndex = 1;
 			this.nudStereoDelay.Value = new decimal(new int[] {
             0,
@@ -1496,7 +1495,7 @@ namespace Mesen.GUI.Forms.Config
             0,
             -2147483648});
 			this.nudStereoPanning.Name = "nudStereoPanning";
-			this.nudStereoPanning.Size = new System.Drawing.Size(45, 20);
+			this.nudStereoPanning.Size = new System.Drawing.Size(45, 21);
 			this.nudStereoPanning.TabIndex = 1;
 			this.nudStereoPanning.Value = new decimal(new int[] {
             0,
@@ -1635,7 +1634,7 @@ namespace Mesen.GUI.Forms.Config
             0,
             0});
 			this.nudCrossFeedRatio.Name = "nudCrossFeedRatio";
-			this.nudCrossFeedRatio.Size = new System.Drawing.Size(42, 20);
+			this.nudCrossFeedRatio.Size = new System.Drawing.Size(42, 21);
 			this.nudCrossFeedRatio.TabIndex = 2;
 			this.nudCrossFeedRatio.Value = new decimal(new int[] {
             0,

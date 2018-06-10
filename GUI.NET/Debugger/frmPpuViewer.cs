@@ -174,14 +174,6 @@ namespace Mesen.GUI.Debugger
 			ConfigManager.ApplyChanges();
 		}
 
-		private void nudScanlineCycle_TextChanged(object sender, EventArgs e)
-		{
-			int scanline, cycle;
-			if(int.TryParse(this.nudScanline.Text, out scanline) && int.TryParse(this.nudCycle.Text, out cycle)) {
-				SetUpdateScanlineCycle(int.Parse(this.nudScanline.Text), int.Parse(this.nudCycle.Text));
-			}
-		}
-
 		private void nudScanlineCycle_ValueChanged(object sender, EventArgs e)
 		{
 			SetUpdateScanlineCycle((int)this.nudScanline.Value, (int)this.nudCycle.Value);

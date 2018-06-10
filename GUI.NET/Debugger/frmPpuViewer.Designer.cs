@@ -268,7 +268,6 @@ namespace Mesen.GUI.Debugger
             0,
             0});
 			this.nudScanline.ValueChanged += new System.EventHandler(this.nudScanlineCycle_ValueChanged);
-			this.nudScanline.TextChanged += new System.EventHandler(this.nudScanlineCycle_TextChanged);
 			// 
 			// lblCycle
 			// 
@@ -310,7 +309,6 @@ namespace Mesen.GUI.Debugger
             0,
             0});
 			this.nudCycle.ValueChanged += new System.EventHandler(this.nudScanlineCycle_ValueChanged);
-			this.nudCycle.TextChanged += new System.EventHandler(this.nudScanlineCycle_TextChanged);
 			// 
 			// btnReset
 			// 

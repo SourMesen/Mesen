@@ -1169,6 +1169,8 @@
     <Compile Include="RuntimeChecker.cs" />
     <Compile Include="SingleInstance.cs" />
     <Compile Include="TestRunner.cs" />
+    <None Include="Resources\NudUpArrow.png" />
+    <None Include="Resources\NudDownArrow.png" />
     <None Include="Dependencies\LuaScripts\NtscSafeArea.lua">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -1571,6 +1573,7 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Config\frmVideoConfig.resx">
       <DependentUpon>frmVideoConfig.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Cheats\frmCheatList.resx">
       <DependentUpon>frmCheatList.cs</DependentUpon>

@@ -720,7 +720,6 @@ namespace Mesen.GUI.Forms.Config
             0,
             0,
             0});
-			this.nudOverclockRate.Validated += new System.EventHandler(this.OverclockConfig_Validated);
 			// 
 			// lblClockRatePercent
 			// 
@@ -792,7 +791,6 @@ namespace Mesen.GUI.Forms.Config
             0,
             0,
             0});
-			this.nudExtraScanlinesAfterNmi.Validated += new System.EventHandler(this.OverclockConfig_Validated);
 			// 
 			// nudExtraScanlinesBeforeNmi
 			// 
@@ -823,7 +821,6 @@ namespace Mesen.GUI.Forms.Config
             0,
             0,
             0});
-			this.nudExtraScanlinesBeforeNmi.Validated += new System.EventHandler(this.OverclockConfig_Validated);
 			// 
 			// lblExtraScanlinesBeforeNmi
 			// 
