@@ -187,7 +187,7 @@ namespace Mesen.GUI.Debugger
 					}
 
 					if(ConfigManager.Config.DebugInfo.ShowOpCodeTooltips && frmOpCodeTooltip.IsOpCode(word)) {
-						ShowTooltip(word, null, -1, new AddressTypeInfo() { Address = address, Type = AddressType.Register });
+						ShowTooltip(word, null, address, new AddressTypeInfo() { Address = address, Type = AddressType.Register });
 						closeExistingPopup = false;
 					}
 				}
