@@ -24,7 +24,7 @@ private:
 
 public:
 	GameClient();
-	~GameClient();
+	virtual ~GameClient();
 
 	static bool Connected();
 	static void Connect(shared_ptr<ClientConnectionData> connectionData);

@@ -35,7 +35,7 @@ protected:
 	
 public:
 	GameServerConnection(shared_ptr<Socket> socket);
-	~GameServerConnection();
+	virtual ~GameServerConnection();
 
 	ControlDeviceState GetState();
 	void SendMovieData(uint8_t port, ControlDeviceState state);

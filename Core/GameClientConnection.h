@@ -41,7 +41,7 @@ protected:
 
 public:
 	GameClientConnection(shared_ptr<Socket> socket, shared_ptr<ClientConnectionData> connectionData);
-	~GameClientConnection();
+	virtual ~GameClientConnection();
 
 	void Shutdown();
 

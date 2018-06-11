@@ -29,7 +29,7 @@ private:
 
 public:
 	MovieRecorder();
-	~MovieRecorder();
+	virtual ~MovieRecorder();
 
 	bool Record(RecordMovieOptions options);
 	bool Stop();

@@ -228,6 +228,8 @@ protected:
 	}
 
 public:
+	virtual ~Snapshotable() {}
+
 	void SaveSnapshot(ostream* file);
 	void LoadSnapshot(istream* file, uint32_t stateVersion);
 

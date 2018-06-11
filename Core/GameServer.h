@@ -31,7 +31,7 @@ private:
 
 public:
 	GameServer(uint16_t port, string hostPlayerName);
-	~GameServer();
+	virtual ~GameServer();
 
 	static void StartServer(uint16_t port, string hostPlayerName);
 	static void StopServer();

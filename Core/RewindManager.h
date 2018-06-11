@@ -46,7 +46,7 @@ private:
 
 public:
 	RewindManager();
-	~RewindManager();
+	virtual ~RewindManager();
 
 	void ProcessNotification(ConsoleNotificationType type, void* parameter) override;
 	void ProcessEndOfFrame();

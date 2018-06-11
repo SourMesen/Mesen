@@ -146,6 +146,8 @@ struct HdPackCondition
 	virtual bool IsExcludedFromFile() { return false; }
 	virtual string ToString() = 0;
 
+	virtual ~HdPackCondition() { }
+
 	void ClearCache()
 	{
 		_resultCache = -1;

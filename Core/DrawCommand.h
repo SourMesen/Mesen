@@ -72,6 +72,10 @@ public:
 		_useIntegerScaling = useIntegerScaling;
 	}
 
+	virtual ~DrawCommand()
+	{
+	}
+
 	void Draw(uint32_t* argbBuffer, OverscanDimensions &overscan, uint32_t lineWidth, uint32_t frameNumber)
 	{
 		if(_startFrame <= frameNumber) {

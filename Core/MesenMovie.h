@@ -35,7 +35,7 @@ private:
 
 public:
 	MesenMovie();
-	~MesenMovie();
+	virtual ~MesenMovie();
 
 	bool Play(VirtualFile &file) override;
 	bool SetInput(BaseControlDevice* device) override;

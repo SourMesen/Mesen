@@ -16,7 +16,7 @@ protected:
 
 public:
 	LuaScriptingContext();
-	~LuaScriptingContext();
+	virtual ~LuaScriptingContext();
 
 	bool LoadScript(string scriptName, string scriptContent, Debugger* debugger) override;
 	

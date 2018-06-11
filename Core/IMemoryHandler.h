@@ -50,4 +50,6 @@ public:
 	virtual void GetMemoryRanges(MemoryRanges &ranges) = 0;
 	virtual uint8_t ReadRAM(uint16_t addr) = 0;
 	virtual void WriteRAM(uint16_t addr, uint8_t value) = 0;
+
+	virtual ~IMemoryHandler() {}
 };
