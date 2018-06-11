@@ -223,14 +223,14 @@
 			<Control ID="lblRequestedRefreshRate">Taxa de atualização solicitada:</Control>
 			<Control ID="tpgOverscan">Overscan</Control>
 			<Control ID="tpgOverscanGlobal">Global</Control>
-			<Control ID="tpgOverscanGameSpecific">Game-Specific</Control>
-			<Control ID="chkEnableGameSpecificOverscan">Enable game-specific overscan settings</Control>
+			<Control ID="tpgOverscanGameSpecific">Específico para jogo</Control>
+			<Control ID="chkEnableGameSpecificOverscan">Habilitar configurações de overscan específico para jogo</Control>
 			<Control ID="lblLeft">Esquerda</Control>
 			<Control ID="lblTop">Cima</Control>
 			<Control ID="lblBottom">Abaixo</Control>
 			<Control ID="lblRight">Direita</Control>
 			<Control ID="tpgPalette">Paleta</Control>
-			<Control ID="chkShowColorIndexes">Show color indexes</Control>
+			<Control ID="chkShowColorIndexes">Mostrar índices de cor</Control>
 			<Control ID="mnuDefaultPalette">Por padrão (NTSC)</Control>
 			<Control ID="btnSelectPalette">Escolher uma paleta...</Control>
 			<Control ID="btnExportPalette">Exportar arquivo .pal</Control>
@@ -408,7 +408,7 @@
 			<Control ID="chkDisableGameSelectionScreen">Desativar a tela de seleção do jogo</Control>
 
 			<Control ID="chkDisableGameDatabase">Desabilitar a base de dados de jogos</Control>
-			<Control ID="chkDisableHighResolutionTimer">Disable high resolution timer</Control>
+			<Control ID="chkDisableHighResolutionTimer">Desativar temporizador de alta resolução</Control>
 			<Control ID="chkDisableOsd">Desativar exibição na tela (OSD)</Control>
 
 			<Control ID="chkAlwaysOnTop">Sempre exibir em cima de outras janelas</Control>
@@ -726,7 +726,7 @@
 		<Message ID="PlayerNumber">Jogador {0}</Message>
 		<Message ID="ExpansionDevice">Dispositivo de expansão</Message>
 
-		<Message ID="PressToExitFullscreen">Press {0} to exit fullscreen</Message>
+		<Message ID="PressToExitFullscreen">Pressione {0} para sair da tela cheia</Message>
 
 		<Message ID="RomsFound">{0} roms encontradas</Message>
 
@@ -823,7 +823,7 @@
 		<Message ID="EmulatorShortcutMappings_SetScale6x">Definir escala 6x</Message>
 		<Message ID="EmulatorShortcutMappings_ToggleFullscreen">Alternar tela cheia</Message>
 		<Message ID="EmulatorShortcutMappings_ToggleFps">Alternar contador de quadros por segundo</Message>
-		<Message ID="EmulatorShortcutMappings_ToggleDebugInfo">Toggle Debug Information</Message>
+		<Message ID="EmulatorShortcutMappings_ToggleDebugInfo">Alternar informação de depuração</Message>
 		<Message ID="EmulatorShortcutMappings_ToggleGameTimer">Alternar tempo de jogo</Message>
 		<Message ID="EmulatorShortcutMappings_ToggleFrameCounter">Alternar contador de quadro</Message>
 		<Message ID="EmulatorShortcutMappings_ToggleLagCounter">Alternar contador de lagr</Message>
