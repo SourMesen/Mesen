@@ -80,7 +80,6 @@ namespace Mesen.GUI.Controls
 				var item = this.Items[e.Item];
 				AfterEdit?.Invoke(this, new LabelEditEventArgs(item.Index, text));
 			} else if(_pressedEsc) {
-				string text = _originalText;
 				var originalItem = this.Items[e.Item];
 				var newItem = new ListViewItem(_originalText);
 				newItem.SubItems.Add(originalItem.SubItems[1].Text);

@@ -36,7 +36,6 @@ namespace Mesen.GUI.Debugger
 
 		private UInt32? _currentActiveAddress { get; set; } = null;
 
-		private Point _previousLocation;
 		private DebugViewInfo _config;
 		private CodeTooltipManager _tooltipManager = null;
 		private CodeViewerActions _codeViewerActions;
@@ -365,7 +364,6 @@ namespace Mesen.GUI.Debugger
 				this.ctrlCodeViewer.ContextMenuStrip = _codeViewerActions.contextMenu;
 			}
 
-			_previousLocation = e.Location;
 			_tooltipManager.ProcessMouseMove(e.Location);
 		}
 

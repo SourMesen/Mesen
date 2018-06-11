@@ -35,8 +35,6 @@ namespace Mesen.GUI.Debugger
 
 		public void InitializeGrid()
 		{
-			HashSet<string> keyCombinations = new HashSet<string>();
-
 			gridShortcuts.Rows.Clear();
 
 			foreach(FieldInfo shortcut in _shortcuts) {

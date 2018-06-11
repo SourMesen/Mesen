@@ -30,7 +30,6 @@
 			this.components = new System.ComponentModel.Container();
 			this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
 			this.ctrlDataViewer = new Mesen.GUI.Debugger.ctrlScrollableTextbox();
-			this.toolTip = new System.Windows.Forms.ToolTip(this.components);
 			this.tableLayoutPanel1.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -75,6 +74,5 @@
 
 		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
 		private ctrlScrollableTextbox ctrlDataViewer;
-		private System.Windows.Forms.ToolTip toolTip;
 	}
 }

@@ -183,7 +183,6 @@ namespace Mesen.GUI.Debugger.Controls
 		private void mnuAddBreakpoint_Click(object sender, EventArgs e)
 		{
 			if(lstFunctions.SelectedIndices.Count > 0) {
-				CodeLabel label = GetSelectedItem().Tag as CodeLabel;
 				int absoluteAddress = (int)GetSelectedItem().SubItems[2].Tag;
 				BreakpointManager.AddBreakpoint(new Breakpoint() {
 					MemoryType = DebugMemoryType.PrgRom,

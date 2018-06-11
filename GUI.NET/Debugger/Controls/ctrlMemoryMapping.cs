@@ -118,8 +118,6 @@ namespace Mesen.GUI.Debugger.Controls
 
 				float pixelsPerByte = (float)rect.Width / totalSize;
 
-				StringFormat verticalFormat = new StringFormat(StringFormatFlags.DirectionVertical);
-
 				float currentPosition = 1;
 				int byteOffset = 0;
 				foreach(MemoryRegionInfo region in _regions) {

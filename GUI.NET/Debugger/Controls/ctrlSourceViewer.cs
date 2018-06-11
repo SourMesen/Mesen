@@ -422,7 +422,6 @@ namespace Mesen.GUI.Debugger.Controls
 
 		class ScrollbarColorProvider : IScrollbarColorProvider
 		{
-			private Color _nesRamColor = Color.FromArgb(163, 222, 171);
 			private Dictionary<int, Color> _breakpointColors = new Dictionary<int, Color>();
 
 			private ctrlSourceViewer _viewer;

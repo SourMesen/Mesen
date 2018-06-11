@@ -128,7 +128,7 @@ namespace Mesen.GUI.Forms
 					string filename = ofd.FileName;
 
 					Task.Run(() => {
-						int result = InteropEmu.RunAutomaticTest(filename);
+						InteropEmu.RunAutomaticTest(filename);
 					});
 				}
 			}

@@ -64,8 +64,8 @@ namespace Mesen.GUI
 			try {
 				Task.Run(() => {
 					//Cache deserializers in another thread
-					XmlSerializer xmlSerializer = new XmlSerializer(typeof(Configuration));
-					xmlSerializer = new XmlSerializer(typeof(DebugWorkspace));
+					new XmlSerializer(typeof(Configuration));
+					new XmlSerializer(typeof(DebugWorkspace));
 				});
 
 				if(Type.GetType("Mono.Runtime") != null) {

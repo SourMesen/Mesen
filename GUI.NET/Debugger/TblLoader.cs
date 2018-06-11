@@ -40,7 +40,6 @@ namespace Mesen.GUI.Debugger
 							if(data[0].Length % 2 == 0 && Regex.IsMatch(data[0], "[0-9A-Fa-f]+")) {
 								TblKey key = new TblKey();
 
-								List<byte> bytes = new List<byte>();
 								for(int j = 0; j < data[0].Length; j+=2) {
 									byte result = byte.Parse(data[0].Substring(j, 2), System.Globalization.NumberStyles.HexNumber);
 									key.Key |= (UInt64)result << (8 * j / 2);

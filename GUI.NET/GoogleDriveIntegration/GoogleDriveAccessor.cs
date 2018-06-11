@@ -24,7 +24,6 @@ namespace Mesen.GUI.GoogleDriveIntegration
 	{
 		private const string _contentType = @"application/zip";
 		private readonly string[] _scopes = new[] { DriveService.Scope.DriveAppdata };
-		private File _driveFile = null;
 		private UserCredential _credentials = null;
 		private DriveService _service = null;
 		private bool _connected = false;
@@ -184,10 +183,8 @@ namespace Mesen.GUI.GoogleDriveIntegration
 				var request = _service.Files.Get(driveFile.Id);
 				var progress = await request.DownloadAsync(outStream).ConfigureAwait(false);
 				if(progress.Status == DownloadStatus.Completed) {
-					_driveFile = driveFile;
 					return FileDownloadResult.OK;
 				} else {
-					_driveFile = null;
 					return FileDownloadResult.Error;
 				}
 			}
@@ -203,7 +200,6 @@ namespace Mesen.GUI.GoogleDriveIntegration
 
 		void Upload_ResponseReceived(File file)
 		{
-			_driveFile = file;
 		}
 
 		void IDisposable.Dispose()

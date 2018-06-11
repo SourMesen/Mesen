@@ -43,7 +43,6 @@
 			this.chkTextSearch = new System.Windows.Forms.CheckBox();
 			this.chkMatchCase = new System.Windows.Forms.CheckBox();
 			this.ctrlHexBox = new Be.Windows.Forms.HexBox();
-			this.toolTip = new System.Windows.Forms.ToolTip(this.components);
 			this.statusStrip = new System.Windows.Forms.StatusStrip();
 			this.lblLocation = new System.Windows.Forms.ToolStripStatusLabel();
 			this.ctxMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
@@ -495,7 +494,6 @@
 		private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
 		private System.Windows.Forms.Label lblNumberOfColumns;
 		private System.Windows.Forms.ComboBox cboNumberColumns;
-		private System.Windows.Forms.ToolTip toolTip;
 		private Be.Windows.Forms.HexBox ctrlHexBox;
 		private System.Windows.Forms.Panel panelSearch;
 		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;

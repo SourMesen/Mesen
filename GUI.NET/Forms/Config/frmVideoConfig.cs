@@ -138,7 +138,6 @@ namespace Mesen.GUI.Forms.Config
 
 		protected override bool ValidateInput()
 		{
-			VideoFilterType orgFilter = ((VideoInfo)Entity).VideoFilter;
 			UpdateObject();
 			UpdateCustomRatioVisibility();
 			UpdatePalette();

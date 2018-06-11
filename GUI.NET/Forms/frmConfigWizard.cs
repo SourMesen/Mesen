@@ -18,8 +18,6 @@ namespace Mesen.GUI.Forms
 {
 	public partial class frmConfigWizard : Form
 	{
-		private PrivateFontCollection _fonts = new PrivateFontCollection();
-
 		public frmConfigWizard()
 		{
 			InitializeComponent();

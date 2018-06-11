@@ -82,7 +82,6 @@ namespace Mesen.GUI.GoogleDriveIntegration
 		private static bool UploadData()
 		{
 			using(MemoryStream stream = CloudSyncHelper.GetDataStream()) {
-				var gdAccessor = new GoogleDriveAccessor();
 				return _accessor.UploadFile(stream, "MesenData.zip");
 			}
 		}

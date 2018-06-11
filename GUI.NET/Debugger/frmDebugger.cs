@@ -393,7 +393,7 @@ namespace Mesen.GUI.Debugger
 		private void UpdateWorkspace()
 		{
 			DebugWorkspaceManager.SaveWorkspace();
-			DebugWorkspace workspace = DebugWorkspaceManager.GetWorkspace();
+			DebugWorkspaceManager.GetWorkspace();
 
 			ctrlLabelList.UpdateLabelList();
 			ctrlFunctionList.UpdateFunctionList(true);

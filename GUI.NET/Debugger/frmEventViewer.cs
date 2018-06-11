@@ -16,14 +16,12 @@ namespace Mesen.GUI.Debugger
 	{
 		private DateTime _lastUpdate = DateTime.MinValue;
 		private InteropEmu.NotificationListener _notifListener;
-		private TabPage _selectedTab;
 		private bool _refreshing = false;
 
 		public frmEventViewer()
 		{
 			InitializeComponent();
 
-			this._selectedTab = this.tpgPpuView;
 			this.mnuRefreshOnBreak.Checked = ConfigManager.Config.DebugInfo.EventViewerRefreshOnBreak;
 			this.chkShowPpuRegisterWrites.Checked = ConfigManager.Config.DebugInfo.EventViewerShowPpuRegisterWrites;
 			this.chkShowPpuRegisterReads.Checked = ConfigManager.Config.DebugInfo.EventViewerShowPpuRegisterReads;
@@ -105,7 +103,6 @@ namespace Mesen.GUI.Debugger
 
 		private void tabMain_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			this._selectedTab = this.tabMain.SelectedTab;
 		}
 
 		private void mnuRefreshOnBreak_Click(object sender, EventArgs e)

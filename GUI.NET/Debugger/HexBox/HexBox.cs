@@ -1885,7 +1885,6 @@ namespace Be.Windows.Forms
 
 			float x = ((float)(p.X - _recHex.X) / _charSize.Width);
 			float y = ((float)(p.Y - _recHex.Y) / _charSize.Height);
-			int iX = (int)x;
 			int iY = (int)y;
 
 			//Offset by half a character to make the selection more intuitive (e.g half the white space belongs to the left byte, the other to the right)
@@ -2553,9 +2552,6 @@ namespace Be.Windows.Forms
 		{
 			int counter = -1;
 			long intern_endByte = Math.Min(_byteProvider.Length - 1, endByte + _iHexMaxHBytes);
-
-			bool isKeyInterpreterActive = _keyInterpreter == null || _keyInterpreter.GetType() == typeof(KeyInterpreter);
-			bool isStringKeyInterpreterActive = _keyInterpreter != null && _keyInterpreter.GetType() == typeof(StringKeyInterpreter);
 
 			int yPrevious = -1;
 			float xOffset = 0;

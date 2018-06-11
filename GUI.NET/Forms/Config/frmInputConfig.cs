@@ -124,7 +124,6 @@ namespace Mesen.GUI.Forms.Config
 			cboPlayer4.SelectedIndexChanged -= cboPlayerController_SelectedIndexChanged;
 
 			bool isNes = ((InputInfo)Entity).ConsoleType == ConsoleType.Nes;
-			bool p3and4visible = (isNes && chkFourScore.Checked) || (!isNes && ((InputInfo)Entity).ExpansionPortDevice == InteropEmu.ExpansionPortDevice.FourPlayerAdapter);
 			bool isOriginalFamicom = !isNes && !ConfigManager.Config.EmulationInfo.UseNes101Hvc101Behavior;
 
 			List<InteropEmu.ControllerType> controllerTypes = new List<InteropEmu.ControllerType>() { InteropEmu.ControllerType.None, InteropEmu.ControllerType.StandardController };

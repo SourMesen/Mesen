@@ -58,7 +58,6 @@ namespace Mesen.GUI.Debugger
 		private string[] _contentNotes = new string[0];
 		private string[] _compareContents = null;
 		private int[] _lineNumbers = new int[0];
-		private int[] _lineMargins = new int[0];		
 		private string[] _lineNumberNotes = new string[0];
 		private Dictionary<int, int> _lineNumberIndex = new Dictionary<int,int>();
 		private bool _showLineNumbers = false;
@@ -889,7 +888,6 @@ namespace Mesen.GUI.Debugger
 					codeString = "--------" + codeString.Substring(2, codeString.Length - 4) + "--------";
 				}
 
-				string commentString = Comments?[i].Trim() ?? "";
 				int padding = Math.Max(CommentSpacingCharCount, codeString.Length);
 				if(codeString.Length == 0) {
 					padding = 0;

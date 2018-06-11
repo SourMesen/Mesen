@@ -48,7 +48,6 @@ namespace Mesen.GUI.Forms
 		private object _loadRomLock = new object();
 		private int _romLoadCounter = 0;
 		private bool _showUpgradeMessage = false;
-		private float _xFactor = 1;
 		private float _yFactor = 1;
 		private bool _enableResize = false;
 		private bool _overrideWindowSize = false;
@@ -345,7 +344,6 @@ namespace Mesen.GUI.Forms
 
 		protected override void ScaleControl(SizeF factor, BoundsSpecified specified)
 		{
-			_xFactor = factor.Width;
 			_yFactor = factor.Height;
 			base.ScaleControl(factor, specified);
 		}

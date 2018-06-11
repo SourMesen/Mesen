@@ -306,7 +306,6 @@ namespace Mesen.GUI.Debugger
 					List<int> indent = new List<int>(30000);
 
 					bool showByteCode = false;
-					char[] splitter = new char[] { ' ' };
 					while(readLine()) {
 						string[] parts = line.Split('\x1');
 						programCounter.Add(Int32.Parse(parts[0], System.Globalization.NumberStyles.HexNumber));

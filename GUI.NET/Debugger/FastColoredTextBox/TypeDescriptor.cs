@@ -30,13 +30,11 @@ namespace FastColoredTextBoxNS
 
     class FCTBTypeDescriptor : CustomTypeDescriptor
     {
-        ICustomTypeDescriptor parent;
         object instance;
 
         public FCTBTypeDescriptor(ICustomTypeDescriptor parent, object instance)
             : base(parent)
         {
-            this.parent = parent;
             this.instance = instance;
         }
 

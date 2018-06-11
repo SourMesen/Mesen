@@ -28,7 +28,6 @@
 		private void InitializeComponent()
 		{
 			this.components = new System.ComponentModel.Container();
-			this.toolTip = new System.Windows.Forms.ToolTip(this.components);
 			this.ctrlCodeViewer = new Mesen.GUI.Debugger.ctrlScrollableTextbox();
 			this.contextMenuMargin = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this.mnuEditBreakpoint = new System.Windows.Forms.ToolStripMenuItem();
@@ -151,7 +150,6 @@
 
 		#endregion
 
-		private System.Windows.Forms.ToolTip toolTip;
 		private Mesen.GUI.Debugger.ctrlScrollableTextbox ctrlCodeViewer;
 		private System.Windows.Forms.ContextMenuStrip contextMenuMargin;
 		private System.Windows.Forms.ToolStripMenuItem mnuRemoveBreakpoint;

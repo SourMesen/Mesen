@@ -4831,7 +4831,6 @@ namespace FastColoredTextBoxNS
                 e.Graphics.FillRectangle(paddingBrush, LeftIndent - HorizontalScroll.Value - 2, 0,
                                          Math.Max(0, Paddings.Left - 1), ClientSize.Height);
             //
-            int leftTextIndent = Math.Max(LeftIndent, LeftIndent + Paddings.Left - HorizontalScroll.Value);
             int textWidth = textAreaRect.Width;
             //draw indent area
             e.Graphics.FillRectangle(indentBrush, 0, 0, LeftIndentLine, ClientSize.Height);
@@ -5083,7 +5082,6 @@ namespace FastColoredTextBoxNS
             var state = graphics.Save();
             graphics.SmoothingMode = SmoothingMode.HighQuality;
             graphics.TranslateTransform(rect.Left + h/2, rect.Top + h/2);
-            var ts = new TimeSpan(DateTime.Now.Ticks);
             graphics.RotateTransform(180 * (DateTime.Now.Millisecond/1000f));
             using (var pen = new Pen(Color.Red, 2))
             {
@@ -6770,7 +6768,6 @@ namespace FastColoredTextBoxNS
         /// </summary>
         public virtual void InsertLinePrefix(string prefix)
         {
-            Range old = Selection.Clone();
             int from = Math.Min(Selection.Start.iLine, Selection.End.iLine);
             int to = Math.Max(Selection.Start.iLine, Selection.End.iLine);
             BeginUpdate();
@@ -6798,7 +6795,6 @@ namespace FastColoredTextBoxNS
         /// </summary>
         public virtual void RemoveLinePrefix(string prefix)
         {
-            Range old = Selection.Clone();
             int from = Math.Min(Selection.Start.iLine, Selection.End.iLine);
             int to = Math.Max(Selection.Start.iLine, Selection.End.iLine);
             BeginUpdate();

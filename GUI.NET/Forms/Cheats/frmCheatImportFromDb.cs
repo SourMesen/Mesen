@@ -95,7 +95,6 @@ namespace Mesen.GUI.Forms.Cheats
 			if(string.IsNullOrWhiteSpace(_previousSearch)) {
 				lstGames.Items.AddRange(_gamesByCrc.Values.ToArray());
 			} else {
-				List<string> gamesToAdd = new List<string>();
 				lstGames.Items.AddRange(_gamesByCrc.Where(c => c.Value.Name.IndexOf(_previousSearch, StringComparison.InvariantCultureIgnoreCase) >= 0).Select(c => c.Value).ToArray());
 			}
 		}

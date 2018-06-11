@@ -54,7 +54,6 @@ namespace FastColoredTextBoxNS
         private void UnloadUnusedLines()
         {
             const int margin = 2000;
-            var iStartVisibleLine = CurrentTB.VisibleRange.Start.iLine;
             var iFinishVisibleLine = CurrentTB.VisibleRange.End.iLine;
 
             int count = 0;

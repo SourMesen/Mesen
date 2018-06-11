@@ -52,7 +52,7 @@ namespace Mesen.GUI.Config
 
 		private static DebugWorkspace Deserialize(string path)
 		{
-			DebugWorkspace config = config = new DebugWorkspace();
+			DebugWorkspace config = new DebugWorkspace();
 
 			if(File.Exists(path)) {
 				try {

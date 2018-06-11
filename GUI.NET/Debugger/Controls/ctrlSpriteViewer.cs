@@ -260,8 +260,6 @@ namespace Mesen.GUI.Debugger.Controls
 			_selectedSprite = -1;
 			for(int i = 0x100 - 4; i >= 0; i-=4) {
 				int spriteY = _spriteRam[i];
-				int tileIndex = _spriteRam[i + 1];
-				int attributes = _spriteRam[i + 2];
 				int spriteX = _spriteRam[i + 3];
 
 				if(xPos >= spriteX && xPos < spriteX + 8 && yPos >= spriteY && yPos < spriteY + (_largeSprites ? 16 : 8)) {

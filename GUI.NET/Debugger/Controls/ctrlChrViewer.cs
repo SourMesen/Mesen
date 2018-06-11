@@ -420,7 +420,6 @@ namespace Mesen.GUI.Debugger.Controls
 		private void ctxMenu_Opening(object sender, CancelEventArgs e)
 		{
 			int baseAddress = _bottomBank ? 0x1000 : 0x0000;
-			bool ppuMemory = this.cboChrSelection.SelectedIndex == 0;
 			if(this.cboChrSelection.SelectedIndex > 1) {
 				baseAddress += (this.cboChrSelection.SelectedIndex - 1) * 0x2000;
 			}
