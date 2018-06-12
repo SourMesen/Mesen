@@ -1,7 +1,19 @@
+#ifdef _WIN32
+#else
+	#define __stdcall	
+#endif
+
 #include <iostream>
 #include <thread>
 #include <vector>
 #include <string>
+#include <algorithm>
+#include <unordered_set>
+#include <experimental/filesystem>
+namespace fs = std::experimental::filesystem;
+using std::string;
+using std::vector;
+using std::thread;
 
 enum class VideoFilterType
 {
@@ -37,67 +49,63 @@ enum class VideoFilterType
 extern "C" {
 	void __stdcall SetFlags(uint64_t flags);
 	void __stdcall SetVideoFilter(VideoFilterType filter);
-	void __stdcall InitializeEmu(char* homeFolder, void*, void*, bool, bool, bool);
-	void __stdcall LoadROM(const char* filename, char* patchFile);
+	void __stdcall InitializeEmu(const char* homeFolder, void*, void*, bool, bool, bool);
+	void __stdcall LoadROM(const char* filename, const char* patchFile);
 	void __stdcall Run();
+	void __stdcall Release();
 	void __stdcall Stop();
 	void __stdcall DebugInitialize();
 }
 
+vector<string> GetFilesInFolder(string rootFolder, std::unordered_set<string> extensions)
+{
+	vector<string> files;
+	vector<string> folders = { { rootFolder } };
+	
+	std::error_code errorCode;
+	if(!fs::is_directory(fs::u8path(rootFolder), errorCode)) {
+		return files;
+	}
+
+	for(string folder : folders) {
+		for(fs::directory_iterator i(fs::u8path(folder.c_str())), end; i != end; i++) {
+			string extension = i->path().extension().u8string();
+			std::transform(extension.begin(), extension.end(), extension.begin(), ::tolower);
+			if(extensions.find(extension) != extensions.end()) {
+				files.push_back(i->path().u8string());
+			}
+		}
+	}
+
+	return files;
+}
+
 int main(int argc, char* argv[])
 {
-	using namespace std;
-	vector<char*> testRoms{
-		"..\\..\\Games\\Super Dodge Ball (USA).nes",
-		"..\\..\\Games\\Super Mario Bros. (USA).nes",
-		"..\\..\\Games\\Mega Man (USA).nes",
-		"..\\..\\Games\\Mega Man 2 (USA).nes",
-		"..\\..\\Games\\Mega Man 3 (USA).nes",
-		"..\\..\\Games\\Mega Man 4 (USA).nes",
-		"..\\..\\Games\\Mega Man 5 (USA).nes",
-		"..\\..\\Games\\Mega Man 6 (USA).nes",
-		"..\\..\\Games\\MMC5\\Just Breed (J) [!].nes",
-		"..\\..\\Games\\MMC5\\Castlevania III - Dracula's Curse (U) [!].nes",
-		"..\\..\\Games\\Blades of Steel (USA).nes",
-		"..\\..\\Games\\Kirby's Adventure (USA).nes",
-		"..\\..\\Games\\Legend of Zelda, The (USA).nes",
-		"..\\..\\Games\\Super Mario Bros. 3 (USA).nes",
-		"..\\..\\Games\\Teenage Mutant Ninja Turtles II - The Arcade Game (USA).nes",		
-		"..\\..\\Games\\Dragon Warrior III (USA).nes",
-		"..\\..\\Games\\Dragon Warrior IV (USA).nes"
-	};
+	vector<string> testRoms = GetFilesInFolder("../PGOGames", { ".nes" });
+
+	string homeFolder = "../PGOMesenHome";
 
 	SetFlags(0x8000000000000000 | 0x20); //EmulationFlags::ConsoleMode | UseHdPacks
-	InitializeEmu("C:\\Code\\PGOMesen", nullptr, nullptr, false, false, false);
-	LoadROM(testRoms[0], "");
+	InitializeEmu(homeFolder.c_str(), nullptr, nullptr, false, false, false);
+	LoadROM(testRoms[0].c_str(), "");
 	std::cout << "Running: " << testRoms[0] << std::endl;
 
 	thread testThread([testRoms] {
 		VideoFilterType filterTypes[13] = {
-			VideoFilterType::BisqwitNtscQuarterRes,
-			VideoFilterType::HQ2x,
-			VideoFilterType::HQ3x,
-			VideoFilterType::HQ4x,
-			VideoFilterType::NTSC,
-			VideoFilterType::Scale2x,
-			VideoFilterType::Scale3x,
-			VideoFilterType::Scale4x,
-			VideoFilterType::xBRZ2x,
-			VideoFilterType::xBRZ3x,
-			VideoFilterType::xBRZ4x,
-			VideoFilterType::xBRZ5x,
-			VideoFilterType::xBRZ6x,
+			VideoFilterType::BisqwitNtscQuarterRes, VideoFilterType::HQ2x, VideoFilterType::HQ3x, VideoFilterType::HQ4x, VideoFilterType::NTSC, VideoFilterType::Scale2x, VideoFilterType::Scale3x, VideoFilterType::Scale4x, VideoFilterType::xBRZ2x, VideoFilterType::xBRZ3x, VideoFilterType::xBRZ4x, VideoFilterType::xBRZ5x, VideoFilterType::xBRZ6x
 		};
 
 		for(size_t i = 1; i < testRoms.size(); i++) {
 			std::this_thread::sleep_for(std::chrono::duration<int, std::milli>(5000));
 			std::cout << "Running: " << testRoms[i] << std::endl;
 			SetVideoFilter(filterTypes[i % 13]);
-			LoadROM(testRoms[i], "");
+			LoadROM(testRoms[i].c_str(), "");
 			DebugInitialize();
 		}
 		std::this_thread::sleep_for(std::chrono::duration<int, std::milli>(5000));
 		Stop();
+		Release();
 	});
 	Run();
 	testThread.join();

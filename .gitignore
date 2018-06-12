@@ -172,3 +172,7 @@ $RECYCLE.BIN/
 
 Docs/docs/
 Docs/*.exe
+
+PGOHelper/PGOMesenHome
+*.profraw
+*.profdata

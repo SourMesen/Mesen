@@ -20,10 +20,19 @@
 MESENFLAGS=
 libretro : MESENFLAGS=-D LIBRETRO
 
-CPPC=clang++
-GCCOPTIONS=-fPIC -Wall --std=c++14 -O3 $(MESENFLAGS) -Wno-parentheses -Wno-switch
+ifeq ($(USE_GCC),true)
+	CPPC=g++
+	CC=gcc
+	PROFILE_GEN_FLAG=-fprofile-generate
+	PROFILE_USE_FLAG=-fprofile-use
+else
+	CPPC=clang++
+	CC=clang
+	PROFILE_GEN_FLAG = -fprofile-instr-generate=$(CURDIR)/PGOHelper/pgo.profraw
+	PROFILE_USE_FLAG = -fprofile-instr-use=$(CURDIR)/PGOHelper/pgo.profdata
+endif
 
-CC=clang
+GCCOPTIONS=-fPIC -Wall --std=c++14 -O3 $(MESENFLAGS) -Wno-parentheses -Wno-switch
 CCOPTIONS=-fPIC -Wall -O3 $(MESENFLAGS)
 
 ifeq ($(MESENPLATFORM),x86)
@@ -42,6 +51,16 @@ ifeq ($(LTO),true)
 	GCCOPTIONS += -flto
 endif
 
+ifeq ($(PGO),profile)
+	CCOPTIONS += ${PROFILE_GEN_FLAG}
+	GCCOPTIONS += ${PROFILE_GEN_FLAG}
+endif
+
+ifeq ($(PGO),optimize)
+	CCOPTIONS += ${PROFILE_USE_FLAG}
+	GCCOPTIONS += ${PROFILE_USE_FLAG}
+endif
+
 OBJFOLDER=obj.$(MESENPLATFORM)
 SHAREDLIB=libMesenCore.$(MESENPLATFORM).dll
 LIBRETROLIB=mesen_libretro.$(MESENPLATFORM).so
@@ -52,6 +71,7 @@ UTILOBJ=$(patsubst Utilities/%.cpp,Utilities/$(OBJFOLDER)/%.o,$(wildcard Utiliti
 LINUXOBJ=$(patsubst Linux/%.cpp,Linux/$(OBJFOLDER)/%.o,$(wildcard Linux/*.cpp)) 
 SEVENZIPOBJ=$(patsubst SevenZip/%.c,SevenZip/$(OBJFOLDER)/%.o,$(wildcard SevenZip/*.c))
 LUAOBJ=$(patsubst Lua/%.c,Lua/$(OBJFOLDER)/%.o,$(wildcard Lua/*.c))
+
 ifeq ($(SYSTEM_LIBEVDEV), true)
 	LIBEVDEVLIB=$(shell pkg-config --libs libevdev)
 	LIBEVDEVINC=$(shell pkg-config --cflags libevdev)
@@ -91,6 +111,9 @@ testhelper: InteropDLL/$(OBJFOLDER)/$(SHAREDLIB)
 	$(CPPC) $(GCCOPTIONS) -Wl,-z,defs -o testhelper TestHelper/*.cpp InteropDLL/ConsoleWrapper.cpp $(SEVENZIPOBJ) $(LUAOBJ) $(LINUXOBJ) $(LIBEVDEVOBJ) $(UTILOBJ) $(COREOBJ) -pthread $(FSLIB) $(SDL2LIB) $(LIBEVDEVLIB)
 	mv testhelper TestHelper/$(OBJFOLDER)
 
+pgohelper: InteropDLL/$(OBJFOLDER)/$(SHAREDLIB)
+	mkdir -p PGOHelper/$(OBJFOLDER) && cd PGOHelper/$(OBJFOLDER) && $(CPPC) $(GCCOPTIONS) -Wl,-z,defs -o pgohelper ../PGOHelper.cpp ../../InteropDLL/$(OBJFOLDER)/$(SHAREDLIB) -pthread $(FSLIB) $(SDL2LIB) $(LIBEVDEVLIB)
+	
 SevenZip/$(OBJFOLDER)/%.o: SevenZip/%.c
 	mkdir -p SevenZip/$(OBJFOLDER) && cd SevenZip/$(OBJFOLDER) && $(CC) $(CCOPTIONS) -c $(patsubst SevenZip/%, ../%, $<)
 Lua/$(OBJFOLDER)/%.o: Lua/%.c
@@ -117,12 +140,17 @@ InteropDLL/$(OBJFOLDER)/$(SHAREDLIB): $(SEVENZIPOBJ) $(LUAOBJ) $(UTILOBJ) $(CORE
 	$(CPPC) $(GCCOPTIONS) -Wl,-z,defs -shared -o $(SHAREDLIB) InteropDLL/*.cpp $(SEVENZIPOBJ) $(LUAOBJ) $(LINUXOBJ) $(LIBEVDEVOBJ) $(UTILOBJ) $(COREOBJ) $(SDL2INC) -pthread $(FSLIB) $(SDL2LIB) $(LIBEVDEVLIB)
 	mv $(SHAREDLIB) InteropDLL/$(OBJFOLDER)
 
-
 Libretro/$(OBJFOLDER)/$(LIBRETROLIB): $(SEVENZIPOBJ) $(UTILOBJ) $(COREOBJ) $(LUAOBJ) Libretro/libretro.cpp
 	mkdir -p Libretro/$(OBJFOLDER)
 	$(CPPC) $(GCCOPTIONS) -Wl,-z,defs -shared -o $(LIBRETROLIB) Libretro/*.cpp $(SEVENZIPOBJ) $(UTILOBJ) $(COREOBJ) $(LUAOBJ) -pthread $(FSLIB)
 	mv $(LIBRETROLIB) Libretro/$(OBJFOLDER) 
 
+pgo:
+	./buildPGO.sh
+	
+official:
+	./build.sh
+	
 debug:
 	MONO_LOG_LEVEL=debug mono $(RELEASEFOLDER)/Mesen.exe
 
@@ -138,4 +166,5 @@ clean:
 	rm -rf InteropDLL/$(OBJFOLDER)
 	rm -rf Libretro/$(OBJFOLDER)
 	rm -rf TestHelper/$(OBJFOLDER)
+	rm -rf PGOHelper/$(OBJFOLDER)
 	rm -rf $(RELEASEFOLDER)
