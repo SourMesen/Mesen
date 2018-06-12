@@ -91,7 +91,7 @@ uint32_t* ScaleFilter::ApplyFilter(uint32_t *inputArgbBuffer, uint32_t width, ui
 				r = (uint8_t)(r * scanlineIntensity);
 				g = (uint8_t)(g * scanlineIntensity);
 				b = (uint8_t)(b * scanlineIntensity);
-				color = (r << 16) | (g << 8) | b;
+				color = 0xFF000000 | (r << 16) | (g << 8) | b;
 			}
 		}
 	}
