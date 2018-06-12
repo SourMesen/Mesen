@@ -41,9 +41,14 @@ SoundMixer::~SoundMixer()
 
 void SoundMixer::StreamState(bool saving)
 {
-	Stream(_clockRate, _sampleRate);
+	Stream(_clockRate, _sampleRate, _model);
 	
 	if(!saving) {
+		if(_model == NesModel::Auto) {
+			//Older savestates - assume NTSC
+			_model = NesModel::NTSC;
+		}
+
 		Reset();
 		UpdateRates(true);
 	}
@@ -174,8 +179,10 @@ void SoundMixer::PlayAudioBuffer(uint32_t time)
 
 void SoundMixer::SetNesModel(NesModel model)
 {
-	_model = model;
-	UpdateRates(true);
+	if(_model != model) {
+		_model = model;
+		UpdateRates(true);
+	}
 }
 
 void SoundMixer::UpdateRates(bool forceUpdate)
