@@ -316,7 +316,8 @@ protected:
 
 		_fillModeNametable = new uint8_t[0x400];
 		_emptyNametable = new uint8_t[0x400];
-		memset(_emptyNametable, 0, 0x400);
+		InitializeRam(_emptyNametable, 0x400);
+		InitializeRam(_fillModeNametable, 0x400);
 
 		//"Expansion RAM ($5C00-$5FFF, read/write)"
 		SetCpuMemoryMapping(0x5C00, 0x5FFF, 0, PrgMemoryType::WorkRam);

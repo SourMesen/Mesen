@@ -76,7 +76,7 @@ void PPU::Reset()
 	_cyclesNeeded = 0.0;
 
 	memset(_hasSprite, 0, sizeof(_hasSprite));
-	memset(_spriteTiles, 0, sizeof(SpriteInfo));
+	memset(_spriteTiles, 0, sizeof(_spriteTiles));
 	_spriteCount = 0;
 	_secondaryOAMAddr = 0;
 	_sprite0Visible = false;
