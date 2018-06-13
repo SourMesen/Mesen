@@ -156,9 +156,10 @@ namespace Mesen.GUI.Debugger
 			get { return this._textZoom; }
 			set
 			{
-				if(value >= 30 && value <= 500) {
+				if(value != _textZoom && value >= 30 && value <= 500) {
 					this._textZoom = value;
 					UpdateFont();
+					this.Invalidate();
 				}
 			}
 		}

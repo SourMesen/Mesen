@@ -69,12 +69,6 @@ namespace Mesen.GUI.Debugger
 			}
 		}
 
-		private void UpdateConfig()
-		{
-			this.SetConfig(_config);
-			ConfigManager.ApplyChanges();
-		}
-
 		protected override ctrlScrollableTextbox ScrollableTextbox
 		{
 			get { return this.ctrlCodeViewer; }
@@ -450,7 +444,7 @@ namespace Mesen.GUI.Debugger
 		private void ctrlCodeViewer_TextZoomChanged(object sender, EventArgs e)
 		{
 			_config.TextZoom = this.ctrlCodeViewer.TextZoom;
-			UpdateConfig();
+			ConfigManager.ApplyChanges();
 		}
 
 		public void EditSubroutine()
