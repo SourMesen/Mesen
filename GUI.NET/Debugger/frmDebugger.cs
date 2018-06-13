@@ -1443,10 +1443,17 @@ namespace Mesen.GUI.Debugger
 
 		private void mnuSelectFont_Click(object sender, EventArgs e)
 		{
-			ctrlDebuggerCode.CodeViewer.BaseFont = FontDialogHelper.SelectFont(ctrlDebuggerCode.CodeViewer.BaseFont);
-			ctrlDebuggerCodeSplit.CodeViewer.BaseFont = ctrlDebuggerCode.CodeViewer.BaseFont;
-			ctrlSourceViewer.CodeViewer.BaseFont = ctrlDebuggerCode.CodeViewer.BaseFont;
-			ctrlSourceViewerSplit.CodeViewer.BaseFont = ctrlDebuggerCode.CodeViewer.BaseFont;
+			Font newFont = FontDialogHelper.SelectFont(ctrlDebuggerCode.CodeViewer.BaseFont);
+
+			ConfigManager.Config.DebugInfo.FontFamily = newFont.FontFamily.Name;
+			ConfigManager.Config.DebugInfo.FontStyle = newFont.Style;
+			ConfigManager.Config.DebugInfo.FontSize = newFont.Size;
+			ConfigManager.ApplyChanges();
+
+			ctrlDebuggerCode.CodeViewer.BaseFont = newFont;
+			ctrlDebuggerCodeSplit.CodeViewer.BaseFont = newFont;
+			ctrlSourceViewer.CodeViewer.BaseFont = newFont;
+			ctrlSourceViewerSplit.CodeViewer.BaseFont = newFont;
 		}
 
 		private void mnuPreferences_Click(object sender, EventArgs e)

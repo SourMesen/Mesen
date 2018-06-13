@@ -63,6 +63,7 @@ namespace Mesen.GUI.Debugger
 				(_codeViewer as ctrlSourceViewer).CurrentFile = _selectedFile;
 			}
 
+			_codeViewer.CodeViewer.BaseFont = new Font(ConfigManager.Config.DebugInfo.FontFamily, ConfigManager.Config.DebugInfo.FontSize, ConfigManager.Config.DebugInfo.FontStyle);
 			_codeViewer.CodeViewer.HideSelection = true;
 			_codeViewer.CodeViewer.ShowScrollbars = false;
 			_codeViewer.CodeViewer.ScrollToLineIndex(_lineIndex, true);
