@@ -273,7 +273,7 @@ int LuaApi::UnregisterMemoryCallback(lua_State *lua)
 	LuaCallHelper l(lua);
 	l.ForceParamCount(4);
 
-	int endAddr = l.ReadInteger();
+	int endAddr = l.ReadInteger(-1);
 	int startAddr = l.ReadInteger();
 	CallbackType type = (CallbackType)l.ReadInteger();
 	int reference = l.ReadInteger();
