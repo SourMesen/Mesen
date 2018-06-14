@@ -35,13 +35,16 @@
 			this.lblWebsite = new System.Windows.Forms.Label();
 			this.lblLink = new System.Windows.Forms.Label();
 			this.labelVersion = new System.Windows.Forms.Label();
-			this.lblDonate = new System.Windows.Forms.Label();
-			this.picDonate = new System.Windows.Forms.PictureBox();
 			this.okButton = new System.Windows.Forms.Button();
+			this.picDonate = new System.Windows.Forms.PictureBox();
+			this.lblDonate = new System.Windows.Forms.Label();
+			this.flowLayoutPanel2 = new System.Windows.Forms.FlowLayoutPanel();
+			this.lblMesenVersion = new System.Windows.Forms.Label();
 			this.tableLayoutPanel.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.logoPictureBox)).BeginInit();
 			this.flowLayoutPanel1.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.picDonate)).BeginInit();
+			this.flowLayoutPanel2.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// tableLayoutPanel
@@ -55,10 +58,10 @@
 			this.tableLayoutPanel.Controls.Add(this.labelProductName, 1, 0);
 			this.tableLayoutPanel.Controls.Add(this.labelCopyright, 1, 2);
 			this.tableLayoutPanel.Controls.Add(this.flowLayoutPanel1, 1, 3);
-			this.tableLayoutPanel.Controls.Add(this.labelVersion, 1, 1);
 			this.tableLayoutPanel.Controls.Add(this.okButton, 1, 5);
 			this.tableLayoutPanel.Controls.Add(this.picDonate, 0, 5);
 			this.tableLayoutPanel.Controls.Add(this.lblDonate, 0, 4);
+			this.tableLayoutPanel.Controls.Add(this.flowLayoutPanel2, 1, 1);
 			this.tableLayoutPanel.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tableLayoutPanel.Location = new System.Drawing.Point(5, 5);
 			this.tableLayoutPanel.Name = "tableLayoutPanel";
@@ -70,7 +73,6 @@
 			this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
 			this.tableLayoutPanel.Size = new System.Drawing.Size(337, 134);
 			this.tableLayoutPanel.TabIndex = 0;
 			// 
@@ -103,7 +105,7 @@
 			// 
 			this.labelCopyright.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.labelCopyright.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.labelCopyright.Location = new System.Drawing.Point(90, 34);
+			this.labelCopyright.Location = new System.Drawing.Point(90, 35);
 			this.labelCopyright.Margin = new System.Windows.Forms.Padding(6, 0, 3, 0);
 			this.labelCopyright.Name = "labelCopyright";
 			this.labelCopyright.Size = new System.Drawing.Size(244, 17);
@@ -115,7 +117,7 @@
 			// 
 			this.flowLayoutPanel1.Controls.Add(this.lblWebsite);
 			this.flowLayoutPanel1.Controls.Add(this.lblLink);
-			this.flowLayoutPanel1.Location = new System.Drawing.Point(84, 51);
+			this.flowLayoutPanel1.Location = new System.Drawing.Point(84, 52);
 			this.flowLayoutPanel1.Margin = new System.Windows.Forms.Padding(0);
 			this.flowLayoutPanel1.Name = "flowLayoutPanel1";
 			this.flowLayoutPanel1.Size = new System.Drawing.Size(236, 18);
@@ -149,24 +151,25 @@
 			// 
 			// labelVersion
 			// 
-			this.labelVersion.Location = new System.Drawing.Point(90, 17);
+			this.labelVersion.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.labelVersion.AutoSize = true;
+			this.labelVersion.Location = new System.Drawing.Point(6, 0);
 			this.labelVersion.Margin = new System.Windows.Forms.Padding(6, 0, 3, 0);
 			this.labelVersion.Name = "labelVersion";
-			this.labelVersion.Size = new System.Drawing.Size(146, 17);
+			this.labelVersion.Size = new System.Drawing.Size(45, 13);
 			this.labelVersion.TabIndex = 0;
-			this.labelVersion.Text = "Version: 0.9.5 (Beta)";
+			this.labelVersion.Text = "Version:";
 			this.labelVersion.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
-			// lblDonate
+			// okButton
 			// 
-			this.lblDonate.AutoSize = true;
-			this.tableLayoutPanel.SetColumnSpan(this.lblDonate, 2);
-			this.lblDonate.Location = new System.Drawing.Point(0, 75);
-			this.lblDonate.Margin = new System.Windows.Forms.Padding(0, 5, 0, 0);
-			this.lblDonate.Name = "lblDonate";
-			this.lblDonate.Size = new System.Drawing.Size(271, 26);
-			this.lblDonate.TabIndex = 30;
-			this.lblDonate.Text = "If you want to support Mesen, please consider donating.\r\nThank you for your support!";
+			this.okButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.okButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+			this.okButton.Location = new System.Drawing.Point(259, 104);
+			this.okButton.Name = "okButton";
+			this.okButton.Size = new System.Drawing.Size(75, 23);
+			this.okButton.TabIndex = 24;
+			this.okButton.Text = "&OK";
 			// 
 			// picDonate
 			// 
@@ -181,15 +184,37 @@
 			this.picDonate.TabStop = false;
 			this.picDonate.Click += new System.EventHandler(this.picDonate_Click);
 			// 
-			// okButton
+			// lblDonate
 			// 
-			this.okButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.okButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.okButton.Location = new System.Drawing.Point(259, 104);
-			this.okButton.Name = "okButton";
-			this.okButton.Size = new System.Drawing.Size(75, 23);
-			this.okButton.TabIndex = 24;
-			this.okButton.Text = "&OK";
+			this.lblDonate.AutoSize = true;
+			this.tableLayoutPanel.SetColumnSpan(this.lblDonate, 2);
+			this.lblDonate.Location = new System.Drawing.Point(0, 75);
+			this.lblDonate.Margin = new System.Windows.Forms.Padding(0, 5, 0, 0);
+			this.lblDonate.Name = "lblDonate";
+			this.lblDonate.Size = new System.Drawing.Size(271, 26);
+			this.lblDonate.TabIndex = 30;
+			this.lblDonate.Text = "If you want to support Mesen, please consider donating.\r\nThank you for your suppo" +
+    "rt!";
+			// 
+			// flowLayoutPanel2
+			// 
+			this.flowLayoutPanel2.Controls.Add(this.labelVersion);
+			this.flowLayoutPanel2.Controls.Add(this.lblMesenVersion);
+			this.flowLayoutPanel2.Location = new System.Drawing.Point(84, 20);
+			this.flowLayoutPanel2.Margin = new System.Windows.Forms.Padding(0, 3, 0, 0);
+			this.flowLayoutPanel2.Name = "flowLayoutPanel2";
+			this.flowLayoutPanel2.Size = new System.Drawing.Size(200, 15);
+			this.flowLayoutPanel2.TabIndex = 31;
+			// 
+			// lblMesenVersion
+			// 
+			this.lblMesenVersion.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.lblMesenVersion.AutoSize = true;
+			this.lblMesenVersion.Location = new System.Drawing.Point(57, 0);
+			this.lblMesenVersion.Name = "lblMesenVersion";
+			this.lblMesenVersion.Size = new System.Drawing.Size(53, 13);
+			this.lblMesenVersion.TabIndex = 1;
+			this.lblMesenVersion.Text = "<version>";
 			// 
 			// frmAbout
 			// 
@@ -215,6 +240,8 @@
 			this.flowLayoutPanel1.ResumeLayout(false);
 			this.flowLayoutPanel1.PerformLayout();
 			((System.ComponentModel.ISupportInitialize)(this.picDonate)).EndInit();
+			this.flowLayoutPanel2.ResumeLayout(false);
+			this.flowLayoutPanel2.PerformLayout();
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -233,5 +260,7 @@
 		private System.Windows.Forms.Button okButton;
 		private System.Windows.Forms.PictureBox picDonate;
 		private System.Windows.Forms.Label lblDonate;
+		private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel2;
+		private System.Windows.Forms.Label lblMesenVersion;
 	}
 }

@@ -517,7 +517,7 @@
 			<Control ID="labelCopyright">© 2018 M. Bibaud (aka Sour)</Control>
 			<Control ID="lblWebsite">サイト:</Control>
 			<Control ID="lblLink">www.mesen.ca</Control>
-			<Control ID="labelVersion">バージョン: 0.9.5 (ベータ版)</Control>
+			<Control ID="labelVersion">バージョン:</Control>
 			<Control ID="lblDonate">応援ありがとうございます！</Control>
 			<Control ID="okButton">&amp;OK</Control>
 		</Form>

@@ -6,8 +6,18 @@ If you want to support this project, please consider making a donation:
 
 [![Donate](https://www.mesen.ca/images/donate.png)](https://www.mesen.ca/Donate.php)
 
-[Website (https://www.mesen.ca)](https://www.mesen.ca)
+[Website (https://www.mesen.ca)](https://www.mesen.ca)  
 [Documentation (https://www.mesen.ca/docs)](https://www.mesen.ca/docs)
+
+## Development Builds
+
+Development builds of the latest commit are available from Appveyor. For stable release builds, see the **Releases** section below.
+
+**Warning:** These are development builds and may be ***unstable***. Using them may also increase the chances of your settings being corrupted, or having issues when upgrading to the next official release. Additionally, these builds are currently not optimized via PGO and will typically run 20-30% slower than the official release builds.
+
+Windows: [![Build status](https://ci.appveyor.com/api/projects/status/d4i7rqbfi386wdyw/branch/master?svg=true)](https://ci.appveyor.com/project/Sour/mesen/build/artifacts)
+
+Linux: [![Build status](https://ci.appveyor.com/api/projects/status/uuoxwu7o5kkqjp4e/branch/master?svg=true)](https://ci.appveyor.com/project/Sour/mesen-nyf7v/build/artifacts)
 
 ## Releases
 

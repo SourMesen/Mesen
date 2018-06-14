@@ -15,6 +15,15 @@ namespace Mesen.GUI.Forms
 		public frmAbout()
 		{
 			InitializeComponent();
+
+			lblMesenVersion.Text = InteropEmu.GetMesenVersion();
+
+#if AUTOBUILD
+			string devVersion = ResourceManager.ReadZippedResource("DevBuild.txt");
+			if(devVersion != null) {
+				lblMesenVersion.Text = devVersion;
+			}
+#endif
 		}
 
 		private void lblLink_Click(object sender, EventArgs e)

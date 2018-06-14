@@ -76,6 +76,18 @@ namespace Mesen.GUI.Forms
 			_fonts.AddFontFile(Path.Combine(ConfigManager.HomeFolder, "Resources", "PixelFont.ttf"));
 			lblVersion.Font = new Font(_fonts.Families[0], 11);
 
+#if AUTOBUILD
+			string devVersion = ResourceManager.ReadZippedResource("DevBuild.txt");
+			if(devVersion != null) {
+				Size versionSize = TextRenderer.MeasureText(devVersion, lblVersion.Font);
+				lblVersion.Text = devVersion;
+				lblVersion.Anchor = AnchorStyles.Left;
+				int newWidth = versionSize.Width + 30;
+				panelInfo.Left -= newWidth - panelInfo.Width;
+				panelInfo.Width = newWidth;
+			}
+#endif
+
 			_commandLineArgs = (string[])args.Clone();
 
 			Application.AddMessageFilter(this);
@@ -135,9 +147,9 @@ namespace Mesen.GUI.Forms
 
 			base.OnLoad(e);
 
-			#if HIDETESTMENU
+#if HIDETESTMENU
 			mnuTests.Visible = false;
-			#endif
+#endif
 
 			_notifListener = new InteropEmu.NotificationListener();
 			_notifListener.OnNotification += _notifListener_OnNotification;
@@ -1140,7 +1152,7 @@ namespace Mesen.GUI.Forms
 				}
 			}
 
-			#if !HIDETESTMENU
+#if !HIDETESTMENU
 			if(keyData == Keys.Pause) {
 				if(InteropEmu.RomTestRecording()) {
 					InteropEmu.RomTestStop();
@@ -1148,7 +1160,7 @@ namespace Mesen.GUI.Forms
 					InteropEmu.RomTestRecord(ConfigManager.TestFolder + "\\" + InteropEmu.GetRomInfo().GetRomName() + ".mtp", true);
 				}
 			}
-			#endif
+#endif
 
 			return base.ProcessCmdKey(ref msg, keyData);
 		}
