@@ -401,6 +401,12 @@
     <Compile Include="Debugger\Controls\ctrlDbgShortcuts.Designer.cs">
       <DependentUpon>ctrlDbgShortcuts.cs</DependentUpon>
     </Compile>
+    <Compile Include="Debugger\Controls\ctrlEventViewerListView.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Debugger\Controls\ctrlEventViewerListView.Designer.cs">
+      <DependentUpon>ctrlEventViewerListView.cs</DependentUpon>
+    </Compile>
     <Compile Include="Debugger\Controls\ctrlFindOccurrences.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -1245,6 +1251,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Debugger\Controls\ctrlDbgShortcuts.resx">
       <DependentUpon>ctrlDbgShortcuts.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Debugger\Controls\ctrlEventViewerListView.resx">
+      <DependentUpon>ctrlEventViewerListView.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Debugger\Controls\ctrlFindOccurrences.resx">
       <DependentUpon>ctrlFindOccurrences.cs</DependentUpon>

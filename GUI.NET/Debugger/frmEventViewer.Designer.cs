@@ -46,6 +46,8 @@
 			this.chkShowPpuRegisterWrites = new System.Windows.Forms.CheckBox();
 			this.chkShowMapperRegisterWrites = new System.Windows.Forms.CheckBox();
 			this.chkShowSpriteZero = new System.Windows.Forms.CheckBox();
+			this.tpgListView = new System.Windows.Forms.TabPage();
+			this.ctrlEventViewerListView = new Mesen.GUI.Debugger.Controls.ctrlEventViewerListView();
 			this.menuStrip1 = new Mesen.GUI.Controls.ctrlMesenMenuStrip();
 			this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuClose = new System.Windows.Forms.ToolStripMenuItem();
@@ -59,12 +61,14 @@
 			this.panel1.SuspendLayout();
 			this.grpShow.SuspendLayout();
 			this.tableLayoutPanel2.SuspendLayout();
+			this.tpgListView.SuspendLayout();
 			this.menuStrip1.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// tabMain
 			// 
 			this.tabMain.Controls.Add(this.tpgPpuView);
+			this.tabMain.Controls.Add(this.tpgListView);
 			this.tabMain.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tabMain.Location = new System.Drawing.Point(0, 24);
 			this.tabMain.Name = "tabMain";
@@ -263,6 +267,25 @@
 			this.chkShowSpriteZero.UseVisualStyleBackColor = true;
 			this.chkShowSpriteZero.Click += new System.EventHandler(this.chkShowSpriteZero_Click);
 			// 
+			// tpgListView
+			// 
+			this.tpgListView.Controls.Add(this.ctrlEventViewerListView);
+			this.tpgListView.Location = new System.Drawing.Point(4, 22);
+			this.tpgListView.Name = "tpgListView";
+			this.tpgListView.Padding = new System.Windows.Forms.Padding(3);
+			this.tpgListView.Size = new System.Drawing.Size(921, 538);
+			this.tpgListView.TabIndex = 1;
+			this.tpgListView.Text = "List View";
+			this.tpgListView.UseVisualStyleBackColor = true;
+			// 
+			// ctrlEventViewerListView
+			// 
+			this.ctrlEventViewerListView.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.ctrlEventViewerListView.Location = new System.Drawing.Point(3, 3);
+			this.ctrlEventViewerListView.Name = "ctrlEventViewerListView";
+			this.ctrlEventViewerListView.Size = new System.Drawing.Size(915, 532);
+			this.ctrlEventViewerListView.TabIndex = 0;
+			// 
 			// menuStrip1
 			// 
 			this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -338,6 +361,7 @@
 			this.grpShow.ResumeLayout(false);
 			this.tableLayoutPanel2.ResumeLayout(false);
 			this.tableLayoutPanel2.PerformLayout();
+			this.tpgListView.ResumeLayout(false);
 			this.menuStrip1.ResumeLayout(false);
 			this.menuStrip1.PerformLayout();
 			this.ResumeLayout(false);
@@ -369,5 +393,7 @@
 		private System.Windows.Forms.GroupBox grpShow;
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem1;
 		private System.Windows.Forms.ToolStripMenuItem mnuRefreshOnBreak;
+		private System.Windows.Forms.TabPage tpgListView;
+		private Controls.ctrlEventViewerListView ctrlEventViewerListView;
 	}
 }

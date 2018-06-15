@@ -21,8 +21,7 @@ namespace Mesen.GUI.Debugger.Controls
 		private byte[] _pictureData = null;
 		private Dictionary<int, List<DebugEventInfo>> _debugEventsByCycle = new Dictionary<int, List<DebugEventInfo>>();
 		private DebugEventInfo[] _debugEvents = new DebugEventInfo[0];
-
-
+		
 		public ctrlEventViewerPpuView()
 		{
 			InitializeComponent();

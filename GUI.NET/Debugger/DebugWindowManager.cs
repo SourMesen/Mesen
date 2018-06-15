@@ -92,7 +92,6 @@ namespace Mesen.GUI.Debugger
 				case DebugWindow.Assembler: return _openedWindows.ToList().Find((form) => form.GetType() == typeof(frmAssembler));
 				case DebugWindow.Debugger: return _openedWindows.ToList().Find((form) => form.GetType() == typeof(frmDebugger));
 				case DebugWindow.ApuViewer: return _openedWindows.ToList().Find((form) => form.GetType() == typeof(frmApuViewer));
-				case DebugWindow.EventViewer: return _openedWindows.ToList().Find((form) => form.GetType() == typeof(frmEventViewer));
 			}
 
 			return null;

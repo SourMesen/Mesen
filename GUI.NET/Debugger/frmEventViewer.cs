@@ -16,6 +16,7 @@ namespace Mesen.GUI.Debugger
 	{
 		private DateTime _lastUpdate = DateTime.MinValue;
 		private InteropEmu.NotificationListener _notifListener;
+		private bool _inListViewTab = false;
 		private bool _refreshing = false;
 
 		public frmEventViewer()
@@ -86,7 +87,11 @@ namespace Mesen.GUI.Debugger
 
 		private void GetData()
 		{
-			ctrlEventViewerPpuView.GetData();
+			if(_inListViewTab) {
+				ctrlEventViewerListView.GetData();
+			} else {
+				ctrlEventViewerPpuView.GetData();
+			}
 		}
 
 		private void RefreshViewer()
@@ -103,6 +108,8 @@ namespace Mesen.GUI.Debugger
 
 		private void tabMain_SelectedIndexChanged(object sender, EventArgs e)
 		{
+			_inListViewTab = tabMain.SelectedTab == tpgListView;
+			GetData();
 		}
 
 		private void mnuRefreshOnBreak_Click(object sender, EventArgs e)
