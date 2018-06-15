@@ -74,7 +74,9 @@
 			this.logLinesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnu100Lines = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnu1000Lines = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnu5000Lines = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnu10000Lines = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnu15000Lines = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnu30000Lines = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuAutoRefresh = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
@@ -597,7 +599,7 @@
             this.mnuSelectFont});
 			this.fontSizeToolStripMenuItem.Image = global::Mesen.GUI.Properties.Resources.Font;
 			this.fontSizeToolStripMenuItem.Name = "fontSizeToolStripMenuItem";
-			this.fontSizeToolStripMenuItem.Size = new System.Drawing.Size(143, 22);
+			this.fontSizeToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
 			this.fontSizeToolStripMenuItem.Text = "Font Options";
 			// 
 			// mnuIncreaseFontSize
@@ -641,16 +643,18 @@
 			this.logLinesToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.mnu100Lines,
             this.mnu1000Lines,
+            this.mnu5000Lines,
             this.mnu10000Lines,
+            this.mnu15000Lines,
             this.mnu30000Lines});
 			this.logLinesToolStripMenuItem.Name = "logLinesToolStripMenuItem";
-			this.logLinesToolStripMenuItem.Size = new System.Drawing.Size(143, 22);
+			this.logLinesToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
 			this.logLinesToolStripMenuItem.Text = "Line Count";
 			// 
 			// mnu100Lines
 			// 
 			this.mnu100Lines.Name = "mnu100Lines";
-			this.mnu100Lines.Size = new System.Drawing.Size(104, 22);
+			this.mnu100Lines.Size = new System.Drawing.Size(152, 22);
 			this.mnu100Lines.Text = "100";
 			this.mnu100Lines.Click += new System.EventHandler(this.mnu100Lines_Click);
 			// 
@@ -659,21 +663,35 @@
 			this.mnu1000Lines.Checked = true;
 			this.mnu1000Lines.CheckState = System.Windows.Forms.CheckState.Checked;
 			this.mnu1000Lines.Name = "mnu1000Lines";
-			this.mnu1000Lines.Size = new System.Drawing.Size(104, 22);
+			this.mnu1000Lines.Size = new System.Drawing.Size(152, 22);
 			this.mnu1000Lines.Text = "1000";
 			this.mnu1000Lines.Click += new System.EventHandler(this.mnu1000Lines_Click);
+			// 
+			// mnu5000Lines
+			// 
+			this.mnu5000Lines.Name = "mnu5000Lines";
+			this.mnu5000Lines.Size = new System.Drawing.Size(152, 22);
+			this.mnu5000Lines.Text = "5000";
+			this.mnu5000Lines.Click += new System.EventHandler(this.mnu5000Lines_Click);
 			// 
 			// mnu10000Lines
 			// 
 			this.mnu10000Lines.Name = "mnu10000Lines";
-			this.mnu10000Lines.Size = new System.Drawing.Size(104, 22);
+			this.mnu10000Lines.Size = new System.Drawing.Size(152, 22);
 			this.mnu10000Lines.Text = "10000";
 			this.mnu10000Lines.Click += new System.EventHandler(this.mnu10000Lines_Click);
+			// 
+			// mnu15000Lines
+			// 
+			this.mnu15000Lines.Name = "mnu15000Lines";
+			this.mnu15000Lines.Size = new System.Drawing.Size(152, 22);
+			this.mnu15000Lines.Text = "15000";
+			this.mnu15000Lines.Click += new System.EventHandler(this.mnu15000Lines_Click);
 			// 
 			// mnu30000Lines
 			// 
 			this.mnu30000Lines.Name = "mnu30000Lines";
-			this.mnu30000Lines.Size = new System.Drawing.Size(104, 22);
+			this.mnu30000Lines.Size = new System.Drawing.Size(152, 22);
 			this.mnu30000Lines.Text = "30000";
 			this.mnu30000Lines.Click += new System.EventHandler(this.mnu30000Lines_Click);
 			// 
@@ -683,19 +701,19 @@
 			this.mnuAutoRefresh.CheckOnClick = true;
 			this.mnuAutoRefresh.CheckState = System.Windows.Forms.CheckState.Checked;
 			this.mnuAutoRefresh.Name = "mnuAutoRefresh";
-			this.mnuAutoRefresh.Size = new System.Drawing.Size(143, 22);
+			this.mnuAutoRefresh.Size = new System.Drawing.Size(152, 22);
 			this.mnuAutoRefresh.Text = "Auto-refresh";
 			// 
 			// toolStripMenuItem1
 			// 
 			this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-			this.toolStripMenuItem1.Size = new System.Drawing.Size(140, 6);
+			this.toolStripMenuItem1.Size = new System.Drawing.Size(149, 6);
 			// 
 			// mnuRefresh
 			// 
 			this.mnuRefresh.Image = global::Mesen.GUI.Properties.Resources.Reset;
 			this.mnuRefresh.Name = "mnuRefresh";
-			this.mnuRefresh.Size = new System.Drawing.Size(143, 22);
+			this.mnuRefresh.Size = new System.Drawing.Size(152, 22);
 			this.mnuRefresh.Text = "Refresh";
 			this.mnuRefresh.Click += new System.EventHandler(this.mnuRefresh_Click);
 			// 
@@ -783,5 +801,7 @@
 		private System.Windows.Forms.CheckBox chkOverrideFormat;
 		private System.Windows.Forms.CheckBox chkUseWindowsEol;
 		private System.Windows.Forms.CheckBox chkExtendZeroPage;
+		private System.Windows.Forms.ToolStripMenuItem mnu5000Lines;
+		private System.Windows.Forms.ToolStripMenuItem mnu15000Lines;
 	}
 }

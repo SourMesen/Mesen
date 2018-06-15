@@ -350,7 +350,9 @@ namespace Mesen.GUI.Debugger
 		private void UpdateMenu()
 		{
 			mnu30000Lines.Checked = _lineCount == 30000;
+			mnu15000Lines.Checked = _lineCount == 15000;
 			mnu10000Lines.Checked = _lineCount == 10000;
+			mnu5000Lines.Checked = _lineCount == 5000;
 			mnu1000Lines.Checked = _lineCount == 1000;
 			mnu100Lines.Checked = _lineCount == 100;
 
@@ -376,28 +378,41 @@ namespace Mesen.GUI.Debugger
 			}
 		}
 
+		private void SetLineCount(int count)
+		{
+			_lineCount = count;
+			UpdateMenu();
+			RefreshLog(false, true);
+		}
+
 		private void mnu30000Lines_Click(object sender, EventArgs e)
 		{
-			_lineCount = 30000;
-			UpdateMenu();
+			SetLineCount(30000);
+		}
+
+		private void mnu15000Lines_Click(object sender, EventArgs e)
+		{
+			SetLineCount(15000);
 		}
 
 		private void mnu10000Lines_Click(object sender, EventArgs e)
 		{
-			_lineCount = 10000;
-			UpdateMenu();
+			SetLineCount(10000);
+		}
+
+		private void mnu5000Lines_Click(object sender, EventArgs e)
+		{
+			SetLineCount(5000);
 		}
 
 		private void mnu1000Lines_Click(object sender, EventArgs e)
 		{
-			_lineCount = 1000;
-			UpdateMenu();
+			SetLineCount(1000);
 		}
 
 		private void mnu100Lines_Click(object sender, EventArgs e)
 		{
-			_lineCount = 100;
-			UpdateMenu();
+			SetLineCount(100);
 		}
 
 		private void mnuRefresh_Click(object sender, EventArgs e)
