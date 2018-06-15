@@ -278,13 +278,9 @@ namespace Mesen.GUI.Forms
 			DebugWindowManager.CloseAll();
 
 			ConfigManager.Config.EmulationInfo.EmulationSpeed = InteropEmu.GetEmulationSpeed();
-			if(this.WindowState == FormWindowState.Normal) {
-				ConfigManager.Config.WindowLocation = this.Location;
-				ConfigManager.Config.WindowSize = this.Size;
-			} else {
-				ConfigManager.Config.WindowLocation = this.RestoreBounds.Location;
-				ConfigManager.Config.WindowSize = this.RestoreBounds.Size;
-			}
+			ConfigManager.Config.WindowLocation = this.WindowState == FormWindowState.Normal ? this.Location : this.RestoreBounds.Location;
+			ConfigManager.Config.WindowSize = this.WindowState == FormWindowState.Normal ? this.Size : this.RestoreBounds.Size;
+
 			if(this._nonNsfSize.HasValue) {
 				ConfigManager.Config.WindowSize = this._nonNsfSize.Value;
 			}
@@ -1275,7 +1271,7 @@ namespace Mesen.GUI.Forms
 					}
 
 					if(!this._isNsfPlayerMode) {
-						this._nonNsfSize = this.WindowState == FormWindowState.Maximized ? this.RestoreBounds.Size : this.Size;
+						this._nonNsfSize = this.WindowState != FormWindowState.Normal ? this.RestoreBounds.Size : this.Size;
 						this._nonNsfMinimumSize = this.MinimumSize;
 						this.Size = ctrlNsfPlayer.WindowMinimumSize;
 						this.MinimumSize = ctrlNsfPlayer.WindowMinimumSize;

@@ -103,8 +103,8 @@ namespace Mesen.GUI.Debugger
 			ConfigManager.Config.DebugInfo.RamFontFamily = ctrlHexViewer.BaseFont.FontFamily.Name;
 			ConfigManager.Config.DebugInfo.RamFontStyle = ctrlHexViewer.BaseFont.Style;
 			ConfigManager.Config.DebugInfo.RamFontSize = ctrlHexViewer.BaseFont.Size;
-			ConfigManager.Config.DebugInfo.MemoryViewerSize = this.WindowState == FormWindowState.Maximized ? this.RestoreBounds.Size : this.Size;
-			ConfigManager.Config.DebugInfo.MemoryViewerLocation = this.WindowState == FormWindowState.Maximized ? this.RestoreBounds.Location : this.Location;
+			ConfigManager.Config.DebugInfo.MemoryViewerSize = this.WindowState != FormWindowState.Normal ? this.RestoreBounds.Size : this.Size;
+			ConfigManager.Config.DebugInfo.MemoryViewerLocation = this.WindowState != FormWindowState.Normal ? this.RestoreBounds.Location : this.Location;
 			ConfigManager.Config.DebugInfo.RamMemoryType = cboMemoryType.GetEnumValue<DebugMemoryType>();
 			ConfigManager.ApplyChanges();
 			DebugWorkspaceManager.SaveWorkspace();

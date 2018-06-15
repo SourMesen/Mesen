@@ -59,8 +59,8 @@ namespace Mesen.GUI.Debugger
 		{
 			base.OnFormClosing(e);
 			this._notifListener.OnNotification -= this._notifListener_OnNotification;
-			ConfigManager.Config.DebugInfo.EventViewerSize = this.WindowState == FormWindowState.Maximized ? this.RestoreBounds.Size : this.Size;
-			ConfigManager.Config.DebugInfo.EventViewerLocation = this.WindowState == FormWindowState.Maximized ? this.RestoreBounds.Location : this.Location;
+			ConfigManager.Config.DebugInfo.EventViewerSize = this.WindowState != FormWindowState.Normal ? this.RestoreBounds.Size : this.Size;
+			ConfigManager.Config.DebugInfo.EventViewerLocation = this.WindowState != FormWindowState.Normal ? this.RestoreBounds.Location : this.Location;
 		}
 
 		private void _notifListener_OnNotification(InteropEmu.NotificationEventArgs e)

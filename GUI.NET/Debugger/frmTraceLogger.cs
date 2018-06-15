@@ -119,8 +119,8 @@ namespace Mesen.GUI.Debugger
 			DebugInfo debugInfo = ConfigManager.Config.DebugInfo;
 			debugInfo.TraceAutoRefresh = mnuAutoRefresh.Checked;
 			debugInfo.TraceLineCount = _lineCount;
-			debugInfo.TraceLoggerSize = this.WindowState == FormWindowState.Maximized ? this.RestoreBounds.Size : this.Size;
-			debugInfo.TraceLoggerLocation = this.WindowState == FormWindowState.Maximized ? this.RestoreBounds.Location : this.Location;
+			debugInfo.TraceLoggerSize = this.WindowState != FormWindowState.Normal ? this.RestoreBounds.Size : this.Size;
+			debugInfo.TraceLoggerLocation = this.WindowState != FormWindowState.Normal ? this.RestoreBounds.Location : this.Location;
 
 			debugInfo.TraceFontFamily = txtTraceLog.BaseFont.FontFamily.Name;
 			debugInfo.TraceFontSize = txtTraceLog.BaseFont.Size;

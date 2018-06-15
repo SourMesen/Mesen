@@ -78,7 +78,7 @@ namespace Mesen.GUI.Debugger
 		{
 			base.OnFormClosing(e);
 			this._notifListener.OnNotification -= this._notifListener_OnNotification;
-			ConfigManager.Config.DebugInfo.PpuWindowLocation = this.WindowState == FormWindowState.Maximized ? this.RestoreBounds.Location : this.Location;
+			ConfigManager.Config.DebugInfo.PpuWindowLocation = this.WindowState != FormWindowState.Normal ? this.RestoreBounds.Location : this.Location;
 			ConfigManager.ApplyChanges();
 			InteropEmu.DebugClearPpuViewerSettings(_ppuViewerId);
 		}

@@ -39,7 +39,7 @@ namespace Mesen.GUI.Debugger
 			//Restore normal volume settings
 			AudioInfo.ApplyConfig();
 
-			ConfigManager.Config.DebugInfo.ApuViewerLocation = this.WindowState == FormWindowState.Maximized ? this.RestoreBounds.Location : this.Location;
+			ConfigManager.Config.DebugInfo.ApuViewerLocation = this.WindowState != FormWindowState.Normal ? this.RestoreBounds.Location : this.Location;
 			ConfigManager.ApplyChanges();
 		}
 
