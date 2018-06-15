@@ -63,7 +63,6 @@ void NtscFilter::OnBeforeApplyFilter()
 		_ntscSetup.artifacts != ntscSettings.Artifacts || _ntscSetup.bleed != ntscSettings.Bleed || _ntscSetup.fringing != ntscSettings.Fringing || _ntscSetup.gamma != ntscSettings.Gamma ||
 		(_ntscSetup.merge_fields == 1) != ntscSettings.MergeFields || _ntscSetup.resolution != ntscSettings.Resolution || _ntscSetup.sharpness != ntscSettings.Sharpness) {
 		
-		_ntscData = new nes_ntsc_t();
 		_ntscSetup.hue = pictureSettings.Hue;
 		_ntscSetup.saturation = pictureSettings.Saturation;
 		_ntscSetup.brightness = pictureSettings.Brightness;

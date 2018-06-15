@@ -24,7 +24,7 @@ BisqwitNtscFilter::BisqwitNtscFilter(int resDivider)
 		int q = signalLumaHigh[r / 0x10];
 		if((r & 0x0F) == 13) {
 			q = m;
-		} else if((r & 0x0F) == 0) {
+		} else if((r & 0x0F) == 0) { 
 			m = q;
 		}
 		_signalLow[i] = m;
@@ -48,7 +48,7 @@ BisqwitNtscFilter::BisqwitNtscFilter(int resDivider)
 				outputBuffer += GetOverscan().GetScreenWidth() * 64 / _resDivider / _resDivider * (120 - GetOverscan().Top);
 			}
 
-			DecodeFrame(120, 239 - GetOverscan().Bottom, _ppuOutputBuffer, outputBuffer, (IsOddFrame() ? 8 : 0) + 327360);
+			DecodeFrame(120, 239 - GetOverscan().Bottom, _ppuOutputBuffer, outputBuffer, (IsOddFrame() ? 8 : 0) + 327360); 
 
 			_workDone = true;
 		}
@@ -165,7 +165,7 @@ void BisqwitNtscFilter::GenerateNtscSignal(int8_t *ntscSignal, int &phase, int r
 		int8_t high = _signalHigh[color & 0x3F];
 		int8_t emphasis = color >> 6;
 
-		uint16_t phaseBitmask = _bitmaskLut[(phase - (color & 0x0F)) % 12];
+		uint16_t phaseBitmask = _bitmaskLut[std::abs(phase - (color & 0x0F)) % 12];
 
 		uint8_t voltage;
 		for(int j = 0; j < 8; j++) {

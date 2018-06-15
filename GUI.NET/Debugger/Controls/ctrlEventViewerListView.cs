@@ -109,7 +109,6 @@ namespace Mesen.GUI.Debugger.Controls
 
 		private void SortData()
 		{
-			int sortOrder = _sortAscending ? 1 : -1;
 			_debugEvents.Sort((DebugEventInfo a, DebugEventInfo b) => {
 				int result = 0;
 				switch(_sortColumn) {
