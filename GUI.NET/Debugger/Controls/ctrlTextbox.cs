@@ -581,7 +581,15 @@ namespace Mesen.GUI.Debugger
 						endIndex = text.Length;
 					}
 					int startIndex = text.LastIndexOfAny(_wordDelimiters, charIndex);
-					return text.Substring(startIndex + 1, endIndex - startIndex - 1);
+					if(startIndex == -1) {
+						return string.Empty;
+					}
+					if(text[startIndex] == '#' && text.Length > startIndex && text[startIndex + 1] == '$') {
+						//Special case for immediate values. e.g: we want to show a tooltip for #MyLabel, but not for #$EF
+						return text.Substring(startIndex, endIndex - startIndex);
+					} else {
+						return text.Substring(startIndex + 1, endIndex - startIndex - 1);
+					}
 				}
 			}
 			return string.Empty;
