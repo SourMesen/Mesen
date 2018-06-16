@@ -963,11 +963,14 @@ void Debugger::SetNextStatement(uint16_t addr)
 	if(_currentReadAddr) {
 		_cpu->SetDebugPC(addr);
 		*_currentReadAddr = addr;
-		*_currentReadValue = _memoryManager->DebugRead(addr, true);
+		*_currentReadValue = _memoryManager->DebugRead(addr, false);
 	} else {
 		//Can't change the address right away (CPU is in the middle of an instruction)
 		//Address will change after current instruction is done executing
 		_nextReadAddr = addr;
+
+		//Force the current instruction to finish
+		Step(1);
 	}
 }
 
