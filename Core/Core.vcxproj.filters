@@ -1375,6 +1375,9 @@
     <ClInclude Include="ServerInformationMessage.h">
       <Filter>NetPlay\Messages</Filter>
     </ClInclude>
+    <ClInclude Include="Bmc8in1.h">
+      <Filter>Nes\Mappers\Unif</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">

@@ -39,6 +39,7 @@ namespace UnifBoards {
 		Bmc12in1,
 		Bmc64in1NoRepeat,
 		Bmc810544CA1,
+		Bmc8in1,
 		BmcF15,
 		Lh10,
 		Ks7037,
