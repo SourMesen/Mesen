@@ -11,10 +11,11 @@ using std::thread;
 
 unique_ptr<GameServer> GameServer::Instance;
 
-GameServer::GameServer(uint16_t listenPort, string hostPlayerName)
+GameServer::GameServer(uint16_t listenPort, string password, string hostPlayerName)
 {
 	_stop = false;
 	_port = listenPort;
+	_password = password;
 	_hostPlayerName = hostPlayerName;
 	_hostControllerPort = 0;
 	ControlManager::RegisterInputRecorder(this);
@@ -37,7 +38,7 @@ void GameServer::AcceptConnections()
 	while(true) {
 		shared_ptr<Socket> socket = _listener->Accept();
 		if(!socket->ConnectionError()) {
-			_openConnections.push_back(shared_ptr<GameServerConnection>(new GameServerConnection(socket)));
+			_openConnections.push_back(shared_ptr<GameServerConnection>(new GameServerConnection(socket, _password)));
 		} else {
 			break;
 		}
@@ -121,9 +122,9 @@ void GameServer::Stop()
 	MessageManager::DisplayMessage("NetPlay", "ServerStopped");
 }
 
-void GameServer::StartServer(uint16_t port, string hostPlayerName)
+void GameServer::StartServer(uint16_t port, string password, string hostPlayerName)
 {
-	Instance.reset(new GameServer(port, hostPlayerName));
+	Instance.reset(new GameServer(port, password, hostPlayerName));
 	Instance->_serverThread.reset(new thread(&GameServer::Exec, Instance.get()));
 }
 

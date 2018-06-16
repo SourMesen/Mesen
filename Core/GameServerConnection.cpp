@@ -1,4 +1,5 @@
 #include "stdafx.h"
+#include <random>
 #include "MessageManager.h"
 #include "GameServerConnection.h"
 #include "HandShakeMessage.h"
@@ -16,24 +17,44 @@
 #include "GameServer.h"
 #include "ForceDisconnectMessage.h"
 #include "BaseControlDevice.h"
+#include "ServerInformationMessage.h"
 
 GameServerConnection* GameServerConnection::_netPlayDevices[BaseControlDevice::PortCount] = { };
 
-GameServerConnection::GameServerConnection(shared_ptr<Socket> socket) : GameConnection(socket, nullptr)
+GameServerConnection::GameServerConnection(shared_ptr<Socket> socket, string serverPassword) : GameConnection(socket)
 {
 	//Server-side connection
+	_serverPassword = serverPassword;
 	_controllerPort = GameConnection::SpectatorPort;
 	MessageManager::RegisterNotificationListener(this);
+	SendServerInformation();
 }
 
 GameServerConnection::~GameServerConnection()
 {
-	if(_connectionData) {
-		MessageManager::DisplayMessage("NetPlay", _connectionData->PlayerName + " (Player " + std::to_string(_controllerPort + 1) + ") disconnected.");
+	if(!_playerName.empty()) {
+		MessageManager::DisplayMessage("NetPlay", _playerName + " (Player " + std::to_string(_controllerPort + 1) + ") disconnected.");
 	}
 
 	UnregisterNetPlayDevice(this);
 	MessageManager::UnregisterNotificationListener(this);
+}
+
+void GameServerConnection::SendServerInformation()
+{
+	std::random_device rd;
+	std::mt19937 engine(rd());
+	std::uniform_int_distribution<> dist((int)' ', (int)'~');
+	string hash(50, ' ');
+	for(int i = 0; i < 50; i++) {
+		int random = dist(engine);
+		hash[i] = (char)random;
+	}
+
+	_connectionHash = hash;
+
+	ServerInformationMessage message(hash);
+	SendNetMessage(message);
 }
 
 void GameServerConnection::SendGameInformation()
@@ -88,23 +109,27 @@ void GameServerConnection::ProcessHandshakeResponse(HandShakeMessage* message)
 {
 	//Send the game's current state to the client and register the controller
 	if(message->IsValid()) {
-		Console::Pause();
+		if(message->CheckPassword(_serverPassword, _connectionHash)) {
+			Console::Pause();
 
-		_controllerPort = message->IsSpectator() ? GameConnection::SpectatorPort : GetFirstFreeControllerPort();
-		_connectionData.reset(new ClientConnectionData("", 0, message->GetPlayerName(), false));
+			_controllerPort = message->IsSpectator() ? GameConnection::SpectatorPort : GetFirstFreeControllerPort();
+			_playerName = message->GetPlayerName();
 
-		string playerPortMessage = _controllerPort == GameConnection::SpectatorPort ? "Spectator" : "Player " + std::to_string(_controllerPort + 1);
+			string playerPortMessage = _controllerPort == GameConnection::SpectatorPort ? "Spectator" : "Player " + std::to_string(_controllerPort + 1);
 
-		MessageManager::DisplayMessage("NetPlay", _connectionData->PlayerName + " (" + playerPortMessage + ") connected.");
+			MessageManager::DisplayMessage("NetPlay", _playerName + " (" + playerPortMessage + ") connected.");
 
-		if(Console::GetMapperInfo().RomName.size() > 0) {
-			SendGameInformation();
+			if(Console::GetMapperInfo().RomName.size() > 0) {
+				SendGameInformation();
+			}
+
+			_handshakeCompleted = true;
+			RegisterNetPlayDevice(this, _controllerPort);
+			GameServer::SendPlayerList();
+			Console::Resume();
+		} else {
+			SendForceDisconnectMessage("The password you provided did not match - you have been disconnected.");
 		}
-
-		_handshakeCompleted = true;
-		RegisterNetPlayDevice(this, _controllerPort);
-		GameServer::SendPlayerList();
-		Console::Resume();
 	} else {
 		SendForceDisconnectMessage("Server is using a different version of Mesen (" + EmulationSettings::GetMesenVersionString() + ") - you have been disconnected.");
 		MessageManager::DisplayMessage("NetPlay", + "NetplayVersionMismatch", message->GetPlayerName());
@@ -119,10 +144,16 @@ void GameServerConnection::ProcessMessage(NetMessage* message)
 			break;
 
 		case MessageType::InputData:
+			if(_handshakeCompleted) {
+				break;
+			}
 			PushState(((InputDataMessage*)message)->GetInputState());
 			break;
 
 		case MessageType::SelectController:
+			if(_handshakeCompleted) {
+				break;
+			}
 			SelectControllerPort(((SelectControllerMessage*)message)->GetPortNumber());
 			break;
 
@@ -208,11 +239,7 @@ uint8_t GameServerConnection::GetFirstFreeControllerPort()
 
 string GameServerConnection::GetPlayerName()
 {
-	if(_connectionData) {
-		return _connectionData->PlayerName;
-	} else {
-		return "";
-	}
+	return _playerName;
 }
 
 uint8_t GameServerConnection::GetControllerPort()

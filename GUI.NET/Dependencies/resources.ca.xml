@@ -440,6 +440,7 @@
 		<Form ID="frmClientConfig" Title="Connexió a un servidor">
 			<Control ID="lblHost">Servidor:</Control>
 			<Control ID="lblPort">Port:</Control>
+			<Control ID="lblPassword">Contrasenya:</Control>
 			<Control ID="chkSpectator">Uneix-t'hi com a espectador</Control>
 			<Control ID="btnOK">D'acord</Control>
 			<Control ID="btnCancel">Cancel·la</Control>

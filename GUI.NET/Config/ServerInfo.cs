@@ -10,9 +10,6 @@ namespace Mesen.GUI.Config
 	{
 		public string Name = "Default";
 		public UInt16 Port = 8888;
-		public string Password = null;
-		public int MaxPlayers = 4;
-		public bool AllowSpectators = true;
-		public bool PublicServer = false;
+		public string Password = "";
 	}
 }

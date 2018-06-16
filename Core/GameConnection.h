@@ -4,7 +4,6 @@
 
 class Socket;
 class NetMessage;
-class ClientConnectionData;
 
 struct PlayerInfo
 {
@@ -17,7 +16,6 @@ class GameConnection
 {
 protected:
 	shared_ptr<Socket> _socket;
-	shared_ptr<ClientConnectionData> _connectionData;
 	uint8_t _readBuffer[0x40000] = {};
 	uint8_t _messageBuffer[0x40000] = {};
 	int _readPosition = 0;
@@ -36,7 +34,7 @@ protected:
 
 public:
 	static const uint8_t SpectatorPort = 0xFF;
-	GameConnection(shared_ptr<Socket> socket, shared_ptr<ClientConnectionData> connectionData);
+	GameConnection(shared_ptr<Socket> socket);
 
 	bool ConnectionError();
 	void ProcessMessages();

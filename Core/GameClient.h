@@ -19,7 +19,7 @@ private:
 
 	static shared_ptr<GameClientConnection> GetConnection();
 
-	void PrivateConnect(shared_ptr<ClientConnectionData> connectionData);
+	void PrivateConnect(ClientConnectionData &connectionData);
 	void Exec();
 
 public:
@@ -27,7 +27,7 @@ public:
 	virtual ~GameClient();
 
 	static bool Connected();
-	static void Connect(shared_ptr<ClientConnectionData> connectionData);
+	static void Connect(ClientConnectionData &connectionData);
 	static void Disconnect();
 
 	static void SelectController(uint8_t port);

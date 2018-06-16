@@ -21,6 +21,7 @@ namespace Mesen.GUI.Forms.NetPlay
 			Entity = ConfigManager.Config.ClientConnectionInfo;
 
 			AddBinding("Host", this.txtHost);
+			AddBinding("Password", this.txtPassword);
 			AddBinding("Spectator", chkSpectator);
 			this.txtPort.Text = ConfigManager.Config.ClientConnectionInfo.Port.ToString();
 		}

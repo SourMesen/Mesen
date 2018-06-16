@@ -10,5 +10,6 @@ enum class MessageType : uint8_t
 	GameInformation = 4,
 	PlayerList = 5,
 	SelectController = 6,
-	ForceDisconnect = 7
+	ForceDisconnect = 7,
+	ServerInformation = 8
 };

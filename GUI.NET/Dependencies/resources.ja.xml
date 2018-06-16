@@ -439,6 +439,7 @@
 		<Form ID="frmClientConfig" Title="サーバに接続">
 			<Control ID="lblHost">ホスト:</Control>
 			<Control ID="lblPort">ポート:</Control>
+			<Control ID="lblPassword">パスワード:</Control>
 			<Control ID="chkSpectator">観客として接続する</Control>
 			<Control ID="btnOK">OK</Control>
 			<Control ID="btnCancel">キャンセル</Control>

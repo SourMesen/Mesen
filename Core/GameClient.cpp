@@ -33,7 +33,7 @@ bool GameClient::Connected()
 	return instance ? instance->_connected : false;
 }
 
-void GameClient::Connect(shared_ptr<ClientConnectionData> connectionData)
+void GameClient::Connect(ClientConnectionData &connectionData)
 {
 	_instance.reset(new GameClient());
 	
@@ -55,11 +55,11 @@ shared_ptr<GameClientConnection> GameClient::GetConnection()
 	return instance ? instance->_connection : nullptr;
 }
 
-void GameClient::PrivateConnect(shared_ptr<ClientConnectionData> connectionData)
+void GameClient::PrivateConnect(ClientConnectionData &connectionData)
 {
 	_stop = false;
 	shared_ptr<Socket> socket(new Socket());
-	if(socket->Connect(connectionData->Host.c_str(), connectionData->Port)) {
+	if(socket->Connect(connectionData.Host.c_str(), connectionData.Port)) {
 		_connection.reset(new GameClientConnection(socket, connectionData));
 		_connected = true;
 	} else {

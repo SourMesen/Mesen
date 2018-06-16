@@ -7,13 +7,14 @@ class ClientConnectionData
 public:
 	string Host;
 	uint16_t Port;
-
+	string Password;
 	string PlayerName;
-
 	bool Spectator;
 
-	ClientConnectionData(string host, uint16_t port, string playerName, bool spectator) :
-		Host(host), Port(port), PlayerName(playerName), Spectator(spectator)
+	ClientConnectionData() {}
+
+	ClientConnectionData(string host, uint16_t port, string password, string playerName, bool spectator) :
+		Host(host), Port(port), Password(password), PlayerName(playerName), Spectator(spectator)
 	{
 	}
 

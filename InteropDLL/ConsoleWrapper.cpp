@@ -262,19 +262,13 @@ namespace InteropEmu {
 		DllExport void __stdcall PowerCycle() { Console::Reset(false); }
 		DllExport void __stdcall ResetLagCounter() { Console::ResetLagCounter(); }
 
-		DllExport void __stdcall StartServer(uint16_t port, char* hostPlayerName) { GameServer::StartServer(port, hostPlayerName); }
+		DllExport void __stdcall StartServer(uint16_t port, char* password, char* hostPlayerName) { GameServer::StartServer(port, password, hostPlayerName); }
 		DllExport void __stdcall StopServer() { GameServer::StopServer(); }
 		DllExport bool __stdcall IsServerRunning() { return GameServer::Started(); }
 
-		DllExport void __stdcall Connect(char* host, uint16_t port, char* playerName, bool spectator)
+		DllExport void __stdcall Connect(char* host, uint16_t port, char* password, char* playerName, bool spectator)
 		{
-			shared_ptr<ClientConnectionData> connectionData(new ClientConnectionData(
-				host,
-				port,
-				playerName,
-				spectator
-			));
-
+			ClientConnectionData connectionData(host, port, password, playerName, spectator);
 			GameClient::Connect(connectionData);
 		}
 

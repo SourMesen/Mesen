@@ -150,7 +150,7 @@ namespace Mesen.GUI.Forms
 			} else {
 				using(frmServerConfig frm = new frmServerConfig()) {
 					if(frm.ShowDialog(sender, this) == System.Windows.Forms.DialogResult.OK) {
-						InteropEmu.StartServer(ConfigManager.Config.ServerInfo.Port, ConfigManager.Config.Profile.PlayerName);
+						InteropEmu.StartServer(ConfigManager.Config.ServerInfo.Port, ConfigManager.Config.ServerInfo.Password, ConfigManager.Config.Profile.PlayerName);
 					}
 				}
 			}
@@ -164,7 +164,13 @@ namespace Mesen.GUI.Forms
 				using(frmClientConfig frm = new frmClientConfig()) {
 					if(frm.ShowDialog(sender, this) == System.Windows.Forms.DialogResult.OK) {
 						Task.Run(() => {
-							InteropEmu.Connect(ConfigManager.Config.ClientConnectionInfo.Host, ConfigManager.Config.ClientConnectionInfo.Port, ConfigManager.Config.Profile.PlayerName, ConfigManager.Config.ClientConnectionInfo.Spectator);
+							InteropEmu.Connect(
+								ConfigManager.Config.ClientConnectionInfo.Host,
+								ConfigManager.Config.ClientConnectionInfo.Port,
+								ConfigManager.Config.ClientConnectionInfo.Password,
+								ConfigManager.Config.Profile.PlayerName,
+								ConfigManager.Config.ClientConnectionInfo.Spectator
+							);
 						});
 					}
 				}

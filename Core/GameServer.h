@@ -17,6 +17,7 @@ private:
 
 	unique_ptr<Socket> _listener;
 	uint16_t _port;
+	string _password;
 	list<shared_ptr<GameServerConnection>> _openConnections;
 	bool _initialized = false;
 
@@ -30,10 +31,10 @@ private:
 	void Stop();
 
 public:
-	GameServer(uint16_t port, string hostPlayerName);
+	GameServer(uint16_t port, string password, string hostPlayerName);
 	virtual ~GameServer();
 
-	static void StartServer(uint16_t port, string hostPlayerName);
+	static void StartServer(uint16_t port, string password, string hostPlayerName);
 	static void StopServer();
 	static bool Started();
 

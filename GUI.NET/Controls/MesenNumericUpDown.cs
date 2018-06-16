@@ -159,9 +159,9 @@ namespace Mesen.GUI.Controls
 			set { _minimum = value; SetValue(this.Value, true); }
 		}
 
-		public decimal Increment { get; set; }
+		public decimal Increment { get; set; } = 1;
 
-		private int _decimalPlaces = 2;
+		private int _decimalPlaces = 0;
 		public int DecimalPlaces
 		{
 			get { return _decimalPlaces; }

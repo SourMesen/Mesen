@@ -7,8 +7,7 @@
 #include "BaseControlDevice.h"
 #include "IInputProvider.h"
 #include "ControlDeviceState.h"
-
-class ClientConnectionData;
+#include "ClientConnectionData.h"
 
 class GameClientConnection : public GameConnection, public INotificationListener, public IInputProvider
 {
@@ -28,6 +27,8 @@ private:
 	ControlDeviceState _lastInputSent;
 	bool _gameLoaded = false;
 	uint8_t _controllerPort = GameConnection::SpectatorPort;
+	ClientConnectionData _connectionData;
+	string _serverSalt;
 
 private:
 	void SendHandshake();
@@ -40,7 +41,7 @@ protected:
 	void ProcessMessage(NetMessage* message) override;
 
 public:
-	GameClientConnection(shared_ptr<Socket> socket, shared_ptr<ClientConnectionData> connectionData);
+	GameClientConnection(shared_ptr<Socket> socket, ClientConnectionData &connectionData);
 	virtual ~GameClientConnection();
 
 	void Shutdown();

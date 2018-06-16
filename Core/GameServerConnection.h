@@ -15,10 +15,14 @@ private:
 	static GameServerConnection* _netPlayDevices[BaseControlDevice::PortCount];
 
 	list<ControlDeviceState> _inputData;
+	string _playerName;
 	int _controllerPort;	
+	string _connectionHash;
+	string _serverPassword;
 	bool _handshakeCompleted = false;
 
 	void PushState(ControlDeviceState state);
+	void SendServerInformation();
 	void SendGameInformation();
 	void SelectControllerPort(uint8_t port);
 
@@ -34,7 +38,7 @@ protected:
 	void ProcessMessage(NetMessage* message) override;
 	
 public:
-	GameServerConnection(shared_ptr<Socket> socket);
+	GameServerConnection(shared_ptr<Socket> socket, string serverPassword);
 	virtual ~GameServerConnection();
 
 	ControlDeviceState GetState();

@@ -436,6 +436,7 @@
 		<Form ID="frmClientConfig" Title="Conexão a um servidor">
 			<Control ID="lblHost">Servidor host:</Control>
 			<Control ID="lblPort">Port:</Control>
+			<Control ID="lblPassword">Senha:</Control>
 			<Control ID="chkSpectator">Entrar como espectador</Control>
 			<Control ID="btnOK">OK</Control>
 			<Control ID="btnCancel">Cancelar</Control>

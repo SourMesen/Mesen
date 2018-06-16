@@ -441,6 +441,7 @@
 		<Form ID="frmClientConfig" Title="Connect...">
 			<Control ID="lblHost">Host:</Control>
 			<Control ID="lblPort">Port:</Control>
+			<Control ID="lblPassword">Password:</Control>
 			<Control ID="chkSpectator">Join as spectator</Control>
 			<Control ID="btnOK">OK</Control>
 			<Control ID="btnCancel">Cancel</Control>

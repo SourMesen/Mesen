@@ -9,12 +9,12 @@
 #include "SelectControllerMessage.h"
 #include "ClientConnectionData.h"
 #include "ForceDisconnectMessage.h"
+#include "ServerInformationMessage.h"
 
 const uint32_t PlayerListMessage::PlayerNameMaxLength;
 
-GameConnection::GameConnection(shared_ptr<Socket> socket, shared_ptr<ClientConnectionData> connectionData)
+GameConnection::GameConnection(shared_ptr<Socket> socket)
 {
-	_connectionData = connectionData;
 	_socket = socket;
 }
 
@@ -64,6 +64,7 @@ NetMessage* GameConnection::ReadMessage()
 				case MessageType::PlayerList: return new PlayerListMessage(_messageBuffer, messageLength);
 				case MessageType::SelectController: return new SelectControllerMessage(_messageBuffer, messageLength);
 				case MessageType::ForceDisconnect: return new ForceDisconnectMessage(_messageBuffer, messageLength);
+				case MessageType::ServerInformation: return new ServerInformationMessage(_messageBuffer, messageLength);
 			}
 		}
 	}

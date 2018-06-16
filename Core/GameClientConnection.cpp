@@ -16,9 +16,11 @@
 #include "SelectControllerMessage.h"
 #include "PlayerListMessage.h"
 #include "ForceDisconnectMessage.h"
+#include "ServerInformationMessage.h"
 
-GameClientConnection::GameClientConnection(shared_ptr<Socket> socket, shared_ptr<ClientConnectionData> connectionData) : GameConnection(socket, connectionData)
+GameClientConnection::GameClientConnection(shared_ptr<Socket> socket, ClientConnectionData &connectionData) : GameConnection(socket)
 {
+	_connectionData = connectionData;
 	_shutdown = false;
 	_enableControllers = false;
 	_minimumQueueSize = 3;
@@ -26,7 +28,6 @@ GameClientConnection::GameClientConnection(shared_ptr<Socket> socket, shared_ptr
 	MessageManager::RegisterNotificationListener(this);
 	MessageManager::DisplayMessage("NetPlay", "ConnectedToServer");
 	ControlManager::RegisterInputProvider(this);
-	SendHandshake();
 }
 
 GameClientConnection::~GameClientConnection()
@@ -50,7 +51,7 @@ void GameClientConnection::Shutdown()
 
 void GameClientConnection::SendHandshake()
 {
-	HandShakeMessage message(_connectionData->PlayerName, _connectionData->Spectator);
+	HandShakeMessage message(_connectionData.PlayerName, HandShakeMessage::GetPasswordHash(_connectionData.Password, _serverSalt), _connectionData.Spectator);
 	SendNetMessage(message);
 }
 
@@ -74,6 +75,11 @@ void GameClientConnection::ProcessMessage(NetMessage* message)
 	GameInformationMessage* gameInfo;
 
 	switch(message->GetType()) {
+		case MessageType::ServerInformation:
+			_serverSalt = ((ServerInformationMessage*)message)->GetHashSalt();
+			SendHandshake();
+			break;
+
 		case MessageType::SaveState:
 			if(_gameLoaded) {
 				DisableControllers();

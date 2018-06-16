@@ -437,6 +437,7 @@
 		<Form ID="frmClientConfig" Title="Подключение к серверу">
 			<Control ID="lblHost">Имя сервера:</Control>
 			<Control ID="lblPort">Порт:</Control>
+			<Control ID="lblPassword">Пароль:</Control>
 			<Control ID="chkSpectator">Войти как наблюдатель</Control>
 			<Control ID="btnOK">OK</Control>
 			<Control ID="btnCancel">Отмена</Control>

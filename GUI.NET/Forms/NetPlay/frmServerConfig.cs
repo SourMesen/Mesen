@@ -20,9 +20,6 @@ namespace Mesen.GUI.Forms.NetPlay
 			this.txtServerName.Text = ConfigManager.Config.ServerInfo.Name;
 			this.txtPort.Text = ConfigManager.Config.ServerInfo.Port.ToString();
 			this.txtPassword.Text = string.Empty;
-			this.nudNbPlayers.Value = ConfigManager.Config.ServerInfo.MaxPlayers;
-			this.chkSpectator.Checked = ConfigManager.Config.ServerInfo.AllowSpectators;
-			this.chkPublicServer.Checked = ConfigManager.Config.ServerInfo.PublicServer;
 		}
 
 		protected override void UpdateConfig()
@@ -30,10 +27,7 @@ namespace Mesen.GUI.Forms.NetPlay
 			ConfigManager.Config.ServerInfo = new ServerInfo() {
 				Name = this.txtServerName.Text,
 				Port = Convert.ToUInt16(this.txtPort.Text),
-				Password = BitConverter.ToString(System.Security.Cryptography.SHA1.Create().ComputeHash(Encoding.UTF8.GetBytes(this.txtPassword.Text))).Replace("-", ""),
-				MaxPlayers = (int)this.nudNbPlayers.Value,
-				AllowSpectators = this.chkSpectator.Checked,
-				PublicServer = this.chkPublicServer.Checked
+				Password = this.txtPassword.Text
 			};
 		}
 
