@@ -872,7 +872,7 @@ ConsoleFeatures Console::GetAvailableFeatures()
 {
 	ConsoleFeatures features = ConsoleFeatures::None;
 	shared_ptr<BaseMapper> mapper = _mapper;
-	shared_ptr<ControlManager> controlManager = controlManager;
+	shared_ptr<ControlManager> controlManager = _controlManager;
 	if(mapper && controlManager) {
 		features = (ConsoleFeatures)((int)features | (int)mapper->GetAvailableFeatures());
 
@@ -894,7 +894,7 @@ ConsoleFeatures Console::GetAvailableFeatures()
 void Console::InputBarcode(uint64_t barcode, uint32_t digitCount)
 {
 	shared_ptr<BaseMapper> mapper = _mapper;
-	shared_ptr<ControlManager> controlManager = controlManager;
+	shared_ptr<ControlManager> controlManager = _controlManager;
 
 	if(mapper) {
 		shared_ptr<IBarcodeReader> barcodeReader = std::dynamic_pointer_cast<IBarcodeReader>(mapper->GetMapperControlDevice());
