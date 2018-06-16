@@ -16,7 +16,7 @@ namespace Mesen.GUI.Debugger
 		private string _hoverLastWord = "";
 		private int _hoverLastLineAddress = -1;
 		private Point _previousLocation;
-		private Form _codeTooltip = null;
+		private TooltipForm _codeTooltip = null;
 		private Control _owner = null;
 		private ctrlScrollableTextbox _codeViewer = null;
 
@@ -48,15 +48,9 @@ namespace Mesen.GUI.Debugger
 				} else {
 					_codeTooltip = new frmCodeTooltip(parentForm, values, previewAddress.HasValue && previewAddress.Value.Type == AddressType.PrgRom ? previewAddress : null, Code, SymbolProvider);
 				}
+				_codeTooltip.FormClosed += (s, e) => { _codeTooltip = null; };
 			}
-			Point p = parentForm.PointToClient(new Point(Cursor.Position.X + 10, Cursor.Position.Y + 10));
-			_codeTooltip.Location = p;
-
-			if(!_codeTooltip.Visible) {
-				_codeTooltip.Show();
-			}
-
-			_owner.Focus();
+			_codeTooltip.SetFormLocation(new Point(Cursor.Position.X + 10, Cursor.Position.Y + 10), _owner);
 
 			_hoverLastWord = word;
 			_hoverLastLineAddress = lineAddress;

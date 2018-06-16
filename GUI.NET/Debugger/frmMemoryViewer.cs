@@ -625,10 +625,8 @@ namespace Mesen.GUI.Debugger
 					}
 
 					_tooltip = new frmCodeTooltip(this, values);
-					Point p = this.PointToClient(new Point(Cursor.Position.X + 10, Cursor.Position.Y + 10));
-					_tooltip.Location = p;
-					_tooltip.Show();
-					ctrlHexViewer.Focus();
+					_tooltip.FormClosed += (s, evt) => { _tooltip = null; };
+					_tooltip.SetFormLocation(new Point(Cursor.Position.X + 10, Cursor.Position.Y + 10), ctrlHexViewer);
 					_lastLabelTooltip = label;
 				}
 			} else {

@@ -13,14 +13,13 @@ using Mesen.GUI.Debugger.Controls;
 
 namespace Mesen.GUI.Debugger
 {
-	public partial class frmCodeTooltip : Form
+	public partial class frmCodeTooltip : TooltipForm
 	{
 		private ICodeViewer _codeViewer;
 		private Dictionary<string, string> _values;
 		private AddressTypeInfo? _previewAddress;
 		private string _code;
 		private Ld65DbgImporter _symbolProvider;
-		private Form _parentForm;
 
 		protected override bool ShowWithoutActivation
 		{
@@ -40,10 +39,8 @@ namespace Mesen.GUI.Debugger
 			_parentForm.Controls.Add(this);
 		}
 
-		protected override void OnShown(EventArgs e)
+		protected override void OnLoad(EventArgs e)
 		{
-			base.OnShown(e);
-
 			tlpMain.SuspendLayout();
 			int i = 0;
 			foreach(KeyValuePair<string, string> kvp in _values) {
@@ -98,6 +95,8 @@ namespace Mesen.GUI.Debugger
 			this.Width = this.tlpMain.Width;
 			this.Height = this.tlpMain.Height; 
 			this.BringToFront();
+
+			base.OnLoad(e);
 		}
 	}
 }

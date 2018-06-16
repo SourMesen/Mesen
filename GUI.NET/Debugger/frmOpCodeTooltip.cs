@@ -13,10 +13,9 @@ using Mesen.GUI.Forms;
 
 namespace Mesen.GUI.Debugger
 {
-	public partial class frmOpCodeTooltip : Form
+	public partial class frmOpCodeTooltip : TooltipForm
 	{
 		static private Dictionary<string, OpCodeDesc> _descriptions;
-		private Form _parentForm;
 
 		protected override bool ShowWithoutActivation
 		{
@@ -163,13 +162,13 @@ namespace Mesen.GUI.Debugger
 			_parentForm.Controls.Add(this);
 		}
 
-		protected override void OnShown(EventArgs e)
+		protected override void OnLoad(EventArgs e)
 		{
-			base.OnShown(e);
-
 			this.Width = this.tlpMain.Width;
 			this.Height = this.tlpMain.Height;
 			this.BringToFront();
+
+			base.OnLoad(e);
 		}
 
 		[Flags]

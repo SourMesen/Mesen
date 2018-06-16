@@ -213,12 +213,10 @@ namespace Mesen.GUI.Debugger.Controls
 
 									Form parentForm = this.FindForm();
 									_tooltip = new frmCodeTooltip(parentForm, values);
+									_tooltip.FormClosed += (s, evt) => { _tooltip = null; };
 									Point location = PointToScreen(e.Location);
-									location = parentForm.PointToClient(location);
-
 									location.Offset(10, 10);
-									_tooltip.Location = location;
-									_tooltip.Show();
+									_tooltip.SetFormLocation(location, this);
 									_lastKey = key;
 								}
 

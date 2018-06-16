@@ -13,7 +13,7 @@ using Mesen.GUI.Debugger.Controls;
 
 namespace Mesen.GUI.Debugger
 {
-	public partial class frmCodePreviewTooltip : Form
+	public partial class frmCodePreviewTooltip : TooltipForm
 	{
 		private ICodeViewer _codeViewer;
 
@@ -21,7 +21,6 @@ namespace Mesen.GUI.Debugger
 		private string _code;
 		private Ld65DbgImporter _symbolProvider;
 		private Ld65DbgImporter.FileInfo _selectedFile;
-		private Form _parentForm;
 
 		protected override bool ShowWithoutActivation
 		{
@@ -42,10 +41,8 @@ namespace Mesen.GUI.Debugger
 			_parentForm.Controls.Add(this);
 		}
 
-		protected override void OnShown(EventArgs e)
+		protected override void OnLoad(EventArgs e)
 		{
-			base.OnShown(e);
-
 			tlpMain.SuspendLayout();
 			tlpMain.RowStyles.Insert(1, new RowStyle());
 
@@ -80,6 +77,8 @@ namespace Mesen.GUI.Debugger
 			this.Width = this.tlpMain.Width;
 			this.Height = this.tlpMain.Height;
 			this.BringToFront();
+
+			base.OnLoad(e);
 		}
 
 		public void ScrollToLineIndex(int lineIndex)

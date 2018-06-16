@@ -190,7 +190,6 @@ namespace Mesen.GUI.Debugger.Controls
 					int scrollPosition = Math.Max(0, (e.Y - this.Top - _buttonSize) * this.Maximum / (this.Height - _buttonSize * 2));
 					if(_lastPreviewScrollPosition != scrollPosition) {
 						Point p = this.PointToScreen(new Point(this.ClientRectangle.Right, e.Y));
-						p = this.FindForm().PointToClient(p);
 						if(_codeTooltip == null) {
 							_codeTooltip = this.ColorProvider.GetPreview(scrollPosition);
 							_codeTooltip.FormClosed += (s, evt) => { _codeTooltip = null; };
@@ -198,12 +197,7 @@ namespace Mesen.GUI.Debugger.Controls
 							_codeTooltip.ScrollToLineIndex(scrollPosition);
 						}
 						if(_codeTooltip != null) {
-							_codeTooltip.Left = p.X + 5;
-							_codeTooltip.Top = p.Y;
-							if(!_codeTooltip.Visible) {
-								_codeTooltip.Show();
-								this.Parent.Focus();
-							}
+							_codeTooltip.SetFormLocation(new Point(p.X + 5, p.Y), this.Parent);
 						}
 						_lastPreviewScrollPosition = scrollPosition;
 					}
