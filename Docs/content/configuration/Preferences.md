@@ -82,6 +82,7 @@ Available shortcuts:
 * **Run Single Frame**: Press to run a single frame and pause.
 * **Set Scale 1x to 6x**: Sets the scale to the matching value.
 * **Toggle Fullscreen Mode**: Enters/exits fullscreen mode.
+* **Toggle Debug Information**: Turns on/off the debug screen overlay.
 * **Toggle FPS Counter**: Turns on/off the FPS counter.
 * **Toggle Game Timer**: Turns on/off the game timer.
 * **Toggle Frame Counter**: Turns on/off the frame counter.
@@ -135,6 +136,8 @@ Available shortcuts:
 </div></div>
 
 **Disable built-in game database**: Mesen contains a built-in database containing information on thousands of rom files -- it uses this database to use the most appropriate settings when loading a game (e.g `NTSC` vs `PAL`) and to fix incorrect file headers. *Disabling this option is not recommended.*
+
+**Disable high resolution timer**: Mesen normally forces Windows' timer resolution down to 1 millisecond when a game is running. Keeping a low timer resolution helps keep the video and audio output as smooth as possible. Enabling this option disables Mesen's default behavior and keeps the timer interval to its regular value, which may slightly improve battery life on a laptop (which is the only reason why this option exists). *Disabling this option is not recommended.*
 
 **Keep rewind data for the last [x] minutes**: The rewind feature in Mesen periodically takes save states and keeps them in memory to allow the emulator to rewind the game. These save states take a minimal amount of memory (roughly 1MB per minute). To limit the amount of memory that Mesen can use for rewind data, this configures the number of minutes that it is possible to rewind for.
 

@@ -29,8 +29,6 @@ chapter: false
 
 **Show FPS**: Displays an FPS counter on the screen.  The first number is the number of frames emulated, the second number is the number of frames displayed on the screen.  These values are usually identical, except when vertical sync is enabled.
 
-**Overscan**: The overscan settings allow you to cut out pixels on any edge of the screen.  On a CRT TV, a few pixels on each side of the screen was usually invisible to the player.  Because of this, games often have glitches or incorrect palette colors on the edges of the screen -- this is normal and caused by the game itself. Setting a value of 8 or so on each side of the overscan configuration will usually hide most glitches.
-
 ## Picture ##
 
 <div class="imgBox"><div>
@@ -63,6 +61,17 @@ The 2 filters have a different set of options:
 **NTSC (bisqwit)**: `Y Filter (Horizontal Blur)`, `I Filter (Horizontal Blur)`, `Q Filter (Horizontal Bleed)`  
 
 Feel free to experiment with the settings and choose what you feel looks best.
+
+## Overscan ##
+
+<div class="imgBox"><div>
+	<img src="/images/VideoOptions_Overscan.png" />
+	<span>Overscan Options</span>
+</div></div>
+
+The overscan settings allow you to cut out pixels on any edge of the screen.  On a CRT TV, a few pixels on each side of the screen was usually invisible to the player.  Because of this, games often have glitches or incorrect palette colors on the edges of the screen -- this is normal and caused by the game itself. Setting a value of 8 or so on each side of the overscan configuration will usually hide most glitches.
+
+It is possible to configure the overscan settings on a per-game basis in the *Game-Specific* tab. All games without specific settings will automatically use the overscan parameters shown in the *Global* tab.
 
 ## Palette ##
 

@@ -5,6 +5,21 @@ pre: ""
 chapter: false
 ---
 
+## Changes between 0.9.5 and 0.9.6 ##
+
+### New Features ###
+
+* New event callbacks: [**<kbd>scriptEnded</kbd>**](/apireference/enums.html#eventtype)
+
+### Changes ###
+
+* The end address parameter for <kbd>[addMemoryCallback](/apireference/callbacks.html#addmemorycallback)</kbd> and <kbd>[removeMemoryCallback](/apireference/callbacks.html#removememorycallback)</kbd> is now optional.
+
+### Bug Fixes ###
+ 
+* <kbd>[addMemoryCallback](/apireference/callbacks.html#addmemorycallback)</kbd> and <kbd>[removeMemoryCallback](/apireference/callbacks.html#removememorycallback)</kbd>  no longer exclude the end address from the range.
+
+
 ## Changes between 0.9.4 and 0.9.5 ##
 
 ### New features ###

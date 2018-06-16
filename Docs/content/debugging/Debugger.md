@@ -112,34 +112,42 @@ The used syntax is identical to C/C++ syntax (e.g && for and, || for or, etc.) a
 
 **Special values**
 ```text
-	A/X/Y/PS/SP: Value of corresponding registers
-	PC: Program Counter
-	OpPC: Address of the current instruction's first byte
-	Irq/Nmi: True if the Irq/Nmi flags are set
-	Cycle/Scanline: Current cycle (0-340)/scanline(-1 to 260) of the PPU
-	Frame: PPU frame number (since power on/reset)
-	Value: Current value being read/written from/to memory
-	IsRead: True if the CPU is reading from a memory address
-	IsWrite: True if the CPU is writing to a memory address
-	Address: Current CPU memory address being read/written
-	RomAddress: Current ROM address being read/written
-	[<address>]: (Byte) Memory value at <address> (CPU)
-	{<address>}: (Word) Memory value at <address> (CPU)
+A/X/Y/PS/SP: Value of corresponding registers
+PC: Program Counter
+OpPC: Address of the current instruction's first byte
+Irq/Nmi: True if the Irq/Nmi flags are set
+Cycle/Scanline: Current cycle (0-340)/scanline(-1 to 260) of the PPU
+Frame: PPU frame number (since power on/reset)
+Value: Current value being read/written from/to memory
+IsRead: True if the CPU is reading from a memory address
+IsWrite: True if the CPU is writing to a memory address
+Address: Current CPU memory address being read/written
+RomAddress: Current ROM address being read/written
+[<address>]: (Byte) Memory value at <address> (CPU)
+{<address>}: (Word) Memory value at <address> (CPU)
 ```
 **Examples**
 ```
-	[$10] //Displays the value of memory at address $10 (CPU)
-	a == 10 || x == $23
-	scanline == 10 && (cycle >= 55 && cycle <= 100)
-	x == [$150] || y == [10]
-	[[$15] + y]   //Reads the value at address $15, adds Y to it and reads the value at the resulting address.
-	{$FFFA}  //Returns the NMI handler's address.
+[$10] //Displays the value of memory at address $10 (CPU)
+a == 10 || x == $23
+scanline == 10 && (cycle >= 55 && cycle <= 100)
+x == [$150] || y == [10]
+[[$15] + y]   //Reads the value at address $15, adds Y to it and reads the value at the resulting address.
+{$FFFA}  //Returns the NMI handler's address.
 ```
 
 **Using labels**
 
 Any label defined in the debugger can be used in watch expressions (their value will match the label's address in CPU memory).  
 For example, if you have a label called "velocity" that points to 1-byte value at address $30 in the CPU's memory, you can display its value in the watch using the following syntax: `[velocity]`
+
+**Displaying arrays**
+
+The watch window allows you display several consecutive memory values on the same row using a special syntax. e.g:
+```
+[$30, 16]      //This will display the values of addresses $30 to $3F
+[MyLabel, 10]  //This syntax can also be used with labels
+```
 
 ## Breakpoints ##
 
@@ -291,7 +299,17 @@ Additionally, two special tooltip windows can be enabled here:
 
 ### Break Options ###
 
-The `Break Options` submenu contains a number of options to configure under which conditions the debugger will break (even when no breakpoint is hit).  
+The `Break Options` submenu contains a number of options to configure under which conditions the debugger will break (even when no breakpoint is hit):
+
+* **Break on power/reset**: Break the emulation whenever a reset or power cycle occurs.
+* **Break on unofficial opcodes**: Break the emulation whenever an unofficial opcode is about to execute.
+* **Break on BRK**: Break the emulation whenever a BRK instruction is about to execute.
+* **Break on CPU crash**: Break the emulation whenever an instruction that will cause the CPU to freeze is about to execute.
+* **Break on uninitialized memory read**: Break whenever the code reads from a memory address containing an uninitialized value. **Note**: *This option only works if the debugger has been opened since the last reset or power cycle.*
+* **Break when debugger is opened**: The emulation will break when you first open the debugger.
+* **Break on debugger focus**: Whenever the debugger's window gains focus (e.g by clicking on it), the emulation will break.
+
+
 Additionally, you can configure whether or not the debugger window gets focused when a break or pause occurs.
 
 ### Copy Options ###

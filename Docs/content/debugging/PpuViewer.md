@@ -27,6 +27,8 @@ There are also a number of display options:
 * **Show Tile Grid**: Displays a 8x8 pixels <span class="red">red</span> grid.
 * **Show Attribute Grid**: Displays a 16x16 pixels <span class="blue">blue</span> grid.
 * **Use Grayscale Palette**: Forces the nametables to be shown in a 4-color grayscale palette.
+* **Highlight Tile Updates**: Displays a 8x8 red square overlay over tiles that have changed since the last frame.
+* **Highlight Attribute Updates**: Displays a 16x16 yellow square overlay over attributes that have changed since the last frame.
 * **Highlight tile selected in CHR viewer**: When enabled, click on a tile in the CHR viewer to select it, all occurrences of that tile will then be marked by a <span class="red">red</span> rectangle in the nametable viewer. 
 
 <kbd>**Double-click**</kbd> on a tile in the nametable viewer to view/edit it in the CHR Viewer.

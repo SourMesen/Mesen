@@ -21,3 +21,10 @@ To stop a script, press **<kbd>Escape</kbd>** or close the script window.
 
 The Log Window at the bottom will display any Lua errors that occur while running the script.
 Additionally, any calls to `emu.log()` will also display their content in the log window.
+
+### Built-in Scripts ###
+
+A number of built-in scripts are accessible from the script window's UI. They can be accessed from the **<kbd>File&rarr;Built-in Scripts</kbd>** menu, or directly from the toolbar.
+These scripts serve as both examples for the Lua API and can also be useful in a number of ways.
+
+The scripts have (mostly) been contributed by users of Mesen (see the top of each script for proper credits) - **if you have useful/interesting scripts that you have written and would like to have included, let me know!**

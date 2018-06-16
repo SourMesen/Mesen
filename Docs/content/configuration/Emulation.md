@@ -52,6 +52,8 @@ Several options in this section should NOT be enabled to avoid issues in some ga
 
 **Allow invalid input**: On a NES controller, it is impossible to press both left and right or up and down at the same time on the controller's D-pad.  Some games rely on this and pressing both buttons at once can cause glitches.  When enabled, this option makes it possible to press opposite directional buttons at the same time.
 
+**Randomize power-on state for mappers**: Cartridges often have a random state at power-on and need to be fully initialized before being used. This option causes Mesen to randomize the power-on state of the most common mappers. This is useful when developing homebrew software.
+
 **Default power on state for RAM**: On a console, the RAM's state at power on is undetermined and relatively random. This option lets you select Mesen's behavior when initializing RAM - set all bits to 0, set all bits to 1, or randomize the value of each bit.
 
 

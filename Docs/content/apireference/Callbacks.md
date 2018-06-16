@@ -42,13 +42,13 @@ Removes a previously registered callback function.
 
 **Syntax**
     
-    emu.addMemoryCallback(function, type, startAddress, endAddress)
+    emu.addMemoryCallback(function, type, startAddress [, endAddress])
 
 **Parameters**  
 function - A Lua function.  
 type - *Enum* See [memCallbackType](/apireference/enums.html#memcallbacktype)  
 startAddress - *Integer* Start of the CPU memory address range to register the callback on.  
-endAddress - *Integer* End of the CPU memory address range to register the callback on.
+endAddress - (optional) *Integer* End of the CPU memory address range to register the callback on.
 
 **Return value**  
 Returns an integer value that can be used to remove the callback by calling [removeMemoryCallback](#removememorycallback). 
@@ -75,13 +75,13 @@ emu.addMemoryCallback(writeCallback, emu.memCallbackType.ppuWrite, 0, 0x1FFF)
 
 **Syntax**
     
-    emu.removeMemoryCallback(reference, type, startAddress, endAddress)
+    emu.removeMemoryCallback(reference, type, startAddress [, endAddress])
 
 **Parameters**  
 reference - The value returned by the call to [addMemoryCallback](#addmemorycallback).  
 type - *Enum* See [memCallbackType](/apireference/enums.html#memcallbacktype).   
 startAddress - *Integer* Start of the CPU memory address range to unregister the callback from.  
-endAddress - *Integer* End of the CPU memory address range to unregister the callback from.
+endAddress - (optional) *Integer* End of the CPU memory address range to unregister the callback from.
 
 **Return value**  
 *None*
