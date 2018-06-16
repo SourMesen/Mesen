@@ -41,7 +41,7 @@ class Console
 		shared_ptr<APU> _apu;
 		shared_ptr<Debugger> _debugger;
 		shared_ptr<BaseMapper> _mapper;
-		unique_ptr<ControlManager> _controlManager;
+		shared_ptr<ControlManager> _controlManager;
 		shared_ptr<MemoryManager> _memoryManager;
 
 		shared_ptr<SystemActionManager> _systemActionManager;

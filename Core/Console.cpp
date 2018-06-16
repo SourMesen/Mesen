@@ -65,12 +65,15 @@ void Console::Release()
 
 void Console::SaveBatteries()
 {
-	if(_mapper) {
-		_mapper->SaveBattery();
+	shared_ptr<BaseMapper> mapper = _mapper;
+	shared_ptr<ControlManager> controlManager = _controlManager;
+	
+	if(mapper) {
+		mapper->SaveBattery();
 	}
 
-	if(_controlManager) {
-		shared_ptr<IBattery> device = std::dynamic_pointer_cast<IBattery>(_controlManager->GetControlDevice(BaseControlDevice::ExpDevicePort));
+	if(controlManager) {
+		shared_ptr<IBattery> device = std::dynamic_pointer_cast<IBattery>(controlManager->GetControlDevice(BaseControlDevice::ExpDevicePort));
 		if(device) {
 			device->SaveBattery();
 		}
@@ -868,18 +871,20 @@ bool Console::UpdateHdPackMode()
 ConsoleFeatures Console::GetAvailableFeatures()
 {
 	ConsoleFeatures features = ConsoleFeatures::None;
-	if(_mapper) {
-		features = (ConsoleFeatures)((int)features | (int)_mapper->GetAvailableFeatures());
+	shared_ptr<BaseMapper> mapper = _mapper;
+	shared_ptr<ControlManager> controlManager = controlManager;
+	if(mapper && controlManager) {
+		features = (ConsoleFeatures)((int)features | (int)mapper->GetAvailableFeatures());
 
-		if(dynamic_cast<VsControlManager*>(_controlManager.get())) {
+		if(dynamic_cast<VsControlManager*>(controlManager.get())) {
 			features = (ConsoleFeatures)((int)features | (int)ConsoleFeatures::VsSystem);
 		}
 
-		if(std::dynamic_pointer_cast<IBarcodeReader>(_controlManager->GetControlDevice(BaseControlDevice::ExpDevicePort))) {
+		if(std::dynamic_pointer_cast<IBarcodeReader>(controlManager->GetControlDevice(BaseControlDevice::ExpDevicePort))) {
 			features = (ConsoleFeatures)((int)features | (int)ConsoleFeatures::BarcodeReader);
 		}
 
-		if(std::dynamic_pointer_cast<FamilyBasicDataRecorder>(_controlManager->GetControlDevice(BaseControlDevice::ExpDevicePort2))) {
+		if(std::dynamic_pointer_cast<FamilyBasicDataRecorder>(controlManager->GetControlDevice(BaseControlDevice::ExpDevicePort2))) {
 			features = (ConsoleFeatures)((int)features | (int)ConsoleFeatures::TapeRecorder);
 		}
 	}
@@ -888,52 +893,71 @@ ConsoleFeatures Console::GetAvailableFeatures()
 
 void Console::InputBarcode(uint64_t barcode, uint32_t digitCount)
 {
-	shared_ptr<IBarcodeReader> barcodeReader = std::dynamic_pointer_cast<IBarcodeReader>(_mapper->GetMapperControlDevice());
-	if(barcodeReader) {
-		barcodeReader->InputBarcode(barcode, digitCount);
+	shared_ptr<BaseMapper> mapper = _mapper;
+	shared_ptr<ControlManager> controlManager = controlManager;
+
+	if(mapper) {
+		shared_ptr<IBarcodeReader> barcodeReader = std::dynamic_pointer_cast<IBarcodeReader>(mapper->GetMapperControlDevice());
+		if(barcodeReader) {
+			barcodeReader->InputBarcode(barcode, digitCount);
+		}
 	}
 
-	barcodeReader = std::dynamic_pointer_cast<IBarcodeReader>(_controlManager->GetControlDevice(BaseControlDevice::ExpDevicePort));
-	if(barcodeReader) {
-		barcodeReader->InputBarcode(barcode, digitCount);
+	if(controlManager) {
+		shared_ptr<IBarcodeReader> barcodeReader = std::dynamic_pointer_cast<IBarcodeReader>(controlManager->GetControlDevice(BaseControlDevice::ExpDevicePort));
+		if(barcodeReader) {
+			barcodeReader->InputBarcode(barcode, digitCount);
+		}
 	}
 }
 
 void Console::LoadTapeFile(string filepath)
 {
-	shared_ptr<FamilyBasicDataRecorder> dataRecorder = std::dynamic_pointer_cast<FamilyBasicDataRecorder>(_controlManager->GetControlDevice(BaseControlDevice::ExpDevicePort2));
-	if(dataRecorder) {
-		Console::Pause();
-		dataRecorder->LoadFromFile(filepath);
-		Console::Resume();
+	shared_ptr<ControlManager> controlManager = _controlManager;
+	if(controlManager) {
+		shared_ptr<FamilyBasicDataRecorder> dataRecorder = std::dynamic_pointer_cast<FamilyBasicDataRecorder>(controlManager->GetControlDevice(BaseControlDevice::ExpDevicePort2));
+		if(dataRecorder) {
+			Console::Pause();
+			dataRecorder->LoadFromFile(filepath);
+			Console::Resume();
+		}
 	}
 }
 
 void Console::StartRecordingTapeFile(string filepath)
 {
-	shared_ptr<FamilyBasicDataRecorder> dataRecorder = std::dynamic_pointer_cast<FamilyBasicDataRecorder>(_controlManager->GetControlDevice(BaseControlDevice::ExpDevicePort2));
-	if(dataRecorder) {
-		Console::Pause();
-		dataRecorder->StartRecording(filepath);
-		Console::Resume();
+	shared_ptr<ControlManager> controlManager = _controlManager;
+	if(controlManager) {
+		shared_ptr<FamilyBasicDataRecorder> dataRecorder = std::dynamic_pointer_cast<FamilyBasicDataRecorder>(controlManager->GetControlDevice(BaseControlDevice::ExpDevicePort2));
+		if(dataRecorder) {
+			Console::Pause();
+			dataRecorder->StartRecording(filepath);
+			Console::Resume();
+		}
 	}
 }
 
 void Console::StopRecordingTapeFile()
 {
-	shared_ptr<FamilyBasicDataRecorder> dataRecorder = std::dynamic_pointer_cast<FamilyBasicDataRecorder>(_controlManager->GetControlDevice(BaseControlDevice::ExpDevicePort2));
-	if(dataRecorder) {
-		Console::Pause();
-		dataRecorder->StopRecording();
-		Console::Resume();
+	shared_ptr<ControlManager> controlManager = _controlManager;
+	if(controlManager) {
+		shared_ptr<FamilyBasicDataRecorder> dataRecorder = std::dynamic_pointer_cast<FamilyBasicDataRecorder>(controlManager->GetControlDevice(BaseControlDevice::ExpDevicePort2));
+		if(dataRecorder) {
+			Console::Pause();
+			dataRecorder->StopRecording();
+			Console::Resume();
+		}
 	}
 }
 
 bool Console::IsRecordingTapeFile()
 {
-	shared_ptr<FamilyBasicDataRecorder> dataRecorder = std::dynamic_pointer_cast<FamilyBasicDataRecorder>(_controlManager->GetControlDevice(BaseControlDevice::ExpDevicePort2));
-	if(dataRecorder) {
-		return dataRecorder->IsRecording();
+	shared_ptr<ControlManager> controlManager = _controlManager;
+	if(controlManager) {
+		shared_ptr<FamilyBasicDataRecorder> dataRecorder = std::dynamic_pointer_cast<FamilyBasicDataRecorder>(controlManager->GetControlDevice(BaseControlDevice::ExpDevicePort2));
+		if(dataRecorder) {
+			return dataRecorder->IsRecording();
+		}
 	}
 
 	return false;
