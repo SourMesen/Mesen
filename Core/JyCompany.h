@@ -144,11 +144,9 @@ protected:
 		int prgRegs[4] = { InvertPrgBits(_prgRegs[0], invertBits), InvertPrgBits(_prgRegs[1], invertBits),
 								 InvertPrgBits(_prgRegs[2], invertBits), InvertPrgBits(_prgRegs[3], invertBits) };
 
-		int lastPage = (_prgMode & 0x04) ? prgRegs[3] : -1;
-
 		switch(_prgMode & 0x03) {
 			case 0:
-				SelectPrgPage4x(0, lastPage * 4);
+				SelectPrgPage4x(0, (_prgMode & 0x04) ? prgRegs[3] : 0x3C);
 				if(_enablePrgAt6000) {
 					SetCpuMemoryMapping(0x6000, 0x7FFF, prgRegs[3] * 4 + 3, PrgMemoryType::PrgRom);
 				}
@@ -156,7 +154,7 @@ protected:
 
 			case 1:
 				SelectPrgPage2x(0, prgRegs[1] << 1);
-				SelectPrgPage2x(1, lastPage * 2);
+				SelectPrgPage2x(1, (_prgMode & 0x04) ? prgRegs[3] : 0x3E);
 				if(_enablePrgAt6000) {
 					SetCpuMemoryMapping(0x6000, 0x7FFF, prgRegs[3] * 2 + 1, PrgMemoryType::PrgRom);
 				}
@@ -167,7 +165,7 @@ protected:
 				SelectPRGPage(0, prgRegs[0]);
 				SelectPRGPage(1, prgRegs[1]);
 				SelectPRGPage(2, prgRegs[2]);
-				SelectPRGPage(3, lastPage);
+				SelectPRGPage(3, (_prgMode & 0x04) ? prgRegs[3] : 0x3F);
 				if(_enablePrgAt6000) {
 					SetCpuMemoryMapping(0x6000, 0x7FFF, prgRegs[3], PrgMemoryType::PrgRom);
 				}
@@ -186,7 +184,16 @@ protected:
 		}
 
 		if(_chrBlockMode) {
-			return _chrLowRegs[index] | (_chrBlock << 8);
+			uint8_t mask = 0;
+			uint8_t shift = 0;
+			switch(_chrMode) {
+				default:
+				case 0: mask = 0x1F; shift = 5; break;
+				case 1: mask = 0x3F; shift = 6; break;
+				case 2: mask = 0x7F; shift = 7; break;
+				case 3: mask = 0xFF; shift = 8; break;
+			}
+			return (_chrLowRegs[index] & mask) | (_chrBlock << shift);
 		} else {
 			return _chrLowRegs[index] | (_chrHighRegs[index] << 8);
 		}
@@ -329,7 +336,7 @@ protected:
 				case 0xD003:
 					_mirrorChr = (value & 0x80) == 0x80;
 					_chrBlockMode = (value & 0x20) == 0x00;
-					_chrBlock = value & 0x1F;
+					_chrBlock = ((value & 0x18) >> 2) | (value & 0x01);
 					break;
 
 			}
