@@ -71,7 +71,7 @@ Draws a line between (x, y) to (x2, y2) using the specified color for a specific
 x - *Integer* X position  
 y - *Integer* Y position
 width - *Integer* The rectangle's width  
-height - *Integer* The rectangle's height
+height - *Integer* The rectangle's height  
 color - *Integer* Color  
 fill - *Boolean* Whether or not to draw an outline, or a filled rectangle.  
 duration - *Integer* Number of frames to display (Default: 1 frame)

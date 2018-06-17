@@ -377,8 +377,6 @@ int LuaApi::DrawRectangle(lua_State *lua)
 	int y = l.ReadInteger();
 	int x = l.ReadInteger();
 	checkminparams(4);
-	errorCond(height <= 0, "height must be >= 1");
-	errorCond(width <= 0, "width must be >= 1");
 
 	DebugHud::GetInstance()->DrawRectangle(x, y, width, height, color, fill, frameCount);
 

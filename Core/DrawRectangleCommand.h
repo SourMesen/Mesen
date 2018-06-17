@@ -33,6 +33,15 @@ public:
 	DrawRectangleCommand(int x, int y, int width, int height, int color, bool fill, int frameCount) :
 		DrawCommand(frameCount), _x(x), _y(y), _width(width), _height(height), _color(color), _fill(fill)
 	{
+		if(width < 0) {
+			_x += width;
+			_width = -width;
+		}
+		if(height < 0) {
+			_y += height;
+			_height = -height;
+		}
+
 		//Invert alpha byte - 0 = opaque, 255 = transparent (this way, no need to specifiy alpha channel all the time)
 		_color = (~color & 0xFF000000) | (color & 0xFFFFFF);
 	}

@@ -9,11 +9,12 @@ chapter: false
 
 ### New Features ###
 
-* New event callbacks: [**<kbd>scriptEnded</kbd>**](/apireference/enums.html#eventtype)
+* New event callback: [**<kbd>scriptEnded</kbd>**](/apireference/enums.html#eventtype)
 
 ### Changes ###
 
 * The end address parameter for <kbd>[addMemoryCallback](/apireference/callbacks.html#addmemorycallback)</kbd> and <kbd>[removeMemoryCallback](/apireference/callbacks.html#removememorycallback)</kbd> is now optional.
+* The <kbd>[drawRectangle](/apireference/drawing.html#drawrectangle)</kbd> function now accepts negative height/width values.
 
 ### Bug Fixes ###
  
