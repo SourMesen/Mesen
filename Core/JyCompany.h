@@ -233,12 +233,7 @@ protected:
 		//"Mapper 211 behaves as though N were always set (1), and mapper 090 behaves as though N were always clear(0)."
 		if((_advancedNtControl || _mapperID == 211) && _mapperID != 90) {
 			for(int i = 0; i < 4; i++) {
-				if(_disableNtRam || (_ntLowRegs[i] & 0x80) != (_ntRamSelectBit & 0x80)) {
-					SetPpuMemoryMapping(0x2000 + 0x400 * i, 0x23FF + 0x400 * i, _ntLowRegs[i] | (_ntHighRegs[i] << 8), ChrMemoryType::ChrRom);
-					SetPpuMemoryMapping(0x3000 + 0x400 * i, 0x33FF + 0x400 * i, _ntLowRegs[i] | (_ntHighRegs[i] << 8), ChrMemoryType::ChrRom);
-				} else {
-					SetNametable(i, _ntLowRegs[i] & 0x01);
-				}
+				SetNametable(i, _ntLowRegs[i] & 0x01);
 			}
 		} else {
 			switch(_mirroringReg) {
@@ -357,6 +352,24 @@ protected:
 		if(_irqSource == JyIrqSource::PpuRead && type == MemoryOperationType::PpuRenderingRead) {
 			TickIrqCounter();
 		}
+
+		if(addr >= 0x2000) {
+			//This behavior only affects reads, not writes.
+			//Additional info: https://forums.nesdev.com/viewtopic.php?f=3&t=17198
+			if((_advancedNtControl || _mapperID == 211) && _mapperID != 90) {
+				uint8_t ntIndex = ((addr & 0x2FFF) - 0x2000) / 0x400;
+				if(_disableNtRam || (_ntLowRegs[ntIndex] & 0x80) != (_ntRamSelectBit & 0x80)) {
+					uint16_t chrPage = _ntLowRegs[ntIndex] | (_ntHighRegs[ntIndex] << 8);
+					uint32_t chrOffset = chrPage * 0x400 + (addr & 0x3FF);
+					if(_chrRomSize > chrOffset) {
+						return _chrRom[chrOffset];
+					} else {
+						return 0;
+					}
+				}
+			}
+		}
+
 		return BaseMapper::MapperReadVRAM(addr, type);
 	}
 
