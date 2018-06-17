@@ -106,17 +106,18 @@ bool Console::Initialize(VirtualFile &romFile, VirtualFile &patchFile)
 		if(mapper) {
 			SoundMixer::StopAudio(true);
 
+			bool isDifferentGame = _romFilepath != (string)romFile || _patchFilename != (string)patchFile;
 			if(_mapper) {
+				if(isDifferentGame) {
+					//Save current game state before loading another one
+					SaveStateManager::SaveRecentGame(GetMapperInfo().RomName, _romFilepath, _patchFilename);
+				}
+
 				//Send notification only if a game was already running and we successfully loaded the new one
 				MessageManager::SendNotification(ConsoleNotificationType::GameStopped, (void*)1);
 			}
 
-			if(_romFilepath != (string)romFile || _patchFilename != (string)patchFile) {
-				//Save current game state before loading another one
-				if(_mapper) {
-					SaveStateManager::SaveRecentGame(GetMapperInfo().RomName, _romFilepath, _patchFilename);
-				}
-
+			if(isDifferentGame) {
 				_romFilepath = romFile;
 				_patchFilename = patchFile;
 				
