@@ -1387,6 +1387,9 @@
     <ClInclude Include="Sachen9602.h">
       <Filter>Nes\Mappers\Sachen</Filter>
     </ClInclude>
+    <ClInclude Include="Unl158B.h">
+      <Filter>Nes\Mappers\Unif</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
