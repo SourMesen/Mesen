@@ -827,7 +827,7 @@
 		<Message ID="EmulatorShortcutMappings_ToggleDebugInfo">Alternar informação de depuração</Message>
 		<Message ID="EmulatorShortcutMappings_ToggleGameTimer">Alternar tempo de jogo</Message>
 		<Message ID="EmulatorShortcutMappings_ToggleFrameCounter">Alternar contador de quadro</Message>
-		<Message ID="EmulatorShortcutMappings_ToggleLagCounter">Alternar contador de lagr</Message>
+		<Message ID="EmulatorShortcutMappings_ToggleLagCounter">Alternar contador de lag</Message>
 		<Message ID="EmulatorShortcutMappings_ToggleOsd">Alternar OSD (Menu na tela)</Message>
 		<Message ID="EmulatorShortcutMappings_ToggleAlwaysOnTop">Alternar exibição na parte superior</Message>
 		<Message ID="EmulatorShortcutMappings_ToggleBackground">Alternar camada de fundo</Message>
