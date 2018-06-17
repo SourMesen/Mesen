@@ -19,13 +19,14 @@
 #include "Bmc11160.h"
 #include "Bmc12in1.h"
 #include "Bmc51.h"
-#include "Bmc8157.h"
 #include "Bmc63.h"
 #include "Bmc64in1NoRepeat.h"
 #include "Bmc70in1.h"
 #include "Bmc190in1.h"
 #include "Bmc235.h"
 #include "Bmc255.h"
+#include "Bmc8157.h"
+#include "Bmc80013B.h"
 #include "Bmc810544CA1.h"
 #include "Bmc830118C.h"
 #include "Bmc8in1.h"
@@ -528,6 +529,7 @@ BaseMapper* MapperFactory::GetMapperFromID(RomData &romData)
 		case UnifBoards::Bmc190in1: return new Bmc190in1();
 		case UnifBoards::Bmc810544CA1: return new Bmc810544CA1();
 		case UnifBoards::Bmc830118C: return new Bmc830118C();
+		case UnifBoards::Bmc80013B: return new Bmc80013B();
 		case UnifBoards::Bmc8157: return new Bmc8157();
 		case UnifBoards::Bmc8in1: return new Bmc8in1();
 		case UnifBoards::BmcF15: return new MMC3_BmcF15();

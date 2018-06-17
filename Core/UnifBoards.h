@@ -59,5 +59,6 @@ namespace UnifBoards {
 		UnlD1038,
 		Sachen9602,
 		Unl158B,
+		Bmc80013B,
 	};
 }
