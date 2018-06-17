@@ -162,6 +162,7 @@
 #include "MMC3_198.h"
 #include "MMC3_199.h"
 #include "MMC3_205.h"
+#include "MMC3_208.h"
 #include "MMC3_215.h"
 #include "MMC3_217.h"
 #include "MMC3_219.h"
@@ -480,6 +481,7 @@ BaseMapper* MapperFactory::GetMapperFromID(RomData &romData)
 		case 205: return new MMC3_205();
 		case 206: return new Namco108();
 		case 207: return new TaitoX1005(true);
+		case 208: return new MMC3_208();
 		case 209: return new JyCompany();
 		case 210: return new Namco163();
 		case 211: return new JyCompany();
