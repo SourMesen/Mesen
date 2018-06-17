@@ -400,6 +400,16 @@ void BaseMapper::InitializeChrRam(int32_t chrRamSize)
 	}
 }
 
+void BaseMapper::SetupDefaultWorkRam()
+{
+	//Setup a default work/save ram in 0x6000-0x7FFF space
+	if(HasBattery() && _saveRamSize > 0) {
+		SetCpuMemoryMapping(0x6000, 0x7FFF, 0, PrgMemoryType::SaveRam);
+	} else if(_workRamSize > 0) {
+		SetCpuMemoryMapping(0x6000, 0x7FFF, 0, PrgMemoryType::WorkRam);
+	}
+}
+
 bool BaseMapper::HasChrRam()
 {
 	return _chrRamSize > 0;
@@ -586,12 +596,7 @@ void BaseMapper::Initialize(RomData &romData)
 		}
 	}
 
-	//Setup a default work/save ram in 0x6000-0x7FFF space
-	if(HasBattery() && _saveRamSize > 0) {
-		SetCpuMemoryMapping(0x6000, 0x7FFF, 0, PrgMemoryType::SaveRam);
-	} else if(_workRamSize > 0) {
-		SetCpuMemoryMapping(0x6000, 0x7FFF, 0, PrgMemoryType::WorkRam);
-	}
+	SetupDefaultWorkRam();
 
 	InitMapper();
 	InitMapper(romData);

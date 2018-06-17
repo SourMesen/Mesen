@@ -136,6 +136,8 @@ protected:
 
 	uint8_t GetPowerOnByte(uint8_t defaultValue = 0);
 	
+	void SetupDefaultWorkRam();
+
 	void RestoreOriginalPrgRam();
 	void InitializeChrRam(int32_t chrRamSize = -1);
 
