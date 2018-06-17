@@ -74,6 +74,7 @@
 #include "Kaiser7016.h"
 #include "Kaiser7017.h"
 #include "Kaiser7022.h"
+#include "Kaiser7031.h"
 #include "Kaiser7037.h"
 #include "Kaiser7057.h"
 #include "Kaiser7058.h"
@@ -556,6 +557,7 @@ BaseMapper* MapperFactory::GetMapperFromID(RomData &romData)
 		case UnifBoards::Ks7013B: return new Kaiser7013B();
 		case UnifBoards::Ks7016: return new Kaiser7016();
 		case UnifBoards::Ks7017: return new Kaiser7017();
+		case UnifBoards::Ks7031: return new Kaiser7031();
 		case UnifBoards::Ks7037: return new Kaiser7037();
 		case UnifBoards::Ks7057: return new Kaiser7057();
 		case UnifBoards::Lh10: return new Lh10();
