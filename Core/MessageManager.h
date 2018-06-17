@@ -11,6 +11,7 @@ class MessageManager
 {
 private:
 	static IMessageManager* _messageManager;
+	static vector<INotificationListener*> _listenersToAdd;
 	static vector<INotificationListener*> _notificationListeners;
 	static std::unordered_map<string, string> _enResources;
 	static std::unordered_map<string, string> _frResources;
@@ -23,6 +24,7 @@ private:
 
 	static SimpleLock _logLock;
 	static SimpleLock _notificationLock;
+	static SimpleLock _addListenerLock;
 	static std::list<string> _log;
 
 public:

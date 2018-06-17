@@ -608,7 +608,9 @@ std::unordered_map<string, string> MessageManager::_caResources = {
 std::list<string> MessageManager::_log;
 SimpleLock MessageManager::_logLock;
 SimpleLock MessageManager::_notificationLock;
+SimpleLock MessageManager::_addListenerLock;
 IMessageManager* MessageManager::_messageManager = nullptr;
+vector<INotificationListener*> MessageManager::_listenersToAdd;
 vector<INotificationListener*> MessageManager::_notificationListeners;
 
 void MessageManager::RegisterMessageManager(IMessageManager* messageManager)
@@ -698,19 +700,34 @@ string MessageManager::GetLog()
 
 void MessageManager::RegisterNotificationListener(INotificationListener* notificationListener)
 {
-	auto lock = _notificationLock.AcquireSafe();
-	MessageManager::_notificationListeners.push_back(notificationListener);
+	auto lock = _addListenerLock.AcquireSafe();
+	MessageManager::_listenersToAdd.push_back(notificationListener);
 }
 
 void MessageManager::UnregisterNotificationListener(INotificationListener* notificationListener)
 {
-	auto lock = _notificationLock.AcquireSafe();
-	MessageManager::_notificationListeners.erase(std::remove(MessageManager::_notificationListeners.begin(), MessageManager::_notificationListeners.end(), notificationListener), MessageManager::_notificationListeners.end());
+	{
+		auto lock = _notificationLock.AcquireSafe();
+		MessageManager::_notificationListeners.erase(std::remove(MessageManager::_notificationListeners.begin(), MessageManager::_notificationListeners.end(), notificationListener), MessageManager::_notificationListeners.end());
+	}
+
+	{
+		auto lock = _addListenerLock.AcquireSafe();
+		MessageManager::_listenersToAdd.erase(std::remove(MessageManager::_listenersToAdd.begin(), MessageManager::_listenersToAdd.end(), notificationListener), MessageManager::_listenersToAdd.end());
+	}
 }
 
 void MessageManager::SendNotification(ConsoleNotificationType type, void* parameter)
 {
 	auto lock = _notificationLock.AcquireSafe();
+	{
+		auto addLock = _addListenerLock.AcquireSafe();
+		for(INotificationListener *listener : _listenersToAdd) {
+			_notificationListeners.push_back(listener);
+		}
+		_listenersToAdd.clear();
+	}
+
 	for(INotificationListener *notificationListener : MessageManager::_notificationListeners) {
 		notificationListener->ProcessNotification(type, parameter);
 	}

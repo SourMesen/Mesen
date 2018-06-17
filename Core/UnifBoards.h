@@ -60,5 +60,6 @@ namespace UnifBoards {
 		Sachen9602,
 		Unl158B,
 		Bmc80013B,
+		Dance2000,
 	};
 }

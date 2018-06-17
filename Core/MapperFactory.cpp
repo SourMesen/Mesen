@@ -41,6 +41,7 @@
 #include "CpRom.h"
 #include "ColorDreams.h"
 #include "ColorDreams46.h"
+#include "Dance2000.h"
 #include "DaouInfosys.h"
 #include "DreamTech01.h"
 #include "Edu2000.h"
@@ -538,6 +539,7 @@ BaseMapper* MapperFactory::GetMapperFromID(RomData &romData)
 		case UnifBoards::Bs5: return new Bs5();
 		case UnifBoards::Cc21: return new Cc21();
 		case UnifBoards::Coolboy: return new MMC3_Coolboy();
+		case UnifBoards::Dance2000: return new Dance2000();
 		case UnifBoards::DreamTech01: return new DreamTech01();
 		case UnifBoards::Edu2000: return new Edu2000();
 		case UnifBoards::Eh8813A: return new Eh8813A();
