@@ -37,6 +37,7 @@
 #include "Caltron41.h"
 #include "Cc21.h"
 #include "Cheapocabra.h"
+#include "CityFighter.h"
 #include "CNROM.h"
 #include "CpRom.h"
 #include "ColorDreams.h"
@@ -538,6 +539,7 @@ BaseMapper* MapperFactory::GetMapperFromID(RomData &romData)
 		case UnifBoards::BmdNtd03: return new BmcNtd03();
 		case UnifBoards::Bs5: return new Bs5();
 		case UnifBoards::Cc21: return new Cc21();
+		case UnifBoards::CityFighter: return new CityFighter();
 		case UnifBoards::Coolboy: return new MMC3_Coolboy();
 		case UnifBoards::Dance2000: return new Dance2000();
 		case UnifBoards::DreamTech01: return new DreamTech01();

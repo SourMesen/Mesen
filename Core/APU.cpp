@@ -256,6 +256,11 @@ bool APU::IsApuEnabled()
 	return _apuEnabled;
 }
 
+void APU::WriteDmc4011(uint8_t value)
+{
+	Instance->_deltaModulationChannel->WriteRAM(0x4011, value);
+}
+
 ApuState APU::GetState()
 {
 	ApuState state;

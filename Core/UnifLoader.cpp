@@ -28,7 +28,7 @@ std::unordered_map<string, int> UnifLoader::_boardMappings = std::unordered_map<
 	{ "BB", UnifBoards::Bb },
 	{ "BS-5", UnifBoards::Bs5 },
 	{ "CC-21", UnifBoards::Cc21 },
-	{ "CITYFIGHT", UnifBoards::UnknownBoard },
+	{ "CITYFIGHT", UnifBoards::CityFighter },
 	{ "COOLBOY", UnifBoards::Coolboy },
 	{ "10-24-C-A1", UnifBoards::UnknownBoard },
 	{ "CNROM", 3 },

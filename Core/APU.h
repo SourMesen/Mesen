@@ -86,4 +86,5 @@ class APU : public Snapshotable, public IMemoryHandler
 		static void AddExpansionAudioDelta(AudioChannel channel, int16_t delta);
 		static void SetApuStatus(bool enabled);
 		static bool IsApuEnabled();
+		static void WriteDmc4011(uint8_t value);
 };
