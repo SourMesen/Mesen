@@ -101,6 +101,7 @@
 #include "Mapper107.h"
 #include "Mapper108.h"
 #include "Mapper112.h"
+#include "Mapper116.h"
 #include "Mapper117.h"
 #include "Mapper120.h"
 #include "Mapper170.h"
@@ -399,6 +400,7 @@ BaseMapper* MapperFactory::GetMapperFromID(RomData &romData)
 		case 113: return new Nina03_06(true);
 		case 114: return new MMC3_114();
 		case 115: return new MMC3_115();
+		case 116: return new Mapper116();
 		case 117: return new Mapper117();
 		case 118: return new TxSRom();
 		case 119: return new MMC3_ChrRam(0x40, 0x7F, 8);

@@ -535,6 +535,7 @@
     <ClInclude Include="Kaiser7017.h" />
     <ClInclude Include="Kaiser7031.h" />
     <ClInclude Include="KeyManager.h" />
+    <ClInclude Include="Mapper116.h" />
     <ClInclude Include="MMC3_198.h" />
     <ClInclude Include="MovieRecorder.h" />
     <ClInclude Include="AsciiTurboFile.h" />
