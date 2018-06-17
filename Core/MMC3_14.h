@@ -29,20 +29,20 @@ protected:
 		Stream(_mode, _vrcMirroring, prgRegs, chrRegs);
 	}
 
-	virtual void SelectCHRPage(uint16_t slot, uint16_t page, ChrMemoryType memoryType = ChrMemoryType::Default) override
+	void UpdateChrMapping() override
 	{
-		if(_mode & 0x02) {
-			if(slot <= 3) {
-				if(!_chrMode && (_mode & 0x80) || _chrMode && slot <= 1 && (_mode & 0x20) || _chrMode && slot >= 2 && (_mode & 0x08)) {
-					page |= 0x100;
-				}
-			} else {
-				if(_chrMode && (_mode & 0x80) || !_chrMode && slot <= 5 && (_mode & 0x20) || !_chrMode && slot >= 6 && (_mode & 0x08)) {
-					page |= 0x100;
-				}
-			}
-		}
-		MMC3::SelectCHRPage(slot, page, memoryType);
+		int slotSwap = (GetState().Reg8000 & 0x80) ? 4 : 0;
+		int outerBank0 = (_mode & 0x08) ? 0x100 : 0;
+		int outerBank1 = (_mode & 0x20) ? 0x100 : 0;
+		int outerBank2 = (_mode & 0x80) ? 0x100 : 0;
+		SelectCHRPage(0 ^ slotSwap, outerBank0 | (_registers[0] & (~1)));
+		SelectCHRPage(1 ^ slotSwap, outerBank0 | _registers[0] | 1);
+		SelectCHRPage(2 ^ slotSwap, outerBank0 | (_registers[1] & (~1)));
+		SelectCHRPage(3 ^ slotSwap, outerBank0 | _registers[1] | 1);
+		SelectCHRPage(4 ^ slotSwap, outerBank1 | _registers[2]);
+		SelectCHRPage(5 ^ slotSwap, outerBank1 | _registers[3]);
+		SelectCHRPage(6 ^ slotSwap, outerBank2 | _registers[4]);
+		SelectCHRPage(7 ^ slotSwap, outerBank2 | _registers[5]);
 	}
 
 	void UpdateVrcState()
