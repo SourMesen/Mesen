@@ -204,6 +204,7 @@
 #include "Sachen74LS374N.h"
 #include "Sachen74LS374NB.h"
 #include "Sachen8259.h"
+#include "Sachen9602.h"
 #include "SealieComputing.h"
 #include "Smb2j.h"
 #include "StudyBox.h"
@@ -553,6 +554,7 @@ BaseMapper* MapperFactory::GetMapperFromID(RomData &romData)
 		case UnifBoards::MaliSB: return new MMC3_MaliSB();
 		case UnifBoards::NovelDiamond: return new NovelDiamond();
 		case UnifBoards::Rt01: return new Rt01();
+		case UnifBoards::Sachen9602: return new Sachen9602();
 		case UnifBoards::Smb2j: return new Smb2j();
 		case UnifBoards::StreetHeroes: return new MMC3_StreetHeroes();
 		case UnifBoards::Super24in1Sc03: return new MMC3_Super24in1Sc03();

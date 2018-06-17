@@ -91,7 +91,7 @@ std::unordered_map<string, int> UnifLoader::_boardMappings = std::unordered_map<
 	{ "SA-016-1M", 146 },
 	{ "SA-72007", 145 },
 	{ "SA-72008", 133 },
-	{ "SA-9602B", UnifBoards::UnknownBoard },
+	{ "SA-9602B", UnifBoards::Sachen9602 },
 	{ "SA-NROM", 143 },
 	{ "SAROM", 1 },
 	{ "SBROM", 1 },

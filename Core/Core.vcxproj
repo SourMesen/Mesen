@@ -534,6 +534,7 @@
     <ClInclude Include="MovieRecorder.h" />
     <ClInclude Include="AsciiTurboFile.h" />
     <ClInclude Include="RawVideoFilter.h" />
+    <ClInclude Include="Sachen9602.h" />
     <ClInclude Include="ServerInformationMessage.h" />
     <ClInclude Include="SystemActionManager.h" />
     <ClInclude Include="DatachBarcodeReader.h" />
