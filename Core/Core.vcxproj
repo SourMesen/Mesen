@@ -529,6 +529,7 @@
     <ClInclude Include="IBattery.h" />
     <ClInclude Include="IInputProvider.h" />
     <ClInclude Include="IInputRecorder.h" />
+    <ClInclude Include="Kaiser7017.h" />
     <ClInclude Include="KeyManager.h" />
     <ClInclude Include="MMC3_198.h" />
     <ClInclude Include="MovieRecorder.h" />
