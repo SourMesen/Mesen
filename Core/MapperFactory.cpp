@@ -544,7 +544,7 @@ BaseMapper* MapperFactory::GetMapperFromID(RomData &romData)
 		case UnifBoards::Bmc8in1: return new Bmc8in1();
 		case UnifBoards::BmcF15: return new MMC3_BmcF15();
 		case UnifBoards::BmcG146: return new BmcG146();
-		case UnifBoards::BmdNtd03: return new BmcNtd03();
+		case UnifBoards::BmcNtd03: return new BmcNtd03();
 		case UnifBoards::Bs5: return new Bs5();
 		case UnifBoards::Cc21: return new Cc21();
 		case UnifBoards::CityFighter: return new CityFighter();
