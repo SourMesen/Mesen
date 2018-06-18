@@ -17,6 +17,7 @@ namespace UnifBoards {
 		Gs2004,
 		NovelDiamond,
 		Kof97,
+		T230,
 		T262,
 		A65AS,
 		Bs5,

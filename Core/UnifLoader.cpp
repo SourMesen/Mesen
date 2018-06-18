@@ -120,7 +120,7 @@ std::unordered_map<string, int> UnifLoader::_boardMappings = std::unordered_map<
 	{ "SuperHIK8in1", 45 },
 	{ "Supervision16in1", 53 },
 	{ "T-227-1", UnifBoards::UnknownBoard },
-	{ "T-230", UnifBoards::UnknownBoard },
+	{ "T-230", UnifBoards::T230 },
 	{ "T-262", UnifBoards::T262 },
 	{ "TBROM", 4 },
 	{ "TC-U01-1.5M", 147 },

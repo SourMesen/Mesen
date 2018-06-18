@@ -224,6 +224,7 @@
 #include "SunsoftFme7.h"
 #include "Supervision.h"
 #include "Super40in1Ws.h"
+#include "T230.h"
 #include "T262.h"
 #include "TaitoTc0190.h"
 #include "TaitoTc0690.h"
@@ -576,6 +577,7 @@ BaseMapper* MapperFactory::GetMapperFromID(RomData &romData)
 		case UnifBoards::StreetHeroes: return new MMC3_StreetHeroes();
 		case UnifBoards::Super24in1Sc03: return new MMC3_Super24in1Sc03();
 		case UnifBoards::Super40in1Ws: return new Super40in1Ws();
+		case UnifBoards::T230: return new T230();
 		case UnifBoards::T262: return new T262();
 		case UnifBoards::Tf1201: return new Tf1201();
 		case UnifBoards::Unl158B: return new Unl158B();
