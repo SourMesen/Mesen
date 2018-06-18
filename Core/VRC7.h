@@ -4,7 +4,6 @@
 #include "VrcIrq.h"
 #include "Vrc7Audio.h"
 
-//incomplete - missing audio
 class VRC7 : public BaseMapper
 {
 private:
@@ -60,6 +59,8 @@ protected:
 		}
 
 		UpdatePrgRamAccess();
+
+		_audio.SetMuteAudio((_controlFlags & 0x40) != 0);
 	}
 
 	void WriteRegister(uint16_t addr, uint8_t value) override
