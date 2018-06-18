@@ -257,6 +257,7 @@
 #include "Waixing176.h"
 #include "Waixing178.h"
 #include "Waixing252.h"
+#include "Yoko.h"
 
 /*
 Supported mappers:  
@@ -583,6 +584,7 @@ BaseMapper* MapperFactory::GetMapperFromID(RomData &romData)
 		case UnifBoards::UnlD1038: return new UnlD1038();
 		case UnifBoards::UnlPuzzle: return new UnlPuzzle();
 		case UnifBoards::UnlVrc7: return new UnlVrc7();
+		case UnifBoards::Yoko: return new Yoko();
 
 		case MapperFactory::NsfMapperID: return new NsfMapper();
 		case MapperFactory::FdsMapperID: return new FDS();

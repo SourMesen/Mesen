@@ -934,6 +934,7 @@
     <ClInclude Include="Waixing178.h" />
     <ClInclude Include="Waixing252.h" />
     <ClInclude Include="WaveRecorder.h" />
+    <ClInclude Include="Yoko.h" />
     <ClInclude Include="Zapper.h" />
   </ItemGroup>
   <ItemGroup>

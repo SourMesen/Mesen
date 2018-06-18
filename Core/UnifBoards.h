@@ -64,5 +64,6 @@ namespace UnifBoards {
 		Dance2000,
 		CityFighter,
 		UnlVrc7,
+		Yoko
 	};
 }
