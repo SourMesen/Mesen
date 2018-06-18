@@ -204,10 +204,12 @@ void SoundMixer::UpdateRates(bool forceUpdate)
 	AudioStatistics stats = GetStatistics();
 	int32_t requestedLatency = (int32_t)EmulationSettings::GetAudioLatency();
 	double targetRate = _sampleRate;
-	if(stats.AverageLatency > requestedLatency + 2) {
-		targetRate *= 1.005;
-	} else if(stats.AverageLatency < requestedLatency - 2) {
-		targetRate *= 0.995;
+	if(stats.AverageLatency > 0 && EmulationSettings::GetEmulationSpeed(100)) {
+		if(stats.AverageLatency > requestedLatency + 2) {
+			targetRate *= 1.005;
+		} else if(stats.AverageLatency < requestedLatency - 2) {
+			targetRate *= 0.995;
+		}
 	}
 
 	if(_clockRate != newRate || forceUpdate) {
