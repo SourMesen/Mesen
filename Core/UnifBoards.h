@@ -63,5 +63,6 @@ namespace UnifBoards {
 		Bmc80013B,
 		Dance2000,
 		CityFighter,
+		UnlVrc7,
 	};
 }

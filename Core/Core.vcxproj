@@ -899,6 +899,7 @@
     <ClInclude Include="Unl255in1.h" />
     <ClInclude Include="Unl43272.h" />
     <ClInclude Include="UnlPuzzle.h" />
+    <ClInclude Include="UnlVrc7.h" />
     <ClInclude Include="UnRom512.h" />
     <ClInclude Include="VideoHud.h" />
     <ClInclude Include="VideoRenderer.h" />

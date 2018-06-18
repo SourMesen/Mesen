@@ -241,6 +241,7 @@
 #include "UnlD1038.h"
 #include "UnlPci556.h"
 #include "UnlPuzzle.h"
+#include "UnlVrc7.h"
 #include "UNROM.h"
 #include "UnRom_94.h"
 #include "UnRom_180.h"
@@ -581,6 +582,7 @@ BaseMapper* MapperFactory::GetMapperFromID(RomData &romData)
 		case UnifBoards::Unl43272: return new Unl43272();
 		case UnifBoards::UnlD1038: return new UnlD1038();
 		case UnifBoards::UnlPuzzle: return new UnlPuzzle();
+		case UnifBoards::UnlVrc7: return new UnlVrc7();
 
 		case MapperFactory::NsfMapperID: return new NsfMapper();
 		case MapperFactory::FdsMapperID: return new FDS();

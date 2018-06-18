@@ -143,7 +143,7 @@ std::unordered_map<string, int> UnifLoader::_boardMappings = std::unordered_map<
 	{ "UNROM-512-16", 30 },
 	{ "UNROM-512-32", 30 },
 	{ "UOROM", 2 },
-	{ "VRC7", UnifBoards::UnknownBoard },
+	{ "VRC7", UnifBoards::UnlVrc7 },
 	{ "YOKO", UnifBoards::UnknownBoard },
 	{ "SB-2000", UnifBoards::UnknownBoard },
 	{ "158B", UnifBoards::Unl158B },
