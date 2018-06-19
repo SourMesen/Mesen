@@ -25,29 +25,6 @@
 
 #include "SpriteFont.h"
 
-XMVECTOR XMVectorMax(FXMVECTOR V1,FXMVECTOR V2)
-{
-	return _mm_max_ps( V1, V2 );
-}
-
-XMVECTOR XMVectorSet(float x, float y, float z, float w)
-{
-    return _mm_set_ps( w, z, y, x );
-}
-
-XMVECTOR XMVectorZero()
-{
-	return _mm_setzero_ps();
-}
-
-#define XM_PERMUTE_PS( v, c ) _mm_shuffle_ps( v, v, c )
-void XMStoreFloat2(XMFLOAT2* pDestination, FXMVECTOR  V)
-{
-	XMVECTOR T = XM_PERMUTE_PS( V, _MM_SHUFFLE( 1, 1, 1, 1 ) );
-	_mm_store_ss( &pDestination->x, V );
-	_mm_store_ss( &pDestination->y, T );
-}
-
 // Internal SpriteFont implementation class.
 class SpriteFont::Impl
 {
@@ -251,9 +228,9 @@ void SpriteFont::DrawString(SDL_Renderer *renderer, wchar_t const* text, int x, 
 	});
 }
 
-XMVECTOR SpriteFont::MeasureString(wchar_t const* text) const
+XMFLOAT2 SpriteFont::MeasureString(wchar_t const* text) const
 {
-	XMVECTOR result = XMVectorZero();
+	XMFLOAT2 result;
 
 	pImpl->ForEachGlyph(text, [&](Glyph const* glyph, float x, float y, float advance)
 	{
@@ -262,59 +239,12 @@ XMVECTOR SpriteFont::MeasureString(wchar_t const* text) const
 
 		h = std::max(h, pImpl->lineSpacing);
 
-		result = XMVectorMax(result, XMVectorSet(x + w, y + h, 0, 0));
+		result.x = std::max(result.x, x + w);
+		result.y = std::max(result.y, y + h);
 	});
 
 	return result;
 }
-
-
-RECT SpriteFont::MeasureDrawBounds(wchar_t const* text, XMFLOAT2 const& position) const
-{
-	RECT result = { UINT32_MAX, UINT32_MAX, 0, 0 };
-
-	pImpl->ForEachGlyph(text, [&](Glyph const* glyph, float x, float y, float advance)
-	{
-		float w = (float)(glyph->Subrect.right - glyph->Subrect.left);
-		float h = (float)(glyph->Subrect.bottom - glyph->Subrect.top);
-
-		float minX = position.x + x;
-		float minY = position.y + y + glyph->YOffset;
-
-		float maxX = std::max(minX + advance, minX + w);
-		float maxY = minY + h;
-
-		if (minX < result.left)
-			result.left = long(minX);
-
-		if (minY < result.top)
-			result.top = long(minY);
-
-		if (result.right < maxX)
-			result.right = long(maxX);
-
-		if (result.bottom < maxY)
-			result.bottom = long(maxY);
-	});
-
-	if (result.left == UINT32_MAX)
-	{
-		result.left = 0;
-		result.top = 0;
-	}
-
-	return result;
-}
-
-
-RECT SpriteFont::MeasureDrawBounds(wchar_t const* text, FXMVECTOR position) const
-{
-	XMFLOAT2 pos;
-	XMStoreFloat2(&pos, position);
-
-	return MeasureDrawBounds(text, pos);
-}
-
 
 // Spacing properties
 float SpriteFont::GetLineSpacing() const
@@ -322,12 +252,10 @@ float SpriteFont::GetLineSpacing() const
 	return pImpl->lineSpacing;
 }
 
-
 void SpriteFont::SetLineSpacing(float spacing)
 {
 	pImpl->lineSpacing = spacing;
 }
-
 
 // Font properties
 wchar_t SpriteFont::GetDefaultCharacter() const
@@ -335,12 +263,10 @@ wchar_t SpriteFont::GetDefaultCharacter() const
 	return pImpl->defaultGlyph ? (wchar_t)pImpl->defaultGlyph->Character : 0;
 }
 
-
 void SpriteFont::SetDefaultCharacter(wchar_t character)
 {
 	pImpl->SetDefaultCharacter(character);
 }
-
 
 bool SpriteFont::ContainsCharacter(wchar_t character) const
 {

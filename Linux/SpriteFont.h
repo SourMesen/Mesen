@@ -19,7 +19,6 @@
 
 #pragma once
 
-#include <xmmintrin.h>
 #include <SDL2/SDL.h>
 #include <string>
 #include <memory>
@@ -29,10 +28,6 @@
 #include <type_traits>
 #include <string>
 using std::string;
-
-#define FXMVECTOR __m128
-#define GXMVECTOR __m128
-#define XMVECTOR __m128
 
 struct RECT
 {
@@ -44,8 +39,8 @@ struct RECT
 
 struct XMFLOAT2
 {
-    float x;
-    float y;
+    float x = 0.0f;
+    float y = 0.0f;
 
     XMFLOAT2() {}
     XMFLOAT2(float _x, float _y) : x(_x), y(_y) {}
@@ -53,11 +48,6 @@ struct XMFLOAT2
 
     XMFLOAT2& operator= (const XMFLOAT2& Float2) { x = Float2.x; y = Float2.y; return *this; }
 };
-
-XMVECTOR XMVectorMax(FXMVECTOR V1,FXMVECTOR V2);
-XMVECTOR XMVectorSet(float x, float y, float z, float w);
-XMVECTOR XMVectorZero();
-void XMStoreFloat2(XMFLOAT2* pDestination, FXMVECTOR  V);
 
 class SpriteFont
 {
@@ -76,10 +66,7 @@ public:
 
 	void DrawString(SDL_Renderer *renderer, wchar_t const* text, int x, int y, uint8_t r = 255, uint8_t g = 255, uint8_t b = 255) const;
 
-	XMVECTOR MeasureString(wchar_t const* text) const;
-
-	RECT MeasureDrawBounds(wchar_t const* text, XMFLOAT2 const& position) const;
-	RECT MeasureDrawBounds(wchar_t const* text, FXMVECTOR position) const;
+	XMFLOAT2 MeasureString(wchar_t const* text) const;
 
 	// Spacing properties
 	float GetLineSpacing() const;

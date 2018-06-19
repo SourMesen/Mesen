@@ -216,9 +216,8 @@ void SdlRenderer::DrawPauseScreen(bool disableOverlay)
 			SDL_FreeSurface(surf);
 		}
 
-		XMVECTOR stringDimensions = _largeFont->MeasureString(L"PAUSE");
-		float* measureF = (float*)&stringDimensions;
-		_largeFont->DrawString(_sdlRenderer, L"PAUSE", (int)(_screenWidth / 2 - measureF[0] / 2), (int)(_screenHeight / 2 - measureF[1] / 2 - 8), 250, 235, 215);
+		XMFLOAT2 size = _largeFont->MeasureString(L"PAUSE");
+		_largeFont->DrawString(_sdlRenderer, L"PAUSE", (int)(_screenWidth / 2 - size.x / 2), (int)(_screenHeight / 2 - size.y / 2 - 8), 250, 235, 215);
 
 		string utf8Message = EmulationSettings::GetPauseScreenMessage();
 		if(utf8Message.size() > 0) {
@@ -237,9 +236,7 @@ void SdlRenderer::DrawString(std::wstring message, int x, int y, uint8_t r, uint
 
 float SdlRenderer::MeasureString(std::wstring text)
 {
-	XMVECTOR measure = _spriteFont->MeasureString(text.c_str());
-	float* measureF = (float*)&measure;
-	return measureF[0];
+	return _spriteFont->MeasureString(text.c_str()).x;
 }
 
 bool SdlRenderer::ContainsCharacter(wchar_t character)
