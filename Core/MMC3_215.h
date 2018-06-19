@@ -2,9 +2,10 @@
 #include "stdafx.h"
 #include "MMC3.h"
 
+//Unif: UNL-8237
 class MMC3_215 : public MMC3
 {
-private:
+protected:
 	const uint8_t _lutReg[8][8] = {
 		{ 0, 1, 2, 3, 4, 5, 6, 7 },
 		{ 0, 2, 6, 1, 7, 3, 4, 5 },
@@ -30,7 +31,6 @@ private:
 
 	uint8_t _exRegs[3];
 
-protected:
 	uint16_t RegisterStartAddress() override { return 0x5000; }
 	uint16_t RegisterEndAddress() override { return 0xFFFF; }
 

@@ -239,6 +239,7 @@
 #include "Unl158B.h"
 #include "Unl255in1.h"
 #include "Unl43272.h"
+#include "Unl8237A.h"
 #include "UnlD1038.h"
 #include "UnlPci556.h"
 #include "UnlPuzzle.h"
@@ -583,6 +584,7 @@ BaseMapper* MapperFactory::GetMapperFromID(RomData &romData)
 		case UnifBoards::Unl158B: return new Unl158B();
 		case UnifBoards::Unl255in1: return new Unl255in1();
 		case UnifBoards::Unl43272: return new Unl43272();
+		case UnifBoards::Unl8237A: return new Unl8237A();
 		case UnifBoards::UnlD1038: return new UnlD1038();
 		case UnifBoards::UnlPuzzle: return new UnlPuzzle();
 		case UnifBoards::UnlVrc7: return new UnlVrc7();

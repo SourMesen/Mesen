@@ -624,6 +624,7 @@
     <ClInclude Include="SuborMouse.h" />
     <ClInclude Include="T230.h" />
     <ClInclude Include="Unl158B.h" />
+    <ClInclude Include="Unl8237A.h" />
     <ClInclude Include="UnlD1038.h" />
     <ClInclude Include="DaouInfosys.h" />
     <ClInclude Include="DebugBreakHelper.h" />
