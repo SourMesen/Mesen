@@ -49,9 +49,9 @@ The following are the specifications for the hires.txt file, as of version "101"
 ### &lt;ver&gt; tag ###
 
 **Syntax**: `<ver>[integer]`  
-**Example**: `<ver>101`
+**Example**: `<ver>102`
 
-The format's version number -- this is currently 101 for Mesen.
+The format's version number (currently 102).
 
 ### &lt;scale&gt; tag ###
 
@@ -137,7 +137,7 @@ For CHR RAM games, `tile data` is a 32-character hexadecimal string representing
 
 The memoryCheck and ppuMemoryCheck conditions are used to compare the value stored at 2 different memory addresses together. (Use the `ppuMemoryCheck` variant to check PPU memory)
 
-**Syntax**: `<condition>[name - text], [conditionType - text], [memory address 1 - integer], [operator - string], [memory address 2 - integer]`  
+**Syntax**: `<condition>[name - text], [conditionType - text], [memory address 1 - hex], [operator - string], [memory address 2 - hex]`  
 **Supported operators**: `==`, `!=`, `>`, `<`, `>=`, `<=`  
 **Example**: `<condition>myCondition,memoryCheck,8FFF,>,8000` (If the value stored at $8FFF is greater than the value stored at $8000, the condition will be true)
 
@@ -145,9 +145,19 @@ The memoryCheck and ppuMemoryCheck conditions are used to compare the value stor
 
 The memoryCheck and ppuMemoryCheck conditions are used to compare the value stored at a memory address with a constant.  (Use the `ppuMemoryCheckConstant` variant to check PPU memory)
 
-**Syntax**: `<condition>[name - text], [conditionType - text], [memory address - integer], [operator - string], [constant - integer]`  
+**Syntax**: `<condition>[name - text], [conditionType - text], [memory address - hex], [operator - string], [constant - hex]`  
 **Supported operators**: `==`, `!=`, `>`, `<`, `>=`, `<=`  
 **Example**: `<condition>myCondition,memoryCheck,8FFF,==,3F` (If the value stored at $8FFF is equal to $3F, the condition will be true)
+
+#### frameRange ####
+
+The frameRange conditions can be used to conditionally replace tiles based on the current frame number.
+The condition is true when the following expression is true:  
+`[current frame number] % [divisorValue] >= [compareValue]`
+
+**Syntax**: `<condition>[name - text], frameRange, [divisorValue - integer], [compareValue - integer]`  
+**Example**: `<condition>myCondition,frameRange,8,10` (This condition will be true for the last 2 frames out of every 10 frames)
+
 
 ### &lt;tile&gt; tag ###
 
@@ -167,13 +177,15 @@ When `default tile` is enabled (with `Y`), the tile is marked as the `default ti
 
 ### &lt;background&gt; tag ###
 
-**Syntax**: `<background>[name - text], [brightness level - 0.0 to 1.0], [horizontal scroll ratio (optional) - float], [vertical scroll ratio (optional) - float]`  
-**Example**: `<background>myBackground.png,1.0,0,0`
+**Syntax**: `<background>[name - text], [brightness level - 0.0 to 1.0], [horizontal scroll ratio (optional) - float], [vertical scroll ratio (optional) - float], [showBehindBackgroundPrioritySprites (optional) - Y or N]`  
+**Example**: `<background>myBackground.png,1.0,0,0,N`
 
 `<background>` tags meant to be used alongside conditions to add a background image under certain conditions (e.g on a specific screen, for example).
 
-The `Horizontal Scroll Ratio` and `Vertical Scroll Ratio` parameters are optional and can be used to specify at what speed the background picture should scroll compared to the NES' scrolling.  
+The `Horizontal Scroll Ratio` and `Vertical Scroll Ratio` parameters are optional (their default value is `0.0`) and can be used to specify at what speed the background picture should scroll compared to the NES' scrolling.  
 This can be used to create simple parallax scrolling effects.
+
+When the `Show Behind Background Priority Sprites` parameter is enabled (`Y`), the background priority sprites will be shown in front of the background image.
 
 ### &lt;options&gt; tag ###
 
@@ -182,7 +194,7 @@ This can be used to create simple parallax scrolling effects.
 
 **Available options**:  
 `disableSpriteLimit`: Forces the emulator to disable the sprite limit when the HD pack is loaded.  
-`disableContours`: Disables the outline effect around sprites/tiles when using <background>s.  
+`disableContours`: Disables the outline effect that appears around sprites/tiles when using the `<background>` feature.  
 
 ### &lt;bgm&gt; tag ###
 
