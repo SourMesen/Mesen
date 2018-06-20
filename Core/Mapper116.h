@@ -98,7 +98,6 @@ protected:
 		if((_mode & 0x03) == 1) {
 			switch(_a12Watcher.UpdateVramAddress(addr)) {
 				case A12StateChange::Rise:
-					uint32_t count = _irqCounter;
 					if(_irqCounter == 0 || _irqReload) {
 						_irqCounter = _irqReloadValue;
 					} else {

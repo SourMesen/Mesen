@@ -49,12 +49,12 @@ protected:
 		Stream(exRegs);
 	}
 
-	void UpdatePrgMapping()
+	void UpdatePrgMapping() override
 	{
 		SelectPrgPage4x(0, _exRegs[5] << 2);
 	}
 
-	uint8_t ReadRegister(uint16_t addr)
+	uint8_t ReadRegister(uint16_t addr) override
 	{
 		return _exRegs[addr & 0x03];
 	}
