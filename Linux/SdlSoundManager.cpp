@@ -52,6 +52,7 @@ bool SdlSoundManager::InitializeAudio(uint32_t sampleRate, bool isStereo)
 	int32_t requestedByteLatency = (int32_t)((float)(sampleRate * EmulationSettings::GetAudioLatency()) / 1000.0f * bytesPerSample);
 	_bufferSize = (int32_t)std::ceil((double)requestedByteLatency * 2 / 0x10000) * 0x10000;
 	_buffer = new uint8_t[_bufferSize];
+	memset(_buffer, 0, _bufferSize);
 
 	SDL_AudioSpec audioSpec;
 	SDL_memset(&audioSpec, 0, sizeof(audioSpec));
