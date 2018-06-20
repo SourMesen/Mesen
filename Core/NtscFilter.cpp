@@ -90,7 +90,7 @@ void NtscFilter::ApplyFilter(uint16_t *ppuOutputBuffer)
 
 void NtscFilter::GenerateArgbFrame(uint32_t *ntscBuffer)
 {
-	uint32_t* outputBuffer = (uint32_t*)GetOutputBuffer();
+	uint32_t* outputBuffer = GetOutputBuffer();
 	OverscanDimensions overscan = GetOverscan();
 	int overscanLeft = overscan.Left > 0 ? NES_NTSC_OUT_WIDTH(overscan.Left) : 0;
 	int overscanRight = overscan.Right > 0 ? NES_NTSC_OUT_WIDTH(overscan.Right) : 0;

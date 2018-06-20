@@ -8,7 +8,7 @@
 class BaseVideoFilter
 {
 private:
-	uint8_t* _outputBuffer = nullptr;
+	uint32_t* _outputBuffer = nullptr;
 	uint32_t _bufferSize = 0;
 	SimpleLock _frameLock;
 	OverscanDimensions _overscan;
@@ -25,7 +25,7 @@ public:
 	BaseVideoFilter();
 	virtual ~BaseVideoFilter();
 
-	uint8_t* GetOutputBuffer();
+	uint32_t* GetOutputBuffer();
 	void SendFrame(uint16_t *ppuOutputBuffer, uint32_t frameNumber);
 	void TakeScreenshot(VideoFilterType filterType);
 	void TakeScreenshot(VideoFilterType filterType, string filename, std::stringstream *stream = nullptr);

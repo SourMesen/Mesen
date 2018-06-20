@@ -18,7 +18,7 @@ void RawVideoFilter::ApplyFilter(uint16_t * ppuOutputBuffer)
 {
 	//Do nothing - return 9-bit values (6-bit Palette + 3-bit emphasis)
 	OverscanDimensions overscan = GetOverscan();
-	uint32_t* out = (uint32_t*)GetOutputBuffer();
+	uint32_t* out = GetOutputBuffer();
 	for(uint32_t i = overscan.Top, iMax = 240 - overscan.Bottom; i < iMax; i++) {
 		for(uint32_t j = overscan.Left, jMax = 256 - overscan.Right; j < jMax; j++) {
 			*out = _rawPalette[ppuOutputBuffer[i * 256 + j]];

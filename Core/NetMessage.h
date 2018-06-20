@@ -23,7 +23,7 @@ protected:
 				_buffer.push_back(bytes[i]);
 			}
 		} else {
-			value = *((T*)(&_buffer[0] + _position));
+			memcpy(&value, _buffer.data()+_position, sizeof(T));
 			_position += sizeof(T);
 		}
 	}

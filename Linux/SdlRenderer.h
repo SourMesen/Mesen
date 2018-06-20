@@ -35,7 +35,7 @@ private:
 
 	SimpleLock _frameLock;
 	SimpleLock _reinitLock;
-	uint8_t* _frameBuffer;
+	uint32_t* _frameBuffer;
 
 	const uint32_t _bytesPerPixel = 4;
 	uint32_t _screenBufferSize = 0;

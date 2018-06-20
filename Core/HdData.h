@@ -51,7 +51,10 @@ struct HdTileKey
 	{
 		uint32_t result = 0;
 		for(size_t i = 0; i < len; i += 4) {
-			result += *((uint32_t*)key);
+			uint32_t chunk;
+			memcpy(&chunk, key, sizeof(uint32_t));
+
+			result += chunk;
 			result = (result << 2) | (result >> 30);
 			key += 4;
 		}
@@ -290,7 +293,7 @@ struct HdPackTileInfo : public HdTileKey
 
 struct HdPackBitmapInfo
 {
-	vector<uint8_t> PixelData;
+	vector<uint32_t> PixelData;
 	uint32_t Width;
 	uint32_t Height;
 };
@@ -301,7 +304,7 @@ struct HdBackgroundFileData
 	uint32_t Width;
 	uint32_t Height;
 
-	vector<uint8_t> PixelData;
+	vector<uint32_t> PixelData;
 };
 
 struct HdBackgroundInfo
@@ -314,7 +317,7 @@ struct HdBackgroundInfo
 
 	uint32_t* data()
 	{
-		return (uint32_t*)Data->PixelData.data();
+		return Data->PixelData.data();
 	}
 
 	string ToString()

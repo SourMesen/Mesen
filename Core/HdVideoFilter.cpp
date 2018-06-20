@@ -35,5 +35,5 @@ void HdVideoFilter::SetHdScreenTiles(HdScreenInfo *hdScreenInfo)
 void HdVideoFilter::ApplyFilter(uint16_t *ppuOutputBuffer)
 {
 	OverscanDimensions overscan = GetOverscan();
-	_hdNesPack->Process(_hdScreenInfo, (uint32_t*)GetOutputBuffer(), overscan);
+	_hdNesPack->Process(_hdScreenInfo, GetOutputBuffer(), overscan);
 }

@@ -25,7 +25,7 @@ BaseVideoFilter::~BaseVideoFilter()
 
 void BaseVideoFilter::UpdateBufferSize()
 {
-	uint32_t newBufferSize = GetFrameInfo().Width*GetFrameInfo().Height*GetFrameInfo().BitsPerPixel;
+	uint32_t newBufferSize = GetFrameInfo().Width*GetFrameInfo().Height;
 	if(_bufferSize != newBufferSize) {
 		_frameLock.Acquire();
 		if(_outputBuffer) {
@@ -33,7 +33,7 @@ void BaseVideoFilter::UpdateBufferSize()
 		}
 
 		_bufferSize = newBufferSize;
-		_outputBuffer = new uint8_t[newBufferSize];
+		_outputBuffer = new uint32_t[newBufferSize];
 		_frameLock.Release();
 	}
 }
@@ -61,12 +61,12 @@ void BaseVideoFilter::SendFrame(uint16_t *ppuOutputBuffer, uint32_t frameNumber)
 	OnBeforeApplyFilter();
 	ApplyFilter(ppuOutputBuffer);
 
-	DebugHud::GetInstance()->Draw((uint32_t*)_outputBuffer, _overscan, GetFrameInfo().Width, frameNumber);
+	DebugHud::GetInstance()->Draw(_outputBuffer, _overscan, GetFrameInfo().Width, frameNumber);
 	
 	_frameLock.Release();
 }
 
-uint8_t* BaseVideoFilter::GetOutputBuffer()
+uint32_t* BaseVideoFilter::GetOutputBuffer()
 {
 	return _outputBuffer;
 }
@@ -82,8 +82,8 @@ void BaseVideoFilter::TakeScreenshot(VideoFilterType filterType, string filename
 			return;
 		}
 
-		frameBuffer = (uint32_t*)new uint8_t[_bufferSize];
-		memcpy(frameBuffer, GetOutputBuffer(), _bufferSize);
+		frameBuffer = new uint32_t[_bufferSize];
+		memcpy(frameBuffer, GetOutputBuffer(), _bufferSize * sizeof(frameBuffer[0]));
 		frameInfo = GetFrameInfo();
 	}
 
@@ -104,7 +104,7 @@ void BaseVideoFilter::TakeScreenshot(VideoFilterType filterType, string filename
 	}
 
 	VideoHud hud;
-	hud.DrawHud((uint8_t*)pngBuffer, frameInfo, EmulationSettings::GetOverscanDimensions());
+	hud.DrawHud(pngBuffer, frameInfo, EmulationSettings::GetOverscanDimensions());
 
 	if(!filename.empty()) {
 		PNGHelper::WritePNG(filename, pngBuffer, frameInfo.Width, frameInfo.Height);

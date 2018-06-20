@@ -73,7 +73,7 @@ bool SdlRenderer::Init()
 
 	SDL_SetWindowSize(_sdlWindow, _screenWidth, _screenHeight);
 
-	_frameBuffer = new uint8_t[_nesFrameHeight*_nesFrameWidth*_bytesPerPixel];
+	_frameBuffer = new uint32_t[_nesFrameHeight*_nesFrameWidth];
 	memset(_frameBuffer, 0, _nesFrameHeight*_nesFrameWidth*_bytesPerPixel);
 
 	return true;
@@ -165,7 +165,7 @@ void SdlRenderer::Render()
 		SDL_LockTexture(_sdlTexture, nullptr, (void**)&textureBuffer, &rowPitch);
 		{
 			auto frameLock = _frameLock.AcquireSafe();
-			uint32_t* ppuFrameBuffer = (uint32_t*)_frameBuffer;
+			uint32_t* ppuFrameBuffer = _frameBuffer;
 			for(uint32_t i = 0, iMax = _nesFrameHeight; i < iMax; i++) {
 				memcpy(textureBuffer, ppuFrameBuffer, _nesFrameWidth*_bytesPerPixel);
 				ppuFrameBuffer += _nesFrameWidth;

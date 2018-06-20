@@ -357,12 +357,12 @@ void HdPackBuilder::GetChrBankList(uint32_t *banks)
 	Console::Resume();
 }
 
-void HdPackBuilder::GetBankPreview(uint32_t bankNumber, uint32_t pageNumber, uint8_t *rgbBuffer)
+void HdPackBuilder::GetBankPreview(uint32_t bankNumber, uint32_t pageNumber, uint32_t *rgbBuffer)
 {
 	Console::Pause();
 
 	for(uint32_t i = 0; i < 128 * 128 * _instance->_hdData.Scale*_instance->_hdData.Scale; i++) {
-		((uint32_t*)rgbBuffer)[i] = 0xFFFF00FF;
+		rgbBuffer[i] = 0xFF666666;
 	}
 
 	auto result = _instance->_tilesByChrBankByPalette.find(bankNumber);

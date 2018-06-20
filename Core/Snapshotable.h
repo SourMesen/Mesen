@@ -109,7 +109,7 @@ private:
 		} else {
 			if(_inBlock) {
 				if(_blockPosition + sizeof(T) <= _blockSize) {
-					value = *((T*)(_blockBuffer + _blockPosition));
+					memcpy(&value, _blockBuffer + _blockPosition, sizeof(T));
 					_blockPosition += sizeof(T);
 				} else {
 					value = defaultValue;
@@ -117,7 +117,7 @@ private:
 				}
 			} else {
 				if(_position + sizeof(T) <= _streamSize) {
-					value = *((T*)(_stream + _position));
+					memcpy(&value, _stream + _position, sizeof(T));
 					_position += sizeof(T);
 				} else {
 					value = defaultValue;

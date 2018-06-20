@@ -46,5 +46,5 @@ public:
 	void SaveHdPack();
 	
 	static void GetChrBankList(uint32_t *banks);
-	static void GetBankPreview(uint32_t bankNumber, uint32_t pageNumber, uint8_t *rgbBuffer);
+	static void GetBankPreview(uint32_t bankNumber, uint32_t pageNumber, uint32_t *rgbBuffer);
 };

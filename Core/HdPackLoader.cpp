@@ -207,8 +207,13 @@ bool HdPackLoader::ProcessImgTag(string src)
 {
 	HdPackBitmapInfo bitmapInfo;
 	vector<uint8_t> fileData;
+	vector<uint8_t> pixelData;
 	LoadFile(src, fileData);
-	if(PNGHelper::ReadPNG(fileData, bitmapInfo.PixelData, bitmapInfo.Width, bitmapInfo.Height)) {
+	if(PNGHelper::ReadPNG(fileData, pixelData, bitmapInfo.Width, bitmapInfo.Height)) {
+		bitmapInfo.PixelData.resize(pixelData.size() / 4);
+		memcpy(bitmapInfo.PixelData.data(), pixelData.data(), bitmapInfo.PixelData.size() * sizeof(bitmapInfo.PixelData[0]));
+
+
 		_hdNesBitmaps.push_back(bitmapInfo);
 		return true;
 	} else {
@@ -513,7 +518,8 @@ void HdPackLoader::ProcessBackgroundTag(vector<string> &tokens, vector<HdPackCon
 			if(PNGHelper::ReadPNG(fileContent, pixelData, width, height)) {
 				_data->BackgroundFileData.push_back(unique_ptr<HdBackgroundFileData>(new HdBackgroundFileData()));
 				bgFileData = _data->BackgroundFileData.back().get();
-				bgFileData->PixelData = pixelData;
+				bgFileData->PixelData.resize(pixelData.size() / 4);
+				memcpy(bgFileData->PixelData.data(), pixelData.data(), bgFileData->PixelData.size() * sizeof(bgFileData->PixelData[0]));
 				bgFileData->Width = width;
 				bgFileData->Height = height;
 				bgFileData->PngName = tokens[0];

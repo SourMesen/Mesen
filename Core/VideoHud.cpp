@@ -8,7 +8,7 @@
 #include "Zapper.h"
 #include "MovieManager.h"
 
-void VideoHud::DrawHud(uint8_t *outputBuffer, FrameInfo frameInfo, OverscanDimensions overscan)
+void VideoHud::DrawHud(uint32_t *outputBuffer, FrameInfo frameInfo, OverscanDimensions overscan)
 {
 	uint32_t displayCount = 0;
 	InputDisplaySettings settings = EmulationSettings::GetInputDisplaySettings();
@@ -25,11 +25,11 @@ void VideoHud::DrawHud(uint8_t *outputBuffer, FrameInfo frameInfo, OverscanDimen
 	DrawMovieIcons(outputBuffer, frameInfo, overscan);
 }
 
-bool VideoHud::DisplayControllerInput(ControlDeviceState &state, int inputPort, uint8_t *outputBuffer, FrameInfo &frameInfo, OverscanDimensions &overscan, uint32_t displayIndex)
+bool VideoHud::DisplayControllerInput(ControlDeviceState &state, int inputPort, uint32_t *outputBuffer, FrameInfo &frameInfo, OverscanDimensions &overscan, uint32_t displayIndex)
 {
 	bool axisInverted = (EmulationSettings::GetScreenRotation() % 180) != 0;
 	int scale = frameInfo.Width / (axisInverted ? overscan.GetScreenHeight() : overscan.GetScreenWidth());
-	uint32_t* rgbaBuffer = (uint32_t*)outputBuffer;
+	uint32_t* rgbaBuffer = outputBuffer;
 
 	InputDisplaySettings settings = EmulationSettings::GetInputDisplaySettings();
 	uint32_t yStart, xStart;
@@ -108,7 +108,7 @@ bool VideoHud::DisplayControllerInput(ControlDeviceState &state, int inputPort, 
 	return false;
 }
 
-void VideoHud::DrawMovieIcons(uint8_t *outputBuffer, FrameInfo &frameInfo, OverscanDimensions &overscan)
+void VideoHud::DrawMovieIcons(uint32_t *outputBuffer, FrameInfo &frameInfo, OverscanDimensions &overscan)
 {
 	if(EmulationSettings::CheckFlag(EmulationFlags::DisplayMovieIcons) && (MovieManager::Playing() || MovieManager::Recording())) {
 		InputDisplaySettings settings = EmulationSettings::GetInputDisplaySettings();

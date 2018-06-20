@@ -39,7 +39,7 @@ BisqwitNtscFilter::BisqwitNtscFilter(int resDivider)
 				break;
 			}
 
-			uint32_t* outputBuffer = (uint32_t*)GetOutputBuffer();
+			uint32_t* outputBuffer = GetOutputBuffer();
 
 			//Adjust outputbuffer to start at the middle of the picture
 			if(_keepVerticalRes) {
@@ -68,7 +68,7 @@ void BisqwitNtscFilter::ApplyFilter(uint16_t *ppuOutputBuffer)
 
 	_workDone = false;
 	_waitWork.Signal();
-	DecodeFrame(GetOverscan().Top, 120, ppuOutputBuffer, (uint32_t*)GetOutputBuffer(), (IsOddFrame() ? 8 : 0) + GetOverscan().Top*341*8);
+	DecodeFrame(GetOverscan().Top, 120, ppuOutputBuffer, GetOutputBuffer(), (IsOddFrame() ? 8 : 0) + GetOverscan().Top*341*8);
 	while(!_workDone) {}
 }
 

@@ -49,7 +49,10 @@ struct TileKey
 	{
 		uint32_t result = 0;
 		for(size_t i = 0; i < len; i += 4) {
-			result += *((uint32_t*)key);
+			uint32_t chunk;
+			memcpy(&chunk, key, sizeof(uint32_t));
+			
+			result += chunk;
 			result = (result << 2) | (result >> 30);
 			key += 4;
 		}

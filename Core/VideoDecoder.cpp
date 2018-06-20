@@ -114,7 +114,7 @@ void VideoDecoder::DecodeFrame(bool synchronous)
 	}
 	_videoFilter->SendFrame(_ppuOutputBuffer, _frameNumber);
 
-	uint32_t* outputBuffer = (uint32_t*)_videoFilter->GetOutputBuffer();
+	uint32_t* outputBuffer = _videoFilter->GetOutputBuffer();
 	FrameInfo frameInfo = _videoFilter->GetFrameInfo();
 
 	if(_rotateFilter) {
@@ -128,7 +128,7 @@ void VideoDecoder::DecodeFrame(bool synchronous)
 	}
 
 	if(_hud) {
-		_hud->DrawHud((uint8_t*)outputBuffer, frameInfo, _videoFilter->GetOverscan());
+		_hud->DrawHud(outputBuffer, frameInfo, _videoFilter->GetOverscan());
 	}
 
 	ScreenSize screenSize;

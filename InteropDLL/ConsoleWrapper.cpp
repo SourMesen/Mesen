@@ -574,6 +574,6 @@ namespace InteropEmu {
 		DllExport void __stdcall HdBuilderStopRecording() { Console::StopRecordingHdPack(); }
 
 		DllExport void __stdcall HdBuilderGetChrBankList(uint32_t* bankBuffer) { HdPackBuilder::GetChrBankList(bankBuffer); }
-		DllExport void __stdcall HdBuilderGetBankPreview(uint32_t bankNumber, uint32_t pageNumber, uint8_t *rgbBuffer) { HdPackBuilder::GetBankPreview(bankNumber, pageNumber, rgbBuffer); }
+		DllExport void __stdcall HdBuilderGetBankPreview(uint32_t bankNumber, uint32_t pageNumber, uint32_t *rgbBuffer) { HdPackBuilder::GetBankPreview(bankNumber, pageNumber, rgbBuffer); }
 	}
 }
