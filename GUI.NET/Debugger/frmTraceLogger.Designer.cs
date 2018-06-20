@@ -112,14 +112,14 @@
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-			this.tableLayoutPanel1.Size = new System.Drawing.Size(706, 182);
+			this.tableLayoutPanel1.Size = new System.Drawing.Size(778, 182);
 			this.tableLayoutPanel1.TabIndex = 0;
 			// 
 			// btnOpenTrace
 			// 
 			this.btnOpenTrace.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.btnOpenTrace.Enabled = false;
-			this.btnOpenTrace.Location = new System.Drawing.Point(608, 3);
+			this.btnOpenTrace.Location = new System.Drawing.Point(680, 3);
 			this.btnOpenTrace.Name = "btnOpenTrace";
 			this.btnOpenTrace.Size = new System.Drawing.Size(95, 23);
 			this.btnOpenTrace.TabIndex = 2;
@@ -156,7 +156,7 @@
 			this.grpLogOptions.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.grpLogOptions.Location = new System.Drawing.Point(3, 32);
 			this.grpLogOptions.Name = "grpLogOptions";
-			this.grpLogOptions.Size = new System.Drawing.Size(700, 150);
+			this.grpLogOptions.Size = new System.Drawing.Size(772, 150);
 			this.grpLogOptions.TabIndex = 3;
 			this.grpLogOptions.TabStop = false;
 			this.grpLogOptions.Text = "Log Options";
@@ -200,7 +200,7 @@
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this.tableLayoutPanel2.Size = new System.Drawing.Size(694, 131);
+			this.tableLayoutPanel2.Size = new System.Drawing.Size(766, 131);
 			this.tableLayoutPanel2.TabIndex = 0;
 			// 
 			// tableLayoutPanel5
@@ -222,7 +222,7 @@
 			this.tableLayoutPanel5.Name = "tableLayoutPanel5";
 			this.tableLayoutPanel5.RowCount = 1;
 			this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel5.Size = new System.Drawing.Size(694, 25);
+			this.tableLayoutPanel5.Size = new System.Drawing.Size(766, 25);
 			this.tableLayoutPanel5.TabIndex = 18;
 			// 
 			// chkOverrideFormat
@@ -241,7 +241,7 @@
 			// picFormatHelp
 			// 
 			this.picFormatHelp.Image = global::Mesen.GUI.Properties.Resources.Help;
-			this.picFormatHelp.Location = new System.Drawing.Point(673, 5);
+			this.picFormatHelp.Location = new System.Drawing.Point(745, 5);
 			this.picFormatHelp.Margin = new System.Windows.Forms.Padding(3, 5, 3, 3);
 			this.picFormatHelp.Name = "picFormatHelp";
 			this.picFormatHelp.Size = new System.Drawing.Size(18, 17);
@@ -263,7 +263,7 @@
 			this.txtFormat.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.txtFormat.Location = new System.Drawing.Point(123, 3);
 			this.txtFormat.Name = "txtFormat";
-			this.txtFormat.Size = new System.Drawing.Size(544, 20);
+			this.txtFormat.Size = new System.Drawing.Size(616, 20);
 			this.txtFormat.TabIndex = 15;
 			this.txtFormat.TextChanged += new System.EventHandler(this.txtFormat_TextChanged);
 			// 
@@ -391,13 +391,13 @@
 			this.tableLayoutPanel4.Name = "tableLayoutPanel4";
 			this.tableLayoutPanel4.RowCount = 1;
 			this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel4.Size = new System.Drawing.Size(694, 25);
+			this.tableLayoutPanel4.Size = new System.Drawing.Size(766, 25);
 			this.tableLayoutPanel4.TabIndex = 16;
 			// 
 			// picHelp
 			// 
 			this.picHelp.Image = global::Mesen.GUI.Properties.Resources.Help;
-			this.picHelp.Location = new System.Drawing.Point(673, 5);
+			this.picHelp.Location = new System.Drawing.Point(745, 5);
 			this.picHelp.Margin = new System.Windows.Forms.Padding(3, 5, 3, 3);
 			this.picHelp.Name = "picHelp";
 			this.picHelp.Size = new System.Drawing.Size(18, 17);
@@ -407,7 +407,7 @@
 			// picExpressionWarning
 			// 
 			this.picExpressionWarning.Image = global::Mesen.GUI.Properties.Resources.Warning;
-			this.picExpressionWarning.Location = new System.Drawing.Point(649, 5);
+			this.picExpressionWarning.Location = new System.Drawing.Point(721, 5);
 			this.picExpressionWarning.Margin = new System.Windows.Forms.Padding(3, 5, 3, 3);
 			this.picExpressionWarning.Name = "picExpressionWarning";
 			this.picExpressionWarning.Size = new System.Drawing.Size(18, 17);
@@ -430,7 +430,7 @@
 			this.txtCondition.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.txtCondition.Location = new System.Drawing.Point(63, 3);
 			this.txtCondition.Name = "txtCondition";
-			this.txtCondition.Size = new System.Drawing.Size(580, 20);
+			this.txtCondition.Size = new System.Drawing.Size(652, 20);
 			this.txtCondition.TabIndex = 15;
 			// 
 			// chkShowExtraInfo
@@ -530,7 +530,7 @@
 			this.tableLayoutPanel3.RowCount = 2;
 			this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this.tableLayoutPanel3.Size = new System.Drawing.Size(712, 385);
+			this.tableLayoutPanel3.Size = new System.Drawing.Size(784, 385);
 			this.tableLayoutPanel3.TabIndex = 1;
 			// 
 			// grpExecutionLog
@@ -539,7 +539,7 @@
 			this.grpExecutionLog.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.grpExecutionLog.Location = new System.Drawing.Point(3, 3);
 			this.grpExecutionLog.Name = "grpExecutionLog";
-			this.grpExecutionLog.Size = new System.Drawing.Size(706, 191);
+			this.grpExecutionLog.Size = new System.Drawing.Size(778, 191);
 			this.grpExecutionLog.TabIndex = 2;
 			this.grpExecutionLog.TabStop = false;
 			this.grpExecutionLog.Text = "Execution Log";
@@ -559,7 +559,7 @@
 			this.txtTraceLog.ShowScrollbars = true;
 			this.txtTraceLog.ShowSingleContentLineNotes = true;
 			this.txtTraceLog.ShowSingleLineLineNumberNotes = false;
-			this.txtTraceLog.Size = new System.Drawing.Size(700, 172);
+			this.txtTraceLog.Size = new System.Drawing.Size(772, 172);
 			this.txtTraceLog.TabIndex = 0;
 			// 
 			// tmrUpdateLog
@@ -573,7 +573,7 @@
             this.showToolStripMenuItem});
 			this.menuStrip1.Location = new System.Drawing.Point(0, 0);
 			this.menuStrip1.Name = "menuStrip1";
-			this.menuStrip1.Size = new System.Drawing.Size(712, 24);
+			this.menuStrip1.Size = new System.Drawing.Size(784, 24);
 			this.menuStrip1.TabIndex = 2;
 			this.menuStrip1.Text = "menuStrip1";
 			// 
@@ -599,7 +599,7 @@
             this.mnuSelectFont});
 			this.fontSizeToolStripMenuItem.Image = global::Mesen.GUI.Properties.Resources.Font;
 			this.fontSizeToolStripMenuItem.Name = "fontSizeToolStripMenuItem";
-			this.fontSizeToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+			this.fontSizeToolStripMenuItem.Size = new System.Drawing.Size(143, 22);
 			this.fontSizeToolStripMenuItem.Text = "Font Options";
 			// 
 			// mnuIncreaseFontSize
@@ -648,13 +648,13 @@
             this.mnu15000Lines,
             this.mnu30000Lines});
 			this.logLinesToolStripMenuItem.Name = "logLinesToolStripMenuItem";
-			this.logLinesToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+			this.logLinesToolStripMenuItem.Size = new System.Drawing.Size(143, 22);
 			this.logLinesToolStripMenuItem.Text = "Line Count";
 			// 
 			// mnu100Lines
 			// 
 			this.mnu100Lines.Name = "mnu100Lines";
-			this.mnu100Lines.Size = new System.Drawing.Size(152, 22);
+			this.mnu100Lines.Size = new System.Drawing.Size(104, 22);
 			this.mnu100Lines.Text = "100";
 			this.mnu100Lines.Click += new System.EventHandler(this.mnu100Lines_Click);
 			// 
@@ -663,35 +663,35 @@
 			this.mnu1000Lines.Checked = true;
 			this.mnu1000Lines.CheckState = System.Windows.Forms.CheckState.Checked;
 			this.mnu1000Lines.Name = "mnu1000Lines";
-			this.mnu1000Lines.Size = new System.Drawing.Size(152, 22);
+			this.mnu1000Lines.Size = new System.Drawing.Size(104, 22);
 			this.mnu1000Lines.Text = "1000";
 			this.mnu1000Lines.Click += new System.EventHandler(this.mnu1000Lines_Click);
 			// 
 			// mnu5000Lines
 			// 
 			this.mnu5000Lines.Name = "mnu5000Lines";
-			this.mnu5000Lines.Size = new System.Drawing.Size(152, 22);
+			this.mnu5000Lines.Size = new System.Drawing.Size(104, 22);
 			this.mnu5000Lines.Text = "5000";
 			this.mnu5000Lines.Click += new System.EventHandler(this.mnu5000Lines_Click);
 			// 
 			// mnu10000Lines
 			// 
 			this.mnu10000Lines.Name = "mnu10000Lines";
-			this.mnu10000Lines.Size = new System.Drawing.Size(152, 22);
+			this.mnu10000Lines.Size = new System.Drawing.Size(104, 22);
 			this.mnu10000Lines.Text = "10000";
 			this.mnu10000Lines.Click += new System.EventHandler(this.mnu10000Lines_Click);
 			// 
 			// mnu15000Lines
 			// 
 			this.mnu15000Lines.Name = "mnu15000Lines";
-			this.mnu15000Lines.Size = new System.Drawing.Size(152, 22);
+			this.mnu15000Lines.Size = new System.Drawing.Size(104, 22);
 			this.mnu15000Lines.Text = "15000";
 			this.mnu15000Lines.Click += new System.EventHandler(this.mnu15000Lines_Click);
 			// 
 			// mnu30000Lines
 			// 
 			this.mnu30000Lines.Name = "mnu30000Lines";
-			this.mnu30000Lines.Size = new System.Drawing.Size(152, 22);
+			this.mnu30000Lines.Size = new System.Drawing.Size(104, 22);
 			this.mnu30000Lines.Text = "30000";
 			this.mnu30000Lines.Click += new System.EventHandler(this.mnu30000Lines_Click);
 			// 
@@ -701,19 +701,19 @@
 			this.mnuAutoRefresh.CheckOnClick = true;
 			this.mnuAutoRefresh.CheckState = System.Windows.Forms.CheckState.Checked;
 			this.mnuAutoRefresh.Name = "mnuAutoRefresh";
-			this.mnuAutoRefresh.Size = new System.Drawing.Size(152, 22);
+			this.mnuAutoRefresh.Size = new System.Drawing.Size(143, 22);
 			this.mnuAutoRefresh.Text = "Auto-refresh";
 			// 
 			// toolStripMenuItem1
 			// 
 			this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-			this.toolStripMenuItem1.Size = new System.Drawing.Size(149, 6);
+			this.toolStripMenuItem1.Size = new System.Drawing.Size(140, 6);
 			// 
 			// mnuRefresh
 			// 
 			this.mnuRefresh.Image = global::Mesen.GUI.Properties.Resources.Reset;
 			this.mnuRefresh.Name = "mnuRefresh";
-			this.mnuRefresh.Size = new System.Drawing.Size(152, 22);
+			this.mnuRefresh.Size = new System.Drawing.Size(143, 22);
 			this.mnuRefresh.Text = "Refresh";
 			this.mnuRefresh.Click += new System.EventHandler(this.mnuRefresh_Click);
 			// 
@@ -721,10 +721,10 @@
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(712, 409);
+			this.ClientSize = new System.Drawing.Size(784, 409);
 			this.Controls.Add(this.tableLayoutPanel3);
 			this.Controls.Add(this.menuStrip1);
-			this.MinimumSize = new System.Drawing.Size(728, 448);
+			this.MinimumSize = new System.Drawing.Size(800, 448);
 			this.Name = "frmTraceLogger";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
 			this.Text = "Trace Logger";

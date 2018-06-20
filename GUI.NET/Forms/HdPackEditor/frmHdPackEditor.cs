@@ -113,8 +113,9 @@ namespace Mesen.GUI.Forms.HdPackEditor
 
 		private void UpdateUI(bool isRecording)
 		{
-			btnStartRecording.Visible = !isRecording;
-			btnStopRecording.Visible = isRecording;
+			btnStartRecording.Enabled = !isRecording;
+			btnStopRecording.Enabled = isRecording;
+			btnOpenFolder.Enabled = Directory.Exists(this.txtSaveFolder.Text);
 
 			cboBank.Enabled = isRecording;
 
@@ -168,13 +169,13 @@ namespace Mesen.GUI.Forms.HdPackEditor
 			UpdateFilterDropdown();
 
 			UpdateUI(false);
-
-			btnOpenFolder.Visible = true;
 		}
 
 		private void btnOpenFolder_Click(object sender, EventArgs e)
 		{
-			System.Diagnostics.Process.Start(this.txtSaveFolder.Text);
+			if(Directory.Exists(this.txtSaveFolder.Text)) {
+				System.Diagnostics.Process.Start(this.txtSaveFolder.Text);
+			}
 		}
 
 		private void btnSelectFolder_Click(object sender, EventArgs e)

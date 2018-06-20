@@ -29,6 +29,8 @@
 		{
 			this.components = new System.ComponentModel.Container();
 			this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+			this.btnStopRecording = new System.Windows.Forms.Button();
+			this.btnStartRecording = new System.Windows.Forms.Button();
 			this.btnOpenFolder = new System.Windows.Forms.Button();
 			this.grpPreview = new System.Windows.Forms.GroupBox();
 			this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
@@ -57,9 +59,6 @@
 			this.flowLayoutPanel6 = new System.Windows.Forms.FlowLayoutPanel();
 			this.cboScale = new System.Windows.Forms.ComboBox();
 			this.picScaleHelp = new System.Windows.Forms.PictureBox();
-			this.flowLayoutPanel2 = new System.Windows.Forms.FlowLayoutPanel();
-			this.btnStartRecording = new System.Windows.Forms.Button();
-			this.btnStopRecording = new System.Windows.Forms.Button();
 			this.tableLayoutPanel4 = new System.Windows.Forms.TableLayoutPanel();
 			this.btnSelectFolder = new System.Windows.Forms.Button();
 			this.txtSaveFolder = new System.Windows.Forms.TextBox();
@@ -83,19 +82,20 @@
 			((System.ComponentModel.ISupportInitialize)(this.picBankSizeHelp)).BeginInit();
 			this.flowLayoutPanel6.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.picScaleHelp)).BeginInit();
-			this.flowLayoutPanel2.SuspendLayout();
 			this.tableLayoutPanel4.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// tableLayoutPanel1
 			// 
-			this.tableLayoutPanel1.ColumnCount = 2;
+			this.tableLayoutPanel1.ColumnCount = 3;
 			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
 			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+			this.tableLayoutPanel1.Controls.Add(this.btnStopRecording, 1, 3);
+			this.tableLayoutPanel1.Controls.Add(this.btnStartRecording, 2, 3);
 			this.tableLayoutPanel1.Controls.Add(this.btnOpenFolder, 0, 3);
 			this.tableLayoutPanel1.Controls.Add(this.grpPreview, 1, 2);
 			this.tableLayoutPanel1.Controls.Add(this.grpOptions, 0, 2);
-			this.tableLayoutPanel1.Controls.Add(this.flowLayoutPanel2, 1, 3);
 			this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanel4, 0, 0);
 			this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
@@ -108,6 +108,36 @@
 			this.tableLayoutPanel1.Size = new System.Drawing.Size(612, 374);
 			this.tableLayoutPanel1.TabIndex = 0;
 			// 
+			// btnStopRecording
+			// 
+			this.btnStopRecording.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.btnStopRecording.AutoSize = true;
+			this.btnStopRecording.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+			this.btnStopRecording.Image = global::Mesen.GUI.Properties.Resources.Stop;
+			this.btnStopRecording.Location = new System.Drawing.Point(389, 348);
+			this.btnStopRecording.Name = "btnStopRecording";
+			this.btnStopRecording.Size = new System.Drawing.Size(107, 23);
+			this.btnStopRecording.TabIndex = 7;
+			this.btnStopRecording.Text = "Stop Recording";
+			this.btnStopRecording.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
+			this.btnStopRecording.UseVisualStyleBackColor = true;
+			this.btnStopRecording.Click += new System.EventHandler(this.btnStopRecording_Click);
+			// 
+			// btnStartRecording
+			// 
+			this.btnStartRecording.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.btnStartRecording.AutoSize = true;
+			this.btnStartRecording.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+			this.btnStartRecording.Image = global::Mesen.GUI.Properties.Resources.Record;
+			this.btnStartRecording.Location = new System.Drawing.Point(502, 348);
+			this.btnStartRecording.Name = "btnStartRecording";
+			this.btnStartRecording.Size = new System.Drawing.Size(107, 23);
+			this.btnStartRecording.TabIndex = 6;
+			this.btnStartRecording.Text = "Start Recording";
+			this.btnStartRecording.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
+			this.btnStartRecording.UseVisualStyleBackColor = true;
+			this.btnStartRecording.Click += new System.EventHandler(this.btnStartRecording_Click);
+			// 
 			// btnOpenFolder
 			// 
 			this.btnOpenFolder.AutoSize = true;
@@ -119,11 +149,11 @@
 			this.btnOpenFolder.Text = "Open Save Folder";
 			this.btnOpenFolder.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
 			this.btnOpenFolder.UseVisualStyleBackColor = true;
-			this.btnOpenFolder.Visible = false;
 			this.btnOpenFolder.Click += new System.EventHandler(this.btnOpenFolder_Click);
 			// 
 			// grpPreview
 			// 
+			this.tableLayoutPanel1.SetColumnSpan(this.grpPreview, 2);
 			this.grpPreview.Controls.Add(this.tableLayoutPanel3);
 			this.grpPreview.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.grpPreview.Location = new System.Drawing.Point(340, 32);
@@ -443,49 +473,6 @@
 			this.picScaleHelp.TabIndex = 12;
 			this.picScaleHelp.TabStop = false;
 			// 
-			// flowLayoutPanel2
-			// 
-			this.flowLayoutPanel2.Controls.Add(this.btnStartRecording);
-			this.flowLayoutPanel2.Controls.Add(this.btnStopRecording);
-			this.flowLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.flowLayoutPanel2.FlowDirection = System.Windows.Forms.FlowDirection.RightToLeft;
-			this.flowLayoutPanel2.Location = new System.Drawing.Point(337, 345);
-			this.flowLayoutPanel2.Margin = new System.Windows.Forms.Padding(0, 0, 0, 3);
-			this.flowLayoutPanel2.Name = "flowLayoutPanel2";
-			this.flowLayoutPanel2.Size = new System.Drawing.Size(275, 26);
-			this.flowLayoutPanel2.TabIndex = 7;
-			// 
-			// btnStartRecording
-			// 
-			this.btnStartRecording.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.btnStartRecording.AutoSize = true;
-			this.btnStartRecording.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-			this.btnStartRecording.Image = global::Mesen.GUI.Properties.Resources.Record;
-			this.btnStartRecording.Location = new System.Drawing.Point(165, 3);
-			this.btnStartRecording.Name = "btnStartRecording";
-			this.btnStartRecording.Size = new System.Drawing.Size(107, 23);
-			this.btnStartRecording.TabIndex = 6;
-			this.btnStartRecording.Text = "Start Recording";
-			this.btnStartRecording.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
-			this.btnStartRecording.UseVisualStyleBackColor = true;
-			this.btnStartRecording.Click += new System.EventHandler(this.btnStartRecording_Click);
-			// 
-			// btnStopRecording
-			// 
-			this.btnStopRecording.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.btnStopRecording.AutoSize = true;
-			this.btnStopRecording.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-			this.btnStopRecording.Image = global::Mesen.GUI.Properties.Resources.Stop;
-			this.btnStopRecording.Location = new System.Drawing.Point(52, 3);
-			this.btnStopRecording.Name = "btnStopRecording";
-			this.btnStopRecording.Size = new System.Drawing.Size(107, 23);
-			this.btnStopRecording.TabIndex = 7;
-			this.btnStopRecording.Text = "Stop Recording";
-			this.btnStopRecording.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
-			this.btnStopRecording.UseVisualStyleBackColor = true;
-			this.btnStopRecording.Visible = false;
-			this.btnStopRecording.Click += new System.EventHandler(this.btnStopRecording_Click);
-			// 
 			// tableLayoutPanel4
 			// 
 			this.tableLayoutPanel4.ColumnCount = 3;
@@ -502,13 +489,13 @@
 			this.tableLayoutPanel4.Name = "tableLayoutPanel4";
 			this.tableLayoutPanel4.RowCount = 1;
 			this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel4.Size = new System.Drawing.Size(612, 29);
+			this.tableLayoutPanel4.Size = new System.Drawing.Size(499, 29);
 			this.tableLayoutPanel4.TabIndex = 9;
 			// 
 			// btnSelectFolder
 			// 
 			this.btnSelectFolder.AutoSize = true;
-			this.btnSelectFolder.Location = new System.Drawing.Point(547, 3);
+			this.btnSelectFolder.Location = new System.Drawing.Point(434, 3);
 			this.btnSelectFolder.Name = "btnSelectFolder";
 			this.btnSelectFolder.Size = new System.Drawing.Size(62, 23);
 			this.btnSelectFolder.TabIndex = 8;
@@ -522,7 +509,7 @@
 			this.txtSaveFolder.Location = new System.Drawing.Point(76, 3);
 			this.txtSaveFolder.Name = "txtSaveFolder";
 			this.txtSaveFolder.ReadOnly = true;
-			this.txtSaveFolder.Size = new System.Drawing.Size(465, 20);
+			this.txtSaveFolder.Size = new System.Drawing.Size(352, 20);
 			this.txtSaveFolder.TabIndex = 1;
 			this.txtSaveFolder.TabStop = false;
 			// 
@@ -549,6 +536,7 @@
 			this.Controls.Add(this.tableLayoutPanel1);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
 			this.MaximizeBox = false;
+			this.MinimumSize = new System.Drawing.Size(628, 413);
 			this.Name = "frmHdPackEditor";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
 			this.Text = "HD Pack Builder";
@@ -577,8 +565,6 @@
 			((System.ComponentModel.ISupportInitialize)(this.picBankSizeHelp)).EndInit();
 			this.flowLayoutPanel6.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)(this.picScaleHelp)).EndInit();
-			this.flowLayoutPanel2.ResumeLayout(false);
-			this.flowLayoutPanel2.PerformLayout();
 			this.tableLayoutPanel4.ResumeLayout(false);
 			this.tableLayoutPanel4.PerformLayout();
 			this.ResumeLayout(false);
@@ -606,7 +592,6 @@
 		private System.Windows.Forms.Button btnSelectFolder;
 		private System.Windows.Forms.ComboBox cboChrBankSize;
 		private System.Windows.Forms.Label lblBankSize;
-		private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel2;
 		private System.Windows.Forms.Button btnStopRecording;
 		private System.Windows.Forms.CheckBox chkGroupBlankTiles;
 		private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel3;
