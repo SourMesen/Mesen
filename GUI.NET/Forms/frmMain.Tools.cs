@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.IO.Compression;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Mesen.GUI.Config;
@@ -127,6 +129,87 @@ namespace Mesen.GUI.Forms
 				};
 			} else {
 				_logWindow.Focus();
+			}
+		}
+		
+		private void mnuInstallHdPack_Click(object sender, EventArgs e)
+		{
+			using(OpenFileDialog ofd = new OpenFileDialog()) {
+				ofd.SetFilter(ResourceHelper.GetMessage("FilterZipFiles"));
+				if(ofd.ShowDialog(this) == DialogResult.OK) {
+					try {
+						using(FileStream stream = File.Open(ofd.FileName, FileMode.Open)) {
+							ZipArchive zip = new ZipArchive(stream);
+
+							//Find the hires.txt file
+							ZipArchiveEntry hiresEntry = null;
+							foreach(ZipArchiveEntry entry in zip.Entries) {
+								if(entry.Name == "hires.txt") {
+									hiresEntry = entry;
+									break;
+								}
+							}
+
+							if(hiresEntry != null) {
+								using(Stream entryStream = hiresEntry.Open()) {
+									using(StreamReader reader = new StreamReader(entryStream)) {
+										string hiresData = reader.ReadToEnd();
+										RomInfo romInfo = InteropEmu.GetRomInfo();
+
+										//If there's a "supportedRom" tag, check if it matches the current ROM
+										Regex supportedRomRegex = new Regex("<supportedRom>([^\\n]*)");
+										Match match = supportedRomRegex.Match(hiresData);
+										if(match.Success) {
+											if(!match.Groups[1].Value.ToUpper().Contains(InteropEmu.GetRomInfo().Sha1.ToUpper())) {
+												MesenMsgBox.Show("InstallHdPackWrongRom", MessageBoxButtons.OK, MessageBoxIcon.Error);
+												return;
+											}
+										}
+
+										//Extract HD pack
+										try {
+											string targetFolder = Path.Combine(ConfigManager.HdPackFolder, Path.GetFileNameWithoutExtension(romInfo.GetRomName()));
+											if(Directory.Exists(targetFolder)) {
+												//Warn if the folder already exists
+												if(MesenMsgBox.Show("InstallHdPackConfirmOverwrite", MessageBoxButtons.OKCancel, MessageBoxIcon.Question, targetFolder) != DialogResult.OK) {
+													return;
+												}
+											} else {
+												Directory.CreateDirectory(targetFolder);
+											}
+
+											string hiresFileFolder = hiresEntry.FullName.Substring(0, hiresEntry.FullName.Length - "hires.txt".Length);
+											foreach(ZipArchiveEntry entry in zip.Entries) {
+												//Extract only the files in the same subfolder as the hires.txt file (and only if they have a name & size > 0)
+												if(!string.IsNullOrWhiteSpace(entry.Name) && entry.Length > 0 && entry.FullName.StartsWith(hiresFileFolder)) {
+													entry.ExtractToFile(Path.Combine(targetFolder, entry.Name), true);
+												}
+											}
+										} catch(Exception ex) {
+											MesenMsgBox.Show("InstallHdPackError", MessageBoxButtons.OK, MessageBoxIcon.Error, ex.ToString());
+											return;
+										}
+									}
+
+									//Turn on HD Pack support automatically after installation succeeds
+									ConfigManager.Config.VideoInfo.UseHdPacks = true;
+									ConfigManager.ApplyChanges();
+									ConfigManager.Config.ApplyConfig();
+
+									if(MesenMsgBox.Show("InstallHdPackConfirmReset", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) == DialogResult.OK) {
+										//Power cycle game if the user agrees
+										InteropEmu.PowerCycle();
+									}
+								}
+							} else {
+								MesenMsgBox.Show("InstallHdPackInvalidPack", MessageBoxButtons.OK, MessageBoxIcon.Error);
+							}
+						}
+					} catch {
+						//Invalid file (file missing, not a zip file, etc.)
+						MesenMsgBox.Show("InstallHdPackInvalidZipFile", MessageBoxButtons.OK, MessageBoxIcon.Error);
+					}
+				}
 			}
 		}
 

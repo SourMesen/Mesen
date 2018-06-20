@@ -700,6 +700,7 @@ namespace Mesen.GUI
 		public static RomInfo GetRomInfo(string filename = "")
 		{
 			InteropRomInfo romInfo = new InteropRomInfo();
+			romInfo.Sha1 = new byte[40];
 			InteropEmu.GetRomInfoWrapper(ref romInfo, filename);
 			return new RomInfo(romInfo);
 		}
@@ -1575,6 +1576,9 @@ namespace Mesen.GUI
 		public bool IsChrRam;
 
 		public UInt16 MapperId;
+
+		[MarshalAs(UnmanagedType.ByValArray, SizeConst = 40)]
+		public byte[] Sha1;
 	}
 
 	public enum RomFormat
@@ -1594,6 +1598,7 @@ namespace Mesen.GUI
 		public RomFormat Format;
 		public bool IsChrRam;
 		public UInt16 MapperId;
+		public string Sha1;
 
 		public RomInfo(InteropRomInfo romInfo)
 		{
@@ -1603,6 +1608,7 @@ namespace Mesen.GUI
 			this.Format = romInfo.Format;
 			this.IsChrRam = romInfo.IsChrRam;
 			this.MapperId = romInfo.MapperId;
+			this.Sha1 = Encoding.UTF8.GetString(romInfo.Sha1);
 		}
 
 		public string GetRomName()

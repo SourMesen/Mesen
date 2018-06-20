@@ -92,6 +92,7 @@
 			<Control ID="mnuRunAllTests">Run all tests</Control>
 			<Control ID="mnuDebugger">デバッガ</Control>
 			<Control ID="mnuLogWindow">ログウィンドウ</Control>
+			<Control ID="mnuInstallHdPack">HDパックをインストールする</Control>
 			<Control ID="mnuHdPackEditor">HDパック作成</Control>
 			<Control ID="mnuTakeScreenshot">スクリーンショットを撮る</Control>
 			<Control ID="mnuRandomGame">ランダムゲームを開く</Control>
@@ -697,6 +698,7 @@
 	</UserControls>
 	<Messages>
 		<Message ID="FilterAll">すべてのファイル (*.*)|*.*</Message>
+		<Message ID="FilterZipFiles">ZIPファイル (*.zip)|*.zip</Message>
 		<Message ID="FilterMovie">動画 (*.mmo)|*.mmo|すべてのファイル (*.*)|*.*</Message>
 		<Message ID="FilterWave">WAVファイル (*.wav)|*.wav|すべてのファイル (*.*)|*.*</Message>
 		<Message ID="FilterAvi">AVIファイル (*.avi)|*.avi|すべてのファイル (*.*)|*.*</Message>
@@ -763,6 +765,13 @@
 		<Message ID="HdPackBuilderGroupBlankHelp">This option groups all the blank tiles sequentially into the same PNG&#xA;files - this helps reduce the number of PNG files produced by removing &#xA;almost-empty PNG files containing only blank tiles.</Message>
 		<Message ID="HdPackBuilderLargeSpritesHelp">When enabled, this option will alter the display order of CHR banks&#xA;that contain only sprites to make the sprites easier to edit in the PNG file.</Message>
 		<Message ID="HdPackBuilderIgnoreOverscanHelp">When enabled, this will make the builder ignore any pixels in the overscan area.&#xA;This is useful in games that contain glitches on the outer edge of the screen.&#xA;Incorrect palette combinations due to these glitches will be ignored and won't be shown in the PNG files.</Message>
+
+		<Message ID="InstallHdPackWrongRom">選択したHD Packは起動中のゲームとは非対応であるため、インストールできません。</Message>
+		<Message ID="InstallHdPackError">HD Packをインストールする時にエラーが発生しました：&#xA;&#xA;{0}</Message>
+		<Message ID="InstallHdPackInvalidPack">選択したファイルはHD Packではないため、インストールできません。</Message>
+		<Message ID="InstallHdPackInvalidZipFile">選択したファイルはZIPファイルではないため、ロードできません。</Message>
+		<Message ID="InstallHdPackConfirmOverwrite">インストール先のフォルダ({0})はすでに存在しています。　上書きしますか？</Message>
+		<Message ID="InstallHdPackConfirmReset">HD Packのインストールは成功しました。　ゲームを再起動して、HD Packをロードしますか？</Message>
 
 		<Message ID="MesenUpToDate">既にMesenの最新のバージョンを使っています。</Message>
 		<Message ID="PatchAndReset">パッチファイルを当てて、ゲームをリセットしますか？</Message>

@@ -90,6 +90,7 @@
 			<Control ID="mnuRunAllTests">Запустить все тесты</Control>
 			<Control ID="mnuDebugger">Отладчик</Control>
 			<Control ID="mnuLogWindow">Лог</Control>
+			<Control ID="mnuInstallHdPack">Install HD Pack</Control>
 			<Control ID="mnuHdPackEditor">HD Pack Builder</Control>
 			<Control ID="mnuTakeScreenshot">Сделать скриншот</Control>
 			<Control ID="mnuRandomGame">Load Random Game</Control>
@@ -700,6 +701,7 @@
 	</UserControls>
 	<Messages>
 		<Message ID="FilterAll">Все файлы (*.*)|*.*</Message>
+		<Message ID="FilterZipFiles">Zip files (*.zip)|*.zip</Message>
 		<Message ID="FilterMovie">Записи (*.mmo)|*.mmo|All Files (*.*)|*.*</Message>
 		<Message ID="FilterWave">Wave файлы (*.wav)|*.wav|All Files (*.*)|*.*</Message>
 		<Message ID="FilterAvi">Avi файлы (*.avi)|*.avi|All Files (*.*)|*.*</Message>
@@ -766,6 +768,13 @@
 		<Message ID="HdPackBuilderGroupBlankHelp">This option groups all the blank tiles sequentially into the same PNG&#xA;files - this helps reduce the number of PNG files produced by removing &#xA;almost-empty PNG files containing only blank tiles.</Message>
 		<Message ID="HdPackBuilderLargeSpritesHelp">When enabled, this option will alter the display order of CHR banks&#xA;that contain only sprites to make the sprites easier to edit in the PNG file.</Message>
 		<Message ID="HdPackBuilderIgnoreOverscanHelp">When enabled, this will make the builder ignore any pixels in the overscan area.&#xA;This is useful in games that contain glitches on the outer edge of the screen.&#xA;Incorrect palette combinations due to these glitches will be ignored and won't be shown in the PNG files.</Message>
+
+		<Message ID="InstallHdPackWrongRom">The selected HD Pack is not compatible with the currently running game and cannot be installed.</Message>
+		<Message ID="InstallHdPackError">An error occurred while trying to install the HD Pack: &#xA;&#xA;{0}</Message>
+		<Message ID="InstallHdPackInvalidPack">The selected file is not a valid HD Pack.</Message>
+		<Message ID="InstallHdPackInvalidZipFile">The selected file is not a valid Zip file.</Message>
+		<Message ID="InstallHdPackConfirmOverwrite">The destination folder ({0}) already exists - are you sure you want to overwrite it?</Message>
+		<Message ID="InstallHdPackConfirmReset">The HD Pack has been installed successfully. Do you want to reset the game and load the HD Pack now?</Message>
 
 		<Message ID="MesenUpToDate">Вы используете последнюю версию Mesen</Message>
 		<Message ID="PatchAndReset">Пропатчить и сбросить текущую игру?</Message>

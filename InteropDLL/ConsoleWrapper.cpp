@@ -76,6 +76,7 @@ namespace InteropEmu {
 		RomFormat Format;
 		bool IsChrRam;
 		uint16_t MapperId;
+		char Sha1[40];
 	};
 
 	extern "C" {
@@ -234,6 +235,9 @@ namespace InteropEmu {
 				romInfo.Format = mapperInfo.Format;
 				romInfo.IsChrRam = mapperInfo.UsesChrRam;
 				romInfo.MapperId = mapperInfo.MapperId;
+				if(mapperInfo.Hash.Sha1Hash.size() == 40) {
+					memcpy(romInfo.Sha1, mapperInfo.Hash.Sha1Hash.c_str(), 40);
+				}
 			} else {
 				RomLoader romLoader(true);
 				if(romLoader.LoadFile(romPath)) {
@@ -246,6 +250,9 @@ namespace InteropEmu {
 					romInfo.Format = RomFormat::Unknown;
 					romInfo.IsChrRam = romData.ChrRom.size() == 0;
 					romInfo.MapperId = 0;
+					if(romData.Sha1.size() == 40) {
+						memcpy(romInfo.Sha1, romData.Sha1.c_str(), 40);
+					}
 				} else {
 					_returnString = "";
 					romInfo.RomName = _returnString.c_str();

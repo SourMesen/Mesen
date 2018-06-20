@@ -90,6 +90,7 @@
 			<Control ID="mnuRunAllTests">Запустіті всі тести</Control>
 			<Control ID="mnuDebugger">Налагодження</Control>
 			<Control ID="mnuLogWindow">Лог</Control>
+			<Control ID="mnuInstallHdPack">Install HD Pack</Control>
 			<Control ID="mnuHdPackEditor">HD Pack Builder</Control>
 			<Control ID="mnuTakeScreenshot">Зробити скріншот</Control>
 			<Control ID="mnuRandomGame">Завантажити випадкову гру</Control>
@@ -700,6 +701,7 @@
 	</UserControls>
 	<Messages>
 		<Message ID="FilterAll">Всi файли (*.*)|*.*</Message>
+		<Message ID="FilterZipFiles">Zip files (*.zip)|*.zip</Message>
 		<Message ID="FilterMovie">Записи (*.mmo)|*.mmo|All Files (*.*)|*.*</Message>
 		<Message ID="FilterWave">Wave файли (*.wav)|*.wav|All Files (*.*)|*.*</Message>
 		<Message ID="FilterAvi">Avi файли (*.avi)|*.avi|All Files (*.*)|*.*</Message>
@@ -766,6 +768,13 @@
 		<Message ID="HdPackBuilderGroupBlankHelp">Ця опція об'єднує все порожні плитки послідовно в тi самi PNG&#xA;файли - це допомагає зменшити кількість PNG файлiв створених видаленням &#xA;майже пустих PNG файлiв що містять лише порожні плитки.</Message>
 		<Message ID="HdPackBuilderLargeSpritesHelp">Якщо увімкнено, ця опція змінить порядок відображення CHR банкiв&#xA;що містять лише спрайти щоб легше редагувати у PNG файлi.</Message>
 		<Message ID="HdPackBuilderIgnoreOverscanHelp">Якщо увімкнено, будівельник буде ігнорувати будь-які пікселі в області перегляду.&#xA;Це корисно в іграх які містять глюки на зовнішньому краю екрана.&#xA;Неправильні комбінації палітр через цi глюки будуть проігноровані і не будуть відображатися в файлах PNG.</Message>
+
+		<Message ID="InstallHdPackWrongRom">The selected HD Pack is not compatible with the currently running game and cannot be installed.</Message>
+		<Message ID="InstallHdPackError">An error occurred while trying to install the HD Pack: &#xA;&#xA;{0}</Message>
+		<Message ID="InstallHdPackInvalidPack">The selected file is not a valid HD Pack.</Message>
+		<Message ID="InstallHdPackInvalidZipFile">The selected file is not a valid Zip file.</Message>
+		<Message ID="InstallHdPackConfirmOverwrite">The destination folder ({0}) already exists - are you sure you want to overwrite it?</Message>
+		<Message ID="InstallHdPackConfirmReset">The HD Pack has been installed successfully. Do you want to reset the game and load the HD Pack now?</Message>
 
 		<Message ID="MesenUpToDate">Ви використовуєте останню версію Mesen</Message>
 		<Message ID="PatchAndReset">Пропатчити і скинути поточну гру?</Message>

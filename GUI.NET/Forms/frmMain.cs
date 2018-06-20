@@ -1043,6 +1043,7 @@ namespace Mesen.GUI.Forms
 					mnuScriptWindow.Enabled = running;
 					mnuTraceLogger.Enabled = running;
 
+					mnuInstallHdPack.Enabled = running;
 					mnuHdPackEditor.Enabled = !netPlay && running;
 
 					mnuNetPlay.Enabled = !InteropEmu.IsNsf();

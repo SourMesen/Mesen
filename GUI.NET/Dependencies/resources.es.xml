@@ -90,6 +90,7 @@
 			<Control ID="mnuRunAllTests">Ejecutar todos los tests</Control>
 			<Control ID="mnuDebugger">Depurar</Control>
 			<Control ID="mnuLogWindow">Ventana del registro</Control>
+			<Control ID="mnuInstallHdPack">Install HD Pack</Control>
 			<Control ID="mnuHdPackEditor">Creador de paquetes de alta resolución</Control>
 			<Control ID="mnuTakeScreenshot">Captura de pantalla</Control>
 			<Control ID="mnuRandomGame">Cargar juego aleatorio</Control>
@@ -699,6 +700,7 @@
 	</UserControls>
 	<Messages>
 		<Message ID="FilterAll">Todos los tipos de archivo (*.*)|*.*</Message>
+		<Message ID="FilterZipFiles">Zip files (*.zip)|*.zip</Message>
 		<Message ID="FilterMovie">Videos (*.mmo)|*.mmo|Todos los archivos (*.*)|*.*</Message>
 		<Message ID="FilterWave">Archivos wave (*.wav)|*.wav|Todos los archivos (*.*)|*.*</Message>
 		<Message ID="FilterAvi">Archivos avi (*.avi)|*.avi|Todos los archivos (*.*)|*.*</Message>
@@ -764,6 +766,13 @@
 		<Message ID="HdPackBuilderGroupBlankHelp">Esta opción agrupa todas las tiles blancas secuencialmente a los mismos ficheros&#xA;PNG - esto ayuda a reducir el número de archivos PNG producidos, ya que eliminan &#xA;archivos PNG casi vacíos que solo contienen tiles blancas.</Message>
 		<Message ID="HdPackBuilderLargeSpritesHelp">Si está habilitada, esta opción alterará el orden de aparición de los bancos CHR&#xA;que solo contengan sprites a fin de hacer que los sprites sean más fáciles de editar en el fichero PNG.</Message>
 		<Message ID="HdPackBuilderIgnoreOverscanHelp">Cuando está habilitado, esto hará que se ignoren los píxeles en el área de overscan.&#xA;Esto es útil en juegos que contienen fallos en el borde exterior de la pantalla.&#xA;Las combinaciones de paleta incorrectas debido a estas interferencias se ignorarán y no se mostrarán en los archivos PNG.</Message>
+
+		<Message ID="InstallHdPackWrongRom">The selected HD Pack is not compatible with the currently running game and cannot be installed.</Message>
+		<Message ID="InstallHdPackError">An error occurred while trying to install the HD Pack: &#xA;&#xA;{0}</Message>
+		<Message ID="InstallHdPackInvalidPack">The selected file is not a valid HD Pack.</Message>
+		<Message ID="InstallHdPackInvalidZipFile">The selected file is not a valid Zip file.</Message>
+		<Message ID="InstallHdPackConfirmOverwrite">The destination folder ({0}) already exists - are you sure you want to overwrite it?</Message>
+		<Message ID="InstallHdPackConfirmReset">The HD Pack has been installed successfully. Do you want to reset the game and load the HD Pack now?</Message>
 
 		<Message ID="MesenUpToDate">Ya utiliza la versión mas reciente de Mesen.</Message>
 		<Message ID="PatchAndReset">¿Aplicar el parche y reiniciar el juego?</Message>

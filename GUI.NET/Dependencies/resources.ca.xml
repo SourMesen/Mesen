@@ -91,6 +91,7 @@
 			<Control ID="mnuRunAllTests">Executa tots els tests</Control>
 			<Control ID="mnuDebugger">Depurador</Control>
 			<Control ID="mnuLogWindow">Finestra del registre</Control>
+			<Control ID="mnuInstallHdPack">Install HD Pack</Control>
 			<Control ID="mnuHdPackEditor">Creador de paquets d'alta resolució</Control>
 			<Control ID="mnuTakeScreenshot">Captura de pantalla</Control>
 			<Control ID="mnuRandomGame">Carrega un joc a l'atzar</Control>
@@ -682,6 +683,7 @@
 	</UserControls>
 	<Messages>
 		<Message ID="FilterAll">Tots els fitxers (*.*)|*.*</Message>
+		<Message ID="FilterZipFiles">Zip files (*.zip)|*.zip</Message>
 		<Message ID="FilterMovie">Pel·lícules (*.mmo)|*.mmo|Tots els fitxers (*.*)|*.*</Message>
 		<Message ID="FilterWave">Fitxers de so (*.wav)|*.wav|Tots els fitxers(*.*)|*.*</Message>
 		<Message ID="FilterAvi">Fitxers de vídeo (*.avi)|*.avi|Tots els fitxers (*.*)|*.*</Message>
@@ -747,6 +749,13 @@
 		<Message ID="HdPackBuilderGroupBlankHelp">Aquesta opció agrupa totes les tiles buides seqüencialment als mateixos fitxers&#xA;PNG - això ajuda a reduir el nombre de fitxers PNG produïts, ja que s'eliminen &#xA;fitxers PNG gairebé buits.</Message>
 		<Message ID="HdPackBuilderLargeSpritesHelp">Si està activada, aquesta opció altera l'ordre d'aparició dels bancs CHR&#xA;que sols continguin sprites per tal de fer que els sprites siguin més fàcils d'editar al fitxer PNG.</Message>
 		<Message ID="HdPackBuilderIgnoreOverscanHelp">Quan aquesta opció està activada, qualsevol píxel a l'àrea de sobreescaneig serà ignorat.&#xA;Això és útil en jocs que contenen errors a la franja exterior de la pantalla.&#xA;Combinacions de paleta incorrectes degudes a aquests errors seran ignorades i no es mostraran als fitxers PNG.</Message>
+
+		<Message ID="InstallHdPackWrongRom">The selected HD Pack is not compatible with the currently running game and cannot be installed.</Message>
+		<Message ID="InstallHdPackError">An error occurred while trying to install the HD Pack: &#xA;&#xA;{0}</Message>
+		<Message ID="InstallHdPackInvalidPack">The selected file is not a valid HD Pack.</Message>
+		<Message ID="InstallHdPackInvalidZipFile">The selected file is not a valid Zip file.</Message>
+		<Message ID="InstallHdPackConfirmOverwrite">The destination folder ({0}) already exists - are you sure you want to overwrite it?</Message>
+		<Message ID="InstallHdPackConfirmReset">The HD Pack has been installed successfully. Do you want to reset the game and load the HD Pack now?</Message>
 
 		<Message ID="MesenUpToDate">Ja feu servir la versió més recent de Mesen.</Message>
 		<Message ID="PatchAndReset">Voleu aplicar el pedaç i reiniciar el joc?</Message>

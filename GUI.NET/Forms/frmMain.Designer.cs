@@ -189,8 +189,8 @@ namespace Mesen.GUI.Forms
 			this.mnuApuViewer = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuAssembler = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuDebugDebugger = new System.Windows.Forms.ToolStripMenuItem();
-			this.mnuMemoryViewer = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuEventViewer = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuMemoryViewer = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuPpuViewer = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuScriptWindow = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuTraceLogger = new System.Windows.Forms.ToolStripMenuItem();
@@ -205,6 +205,8 @@ namespace Mesen.GUI.Forms
 			this.mnuReportBug = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem5 = new System.Windows.Forms.ToolStripSeparator();
 			this.mnuAbout = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem27 = new System.Windows.Forms.ToolStripSeparator();
+			this.mnuInstallHdPack = new System.Windows.Forms.ToolStripMenuItem();
 			this.panelRenderer.SuspendLayout();
 			this.panelInfo.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.picIcon)).BeginInit();
@@ -1112,6 +1114,8 @@ namespace Mesen.GUI.Forms
             this.mnuTests,
             this.mnuDebugger,
             this.mnuLogWindow,
+            this.toolStripMenuItem27,
+            this.mnuInstallHdPack,
             this.mnuHdPackEditor,
             this.toolStripMenuItem1,
             this.mnuRandomGame,
@@ -1510,14 +1514,6 @@ namespace Mesen.GUI.Forms
 			this.mnuDebugDebugger.Text = "Debugger";
 			this.mnuDebugDebugger.Click += new System.EventHandler(this.mnuDebugDebugger_Click);
 			// 
-			// mnuMemoryViewer
-			// 
-			this.mnuMemoryViewer.Image = global::Mesen.GUI.Properties.Resources.CheatCode;
-			this.mnuMemoryViewer.Name = "mnuMemoryViewer";
-			this.mnuMemoryViewer.Size = new System.Drawing.Size(162, 22);
-			this.mnuMemoryViewer.Text = "Memory Tools";
-			this.mnuMemoryViewer.Click += new System.EventHandler(this.mnuMemoryViewer_Click);
-			// 
 			// mnuEventViewer
 			// 
 			this.mnuEventViewer.Image = global::Mesen.GUI.Properties.Resources.NesEventViewer;
@@ -1525,6 +1521,14 @@ namespace Mesen.GUI.Forms
 			this.mnuEventViewer.Size = new System.Drawing.Size(162, 22);
 			this.mnuEventViewer.Text = "Event Viewer";
 			this.mnuEventViewer.Click += new System.EventHandler(this.mnuEventViewer_Click);
+			// 
+			// mnuMemoryViewer
+			// 
+			this.mnuMemoryViewer.Image = global::Mesen.GUI.Properties.Resources.CheatCode;
+			this.mnuMemoryViewer.Name = "mnuMemoryViewer";
+			this.mnuMemoryViewer.Size = new System.Drawing.Size(162, 22);
+			this.mnuMemoryViewer.Text = "Memory Tools";
+			this.mnuMemoryViewer.Click += new System.EventHandler(this.mnuMemoryViewer_Click);
 			// 
 			// mnuPpuViewer
 			// 
@@ -1634,6 +1638,19 @@ namespace Mesen.GUI.Forms
 			this.mnuAbout.Size = new System.Drawing.Size(198, 22);
 			this.mnuAbout.Text = "About";
 			this.mnuAbout.Click += new System.EventHandler(this.mnuAbout_Click);
+			// 
+			// toolStripMenuItem27
+			// 
+			this.toolStripMenuItem27.Name = "toolStripMenuItem27";
+			this.toolStripMenuItem27.Size = new System.Drawing.Size(179, 6);
+			// 
+			// mnuInstallHdPack
+			// 
+			this.mnuInstallHdPack.Image = global::Mesen.GUI.Properties.Resources.Import;
+			this.mnuInstallHdPack.Name = "mnuInstallHdPack";
+			this.mnuInstallHdPack.Size = new System.Drawing.Size(182, 22);
+			this.mnuInstallHdPack.Text = "Install HD Pack";
+			this.mnuInstallHdPack.Click += new System.EventHandler(this.mnuInstallHdPack_Click);
 			// 
 			// frmMain
 			// 
@@ -1838,6 +1855,8 @@ namespace Mesen.GUI.Forms
 		private System.Windows.Forms.ToolStripMenuItem mnuApuViewer;
 		private System.Windows.Forms.ToolStripMenuItem mnuEventViewer;
 		private System.Windows.Forms.ToolStripMenuItem mnuLoadLastSession;
+		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem27;
+		private System.Windows.Forms.ToolStripMenuItem mnuInstallHdPack;
 	}
 }
 
