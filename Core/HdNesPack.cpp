@@ -289,6 +289,28 @@ void HdNesPack::GetPixels(uint32_t x, uint32_t y, HdPpuPixelInfo &pixelInfo, uin
 	
 	DrawColor(_palette[pixelInfo.Tile.PpuBackgroundColor], outputBuffer, hdData->Scale, screenWidth);
 
+	bool hasCustomBackground = false;
+	bool hasNonBackgroundSurrounding = false;
+	bool backgroundBehindBgSprites = false;
+	if(_backgroundIndex >= 0) {
+		HdBackgroundInfo &bgInfo = hdData->Backgrounds[_backgroundIndex];
+
+		//Enable custom background if the current pixel fits within the background's boundaries
+		hasCustomBackground =
+			(int32_t)x >= -_bgScrollX &&
+			(int32_t)y >= -_bgScrollY &&
+			(y + _bgScrollY + 1) * hdData->Scale <= bgInfo.Data->Height &&
+			(x + _bgScrollX + 1) * hdData->Scale <= bgInfo.Data->Width;
+
+		if(hasCustomBackground) {
+			hasNonBackgroundSurrounding = _contoursEnabled && IsNextToSprite(x, y);
+			if(bgInfo.BehindBgPrioritySprites) {
+				DrawCustomBackground(outputBuffer, x + _bgScrollX, y + _bgScrollY, hdData->Scale, screenWidth);
+				backgroundBehindBgSprites = true;
+			}
+		}
+	}
+
 	if(hasSprite) {
 		for(int k = pixelInfo.SpriteCount - 1; k >= 0; k--) {
 			if(pixelInfo.Sprite[k].BackgroundPriority) {
@@ -306,22 +328,8 @@ void HdNesPack::GetPixels(uint32_t x, uint32_t y, HdPpuPixelInfo &pixelInfo, uin
 		}
 	}
 	
-	bool hasCustomBackground = false;
-	bool hasNonBackgroundSurrounding = false;
-	if(_backgroundIndex >= 0) {
-		HdBackgroundInfo &bgInfo = hdData->Backgrounds[_backgroundIndex];
-
-		//Enable custom background if the current pixel fits within the background's boundaries
-		hasCustomBackground =
-			(int32_t)x >= -_bgScrollX &&
-			(int32_t)y >= -_bgScrollY &&
-			(y + _bgScrollY + 1) * hdData->Scale <= bgInfo.Data->Height &&
-			(x + _bgScrollX + 1) * hdData->Scale <= bgInfo.Data->Width;
-
-		if(hasCustomBackground) {
-			hasNonBackgroundSurrounding = _contoursEnabled && IsNextToSprite(x, y);
-			DrawCustomBackground(outputBuffer, x + _bgScrollX, y + _bgScrollY, hdData->Scale, screenWidth);
-		}
+	if (hasCustomBackground && !backgroundBehindBgSprites) {
+		DrawCustomBackground(outputBuffer, x + _bgScrollX, y + _bgScrollY, hdData->Scale, screenWidth);
 	}
 
 	if(hdPackTileInfo) {

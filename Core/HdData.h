@@ -314,6 +314,7 @@ struct HdBackgroundInfo
 	vector<HdPackCondition*> Conditions;
 	float HorizontalScrollRatio;
 	float VerticalScrollRatio;
+	bool BehindBgPrioritySprites;
 
 	uint32_t* data()
 	{

@@ -95,6 +95,9 @@ namespace Mesen.GUI.Forms
 					if(ConfigManager.Config.AudioInfo.AudioLatency < 60) {
 						ConfigManager.Config.AudioInfo.AudioLatency = 60;
 					}
+
+					//No reason to keep this disabled by default - enabling it by default makes it easier for new users to install/use HD packs
+					ConfigManager.Config.VideoInfo.UseHdPacks = true;
 				}
 
 				ConfigManager.Config.MesenVersion = InteropEmu.GetMesenVersion();

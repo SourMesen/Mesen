@@ -33,7 +33,7 @@ private:
 	__forceinline void ProcessGrayscaleAndEmphasis(HdPpuPixelInfo &pixelInfo, uint32_t* outputBuffer, uint32_t hdScreenWidth);
 
 public:
-	static const uint32_t CurrentVersion = 101;
+	static const uint32_t CurrentVersion = 102;
 
 	HdNesPack();
 	~HdNesPack();

@@ -23,7 +23,7 @@ namespace Mesen.GUI.Config
 		public ScreenRotation ScreenRotation = ScreenRotation.None;
 		[MinMax(0.1, 5.0)] public double CustomAspectRatio = 1.0;
 		public bool VerticalSync = false;
-		public bool UseHdPacks = false;
+		public bool UseHdPacks = true;
 		public bool IntegerFpsMode = false;
 		public string PaletteData;
 

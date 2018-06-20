@@ -213,7 +213,6 @@ bool HdPackLoader::ProcessImgTag(string src)
 		bitmapInfo.PixelData.resize(pixelData.size() / 4);
 		memcpy(bitmapInfo.PixelData.data(), pixelData.data(), bitmapInfo.PixelData.size() * sizeof(bitmapInfo.PixelData[0]));
 
-
 		_hdNesBitmaps.push_back(bitmapInfo);
 		return true;
 	} else {
@@ -533,6 +532,7 @@ void HdPackLoader::ProcessBackgroundTag(vector<string> &tokens, vector<HdPackCon
 		backgroundInfo.Brightness = (uint8_t)(std::stof(tokens[1]) * 255);
 		backgroundInfo.HorizontalScrollRatio = 0;
 		backgroundInfo.VerticalScrollRatio = 0;
+		backgroundInfo.BehindBgPrioritySprites = false;
 
 		for(HdPackCondition* condition : conditions) {
 			if(
@@ -555,6 +555,10 @@ void HdPackLoader::ProcessBackgroundTag(vector<string> &tokens, vector<HdPackCon
 			backgroundInfo.HorizontalScrollRatio = std::stof(tokens[2]);
 			if(tokens.size() > 3) {
 				backgroundInfo.VerticalScrollRatio = std::stof(tokens[3]);
+			}
+			if(tokens.size() > 4) {
+				checkConstraint(_data->Version >= 102, "[HDPack] This feature requires version 102+ of HD Packs");
+				backgroundInfo.BehindBgPrioritySprites = tokens[4] == "Y";
 			}
 		}
 
