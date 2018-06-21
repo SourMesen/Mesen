@@ -52,7 +52,7 @@ struct TraceLoggerOptions
 class TraceLogger
 {
 private:
-	static TraceLogger *_instance;
+	constexpr static int ExecutionLogSize = 30000;
 
 	//Must be static to be thread-safe when switching game
 	static string _executionTrace;
@@ -73,7 +73,6 @@ private:
 	DebugState _lastState;
 	DisassemblyInfo _lastDisassemblyInfo;
 
-	constexpr static int ExecutionLogSize = 30000;
 	bool _logToFile;
 	uint16_t _currentPos;
 	uint32_t _logCount;
@@ -105,9 +104,7 @@ public:
 	void StartLogging(string filename);
 	void StopLogging();
 
+	void LogExtraInfo(const char *log);
+
 	const char* GetExecutionTrace(uint32_t lineCount);
-
-	static void LogStatic(const char *log);
-	static void LogStatic(string log);
-
 };

@@ -12,7 +12,6 @@
 #include "../Utilities/HexUtilities.h"
 #include "../Utilities/FolderUtilities.h"
 
-TraceLogger *TraceLogger::_instance = nullptr;
 string TraceLogger::_executionTrace = "";
 
 TraceLogger::TraceLogger(Debugger* debugger, shared_ptr<MemoryManager> memoryManager, shared_ptr<LabelManager> labelManager)
@@ -20,7 +19,6 @@ TraceLogger::TraceLogger(Debugger* debugger, shared_ptr<MemoryManager> memoryMan
 	_expEvaluator = shared_ptr<ExpressionEvaluator>(new ExpressionEvaluator(debugger));
 	_memoryManager = memoryManager;
 	_labelManager = labelManager;
-	_instance = this;
 	_currentPos = 0;
 	_logCount = 0;
 	_logToFile = false;
@@ -30,7 +28,6 @@ TraceLogger::TraceLogger(Debugger* debugger, shared_ptr<MemoryManager> memoryMan
 TraceLogger::~TraceLogger()
 {
 	StopLogging();
-	_instance = nullptr;
 }
 
 template<typename T>
@@ -153,20 +150,13 @@ void TraceLogger::StopLogging()
 	}
 }
 
-void TraceLogger::LogStatic(const char *log)
+void TraceLogger::LogExtraInfo(const char *log)
 {
-	if(_instance && _instance->_logToFile && _instance->_options.ShowExtraInfo) {
-		LogStatic(string(log));
-	}
-}
-
-void TraceLogger::LogStatic(string log)
-{
-	if(_instance && _instance->_logToFile && _instance->_options.ShowExtraInfo) {
+	if(_logToFile && _options.ShowExtraInfo) {
 		//Flush current buffer
-		_instance->_outputFile << _instance->_outputBuffer;
-		_instance->_outputBuffer.clear();
-		_instance->_outputFile << "[" << log << " - Cycle: " << std::to_string(CPU::GetCycleCount()) << "]" << (_instance->_options.UseWindowsEol ? "\r\n" : "\n");
+		_outputFile << _outputBuffer;
+		_outputBuffer.clear();
+		_outputFile << "[" << log << " - Cycle: " << std::to_string(CPU::GetCycleCount()) << "]" << (_options.UseWindowsEol ? "\r\n" : "\n");
 	}
 }
 

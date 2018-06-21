@@ -231,6 +231,8 @@ public:
 	static bool IsEnabled();
 	static void BreakIfDebugging();
 
+	static void AddTrace(const char *log);
+
 	void SetFreezeState(uint16_t address, bool frozen);
 	void GetFreezeState(uint16_t startAddress, uint16_t length, bool* freezeState);
 

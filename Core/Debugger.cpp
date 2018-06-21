@@ -1452,3 +1452,10 @@ uint32_t Debugger::GetDebugEventCount()
 {
 	return (uint32_t)_debugEvents.size();
 }
+
+void Debugger::AddTrace(const char* log)
+{
+	if(Debugger::Instance) {
+		Debugger::Instance->_traceLogger->LogExtraInfo(log);
+	}
+}

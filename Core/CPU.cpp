@@ -3,7 +3,6 @@
 #include "PPU.h"
 #include "APU.h"
 #include "DeltaModulationChannel.h"
-#include "TraceLogger.h"
 #include "Debugger.h"
 #include "NsfMapper.h"
 #include "MemoryManager.h"
@@ -142,14 +141,14 @@ void CPU::IRQ()
 		SetPC(MemoryReadWord(CPU::NMIVector));
 		_state.NMIFlag = false;
 
-		TraceLogger::LogStatic("NMI");
+		Debugger::AddTrace("NMI");
 		Debugger::ProcessInterrupt(originalPc, _state.PC, true);
 	} else {
 		Push((uint8_t)(PS() | PSFlags::Reserved));
 		SetFlags(PSFlags::Interrupt);
 		SetPC(MemoryReadWord(CPU::IRQVector));
 
-		TraceLogger::LogStatic("IRQ");
+		Debugger::AddTrace("IRQ");
 		Debugger::ProcessInterrupt(originalPc, _state.PC, false);
 	}
 }
@@ -164,14 +163,14 @@ void CPU::BRK() {
 
 		SetPC(MemoryReadWord(CPU::NMIVector));
 
-		TraceLogger::LogStatic("NMI");
+		Debugger::AddTrace("NMI");
 	} else {
 		Push((uint8_t)flags);
 		SetFlags(PSFlags::Interrupt);
 
 		SetPC(MemoryReadWord(CPU::IRQVector));
 
-		TraceLogger::LogStatic("IRQ");
+		Debugger::AddTrace("IRQ");
 	}
 
 	//Since we just set the flag to prevent interrupts, do not run one right away after this (fixes nmi_and_brk & nmi_and_irq tests)
@@ -266,7 +265,7 @@ void CPU::IncCycleCount()
 			//Update the DMC buffer when the stall period is completed
 			_dmcDmaRunning = false;
 			DeltaModulationChannel::SetReadBuffer();
-			TraceLogger::LogStatic("DMC DMA End");
+			Debugger::AddTrace("DMC DMA End");
 		}
 	}
 
@@ -285,7 +284,7 @@ void CPU::IncCycleCount()
 
 void CPU::RunDMATransfer(uint8_t offsetValue)
 {
-	TraceLogger::LogStatic("Sprite DMA Start");
+	Debugger::AddTrace("Sprite DMA Start");
 	Instance->_spriteDmaTransfer = true;
 	
 	//"The CPU is suspended during the transfer, which will take 513 or 514 cycles after the $4014 write tick."
@@ -310,14 +309,14 @@ void CPU::RunDMATransfer(uint8_t offsetValue)
 	
 	Instance->_spriteDmaTransfer = false;
 
-	TraceLogger::LogStatic("Sprite DMA End");
+	Debugger::AddTrace("Sprite DMA End");
 }
 
 void CPU::StartDmcTransfer()
 {
 	//"DMC DMA adds 4 cycles normally, 2 if it lands on the $4014 write or during OAM DMA"
 	//3 cycles if it lands on the last write cycle of any instruction
-	TraceLogger::LogStatic("DMC DMA Start");
+	Debugger::AddTrace("DMC DMA Start");
 	Instance->_dmcDmaRunning = true;
 	if(Instance->_spriteDmaTransfer) {
 		if(Instance->_spriteDmaCounter == 2) {
