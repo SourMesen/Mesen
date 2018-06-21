@@ -70,7 +70,8 @@ namespace Mesen.GUI
 		{
 			ZipArchive zip = new ZipArchive(Assembly.GetExecutingAssembly().GetManifestResourceStream("Mesen.GUI.Dependencies.Dependencies.zip"));
 			foreach(ZipArchiveEntry entry in zip.Entries) {
-				if(entry.Name == filename) {
+				string entryFileName = Program.IsMono ? entry.Name.Substring(entry.Name.LastIndexOf('\\') + 1) : entry.Name;
+				if(entryFileName == filename) {
 					using(Stream stream = entry.Open()) {
 						using(StreamReader reader = new StreamReader(stream)) {
 							return reader.ReadToEnd();
