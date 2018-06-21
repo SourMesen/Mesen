@@ -27,11 +27,11 @@ namespace FastColoredTextBoxNS
             this[KEYS.Control | KEYS.Alt | KEYS.F] = FCTBAction.FindChar;
             this[KEYS.F3] = FCTBAction.FindNext;
             this[KEYS.Control | KEYS.H] = FCTBAction.ReplaceDialog;
-            this[KEYS.Control | KEYS.C] = FCTBAction.Copy;
+            //this[KEYS.Control | KEYS.C] = FCTBAction.Copy;
             this[KEYS.Control | KEYS.Shift | KEYS.C] = FCTBAction.CommentSelected;
-            this[KEYS.Control | KEYS.X] = FCTBAction.Cut;
-            this[KEYS.Control | KEYS.V] = FCTBAction.Paste;
-            this[KEYS.Control | KEYS.A] = FCTBAction.SelectAll;
+            //this[KEYS.Control | KEYS.X] = FCTBAction.Cut;
+            //this[KEYS.Control | KEYS.V] = FCTBAction.Paste;
+            //this[KEYS.Control | KEYS.A] = FCTBAction.SelectAll;
             this[KEYS.Control | KEYS.Z] = FCTBAction.Undo;
             this[KEYS.Control | KEYS.Y] = FCTBAction.Redo;
             this[KEYS.Control | KEYS.U] = FCTBAction.UpperCase;
