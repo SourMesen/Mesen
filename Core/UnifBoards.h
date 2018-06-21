@@ -68,5 +68,6 @@ namespace UnifBoards {
 		Yoko,
 		Unl8237A,
 		BmcHpxx,
+		DragonFighter,
 	};
 }

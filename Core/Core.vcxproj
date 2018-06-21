@@ -526,6 +526,7 @@
     <ClInclude Include="CityFighter.h" />
     <ClInclude Include="ControlDeviceState.h" />
     <ClInclude Include="Dance2000.h" />
+    <ClInclude Include="DragonFighter.h" />
     <ClInclude Include="DrawScreenBufferCommand.h" />
     <ClInclude Include="FdsSystemActionManager.h" />
     <ClInclude Include="HdPackConditions.h" />
