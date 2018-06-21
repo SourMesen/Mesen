@@ -158,5 +158,5 @@ std::unordered_map<string, int> UnifLoader::_boardMappings = std::unordered_map<
 	{ "80013-B", UnifBoards::Bmc80013B },
 	{ "WAIXING-FW01", 227 },
 	{ "WAIXING-FS005", UnifBoards::UnknownBoard },
-	{ "HPxx", UnifBoards::UnknownBoard },
+	{ "HPxx", UnifBoards::BmcHpxx },
 };

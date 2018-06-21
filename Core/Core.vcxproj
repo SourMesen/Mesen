@@ -522,6 +522,7 @@
     <ClInclude Include="Bmc8157.h" />
     <ClInclude Include="Bmc830118C.h" />
     <ClInclude Include="Bmc8in1.h" />
+    <ClInclude Include="BmcHpxx.h" />
     <ClInclude Include="CityFighter.h" />
     <ClInclude Include="ControlDeviceState.h" />
     <ClInclude Include="Dance2000.h" />

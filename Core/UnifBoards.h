@@ -66,6 +66,7 @@ namespace UnifBoards {
 		CityFighter,
 		UnlVrc7,
 		Yoko,
-		Unl8237A
+		Unl8237A,
+		BmcHpxx,
 	};
 }

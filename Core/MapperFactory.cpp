@@ -57,6 +57,7 @@
 #include "Henggedianzi177.h"
 #include "Henggedianzi179.h"
 #include "Hp898f.h"
+#include "BmcHPxx.h"
 #include "IremG101.h"
 #include "IremH3001.h"
 #include "IremLrog017.h"
@@ -545,6 +546,7 @@ BaseMapper* MapperFactory::GetMapperFromID(RomData &romData)
 		case UnifBoards::Bmc8in1: return new Bmc8in1();
 		case UnifBoards::BmcF15: return new MMC3_BmcF15();
 		case UnifBoards::BmcG146: return new BmcG146();
+		case UnifBoards::BmcHpxx: return new BmcHpxx();
 		case UnifBoards::BmcNtd03: return new BmcNtd03();
 		case UnifBoards::Bs5: return new Bs5();
 		case UnifBoards::Cc21: return new Cc21();
