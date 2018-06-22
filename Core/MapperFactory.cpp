@@ -58,7 +58,7 @@
 #include "Henggedianzi177.h"
 #include "Henggedianzi179.h"
 #include "Hp898f.h"
-#include "BmcHPxx.h"
+#include "BmcHpxx.h"
 #include "IremG101.h"
 #include "IremH3001.h"
 #include "IremLrog017.h"
