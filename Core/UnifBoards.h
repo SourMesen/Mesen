@@ -69,5 +69,6 @@ namespace UnifBoards {
 		Unl8237A,
 		BmcHpxx,
 		DragonFighter,
+		BmcGn45,
 	};
 }

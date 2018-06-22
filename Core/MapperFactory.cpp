@@ -31,6 +31,7 @@
 #include "Bmc830118C.h"
 #include "Bmc8in1.h"
 #include "BmcG146.h"
+#include "BmcGn45.h"
 #include "BmcNtd03.h"
 #include "BnRom.h"
 #include "Bs5.h"
@@ -547,6 +548,7 @@ BaseMapper* MapperFactory::GetMapperFromID(RomData &romData)
 		case UnifBoards::Bmc8in1: return new Bmc8in1();
 		case UnifBoards::BmcF15: return new MMC3_BmcF15();
 		case UnifBoards::BmcG146: return new BmcG146();
+		case UnifBoards::BmcGn45: return new BmcGn45();
 		case UnifBoards::BmcHpxx: return new BmcHpxx();
 		case UnifBoards::BmcNtd03: return new BmcNtd03();
 		case UnifBoards::Bs5: return new Bs5();
@@ -560,7 +562,7 @@ BaseMapper* MapperFactory::GetMapperFromID(RomData &romData)
 		case UnifBoards::Eh8813A: return new Eh8813A();
 		case UnifBoards::Fk23C: return new MMC3_Fk23C(false);
 		case UnifBoards::Fk23Ca: return new MMC3_Fk23C(true);
-		case UnifBoards::Ghostbusters63in1: return new Ghostbusters63in1();			
+		case UnifBoards::Ghostbusters63in1: return new Ghostbusters63in1();
 		case UnifBoards::Gs2004: return new Gs2004();
 		case UnifBoards::Gs2013: return new Gs2013();
 		case UnifBoards::Hp898f: return new Hp898f();

@@ -4,7 +4,7 @@
 #
 # Automatically generated database based on Nestopia's DB and NesCartDB
 #
-# Generated on 2018-04-16 using:
+# Generated on 2018-06-22 using:
 #     -NesCartDB (dated 2017-08-21)
 #     -Nestopia UE's latest DB (dated 2015-10-22) 
 # 
@@ -4893,7 +4893,7 @@
 5033AF84,NesNtsc,UNK,,,4,128,128,,0,0,0,h,,,
 5034B399,NesNtsc,UNK,,,0,16,8,,0,0,0,h,,,
 5034F443,NesNtsc,UNK,,,2,128,,,0,0,0,v,,,
-503566B2,NesNtsc,UNK,,,205,512,512,,0,0,0,h,,,
+503566B2,NesNtsc,BMC-GN-45,,,65000,512,512,,0,0,0,h,,,
 503D9FA7,NesNtsc,UNK,,,4,128,128,,0,0,0,h,,,
 5047CDB4,NesNtsc,UNK,,,1,128,128,,0,0,0,h,,,
 504BDFB8,NesNtsc,UNK,,,4,256,128,,0,8,1,h,,,
@@ -5514,6 +5514,7 @@
 5A9664D0,Famicom,,,,4,128,256,,0,0,0,,,,
 5A9D96D3,NesNtsc,UNK,,,4,128,128,,0,0,0,h,,,
 5A9EA721,NesNtsc,UNK,,,1,128,128,,0,0,0,h,,,
+5AA23A15,NesNtsc,BMC-GN-45,,,65000,512,512,,0,0,0,h,,,
 5AAA3239,NesNtsc,UNK,,,1,128,128,,0,0,0,h,,,
 5AAC2B09,NesNtsc,UNK,,,4,256,128,,0,8,1,h,,,
 5AAFFF2A,NesNtsc,UNK,,,4,128,160,,0,0,0,h,,,
@@ -14977,7 +14978,7 @@ F6AB12A2,NesNtsc,UNK,,,1,128,128,,0,0,0,h,,,
 F6AF241B,NesNtsc,UNK,,,4,256,256,,0,8,1,h,,,
 F6B68541,NesNtsc,UNK,,,3,32,32,,0,0,0,v,,,
 F6B9799C,NesNtsc,NES-SNROM,NES-SNROM-05,MMC1B2,1,256,,8,0,8,1,,,,
-F6B9D088,NesNtsc,UNK,,,205,512,512,,0,0,0,h,,,
+F6B9D088,NesNtsc,BMC-GN-45,,,65000,512,512,,0,0,0,h,,,
 F6BB3AC2,NesNtsc,UNK,,,4,128,128,,0,0,0,v,,,
 F6BCA10F,NesNtsc,UNK,,,0,32,8,,0,0,0,v,,,
 F6BD8E31,NesNtsc,UNK,,,90,512,512,,0,0,0,h,,,
