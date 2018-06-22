@@ -90,7 +90,7 @@
 			<Control ID="mnuRunAllTests">Executar todos os testes</Control>
 			<Control ID="mnuDebugger">Depurar</Control>
 			<Control ID="mnuLogWindow">Janela de relatório</Control>
-			<Control ID="mnuInstallHdPack">Install HD Pack</Control>
+			<Control ID="mnuInstallHdPack">Instalar pacote de alta definição</Control>
 			<Control ID="mnuHdPackEditor">Criador de pacote de alta definição</Control>
 			<Control ID="mnuTakeScreenshot">Captura de tela</Control>
 			<Control ID="mnuRandomGame">Carregar jogo aleatório</Control>
@@ -698,7 +698,7 @@
 	</UserControls>
 	<Messages>
 		<Message ID="FilterAll">Todos os tipos de arquivo (*.*)|*.*</Message>
-		<Message ID="FilterZipFiles">Zip files (*.zip)|*.zip</Message>
+		<Message ID="FilterZipFiles">Arquivos zip (*.zip)|*.zip</Message>
 		<Message ID="FilterMovie">Vídeos (*.mmo)|*.mmo|Todos os arquivos (*.*)|*.*</Message>
 		<Message ID="FilterWave">Arquivos wave (*.wav)|*.wav|Todos os arquivos (*.*)|*.*</Message>
 		<Message ID="FilterAvi">Arquivos avi (*.avi)|*.avi|Todos os arquivos (*.*)|*.*</Message>
@@ -767,12 +767,12 @@
 		<Message ID="HdPackBuilderLargeSpritesHelp">Se habilitada, esta opção irá alterar a ordem de exibição dos bancos de CHR&#xA;contendo apenas sprites, de modo a tornar os sprites mais fáceis de editar no arquivo PNG.</Message>
 		<Message ID="HdPackBuilderIgnoreOverscanHelp">Quando habilitado, isso fará com que o construtor ignore quaisquer pixels na área de overscan.&#xA;Isso é útil em jogos que contenham falhas na borda externa da tela.&#xA;Combinações de paleta incorretas devido a essas falhas serão ignoradas e não serão mostradas nos arquivos PNG.</Message>
 
-		<Message ID="InstallHdPackWrongRom">The selected HD Pack is not compatible with the currently running game and cannot be installed.</Message>
-		<Message ID="InstallHdPackError">An error occurred while trying to install the HD Pack: &#xA;&#xA;{0}</Message>
-		<Message ID="InstallHdPackInvalidPack">The selected file is not a valid HD Pack.</Message>
-		<Message ID="InstallHdPackInvalidZipFile">The selected file is not a valid Zip file.</Message>
-		<Message ID="InstallHdPackConfirmOverwrite">The destination folder ({0}) already exists - are you sure you want to overwrite it?</Message>
-		<Message ID="InstallHdPackConfirmReset">The HD Pack has been installed successfully. Do you want to reset the game and load the HD Pack now?</Message>
+		<Message ID="InstallHdPackWrongRom">O pacote de alta definição selecionado não é compatível com o jogo atualmente em execução e não pode ser instalado.</Message>
+		<Message ID="InstallHdPackError">Ocorreu um erro ao tentar instalar o pacote de alta definição: &#xA;&#xA;{0}</Message>
+		<Message ID="InstallHdPackInvalidPack">O arquivo selecionado não é um pacote de alta definição válido.</Message>
+		<Message ID="InstallHdPackInvalidZipFile">O arquivo selecionado não é um arquivo Zip válido.</Message>
+		<Message ID="InstallHdPackConfirmOverwrite">A pasta de destino ({0}) já existe. Tem certeza de que quer sobrescrevê-la?</Message>
+		<Message ID="InstallHdPackConfirmReset">O pacote de alta definição foi instalado com sucesso. Você quer reiniciar o jogo e carregar o pacote agora?</Message>
 
 		<Message ID="MesenUpToDate">Você já utiliza a versão mais recente do Mesen.</Message>
 		<Message ID="PatchAndReset">Aplicar o patch e reiniciar o jogo?</Message>
