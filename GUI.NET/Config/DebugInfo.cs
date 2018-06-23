@@ -325,6 +325,17 @@ namespace Mesen.GUI.Config
 		public float AssemblerFontSize = BaseControl.DefaultFontSize;
 		public int AssemblerZoom = 100;
 
+		public Point? TextHookerWindowLocation = null;
+		public bool TextHookerAutoRefresh = true;
+		public bool TextHookerRefreshOnBreak = true;
+		public int TextHookerDisplayCycle = 0;
+		public int TextHookerDisplayScanline = 241;
+		public List<CharMap> TextHookerCharMappings = new List<CharMap>();
+		public DakutenMode TextHookerDakutenMode = DakutenMode.OnTop;
+		public bool TextHookerAdjustViewportScrolling = true;
+		public bool TextHookerIgnoreMirroredNametables = true;
+		public bool TextHookerAutoCopyToClipboard = false;
+
 		public DebuggerShortcutsConfig Shortcuts = new DebuggerShortcutsConfig();
 		public DebugImportConfig ImportConfig = new DebugImportConfig();
 
@@ -440,5 +451,20 @@ namespace Mesen.GUI.Config
 				}
 			}
 		}
+	}
+
+	public class CharMap
+	{
+		[XmlAttribute]
+		public string Key;
+		[XmlAttribute]
+		public string Value;
+	}
+
+	public enum DakutenMode
+	{
+		Ignore,
+		OnTheRight,
+		OnTop
 	}
 }

@@ -30,6 +30,7 @@ namespace Mesen.GUI.Debugger
 					case DebugWindow.ScriptWindow: frm = new frmScript(); break;
 					case DebugWindow.ApuViewer: frm = new frmApuViewer(); break;
 					case DebugWindow.EventViewer: frm = new frmEventViewer(); break;
+					case DebugWindow.TextHooker: frm = new frmTextHooker(); break;
 				}
 				_openedWindows.Add(frm);
 				frm.FormClosed += Debugger_FormClosed;
@@ -92,6 +93,7 @@ namespace Mesen.GUI.Debugger
 				case DebugWindow.Assembler: return _openedWindows.ToList().Find((form) => form.GetType() == typeof(frmAssembler));
 				case DebugWindow.Debugger: return _openedWindows.ToList().Find((form) => form.GetType() == typeof(frmDebugger));
 				case DebugWindow.ApuViewer: return _openedWindows.ToList().Find((form) => form.GetType() == typeof(frmApuViewer));
+				case DebugWindow.TextHooker: return _openedWindows.ToList().Find((form) => form.GetType() == typeof(frmTextHooker));
 			}
 
 			return null;
@@ -126,6 +128,7 @@ namespace Mesen.GUI.Debugger
 		Debugger,
 		ScriptWindow,
 		ApuViewer,
-		EventViewer
+		EventViewer,
+		TextHooker,
 	}
 }

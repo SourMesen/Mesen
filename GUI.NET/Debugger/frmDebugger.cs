@@ -265,6 +265,7 @@ namespace Mesen.GUI.Debugger
 			mnuPpuViewer.InitShortcut(this, nameof(DebuggerShortcutsConfig.OpenPpuViewer));
 			mnuScriptWindow.InitShortcut(this, nameof(DebuggerShortcutsConfig.OpenScriptWindow));
 			mnuTraceLogger.InitShortcut(this, nameof(DebuggerShortcutsConfig.OpenTraceLogger));
+			mnuTextHooker.InitShortcut(this, nameof(DebuggerShortcutsConfig.OpenTextHooker));
 		}
 
 		private void InitToolbar()
@@ -277,7 +278,7 @@ namespace Mesen.GUI.Debugger
 				mnuRunPpuCycle, mnuRunScanline, mnuRunOneFrame, null,
 				mnuToggleBreakpoint, mnuDisableEnableBreakpoint, null,
 				mnuFind, mnuFindPrev, mnuFindNext, null,
-				mnuApuViewer, mnuAssembler, mnuEventViewer, mnuMemoryViewer, mnuPpuViewer, mnuScriptWindow, mnuTraceLogger, null,
+				mnuApuViewer, mnuAssembler, mnuEventViewer, mnuMemoryViewer, mnuPpuViewer, mnuScriptWindow, mnuTextHooker, mnuTraceLogger, null,
 				mnuEditHeader, null,
 				mnuSplitView, mnuUseVerticalLayout, null
 			);
@@ -961,6 +962,11 @@ namespace Mesen.GUI.Debugger
 					_lastCodeWindow.ScrollToLineNumber(relAddress);
 				}
 			}
+		}
+
+		private void mnuTextHooker_Click(object sender, EventArgs e)
+		{
+			DebugWindowManager.OpenDebugWindow(DebugWindow.TextHooker);
 		}
 
 		private void mnuTraceLogger_Click(object sender, EventArgs e)

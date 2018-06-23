@@ -28,8 +28,7 @@ namespace Mesen.GUI.Debugger
 		{
 			InitializeComponent();
 
-			_ppuViewerId = _nextPpuViewerId;
-			_nextPpuViewerId++;
+			_ppuViewerId = GetNextPpuViewerId();
 
 			this._selectedTab = this.tpgNametableViewer;
 			this.mnuAutoRefresh.Checked = ConfigManager.Config.DebugInfo.PpuAutoRefresh;
@@ -40,6 +39,11 @@ namespace Mesen.GUI.Debugger
 				this.StartPosition = FormStartPosition.Manual;
 				this.Location = ConfigManager.Config.DebugInfo.PpuWindowLocation.Value;
 			}
+		}
+
+		public static int GetNextPpuViewerId()
+		{
+			return _nextPpuViewerId++;
 		}
 
 		private void InitShortcuts()
@@ -55,10 +59,7 @@ namespace Mesen.GUI.Debugger
 				this._notifListener = new InteropEmu.NotificationListener();
 				this._notifListener.OnNotification += this._notifListener_OnNotification;
 
-				this.nudScanline.Value = ConfigManager.Config.DebugInfo.PpuDisplayScanline;
-				this.nudCycle.Value = ConfigManager.Config.DebugInfo.PpuDisplayCycle;
-
-				InteropEmu.DebugSetPpuViewerScanlineCycle(_ppuViewerId, (int)this.nudScanline.Value, (int)this.nudCycle.Value);
+				this.ctrlScanlineCycle.Initialize(_ppuViewerId, ConfigManager.Config.DebugInfo.PpuDisplayScanline, ConfigManager.Config.DebugInfo.PpuDisplayCycle);
 
 				this.ctrlNametableViewer.GetData();
 				this.ctrlChrViewer.GetData();
@@ -79,6 +80,8 @@ namespace Mesen.GUI.Debugger
 			base.OnFormClosing(e);
 			this._notifListener.OnNotification -= this._notifListener_OnNotification;
 			ConfigManager.Config.DebugInfo.PpuWindowLocation = this.WindowState != FormWindowState.Normal ? this.RestoreBounds.Location : this.Location;
+			ConfigManager.Config.DebugInfo.PpuDisplayScanline = ctrlScanlineCycle.Scanline;
+			ConfigManager.Config.DebugInfo.PpuDisplayCycle = ctrlScanlineCycle.Cycle;
 			ConfigManager.ApplyChanges();
 			InteropEmu.DebugClearPpuViewerSettings(_ppuViewerId);
 		}
@@ -107,7 +110,7 @@ namespace Mesen.GUI.Debugger
 
 				case InteropEmu.ConsoleNotificationType.GameLoaded:
 					//Configuration is lost when debugger is restarted (when switching game or power cycling)
-					InteropEmu.DebugSetPpuViewerScanlineCycle(_ppuViewerId, ConfigManager.Config.DebugInfo.PpuDisplayScanline, ConfigManager.Config.DebugInfo.PpuDisplayCycle);
+					ctrlScanlineCycle.RefreshSettings();
 					break;
 			}
 		}
@@ -162,23 +165,7 @@ namespace Mesen.GUI.Debugger
 			ConfigManager.Config.DebugInfo.PpuRefreshOnBreak = this.mnuRefreshOnBreak.Checked;
 			ConfigManager.ApplyChanges();
 		}
-
-		private void SetUpdateScanlineCycle(int scanline, int cycle)
-		{
-			scanline = Math.Min(260, Math.Max(-1, scanline));
-			cycle = Math.Min(340, Math.Max(0, cycle));
-
-			InteropEmu.DebugSetPpuViewerScanlineCycle(_ppuViewerId, scanline, cycle);
-			ConfigManager.Config.DebugInfo.PpuDisplayScanline = scanline;
-			ConfigManager.Config.DebugInfo.PpuDisplayCycle = cycle;
-			ConfigManager.ApplyChanges();
-		}
-
-		private void nudScanlineCycle_ValueChanged(object sender, EventArgs e)
-		{
-			SetUpdateScanlineCycle((int)this.nudScanline.Value, (int)this.nudCycle.Value);
-		}
-
+				
 		private void tabMain_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			this._selectedTab = this.tabMain.SelectedTab;
@@ -189,15 +176,9 @@ namespace Mesen.GUI.Debugger
 			}
 		}
 
-		private void btnReset_Click(object sender, EventArgs e)
-		{
-			this.nudScanline.Value = 241;
-			this.nudCycle.Value = 0;
-		}
-
 		protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
 		{
-			if(!this.nudScanline.ContainsFocus && !this.nudCycle.ContainsFocus) {
+			if(!this.ctrlScanlineCycle.ContainsFocus) {
 				if(keyData == ConfigManager.Config.DebugInfo.Shortcuts.Copy) {
 					if(this.tabMain.SelectedTab == tpgNametableViewer) {
 						ctrlNametableViewer.CopyToClipboard();

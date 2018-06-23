@@ -1145,5 +1145,10 @@
 			<Value ID="Undefined2">Undefined (2)</Value>
 			<Value ID="Undefined3">Undefined (3)</Value>
 		</Enum>
+		<Enum ID="DakutenMode">
+			<Value ID="Ignore">Ignore</Value>
+			<Value ID="OnTheRight">On the right</Value>
+			<Value ID="OnTop">On top</Value>
+		</Enum>
 	</Enums>
 </Resources>

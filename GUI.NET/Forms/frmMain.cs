@@ -710,6 +710,7 @@ namespace Mesen.GUI.Forms
 			mnuPpuViewer.InitShortcut(this, nameof(DebuggerShortcutsConfig.OpenPpuViewer));
 			mnuScriptWindow.InitShortcut(this, nameof(DebuggerShortcutsConfig.OpenScriptWindow));
 			mnuTraceLogger.InitShortcut(this, nameof(DebuggerShortcutsConfig.OpenTraceLogger));
+			mnuTextHooker.InitShortcut(this, nameof(DebuggerShortcutsConfig.OpenTextHooker));
 		}
 		
 		private void BindShortcut(ToolStripMenuItem item, EmulatorShortcut shortcut, Func<bool> isActionEnabled = null)
@@ -1041,6 +1042,7 @@ namespace Mesen.GUI.Forms
 					mnuEventViewer.Enabled = running;
 					mnuPpuViewer.Enabled = running;
 					mnuScriptWindow.Enabled = running;
+					mnuTextHooker.Enabled = running;
 					mnuTraceLogger.Enabled = running;
 
 					mnuInstallHdPack.Enabled = running;

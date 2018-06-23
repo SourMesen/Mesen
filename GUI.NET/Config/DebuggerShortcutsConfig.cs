@@ -67,6 +67,8 @@ namespace Mesen.GUI.Config
 		public XmlKeys OpenScriptWindow = Keys.Control | Keys.N;
 		[ShortcutName("Open Trace Logger")]
 		public XmlKeys OpenTraceLogger = Keys.Control | Keys.J;
+		[ShortcutName("Open Text Hooker")]
+		public XmlKeys OpenTextHooker = Keys.Control | Keys.H;
 
 		//Debugger window
 		[ShortcutName("Reset")]

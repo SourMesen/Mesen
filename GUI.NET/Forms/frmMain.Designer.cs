@@ -181,6 +181,8 @@ namespace Mesen.GUI.Forms
 			this.mnuRunAutomaticTest = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuDebugger = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuLogWindow = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem27 = new System.Windows.Forms.ToolStripSeparator();
+			this.mnuInstallHdPack = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuHdPackEditor = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
 			this.mnuRandomGame = new System.Windows.Forms.ToolStripMenuItem();
@@ -193,6 +195,7 @@ namespace Mesen.GUI.Forms
 			this.mnuMemoryViewer = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuPpuViewer = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuScriptWindow = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuTextHooker = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuTraceLogger = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem25 = new System.Windows.Forms.ToolStripSeparator();
 			this.mnuEditHeader = new System.Windows.Forms.ToolStripMenuItem();
@@ -205,8 +208,6 @@ namespace Mesen.GUI.Forms
 			this.mnuReportBug = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem5 = new System.Windows.Forms.ToolStripSeparator();
 			this.mnuAbout = new System.Windows.Forms.ToolStripMenuItem();
-			this.toolStripMenuItem27 = new System.Windows.Forms.ToolStripSeparator();
-			this.mnuInstallHdPack = new System.Windows.Forms.ToolStripMenuItem();
 			this.panelRenderer.SuspendLayout();
 			this.panelInfo.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.picIcon)).BeginInit();
@@ -1443,6 +1444,19 @@ namespace Mesen.GUI.Forms
 			this.mnuLogWindow.Text = "Log Window";
 			this.mnuLogWindow.Click += new System.EventHandler(this.mnuLogWindow_Click);
 			// 
+			// toolStripMenuItem27
+			// 
+			this.toolStripMenuItem27.Name = "toolStripMenuItem27";
+			this.toolStripMenuItem27.Size = new System.Drawing.Size(179, 6);
+			// 
+			// mnuInstallHdPack
+			// 
+			this.mnuInstallHdPack.Image = global::Mesen.GUI.Properties.Resources.Import;
+			this.mnuInstallHdPack.Name = "mnuInstallHdPack";
+			this.mnuInstallHdPack.Size = new System.Drawing.Size(182, 22);
+			this.mnuInstallHdPack.Text = "Install HD Pack";
+			this.mnuInstallHdPack.Click += new System.EventHandler(this.mnuInstallHdPack_Click);
+			// 
 			// mnuHdPackEditor
 			// 
 			this.mnuHdPackEditor.Image = global::Mesen.GUI.Properties.Resources.HdPack;
@@ -1480,6 +1494,7 @@ namespace Mesen.GUI.Forms
             this.mnuMemoryViewer,
             this.mnuPpuViewer,
             this.mnuScriptWindow,
+            this.mnuTextHooker,
             this.mnuTraceLogger,
             this.toolStripMenuItem25,
             this.mnuEditHeader});
@@ -1545,6 +1560,14 @@ namespace Mesen.GUI.Forms
 			this.mnuScriptWindow.Size = new System.Drawing.Size(162, 22);
 			this.mnuScriptWindow.Text = "Script Window";
 			this.mnuScriptWindow.Click += new System.EventHandler(this.mnuScriptWindow_Click);
+			// 
+			// mnuTextHooker
+			// 
+			this.mnuTextHooker.Image = global::Mesen.GUI.Properties.Resources.Font;
+			this.mnuTextHooker.Name = "mnuTextHooker";
+			this.mnuTextHooker.Size = new System.Drawing.Size(162, 22);
+			this.mnuTextHooker.Text = "Text Hooker";
+			this.mnuTextHooker.Click += new System.EventHandler(this.mnuTextHooker_Click);
 			// 
 			// mnuTraceLogger
 			// 
@@ -1638,19 +1661,6 @@ namespace Mesen.GUI.Forms
 			this.mnuAbout.Size = new System.Drawing.Size(198, 22);
 			this.mnuAbout.Text = "About";
 			this.mnuAbout.Click += new System.EventHandler(this.mnuAbout_Click);
-			// 
-			// toolStripMenuItem27
-			// 
-			this.toolStripMenuItem27.Name = "toolStripMenuItem27";
-			this.toolStripMenuItem27.Size = new System.Drawing.Size(179, 6);
-			// 
-			// mnuInstallHdPack
-			// 
-			this.mnuInstallHdPack.Image = global::Mesen.GUI.Properties.Resources.Import;
-			this.mnuInstallHdPack.Name = "mnuInstallHdPack";
-			this.mnuInstallHdPack.Size = new System.Drawing.Size(182, 22);
-			this.mnuInstallHdPack.Text = "Install HD Pack";
-			this.mnuInstallHdPack.Click += new System.EventHandler(this.mnuInstallHdPack_Click);
 			// 
 			// frmMain
 			// 
@@ -1857,6 +1867,7 @@ namespace Mesen.GUI.Forms
 		private System.Windows.Forms.ToolStripMenuItem mnuLoadLastSession;
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem27;
 		private System.Windows.Forms.ToolStripMenuItem mnuInstallHdPack;
+		private System.Windows.Forms.ToolStripMenuItem mnuTextHooker;
 	}
 }
 

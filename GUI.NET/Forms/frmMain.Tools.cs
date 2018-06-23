@@ -341,5 +341,10 @@ namespace Mesen.GUI.Forms
 		{
 			DebugWindowManager.OpenDebugWindow(DebugWindow.TraceLogger);
 		}
+
+		private void mnuTextHooker_Click(object sender, EventArgs e)
+		{
+			DebugWindowManager.OpenDebugWindow(DebugWindow.TextHooker);
+		}
 	}
 }

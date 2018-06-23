@@ -392,6 +392,18 @@
     <Compile Include="Debugger\Controls\ctrlAddressList.Designer.cs">
       <DependentUpon>ctrlAddressList.cs</DependentUpon>
     </Compile>
+    <Compile Include="Debugger\Controls\ctrlCharacterMapping.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Debugger\Controls\ctrlCharacterMapping.Designer.cs">
+      <DependentUpon>ctrlCharacterMapping.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Debugger\Controls\ctrlCharacterMappings.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Debugger\Controls\ctrlCharacterMappings.Designer.cs">
+      <DependentUpon>ctrlCharacterMappings.cs</DependentUpon>
+    </Compile>
     <Compile Include="Debugger\Controls\ctrlCodeScrollbar.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -439,6 +451,18 @@
     </Compile>
     <Compile Include="Debugger\Controls\ctrlEventViewerPpuView.Designer.cs">
       <DependentUpon>ctrlEventViewerPpuView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Debugger\Controls\ctrlScanlineCycleSelect.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Debugger\Controls\ctrlScanlineCycleSelect.Designer.cs">
+      <DependentUpon>ctrlScanlineCycleSelect.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Debugger\Controls\ctrlTextHooker.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Debugger\Controls\ctrlTextHooker.Designer.cs">
+      <DependentUpon>ctrlTextHooker.cs</DependentUpon>
     </Compile>
     <Compile Include="Debugger\Controls\ctrlProfiler.cs">
       <SubType>UserControl</SubType>
@@ -746,6 +770,12 @@
     </Compile>
     <Compile Include="Debugger\frmMemoryViewer.Designer.cs">
       <DependentUpon>frmMemoryViewer.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Debugger\frmTextHooker.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Debugger\frmTextHooker.Designer.cs">
+      <DependentUpon>frmTextHooker.cs</DependentUpon>
     </Compile>
     <Compile Include="Debugger\frmPpuViewer.cs">
       <SubType>Form</SubType>
@@ -1252,6 +1282,12 @@
     <EmbeddedResource Include="Debugger\Controls\CodeViewerActions.resx">
       <DependentUpon>CodeViewerActions.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Debugger\Controls\ctrlCharacterMapping.resx">
+      <DependentUpon>ctrlCharacterMapping.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Debugger\Controls\ctrlCharacterMappings.resx">
+      <DependentUpon>ctrlCharacterMappings.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Debugger\Controls\ctrlDbgShortcuts.resx">
       <DependentUpon>ctrlDbgShortcuts.cs</DependentUpon>
     </EmbeddedResource>
@@ -1267,8 +1303,17 @@
     <EmbeddedResource Include="Debugger\Controls\ctrlEventViewerPpuView.resx">
       <DependentUpon>ctrlEventViewerPpuView.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Debugger\Controls\ctrlScanlineCycleSelect.resx">
+      <DependentUpon>ctrlScanlineCycleSelect.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Debugger\Controls\ctrlTextHooker.resx">
+      <DependentUpon>ctrlTextHooker.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Debugger\Controls\ctrlSourceViewer.resx">
       <DependentUpon>ctrlSourceViewer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Debugger\frmTextHooker.resx">
+      <DependentUpon>frmTextHooker.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Dependencies\LuaScripts\Example.lua">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -1663,6 +1708,9 @@
     <None Include="Dependencies\Font.64.spritefont">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <Content Include="Dependencies\CharacterMappings.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Dependencies\PixelFont.ttf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -1808,7 +1856,6 @@
     <EmbeddedResource Include="$(OutputPath)Dependencies.zip">
       <Link>Dependencies\Dependencies.zip</Link>
     </EmbeddedResource>
-    <Content Include="D:\Users\Saitoh Hajime\Desktop\Mesen Website\favicon.ico" />
     <None Include="Resources\Close.png" />
     <None Include="Resources\PreviousArrow.png" />
     <None Include="Resources\NextArrow.png" />
