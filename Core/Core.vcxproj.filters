@@ -1432,6 +1432,12 @@
     <ClInclude Include="BmcGn45.h">
       <Filter>Nes\Mappers\Unif</Filter>
     </ClInclude>
+    <ClInclude Include="UnlDripGame.h">
+      <Filter>Nes\Mappers\Unif</Filter>
+    </ClInclude>
+    <ClInclude Include="UnlDripGameAudio.h">
+      <Filter>Nes\Mappers\Unif</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">

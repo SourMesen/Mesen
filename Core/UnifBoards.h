@@ -70,5 +70,6 @@ namespace UnifBoards {
 		BmcHpxx,
 		DragonFighter,
 		BmcGn45,
+		UnlDripGame,
 	};
 }
