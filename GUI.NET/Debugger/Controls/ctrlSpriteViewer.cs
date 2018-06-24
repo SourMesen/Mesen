@@ -30,6 +30,7 @@ namespace Mesen.GUI.Debugger.Controls
 		private Bitmap _imgSprites;
 		private Bitmap _screenPreview = new Bitmap(256, 240, PixelFormat.Format32bppArgb);
 		private HdPackCopyHelper _hdCopyHelper = new HdPackCopyHelper();
+		private bool _firstDraw = true;
 
 		public ctrlSpriteViewer()
 		{
@@ -85,6 +86,13 @@ namespace Mesen.GUI.Debugger.Controls
 				SelectSpriteUnderCursor();
 			}
 			CreateScreenPreview();
+
+			if(_firstDraw) {
+				//Update the UI with the first sprite when showing for the first time
+				UpdateTileInfo(0);
+				_selectedSprite = -1;
+				_firstDraw = false;
+			}
 		}
 
 		private void CreateScreenPreview()

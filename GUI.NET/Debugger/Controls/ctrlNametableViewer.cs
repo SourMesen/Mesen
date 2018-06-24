@@ -36,6 +36,7 @@ namespace Mesen.GUI.Debugger.Controls
 		private ctrlChrViewer _chrViewer;
 		private DebugState _state = new DebugState();
 		private HdPackCopyHelper _hdCopyHelper = new HdPackCopyHelper();
+		private bool _firstDraw = true;
 
 		public ctrlNametableViewer()
 		{
@@ -150,6 +151,11 @@ namespace Mesen.GUI.Debugger.Controls
 			}
 
 			this.picNametable.Image = target;
+
+			if(_firstDraw) {
+				UpdateTileInformation(0, 0, 0x2000, 0);
+				_firstDraw = false;
+			}
 		}
 
 		private void DrawEditHighlights(Graphics g)
@@ -243,13 +249,13 @@ namespace Mesen.GUI.Debugger.Controls
 		{
 			int xPos = e.X * 512 / (picNametable.Width - 2);
 			int yPos = e.Y * 480 / (picNametable.Height - 2);
-			
+
 			_nametableIndex = 0;
 			if(xPos >= 256) {
 				_nametableIndex++;
 			}
 			if(yPos >= 240) {
-				_nametableIndex+=2;
+				_nametableIndex += 2;
 			}
 
 			int baseAddress = 0x2000 + _nametableIndex * 0x400;
@@ -271,12 +277,17 @@ namespace Mesen.GUI.Debugger.Controls
 			}
 			_currentPpuAddress = ppuAddress;
 
+			UpdateTileInformation(xPos, yPos, baseAddress, shift);
+		}
+
+		private void UpdateTileInformation(int xPos, int yPos, int baseAddress, int shift)
+		{
 			DebugState state = new DebugState();
 			InteropEmu.DebugGetState(ref state);
 			int bgAddr = state.PPU.ControlFlags.BackgroundPatternAddr;
-			
-			int tileIndex = _tileData[_nametableIndex][_tileY*32+_tileX];
-			int attributeData = _attributeData[_nametableIndex][_tileY*32+_tileX];
+
+			int tileIndex = _tileData[_nametableIndex][_tileY * 32 + _tileX];
+			int attributeData = _attributeData[_nametableIndex][_tileY * 32 + _tileX];
 			int attributeAddr = baseAddress + 960 + ((_tileY & 0xFC) << 1) + (_tileX >> 2);
 			int paletteBaseAddr = ((attributeData >> shift) & 0x03) << 2;
 
@@ -291,11 +302,11 @@ namespace Mesen.GUI.Debugger.Controls
 			this.txtAttributeAddress.Text = attributeAddr.ToString("X4");
 			this.txtPaletteAddress.Text = (0x3F00 + paletteBaseAddr).ToString("X4");
 
-			Bitmap tile = new Bitmap(64, 64);			
+			Bitmap tile = new Bitmap(64, 64);
 			Bitmap tilePreview = new Bitmap(8, 8);
 			using(Graphics g = Graphics.FromImage(tilePreview)) {
-				g.DrawImage(_nametableImage, new Rectangle(0, 0, 8, 8), new Rectangle(xPos/8*8, yPos/8*8, 8, 8), GraphicsUnit.Pixel);
-			}			
+				g.DrawImage(_nametableImage, new Rectangle(0, 0, 8, 8), new Rectangle(xPos / 8 * 8, yPos / 8 * 8, 8, 8), GraphicsUnit.Pixel);
+			}
 			using(Graphics g = Graphics.FromImage(tile)) {
 				g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
 				g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.None;
