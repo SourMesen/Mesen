@@ -20,7 +20,8 @@ namespace Mesen.GUI.Debugger.Controls
 		private bool _allowSelection = false;
 		private int _hoverColor = -1;
 		private int _selectedColor = 0;
-		
+		private int[] _currentPalette = new int[4];
+
 		public bool HighlightMouseOver { get; set; }
 		public bool DisplayIndexes { get; set; }
 
@@ -99,24 +100,23 @@ namespace Mesen.GUI.Debugger.Controls
 				return;
 			}
 
-			int[] currentPalette = new int[4];
 			int[] paletteColorCodes = new int[4];
 			if(_paletteColors.HasValue) {
 				int[] paletteData = InteropEmu.GetRgbPalette();
 				for(int i = 0; i < 4; i++) {
 					paletteColorCodes[i] = (int)(_paletteColors.Value >> (8 * i)) & 0x3F;
-					currentPalette[i] = paletteData[paletteColorCodes[i]];
+					_currentPalette[i] = paletteData[paletteColorCodes[i]];
 				}
 			} else {
 				byte[] paletteRam = InteropEmu.DebugGetMemoryState(DebugMemoryType.PaletteMemory);
 				int[] palette = InteropEmu.DebugGetPalette();
-				Array.Copy(palette, _selectedPalette * 4, currentPalette, 0, 4);
+				Array.Copy(palette, _selectedPalette * 4, _currentPalette, 0, 4);
 				for(int i = 0; i < 4; i++) {
 					paletteColorCodes[i] = paletteRam[_selectedPalette * 4 + i];
 				}
 			}
 
-			GCHandle handle = GCHandle.Alloc(currentPalette, GCHandleType.Pinned);
+			GCHandle handle = GCHandle.Alloc(_currentPalette, GCHandleType.Pinned);
 			try {
 				Bitmap source = new Bitmap(4, 1, 4*4, System.Drawing.Imaging.PixelFormat.Format32bppArgb, handle.AddrOfPinnedObject());
 				Bitmap target = new Bitmap(128, 32);
@@ -174,6 +174,33 @@ namespace Mesen.GUI.Debugger.Controls
 		{
 			_hoverColor = -1;
 			RefreshPalette();
+		}
+
+		private string GetHexColorString()
+		{
+			return "#" + _currentPalette[this.SelectedColor].ToString("X8").Substring(2, 6);
+		}
+
+		private string GetRgbColorString()
+		{
+			Color selectedColor = Color.FromArgb(_currentPalette[this.SelectedColor]);
+			return "rgb(" + selectedColor.R.ToString() + ", " + selectedColor.G.ToString() + ", " + selectedColor.B.ToString() + ")";
+		}
+
+		private void ctxMenu_Opening(object sender, CancelEventArgs e)
+		{
+			mnuCopyHexColor.Text = "Copy Hex Color - " + GetHexColorString();
+			mnuCopyRgbColor.Text = "Copy RGB Color - " + GetRgbColorString();
+		}
+
+		private void mnuCopyHexColor_Click(object sender, EventArgs e)
+		{
+			Clipboard.SetText(GetHexColorString());
+		}
+
+		private void mnuCopyRgbColor_Click(object sender, EventArgs e)
+		{
+			Clipboard.SetText(GetRgbColorString());
 		}
 	}
 }

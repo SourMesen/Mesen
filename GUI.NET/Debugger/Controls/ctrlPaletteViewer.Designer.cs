@@ -27,6 +27,7 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
+			this.components = new System.ComponentModel.Container();
 			this.grpColorInfo = new System.Windows.Forms.GroupBox();
 			this.tableLayoutPanel4 = new System.Windows.Forms.TableLayoutPanel();
 			this.txtPaletteAddress = new System.Windows.Forms.TextBox();
@@ -35,11 +36,18 @@
 			this.lblColorTile = new System.Windows.Forms.Label();
 			this.txtColor = new System.Windows.Forms.TextBox();
 			this.picColor = new System.Windows.Forms.PictureBox();
+			this.lblColorHex = new System.Windows.Forms.Label();
+			this.label1 = new System.Windows.Forms.Label();
+			this.txtColorCodeHex = new System.Windows.Forms.TextBox();
+			this.txtColorCodeRgb = new System.Windows.Forms.TextBox();
 			this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
 			this.picPalette = new System.Windows.Forms.PictureBox();
 			this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
 			this.picHelp = new System.Windows.Forms.PictureBox();
 			this.lblClickColorHint = new System.Windows.Forms.Label();
+			this.ctxMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
+			this.mnuCopyHexColor = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuCopyRgbColor = new System.Windows.Forms.ToolStripMenuItem();
 			this.grpColorInfo.SuspendLayout();
 			this.tableLayoutPanel4.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.picColor)).BeginInit();
@@ -47,6 +55,7 @@
 			((System.ComponentModel.ISupportInitialize)(this.picPalette)).BeginInit();
 			this.flowLayoutPanel1.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.picHelp)).BeginInit();
+			this.ctxMenu.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// grpColorInfo
@@ -72,23 +81,27 @@
 			this.tableLayoutPanel4.Controls.Add(this.lblColorTile, 0, 2);
 			this.tableLayoutPanel4.Controls.Add(this.txtColor, 1, 0);
 			this.tableLayoutPanel4.Controls.Add(this.picColor, 1, 2);
+			this.tableLayoutPanel4.Controls.Add(this.lblColorHex, 0, 3);
+			this.tableLayoutPanel4.Controls.Add(this.label1, 0, 4);
+			this.tableLayoutPanel4.Controls.Add(this.txtColorCodeHex, 1, 3);
+			this.tableLayoutPanel4.Controls.Add(this.txtColorCodeRgb, 1, 4);
 			this.tableLayoutPanel4.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tableLayoutPanel4.Location = new System.Drawing.Point(3, 16);
 			this.tableLayoutPanel4.Name = "tableLayoutPanel4";
-			this.tableLayoutPanel4.RowCount = 4;
+			this.tableLayoutPanel4.RowCount = 6;
+			this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-			this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-			this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
 			this.tableLayoutPanel4.Size = new System.Drawing.Size(532, 286);
 			this.tableLayoutPanel4.TabIndex = 0;
 			// 
 			// txtPaletteAddress
 			// 
-			this.txtPaletteAddress.Location = new System.Drawing.Point(93, 29);
+			this.txtPaletteAddress.BackColor = System.Drawing.SystemColors.ControlLightLight;
+			this.txtPaletteAddress.Location = new System.Drawing.Point(103, 29);
 			this.txtPaletteAddress.Name = "txtPaletteAddress";
 			this.txtPaletteAddress.ReadOnly = true;
 			this.txtPaletteAddress.Size = new System.Drawing.Size(42, 20);
@@ -126,7 +139,8 @@
 			// 
 			// txtColor
 			// 
-			this.txtColor.Location = new System.Drawing.Point(93, 3);
+			this.txtColor.BackColor = System.Drawing.SystemColors.ControlLightLight;
+			this.txtColor.Location = new System.Drawing.Point(103, 3);
 			this.txtColor.Name = "txtColor";
 			this.txtColor.ReadOnly = true;
 			this.txtColor.Size = new System.Drawing.Size(26, 20);
@@ -135,12 +149,50 @@
 			// picColor
 			// 
 			this.picColor.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.picColor.Location = new System.Drawing.Point(93, 55);
+			this.picColor.Location = new System.Drawing.Point(103, 55);
 			this.picColor.Name = "picColor";
 			this.picColor.Size = new System.Drawing.Size(66, 66);
 			this.picColor.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
 			this.picColor.TabIndex = 12;
 			this.picColor.TabStop = false;
+			// 
+			// lblColorHex
+			// 
+			this.lblColorHex.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.lblColorHex.AutoSize = true;
+			this.lblColorHex.Location = new System.Drawing.Point(3, 130);
+			this.lblColorHex.Name = "lblColorHex";
+			this.lblColorHex.Size = new System.Drawing.Size(90, 13);
+			this.lblColorHex.TabIndex = 13;
+			this.lblColorHex.Text = "Color Code (Hex):";
+			// 
+			// label1
+			// 
+			this.label1.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.label1.AutoSize = true;
+			this.label1.Location = new System.Drawing.Point(3, 156);
+			this.label1.Name = "label1";
+			this.label1.Size = new System.Drawing.Size(94, 13);
+			this.label1.TabIndex = 14;
+			this.label1.Text = "Color Code (RGB):";
+			// 
+			// txtColorCodeHex
+			// 
+			this.txtColorCodeHex.BackColor = System.Drawing.SystemColors.ControlLightLight;
+			this.txtColorCodeHex.Location = new System.Drawing.Point(103, 127);
+			this.txtColorCodeHex.Name = "txtColorCodeHex";
+			this.txtColorCodeHex.ReadOnly = true;
+			this.txtColorCodeHex.Size = new System.Drawing.Size(66, 20);
+			this.txtColorCodeHex.TabIndex = 15;
+			// 
+			// txtColorCodeRgb
+			// 
+			this.txtColorCodeRgb.BackColor = System.Drawing.SystemColors.ControlLightLight;
+			this.txtColorCodeRgb.Location = new System.Drawing.Point(103, 153);
+			this.txtColorCodeRgb.Name = "txtColorCodeRgb";
+			this.txtColorCodeRgb.ReadOnly = true;
+			this.txtColorCodeRgb.Size = new System.Drawing.Size(108, 20);
+			this.txtColorCodeRgb.TabIndex = 16;
 			// 
 			// tableLayoutPanel3
 			// 
@@ -163,6 +215,7 @@
 			// picPalette
 			// 
 			this.picPalette.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this.picPalette.ContextMenuStrip = this.ctxMenu;
 			this.picPalette.Cursor = System.Windows.Forms.Cursors.Hand;
 			this.picPalette.Location = new System.Drawing.Point(4, 4);
 			this.picPalette.Margin = new System.Windows.Forms.Padding(4);
@@ -203,6 +256,27 @@
 			this.lblClickColorHint.TabIndex = 5;
 			this.lblClickColorHint.Text = "Click on a color to change it";
 			// 
+			// ctxMenu
+			// 
+			this.ctxMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.mnuCopyHexColor,
+            this.mnuCopyRgbColor});
+			this.ctxMenu.Name = "ctxMenu";
+			this.ctxMenu.Size = new System.Drawing.Size(160, 70);
+			this.ctxMenu.Opening += new System.ComponentModel.CancelEventHandler(this.ctxMenu_Opening);
+			// 
+			// mnuCopyHexColor
+			// 
+			this.mnuCopyHexColor.Name = "mnuCopyHexColor";
+			this.mnuCopyHexColor.Size = new System.Drawing.Size(159, 22);
+			this.mnuCopyHexColor.Text = "Copy Hex Color";
+			// 
+			// mnuCopyRgbColor
+			// 
+			this.mnuCopyRgbColor.Name = "mnuCopyRgbColor";
+			this.mnuCopyRgbColor.Size = new System.Drawing.Size(159, 22);
+			this.mnuCopyRgbColor.Text = "Copy RGB Color";
+			// 
 			// ctrlPaletteViewer
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -219,6 +293,7 @@
 			((System.ComponentModel.ISupportInitialize)(this.picPalette)).EndInit();
 			this.flowLayoutPanel1.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)(this.picHelp)).EndInit();
+			this.ctxMenu.ResumeLayout(false);
 			this.ResumeLayout(false);
 
 		}
@@ -238,5 +313,12 @@
 		private System.Windows.Forms.Label lblClickColorHint;
 		private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
 		private System.Windows.Forms.PictureBox picHelp;
+		private System.Windows.Forms.Label lblColorHex;
+		private System.Windows.Forms.Label label1;
+		private System.Windows.Forms.TextBox txtColorCodeHex;
+		private System.Windows.Forms.TextBox txtColorCodeRgb;
+		private System.Windows.Forms.ContextMenuStrip ctxMenu;
+		private System.Windows.Forms.ToolStripMenuItem mnuCopyHexColor;
+		private System.Windows.Forms.ToolStripMenuItem mnuCopyRgbColor;
 	}
 }
