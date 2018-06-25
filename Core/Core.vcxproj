@@ -518,6 +518,7 @@
     <ClInclude Include="BaseSoundManager.h" />
     <ClInclude Include="BatteryManager.h" />
     <ClInclude Include="BattleBox.h" />
+    <ClInclude Include="Bmc60311C.h" />
     <ClInclude Include="Bmc80013B.h" />
     <ClInclude Include="Bmc8157.h" />
     <ClInclude Include="Bmc830118C.h" />

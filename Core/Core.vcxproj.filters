@@ -1453,6 +1453,9 @@
     <ClInclude Include="IMemoryManager.h">
       <Filter>Nes\MemoryManager</Filter>
     </ClInclude>
+    <ClInclude Include="Bmc60311C.h">
+      <Filter>Nes\Mappers\Unif</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">

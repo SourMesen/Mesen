@@ -72,5 +72,6 @@ namespace UnifBoards {
 		BmcGn45,
 		UnlDripGame,
 		SssNrom256,
+		Bmc60311C,
 	};
 }

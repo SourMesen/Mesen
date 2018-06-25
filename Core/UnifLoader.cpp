@@ -161,4 +161,5 @@ std::unordered_map<string, int> UnifLoader::_boardMappings = std::unordered_map<
 	{ "HPxx", UnifBoards::BmcHpxx },
 	{ "GN-45", UnifBoards::BmcGn45 }, //Doesn't actually exist as a UNIF file (used to assign a mapper to GN-45 boards)
 	{ "DRIPGAME", UnifBoards::UnlDripGame },
+	{ "60311C", UnifBoards::Bmc60311C },
 };
