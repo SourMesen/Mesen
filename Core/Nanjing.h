@@ -91,7 +91,7 @@ public:
 		//Copy protection stuff - based on FCEUX's implementation
 		switch(addr & 0x7700) {
 			case 0x5100:
-				return _registers[3] | _registers[1] | _registers[0] | _registers[2] ^ 0xFF;
+				return _registers[3] | _registers[1] | _registers[0] | (_registers[2] ^ 0xFF);
 
 			case 0x5500:
 				if(_toggle) {

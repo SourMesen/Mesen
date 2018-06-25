@@ -73,7 +73,7 @@ protected:
 				uint8_t regNumber = ((((addr >> 12) & 0x07) - 3) << 1) + ((addr >> 1) & 0x01);
 				bool lowBits = (addr & 0x01) == 0x00;
 				if(lowBits) {
-					_vrcChrRegs[regNumber] = (_vrcChrRegs[regNumber] & 0xF0) | value & 0x0F;
+					_vrcChrRegs[regNumber] = (_vrcChrRegs[regNumber] & 0xF0) | (value & 0x0F);
 				} else {
 					_vrcChrRegs[regNumber] = (_vrcChrRegs[regNumber] & 0x0F) | ((value & 0x0F) << 4);
 				}

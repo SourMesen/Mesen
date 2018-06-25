@@ -308,14 +308,13 @@ void Assembler::AssembleInstruction(LineData &lineData, uint16_t &instructionAdd
 			if(lineData.OpCode.compare(opName[i]) == 0) {
 				bool modeMatch = opMode == lineData.Mode;
 				if(!modeMatch) {
-					if(lineData.Mode == AddrMode::Imp && opMode == AddrMode::Acc ||
-						lineData.Mode == AddrMode::IndY && opMode == AddrMode::IndYW ||
-						lineData.Mode == AddrMode::AbsY && opMode == AddrMode::AbsYW ||
-						lineData.Mode == AddrMode::AbsX && opMode == AddrMode::AbsXW) {
+					if((lineData.Mode == AddrMode::Imp && opMode == AddrMode::Acc) ||
+						(lineData.Mode == AddrMode::IndY && opMode == AddrMode::IndYW) ||
+						(lineData.Mode == AddrMode::AbsY && opMode == AddrMode::AbsYW) ||
+						(lineData.Mode == AddrMode::AbsX && opMode == AddrMode::AbsXW)) {
 						modeMatch = true;
-					} else if(lineData.Mode == AddrMode::Abs && opMode == AddrMode::Rel ||
-						lineData.Mode == AddrMode::Imm && opMode == AddrMode::Rel) {
-
+					} else if((lineData.Mode == AddrMode::Abs && opMode == AddrMode::Rel) ||
+								(lineData.Mode == AddrMode::Imm && opMode == AddrMode::Rel)) {
 						if(lineData.OperandSize == 2) {
 							if(lineData.Mode == AddrMode::Imm) {
 								//Hardcoded jump values must be 1-byte

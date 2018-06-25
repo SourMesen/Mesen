@@ -332,7 +332,7 @@ void FDS::UpdateCrc(uint8_t value)
 
 void FDS::WriteRegister(uint16_t addr, uint8_t value)
 {
-	if(!_diskRegEnabled && addr >= 0x4024 && addr <= 0x4026 || !_soundRegEnabled && addr >= 0x4040) {
+	if((!_diskRegEnabled && addr >= 0x4024 && addr <= 0x4026) || (!_soundRegEnabled && addr >= 0x4040)) {
 		return;
 	}
 

@@ -32,7 +32,7 @@ else
 	PROFILE_USE_FLAG = -fprofile-instr-use=$(CURDIR)/PGOHelper/pgo.profdata
 endif
 
-GCCOPTIONS=-fPIC -Wall --std=c++14 -O3 $(MESENFLAGS) -Wno-parentheses -Wno-switch
+GCCOPTIONS=-fPIC -Wall --std=c++14 -O3 $(MESENFLAGS) -Wno-switch
 CCOPTIONS=-fPIC -Wall -O3 $(MESENFLAGS)
 
 ifeq ($(MESENPLATFORM),x86)

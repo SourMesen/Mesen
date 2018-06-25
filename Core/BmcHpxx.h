@@ -45,8 +45,8 @@ protected:
 			switch(_exRegs[0] & 0x03) {
 				case 0:
 				case 1: SelectChrPage8x(0, (_exRegs[2] & 0x3F) << 3); break;
-				case 2: SelectChrPage8x(0, ((_exRegs[2] & 0x3E) | _exRegs[4] & 0x01) << 3); break;
-				case 3: SelectChrPage8x(0, ((_exRegs[2] & 0x3C) | _exRegs[4] & 0x03) << 3); break;
+				case 2: SelectChrPage8x(0, ((_exRegs[2] & 0x3E) | (_exRegs[4] & 0x01)) << 3); break;
+				case 3: SelectChrPage8x(0, ((_exRegs[2] & 0x3C) | (_exRegs[4] & 0x03)) << 3); break;
 			}
 		} else {
 			uint8_t base, mask;

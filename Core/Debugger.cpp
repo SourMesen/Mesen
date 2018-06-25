@@ -323,8 +323,8 @@ void Debugger::ProcessBreakpoints(BreakpointType type, OperationInfo &operationI
 		Breakpoint &breakpoint = breakpoints[i];
 		if(
 			type == BreakpointType::Global ||
-			!isPpuBreakpoint && breakpoint.Matches(operationInfo.Address, info) ||
-			isPpuBreakpoint && breakpoint.Matches(operationInfo.Address, ppuInfo)
+			(!isPpuBreakpoint && breakpoint.Matches(operationInfo.Address, info)) ||
+			(isPpuBreakpoint && breakpoint.Matches(operationInfo.Address, ppuInfo))
 		) {
 			if(!breakpoint.HasCondition()) {
 				processBreakpoint(breakpoint);

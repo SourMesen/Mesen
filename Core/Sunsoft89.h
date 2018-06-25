@@ -16,7 +16,7 @@ protected:
 	void WriteRegister(uint16_t addr, uint8_t value) override
 	{
 		SelectPRGPage(0, (value >> 4) & 0x07);
-		SelectCHRPage(0, value & 0x07 | ((value & 0x80) >> 4));
+		SelectCHRPage(0, (value & 0x07) | ((value & 0x80) >> 4));
 		SetMirroringType((value & 0x08) == 0x08 ? MirroringType::ScreenBOnly : MirroringType::ScreenAOnly);
 	}
 };

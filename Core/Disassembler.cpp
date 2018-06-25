@@ -532,7 +532,7 @@ string Disassembler::GetCode(AddressTypeInfo &addressInfo, uint32_t endAddr, uin
 
 		isVerifiedData = addressInfo.Type == AddressType::PrgRom && cdl->IsData(addr&mask);
 		info = infoRef.get();
-		if(!info && (disassembleUnidentifiedData && !isVerifiedData || disassembleVerifiedData && isVerifiedData)) {
+		if(!info && ((disassembleUnidentifiedData && !isVerifiedData) || (disassembleVerifiedData && isVerifiedData))) {
 			dataType = isVerifiedData ? DataType::VerifiedData : (addressInfo.Type == AddressType::PrgRom ? DataType::UnidentifiedData : DataType::VerifiedCode);
 			info = new DisassemblyInfo(source + (addr & mask), false);
 		} else if(info) {

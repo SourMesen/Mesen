@@ -23,9 +23,9 @@ bool Breakpoint::Matches(uint32_t memoryAddr, AddressTypeInfo &info)
 			return (int32_t)memoryAddr >= _startAddr && (int32_t)memoryAddr <= _endAddr;
 		}
 	} else if(
-		_memoryType == DebugMemoryType::PrgRom && info.Type == AddressType::PrgRom ||
-		_memoryType == DebugMemoryType::WorkRam && info.Type == AddressType::WorkRam ||
-		_memoryType == DebugMemoryType::SaveRam && info.Type == AddressType::SaveRam
+		(_memoryType == DebugMemoryType::PrgRom && info.Type == AddressType::PrgRom) ||
+		(_memoryType == DebugMemoryType::WorkRam && info.Type == AddressType::WorkRam) ||
+		(_memoryType == DebugMemoryType::SaveRam && info.Type == AddressType::SaveRam)
 	) {
 		if(_endAddr == -1) {
 			return info.Address == _startAddr;
@@ -50,9 +50,9 @@ bool Breakpoint::Matches(uint32_t memoryAddr, PpuAddressTypeInfo &info)
 			return (int32_t)memoryAddr >= _startAddr && (int32_t)memoryAddr <= _endAddr;
 		}
 	} else if(
-		_memoryType == DebugMemoryType::ChrRam && info.Type == PpuAddressType::ChrRam ||
-		_memoryType == DebugMemoryType::ChrRom && info.Type == PpuAddressType::ChrRom ||
-		_memoryType == DebugMemoryType::PaletteMemory && info.Type == PpuAddressType::PaletteRam
+		(_memoryType == DebugMemoryType::ChrRam && info.Type == PpuAddressType::ChrRam) ||
+		(_memoryType == DebugMemoryType::ChrRom && info.Type == PpuAddressType::ChrRom) ||
+		(_memoryType == DebugMemoryType::PaletteMemory && info.Type == PpuAddressType::PaletteRam)
 	) {
 		if(_endAddr == -1) {
 			return info.Address == _startAddr;

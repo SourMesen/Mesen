@@ -27,7 +27,7 @@ protected:
 			SelectPRGPage(1, (prgPage & 0xFE) + 1);
 		}
 
-		SelectCHRPage(0, addr & 0x3F | highBit);
+		SelectCHRPage(0, (addr & 0x3F) | highBit);
 
 		SetMirroringType(addr & 0x2000 ? MirroringType::Horizontal : MirroringType::Vertical);
 	}

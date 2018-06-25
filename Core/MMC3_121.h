@@ -49,7 +49,7 @@ protected:
 			//Hack for Super 3-in-1
 			BaseMapper::SelectCHRPage(slot, page | ((_exRegs[3] & 0x80) << 1), memoryType);
 		} else {			
-			if(slot < 4 && _chrMode == 0 || slot >= 4 && _chrMode == 1) {
+			if((slot < 4 && _chrMode == 0) || (slot >= 4 && _chrMode == 1)) {
 				page |= 0x100;
 			}
 			BaseMapper::SelectCHRPage(slot, page, memoryType);

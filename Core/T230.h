@@ -64,7 +64,7 @@ protected:
 
 	void WriteRegister(uint16_t addr, uint8_t value) override
 	{
-		addr = addr & 0xF000 | (addr & 0x2A ? 0x02 : 0) | (addr & 0x15 ? 0x01 : 0);
+		addr = (addr & 0xF000) | (addr & 0x2A ? 0x02 : 0) | (addr & 0x15 ? 0x01 : 0);
 
 		if(addr >= 0x9000 && addr <= 0x9001) {
 			switch(value) {

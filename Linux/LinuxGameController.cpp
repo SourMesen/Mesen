@@ -33,8 +33,8 @@ std::shared_ptr<LinuxGameController> LinuxGameController::GetController(int devi
 			return nullptr;
 		}
 
-		if(libevdev_has_event_type(device, EV_KEY) && libevdev_has_event_code(device, EV_KEY, BTN_GAMEPAD) ||
-			libevdev_has_event_type(device, EV_ABS) && libevdev_has_event_code(device, EV_ABS, ABS_X)) {
+		if((libevdev_has_event_type(device, EV_KEY) && libevdev_has_event_code(device, EV_KEY, BTN_GAMEPAD)) ||
+			(libevdev_has_event_type(device, EV_ABS) && libevdev_has_event_code(device, EV_ABS, ABS_X))) {
 			MessageManager::Log(std::string("[Input Connected] Name: ") + libevdev_get_name(device) + " Vendor: " + std::to_string(libevdev_get_id_vendor(device)) + " Product: " + std::to_string(libevdev_get_id_product(device)));
 			return std::shared_ptr<LinuxGameController>(new LinuxGameController(deviceID, fd, device));
 		} else {
@@ -67,7 +67,8 @@ LinuxGameController::LinuxGameController(int deviceID, int fileDescriptor, libev
 			timeout.tv_sec = 0;
 			timeout.tv_usec = 100000;
 
-			if(rc = select((int)_fd+1, &readSet, nullptr, nullptr, &timeout)) {			
+			rc = select((int)_fd+1, &readSet, nullptr, nullptr, &timeout);
+			if(rc) {
 				do {
 					struct input_event ev;
 					rc = libevdev_next_event(_device, LIBEVDEV_READ_FLAG_NORMAL, &ev);

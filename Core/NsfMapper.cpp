@@ -327,7 +327,7 @@ void NsfMapper::WriteRegister(uint16_t addr, uint8_t value)
 		_fdsAudio.WriteRegister(addr, value);
 	} else if((_nsfHeader.SoundChips & NsfSoundChips::MMC5) && addr >= 0x5000 && addr <= 0x5015) {
 		_mmc5Audio.WriteRegister(addr, value);
-	} else if((_nsfHeader.SoundChips & NsfSoundChips::Namco) && (addr >= 0x4800 && addr <= 0x4FFF || addr >= 0xF800 && addr <= 0xFFFF)) {
+	} else if((_nsfHeader.SoundChips & NsfSoundChips::Namco) && ((addr >= 0x4800 && addr <= 0x4FFF) || (addr >= 0xF800 && addr <= 0xFFFF))) {
 		_namcoAudio.WriteRegister(addr, value);
 
 		//Technically we should call this, but doing so breaks some NSFs

@@ -107,11 +107,11 @@ protected:
 						break;
 
 					case 0xE:
-						_irqCounter = _irqCounter & 0xFF00 | value;
+						_irqCounter = (_irqCounter & 0xFF00) | value;
 						break;
 
 					case 0xF:
-						_irqCounter = _irqCounter & 0xFF | (value << 8);
+						_irqCounter = (_irqCounter & 0xFF) | (value << 8);
 						break;
 				}
 				break;

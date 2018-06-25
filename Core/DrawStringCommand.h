@@ -136,7 +136,7 @@ protected:
 				int width = GetCharWidth(c);
 				int rowOffset = (c == 'y' || c == 'g' || c == 'p' || c == 'q') ? 1 : 0;
 				for(int j = 0; j < 8; j++) {
-					uint8_t rowData = (j == 7 && rowOffset == 0 || j == 0 && rowOffset == 1) ? 0 : _font[ch * 8 + 1 + j - rowOffset];
+					uint8_t rowData = ((j == 7 && rowOffset == 0) || (j == 0 && rowOffset == 1)) ? 0 : _font[ch * 8 + 1 + j - rowOffset];
 					for(int i = 0; i < width; i++) {
 						int drawFg = (rowData >> (7 - i)) & 0x01;
 						DrawPixel(x + i, y + j, drawFg ? _color : _backColor);

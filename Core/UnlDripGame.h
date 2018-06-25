@@ -93,6 +93,7 @@ protected:
 				//Attribute fetches
 				uint8_t bank;
 				switch(GetMirroringType()) {
+					default:
 					case MirroringType::ScreenAOnly: bank = 0; break;
 					case MirroringType::ScreenBOnly: bank = 1; break;
 					case MirroringType::Horizontal: bank = (addr & 0x800) ? 1 : 0; break;

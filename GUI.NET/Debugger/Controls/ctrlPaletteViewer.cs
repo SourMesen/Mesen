@@ -85,7 +85,6 @@ namespace Mesen.GUI.Debugger.Controls
 			this.txtColor.Text = _paletteRam[paletteIndex].ToString("X2");
 			this.txtPaletteAddress.Text = (0x3F00 + paletteIndex).ToString("X4");
 
-			Color selectedColor = Color.FromArgb(_palettePixelData[paletteIndex]);
 			this.txtColorCodeHex.Text = GetHexColorString();
 			this.txtColorCodeRgb.Text = GetRgbColorString();
 

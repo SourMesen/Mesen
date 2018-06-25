@@ -27,11 +27,11 @@ protected:
 		if(_regs[0] & 0x40) {
 			//NINA-03 mode
 			SelectPRGPage(0, (_regs[0] & 0x0E) | (_regs[1] & 0x01));
-			SelectCHRPage(0, ((_regs[0] << 2) & 0x38) | (_regs[1] >> 4) & 0x07);
+			SelectCHRPage(0, ((_regs[0] << 2) & 0x38) | ((_regs[1] >> 4) & 0x07));
 		} else {
 			//CNROM mode
 			SelectPRGPage(0, _regs[0] & 0x0F);
-			SelectCHRPage(0, ((_regs[0] << 2) & 0x3C) | (_regs[1] >> 4) & 0x03);
+			SelectCHRPage(0, ((_regs[0] << 2) & 0x3C) | ((_regs[1] >> 4) & 0x03));
 		}
 
 		SetMirroringType(_regs[0] & 0x80 ? MirroringType::Horizontal : MirroringType::Vertical);
