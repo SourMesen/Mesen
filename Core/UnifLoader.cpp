@@ -162,4 +162,5 @@ std::unordered_map<string, int> UnifLoader::_boardMappings = std::unordered_map<
 	{ "GN-45", UnifBoards::BmcGn45 }, //Doesn't actually exist as a UNIF file (used to assign a mapper to GN-45 boards)
 	{ "DRIPGAME", UnifBoards::UnlDripGame },
 	{ "60311C", UnifBoards::Bmc60311C },
+	{ "CHINA_ER_SAN2", 19 }, //Appears to be a mapper 19 hack specific for VirtuaNES (which adds chinese text on top of the PPU's output), unknown if a board actually exists
 };
