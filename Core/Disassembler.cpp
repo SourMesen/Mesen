@@ -156,6 +156,10 @@ bool Disassembler::IsUnconditionalJump(uint8_t opCode)
 void Disassembler::GetInfo(AddressTypeInfo &info, uint8_t** source, uint32_t &size, vector<shared_ptr<DisassemblyInfo>> **cache)
 {
 	switch(info.Type) {
+		case AddressType::Register:
+			//AddressType::Register should never be used here
+			break;
+
 		case AddressType::InternalRam: 
 			*source = _memoryManager->GetInternalRAM();
 			*cache = &_disassembleMemoryCache;
@@ -263,6 +267,10 @@ void Disassembler::InvalidateCache(AddressTypeInfo &info)
 		case AddressType::SaveRam:
 			addr = info.Address;
 			cache = &_disassembleSaveRamCache;
+			break;
+
+		default:
+			//No need to invalidate PRG ROM cache (since it's not RAM)
 			break;
 	}
 
@@ -470,6 +478,7 @@ string Disassembler::GetCode(AddressTypeInfo &addressInfo, uint32_t endAddr, uin
 	uint8_t *source;
 	char memoryType = 'P';
 	switch(addressInfo.Type) {
+		case AddressType::Register: break; //Should never happen
 		case AddressType::InternalRam: memoryType = 'N'; break;
 		case AddressType::PrgRom: memoryType = 'P'; break;
 		case AddressType::WorkRam: memoryType = 'W'; break;
@@ -662,6 +671,7 @@ DisassemblyInfo Disassembler::GetDisassemblyInfo(AddressTypeInfo &info)
 {
 	DisassemblyInfo* disassemblyInfo = nullptr;
 	switch(info.Type) {
+		case AddressType::Register: break; //Should never happen
 		case AddressType::InternalRam: disassemblyInfo = _disassembleMemoryCache[info.Address & 0x7FF].get(); break;
 		case AddressType::PrgRom: disassemblyInfo = _disassembleCache[info.Address].get(); break;
 		case AddressType::WorkRam: disassemblyInfo = _disassembleWorkRamCache[info.Address].get(); break;

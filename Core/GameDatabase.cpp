@@ -439,6 +439,7 @@ void GameDatabase::SetGameInfo(uint32_t romCrc, RomData &romData, bool updateRom
 		}
 
 		switch(GetBusConflictType(info.BusConflicts)) {
+			case BusConflictType::Default: break;
 			case BusConflictType::Yes: MessageManager::Log("[DB] Bus conflicts: Yes"); break;
 			case BusConflictType::No: MessageManager::Log("[DB] Bus conflicts: No"); break;
 		}

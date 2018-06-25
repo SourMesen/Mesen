@@ -103,6 +103,15 @@ shared_ptr<ScaleFilter> ScaleFilter::GetScaleFilter(VideoFilterType filter)
 {
 	shared_ptr<ScaleFilter> scaleFilter;
 	switch(filter) {
+		case VideoFilterType::BisqwitNtsc:
+		case VideoFilterType::BisqwitNtscHalfRes:
+		case VideoFilterType::BisqwitNtscQuarterRes:
+		case VideoFilterType::NTSC:
+		case VideoFilterType::HdPack:
+		case VideoFilterType::Raw:
+		case VideoFilterType::None:
+			break;
+
 		case VideoFilterType::xBRZ2x: scaleFilter.reset(new ScaleFilter(ScaleFilterType::xBRZ, 2)); break;
 		case VideoFilterType::xBRZ3x: scaleFilter.reset(new ScaleFilter(ScaleFilterType::xBRZ, 3)); break;
 		case VideoFilterType::xBRZ4x: scaleFilter.reset(new ScaleFilter(ScaleFilterType::xBRZ, 4)); break;

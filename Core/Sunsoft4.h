@@ -20,6 +20,7 @@ private:
 
 		if(_useChrForNametables) {
 			switch(GetMirroringType()) {
+				case MirroringType::FourScreens: break; //4-screen mirroring is not supported by this mapper
 				case MirroringType::Vertical: SetNametables(4, 5, 4, 5); break;
 				case MirroringType::Horizontal: SetNametables(4, 4, 5, 5); break;
 				case MirroringType::ScreenAOnly: SetNametables(4, 4, 4, 4);	break;

@@ -23,6 +23,12 @@ MemoryDumper::MemoryDumper(shared_ptr<PPU> ppu, shared_ptr<MemoryManager> memory
 void MemoryDumper::SetMemoryState(DebugMemoryType type, uint8_t *buffer)
 {
 	switch(type) {
+		case DebugMemoryType::ChrRom:
+		case DebugMemoryType::PrgRom:
+		case DebugMemoryType::CpuMemory:
+		case DebugMemoryType::PpuMemory:
+			break;
+
 		case DebugMemoryType::InternalRam:
 			for(int i = 0; i < 0x800; i++) {
 				_memoryManager->DebugWrite(i, buffer[i]);
@@ -172,6 +178,7 @@ void MemoryDumper::SetMemoryValue(DebugMemoryType memoryType, uint32_t address, 
 				_debugger->GetAbsoluteAddressAndType(address, &info);
 				if(info.Address >= 0) {
 					switch(info.Type) {
+						case AddressType::Register: break; //not supported
 						case AddressType::InternalRam: SetMemoryValue(DebugMemoryType::InternalRam, info.Address, value, preventRebuildCache, true); break;
 						case AddressType::PrgRom: SetMemoryValue(DebugMemoryType::PrgRom, info.Address, value, preventRebuildCache, true); break;
 						case AddressType::WorkRam: SetMemoryValue(DebugMemoryType::WorkRam, info.Address, value, preventRebuildCache, true); break;
@@ -230,6 +237,7 @@ uint8_t MemoryDumper::GetMemoryValue(DebugMemoryType memoryType, uint32_t addres
 				_debugger->GetAbsoluteAddressAndType(address, &info);
 				if(info.Address >= 0) {
 					switch(info.Type) {
+						case AddressType::Register: return 0; //not supported
 						case AddressType::InternalRam: return GetMemoryValue(DebugMemoryType::InternalRam, info.Address, true);
 						case AddressType::PrgRom: return GetMemoryValue(DebugMemoryType::PrgRom, info.Address, true);
 						case AddressType::WorkRam: return GetMemoryValue(DebugMemoryType::WorkRam, info.Address, true);

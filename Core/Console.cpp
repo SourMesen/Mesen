@@ -968,6 +968,8 @@ uint8_t* Console::GetRamBuffer(DebugMemoryType memoryType, uint32_t &size, int32
 {
 	//Only used by libretro port for achievements - should not be used by anything else.
 	switch(memoryType) {
+		default: break;
+
 		case DebugMemoryType::InternalRam:
 			size = MemoryManager::InternalRAMSize;
 			startAddr = 0;

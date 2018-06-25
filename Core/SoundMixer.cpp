@@ -139,6 +139,7 @@ void SoundMixer::PlayAudioBuffer(uint32_t time)
 	}
 
 	switch(EmulationSettings::GetStereoFilter()) {
+		case StereoFilter::None: break;
 		case StereoFilter::Delay: _stereoDelay.ApplyFilter(_outputBuffer, sampleCount, _sampleRate); break;
 		case StereoFilter::Panning: _stereoPanning.ApplyFilter(_outputBuffer, sampleCount); break;
 	}

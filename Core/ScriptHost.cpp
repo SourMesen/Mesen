@@ -42,6 +42,7 @@ void ScriptHost::ProcessCpuOperation(uint16_t addr, uint8_t &value, MemoryOperat
 			case MemoryOperationType::Read: _context->CallMemoryCallback(addr, value, CallbackType::CpuRead); break;
 			case MemoryOperationType::Write: _context->CallMemoryCallback(addr, value, CallbackType::CpuWrite); break;
 			case MemoryOperationType::ExecOpCode: _context->CallMemoryCallback(addr, value, CallbackType::CpuExec); break;
+			default: break;
 		}
 	}
 }
@@ -52,6 +53,7 @@ void ScriptHost::ProcessPpuOperation(uint16_t addr, uint8_t &value, MemoryOperat
 		switch(type) {
 			case MemoryOperationType::Read: _context->CallMemoryCallback(addr, value, CallbackType::PpuRead); break;
 			case MemoryOperationType::Write: _context->CallMemoryCallback(addr, value, CallbackType::PpuWrite); break;
+			default: break;
 		}
 	}
 }

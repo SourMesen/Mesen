@@ -710,6 +710,7 @@ int LuaApi::GetAccessCounters(lua_State *lua)
 
 	uint32_t size = 0;
 	switch(memoryType) {
+		case AddressType::Register: error("Invalid memory type"); break;
 		case AddressType::InternalRam: size = 0x2000; break;
 		case AddressType::PrgRom: size = _debugger->GetMemoryDumper()->GetMemorySize(DebugMemoryType::PrgRom); break;
 		case AddressType::WorkRam: size = _debugger->GetMemoryDumper()->GetMemorySize(DebugMemoryType::WorkRam); break;

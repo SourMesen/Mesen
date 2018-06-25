@@ -142,6 +142,8 @@ uint32_t EmulationSettings::GetEmulationSpeed(bool ignoreTurbo)
 double EmulationSettings::GetAspectRatio()
 {
 	switch(_aspectRatio) {
+		case VideoAspectRatio::NoStretching: return 0.0;
+
 		case VideoAspectRatio::Auto:
 		{
 			NesModel model = GetNesModel();

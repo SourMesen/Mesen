@@ -92,12 +92,10 @@ protected:
 
 	void WriteRAM(uint16_t addr, uint8_t value)
 	{
-		switch(GetRegisterID(addr)) {
-			case PPURegisters::VideoMemoryData:
-				if(_state.VideoRamAddr < 0x2000) {
-					_needChrHash = true;
-				}
-				break;
+		if(GetRegisterID(addr) == PPURegisters::VideoMemoryData) {
+			if(_state.VideoRamAddr < 0x2000) {
+				_needChrHash = true;
+			}
 		}
 		PPU::WriteRAM(addr, value);
 	}

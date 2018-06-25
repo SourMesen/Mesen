@@ -525,7 +525,7 @@ struct KeyCombination
 
 enum class Language
 {
-	SystemDefault = 0,
+	//SystemDefault = 0,  //This value is never used by the C++ core
 	English = 1,
 	French = 2,
 	Japanese = 3,

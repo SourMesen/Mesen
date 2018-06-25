@@ -109,6 +109,10 @@ void PPU::SetNesModel(NesModel model)
 	_nesModel = model;
 
 	switch(_nesModel) {
+		case NesModel::Auto:
+			//Should never be Auto
+			break;
+
 		case NesModel::NTSC:
 			_nmiScanline = 241;
 			_vblankEnd = 260;
@@ -239,6 +243,7 @@ uint8_t PPU::ReadRAM(uint16_t addr)
 				case PpuModel::Ppu2C05C: openBusMask = 0x00; returnValue |= 0x1C; break;
 				case PpuModel::Ppu2C05D: openBusMask = 0x00; returnValue |= 0x1B; break;
 				case PpuModel::Ppu2C05E: openBusMask = 0x00; break;
+				default: break;
 			}
 			break;
 

@@ -290,6 +290,9 @@ void Debugger::ProcessBreakpoints(BreakpointType type, OperationInfo &operationI
 	PpuAddressTypeInfo ppuInfo { -1, PpuAddressType::None };
 	bool isPpuBreakpoint = false;
 	switch(type) {
+		case BreakpointType::Global:
+			break;
+
 		case BreakpointType::Execute:
 		case BreakpointType::ReadRam:
 		case BreakpointType::WriteRam:
@@ -657,8 +660,9 @@ bool Debugger::PrivateProcessRamOperation(MemoryOperationType type, uint16_t &ad
 	}
 
 	if(type != MemoryOperationType::DummyRead) {
-		BreakpointType breakpointType = BreakpointType::Execute;
+		BreakpointType breakpointType;
 		switch(type) {
+			default: breakpointType = BreakpointType::Execute; break;
 			case MemoryOperationType::Read: breakpointType = BreakpointType::ReadRam; break;
 			case MemoryOperationType::Write: breakpointType = BreakpointType::WriteRam; break;
 		}

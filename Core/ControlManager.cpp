@@ -124,6 +124,7 @@ shared_ptr<BaseControlDevice> ControlManager::CreateControllerDevice(ControllerT
 	shared_ptr<BaseControlDevice> device;
 
 	switch(type) {
+		case ControllerType::None: break;
 		case ControllerType::StandardController: device.reset(new StandardController(port, EmulationSettings::GetControllerKeys(port))); break;
 		case ControllerType::Zapper: device.reset(new Zapper(port)); break;
 		case ControllerType::ArkanoidController: device.reset(new ArkanoidController(port)); break;

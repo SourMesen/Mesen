@@ -281,6 +281,9 @@ class MMC3 : public BaseMapper
 		virtual void NotifyVRAMAddressChange(uint16_t addr) override
 		{
 			switch(_a12Watcher.UpdateVramAddress(addr)) {
+				case A12StateChange::None:
+					break;
+
 				case A12StateChange::Fall:
 					if(_needIrq) {
 						//Used by MC-ACC (Acclaim copy of the MMC3), see TriggerIrq above

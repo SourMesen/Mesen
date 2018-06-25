@@ -105,6 +105,12 @@ public:
 				_chrOr[1] = 2;
 				_chrOr[2] = 3;
 				break;
+
+			case Sachen8259Variant::Sachen8259D:
+				//Variant D does not use the _shift / _chrOr variables at all
+				_shift = 0;
+				_chrOr[0] = _chrOr[1] = _chrOr[2] = 0;
+				break;
 		}
 	}
 };

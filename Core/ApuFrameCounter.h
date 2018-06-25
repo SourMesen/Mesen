@@ -81,6 +81,10 @@ public:
 		if(_nesModel != model) {
 			_nesModel = model;
 			switch(model) {
+				case NesModel::Auto:
+					//Auto should never be set here
+					break;
+
 				case NesModel::NTSC:
 				case NesModel::Dendy:
 					memcpy(_stepCycles, _stepCyclesNtsc, sizeof(_stepCycles));

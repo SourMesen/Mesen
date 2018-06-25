@@ -89,6 +89,9 @@ void RecordedRomTest::ProcessNotification(ConsoleNotificationType type, void* pa
 				Save();
 			}
 			break;
+
+		default:
+			break;
 	}
 }
 

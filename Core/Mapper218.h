@@ -26,6 +26,7 @@ protected:
 			case MirroringType::Horizontal: mask = 0x800; break;
 			case MirroringType::ScreenAOnly: mask = 0x1000; break;
 			case MirroringType::ScreenBOnly: mask = 0x2000; break;
+			case MirroringType::FourScreens: break; //Will never be FourScreens, see InitMapper() above
 		}
 
 		for(int i = 0; i < 8; i++) {

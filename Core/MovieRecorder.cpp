@@ -77,6 +77,7 @@ void MovieRecorder::GetGameSettings(stringstream &out)
 	}
 
 	switch(model) {
+		case NesModel::Auto: break; //Console::GetModel() will never return Auto.
 		case NesModel::NTSC: WriteString(out, MovieKeys::Region, "NTSC"); break;
 		case NesModel::PAL: WriteString(out, MovieKeys::Region, "PAL"); break;
 		case NesModel::Dendy: WriteString(out, MovieKeys::Region, "Dendy"); break;

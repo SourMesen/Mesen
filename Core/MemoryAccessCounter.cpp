@@ -90,6 +90,8 @@ void MemoryAccessCounter::GetAccessCounts(AddressType memoryType, MemoryOperatio
 void MemoryAccessCounter::GetAccessStamps(uint32_t offset, uint32_t length, DebugMemoryType memoryType, MemoryOperationType operationType, uint32_t stamps[])
 {
 	switch(memoryType) {
+		default: break;
+
 		case DebugMemoryType::InternalRam:
 			memcpy(stamps, GetArray(operationType, AddressType::InternalRam, true).data() + offset, length * sizeof(uint32_t));
 			break;
@@ -119,6 +121,8 @@ void MemoryAccessCounter::GetAccessStamps(uint32_t offset, uint32_t length, Debu
 void MemoryAccessCounter::GetAccessCountsEx(uint32_t offset, uint32_t length, DebugMemoryType memoryType, MemoryOperationType operationType, int32_t counts[])
 {
 	switch(memoryType) {
+		default: break;
+
 		case DebugMemoryType::InternalRam:
 			memcpy(counts, GetArray(operationType, AddressType::InternalRam, false).data() + offset, length * sizeof(uint32_t));
 			break;

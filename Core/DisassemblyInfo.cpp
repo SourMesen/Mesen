@@ -226,6 +226,8 @@ void DisassemblyInfo::GetEffectiveAddressString(string &out, State& cpuState, Me
 int32_t DisassemblyInfo::GetEffectiveAddress(State& cpuState, MemoryManager* memoryManager)
 {
 	switch(_opMode) {
+		default: break;
+
 		case AddrMode::ZeroX: return (uint8_t)(_byteCode[1] + cpuState.X); break;
 		case AddrMode::ZeroY: return (uint8_t)(_byteCode[1] + cpuState.Y); break;
 
