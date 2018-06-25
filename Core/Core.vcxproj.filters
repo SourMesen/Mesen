@@ -952,9 +952,6 @@
     <ClInclude Include="MMC3_Coolboy.h">
       <Filter>Nes\Mappers\MMC</Filter>
     </ClInclude>
-    <ClInclude Include="Mapper220.h">
-      <Filter>Nes\Mappers\Unnamed</Filter>
-    </ClInclude>
     <ClInclude Include="Mapper83.h">
       <Filter>Nes\Mappers\Unnamed</Filter>
     </ClInclude>

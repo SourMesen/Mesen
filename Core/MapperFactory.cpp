@@ -120,7 +120,6 @@
 #include "Mapper214.h"
 #include "Mapper216.h"
 #include "Mapper218.h"
-#include "Mapper220.h"
 #include "Mapper221.h"
 #include "Mapper222.h"
 #include "Mapper225.h"
@@ -502,7 +501,7 @@ BaseMapper* MapperFactory::GetMapperFromID(RomData &romData)
 		case 217: return new MMC3_217();
 		case 218: return new Mapper218();
 		case 219: return new MMC3_219();
-		case 220: return new Mapper220();
+		case 220: return new Kaiser7057();
 		case 221: return new Mapper221();
 		case 222: return new Mapper222();
 		case 224: return new MMC3_224();
