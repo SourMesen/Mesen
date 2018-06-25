@@ -265,6 +265,9 @@ namespace Mesen.GUI.Forms
 			}
 
 			_shuttingDown = true;
+			if(_frmFullscreenRenderer != null) {
+				_frmFullscreenRenderer.Close();
+			}
 
 			//Stop menu update timer, and process all pending events before stopping the core
 			//This prevents some rare crashes on shutdown
@@ -833,7 +836,7 @@ namespace Mesen.GUI.Forms
 				case EmulatorShortcut.LoadLastSession: LoadLastSession(); break;
 			}
 
-			if(restoreFullscreen && _frmFullscreenRenderer == null) {
+			if(restoreFullscreen && _frmFullscreenRenderer == null && !_shuttingDown) {
 				//Need to restore fullscreen mode after showing a dialog
 				this.SetFullscreenState(true);
 			}
