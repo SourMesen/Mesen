@@ -179,7 +179,7 @@ class MMC1 : public BaseMapper
 
 		virtual void InitMapper() override
 		{
-			_state.Reg8000 = GetPowerOnByte(0x0C); //On powerup: bits 2,3 of $8000 are set (this ensures the $8000 is bank 0, and $C000 is the last bank - needed for SEROM/SHROM/SH1ROM which do no support banking)
+			_state.Reg8000 = GetPowerOnByte() | 0x0C; //On powerup: bits 2,3 of $8000 are set (this ensures the $8000 is bank 0, and $C000 is the last bank - needed for SEROM/SHROM/SH1ROM which do no support banking)
 			_state.RegA000 = GetPowerOnByte();
 			_state.RegC000 = GetPowerOnByte();
 			_state.RegE000 = (_databaseInfo.Board.find("MMC1B") != string::npos ? 0x10 : 0x00); //WRAM Disable: enabled by default for MMC1B
