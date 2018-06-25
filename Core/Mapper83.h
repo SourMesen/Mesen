@@ -124,7 +124,13 @@ protected:
 			UpdateState();
 		} else {
 			switch(addr) {
-				case 0x8000: _is2kBank = true; //no break				
+				case 0x8000: 
+					_is2kBank = true;
+					_bank = value;
+					_mode |= 0x40;
+					UpdateState();
+					break;
+
 				case 0xB000: case 0xB0FF: case 0xB1FF:
 					// Dragon Ball Z Party [p1] BMC
 					_bank = value; 

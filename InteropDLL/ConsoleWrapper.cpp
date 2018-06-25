@@ -223,7 +223,7 @@ namespace InteropEmu {
 			}
 		}
 
-		DllExport const void __stdcall GetRomInfo(RomInfo &romInfo, char* filename) 
+		DllExport void __stdcall GetRomInfo(RomInfo &romInfo, char* filename) 
 		{
 			string romPath = filename;
 			if(romPath.empty()) {

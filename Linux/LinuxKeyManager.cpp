@@ -246,7 +246,7 @@ LinuxKeyManager::LinuxKeyManager()
 
 	for(int i = 0; i < 20; i++) {
 		for(int j = 0; j < (int)buttonNames.size(); j++) {
-			_keyDefinitions.push_back({ "", (uint32_t)(0x10000 + i * 0x100 + j), "Pad" + std::to_string(i + 1) + " " + buttonNames[j] });
+			_keyDefinitions.push_back({ "", (uint32_t)(0x10000 + i * 0x100 + j), "Pad" + std::to_string(i + 1) + " " + buttonNames[j], "" });
 		}
 	}
 

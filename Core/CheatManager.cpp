@@ -37,7 +37,7 @@ CodeInfo CheatManager::GetGGCodeInfo(string ggCode)
 		rawCode |= ggLetters.find(ggCode[i]) << (i * 4);
 	}
 
-	CodeInfo code = { 0 };
+	CodeInfo code = { };
 	code.IsRelativeAddress = true;
 	code.CompareValue = -1;
 	uint32_t addressBits[15] = { 14, 13, 12, 19, 22, 21, 20, 7, 10, 9, 8, 15, 18, 17, 16 };
@@ -78,7 +78,7 @@ CodeInfo CheatManager::GetPARCodeInfo(uint32_t parCode)
 		key <<= 1;
 	}
 
-	CodeInfo code = { 0 };
+	CodeInfo code = { };
 	code.IsRelativeAddress = true;
 	code.Address = (result & 0x7fff) + 0x8000;
 	code.Value = (result >> 24) & 0xFF;

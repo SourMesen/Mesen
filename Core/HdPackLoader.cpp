@@ -442,10 +442,10 @@ void HdPackLoader::ProcessConditionTag(vector<string> &tokens, bool createInvert
 		uint32_t operandA = HexUtilities::FromHex(tokens[index++]);
 
 		if(usePpuMemory) {
-			checkConstraint(operandA >= 0 && operandA <= 0x3FFF, "[HDPack] Out of range memoryCheck operand");
+			checkConstraint(operandA <= 0x3FFF, "[HDPack] Out of range memoryCheck operand");
 			operandA |= HdPackBaseMemoryCondition::PpuMemoryMarker;
 		} else {
-			checkConstraint(operandA >= 0 && operandA <= 0xFFFF, "[HDPack] Out of range memoryCheck operand");
+			checkConstraint(operandA <= 0xFFFF, "[HDPack] Out of range memoryCheck operand");
 		}
 
 		HdPackConditionOperator op;
@@ -470,14 +470,14 @@ void HdPackLoader::ProcessConditionTag(vector<string> &tokens, bool createInvert
 
 		if(dynamic_cast<HdPackMemoryCheckCondition*>(condition.get())) {
 			if(usePpuMemory) {
-				checkConstraint(operandB >= 0 && operandB <= 0x3FFF, "[HDPack] Out of range memoryCheck operand");
+				checkConstraint(operandB <= 0x3FFF, "[HDPack] Out of range memoryCheck operand");
 				operandB |= HdPackBaseMemoryCondition::PpuMemoryMarker;
 			} else {
-				checkConstraint(operandB >= 0 && operandB <= 0xFFFF, "[HDPack] Out of range memoryCheck operand");
+				checkConstraint(operandB <= 0xFFFF, "[HDPack] Out of range memoryCheck operand");
 			}
 			_data->WatchedMemoryAddresses.emplace(operandB);
 		} else if(dynamic_cast<HdPackMemoryCheckConstantCondition*>(condition.get())) {
-			checkConstraint(operandB >= 0 && operandB <= 0xFF, "[HDPack] Out of range memoryCheckConstant operand");
+			checkConstraint(operandB <= 0xFF, "[HDPack] Out of range memoryCheckConstant operand");
 		}
 		_data->WatchedMemoryAddresses.emplace(operandA);
 		((HdPackBaseMemoryCondition*)condition.get())->Initialize(operandA, op, operandB);
@@ -485,10 +485,18 @@ void HdPackLoader::ProcessConditionTag(vector<string> &tokens, bool createInvert
 		checkConstraint(_data->Version >= 101, "[HDPack] This feature requires version 101+ of HD Packs");
 		checkConstraint(tokens.size() >= 4, "[HDPack] Condition tag should contain at least 4 parameters");
 
-		int operandA = HexUtilities::FromHex(tokens[index++]);
-		checkConstraint(operandA >= 0 && operandA <= 0xFFFF, "[HDPack] Out of range frameRange operand");
+		int32_t operandA;
+		int32_t operandB;
+		if(_data->Version == 101) {
+			operandA = HexUtilities::FromHex(tokens[index++]);
+			operandB = HexUtilities::FromHex(tokens[index++]);
+		} else {
+			//Version 102+
+			operandA = std::stoi(tokens[index++]);
+			operandB = std::stoi(tokens[index++]);
+		}
 
-		int operandB = HexUtilities::FromHex(tokens[index++]);
+		checkConstraint(operandA >= 0 && operandA <= 0xFFFF, "[HDPack] Out of range frameRange operand");
 		checkConstraint(operandB >= 0 && operandB <= 0xFFFF, "[HDPack] Out of range frameRange operand");
 
 		((HdPackFrameRangeCondition*)condition.get())->Initialize(operandA, operandB);
