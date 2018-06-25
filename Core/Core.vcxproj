@@ -535,6 +535,8 @@
     <ClInclude Include="IBattery.h" />
     <ClInclude Include="IInputProvider.h" />
     <ClInclude Include="IInputRecorder.h" />
+    <ClInclude Include="IMemoryManager.h" />
+    <ClInclude Include="InternalRamHandler.h" />
     <ClInclude Include="Kaiser7017.h" />
     <ClInclude Include="Kaiser7031.h" />
     <ClInclude Include="KeyManager.h" />
@@ -544,9 +546,11 @@
     <ClInclude Include="MMC3_224.h" />
     <ClInclude Include="MovieRecorder.h" />
     <ClInclude Include="AsciiTurboFile.h" />
+    <ClInclude Include="OpenBusHandler.h" />
     <ClInclude Include="RawVideoFilter.h" />
     <ClInclude Include="Sachen9602.h" />
     <ClInclude Include="ServerInformationMessage.h" />
+    <ClInclude Include="FamicomBox.h" />
     <ClInclude Include="SystemActionManager.h" />
     <ClInclude Include="DatachBarcodeReader.h" />
     <ClInclude Include="DebugHud.h" />
@@ -966,6 +970,7 @@
     <ClCompile Include="MovieRecorder.cpp" />
     <ClCompile Include="OggMixer.cpp" />
     <ClCompile Include="OggReader.cpp" />
+    <ClCompile Include="OpenBusHandler.cpp" />
     <ClCompile Include="RawVideoFilter.cpp" />
     <ClCompile Include="RecordedRomTest.cpp" />
     <ClCompile Include="AutoSaveManager.cpp" />

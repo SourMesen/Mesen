@@ -113,6 +113,9 @@
     <Filter Include="Nes\Input\Controllers">
       <UniqueIdentifier>{7b42e684-9487-4031-a769-a05934998777}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Nes\MemoryManager">
+      <UniqueIdentifier>{13af8497-e820-43f1-9888-85797a29b551}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="IAudioDevice.h">
@@ -281,9 +284,6 @@
       <Filter>Nes</Filter>
     </ClInclude>
     <ClInclude Include="CheatManager.h">
-      <Filter>Nes</Filter>
-    </ClInclude>
-    <ClInclude Include="MemoryManager.h">
       <Filter>Nes</Filter>
     </ClInclude>
     <ClInclude Include="PPU.h">
@@ -1438,6 +1438,21 @@
     <ClInclude Include="MMC3_224.h">
       <Filter>Nes\Mappers\MMC</Filter>
     </ClInclude>
+    <ClInclude Include="FamicomBox.h">
+      <Filter>Nes\Mappers\Unif</Filter>
+    </ClInclude>
+    <ClInclude Include="MemoryManager.h">
+      <Filter>Nes\MemoryManager</Filter>
+    </ClInclude>
+    <ClInclude Include="InternalRamHandler.h">
+      <Filter>Nes\MemoryManager</Filter>
+    </ClInclude>
+    <ClInclude Include="OpenBusHandler.h">
+      <Filter>Nes\MemoryManager</Filter>
+    </ClInclude>
+    <ClInclude Include="IMemoryManager.h">
+      <Filter>Nes\MemoryManager</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -1501,9 +1516,6 @@
       <Filter>Nes</Filter>
     </ClCompile>
     <ClCompile Include="ControlManager.cpp">
-      <Filter>Nes</Filter>
-    </ClCompile>
-    <ClCompile Include="MemoryManager.cpp">
       <Filter>Nes</Filter>
     </ClCompile>
     <ClCompile Include="PPU.cpp">
@@ -1706,6 +1718,12 @@
     </ClCompile>
     <ClCompile Include="BaseSoundManager.cpp">
       <Filter>Misc</Filter>
+    </ClCompile>
+    <ClCompile Include="MemoryManager.cpp">
+      <Filter>Nes\MemoryManager</Filter>
+    </ClCompile>
+    <ClCompile Include="OpenBusHandler.cpp">
+      <Filter>Nes\MemoryManager</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

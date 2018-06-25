@@ -32,6 +32,7 @@
 #include "Bmc8in1.h"
 #include "BmcG146.h"
 #include "BmcGn45.h"
+#include "BmcHpxx.h"
 #include "BmcNtd03.h"
 #include "BnRom.h"
 #include "Bs5.h"
@@ -49,6 +50,7 @@
 #include "DreamTech01.h"
 #include "Edu2000.h"
 #include "Eh8813A.h"
+#include "FamicomBox.h"
 #include "FDS.h"
 #include "FrontFareast.h"
 #include "Ghostbusters63in1.h"
@@ -59,7 +61,6 @@
 #include "Henggedianzi177.h"
 #include "Henggedianzi179.h"
 #include "Hp898f.h"
-#include "BmcHpxx.h"
 #include "IremG101.h"
 #include "IremH3001.h"
 #include "IremLrog017.h"
@@ -583,6 +584,7 @@ BaseMapper* MapperFactory::GetMapperFromID(RomData &romData)
 		case UnifBoards::Rt01: return new Rt01();
 		case UnifBoards::Sachen9602: return new Sachen9602();
 		case UnifBoards::Smb2j: return new Smb2j();
+		case UnifBoards::SssNrom256: return new FamicomBox();
 		case UnifBoards::StreetHeroes: return new MMC3_StreetHeroes();
 		case UnifBoards::Super24in1Sc03: return new MMC3_Super24in1Sc03();
 		case UnifBoards::Super40in1Ws: return new Super40in1Ws();

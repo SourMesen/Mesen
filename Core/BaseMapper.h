@@ -12,6 +12,7 @@
 #include "IBattery.h"
 
 class BaseControlDevice;
+class IMemoryManager;
 
 class BaseMapper : public IMemoryHandler, public Snapshotable, public INotificationListener, public IBattery
 {
@@ -55,6 +56,7 @@ private:
 
 protected:
 	shared_ptr<BaseControlDevice> _mapperControlDevice;
+	IMemoryManager *_memoryManager;
 
 	NESHeader _nesHeader;
 	GameInfo _databaseInfo;
@@ -171,6 +173,7 @@ public:
 	
 	virtual void SaveBattery() override;
 
+	void SetMemoryManager(IMemoryManager* memoryManager);
 	virtual void SetDefaultNametables(uint8_t* nametableA, uint8_t* nametableB);
 
 	shared_ptr<BaseControlDevice> GetMapperControlDevice();

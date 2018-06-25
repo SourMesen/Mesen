@@ -9,6 +9,7 @@
 #include "Debugger.h"
 #include "MemoryManager.h"
 #include "BatteryManager.h"
+#include "IMemoryManager.h"
 
 void BaseMapper::WriteRegister(uint16_t addr, uint8_t value) { }
 uint8_t BaseMapper::ReadRegister(uint16_t addr) { return 0; }
@@ -653,6 +654,11 @@ void BaseMapper::GetMemoryRanges(MemoryRanges &ranges)
 		ranges.AddHandler(MemoryOperation::Read, 0x4018, 0xFFFF);
 		ranges.AddHandler(MemoryOperation::Write, 0x4018, 0xFFFF);
 	}
+}
+
+void BaseMapper::SetMemoryManager(IMemoryManager* memoryManager)
+{
+	_memoryManager = memoryManager;
 }
 
 void BaseMapper::SetDefaultNametables(uint8_t* nametableA, uint8_t* nametableB)

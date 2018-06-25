@@ -108,7 +108,7 @@ std::unordered_map<string, int> UnifLoader::_boardMappings = std::unordered_map<
 	{ "SMB2J", UnifBoards::Smb2j },
 	{ "SNROM", 1 },
 	{ "SOROM", 1 },
-	{ "SSS-NROM-256", UnifBoards::UnknownBoard },
+	{ "SSS-NROM-256", UnifBoards::SssNrom256 },
 	{ "SUNSOFT_UNROM", 93 },
 	{ "Sachen-74LS374N", 150 },
 	{ "Sachen-74LS374NA", 243 },
