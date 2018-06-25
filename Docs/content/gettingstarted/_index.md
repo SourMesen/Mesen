@@ -126,11 +126,17 @@ Mesen has a number of shortcut keys that you may find useful:
 * <kbd>**Ctrl-O**</kbd>: Open a file
 * <kbd>**Ctrl-R**</kbd>: Reset the game
 * <kbd>**Escape**</kbd>: Pause/resume the game
+* <kbd>**Alt-1 to Alt-6**</kbd>: Change the video scale.
 * <kbd>**F1 to F8**</kbd>: Load save state in the corresponding slot.
 * <kbd>**Shift-F1 to Shift-F7**</kbd>: Save a save state in the corresponding slot.
 * <kbd>**Ctrl-S**</kbd>: Manually save a save state to a file.
 * <kbd>**Ctrl-L**</kbd>: Manually load a save state from a file.
-* <kbd>**Alt-1 to Alt-6**</kbd>: Change the video scale.
+* <kbd>**Tab**</kbd>: Hold the tab key to fast forward the emulation (defaults to 300% speed)
+* <kbd>**Backspace**</kbd>: Hold the backspace key to rewind the emulation, frame-by-frame.
+
+{{% notice tip %}}
+If you load a state by mistake, you can use the rewind feature to undo the load state action.
+{{% /notice %}}
 
 The [shortcut keys](/configuration/preferences.html#shortcut-keys) can be customized in the [preferences](/configuration/preferences.html).
 
