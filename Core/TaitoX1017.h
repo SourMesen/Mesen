@@ -43,8 +43,9 @@ protected:
 	void UpdateChrBanking()
 	{
 		if(_chrMode == 0) {
-			SelectChrPage2x(0, _chrRegs[0]);
-			SelectChrPage2x(1, _chrRegs[1]);
+			//Regs 0 & 1 ignore the LSB
+			SelectChrPage2x(0, _chrRegs[0] & 0xFE);
+			SelectChrPage2x(1, _chrRegs[1] & 0xFE);
 
 			SelectCHRPage(4, _chrRegs[2]);
 			SelectCHRPage(5, _chrRegs[3]);
@@ -56,8 +57,9 @@ protected:
 			SelectCHRPage(2, _chrRegs[4]);
 			SelectCHRPage(3, _chrRegs[5]);
 
-			SelectChrPage2x(2, _chrRegs[0]);
-			SelectChrPage2x(3, _chrRegs[1]);
+			//Regs 0 & 1 ignore the LSB
+			SelectChrPage2x(2, _chrRegs[0] & 0xFE);
+			SelectChrPage2x(3, _chrRegs[1] & 0xFE);
 		}
 	}
 
