@@ -78,6 +78,7 @@ SOURCES_CXX := $(LIBRETRO_DIR)/libretro.cpp \
                $(CORE_DIR)/NtscFilter.cpp \
                $(CORE_DIR)/OggMixer.cpp \
                $(CORE_DIR)/OggReader.cpp \
+               $(CORE_DIR)/OpenBusHandler.cpp \
                $(CORE_DIR)/PPU.cpp \
                $(CORE_DIR)/Profiler.cpp \
                $(CORE_DIR)/RecordedRomTest.cpp \
