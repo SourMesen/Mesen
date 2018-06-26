@@ -404,6 +404,8 @@
 
 			<Control ID="lblFdsSettings">Configurações do Famicom Disk System</Control>
 			<Control ID="lblUiDisplaySettings">Configuração da interface de usuário</Control>
+			<Control ID="lblWindowSettings">Window Settings</Control>
+			<Control ID="chkDisableMouseResize">Do not allow the main window to be resized using the mouse</Control>
 			<Control ID="lblGameSelectionScreenSettings">Configurações da tela de seleção de jogos</Control>
 			<Control ID="chkGameSelectionScreenResetGame">Iniciar o jogo a partir do zero, em vez de retomar a sessão de jogo anterior</Control>
 			<Control ID="chkDisableGameSelectionScreen">Desativar a tela de seleção do jogo</Control>
@@ -414,12 +416,13 @@
 
 			<Control ID="chkAlwaysOnTop">Sempre exibir em cima de outras janelas</Control>
 
-			<Control ID="tpgNsf">NSF</Control>
+			<Control ID="tpgFdsNfs">FDS / NSF</Control>
+			<Control ID="lblNsfSettings">NSF Settings</Control>
 			<Control ID="chkNsfAutoDetectSilence">Reproduzir a faixa seguinte depois de</Control>
 			<Control ID="lblNsfMillisecondsOfSilence">milissegundos de silêncio</Control>
 			<Control ID="chkNsfMoveToNextTrackAfterTime">Limitar a duração da faixa em</Control>
 			<Control ID="lblNsfSeconds">segundos</Control>
-			<Control ID="chkNsfDisableApuIrqs">Desabilitar as IRQs da APU (Recomendado)</Control>
+			<Control ID="chkNsfEnableApuIrqs">Enable APU IRQs for NSF files</Control>
 
 			<Control ID="btnOK">OK</Control>
 			<Control ID="btnCancel">Cancelar</Control>

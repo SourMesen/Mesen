@@ -405,6 +405,8 @@
 
 			<Control ID="lblFdsSettings">Famicom Disk System Settings</Control>
 			<Control ID="lblUiDisplaySettings">UI Display Settings</Control>
+			<Control ID="lblWindowSettings">Window Settings</Control>
+			<Control ID="chkDisableMouseResize">Do not allow the main window to be resized using the mouse</Control>
 			<Control ID="lblGameSelectionScreenSettings">Game Selection Screen Settings</Control>
 			<Control ID="chkGameSelectionScreenResetGame">Start game from power-on instead of resuming the previous gameplay session</Control>
 			<Control ID="chkDisableGameSelectionScreen">Disable game selection screen</Control>
@@ -415,12 +417,13 @@
 
 			<Control ID="chkAlwaysOnTop">Always display on top of other windows</Control>
 
-			<Control ID="tpgNsf">NSF</Control>
+			<Control ID="tpgFdsNfs">FDS / NSF</Control>
+			<Control ID="lblNsfSettings">NSF Settings</Control>
 			<Control ID="chkNsfAutoDetectSilence">Переходить на следующий трек после</Control>
 			<Control ID="lblNsfMillisecondsOfSilence">миллисекунд тишины</Control>
 			<Control ID="chkNsfMoveToNextTrackAfterTime">Ограничить продолжительность воспроизведения</Control>
 			<Control ID="lblNsfSeconds">секундами</Control>
-			<Control ID="chkNsfDisableApuIrqs">Отключить IRQs APU (Рекомендовано)</Control>
+			<Control ID="chkNsfEnableApuIrqs">Enable APU IRQs for NSF files</Control>
 
 			<Control ID="btnOK">OK</Control>
 			<Control ID="btnCancel">Отмена</Control>

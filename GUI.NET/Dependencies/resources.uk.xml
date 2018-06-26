@@ -405,6 +405,8 @@
 
 			<Control ID="lblFdsSettings">Famicom Disk System Налаштування</Control>
 			<Control ID="lblUiDisplaySettings">Налаштування дисплея інтерфейсу користувача</Control>
+			<Control ID="lblWindowSettings">Window Settings</Control>
+			<Control ID="chkDisableMouseResize">Do not allow the main window to be resized using the mouse</Control>
 			<Control ID="lblGameSelectionScreenSettings">Налаштування екрана вибору гри</Control>
 			<Control ID="chkGameSelectionScreenResetGame">Відновити гру з самого початку (замість продовження попередньої гри)</Control>
 			<Control ID="chkDisableGameSelectionScreen">Вимкнути екран вибору гри</Control>
@@ -415,12 +417,13 @@
 
 			<Control ID="chkAlwaysOnTop">Завжди відображати поверх інших вікон</Control>
 
-			<Control ID="tpgNsf">NSF</Control>
+			<Control ID="tpgFdsNfs">FDS / NSF</Control>
+			<Control ID="lblNsfSettings">NSF Settings</Control>
 			<Control ID="chkNsfAutoDetectSilence">Відтворити наступний трек після</Control>
 			<Control ID="lblNsfMillisecondsOfSilence">мілісекунд тиші</Control>
 			<Control ID="chkNsfMoveToNextTrackAfterTime">Обмежити тривалість доріжок до</Control>
 			<Control ID="lblNsfSeconds">секунд</Control>
-			<Control ID="chkNsfDisableApuIrqs">Відключити переривання APU (Рекомендується)</Control>
+			<Control ID="chkNsfEnableApuIrqs">Enable APU IRQs for NSF files</Control>
 
 			<Control ID="btnOK">OK</Control>
 			<Control ID="btnCancel">Вiдмiна</Control>

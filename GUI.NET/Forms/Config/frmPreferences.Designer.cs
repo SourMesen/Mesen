@@ -83,8 +83,13 @@ namespace Mesen.GUI.Forms.Config
 			this.chkAutoSave = new System.Windows.Forms.CheckBox();
 			this.nudAutoSave = new Mesen.GUI.Controls.MesenNumericUpDown();
 			this.lblAutoSave = new System.Windows.Forms.Label();
-			this.tpgNsf = new System.Windows.Forms.TabPage();
+			this.tpgFdsNfs = new System.Windows.Forms.TabPage();
 			this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
+			this.lblNsfSettings = new System.Windows.Forms.Label();
+			this.lblFdsSettings = new System.Windows.Forms.Label();
+			this.chkFdsAutoLoadDisk = new System.Windows.Forms.CheckBox();
+			this.chkFdsFastForwardOnLoad = new System.Windows.Forms.CheckBox();
+			this.chkFdsAutoInsertDisk = new System.Windows.Forms.CheckBox();
 			this.flowLayoutPanel7 = new System.Windows.Forms.FlowLayoutPanel();
 			this.chkNsfAutoDetectSilence = new System.Windows.Forms.CheckBox();
 			this.nudNsfAutoDetectSilenceDelay = new Mesen.GUI.Controls.MesenNumericUpDown();
@@ -93,7 +98,7 @@ namespace Mesen.GUI.Forms.Config
 			this.chkNsfMoveToNextTrackAfterTime = new System.Windows.Forms.CheckBox();
 			this.nudNsfMoveToNextTrackTime = new Mesen.GUI.Controls.MesenNumericUpDown();
 			this.lblNsfSeconds = new System.Windows.Forms.Label();
-			this.chkNsfDisableApuIrqs = new System.Windows.Forms.CheckBox();
+			this.chkNsfEnableApuIrqs = new Mesen.GUI.Controls.ctrlRiskyOption();
 			this.tpgFiles = new System.Windows.Forms.TabPage();
 			this.tableLayoutPanel6 = new System.Windows.Forms.TableLayoutPanel();
 			this.grpPathOverrides = new System.Windows.Forms.GroupBox();
@@ -130,28 +135,26 @@ namespace Mesen.GUI.Forms.Config
 			this.lblDataLocation = new System.Windows.Forms.Label();
 			this.tpgAdvanced = new System.Windows.Forms.TabPage();
 			this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+			this.chkDisableHighResolutionTimer = new Mesen.GUI.Controls.ctrlRiskyOption();
 			this.chkShowFullPathInRecents = new System.Windows.Forms.CheckBox();
-			this.chkAlwaysOnTop = new System.Windows.Forms.CheckBox();
 			this.chkDisableGameSelectionScreen = new System.Windows.Forms.CheckBox();
 			this.chkGameSelectionScreenResetGame = new System.Windows.Forms.CheckBox();
 			this.chkDisableGameDatabase = new Mesen.GUI.Controls.ctrlRiskyOption();
-			this.chkFdsAutoLoadDisk = new System.Windows.Forms.CheckBox();
-			this.chkFdsFastForwardOnLoad = new System.Windows.Forms.CheckBox();
 			this.chkDisplayTitleBarInfo = new System.Windows.Forms.CheckBox();
 			this.flowLayoutPanel6 = new System.Windows.Forms.FlowLayoutPanel();
 			this.lblRewind = new System.Windows.Forms.Label();
 			this.nudRewindBufferSize = new Mesen.GUI.Controls.MesenNumericUpDown();
 			this.lblRewindMinutes = new System.Windows.Forms.Label();
-			this.chkFdsAutoInsertDisk = new System.Windows.Forms.CheckBox();
 			this.chkShowGameTimer = new System.Windows.Forms.CheckBox();
 			this.chkShowFrameCounter = new System.Windows.Forms.CheckBox();
 			this.chkShowVsConfigOnLoad = new System.Windows.Forms.CheckBox();
 			this.chkDisableOsd = new System.Windows.Forms.CheckBox();
-			this.lblFdsSettings = new System.Windows.Forms.Label();
 			this.lblUiDisplaySettings = new System.Windows.Forms.Label();
 			this.lblGameSelectionScreenSettings = new System.Windows.Forms.Label();
+			this.lblWindowSettings = new System.Windows.Forms.Label();
+			this.chkAlwaysOnTop = new System.Windows.Forms.CheckBox();
+			this.chkDisableMouseResize = new System.Windows.Forms.CheckBox();
 			this.tmrSyncDateTime = new System.Windows.Forms.Timer(this.components);
-			this.chkDisableHighResolutionTimer = new Mesen.GUI.Controls.ctrlRiskyOption();
 			this.tlpMain.SuspendLayout();
 			this.flowLayoutPanel2.SuspendLayout();
 			this.tableLayoutPanel5.SuspendLayout();
@@ -171,7 +174,7 @@ namespace Mesen.GUI.Forms.Config
 			this.grpAutomaticSaves.SuspendLayout();
 			this.tableLayoutPanel4.SuspendLayout();
 			this.flpAutoSave.SuspendLayout();
-			this.tpgNsf.SuspendLayout();
+			this.tpgFdsNfs.SuspendLayout();
 			this.tableLayoutPanel2.SuspendLayout();
 			this.flowLayoutPanel7.SuspendLayout();
 			this.flowLayoutPanel5.SuspendLayout();
@@ -192,7 +195,7 @@ namespace Mesen.GUI.Forms.Config
 			// 
 			// baseConfigPanel
 			// 
-			this.baseConfigPanel.Location = new System.Drawing.Point(0, 440);
+			this.baseConfigPanel.Location = new System.Drawing.Point(0, 422);
 			this.baseConfigPanel.Size = new System.Drawing.Size(497, 29);
 			// 
 			// tlpMain
@@ -237,7 +240,7 @@ namespace Mesen.GUI.Forms.Config
 			this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-			this.tlpMain.Size = new System.Drawing.Size(483, 387);
+			this.tlpMain.Size = new System.Drawing.Size(483, 390);
 			this.tlpMain.TabIndex = 1;
 			// 
 			// chkDeveloperMode
@@ -377,7 +380,7 @@ namespace Mesen.GUI.Forms.Config
 			this.tableLayoutPanel5.Controls.Add(this.btnOpenMesenFolder, 0, 0);
 			this.tableLayoutPanel5.Controls.Add(this.btnResetSettings, 2, 0);
 			this.tableLayoutPanel5.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.tableLayoutPanel5.Location = new System.Drawing.Point(0, 358);
+			this.tableLayoutPanel5.Location = new System.Drawing.Point(0, 361);
 			this.tableLayoutPanel5.Margin = new System.Windows.Forms.Padding(0);
 			this.tableLayoutPanel5.Name = "tableLayoutPanel5";
 			this.tableLayoutPanel5.RowCount = 1;
@@ -500,14 +503,14 @@ namespace Mesen.GUI.Forms.Config
 			this.tabMain.Controls.Add(this.tpgGeneral);
 			this.tabMain.Controls.Add(this.tpgShortcuts);
 			this.tabMain.Controls.Add(this.tpgSaveData);
-			this.tabMain.Controls.Add(this.tpgNsf);
+			this.tabMain.Controls.Add(this.tpgFdsNfs);
 			this.tabMain.Controls.Add(this.tpgFiles);
 			this.tabMain.Controls.Add(this.tpgAdvanced);
 			this.tabMain.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tabMain.Location = new System.Drawing.Point(0, 0);
 			this.tabMain.Name = "tabMain";
 			this.tabMain.SelectedIndex = 0;
-			this.tabMain.Size = new System.Drawing.Size(497, 440);
+			this.tabMain.Size = new System.Drawing.Size(497, 422);
 			this.tabMain.TabIndex = 2;
 			// 
 			// tpgGeneral
@@ -516,7 +519,7 @@ namespace Mesen.GUI.Forms.Config
 			this.tpgGeneral.Location = new System.Drawing.Point(4, 22);
 			this.tpgGeneral.Name = "tpgGeneral";
 			this.tpgGeneral.Padding = new System.Windows.Forms.Padding(3);
-			this.tpgGeneral.Size = new System.Drawing.Size(489, 393);
+			this.tpgGeneral.Size = new System.Drawing.Size(489, 396);
 			this.tpgGeneral.TabIndex = 0;
 			this.tpgGeneral.Text = "General";
 			this.tpgGeneral.UseVisualStyleBackColor = true;
@@ -527,7 +530,7 @@ namespace Mesen.GUI.Forms.Config
 			this.tpgShortcuts.Location = new System.Drawing.Point(4, 22);
 			this.tpgShortcuts.Name = "tpgShortcuts";
 			this.tpgShortcuts.Padding = new System.Windows.Forms.Padding(3);
-			this.tpgShortcuts.Size = new System.Drawing.Size(489, 393);
+			this.tpgShortcuts.Size = new System.Drawing.Size(489, 396);
 			this.tpgShortcuts.TabIndex = 7;
 			this.tpgShortcuts.Text = "Shortcut Keys";
 			this.tpgShortcuts.UseVisualStyleBackColor = true;
@@ -537,7 +540,7 @@ namespace Mesen.GUI.Forms.Config
 			this.ctrlEmulatorShortcuts.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.ctrlEmulatorShortcuts.Location = new System.Drawing.Point(3, 3);
 			this.ctrlEmulatorShortcuts.Name = "ctrlEmulatorShortcuts";
-			this.ctrlEmulatorShortcuts.Size = new System.Drawing.Size(483, 387);
+			this.ctrlEmulatorShortcuts.Size = new System.Drawing.Size(483, 390);
 			this.ctrlEmulatorShortcuts.TabIndex = 0;
 			// 
 			// tpgSaveData
@@ -546,7 +549,7 @@ namespace Mesen.GUI.Forms.Config
 			this.tpgSaveData.Location = new System.Drawing.Point(4, 22);
 			this.tpgSaveData.Name = "tpgSaveData";
 			this.tpgSaveData.Padding = new System.Windows.Forms.Padding(3);
-			this.tpgSaveData.Size = new System.Drawing.Size(489, 393);
+			this.tpgSaveData.Size = new System.Drawing.Size(489, 396);
 			this.tpgSaveData.TabIndex = 3;
 			this.tpgSaveData.Text = "Save Data";
 			this.tpgSaveData.UseVisualStyleBackColor = true;
@@ -563,7 +566,7 @@ namespace Mesen.GUI.Forms.Config
 			this.tableLayoutPanel3.RowCount = 2;
 			this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel3.Size = new System.Drawing.Size(483, 387);
+			this.tableLayoutPanel3.Size = new System.Drawing.Size(483, 390);
 			this.tableLayoutPanel3.TabIndex = 1;
 			// 
 			// grpCloudSaves
@@ -572,7 +575,7 @@ namespace Mesen.GUI.Forms.Config
 			this.grpCloudSaves.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.grpCloudSaves.Location = new System.Drawing.Point(3, 99);
 			this.grpCloudSaves.Name = "grpCloudSaves";
-			this.grpCloudSaves.Size = new System.Drawing.Size(477, 285);
+			this.grpCloudSaves.Size = new System.Drawing.Size(477, 288);
 			this.grpCloudSaves.TabIndex = 2;
 			this.grpCloudSaves.TabStop = false;
 			this.grpCloudSaves.Text = "Cloud Saves";
@@ -589,7 +592,7 @@ namespace Mesen.GUI.Forms.Config
 			this.tlpCloudSaves.RowCount = 2;
 			this.tlpCloudSaves.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tlpCloudSaves.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this.tlpCloudSaves.Size = new System.Drawing.Size(471, 266);
+			this.tlpCloudSaves.Size = new System.Drawing.Size(471, 269);
 			this.tlpCloudSaves.TabIndex = 0;
 			// 
 			// tlpCloudSaveDesc
@@ -833,8 +836,9 @@ namespace Mesen.GUI.Forms.Config
             0,
             0,
             0});
+			this.nudAutoSave.MinimumSize = new System.Drawing.Size(0, 21);
 			this.nudAutoSave.Name = "nudAutoSave";
-			this.nudAutoSave.Size = new System.Drawing.Size(42, 20);
+			this.nudAutoSave.Size = new System.Drawing.Size(42, 21);
 			this.nudAutoSave.TabIndex = 1;
 			this.nudAutoSave.Value = new decimal(new int[] {
             5,
@@ -852,33 +856,101 @@ namespace Mesen.GUI.Forms.Config
 			this.lblAutoSave.TabIndex = 2;
 			this.lblAutoSave.Text = "minutes";
 			// 
-			// tpgNsf
+			// tpgFdsNfs
 			// 
-			this.tpgNsf.Controls.Add(this.tableLayoutPanel2);
-			this.tpgNsf.Location = new System.Drawing.Point(4, 22);
-			this.tpgNsf.Name = "tpgNsf";
-			this.tpgNsf.Padding = new System.Windows.Forms.Padding(3);
-			this.tpgNsf.Size = new System.Drawing.Size(489, 393);
-			this.tpgNsf.TabIndex = 4;
-			this.tpgNsf.Text = "NSF";
-			this.tpgNsf.UseVisualStyleBackColor = true;
+			this.tpgFdsNfs.Controls.Add(this.tableLayoutPanel2);
+			this.tpgFdsNfs.Location = new System.Drawing.Point(4, 22);
+			this.tpgFdsNfs.Name = "tpgFdsNfs";
+			this.tpgFdsNfs.Padding = new System.Windows.Forms.Padding(3);
+			this.tpgFdsNfs.Size = new System.Drawing.Size(489, 396);
+			this.tpgFdsNfs.TabIndex = 4;
+			this.tpgFdsNfs.Text = "FDS / NSF";
+			this.tpgFdsNfs.UseVisualStyleBackColor = true;
 			// 
 			// tableLayoutPanel2
 			// 
 			this.tableLayoutPanel2.ColumnCount = 1;
 			this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel2.Controls.Add(this.flowLayoutPanel7, 0, 0);
-			this.tableLayoutPanel2.Controls.Add(this.flowLayoutPanel5, 0, 1);
-			this.tableLayoutPanel2.Controls.Add(this.chkNsfDisableApuIrqs, 0, 2);
+			this.tableLayoutPanel2.Controls.Add(this.lblNsfSettings, 0, 4);
+			this.tableLayoutPanel2.Controls.Add(this.lblFdsSettings, 0, 0);
+			this.tableLayoutPanel2.Controls.Add(this.chkFdsAutoLoadDisk, 0, 1);
+			this.tableLayoutPanel2.Controls.Add(this.chkFdsFastForwardOnLoad, 0, 2);
+			this.tableLayoutPanel2.Controls.Add(this.chkFdsAutoInsertDisk, 0, 3);
+			this.tableLayoutPanel2.Controls.Add(this.flowLayoutPanel7, 0, 5);
+			this.tableLayoutPanel2.Controls.Add(this.flowLayoutPanel5, 0, 6);
+			this.tableLayoutPanel2.Controls.Add(this.chkNsfEnableApuIrqs, 0, 7);
 			this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tableLayoutPanel2.Location = new System.Drawing.Point(3, 3);
 			this.tableLayoutPanel2.Name = "tableLayoutPanel2";
-			this.tableLayoutPanel2.RowCount = 3;
+			this.tableLayoutPanel2.RowCount = 9;
+			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel2.Size = new System.Drawing.Size(483, 387);
+			this.tableLayoutPanel2.Size = new System.Drawing.Size(483, 390);
 			this.tableLayoutPanel2.TabIndex = 0;
+			// 
+			// lblNsfSettings
+			// 
+			this.lblNsfSettings.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.lblNsfSettings.AutoSize = true;
+			this.lblNsfSettings.ForeColor = System.Drawing.SystemColors.GrayText;
+			this.lblNsfSettings.Location = new System.Drawing.Point(0, 89);
+			this.lblNsfSettings.Margin = new System.Windows.Forms.Padding(0, 0, 3, 0);
+			this.lblNsfSettings.Name = "lblNsfSettings";
+			this.lblNsfSettings.Size = new System.Drawing.Size(69, 13);
+			this.lblNsfSettings.TabIndex = 25;
+			this.lblNsfSettings.Text = "NSF Settings";
+			// 
+			// lblFdsSettings
+			// 
+			this.lblFdsSettings.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.lblFdsSettings.AutoSize = true;
+			this.lblFdsSettings.ForeColor = System.Drawing.SystemColors.GrayText;
+			this.lblFdsSettings.Location = new System.Drawing.Point(0, 0);
+			this.lblFdsSettings.Margin = new System.Windows.Forms.Padding(0, 0, 3, 0);
+			this.lblFdsSettings.Name = "lblFdsSettings";
+			this.lblFdsSettings.Size = new System.Drawing.Size(151, 13);
+			this.lblFdsSettings.TabIndex = 24;
+			this.lblFdsSettings.Text = "Famicom Disk System Settings";
+			// 
+			// chkFdsAutoLoadDisk
+			// 
+			this.chkFdsAutoLoadDisk.AutoSize = true;
+			this.chkFdsAutoLoadDisk.Location = new System.Drawing.Point(13, 16);
+			this.chkFdsAutoLoadDisk.Margin = new System.Windows.Forms.Padding(13, 3, 3, 3);
+			this.chkFdsAutoLoadDisk.Name = "chkFdsAutoLoadDisk";
+			this.chkFdsAutoLoadDisk.Size = new System.Drawing.Size(303, 17);
+			this.chkFdsAutoLoadDisk.TabIndex = 3;
+			this.chkFdsAutoLoadDisk.Text = "Automatically insert disk 1 side A when starting FDS games";
+			this.chkFdsAutoLoadDisk.UseVisualStyleBackColor = true;
+			// 
+			// chkFdsFastForwardOnLoad
+			// 
+			this.chkFdsFastForwardOnLoad.AutoSize = true;
+			this.chkFdsFastForwardOnLoad.Location = new System.Drawing.Point(13, 39);
+			this.chkFdsFastForwardOnLoad.Margin = new System.Windows.Forms.Padding(13, 3, 3, 3);
+			this.chkFdsFastForwardOnLoad.Name = "chkFdsFastForwardOnLoad";
+			this.chkFdsFastForwardOnLoad.Size = new System.Drawing.Size(342, 17);
+			this.chkFdsFastForwardOnLoad.TabIndex = 4;
+			this.chkFdsFastForwardOnLoad.Text = "Automatically fast forward FDS games when disk or BIOS is loading";
+			this.chkFdsFastForwardOnLoad.UseVisualStyleBackColor = true;
+			// 
+			// chkFdsAutoInsertDisk
+			// 
+			this.chkFdsAutoInsertDisk.AutoSize = true;
+			this.chkFdsAutoInsertDisk.Location = new System.Drawing.Point(13, 62);
+			this.chkFdsAutoInsertDisk.Margin = new System.Windows.Forms.Padding(13, 3, 3, 3);
+			this.chkFdsAutoInsertDisk.Name = "chkFdsAutoInsertDisk";
+			this.chkFdsAutoInsertDisk.Size = new System.Drawing.Size(221, 17);
+			this.chkFdsAutoInsertDisk.TabIndex = 10;
+			this.chkFdsAutoInsertDisk.Text = "Automatically switch disks for FDS games";
+			this.chkFdsAutoInsertDisk.UseVisualStyleBackColor = true;
 			// 
 			// flowLayoutPanel7
 			// 
@@ -886,7 +958,7 @@ namespace Mesen.GUI.Forms.Config
 			this.flowLayoutPanel7.Controls.Add(this.nudNsfAutoDetectSilenceDelay);
 			this.flowLayoutPanel7.Controls.Add(this.lblNsfMillisecondsOfSilence);
 			this.flowLayoutPanel7.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.flowLayoutPanel7.Location = new System.Drawing.Point(0, 0);
+			this.flowLayoutPanel7.Location = new System.Drawing.Point(0, 102);
 			this.flowLayoutPanel7.Margin = new System.Windows.Forms.Padding(0);
 			this.flowLayoutPanel7.Name = "flowLayoutPanel7";
 			this.flowLayoutPanel7.Size = new System.Drawing.Size(483, 24);
@@ -896,7 +968,8 @@ namespace Mesen.GUI.Forms.Config
 			// 
 			this.chkNsfAutoDetectSilence.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.chkNsfAutoDetectSilence.AutoSize = true;
-			this.chkNsfAutoDetectSilence.Location = new System.Drawing.Point(3, 3);
+			this.chkNsfAutoDetectSilence.Location = new System.Drawing.Point(13, 3);
+			this.chkNsfAutoDetectSilence.Margin = new System.Windows.Forms.Padding(13, 3, 0, 3);
 			this.chkNsfAutoDetectSilence.Name = "chkNsfAutoDetectSilence";
 			this.chkNsfAutoDetectSilence.Size = new System.Drawing.Size(139, 17);
 			this.chkNsfAutoDetectSilence.TabIndex = 1;
@@ -912,7 +985,7 @@ namespace Mesen.GUI.Forms.Config
             0,
             0,
             0});
-			this.nudNsfAutoDetectSilenceDelay.Location = new System.Drawing.Point(145, 1);
+			this.nudNsfAutoDetectSilenceDelay.Location = new System.Drawing.Point(152, 1);
 			this.nudNsfAutoDetectSilenceDelay.Margin = new System.Windows.Forms.Padding(0);
 			this.nudNsfAutoDetectSilenceDelay.Maximum = new decimal(new int[] {
             999999,
@@ -925,8 +998,9 @@ namespace Mesen.GUI.Forms.Config
             0,
             0,
             0});
+			this.nudNsfAutoDetectSilenceDelay.MinimumSize = new System.Drawing.Size(0, 21);
 			this.nudNsfAutoDetectSilenceDelay.Name = "nudNsfAutoDetectSilenceDelay";
-			this.nudNsfAutoDetectSilenceDelay.Size = new System.Drawing.Size(57, 20);
+			this.nudNsfAutoDetectSilenceDelay.Size = new System.Drawing.Size(57, 21);
 			this.nudNsfAutoDetectSilenceDelay.TabIndex = 3;
 			this.nudNsfAutoDetectSilenceDelay.Value = new decimal(new int[] {
             3000,
@@ -938,7 +1012,7 @@ namespace Mesen.GUI.Forms.Config
 			// 
 			this.lblNsfMillisecondsOfSilence.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.lblNsfMillisecondsOfSilence.AutoSize = true;
-			this.lblNsfMillisecondsOfSilence.Location = new System.Drawing.Point(202, 5);
+			this.lblNsfMillisecondsOfSilence.Location = new System.Drawing.Point(209, 5);
 			this.lblNsfMillisecondsOfSilence.Margin = new System.Windows.Forms.Padding(0, 0, 3, 0);
 			this.lblNsfMillisecondsOfSilence.Name = "lblNsfMillisecondsOfSilence";
 			this.lblNsfMillisecondsOfSilence.Size = new System.Drawing.Size(111, 13);
@@ -951,7 +1025,7 @@ namespace Mesen.GUI.Forms.Config
 			this.flowLayoutPanel5.Controls.Add(this.nudNsfMoveToNextTrackTime);
 			this.flowLayoutPanel5.Controls.Add(this.lblNsfSeconds);
 			this.flowLayoutPanel5.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.flowLayoutPanel5.Location = new System.Drawing.Point(0, 24);
+			this.flowLayoutPanel5.Location = new System.Drawing.Point(0, 126);
 			this.flowLayoutPanel5.Margin = new System.Windows.Forms.Padding(0);
 			this.flowLayoutPanel5.Name = "flowLayoutPanel5";
 			this.flowLayoutPanel5.Size = new System.Drawing.Size(483, 24);
@@ -961,8 +1035,8 @@ namespace Mesen.GUI.Forms.Config
 			// 
 			this.chkNsfMoveToNextTrackAfterTime.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.chkNsfMoveToNextTrackAfterTime.AutoSize = true;
-			this.chkNsfMoveToNextTrackAfterTime.Location = new System.Drawing.Point(3, 3);
-			this.chkNsfMoveToNextTrackAfterTime.Margin = new System.Windows.Forms.Padding(3, 3, 0, 3);
+			this.chkNsfMoveToNextTrackAfterTime.Location = new System.Drawing.Point(13, 3);
+			this.chkNsfMoveToNextTrackAfterTime.Margin = new System.Windows.Forms.Padding(13, 3, 0, 3);
 			this.chkNsfMoveToNextTrackAfterTime.Name = "chkNsfMoveToNextTrackAfterTime";
 			this.chkNsfMoveToNextTrackAfterTime.Size = new System.Drawing.Size(126, 17);
 			this.chkNsfMoveToNextTrackAfterTime.TabIndex = 2;
@@ -978,7 +1052,7 @@ namespace Mesen.GUI.Forms.Config
             0,
             0,
             0});
-			this.nudNsfMoveToNextTrackTime.Location = new System.Drawing.Point(129, 1);
+			this.nudNsfMoveToNextTrackTime.Location = new System.Drawing.Point(139, 1);
 			this.nudNsfMoveToNextTrackTime.Margin = new System.Windows.Forms.Padding(0);
 			this.nudNsfMoveToNextTrackTime.Maximum = new decimal(new int[] {
             999,
@@ -991,8 +1065,9 @@ namespace Mesen.GUI.Forms.Config
             0,
             0,
             0});
+			this.nudNsfMoveToNextTrackTime.MinimumSize = new System.Drawing.Size(0, 21);
 			this.nudNsfMoveToNextTrackTime.Name = "nudNsfMoveToNextTrackTime";
-			this.nudNsfMoveToNextTrackTime.Size = new System.Drawing.Size(44, 20);
+			this.nudNsfMoveToNextTrackTime.Size = new System.Drawing.Size(44, 21);
 			this.nudNsfMoveToNextTrackTime.TabIndex = 3;
 			this.nudNsfMoveToNextTrackTime.Value = new decimal(new int[] {
             5,
@@ -1004,22 +1079,23 @@ namespace Mesen.GUI.Forms.Config
 			// 
 			this.lblNsfSeconds.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.lblNsfSeconds.AutoSize = true;
-			this.lblNsfSeconds.Location = new System.Drawing.Point(173, 5);
+			this.lblNsfSeconds.Location = new System.Drawing.Point(183, 5);
 			this.lblNsfSeconds.Margin = new System.Windows.Forms.Padding(0, 0, 3, 0);
 			this.lblNsfSeconds.Name = "lblNsfSeconds";
 			this.lblNsfSeconds.Size = new System.Drawing.Size(47, 13);
 			this.lblNsfSeconds.TabIndex = 4;
 			this.lblNsfSeconds.Text = "seconds";
 			// 
-			// chkNsfDisableApuIrqs
+			// chkNsfEnableApuIrqs
 			// 
-			this.chkNsfDisableApuIrqs.AutoSize = true;
-			this.chkNsfDisableApuIrqs.Location = new System.Drawing.Point(3, 51);
-			this.chkNsfDisableApuIrqs.Name = "chkNsfDisableApuIrqs";
-			this.chkNsfDisableApuIrqs.Size = new System.Drawing.Size(194, 17);
-			this.chkNsfDisableApuIrqs.TabIndex = 6;
-			this.chkNsfDisableApuIrqs.Text = "Disable APU IRQs (Recommended)";
-			this.chkNsfDisableApuIrqs.UseVisualStyleBackColor = true;
+			this.chkNsfEnableApuIrqs.Checked = false;
+			this.chkNsfEnableApuIrqs.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.chkNsfEnableApuIrqs.Location = new System.Drawing.Point(10, 150);
+			this.chkNsfEnableApuIrqs.Margin = new System.Windows.Forms.Padding(10, 0, 0, 0);
+			this.chkNsfEnableApuIrqs.Name = "chkNsfEnableApuIrqs";
+			this.chkNsfEnableApuIrqs.Size = new System.Drawing.Size(473, 23);
+			this.chkNsfEnableApuIrqs.TabIndex = 26;
+			this.chkNsfEnableApuIrqs.Text = "Enable APU IRQs for NSF files";
 			// 
 			// tpgFiles
 			// 
@@ -1027,7 +1103,7 @@ namespace Mesen.GUI.Forms.Config
 			this.tpgFiles.Location = new System.Drawing.Point(4, 22);
 			this.tpgFiles.Name = "tpgFiles";
 			this.tpgFiles.Padding = new System.Windows.Forms.Padding(3);
-			this.tpgFiles.Size = new System.Drawing.Size(489, 393);
+			this.tpgFiles.Size = new System.Drawing.Size(489, 396);
 			this.tpgFiles.TabIndex = 2;
 			this.tpgFiles.Text = "Folders/Files";
 			this.tpgFiles.UseVisualStyleBackColor = true;
@@ -1048,7 +1124,7 @@ namespace Mesen.GUI.Forms.Config
 			this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel6.Size = new System.Drawing.Size(483, 387);
+			this.tableLayoutPanel6.Size = new System.Drawing.Size(483, 390);
 			this.tableLayoutPanel6.TabIndex = 13;
 			// 
 			// grpPathOverrides
@@ -1486,7 +1562,7 @@ namespace Mesen.GUI.Forms.Config
 			this.tpgAdvanced.Location = new System.Drawing.Point(4, 22);
 			this.tpgAdvanced.Name = "tpgAdvanced";
 			this.tpgAdvanced.Padding = new System.Windows.Forms.Padding(3);
-			this.tpgAdvanced.Size = new System.Drawing.Size(489, 414);
+			this.tpgAdvanced.Size = new System.Drawing.Size(489, 396);
 			this.tpgAdvanced.TabIndex = 1;
 			this.tpgAdvanced.Text = "Advanced";
 			this.tpgAdvanced.UseVisualStyleBackColor = true;
@@ -1496,35 +1572,31 @@ namespace Mesen.GUI.Forms.Config
 			this.tableLayoutPanel1.ColumnCount = 1;
 			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this.tableLayoutPanel1.Controls.Add(this.chkDisableHighResolutionTimer, 0, 1);
-			this.tableLayoutPanel1.Controls.Add(this.chkShowFullPathInRecents, 0, 10);
-			this.tableLayoutPanel1.Controls.Add(this.chkAlwaysOnTop, 0, 7);
-			this.tableLayoutPanel1.Controls.Add(this.chkDisableGameSelectionScreen, 0, 16);
-			this.tableLayoutPanel1.Controls.Add(this.chkGameSelectionScreenResetGame, 0, 15);
+			this.tableLayoutPanel1.Controls.Add(this.chkShowFullPathInRecents, 0, 8);
+			this.tableLayoutPanel1.Controls.Add(this.chkDisableGameSelectionScreen, 0, 14);
+			this.tableLayoutPanel1.Controls.Add(this.chkGameSelectionScreenResetGame, 0, 13);
 			this.tableLayoutPanel1.Controls.Add(this.chkDisableGameDatabase, 0, 0);
-			this.tableLayoutPanel1.Controls.Add(this.chkFdsAutoLoadDisk, 0, 3);
-			this.tableLayoutPanel1.Controls.Add(this.chkFdsFastForwardOnLoad, 0, 4);
-			this.tableLayoutPanel1.Controls.Add(this.chkDisplayTitleBarInfo, 0, 9);
-			this.tableLayoutPanel1.Controls.Add(this.flowLayoutPanel6, 0, 17);
-			this.tableLayoutPanel1.Controls.Add(this.chkFdsAutoInsertDisk, 0, 5);
-			this.tableLayoutPanel1.Controls.Add(this.chkShowGameTimer, 0, 12);
-			this.tableLayoutPanel1.Controls.Add(this.chkShowFrameCounter, 0, 11);
-			this.tableLayoutPanel1.Controls.Add(this.chkShowVsConfigOnLoad, 0, 13);
-			this.tableLayoutPanel1.Controls.Add(this.chkDisableOsd, 0, 8);
-			this.tableLayoutPanel1.Controls.Add(this.lblFdsSettings, 0, 2);
-			this.tableLayoutPanel1.Controls.Add(this.lblUiDisplaySettings, 0, 6);
-			this.tableLayoutPanel1.Controls.Add(this.lblGameSelectionScreenSettings, 0, 14);
+			this.tableLayoutPanel1.Controls.Add(this.chkDisplayTitleBarInfo, 0, 7);
+			this.tableLayoutPanel1.Controls.Add(this.flowLayoutPanel6, 0, 15);
+			this.tableLayoutPanel1.Controls.Add(this.chkShowGameTimer, 0, 10);
+			this.tableLayoutPanel1.Controls.Add(this.chkShowFrameCounter, 0, 9);
+			this.tableLayoutPanel1.Controls.Add(this.chkShowVsConfigOnLoad, 0, 11);
+			this.tableLayoutPanel1.Controls.Add(this.chkDisableOsd, 0, 6);
+			this.tableLayoutPanel1.Controls.Add(this.lblUiDisplaySettings, 0, 5);
+			this.tableLayoutPanel1.Controls.Add(this.lblGameSelectionScreenSettings, 0, 12);
+			this.tableLayoutPanel1.Controls.Add(this.lblWindowSettings, 0, 2);
+			this.tableLayoutPanel1.Controls.Add(this.chkAlwaysOnTop, 0, 3);
+			this.tableLayoutPanel1.Controls.Add(this.chkDisableMouseResize, 0, 4);
 			this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tableLayoutPanel1.Location = new System.Drawing.Point(3, 3);
 			this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-			this.tableLayoutPanel1.RowCount = 19;
+			this.tableLayoutPanel1.RowCount = 17;
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
@@ -1536,13 +1608,24 @@ namespace Mesen.GUI.Forms.Config
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel1.Size = new System.Drawing.Size(483, 408);
+			this.tableLayoutPanel1.Size = new System.Drawing.Size(483, 390);
 			this.tableLayoutPanel1.TabIndex = 0;
+			// 
+			// chkDisableHighResolutionTimer
+			// 
+			this.chkDisableHighResolutionTimer.Checked = false;
+			this.chkDisableHighResolutionTimer.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.chkDisableHighResolutionTimer.Location = new System.Drawing.Point(0, 23);
+			this.chkDisableHighResolutionTimer.MinimumSize = new System.Drawing.Size(0, 21);
+			this.chkDisableHighResolutionTimer.Name = "chkDisableHighResolutionTimer";
+			this.chkDisableHighResolutionTimer.Size = new System.Drawing.Size(483, 23);
+			this.chkDisableHighResolutionTimer.TabIndex = 31;
+			this.chkDisableHighResolutionTimer.Text = "Disable high resolution timer";
 			// 
 			// chkShowFullPathInRecents
 			// 
 			this.chkShowFullPathInRecents.AutoSize = true;
-			this.chkShowFullPathInRecents.Location = new System.Drawing.Point(13, 227);
+			this.chkShowFullPathInRecents.Location = new System.Drawing.Point(13, 181);
 			this.chkShowFullPathInRecents.Margin = new System.Windows.Forms.Padding(13, 3, 3, 3);
 			this.chkShowFullPathInRecents.Name = "chkShowFullPathInRecents";
 			this.chkShowFullPathInRecents.Size = new System.Drawing.Size(184, 17);
@@ -1550,21 +1633,10 @@ namespace Mesen.GUI.Forms.Config
 			this.chkShowFullPathInRecents.Text = "Show full file path in recent file list";
 			this.chkShowFullPathInRecents.UseVisualStyleBackColor = true;
 			// 
-			// chkAlwaysOnTop
-			// 
-			this.chkAlwaysOnTop.AutoSize = true;
-			this.chkAlwaysOnTop.Location = new System.Drawing.Point(13, 158);
-			this.chkAlwaysOnTop.Margin = new System.Windows.Forms.Padding(13, 3, 3, 3);
-			this.chkAlwaysOnTop.Name = "chkAlwaysOnTop";
-			this.chkAlwaysOnTop.Size = new System.Drawing.Size(210, 17);
-			this.chkAlwaysOnTop.TabIndex = 29;
-			this.chkAlwaysOnTop.Text = "Always display on top of other windows";
-			this.chkAlwaysOnTop.UseVisualStyleBackColor = true;
-			// 
 			// chkDisableGameSelectionScreen
 			// 
 			this.chkDisableGameSelectionScreen.AutoSize = true;
-			this.chkDisableGameSelectionScreen.Location = new System.Drawing.Point(13, 362);
+			this.chkDisableGameSelectionScreen.Location = new System.Drawing.Point(13, 316);
 			this.chkDisableGameSelectionScreen.Margin = new System.Windows.Forms.Padding(13, 3, 3, 3);
 			this.chkDisableGameSelectionScreen.Name = "chkDisableGameSelectionScreen";
 			this.chkDisableGameSelectionScreen.Size = new System.Drawing.Size(170, 17);
@@ -1575,7 +1647,7 @@ namespace Mesen.GUI.Forms.Config
 			// chkGameSelectionScreenResetGame
 			// 
 			this.chkGameSelectionScreenResetGame.AutoSize = true;
-			this.chkGameSelectionScreenResetGame.Location = new System.Drawing.Point(13, 339);
+			this.chkGameSelectionScreenResetGame.Location = new System.Drawing.Point(13, 293);
 			this.chkGameSelectionScreenResetGame.Margin = new System.Windows.Forms.Padding(13, 3, 3, 3);
 			this.chkGameSelectionScreenResetGame.Name = "chkGameSelectionScreenResetGame";
 			this.chkGameSelectionScreenResetGame.Size = new System.Drawing.Size(388, 17);
@@ -1594,32 +1666,10 @@ namespace Mesen.GUI.Forms.Config
 			this.chkDisableGameDatabase.TabIndex = 6;
 			this.chkDisableGameDatabase.Text = "Disable built-in game database";
 			// 
-			// chkFdsAutoLoadDisk
-			// 
-			this.chkFdsAutoLoadDisk.AutoSize = true;
-			this.chkFdsAutoLoadDisk.Location = new System.Drawing.Point(13, 69);
-			this.chkFdsAutoLoadDisk.Margin = new System.Windows.Forms.Padding(13, 3, 3, 3);
-			this.chkFdsAutoLoadDisk.Name = "chkFdsAutoLoadDisk";
-			this.chkFdsAutoLoadDisk.Size = new System.Drawing.Size(303, 17);
-			this.chkFdsAutoLoadDisk.TabIndex = 3;
-			this.chkFdsAutoLoadDisk.Text = "Automatically insert disk 1 side A when starting FDS games";
-			this.chkFdsAutoLoadDisk.UseVisualStyleBackColor = true;
-			// 
-			// chkFdsFastForwardOnLoad
-			// 
-			this.chkFdsFastForwardOnLoad.AutoSize = true;
-			this.chkFdsFastForwardOnLoad.Location = new System.Drawing.Point(13, 92);
-			this.chkFdsFastForwardOnLoad.Margin = new System.Windows.Forms.Padding(13, 3, 3, 3);
-			this.chkFdsFastForwardOnLoad.Name = "chkFdsFastForwardOnLoad";
-			this.chkFdsFastForwardOnLoad.Size = new System.Drawing.Size(342, 17);
-			this.chkFdsFastForwardOnLoad.TabIndex = 4;
-			this.chkFdsFastForwardOnLoad.Text = "Automatically fast forward FDS games when disk or BIOS is loading";
-			this.chkFdsFastForwardOnLoad.UseVisualStyleBackColor = true;
-			// 
 			// chkDisplayTitleBarInfo
 			// 
 			this.chkDisplayTitleBarInfo.AutoSize = true;
-			this.chkDisplayTitleBarInfo.Location = new System.Drawing.Point(13, 204);
+			this.chkDisplayTitleBarInfo.Location = new System.Drawing.Point(13, 158);
 			this.chkDisplayTitleBarInfo.Margin = new System.Windows.Forms.Padding(13, 3, 3, 3);
 			this.chkDisplayTitleBarInfo.Name = "chkDisplayTitleBarInfo";
 			this.chkDisplayTitleBarInfo.Size = new System.Drawing.Size(210, 17);
@@ -1633,7 +1683,7 @@ namespace Mesen.GUI.Forms.Config
 			this.flowLayoutPanel6.Controls.Add(this.nudRewindBufferSize);
 			this.flowLayoutPanel6.Controls.Add(this.lblRewindMinutes);
 			this.flowLayoutPanel6.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.flowLayoutPanel6.Location = new System.Drawing.Point(0, 385);
+			this.flowLayoutPanel6.Location = new System.Drawing.Point(0, 339);
 			this.flowLayoutPanel6.Margin = new System.Windows.Forms.Padding(0, 3, 0, 0);
 			this.flowLayoutPanel6.Name = "flowLayoutPanel6";
 			this.flowLayoutPanel6.Size = new System.Drawing.Size(483, 23);
@@ -1643,7 +1693,7 @@ namespace Mesen.GUI.Forms.Config
 			// 
 			this.lblRewind.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.lblRewind.AutoSize = true;
-			this.lblRewind.Location = new System.Drawing.Point(3, 3);
+			this.lblRewind.Location = new System.Drawing.Point(3, 4);
 			this.lblRewind.Name = "lblRewind";
 			this.lblRewind.Size = new System.Drawing.Size(142, 13);
 			this.lblRewind.TabIndex = 3;
@@ -1671,8 +1721,9 @@ namespace Mesen.GUI.Forms.Config
             0,
             0,
             0});
+			this.nudRewindBufferSize.MinimumSize = new System.Drawing.Size(0, 21);
 			this.nudRewindBufferSize.Name = "nudRewindBufferSize";
-			this.nudRewindBufferSize.Size = new System.Drawing.Size(42, 20);
+			this.nudRewindBufferSize.Size = new System.Drawing.Size(42, 21);
 			this.nudRewindBufferSize.TabIndex = 1;
 			this.nudRewindBufferSize.Value = new decimal(new int[] {
             300,
@@ -1684,27 +1735,16 @@ namespace Mesen.GUI.Forms.Config
 			// 
 			this.lblRewindMinutes.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.lblRewindMinutes.AutoSize = true;
-			this.lblRewindMinutes.Location = new System.Drawing.Point(193, 3);
+			this.lblRewindMinutes.Location = new System.Drawing.Point(193, 4);
 			this.lblRewindMinutes.Name = "lblRewindMinutes";
 			this.lblRewindMinutes.Size = new System.Drawing.Size(175, 13);
 			this.lblRewindMinutes.TabIndex = 2;
 			this.lblRewindMinutes.Text = "minutes (Memory Usage ≈1MB/min)";
 			// 
-			// chkFdsAutoInsertDisk
-			// 
-			this.chkFdsAutoInsertDisk.AutoSize = true;
-			this.chkFdsAutoInsertDisk.Location = new System.Drawing.Point(13, 115);
-			this.chkFdsAutoInsertDisk.Margin = new System.Windows.Forms.Padding(13, 3, 3, 3);
-			this.chkFdsAutoInsertDisk.Name = "chkFdsAutoInsertDisk";
-			this.chkFdsAutoInsertDisk.Size = new System.Drawing.Size(221, 17);
-			this.chkFdsAutoInsertDisk.TabIndex = 10;
-			this.chkFdsAutoInsertDisk.Text = "Automatically switch disks for FDS games";
-			this.chkFdsAutoInsertDisk.UseVisualStyleBackColor = true;
-			// 
 			// chkShowGameTimer
 			// 
 			this.chkShowGameTimer.AutoSize = true;
-			this.chkShowGameTimer.Location = new System.Drawing.Point(13, 273);
+			this.chkShowGameTimer.Location = new System.Drawing.Point(13, 227);
 			this.chkShowGameTimer.Margin = new System.Windows.Forms.Padding(13, 3, 3, 3);
 			this.chkShowGameTimer.Name = "chkShowGameTimer";
 			this.chkShowGameTimer.Size = new System.Drawing.Size(107, 17);
@@ -1715,7 +1755,7 @@ namespace Mesen.GUI.Forms.Config
 			// chkShowFrameCounter
 			// 
 			this.chkShowFrameCounter.AutoSize = true;
-			this.chkShowFrameCounter.Location = new System.Drawing.Point(13, 250);
+			this.chkShowFrameCounter.Location = new System.Drawing.Point(13, 204);
 			this.chkShowFrameCounter.Margin = new System.Windows.Forms.Padding(13, 3, 3, 3);
 			this.chkShowFrameCounter.Name = "chkShowFrameCounter";
 			this.chkShowFrameCounter.Size = new System.Drawing.Size(121, 17);
@@ -1726,7 +1766,7 @@ namespace Mesen.GUI.Forms.Config
 			// chkShowVsConfigOnLoad
 			// 
 			this.chkShowVsConfigOnLoad.AutoSize = true;
-			this.chkShowVsConfigOnLoad.Location = new System.Drawing.Point(13, 296);
+			this.chkShowVsConfigOnLoad.Location = new System.Drawing.Point(13, 250);
 			this.chkShowVsConfigOnLoad.Margin = new System.Windows.Forms.Padding(13, 3, 3, 3);
 			this.chkShowVsConfigOnLoad.Name = "chkShowVsConfigOnLoad";
 			this.chkShowVsConfigOnLoad.Size = new System.Drawing.Size(331, 17);
@@ -1737,7 +1777,7 @@ namespace Mesen.GUI.Forms.Config
 			// chkDisableOsd
 			// 
 			this.chkDisableOsd.AutoSize = true;
-			this.chkDisableOsd.Location = new System.Drawing.Point(13, 181);
+			this.chkDisableOsd.Location = new System.Drawing.Point(13, 135);
 			this.chkDisableOsd.Margin = new System.Windows.Forms.Padding(13, 3, 3, 3);
 			this.chkDisableOsd.Name = "chkDisableOsd";
 			this.chkDisableOsd.Size = new System.Drawing.Size(178, 17);
@@ -1745,24 +1785,12 @@ namespace Mesen.GUI.Forms.Config
 			this.chkDisableOsd.Text = "Disable on-screen display (OSD)";
 			this.chkDisableOsd.UseVisualStyleBackColor = true;
 			// 
-			// lblFdsSettings
-			// 
-			this.lblFdsSettings.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.lblFdsSettings.AutoSize = true;
-			this.lblFdsSettings.ForeColor = System.Drawing.SystemColors.GrayText;
-			this.lblFdsSettings.Location = new System.Drawing.Point(0, 53);
-			this.lblFdsSettings.Margin = new System.Windows.Forms.Padding(0, 0, 3, 0);
-			this.lblFdsSettings.Name = "lblFdsSettings";
-			this.lblFdsSettings.Size = new System.Drawing.Size(151, 13);
-			this.lblFdsSettings.TabIndex = 24;
-			this.lblFdsSettings.Text = "Famicom Disk System Settings";
-			// 
 			// lblUiDisplaySettings
 			// 
 			this.lblUiDisplaySettings.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.lblUiDisplaySettings.AutoSize = true;
 			this.lblUiDisplaySettings.ForeColor = System.Drawing.SystemColors.GrayText;
-			this.lblUiDisplaySettings.Location = new System.Drawing.Point(0, 142);
+			this.lblUiDisplaySettings.Location = new System.Drawing.Point(0, 119);
 			this.lblUiDisplaySettings.Margin = new System.Windows.Forms.Padding(0, 0, 3, 0);
 			this.lblUiDisplaySettings.Name = "lblUiDisplaySettings";
 			this.lblUiDisplaySettings.Size = new System.Drawing.Size(96, 13);
@@ -1774,34 +1802,57 @@ namespace Mesen.GUI.Forms.Config
 			this.lblGameSelectionScreenSettings.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.lblGameSelectionScreenSettings.AutoSize = true;
 			this.lblGameSelectionScreenSettings.ForeColor = System.Drawing.SystemColors.GrayText;
-			this.lblGameSelectionScreenSettings.Location = new System.Drawing.Point(0, 323);
+			this.lblGameSelectionScreenSettings.Location = new System.Drawing.Point(0, 277);
 			this.lblGameSelectionScreenSettings.Margin = new System.Windows.Forms.Padding(0, 0, 3, 0);
 			this.lblGameSelectionScreenSettings.Name = "lblGameSelectionScreenSettings";
 			this.lblGameSelectionScreenSettings.Size = new System.Drawing.Size(160, 13);
 			this.lblGameSelectionScreenSettings.TabIndex = 26;
 			this.lblGameSelectionScreenSettings.Text = "Game Selection Screen Settings";
 			// 
+			// lblWindowSettings
+			// 
+			this.lblWindowSettings.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.lblWindowSettings.AutoSize = true;
+			this.lblWindowSettings.ForeColor = System.Drawing.SystemColors.GrayText;
+			this.lblWindowSettings.Location = new System.Drawing.Point(0, 53);
+			this.lblWindowSettings.Margin = new System.Windows.Forms.Padding(0, 0, 3, 0);
+			this.lblWindowSettings.Name = "lblWindowSettings";
+			this.lblWindowSettings.Size = new System.Drawing.Size(87, 13);
+			this.lblWindowSettings.TabIndex = 32;
+			this.lblWindowSettings.Text = "Window Settings";
+			// 
+			// chkAlwaysOnTop
+			// 
+			this.chkAlwaysOnTop.AutoSize = true;
+			this.chkAlwaysOnTop.Location = new System.Drawing.Point(13, 69);
+			this.chkAlwaysOnTop.Margin = new System.Windows.Forms.Padding(13, 3, 3, 3);
+			this.chkAlwaysOnTop.Name = "chkAlwaysOnTop";
+			this.chkAlwaysOnTop.Size = new System.Drawing.Size(210, 17);
+			this.chkAlwaysOnTop.TabIndex = 29;
+			this.chkAlwaysOnTop.Text = "Always display on top of other windows";
+			this.chkAlwaysOnTop.UseVisualStyleBackColor = true;
+			// 
+			// chkDisableMouseResize
+			// 
+			this.chkDisableMouseResize.AutoSize = true;
+			this.chkDisableMouseResize.Location = new System.Drawing.Point(13, 92);
+			this.chkDisableMouseResize.Margin = new System.Windows.Forms.Padding(13, 3, 3, 3);
+			this.chkDisableMouseResize.Name = "chkDisableMouseResize";
+			this.chkDisableMouseResize.Size = new System.Drawing.Size(310, 17);
+			this.chkDisableMouseResize.TabIndex = 33;
+			this.chkDisableMouseResize.Text = "Do not allow the main window to be resized using the mouse";
+			this.chkDisableMouseResize.UseVisualStyleBackColor = true;
+			// 
 			// tmrSyncDateTime
 			// 
 			this.tmrSyncDateTime.Enabled = true;
 			this.tmrSyncDateTime.Tick += new System.EventHandler(this.tmrSyncDateTime_Tick);
 			// 
-			// chkDisableHighResolutionTimer
-			// 
-			this.chkDisableHighResolutionTimer.Checked = false;
-			this.chkDisableHighResolutionTimer.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.chkDisableHighResolutionTimer.Location = new System.Drawing.Point(0, 23);
-			this.chkDisableHighResolutionTimer.MinimumSize = new System.Drawing.Size(0, 21);
-			this.chkDisableHighResolutionTimer.Name = "chkDisableHighResolutionTimer";
-			this.chkDisableHighResolutionTimer.Size = new System.Drawing.Size(483, 23);
-			this.chkDisableHighResolutionTimer.TabIndex = 31;
-			this.chkDisableHighResolutionTimer.Text = "Disable high resolution timer";
-			// 
 			// frmPreferences
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(497, 469);
+			this.ClientSize = new System.Drawing.Size(497, 451);
 			this.Controls.Add(this.tabMain);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
 			this.MaximizeBox = false;
@@ -1840,7 +1891,7 @@ namespace Mesen.GUI.Forms.Config
 			this.tableLayoutPanel4.PerformLayout();
 			this.flpAutoSave.ResumeLayout(false);
 			this.flpAutoSave.PerformLayout();
-			this.tpgNsf.ResumeLayout(false);
+			this.tpgFdsNfs.ResumeLayout(false);
 			this.tableLayoutPanel2.ResumeLayout(false);
 			this.tableLayoutPanel2.PerformLayout();
 			this.flowLayoutPanel7.ResumeLayout(false);
@@ -1909,7 +1960,7 @@ namespace Mesen.GUI.Forms.Config
 		private System.Windows.Forms.CheckBox chkMstFormat;
 		private System.Windows.Forms.CheckBox chkNsfFormat;
 		private System.Windows.Forms.TabPage tpgAdvanced;
-		private System.Windows.Forms.TabPage tpgNsf;
+		private System.Windows.Forms.TabPage tpgFdsNfs;
 		private ctrlRiskyOption chkDisableGameDatabase;
 		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
 		private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel5;
@@ -1920,7 +1971,6 @@ namespace Mesen.GUI.Forms.Config
 		private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel7;
 		private MesenNumericUpDown nudNsfAutoDetectSilenceDelay;
 		private System.Windows.Forms.Label lblNsfMillisecondsOfSilence;
-		private System.Windows.Forms.CheckBox chkNsfDisableApuIrqs;
 		private System.Windows.Forms.CheckBox chkUnfFormat;
 		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel3;
 		private System.Windows.Forms.GroupBox grpCloudSaves;
@@ -1994,5 +2044,9 @@ namespace Mesen.GUI.Forms.Config
 		private System.Windows.Forms.CheckBox chkPauseInMenuAndConfig;
 		private System.Windows.Forms.CheckBox chkPauseInDebugger;
 		private ctrlRiskyOption chkDisableHighResolutionTimer;
+		private System.Windows.Forms.Label lblNsfSettings;
+		private System.Windows.Forms.Label lblWindowSettings;
+		private System.Windows.Forms.CheckBox chkDisableMouseResize;
+		private ctrlRiskyOption chkNsfEnableApuIrqs;
 	}
 }

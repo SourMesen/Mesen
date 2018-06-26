@@ -35,11 +35,13 @@ namespace Mesen.GUI.Forms.Config
 			AddBinding("AssociateMstFiles", chkMstFormat);
 			AddBinding("AssociateUnfFiles", chkUnfFormat);
 
+			AddBinding("DisableMouseResize", chkDisableMouseResize);
+
 			AddBinding("NsfAutoDetectSilence", chkNsfAutoDetectSilence);
 			AddBinding("NsfMoveToNextTrackAfterTime", chkNsfMoveToNextTrackAfterTime);
 			AddBinding("NsfMoveToNextTrackTime", nudNsfMoveToNextTrackTime);
 			AddBinding("NsfAutoDetectSilenceDelay", nudNsfAutoDetectSilenceDelay);
-			AddBinding("NsfDisableApuIrqs", chkNsfDisableApuIrqs);
+			AddBinding("NsfEnableApuIrqs", chkNsfEnableApuIrqs);
 
 			AddBinding("FdsAutoLoadDisk", chkFdsAutoLoadDisk);
 			AddBinding("FdsFastForwardOnLoad", chkFdsFastForwardOnLoad);

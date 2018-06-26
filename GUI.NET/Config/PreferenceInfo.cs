@@ -22,6 +22,8 @@ namespace Mesen.GUI.Config
 		public bool AutoHideMenu = false;
 		public bool DisplayTitleBarInfo = false;
 
+		public bool DisableMouseResize = false;
+
 		public bool AutoSave = true;
 		public Int32 AutoSaveDelay = 5;
 		public bool AutoSaveNotify = false;
@@ -38,7 +40,7 @@ namespace Mesen.GUI.Config
 		public bool AssociateMstFiles = false;
 		public bool AssociateUnfFiles = false;
 
-		public bool NsfDisableApuIrqs = true;
+		public bool NsfEnableApuIrqs = false;
 		public bool NsfMoveToNextTrackAfterTime = true;
 		public Int32 NsfMoveToNextTrackTime = 120;
 		public bool NsfAutoDetectSilence = true;
@@ -193,7 +195,7 @@ namespace Mesen.GUI.Config
 			InteropEmu.SetFlag(EmulationFlags.DisableGameSelectionScreen, preferenceInfo.DisableGameSelectionScreen);
 			InteropEmu.SetFlag(EmulationFlags.ConfirmExitResetPower, preferenceInfo.ConfirmExitResetPower);
 
-			InteropEmu.NsfSetNsfConfig(preferenceInfo.NsfAutoDetectSilence ? preferenceInfo.NsfAutoDetectSilenceDelay : 0, preferenceInfo.NsfMoveToNextTrackAfterTime ? preferenceInfo.NsfMoveToNextTrackTime : -1, preferenceInfo.NsfDisableApuIrqs);
+			InteropEmu.NsfSetNsfConfig(preferenceInfo.NsfAutoDetectSilence ? preferenceInfo.NsfAutoDetectSilenceDelay : 0, preferenceInfo.NsfMoveToNextTrackAfterTime ? preferenceInfo.NsfMoveToNextTrackTime : -1, !preferenceInfo.NsfEnableApuIrqs);
 			InteropEmu.SetFlag(EmulationFlags.NsfRepeat, preferenceInfo.NsfRepeat);
 			InteropEmu.SetFlag(EmulationFlags.NsfShuffle, preferenceInfo.NsfShuffle);
 

@@ -199,6 +199,10 @@ namespace Mesen.GUI.Forms
 			if(ConfigManager.Config.WindowSize.HasValue && !_overrideWindowSize) {
 				this.ClientSize = ConfigManager.Config.WindowSize.Value;
 			}
+
+			if(ConfigManager.Config.PreferenceInfo.DisableMouseResize) {
+				this.FormBorderStyle = FormBorderStyle.Fixed3D;
+			}
 		}
 
 		private void ProcessFullscreenSwitch(List<string> switches)

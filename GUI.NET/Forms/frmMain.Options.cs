@@ -130,6 +130,7 @@ namespace Mesen.GUI.Forms
 					InitializeNsfMode(true);
 					ctrlRecentGames.UpdateGameInfo();
 					TopMost = ConfigManager.Config.PreferenceInfo.AlwaysOnTop;
+					FormBorderStyle = ConfigManager.Config.PreferenceInfo.DisableMouseResize ? FormBorderStyle.Fixed3D : FormBorderStyle.Sizable;
 				} else {
 					UpdateVideoSettings();
 					UpdateMenus();

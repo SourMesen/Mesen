@@ -408,6 +408,8 @@
 
 			<Control ID="lblFdsSettings">Configuració de Famicom Disk System</Control>
 			<Control ID="lblUiDisplaySettings">Configuració de la interfície d'usuari</Control>
+			<Control ID="lblWindowSettings">Window Settings</Control>
+			<Control ID="chkDisableMouseResize">Do not allow the main window to be resized using the mouse</Control>
 			<Control ID="lblGameSelectionScreenSettings">Configuració de la pantalla de selecció de jocs</Control>
 			<Control ID="chkGameSelectionScreenResetGame">Inicia els jocs des de zero en comptes de reprendre la sessió de joc anterior</Control>
 			<Control ID="chkDisableGameSelectionScreen">Desactiva la pantalla de selecció de jocs</Control>
@@ -418,13 +420,14 @@
 
 			<Control ID="chkAlwaysOnTop">Always display on top of other windows</Control>
 
-			<Control ID="tpgNsf">NSF</Control>
+			<Control ID="tpgFdsNfs">FDS / NSF</Control>
+			<Control ID="lblNsfSettings">NSF Settings</Control>
 			<Control ID="chkNsfAutoDetectSilence">Reprodueix la següent pista després de</Control>
 			<Control ID="lblNsfMillisecondsOfSilence">mil·lisegons de silenci</Control>
 			<Control ID="chkNsfMoveToNextTrackAfterTime">Limita la duració de pistes a</Control>
 			<Control ID="lblNsfSeconds">segons</Control>
-			<Control ID="chkNsfDisableApuIrqs">Desactiva les IRQs de l'APU (recomanat)</Control>
-
+			<Control ID="chkNsfEnableApuIrqs">Enable APU IRQs for NSF files</Control>
+			
 			<Control ID="btnOK">D'acord</Control>
 			<Control ID="btnCancel">Cancel·la</Control>
 		</Form>

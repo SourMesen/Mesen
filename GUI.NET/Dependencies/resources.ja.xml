@@ -407,6 +407,8 @@
 
 			<Control ID="lblFdsSettings">ファミコンディスクシステム設定</Control>
 			<Control ID="lblUiDisplaySettings">ユーザーインターフェイス表示設定</Control>
+			<Control ID="lblWindowSettings">ウインドウ設定</Control>
+			<Control ID="chkDisableMouseResize">ウインドウのサイズをマウスで変更できないようにする</Control>
 			<Control ID="lblGameSelectionScreenSettings">ゲーム選択画面設定</Control>
 			<Control ID="chkGameSelectionScreenResetGame">初めからゲームを実行する</Control>
 			<Control ID="chkDisableGameSelectionScreen">ゲーム選択画面を無効にする</Control>
@@ -417,13 +419,14 @@
 
 			<Control ID="chkAlwaysOnTop">他のウインドウより常に手前に表示する</Control>
 
-			<Control ID="tpgNsf">NSF</Control>
+			<Control ID="tpgFdsNfs">FDS・NSF</Control>
+			<Control ID="lblNsfSettings">NSF設定</Control>
 			<Control ID="chkNsfAutoDetectSilence">無音検出：</Control>
 			<Control ID="lblNsfMillisecondsOfSilence">ミリ秒間で無音の場合、次の曲を再生</Control>
 			<Control ID="chkNsfMoveToNextTrackAfterTime">曲の最大長さを</Control>
 			<Control ID="lblNsfSeconds">秒に固定する</Control>
-			<Control ID="chkNsfDisableApuIrqs">APUのIRQを無効にする （推奨）</Control>
-
+			<Control ID="chkNsfEnableApuIrqs">NSFファイルを再生する時、APUのIRQを有効にする</Control>
+			
 			<Control ID="btnOK">OK</Control>
 			<Control ID="btnCancel">キャンセル</Control>
 		</Form>
