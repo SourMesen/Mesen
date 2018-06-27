@@ -138,7 +138,10 @@
 			<Control ID="lblReverbDelay">ディレイ:</Control>
 			<Control ID="lblReverbStrength">強度:</Control>
 			<Control ID="chkMuteSoundInBackground">Mesenが最前面ではない時、音声をミュートにする</Control>
-			<Control ID="chkReduceSoundInBackground">Mesenが最前面ではない時、音声を低くする</Control>
+			<Control ID="chkReduceSoundInBackground">Mesenが最前面ではない時、音量を軽減する</Control>
+			<Control ID="chkReduceSoundInFastForward">早送りや巻き戻しする時、音量を軽減する</Control>
+			<Control ID="trkVolumeReduction">音量の軽減度（％）</Control>
+			<Control ID="lblVolumeReductionSettings">音量軽減設定</Control>
 			<Control ID="chkEnableAudio">音声オン</Control>
 			<Control ID="lblSampleRate">サンプルレート:</Control>
 			<Control ID="lblLatencyMs">ミリ秒</Control>

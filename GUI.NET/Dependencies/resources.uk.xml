@@ -137,6 +137,9 @@
 			<Control ID="lblReverbStrength">Сила :</Control>
 			<Control ID="chkMuteSoundInBackground">Відключати звук при втраті фокуса</Control>
 			<Control ID="chkReduceSoundInBackground">Приглушати звук при потере фокуса</Control>
+			<Control ID="chkReduceSoundInFastForward">Reduce volume during fast forward/rewind</Control>
+			<Control ID="trkVolumeReduction">Volume Reduction (%)</Control>
+			<Control ID="lblVolumeReductionSettings">Volume Reduction Settings</Control>
 			<Control ID="chkEnableAudio">Увімкнути звук</Control>
 			<Control ID="lblSampleRate">Частота дискретизації:</Control>
 			<Control ID="lblLatencyMs">мс</Control>

@@ -123,12 +123,18 @@ void SoundMixer::PlayAudioBuffer(uint32_t time)
 		_oggMixer->ApplySamples(_outputBuffer, sampleCount);
 	}
 
-	//Apply low pass filter/volume reduction when in background (based on options)
-	if(!VideoRenderer::GetInstance()->IsRecording() && !_waveRecorder && !EmulationSettings::CheckFlag(EmulationFlags::NsfPlayerEnabled) && EmulationSettings::CheckFlag(EmulationFlags::InBackground)) {
-		if(EmulationSettings::CheckFlag(EmulationFlags::MuteSoundInBackground)) {
-			_lowPassFilter.ApplyFilter(_outputBuffer, sampleCount, 0, 0);
-		} else if(EmulationSettings::CheckFlag(EmulationFlags::ReduceSoundInBackground)) {
-			_lowPassFilter.ApplyFilter(_outputBuffer, sampleCount, 6, 0.75);
+	if(!VideoRenderer::GetInstance()->IsRecording() && !_waveRecorder && !EmulationSettings::CheckFlag(EmulationFlags::NsfPlayerEnabled)) {
+		if((EmulationSettings::CheckFlag(EmulationFlags::Turbo) || RewindManager::IsRewinding()) && EmulationSettings::CheckFlag(EmulationFlags::ReduceSoundInFastForward)) {
+			//Reduce volume when fast forwarding or rewinding
+			_lowPassFilter.ApplyFilter(_outputBuffer, sampleCount, 0, 1.0 - EmulationSettings::GetVolumeReduction());
+		} else if(EmulationSettings::CheckFlag(EmulationFlags::InBackground)) {
+			if(EmulationSettings::CheckFlag(EmulationFlags::MuteSoundInBackground)) {
+				//Mute sound when in background
+				_lowPassFilter.ApplyFilter(_outputBuffer, sampleCount, 0, 0);
+			} else if(EmulationSettings::CheckFlag(EmulationFlags::ReduceSoundInBackground)) {
+				//Apply low pass filter/volume reduction when in background (based on options)
+				_lowPassFilter.ApplyFilter(_outputBuffer, sampleCount, 0, 1.0 - EmulationSettings::GetVolumeReduction());
+			}
 		}
 	}
 

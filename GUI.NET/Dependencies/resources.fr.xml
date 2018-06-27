@@ -138,6 +138,9 @@
 			<Control ID="lblReverbStrength">Force :</Control>
 			<Control ID="chkMuteSoundInBackground">Fermer le son lorsque Mesen est en arrière-plan</Control>
 			<Control ID="chkReduceSoundInBackground">Réduire le volume lorsque Mesen est en arrière-plan</Control>
+			<Control ID="chkReduceSoundInFastForward">Réduire pendant l'avance rapide/le rembobinage</Control>
+			<Control ID="trkVolumeReduction">Réduction du volume (%)</Control>
+			<Control ID="lblVolumeReductionSettings">Options de réduction du volume</Control>
 			<Control ID="chkEnableAudio">Activer le son</Control>
 			<Control ID="lblSampleRate">Taux d'échantillonnage:</Control>
 			<Control ID="lblLatencyMs">ms</Control>

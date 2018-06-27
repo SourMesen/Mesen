@@ -36,6 +36,9 @@ namespace Mesen.GUI.Config
 
 		[ValidValues(11025, 22050, 44100, 48000, 96000)] public UInt32 SampleRate = 48000;
 		public bool ReduceSoundInBackground = true;
+		public bool ReduceSoundInFastForward = false;
+		[MinMax(0, 100)] public int VolumeReduction = 75;
+		
 		public bool MuteSoundInBackground = false;
 		public bool SwapDutyCycles = false;
 		public bool SilenceTriangleHighFreq = false;
@@ -97,7 +100,7 @@ namespace Mesen.GUI.Config
 			AudioInfo audioInfo = ConfigManager.Config.AudioInfo;
 			InteropEmu.SetAudioDevice(audioInfo.AudioDevice);
 			InteropEmu.SetAudioLatency(audioInfo.AudioLatency);
-			InteropEmu.SetMasterVolume(audioInfo.MasterVolume / 10d);
+			InteropEmu.SetMasterVolume(audioInfo.MasterVolume / 10d, audioInfo.VolumeReduction/ 100d);
 			InteropEmu.SetChannelVolume(AudioChannel.Square1, ConvertVolume(audioInfo.Square1Volume));
 			InteropEmu.SetChannelVolume(AudioChannel.Square2, ConvertVolume(audioInfo.Square2Volume));
 			InteropEmu.SetChannelVolume(AudioChannel.Triangle, ConvertVolume(audioInfo.TriangleVolume));
@@ -170,6 +173,7 @@ namespace Mesen.GUI.Config
 
 			InteropEmu.SetFlag(EmulationFlags.MuteSoundInBackground, audioInfo.MuteSoundInBackground);
 			InteropEmu.SetFlag(EmulationFlags.ReduceSoundInBackground, audioInfo.ReduceSoundInBackground);
+			InteropEmu.SetFlag(EmulationFlags.ReduceSoundInFastForward, audioInfo.ReduceSoundInFastForward);
 
 			InteropEmu.SetFlag(EmulationFlags.SwapDutyCycles, audioInfo.SwapDutyCycles);
 			InteropEmu.SetFlag(EmulationFlags.SilenceTriangleHighFreq, audioInfo.SilenceTriangleHighFreq);

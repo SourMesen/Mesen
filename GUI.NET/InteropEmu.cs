@@ -155,7 +155,7 @@ namespace Mesen.GUI
 		[DllImport(DLLPath)] private static extern void SetFlags(EmulationFlags flags);
 		[DllImport(DLLPath)] private static extern void ClearFlags(EmulationFlags flags);
 		[DllImport(DLLPath)] public static extern void SetRamPowerOnState(RamPowerOnState state);
-		[DllImport(DLLPath)] public static extern void SetMasterVolume(double volume);
+		[DllImport(DLLPath)] public static extern void SetMasterVolume(double volume, double volumeReduction);
 		[DllImport(DLLPath)] public static extern void SetChannelVolume(AudioChannel channel, double volume);
 		[DllImport(DLLPath)] public static extern void SetChannelPanning(AudioChannel channel, double panning);
 		[DllImport(DLLPath)] public static extern void SetEqualizerFilterType(EqualizerFilterType filter);
@@ -1536,6 +1536,8 @@ namespace Mesen.GUI
 
 		UseHighResolutionTimer = 0x40000000000000,
 		DisplayDebugInfo = 0x80000000000000,
+
+		ReduceSoundInFastForward = 0x100000000000000,
 
 		ForceMaxSpeed = 0x4000000000000000,
 		ConsoleMode = 0x8000000000000000,

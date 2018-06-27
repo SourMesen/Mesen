@@ -88,6 +88,8 @@ namespace Mesen.GUI.Forms.Config
 
 			AddBinding("ReduceSoundInBackground", chkReduceSoundInBackground);
 			AddBinding("MuteSoundInBackground", chkMuteSoundInBackground);
+			AddBinding("ReduceSoundInFastForward", chkReduceSoundInFastForward);
+			AddBinding("VolumeReduction", trkVolumeReduction);
 
 			AddBinding("SwapDutyCycles", chkSwapDutyCycles);
 			AddBinding("SilenceTriangleHighFreq", chkSilenceTriangleHighFreq);
@@ -151,11 +153,6 @@ namespace Mesen.GUI.Forms.Config
 			AudioInfo.ApplyConfig();
 		}
 
-		private void chkMuteWhenInBackground_CheckedChanged(object sender, EventArgs e)
-		{
-			chkReduceSoundInBackground.Enabled = !chkMuteSoundInBackground.Checked;
-		}
-
 		private void cboEqualizerPreset_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			EqualizerPreset preset = cboEqualizerPreset.GetEnumValue<EqualizerPreset>();
@@ -211,6 +208,22 @@ namespace Mesen.GUI.Forms.Config
 		private void chkEnableEqualizer_CheckedChanged(object sender, EventArgs e)
 		{
 			tlpEqualizer.Enabled = chkEnableEqualizer.Checked;
+		}
+
+		private void chkMuteWhenInBackground_CheckedChanged(object sender, EventArgs e)
+		{
+			UpdateVolumeOptions();
+		}
+
+		private void chkReduceVolume_CheckedChanged(object sender, EventArgs e)
+		{
+			UpdateVolumeOptions();
+		}
+
+		private void UpdateVolumeOptions()
+		{
+			chkReduceSoundInBackground.Enabled = !chkMuteSoundInBackground.Checked;
+			trkVolumeReduction.Enabled = chkReduceSoundInFastForward.Checked || (chkReduceSoundInBackground.Checked && chkReduceSoundInBackground.Enabled);
 		}
 	}
 }

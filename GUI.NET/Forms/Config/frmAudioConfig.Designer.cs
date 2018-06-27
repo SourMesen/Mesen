@@ -44,8 +44,7 @@ namespace Mesen.GUI.Forms.Config
 			this.trkNamco163Vol = new Mesen.GUI.Controls.ctrlTrackbar();
 			this.trkSunsoft5b = new Mesen.GUI.Controls.ctrlTrackbar();
 			this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
-			this.chkMuteSoundInBackground = new System.Windows.Forms.CheckBox();
-			this.chkReduceSoundInBackground = new System.Windows.Forms.CheckBox();
+			this.lblVolumeReductionSettings = new System.Windows.Forms.Label();
 			this.chkEnableAudio = new System.Windows.Forms.CheckBox();
 			this.lblSampleRate = new System.Windows.Forms.Label();
 			this.lblAudioLatency = new System.Windows.Forms.Label();
@@ -57,6 +56,11 @@ namespace Mesen.GUI.Forms.Config
 			this.picLatencyWarning = new System.Windows.Forms.PictureBox();
 			this.lblLatencyMs = new System.Windows.Forms.Label();
 			this.nudLatency = new Mesen.GUI.Controls.MesenNumericUpDown();
+			this.tableLayoutPanel8 = new System.Windows.Forms.TableLayoutPanel();
+			this.chkReduceSoundInBackground = new System.Windows.Forms.CheckBox();
+			this.chkReduceSoundInFastForward = new System.Windows.Forms.CheckBox();
+			this.trkVolumeReduction = new Mesen.GUI.Controls.ctrlHorizontalTrackbar();
+			this.chkMuteSoundInBackground = new System.Windows.Forms.CheckBox();
 			this.btnReset = new System.Windows.Forms.Button();
 			this.tabMain = new System.Windows.Forms.TabControl();
 			this.tpgGeneral = new System.Windows.Forms.TabPage();
@@ -138,6 +142,7 @@ namespace Mesen.GUI.Forms.Config
 			this.tableLayoutPanel2.SuspendLayout();
 			this.tableLayoutPanel7.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.picLatencyWarning)).BeginInit();
+			this.tableLayoutPanel8.SuspendLayout();
 			this.tabMain.SuspendLayout();
 			this.tpgGeneral.SuspendLayout();
 			this.tpgVolume.SuspendLayout();
@@ -395,8 +400,7 @@ namespace Mesen.GUI.Forms.Config
 			this.tableLayoutPanel2.ColumnCount = 2;
 			this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
 			this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-			this.tableLayoutPanel2.Controls.Add(this.chkMuteSoundInBackground, 0, 4);
-			this.tableLayoutPanel2.Controls.Add(this.chkReduceSoundInBackground, 0, 5);
+			this.tableLayoutPanel2.Controls.Add(this.lblVolumeReductionSettings, 0, 4);
 			this.tableLayoutPanel2.Controls.Add(this.chkEnableAudio, 0, 0);
 			this.tableLayoutPanel2.Controls.Add(this.lblSampleRate, 0, 2);
 			this.tableLayoutPanel2.Controls.Add(this.lblAudioLatency, 0, 3);
@@ -404,43 +408,36 @@ namespace Mesen.GUI.Forms.Config
 			this.tableLayoutPanel2.Controls.Add(this.lblAudioDevice, 0, 1);
 			this.tableLayoutPanel2.Controls.Add(this.cboAudioDevice, 1, 1);
 			this.tableLayoutPanel2.Controls.Add(this.tableLayoutPanel7, 1, 3);
+			this.tableLayoutPanel2.Controls.Add(this.tableLayoutPanel8, 0, 5);
 			this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tableLayoutPanel2.Location = new System.Drawing.Point(3, 3);
 			this.tableLayoutPanel2.Margin = new System.Windows.Forms.Padding(0);
 			this.tableLayoutPanel2.Name = "tableLayoutPanel2";
-			this.tableLayoutPanel2.RowCount = 6;
+			this.tableLayoutPanel2.RowCount = 9;
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 22F));
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
 			this.tableLayoutPanel2.Size = new System.Drawing.Size(463, 341);
 			this.tableLayoutPanel2.TabIndex = 3;
 			// 
-			// chkMuteSoundInBackground
+			// lblVolumeReductionSettings
 			// 
-			this.chkMuteSoundInBackground.AutoSize = true;
-			this.tableLayoutPanel2.SetColumnSpan(this.chkMuteSoundInBackground, 2);
-			this.chkMuteSoundInBackground.Location = new System.Drawing.Point(3, 110);
-			this.chkMuteSoundInBackground.Name = "chkMuteSoundInBackground";
-			this.chkMuteSoundInBackground.Size = new System.Drawing.Size(182, 17);
-			this.chkMuteSoundInBackground.TabIndex = 14;
-			this.chkMuteSoundInBackground.Text = "Mute sound when in background";
-			this.chkMuteSoundInBackground.UseVisualStyleBackColor = true;
-			this.chkMuteSoundInBackground.CheckedChanged += new System.EventHandler(this.chkMuteWhenInBackground_CheckedChanged);
-			// 
-			// chkReduceSoundInBackground
-			// 
-			this.chkReduceSoundInBackground.AutoSize = true;
-			this.tableLayoutPanel2.SetColumnSpan(this.chkReduceSoundInBackground, 2);
-			this.chkReduceSoundInBackground.Location = new System.Drawing.Point(3, 133);
-			this.chkReduceSoundInBackground.Name = "chkReduceSoundInBackground";
-			this.chkReduceSoundInBackground.Size = new System.Drawing.Size(201, 17);
-			this.chkReduceSoundInBackground.TabIndex = 13;
-			this.chkReduceSoundInBackground.Text = "Reduce volume when in background";
-			this.chkReduceSoundInBackground.UseVisualStyleBackColor = true;
+			this.lblVolumeReductionSettings.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.lblVolumeReductionSettings.AutoSize = true;
+			this.tableLayoutPanel2.SetColumnSpan(this.lblVolumeReductionSettings, 2);
+			this.lblVolumeReductionSettings.ForeColor = System.Drawing.SystemColors.GrayText;
+			this.lblVolumeReductionSettings.Location = new System.Drawing.Point(0, 116);
+			this.lblVolumeReductionSettings.Margin = new System.Windows.Forms.Padding(0, 0, 3, 0);
+			this.lblVolumeReductionSettings.Name = "lblVolumeReductionSettings";
+			this.lblVolumeReductionSettings.Size = new System.Drawing.Size(94, 13);
+			this.lblVolumeReductionSettings.TabIndex = 24;
+			this.lblVolumeReductionSettings.Text = "Volume Reduction";
 			// 
 			// chkEnableAudio
 			// 
@@ -584,6 +581,7 @@ namespace Mesen.GUI.Forms.Config
             0,
             0,
             0});
+			this.nudLatency.MinimumSize = new System.Drawing.Size(0, 21);
 			this.nudLatency.Name = "nudLatency";
 			this.nudLatency.Size = new System.Drawing.Size(45, 21);
 			this.nudLatency.TabIndex = 1;
@@ -593,6 +591,77 @@ namespace Mesen.GUI.Forms.Config
             0,
             0});
 			this.nudLatency.ValueChanged += new System.EventHandler(this.nudLatency_ValueChanged);
+			// 
+			// tableLayoutPanel8
+			// 
+			this.tableLayoutPanel8.ColumnCount = 2;
+			this.tableLayoutPanel2.SetColumnSpan(this.tableLayoutPanel8, 2);
+			this.tableLayoutPanel8.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+			this.tableLayoutPanel8.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+			this.tableLayoutPanel8.Controls.Add(this.chkReduceSoundInBackground, 0, 1);
+			this.tableLayoutPanel8.Controls.Add(this.chkReduceSoundInFastForward, 0, 2);
+			this.tableLayoutPanel8.Controls.Add(this.trkVolumeReduction, 1, 1);
+			this.tableLayoutPanel8.Controls.Add(this.chkMuteSoundInBackground, 0, 0);
+			this.tableLayoutPanel8.Location = new System.Drawing.Point(10, 132);
+			this.tableLayoutPanel8.Margin = new System.Windows.Forms.Padding(10, 3, 0, 0);
+			this.tableLayoutPanel8.Name = "tableLayoutPanel8";
+			this.tableLayoutPanel8.RowCount = 4;
+			this.tableLayoutPanel8.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this.tableLayoutPanel8.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this.tableLayoutPanel8.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this.tableLayoutPanel8.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+			this.tableLayoutPanel8.Size = new System.Drawing.Size(453, 81);
+			this.tableLayoutPanel8.TabIndex = 25;
+			// 
+			// chkReduceSoundInBackground
+			// 
+			this.chkReduceSoundInBackground.AutoSize = true;
+			this.chkReduceSoundInBackground.Location = new System.Drawing.Point(3, 26);
+			this.chkReduceSoundInBackground.Name = "chkReduceSoundInBackground";
+			this.chkReduceSoundInBackground.Size = new System.Drawing.Size(164, 17);
+			this.chkReduceSoundInBackground.TabIndex = 13;
+			this.chkReduceSoundInBackground.Text = "Reduce when in background";
+			this.chkReduceSoundInBackground.UseVisualStyleBackColor = true;
+			this.chkReduceSoundInBackground.CheckedChanged += new System.EventHandler(this.chkReduceVolume_CheckedChanged);
+			// 
+			// chkReduceSoundInFastForward
+			// 
+			this.chkReduceSoundInFastForward.AutoSize = true;
+			this.chkReduceSoundInFastForward.Location = new System.Drawing.Point(3, 49);
+			this.chkReduceSoundInFastForward.Name = "chkReduceSoundInFastForward";
+			this.chkReduceSoundInFastForward.Size = new System.Drawing.Size(225, 17);
+			this.chkReduceSoundInFastForward.TabIndex = 16;
+			this.chkReduceSoundInFastForward.Text = "Reduce when fast forwarding or rewinding";
+			this.chkReduceSoundInFastForward.UseVisualStyleBackColor = true;
+			this.chkReduceSoundInFastForward.CheckedChanged += new System.EventHandler(this.chkReduceVolume_CheckedChanged);
+			// 
+			// trkVolumeReduction
+			// 
+			this.trkVolumeReduction.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.trkVolumeReduction.Enabled = false;
+			this.trkVolumeReduction.Location = new System.Drawing.Point(231, 23);
+			this.trkVolumeReduction.Margin = new System.Windows.Forms.Padding(0);
+			this.trkVolumeReduction.Maximum = 100;
+			this.trkVolumeReduction.MaximumSize = new System.Drawing.Size(400, 55);
+			this.trkVolumeReduction.Minimum = 0;
+			this.trkVolumeReduction.MinimumSize = new System.Drawing.Size(150, 55);
+			this.trkVolumeReduction.Name = "trkVolumeReduction";
+			this.tableLayoutPanel8.SetRowSpan(this.trkVolumeReduction, 2);
+			this.trkVolumeReduction.Size = new System.Drawing.Size(222, 55);
+			this.trkVolumeReduction.TabIndex = 17;
+			this.trkVolumeReduction.Text = "Volume Reduction";
+			this.trkVolumeReduction.Value = 50;
+			// 
+			// chkMuteSoundInBackground
+			// 
+			this.chkMuteSoundInBackground.AutoSize = true;
+			this.chkMuteSoundInBackground.Location = new System.Drawing.Point(3, 3);
+			this.chkMuteSoundInBackground.Name = "chkMuteSoundInBackground";
+			this.chkMuteSoundInBackground.Size = new System.Drawing.Size(182, 17);
+			this.chkMuteSoundInBackground.TabIndex = 18;
+			this.chkMuteSoundInBackground.Text = "Mute sound when in background";
+			this.chkMuteSoundInBackground.UseVisualStyleBackColor = true;
+			this.chkMuteSoundInBackground.CheckedChanged += new System.EventHandler(this.chkMuteWhenInBackground_CheckedChanged);
 			// 
 			// btnReset
 			// 
@@ -1463,6 +1532,7 @@ namespace Mesen.GUI.Forms.Config
             0,
             0,
             0});
+			this.nudStereoDelay.MinimumSize = new System.Drawing.Size(0, 21);
 			this.nudStereoDelay.Name = "nudStereoDelay";
 			this.nudStereoDelay.Size = new System.Drawing.Size(45, 21);
 			this.nudStereoDelay.TabIndex = 1;
@@ -1494,6 +1564,7 @@ namespace Mesen.GUI.Forms.Config
             0,
             0,
             -2147483648});
+			this.nudStereoPanning.MinimumSize = new System.Drawing.Size(0, 21);
 			this.nudStereoPanning.Name = "nudStereoPanning";
 			this.nudStereoPanning.Size = new System.Drawing.Size(45, 21);
 			this.nudStereoPanning.TabIndex = 1;
@@ -1633,6 +1704,7 @@ namespace Mesen.GUI.Forms.Config
             0,
             0,
             0});
+			this.nudCrossFeedRatio.MinimumSize = new System.Drawing.Size(0, 21);
 			this.nudCrossFeedRatio.Name = "nudCrossFeedRatio";
 			this.nudCrossFeedRatio.Size = new System.Drawing.Size(42, 21);
 			this.nudCrossFeedRatio.TabIndex = 2;
@@ -1747,6 +1819,8 @@ namespace Mesen.GUI.Forms.Config
 			this.tableLayoutPanel7.ResumeLayout(false);
 			this.tableLayoutPanel7.PerformLayout();
 			((System.ComponentModel.ISupportInitialize)(this.picLatencyWarning)).EndInit();
+			this.tableLayoutPanel8.ResumeLayout(false);
+			this.tableLayoutPanel8.PerformLayout();
 			this.tabMain.ResumeLayout(false);
 			this.tpgGeneral.ResumeLayout(false);
 			this.tpgVolume.ResumeLayout(false);
@@ -1810,7 +1884,6 @@ namespace Mesen.GUI.Forms.Config
 		private System.Windows.Forms.TabControl tabMain;
 		private System.Windows.Forms.TabPage tpgGeneral;
 		private System.Windows.Forms.TabPage tpgVolume;
-		private System.Windows.Forms.CheckBox chkMuteSoundInBackground;
 		private System.Windows.Forms.CheckBox chkReduceSoundInBackground;
 		private System.Windows.Forms.TabPage tpgAdvanced;
 		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel3;
@@ -1886,5 +1959,10 @@ namespace Mesen.GUI.Forms.Config
 		private System.Windows.Forms.ComboBox cboEqualizerPreset;
 		private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel7;
 		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel7;
+		private System.Windows.Forms.CheckBox chkReduceSoundInFastForward;
+		private System.Windows.Forms.Label lblVolumeReductionSettings;
+		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel8;
+		private ctrlHorizontalTrackbar trkVolumeReduction;
+		private System.Windows.Forms.CheckBox chkMuteSoundInBackground;
 	}
 }

@@ -25,6 +25,7 @@ EqualizerFilterType EmulationSettings::_equalizerFilterType = EqualizerFilterTyp
 vector<double> EmulationSettings::_bandGains = { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 };
 vector<double> EmulationSettings::_bands = { { 40,56,80,113,160,225,320,450,600,750,1000,2000,3000,4000,5000,6000,7000,10000,12500,15000 } };
 double EmulationSettings::_masterVolume = 1.0;
+double EmulationSettings::_volumeReduction = 0.75;
 uint32_t EmulationSettings::_sampleRate = 44100;
 StereoFilter EmulationSettings::_stereoFilter = StereoFilter::None;
 int32_t EmulationSettings::_stereoDelay = 0;

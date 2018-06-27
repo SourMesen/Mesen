@@ -85,6 +85,8 @@ enum EmulationFlags : uint64_t
 	UseHighResolutionTimer = 0x40000000000000,
 	DisplayDebugInfo = 0x80000000000000,
 
+	ReduceSoundInFastForward = 0x100000000000000,
+
 	ForceMaxSpeed = 0x4000000000000000,	
 	ConsoleMode = 0x8000000000000000,
 };
@@ -595,6 +597,7 @@ private:
 	static vector<double> _bandGains;
 	static vector<double> _bands;
 	static double _masterVolume;
+	static double _volumeReduction;
 	static uint32_t _sampleRate;
 	static StereoFilter _stereoFilter;
 	static int32_t _stereoDelay;
@@ -779,9 +782,12 @@ public:
 		_audioSettingsChanged = true;
 	}
 
-	static void SetMasterVolume(double volume)
+	static void SetMasterVolume(double volume, double volumeReduction = -1.0)
 	{
 		_masterVolume = volume;
+		if(volumeReduction >= 0) {
+			_volumeReduction = volumeReduction;
+		}
 		_audioSettingsChanged = true;
 	}
 
@@ -1083,6 +1089,11 @@ public:
 	static double GetMasterVolume()
 	{
 		return _masterVolume;
+	}
+
+	static double GetVolumeReduction()
+	{
+		return _volumeReduction;
 	}
 
 	static double GetChannelPanning(AudioChannel channel)
