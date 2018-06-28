@@ -457,7 +457,7 @@ namespace Mesen.GUI.Forms
 			this.menuStrip.Visible = true;
 			this.WindowState = _originalWindowState;
 			this.MinimumSize = _originalWindowMinimumSize;
-			this.FormBorderStyle = FormBorderStyle.Sizable;
+			this.FormBorderStyle = ConfigManager.Config.PreferenceInfo.DisableMouseResize ? FormBorderStyle.Fixed3D : FormBorderStyle.Sizable;
 			this.frmMain_Resize(null, EventArgs.Empty);
 		}
 
