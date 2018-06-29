@@ -90,7 +90,7 @@
 			<Control ID="mnuRunAllTests">Ejecutar todos los tests</Control>
 			<Control ID="mnuDebugger">Depurar</Control>
 			<Control ID="mnuLogWindow">Ventana del registro</Control>
-			<Control ID="mnuInstallHdPack">Install HD Pack</Control>
+			<Control ID="mnuInstallHdPack">Instalar Pack HD</Control>
 			<Control ID="mnuHdPackEditor">Creador de paquetes de alta resolución</Control>
 			<Control ID="mnuTakeScreenshot">Captura de pantalla</Control>
 			<Control ID="mnuRandomGame">Cargar juego aleatorio</Control>
@@ -137,9 +137,9 @@
 			<Control ID="lblReverbStrength">Fuerza:</Control>
 			<Control ID="chkMuteSoundInBackground">Detener el sonido cuando Mesen esté en segundo plano</Control>
 			<Control ID="chkReduceSoundInBackground">Bajar el volumen cuando Mesen esté en segundo plano</Control>
-			<Control ID="chkReduceSoundInFastForward">Reduce volume during fast forward/rewind</Control>
-			<Control ID="trkVolumeReduction">Volume Reduction (%)</Control>
-			<Control ID="lblVolumeReductionSettings">Volume Reduction Settings</Control>
+			<Control ID="chkReduceSoundInFastForward">Reducir volumen durante el avance rápido/rebobinado</Control>
+			<Control ID="trkVolumeReduction">Reducción de volumen (%)</Control>
+			<Control ID="lblVolumeReductionSettings">Ajustes de reducción de volumen</Control>
 			<Control ID="chkEnableAudio">Activar el sonido</Control>
 			<Control ID="lblSampleRate">Frecuencia de muestreo:</Control>
 			<Control ID="lblLatencyMs">ms</Control>
@@ -227,14 +227,14 @@
 			<Control ID="lblRequestedRefreshRate">Frecuencia de actualización solicitada:</Control>
 			<Control ID="tpgOverscan">Overscan</Control>
 			<Control ID="tpgOverscanGlobal">Global</Control>
-			<Control ID="tpgOverscanGameSpecific">Game-Specific</Control>
-			<Control ID="chkEnableGameSpecificOverscan">Enable game-specific overscan settings</Control>
+			<Control ID="tpgOverscanGameSpecific">Específico del juego</Control>
+			<Control ID="chkEnableGameSpecificOverscan">Habilitar ajustes de overscan específicos del juego</Control>
 			<Control ID="lblLeft">Izquierda</Control>
 			<Control ID="lblTop">Arriba</Control>
 			<Control ID="lblBottom">Abajo</Control>
 			<Control ID="lblRight">Derecha</Control>
 			<Control ID="tpgPalette">Paleta</Control>
-			<Control ID="chkShowColorIndexes">Show color indexes</Control>
+			<Control ID="chkShowColorIndexes">Mostrar índices de color</Control>
 			<Control ID="mnuDefaultPalette">Por defecto (NTSC)</Control>
 			<Control ID="btnSelectPalette">Elegir una paleta...</Control>
 			<Control ID="btnExportPalette">Exportar archivo .pal</Control>
@@ -270,7 +270,7 @@
 			<Control ID="mnuPresetMonochrome">Monocromo</Control>
 
 			<Control ID="tpgAdvanced">Avanzado</Control>
-			<Control ID="lblScreenRotation">Screen Rotation:</Control>
+			<Control ID="lblScreenRotation">Rotación de pantalla:</Control>
 			<Control ID="chkDisableBackground">Deshabilitar fondo</Control>
 			<Control ID="chkDisableSprites">Deshabilitar sprites</Control>
 			<Control ID="chkForceBackgroundFirstColumn">Forzar ver fondo en primera columna</Control>
@@ -300,7 +300,7 @@
 			<Control ID="chkDisablePaletteRead">Impedir la reproducción de la paleta de la PPU</Control>
 			<Control ID="chkDisablePpuReset">No resetear la PPU al resetear la consola (Famicom)</Control>
 			<Control ID="chkUseNes101Hvc101Behavior">Simular el comportamiento de NES/HVC-101 (Top-loader / AV Famicom)</Control>
-			<Control ID="chkMapperRandomPowerOnState">Randomize power-on state for mappers</Control>
+			<Control ID="chkMapperRandomPowerOnState">Aleatorizar el estado de encendido para los mappers</Control>
 
 			<Control ID="tpgOverclocking">Overclocking</Control>
 			<Control ID="grpOverclocking">Overclocking de CPU</Control>
@@ -409,14 +409,14 @@
 
 			<Control ID="lblFdsSettings">Configuración de Famicom Disk System</Control>
 			<Control ID="lblUiDisplaySettings">Configuración de interfaz de usuario</Control>
-			<Control ID="lblWindowSettings">Window Settings</Control>
-			<Control ID="chkDisableMouseResize">Do not allow the main window to be resized using the mouse</Control>
+			<Control ID="lblWindowSettings">Ventana de ajustes</Control>
+			<Control ID="chkDisableMouseResize">No permitir que la ventana principal se redimensione usando el ratón</Control>
 			<Control ID="lblGameSelectionScreenSettings">Configuración de la pantalla de selección de juegos</Control>
 			<Control ID="chkGameSelectionScreenResetGame">Iniciar juego desde cero en vez de reanudar la sesión de juego anterior</Control>
 			<Control ID="chkDisableGameSelectionScreen">Deshabilitar pantalla de selección de juegos</Control>
 
 			<Control ID="chkDisableGameDatabase">Deshabilitar la base de datos de juegos</Control>
-			<Control ID="chkDisableHighResolutionTimer">Disable high resolution timer</Control>
+			<Control ID="chkDisableHighResolutionTimer">Deshabilitar temporizador de alta resolución</Control>
 			<Control ID="chkDisableOsd">Deshabilitar visualización en pantalla (OSD)</Control>
 
 			<Control ID="chkAlwaysOnTop">Mostrar siempre sobre otras ventanas</Control>
@@ -427,7 +427,7 @@
 			<Control ID="lblNsfMillisecondsOfSilence">milisegundos de silencio</Control>
 			<Control ID="chkNsfMoveToNextTrackAfterTime">Limitar la duración de pistas a</Control>
 			<Control ID="lblNsfSeconds">segundos</Control>
-			<Control ID="chkNsfEnableApuIrqs">Enable APU IRQs for NSF files</Control>
+			<Control ID="chkNsfEnableApuIrqs">Habilitar APU IRQs para archivos NSF</Control>
 
 			<Control ID="btnOK">OK</Control>
 			<Control ID="btnCancel">Cancelar</Control>
@@ -739,7 +739,7 @@
 		<Message ID="CheatsFound">{0} y {1} trucos de juegos presentes en la base de datos</Message>
 		<Message ID="CheatsImported">{0} trucos se importaron para el juego {1}.</Message>
 
-		<Message ID="PressToExitFullscreen">Press {0} to exit fullscreen</Message>
+		<Message ID="PressToExitFullscreen">Pulsar {0} para salir de pantalla completa</Message>
 
 		<Message ID="RomsFound">{0} roms encontradas</Message>
 
@@ -773,12 +773,12 @@
 		<Message ID="HdPackBuilderLargeSpritesHelp">Si está habilitada, esta opción alterará el orden de aparición de los bancos CHR&#xA;que solo contengan sprites a fin de hacer que los sprites sean más fáciles de editar en el fichero PNG.</Message>
 		<Message ID="HdPackBuilderIgnoreOverscanHelp">Cuando está habilitado, esto hará que se ignoren los píxeles en el área de overscan.&#xA;Esto es útil en juegos que contienen fallos en el borde exterior de la pantalla.&#xA;Las combinaciones de paleta incorrectas debido a estas interferencias se ignorarán y no se mostrarán en los archivos PNG.</Message>
 
-		<Message ID="InstallHdPackWrongRom">The selected HD Pack is not compatible with the currently running game and cannot be installed.</Message>
-		<Message ID="InstallHdPackError">An error occurred while trying to install the HD Pack: &#xA;&#xA;{0}</Message>
-		<Message ID="InstallHdPackInvalidPack">The selected file is not a valid HD Pack.</Message>
-		<Message ID="InstallHdPackInvalidZipFile">The selected file is not a valid Zip file.</Message>
-		<Message ID="InstallHdPackConfirmOverwrite">The destination folder ({0}) already exists - are you sure you want to overwrite it?</Message>
-		<Message ID="InstallHdPackConfirmReset">The HD Pack has been installed successfully. Do you want to reset the game and load the HD Pack now?</Message>
+		<Message ID="InstallHdPackWrongRom">El Pack HD seleccionado no es compatible con el juego que se está ejecutando actualmente y no se puede instalar.</Message>
+		<Message ID="InstallHdPackError">Se produjo un error al intentar instalar el Pack HD: &#xA;&#xA;{0}</Message>
+		<Message ID="InstallHdPackInvalidPack">El archivo seleccionado no es un Pack HD válido.</Message>
+		<Message ID="InstallHdPackInvalidZipFile">El archivo seleccionado no es un archivo Zip válido.</Message>
+		<Message ID="InstallHdPackConfirmOverwrite">El directorio destino ({0}) ya existe - ¿Seguro que desea sobreescribirlo?</Message>
+		<Message ID="InstallHdPackConfirmReset">El Pack HD se ha instalado con éxito. ¿Desea reiniciar el juego y cargar el Pack HD ahora?</Message>
 
 		<Message ID="MesenUpToDate">Ya utiliza la versión mas reciente de Mesen.</Message>
 		<Message ID="PatchAndReset">¿Aplicar el parche y reiniciar el juego?</Message>
@@ -839,7 +839,7 @@
 		<Message ID="EmulatorShortcutMappings_SetScale6x">Establecer escala 6x</Message>
 		<Message ID="EmulatorShortcutMappings_ToggleFullscreen">Alternar pantalla completa</Message>
 		<Message ID="EmulatorShortcutMappings_ToggleFps">Alternar contador de FPS</Message>
-		<Message ID="EmulatorShortcutMappings_ToggleDebugInfo">Toggle Debug Information</Message>
+		<Message ID="EmulatorShortcutMappings_ToggleDebugInfo">Alternar información de depuración</Message>
 		<Message ID="EmulatorShortcutMappings_ToggleGameTimer">Alternar temporizador de juego</Message>
 		<Message ID="EmulatorShortcutMappings_ToggleFrameCounter">Alternar contador de frames</Message>
 		<Message ID="EmulatorShortcutMappings_ToggleLagCounter">Alternar contador de lag</Message>
@@ -905,10 +905,10 @@
 			<Value ID="KonamiHyperShot">Konami Hyper Shot</Value>
 			<Value ID="FamilyBasicKeyboard">Family Basic Keyboard</Value>
 			<Value ID="PartyTap">Partytap</Value>
-			<Value ID="Pachinko">Pachinko Controller</Value>
+			<Value ID="Pachinko">Control Pachinko</Value>
 			<Value ID="ExcitingBoxing">Exciting Boxing Punching Bag</Value>
-			<Value ID="JissenMahjong">Jissen Mahjong Controller</Value>
-			<Value ID="SuborKeyboard">Subor Keyboard</Value>
+			<Value ID="JissenMahjong">Control Jissen Mahjong</Value>
+			<Value ID="SuborKeyboard">Teclado Subor</Value>
 			<Value ID="BarcodeBattler">Barcode Battler</Value>
 			<Value ID="HoriTrack">Hori Track</Value>
 			<Value ID="BandaiHyperShot">Bandai Hyper Shot</Value>
