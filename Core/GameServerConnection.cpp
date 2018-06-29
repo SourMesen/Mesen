@@ -142,15 +142,17 @@ void GameServerConnection::ProcessMessage(NetMessage* message)
 			break;
 
 		case MessageType::InputData:
-			if(_handshakeCompleted) {
-				break;
+			if(!_handshakeCompleted) {
+				SendForceDisconnectMessage("Handshake has not been completed - invalid packet");
+				return;
 			}
 			PushState(((InputDataMessage*)message)->GetInputState());
 			break;
 
 		case MessageType::SelectController:
-			if(_handshakeCompleted) {
-				break;
+			if(!_handshakeCompleted) {
+				SendForceDisconnectMessage("Handshake has not been completed - invalid packet");
+				return;
 			}
 			SelectControllerPort(((SelectControllerMessage*)message)->GetPortNumber());
 			break;
