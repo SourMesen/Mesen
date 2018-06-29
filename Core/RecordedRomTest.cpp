@@ -17,15 +17,11 @@
 RecordedRomTest::RecordedRomTest()
 {
 	Reset();
-
-	MessageManager::RegisterNotificationListener(this);
 }
 
 RecordedRomTest::~RecordedRomTest()
 {
 	Reset();
-
-	MessageManager::UnregisterNotificationListener(this);
 }
 
 void RecordedRomTest::SaveFrame(uint16_t* ppuFrameBuffer)

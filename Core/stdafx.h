@@ -30,6 +30,7 @@
 using std::vector;
 using std::shared_ptr;
 using std::unique_ptr;
+using std::weak_ptr;
 using std::ios;
 using std::istream;
 using std::ostream;

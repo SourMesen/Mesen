@@ -13,14 +13,12 @@ AutomaticRomTest::AutomaticRomTest()
 {
 	_running = true;
 	_errorCode = 0;
-	MessageManager::RegisterNotificationListener(this);
 	ControlManager::RegisterInputProvider(this);
 }
 
 AutomaticRomTest::~AutomaticRomTest()
 {
 	_running = false;
-	MessageManager::UnregisterNotificationListener(this);
 	ControlManager::UnregisterInputProvider(this);
 }
 

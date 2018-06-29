@@ -28,6 +28,7 @@
 #include "../Core/FdsSystemActionManager.h"
 #include "../Core/VsSystemActionManager.h"
 #include "../Core/KeyManager.h"
+#include "../Utilities/SimpleLock.h"
 
 #ifdef _WIN32
 	#include "../Windows/Renderer.h"
@@ -48,7 +49,9 @@ void* _windowHandle = nullptr;
 void* _viewerHandle = nullptr;
 string _returnString;
 string _logString;
-RecordedRomTest *_recordedRomTest = nullptr;
+shared_ptr<RecordedRomTest> _recordedRomTest;
+SimpleLock _externalNotificationListenerLock;
+vector<shared_ptr<INotificationListener>> _externalNotificationListeners;
 
 typedef void (__stdcall *NotificationListenerCallback)(int, void*);
 
@@ -61,7 +64,7 @@ namespace InteropEmu {
 		{
 			_callback = callback;
 		}
-
+		
 		void ProcessNotification(ConsoleNotificationType type, void* parameter)
 		{
 			_callback((int)type, parameter);
@@ -353,11 +356,25 @@ namespace InteropEmu {
 
 		DllExport INotificationListener* __stdcall RegisterNotificationCallback(NotificationListenerCallback callback)
 		{
-			INotificationListener* listener = new InteropNotificationListener(callback);
+			auto lock = _externalNotificationListenerLock.AcquireSafe();
+			auto listener = shared_ptr<INotificationListener>(new InteropNotificationListener(callback));
+			_externalNotificationListeners.push_back(listener);
 			MessageManager::RegisterNotificationListener(listener);
-			return listener;
+			return listener.get();
 		}
-		DllExport void __stdcall UnregisterNotificationCallback(INotificationListener *listener) { MessageManager::UnregisterNotificationListener(listener); }
+
+		DllExport void __stdcall UnregisterNotificationCallback(INotificationListener *listener)
+		{
+			auto lock = _externalNotificationListenerLock.AcquireSafe();
+			_externalNotificationListeners.erase(
+				std::remove_if(
+					_externalNotificationListeners.begin(),
+					_externalNotificationListeners.end(),
+					[=](shared_ptr<INotificationListener> ptr) { return ptr.get() == listener; }
+				),
+				_externalNotificationListeners.end()
+			);
+		}
 
 		DllExport void __stdcall DisplayMessage(char* title, char* message, char* param1) { MessageManager::DisplayMessage(title, message, param1 ? param1 : ""); }
 		DllExport const char* __stdcall GetLog()
@@ -400,28 +417,29 @@ namespace InteropEmu {
 
 		DllExport int32_t __stdcall RunAutomaticTest(char* filename)
 		{
-			AutomaticRomTest romTest;
-			return romTest.Run(filename);
+			shared_ptr<AutomaticRomTest> romTest(new AutomaticRomTest());
+			MessageManager::RegisterNotificationListener(romTest);
+			return romTest->Run(filename);
 		}
 
 		DllExport void __stdcall RomTestRecord(char* filename, bool reset) 
 		{
-			if(_recordedRomTest) {
-				delete _recordedRomTest;
-			}
-			_recordedRomTest = new RecordedRomTest();
+			_recordedRomTest.reset(new RecordedRomTest());
+			MessageManager::RegisterNotificationListener(_recordedRomTest);
 			_recordedRomTest->Record(filename, reset);
 		}
 
 		DllExport void __stdcall RomTestRecordFromMovie(char* testFilename, char* movieFilename) 
 		{
-			_recordedRomTest = new RecordedRomTest();
+			_recordedRomTest.reset(new RecordedRomTest());
+			MessageManager::RegisterNotificationListener(_recordedRomTest);
 			_recordedRomTest->RecordFromMovie(testFilename, string(movieFilename));
 		}
 
 		DllExport void __stdcall RomTestRecordFromTest(char* newTestFilename, char* existingTestFilename) 
 		{
-			_recordedRomTest = new RecordedRomTest();
+			_recordedRomTest.reset(new RecordedRomTest());
+			MessageManager::RegisterNotificationListener(_recordedRomTest);
 			_recordedRomTest->RecordFromTest(newTestFilename, existingTestFilename);
 		}
 
@@ -429,8 +447,7 @@ namespace InteropEmu {
 		{
 			if(_recordedRomTest) {
 				_recordedRomTest->Stop();
-				delete _recordedRomTest;
-				_recordedRomTest = nullptr;
+				_recordedRomTest.reset();
 			}
 		}
 

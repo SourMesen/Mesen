@@ -15,7 +15,6 @@ RewindManager::RewindManager()
 	_framesToFastForward = 0;
 	AddHistoryBlock();
 
-	MessageManager::RegisterNotificationListener(this);
 	ControlManager::RegisterInputProvider(this);
 	ControlManager::RegisterInputRecorder(this);
 }
@@ -25,7 +24,6 @@ RewindManager::~RewindManager()
 	if(_instance == this) {
 		_instance = nullptr;
 	}
-	MessageManager::UnregisterNotificationListener(this);
 	ControlManager::UnregisterInputProvider(this);
 	ControlManager::UnregisterInputRecorder(this);
 }

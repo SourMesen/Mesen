@@ -38,7 +38,9 @@ void GameServer::AcceptConnections()
 	while(true) {
 		shared_ptr<Socket> socket = _listener->Accept();
 		if(!socket->ConnectionError()) {
-			_openConnections.push_back(shared_ptr<GameServerConnection>(new GameServerConnection(socket, _password)));
+			auto connection = shared_ptr<GameServerConnection>(new GameServerConnection(socket, _password));
+			MessageManager::RegisterNotificationListener(connection);
+			_openConnections.push_back(connection);
 		} else {
 			break;
 		}

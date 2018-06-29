@@ -623,6 +623,7 @@ shared_ptr<BaseMapper> MapperFactory::InitializeFromFile(string romFilename, vec
 
 		if(mapper) {
 			mapper->Initialize(romData);
+			MessageManager::RegisterNotificationListener(mapper);
 			return mapper;
 		}
 	}

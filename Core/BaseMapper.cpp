@@ -602,8 +602,6 @@ void BaseMapper::Initialize(RomData &romData)
 	InitMapper();
 	InitMapper(romData);
 
-	MessageManager::RegisterNotificationListener(this);
-
 	ApplyCheats();
 }
 
@@ -622,8 +620,6 @@ BaseMapper::~BaseMapper()
 	if(_cartNametableRam[1]) {
 		delete[] _cartNametableRam[1];
 	}
-
-	MessageManager::UnregisterNotificationListener(this);
 }
 
 void BaseMapper::ProcessNotification(ConsoleNotificationType type, void* parameter)

@@ -198,6 +198,7 @@ bool Console::Initialize(VirtualFile &romFile, VirtualFile &patchFile)
 			ResetComponents(false);
 
 			_rewindManager.reset(new RewindManager());
+			MessageManager::RegisterNotificationListener(_rewindManager);
 
 			VideoDecoder::GetInstance()->StartThread();
 

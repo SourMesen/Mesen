@@ -26,7 +26,6 @@ GameServerConnection::GameServerConnection(shared_ptr<Socket> socket, string ser
 	//Server-side connection
 	_serverPassword = serverPassword;
 	_controllerPort = GameConnection::SpectatorPort;
-	MessageManager::RegisterNotificationListener(this);
 	SendServerInformation();
 }
 
@@ -37,7 +36,6 @@ GameServerConnection::~GameServerConnection()
 	}
 
 	UnregisterNetPlayDevice(this);
-	MessageManager::UnregisterNotificationListener(this);
 }
 
 void GameServerConnection::SendServerInformation()

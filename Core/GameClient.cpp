@@ -14,8 +14,6 @@ shared_ptr<GameClient> GameClient::_instance;
 GameClient::GameClient()
 {
 	_stop = false;
-	
-	MessageManager::RegisterNotificationListener(this);
 }
 
 GameClient::~GameClient()
@@ -24,7 +22,6 @@ GameClient::~GameClient()
 	if(_clientThread) {
 		_clientThread->join();
 	}
-	MessageManager::UnregisterNotificationListener(this);
 }
 
 bool GameClient::Connected()
@@ -36,6 +33,7 @@ bool GameClient::Connected()
 void GameClient::Connect(ClientConnectionData &connectionData)
 {
 	_instance.reset(new GameClient());
+	MessageManager::RegisterNotificationListener(_instance);
 	
 	shared_ptr<GameClient> instance = _instance;
 	if(instance) {
@@ -61,6 +59,7 @@ void GameClient::PrivateConnect(ClientConnectionData &connectionData)
 	shared_ptr<Socket> socket(new Socket());
 	if(socket->Connect(connectionData.Host.c_str(), connectionData.Port)) {
 		_connection.reset(new GameClientConnection(socket, connectionData));
+		MessageManager::RegisterNotificationListener(_connection);
 		_connected = true;
 	} else {
 		MessageManager::DisplayMessage("NetPlay", "CouldNotConnect");

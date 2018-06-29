@@ -1056,10 +1056,7 @@ namespace Mesen.GUI
 
 			public void Dispose()
 			{
-				Task.Run(() => {
-					//Unregister the callback in another thread, to prevent deadlocks
-					InteropEmu.UnregisterNotificationCallback(_notificationListener);
-				});
+				InteropEmu.UnregisterNotificationCallback(_notificationListener);
 			}
 
 			public void ProcessNotification(int type, IntPtr parameter)

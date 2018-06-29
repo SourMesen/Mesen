@@ -25,7 +25,6 @@ GameClientConnection::GameClientConnection(shared_ptr<Socket> socket, ClientConn
 	_enableControllers = false;
 	_minimumQueueSize = 3;
 
-	MessageManager::RegisterNotificationListener(this);
 	MessageManager::DisplayMessage("NetPlay", "ConnectedToServer");
 	ControlManager::RegisterInputProvider(this);
 }
@@ -42,7 +41,6 @@ void GameClientConnection::Shutdown()
 		DisableControllers();
 
 		ControlManager::UnregisterInputProvider(this);
-		MessageManager::UnregisterNotificationListener(this);
 		MessageManager::SendNotification(ConsoleNotificationType::DisconnectedFromServer);
 		MessageManager::DisplayMessage("NetPlay", "ConnectionLost");
 		EmulationSettings::ClearFlags(EmulationFlags::ForceMaxSpeed);
