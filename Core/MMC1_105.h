@@ -30,7 +30,7 @@ protected:
 			_irqCounter++;
 			//TODO: Counter hardcoded - should be based on dip switches
 			if(_irqCounter == 0x28000000) {
-				CPU::SetIRQSource(IRQSource::External);
+				_console->GetCpu()->SetIrqSource(IRQSource::External);
 				_irqEnabled = false;
 			}
 		}
@@ -47,7 +47,7 @@ protected:
 		if(_state.RegA000 & 0x10) {
 			_irqEnabled = false;
 			_irqCounter = 0;
-			CPU::ClearIRQSource(IRQSource::External);
+			_console->GetCpu()->ClearIrqSource(IRQSource::External);
 		} else {
 			_irqEnabled = true;
 		}

@@ -15,10 +15,14 @@ struct KeyDefinition {
 	string extDescription;
 };
 
+class Console;
+
 class WindowsKeyManager : public IKeyManager
 {
 	private:
 		HWND _hWnd;
+		shared_ptr<Console> _console;
+
 		bool _keyState[0x200];
 		bool _mouseState[0x03];
 		unique_ptr<DirectInputManager> _directInput;
@@ -36,7 +40,7 @@ class WindowsKeyManager : public IKeyManager
 		void StartUpdateDeviceThread();
 
 	public:
-		WindowsKeyManager(HWND hWnd);
+		WindowsKeyManager(shared_ptr<Console> console, HWND hWnd);
 		~WindowsKeyManager();
 
 		void RefreshState();

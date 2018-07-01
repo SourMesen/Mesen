@@ -9,6 +9,7 @@ class BandaiHyperShot : public StandardController
 {
 private:
 	uint32_t _stateBuffer = 0;
+	shared_ptr<Console> _console;
 
 protected:
 	enum ZapperButtons { Fire = 9 };
@@ -38,7 +39,7 @@ protected:
 
 	bool IsLightFound()
 	{
-		return Zapper::StaticIsLightFound(GetCoordinates());
+		return Zapper::StaticIsLightFound(GetCoordinates(), _console);
 	}
 
 	void StreamState(bool saving) override
@@ -48,8 +49,9 @@ protected:
 	}
 
 public:
-	BandaiHyperShot(KeyMappingSet keyMappings) : StandardController(BaseControlDevice::ExpDevicePort, keyMappings)
+	BandaiHyperShot(shared_ptr<Console> console, KeyMappingSet keyMappings) : StandardController(console, BaseControlDevice::ExpDevicePort, keyMappings)
 	{
+		_console = console;
 	}
 
 	void RefreshStateBuffer() override

@@ -5,13 +5,11 @@
 #include "DeltaModulationChannel.h"
 #include "Debugger.h"
 #include "NsfMapper.h"
-#include "MemoryManager.h"
+#include "Console.h"
 
-CPU* CPU::Instance = nullptr;
-
-CPU::CPU(MemoryManager *memoryManager)
+CPU::CPU(shared_ptr<Console> console)
 {
-	CPU::Instance = this;
+	_console = console;
 
 	Func opTable[] = { 
 	//	0				1				2				3				4				5				6						7				8				9				A						B				C						D				E						F
@@ -71,11 +69,11 @@ CPU::CPU(MemoryManager *memoryManager)
 	_state = {};
 	_prevRunIrq = false;
 	_runIrq = false;
- 	_memoryManager = memoryManager;	
 }
 
 void CPU::Reset(bool softReset, NesModel model)
 {
+	_memoryManager = _console->GetMemoryManager();
 	_state.NMIFlag = false;
 	_state.IRQFlag = 0;
 	_cycleCount = -1;
@@ -107,11 +105,11 @@ void CPU::Reset(bool softReset, NesModel model)
 
 	//The CPU takes some cycles before starting its execution after a reset/power up
 	for(int i = 0; i < (model == NesModel::NTSC ? 28 : 30); i++) {
-		PPU::RunOneCycle();
+		_console->GetPpu()->Exec();
 	}
 
 	for(int i = 0; i < 10; i++) {
-		APU::ExecStatic();
+		_console->GetApu()->ProcessCpuClock();
 	}
 }
 
@@ -141,15 +139,15 @@ void CPU::IRQ()
 		SetPC(MemoryReadWord(CPU::NMIVector));
 		_state.NMIFlag = false;
 
-		Debugger::AddTrace("NMI");
-		Debugger::ProcessInterrupt(originalPc, _state.PC, true);
+		_console->DebugAddTrace("NMI");
+		_console->DebugProcessInterrupt(originalPc, _state.PC, true);
 	} else {
 		Push((uint8_t)(PS() | PSFlags::Reserved));
 		SetFlags(PSFlags::Interrupt);
 		SetPC(MemoryReadWord(CPU::IRQVector));
 
-		Debugger::AddTrace("IRQ");
-		Debugger::ProcessInterrupt(originalPc, _state.PC, false);
+		_console->DebugAddTrace("IRQ");
+		_console->DebugProcessInterrupt(originalPc, _state.PC, false);
 	}
 }
 
@@ -163,14 +161,14 @@ void CPU::BRK() {
 
 		SetPC(MemoryReadWord(CPU::NMIVector));
 
-		Debugger::AddTrace("NMI");
+		_console->DebugAddTrace("NMI");
 	} else {
 		Push((uint8_t)flags);
 		SetFlags(PSFlags::Interrupt);
 
 		SetPC(MemoryReadWord(CPU::IRQVector));
 
-		Debugger::AddTrace("IRQ");
+		_console->DebugAddTrace("IRQ");
 	}
 
 	//Since we just set the flag to prevent interrupts, do not run one right away after this (fixes nmi_and_brk & nmi_and_irq tests)
@@ -234,13 +232,13 @@ uint16_t CPU::FetchOperand()
 	}
 	
 #ifndef LIBRETRO
-	Debugger::BreakIfDebugging();
+	_console->BreakIfDebugging();
 	
 	if(NsfMapper::GetInstance()) {
 		//Don't stop emulation on CPU crash when playing NSFs, reset cpu instead
-		Console::Reset(true);
+		_console->Reset(true);
 		return 0;
-	} else if(!Debugger::IsEnabled()) {
+	} else if(!_console->GetDebugger(false)) {
 		//Throw an error and stop emulation core (if debugger is not enabled)
 		throw std::runtime_error("Invalid OP code - CPU crashed");
 	} else {
@@ -256,22 +254,19 @@ void CPU::IncCycleCount()
 {
 	_cycleCount++;
 
-	_memoryManager->ProcessCpuClock();
-
 	if(_dmcDmaRunning) {
 		//CPU is being stalled by the DMC's DMA transfer
 		_dmcCounter--;
 		if(_dmcCounter == 0) {
 			//Update the DMC buffer when the stall period is completed
 			_dmcDmaRunning = false;
-			DeltaModulationChannel::SetReadBuffer();
-			Debugger::AddTrace("DMC DMA End");
+			_console->GetApu()->FillDmcReadBuffer();
+			_console->DebugAddTrace("DMC DMA End");
 		}
 	}
 
-	PPU::ExecStatic();
-	APU::ExecStatic();
-	
+	_console->ProcessCpuClock();
+
 	if(!_spriteDmaTransfer && !_dmcDmaRunning) {
 		//IRQ flags are ignored during Sprite DMA - fixes irq_and_dma
 
@@ -284,57 +279,57 @@ void CPU::IncCycleCount()
 
 void CPU::RunDMATransfer(uint8_t offsetValue)
 {
-	Debugger::AddTrace("Sprite DMA Start");
-	Instance->_spriteDmaTransfer = true;
+	_console->DebugAddTrace("Sprite DMA Start");
+	_spriteDmaTransfer = true;
 	
 	//"The CPU is suspended during the transfer, which will take 513 or 514 cycles after the $4014 write tick."
 	//"(1 dummy read cycle while waiting for writes to complete, +1 if on an odd CPU cycle, then 256 alternating read/write cycles.)"
-	if(Instance->_cycleCount % 2 != 0) {
-		Instance->DummyRead();
+	if(_cycleCount % 2 != 0) {
+		DummyRead();
 	}
-	Instance->DummyRead();
+	DummyRead();
 
-	Instance->_spriteDmaCounter = 256;
+	_spriteDmaCounter = 256;
 
 	//DMA transfer starts at SpriteRamAddr and wraps around
 	for(int i = 0; i < 0x100; i++) {
 		//Read value
-		uint8_t readValue = Instance->MemoryRead(offsetValue * 0x100 + i);
+		uint8_t readValue = MemoryRead(offsetValue * 0x100 + i);
 		
 		//Write to sprite ram via $2004 ("DMA is implemented in the 2A03/7 chip and works by repeatedly writing to OAMDATA")
-		Instance->MemoryWrite(0x2004, readValue);
+		MemoryWrite(0x2004, readValue);
 
-		Instance->_spriteDmaCounter--;
+		_spriteDmaCounter--;
 	}
 	
-	Instance->_spriteDmaTransfer = false;
+	_spriteDmaTransfer = false;
 
-	Debugger::AddTrace("Sprite DMA End");
+	_console->DebugAddTrace("Sprite DMA End");
 }
 
 void CPU::StartDmcTransfer()
 {
 	//"DMC DMA adds 4 cycles normally, 2 if it lands on the $4014 write or during OAM DMA"
 	//3 cycles if it lands on the last write cycle of any instruction
-	Debugger::AddTrace("DMC DMA Start");
-	Instance->_dmcDmaRunning = true;
-	if(Instance->_spriteDmaTransfer) {
-		if(Instance->_spriteDmaCounter == 2) {
-			Instance->_dmcCounter = 1;
-		} else if(Instance->_spriteDmaCounter == 1) {
-			Instance->_dmcCounter = 3;
+	_console->DebugAddTrace("DMC DMA Start");
+	_dmcDmaRunning = true;
+	if(_spriteDmaTransfer) {
+		if(_spriteDmaCounter == 2) {
+			_dmcCounter = 1;
+		} else if(_spriteDmaCounter == 1) {
+			_dmcCounter = 3;
 		} else {
-			Instance->_dmcCounter = 2;
+			_dmcCounter = 2;
 		}
 	} else {
-		if(Instance->_cpuWrite) {
-			if(Instance->_writeAddr == 0x4014) {
-				Instance->_dmcCounter = 2;
+		if(_cpuWrite) {
+			if(_writeAddr == 0x4014) {
+				_dmcCounter = 2;
 			} else {
-				Instance->_dmcCounter = 3;
+				_dmcCounter = 3;
 			}
 		} else {
-			Instance->_dmcCounter = 4;
+			_dmcCounter = 4;
 		}
 	}
 }
@@ -347,16 +342,6 @@ uint32_t CPU::GetClockRate(NesModel model)
 		case NesModel::PAL: return CPU::ClockRatePal; break;
 		case NesModel::Dendy: return CPU::ClockRateDendy; break;
 	}
-}
-
-uint8_t CPU::DebugReadByte(uint16_t addr)
-{ 
-	return CPU::Instance->_memoryManager->DebugRead(addr);
-}
-
-uint16_t CPU::DebugReadWord(uint16_t addr)
-{
-	return CPU::Instance->_memoryManager->DebugReadWord(addr);
 }
 
 void CPU::StreamState(bool saving)

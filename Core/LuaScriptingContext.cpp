@@ -6,7 +6,9 @@
 #include "DebuggerTypes.h"
 #include "Debugger.h"
 
-LuaScriptingContext::LuaScriptingContext() { }
+LuaScriptingContext::LuaScriptingContext(Debugger* debugger) : ScriptingContext(debugger)
+{
+}
 
 LuaScriptingContext::~LuaScriptingContext()
 {

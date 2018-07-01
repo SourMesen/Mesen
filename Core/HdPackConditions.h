@@ -58,7 +58,7 @@ enum class HdPackConditionOperator
 
 struct HdPackBaseMemoryCondition : public HdPackCondition
 {
-	static const uint32_t PpuMemoryMarker = 0x80000000;
+	static constexpr uint32_t PpuMemoryMarker = 0x80000000;
 	uint32_t OperandA;
 	HdPackConditionOperator Operator;
 	uint32_t OperandB;

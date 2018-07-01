@@ -8,6 +8,7 @@
 #include "ModChannel.h"
 #include "BaseExpansionAudio.h"
 #include "MemoryManager.h"
+#include "Console.h"
 
 class FdsAudio : public BaseExpansionAudio
 {
@@ -82,15 +83,19 @@ protected:
 
 
 		if(_lastOutput != outputLevel) {
-			APU::AddExpansionAudioDelta(AudioChannel::FDS, outputLevel - _lastOutput);
+			_console->GetApu()->AddExpansionAudioDelta(AudioChannel::FDS, outputLevel - _lastOutput);
 			_lastOutput = outputLevel;
 		}
 	}
 
 public:
+	FdsAudio(shared_ptr<Console> console) : BaseExpansionAudio(console)
+	{
+	}
+
 	uint8_t ReadRegister(uint16_t addr)
 	{
-		uint8_t value = MemoryManager::GetOpenBus();
+		uint8_t value = _console->GetMemoryManager()->GetOpenBus();
 		if(addr <= 0x407F) {
 			value &= 0xC0;
 			value |= _waveTable[addr & 0x3F];

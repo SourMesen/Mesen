@@ -21,7 +21,7 @@
 
 GameServerConnection* GameServerConnection::_netPlayDevices[BaseControlDevice::PortCount] = { };
 
-GameServerConnection::GameServerConnection(shared_ptr<Socket> socket, string serverPassword) : GameConnection(socket)
+GameServerConnection::GameServerConnection(shared_ptr<Console> console, shared_ptr<Socket> socket, string serverPassword) : GameConnection(console, socket)
 {
 	//Server-side connection
 	_serverPassword = serverPassword;
@@ -57,13 +57,13 @@ void GameServerConnection::SendServerInformation()
 
 void GameServerConnection::SendGameInformation()
 {
-	Console::Pause();
-	MapperInfo mapperInfo = Console::GetMapperInfo();
+	_console->Pause();
+	MapperInfo mapperInfo = _console->GetMapperInfo();
 	GameInformationMessage gameInfo(mapperInfo.RomName, mapperInfo.Hash.Crc32Hash, _controllerPort, EmulationSettings::CheckFlag(EmulationFlags::Paused));
 	SendNetMessage(gameInfo);
-	SaveStateMessage saveState;
+	SaveStateMessage saveState(_console);
 	SendNetMessage(saveState);
-	Console::Resume();
+	_console->Resume();
 }
 
 void GameServerConnection::SendMovieData(uint8_t port, ControlDeviceState state)
@@ -108,7 +108,7 @@ void GameServerConnection::ProcessHandshakeResponse(HandShakeMessage* message)
 	//Send the game's current state to the client and register the controller
 	if(message->IsValid()) {
 		if(message->CheckPassword(_serverPassword, _connectionHash)) {
-			Console::Pause();
+			_console->Pause();
 
 			_controllerPort = message->IsSpectator() ? GameConnection::SpectatorPort : GetFirstFreeControllerPort();
 			_playerName = message->GetPlayerName();
@@ -117,14 +117,14 @@ void GameServerConnection::ProcessHandshakeResponse(HandShakeMessage* message)
 
 			MessageManager::DisplayMessage("NetPlay", _playerName + " (" + playerPortMessage + ") connected.");
 
-			if(Console::GetMapperInfo().RomName.size() > 0) {
+			if(_console->GetMapperInfo().RomName.size() > 0) {
 				SendGameInformation();
 			}
 
 			_handshakeCompleted = true;
 			RegisterNetPlayDevice(this, _controllerPort);
 			GameServer::SendPlayerList();
-			Console::Resume();
+			_console->Resume();
 		} else {
 			SendForceDisconnectMessage("The password you provided did not match - you have been disconnected.");
 		}
@@ -164,7 +164,7 @@ void GameServerConnection::ProcessMessage(NetMessage* message)
 
 void GameServerConnection::SelectControllerPort(uint8_t port)
 {
-	Console::Pause();
+	_console->Pause();
 	if(port == GameConnection::SpectatorPort) {
 		//Client wants to be a spectator, make sure we are not using any controller
 		UnregisterNetPlayDevice(this);
@@ -184,7 +184,7 @@ void GameServerConnection::SelectControllerPort(uint8_t port)
 	}
 	SendGameInformation();
 	GameServer::SendPlayerList();
-	Console::Resume();
+	_console->Resume();
 }
 
 void GameServerConnection::ProcessNotification(ConsoleNotificationType type, void* parameter)

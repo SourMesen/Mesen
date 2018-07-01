@@ -1,20 +1,6 @@
 #include "stdafx.h"
 #include "VsControlManager.h"
 
-VsControlManager *VsControlManager::_instance = nullptr;
-
-VsControlManager::VsControlManager(shared_ptr<BaseControlDevice> systemActionManager, shared_ptr<BaseControlDevice> mapperControlDevice) : ControlManager(systemActionManager, mapperControlDevice)
-{
-	_instance = this;
-}
-
-VsControlManager::~VsControlManager()
-{
-	if(_instance == this) {
-		_instance = nullptr;
-	}
-}
-
 ControllerType VsControlManager::GetControllerType(uint8_t port)
 {
 	ControllerType type = ControlManager::GetControllerType(port);
@@ -27,11 +13,6 @@ ControllerType VsControlManager::GetControllerType(uint8_t port)
 void VsControlManager::Reset(bool softReset)
 {
 	_protectionCounter = 0;
-}
-
-VsControlManager* VsControlManager::GetInstance()
-{
-	return _instance;
 }
 
 void VsControlManager::StreamState(bool saving)
@@ -100,7 +81,7 @@ uint8_t VsControlManager::ReadRAM(uint16_t addr)
 {
 	uint8_t value = 0;
 
-	uint32_t crc = Console::GetMapperInfo().Hash.PrgCrc32Hash;
+	uint32_t crc = _console->GetMapperInfo().Hash.PrgCrc32Hash;
 
 	switch(addr) {
 		case 0x4016: {

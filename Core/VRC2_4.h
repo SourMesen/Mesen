@@ -21,7 +21,7 @@ enum class VRCVariant
 class VRC2_4 : public BaseMapper
 {
 	private:
-		VrcIrq _irq;
+		unique_ptr<VrcIrq> _irq;
 		VRCVariant _variant;
 		bool _useHeuristics;
 
@@ -83,6 +83,7 @@ class VRC2_4 : public BaseMapper
 
 		void InitMapper() override 
 		{
+			_irq.reset(new VrcIrq(_console));
 			DetectVariant();
 
 			_prgMode = GetPowerOnByte() & 0x01;
@@ -97,12 +98,12 @@ class VRC2_4 : public BaseMapper
 
 			UpdateState();
 		}
-
+		
 		void ProcessCpuClock() override
 		{
 			if((_useHeuristics && _mapperID != 22) || _variant >= VRCVariant::VRC4a) {
 				//Only VRC4 supports IRQs
-				_irq.ProcessCpuClock();
+				_irq->ProcessCpuClock();
 			}
 		}
 
@@ -164,13 +165,13 @@ class VRC2_4 : public BaseMapper
 					_hiCHRRegs[regNumber] = value & 0x1F;
 				}
 			} else if(addr == 0xF000) {
-				_irq.SetReloadValueNibble(value, false);
+				_irq->SetReloadValueNibble(value, false);
 			} else if(addr == 0xF001) {
-				_irq.SetReloadValueNibble(value, true);
+				_irq->SetReloadValueNibble(value, true);
 			} else if(addr == 0xF002) {
-				_irq.SetControlValue(value);
+				_irq->SetControlValue(value);
 			} else if(addr == 0xF003) {
-				_irq.AcknowledgeIrq();
+				_irq->AcknowledgeIrq();
 			}
 
 			UpdateState();
@@ -289,7 +290,7 @@ class VRC2_4 : public BaseMapper
 			BaseMapper::StreamState(saving);
 			ArrayInfo<uint8_t> loChrRegs = { _loCHRRegs, 8 };
 			ArrayInfo<uint8_t> hiChrRegs = { _hiCHRRegs, 8 };
-			SnapshotInfo irq{ &_irq };
+			SnapshotInfo irq{ _irq.get() };
 			Stream(_prgReg0, _prgReg1, _prgMode, loChrRegs, hiChrRegs, _hasIRQ, irq);
 		}
 };

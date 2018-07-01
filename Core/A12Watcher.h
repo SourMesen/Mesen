@@ -1,7 +1,6 @@
 #pragma once
 
 #include "stdafx.h"
-#include "CPU.h"
 #include "PPU.h"
 #include "Snapshotable.h"
 
@@ -24,20 +23,19 @@ public:
 		Stream(_lastCycle, _cyclesDown);
 	}
 
-	A12StateChange UpdateVramAddress(uint16_t addr)
+	A12StateChange UpdateVramAddress(uint16_t addr, uint32_t frameCycle)
 	{
 		A12StateChange result = A12StateChange::None;
-		uint32_t cycle = PPU::GetFrameCycle();
 
 		if((addr & 0x1000) == 0) {
 			if(_cyclesDown == 0) {
 				_cyclesDown = 1;
 			} else {
-				if(_lastCycle > cycle) {
+				if(_lastCycle > frameCycle) {
 					//We changed frames
-					_cyclesDown += (89342 - _lastCycle) + cycle;
+					_cyclesDown += (89342 - _lastCycle) + frameCycle;
 				} else {
-					_cyclesDown += (cycle - _lastCycle);
+					_cyclesDown += (frameCycle - _lastCycle);
 				}
 			}
 			result = A12StateChange::Fall;
@@ -47,7 +45,7 @@ public:
 			}
 			_cyclesDown = 0;
 		}
-		_lastCycle = cycle;
+		_lastCycle = frameCycle;
 
 		return result;
 	}

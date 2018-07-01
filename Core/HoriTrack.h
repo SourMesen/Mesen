@@ -17,7 +17,7 @@ protected:
 	}
 
 public:
-	HoriTrack(KeyMappingSet keyMappings) : StandardController(BaseControlDevice::ExpDevicePort, keyMappings)
+	HoriTrack(shared_ptr<Console> console,  KeyMappingSet keyMappings) : StandardController(console, BaseControlDevice::ExpDevicePort, keyMappings)
 	{
 	}
 

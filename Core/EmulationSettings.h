@@ -7,6 +7,8 @@
 #include "KeyManager.h"
 #include "../Utilities/SimpleLock.h"
 
+class Console;
+
 enum EmulationFlags : uint64_t
 {
 	Paused = 0x01,
@@ -54,6 +56,7 @@ enum EmulationFlags : uint64_t
 
 	FdsAutoInsertDisk = 0x800000000,
 
+	Rewind =  0x1000000000,
 	Turbo = 0x2000000000,
 	InBackground = 0x4000000000,
 	NsfPlayerEnabled = 0x8000000000,
@@ -1180,7 +1183,7 @@ public:
 		return _ntscFilterSettings;
 	}
 
-	static double GetAspectRatio();
+	static double GetAspectRatio(shared_ptr<Console> console);
 
 	static void SetVideoScale(double scale)
 	{

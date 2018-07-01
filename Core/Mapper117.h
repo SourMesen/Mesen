@@ -35,11 +35,11 @@ protected:
 
 	void NotifyVRAMAddressChange(uint16_t addr) override
 	{
-		if(_a12Watcher.UpdateVramAddress(addr) == A12StateChange::Rise) {
+		if(_a12Watcher.UpdateVramAddress(addr, _console->GetPpu()->GetFrameCycle()) == A12StateChange::Rise) {
 			if(_irqEnabled && _irqEnabledAlt && _irqCounter) {
 				_irqCounter--;
 				if(_irqCounter == 0) {
-					CPU::SetIRQSource(IRQSource::External);
+					_console->GetCpu()->SetIrqSource(IRQSource::External);
 					_irqEnabledAlt = false;
 				}
 			}
@@ -59,7 +59,7 @@ protected:
 				break;
 
 			case 0xC001: _irqReloadValue = value; break;
-			case 0xC002: CPU::ClearIRQSource(IRQSource::External); break;
+			case 0xC002: _console->GetCpu()->ClearIrqSource(IRQSource::External); break;
 
 			case 0xC003:
 				_irqCounter = _irqReloadValue;
@@ -70,7 +70,7 @@ protected:
 
 			case 0xE000:
 				_irqEnabled = (value & 0x01) == 0x01;
-				CPU::ClearIRQSource(IRQSource::External);
+				_console->GetCpu()->ClearIrqSource(IRQSource::External);
 				break;
 		}
 	}

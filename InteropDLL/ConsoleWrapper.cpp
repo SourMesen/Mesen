@@ -49,6 +49,7 @@ void* _windowHandle = nullptr;
 void* _viewerHandle = nullptr;
 string _returnString;
 string _logString;
+shared_ptr<Console> _console;
 shared_ptr<RecordedRomTest> _recordedRomTest;
 SimpleLock _externalNotificationListenerLock;
 vector<shared_ptr<INotificationListener>> _externalNotificationListeners;
@@ -93,7 +94,9 @@ namespace InteropEmu {
 		DllExport void __stdcall InitializeEmu(const char* homeFolder, void *windowHandle, void *viewerHandle, bool noAudio, bool noVideo, bool noInput)
 		{
 			FolderUtilities::SetHomeFolder(homeFolder);
-			_shortcutKeyHandler.reset(new ShortcutKeyHandler());
+			_console.reset(new Console());
+			_console->Init();
+			_shortcutKeyHandler.reset(new ShortcutKeyHandler(_console));
 
 			if(windowHandle != nullptr && viewerHandle != nullptr) {
 				_windowHandle = windowHandle;
@@ -101,7 +104,7 @@ namespace InteropEmu {
 
 				if(!noVideo) {
 					#ifdef _WIN32
-						_renderer = new NES::Renderer((HWND)_viewerHandle);
+						_renderer = new Renderer(_console, (HWND)_viewerHandle);
 					#else 
 						_renderer = new SdlRenderer(_viewerHandle);
 					#endif
@@ -109,7 +112,7 @@ namespace InteropEmu {
 
 				if(!noAudio) {
 					#ifdef _WIN32
-						_soundManager = new SoundManager((HWND)_windowHandle);
+						_soundManager = new SoundManager(_console, (HWND)_windowHandle);
 					#else
 						_soundManager = new SdlSoundManager(); 
 					#endif
@@ -117,7 +120,7 @@ namespace InteropEmu {
 
 				if(!noInput) {
 					#ifdef _WIN32
-						_keyManager = new WindowsKeyManager((HWND)_windowHandle);
+						_keyManager = new WindowsKeyManager(_console, (HWND)_windowHandle);
 					#else 
 						_keyManager = new LinuxKeyManager();
 					#endif				
@@ -135,13 +138,13 @@ namespace InteropEmu {
 		}
 
 
-		DllExport bool __stdcall IsRunning() { return Console::IsRunning(); }
-		DllExport int32_t __stdcall GetStopCode() { return Console::GetInstance()->GetStopCode(); }
+		DllExport bool __stdcall IsRunning() { return _console->IsRunning(); }
+		DllExport int32_t __stdcall GetStopCode() { return _console->GetStopCode(); }
 
-		DllExport void __stdcall LoadROM(char* filename, char* patchFile) { Console::LoadROM((string)filename, (string)patchFile); }
+		DllExport void __stdcall LoadROM(char* filename, char* patchFile) { _console->Initialize(filename, patchFile); }
 		DllExport void __stdcall AddKnownGameFolder(char* folder) { FolderUtilities::AddKnownGameFolder(folder); }
 		DllExport void __stdcall SetFolderOverrides(char* saveFolder, char* saveStateFolder, char* screenshotFolder) { FolderUtilities::SetFolderOverrides(saveFolder, saveStateFolder, screenshotFolder); }
-		DllExport void __stdcall LoadRecentGame(char* filepath, bool resetGame) { SaveStateManager::LoadRecentGame(filepath, resetGame); }
+		DllExport void __stdcall LoadRecentGame(char* filepath, bool resetGame) { _console->GetSaveStateManager()->LoadRecentGame(filepath, resetGame); }
 
 		DllExport const char* __stdcall GetArchiveRomList(char* filename) { 
 			std::ostringstream out;
@@ -210,8 +213,8 @@ namespace InteropEmu {
 
 		DllExport void __stdcall Run()
 		{
-			if(Console::GetInstance()) {
-				Console::GetInstance()->Run();
+			if(_console) {
+				_console->Run();
 			}
 		}
 
@@ -219,10 +222,10 @@ namespace InteropEmu {
 		DllExport bool __stdcall IsPaused() { return EmulationSettings::CheckFlag(EmulationFlags::Paused); }
 		DllExport void __stdcall Stop()
 		{
-			if(Console::GetInstance()) {
+			if(_console) {
 				GameServer::StopServer();
 				GameClient::Disconnect();
-				Console::GetInstance()->Stop();
+				_console->Stop();
 			}
 		}
 
@@ -230,9 +233,9 @@ namespace InteropEmu {
 		{
 			string romPath = filename;
 			if(romPath.empty()) {
-				_returnString = Console::GetRomPath();
+				_returnString = _console->GetRomPath();
 				romInfo.RomName = _returnString.c_str();
-				MapperInfo mapperInfo = Console::GetMapperInfo();
+				MapperInfo mapperInfo = _console->GetMapperInfo();
 				romInfo.Crc32 = mapperInfo.Hash.Crc32Hash;
 				romInfo.PrgCrc32 = mapperInfo.Hash.PrgCrc32Hash;
 				romInfo.Format = mapperInfo.Format;
@@ -268,18 +271,18 @@ namespace InteropEmu {
 			}
 		}
 
-		DllExport void __stdcall Reset() { Console::Reset(true); }
-		DllExport void __stdcall PowerCycle() { Console::Reset(false); }
-		DllExport void __stdcall ResetLagCounter() { Console::ResetLagCounter(); }
+		DllExport void __stdcall Reset() { _console->Reset(true); }
+		DllExport void __stdcall PowerCycle() { _console->Reset(false); }
+		DllExport void __stdcall ResetLagCounter() { _console->ResetLagCounter(); }
 
-		DllExport void __stdcall StartServer(uint16_t port, char* password, char* hostPlayerName) { GameServer::StartServer(port, password, hostPlayerName); }
+		DllExport void __stdcall StartServer(uint16_t port, char* password, char* hostPlayerName) { GameServer::StartServer(_console, port, password, hostPlayerName); }
 		DllExport void __stdcall StopServer() { GameServer::StopServer(); }
 		DllExport bool __stdcall IsServerRunning() { return GameServer::Started(); }
 
 		DllExport void __stdcall Connect(char* host, uint16_t port, char* password, char* playerName, bool spectator)
 		{
 			ClientConnectionData connectionData(host, port, password, playerName, spectator);
-			GameClient::Connect(connectionData);
+			GameClient::Connect(_console, connectionData);
 		}
 
 		DllExport void __stdcall Disconnect() { GameClient::Disconnect(); }
@@ -324,19 +327,11 @@ namespace InteropEmu {
 		{
 			_shortcutKeyHandler.reset();
 			
-			Console::GetInstance()->Stop();
-
-			VideoDecoder::GetInstance()->StopThread();
-			VideoDecoder::Release();
-
-			VideoRenderer::GetInstance()->StopThread();
-			VideoRenderer::Release();
-
-			Console::Release();
 			GameServer::StopServer();
 			GameClient::Disconnect();
-			MessageManager::RegisterMessageManager(nullptr);
-			
+
+			_console->Stop();
+
 			if(_renderer) {
 				delete _renderer;
 				_renderer = nullptr;
@@ -349,10 +344,16 @@ namespace InteropEmu {
 				delete _keyManager;
 				_keyManager = nullptr;
 			}
+
+			_console->Release(true);
+			_console.reset();
+
+			MessageManager::RegisterMessageManager(nullptr);
+			
 			_shortcutKeyHandler.reset();
 		}
 
-		DllExport void __stdcall TakeScreenshot() { VideoDecoder::GetInstance()->TakeScreenshot(); }
+		DllExport void __stdcall TakeScreenshot() { _console->GetVideoDecoder()->TakeScreenshot(); }
 
 		DllExport INotificationListener* __stdcall RegisterNotificationCallback(NotificationListenerCallback callback)
 		{
@@ -383,36 +384,37 @@ namespace InteropEmu {
 			return _logString.c_str();
 		}
 
-		DllExport void __stdcall SaveState(uint32_t stateIndex) { SaveStateManager::SaveState(stateIndex); }
-		DllExport void __stdcall LoadState(uint32_t stateIndex) { SaveStateManager::LoadState(stateIndex); }
-		DllExport void __stdcall SaveStateFile(char* filepath) { SaveStateManager::SaveState(filepath); }
-		DllExport void __stdcall LoadStateFile(char* filepath) { SaveStateManager::LoadState(filepath); }
-		DllExport int64_t  __stdcall GetStateInfo(uint32_t stateIndex) { return SaveStateManager::GetStateInfo(stateIndex); }
+		DllExport void __stdcall SaveState(uint32_t stateIndex) { _console->GetSaveStateManager()->SaveState(stateIndex); }
+		DllExport void __stdcall LoadState(uint32_t stateIndex) { _console->GetSaveStateManager()->LoadState(stateIndex); }
+		DllExport void __stdcall SaveStateFile(char* filepath) { _console->GetSaveStateManager()->SaveState(filepath); }
+		DllExport void __stdcall LoadStateFile(char* filepath) { _console->GetSaveStateManager()->LoadState(filepath); }
+		DllExport int64_t  __stdcall GetStateInfo(uint32_t stateIndex) { return _console->GetSaveStateManager()->GetStateInfo(stateIndex); }
 
-		DllExport void __stdcall MoviePlay(char* filename) { MovieManager::Play(string(filename)); }
+		DllExport void __stdcall MoviePlay(char* filename) { MovieManager::Play(string(filename), _console); }
 		
 		DllExport void __stdcall MovieRecord(RecordMovieOptions *options)
 		{
 			RecordMovieOptions opt = *options;
-			MovieManager::Record(opt);
+			MovieManager::Record(opt, _console);
 		}
 
 		DllExport void __stdcall MovieStop() { MovieManager::Stop(); }
 		DllExport bool __stdcall MoviePlaying() { return MovieManager::Playing(); }
 		DllExport bool __stdcall MovieRecording() { return MovieManager::Recording(); }
 
-		DllExport void __stdcall AviRecord(char* filename, VideoCodec codec, uint32_t compressionLevel) { VideoRenderer::GetInstance()->StartRecording(filename, codec, compressionLevel); }
-		DllExport void __stdcall AviStop() { VideoRenderer::GetInstance()->StopRecording(); }
-		DllExport bool __stdcall AviIsRecording() { return VideoRenderer::GetInstance()->IsRecording(); }
+		DllExport void __stdcall AviRecord(char* filename, VideoCodec codec, uint32_t compressionLevel) { _console->GetVideoRenderer()->StartRecording(filename, codec, compressionLevel); }
+		DllExport void __stdcall AviStop() { _console->GetVideoRenderer()->StopRecording(); }
+		DllExport bool __stdcall AviIsRecording() { return _console->GetVideoRenderer()->IsRecording(); }
 
-		DllExport void __stdcall WaveRecord(char* filename) { SoundMixer::StartRecording(filename); }
-		DllExport void __stdcall WaveStop() { SoundMixer::StopRecording(); }
-		DllExport bool __stdcall WaveIsRecording() { return SoundMixer::IsRecording(); }
+		DllExport void __stdcall WaveRecord(char* filename) { _console->GetSoundMixer()->StartRecording(filename); }
+		DllExport void __stdcall WaveStop() { _console->GetSoundMixer()->StopRecording(); }
+		DllExport bool __stdcall WaveIsRecording() { return _console->GetSoundMixer()->IsRecording(); }
 
 		DllExport int32_t __stdcall RunRecordedTest(char* filename)
 		{
-			RecordedRomTest romTest; 
-			return romTest.Run(filename);
+			_recordedRomTest.reset(new RecordedRomTest(_console));
+			MessageManager::RegisterNotificationListener(_recordedRomTest);
+			return _recordedRomTest->Run(filename);
 		}
 
 		DllExport int32_t __stdcall RunAutomaticTest(char* filename)
@@ -424,21 +426,21 @@ namespace InteropEmu {
 
 		DllExport void __stdcall RomTestRecord(char* filename, bool reset) 
 		{
-			_recordedRomTest.reset(new RecordedRomTest());
+			_recordedRomTest.reset(new RecordedRomTest(_console));
 			MessageManager::RegisterNotificationListener(_recordedRomTest);
 			_recordedRomTest->Record(filename, reset);
 		}
 
 		DllExport void __stdcall RomTestRecordFromMovie(char* testFilename, char* movieFilename) 
 		{
-			_recordedRomTest.reset(new RecordedRomTest());
+			_recordedRomTest.reset(new RecordedRomTest(_console));
 			MessageManager::RegisterNotificationListener(_recordedRomTest);
 			_recordedRomTest->RecordFromMovie(testFilename, string(movieFilename));
 		}
 
 		DllExport void __stdcall RomTestRecordFromTest(char* newTestFilename, char* existingTestFilename) 
 		{
-			_recordedRomTest.reset(new RecordedRomTest());
+			_recordedRomTest.reset(new RecordedRomTest(_console));
 			MessageManager::RegisterNotificationListener(_recordedRomTest);
 			_recordedRomTest->RecordFromTest(newTestFilename, existingTestFilename);
 		}
@@ -453,7 +455,7 @@ namespace InteropEmu {
 
 		DllExport bool __stdcall RomTestRecording() { return _recordedRomTest != nullptr; }
 
-		DllExport void __stdcall SetCheats(CheatInfo cheats[], uint32_t length) { CheatManager::SetCheats(cheats, length); }
+		DllExport void __stdcall SetCheats(CheatInfo cheats[], uint32_t length) { _console->GetCheatManager()->SetCheats(cheats, length); }
 
 		DllExport bool __stdcall CheckFlag(EmulationFlags flags) { return EmulationSettings::CheckFlag(flags); }
 		DllExport void __stdcall SetFlags(EmulationFlags flags) { EmulationSettings::SetFlags(flags); }
@@ -474,7 +476,7 @@ namespace InteropEmu {
 		DllExport void __stdcall SetReverbParameters(double strength, double delay) { EmulationSettings::SetReverbParameters(strength, delay); }
 		DllExport void __stdcall SetCrossFeedRatio(uint32_t ratio) { EmulationSettings::SetCrossFeedRatio(ratio); }
 
-		DllExport NesModel __stdcall GetNesModel() { return Console::GetModel(); }
+		DllExport NesModel __stdcall GetNesModel() { return _console->GetModel(); }
 		DllExport void __stdcall SetNesModel(uint32_t model) { EmulationSettings::SetNesModel((NesModel)model); }
 		DllExport void __stdcall SetOverscanDimensions(uint32_t left, uint32_t right, uint32_t top, uint32_t bottom) { EmulationSettings::SetOverscanDimensions(left, right, top, bottom); }
 		DllExport void __stdcall SetEmulationSpeed(uint32_t emulationSpeed) { EmulationSettings::SetEmulationSpeed(emulationSpeed, true); }
@@ -508,16 +510,16 @@ namespace InteropEmu {
 
 		DllExport void __stdcall SetAudioDevice(char* audioDevice) { if(_soundManager) { _soundManager->SetAudioDevice(audioDevice); } }
 
-		DllExport void __stdcall GetScreenSize(ScreenSize &size, bool ignoreScale) { VideoDecoder::GetInstance()->GetScreenSize(size, ignoreScale); }
+		DllExport void __stdcall GetScreenSize(ScreenSize &size, bool ignoreScale) { _console->GetVideoDecoder()->GetScreenSize(size, ignoreScale); }
 
-		DllExport void __stdcall InputBarcode(uint64_t barCode, int32_t digitCount) { Console::GetInstance()->InputBarcode(barCode, digitCount); }
+		DllExport void __stdcall InputBarcode(uint64_t barCode, int32_t digitCount) { _console->InputBarcode(barCode, digitCount); }
 
-		DllExport void __stdcall LoadTapeFile(char *filepath) { Console::GetInstance()->LoadTapeFile(filepath); }
-		DllExport void __stdcall StartRecordingTapeFile(char *filepath) { Console::GetInstance()->StartRecordingTapeFile(filepath); }
-		DllExport void __stdcall StopRecordingTapeFile() { Console::GetInstance()->StopRecordingTapeFile(); }
-		DllExport bool __stdcall IsRecordingTapeFile() { return Console::GetInstance()->IsRecordingTapeFile(); }
+		DllExport void __stdcall LoadTapeFile(char *filepath) { _console->LoadTapeFile(filepath); }
+		DllExport void __stdcall StartRecordingTapeFile(char *filepath) { _console->StartRecordingTapeFile(filepath); }
+		DllExport void __stdcall StopRecordingTapeFile() { _console->StopRecordingTapeFile(); }
+		DllExport bool __stdcall IsRecordingTapeFile() { return _console->IsRecordingTapeFile(); }
 
-		DllExport ConsoleFeatures __stdcall GetAvailableFeatures() { return Console::GetInstance()->GetAvailableFeatures(); }
+		DllExport ConsoleFeatures __stdcall GetAvailableFeatures() { return _console->GetAvailableFeatures(); }
 
 		//NSF functions
 		DllExport bool __stdcall IsNsf() { return NsfMapper::GetInstance() != nullptr; }
@@ -543,40 +545,43 @@ namespace InteropEmu {
 
 		//FDS functions
 		DllExport uint32_t __stdcall FdsGetSideCount() {
-			shared_ptr<FdsSystemActionManager> sam = Console::GetInstance()->GetSystemActionManager<FdsSystemActionManager>();
+			shared_ptr<FdsSystemActionManager> sam = _console->GetSystemActionManager<FdsSystemActionManager>();
 			return sam ? sam->GetSideCount() : 0;
 		}
 
 		DllExport void __stdcall FdsEjectDisk() {
-			shared_ptr<FdsSystemActionManager> sam = Console::GetInstance()->GetSystemActionManager<FdsSystemActionManager>();
+			shared_ptr<FdsSystemActionManager> sam = _console->GetSystemActionManager<FdsSystemActionManager>();
 			if(sam) {
 				sam->EjectDisk();
 			}
 		}
 
 		DllExport void __stdcall FdsInsertDisk(uint32_t diskNumber) {
-			shared_ptr<FdsSystemActionManager> sam = Console::GetInstance()->GetSystemActionManager<FdsSystemActionManager>();
+			shared_ptr<FdsSystemActionManager> sam = _console->GetSystemActionManager<FdsSystemActionManager>();
 			if(sam) {
 				sam->InsertDisk(diskNumber);
 			}
 		}
 
 		DllExport void __stdcall FdsSwitchDiskSide() {
-			shared_ptr<FdsSystemActionManager> sam = Console::GetInstance()->GetSystemActionManager<FdsSystemActionManager>();
+			shared_ptr<FdsSystemActionManager> sam = _console->GetSystemActionManager<FdsSystemActionManager>();
 			if(sam) {
 				sam->SwitchDiskSide();
 			}
 		}
 
 		DllExport bool __stdcall FdsIsAutoInsertDiskEnabled() {
-			shared_ptr<FdsSystemActionManager> sam = Console::GetInstance()->GetSystemActionManager<FdsSystemActionManager>();
+			shared_ptr<FdsSystemActionManager> sam = _console->GetSystemActionManager<FdsSystemActionManager>();
 			return sam ? sam->IsAutoInsertDiskEnabled() : false;
 		}
 
 		//VS System functions
-		DllExport bool __stdcall IsVsSystem() { return VsControlManager::GetInstance() != nullptr; }
+		DllExport bool __stdcall IsVsSystem() {
+			return dynamic_cast<VsControlManager*>(_console->GetControlManager()) != nullptr;
+		}
+
 		DllExport void __stdcall VsInsertCoin(uint32_t port) {
-			shared_ptr<VsSystemActionManager> sam = Console::GetInstance()->GetSystemActionManager<VsSystemActionManager>();
+			shared_ptr<VsSystemActionManager> sam = _console->GetSystemActionManager<VsSystemActionManager>();
 			if(sam) {
 				sam->InsertCoin(port);
 			}
@@ -584,18 +589,17 @@ namespace InteropEmu {
 
 		DllExport void __stdcall VsSetGameConfig(PpuModel model, VsInputType inputType, uint8_t dipSwitches)
 		{
-			VsControlManager* vs = VsControlManager::GetInstance();
-			if(vs) {
+			if(dynamic_cast<VsControlManager*>(_console->GetControlManager())) {
 				EmulationSettings::SetPpuModel(model);
 				EmulationSettings::SetDipSwitches(dipSwitches);
 				EmulationSettings::SetVsInputType(inputType);
 			}
 		}
 
-		DllExport bool __stdcall IsHdPpu() { return Console::IsHdPpu(); }
+		DllExport bool __stdcall IsHdPpu() { return _console->IsHdPpu(); }
 
-		DllExport void __stdcall HdBuilderStartRecording(char* saveFolder, ScaleFilterType filterType, uint32_t scale, uint32_t flags, uint32_t chrRamBankSize) { Console::StartRecordingHdPack(saveFolder, filterType, scale, flags, chrRamBankSize); }
-		DllExport void __stdcall HdBuilderStopRecording() { Console::StopRecordingHdPack(); }
+		DllExport void __stdcall HdBuilderStartRecording(char* saveFolder, ScaleFilterType filterType, uint32_t scale, uint32_t flags, uint32_t chrRamBankSize) { _console->StartRecordingHdPack(saveFolder, filterType, scale, flags, chrRamBankSize); }
+		DllExport void __stdcall HdBuilderStopRecording() { _console->StopRecordingHdPack(); }
 
 		DllExport void __stdcall HdBuilderGetChrBankList(uint32_t* bankBuffer) { HdPackBuilder::GetChrBankList(bankBuffer); }
 		DllExport void __stdcall HdBuilderGetBankPreview(uint32_t bankNumber, uint32_t pageNumber, uint32_t *rgbBuffer) { HdPackBuilder::GetBankPreview(bankNumber, pageNumber, rgbBuffer); }

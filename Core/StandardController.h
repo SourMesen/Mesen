@@ -1,11 +1,12 @@
 #pragma once
 #include "stdafx.h"
 #include "BaseControlDevice.h"
-#include "PPU.h"
+#include "Console.h"
 
 class StandardController : public BaseControlDevice
 {
 private:
+	shared_ptr<Console> _console;
 	bool _microphoneEnabled = false;
 	uint32_t _turboSpeed = 0;
 
@@ -40,13 +41,13 @@ protected:
 			SetPressedState(Buttons::Right, keyMapping.Right);
 
 			uint8_t turboFreq = 1 << (4 - _turboSpeed);
-			bool turboOn = (uint8_t)(PPU::GetFrameCount() % turboFreq) < turboFreq / 2;
+			bool turboOn = (uint8_t)(_console->GetFrameCount() % turboFreq) < turboFreq / 2;
 			if(turboOn) {
 				SetPressedState(Buttons::A, keyMapping.TurboA);
 				SetPressedState(Buttons::B, keyMapping.TurboB);
 			}
 
-			if(_microphoneEnabled && (PPU::GetFrameCount() % 3) == 0) {
+			if(_microphoneEnabled && (_console->GetFrameCount() % 3) == 0) {
 				SetPressedState(Buttons::Microphone, keyMapping.Microphone);
 			}
 
@@ -78,8 +79,9 @@ protected:
 public:
 	enum Buttons { Up = 0, Down, Left, Right, Start, Select, B, A, Microphone };
 
-	StandardController(uint8_t port, KeyMappingSet keyMappings) : BaseControlDevice(port, keyMappings)
+	StandardController(shared_ptr<Console> console, uint8_t port, KeyMappingSet keyMappings) : BaseControlDevice(port, keyMappings)
 	{
+		_console = console;
 		_turboSpeed = keyMappings.TurboSpeed;
 		_microphoneEnabled = port == 1 && EmulationSettings::GetConsoleType() == ConsoleType::Famicom;
 	}

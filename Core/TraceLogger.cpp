@@ -150,13 +150,13 @@ void TraceLogger::StopLogging()
 	}
 }
 
-void TraceLogger::LogExtraInfo(const char *log)
+void TraceLogger::LogExtraInfo(const char *log, uint32_t cycleCount)
 {
 	if(_logToFile && _options.ShowExtraInfo) {
 		//Flush current buffer
 		_outputFile << _outputBuffer;
 		_outputBuffer.clear();
-		_outputFile << "[" << log << " - Cycle: " << std::to_string(CPU::GetCycleCount()) << "]" << (_options.UseWindowsEol ? "\r\n" : "\n");
+		_outputFile << "[" << log << " - Cycle: " << std::to_string(cycleCount) << "]" << (_options.UseWindowsEol ? "\r\n" : "\n");
 	}
 }
 

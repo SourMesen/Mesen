@@ -9,7 +9,7 @@
 class BattleBox : public BaseControlDevice, public IBattery
 {
 private:
-	static const int FileSize = 0x200;
+	static constexpr int FileSize = 0x200;
 	uint8_t _lastWrite = 0;
 	uint8_t _address = 0;
 	uint8_t _chipSelect = 0;

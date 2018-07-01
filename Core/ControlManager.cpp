@@ -34,24 +34,16 @@
 #include "AsciiTurboFile.h"
 #include "BattleBox.h"
 
-ControlManager* ControlManager::_instance = nullptr;
-vector<IInputRecorder*> ControlManager::_inputRecorders;
-vector<IInputProvider*> ControlManager::_inputProviders;
-SimpleLock ControlManager::_deviceLock;
-uint32_t ControlManager::_pollCounter = 0;
-
-ControlManager::ControlManager(shared_ptr<BaseControlDevice> systemActionManager, shared_ptr<BaseControlDevice> mapperControlDevice)
+ControlManager::ControlManager(shared_ptr<Console> console, shared_ptr<BaseControlDevice> systemActionManager, shared_ptr<BaseControlDevice> mapperControlDevice)
 {
+	_console = console;
 	_systemActionManager = systemActionManager;
 	_mapperControlDevice = mapperControlDevice;
-	_instance = this;
+	_pollCounter = 0;
 }
 
 ControlManager::~ControlManager()
 {
-	if(_instance == this) {
-		_instance = nullptr;
-	}
 }
 
 void ControlManager::RegisterInputProvider(IInputProvider* provider)
@@ -98,13 +90,11 @@ vector<ControlDeviceState> ControlManager::GetPortStates()
 
 shared_ptr<BaseControlDevice> ControlManager::GetControlDevice(uint8_t port)
 {
-	if(_instance) {
-		auto lock = _deviceLock.AcquireSafe();
+	auto lock = _deviceLock.AcquireSafe();
 
-		auto result = std::find_if(_instance->_controlDevices.begin(), _instance->_controlDevices.end(), [port](const shared_ptr<BaseControlDevice> control) { return control->GetPort() == port; });
-		if(result != _instance->_controlDevices.end()) {
-			return *result;
-		}
+	auto result = std::find_if(_controlDevices.begin(), _controlDevices.end(), [port](const shared_ptr<BaseControlDevice> control) { return control->GetPort() == port; });
+	if(result != _controlDevices.end()) {
+		return *result;
 	}
 	return nullptr;
 }
@@ -119,44 +109,44 @@ ControllerType ControlManager::GetControllerType(uint8_t port)
 	return EmulationSettings::GetControllerType(port);
 }
 
-shared_ptr<BaseControlDevice> ControlManager::CreateControllerDevice(ControllerType type, uint8_t port)
+shared_ptr<BaseControlDevice> ControlManager::CreateControllerDevice(ControllerType type, uint8_t port, shared_ptr<Console> console)
 {
 	shared_ptr<BaseControlDevice> device;
 
 	switch(type) {
 		case ControllerType::None: break;
-		case ControllerType::StandardController: device.reset(new StandardController(port, EmulationSettings::GetControllerKeys(port))); break;
-		case ControllerType::Zapper: device.reset(new Zapper(port)); break;
+		case ControllerType::StandardController: device.reset(new StandardController(console, port, EmulationSettings::GetControllerKeys(port))); break;
+		case ControllerType::Zapper: device.reset(new Zapper(console, port)); break;
 		case ControllerType::ArkanoidController: device.reset(new ArkanoidController(port)); break;
 		case ControllerType::SnesController: device.reset(new SnesController(port, EmulationSettings::GetControllerKeys(port))); break;
 		case ControllerType::PowerPad: device.reset(new PowerPad(port, EmulationSettings::GetControllerKeys(port))); break;
 		case ControllerType::SnesMouse: device.reset(new SnesMouse(port)); break;
 		case ControllerType::SuborMouse: device.reset(new SuborMouse(port)); break;
-		case ControllerType::VsZapper: device.reset(new VsZapper(port)); break;
+		case ControllerType::VsZapper: device.reset(new VsZapper(console, port)); break;
 	}
-
+	
 	return device;
 }
 
-shared_ptr<BaseControlDevice> ControlManager::CreateExpansionDevice(ExpansionPortDevice type)
+shared_ptr<BaseControlDevice> ControlManager::CreateExpansionDevice(ExpansionPortDevice type, shared_ptr<Console> console)
 {
 	shared_ptr<BaseControlDevice> device;
 
 	switch(type) {
-		case ExpansionPortDevice::Zapper: device.reset(new Zapper(BaseControlDevice::ExpDevicePort)); break;
+		case ExpansionPortDevice::Zapper: device.reset(new Zapper(console, BaseControlDevice::ExpDevicePort)); break;
 		case ExpansionPortDevice::ArkanoidController: device.reset(new ArkanoidController(BaseControlDevice::ExpDevicePort)); break;
 		case ExpansionPortDevice::OekaKidsTablet: device.reset(new OekaKidsTablet()); break;
 		case ExpansionPortDevice::FamilyTrainerMat: device.reset(new FamilyMatTrainer(EmulationSettings::GetControllerKeys(0))); break;
-		case ExpansionPortDevice::KonamiHyperShot: device.reset(new KonamiHyperShot(EmulationSettings::GetControllerKeys(0), EmulationSettings::GetControllerKeys(1))); break;
+		case ExpansionPortDevice::KonamiHyperShot: device.reset(new KonamiHyperShot(console, EmulationSettings::GetControllerKeys(0), EmulationSettings::GetControllerKeys(1))); break;
 		case ExpansionPortDevice::FamilyBasicKeyboard: device.reset(new FamilyBasicKeyboard(EmulationSettings::GetControllerKeys(0))); break;
 		case ExpansionPortDevice::PartyTap: device.reset(new PartyTap(EmulationSettings::GetControllerKeys(0))); break;
-		case ExpansionPortDevice::Pachinko: device.reset(new PachinkoController(EmulationSettings::GetControllerKeys(0))); break;
+		case ExpansionPortDevice::Pachinko: device.reset(new PachinkoController(console, EmulationSettings::GetControllerKeys(0))); break;
 		case ExpansionPortDevice::ExcitingBoxing: device.reset(new ExcitingBoxingController(EmulationSettings::GetControllerKeys(0))); break;
 		case ExpansionPortDevice::JissenMahjong: device.reset(new JissenMahjongController(EmulationSettings::GetControllerKeys(0))); break;
 		case ExpansionPortDevice::SuborKeyboard: device.reset(new SuborKeyboard(EmulationSettings::GetControllerKeys(0))); break;
-		case ExpansionPortDevice::BarcodeBattler: device.reset(new BarcodeBattlerReader()); break;
-		case ExpansionPortDevice::HoriTrack: device.reset(new HoriTrack(EmulationSettings::GetControllerKeys(0))); break;
-		case ExpansionPortDevice::BandaiHyperShot: device.reset(new BandaiHyperShot(EmulationSettings::GetControllerKeys(0))); break;
+		case ExpansionPortDevice::BarcodeBattler: device.reset(new BarcodeBattlerReader(console)); break;
+		case ExpansionPortDevice::HoriTrack: device.reset(new HoriTrack(console, EmulationSettings::GetControllerKeys(0))); break;
+		case ExpansionPortDevice::BandaiHyperShot: device.reset(new BandaiHyperShot(console, EmulationSettings::GetControllerKeys(0))); break;
 		case ExpansionPortDevice::AsciiTurboFile: device.reset(new AsciiTurboFile()); break;
 		case ExpansionPortDevice::BattleBox: device.reset(new BattleBox()); break;
 
@@ -176,9 +166,9 @@ void ControlManager::UpdateControlDevices()
 
 	bool hadKeyboard = HasKeyboard();
 
-	ControlManager::_controlDevices.clear();
+	_controlDevices.clear();
 
-	ControlManager::RegisterControlDevice(_systemActionManager);
+	RegisterControlDevice(_systemActionManager);
 
 	bool fourScore = EmulationSettings::CheckFlag(EmulationFlags::HasFourScore);
 	ConsoleType consoleType = EmulationSettings::GetConsoleType();
@@ -191,20 +181,20 @@ void ControlManager::UpdateControlDevices()
 	}
 
 	for(int i = 0; i < (fourScore ? 4 : 2); i++) {
-		shared_ptr<BaseControlDevice> device = CreateControllerDevice(GetControllerType(i), i);
+		shared_ptr<BaseControlDevice> device = CreateControllerDevice(GetControllerType(i), i, _console);
 		if(device) {
-			ControlManager::RegisterControlDevice(device);
+			RegisterControlDevice(device);
 		}
 	}
 
 	if(fourScore && consoleType == ConsoleType::Nes) {
 		//FourScore is only used to provide the signature for reads past the first 16 reads
-		ControlManager::RegisterControlDevice(shared_ptr<FourScore>(new FourScore()));
+		RegisterControlDevice(shared_ptr<FourScore>(new FourScore()));
 	}
 
-	shared_ptr<BaseControlDevice> expDevice = CreateExpansionDevice(expansionDevice);
+	shared_ptr<BaseControlDevice> expDevice = CreateExpansionDevice(expansionDevice, _console);
 	if(expDevice) {
-		ControlManager::RegisterControlDevice(expDevice);
+		RegisterControlDevice(expDevice);
 	}
 
 	bool hasKeyboard = HasKeyboard();
@@ -215,12 +205,12 @@ void ControlManager::UpdateControlDevices()
 	}
 
 	if(_mapperControlDevice) {
-		ControlManager::RegisterControlDevice(_mapperControlDevice);
+		RegisterControlDevice(_mapperControlDevice);
 	}
 
 	if(std::dynamic_pointer_cast<FamilyBasicKeyboard>(expDevice)) {
 		//Automatically connect the data recorder if the keyboard is connected
-		ControlManager::RegisterControlDevice(shared_ptr<FamilyBasicDataRecorder>(new FamilyBasicDataRecorder()));
+		RegisterControlDevice(shared_ptr<FamilyBasicDataRecorder>(new FamilyBasicDataRecorder(_console)));
 	}
 }
 
@@ -287,7 +277,7 @@ void ControlManager::UpdateInputState()
 		//log += "|" + device->GetTextState();
 	}
 
-	shared_ptr<Debugger> debugger = Console::GetInstance()->GetDebugger(false);
+	shared_ptr<Debugger> debugger = _console->GetDebugger(false);
 	if(debugger) {
 		debugger->ProcessEvent(EventType::InputPolled);
 	}
@@ -297,7 +287,7 @@ void ControlManager::UpdateInputState()
 	}
 	//MessageManager::Log(log);
 
-	ControlManager::_pollCounter++;
+	_pollCounter++;
 }
 
 uint32_t ControlManager::GetLagCounter()
@@ -317,7 +307,7 @@ uint32_t ControlManager::GetPollCounter()
 
 void ControlManager::ResetPollCounter()
 {
-	ControlManager::_pollCounter = 0;
+	_pollCounter = 0;
 }
 
 uint8_t ControlManager::ReadRAM(uint16_t addr)
@@ -325,12 +315,12 @@ uint8_t ControlManager::ReadRAM(uint16_t addr)
 	//Used for lag counter - any frame where the input is read does not count as lag
 	_isLagging = false;
 
-	uint8_t value = MemoryManager::GetOpenBus(GetOpenBusMask(addr - 0x4016));
+	uint8_t value = _console->GetMemoryManager()->GetOpenBus(GetOpenBusMask(addr - 0x4016));
 	for(shared_ptr<BaseControlDevice> &device : _controlDevices) {
 		value |= device->ReadRAM(addr);
 	}
-	return value;
 
+	return value;
 }
 
 void ControlManager::WriteRAM(uint16_t addr, uint8_t value)
@@ -357,7 +347,7 @@ void ControlManager::StreamState(bool saving)
 	bool useNes101Hvc101Behavior = false;
 	uint32_t zapperDetectionRadius = 0;
 	if(saving) {
-		nesModel = Console::GetModel();
+		nesModel = _console->GetModel();
 		expansionDevice = EmulationSettings::GetExpansionDevice();
 		consoleType = EmulationSettings::GetConsoleType();
 		hasFourScore = EmulationSettings::CheckFlag(EmulationFlags::HasFourScore);

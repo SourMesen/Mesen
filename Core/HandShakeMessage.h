@@ -7,7 +7,7 @@
 class HandShakeMessage : public NetMessage
 {
 private:
-	const static int CurrentVersion = 2;
+	static constexpr int CurrentVersion = 2;
 	uint32_t _mesenVersion = 0;
 	uint32_t _protocolVersion = CurrentVersion;
 	char* _playerName = nullptr;

@@ -7,6 +7,8 @@
 class SaveStateMessage : public NetMessage
 {
 private:
+	vector<CodeInfo> _activeCheats;
+
 	uint8_t* _stateData = nullptr;
 	uint32_t _dataSize = 0;
 
@@ -19,10 +21,8 @@ protected:
 		StreamArray((void**)&_stateData, _dataSize);
 
 		if(_sending) {
-			vector<CodeInfo> cheats;
-			cheats = CheatManager::GetCheats();
-			_cheats = cheats.size() > 0 ? &cheats[0] : nullptr;
-			_cheatArraySize = (uint32_t)cheats.size() * sizeof(CodeInfo);
+			_cheats = _activeCheats.size() > 0 ? &_activeCheats[0] : nullptr;
+			_cheatArraySize = (uint32_t)_activeCheats.size() * sizeof(CodeInfo);
 			StreamArray((void**)&_cheats, _cheatArraySize);
 			delete[] _stateData;
 		} else {
@@ -33,27 +33,28 @@ protected:
 public:
 	SaveStateMessage(void* buffer, uint32_t length) : NetMessage(buffer, length) { }
 	
-	SaveStateMessage() : NetMessage(MessageType::SaveState)
+	SaveStateMessage(shared_ptr<Console> console) : NetMessage(MessageType::SaveState)
 	{
 		//Used when sending state to clients
-		Console::Pause();
+		console->Pause();
+		_activeCheats = console->GetCheatManager()->GetCheats();
 		stringstream state;
-		Console::SaveState(state);
-		Console::Resume();
+		console->SaveState(state);
+		console->Resume();
 
 		_dataSize = (uint32_t)state.tellp();
 		_stateData = new uint8_t[_dataSize];
 		state.read((char*)_stateData, _dataSize);
 	}
 	
-	void LoadState()
+	void LoadState(shared_ptr<Console> console)
 	{
-		Console::LoadState((uint8_t*)_stateData, _dataSize);
+		console->LoadState((uint8_t*)_stateData, _dataSize);
 
 		vector<CodeInfo> cheats;
 		for(uint32_t i = 0; i < _cheatArraySize / sizeof(CodeInfo); i++) {
 			cheats.push_back(((CodeInfo*)_cheats)[i]);
 		}
-		CheatManager::SetCheats(cheats);
+		console->GetCheatManager()->SetCheats(cheats);
 	}
 };

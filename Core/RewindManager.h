@@ -6,6 +6,8 @@
 #include "IInputProvider.h"
 #include "IInputRecorder.h"
 
+class Console;
+
 enum class RewindState
 {
 	Stopped = 0,
@@ -18,8 +20,10 @@ enum class RewindState
 class RewindManager : public INotificationListener, public IInputProvider, public IInputRecorder
 {
 private:
-	static const int32_t BufferSize = 30; //Number of frames between each save state
-	static RewindManager* _instance;
+	static constexpr int32_t BufferSize = 30; //Number of frames between each save state
+
+	shared_ptr<Console> _console;
+
 	std::deque<RewindData> _history;
 	std::deque<RewindData> _historyBackup;
 	RewindData _currentHistory;
@@ -45,7 +49,7 @@ private:
 	void ClearBuffer();
 
 public:
-	RewindManager();
+	RewindManager(shared_ptr<Console> console);
 	virtual ~RewindManager();
 
 	void ProcessNotification(ConsoleNotificationType type, void* parameter) override;
@@ -54,12 +58,12 @@ public:
 	void RecordInput(vector<shared_ptr<BaseControlDevice>> devices) override;
 	bool SetInput(BaseControlDevice *device) override;
 
-	static void StartRewinding(bool forDebugger = false);
-	static void StopRewinding(bool forDebugger = false);
-	static bool IsRewinding();
-	static bool IsStepBack();
-	static void RewindSeconds(uint32_t seconds);
+	void StartRewinding(bool forDebugger = false);
+	void StopRewinding(bool forDebugger = false);
+	bool IsRewinding();
+	bool IsStepBack();
+	void RewindSeconds(uint32_t seconds);
 
-	static void SendFrame(void *frameBuffer, uint32_t width, uint32_t height, bool forRewind);
-	static bool SendAudio(int16_t *soundBuffer, uint32_t sampleCount, uint32_t sampleRate);
+	void SendFrame(void *frameBuffer, uint32_t width, uint32_t height, bool forRewind);
+	bool SendAudio(int16_t *soundBuffer, uint32_t sampleCount, uint32_t sampleRate);
 };

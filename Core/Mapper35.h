@@ -44,7 +44,7 @@ protected:
 
 			case 0xC002: 
 				_irqEnabled = false;
-				CPU::ClearIRQSource(IRQSource::External);
+				_console->GetCpu()->ClearIrqSource(IRQSource::External);
 				break;
 
 			case 0xC003: _irqEnabled = true; break;
@@ -59,12 +59,12 @@ protected:
 	virtual void NotifyVRAMAddressChange(uint16_t addr) override
 	{
 		//MMC3-style A12 IRQ counter
-		if(_a12Watcher.UpdateVramAddress(addr) == A12StateChange::Rise) {
+		if(_a12Watcher.UpdateVramAddress(addr, _console->GetPpu()->GetFrameCycle()) == A12StateChange::Rise) {
 			if(_irqEnabled) {
 				_irqCounter--;
 				if(_irqCounter == 0) {
 					_irqEnabled = false;
-					CPU::SetIRQSource(IRQSource::External);
+					_console->GetCpu()->SetIrqSource(IRQSource::External);
 				}
 			}
 		}

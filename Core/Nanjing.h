@@ -63,7 +63,7 @@ protected:
 				switch(addr & 0x7300) {
 					case 0x5000:
 						_registers[0] = value;
-						if(!(_registers[0] & 0x80) && PPU::GetCurrentScanline() < 128) {
+						if(!(_registers[0] & 0x80) && _console->GetPpu()->GetCurrentScanline() < 128) {
 							SelectCHRPage(0, 0);
 							SelectCHRPage(1, 1);
 						}
@@ -104,11 +104,12 @@ public:
 
 	virtual void NotifyVRAMAddressChange(uint16_t addr) override
 	{
-		if(_autoSwitchCHR && PPU::GetCurrentCycle() > 256) {
-			if(PPU::GetCurrentScanline() == 239) {
+		PPU *ppu = _console->GetPpu();
+		if(_autoSwitchCHR && ppu->GetCurrentCycle() > 256) {
+			if(ppu->GetCurrentScanline() == 239) {
 				SelectCHRPage(0, 0);
 				SelectCHRPage(1, 0);
-			} else if(PPU::GetCurrentScanline() == 127) {
+			} else if(ppu->GetCurrentScanline() == 127) {
 				SelectCHRPage(0, 1);
 				SelectCHRPage(1, 1);
 			}

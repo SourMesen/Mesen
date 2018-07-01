@@ -201,8 +201,9 @@ static vector<KeyDefinition> _keyDefinitions = {
 	{ "VK_OEM_CLEAR", 0xFE, "Clear", "" }
 };
 
-WindowsKeyManager::WindowsKeyManager(HWND hWnd)
+WindowsKeyManager::WindowsKeyManager(shared_ptr<Console> console, HWND hWnd)
 {
+	_console = console;
 	_hWnd = hWnd;
 
 	ResetKeyState();
@@ -257,14 +258,12 @@ void WindowsKeyManager::StartUpdateDeviceThread()
 		while(!_stopUpdateDeviceThread) {
 			//Check for newly plugged in controllers every 5 secs (this takes ~60-70ms when no new controllers are found)
 			if(_xInput->NeedToUpdate()) {
-				Console::Pause();
 				_xInput->UpdateDeviceList();
-				Console::Resume();
 			}
 			if(_directInput->NeedToUpdate()) {
-				Console::Pause();
+				_console->Pause();
 				_directInput->UpdateDeviceList();
-				Console::Resume();
+				_console->Resume();
 			}
 
 			_stopSignal.Wait(5000);
@@ -380,10 +379,10 @@ void WindowsKeyManager::UpdateDevices()
 		return;
 	}
 
-	Console::Pause();
+	_console->Pause();
 	_xInput->UpdateDeviceList();
 	_directInput->UpdateDeviceList();
-	Console::Resume();
+	_console->Resume();
 }
 
 void WindowsKeyManager::SetKeyState(uint16_t scanCode, bool state)

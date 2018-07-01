@@ -3,16 +3,14 @@
 #include "stdafx.h"
 #include "Snapshotable.h"
 #include "IMemoryHandler.h"
-#include "MessageManager.h"
-#include "RomLoader.h"
-#include "EmulationSettings.h"
 #include "DebuggerTypes.h"
 #include "Debugger.h"
 #include "Types.h"
 #include "IBattery.h"
+#include "RomData.h"
+#include "Console.h"
 
 class BaseControlDevice;
-class IMemoryManager;
 
 class BaseMapper : public IMemoryHandler, public Snapshotable, public INotificationListener, public IBattery
 {
@@ -56,7 +54,7 @@ private:
 
 protected:
 	shared_ptr<BaseControlDevice> _mapperControlDevice;
-	IMemoryManager *_memoryManager;
+	shared_ptr<Console> _console;
 
 	NESHeader _nesHeader;
 	GameInfo _databaseInfo;
@@ -173,7 +171,7 @@ public:
 	
 	virtual void SaveBattery() override;
 
-	void SetMemoryManager(IMemoryManager* memoryManager);
+	void SetConsole(shared_ptr<Console> console);
 	virtual void SetDefaultNametables(uint8_t* nametableA, uint8_t* nametableB);
 
 	shared_ptr<BaseControlDevice> GetMapperControlDevice();
@@ -188,10 +186,10 @@ public:
 	__forceinline uint8_t InternalReadVRAM(uint16_t addr);
 	__forceinline virtual uint8_t MapperReadVRAM(uint16_t addr, MemoryOperationType operationType);
 	
-	__forceinline uint8_t ReadVRAM(uint16_t addr, MemoryOperationType type = MemoryOperationType::PpuRenderingRead) 
+	__forceinline uint8_t ReadVRAM(uint16_t addr, MemoryOperationType type = MemoryOperationType::PpuRenderingRead)
 	{
 		uint8_t value = MapperReadVRAM(addr, type);
-		Debugger::ProcessVramReadOperation(type, addr, value);
+		_console->DebugProcessVramReadOperation(type, addr, value);
 		return value;
 	}
 

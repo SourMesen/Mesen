@@ -2,7 +2,6 @@
 #include "stdafx.h"
 #include "BaseMapper.h"
 #include "InternalRamHandler.h"
-#include "IMemoryManager.h"
 
 //SSS-NROM-256 (Famicom box menu board)
 //Info from here: http://kevtris.org/mappers/famicombox/index6.html
@@ -47,7 +46,7 @@ protected:
 		for(int i = 0; i < 6; i++) {
 			_regs[i] = 0;
 		}
-		_memoryManager->RegisterIODevice(&_extendedRamHandler);
+		_console->GetMemoryManager()->RegisterIODevice(&_extendedRamHandler);
 	}
 
 	uint8_t ReadRegister(uint16_t addr) override

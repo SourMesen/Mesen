@@ -89,7 +89,7 @@ class JalecoSs88006 : public BaseMapper
 				uint16_t counter = _irqCounter & _irqMask[_irqCounterSize];
 
 				if(--counter == 0) {
-					CPU::SetIRQSource(IRQSource::External);
+					_console->GetCpu()->SetIrqSource(IRQSource::External);
 				}
 
 				_irqCounter = (_irqCounter & ~_irqMask[_irqCounterSize]) | (counter & _irqMask[_irqCounterSize]);
@@ -120,12 +120,12 @@ class JalecoSs88006 : public BaseMapper
 					break;
 
 				case 0xF000:
-					CPU::ClearIRQSource(IRQSource::External);
+					_console->GetCpu()->ClearIrqSource(IRQSource::External);
 					ReloadIrqCounter();
 					break;
 
 				case 0xF001:
-					CPU::ClearIRQSource(IRQSource::External);
+					_console->GetCpu()->ClearIrqSource(IRQSource::External);
 					_irqEnabled = (value & 0x01) & 0x01;
 					if(value & 0x08) {
 						_irqCounterSize = 3; //4-bit counter

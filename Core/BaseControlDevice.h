@@ -43,11 +43,11 @@ protected:
 	virtual void InternalSetStateFromInput();
 	
 public:
-	static const uint8_t ExpDevicePort = 4;
-	static const uint8_t ConsoleInputPort = 5;
-	static const uint8_t MapperInputPort = 6;
-	static const uint8_t ExpDevicePort2 = 7;
-	static const uint8_t PortCount = ExpDevicePort2 + 1;
+	static constexpr uint8_t ExpDevicePort = 4;
+	static constexpr uint8_t ConsoleInputPort = 5;
+	static constexpr uint8_t MapperInputPort = 6;
+	static constexpr uint8_t ExpDevicePort2 = 7;
+	static constexpr uint8_t PortCount = ExpDevicePort2 + 1;
 
 	BaseControlDevice(uint8_t port, KeyMappingSet keyMappingSet = KeyMappingSet());
 	virtual ~BaseControlDevice();

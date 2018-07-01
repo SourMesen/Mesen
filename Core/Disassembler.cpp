@@ -9,6 +9,7 @@
 #include "../Utilities/HexUtilities.h"
 #include "../Utilities/StringUtilities.h"
 #include "Debugger.h"
+#include "CodeDataLogger.h"
 
 Disassembler::Disassembler(MemoryManager* memoryManager, BaseMapper* mapper, Debugger* debugger)
 {

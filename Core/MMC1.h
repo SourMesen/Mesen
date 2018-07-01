@@ -194,7 +194,7 @@ class MMC1 : public BaseMapper
 
 		virtual void WriteRegister(uint16_t addr, uint8_t value) override
 		{
-			int32_t currentCycle = CPU::GetCycleCount();
+			int32_t currentCycle = _console->GetCpu()->GetCycleCount();
 			
 			//Ignore write if within 2 cycles of another write (i.e the real write after a dummy write)
 			if(abs(currentCycle - _lastWriteCycle) >= 2) {

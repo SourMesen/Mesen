@@ -1,17 +1,19 @@
 #pragma once
 
 #include "stdafx.h"
-#include "CheatManager.h"
 #include "MovieManager.h"
-#include "ControlManager.h"
-#include "BatteryManager.h"
 #include "VirtualFile.h"
+#include "BatteryManager.h"
 
 class ZipReader;
+class Console;
+struct CodeInfo;
 
 class MesenMovie : public IMovie, public IBatteryProvider, public std::enable_shared_from_this<MesenMovie>
 {
 private:
+	shared_ptr<Console> _console;
+
 	VirtualFile _movieFile;
 	shared_ptr<ZipReader> _reader;
 	bool _playing = false;
@@ -34,7 +36,7 @@ private:
 	bool LoadCheat(string cheatData, CodeInfo &code);
 
 public:
-	MesenMovie();
+	MesenMovie(shared_ptr<Console> console);
 	virtual ~MesenMovie();
 
 	bool Play(VirtualFile &file) override;

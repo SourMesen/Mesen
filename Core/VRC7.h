@@ -7,8 +7,8 @@
 class VRC7 : public BaseMapper
 {
 private:
-	Vrc7Audio _audio;
-	VrcIrq _irq;
+	unique_ptr<Vrc7Audio> _audio;
+	unique_ptr<VrcIrq> _irq;
 	uint8_t _controlFlags;
 	uint8_t _chrRegisters[8];
 
@@ -23,17 +23,20 @@ protected:
 
 	void InitMapper() override
 	{
-		_irq.Reset();
+		_audio.reset(new Vrc7Audio(_console));
+		_irq.reset(new VrcIrq(_console));
+
+		_irq->Reset();
 		_controlFlags = 0;
 		memset(_chrRegisters, 0, sizeof(_chrRegisters));
 		SelectPRGPage(3, -1);
 	}
-
+	
 	virtual void StreamState(bool saving) override
 	{
 		BaseMapper::StreamState(saving);
-		SnapshotInfo irq{ &_irq };
-		SnapshotInfo audio{ &_audio };
+		SnapshotInfo irq{ _irq.get() };
+		SnapshotInfo audio{ _audio.get() };
 		ArrayInfo<uint8_t> chrRegisters = { _chrRegisters, 8 };
 
 		Stream(_controlFlags, chrRegisters, irq, audio);
@@ -45,8 +48,8 @@ protected:
 
 	void ProcessCpuClock() override
 	{
-		_irq.ProcessCpuClock();
-		_audio.Clock();
+		_irq->ProcessCpuClock();
+		_audio->Clock();
 	}
 
 	void UpdateState()
@@ -60,7 +63,7 @@ protected:
 
 		UpdatePrgRamAccess();
 
-		_audio.SetMuteAudio((_controlFlags & 0x40) != 0);
+		_audio->SetMuteAudio((_controlFlags & 0x40) != 0);
 	}
 
 	void WriteRegister(uint16_t addr, uint8_t value) override
@@ -75,7 +78,7 @@ protected:
 			case 0x8008: SelectPRGPage(1, value & 0x3F); break;
 			case 0x9000: SelectPRGPage(2, value & 0x3F); break;
 				
-			case 0x9010: case 0x9030: _audio.WriteReg(addr, value); break;
+			case 0x9010: case 0x9030: _audio->WriteReg(addr, value); break;
 			 
 			case 0xA000: SelectCHRPage(0, value);  break;
 			case 0xA008: SelectCHRPage(1, value);  break;
@@ -88,9 +91,9 @@ protected:
 
 			case 0xE000: _controlFlags = value; UpdateState(); break;				
 
-			case 0xE008: _irq.SetReloadValue(value); break;
-			case 0xF000: _irq.SetControlValue(value); break;
-			case 0xF008: _irq.AcknowledgeIrq(); break;
+			case 0xE008: _irq->SetReloadValue(value); break;
+			case 0xF000: _irq->SetControlValue(value); break;
+			case 0xF008: _irq->AcknowledgeIrq(); break;
 		}
 	}
 };

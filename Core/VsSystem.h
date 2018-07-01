@@ -36,8 +36,9 @@ protected:
 
 	void ProcessCpuClock() override
 	{
-		if(_prgChrSelectBit != VsControlManager::GetInstance()->GetPrgChrSelectBit()) {
-			_prgChrSelectBit = VsControlManager::GetInstance()->GetPrgChrSelectBit();
+		VsControlManager* controlManager = dynamic_cast<VsControlManager*>(_console->GetControlManager());
+		if(_prgChrSelectBit != controlManager->GetPrgChrSelectBit()) {
+			_prgChrSelectBit = controlManager->GetPrgChrSelectBit();
 
 			if(_prgSize > 0x8000) {
 				//"Note: In case of games with 40KiB PRG - ROM(as found in VS Gumshoe), the above bit additionally changes 8KiB PRG - ROM at $8000 - $9FFF."

@@ -11,6 +11,7 @@ enum class NesModel;
 
 class BaseMapper;
 class ControlManager;
+class Console;
 
 enum PPURegisters
 {
@@ -28,9 +29,7 @@ enum PPURegisters
 class PPU : public IMemoryHandler, public Snapshotable
 {
 	protected:
-		static PPU* Instance;
-
-		BaseMapper *_mapper;
+		shared_ptr<Console> _console;
 
 		PPUState _state;
 		int32_t _scanline;
@@ -104,8 +103,6 @@ class PPU : public IMemoryHandler, public Snapshotable
 		int32_t _oamDecayCycles[0x40];
 		bool _enableOamDecay;
 
-		ControlManager *_controlManager;
-		
 		void UpdateStatusFlag();
 
 		void SetControlRegister(uint8_t value);
@@ -164,12 +161,12 @@ class PPU : public IMemoryHandler, public Snapshotable
 		void StreamState(bool saving) override;
 
 	public:
-		static const int32_t ScreenWidth = 256;
-		static const int32_t ScreenHeight = 240;
-		static const int32_t PixelCount = 256*240;
-		static const int32_t OutputBufferSize = 256*240*2;
+		static constexpr int32_t ScreenWidth = 256;
+		static constexpr int32_t ScreenHeight = 240;
+		static constexpr int32_t PixelCount = 256*240;
+		static constexpr int32_t OutputBufferSize = 256*240*2;
 
-		PPU(BaseMapper *mapper, ControlManager *controlManager);
+		PPU(shared_ptr<Console> console);
 		virtual ~PPU();
 
 		void Reset();
@@ -196,36 +193,31 @@ class PPU : public IMemoryHandler, public Snapshotable
 		void SetNesModel(NesModel model);
 		
 		void Exec();
-		static void ExecStatic();
-		
-		static void RunOneCycle()
+		void ProcessCpuClock();
+
+		uint32_t GetFrameCount()
 		{
-			Instance->Exec();
+			return _frameCount;
 		}
 
-		static uint32_t GetFrameCount()
+		uint32_t GetFrameCycle()
 		{
-			return PPU::Instance->_frameCount;
+			return ((_scanline + 1) * 341) + _cycle;
 		}
 
-		static uint32_t GetFrameCycle()
+		PPUControlFlags GetControlFlags()
 		{
-			return ((PPU::Instance->_scanline + 1) * 341) + PPU::Instance->_cycle;
+			return _flags;
 		}
 
-		static PPUControlFlags GetControlFlags()
+		uint32_t GetCurrentCycle()
 		{
-			return PPU::Instance->_flags;
+			return _cycle;
 		}
 
-		static uint32_t GetCurrentCycle()
+		int32_t GetCurrentScanline()
 		{
-			return PPU::Instance->_cycle;
-		}
-
-		static int32_t GetCurrentScanline()
-		{
-			return PPU::Instance->_scanline;
+			return _scanline;
 		}
 		
 		uint8_t* GetSpriteRam()
@@ -238,16 +230,16 @@ class PPU : public IMemoryHandler, public Snapshotable
 			return _secondarySpriteRAM;
 		}
 		
-		static uint32_t GetPixelBrightness(uint8_t x, uint8_t y)
+		uint32_t GetPixelBrightness(uint8_t x, uint8_t y)
 		{
 			//Used by Zapper, gives a rough approximation of the brightness level of the specific pixel
-			uint16_t pixelData = PPU::Instance->_currentOutputBuffer[y << 8 | x];
+			uint16_t pixelData = _currentOutputBuffer[y << 8 | x];
 			uint32_t argbColor = EmulationSettings::GetRgbPalette()[pixelData & 0x3F];
 			return (argbColor & 0xFF) + ((argbColor >> 8) & 0xFF) + ((argbColor >> 16) & 0xFF);
 		}
 
-		static uint16_t GetPixel(uint8_t x, uint8_t y)
+		uint16_t GetPixel(uint8_t x, uint8_t y)
 		{
-			return PPU::Instance->_currentOutputBuffer[y << 8 | x];
+			return _currentOutputBuffer[y << 8 | x];
 		}
 };

@@ -3,11 +3,9 @@
 #include "MessageManager.h"
 #include "../Utilities/PNGHelper.h"
 #include "../Utilities/FolderUtilities.h"
-#include "Console.h"
 #include "StandardController.h"
 #include "ScaleFilter.h"
 #include "RotateFilter.h"
-#include "DebugHud.h"
 
 BaseVideoFilter::BaseVideoFilter()
 {
@@ -61,8 +59,6 @@ void BaseVideoFilter::SendFrame(uint16_t *ppuOutputBuffer, uint32_t frameNumber)
 	OnBeforeApplyFilter();
 	ApplyFilter(ppuOutputBuffer);
 
-	DebugHud::GetInstance()->Draw(_outputBuffer, _overscan, GetFrameInfo().Width, frameNumber);
-	
 	_frameLock.Release();
 }
 
@@ -71,7 +67,7 @@ uint32_t* BaseVideoFilter::GetOutputBuffer()
 	return _outputBuffer;
 }
 
-void BaseVideoFilter::TakeScreenshot(VideoFilterType filterType, string filename, std::stringstream *stream)
+void BaseVideoFilter::TakeScreenshot(shared_ptr<Console> console, VideoFilterType filterType, string filename, std::stringstream *stream)
 {
 	uint32_t* pngBuffer;
 	FrameInfo frameInfo;
@@ -104,7 +100,7 @@ void BaseVideoFilter::TakeScreenshot(VideoFilterType filterType, string filename
 	}
 
 	VideoHud hud;
-	hud.DrawHud(pngBuffer, frameInfo, EmulationSettings::GetOverscanDimensions());
+	hud.DrawHud(console, pngBuffer, frameInfo, EmulationSettings::GetOverscanDimensions());
 
 	if(!filename.empty()) {
 		PNGHelper::WritePNG(filename, pngBuffer, frameInfo.Width, frameInfo.Height);
@@ -115,9 +111,9 @@ void BaseVideoFilter::TakeScreenshot(VideoFilterType filterType, string filename
 	delete[] frameBuffer;
 }
 
-void BaseVideoFilter::TakeScreenshot(VideoFilterType filterType)
+void BaseVideoFilter::TakeScreenshot(shared_ptr<Console> console, string romName, VideoFilterType filterType)
 {
-	string romFilename = FolderUtilities::GetFilename(Console::GetMapperInfo().RomName, false);
+	string romFilename = FolderUtilities::GetFilename(romName, false);
 
 	int counter = 0;
 	string baseFilename = FolderUtilities::CombinePath(FolderUtilities::GetScreenshotFolder(), romFilename);
@@ -137,7 +133,7 @@ void BaseVideoFilter::TakeScreenshot(VideoFilterType filterType)
 		counter++;
 	}
 
-	TakeScreenshot(filterType, ssFilename);
+	TakeScreenshot(console, filterType, ssFilename);
 
 	MessageManager::DisplayMessage("ScreenshotSaved", FolderUtilities::GetFilename(ssFilename, true));
 }

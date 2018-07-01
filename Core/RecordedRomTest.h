@@ -6,10 +6,13 @@
 #include "../Utilities/AutoResetEvent.h"
 
 class VirtualFile;
+class Console;
 
 class RecordedRomTest : public INotificationListener
 {
 private:
+	shared_ptr<Console> _console;
+
 	bool _recording;
 	bool _runningTest;
 	int _badFrameCount;
@@ -36,7 +39,7 @@ private:
 	void Save();
 
 public:
-	RecordedRomTest();
+	RecordedRomTest(shared_ptr<Console> console);
 	virtual ~RecordedRomTest();
 
 	void ProcessNotification(ConsoleNotificationType type, void* parameter) override;

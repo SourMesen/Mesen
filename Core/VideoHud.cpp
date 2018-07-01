@@ -7,13 +7,14 @@
 #include "FourScore.h"
 #include "Zapper.h"
 #include "MovieManager.h"
+#include "Console.h"
 
-void VideoHud::DrawHud(uint32_t *outputBuffer, FrameInfo frameInfo, OverscanDimensions overscan)
+void VideoHud::DrawHud(shared_ptr<Console> console, uint32_t *outputBuffer, FrameInfo frameInfo, OverscanDimensions overscan)
 {
 	uint32_t displayCount = 0;
 	InputDisplaySettings settings = EmulationSettings::GetInputDisplaySettings();
 	
-	vector<ControlDeviceState> states = ControlManager::GetPortStates();
+	vector<ControlDeviceState> states = console->GetControlManager()->GetPortStates();
 	for(int inputPort = 0; inputPort < 4; inputPort++) {
 		if((settings.VisiblePorts >> inputPort) & 0x01) {
 			if(DisplayControllerInput(states[inputPort], inputPort, outputBuffer, frameInfo, overscan, displayCount)) {
@@ -55,7 +56,7 @@ bool VideoHud::DisplayControllerInput(ControlDeviceState &state, int inputPort, 
 
 	int32_t buttonState = -1;
 
-	shared_ptr<BaseControlDevice> device = ControlManager::CreateControllerDevice(EmulationSettings::GetControllerType(inputPort), 0);
+	shared_ptr<BaseControlDevice> device = ControlManager::CreateControllerDevice(EmulationSettings::GetControllerType(inputPort), 0, nullptr);
 	if(!device) {
 		return false;
 	}

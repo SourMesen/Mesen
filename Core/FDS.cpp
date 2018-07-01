@@ -2,7 +2,6 @@
 #include "../Utilities/IpsPatcher.h"
 #include "Console.h"
 #include "FDS.h"
-#include "CPU.h"
 #include "PPU.h"
 #include "FdsAudio.h"
 #include "MemoryManager.h"
@@ -23,6 +22,7 @@ void FDS::InitMapper()
 
 void FDS::InitMapper(RomData &romData)
 {
+	_audio.reset(new FdsAudio(_console));
 	_romFilepath = romData.Filename;
 	_fdsDiskSides = romData.FdsDiskData;
 	_fdsDiskHeaders = romData.FdsDiskHeaders;
@@ -93,7 +93,7 @@ void FDS::ClockIrq()
 {
 	if(_irqEnabled) {
 		if(_irqCounter == 0) {
-			CPU::SetIRQSource(IRQSource::External);
+			_console->GetCpu()->SetIrqSource(IRQSource::External);
 			_irqCounter = _irqReloadValue;
 			if(!_irqRepeatEnabled) {
 				_irqEnabled = false;
@@ -106,19 +106,19 @@ void FDS::ClockIrq()
 
 uint8_t FDS::ReadRAM(uint16_t addr)
 {
-	if(addr == 0xE18C && !_gameStarted && (CPU::DebugReadByte(0x100) & 0xC0) != 0) {
+	if(addr == 0xE18C && !_gameStarted && (_console->GetMemoryManager()->DebugRead(0x100) & 0xC0) != 0) {
 		//$E18B is the NMI entry point (using $E18C due to dummy reads)
 		//When NMI occurs while $100 & $C0 != 0, it typically means that the game is starting.
 		_gameStarted = true;
 	} else if(addr == 0xE445 && IsAutoInsertDiskEnabled()) {
 		//Game is trying to check if a specific disk/side is inserted
 		//Find the matching disk and insert it automatically
-		uint16_t bufferAddr = CPU::DebugReadWord(0);
+		uint16_t bufferAddr = _console->GetMemoryManager()->DebugReadWord(0);
 		uint8_t buffer[10];
 		for(int i = 0; i < 10; i++) {
 			//Prevent infinite recursion
 			if(bufferAddr + i != 0xE445) {
-				buffer[i] = CPU::DebugReadByte(bufferAddr + i);
+				buffer[i] = _console->GetMemoryManager()->DebugRead(bufferAddr + i);
 			} else {
 				buffer[i] = 0;
 			}
@@ -172,7 +172,7 @@ void FDS::ProcessAutoDiskInsert()
 {
 	if(IsAutoInsertDiskEnabled()) {
 		bool fastForwardEnabled = EmulationSettings::CheckFlag(EmulationFlags::FdsFastForwardOnLoad);
-		uint32_t currentFrame = PPU::GetFrameCount();
+		uint32_t currentFrame = _console->GetPpu()->GetFrameCount();
 		if(_previousFrame != currentFrame) {
 			_previousFrame = currentFrame;
 			if(_autoDiskEjectCounter > 0) {
@@ -269,7 +269,7 @@ void FDS::ProcessCpuClock()
 				_transferComplete = true;
 				_readDataReg = diskData;
 				if(needIrq) {
-					CPU::SetIRQSource(IRQSource::FdsDisk);
+					_console->GetCpu()->SetIrqSource(IRQSource::FdsDisk);
 				}
 			}
 		} else {
@@ -277,7 +277,7 @@ void FDS::ProcessCpuClock()
 				_transferComplete = true;
 				diskData = _writeDataReg;
 				if(needIrq) {
-					CPU::SetIRQSource(IRQSource::FdsDisk);
+					_console->GetCpu()->SetIrqSource(IRQSource::FdsDisk);
 				}
 			}
 
@@ -352,7 +352,7 @@ void FDS::WriteRegister(uint16_t addr, uint8_t value)
 			if(_irqEnabled) {
 				_irqCounter = _irqReloadValue;
 			} else {
-				CPU::ClearIRQSource(IRQSource::External);
+				_console->GetCpu()->ClearIrqSource(IRQSource::External);
 			}
 			break;
 
@@ -362,8 +362,8 @@ void FDS::WriteRegister(uint16_t addr, uint8_t value)
 
 			if(!_diskRegEnabled) {
 				_irqEnabled = false;
-				CPU::ClearIRQSource(IRQSource::External);
-				CPU::ClearIRQSource(IRQSource::FdsDisk);
+				_console->GetCpu()->ClearIrqSource(IRQSource::External);
+				_console->GetCpu()->ClearIrqSource(IRQSource::FdsDisk);
 			}
 			break;
 
@@ -372,7 +372,7 @@ void FDS::WriteRegister(uint16_t addr, uint8_t value)
 			_transferComplete = false;
 
 			//Unsure about clearing irq here: FCEUX/Nintendulator don't do this, puNES does.
-			CPU::ClearIRQSource(IRQSource::FdsDisk);
+			_console->GetCpu()->ClearIrqSource(IRQSource::FdsDisk);
 			break;
 
 		case 0x4025:
@@ -387,7 +387,7 @@ void FDS::WriteRegister(uint16_t addr, uint8_t value)
 
 			//Writing to $4025 clears IRQ according to FCEUX, puNES & Nintendulator
 			//Fixes issues in some unlicensed games (error $20 at power on)
-			CPU::ClearIRQSource(IRQSource::FdsDisk);
+			_console->GetCpu()->ClearIrqSource(IRQSource::FdsDisk);
 			break;
 
 		case 0x4026:
@@ -404,7 +404,7 @@ void FDS::WriteRegister(uint16_t addr, uint8_t value)
 
 uint8_t FDS::ReadRegister(uint16_t addr)
 {
-	uint8_t value = MemoryManager::GetOpenBus();
+	uint8_t value = _console->GetMemoryManager()->GetOpenBus();
 	if(_soundRegEnabled && addr >= 0x4040) {
 		return _audio->ReadRegister(addr);
 	} else if(_diskRegEnabled && addr <= 0x4033) {
@@ -413,20 +413,20 @@ uint8_t FDS::ReadRegister(uint16_t addr)
 				//These 3 pins are open bus
 				value &= 0x2C;
 
-				value |= CPU::HasIRQSource(IRQSource::External) ? 0x01 : 0x00;
+				value |= _console->GetCpu()->HasIrqSource(IRQSource::External) ? 0x01 : 0x00;
 				value |= _transferComplete ? 0x02 : 0x00;
 				value |= _badCrc ? 0x10 : 0x00;
 				//value |= _endOfHead ? 0x40 : 0x00;
 				//value |= _diskRegEnabled ? 0x80 : 0x00;
 
 				_transferComplete = false;
-				CPU::ClearIRQSource(IRQSource::External);
-				CPU::ClearIRQSource(IRQSource::FdsDisk);
+				_console->GetCpu()->ClearIrqSource(IRQSource::External);
+				_console->GetCpu()->ClearIrqSource(IRQSource::FdsDisk);
 				return value;
 
 			case 0x4031:
 				_transferComplete = false;
-				CPU::ClearIRQSource(IRQSource::FdsDisk);
+				_console->GetCpu()->ClearIrqSource(IRQSource::FdsDisk);
 				return _readDataReg;
 
 			case 0x4032:
@@ -438,12 +438,12 @@ uint8_t FDS::ReadRegister(uint16_t addr)
 				value |= !IsDiskInserted() ? 0x04 : 0x00;  //Disk not writable
 
 				if(IsAutoInsertDiskEnabled()) {
-					if(PPU::GetFrameCount() - _lastDiskCheckFrame < 100) {
+					if(_console->GetPpu()->GetFrameCount() - _lastDiskCheckFrame < 100) {
 						_successiveChecks++;
 					} else {
 						_successiveChecks = 0;
 					}
-					_lastDiskCheckFrame = PPU::GetFrameCount();
+					_lastDiskCheckFrame = _console->GetPpu()->GetFrameCount();
 
 					if(_successiveChecks > 20 && _autoDiskEjectCounter == 0 && _autoDiskSwitchCounter == -1) {
 						//Game tried to check if a disk was inserted or not - this is usually done when the disk needs to be changed
@@ -465,7 +465,7 @@ uint8_t FDS::ReadRegister(uint16_t addr)
 		}
 	}
 
-	return MemoryManager::GetOpenBus();
+	return _console->GetMemoryManager()->GetOpenBus();
 }
 
 void FDS::StreamState(bool saving)
@@ -501,11 +501,6 @@ void FDS::StreamState(bool saving)
 		//Otherwise it's possible to get stuck in fast forward mode
 		_gameStarted = true;
 	}
-}
-
-FDS::FDS()
-{
-	_audio.reset(new FdsAudio());
 }
 
 FDS::~FDS()

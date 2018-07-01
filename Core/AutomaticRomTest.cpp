@@ -7,35 +7,29 @@
 #include "VideoDecoder.h"
 #include "StandardController.h"
 
-bool AutomaticRomTest::_running = false;
-
 AutomaticRomTest::AutomaticRomTest()
 {
-	_running = true;
 	_errorCode = 0;
-	ControlManager::RegisterInputProvider(this);
 }
 
 AutomaticRomTest::~AutomaticRomTest()
 {
-	_running = false;
-	ControlManager::UnregisterInputProvider(this);
 }
 
 void AutomaticRomTest::ProcessNotification(ConsoleNotificationType type, void* parameter)
 {
 	if(type == ConsoleNotificationType::PpuFrameDone) {
 		uint16_t *frameBuffer = (uint16_t*)parameter;
-		if(PPU::GetFrameCount() == 5) {
+		if(_console->GetFrameCount() == 5) {
 			memcpy(_prevFrameBuffer, frameBuffer, sizeof(_prevFrameBuffer));
-		} else if(PPU::GetFrameCount() == 300) {
+		} else if(_console->GetFrameCount() == 300) {
 			if(memcmp(_prevFrameBuffer, frameBuffer, sizeof(_prevFrameBuffer)) == 0) {
 				//No change
 				_errorCode |= 0x20;
 			}
 			memcpy(_prevFrameBuffer, frameBuffer, sizeof(_prevFrameBuffer));
-			VideoDecoder::GetInstance()->TakeScreenshot();
-		} else if(PPU::GetFrameCount() == 900) {
+			_console->GetVideoDecoder()->TakeScreenshot();
+		} else if(_console->GetFrameCount() == 900) {
 			if(memcmp(_prevFrameBuffer, frameBuffer, sizeof(_prevFrameBuffer)) == 0) {
 				//No change
 				_errorCode |= 0x01;
@@ -54,8 +48,8 @@ void AutomaticRomTest::ProcessNotification(ConsoleNotificationType type, void* p
 			}
 
 			memcpy(_prevFrameBuffer, frameBuffer, sizeof(_prevFrameBuffer));
-			VideoDecoder::GetInstance()->TakeScreenshot();
-		} else if(PPU::GetFrameCount() == 1800) {
+			_console->GetVideoDecoder()->TakeScreenshot();
+		} else if(_console->GetFrameCount() == 1800) {
 			bool continueTest = false;
 			if(memcmp(_prevFrameBuffer, frameBuffer, sizeof(_prevFrameBuffer)) == 0) {
 				//No change, change input pattern and keep trying
@@ -74,13 +68,13 @@ void AutomaticRomTest::ProcessNotification(ConsoleNotificationType type, void* p
 				_errorCode |= 0x08;
 			}
 
-			VideoDecoder::GetInstance()->TakeScreenshot();
+			_console->GetVideoDecoder()->TakeScreenshot();
 
 			if(!continueTest) {
 				//Stop test
 				_signal.Signal();
 			}
-		} else if(PPU::GetFrameCount() == 3600) {
+		} else if(_console->GetFrameCount() == 3600) {
 			if(memcmp(_prevFrameBuffer, frameBuffer, sizeof(_prevFrameBuffer)) == 0) {
 				//No change
 				_errorCode |= 0x02;
@@ -98,7 +92,7 @@ void AutomaticRomTest::ProcessNotification(ConsoleNotificationType type, void* p
 				_errorCode |= 0x40;
 			}
 
-			VideoDecoder::GetInstance()->TakeScreenshot();
+			_console->GetVideoDecoder()->TakeScreenshot();
 
 			//Stop test
 			_signal.Signal();
@@ -109,16 +103,17 @@ void AutomaticRomTest::ProcessNotification(ConsoleNotificationType type, void* p
 int32_t AutomaticRomTest::Run(string filename)
 {
 	EmulationSettings::SetMasterVolume(0);
-	Console::Pause();
-	if(Console::LoadROM(filename)) {
-		Console::Resume();
+	_console.reset(new Console());
+	if(_console->Initialize(filename)) {
+		_console->GetControlManager()->RegisterInputProvider(this);
+
 		EmulationSettings::SetFlags(EmulationFlags::ForceMaxSpeed);
 		EmulationSettings::ClearFlags(EmulationFlags::Paused);
 		_signal.Wait();
 
 		EmulationSettings::SetFlags(EmulationFlags::Paused);
 
-		if(PPU::GetFrameCount() < 1800) {
+		if(_console->GetFrameCount() < 1800) {
 			//Finished early
 			_errorCode |= 0x10;
 		}
@@ -126,7 +121,8 @@ int32_t AutomaticRomTest::Run(string filename)
 		EmulationSettings::ClearFlags(EmulationFlags::ForceMaxSpeed);
 		EmulationSettings::SetMasterVolume(1.0);
 
-		Console::GetInstance()->Stop();
+		_console->GetControlManager()->UnregisterInputProvider(this);
+		_console->Stop();
 
 		return _errorCode;
 	}
@@ -134,15 +130,10 @@ int32_t AutomaticRomTest::Run(string filename)
 	return -1;
 }
 
-bool AutomaticRomTest::Running()
-{
-	return _running;
-}
-
 bool AutomaticRomTest::SetInput(BaseControlDevice* device)
 {
 	if(device->GetPort() == 0) {
-		uint32_t frameNumber = PPU::GetFrameCount();
+		uint32_t frameNumber = _console->GetFrameCount();
 		ControlDeviceState state;
 
 		if(frameNumber <= 1800) {

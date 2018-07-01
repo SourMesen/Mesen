@@ -2,16 +2,19 @@
 #include "stdafx.h"
 #include <unordered_map>
 #include "IInputRecorder.h"
-#include "CheatManager.h"
 #include "BatteryManager.h"
 #include "Types.h"
 
 class ZipWriter;
+class Console;
+struct CodeInfo;
 
 class MovieRecorder : public IInputRecorder, public IBatteryRecorder, public IBatteryProvider, public std::enable_shared_from_this<MovieRecorder>
 {
 private:
 	static const uint32_t MovieFormatVersion = 1;
+
+	shared_ptr<Console> _console;
 	string _filename;
 	string _author;
 	string _description;
@@ -28,7 +31,7 @@ private:
 	void WriteBool(stringstream &out, string name, bool enabled);
 
 public:
-	MovieRecorder();
+	MovieRecorder(shared_ptr<Console> console);
 	virtual ~MovieRecorder();
 
 	bool Record(RecordMovieOptions options);

@@ -12,7 +12,6 @@ class HdBuilderPpu : public PPU
 {
 private:
 	HdPackBuilder* _hdPackBuilder;
-	bool _isChrRam;
 	bool _needChrHash = false;
 	uint32_t _chrRamBankSize;
 	uint32_t _chrRamIndexMask;
@@ -24,6 +23,9 @@ protected:
 	void DrawPixel()
 	{
 		if(IsRenderingEnabled() || ((_state.VideoRamAddr & 0x3F00) != 0x3F00)) {
+			bool isChrRam = !_console->GetMapper()->HasChrRom();
+			BaseMapper *mapper = _console->GetMapper();
+
 			_lastSprite = nullptr;
 			uint32_t color = GetPixelColor();
 			_currentOutputBuffer[(_scanline << 8) + _cycle - 1] = _paletteRAM[color & 0x03 ? color : 0];
@@ -38,7 +40,7 @@ protected:
 				while(addr < 0x2000) {
 					uint32_t hash = 0;
 					for(uint16_t i = 0; i < _chrRamBankSize; i++) {
-						hash += _mapper->DebugReadVRAM(i + addr);
+						hash += _console->GetMapper()->DebugReadVRAM(i + addr);
 						hash = (hash << 1) | (hash >> 31);
 					}
 					_bankHashes.push_back(hash);
@@ -48,7 +50,7 @@ protected:
 			}
 
 			bool hasBgSprite = false;
-			DebugMemoryType memoryType = _isChrRam ? DebugMemoryType::ChrRam : DebugMemoryType::ChrRom;
+			DebugMemoryType memoryType = isChrRam ? DebugMemoryType::ChrRam : DebugMemoryType::ChrRom;
 			if(_lastSprite && _flags.SpritesEnabled) {
 				if(backgroundColor == 0) {
 					for(uint8_t i = 0; i < _spriteCount; i++) {
@@ -60,28 +62,28 @@ protected:
 				}
 
 				if(_lastSprite->AbsoluteTileAddr >= 0) {
-					sprite.TileIndex = (_isChrRam ? (_lastSprite->TileAddr & _chrRamIndexMask) : _lastSprite->AbsoluteTileAddr) / 16;
+					sprite.TileIndex = (isChrRam ? (_lastSprite->TileAddr & _chrRamIndexMask) : _lastSprite->AbsoluteTileAddr) / 16;
 					sprite.PaletteColors = ReadPaletteRAM(_lastSprite->PaletteOffset + 3) | (ReadPaletteRAM(_lastSprite->PaletteOffset + 2) << 8) | (ReadPaletteRAM(_lastSprite->PaletteOffset + 1) << 16) | 0xFF000000;
-					sprite.IsChrRamTile = _isChrRam;
+					sprite.IsChrRamTile = isChrRam;
 					for(int i = 0; i < 16; i++) {
-						sprite.TileData[i] = _mapper->GetMemoryValue(memoryType, _lastSprite->AbsoluteTileAddr / 16 * 16 + i);
+						sprite.TileData[i] = _console->GetMapper()->GetMemoryValue(memoryType, _lastSprite->AbsoluteTileAddr / 16 * 16 + i);
 					}
 
-					_hdPackBuilder->ProcessTile(_cycle - 1, _scanline, _lastSprite->AbsoluteTileAddr, sprite, _mapper, false, _bankHashes[_lastSprite->TileAddr / _chrRamBankSize], false);
+					_hdPackBuilder->ProcessTile(_cycle - 1, _scanline, _lastSprite->AbsoluteTileAddr, sprite, mapper, false, _bankHashes[_lastSprite->TileAddr / _chrRamBankSize], false);
 				}
 			}
 
 			if(_flags.BackgroundEnabled) {
 				TileInfo* lastTile = &((_state.XScroll + ((_cycle - 1) & 0x07) < 8) ? _previousTile : _currentTile);
 				if(lastTile->AbsoluteTileAddr >= 0) {
-					tile.TileIndex = (_isChrRam ? (lastTile->TileAddr & _chrRamIndexMask) : lastTile->AbsoluteTileAddr) / 16;
+					tile.TileIndex = (isChrRam ? (lastTile->TileAddr & _chrRamIndexMask) : lastTile->AbsoluteTileAddr) / 16;
 					tile.PaletteColors = ReadPaletteRAM(lastTile->PaletteOffset + 3) | (ReadPaletteRAM(lastTile->PaletteOffset + 2) << 8) | (ReadPaletteRAM(lastTile->PaletteOffset + 1) << 16) | (ReadPaletteRAM(0) << 24);
-					tile.IsChrRamTile = _isChrRam;
+					tile.IsChrRamTile = isChrRam;
 					for(int i = 0; i < 16; i++) {
-						tile.TileData[i] = _mapper->GetMemoryValue(memoryType, lastTile->AbsoluteTileAddr / 16 * 16 + i);
+						tile.TileData[i] = _console->GetMapper()->GetMemoryValue(memoryType, lastTile->AbsoluteTileAddr / 16 * 16 + i);
 					}
 
-					_hdPackBuilder->ProcessTile(_cycle - 1, _scanline, lastTile->AbsoluteTileAddr, tile, _mapper, false, _bankHashes[lastTile->TileAddr / _chrRamBankSize], hasBgSprite);
+					_hdPackBuilder->ProcessTile(_cycle - 1, _scanline, lastTile->AbsoluteTileAddr, tile, mapper, false, _bankHashes[lastTile->TileAddr / _chrRamBankSize], hasBgSprite);
 				}
 			}
 		} else {
@@ -109,12 +111,11 @@ protected:
 	}
 
 public:
-	HdBuilderPpu(BaseMapper* mapper, ControlManager* controlManager, HdPackBuilder* hdPackBuilder, uint32_t chrRamBankSize) : PPU(mapper, controlManager)
+	HdBuilderPpu(shared_ptr<Console> console, HdPackBuilder* hdPackBuilder, uint32_t chrRamBankSize) : PPU(console)
 	{
 		_hdPackBuilder = hdPackBuilder;
 		_chrRamBankSize = chrRamBankSize;
 		_chrRamIndexMask = chrRamBankSize - 1;
-		_isChrRam = !_mapper->HasChrRom();
 		_needChrHash = true;
 	}
 

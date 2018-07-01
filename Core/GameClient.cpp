@@ -11,8 +11,9 @@ using std::thread;
 
 shared_ptr<GameClient> GameClient::_instance;
 
-GameClient::GameClient()
+GameClient::GameClient(shared_ptr<Console> console)
 {
+	_console = console;
 	_stop = false;
 }
 
@@ -30,9 +31,9 @@ bool GameClient::Connected()
 	return instance ? instance->_connected : false;
 }
 
-void GameClient::Connect(ClientConnectionData &connectionData)
+void GameClient::Connect(shared_ptr<Console> console, ClientConnectionData &connectionData)
 {
-	_instance.reset(new GameClient());
+	_instance.reset(new GameClient(console));
 	MessageManager::RegisterNotificationListener(_instance);
 	
 	shared_ptr<GameClient> instance = _instance;
@@ -58,7 +59,7 @@ void GameClient::PrivateConnect(ClientConnectionData &connectionData)
 	_stop = false;
 	shared_ptr<Socket> socket(new Socket());
 	if(socket->Connect(connectionData.Host.c_str(), connectionData.Port)) {
-		_connection.reset(new GameClientConnection(socket, connectionData));
+		_connection.reset(new GameClientConnection(_console, socket, connectionData));
 		MessageManager::RegisterNotificationListener(_connection);
 		_connected = true;
 	} else {
@@ -89,7 +90,7 @@ void GameClient::ProcessNotification(ConsoleNotificationType type, void* paramet
 {
 	if(type == ConsoleNotificationType::GameLoaded &&
 		std::this_thread::get_id() != _clientThread->get_id() && 
-		std::this_thread::get_id() != Console::GetEmulationThreadId()
+		std::this_thread::get_id() != _console->GetEmulationThreadId()
 	) {
 		//Disconnect if the client tried to manually load a game
 		//A deadlock occurs if this is called from the emulation thread while a network message is being processed

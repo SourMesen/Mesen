@@ -73,7 +73,7 @@ protected:
 				if(!_irqEnabled) {
 					_irqScaler = 0;
 				}
-				CPU::ClearIRQSource(IRQSource::External);
+				_console->GetCpu()->ClearIrqSource(IRQSource::External);
 				break;
 		}
 	}
@@ -81,7 +81,7 @@ protected:
 	virtual void ProcessCpuClock() override
 	{
 		if(_needIrq) {
-			CPU::SetIRQSource(IRQSource::External);
+			_console->GetCpu()->SetIrqSource(IRQSource::External);
 			_needIrq = false;
 		}
 

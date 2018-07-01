@@ -1,7 +1,6 @@
 #pragma once
 #include "stdafx.h"
 #include "IMemoryHandler.h"
-#include "CPU.h"
 #include "EmulationSettings.h"
 
 enum class FrameType
@@ -21,6 +20,7 @@ private:
 	const FrameType _frameType[2][6] = { { FrameType::QuarterFrame, FrameType::HalfFrame, FrameType::QuarterFrame, FrameType::None, FrameType::HalfFrame, FrameType::None },
 													 { FrameType::QuarterFrame, FrameType::HalfFrame, FrameType::QuarterFrame, FrameType::None, FrameType::HalfFrame, FrameType::None } };
 
+	shared_ptr<Console> _console;
 	int32_t _stepCycles[2][6];
 	NesModel _nesModel;
 	int32_t _nextIrqCycle;
@@ -32,15 +32,13 @@ private:
 	int16_t _newValue;
 	int8_t _writeDelayCounter;
 
-	void (*_callback)(FrameType);
-
 public:
-	ApuFrameCounter(void (*frameCounterTickCallback)(FrameType))
+	ApuFrameCounter(shared_ptr<Console> console)
 	{
-		_callback = frameCounterTickCallback;
+		_console = console;
 		Reset(false);
 	}
-
+	
 	void Reset(bool softReset)
 	{
 		_nesModel = NesModel::Auto;
@@ -104,13 +102,13 @@ public:
 		if(_previousCycle + cyclesToRun >= _stepCycles[_stepMode][_currentStep]) {
 			if(!_inhibitIRQ && _stepMode == 0 && _currentStep >= 3) {
 				//Set irq on the last 3 cycles for 4-step mode
-				CPU::SetIRQSource(IRQSource::FrameCounter);
+				_console->GetCpu()->SetIrqSource(IRQSource::FrameCounter);
 				_nextIrqCycle++;
 			}
 
 			FrameType type = _frameType[_stepMode][_currentStep];
 			if(type != FrameType::None && !_blockFrameCounterTick) {
-				_callback(type);
+				_console->GetApu()->FrameCounterTick(type);
 				
 				//Do not allow writes to 4017 to clock the frame counter for the next cycle (i.e this odd cycle + the following even cycle)
 				_blockFrameCounterTick = 2;
@@ -160,7 +158,7 @@ public:
 
 				if(_stepMode && !_blockFrameCounterTick) {
 					//"Writing to $4017 with bit 7 set will immediately generate a clock for both the quarter frame and the half frame units, regardless of what the sequencer is doing."
-					_callback(FrameType::HalfFrame);
+					_console->GetApu()->FrameCounterTick(FrameType::HalfFrame);
 					_blockFrameCounterTick = 2;
 				}
 			}
@@ -203,11 +201,11 @@ public:
 
 	void WriteRAM(uint16_t addr, uint8_t value) override
 	{
-		APU::StaticRun();
+		_console->GetApu()->Run();
 		_newValue = value;
 
 		//Reset sequence after $4017 is written to
-		if(CPU::GetCycleCount() & 0x01) {
+		if(_console->GetCpu()->GetCycleCount() & 0x01) {
 			//"If the write occurs during an APU cycle, the effects occur 3 CPU cycles after the $4017 write cycle"
 			_writeDelayCounter = 3;
 		} else {
@@ -217,7 +215,7 @@ public:
 
 		_inhibitIRQ = (value & 0x40) == 0x40;
 		if(_inhibitIRQ) {
-			CPU::ClearIRQSource(IRQSource::FrameCounter);
+			_console->GetCpu()->ClearIrqSource(IRQSource::FrameCounter);
 		}
 	}
 

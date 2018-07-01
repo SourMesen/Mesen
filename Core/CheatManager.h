@@ -2,6 +2,8 @@
 
 #include "stdafx.h"
 
+class Console;
+
 struct CodeInfo
 {
 	uint32_t Address;
@@ -32,7 +34,8 @@ struct CheatInfo
 class CheatManager
 {
 private:
-	static CheatManager* Instance;
+	shared_ptr<Console> _console;
+
 	vector<unique_ptr<vector<CodeInfo>>> _relativeCheatCodes;
 	vector<CodeInfo> _absoluteCheatCodes;
 
@@ -42,19 +45,17 @@ private:
 	void AddCode(CodeInfo &code);
 	
 public:
-	CheatManager();
-
-	static CheatManager* GetInstance();
+	CheatManager(shared_ptr<Console> console);
 
 	void AddGameGenieCode(string code);
 	void AddProActionRockyCode(uint32_t code);
 	void AddCustomCode(uint32_t address, uint8_t value, int32_t compareValue = -1, bool isRelativeAddress = true);
 	void ClearCodes();
 
-	static vector<CodeInfo> GetCheats();
-	static void SetCheats(vector<CodeInfo> &cheats);
-	static void SetCheats(CheatInfo cheats[], uint32_t length);
+	vector<CodeInfo> GetCheats();
+	void SetCheats(vector<CodeInfo> &cheats);
+	void SetCheats(CheatInfo cheats[], uint32_t length);
 
-	static void ApplyRamCodes(uint16_t addr, uint8_t &value);
-	static void ApplyPrgCodes(uint8_t *prgRam, uint32_t prgSize);
+	void ApplyRamCodes(uint16_t addr, uint8_t &value);
+	void ApplyPrgCodes(uint8_t *prgRam, uint32_t prgSize);
 };

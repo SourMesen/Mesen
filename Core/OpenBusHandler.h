@@ -5,7 +5,7 @@
 class OpenBusHandler : public IMemoryHandler
 {
 private:
-	static uint8_t _lastReadValue;
+	uint8_t _lastReadValue;
 
 public:
 	OpenBusHandler()
@@ -18,12 +18,12 @@ public:
 		return _lastReadValue;
 	}
 
-	__forceinline static uint8_t GetOpenBus()
+	__forceinline uint8_t GetOpenBus()
 	{
 		return _lastReadValue;
 	}
 
-	__forceinline static void SetOpenBus(uint8_t value)
+	__forceinline void SetOpenBus(uint8_t value)
 	{
 		_lastReadValue = value;
 	}

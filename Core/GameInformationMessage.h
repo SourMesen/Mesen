@@ -2,8 +2,6 @@
 #include "stdafx.h"
 #include "MessageManager.h"
 #include "NetMessage.h"
-#include "Console.h"
-#include "RomLoader.h"
 #include "../Utilities/FolderUtilities.h"
 
 class GameInformationMessage : public NetMessage
@@ -35,30 +33,23 @@ public:
 		_paused = paused;
 	}
 	
-	bool AttemptLoadGame()
-	{
-		string filename = _romFilename;
-		if(filename.size() > 0) {
-			HashInfo hashInfo;
-			hashInfo.Crc32Hash = _crc32Hash;
-			if(Console::LoadROM(filename, hashInfo)) {
-				return true;
-			} else {
-				MessageManager::DisplayMessage("NetPlay", "CouldNotFindRom");
-				return false;
-			}
-		}
-		return false;
-	}
-
 	uint8_t GetPort()
 	{
 		return _controllerPort;
+	}
+
+	string GetRomFilename()
+	{
+		return _romFilename;
+	}
+
+	uint32_t GetCrc32Hash()
+	{
+		return _crc32Hash;
 	}
 
 	bool IsPaused()
 	{
 		return _paused;
 	}
-
 };

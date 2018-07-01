@@ -107,7 +107,7 @@ private:
 		}
 		summedOutput /= GetNumberOfChannels();
 
-		APU::AddExpansionAudioDelta(AudioChannel::Namco163, summedOutput - _lastOutput);
+		_console->GetApu()->AddExpansionAudioDelta(AudioChannel::Namco163, summedOutput - _lastOutput);
 		_lastOutput = summedOutput;
 	}
 
@@ -138,7 +138,7 @@ protected:
 	}
 
 public:
-	Namco163Audio()
+	Namco163Audio(shared_ptr<Console> console) : BaseExpansionAudio(console)
 	{
 		memset(_internalRam, 0, sizeof(_internalRam));
 		memset(_channelOutput, 0, sizeof(_channelOutput));

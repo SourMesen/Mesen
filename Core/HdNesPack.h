@@ -5,6 +5,8 @@
 class HdNesPack
 {
 private:
+	shared_ptr<HdPackData> _hdData;
+
 	int32_t _backgroundIndex = -1;
 	HdScreenInfo *_hdScreenInfo = nullptr;
 	uint32_t* _palette = nullptr;
@@ -33,9 +35,9 @@ private:
 	__forceinline void ProcessGrayscaleAndEmphasis(HdPpuPixelInfo &pixelInfo, uint32_t* outputBuffer, uint32_t hdScreenWidth);
 
 public:
-	static const uint32_t CurrentVersion = 102;
+	static constexpr uint32_t CurrentVersion = 102;
 
-	HdNesPack();
+	HdNesPack(shared_ptr<HdPackData> hdData);
 	~HdNesPack();
 
 	uint32_t GetScale();

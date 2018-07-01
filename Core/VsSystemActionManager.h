@@ -5,7 +5,7 @@
 class VsSystemActionManager : public SystemActionManager
 {
 private:
-	static const uint8_t InsertCoinFrameCount = 4;
+	static constexpr uint8_t InsertCoinFrameCount = 4;
 
 	uint8_t _needInsertCoin[2] = { 0, 0 };
 	bool _needServiceButton = false;

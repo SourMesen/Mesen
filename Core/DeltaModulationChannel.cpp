@@ -5,12 +5,8 @@
 #include "Console.h"
 #include "MemoryManager.h"
 
-DeltaModulationChannel *DeltaModulationChannel::Instance = nullptr;
-
-DeltaModulationChannel::DeltaModulationChannel(AudioChannel channel, SoundMixer *mixer, MemoryManager* memoryManager) : BaseApuChannel(channel, mixer)
+DeltaModulationChannel::DeltaModulationChannel(AudioChannel channel, shared_ptr<Console> console, SoundMixer *mixer) : BaseApuChannel(channel, console, mixer)
 {
-	Instance = this;
-	_memoryManager = memoryManager;
 }
 
 void DeltaModulationChannel::Reset(bool softReset)
@@ -53,14 +49,14 @@ void DeltaModulationChannel::InitSample()
 void DeltaModulationChannel::StartDmcTransfer()
 {
 	if(_bufferEmpty && _bytesRemaining > 0) {
-		CPU::StartDmcTransfer();
+		_console->GetCpu()->StartDmcTransfer();
 	}
 }
 
 void DeltaModulationChannel::FillReadBuffer()
 {
 	if(_bytesRemaining > 0) {
-		_readBuffer = _memoryManager->Read(_currentAddr, MemoryOperationType::DmcRead);
+		_readBuffer = _console->GetMemoryManager()->Read(_currentAddr, MemoryOperationType::DmcRead);
 		_bufferEmpty = false;
 
 		_currentAddr++;
@@ -72,7 +68,7 @@ void DeltaModulationChannel::FillReadBuffer()
 				//Looped sample should never set IRQ flag
 				InitSample();
 			} else if(_irqEnabled) {
-				CPU::SetIRQSource(IRQSource::DMC);
+				_console->GetCpu()->SetIrqSource(IRQSource::DMC);
 			}
 		}
 	}
@@ -139,7 +135,8 @@ void DeltaModulationChannel::GetMemoryRanges(MemoryRanges &ranges)
 
 void DeltaModulationChannel::WriteRAM(uint16_t addr, uint8_t value)
 {
-	APU::StaticRun();
+	_console->GetApu()->Run();
+
 	switch(addr & 0x03) {
 		case 0:		//4010
 			_irqEnabled = (value & 0x80) == 0x80;
@@ -150,7 +147,7 @@ void DeltaModulationChannel::WriteRAM(uint16_t addr, uint8_t value)
 			_period = (GetNesModel() == NesModel::NTSC ? _dmcPeriodLookupTableNtsc : _dmcPeriodLookupTablePal)[value & 0x0F] - 1;
 
 			if(!_irqEnabled) {
-				CPU::ClearIRQSource(IRQSource::DMC);
+				_console->GetCpu()->ClearIrqSource(IRQSource::DMC);
 			}
 			break;
 
@@ -168,7 +165,7 @@ void DeltaModulationChannel::WriteRAM(uint16_t addr, uint8_t value)
 			AddOutput(_outputLevel);
 			
 			if(_lastValue4011 != value && newValue > 0) {
-				Console::SetNextFrameOverclockStatus(true);
+				_console->SetNextFrameOverclockStatus(true);
 			}
 
 			_lastValue4011 = newValue;
@@ -178,14 +175,14 @@ void DeltaModulationChannel::WriteRAM(uint16_t addr, uint8_t value)
 		case 2:		//4012
 			_sampleAddr = 0xC000 | ((uint32_t)value << 6);
 			if(value > 0) {
-				Console::SetNextFrameOverclockStatus(false);
+				_console->SetNextFrameOverclockStatus(false);
 			}
 			break;
 
 		case 3:		//4013
 			_sampleLength = (value << 4) | 0x0001;
 			if(value > 0) {
-				Console::SetNextFrameOverclockStatus(false);
+				_console->SetNextFrameOverclockStatus(false);
 			}
 			break;
 	}
@@ -207,11 +204,6 @@ bool DeltaModulationChannel::NeedToRun()
 	return _needToRun;
 }
 
-void DeltaModulationChannel::SetReadBuffer()
-{
-	Instance->FillReadBuffer();
-}
-
 ApuDmcState DeltaModulationChannel::GetState()
 {
 	ApuDmcState state;
@@ -221,7 +213,7 @@ ApuDmcState DeltaModulationChannel::GetState()
 	state.OutputVolume = _lastOutput;
 	state.Period = _period;
 	state.Timer = _timer;
-	state.SampleRate = (double)CPU::GetClockRate(GetNesModel()) / (_period + 1);
+	state.SampleRate = (double)_console->GetCpu()->GetClockRate(GetNesModel()) / (_period + 1);
 	state.SampleAddr = _sampleAddr;
 	state.SampleLength = _sampleLength;
 	return state;

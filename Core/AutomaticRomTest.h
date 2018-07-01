@@ -4,11 +4,14 @@
 #include "IInputProvider.h"
 #include "../Utilities/AutoResetEvent.h"
 
+class Console;
+
 class AutomaticRomTest : public INotificationListener, public IInputProvider
 {
 private:
+	shared_ptr<Console> _console;
+
 	AutoResetEvent _signal;
-	static bool _running;
 	uint16_t _prevFrameBuffer[256 * 240];
 	uint32_t _errorCode;
 
@@ -18,8 +21,6 @@ public:
 
 	void ProcessNotification(ConsoleNotificationType type, void* parameter) override;
 	int32_t Run(string filename);
-
-	static bool Running();
 
 	// Inherited via IInputProvider
 	virtual bool SetInput(BaseControlDevice * device) override;

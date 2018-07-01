@@ -4,8 +4,9 @@
 #include "Console.h"
 #include "EmulationSettings.h"
 
-AviRecorder::AviRecorder()
+AviRecorder::AviRecorder(shared_ptr<Console> console)
 {
+	_console = console;
 	_recording = false;
 	_stopFlag = false;
 	_frameBuffer = nullptr;
@@ -27,7 +28,7 @@ AviRecorder::~AviRecorder()
 
 uint32_t AviRecorder::GetFps()
 {
-	if(Console::GetModel() == NesModel::NTSC) {
+	if(_console->GetModel() == NesModel::NTSC) {
 		return EmulationSettings::CheckFlag(EmulationFlags::IntegerFpsMode) ? 60000000 : 60098812;
 	} else {
 		return EmulationSettings::CheckFlag(EmulationFlags::IntegerFpsMode) ? 50000000 : 50006978;

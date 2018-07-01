@@ -13,7 +13,6 @@ class BaseControlDevice;
 class VsControlManager : public ControlManager
 {
 private:
-	static VsControlManager *_instance;
 	uint8_t _prgChrSelectBit;
 	bool _refreshState = false;
 
@@ -42,16 +41,11 @@ private:
 	ControllerType GetControllerType(uint8_t port) override;
 
 public:
-	VsControlManager(shared_ptr<BaseControlDevice> systemActionManager, shared_ptr<BaseControlDevice> mapperControlDevice);
-	virtual ~VsControlManager();
+	using ControlManager::ControlManager;
 
 	void StreamState(bool saving) override;
 	void Reset(bool softReset) override;
 
-	static VsControlManager* GetInstance();	
-	
-	void SetInputType(VsInputType inputType);
-	
 	void GetMemoryRanges(MemoryRanges &ranges) override;
 
 	uint8_t GetPrgChrSelectBit();

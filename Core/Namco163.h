@@ -14,7 +14,7 @@ enum class NamcoVariant
 class Namco163 : public BaseMapper
 {
 private:
-	Namco163Audio _audio;
+	unique_ptr<Namco163Audio> _audio;
 
 	NamcoVariant _variant;
 	bool _notNamco340;
@@ -57,6 +57,8 @@ protected:
 	
 	void InitMapper() override
 	{
+		_audio.reset(new Namco163Audio(_console));
+
 		switch(_mapperID) {
 			case 19:
 				_variant = NamcoVariant::Namco163;
@@ -100,7 +102,7 @@ protected:
 	{
 		BaseMapper::StreamState(saving);
 
-		SnapshotInfo audio{ &_audio };
+		SnapshotInfo audio{ _audio.get() };
 		Stream(_variant, _notNamco340, _autoDetectVariant, _writeProtect, _lowChrNtMode, _highChrNtMode, _irqCounter, audio);
 		if(!saving) {
 			UpdateSaveRamAccess();
@@ -112,12 +114,12 @@ protected:
 		if(_irqCounter & 0x8000 && (_irqCounter & 0x7FFF) != 0x7FFF) {
 			_irqCounter++;
 			if((_irqCounter & 0x7FFF) == 0x7FFF) {
-				CPU::SetIRQSource(IRQSource::External);
+				_console->GetCpu()->SetIrqSource(IRQSource::External);
 			}
 		}
 
 		if(_variant == NamcoVariant::Namco163) {
-			_audio.Clock();
+			_audio->Clock();
 		}
 	}
 
@@ -135,7 +137,7 @@ protected:
 	uint8_t ReadRegister(uint16_t addr) override
 	{
 		switch(addr & 0xF800) {
-			case 0x4800: return _audio.ReadRegister(addr);
+			case 0x4800: return _audio->ReadRegister(addr);
 			case 0x5000: return _irqCounter & 0xFF;
 			case 0x5800: return (_irqCounter >> 8);
 			default:	return BaseMapper::ReadRegister(addr);
@@ -149,19 +151,19 @@ protected:
 		switch(addr) {
 			case 0x4800:
 				SetVariant(NamcoVariant::Namco163);
-				_audio.WriteRegister(addr, value);
+				_audio->WriteRegister(addr, value);
 				break;
 
 			case 0x5000:
 				SetVariant(NamcoVariant::Namco163);
 				_irqCounter = (_irqCounter & 0xFF00) | value;
-				CPU::ClearIRQSource(IRQSource::External);
+				_console->GetCpu()->ClearIrqSource(IRQSource::External);
 				break;
 
 			case 0x5800:
 				SetVariant(NamcoVariant::Namco163);
 				_irqCounter = (_irqCounter & 0x00FF) | (value << 8);
-				CPU::ClearIRQSource(IRQSource::External);
+				_console->GetCpu()->ClearIrqSource(IRQSource::External);
 				break;
 
 			case 0x8000: case 0x8800: case 0x9000: case 0x9800: {
@@ -221,7 +223,7 @@ protected:
 						case 3: SetMirroringType(MirroringType::ScreenBOnly); break;
 					}
 				} else if(_variant == NamcoVariant::Namco163) {
-					_audio.WriteRegister(addr, value);
+					_audio->WriteRegister(addr, value);
 				}
 				break;
 
@@ -243,7 +245,7 @@ protected:
 					_writeProtect = value;
 					UpdateSaveRamAccess();
 
-					_audio.WriteRegister(addr, value);
+					_audio->WriteRegister(addr, value);
 				}
 				break;
 		}

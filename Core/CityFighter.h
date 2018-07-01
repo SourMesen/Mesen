@@ -1,8 +1,8 @@
 #pragma once
-#pragma once
 #include "stdafx.h"
-#include "APU.h"
 #include "BaseMapper.h"
+#include "MemoryManager.h"
+#include "CPU.h"
 
 class CityFighter : public BaseMapper
 {
@@ -61,7 +61,7 @@ protected:
 		if(_irqEnabled) {
 			_irqCounter--;
 			if(_irqCounter == 0) {
-				CPU::SetIRQSource(IRQSource::External);
+				_console->GetCpu()->SetIrqSource(IRQSource::External);
 			}
 		}
 	}
@@ -76,7 +76,7 @@ protected:
 			
 			case 0x9004: case 0x9008: case 0x900C:
 				if(addr & 0x800) {
-					APU::WriteDmc4011((value & 0x0F) << 3);
+					_console->GetMemoryManager()->Write(0x4011, (value & 0x0F) << 3);
 				} else {
 					_prgReg = value & 0x0C;
 				}
@@ -106,7 +106,7 @@ protected:
 			case 0xF004: _irqCounter = ((_irqCounter & 0x1E) | ((value & 0x0F) << 5)); break;
 			case 0xF008:
 				_irqEnabled = (value & 0x02) != 0;
-				CPU::ClearIRQSource(IRQSource::External);
+				_console->GetCpu()->ClearIrqSource(IRQSource::External);
 				break;
 		}
 

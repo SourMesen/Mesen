@@ -3,6 +3,8 @@
 #include "APU.h"
 #include "IMemoryHandler.h"
 #include "ApuEnvelope.h"
+#include "CPU.h"
+#include "MemoryManager.h"
 
 class TriangleChannel : public ApuLengthCounter
 {
@@ -32,7 +34,7 @@ protected:
 	}
 
 public:
-	TriangleChannel(AudioChannel channel, SoundMixer* mixer) : ApuLengthCounter(channel, mixer)
+	TriangleChannel(AudioChannel channel, shared_ptr<Console> console, SoundMixer* mixer) : ApuLengthCounter(channel, console, mixer)
 	{
 	}
 
@@ -62,7 +64,8 @@ public:
 
 	void WriteRAM(uint16_t addr, uint8_t value) override
 	{
-		APU::StaticRun();
+		_console->GetApu()->Run();
+
 		switch(addr & 0x03) {
 			case 0:		//4008
 				_linearControlFlag = (value & 0x80) == 0x80;
@@ -105,7 +108,7 @@ public:
 	{
 		ApuTriangleState state;
 		state.Enabled = _enabled;
-		state.Frequency = CPU::GetClockRate(GetNesModel()) / 32.0 / (_period + 1);
+		state.Frequency = _console->GetCpu()->GetClockRate(GetNesModel()) / 32.0 / (_period + 1);
 		state.LengthCounter = ApuLengthCounter::GetState();
 		state.OutputVolume = _lastOutput;
 		state.Period = _period;

@@ -8,15 +8,13 @@
 #include "BaseMapper.h"
 #include "RewindManager.h"
 #include "ControlManager.h"
+#include "MemoryManager.h"
+#include "Console.h"
 
-PPU* PPU::Instance = nullptr;
-
-PPU::PPU(BaseMapper *mapper, ControlManager *controlManager)
+PPU::PPU(shared_ptr<Console> console)
 {
-	PPU::Instance = this;
+	_console = console;
 
-	_mapper = mapper;
-	_controlManager = controlManager;
 	_outputBuffers[0] = new uint16_t[256 * 240];
 	_outputBuffers[1] = new uint16_t[256 * 240];
 
@@ -278,7 +276,7 @@ uint8_t PPU::ReadRAM(uint16_t addr)
 
 				if((_state.VideoRamAddr & 0x3FFF) >= 0x3F00 && !EmulationSettings::CheckFlag(EmulationFlags::DisablePaletteRead)) {
 					returnValue = ReadPaletteRAM(_state.VideoRamAddr) | (_openBus & 0xC0);
-					Debugger::ProcessVramReadOperation(MemoryOperationType::Read, _state.VideoRamAddr & 0x3FFF, returnValue);
+					_console->DebugProcessVramReadOperation(MemoryOperationType::Read, _state.VideoRamAddr & 0x3FFF, returnValue);
 					openBusMask = 0xC0;
 				} else {
 					openBusMask = 0x00;
@@ -342,7 +340,7 @@ void PPU::WriteRAM(uint16_t addr, uint8_t value)
 				_state.TmpVideoRamAddr = (_state.TmpVideoRamAddr & ~0x001F) | (value >> 3);
 
 				//Update debugger overlay X scroll only
-				Debugger::SetLastFramePpuScroll(_state.TmpVideoRamAddr, _state.XScroll, false);
+				_console->DebugSetLastFramePpuScroll(_state.TmpVideoRamAddr, _state.XScroll, false);
 			}
 			_state.WriteToggle = !_state.WriteToggle;
 			break;
@@ -355,7 +353,7 @@ void PPU::WriteRAM(uint16_t addr, uint8_t value)
 				_needStateUpdate = true;
 				_updateVramAddrDelay = 2;
 				_updateVramAddr = _state.TmpVideoRamAddr;
-				Debugger::SetLastFramePpuScroll(_updateVramAddr, _state.XScroll, false);
+				_console->DebugSetLastFramePpuScroll(_updateVramAddr, _state.XScroll, false);
 			} else {
 				_state.TmpVideoRamAddr = (_state.TmpVideoRamAddr & ~0xFF00) | ((value & 0x3F) << 8);
 			}
@@ -364,14 +362,14 @@ void PPU::WriteRAM(uint16_t addr, uint8_t value)
 		case PPURegisters::VideoMemoryData:
 			if((_state.VideoRamAddr & 0x3FFF) >= 0x3F00) {
 				WritePaletteRAM(_state.VideoRamAddr, value);
-				Debugger::ProcessVramWriteOperation(_state.VideoRamAddr & 0x3FFF, value);
+				_console->DebugProcessVramWriteOperation(_state.VideoRamAddr & 0x3FFF, value);
 			} else {
-				_mapper->WriteVRAM(_ppuBusAddress & 0x3FFF, value);
+				_console->GetMapper()->WriteVRAM(_ppuBusAddress & 0x3FFF, value);
 			}
 			UpdateVideoRamAddr();
 			break;
 		case PPURegisters::SpriteDMA:
-			CPU::RunDMATransfer(value);
+			_console->GetCpu()->RunDMATransfer(value);
 			break;
 		default:
 			break;
@@ -430,10 +428,10 @@ void PPU::SetControlRegister(uint8_t value)
 	_flags.VBlank = (_state.Control & 0x80) == 0x80;
 
 	if(!originalVBlank && _flags.VBlank && _statusFlags.VerticalBlank && (_scanline != -1 || _cycle != 0)) {
-		CPU::SetNMIFlag();
+		_console->GetCpu()->SetNmiFlag();
 	}
 	if(_scanline == 241 && _cycle < 3 && !_flags.VBlank) {
-		CPU::ClearNMIFlag();
+		_console->GetCpu()->ClearNmiFlag();
 	}
 }
 
@@ -487,7 +485,7 @@ void PPU::UpdateStatusFlag()
 	if(_scanline == 241 && _cycle < 3) {
 		//"Reading on the same PPU clock or one later reads it as set, clears it, and suppresses the NMI for that frame."
 		_statusFlags.VerticalBlank = false;
-		CPU::ClearNMIFlag();
+		_console->GetCpu()->ClearNmiFlag();
 
 		if(_cycle == 0) {
 			//"Reading one PPU clock before reads it as clear and never sets the flag or generates NMI for that frame. "
@@ -550,19 +548,19 @@ uint16_t PPU::GetAttributeAddr()
 void PPU::SetBusAddress(uint16_t addr)
 {
 	_ppuBusAddress = addr;
-	_mapper->NotifyVRAMAddressChange(addr);
+	_console->GetMapper()->NotifyVRAMAddressChange(addr);
 }
 
 uint8_t PPU::ReadVram(uint16_t addr, MemoryOperationType type)
 {
 	SetBusAddress(addr);
-	return _mapper->ReadVRAM(addr, type);
+	return _console->GetMapper()->ReadVRAM(addr, type);
 }
 
 void PPU::WriteVram(uint16_t addr, uint8_t value)
 {
 	SetBusAddress(addr);
-	_mapper->WriteVRAM(addr, value);
+	_console->GetMapper()->WriteVRAM(addr, value);
 }
 
 void PPU::LoadTileInfo()
@@ -590,7 +588,7 @@ void PPU::LoadTileInfo()
 
 			case 3:
 				_nextTile.LowByte = ReadVram(_nextTile.TileAddr);
-				_nextTile.AbsoluteTileAddr = _mapper->ToAbsoluteChrAddress(_nextTile.TileAddr);
+				_nextTile.AbsoluteTileAddr = _console->GetMapper()->ToAbsoluteChrAddress(_nextTile.TileAddr);
 				break;
 
 			case 5:
@@ -629,15 +627,15 @@ void PPU::LoadSprite(uint8_t spriteY, uint8_t tileIndex, uint8_t attributes, uin
 		info.PaletteOffset = ((attributes & 0x03) << 2) | 0x10;
 		if(extraSprite) {
 			//Use DebugReadVRAM for extra sprites to prevent side-effects.
-			info.LowByte = _mapper->DebugReadVRAM(tileAddr);
-			info.HighByte = _mapper->DebugReadVRAM(tileAddr + 8);
+			info.LowByte = _console->GetMapper()->DebugReadVRAM(tileAddr);
+			info.HighByte = _console->GetMapper()->DebugReadVRAM(tileAddr + 8);
 		} else {
 			fetchLastSprite = false;
 			info.LowByte = ReadVram(tileAddr);
 			info.HighByte = ReadVram(tileAddr + 8);
 		}
 		info.TileAddr = tileAddr;
-		info.AbsoluteTileAddr = _mapper->ToAbsoluteChrAddress(tileAddr);
+		info.AbsoluteTileAddr = _console->GetMapper()->ToAbsoluteChrAddress(tileAddr);
 		info.OffsetY = lineOffset;
 		info.SpriteX = spriteX;
 
@@ -757,7 +755,7 @@ uint8_t PPU::GetPixelColor()
 						//"Should always miss when Y >= 239"
 						_statusFlags.Sprite0Hit = true;
 
-						Debugger::StaticProcessEvent(EventType::SpriteZeroHit);
+						_console->DebugProcessEvent(EventType::SpriteZeroHit);
 					}
 
 					if(EmulationSettings::GetSpritesEnabled() && (backgroundColor == 0 || !_spriteTiles[i].BackgroundPriority)) {
@@ -883,7 +881,7 @@ void PPU::ProcessScanline()
 				_oamCopybuffer = _secondarySpriteRAM[0];
 			}
 			if(_scanline == -1) {
-				Debugger::SetLastFramePpuScroll(_state.VideoRamAddr, _state.XScroll, false);
+				_console->DebugSetLastFramePpuScroll(_state.VideoRamAddr, _state.XScroll, false);
 			}
 		} else if(_prevRenderingEnabled && (_cycle == 328 || _cycle == 336)) {
 			_state.LowBitShift <<= 8;
@@ -1020,7 +1018,7 @@ uint8_t PPU::ReadSpriteRam(uint8_t addr)
 	if(!_enableOamDecay) {
 		return _spriteRAM[addr];
 	} else {
-		int32_t cycle = CPU::GetCycleCount();
+		int32_t cycle = _console->GetCpu()->GetCycleCount();
 		if(_oamDecayCycles[addr >> 2] >= cycle) {
 			_oamDecayCycles[addr >> 2] = cycle + 3000;
 			return _spriteRAM[addr];
@@ -1035,13 +1033,13 @@ void PPU::WriteSpriteRam(uint8_t addr, uint8_t value)
 {
 	_spriteRAM[addr] = value;
 	if(_enableOamDecay) {
-		_oamDecayCycles[addr >> 2] = CPU::GetCycleCount() + 3000;
+		_oamDecayCycles[addr >> 2] = _console->GetCpu()->GetCycleCount() + 3000;
 	}
 }
 
 void PPU::DebugSendFrame()
 {
-	VideoDecoder::GetInstance()->UpdateFrame(_currentOutputBuffer);
+	_console->GetVideoDecoder()->UpdateFrame(_currentOutputBuffer);
 }
 
 void PPU::DebugCopyOutputBuffer(uint16_t *target)
@@ -1056,15 +1054,15 @@ void PPU::SendFrame()
  	MessageManager::SendNotification(ConsoleNotificationType::PpuFrameDone, _currentOutputBuffer);
 
 #ifdef LIBRETRO
-	VideoDecoder::GetInstance()->UpdateFrameSync(_currentOutputBuffer);
+	_console->GetVideoDecoder()->UpdateFrameSync(_currentOutputBuffer);
 #else 
-	if(RewindManager::IsRewinding()) {
-		if(!RewindManager::IsStepBack()) {
-			VideoDecoder::GetInstance()->UpdateFrameSync(_currentOutputBuffer);
+	if(_console->GetRewindManager()->IsRewinding()) {
+		if(!_console->GetRewindManager()->IsStepBack()) {
+			_console->GetVideoDecoder()->UpdateFrameSync(_currentOutputBuffer);
 		}
 	} else {
 		//If VideoDecoder isn't done with the previous frame, UpdateFrame will block until it is ready to accept a new frame.
-		VideoDecoder::GetInstance()->UpdateFrame(_currentOutputBuffer);
+		_console->GetVideoDecoder()->UpdateFrame(_currentOutputBuffer);
 	}
 
 	_enableOamDecay = EmulationSettings::CheckFlag(EmulationFlags::EnableOamDecay);
@@ -1080,20 +1078,21 @@ void PPU::TriggerNmi()
 {
 	_statusFlags.VerticalBlank = true;
 	if(_flags.VBlank) {
-		CPU::SetNMIFlag();
+		_console->GetCpu()->SetNmiFlag();
 	}
 }
 
 void PPU::UpdateApuStatus()
 {
-	APU::SetApuStatus(true);
+	APU* apu = _console->GetApu();
+	apu->SetApuStatus(true);
 	if(_scanline > 240) {
 		if(_scanline > _standardVblankEnd) {
 			//Disable APU for extra lines after NMI
-			APU::SetApuStatus(false);
+			apu->SetApuStatus(false);
 		} else if(_scanline >= _standardNmiScanline && _scanline < _nmiScanline) {
 			//Disable APU for extra lines before NMI
-			APU::SetApuStatus(false);
+			apu->SetApuStatus(false);
 		}
 	}
 }
@@ -1120,12 +1119,12 @@ void PPU::Exec()
 			UpdateMinimumDrawCycles();
 		}
 
-		Debugger::ProcessPpuCycle();
+		_console->DebugProcessPpuCycle();
 		
 		UpdateApuStatus();
 		
 		if(_scanline == EmulationSettings::GetInputPollScanline()) {
-			_controlManager->UpdateInputState();
+			_console->GetControlManager()->UpdateInputState();
 		}
 
 		//Cycle = 0
@@ -1145,7 +1144,7 @@ void PPU::Exec()
 		//Cycle > 0
 		_cycle++;
 
-		Debugger::ProcessPpuCycle();
+		_console->DebugProcessPpuCycle();
 		if(_scanline < 240) {
 			ProcessScanline();
 		} else if(_nesModel == NesModel::PAL && _scanline >= _palSpriteEvalScanline) {
@@ -1202,27 +1201,27 @@ void PPU::UpdateState()
 	}
 }
 
-void PPU::ExecStatic()
+void PPU::ProcessCpuClock()
 {
 	if(!EmulationSettings::HasOverclock()) {
-		PPU::Instance->Exec();
-		PPU::Instance->Exec();
-		PPU::Instance->Exec();
-		if(PPU::Instance->_nesModel == NesModel::PAL && CPU::GetCycleCount() % 5 == 0) {
+		Exec();
+		Exec();
+		Exec();
+		if(_nesModel == NesModel::PAL && _console->GetCpu()->GetCycleCount() % 5 == 0) {
 			//PAL PPU runs 3.2 clocks for every CPU clock, so we need to run an extra clock every 5 CPU clocks
-			PPU::Instance->Exec();
+			Exec();
 		}
 	} else {
-		if(PPU::Instance->_nesModel == NesModel::PAL) {
+		if(_nesModel == NesModel::PAL) {
 			//PAL PPU runs 3.2 clocks for every CPU clock, so we need to run an extra clock every 5 CPU clocks
-			Instance->_cyclesNeeded += 3.2 / (EmulationSettings::GetOverclockRate() / 100.0);
+			_cyclesNeeded += 3.2 / (EmulationSettings::GetOverclockRate() / 100.0);
 		} else {
-			Instance->_cyclesNeeded += 3.0 / (EmulationSettings::GetOverclockRate() / 100.0);
+			_cyclesNeeded += 3.0 / (EmulationSettings::GetOverclockRate() / 100.0);
 		}
 
-		while(Instance->_cyclesNeeded >= 1.0) {
-			PPU::Instance->Exec();
-			Instance->_cyclesNeeded--;
+		while(_cyclesNeeded >= 1.0) {
+			Exec();
+			_cyclesNeeded--;
 		}
 	}
 }

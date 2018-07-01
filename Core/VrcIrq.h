@@ -5,6 +5,7 @@
 class VrcIrq : public Snapshotable
 {
 private:
+	shared_ptr<Console> _console;
 	uint8_t _irqReloadValue;
 	uint8_t _irqCounter;
 	int16_t _irqPrescalerCounter;
@@ -19,6 +20,11 @@ protected:
 	}
 
 public:
+	VrcIrq(shared_ptr<Console> console)
+	{
+		_console = console;
+	}
+
 	void Reset()
 	{
 		_irqPrescalerCounter = 0;
@@ -37,7 +43,7 @@ public:
 			if(_irqCycleMode || (_irqPrescalerCounter <= 0 && !_irqCycleMode)) {
 				if(_irqCounter == 0xFF) {
 					_irqCounter = _irqReloadValue;
-					CPU::SetIRQSource(IRQSource::External);
+					_console->GetCpu()->SetIrqSource(IRQSource::External);
 				} else {
 					_irqCounter++;
 				}
@@ -71,13 +77,12 @@ public:
 			_irqPrescalerCounter = 341;
 		}
 
-		CPU::ClearIRQSource(IRQSource::External);
+		_console->GetCpu()->ClearIrqSource(IRQSource::External);
 	}
 
 	void AcknowledgeIrq()
 	{
 		_irqEnabled = _irqEnabledAfterAck;
-		CPU::ClearIRQSource(IRQSource::External);
+		_console->GetCpu()->ClearIrqSource(IRQSource::External);
 	}
-
 };

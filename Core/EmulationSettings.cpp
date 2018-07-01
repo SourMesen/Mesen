@@ -133,14 +133,14 @@ uint32_t EmulationSettings::GetEmulationSpeed(bool ignoreTurbo)
 		return 0;
 	} else if(CheckFlag(EmulationFlags::Turbo)) {
 		return _turboSpeed;
-	} else if(RewindManager::IsRewinding()) {
+	} else if(CheckFlag(EmulationFlags::Rewind)) {
 		return _rewindSpeed;
 	} else {
 		return _emulationSpeed;
 	}
 }
 
-double EmulationSettings::GetAspectRatio()
+double EmulationSettings::GetAspectRatio(shared_ptr<Console> console)
 {
 	switch(_aspectRatio) {
 		case VideoAspectRatio::NoStretching: return 0.0;
@@ -149,7 +149,7 @@ double EmulationSettings::GetAspectRatio()
 		{
 			NesModel model = GetNesModel();
 			if(model == NesModel::Auto) {
-				model = Console::GetModel();
+				model = console->GetModel();
 			}
 			return (model == NesModel::PAL || model == NesModel::Dendy) ? (9440000.0 / 6384411.0) : (128.0 / 105.0);
 		}

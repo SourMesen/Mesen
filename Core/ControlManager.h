@@ -10,6 +10,7 @@ class Zapper;
 class SystemActionManager;
 class IInputRecorder;
 class IInputProvider;
+class Console;
 struct ControlDeviceState;
 enum class ControllerType;
 enum class ExpansionPortDevice;
@@ -17,19 +18,18 @@ enum class ExpansionPortDevice;
 class ControlManager : public Snapshotable, public IMemoryHandler
 {
 private:
-	static ControlManager* _instance;
-	static vector<IInputRecorder*> _inputRecorders;
-	static vector<IInputProvider*> _inputProviders;
-	static SimpleLock _deviceLock;
+	vector<IInputRecorder*> _inputRecorders;
+	vector<IInputProvider*> _inputProviders;
+	SimpleLock _deviceLock;
 
 	//Static so that power cycle does not reset its value
-	static uint32_t _pollCounter;
+	//TODOCONSOLE : PollCounter needs to be kept through power cycle
+	uint32_t _pollCounter;
 
 	vector<shared_ptr<BaseControlDevice>> _controlDevices;
 
 	shared_ptr<BaseControlDevice> _systemActionManager;
 	shared_ptr<BaseControlDevice> _mapperControlDevice;
-
 
 	uint32_t _lagCounter = 0;
 	bool _isLagging = false;
@@ -38,12 +38,13 @@ private:
 	void RegisterControlDevice(shared_ptr<BaseControlDevice> controlDevice);
 
 protected:
+	shared_ptr<Console> _console;
+
 	virtual void StreamState(bool saving) override;
 	virtual ControllerType GetControllerType(uint8_t port);
 
 public:
-
-	ControlManager(shared_ptr<BaseControlDevice> systemActionManager, shared_ptr<BaseControlDevice> mapperControlDevice);
+	ControlManager(shared_ptr<Console> console, shared_ptr<BaseControlDevice> systemActionManager, shared_ptr<BaseControlDevice> mapperControlDevice);
 	virtual ~ControlManager();
 
 	void UpdateControlDevices();
@@ -52,23 +53,24 @@ public:
 	uint32_t GetLagCounter();
 	void ResetLagCounter();
 
-	static uint32_t GetPollCounter();
-	static void ResetPollCounter();
+	uint32_t GetPollCounter();
+	void ResetPollCounter();
 
 	virtual void Reset(bool softReset);
 
-	static void RegisterInputProvider(IInputProvider* provider);
-	static void UnregisterInputProvider(IInputProvider* provider);
+	void RegisterInputProvider(IInputProvider* provider);
+	void UnregisterInputProvider(IInputProvider* provider);
 
-	static void RegisterInputRecorder(IInputRecorder* recorder);
-	static void UnregisterInputRecorder(IInputRecorder* recorder);
+	void RegisterInputRecorder(IInputRecorder* recorder);
+	void UnregisterInputRecorder(IInputRecorder* recorder);
 
-	static vector<ControlDeviceState> GetPortStates();
+	vector<ControlDeviceState> GetPortStates();
 
-	static shared_ptr<BaseControlDevice> GetControlDevice(uint8_t port);
-	static shared_ptr<BaseControlDevice> CreateControllerDevice(ControllerType type, uint8_t port);
-	static shared_ptr<BaseControlDevice> CreateExpansionDevice(ExpansionPortDevice type);
-	static bool HasKeyboard();
+	shared_ptr<BaseControlDevice> GetControlDevice(uint8_t port);
+	bool HasKeyboard();
+	
+	static shared_ptr<BaseControlDevice> CreateControllerDevice(ControllerType type, uint8_t port, shared_ptr<Console> console);
+	static shared_ptr<BaseControlDevice> CreateExpansionDevice(ExpansionPortDevice type, shared_ptr<Console> console);
 
 	virtual void GetMemoryRanges(MemoryRanges &ranges) override
 	{

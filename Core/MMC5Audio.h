@@ -17,7 +17,7 @@ private:
 	}
 
 public:
-	MMC5Square() : SquareChannel(AudioChannel::MMC5, nullptr, false)
+	MMC5Square(shared_ptr<Console> console) : SquareChannel(AudioChannel::MMC5, console, nullptr, false)
 	{
 		_currentOutput = 0;
 		_isMmc5Square = true;
@@ -70,7 +70,7 @@ protected:
 		_square2.RunChannel();
 		if(_audioCounter <= 0) {
 			//~240hz envelope/length counter
-			_audioCounter = CPU::GetClockRate(Console::GetModel()) / 240;
+			_audioCounter = _console->GetCpu()->GetClockRate(_console->GetModel()) / 240;
 			_square1.TickLengthCounter();
 			_square1.TickEnvelope();
 			_square2.TickLengthCounter();
@@ -81,7 +81,7 @@ protected:
 		//"The polarity of all MMC5 channels is reversed compared to the APU."
 		int16_t summedOutput = -(_square1.GetOutput() + _square2.GetOutput() + _pcmOutput);
 		if(summedOutput != _lastOutput) {
-			APU::AddExpansionAudioDelta(AudioChannel::MMC5, summedOutput - _lastOutput);
+			_console->GetApu()->AddExpansionAudioDelta(AudioChannel::MMC5, summedOutput - _lastOutput);
 			_lastOutput = summedOutput;
 		}
 
@@ -90,7 +90,7 @@ protected:
 	}
 
 public:
-	MMC5Audio()
+	MMC5Audio(shared_ptr<Console> console) : BaseExpansionAudio(console), _square1(console), _square2(console)
 	{
 		_audioCounter = 0;
 		_lastOutput = 0;
@@ -113,7 +113,7 @@ public:
 				return status;
 		}
 
-		return MemoryManager::GetOpenBus();
+		return _console->GetMemoryManager()->GetOpenBus();
 	}
 
 	void WriteRegister(uint16_t addr, uint8_t value)

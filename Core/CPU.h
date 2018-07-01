@@ -5,6 +5,7 @@
 #include "Types.h"
 
 enum class NesModel;
+class Console;
 class MemoryManager;
 
 namespace PSFlags
@@ -22,32 +23,17 @@ namespace PSFlags
 	};
 }
 
-enum class AddrMode
-{
-	None,	Acc, Imp, Imm, Rel,
-	Zero, Abs, ZeroX, ZeroY,
-	Ind, IndX, IndY, IndYW,
-	AbsX, AbsXW, AbsY, AbsYW
-};
-
-enum class IRQSource
-{
-	External = 1,
-	FrameCounter = 2,
-	DMC = 4,
-	FdsDisk = 8,
-};
-
 class CPU : public Snapshotable
 {
 public:
-	static const uint16_t NMIVector = 0xFFFA;
-	static const uint16_t ResetVector = 0xFFFC;
-	static const uint16_t IRQVector = 0xFFFE;
+	static constexpr uint16_t NMIVector = 0xFFFA;
+	static constexpr uint16_t ResetVector = 0xFFFC;
+	static constexpr uint16_t IRQVector = 0xFFFE;
+	static constexpr uint32_t ClockRateNtsc = 1789773;
+	static constexpr uint32_t ClockRatePal = 1662607;
+	static constexpr uint32_t ClockRateDendy = 1773448;
 
 private:
-	static CPU* Instance;
-
 	typedef void(CPU::*Func)();
 
 	int32_t _cycleCount;
@@ -68,7 +54,8 @@ private:
 	uint8_t _irqMask;
 
 	State _state;
-	MemoryManager *_memoryManager = nullptr;
+	shared_ptr<Console> _console;
+	MemoryManager* _memoryManager;
 
 	bool _prevRunIrq = false;
 	bool _runIrq = false;
@@ -780,36 +767,31 @@ protected:
 	void StreamState(bool saving) override;
 
 public:
-	static const uint32_t ClockRateNtsc = 1789773;
-	static const uint32_t ClockRatePal = 1662607;
-	static const uint32_t ClockRateDendy = 1773448;
-
-	CPU(MemoryManager *memoryManager);
+	CPU(shared_ptr<Console> console);
 	
-	static int32_t GetCycleCount() { return CPU::Instance->_cycleCount; }
+	int32_t GetCycleCount() { return _cycleCount; }
 	
-	static int32_t GetElapsedCycles(int32_t prevCycleCount)
+	int32_t GetElapsedCycles(int32_t prevCycleCount)
 	{
-		if(prevCycleCount > Instance->_cycleCount) {
-			return 0xFFFFFFFF - prevCycleCount + Instance->_cycleCount + 1;
+		if(prevCycleCount > _cycleCount) {
+			return 0xFFFFFFFF - prevCycleCount + _cycleCount + 1;
 		} else {
-			return Instance->_cycleCount - prevCycleCount;
+			return _cycleCount - prevCycleCount;
 		}
 	}
 
-	static void SetNMIFlag() { CPU::Instance->_state.NMIFlag = true; }
-	static void ClearNMIFlag() { CPU::Instance->_state.NMIFlag = false; }
-	static void SetIRQMask(uint8_t mask) { CPU::Instance->_irqMask = mask; }
-	static void SetIRQSource(IRQSource source) { CPU::Instance->_state.IRQFlag |= (int)source; }
-	static bool HasIRQSource(IRQSource source) { return (CPU::Instance->_state.IRQFlag & (int)source) != 0; }
-	static void ClearIRQSource(IRQSource source) { CPU::Instance->_state.IRQFlag &= ~(int)source; }
-	static void RunDMATransfer(uint8_t offsetValue);
-	static void StartDmcTransfer();	
-	static uint32_t GetClockRate(NesModel model);
-	static bool IsCpuWrite() { return CPU::Instance->_cpuWrite; }
+	void SetNmiFlag() { _state.NMIFlag = true; }
+	void ClearNmiFlag() { _state.NMIFlag = false; }
+	void SetIrqMask(uint8_t mask) { _irqMask = mask; }
+	void SetIrqSource(IRQSource source) { _state.IRQFlag |= (int)source; }
+	bool HasIrqSource(IRQSource source) { return (_state.IRQFlag & (int)source) != 0; }
+	void ClearIrqSource(IRQSource source) { _state.IRQFlag &= ~(int)source; }
 
-	static uint8_t DebugReadByte(uint16_t addr);
-	static uint16_t DebugReadWord(uint16_t addr);
+	void RunDMATransfer(uint8_t offsetValue);
+	void StartDmcTransfer();
+
+	uint32_t GetClockRate(NesModel model);
+	bool IsCpuWrite() { return _cpuWrite; }
 		
 	//Used by debugger for "Set Next Statement"
 	void SetDebugPC(uint16_t value) { SetPC(value); _state.DebugPC = value; }

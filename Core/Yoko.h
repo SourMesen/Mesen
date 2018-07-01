@@ -62,7 +62,7 @@ protected:
 			if(_irqCounter == 0) {
 				_irqEnabled = false;
 				_irqCounter = 0xFFFF;
-				CPU::SetIRQSource(IRQSource::External);
+				_console->GetCpu()->SetIrqSource(IRQSource::External);
 			}
 		}
 	}
@@ -93,7 +93,7 @@ protected:
 	uint8_t ReadRegister(uint16_t addr) override
 	{
 		if(addr <= 0x53FF) {
-			return (MemoryManager::GetOpenBus() & 0xFC) | _dipSwitch;
+			return (_console->GetMemoryManager()->GetOpenBus() & 0xFC) | _dipSwitch;
 		} else {
 			return _exRegs[addr & 0x03];
 		}
@@ -109,7 +109,7 @@ protected:
 				case 0x8400: _mode = value; UpdateState(); break;
 				case 0x8800:
 					_irqCounter = (_irqCounter & 0xFF00) | value;
-					CPU::ClearIRQSource(IRQSource::External);
+					_console->GetCpu()->ClearIrqSource(IRQSource::External);
 					break;
 				case 0x8801:
 					_irqEnabled = (_mode & 0x80) != 0;

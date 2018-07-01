@@ -4,6 +4,7 @@
 #include "FrameInfo.h"
 
 struct ControlDeviceState;
+class Console;
 
 class VideoHud
 {
@@ -17,5 +18,5 @@ private:
 	void DrawMovieIcons(uint32_t *outputBuffer, FrameInfo &frameInfo, OverscanDimensions &overscan);
 
 public:
-	void DrawHud(uint32_t *outputBuffer, FrameInfo frameInfo, OverscanDimensions overscan);
+	void DrawHud(shared_ptr<Console> console, uint32_t *outputBuffer, FrameInfo frameInfo, OverscanDimensions overscan);
 };

@@ -3,16 +3,13 @@
 #include "IMemoryHandler.h"
 #include "BaseApuChannel.h"
 
-class MemoryManager;
+class Console;
 
 class DeltaModulationChannel : public BaseApuChannel
 {
 private:	
 	const uint16_t _dmcPeriodLookupTableNtsc[16] = { 428, 380, 340, 320, 286, 254, 226, 214, 190, 160, 142, 128, 106,  84,  72,  54 };
 	const uint16_t _dmcPeriodLookupTablePal[16] = { 398, 354, 316, 298, 276, 236, 210, 198, 176, 148, 132, 118,  98,  78,  66,  50 };
-	static DeltaModulationChannel *Instance;
-
-	MemoryManager *_memoryManager = nullptr;
 
 	uint16_t _sampleAddr = 0;
 	uint16_t _sampleLength = 0;
@@ -33,12 +30,11 @@ private:
 	uint8_t _lastValue4011 = 0;
 
 	void InitSample();
-	void FillReadBuffer();
 	
 	void Clock() override;
 
 public:
-	DeltaModulationChannel(AudioChannel channel, SoundMixer* mixer, MemoryManager* memoryManager);
+	DeltaModulationChannel(AudioChannel channel, shared_ptr<Console> console, SoundMixer* mixer);
 
 	virtual void Reset(bool softReset) override;
 	virtual void StreamState(bool saving) override;
@@ -51,7 +47,7 @@ public:
 
 	void SetEnabled(bool enabled);
 	void StartDmcTransfer();
-	static void SetReadBuffer();
+	void FillReadBuffer();
 
 	ApuDmcState GetState();
 };

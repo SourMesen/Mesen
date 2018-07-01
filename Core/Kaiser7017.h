@@ -50,15 +50,15 @@ protected:
 			_irqCounter--;
 			if(_irqCounter == 0) {
 				_irqEnabled = false;
-				CPU::SetIRQSource(IRQSource::External);
+				_console->GetCpu()->SetIrqSource(IRQSource::External);
 			}
 		}
 	}
 
 	uint8_t ReadRegister(uint16_t addr) override
 	{
-		bool irqPending = CPU::HasIRQSource(IRQSource::External);
-		CPU::ClearIRQSource(IRQSource::External);
+		bool irqPending = _console->GetCpu()->HasIrqSource(IRQSource::External);
+		_console->GetCpu()->ClearIrqSource(IRQSource::External);
 		return irqPending ? 0x01 : 0x00;
 	}
 
@@ -69,10 +69,10 @@ protected:
 		} else if((addr & 0xFF00) == 0x5100) {
 			UpdateState();
 		} else if(addr == 0x4020) {
-			CPU::ClearIRQSource(IRQSource::External);
+			_console->GetCpu()->ClearIrqSource(IRQSource::External);
 			_irqCounter = (_irqCounter & 0xFF00) | value;
 		} else if(addr == 0x4021) {
-			CPU::ClearIRQSource(IRQSource::External);
+			_console->GetCpu()->ClearIrqSource(IRQSource::External);
 			_irqCounter = (_irqCounter & 0xFF) | (value << 8);
 			_irqEnabled = true;
 		} else if(addr == 0x4025) {

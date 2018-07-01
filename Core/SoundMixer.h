@@ -11,6 +11,7 @@
 #include "ReverbFilter.h"
 #include "CrossFeedFilter.h"
 
+class Console;
 class WaveRecorder;
 class OggMixer;
 
@@ -22,24 +23,25 @@ namespace orfanidis_eq {
 class SoundMixer : public Snapshotable
 {
 public:
-	static const uint32_t CycleLength = 10000;
-	static const uint32_t BitsPerSample = 16;
+	static constexpr uint32_t CycleLength = 10000;
+	static constexpr uint32_t BitsPerSample = 16;
 
 private:
-	static unique_ptr<WaveRecorder> _waveRecorder;
-	static SimpleLock _waveRecorderLock;
-	static double _fadeRatio;
-	static uint32_t _muteFrameCount;
-	static unique_ptr<OggMixer> _oggMixer;
+	static constexpr uint32_t MaxSampleRate = 96000;
+	static constexpr uint32_t MaxSamplesPerFrame = MaxSampleRate / 60 * 4 * 2; //x4 to allow CPU overclocking up to 10x, x2 for panning stereo
+	static constexpr uint32_t MaxChannelCount = 11;
 
-	static IAudioDevice* AudioDevice;
-	static const uint32_t MaxSampleRate = 96000;
-	static const uint32_t MaxSamplesPerFrame = MaxSampleRate / 60 * 4 * 2; //x4 to allow CPU overclocking up to 10x, x2 for panning stereo
-	static const uint32_t MaxChannelCount = 11;
+	IAudioDevice* _audioDevice;
+	unique_ptr<WaveRecorder> _waveRecorder;
+	SimpleLock _waveRecorderLock;
+	double _fadeRatio;
+	uint32_t _muteFrameCount;
+	unique_ptr<OggMixer> _oggMixer;
 	
 	unique_ptr<orfanidis_eq::freq_grid> _eqFrequencyGrid;
 	unique_ptr<orfanidis_eq::eq1> _equalizerLeft;
 	unique_ptr<orfanidis_eq::eq1> _equalizerRight;
+	shared_ptr<Console> _console;
 
 	CrossFeedFilter _crossFeedFilter;
 	LowPassFilter _lowPassFilter;
@@ -82,7 +84,7 @@ protected:
 	virtual void StreamState(bool saving) override;
 
 public:
-	SoundMixer();
+	SoundMixer(shared_ptr<Console> console);
 	~SoundMixer();
 
 	void SetNesModel(NesModel model);
@@ -91,20 +93,20 @@ public:
 	void PlayAudioBuffer(uint32_t cycle);
 	void AddDelta(AudioChannel channel, uint32_t time, int16_t delta);
 
-	static void StartRecording(string filepath);
-	static void StopRecording();
-	static bool IsRecording();
+	void StartRecording(string filepath);
+	void StopRecording();
+	bool IsRecording();
 
 	//For NSF/NSFe
-	static uint32_t GetMuteFrameCount();
-	static void ResetMuteFrameCount();
-	static void SetFadeRatio(double fadeRatio);
+	uint32_t GetMuteFrameCount();
+	void ResetMuteFrameCount();
+	void SetFadeRatio(double fadeRatio);
 
-	static void StopAudio(bool clearBuffer = false);
-	static void RegisterAudioDevice(IAudioDevice *audioDevice);
+	void StopAudio(bool clearBuffer = false);
+	void RegisterAudioDevice(IAudioDevice *audioDevice);
 
-	static OggMixer* GetOggMixer();
+	OggMixer* GetOggMixer();
 
-	static AudioStatistics GetStatistics();
-	static void ProcessEndOfFrame();
+	AudioStatistics GetStatistics();
+	void ProcessEndOfFrame();
 };

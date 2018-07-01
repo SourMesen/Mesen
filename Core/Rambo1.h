@@ -46,7 +46,7 @@ protected:
 		if(_needIrqDelay) {
 			_needIrqDelay--;
 			if(_needIrqDelay == 0) {
-				CPU::SetIRQSource(IRQSource::External);
+				_console->GetCpu()->SetIrqSource(IRQSource::External);
 			}
 		}
 
@@ -144,7 +144,7 @@ protected:
 
 			case 0xE000:
 				_irqEnabled = false;
-				CPU::ClearIRQSource(IRQSource::External);
+				_console->GetCpu()->ClearIrqSource(IRQSource::External);
 				break;
 			
 			case 0xE001:
@@ -157,7 +157,7 @@ public:
 	virtual void NotifyVRAMAddressChange(uint16_t addr) override
 	{
 		if(!_irqCycleMode) {
-			if(_a12Watcher.UpdateVramAddress(addr) == A12StateChange::Rise) {
+			if(_a12Watcher.UpdateVramAddress(addr, _console->GetPpu()->GetFrameCycle()) == A12StateChange::Rise) {
 				ClockIrqCounter(Rambo1::PpuIrqDelay);
 			}
 		}

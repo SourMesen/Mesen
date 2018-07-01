@@ -4,6 +4,7 @@
 #include "EmulationSettings.h"
 #include "Snapshotable.h"
 #include "SoundMixer.h"
+#include "Console.h"
 
 class BaseApuChannel : public IMemoryHandler, public Snapshotable
 {
@@ -17,6 +18,7 @@ protected:
 	int8_t _lastOutput;
 	uint16_t _timer = 0;
 	uint16_t _period = 0;
+	shared_ptr<Console> _console;
 
 	AudioChannel GetChannel()
 	{
@@ -27,14 +29,15 @@ public:
 	virtual void Clock() = 0;
 	virtual bool GetStatus() = 0;
 
-	BaseApuChannel(AudioChannel channel, SoundMixer *mixer)
+	BaseApuChannel(AudioChannel channel, shared_ptr<Console> console, SoundMixer *mixer)
 	{
 		_channel = channel;
 		_mixer = mixer;
+		_console = console;
 		_nesModel = NesModel::NTSC;
 		
 		Reset(false);
-	}
+	}	
 
 	virtual void Reset(bool softReset)
 	{

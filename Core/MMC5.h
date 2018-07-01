@@ -11,7 +11,7 @@ private:
 	const uint8_t NtEmptyIndex = 5;
 	const uint8_t NtFillModeIndex = 6;
 
-	MMC5Audio _audio;
+	unique_ptr<MMC5Audio> _audio;
 
 	uint8_t _prgRamProtect1;
 	uint8_t _prgRamProtect2;
@@ -182,13 +182,14 @@ private:
 
 	void ProcessCpuClock() override
 	{
-		_audio.Clock();
+		_audio->Clock();
 	}
 
 	virtual void NotifyVRAMAddressChange(uint16_t addr) override
 	{
-		if(PPU::GetControlFlags().BackgroundEnabled || PPU::GetControlFlags().SpritesEnabled) {
-			int16_t currentScanline = PPU::GetCurrentScanline();
+		PPU* ppu = _console->GetPpu();
+		if(ppu->GetControlFlags().BackgroundEnabled || ppu->GetControlFlags().SpritesEnabled) {
+			int16_t currentScanline = ppu->GetCurrentScanline();
 			if(currentScanline != _previousScanline) {
 				if(currentScanline >= 239 || currentScanline < 0) {
 					_ppuInFrame = false;
@@ -197,13 +198,13 @@ private:
 						_ppuInFrame = true;
 						_irqCounter = 0;
 						_irqPending = false;
-						CPU::ClearIRQSource(IRQSource::External);
+						_console->GetCpu()->ClearIrqSource(IRQSource::External);
 					} else {
 						_irqCounter++;
 						if(_irqCounter == _irqCounterTarget) {
 							_irqPending = true;
 							if(_irqEnabled) {
-								CPU::SetIRQSource(IRQSource::External);
+								_console->GetCpu()->SetIrqSource(IRQSource::External);
 							}
 						}
 					}
@@ -262,7 +263,7 @@ private:
 
 	bool IsSpriteFetch()
 	{
-		return PPU::GetCurrentCycle() >= 257 && PPU::GetCurrentCycle() < 321;
+		return _console->GetPpu()->GetCurrentCycle() >= 257 && _console->GetPpu()->GetCurrentCycle() < 321;
 	}
 
 protected:
@@ -281,6 +282,8 @@ protected:
 
 	virtual void InitMapper() override
 	{
+		_audio.reset(new MMC5Audio(_console));
+
 		_hasBattery = true;
 
 		_chrMode = 0;
@@ -346,7 +349,7 @@ protected:
 		ArrayInfo<uint8_t> prgBanks = { _prgBanks, 5 };
 		ArrayInfo<uint16_t> chrBanks = { _chrBanks, 12 };
 		ArrayInfo<uint8_t> fillModeNametable = { _fillModeNametable, 0x400 };
-		SnapshotInfo audio{ &_audio };
+		SnapshotInfo audio{ _audio.get() };
 		Stream(_prgRamProtect1, _prgRamProtect2, _fillModeTile, _fillModeColor, _verticalSplitEnabled, _verticalSplitRightSide,
 				_verticalSplitDelimiterTile, _verticalSplitScroll, _verticalSplitBank, _multiplierValue1, _multiplierValue2,
 				_nametableMapping, _extendedRamMode, _exAttributeLastNametableFetch, _exAttrLastFetchCounter, _exAttrSelectedChrBank, 
@@ -362,7 +365,7 @@ protected:
 	virtual void WriteRAM(uint16_t addr, uint8_t value) override
 	{
 		if(addr >= 0x5C00 && addr <= 0x5FFF && _extendedRamMode <= 1) {
-			PPUControlFlags flags = PPU::GetControlFlags();
+			PPUControlFlags flags = _console->GetPpu()->GetControlFlags();
 			if(!flags.BackgroundEnabled && !flags.SpritesEnabled) {
 				//Expansion RAM ($5C00-$5FFF, read/write)
 				//Mode 0/1 - Not readable (returns open bus), can only be written while the PPU is rendering (otherwise, 0 is written)
@@ -374,16 +377,17 @@ protected:
 
 	virtual uint8_t MapperReadVRAM(uint16_t addr, MemoryOperationType memoryOperationType) override
 	{
-		if(_spriteFetch != IsSpriteFetch() || _largeSprites != PPU::GetControlFlags().LargeSprites || _lastVramOperationType != memoryOperationType) {
+		PPU* ppu = _console->GetPpu();
+		if(_spriteFetch != IsSpriteFetch() || _largeSprites != ppu->GetControlFlags().LargeSprites || _lastVramOperationType != memoryOperationType) {
 			_lastVramOperationType = memoryOperationType;
 			_spriteFetch = IsSpriteFetch();
-			_largeSprites = PPU::GetControlFlags().LargeSprites;
+			_largeSprites = ppu->GetControlFlags().LargeSprites;
 			UpdateChrBanks();
 		}
 
 		if(_extendedRamMode <= 1 && _verticalSplitEnabled && memoryOperationType == MemoryOperationType::PpuRenderingRead) {
-			uint32_t cycle = PPU::GetCurrentCycle();
-			int32_t scanline = PPU::GetCurrentScanline();
+			uint32_t cycle = ppu->GetCurrentCycle();
+			int32_t scanline = ppu->GetCurrentScanline();
 			if(cycle == 321) {
 				_splitTileNumber = -1;
 				if(scanline == -1) {
@@ -468,7 +472,7 @@ protected:
 		} else {
 			switch(addr) {
 				case 0x5000: case 0x5001: case 0x5002: case 0x5003: case 0x5004: case 0x5005: case 0x5006: case 0x5007: case 0x5010: case 0x5011: case 0x5015:
-					_audio.WriteRegister(addr, value);
+					_audio->WriteRegister(addr, value);
 					break;
 
 				case 0x5100: _prgMode = value & 0x03; UpdatePrgBanks(); break;
@@ -491,9 +495,9 @@ protected:
 				case 0x5204: 
 					_irqEnabled = (value & 0x80) == 0x80;
 					if(!_irqEnabled) {
-						CPU::ClearIRQSource(IRQSource::External);
+						_console->GetCpu()->ClearIrqSource(IRQSource::External);
 					} else if(_irqEnabled && _irqPending) {
-						CPU::SetIRQSource(IRQSource::External);
+						_console->GetCpu()->SetIrqSource(IRQSource::External);
 					}
 					break;
 				case 0x5205: _multiplierValue1 = value; break;
@@ -509,13 +513,13 @@ protected:
 	{
 		switch(addr) {
 			case 0x5010: case 0x5015: 
-				return _audio.ReadRegister(addr);
+				return _audio->ReadRegister(addr);
 
 			case 0x5204:
 			{
 				uint8_t value = (_ppuInFrame ? 0x40 : 0x00) | (_irqPending ? 0x80 : 0x00);
 				_irqPending = false;
-				CPU::ClearIRQSource(IRQSource::External);
+				_console->GetCpu()->ClearIrqSource(IRQSource::External);
 				return value;
 			}
 
@@ -523,7 +527,7 @@ protected:
 			case 0x5206: return (_multiplierValue1*_multiplierValue2) >> 8;
 		}
 
-		return MemoryManager::GetOpenBus();
+		return _console->GetMemoryManager()->GetOpenBus();
 	}
 
 public:

@@ -18,7 +18,7 @@ protected:
 	}
 
 public:
-	DrawScreenBufferCommand(uint32_t* screenBuffer) : DrawCommand(1)
+	DrawScreenBufferCommand(uint32_t* screenBuffer, int startFrame) : DrawCommand(startFrame, 1)
 	{
 		memcpy(_screenBuffer, screenBuffer, 256 * 240 * sizeof(uint32_t));
 	}

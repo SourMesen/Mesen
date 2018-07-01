@@ -3,6 +3,8 @@
 #include <deque>
 #include "BaseControlDevice.h"
 
+class Console;
+
 class RewindData
 {
 private:
@@ -15,6 +17,6 @@ public:
 	std::deque<ControlDeviceState> InputLogs[BaseControlDevice::PortCount];
 	int32_t FrameCount = 0;
 
-	void LoadState();
-	void SaveState();
+	void LoadState(shared_ptr<Console> &console);
+	void SaveState(shared_ptr<Console> &console);
 };

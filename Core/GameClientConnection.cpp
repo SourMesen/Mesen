@@ -18,7 +18,7 @@
 #include "ForceDisconnectMessage.h"
 #include "ServerInformationMessage.h"
 
-GameClientConnection::GameClientConnection(shared_ptr<Socket> socket, ClientConnectionData &connectionData) : GameConnection(socket)
+GameClientConnection::GameClientConnection(shared_ptr<Console> console, shared_ptr<Socket> socket, ClientConnectionData &connectionData) : GameConnection(console, socket)
 {
 	_connectionData = connectionData;
 	_shutdown = false;
@@ -26,7 +26,7 @@ GameClientConnection::GameClientConnection(shared_ptr<Socket> socket, ClientConn
 	_minimumQueueSize = 3;
 
 	MessageManager::DisplayMessage("NetPlay", "ConnectedToServer");
-	ControlManager::RegisterInputProvider(this);
+	_console->GetControlManager()->RegisterInputProvider(this);
 }
 
 GameClientConnection::~GameClientConnection()
@@ -40,7 +40,7 @@ void GameClientConnection::Shutdown()
 		_shutdown = true;
 		DisableControllers();
 
-		ControlManager::UnregisterInputProvider(this);
+		_console->GetControlManager()->UnregisterInputProvider(this);
 		MessageManager::SendNotification(ConsoleNotificationType::DisconnectedFromServer);
 		MessageManager::DisplayMessage("NetPlay", "ConnectionLost");
 		EmulationSettings::ClearFlags(EmulationFlags::ForceMaxSpeed);
@@ -81,12 +81,12 @@ void GameClientConnection::ProcessMessage(NetMessage* message)
 		case MessageType::SaveState:
 			if(_gameLoaded) {
 				DisableControllers();
-				Console::Pause();
+				_console->Pause();
 				ClearInputData();
-				((SaveStateMessage*)message)->LoadState();
+				((SaveStateMessage*)message)->LoadState(_console);
 				_enableControllers = true;
 				InitControlDevice();
-				Console::Resume();
+				_console->Resume();
 			}
 			break;
 
@@ -106,7 +106,7 @@ void GameClientConnection::ProcessMessage(NetMessage* message)
 
 		case MessageType::GameInformation:
 			DisableControllers();
-			Console::Pause();
+			_console->Pause();
 			gameInfo = (GameInformationMessage*)message;
 			if(gameInfo->GetPort() != _controllerPort) {
 				_controllerPort = gameInfo->GetPort();
@@ -120,17 +120,32 @@ void GameClientConnection::ProcessMessage(NetMessage* message)
 
 			ClearInputData();
 
-			_gameLoaded = gameInfo->AttemptLoadGame();
+			_gameLoaded = AttemptLoadGame(gameInfo->GetRomFilename(), gameInfo->GetCrc32Hash());
 			if(gameInfo->IsPaused()) {
 				EmulationSettings::SetFlags(EmulationFlags::Paused);
 			} else {
 				EmulationSettings::ClearFlags(EmulationFlags::Paused);
 			}
-			Console::Resume();
+			_console->Resume();
 			break;
 		default:
 			break;
 	}
+}
+
+bool GameClientConnection::AttemptLoadGame(string filename, uint32_t crc32Hash)
+{
+	if(filename.size() > 0) {
+		HashInfo hashInfo;
+		hashInfo.Crc32Hash = crc32Hash;
+		if(_console->LoadMatchingRom(filename, hashInfo)) {
+			return true;
+		} else {
+			MessageManager::DisplayMessage("NetPlay", "CouldNotFindRom");
+			return false;
+		}
+	}
+	return false;
 }
 
 void GameClientConnection::PushControllerState(uint8_t port, ControlDeviceState state)
@@ -192,10 +207,10 @@ bool GameClientConnection::SetInput(BaseControlDevice *device)
 void GameClientConnection::InitControlDevice()
 {
 	if(_controllerPort == BaseControlDevice::ExpDevicePort) {
-		_newControlDevice = ControlManager::CreateExpansionDevice(EmulationSettings::GetExpansionDevice());
+		_newControlDevice = ControlManager::CreateExpansionDevice(EmulationSettings::GetExpansionDevice(), nullptr);
 	} else {
 		//Pretend we are using port 0 (to use player 1's keybindings during netplay)
-		_newControlDevice = ControlManager::CreateControllerDevice(EmulationSettings::GetControllerType(_controllerPort), 0);
+		_newControlDevice = ControlManager::CreateControllerDevice(EmulationSettings::GetControllerType(_controllerPort), 0, nullptr);
 	}
 }
 

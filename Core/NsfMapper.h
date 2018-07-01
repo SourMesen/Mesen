@@ -33,12 +33,12 @@ private:
 	NesModel _model;
 
 	NsfHeader _nsfHeader;
-	MMC5Audio _mmc5Audio;
-	Vrc6Audio _vrc6Audio;
-	Vrc7Audio _vrc7Audio;
-	FdsAudio _fdsAudio;
-	Namco163Audio _namcoAudio;
-	Sunsoft5bAudio _sunsoftAudio;
+	unique_ptr<MMC5Audio> _mmc5Audio;
+	unique_ptr<Vrc6Audio> _vrc6Audio;
+	unique_ptr<Vrc7Audio> _vrc7Audio;
+	unique_ptr<FdsAudio> _fdsAudio;
+	unique_ptr<Namco163Audio> _namcoAudio;
+	unique_ptr<Sunsoft5bAudio> _sunsoftAudio;
 	
 	bool _needInit = false;
 	bool _irqEnabled = false;

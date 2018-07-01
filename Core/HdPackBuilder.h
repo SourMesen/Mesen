@@ -18,6 +18,8 @@ class HdPackBuilder
 {
 private:
 	static HdPackBuilder* _instance;
+	
+	shared_ptr<Console> _console;
 
 	HdPackData _hdData;
 	std::unordered_map<HdTileKey, uint32_t> _tileUsageCount;
@@ -39,7 +41,7 @@ private:
 	void DrawTile(HdPackTileInfo *tile, int tileIndex, uint32_t* pngBuffer, int pageNumber, bool containsSpritesOnly);
 
 public:
-	HdPackBuilder(string saveFolder, ScaleFilterType filterType, uint32_t scale, uint32_t flags, uint32_t chrRamBankSize, bool isChrRam);
+	HdPackBuilder(shared_ptr<Console> console, string saveFolder, ScaleFilterType filterType, uint32_t scale, uint32_t flags, uint32_t chrRamBankSize, bool isChrRam);
 	~HdPackBuilder();
 
 	void ProcessTile(uint32_t x, uint32_t y, uint16_t tileAddr, HdPpuTileInfo& tile, BaseMapper* mapper, bool isSprite, uint32_t chrBankHash, bool transparencyRequired);

@@ -14,8 +14,9 @@
 #include "../Utilities/ZipReader.h"
 #include "../Utilities/ArchiveReader.h"
 
-RecordedRomTest::RecordedRomTest()
+RecordedRomTest::RecordedRomTest(shared_ptr<Console> console)
 {
+	_console = console;
 	Reset();
 }
 
@@ -60,7 +61,7 @@ void RecordedRomTest::ValidateFrame(uint16_t* ppuFrameBuffer)
 
 	if(memcmp(_screenshotHashes.front(), md5Hash, 16) != 0) {
 		_badFrameCount++;
-		Debugger::BreakIfDebugging();
+		_console->BreakIfDebugging();
 	} 
 	
 	if (_currentCount == 0 && _repetitionCount.empty()) {
@@ -117,7 +118,7 @@ void RecordedRomTest::Record(string filename, bool reset)
 	_file.open(mrtFilename, ios::out | ios::binary);
 
 	if(_file) {
-		Console::Pause();
+		_console->Pause();
 		Reset();
 
 		_recording = true;
@@ -127,9 +128,9 @@ void RecordedRomTest::Record(string filename, bool reset)
 		string movieFilename = FolderUtilities::CombinePath(FolderUtilities::GetFolderName(filename), FolderUtilities::GetFilename(filename, false) + ".mmo");
 		memcpy(options.Filename, movieFilename.c_str(), std::max(1000, (int)movieFilename.size()));
 		options.RecordFrom = reset ? RecordMovieFrom::StartWithSaveData : RecordMovieFrom::CurrentState;
-		MovieManager::Record(options);
+		MovieManager::Record(options, _console);
 
-		Console::Resume();
+		_console->Resume();
 	}
 }
 
@@ -145,17 +146,17 @@ void RecordedRomTest::RecordFromMovie(string testFilename, VirtualFile movieFile
 	_file.open(mrtFilename, ios::out | ios::binary);
 
 	if(_file) {
-		Console::Pause();
+		_console->Pause();
 		Reset();
 
 		_recording = true;
 
 		//Start playing movie
-		MovieManager::Play(movieFile);
+		MovieManager::Play(movieFile, _console);
 		movieFile.ReadFile(_movieData);
 		_recordingFromMovie = true;
 
-		Console::Resume();
+		_console->Resume();
 	}
 }
 
@@ -169,13 +170,13 @@ void RecordedRomTest::RecordFromTest(string newTestFilename, string existingTest
 	VirtualFile romFile(testRom, newTestFilename);
 
 	if(testMovie && testRom) {
-		Console::Pause();
-		Console::LoadROM(romFile);
+		_console->Pause();
+		_console->Initialize(romFile);
 		testRom.seekg(0, ios::beg);
 		_romStream << testRom.rdbuf();
 
 		RecordFromMovie(newTestFilename, VirtualFile(existingTestFilename, "TestMovie.mmo"));
-		Console::Resume();
+		_console->Resume();
 	}
 }
 
@@ -213,7 +214,7 @@ int32_t RecordedRomTest::Run(string filename)
 
 		EmulationSettings::SetMasterVolume(0);
 		
-		Console::Pause();
+		_console->Pause();
 		
 		Reset();
 
@@ -234,16 +235,16 @@ int32_t RecordedRomTest::Run(string filename)
 		_repetitionCount.pop_front();
 
 		//Start playing movie
-		if(Console::LoadROM(testRom)) {
+		if(_console->Initialize(testRom)) {
 			EmulationSettings::SetFlags(EmulationFlags::ForceMaxSpeed);
 			_runningTest = true;
-			MovieManager::Play(testMovie);
+			MovieManager::Play(testMovie, _console);
 
-			Console::Resume();
+			_console->Resume();
 			EmulationSettings::ClearFlags(EmulationFlags::Paused);
 			_signal.Wait();
 			_runningTest = false;
-			Console::GetInstance()->Stop();
+			_console->Stop();
 		} else {
 			//Something went wrong when loading the rom
 			return -2;
@@ -303,7 +304,7 @@ void RecordedRomTest::Save()
 		writer.AddFile(mmoFilename, "TestMovie.mmo");
 		std::remove(mmoFilename.c_str());
 
-		writer.AddFile(Console::GetRomPath().GetFilePath(), "TestRom.nes");
+		writer.AddFile(_console->GetRomPath().GetFilePath(), "TestRom.nes");
 	}
 	writer.Save();
 

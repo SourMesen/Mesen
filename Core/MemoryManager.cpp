@@ -3,11 +3,11 @@
 #include "BaseMapper.h"
 #include "Debugger.h"
 #include "CheatManager.h"
+#include "Console.h"
 
-MemoryManager::MemoryManager(shared_ptr<BaseMapper> mapper)
+MemoryManager::MemoryManager(shared_ptr<Console> console)
 {
-	_mapper = mapper;
-
+	_console = console;
 	_internalRAM = new uint8_t[InternalRAMSize];
 	_internalRamHandler.SetInternalRam(_internalRAM);
 
@@ -15,9 +15,6 @@ MemoryManager::MemoryManager(shared_ptr<BaseMapper> mapper)
 		_nametableRAM[i] = new uint8_t[NameTableScreenSize];
 		BaseMapper::InitializeRam(_nametableRAM[i], NameTableScreenSize);
 	}
-
-	_mapper->SetMemoryManager(this);
-	_mapper->SetDefaultNametables(_nametableRAM[0], _nametableRAM[1]);
 
 	_ramReadHandlers = new IMemoryHandler*[RAMSize];
 	_ramWriteHandlers = new IMemoryHandler*[RAMSize];
@@ -39,6 +36,12 @@ MemoryManager::~MemoryManager()
 
 	delete[] _ramReadHandlers;
 	delete[] _ramWriteHandlers;
+}
+
+void MemoryManager::SetMapper(shared_ptr<BaseMapper> mapper)
+{
+	_mapper = mapper;
+	_mapper->SetDefaultNametables(_nametableRAM[0], _nametableRAM[1]);
 }
 
 void MemoryManager::Reset(bool softReset)
@@ -110,7 +113,7 @@ uint8_t MemoryManager::DebugRead(uint16_t addr, bool disableSideEffects)
 		}
 	}
 
-	CheatManager::ApplyRamCodes(addr, value);
+	_console->GetCheatManager()->ApplyRamCodes(addr, value);
 
 	return value;
 }
@@ -120,25 +123,20 @@ uint16_t MemoryManager::DebugReadWord(uint16_t addr)
 	return DebugRead(addr) | (DebugRead(addr + 1) << 8);
 }
 
-void MemoryManager::ProcessCpuClock()
-{
-	_mapper->ProcessCpuClock();
-}
-
 uint8_t MemoryManager::Read(uint16_t addr, MemoryOperationType operationType)
 {
 	uint8_t value = _ramReadHandlers[addr]->ReadRAM(addr);
-	CheatManager::ApplyRamCodes(addr, value);
-	Debugger::ProcessRamOperation(operationType, addr, value);
+	_console->GetCheatManager()->ApplyRamCodes(addr, value);
+	_console->DebugProcessRamOperation(operationType, addr, value);
 
-	OpenBusHandler::SetOpenBus(value);
+	_openBusHandler.SetOpenBus(value);
 
 	return value;
 }
 
 void MemoryManager::Write(uint16_t addr, uint8_t value)
 {
-	if(Debugger::ProcessRamOperation(MemoryOperationType::Write, addr, value)) {
+	if(_console->DebugProcessRamOperation(MemoryOperationType::Write, addr, value)) {
 		_ramWriteHandlers[addr]->WriteRAM(addr, value);
 	}
 }
@@ -177,5 +175,5 @@ void MemoryManager::StreamState(bool saving)
 
 uint8_t MemoryManager::GetOpenBus(uint8_t mask)
 {
-	return OpenBusHandler::GetOpenBus() & mask;
+	return _openBusHandler.GetOpenBus() & mask;
 }

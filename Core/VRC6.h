@@ -9,8 +9,8 @@ enum class VRCVariant;
 class VRC6 : public BaseMapper
 {
 private:
-	VrcIrq _irq;
-	Vrc6Audio _audio;
+	unique_ptr<VrcIrq> _irq;
+	unique_ptr<Vrc6Audio> _audio;
 
 	VRCVariant _model;
 	uint8_t _bankingMode;
@@ -27,18 +27,21 @@ protected:
 	
 	void InitMapper() override
 	{
-		_irq.Reset();
-		_audio.Reset();
+		_audio.reset(new Vrc6Audio(_console));
+		_irq.reset(new VrcIrq(_console));
+
+		_irq->Reset();
+		_audio->Reset();
 		memset(_chrRegisters, 0, sizeof(_chrRegisters));
 		SelectPRGPage(3, -1);
 	}
-
+	
 	virtual void StreamState(bool saving) override
 	{
 		BaseMapper::StreamState(saving);
 		ArrayInfo<uint8_t> chrRegisters = { _chrRegisters, 8 };
-		SnapshotInfo irq{ &_irq };
-		SnapshotInfo audio{ &_audio };
+		SnapshotInfo irq{ _irq.get() };
+		SnapshotInfo audio{ _audio.get() };
 
 		Stream(_bankingMode, chrRegisters, irq, audio);
 
@@ -50,8 +53,8 @@ protected:
 
 	void ProcessCpuClock() override
 	{
-		_irq.ProcessCpuClock();
-		_audio.Clock();
+		_irq->ProcessCpuClock();
+		_audio->Clock();
 	}
 
 	void SetPpuMapping(uint8_t bank, uint8_t page)
@@ -237,7 +240,7 @@ protected:
 			case 0x9003:
 			case 0xA000: case 0xA001: case 0xA002:
 			case 0xB000: case 0xB001: case 0xB002:
-				_audio.WriteRegister(addr, value);
+				_audio->WriteRegister(addr, value);
 				break;
 
 			case 0xB003:
@@ -260,15 +263,15 @@ protected:
 				break;
 
 			case 0xF000:
-				_irq.SetReloadValue(value);
+				_irq->SetReloadValue(value);
 				break;
 
 			case 0xF001:
-				_irq.SetControlValue(value);
+				_irq->SetControlValue(value);
 				break;
 
 			case 0xF002:
-				_irq.AcknowledgeIrq();
+				_irq->AcknowledgeIrq();
 				break;
 		}
 	}

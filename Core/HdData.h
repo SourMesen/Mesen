@@ -6,7 +6,7 @@
 
 struct HdTileKey
 {
-	static const int32_t NoTile = -1;
+	static constexpr int32_t NoTile = -1;
 
 	uint32_t PaletteColors;
 	uint8_t TileData[16];
@@ -119,18 +119,18 @@ struct HdScreenInfo
 
 	HdScreenInfo(const HdScreenInfo& that) = delete;
 
-	HdScreenInfo(bool isChrRam)
+	HdScreenInfo()
 	{
 		ScreenTiles = new HdPpuPixelInfo[PPU::PixelCount];
 
 		for(int i = 0; i < PPU::PixelCount; i++) {
 			ScreenTiles[i].Tile.BackgroundPriority = false;
-			ScreenTiles[i].Tile.IsChrRamTile = isChrRam;
+			ScreenTiles[i].Tile.IsChrRamTile = false;
 			ScreenTiles[i].Tile.HorizontalMirroring = false;
 			ScreenTiles[i].Tile.VerticalMirroring = false;
 
 			for(int j = 0; j < 4; j++) {
-				ScreenTiles[i].Sprite[j].IsChrRamTile = isChrRam;
+				ScreenTiles[i].Sprite[j].IsChrRamTile = false;
 			}
 		}
 	}

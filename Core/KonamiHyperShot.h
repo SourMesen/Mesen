@@ -1,10 +1,13 @@
 #pragma once
 #include "stdafx.h"
 #include "BaseControlDevice.h"
+#include "Console.h"
 
 class KonamiHyperShot : public BaseControlDevice
 {
 private:
+	shared_ptr<Console> _console;
+
 	bool _enableP1 = true;
 	bool _enableP2 = true;
 	uint32_t _p1TurboSpeed;
@@ -26,7 +29,7 @@ protected:
 			SetPressedState(Buttons::Player1Run, keyMapping.B);
 
 			uint8_t turboFreq = 1 << (4 - _p1TurboSpeed);
-			bool turboOn = (uint8_t)(PPU::GetFrameCount() % turboFreq) < turboFreq / 2;
+			bool turboOn = (uint8_t)(_console->GetFrameCount() % turboFreq) < turboFreq / 2;
 			if(turboOn) {
 				SetPressedState(Buttons::Player1Jump, keyMapping.TurboA);
 				SetPressedState(Buttons::Player1Run, keyMapping.TurboB);
@@ -38,7 +41,7 @@ protected:
 			SetPressedState(Buttons::Player2Run, keyMapping.B);
 
 			uint8_t turboFreq = 1 << (4 - _p2TurboSpeed);
-			bool turboOn = (uint8_t)(PPU::GetFrameCount() % turboFreq) < turboFreq / 2;
+			bool turboOn = (uint8_t)(_console->GetFrameCount() % turboFreq) < turboFreq / 2;
 			if(turboOn) {
 				SetPressedState(Buttons::Player2Jump, keyMapping.TurboA);
 				SetPressedState(Buttons::Player2Run, keyMapping.TurboB);
@@ -53,8 +56,9 @@ protected:
 	}
 
 public:
-	KonamiHyperShot(KeyMappingSet p1, KeyMappingSet p2) : BaseControlDevice(BaseControlDevice::ExpDevicePort, p1)
+	KonamiHyperShot(shared_ptr<Console> console, KeyMappingSet p1, KeyMappingSet p2) : BaseControlDevice(BaseControlDevice::ExpDevicePort, p1)
 	{
+		_console = console;
 		_p1TurboSpeed = p1.TurboSpeed;
 		_p2TurboSpeed = p2.TurboSpeed;
 		_p2KeyMappings = p2.GetKeyMappingArray();

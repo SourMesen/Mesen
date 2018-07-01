@@ -9,7 +9,8 @@
 #include "Debugger.h"
 #include "MemoryManager.h"
 #include "BatteryManager.h"
-#include "IMemoryManager.h"
+#include "MessageManager.h"
+#include "EmulationSettings.h"
 
 void BaseMapper::WriteRegister(uint16_t addr, uint8_t value) { }
 uint8_t BaseMapper::ReadRegister(uint16_t addr) { return 0; }
@@ -634,11 +635,10 @@ void BaseMapper::ProcessNotification(ConsoleNotificationType type, void* paramet
 	}
 }
 
-
 void BaseMapper::ApplyCheats()
 {
 	RestoreOriginalPrgRam();
-	CheatManager::ApplyPrgCodes(_prgRom, _prgSize);
+	_console->GetCheatManager()->ApplyPrgCodes(_prgRom, _prgSize);
 }
 
 void BaseMapper::GetMemoryRanges(MemoryRanges &ranges)
@@ -652,9 +652,9 @@ void BaseMapper::GetMemoryRanges(MemoryRanges &ranges)
 	}
 }
 
-void BaseMapper::SetMemoryManager(IMemoryManager* memoryManager)
+void BaseMapper::SetConsole(shared_ptr<Console> console)
 {
-	_memoryManager = memoryManager;
+	_console = console;
 }
 
 void BaseMapper::SetDefaultNametables(uint8_t* nametableA, uint8_t* nametableB)
@@ -757,7 +757,7 @@ uint8_t BaseMapper::ReadRAM(uint16_t addr)
 	} else {
 		//assert(false);
 	}
-	return MemoryManager::GetOpenBus();
+	return _console->GetMemoryManager()->GetOpenBus();
 }
 
 uint8_t BaseMapper::DebugReadRAM(uint16_t addr)
@@ -850,7 +850,7 @@ void BaseMapper::DebugWriteVRAM(uint16_t addr, uint8_t value, bool disableSideEf
 
 void BaseMapper::WriteVRAM(uint16_t addr, uint8_t value)
 {
-	Debugger::ProcessVramWriteOperation(addr, value);
+	_console->DebugProcessVramWriteOperation(addr, value);
 
 	if(_chrPageAccessType[addr >> 8] & MemoryAccessType::Write) {
 		_chrPages[addr >> 8][(uint8_t)addr] = value;
@@ -1141,7 +1141,7 @@ void BaseMapper::GetRomFileData(vector<uint8_t> &out, bool asIpsFile, uint8_t* h
 	if(header) {
 		//Get original rom with edited header
 		vector<uint8_t> originalFile;
-		Console::GetRomPath().ReadFile(originalFile);
+		_console->GetRomPath().ReadFile(originalFile);
 
 		out.insert(out.end(), header, header+sizeof(NESHeader));
 		out.insert(out.end(), originalFile.begin()+sizeof(NESHeader), originalFile.end());
@@ -1156,7 +1156,7 @@ void BaseMapper::GetRomFileData(vector<uint8_t> &out, bool asIpsFile, uint8_t* h
 		//Get edited rom
 		if(asIpsFile) {
 			vector<uint8_t> originalFile;
-			Console::GetRomPath().ReadFile(originalFile);
+			_console->GetRomPath().ReadFile(originalFile);
 
 			vector<uint8_t> patchData = IpsPatcher::CreatePatch(originalFile, newFile);
 			out.insert(out.end(), patchData.begin(), patchData.end());

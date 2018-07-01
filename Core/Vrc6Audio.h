@@ -31,11 +31,15 @@ protected:
 		}
 
 		int32_t outputLevel = _pulse1.GetVolume() + _pulse2.GetVolume() + _saw.GetVolume();
-		APU::AddExpansionAudioDelta(AudioChannel::VRC6, outputLevel - _lastOutput);
+		_console->GetApu()->AddExpansionAudioDelta(AudioChannel::VRC6, outputLevel - _lastOutput);
 		_lastOutput = outputLevel;
 	}
 
 public:
+	Vrc6Audio(shared_ptr<Console> console) : BaseExpansionAudio(console)
+	{
+	}
+
 	void Reset()
 	{
 		_lastOutput = 0;

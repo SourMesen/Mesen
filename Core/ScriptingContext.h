@@ -27,6 +27,8 @@ private:
 	bool _inStartFrameEvent = false;
 	bool _inExecOpEvent = false;
 
+	Debugger* _debugger = nullptr;
+
 	std::unordered_map<int32_t, string> _saveSlotData;
 	int32_t _saveSlot = -1;
 	int32_t _loadSlot = -1;
@@ -42,6 +44,7 @@ protected:
 	virtual int InternalCallEventCallback(EventType type) = 0;
 
 public:
+	ScriptingContext(Debugger* debugger);
 	virtual ~ScriptingContext() {}
 	virtual bool LoadScript(string scriptName, string scriptContent, Debugger* debugger) = 0;
 

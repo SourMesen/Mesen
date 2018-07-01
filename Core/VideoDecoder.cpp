@@ -10,30 +10,16 @@
 #include "ScaleFilter.h"
 #include "VideoRenderer.h"
 #include "RewindManager.h"
+#include "Console.h"
 #include "PPU.h"
 #include "HdData.h"
 #include "HdNesPack.h"
 #include "RotateFilter.h"
+#include "DebugHud.h"
 
-unique_ptr<VideoDecoder> VideoDecoder::Instance;
-
-VideoDecoder* VideoDecoder::GetInstance()
+VideoDecoder::VideoDecoder(shared_ptr<Console> console)
 {
-	if(!Instance) {
-		Instance.reset(new VideoDecoder());
-	}
-	return Instance.get();
-}
-
-void VideoDecoder::Release()
-{
-	if(Instance) {
-		Instance.reset();
-	}
-}
-
-VideoDecoder::VideoDecoder()
-{
+	_console = console;
 	_frameChanged = false;
 	_stopFlag = false;
 	UpdateVideoFilter();
@@ -54,7 +40,7 @@ void VideoDecoder::GetScreenSize(ScreenSize &size, bool ignoreScale)
 	if(_videoFilter) {
 		OverscanDimensions overscan = ignoreScale ? _videoFilter->GetOverscan() : EmulationSettings::GetOverscanDimensions();
 		FrameInfo frameInfo{ overscan.GetScreenWidth(), overscan.GetScreenHeight(), PPU::ScreenWidth, PPU::ScreenHeight, 4 };
-		double aspectRatio = EmulationSettings::GetAspectRatio();
+		double aspectRatio = EmulationSettings::GetAspectRatio(_console);
 		double scale = (ignoreScale ? 1 : EmulationSettings::GetVideoScale());
 		size.Width = (int32_t)(frameInfo.Width * scale);
 		size.Height = (int32_t)(frameInfo.Height * scale);
@@ -91,7 +77,7 @@ void VideoDecoder::UpdateVideoFilter()
 
 		_hdFilterEnabled = false;
 		if(_hdScreenInfo) {
-			_videoFilter.reset(new HdVideoFilter());
+			_videoFilter.reset(new HdVideoFilter(_console->GetHdData()));
 			_hdFilterEnabled = true;
 		}
 	}
@@ -116,6 +102,7 @@ void VideoDecoder::DecodeFrame(bool synchronous)
 
 	uint32_t* outputBuffer = _videoFilter->GetOutputBuffer();
 	FrameInfo frameInfo = _videoFilter->GetFrameInfo();
+	_console->GetDebugHud()->Draw(outputBuffer, _videoFilter->GetOverscan(), frameInfo.Width, _frameNumber);
 
 	if(_rotateFilter) {
 		outputBuffer = _rotateFilter->ApplyFilter(outputBuffer, frameInfo.Width, frameInfo.Height);
@@ -128,7 +115,7 @@ void VideoDecoder::DecodeFrame(bool synchronous)
 	}
 
 	if(_hud) {
-		_hud->DrawHud(outputBuffer, frameInfo, _videoFilter->GetOverscan());
+		_hud->DrawHud(_console, outputBuffer, frameInfo, _videoFilter->GetOverscan());
 	}
 
 	ScreenSize screenSize;
@@ -144,7 +131,7 @@ void VideoDecoder::DecodeFrame(bool synchronous)
 	_frameChanged = false;
 	
 	//Rewind manager will take care of sending the correct frame to the video renderer
-	RewindManager::SendFrame(outputBuffer, frameInfo.Width, frameInfo.Height, synchronous);
+	_console->GetRewindManager()->SendFrame(outputBuffer, frameInfo.Width, frameInfo.Height, synchronous);
 }
 
 void VideoDecoder::DecodeThread()
@@ -170,7 +157,7 @@ uint32_t VideoDecoder::GetFrameCount()
 
 void VideoDecoder::UpdateFrameSync(void *ppuOutputBuffer, HdScreenInfo *hdScreenInfo)
 {
-	_frameNumber = PPU::GetFrameCount();
+	_frameNumber = _console->GetFrameCount();
 	_hdScreenInfo = hdScreenInfo;
 	_ppuOutputBuffer = (uint16_t*)ppuOutputBuffer;
 	DecodeFrame(true);
@@ -187,7 +174,7 @@ void VideoDecoder::UpdateFrame(void *ppuOutputBuffer, HdScreenInfo *hdScreenInfo
 		//At this point, we are sure that the decode thread is no longer busy
 	}
 	
-	_frameNumber = PPU::GetFrameCount();
+	_frameNumber = _console->GetFrameCount();
 	_hdScreenInfo = hdScreenInfo;
 	_ppuOutputBuffer = (uint16_t*)ppuOutputBuffer;
 	_frameChanged = true;
@@ -244,13 +231,13 @@ bool VideoDecoder::IsRunning()
 void VideoDecoder::TakeScreenshot()
 {
 	if(_videoFilter) {
-		_videoFilter->TakeScreenshot(_videoFilterType);
+		_videoFilter->TakeScreenshot(_console, _console->GetRomPath(), _videoFilterType);
 	}
 }
 
 void VideoDecoder::TakeScreenshot(std::stringstream &stream)
 {
 	if(_videoFilter) {
-		_videoFilter->TakeScreenshot(_videoFilterType, "", &stream);
+		_videoFilter->TakeScreenshot(_console, _videoFilterType, "", &stream);
 	}
 }

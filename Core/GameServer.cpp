@@ -11,15 +11,16 @@ using std::thread;
 
 unique_ptr<GameServer> GameServer::Instance;
 
-GameServer::GameServer(uint16_t listenPort, string password, string hostPlayerName)
+GameServer::GameServer(shared_ptr<Console> console, uint16_t listenPort, string password, string hostPlayerName)
 {
+	_console = console;
 	_stop = false;
 	_port = listenPort;
 	_password = password;
 	_hostPlayerName = hostPlayerName;
 	_hostControllerPort = 0;
-	ControlManager::RegisterInputRecorder(this);
-	ControlManager::RegisterInputProvider(this);
+	_console->GetControlManager()->RegisterInputRecorder(this);
+	_console->GetControlManager()->RegisterInputProvider(this);
 }
 
 GameServer::~GameServer()
@@ -29,8 +30,8 @@ GameServer::~GameServer()
 
 	Stop();
 
-	ControlManager::UnregisterInputRecorder(this);
-	ControlManager::UnregisterInputProvider(this);
+	_console->GetControlManager()->UnregisterInputRecorder(this);
+	_console->GetControlManager()->UnregisterInputProvider(this);
 }
 
 void GameServer::AcceptConnections()
@@ -38,7 +39,7 @@ void GameServer::AcceptConnections()
 	while(true) {
 		shared_ptr<Socket> socket = _listener->Accept();
 		if(!socket->ConnectionError()) {
-			auto connection = shared_ptr<GameServerConnection>(new GameServerConnection(socket, _password));
+			auto connection = shared_ptr<GameServerConnection>(new GameServerConnection(_console, socket, _password));
 			MessageManager::RegisterNotificationListener(connection);
 			_openConnections.push_back(connection);
 		} else {
@@ -124,9 +125,9 @@ void GameServer::Stop()
 	MessageManager::DisplayMessage("NetPlay", "ServerStopped");
 }
 
-void GameServer::StartServer(uint16_t port, string password, string hostPlayerName)
+void GameServer::StartServer(shared_ptr<Console> console, uint16_t port, string password, string hostPlayerName)
 {
-	Instance.reset(new GameServer(port, password, hostPlayerName));
+	Instance.reset(new GameServer(console, port, password, hostPlayerName));
 	Instance->_serverThread.reset(new thread(&GameServer::Exec, Instance.get()));
 }
 
@@ -165,13 +166,13 @@ uint8_t GameServer::GetHostControllerPort()
 void GameServer::SetHostControllerPort(uint8_t port)
 {
 	if(GameServer::Started()) {
-		Console::Pause();
+		Instance->_console->Pause();
 		if(port == GameConnection::SpectatorPort || GetAvailableControllers() & (1 << port)) {
 			//Port is available
 			Instance->_hostControllerPort = port;
 			SendPlayerList();
 		}
-		Console::Resume();
+		Instance->_console->Resume();
 	}
 }
 

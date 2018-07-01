@@ -328,7 +328,9 @@ int LuaApi::DrawString(lua_State *lua)
 	int x = l.ReadInteger();
 	checkminparams(3);
 
-	DebugHud::GetInstance()->DrawString(x, y, text, color, backColor, frameCount);
+	Console* console = _debugger->GetConsole();
+	int startFrame = console->GetFrameCount();
+	console->GetDebugHud()->DrawString(x, y, text, color, backColor, frameCount, startFrame);
 
 	return l.ReturnCount();
 }
@@ -345,7 +347,9 @@ int LuaApi::DrawLine(lua_State *lua)
 	int x = l.ReadInteger();
 	checkminparams(4);
 
-	DebugHud::GetInstance()->DrawLine(x, y, x2, y2, color, frameCount);
+	Console* console = _debugger->GetConsole();
+	int startFrame = console->GetFrameCount();
+	console->GetDebugHud()->DrawLine(x, y, x2, y2, color, frameCount, startFrame);
 
 	return l.ReturnCount();
 }
@@ -360,7 +364,9 @@ int LuaApi::DrawPixel(lua_State *lua)
 	int x = l.ReadInteger();
 	checkminparams(3);
 
-	DebugHud::GetInstance()->DrawPixel(x, y, color, frameCount);
+	Console* console = _debugger->GetConsole();
+	int startFrame = console->GetFrameCount();
+	console->GetDebugHud()->DrawPixel(x, y, color, frameCount, startFrame);
 
 	return l.ReturnCount();
 }
@@ -378,7 +384,9 @@ int LuaApi::DrawRectangle(lua_State *lua)
 	int x = l.ReadInteger();
 	checkminparams(4);
 
-	DebugHud::GetInstance()->DrawRectangle(x, y, width, height, color, fill, frameCount);
+	Console* console = _debugger->GetConsole();
+	int startFrame = console->GetFrameCount();
+	console->GetDebugHud()->DrawRectangle(x, y, width, height, color, fill, frameCount, startFrame);
 
 	return l.ReturnCount();
 }
@@ -387,7 +395,8 @@ int LuaApi::ClearScreen(lua_State *lua)
 {
 	LuaCallHelper l(lua);
 	checkparams();
-	DebugHud::GetInstance()->ClearScreen();
+
+	_debugger->GetConsole()->GetDebugHud()->ClearScreen();
 	return l.ReturnCount();
 }
 
@@ -399,7 +408,7 @@ int LuaApi::GetScreenBuffer(lua_State *lua)
 	lua_newtable(lua);
 	for(int y = 0; y < PPU::ScreenHeight; y++) {
 		for(int x = 0; x < PPU::ScreenWidth; x++) {
-			lua_pushinteger(lua, palette[PPU::GetPixel(x, y) & 0x3F] & 0xFFFFFF);
+			lua_pushinteger(lua, palette[_debugger->GetScreenPixel(x, y) & 0x3F] & 0xFFFFFF);
 			lua_rawseti(lua, -2, (y << 8) + x);
 		}
 	}
@@ -418,7 +427,9 @@ int LuaApi::SetScreenBuffer(lua_State *lua)
 		pixels[i] = l.ReadInteger() ^ 0xFF000000;
 	}
 	
-	DebugHud::GetInstance()->DrawScreenBuffer(pixels);
+	Console* console = _debugger->GetConsole();
+	int startFrame = console->GetFrameCount();
+	console->GetDebugHud()->DrawScreenBuffer(pixels, startFrame);
 
 	return l.ReturnCount();
 }
@@ -432,7 +443,7 @@ int LuaApi::GetPixel(lua_State *lua)
 	errorCond(x < 0 || x > 255 || y < 0 || y > 239, "invalid x,y coordinates (must be between 0-255, 0-239)");
 
 	//Ignores intensify & grayscale bits
-	l.Return(EmulationSettings::GetRgbPalette()[PPU::GetPixel(x, y) & 0x3F] & 0xFFFFFF);
+	l.Return(EmulationSettings::GetRgbPalette()[_debugger->GetScreenPixel(x, y) & 0x3F] & 0xFFFFFF);
 	return l.ReturnCount();
 }
 
@@ -473,7 +484,7 @@ int LuaApi::Reset(lua_State *lua)
 {
 	LuaCallHelper l(lua);
 	checkparams();
-	Console::Reset(true);
+	_debugger->GetConsole()->Reset(true);
 	return l.ReturnCount();
 }
 
@@ -482,7 +493,7 @@ int LuaApi::Stop(lua_State *lua)
 	LuaCallHelper l(lua);
 	int32_t stopCode = l.ReadInteger(0);
 	checkminparams(0);
-	Console::GetInstance()->Stop(stopCode);
+	_debugger->GetConsole()->Stop(stopCode);
 	return l.ReturnCount();
 }
 
@@ -526,7 +537,7 @@ int LuaApi::Rewind(lua_State *lua)
 	checkparams();
 	checksavestateconditions();
 	errorCond(seconds <= 0, "seconds must be >= 1");
-	RewindManager::RewindSeconds(seconds);
+	_debugger->GetConsole()->GetRewindManager()->RewindSeconds(seconds);
 	return l.ReturnCount();
 }
 
@@ -535,7 +546,7 @@ int LuaApi::TakeScreenshot(lua_State *lua)
 	LuaCallHelper l(lua);
 	checkparams();
 	stringstream ss;
-	VideoDecoder::GetInstance()->TakeScreenshot(ss);
+	_debugger->GetConsole()->GetVideoDecoder()->TakeScreenshot(ss);
 	l.Return(ss.str());
 	return l.ReturnCount();
 }
@@ -545,7 +556,7 @@ int LuaApi::SaveSavestate(lua_State *lua)
 	LuaCallHelper l(lua);
 	checksavestateconditions();
 	stringstream ss;
-	SaveStateManager::SaveState(ss);
+	_debugger->GetConsole()->GetSaveStateManager()->SaveState(ss);
 	l.Return(ss.str());
 	return l.ReturnCount();
 }
@@ -618,7 +629,7 @@ int LuaApi::GetInput(lua_State *lua)
 	checkparams();
 	errorCond(port < 0 || port > 3, "Invalid port number - must be between 0 to 3");
 
-	shared_ptr<StandardController> controller = std::dynamic_pointer_cast<StandardController>(ControlManager::GetControlDevice(port));
+	shared_ptr<StandardController> controller = std::dynamic_pointer_cast<StandardController>(_debugger->GetConsole()->GetControlManager()->GetControlDevice(port));
 	errorCond(controller == nullptr, "Input port must be connected to a standard controller");
 
 	lua_newtable(lua);
@@ -664,7 +675,7 @@ int LuaApi::SetInput(lua_State *lua)
 
 	errorCond(port < 0 || port > 3, "Invalid port number - must be between 0 to 3");
 
-	shared_ptr<StandardController> controller = std::dynamic_pointer_cast<StandardController>(ControlManager::GetControlDevice(port));
+	shared_ptr<StandardController> controller = std::dynamic_pointer_cast<StandardController>(_debugger->GetConsole()->GetControlManager()->GetControlDevice(port));
 	errorCond(controller == nullptr, "Input port must be connected to a standard controller");
 
 	if(right.HasValue || !allowUserInput) controller->SetBitValue(StandardController::Buttons::Right, right.Value);
@@ -686,7 +697,7 @@ int LuaApi::AddCheat(lua_State *lua)
 	checkparams();
 	errorCond(gamegenieCode.length() != 6 && gamegenieCode.length() != 8, "Game genie code must be 6 or 8 characters long");
 	errorCond(gamegenieCode.find_first_not_of("APZLGITYEOXUKSVN", 0) != string::npos, "Game genie code may only contain these characters: AEGIKLNOPSTUVXYZ");
-	CheatManager::GetInstance()->AddGameGenieCode(gamegenieCode);
+	_debugger->GetConsole()->GetCheatManager()->AddGameGenieCode(gamegenieCode);
 	return l.ReturnCount();
 }
 
@@ -694,7 +705,7 @@ int LuaApi::ClearCheats(lua_State *lua)
 {
 	LuaCallHelper l(lua);
 	checkparams();
-	CheatManager::GetInstance()->ClearCodes();
+	_debugger->GetConsole()->GetCheatManager()->ClearCodes();
 	return l.ReturnCount();
 }
 
@@ -755,11 +766,12 @@ int LuaApi::GetRomInfo(lua_State *lua)
 	LuaCallHelper l(lua);
 	checkparams();
 
-	MapperInfo mapperInfo = Console::GetMapperInfo();
+	MapperInfo mapperInfo = _debugger->GetConsole()->GetMapperInfo();
+	string romPath = _debugger->GetConsole()->GetRomPath();
 
 	lua_newtable(lua);
 	lua_pushstringvalue(name, mapperInfo.RomName);
-	lua_pushstringvalue(path, ((string)Console::GetRomPath()));
+	lua_pushstringvalue(path, romPath);
 
 	HashInfo hashInfo = mapperInfo.Hash;
 	lua_pushintvalue(fileCrc32Hash, hashInfo.Crc32Hash);
@@ -861,7 +873,7 @@ int LuaApi::GetState(lua_State *lua)
 
 	lua_newtable(lua);
 	lua_pushintvalue(region, state.Model);
-	lua_pushintvalue(clockRate, CPU::GetClockRate(Console::GetModel()));
+	lua_pushintvalue(clockRate, state.ClockRate);
 
 	lua_starttable("cpu");
 	lua_pushintvalue(a, state.CPU.A);

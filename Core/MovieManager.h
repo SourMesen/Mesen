@@ -7,6 +7,7 @@
 
 class MovieRecorder;
 class VirtualFile;
+class Console;
 
 class IMovie : public IInputProvider
 {
@@ -32,8 +33,8 @@ private:
 	static shared_ptr<MovieRecorder> _recorder;
 
 public:
-	static void Record(RecordMovieOptions options);
-	static void Play(VirtualFile file);
+	static void Record(RecordMovieOptions options, shared_ptr<Console> console);
+	static void Play(VirtualFile file, shared_ptr<Console> console);
 	static void Stop();
 	static bool Playing();
 	static bool Recording();

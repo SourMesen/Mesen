@@ -8,11 +8,9 @@ using std::atomic;
 using std::deque;
 using std::unordered_set;
 
-#include "Breakpoint.h"
-#include "TraceLogger.h"
 #include "../Utilities/SimpleLock.h"
-#include "CodeDataLogger.h"
 #include "DebuggerTypes.h"
+#include "ExpressionEvaluator.h"
 
 class CPU;
 class APU;
@@ -28,13 +26,16 @@ class Profiler;
 class CodeRunner;
 class BaseMapper;
 class ScriptHost;
+class TraceLogger;
+class Breakpoint;
+class CodeDataLogger;
+
+enum class CdlStripFlag;
 
 class Debugger
 {
 private:
-	static Debugger* Instance;
-
-	const static int BreakpointTypeCount = 6;
+	static constexpr int BreakpointTypeCount = 6;
 
 	//Must be static to be thread-safe when switching game
 	static string _disassemblerOutput;
@@ -127,15 +128,10 @@ private:
 	vector<vector<int>> _debugEventMarkerRpn;
 
 private:
-	void PrivateProcessPpuCycle();
-	bool PrivateProcessRamOperation(MemoryOperationType type, uint16_t &addr, uint8_t &value);
-	void PrivateProcessVramReadOperation(MemoryOperationType type, uint16_t addr, uint8_t &value);
-	void PrivateProcessVramWriteOperation(uint16_t addr, uint8_t &value);
 	void ProcessBreakpoints(BreakpointType type, OperationInfo &operationInfo, bool allowBreak = true);
 	
 	void AddCallstackFrame(uint16_t source, uint16_t target, StackFrameFlags flags);
 	void UpdateCallstack(uint8_t currentInstruction, uint32_t addr);
-	void PrivateProcessInterrupt(uint16_t cpuAddr, uint16_t destCpuAddr, bool forNmi);
 
 	void ProcessStepConditions(uint16_t addr);
 	bool SleepUntilResume(BreakSource source = BreakSource::Break);
@@ -147,6 +143,8 @@ private:
 public:
 	Debugger(shared_ptr<Console> console, shared_ptr<CPU> cpu, shared_ptr<PPU> ppu, shared_ptr<APU> apu, shared_ptr<MemoryManager> memoryManager, shared_ptr<BaseMapper> mapper);
 	~Debugger();
+
+	Console* GetConsole();
 
 	void SetFlags(uint32_t flags);
 	bool CheckFlag(DebuggerFlags flag);
@@ -177,7 +175,8 @@ public:
 	void StepOut();
 	void StepBack();
 	void Run();
-	
+
+	void BreakImmediately();	
 	void BreakOnScanline(int16_t scanline);
 
 	bool LoadCdlFile(string cdlFilepath);
@@ -217,21 +216,17 @@ public:
 
 	int32_t EvaluateExpression(string expression, EvalResultType &resultType);
 	
-	static bool ProcessRamOperation(MemoryOperationType type, uint16_t &addr, uint8_t &value);
-	static void ProcessVramReadOperation(MemoryOperationType type, uint16_t addr, uint8_t &value);
-	static void ProcessVramWriteOperation(uint16_t addr, uint8_t &value);
-	static void ProcessPpuCycle();
-	static void StaticProcessEvent(EventType type);
+	void ProcessPpuCycle();
+	bool ProcessRamOperation(MemoryOperationType type, uint16_t &addr, uint8_t &value);
+	void ProcessVramReadOperation(MemoryOperationType type, uint16_t addr, uint8_t &value);
+	void ProcessVramWriteOperation(uint16_t addr, uint8_t &value);
 	
-	static void SetLastFramePpuScroll(uint16_t addr, uint8_t xScroll, bool updateHorizontalScrollOnly);
+	void SetLastFramePpuScroll(uint16_t addr, uint8_t xScroll, bool updateHorizontalScrollOnly);
 	uint32_t GetPpuScroll();
 
-	static void ProcessInterrupt(uint16_t cpuAddr, uint16_t destCpuAddr, bool forNmi);
-
-	static bool IsEnabled();
-	static void BreakIfDebugging();
-
-	static void AddTrace(const char *log);
+	void ProcessInterrupt(uint16_t cpuAddr, uint16_t destCpuAddr, bool forNmi);
+	
+	void AddTrace(const char *log);
 
 	void SetFreezeState(uint16_t address, bool frozen);
 	void GetFreezeState(uint16_t startAddress, uint16_t length, bool* freezeState);
@@ -263,4 +258,6 @@ public:
 
 	void GetDebugEvents(uint32_t* pictureBuffer, DebugEventInfo *infoArray, uint32_t &maxEventCount);
 	uint32_t GetDebugEventCount();
+
+	uint32_t GetScreenPixel(uint8_t x, uint8_t y);
 };

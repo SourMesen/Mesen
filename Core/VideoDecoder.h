@@ -13,6 +13,7 @@ class ScaleFilter;
 class RotateFilter;
 class IRenderingDevice;
 class VideoHud;
+class Console;
 struct HdScreenInfo;
 
 struct ScreenSize
@@ -25,7 +26,7 @@ struct ScreenSize
 class VideoDecoder
 {
 private:
-	static unique_ptr<VideoDecoder> Instance;
+	shared_ptr<Console> _console;
 
 	uint16_t *_ppuOutputBuffer = nullptr;
 	HdScreenInfo *_hdScreenInfo = nullptr;
@@ -55,11 +56,8 @@ private:
 	void DecodeThread();
 
 public:
-	static VideoDecoder* GetInstance();
-	VideoDecoder();
+	VideoDecoder(shared_ptr<Console> console);
 	~VideoDecoder();
-
-	static void Release();
 
 	void DecodeFrame(bool synchronous = false);
 	void TakeScreenshot();

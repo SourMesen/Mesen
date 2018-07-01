@@ -1,6 +1,22 @@
 #pragma once
 #include "stdafx.h"
 
+enum class AddrMode
+{
+	None, Acc, Imp, Imm, Rel,
+	Zero, Abs, ZeroX, ZeroY,
+	Ind, IndX, IndY, IndYW,
+	AbsX, AbsXW, AbsY, AbsYW
+};
+
+enum class IRQSource
+{
+	External = 1,
+	FrameCounter = 2,
+	DMC = 4,
+	FdsDisk = 8,
+};
+
 enum class MemoryOperation
 {
 	Read = 1,

@@ -49,9 +49,9 @@ protected:
 	{
 		if(!(addr & 0x01)) {
 			if((_exRegs[0] & 0xE0) == 0xC0) {
-				_exRegs[1] = CPU::DebugReadByte(0x6A);
+				_exRegs[1] = _console->GetMemoryManager()->DebugRead(0x6A);
 			} else {
-				_exRegs[2] = CPU::DebugReadByte(0xFF);
+				_exRegs[2] = _console->GetMemoryManager()->DebugRead(0xFF);
 			}
 			UpdateState();
 		}

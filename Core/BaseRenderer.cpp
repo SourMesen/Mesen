@@ -6,6 +6,11 @@
 #include "VideoDecoder.h"
 #include "PPU.h"
 
+BaseRenderer::BaseRenderer(shared_ptr<Console> console)
+{
+	_console = console;
+}
+
 void BaseRenderer::DisplayMessage(string title, string message)
 {
 	shared_ptr<ToastInfo> toast(new ToastInfo(title, message, 4000));
@@ -105,7 +110,7 @@ void BaseRenderer::ShowFpsCounter(int lineNumber)
 	int yPos = 13 + 24 * lineNumber;
 	if(_fpsTimer.GetElapsedMS() > 1000) {
 		//Update fps every sec
-		uint32_t frameCount = VideoDecoder::GetInstance()->GetFrameCount();
+		uint32_t frameCount = _console->GetFrameCount();
 		if(_lastFrameCount > frameCount) {
 			_currentFPS = 0;
 		} else {
@@ -131,8 +136,8 @@ void BaseRenderer::ShowFpsCounter(int lineNumber)
 void BaseRenderer::ShowGameTimer(int lineNumber)
 {
 	int yPos = 13 + 24 * lineNumber;
-	double frameCount = PPU::GetFrameCount();
-	double frameRate = Console::GetModel() == NesModel::NTSC ? 60.098811862348404716732985230828 : 50.006977968268290848936010226333;
+	double frameCount = _console->GetFrameCount();
+	double frameRate = _console->GetModel() == NesModel::NTSC ? 60.098811862348404716732985230828 : 50.006977968268290848936010226333;
 	//uint32_t milliseconds = (uint32_t)(frameCount / 60.1 * 1000) % 1000;
 	uint32_t seconds = (uint32_t)(frameCount / frameRate) % 60;
 	uint32_t minutes = (uint32_t)(frameCount / frameRate / 60) % 60;
@@ -149,14 +154,14 @@ void BaseRenderer::ShowGameTimer(int lineNumber)
 void BaseRenderer::ShowLagCounter(int lineNumber)
 {
 	int yPos = 13 + 24 * lineNumber;
-	string lagCounter = MessageManager::Localize("Lag") + ": " + std::to_string(Console::GetLagCounter());
+	string lagCounter = MessageManager::Localize("Lag") + ": " + std::to_string(_console->GetLagCounter());
 	DrawString(lagCounter, _screenWidth - 123, yPos, 250, 235, 215);
 }
 
 void BaseRenderer::ShowFrameCounter(int lineNumber)
 {
 	int yPos = 13 + 24 * lineNumber;
-	string lagCounter = MessageManager::Localize("Frame") + ": " + std::to_string(PPU::GetFrameCount());
+	string lagCounter = MessageManager::Localize("Frame") + ": " + std::to_string(_console->GetFrameCount());
 	DrawString(lagCounter, _screenWidth - 146, yPos, 250, 235, 215);
 }
 

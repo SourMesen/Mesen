@@ -41,7 +41,7 @@ protected:
 			_irqCounter++;
 			if(_irqCounter == 0xFFFF) {
 				_irqCounter = _irqReloadValue;
-				CPU::SetIRQSource(IRQSource::External);
+				_console->GetCpu()->SetIrqSource(IRQSource::External);
 			}
 		}
 	}
@@ -59,10 +59,10 @@ protected:
 				if(_irqEnabled) {
 					_irqCounter = _irqReloadValue;
 				}
-				CPU::ClearIRQSource(IRQSource::External);
+				_console->GetCpu()->ClearIrqSource(IRQSource::External);
 				break;
 
-			case 0xD000: CPU::ClearIRQSource(IRQSource::External); break;
+			case 0xD000: _console->GetCpu()->ClearIrqSource(IRQSource::External); break;
 			case 0xE000: _selectedReg = (value & 0x0F) - 1; break;
 
 			case 0xF000: 

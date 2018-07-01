@@ -4,18 +4,13 @@
 #include "Console.h"
 #include "MessageManager.h"
 
-CheatManager* CheatManager::Instance = new CheatManager();
-
-CheatManager::CheatManager()
+CheatManager::CheatManager(shared_ptr<Console> console)
 {
+	_console = console;
+
 	for(int i = 0; i <= 0xFFFF; i++) {
 		_relativeCheatCodes.push_back(nullptr);
 	}
-}
-
-CheatManager * CheatManager::GetInstance()
-{
-	return Instance;
 }
 
 uint32_t CheatManager::DecodeValue(uint32_t code, uint32_t* bitIndexes, uint32_t bitCount)
@@ -149,9 +144,9 @@ void CheatManager::ClearCodes()
 
 void CheatManager::ApplyRamCodes(uint16_t addr, uint8_t &value)
 {
-	if(Instance->_relativeCheatCodes[addr] != nullptr) {
-		for(uint32_t i = 0, len = i < Instance->_relativeCheatCodes[addr]->size(); i < len; i++) {
-			CodeInfo code = Instance->_relativeCheatCodes[addr]->at(i);
+	if(_relativeCheatCodes[addr] != nullptr) {
+		for(uint32_t i = 0, len = i < _relativeCheatCodes[addr]->size(); i < len; i++) {
+			CodeInfo code = _relativeCheatCodes[addr]->at(i);
 			if(code.CompareValue == -1 || code.CompareValue == value) {
 				value = code.Value;
 				return;
@@ -162,8 +157,8 @@ void CheatManager::ApplyRamCodes(uint16_t addr, uint8_t &value)
 
 void CheatManager::ApplyPrgCodes(uint8_t *prgRam, uint32_t prgSize)
 {
-	for(uint32_t i = 0, len = i < Instance->_absoluteCheatCodes.size(); i < len; i++) {
-		CodeInfo code = Instance->_absoluteCheatCodes[i];
+	for(uint32_t i = 0, len = i < _absoluteCheatCodes.size(); i < len; i++) {
+		CodeInfo code = _absoluteCheatCodes[i];
 		if(code.Address < prgSize) {
 			if(code.CompareValue == -1 || code.CompareValue == prgRam[code.Address]) {
 				prgRam[code.Address] = code.Value;
@@ -176,42 +171,42 @@ vector<CodeInfo> CheatManager::GetCheats()
 {
 	//Used by NetPlay
 	vector<CodeInfo> cheats;
-	for(unique_ptr<vector<CodeInfo>> &codes : Instance->_relativeCheatCodes) {
+	for(unique_ptr<vector<CodeInfo>> &codes : _relativeCheatCodes) {
 		if(codes) {
 			std::copy(codes.get()->begin(), codes.get()->end(), std::back_inserter(cheats));
 		}
 	}
-	std::copy(Instance->_absoluteCheatCodes.begin(), Instance->_absoluteCheatCodes.end(), std::back_inserter(cheats));
+	std::copy(_absoluteCheatCodes.begin(), _absoluteCheatCodes.end(), std::back_inserter(cheats));
 	return cheats;
 }
 
 void CheatManager::SetCheats(CheatInfo cheats[], uint32_t length)
 {
-	Console::Pause();
+	_console->Pause();
 
-	Instance->ClearCodes();
+	ClearCodes();
 
 	for(uint32_t i = 0; i < length; i++) {
 		CheatInfo &cheat = cheats[i];
 		switch(cheat.Type) {
-			case CheatType::Custom: Instance->AddCustomCode(cheat.Address, cheat.Value, cheat.UseCompareValue ? cheat.CompareValue : -1, cheat.IsRelativeAddress); break;
-			case CheatType::GameGenie: Instance->AddGameGenieCode(cheat.GameGenieCode);	break;
-			case CheatType::ProActionRocky: Instance->AddProActionRockyCode(cheat.ProActionRockyCode); break;
+			case CheatType::Custom: AddCustomCode(cheat.Address, cheat.Value, cheat.UseCompareValue ? cheat.CompareValue : -1, cheat.IsRelativeAddress); break;
+			case CheatType::GameGenie: AddGameGenieCode(cheat.GameGenieCode);	break;
+			case CheatType::ProActionRocky: AddProActionRockyCode(cheat.ProActionRockyCode); break;
 		}
 	}
 
-	Console::Resume();
+	_console->Resume();
 }
 
 void CheatManager::SetCheats(vector<CodeInfo> &cheats)
 {
 	//Used by NetPlay
-	Instance->ClearCodes();
+	ClearCodes();
 
 	if(cheats.size() > 0) {
 		MessageManager::DisplayMessage("Cheats", cheats.size() > 1 ? "CheatsApplied" : "CheatApplied", std::to_string(cheats.size()));
 		for(CodeInfo &cheat : cheats) {
-			Instance->AddCode(cheat);
+			AddCode(cheat);
 		}
 	}
 }

@@ -10,8 +10,9 @@
 #include "VirtualFile.h"
 #include "SaveStateManager.h"
 
-MovieRecorder::MovieRecorder()
+MovieRecorder::MovieRecorder(shared_ptr<Console> console)
 {
+	_console = console;
 }
 
 MovieRecorder::~MovieRecorder()
@@ -32,7 +33,7 @@ bool MovieRecorder::Record(RecordMovieOptions options)
 		_writer.reset();
 		return false;
 	} else {
-		Console::Pause();
+		_console->Pause();
 
 		if(options.RecordFrom == RecordMovieFrom::StartWithoutSaveData) {
 			BatteryManager::SetBatteryProvider(shared_from_this());
@@ -42,15 +43,15 @@ bool MovieRecorder::Record(RecordMovieOptions options)
 		if(options.RecordFrom == RecordMovieFrom::StartWithSaveData) {
 			BatteryManager::SetBatteryRecorder(shared_from_this());
 		}
-		ControlManager::RegisterInputRecorder(this);
+		_console->GetControlManager()->RegisterInputRecorder(this);
 		if(options.RecordFrom == RecordMovieFrom::CurrentState) {
-			SaveStateManager::SaveState(_saveStateData);
+			_console->GetSaveStateManager()->SaveState(_saveStateData);
 			_hasSaveState = true;
 		} else {
-			Console::GetInstance()->PowerCycle();
+			_console->PowerCycle();
 		}
 		BatteryManager::SetBatteryRecorder(nullptr);
-		Console::Resume();
+		_console->Resume();
 
 		MessageManager::DisplayMessage("Movies", "MovieRecordingTo", FolderUtilities::GetFilename(_filename, true));
 
@@ -60,20 +61,20 @@ bool MovieRecorder::Record(RecordMovieOptions options)
 
 void MovieRecorder::GetGameSettings(stringstream &out)
 {
-	NesModel model = Console::GetModel();
+	NesModel model = _console->GetModel();
 
 	WriteString(out, MovieKeys::MesenVersion, EmulationSettings::GetMesenVersionString());
 	WriteInt(out, MovieKeys::MovieFormatVersion, MovieRecorder::MovieFormatVersion);
 
-	VirtualFile romFile = Console::GetRomPath();
+	VirtualFile romFile = _console->GetRomPath();
 	WriteString(out, MovieKeys::GameFile, romFile.GetFileName());
 	WriteString(out, MovieKeys::Sha1, romFile.GetSha1Hash());
 
-	VirtualFile patchFile = Console::GetPatchFile();
+	VirtualFile patchFile = _console->GetPatchFile();
 	if(patchFile.IsValid()) {
 		WriteString(out, MovieKeys::PatchFile, patchFile.GetFileName());
 		WriteString(out, MovieKeys::PatchFileSha1, patchFile.GetSha1Hash());
-		WriteString(out, MovieKeys::PatchedRomSha1, Console::GetMapperInfo().Hash.Sha1Hash);
+		WriteString(out, MovieKeys::PatchedRomSha1, _console->GetMapperInfo().Hash.Sha1Hash);
 	}
 
 	switch(model) {
@@ -123,12 +124,12 @@ void MovieRecorder::GetGameSettings(stringstream &out)
 	}	
 
 	//VS System flags
-	if(Console::GetInstance()->GetAvailableFeatures() == ConsoleFeatures::VsSystem) {
+	if(_console->GetAvailableFeatures() == ConsoleFeatures::VsSystem) {
 		WriteString(out, MovieKeys::DipSwitches, HexUtilities::ToHex(EmulationSettings::GetDipSwitches()));
 		WriteString(out, MovieKeys::PpuModel, PpuModelNames[(int)EmulationSettings::GetPpuModel()]);
 	}
 
-	for(CodeInfo &code : CheatManager::GetCheats()) {
+	for(CodeInfo &code : _console->GetCheatManager()->GetCheats()) {
 		WriteCheat(out, code);
 	}
 }
@@ -160,7 +161,7 @@ void MovieRecorder::WriteBool(stringstream &out, string name, bool enabled)
 bool MovieRecorder::Stop()
 {
 	if(_writer) {
-		ControlManager::UnregisterInputRecorder(this);
+		_console->GetControlManager()->UnregisterInputRecorder(this);
 
 		_writer->AddFile(_inputData, "Input.txt");
 
@@ -175,7 +176,7 @@ bool MovieRecorder::Stop()
 			_writer->AddFile(movieInfo, "MovieInfo.txt");
 		}
 
-		VirtualFile patchFile = Console::GetPatchFile();
+		VirtualFile patchFile = _console->GetPatchFile();
 		vector<uint8_t> patchData;
 		if(patchFile.IsValid() && patchFile.ReadFile(patchData)) {
 			_writer->AddFile(patchData, "PatchData.dat");

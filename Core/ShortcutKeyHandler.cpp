@@ -11,9 +11,11 @@
 #include "VsSystemActionManager.h"
 #include "MovieManager.h"
 #include "ControlManager.h"
+#include "Console.h"
 
-ShortcutKeyHandler::ShortcutKeyHandler()
+ShortcutKeyHandler::ShortcutKeyHandler(shared_ptr<Console> console)
 {
+	_console = console;
 	_keySetIndex = 0;
 	_isKeyUp = false;
 	_keyboardMode = false;
@@ -103,7 +105,8 @@ void ShortcutKeyHandler::CheckMappedKeys()
 		if(EmulationSettings::IsKeyboardMode()) {
 			EmulationSettings::DisableKeyboardMode();
 		} else {
-			if(ControlManager::HasKeyboard()) {
+			ControlManager* controlManager = _console->GetControlManager();
+			if(controlManager && controlManager->HasKeyboard()) {
 				EmulationSettings::EnableKeyboardMode();
 			}
 		}
@@ -132,7 +135,7 @@ void ShortcutKeyHandler::CheckMappedKeys()
 		}
 	}
 
-	shared_ptr<VsSystemActionManager> vsSam = Console::GetInstance()->GetSystemActionManager<VsSystemActionManager>();
+	shared_ptr<VsSystemActionManager> vsSam = _console->GetSystemActionManager<VsSystemActionManager>();
 	if(vsSam && !isNetplayClient && !isMovieActive) {
 		if(DetectKeyPress(EmulatorShortcut::VsServiceButton)) {
 			vsSam->SetServiceButtonState(true);
@@ -143,26 +146,26 @@ void ShortcutKeyHandler::CheckMappedKeys()
 	}
 
 	if(DetectKeyPress(EmulatorShortcut::InsertNextDisk) && !isNetplayClient && !isMovieActive) {
-		shared_ptr<FdsSystemActionManager> sam = Console::GetInstance()->GetSystemActionManager<FdsSystemActionManager>();
+		shared_ptr<FdsSystemActionManager> sam = _console->GetSystemActionManager<FdsSystemActionManager>();
 		if(sam) {
 			sam->InsertNextDisk();
 		}
 	}
 
 	if(DetectKeyPress(EmulatorShortcut::MoveToNextStateSlot)) {
-		SaveStateManager::MoveToNextSlot();
+		_console->GetSaveStateManager()->MoveToNextSlot();
 	}
 
 	if(DetectKeyPress(EmulatorShortcut::MoveToPreviousStateSlot)) {
-		SaveStateManager::MoveToPreviousSlot();
+		_console->GetSaveStateManager()->MoveToPreviousSlot();
 	}
 
 	if(DetectKeyPress(EmulatorShortcut::SaveState)) {
-		SaveStateManager::SaveState();
+		_console->GetSaveStateManager()->SaveState();
 	}
 
 	if(DetectKeyPress(EmulatorShortcut::LoadState) && !isNetplayClient) {
-		SaveStateManager::LoadState();
+		_console->GetSaveStateManager()->LoadState();
 	}
 
 	if(DetectKeyPress(EmulatorShortcut::ToggleCheats) && !isNetplayClient && !isMovieActive) {
@@ -175,17 +178,17 @@ void ShortcutKeyHandler::CheckMappedKeys()
 
 	if(DetectKeyPress(EmulatorShortcut::RunSingleFrame)) {
 		if(EmulationSettings::CheckFlag(EmulationFlags::DebuggerWindowEnabled)) {
-			shared_ptr<Debugger> debugger = Console::GetInstance()->GetDebugger(false);
+			shared_ptr<Debugger> debugger = _console->GetDebugger(false);
 			if(debugger) {
 				debugger->BreakOnScanline(241);
 			}
 		} else {
 			if(EmulationSettings::CheckFlag(EmulationFlags::Paused)) {
 				EmulationSettings::ClearFlags(EmulationFlags::Paused);
-				Console::Pause();
+				_console->Pause();
 				std::this_thread::sleep_for(std::chrono::duration<int, std::milli>(50));
 				EmulationSettings::SetFlags(EmulationFlags::Paused);
-				Console::Resume();
+				_console->Resume();
 			} else {
 				EmulationSettings::SetFlags(EmulationFlags::Paused);
 			}
@@ -193,22 +196,23 @@ void ShortcutKeyHandler::CheckMappedKeys()
 	}
 
 	if(!isNetplayClient && !MovieManager::Recording() && !EmulationSettings::CheckFlag(NsfPlayerEnabled)) {
+		RewindManager* rewindManager = _console->GetRewindManager();
 		if(DetectKeyPress(EmulatorShortcut::ToggleRewind)) {
-			if(RewindManager::IsRewinding()) {
-				RewindManager::StopRewinding();
+			if(rewindManager->IsRewinding()) {
+				rewindManager->StopRewinding();
 			} else {
-				RewindManager::StartRewinding();
+				rewindManager->StartRewinding();
 			}
 		}
 
 		if(DetectKeyPress(EmulatorShortcut::Rewind)) {
-			RewindManager::StartRewinding();
+			rewindManager->StartRewinding();
 		} else if(DetectKeyRelease(EmulatorShortcut::Rewind)) {
-			RewindManager::StopRewinding();
+			rewindManager->StopRewinding();
 		} else  if(DetectKeyPress(EmulatorShortcut::RewindTenSecs)) {
-			RewindManager::RewindSeconds(10);
+			rewindManager->RewindSeconds(10);
 		} else if(DetectKeyPress(EmulatorShortcut::RewindOneMin)) {
-			RewindManager::RewindSeconds(60);
+			rewindManager->RewindSeconds(60);
 		}
 	}
 }

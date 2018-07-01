@@ -1,11 +1,13 @@
 #pragma once
 #include "stdafx.h"
 #include "BaseControlDevice.h"
-#include "PPU.h"
+#include "Console.h"
 
 class BandaiMicrophone : public BaseControlDevice
 {
 protected:
+	shared_ptr<Console> _console;
+
 	enum Buttons { A, B, Microphone };
 
 	string GetKeyNames() override
@@ -21,7 +23,7 @@ protected:
 		for(KeyMapping keyMapping : _keyMappings) {
 			SetPressedState(Buttons::A, keyMapping.BandaiMicrophoneButtons[0]);
 			SetPressedState(Buttons::B, keyMapping.BandaiMicrophoneButtons[1]);
-			if((PPU::GetFrameCount() % 2) == 0) {
+			if((_console->GetFrameCount() % 2) == 0) {
 				//Alternate between 1 and 0s (not sure if the game does anything with this data?)
 				SetPressedState(Buttons::Microphone, keyMapping.BandaiMicrophoneButtons[2]);
 			}
@@ -29,7 +31,7 @@ protected:
 	}
 
 public:
-	BandaiMicrophone(KeyMappingSet keyMappings) : BaseControlDevice(BaseControlDevice::MapperInputPort, keyMappings)
+	BandaiMicrophone(shared_ptr<Console> console, KeyMappingSet keyMappings) : BaseControlDevice(BaseControlDevice::MapperInputPort, keyMappings)
 	{
 	}
 

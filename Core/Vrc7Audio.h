@@ -16,12 +16,16 @@ private:
 protected:
 	void ClockAudio() override
 	{
+		if(_clockTimer == 0) {
+			_clockTimer = ((double)_console->GetCpu()->GetClockRate(_console->GetModel())) / 49716;
+		}
+
 		_clockTimer--;
 		if(_clockTimer <= 0) {
 			int16_t output = _opllEmulator->GetOutput();
-			APU::AddExpansionAudioDelta(AudioChannel::VRC7, _muted ? 0 : (output - _previousOutput));
+			_console->GetApu()->AddExpansionAudioDelta(AudioChannel::VRC7, _muted ? 0 : (output - _previousOutput));
 			_previousOutput = output;
-			_clockTimer = ((double)CPU::GetClockRate(Console::GetModel())) / 49716;
+			_clockTimer = ((double)_console->GetCpu()->GetClockRate(_console->GetModel())) / 49716;
 		}
 	}
 
@@ -34,13 +38,12 @@ protected:
 	}
 
 public:
-	Vrc7Audio()
+	Vrc7Audio(shared_ptr<Console> console) : BaseExpansionAudio(console)
 	{
 		_previousOutput = 0;
 		_currentReg = 0;
 		_muted = false;
-		_clockTimer = ((double)CPU::GetClockRate(Console::GetModel())) / 49716;
-
+		_clockTimer = 0;
 		_opllEmulator.reset(new Vrc7Opll::OpllEmulator());
 	}
 

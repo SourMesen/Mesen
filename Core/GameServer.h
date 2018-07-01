@@ -7,14 +7,15 @@
 #include "IInputRecorder.h"
 
 using std::thread;
+class Console;
 
 class GameServer : public IInputRecorder, public IInputProvider
 {
 private:
 	static unique_ptr<GameServer> Instance;
+	shared_ptr<Console> _console;
 	unique_ptr<thread> _serverThread;
 	atomic<bool> _stop;
-
 	unique_ptr<Socket> _listener;
 	uint16_t _port;
 	string _password;
@@ -31,10 +32,10 @@ private:
 	void Stop();
 
 public:
-	GameServer(uint16_t port, string password, string hostPlayerName);
+	GameServer(shared_ptr<Console> console, uint16_t port, string password, string hostPlayerName);
 	virtual ~GameServer();
 
-	static void StartServer(uint16_t port, string password, string hostPlayerName);
+	static void StartServer(shared_ptr<Console> console, uint16_t port, string password, string hostPlayerName);
 	static void StopServer();
 	static bool Started();
 

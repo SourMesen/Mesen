@@ -6,7 +6,7 @@ class Waixing252 : public BaseMapper
 {
 private:
 	uint8_t _chrRegs[8];
-	VrcIrq _irq;
+	unique_ptr<VrcIrq> _irq;
 
 protected:
 	uint16_t GetPRGPageSize() override { return 0x2000; }
@@ -14,6 +14,8 @@ protected:
 
 	void InitMapper() override
 	{
+		_irq.reset(new VrcIrq(_console));
+
 		memset(_chrRegs, 0, sizeof(_chrRegs));
 
 		SelectPRGPage(2, -2);
@@ -23,7 +25,7 @@ protected:
 	void StreamState(bool saving) override
 	{
 		BaseMapper::StreamState(saving);
-		SnapshotInfo irq{ &_irq };
+		SnapshotInfo irq{ _irq.get() };
 		ArrayInfo<uint8_t> chrRegs{ _chrRegs,8 };
 		Stream(chrRegs, irq);
 
@@ -34,7 +36,7 @@ protected:
 
 	void ProcessCpuClock() override
 	{
-		_irq.ProcessCpuClock();
+		_irq->ProcessCpuClock();
 	}
 
 	void UpdateState()
@@ -58,10 +60,10 @@ protected:
 			UpdateState();
 		} else {
 			switch(addr & 0xF00C) {
-				case 0xF000: _irq.SetReloadValueNibble(value, false); break;
-				case 0xF004: _irq.SetReloadValueNibble(value, true); break;
-				case 0xF008: _irq.SetControlValue(value); break;
-				case 0xF00C: _irq.AcknowledgeIrq(); break;
+				case 0xF000: _irq->SetReloadValueNibble(value, false); break;
+				case 0xF004: _irq->SetReloadValueNibble(value, true); break;
+				case 0xF008: _irq->SetControlValue(value); break;
+				case 0xF00C: _irq->AcknowledgeIrq(); break;
 			}
 		}
 	}

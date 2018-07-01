@@ -4,7 +4,7 @@
 #include "EmulationSettings.h"
 #include "SaveStateManager.h"
 
-AutoSaveManager::AutoSaveManager()
+AutoSaveManager::AutoSaveManager(shared_ptr<Console> console)
 {
 	_stopThread = false;
 	_timer.Reset();
@@ -14,8 +14,8 @@ AutoSaveManager::AutoSaveManager()
 			uint32_t autoSaveDelay = EmulationSettings::GetAutoSaveDelay(showMessage) * 60 * 1000;
 			if(autoSaveDelay > 0) {
 				if(_timer.GetElapsedMS() > autoSaveDelay) {
-					if(!Console::IsDebuggerAttached()) {
-						SaveStateManager::SaveState(_autoSaveSlot, showMessage);
+					if(!console->IsDebuggerAttached()) {
+						console->GetSaveStateManager()->SaveState(_autoSaveSlot, showMessage);
 					}
 					_timer.Reset();
 				}

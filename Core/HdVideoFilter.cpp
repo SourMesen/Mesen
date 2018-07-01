@@ -4,9 +4,10 @@
 #include "HdVideoFilter.h"
 #include "Console.h"
 
-HdVideoFilter::HdVideoFilter()
+HdVideoFilter::HdVideoFilter(shared_ptr<HdPackData> hdData)
 {
-	_hdNesPack.reset(new HdNesPack());
+	_hdData = hdData;
+	_hdNesPack.reset(new HdNesPack(hdData));
 }
 
 FrameInfo HdVideoFilter::GetFrameInfo()
@@ -19,9 +20,8 @@ FrameInfo HdVideoFilter::GetFrameInfo()
 
 OverscanDimensions HdVideoFilter::GetOverscan()
 {
-	HdPackData* hdData = Console::GetHdData();
-	if(hdData->HasOverscanConfig) {
-		return hdData->Overscan;
+	if(_hdData->HasOverscanConfig) {
+		return _hdData->Overscan;
 	} else {
 		return BaseVideoFilter::GetOverscan();
 	}

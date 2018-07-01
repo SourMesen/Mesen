@@ -50,7 +50,7 @@ protected:
 
 	uint8_t ReadRegister(uint16_t addr) override
 	{
-		return MemoryManager::GetOpenBus() | _protectionLut[addr & 0x07];
+		return _console->GetMemoryManager()->GetOpenBus() | _protectionLut[addr & 0x07];
 	}
 
 	void WriteRegister(uint16_t addr, uint8_t value) override

@@ -30,8 +30,8 @@ protected:
 	}
 
 public:
-	DrawRectangleCommand(int x, int y, int width, int height, int color, bool fill, int frameCount) :
-		DrawCommand(frameCount), _x(x), _y(y), _width(width), _height(height), _color(color), _fill(fill)
+	DrawRectangleCommand(int x, int y, int width, int height, int color, bool fill, int frameCount, int startFrame) :
+		DrawCommand(startFrame, frameCount), _x(x), _y(y), _width(width), _height(height), _color(color), _fill(fill)
 	{
 		if(width < 0) {
 			_x += width + 1;

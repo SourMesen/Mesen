@@ -7,7 +7,7 @@
 class SunsoftFme7 : public BaseMapper
 {
 private:
-	Sunsoft5bAudio _audio;
+	unique_ptr<Sunsoft5bAudio> _audio;
 	uint8_t _command;
 	uint8_t _workRamValue;
 	bool _irqEnabled;
@@ -24,6 +24,8 @@ protected:
 
 	void InitMapper() override
 	{
+		_audio.reset(new Sunsoft5bAudio(_console));
+
 		_command = 0;
 		_workRamValue = 0;
 		_irqEnabled = false;
@@ -38,7 +40,7 @@ protected:
 	void StreamState(bool saving) override
 	{
 		BaseMapper::StreamState(saving);
-		SnapshotInfo audio{ &_audio };
+		SnapshotInfo audio{ _audio.get() };
 		Stream(_command, _workRamValue, _irqEnabled, _irqCounterEnabled, _irqCounter, audio);
 		if(!saving) {
 			UpdateWorkRam();
@@ -51,12 +53,12 @@ protected:
 			_irqCounter--;
 			if(_irqCounter == 0xFFFF) {
 				if(_irqEnabled) {
-					CPU::SetIRQSource(IRQSource::External);
+					_console->GetCpu()->SetIrqSource(IRQSource::External);
 				}
 			}
 		}
 
-		_audio.Clock();
+		_audio->Clock();
 	}
 
 	void UpdateWorkRam()
@@ -103,7 +105,7 @@ protected:
 					case 0xD:
 						_irqEnabled = (value & 0x01) == 0x01;
 						_irqCounterEnabled = (value & 0x80) == 0x80;
-						CPU::ClearIRQSource(IRQSource::External);
+						_console->GetCpu()->ClearIrqSource(IRQSource::External);
 						break;
 
 					case 0xE:
@@ -118,7 +120,7 @@ protected:
 
 			case 0xC000:
 			case 0xE000:
-				_audio.WriteRegister(addr, value);
+				_audio->WriteRegister(addr, value);
 				break;
 		}
 	}

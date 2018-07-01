@@ -3,13 +3,13 @@
 #include "Console.h"
 #include "../Utilities/miniz.h"
 
-void RewindData::LoadState()
+void RewindData::LoadState(shared_ptr<Console> &console)
 {
 	if(SaveStateData.size() > 0 && OriginalSaveStateSize > 0) {
 		unsigned long length = OriginalSaveStateSize;
 		uint8_t* buffer = new uint8_t[length];
 		uncompress(buffer, &length, SaveStateData.data(), (unsigned long)SaveStateData.size());
-		Console::LoadState(buffer, length);
+		console->LoadState(buffer, length);
 		delete[] buffer;
 	}
 }
@@ -23,10 +23,10 @@ void RewindData::CompressState(string stateData, vector<uint8_t>& compressedStat
 	delete[] compressedData;
 }
 
-void RewindData::SaveState()
+void RewindData::SaveState(shared_ptr<Console> &console)
 {
 	std::stringstream state;
-	Console::SaveState(state);
+	console->SaveState(state);
 
 	string stateData = state.str();
 	vector<uint8_t> compressedState;

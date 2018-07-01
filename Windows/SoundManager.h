@@ -3,6 +3,8 @@
 #include "stdafx.h"
 #include "../Core/BaseSoundManager.h"
 
+class Console;
+
 struct SoundDeviceInfo
 {
 	string description;
@@ -12,7 +14,7 @@ struct SoundDeviceInfo
 class SoundManager : public BaseSoundManager
 {
 public:
-	SoundManager(HWND hWnd);
+	SoundManager(shared_ptr<Console> console, HWND hWnd);
 	~SoundManager();
 
 	void Release();
@@ -34,6 +36,7 @@ private:
 	void ValidateWriteCursor(DWORD safeWriteCursor);
 
 private:
+	shared_ptr<Console> _console;
 	HWND _hWnd;
 	GUID _audioDeviceID;
 	bool _needReset = false;

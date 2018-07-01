@@ -1,16 +1,6 @@
 #pragma once
 #include "stdafx.h"
-#include "ExpressionEvaluator.h"
-
-enum BreakpointType
-{
-	Global = 0,
-	Execute = 1,
-	ReadRam = 2,
-	WriteRam = 3,
-	ReadVram = 4,
-	WriteVram = 5,
-};
+#include "DebuggerTypes.h"
 
 class Breakpoint
 {

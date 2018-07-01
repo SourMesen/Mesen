@@ -3,6 +3,7 @@
 #include "VirtualFile.h"
 #include "HdPackBuilder.h"
 #include "HdNesPack.h"
+#include "Console.h"
 
 HdPackBuilder* HdPackBuilder::_instance = nullptr;
 
@@ -15,8 +16,9 @@ enum HdPackRecordFlags
 	IgnoreOverscan = 8,
 };
 
-HdPackBuilder::HdPackBuilder(string saveFolder, ScaleFilterType filterType, uint32_t scale, uint32_t flags, uint32_t chrRamBankSize, bool isChrRam)
+HdPackBuilder::HdPackBuilder(shared_ptr<Console> console, string saveFolder, ScaleFilterType filterType, uint32_t scale, uint32_t flags, uint32_t chrRamBankSize, bool isChrRam)
 {
+	_console = console;
 	_saveFolder = saveFolder;
 	_filterType = filterType;
 	_chrRamBankSize = chrRamBankSize;
@@ -38,7 +40,7 @@ HdPackBuilder::HdPackBuilder(string saveFolder, ScaleFilterType filterType, uint
 		_hdData.Scale = scale;
 	}
 
-	_romName = FolderUtilities::GetFilename(Console::GetMapperInfo().RomName, false);
+	_romName = FolderUtilities::GetFilename(_console->GetMapperInfo().RomName, false);
 	_instance = this;
 }
 
@@ -220,7 +222,7 @@ void HdPackBuilder::SaveHdPack()
 	int pngIndex = 0;
 	ss << "<ver>" << std::to_string(HdNesPack::CurrentVersion) << std::endl;
 	ss << "<scale>" << _hdData.Scale << std::endl;
-	ss << "<supportedRom>" << Console::GetMapperInfo().Hash.Sha1Hash << std::endl;
+	ss << "<supportedRom>" << _console->GetMapperInfo().Hash.Sha1Hash << std::endl;
 	if(_flags & HdPackRecordFlags::IgnoreOverscan) {
 		OverscanDimensions overscan = EmulationSettings::GetOverscanDimensions();
 		ss << "<overscan>" << overscan.Top << "," << overscan.Right << "," << overscan.Bottom << "," << overscan.Left << std::endl;
@@ -348,18 +350,18 @@ void HdPackBuilder::SaveHdPack()
 
 void HdPackBuilder::GetChrBankList(uint32_t *banks)
 {
-	Console::Pause();
+	_instance->_console->Pause();
 	for(std::pair<const uint32_t, std::map<uint32_t, vector<HdPackTileInfo*>>> &kvp : _instance->_tilesByChrBankByPalette) {
 		*banks = kvp.first;
 		banks++;
 	}
 	*banks = -1;
-	Console::Resume();
+	_instance->_console->Resume();
 }
 
 void HdPackBuilder::GetBankPreview(uint32_t bankNumber, uint32_t pageNumber, uint32_t *rgbBuffer)
 {
-	Console::Pause();
+	_instance->_console->Pause();
 
 	for(uint32_t i = 0; i < 128 * 128 * _instance->_hdData.Scale*_instance->_hdData.Scale; i++) {
 		rgbBuffer[i] = 0xFF666666;
@@ -409,5 +411,5 @@ void HdPackBuilder::GetBankPreview(uint32_t bankNumber, uint32_t pageNumber, uin
 		}
 	}
 
-	Console::Resume();
+	_instance->_console->Resume();
 }

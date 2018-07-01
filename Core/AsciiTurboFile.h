@@ -9,8 +9,8 @@
 class AsciiTurboFile : public BaseControlDevice, public IBattery
 {
 private:
-	static const int FileSize = 0x2000;
-	static const int BitCount = FileSize * 8;
+	static constexpr int FileSize = 0x2000;
+	static constexpr int BitCount = FileSize * 8;
 	uint8_t _lastWrite = 0;
 	uint16_t _position = 0;
 	uint8_t _data[AsciiTurboFile::FileSize];

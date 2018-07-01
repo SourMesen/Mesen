@@ -21,7 +21,7 @@ protected:
 	}
 
 public:
-	PachinkoController(KeyMappingSet keyMappings) : StandardController(BaseControlDevice::ExpDevicePort, keyMappings)
+	PachinkoController(shared_ptr<Console> console, KeyMappingSet keyMappings) : StandardController(console, BaseControlDevice::ExpDevicePort, keyMappings)
 	{
 	}
 

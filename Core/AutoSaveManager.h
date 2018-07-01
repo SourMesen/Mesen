@@ -4,6 +4,8 @@
 #include "../Utilities/Timer.h"
 #include "../Utilities/AutoResetEvent.h"
 
+class Console;
+
 class AutoSaveManager
 {
 private:
@@ -15,6 +17,6 @@ private:
 	Timer _timer;
 
 public:
-	AutoSaveManager();
+	AutoSaveManager(shared_ptr<Console> console);
 	~AutoSaveManager();
 };

@@ -10,13 +10,16 @@
 #include "Debugger.h"
 #include "MovieManager.h"
 
-const uint32_t SaveStateManager::FileFormatVersion;
-atomic<uint32_t> SaveStateManager::_lastIndex(1);
+SaveStateManager::SaveStateManager(shared_ptr<Console> console)
+{
+	_console = console;
+	_lastIndex = 1;
+}
 
 string SaveStateManager::GetStateFilepath(int stateIndex)
 {
 	string folder = FolderUtilities::GetSaveStateFolder();
-	string filename = FolderUtilities::GetFilename(Console::GetMapperInfo().RomName, false) + "_" + std::to_string(stateIndex) + ".mst";
+	string filename = FolderUtilities::GetFilename(_console->GetMapperInfo().RomName, false) + "_" + std::to_string(stateIndex) + ".mst";
 	return FolderUtilities::CombinePath(folder, filename);
 }
 
@@ -61,7 +64,7 @@ void SaveStateManager::SaveState(ostream &stream)
 	stream.write((char*)&emuVersion, sizeof(emuVersion));
 	stream.write((char*)&SaveStateManager::FileFormatVersion, sizeof(uint32_t));
 
-	MapperInfo mapperInfo = Console::GetMapperInfo();
+	MapperInfo mapperInfo = _console->GetMapperInfo();
 	stream.write((char*)&mapperInfo.MapperId, sizeof(uint16_t));
 	stream.write((char*)&mapperInfo.SubMapperId, sizeof(uint8_t));
 	
@@ -73,7 +76,7 @@ void SaveStateManager::SaveState(ostream &stream)
 	stream.write((char*)&nameLength, sizeof(uint32_t));
 	stream.write(romName.c_str(), romName.size());
 
-	Console::SaveState(stream);
+	_console->SaveState(stream);
 }
 
 bool SaveStateManager::SaveState(string filepath)
@@ -81,16 +84,16 @@ bool SaveStateManager::SaveState(string filepath)
 	ofstream file(filepath, ios::out | ios::binary);
 
 	if(file) {
-		Console::Pause();
+		_console->Pause();
 		SaveState(file);
 		file.close();
 
-		shared_ptr<Debugger> debugger = Console::GetInstance()->GetDebugger(false);
+		shared_ptr<Debugger> debugger = _console->GetDebugger(false);
 		if(debugger) {
 			debugger->ProcessEvent(EventType::StateSaved);
 		}
 
-		Console::Resume();
+		_console->Resume();
 		return true;
 	}
 	return false;
@@ -152,7 +155,7 @@ bool SaveStateManager::LoadState(istream &stream, bool hashCheckRequired)
 			stream.read(nameBuffer.data(), nameBuffer.size());
 			string romName(nameBuffer.data(), nameLength);
 			
-			MapperInfo mapperInfo = Console::GetMapperInfo();
+			MapperInfo mapperInfo = _console->GetMapperInfo();
 			bool gameLoaded = !mapperInfo.Hash.Sha1Hash.empty();
 			if(mapperInfo.Hash.Sha1Hash != string(hash)) {
 				//CRC doesn't match
@@ -162,7 +165,7 @@ bool SaveStateManager::LoadState(istream &stream, bool hashCheckRequired)
 					//If mismatching states aren't allowed, or a game isn't loaded, or the mapper types don't match, try to find and load the matching ROM
 					HashInfo info;
 					info.Sha1Hash = hash;
-					if(!Console::LoadROM(romName, info)) {
+					if(!_console->LoadMatchingRom(romName, info)) {
 						MessageManager::DisplayMessage("SaveStates", "SaveStateMissingRom", romName);
 						return false;
 					}
@@ -174,7 +177,7 @@ bool SaveStateManager::LoadState(istream &stream, bool hashCheckRequired)
 		//(Note: Loading a state is disabled in the UI while a movie is playing/recording)
 		MovieManager::Stop();
 
-		Console::LoadState(stream, fileFormatVersion);
+		_console->LoadState(stream, fileFormatVersion);
 
 		return true;
 	}
@@ -188,16 +191,16 @@ bool SaveStateManager::LoadState(string filepath, bool hashCheckRequired)
 	bool result = false;
 
 	if(file.good()) {
-		Console::Pause();
+		_console->Pause();
 		if(LoadState(file, hashCheckRequired)) {
 			result = true;
 		}
 		file.close();
-		shared_ptr<Debugger> debugger = Console::GetInstance()->GetDebugger(false);
+		shared_ptr<Debugger> debugger = _console->GetDebugger(false);
 		if(debugger) {
 			debugger->ProcessEvent(EventType::StateLoaded);
 		}
-		Console::Resume();
+		_console->Resume();
 	} else {
 		MessageManager::DisplayMessage("SaveStates", "SaveStateEmpty");
 	}
@@ -217,13 +220,13 @@ bool SaveStateManager::LoadState(int stateIndex)
 
 void SaveStateManager::SaveRecentGame(string romName, string romPath, string patchPath)
 {
-	if(!EmulationSettings::CheckFlag(EmulationFlags::ConsoleMode) && !EmulationSettings::CheckFlag(EmulationFlags::DisableGameSelectionScreen) && Console::GetMapperInfo().Format != RomFormat::Nsf) {
-		string filename = FolderUtilities::GetFilename(Console::GetMapperInfo().RomName, false) + ".rgd";
+	if(!EmulationSettings::CheckFlag(EmulationFlags::ConsoleMode) && !EmulationSettings::CheckFlag(EmulationFlags::DisableGameSelectionScreen) && _console->GetMapperInfo().Format != RomFormat::Nsf) {
+		string filename = FolderUtilities::GetFilename(_console->GetMapperInfo().RomName, false) + ".rgd";
 		ZipWriter writer;
 		writer.Initialize(FolderUtilities::CombinePath(FolderUtilities::GetRecentGamesFolder(), filename));
 
 		std::stringstream pngStream;
-		VideoDecoder::GetInstance()->TakeScreenshot(pngStream);
+		_console->GetVideoDecoder()->TakeScreenshot(pngStream);
 		writer.AddFile(pngStream, "Screenshot.png");
 
 		std::stringstream stateStream;
@@ -253,15 +256,15 @@ void SaveStateManager::LoadRecentGame(string filename, bool resetGame)
 	std::getline(romInfoStream, romPath);
 	std::getline(romInfoStream, patchPath);
 
-	Console::Pause();
+	_console->Pause();
 	try {
-		if(Console::LoadROM(romPath, patchPath)) {
+		if(_console->Initialize(romPath, patchPath)) {
 			if(!resetGame) {
 				SaveStateManager::LoadState(stateStream, false);
 			}
 		}
 	} catch(std::exception ex) { 
-		Console::GetInstance()->Stop();
+		_console->Stop();
 	}
-	Console::Resume();
+	_console->Resume();
 }

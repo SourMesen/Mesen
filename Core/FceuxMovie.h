@@ -10,5 +10,7 @@ private:
 	bool InitializeData(stringstream &filestream);
 
 public:
+	using BizhawkMovie::BizhawkMovie;
+
 	bool Play(VirtualFile &file) override;
 };

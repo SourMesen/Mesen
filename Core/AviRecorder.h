@@ -5,12 +5,15 @@
 #include "../Utilities/AviWriter.h"
 #include "../Utilities/SimpleLock.h"
 
+class Console;
+
 class AviRecorder
 {
 private:
 	std::thread _aviWriterThread;
 	
 	unique_ptr<AviWriter> _aviWriter;
+	shared_ptr<Console> _console;
 
 	string _outputFile;
 	SimpleLock _lock;
@@ -29,7 +32,7 @@ private:
 	uint32_t GetFps();
 
 public:
-	AviRecorder();
+	AviRecorder(shared_ptr<Console> console);
 	virtual ~AviRecorder();
 
 	bool StartRecording(string filename, VideoCodec codec, uint32_t width, uint32_t height, uint32_t bpp, uint32_t audioSampleRate, uint32_t compressionLevel);

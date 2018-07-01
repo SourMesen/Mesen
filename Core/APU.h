@@ -6,21 +6,24 @@
 #include "Snapshotable.h"
 #include "EmulationSettings.h"
 
-class MemoryManager;
+class Console;
 class SquareChannel;
 class TriangleChannel;
 class NoiseChannel;
 class DeltaModulationChannel;
 class ApuFrameCounter;
 class SoundMixer;
+class Debugger;
 enum class FrameType;
 enum class NesModel;
 
 class APU : public Snapshotable, public IMemoryHandler
 {
+	friend ApuFrameCounter;
+
 	private:
-		static APU* Instance;
-		static bool _apuEnabled;
+		bool _apuEnabled;
+		bool _needToRun;
 
 		uint32_t _previousCycle;
 		uint32_t _currentCycle;
@@ -29,11 +32,9 @@ class APU : public Snapshotable, public IMemoryHandler
 		unique_ptr<TriangleChannel> _triangleChannel;
 		unique_ptr<NoiseChannel> _noiseChannel;
 		unique_ptr<DeltaModulationChannel> _deltaModulationChannel;
-
 		unique_ptr<ApuFrameCounter> _frameCounter;
 
-		MemoryManager* _memoryManager;
-
+		shared_ptr<Console> _console;
 		shared_ptr<SoundMixer> _mixer;
 
 		NesModel _nesModel;
@@ -42,18 +43,15 @@ class APU : public Snapshotable, public IMemoryHandler
 
 	private:
 		__forceinline bool NeedToRun(uint32_t currentCycle);
-		void Run();
 
-		static void FrameCounterTick(FrameType type);
+		void FrameCounterTick(FrameType type);
 
 	protected:
 		void StreamState(bool saving) override;
 
 	public:
-		APU(MemoryManager* memoryManager);
+		APU(shared_ptr<Console> console);
 		~APU();
-
-		void EndFrame();
 
 		void Reset(bool softReset);
 		void SetNesModel(NesModel model, bool forceInit = false);
@@ -65,26 +63,13 @@ class APU : public Snapshotable, public IMemoryHandler
 		ApuState GetState();
 
 		void Exec();
+		void ProcessCpuClock();
+		void Run();
+		void EndFrame();
 
-		__forceinline static void ExecStatic()
-		{
-			if(APU::_apuEnabled) {
-				if(EmulationSettings::GetOverclockRate() == 100 || !EmulationSettings::GetOverclockAdjustApu()) {
-					Instance->Exec();
-				} else {
-					Instance->_cyclesNeeded += 1.0 / ((double)EmulationSettings::GetOverclockRate() / 100.0);
-					while(Instance->_cyclesNeeded >= 1.0) {
-						Instance->Exec();
-						Instance->_cyclesNeeded--;
-					}
-				}
-			}
-		}
-
-		static void StaticRun();
-
-		static void AddExpansionAudioDelta(AudioChannel channel, int16_t delta);
-		static void SetApuStatus(bool enabled);
-		static bool IsApuEnabled();
-		static void WriteDmc4011(uint8_t value);
+		void AddExpansionAudioDelta(AudioChannel channel, int16_t delta);
+		void SetApuStatus(bool enabled);
+		bool IsApuEnabled();
+		void FillDmcReadBuffer();
+		void SetNeedToRun();
 };

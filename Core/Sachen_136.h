@@ -31,7 +31,7 @@ protected:
 
 	uint8_t ReadRegister(uint16_t addr) override
 	{
-		return (_chrReg & 0x3F) | (MemoryManager::GetOpenBus() & 0xC0);
+		return (_chrReg & 0x3F) | (_console->GetMemoryManager()->GetOpenBus() & 0xC0);
 	}
 
 	void WriteRegister(uint16_t addr, uint8_t value) override

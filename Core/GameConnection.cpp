@@ -11,10 +11,9 @@
 #include "ForceDisconnectMessage.h"
 #include "ServerInformationMessage.h"
 
-const uint32_t PlayerListMessage::PlayerNameMaxLength;
-
-GameConnection::GameConnection(shared_ptr<Socket> socket)
+GameConnection::GameConnection(shared_ptr<Console> console, shared_ptr<Socket> socket)
 {
+	_console = console;
 	_socket = socket;
 }
 

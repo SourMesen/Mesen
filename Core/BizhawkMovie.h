@@ -4,6 +4,7 @@
 #include "../Utilities/ZipReader.h"
 
 class VirtualFile;
+class Console;
 
 class BizhawkMovie : public IMovie
 {
@@ -13,13 +14,15 @@ private:
 	void Stop();
 
 protected:
+	shared_ptr<Console> _console;
+
 	vector<uint32_t> _systemActionByFrame;
 	vector<string> _dataByFrame[4];
 	bool _isPlaying = false;
 	RamPowerOnState _originalPowerOnState;
 
 public:
-	BizhawkMovie();
+	BizhawkMovie(shared_ptr<Console>);
 	virtual ~BizhawkMovie();
 
 	bool SetInput(BaseControlDevice *device) override;

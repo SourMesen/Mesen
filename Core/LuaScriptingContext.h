@@ -15,7 +15,7 @@ protected:
 	int InternalCallEventCallback(EventType type) override;
 
 public:
-	LuaScriptingContext();
+	LuaScriptingContext(Debugger* debugger);
 	virtual ~LuaScriptingContext();
 
 	bool LoadScript(string scriptName, string scriptContent, Debugger* debugger) override;

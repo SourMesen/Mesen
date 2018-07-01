@@ -1,6 +1,7 @@
 #pragma once
 #include "BaseMapper.h"
 #include "CPU.h"
+#include "Console.h"
 #include "MemoryManager.h"
 #include "DatachBarcodeReader.h"
 
@@ -34,7 +35,7 @@ protected:
 		
 		if(_mapperID == 157) {
 			//"Mapper 157 is used for Datach Joint ROM System boards"
-			_barcodeReader.reset(new DatachBarcodeReader());
+			_barcodeReader.reset(new DatachBarcodeReader(_console));
 			_mapperControlDevice = _barcodeReader;
 		}
 
@@ -68,7 +69,7 @@ protected:
 			//Famicom Jump II - Saikyou no 7 Nin (J) and Magical Taruruuto-kun 2 - Mahou Daibouken (J)
 			//to work without glitches with the same code.
 			if(_irqCounter == 0) {
-				CPU::SetIRQSource(IRQSource::External);
+				_console->GetCpu()->SetIrqSource(IRQSource::External);
 			}
 			_irqCounter--;
 		}
@@ -77,7 +78,7 @@ protected:
 	uint8_t ReadRegister(uint16_t addr) override
 	{
 		//Pretend EEPROM data is always 0
-		return (_barcodeReader ? _barcodeReader->GetOutput() : 0) | MemoryManager::GetOpenBus(0xE7);
+		return (_barcodeReader ? _barcodeReader->GetOutput() : 0) | _console->GetMemoryManager()->GetOpenBus(0xE7);
 	}
 
 	void WriteRegister(uint16_t addr, uint8_t value) override
@@ -115,7 +116,7 @@ protected:
 				//Wiki claims there is no reload value, however this seems to be the only way to make Famicom Jump II - Saikyou no 7 Nin work properly 
 				_irqEnabled = (value & 0x01) == 0x01;
 				_irqCounter = _irqReload;
-				CPU::ClearIRQSource(IRQSource::External);
+				_console->GetCpu()->ClearIrqSource(IRQSource::External);
 				break;
 
 			case 0x0B:

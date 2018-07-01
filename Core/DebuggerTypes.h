@@ -2,6 +2,16 @@
 #include "Types.h"
 #include "EmulationSettings.h"
 
+enum BreakpointType
+{
+	Global = 0,
+	Execute = 1,
+	ReadRam = 2,
+	WriteRam = 3,
+	ReadVram = 4,
+	WriteVram = 5,
+};
+
 enum class DebuggerFlags
 {
 	None = 0x00,
@@ -102,6 +112,7 @@ struct DebugState
 	CartridgeState Cartridge;
 	ApuState APU;
 	NesModel Model;
+	uint32_t ClockRate;
 };
 
 struct OperationInfo

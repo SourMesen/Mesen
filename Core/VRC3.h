@@ -36,14 +36,14 @@ protected:
 				smallCounter++;
 				if(_smallCounter == 0) {
 					smallCounter = _irqReload & 0xFF;
-					CPU::SetIRQSource(IRQSource::External);
+					_console->GetCpu()->SetIrqSource(IRQSource::External);
 				}
 				_irqCounter = (_irqCounter & 0xFF00) | smallCounter;
 			} else {
 				_irqCounter++;
 				if(_irqCounter == 0) {
 					_irqCounter = _irqReload;
-					CPU::SetIRQSource(IRQSource::External);
+					_console->GetCpu()->SetIrqSource(IRQSource::External);
 				}
 			}
 		}
@@ -63,10 +63,10 @@ protected:
 				}
 				_smallCounter = (value & 0x04) == 0x04;
 				_irqEnableOnAck = (value & 0x01) == 0x01;
-				CPU::ClearIRQSource(IRQSource::External);
+				_console->GetCpu()->ClearIrqSource(IRQSource::External);
 				break;
 			case 0xD000:
-				CPU::ClearIRQSource(IRQSource::External);
+				_console->GetCpu()->ClearIrqSource(IRQSource::External);
 				_irqEnabled = _irqEnableOnAck;				
 				break;
 			case 0xF000: SelectPRGPage(0, value & 0x07); break;

@@ -35,7 +35,7 @@ protected:
 		if(_irqCounter > 0) {
 			_irqCounter--;
 			if(_irqCounter == 0) {
-				CPU::SetIRQSource(IRQSource::External);
+				_console->GetCpu()->SetIrqSource(IRQSource::External);
 			}
 		}
 	}
@@ -45,7 +45,7 @@ protected:
 		switch(addr & 0xE000) {
 			case 0x8000:
 				_irqCounter = 0;
-				CPU::ClearIRQSource(IRQSource::External);
+				_console->GetCpu()->ClearIrqSource(IRQSource::External);
 				break;
 			case 0xA000:
 				_irqCounter = 4096;

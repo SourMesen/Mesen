@@ -24,18 +24,20 @@
 #include "DebugBreakHelper.h"
 #include "ScriptHost.h"
 #include "StandardController.h"
+#include "TraceLogger.h"
+#include "Breakpoint.h"
+#include "CodeDataLogger.h"
 
 #ifndef UINT32_MAX
 #define UINT32_MAX  ((uint32_t)-1)
 #endif
 
-Debugger* Debugger::Instance = nullptr;
 const int Debugger::BreakpointTypeCount;
 string Debugger::_disassemblerOutput = "";
 
 Debugger::Debugger(shared_ptr<Console> console, shared_ptr<CPU> cpu, shared_ptr<PPU> ppu, shared_ptr<APU> apu, shared_ptr<MemoryManager> memoryManager, shared_ptr<BaseMapper> mapper)
 {
-	_romName = Console::GetMapperInfo().RomName;
+	_romName = console->GetMapperInfo().RomName;
 	_console = console;
 	_cpu = cpu;
 	_ppu = ppu;
@@ -103,8 +105,6 @@ Debugger::Debugger(shared_ptr<Console> console, shared_ptr<CPU> cpu, shared_ptr<
 	_nextScriptId = 0;
 
 	UpdatePpuCyclesToProcess();
-
-	Debugger::Instance = this;
 }
 
 Debugger::~Debugger()
@@ -113,7 +113,7 @@ Debugger::~Debugger()
 
 	_stopFlag = true;
 
-	Console::Pause();
+	_console->Pause();
 
 	{
 		auto lock = _scriptLock.AcquireSafe();
@@ -125,12 +125,14 @@ Debugger::~Debugger()
 		_hasScript = false;
 	}
 
-	if(Debugger::Instance == this) {
-		Debugger::Instance = nullptr;
-	}
 	_breakLock.Acquire();
 	_breakLock.Release();
-	Console::Resume();
+	_console->Resume();
+}
+
+Console* Debugger::GetConsole()
+{
+	return _console.get();
 }
 
 void Debugger::Suspend()
@@ -161,35 +163,17 @@ bool Debugger::CheckFlag(DebuggerFlags flag)
 	return (_flags & (uint32_t)flag) == (uint32_t)flag;
 }
 
-bool Debugger::IsEnabled()
-{
-	return Debugger::Instance != nullptr;
-}
-
-void Debugger::BreakIfDebugging()
-{
-	if(Debugger::Instance != nullptr) {
-		Debugger::Instance->Step(1);
-		Debugger::Instance->SleepUntilResume();
-	} else if(EmulationSettings::CheckFlag(EmulationFlags::BreakOnCrash)) {
-		//When "Break on Crash" is enabled, open the debugger and break immediately if a crash occurs
-		Console::GetInstance()->GetDebugger(true);
-		Debugger::Instance->Step(1);
-		Debugger::Instance->SleepUntilResume();
-	}
-}
-
 bool Debugger::LoadCdlFile(string cdlFilepath)
 {
 	if(_codeDataLogger->LoadCdlFile(cdlFilepath)) {
 		//Can't use DebugBreakHelper due to the fact this is called in the constructor
-		bool isEmulationThread = Console::GetEmulationThreadId() == std::this_thread::get_id();
+		bool isEmulationThread = _console->GetEmulationThreadId() == std::this_thread::get_id();
 		if(!isEmulationThread) {
-			Console::Pause();
+			_console->Pause();
 		}
 		UpdateCdlCache();
 		if(!isEmulationThread) {
-			Console::Resume();
+			_console->Resume();
 		}
 		return true;
 	}
@@ -433,7 +417,7 @@ void Debugger::AddCallstackFrame(uint16_t source, uint16_t target, StackFrameFla
 	_callstack.push_back(stackFrame);
 }
 
-void Debugger::PrivateProcessInterrupt(uint16_t cpuAddr, uint16_t destCpuAddr, bool forNmi)
+void Debugger::ProcessInterrupt(uint16_t cpuAddr, uint16_t destCpuAddr, bool forNmi)
 {
 	AddCallstackFrame(cpuAddr, destCpuAddr, forNmi ? StackFrameFlags::Nmi : StackFrameFlags::Irq);
 	_subReturnAddresses.push_back(cpuAddr);
@@ -441,20 +425,6 @@ void Debugger::PrivateProcessInterrupt(uint16_t cpuAddr, uint16_t destCpuAddr, b
 	_profiler->StackFunction(-1, _mapper->ToAbsoluteAddress(destCpuAddr));
 
 	ProcessEvent(forNmi ? EventType::Nmi : EventType::Irq);
-}
-
-void Debugger::ProcessInterrupt(uint16_t cpuAddr, uint16_t destCpuAddr, bool forNmi)
-{
-	if(Debugger::Instance) {
-		Debugger::Instance->PrivateProcessInterrupt(cpuAddr, destCpuAddr, forNmi);
-	}
-}
-
-void Debugger::StaticProcessEvent(EventType type)
-{
-	if(Debugger::Instance) {
-		Debugger::Instance->ProcessEvent(type);
-	}
 }
 
 void Debugger::ProcessStepConditions(uint16_t addr)
@@ -469,24 +439,24 @@ void Debugger::ProcessStepConditions(uint16_t addr)
 	}
 }
 
-void Debugger::PrivateProcessPpuCycle()
+void Debugger::ProcessPpuCycle()
 {
-	if(_proccessPpuCycle[PPU::GetCurrentCycle()]) {
-		int32_t currentCycle = (PPU::GetCurrentCycle() << 9) + PPU::GetCurrentScanline();
+	if(_proccessPpuCycle[_ppu->GetCurrentCycle()]) {
+		int32_t currentCycle = (_ppu->GetCurrentCycle() << 9) + _ppu->GetCurrentScanline();
 		for(auto updateCycle : _ppuViewerUpdateCycle) {
 			if(updateCycle.second == currentCycle) {
 				MessageManager::SendNotification(ConsoleNotificationType::PpuViewerDisplayFrame, (void*)(uint64_t)updateCycle.first);
 			}
 		}
 
-		if(PPU::GetCurrentCycle() == 0) {
-			if(_breakOnScanline == PPU::GetCurrentScanline()) {
+		if(_ppu->GetCurrentCycle() == 0) {
+			if(_breakOnScanline == _ppu->GetCurrentScanline()) {
 				Step(1);
 				SleepUntilResume(BreakSource::Pause);
 			}
-			if(PPU::GetCurrentScanline() == 241) {
+			if(_ppu->GetCurrentScanline() == 241) {
 				ProcessEvent(EventType::EndFrame);
-			} else if(PPU::GetCurrentScanline() == -1) {
+			} else if(_ppu->GetCurrentScanline() == -1) {
 				ProcessEvent(EventType::StartFrame);
 			}
 		}
@@ -507,7 +477,7 @@ void Debugger::PrivateProcessPpuCycle()
 	}
 }
 
-bool Debugger::PrivateProcessRamOperation(MemoryOperationType type, uint16_t &addr, uint8_t &value)
+bool Debugger::ProcessRamOperation(MemoryOperationType type, uint16_t &addr, uint8_t &value)
 {
 	OperationInfo operationInfo { addr, (int16_t)value, type };
 
@@ -541,7 +511,7 @@ bool Debugger::PrivateProcessRamOperation(MemoryOperationType type, uint16_t &ad
 			if(!_rewindCache.empty()) {
 				//Restore the state, and the cycle number of the instruction that preceeded that state
 				//Otherwise, the target cycle number when building the next cache will be incorrect
-				Console::LoadState(_rewindCache.back());
+				_console->LoadState(_rewindCache.back());
 				_curInstructionCycle = _rewindPrevInstructionCycleCache.back();
 				
 				_rewindCache.pop_back();
@@ -551,7 +521,7 @@ bool Debugger::PrivateProcessRamOperation(MemoryOperationType type, uint16_t &ad
 				_runToCycle = 0;
 				Step(1);
 			} else {
-				RewindManager::StartRewinding(true);
+				_console->GetRewindManager()->StartRewinding(true);
 			}
 			UpdateProgramCounter(addr, value);
 			_needRewind = false;
@@ -602,7 +572,7 @@ bool Debugger::PrivateProcessRamOperation(MemoryOperationType type, uint16_t &ad
 
 	if(type == MemoryOperationType::ExecOpCode) {
 		_prevInstructionCycle = _curInstructionCycle;
-		_curInstructionCycle = CPU::GetCycleCount();
+		_curInstructionCycle = _cpu->GetCycleCount();
 
 		bool isSubEntryPoint = _lastInstruction == 0x20; //Previous instruction was a JSR
 		if(absoluteAddr >= 0) {
@@ -626,14 +596,14 @@ bool Debugger::PrivateProcessRamOperation(MemoryOperationType type, uint16_t &ad
 		} 
 
 		if(_runToCycle != 0) {
-			if(CPU::GetCycleCount() >= _runToCycle) {
+			if(_cpu->GetCycleCount() >= _runToCycle) {
 				//Step back operation is done, revert RewindManager's state & break debugger
-				RewindManager::StopRewinding(true);
+				_console->GetRewindManager()->StopRewinding(true);
 				_runToCycle = 0;
 				Step(1);
-			} else if(_runToCycle - CPU::GetCycleCount() < 500) {
+			} else if(_runToCycle - _cpu->GetCycleCount() < 500) {
 				_rewindCache.push_back(stringstream());
-				Console::SaveState(_rewindCache.back());
+				_console->SaveState(_rewindCache.back());
 				_rewindPrevInstructionCycleCache.push_back(_prevInstructionCycle);
 			}
 		}
@@ -720,7 +690,7 @@ bool Debugger::SleepUntilResume(BreakSource source)
 		auto lock = _breakLock.AcquireSafe();
 				
 		if(_preventResume == 0) {
-			SoundMixer::StopAudio();
+			_console->GetSoundMixer()->StopAudio();
 			MessageManager::SendNotification(ConsoleNotificationType::CodeBreak, (void*)(uint64_t)source);
 			ProcessEvent(EventType::CodeBreak);
 			_stepOverAddr = -1;
@@ -742,7 +712,7 @@ bool Debugger::SleepUntilResume(BreakSource source)
 	return false;
 }
 
-void Debugger::PrivateProcessVramReadOperation(MemoryOperationType type, uint16_t addr, uint8_t &value)
+void Debugger::ProcessVramReadOperation(MemoryOperationType type, uint16_t addr, uint8_t &value)
 {
 	int32_t absoluteAddr = _mapper->ToAbsoluteChrAddress(addr);
 	_codeDataLogger->SetFlag(absoluteAddr, type == MemoryOperationType::Read ? CdlChrFlags::Read : CdlChrFlags::Drawn);
@@ -755,7 +725,7 @@ void Debugger::PrivateProcessVramReadOperation(MemoryOperationType type, uint16_
 	ProcessPpuOperation(addr, value, MemoryOperationType::Read);
 }
 
-void Debugger::PrivateProcessVramWriteOperation(uint16_t addr, uint8_t &value)
+void Debugger::ProcessVramWriteOperation(uint16_t addr, uint8_t &value)
 {
 	if(_hasBreakpoint[BreakpointType::WriteVram]) {
 		OperationInfo operationInfo{ addr, value, MemoryOperationType::Write };
@@ -771,7 +741,7 @@ void Debugger::GetApuState(ApuState *state)
 	DebugBreakHelper helper(this);
 
 	//Force APU to catch up before we retrieve its state
-	APU::StaticRun();
+	_apu->Run();
 
 	*state = _apu->GetState();
 }
@@ -779,6 +749,7 @@ void Debugger::GetApuState(ApuState *state)
 void Debugger::GetState(DebugState *state, bool includeMapperInfo)
 {
 	state->Model = _console->GetModel();
+	state->ClockRate = _cpu->GetClockRate(_console->GetModel());
 	_cpu->GetState(state->CPU);
 	_ppu->GetState(state->PPU);
 	if(includeMapperInfo) {
@@ -875,6 +846,12 @@ void Debugger::Run()
 	_stepCount = -1;
 	_breakOnScanline = -2;
 	_stepOut = false;
+}
+
+void Debugger::BreakImmediately()
+{
+	Step(1);
+	SleepUntilResume();
 }
 
 void Debugger::BreakOnScanline(int16_t scanline)
@@ -976,45 +953,6 @@ void Debugger::SetNextStatement(uint16_t addr)
 		//Force the current instruction to finish
 		Step(1);
 	}
-}
-
-void Debugger::ProcessPpuCycle()
-{
-#ifndef LIBRETRO
-	if(Debugger::Instance) {
-		Debugger::Instance->PrivateProcessPpuCycle();
-	}
-#endif
-}
-
-bool Debugger::ProcessRamOperation(MemoryOperationType type, uint16_t &addr, uint8_t &value)
-{
-#ifndef LIBRETRO
-	if(Debugger::Instance) {
-		return Debugger::Instance->PrivateProcessRamOperation(type, addr, value);
-	}
-	return true;
-#else
-	return true;
-#endif
-}
-
-void Debugger::ProcessVramReadOperation(MemoryOperationType type, uint16_t addr, uint8_t &value)
-{
-#ifndef LIBRETRO
-	if(Debugger::Instance) {
-		Debugger::Instance->PrivateProcessVramReadOperation(type, addr, value);
-	}
-#endif
-}
-
-void Debugger::ProcessVramWriteOperation(uint16_t addr, uint8_t &value)
-{
-#ifndef LIBRETRO
-	if(Debugger::Instance) {
-		Debugger::Instance->PrivateProcessVramWriteOperation(addr, value);
-	}
-#endif
 }
 
 void Debugger::GetCallstack(StackFrameInfo* callstackArray, uint32_t &callstackSize)
@@ -1172,11 +1110,9 @@ void Debugger::ClearPpuViewerSettings(int32_t ppuViewer)
 
 void Debugger::SetLastFramePpuScroll(uint16_t addr, uint8_t xScroll, bool updateHorizontalScrollOnly)
 {
-	if(Debugger::Instance) {
-		Debugger::Instance->_ppuScrollX = ((addr & 0x1F) << 3) | xScroll | ((addr & 0x400) ? 0x100 : 0);
-		if(!updateHorizontalScrollOnly) {
-			Debugger::Instance->_ppuScrollY = (((addr & 0x3E0) >> 2) | ((addr & 0x7000) >> 12)) + ((addr & 0x800) ? 240 : 0);
-		}
+	_ppuScrollX = ((addr & 0x1F) << 3) | xScroll | ((addr & 0x400) ? 0x100 : 0);
+	if(!updateHorizontalScrollOnly) {
+		_ppuScrollY = (((addr & 0x3E0) >> 2) | ((addr & 0x7000) >> 12)) + ((addr & 0x800) ? 240 : 0);
 	}
 }
 
@@ -1387,7 +1323,7 @@ void Debugger::ProcessEvent(EventType type)
 	if(type == EventType::InputPolled) {
 		for(int i = 0; i < 4; i++) {
 			if(_inputOverride[i] != 0) {
-				shared_ptr<StandardController> controller = std::dynamic_pointer_cast<StandardController>(ControlManager::GetControlDevice(i));
+				shared_ptr<StandardController> controller = std::dynamic_pointer_cast<StandardController>(_console->GetControlManager()->GetControlDevice(i));
 				if(controller) {
 					controller->SetBitValue(StandardController::Buttons::A, (_inputOverride[i] & 0x01) != 0);
 					controller->SetBitValue(StandardController::Buttons::B, (_inputOverride[i] & 0x02) != 0);
@@ -1457,9 +1393,12 @@ uint32_t Debugger::GetDebugEventCount()
 	return (uint32_t)_debugEvents.size();
 }
 
+uint32_t Debugger::GetScreenPixel(uint8_t x, uint8_t y)
+{
+	return _ppu->GetPixel(x, y);
+}
+
 void Debugger::AddTrace(const char* log)
 {
-	if(Debugger::Instance) {
-		Debugger::Instance->_traceLogger->LogExtraInfo(log);
-	}
+	_traceLogger->LogExtraInfo(log, _cpu->GetCycleCount());
 }

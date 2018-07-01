@@ -33,7 +33,7 @@ protected:
 		_irqCounter--;
 		if(_irqCounter == 0) {
 			_irqCounter = 1024;
-			CPU::SetIRQSource(IRQSource::External);
+			_console->GetCpu()->SetIrqSource(IRQSource::External);
 		}
 	}
 
@@ -47,7 +47,7 @@ protected:
 
 			case 0xC000: 
 				_irqCounter = 1024;
-				CPU::ClearIRQSource(IRQSource::External);
+				_console->GetCpu()->ClearIrqSource(IRQSource::External);
 				break;
 		}
 

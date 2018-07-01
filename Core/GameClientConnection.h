@@ -9,6 +9,8 @@
 #include "ControlDeviceState.h"
 #include "ClientConnectionData.h"
 
+class Console;
+
 class GameClientConnection : public GameConnection, public INotificationListener, public IInputProvider
 {
 private:
@@ -36,12 +38,13 @@ private:
 	void ClearInputData();
 	void PushControllerState(uint8_t port, ControlDeviceState state);
 	void DisableControllers();
+	bool AttemptLoadGame(string filename, uint32_t crc32Hash);
 
 protected:
 	void ProcessMessage(NetMessage* message) override;
 
 public:
-	GameClientConnection(shared_ptr<Socket> socket, ClientConnectionData &connectionData);
+	GameClientConnection(shared_ptr<Console> console, shared_ptr<Socket> socket, ClientConnectionData &connectionData);
 	virtual ~GameClientConnection();
 
 	void Shutdown();

@@ -3,6 +3,8 @@
 #include "APU.h"
 #include "IMemoryHandler.h"
 #include "ApuEnvelope.h"
+#include "CPU.h"
+#include "Console.h"
 
 class NoiseChannel : public ApuEnvelope
 {
@@ -38,7 +40,7 @@ protected:
 	}
 
 public:
-	NoiseChannel(AudioChannel channel, SoundMixer* mixer) : ApuEnvelope(channel, mixer)
+	NoiseChannel(AudioChannel channel, shared_ptr<Console> console, SoundMixer* mixer) : ApuEnvelope(channel, console, mixer)
 	{
 	}
 
@@ -65,7 +67,8 @@ public:
 
 	void WriteRAM(uint16_t addr, uint8_t value) override
 	{
-		APU::StaticRun();
+		_console->GetApu()->Run();
+
 		switch(addr & 0x03) {
 			case 0:		//400C
 				InitializeLengthCounter((value & 0x20) == 0x20);
@@ -91,7 +94,7 @@ public:
 		ApuNoiseState state;
 		state.Enabled = _enabled;
 		state.Envelope = ApuEnvelope::GetState();
-		state.Frequency = (double)CPU::GetClockRate(GetNesModel()) / (_period + 1) / (_modeFlag ? 93 : 1);
+		state.Frequency = (double)_console->GetCpu()->GetClockRate(GetNesModel()) / (_period + 1) / (_modeFlag ? 93 : 1);
 		state.LengthCounter = ApuLengthCounter::GetState();
 		state.ModeFlag = _modeFlag;
 		state.OutputVolume = _lastOutput;

@@ -613,7 +613,7 @@ BaseMapper* MapperFactory::GetMapperFromID(RomData &romData)
 	return nullptr;
 }
 
-shared_ptr<BaseMapper> MapperFactory::InitializeFromFile(string romFilename, vector<uint8_t> &fileData)
+shared_ptr<BaseMapper> MapperFactory::InitializeFromFile(shared_ptr<Console> console, string romFilename, vector<uint8_t> &fileData)
 {
 	RomLoader loader;
 
@@ -622,6 +622,7 @@ shared_ptr<BaseMapper> MapperFactory::InitializeFromFile(string romFilename, vec
 		shared_ptr<BaseMapper> mapper(GetMapperFromID(romData));
 
 		if(mapper) {
+			mapper->SetConsole(console);
 			mapper->Initialize(romData);
 			MessageManager::RegisterNotificationListener(mapper);
 			return mapper;

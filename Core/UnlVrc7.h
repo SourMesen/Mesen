@@ -6,7 +6,7 @@
 class UnlVrc7 : public BaseMapper
 {
 private:
-	VrcIrq _irq;
+	unique_ptr<VrcIrq> _irq;
 	uint8_t _chrRegisters[8];
 
 protected:
@@ -15,7 +15,8 @@ protected:
 
 	void InitMapper() override
 	{
-		_irq.Reset();
+		_irq.reset(new VrcIrq(_console));
+		_irq->Reset();
 		memset(_chrRegisters, 0, sizeof(_chrRegisters));
 		SelectPRGPage(3, -1);
 	}
@@ -23,7 +24,7 @@ protected:
 	virtual void StreamState(bool saving) override
 	{
 		BaseMapper::StreamState(saving);
-		SnapshotInfo irq { &_irq };
+		SnapshotInfo irq { _irq.get() };
 		ArrayInfo<uint8_t> chrRegisters = { _chrRegisters, 8 };
 
 		Stream(chrRegisters, irq);
@@ -31,7 +32,7 @@ protected:
 
 	void ProcessCpuClock() override
 	{
-		_irq.ProcessCpuClock();
+		_irq->ProcessCpuClock();
 	}
 	
 	void WriteRegister(uint16_t addr, uint8_t value) override
@@ -59,9 +60,9 @@ protected:
 				}
 				break;
 
-			case 0xE008: _irq.SetReloadValue(value + 8); break;
-			case 0xF000: _irq.SetControlValue(value & 0x03); break;
-			case 0xF008: _irq.AcknowledgeIrq(); break;
+			case 0xE008: _irq->SetReloadValue(value + 8); break;
+			case 0xF000: _irq->SetControlValue(value & 0x03); break;
+			case 0xF008: _irq->AcknowledgeIrq(); break;
 		}
 	}
 };

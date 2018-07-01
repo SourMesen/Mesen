@@ -3,6 +3,7 @@
 #include "Snapshotable.h"
 #include "APU.h"
 #include "BaseExpansionAudio.h"
+#include "Console.h"
 
 class Sunsoft5bAudio : public BaseExpansionAudio
 {
@@ -68,7 +69,7 @@ private:
 			}
 		}
 
-		APU::AddExpansionAudioDelta(AudioChannel::Sunsoft5B, summedOutput - _lastOutput);
+		_console->GetApu()->AddExpansionAudioDelta(AudioChannel::Sunsoft5B, summedOutput - _lastOutput);
 		_lastOutput = summedOutput;
 	}
 
@@ -95,7 +96,7 @@ protected:
 	}
 
 public:
-	Sunsoft5bAudio()
+	Sunsoft5bAudio(shared_ptr<Console> console) : BaseExpansionAudio(console)
 	{
 		memset(_timer, 0, sizeof(_timer));
 		memset(_registers, 0, sizeof(_registers));

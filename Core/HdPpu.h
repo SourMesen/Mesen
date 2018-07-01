@@ -14,7 +14,6 @@ class HdPpu : public PPU
 private:
 	HdScreenInfo *_screenInfo[2];
 	HdScreenInfo *_info;
-	bool _isChrRam;
 	uint32_t _version;
 	HdPackData *_hdData = nullptr;
 
@@ -26,6 +25,9 @@ protected:
 		_lastSprite = nullptr;
 
 		if(IsRenderingEnabled() || ((_state.VideoRamAddr & 0x3F00) != 0x3F00)) {
+			bool isChrRam = !_console->GetMapper()->HasChrRom();
+			BaseMapper *mapper = _console->GetMapper();
+
 			uint32_t color = GetPixelColor();
 			pixel = (_paletteRAM[color & 0x03 ? color : 0] & _paletteRamMask) | _intensifyColorBits;
 			
@@ -57,8 +59,8 @@ protected:
 					SpriteInfo& sprite = _spriteTiles[i];
 					if(shift >= 0 && shift < 8) {
 						tileInfo.Sprite[j].TileIndex = sprite.AbsoluteTileAddr / 16;
-						if(_isChrRam) {
-							_mapper->CopyChrRamTile(sprite.AbsoluteTileAddr & 0xFFFFFFF0, tileInfo.Sprite[j].TileData);
+						if(isChrRam) {
+							mapper->CopyChrRamTile(sprite.AbsoluteTileAddr & 0xFFFFFFF0, tileInfo.Sprite[j].TileData);
 						}
 						if(_version >= 100) {
 							tileInfo.Sprite[j].PaletteColors = 0xFF000000 | _paletteRAM[sprite.PaletteOffset + 3] | (_paletteRAM[sprite.PaletteOffset + 2] << 8) | (_paletteRAM[sprite.PaletteOffset + 1] << 16);
@@ -105,8 +107,8 @@ protected:
 
 			if(_flags.BackgroundEnabled && _cycle > _minimumDrawBgCycle) {
 				tileInfo.Tile.TileIndex = lastTile->AbsoluteTileAddr / 16;
-				if(_isChrRam) {
-					_mapper->CopyChrRamTile(lastTile->AbsoluteTileAddr & 0xFFFFFFF0, tileInfo.Tile.TileData);
+				if(isChrRam) {
+					mapper->CopyChrRamTile(lastTile->AbsoluteTileAddr & 0xFFFFFFF0, tileInfo.Tile.TileData);
 				}
 				if(_version >= 100) {
 					tileInfo.Tile.PaletteColors = _paletteRAM[lastTile->PaletteOffset + 3] | (_paletteRAM[lastTile->PaletteOffset + 2] << 8) | (_paletteRAM[lastTile->PaletteOffset + 1] << 16) | (_paletteRAM[0] << 24);
@@ -127,15 +129,13 @@ protected:
 	}
 
 public:
-	HdPpu(BaseMapper* mapper, ControlManager* controlManager, HdPackData* hdData) : PPU(mapper, controlManager)
+	HdPpu(shared_ptr<Console> console, HdPackData* hdData) : PPU(console)
 	{
-		_isChrRam = !_mapper->HasChrRom();
 		_hdData = hdData;
 		_version = _hdData->Version;
-
-		_screenInfo[0] = new HdScreenInfo(_isChrRam);
-		_screenInfo[1] = new HdScreenInfo(_isChrRam);
-		
+	
+		_screenInfo[0] = new HdScreenInfo();
+		_screenInfo[1] = new HdScreenInfo();
 		_info = _screenInfo[0];
 	}
 
@@ -156,20 +156,20 @@ public:
 				if((address & 0x3FFF) >= 0x3F00) {
 					_info->WatchedAddressValues[address] = ReadPaletteRAM(address);
 				} else {
-					_info->WatchedAddressValues[address] = _mapper->DebugReadVRAM(address & 0x3FFF, true);
+					_info->WatchedAddressValues[address] = _console->GetMapper()->DebugReadVRAM(address & 0x3FFF, true);
 				}
 			} else {
-				_info->WatchedAddressValues[address] = CPU::DebugReadByte(address);
+				_info->WatchedAddressValues[address] = _console->GetMemoryManager()->DebugRead(address);
 			}
 		}
 
 #ifdef  LIBRETRO
-		VideoDecoder::GetInstance()->UpdateFrameSync(_currentOutputBuffer, _info);
+		_console->GetVideoDecoder()->UpdateFrameSync(_currentOutputBuffer, _info);
 #else
-		if(RewindManager::IsRewinding()) {
-			VideoDecoder::GetInstance()->UpdateFrameSync(_currentOutputBuffer, _info);
+		if(_console->GetRewindManager()->IsRewinding()) {
+			_console->GetVideoDecoder()->UpdateFrameSync(_currentOutputBuffer, _info);
 		} else {
-			VideoDecoder::GetInstance()->UpdateFrame(_currentOutputBuffer, _info);
+			_console->GetVideoDecoder()->UpdateFrame(_currentOutputBuffer, _info);
 		}
 		_currentOutputBuffer = (_currentOutputBuffer == _outputBuffers[0]) ? _outputBuffers[1] : _outputBuffers[0];
 		_info = (_info == _screenInfo[0]) ? _screenInfo[1] : _screenInfo[0];

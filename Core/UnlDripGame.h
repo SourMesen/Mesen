@@ -6,7 +6,7 @@
 class UnlDripGame : public BaseMapper
 {
 private:
-	UnlDripGameAudio _audioChannels[2];
+	unique_ptr<UnlDripGameAudio> _audioChannels[2];
 	uint8_t _extendedAttributes[2][0x400];
 	uint8_t _lowByteIrqCounter;
 	uint16_t _irqCounter;
@@ -25,6 +25,9 @@ protected:
 
 	void InitMapper() override
 	{
+		_audioChannels[0].reset(new UnlDripGameAudio(_console));
+		_audioChannels[1].reset(new UnlDripGameAudio(_console));
+
 		_lowByteIrqCounter = 0;
 		_irqCounter = 0;
 		_irqEnabled = false;
@@ -48,8 +51,8 @@ protected:
 
 		ArrayInfo<uint8_t> extAttributes1 { _extendedAttributes[0], 0x400 };
 		ArrayInfo<uint8_t> extAttributes2 { _extendedAttributes[1], 0x400 };
-		SnapshotInfo audioChannel1 { &_audioChannels[0] };
-		SnapshotInfo audioChannel2 { &_audioChannels[1] };
+		SnapshotInfo audioChannel1 { _audioChannels[0].get() };
+		SnapshotInfo audioChannel2 { _audioChannels[1].get() };
 
 		Stream(extAttributes1, extAttributes2, audioChannel1, audioChannel2, _lowByteIrqCounter, _irqCounter, _irqEnabled,
 				 _extAttributesEnabled, _wramWriteEnabled, _dipSwitch);
@@ -69,13 +72,13 @@ protected:
 					//cycle.Once the timer reaches zero, the /IRQ line is set to logic 0 and the
 					//timer stops decrementing
 					_irqEnabled = false;
-					CPU::SetIRQSource(IRQSource::External);
+					_console->GetCpu()->SetIrqSource(IRQSource::External);
 				}
 			}
 		}
 
-		_audioChannels[0].Clock();
-		_audioChannels[1].Clock();
+		_audioChannels[0]->Clock();
+		_audioChannels[1]->Clock();
 	}
 
 	void UpdateWorkRamState()
@@ -112,8 +115,8 @@ protected:
 	{
 		switch(addr & 0x5800) {
 			case 0x4800: return (_dipSwitch ? 0x80 : 0) | 0x64;
-			case 0x5000: return _audioChannels[0].ReadRegister();
-			case 0x5800: return _audioChannels[1].ReadRegister();
+			case 0x5000: return _audioChannels[0]->ReadRegister();
+			case 0x5800: return _audioChannels[1]->ReadRegister();
 		}
 		return 0;
 	}
@@ -123,11 +126,11 @@ protected:
 		if(addr <= 0xBFFF) {
 			switch(addr & 0x800F) {
 				case 0x8000: case 0x8001: case 0x8002: case 0x8003:
-					_audioChannels[0].WriteRegister(addr, value);
+					_audioChannels[0]->WriteRegister(addr, value);
 					break;
 
 				case 0x8004: case 0x8005: case 0x8006: case 0x8007:
-					_audioChannels[1].WriteRegister(addr, value);
+					_audioChannels[1]->WriteRegister(addr, value);
 					break;
 
 				case 0x8008:
@@ -141,7 +144,7 @@ protected:
 					_irqEnabled = (value & 0x80) != 0;
 
 					//Writing to the IRQ Enable register will acknowledge the interrupt and return the /IRQ signal to logic 1.
-					CPU::ClearIRQSource(IRQSource::External);
+					_console->GetCpu()->ClearIrqSource(IRQSource::External);
 					break;
 
 				case 0x800A:

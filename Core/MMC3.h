@@ -255,7 +255,7 @@ class MMC3 : public BaseMapper
 
 				case MMC3Registers::RegE000:
 					_irqEnabled = false;
-					CPU::ClearIRQSource(IRQSource::External);
+					_console->GetCpu()->ClearIrqSource(IRQSource::External);
 					break;
 
 				case MMC3Registers::RegE001:
@@ -272,7 +272,7 @@ class MMC3 : public BaseMapper
 				//This adds a 4 ppu cycle delay (until the PPU fetches the next garbage NT tile between sprites)
 				_needIrq = true;
 			} else {
-				CPU::SetIRQSource(IRQSource::External);
+				_console->GetCpu()->SetIrqSource(IRQSource::External);
 			}
 		}
 
@@ -280,14 +280,14 @@ class MMC3 : public BaseMapper
 	public:
 		virtual void NotifyVRAMAddressChange(uint16_t addr) override
 		{
-			switch(_a12Watcher.UpdateVramAddress(addr)) {
+			switch(_a12Watcher.UpdateVramAddress(addr, _console->GetPpu()->GetFrameCycle())) {
 				case A12StateChange::None:
 					break;
 
 				case A12StateChange::Fall:
 					if(_needIrq) {
 						//Used by MC-ACC (Acclaim copy of the MMC3), see TriggerIrq above
-						CPU::SetIRQSource(IRQSource::External);
+						_console->GetCpu()->SetIrqSource(IRQSource::External);
 						_needIrq = false;
 					}
 					break;

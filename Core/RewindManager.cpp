@@ -6,42 +6,35 @@
 #include "SoundMixer.h"
 #include "BaseControlDevice.h"
 
-RewindManager* RewindManager::_instance = nullptr;
-
-RewindManager::RewindManager()
+RewindManager::RewindManager(shared_ptr<Console> console)
 {
-	_instance = this;
+	_console = console;
 	_rewindState = RewindState::Stopped;
 	_framesToFastForward = 0;
 	AddHistoryBlock();
 
-	ControlManager::RegisterInputProvider(this);
-	ControlManager::RegisterInputRecorder(this);
+	_console->GetControlManager()->RegisterInputProvider(this);
+	_console->GetControlManager()->RegisterInputRecorder(this);
 }
 
 RewindManager::~RewindManager()
 {
-	if(_instance == this) {
-		_instance = nullptr;
-	}
-	ControlManager::UnregisterInputProvider(this);
-	ControlManager::UnregisterInputRecorder(this);
+	_console->GetControlManager()->UnregisterInputProvider(this);
+	_console->GetControlManager()->UnregisterInputRecorder(this);
 }
 
 void RewindManager::ClearBuffer()
 {
-	if(_instance) {
-		_history.clear();
-		_historyBackup.clear();
-		_currentHistory = RewindData();
-		_framesToFastForward = 0;
-		_videoHistory.clear();
-		_videoHistoryBuilder.clear();
-		_audioHistory.clear();
-		_audioHistoryBuilder.clear();
-		_rewindState = RewindState::Stopped;
-		_currentHistory = RewindData();
-	}
+	_history.clear();
+	_historyBackup.clear();
+	_currentHistory = RewindData();
+	_framesToFastForward = 0;
+	_videoHistory.clear();
+	_videoHistoryBuilder.clear();
+	_audioHistory.clear();
+	_audioHistoryBuilder.clear();
+	_rewindState = RewindState::Stopped;
+	_currentHistory = RewindData();
 }
 
 void RewindManager::ProcessNotification(ConsoleNotificationType type, void * parameter)
@@ -94,7 +87,7 @@ void RewindManager::AddHistoryBlock()
 			_history.push_back(_currentHistory);
 		}
 		_currentHistory = RewindData();
-		_currentHistory.SaveState();
+		_currentHistory.SaveState(_console);
 	}
 }
 
@@ -109,7 +102,7 @@ void RewindManager::PopHistory()
 		}
 
 		_historyBackup.push_front(_currentHistory);
-		_currentHistory.LoadState();
+		_currentHistory.LoadState(_console);
 		if(!_audioHistoryBuilder.empty()) {
 			_audioHistory.insert(_audioHistory.begin(), _audioHistoryBuilder.begin(), _audioHistoryBuilder.end());
 			_audioHistoryBuilder.clear();
@@ -120,7 +113,7 @@ void RewindManager::PopHistory()
 void RewindManager::Start(bool forDebugger)
 {
 	if(_rewindState == RewindState::Stopped && EmulationSettings::GetRewindBufferSize() > 0) {
-		Console::Pause();
+		_console->Pause();
 
 		_rewindState = forDebugger ? RewindState::Debugging : RewindState::Starting;
 		_videoHistoryBuilder.clear();
@@ -130,10 +123,11 @@ void RewindManager::Start(bool forDebugger)
 		_historyBackup.clear();
 		
 		PopHistory();
-		SoundMixer::StopAudio(true);
+		_console->GetSoundMixer()->StopAudio(true);
 		EmulationSettings::SetFlags(EmulationFlags::ForceMaxSpeed);
+		EmulationSettings::SetFlags(EmulationFlags::Rewind);
 
-		Console::Resume();
+		_console->Resume();
 	}
 }
 
@@ -148,13 +142,14 @@ void RewindManager::ForceStop()
 		_historyBackup.clear();
 		_rewindState = RewindState::Stopped;
 		EmulationSettings::ClearFlags(EmulationFlags::ForceMaxSpeed);
+		EmulationSettings::ClearFlags(EmulationFlags::Rewind);
 	}
 }
 
 void RewindManager::Stop()
 {
 	if(_rewindState >= RewindState::Starting) {
-		Console::Pause();
+		_console->Pause();
 		if(_rewindState == RewindState::Started) {
 			//Move back to the save state containing the frame currently shown on the screen
 			if(_historyBackup.size() > 1) {
@@ -179,7 +174,7 @@ void RewindManager::Stop()
 			_framesToFastForward = _historyBackup.front().FrameCount;
 		}
 
-		_currentHistory.LoadState();
+		_currentHistory.LoadState(_console);
 		if(_framesToFastForward > 0) {
 			_rewindState = RewindState::Stopping;
 			_currentHistory.FrameCount = 0;
@@ -188,6 +183,7 @@ void RewindManager::Stop()
 			_rewindState = RewindState::Stopped;
 			_historyBackup.clear();
 			EmulationSettings::ClearFlags(EmulationFlags::ForceMaxSpeed);
+			EmulationSettings::ClearFlags(EmulationFlags::Rewind);
 		}
 
 		_videoHistoryBuilder.clear();
@@ -195,7 +191,7 @@ void RewindManager::Stop()
 		_audioHistoryBuilder.clear();
 		_audioHistory.clear();
 
-		Console::Resume();
+		_console->Resume();
 	}
 }
 
@@ -235,14 +231,14 @@ void RewindManager::ProcessFrame(void * frameBuffer, uint32_t width, uint32_t he
 			_rewindState = RewindState::Started;
 			EmulationSettings::ClearFlags(EmulationFlags::ForceMaxSpeed);
 			if(!_videoHistory.empty()) {
-				VideoRenderer::GetInstance()->UpdateFrame(_videoHistory.back().data(), width, height);
+				_console->GetVideoRenderer()->UpdateFrame(_videoHistory.back().data(), width, height);
 				_videoHistory.pop_back();
 			}
 		}
 	} else if(_rewindState == RewindState::Stopping || _rewindState == RewindState::Debugging) {
 		//Display nothing while resyncing
 	} else {
-		VideoRenderer::GetInstance()->UpdateFrame(frameBuffer, width, height);
+		_console->GetVideoRenderer()->UpdateFrame(frameBuffer, width, height);
 	}
 }
 
@@ -272,9 +268,9 @@ bool RewindManager::ProcessAudio(int16_t * soundBuffer, uint32_t sampleCount, ui
 
 void RewindManager::RecordInput(vector<shared_ptr<BaseControlDevice>> devices)
 {
-	if(EmulationSettings::GetRewindBufferSize() > 0 && _instance && _instance->_rewindState == RewindState::Stopped) {
+	if(EmulationSettings::GetRewindBufferSize() > 0 && _rewindState == RewindState::Stopped) {
 		for(shared_ptr<BaseControlDevice> &device : devices) {
-			_instance->_currentHistory.InputLogs[device->GetPort()].push_back(device->GetRawState());
+			_currentHistory.InputLogs[device->GetPort()].push_back(device->GetRawState());
 		}
 	}
 }
@@ -282,9 +278,9 @@ void RewindManager::RecordInput(vector<shared_ptr<BaseControlDevice>> devices)
 bool RewindManager::SetInput(BaseControlDevice *device)
 {
 	uint8_t port = device->GetPort();
-	if(!_instance->_currentHistory.InputLogs[port].empty() && RewindManager::IsRewinding()) {
-		ControlDeviceState state = _instance->_currentHistory.InputLogs[port].front();
-		_instance->_currentHistory.InputLogs[port].pop_front();
+	if(!_currentHistory.InputLogs[port].empty() && IsRewinding()) {
+		ControlDeviceState state = _currentHistory.InputLogs[port].front();
+		_currentHistory.InputLogs[port].pop_front();
 		device->SetRawState(state);
 		return true;
 	} else {
@@ -294,63 +290,52 @@ bool RewindManager::SetInput(BaseControlDevice *device)
 
 void RewindManager::StartRewinding(bool forDebugger)
 {
-	if(_instance) {
-		_instance->Start(forDebugger);
-	}
+	Start(forDebugger);
 }
 
 void RewindManager::StopRewinding(bool forDebugger)
 {
-	if(_instance) {
-		if(forDebugger) {
-			_instance->ForceStop();
-		} else {
-			_instance->Stop();
-		}
+	if(forDebugger) {
+		ForceStop();
+	} else {
+		Stop();
 	}
 }
 
 bool RewindManager::IsRewinding()
 {
-	return _instance ? _instance->_rewindState != RewindState::Stopped : false;
+	return _rewindState != RewindState::Stopped;
 }
 
 bool RewindManager::IsStepBack()
 {
-	return _instance ? _instance->_rewindState == RewindState::Debugging : false;
+	return _rewindState == RewindState::Debugging;
 }
 
 void RewindManager::RewindSeconds(uint32_t seconds)
 {
-	if(_instance && _instance->_rewindState == RewindState::Stopped) {
+	if(_rewindState == RewindState::Stopped) {
 		uint32_t removeCount = (seconds * 60 / RewindManager::BufferSize) + 1;
-		Console::Pause();
+		_console->Pause();
 		for(uint32_t i = 0; i < removeCount; i++) {
-			if(!_instance->_history.empty()) {
-				_instance->_currentHistory = _instance->_history.back();
-				_instance->_history.pop_back();
+			if(!_history.empty()) {
+				_currentHistory = _history.back();
+				_history.pop_back();
 			} else {
 				break;
 			}
 		}
-		_instance->_currentHistory.LoadState();
-		Console::Resume();
+		_currentHistory.LoadState(_console);
+		_console->Resume();
 	}
 }
 
 void RewindManager::SendFrame(void * frameBuffer, uint32_t width, uint32_t height, bool forRewind)
 {
-	if(_instance) {
-		_instance->ProcessFrame(frameBuffer, width, height, forRewind);
-	} else {
-		VideoRenderer::GetInstance()->UpdateFrame(frameBuffer, width, height);
-	}
+	ProcessFrame(frameBuffer, width, height, forRewind);
 }
 
 bool RewindManager::SendAudio(int16_t * soundBuffer, uint32_t sampleCount, uint32_t sampleRate)
 {
-	if(_instance) {
-		return _instance->ProcessAudio(soundBuffer, sampleCount, sampleRate);
-	}
-	return true;
+	return ProcessAudio(soundBuffer, sampleCount, sampleRate);
 }

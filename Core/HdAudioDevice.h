@@ -6,6 +6,7 @@
 #include "Snapshotable.h"
 
 struct HdPackData;
+class Console;
 
 class HdAudioDevice : public IMemoryHandler, public Snapshotable
 {
@@ -27,7 +28,7 @@ protected:
 	void StreamState(bool saving) override;
 
 public:
-	HdAudioDevice(HdPackData *hdData);
+	HdAudioDevice(shared_ptr<Console> console, HdPackData *hdData);
 
 	void GetMemoryRanges(MemoryRanges &ranges) override;
 	void WriteRAM(uint16_t addr, uint8_t value) override;

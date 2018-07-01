@@ -2,7 +2,8 @@
 #include "stdafx.h"
 #include "Snapshotable.h"
 #include "EmulationSettings.h"
-#include "APU.h"
+
+class MemoryManager;
 
 class BaseExpansionAudio : public Snapshotable
 {
@@ -10,26 +11,13 @@ private:
 	double _clocksNeeded = 0;
 
 protected: 
-	virtual void ClockAudio() = 0;
+	shared_ptr<Console> _console = nullptr;
 
-	void StreamState(bool saving) override
-	{
-		Stream(_clocksNeeded);
-	}
+	virtual void ClockAudio() = 0;
+	void StreamState(bool saving) override;
 
 public:
-	void Clock()
-	{
-		if(APU::IsApuEnabled()) {
-			if(EmulationSettings::GetOverclockRate() == 100 || !EmulationSettings::GetOverclockAdjustApu()) {
-				ClockAudio();
-			} else {
-				_clocksNeeded += 1.0 / ((double)EmulationSettings::GetOverclockRate() / 100);
-				while(_clocksNeeded >= 1.0) {
-					ClockAudio();
-					_clocksNeeded--;
-				}
-			}
-		}
-	}
+	BaseExpansionAudio(shared_ptr<Console> console);
+
+	void Clock();
 };

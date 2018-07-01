@@ -10,34 +10,27 @@
 #include "SoundMixer.h"
 #include "MemoryManager.h"
 
-APU* APU::Instance = nullptr;
-bool APU::_apuEnabled = true;
-
-APU::APU(MemoryManager* memoryManager)
+APU::APU(shared_ptr<Console> console)
 {
-	APU::Instance = this;
-
-	_memoryManager = memoryManager;
-
 	_nesModel = NesModel::Auto;
-
 	_apuEnabled = true;
 
-	_mixer.reset(new SoundMixer());
+	_console = console;
+	_mixer = _console->GetSoundMixer();
 
-	_squareChannel[0].reset(new SquareChannel(AudioChannel::Square1, _mixer.get(), true));
-	_squareChannel[1].reset(new SquareChannel(AudioChannel::Square2, _mixer.get(), false));
-	_triangleChannel.reset(new TriangleChannel(AudioChannel::Triangle, _mixer.get()));
-	_noiseChannel.reset(new NoiseChannel(AudioChannel::Noise, _mixer.get()));
-	_deltaModulationChannel.reset(new DeltaModulationChannel(AudioChannel::DMC, _mixer.get(), _memoryManager));
-	_frameCounter.reset(new ApuFrameCounter(&APU::FrameCounterTick));
+	_squareChannel[0].reset(new SquareChannel(AudioChannel::Square1, _console, _mixer.get(), true));
+	_squareChannel[1].reset(new SquareChannel(AudioChannel::Square2, _console, _mixer.get(), false));
+	_triangleChannel.reset(new TriangleChannel(AudioChannel::Triangle, _console, _mixer.get()));
+	_noiseChannel.reset(new NoiseChannel(AudioChannel::Noise, _console, _mixer.get()));
+	_deltaModulationChannel.reset(new DeltaModulationChannel(AudioChannel::DMC, _console, _mixer.get()));
+	_frameCounter.reset(new ApuFrameCounter(_console));
 
-	_memoryManager->RegisterIODevice(_squareChannel[0].get());
-	_memoryManager->RegisterIODevice(_squareChannel[1].get());
-	_memoryManager->RegisterIODevice(_frameCounter.get());
-	_memoryManager->RegisterIODevice(_triangleChannel.get());
-	_memoryManager->RegisterIODevice(_noiseChannel.get());
-	_memoryManager->RegisterIODevice(_deltaModulationChannel.get());
+	_console->GetMemoryManager()->RegisterIODevice(_squareChannel[0].get());
+	_console->GetMemoryManager()->RegisterIODevice(_squareChannel[1].get());
+	_console->GetMemoryManager()->RegisterIODevice(_frameCounter.get());
+	_console->GetMemoryManager()->RegisterIODevice(_triangleChannel.get());
+	_console->GetMemoryManager()->RegisterIODevice(_noiseChannel.get());
+	_console->GetMemoryManager()->RegisterIODevice(_deltaModulationChannel.get());
 
 	Reset(false);
 }
@@ -67,20 +60,20 @@ void APU::SetNesModel(NesModel model, bool forceInit)
 void APU::FrameCounterTick(FrameType type)
 {
 	//Quarter & half frame clock envelope & linear counter
-	Instance->_squareChannel[0]->TickEnvelope();
-	Instance->_squareChannel[1]->TickEnvelope();
-	Instance->_triangleChannel->TickLinearCounter();
-	Instance->_noiseChannel->TickEnvelope();
+	_squareChannel[0]->TickEnvelope();
+	_squareChannel[1]->TickEnvelope();
+	_triangleChannel->TickLinearCounter();
+	_noiseChannel->TickEnvelope();
 
 	if(type == FrameType::HalfFrame) {
 		//Half frames clock length counter & sweep
-		Instance->_squareChannel[0]->TickLengthCounter();
-		Instance->_squareChannel[1]->TickLengthCounter();
-		Instance->_triangleChannel->TickLengthCounter();
-		Instance->_noiseChannel->TickLengthCounter();
+		_squareChannel[0]->TickLengthCounter();
+		_squareChannel[1]->TickLengthCounter();
+		_triangleChannel->TickLengthCounter();
+		_noiseChannel->TickLengthCounter();
 
-		Instance->_squareChannel[0]->TickSweep();
-		Instance->_squareChannel[1]->TickSweep();
+		_squareChannel[0]->TickSweep();
+		_squareChannel[1]->TickSweep();
 	}
 }
 
@@ -95,11 +88,11 @@ uint8_t APU::ReadRAM(uint16_t addr)
 	status |= _triangleChannel->GetStatus() ? 0x04 : 0x00;
 	status |= _noiseChannel->GetStatus() ? 0x08 : 0x00;
 	status |= _deltaModulationChannel->GetStatus() ? 0x10 : 0x00;
-	status |= CPU::HasIRQSource(IRQSource::FrameCounter) ? 0x40 : 0x00;
-	status |= CPU::HasIRQSource(IRQSource::DMC) ? 0x80 : 0x00;
+	status |= _console->GetCpu()->HasIrqSource(IRQSource::FrameCounter) ? 0x40 : 0x00;
+	status |= _console->GetCpu()->HasIrqSource(IRQSource::DMC) ? 0x80 : 0x00;
 
 	//Reading $4015 clears the Frame Counter interrupt flag.
-	CPU::ClearIRQSource(IRQSource::FrameCounter);
+	_console->GetCpu()->ClearIrqSource(IRQSource::FrameCounter);
 
 	return status;
 }
@@ -111,7 +104,7 @@ void APU::WriteRAM(uint16_t addr, uint8_t value)
 
 	//Writing to $4015 clears the DMC interrupt flag.
 	//This needs to be done before setting the enabled flag for the DMC (because doing so can trigger an IRQ)
-	CPU::ClearIRQSource(IRQSource::DMC);
+	_console->GetCpu()->ClearIrqSource(IRQSource::DMC);
 
 	_squareChannel[0]->SetEnabled((value & 0x01) == 0x01);
 	_squareChannel[1]->SetEnabled((value & 0x02) == 0x02);
@@ -153,19 +146,17 @@ void APU::Run()
 	}
 }
 
-void APU::StaticRun()
+void APU::SetNeedToRun()
 {
-	Instance->Run();
+	_needToRun = true;
 }
 
 bool APU::NeedToRun(uint32_t currentCycle)
 {
-	if(ApuLengthCounter::NeedToRun()) {
-		return true;
-	}
-
-	if(_deltaModulationChannel->NeedToRun()) {
+	if(_needToRun || _deltaModulationChannel->NeedToRun()) {
+		//Need to run whenever we alter the length counters
 		//Need to run every cycle when DMC is running to get accurate emulation (CPU stalling, interaction with sprite DMA, etc.)
+		_needToRun = false;
 		return true;
 	}
 
@@ -201,6 +192,21 @@ void APU::EndFrame()
 
 	_currentCycle = 0;
 	_previousCycle = 0;
+}
+
+void APU::ProcessCpuClock()
+{
+	if(_apuEnabled) {
+		if(EmulationSettings::GetOverclockRate() == 100 || !EmulationSettings::GetOverclockAdjustApu()) {
+			Exec();
+		} else {
+			_cyclesNeeded += 1.0 / ((double)EmulationSettings::GetOverclockRate() / 100.0);
+			while(_cyclesNeeded >= 1.0) {
+				Exec();
+				_cyclesNeeded--;
+			}
+		}
+	}
 }
 
 void APU::Reset(bool softReset)
@@ -239,7 +245,7 @@ void APU::StreamState(bool saving)
 
 void APU::AddExpansionAudioDelta(AudioChannel channel, int16_t delta)
 {
-	Instance->_mixer->AddDelta(channel, Instance->_currentCycle, delta);
+	_mixer->AddDelta(channel, _currentCycle, delta);
 }
 
 void APU::SetApuStatus(bool enabled)
@@ -256,9 +262,9 @@ bool APU::IsApuEnabled()
 	return _apuEnabled;
 }
 
-void APU::WriteDmc4011(uint8_t value)
+void APU::FillDmcReadBuffer()
 {
-	Instance->_deltaModulationChannel->WriteRAM(0x4011, value);
+	_deltaModulationChannel->FillReadBuffer();
 }
 
 ApuState APU::GetState()

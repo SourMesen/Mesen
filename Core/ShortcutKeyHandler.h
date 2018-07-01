@@ -5,9 +5,13 @@
 #include "../Utilities/SimpleLock.h"
 #include "EmulationSettings.h"
 
+class Console;
+
 class ShortcutKeyHandler
 {
 private:
+	shared_ptr<Console> _console;
+
 	std::thread _thread;
 	atomic<bool> _stopThread;
 	SimpleLock _lock;
@@ -31,7 +35,7 @@ private:
 	bool DetectKeyRelease(EmulatorShortcut key);
 
 public:
-	ShortcutKeyHandler();
+	ShortcutKeyHandler(shared_ptr<Console> console);
 	~ShortcutKeyHandler();
 
 	void ProcessKeys();

@@ -6,7 +6,7 @@
 class T230 : public BaseMapper
 {
 private:
-	VrcIrq _irq;
+	unique_ptr<VrcIrq> _irq;
 
 	uint8_t _prgReg0;
 	uint8_t _prgReg1;
@@ -23,6 +23,8 @@ protected:
 
 	void InitMapper() override
 	{
+		_irq.reset(new VrcIrq(_console));
+
 		_prgMode = GetPowerOnByte() & 0x01;
 		_prgReg0 = GetPowerOnByte() & 0x1F;
 		_prgReg1 = GetPowerOnByte() & 0x1F;
@@ -37,7 +39,7 @@ protected:
 
 	void ProcessCpuClock() override
 	{
-		_irq.ProcessCpuClock();
+		_irq->ProcessCpuClock();
 	}
 
 	void UpdateState()
@@ -93,13 +95,13 @@ protected:
 				}
 			}			
 		} else if(addr == 0xF000) {
-			_irq.SetReloadValueNibble(value, false);
+			_irq->SetReloadValueNibble(value, false);
 		} else if(addr == 0xF001) {
-			_irq.SetReloadValueNibble(value, true);
+			_irq->SetReloadValueNibble(value, true);
 		} else if(addr == 0xF002) {
-			_irq.SetControlValue(value);
+			_irq->SetControlValue(value);
 		} else if(addr == 0xF003) {
-			_irq.AcknowledgeIrq();
+			_irq->AcknowledgeIrq();
 		}
 
 		UpdateState();
@@ -111,7 +113,7 @@ public:
 		BaseMapper::StreamState(saving);
 		ArrayInfo<uint8_t> loChrRegs = { _loCHRRegs, 8 };
 		ArrayInfo<uint8_t> hiChrRegs = { _hiCHRRegs, 8 };
-		SnapshotInfo irq { &_irq };
+		SnapshotInfo irq { _irq.get() };
 		Stream(_prgReg0, _prgReg1, _prgMode, loChrRegs, hiChrRegs, irq);
 	}
 };

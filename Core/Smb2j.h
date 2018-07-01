@@ -45,7 +45,7 @@ protected:
 			_irqCounter = (_irqCounter + 1) & 0xFFF;
 			if(_irqCounter == 0) {
 				_irqEnabled = false;
-				CPU::SetIRQSource(IRQSource::External);
+				_console->GetCpu()->SetIrqSource(IRQSource::External);
 			}
 		}
 	}
@@ -58,7 +58,7 @@ protected:
 		} else if(addr == 0x4122) {
 			_irqEnabled = (value & 0x03) != 0;
 			_irqCounter = 0;
-			CPU::ClearIRQSource(IRQSource::External);
+			_console->GetCpu()->ClearIrqSource(IRQSource::External);
 		}
 	}
 };

@@ -2,6 +2,8 @@
 #include "../Core/IMessageManager.h"
 #include "../Utilities/Timer.h"
 
+class Console;
+
 class BaseRenderer : public IMessageManager
 {
 private:
@@ -19,9 +21,13 @@ private:
 	virtual bool ContainsCharacter(wchar_t character) = 0;
 
 protected:
+	shared_ptr<Console> _console;
+
 	uint32_t _screenWidth = 0;
 	uint32_t _screenHeight = 0;
 	uint32_t _renderedFrameCount = 0;	
+
+	BaseRenderer(shared_ptr<Console> console);
 
 	bool IsMessageShown();	
 

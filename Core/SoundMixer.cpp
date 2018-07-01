@@ -2,22 +2,16 @@
 #include "../Utilities/orfanidis_eq.h"
 #include "../Utilities/stb_vorbis.h"
 #include "SoundMixer.h"
-#include "APU.h"
 #include "CPU.h"
 #include "VideoRenderer.h"
 #include "RewindManager.h"
 #include "WaveRecorder.h"
 #include "OggMixer.h"
+#include "Console.h"
 
-IAudioDevice* SoundMixer::AudioDevice = nullptr;
-unique_ptr<WaveRecorder> SoundMixer::_waveRecorder;
-SimpleLock SoundMixer::_waveRecorderLock;
-double SoundMixer::_fadeRatio;
-uint32_t SoundMixer::_muteFrameCount;
-unique_ptr<OggMixer> SoundMixer::_oggMixer;
-
-SoundMixer::SoundMixer()
+SoundMixer::SoundMixer(shared_ptr<Console> console)
 {
+	_console = console;
 	_eqFrequencyGrid.reset(new orfanidis_eq::freq_grid());
 	_oggMixer.reset();
 	_outputBuffer = new int16_t[SoundMixer::MaxSamplesPerFrame];
@@ -25,9 +19,6 @@ SoundMixer::SoundMixer()
 	_blipBufRight = blip_new(SoundMixer::MaxSamplesPerFrame);
 	_sampleRate = EmulationSettings::GetSampleRate();
 	_model = NesModel::NTSC;
-	_clockRate = CPU::GetClockRate(_model);
-
-	Reset();
 }
 
 SoundMixer::~SoundMixer()
@@ -59,20 +50,19 @@ void SoundMixer::StreamState(bool saving)
 
 void SoundMixer::RegisterAudioDevice(IAudioDevice *audioDevice)
 {
-	SoundMixer::AudioDevice = audioDevice;
+	_audioDevice = audioDevice;
 }
 
 void SoundMixer::StopAudio(bool clearBuffer)
 {
-	if(SoundMixer::AudioDevice) {
+	if(_audioDevice) {
 		if(clearBuffer) {
-			SoundMixer::AudioDevice->Stop();
+			_audioDevice->Stop();
 		} else {
-			SoundMixer::AudioDevice->Pause();
+			_audioDevice->Pause();
 		}
 	}
 }
-
 void SoundMixer::Reset()
 {
 	if(_oggMixer) {
@@ -123,8 +113,10 @@ void SoundMixer::PlayAudioBuffer(uint32_t time)
 		_oggMixer->ApplySamples(_outputBuffer, sampleCount);
 	}
 
-	if(!VideoRenderer::GetInstance()->IsRecording() && !_waveRecorder && !EmulationSettings::CheckFlag(EmulationFlags::NsfPlayerEnabled)) {
-		if((EmulationSettings::CheckFlag(EmulationFlags::Turbo) || RewindManager::IsRewinding()) && EmulationSettings::CheckFlag(EmulationFlags::ReduceSoundInFastForward)) {
+	RewindManager* rewindManager = _console->GetRewindManager();
+
+	if(!_console->GetVideoRenderer()->IsRecording() && !_waveRecorder && !EmulationSettings::CheckFlag(EmulationFlags::NsfPlayerEnabled)) {
+		if((EmulationSettings::CheckFlag(EmulationFlags::Turbo) || (rewindManager && rewindManager->IsRewinding())) && EmulationSettings::CheckFlag(EmulationFlags::ReduceSoundInFastForward)) {
 			//Reduce volume when fast forwarding or rewinding
 			_lowPassFilter.ApplyFilter(_outputBuffer, sampleCount, 0, 1.0 - EmulationSettings::GetVolumeReduction());
 		} else if(EmulationSettings::CheckFlag(EmulationFlags::InBackground)) {
@@ -154,7 +146,7 @@ void SoundMixer::PlayAudioBuffer(uint32_t time)
 		_crossFeedFilter.ApplyFilter(_outputBuffer, sampleCount, EmulationSettings::GetCrossFeedRatio());
 	}
 
-	if(RewindManager::SendAudio(_outputBuffer, (uint32_t)sampleCount, _sampleRate)) {
+	if(rewindManager && rewindManager->SendAudio(_outputBuffer, (uint32_t)sampleCount, _sampleRate)) {
 		if(_waveRecorder) {
 			auto lock = _waveRecorderLock.AcquireSafe();
 			if(_waveRecorder) {
@@ -164,10 +156,10 @@ void SoundMixer::PlayAudioBuffer(uint32_t time)
 			}
 		}
 
-		VideoRenderer::GetInstance()->AddRecordingSound(_outputBuffer, (uint32_t)sampleCount, _sampleRate);
+		_console->GetVideoRenderer()->AddRecordingSound(_outputBuffer, (uint32_t)sampleCount, _sampleRate);
 
-		if(SoundMixer::AudioDevice && !EmulationSettings::IsPaused()) {
-			SoundMixer::AudioDevice->PlayBuffer(_outputBuffer, (uint32_t)sampleCount, _sampleRate, true);
+		if(_audioDevice && !EmulationSettings::IsPaused()) {
+			_audioDevice->PlayBuffer(_outputBuffer, (uint32_t)sampleCount, _sampleRate, true);
 		}
 	}
 
@@ -194,7 +186,7 @@ void SoundMixer::SetNesModel(NesModel model)
 
 void SoundMixer::UpdateRates(bool forceUpdate)
 {
-	uint32_t newRate = CPU::GetClockRate(_model);
+	uint32_t newRate = _console->GetCpu()->GetClockRate(_model);
 	if(!EmulationSettings::GetOverclockAdjustApu()) {
 		newRate = (uint32_t)(newRate * (double)EmulationSettings::GetOverclockRate() / 100);
 	}
@@ -413,8 +405,8 @@ OggMixer* SoundMixer::GetOggMixer()
 
 AudioStatistics SoundMixer::GetStatistics()
 {
-	if(SoundMixer::AudioDevice) {
-		return SoundMixer::AudioDevice->GetStatistics();
+	if(_audioDevice) {
+		return _audioDevice->GetStatistics();
 	} else {
 		return AudioStatistics();
 	}
@@ -422,8 +414,8 @@ AudioStatistics SoundMixer::GetStatistics()
 
 void SoundMixer::ProcessEndOfFrame()
 {
-	if(SoundMixer::AudioDevice) {
-		SoundMixer::AudioDevice->ProcessEndOfFrame();
+	if(_audioDevice) {
+		_audioDevice->ProcessEndOfFrame();
 	}
 }
 

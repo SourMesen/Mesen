@@ -6,12 +6,13 @@
 
 class IRenderingDevice;
 class AviRecorder;
+class Console;
 enum class VideoCodec;
 
 class VideoRenderer
 {
 private:
-	static unique_ptr<VideoRenderer> Instance;
+	shared_ptr<Console> _console;
 
 	AutoResetEvent _waitForRender;
 	unique_ptr<std::thread> _renderThread;
@@ -23,11 +24,8 @@ private:
 	void RenderThread();
 
 public:
-	static VideoRenderer* GetInstance();
-	VideoRenderer();
+	VideoRenderer(shared_ptr<Console> console);
 	~VideoRenderer();
-
-	static void Release();
 
 	void StartThread();
 	void StopThread();

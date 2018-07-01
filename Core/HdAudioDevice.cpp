@@ -1,8 +1,9 @@
 #include "stdafx.h"
 #include "HdAudioDevice.h"
 #include "HdData.h"
+#include "Console.h"
 
-HdAudioDevice::HdAudioDevice(HdPackData * hdData)
+HdAudioDevice::HdAudioDevice(shared_ptr<Console> console, HdPackData* hdData)
 {
 	_hdData = hdData;
 	_album = 0;
@@ -11,7 +12,7 @@ HdAudioDevice::HdAudioDevice(HdPackData * hdData)
 	_sfxVolume = 128;
 	_bgmVolume = 128;
 
-	_oggMixer = SoundMixer::GetOggMixer();
+	_oggMixer = console->GetSoundMixer()->GetOggMixer();
 	_oggMixer->SetBgmVolume(_bgmVolume);
 	_oggMixer->SetSfxVolume(_sfxVolume);
 }

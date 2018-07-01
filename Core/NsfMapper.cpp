@@ -31,6 +31,13 @@ NsfMapper * NsfMapper::GetInstance()
 
 void NsfMapper::InitMapper()
 {
+	_mmc5Audio.reset(new MMC5Audio(_console));
+	_vrc6Audio.reset(new Vrc6Audio(_console));
+	_vrc7Audio.reset(new Vrc7Audio(_console));
+	_fdsAudio.reset(new FdsAudio(_console));
+	_namcoAudio.reset(new Namco163Audio(_console));
+	_sunsoftAudio.reset(new Sunsoft5bAudio(_console));
+
 	SetCpuMemoryMapping(0x3F00, 0x3FFF, GetWorkRam() + 0x2000, MemoryAccessType::Read);
 	memcpy(GetWorkRam() + 0x2000, _nsfBios, 0x100);
 
@@ -162,13 +169,13 @@ void NsfMapper::TriggerIrq(NsfIrqType type)
 	}
 
 	_irqStatus = type;
-	CPU::SetIRQSource(IRQSource::External);
+	_console->GetCpu()->SetIrqSource(IRQSource::External);
 }
 
 void NsfMapper::ClearIrq()
 {
 	_irqStatus = NsfIrqType::None;
-	CPU::ClearIRQSource(IRQSource::External);
+	_console->GetCpu()->ClearIrqSource(IRQSource::External);
 }
 
 void NsfMapper::ClockLengthAndFadeCounters()
@@ -182,10 +189,10 @@ void NsfMapper::ClockLengthAndFadeCounters()
 
 	if((_trackEndCounter < 0 || _allowSilenceDetection) && EmulationSettings::GetNsfAutoDetectSilenceDelay() > 0) {
 		//No track length specified
-		if(SoundMixer::GetMuteFrameCount() * SoundMixer::CycleLength > _silenceDetectDelay) {
+		if(_console->GetSoundMixer()->GetMuteFrameCount() * SoundMixer::CycleLength > _silenceDetectDelay) {
 			//Auto detect end of track after AutoDetectSilenceDelay (in ms) has gone by without sound
 			_trackEnded = true;
-			SoundMixer::ResetMuteFrameCount();
+			_console->GetSoundMixer()->ResetMuteFrameCount();
 		}
 	}
 
@@ -193,7 +200,7 @@ void NsfMapper::ClockLengthAndFadeCounters()
 		if(_trackFadeCounter > 0) {
 			if(_fadeLength != 0) {
 				double fadeRatio = (double)_trackFadeCounter / (double)_fadeLength * 1.2;
-				SoundMixer::SetFadeRatio(std::max(0.0, fadeRatio - 0.2));
+				_console->GetSoundMixer()->SetFadeRatio(std::max(0.0, fadeRatio - 0.2));
 			}
 			_trackFadeCounter--;
 		}
@@ -222,7 +229,7 @@ void NsfMapper::SelectNextTrack()
 
 void NsfMapper::ProcessCpuClock()
 {
-	CPU::SetIRQMask(EmulationSettings::GetNsfDisableApuIrqs() ? (uint8_t)IRQSource::External : 0xFF);
+	_console->GetCpu()->SetIrqMask(EmulationSettings::GetNsfDisableApuIrqs() ? (uint8_t)IRQSource::External : 0xFF);
 
 	if(_needInit) {
 		TriggerIrq(NsfIrqType::Init);
@@ -240,31 +247,31 @@ void NsfMapper::ProcessCpuClock()
 	ClockLengthAndFadeCounters();
 
 	if(_nsfHeader.SoundChips & NsfSoundChips::MMC5) {
-		_mmc5Audio.Clock();
+		_mmc5Audio->Clock();
 	}
 	if(_nsfHeader.SoundChips & NsfSoundChips::VRC6) {
-		_vrc6Audio.Clock();
+		_vrc6Audio->Clock();
 	}
 	if(_nsfHeader.SoundChips & NsfSoundChips::VRC7) {
-		_vrc7Audio.Clock();
+		_vrc7Audio->Clock();
 	}
 	if(_nsfHeader.SoundChips & NsfSoundChips::Namco) {
-		_namcoAudio.Clock();
+		_namcoAudio->Clock();
 	}
 	if(_nsfHeader.SoundChips & NsfSoundChips::Sunsoft) {
-		_sunsoftAudio.Clock();
+		_sunsoftAudio->Clock();
 	}
 	if(_nsfHeader.SoundChips & NsfSoundChips::FDS) {
-		_fdsAudio.Clock();
+		_fdsAudio->Clock();
 	}
 }
 
 uint8_t NsfMapper::ReadRegister(uint16_t addr)
 {
 	if((_nsfHeader.SoundChips & NsfSoundChips::FDS) && addr >= 0x4040 && addr <= 0x4092) {
-		return _fdsAudio.ReadRegister(addr);
+		return _fdsAudio->ReadRegister(addr);
 	} else if((_nsfHeader.SoundChips & NsfSoundChips::Namco) && addr >= 0x4800 && addr <= 0x4FFF) {
-		return _namcoAudio.ReadRegister(addr);
+		return _namcoAudio->ReadRegister(addr);
 	} else {
 		switch(addr) {
 			case 0x3E00: return _nsfHeader.InitAddress & 0xFF;
@@ -318,24 +325,24 @@ uint8_t NsfMapper::ReadRegister(uint16_t addr)
 		}
 	}
 
-	return MemoryManager::GetOpenBus();
+	return _console->GetMemoryManager()->GetOpenBus();
 }
 
 void NsfMapper::WriteRegister(uint16_t addr, uint8_t value)
 {
 	if((_nsfHeader.SoundChips & NsfSoundChips::FDS) && addr >= 0x4040 && addr <= 0x4092) {
-		_fdsAudio.WriteRegister(addr, value);
+		_fdsAudio->WriteRegister(addr, value);
 	} else if((_nsfHeader.SoundChips & NsfSoundChips::MMC5) && addr >= 0x5000 && addr <= 0x5015) {
-		_mmc5Audio.WriteRegister(addr, value);
+		_mmc5Audio->WriteRegister(addr, value);
 	} else if((_nsfHeader.SoundChips & NsfSoundChips::Namco) && ((addr >= 0x4800 && addr <= 0x4FFF) || (addr >= 0xF800 && addr <= 0xFFFF))) {
-		_namcoAudio.WriteRegister(addr, value);
+		_namcoAudio->WriteRegister(addr, value);
 
 		//Technically we should call this, but doing so breaks some NSFs
 		/*if(addr >= 0xF800 && _nsfHeader.SoundChips & NsfSoundChips::Sunsoft) {
 		_sunsoftAudio.WriteRegister(addr, value);
 		}*/
 	} else if((_nsfHeader.SoundChips & NsfSoundChips::Sunsoft) && addr >= 0xC000 && addr <= 0xFFFF) {
-		_sunsoftAudio.WriteRegister(addr, value);
+		_sunsoftAudio->WriteRegister(addr, value);
 	} else {
 		switch(addr) {
 			case 0x3E10: _irqReloadValue = (_irqReloadValue & 0xFF00) | value; break;
@@ -379,11 +386,11 @@ void NsfMapper::WriteRegister(uint16_t addr, uint8_t value)
 				break;
 
 			case 0x9000: case 0x9001: case 0x9002: case 0x9003: case 0xA000: case 0xA001: case 0xA002: case 0xB000: case 0xB001: case 0xB002:
-				_vrc6Audio.WriteRegister(addr, value);
+				_vrc6Audio->WriteRegister(addr, value);
 				break;
 
 			case 0x9010: case 0x9030:
-				_vrc7Audio.WriteReg(addr, value);
+				_vrc7Audio->WriteReg(addr, value);
 				break;
 
 		}
@@ -402,10 +409,10 @@ void NsfMapper::InternalSelectTrack(uint8_t trackNumber, bool requestReset)
 		//Need to change track while running
 		//Some NSFs keep the interrupt flag on at all times, preventing us from triggering an IRQ to change tracks
 		//Forcing the console to reset ensures changing tracks always works, even with a bad NSF file
-		Console::Reset(true);
+		_console->Reset(true);
 	} else {
 		//Selecting tracking after a reset
-		SoundMixer::SetFadeRatio(1.0);
+		_console->GetSoundMixer()->SetFadeRatio(1.0);
 
 		//Set track length/fade counters (NSFe)
 		if(_nsfHeader.TrackLength[trackNumber] >= 0) {

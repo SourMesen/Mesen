@@ -50,7 +50,7 @@ protected:
 
 	void SetOutput(int16_t output)
 	{
-		APU::AddExpansionAudioDelta(AudioChannel::VRC7, (output - _prevOutput) * 3);
+		_console->GetApu()->AddExpansionAudioDelta(AudioChannel::VRC7, (output - _prevOutput) * 3);
 		_prevOutput = output;
 	}
 
@@ -64,7 +64,7 @@ protected:
 	}
 
 public:
-	UnlDripGameAudio()
+	UnlDripGameAudio(shared_ptr<Console> console) : BaseExpansionAudio(console)
 	{
 		_freq = 0;
 		_timer = 0;

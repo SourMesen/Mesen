@@ -23,12 +23,12 @@ protected:
 		SelectPRGPage(1, 0x07);
 		SelectCHRPage(0, 0);
 
-		_mapperControlDevice.reset(new BandaiMicrophone(EmulationSettings::GetControllerKeys(0)));
+		_mapperControlDevice.reset(new BandaiMicrophone(_console, EmulationSettings::GetControllerKeys(0)));
 	}
 
 	uint8_t ReadRegister(uint16_t addr) override
 	{
-		return _mapperControlDevice->ReadRAM(addr) | MemoryManager::GetOpenBus(0xF8);
+		return _mapperControlDevice->ReadRAM(addr) | _console->GetMemoryManager()->GetOpenBus(0xF8);
 	}
 
 	void WriteRegister(uint16_t addr, uint8_t value) override

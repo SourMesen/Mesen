@@ -39,7 +39,7 @@ protected:
 		if(_irqDelay > 0) {
 			_irqDelay--;
 			if(_irqDelay == 0) {
-				CPU::SetIRQSource(IRQSource::External);
+				_console->GetCpu()->SetIrqSource(IRQSource::External);
 			}
 		}
 	}
@@ -67,13 +67,13 @@ protected:
 
 			case 0xC000:
 				//Flintstones expects either $C000 or $C001 to clear the irq flag
-				CPU::ClearIRQSource(IRQSource::External);
+				_console->GetCpu()->ClearIrqSource(IRQSource::External);
 
 				_irqReloadValue = (value ^ 0xFF) + (_isFlintstones ? 0 : 1);
 				break;
 			case 0xC001:
 				//Flintstones expects either $C000 or $C001 to clear the irq flag
-				CPU::ClearIRQSource(IRQSource::External);
+				_console->GetCpu()->ClearIrqSource(IRQSource::External);
 
 				_irqCounter = 0;
 				_irqReload = true;
@@ -83,7 +83,7 @@ protected:
 				break;
 			case 0xC003:
 				_irqEnabled = false;
-				CPU::ClearIRQSource(IRQSource::External);
+				_console->GetCpu()->ClearIrqSource(IRQSource::External);
 				break;
 
 			case 0xE000:

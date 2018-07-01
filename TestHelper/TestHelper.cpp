@@ -29,21 +29,6 @@ using namespace std;
 
 typedef void (__stdcall *NotificationListenerCallback)(ConsoleNotificationType);
 
-class InteropNotificationListener : public INotificationListener
-{
-	NotificationListenerCallback _callback;
-public:
-	InteropNotificationListener(NotificationListenerCallback callback)
-	{
-		_callback = callback;
-	}
-
-	void ProcessNotification(ConsoleNotificationType type, void* parameter)
-	{
-		_callback((ConsoleNotificationType)type);
-	}
-};
-
 extern "C" {
 	void __stdcall SetFlags(uint64_t flags);
 	void __stdcall InitializeEmu(const char* homeFolder, void*, void*, bool, bool, bool);

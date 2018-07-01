@@ -536,7 +536,6 @@
     <ClInclude Include="IBattery.h" />
     <ClInclude Include="IInputProvider.h" />
     <ClInclude Include="IInputRecorder.h" />
-    <ClInclude Include="IMemoryManager.h" />
     <ClInclude Include="InternalRamHandler.h" />
     <ClInclude Include="Kaiser7017.h" />
     <ClInclude Include="Kaiser7031.h" />
@@ -951,9 +950,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="APU.cpp" />
-    <ClCompile Include="ApuLengthCounter.cpp" />
     <ClCompile Include="Assembler.cpp" />
     <ClCompile Include="AutomaticRomTest.cpp" />
+    <ClCompile Include="BaseExpansionAudio.cpp" />
     <ClCompile Include="BaseRenderer.cpp" />
     <ClCompile Include="BaseSoundManager.cpp" />
     <ClCompile Include="BatteryManager.cpp" />
@@ -971,7 +970,6 @@
     <ClCompile Include="MovieRecorder.cpp" />
     <ClCompile Include="OggMixer.cpp" />
     <ClCompile Include="OggReader.cpp" />
-    <ClCompile Include="OpenBusHandler.cpp" />
     <ClCompile Include="RawVideoFilter.cpp" />
     <ClCompile Include="RecordedRomTest.cpp" />
     <ClCompile Include="AutoSaveManager.cpp" />

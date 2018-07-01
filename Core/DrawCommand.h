@@ -1,7 +1,7 @@
 #pragma once
 #include "stdafx.h"
 #include "EmulationSettings.h"
-#include "PPU.h"
+#include "Console.h"
 
 class DrawCommand
 {
@@ -65,10 +65,10 @@ protected:
 	}
 
 public:
-	DrawCommand(int frameCount, bool useIntegerScaling = false)
+	DrawCommand(int startFrame, int frameCount, bool useIntegerScaling = false)
 	{ 
 		_frameCount = frameCount > 0 ? frameCount : 1;
-		_startFrame = PPU::GetFrameCount();
+		_startFrame = startFrame;
 		_useIntegerScaling = useIntegerScaling;
 	}
 

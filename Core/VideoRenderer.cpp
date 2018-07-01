@@ -3,19 +3,11 @@
 #include "VideoRenderer.h"
 #include "AviRecorder.h"
 #include "VideoDecoder.h"
+#include "Console.h"
 
-unique_ptr<VideoRenderer> VideoRenderer::Instance;
-
-VideoRenderer* VideoRenderer::GetInstance()
+VideoRenderer::VideoRenderer(shared_ptr<Console> console)
 {
-	if(!Instance) {
-		Instance.reset(new VideoRenderer());
-	}
-	return Instance.get();
-}
-
-VideoRenderer::VideoRenderer()
-{
+	_console = console;
 	_stopFlag = false;	
 	StartThread();
 }
@@ -24,11 +16,6 @@ VideoRenderer::~VideoRenderer()
 {
 	_stopFlag = true;
 	StopThread();
-}
-
-void VideoRenderer::Release()
-{
-	Instance.reset();
 }
 
 void VideoRenderer::StartThread()
@@ -98,9 +85,9 @@ void VideoRenderer::UnregisterRenderingDevice(IRenderingDevice *renderer)
 
 void VideoRenderer::StartRecording(string filename, VideoCodec codec, uint32_t compressionLevel)
 {
-	shared_ptr<AviRecorder> recorder(new AviRecorder());
+	shared_ptr<AviRecorder> recorder(new AviRecorder(_console));
 
-	FrameInfo frameInfo = VideoDecoder::GetInstance()->GetFrameInfo();
+	FrameInfo frameInfo = _console->GetVideoDecoder()->GetFrameInfo();
 	if(recorder->StartRecording(filename, codec, frameInfo.Width, frameInfo.Height, frameInfo.BitsPerPixel, EmulationSettings::GetSampleRate(), compressionLevel)) {
 		_aviRecorder = recorder;
 	}

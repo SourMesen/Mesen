@@ -33,8 +33,8 @@ protected:
 	}
 
 public:
-	DrawLineCommand(int x, int y, int x2, int y2, int color, int frameCount) :
-		DrawCommand(frameCount), _x(x), _y(y), _x2(x2), _y2(y2), _color(color)
+	DrawLineCommand(int x, int y, int x2, int y2, int color, int frameCount, int startFrame) :
+		DrawCommand(startFrame, frameCount), _x(x), _y(y), _x2(x2), _y2(y2), _color(color)
 	{
 		//Invert alpha byte - 0 = opaque, 255 = transparent (this way, no need to specifiy alpha channel all the time)
 		_color = (~color & 0xFF000000) | (color & 0xFFFFFF);

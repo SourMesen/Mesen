@@ -7,10 +7,13 @@
 #include "../Core/MemoryAccessCounter.h"
 #include "../Core/Profiler.h"
 #include "../Core/Assembler.h"
+#include "../Core/TraceLogger.h"
+
+extern shared_ptr<Console> _console;
 
 shared_ptr<Debugger> GetDebugger()
 {
-	return Console::GetInstance()->GetDebugger();
+	return _console->GetDebugger();
 }
 
 extern "C"
@@ -18,17 +21,17 @@ extern "C"
 	//Debugger wrapper
 	DllExport void __stdcall DebugInitialize()
 	{
-		Console::GetInstance()->GetDebugger();
+		_console->GetDebugger();
 	}
 
 	DllExport void __stdcall DebugRelease()
 	{
-		Console::GetInstance()->StopDebugger();
+		_console->StopDebugger();
 	}
 
 	DllExport bool __stdcall DebugIsDebuggerRunning()
 	{
-		return Console::GetInstance()->GetDebugger(false).get() != nullptr;
+		return _console->GetDebugger(false).get() != nullptr;
 	}
 
 	DllExport void __stdcall DebugSetFlags(uint32_t flags) { GetDebugger()->SetFlags(flags); }

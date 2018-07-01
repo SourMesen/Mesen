@@ -1,6 +1,7 @@
 #pragma once
 #include "stdafx.h"
 #include "ApuLengthCounter.h"
+#include "Console.h"
 
 class ApuEnvelope : public ApuLengthCounter
 {
@@ -15,7 +16,7 @@ private:
 	uint8_t _counter = 0;
 
 protected:
-	ApuEnvelope(AudioChannel channel, SoundMixer* mixer) : ApuLengthCounter(channel, mixer)
+	ApuEnvelope(AudioChannel channel, shared_ptr<Console> console, SoundMixer* mixer) : ApuLengthCounter(channel, console, mixer)
 	{
 	}
 

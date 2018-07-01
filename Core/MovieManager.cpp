@@ -10,15 +10,15 @@
 shared_ptr<IMovie> MovieManager::_player;
 shared_ptr<MovieRecorder> MovieManager::_recorder;
 
-void MovieManager::Record(RecordMovieOptions options)
+void MovieManager::Record(RecordMovieOptions options, shared_ptr<Console> console)
 {
-	shared_ptr<MovieRecorder> recorder(new MovieRecorder());
+	shared_ptr<MovieRecorder> recorder(new MovieRecorder(console));
 	if(recorder->Record(options)) {
 		_recorder = recorder;
 	}
 }
 
-void MovieManager::Play(VirtualFile file)
+void MovieManager::Play(VirtualFile file, shared_ptr<Console> console)
 {
 	vector<uint8_t> fileData;
 	if(file.IsValid() && file.ReadFile(fileData)) {
@@ -33,12 +33,12 @@ void MovieManager::Play(VirtualFile file)
 
 			vector<string> files = reader.GetFileList();
 			if(std::find(files.begin(), files.end(), "GameSettings.txt") != files.end()) {
-				player.reset(new MesenMovie());
+				player.reset(new MesenMovie(console));
 			} else {
-				player.reset(new BizhawkMovie());
+				player.reset(new BizhawkMovie(console));
 			}
 		} else if(memcmp(fileData.data(), "ver", 3) == 0) {
-			player.reset(new FceuxMovie());
+			player.reset(new FceuxMovie(console));
 		}
 
 		if(player && player->Play(file)) {

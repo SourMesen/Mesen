@@ -30,11 +30,11 @@ protected:
 
 	virtual void NotifyVRAMAddressChange(uint16_t addr) override
 	{
-		if(_a12Watcher.UpdateVramAddress(addr) == A12StateChange::Rise) {
+		if(_a12Watcher.UpdateVramAddress(addr, _console->GetPpu()->GetFrameCycle()) == A12StateChange::Rise) {
 			if(_irqCounter) {
 				_irqCounter++;
 				if(_irqCounter >= 240) {
-					CPU::SetIRQSource(IRQSource::External);
+					_console->GetCpu()->SetIrqSource(IRQSource::External);
 					_irqCounter = 0;
 				}
 			}
@@ -57,7 +57,7 @@ protected:
 			case 0xE002: SelectCHRPage(7, value); break;
 			case 0xF000: 
 				_irqCounter = value;
-				CPU::ClearIRQSource(IRQSource::External);
+				_console->GetCpu()->ClearIrqSource(IRQSource::External);
 				break;
 		}
 	}

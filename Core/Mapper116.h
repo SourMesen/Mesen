@@ -96,7 +96,7 @@ protected:
 	virtual void NotifyVRAMAddressChange(uint16_t addr) override
 	{
 		if((_mode & 0x03) == 1) {
-			switch(_a12Watcher.UpdateVramAddress(addr)) {
+			switch(_a12Watcher.UpdateVramAddress(addr, _console->GetPpu()->GetFrameCycle())) {
 				case A12StateChange::None:
 				case A12StateChange::Fall:
 					break;
@@ -109,7 +109,7 @@ protected:
 					}
 
 					if(_irqCounter == 0 && _irqEnabled) {
-						CPU::SetIRQSource(IRQSource::External);
+						_console->GetCpu()->SetIrqSource(IRQSource::External);
 					}
 					_irqReload = false;
 					break;
@@ -254,7 +254,7 @@ protected:
 			case 0xC001: _irqReload = true; break;
 			
 			case 0xE000:
-				CPU::ClearIRQSource(IRQSource::External);
+				_console->GetCpu()->ClearIrqSource(IRQSource::External);
 				_irqEnabled = false;
 				break;
 			

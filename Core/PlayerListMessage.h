@@ -5,7 +5,7 @@
 class PlayerListMessage : public NetMessage
 {
 private:
-	static const uint32_t PlayerNameMaxLength = 50;
+	static constexpr uint32_t PlayerNameMaxLength = 50;
 	vector<PlayerInfo> _playerList;
 
 protected:

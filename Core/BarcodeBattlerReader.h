@@ -2,12 +2,13 @@
 #include "stdafx.h"
 #include "BaseControlDevice.h"
 #include "IBarcodeReader.h"
-#include "CPU.h"
+#include "MemoryManager.h"
 
 class BarcodeBattlerReader : public BaseControlDevice, public IBarcodeReader
 {
 private:
-	static const int StreamSize = 200;
+	static constexpr int StreamSize = 200;
+	shared_ptr<Console> _console;
 	uint64_t _newBarcode = 0;
 	uint32_t _newBarcodeDigitCount = 0;
 
@@ -50,8 +51,9 @@ protected:
 	}
 
 public:
-	BarcodeBattlerReader() : BaseControlDevice(BaseControlDevice::ExpDevicePort)
+	BarcodeBattlerReader(shared_ptr<Console> console) : BaseControlDevice(BaseControlDevice::ExpDevicePort)
 	{
+		_console = console;
 	}
 
 	void InternalSetStateFromInput() override
@@ -73,7 +75,9 @@ public:
 	{
 		if(GetRawState().State.size() > 0) {
 			InitBarcodeStream();
-			_insertCycle = CPU::GetCycleCount();
+			if(_console) {
+				_insertCycle = _console->GetCpu()->GetCycleCount();
+			}
 		}
 	}
 
@@ -86,7 +90,7 @@ public:
 	uint8_t ReadRAM(uint16_t addr) override
 	{
 		if(addr == 0x4017) {
-			int32_t elapsedCycles = CPU::GetElapsedCycles(_insertCycle);
+			int32_t elapsedCycles = _console->GetCpu()->GetElapsedCycles(_insertCycle);
 			constexpr uint32_t cyclesPerBit = CPU::ClockRateNtsc / 1200;
 
 			uint32_t streamPosition = elapsedCycles / cyclesPerBit;

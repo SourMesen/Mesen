@@ -1,13 +1,14 @@
 #pragma once
 #include "stdafx.h"
 #include "BaseApuChannel.h"
+#include "Console.h"
+#include "APU.h"
 
 class ApuLengthCounter : public BaseApuChannel
 {
 private:
 	uint8_t _lcLookupTable[32] = { 10, 254, 20, 2, 40, 4, 80, 6, 160, 8, 60, 10, 14, 12, 26, 14, 12, 16, 24, 18, 48, 20, 96, 22, 192, 24, 72, 26, 16, 28, 32, 30 };
 	bool _newHaltValue;
-	static bool _needToRun;
 
 protected:
 	bool _enabled = false;
@@ -18,7 +19,7 @@ protected:
 
 	void InitializeLengthCounter(bool haltFlag)
 	{
-		SetRunFlag();
+		_console->GetApu()->SetNeedToRun();
 		_newHaltValue = haltFlag;
 	}
 
@@ -27,27 +28,15 @@ protected:
 		if(_enabled) {
 			_lengthCounterReloadValue = _lcLookupTable[value];
 			_lengthCounterPreviousValue = _lengthCounter;
-			SetRunFlag();
+			_console->GetApu()->SetNeedToRun();
 		}
 	}
-
-	void SetRunFlag()
-	{
-		ApuLengthCounter::_needToRun = true;
-	}
-
+	
 public:
-	ApuLengthCounter(AudioChannel channel, SoundMixer* mixer) : BaseApuChannel(channel, mixer)
+	ApuLengthCounter(AudioChannel channel, shared_ptr<Console> console, SoundMixer* mixer) : BaseApuChannel(channel, console, mixer)
 	{
 	}
 	
-	static bool NeedToRun()
-	{
-		bool needToRun = ApuLengthCounter::_needToRun;
-		ApuLengthCounter::_needToRun = false;
-		return needToRun;
-	}
-
 	virtual void Reset(bool softReset) override
 	{
 		BaseApuChannel::Reset(softReset);
@@ -69,9 +58,7 @@ public:
 			_newHaltValue = false;
 			_lengthCounterReloadValue = 0;
 			_lengthCounterPreviousValue = 0;		
-		}		
-
-		ApuLengthCounter::_needToRun = false;
+		}
 	}
 
 	virtual void StreamState(bool saving) override

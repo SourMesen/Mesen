@@ -5,6 +5,8 @@
 #include "FrameInfo.h"
 #include "VideoHud.h"
 
+class Console;
+
 class BaseVideoFilter
 {
 private:
@@ -27,8 +29,8 @@ public:
 
 	uint32_t* GetOutputBuffer();
 	void SendFrame(uint16_t *ppuOutputBuffer, uint32_t frameNumber);
-	void TakeScreenshot(VideoFilterType filterType);
-	void TakeScreenshot(VideoFilterType filterType, string filename, std::stringstream *stream = nullptr);
+	void TakeScreenshot(shared_ptr<Console> console, string romName, VideoFilterType filterType);
+	void TakeScreenshot(shared_ptr<Console> console, VideoFilterType filterType, string filename, std::stringstream *stream = nullptr);
 
 	virtual OverscanDimensions GetOverscan();
 	virtual FrameInfo GetFrameInfo() = 0;

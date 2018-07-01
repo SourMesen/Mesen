@@ -13,8 +13,9 @@
 #include "BatteryManager.h"
 #include "VirtualFile.h"
 
-MesenMovie::MesenMovie()
+MesenMovie::MesenMovie(shared_ptr<Console> console)
 {
+	_console = console;
 }
 
 MesenMovie::~MesenMovie()
@@ -29,12 +30,12 @@ void MesenMovie::Stop()
 		_playing = false;
 	}
 	EmulationSettings::SetInputPollScanline(241);
-	ControlManager::UnregisterInputProvider(this);
+	_console->GetControlManager()->UnregisterInputProvider(this);
 }
 
 bool MesenMovie::SetInput(BaseControlDevice *device)
 {
-	uint32_t inputRowIndex = ControlManager::GetPollCounter();
+	uint32_t inputRowIndex = _console->GetControlManager()->GetPollCounter();
 
 	if(_inputData.size() > inputRowIndex && _inputData[inputRowIndex].size() > _deviceIndex) {
 		device->SetTextState(_inputData[inputRowIndex][_deviceIndex]);
@@ -94,37 +95,37 @@ bool MesenMovie::Play(VirtualFile &file)
 
 	ParseSettings(settingsData);
 	
-	Console::Pause();
+	_console->Pause();
 		
 	BatteryManager::SetBatteryProvider(shared_from_this());
-	ControlManager::RegisterInputProvider(this);
+	_console->GetControlManager()->RegisterInputProvider(this);
 	ApplySettings();
 
 	//Disable auto-configure input option (otherwise the movie file's input types are ignored)
 	bool autoConfigureInput = EmulationSettings::CheckFlag(EmulationFlags::AutoConfigureInput);
 	EmulationSettings::ClearFlags(EmulationFlags::AutoConfigureInput);
-	ControlManager::ResetPollCounter();
+	_console->GetControlManager()->ResetPollCounter();
 	bool gameLoaded = LoadGame();
 	EmulationSettings::SetFlagState(EmulationFlags::AutoConfigureInput, autoConfigureInput);
 
 	if(!gameLoaded) {
-		Console::Resume();
+		_console->Resume();
 		return false;
 	}
 
 	stringstream saveStateData;
 	if(_reader->GetStream("SaveState.mst", saveStateData)) {
-		if(!SaveStateManager::LoadState(saveStateData, true)) {
-			Console::Resume();
+		if(!_console->GetSaveStateManager()->LoadState(saveStateData, true)) {
+			_console->Resume();
 			return false;
 		} else {
-			ControlManager::ResetPollCounter();
+			_console->GetControlManager()->ResetPollCounter();
 		}
 	}
 
 	_playing = true;
 
-	Console::Resume();
+	_console->Resume();
 
 	return true;
 }
@@ -180,14 +181,14 @@ bool MesenMovie::LoadGame()
 	HashInfo hashInfo;
 	hashInfo.Sha1Hash = sha1Hash;
 
-	VirtualFile romFile = Console::FindMatchingRom(gameFile, hashInfo);
+	VirtualFile romFile = _console->FindMatchingRom(gameFile, hashInfo);
 	bool gameLoaded = false;
 	if(romFile.IsValid()) {
 		VirtualFile patchFile(_movieFile.GetFilePath(), "PatchData.dat");
 		if(patchFile.IsValid()) {
-			gameLoaded = Console::LoadROM(romFile, patchFile);
+			gameLoaded = _console->Initialize(romFile, patchFile);
 		} else {
-			gameLoaded = Console::LoadROM(romFile);
+			gameLoaded = _console->Initialize(romFile);
 		}
 	}
 
@@ -301,7 +302,7 @@ void MesenMovie::LoadCheats()
 			cheats.push_back(code);
 		}
 	}
-	CheatManager::SetCheats(cheats);
+	_console->GetCheatManager()->SetCheats(cheats);
 }
 
 bool MesenMovie::LoadCheat(string cheatData, CodeInfo &code)

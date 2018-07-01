@@ -1,9 +1,11 @@
 #pragma once
 #include "stdafx.h"
 #include <unordered_map>
-#include "CPU.h"
 
+class MemoryManager;
 class LabelManager;
+struct State;
+enum class AddrMode;
 
 class DisassemblyInfo
 {

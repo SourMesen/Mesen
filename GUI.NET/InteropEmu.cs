@@ -1155,6 +1155,7 @@ namespace Mesen.GUI
 		public CartridgeState Cartridge;
 		public ApuState APU;
 		public NesModel Model;
+		public UInt32 ClockRate;
 	}
 
 	public struct CartridgeState
@@ -1503,6 +1504,7 @@ namespace Mesen.GUI
 
 		FdsAutoInsertDisk = 0x800000000,
 
+		Rewind = 0x1000000000,
 		Turbo = 0x2000000000,
 		InBackground = 0x4000000000,
 		NsfPlayerEnabled = 0x8000000000,

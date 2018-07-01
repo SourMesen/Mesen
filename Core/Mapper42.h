@@ -39,9 +39,9 @@ protected:
 				_irqCounter -= 0x8000;
 			}
 			if(_irqCounter >= 0x6000) {
-				CPU::SetIRQSource(IRQSource::External);
+				_console->GetCpu()->SetIrqSource(IRQSource::External);
 			} else {
-				CPU::ClearIRQSource(IRQSource::External);
+				_console->GetCpu()->ClearIrqSource(IRQSource::External);
 			}
 		}
 	}
@@ -67,7 +67,7 @@ protected:
 				_irqEnabled = (value == 0x02);
 
 				if(!_irqEnabled) {
-					CPU::ClearIRQSource(IRQSource::External);
+					_console->GetCpu()->ClearIrqSource(IRQSource::External);
 					_irqCounter = 0;
 				}
 				break;

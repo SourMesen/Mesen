@@ -12,7 +12,7 @@ class FdsAudio;
 class FDS : public BaseMapper
 {
 private:
-	static const uint32_t NoDiskInserted = 0xFF;
+	static constexpr uint32_t NoDiskInserted = 0xFF;
 	bool _disableAutoInsertDisk;
 
 	unique_ptr<FdsAudio> _audio;
@@ -105,7 +105,6 @@ protected:
 	void StreamState(bool saving) override;
 
 public:
-	FDS();
 	~FDS();
 
 	void SaveBattery() override;

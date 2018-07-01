@@ -4,12 +4,14 @@
 #include "KeyManager.h"
 #include "IKeyManager.h"
 #include "PPU.h"
+#include "MemoryManager.h"
 
 class Zapper : public BaseControlDevice
 {
 protected:
 	bool HasCoordinates() override { return true; }
-	
+	shared_ptr<Console> _console;
+
 	string GetKeyNames() override
 	{
 		return "F";
@@ -33,12 +35,13 @@ protected:
 
 	bool IsLightFound()
 	{
-		return StaticIsLightFound(GetCoordinates());
+		return StaticIsLightFound(GetCoordinates(), _console);
 	}
 
 public:
-	Zapper(uint8_t port) : BaseControlDevice(port)
+	Zapper(shared_ptr<Console> console, uint8_t port) : BaseControlDevice(port)
 	{
+		_console = console;
 	}
 
 	uint8_t ReadRAM(uint16_t addr) override
@@ -54,10 +57,15 @@ public:
 	{
 	}
 
-	static bool StaticIsLightFound(MousePosition pos)
+	static bool StaticIsLightFound(MousePosition pos, shared_ptr<Console> console)
 	{
-		int32_t scanline = PPU::GetCurrentScanline();
-		int32_t cycle = PPU::GetCurrentCycle();
+		PPU* ppu = console ? console->GetPpu() : nullptr;
+		if(!ppu) {
+			return false;
+		}
+
+		int32_t scanline = ppu->GetCurrentScanline();
+		int32_t cycle = ppu->GetCurrentCycle();
 		int radius = (int)EmulationSettings::GetZapperDetectionRadius();
 
 		if(pos.X >= 0 && pos.Y >= 0) {
@@ -67,7 +75,7 @@ public:
 					for(int xOffset = -radius; xOffset <= radius; xOffset++) {
 						int xPos = pos.X + xOffset;
 						if(xPos >= 0 && xPos < PPU::ScreenWidth) {
-							if(scanline >= yPos && (scanline - yPos <= 20) && (scanline != yPos || cycle > xPos) && PPU::GetPixelBrightness(xPos, yPos) >= 85) {
+							if(scanline >= yPos && (scanline - yPos <= 20) && (scanline != yPos || cycle > xPos) && ppu->GetPixelBrightness(xPos, yPos) >= 85) {
 								//Light cannot be detected if the Y/X position is further ahead than the PPU, or if the PPU drew a dark color
 								return true;
 							}

@@ -150,6 +150,7 @@ namespace Mesen.GUI.Forms
 #if HIDETESTMENU
 			mnuTests.Visible = false;
 #endif
+			InitializeCore();
 
 			_notifListener = new InteropEmu.NotificationListener();
 			_notifListener.OnNotification += _notifListener_OnNotification;
@@ -169,7 +170,6 @@ namespace Mesen.GUI.Forms
 
 			UpdateVideoSettings();
 
-			InitializeCore();
 			PerformUpgrade();
 			InitializeEmu();
 

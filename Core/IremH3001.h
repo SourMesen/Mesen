@@ -34,7 +34,7 @@ protected:
 			_irqCounter--;
 			if(_irqCounter == 0) {
 				_irqEnabled = false;
-				CPU::SetIRQSource(IRQSource::External);
+				_console->GetCpu()->SetIrqSource(IRQSource::External);
 			}
 		}
 	}
@@ -47,12 +47,12 @@ protected:
 			case 0x9001: SetMirroringType(value & 0x80 ? MirroringType::Horizontal : MirroringType::Vertical); break;
 			case 0x9003: 
 				_irqEnabled = (value & 0x80) == 0x80; 
-				CPU::ClearIRQSource(IRQSource::External);
+				_console->GetCpu()->ClearIrqSource(IRQSource::External);
 				break;
 
 			case 0x9004: 
 				_irqCounter = _irqReloadValue;
-				CPU::ClearIRQSource(IRQSource::External);
+				_console->GetCpu()->ClearIrqSource(IRQSource::External);
 				break;
 
 			case 0x9005: _irqReloadValue = (_irqReloadValue & 0x00FF) | (value << 8); break;

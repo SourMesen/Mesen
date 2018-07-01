@@ -13,7 +13,7 @@ private:
 	bool _running;
 
 public:
-	static const uint16_t BaseAddress = 0x3000;
+	static constexpr uint16_t BaseAddress = 0x3000;
 
 	CodeRunner(vector<uint8_t> byteCode, Debugger *debugger);
 

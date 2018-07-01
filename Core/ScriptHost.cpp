@@ -25,7 +25,7 @@ const char* ScriptHost::GetLog()
 bool ScriptHost::LoadScript(string scriptName, string scriptContent, Debugger* debugger)
 {
 #ifndef LIBRETRO
-	_context.reset(new LuaScriptingContext());
+	_context.reset(new LuaScriptingContext(debugger));
 	if(!_context->LoadScript(scriptName, scriptContent, debugger)) {
 		return false;
 	}

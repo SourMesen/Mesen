@@ -62,7 +62,7 @@ protected:
 
 	uint8_t ReadRegister(uint16_t addr) override
 	{
-		return (_prgReg & 0x40) ? MemoryManager::GetOpenBus() : InternalReadRam(addr);
+		return (_prgReg & 0x40) ? _console->GetMemoryManager()->GetOpenBus() : InternalReadRam(addr);
 	}
 
 	void WriteRegister(uint16_t addr, uint8_t value) override

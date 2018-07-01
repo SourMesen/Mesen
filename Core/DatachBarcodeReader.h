@@ -3,10 +3,12 @@
 #include "BaseControlDevice.h"
 #include "IBarcodeReader.h"
 #include "CPU.h"
+#include "Console.h"
 
 class DatachBarcodeReader : public BaseControlDevice, public IBarcodeReader
 {
 private:
+	shared_ptr<Console> _console;
 	vector<uint8_t> _data;
 	int32_t _insertCycle = 0;
 	uint64_t _newBarcode = 0;
@@ -27,8 +29,9 @@ protected:
 	}
 
 public:
-	DatachBarcodeReader() : BaseControlDevice(BaseControlDevice::MapperInputPort)
+	DatachBarcodeReader(shared_ptr<Console> console) : BaseControlDevice(BaseControlDevice::MapperInputPort)
 	{
+		_console = console;
 	}
 
 	void InternalSetStateFromInput() override
@@ -52,7 +55,7 @@ public:
 
 	uint8_t GetOutput()
 	{
-		int32_t elapsedCycles = CPU::GetElapsedCycles(_insertCycle);
+		int32_t elapsedCycles = _console->GetCpu()->GetElapsedCycles(_insertCycle);
 		int32_t bitNumber = elapsedCycles / 1000;
 		if(bitNumber < (int32_t)_data.size()) {
 			return _data[bitNumber];
@@ -69,9 +72,9 @@ public:
 
 	void InitBarcodeData() 
 	{
-		_insertCycle = CPU::GetCycleCount();
+		_insertCycle = _console->GetCpu()->GetCycleCount();
 
-		static const uint8_t prefixParityType[10][6] = {
+		static constexpr uint8_t prefixParityType[10][6] = {
 			{ 8,8,8,8,8,8 },{ 8,8,0,8,0,0 },
 			{ 8,8,0,0,8,0 },{ 8,8,0,0,0,8 },
 			{ 8,0,8,8,0,0 },{ 8,0,0,8,8,0 },
@@ -79,7 +82,7 @@ public:
 			{ 8,0,8,0,0,8 },{ 8,0,0,8,0,8 }
 		};
 
-		static const uint8_t dataLeftOdd[10][7] = {
+		static constexpr uint8_t dataLeftOdd[10][7] = {
 			{ 8,8,8,0,0,8,0 },{ 8,8,0,0,8,8,0 },
 			{ 8,8,0,8,8,0,0 },{ 8,0,0,0,0,8,0 },
 			{ 8,0,8,8,8,0,0 },{ 8,0,0,8,8,8,0 },
@@ -87,7 +90,7 @@ public:
 			{ 8,0,0,8,0,0,0 },{ 8,8,8,0,8,0,0 }
 		};
 
-		static const uint8_t dataLeftEven[10][7] =	{
+		static constexpr uint8_t dataLeftEven[10][7] =	{
 			{ 8,0,8,8,0,0,0 },{ 8,0,0,8,8,0,0 },
 			{ 8,8,0,0,8,0,0 },{ 8,0,8,8,8,8,0 },
 			{ 8,8,0,0,0,8,0 },{ 8,0,0,0,8,8,0 },
@@ -95,7 +98,7 @@ public:
 			{ 8,8,8,0,8,8,0 },{ 8,8,0,8,0,0,0 }
 		};
 
-		static const uint8_t dataRight[10][7] = {
+		static constexpr uint8_t dataRight[10][7] = {
 			{ 0,0,0,8,8,0,8 },{ 0,0,8,8,0,0,8 },
 			{ 0,0,8,0,0,8,8 },{ 0,8,8,8,8,0,8 },
 			{ 0,8,0,0,0,8,8 },{ 0,8,8,0,0,0,8 },

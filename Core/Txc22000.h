@@ -38,7 +38,7 @@ protected:
 
 	virtual uint8_t ReadRegister(uint16_t addr) override
 	{
-		return (MemoryManager::GetOpenBus() & 0xCF) | (_state << 4);
+		return (_console->GetMemoryManager()->GetOpenBus() & 0xCF) | (_state << 4);
 	}
 
 	void WriteRegister(uint16_t addr, uint8_t value) override

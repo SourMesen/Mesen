@@ -16,7 +16,7 @@ bool FceuxMovie::InitializeData(stringstream &filestream)
 	_dataByFrame[2].push_back("");
 	_dataByFrame[3].push_back("");
 
-	ControlManager::ResetPollCounter();
+	_console->GetControlManager()->ResetPollCounter();
 
 	while(!filestream.eof()) {
 		string line;
@@ -25,7 +25,7 @@ bool FceuxMovie::InitializeData(stringstream &filestream)
 			vector<uint8_t> md5array = Base64::Decode(line.substr(19, line.size() - 20));
 			HashInfo hashInfo;
 			hashInfo.PrgChrMd5Hash = HexUtilities::ToHex(md5array);
-			if(Console::LoadROM("", hashInfo)) {
+			if(_console->LoadMatchingRom("", hashInfo)) {
 				result = true;
 			} else {
 				return false;
@@ -61,17 +61,17 @@ bool FceuxMovie::InitializeData(stringstream &filestream)
 
 bool FceuxMovie::Play(VirtualFile &file)
 {
-	Console::Pause();
+	_console->Pause();
 	
 	std::stringstream ss;
 	file.ReadFile(ss);
 	if(InitializeData(ss)) {
 		EmulationSettings::SetRamPowerOnState(RamPowerOnState::AllZeros);
-		ControlManager::RegisterInputProvider(this);
-		Console::Reset(false);
+		_console->GetControlManager()->RegisterInputProvider(this);
+		_console->Reset(false);
 		_isPlaying = true;
 	}
 
-	Console::Resume();
+	_console->Resume();
 	return _isPlaying;
 }

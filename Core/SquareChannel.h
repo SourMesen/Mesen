@@ -3,6 +3,8 @@
 #include "APU.h"
 #include "IMemoryHandler.h"
 #include "ApuEnvelope.h"
+#include "Console.h"
+#include "CPU.h"
 
 class SquareChannel : public ApuEnvelope
 {
@@ -88,7 +90,7 @@ protected:
 	}
 
 public:
-	SquareChannel(AudioChannel channel, SoundMixer *mixer, bool isChannel1) : ApuEnvelope(channel, mixer)
+	SquareChannel(AudioChannel channel, shared_ptr<Console> console, SoundMixer *mixer, bool isChannel1) : ApuEnvelope(channel, console, mixer)
 	{
 		_isChannel1 = isChannel1;
 	}
@@ -130,7 +132,7 @@ public:
 
 	void WriteRAM(uint16_t addr, uint8_t value) override
 	{
-		APU::StaticRun();
+		_console->GetApu()->Run();
 		switch(addr & 0x03) {
 			case 0:		//4000 & 4004
 				InitializeLengthCounter((value & 0x20) == 0x20);
@@ -191,7 +193,7 @@ public:
 		state.DutyPosition = _dutyPos;
 		state.Enabled = _enabled;
 		state.Envelope = ApuEnvelope::GetState();
-		state.Frequency = CPU::GetClockRate(GetNesModel()) / 16.0 / (_realPeriod + 1);
+		state.Frequency = _console->GetCpu()->GetClockRate(GetNesModel()) / 16.0 / (_realPeriod + 1);
 		state.LengthCounter = ApuLengthCounter::GetState();
 		state.OutputVolume = _lastOutput;
 		state.Period = _realPeriod;

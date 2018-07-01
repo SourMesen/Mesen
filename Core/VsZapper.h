@@ -20,7 +20,7 @@ protected:
 	}
 
 public:
-	VsZapper(uint8_t port) : Zapper(port)
+	VsZapper(shared_ptr<Console> console, uint8_t port) : Zapper(console, port)
 	{
 	}
 

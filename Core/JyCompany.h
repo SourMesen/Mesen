@@ -254,7 +254,7 @@ protected:
 			case 0x5803: return _regRamValue;
 		}
 
-		return MemoryManager::GetOpenBus();
+		return _console->GetMemoryManager()->GetOpenBus();
 	}
 
 	void WriteRegister(uint16_t addr, uint8_t value) override
@@ -295,7 +295,7 @@ protected:
 						_irqEnabled = true;
 					} else {
 						_irqEnabled = false;
-						CPU::ClearIRQSource(IRQSource::External);
+						_console->GetCpu()->ClearIrqSource(IRQSource::External);
 					}
 					break;
 
@@ -308,7 +308,7 @@ protected:
 
 				case 0xC002:
 					_irqEnabled = false;
-					CPU::ClearIRQSource(IRQSource::External);
+					_console->GetCpu()->ClearIrqSource(IRQSource::External);
 					break;
 
 				case 0xC003: _irqEnabled = true; break;
@@ -342,7 +342,7 @@ protected:
 
 	void ProcessCpuClock() override
 	{
-		if(_irqSource == JyIrqSource::CpuClock || (_irqSource == JyIrqSource::CpuWrite && CPU::IsCpuWrite())) {
+		if(_irqSource == JyIrqSource::CpuClock || (_irqSource == JyIrqSource::CpuWrite && _console->GetCpu()->IsCpuWrite())) {
 			TickIrqCounter();
 		}
 	}
@@ -412,12 +412,12 @@ protected:
 			if(_irqCountDirection == 0x01) {
 				_irqCounter++;
 				if(_irqCounter == 0 && _irqEnabled) {
-					CPU::SetIRQSource(IRQSource::External);
+					_console->GetCpu()->SetIrqSource(IRQSource::External);
 				}
 			} else if(_irqCountDirection == 0x02) {
 				_irqCounter--;
 				if(_irqCounter == 0xFF && _irqEnabled) {
-					CPU::SetIRQSource(IRQSource::External);
+					_console->GetCpu()->SetIrqSource(IRQSource::External);
 				}
 			}
 		}

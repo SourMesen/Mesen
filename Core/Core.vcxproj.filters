@@ -1450,9 +1450,6 @@
     <ClInclude Include="OpenBusHandler.h">
       <Filter>Nes\MemoryManager</Filter>
     </ClInclude>
-    <ClInclude Include="IMemoryManager.h">
-      <Filter>Nes\MemoryManager</Filter>
-    </ClInclude>
     <ClInclude Include="Bmc60311C.h">
       <Filter>Nes\Mappers\Unif</Filter>
     </ClInclude>
@@ -1528,9 +1525,6 @@
       <Filter>Nes</Filter>
     </ClCompile>
     <ClCompile Include="APU.cpp">
-      <Filter>Nes\APU</Filter>
-    </ClCompile>
-    <ClCompile Include="ApuLengthCounter.cpp">
       <Filter>Nes\APU</Filter>
     </ClCompile>
     <ClCompile Include="DeltaModulationChannel.cpp">
@@ -1725,8 +1719,8 @@
     <ClCompile Include="MemoryManager.cpp">
       <Filter>Nes\MemoryManager</Filter>
     </ClCompile>
-    <ClCompile Include="OpenBusHandler.cpp">
-      <Filter>Nes\MemoryManager</Filter>
+    <ClCompile Include="BaseExpansionAudio.cpp">
+      <Filter>Misc</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
