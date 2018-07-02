@@ -54,7 +54,7 @@ public:
 	void ResetLagCounter();
 
 	uint32_t GetPollCounter();
-	void ResetPollCounter();
+	void SetPollCounter(uint32_t value);
 
 	virtual void Reset(bool softReset);
 

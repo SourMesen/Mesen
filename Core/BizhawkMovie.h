@@ -2,11 +2,12 @@
 #include "stdafx.h"
 #include "MovieManager.h"
 #include "../Utilities/ZipReader.h"
+#include "INotificationListener.h"
 
 class VirtualFile;
 class Console;
 
-class BizhawkMovie : public IMovie
+class BizhawkMovie : public IMovie, public INotificationListener, public std::enable_shared_from_this<BizhawkMovie>
 {
 private:
 	bool InitializeGameData(ZipReader &reader);
@@ -28,4 +29,7 @@ public:
 	bool SetInput(BaseControlDevice *device) override;
 	bool Play(VirtualFile &file) override;
 	bool IsPlaying() override;
+
+	// Inherited via INotificationListener
+	virtual void ProcessNotification(ConsoleNotificationType type, void * parameter) override;
 };

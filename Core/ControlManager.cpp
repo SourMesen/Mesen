@@ -305,9 +305,9 @@ uint32_t ControlManager::GetPollCounter()
 	return ControlManager::_pollCounter;
 }
 
-void ControlManager::ResetPollCounter()
+void ControlManager::SetPollCounter(uint32_t value)
 {
-	_pollCounter = 0;
+	_pollCounter = value;
 }
 
 uint8_t ControlManager::ReadRAM(uint16_t addr)

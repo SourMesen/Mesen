@@ -5,7 +5,8 @@
 #include "VsSystemActionManager.h"
 #include "BizhawkMovie.h"
 #include "VsControlManager.h"
-#include "FDS.h"
+#include "Console.h"
+#include "NotificationManager.h"
 
 BizhawkMovie::BizhawkMovie(shared_ptr<Console> console)
 {
@@ -97,7 +98,7 @@ bool BizhawkMovie::InitializeGameData(ZipReader &reader)
 		return false;
 	}
 
-	_console->GetControlManager()->ResetPollCounter();
+	_console->GetControlManager()->SetPollCounter(0);
 
 	while(!fileData.eof()) {
 		string line;
@@ -187,13 +188,12 @@ bool BizhawkMovie::Play(VirtualFile &file)
 	file.ReadFile(ss);
 
 	reader.LoadArchive(ss);
-	_console->GetControlManager()->RegisterInputProvider(this);
+	
+	_console->GetNotificationManager()->RegisterNotificationListener(shared_from_this());
+	EmulationSettings::SetRamPowerOnState(RamPowerOnState::AllOnes);
 	if(InitializeInputData(reader) && InitializeGameData(reader)) {
 		//NesHawk initializes memory to 1s
-		EmulationSettings::SetRamPowerOnState(RamPowerOnState::AllOnes);
 		_isPlaying = true;
-	} else {
-		_console->GetControlManager()->UnregisterInputProvider(this);
 	}
 	_console->Resume();
 	return _isPlaying;
@@ -202,4 +202,11 @@ bool BizhawkMovie::Play(VirtualFile &file)
 bool BizhawkMovie::IsPlaying()
 {
 	return _isPlaying;
+}
+
+void BizhawkMovie::ProcessNotification(ConsoleNotificationType type, void* parameter)
+{
+	if(type == ConsoleNotificationType::GameLoaded) {
+		_console->GetControlManager()->RegisterInputProvider(this);
+	}
 }

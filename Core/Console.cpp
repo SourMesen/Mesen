@@ -279,12 +279,20 @@ bool Console::Initialize(VirtualFile &romFile, VirtualFile &patchFile)
 
 			//Temporarely disable battery saves to prevent battery files from being created for the wrong game (for Battle Box & Turbo File)
 			BatteryManager::SetSaveEnabled(false);
+
+			uint32_t pollCounter = 0;
+			if(_controlManager && !isDifferentGame) {
+				//When power cycling, poll counter must be preserved to allow movies to playback properly
+				pollCounter = _controlManager->GetPollCounter();
+			}
 			if(system == GameSystem::VsUniSystem) {
 				_controlManager.reset(new VsControlManager(shared_from_this(), _systemActionManager, _mapper->GetMapperControlDevice()));
 			} else {
 				_controlManager.reset(new ControlManager(shared_from_this(), _systemActionManager, _mapper->GetMapperControlDevice()));
 			}
+			_controlManager->SetPollCounter(pollCounter);
 			_controlManager->UpdateControlDevices();
+			
 			//Re-enable battery saves
 			BatteryManager::SetSaveEnabled(true);
 			

@@ -6,6 +6,7 @@
 #include "ControlManager.h"
 #include "FceuxMovie.h"
 #include "Console.h"
+#include "NotificationManager.h"
 
 bool FceuxMovie::InitializeData(stringstream &filestream)
 {
@@ -16,7 +17,7 @@ bool FceuxMovie::InitializeData(stringstream &filestream)
 	_dataByFrame[2].push_back("");
 	_dataByFrame[3].push_back("");
 
-	_console->GetControlManager()->ResetPollCounter();
+	_console->GetControlManager()->SetPollCounter(0);
 
 	while(!filestream.eof()) {
 		string line;
@@ -25,6 +26,7 @@ bool FceuxMovie::InitializeData(stringstream &filestream)
 			vector<uint8_t> md5array = Base64::Decode(line.substr(19, line.size() - 20));
 			HashInfo hashInfo;
 			hashInfo.PrgChrMd5Hash = HexUtilities::ToHex(md5array);
+			EmulationSettings::SetRamPowerOnState(RamPowerOnState::AllZeros);
 			if(_console->LoadMatchingRom("", hashInfo)) {
 				result = true;
 			} else {
@@ -65,9 +67,8 @@ bool FceuxMovie::Play(VirtualFile &file)
 	
 	std::stringstream ss;
 	file.ReadFile(ss);
+	_console->GetNotificationManager()->RegisterNotificationListener(shared_from_this());
 	if(InitializeData(ss)) {
-		EmulationSettings::SetRamPowerOnState(RamPowerOnState::AllZeros);
-		_console->GetControlManager()->RegisterInputProvider(this);
 		_console->Reset(false);
 		_isPlaying = true;
 	}
