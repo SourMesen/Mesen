@@ -43,6 +43,7 @@
 #include "VideoDecoder.h"
 #include "VideoRenderer.h"
 #include "DebugHud.h"
+#include "NotificationManager.h"
 
 Console::Console()
 {
@@ -57,6 +58,7 @@ Console::~Console()
 
 void Console::Init()
 {
+	_notificationManager.reset(new NotificationManager());
 	_saveStateManager.reset(new SaveStateManager(shared_from_this()));
 	_videoRenderer.reset(new VideoRenderer(shared_from_this()));
 	_videoDecoder.reset(new VideoDecoder(shared_from_this()));
@@ -235,7 +237,7 @@ bool Console::Initialize(VirtualFile &romFile, VirtualFile &patchFile)
 				}
 
 				//Send notification only if a game was already running and we successfully loaded the new one
-				MessageManager::SendNotification(ConsoleNotificationType::GameStopped, (void*)1);
+				_notificationManager->SendNotification(ConsoleNotificationType::GameStopped, (void*)1);
 			}
 
 			if(isDifferentGame) {
@@ -321,7 +323,7 @@ bool Console::Initialize(VirtualFile &romFile, VirtualFile &patchFile)
 			ResetComponents(false);
 
 			_rewindManager.reset(new RewindManager(shared_from_this()));
-			MessageManager::RegisterNotificationListener(_rewindManager);
+			_notificationManager->RegisterNotificationListener(_rewindManager);
 
 			_videoDecoder->StartThread();
 
@@ -375,6 +377,11 @@ APU* Console::GetApu()
 shared_ptr<SoundMixer> Console::GetSoundMixer()
 {
 	return _soundMixer;
+}
+
+shared_ptr<NotificationManager> Console::GetNotificationManager()
+{
+	return _notificationManager;
 }
 
 BaseMapper* Console::GetMapper()
@@ -473,7 +480,8 @@ void Console::ResetComponents(bool softReset)
 
 	KeyManager::UpdateDevices();
 
-	MessageManager::SendNotification(softReset ? ConsoleNotificationType::GameReset : ConsoleNotificationType::GameLoaded);
+	//This notification MUST be sent before the UpdateInputState() below to allow MovieRecorder to grab the first frame's worth of inputs
+	_notificationManager->SendNotification(softReset ? ConsoleNotificationType::GameReset : ConsoleNotificationType::GameLoaded);
 
 	if(softReset) {
 		shared_ptr<Debugger> debugger = _debugger;
@@ -603,7 +611,7 @@ void Console::Run()
 
 				bool paused = EmulationSettings::IsPaused();
 				if(paused && !_stop) {
-					MessageManager::SendNotification(ConsoleNotificationType::GamePaused);
+					_notificationManager->SendNotification(ConsoleNotificationType::GamePaused);
 
 					//Prevent audio from looping endlessly while game is paused
 					_soundMixer->StopAudio();
@@ -625,7 +633,7 @@ void Console::Run()
 
 					PlatformUtilities::DisableScreensaver();
 					_runLock.Acquire();
-					MessageManager::SendNotification(ConsoleNotificationType::GameResumed);
+					_notificationManager->SendNotification(ConsoleNotificationType::GameResumed);
 					lastFrameTimer.Reset();
 				}
 
@@ -668,7 +676,7 @@ void Console::Run()
 
 	_running = false;
 
-	MessageManager::SendNotification(ConsoleNotificationType::BeforeEmulationStop);
+	_notificationManager->SendNotification(ConsoleNotificationType::BeforeEmulationStop);
 
 	if(!crashed) {
 		_saveStateManager->SaveRecentGame(GetMapperInfo().RomName, _romFilepath, _patchFilename);
@@ -703,8 +711,8 @@ void Console::Run()
 
 	_emulationThreadId = std::thread::id();
 
-	MessageManager::SendNotification(ConsoleNotificationType::GameStopped);
-	MessageManager::SendNotification(ConsoleNotificationType::EmulationStopped);
+	_notificationManager->SendNotification(ConsoleNotificationType::GameStopped);
+	_notificationManager->SendNotification(ConsoleNotificationType::EmulationStopped);
 }
 
 bool Console::IsRunning()
@@ -747,7 +755,7 @@ void Console::UpdateNesModel(bool sendNotification)
 	_apu->SetNesModel(model);
 
 	if(configChanged && sendNotification) {
-		MessageManager::SendNotification(ConsoleNotificationType::ConfigChanged);
+		_notificationManager->SendNotification(ConsoleNotificationType::ConfigChanged);
 	}
 }
 
@@ -813,7 +821,7 @@ void Console::LoadState(istream &loadStream, uint32_t stateVersion)
 			debugger->ResetCounters();
 		}
 
-		MessageManager::SendNotification(ConsoleNotificationType::StateLoaded);
+		_notificationManager->SendNotification(ConsoleNotificationType::StateLoaded);
 	}
 }
 

@@ -6,7 +6,7 @@
 
 class Console;
 
-class AutomaticRomTest : public INotificationListener, public IInputProvider
+class AutomaticRomTest : public INotificationListener, public IInputProvider, public std::enable_shared_from_this<AutomaticRomTest>
 {
 private:
 	shared_ptr<Console> _console;

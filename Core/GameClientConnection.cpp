@@ -17,6 +17,7 @@
 #include "PlayerListMessage.h"
 #include "ForceDisconnectMessage.h"
 #include "ServerInformationMessage.h"
+#include "NotificationManager.h"
 
 GameClientConnection::GameClientConnection(shared_ptr<Console> console, shared_ptr<Socket> socket, ClientConnectionData &connectionData) : GameConnection(console, socket)
 {
@@ -41,7 +42,7 @@ void GameClientConnection::Shutdown()
 		DisableControllers();
 
 		_console->GetControlManager()->UnregisterInputProvider(this);
-		MessageManager::SendNotification(ConsoleNotificationType::DisconnectedFromServer);
+		_console->GetNotificationManager()->SendNotification(ConsoleNotificationType::DisconnectedFromServer);
 		MessageManager::DisplayMessage("NetPlay", "ConnectionLost");
 		EmulationSettings::ClearFlags(EmulationFlags::ForceMaxSpeed);
 	}

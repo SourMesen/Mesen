@@ -10,6 +10,7 @@
 #include "ControlManager.h"
 #include "MemoryManager.h"
 #include "Console.h"
+#include "NotificationManager.h"
 
 PPU::PPU(shared_ptr<Console> console)
 {
@@ -1051,7 +1052,7 @@ void PPU::SendFrame()
 {
 	UpdateGrayscaleAndIntensifyBits();
 
- 	MessageManager::SendNotification(ConsoleNotificationType::PpuFrameDone, _currentOutputBuffer);
+	_console->GetNotificationManager()->SendNotification(ConsoleNotificationType::PpuFrameDone, _currentOutputBuffer);
 
 #ifdef LIBRETRO
 	_console->GetVideoDecoder()->UpdateFrameSync(_currentOutputBuffer);

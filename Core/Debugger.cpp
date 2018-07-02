@@ -27,6 +27,7 @@
 #include "TraceLogger.h"
 #include "Breakpoint.h"
 #include "CodeDataLogger.h"
+#include "NotificationManager.h"
 
 #ifndef UINT32_MAX
 #define UINT32_MAX  ((uint32_t)-1)
@@ -445,7 +446,7 @@ void Debugger::ProcessPpuCycle()
 		int32_t currentCycle = (_ppu->GetCurrentCycle() << 9) + _ppu->GetCurrentScanline();
 		for(auto updateCycle : _ppuViewerUpdateCycle) {
 			if(updateCycle.second == currentCycle) {
-				MessageManager::SendNotification(ConsoleNotificationType::PpuViewerDisplayFrame, (void*)(uint64_t)updateCycle.first);
+				_console->GetNotificationManager()->SendNotification(ConsoleNotificationType::PpuViewerDisplayFrame, (void*)(uint64_t)updateCycle.first);
 			}
 		}
 
@@ -691,7 +692,7 @@ bool Debugger::SleepUntilResume(BreakSource source)
 				
 		if(_preventResume == 0) {
 			_console->GetSoundMixer()->StopAudio();
-			MessageManager::SendNotification(ConsoleNotificationType::CodeBreak, (void*)(uint64_t)source);
+			_console->GetNotificationManager()->SendNotification(ConsoleNotificationType::CodeBreak, (void*)(uint64_t)source);
 			ProcessEvent(EventType::CodeBreak);
 			_stepOverAddr = -1;
 			if(CheckFlag(DebuggerFlags::PpuPartialDraw)) {
@@ -1340,7 +1341,7 @@ void Debugger::ProcessEvent(EventType type)
 		_memoryDumper->GatherChrPaletteInfo();
 	} else if(type == EventType::StartFrame) {
 		//Update the event viewer
-		MessageManager::SendNotification(ConsoleNotificationType::EventViewerDisplayFrame);
+		_console->GetNotificationManager()->SendNotification(ConsoleNotificationType::EventViewerDisplayFrame);
 
 		//Clear the current frame/event log
 		if(CheckFlag(DebuggerFlags::PpuPartialDraw)) {

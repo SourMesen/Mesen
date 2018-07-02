@@ -6,6 +6,7 @@
 #include "PPU.h"
 #include "VideoDecoder.h"
 #include "StandardController.h"
+#include "NotificationManager.h"
 
 AutomaticRomTest::AutomaticRomTest()
 {
@@ -104,6 +105,7 @@ int32_t AutomaticRomTest::Run(string filename)
 {
 	EmulationSettings::SetMasterVolume(0);
 	_console.reset(new Console());
+	_console->GetNotificationManager()->RegisterNotificationListener(shared_from_this());
 	if(_console->Initialize(filename)) {
 		_console->GetControlManager()->RegisterInputProvider(this);
 

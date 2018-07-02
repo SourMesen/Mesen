@@ -1453,6 +1453,9 @@
     <ClInclude Include="Bmc60311C.h">
       <Filter>Nes\Mappers\Unif</Filter>
     </ClInclude>
+    <ClInclude Include="NotificationManager.h">
+      <Filter>Misc</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -1721,6 +1724,21 @@
     </ClCompile>
     <ClCompile Include="BaseExpansionAudio.cpp">
       <Filter>Misc</Filter>
+    </ClCompile>
+    <ClCompile Include="NotificationManager.cpp">
+      <Filter>Misc</Filter>
+    </ClCompile>
+    <ClCompile Include="NsfPpu.cpp">
+      <Filter>Nes</Filter>
+    </ClCompile>
+    <ClCompile Include="HdPpu.cpp">
+      <Filter>HdPacks</Filter>
+    </ClCompile>
+    <ClCompile Include="NsfLoader.cpp">
+      <Filter>Nes\RomLoader</Filter>
+    </ClCompile>
+    <ClCompile Include="FdsLoader.cpp">
+      <Filter>Nes\RomLoader</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

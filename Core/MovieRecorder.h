@@ -4,12 +4,13 @@
 #include "IInputRecorder.h"
 #include "BatteryManager.h"
 #include "Types.h"
+#include "INotificationListener.h"
 
 class ZipWriter;
 class Console;
 struct CodeInfo;
 
-class MovieRecorder : public IInputRecorder, public IBatteryRecorder, public IBatteryProvider, public std::enable_shared_from_this<MovieRecorder>
+class MovieRecorder : public INotificationListener, public IInputRecorder, public IBatteryRecorder, public IBatteryProvider, public std::enable_shared_from_this<MovieRecorder>
 {
 private:
 	static const uint32_t MovieFormatVersion = 1;
@@ -44,6 +45,9 @@ public:
 
 	// Inherited via IBatteryProvider
 	virtual vector<uint8_t> LoadBattery(string extension) override;
+
+	// Inherited via INotificationListener
+	virtual void ProcessNotification(ConsoleNotificationType type, void * parameter) override;
 };
 
 namespace MovieKeys

@@ -12,6 +12,7 @@
 #include "MovieRecorder.h"
 #include "BatteryManager.h"
 #include "VirtualFile.h"
+#include "NotificationManager.h"
 
 MesenMovie::MesenMovie(shared_ptr<Console> console)
 {
@@ -63,6 +64,13 @@ vector<uint8_t> MesenMovie::LoadBattery(string extension)
 	return batteryData;
 }
 
+void MesenMovie::ProcessNotification(ConsoleNotificationType type, void * parameter)
+{
+	if(type == ConsoleNotificationType::GameLoaded) {
+		_console->GetControlManager()->RegisterInputProvider(this);
+	}
+}
+
 bool MesenMovie::Play(VirtualFile &file)
 {
 	_movieFile = file;
@@ -98,7 +106,7 @@ bool MesenMovie::Play(VirtualFile &file)
 	_console->Pause();
 		
 	BatteryManager::SetBatteryProvider(shared_from_this());
-	_console->GetControlManager()->RegisterInputProvider(this);
+	_console->GetNotificationManager()->RegisterNotificationListener(shared_from_this());
 	ApplySettings();
 
 	//Disable auto-configure input option (otherwise the movie file's input types are ignored)

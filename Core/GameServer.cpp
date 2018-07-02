@@ -8,6 +8,7 @@ using std::thread;
 #include "ControlManager.h"
 #include "../Utilities/Socket.h"
 #include "PlayerListMessage.h"
+#include "NotificationManager.h"
 
 unique_ptr<GameServer> GameServer::Instance;
 
@@ -40,7 +41,7 @@ void GameServer::AcceptConnections()
 		shared_ptr<Socket> socket = _listener->Accept();
 		if(!socket->ConnectionError()) {
 			auto connection = shared_ptr<GameServerConnection>(new GameServerConnection(_console, socket, _password));
-			MessageManager::RegisterNotificationListener(connection);
+			_console->GetNotificationManager()->RegisterNotificationListener(connection);
 			_openConnections.push_back(connection);
 		} else {
 			break;

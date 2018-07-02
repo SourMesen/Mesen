@@ -15,7 +15,10 @@ protected:
 	void EndMovie()
 	{
 		MessageManager::DisplayMessage("Movies", "MovieEnded");
-		MessageManager::SendNotification(ConsoleNotificationType::MovieEnded);
+		
+		//TODOCONSOLE
+		//MessageManager::SendNotification(ConsoleNotificationType::MovieEnded);
+
 		if(EmulationSettings::CheckFlag(EmulationFlags::PauseOnMovieEnd)) {
 			EmulationSettings::SetFlags(EmulationFlags::Paused);
 		}

@@ -3,6 +3,7 @@
 #include "CheatManager.h"
 #include "Console.h"
 #include "MessageManager.h"
+#include "NotificationManager.h"
 
 CheatManager::CheatManager(shared_ptr<Console> console)
 {
@@ -97,7 +98,7 @@ void CheatManager::AddCode(CodeInfo &code)
 	} else {
 		_absoluteCheatCodes.push_back(code);
 	}
-	MessageManager::SendNotification(ConsoleNotificationType::CheatAdded);
+	_console->GetNotificationManager()->SendNotification(ConsoleNotificationType::CheatAdded);
 }
 
 void CheatManager::AddGameGenieCode(string code)
@@ -138,7 +139,7 @@ void CheatManager::ClearCodes()
 	_absoluteCheatCodes.clear();
 	
 	if(cheatRemoved) {
-		MessageManager::SendNotification(ConsoleNotificationType::CheatRemoved);
+		_console->GetNotificationManager()->SendNotification(ConsoleNotificationType::CheatRemoved);
 	}
 }
 

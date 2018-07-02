@@ -5,14 +5,8 @@
 class NsfPpu : public PPU
 {
 protected:
-	void DrawPixel()
-	{
-	}
-
-	void SendFrame()
-	{
-		MessageManager::SendNotification(ConsoleNotificationType::PpuFrameDone);
-	}
+	void DrawPixel() override;
+	void SendFrame() override;
 
 public:
 	using PPU::PPU;

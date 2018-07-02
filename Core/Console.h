@@ -25,6 +25,7 @@ class VideoDecoder;
 class VideoRenderer;
 class DebugHud;
 class SoundMixer;
+class NotificationManager;
 
 struct HdPackData;
 enum class NesModel;
@@ -59,6 +60,7 @@ private:
 	shared_ptr<CheatManager> _cheatManager;
 	shared_ptr<DebugHud> _debugHud;
 	shared_ptr<SoundMixer> _soundMixer;
+	shared_ptr<NotificationManager> _notificationManager;
 
 	shared_ptr<HdPackBuilder> _hdPackBuilder;
 	shared_ptr<HdPackData> _hdData;
@@ -96,6 +98,7 @@ public:
 	shared_ptr<VideoRenderer> GetVideoRenderer();
 	shared_ptr<DebugHud> GetDebugHud();
 	shared_ptr<SoundMixer> GetSoundMixer();
+	shared_ptr<NotificationManager> GetNotificationManager();
 
 	void ProcessCpuClock();
 	CPU* GetCpu();

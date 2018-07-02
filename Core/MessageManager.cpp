@@ -607,11 +607,7 @@ std::unordered_map<string, string> MessageManager::_caResources = {
 
 std::list<string> MessageManager::_log;
 SimpleLock MessageManager::_logLock;
-SimpleLock MessageManager::_notificationLock;
-SimpleLock MessageManager::_addListenerLock;
 IMessageManager* MessageManager::_messageManager = nullptr;
-vector<weak_ptr<INotificationListener>> MessageManager::_listenersToAdd;
-vector<weak_ptr<INotificationListener>> MessageManager::_notificationListeners;
 
 void MessageManager::RegisterMessageManager(IMessageManager* messageManager)
 {
@@ -696,51 +692,4 @@ string MessageManager::GetLog()
 		ss << msg << "\n";
 	}
 	return ss.str();
-}
-
-void MessageManager::RegisterNotificationListener(shared_ptr<INotificationListener> notificationListener)
-{
-	auto lock = _notificationLock.AcquireSafe();
-	
-	for(weak_ptr<INotificationListener> listener : _notificationListeners) {
-		if(listener.lock() == notificationListener) {
-			//This listener is already registered, do nothing
-			return;
-		}
-	}
-
-	_notificationListeners.push_back(notificationListener);
-}
-
-void MessageManager::CleanupNotificationListeners()
-{
-	auto lock = _notificationLock.AcquireSafe();
-	
-	//Remove expired listeners
-	_notificationListeners.erase(
-		std::remove_if(
-			_notificationListeners.begin(),
-			_notificationListeners.end(),
-			[](weak_ptr<INotificationListener> ptr) { return ptr.expired(); }
-		),
-		_notificationListeners.end()
-	);
-}
-
-void MessageManager::SendNotification(ConsoleNotificationType type, void* parameter)
-{
-	vector<weak_ptr<INotificationListener>> listeners;
-	{
-		auto lock = _notificationLock.AcquireSafe();
-		CleanupNotificationListeners();
-		listeners = _notificationListeners;
-	}
-
-	//Iterate on a copy without using a lock
-	for(weak_ptr<INotificationListener> notificationListener : listeners) {
-		shared_ptr<INotificationListener> listener = notificationListener.lock();
-		if(listener) {
-			listener->ProcessNotification(type, parameter);
-		}
-	}
 }

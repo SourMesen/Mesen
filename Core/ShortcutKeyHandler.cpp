@@ -12,6 +12,7 @@
 #include "MovieManager.h"
 #include "ControlManager.h"
 #include "Console.h"
+#include "NotificationManager.h"
 
 ShortcutKeyHandler::ShortcutKeyHandler(shared_ptr<Console> console)
 {
@@ -117,7 +118,7 @@ void ShortcutKeyHandler::CheckMappedKeys()
 	for(uint64_t i = (uint64_t)EmulatorShortcut::SwitchDiskSide; i < (uint64_t)EmulatorShortcut::ShortcutCount; i++) {
 		if(DetectKeyPress((EmulatorShortcut)i)) {
 			void* param = (void*)i;
-			MessageManager::SendNotification(ConsoleNotificationType::ExecuteShortcut, param);
+			_console->GetNotificationManager()->SendNotification(ConsoleNotificationType::ExecuteShortcut, param);
 		}
 	}
 
@@ -169,11 +170,11 @@ void ShortcutKeyHandler::CheckMappedKeys()
 	}
 
 	if(DetectKeyPress(EmulatorShortcut::ToggleCheats) && !isNetplayClient && !isMovieActive) {
-		MessageManager::SendNotification(ConsoleNotificationType::ExecuteShortcut, (void*)EmulatorShortcut::ToggleCheats);
+		_console->GetNotificationManager()->SendNotification(ConsoleNotificationType::ExecuteShortcut, (void*)EmulatorShortcut::ToggleCheats);
 	}
 
 	if(DetectKeyPress(EmulatorShortcut::ToggleAudio)) {
-		MessageManager::SendNotification(ConsoleNotificationType::ExecuteShortcut, (void*)EmulatorShortcut::ToggleAudio);
+		_console->GetNotificationManager()->SendNotification(ConsoleNotificationType::ExecuteShortcut, (void*)EmulatorShortcut::ToggleAudio);
 	}
 
 	if(DetectKeyPress(EmulatorShortcut::RunSingleFrame)) {

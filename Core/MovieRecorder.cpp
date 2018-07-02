@@ -9,6 +9,7 @@
 #include "CheatManager.h"
 #include "VirtualFile.h"
 #include "SaveStateManager.h"
+#include "NotificationManager.h"
 
 MovieRecorder::MovieRecorder(shared_ptr<Console> console)
 {
@@ -43,8 +44,10 @@ bool MovieRecorder::Record(RecordMovieOptions options)
 		if(options.RecordFrom == RecordMovieFrom::StartWithSaveData) {
 			BatteryManager::SetBatteryRecorder(shared_from_this());
 		}
-		_console->GetControlManager()->RegisterInputRecorder(this);
+		
+		_console->GetNotificationManager()->RegisterNotificationListener(shared_from_this());
 		if(options.RecordFrom == RecordMovieFrom::CurrentState) {
+			_console->GetControlManager()->RegisterInputRecorder(this);
 			_console->GetSaveStateManager()->SaveState(_saveStateData);
 			_hasSaveState = true;
 		} else {
@@ -216,4 +219,11 @@ void MovieRecorder::OnLoadBattery(string extension, vector<uint8_t> batteryData)
 vector<uint8_t> MovieRecorder::LoadBattery(string extension)
 {
 	return vector<uint8_t>();
+}
+
+void MovieRecorder::ProcessNotification(ConsoleNotificationType type, void *parameter)
+{
+	if(type == ConsoleNotificationType::GameLoaded) {
+		_console->GetControlManager()->RegisterInputRecorder(this);
+	}
 }

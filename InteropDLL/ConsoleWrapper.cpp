@@ -1,6 +1,7 @@
 #include "stdafx.h"
 
 #include "../Core/MessageManager.h"
+#include "../Core/NotificationManager.h"
 #include "../Core/Console.h"
 #include "../Core/GameServer.h"
 #include "../Core/GameClient.h"
@@ -360,7 +361,7 @@ namespace InteropEmu {
 			auto lock = _externalNotificationListenerLock.AcquireSafe();
 			auto listener = shared_ptr<INotificationListener>(new InteropNotificationListener(callback));
 			_externalNotificationListeners.push_back(listener);
-			MessageManager::RegisterNotificationListener(listener);
+			_console->GetNotificationManager()->RegisterNotificationListener(listener);
 			return listener.get();
 		}
 
@@ -413,35 +414,34 @@ namespace InteropEmu {
 		DllExport int32_t __stdcall RunRecordedTest(char* filename)
 		{
 			_recordedRomTest.reset(new RecordedRomTest(_console));
-			MessageManager::RegisterNotificationListener(_recordedRomTest);
+			_console->GetNotificationManager()->RegisterNotificationListener(_recordedRomTest);
 			return _recordedRomTest->Run(filename);
 		}
 
 		DllExport int32_t __stdcall RunAutomaticTest(char* filename)
 		{
 			shared_ptr<AutomaticRomTest> romTest(new AutomaticRomTest());
-			MessageManager::RegisterNotificationListener(romTest);
 			return romTest->Run(filename);
 		}
 
 		DllExport void __stdcall RomTestRecord(char* filename, bool reset) 
 		{
 			_recordedRomTest.reset(new RecordedRomTest(_console));
-			MessageManager::RegisterNotificationListener(_recordedRomTest);
+			_console->GetNotificationManager()->RegisterNotificationListener(_recordedRomTest);
 			_recordedRomTest->Record(filename, reset);
 		}
 
 		DllExport void __stdcall RomTestRecordFromMovie(char* testFilename, char* movieFilename) 
 		{
 			_recordedRomTest.reset(new RecordedRomTest(_console));
-			MessageManager::RegisterNotificationListener(_recordedRomTest);
+			_console->GetNotificationManager()->RegisterNotificationListener(_recordedRomTest);
 			_recordedRomTest->RecordFromMovie(testFilename, string(movieFilename));
 		}
 
 		DllExport void __stdcall RomTestRecordFromTest(char* newTestFilename, char* existingTestFilename) 
 		{
 			_recordedRomTest.reset(new RecordedRomTest(_console));
-			MessageManager::RegisterNotificationListener(_recordedRomTest);
+			_console->GetNotificationManager()->RegisterNotificationListener(_recordedRomTest);
 			_recordedRomTest->RecordFromTest(newTestFilename, existingTestFilename);
 		}
 

@@ -1,8 +1,10 @@
 #include "stdafx.h"
-#include "MessageManager.h"
+#include "NotificationManager.h"
 #include "MapperFactory.h"
 #include "RomLoader.h"
 #include "UnifBoards.h"
+#include "BaseMapper.h"
+#include "RomData.h"
 
 #include "A65AS.h"
 #include "Ac08.h"
@@ -624,9 +626,11 @@ shared_ptr<BaseMapper> MapperFactory::InitializeFromFile(shared_ptr<Console> con
 		if(mapper) {
 			mapper->SetConsole(console);
 			mapper->Initialize(romData);
-			MessageManager::RegisterNotificationListener(mapper);
+			console->GetNotificationManager()->RegisterNotificationListener(mapper);
 			return mapper;
 		}
+	} else if(loader.GetRomData().BiosMissing) {
+		console->GetNotificationManager()->SendNotification(ConsoleNotificationType::FdsBiosNotFound);
 	}
 	return nullptr;
 }

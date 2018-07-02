@@ -11,8 +11,6 @@ class MessageManager
 {
 private:
 	static IMessageManager* _messageManager;
-	static vector<weak_ptr<INotificationListener>> _listenersToAdd;
-	static vector<weak_ptr<INotificationListener>> _notificationListeners;
 	static std::unordered_map<string, string> _enResources;
 	static std::unordered_map<string, string> _frResources;
 	static std::unordered_map<string, string> _jaResources;
@@ -23,12 +21,8 @@ private:
 	static std::unordered_map<string, string> _caResources;
 
 	static SimpleLock _logLock;
-	static SimpleLock _notificationLock;
-	static SimpleLock _addListenerLock;
 	static std::list<string> _log;
-
-	static void CleanupNotificationListeners();
-
+	
 public:
 	static string Localize(string key);
 
@@ -37,7 +31,4 @@ public:
 
 	static void Log(string message = "");
 	static string GetLog();
-
-	static void RegisterNotificationListener(shared_ptr<INotificationListener> notificationListener);
-	static void SendNotification(ConsoleNotificationType type, void* parameter = nullptr);
 };

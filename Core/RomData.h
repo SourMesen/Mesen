@@ -285,6 +285,7 @@ struct RomData
 	uint32_t PrgChrCrc32 = 0;
 
 	bool Error = false;
+	bool BiosMissing = false;
 
 	NESHeader NesHeader;
 	NsfHeader NsfInfo;

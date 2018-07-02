@@ -4,12 +4,13 @@
 #include "MovieManager.h"
 #include "VirtualFile.h"
 #include "BatteryManager.h"
+#include "INotificationListener.h"
 
 class ZipReader;
 class Console;
 struct CodeInfo;
 
-class MesenMovie : public IMovie, public IBatteryProvider, public std::enable_shared_from_this<MesenMovie>
+class MesenMovie : public IMovie, public INotificationListener, public IBatteryProvider, public std::enable_shared_from_this<MesenMovie>
 {
 private:
 	shared_ptr<Console> _console;
@@ -45,4 +46,7 @@ public:
 
 	// Inherited via IBatteryProvider
 	virtual vector<uint8_t> LoadBattery(string extension) override;
+
+	// Inherited via INotificationListener
+	virtual void ProcessNotification(ConsoleNotificationType type, void * parameter) override;
 };

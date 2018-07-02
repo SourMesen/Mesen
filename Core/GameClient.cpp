@@ -5,6 +5,7 @@ using std::thread;
 #include "MessageManager.h"
 #include "GameClient.h"
 #include "Console.h"
+#include "NotificationManager.h"
 #include "../Utilities/Socket.h"
 #include "ClientConnectionData.h"
 #include "GameClientConnection.h"
@@ -34,7 +35,7 @@ bool GameClient::Connected()
 void GameClient::Connect(shared_ptr<Console> console, ClientConnectionData &connectionData)
 {
 	_instance.reset(new GameClient(console));
-	MessageManager::RegisterNotificationListener(_instance);
+	console->GetNotificationManager()->RegisterNotificationListener(_instance);
 	
 	shared_ptr<GameClient> instance = _instance;
 	if(instance) {
@@ -60,7 +61,7 @@ void GameClient::PrivateConnect(ClientConnectionData &connectionData)
 	shared_ptr<Socket> socket(new Socket());
 	if(socket->Connect(connectionData.Host.c_str(), connectionData.Port)) {
 		_connection.reset(new GameClientConnection(_console, socket, connectionData));
-		MessageManager::RegisterNotificationListener(_connection);
+		_console->GetNotificationManager()->RegisterNotificationListener(_connection);
 		_connected = true;
 	} else {
 		MessageManager::DisplayMessage("NetPlay", "CouldNotConnect");

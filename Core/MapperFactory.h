@@ -1,8 +1,10 @@
 #pragma once
 #include "stdafx.h"
-#include "BaseMapper.h"
-#include "RomData.h"
+
 class MemoryManager;
+class Console;
+class BaseMapper;
+struct RomData;
 
 class MapperFactory
 {

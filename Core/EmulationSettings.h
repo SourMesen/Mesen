@@ -1039,7 +1039,8 @@ public:
 
 			UpdateEffectiveOverclockRate();
 
-			MessageManager::SendNotification(ConsoleNotificationType::ConfigChanged);
+			//TODOCONSOLE
+			//MessageManager::SendNotification(ConsoleNotificationType::ConfigChanged);
 
 			MessageManager::DisplayMessage("ClockRate", std::to_string((uint32_t)EmulationSettings::GetOverclockRate()) + "%");
 		}
