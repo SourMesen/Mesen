@@ -51,6 +51,7 @@ public:
 	void Log(string message);
 	const char* GetLog();
 
+	Debugger* GetDebugger();
 	string GetScriptName();
 
 	void RequestSaveState(int slot);

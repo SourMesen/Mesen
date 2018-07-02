@@ -4,6 +4,7 @@
 struct lua_State;
 class ScriptingContext;
 class Debugger;
+class Console;
 class MemoryDumper;
 struct ApuSquareState;
 struct ApuEnvelopeState;
@@ -13,7 +14,6 @@ class LuaApi
 {
 public:
 	static void SetContext(ScriptingContext *context);
-	static void RegisterDebugger(Debugger* debugger);
 	static int GetLibrary(lua_State *lua);
 
 	static int ReadMemory(lua_State *lua);
@@ -75,6 +75,7 @@ public:
 	static int ResetAccessCounters(lua_State *lua);
 
 private:
+	static Console* _console;
 	static Debugger* _debugger;
 	static MemoryDumper* _memoryDumper;
 	static ScriptingContext* _context;

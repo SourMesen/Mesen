@@ -33,6 +33,11 @@ const char* ScriptingContext::GetLog()
 	return _log.c_str();
 }
 
+Debugger* ScriptingContext::GetDebugger()
+{
+	return _debugger;
+}
+
 string ScriptingContext::GetScriptName()
 {
 	return _scriptName;

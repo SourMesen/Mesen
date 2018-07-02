@@ -44,7 +44,6 @@ bool LuaScriptingContext::LoadScript(string scriptName, string scriptContent, De
 
 	int iErr = 0;
 	_lua = luaL_newstate();
-	LuaApi::RegisterDebugger(debugger);
 	LuaApi::SetContext(this);
 
 	luaL_openlibs(_lua);
