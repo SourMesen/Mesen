@@ -227,8 +227,10 @@ static vector<KeyDefinition> _keyDefinitions = {
 	{ "", 246, "XF86WLAN", "" },
 };
 
-LinuxKeyManager::LinuxKeyManager()
+LinuxKeyManager::LinuxKeyManager(shared_ptr<Console> console)
 {
+	_console = console;
+
 	ResetKeyState();
 
 	vector<string> buttonNames = { 
@@ -378,14 +380,14 @@ void LinuxKeyManager::StartUpdateDeviceThread()
 			}
 
 			if(!indexesToRemove.empty() || !controllersToAdd.empty()) {
-				Console::Pause();
+				_console->Pause();
 				for(int index : indexesToRemove) {
 					_controllers.erase(_controllers.begin()+index);
 				}
 				for(std::shared_ptr<LinuxGameController> controller : controllersToAdd) {
 					_controllers.push_back(controller);
 				} 
-				Console::Resume();
+				_console->Resume();
 			}
 
 			_stopSignal.Wait(2000);

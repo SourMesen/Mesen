@@ -1,6 +1,4 @@
 ﻿#include "stdafx.h"
-
-#include <algorithm>
 #include "MessageManager.h"
 #include "EmulationSettings.h"
 

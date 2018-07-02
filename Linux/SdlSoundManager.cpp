@@ -2,11 +2,14 @@
 #include "../Core/EmulationSettings.h"
 #include "../Core/MessageManager.h"
 #include "../Core/SoundMixer.h"
+#include "../Core/Console.h"
 
-SdlSoundManager::SdlSoundManager()
+SdlSoundManager::SdlSoundManager(shared_ptr<Console> console)
 {
+	_console = console;
+
 	if(InitializeAudio(44100, false)) {
-		SoundMixer::RegisterAudioDevice(this);
+		_console->GetSoundMixer()->RegisterAudioDevice(this);
 	}
 }
 

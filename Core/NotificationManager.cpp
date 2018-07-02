@@ -1,4 +1,5 @@
 #include "stdafx.h"
+#include <algorithm>
 #include "NotificationManager.h"
 
 void NotificationManager::RegisterNotificationListener(shared_ptr<INotificationListener> notificationListener)

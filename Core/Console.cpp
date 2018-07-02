@@ -150,7 +150,7 @@ bool Console::LoadMatchingRom(string romName, HashInfo hashInfo)
 	if(!match.empty()) {
 		return Initialize(match);
 	}
-	return nullptr;
+	return false;
 }
 
 string Console::FindMatchingRom(string romName, HashInfo hashInfo)

@@ -60,9 +60,10 @@ bool SaveStateManager::LoadState()
 void SaveStateManager::SaveState(ostream &stream)
 {
 	uint32_t emuVersion = EmulationSettings::GetMesenVersion();
+	uint32_t formatVersion = SaveStateManager::FileFormatVersion;
 	stream.write("MST", 3);
 	stream.write((char*)&emuVersion, sizeof(emuVersion));
-	stream.write((char*)&SaveStateManager::FileFormatVersion, sizeof(uint32_t));
+	stream.write((char*)&formatVersion, sizeof(uint32_t));
 
 	MapperInfo mapperInfo = _console->GetMapperInfo();
 	stream.write((char*)&mapperInfo.MapperId, sizeof(uint16_t));

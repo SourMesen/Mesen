@@ -21,6 +21,8 @@ struct SDL_Window
 };
 typedef struct SDL_Window SDL_Window;
 
+class Console;
+
 class SdlRenderer : public IRenderingDevice, public BaseRenderer
 {
 private:
@@ -59,7 +61,7 @@ private:
 	bool ContainsCharacter(wchar_t character) override;
 
 public:
-	SdlRenderer(void* windowHandle);
+	SdlRenderer(shared_ptr<Console> console, void* windowHandle);
 	virtual ~SdlRenderer();
 
 	void UpdateFrame(void *frameBuffer, uint32_t width, uint32_t height) override;

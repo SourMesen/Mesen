@@ -6,6 +6,7 @@
 #include "../Utilities/AutoResetEvent.h"
 
 class LinuxGameController;
+class Console;
 
 struct KeyDefinition {
 	string name;
@@ -17,6 +18,7 @@ struct KeyDefinition {
 class LinuxKeyManager : public IKeyManager
 {
 private:
+	shared_ptr<Console> _console;
 	std::vector<shared_ptr<LinuxGameController>> _controllers;
 	bool _keyState[0x200];
 	bool _mouseState[0x03];
@@ -31,7 +33,7 @@ private:
 	void StartUpdateDeviceThread();
 
 public:
-	LinuxKeyManager();
+	LinuxKeyManager(shared_ptr<Console> console);
 	virtual ~LinuxKeyManager();
 
 	void RefreshState();

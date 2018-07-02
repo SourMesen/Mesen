@@ -66,6 +66,10 @@ namespace InteropEmu {
 		{
 			_callback = callback;
 		}
+
+		virtual ~InteropNotificationListener()
+		{
+		}
 		
 		void ProcessNotification(ConsoleNotificationType type, void* parameter)
 		{
@@ -107,7 +111,7 @@ namespace InteropEmu {
 					#ifdef _WIN32
 						_renderer = new Renderer(_console, (HWND)_viewerHandle);
 					#else 
-						_renderer = new SdlRenderer(_viewerHandle);
+						_renderer = new SdlRenderer(_console, _viewerHandle);
 					#endif
 				} 
 
@@ -115,7 +119,7 @@ namespace InteropEmu {
 					#ifdef _WIN32
 						_soundManager = new SoundManager(_console, (HWND)_windowHandle);
 					#else
-						_soundManager = new SdlSoundManager(); 
+						_soundManager = new SdlSoundManager(_console);
 					#endif
 				}
 
@@ -123,7 +127,7 @@ namespace InteropEmu {
 					#ifdef _WIN32
 						_keyManager = new WindowsKeyManager(_console, (HWND)_windowHandle);
 					#else 
-						_keyManager = new LinuxKeyManager();
+						_keyManager = new LinuxKeyManager(_console);
 					#endif				
 					
 					KeyManager::RegisterKeyManager(_keyManager);

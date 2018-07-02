@@ -3,7 +3,6 @@
 #include "stdafx.h"
 
 #include "IMessageManager.h"
-#include "INotificationListener.h"
 #include <unordered_map>
 #include "../Utilities/SimpleLock.h"
 

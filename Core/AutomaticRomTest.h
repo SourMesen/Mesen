@@ -17,7 +17,7 @@ private:
 
 public:
 	AutomaticRomTest();
-	~AutomaticRomTest();
+	virtual ~AutomaticRomTest();
 
 	void ProcessNotification(ConsoleNotificationType type, void* parameter) override;
 	int32_t Run(string filename);

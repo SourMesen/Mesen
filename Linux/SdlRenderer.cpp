@@ -5,7 +5,7 @@
 #include "../Core/VideoDecoder.h"
 #include "../Core/EmulationSettings.h"
 
-SdlRenderer::SdlRenderer(void* windowHandle) : _windowHandle(windowHandle)
+SdlRenderer::SdlRenderer(shared_ptr<Console> console, void* windowHandle) : BaseRenderer(console), _windowHandle(windowHandle)
 {
 	_frameBuffer = nullptr;
 	SetScreenSize(256,240);
@@ -14,7 +14,7 @@ SdlRenderer::SdlRenderer(void* windowHandle) : _windowHandle(windowHandle)
 
 SdlRenderer::~SdlRenderer()
 {
-	VideoRenderer::GetInstance()->UnregisterRenderingDevice(this);
+	_console->GetVideoRenderer()->UnregisterRenderingDevice(this);
 	Cleanup();
 }
 
@@ -99,7 +99,7 @@ void SdlRenderer::Reset()
 {
 	Cleanup();
 	if(Init()) {
-		VideoRenderer::GetInstance()->RegisterRenderingDevice(this);
+		_console->GetVideoRenderer()->RegisterRenderingDevice(this);
 	} else {
 		Cleanup();
 	}
@@ -108,7 +108,7 @@ void SdlRenderer::Reset()
 void SdlRenderer::SetScreenSize(uint32_t width, uint32_t height)
 {
 	ScreenSize screenSize;
-	VideoDecoder::GetInstance()->GetScreenSize(screenSize, false);
+	_console->GetVideoDecoder()->GetScreenSize(screenSize, false);
 
 	if(_screenHeight != (uint32_t)screenSize.Height || _screenWidth != (uint32_t)screenSize.Width || _nesFrameHeight != height || _nesFrameWidth != width || _resizeFilter != EmulationSettings::GetVideoResizeFilter() || _vsyncEnabled != EmulationSettings::CheckFlag(EmulationFlags::VerticalSync)) {
 		_reinitLock.Acquire();
@@ -147,9 +147,9 @@ void SdlRenderer::Render()
 		return;
 	}
 
-	bool paused = EmulationSettings::IsPaused() && Console::IsRunning();
+	bool paused = EmulationSettings::IsPaused() && _console->IsRunning();
 	bool disableOverlay = EmulationSettings::CheckFlag(EmulationFlags::HidePauseOverlay);
-	shared_ptr<Debugger> debugger = Console::GetInstance()->GetDebugger(false);
+	shared_ptr<Debugger> debugger = _console->GetDebugger(false);
 	if(debugger && debugger->IsExecutionStopped()) {
 		paused = debugger->IsPauseIconShown();
 		disableOverlay = true;
@@ -185,7 +185,7 @@ void SdlRenderer::Render()
 
 		if(paused && !EmulationSettings::CheckFlag(EmulationFlags::HidePauseOverlay)) {
 			DrawPauseScreen(disableOverlay);
-		} else if(VideoDecoder::GetInstance()->IsRunning()) {
+		} else if(_console->GetVideoDecoder()->IsRunning()) {
 			DrawCounters();
 		}
 
