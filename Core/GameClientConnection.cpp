@@ -27,7 +27,6 @@ GameClientConnection::GameClientConnection(shared_ptr<Console> console, shared_p
 	_minimumQueueSize = 3;
 
 	MessageManager::DisplayMessage("NetPlay", "ConnectedToServer");
-	_console->GetControlManager()->RegisterInputProvider(this);
 }
 
 GameClientConnection::~GameClientConnection()
@@ -208,10 +207,10 @@ bool GameClientConnection::SetInput(BaseControlDevice *device)
 void GameClientConnection::InitControlDevice()
 {
 	if(_controllerPort == BaseControlDevice::ExpDevicePort) {
-		_newControlDevice = ControlManager::CreateExpansionDevice(EmulationSettings::GetExpansionDevice(), nullptr);
+		_newControlDevice = ControlManager::CreateExpansionDevice(EmulationSettings::GetExpansionDevice(), _console);
 	} else {
 		//Pretend we are using port 0 (to use player 1's keybindings during netplay)
-		_newControlDevice = ControlManager::CreateControllerDevice(EmulationSettings::GetControllerType(_controllerPort), 0, nullptr);
+		_newControlDevice = ControlManager::CreateControllerDevice(EmulationSettings::GetControllerType(_controllerPort), 0, _console);
 	}
 }
 
@@ -219,6 +218,8 @@ void GameClientConnection::ProcessNotification(ConsoleNotificationType type, voi
 {
 	if(type == ConsoleNotificationType::ConfigChanged) {
 		InitControlDevice();
+	} else if(type == ConsoleNotificationType::GameLoaded) {
+		_console->GetControlManager()->RegisterInputProvider(this);
 	}
 }
 

@@ -10,7 +10,7 @@ using std::thread;
 #include "PlayerListMessage.h"
 #include "NotificationManager.h"
 
-unique_ptr<GameServer> GameServer::Instance;
+shared_ptr<GameServer> GameServer::Instance;
 
 GameServer::GameServer(shared_ptr<Console> console, uint16_t listenPort, string password, string hostPlayerName)
 {
@@ -20,8 +20,9 @@ GameServer::GameServer(shared_ptr<Console> console, uint16_t listenPort, string 
 	_password = password;
 	_hostPlayerName = hostPlayerName;
 	_hostControllerPort = 0;
-	_console->GetControlManager()->RegisterInputRecorder(this);
-	_console->GetControlManager()->RegisterInputProvider(this);
+
+	//If a game is already running, register ourselves as an input recorder/provider right away
+	RegisterServerInput();
 }
 
 GameServer::~GameServer()
@@ -33,6 +34,15 @@ GameServer::~GameServer()
 
 	_console->GetControlManager()->UnregisterInputRecorder(this);
 	_console->GetControlManager()->UnregisterInputProvider(this);
+}
+
+void GameServer::RegisterServerInput()
+{
+	ControlManager* controlManager = _console->GetControlManager();
+	if(controlManager) {
+		controlManager->RegisterInputRecorder(this);
+		controlManager->RegisterInputProvider(this);
+	}
 }
 
 void GameServer::AcceptConnections()
@@ -102,6 +112,14 @@ void GameServer::RecordInput(vector<shared_ptr<BaseControlDevice>> devices)
 	}
 }
 
+void GameServer::ProcessNotification(ConsoleNotificationType type, void * parameter)
+{
+	if(type == ConsoleNotificationType::GameLoaded) {
+		//Register the server as an input provider/recorder
+		RegisterServerInput();
+	}
+}
+
 void GameServer::Exec()
 {
 	_listener.reset(new Socket());
@@ -129,6 +147,7 @@ void GameServer::Stop()
 void GameServer::StartServer(shared_ptr<Console> console, uint16_t port, string password, string hostPlayerName)
 {
 	Instance.reset(new GameServer(console, port, password, hostPlayerName));
+	console->GetNotificationManager()->RegisterNotificationListener(Instance);
 	Instance->_serverThread.reset(new thread(&GameServer::Exec, Instance.get()));
 }
 

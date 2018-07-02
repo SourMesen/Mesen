@@ -9,10 +9,10 @@
 using std::thread;
 class Console;
 
-class GameServer : public IInputRecorder, public IInputProvider
+class GameServer : public IInputRecorder, public IInputProvider, public INotificationListener
 {
 private:
-	static unique_ptr<GameServer> Instance;
+	static shared_ptr<GameServer> Instance;
 	shared_ptr<Console> _console;
 	unique_ptr<thread> _serverThread;
 	atomic<bool> _stop;
@@ -35,6 +35,8 @@ public:
 	GameServer(shared_ptr<Console> console, uint16_t port, string password, string hostPlayerName);
 	virtual ~GameServer();
 
+	void RegisterServerInput();
+
 	static void StartServer(shared_ptr<Console> console, uint16_t port, string password, string hostPlayerName);
 	static void StopServer();
 	static bool Started();
@@ -50,4 +52,7 @@ public:
 
 	bool SetInput(BaseControlDevice *device) override;
 	void RecordInput(vector<shared_ptr<BaseControlDevice>> devices) override;
+
+	// Inherited via INotificationListener
+	virtual void ProcessNotification(ConsoleNotificationType type, void * parameter) override;
 };
