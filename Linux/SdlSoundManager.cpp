@@ -42,6 +42,7 @@ void SdlSoundManager::Release()
 bool SdlSoundManager::InitializeAudio(uint32_t sampleRate, bool isStereo)
 {
 	if(SDL_InitSubSystem(SDL_INIT_AUDIO) != 0) {
+		MessageManager::Log("[Audio] Failed to initialize audio subsystem");
 		return false;
 	}
 

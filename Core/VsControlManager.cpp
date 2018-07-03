@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "VsControlManager.h"
+#include "VsSystem.h"
 
 ControllerType VsControlManager::GetControllerType(uint8_t port)
 {
@@ -12,7 +13,13 @@ ControllerType VsControlManager::GetControllerType(uint8_t port)
 
 void VsControlManager::Reset(bool softReset)
 {
+	ControlManager::Reset(softReset);
 	_protectionCounter = 0;
+	UpdateSlaveMasterBit(_console->IsMaster() ? 0x00 : 0x02);
+
+	if(!softReset && !_console->IsMaster() && _console->GetDualConsole()) {
+		RegisterInputProvider(this);
+	}
 }
 
 void VsControlManager::StreamState(bool saving)
@@ -89,6 +96,7 @@ uint8_t VsControlManager::ReadRAM(uint16_t addr)
 			value = ControlManager::ReadRAM(addr);
 			value |= ((dipSwitches & 0x01) ? 0x08 : 0x00);
 			value |= ((dipSwitches & 0x02) ? 0x10 : 0x00);
+			value |= (_console->IsMaster() ? 0x00 : 0x80);
 			break;
 		}
 
@@ -143,5 +151,65 @@ void VsControlManager::WriteRAM(uint16_t addr, uint8_t value)
 
 	if(addr == 0x4016) {
 		_prgChrSelectBit = (value >> 2) & 0x01;
+		
+		//Bit 2: DualSystem-only
+		uint8_t slaveMasterBit = (value & 0x02);
+		if(slaveMasterBit != _slaveMasterBit) {
+			UpdateSlaveMasterBit(slaveMasterBit);
+		}
 	}
+}
+
+void VsControlManager::UpdateSlaveMasterBit(uint8_t slaveMasterBit)
+{
+	shared_ptr<Console> dualConsole = _console->GetDualConsole();
+	if(dualConsole) {
+		VsSystem* mapper = dynamic_cast<VsSystem*>(_console->GetMapper());
+		
+		if(_console->IsMaster()) {
+			mapper->UpdateMemoryAccess(slaveMasterBit);
+		}
+
+		if(slaveMasterBit) {
+			dualConsole->GetCpu()->ClearIrqSource(IRQSource::External);
+		} else {
+			//When low, asserts /IRQ on the other CPU
+			dualConsole->GetCpu()->SetIrqSource(IRQSource::External);
+		}
+	}
+	_slaveMasterBit = slaveMasterBit;
+}
+
+void VsControlManager::UpdateControlDevices()
+{
+	if(_console->GetDualConsole()) {
+		auto lock = _deviceLock.AcquireSafe();
+		_controlDevices.clear();
+		RegisterControlDevice(_systemActionManager);
+
+		//Force 4x standard controllers
+		//P3 & P4 will be sent to the slave CPU - see SetInput() below.
+		for(int i = 0; i < 4; i++) {
+			shared_ptr<BaseControlDevice> device = CreateControllerDevice(ControllerType::StandardController, i, _console);
+			if(device) {
+				RegisterControlDevice(device);
+			}
+		}
+	} else {
+		ControlManager::UpdateControlDevices();
+	}
+}
+
+bool VsControlManager::SetInput(BaseControlDevice* device)
+{
+	uint8_t port = device->GetPort();
+	ControlManager* masterControlManager = _console->GetDualConsole()->GetControlManager();
+	if(masterControlManager && port <= 1) {
+		shared_ptr<BaseControlDevice> controlDevice = masterControlManager->GetControlDevice(port + 2);
+		if(controlDevice) {
+			ControlDeviceState state = controlDevice->GetRawState();
+			device->SetRawState(state);
+		}
+	}
+	return true;
 }

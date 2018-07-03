@@ -41,10 +41,13 @@
 	#include "../Linux/LinuxKeyManager.h"
 #endif
 
-IRenderingDevice *_renderer = nullptr;
-IAudioDevice *_soundManager = nullptr;
-IKeyManager *_keyManager = nullptr;
+unique_ptr<IRenderingDevice> _renderer;
+unique_ptr<IAudioDevice> _soundManager;
+unique_ptr<IKeyManager> _keyManager;
 unique_ptr<ShortcutKeyHandler> _shortcutKeyHandler;
+
+unique_ptr<IRenderingDevice> _dualRenderer;
+unique_ptr<IAudioDevice> _dualSoundManager;
 
 void* _windowHandle = nullptr;
 void* _viewerHandle = nullptr;
@@ -109,30 +112,54 @@ namespace InteropEmu {
 
 				if(!noVideo) {
 					#ifdef _WIN32
-						_renderer = new Renderer(_console, (HWND)_viewerHandle);
+						_renderer.reset(new Renderer(_console, (HWND)_viewerHandle));
 					#else 
-						_renderer = new SdlRenderer(_console, _viewerHandle);
+						_renderer.reset(new SdlRenderer(_console, _viewerHandle));
 					#endif
 				} 
 
 				if(!noAudio) {
 					#ifdef _WIN32
-						_soundManager = new SoundManager(_console, (HWND)_windowHandle);
+						_soundManager.reset(new SoundManager(_console, (HWND)_windowHandle));
 					#else
-						_soundManager = new SdlSoundManager(_console);
+						_soundManager.reset(new SdlSoundManager(_console));
 					#endif
 				}
 
 				if(!noInput) {
 					#ifdef _WIN32
-						_keyManager = new WindowsKeyManager(_console, (HWND)_windowHandle);
+						_keyManager.reset(new WindowsKeyManager(_console, (HWND)_windowHandle));
 					#else 
-						_keyManager = new LinuxKeyManager(_console);
+						_keyManager.reset(new LinuxKeyManager(_console));
 					#endif				
 					
-					KeyManager::RegisterKeyManager(_keyManager);
+					KeyManager::RegisterKeyManager(_keyManager.get());
 				}
 			}
+		}
+		
+		DllExport void __stdcall InitializeDualSystem(void *windowHandle, void *viewerHandle)
+		{
+			shared_ptr<Console> slaveConsole = _console->GetDualConsole();
+			if(slaveConsole){
+				_console->Pause();
+				#ifdef _WIN32
+					_dualRenderer.reset(new Renderer(slaveConsole, (HWND)viewerHandle));
+					_dualSoundManager.reset(new SoundManager(slaveConsole, (HWND)windowHandle));
+				#else 
+					_dualRenderer.reset(new SdlRenderer(slaveConsole, viewerHandle));
+					_dualSoundManager.reset(new SdlSoundManager(slaveConsole));
+				#endif
+				_console->Resume();
+			}
+		}
+
+		DllExport void __stdcall ReleaseDualSystemAudioVideo()
+		{
+			_console->Pause();
+			_dualRenderer.reset();
+			_dualSoundManager.reset();
+			_console->Resume();
 		}
 
 		DllExport void __stdcall SetFullscreenMode(bool fullscreen, void *windowHandle, uint32_t monitorWidth, uint32_t monitorHeight)
@@ -330,6 +357,7 @@ namespace InteropEmu {
 
 		DllExport void __stdcall Release()
 		{
+			ReleaseDualSystemAudioVideo();
 			_shortcutKeyHandler.reset();
 			
 			GameServer::StopServer();
@@ -337,18 +365,9 @@ namespace InteropEmu {
 
 			_console->Stop();
 
-			if(_renderer) {
-				delete _renderer;
-				_renderer = nullptr;
-			}
-			if(_soundManager) {
-				delete _soundManager;
-				_soundManager = nullptr;
-			}
-			if(_keyManager) {
-				delete _keyManager;
-				_keyManager = nullptr;
-			}
+			_renderer.reset();
+			_soundManager.reset();
+			_keyManager.reset();
 
 			_console->Release(true);
 			_console.reset();

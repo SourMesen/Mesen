@@ -208,6 +208,7 @@ namespace Mesen.GUI.Forms
 			this.mnuReportBug = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem5 = new System.Windows.Forms.ToolStripSeparator();
 			this.mnuAbout = new System.Windows.Forms.ToolStripMenuItem();
+			this.ctrlRendererDualSystem = new Mesen.GUI.Controls.ctrlRenderer();
 			this.panelRenderer.SuspendLayout();
 			this.panelInfo.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.picIcon)).BeginInit();
@@ -221,6 +222,7 @@ namespace Mesen.GUI.Forms
 			// panelRenderer
 			// 
 			this.panelRenderer.BackColor = System.Drawing.Color.Black;
+			this.panelRenderer.Controls.Add(this.ctrlRendererDualSystem);
 			this.panelRenderer.Controls.Add(this.ctrlLoading);
 			this.panelRenderer.Controls.Add(this.panelInfo);
 			this.panelRenderer.Controls.Add(this.ctrlRecentGames);
@@ -1662,6 +1664,16 @@ namespace Mesen.GUI.Forms
 			this.mnuAbout.Text = "About";
 			this.mnuAbout.Click += new System.EventHandler(this.mnuAbout_Click);
 			// 
+			// ctrlRendererDualSystem
+			// 
+			this.ctrlRendererDualSystem.BackColor = System.Drawing.Color.Black;
+			this.ctrlRendererDualSystem.Location = new System.Drawing.Point(275, 0);
+			this.ctrlRendererDualSystem.Margin = new System.Windows.Forms.Padding(0);
+			this.ctrlRendererDualSystem.Name = "ctrlRendererDualSystem";
+			this.ctrlRendererDualSystem.Size = new System.Drawing.Size(150, 90);
+			this.ctrlRendererDualSystem.TabIndex = 8;
+			this.ctrlRendererDualSystem.Visible = false;
+			// 
 			// frmMain
 			// 
 			this.AllowDrop = true;
@@ -1868,6 +1880,7 @@ namespace Mesen.GUI.Forms
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem27;
 		private System.Windows.Forms.ToolStripMenuItem mnuInstallHdPack;
 		private System.Windows.Forms.ToolStripMenuItem mnuTextHooker;
+		private Controls.ctrlRenderer ctrlRendererDualSystem;
 	}
 }
 

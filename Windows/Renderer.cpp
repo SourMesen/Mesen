@@ -18,13 +18,14 @@ Renderer::Renderer(shared_ptr<Console> console, HWND hWnd) : BaseRenderer(consol
 	_hWnd = hWnd;
 
 	SetScreenSize(256, 240);
-
-	MessageManager::RegisterMessageManager(this);
 }
 
 Renderer::~Renderer()
 {
-	_console->GetVideoRenderer()->UnregisterRenderingDevice(this);
+	shared_ptr<VideoRenderer> videoRenderer = _console->GetVideoRenderer();
+	if(videoRenderer) {
+		videoRenderer->UnregisterRenderingDevice(this);
+	}
 	CleanupDevice();
 }
 

@@ -23,6 +23,8 @@ enum class ConsoleNotificationType
 	EmulationStopped = 17,
 	EventViewerDisplayFrame = 18,
 	BeforeEmulationStop = 19,
+	VsDualSystemStarted = 20,
+	VsDualSystemStopped = 21,
 };
 
 class INotificationListener

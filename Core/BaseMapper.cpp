@@ -643,7 +643,7 @@ void BaseMapper::ApplyCheats()
 
 void BaseMapper::GetMemoryRanges(MemoryRanges &ranges)
 {
-	if(_gameSystem == GameSystem::VsUniSystem) {
+	if(_gameSystem == GameSystem::VsUniSystem || _gameSystem == GameSystem::VsDualSystem) {
 		ranges.AddHandler(MemoryOperation::Read, 0x6000, 0xFFFF);
 		ranges.AddHandler(MemoryOperation::Write, 0x6000, 0xFFFF);
 	} else {

@@ -35,8 +35,8 @@ private:
 	
 	VideoResizeFilter _resizeFilter = VideoResizeFilter::NearestNeighbor;
 
-	SimpleLock _frameLock;
-	SimpleLock _reinitLock;
+	static SimpleLock _frameLock;
+	static SimpleLock _reinitLock;
 	uint32_t* _frameBuffer;
 
 	const uint32_t _bytesPerPixel = 4;

@@ -20,25 +20,25 @@ class ControlManager : public Snapshotable, public IMemoryHandler
 private:
 	vector<IInputRecorder*> _inputRecorders;
 	vector<IInputProvider*> _inputProviders;
-	SimpleLock _deviceLock;
-
+	
 	//Static so that power cycle does not reset its value
 	//TODOCONSOLE : PollCounter needs to be kept through power cycle
 	uint32_t _pollCounter;
 
-	vector<shared_ptr<BaseControlDevice>> _controlDevices;
-
-	shared_ptr<BaseControlDevice> _systemActionManager;
 	shared_ptr<BaseControlDevice> _mapperControlDevice;
 
 	uint32_t _lagCounter = 0;
 	bool _isLagging = false;
 
 	uint8_t GetOpenBusMask(uint8_t port);
-	void RegisterControlDevice(shared_ptr<BaseControlDevice> controlDevice);
 
 protected:
 	shared_ptr<Console> _console;
+	SimpleLock _deviceLock;
+	vector<shared_ptr<BaseControlDevice>> _controlDevices;
+	shared_ptr<BaseControlDevice> _systemActionManager;
+
+	void RegisterControlDevice(shared_ptr<BaseControlDevice> controlDevice);
 
 	virtual void StreamState(bool saving) override;
 	virtual ControllerType GetControllerType(uint8_t port);
@@ -47,7 +47,7 @@ public:
 	ControlManager(shared_ptr<Console> console, shared_ptr<BaseControlDevice> systemActionManager, shared_ptr<BaseControlDevice> mapperControlDevice);
 	virtual ~ControlManager();
 
-	void UpdateControlDevices();
+	virtual void UpdateControlDevices();
 	void UpdateInputState();
 
 	uint32_t GetLagCounter();

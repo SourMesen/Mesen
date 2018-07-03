@@ -5,16 +5,21 @@
 #include "../Core/VideoDecoder.h"
 #include "../Core/EmulationSettings.h"
 
+SimpleLock SdlRenderer::_reinitLock;
+SimpleLock SdlRenderer::_frameLock;
+
 SdlRenderer::SdlRenderer(shared_ptr<Console> console, void* windowHandle) : BaseRenderer(console), _windowHandle(windowHandle)
 {
 	_frameBuffer = nullptr;
 	SetScreenSize(256,240);
-	MessageManager::RegisterMessageManager(this);	
 }
 
 SdlRenderer::~SdlRenderer()
 {
-	_console->GetVideoRenderer()->UnregisterRenderingDevice(this);
+	shared_ptr<VideoRenderer> videoRenderer = _console->GetVideoRenderer();
+	if(videoRenderer) {
+		videoRenderer->UnregisterRenderingDevice(this);
+	}
 	Cleanup();
 }
 

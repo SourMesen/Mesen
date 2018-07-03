@@ -45,36 +45,55 @@
 #include "DebugHud.h"
 #include "NotificationManager.h"
 
-Console::Console()
+Console::Console(shared_ptr<Console> master)
 {
+	_master = master;
 	_model = NesModel::NTSC;
+
+	if(_master) {
+		_master->_notificationManager->SendNotification(ConsoleNotificationType::VsDualSystemStarted);
+	}
 }
 
 Console::~Console()
 {
 	MovieManager::Stop();
-	GetSoundMixer()->StopRecording();
 }
 
 void Console::Init()
 {
 	_notificationManager.reset(new NotificationManager());
-	_saveStateManager.reset(new SaveStateManager(shared_from_this()));
+	
 	_videoRenderer.reset(new VideoRenderer(shared_from_this()));
 	_videoDecoder.reset(new VideoDecoder(shared_from_this()));
+
+	_saveStateManager.reset(new SaveStateManager(shared_from_this()));
 	_cheatManager.reset(new CheatManager(shared_from_this()));
 	_debugHud.reset(new DebugHud());
+
 	_soundMixer.reset(new SoundMixer(shared_from_this()));
+	_soundMixer->SetNesModel(_model);
 }
 
 void Console::Release(bool forShutdown)
 {
 	if(forShutdown) {
-		_saveStateManager.reset();
-		_videoRenderer.reset();
+		_videoDecoder->StopThread();
+		_videoRenderer->StopThread();
+
 		_videoDecoder.reset();
+		_videoRenderer.reset();
+
 		_debugHud.reset();
+		_saveStateManager.reset();
 		_cheatManager.reset();
+
+		_soundMixer.reset();
+		_notificationManager.reset();
+	}
+
+	if(_master) {
+		_master->_notificationManager->SendNotification(ConsoleNotificationType::VsDualSystemStopped);
 	}
 
 	_rewindManager.reset();
@@ -85,7 +104,13 @@ void Console::Release(bool forShutdown)
 	_hdAudioDevice.reset();
 
 	_systemActionManager.reset();
+	
+	if(_slave) {
+		_slave->Release(true);
+		_slave.reset();
+	}
 
+	_master.reset();
 	_cpu.reset();
 	_ppu.reset();
 	_apu.reset();
@@ -246,19 +271,25 @@ bool Console::Initialize(VirtualFile &romFile, VirtualFile &patchFile)
 				
 				//Changed game, stop all recordings
 				MovieManager::Stop();
-				GetSoundMixer()->StopRecording();
+				_soundMixer->StopRecording();
 				StopRecordingHdPack();
 			}
-
-#ifndef LIBRETRO
-			//Don't use auto-save manager for libretro
-			_autoSaveManager.reset(new AutoSaveManager(shared_from_this()));
-#endif
 
 			_mapper = mapper;
 			_memoryManager.reset(new MemoryManager(shared_from_this()));
 			_cpu.reset(new CPU(shared_from_this()));
 			_apu.reset(new APU(shared_from_this()));
+
+			if(_slave) {
+				_slave->Release(false);
+				_slave.reset();
+			}
+
+			if(!_master && _mapper->GetMapperInfo().System == GameSystem::VsDualSystem) {
+				_slave.reset(new Console(shared_from_this()));
+				_slave->Init();
+				_slave->Initialize(romFile, patchFile);
+			}
 
 			GameSystem system = _mapper->GetMapperInfo().System;
 
@@ -269,6 +300,7 @@ bool Console::Initialize(VirtualFile &romFile, VirtualFile &patchFile)
 					break;
 				
 				case GameSystem::VsUniSystem:
+				case GameSystem::VsDualSystem:
 					_systemActionManager.reset(new VsSystemActionManager(shared_from_this()));
 					break;
 				
@@ -285,7 +317,8 @@ bool Console::Initialize(VirtualFile &romFile, VirtualFile &patchFile)
 				//When power cycling, poll counter must be preserved to allow movies to playback properly
 				pollCounter = _controlManager->GetPollCounter();
 			}
-			if(system == GameSystem::VsUniSystem) {
+
+			if(system == GameSystem::VsUniSystem || system == GameSystem::VsDualSystem) {
 				_controlManager.reset(new VsControlManager(shared_from_this(), _systemActionManager, _mapper->GetMapperControlDevice()));
 			} else {
 				_controlManager.reset(new ControlManager(shared_from_this(), _systemActionManager, _mapper->GetMapperControlDevice()));
@@ -330,6 +363,13 @@ bool Console::Initialize(VirtualFile &romFile, VirtualFile &patchFile)
 
 			ResetComponents(false);
 
+#ifndef LIBRETRO
+			//Don't use auto-save manager for libretro
+			//Only enable auto-save for the master console (VS Dualsystem)
+			if(IsMaster()) {
+				_autoSaveManager.reset(new AutoSaveManager(shared_from_this()));
+			}
+#endif
 			_rewindManager.reset(new RewindManager(shared_from_this()));
 			_notificationManager->RegisterNotificationListener(_rewindManager);
 
@@ -337,13 +377,15 @@ bool Console::Initialize(VirtualFile &romFile, VirtualFile &patchFile)
 
 			FolderUtilities::AddKnownGameFolder(romFile.GetFolderPath());
 
-			string modelName = _model == NesModel::PAL ? "PAL" : (_model == NesModel::Dendy ? "Dendy" : "NTSC");
-			string messageTitle = MessageManager::Localize("GameLoaded") + " (" + modelName + ")";
-			MessageManager::DisplayMessage(messageTitle, FolderUtilities::GetFilename(GetMapperInfo().RomName, false));
-			if(EmulationSettings::GetOverclockRate() != 100) {
-				MessageManager::DisplayMessage("ClockRate", std::to_string(EmulationSettings::GetOverclockRate()) + "%");
+			if(IsMaster()) {
+				string modelName = _model == NesModel::PAL ? "PAL" : (_model == NesModel::Dendy ? "Dendy" : "NTSC");
+				string messageTitle = MessageManager::Localize("GameLoaded") + " (" + modelName + ")";
+				MessageManager::DisplayMessage(messageTitle, FolderUtilities::GetFilename(GetMapperInfo().RomName, false));
+				if(EmulationSettings::GetOverclockRate() != 100) {
+					MessageManager::DisplayMessage("ClockRate", std::to_string(EmulationSettings::GetOverclockRate()) + "%");
+				}
+				EmulationSettings::ClearFlags(EmulationFlags::ForceMaxSpeed);
 			}
-			EmulationSettings::ClearFlags(EmulationFlags::ForceMaxSpeed);
 			Resume();
 			return true;
 		}
@@ -390,6 +432,24 @@ shared_ptr<SoundMixer> Console::GetSoundMixer()
 shared_ptr<NotificationManager> Console::GetNotificationManager()
 {
 	return _notificationManager;
+}
+
+bool Console::IsDualSystem()
+{
+	return _slave != nullptr || _master != nullptr;
+}
+
+shared_ptr<Console> Console::GetDualConsole()
+{
+	//When called from the master, returns the slave.
+	//When called from the slave, returns the master.
+	//Returns a null pointer when not running a dualsystem game
+	return _slave ? _slave : _master;
+}
+
+bool Console::IsMaster()
+{
+	return !_master;
 }
 
 BaseMapper* Console::GetMapper()
@@ -476,6 +536,11 @@ void Console::Reset(bool softReset)
 
 void Console::ResetComponents(bool softReset)
 {
+	if(_slave) {
+		//Always reset/power cycle the slave alongside the master CPU
+		_slave->ResetComponents(softReset);
+	}
+
 	_soundMixer->StopAudio(true);
 
 	_memoryManager->Reset(softReset);
@@ -523,15 +588,26 @@ void Console::Pause()
 		//Make sure debugger resumes if we try to pause the emu, otherwise we will get deadlocked.
 		debugger->Suspend();
 	}
-	_pauseLock.Acquire();
-	//Spin wait until emu pauses
-	_runLock.Acquire();
+
+	if(_master) {
+		//When trying to pause/resume the slave, we need to pause/resume the master instead
+		_master->Pause();
+	} else {
+		_pauseLock.Acquire();
+		//Spin wait until emu pauses
+		_runLock.Acquire();
+	}
 }
 
 void Console::Resume()
 {
-	_runLock.Release();
-	_pauseLock.Release();
+	if(_master) {
+		//When trying to pause/resume the slave, we need to pause/resume the master instead
+		_master->Resume();
+	} else {
+		_runLock.Release();
+		_pauseLock.Release();
+	}
 	
 	shared_ptr<Debugger> debugger = _debugger;
 	if(debugger) {
@@ -567,6 +643,8 @@ void Console::Run()
 	int timeLagDataIndex = 0;
 	double lastFrameMin = 9999;
 	double lastFrameMax = 0;
+	int32_t cycleGap = 0;
+	uint32_t currentFrameNumber = 0;
 
 	uint32_t lastFrameNumber = -1;
 
@@ -590,13 +668,32 @@ void Console::Run()
 		while(true) {
 			_cpu->Exec();
 
-			uint32_t currentFrameNumber = _ppu->GetFrameCount();
+			currentFrameNumber = _ppu->GetFrameCount();
+			
+			if(_slave) {
+				while(true) {
+					//Run the slave until it catches up to the master CPU (and take into account the CPU count overflow that occurs every ~20mins)
+					cycleGap = _cpu->GetCycleCount() - _slave->_cpu->GetCycleCount();
+					if(cycleGap > 5 || cycleGap < -10000 || currentFrameNumber > _slave->_ppu->GetFrameCount()) {
+						_slave->_cpu->Exec();
+					} else {
+						break;
+					}
+				}
+			}
+
 			if(currentFrameNumber != lastFrameNumber) {
 				_soundMixer->ProcessEndOfFrame();
+				if(_slave) {
+					_slave->_soundMixer->ProcessEndOfFrame();
+				}
 
 				bool displayDebugInfo = EmulationSettings::CheckFlag(EmulationFlags::DisplayDebugInfo);
 				if(displayDebugInfo) {
 					DisplayDebugInformation(clockTimer, lastFrameTimer, lastFrameMin, lastFrameMax, timeLagData);
+					if(_slave) {
+						_slave->DisplayDebugInformation(clockTimer, lastFrameTimer, lastFrameMin, lastFrameMax, timeLagData);
+					}
 				}
 				lastFrameTimer.Reset();
 
@@ -623,6 +720,9 @@ void Console::Run()
 
 					//Prevent audio from looping endlessly while game is paused
 					_soundMixer->StopAudio();
+					if(_slave) {
+						_slave->_soundMixer->StopAudio();
+					}
 
 					_runLock.Release();
 
@@ -695,7 +795,7 @@ void Console::Run()
 
 	_soundMixer->StopAudio();
 	MovieManager::Stop();
-	GetSoundMixer()->StopRecording();
+	_soundMixer->StopRecording();
 
 	PlatformUtilities::EnableScreensaver();
 	PlatformUtilities::RestoreTimerResolution();
@@ -725,12 +825,22 @@ void Console::Run()
 
 bool Console::IsRunning()
 {
-	return !_stopLock.IsFree() && _running;
+	if(_master) {
+		//For slave CPU, return the master's state
+		return _master->IsRunning();
+	} else {
+		return !_stopLock.IsFree() && _running;
+	}
 }
 
 bool Console::IsPaused()
 {
-	return _runLock.IsFree() || !_pauseLock.IsFree() || !_running;
+	if(_master) {
+		//For slave CPU, return the master's state
+		return _master->IsPaused();
+	} else {
+		return _runLock.IsFree() || !_pauseLock.IsFree() || !_running;
+	}
 }
 
 void Console::UpdateNesModel(bool sendNotification)
@@ -801,6 +911,11 @@ void Console::SaveState(ostream &saveStream)
 		} else {
 			Snapshotable::WriteEmptyBlock(&saveStream);
 		}
+
+		if(_slave) {
+			//For VS Dualsystem, append the 2nd console's savestate
+			_slave->SaveState(saveStream);
+		}
 	}
 }
 
@@ -822,6 +937,11 @@ void Console::LoadState(istream &loadStream, uint32_t stateVersion)
 			_hdAudioDevice->LoadSnapshot(&loadStream, stateVersion);
 		} else {
 			Snapshotable::SkipBlock(&loadStream);
+		}
+
+		if(_slave) {
+			//For VS Dualsystem, the slave console's savestate is appended to the end of the file
+			_slave->LoadState(loadStream, stateVersion);
 		}
 		
 		shared_ptr<Debugger> debugger = _debugger;

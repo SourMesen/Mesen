@@ -101,6 +101,8 @@ GameSystem GameDatabase::GetGameSystem(string system)
 		return GameSystem::Famicom;
 	} else if(system.compare("VsUni") == 0) {
 		return GameSystem::VsUniSystem;
+	} else if(system.compare("VsDual") == 0) {
+		return GameSystem::VsDualSystem;
 	} else if(system.compare("Dendy") == 0) {
 		return GameSystem::Dendy;
 	} else if(system.compare("Playchoice") == 0) {

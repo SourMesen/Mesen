@@ -22,6 +22,9 @@ namespace Mesen.GUI
 		[DllImport(DLLPath)] public static extern void InitializeEmu([MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(UTF8Marshaler))]string homeFolder, IntPtr windowHandle, IntPtr dxViewerHandle, [MarshalAs(UnmanagedType.I1)]bool noAudio, [MarshalAs(UnmanagedType.I1)]bool noVideo, [MarshalAs(UnmanagedType.I1)]bool noInput);
 		[DllImport(DLLPath)] public static extern void Release();
 
+		[DllImport(DLLPath)] public static extern void InitializeDualSystem(IntPtr windowHandle, IntPtr viewerHandle);
+		[DllImport(DLLPath)] public static extern void ReleaseDualSystemAudioVideo();
+
 		[DllImport(DLLPath)] public static extern void SetDisplayLanguage(Language lang);
 
 		[DllImport(DLLPath)] public static extern void SetFullscreenMode([MarshalAs(UnmanagedType.I1)]bool fullscreen, IntPtr windowHandle, UInt32 monitorWidth, UInt32 monitorHeight);
@@ -883,6 +886,8 @@ namespace Mesen.GUI
 			EmulationStopped = 17,
 			EventViewerDisplayFrame = 18,
 			BeforeEmulationStop = 19,
+			VsDualSystemStarted = 20,
+			VsDualSystemStopped = 21,
 		}
 
 		public enum ControllerType

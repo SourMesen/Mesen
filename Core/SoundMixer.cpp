@@ -11,6 +11,7 @@
 
 SoundMixer::SoundMixer(shared_ptr<Console> console)
 {
+	_audioDevice = nullptr;
 	_console = console;
 	_eqFrequencyGrid.reset(new orfanidis_eq::freq_grid());
 	_oggMixer.reset();
@@ -23,6 +24,8 @@ SoundMixer::SoundMixer(shared_ptr<Console> console)
 
 SoundMixer::~SoundMixer()
 {
+	StopRecording();
+
 	delete[] _outputBuffer;
 	_outputBuffer = nullptr;
 

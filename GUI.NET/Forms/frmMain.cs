@@ -52,6 +52,7 @@ namespace Mesen.GUI.Forms
 		private bool _enableResize = false;
 		private bool _overrideWindowSize = false;
 		private bool _shuttingDown = false;
+		private bool _isDualSystem = false;
 
 		private frmFullscreenRenderer _frmFullscreenRenderer = null;
 
@@ -333,23 +334,32 @@ namespace Mesen.GUI.Forms
 			UpdateEmulationFlags();
 		}
 
-		private void UpdateViewerSize()
+		private void UpdateViewerSize(bool forceUpdate = false)
 		{
 			this.Resize -= frmMain_Resize;
 
 			InteropEmu.ScreenSize size = InteropEmu.GetScreenSize(false);
 
-			if(!_customSize && this.WindowState != FormWindowState.Maximized) {
+			int width = _isDualSystem ? (size.Width * 2) : size.Width;
+			if(forceUpdate || (!_customSize && this.WindowState != FormWindowState.Maximized)) {
 				Size sizeGap = this.Size - this.ClientSize;
 
 				UpdateScaleMenu(size.Scale);
-				this.ClientSize = new Size(Math.Max(this.MinimumSize.Width - sizeGap.Width, size.Width), Math.Max(this.MinimumSize.Height - sizeGap.Height, size.Height + (this.HideMenuStrip ? 0 : menuStrip.Height)));
+				this.ClientSize = new Size(Math.Max(this.MinimumSize.Width - sizeGap.Width, width), Math.Max(this.MinimumSize.Height - sizeGap.Height, size.Height + (this.HideMenuStrip ? 0 : menuStrip.Height)));
 			}
 
 			ctrlRenderer.Size = new Size(size.Width, size.Height);
-			ctrlRenderer.Left = (panelRenderer.Width - ctrlRenderer.Width) / 2;
-			ctrlRenderer.Top = (panelRenderer.Height - ctrlRenderer.Height) / 2;
+			if(_isDualSystem) {
+				ctrlRendererDualSystem.Size = new Size(size.Width, size.Height);
+				ctrlRendererDualSystem.Top = (panelRenderer.Height - ctrlRenderer.Height) / 2;
 
+				ctrlRenderer.Left = (panelRenderer.Width / 2 - ctrlRenderer.Width) / 2;
+				ctrlRendererDualSystem.Left = ctrlRenderer.Left + ctrlRenderer.Width;
+			} else {
+				ctrlRenderer.Left = (panelRenderer.Width - ctrlRenderer.Width) / 2;
+			}
+			ctrlRenderer.Top = (panelRenderer.Height - ctrlRenderer.Height) / 2;
+			
 			if(this.HideMenuStrip) {
 				this.menuStrip.Visible = false;
 			}
@@ -628,6 +638,24 @@ namespace Mesen.GUI.Forms
 						if(DebugWindowManager.GetDebugger() == null) {
 							DebugWindowManager.OpenDebugWindow(DebugWindow.Debugger);
 						}
+					}));
+					break;
+
+				case InteropEmu.ConsoleNotificationType.VsDualSystemStarted:
+					_isDualSystem = true;
+					this.BeginInvoke((MethodInvoker)(() => {
+						ctrlRendererDualSystem.Visible = _isDualSystem;
+						UpdateViewerSize(true);
+						InteropEmu.InitializeDualSystem(this.Handle, ctrlRendererDualSystem.Handle);
+					}));
+					break;
+
+				case InteropEmu.ConsoleNotificationType.VsDualSystemStopped:
+					_isDualSystem = false;
+					InteropEmu.ReleaseDualSystemAudioVideo();
+					this.BeginInvoke((MethodInvoker)(() => {
+						ctrlRendererDualSystem.Visible = _isDualSystem;
+						UpdateViewerSize(true);
 					}));
 					break;
 			}

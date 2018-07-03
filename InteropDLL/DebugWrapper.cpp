@@ -21,7 +21,7 @@ extern "C"
 	//Debugger wrapper
 	DllExport void __stdcall DebugInitialize()
 	{
-		_console->GetDebugger();
+		GetDebugger();
 	}
 
 	DllExport void __stdcall DebugRelease()

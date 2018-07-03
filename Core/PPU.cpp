@@ -893,7 +893,7 @@ void PPU::ProcessScanline()
 		if(IsRenderingEnabled()) {
 			ReadVram(GetNameTableAddr());
 
-			if(_scanline == -1 && _nesModel == NesModel::NTSC && _cycle == 339 && (_frameCount & 0x01)) {
+			if(_scanline == -1 && _cycle == 339 && (_frameCount & 0x01) && _nesModel == NesModel::NTSC && EmulationSettings::GetPpuModel() == PpuModel::Ppu2C02) {
 				//This behavior is NTSC-specific - PAL frames are always the same number of cycles
 				//"With rendering enabled, each odd PPU frame is one PPU clock shorter than normal" (skip from 339 to 0, going over 340)
 				_cycle = 340;

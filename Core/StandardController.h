@@ -102,6 +102,11 @@ public:
 
 	uint8_t ReadRAM(uint16_t addr) override
 	{
+		if(_port >= 2 && _console->IsDualSystem()) {
+			//Ignore P3/P4 controllers for VS DualSystem - those are used by the slave CPU
+			return 0;
+		}
+
 		uint8_t output = 0;
 
 		if((addr == 0x4016 && (_port & 0x01) == 0) || (addr == 0x4017 && (_port & 0x01) == 1)) {

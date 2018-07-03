@@ -7,13 +7,16 @@
 #include <assert.h>
 #include "StandardController.h"
 #include "MovieManager.h"
+#include "IInputProvider.h"
 
 class BaseControlDevice;
 
-class VsControlManager : public ControlManager
+class VsControlManager : public ControlManager, public IInputProvider
 {
 private:
-	uint8_t _prgChrSelectBit;
+	uint8_t _prgChrSelectBit = 0;
+	uint8_t _slaveMasterBit = 0;
+
 	bool _refreshState = false;
 
 	uint32_t _protectionCounter = 0;
@@ -39,6 +42,7 @@ private:
 	};
 
 	ControllerType GetControllerType(uint8_t port) override;
+	void UpdateSlaveMasterBit(uint8_t slaveMasterBit);
 
 public:
 	using ControlManager::ControlManager;
@@ -50,8 +54,13 @@ public:
 
 	uint8_t GetPrgChrSelectBit();
 
+	void UpdateControlDevices() override;
+
 	void RemapControllerButtons();
 
 	uint8_t ReadRAM(uint16_t addr) override;	
 	void WriteRAM(uint16_t addr, uint8_t value) override;
+
+	// Inherited via IInputProvider
+	virtual bool SetInput(BaseControlDevice* device) override;
 };

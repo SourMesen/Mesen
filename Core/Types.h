@@ -316,6 +316,7 @@ enum class GameSystem
 	Famicom,
 	Dendy,
 	VsUniSystem,
+	VsDualSystem,
 	Playchoice,
 	FDS,
 	Unknown,

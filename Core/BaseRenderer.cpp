@@ -9,6 +9,11 @@
 BaseRenderer::BaseRenderer(shared_ptr<Console> console)
 {
 	_console = console;
+
+	if(console->IsMaster()) {
+		//Only display messages on the master CPU's screen
+		MessageManager::RegisterMessageManager(this);
+	}
 }
 
 void BaseRenderer::DisplayMessage(string title, string message)

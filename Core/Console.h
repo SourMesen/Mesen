@@ -50,6 +50,10 @@ private:
 	shared_ptr<BaseMapper> _mapper;
 	shared_ptr<ControlManager> _controlManager;
 	shared_ptr<MemoryManager> _memoryManager;
+	
+	//Used by VS-DualSystem
+	shared_ptr<Console> _master;
+	shared_ptr<Console> _slave;
 
 	shared_ptr<SystemActionManager> _systemActionManager;
 
@@ -87,7 +91,7 @@ private:
 	void DisplayDebugInformation(Timer &clockTimer, Timer &lastFrameTimer, double &lastFrameMin, double &lastFrameMax, double *timeLagData);
 
 public:
-	Console();
+	Console(shared_ptr<Console> master = nullptr);
 	~Console();
 
 	void Init();
@@ -99,6 +103,10 @@ public:
 	shared_ptr<DebugHud> GetDebugHud();
 	shared_ptr<SoundMixer> GetSoundMixer();
 	shared_ptr<NotificationManager> GetNotificationManager();
+
+	bool IsDualSystem();
+	shared_ptr<Console> GetDualConsole();
+	bool IsMaster();
 
 	void ProcessCpuClock();
 	CPU* GetCpu();
