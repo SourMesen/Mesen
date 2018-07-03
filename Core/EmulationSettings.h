@@ -90,6 +90,9 @@ enum EmulationFlags : uint64_t
 
 	ReduceSoundInFastForward = 0x100000000000000,
 
+	VsDualMuteMaster = 0x200000000000000,
+	VsDualMuteSlave = 0x400000000000000,
+	
 	ForceMaxSpeed = 0x4000000000000000,	
 	ConsoleMode = 0x8000000000000000,
 };

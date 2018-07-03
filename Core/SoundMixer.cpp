@@ -116,6 +116,14 @@ void SoundMixer::PlayAudioBuffer(uint32_t time)
 		_oggMixer->ApplySamples(_outputBuffer, sampleCount);
 	}
 
+	if(_console->IsDualSystem()) {
+		if(_console->IsMaster() && EmulationSettings::CheckFlag(EmulationFlags::VsDualMuteMaster)) {
+			_lowPassFilter.ApplyFilter(_outputBuffer, sampleCount, 0, 0);
+		} else if(!_console->IsMaster() && EmulationSettings::CheckFlag(EmulationFlags::VsDualMuteSlave)) {
+			_lowPassFilter.ApplyFilter(_outputBuffer, sampleCount, 0, 0);
+		}
+	}
+
 	RewindManager* rewindManager = _console->GetRewindManager();
 
 	if(!_console->GetVideoRenderer()->IsRecording() && !_waveRecorder && !EmulationSettings::CheckFlag(EmulationFlags::NsfPlayerEnabled)) {

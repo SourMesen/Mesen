@@ -408,6 +408,10 @@
 			<Control ID="btnResync">同期</Control>
 			<Control ID="lblLastSync">最終同期： </Control>
 
+			<Control ID="lblVsDualSystem">VS.システム設定</Control>
+			<Control ID="lblVsDualPlayAudio">次の音声を再生する：</Control>
+			<Control ID="lblVsDualShowVideo">次の映像を表示する：</Control>
+
 			<Control ID="lblFdsSettings">ファミコンディスクシステム設定</Control>
 			<Control ID="lblUiDisplaySettings">ユーザーインターフェイス表示設定</Control>
 			<Control ID="lblWindowSettings">ウインドウ設定</Control>
@@ -422,7 +426,7 @@
 
 			<Control ID="chkAlwaysOnTop">他のウインドウより常に手前に表示する</Control>
 
-			<Control ID="tpgFdsNfs">FDS・NSF</Control>
+			<Control ID="tpgFdsNfs">FDS・VS・NSF</Control>
 			<Control ID="lblNsfSettings">NSF設定</Control>
 			<Control ID="chkNsfAutoDetectSilence">無音検出：</Control>
 			<Control ID="lblNsfMillisecondsOfSilence">ミリ秒間で無音の場合、次の曲を再生</Control>
@@ -963,6 +967,11 @@
 			<Value ID="Prescale6x">Prescale 6x</Value>
 			<Value ID="Prescale8x">Prescale 8x</Value>
 			<Value ID="Prescale10x">Prescale 10x</Value>
+		</Enum>
+		<Enum ID="VsDualOutputOption">
+			<Value ID="Both">両方</Value>
+			<Value ID="MasterOnly">マスターのみ</Value>
+			<Value ID="SlaveOnly">スレーブのみ</Value>
 		</Enum>
 		<Enum ID="ConsoleType">
 			<Value ID="Nes">NES</Value>

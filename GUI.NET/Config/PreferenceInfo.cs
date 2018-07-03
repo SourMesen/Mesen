@@ -40,6 +40,9 @@ namespace Mesen.GUI.Config
 		public bool AssociateMstFiles = false;
 		public bool AssociateUnfFiles = false;
 
+		public VsDualOutputOption VsDualVideoOutput = VsDualOutputOption.Both;
+		public VsDualOutputOption VsDualAudioOutput = VsDualOutputOption.Both;
+
 		public bool NsfEnableApuIrqs = false;
 		public bool NsfMoveToNextTrackAfterTime = true;
 		public Int32 NsfMoveToNextTrackTime = 120;
@@ -201,6 +204,9 @@ namespace Mesen.GUI.Config
 
 			InteropEmu.SetFlag(EmulationFlags.DisplayDebugInfo, preferenceInfo.DisplayDebugInfo);
 
+			InteropEmu.SetFlag(EmulationFlags.VsDualMuteMaster, preferenceInfo.VsDualAudioOutput == VsDualOutputOption.SlaveOnly);
+			InteropEmu.SetFlag(EmulationFlags.VsDualMuteSlave, preferenceInfo.VsDualAudioOutput == VsDualOutputOption.MasterOnly);
+
 			InteropEmu.SetAutoSaveOptions(preferenceInfo.AutoSave ? (uint)preferenceInfo.AutoSaveDelay : 0, preferenceInfo.AutoSaveNotify);
 
 			InteropEmu.ClearShortcutKeys();
@@ -229,5 +235,12 @@ namespace Mesen.GUI.Config
 			Shortcut = key;
 			KeyCombination = keyCombination;
 		}
+	}
+
+	public enum VsDualOutputOption
+	{
+		Both = 0,
+		MasterOnly = 1,
+		SlaveOnly = 2
 	}
 }

@@ -85,6 +85,12 @@ namespace Mesen.GUI.Forms.Config
 			this.lblAutoSave = new System.Windows.Forms.Label();
 			this.tpgFdsNfs = new System.Windows.Forms.TabPage();
 			this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
+			this.flowLayoutPanel10 = new System.Windows.Forms.FlowLayoutPanel();
+			this.lblVsDualPlayAudio = new System.Windows.Forms.Label();
+			this.cboVsDualAudioOutput = new System.Windows.Forms.ComboBox();
+			this.flowLayoutPanel9 = new System.Windows.Forms.FlowLayoutPanel();
+			this.lblVsDualShowVideo = new System.Windows.Forms.Label();
+			this.cboVsDualVideoOutput = new System.Windows.Forms.ComboBox();
 			this.lblNsfSettings = new System.Windows.Forms.Label();
 			this.lblFdsSettings = new System.Windows.Forms.Label();
 			this.chkFdsAutoLoadDisk = new System.Windows.Forms.CheckBox();
@@ -99,6 +105,7 @@ namespace Mesen.GUI.Forms.Config
 			this.nudNsfMoveToNextTrackTime = new Mesen.GUI.Controls.MesenNumericUpDown();
 			this.lblNsfSeconds = new System.Windows.Forms.Label();
 			this.chkNsfEnableApuIrqs = new Mesen.GUI.Controls.ctrlRiskyOption();
+			this.lblVsDualSystem = new System.Windows.Forms.Label();
 			this.tpgFiles = new System.Windows.Forms.TabPage();
 			this.tableLayoutPanel6 = new System.Windows.Forms.TableLayoutPanel();
 			this.grpPathOverrides = new System.Windows.Forms.GroupBox();
@@ -176,6 +183,8 @@ namespace Mesen.GUI.Forms.Config
 			this.flpAutoSave.SuspendLayout();
 			this.tpgFdsNfs.SuspendLayout();
 			this.tableLayoutPanel2.SuspendLayout();
+			this.flowLayoutPanel10.SuspendLayout();
+			this.flowLayoutPanel9.SuspendLayout();
 			this.flowLayoutPanel7.SuspendLayout();
 			this.flowLayoutPanel5.SuspendLayout();
 			this.tpgFiles.SuspendLayout();
@@ -871,20 +880,26 @@ namespace Mesen.GUI.Forms.Config
 			// 
 			this.tableLayoutPanel2.ColumnCount = 1;
 			this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel2.Controls.Add(this.lblNsfSettings, 0, 4);
+			this.tableLayoutPanel2.Controls.Add(this.flowLayoutPanel10, 0, 6);
+			this.tableLayoutPanel2.Controls.Add(this.flowLayoutPanel9, 0, 5);
+			this.tableLayoutPanel2.Controls.Add(this.lblNsfSettings, 0, 7);
 			this.tableLayoutPanel2.Controls.Add(this.lblFdsSettings, 0, 0);
 			this.tableLayoutPanel2.Controls.Add(this.chkFdsAutoLoadDisk, 0, 1);
 			this.tableLayoutPanel2.Controls.Add(this.chkFdsFastForwardOnLoad, 0, 2);
 			this.tableLayoutPanel2.Controls.Add(this.chkFdsAutoInsertDisk, 0, 3);
-			this.tableLayoutPanel2.Controls.Add(this.flowLayoutPanel7, 0, 5);
-			this.tableLayoutPanel2.Controls.Add(this.flowLayoutPanel5, 0, 6);
-			this.tableLayoutPanel2.Controls.Add(this.chkNsfEnableApuIrqs, 0, 7);
+			this.tableLayoutPanel2.Controls.Add(this.flowLayoutPanel7, 0, 8);
+			this.tableLayoutPanel2.Controls.Add(this.flowLayoutPanel5, 0, 9);
+			this.tableLayoutPanel2.Controls.Add(this.chkNsfEnableApuIrqs, 0, 10);
+			this.tableLayoutPanel2.Controls.Add(this.lblVsDualSystem, 0, 4);
 			this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tableLayoutPanel2.Location = new System.Drawing.Point(3, 3);
 			this.tableLayoutPanel2.Name = "tableLayoutPanel2";
-			this.tableLayoutPanel2.RowCount = 9;
+			this.tableLayoutPanel2.RowCount = 12;
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
@@ -895,12 +910,74 @@ namespace Mesen.GUI.Forms.Config
 			this.tableLayoutPanel2.Size = new System.Drawing.Size(483, 390);
 			this.tableLayoutPanel2.TabIndex = 0;
 			// 
+			// flowLayoutPanel10
+			// 
+			this.flowLayoutPanel10.Controls.Add(this.lblVsDualPlayAudio);
+			this.flowLayoutPanel10.Controls.Add(this.cboVsDualAudioOutput);
+			this.flowLayoutPanel10.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.flowLayoutPanel10.Location = new System.Drawing.Point(0, 129);
+			this.flowLayoutPanel10.Margin = new System.Windows.Forms.Padding(0);
+			this.flowLayoutPanel10.Name = "flowLayoutPanel10";
+			this.flowLayoutPanel10.Size = new System.Drawing.Size(483, 27);
+			this.flowLayoutPanel10.TabIndex = 29;
+			// 
+			// lblVsDualPlayAudio
+			// 
+			this.lblVsDualPlayAudio.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.lblVsDualPlayAudio.AutoSize = true;
+			this.lblVsDualPlayAudio.Location = new System.Drawing.Point(10, 7);
+			this.lblVsDualPlayAudio.Margin = new System.Windows.Forms.Padding(10, 0, 3, 0);
+			this.lblVsDualPlayAudio.Name = "lblVsDualPlayAudio";
+			this.lblVsDualPlayAudio.Size = new System.Drawing.Size(74, 13);
+			this.lblVsDualPlayAudio.TabIndex = 4;
+			this.lblVsDualPlayAudio.Text = "Play audio for:";
+			// 
+			// cboVsDualAudioOutput
+			// 
+			this.cboVsDualAudioOutput.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.cboVsDualAudioOutput.FormattingEnabled = true;
+			this.cboVsDualAudioOutput.Location = new System.Drawing.Point(90, 3);
+			this.cboVsDualAudioOutput.Name = "cboVsDualAudioOutput";
+			this.cboVsDualAudioOutput.Size = new System.Drawing.Size(127, 21);
+			this.cboVsDualAudioOutput.TabIndex = 5;
+			// 
+			// flowLayoutPanel9
+			// 
+			this.flowLayoutPanel9.Controls.Add(this.lblVsDualShowVideo);
+			this.flowLayoutPanel9.Controls.Add(this.cboVsDualVideoOutput);
+			this.flowLayoutPanel9.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.flowLayoutPanel9.Location = new System.Drawing.Point(0, 102);
+			this.flowLayoutPanel9.Margin = new System.Windows.Forms.Padding(0);
+			this.flowLayoutPanel9.Name = "flowLayoutPanel9";
+			this.flowLayoutPanel9.Size = new System.Drawing.Size(483, 27);
+			this.flowLayoutPanel9.TabIndex = 28;
+			// 
+			// lblVsDualShowVideo
+			// 
+			this.lblVsDualShowVideo.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.lblVsDualShowVideo.AutoSize = true;
+			this.lblVsDualShowVideo.Location = new System.Drawing.Point(10, 7);
+			this.lblVsDualShowVideo.Margin = new System.Windows.Forms.Padding(10, 0, 3, 0);
+			this.lblVsDualShowVideo.Name = "lblVsDualShowVideo";
+			this.lblVsDualShowVideo.Size = new System.Drawing.Size(114, 13);
+			this.lblVsDualShowVideo.TabIndex = 4;
+			this.lblVsDualShowVideo.Text = "Show video for:";
+			// 
+			// cboVsDualVideoOutput
+			// 
+			this.cboVsDualVideoOutput.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.cboVsDualVideoOutput.FormattingEnabled = true;
+			this.cboVsDualVideoOutput.Location = new System.Drawing.Point(130, 3);
+			this.cboVsDualVideoOutput.Name = "cboVsDualVideoOutput";
+			this.cboVsDualVideoOutput.Size = new System.Drawing.Size(127, 21);
+			this.cboVsDualVideoOutput.TabIndex = 5;
+			// 
 			// lblNsfSettings
 			// 
 			this.lblNsfSettings.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.lblNsfSettings.AutoSize = true;
 			this.lblNsfSettings.ForeColor = System.Drawing.SystemColors.GrayText;
-			this.lblNsfSettings.Location = new System.Drawing.Point(0, 89);
+			this.lblNsfSettings.Location = new System.Drawing.Point(0, 163);
 			this.lblNsfSettings.Margin = new System.Windows.Forms.Padding(0, 0, 3, 0);
 			this.lblNsfSettings.Name = "lblNsfSettings";
 			this.lblNsfSettings.Size = new System.Drawing.Size(69, 13);
@@ -958,7 +1035,7 @@ namespace Mesen.GUI.Forms.Config
 			this.flowLayoutPanel7.Controls.Add(this.nudNsfAutoDetectSilenceDelay);
 			this.flowLayoutPanel7.Controls.Add(this.lblNsfMillisecondsOfSilence);
 			this.flowLayoutPanel7.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.flowLayoutPanel7.Location = new System.Drawing.Point(0, 102);
+			this.flowLayoutPanel7.Location = new System.Drawing.Point(0, 176);
 			this.flowLayoutPanel7.Margin = new System.Windows.Forms.Padding(0);
 			this.flowLayoutPanel7.Name = "flowLayoutPanel7";
 			this.flowLayoutPanel7.Size = new System.Drawing.Size(483, 24);
@@ -1025,7 +1102,7 @@ namespace Mesen.GUI.Forms.Config
 			this.flowLayoutPanel5.Controls.Add(this.nudNsfMoveToNextTrackTime);
 			this.flowLayoutPanel5.Controls.Add(this.lblNsfSeconds);
 			this.flowLayoutPanel5.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.flowLayoutPanel5.Location = new System.Drawing.Point(0, 126);
+			this.flowLayoutPanel5.Location = new System.Drawing.Point(0, 200);
 			this.flowLayoutPanel5.Margin = new System.Windows.Forms.Padding(0);
 			this.flowLayoutPanel5.Name = "flowLayoutPanel5";
 			this.flowLayoutPanel5.Size = new System.Drawing.Size(483, 24);
@@ -1090,12 +1167,24 @@ namespace Mesen.GUI.Forms.Config
 			// 
 			this.chkNsfEnableApuIrqs.Checked = false;
 			this.chkNsfEnableApuIrqs.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.chkNsfEnableApuIrqs.Location = new System.Drawing.Point(10, 150);
+			this.chkNsfEnableApuIrqs.Location = new System.Drawing.Point(10, 224);
 			this.chkNsfEnableApuIrqs.Margin = new System.Windows.Forms.Padding(10, 0, 0, 0);
 			this.chkNsfEnableApuIrqs.Name = "chkNsfEnableApuIrqs";
 			this.chkNsfEnableApuIrqs.Size = new System.Drawing.Size(473, 23);
 			this.chkNsfEnableApuIrqs.TabIndex = 26;
 			this.chkNsfEnableApuIrqs.Text = "Enable APU IRQs for NSF files";
+			// 
+			// lblVsDualSystem
+			// 
+			this.lblVsDualSystem.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.lblVsDualSystem.AutoSize = true;
+			this.lblVsDualSystem.ForeColor = System.Drawing.SystemColors.GrayText;
+			this.lblVsDualSystem.Location = new System.Drawing.Point(0, 89);
+			this.lblVsDualSystem.Margin = new System.Windows.Forms.Padding(0, 0, 3, 0);
+			this.lblVsDualSystem.Name = "lblVsDualSystem";
+			this.lblVsDualSystem.Size = new System.Drawing.Size(121, 13);
+			this.lblVsDualSystem.TabIndex = 27;
+			this.lblVsDualSystem.Text = "VS DualSystem Settings";
 			// 
 			// tpgFiles
 			// 
@@ -1894,6 +1983,10 @@ namespace Mesen.GUI.Forms.Config
 			this.tpgFdsNfs.ResumeLayout(false);
 			this.tableLayoutPanel2.ResumeLayout(false);
 			this.tableLayoutPanel2.PerformLayout();
+			this.flowLayoutPanel10.ResumeLayout(false);
+			this.flowLayoutPanel10.PerformLayout();
+			this.flowLayoutPanel9.ResumeLayout(false);
+			this.flowLayoutPanel9.PerformLayout();
 			this.flowLayoutPanel7.ResumeLayout(false);
 			this.flowLayoutPanel7.PerformLayout();
 			this.flowLayoutPanel5.ResumeLayout(false);
@@ -2048,5 +2141,12 @@ namespace Mesen.GUI.Forms.Config
 		private System.Windows.Forms.Label lblWindowSettings;
 		private System.Windows.Forms.CheckBox chkDisableMouseResize;
 		private ctrlRiskyOption chkNsfEnableApuIrqs;
+		private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel10;
+		private System.Windows.Forms.Label lblVsDualPlayAudio;
+		private System.Windows.Forms.ComboBox cboVsDualAudioOutput;
+		private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel9;
+		private System.Windows.Forms.Label lblVsDualShowVideo;
+		private System.Windows.Forms.ComboBox cboVsDualVideoOutput;
+		private System.Windows.Forms.Label lblVsDualSystem;
 	}
 }

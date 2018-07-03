@@ -406,6 +406,10 @@
 			<Control ID="lblLastSync">Востаннє синхронізовано : </Control>
 			<Control ID="btnResync">Синхронізувати</Control>
 
+			<Control ID="lblVsDualSystem">VS. DualSystem Settings</Control>
+			<Control ID="lblVsDualPlayAudio">Play audio for:</Control>
+			<Control ID="lblVsDualShowVideo">Show video for:</Control>
+
 			<Control ID="lblFdsSettings">Famicom Disk System Налаштування</Control>
 			<Control ID="lblUiDisplaySettings">Налаштування дисплея інтерфейсу користувача</Control>
 			<Control ID="lblWindowSettings">Window Settings</Control>
@@ -420,7 +424,7 @@
 
 			<Control ID="chkAlwaysOnTop">Завжди відображати поверх інших вікон</Control>
 
-			<Control ID="tpgFdsNfs">FDS / NSF</Control>
+			<Control ID="tpgFdsNfs">FDS / VS / NSF</Control>
 			<Control ID="lblNsfSettings">NSF Settings</Control>
 			<Control ID="chkNsfAutoDetectSilence">Відтворити наступний трек після</Control>
 			<Control ID="lblNsfMillisecondsOfSilence">мілісекунд тиші</Control>
@@ -966,6 +970,11 @@
 			<Value ID="Prescale6x">Prescale 6x</Value>
 			<Value ID="Prescale8x">Prescale 8x</Value>
 			<Value ID="Prescale10x">Prescale 10x</Value>
+		</Enum>
+		<Enum ID="VsDualOutputOption">
+			<Value ID="Both">Both</Value>
+			<Value ID="MasterOnly">Master Only</Value>
+			<Value ID="SlaveOnly">Slave Only</Value>
 		</Enum>
 		<Enum ID="ConsoleType">
 			<Value ID="Nes">NES</Value>

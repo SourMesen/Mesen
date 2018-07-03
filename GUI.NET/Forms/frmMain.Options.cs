@@ -122,7 +122,17 @@ namespace Mesen.GUI.Forms
 		private void mnuPreferences_Click(object sender, EventArgs e)
 		{
 			using(frmPreferences frm = new frmPreferences()) {
+				VsDualOutputOption originalVsDualOutput = ConfigManager.Config.PreferenceInfo.VsDualVideoOutput;
+
 				if(frm.ShowDialog(sender, this) == DialogResult.OK) {
+					VsDualOutputOption newVsDualOutput = ConfigManager.Config.PreferenceInfo.VsDualVideoOutput;
+					if(originalVsDualOutput != newVsDualOutput) {
+						if(newVsDualOutput == VsDualOutputOption.Both || originalVsDualOutput == VsDualOutputOption.Both) {
+							UpdateViewerSize(true);
+						} else {
+							UpdateDualSystemViewer();
+						}
+					}
 					ResourceHelper.LoadResources(ConfigManager.Config.PreferenceInfo.DisplayLanguage);
 					ResourceHelper.UpdateEmuLanguage();
 					ResourceHelper.ApplyResources(this);

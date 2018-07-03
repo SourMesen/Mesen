@@ -43,6 +43,9 @@ namespace Mesen.GUI.Forms.Config
 			AddBinding("NsfAutoDetectSilenceDelay", nudNsfAutoDetectSilenceDelay);
 			AddBinding("NsfEnableApuIrqs", chkNsfEnableApuIrqs);
 
+			AddBinding("VsDualVideoOutput", cboVsDualVideoOutput);
+			AddBinding("VsDualAudioOutput", cboVsDualAudioOutput);
+
 			AddBinding("FdsAutoLoadDisk", chkFdsAutoLoadDisk);
 			AddBinding("FdsFastForwardOnLoad", chkFdsFastForwardOnLoad);
 			AddBinding("FdsAutoInsertDisk", chkFdsAutoInsertDisk);

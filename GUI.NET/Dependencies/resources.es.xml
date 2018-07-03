@@ -407,6 +407,10 @@
 			<Control ID="lblLastSync">Última sincronización: </Control>
 			<Control ID="btnResync">Resincronizar</Control>
 
+			<Control ID="lblVsDualSystem">VS. DualSystem Settings</Control>
+			<Control ID="lblVsDualPlayAudio">Play audio for:</Control>
+			<Control ID="lblVsDualShowVideo">Show video for:</Control>
+
 			<Control ID="lblFdsSettings">Configuración de Famicom Disk System</Control>
 			<Control ID="lblUiDisplaySettings">Configuración de interfaz de usuario</Control>
 			<Control ID="lblWindowSettings">Ventana de ajustes</Control>
@@ -421,7 +425,7 @@
 
 			<Control ID="chkAlwaysOnTop">Mostrar siempre sobre otras ventanas</Control>
 
-			<Control ID="tpgFdsNfs">FDS / NSF</Control>
+			<Control ID="tpgFdsNfs">FDS / VS / NSF</Control>
 			<Control ID="lblNsfSettings">NSF Settings</Control>
 			<Control ID="chkNsfAutoDetectSilence">Reproducir la siguiente pista después</Control>
 			<Control ID="lblNsfMillisecondsOfSilence">milisegundos de silencio</Control>
@@ -964,6 +968,11 @@
 			<Value ID="Prescale6x">Preescala 6x</Value>
 			<Value ID="Prescale8x">Preescala 8x</Value>
 			<Value ID="Prescale10x">Preescala 10x</Value>
+		</Enum>
+		<Enum ID="VsDualOutputOption">
+			<Value ID="Both">Both</Value>
+			<Value ID="MasterOnly">Master Only</Value>
+			<Value ID="SlaveOnly">Slave Only</Value>
 		</Enum>
 		<Enum ID="ConsoleType">
 			<Value ID="Nes">NES</Value>
