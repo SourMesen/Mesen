@@ -37,6 +37,11 @@ namespace Mesen.GUI.Forms.Config
 			base.OnLoad(e);
 		}
 
+		protected override bool ApplyChangesOnOK
+		{
+			get { return false; }
+		}
+
 		protected override void OnFormClosed(FormClosedEventArgs e)
 		{
 			//Do not save anything, the parent input form will handle the changes
@@ -44,7 +49,7 @@ namespace Mesen.GUI.Forms.Config
 				UpdateKeyMappings();
 				UpdateObject();
 			}
-			base.OnFormClosed(e);			
+			base.OnFormClosed(e);
 		}
 
 		protected override bool ValidateInput()

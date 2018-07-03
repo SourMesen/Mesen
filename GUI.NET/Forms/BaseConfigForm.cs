@@ -77,7 +77,9 @@ namespace Mesen.GUI.Forms
 					ConfigManager.ApplyChanges();
 				}
 			} else {
-				ConfigManager.RejectChanges();
+				if(ApplyChangesOnOK) {
+					ConfigManager.RejectChanges();
+				}
 			}
 			base.OnFormClosed(e);
 		}

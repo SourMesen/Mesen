@@ -216,9 +216,10 @@ namespace Mesen.GUI.Forms.Cheats
 				CheatType = CheatType.Custom
 			};
 
-			frmCheat frm = new frmCheat(newCheat);
-			if(frm.ShowDialog() == DialogResult.OK) {
-				OnAddCheat?.Invoke(newCheat, new EventArgs());
+			using(frmCheat frm = new frmCheat(newCheat)) {
+				if(frm.ShowDialog() == DialogResult.OK) {
+					OnAddCheat?.Invoke(newCheat, new EventArgs());
+				}
 			}
 		}
 

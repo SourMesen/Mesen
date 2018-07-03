@@ -272,6 +272,11 @@ namespace Mesen.GUI.Config
 			_dirtyConfig = _config.Clone();
 		}
 
+		public static void RevertDirtyToBackup(Configuration config)
+		{
+			_dirtyConfig = config.Clone();
+		}
+
 		public static void ResetSettings()
 		{
 			DefaultKeyMappingType defaultMappings = Config.InputInfo.DefaultMapping;

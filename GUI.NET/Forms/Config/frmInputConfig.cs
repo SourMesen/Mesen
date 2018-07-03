@@ -422,9 +422,15 @@ namespace Mesen.GUI.Forms.Config
 			frm.StartPosition = FormStartPosition.Manual;
 			frm.Top = point.Y;
 			frm.Left = point.X;
+
+			Configuration configBackup = ConfigManager.Config.Clone();
 			if(frm.ShowDialog(this) == DialogResult.OK) {
 				UpdateInterface();
+			} else {
+				ConfigManager.RevertDirtyToBackup(configBackup);
+				Entity = ConfigManager.Config.InputInfo;
 			}
+
 			frm.Dispose();
 		}
 		

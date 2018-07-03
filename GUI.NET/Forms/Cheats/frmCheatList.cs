@@ -165,19 +165,24 @@ namespace Mesen.GUI.Forms.Cheats
 				GameName = _selectedItem?.Text
 			};
 
-			frmCheat frm = new frmCheat(newCheat);
-			if(frm.ShowDialog() == DialogResult.OK) {
-				AddCheats(new List<CheatInfo>() { newCheat });
+			using(frmCheat frm = new frmCheat(newCheat)) {
+				if(frm.ShowDialog() == DialogResult.OK) {
+					AddCheats(new List<CheatInfo>() { newCheat });
+				}
 			}
 		}
 
 		private void lstCheats_DoubleClick(object sender, EventArgs e)
 		{
 			if(lstCheats.SelectedItems.Count == 1) {
-				frmCheat frm = new frmCheat((CheatInfo)lstCheats.SelectedItems[0].Tag);
-				if(frm.ShowDialog() == DialogResult.OK) {
-					UpdateGameList();
-					CheatInfo.ApplyCheats(_cheats, chkDisableCheats.Checked);
+				Configuration configBackup = ConfigManager.Config.Clone();
+				using(frmCheat frm = new frmCheat((CheatInfo)lstCheats.SelectedItems[0].Tag)) {
+					if(frm.ShowDialog() == DialogResult.OK) {
+						UpdateGameList();
+						CheatInfo.ApplyCheats(_cheats, chkDisableCheats.Checked);
+					} else {
+						ConfigManager.RevertDirtyToBackup(configBackup);
+					}
 				}
 			}
 		}
@@ -237,14 +242,15 @@ namespace Mesen.GUI.Forms.Cheats
 
 		private void btnImportFromFile_Click(object sender, EventArgs e)
 		{
-			var frm = new frmCheatImport();
-			frm.FormClosing += (o, evt) => {
-				if(frm.DialogResult == DialogResult.OK && frm.ImportedCheats != null) {
-					AddCheats(frm.ImportedCheats);
-					CheatInfo.ApplyCheats(_cheats, chkDisableCheats.Checked);
-				}
-			};
-			frm.ShowDialog(sender, this);
+			using(var frm = new frmCheatImport()) {
+				frm.FormClosing += (o, evt) => {
+					if(frm.DialogResult == DialogResult.OK && frm.ImportedCheats != null) {
+						AddCheats(frm.ImportedCheats);
+						CheatInfo.ApplyCheats(_cheats, chkDisableCheats.Checked);
+					}
+				};
+				frm.ShowDialog(sender, this);
+			}
 		}
 
 		private void AddCheats(List<CheatInfo> cheats)
