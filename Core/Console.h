@@ -133,6 +133,7 @@ public:
 	int32_t GetStopCode();
 		
 	void RunSingleFrame();
+	void RunSlaveCpu();
 	bool UpdateHdPackMode();
 
 	shared_ptr<SystemActionManager> GetSystemActionManager();

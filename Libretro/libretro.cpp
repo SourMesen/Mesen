@@ -14,6 +14,7 @@
 #include "../Core/CheatManager.h"
 #include "../Core/HdData.h"
 #include "../Core/DebuggerTypes.h"
+#include "../Core/GameDatabase.h"
 #include "../Utilities/FolderUtilities.h"
 #include "../Utilities/HexUtilities.h"
 
@@ -50,6 +51,7 @@ static vector<string> gameDb = {
 #include "MesenDB.inc"
 };
 
+static std::shared_ptr<Console> _console;
 static std::unique_ptr<LibretroRenderer> _renderer;
 static std::unique_ptr<LibretroSoundManager> _soundManager;
 static std::unique_ptr<LibretroKeyManager> _keyManager;
@@ -110,9 +112,12 @@ extern "C" {
 
 		GameDatabase::LoadGameDb(gameDb);
 
-		_renderer.reset(new LibretroRenderer());
-		_soundManager.reset(new LibretroSoundManager());
-		_keyManager.reset(new LibretroKeyManager());
+		_console.reset(new Console());
+		_console->Init();
+
+		_renderer.reset(new LibretroRenderer(_console));
+		_soundManager.reset(new LibretroSoundManager(_console));
+		_keyManager.reset(new LibretroKeyManager(_console));
 		_messageManager.reset(new LibretroMessageManager(logCallback, retroEnv));
 
 		EmulationSettings::SetFlags(EmulationFlags::FdsAutoLoadDisk);
@@ -124,14 +129,14 @@ extern "C" {
 
 	RETRO_API void retro_deinit()
 	{
-		Console::GetInstance()->SaveBatteries();
-		VideoDecoder::Release();
-		VideoRenderer::Release();
-		Console::Release();
 		_renderer.reset();
 		_soundManager.reset();
 		_keyManager.reset();
 		_messageManager.reset();
+
+		_console->SaveBatteries();
+		_console->Release(true);
+		_console.reset();
 	}
 
 	RETRO_API void retro_set_environment(retro_environment_t env)
@@ -252,7 +257,7 @@ extern "C" {
 
 	RETRO_API void retro_reset()
 	{
-		Console::Reset(true);
+		_console->Reset(true);
 	}
 	
 	void set_flag(const char* flagName, uint64_t flagValue)
@@ -615,7 +620,7 @@ extern "C" {
 			_soundManager->SetSkipMode(true);
 			for(int i = 0; i < 9; i++) {
 				//Attempt to speed up to 1000% speed
-				Console::GetInstance()->RunSingleFrame();
+				_console->RunSingleFrame();
 			}
 			_renderer->SetSkipMode(false);
 			_soundManager->SetSkipMode(false);
@@ -628,12 +633,12 @@ extern "C" {
 			bool hdPacksEnabled = EmulationSettings::CheckFlag(EmulationFlags::UseHdPacks);
 			if(hdPacksEnabled != _hdPacksEnabled) {
 				//Try to load/unload HD pack when the flag is toggled
-				Console::GetInstance()->UpdateHdPackMode();
+				_console->UpdateHdPackMode();
 				_hdPacksEnabled = hdPacksEnabled;
 			}
 		}
 
-		Console::GetInstance()->RunSingleFrame();
+		_console->RunSingleFrame();
 
 		if(updated) {
 			//Update geometry after running the frame, in case the console's region changed (affects "auto" aspect ratio)
@@ -651,7 +656,7 @@ extern "C" {
 	RETRO_API bool retro_serialize(void *data, size_t size)
 	{
 		std::stringstream ss;
-		Console::SaveState(ss);
+		_console->SaveState(ss);
 		
 		string saveStateData = ss.str();
 		memset(data, 0, size);
@@ -662,13 +667,13 @@ extern "C" {
 
 	RETRO_API bool retro_unserialize(const void *data, size_t size)
 	{
-		Console::LoadState((uint8_t*)data, (uint32_t)size);
+		_console->LoadState((uint8_t*)data, (uint32_t)size);
 		return true;
 	}
 
 	RETRO_API void retro_cheat_reset()
 	{
-		CheatManager::GetInstance()->ClearCodes();
+		_console->GetCheatManager()->ClearCodes();
 	}
 
 	RETRO_API void retro_cheat_set(unsigned index, bool enabled, const char *codeStr)
@@ -681,12 +686,12 @@ extern "C" {
 		if(code.size() == 7 && code[4] == ':') {
 			string address = code.substr(0, 4);
 			string value = code.substr(5, 2);
-			CheatManager::GetInstance()->AddCustomCode(HexUtilities::FromHex(address), HexUtilities::FromHex(value));
+			_console->GetCheatManager()->AddCustomCode(HexUtilities::FromHex(address), HexUtilities::FromHex(value));
 		} else if(code.size() == 10 && code[4] == '?' && code[7] == ':') {
 			string address = code.substr(0, 4);
 			string comparison = code.substr(5, 2);
 			string value = code.substr(8, 2);
-			CheatManager::GetInstance()->AddCustomCode(HexUtilities::FromHex(address), HexUtilities::FromHex(value), HexUtilities::FromHex(comparison));
+			_console->GetCheatManager()->AddCustomCode(HexUtilities::FromHex(address), HexUtilities::FromHex(value), HexUtilities::FromHex(comparison));
 		} else if(code.size() == 6 || code.size() == 8) {
 			//This is either a GG or PAR code
 			bool isValidGgCode = true;
@@ -701,9 +706,9 @@ extern "C" {
 			}
 
 			if(isValidGgCode) {
-				CheatManager::GetInstance()->AddGameGenieCode(code);
+				_console->GetCheatManager()->AddGameGenieCode(code);
 			} else if(isValidParCode) {
-				CheatManager::GetInstance()->AddProActionRockyCode(HexUtilities::FromHex(code));
+				_console->GetCheatManager()->AddProActionRockyCode(HexUtilities::FromHex(code));
 			}
 		}
 
@@ -830,7 +835,7 @@ extern "C" {
 	void update_core_controllers()
 	{
 		//Setup all "auto" ports
-		GameDatabase::InitializeInputDevices(Console::GetMapperInfo().Hash.PrgChrCrc32Hash);
+		GameDatabase::InitializeInputDevices(_console->GetMapperInfo().Hash.PrgChrCrc32Hash);
 
 		//TODO: Four Score		
 
@@ -895,14 +900,14 @@ extern "C" {
 		uint32_t i = 0;
 		uint32_t size = 0;
 		int32_t startAddr = 0;
-		uint8_t* internalRam = Console::GetInstance()->GetRamBuffer(DebugMemoryType::InternalRam, size, startAddr);
+		uint8_t* internalRam = _console->GetRamBuffer(DebugMemoryType::InternalRam, size, startAddr);
 		_descriptors[i].ptr = internalRam;
 		_descriptors[i].start = startAddr;
 		_descriptors[i].len = size;
 		_descriptors[i].select = 0;
 		i++;
 
-		uint8_t* saveRam = Console::GetInstance()->GetRamBuffer(DebugMemoryType::SaveRam, size, startAddr);
+		uint8_t* saveRam = _console->GetRamBuffer(DebugMemoryType::SaveRam, size, startAddr);
 		if(size > 0 && startAddr > 0) {
 			_descriptors[i].ptr = saveRam;
 			_descriptors[i].start = startAddr;
@@ -911,7 +916,7 @@ extern "C" {
 			i++;
 		}
 
-		uint8_t* workRam = Console::GetInstance()->GetRamBuffer(DebugMemoryType::WorkRam, size, startAddr);
+		uint8_t* workRam = _console->GetRamBuffer(DebugMemoryType::WorkRam, size, startAddr);
 		if(size > 0 && startAddr > 0) {
 			_descriptors[i].ptr = workRam;
 			_descriptors[i].start = startAddr;
@@ -967,7 +972,7 @@ extern "C" {
 		EmulationSettings::SetControllerType(1, ControllerType::StandardController);
 		EmulationSettings::SetControllerType(2, ControllerType::None);
 		EmulationSettings::SetControllerType(3, ControllerType::None);
-		bool result = Console::LoadROM(string(game->path));
+		bool result = _console->Initialize(game->path);
 
 		if(result) {
 			update_core_controllers();
@@ -977,7 +982,7 @@ extern "C" {
 			//Retroarch doesn't like this for netplay or rewinding - it requires the states to always be the exact same size
 			//So we need to send a large enough size to Retroarch to ensure Mesen's state will always fit within that buffer.
 			std::stringstream ss;
-			Console::SaveState(ss);
+			_console->SaveState(ss);
 
 			//Round up to the next 1kb multiple
 			_saveStateSize = ((ss.str().size() * 2) + 0x400) & ~0x3FF;
@@ -994,12 +999,12 @@ extern "C" {
 
 	RETRO_API void retro_unload_game()
 	{
-		Console::GetInstance()->Stop();
+		_console->Stop();
 	}
 
 	RETRO_API unsigned retro_get_region()
 	{
-		NesModel model = Console::GetModel();
+		NesModel model = _console->GetModel();
 		return model == NesModel::NTSC ? RETRO_REGION_NTSC : RETRO_REGION_PAL;
 	}
 
@@ -1026,8 +1031,8 @@ extern "C" {
 			default: hscale = 1; break;
 		}
 		
-		HdPackData* hdData = Console::GetHdData();
-		if(hdData != nullptr) {
+		shared_ptr<HdPackData> hdData = _console->GetHdData();
+		if(hdData) {
 			hscale = hdData->Scale;
 			vscale = hdData->Scale;
 		}
@@ -1044,8 +1049,8 @@ extern "C" {
 		uint32_t size;
 		int32_t startAddr;
 		switch(id) {
-			case RETRO_MEMORY_SAVE_RAM: return Console::GetInstance()->GetRamBuffer(DebugMemoryType::SaveRam, size, startAddr);
-			case RETRO_MEMORY_SYSTEM_RAM: return Console::GetInstance()->GetRamBuffer(DebugMemoryType::InternalRam, size, startAddr);
+			case RETRO_MEMORY_SAVE_RAM: return _console->GetRamBuffer(DebugMemoryType::SaveRam, size, startAddr);
+			case RETRO_MEMORY_SYSTEM_RAM: return _console->GetRamBuffer(DebugMemoryType::InternalRam, size, startAddr);
 		}
 		return nullptr;
 	}
@@ -1055,8 +1060,8 @@ extern "C" {
 		uint32_t size = 0;
 		int32_t startAddr;
 		switch(id) {
-			case RETRO_MEMORY_SAVE_RAM: Console::GetInstance()->GetRamBuffer(DebugMemoryType::SaveRam, size, startAddr); break;
-			case RETRO_MEMORY_SYSTEM_RAM: Console::GetInstance()->GetRamBuffer(DebugMemoryType::InternalRam, size, startAddr); break;
+			case RETRO_MEMORY_SAVE_RAM: _console->GetRamBuffer(DebugMemoryType::SaveRam, size, startAddr); break;
+			case RETRO_MEMORY_SYSTEM_RAM: _console->GetRamBuffer(DebugMemoryType::InternalRam, size, startAddr); break;
 		}
 		return size;
 	}

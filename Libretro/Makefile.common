@@ -21,12 +21,12 @@ SOURCES_C   := $(SEVENZIP_DIR)/7zAlloc.c \
 
 SOURCES_CXX := $(LIBRETRO_DIR)/libretro.cpp \
                $(CORE_DIR)/APU.cpp \
-               $(CORE_DIR)/ApuLengthCounter.cpp \
                $(CORE_DIR)/Assembler.cpp \
                $(CORE_DIR)/AutomaticRomTest.cpp \
                $(CORE_DIR)/AutoSaveManager.cpp \
                $(CORE_DIR)/AviRecorder.cpp \
                $(CORE_DIR)/BaseControlDevice.cpp \
+               $(CORE_DIR)/BaseExpansionAudio.cpp \
                $(CORE_DIR)/BaseMapper.cpp \
                $(CORE_DIR)/BaseRenderer.cpp \
                $(CORE_DIR)/BaseVideoFilter.cpp \
@@ -44,7 +44,7 @@ SOURCES_CXX := $(LIBRETRO_DIR)/libretro.cpp \
                $(CORE_DIR)/Debugger.cpp \
                $(CORE_DIR)/DebugHud.cpp \
                $(CORE_DIR)/DefaultVideoFilter.cpp \
-					$(CORE_DIR)/RawVideoFilter.cpp \
+               $(CORE_DIR)/RawVideoFilter.cpp \
                $(CORE_DIR)/DeltaModulationChannel.cpp \
                $(CORE_DIR)/Disassembler.cpp \
                $(CORE_DIR)/DisassemblyInfo.cpp \
@@ -52,6 +52,7 @@ SOURCES_CXX := $(LIBRETRO_DIR)/libretro.cpp \
                $(CORE_DIR)/ExpressionEvaluator.cpp \
                $(CORE_DIR)/FceuxMovie.cpp \
                $(CORE_DIR)/FDS.cpp \
+               $(CORE_DIR)/FdsLoader.cpp \
                $(CORE_DIR)/GameClient.cpp \
                $(CORE_DIR)/GameClientConnection.cpp \
                $(CORE_DIR)/GameConnection.cpp \
@@ -62,6 +63,7 @@ SOURCES_CXX := $(LIBRETRO_DIR)/libretro.cpp \
                $(CORE_DIR)/HdNesPack.cpp \
                $(CORE_DIR)/HdPackBuilder.cpp \
                $(CORE_DIR)/HdPackLoader.cpp \
+               $(CORE_DIR)/HdPpu.cpp \
                $(CORE_DIR)/HdVideoFilter.cpp \
                $(CORE_DIR)/iNesLoader.cpp \
                $(CORE_DIR)/KeyManager.cpp \
@@ -74,11 +76,13 @@ SOURCES_CXX := $(LIBRETRO_DIR)/libretro.cpp \
                $(CORE_DIR)/MessageManager.cpp \
                $(CORE_DIR)/MovieManager.cpp \
                $(CORE_DIR)/MovieRecorder.cpp \
+               $(CORE_DIR)/NotificationManager.cpp \
+               $(CORE_DIR)/NsfLoader.cpp \
                $(CORE_DIR)/NsfMapper.cpp \
+               $(CORE_DIR)/NsfPpu.cpp \
                $(CORE_DIR)/NtscFilter.cpp \
                $(CORE_DIR)/OggMixer.cpp \
                $(CORE_DIR)/OggReader.cpp \
-               $(CORE_DIR)/OpenBusHandler.cpp \
                $(CORE_DIR)/PPU.cpp \
                $(CORE_DIR)/Profiler.cpp \
                $(CORE_DIR)/RecordedRomTest.cpp \

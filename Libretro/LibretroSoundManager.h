@@ -9,16 +9,18 @@ class LibretroSoundManager : public IAudioDevice
 private:
 	retro_audio_sample_batch_t _sendAudioBuffer = nullptr;
 	bool _skipMode = false;
+	shared_ptr<Console> _console;
 
 public:
-	LibretroSoundManager()
+	LibretroSoundManager(shared_ptr<Console> console)
 	{
-		SoundMixer::RegisterAudioDevice(this);
+		_console = console;
+		_console->GetSoundMixer()->RegisterAudioDevice(this);
 	}
 
 	~LibretroSoundManager()
 	{
-		SoundMixer::RegisterAudioDevice(nullptr);
+		_console->GetSoundMixer()->RegisterAudioDevice(nullptr);
 	}
 
 	// Inherited via IAudioDevice

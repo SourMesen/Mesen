@@ -77,6 +77,11 @@ void Console::Init()
 
 void Console::Release(bool forShutdown)
 {
+	if(_slave) {
+		_slave->Release(true);
+		_slave.reset();
+	}
+
 	if(forShutdown) {
 		_videoDecoder->StopThread();
 		_videoRenderer->StopThread();
@@ -105,11 +110,6 @@ void Console::Release(bool forShutdown)
 
 	_systemActionManager.reset();
 	
-	if(_slave) {
-		_slave->Release(true);
-		_slave.reset();
-	}
-
 	_master.reset();
 	_cpu.reset();
 	_ppu.reset();
@@ -625,6 +625,9 @@ void Console::RunSingleFrame()
 
 	while(_ppu->GetFrameCount() == lastFrameNumber) {
 		_cpu->Exec();
+		if(_slave) {
+			RunSlaveCpu();
+		}
 	}
 
 	EmulationSettings::DisableOverclocking(_disableOcNextFrame || NsfMapper::GetInstance());
@@ -632,6 +635,20 @@ void Console::RunSingleFrame()
 
 	_systemActionManager->ProcessSystemActions();
 	_apu->EndFrame();
+}
+
+void Console::RunSlaveCpu()
+{
+	int32_t cycleGap;
+	while(true) {
+		//Run the slave until it catches up to the master CPU (and take into account the CPU count overflow that occurs every ~20mins)
+		cycleGap = _cpu->GetCycleCount() - _slave->_cpu->GetCycleCount();
+		if(cycleGap > 5 || cycleGap < -10000 || _ppu->GetFrameCount() > _slave->_ppu->GetFrameCount()) {
+			_slave->_cpu->Exec();
+		} else {
+			break;
+		}
+	}
 }
 
 void Console::Run()
@@ -643,8 +660,6 @@ void Console::Run()
 	int timeLagDataIndex = 0;
 	double lastFrameMin = 9999;
 	double lastFrameMax = 0;
-	int32_t cycleGap = 0;
-	uint32_t currentFrameNumber = 0;
 
 	uint32_t lastFrameNumber = -1;
 
@@ -668,21 +683,11 @@ void Console::Run()
 		while(true) {
 			_cpu->Exec();
 
-			currentFrameNumber = _ppu->GetFrameCount();
-			
 			if(_slave) {
-				while(true) {
-					//Run the slave until it catches up to the master CPU (and take into account the CPU count overflow that occurs every ~20mins)
-					cycleGap = _cpu->GetCycleCount() - _slave->_cpu->GetCycleCount();
-					if(cycleGap > 5 || cycleGap < -10000 || currentFrameNumber > _slave->_ppu->GetFrameCount()) {
-						_slave->_cpu->Exec();
-					} else {
-						break;
-					}
-				}
+				RunSlaveCpu();
 			}
 
-			if(currentFrameNumber != lastFrameNumber) {
+			if(_ppu->GetFrameCount() != lastFrameNumber) {
 				_soundMixer->ProcessEndOfFrame();
 				if(_slave) {
 					_slave->_soundMixer->ProcessEndOfFrame();

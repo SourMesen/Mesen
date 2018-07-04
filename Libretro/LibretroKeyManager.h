@@ -4,10 +4,12 @@
 #include "../Core/KeyManager.h"
 #include "../Core/FdsSystemActionManager.h"
 #include "../Core/VsSystemActionManager.h"
+#include "../Core/Console.h"
 
 class LibretroKeyManager : public IKeyManager
 {
 private:
+	shared_ptr<Console> _console;
 	retro_input_state_t _getInputState = nullptr;
 	retro_input_poll_t _pollInput = nullptr;
 	bool _mouseButtons[3] = { false, false, false };
@@ -28,8 +30,9 @@ private:
 	}
 
 public:
-	LibretroKeyManager()
+	LibretroKeyManager(shared_ptr<Console> console)
 	{
+		_console = console;
 		KeyManager::RegisterKeyManager(this);
 	}
 
@@ -72,7 +75,7 @@ public:
 			_mouseButtons[(int)MouseButton::RightButton] = _getInputState(0, RETRO_DEVICE_MOUSE, 0, RETRO_DEVICE_ID_MOUSE_RIGHT) != 0;
 			_mouseButtons[(int)MouseButton::MiddleButton] = _getInputState(0, RETRO_DEVICE_MOUSE, 0, RETRO_DEVICE_ID_MOUSE_MIDDLE) != 0;
 
-			shared_ptr<FdsSystemActionManager> fdsSam = Console::GetInstance()->GetSystemActionManager<FdsSystemActionManager>();
+			shared_ptr<FdsSystemActionManager> fdsSam = _console->GetSystemActionManager<FdsSystemActionManager>();
 			if(fdsSam) {
 				if(ProcessAction(RETRO_DEVICE_ID_JOYPAD_L)) {
 					fdsSam->InsertNextDisk();
@@ -83,7 +86,7 @@ public:
 				}
 			}
 			
-			shared_ptr<VsSystemActionManager> vsSam = Console::GetInstance()->GetSystemActionManager<VsSystemActionManager>();
+			shared_ptr<VsSystemActionManager> vsSam = _console->GetSystemActionManager<VsSystemActionManager>();
 			if(vsSam) {
 				if(ProcessAction(RETRO_DEVICE_ID_JOYPAD_L2)) {
 					vsSam->InsertCoin(0);

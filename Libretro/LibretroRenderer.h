@@ -10,6 +10,7 @@
 class LibretroRenderer : public IRenderingDevice
 {
 private:
+	shared_ptr<Console> _console;
 	retro_video_refresh_t _sendFrame = nullptr;
 	retro_environment_t _retroEnv = nullptr;
 	bool _skipMode = false;
@@ -17,14 +18,15 @@ private:
 	int32_t _previousWidth = -1;
 
 public:
-	LibretroRenderer()
+	LibretroRenderer(shared_ptr<Console> console)
 	{
-		VideoRenderer::GetInstance()->RegisterRenderingDevice(this);
+		_console = console;
+		_console->GetVideoRenderer()->RegisterRenderingDevice(this);
 	}
 
 	~LibretroRenderer()
 	{
-		VideoRenderer::GetInstance()->UnregisterRenderingDevice(this);
+		_console->GetVideoRenderer()->UnregisterRenderingDevice(this);
 	}
 
 	// Inherited via IRenderingDevice
@@ -50,10 +52,10 @@ public:
 	
 	void GetSystemAudioVideoInfo(retro_system_av_info &info, int32_t maxWidth = 0, int32_t maxHeight = 0)
 	{
-		info.timing.fps = Console::GetModel() == NesModel::NTSC ? 60.098811862348404716732985230828 : 50.006977968268290848936010226333;
+		info.timing.fps = _console->GetModel() == NesModel::NTSC ? 60.098811862348404716732985230828 : 50.006977968268290848936010226333;
 		info.timing.sample_rate = 48000;
 
-		float ratio = (float)EmulationSettings::GetAspectRatio();
+		float ratio = (float)EmulationSettings::GetAspectRatio(_console);
 		if(ratio == 0.0f) {
 			ratio = 1.0f;
 		}
