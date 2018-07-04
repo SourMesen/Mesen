@@ -119,18 +119,18 @@ struct HdScreenInfo
 
 	HdScreenInfo(const HdScreenInfo& that) = delete;
 
-	HdScreenInfo()
+	HdScreenInfo(bool isChrRamGame)
 	{
 		ScreenTiles = new HdPpuPixelInfo[PPU::PixelCount];
 
 		for(int i = 0; i < PPU::PixelCount; i++) {
 			ScreenTiles[i].Tile.BackgroundPriority = false;
-			ScreenTiles[i].Tile.IsChrRamTile = false;
+			ScreenTiles[i].Tile.IsChrRamTile = isChrRamGame;
 			ScreenTiles[i].Tile.HorizontalMirroring = false;
 			ScreenTiles[i].Tile.VerticalMirroring = false;
 
 			for(int j = 0; j < 4; j++) {
-				ScreenTiles[i].Sprite[j].IsChrRamTile = false;
+				ScreenTiles[i].Sprite[j].IsChrRamTile = isChrRamGame;
 			}
 		}
 	}

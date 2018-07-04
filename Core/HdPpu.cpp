@@ -125,8 +125,9 @@ HdPpu::HdPpu(shared_ptr<Console> console, HdPackData * hdData) : PPU(console)
 	_hdData = hdData;
 	_version = _hdData->Version;
 
-	_screenInfo[0] = new HdScreenInfo();
-	_screenInfo[1] = new HdScreenInfo();
+	bool isChrRamGame = !console->GetMapper()->HasChrRom();
+	_screenInfo[0] = new HdScreenInfo(isChrRamGame);
+	_screenInfo[1] = new HdScreenInfo(isChrRamGame);
 	_info = _screenInfo[0];
 }
 
