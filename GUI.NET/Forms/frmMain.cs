@@ -351,18 +351,25 @@ namespace Mesen.GUI.Forms
 			}
 
 			ctrlRenderer.Size = new Size(size.Width, size.Height);
-			ctrlRenderer.Top = (panelRenderer.Height - ctrlRenderer.Height) / 2;
-			ctrlRenderer.Left = (panelRenderer.Width - ctrlRenderer.Width) / 2;
-
-			if(_isDualSystem) {
-				UpdateDualSystemViewer();
-			}
+			UpdateRendererPosition();
 
 			if(this.HideMenuStrip) {
 				this.menuStrip.Visible = false;
 			}
 
 			this.Resize += frmMain_Resize;
+		}
+
+		private void UpdateRendererPosition()
+		{
+			ctrlRenderer.Top = (panelRenderer.Height - ctrlRenderer.Height) / 2;
+
+			if(_isDualSystem) {
+				UpdateDualSystemViewer();
+			} else {
+				ctrlRenderer.Left = (panelRenderer.Width - ctrlRenderer.Width) / 2;
+				ctrlRendererDualSystem.Visible = false;
+			}
 		}
 
 		private void UpdateDualSystemViewer()
@@ -376,6 +383,7 @@ namespace Mesen.GUI.Forms
 
 				ctrlRendererDualSystem.Visible = true;
 			} else {
+				ctrlRenderer.Left = (panelRenderer.Width - ctrlRenderer.Width) / 2;
 				ctrlRendererDualSystem.Left = (panelRenderer.Width - ctrlRenderer.Width) / 2;
 
 				if(ConfigManager.Config.PreferenceInfo.VsDualVideoOutput == VsDualOutputOption.SlaveOnly) {
@@ -408,15 +416,23 @@ namespace Mesen.GUI.Forms
 		{
 			if(_enableResize && this.WindowState != FormWindowState.Minimized) {
 				SetScaleBasedOnWindowSize();
-				ctrlRenderer.Left = (panelRenderer.Width - ctrlRenderer.Width) / 2;
-				ctrlRenderer.Top = (panelRenderer.Height - ctrlRenderer.Height) / 2;
+				UpdateRendererPosition();
 			}
 		}
 
-		private void SetScaleBasedOnDimensions(Size dimensions)
+		private void SetScaleBasedOnDimensions(Size dimensions, bool allowVsDualScreen)
 		{
 			_customSize = true;
 			InteropEmu.ScreenSize size = InteropEmu.GetScreenSize(true);
+
+			if(allowVsDualScreen && _isDualSystem && ConfigManager.Config.PreferenceInfo.VsDualVideoOutput == VsDualOutputOption.Both) {
+				size = new InteropEmu.ScreenSize() {
+					Width = size.Width * 2,
+					Height = size.Height,
+					Scale = size.Scale
+				};
+			}
+
 			double verticalScale = (double)dimensions.Height / size.Height;
 			double horizontalScale = (double)dimensions.Width / size.Width;
 			double scale = Math.Min(verticalScale, horizontalScale);
@@ -429,12 +445,12 @@ namespace Mesen.GUI.Forms
 
 		private void SetScaleBasedOnWindowSize()
 		{
-			SetScaleBasedOnDimensions(panelRenderer.ClientSize);
+			SetScaleBasedOnDimensions(panelRenderer.ClientSize, true);
 		}
 
 		private void SetScaleBasedOnScreenSize()
 		{
-			SetScaleBasedOnDimensions(Screen.FromControl(this).Bounds.Size);
+			SetScaleBasedOnDimensions(Screen.FromControl(this).Bounds.Size, false);
 		}
 
 		private void StopExclusiveFullscreenMode()
