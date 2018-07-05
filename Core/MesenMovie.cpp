@@ -171,6 +171,12 @@ bool MesenMovie::LoadGame()
 	//string patchFileSha1 = LoadString(_settings, MovieKeys::PatchFileSha1);
 	//string patchedRomSha1 = LoadString(_settings, MovieKeys::PatchedRomSha1);
 
+	if(EmulationSettings::CheckFlag(EmulationFlags::AllowMismatchingSaveState) && Console::GetMapperInfo().RomName == gameFile) {
+		//Loaded game has the right name, and we don't want to validate the hash values
+		Console::GetInstance()->PowerCycle();
+		return true;
+	}
+
 	HashInfo hashInfo;
 	hashInfo.Sha1Hash = sha1Hash;
 
