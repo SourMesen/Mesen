@@ -1532,5 +1532,10 @@ namespace Mesen.GUI.Debugger
 			mnuShowFunctionLabelLists.Enabled = !mnuUseVerticalLayout.Checked;
 			this.UpdateMinimumSize();
 		}
+
+		private void mnuBreakOptions_DropDownOpening(object sender, EventArgs e)
+		{
+			this.mnuBreakOnDecayedOamRead.Enabled = ConfigManager.Config.EmulationInfo.EnableOamDecay;
+		}
 	}
 }

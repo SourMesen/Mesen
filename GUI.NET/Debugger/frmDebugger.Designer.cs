@@ -1177,6 +1177,7 @@ namespace Mesen.GUI.Debugger
 			this.mnuBreakOptions.Name = "mnuBreakOptions";
 			this.mnuBreakOptions.Size = new System.Drawing.Size(266, 22);
 			this.mnuBreakOptions.Text = "Break Options";
+			this.mnuBreakOptions.DropDownOpening += new System.EventHandler(this.mnuBreakOptions_DropDownOpening);
 			// 
 			// mnuBreakOnReset
 			// 
