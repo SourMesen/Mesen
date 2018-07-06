@@ -77,6 +77,14 @@ namespace Mesen.GUI.Debugger
 			return _openedWindows.ToList().Find((form) => form.GetType() == typeof(frmMemoryViewer)) as frmMemoryViewer;
 		}
 
+		public static bool HasOpenedWindow
+		{
+			get
+			{
+				return _openedWindows.Count > 0;
+			}
+		}
+
 		public static void CloseAll()
 		{
 			List<Form> openedWindows = new List<Form>(_openedWindows);

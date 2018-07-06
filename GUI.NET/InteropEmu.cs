@@ -95,7 +95,7 @@ namespace Mesen.GUI
 
 		[DllImport(DLLPath)] public static extern void TakeScreenshot();
 
-		[DllImport(DLLPath)] public static extern IntPtr RegisterNotificationCallback(NotificationListener.NotificationCallback callback);
+		[DllImport(DLLPath)] public static extern IntPtr RegisterNotificationCallback(Int32 consoleId, NotificationListener.NotificationCallback callback);
 		[DllImport(DLLPath)] public static extern void UnregisterNotificationCallback(IntPtr notificationListener);
 
 		[DllImport(DLLPath)] public static extern void DisplayMessage([MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(UTF8Marshaler))]string title, [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(UTF8Marshaler))]string message, [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(UTF8Marshaler))]string param1 = null);
@@ -203,6 +203,7 @@ namespace Mesen.GUI
 		[DllImport(DLLPath, EntryPoint = "GetAudioDevices")] private static extern IntPtr GetAudioDevicesWrapper();
 		[DllImport(DLLPath)] public static extern void SetAudioDevice(string audioDevice);
 
+		[DllImport(DLLPath)] public static extern void DebugSetDebuggerConsole(Int32 consoleId);
 		[DllImport(DLLPath)] public static extern void DebugInitialize();
 		[DllImport(DLLPath)] [return: MarshalAs(UnmanagedType.I1)] public static extern bool DebugIsDebuggerRunning();
 		[DllImport(DLLPath)] public static extern void DebugRelease();
@@ -1041,6 +1042,12 @@ namespace Mesen.GUI
 			public IntPtr Parameter;
 		}
 
+		public enum ConsoleId
+		{
+			Master = 0,
+			Slave = 1
+		}
+
 		public class NotificationListener : IDisposable
 		{
 			public delegate void NotificationCallback(int type, IntPtr parameter);
@@ -1051,12 +1058,12 @@ namespace Mesen.GUI
 			NotificationCallback _callback;
 			IntPtr _notificationListener;
 
-			public NotificationListener()
+			public NotificationListener(ConsoleId consoleId)
 			{
 				_callback = (int type, IntPtr parameter) => {
 					this.ProcessNotification(type, parameter);
 				};
-				_notificationListener = InteropEmu.RegisterNotificationCallback(_callback);
+				_notificationListener = InteropEmu.RegisterNotificationCallback(consoleId == ConsoleId.Slave ? 1 : 0, _callback);
 			}
 
 			public void Dispose()

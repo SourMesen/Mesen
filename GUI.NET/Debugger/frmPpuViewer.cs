@@ -56,7 +56,7 @@ namespace Mesen.GUI.Debugger
  			base.OnLoad(e);
 
 			if(!this.DesignMode) {
-				this._notifListener = new InteropEmu.NotificationListener();
+				this._notifListener = new InteropEmu.NotificationListener(ConfigManager.Config.DebugInfo.DebugConsoleId);
 				this._notifListener.OnNotification += this._notifListener_OnNotification;
 
 				this.ctrlScanlineCycle.Initialize(_ppuViewerId, ConfigManager.Config.DebugInfo.PpuDisplayScanline, ConfigManager.Config.DebugInfo.PpuDisplayCycle);

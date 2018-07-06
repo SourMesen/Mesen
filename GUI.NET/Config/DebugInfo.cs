@@ -119,6 +119,8 @@ namespace Mesen.GUI.Config
 		public DebugViewInfo LeftView;
 		public DebugViewInfo RightView;
 
+		public InteropEmu.ConsoleId DebugConsoleId = InteropEmu.ConsoleId.Master;
+
 		public string FontFamily = BaseControl.MonospaceFontFamily;
 		public FontStyle FontStyle = FontStyle.Regular;
 		public float FontSize = BaseControl.DefaultFontSize;

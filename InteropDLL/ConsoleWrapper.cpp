@@ -60,6 +60,21 @@ vector<shared_ptr<INotificationListener>> _externalNotificationListeners;
 
 typedef void (__stdcall *NotificationListenerCallback)(int, void*);
 
+shared_ptr<Console> GetConsoleById(int32_t consoleId)
+{
+	shared_ptr<Console> console;
+	if(consoleId == 1) {
+		//Get the VS Dualsystem's 2nd CPU, only if it's available (and requested)
+		console = _console->GetDualConsole();
+	}
+
+	if(!console) {
+		//Otherwise return the main CPU
+		console = _console;
+	}
+	return console;
+}
+
 namespace InteropEmu {
 	class InteropNotificationListener : public INotificationListener
 	{
@@ -379,12 +394,12 @@ namespace InteropEmu {
 
 		DllExport void __stdcall TakeScreenshot() { _console->GetVideoDecoder()->TakeScreenshot(); }
 
-		DllExport INotificationListener* __stdcall RegisterNotificationCallback(NotificationListenerCallback callback)
+		DllExport INotificationListener* __stdcall RegisterNotificationCallback(int32_t consoleId, NotificationListenerCallback callback)
 		{
 			auto lock = _externalNotificationListenerLock.AcquireSafe();
 			auto listener = shared_ptr<INotificationListener>(new InteropNotificationListener(callback));
 			_externalNotificationListeners.push_back(listener);
-			_console->GetNotificationManager()->RegisterNotificationListener(listener);
+			GetConsoleById(consoleId)->GetNotificationManager()->RegisterNotificationListener(listener);
 			return listener.get();
 		}
 

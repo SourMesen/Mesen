@@ -4,8 +4,6 @@
 #include <atomic>
 #include "../Utilities/SimpleLock.h"
 #include "VirtualFile.h"
-#include "RomData.h"
-#include "Debugger.h"
 
 class BaseMapper;
 class RewindManager;
@@ -26,8 +24,13 @@ class VideoRenderer;
 class DebugHud;
 class SoundMixer;
 class NotificationManager;
+class Debugger;
 
 struct HdPackData;
+struct HashInfo;
+struct MapperInfo;
+
+enum class MemoryOperationType;
 enum class NesModel;
 enum class ScaleFilterType;
 enum class ConsoleFeatures;

@@ -346,5 +346,28 @@ namespace Mesen.GUI.Forms
 		{
 			DebugWindowManager.OpenDebugWindow(DebugWindow.TextHooker);
 		}
+
+		private void mnuDebugDualSystemSecondaryCpu_Click(object sender, EventArgs e)
+		{
+			bool switchCpu = false;
+
+			if(!DebugWindowManager.HasOpenedWindow) {
+				switchCpu = true;
+			} else {
+				if(MessageBox.Show("Warning: Changing this setting will close all currently opened debug tools!", "Warning", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK) {
+					DebugWindowManager.CloseAll();
+					if(!DebugWindowManager.HasOpenedWindow) {
+						switchCpu = true;
+					}
+				}
+			}
+
+			if(switchCpu) {
+				mnuDebugDualSystemSecondaryCpu.Checked = !mnuDebugDualSystemSecondaryCpu.Checked;
+				ConfigManager.Config.DebugInfo.DebugConsoleId = mnuDebugDualSystemSecondaryCpu.Checked ? InteropEmu.ConsoleId.Slave : InteropEmu.ConsoleId.Master;
+				ConfigManager.ApplyChanges();
+				InteropEmu.DebugSetDebuggerConsole(ConfigManager.Config.DebugInfo.DebugConsoleId == InteropEmu.ConsoleId.Slave ? 1 : 0);
+			}
+		}
 	}
 }

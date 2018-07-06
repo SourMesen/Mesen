@@ -81,7 +81,7 @@ namespace Mesen.GUI.Debugger
 			UpdateImportButton();
 			InitMemoryTypeDropdown(true);
 
-			_notifListener = new InteropEmu.NotificationListener();
+			_notifListener = new InteropEmu.NotificationListener(ConfigManager.Config.DebugInfo.DebugConsoleId);
 			_notifListener.OnNotification += _notifListener_OnNotification;
 
 			this.mnuShowCharacters.CheckedChanged += this.mnuShowCharacters_CheckedChanged;

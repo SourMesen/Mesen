@@ -50,7 +50,7 @@ namespace Mesen.GUI.Debugger
 					this.Location = ConfigManager.Config.DebugInfo.EventViewerLocation;
 				}
 
-				this._notifListener = new InteropEmu.NotificationListener();
+				this._notifListener = new InteropEmu.NotificationListener(ConfigManager.Config.DebugInfo.DebugConsoleId);
 				this._notifListener.OnNotification += this._notifListener_OnNotification;
 			}
 		}

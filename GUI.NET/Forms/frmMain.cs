@@ -153,7 +153,7 @@ namespace Mesen.GUI.Forms
 #endif
 			InitializeCore();
 
-			_notifListener = new InteropEmu.NotificationListener();
+			_notifListener = new InteropEmu.NotificationListener(InteropEmu.ConsoleId.Master);
 			_notifListener.OnNotification += _notifListener_OnNotification;
 
 			menuTimer.Start();
@@ -204,6 +204,9 @@ namespace Mesen.GUI.Forms
 			if(ConfigManager.Config.PreferenceInfo.DisableMouseResize) {
 				this.FormBorderStyle = FormBorderStyle.Fixed3D;
 			}
+
+			mnuDebugDualSystemSecondaryCpu.Checked = ConfigManager.Config.DebugInfo.DebugConsoleId == InteropEmu.ConsoleId.Slave;
+			InteropEmu.DebugSetDebuggerConsole(ConfigManager.Config.DebugInfo.DebugConsoleId == InteropEmu.ConsoleId.Slave ? 1 : 0);
 		}
 
 		private void ProcessFullscreenSwitch(List<string> switches)
@@ -1113,6 +1116,15 @@ namespace Mesen.GUI.Forms
 					mnuScriptWindow.Enabled = running;
 					mnuTextHooker.Enabled = running;
 					mnuTraceLogger.Enabled = running;
+
+#if !HIDETESTMENU
+					//Keep this option hidden for now, until some remaining issues are fixed.
+					mnuDebugDualSystemSecondaryCpu.Visible = _isDualSystem;
+					sepDebugDualSystemSecondaryCpu.Visible = _isDualSystem;
+#else
+					mnuDebugDualSystemSecondaryCpu.Visible = false;
+					sepDebugDualSystemSecondaryCpu.Visible = false;
+#endif
 
 					mnuInstallHdPack.Enabled = running;
 					mnuHdPackEditor.Enabled = !netPlay && running;

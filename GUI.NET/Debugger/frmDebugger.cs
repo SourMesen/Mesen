@@ -158,7 +158,7 @@ namespace Mesen.GUI.Debugger
 				"[MyLabel, 4]: Display 4 bytes starting from the address the specified label (MyLabel) refers to"
 			);
 
-			_notifListener = new InteropEmu.NotificationListener();
+			_notifListener = new InteropEmu.NotificationListener(ConfigManager.Config.DebugInfo.DebugConsoleId);
 			_notifListener.OnNotification += _notifListener_OnNotification;
 
 			InteropEmu.DebugInitialize();

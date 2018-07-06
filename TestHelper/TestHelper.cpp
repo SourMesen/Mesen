@@ -37,7 +37,7 @@ extern "C" {
 	int __stdcall RunRecordedTest(char* filename);
 	void __stdcall Run();
 	void __stdcall Stop();
-	INotificationListener* __stdcall RegisterNotificationCallback(NotificationListenerCallback callback);
+	INotificationListener* __stdcall RegisterNotificationCallback(int32_t consoleId, NotificationListenerCallback callback);
 }
 
 std::thread *runThread = nullptr;
@@ -189,10 +189,9 @@ int main(int argc, char* argv[])
 		std::getchar();
 	} else if(argc == 3) {
 		char* testFilename = argv[2];
-		RegisterNotificationCallback((NotificationListenerCallback)OnNotificationReceived);
-
 		SetFlags(0x8000000000000000); //EmulationFlags::ConsoleMode
 		InitializeEmu(mesenFolder.c_str(), nullptr, nullptr, false, false, false);
+		RegisterNotificationCallback(0, (NotificationListenerCallback)OnNotificationReceived);
 		SetControllerType(0, ControllerType::StandardController);
 		SetControllerType(1, ControllerType::StandardController);
 

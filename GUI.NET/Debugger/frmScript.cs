@@ -120,7 +120,7 @@ namespace Mesen.GUI.Debugger
 		protected override void OnLoad(EventArgs e)
 		{
 			base.OnLoad(e);
-			this._notifListener = new InteropEmu.NotificationListener();
+			this._notifListener = new InteropEmu.NotificationListener(ConfigManager.Config.DebugInfo.DebugConsoleId);
 			this._notifListener.OnNotification += this._notifListener_OnNotification;
 
 			this.InitShortcuts();

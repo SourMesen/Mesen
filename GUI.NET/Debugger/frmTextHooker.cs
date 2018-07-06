@@ -77,7 +77,7 @@ namespace Mesen.GUI.Debugger
 				this.ctrlTextHooker.SetCharacterMappings(_charMappings);
 				this.ctrlCharacterMappings.SetCharacterMappings(_charMappings);
 
-				this._notifListener = new InteropEmu.NotificationListener();
+				this._notifListener = new InteropEmu.NotificationListener(ConfigManager.Config.DebugInfo.DebugConsoleId);
 				this._notifListener.OnNotification += this._notifListener_OnNotification;
 
 				this.ctrlTextHooker.GetData();

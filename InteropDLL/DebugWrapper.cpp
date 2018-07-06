@@ -10,10 +10,12 @@
 #include "../Core/TraceLogger.h"
 
 extern shared_ptr<Console> _console;
+static int32_t _debugConsoleId = 0;
+extern shared_ptr<Console> GetConsoleById(int32_t consoleId);
 
 shared_ptr<Debugger> GetDebugger()
 {
-	return _console->GetDebugger();
+	return GetConsoleById(_debugConsoleId)->GetDebugger();
 }
 
 extern "C"
@@ -26,12 +28,17 @@ extern "C"
 
 	DllExport void __stdcall DebugRelease()
 	{
-		_console->StopDebugger();
+		GetConsoleById(_debugConsoleId)->StopDebugger();
 	}
 
 	DllExport bool __stdcall DebugIsDebuggerRunning()
 	{
-		return _console->GetDebugger(false).get() != nullptr;
+		return GetConsoleById(_debugConsoleId)->GetDebugger(false).get() != nullptr;
+	}
+
+	DllExport void __stdcall DebugSetDebuggerConsole(int32_t consoleId)
+	{
+		_debugConsoleId = consoleId;
 	}
 
 	DllExport void __stdcall DebugSetFlags(uint32_t flags) { GetDebugger()->SetFlags(flags); }

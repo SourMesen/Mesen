@@ -49,10 +49,6 @@ Console::Console(shared_ptr<Console> master)
 {
 	_master = master;
 	_model = NesModel::NTSC;
-
-	if(_master) {
-		_master->_notificationManager->SendNotification(ConsoleNotificationType::VsDualSystemStarted);
-	}
 }
 
 Console::~Console()
@@ -73,6 +69,10 @@ void Console::Init()
 
 	_soundMixer.reset(new SoundMixer(shared_from_this()));
 	_soundMixer->SetNesModel(_model);
+
+	if(_master) {
+		_emulationThreadId = _master->_emulationThreadId;
+	}
 }
 
 void Console::Release(bool forShutdown)
@@ -385,6 +385,10 @@ bool Console::Initialize(VirtualFile &romFile, VirtualFile &patchFile)
 					MessageManager::DisplayMessage("ClockRate", std::to_string(EmulationSettings::GetOverclockRate()) + "%");
 				}
 				EmulationSettings::ClearFlags(EmulationFlags::ForceMaxSpeed);
+
+				if(_slave) {
+					_notificationManager->SendNotification(ConsoleNotificationType::VsDualSystemStarted);
+				}
 			}
 			Resume();
 			return true;
@@ -667,6 +671,9 @@ void Console::Run()
 	_stopLock.Acquire();
 
 	_emulationThreadId = std::this_thread::get_id();
+	if(_slave) {
+		_slave->_emulationThreadId = std::this_thread::get_id();
+	}
 
 	targetTime = GetFrameDelay();
 
