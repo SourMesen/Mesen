@@ -1025,7 +1025,7 @@ uint8_t PPU::ReadSpriteRam(uint8_t addr)
 			return _spriteRAM[addr];
 		} else {
 			//If this 8-byte row hasn't been read/written to in over 3000 cpu cycles (~1.7ms), return 0xFF to simulate decay
-			shared_ptr<Debugger> debugger = _console->GetDebugger();
+			shared_ptr<Debugger> debugger = _console->GetDebugger(false);
 			if(debugger && debugger->CheckFlag(DebuggerFlags::BreakOnDecayedOamRead)) {
 				debugger->BreakImmediately();
 			}
