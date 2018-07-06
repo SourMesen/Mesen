@@ -31,7 +31,9 @@ enum class DebuggerFlags
 
 	IgnoreRedundantWrites = 0x800,
 
-	HidePauseIcon = 0x1000
+	HidePauseIcon = 0x1000,
+
+	BreakOnDecayedOamRead = 0x2000,
 };
 
 enum class BreakSource

@@ -1579,6 +1579,8 @@ namespace Mesen.GUI
 		IgnoreRedundantWrites = 0x800,
 
 		HidePauseIcon = 0x1000,
+
+		BreakOnDecayedOamRead = 0x2000,
 	}
 
 	public struct InteropRomInfo

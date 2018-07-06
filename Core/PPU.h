@@ -220,10 +220,7 @@ class PPU : public IMemoryHandler, public Snapshotable
 			return _scanline;
 		}
 		
-		uint8_t* GetSpriteRam()
-		{
-			return _spriteRAM;
-		}
+		uint8_t* GetSpriteRam();
 
 		uint8_t* GetSecondarySpriteRam()
 		{

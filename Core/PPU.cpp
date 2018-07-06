@@ -1020,12 +1020,16 @@ uint8_t PPU::ReadSpriteRam(uint8_t addr)
 		return _spriteRAM[addr];
 	} else {
 		int32_t cycle = _console->GetCpu()->GetCycleCount();
-		if(_oamDecayCycles[addr >> 2] >= cycle) {
-			_oamDecayCycles[addr >> 2] = cycle + 3000;
+		if(_oamDecayCycles[addr >> 3] >= cycle) {
+			_oamDecayCycles[addr >> 3] = cycle + 3000;
 			return _spriteRAM[addr];
 		} else {
-			//If this 4-byte row hasn't been read/written to in over 3000 cpu cycles (~1.7ms), return 0xFF to simulate decay
-			return 0xFF;
+			//If this 8-byte row hasn't been read/written to in over 3000 cpu cycles (~1.7ms), return 0xFF to simulate decay
+			shared_ptr<Debugger> debugger = _console->GetDebugger();
+			if(debugger && debugger->CheckFlag(DebuggerFlags::BreakOnDecayedOamRead)) {
+				debugger->BreakImmediately();
+			}
+			return 0x10;
 		}
 	}
 }
@@ -1034,7 +1038,7 @@ void PPU::WriteSpriteRam(uint8_t addr, uint8_t value)
 {
 	_spriteRAM[addr] = value;
 	if(_enableOamDecay) {
-		_oamDecayCycles[addr >> 2] = _console->GetCpu()->GetCycleCount() + 3000;
+		_oamDecayCycles[addr >> 3] = _console->GetCpu()->GetCycleCount() + 3000;
 	}
 }
 
@@ -1227,6 +1231,21 @@ void PPU::ProcessCpuClock()
 	}
 }
 
+uint8_t* PPU::GetSpriteRam()
+{
+	//Used by debugger
+	if(_enableOamDecay) {
+		int32_t cycle = _console->GetCpu()->GetCycleCount();
+		for(int i = 0; i < 0x100; i++) {
+			//Apply OAM decay to sprite RAM before letting debugger access it
+			if(_oamDecayCycles[i >> 3] < cycle) {
+				_spriteRAM[i] = 0x10;
+			}
+		}
+	}
+	return _spriteRAM;
+}
+
 void PPU::StreamState(bool saving)
 {
 	ArrayInfo<uint8_t> paletteRam = { _paletteRAM, 0x20 };
@@ -1271,7 +1290,7 @@ void PPU::StreamState(bool saving)
 		SetNesModel(_nesModel);
 		UpdateMinimumDrawCycles();
 
-		for(int i = 0; i < 0x40; i++) {
+		for(int i = 0; i < 0x20; i++) {
 			//Set max value to ensure oam decay doesn't cause issues with savestates when used
 			_oamDecayCycles[i] = 0x7FFFFFFF;
 		}
