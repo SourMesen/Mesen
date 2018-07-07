@@ -21,19 +21,19 @@ void NsfLoader::Read(uint8_t *& data, char * dest, size_t len)
 	data += len;
 }
 
-void NsfLoader::InitializeFromHeader(RomData & romData)
+void NsfLoader::InitializeFromHeader(RomData &romData)
 {
-	NsfHeader &header = romData.NsfInfo;
+	NsfHeader &header = romData.Info.NsfInfo;
 
-	romData.Format = RomFormat::Nsf;
-	romData.MapperID = MapperFactory::NsfMapperID;
+	romData.Info.Format = RomFormat::Nsf;
+	romData.Info.MapperID = MapperFactory::NsfMapperID;
 
 	if(header.LoadAddress < 0x6000 || header.TotalSongs == 0) {
 		romData.Error = true;
 	}
 
 	if(header.Flags == 0x01) {
-		romData.System = GameSystem::NesPal;
+		romData.Info.System = GameSystem::NesPal;
 	}
 
 	if(header.PlaySpeedNtsc == 0) {
@@ -119,7 +119,7 @@ void NsfLoader::InitHeader(NsfHeader & header)
 RomData NsfLoader::LoadRom(vector<uint8_t>& romFile)
 {
 	RomData romData;
-	NsfHeader &header = romData.NsfInfo;
+	NsfHeader &header = romData.Info.NsfInfo;
 
 	InitHeader(header);
 

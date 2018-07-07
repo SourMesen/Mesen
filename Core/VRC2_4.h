@@ -36,11 +36,11 @@ class VRC2_4 : public BaseMapper
 
 		void DetectVariant()
 		{
-			switch(_mapperID) {
+			switch(_romInfo.MapperID) {
 				default:
 				case 21:
 					//Conflicts: VRC4c
-					switch(_subMapperID) {
+					switch(_romInfo.SubMapperID) {
 						default:
 						case 0: _variant = VRCVariant::VRC4a; break;
 						case 1: _variant = VRCVariant::VRC4a; break;
@@ -52,7 +52,7 @@ class VRC2_4 : public BaseMapper
 
 				case 23:
 					//Conflicts: VRC4e
-					switch(_subMapperID) {
+					switch(_romInfo.SubMapperID) {
 						default:
 						case 0: _variant = VRCVariant::VRC2b; break;
 						case 2: _variant = VRCVariant::VRC4e; break;
@@ -62,7 +62,7 @@ class VRC2_4 : public BaseMapper
 
 				case 25:
 					//Conflicts: VRC2c, VRC4d
-					switch(_subMapperID) {
+					switch(_romInfo.SubMapperID) {
 						default:
 						case 0: _variant = VRCVariant::VRC4b; break;
 						case 1: _variant = VRCVariant::VRC4b; break;
@@ -74,7 +74,7 @@ class VRC2_4 : public BaseMapper
 				case 27: _variant = VRCVariant::VRC4_27; break; //Untested
 			}
 
-			_useHeuristics = (_subMapperID == 0) && _mapperID != 22 && _mapperID != 27;
+			_useHeuristics = (_romInfo.SubMapperID == 0) && _romInfo.MapperID != 22 && _romInfo.MapperID != 27;
 		}
 
 	protected:
@@ -101,7 +101,7 @@ class VRC2_4 : public BaseMapper
 		
 		void ProcessCpuClock() override
 		{
-			if((_useHeuristics && _mapperID != 22) || _variant >= VRCVariant::VRC4a) {
+			if((_useHeuristics && _romInfo.MapperID != 22) || _variant >= VRCVariant::VRC4a) {
 				//Only VRC4 supports IRQs
 				_irq->ProcessCpuClock();
 			}

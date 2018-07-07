@@ -76,6 +76,7 @@ SOURCES_CXX := $(LIBRETRO_DIR)/libretro.cpp \
                $(CORE_DIR)/MessageManager.cpp \
                $(CORE_DIR)/MovieManager.cpp \
                $(CORE_DIR)/MovieRecorder.cpp \
+               $(CORE_DIR)/NESHeader.cpp \
                $(CORE_DIR)/NotificationManager.cpp \
                $(CORE_DIR)/NsfLoader.cpp \
                $(CORE_DIR)/NsfMapper.cpp \

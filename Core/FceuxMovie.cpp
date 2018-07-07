@@ -25,7 +25,7 @@ bool FceuxMovie::InitializeData(stringstream &filestream)
 		if(line.compare(0, 19, "romChecksum base64:", 19) == 0) {
 			vector<uint8_t> md5array = Base64::Decode(line.substr(19, line.size() - 20));
 			HashInfo hashInfo;
-			hashInfo.PrgChrMd5Hash = HexUtilities::ToHex(md5array);
+			hashInfo.PrgChrMd5 = HexUtilities::ToHex(md5array);
 			EmulationSettings::SetRamPowerOnState(RamPowerOnState::AllZeros);
 			if(_console->LoadMatchingRom("", hashInfo)) {
 				result = true;

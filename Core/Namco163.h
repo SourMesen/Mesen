@@ -59,16 +59,16 @@ protected:
 	{
 		_audio.reset(new Namco163Audio(_console));
 
-		switch(_mapperID) {
+		switch(_romInfo.MapperID) {
 			case 19:
 				_variant = NamcoVariant::Namco163;
-				if(_databaseInfo.Board == "NAMCOT-163") {
+				if(_romInfo.DatabaseInfo.Board == "NAMCOT-163") {
 					_variant = NamcoVariant::Namco163;
 					_autoDetectVariant = false;
-				} else if(_databaseInfo.Board == "NAMCOT-175") {
+				} else if(_romInfo.DatabaseInfo.Board == "NAMCOT-175") {
 					_variant = NamcoVariant::Namco175;
 					_autoDetectVariant = false;
-				} else if(_databaseInfo.Board == "NAMCOT-340") {
+				} else if(_romInfo.DatabaseInfo.Board == "NAMCOT-340") {
 					_variant = NamcoVariant::Namco340;
 					_autoDetectVariant = false;
 				} else {
@@ -76,7 +76,7 @@ protected:
 				}
 				break;
 			case 210: 
-				switch(_subMapperID) {
+				switch(_romInfo.SubMapperID) {
 					case 0: _variant = NamcoVariant::Unknown; _autoDetectVariant = true; break;
 					case 1: _variant = NamcoVariant::Namco175; _autoDetectVariant = false; break;
 					case 2: _variant = NamcoVariant::Namco340; _autoDetectVariant = false; break;

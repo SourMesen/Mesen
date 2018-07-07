@@ -38,7 +38,7 @@ string Debugger::_disassemblerOutput = "";
 
 Debugger::Debugger(shared_ptr<Console> console, shared_ptr<CPU> cpu, shared_ptr<PPU> ppu, shared_ptr<APU> apu, shared_ptr<MemoryManager> memoryManager, shared_ptr<BaseMapper> mapper)
 {
-	_romName = console->GetMapperInfo().RomName;
+	_romName = console->GetRomInfo().RomName;
 	_console = console;
 	_cpu = cpu;
 	_ppu = ppu;
@@ -1159,7 +1159,7 @@ void Debugger::StopCodeRunner()
 
 void Debugger::GetNesHeader(uint8_t* header)
 {
-	NESHeader nesHeader = _mapper->GetNesHeader();
+	NESHeader nesHeader = _mapper->GetRomInfo().NesHeader;
 	memcpy(header, &nesHeader, sizeof(NESHeader));
 }
 

@@ -19,7 +19,7 @@ class IremG101 : public BaseMapper
 			SelectPRGPage(2, -2);
 			SelectPRGPage(3, -1);
 
-			if(_subMapperID == 1) {
+			if(_romInfo.SubMapperID == 1) {
 				//032: 1 Major League
 				//CIRAM A10 is tied high (fixed one-screen mirroring) and PRG banking style is fixed as 8+8+16F 
 				SetMirroringType(MirroringType::ScreenAOnly);
@@ -57,7 +57,7 @@ class IremG101 : public BaseMapper
 					break;
 				case 0x9000:
 					_prgMode = (value & 0x02) >> 1;
-					if(_subMapperID == 1) {
+					if(_romInfo.SubMapperID == 1) {
 						_prgMode = 0;
 					}
 					UpdatePrgMode();

@@ -187,7 +187,7 @@ bool MesenMovie::LoadGame()
 	}
 
 	HashInfo hashInfo;
-	hashInfo.Sha1Hash = sha1Hash;
+	hashInfo.Sha1 = sha1Hash;
 
 	VirtualFile romFile = _console->FindMatchingRom(gameFile, hashInfo);
 	bool gameLoaded = false;

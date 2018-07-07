@@ -138,7 +138,7 @@ class MMC1 : public BaseMapper
 				}
 			}
 
-			if(_subMapperID == 5) {
+			if(_romInfo.SubMapperID == 5) {
 				//SubMapper 5
 				//"001: 5 Fixed PRG    SEROM, SHROM, SH1ROM use a fixed 32k PRG ROM with no banking support.
 				SelectPrgPage2x(0, 0);
@@ -182,10 +182,10 @@ class MMC1 : public BaseMapper
 			_state.Reg8000 = GetPowerOnByte() | 0x0C; //On powerup: bits 2,3 of $8000 are set (this ensures the $8000 is bank 0, and $C000 is the last bank - needed for SEROM/SHROM/SH1ROM which do no support banking)
 			_state.RegA000 = GetPowerOnByte();
 			_state.RegC000 = GetPowerOnByte();
-			_state.RegE000 = (_databaseInfo.Board.find("MMC1B") != string::npos ? 0x10 : 0x00); //WRAM Disable: enabled by default for MMC1B
+			_state.RegE000 = (_romInfo.DatabaseInfo.Board.find("MMC1B") != string::npos ? 0x10 : 0x00); //WRAM Disable: enabled by default for MMC1B
 
 			//"MMC1A: PRG RAM is always enabled" - Normally these roms should be classified as mapper 155
-			_forceWramOn = (_databaseInfo.Board.compare("MMC1A") == 0);
+			_forceWramOn = (_romInfo.DatabaseInfo.Board.compare("MMC1A") == 0);
 
 			_lastChrReg = MMC1Registers::RegA000;
 

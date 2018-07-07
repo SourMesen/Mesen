@@ -288,22 +288,6 @@ enum class ExpansionPortDevice
 	BattleBox = 17,
 };
 
-extern const vector<string> PpuModelNames;
-enum class PpuModel
-{
-	Ppu2C02 = 0,
-	Ppu2C03 = 1,
-	Ppu2C04A = 2,
-	Ppu2C04B = 3,
-	Ppu2C04C = 4,
-	Ppu2C04D = 5,
-	Ppu2C05A = 6,
-	Ppu2C05B = 7,
-	Ppu2C05C = 8,
-	Ppu2C05D = 9,
-	Ppu2C05E = 10
-};
-
 enum class VsInputType
 {
 	Default = 0,

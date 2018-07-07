@@ -298,10 +298,10 @@ Supported mappers:
 BaseMapper* MapperFactory::GetMapperFromID(RomData &romData)
 {
 #ifdef _DEBUG
-	MessageManager::DisplayMessage("GameInfo", "Mapper", std::to_string(romData.MapperID), std::to_string(romData.SubMapperID));
+	MessageManager::DisplayMessage("GameInfo", "Mapper", std::to_string(romData.Info.MapperID), std::to_string(romData.Info.SubMapperID));
 #endif
 
-	switch(romData.MapperID) {
+	switch(romData.Info.MapperID) {
 		case 0: return new NROM();
 		case 1: return new MMC1();
 		case 2: return new UNROM();
@@ -336,7 +336,7 @@ BaseMapper* MapperFactory::GetMapperFromID(RomData &romData)
 		case 32: return new IremG101();
 		case 33: return new TaitoTc0190();
 		case 34: 
-			switch(romData.SubMapperID) {
+			switch(romData.Info.SubMapperID) {
 				case 0: return (romData.ChrRom.size() > 0) ? (BaseMapper*)new Nina01() : (BaseMapper*)new BnRom(); //BnROM uses CHR RAM (so no CHR rom in the .NES file)
 				case 1: return new Nina01();
 				case 2: return new BnRom();
@@ -609,8 +609,8 @@ BaseMapper* MapperFactory::GetMapperFromID(RomData &romData)
 		case MapperFactory::FdsMapperID: return new FDS();
 	}
 
-	if(romData.MapperID != UnifBoards::UnknownBoard) {
-		MessageManager::DisplayMessage("Error", "UnsupportedMapper", "iNES #" + std::to_string(romData.MapperID));
+	if(romData.Info.MapperID != UnifBoards::UnknownBoard) {
+		MessageManager::DisplayMessage("Error", "UnsupportedMapper", "iNES #" + std::to_string(romData.Info.MapperID));
 	}
 	return nullptr;
 }

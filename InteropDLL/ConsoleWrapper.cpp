@@ -95,7 +95,7 @@ namespace InteropEmu {
 		}
 	};
 
-	struct RomInfo
+	struct InteropRomInfo
 	{
 		const char* RomName;
 		uint32_t Crc32;
@@ -276,20 +276,20 @@ namespace InteropEmu {
 			}
 		}
 
-		DllExport void __stdcall GetRomInfo(RomInfo &romInfo, char* filename) 
+		DllExport void __stdcall GetRomInfo(InteropRomInfo &interopRomInfo, char* filename)
 		{
 			string romPath = filename;
 			if(romPath.empty()) {
 				_returnString = _console->GetRomPath();
-				romInfo.RomName = _returnString.c_str();
-				MapperInfo mapperInfo = _console->GetMapperInfo();
-				romInfo.Crc32 = mapperInfo.Hash.Crc32Hash;
-				romInfo.PrgCrc32 = mapperInfo.Hash.PrgCrc32Hash;
-				romInfo.Format = mapperInfo.Format;
-				romInfo.IsChrRam = mapperInfo.UsesChrRam;
-				romInfo.MapperId = mapperInfo.MapperId;
-				if(mapperInfo.Hash.Sha1Hash.size() == 40) {
-					memcpy(romInfo.Sha1, mapperInfo.Hash.Sha1Hash.c_str(), 40);
+				interopRomInfo.RomName = _returnString.c_str();
+				RomInfo romInfo = _console->GetRomInfo();
+				interopRomInfo.Crc32 = romInfo.Hash.Crc32;
+				interopRomInfo.PrgCrc32 = romInfo.Hash.PrgCrc32;
+				interopRomInfo.Format = romInfo.Format;
+				interopRomInfo.IsChrRam = romInfo.HasChrRam;
+				interopRomInfo.MapperId = romInfo.MapperID;
+				if(romInfo.Hash.Sha1.size() == 40) {
+					memcpy(interopRomInfo.Sha1, romInfo.Hash.Sha1.c_str(), 40);
 				}
 			} else {
 				RomLoader romLoader(true);
@@ -297,23 +297,23 @@ namespace InteropEmu {
 					RomData romData = romLoader.GetRomData();
 
 					_returnString = romPath;
-					romInfo.RomName = _returnString.c_str();
-					romInfo.Crc32 = romData.Crc32;
-					romInfo.PrgCrc32 = romData.PrgCrc32;
-					romInfo.Format = RomFormat::Unknown;
-					romInfo.IsChrRam = romData.ChrRom.size() == 0;
-					romInfo.MapperId = 0;
-					if(romData.Sha1.size() == 40) {
-						memcpy(romInfo.Sha1, romData.Sha1.c_str(), 40);
+					interopRomInfo.RomName = _returnString.c_str();
+					interopRomInfo.Crc32 = romData.Info.Hash.Crc32;
+					interopRomInfo.PrgCrc32 = romData.Info.Hash.PrgCrc32;
+					interopRomInfo.Format = RomFormat::Unknown;
+					interopRomInfo.IsChrRam = romData.ChrRom.size() == 0;
+					interopRomInfo.MapperId = 0;
+					if(romData.Info.Hash.Sha1.size() == 40) {
+						memcpy(interopRomInfo.Sha1, romData.Info.Hash.Sha1.c_str(), 40);
 					}
 				} else {
 					_returnString = "";
-					romInfo.RomName = _returnString.c_str();
-					romInfo.Crc32 = 0;
-					romInfo.PrgCrc32 = 0;
-					romInfo.Format = RomFormat::Unknown;
-					romInfo.IsChrRam = false;
-					romInfo.MapperId = 0;
+					interopRomInfo.RomName = _returnString.c_str();
+					interopRomInfo.Crc32 = 0;
+					interopRomInfo.PrgCrc32 = 0;
+					interopRomInfo.Format = RomFormat::Unknown;
+					interopRomInfo.IsChrRam = false;
+					interopRomInfo.MapperId = 0;
 				}
 			}
 		}

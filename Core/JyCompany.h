@@ -231,7 +231,7 @@ protected:
 	void UpdateMirroringState()
 	{
 		//"Mapper 211 behaves as though N were always set (1), and mapper 090 behaves as though N were always clear(0)."
-		if((_advancedNtControl || _mapperID == 211) && _mapperID != 90) {
+		if((_advancedNtControl || _romInfo.MapperID == 211) && _romInfo.MapperID != 90) {
 			for(int i = 0; i < 4; i++) {
 				SetNametable(i, _ntLowRegs[i] & 0x01);
 			}
@@ -356,7 +356,7 @@ protected:
 		if(addr >= 0x2000) {
 			//This behavior only affects reads, not writes.
 			//Additional info: https://forums.nesdev.com/viewtopic.php?f=3&t=17198
-			if((_advancedNtControl || _mapperID == 211) && _mapperID != 90) {
+			if((_advancedNtControl || _romInfo.MapperID == 211) && _romInfo.MapperID != 90) {
 				uint8_t ntIndex = ((addr & 0x2FFF) - 0x2000) / 0x400;
 				if(_disableNtRam || (_ntLowRegs[ntIndex] & 0x80) != (_ntRamSelectBit & 0x80)) {
 					uint16_t chrPage = _ntLowRegs[ntIndex] | (_ntHighRegs[ntIndex] << 8);
@@ -380,7 +380,7 @@ protected:
 		}
 		_lastPpuAddr = addr;
 
-		if(_mapperID == 209) {
+		if(_romInfo.MapperID == 209) {
 			switch(addr & 0x2FF8) {
 				case 0x0FD8:
 				case 0x0FE8:

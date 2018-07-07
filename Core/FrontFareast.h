@@ -22,7 +22,7 @@ protected:
 		_irqEnabled = false;
 		_ffeAltMode = true;
 
-		switch(_mapperID) {
+		switch(_romInfo.MapperID) {
 			case 6:
 				AddRegisterRange(0x8000, 0xFFFF, MemoryOperation::Write);
 				SelectPrgPage2x(0, 0);
@@ -92,7 +92,7 @@ protected:
 				break;
 
 			default:
-				if(_mapperID == 6) {
+				if(_romInfo.MapperID == 6) {
 					if(addr >= 0x8000) {
 						if(HasChrRam() || _ffeAltMode) {
 							SelectPrgPage2x(0, (value & 0xFC) >> 1);
@@ -100,7 +100,7 @@ protected:
 						}
 						SelectChrPage8x(0, value << 3);
 					}
-				} else if(_mapperID == 8) {
+				} else if(_romInfo.MapperID == 8) {
 					if(addr >= 0x8000) {
 						SelectPrgPage2x(0, (value & 0xF8) >> 2);
 						SelectChrPage8x(0, (value & 0x07) << 3);

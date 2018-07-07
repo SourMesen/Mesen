@@ -9,6 +9,7 @@
 #include "VideoDecoder.h"
 #include "Debugger.h"
 #include "MovieManager.h"
+#include "RomData.h"
 
 SaveStateManager::SaveStateManager(shared_ptr<Console> console)
 {
@@ -19,7 +20,7 @@ SaveStateManager::SaveStateManager(shared_ptr<Console> console)
 string SaveStateManager::GetStateFilepath(int stateIndex)
 {
 	string folder = FolderUtilities::GetSaveStateFolder();
-	string filename = FolderUtilities::GetFilename(_console->GetMapperInfo().RomName, false) + "_" + std::to_string(stateIndex) + ".mst";
+	string filename = FolderUtilities::GetFilename(_console->GetRomInfo().RomName, false) + "_" + std::to_string(stateIndex) + ".mst";
 	return FolderUtilities::CombinePath(folder, filename);
 }
 
@@ -65,14 +66,14 @@ void SaveStateManager::SaveState(ostream &stream)
 	stream.write((char*)&emuVersion, sizeof(emuVersion));
 	stream.write((char*)&formatVersion, sizeof(uint32_t));
 
-	MapperInfo mapperInfo = _console->GetMapperInfo();
-	stream.write((char*)&mapperInfo.MapperId, sizeof(uint16_t));
-	stream.write((char*)&mapperInfo.SubMapperId, sizeof(uint8_t));
+	RomInfo romInfo = _console->GetRomInfo();
+	stream.write((char*)&romInfo.MapperID, sizeof(uint16_t));
+	stream.write((char*)&romInfo.SubMapperID, sizeof(uint8_t));
 	
-	string sha1Hash = mapperInfo.Hash.Sha1Hash;
+	string sha1Hash = romInfo.Hash.Sha1;
 	stream.write(sha1Hash.c_str(), sha1Hash.size());
 
-	string romName = mapperInfo.RomName;
+	string romName = romInfo.RomName;
 	uint32_t nameLength = (uint32_t)romName.size();
 	stream.write((char*)&nameLength, sizeof(uint32_t));
 	stream.write(romName.c_str(), romName.size());
@@ -156,16 +157,16 @@ bool SaveStateManager::LoadState(istream &stream, bool hashCheckRequired)
 			stream.read(nameBuffer.data(), nameBuffer.size());
 			string romName(nameBuffer.data(), nameLength);
 			
-			MapperInfo mapperInfo = _console->GetMapperInfo();
-			bool gameLoaded = !mapperInfo.Hash.Sha1Hash.empty();
-			if(mapperInfo.Hash.Sha1Hash != string(hash)) {
+			RomInfo romInfo = _console->GetRomInfo();
+			bool gameLoaded = !romInfo.Hash.Sha1.empty();
+			if(romInfo.Hash.Sha1 != string(hash)) {
 				//CRC doesn't match
 				if(!EmulationSettings::CheckFlag(EmulationFlags::AllowMismatchingSaveState) || !gameLoaded ||
-					mapperInfo.MapperId != mapperId || mapperInfo.SubMapperId != subMapperId) 
+					romInfo.MapperID != mapperId || romInfo.SubMapperID != subMapperId)
 				{
 					//If mismatching states aren't allowed, or a game isn't loaded, or the mapper types don't match, try to find and load the matching ROM
 					HashInfo info;
-					info.Sha1Hash = hash;
+					info.Sha1 = hash;
 					if(!_console->LoadMatchingRom(romName, info)) {
 						MessageManager::DisplayMessage("SaveStates", "SaveStateMissingRom", romName);
 						return false;
@@ -221,8 +222,8 @@ bool SaveStateManager::LoadState(int stateIndex)
 
 void SaveStateManager::SaveRecentGame(string romName, string romPath, string patchPath)
 {
-	if(!EmulationSettings::CheckFlag(EmulationFlags::ConsoleMode) && !EmulationSettings::CheckFlag(EmulationFlags::DisableGameSelectionScreen) && _console->GetMapperInfo().Format != RomFormat::Nsf) {
-		string filename = FolderUtilities::GetFilename(_console->GetMapperInfo().RomName, false) + ".rgd";
+	if(!EmulationSettings::CheckFlag(EmulationFlags::ConsoleMode) && !EmulationSettings::CheckFlag(EmulationFlags::DisableGameSelectionScreen) && _console->GetRomInfo().Format != RomFormat::Nsf) {
+		string filename = FolderUtilities::GetFilename(_console->GetRomInfo().RomName, false) + ".rgd";
 		ZipWriter writer;
 		writer.Initialize(FolderUtilities::CombinePath(FolderUtilities::GetRecentGamesFolder(), filename));
 

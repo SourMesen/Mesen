@@ -315,8 +315,7 @@ enum class GameSystem
 	NesPal,
 	Famicom,
 	Dendy,
-	VsUniSystem,
-	VsDualSystem,
+	VsSystem,
 	Playchoice,
 	FDS,
 	Unknown,
@@ -331,11 +330,11 @@ enum class BusConflictType
 
 struct HashInfo
 {
-	uint32_t Crc32Hash = 0;
-	uint32_t PrgCrc32Hash = 0;
-	uint32_t PrgChrCrc32Hash = 0;
-	string Sha1Hash;
-	string PrgChrMd5Hash;
+	uint32_t Crc32 = 0;
+	uint32_t PrgCrc32 = 0;
+	uint32_t PrgChrCrc32 = 0;
+	string Sha1;
+	string PrgChrMd5;
 };
 
 enum class RomFormat
@@ -347,14 +346,29 @@ enum class RomFormat
 	Nsf = 4,
 };
 
-struct MapperInfo
+enum class VsSystemType
 {
-	string RomName;
-	RomFormat Format;
-	GameSystem System;
-	uint16_t MapperId;
-	uint8_t SubMapperId;
+	Default = 0,
+	RbiBaseballProtection = 1,
+	TkoBoxingProtection = 2,
+	SuperXeviousProtection = 3,
+	IceClimberProtection = 4,
+	VsDualSystem = 5,
+	RaidOnBungelingBayProtection = 6,
+};
 
-	HashInfo Hash;
-	bool UsesChrRam;
+extern const vector<string> PpuModelNames;
+enum class PpuModel
+{
+	Ppu2C02 = 0,
+	Ppu2C03 = 1,
+	Ppu2C04A = 2,
+	Ppu2C04B = 3,
+	Ppu2C04C = 4,
+	Ppu2C04D = 5,
+	Ppu2C05A = 6,
+	Ppu2C05B = 7,
+	Ppu2C05C = 8,
+	Ppu2C05D = 9,
+	Ppu2C05E = 10
 };

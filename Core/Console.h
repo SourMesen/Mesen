@@ -28,7 +28,7 @@ class Debugger;
 
 struct HdPackData;
 struct HashInfo;
-struct MapperInfo;
+struct RomInfo;
 
 enum class MemoryOperationType;
 enum class NesModel;
@@ -178,7 +178,7 @@ public:
 
 	VirtualFile GetRomPath();
 	VirtualFile GetPatchFile();
-	MapperInfo GetMapperInfo();
+	RomInfo GetRomInfo();
 	uint32_t GetFrameCount();
 	NesModel GetModel();
 

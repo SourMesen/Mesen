@@ -284,7 +284,7 @@ protected:
 	{
 		_audio.reset(new MMC5Audio(_console));
 
-		_hasBattery = true;
+		_romInfo.HasBattery = true;
 
 		_chrMode = 0;
 		_prgRamProtect1 = 0;

@@ -137,7 +137,7 @@ bool GameClientConnection::AttemptLoadGame(string filename, uint32_t crc32Hash)
 {
 	if(filename.size() > 0) {
 		HashInfo hashInfo;
-		hashInfo.Crc32Hash = crc32Hash;
+		hashInfo.Crc32 = crc32Hash;
 		if(_console->LoadMatchingRom(filename, hashInfo)) {
 			return true;
 		} else {

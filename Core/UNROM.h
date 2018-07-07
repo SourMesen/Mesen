@@ -17,7 +17,7 @@ class UNROM : public BaseMapper
 			SelectCHRPage(0, 0);
 		}
 
-		bool HasBusConflicts() override { return _subMapperID == 2; }
+		bool HasBusConflicts() override { return _romInfo.SubMapperID == 2; }
 
 		void WriteRegister(uint16_t addr, uint8_t value) override
 		{

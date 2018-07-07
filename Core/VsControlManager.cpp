@@ -16,6 +16,8 @@ void VsControlManager::Reset(bool softReset)
 	ControlManager::Reset(softReset);
 	_protectionCounter = 0;
 	UpdateSlaveMasterBit(_console->IsMaster() ? 0x00 : 0x02);
+	
+	_vsSystemType = _console->GetRomInfo().VsSystemType;
 
 	if(!softReset && !_console->IsMaster() && _console->GetDualConsole()) {
 		RegisterInputProvider(this);
@@ -72,11 +74,10 @@ void VsControlManager::RemapControllerButtons()
 	BaseControlDevice::SwapButtons(controllers[0], StandardController::Buttons::Start, controllers[0], StandardController::Buttons::Select);
 	BaseControlDevice::SwapButtons(controllers[1], StandardController::Buttons::Start, controllers[1], StandardController::Buttons::Select);
 
-	uint32_t crc = _console->GetMapperInfo().Hash.PrgCrc32Hash;
-	if(crc == 0x99FB3B3B) {
-		//Bit 3 of the input status must always be on (Raid on Bungeling Bay protection)
-		controllers[0]->InvertBit(StandardController::Buttons::Start);
-		controllers[1]->InvertBit(StandardController::Buttons::Start);
+	if(_vsSystemType == VsSystemType::RaidOnBungelingBayProtection || _vsSystemType == VsSystemType::IceClimberProtection) {
+		//Bit 3 of the input status must always be on
+		controllers[0]->SetBit(StandardController::Buttons::Start);
+		controllers[1]->SetBit(StandardController::Buttons::Start);
 	}
 }
 
@@ -88,8 +89,6 @@ uint8_t VsControlManager::GetOpenBusMask(uint8_t port)
 uint8_t VsControlManager::ReadRAM(uint16_t addr)
 {
 	uint8_t value = 0;
-
-	uint32_t crc = _console->GetMapperInfo().Hash.PrgCrc32Hash;
 
 	switch(addr) {
 		case 0x4016: {
@@ -119,18 +118,15 @@ uint8_t VsControlManager::ReadRAM(uint16_t addr)
 			break;
 
 		case 0x5E01:
-			if(crc == 0xEB2DBA63 || crc == 0x98CFE016) {
-				//TKO Boxing
+			if(_vsSystemType == VsSystemType::TkoBoxingProtection) {
 				value = _protectionData[0][_protectionCounter++ & 0x1F];
-			} else if(crc == 0x135ADF7C) {
-				//RBI Baseball
+			} else if(_vsSystemType == VsSystemType::RbiBaseballProtection) {
 				value = _protectionData[1][_protectionCounter++ & 0x1F];
 			}
 			break;
 
 		default:
-			if((crc == 0xF9D3B0A3 || crc == 0x66BB838F || crc == 0x9924980A) && addr >= 0x5400 && addr <= 0x57FF) {
-				//Super devious
+			if(_vsSystemType == VsSystemType::SuperXeviousProtection) {
 				return _protectionData[2][_protectionCounter++ & 0x1F];
 			}
 			break;

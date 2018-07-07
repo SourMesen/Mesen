@@ -19,6 +19,8 @@ private:
 
 	bool _refreshState = false;
 
+	VsSystemType _vsSystemType;
+
 	uint32_t _protectionCounter = 0;
 	const uint32_t _protectionData[3][32] = { 
 		{

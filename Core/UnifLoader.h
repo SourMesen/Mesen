@@ -84,8 +84,8 @@ private:
 		if(fourCC.compare("MAPR") == 0) {
 			_mapperName = ReadString(data, chunkEnd);
 			if(_mapperName.size() > 0) {
-				romData.MapperID = GetMapperID(_mapperName);
-				if(romData.MapperID == UnifBoards::UnknownBoard) {
+				romData.Info.MapperID = GetMapperID(_mapperName);
+				if(romData.Info.MapperID == UnifBoards::UnknownBoard) {
 					Log("[UNIF] Error: Unknown board");
 				}
 			} else {
@@ -111,24 +111,24 @@ private:
 		} else if(fourCC.compare("TVCI") == 0) {
 			uint8_t value;
 			Read(data, value);
-			romData.System = value == 1 ? GameSystem::NesPal : GameSystem::NesNtsc;
+			romData.Info.System = value == 1 ? GameSystem::NesPal : GameSystem::NesNtsc;
 		} else if(fourCC.compare("CTRL") == 0) {
 			//not supported
 		} else if(fourCC.compare("BATR") == 0) {
 			uint8_t value;
 			Read(data, value);
-			romData.HasBattery = value > 0;
+			romData.Info.HasBattery = value > 0;
 		} else if(fourCC.compare("MIRR") == 0) {
 			uint8_t value;
 			Read(data, value);
 
 			switch(value) {
 				default:
-				case 0: romData.Mirroring = MirroringType::Horizontal; break;
-				case 1: romData.Mirroring = MirroringType::Vertical; break;
-				case 2: romData.Mirroring = MirroringType::ScreenAOnly; break;
-				case 3: romData.Mirroring = MirroringType::ScreenBOnly; break;
-				case 4: romData.Mirroring = MirroringType::FourScreens; break;
+				case 0: romData.Info.Mirroring = MirroringType::Horizontal; break;
+				case 1: romData.Info.Mirroring = MirroringType::Vertical; break;
+				case 2: romData.Info.Mirroring = MirroringType::ScreenAOnly; break;
+				case 3: romData.Info.Mirroring = MirroringType::ScreenBOnly; break;
+				case 4: romData.Info.Mirroring = MirroringType::FourScreens; break;
 			}
 		} else {
 			//Unsupported/unused FourCCs: PCKn, CCKn, NAME, WRTR, READ, DINF, VROR
@@ -181,12 +181,12 @@ public:
 			fullRom.insert(fullRom.end(), romData.PrgRom.begin(), romData.PrgRom.end());
 			fullRom.insert(fullRom.end(), romData.ChrRom.begin(), romData.ChrRom.end());
 
-			romData.Format = RomFormat::Unif;
-			romData.PrgCrc32 = CRC32::GetCRC(romData.PrgRom.data(), romData.PrgRom.size());
-			romData.PrgChrCrc32 = CRC32::GetCRC(fullRom.data(), fullRom.size());
-			romData.PrgChrMd5 = GetMd5Sum(fullRom.data(), fullRom.size());
+			romData.Info.Format = RomFormat::Unif;
+			romData.Info.Hash.PrgCrc32 = CRC32::GetCRC(romData.PrgRom.data(), romData.PrgRom.size());
+			romData.Info.Hash.PrgChrCrc32 = CRC32::GetCRC(fullRom.data(), fullRom.size());
+			romData.Info.Hash.PrgChrMd5 = GetMd5Sum(fullRom.data(), fullRom.size());
 
-			Log("PRG+CHR CRC32: 0x" + HexUtilities::ToHex(romData.PrgChrCrc32));
+			Log("PRG+CHR CRC32: 0x" + HexUtilities::ToHex(romData.Info.Hash.PrgChrCrc32));
 			Log("[UNIF] Board Name: " + _mapperName);
 			Log("[UNIF] PRG ROM: " + std::to_string(romData.PrgRom.size() / 1024) + " KB");
 			Log("[UNIF] CHR ROM: " + std::to_string(romData.ChrRom.size() / 1024) + " KB");
@@ -195,7 +195,7 @@ public:
 			}
 
 			string mirroringType;
-			switch(romData.Mirroring) {
+			switch(romData.Info.Mirroring) {
 				case MirroringType::Horizontal: mirroringType = "Horizontal"; break;
 				case MirroringType::Vertical: mirroringType = "Vertical"; break;
 				case MirroringType::ScreenAOnly: mirroringType = "1-Screen (A)"; break;
@@ -204,13 +204,13 @@ public:
 			}
 
 			Log("[UNIF] Mirroring: " + mirroringType);
-			Log("[UNIF] Battery: " + string(romData.HasBattery ? "Yes" : "No"));
+			Log("[UNIF] Battery: " + string(romData.Info.HasBattery ? "Yes" : "No"));
 
 			if(!_checkOnly) {
-				GameDatabase::SetGameInfo(romData.PrgChrCrc32, romData, !EmulationSettings::CheckFlag(EmulationFlags::DisableGameDatabase), false);
+				GameDatabase::SetGameInfo(romData.Info.Hash.PrgChrCrc32, romData, !EmulationSettings::CheckFlag(EmulationFlags::DisableGameDatabase), false);
 			}
 
-			if(romData.MapperID == UnifBoards::UnknownBoard) {
+			if(romData.Info.MapperID == UnifBoards::UnknownBoard) {
 				if(!_checkOnly) {
 					MessageManager::DisplayMessage("Error", "UnsupportedMapper", "UNIF: " + _mapperName);
 				}

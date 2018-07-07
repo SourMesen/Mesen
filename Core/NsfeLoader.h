@@ -83,7 +83,7 @@ private:
 			return false;
 		}
 
-		NsfHeader& header = romData.NsfInfo;
+		NsfHeader& header = romData.Info.NsfInfo;
 
 		uint32_t length;
 		Read(data, length);
@@ -183,11 +183,11 @@ public:
 	RomData LoadRom(vector<uint8_t>& romFile)
 	{
 		RomData romData;
-		NsfHeader &header = romData.NsfInfo;
+		NsfHeader &header = romData.Info.NsfInfo;
 
 		InitHeader(header);
 
-		romData.Format = RomFormat::Nsf;
+		romData.Info.Format = RomFormat::Nsf;
 
 		uint8_t* data = romFile.data() + 4;
 		uint8_t* endOfData = romFile.data() + romFile.size();

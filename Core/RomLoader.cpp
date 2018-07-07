@@ -68,22 +68,22 @@ bool RomLoader::LoadFile(string filename, vector<uint8_t> &fileData)
 		}
 	}
 
-	_romData.Crc32 = crc;
-	_romData.Sha1 = SHA1::GetHash(fileData);
+	_romData.Info.Hash.Crc32 = crc;
+	_romData.Info.Hash.Sha1 = SHA1::GetHash(fileData);
 	_romData.RawData = fileData;
-	_romData.RomName = romName;
-	_romData.Filename = _filename;
+	_romData.Info.RomName = romName;
+	_romData.Info.Filename = _filename;
 
-	if(_romData.System == GameSystem::Unknown) {
+	if(_romData.Info.System == GameSystem::Unknown) {
 		//Use filename to detect PAL/VS system games
-		string name = _romData.Filename;
+		string name = _romData.Info.Filename;
 		std::transform(name.begin(), name.end(), name.begin(), ::tolower);
 
 		if(name.find("(e)") != string::npos || name.find("(australia)") != string::npos || name.find("(europe)") != string::npos ||
 			name.find("(germany)") != string::npos || name.find("(spain)") != string::npos) {
-			_romData.System = GameSystem::NesPal;
+			_romData.Info.System = GameSystem::NesPal;
 		} else if(name.find("(vs)") != string::npos) {
-			_romData.System = GameSystem::VsUniSystem;
+			_romData.Info.System = GameSystem::VsSystem;
 		}
 	}
 
@@ -103,7 +103,7 @@ string RomLoader::FindMatchingRomInFile(string filePath, HashInfo hashInfo)
 			RomLoader loader(true);
 			vector<uint8_t> fileData;
 			if(loader.LoadFile(filePath)) {
-				if(hashInfo.Crc32Hash == loader._romData.Crc32 || hashInfo.Sha1Hash.compare(loader._romData.Sha1) == 0) {
+				if(hashInfo.Crc32 == loader._romData.Info.Hash.Crc32 || hashInfo.Sha1.compare(loader._romData.Info.Hash.Sha1) == 0) {
 					return VirtualFile(filePath, file);
 				}
 			}
@@ -112,7 +112,7 @@ string RomLoader::FindMatchingRomInFile(string filePath, HashInfo hashInfo)
 		RomLoader loader(true);
 		vector<uint8_t> fileData;
 		if(loader.LoadFile(filePath)) {
-			if(hashInfo.Crc32Hash == loader._romData.Crc32 || hashInfo.Sha1Hash.compare(loader._romData.Sha1) == 0) {
+			if(hashInfo.Crc32 == loader._romData.Info.Hash.Crc32 || hashInfo.Sha1.compare(loader._romData.Info.Hash.Sha1) == 0) {
 				return filePath;
 			}
 		}

@@ -22,7 +22,7 @@ protected:
 	uint16_t RegisterStartAddress() override { return 0x6000; }
 	uint16_t RegisterEndAddress() override { return 0xFFFF; }
 	bool AllowRegisterRead() override { return true; }
-	ConsoleFeatures GetAvailableFeatures() override { return _mapperID == 157 ? (ConsoleFeatures)((int)ConsoleFeatures::BarcodeReader | (int)ConsoleFeatures::DatachBarcodeReader) : ConsoleFeatures::None; }
+	ConsoleFeatures GetAvailableFeatures() override { return _romInfo.MapperID == 157 ? (ConsoleFeatures)((int)ConsoleFeatures::BarcodeReader | (int)ConsoleFeatures::DatachBarcodeReader) : ConsoleFeatures::None; }
 
 	void InitMapper() override
 	{
@@ -33,7 +33,7 @@ protected:
 		_prgPage = 0;
 		_prgBankSelect = 0;
 		
-		if(_mapperID == 157) {
+		if(_romInfo.MapperID == 157) {
 			//"Mapper 157 is used for Datach Joint ROM System boards"
 			_barcodeReader.reset(new DatachBarcodeReader(_console));
 			_mapperControlDevice = _barcodeReader;
@@ -42,7 +42,7 @@ protected:
 		//Only allow reads from 0x6000 to 0x7FFF
 		RemoveRegisterRange(0x8000, 0xFFFF, MemoryOperation::Read);
 
-		if(_mapperID != 16 || GetPRGPageCount() >= 0x20) {
+		if(_romInfo.MapperID != 16 || GetPRGPageCount() >= 0x20) {
 			//"For iNES Mapper 153 (with SRAM), the writeable ports must only be mirrored across $8000-$FFFF."
 			//"Mappers 157 and 159 do not need to support the FCG-1 and -2 and so should only mirror the ports across $8000-$FFFF."
 
@@ -86,14 +86,14 @@ protected:
 		switch(addr & 0x000F) {
 			case 0x00: case 0x01: case 0x02: case 0x03: case 0x04: case 0x05: case 0x06: case 0x07:
 				_chrRegs[addr & 0x07] = value;
-				if(_mapperID == 153 || GetPRGPageCount() >= 0x20) {
+				if(_romInfo.MapperID == 153 || GetPRGPageCount() >= 0x20) {
 					_prgBankSelect = 0;
 					for(int i = 0; i < 8; i++) {
 						_prgBankSelect |= (_chrRegs[i] & 0x01) << 4;
 					}
 					SelectPRGPage(0, _prgPage | _prgBankSelect);
 					SelectPRGPage(1, 0x0F | _prgBankSelect);
-				} else if(!HasChrRam() && _mapperID != 157) {
+				} else if(!HasChrRam() && _romInfo.MapperID != 157) {
 					SelectCHRPage(addr & 0x07, value);
 				}
 				break;

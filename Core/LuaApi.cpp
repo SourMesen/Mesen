@@ -20,6 +20,7 @@
 #include "CheatManager.h"
 #include "KeyManager.h"
 #include "MemoryAccessCounter.h"
+#include "RomData.h"
 
 #define lua_pushintvalue(name, value) lua_pushliteral(lua, #name); lua_pushinteger(lua, (int)value); lua_settable(lua, -3);
 #define lua_pushdoublevalue(name, value) lua_pushliteral(lua, #name); lua_pushnumber(lua, (double)value); lua_settable(lua, -3);
@@ -759,20 +760,19 @@ int LuaApi::GetRomInfo(lua_State *lua)
 	LuaCallHelper l(lua);
 	checkparams();
 
-	MapperInfo mapperInfo = _console->GetMapperInfo();
+	RomInfo romInfo = _console->GetRomInfo();
 	string romPath = _console->GetRomPath();
 
 	lua_newtable(lua);
-	lua_pushstringvalue(name, mapperInfo.RomName);
+	lua_pushstringvalue(name, romInfo.RomName);
 	lua_pushstringvalue(path, romPath);
 
-	HashInfo hashInfo = mapperInfo.Hash;
-	lua_pushintvalue(fileCrc32Hash, hashInfo.Crc32Hash);
-	lua_pushstringvalue(fileSha1Hash, hashInfo.Sha1Hash);
-	lua_pushintvalue(prgChrCrc32Hash, hashInfo.PrgCrc32Hash);
-	lua_pushstringvalue(prgChrMd5Hash, hashInfo.PrgChrMd5Hash);
-	lua_pushintvalue(format, mapperInfo.Format);
-	lua_pushboolvalue(isChrRam, mapperInfo.UsesChrRam);
+	lua_pushintvalue(fileCrc32Hash, romInfo.Hash.Crc32);
+	lua_pushstringvalue(fileSha1Hash, romInfo.Hash.Sha1);
+	lua_pushintvalue(prgChrCrc32Hash, romInfo.Hash.PrgCrc32);
+	lua_pushstringvalue(prgChrMd5Hash, romInfo.Hash.PrgChrMd5);
+	lua_pushintvalue(format, romInfo.Format);
+	lua_pushboolvalue(isChrRam, romInfo.HasChrRam);
 	return 1;
 }
 

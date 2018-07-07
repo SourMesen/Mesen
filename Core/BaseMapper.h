@@ -31,10 +31,6 @@ private:
 	bool _onlyChrRam = false;
 	bool _hasBusConflicts = false;
 	
-	string _romFilename;
-	string _romName;
-	RomFormat _romFormat;
-
 	bool _allowRegisterRead = false;
 	bool _isReadRegisterAddr[0x10000];
 	bool _isWriteRegisterAddr[0x10000];
@@ -47,21 +43,14 @@ private:
 	uint32_t _prgPageNumbers[64];
 	uint32_t _chrPageNumbers[64];
 
-	HashInfo _hashInfo;
-
 	vector<uint8_t> _originalPrgRom;
 	vector<uint8_t> _originalChrRom;
 
 protected:
+	RomInfo _romInfo;
+
 	shared_ptr<BaseControlDevice> _mapperControlDevice;
 	shared_ptr<Console> _console;
-
-	NESHeader _nesHeader;
-	GameInfo _databaseInfo;
-
-	uint16_t _mapperID;
-	uint8_t _subMapperID;
-	GameSystem _gameSystem;
 
 	uint8_t* _prgRom = nullptr;
 	uint8_t* _chrRom = nullptr;
@@ -74,7 +63,6 @@ protected:
 	uint32_t _saveRamSize = 0;
 	uint32_t _workRamSize = 0;
 	uint8_t* _workRam = nullptr;
-	bool _hasBattery = false;
 	bool _hasChrBattery = false;
 	int16_t _vramOpenBusValue = -1;
 
@@ -175,7 +163,7 @@ public:
 	virtual void SetDefaultNametables(uint8_t* nametableA, uint8_t* nametableB);
 
 	shared_ptr<BaseControlDevice> GetMapperControlDevice();
-	MapperInfo GetMapperInfo();
+	RomInfo GetRomInfo();
 
 	__forceinline uint8_t ReadRAM(uint16_t addr) override;
 	uint8_t DebugReadRAM(uint16_t addr);
@@ -229,7 +217,6 @@ public:
 	bool IsWriteRegister(uint16_t addr);
 	bool IsReadRegister(uint16_t addr);
 
-	NESHeader GetNesHeader();
 	void GetRomFileData(vector<uint8_t> &out, bool asIpsFile, uint8_t* header);
 
 	vector<uint8_t> GetPrgChrCopy();

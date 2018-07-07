@@ -23,28 +23,25 @@ RomData iNesLoader::LoadRom(vector<uint8_t>& romFile, NESHeader *preloadedHeader
 		dataSize -= sizeof(NESHeader);
 	}
 
-	romData.Format = RomFormat::iNes;
+	romData.Info.Format = RomFormat::iNes;
 
-	romData.IsNes20Header = (header.GetRomHeaderVersion() == RomHeaderVersion::Nes2_0);
-	romData.MapperID = header.GetMapperID();
-	romData.SubMapperID = header.GetSubMapper();
-	romData.Mirroring = header.GetMirroringType();
-	romData.HasBattery = header.HasBattery();
-	if(header.IsPalRom()) {
-		romData.System = GameSystem::NesPal;
-	} else if(header.IsVsSystem()) {
-		romData.System = GameSystem::VsUniSystem;
-	} else if(header.IsPlaychoice()) {
-		romData.System = GameSystem::Playchoice;
-	}
-	romData.HasTrainer = header.HasTrainer();
+	romData.Info.IsNes20Header = (header.GetRomHeaderVersion() == RomHeaderVersion::Nes2_0);
+	romData.Info.MapperID = header.GetMapperID();
+	romData.Info.SubMapperID = header.GetSubMapper();
+	romData.Info.Mirroring = header.GetMirroringType();
+	romData.Info.HasBattery = header.HasBattery();
+	romData.Info.System = header.GetGameSystem();
+	romData.Info.VsSystemType = header.GetVsSystemType();
+	romData.Info.PpuModel = header.GetVsSystemPpuModel();
+	romData.Info.HasTrainer = header.HasTrainer();
+	romData.Info.NesHeader = header;
+
 	romData.ChrRamSize = header.GetChrRamSize();
 	romData.SaveChrRamSize = header.GetSaveChrRamSize();
 	romData.WorkRamSize = header.GetWorkRamSize();
 	romData.SaveRamSize = header.GetSaveRamSize();
-	romData.NesHeader = header;
 
-	if(romData.HasTrainer) {
+	if(romData.Info.HasTrainer) {
 		//512-byte trainer at $7000-$71FF (stored before PRG data)
 		romData.TrainerData.insert(romData.TrainerData.end(), buffer, buffer + 512);
 		buffer += 512;
@@ -53,13 +50,13 @@ RomData iNesLoader::LoadRom(vector<uint8_t>& romFile, NESHeader *preloadedHeader
 	size_t bytesRead = buffer - romFile.data();
 
 	uint32_t romCrc = CRC32::GetCRC(buffer, romFile.size() - bytesRead);
-	romData.PrgChrCrc32 = romCrc;
-	romData.PrgChrMd5 = GetMd5Sum(buffer, romFile.size() - bytesRead);
+	romData.Info.Hash.PrgChrCrc32 = romCrc;
+	romData.Info.Hash.PrgChrMd5 = GetMd5Sum(buffer, romFile.size() - bytesRead);
 
 	uint32_t prgSize = 0;
 	uint32_t chrSize = 0;
 
-	if(EmulationSettings::CheckFlag(EmulationFlags::DisableGameDatabase) || !GameDatabase::GetDbRomSize(romData.PrgChrCrc32, prgSize, chrSize)) {
+	if(EmulationSettings::CheckFlag(EmulationFlags::DisableGameDatabase) || !GameDatabase::GetDbRomSize(romData.Info.Hash.PrgChrCrc32, prgSize, chrSize)) {
 		//Fallback on header sizes when game is not in DB (or DB is disabled)
 		prgSize = header.GetPrgSize();
 		chrSize = header.GetChrSize();
@@ -75,37 +72,51 @@ RomData iNesLoader::LoadRom(vector<uint8_t>& romFile, NESHeader *preloadedHeader
 	buffer += prgSize;
 	romData.ChrRom.insert(romData.ChrRom.end(), buffer, buffer + chrSize);
 
-	romData.PrgCrc32 = CRC32::GetCRC(romData.PrgRom.data(), romData.PrgRom.size());
+	romData.Info.Hash.PrgCrc32 = CRC32::GetCRC(romData.PrgRom.data(), romData.PrgRom.size());
 
-	Log("PRG CRC32: 0x" + HexUtilities::ToHex(romData.PrgCrc32, true));
-	Log("PRG+CHR CRC32: 0x" + HexUtilities::ToHex(romData.PrgChrCrc32, true));
+	Log("PRG CRC32: 0x" + HexUtilities::ToHex(romData.Info.Hash.PrgCrc32, true));
+	Log("PRG+CHR CRC32: 0x" + HexUtilities::ToHex(romData.Info.Hash.PrgChrCrc32, true));
 
-	if(romData.IsNes20Header) {
+	if(romData.Info.IsNes20Header) {
 		Log("[iNes] NES 2.0 file: Yes");
 	}
-	Log("[iNes] Mapper: " + std::to_string(romData.MapperID) + " Sub:" + std::to_string(romData.SubMapperID));
+	Log("[iNes] Mapper: " + std::to_string(romData.Info.MapperID) + " Sub:" + std::to_string(romData.Info.SubMapperID));
+	
+	if(romData.Info.System == GameSystem::VsSystem) {
+		string type = "Vs-UniSystem";
+		switch(romData.Info.VsSystemType) {
+			case VsSystemType::IceClimberProtection: type = "VS-UniSystem (Ice Climbers)"; break;
+			case VsSystemType::RaidOnBungelingBayProtection: type = "VS-DualSystem (Raid on Bungeling Bay)"; break;
+			case VsSystemType::RbiBaseballProtection: type = "VS-UniSystem (RBI Baseball)"; break;
+			case VsSystemType::SuperXeviousProtection: type = "VS-UniSystem (Super Xevious)"; break;
+			case VsSystemType::TkoBoxingProtection: type = "VS-UniSystem (TKO Boxing)"; break;
+			case VsSystemType::VsDualSystem: type = "VS-DualSystem"; break;
+		}
+		Log("[iNes] System: " + type);
+	}
+
 	Log("[iNes] PRG ROM: " + std::to_string(romData.PrgRom.size()/1024) + " KB");
 	Log("[iNes] CHR ROM: " + std::to_string(romData.ChrRom.size()/1024) + " KB");
-	if(romData.ChrRamSize > 0 || romData.IsNes20Header) {
+	if(romData.ChrRamSize > 0 || romData.Info.IsNes20Header) {
 		Log("[iNes] CHR RAM: " + std::to_string(romData.ChrRamSize / 1024) + " KB");
 	} else if(romData.ChrRom.size() == 0) {
 		Log("[iNes] CHR RAM: 8 KB");
 	}
-	if(romData.WorkRamSize > 0 || romData.IsNes20Header) {
+	if(romData.WorkRamSize > 0 || romData.Info.IsNes20Header) {
 		Log("[iNes] Work RAM: " + std::to_string(romData.WorkRamSize / 1024) + " KB");
 	}
-	if(romData.SaveRamSize > 0 || romData.IsNes20Header) {
+	if(romData.SaveRamSize > 0 || romData.Info.IsNes20Header) {
 		Log("[iNes] Save RAM: " + std::to_string(romData.SaveRamSize / 1024) + " KB");
 	}
 
-	Log("[iNes] Mirroring: " + string(romData.Mirroring == MirroringType::Horizontal ? "Horizontal" : romData.Mirroring == MirroringType::Vertical ? "Vertical" : "Four Screens"));
-	Log("[iNes] Battery: " + string(romData.HasBattery ? "Yes" : "No"));
-	if(romData.HasTrainer) {
+	Log("[iNes] Mirroring: " + string(romData.Info.Mirroring == MirroringType::Horizontal ? "Horizontal" : romData.Info.Mirroring == MirroringType::Vertical ? "Vertical" : "Four Screens"));
+	Log("[iNes] Battery: " + string(romData.Info.HasBattery ? "Yes" : "No"));
+	if(romData.Info.HasTrainer) {
 		Log("[iNes] Trainer: Yes");
 	}
 
 	if(!_checkOnly) {
-		GameDatabase::SetGameInfo(romData.PrgChrCrc32, romData, !EmulationSettings::CheckFlag(EmulationFlags::DisableGameDatabase) && header.GetRomHeaderVersion() != RomHeaderVersion::Nes2_0, preloadedHeader != nullptr);
+		GameDatabase::SetGameInfo(romData.Info.Hash.PrgChrCrc32, romData, !EmulationSettings::CheckFlag(EmulationFlags::DisableGameDatabase) && header.GetRomHeaderVersion() != RomHeaderVersion::Nes2_0, preloadedHeader != nullptr);
 	}
 
 	return romData;

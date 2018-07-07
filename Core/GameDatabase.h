@@ -12,6 +12,8 @@ private:
 
 	static BusConflictType GetBusConflictType(string busConflictSetting);
 	static GameSystem GetGameSystem(string system);
+	static VsSystemType GetVsSystemType(string system);
+	static PpuModel GetPpuModel(string model);
 	static uint8_t GetSubMapper(GameInfo &info);
 
 	static void InitDatabase();

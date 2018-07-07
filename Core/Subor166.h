@@ -35,7 +35,7 @@ protected:
 
 		uint8_t outerBank = ((_regs[0] ^ _regs[1]) & 0x10) << 1;
 		uint8_t innerBank = _regs[2] ^ _regs[3];
-		bool altMode = _mapperID == 167;
+		bool altMode = _romInfo.MapperID == 167;
 
 		if(_regs[1] & 0x08) {
 			//32 KiB NROM

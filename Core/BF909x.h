@@ -13,7 +13,7 @@ protected:
 
 	void InitMapper() override 
 	{
-		if(_subMapperID == 1) {
+		if(_romInfo.SubMapperID == 1) {
 			_bf9097Mode = true;
 		}
 

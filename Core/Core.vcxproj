@@ -546,6 +546,7 @@
     <ClInclude Include="MMC3_224.h" />
     <ClInclude Include="MovieRecorder.h" />
     <ClInclude Include="AsciiTurboFile.h" />
+    <ClInclude Include="NESHeader.h" />
     <ClInclude Include="NotificationManager.h" />
     <ClInclude Include="OpenBusHandler.h" />
     <ClInclude Include="RawVideoFilter.h" />
@@ -971,6 +972,7 @@
     <ClCompile Include="LuaCallHelper.cpp" />
     <ClCompile Include="LuaScriptingContext.cpp" />
     <ClCompile Include="MovieRecorder.cpp" />
+    <ClCompile Include="NESHeader.cpp" />
     <ClCompile Include="NotificationManager.cpp" />
     <ClCompile Include="NsfLoader.cpp" />
     <ClCompile Include="NsfPpu.cpp" />

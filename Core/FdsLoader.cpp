@@ -136,15 +136,15 @@ RomData FdsLoader::LoadRom(vector<uint8_t>& romFile, string filename)
 {
 	RomData romData;
 
-	romData.Sha1 = SHA1::GetHash(romFile);
-	romData.Crc32 = CRC32::GetCRC(romFile.data(), romFile.size());
-	romData.PrgCrc32 = CRC32::GetCRC(romFile.data(), romFile.size());
+	romData.Info.Hash.Sha1 = SHA1::GetHash(romFile);
+	romData.Info.Hash.Crc32 = CRC32::GetCRC(romFile.data(), romFile.size());
+	romData.Info.Hash.PrgCrc32 = CRC32::GetCRC(romFile.data(), romFile.size());
 
-	romData.Format = RomFormat::Fds;
-	romData.MapperID = MapperFactory::FdsMapperID;
-	romData.Mirroring = MirroringType::Vertical;
+	romData.Info.Format = RomFormat::Fds;
+	romData.Info.MapperID = MapperFactory::FdsMapperID;
+	romData.Info.Mirroring = MirroringType::Vertical;
 	romData.PrgRom = LoadBios();
-	romData.System = GameSystem::FDS;
+	romData.Info.System = GameSystem::FDS;
 
 	if(romData.PrgRom.size() != 0x2000) {
 		romData.Error = true;

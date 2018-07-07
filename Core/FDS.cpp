@@ -23,7 +23,7 @@ void FDS::InitMapper()
 void FDS::InitMapper(RomData &romData)
 {
 	_audio.reset(new FdsAudio(_console));
-	_romFilepath = romData.Filename;
+	_romFilepath = romData.Info.Filename;
 	_fdsDiskSides = romData.FdsDiskData;
 	_fdsDiskHeaders = romData.FdsDiskHeaders;
 	_fdsRawData = romData.RawData;

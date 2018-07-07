@@ -162,8 +162,8 @@ bool Console::LoadMatchingRom(string romName, HashInfo hashInfo)
 	if(_initialized) {
 		string currentRomFilepath = GetRomPath().GetFilePath();
 		if(!currentRomFilepath.empty()) {
-			HashInfo gameHashInfo = GetMapperInfo().Hash;
-			if(gameHashInfo.Crc32Hash == hashInfo.Crc32Hash || gameHashInfo.Sha1Hash.compare(hashInfo.Sha1Hash) == 0 || gameHashInfo.PrgChrMd5Hash.compare(hashInfo.PrgChrMd5Hash) == 0) {
+			HashInfo gameHashInfo = GetRomInfo().Hash;
+			if(gameHashInfo.Crc32 == hashInfo.Crc32 || gameHashInfo.Sha1.compare(hashInfo.Sha1) == 0 || gameHashInfo.PrgChrMd5.compare(hashInfo.PrgChrMd5) == 0) {
 				//Current game matches, power cycle game and return
 				PowerCycle();
 				return true;
@@ -183,8 +183,8 @@ string Console::FindMatchingRom(string romName, HashInfo hashInfo)
 	if(_initialized) {
 		VirtualFile currentRom = GetRomPath();
 		if(currentRom.IsValid() && !GetPatchFile().IsValid()) {
-			HashInfo gameHashInfo = GetMapperInfo().Hash;
-			if(gameHashInfo.Crc32Hash == hashInfo.Crc32Hash || gameHashInfo.Sha1Hash.compare(hashInfo.Sha1Hash) == 0 || gameHashInfo.PrgChrMd5Hash.compare(hashInfo.PrgChrMd5Hash) == 0) {
+			HashInfo gameHashInfo = GetRomInfo().Hash;
+			if(gameHashInfo.Crc32 == hashInfo.Crc32 || gameHashInfo.Sha1.compare(hashInfo.Sha1) == 0 || gameHashInfo.PrgChrMd5.compare(hashInfo.PrgChrMd5) == 0) {
 				//Current game matches
 				return currentRom;
 			}
@@ -258,7 +258,7 @@ bool Console::Initialize(VirtualFile &romFile, VirtualFile &patchFile)
 			if(_mapper) {
 				if(isDifferentGame) {
 					//Save current game state before loading another one
-					_saveStateManager->SaveRecentGame(GetMapperInfo().RomName, _romFilepath, _patchFilename);
+					_saveStateManager->SaveRecentGame(GetRomInfo().RomName, _romFilepath, _patchFilename);
 				}
 
 				//Send notification only if a game was already running and we successfully loaded the new one
@@ -285,22 +285,20 @@ bool Console::Initialize(VirtualFile &romFile, VirtualFile &patchFile)
 				_slave.reset();
 			}
 
-			if(!_master && _mapper->GetMapperInfo().System == GameSystem::VsDualSystem) {
+			RomInfo romInfo = _mapper->GetRomInfo();
+			if(!_master && romInfo.VsSystemType == VsSystemType::VsDualSystem) {
 				_slave.reset(new Console(shared_from_this()));
 				_slave->Init();
 				_slave->Initialize(romFile, patchFile);
 			}
 
-			GameSystem system = _mapper->GetMapperInfo().System;
-
-			switch(system) {
+			switch(romInfo.System) {
 				case GameSystem::FDS:
 					EmulationSettings::SetPpuModel(PpuModel::Ppu2C02);
 					_systemActionManager.reset(new FdsSystemActionManager(shared_from_this(), _mapper));
 					break;
 				
-				case GameSystem::VsUniSystem:
-				case GameSystem::VsDualSystem:
+				case GameSystem::VsSystem:
 					_systemActionManager.reset(new VsSystemActionManager(shared_from_this()));
 					break;
 				
@@ -318,7 +316,7 @@ bool Console::Initialize(VirtualFile &romFile, VirtualFile &patchFile)
 				pollCounter = _controlManager->GetPollCounter();
 			}
 
-			if(system == GameSystem::VsUniSystem || system == GameSystem::VsDualSystem) {
+			if(romInfo.System == GameSystem::VsSystem) {
 				_controlManager.reset(new VsControlManager(shared_from_this(), _systemActionManager, _mapper->GetMapperControlDevice()));
 			} else {
 				_controlManager.reset(new ControlManager(shared_from_this(), _systemActionManager, _mapper->GetMapperControlDevice()));
@@ -380,7 +378,7 @@ bool Console::Initialize(VirtualFile &romFile, VirtualFile &patchFile)
 			if(IsMaster()) {
 				string modelName = _model == NesModel::PAL ? "PAL" : (_model == NesModel::Dendy ? "Dendy" : "NTSC");
 				string messageTitle = MessageManager::Localize("GameLoaded") + " (" + modelName + ")";
-				MessageManager::DisplayMessage(messageTitle, FolderUtilities::GetFilename(GetMapperInfo().RomName, false));
+				MessageManager::DisplayMessage(messageTitle, FolderUtilities::GetFilename(GetRomInfo().RomName, false));
 				if(EmulationSettings::GetOverclockRate() != 100) {
 					MessageManager::DisplayMessage("ClockRate", std::to_string(EmulationSettings::GetOverclockRate()) + "%");
 				}
@@ -396,7 +394,7 @@ bool Console::Initialize(VirtualFile &romFile, VirtualFile &patchFile)
 	}
 
 	//Reset battery source to current game if new game failed to load
-	BatteryManager::Initialize(FolderUtilities::GetFilename(GetMapperInfo().RomName, false));
+	BatteryManager::Initialize(FolderUtilities::GetFilename(GetRomInfo().RomName, false));
 	if(_mapper) {
 		_videoDecoder->StartThread();
 	}
@@ -491,9 +489,9 @@ VirtualFile Console::GetPatchFile()
 	return (VirtualFile)_patchFilename;
 }
 
-MapperInfo Console::GetMapperInfo()
+RomInfo Console::GetRomInfo()
 {
-	return _mapper ? _mapper->GetMapperInfo() : (MapperInfo {});
+	return _mapper ? _mapper->GetRomInfo() : (RomInfo {});
 }
 
 uint32_t Console::GetFrameCount()
@@ -799,7 +797,7 @@ void Console::Run()
 	_notificationManager->SendNotification(ConsoleNotificationType::BeforeEmulationStop);
 
 	if(!crashed) {
-		_saveStateManager->SaveRecentGame(GetMapperInfo().RomName, _romFilepath, _patchFilename);
+		_saveStateManager->SaveRecentGame(GetRomInfo().RomName, _romFilepath, _patchFilename);
 	}
 
 	_videoDecoder->StopThread();
@@ -865,7 +863,7 @@ void Console::UpdateNesModel(bool sendNotification)
 
 	NesModel model = EmulationSettings::GetNesModel();
 	if(model == NesModel::Auto) {
-		switch(_mapper->GetMapperInfo().System) {
+		switch(_mapper->GetRomInfo().System) {
 			case GameSystem::NesPal: model = NesModel::PAL; break;
 			case GameSystem::Dendy: model = NesModel::Dendy; break;
 			default: model = NesModel::NTSC; break;

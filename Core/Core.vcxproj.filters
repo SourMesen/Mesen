@@ -1456,6 +1456,9 @@
     <ClInclude Include="NotificationManager.h">
       <Filter>Misc</Filter>
     </ClInclude>
+    <ClInclude Include="NESHeader.h">
+      <Filter>Nes\RomLoader</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -1738,6 +1741,9 @@
       <Filter>Nes\RomLoader</Filter>
     </ClCompile>
     <ClCompile Include="FdsLoader.cpp">
+      <Filter>Nes\RomLoader</Filter>
+    </ClCompile>
+    <ClCompile Include="NESHeader.cpp">
       <Filter>Nes\RomLoader</Filter>
     </ClCompile>
   </ItemGroup>

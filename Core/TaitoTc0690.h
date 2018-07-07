@@ -18,7 +18,7 @@ protected:
 
 		//This cart appears to behave differently (maybe not an identical mapper?)
 		//IRQ seems to be triggered at a different timing (approx 100 cpu cycles before regular mapper 48 timings)
-		_isFlintstones = _subMapperID == 255;
+		_isFlintstones = _romInfo.SubMapperID == 255;
 	}
 
 	virtual void StreamState(bool saving) override

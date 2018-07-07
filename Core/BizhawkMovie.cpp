@@ -106,7 +106,7 @@ bool BizhawkMovie::InitializeGameData(ZipReader &reader)
 		if(line.compare(0, 4, "SHA1", 4) == 0) {
 			if(line.size() >= 45) {
 				HashInfo hashInfo;
-				hashInfo.Sha1Hash = line.substr(5, 40);
+				hashInfo.Sha1 = line.substr(5, 40);
 				if(_console->LoadMatchingRom("", hashInfo)) {
 					return true;
 				}
@@ -114,8 +114,8 @@ bool BizhawkMovie::InitializeGameData(ZipReader &reader)
 		} else if(line.compare(0, 3, "MD5", 3) == 0) {
 			if(line.size() >= 36) {
 				HashInfo hashInfo;
-				hashInfo.PrgChrMd5Hash = line.substr(4, 32);
-				std::transform(hashInfo.PrgChrMd5Hash.begin(), hashInfo.PrgChrMd5Hash.end(), hashInfo.PrgChrMd5Hash.begin(), ::toupper);
+				hashInfo.PrgChrMd5 = line.substr(4, 32);
+				std::transform(hashInfo.PrgChrMd5.begin(), hashInfo.PrgChrMd5.end(), hashInfo.PrgChrMd5.begin(), ::toupper);
 				if(_console->LoadMatchingRom("", hashInfo)) {
 					return true;
 				}

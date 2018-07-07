@@ -10,6 +10,7 @@
 #include "VirtualFile.h"
 #include "SaveStateManager.h"
 #include "NotificationManager.h"
+#include "RomData.h"
 
 MovieRecorder::MovieRecorder(shared_ptr<Console> console)
 {
@@ -77,7 +78,7 @@ void MovieRecorder::GetGameSettings(stringstream &out)
 	if(patchFile.IsValid()) {
 		WriteString(out, MovieKeys::PatchFile, patchFile.GetFileName());
 		WriteString(out, MovieKeys::PatchFileSha1, patchFile.GetSha1Hash());
-		WriteString(out, MovieKeys::PatchedRomSha1, _console->GetMapperInfo().Hash.Sha1Hash);
+		WriteString(out, MovieKeys::PatchedRomSha1, _console->GetRomInfo().Hash.Sha1);
 	}
 
 	switch(model) {

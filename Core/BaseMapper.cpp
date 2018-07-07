@@ -347,7 +347,7 @@ uint8_t BaseMapper::GetPowerOnByte(uint8_t defaultValue)
 		
 bool BaseMapper::HasBattery()
 {
-	return _hasBattery;
+	return _romInfo.HasBattery;
 }
 
 void BaseMapper::LoadBattery()
@@ -384,7 +384,7 @@ uint32_t BaseMapper::GetCHRPageCount()
 
 string BaseMapper::GetBatteryFilename()
 {
-	return FolderUtilities::CombinePath(FolderUtilities::GetSaveFolder(), FolderUtilities::GetFilename(_romName, false) + ".sav");
+	return FolderUtilities::CombinePath(FolderUtilities::GetSaveFolder(), FolderUtilities::GetFilename(_romInfo.RomName, false) + ".sav");
 }
 		
 void BaseMapper::RestoreOriginalPrgRam()
@@ -493,17 +493,10 @@ void BaseMapper::StreamState(bool saving)
 
 void BaseMapper::Initialize(RomData &romData)
 {
-	_mapperID = romData.MapperID;
-	_subMapperID = romData.SubMapperID;
+	_romInfo = romData.Info;
 
-	_databaseInfo = romData.DatabaseInfo;
-
-	_romName = romData.RomName;
-	_romFilename = romData.Filename;
 	_batteryFilename = GetBatteryFilename();
 	
-	_hasBattery = romData.HasBattery;
-
 	if(romData.SaveRamSize == -1 || ForceSaveRamSize()) {
 		_saveRamSize = GetSaveRamSize();
 	} else {
@@ -522,10 +515,7 @@ void BaseMapper::Initialize(RomData &romData)
 	memset(_isWriteRegisterAddr, 0, sizeof(_isWriteRegisterAddr));
 	AddRegisterRange(RegisterStartAddress(), RegisterEndAddress(), MemoryOperation::Any);
 
-	_nesHeader = romData.NesHeader;
-	_romFormat = romData.Format;
-
-	_mirroringType = romData.Mirroring;
+	_mirroringType = romData.Info.Mirroring;
 
 	_prgSize = (uint32_t)romData.PrgRom.size();
 	_chrRomSize = (uint32_t)romData.ChrRom.size();
@@ -541,13 +531,7 @@ void BaseMapper::Initialize(RomData &romData)
 
 	_hasChrBattery = romData.SaveChrRamSize > 0 || ForceChrBattery();
 
-	_gameSystem = romData.System;
-	_hashInfo.Crc32Hash = romData.Crc32;
-	_hashInfo.PrgCrc32Hash = romData.PrgCrc32;
-	_hashInfo.PrgChrCrc32Hash = romData.PrgChrCrc32;
-	_hashInfo.Sha1Hash = romData.Sha1;
-	_hashInfo.PrgChrMd5Hash = romData.PrgChrMd5;
-	switch(romData.BusConflicts) {
+	switch(romData.Info.BusConflicts) {
 		case BusConflictType::Default: _hasBusConflicts = HasBusConflicts(); break;
 		case BusConflictType::Yes: _hasBusConflicts = true; break;
 		case BusConflictType::No: _hasBusConflicts = false; break;
@@ -590,7 +574,7 @@ void BaseMapper::Initialize(RomData &romData)
 	//Load battery data if present
 	LoadBattery();
 
-	if(romData.HasTrainer) {
+	if(romData.Info.HasTrainer) {
 		if(_workRamSize >= 0x2000) {
 			memcpy(_workRam + 0x1000, romData.TrainerData.data(), 512);
 		} else if(_saveRamSize >= 0x2000) {
@@ -604,6 +588,8 @@ void BaseMapper::Initialize(RomData &romData)
 	InitMapper(romData);
 
 	ApplyCheats();
+
+	_romInfo.HasChrRam = HasChrRam();
 }
 
 BaseMapper::~BaseMapper()
@@ -643,7 +629,7 @@ void BaseMapper::ApplyCheats()
 
 void BaseMapper::GetMemoryRanges(MemoryRanges &ranges)
 {
-	if(_gameSystem == GameSystem::VsUniSystem || _gameSystem == GameSystem::VsDualSystem) {
+	if(_romInfo.System == GameSystem::VsSystem) {
 		ranges.AddHandler(MemoryOperation::Read, 0x6000, 0xFFFF);
 		ranges.AddHandler(MemoryOperation::Write, 0x6000, 0xFFFF);
 	} else {
@@ -730,17 +716,9 @@ shared_ptr<BaseControlDevice> BaseMapper::GetMapperControlDevice()
 	return _mapperControlDevice;
 }
 
-MapperInfo BaseMapper::GetMapperInfo()
+RomInfo BaseMapper::GetRomInfo()
 {
-	return {
-		_romName,
-		_romFormat,
-		_gameSystem,
-		_mapperID,
-		_subMapperID,
-		_hashInfo,
-		HasChrRam()
-	};
+	return _romInfo;
 }
 
 MirroringType BaseMapper::GetMirroringType()
@@ -859,7 +837,7 @@ void BaseMapper::WriteVRAM(uint16_t addr, uint8_t value)
 
 bool BaseMapper::IsNes20()
 {
-	return _nesHeader.GetRomHeaderVersion() == RomHeaderVersion::Nes2_0;
+	return _romInfo.NesHeader.GetRomHeaderVersion() == RomHeaderVersion::Nes2_0;
 }
 
 //Debugger Helper Functions
@@ -1131,11 +1109,6 @@ CartridgeState BaseMapper::GetState()
 	return state;
 }
 
-NESHeader BaseMapper::GetNesHeader()
-{
-	return _nesHeader;
-}
-
 void BaseMapper::GetRomFileData(vector<uint8_t> &out, bool asIpsFile, uint8_t* header)
 {
 	if(header) {
@@ -1147,7 +1120,7 @@ void BaseMapper::GetRomFileData(vector<uint8_t> &out, bool asIpsFile, uint8_t* h
 		out.insert(out.end(), originalFile.begin()+sizeof(NESHeader), originalFile.end());
 	} else {
 		vector<uint8_t> newFile;
-		newFile.insert(newFile.end(), (uint8_t*)&_nesHeader, ((uint8_t*)&_nesHeader) + sizeof(NESHeader));
+		newFile.insert(newFile.end(), (uint8_t*)&_romInfo.NesHeader, ((uint8_t*)&_romInfo.NesHeader) + sizeof(NESHeader));
 		newFile.insert(newFile.end(), _prgRom, _prgRom + _prgSize);
 		if(HasChrRom()) {
 			newFile.insert(newFile.end(), _chrRom, _chrRom + _chrRomSize);

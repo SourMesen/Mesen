@@ -17,7 +17,7 @@ class ColorDreams : public BaseMapper
 
 		void WriteRegister(uint16_t addr, uint8_t value) override
 		{
-			if(_mapperID == 144) {
+			if(_romInfo.MapperID == 144) {
 				//"This addition means that only the ROM's least significant bit always wins bus conflicts."
 				value |= (ReadRAM(addr) & 0x01);
 			}

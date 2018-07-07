@@ -15,12 +15,10 @@ protected:
 
 	virtual void InitMapper() override
 	{
-		//Force VS system if mapper 99 (since we assume VsControlManager exists below)
-		if(_prgSize >= 0x10000) {
-			//Assume DualSystem if PRG ROM is 64kb or larger
-			_gameSystem = GameSystem::VsDualSystem;
-		} else {
-			_gameSystem = GameSystem::VsUniSystem;
+		if(!IsNes20()) {
+			//Force VS system if mapper 99
+			_romInfo.System = GameSystem::VsSystem;
+			_romInfo.VsSystemType = VsSystemType::Default;
 		}
 
 		//"Note: unlike all other mappers, an undersize mapper 99 image implies open bus instead of mirroring."
@@ -50,7 +48,7 @@ protected:
 	void ProcessCpuClock() override
 	{
 		VsControlManager* controlManager = dynamic_cast<VsControlManager*>(_console->GetControlManager());
-		if(_prgChrSelectBit != controlManager->GetPrgChrSelectBit()) {
+		if(controlManager && _prgChrSelectBit != controlManager->GetPrgChrSelectBit()) {
 			_prgChrSelectBit = controlManager->GetPrgChrSelectBit();
 
 			if(_prgSize > 0x8000 && _prgSize < 0x10000) {

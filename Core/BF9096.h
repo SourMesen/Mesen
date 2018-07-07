@@ -28,7 +28,7 @@ protected:
 		if(addr >= 0xC000) {
 			_prgPage = value & 0x03;
 		} else if(addr < 0xC000) {
-			if(_subMapperID == 1) {
+			if(_romInfo.SubMapperID == 1) {
 				//"232: 1 Aladdin Deck Enhancer"
 				//"Aladdin Deck Enhancer variation.Swap the bits of the outer bank number."
 				//But this seems to match the Pegasus 4-in-1 behavior?  Wiki wrong?

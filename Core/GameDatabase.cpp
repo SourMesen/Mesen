@@ -25,24 +25,25 @@ void GameDatabase::LoadGameDb(vector<string> data)
 	for(string &row : data) {
 		vector<string> values = StringUtilities::Split(row, ',');
 		if(values.size() >= 16) {
-			GameInfo gameInfo {
-				(uint32_t)std::stoll(values[0], nullptr, 16),
-				values[1],
-				values[2],
-				values[3],
-				values[4],
-				(uint16_t)ToInt<uint32_t>(values[5]),
-				ToInt<uint32_t>(values[6]),
-				ToInt<uint32_t>(values[7]),
-				ToInt<uint32_t>(values[8]),
-				ToInt<uint32_t>(values[9]),
-				ToInt<uint32_t>(values[10]),
-				ToInt<uint32_t>(values[11]) == 0 ? false : true,
-				values[12],
-				values[13],
-				values[14],
-				values[15]
-			};
+			GameInfo gameInfo;
+			gameInfo.Crc = (uint32_t)std::stoll(values[0], nullptr, 16);
+			gameInfo.System = values[1];
+			gameInfo.Board = values[2];
+			gameInfo.Pcb = values[3];
+			gameInfo.Chip = values[4];
+			gameInfo.MapperID = (uint16_t)ToInt<uint32_t>(values[5]);
+			gameInfo.PrgRomSize = ToInt<uint32_t>(values[6]);
+			gameInfo.ChrRomSize = ToInt<uint32_t>(values[7]);
+			gameInfo.ChrRamSize = ToInt<uint32_t>(values[8]);
+			gameInfo.WorkRamSize = ToInt<uint32_t>(values[9]);
+			gameInfo.SaveRamSize = ToInt<uint32_t>(values[10]);
+			gameInfo.HasBattery = ToInt<uint32_t>(values[11]) == 0 ? false : true;
+			gameInfo.Mirroring = values[12];
+			gameInfo.InputType = values[13];
+			gameInfo.BusConflicts = values[14];
+			gameInfo.SubmapperID = values[15];
+			gameInfo.VsSystemType = values[16];
+			gameInfo.PpuModel = values[17];
 
 			if(gameInfo.MapperID == 65000) {
 				gameInfo.MapperID = UnifLoader::GetMapperID(gameInfo.Board);
@@ -99,10 +100,8 @@ GameSystem GameDatabase::GetGameSystem(string system)
 		return GameSystem::NesPal;
 	} else if(system.compare("Famicom") == 0) {
 		return GameSystem::Famicom;
-	} else if(system.compare("VsUni") == 0) {
-		return GameSystem::VsUniSystem;
-	} else if(system.compare("VsDual") == 0) {
-		return GameSystem::VsDualSystem;
+	} else if(system.compare("VsSystem") == 0) {
+		return GameSystem::VsSystem;
 	} else if(system.compare("Dendy") == 0) {
 		return GameSystem::Dendy;
 	} else if(system.compare("Playchoice") == 0) {
@@ -110,6 +109,52 @@ GameSystem GameDatabase::GetGameSystem(string system)
 	}
 	
 	return GameSystem::NesNtsc;
+}
+
+VsSystemType GameDatabase::GetVsSystemType(string system)
+{
+	if(system.compare("IceClimber") == 0) {
+		return VsSystemType::IceClimberProtection;
+	} else if(system.compare("RaidOnBungelingBay") == 0) {
+		return VsSystemType::RaidOnBungelingBayProtection;
+	} else if(system.compare("RbiBaseball") == 0) {
+		return VsSystemType::RbiBaseballProtection;
+	} else if(system.compare("SuperXevious") == 0) {
+		return VsSystemType::SuperXeviousProtection;
+	} else if(system.compare("TkoBoxing") == 0) {
+		return VsSystemType::TkoBoxingProtection;
+	} else if(system.compare("VsDualSystem") == 0) {
+		return VsSystemType::VsDualSystem;
+	}
+
+	return VsSystemType::Default;
+}
+
+PpuModel GameDatabase::GetPpuModel(string model)
+{
+	if(model.compare("RP2C04-0001") == 0) {
+		return PpuModel::Ppu2C04A;
+	} else if(model.compare("RP2C04-0002") == 0) {
+		return PpuModel::Ppu2C04B;
+	} else if(model.compare("RP2C04-0003") == 0) {
+		return PpuModel::Ppu2C04C;
+	} else if(model.compare("RP2C04-0004") == 0) {
+		return PpuModel::Ppu2C04D;
+	} else if(model.compare("RC2C05-01") == 0) {
+		return PpuModel::Ppu2C05A;
+	} else if(model.compare("RC2C05-02") == 0) {
+		return PpuModel::Ppu2C05B;
+	} else if(model.compare("RC2C05-03") == 0) {
+		return PpuModel::Ppu2C05C;
+	} else if(model.compare("RC2C05-04") == 0) {
+		return PpuModel::Ppu2C05D;
+	} else if(model.compare("RC2C05-05") == 0) {
+		return PpuModel::Ppu2C05E;
+	} else if(model.compare("RP2C03B") == 0 || model.compare("RP2C03G") == 0) {
+		return PpuModel::Ppu2C03;
+	}
+
+	return PpuModel::Ppu2C02;
 }
 
 void GameDatabase::InitializeInputDevices(uint32_t romCrc)
@@ -136,7 +181,7 @@ void GameDatabase::InitializeInputDevices(string inputType, GameSystem system, b
 		}
 	};
 
-	bool isVsSystem = system == GameSystem::VsUniSystem;
+	bool isVsSystem = system == GameSystem::VsSystem;
 	bool isFamicom = (system == GameSystem::Famicom || system == GameSystem::FDS || system == GameSystem::Dendy);
 
 	if(inputType.compare("Zapper") == 0) {
@@ -377,7 +422,7 @@ bool GameDatabase::GetiNesHeader(uint32_t romCrc, NESHeader &nesHeader)
 		GameSystem system = GetGameSystem(info.System);
 		if(system == GameSystem::Playchoice) {
 			nesHeader.Byte7 |= 0x02;
-		} else if(system == GameSystem::VsUniSystem) {
+		} else if(system == GameSystem::VsSystem) {
 			nesHeader.Byte7 |= 0x01;
 		}
 		
@@ -420,7 +465,7 @@ void GameDatabase::SetGameInfo(uint32_t romCrc, RomData &romData, bool updateRom
 		info = result->second;
 		if(!forHeaderlessRom && info.Board == "UNK") {
 			//Boards marked as UNK should only be used for headerless roms (since their data is unverified)
-			romData.DatabaseInfo = {};
+			romData.Info.DatabaseInfo = {};
 			return;
 		}
 
@@ -433,6 +478,19 @@ void GameDatabase::SetGameInfo(uint32_t romCrc, RomData &romData, bool updateRom
 		}
 
 		MessageManager::Log("[DB] System : " + info.System);
+
+		if(GetGameSystem(info.System) == GameSystem::VsSystem) {
+			string type = "VS-UniSystem";
+			switch(GetVsSystemType(info.VsSystemType)) {
+				case VsSystemType::IceClimberProtection: type = "VS-UniSystem (Ice Climbers)"; break;
+				case VsSystemType::RaidOnBungelingBayProtection: type = "VS-DualSystem (Raid on Bungeling Bay)"; break;
+				case VsSystemType::RbiBaseballProtection: type = "VS-UniSystem (RBI Baseball)"; break;
+				case VsSystemType::SuperXeviousProtection: type = "VS-UniSystem (Super Xevious)"; break;
+				case VsSystemType::TkoBoxingProtection: type = "VS-UniSystem (TKO Boxing)"; break;
+				case VsSystemType::VsDualSystem: type = "VS-DualSystem"; break;
+			}
+			MessageManager::Log("[DB] VS System Type: " + type);
+		}
 		if(!info.Board.empty()) {
 			MessageManager::Log("[DB] Board: " + info.Board);
 		}
@@ -475,28 +533,32 @@ void GameDatabase::SetGameInfo(uint32_t romCrc, RomData &romData, bool updateRom
 		}
 
 		if(EmulationSettings::CheckFlag(EmulationFlags::AutoConfigureInput)) {
-			InitializeInputDevices(info.InputType, romData.System);
+			InitializeInputDevices(info.InputType, romData.Info.System);
 		}
 #ifdef _DEBUG
-		MessageManager::DisplayMessage("DB", "Mapper: " + std::to_string(romData.MapperID) + "  Sub: " + std::to_string(romData.SubMapperID) + "  System: " + info.System);
+		MessageManager::DisplayMessage("DB", "Mapper: " + std::to_string(romData.Info.MapperID) + "  Sub: " + std::to_string(romData.Info.SubMapperID) + "  System: " + info.System);
 #endif
 	} else {
 		MessageManager::Log("[DB] Game not found in database");
 	}
 
 #ifdef LIBRETRO
-	SetVsSystemDefaults(romData.PrgCrc32);
+	SetVsSystemDefaults(romData.Info.Hash.PrgCrc32);
 #endif
 
-	romData.DatabaseInfo = info;
+	romData.Info.DatabaseInfo = info;
 }
 
 void GameDatabase::UpdateRomData(GameInfo &info, RomData &romData)
 {
-	romData.MapperID = info.MapperID;
-	romData.System = GetGameSystem(info.System);
-	romData.SubMapperID = GetSubMapper(info);
-	romData.BusConflicts = GetBusConflictType(info.BusConflicts);
+	romData.Info.MapperID = info.MapperID;
+	romData.Info.System = GetGameSystem(info.System);
+	if(romData.Info.System == GameSystem::VsSystem) {
+		romData.Info.VsSystemType = GetVsSystemType(info.VsSystemType);
+		romData.Info.PpuModel = GetPpuModel(info.PpuModel);
+	}
+	romData.Info.SubMapperID = GetSubMapper(info);
+	romData.Info.BusConflicts = GetBusConflictType(info.BusConflicts);
 	if(info.ChrRamSize > 0) {
 		romData.ChrRamSize = info.ChrRamSize * 1024;
 	}
@@ -506,14 +568,14 @@ void GameDatabase::UpdateRomData(GameInfo &info, RomData &romData)
 	if(info.SaveRamSize > 0) {
 		romData.SaveRamSize = info.SaveRamSize * 1024;
 	}
-	romData.HasBattery |= info.HasBattery;
+	romData.Info.HasBattery |= info.HasBattery;
 
 	if(!info.Mirroring.empty()) {
 		switch(info.Mirroring[0]) {
-			case 'h': romData.Mirroring = MirroringType::Horizontal; break;
-			case 'v': romData.Mirroring = MirroringType::Vertical; break;
-			case '4': romData.Mirroring = MirroringType::FourScreens; break;
-			case 'a': romData.Mirroring = MirroringType::ScreenAOnly; break;
+			case 'h': romData.Info.Mirroring = MirroringType::Horizontal; break;
+			case 'v': romData.Info.Mirroring = MirroringType::Vertical; break;
+			case '4': romData.Info.Mirroring = MirroringType::FourScreens; break;
+			case 'a': romData.Info.Mirroring = MirroringType::ScreenAOnly; break;
 		}
 	}
 }
@@ -526,44 +588,11 @@ void GameDatabase::SetVsSystemDefaults(uint32_t prgCrc32)
 	uint8_t defaultDip = 0;
 
 	switch(prgCrc32) {
-		case 0xEB2DBA63: case 0x98CFE016:
-			//TKOBoxing
-			model = PpuModel::Ppu2C04C;
-			break;
-
-		case 0x135ADF7C:
-			//RBIBaseball
-			inputType = VsInputType::SwapControllers;
-			model = PpuModel::Ppu2C04A;
-			break;
-
-		case 0xED588F00:
-			//"DuckHunt", use defaults
-			model = PpuModel::Ppu2C03;
-			break;
-
-		case 0x16D3F469:
-			//NinjaJajamaruKun
-			inputType = VsInputType::SwapControllers;
-			model = PpuModel::Ppu2C05A;
-			break;
-
 		case 0x8850924B:
 			//Tetris
-			model = PpuModel::Ppu2C03;
-			inputType = VsInputType::SwapControllers;
-			defaultDip = 32;
+			defaultDip = 32; //????
 			break;
 
-		case 0x8C0C2DF5:
-			//TopGun
-			model = PpuModel::Ppu2C05D;
-			break;
-
-		case 0x70901B25:
-			//Slalom
-			model = PpuModel::Ppu2C04B;
-			break;
 
 		case 0xCF36261E:
 			//SuperSkyKid
@@ -573,40 +602,7 @@ void GameDatabase::SetVsSystemDefaults(uint32_t prgCrc32)
 
 		case 0xE1AA8214:
 			//StarLuster
-			model = PpuModel::Ppu2C04A;
-			defaultDip = 32;
-			break;
-
-		case 0xD5D7EAC4:
-			//DrMario
-			inputType = VsInputType::SwapControllers;
-			model = PpuModel::Ppu2C04C;
-			break;
-
-		case 0xFFBEF374:
-			//Castlevania
-			model = PpuModel::Ppu2C04B;
-			break;
-
-		case 0xE2C0A2BE:
-			//Platoon
-			model = PpuModel::Ppu2C04A;
-			break;
-
-		case 0x29155E0C:
-			//ExciteBike
-			model = PpuModel::Ppu2C04D;
-			break;
-
-		case 0xCBE85490:
-			//ExciteBikeB
-			model = PpuModel::Ppu2C04C;
-			break;
-
-		case 0x07138C06:
-			//Clu Clu Land
-			inputType = VsInputType::SwapControllers;
-			model = PpuModel::Ppu2C04D;
+			defaultDip = 32; //????
 			break;
 
 		case 0x43A357EF:
@@ -621,20 +617,9 @@ void GameDatabase::SetVsSystemDefaults(uint32_t prgCrc32)
 			model = PpuModel::Ppu2C04D;
 			break;
 
-		case 0x737DD1BF: case 0x4BF3972D: case 0x8B60CC58: case 0x8192C804:
+		case 0x737DD1BF: case 0x4BF3972D:
 			//SuperMarioBros
 			model = PpuModel::Ppu2C04D;
-			break;
-
-		case 0xE528F651:
-			//Pinball
-			inputType = VsInputType::SwapAB;
-			model = PpuModel::Ppu2C03;
-			break;
-
-		case 0xEC461DB9:
-			//PinballB
-			model = PpuModel::Ppu2C04A;
 			break;
 
 		case 0xAE8063EF:
@@ -642,42 +627,9 @@ void GameDatabase::SetVsSystemDefaults(uint32_t prgCrc32)
 			model = PpuModel::Ppu2C03;
 			break;
 
-		case 0x0B65A917: case 0x8A6A9848:
+		case 0x8A6A9848: //1 crc left
 			//MachRider
 			model = PpuModel::Ppu2C04B;
-			break;
-
-		case 0x46914E3E:
-			//Soccer
-			inputType = VsInputType::SwapControllers;
-			model = PpuModel::Ppu2C04C;
-			break;
-			
-		case 0x70433F2C:
-			//Battle City
-			inputType = VsInputType::SwapControllers;
-			model = PpuModel::Ppu2C04A;
-			break;
-
-		case 0xD99A2087:
-			//Gradius
-			inputType = VsInputType::SwapControllers;
-			model = PpuModel::Ppu2C04A;
-			break;
-
-		case 0x1E438D52:
-			//Goonies
-			model = PpuModel::Ppu2C04C;
-			break;
-
-		case 0xFF5135A3:
-			//HoganAlley
-			model = PpuModel::Ppu2C04A;
-			break;
-
-		case 0x17AE56BE:
-			//FreedomForce
-			model = PpuModel::Ppu2C04A;
 			break;
 
 		case 0xC99EC059:
@@ -689,28 +641,6 @@ void GameDatabase::SetVsSystemDefaults(uint32_t prgCrc32)
 		case 0xF9D3B0A3: case 0x66BB838F: case 0x9924980A:
 			//SuperXevious
 			model = PpuModel::Ppu2C04A;
-			break;
-
-		case 0xA93A5AEE:
-			//Golf
-			inputType = VsInputType::SwapControllers;
-			model = PpuModel::Ppu2C03;
-			break;
-
-		case 0xCC2C4B5D: case 0x86167220:
-			//GolfB
-			inputType = VsInputType::SwapControllers;
-			model = PpuModel::Ppu2C04B;
-			break;
-
-		case 0xCA85E56D:
-			//MightyBombJack
-			model = PpuModel::Ppu2C05B;
-			break;
-
-		case 0xFE446787:
-			//Gumshoe
-			model = PpuModel::Ppu2C05C;
 			break;
 	}
 

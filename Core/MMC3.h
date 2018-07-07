@@ -39,7 +39,7 @@ class MMC3 : public BaseMapper
 
 		bool IsMcAcc()
 		{
-			return _mapperID == 4 && _subMapperID == 3;
+			return _romInfo.MapperID == 4 && _romInfo.SubMapperID == 3;
 		}
 
 	protected:
@@ -157,7 +157,7 @@ class MMC3 : public BaseMapper
 			_chrMode = (_state.Reg8000 & 0x80) >> 7;
 			_prgMode = (_state.Reg8000 & 0x40) >> 6;
 
-			if(_subMapperID == 1) {
+			if(_romInfo.SubMapperID == 1) {
 				//bool wramEnabled = (_state.Reg8000 & 0x20) == 0x20;
 				RemoveCpuMemoryMapping(0x6000, 0x7000);
 				
@@ -172,7 +172,7 @@ class MMC3 : public BaseMapper
 				_wramEnabled = (_state.RegA001 & 0x80) == 0x80;
 				_wramWriteProtected = (_state.RegA001 & 0x40) == 0x40;
 
-				if(IsNes20() && _subMapperID == 0) {
+				if(IsNes20() && _romInfo.SubMapperID == 0) {
 					if(_wramEnabled) {
 						SetCpuMemoryMapping(0x6000, 0x7FFF, 0, HasBattery() ? PrgMemoryType::SaveRam : PrgMemoryType::WorkRam, CanWriteToWorkRam() ? MemoryAccessType::ReadWrite : MemoryAccessType::Read);
 					} else {
@@ -202,14 +202,14 @@ class MMC3 : public BaseMapper
 
 		virtual uint16_t GetPRGPageSize() override { return 0x2000; }
 		virtual uint16_t GetCHRPageSize() override {	return 0x0400; }
-		virtual uint32_t GetSaveRamPageSize() override { return _subMapperID == 1 ? 0x200 : 0x2000; }
-		virtual uint32_t GetSaveRamSize() override { return _subMapperID == 1 ? 0x400 : 0x2000; }
+		virtual uint32_t GetSaveRamPageSize() override { return _romInfo.SubMapperID == 1 ? 0x200 : 0x2000; }
+		virtual uint32_t GetSaveRamSize() override { return _romInfo.SubMapperID == 1 ? 0x400 : 0x2000; }
 
 		virtual void InitMapper() override 
 		{
 			//Force MMC3A irqs for boards that are known to use the A revision.
 			//Some MMC3B boards also have the A behavior, but currently no way to tell them apart.
-			_forceMmc3RevAIrqs = _databaseInfo.Chip.substr(0, 5).compare("MMC3A") == 0;
+			_forceMmc3RevAIrqs = _romInfo.DatabaseInfo.Chip.substr(0, 5).compare("MMC3A") == 0;
 
 			ResetMmc3();
 			SetCpuMemoryMapping(0x6000, 0x7FFF, 0, HasBattery() ? PrgMemoryType::SaveRam : PrgMemoryType::WorkRam);
