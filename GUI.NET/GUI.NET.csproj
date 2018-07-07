@@ -259,7 +259,7 @@
     <Compile Include="Config\PlayerProfile.cs" />
     <Compile Include="Config\ConfigManager.cs" />
     <Compile Include="Config\ServerInfo.cs" />
-    <Compile Include="Config\VsConfigInfo.cs" />
+    <Compile Include="Config\GameDipswitchDefinition.cs" />
     <Compile Include="Controls\BaseControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -1057,11 +1057,11 @@
     <Compile Include="Forms\Cheats\frmCheatList.Designer.cs">
       <DependentUpon>frmCheatList.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\Config\frmVsGameConfig.cs">
+    <Compile Include="Forms\Config\frmGameConfig.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\Config\frmVsGameConfig.Designer.cs">
-      <DependentUpon>frmVsGameConfig.cs</DependentUpon>
+    <Compile Include="Forms\Config\frmGameConfig.Designer.cs">
+      <DependentUpon>frmGameConfig.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\Config\Controllers\ctrlPowerPadConfig.cs">
       <SubType>UserControl</SubType>
@@ -1640,8 +1640,8 @@
       <DependentUpon>frmCheatList.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\Config\frmVsGameConfig.resx">
-      <DependentUpon>frmVsGameConfig.cs</DependentUpon>
+    <EmbeddedResource Include="Forms\Config\frmGameConfig.resx">
+      <DependentUpon>frmGameConfig.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Config\Controllers\ctrlPowerPadConfig.resx">
       <DependentUpon>ctrlPowerPadConfig.cs</DependentUpon>

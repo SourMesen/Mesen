@@ -14,6 +14,7 @@ private:
 	static GameSystem GetGameSystem(string system);
 	static VsSystemType GetVsSystemType(string system);
 	static PpuModel GetPpuModel(string model);
+	static GameInputType GetInputType(GameSystem system, string inputType);
 	static uint8_t GetSubMapper(GameInfo &info);
 
 	static void InitDatabase();
@@ -23,7 +24,7 @@ private:
 public:
 	static void LoadGameDb(vector<string> data);
 
-	static void InitializeInputDevices(string inputType, GameSystem system, bool silent = false);
+	static void InitializeInputDevices(GameInputType inputType, GameSystem system, bool silent = false);
 	static void InitializeInputDevices(uint32_t romCrc);
 	static void SetGameInfo(uint32_t romCrc, RomData &romData, bool updateRomData, bool forHeaderlessRom);
 	static bool GetiNesHeader(uint32_t romCrc, NESHeader &nesHeader);

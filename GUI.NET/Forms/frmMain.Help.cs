@@ -19,12 +19,6 @@ namespace Mesen.GUI.Forms
 			Version oldVersion = new Version(ConfigManager.Config.MesenVersion);
 			if(oldVersion < newVersion) {
 				//Upgrade
-				if(oldVersion <= new Version("0.3.0")) {
-					//Version 0.3.0-
-					//Remove all old VS system config to make sure the new defaults are used
-					ConfigManager.Config.VsConfig = new List<VsConfigInfo>();
-				}
-				
 				if(oldVersion <= new Version("0.4.1")) {
 					//Version 0.4.1-
 					//Remove all old cheats (Game matching/CRC logic has been changed and no longer compatible)
@@ -98,9 +92,6 @@ namespace Mesen.GUI.Forms
 
 					//No reason to keep this disabled by default - enabling it by default makes it easier for new users to install/use HD packs
 					ConfigManager.Config.VideoInfo.UseHdPacks = true;
-
-					//Clear VS game config information due to changes in the data model
-					ConfigManager.Config.VsConfig = new List<VsConfigInfo>();
 				}
 
 				ConfigManager.Config.MesenVersion = InteropEmu.GetMesenVersion();

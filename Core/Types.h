@@ -357,7 +357,53 @@ enum class VsSystemType
 	RaidOnBungelingBayProtection = 6,
 };
 
-extern const vector<string> PpuModelNames;
+enum class GameInputType
+{
+	Default = 0,
+	FamicomControllers = 1,
+	FourScore = 2,
+	FourPlayerAdapter = 3,
+	VsSystem = 4,
+	VsSystemSwapped = 5,
+	VsSystemSwapAB = 6,
+	VsZapper = 7,
+	Zapper = 8,
+	TwoZappers = 9,
+	BandaiHypershot = 0x0A,
+	PowerPadSideA = 0x0B,
+	PowerPadSideB = 0x0C,
+	FamilyTrainerSideA = 0x0D,
+	FamilyTrainerSideB = 0x0E,
+	ArkanoidControllerNes = 0x0F,
+	ArkanoidControllerFamicom = 0x10,
+	//0x11  2x Vaus
+	KonamiHyperShot = 0x12,
+	PachinkoController = 0x13,
+	ExcitingBoxing = 0x14,
+	JissenMahjong = 0x15,
+	PartyTap = 0x16,
+	OekaKidsTablet = 0x17,
+	BarcodeBattler = 0x18,
+	//0x19 Miracle Piano
+	//0x1A Pokkun Moguraa
+	//0x1B Top Rider
+	//0x1C Double Fisted
+	//0x1D Famicom 3D System
+	//0x1E Doremikko Keyboard
+	//0x1F ROB
+	FamicomDataRecorder = 0x20,
+	TurboFile = 0x21,
+	BattleBox = 0x22,
+	FamilyBasicKeyboard = 0x23,
+	//0x24 PEC 586 keyboard
+	//0x25 Bit-79 Keyboard
+	SuborKeyboard = 0x26,
+	SuborKeyboardMouse1 = 0x27,
+	SuborKeyboardMouse2 = 0x28,
+	SnesMouse = 0x29,
+	//0x30 Generic Multicart
+};
+
 enum class PpuModel
 {
 	Ppu2C02 = 0,

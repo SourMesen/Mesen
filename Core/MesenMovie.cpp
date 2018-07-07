@@ -253,7 +253,6 @@ void MesenMovie::ApplySettings()
 	EmulationSettings::SetFlagState(EmulationFlags::DisablePpuReset, LoadBool(_settings, MovieKeys::DisablePpuReset));
 
 	//VS System flags
-	EmulationSettings::SetPpuModel(FromString(LoadString(_settings, MovieKeys::PpuModel), PpuModelNames, PpuModel::Ppu2C02));
 	EmulationSettings::SetDipSwitches(HexUtilities::FromHex(LoadString(_settings, MovieKeys::DipSwitches)));
 
 	LoadCheats();

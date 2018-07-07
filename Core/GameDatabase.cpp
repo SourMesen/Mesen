@@ -157,19 +157,80 @@ PpuModel GameDatabase::GetPpuModel(string model)
 	return PpuModel::Ppu2C02;
 }
 
+GameInputType GameDatabase::GetInputType(GameSystem system, string inputType)
+{
+	bool isVsSystem = system == GameSystem::VsSystem;
+	bool isFamicom = (system == GameSystem::Famicom || system == GameSystem::FDS || system == GameSystem::Dendy);
+
+	if(inputType.compare("Zapper") == 0) {
+		if(isVsSystem) {
+			return GameInputType::VsZapper;
+		} else {
+			return GameInputType::Zapper;
+		}
+	} else if(inputType.compare("FourPlayer") == 0) {
+		if(isFamicom) {
+			return GameInputType::FourPlayerAdapter;
+		} else {
+			return GameInputType::FourScore;
+		}
+	} else if(inputType.compare("Arkanoid") == 0) {
+		if(isFamicom) {
+			return GameInputType::ArkanoidControllerFamicom;
+		} else {
+			return GameInputType::ArkanoidControllerNes;
+		}
+	} else if(inputType.compare("OekaKidsTablet") == 0) {
+		return GameInputType::OekaKidsTablet;
+	} else if(inputType.compare("KonamiHypershot") == 0) {
+		return GameInputType::KonamiHyperShot;
+	} else if(inputType.compare("FamilyKeyboard") == 0) {
+		return GameInputType::FamilyBasicKeyboard;
+	} else if(inputType.compare("PartyTap") == 0) {
+		return GameInputType::PartyTap;
+	} else if(inputType.compare("Pachinko") == 0) {
+		return GameInputType::PachinkoController;
+	} else if(inputType.compare("ExcitingBoxing") == 0) {
+		return GameInputType::ExcitingBoxing;
+	} else if(inputType.compare("SuborKeyboard") == 0) {
+		return GameInputType::SuborKeyboardMouse1;
+	} else if(inputType.compare("Mahjong") == 0) {
+		return GameInputType::JissenMahjong;
+	} else if(inputType.compare("BarCodeWorld") == 0) {
+		return GameInputType::BarcodeBattler;
+	} else if(inputType.compare("BandaiHypershot") == 0) {
+		return GameInputType::BandaiHypershot;
+	} else if(inputType.compare("BattleBox") == 0) {
+		return GameInputType::BattleBox;
+	} else if(inputType.compare("TurboFile") == 0) {
+		return GameInputType::TurboFile;
+	} else if(inputType.compare("FamilyTrainer") == 0) {
+		return GameInputType::FamilyTrainerSideA;
+	} else if(inputType.compare("PowerPad") == 0 || inputType.compare("FamilyFunFitness") == 0) {
+		return GameInputType::PowerPadSideA;
+	} else if(inputType.compare("VsSwapped") == 0) {
+		return GameInputType::VsSystemSwapped;
+	} else if(inputType.compare("VsSwapAB") == 0) {
+		return GameInputType::VsSystemSwapAB;
+	} else {
+		return GameInputType::Default;
+	}
+}
+
 void GameDatabase::InitializeInputDevices(uint32_t romCrc)
 {
 	InitDatabase();
 
 	auto result = _gameDatabase.find(romCrc);
 	if(result != _gameDatabase.end()) {
-		InitializeInputDevices(result->second.InputType, GetGameSystem(result->second.System), true);
+		GameSystem system = GetGameSystem(result->second.System);
+		InitializeInputDevices(GetInputType(system, result->second.InputType), system, true);
 	} else {
-		InitializeInputDevices("", GameSystem::NesNtsc, true);
+		InitializeInputDevices(GameInputType::Default, GameSystem::NesNtsc, true);
 	}
 }
 
-void GameDatabase::InitializeInputDevices(string inputType, GameSystem system, bool silent)
+void GameDatabase::InitializeInputDevices(GameInputType inputType, GameSystem system, bool silent)
 {
 	ControllerType controllers[4] = { ControllerType::StandardController, ControllerType::StandardController, ControllerType::None, ControllerType::None };
 	ExpansionPortDevice expDevice = ExpansionPortDevice::None;
@@ -181,92 +242,89 @@ void GameDatabase::InitializeInputDevices(string inputType, GameSystem system, b
 		}
 	};
 
-	bool isVsSystem = system == GameSystem::VsSystem;
 	bool isFamicom = (system == GameSystem::Famicom || system == GameSystem::FDS || system == GameSystem::Dendy);
 
-	if(inputType.compare("Zapper") == 0) {
+	if(inputType == GameInputType::VsZapper) {
+		//VS Duck Hunt, etc. need the zapper in the first port
+		log("[DB] Input: VS Zapper connected");
+		controllers[0] = ControllerType::Zapper;
+	} else if(inputType == GameInputType::Zapper) {
 		log("[DB] Input: Zapper connected");
 		if(isFamicom) {
 			expDevice = ExpansionPortDevice::Zapper;
 		} else {
-			if(isVsSystem) {
-				//VS Duck Hunt, etc. need the zapper in the first port
-				controllers[0] = ControllerType::Zapper;
-			} else {
-				controllers[1] = ControllerType::Zapper;
-			}
+			controllers[1] = ControllerType::Zapper;
 		}
-	} else if(inputType.compare("FourPlayer") == 0) {
+	} else if(inputType == GameInputType::FourScore) {
+		log("[DB] Input: Four score connected");
+		EmulationSettings::SetFlags(EmulationFlags::HasFourScore);
+		controllers[2] = controllers[3] = ControllerType::StandardController;
+	} else if(inputType == GameInputType::FourPlayerAdapter) {
 		log("[DB] Input: Four player adapter connected");
 		EmulationSettings::SetFlags(EmulationFlags::HasFourScore);
-		if(isFamicom) {
-			expDevice = ExpansionPortDevice::FourPlayerAdapter;
-			controllers[2] = controllers[3] = ControllerType::StandardController;
-		} else {
-			controllers[2] = controllers[3] = ControllerType::StandardController;
-		}
-	} else if(inputType.compare("Arkanoid") == 0) {
-		log("[DB] Input: Arkanoid controller connected");
-		if(isFamicom) {
-			expDevice = ExpansionPortDevice::ArkanoidController;
-		} else {
-			controllers[1] = ControllerType::ArkanoidController;
-		}
-	} else if(inputType.compare("OekaKidsTablet") == 0) {
+		expDevice = ExpansionPortDevice::FourPlayerAdapter;
+		controllers[2] = controllers[3] = ControllerType::StandardController;
+	} else if(inputType == GameInputType::ArkanoidControllerFamicom) {
+		log("[DB] Input: Arkanoid controller (Famicom) connected");
+		expDevice = ExpansionPortDevice::ArkanoidController;
+	} else if(inputType == GameInputType::ArkanoidControllerNes) {
+		log("[DB] Input: Arkanoid controller (NES) connected");
+		controllers[1] = ControllerType::ArkanoidController;
+	} else if(inputType == GameInputType::OekaKidsTablet) {
 		log("[DB] Input: Oeka Kids Tablet connected");
 		system = GameSystem::Famicom;
 		expDevice = ExpansionPortDevice::OekaKidsTablet;
-	} else if(inputType.compare("KonamiHypershot") == 0) {
+	} else if(inputType == GameInputType::KonamiHyperShot) {
 		log("[DB] Input: Konami Hyper Shot connected");
 		system = GameSystem::Famicom;
 		expDevice = ExpansionPortDevice::KonamiHyperShot;
-	} else if(inputType.compare("FamilyKeyboard") == 0) {
+	} else if(inputType == GameInputType::FamilyBasicKeyboard) {
 		log("[DB] Input: Family Basic Keyboard connected");
 		system = GameSystem::Famicom;
 		expDevice = ExpansionPortDevice::FamilyBasicKeyboard;
-	} else if(inputType.compare("PartyTap") == 0) {
+	} else if(inputType == GameInputType::PartyTap) {
 		log("[DB] Input: Party Tap connected");
 		system = GameSystem::Famicom;
 		expDevice = ExpansionPortDevice::PartyTap;
-	} else if(inputType.compare("Pachinko") == 0) {
+	} else if(inputType == GameInputType::PachinkoController) {
 		log("[DB] Input: Pachinko controller connected");
 		system = GameSystem::Famicom;
 		expDevice = ExpansionPortDevice::Pachinko;
-	} else if(inputType.compare("ExcitingBoxing") == 0) {
+	} else if(inputType == GameInputType::ExcitingBoxing) {
 		log("[DB] Input: Exciting Boxing controller connected");
 		system = GameSystem::Famicom;
 		expDevice = ExpansionPortDevice::ExcitingBoxing;
-	} else if(inputType.compare("SuborKeyboard") == 0) {
+	} else if(inputType == GameInputType::SuborKeyboardMouse1) {
 		log("[DB] Input: Subor mouse connected");
 		log("[DB] Input: Subor keyboard connected");
 		system = GameSystem::Famicom;
 		expDevice = ExpansionPortDevice::SuborKeyboard;
 		controllers[1] = ControllerType::SuborMouse;
-	} else if(inputType.compare("Mahjong") == 0) {
+	} else if(inputType == GameInputType::JissenMahjong) {
 		log("[DB] Input: Jissen Mahjong controller connected");
 		system = GameSystem::Famicom;
 		expDevice = ExpansionPortDevice::JissenMahjong;
-	} else if(inputType.compare("BarCodeWorld") == 0) {
+	} else if(inputType == GameInputType::BarcodeBattler) {
 		log("[DB] Input: Barcode Battler barcode reader connected");
 		system = GameSystem::Famicom;
 		expDevice = ExpansionPortDevice::BarcodeBattler;
-	} else if(inputType.compare("BandaiHypershot") == 0) {
+	} else if(inputType == GameInputType::BandaiHypershot) {
 		log("[DB] Input: Bandai Hyper Shot gun connected");
 		system = GameSystem::Famicom;
 		expDevice = ExpansionPortDevice::BandaiHyperShot;
-	} else if(inputType.compare("BattleBox") == 0) {
+	} else if(inputType == GameInputType::BattleBox) {
 		log("[DB] Input: Battle Box connected");
 		system = GameSystem::Famicom;
 		expDevice = ExpansionPortDevice::BattleBox;
-	} else if(inputType.compare("TurboFile") == 0) {
+	} else if(inputType == GameInputType::TurboFile) {
 		log("[DB] Input: Ascii Turbo File connected");
 		system = GameSystem::Famicom;
 		expDevice = ExpansionPortDevice::AsciiTurboFile;
-	} else if(inputType.compare("FamilyTrainer") == 0) {
+	} else if(inputType == GameInputType::FamilyTrainerSideA || inputType == GameInputType::FamilyTrainerSideB) {
 		log("[DB] Input: Family Trainer mat connected");
 		system = GameSystem::Famicom;
 		expDevice = ExpansionPortDevice::FamilyTrainerMat;
-	} else if(inputType.compare("PowerPad") == 0 || inputType.compare("FamilyFunFitness") == 0) {
+	} else if(inputType == GameInputType::PowerPadSideA || inputType == GameInputType::PowerPadSideB) {
 		log("[DB] Input: Power Pad connected");
 		system = GameSystem::NesNtsc;
 		controllers[1] = ControllerType::PowerPad;
@@ -533,7 +591,7 @@ void GameDatabase::SetGameInfo(uint32_t romCrc, RomData &romData, bool updateRom
 		}
 
 		if(EmulationSettings::CheckFlag(EmulationFlags::AutoConfigureInput)) {
-			InitializeInputDevices(info.InputType, romData.Info.System);
+			InitializeInputDevices(GetInputType(romData.Info.System, info.InputType), romData.Info.System);
 		}
 #ifdef _DEBUG
 		MessageManager::DisplayMessage("DB", "Mapper: " + std::to_string(romData.Info.MapperID) + "  Sub: " + std::to_string(romData.Info.SubMapperID) + "  System: " + info.System);
@@ -554,9 +612,10 @@ void GameDatabase::UpdateRomData(GameInfo &info, RomData &romData)
 	romData.Info.MapperID = info.MapperID;
 	romData.Info.System = GetGameSystem(info.System);
 	if(romData.Info.System == GameSystem::VsSystem) {
-		romData.Info.VsSystemType = GetVsSystemType(info.VsSystemType);
-		romData.Info.PpuModel = GetPpuModel(info.PpuModel);
+		romData.Info.VsType = GetVsSystemType(info.VsSystemType);
+		romData.Info.VsPpuModel = GetPpuModel(info.PpuModel);
 	}
+	romData.Info.InputType = GetInputType(romData.Info.System, info.InputType);
 	romData.Info.SubMapperID = GetSubMapper(info);
 	romData.Info.BusConflicts = GetBusConflictType(info.BusConflicts);
 	if(info.ChrRamSize > 0) {
@@ -644,7 +703,5 @@ void GameDatabase::SetVsSystemDefaults(uint32_t prgCrc32)
 			break;
 	}
 
-	EmulationSettings::SetPpuModel(model);
 	EmulationSettings::SetDipSwitches(defaultDip);
-	EmulationSettings::SetVsInputType(inputType);
 }

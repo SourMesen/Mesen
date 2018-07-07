@@ -625,13 +625,9 @@ namespace InteropEmu {
 			}
 		}
 
-		DllExport void __stdcall VsSetGameConfig(PpuModel model, VsInputType inputType, uint8_t dipSwitches)
+		DllExport void __stdcall SetDipSwitches(uint32_t dipSwitches)
 		{
-			if(dynamic_cast<VsControlManager*>(_console->GetControlManager())) {
-				EmulationSettings::SetPpuModel(model);
-				EmulationSettings::SetDipSwitches(dipSwitches);
-				EmulationSettings::SetVsInputType(inputType);
-			}
+			EmulationSettings::SetDipSwitches(dipSwitches);
 		}
 
 		DllExport bool __stdcall IsHdPpu() { return _console->IsHdPpu(); }

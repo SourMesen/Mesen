@@ -17,7 +17,7 @@
 			<Control ID="mnuSwitchDiskSide">Canvia la cara del disc</Control>
 			<Control ID="mnuSelectDisk">Escull el disc</Control>
 			<Control ID="mnuEjectDisk">Expulsa el disc</Control>
-			<Control ID="mnuVsGameConfig">Configuració de joc VS</Control>
+			<Control ID="mnuGameConfig">Configuració de joc</Control>
 			<Control ID="mnuInsertCoin1">Insereix moneda (1)</Control>
 			<Control ID="mnuInsertCoin2">Insereix moneda (2)</Control>
 			<Control ID="mnuInputBarcode">Introdueix un codi de barres</Control>
@@ -533,10 +533,7 @@
 			<Control ID="lblDonate">Si desitgeu col·laborar amb Mesen, si us plau, considereu fer un donatiu.&#xA;Gràcies pel vostre suport.</Control>
 			<Control ID="okButton">&amp;D'acord</Control>
 		</Form>
-		<Form ID="frmVsGameConfig" Title="Configuració de joc VS">
-			<Control ID="lblGame">Joc</Control>
-			<Control ID="lblPpuModel">Model de PPU</Control>
-			<Control ID="lblInputType">Input Type:</Control>
+		<Form ID="frmGameConfig" Title="Configuració de joc">
 			<Control ID="grpDipSwitches">Interruptors DIP</Control>
 		</Form>
 		<Form ID="frmUpdatePrompt" Title="Mesen - Actualització disponible">

@@ -649,7 +649,6 @@ private:
 
 	static RamPowerOnState _ramPowerOnState;
 	static uint32_t _dipSwitches;
-	static VsInputType _vsInputType;
 	
 	static SimpleLock _shortcutLock;
 	static SimpleLock _equalizerLock;
@@ -1433,16 +1432,6 @@ public:
 	static uint32_t GetDipSwitches()
 	{
 		return _dipSwitches;
-	}
-
-	static void SetVsInputType(VsInputType inputType)
-	{
-		_vsInputType = inputType;
-	}
-
-	static VsInputType GetVsInputType()
-	{
-		return _vsInputType;
 	}
 
 	static bool IsKeyboardMode()

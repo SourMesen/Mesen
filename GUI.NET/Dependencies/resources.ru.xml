@@ -17,7 +17,7 @@
 			<Control ID="mnuSwitchDiskSide">Сменить сторону диска</Control>
 			<Control ID="mnuSelectDisk">Выбрать диск</Control>
 			<Control ID="mnuEjectDisk">Извлечь диск</Control>
-			<Control ID="mnuVsGameConfig">Конфигурация VS</Control>
+			<Control ID="mnuGameConfig">Конфигурация</Control>
 			<Control ID="mnuInsertCoin1">Вставить монету в слот 1</Control>
 			<Control ID="mnuInsertCoin2">Вставить монету в слот 2</Control>
 			<Control ID="mnuInputBarcode">Input Barcode</Control>
@@ -531,10 +531,7 @@
 			<Control ID="lblDonate">If you want to support Mesen, please consider donating.&#xA;Thank you for your support!</Control>
 			<Control ID="okButton">&amp;OK</Control>
 		</Form>
-		<Form ID="frmVsGameConfig" Title="Конфигурация VS">
-			<Control ID="lblGame">Игра</Control>
-			<Control ID="lblPpuModel">Модель PPU</Control>
-			<Control ID="lblInputType">Input Type:</Control>
+		<Form ID="frmGameConfig" Title="Конфигурация">
 			<Control ID="grpDipSwitches">DIP Switches</Control>
 		</Form>
 		<Form ID="frmUpdatePrompt" Title="Mesen - Доступно обновление">

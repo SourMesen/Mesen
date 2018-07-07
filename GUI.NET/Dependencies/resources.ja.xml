@@ -17,7 +17,7 @@
 			<Control ID="mnuSwitchDiskSide">A面B面切り替え</Control>
 			<Control ID="mnuSelectDisk">ディスク選択</Control>
 			<Control ID="mnuEjectDisk">ディスクを取り出す</Control>
-			<Control ID="mnuVsGameConfig">VSゲームの設定</Control>
+			<Control ID="mnuGameConfig">ゲーム設定</Control>
 			<Control ID="mnuInsertCoin1">インサートコイン 1</Control>
 			<Control ID="mnuInsertCoin2">インサートコイン 2</Control>
 			<Control ID="mnuInputBarcode">バーコードを入力</Control>
@@ -533,10 +533,7 @@
 			<Control ID="lblDonate">応援ありがとうございます！</Control>
 			<Control ID="okButton">&amp;OK</Control>
 		</Form>
-		<Form ID="frmVsGameConfig" Title="ゲーム設定">
-			<Control ID="lblGame">ゲーム:</Control>
-			<Control ID="lblPpuModel">PPUモデル:</Control>
-			<Control ID="lblInputType">コントローラ設定:</Control>
+		<Form ID="frmGameConfig" Title="ゲーム設定">
 			<Control ID="grpDipSwitches">ディップスイッチ</Control>
 		</Form>
 		<Form ID="frmUpdatePrompt" Title="Mesen ー アップデート可能">

@@ -153,7 +153,7 @@ RomData FdsLoader::LoadRom(vector<uint8_t>& romFile, string filename)
 
 	//Setup default controllers
 	if(!_checkOnly && EmulationSettings::CheckFlag(EmulationFlags::AutoConfigureInput)) {
-		GameDatabase::InitializeInputDevices("", GameSystem::FDS);
+		GameDatabase::InitializeInputDevices(GameInputType::FamicomControllers, GameSystem::FDS);
 	}
 
 	return romData;

@@ -56,22 +56,23 @@ namespace Mesen.GUI.Forms
 			sepVsSystem.Visible = InteropEmu.IsVsSystem();
 			mnuInsertCoin1.Visible = InteropEmu.IsVsSystem();
 			mnuInsertCoin2.Visible = InteropEmu.IsVsSystem();
-			mnuVsGameConfig.Visible = InteropEmu.IsVsSystem();
+			mnuGameConfig.Visible = InteropEmu.IsVsSystem();
 		}
 
-		private void ShowVsGameConfig()
+		private void ShowGameConfig()
 		{
-			VsConfigInfo configInfo = VsConfigInfo.GetCurrentGameConfig(true);
-			using(frmVsGameConfig frm = new frmVsGameConfig(configInfo)) {
-				if(frm.ShowDialog(null, this) == DialogResult.OK) {
-					VsConfigInfo.ApplyConfig();
-				}
+			GameSpecificInfo configInfo = GameSpecificInfo.GetGameSpecificInfo();
+			if(configInfo == null) {
+				configInfo = GameSpecificInfo.CreateGameSpecificConfig();
+			}
+			using(frmGameConfig frm = new frmGameConfig(configInfo)) {
+				frm.ShowDialog(null, this);
 			}
 		}
 
-		private void mnuVsGameConfig_Click(object sender, EventArgs e)
+		private void mnuGameConfig_Click(object sender, EventArgs e)
 		{
-			ShowVsGameConfig();
+			ShowGameConfig();
 		}
 
 		private void mnuLoadTapeFile_Click(object sender, EventArgs e)

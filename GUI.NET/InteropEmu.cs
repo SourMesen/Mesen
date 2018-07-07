@@ -143,7 +143,8 @@ namespace Mesen.GUI
 
 		[DllImport(DLLPath)] [return: MarshalAs(UnmanagedType.I1)] public static extern bool IsVsSystem();
 		[DllImport(DLLPath)] public static extern void VsInsertCoin(UInt32 port);
-		[DllImport(DLLPath)] public static extern void VsSetGameConfig(PpuModel model, VsInputType inputType, byte dipSwitches);
+
+		[DllImport(DLLPath)] public static extern void SetDipSwitches(UInt32 dipSwitches);
 
 		[DllImport(DLLPath)] public static extern void InputBarcode(UInt64 barcode, Int32 digitCount);
 

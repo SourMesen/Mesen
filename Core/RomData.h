@@ -71,8 +71,9 @@ struct RomInfo
 	uint8_t SubMapperID = 0;
 	
 	GameSystem System = GameSystem::Unknown;
-	VsSystemType VsSystemType = VsSystemType::Default;
-	PpuModel PpuModel = PpuModel::Ppu2C02;
+	VsSystemType VsType = VsSystemType::Default;
+	GameInputType InputType = GameInputType::Default;
+	PpuModel VsPpuModel = PpuModel::Ppu2C02;
 
 	bool HasChrRam = false;
 	bool HasBattery = false;

@@ -27,7 +27,8 @@ struct NESHeader
 	uint8_t Byte11;
 	uint8_t Byte12;
 	uint8_t Byte13;
-	uint8_t Reserved[2];
+	uint8_t Byte14;
+	uint8_t Byte15;
 
 	uint16_t GetMapperID();
 	bool HasBattery();
@@ -43,6 +44,7 @@ struct NESHeader
 	uint32_t GetSaveChrRamSize();
 	uint8_t GetSubMapper();
 	MirroringType GetMirroringType();
+	GameInputType GetControllerType();
 	VsSystemType GetVsSystemType();
 	PpuModel GetVsSystemPpuModel();
 	void SanitizeHeader(size_t romLength);

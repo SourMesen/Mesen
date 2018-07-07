@@ -11,58 +11,31 @@ using Mesen.GUI.Config;
 
 namespace Mesen.GUI.Forms.Config
 {
-	public partial class frmVsGameConfig : BaseConfigForm
+	public partial class frmGameConfig : BaseConfigForm
 	{
-		private class DropdownElement
-		{
-			public string Name;
-			public string ID;
-
-			public override string ToString()
-			{
-				return Name;
-			}
-		}
-
-		public frmVsGameConfig(VsConfigInfo configInfo)
+		public frmGameConfig(GameSpecificInfo configInfo)
 		{
 			InitializeComponent();
 
+			GameSpecificInfo existingConfig = GameSpecificInfo.GetGameSpecificInfo();
+			if(existingConfig == null) {
+				GameDipswitchDefinition dipswitchDefinition = GameDipswitchDefinition.GetDipswitchDefinition();
+				configInfo.DipSwitches = dipswitchDefinition.DefaultDipSwitches;
+			}
+
 			Entity = configInfo;
-
-			if(VsGameConfig.GetGameIdByCrc(InteropEmu.GetRomInfo().PrgCrc32) != null) {
-				cboGame.Enabled = false;
-			}
-
-			AddBinding("PpuModel", cboPpuModel);
-			AddBinding("InputType", cboInputType);
-
-			foreach(KeyValuePair<string, VsGameConfig> kvp in VsGameConfig.GetGameConfigs()) {
-				cboGame.Items.Add(new DropdownElement { Name = kvp.Value.GameName, ID = kvp.Value.GameID });
-				if(kvp.Key == configInfo.GameID) {
-					cboGame.SelectedIndex = cboGame.Items.Count - 1;
-				}
-			}
+			UpdateDipSwitches();
 		}
 
-		private void cboGame_SelectedIndexChanged(object sender, EventArgs e)
+		private void UpdateDipSwitches()
 		{
-			VsGameConfig config = VsGameConfig.GetGameConfig(((DropdownElement)cboGame.SelectedItem).ID);
-			UpdateDipSwitches(config, false);
-		}
+			GameDipswitchDefinition dipswitchDefinition = GameDipswitchDefinition.GetDipswitchDefinition();
 
-		private void UpdateDipSwitches(VsGameConfig config, bool updateDropdown)
-		{
 			grpDipSwitches.Controls.Clear();
 
 			List<List<string>> dipSwitches;
-			if(config != null) {
-				dipSwitches = config.DipSwitches;
-				if(updateDropdown) {
-					cboGame.SelectedIndexChanged -= cboGame_SelectedIndexChanged;
-					cboGame.SelectedItem = config.GameName;
-					cboGame.SelectedIndexChanged += cboGame_SelectedIndexChanged;
-				}
+			if(dipswitchDefinition != null) {
+				dipSwitches = dipswitchDefinition.DipSwitches;
 			} else {
 				dipSwitches = new List<List<string>>();
 				for(int i = 0; i < 8; i++) {
@@ -77,7 +50,7 @@ namespace Mesen.GUI.Forms.Config
 			tlpDipSwitches.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
 			tlpDipSwitches.ColumnCount = 2;
 
-			byte value = ((VsConfigInfo)Entity).DipSwitches;
+			UInt32 value = ((GameSpecificInfo)Entity).DipSwitches;
 			int currentBit = 0;
 			foreach(List<string> setting in dipSwitches) {
 				var optionLabel = new Label();
@@ -94,7 +67,7 @@ namespace Mesen.GUI.Forms.Config
 
 				int bitCount = (int)Math.Round(Math.Log(optionDropdown.Items.Count) / Math.Log(2));
 
-				int selectedIndex = (value >> currentBit) & ((1 << bitCount) - 1);
+				int selectedIndex = (int)((value >> currentBit) & ((1 << bitCount) - 1));
 				optionDropdown.SelectedIndex = selectedIndex;
 				optionDropdown.Dock = DockStyle.Fill;
 				currentBit += bitCount;
@@ -111,13 +84,13 @@ namespace Mesen.GUI.Forms.Config
 			tlpDipSwitches.PerformLayout();
 		}
 
-		private byte GetDipSwitchValue()
+		private UInt32 GetDipSwitchValue()
 		{
 			int value = 0;
 			int currentBit = 0;
 			if(grpDipSwitches.Controls.Count > 0) {
 				foreach(Control control in grpDipSwitches.Controls[0].Controls) {
-					if(control is ComboBox && control != cboPpuModel) {
+					if(control is ComboBox) {
 						ComboBox dipSwitch = (ComboBox)control;
 						int bitCount = (int)Math.Round(Math.Log(dipSwitch.Items.Count) / Math.Log(2));
 
@@ -137,18 +110,24 @@ namespace Mesen.GUI.Forms.Config
 		{
 			base.UpdateConfig();
 
-			((VsConfigInfo)Entity).DipSwitches = (byte)GetDipSwitchValue();
-			((VsConfigInfo)Entity).GameID = ((DropdownElement)cboGame.SelectedItem).ID;
+			((GameSpecificInfo)Entity).DipSwitches = GetDipSwitchValue();
+		}
+
+		protected override void OnFormClosed(FormClosedEventArgs e)
+		{
+			if(this.DialogResult == DialogResult.OK) {
+				GameSpecificInfo.AddGameSpecificConfig((GameSpecificInfo)Entity);
+				GameSpecificInfo.ApplyGameSpecificConfig();
+			}
+			base.OnFormClosed(e);
 		}
 
 		private void btnReset_Click(object sender, EventArgs e)
 		{
-			VsGameConfig defaultConfig = VsGameConfig.GetGameConfig(((DropdownElement)cboGame.SelectedItem).ID);
-			((VsConfigInfo)Entity).DipSwitches = defaultConfig.DefaultDipSwitches;
-			((VsConfigInfo)Entity).PpuModel = defaultConfig.PpuModel;
-			((VsConfigInfo)Entity).InputType = defaultConfig.InputType;
+			GameDipswitchDefinition defaultConfig = GameDipswitchDefinition.GetDipswitchDefinition();
+			((GameSpecificInfo)Entity).DipSwitches = defaultConfig.DefaultDipSwitches;
 			UpdateUI();
-			UpdateDipSwitches(defaultConfig, false);
+			UpdateDipSwitches();
 		}
 	}
 

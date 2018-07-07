@@ -8,60 +8,15 @@ using System.Xml.Serialization;
 
 namespace Mesen.GUI.Config
 {
-	public class VsConfigInfo
-	{
-		public string GameID;
-		public string GameCrc;
-		public InteropEmu.PpuModel PpuModel;
-		public byte DipSwitches;
-
-		[XmlElement("InputScheme")] //Rename node to prevent upgrade issues
-		public InteropEmu.VsInputType InputType;
-
-		public static VsConfigInfo GetCurrentGameConfig(bool createNew)
-		{
-			string crc = InteropEmu.GetRomInfo().GetCrcString();
-			foreach(VsConfigInfo config in ConfigManager.Config.VsConfig) {
-				if(config.GameCrc == crc) {
-					return config;
-				}
-			}
-
-			VsConfigInfo newConfig = new VsConfigInfo();
-			newConfig.GameCrc = crc;
-			newConfig.GameID = VsGameConfig.GetGameID();
-			VsGameConfig gameConfig = VsGameConfig.GetGameConfig(newConfig.GameID);
-			if(gameConfig != null) {
-				newConfig.PpuModel = gameConfig.PpuModel;
-				newConfig.DipSwitches = gameConfig.DefaultDipSwitches;
-				newConfig.InputType = gameConfig.InputType;
-			}
-
-			if(createNew) {
-				ConfigManager.Config.VsConfig.Add(newConfig);
-			}
-
-			return newConfig;
-		}
-
-		public static void ApplyConfig()
-		{
-			VsConfigInfo configInfo = GetCurrentGameConfig(false);
-			InteropEmu.VsSetGameConfig(configInfo.PpuModel, configInfo.InputType, configInfo.DipSwitches);
-		}
-	}
-
-	public class VsGameConfig
+	public class GameDipswitchDefinition
 	{
 		public string GameName;
 		public string GameID;
-		public InteropEmu.VsInputType InputType;
-		public InteropEmu.PpuModel PpuModel;
 		public byte DefaultDipSwitches;
 
 		public List<List<string>> DipSwitches;
 
-		private static Dictionary<string, VsGameConfig> _gameConfigs = new Dictionary<string, VsGameConfig>();
+		private static Dictionary<string, GameDipswitchDefinition> _gameConfigs = new Dictionary<string, GameDipswitchDefinition>();
 
 		public static string GetGameIdByCrc(UInt32 prgCrc32)
 		{
@@ -111,21 +66,14 @@ namespace Mesen.GUI.Config
 
 			if(gameID != null) {
 				 return gameID;
-			} else {
-				//Try to guess the game based on filename
-				string romName = InteropEmu.GetRomInfo().GetRomName().ToLowerInvariant().Replace(" ", "");
-				foreach(KeyValuePair<string, VsGameConfig> kvp in _gameConfigs) {
-					if(romName.Contains(kvp.Key.ToLowerInvariant().Replace(" ", "")) || romName.Contains(kvp.Value.GameName.ToLowerInvariant().Replace(" ", ""))) {
-						return kvp.Key;
-					}
-				}
 			}
 
 			return "Unknown";
 		}
 
-		public static VsGameConfig GetGameConfig(string gameID)
+		public static GameDipswitchDefinition GetDipswitchDefinition()
 		{
+			string gameID = GetGameID();
 			if(gameID != null && _gameConfigs.ContainsKey(gameID)) {
 				return _gameConfigs[gameID];
 			} else {
@@ -133,39 +81,24 @@ namespace Mesen.GUI.Config
 			}
 		}
 
-		public static Dictionary<string, VsGameConfig> GetGameConfigs()
-		{
-			return _gameConfigs;
-		}
-
-		static VsGameConfig()
+		static GameDipswitchDefinition()
 		{
 			XmlDocument config = new XmlDocument();
 			config.Load(ResourceManager.GetZippedResource("VsSystem.xml"));
 
 			foreach(XmlNode gameNode in config.SelectNodes("/VsSystemGames/Game")) {
-				var gameConfig = new VsGameConfig();
-				gameConfig.GameID = gameNode.Attributes["ID"].Value;
-				gameConfig.GameName = gameNode.Attributes["Localization"].Value;
+				var gameDipswitches = new GameDipswitchDefinition();
+				gameDipswitches.GameID = gameNode.Attributes["ID"].Value;
+				gameDipswitches.GameName = gameNode.Attributes["Localization"].Value;
 				if(gameNode.Attributes["DefaultDip"] != null) {
-					gameConfig.DefaultDipSwitches = (byte)Int32.Parse(gameNode.Attributes["DefaultDip"].Value);
+					gameDipswitches.DefaultDipSwitches = (byte)Int32.Parse(gameNode.Attributes["DefaultDip"].Value);
 				}
-				if(gameNode.Attributes["PpuModel"] != null) {
-					gameConfig.PpuModel = (InteropEmu.PpuModel)Enum.Parse(typeof(InteropEmu.PpuModel), gameNode.Attributes["PpuModel"].Value);
-				} else {
-					gameConfig.PpuModel = InteropEmu.PpuModel.Ppu2C03;
-				}
-				if(gameNode.Attributes["InputType"] != null) {
-					gameConfig.InputType = (InteropEmu.VsInputType)Enum.Parse(typeof(InteropEmu.VsInputType), gameNode.Attributes["InputType"].Value);
-				} else {
-					gameConfig.InputType = InteropEmu.VsInputType.Default;
-				}
-				gameConfig.DipSwitches = new List<List<string>>();
+				gameDipswitches.DipSwitches = new List<List<string>>();
 
 				foreach(XmlNode dipSwitch in gameNode.SelectNodes("DipSwitch")) {
 					if(dipSwitch.Attributes["Localization"] != null) {
 						var list = new List<string>();
-						gameConfig.DipSwitches.Add(list);
+						gameDipswitches.DipSwitches.Add(list);
 
 						list.Add(dipSwitch.Attributes["Localization"].Value);
 						foreach(XmlNode option in dipSwitch.SelectNodes("Option")) {
@@ -173,14 +106,14 @@ namespace Mesen.GUI.Config
 						}
 					} else {
 						var list = new List<string>();
-						gameConfig.DipSwitches.Add(list);
+						gameDipswitches.DipSwitches.Add(list);
 
 						list.Add("Unknown");
 						list.Add("Off");
 						list.Add("On");
 					}
 				}
-				_gameConfigs[gameNode.Attributes["ID"].Value] = gameConfig;
+				_gameConfigs[gameNode.Attributes["ID"].Value] = gameDipswitches;
 			}
 		}
 	}

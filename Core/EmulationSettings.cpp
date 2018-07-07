@@ -67,7 +67,6 @@ std::unordered_map<uint32_t, vector<KeyCombination>> EmulationSettings::_shortcu
 
 RamPowerOnState EmulationSettings::_ramPowerOnState = RamPowerOnState::AllZeros;
 uint32_t EmulationSettings::_dipSwitches = 0;
-VsInputType EmulationSettings::_vsInputType = VsInputType::Default;
 
 InputDisplaySettings EmulationSettings::_inputDisplaySettings = { 0, InputDisplayPosition::TopLeft, false };
 
@@ -206,18 +205,4 @@ const vector<string> ExpansionPortDeviceNames = {
 	"BandaiHyperShot",
 	"AsciiTurboFile",
 	"BattleBox",
-};
-
-const vector<string> PpuModelNames = {
-	"Ppu2C02",
-	"Ppu2C03",
-	"Ppu2C04A",
-	"Ppu2C04B",
-	"Ppu2C04C",
-	"Ppu2C04D",
-	"Ppu2C05A",
-	"Ppu2C05B",
-	"Ppu2C05C",
-	"Ppu2C05D",
-	"Ppu2C05E"
 };

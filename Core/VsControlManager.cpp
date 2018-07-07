@@ -17,7 +17,7 @@ void VsControlManager::Reset(bool softReset)
 	_protectionCounter = 0;
 	UpdateSlaveMasterBit(_console->IsMaster() ? 0x00 : 0x02);
 	
-	_vsSystemType = _console->GetRomInfo().VsSystemType;
+	_vsSystemType = _console->GetRomInfo().VsType;
 
 	if(!softReset && !_console->IsMaster() && _console->GetDualConsole()) {
 		RegisterInputProvider(this);
@@ -54,8 +54,8 @@ void VsControlManager::RemapControllerButtons()
 		return;
 	}
 
-	VsInputType inputType = EmulationSettings::GetVsInputType();
-	if(inputType == VsInputType::SwapControllers) {
+	GameInputType inputType = _console->GetRomInfo().InputType;
+	if(inputType == GameInputType::VsSystemSwapped) {
 		//Swap controllers 1 & 2
 		ControlDeviceState port1State = controllers[0]->GetRawState();
 		ControlDeviceState port2State = controllers[1]->GetRawState();
@@ -65,7 +65,7 @@ void VsControlManager::RemapControllerButtons()
 		//But don't swap the start/select buttons
 		BaseControlDevice::SwapButtons(controllers[0], StandardController::Buttons::Start, controllers[1], StandardController::Buttons::Start);
 		BaseControlDevice::SwapButtons(controllers[0], StandardController::Buttons::Select, controllers[1], StandardController::Buttons::Select);
-	} else if(inputType == VsInputType::SwapAB) {
+	} else if(inputType == GameInputType::VsSystemSwapAB) {
 		//Swap buttons P1 A & P2 B (Pinball (Japan))
 		BaseControlDevice::SwapButtons(controllers[0], StandardController::Buttons::B, controllers[1], StandardController::Buttons::A);
 	}

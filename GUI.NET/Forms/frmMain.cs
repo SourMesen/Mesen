@@ -593,12 +593,12 @@ namespace Mesen.GUI.Forms
 					InteropEmu.SetNesModel(ConfigManager.Config.Region);
 					InitializeNsfMode(false, true);
 					CheatInfo.ApplyCheats();
-					VsConfigInfo.ApplyConfig();
+					GameSpecificInfo.ApplyGameSpecificConfig();
 					UpdateStateMenu(mnuSaveState, true);
 					UpdateStateMenu(mnuLoadState, false);
 					if(ConfigManager.Config.PreferenceInfo.ShowVsConfigOnLoad && InteropEmu.IsVsSystem()) {
 						this.Invoke((MethodInvoker)(() => {
-							this.ShowVsGameConfig();
+							this.ShowGameConfig();
 						}));
 					}
 
@@ -1079,7 +1079,7 @@ namespace Mesen.GUI.Forms
 					mnuPlayMovie.Enabled = !netPlay && !moviePlaying && !movieRecording;
 					mnuStopMovie.Enabled = running && !netPlay && (moviePlaying || movieRecording);
 					mnuRecordMovie.Enabled = running && !moviePlaying && !movieRecording && !isNetPlayClient;
-					mnuVsGameConfig.Enabled = !moviePlaying && !movieRecording;
+					mnuGameConfig.Enabled = !moviePlaying && !movieRecording;
 
 					bool waveRecording = InteropEmu.WaveIsRecording();
 					mnuWaveRecord.Enabled = running && !waveRecording;

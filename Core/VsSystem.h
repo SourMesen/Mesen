@@ -18,7 +18,7 @@ protected:
 		if(!IsNes20()) {
 			//Force VS system if mapper 99
 			_romInfo.System = GameSystem::VsSystem;
-			_romInfo.VsSystemType = VsSystemType::Default;
+			_romInfo.VsType = VsSystemType::Default;
 		}
 
 		//"Note: unlike all other mappers, an undersize mapper 99 image implies open bus instead of mirroring."

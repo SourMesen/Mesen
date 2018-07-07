@@ -170,6 +170,16 @@ MirroringType NESHeader::GetMirroringType()
 	}
 }
 
+GameInputType NESHeader::GetControllerType()
+{
+	if(Byte15 <= 0x2A) {
+		return (GameInputType)Byte15;
+	}
+
+	MessageManager::Log("[iNES] Unknown controller type.");
+	return GameInputType::Default;	
+}
+
 VsSystemType NESHeader::GetVsSystemType()
 {
 	if(GetRomHeaderVersion() == RomHeaderVersion::Nes2_0) {

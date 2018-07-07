@@ -286,7 +286,7 @@ bool Console::Initialize(VirtualFile &romFile, VirtualFile &patchFile)
 			}
 
 			RomInfo romInfo = _mapper->GetRomInfo();
-			if(!_master && romInfo.VsSystemType == VsSystemType::VsDualSystem) {
+			if(!_master && romInfo.VsType == VsSystemType::VsDualSystem) {
 				_slave.reset(new Console(shared_from_this()));
 				_slave->Init();
 				_slave->Initialize(romFile, patchFile);
@@ -299,6 +299,7 @@ bool Console::Initialize(VirtualFile &romFile, VirtualFile &patchFile)
 					break;
 				
 				case GameSystem::VsSystem:
+					EmulationSettings::SetPpuModel(romInfo.VsPpuModel);
 					_systemActionManager.reset(new VsSystemActionManager(shared_from_this()));
 					break;
 				

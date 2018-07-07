@@ -18,11 +18,60 @@ namespace Mesen.GUI.Config
 		public UInt32 OverscanTop;
 		public UInt32 OverscanBottom;
 
+		public UInt32 DipSwitches = 0;
+
 		public static GameSpecificInfo GetGameSpecificInfo()
 		{
 			RomInfo romInfo = InteropEmu.GetRomInfo();
 			GameSpecificInfo existingConfig = ConfigManager.Config.GameSpecificSettings.Find(gameConfig => gameConfig.GamePrgCrc32 == romInfo.GetPrgCrcString());
 			return existingConfig;
+		}
+
+		public static void AddGameSpecificConfig(GameSpecificInfo info)
+		{
+			if(!ConfigManager.Config.GameSpecificSettings.Contains(info)) {
+				ConfigManager.Config.GameSpecificSettings.Add(info);
+			}
+		}
+
+		public static GameSpecificInfo CreateGameSpecificConfig()
+		{
+			RomInfo romInfo = InteropEmu.GetRomInfo();
+			GameSpecificInfo info = new GameSpecificInfo();
+			info.GameName = romInfo.GetRomName();
+			info.GamePrgCrc32 = romInfo.GetPrgCrcString();
+			return info;
+		}
+
+		public static void ApplyGameSpecificConfig()
+		{
+			GameSpecificInfo existingConfig = GetGameSpecificInfo();
+			if(existingConfig != null) {
+				InteropEmu.SetDipSwitches(existingConfig.DipSwitches);
+			} else {
+				GameDipswitchDefinition dipswitchDefinition = GameDipswitchDefinition.GetDipswitchDefinition();
+				if(dipswitchDefinition != null) {
+					InteropEmu.SetDipSwitches(dipswitchDefinition.DefaultDipSwitches);
+				} else {
+					InteropEmu.SetDipSwitches(0);
+				}
+			}
+		}
+
+		public static void SetDipswitches(UInt32 dipswitches)
+		{
+			GameSpecificInfo existingConfig = GetGameSpecificInfo();
+
+			if(existingConfig != null) {
+				existingConfig.DipSwitches = dipswitches;
+			} else {
+				GameSpecificInfo info = new GameSpecificInfo();
+				info.DipSwitches = dipswitches;
+				ConfigManager.Config.GameSpecificSettings.Add(info);
+			}
+			ApplyGameSpecificConfig();
+
+			ConfigManager.ApplyChanges();
 		}
 
 		public static void SetGameSpecificOverscan(bool overrideOverscan, UInt32 top, UInt32 bottom, UInt32 left, UInt32 right)

@@ -22,7 +22,6 @@ namespace Mesen.GUI.Config
 		public InputInfo InputInfo;
 		public EmulationInfo EmulationInfo;
 		public List<RecentItem> RecentFiles;
-		public List<VsConfigInfo> VsConfig;
 		public List<CheatInfo> Cheats;
 		public bool DisableAllCheats;
 		public NesModel Region;
@@ -48,7 +47,6 @@ namespace Mesen.GUI.Config
 			RecentFiles = new List<RecentItem>();
 			InputInfo = new InputInfo();
 			Cheats = new List<CheatInfo>();
-			VsConfig = new List<VsConfigInfo>();
 			DebugInfo = new DebugInfo();
 			AviRecordInfo = new AviRecordInfo();
 			MovieRecordInfo = new MovieRecordInfo();

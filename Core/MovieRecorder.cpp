@@ -130,7 +130,6 @@ void MovieRecorder::GetGameSettings(stringstream &out)
 	//VS System flags
 	if(_console->GetAvailableFeatures() == ConsoleFeatures::VsSystem) {
 		WriteString(out, MovieKeys::DipSwitches, HexUtilities::ToHex(EmulationSettings::GetDipSwitches()));
-		WriteString(out, MovieKeys::PpuModel, PpuModelNames[(int)EmulationSettings::GetPpuModel()]);
 	}
 
 	for(CodeInfo &code : _console->GetCheatManager()->GetCheats()) {

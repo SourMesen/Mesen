@@ -63,7 +63,7 @@ namespace Mesen.GUI.Forms
 			this.mnuSelectDisk = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuEjectDisk = new System.Windows.Forms.ToolStripMenuItem();
 			this.sepVsSystem = new System.Windows.Forms.ToolStripSeparator();
-			this.mnuVsGameConfig = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuGameConfig = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuInsertCoin1 = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuInsertCoin2 = new System.Windows.Forms.ToolStripMenuItem();
 			this.sepBarcode = new System.Windows.Forms.ToolStripSeparator();
@@ -433,7 +433,7 @@ namespace Mesen.GUI.Forms
             this.mnuSelectDisk,
             this.mnuEjectDisk,
             this.sepVsSystem,
-            this.mnuVsGameConfig,
+            this.mnuGameConfig,
             this.mnuInsertCoin1,
             this.mnuInsertCoin2,
             this.sepBarcode,
@@ -513,13 +513,13 @@ namespace Mesen.GUI.Forms
 			this.sepVsSystem.Size = new System.Drawing.Size(179, 6);
 			this.sepVsSystem.Visible = false;
 			// 
-			// mnuVsGameConfig
+			// mnuGameConfig
 			// 
-			this.mnuVsGameConfig.Image = global::Mesen.GUI.Properties.Resources.DipSwitches;
-			this.mnuVsGameConfig.Name = "mnuVsGameConfig";
-			this.mnuVsGameConfig.Size = new System.Drawing.Size(182, 22);
-			this.mnuVsGameConfig.Text = "Game Configuration";
-			this.mnuVsGameConfig.Click += new System.EventHandler(this.mnuVsGameConfig_Click);
+			this.mnuGameConfig.Image = global::Mesen.GUI.Properties.Resources.DipSwitches;
+			this.mnuGameConfig.Name = "mnuGameConfig";
+			this.mnuGameConfig.Size = new System.Drawing.Size(182, 22);
+			this.mnuGameConfig.Text = "Game Configuration";
+			this.mnuGameConfig.Click += new System.EventHandler(this.mnuGameConfig_Click);
 			// 
 			// mnuInsertCoin1
 			// 
@@ -1813,7 +1813,7 @@ namespace Mesen.GUI.Forms
 		private System.Windows.Forms.ToolStripMenuItem mnuFullscreen;
 		private System.Windows.Forms.ToolStripSeparator sepVsSystem;
 		private System.Windows.Forms.ToolStripMenuItem mnuInsertCoin1;
-		private System.Windows.Forms.ToolStripMenuItem mnuVsGameConfig;
+		private System.Windows.Forms.ToolStripMenuItem mnuGameConfig;
 		private System.Windows.Forms.ToolStripMenuItem mnuInsertCoin2;
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem15;
 		private System.Windows.Forms.ToolStripMenuItem mnuXBRZ2xFilter;

@@ -17,7 +17,7 @@
 			<Control ID="mnuSwitchDiskSide">Trocar o lado do disco</Control>
 			<Control ID="mnuSelectDisk">Selecionar o disco</Control>
 			<Control ID="mnuEjectDisk">Ejetar o disco</Control>
-			<Control ID="mnuVsGameConfig">Configuração de jogo VS</Control>
+			<Control ID="mnuGameConfig">Configuração de jogo</Control>
 			<Control ID="mnuInsertCoin1">Inserir moeda (1)</Control>
 			<Control ID="mnuInsertCoin2">Inserir moeda (2)</Control>
 			<Control ID="mnuInputBarcode">Entrar código de barra</Control>
@@ -529,10 +529,7 @@
 			<Control ID="lblDonate">Caso queira apoiar o Mesen, por favor, considere fazer uma doação ao projeto.&#xA;Obrigado pelo seu apoio!</Control>
 			<Control ID="okButton">&amp;OK</Control>
 		</Form>
-		<Form ID="frmVsGameConfig" Title="Configuração de jogo VS">
-			<Control ID="lblGame">Jogo</Control>
-			<Control ID="lblPpuModel">Modelo da PPU</Control>
-			<Control ID="lblInputType">Input Type:</Control>
+		<Form ID="frmGameConfig" Title="Configuração de jogo">
 			<Control ID="grpDipSwitches">Comutadores DIP</Control>
 		</Form>
 		<Form ID="frmUpdatePrompt" Title="Mesen - Atualização disponível">

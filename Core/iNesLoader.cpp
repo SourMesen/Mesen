@@ -31,8 +31,8 @@ RomData iNesLoader::LoadRom(vector<uint8_t>& romFile, NESHeader *preloadedHeader
 	romData.Info.Mirroring = header.GetMirroringType();
 	romData.Info.HasBattery = header.HasBattery();
 	romData.Info.System = header.GetGameSystem();
-	romData.Info.VsSystemType = header.GetVsSystemType();
-	romData.Info.PpuModel = header.GetVsSystemPpuModel();
+	romData.Info.VsType = header.GetVsSystemType();
+	romData.Info.VsPpuModel = header.GetVsSystemPpuModel();
 	romData.Info.HasTrainer = header.HasTrainer();
 	romData.Info.NesHeader = header;
 
@@ -84,7 +84,7 @@ RomData iNesLoader::LoadRom(vector<uint8_t>& romFile, NESHeader *preloadedHeader
 	
 	if(romData.Info.System == GameSystem::VsSystem) {
 		string type = "Vs-UniSystem";
-		switch(romData.Info.VsSystemType) {
+		switch(romData.Info.VsType) {
 			case VsSystemType::IceClimberProtection: type = "VS-UniSystem (Ice Climbers)"; break;
 			case VsSystemType::RaidOnBungelingBayProtection: type = "VS-DualSystem (Raid on Bungeling Bay)"; break;
 			case VsSystemType::RbiBaseballProtection: type = "VS-UniSystem (RBI Baseball)"; break;
