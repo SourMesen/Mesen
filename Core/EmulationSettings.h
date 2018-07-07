@@ -307,11 +307,8 @@ enum class PpuModel
 enum class VsInputType
 {
 	Default = 0,
-	TypeA = 1,
-	TypeB = 2,
-	TypeC = 3,
-	TypeD = 4,
-	TypeE = 5
+	SwapControllers = 1,
+	SwapAB = 2
 };
 
 struct KeyMapping

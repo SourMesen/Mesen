@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <VsSystemGames>
-  <Game ID="BattleCity" Localization="Battle City" InputType="B" PpuModel="Ppu2C04A">
+  <Game ID="BattleCity" Localization="Battle City" InputType="SwapControllers" PpuModel="Ppu2C04A">
     <DipSwitch Localization="Credits for 2 Players">
       <Option>1</Option>
       <Option>2</Option>
@@ -23,7 +23,7 @@
       <Option>RP2C04-0004</Option>
     </DipSwitch>
   </Game>
-  <Game ID="Castlevania" Localization="Castlevania" InputType="A" PpuModel="Ppu2C04B">
+  <Game ID="Castlevania" Localization="Castlevania" PpuModel="Ppu2C04B">
     <DipSwitch Localization="Coins">
       <Option>1 coin = 1 credit</Option>
       <Option>3 coins = 1 credit</Option>
@@ -49,7 +49,7 @@
       <Option>Hard</Option>
     </DipSwitch>
   </Game>
-  <Game ID="CluCluLand" Localization="Clu Clu Land" InputType="B" PpuModel="Ppu2C04D">
+  <Game ID="CluCluLand" Localization="Clu Clu Land" InputType="SwapControllers" PpuModel="Ppu2C04D">
     <DipSwitch Localization="Coins">
       <Option>1 coin = 1 credit</Option>
       <Option>2 coins = 1 credit</Option>
@@ -70,7 +70,7 @@
     </DipSwitch>
     <DipSwitch />
   </Game>
-  <Game ID="DrMario" Localization="Dr. Mario" InputType="B" PpuModel="Ppu2C04C">
+  <Game ID="DrMario" Localization="Dr. Mario" InputType="SwapControllers" PpuModel="Ppu2C04C">
     <DipSwitch Localization="Drop Rate Increases After">
       <Option>7 Pills</Option>
       <Option>8 Pills</Option>
@@ -126,7 +126,7 @@
       <Option>100000</Option>
     </DipSwitch>
   </Game>
-  <Game ID="ExciteBike" Localization="Excitebike" InputType="A" PpuModel="Ppu2C04D">
+  <Game ID="ExciteBike" Localization="Excitebike" PpuModel="Ppu2C04D">
     <DipSwitch Localization="Coins">
       <Option>1 coin = 1 credit</Option>
       <Option>2 coins = 1 credit</Option>
@@ -152,7 +152,7 @@
       <Option>Hard</Option>
     </DipSwitch>
   </Game>
-  <Game ID="ExciteBikeB" Localization="Excitebike" InputType="A" PpuModel="Ppu2C04C">
+  <Game ID="ExciteBikeB" Localization="Excitebike" PpuModel="Ppu2C04C">
     <DipSwitch Localization="Coins">
       <Option>1 coin = 1 credit</Option>
       <Option>2 coins = 1 credit</Option>
@@ -195,7 +195,7 @@
     <DipSwitch />
     <DipSwitch />
   </Game>
-  <Game ID="Golf" Localization="Golf" InputType="B">
+  <Game ID="Golf" Localization="Golf" InputType="SwapControllers">
     <DipSwitch Localization="Coins">
       <Option>Free Play</Option>
       <Option>1 coin = 1 credit</Option>
@@ -225,7 +225,7 @@
       <Option>Hard</Option>
     </DipSwitch>
   </Game>
-  <Game ID="GolfB" Localization="Golf" InputType="B" PpuModel="Ppu2C04B">
+  <Game ID="GolfB" Localization="Golf" InputType="SwapControllers" PpuModel="Ppu2C04B">
     <DipSwitch Localization="Coins">
       <Option>Free Play</Option>
       <Option>1 coin = 1 credit</Option>
@@ -255,7 +255,7 @@
       <Option>Hard</Option>
     </DipSwitch>
   </Game>
-  <Game ID="Goonies" Localization="Goonies" InputType="A" PpuModel="Ppu2C04C">
+  <Game ID="Goonies" Localization="Goonies" PpuModel="Ppu2C04C">
     <DipSwitch Localization="Coins">
       <Option>1 coin = 1 credit</Option>
       <Option>3 coins = 1 credit</Option>
@@ -281,7 +281,7 @@
       <Option>On</Option>
     </DipSwitch>
   </Game>
-  <Game ID="Gradius" Localization="Gradius" InputType="B" PpuModel="Ppu2C04A">
+  <Game ID="Gradius" Localization="Gradius" InputType="SwapControllers" PpuModel="Ppu2C04A">
     <DipSwitch Localization="Coins">
       <Option>1 coin = 1 credit</Option>
       <Option>3 coins = 1 credit</Option>
@@ -369,7 +369,7 @@
       <Option>100000</Option>
     </DipSwitch>
   </Game>
-  <Game ID="IceClimber" Localization="Ice Climber" InputType="B" PpuModel="Ppu2C04D">
+  <Game ID="IceClimber" Localization="Ice Climber" InputType="SwapControllers" PpuModel="Ppu2C04D">
     <DipSwitch Localization="Coins">
       <Option>1 coin = 1 credit</Option>
       <Option>2 coins = 1 credit</Option>
@@ -395,7 +395,7 @@
       <Option>Short</Option>
     </DipSwitch>
   </Game>
-  <Game ID="IceClimberB" Localization="Ice Climber" InputType="D" PpuModel="Ppu2C04D">
+  <Game ID="IceClimberB" Localization="Ice Climber" InputType="SwapControllers" PpuModel="Ppu2C04D">
     <DipSwitch Localization="Coins">
       <Option>1 coin = 1 credit</Option>
       <Option>2 coins = 1 credit</Option>
@@ -421,7 +421,7 @@
       <Option>Short</Option>
     </DipSwitch>
   </Game>
-  <Game ID="MachRider" Localization="Mach Rider" InputType="A" PpuModel="Ppu2C04B">
+  <Game ID="MachRider" Localization="Mach Rider" PpuModel="Ppu2C04B">
     <DipSwitch Localization="Coins">
       <Option>1 coin = 1 credit</Option>
       <Option>2 coins = 1 credit</Option>
@@ -461,7 +461,7 @@
     <DipSwitch />
     <DipSwitch />
   </Game>
-  <Game ID="MightyBombJack" Localization="Mighty Bomb Jack" InputType="A" PpuModel="Ppu2C05B">
+  <Game ID="MightyBombJack" Localization="Mighty Bomb Jack" PpuModel="Ppu2C05B">
     <DipSwitch Localization="Coins">
       <Option>1 coin = 1 credit</Option>
       <Option>2 coins = 1 credit</Option>
@@ -482,7 +482,7 @@
     <DipSwitch />
     <DipSwitch />
   </Game>
-  <Game ID="NinjaJajamaruKun" Localization="Ninja Jajamaru Kun" PpuModel="Ppu2C05A" InputType="C">
+  <Game ID="NinjaJajamaruKun" Localization="Ninja Jajamaru Kun" PpuModel="Ppu2C05A" InputType="SwapControllers">
     <DipSwitch Localization="Coins">
       <Option>1 coin = 1 credit</Option>
       <Option>2 coins = 1 credit</Option>
@@ -506,7 +506,7 @@
       <Option>On</Option>
     </DipSwitch>
   </Game>
-  <Game ID="Pinball" Localization="Pinball" InputType="E">
+  <Game ID="Pinball" Localization="Pinball (Japan)" InputType="SwapAB">
     <DipSwitch Localization="Coins">
       <Option>Free Play</Option>
       <Option>1 coin = 1 credit</Option>
@@ -530,7 +530,7 @@
       <Option>Fast</Option>
     </DipSwitch>
   </Game>
-  <Game ID="PinballB" Localization="Pinball" InputType="A" PpuModel="Ppu2C04A">
+  <Game ID="PinballB" Localization="Pinball (US)" PpuModel="Ppu2C04A">
     <DipSwitch Localization="Coins">
       <Option>Free Play</Option>
       <Option>1 coin = 1 credit</Option>
@@ -554,7 +554,7 @@
       <Option>Fast</Option>
     </DipSwitch>
   </Game>
-  <Game ID="Platoon" Localization="Platoon" InputType="A" PpuModel="Ppu2C04A">
+  <Game ID="Platoon" Localization="Platoon" PpuModel="Ppu2C04A">
     <DipSwitch />
     <DipSwitch />
     <DipSwitch Localization="Demo Sounds">
@@ -574,7 +574,7 @@
       <Option>Free Play</Option>
     </DipSwitch>
   </Game>
-  <Game ID="RBIBaseball" Localization="RBI Baseball" InputType="B" PpuModel="Ppu2C04A">
+  <Game ID="RBIBaseball" Localization="RBI Baseball" InputType="SwapControllers" PpuModel="Ppu2C04A">
     <DipSwitch Localization="Coins">
       <Option>1 coin = 1 credit</Option>
       <Option>1 coin = 2 credits</Option>
@@ -601,7 +601,7 @@
       <Option>Unused</Option>
     </DipSwitch>
   </Game>
-  <Game ID="RaidBungelingBay" Localization="Raid on Bungeling Bay" InputType="D" PpuModel="Ppu2C04B">
+  <Game ID="RaidBungelingBay" Localization="Raid on Bungeling Bay" InputType="SwapControllers" PpuModel="Ppu2C04B">
     <DipSwitch Localization="Coins">
       <Option>1 coin = 1 credit</Option>
       <Option>2 coins = 1 credit</Option>
@@ -621,7 +621,7 @@
     <DipSwitch />
     <DipSwitch />
   </Game>
-  <Game ID="Slalom" Localization="Slalom" InputType="A" PpuModel="Ppu2C04B">
+  <Game ID="Slalom" Localization="Slalom" PpuModel="Ppu2C04B">
     <DipSwitch Localization="Coins">
       <Option>1 coin = 1 credit</Option>
       <Option>3 coins = 1 credit</Option>
@@ -651,7 +651,7 @@
       <Option>On</Option>
     </DipSwitch>
   </Game>
-  <Game ID="Soccer" Localization="Soccer" InputType="B" PpuModel="Ppu2C04C">
+  <Game ID="Soccer" Localization="Soccer" InputType="SwapControllers" PpuModel="Ppu2C04C">
     <DipSwitch Localization="Coins">
       <Option>1 coin = 1 credit</Option>
       <Option>2 coins = 1 credit</Option>
@@ -675,7 +675,7 @@
       <Option>Very Hard</Option>
     </DipSwitch>
   </Game>
-  <Game ID="StarLuster" Localization="Star Luster" InputType="A" DefaultDip="32" PpuModel="Ppu2C04A">
+  <Game ID="StarLuster" Localization="Star Luster" DefaultDip="32" PpuModel="Ppu2C04A">
     <DipSwitch Localization="Coins">
       <Option>1 coin = 1 credit</Option>
       <Option>2 coins = 1 credit</Option>
@@ -693,7 +693,7 @@
     </DipSwitch>
     <DipSwitch />
   </Game>
-  <Game ID="SuperMarioBros" Localization="Super Mario Bros" InputType="A" PpuModel="Ppu2C04D">
+  <Game ID="SuperMarioBros" Localization="Super Mario Bros" PpuModel="Ppu2C04D">
     <DipSwitch Localization="Coins">
       <Option>1 coin = 1 credit</Option>
       <Option>1 coin = 3 credits</Option>
@@ -723,7 +723,7 @@
       <Option>3</Option>
     </DipSwitch>
   </Game>
-  <Game ID="SuperSkyKid" Localization="Super Sky Kid" InputType="C" PpuModel="Ppu2C04A">
+  <Game ID="SuperSkyKid" Localization="Super Sky Kid" InputType="SwapControllers" PpuModel="Ppu2C04A">
     <DipSwitch />
     <DipSwitch />
     <DipSwitch Localization="Lives">
@@ -747,7 +747,7 @@
       <Option>Unused</Option>
     </DipSwitch>
   </Game>
-  <Game ID="SuperXevious" Localization="Super Xevious" InputType="A" PpuModel="Ppu2C04A">
+  <Game ID="SuperXevious" Localization="Super Xevious" PpuModel="Ppu2C04A">
     <DipSwitch />
     <DipSwitch />
     <DipSwitch />
@@ -765,7 +765,7 @@
       <Option>RP2C04-0004</Option>
     </DipSwitch>
   </Game>
-  <Game ID="Tetris" Localization="Tetris" InputType="B" DefaultDip="32">
+  <Game ID="Tetris" Localization="Tetris" InputType="SwapControllers" DefaultDip="32">
     <DipSwitch Localization="Coins">
       <Option>1 coin = 1 credit</Option>
       <Option>2 coins = 1 credit</Option>
@@ -783,7 +783,7 @@
     </DipSwitch>
     <DipSwitch />
   </Game>
-  <Game ID="TKOBoxing" Localization="TKO Boxing" InputType="A" PpuModel="Ppu2C04C">
+  <Game ID="TKOBoxing" Localization="TKO Boxing" PpuModel="Ppu2C04C">
     <DipSwitch Localization="Coins">
       <Option>1 coin = 1 credit</Option>
       <Option>1 coin = 2 credits</Option>
@@ -800,7 +800,7 @@
     <DipSwitch />
     <DipSwitch />
   </Game>
-  <Game ID="TopGun" Localization="Top Gun" InputType="A" PpuModel="Ppu2C05D">
+  <Game ID="TopGun" Localization="Top Gun" PpuModel="Ppu2C05D">
     <DipSwitch Localization="Coins">
       <Option>1 coin = 1 credit</Option>
       <Option>3 coins = 1 credit</Option>

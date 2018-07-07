@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
+using System.Xml.Serialization;
 
 namespace Mesen.GUI.Config
 {
@@ -13,6 +14,8 @@ namespace Mesen.GUI.Config
 		public string GameCrc;
 		public InteropEmu.PpuModel PpuModel;
 		public byte DipSwitches;
+
+		[XmlElement("InputScheme")] //Rename node to prevent upgrade issues
 		public InteropEmu.VsInputType InputType;
 
 		public static VsConfigInfo GetCurrentGameConfig(bool createNew)
@@ -153,7 +156,7 @@ namespace Mesen.GUI.Config
 					gameConfig.PpuModel = InteropEmu.PpuModel.Ppu2C03;
 				}
 				if(gameNode.Attributes["InputType"] != null) {
-					gameConfig.InputType = (InteropEmu.VsInputType)Enum.Parse(typeof(InteropEmu.VsInputType), "Type" + gameNode.Attributes["InputType"].Value);
+					gameConfig.InputType = (InteropEmu.VsInputType)Enum.Parse(typeof(InteropEmu.VsInputType), gameNode.Attributes["InputType"].Value);
 				} else {
 					gameConfig.InputType = InteropEmu.VsInputType.Default;
 				}

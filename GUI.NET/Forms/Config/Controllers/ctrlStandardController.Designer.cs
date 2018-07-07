@@ -50,13 +50,19 @@
 			this.btnUp = new System.Windows.Forms.Button();
 			this.btnDown = new System.Windows.Forms.Button();
 			this.btnA = new System.Windows.Forms.Button();
+			this.picStart = new System.Windows.Forms.PictureBox();
+			this.picSelect = new System.Windows.Forms.PictureBox();
 			this.picBackground = new System.Windows.Forms.PictureBox();
 			this.panel2.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.picStart)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.picSelect)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.picBackground)).BeginInit();
 			this.SuspendLayout();
 			// 
 			// panel2
 			// 
+			this.panel2.Controls.Add(this.picStart);
+			this.panel2.Controls.Add(this.picSelect);
 			this.panel2.Controls.Add(this.lblL);
 			this.panel2.Controls.Add(this.lblR);
 			this.panel2.Controls.Add(this.btnL);
@@ -147,45 +153,43 @@
 			// 
 			// lblTurboA
 			// 
-			this.lblTurboA.AutoSize = true;
 			this.lblTurboA.Font = new System.Drawing.Font("Arial", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.lblTurboA.Location = new System.Drawing.Point(498, 78);
 			this.lblTurboA.Name = "lblTurboA";
 			this.lblTurboA.Size = new System.Drawing.Size(62, 18);
 			this.lblTurboA.TabIndex = 27;
 			this.lblTurboA.Text = "Turbo A";
-			this.lblTurboA.TextAlign = System.Drawing.ContentAlignment.TopRight;
+			this.lblTurboA.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// lblTurboB
 			// 
-			this.lblTurboB.AutoSize = true;
 			this.lblTurboB.Font = new System.Drawing.Font("Arial", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.lblTurboB.Location = new System.Drawing.Point(414, 78);
 			this.lblTurboB.Name = "lblTurboB";
 			this.lblTurboB.Size = new System.Drawing.Size(65, 18);
 			this.lblTurboB.TabIndex = 26;
 			this.lblTurboB.Text = "Turbo B";
-			this.lblTurboB.TextAlign = System.Drawing.ContentAlignment.TopRight;
+			this.lblTurboB.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// lblStart
 			// 
-			this.lblStart.AutoSize = true;
 			this.lblStart.Font = new System.Drawing.Font("Arial", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.lblStart.Location = new System.Drawing.Point(324, 104);
+			this.lblStart.Location = new System.Drawing.Point(310, 106);
 			this.lblStart.Name = "lblStart";
-			this.lblStart.Size = new System.Drawing.Size(42, 18);
+			this.lblStart.Size = new System.Drawing.Size(73, 18);
 			this.lblStart.TabIndex = 25;
 			this.lblStart.Text = "Start";
+			this.lblStart.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 			// 
 			// lblSelect
 			// 
-			this.lblSelect.AutoSize = true;
 			this.lblSelect.Font = new System.Drawing.Font("Arial", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.lblSelect.Location = new System.Drawing.Point(237, 104);
+			this.lblSelect.Location = new System.Drawing.Point(228, 106);
 			this.lblSelect.Name = "lblSelect";
-			this.lblSelect.Size = new System.Drawing.Size(53, 18);
+			this.lblSelect.Size = new System.Drawing.Size(73, 18);
 			this.lblSelect.TabIndex = 24;
 			this.lblSelect.Text = "Select";
+			this.lblSelect.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 			// 
 			// lblMicrophone
 			// 
@@ -298,6 +302,24 @@
 			this.btnA.Text = "A";
 			this.btnA.UseVisualStyleBackColor = true;
 			// 
+			// picStart
+			// 
+			this.picStart.Location = new System.Drawing.Point(332, 100);
+			this.picStart.Name = "picStart";
+			this.picStart.Size = new System.Drawing.Size(24, 24);
+			this.picStart.TabIndex = 36;
+			this.picStart.TabStop = false;
+			this.picStart.Visible = false;
+			// 
+			// picSelect
+			// 
+			this.picSelect.Location = new System.Drawing.Point(252, 100);
+			this.picSelect.Name = "picSelect";
+			this.picSelect.Size = new System.Drawing.Size(24, 24);
+			this.picSelect.TabIndex = 35;
+			this.picSelect.TabStop = false;
+			this.picSelect.Visible = false;
+			// 
 			// picBackground
 			// 
 			this.picBackground.Location = new System.Drawing.Point(0, 0);
@@ -316,6 +338,8 @@
 			this.Size = new System.Drawing.Size(585, 210);
 			this.panel2.ResumeLayout(false);
 			this.panel2.PerformLayout();
+			((System.ComponentModel.ISupportInitialize)(this.picStart)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.picSelect)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.picBackground)).EndInit();
 			this.ResumeLayout(false);
 
@@ -347,5 +371,7 @@
 		private System.Windows.Forms.Label lblR;
 		private System.Windows.Forms.Button btnL;
 		private System.Windows.Forms.Button btnR;
+		private System.Windows.Forms.PictureBox picStart;
+		private System.Windows.Forms.PictureBox picSelect;
 	}
 }

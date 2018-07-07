@@ -244,6 +244,11 @@ uint8_t ControlManager::GetOpenBusMask(uint8_t port)
 	}
 }
 
+void ControlManager::RemapControllerButtons()
+{
+	//Used by VS System games
+}
+
 void ControlManager::UpdateInputState()
 {
 	if(_isLagging) {
@@ -276,6 +281,9 @@ void ControlManager::UpdateInputState()
 		device->OnAfterSetState();
 		//log += "|" + device->GetTextState();
 	}
+
+	//Used by VS System games
+	RemapControllerButtons();
 
 	shared_ptr<Debugger> debugger = _console->GetDebugger(false);
 	if(debugger) {

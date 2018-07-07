@@ -53,35 +53,36 @@ void VsControlManager::RemapControllerButtons()
 	}
 
 	VsInputType inputType = EmulationSettings::GetVsInputType();
-	if(inputType == VsInputType::TypeA) {
-		BaseControlDevice::SwapButtons(controllers[0], StandardController::Buttons::Select, controllers[0], StandardController::Buttons::Start);
-		BaseControlDevice::SwapButtons(controllers[1], StandardController::Buttons::Select, controllers[1], StandardController::Buttons::Start);
-	} else if(inputType == VsInputType::TypeB) {
-		std::swap(controllers[0], controllers[1]);
-		BaseControlDevice::SwapButtons(controllers[1], StandardController::Buttons::Select, controllers[0], StandardController::Buttons::Start);
-		BaseControlDevice::SwapButtons(controllers[0], StandardController::Buttons::Select, controllers[1], StandardController::Buttons::Start);
-	} else if(inputType == VsInputType::TypeC) {
-		std::swap(controllers[0], controllers[1]);
+	if(inputType == VsInputType::SwapControllers) {
+		//Swap controllers 1 & 2
+		ControlDeviceState port1State = controllers[0]->GetRawState();
+		ControlDeviceState port2State = controllers[1]->GetRawState();
+		controllers[0]->SetRawState(port2State);
+		controllers[1]->SetRawState(port1State);
 
-		if(controllers[0]->IsPressed(StandardController::Buttons::Start)) {
-			controllers[1]->SetBit(StandardController::Buttons::Select);
-		} else {
-			controllers[1]->ClearBit(StandardController::Buttons::Select);
-		}
-
-		controllers[0]->ClearBit(StandardController::Buttons::Start);
-		controllers[0]->ClearBit(StandardController::Buttons::Select);
-	} else if(inputType == VsInputType::TypeD) {
-		std::swap(controllers[0], controllers[1]);
-		BaseControlDevice::SwapButtons(controllers[1], StandardController::Buttons::Select, controllers[0], StandardController::Buttons::Start);
-		BaseControlDevice::SwapButtons(controllers[0], StandardController::Buttons::Select, controllers[1], StandardController::Buttons::Start);
-		controllers[0]->InvertBit(StandardController::Buttons::Select);
-		controllers[1]->InvertBit(StandardController::Buttons::Select);
-	} else if(inputType == VsInputType::TypeE) {
+		//But don't swap the start/select buttons
+		BaseControlDevice::SwapButtons(controllers[0], StandardController::Buttons::Start, controllers[1], StandardController::Buttons::Start);
+		BaseControlDevice::SwapButtons(controllers[0], StandardController::Buttons::Select, controllers[1], StandardController::Buttons::Select);
+	} else if(inputType == VsInputType::SwapAB) {
+		//Swap buttons P1 A & P2 B (Pinball (Japan))
 		BaseControlDevice::SwapButtons(controllers[0], StandardController::Buttons::B, controllers[1], StandardController::Buttons::A);
-		BaseControlDevice::SwapButtons(controllers[0], StandardController::Buttons::Select, controllers[0], StandardController::Buttons::Start);
-		BaseControlDevice::SwapButtons(controllers[1], StandardController::Buttons::Select, controllers[1], StandardController::Buttons::Start);
 	}
+
+	//Swap Start/Select for all configurations (makes it more intuitive)
+	BaseControlDevice::SwapButtons(controllers[0], StandardController::Buttons::Start, controllers[0], StandardController::Buttons::Select);
+	BaseControlDevice::SwapButtons(controllers[1], StandardController::Buttons::Start, controllers[1], StandardController::Buttons::Select);
+
+	uint32_t crc = _console->GetMapperInfo().Hash.PrgCrc32Hash;
+	if(crc == 0x99FB3B3B) {
+		//Bit 3 of the input status must always be on (Raid on Bungeling Bay protection)
+		controllers[0]->InvertBit(StandardController::Buttons::Start);
+		controllers[1]->InvertBit(StandardController::Buttons::Start);
+	}
+}
+
+uint8_t VsControlManager::GetOpenBusMask(uint8_t port)
+{
+	return 0x00;
 }
 
 uint8_t VsControlManager::ReadRAM(uint16_t addr)
@@ -93,7 +94,7 @@ uint8_t VsControlManager::ReadRAM(uint16_t addr)
 	switch(addr) {
 		case 0x4016: {
 			uint32_t dipSwitches = EmulationSettings::GetDipSwitches();
-			value = ControlManager::ReadRAM(addr);
+			value = ControlManager::ReadRAM(addr) & 0x65;
 			value |= ((dipSwitches & 0x01) ? 0x08 : 0x00);
 			value |= ((dipSwitches & 0x02) ? 0x10 : 0x00);
 			value |= (_console->IsMaster() ? 0x00 : 0x80);
@@ -144,10 +145,6 @@ void VsControlManager::WriteRAM(uint16_t addr, uint8_t value)
 
 	bool previousState = _refreshState;
 	_refreshState = (value & 0x01) == 0x01;
-
-	if(previousState && !_refreshState) {
-		RemapControllerButtons();
-	}
 
 	if(addr == 0x4016) {
 		_prgChrSelectBit = (value >> 2) & 0x01;

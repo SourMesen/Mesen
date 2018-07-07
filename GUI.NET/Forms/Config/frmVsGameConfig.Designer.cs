@@ -34,6 +34,8 @@
 			this.cboPpuModel = new System.Windows.Forms.ComboBox();
 			this.grpDipSwitches = new System.Windows.Forms.GroupBox();
 			this.btnReset = new System.Windows.Forms.Button();
+			this.lblInputType = new System.Windows.Forms.Label();
+			this.cboInputType = new System.Windows.Forms.ComboBox();
 			this.baseConfigPanel.SuspendLayout();
 			this.tlpMain.SuspendLayout();
 			this.SuspendLayout();
@@ -41,7 +43,7 @@
 			// baseConfigPanel
 			// 
 			this.baseConfigPanel.Controls.Add(this.btnReset);
-			this.baseConfigPanel.Location = new System.Drawing.Point(0, 295);
+			this.baseConfigPanel.Location = new System.Drawing.Point(0, 325);
 			this.baseConfigPanel.Size = new System.Drawing.Size(305, 29);
 			this.baseConfigPanel.Controls.SetChildIndex(this.btnReset, 0);
 			// 
@@ -50,19 +52,22 @@
 			this.tlpMain.ColumnCount = 2;
 			this.tlpMain.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
 			this.tlpMain.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+			this.tlpMain.Controls.Add(this.cboInputType, 0, 2);
+			this.tlpMain.Controls.Add(this.lblInputType, 0, 2);
 			this.tlpMain.Controls.Add(this.cboGame, 1, 0);
 			this.tlpMain.Controls.Add(this.lblGame, 0, 0);
 			this.tlpMain.Controls.Add(this.lblPpuModel, 0, 1);
 			this.tlpMain.Controls.Add(this.cboPpuModel, 1, 1);
-			this.tlpMain.Controls.Add(this.grpDipSwitches, 0, 2);
+			this.tlpMain.Controls.Add(this.grpDipSwitches, 0, 3);
 			this.tlpMain.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tlpMain.Location = new System.Drawing.Point(0, 0);
 			this.tlpMain.Name = "tlpMain";
-			this.tlpMain.RowCount = 3;
+			this.tlpMain.RowCount = 4;
 			this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this.tlpMain.Size = new System.Drawing.Size(305, 324);
+			this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this.tlpMain.Size = new System.Drawing.Size(305, 354);
 			this.tlpMain.TabIndex = 0;
 			// 
 			// cboGame
@@ -108,10 +113,10 @@
 			// 
 			this.tlpMain.SetColumnSpan(this.grpDipSwitches, 2);
 			this.grpDipSwitches.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.grpDipSwitches.Location = new System.Drawing.Point(3, 57);
+			this.grpDipSwitches.Location = new System.Drawing.Point(3, 84);
 			this.grpDipSwitches.Margin = new System.Windows.Forms.Padding(3, 3, 3, 30);
 			this.grpDipSwitches.Name = "grpDipSwitches";
-			this.grpDipSwitches.Size = new System.Drawing.Size(299, 237);
+			this.grpDipSwitches.Size = new System.Drawing.Size(299, 240);
 			this.grpDipSwitches.TabIndex = 3;
 			this.grpDipSwitches.TabStop = false;
 			this.grpDipSwitches.Text = "DIP Switches";
@@ -127,11 +132,30 @@
 			this.btnReset.UseVisualStyleBackColor = true;
 			this.btnReset.Click += new System.EventHandler(this.btnReset_Click);
 			// 
+			// lblInputType
+			// 
+			this.lblInputType.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.lblInputType.AutoSize = true;
+			this.lblInputType.Location = new System.Drawing.Point(3, 61);
+			this.lblInputType.Name = "lblInputType";
+			this.lblInputType.Size = new System.Drawing.Size(61, 13);
+			this.lblInputType.TabIndex = 6;
+			this.lblInputType.Text = "Input Type:";
+			// 
+			// cboInputType
+			// 
+			this.cboInputType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.cboInputType.FormattingEnabled = true;
+			this.cboInputType.Location = new System.Drawing.Point(73, 57);
+			this.cboInputType.Name = "cboInputType";
+			this.cboInputType.Size = new System.Drawing.Size(194, 21);
+			this.cboInputType.TabIndex = 7;
+			// 
 			// frmVsGameConfig
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(305, 324);
+			this.ClientSize = new System.Drawing.Size(305, 354);
 			this.Controls.Add(this.tlpMain);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
 			this.MaximizeBox = false;
@@ -158,5 +182,7 @@
 		private System.Windows.Forms.ComboBox cboGame;
 		private System.Windows.Forms.Label lblGame;
 		private System.Windows.Forms.Button btnReset;
+		private System.Windows.Forms.ComboBox cboInputType;
+		private System.Windows.Forms.Label lblInputType;
 	}
 }

@@ -30,6 +30,11 @@ namespace Mesen.GUI.Forms.Config
 				ctrlStandardController2.Initialize(controllerInfo.Keys[2]);
 				ctrlStandardController3.Initialize(controllerInfo.Keys[3]);
 
+				ctrlStandardController0.PortNumber = portNumber;
+				ctrlStandardController1.PortNumber = portNumber;
+				ctrlStandardController2.PortNumber = portNumber;
+				ctrlStandardController3.PortNumber = portNumber;
+
 				if(portNumber == 1 && consoleType == ConsoleType.Famicom) {
 					ctrlStandardController0.ShowMicrophone = true;
 					ctrlStandardController1.ShowMicrophone = true;
@@ -38,10 +43,17 @@ namespace Mesen.GUI.Forms.Config
 				}
 
 				if(controllerType == InteropEmu.ControllerType.SnesController) {
-					ctrlStandardController0.IsSnesController = true;
-					ctrlStandardController1.IsSnesController = true;
-					ctrlStandardController2.IsSnesController = true;
-					ctrlStandardController3.IsSnesController = true;
+					ctrlStandardController0.Type = StandardControllerType.SnesController;
+					ctrlStandardController1.Type = StandardControllerType.SnesController;
+					ctrlStandardController2.Type = StandardControllerType.SnesController;
+					ctrlStandardController3.Type = StandardControllerType.SnesController;
+				}
+
+				if(InteropEmu.IsVsSystem()) {
+					ctrlStandardController0.Type = StandardControllerType.VsSystem;
+					ctrlStandardController1.Type = StandardControllerType.VsSystem;
+					ctrlStandardController2.Type = StandardControllerType.VsSystem;
+					ctrlStandardController3.Type = StandardControllerType.VsSystem;
 				}
 
 				this.btnSelectPreset.Image = BaseControl.DownArrow;

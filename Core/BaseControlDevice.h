@@ -74,12 +74,6 @@ public:
 	void SetRawState(ControlDeviceState state);
 	ControlDeviceState GetRawState();
 
-	template<typename T>
-	shared_ptr<T> GetState()
-	{
-		return std::dynamic_pointer_cast<T>(_state);
-	}
-
 	virtual uint8_t ReadRAM(uint16_t addr) = 0;
 	virtual void WriteRAM(uint16_t addr, uint8_t value) = 0;
 	

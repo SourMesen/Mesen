@@ -22,15 +22,12 @@ private:
 	vector<IInputProvider*> _inputProviders;
 	
 	//Static so that power cycle does not reset its value
-	//TODOCONSOLE : PollCounter needs to be kept through power cycle
 	uint32_t _pollCounter;
 
 	shared_ptr<BaseControlDevice> _mapperControlDevice;
 
 	uint32_t _lagCounter = 0;
 	bool _isLagging = false;
-
-	uint8_t GetOpenBusMask(uint8_t port);
 
 protected:
 	shared_ptr<Console> _console;
@@ -42,6 +39,8 @@ protected:
 
 	virtual void StreamState(bool saving) override;
 	virtual ControllerType GetControllerType(uint8_t port);
+	virtual void RemapControllerButtons();
+	virtual uint8_t GetOpenBusMask(uint8_t port);
 
 public:
 	ControlManager(shared_ptr<Console> console, shared_ptr<BaseControlDevice> systemActionManager, shared_ptr<BaseControlDevice> mapperControlDevice);

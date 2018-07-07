@@ -77,6 +77,7 @@ RomData iNesLoader::LoadRom(vector<uint8_t>& romFile, NESHeader *preloadedHeader
 
 	romData.PrgCrc32 = CRC32::GetCRC(romData.PrgRom.data(), romData.PrgRom.size());
 
+	Log("PRG CRC32: 0x" + HexUtilities::ToHex(romData.PrgCrc32, true));
 	Log("PRG+CHR CRC32: 0x" + HexUtilities::ToHex(romData.PrgChrCrc32, true));
 
 	if(romData.IsNes20Header) {

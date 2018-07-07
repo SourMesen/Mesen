@@ -534,6 +534,7 @@
 		<Form ID="frmVsGameConfig" Title="Конфигурация VS">
 			<Control ID="lblGame">Игра</Control>
 			<Control ID="lblPpuModel">Модель PPU</Control>
+			<Control ID="lblInputType">Input Type:</Control>
 			<Control ID="grpDipSwitches">DIP Switches</Control>
 		</Form>
 		<Form ID="frmUpdatePrompt" Title="Mesen - Доступно обновление">
@@ -979,6 +980,11 @@
 		<Enum ID="ConsoleType">
 			<Value ID="Nes">NES</Value>
 			<Value ID="Famicom">Famicom</Value>
+		</Enum>
+		<Enum ID="VsInputType">
+			<Value ID="Default">Default</Value>
+			<Value ID="SwapControllers">Swap controllers</Value>
+			<Value ID="SwapAB">Swap A/B buttons</Value>
 		</Enum>
 		<Enum ID="PpuModel">
 			<Value ID="Ppu2C03">RP2C03</Value>

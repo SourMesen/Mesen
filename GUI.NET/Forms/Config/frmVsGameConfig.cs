@@ -35,6 +35,7 @@ namespace Mesen.GUI.Forms.Config
 			}
 
 			AddBinding("PpuModel", cboPpuModel);
+			AddBinding("InputType", cboInputType);
 
 			foreach(KeyValuePair<string, VsGameConfig> kvp in VsGameConfig.GetGameConfigs()) {
 				cboGame.Items.Add(new DropdownElement { Name = kvp.Value.GameName, ID = kvp.Value.GameID });

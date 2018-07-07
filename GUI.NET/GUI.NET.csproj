@@ -1208,6 +1208,10 @@
     <Compile Include="RuntimeChecker.cs" />
     <Compile Include="SingleInstance.cs" />
     <Compile Include="TestRunner.cs" />
+    <None Include="Resources\VsButton4.png" />
+    <None Include="Resources\VsButton3.png" />
+    <None Include="Resources\VsButton2.png" />
+    <None Include="Resources\VsButton1.png" />
     <None Include="Resources\NudUpArrow.png" />
     <None Include="Resources\NudDownArrow.png" />
     <None Include="Dependencies\LuaScripts\NtscSafeArea.lua">

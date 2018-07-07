@@ -14,38 +14,56 @@ namespace Mesen.GUI.Forms.Config
 {
 	public partial class ctrlStandardController : BaseInputConfigControl
 	{
-		private bool _isSnesController = false;
+		private StandardControllerType _type = StandardControllerType.Default;
 
 		public ctrlStandardController()
 		{
 			InitializeComponent();
 			if(LicenseManager.UsageMode != LicenseUsageMode.Designtime) {
-				IsSnesController = false;
+				Type = StandardControllerType.Default;
 				picBackground.Resize += picBackground_Resize;
 				UpdateBackground();
 			}
 		}
+
+		public int PortNumber { get; set; }
 
 		private void picBackground_Resize(object sender, EventArgs e)
 		{
 			this.BeginInvoke((Action)(()=> UpdateBackground()));
 		}
 
-		public bool IsSnesController 
+		public StandardControllerType Type
 		{
 			set
 			{
-				_isSnesController = value;
+				_type = value;
 
-				if(value) {
-					lblTurboA.Text = _isSnesController ? "X" : "Turbo A";
-					lblTurboB.Text = _isSnesController ? "Y" : "Turbo B";
+				lblStart.Text = "Start";
+				lblSelect.Text = "Select";
+				lblTurboA.Text = "Turbo A";
+				lblTurboB.Text = "Turbo B";
+
+				if(_type == StandardControllerType.SnesController) {
+					lblTurboA.Text = "X";
+					lblTurboB.Text = "Y";
 				}
 
-				btnL.Visible = value;
-				lblL.Visible = value;
-				btnR.Visible = value;
-				lblR.Visible = value;
+				if(_type == StandardControllerType.VsSystem) {
+					lblStart.Visible = false;
+					lblSelect.Visible = false;
+
+					picStart.Visible = true;
+					picSelect.Visible = true;
+					picStart.Image = (PortNumber % 2 == 0) ? Properties.Resources.VsButton1 : Properties.Resources.VsButton2;
+					picSelect.Image = (PortNumber % 2 == 0) ? Properties.Resources.VsButton3 : Properties.Resources.VsButton4;
+				}
+
+				bool isSnes = _type == StandardControllerType.SnesController;
+				btnL.Visible = isSnes;
+				lblL.Visible = isSnes;
+				btnR.Visible = isSnes;
+				lblR.Visible = isSnes;
 			}
 		}
 
@@ -100,7 +118,7 @@ namespace Mesen.GUI.Forms.Config
 
 			this.OnChange();
 		}
-		
+	
 		public override void UpdateKeyMappings(KeyMappings mappings)
 		{
 			mappings.A = (UInt32)btnA.Tag;
@@ -119,5 +137,12 @@ namespace Mesen.GUI.Forms.Config
 			mappings.LButton = (UInt32)btnL.Tag;
 			mappings.RButton = (UInt32)btnR.Tag;
 		}
+	}
+
+	public enum StandardControllerType
+	{
+		Default = 0,
+		SnesController = 1,
+		VsSystem = 2
 	}
 }

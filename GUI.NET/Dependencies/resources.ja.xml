@@ -533,6 +533,12 @@
 			<Control ID="lblDonate">応援ありがとうございます！</Control>
 			<Control ID="okButton">&amp;OK</Control>
 		</Form>
+		<Form ID="frmVsGameConfig" Title="ゲーム設定">
+			<Control ID="lblGame">ゲーム:</Control>
+			<Control ID="lblPpuModel">PPUモデル:</Control>
+			<Control ID="lblInputType">コントローラ設定:</Control>
+			<Control ID="grpDipSwitches">ディップスイッチ</Control>
+		</Form>
 		<Form ID="frmUpdatePrompt" Title="Mesen ー アップデート可能">
 			<Control ID="lblLatestVersion">最新バージョン： </Control>
 			<Control ID="lblCurrentVersion">現在のバージョン： </Control>
@@ -976,6 +982,11 @@
 		<Enum ID="ConsoleType">
 			<Value ID="Nes">NES</Value>
 			<Value ID="Famicom">ファミコン</Value>
+		</Enum>
+		<Enum ID="VsInputType">
+			<Value ID="Default">デフォルト</Value>
+			<Value ID="SwapControllers">コントローラを入れ替える</Value>
+			<Value ID="SwapAB">A・Bボタンを入れ替える</Value>
 		</Enum>
 		<Enum ID="PpuModel">
 			<Value ID="Ppu2C03">RP2C03</Value>

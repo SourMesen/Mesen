@@ -41,7 +41,11 @@ private:
 		}
 	};
 
+protected:
 	ControllerType GetControllerType(uint8_t port) override;
+	void RemapControllerButtons() override;
+	uint8_t GetOpenBusMask(uint8_t port) override;
+
 	void UpdateSlaveMasterBit(uint8_t slaveMasterBit);
 
 public:
@@ -55,8 +59,6 @@ public:
 	uint8_t GetPrgChrSelectBit();
 
 	void UpdateControlDevices() override;
-
-	void RemapControllerButtons();
 
 	uint8_t ReadRAM(uint16_t addr) override;	
 	void WriteRAM(uint16_t addr, uint8_t value) override;
