@@ -61,6 +61,7 @@ void RewindManager::ProcessNotification(ConsoleNotificationType type, void * par
 						}
 						_historyBackup.clear();
 						_rewindState = RewindState::Stopped;
+						EmulationSettings::ClearFlags(EmulationFlags::Rewind);
 						EmulationSettings::ClearFlags(EmulationFlags::ForceMaxSpeed);
 					}
 					break;
