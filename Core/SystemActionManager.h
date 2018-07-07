@@ -51,14 +51,22 @@ public:
 		}		
 	}
 
-	void Reset()
+	bool Reset()
 	{
-		_needReset = true;
+		if(!_needReset) {
+			_needReset = true;
+			return true;
+		}
+		return false;
 	}
 
-	void PowerCycle()
+	bool PowerCycle()
 	{
-		_needPowerCycle = true;
+		if(!_needPowerCycle) {
+			_needPowerCycle = true;
+			return true;
+		}
+		return false;
 	}
 
 	void ProcessSystemActions()

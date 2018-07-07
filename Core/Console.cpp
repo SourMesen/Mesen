@@ -522,17 +522,16 @@ void Console::PowerCycle()
 void Console::Reset(bool softReset)
 {
 	if(_initialized) {
-		if(softReset) {
-			_systemActionManager->Reset();
-		} else {
-			_systemActionManager->PowerCycle();
-		}
+		bool needSuspend = softReset ? _systemActionManager->Reset() : _systemActionManager->PowerCycle();
 
-		//Resume from code break if needed (otherwise reset doesn't happen right away)
-		shared_ptr<Debugger> debugger = _debugger;
-		if(debugger) {
-			debugger->Suspend();
-			debugger->Run();
+		if(needSuspend) {
+			//Only do this if a reset/power cycle is not already pending - otherwise we'll end up calling Suspend() too many times
+			//Resume from code break if needed (otherwise reset doesn't happen right away)
+			shared_ptr<Debugger> debugger = _debugger;
+			if(debugger) {
+				debugger->Suspend();
+				debugger->Run();
+			}
 		}
 	}
 }
