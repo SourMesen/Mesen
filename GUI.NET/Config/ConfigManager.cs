@@ -201,8 +201,15 @@ namespace Mesen.GUI.Config
 			} else {
 				folder = defaultFolderName;
 			}
-			if(!Directory.Exists(folder)) {
-				Directory.CreateDirectory(folder);
+
+			try {
+				if(!Directory.Exists(folder)) {
+					Directory.CreateDirectory(folder);
+				}
+			} catch {
+				//If the folder doesn't exist and we couldn't create it, use the default folder
+				InteropEmu.WriteLogEntry("[UI] Folder could not be created: " + folder);
+				folder = defaultFolderName;
 			}
 			return folder;
 		}

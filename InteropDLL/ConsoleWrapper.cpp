@@ -423,6 +423,8 @@ namespace InteropEmu {
 			return _logString.c_str();
 		}
 
+		DllExport void __stdcall WriteLogEntry(char* message) { MessageManager::Log(message); }
+
 		DllExport void __stdcall SaveState(uint32_t stateIndex) { _console->GetSaveStateManager()->SaveState(stateIndex); }
 		DllExport void __stdcall LoadState(uint32_t stateIndex) { _console->GetSaveStateManager()->LoadState(stateIndex); }
 		DllExport void __stdcall SaveStateFile(char* filepath) { _console->GetSaveStateManager()->SaveState(filepath); }
