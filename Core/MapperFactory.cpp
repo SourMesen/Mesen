@@ -536,74 +536,121 @@ BaseMapper* MapperFactory::GetMapperFromID(RomData &romData)
 		case 254: return new MMC3_254();
 		case 255: return new Bmc255();
 
-		case UnifBoards::A65AS: return new A65AS();
+		case 256: break; //ONEBUS
+		case 257: break; //PEC-586
+		case 258: return new Unl158B();
+		case 259: return new MMC3_BmcF15();
+		case 260: return new BmcHpxx();
+		case 261: return new Bmc810544CA1();
+		case 262: return new MMC3_StreetHeroes();
+		case 263: return new MMC3_Kof97();
+		case 264: return new Yoko();
+		case 265: return new T262();
+		case 266: return new CityFighter();
+		//267
+		case 268: return new MMC3_Coolboy();
+		//269-270
+		case 271: break; //22026
+		//272-273
+		case 274: return new Bmc80013B();
+		//275-282
+		case 283: return new Gs2004();
+		case 284: return new UnlDripGame();
+		case 285: return new A65AS();
+		case 286: return new Bs5();
+		case 287: return new MMC3_Bmc411120C(); //+ K-3088
+		case 288: break; //GKCXIN1
+		case 289: return new Bmc60311C();
+		case 290: return new BmcNtd03();
+		//291
+		case 292: return new DragonFighter();
+		//293-294
+		case 295: break; //13IN1JY110
+		//296-297
+		case 298: return new Tf1201();
+		case 299: return new Bmc11160();
+		case 300: return new Bmc190in1();
+		case 301: return new Bmc8157();
+		case 302: return new Kaiser7057();
+		case 303: return new Kaiser7017();
+		case 304: return new Smb2j();
+		case 305: return new Kaiser7031();
+		case 306: return new Kaiser7016();
+		case 307: return new Kaiser7037();
+		case 308: break; //TH2131-1
+		case 309: break; //LH51
+		//310-311
+		case 312: return new Kaiser7013B();
+		case 313: break; //RESET-TXROM
+		case 314: return new Bmc64in1NoRepeat();
+		case 315: break; //830134C
+		//316-318
+		case 319: return new Hp898f();
+		case 320: break; //830425C-4391T
+		//321
+		case 322: break; //K-3033
+		case 323: break; //FARID_SLROM_8-IN-1
+		case 324: break; //FARID_UNROM_8-IN-1
+		case 325: return new MMC3_MaliSB();
+		case 327: break; //10-24-C-A1
+		case 328: return new Rt01();
+		case 329: return new Edu2000();
+		//330
+		case 331: return new Bmc12in1();
+		case 332: return new Super40in1Ws();
+		case 333: return new Bmc8in1(); // + NEWSTAR-GRM070-8IN1
+		//334
+		case 335: break; //CTC-09
+		case 336: break; //K-3046
+		case 337: break; //CTC-12IN1
+		case 338: break; //SA005-A
+		case 339: break; //K-3006
+		case 340: break; //K-3036
+		case 341: break; //TJ-03
+		case 342: break; //COOLGIRL
+		//343
+		case 344: break; //GN26
+		case 345: break; //L6IN1
+		case 346: return new Kaiser7012();
+		//347
+		case 348: return new Bmc830118C();
+		case 349: return new BmcG146();
+		case 350: break; //891227
+
+		case 513: return new Sachen9602();
+		//514-517
+		case 518: return new Dance2000();
+		case 519: return new Eh8813A();
+		//520
+		case 521: return new DreamTech01();
+		case 522: return new Lh10();
+		//523
+		case 524: break; //900218
+		case 525: break; //KS7021A
+		case 526: break; //BJ56
+		case 527: break; //AX40G
+		case 528: break; //831128C
+		case 529: return new T230();
+		case 530: return new Ax5705();
+
 		case UnifBoards::Ac08: return new Ac08();
-		case UnifBoards::Ax5705: return new Ax5705();
 		case UnifBoards::Bb: return new Bb();
-		case UnifBoards::Bmc11160: return new Bmc11160();
-		case UnifBoards::Bmc12in1: return new Bmc12in1();
-		case UnifBoards::Bmc411120C: return new MMC3_Bmc411120C();
-		case UnifBoards::Bmc64in1NoRepeat: return new Bmc64in1NoRepeat();
-		case UnifBoards::Bmc70in1: return new Bmc70in1();
-		case UnifBoards::Bmc70in1B: return new Bmc70in1();
-		case UnifBoards::Bmc190in1: return new Bmc190in1();
-		case UnifBoards::Bmc60311C: return new Bmc60311C();
-		case UnifBoards::Bmc810544CA1: return new Bmc810544CA1();
-		case UnifBoards::Bmc830118C: return new Bmc830118C();
-		case UnifBoards::Bmc80013B: return new Bmc80013B();
-		case UnifBoards::Bmc8157: return new Bmc8157();
-		case UnifBoards::Bmc8in1: return new Bmc8in1();
-		case UnifBoards::BmcF15: return new MMC3_BmcF15();
-		case UnifBoards::BmcG146: return new BmcG146();
 		case UnifBoards::BmcGn45: return new BmcGn45();
-		case UnifBoards::BmcHpxx: return new BmcHpxx();
-		case UnifBoards::BmcNtd03: return new BmcNtd03();
-		case UnifBoards::Bs5: return new Bs5();
 		case UnifBoards::Cc21: return new Cc21();
-		case UnifBoards::CityFighter: return new CityFighter();
-		case UnifBoards::Coolboy: return new MMC3_Coolboy();
-		case UnifBoards::Dance2000: return new Dance2000();
-		case UnifBoards::DragonFighter: return new DragonFighter();
-		case UnifBoards::DreamTech01: return new DreamTech01();
-		case UnifBoards::Edu2000: return new Edu2000();
-		case UnifBoards::Eh8813A: return new Eh8813A();
 		case UnifBoards::Fk23C: return new MMC3_Fk23C(false);
 		case UnifBoards::Fk23Ca: return new MMC3_Fk23C(true);
 		case UnifBoards::Ghostbusters63in1: return new Ghostbusters63in1();
-		case UnifBoards::Gs2004: return new Gs2004();
 		case UnifBoards::Gs2013: return new Gs2013();
-		case UnifBoards::Hp898f: return new Hp898f();
-		case UnifBoards::Kof97: return new MMC3_Kof97();
-		case UnifBoards::Ks7012: return new Kaiser7012();
-		case UnifBoards::Ks7013B: return new Kaiser7013B();
-		case UnifBoards::Ks7016: return new Kaiser7016();
-		case UnifBoards::Ks7017: return new Kaiser7017();
-		case UnifBoards::Ks7031: return new Kaiser7031();
-		case UnifBoards::Ks7037: return new Kaiser7037();
-		case UnifBoards::Ks7057: return new Kaiser7057();
-		case UnifBoards::Lh10: return new Lh10();
 		case UnifBoards::Malee: return new Malee();
-		case UnifBoards::MaliSB: return new MMC3_MaliSB();
 		case UnifBoards::NovelDiamond: return new NovelDiamond();
-		case UnifBoards::Rt01: return new Rt01();
-		case UnifBoards::Sachen9602: return new Sachen9602();
-		case UnifBoards::Smb2j: return new Smb2j();
 		case UnifBoards::SssNrom256: return new FamicomBox();
-		case UnifBoards::StreetHeroes: return new MMC3_StreetHeroes();
 		case UnifBoards::Super24in1Sc03: return new MMC3_Super24in1Sc03();
-		case UnifBoards::Super40in1Ws: return new Super40in1Ws();
-		case UnifBoards::T230: return new T230();
-		case UnifBoards::T262: return new T262();
-		case UnifBoards::Tf1201: return new Tf1201();
-		case UnifBoards::Unl158B: return new Unl158B();
 		case UnifBoards::Unl255in1: return new Unl255in1();
 		case UnifBoards::Unl43272: return new Unl43272();
 		case UnifBoards::Unl8237A: return new Unl8237A();
 		case UnifBoards::UnlD1038: return new UnlD1038();
-		case UnifBoards::UnlDripGame: return new UnlDripGame();
 		case UnifBoards::UnlPuzzle: return new UnlPuzzle();
 		case UnifBoards::UnlVrc7: return new UnlVrc7();
-		case UnifBoards::Yoko: return new Yoko();
 
 		case MapperFactory::NsfMapperID: return new NsfMapper();
 		case MapperFactory::FdsMapperID: return new FDS();

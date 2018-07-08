@@ -356,7 +356,7 @@ namespace Mesen.GUI.Debugger
 			{
 				switch(GetRomHeaderVersion()) {
 					case RomHeaderVersion.Nes2_0:
-						return ((_bytes[8] & 0x0F) << 4) | (_bytes[7] & 0xF0) | (_bytes[6] >> 4);
+						return ((_bytes[8] & 0x0F) << 8) | (_bytes[7] & 0xF0) | (_bytes[6] >> 4);
 					default:
 					case RomHeaderVersion.iNes:
 						return (_bytes[7] & 0xF0) | (_bytes[6] >> 4);

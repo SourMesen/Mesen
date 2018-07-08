@@ -7,7 +7,7 @@ uint16_t NESHeader::GetMapperID()
 {
 	switch(GetRomHeaderVersion()) {
 		case RomHeaderVersion::Nes2_0:
-			return ((Byte8 & 0x0F) << 4) | (Byte7 & 0xF0) | (Byte6 >> 4);
+			return ((Byte8 & 0x0F) << 8) | (Byte7 & 0xF0) | (Byte6 >> 4);
 		default:
 		case RomHeaderVersion::iNes:
 			return (Byte7 & 0xF0) | (Byte6 >> 4);
