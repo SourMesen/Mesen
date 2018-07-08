@@ -8,6 +8,7 @@ class Mapper42 : public BaseMapper
 private:
 	uint16_t _irqCounter;
 	bool _irqEnabled;
+	uint8_t _prgReg;
 
 protected:
 	virtual uint16_t GetPRGPageSize() override { return 0x2000; }
@@ -17,18 +18,30 @@ protected:
 	{
 		_irqCounter = 0;
 		_irqEnabled = false;
+		_prgReg = 0;
 
-		SelectPRGPage(0, 0x0C);
-		SelectPRGPage(1, 0x0D);
-		SelectPRGPage(2, 0x0E);
-		SelectPRGPage(3, 0x0F);
+		SelectPRGPage(0, -4);
+		SelectPRGPage(1, -3);
+		SelectPRGPage(2, -2);
+		SelectPRGPage(3, -1);
 		SelectCHRPage(0, 0);
+
+		UpdateState();
 	}
 
 	void StreamState(bool saving) override
 	{
 		BaseMapper::StreamState(saving);
-		Stream(_irqCounter, _irqEnabled);
+		Stream(_irqCounter, _irqEnabled, _prgReg);
+
+		if(!saving) {
+			UpdateState();
+		}
+	}
+
+	void UpdateState()
+	{
+		SetCpuMemoryMapping(0x6000, 0x7FFF, _prgReg & 0x0F, PrgMemoryType::PrgRom);
 	}
 
 	void ProcessCpuClock() override
@@ -56,7 +69,8 @@ protected:
 				break;
 
 			case 0xE000:
-				SetCpuMemoryMapping(0x6000, 0x7FFF, value & 0x0F, PrgMemoryType::PrgRom);
+				_prgReg = value & 0x0F;
+				UpdateState();
 				break;
 
 			case 0xE001:

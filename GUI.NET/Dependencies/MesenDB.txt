@@ -4,7 +4,7 @@
 #
 # Automatically generated database based on Nestopia's DB and NesCartDB
 #
-# Generated on 2018-07-07 using:
+# Generated on 2018-07-08 using:
 #     -NesCartDB (dated 2017-08-21)
 #     -Nestopia UE's latest DB (dated 2015-10-22) 
 # 
@@ -6633,7 +6633,7 @@
 6D6DBE6B,NesNtsc,UNK,,,0,32,8,,0,0,0,v,,,,,
 6D78F836,NesNtsc,UNK,,,4,128,128,,0,0,0,v,,,,,
 6D8908AC,NesNtsc,UNK,,,2,128,,,0,0,0,v,,,,,
-6D92DFF1,Famicom,,,,60,128,64,,0,0,0,,,,,,
+6D92DFF1,Famicom,,,,59,128,64,,0,0,0,,,,,,
 6D9E4F4D,NesNtsc,UNK,,,4,256,128,,0,0,0,h,,,,,
 6DA0F643,NesNtsc,UNK,,,4,256,128,,0,0,0,h,,,,,
 6DA83F06,NesNtsc,UNK,,,4,128,128,,0,0,0,h,,,,,

@@ -106,7 +106,6 @@
 #include "Mapper103.h"
 #include "Mapper106.h"
 #include "Mapper107.h"
-#include "Mapper108.h"
 #include "Mapper112.h"
 #include "Mapper116.h"
 #include "Mapper117.h"
@@ -115,7 +114,6 @@
 #include "Mapper174.h"
 #include "Mapper183.h"
 #include "Mapper200.h"
-#include "Mapper201.h"
 #include "Mapper202.h"
 #include "Mapper203.h"
 #include "Mapper204.h"
@@ -245,13 +243,11 @@
 #include "TxSRom.h"
 #include "Unl158B.h"
 #include "Unl255in1.h"
-#include "Unl43272.h"
 #include "Unl8237A.h"
 #include "UnlD1038.h"
 #include "UnlDripGame.h"
 #include "UnlPci556.h"
 #include "UnlPuzzle.h"
-#include "UnlVrc7.h"
 #include "UNROM.h"
 #include "UnRom_94.h"
 #include "UnRom_180.h"
@@ -279,7 +275,7 @@ Supported mappers:
 | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10| 11| 12| 13| 14| 15|
 | 16| 17| 18| 19|...| 21| 22| 23| 24| 25| 26| 27| 28| 29| 30| 31|
 | 32| 33| 34| 35| 36| 37| 38| 39| 40| 41| 42| 43| 44| 45| 46| 47|
-| 48| 49| 50| 51| 52| 53| 54|???| 56| 57| 58|===| 60| 61| 62| 63|
+| 48| 49| 50| 51| 52| 53| 54|???| 56| 57| 58| 59| 60| 61| 62| 63|
 | 64| 65| 66| 67| 68| 69| 70| 71| 72| 73| 74| 75| 76| 77| 78| 79|
 | 80|===| 82| 83|===| 85| 86| 87| 88| 89| 90| 91| 92| 93| 94| 95|
 | 96| 97|===| 99|...|101|===|103|104|105|106|107|108|===|===|111|
@@ -364,7 +360,8 @@ BaseMapper* MapperFactory::GetMapperFromID(RomData &romData)
 		case 56: return new Kaiser202();
 		case 57: return new Mapper57();
 		case 58: return new Mapper58();
-		case 60: return new Mapper60();  //Partial support?
+		case 59: return new UnlD1038();
+		case 60: return new Mapper60();
 		case 61: return new Mapper61();
 		case 62: return new Mapper62();
 		case 63: return new Bmc63();
@@ -407,7 +404,7 @@ BaseMapper* MapperFactory::GetMapperFromID(RomData &romData)
 		case 105: return new MMC1_105(); break;
 		case 106: return new Mapper106();
 		case 107: return new Mapper107();
-		case 108: return new Mapper108();
+		case 108: return new Bb();
 		case 111: return new Cheapocabra();
 		case 112: return new Mapper112();
 		case 113: return new Nina03_06(true);
@@ -486,7 +483,7 @@ BaseMapper* MapperFactory::GetMapperFromID(RomData &romData)
 		case 198: return new MMC3_198();
 		case 199: return new MMC3_199();
 		case 200: return new Mapper200();
-		case 201: return new Mapper201();
+		case 201: return new NovelDiamond();
 		case 202: return new Mapper202();
 		case 203: return new Mapper203();
 		case 204: return new Mapper204();
@@ -633,24 +630,19 @@ BaseMapper* MapperFactory::GetMapperFromID(RomData &romData)
 		case 529: return new T230();
 		case 530: return new Ax5705();
 
-		case UnifBoards::Ac08: return new Ac08();
-		case UnifBoards::Bb: return new Bb();
+		case UnifBoards::Ac08: return new Ac08(); //mapper 42?
 		case UnifBoards::BmcGn45: return new BmcGn45();
 		case UnifBoards::Cc21: return new Cc21();
-		case UnifBoards::Fk23C: return new MMC3_Fk23C(false);
-		case UnifBoards::Fk23Ca: return new MMC3_Fk23C(true);
-		case UnifBoards::Ghostbusters63in1: return new Ghostbusters63in1();
+		case UnifBoards::Fk23C: return new MMC3_Fk23C(false); //mapper 176?
+		case UnifBoards::Fk23Ca: return new MMC3_Fk23C(true); //mapper 176?
+		case UnifBoards::Ghostbusters63in1: return new Ghostbusters63in1(); //mapper 226?
 		case UnifBoards::Gs2013: return new Gs2013();
-		case UnifBoards::Malee: return new Malee();
-		case UnifBoards::NovelDiamond: return new NovelDiamond();
+		case UnifBoards::Malee: return new Malee(); //mapper 42?
 		case UnifBoards::SssNrom256: return new FamicomBox();
-		case UnifBoards::Super24in1Sc03: return new MMC3_Super24in1Sc03();
+		case UnifBoards::Super24in1Sc03: return new MMC3_Super24in1Sc03(); //mapper 176?
 		case UnifBoards::Unl255in1: return new Unl255in1();
-		case UnifBoards::Unl43272: return new Unl43272();
-		case UnifBoards::Unl8237A: return new Unl8237A();
-		case UnifBoards::UnlD1038: return new UnlD1038();
+		case UnifBoards::Unl8237A: return new Unl8237A(); //mapper 215.1
 		case UnifBoards::UnlPuzzle: return new UnlPuzzle();
-		case UnifBoards::UnlVrc7: return new UnlVrc7();
 
 		case MapperFactory::NsfMapperID: return new NsfMapper();
 		case MapperFactory::FdsMapperID: return new FDS();

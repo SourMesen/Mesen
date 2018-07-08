@@ -406,9 +406,6 @@
     <ClInclude Include="Mapper200.h">
       <Filter>Nes\Mappers\Unnamed</Filter>
     </ClInclude>
-    <ClInclude Include="Mapper201.h">
-      <Filter>Nes\Mappers\Unnamed</Filter>
-    </ClInclude>
     <ClInclude Include="Mapper202.h">
       <Filter>Nes\Mappers\Unnamed</Filter>
     </ClInclude>
@@ -808,9 +805,6 @@
     <ClInclude Include="MMC3_197.h">
       <Filter>Nes\Mappers\MMC</Filter>
     </ClInclude>
-    <ClInclude Include="Mapper108.h">
-      <Filter>Nes\Mappers\Unnamed</Filter>
-    </ClInclude>
     <ClInclude Include="MMC3_187.h">
       <Filter>Nes\Mappers\MMC</Filter>
     </ClInclude>
@@ -1073,9 +1067,6 @@
       <Filter>Nes\Mappers\Unif</Filter>
     </ClInclude>
     <ClInclude Include="MMC3_MaliSB.h">
-      <Filter>Nes\Mappers\Unif</Filter>
-    </ClInclude>
-    <ClInclude Include="Unl43272.h">
       <Filter>Nes\Mappers\Unif</Filter>
     </ClInclude>
     <ClInclude Include="MMC3_Bmc411120C.h">
@@ -1407,9 +1398,6 @@
     </ClInclude>
     <ClInclude Include="MMC3_208.h">
       <Filter>Nes\Mappers\MMC</Filter>
-    </ClInclude>
-    <ClInclude Include="UnlVrc7.h">
-      <Filter>Nes\Mappers\Unif</Filter>
     </ClInclude>
     <ClInclude Include="Yoko.h">
       <Filter>Nes\Mappers\Unif</Filter>
