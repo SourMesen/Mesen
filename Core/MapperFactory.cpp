@@ -57,6 +57,7 @@
 #include "FDS.h"
 #include "FrontFareast.h"
 #include "Ghostbusters63in1.h"
+#include "Gkcx1.h"
 #include "GoldenFive.h"
 #include "Gs2004.h"
 #include "Gs2013.h"
@@ -556,7 +557,7 @@ BaseMapper* MapperFactory::GetMapperFromID(RomData &romData)
 		case 285: return new A65AS();
 		case 286: return new Bs5();
 		case 287: return new MMC3_Bmc411120C(); //+ K-3088
-		case 288: break; //GKCXIN1
+		case 288: return new Gkcx1();
 		case 289: return new Bmc60311C();
 		case 290: return new BmcNtd03();
 		//291

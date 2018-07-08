@@ -1447,6 +1447,9 @@
     <ClInclude Include="NESHeader.h">
       <Filter>Nes\RomLoader</Filter>
     </ClInclude>
+    <ClInclude Include="Gkcx1.h">
+      <Filter>Nes\Mappers\Unif</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
