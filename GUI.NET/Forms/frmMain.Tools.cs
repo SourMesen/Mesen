@@ -93,6 +93,8 @@ namespace Mesen.GUI.Forms
 					_cheatListWindow = null;
 				};
 			} else {
+				_cheatListWindow.WindowState = FormWindowState.Normal;
+				_cheatListWindow.BringToFront();
 				_cheatListWindow.Focus();
 			}
 		}
@@ -128,6 +130,8 @@ namespace Mesen.GUI.Forms
 					_logWindow = null;
 				};
 			} else {
+				_logWindow.WindowState = FormWindowState.Normal;
+				_logWindow.BringToFront();
 				_logWindow.Focus();
 			}
 		}
@@ -222,6 +226,8 @@ namespace Mesen.GUI.Forms
 					_hdPackEditorWindow = null;
 				};
 			} else {
+				_hdPackEditorWindow.WindowState = FormWindowState.Normal;
+				_hdPackEditorWindow.BringToFront();
 				_hdPackEditorWindow.Focus();
 			}
 		}
