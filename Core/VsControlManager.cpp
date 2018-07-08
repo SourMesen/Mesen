@@ -156,7 +156,6 @@ void VsControlManager::WriteRAM(uint16_t addr, uint8_t value)
 {
 	ControlManager::WriteRAM(addr, value);
 
-	bool previousState = _refreshState;
 	_refreshState = (value & 0x01) == 0x01;
 
 	if(addr == 0x4016) {

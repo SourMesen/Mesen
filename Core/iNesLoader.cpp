@@ -86,6 +86,7 @@ RomData iNesLoader::LoadRom(vector<uint8_t>& romFile, NESHeader *preloadedHeader
 	if(romData.Info.System == GameSystem::VsSystem) {
 		string type = "Vs-UniSystem";
 		switch(romData.Info.VsType) {
+			case VsSystemType::Default: break;
 			case VsSystemType::IceClimberProtection: type = "VS-UniSystem (Ice Climbers)"; break;
 			case VsSystemType::RaidOnBungelingBayProtection: type = "VS-DualSystem (Raid on Bungeling Bay)"; break;
 			case VsSystemType::RbiBaseballProtection: type = "VS-UniSystem (RBI Baseball)"; break;

@@ -84,9 +84,12 @@ namespace Mesen.GUI.Forms.Config
 				optionDropdown.SelectedIndex = selectedIndex;
 				optionDropdown.Dock = DockStyle.Fill;
 				currentBit += bitCount;
-				
 
-				tlpDipSwitches.RowStyles.Add(new RowStyle(SizeType.AutoSize));
+				if(Program.IsMono) {
+					tlpDipSwitches.RowStyles.Add(new RowStyle(SizeType.Absolute, 27));
+				} else {
+					tlpDipSwitches.RowStyles.Add(new RowStyle(SizeType.AutoSize));
+				}
 				tlpDipSwitches.Controls.Add(optionLabel, baseColumn, row);
 				tlpDipSwitches.Controls.Add(optionDropdown, baseColumn + 1, row);
 				row++;
@@ -96,7 +99,8 @@ namespace Mesen.GUI.Forms.Config
 				}
 			}
 			tlpDipSwitches.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-			tlpDipSwitches.RowCount = _dipSwitches.Count;
+			tlpDipSwitches.RowCount = _dipSwitches.Count + 1;
+
 			grpDipSwitches.Controls.Add(tlpDipSwitches);
 			tlpDipSwitches.PerformLayout();
 		}

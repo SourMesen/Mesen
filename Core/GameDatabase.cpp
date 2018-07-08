@@ -540,6 +540,7 @@ void GameDatabase::SetGameInfo(uint32_t romCrc, RomData &romData, bool updateRom
 		if(GetGameSystem(info.System) == GameSystem::VsSystem) {
 			string type = "VS-UniSystem";
 			switch(GetVsSystemType(info.VsSystemType)) {
+				case VsSystemType::Default: break;
 				case VsSystemType::IceClimberProtection: type = "VS-UniSystem (Ice Climbers)"; break;
 				case VsSystemType::RaidOnBungelingBayProtection: type = "VS-DualSystem (Raid on Bungeling Bay)"; break;
 				case VsSystemType::RbiBaseballProtection: type = "VS-UniSystem (RBI Baseball)"; break;
@@ -641,67 +642,61 @@ void GameDatabase::UpdateRomData(GameInfo &info, RomData &romData)
 
 void GameDatabase::SetVsSystemDefaults(uint32_t prgCrc32)
 {
-	//Used by Libretro port since the data for VS system games is stored in the C# UI (needs to be refactored eventually)
-	VsInputType inputType = VsInputType::Default;
-	PpuModel model = PpuModel::Ppu2C03;
-	uint8_t defaultDip = 0;
-
+	//TODO: CLEANUP
 	switch(prgCrc32) {
 		case 0x8850924B:
 			//Tetris
-			defaultDip = 32; //????
+			//defaultDip = 32; //????
 			break;
 
 
 		case 0xCF36261E:
 			//SuperSkyKid
-			inputType = VsInputType::SwapControllers;
-			model = PpuModel::Ppu2C04A;
+			//inputType = VsInputType::SwapControllers;
+			//model = PpuModel::Ppu2C04A;
 			break;
 
 		case 0xE1AA8214:
 			//StarLuster
-			defaultDip = 32; //????
+			//defaultDip = 32; //????
 			break;
 
 		case 0x43A357EF:
 			//IceClimber
-			inputType = VsInputType::SwapControllers;
-			model = PpuModel::Ppu2C04D;
+			//inputType = VsInputType::SwapControllers;
+			//model = PpuModel::Ppu2C04D;
 			break;
 
 		case 0xD4EB5923:
 			//IceClimberB
-			inputType = VsInputType::SwapControllers;
-			model = PpuModel::Ppu2C04D;
+			//inputType = VsInputType::SwapControllers;
+			//model = PpuModel::Ppu2C04D;
 			break;
 
 		case 0x737DD1BF: case 0x4BF3972D:
 			//SuperMarioBros
-			model = PpuModel::Ppu2C04D;
+			//model = PpuModel::Ppu2C04D;
 			break;
 
 		case 0xAE8063EF:
 			//MachRiderFightingCourse, defaults
-			model = PpuModel::Ppu2C03;
+			//model = PpuModel::Ppu2C03;
 			break;
 
 		case 0x8A6A9848: //1 crc left
 			//MachRider
-			model = PpuModel::Ppu2C04B;
+			//model = PpuModel::Ppu2C04B;
 			break;
 
 		case 0xC99EC059:
 			//RaidBungelingBay
-			inputType = VsInputType::SwapControllers;
-			model = PpuModel::Ppu2C04B;
+			//inputType = VsInputType::SwapControllers;
+			//model = PpuModel::Ppu2C04B;
 			break;
 
 		case 0xF9D3B0A3: case 0x66BB838F: case 0x9924980A:
 			//SuperXevious
-			model = PpuModel::Ppu2C04A;
+			//model = PpuModel::Ppu2C04A;
 			break;
 	}
-
-	EmulationSettings::SetDipSwitches(defaultDip);
 }
