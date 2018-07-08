@@ -36,6 +36,7 @@ struct NESHeader
 	GameSystem GetNesGameSystem();
 	GameSystem GetGameSystem();
 	RomHeaderVersion GetRomHeaderVersion();
+	uint64_t GetSizeValue(uint32_t exponent, uint32_t multiplier);
 	uint32_t GetPrgSize();
 	uint32_t GetChrSize();
 	uint32_t GetWorkRamSize();

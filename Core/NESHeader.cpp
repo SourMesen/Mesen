@@ -81,10 +81,26 @@ RomHeaderVersion NESHeader::GetRomHeaderVersion()
 	}
 }
 
+uint64_t NESHeader::GetSizeValue(uint32_t exponent, uint32_t multiplier)
+{
+	if(exponent > 32) {
+		//Restrict max size to 28GB (mosty to be able to return the size in a 64-bit int)
+		exponent = 32;
+		MessageManager::Log("[iNes] Unsupported size value.");
+	}
+
+	multiplier = multiplier * 2 + 1;
+	return multiplier * (uint64_t)1 << exponent;
+}
+
 uint32_t NESHeader::GetPrgSize()
 {
 	if(GetRomHeaderVersion() == RomHeaderVersion::Nes2_0) {
-		return (((Byte9 & 0x0F) << 8) | PrgCount) * 0x4000;
+		if((Byte9 & 0x0F) == 0x0F) {
+			return GetSizeValue(PrgCount >> 2, PrgCount & 0x03);
+		} else {
+			return (((Byte9 & 0x0F) << 8) | PrgCount) * 0x4000;
+		}
 	} else {
 		if(PrgCount == 0) {
 			return 256 * 0x4000; //0 is a special value and means 256
@@ -97,7 +113,11 @@ uint32_t NESHeader::GetPrgSize()
 uint32_t NESHeader::GetChrSize()
 {
 	if(GetRomHeaderVersion() == RomHeaderVersion::Nes2_0) {
-		return (((Byte9 & 0xF0) << 4) | ChrCount) * 0x2000;
+		if((Byte9 & 0xF0) == 0xF0) {
+			return GetSizeValue(ChrCount >> 2, ChrCount & 0x03);
+		} else {
+			return (((Byte9 & 0xF0) << 4) | ChrCount) * 0x2000;
+		}
 	} else {
 		return ChrCount * 0x2000;
 	}
