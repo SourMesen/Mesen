@@ -44,6 +44,7 @@ std::unordered_map<string, int> UnifLoader::_boardMappings = std::unordered_map<
 	{ "ETROM", 5 },
 	{ "EWROM", 5 },
 	{ "FARID_SLROM_8-IN-1", 323 },
+	{ "FARID_UNROM_8-IN-1", 324 },
 	{ "FK23C", UnifBoards::Fk23C },
 	{ "FK23CA", UnifBoards::Fk23Ca },
 	{ "FS304", 162 },
