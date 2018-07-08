@@ -103,6 +103,10 @@ uint8_t VsControlManager::ReadRAM(uint16_t addr)
 	switch(addr) {
 		case 0x4016: {
 			uint32_t dipSwitches = EmulationSettings::GetDipSwitches();
+			if(!_console->IsMaster()) {
+				dipSwitches >>= 8;
+			}
+
 			value = ControlManager::ReadRAM(addr) & 0x65;
 			value |= ((dipSwitches & 0x01) ? 0x08 : 0x00);
 			value |= ((dipSwitches & 0x02) ? 0x10 : 0x00);
@@ -114,6 +118,9 @@ uint8_t VsControlManager::ReadRAM(uint16_t addr)
 			value = ControlManager::ReadRAM(addr) & 0x01;
 
 			uint32_t dipSwitches = EmulationSettings::GetDipSwitches();
+			if(!_console->IsMaster()) {
+				dipSwitches >>= 8;
+			}
 			value |= ((dipSwitches & 0x04) ? 0x04 : 0x00);
 			value |= ((dipSwitches & 0x08) ? 0x08 : 0x00);
 			value |= ((dipSwitches & 0x10) ? 0x10 : 0x00);

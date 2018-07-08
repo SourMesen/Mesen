@@ -13,14 +13,29 @@ namespace Mesen.GUI.Forms.Config
 {
 	public partial class frmGameConfig : BaseConfigForm
 	{
+		private List<List<string>> _dipSwitches;
+
 		public frmGameConfig(GameSpecificInfo configInfo)
 		{
 			InitializeComponent();
 
 			GameSpecificInfo existingConfig = GameSpecificInfo.GetGameSpecificInfo();
-			if(existingConfig == null) {
-				GameDipswitchDefinition dipswitchDefinition = GameDipswitchDefinition.GetDipswitchDefinition();
+			GameDipswitchDefinition dipswitchDefinition = GameDipswitchDefinition.GetDipswitchDefinition();
+			if(existingConfig == null && dipswitchDefinition != null) {
 				configInfo.DipSwitches = dipswitchDefinition.DefaultDipSwitches;
+			}
+
+			if(dipswitchDefinition != null) {
+				_dipSwitches = dipswitchDefinition.DipSwitches;
+			} else {
+				_dipSwitches = new List<List<string>>();
+				for(int i = 0; i < (InteropEmu.IsVsDualSystem() ? 16 : 8); i++) {
+					_dipSwitches.Add(new List<string>(new string[] { "Dipswitch #" + i.ToString(), "Off", "On" }));
+				}
+			}
+
+			if(_dipSwitches.Count > 8) {
+				this.Width *= 2;
 			}
 
 			Entity = configInfo;
@@ -29,30 +44,28 @@ namespace Mesen.GUI.Forms.Config
 
 		private void UpdateDipSwitches()
 		{
-			GameDipswitchDefinition dipswitchDefinition = GameDipswitchDefinition.GetDipswitchDefinition();
-
 			grpDipSwitches.Controls.Clear();
 
-			List<List<string>> dipSwitches;
-			if(dipswitchDefinition != null) {
-				dipSwitches = dipswitchDefinition.DipSwitches;
-			} else {
-				dipSwitches = new List<List<string>>();
-				for(int i = 0; i < 8; i++) {
-					dipSwitches.Add(new List<string>(new string[] { "Unknown", "Off", "On" }));
-				}
-			}
-
 			int row = 0;
+			int baseColumn = 0;
 			var tlpDipSwitches = new TableLayoutPanel();
 			tlpDipSwitches.Dock = DockStyle.Fill;
-			tlpDipSwitches.ColumnStyles.Add(new ColumnStyle());
-			tlpDipSwitches.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
-			tlpDipSwitches.ColumnCount = 2;
+
+			if(_dipSwitches.Count > 8) {
+				tlpDipSwitches.ColumnStyles.Add(new ColumnStyle());
+				tlpDipSwitches.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+				tlpDipSwitches.ColumnStyles.Add(new ColumnStyle());
+				tlpDipSwitches.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+				tlpDipSwitches.ColumnCount = 4;
+			} else {
+				tlpDipSwitches.ColumnStyles.Add(new ColumnStyle());
+				tlpDipSwitches.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+				tlpDipSwitches.ColumnCount = 2;
+			}
 
 			UInt32 value = ((GameSpecificInfo)Entity).DipSwitches;
 			int currentBit = 0;
-			foreach(List<string> setting in dipSwitches) {
+			foreach(List<string> setting in _dipSwitches) {
 				var optionLabel = new Label();
 				optionLabel.AutoSize = true;
 				optionLabel.Text = setting[0] + ":";
@@ -74,12 +87,16 @@ namespace Mesen.GUI.Forms.Config
 				
 
 				tlpDipSwitches.RowStyles.Add(new RowStyle(SizeType.AutoSize));
-				tlpDipSwitches.Controls.Add(optionLabel, 0, row);
-				tlpDipSwitches.Controls.Add(optionDropdown, 1, row);
+				tlpDipSwitches.Controls.Add(optionLabel, baseColumn, row);
+				tlpDipSwitches.Controls.Add(optionDropdown, baseColumn + 1, row);
 				row++;
+				if(row == 8) {
+					baseColumn += 2;
+					row = 0;
+				}
 			}
 			tlpDipSwitches.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-			tlpDipSwitches.RowCount = row + 1;
+			tlpDipSwitches.RowCount = _dipSwitches.Count;
 			grpDipSwitches.Controls.Add(tlpDipSwitches);
 			tlpDipSwitches.PerformLayout();
 		}
@@ -103,7 +120,7 @@ namespace Mesen.GUI.Forms.Config
 				}
 			}
 
-			return (byte)value;
+			return (UInt32)value;
 		}
 
 		protected override void UpdateConfig()

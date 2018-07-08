@@ -10,7 +10,6 @@ namespace Mesen.GUI.Config
 {
 	public class GameDipswitchDefinition
 	{
-		public string GameName;
 		public string GameID;
 		public byte DefaultDipSwitches;
 
@@ -21,6 +20,7 @@ namespace Mesen.GUI.Config
 		public static string GetGameIdByCrc(UInt32 prgCrc32)
 		{
 			switch(prgCrc32) {
+				case 0x9213A19E: return "BalloonFight";
 				case 0xEB2DBA63: case 0x98CFE016: return "TKOBoxing";
 				case 0x135ADF7C: return "RBIBaseball";
 				case 0xED588F00: return "DuckHunt";
@@ -89,7 +89,6 @@ namespace Mesen.GUI.Config
 			foreach(XmlNode gameNode in config.SelectNodes("/VsSystemGames/Game")) {
 				var gameDipswitches = new GameDipswitchDefinition();
 				gameDipswitches.GameID = gameNode.Attributes["ID"].Value;
-				gameDipswitches.GameName = gameNode.Attributes["Localization"].Value;
 				if(gameNode.Attributes["DefaultDip"] != null) {
 					gameDipswitches.DefaultDipSwitches = (byte)Int32.Parse(gameNode.Attributes["DefaultDip"].Value);
 				}
