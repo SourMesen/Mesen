@@ -17,6 +17,8 @@ void VsControlManager::Reset(bool softReset)
 {
 	ControlManager::Reset(softReset);
 	_protectionCounter = 0;
+
+	//Unsure about this, needed for VS Wrecking Crew
 	UpdateSlaveMasterBit(_console->IsMaster() ? 0x00 : 0x02);
 	
 	_vsSystemType = _console->GetRomInfo().VsType;

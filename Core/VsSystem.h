@@ -27,11 +27,36 @@ protected:
 
 		//"Note: unlike all other mappers, an undersize mapper 99 image implies open bus instead of mirroring."
 		//However, it doesn't look like any game actually rely on this behavior?  So not implemented for now.
-		uint8_t prgOuter = _console->IsMaster() ? 0 : 4;
-		SelectPRGPage(0, 0 | prgOuter);
-		SelectPRGPage(1, 1 | prgOuter);
-		SelectPRGPage(2, 2 | prgOuter);
-		SelectPRGPage(3, 3 | prgOuter);
+		bool initialized = false;
+		if(_prgSize == 0xC000) {
+			//48KB rom == unpadded dualsystem rom
+			if(_romInfo.VsType == VsSystemType::VsDualSystem) {
+				uint8_t prgOuter = _console->IsMaster() ? 0 : 3;
+				SelectPRGPage(1, 0 + prgOuter);
+				SelectPRGPage(2, 1 + prgOuter);
+				SelectPRGPage(3, 2 + prgOuter);
+				initialized = true;
+			} else if(_romInfo.VsType == VsSystemType::RaidOnBungelingBayProtection) {
+				if(_console->IsMaster()) {
+					SelectPRGPage(0, 0);
+					SelectPRGPage(1, 1);
+					SelectPRGPage(2, 2);
+					SelectPRGPage(3, 3);
+				} else {
+					//Slave CPU
+					SelectPRGPage(0, 4);
+				}
+				initialized = true;
+			}
+		}
+
+		if(!initialized) {
+			uint8_t prgOuter = _console->IsMaster() ? 0 : 4;
+			SelectPRGPage(0, 0 | prgOuter);
+			SelectPRGPage(1, 1 | prgOuter);
+			SelectPRGPage(2, 2 | prgOuter);
+			SelectPRGPage(3, 3 | prgOuter);
+		}
 
 		uint8_t chrOuter = _console->IsMaster() ? 0 : 2;
 		SelectCHRPage(0, 0 | chrOuter);
