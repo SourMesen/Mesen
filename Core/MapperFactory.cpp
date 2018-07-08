@@ -32,6 +32,7 @@
 #include "Bmc80013B.h"
 #include "Bmc810544CA1.h"
 #include "Bmc830118C.h"
+#include "Bmc830425C4391T.h"
 #include "Bmc8in1.h"
 #include "BmcG146.h"
 #include "BmcGn45.h"
@@ -586,7 +587,7 @@ BaseMapper* MapperFactory::GetMapperFromID(RomData &romData)
 		case 315: break; //830134C
 		//316-318
 		case 319: return new Hp898f();
-		case 320: break; //830425C-4391T
+		case 320: return new Bmc830425C4391T();
 		//321
 		case 322: break; //K-3033
 		case 323: break; //FARID_SLROM_8-IN-1
