@@ -394,6 +394,7 @@ enum class EmulatorShortcut
 
 	InsertNextDisk,
 	VsServiceButton,
+	VsServiceButton2,
 
 	ToggleCheats,
 	ToggleAudio,
@@ -409,6 +410,8 @@ enum class EmulatorShortcut
 
 	InsertCoin1,
 	InsertCoin2,
+	InsertCoin3,
+	InsertCoin4,
 	
 	InputBarcode,
 

@@ -731,6 +731,7 @@ namespace Mesen.GUI.Forms
 			Func<bool> runningFdsNoAutoInsert = () => { return _emuThread != null && InteropEmu.FdsGetSideCount() > 0 && !InteropEmu.FdsIsAutoInsertDiskEnabled() && !InteropEmu.MoviePlaying() && !InteropEmu.IsConnected(); };
 			Func<bool> runningFdsMultipleDisks = () => { return runningFdsNoAutoInsert() && InteropEmu.FdsGetSideCount() > 1; };
 			Func<bool> runningVsSystem = () => { return _emuThread != null && InteropEmu.IsVsSystem() && !InteropEmu.MoviePlaying() && !InteropEmu.IsConnected(); };
+			Func<bool> runningVsDualSystem = () => { return runningVsSystem() && InteropEmu.IsVsDualSystem(); };
 			Func<bool> hasBarcodeReader = () => { return InteropEmu.GetAvailableFeatures().HasFlag(ConsoleFeatures.BarcodeReader) && !InteropEmu.IsConnected(); };
 
 			Func<bool> enableLoadLastSession = () => {
@@ -754,6 +755,8 @@ namespace Mesen.GUI.Forms
 
 			BindShortcut(mnuInsertCoin1, EmulatorShortcut.InsertCoin1, runningVsSystem);
 			BindShortcut(mnuInsertCoin2, EmulatorShortcut.InsertCoin2, runningVsSystem);
+			BindShortcut(mnuInsertCoin3, EmulatorShortcut.InsertCoin3, runningVsDualSystem);
+			BindShortcut(mnuInsertCoin4, EmulatorShortcut.InsertCoin4, runningVsDualSystem);
 
 			BindShortcut(mnuInputBarcode, EmulatorShortcut.InputBarcode, hasBarcodeReader);
 
@@ -867,6 +870,8 @@ namespace Mesen.GUI.Forms
 					
 				case EmulatorShortcut.InsertCoin1: InteropEmu.VsInsertCoin(0); break;
 				case EmulatorShortcut.InsertCoin2: InteropEmu.VsInsertCoin(1); break;
+				case EmulatorShortcut.InsertCoin3: InteropEmu.VsInsertCoin(2); break;
+				case EmulatorShortcut.InsertCoin4: InteropEmu.VsInsertCoin(3); break;
 
 				case EmulatorShortcut.InputBarcode:
 					using(frmInputBarcode frm = new frmInputBarcode()) {

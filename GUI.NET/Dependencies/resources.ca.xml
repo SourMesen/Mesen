@@ -20,6 +20,8 @@
 			<Control ID="mnuGameConfig">Configuració de joc</Control>
 			<Control ID="mnuInsertCoin1">Insereix moneda (1)</Control>
 			<Control ID="mnuInsertCoin2">Insereix moneda (2)</Control>
+			<Control ID="mnuInsertCoin3">Insereix moneda (3 - DualSystem)</Control>
+			<Control ID="mnuInsertCoin4">Insereix moneda (4 - DualSystem)</Control>
 			<Control ID="mnuInputBarcode">Introdueix un codi de barres</Control>
 			<Control ID="mnuTapeRecorder">Enregistrador de dades</Control>
 			<Control ID="mnuLoadTapeFile">Carrega des d'un fitxer...</Control>
@@ -805,8 +807,11 @@
 		<Message ID="EmulatorShortcutMappings_InsertNextDisk">FDS - Insereix el següent disc</Message>
 		<Message ID="EmulatorShortcutMappings_InsertCoin1">VS - Insereix moneda (1)</Message>
 		<Message ID="EmulatorShortcutMappings_InsertCoin2">VS - Insereix moneda (2)</Message>
+		<Message ID="EmulatorShortcutMappings_InsertCoin3">VS - Insereix moneda (3 - DualSystem)</Message>
+		<Message ID="EmulatorShortcutMappings_InsertCoin4">VS - Insereix moneda (4 - DualSystem)</Message>
 		<Message ID="EmulatorShortcutMappings_InputBarcode">Input Barcode</Message>
 		<Message ID="EmulatorShortcutMappings_VsServiceButton">VS - Botó de servei</Message>
+		<Message ID="EmulatorShortcutMappings_VsServiceButton2">VS - Botó de servei (2 - DualSystem)</Message>
 		<Message ID="EmulatorShortcutMappings_MoveToNextStateSlot">Selecciona la següent partida guardada</Message>
 		<Message ID="EmulatorShortcutMappings_MoveToPreviousStateSlot">Selecciona l'anterior partida guardada</Message>
 		<Message ID="EmulatorShortcutMappings_SaveState">Desa a la partida guardada seleccionada</Message>

@@ -20,6 +20,8 @@
 			<Control ID="mnuGameConfig">Game Configuration</Control>
 			<Control ID="mnuInsertCoin1">Insert Coin (1)</Control>
 			<Control ID="mnuInsertCoin2">Insert Coin (2)</Control>
+			<Control ID="mnuInsertCoin3">Insert Coin (3 - DualSystem)</Control>
+			<Control ID="mnuInsertCoin4">Insert Coin (4 - DualSystem)</Control>
 			<Control ID="mnuInputBarcode">Input Barcode...</Control>
 			<Control ID="mnuTapeRecorder">Tape Recorder</Control>
 			<Control ID="mnuLoadTapeFile">Load from file...</Control>
@@ -838,8 +840,11 @@
 		<Message ID="EmulatorShortcutMappings_InsertNextDisk">FDS - Insert Next Disk</Message>
 		<Message ID="EmulatorShortcutMappings_InsertCoin1">VS - Insert Coin 1</Message>
 		<Message ID="EmulatorShortcutMappings_InsertCoin2">VS - Insert Coin 2</Message>
+		<Message ID="EmulatorShortcutMappings_InsertCoin3">VS - Insert Coin 3 (DualSystem)</Message>
+		<Message ID="EmulatorShortcutMappings_InsertCoin4">VS - Insert Coin 4 (DualSystem)</Message>
 		<Message ID="EmulatorShortcutMappings_InputBarcode">Input Barcode</Message>
 		<Message ID="EmulatorShortcutMappings_VsServiceButton">VS - Service Button</Message>
+		<Message ID="EmulatorShortcutMappings_VsServiceButton2">VS - Service Button 2 (DualSystem)</Message>
 		<Message ID="EmulatorShortcutMappings_MoveToNextStateSlot">Select Next Save Slot</Message>
 		<Message ID="EmulatorShortcutMappings_MoveToPreviousStateSlot">Select Previous Save Slot</Message>
 		<Message ID="EmulatorShortcutMappings_SaveState">Save State</Message>

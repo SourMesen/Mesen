@@ -620,6 +620,10 @@ namespace InteropEmu {
 			return dynamic_cast<VsControlManager*>(_console->GetControlManager()) != nullptr;
 		}
 
+		DllExport bool __stdcall IsVsDualSystem() {
+			return dynamic_cast<VsControlManager*>(_console->GetControlManager()) != nullptr && _console->IsDualSystem();
+		}
+
 		DllExport void __stdcall VsInsertCoin(uint32_t port) {
 			shared_ptr<VsSystemActionManager> sam = _console->GetSystemActionManager<VsSystemActionManager>();
 			if(sam) {

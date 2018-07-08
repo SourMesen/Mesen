@@ -33,6 +33,7 @@ RomData iNesLoader::LoadRom(vector<uint8_t>& romFile, NESHeader *preloadedHeader
 	romData.Info.System = header.GetGameSystem();
 	romData.Info.VsType = header.GetVsSystemType();
 	romData.Info.VsPpuModel = header.GetVsSystemPpuModel();
+	romData.Info.InputType = header.GetInputType();
 	romData.Info.HasTrainer = header.HasTrainer();
 	romData.Info.NesHeader = header;
 

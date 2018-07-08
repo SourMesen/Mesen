@@ -20,6 +20,8 @@
 			<Control ID="mnuGameConfig">ゲーム設定</Control>
 			<Control ID="mnuInsertCoin1">インサートコイン 1</Control>
 			<Control ID="mnuInsertCoin2">インサートコイン 2</Control>
+			<Control ID="mnuInsertCoin3">インサートコイン 3 (DualSystem)</Control>
+			<Control ID="mnuInsertCoin4">インサートコイン 4 (DualSystem)</Control>
 			<Control ID="mnuInputBarcode">バーコードを入力</Control>
 			<Control ID="mnuTapeRecorder">テープレコーダー</Control>
 			<Control ID="mnuLoadTapeFile">ファイルから再生する</Control>
@@ -826,8 +828,11 @@
 		<Message ID="EmulatorShortcutMappings_InsertNextDisk">FDS - 次のディスクを入れる</Message>
 		<Message ID="EmulatorShortcutMappings_InsertCoin1">VS - インサートコイン 1</Message>
 		<Message ID="EmulatorShortcutMappings_InsertCoin2">VS - インサートコイン 2</Message>
+		<Message ID="EmulatorShortcutMappings_InsertCoin3">VS - インサートコイン 3 (DualSystem)</Message>
+		<Message ID="EmulatorShortcutMappings_InsertCoin4">VS - インサートコイン 4 (DualSystem)</Message>
 		<Message ID="EmulatorShortcutMappings_InputBarcode">バーコードを入力</Message>
 		<Message ID="EmulatorShortcutMappings_VsServiceButton">VS - サービスボタン</Message>
+		<Message ID="EmulatorShortcutMappings_VsServiceButton2">VS - サービスボタン 2 (DualSystem)</Message>
 		<Message ID="EmulatorShortcutMappings_MoveToNextStateSlot">次のクイックセーブスロットを選ぶ</Message>
 		<Message ID="EmulatorShortcutMappings_MoveToPreviousStateSlot">前のクイックセーブスロットを選ぶ</Message>
 		<Message ID="EmulatorShortcutMappings_SaveState">選択中スロットにクイックセーブ</Message>

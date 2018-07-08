@@ -143,6 +143,7 @@ namespace Mesen.GUI
 		[DllImport(DLLPath)] [return: MarshalAs(UnmanagedType.I1)] public static extern bool FdsIsAutoInsertDiskEnabled();
 
 		[DllImport(DLLPath)] [return: MarshalAs(UnmanagedType.I1)] public static extern bool IsVsSystem();
+		[DllImport(DLLPath)] [return: MarshalAs(UnmanagedType.I1)] public static extern bool IsVsDualSystem();
 		[DllImport(DLLPath)] public static extern void VsInsertCoin(UInt32 port);
 
 		[DllImport(DLLPath)] public static extern void SetDipSwitches(UInt32 dipSwitches);
@@ -1729,7 +1730,8 @@ namespace Mesen.GUI
 
 		InsertNextDisk,
 		VsServiceButton,
-
+		VsServiceButton2,
+		
 		ToggleCheats,
 		ToggleAudio,
 		ToggleFastForward,
@@ -1744,6 +1746,8 @@ namespace Mesen.GUI
 
 		InsertCoin1,
 		InsertCoin2,
+		InsertCoin3,
+		InsertCoin4,
 
 		InputBarcode,
 

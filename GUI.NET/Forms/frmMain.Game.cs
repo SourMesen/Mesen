@@ -56,6 +56,8 @@ namespace Mesen.GUI.Forms
 			sepVsSystem.Visible = InteropEmu.IsVsSystem();
 			mnuInsertCoin1.Visible = InteropEmu.IsVsSystem();
 			mnuInsertCoin2.Visible = InteropEmu.IsVsSystem();
+			mnuInsertCoin3.Visible = InteropEmu.IsVsDualSystem();
+			mnuInsertCoin4.Visible = InteropEmu.IsVsDualSystem();
 			mnuGameConfig.Visible = InteropEmu.IsVsSystem();
 		}
 

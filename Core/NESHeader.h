@@ -44,7 +44,7 @@ struct NESHeader
 	uint32_t GetSaveChrRamSize();
 	uint8_t GetSubMapper();
 	MirroringType GetMirroringType();
-	GameInputType GetControllerType();
+	GameInputType GetInputType();
 	VsSystemType GetVsSystemType();
 	PpuModel GetVsSystemPpuModel();
 	void SanitizeHeader(size_t romLength);

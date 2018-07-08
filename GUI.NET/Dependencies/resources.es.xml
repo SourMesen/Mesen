@@ -20,6 +20,8 @@
 			<Control ID="mnuGameConfig">Configuración de juego</Control>
 			<Control ID="mnuInsertCoin1">Insertar moneda (1)</Control>
 			<Control ID="mnuInsertCoin2">Insertar moneda (2)</Control>
+			<Control ID="mnuInsertCoin3">Insertar moneda (3 - DualSystem)</Control>
+			<Control ID="mnuInsertCoin4">Insertar moneda (4 - DualSystem)</Control>
 			<Control ID="mnuInputBarcode">Insertar código de barras</Control>
 			<Control ID="mnuTapeRecorder">Grabadora</Control>
 			<Control ID="mnuLoadTapeFile">Cargar de archivo...</Control>
@@ -822,8 +824,11 @@
 		<Message ID="EmulatorShortcutMappings_InsertNextDisk">FDS - Insertar siguiente disco</Message>
 		<Message ID="EmulatorShortcutMappings_InsertCoin1">VS - Insertar moneda (1)</Message>
 		<Message ID="EmulatorShortcutMappings_InsertCoin2">VS - Insertar moneda (2)</Message>
+		<Message ID="EmulatorShortcutMappings_InsertCoin3">VS - Insertar moneda (3 - DualSystem)</Message>
+		<Message ID="EmulatorShortcutMappings_InsertCoin4">VS - Insertar moneda (4 - DualSystem)</Message>
 		<Message ID="EmulatorShortcutMappings_InputBarcode">Insertar código de barras</Message>
 		<Message ID="EmulatorShortcutMappings_VsServiceButton">VS - Botón de servicio</Message>
+		<Message ID="EmulatorShortcutMappings_VsServiceButton2">VS - Botón de servicio (2 - DualSystem)</Message>
 		<Message ID="EmulatorShortcutMappings_MoveToNextStateSlot">Ir a posición de guardado siguiente</Message>
 		<Message ID="EmulatorShortcutMappings_MoveToPreviousStateSlot">Ir a posición de guardado anterior</Message>
 		<Message ID="EmulatorShortcutMappings_SaveState">Guardar partida en la posición actual</Message>

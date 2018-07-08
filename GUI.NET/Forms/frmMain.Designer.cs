@@ -211,6 +211,8 @@ namespace Mesen.GUI.Forms
 			this.mnuReportBug = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem5 = new System.Windows.Forms.ToolStripSeparator();
 			this.mnuAbout = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuInsertCoin3 = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuInsertCoin4 = new System.Windows.Forms.ToolStripMenuItem();
 			this.panelRenderer.SuspendLayout();
 			this.panelInfo.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.picIcon)).BeginInit();
@@ -436,6 +438,8 @@ namespace Mesen.GUI.Forms
             this.mnuGameConfig,
             this.mnuInsertCoin1,
             this.mnuInsertCoin2,
+            this.mnuInsertCoin3,
+            this.mnuInsertCoin4,
             this.sepBarcode,
             this.mnuInputBarcode,
             this.mnuTapeRecorder});
@@ -451,7 +455,7 @@ namespace Mesen.GUI.Forms
 			this.mnuPause.Enabled = false;
 			this.mnuPause.Image = global::Mesen.GUI.Properties.Resources.Pause;
 			this.mnuPause.Name = "mnuPause";
-			this.mnuPause.Size = new System.Drawing.Size(182, 22);
+			this.mnuPause.Size = new System.Drawing.Size(221, 22);
 			this.mnuPause.Text = "Pause";
 			// 
 			// mnuReset
@@ -459,7 +463,7 @@ namespace Mesen.GUI.Forms
 			this.mnuReset.Enabled = false;
 			this.mnuReset.Image = global::Mesen.GUI.Properties.Resources.Reset;
 			this.mnuReset.Name = "mnuReset";
-			this.mnuReset.Size = new System.Drawing.Size(182, 22);
+			this.mnuReset.Size = new System.Drawing.Size(221, 22);
 			this.mnuReset.Text = "Reset";
 			// 
 			// mnuPowerCycle
@@ -467,57 +471,57 @@ namespace Mesen.GUI.Forms
 			this.mnuPowerCycle.Enabled = false;
 			this.mnuPowerCycle.Image = global::Mesen.GUI.Properties.Resources.PowerCycle;
 			this.mnuPowerCycle.Name = "mnuPowerCycle";
-			this.mnuPowerCycle.Size = new System.Drawing.Size(182, 22);
+			this.mnuPowerCycle.Size = new System.Drawing.Size(221, 22);
 			this.mnuPowerCycle.Text = "Power Cycle";
 			// 
 			// toolStripMenuItem24
 			// 
 			this.toolStripMenuItem24.Name = "toolStripMenuItem24";
-			this.toolStripMenuItem24.Size = new System.Drawing.Size(179, 6);
+			this.toolStripMenuItem24.Size = new System.Drawing.Size(218, 6);
 			// 
 			// mnuPowerOff
 			// 
 			this.mnuPowerOff.Image = global::Mesen.GUI.Properties.Resources.Stop;
 			this.mnuPowerOff.Name = "mnuPowerOff";
-			this.mnuPowerOff.Size = new System.Drawing.Size(182, 22);
+			this.mnuPowerOff.Size = new System.Drawing.Size(221, 22);
 			this.mnuPowerOff.Text = "Power Off";
 			// 
 			// sepFdsDisk
 			// 
 			this.sepFdsDisk.Name = "sepFdsDisk";
-			this.sepFdsDisk.Size = new System.Drawing.Size(179, 6);
+			this.sepFdsDisk.Size = new System.Drawing.Size(218, 6);
 			// 
 			// mnuSwitchDiskSide
 			// 
 			this.mnuSwitchDiskSide.Name = "mnuSwitchDiskSide";
-			this.mnuSwitchDiskSide.Size = new System.Drawing.Size(182, 22);
+			this.mnuSwitchDiskSide.Size = new System.Drawing.Size(221, 22);
 			this.mnuSwitchDiskSide.Text = "Switch Disk Side";
 			// 
 			// mnuSelectDisk
 			// 
 			this.mnuSelectDisk.Image = global::Mesen.GUI.Properties.Resources.Floppy;
 			this.mnuSelectDisk.Name = "mnuSelectDisk";
-			this.mnuSelectDisk.Size = new System.Drawing.Size(182, 22);
+			this.mnuSelectDisk.Size = new System.Drawing.Size(221, 22);
 			this.mnuSelectDisk.Text = "Select Disk";
 			// 
 			// mnuEjectDisk
 			// 
 			this.mnuEjectDisk.Image = global::Mesen.GUI.Properties.Resources.Eject;
 			this.mnuEjectDisk.Name = "mnuEjectDisk";
-			this.mnuEjectDisk.Size = new System.Drawing.Size(182, 22);
+			this.mnuEjectDisk.Size = new System.Drawing.Size(221, 22);
 			this.mnuEjectDisk.Text = "Eject Disk";
 			// 
 			// sepVsSystem
 			// 
 			this.sepVsSystem.Name = "sepVsSystem";
-			this.sepVsSystem.Size = new System.Drawing.Size(179, 6);
+			this.sepVsSystem.Size = new System.Drawing.Size(218, 6);
 			this.sepVsSystem.Visible = false;
 			// 
 			// mnuGameConfig
 			// 
 			this.mnuGameConfig.Image = global::Mesen.GUI.Properties.Resources.DipSwitches;
 			this.mnuGameConfig.Name = "mnuGameConfig";
-			this.mnuGameConfig.Size = new System.Drawing.Size(182, 22);
+			this.mnuGameConfig.Size = new System.Drawing.Size(221, 22);
 			this.mnuGameConfig.Text = "Game Configuration";
 			this.mnuGameConfig.Click += new System.EventHandler(this.mnuGameConfig_Click);
 			// 
@@ -525,7 +529,7 @@ namespace Mesen.GUI.Forms
 			// 
 			this.mnuInsertCoin1.Image = global::Mesen.GUI.Properties.Resources.coins;
 			this.mnuInsertCoin1.Name = "mnuInsertCoin1";
-			this.mnuInsertCoin1.Size = new System.Drawing.Size(182, 22);
+			this.mnuInsertCoin1.Size = new System.Drawing.Size(221, 22);
 			this.mnuInsertCoin1.Text = "Insert Coin (1)";
 			this.mnuInsertCoin1.Visible = false;
 			// 
@@ -533,21 +537,21 @@ namespace Mesen.GUI.Forms
 			// 
 			this.mnuInsertCoin2.Image = global::Mesen.GUI.Properties.Resources.coins;
 			this.mnuInsertCoin2.Name = "mnuInsertCoin2";
-			this.mnuInsertCoin2.Size = new System.Drawing.Size(182, 22);
+			this.mnuInsertCoin2.Size = new System.Drawing.Size(221, 22);
 			this.mnuInsertCoin2.Text = "Insert Coin (2)";
 			this.mnuInsertCoin2.Visible = false;
 			// 
 			// sepBarcode
 			// 
 			this.sepBarcode.Name = "sepBarcode";
-			this.sepBarcode.Size = new System.Drawing.Size(179, 6);
+			this.sepBarcode.Size = new System.Drawing.Size(218, 6);
 			this.sepBarcode.Visible = false;
 			// 
 			// mnuInputBarcode
 			// 
 			this.mnuInputBarcode.Image = global::Mesen.GUI.Properties.Resources.Barcode;
 			this.mnuInputBarcode.Name = "mnuInputBarcode";
-			this.mnuInputBarcode.Size = new System.Drawing.Size(182, 22);
+			this.mnuInputBarcode.Size = new System.Drawing.Size(221, 22);
 			this.mnuInputBarcode.Text = "Input Barcode...";
 			this.mnuInputBarcode.Visible = false;
 			// 
@@ -559,7 +563,7 @@ namespace Mesen.GUI.Forms
             this.mnuStopRecordTapeFile});
 			this.mnuTapeRecorder.Image = global::Mesen.GUI.Properties.Resources.Tape;
 			this.mnuTapeRecorder.Name = "mnuTapeRecorder";
-			this.mnuTapeRecorder.Size = new System.Drawing.Size(182, 22);
+			this.mnuTapeRecorder.Size = new System.Drawing.Size(221, 22);
 			this.mnuTapeRecorder.Text = "Tape Recorder";
 			// 
 			// mnuLoadTapeFile
@@ -1690,6 +1694,22 @@ namespace Mesen.GUI.Forms
 			this.mnuAbout.Text = "About";
 			this.mnuAbout.Click += new System.EventHandler(this.mnuAbout_Click);
 			// 
+			// mnuInsertCoin3
+			// 
+			this.mnuInsertCoin3.Image = global::Mesen.GUI.Properties.Resources.coins;
+			this.mnuInsertCoin3.Name = "mnuInsertCoin3";
+			this.mnuInsertCoin3.Size = new System.Drawing.Size(221, 22);
+			this.mnuInsertCoin3.Text = "Insert Coin (3 - DualSystem)";
+			this.mnuInsertCoin3.Visible = false;
+			// 
+			// mnuInsertCoin4
+			// 
+			this.mnuInsertCoin4.Image = global::Mesen.GUI.Properties.Resources.coins;
+			this.mnuInsertCoin4.Name = "mnuInsertCoin4";
+			this.mnuInsertCoin4.Size = new System.Drawing.Size(221, 22);
+			this.mnuInsertCoin4.Text = "Insert Coin (4 - DualSystem)";
+			this.mnuInsertCoin4.Visible = false;
+			// 
 			// frmMain
 			// 
 			this.AllowDrop = true;
@@ -1899,6 +1919,8 @@ namespace Mesen.GUI.Forms
 		private Controls.ctrlRenderer ctrlRendererDualSystem;
 		private System.Windows.Forms.ToolStripSeparator sepDebugDualSystemSecondaryCpu;
 		private System.Windows.Forms.ToolStripMenuItem mnuDebugDualSystemSecondaryCpu;
+		private System.Windows.Forms.ToolStripMenuItem mnuInsertCoin3;
+		private System.Windows.Forms.ToolStripMenuItem mnuInsertCoin4;
 	}
 }
 

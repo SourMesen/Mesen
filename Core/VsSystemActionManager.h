@@ -1,33 +1,42 @@
 #pragma once
 #include "stdafx.h"
 #include "SystemActionManager.h"
+#include "Console.h"
 
 class VsSystemActionManager : public SystemActionManager
 {
 private:
 	static constexpr uint8_t InsertCoinFrameCount = 4;
 
-	uint8_t _needInsertCoin[2] = { 0, 0 };
-	bool _needServiceButton = false;
+	bool _isDualSystem = false;
+	uint8_t _needInsertCoin[4] = { 0, 0, 0, 0 };
+	bool _needServiceButton[2] = { false, false };
 
 	void ProcessInsertCoin(uint8_t port)
 	{
 		if(_needInsertCoin[port] > 0) {
 			_needInsertCoin[port]--;
-			SetBit(VsSystemActionManager::VsButtons::InsertCoin1 + port);
+
+			switch(port) {
+				case 0: SetBit(VsSystemActionManager::VsButtons::InsertCoin1); break;
+				case 1: SetBit(VsSystemActionManager::VsButtons::InsertCoin2); break;
+				case 2: SetBit(VsSystemActionManager::VsButtons::InsertCoin3); break;
+				case 3: SetBit(VsSystemActionManager::VsButtons::InsertCoin4); break;
+			}			
 		}
 	}
 
 	string GetKeyNames() override
 	{
-		return "RP12S";
+		return _isDualSystem ? "RP12S34ST" : "RP12S";
 	}
 
 public:
-	enum VsButtons { InsertCoin1 = 2, InsertCoin2, ServiceButton };
+	enum VsButtons { InsertCoin1 = 2, InsertCoin2, ServiceButton, InsertCoin3, InsertCoin4, ServiceButton2 };
 
 	VsSystemActionManager(std::shared_ptr<Console> console) : SystemActionManager(console)
 	{
+		_isDualSystem = console->IsDualSystem();
 	}
 
 	uint8_t ReadRAM(uint16_t addr) override
@@ -53,20 +62,27 @@ public:
 
 		ProcessInsertCoin(0);
 		ProcessInsertCoin(1);
+		ProcessInsertCoin(2);
+		ProcessInsertCoin(3);
 
-		if(_needServiceButton) {
+		if(_needServiceButton[0]) {
 			SetBit(VsSystemActionManager::VsButtons::ServiceButton);
+		}
+		if(_needServiceButton[1]) {
+			SetBit(VsSystemActionManager::VsButtons::ServiceButton2);
 		}
 	}
 
 	void InsertCoin(uint8_t port)
 	{
-		_needInsertCoin[port] = VsSystemActionManager::InsertCoinFrameCount;
-		MessageManager::DisplayMessage("VS System", "CoinInsertedSlot", std::to_string(port + 1));
+		if(port < 4) {
+			_needInsertCoin[port] = VsSystemActionManager::InsertCoinFrameCount;
+			MessageManager::DisplayMessage("VS System", "CoinInsertedSlot", std::to_string(port + 1));
+		}
 	}
 
-	void SetServiceButtonState(bool pressed)
+	void SetServiceButtonState(int consoleId, bool pressed)
 	{
-		_needServiceButton = pressed;
+		_needServiceButton[consoleId] = pressed;
 	}
 };

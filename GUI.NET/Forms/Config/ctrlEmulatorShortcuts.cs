@@ -49,7 +49,10 @@ namespace Mesen.GUI.Forms.Config
 
 				EmulatorShortcut.InsertCoin1,
 				EmulatorShortcut.InsertCoin2,
+				EmulatorShortcut.InsertCoin3,
+				EmulatorShortcut.InsertCoin4,
 				EmulatorShortcut.VsServiceButton,
+				EmulatorShortcut.VsServiceButton2,
 
 				EmulatorShortcut.InputBarcode,
 

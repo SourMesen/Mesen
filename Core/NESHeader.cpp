@@ -170,7 +170,7 @@ MirroringType NESHeader::GetMirroringType()
 	}
 }
 
-GameInputType NESHeader::GetControllerType()
+GameInputType NESHeader::GetInputType()
 {
 	if(Byte15 <= 0x2A) {
 		return (GameInputType)Byte15;

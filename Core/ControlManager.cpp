@@ -282,9 +282,6 @@ void ControlManager::UpdateInputState()
 		//log += "|" + device->GetTextState();
 	}
 
-	//Used by VS System games
-	RemapControllerButtons();
-
 	shared_ptr<Debugger> debugger = _console->GetDebugger(false);
 	if(debugger) {
 		debugger->ProcessEvent(EventType::InputPolled);
@@ -293,6 +290,10 @@ void ControlManager::UpdateInputState()
 	for(IInputRecorder* recorder : _inputRecorders) {
 		recorder->RecordInput(_controlDevices);
 	}
+
+	//Used by VS System games
+	RemapControllerButtons();
+
 	//MessageManager::Log(log);
 
 	_pollCounter++;

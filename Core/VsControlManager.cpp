@@ -1,6 +1,8 @@
 #include "stdafx.h"
 #include "VsControlManager.h"
 #include "VsSystem.h"
+#include "SystemActionManager.h"
+#include "VsSystemActionManager.h"
 
 ControllerType VsControlManager::GetControllerType(uint8_t port)
 {
@@ -89,6 +91,14 @@ uint8_t VsControlManager::GetOpenBusMask(uint8_t port)
 uint8_t VsControlManager::ReadRAM(uint16_t addr)
 {
 	uint8_t value = 0;
+
+	if(!_console->IsMaster()) {
+		//Copy the insert coin 3/4 + service button "2" bits from the main console to this one
+		shared_ptr<Console> masterConsole = _console->GetDualConsole();
+		_systemActionManager->SetBitValue(VsSystemActionManager::VsButtons::InsertCoin1, masterConsole->GetSystemActionManager()->IsPressed(VsSystemActionManager::VsButtons::InsertCoin3));
+		_systemActionManager->SetBitValue(VsSystemActionManager::VsButtons::InsertCoin2, masterConsole->GetSystemActionManager()->IsPressed(VsSystemActionManager::VsButtons::InsertCoin4));
+		_systemActionManager->SetBitValue(VsSystemActionManager::VsButtons::ServiceButton, masterConsole->GetSystemActionManager()->IsPressed(VsSystemActionManager::VsButtons::ServiceButton2));
+	}
 
 	switch(addr) {
 		case 0x4016: {

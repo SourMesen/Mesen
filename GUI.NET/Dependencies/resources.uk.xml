@@ -20,6 +20,8 @@
 			<Control ID="mnuGameConfig">Конфігурація</Control>
 			<Control ID="mnuInsertCoin1">Вставити монету в слот 1</Control>
 			<Control ID="mnuInsertCoin2">Вставити монету в слот 2</Control>
+			<Control ID="mnuInsertCoin3">Вставити монету в слот 3 (DualSystem)</Control>
+			<Control ID="mnuInsertCoin4">Вставити монету в слот 4 (DualSystem)</Control>
 			<Control ID="mnuInputBarcode">Input Barcode</Control>
 			<Control ID="mnuTapeRecorder">Tape Recorder</Control>
 			<Control ID="mnuLoadTapeFile">Load from file...</Control>
@@ -824,8 +826,11 @@
 		<Message ID="EmulatorShortcutMappings_InsertNextDisk">FDS - Вставити наступний диск</Message>
 		<Message ID="EmulatorShortcutMappings_InsertCoin1">VS - Вставити монету в слот 1</Message>
 		<Message ID="EmulatorShortcutMappings_InsertCoin2">VS - Вставити монету в слот 2</Message>
+		<Message ID="EmulatorShortcutMappings_InsertCoin3">VS - Вставити монету в слот 3 (DualSystem)</Message>
+		<Message ID="EmulatorShortcutMappings_InsertCoin4">VS - Вставити монету в слот 4 (DualSystem)</Message>
 		<Message ID="EmulatorShortcutMappings_InputBarcode">Введення штрих-коду</Message>
 		<Message ID="EmulatorShortcutMappings_VsServiceButton">VS - Сервісна кнопка</Message>
+		<Message ID="EmulatorShortcutMappings_VsServiceButton2">VS - Сервісна кнопка 2 (DualSystem)</Message>
 		<Message ID="EmulatorShortcutMappings_MoveToNextStateSlot">Наступний слот для збережень</Message>
 		<Message ID="EmulatorShortcutMappings_MoveToPreviousStateSlot">Попередній слот для збережень</Message>
 		<Message ID="EmulatorShortcutMappings_SaveState">Зберегти</Message>

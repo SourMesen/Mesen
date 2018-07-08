@@ -137,16 +137,22 @@ void ShortcutKeyHandler::CheckMappedKeys()
 	}
 
 	shared_ptr<VsSystemActionManager> vsSam = _console->GetSystemActionManager<VsSystemActionManager>();
-	if(vsSam && !isNetplayClient && !isMovieActive) {
+	if(vsSam && !isNetplayClient && !MovieManager::Playing()) {
 		if(DetectKeyPress(EmulatorShortcut::VsServiceButton)) {
-			vsSam->SetServiceButtonState(true);
+			vsSam->SetServiceButtonState(0, true);
 		}
 		if(DetectKeyRelease(EmulatorShortcut::VsServiceButton)) {
-			vsSam->SetServiceButtonState(false);
+			vsSam->SetServiceButtonState(0, false);
+		}
+		if(DetectKeyPress(EmulatorShortcut::VsServiceButton2)) {
+			vsSam->SetServiceButtonState(1, true);
+		}
+		if(DetectKeyRelease(EmulatorShortcut::VsServiceButton2)) {
+			vsSam->SetServiceButtonState(1, false);
 		}
 	}
 
-	if(DetectKeyPress(EmulatorShortcut::InsertNextDisk) && !isNetplayClient && !isMovieActive) {
+	if(DetectKeyPress(EmulatorShortcut::InsertNextDisk) && !isNetplayClient && !MovieManager::Playing()) {
 		shared_ptr<FdsSystemActionManager> sam = _console->GetSystemActionManager<FdsSystemActionManager>();
 		if(sam) {
 			sam->InsertNextDisk();
