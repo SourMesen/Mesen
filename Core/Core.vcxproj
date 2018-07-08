@@ -541,6 +541,7 @@
     <ClInclude Include="Kaiser7017.h" />
     <ClInclude Include="Kaiser7031.h" />
     <ClInclude Include="KeyManager.h" />
+    <ClInclude Include="Lh51.h" />
     <ClInclude Include="Mapper116.h" />
     <ClInclude Include="MMC3_198.h" />
     <ClInclude Include="MMC3_208.h" />

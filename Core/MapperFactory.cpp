@@ -88,6 +88,7 @@
 #include "Kaiser7058.h"
 #include "Lh10.h"
 #include "Lh32.h"
+#include "Lh51.h"
 #include "Malee.h"
 #include "MagicKidGooGoo.h"
 #include "Mapper15.h"
@@ -576,7 +577,7 @@ BaseMapper* MapperFactory::GetMapperFromID(RomData &romData)
 		case 306: return new Kaiser7016();
 		case 307: return new Kaiser7037();
 		case 308: break; //TH2131-1
-		case 309: break; //LH51
+		case 309: return new Lh51();
 		//310-311
 		case 312: return new Kaiser7013B();
 		case 313: break; //RESET-TXROM
