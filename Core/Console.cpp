@@ -1261,59 +1261,77 @@ uint8_t* Console::GetRamBuffer(DebugMemoryType memoryType, uint32_t &size, int32
 
 void Console::DebugAddTrace(const char * log)
 {
+#ifndef LIBRETRO
 	if(_debugger) {
 		_debugger->AddTrace(log);
 	}
+#endif
 }
 
 void Console::DebugProcessPpuCycle()
 {
+#ifndef LIBRETRO
 	if(_debugger) {
 		_debugger->ProcessPpuCycle();
 	}
+#endif
 }
 
 void Console::DebugProcessEvent(EventType type)
 {
+#ifndef LIBRETRO
 	if(_debugger) {
 		_debugger->ProcessEvent(type);
 	}
+#endif
 }
 
 void Console::DebugProcessInterrupt(uint16_t cpuAddr, uint16_t destCpuAddr, bool forNmi)
 {
+#ifndef LIBRETRO
 	if(_debugger) {
 		_debugger->ProcessInterrupt(cpuAddr, destCpuAddr, forNmi);
 	}
+#endif
 }
 
 void Console::DebugSetLastFramePpuScroll(uint16_t addr, uint8_t xScroll, bool updateHorizontalScrollOnly)
 {
+#ifndef LIBRETRO
 	if(_debugger) {
 		_debugger->SetLastFramePpuScroll(addr, xScroll, updateHorizontalScrollOnly);
 	}
+#endif
 }
 
 bool Console::DebugProcessRamOperation(MemoryOperationType type, uint16_t & addr, uint8_t & value)
 {
+#ifndef LIBRETRO
 	if(_debugger) {
 		return _debugger->ProcessRamOperation(type, addr, value);
 	}
 	return true;
+#else
+	return true;
+#endif
 }
 
 void Console::DebugProcessVramReadOperation(MemoryOperationType type, uint16_t addr, uint8_t & value)
 {
+#ifndef LIBRETRO
 	if(_debugger) {
 		_debugger->ProcessVramReadOperation(type, addr, value);
 	}
+#endif
 }
 
 void Console::DebugProcessVramWriteOperation(uint16_t addr, uint8_t & value)
 {
+#ifndef LIBRETRO
 	if(_debugger) {
 		_debugger->ProcessVramWriteOperation(addr, value);
 	}
+#endif
 }
 
 void Console::DisplayDebugInformation(Timer &clockTimer, Timer &lastFrameTimer, double &lastFrameMin, double &lastFrameMax, double *timeLagData)
