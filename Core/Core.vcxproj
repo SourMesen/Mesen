@@ -552,6 +552,7 @@
     <ClInclude Include="NotificationManager.h" />
     <ClInclude Include="OpenBusHandler.h" />
     <ClInclude Include="RawVideoFilter.h" />
+    <ClInclude Include="ResetTxrom.h" />
     <ClInclude Include="Sachen9602.h" />
     <ClInclude Include="ServerInformationMessage.h" />
     <ClInclude Include="FamicomBox.h" />

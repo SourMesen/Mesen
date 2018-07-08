@@ -47,7 +47,10 @@ private:
 				data = chunkEnd;
 				break;
 			} else {
-				ss << (char)data[0];
+				if(data[0] != ' ') {
+					//Ignore spaces
+					ss << (char)data[0];
+				}
 			}
 			data++;
 		}

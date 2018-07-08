@@ -207,6 +207,7 @@
 #include "Racermate.h"
 #include "Rambo1.h"
 #include "Rambo1_158.h"
+#include "ResetTxrom.h"
 #include "Rt01.h"
 #include "Sachen_133.h"
 #include "Sachen_136.h"
@@ -580,7 +581,7 @@ BaseMapper* MapperFactory::GetMapperFromID(RomData &romData)
 		case 309: return new Lh51();
 		//310-311
 		case 312: return new Kaiser7013B();
-		case 313: break; //RESET-TXROM
+		case 313: return new ResetTxrom();
 		case 314: return new Bmc64in1NoRepeat();
 		case 315: break; //830134C
 		//316-318
