@@ -57,6 +57,7 @@ std::unordered_map<string, int> UnifLoader::_boardMappings = std::unordered_map<
 	{ "HKROM", 4 },
 	{ "KOF97", 263 },
 	{ "KONAMI-QTAI", 190 },
+	{ "K-3046", 336 },
 	{ "KS7010", UnifBoards::UnknownBoard },
 	{ "KS7012", 346 },
 	{ "KS7013B", 312 },

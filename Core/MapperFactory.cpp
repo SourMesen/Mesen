@@ -37,6 +37,7 @@
 #include "BmcG146.h"
 #include "BmcGn45.h"
 #include "BmcHpxx.h"
+#include "BmcK3046.h"
 #include "BmcNtd03.h"
 #include "BnRom.h"
 #include "Bs5.h"
@@ -604,7 +605,7 @@ BaseMapper* MapperFactory::GetMapperFromID(RomData &romData)
 		case 333: return new Bmc8in1(); // + NEWSTAR-GRM070-8IN1
 		//334
 		case 335: break; //CTC-09
-		case 336: break; //K-3046
+		case 336: return new BmcK3046();
 		case 337: break; //CTC-12IN1
 		case 338: break; //SA005-A
 		case 339: break; //K-3006
