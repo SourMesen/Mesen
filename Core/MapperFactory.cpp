@@ -55,6 +55,7 @@
 #include "Edu2000.h"
 #include "Eh8813A.h"
 #include "FamicomBox.h"
+#include "FaridSlrom.h"
 #include "FDS.h"
 #include "FrontFareast.h"
 #include "Ghostbusters63in1.h"
@@ -590,7 +591,7 @@ BaseMapper* MapperFactory::GetMapperFromID(RomData &romData)
 		case 320: return new Bmc830425C4391T();
 		//321
 		case 322: break; //K-3033
-		case 323: break; //FARID_SLROM_8-IN-1
+		case 323: return new FaridSlrom();
 		case 324: break; //FARID_UNROM_8-IN-1
 		case 325: return new MMC3_MaliSB();
 		case 327: break; //10-24-C-A1

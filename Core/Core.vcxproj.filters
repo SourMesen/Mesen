@@ -1459,6 +1459,9 @@
     <ClInclude Include="Bmc830425C4391T.h">
       <Filter>Nes\Mappers\Unif</Filter>
     </ClInclude>
+    <ClInclude Include="FaridSlrom.h">
+      <Filter>Nes\Mappers\Unif</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">

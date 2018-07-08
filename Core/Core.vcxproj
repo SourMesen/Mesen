@@ -531,6 +531,7 @@
     <ClInclude Include="Dance2000.h" />
     <ClInclude Include="DragonFighter.h" />
     <ClInclude Include="DrawScreenBufferCommand.h" />
+    <ClInclude Include="FaridSlrom.h" />
     <ClInclude Include="FdsSystemActionManager.h" />
     <ClInclude Include="Gkcx1.h" />
     <ClInclude Include="HdPackConditions.h" />
