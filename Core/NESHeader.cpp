@@ -54,7 +54,7 @@ GameSystem NESHeader::GetGameSystem()
 					case 1: return GameSystem::VsSystem;
 					case 2: return GameSystem::Playchoice;
 					default:
-						MessageManager::Log("[iNES] Unsupported console type detected (using NES NTSC instead)");
+						MessageManager::Log("[iNes] Unsupported console type detected (using NES NTSC instead)");
 						return GameSystem::NesNtsc;
 
 				}
@@ -81,23 +81,28 @@ RomHeaderVersion NESHeader::GetRomHeaderVersion()
 	}
 }
 
-uint64_t NESHeader::GetSizeValue(uint32_t exponent, uint32_t multiplier)
+uint32_t NESHeader::GetSizeValue(uint32_t exponent, uint32_t multiplier)
 {
-	if(exponent > 32) {
-		//Restrict max size to 28GB (mosty to be able to return the size in a 64-bit int)
-		exponent = 32;
+	if(exponent > 60) {
+		//Restrict max size to avoid overflow in a 64-bit value
+		exponent = 60;
 		MessageManager::Log("[iNes] Unsupported size value.");
 	}
 
 	multiplier = multiplier * 2 + 1;
-	return multiplier * (uint64_t)1 << exponent;
+	
+	uint64_t size = multiplier * (uint64_t)1 << exponent;
+	if(size >= ((uint64_t)1 << 32)) {
+		MessageManager::Log("[iNes] Unsupported size value.");
+	}
+	return (uint32_t)size;
 }
 
 uint32_t NESHeader::GetPrgSize()
 {
 	if(GetRomHeaderVersion() == RomHeaderVersion::Nes2_0) {
 		if((Byte9 & 0x0F) == 0x0F) {
-			return GetSizeValue(PrgCount >> 2, PrgCount & 0x03);
+			return (uint32_t)GetSizeValue(PrgCount >> 2, PrgCount & 0x03);
 		} else {
 			return (((Byte9 & 0x0F) << 8) | PrgCount) * 0x4000;
 		}
@@ -114,7 +119,7 @@ uint32_t NESHeader::GetChrSize()
 {
 	if(GetRomHeaderVersion() == RomHeaderVersion::Nes2_0) {
 		if((Byte9 & 0xF0) == 0xF0) {
-			return GetSizeValue(ChrCount >> 2, ChrCount & 0x03);
+			return (uint32_t)GetSizeValue(ChrCount >> 2, ChrCount & 0x03);
 		} else {
 			return (((Byte9 & 0xF0) << 4) | ChrCount) * 0x2000;
 		}
@@ -196,7 +201,7 @@ GameInputType NESHeader::GetInputType()
 		return (GameInputType)Byte15;
 	}
 
-	MessageManager::Log("[iNES] Unknown controller type.");
+	MessageManager::Log("[iNes] Unknown controller type.");
 	return GameInputType::Default;	
 }
 
@@ -206,7 +211,7 @@ VsSystemType NESHeader::GetVsSystemType()
 		if((Byte13 >> 4) <= 0x06) {
 			return (VsSystemType)(Byte13 >> 4);
 		}
-		MessageManager::Log("[iNES] Unknown VS System Type specified.");
+		MessageManager::Log("[iNes] Unknown VS System Type specified.");
 	}
 	return VsSystemType::Default;
 }
@@ -217,7 +222,7 @@ PpuModel NESHeader::GetVsSystemPpuModel()
 		switch(Byte13 & 0x0F) {
 			case 0: return PpuModel::Ppu2C03;
 			case 1:
-				MessageManager::Log("[iNES] Unsupport VS System Palette specified (2C03G).");
+				MessageManager::Log("[iNes] Unsupport VS System Palette specified (2C03G).");
 				return PpuModel::Ppu2C03;
 
 			case 2: return PpuModel::Ppu2C04A;
@@ -233,7 +238,7 @@ PpuModel NESHeader::GetVsSystemPpuModel()
 			case 12: return PpuModel::Ppu2C05E;
 
 			default:
-				MessageManager::Log("[iNES] Unknown VS System Palette specified.");
+				MessageManager::Log("[iNes] Unknown VS System Palette specified.");
 				break;
 		}
 	}
@@ -242,6 +247,9 @@ PpuModel NESHeader::GetVsSystemPpuModel()
 
 void NESHeader::SanitizeHeader(size_t romLength)
 {
+	uint32_t originalPrgSize = GetPrgSize();
+	uint32_t originalChrSize = GetChrSize();
+
 	size_t calculatedLength = sizeof(NESHeader) + GetPrgSize();
 	while(calculatedLength > romLength) {
 		Byte9 = 0;
@@ -254,5 +262,12 @@ void NESHeader::SanitizeHeader(size_t romLength)
 		Byte9 = 0;
 		ChrCount--;
 		calculatedLength = sizeof(NESHeader) + GetPrgSize() + GetChrSize();
+	}
+
+	if(originalPrgSize != GetPrgSize()) {
+		MessageManager::Log("[iNes] Invalid ROM file length - PRG data has been truncated.");
+	}
+	if(originalChrSize != GetChrSize()) {
+		MessageManager::Log("[iNes] Invalid ROM file length - CHR data has been truncated.");
 	}
 }

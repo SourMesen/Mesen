@@ -549,11 +549,6 @@ static int error(vorb *f, enum STBVorbisError e)
 #define array_size_required(count,size)  (count*(sizeof(void *)+(size)))
 
 #define temp_alloc(f,size)              (f->alloc.alloc_buffer ? setup_temp_malloc(f,size) : alloca(size))
-#ifdef dealloca
-#define temp_free(f,p)                  (f->alloc.alloc_buffer ? 0 : dealloca(size))
-#else
-#define temp_free(f,p)                  0
-#endif
 #define temp_alloc_save(f)              ((f)->temp_offset)
 #define temp_alloc_restore(f,p)         ((f)->temp_offset = (p))
 
@@ -1922,11 +1917,6 @@ static void decode_residue(vorb *f, float *residue_buffers[], int ch, int n, int
    }
   done:
    CHECK(f);
-   #ifndef STB_VORBIS_DIVIDES_IN_RESIDUE
-   temp_free(f,part_classdata);
-   #else
-   temp_free(f,classifications);
-   #endif
    temp_alloc_restore(f,temp_alloc_point);
 }
 
@@ -2572,7 +2562,6 @@ static void inverse_mdct(float *buffer, int n, vorb *f, int blocktype)
       }
    }
 
-   temp_free(f,buf2);
    temp_alloc_restore(f,save_point);
 }
 
@@ -3584,7 +3573,7 @@ static int start_decoder(vorb *f)
             g->sorted_order[j] = (uint8) p[j].id;
          // precompute the neighbors
          for (j=2; j < g->values; ++j) {
-            int low,hi;
+            int low=0,hi=0;
             neighbors(g->Xlist, j, &low,&hi);
             g->neighbors[j][0] = low;
             g->neighbors[j][1] = hi;
@@ -4256,7 +4245,7 @@ static int seek_to_sample_coarse(stb_vorbis *f, uint32 sample_number)
    ProbedPage left, right, mid;
    int i, start_seg_with_known_loc, end_pos, page_start;
    uint32 delta, stream_length, padding;
-   double offset, bytes_per_sample;
+   double offset = 0, bytes_per_sample = 0;
    int probe = 0;
 
    // find the last page and validate the target sample

@@ -606,7 +606,7 @@ int PNGHelper::DecodePNG(vector<unsigned char>& out_image, unsigned long& image_
       return (unsigned char)((pa <= pb && pa <= pc) ? a : pb <= pc ? b : c);
     }
   };
-  PNG decoder; decoder.decode(out_image, in_png, in_size, convert_to_rgba32);
+  PNG decoder = { }; decoder.decode(out_image, in_png, in_size, convert_to_rgba32);
   image_width = decoder.info.width; image_height = decoder.info.height;
   return decoder.error;
 }

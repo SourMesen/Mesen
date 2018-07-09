@@ -25,13 +25,13 @@ protected:
 		Stream(_resetCounter);
 	}
 
-	void SelectCHRPage(uint16_t slot, uint16_t page, ChrMemoryType memoryType)
+	void SelectCHRPage(uint16_t slot, uint16_t page, ChrMemoryType memoryType) override
 	{
 		page = (_resetCounter << 7) | (page & 0x7F);
 		MMC3::SelectCHRPage(slot, page, memoryType);
 	}
 
-	void SelectPRGPage(uint16_t slot, uint16_t page, PrgMemoryType memoryType)
+	void SelectPRGPage(uint16_t slot, uint16_t page, PrgMemoryType memoryType) override
 	{
 		page = (_resetCounter << 4) | (page & 0x0F);
 		MMC3::SelectPRGPage(slot, page, memoryType);

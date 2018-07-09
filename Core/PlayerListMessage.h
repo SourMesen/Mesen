@@ -5,12 +5,13 @@
 class PlayerListMessage : public NetMessage
 {
 private:
-	static constexpr uint32_t PlayerNameMaxLength = 50;
 	vector<PlayerInfo> _playerList;
 
 protected:
 	virtual void ProtectedStreamState()
 	{
+		constexpr uint32_t PlayerNameMaxLength = 50;
+
 		uint32_t nameLength = PlayerNameMaxLength + 1;
 		char playerName[PlayerNameMaxLength + 1];
 		uint8_t playerPort = 0;
