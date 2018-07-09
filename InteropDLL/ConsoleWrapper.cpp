@@ -114,11 +114,15 @@ namespace InteropEmu {
 
 		DllExport uint32_t __stdcall GetMesenVersion() { return EmulationSettings::GetMesenVersion(); }
 
+		DllExport void __stdcall InitDll()
+		{
+			_console.reset(new Console());
+			_console->Init();
+		}
+
 		DllExport void __stdcall InitializeEmu(const char* homeFolder, void *windowHandle, void *viewerHandle, bool noAudio, bool noVideo, bool noInput)
 		{
 			FolderUtilities::SetHomeFolder(homeFolder);
-			_console.reset(new Console());
-			_console->Init();
 			_shortcutKeyHandler.reset(new ShortcutKeyHandler(_console));
 
 			if(windowHandle != nullptr && viewerHandle != nullptr) {

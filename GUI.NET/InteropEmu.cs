@@ -16,6 +16,7 @@ namespace Mesen.GUI
 	{
 		private const string DLLPath = "MesenCore.dll";
 		[DllImport(DLLPath)] [return: MarshalAs(UnmanagedType.I1)] public static extern bool TestDll();
+		[DllImport(DLLPath)] public static extern void InitDll();
 
 		[DllImport(DLLPath, EntryPoint = "GetMesenVersion")] private static extern UInt32 GetMesenVersionWrapper();
 
