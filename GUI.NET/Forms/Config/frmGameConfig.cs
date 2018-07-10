@@ -14,6 +14,7 @@ namespace Mesen.GUI.Forms.Config
 	public partial class frmGameConfig : BaseConfigForm
 	{
 		private List<List<string>> _dipSwitches;
+		private List<ComboBox> _dropdowns;
 
 		public frmGameConfig(GameSpecificInfo configInfo)
 		{
@@ -39,11 +40,12 @@ namespace Mesen.GUI.Forms.Config
 			}
 
 			Entity = configInfo;
-			UpdateDipSwitches();
+			InitializeDipSwitches();
 		}
 
-		private void UpdateDipSwitches()
+		private void InitializeDipSwitches()
 		{
+			_dropdowns = new List<ComboBox>();
 			grpDipSwitches.Controls.Clear();
 
 			int row = 0;
@@ -97,6 +99,8 @@ namespace Mesen.GUI.Forms.Config
 					baseColumn += 2;
 					row = 0;
 				}
+
+				_dropdowns.Add(optionDropdown);
 			}
 			tlpDipSwitches.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
 			tlpDipSwitches.RowCount = _dipSwitches.Count + 1;
@@ -105,23 +109,30 @@ namespace Mesen.GUI.Forms.Config
 			tlpDipSwitches.PerformLayout();
 		}
 
+		private void UpdateDipSwitches()
+		{
+			UInt32 value = ((GameSpecificInfo)Entity).DipSwitches;
+			int currentBit = 0;
+			for(int i = 0; i < _dipSwitches.Count; i++) {
+				int bitCount = (int)Math.Round(Math.Log(_dropdowns[i].Items.Count) / Math.Log(2));
+
+				int selectedIndex = (int)((value >> currentBit) & ((1 << bitCount) - 1));
+				_dropdowns[i].SelectedIndex = selectedIndex;
+			}
+		}
+
 		private UInt32 GetDipSwitchValue()
 		{
 			int value = 0;
 			int currentBit = 0;
-			if(grpDipSwitches.Controls.Count > 0) {
-				foreach(Control control in grpDipSwitches.Controls[0].Controls) {
-					if(control is ComboBox) {
-						ComboBox dipSwitch = (ComboBox)control;
-						int bitCount = (int)Math.Round(Math.Log(dipSwitch.Items.Count) / Math.Log(2));
+			foreach(ComboBox dipSwitch in _dropdowns) {
+				int bitCount = (int)Math.Round(Math.Log(dipSwitch.Items.Count) / Math.Log(2));
 
-						if(dipSwitch.SelectedItem != null) {
-							value |= ((DipSwitchOption)dipSwitch.SelectedItem).Index << currentBit;
-						}
-
-						currentBit += bitCount;
-					}
+				if(dipSwitch.SelectedItem != null) {
+					value |= ((DipSwitchOption)dipSwitch.SelectedItem).Index << currentBit;
 				}
+
+				currentBit += bitCount;
 			}
 
 			return (UInt32)value;
@@ -146,7 +157,7 @@ namespace Mesen.GUI.Forms.Config
 		private void btnReset_Click(object sender, EventArgs e)
 		{
 			GameDipswitchDefinition defaultConfig = GameDipswitchDefinition.GetDipswitchDefinition();
-			((GameSpecificInfo)Entity).DipSwitches = defaultConfig.DefaultDipSwitches;
+			((GameSpecificInfo)Entity).DipSwitches = defaultConfig?.DefaultDipSwitches ?? 0;
 			UpdateUI();
 			UpdateDipSwitches();
 		}
