@@ -143,6 +143,10 @@ namespace Mesen.GUI.Forms
 			if(Program.IsMono) {
 				if(container is TextBox) {
 					((TextBox)container).BorderStyle = BorderStyle.FixedSingle;
+					((TextBox)container).BackColor = ((TextBox)container).ReadOnly ? Color.FromArgb(240, 240, 240) : Color.FromArgb(255, 255, 255);
+					((TextBox)container).ReadOnlyChanged += (object sender, EventArgs e) => {
+						((TextBox)sender).BackColor = ((TextBox)sender).ReadOnly ? Color.FromArgb(240, 240, 240) : Color.FromArgb(255, 255, 255);
+					};
 				} else if(container is CheckBox) {
 					((CheckBox)container).FlatStyle = FlatStyle.Flat;
 				} else if(container is Button) {
