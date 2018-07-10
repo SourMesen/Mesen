@@ -139,9 +139,9 @@
 			<Control ID="lblReverbStrength">Força:</Control>
 			<Control ID="chkMuteSoundInBackground">Silenciar o Mesen quando estiver em segundo plano</Control>
 			<Control ID="chkReduceSoundInBackground">Reduzir o volume do Mesen quando estiver em segundo plano</Control>
-			<Control ID="chkReduceSoundInFastForward">Reduce volume during fast forward/rewind</Control>
-			<Control ID="trkVolumeReduction">Volume Reduction (%)</Control>
-			<Control ID="lblVolumeReductionSettings">Volume Reduction Settings</Control>
+			<Control ID="chkReduceSoundInFastForward">Reduzir volume durante o avanço rápido/rewind</Control>
+			<Control ID="trkVolumeReduction">Redução de volume (%)</Control>
+			<Control ID="lblVolumeReductionSettings">Configurações de redução de volume</Control>
 			<Control ID="chkEnableAudio">Ativar o som</Control>
 			<Control ID="lblSampleRate">Frequência da amostra:</Control>
 			<Control ID="lblLatencyMs">ms</Control>
@@ -407,14 +407,14 @@
 			<Control ID="lblLastSync">Última sincronização: </Control>
 			<Control ID="btnResync">Ressincronizar</Control>
 
-			<Control ID="lblVsDualSystem">VS. DualSystem Settings</Control>
-			<Control ID="lblVsDualPlayAudio">Play audio for:</Control>
-			<Control ID="lblVsDualShowVideo">Show video for:</Control>
+			<Control ID="lblVsDualSystem">Configurações VS. DualSystem</Control>
+			<Control ID="lblVsDualPlayAudio">Reproduzir áudio para:</Control>
+			<Control ID="lblVsDualShowVideo">Exibir vídeo para:</Control>
 
 			<Control ID="lblFdsSettings">Configurações do Famicom Disk System</Control>
 			<Control ID="lblUiDisplaySettings">Configuração da interface de usuário</Control>
-			<Control ID="lblWindowSettings">Window Settings</Control>
-			<Control ID="chkDisableMouseResize">Do not allow the main window to be resized using the mouse</Control>
+			<Control ID="lblWindowSettings">Configurações da janela</Control>
+			<Control ID="chkDisableMouseResize">Não permitir que a janela principal seja redimensionada usando o mouse</Control>
 			<Control ID="lblGameSelectionScreenSettings">Configurações da tela de seleção de jogos</Control>
 			<Control ID="chkGameSelectionScreenResetGame">Iniciar o jogo a partir do zero, em vez de retomar a sessão de jogo anterior</Control>
 			<Control ID="chkDisableGameSelectionScreen">Desativar a tela de seleção do jogo</Control>
@@ -426,12 +426,12 @@
 			<Control ID="chkAlwaysOnTop">Sempre exibir em cima de outras janelas</Control>
 
 			<Control ID="tpgFdsNfs">FDS / VS / NSF</Control>
-			<Control ID="lblNsfSettings">NSF Settings</Control>
+			<Control ID="lblNsfSettings">Configurações NSF</Control>
 			<Control ID="chkNsfAutoDetectSilence">Reproduzir a faixa seguinte depois de</Control>
 			<Control ID="lblNsfMillisecondsOfSilence">milissegundos de silêncio</Control>
 			<Control ID="chkNsfMoveToNextTrackAfterTime">Limitar a duração da faixa em</Control>
 			<Control ID="lblNsfSeconds">segundos</Control>
-			<Control ID="chkNsfEnableApuIrqs">Enable APU IRQs for NSF files</Control>
+			<Control ID="chkNsfEnableApuIrqs">Habilitar IRQs da APU para arquivos NSF</Control>
 
 			<Control ID="btnOK">OK</Control>
 			<Control ID="btnCancel">Cancelar</Control>
@@ -974,18 +974,18 @@
 			<Value ID="Prescale10x">Preescala 10x</Value>
 		</Enum>
 		<Enum ID="VsDualOutputOption">
-			<Value ID="Both">Both</Value>
-			<Value ID="MasterOnly">Master Only</Value>
-			<Value ID="SlaveOnly">Slave Only</Value>
+			<Value ID="Both">Ambos</Value>
+			<Value ID="MasterOnly">Somente principal</Value>
+			<Value ID="SlaveOnly">Somente escravo</Value>
 		</Enum>
 		<Enum ID="ConsoleType">
 			<Value ID="Nes">NES</Value>
 			<Value ID="Famicom">Famicom</Value>
 		</Enum>
 		<Enum ID="VsInputType">
-			<Value ID="Default">Default</Value>
-			<Value ID="SwapControllers">Swap controllers</Value>
-			<Value ID="SwapAB">Swap A/B buttons</Value>
+			<Value ID="Default">Padrão</Value>
+			<Value ID="SwapControllers">Controladores de troca</Value>
+			<Value ID="SwapAB">Trocar botões A/B</Value>
 		</Enum>
 		<Enum ID="PpuModel">
 			<Value ID="Ppu2C03">RP2C03</Value>
