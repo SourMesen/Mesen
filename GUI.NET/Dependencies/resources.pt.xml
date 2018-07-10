@@ -975,7 +975,7 @@
 		</Enum>
 		<Enum ID="VsDualOutputOption">
 			<Value ID="Both">Ambos</Value>
-			<Value ID="MasterOnly">Somente mestre</Value>
+			<Value ID="MasterOnly">Somente principal</Value>
 			<Value ID="SlaveOnly">Somente escravo</Value>
 		</Enum>
 		<Enum ID="ConsoleType">
