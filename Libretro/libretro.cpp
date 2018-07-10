@@ -835,7 +835,8 @@ extern "C" {
 	void update_core_controllers()
 	{
 		//Setup all "auto" ports
-		GameDatabase::InitializeInputDevices(_console->GetRomInfo());
+		RomInfo romInfo = _console->GetRomInfo();
+		GameDatabase::InitializeInputDevices(romInfo);
 
 		//TODO: Four Score		
 
