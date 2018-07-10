@@ -184,8 +184,6 @@ namespace Mesen.GUI.Debugger
 			UpdateDebuggerFlags();
 			UpdateCdlRatios();
 			UpdateFileOptions();
-
-			tmrCdlRatios.Start();
 		}
 
 		protected override void OnShown(EventArgs e)
@@ -456,6 +454,7 @@ namespace Mesen.GUI.Debugger
 								ctrlCpuMemoryMapping.UpdateCpuRegions(state.Cartridge);
 								ctrlPpuMemoryMapping.UpdatePpuRegions(state.Cartridge);
 								ctrlConsoleStatus.UpdateStatus(ref state);
+								UpdateCdlRatios();
 							}
 							ctrlWatch.UpdateWatch(false);
 						}));
@@ -593,6 +592,7 @@ namespace Mesen.GUI.Debugger
 			ctrlConsoleStatus.UpdateStatus(ref state);
 			ctrlWatch.UpdateWatch();
 			ctrlCallstack.UpdateCallstack();
+			UpdateCdlRatios();
 
 			ctrlCpuMemoryMapping.UpdateCpuRegions(state.Cartridge);
 			ctrlPpuMemoryMapping.UpdatePpuRegions(state.Cartridge);
@@ -879,8 +879,6 @@ namespace Mesen.GUI.Debugger
 
 		protected override void OnFormClosing(FormClosingEventArgs e)
 		{
-			tmrCdlRatios.Stop();
-
 			LabelManager.OnLabelUpdated -= LabelManager_OnLabelUpdated;
 			BreakpointManager.BreakpointsChanged -= BreakpointManager_BreakpointsChanged;
 			ctrlConsoleStatus.OnStateChanged -= ctrlConsoleStatus_OnStateChanged;
@@ -930,11 +928,6 @@ namespace Mesen.GUI.Debugger
 		private void ctrlConsoleStatus_OnStateChanged(object sender, EventArgs e)
 		{
 			UpdateDebugger(true, false);
-		}
-
-		private void tmrCdlRatios_Tick(object sender, EventArgs e)
-		{
-			this.UpdateCdlRatios();
 		}
 
 		private void mnuLoadCdlFile_Click(object sender, EventArgs e)
