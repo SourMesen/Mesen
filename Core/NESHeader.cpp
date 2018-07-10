@@ -197,7 +197,7 @@ MirroringType NESHeader::GetMirroringType()
 
 GameInputType NESHeader::GetInputType()
 {
-	if(Byte15 <= 0x2A) {
+	if(Byte15 < (uint8_t)GameInputType::LastEntry) {
 		return (GameInputType)Byte15;
 	}
 

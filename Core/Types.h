@@ -401,7 +401,9 @@ enum class GameInputType
 	SuborKeyboardMouse1 = 0x27,
 	SuborKeyboardMouse2 = 0x28,
 	SnesMouse = 0x29,
-	//0x30 Generic Multicart
+	//0x2A Generic Multicart
+	SnesControllers = 0x2B,
+	LastEntry
 };
 
 enum class PpuModel
