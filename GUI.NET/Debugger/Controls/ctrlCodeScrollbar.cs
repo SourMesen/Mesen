@@ -211,12 +211,15 @@ namespace Mesen.GUI.Debugger.Controls
 		{
 			base.OnMouseLeave(e);
 			if(_codeTooltip != null) {
+				bool restoreFocus = _codeTooltip.NeedRestoreFocus;
 				_codeTooltip.Close();
+				if(restoreFocus) {
+					this.Parent.Focus();
+				}
 				_codeTooltip = null;
 			}
 			_lastPreviewScrollPosition = -1;
 			_tmrScroll.Stop();
-			this.Parent.Focus();
 		}
 
 		private int HighlightHeight { get { return Math.Max(8, (int)(((float)this.VisibleLineCount / this.Maximum) * this.Height)); } }

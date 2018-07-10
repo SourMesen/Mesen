@@ -59,9 +59,12 @@ namespace Mesen.GUI.Debugger
 		public void Close()
 		{
 			if(_codeTooltip != null) {
+				bool restoreFocus = _codeTooltip.NeedRestoreFocus;
 				_codeTooltip.Close();
+				if(restoreFocus) {
+					_owner.Focus();
+				}
 				_codeTooltip = null;
-				_owner.Focus();
 			}
 		}
 

@@ -14,6 +14,7 @@ namespace Mesen.GUI.Debugger
 	{
 		protected Form _parentForm;
 		private Point _requestedLocation;
+		private bool _parentContainedFocus = false;
 
 		protected override void OnLoad(EventArgs e)
 		{
@@ -31,11 +32,17 @@ namespace Mesen.GUI.Debugger
 			}
 		}
 
+		public bool NeedRestoreFocus
+		{
+			get { return _parentContainedFocus; }
+		}
+
 		public void SetFormLocation(Point screenLocation, Control focusTarget)
 		{
 			_requestedLocation = _parentForm.PointToClient(screenLocation);
 
 			if(!this.Visible) {
+				this._parentContainedFocus = focusTarget.ContainsFocus;
 				this.Location = _requestedLocation;
 				this.Show();
 			} else {
