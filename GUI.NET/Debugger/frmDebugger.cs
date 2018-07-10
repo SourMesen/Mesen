@@ -113,7 +113,7 @@ namespace Mesen.GUI.Debugger
 			this.mnuShowVerifiedData.Checked = ConfigManager.Config.DebugInfo.ShowVerifiedData;
 			this.mnuShowUnidentifiedData.Checked = ConfigManager.Config.DebugInfo.ShowUnidentifiedData;
 
-			this.mnuRefreshWatchWhileRunning.Checked = ConfigManager.Config.DebugInfo.RefreshWatchWhileRunning;
+			this.mnuRefreshWhileRunning.Checked = ConfigManager.Config.DebugInfo.RefreshWhileRunning;
 			this.mnuShowMemoryValues.Checked = ConfigManager.Config.DebugInfo.ShowMemoryValuesInCodeWindow;
 			ctrlDebuggerCode.ShowMemoryValues = mnuShowMemoryValues.Checked;
 			ctrlDebuggerCodeSplit.ShowMemoryValues = mnuShowMemoryValues.Checked;
@@ -446,8 +446,19 @@ namespace Mesen.GUI.Debugger
 		{
 			switch(e.NotificationType) {
 				case InteropEmu.ConsoleNotificationType.PpuFrameDone:
-					if(ConfigManager.Config.DebugInfo.RefreshWatchWhileRunning) {
-						this.BeginInvoke((MethodInvoker)(() => ctrlWatch.UpdateWatch()));
+					if(ConfigManager.Config.DebugInfo.RefreshWhileRunning) {
+						DebugState state = new DebugState();
+						InteropEmu.DebugGetState(ref state);
+
+						this.BeginInvoke((MethodInvoker)(() => {
+							if(state.PPU.FrameCount % 30 == 0) {
+								//Update UI every 30 frames, since this is a relatively slow operation
+								ctrlCpuMemoryMapping.UpdateCpuRegions(state.Cartridge);
+								ctrlPpuMemoryMapping.UpdatePpuRegions(state.Cartridge);
+								ctrlConsoleStatus.UpdateStatus(ref state);
+							}
+							ctrlWatch.UpdateWatch(false);
+						}));
 					}
 					break;
 
@@ -1124,9 +1135,9 @@ namespace Mesen.GUI.Debugger
 			ConfigManager.ApplyChanges();
 		}
 
-		private void mnuRefreshWatchWhileRunning_Click(object sender, EventArgs e)
+		private void mnuRefreshWhileRunning_Click(object sender, EventArgs e)
 		{
-			ConfigManager.Config.DebugInfo.RefreshWatchWhileRunning = mnuRefreshWatchWhileRunning.Checked;
+			ConfigManager.Config.DebugInfo.RefreshWhileRunning = mnuRefreshWhileRunning.Checked;
 			ConfigManager.ApplyChanges();
 		}
 

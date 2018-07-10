@@ -96,6 +96,7 @@ namespace Mesen.GUI.Debugger
 
 			txtCycle.Text = state.Cycle.ToString();
 			txtScanline.Text = state.Scanline.ToString();
+			txtFrameCount.Text = state.FrameCount.ToString();
 
 			txtVRAMAddr.Text = state.State.VideoRamAddr.ToString("X4");
 			txtTmpAddr.Text = state.State.TmpVideoRamAddr.ToString("X4");
@@ -161,6 +162,10 @@ namespace Mesen.GUI.Debugger
 				Int32 scanline = 0;
 				Int32.TryParse(txtScanline.Text, out scanline);
 				state.PPU.Scanline = scanline;
+				
+				UInt32 frameCount = 0;
+				UInt32.TryParse(txtFrameCount.Text, out frameCount);
+				state.PPU.FrameCount = frameCount;
 
 				Int32 xScroll = 0;
 				Int32.TryParse(txtXScroll.Text, out xScroll);

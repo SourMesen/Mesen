@@ -49,6 +49,8 @@
 			this.txtXScroll = new System.Windows.Forms.TextBox();
 			this.label1 = new System.Windows.Forms.Label();
 			this.txtTmpAddr = new System.Windows.Forms.TextBox();
+			this.lblFrameCount = new System.Windows.Forms.Label();
+			this.txtFrameCount = new System.Windows.Forms.TextBox();
 			this.grpControlMask = new System.Windows.Forms.GroupBox();
 			this.tableLayoutPanel9 = new System.Windows.Forms.TableLayoutPanel();
 			this.chkDrawLeftSpr = new System.Windows.Forms.CheckBox();
@@ -77,9 +79,11 @@
 			this.chkExternal = new System.Windows.Forms.CheckBox();
 			this.chkNMI = new System.Windows.Forms.CheckBox();
 			this.chkDMC = new System.Windows.Forms.CheckBox();
+			this.chkBreak = new System.Windows.Forms.CheckBox();
 			this.chkNegative = new System.Windows.Forms.CheckBox();
 			this.chkOverflow = new System.Windows.Forms.CheckBox();
 			this.chkDecimal = new System.Windows.Forms.CheckBox();
+			this.chkReserved = new System.Windows.Forms.CheckBox();
 			this.txtStatus = new System.Windows.Forms.TextBox();
 			this.chkInterrupt = new System.Windows.Forms.CheckBox();
 			this.lblStatus = new System.Windows.Forms.Label();
@@ -121,8 +125,6 @@
 			this.mnuGoToPlayHandler = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
 			this.mnuGoToProgramCounter = new System.Windows.Forms.ToolStripMenuItem();
-			this.chkReserved = new System.Windows.Forms.CheckBox();
-			this.chkBreak = new System.Windows.Forms.CheckBox();
 			this.tableLayoutPanel2.SuspendLayout();
 			this.grpPPUStatus.SuspendLayout();
 			this.tableLayoutPanel8.SuspendLayout();
@@ -214,6 +216,8 @@
 			this.tableLayoutPanel7.Controls.Add(this.txtXScroll, 1, 4);
 			this.tableLayoutPanel7.Controls.Add(this.label1, 2, 2);
 			this.tableLayoutPanel7.Controls.Add(this.txtTmpAddr, 3, 2);
+			this.tableLayoutPanel7.Controls.Add(this.lblFrameCount, 2, 0);
+			this.tableLayoutPanel7.Controls.Add(this.txtFrameCount, 3, 0);
 			this.tableLayoutPanel7.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tableLayoutPanel7.Location = new System.Drawing.Point(3, 3);
 			this.tableLayoutPanel7.Margin = new System.Windows.Forms.Padding(3, 3, 0, 3);
@@ -420,11 +424,33 @@
 			// 
 			// txtTmpAddr
 			// 
-			this.txtTmpAddr.Location = new System.Drawing.Point(128, 40);
+			this.txtTmpAddr.Location = new System.Drawing.Point(137, 40);
 			this.txtTmpAddr.Margin = new System.Windows.Forms.Padding(0);
 			this.txtTmpAddr.Name = "txtTmpAddr";
 			this.txtTmpAddr.Size = new System.Drawing.Size(45, 20);
 			this.txtTmpAddr.TabIndex = 14;
+			this.txtTmpAddr.TextChanged += new System.EventHandler(this.OnOptionChanged);
+			// 
+			// lblFrameCount
+			// 
+			this.lblFrameCount.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.lblFrameCount.AutoSize = true;
+			this.lblFrameCount.Location = new System.Drawing.Point(111, 3);
+			this.lblFrameCount.Margin = new System.Windows.Forms.Padding(0);
+			this.lblFrameCount.Name = "lblFrameCount";
+			this.lblFrameCount.Size = new System.Drawing.Size(26, 13);
+			this.lblFrameCount.TabIndex = 15;
+			this.lblFrameCount.Text = "Fr#:";
+			this.lblFrameCount.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// txtFrameCount
+			// 
+			this.txtFrameCount.Location = new System.Drawing.Point(137, 0);
+			this.txtFrameCount.Margin = new System.Windows.Forms.Padding(0);
+			this.txtFrameCount.Name = "txtFrameCount";
+			this.txtFrameCount.Size = new System.Drawing.Size(52, 20);
+			this.txtFrameCount.TabIndex = 16;
+			this.txtFrameCount.TextChanged += new System.EventHandler(this.OnOptionChanged);
 			// 
 			// grpControlMask
 			// 
@@ -822,6 +848,19 @@
 			this.chkDMC.UseVisualStyleBackColor = true;
 			this.chkDMC.Click += new System.EventHandler(this.OnOptionChanged);
 			// 
+			// chkBreak
+			// 
+			this.chkBreak.AutoSize = true;
+			this.chkBreak.Enabled = false;
+			this.chkBreak.Location = new System.Drawing.Point(49, 17);
+			this.chkBreak.Margin = new System.Windows.Forms.Padding(0);
+			this.chkBreak.Name = "chkBreak";
+			this.chkBreak.Size = new System.Drawing.Size(54, 17);
+			this.chkBreak.TabIndex = 4;
+			this.chkBreak.Text = "Break";
+			this.chkBreak.UseVisualStyleBackColor = true;
+			this.chkBreak.Click += new System.EventHandler(this.chkCpuFlag_Click);
+			// 
 			// chkNegative
 			// 
 			this.chkNegative.AutoSize = true;
@@ -857,6 +896,19 @@
 			this.chkDecimal.Text = "Unused";
 			this.chkDecimal.UseVisualStyleBackColor = true;
 			this.chkDecimal.Click += new System.EventHandler(this.chkCpuFlag_Click);
+			// 
+			// chkReserved
+			// 
+			this.chkReserved.AutoSize = true;
+			this.chkReserved.Enabled = false;
+			this.chkReserved.Location = new System.Drawing.Point(103, 17);
+			this.chkReserved.Margin = new System.Windows.Forms.Padding(0);
+			this.chkReserved.Name = "chkReserved";
+			this.chkReserved.Size = new System.Drawing.Size(72, 17);
+			this.chkReserved.TabIndex = 5;
+			this.chkReserved.Text = "Reserved";
+			this.chkReserved.UseVisualStyleBackColor = true;
+			this.chkReserved.Click += new System.EventHandler(this.chkCpuFlag_Click);
 			// 
 			// txtStatus
 			// 
@@ -1314,32 +1366,6 @@
 			this.mnuGoToProgramCounter.ToolTipText = "Alt+*";
 			this.mnuGoToProgramCounter.Click += new System.EventHandler(this.mnuGoToProgramCounter_Click);
 			// 
-			// chkReserved
-			// 
-			this.chkReserved.AutoSize = true;
-			this.chkReserved.Enabled = false;
-			this.chkReserved.Location = new System.Drawing.Point(103, 17);
-			this.chkReserved.Margin = new System.Windows.Forms.Padding(0);
-			this.chkReserved.Name = "chkReserved";
-			this.chkReserved.Size = new System.Drawing.Size(72, 17);
-			this.chkReserved.TabIndex = 5;
-			this.chkReserved.Text = "Reserved";
-			this.chkReserved.UseVisualStyleBackColor = true;
-			this.chkReserved.Click += new System.EventHandler(this.chkCpuFlag_Click);
-			// 
-			// chkBreak
-			// 
-			this.chkBreak.AutoSize = true;
-			this.chkBreak.Enabled = false;
-			this.chkBreak.Location = new System.Drawing.Point(49, 17);
-			this.chkBreak.Margin = new System.Windows.Forms.Padding(0);
-			this.chkBreak.Name = "chkBreak";
-			this.chkBreak.Size = new System.Drawing.Size(54, 17);
-			this.chkBreak.TabIndex = 4;
-			this.chkBreak.Text = "Break";
-			this.chkBreak.UseVisualStyleBackColor = true;
-			this.chkBreak.Click += new System.EventHandler(this.chkCpuFlag_Click);
-			// 
 			// ctrlConsoleStatus
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1483,5 +1509,7 @@
 		private System.Windows.Forms.TextBox txtStack;
 		private System.Windows.Forms.CheckBox chkBreak;
 		private System.Windows.Forms.CheckBox chkReserved;
+		private System.Windows.Forms.Label lblFrameCount;
+		private System.Windows.Forms.TextBox txtFrameCount;
 	}
 }

@@ -277,7 +277,7 @@ namespace Mesen.GUI.Config
 		public bool AutoLoadCdlFiles = false;
 		public bool DisableDefaultLabels = false;
 
-		public bool RefreshWatchWhileRunning = false;
+		public bool RefreshWhileRunning = false;
 		public bool ShowMemoryValuesInCodeWindow = true;
 
 		public bool BreakOnOpen = true;

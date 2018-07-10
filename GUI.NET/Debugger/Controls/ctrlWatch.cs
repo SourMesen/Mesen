@@ -42,13 +42,13 @@ namespace Mesen.GUI.Debugger
 			}
 		}
 
-		public void UpdateWatch()
+		public void UpdateWatch(bool autoResizeColumns = true)
 		{
 			List<WatchValueInfo> watchContent = WatchManager.GetWatchContent(mnuHexDisplay.Checked);
 
-			lstWatch.BeginUpdate();
-
+			bool updating = false;
 			if(watchContent.Count != lstWatch.Items.Count - 1) {
+				lstWatch.BeginUpdate();
 				lstWatch.Items.Clear();
 
 				List<ListViewItem> itemsToAdd = new List<ListViewItem>();
@@ -62,21 +62,34 @@ namespace Mesen.GUI.Debugger
 				lastItem.SubItems.Add("");
 				itemsToAdd.Add(lastItem);
 				lstWatch.Items.AddRange(itemsToAdd.ToArray());
+				updating = true;
 			} else {
 				for(int i = 0; i < watchContent.Count; i++) {
 					ListViewItem item = lstWatch.Items[i];
-					item.SubItems[0].Text = watchContent[i].Expression;
-					item.SubItems[1].Text = watchContent[i].Value.ToString();
-					item.SubItems[1].ForeColor = watchContent[i].HasChanged ? Color.Red : Color.Black;
+					bool needUpdate = (
+						item.SubItems[0].Text != watchContent[i].Expression ||
+						item.SubItems[1].Text != watchContent[i].Value ||
+						item.SubItems[1].ForeColor != (watchContent[i].HasChanged ? Color.Red : Color.Black)
+					);
+					if(needUpdate) {
+						updating = true;
+						item.SubItems[0].Text = watchContent[i].Expression;
+						item.SubItems[1].Text = watchContent[i].Value;
+						item.SubItems[1].ForeColor = watchContent[i].HasChanged ? Color.Red : Color.Black;
+					}
 				}
 			}
 
-			lstWatch.AutoResizeColumn(1, ColumnHeaderAutoResizeStyle.ColumnContent);
-			if(colValue.Width < 100) {
-				colValue.Width = 100;
-			}
+			if(updating) {
+				if(autoResizeColumns) {
+					lstWatch.AutoResizeColumn(1, ColumnHeaderAutoResizeStyle.ColumnContent);
+				}
+				if(colValue.Width < 100) {
+					colValue.Width = 100;
+				}
 
-			lstWatch.EndUpdate();
+				lstWatch.EndUpdate();
+			}
 
 			if(_currentSelection >= 0 && lstWatch.Items.Count > _currentSelection) {
 				lstWatch.FocusedItem = lstWatch.Items[_currentSelection];
