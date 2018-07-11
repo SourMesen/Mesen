@@ -7,6 +7,7 @@
 
 class BaseMapper;
 class RewindManager;
+class HistoryViewer;
 class APU;
 class CPU;
 class PPU;
@@ -46,6 +47,8 @@ private:
 	SimpleLock _debuggerLock;
 
 	shared_ptr<RewindManager> _rewindManager;
+	shared_ptr<HistoryViewer> _historyViewer;
+
 	shared_ptr<CPU> _cpu;
 	shared_ptr<PPU> _ppu;
 	shared_ptr<APU> _apu;
@@ -78,6 +81,7 @@ private:
 	string _romFilepath;
 	string _patchFilename;
 
+	bool _paused = false;
 	bool _stop = false;
 	bool _running = false;
 	int32_t _stopCode = 0;
@@ -119,7 +123,8 @@ public:
 	ControlManager* GetControlManager();
 	MemoryManager* GetMemoryManager();
 	CheatManager* GetCheatManager();
-	RewindManager * GetRewindManager();
+	RewindManager* GetRewindManager();
+	HistoryViewer* GetHistoryViewer();
 
 	bool LoadMatchingRom(string romName, HashInfo hashInfo);
 	string FindMatchingRom(string romName, HashInfo hashInfo);
@@ -188,6 +193,9 @@ public:
 	bool IsRunning();
 	bool IsPaused();
 
+	bool GetPauseStatus();
+	void SetPauseStatus(bool paused);
+
 	void SetNextFrameOverclockStatus(bool disabled);
 
 	bool IsDebuggerAttached();
@@ -197,6 +205,8 @@ public:
 
 	void StartRecordingHdPack(string saveFolder, ScaleFilterType filterType, uint32_t scale, uint32_t flags, uint32_t chrRamBankSize);
 	void StopRecordingHdPack();
+	
+	void CopyRewindData(shared_ptr<Console> sourceConsole);
 
 	uint8_t* GetRamBuffer(DebugMemoryType memoryType, uint32_t &size, int32_t &startAddr);
 		

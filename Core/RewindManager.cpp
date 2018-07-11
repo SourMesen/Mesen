@@ -5,6 +5,7 @@
 #include "VideoRenderer.h"
 #include "SoundMixer.h"
 #include "BaseControlDevice.h"
+#include "HistoryViewer.h"
 
 RewindManager::RewindManager(shared_ptr<Console> console)
 {
@@ -329,6 +330,11 @@ void RewindManager::RewindSeconds(uint32_t seconds)
 		_currentHistory.LoadState(_console);
 		_console->Resume();
 	}
+}
+
+void RewindManager::CopyHistory(shared_ptr<HistoryViewer> destHistoryViewer)
+{
+	destHistoryViewer->SetHistoryData(_history);
 }
 
 void RewindManager::SendFrame(void * frameBuffer, uint32_t width, uint32_t height, bool forRewind)

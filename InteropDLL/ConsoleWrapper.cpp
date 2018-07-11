@@ -11,6 +11,7 @@
 #include "../Core/EmulationSettings.h"
 #include "../Core/VideoDecoder.h"
 #include "../Core/VideoRenderer.h"
+#include "../Core/HistoryViewer.h"
 #include "../Core/AutomaticRomTest.h"
 #include "../Core/RecordedRomTest.h"
 #include "../Core/FDS.h"
@@ -48,6 +49,10 @@ unique_ptr<ShortcutKeyHandler> _shortcutKeyHandler;
 
 unique_ptr<IRenderingDevice> _dualRenderer;
 unique_ptr<IAudioDevice> _dualSoundManager;
+
+shared_ptr<Console> _historyConsole;
+unique_ptr<IRenderingDevice> _historyRenderer;
+unique_ptr<IAudioDevice> _historySoundManager;
 
 void* _windowHandle = nullptr;
 void* _viewerHandle = nullptr;
@@ -131,7 +136,7 @@ namespace InteropEmu {
 
 				if(!noVideo) {
 					#ifdef _WIN32
-						_renderer.reset(new Renderer(_console, (HWND)_viewerHandle));
+						_renderer.reset(new Renderer(_console, (HWND)_viewerHandle, true));
 					#else 
 						_renderer.reset(new SdlRenderer(_console, _viewerHandle));
 					#endif
@@ -163,7 +168,7 @@ namespace InteropEmu {
 			if(slaveConsole){
 				_console->Pause();
 				#ifdef _WIN32
-					_dualRenderer.reset(new Renderer(slaveConsole, (HWND)viewerHandle));
+					_dualRenderer.reset(new Renderer(slaveConsole, (HWND)viewerHandle, false));
 					_dualSoundManager.reset(new SoundManager(slaveConsole, (HWND)windowHandle));
 				#else 
 					_dualRenderer.reset(new SdlRenderer(slaveConsole, viewerHandle));
@@ -181,13 +186,82 @@ namespace InteropEmu {
 			_console->Resume();
 		}
 
+		DllExport void __stdcall InitializeHistoryViewer(void *windowHandle, void *viewerHandle)
+		{
+			_historyConsole.reset(new Console());
+			_historyConsole->Init();
+			_historyConsole->Initialize(_console->GetRomPath(), _console->GetPatchFile());
+			_historyConsole->CopyRewindData(_console);
+
+			#ifdef _WIN32
+				_historyRenderer.reset(new Renderer(_historyConsole, (HWND)viewerHandle, false));
+				_historySoundManager.reset(new SoundManager(_historyConsole, (HWND)windowHandle));
+			#else 
+				_historyRenderer.reset(new SdlRenderer(_historyConsole, viewerHandle));
+				_historySoundManager.reset(new SdlSoundManager(_historyConsole));
+			#endif
+		}
+
+		DllExport void __stdcall ReleaseHistoryViewer(void *windowHandle, void *viewerHandle)
+		{
+			_historyConsole->Stop();
+			_historyConsole->Release(true);
+			_historyRenderer.reset();
+			_historySoundManager.reset();
+			_historyConsole.reset();
+		}
+
+		DllExport void __stdcall RunHistoryViewer()
+		{
+			if(_historyConsole) {
+				_historyConsole->Run();
+			}
+		}
+
+		DllExport void __stdcall SetHistoryViewerPauseStatus(bool paused)
+		{
+			if(_historyConsole) {
+				_historyConsole->SetPauseStatus(paused);
+			}
+		}
+
+		DllExport bool __stdcall GetHistoryViewerPauseStatus()
+		{
+			if(_historyConsole) {
+				return _historyConsole->GetPauseStatus();
+			}
+			return true;
+		}
+
+		DllExport uint32_t __stdcall GetHistoryViewerTotalFrameCount()
+		{
+			if(_historyConsole) {
+				return _historyConsole->GetHistoryViewer()->GetHistoryLength();
+			}
+			return 0;
+		}
+
+		DllExport void __stdcall SetHistoryViewerPosition(uint32_t seekPosition)
+		{
+			if(_historyConsole) {
+				_historyConsole->GetHistoryViewer()->SeekTo(seekPosition);
+			}
+		}
+
+		DllExport uint32_t __stdcall GetHistoryViewerPosition()
+		{
+			if(_historyConsole) {
+				return _historyConsole->GetHistoryViewer()->GetPosition();
+			}
+			return 0;
+		}
+
 		DllExport void __stdcall SetFullscreenMode(bool fullscreen, void *windowHandle, uint32_t monitorWidth, uint32_t monitorHeight)
 		{
 			if(_renderer) {
 				_renderer->SetFullscreenMode(fullscreen, windowHandle, monitorWidth, monitorHeight);
 			}
 		}
-
 
 		DllExport bool __stdcall IsRunning() { return _console->IsRunning(); }
 		DllExport int32_t __stdcall GetStopCode() { return _console->GetStopCode(); }
@@ -271,6 +345,7 @@ namespace InteropEmu {
 
 		DllExport void __stdcall Resume() { EmulationSettings::ClearFlags(EmulationFlags::Paused); }
 		DllExport bool __stdcall IsPaused() { return EmulationSettings::CheckFlag(EmulationFlags::Paused); }
+		
 		DllExport void __stdcall Stop()
 		{
 			if(_console) {

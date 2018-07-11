@@ -49,6 +49,7 @@ enum class VideoFilterType
 extern "C" {
 	void __stdcall SetFlags(uint64_t flags);
 	void __stdcall SetVideoFilter(VideoFilterType filter);
+	void __stdcall InitDll();
 	void __stdcall InitializeEmu(const char* homeFolder, void*, void*, bool, bool, bool);
 	void __stdcall LoadROM(const char* filename, const char* patchFile);
 	void __stdcall Run();
@@ -86,6 +87,7 @@ int main(int argc, char* argv[])
 
 	string homeFolder = "../PGOMesenHome";
 
+	InitDll();
 	SetFlags(0x8000000000000000 | 0x20); //EmulationFlags::ConsoleMode | UseHdPacks
 	InitializeEmu(homeFolder.c_str(), nullptr, nullptr, false, false, false);
 	LoadROM(testRoms[0].c_str(), "");

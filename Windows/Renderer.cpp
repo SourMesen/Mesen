@@ -13,7 +13,7 @@
 
 using namespace DirectX;
 
-Renderer::Renderer(shared_ptr<Console> console, HWND hWnd) : BaseRenderer(console)
+Renderer::Renderer(shared_ptr<Console> console, HWND hWnd, bool registerAsMessageManager) : BaseRenderer(console, registerAsMessageManager)
 {
 	_hWnd = hWnd;
 

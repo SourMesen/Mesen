@@ -1103,6 +1103,12 @@
     <Compile Include="Forms\frmHelp.Designer.cs">
       <DependentUpon>frmHelp.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\frmHistoryViewer.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\frmHistoryViewer.Designer.cs">
+      <DependentUpon>frmHistoryViewer.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\frmInputBarcode.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -1661,6 +1667,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\frmHelp.resx">
       <DependentUpon>frmHelp.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\frmHistoryViewer.resx">
+      <DependentUpon>frmHistoryViewer.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\frmInputBarcode.resx">
       <DependentUpon>frmInputBarcode.cs</DependentUpon>

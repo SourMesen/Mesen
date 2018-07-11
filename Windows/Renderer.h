@@ -93,7 +93,7 @@ private:
 	HRESULT CreateSamplerState();
 
 public:
-	Renderer(shared_ptr<Console> console, HWND hWnd);
+	Renderer(shared_ptr<Console> console, HWND hWnd, bool registerAsMessageManager);
 	~Renderer();
 
 	void SetFullscreenMode(bool fullscreen, void* windowHandle, uint32_t monitorWidth, uint32_t monitorHeight);

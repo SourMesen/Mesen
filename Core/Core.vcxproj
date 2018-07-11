@@ -537,6 +537,7 @@
     <ClInclude Include="FdsSystemActionManager.h" />
     <ClInclude Include="Gkcx1.h" />
     <ClInclude Include="HdPackConditions.h" />
+    <ClInclude Include="HistoryViewer.h" />
     <ClInclude Include="IBarcodeReader.h" />
     <ClInclude Include="IBattery.h" />
     <ClInclude Include="IInputProvider.h" />
@@ -970,6 +971,7 @@
     <ClCompile Include="HdPackBuilder.cpp" />
     <ClCompile Include="HdPackLoader.cpp" />
     <ClCompile Include="HdPpu.cpp" />
+    <ClCompile Include="HistoryViewer.cpp" />
     <ClCompile Include="KeyManager.cpp" />
     <ClCompile Include="LuaApi.cpp" />
     <ClCompile Include="LuaCallHelper.cpp" />

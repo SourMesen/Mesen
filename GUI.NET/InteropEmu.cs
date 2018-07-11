@@ -26,6 +26,16 @@ namespace Mesen.GUI
 		[DllImport(DLLPath)] public static extern void InitializeDualSystem(IntPtr windowHandle, IntPtr viewerHandle);
 		[DllImport(DLLPath)] public static extern void ReleaseDualSystemAudioVideo();
 
+		[DllImport(DLLPath)] public static extern void InitializeHistoryViewer(IntPtr windowHandle, IntPtr viewerHandle);
+		[DllImport(DLLPath)] public static extern void ReleaseHistoryViewer();
+		[DllImport(DLLPath)] public static extern void RunHistoryViewer();
+		[DllImport(DLLPath)] public static extern void StopHistoryViewer();
+		[DllImport(DLLPath)] public static extern UInt32 GetHistoryViewerTotalFrameCount();
+		[DllImport(DLLPath)] public static extern void SetHistoryViewerPosition(UInt32 seekPosition);
+		[DllImport(DLLPath)] public static extern UInt32 GetHistoryViewerPosition();
+		[DllImport(DLLPath)] public static extern void SetHistoryViewerPauseStatus([MarshalAs(UnmanagedType.I1)]bool paused);		
+		[DllImport(DLLPath)] [return: MarshalAs(UnmanagedType.I1)] public static extern bool GetHistoryViewerPauseStatus();		
+
 		[DllImport(DLLPath)] public static extern void SetDisplayLanguage(Language lang);
 
 		[DllImport(DLLPath)] public static extern void SetFullscreenMode([MarshalAs(UnmanagedType.I1)]bool fullscreen, IntPtr windowHandle, UInt32 monitorWidth, UInt32 monitorHeight);

@@ -1468,6 +1468,9 @@
     <ClInclude Include="BmcK3046.h">
       <Filter>Nes\Mappers\Unif</Filter>
     </ClInclude>
+    <ClInclude Include="HistoryViewer.h">
+      <Filter>Rewinder</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -1754,6 +1757,9 @@
     </ClCompile>
     <ClCompile Include="NESHeader.cpp">
       <Filter>Nes\RomLoader</Filter>
+    </ClCompile>
+    <ClCompile Include="HistoryViewer.cpp">
+      <Filter>Rewinder</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

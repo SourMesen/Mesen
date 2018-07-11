@@ -6,11 +6,11 @@
 #include "VideoDecoder.h"
 #include "PPU.h"
 
-BaseRenderer::BaseRenderer(shared_ptr<Console> console)
+BaseRenderer::BaseRenderer(shared_ptr<Console> console, bool registerAsMessageManager)
 {
 	_console = console;
 
-	if(console->IsMaster()) {
+	if(registerAsMessageManager) {
 		//Only display messages on the master CPU's screen
 		MessageManager::RegisterMessageManager(this);
 	}

@@ -98,7 +98,22 @@ namespace Mesen.GUI.Forms
 				_cheatListWindow.Focus();
 			}
 		}
-		
+
+		private void mnuHistoryViewer_Click(object sender, EventArgs e)
+		{
+			if(_historyViewerWindow == null) {
+				_historyViewerWindow = new frmHistoryViewer();
+				_historyViewerWindow.Show();
+				_historyViewerWindow.FormClosed += (s, evt) => {
+					_historyViewerWindow = null;
+				};
+			} else {
+				_historyViewerWindow.WindowState = FormWindowState.Normal;
+				_historyViewerWindow.BringToFront();
+				_historyViewerWindow.Focus();
+			}
+		}
+
 		private void LoadRandomGame()
 		{
 			IEnumerable<string> gameFolders = ConfigManager.Config.RecentFiles.Select(recentFile => recentFile.RomFile.Folder.ToLowerInvariant()).Distinct();
@@ -376,4 +391,5 @@ namespace Mesen.GUI.Forms
 			}
 		}
 	}
+
 }

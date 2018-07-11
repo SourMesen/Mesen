@@ -44,6 +44,7 @@
 #include "VideoRenderer.h"
 #include "DebugHud.h"
 #include "NotificationManager.h"
+#include "HistoryViewer.h"
 
 Console::Console(shared_ptr<Console> master)
 {
@@ -480,6 +481,11 @@ RewindManager* Console::GetRewindManager()
 	return _rewindManager.get();
 }
 
+HistoryViewer* Console::GetHistoryViewer()
+{
+	return _historyViewer.get();
+}
+
 VirtualFile Console::GetRomPath()
 {
 	return static_cast<VirtualFile>(_romFilepath);
@@ -707,6 +713,9 @@ void Console::Run()
 				}
 				lastFrameTimer.Reset();
 
+				if(_historyViewer) {
+					_historyViewer->ProcessEndOfFrame();
+				}
 				_rewindManager->ProcessEndOfFrame();
 				EmulationSettings::DisableOverclocking(_disableOcNextFrame || NsfMapper::GetInstance());
 				_disableOcNextFrame = false;
@@ -724,7 +733,7 @@ void Console::Run()
 					_runLock.Acquire();
 				}
 
-				bool paused = EmulationSettings::IsPaused();
+				bool paused = EmulationSettings::IsPaused() || _paused;
 				if(paused && !_stop) {
 					_notificationManager->SendNotification(ConsoleNotificationType::GamePaused);
 
@@ -741,7 +750,7 @@ void Console::Run()
 					while(paused && !_stop) {
 						//Sleep until emulation is resumed
 						std::this_thread::sleep_for(std::chrono::duration<int, std::milli>(30));
-						paused = EmulationSettings::IsPaused();
+						paused = EmulationSettings::IsPaused() || _paused;
 					}
 
 					if(EmulationSettings::CheckFlag(EmulationFlags::DebuggerWindowEnabled)) {
@@ -792,6 +801,7 @@ void Console::Run()
 		MessageManager::DisplayMessage("Error", "GameCrash", ex.what());
 	}
 
+	_paused = false;
 	_running = false;
 
 	_notificationManager->SendNotification(ConsoleNotificationType::BeforeEmulationStop);
@@ -851,6 +861,16 @@ bool Console::IsPaused()
 	} else {
 		return _runLock.IsFree() || !_pauseLock.IsFree() || !_running;
 	}
+}
+
+bool Console::GetPauseStatus()
+{
+	return _paused;
+}
+
+void Console::SetPauseStatus(bool paused)
+{
+	_paused = paused;
 }
 
 void Console::UpdateNesModel(bool sendNotification)
@@ -1232,6 +1252,18 @@ bool Console::IsRecordingTapeFile()
 	}
 
 	return false;
+}
+
+void Console::CopyRewindData(shared_ptr<Console> sourceConsole)
+{
+	sourceConsole->Pause();
+	Pause();
+
+	_historyViewer.reset(new HistoryViewer(shared_from_this()));
+	sourceConsole->_rewindManager->CopyHistory(_historyViewer);
+
+	Resume();
+	sourceConsole->Resume();
 }
 
 uint8_t* Console::GetRamBuffer(DebugMemoryType memoryType, uint32_t &size, int32_t &startAddr)

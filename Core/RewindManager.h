@@ -7,6 +7,7 @@
 #include "IInputRecorder.h"
 
 class Console;
+class HistoryViewer;
 
 enum class RewindState
 {
@@ -63,6 +64,8 @@ public:
 	bool IsRewinding();
 	bool IsStepBack();
 	void RewindSeconds(uint32_t seconds);
+
+	void CopyHistory(shared_ptr<HistoryViewer> destHistoryViewer);
 
 	void SendFrame(void *frameBuffer, uint32_t width, uint32_t height, bool forRewind);
 	bool SendAudio(int16_t *soundBuffer, uint32_t sampleCount, uint32_t sampleRate);

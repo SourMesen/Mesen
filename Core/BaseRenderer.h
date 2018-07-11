@@ -27,7 +27,7 @@ protected:
 	uint32_t _screenHeight = 0;
 	uint32_t _renderedFrameCount = 0;	
 
-	BaseRenderer(shared_ptr<Console> console);
+	BaseRenderer(shared_ptr<Console> console, bool registerAsMessageManager);
 
 	bool IsMessageShown();	
 

@@ -30,6 +30,7 @@ namespace Mesen.GUI.Forms
 		private Thread _emuThread;
 		private frmLogWindow _logWindow;
 		private frmCheatList _cheatListWindow;
+		private frmHistoryViewer _historyViewerWindow;
 		private frmHdPackEditor _hdPackEditorWindow;
 		private ResourcePath? _currentRomPath = null;
 		List<string> _luaScriptsToLoad = new List<string>();
@@ -274,9 +275,11 @@ namespace Mesen.GUI.Forms
 			}
 
 			_shuttingDown = true;
-			if(_frmFullscreenRenderer != null) {
-				_frmFullscreenRenderer.Close();
-			}
+			_logWindow?.Close();
+			_historyViewerWindow?.Close();
+			_cheatListWindow?.Close();
+			_hdPackEditorWindow?.Close();
+			_frmFullscreenRenderer?.Close();
 
 			//Stop menu update timer, and process all pending events before stopping the core
 			//This prevents some rare crashes on shutdown
