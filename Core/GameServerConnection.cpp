@@ -59,7 +59,7 @@ void GameServerConnection::SendGameInformation()
 {
 	_console->Pause();
 	RomInfo romInfo = _console->GetRomInfo();
-	GameInformationMessage gameInfo(romInfo.RomName, romInfo.Hash.Crc32, _controllerPort, EmulationSettings::CheckFlag(EmulationFlags::Paused));
+	GameInformationMessage gameInfo(romInfo.RomName, romInfo.Hash.Crc32, _controllerPort, _console->GetSettings()->CheckFlag(EmulationFlags::Paused));
 	SendNetMessage(gameInfo);
 	SaveStateMessage saveState(_console);
 	SendNetMessage(saveState);

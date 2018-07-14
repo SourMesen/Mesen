@@ -399,7 +399,7 @@ int LuaApi::GetScreenBuffer(lua_State *lua)
 {
 	LuaCallHelper l(lua);
 	
-	uint32_t *palette = EmulationSettings::GetRgbPalette();
+	uint32_t *palette = _console->GetSettings()->GetRgbPalette();
 	lua_newtable(lua);
 	for(int y = 0; y < PPU::ScreenHeight; y++) {
 		for(int x = 0; x < PPU::ScreenWidth; x++) {
@@ -437,7 +437,7 @@ int LuaApi::GetPixel(lua_State *lua)
 	errorCond(x < 0 || x > 255 || y < 0 || y > 239, "invalid x,y coordinates (must be between 0-255, 0-239)");
 
 	//Ignores intensify & grayscale bits
-	l.Return(EmulationSettings::GetRgbPalette()[_debugger->GetScreenPixel(x, y) & 0x3F] & 0xFFFFFF);
+	l.Return(_console->GetSettings()->GetRgbPalette()[_debugger->GetScreenPixel(x, y) & 0x3F] & 0xFFFFFF);
 	return l.ReturnCount();
 }
 

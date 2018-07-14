@@ -3,6 +3,8 @@
 #include "BaseControlDevice.h"
 #include "IKeyManager.h"
 #include "KeyManager.h"
+#include "Console.h"
+#include "EmulationSettings.h"
 
 class SnesMouse : public BaseControlDevice
 {
@@ -30,11 +32,11 @@ protected:
 	{
 		SetPressedState(Buttons::Left, KeyManager::IsMouseButtonPressed(MouseButton::LeftButton));
 		SetPressedState(Buttons::Right, KeyManager::IsMouseButtonPressed(MouseButton::RightButton));
-		SetMovement(KeyManager::GetMouseMovement(EmulationSettings::GetMouseSensitivity(MouseDevice::SnesMouse)));
+		SetMovement(KeyManager::GetMouseMovement(_console->GetSettings()->GetMouseSensitivity(MouseDevice::SnesMouse)));
 	}
 
 public:
-	SnesMouse(uint8_t port) : BaseControlDevice(port)
+	SnesMouse(shared_ptr<Console> console, uint8_t port) : BaseControlDevice(console, port)
 	{
 	}
 

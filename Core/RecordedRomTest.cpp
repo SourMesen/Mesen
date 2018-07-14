@@ -182,17 +182,18 @@ void RecordedRomTest::RecordFromTest(string newTestFilename, string existingTest
 
 int32_t RecordedRomTest::Run(string filename)
 {
+	EmulationSettings* settings = _console->GetSettings();
 	string testName = FolderUtilities::GetFilename(filename, false);
 	if(testName.compare("5.MMC3_rev_A") == 0 || testName.compare("6-MMC6") == 0 || testName.compare("6-MMC3_alt") == 0) {
-		EmulationSettings::SetFlags(EmulationFlags::Mmc3IrqAltBehavior);
+		settings->SetFlags(EmulationFlags::Mmc3IrqAltBehavior);
 	} else {
-		EmulationSettings::ClearFlags(EmulationFlags::Mmc3IrqAltBehavior);
+		settings->ClearFlags(EmulationFlags::Mmc3IrqAltBehavior);
 	}
 
 	if(testName.compare("demo_pal") == 0 || testName.substr(0, 4).compare("pal_") == 0) {
-		EmulationSettings::SetNesModel(NesModel::PAL);
+		settings->SetNesModel(NesModel::PAL);
 	} else {
-		EmulationSettings::SetNesModel(NesModel::NTSC);
+		settings->SetNesModel(NesModel::NTSC);
 	}
 
 	VirtualFile testMovie(filename, "TestMovie.mmo");
@@ -212,7 +213,7 @@ int32_t RecordedRomTest::Run(string filename)
 			return false;
 		}
 
-		EmulationSettings::SetMasterVolume(0);
+		settings->SetMasterVolume(0);
 		
 		_console->Pause();
 		
@@ -236,12 +237,12 @@ int32_t RecordedRomTest::Run(string filename)
 
 		//Start playing movie
 		if(_console->Initialize(testRom)) {
-			EmulationSettings::SetFlags(EmulationFlags::ForceMaxSpeed);
+			settings->SetFlags(EmulationFlags::ForceMaxSpeed);
 			_runningTest = true;
 			MovieManager::Play(testMovie, _console);
 
 			_console->Resume();
-			EmulationSettings::ClearFlags(EmulationFlags::Paused);
+			_console->GetSettings()->ClearFlags(EmulationFlags::Paused);
 			_signal.Wait();
 			_runningTest = false;
 			_console->Stop();
@@ -250,8 +251,8 @@ int32_t RecordedRomTest::Run(string filename)
 			return -2;
 		}
 
-		EmulationSettings::ClearFlags(EmulationFlags::ForceMaxSpeed);
-		EmulationSettings::SetMasterVolume(1.0);
+		settings->ClearFlags(EmulationFlags::ForceMaxSpeed);
+		settings->SetMasterVolume(1.0);
 
 		return _badFrameCount;
 	}

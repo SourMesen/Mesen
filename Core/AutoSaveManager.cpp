@@ -11,7 +11,7 @@ AutoSaveManager::AutoSaveManager(shared_ptr<Console> console)
 	_autoSaveThread = std::thread([=]() {
 		while(!_stopThread) {
 			bool showMessage = false;
-			uint32_t autoSaveDelay = EmulationSettings::GetAutoSaveDelay(showMessage) * 60 * 1000;
+			uint32_t autoSaveDelay = console->GetSettings()->GetAutoSaveDelay(showMessage) * 60 * 1000;
 			if(autoSaveDelay > 0) {
 				if(_timer.GetElapsedMS() > autoSaveDelay) {
 					if(!console->IsDebuggerAttached()) {

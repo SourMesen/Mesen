@@ -2,9 +2,12 @@
 #include "BaseControlDevice.h"
 #include "KeyManager.h"
 #include "../Utilities/StringUtilities.h"
+#include "Console.h"
+#include "EmulationSettings.h"
 
-BaseControlDevice::BaseControlDevice(uint8_t port, KeyMappingSet keyMappingSet)
+BaseControlDevice::BaseControlDevice(shared_ptr<Console> console, uint8_t port, KeyMappingSet keyMappingSet)
 {
+	_console = console;
 	_port = port;
 	_strobe = false;
 	_keyMappings = keyMappingSet.GetKeyMappingArray();
@@ -212,12 +215,12 @@ void BaseControlDevice::InvertBit(uint8_t bit)
 
 void BaseControlDevice::SetPressedState(uint8_t bit, uint32_t keyCode)
 {
-	if(IsKeyboard() && keyCode < 0x200 && !EmulationSettings::IsKeyboardMode()) {
+	if(IsKeyboard() && keyCode < 0x200 && !_console->GetSettings()->IsKeyboardMode()) {
 		//Prevent keyboard device input when keyboard mode is off
 		return;
 	}
 
-	if(EmulationSettings::InputEnabled() && (!EmulationSettings::IsKeyboardMode() || keyCode >= 0x200 || IsKeyboard()) && KeyManager::IsKeyPressed(keyCode)) {
+	if(_console->GetSettings()->InputEnabled() && (!_console->GetSettings()->IsKeyboardMode() || keyCode >= 0x200 || IsKeyboard()) && KeyManager::IsKeyPressed(keyCode)) {
 		SetBit(bit);
 	}
 }

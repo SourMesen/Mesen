@@ -23,7 +23,7 @@ protected:
 	}
 
 public:
-	FourScore() : BaseControlDevice(BaseControlDevice::ExpDevicePort)
+	FourScore(shared_ptr<Console> console) : BaseControlDevice(console, BaseControlDevice::ExpDevicePort)
 	{
 	}
 	

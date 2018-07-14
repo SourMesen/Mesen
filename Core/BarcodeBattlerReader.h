@@ -8,7 +8,6 @@ class BarcodeBattlerReader : public BaseControlDevice, public IBarcodeReader
 {
 private:
 	static constexpr int StreamSize = 200;
-	shared_ptr<Console> _console;
 	uint64_t _newBarcode = 0;
 	uint32_t _newBarcodeDigitCount = 0;
 
@@ -51,9 +50,8 @@ protected:
 	}
 
 public:
-	BarcodeBattlerReader(shared_ptr<Console> console) : BaseControlDevice(BaseControlDevice::ExpDevicePort)
+	BarcodeBattlerReader(shared_ptr<Console> console) : BaseControlDevice(console, BaseControlDevice::ExpDevicePort)
 	{
-		_console = console;
 	}
 
 	void InternalSetStateFromInput() override

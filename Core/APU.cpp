@@ -17,6 +17,7 @@ APU::APU(shared_ptr<Console> console)
 
 	_console = console;
 	_mixer = _console->GetSoundMixer();
+	_settings = _console->GetSettings();
 
 	_squareChannel[0].reset(new SquareChannel(AudioChannel::Square1, _console, _mixer.get(), true));
 	_squareChannel[1].reset(new SquareChannel(AudioChannel::Square2, _console, _mixer.get(), false));
@@ -197,10 +198,10 @@ void APU::EndFrame()
 void APU::ProcessCpuClock()
 {
 	if(_apuEnabled) {
-		if(EmulationSettings::GetOverclockRate() == 100 || !EmulationSettings::GetOverclockAdjustApu()) {
+		if(_settings->GetOverclockRate() == 100 || !_settings->GetOverclockAdjustApu()) {
 			Exec();
 		} else {
-			_cyclesNeeded += 1.0 / ((double)EmulationSettings::GetOverclockRate() / 100.0);
+			_cyclesNeeded += 1.0 / ((double)_settings->GetOverclockRate() / 100.0);
 			while(_cyclesNeeded >= 1.0) {
 				Exec();
 				_cyclesNeeded--;

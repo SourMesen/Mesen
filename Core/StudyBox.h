@@ -45,12 +45,7 @@ protected:
 	{
 		switch(addr) {
 			case 0x4200: case 0x4203: return 0x00;
-			case 0x4201: 
-				return 0x10; /* | (EmulationSettings::CheckFlag(EmulationFlags::ShowFPS) ? 0x20 : 0x00)
-					| (EmulationSettings::CheckFlag(EmulationFlags::Turbo) ? 0x40 : 0x00); */
-				/*(EmulationSettings::CheckFlag(EmulationFlags::ShowFPS) ? 0x00 : 0x20) |
-				(EmulationSettings::CheckFlag(EmulationFlags::Turbo) ? 0x00 : 0x50);*/
-
+			case 0x4201: return 0x10;
 			case 0x4202: return _tapeReady ? 0x40 : 0x00;
 			default: return 0xFF;
 		}

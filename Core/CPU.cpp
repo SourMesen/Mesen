@@ -346,17 +346,18 @@ uint32_t CPU::GetClockRate(NesModel model)
 
 void CPU::StreamState(bool saving)
 {
-	uint32_t overclockRate = EmulationSettings::GetOverclockRateSetting();
-	bool overclockAdjustApu = EmulationSettings::GetOverclockAdjustApu();
-	uint32_t extraScanlinesBeforeNmi = EmulationSettings::GetPpuExtraScanlinesBeforeNmi();
-	uint32_t extraScanlinesAfterNmi = EmulationSettings::GetPpuExtraScanlinesAfterNmi();
+	EmulationSettings* settings = _console->GetSettings();
+	uint32_t overclockRate = settings->GetOverclockRateSetting();
+	bool overclockAdjustApu = settings->GetOverclockAdjustApu();
+	uint32_t extraScanlinesBeforeNmi = settings->GetPpuExtraScanlinesBeforeNmi();
+	uint32_t extraScanlinesAfterNmi = settings->GetPpuExtraScanlinesAfterNmi();
 
 	Stream(_state.PC, _state.SP, _state.PS, _state.A, _state.X, _state.Y, _cycleCount, _state.NMIFlag, 
 			_state.IRQFlag, _dmcCounter, _dmcDmaRunning, _spriteDmaCounter, _spriteDmaTransfer, 
 			overclockRate, overclockAdjustApu, extraScanlinesBeforeNmi, extraScanlinesBeforeNmi);
 
 	if(!saving) {
-		EmulationSettings::SetOverclockRate(overclockRate, overclockAdjustApu);
-		EmulationSettings::SetPpuNmiConfig(extraScanlinesBeforeNmi, extraScanlinesAfterNmi);
+		settings->SetOverclockRate(overclockRate, overclockAdjustApu);
+		settings->SetPpuNmiConfig(extraScanlinesBeforeNmi, extraScanlinesAfterNmi);
 	}
 }

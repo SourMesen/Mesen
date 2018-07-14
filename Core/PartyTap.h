@@ -33,7 +33,7 @@ protected:
 	}
 
 public:
-	PartyTap(KeyMappingSet keyMappings) : BaseControlDevice(BaseControlDevice::ExpDevicePort, keyMappings)
+	PartyTap(shared_ptr<Console> console, KeyMappingSet keyMappings) : BaseControlDevice(console, BaseControlDevice::ExpDevicePort, keyMappings)
 	{
 	}
 

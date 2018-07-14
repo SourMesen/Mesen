@@ -32,6 +32,7 @@ private:
 	static constexpr uint32_t MaxChannelCount = 11;
 
 	IAudioDevice* _audioDevice;
+	EmulationSettings* _settings;
 	unique_ptr<WaveRecorder> _waveRecorder;
 	SimpleLock _waveRecorderLock;
 	double _fadeRatio;

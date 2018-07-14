@@ -6,8 +6,9 @@
 #include <algorithm>
 #include "PPU.h"
 #include "DebugHud.h"
+#include "Console.h"
 
-DefaultVideoFilter::DefaultVideoFilter()
+DefaultVideoFilter::DefaultVideoFilter(shared_ptr<Console> console) : BaseVideoFilter(console)
 {
 	InitDecodeTables();
 
@@ -45,7 +46,7 @@ FrameInfo DefaultVideoFilter::GetFrameInfo()
 
 void DefaultVideoFilter::OnBeforeApplyFilter()
 {
-	PictureSettings currentSettings = EmulationSettings::GetPictureSettings();
+	PictureSettings currentSettings = _console->GetSettings()->GetPictureSettings();
 	if(_pictureSettings.Hue != currentSettings.Hue || _pictureSettings.Saturation != currentSettings.Saturation) {
 		InitConversionMatrix(currentSettings.Hue, currentSettings.Saturation);
 	}
@@ -57,7 +58,7 @@ void DefaultVideoFilter::DecodePpuBuffer(uint16_t *ppuOutputBuffer, uint32_t* ou
 {
 	uint32_t* out = outputBuffer;
 	OverscanDimensions overscan = GetOverscan();
-	double scanlineIntensity = 1.0 - EmulationSettings::GetPictureSettings().ScanlineIntensity;
+	double scanlineIntensity = 1.0 - _console->GetSettings()->GetPictureSettings().ScanlineIntensity;
 	for(uint32_t i = overscan.Top, iMax = 240 - overscan.Bottom; i < iMax; i++) {
 		if(displayScanlines && (i + overscan.Top) % 2 == 0) {
 			for(uint32_t j = overscan.Left, jMax = 256 - overscan.Right; j < jMax; j++) {
@@ -75,7 +76,7 @@ void DefaultVideoFilter::DecodePpuBuffer(uint16_t *ppuOutputBuffer, uint32_t* ou
 
 void DefaultVideoFilter::ApplyFilter(uint16_t *ppuOutputBuffer)
 {
-	DecodePpuBuffer(ppuOutputBuffer, GetOutputBuffer(), EmulationSettings::GetVideoFilterType() <= VideoFilterType::BisqwitNtsc);
+	DecodePpuBuffer(ppuOutputBuffer, GetOutputBuffer(), _console->GetSettings()->GetVideoFilterType() <= VideoFilterType::BisqwitNtsc);
 }
 
 void DefaultVideoFilter::RgbToYiq(double r, double g, double b, double &y, double &i, double &q)
@@ -131,7 +132,7 @@ void DefaultVideoFilter::InitDecodeTables()
 
 uint32_t DefaultVideoFilter::ProcessIntensifyBits(uint16_t ppuPixel, double scanlineIntensity)
 {
-	uint32_t pixelOutput = EmulationSettings::GetRgbPalette()[ppuPixel & 0x3F];
+	uint32_t pixelOutput = _console->GetSettings()->GetRgbPalette()[ppuPixel & 0x3F];
 	uint32_t intensifyBits = (ppuPixel >> 6) & 0x07;
 
 	if(intensifyBits || _needToProcess || scanlineIntensity < 1.0) {

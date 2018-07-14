@@ -106,7 +106,7 @@ void ControlManager::RegisterControlDevice(shared_ptr<BaseControlDevice> control
 
 ControllerType ControlManager::GetControllerType(uint8_t port)
 {
-	return EmulationSettings::GetControllerType(port);
+	return _console->GetSettings()->GetControllerType(port);
 }
 
 shared_ptr<BaseControlDevice> ControlManager::CreateControllerDevice(ControllerType type, uint8_t port, shared_ptr<Console> console)
@@ -115,13 +115,13 @@ shared_ptr<BaseControlDevice> ControlManager::CreateControllerDevice(ControllerT
 
 	switch(type) {
 		case ControllerType::None: break;
-		case ControllerType::StandardController: device.reset(new StandardController(console, port, EmulationSettings::GetControllerKeys(port))); break;
+		case ControllerType::StandardController: device.reset(new StandardController(console, port, console->GetSettings()->GetControllerKeys(port))); break;
 		case ControllerType::Zapper: device.reset(new Zapper(console, port)); break;
-		case ControllerType::ArkanoidController: device.reset(new ArkanoidController(port)); break;
-		case ControllerType::SnesController: device.reset(new SnesController(port, EmulationSettings::GetControllerKeys(port))); break;
-		case ControllerType::PowerPad: device.reset(new PowerPad(port, EmulationSettings::GetControllerKeys(port))); break;
-		case ControllerType::SnesMouse: device.reset(new SnesMouse(port)); break;
-		case ControllerType::SuborMouse: device.reset(new SuborMouse(port)); break;
+		case ControllerType::ArkanoidController: device.reset(new ArkanoidController(console, port)); break;
+		case ControllerType::SnesController: device.reset(new SnesController(console, port, console->GetSettings()->GetControllerKeys(port))); break;
+		case ControllerType::PowerPad: device.reset(new PowerPad(console, port, console->GetSettings()->GetControllerKeys(port))); break;
+		case ControllerType::SnesMouse: device.reset(new SnesMouse(console, port)); break;
+		case ControllerType::SuborMouse: device.reset(new SuborMouse(console, port)); break;
 		case ControllerType::VsZapper: device.reset(new VsZapper(console, port)); break;
 	}
 	
@@ -134,21 +134,21 @@ shared_ptr<BaseControlDevice> ControlManager::CreateExpansionDevice(ExpansionPor
 
 	switch(type) {
 		case ExpansionPortDevice::Zapper: device.reset(new Zapper(console, BaseControlDevice::ExpDevicePort)); break;
-		case ExpansionPortDevice::ArkanoidController: device.reset(new ArkanoidController(BaseControlDevice::ExpDevicePort)); break;
-		case ExpansionPortDevice::OekaKidsTablet: device.reset(new OekaKidsTablet()); break;
-		case ExpansionPortDevice::FamilyTrainerMat: device.reset(new FamilyMatTrainer(EmulationSettings::GetControllerKeys(0))); break;
-		case ExpansionPortDevice::KonamiHyperShot: device.reset(new KonamiHyperShot(console, EmulationSettings::GetControllerKeys(0), EmulationSettings::GetControllerKeys(1))); break;
-		case ExpansionPortDevice::FamilyBasicKeyboard: device.reset(new FamilyBasicKeyboard(EmulationSettings::GetControllerKeys(0))); break;
-		case ExpansionPortDevice::PartyTap: device.reset(new PartyTap(EmulationSettings::GetControllerKeys(0))); break;
-		case ExpansionPortDevice::Pachinko: device.reset(new PachinkoController(console, EmulationSettings::GetControllerKeys(0))); break;
-		case ExpansionPortDevice::ExcitingBoxing: device.reset(new ExcitingBoxingController(EmulationSettings::GetControllerKeys(0))); break;
-		case ExpansionPortDevice::JissenMahjong: device.reset(new JissenMahjongController(EmulationSettings::GetControllerKeys(0))); break;
-		case ExpansionPortDevice::SuborKeyboard: device.reset(new SuborKeyboard(EmulationSettings::GetControllerKeys(0))); break;
+		case ExpansionPortDevice::ArkanoidController: device.reset(new ArkanoidController(console, BaseControlDevice::ExpDevicePort)); break;
+		case ExpansionPortDevice::OekaKidsTablet: device.reset(new OekaKidsTablet(console)); break;
+		case ExpansionPortDevice::FamilyTrainerMat: device.reset(new FamilyMatTrainer(console, console->GetSettings()->GetControllerKeys(0))); break;
+		case ExpansionPortDevice::KonamiHyperShot: device.reset(new KonamiHyperShot(console, console->GetSettings()->GetControllerKeys(0), console->GetSettings()->GetControllerKeys(1))); break;
+		case ExpansionPortDevice::FamilyBasicKeyboard: device.reset(new FamilyBasicKeyboard(console, console->GetSettings()->GetControllerKeys(0))); break;
+		case ExpansionPortDevice::PartyTap: device.reset(new PartyTap(console, console->GetSettings()->GetControllerKeys(0))); break;
+		case ExpansionPortDevice::Pachinko: device.reset(new PachinkoController(console, console->GetSettings()->GetControllerKeys(0))); break;
+		case ExpansionPortDevice::ExcitingBoxing: device.reset(new ExcitingBoxingController(console, console->GetSettings()->GetControllerKeys(0))); break;
+		case ExpansionPortDevice::JissenMahjong: device.reset(new JissenMahjongController(console, console->GetSettings()->GetControllerKeys(0))); break;
+		case ExpansionPortDevice::SuborKeyboard: device.reset(new SuborKeyboard(console, console->GetSettings()->GetControllerKeys(0))); break;
 		case ExpansionPortDevice::BarcodeBattler: device.reset(new BarcodeBattlerReader(console)); break;
-		case ExpansionPortDevice::HoriTrack: device.reset(new HoriTrack(console, EmulationSettings::GetControllerKeys(0))); break;
-		case ExpansionPortDevice::BandaiHyperShot: device.reset(new BandaiHyperShot(console, EmulationSettings::GetControllerKeys(0))); break;
-		case ExpansionPortDevice::AsciiTurboFile: device.reset(new AsciiTurboFile()); break;
-		case ExpansionPortDevice::BattleBox: device.reset(new BattleBox()); break;
+		case ExpansionPortDevice::HoriTrack: device.reset(new HoriTrack(console, console->GetSettings()->GetControllerKeys(0))); break;
+		case ExpansionPortDevice::BandaiHyperShot: device.reset(new BandaiHyperShot(console, console->GetSettings()->GetControllerKeys(0))); break;
+		case ExpansionPortDevice::AsciiTurboFile: device.reset(new AsciiTurboFile(console)); break;
+		case ExpansionPortDevice::BattleBox: device.reset(new BattleBox(console)); break;
 
 		case ExpansionPortDevice::FourPlayerAdapter:
 		default: break;
@@ -160,9 +160,10 @@ shared_ptr<BaseControlDevice> ControlManager::CreateExpansionDevice(ExpansionPor
 void ControlManager::UpdateControlDevices()
 {
 	auto lock = _deviceLock.AcquireSafe();
+	EmulationSettings* settings = _console->GetSettings();
 
 	//Reset update flag
-	EmulationSettings::NeedControllerUpdate();
+	settings->NeedControllerUpdate();
 
 	bool hadKeyboard = HasKeyboard();
 
@@ -170,9 +171,9 @@ void ControlManager::UpdateControlDevices()
 
 	RegisterControlDevice(_systemActionManager);
 
-	bool fourScore = EmulationSettings::CheckFlag(EmulationFlags::HasFourScore);
-	ConsoleType consoleType = EmulationSettings::GetConsoleType();
-	ExpansionPortDevice expansionDevice = EmulationSettings::GetExpansionDevice();
+	bool fourScore = settings->CheckFlag(EmulationFlags::HasFourScore);
+	ConsoleType consoleType = settings->GetConsoleType();
+	ExpansionPortDevice expansionDevice = settings->GetExpansionDevice();
 
 	if(consoleType != ConsoleType::Famicom) {
 		expansionDevice = ExpansionPortDevice::None;
@@ -189,7 +190,7 @@ void ControlManager::UpdateControlDevices()
 
 	if(fourScore && consoleType == ConsoleType::Nes) {
 		//FourScore is only used to provide the signature for reads past the first 16 reads
-		RegisterControlDevice(shared_ptr<FourScore>(new FourScore()));
+		RegisterControlDevice(shared_ptr<FourScore>(new FourScore(_console)));
 	}
 
 	shared_ptr<BaseControlDevice> expDevice = CreateExpansionDevice(expansionDevice, _console);
@@ -199,9 +200,9 @@ void ControlManager::UpdateControlDevices()
 
 	bool hasKeyboard = HasKeyboard();
 	if(!hasKeyboard) {
-		EmulationSettings::DisableKeyboardMode();
+		settings->DisableKeyboardMode();
 	} else if(!hadKeyboard && hasKeyboard) {
-		EmulationSettings::EnableKeyboardMode();
+		settings->EnableKeyboardMode();
 	}
 
 	if(_mapperControlDevice) {
@@ -226,17 +227,17 @@ uint8_t ControlManager::GetOpenBusMask(uint8_t port)
 	//Usually this is the most significant byte of the address of the controller port - 0x40.
 	//Paperboy relies on this behavior and requires that reads from the controller ports return exactly $40 or $41 as appropriate."
 
-	switch(EmulationSettings::GetConsoleType()) {
+	switch(_console->GetSettings()->GetConsoleType()) {
 		default:
 		case ConsoleType::Nes:
-			if(EmulationSettings::CheckFlag(EmulationFlags::UseNes101Hvc101Behavior)) {
+			if(_console->GetSettings()->CheckFlag(EmulationFlags::UseNes101Hvc101Behavior)) {
 				return port == 0 ? 0xE4 : 0xE0;
 			} else {
 				return 0xE0;
 			}
 
 		case ConsoleType::Famicom:
-			if(EmulationSettings::CheckFlag(EmulationFlags::UseNes101Hvc101Behavior)) {
+			if(_console->GetSettings()->CheckFlag(EmulationFlags::UseNes101Hvc101Behavior)) {
 				return port == 0 ? 0xF8 : 0xE0;
 			} else {
 				return port == 0 ? 0xF8 : 0xE0;
@@ -348,6 +349,7 @@ void ControlManager::StreamState(bool saving)
 {
 	//Restore controllers that were being used at the time the snapshot was made
 	//This is particularely important to ensure proper sync during NetPlay
+	EmulationSettings* settings = _console->GetSettings();
 	ControllerType controllerTypes[4];
 	NesModel nesModel;
 	ExpansionPortDevice expansionDevice;
@@ -357,13 +359,13 @@ void ControlManager::StreamState(bool saving)
 	uint32_t zapperDetectionRadius = 0;
 	if(saving) {
 		nesModel = _console->GetModel();
-		expansionDevice = EmulationSettings::GetExpansionDevice();
-		consoleType = EmulationSettings::GetConsoleType();
-		hasFourScore = EmulationSettings::CheckFlag(EmulationFlags::HasFourScore);
-		useNes101Hvc101Behavior = EmulationSettings::CheckFlag(EmulationFlags::UseNes101Hvc101Behavior);
-		zapperDetectionRadius = EmulationSettings::GetZapperDetectionRadius();
+		expansionDevice = settings->GetExpansionDevice();
+		consoleType = settings->GetConsoleType();
+		hasFourScore = settings->CheckFlag(EmulationFlags::HasFourScore);
+		useNes101Hvc101Behavior = settings->CheckFlag(EmulationFlags::UseNes101Hvc101Behavior);
+		zapperDetectionRadius = settings->GetZapperDetectionRadius();
 		for(int i = 0; i < 4; i++) {
-			controllerTypes[i] = EmulationSettings::GetControllerType(i);
+			controllerTypes[i] = settings->GetControllerType(i);
 		}
 	}
 
@@ -375,16 +377,16 @@ void ControlManager::StreamState(bool saving)
 	Stream(unusedRefreshState, unusedMousePositionX, unusedMousePositionY, nesModel, expansionDevice, consoleType, types, hasFourScore, useNes101Hvc101Behavior, zapperDetectionRadius, _lagCounter, _pollCounter);
 
 	if(!saving) {
-		EmulationSettings::SetNesModel(nesModel);
-		EmulationSettings::SetExpansionDevice(expansionDevice);
-		EmulationSettings::SetConsoleType(consoleType);
+		settings->SetNesModel(nesModel);
+		settings->SetExpansionDevice(expansionDevice);
+		settings->SetConsoleType(consoleType);
 		for(int i = 0; i < 4; i++) {
-			EmulationSettings::SetControllerType(i, controllerTypes[i]);
+			settings->SetControllerType(i, controllerTypes[i]);
 		}
 
-		EmulationSettings::SetZapperDetectionRadius(zapperDetectionRadius);
-		EmulationSettings::SetFlagState(EmulationFlags::HasFourScore, hasFourScore);
-		EmulationSettings::SetFlagState(EmulationFlags::UseNes101Hvc101Behavior, useNes101Hvc101Behavior);
+		settings->SetZapperDetectionRadius(zapperDetectionRadius);
+		settings->SetFlagState(EmulationFlags::HasFourScore, hasFourScore);
+		settings->SetFlagState(EmulationFlags::UseNes101Hvc101Behavior, useNes101Hvc101Behavior);
 
 		UpdateControlDevices();
 	}

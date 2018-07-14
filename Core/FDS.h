@@ -16,6 +16,7 @@ private:
 	bool _disableAutoInsertDisk;
 
 	unique_ptr<FdsAudio> _audio;
+	EmulationSettings* _settings = nullptr;
 
 	//Write registers
 	uint16_t _irqReloadValue = 0;

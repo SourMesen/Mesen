@@ -179,7 +179,7 @@ namespace Mesen.GUI.Debugger
 				//Break once to show code and then resume execution
 				InteropEmu.DebugStep(1);
 			}
-			InteropEmu.SetFlag(EmulationFlags.Paused, false);
+			InteropEmu.Resume();
 
 			UpdateDebuggerFlags();
 			UpdateCdlRatios();
@@ -893,7 +893,7 @@ namespace Mesen.GUI.Debugger
 			InteropEmu.SetFlag(EmulationFlags.DebuggerWindowEnabled, false);
 			BreakpointManager.SetBreakpoints();
 			if(_wasPaused) {
-				InteropEmu.SetFlag(EmulationFlags.Paused, true);
+				InteropEmu.Pause();
 			}
 			InteropEmu.DebugRun();
 

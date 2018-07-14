@@ -55,20 +55,20 @@ public:
 		info.timing.fps = _console->GetModel() == NesModel::NTSC ? 60.098811862348404716732985230828 : 50.006977968268290848936010226333;
 		info.timing.sample_rate = 48000;
 
-		float ratio = (float)EmulationSettings::GetAspectRatio(_console);
+		float ratio = (float)_console->GetSettings()->GetAspectRatio(_console);
 		if(ratio == 0.0f) {
 			ratio = 1.0f;
 		}
-		ratio *= (float)EmulationSettings::GetOverscanDimensions().GetScreenWidth() / EmulationSettings::GetOverscanDimensions().GetScreenHeight() / 256 * 240;
+		ratio *= (float)_console->GetSettings()->GetOverscanDimensions().GetScreenWidth() / _console->GetSettings()->GetOverscanDimensions().GetScreenHeight() / 256 * 240;
 
-		if(EmulationSettings::GetScreenRotation() % 180) {
+		if(_console->GetSettings()->GetScreenRotation() % 180) {
 			info.geometry.aspect_ratio = ratio == 0.0f ? 0.0f : 1.0f / ratio;
 		} else {
 			info.geometry.aspect_ratio = ratio;
 		}
 
-		info.geometry.base_width = EmulationSettings::GetOverscanDimensions().GetScreenWidth();
-		info.geometry.base_height = EmulationSettings::GetOverscanDimensions().GetScreenHeight();
+		info.geometry.base_width = _console->GetSettings()->GetOverscanDimensions().GetScreenWidth();
+		info.geometry.base_height = _console->GetSettings()->GetOverscanDimensions().GetScreenHeight();
 
 		info.geometry.max_width = maxWidth;
 		info.geometry.max_height = maxHeight;

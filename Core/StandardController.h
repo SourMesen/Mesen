@@ -6,7 +6,6 @@
 class StandardController : public BaseControlDevice
 {
 private:
-	shared_ptr<Console> _console;
 	bool _microphoneEnabled = false;
 	uint32_t _turboSpeed = 0;
 
@@ -51,7 +50,7 @@ protected:
 				SetPressedState(Buttons::Microphone, keyMapping.Microphone);
 			}
 
-			if(!EmulationSettings::CheckFlag(EmulationFlags::AllowInvalidInput)) {
+			if(!_console->GetSettings()->CheckFlag(EmulationFlags::AllowInvalidInput)) {
 				if(IsPressed(Buttons::Up) && IsPressed(Buttons::Down)) {
 					ClearBit(Buttons::Down);
 				}
@@ -64,7 +63,7 @@ protected:
 
 	void RefreshStateBuffer() override
 	{
-		if(EmulationSettings::GetConsoleType() == ConsoleType::Nes && EmulationSettings::CheckFlag(EmulationFlags::HasFourScore)) {
+		if(_console->GetSettings()->GetConsoleType() == ConsoleType::Nes && _console->GetSettings()->CheckFlag(EmulationFlags::HasFourScore)) {
 			if(_port >= 2) {
 				_stateBuffer = ToByte() << 8;
 			} else {
@@ -79,11 +78,10 @@ protected:
 public:
 	enum Buttons { Up = 0, Down, Left, Right, Start, Select, B, A, Microphone };
 
-	StandardController(shared_ptr<Console> console, uint8_t port, KeyMappingSet keyMappings) : BaseControlDevice(port, keyMappings)
+	StandardController(shared_ptr<Console> console, uint8_t port, KeyMappingSet keyMappings) : BaseControlDevice(console, port, keyMappings)
 	{
-		_console = console;
 		_turboSpeed = keyMappings.TurboSpeed;
-		_microphoneEnabled = port == 1 && EmulationSettings::GetConsoleType() == ConsoleType::Famicom;
+		_microphoneEnabled = port == 1 && _console->GetSettings()->GetConsoleType() == ConsoleType::Famicom;
 	}
 	
 	uint8_t ToByte()
@@ -111,7 +109,7 @@ public:
 
 		if((addr == 0x4016 && (_port & 0x01) == 0) || (addr == 0x4017 && (_port & 0x01) == 1)) {
 			output = _stateBuffer & 0x01;
-			if(_port >= 2 && EmulationSettings::GetConsoleType() == ConsoleType::Famicom) {
+			if(_port >= 2 && _console->GetSettings()->GetConsoleType() == ConsoleType::Famicom) {
 				//Famicom outputs P3 & P4 on bit 1
 				output <<= 1;
 			}

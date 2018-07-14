@@ -173,16 +173,17 @@ void BaseRenderer::ShowFrameCounter(int lineNumber)
 void BaseRenderer::DrawCounters()
 {
 	int lineNumber = 0;
-	if(EmulationSettings::CheckFlag(EmulationFlags::ShowGameTimer)) {
+	EmulationSettings* settings = _console->GetSettings();
+	if(settings->CheckFlag(EmulationFlags::ShowGameTimer)) {
 		ShowGameTimer(lineNumber++);
 	}
-	if(EmulationSettings::CheckFlag(EmulationFlags::ShowFPS)) {
+	if(settings->CheckFlag(EmulationFlags::ShowFPS)) {
 		ShowFpsCounter(lineNumber++);
 	}
-	if(EmulationSettings::CheckFlag(EmulationFlags::ShowLagCounter)) {
+	if(settings->CheckFlag(EmulationFlags::ShowLagCounter)) {
 		ShowLagCounter(lineNumber++);
 	}
-	if(EmulationSettings::CheckFlag(EmulationFlags::ShowFrameCounter)) {
+	if(settings->CheckFlag(EmulationFlags::ShowFrameCounter)) {
 		ShowFrameCounter(lineNumber++);
 	}
 }

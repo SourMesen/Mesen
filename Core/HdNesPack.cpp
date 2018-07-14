@@ -9,9 +9,10 @@
 #include "../Utilities/FolderUtilities.h"
 #include "../Utilities/PNGHelper.h"
 
-HdNesPack::HdNesPack(shared_ptr<HdPackData> hdData)
+HdNesPack::HdNesPack(shared_ptr<HdPackData> hdData, EmulationSettings* settings)
 {
 	_hdData = hdData;
+	_settings = settings;
 }
 
 HdNesPack::~HdNesPack()
@@ -162,12 +163,12 @@ void HdNesPack::OnLineStart(HdPpuPixelInfo &lineFirstPixel)
 
 void HdNesPack::OnBeforeApplyFilter()
 {
-	_palette = _hdData->Palette.size() == 0x40 ? _hdData->Palette.data() : EmulationSettings::GetRgbPalette();
+	_palette = _hdData->Palette.size() == 0x40 ? _hdData->Palette.data() : _settings->GetRgbPalette();
 	_contoursEnabled = (_hdData->OptionFlags & (int)HdPackOptions::NoContours) == 0;
 	_cacheEnabled = (_hdData->OptionFlags & (int)HdPackOptions::DisableCache) == 0;
 
 	if(_hdData->OptionFlags & (int)HdPackOptions::NoSpriteLimit) {
-		EmulationSettings::SetFlags(EmulationFlags::RemoveSpriteLimit | EmulationFlags::AdaptiveSpriteLimit);
+		_settings->SetFlags(EmulationFlags::RemoveSpriteLimit | EmulationFlags::AdaptiveSpriteLimit);
 	}
 
 	_backgroundIndex = -1;

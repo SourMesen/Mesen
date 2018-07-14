@@ -156,7 +156,7 @@ void DeltaModulationChannel::WriteRAM(uint16_t addr, uint8_t value)
 			uint8_t previousLevel = _outputLevel;
 			_outputLevel = newValue;
 			
-			if(EmulationSettings::CheckFlag(EmulationFlags::ReduceDmcPopping) && abs(_outputLevel - previousLevel) > 50) {
+			if(_console->GetSettings()->CheckFlag(EmulationFlags::ReduceDmcPopping) && abs(_outputLevel - previousLevel) > 50) {
 				//Reduce popping sounds for 4011 writes
 				_outputLevel -= (_outputLevel - previousLevel) / 2;
 			}

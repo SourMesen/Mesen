@@ -44,16 +44,16 @@ void Renderer::SetScreenSize(uint32_t width, uint32_t height)
 	ScreenSize screenSize;
 	_console->GetVideoDecoder()->GetScreenSize(screenSize, false);
 
-	if(_screenHeight != screenSize.Height || _screenWidth != screenSize.Width || _nesFrameHeight != height || _nesFrameWidth != width || _resizeFilter != EmulationSettings::GetVideoResizeFilter() || _newFullscreen != _fullscreen) {
+	if(_screenHeight != screenSize.Height || _screenWidth != screenSize.Width || _nesFrameHeight != height || _nesFrameWidth != width || _resizeFilter != _console->GetSettings()->GetVideoResizeFilter() || _newFullscreen != _fullscreen) {
 		auto frameLock = _frameLock.AcquireSafe();
 		auto textureLock = _textureLock.AcquireSafe();
 		_console->GetVideoDecoder()->GetScreenSize(screenSize, false);
-		if(_screenHeight != screenSize.Height || _screenWidth != screenSize.Width || _nesFrameHeight != height || _nesFrameWidth != width || _resizeFilter != EmulationSettings::GetVideoResizeFilter() || _newFullscreen != _fullscreen) {
+		if(_screenHeight != screenSize.Height || _screenWidth != screenSize.Width || _nesFrameHeight != height || _nesFrameWidth != width || _resizeFilter != _console->GetSettings()->GetVideoResizeFilter() || _newFullscreen != _fullscreen) {
 			_nesFrameHeight = height;
 			_nesFrameWidth = width;
 			_newFrameBufferSize = width*height;
 
-			bool needReset = _fullscreen != _newFullscreen || _resizeFilter != EmulationSettings::GetVideoResizeFilter();
+			bool needReset = _fullscreen != _newFullscreen || _resizeFilter != _console->GetSettings()->GetVideoResizeFilter();
 			bool fullscreenResizeMode = _fullscreen && _newFullscreen;
 
 			if(_pSwapChain && _fullscreen && !_newFullscreen) {
@@ -277,7 +277,7 @@ HRESULT Renderer::InitDevice()
 	sd.BufferDesc.Width = _realScreenWidth;
 	sd.BufferDesc.Height = _realScreenHeight;
 	sd.BufferDesc.Format = DXGI_FORMAT_B8G8R8A8_UNORM;
-	sd.BufferDesc.RefreshRate.Numerator = EmulationSettings::GetExclusiveRefreshRate();
+	sd.BufferDesc.RefreshRate.Numerator = _console->GetSettings()->GetExclusiveRefreshRate();
 	sd.BufferDesc.RefreshRate.Denominator = 1;
 	sd.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
 	sd.Flags = _fullscreen ? DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH : 0;
@@ -400,7 +400,7 @@ HRESULT Renderer::InitDevice()
 
 HRESULT Renderer::CreateSamplerState()
 {
-	_resizeFilter = EmulationSettings::GetVideoResizeFilter();
+	_resizeFilter = _console->GetSettings()->GetVideoResizeFilter();
 
 	//Sample state
 	D3D11_SAMPLER_DESC samplerDesc;
@@ -573,7 +573,7 @@ void Renderer::DrawPauseScreen(bool disableOverlay)
 		float y = (float)_screenHeight / 2 - stringDimensions.m128_f32[1] / 2 - 8;
 		DrawString("PAUSE", x, y, Colors::AntiqueWhite, 1.0f, _largeFont.get());
 
-		string utf8Message = EmulationSettings::GetPauseScreenMessage();
+		string utf8Message = _console->GetSettings()->GetPauseScreenMessage();
 		if(utf8Message.size() > 0) {
 			std::wstring message = utf8::utf8::decode(utf8Message);
 			float width = MeasureString(message);
@@ -584,8 +584,8 @@ void Renderer::DrawPauseScreen(bool disableOverlay)
 
 void Renderer::Render()
 {
-	bool paused = EmulationSettings::IsPaused() && _console->IsRunning();
-	bool disableOverlay = EmulationSettings::CheckFlag(EmulationFlags::HidePauseOverlay);
+	bool paused = _console->IsPaused() && _console->IsRunning();
+	bool disableOverlay = _console->GetSettings()->CheckFlag(EmulationFlags::HidePauseOverlay);
 	shared_ptr<Debugger> debugger = _console->GetDebugger(false);
 	if(debugger && debugger->IsExecutionStopped()) {
 		paused = debugger->IsPauseIconShown();
@@ -630,7 +630,7 @@ void Renderer::Render()
 		_spriteBatch->End();
 
 		// Present the information rendered to the back buffer to the front buffer (the screen)
-		HRESULT hr = _pSwapChain->Present(EmulationSettings::CheckFlag(EmulationFlags::VerticalSync) ? 1 : 0, 0);
+		HRESULT hr = _pSwapChain->Present(_console->GetSettings()->CheckFlag(EmulationFlags::VerticalSync) ? 1 : 0, 0);
 		if(FAILED(hr)) {
 			MessageManager::Log("SwapChain::Present() failed - Error:" + std::to_string(hr));
 			if(hr == DXGI_ERROR_DEVICE_REMOVED) {

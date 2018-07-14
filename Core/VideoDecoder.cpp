@@ -39,17 +39,17 @@ FrameInfo VideoDecoder::GetFrameInfo()
 void VideoDecoder::GetScreenSize(ScreenSize &size, bool ignoreScale)
 {
 	if(_videoFilter) {
-		OverscanDimensions overscan = ignoreScale ? _videoFilter->GetOverscan() : EmulationSettings::GetOverscanDimensions();
+		OverscanDimensions overscan = ignoreScale ? _videoFilter->GetOverscan() : _console->GetSettings()->GetOverscanDimensions();
 		FrameInfo frameInfo{ overscan.GetScreenWidth(), overscan.GetScreenHeight(), PPU::ScreenWidth, PPU::ScreenHeight, 4 };
-		double aspectRatio = EmulationSettings::GetAspectRatio(_console);
-		double scale = (ignoreScale ? 1 : EmulationSettings::GetVideoScale());
+		double aspectRatio = _console->GetSettings()->GetAspectRatio(_console);
+		double scale = (ignoreScale ? 1 : _console->GetSettings()->GetVideoScale());
 		size.Width = (int32_t)(frameInfo.Width * scale);
 		size.Height = (int32_t)(frameInfo.Height * scale);
 		if(aspectRatio != 0.0) {
 			size.Width = (uint32_t)(frameInfo.OriginalHeight * scale * aspectRatio * ((double)frameInfo.Width / frameInfo.OriginalWidth));
 		}
 
-		if(EmulationSettings::GetScreenRotation() % 180) {
+		if(_console->GetSettings()->GetScreenRotation() % 180) {
 			std::swap(size.Width, size.Height);
 		}
 
@@ -59,35 +59,35 @@ void VideoDecoder::GetScreenSize(ScreenSize &size, bool ignoreScale)
 
 void VideoDecoder::UpdateVideoFilter()
 {
-	VideoFilterType newFilter = EmulationSettings::GetVideoFilterType();
+	VideoFilterType newFilter = _console->GetSettings()->GetVideoFilterType();
 
 	if(_videoFilterType != newFilter || _videoFilter == nullptr || (_hdScreenInfo && !_hdFilterEnabled) || (!_hdScreenInfo && _hdFilterEnabled)) {
 		_videoFilterType = newFilter;
-		_videoFilter.reset(new DefaultVideoFilter());
+		_videoFilter.reset(new DefaultVideoFilter(_console));
 		_scaleFilter.reset();
 
 		switch(_videoFilterType) {
 			case VideoFilterType::None: break;
-			case VideoFilterType::NTSC: _videoFilter.reset(new NtscFilter()); break;
-			case VideoFilterType::BisqwitNtsc: _videoFilter.reset(new BisqwitNtscFilter(1)); break;
-			case VideoFilterType::BisqwitNtscHalfRes: _videoFilter.reset(new BisqwitNtscFilter(2)); break;
-			case VideoFilterType::BisqwitNtscQuarterRes: _videoFilter.reset(new BisqwitNtscFilter(4)); break;
-			case VideoFilterType::Raw: _videoFilter.reset(new RawVideoFilter()); break;
+			case VideoFilterType::NTSC: _videoFilter.reset(new NtscFilter(_console)); break;
+			case VideoFilterType::BisqwitNtsc: _videoFilter.reset(new BisqwitNtscFilter(_console, 1)); break;
+			case VideoFilterType::BisqwitNtscHalfRes: _videoFilter.reset(new BisqwitNtscFilter(_console, 2)); break;
+			case VideoFilterType::BisqwitNtscQuarterRes: _videoFilter.reset(new BisqwitNtscFilter(_console, 4)); break;
+			case VideoFilterType::Raw: _videoFilter.reset(new RawVideoFilter(_console)); break;
 			default: _scaleFilter = ScaleFilter::GetScaleFilter(_videoFilterType); break;
 		}
 
 		_hdFilterEnabled = false;
 		if(_hdScreenInfo) {
-			_videoFilter.reset(new HdVideoFilter(_console->GetHdData()));
+			_videoFilter.reset(new HdVideoFilter(_console, _console->GetHdData()));
 			_hdFilterEnabled = true;
 		}
 	}
 
-	if(EmulationSettings::GetScreenRotation() == 0 && _rotateFilter) {
+	if(_console->GetSettings()->GetScreenRotation() == 0 && _rotateFilter) {
 		_rotateFilter.reset();
-	} else if(EmulationSettings::GetScreenRotation() > 0) {
-		if(!_rotateFilter || _rotateFilter->GetAngle() != EmulationSettings::GetScreenRotation()) {
-			_rotateFilter.reset(new RotateFilter(EmulationSettings::GetScreenRotation()));
+	} else if(_console->GetSettings()->GetScreenRotation() > 0) {
+		if(!_rotateFilter || _rotateFilter->GetAngle() != _console->GetSettings()->GetScreenRotation()) {
+			_rotateFilter.reset(new RotateFilter(_console->GetSettings()->GetScreenRotation()));
 		}
 	}
 }
@@ -111,7 +111,7 @@ void VideoDecoder::DecodeFrame(bool synchronous)
 	}
 
 	if(_scaleFilter) {
-		outputBuffer = _scaleFilter->ApplyFilter(outputBuffer, frameInfo.Width, frameInfo.Height);
+		outputBuffer = _scaleFilter->ApplyFilter(outputBuffer, frameInfo.Width, frameInfo.Height, _console->GetSettings()->GetPictureSettings().ScanlineIntensity);
 		frameInfo = _scaleFilter->GetFrameInfo(frameInfo);
 	}
 
@@ -121,10 +121,10 @@ void VideoDecoder::DecodeFrame(bool synchronous)
 
 	ScreenSize screenSize;
 	GetScreenSize(screenSize, true);
-	if(_previousScale != EmulationSettings::GetVideoScale() || screenSize.Height != _previousScreenSize.Height || screenSize.Width != _previousScreenSize.Width) {
+	if(_previousScale != _console->GetSettings()->GetVideoScale() || screenSize.Height != _previousScreenSize.Height || screenSize.Width != _previousScreenSize.Width) {
 		_console->GetNotificationManager()->SendNotification(ConsoleNotificationType::ResolutionChanged);
 	}
-	_previousScale = EmulationSettings::GetVideoScale();
+	_previousScale = _console->GetSettings()->GetVideoScale();
 	_previousScreenSize = screenSize;
 	
 	_lastFrameInfo = frameInfo;
@@ -210,7 +210,7 @@ void VideoDecoder::StopThread()
 
 		_hud.reset();
 		_hdScreenInfo = nullptr;
-		EmulationSettings::SetPpuModel(PpuModel::Ppu2C02);
+		_console->GetSettings()->SetPpuModel(PpuModel::Ppu2C02);
 		UpdateVideoFilter();
 		if(_ppuOutputBuffer != nullptr) {
 			//Clear whole screen
@@ -232,13 +232,13 @@ bool VideoDecoder::IsRunning()
 void VideoDecoder::TakeScreenshot()
 {
 	if(_videoFilter) {
-		_videoFilter->TakeScreenshot(_console, _console->GetRomPath(), _videoFilterType);
+		_videoFilter->TakeScreenshot(_console->GetRomPath(), _videoFilterType);
 	}
 }
 
 void VideoDecoder::TakeScreenshot(std::stringstream &stream)
 {
 	if(_videoFilter) {
-		_videoFilter->TakeScreenshot(_console, _videoFilterType, "", &stream);
+		_videoFilter->TakeScreenshot(_videoFilterType, "", &stream);
 	}
 }

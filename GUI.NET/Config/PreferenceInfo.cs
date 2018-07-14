@@ -177,6 +177,9 @@ namespace Mesen.GUI.Config
 				FileAssociationHelper.UpdateFileAssociation("unf", preferenceInfo.AssociateUnfFiles);
 			}
 
+			InteropEmu.SetOsdState(!preferenceInfo.DisableOsd);
+			InteropEmu.SetGameDatabaseState(!preferenceInfo.DisableGameDatabase);
+
 			InteropEmu.SetFlag(EmulationFlags.AllowInvalidInput, preferenceInfo.AllowInvalidInput);
 			InteropEmu.SetFlag(EmulationFlags.RemoveSpriteLimit, preferenceInfo.RemoveSpriteLimit);
 			InteropEmu.SetFlag(EmulationFlags.FdsAutoLoadDisk, preferenceInfo.FdsAutoLoadDisk);
@@ -185,9 +188,7 @@ namespace Mesen.GUI.Config
 			InteropEmu.SetFlag(EmulationFlags.PauseOnMovieEnd, preferenceInfo.PauseOnMovieEnd);
 			InteropEmu.SetFlag(EmulationFlags.AllowBackgroundInput, preferenceInfo.AllowBackgroundInput);
 			InteropEmu.SetFlag(EmulationFlags.PauseWhenInBackground, preferenceInfo.PauseWhenInBackground || preferenceInfo.PauseWhenInMenusAndConfig || preferenceInfo.PauseWhenInDebuggingTools);
-			InteropEmu.SetFlag(EmulationFlags.DisableGameDatabase, preferenceInfo.DisableGameDatabase);
 			InteropEmu.SetFlag(EmulationFlags.UseHighResolutionTimer, !preferenceInfo.DisableHighResolutionTimer);
-			InteropEmu.SetFlag(EmulationFlags.DisableOsd, preferenceInfo.DisableOsd);
 			InteropEmu.SetFlag(EmulationFlags.AllowMismatchingSaveStates, preferenceInfo.AllowMismatchingSaveStates);			
 
 			InteropEmu.SetFlag(EmulationFlags.ShowFrameCounter, preferenceInfo.ShowFrameCounter);

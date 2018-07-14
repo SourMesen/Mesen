@@ -6,8 +6,6 @@
 class BandaiMicrophone : public BaseControlDevice
 {
 protected:
-	shared_ptr<Console> _console;
-
 	enum Buttons { A, B, Microphone };
 
 	string GetKeyNames() override
@@ -18,7 +16,7 @@ protected:
 	void InternalSetStateFromInput() override
 	{
 		//Make sure the key bindings are properly updated (not ideal, but good enough)
-		_keyMappings = EmulationSettings::GetControllerKeys(0).GetKeyMappingArray();
+		_keyMappings = _console->GetSettings()->GetControllerKeys(0).GetKeyMappingArray();
 
 		for(KeyMapping keyMapping : _keyMappings) {
 			SetPressedState(Buttons::A, keyMapping.BandaiMicrophoneButtons[0]);
@@ -31,7 +29,7 @@ protected:
 	}
 
 public:
-	BandaiMicrophone(shared_ptr<Console> console, KeyMappingSet keyMappings) : BaseControlDevice(BaseControlDevice::MapperInputPort, keyMappings)
+	BandaiMicrophone(shared_ptr<Console> console, KeyMappingSet keyMappings) : BaseControlDevice(console, BaseControlDevice::MapperInputPort, keyMappings)
 	{
 	}
 

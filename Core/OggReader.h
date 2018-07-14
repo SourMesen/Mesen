@@ -3,7 +3,6 @@
 #include "../Utilities/stb_vorbis.h"
 #include "../Utilities/blip_buf.h"
 #include "VirtualFile.h"
-#include "EmulationSettings.h"
 
 class OggReader
 {
@@ -35,6 +34,6 @@ public:
 	bool IsPlaybackOver();
 	void SetSampleRate(int sampleRate);
 	void SetLoopFlag(bool loop);
-	void ApplySamples(int16_t* buffer, size_t sampleCount, uint8_t volume);
+	void ApplySamples(int16_t* buffer, size_t sampleCount, uint8_t volume, double masterVolume);
 	uint32_t GetOffset();
 };

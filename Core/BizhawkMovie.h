@@ -21,7 +21,7 @@ protected:
 	vector<string> _dataByFrame[4];
 	bool _isPlaying = false;
 	RamPowerOnState _originalPowerOnState;
-
+	
 public:
 	BizhawkMovie(shared_ptr<Console>);
 	virtual ~BizhawkMovie();

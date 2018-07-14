@@ -5,10 +5,11 @@
 #include "EmulationSettings.h"
 #include "PPU.h"
 
-IKeyManager* KeyManager::_keyManager;
-MousePosition KeyManager::_mousePosition;
-atomic<int16_t> KeyManager::_xMouseMovement;
-atomic<int16_t> KeyManager::_yMouseMovement;
+IKeyManager* KeyManager::_keyManager = nullptr;
+MousePosition KeyManager::_mousePosition = { 0, 0 };
+atomic<int16_t> KeyManager::_xMouseMovement = 0;
+atomic<int16_t> KeyManager::_yMouseMovement = 0;
+EmulationSettings* KeyManager::_settings = nullptr;
 
 void KeyManager::RegisterKeyManager(IKeyManager* keyManager)
 {
@@ -22,10 +23,15 @@ void KeyManager::RefreshKeyState()
 	}
 }
 
+void KeyManager::SetSettings(EmulationSettings* settings)
+{
+	_settings = settings;
+}
+
 bool KeyManager::IsKeyPressed(uint32_t keyCode)
 {
 	if(_keyManager != nullptr) {
-		return EmulationSettings::InputEnabled() && _keyManager->IsKeyPressed(keyCode);
+		return _settings->InputEnabled() && _keyManager->IsKeyPressed(keyCode);
 	}
 	return false;
 }
@@ -33,7 +39,7 @@ bool KeyManager::IsKeyPressed(uint32_t keyCode)
 bool KeyManager::IsMouseButtonPressed(MouseButton button)
 {
 	if(_keyManager != nullptr) {
-		return EmulationSettings::InputEnabled() && _keyManager->IsMouseButtonPressed(button);
+		return _settings->InputEnabled() && _keyManager->IsMouseButtonPressed(button);
 	}
 	return false;
 }
@@ -77,7 +83,7 @@ void KeyManager::SetMouseMovement(int16_t x, int16_t y)
 
 MouseMovement KeyManager::GetMouseMovement(double mouseSensitivity)
 {
-	double factor = EmulationSettings::GetVideoScale() / mouseSensitivity;
+	double factor = _settings->GetVideoScale() / mouseSensitivity;
 	MouseMovement mov;
 	mov.dx = (int16_t)(_xMouseMovement / factor);
 	mov.dy = (int16_t)(_yMouseMovement / factor);
@@ -93,7 +99,7 @@ void KeyManager::SetMousePosition(double x, double y)
 		_mousePosition.X = -1;
 		_mousePosition.Y = -1;
 	} else {
-		OverscanDimensions overscan = EmulationSettings::GetOverscanDimensions();
+		OverscanDimensions overscan = _settings->GetOverscanDimensions();
 		_mousePosition.X = (int32_t)(x * (PPU::ScreenWidth - overscan.Left - overscan.Right) + overscan.Left);
 		_mousePosition.Y = (int32_t)(y * (PPU::ScreenHeight - overscan.Top - overscan.Bottom) + overscan.Top);
 	}

@@ -7,6 +7,7 @@ class GameDatabase
 {
 private:
 	static std::unordered_map<uint32_t, GameInfo> _gameDatabase;
+	static bool _enabled;
 
 	template<typename T> static T ToInt(string value);
 
@@ -23,9 +24,10 @@ private:
 
 public:
 	static void LoadGameDb(vector<string> data);
+	
+	static void SetGameDatabaseState(bool enabled);
+	static bool IsEnabled();
 
-	static void InitializeInputDevices(GameInputType inputType, GameSystem system, bool silent = false);
-	static void InitializeInputDevices(RomInfo &romInfo);
 	static void SetGameInfo(uint32_t romCrc, RomData &romData, bool updateRomData, bool forHeaderlessRom);
 	static bool GetiNesHeader(uint32_t romCrc, NESHeader &nesHeader);
 	static bool GetDbRomSize(uint32_t romCrc, uint32_t &prgSize, uint32_t &chrSize);

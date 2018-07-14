@@ -83,7 +83,7 @@ protected:
 	}
 
 public:
-	FamilyBasicKeyboard(KeyMappingSet keyMappings) : BaseControlDevice(BaseControlDevice::ExpDevicePort, keyMappings)
+	FamilyBasicKeyboard(shared_ptr<Console> console, KeyMappingSet keyMappings) : BaseControlDevice(console, BaseControlDevice::ExpDevicePort, keyMappings)
 	{
 	}
 

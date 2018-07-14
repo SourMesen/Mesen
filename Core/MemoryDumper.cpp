@@ -270,7 +270,7 @@ uint8_t MemoryDumper::GetMemoryValue(DebugMemoryType memoryType, uint32_t addres
 void MemoryDumper::GetNametable(int nametableIndex, bool useGrayscalePalette, uint32_t* frameBuffer, uint8_t* tileData, uint8_t* paletteData)
 {
 	shared_ptr<MMC5> mmc5 = std::dynamic_pointer_cast<MMC5>(_mapper);
-	uint32_t *rgbPalette = EmulationSettings::GetRgbPalette();
+	uint32_t *rgbPalette = _debugger->GetConsole()->GetSettings()->GetRgbPalette();
 	PPUDebugState state;
 	_ppu->GetState(state);
 	uint16_t bgAddr = state.ControlFlags.BackgroundPatternAddr;
@@ -418,7 +418,7 @@ void MemoryDumper::GetChrBank(int bankIndex, uint32_t* frameBuffer, uint8_t pale
 			(_ppu->ReadPaletteRAM(paletteBaseAddr + 3) << 24);
 	}
 	
-	uint32_t *rgbPalette = EmulationSettings::GetRgbPalette();
+	uint32_t *rgbPalette = _debugger->GetConsole()->GetSettings()->GetRgbPalette();
 	uint8_t chrBuffer[0x1000];
 	bool chrIsDrawn[0x1000];
 	bool isChrRam = _mapper->GetMemorySize(DebugMemoryType::ChrRam) > 0;
@@ -502,7 +502,7 @@ void MemoryDumper::GetSprites(uint32_t* frameBuffer)
 	memset(frameBuffer, 0, 64*128*sizeof(uint32_t));
 
 	uint8_t *spriteRam = _ppu->GetSpriteRam();
-	uint32_t *rgbPalette = EmulationSettings::GetRgbPalette();
+	uint32_t *rgbPalette = _debugger->GetConsole()->GetSettings()->GetRgbPalette();
 
 	PPUDebugState state;
 	_ppu->GetState(state);
@@ -562,7 +562,7 @@ void MemoryDumper::GetSprites(uint32_t* frameBuffer)
 
 void MemoryDumper::GetPalette(uint32_t* frameBuffer)
 {
-	uint32_t *rgbPalette = EmulationSettings::GetRgbPalette();
+	uint32_t *rgbPalette = _debugger->GetConsole()->GetSettings()->GetRgbPalette();
 	for(uint8_t i = 0; i < 32; i++) {
 		frameBuffer[i] = rgbPalette[_ppu->ReadPaletteRAM(i) & 0x3F];
 	}

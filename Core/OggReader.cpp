@@ -88,7 +88,7 @@ bool OggReader::LoadSamples()
 	return samplesReturned > 0;
 }
 
-void OggReader::ApplySamples(int16_t * buffer, size_t sampleCount, uint8_t volume)
+void OggReader::ApplySamples(int16_t * buffer, size_t sampleCount, uint8_t volume, double masterVolume)
 {
 	while(blip_samples_avail(_blipLeft) < (int)sampleCount) {
 		if(!LoadSamples()) {
@@ -100,7 +100,7 @@ void OggReader::ApplySamples(int16_t * buffer, size_t sampleCount, uint8_t volum
 	blip_read_samples(_blipRight, _outputBuffer + 1, (int)sampleCount, 1);
 
 	for(size_t i = 0, len = samplesRead * 2; i < len; i++) {
-		buffer[i] += (int16_t)(_outputBuffer[i] * (EmulationSettings::GetMasterVolume() * volume / 255 / 10));
+		buffer[i] += (int16_t)(_outputBuffer[i] * (masterVolume * volume / 255 / 10));
 	}
 }
 

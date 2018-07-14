@@ -26,6 +26,7 @@ class DebugHud;
 class SoundMixer;
 class NotificationManager;
 class Debugger;
+class EmulationSettings;
 
 struct HdPackData;
 struct HashInfo;
@@ -71,6 +72,7 @@ private:
 	shared_ptr<DebugHud> _debugHud;
 	shared_ptr<SoundMixer> _soundMixer;
 	shared_ptr<NotificationManager> _notificationManager;
+	shared_ptr<EmulationSettings> _settings;
 
 	shared_ptr<HdPackBuilder> _hdPackBuilder;
 	shared_ptr<HdPackData> _hdData;
@@ -98,7 +100,7 @@ private:
 	void DisplayDebugInformation(Timer &clockTimer, Timer &lastFrameTimer, double &lastFrameMin, double &lastFrameMax, double *timeLagData);
 
 public:
-	Console(shared_ptr<Console> master = nullptr);
+	Console(shared_ptr<Console> master = nullptr, EmulationSettings* initialSettings = nullptr);
 	~Console();
 
 	void Init();
@@ -110,7 +112,8 @@ public:
 	shared_ptr<DebugHud> GetDebugHud();
 	shared_ptr<SoundMixer> GetSoundMixer();
 	shared_ptr<NotificationManager> GetNotificationManager();
-
+	EmulationSettings* GetSettings();
+	
 	bool IsDualSystem();
 	shared_ptr<Console> GetDualConsole();
 	bool IsMaster();
@@ -191,10 +194,9 @@ public:
 	void ResetLagCounter();
 
 	bool IsRunning();
-	bool IsPaused();
+	bool IsExecutionStopped();
 
-	bool GetPauseStatus();
-	void SetPauseStatus(bool paused);
+	bool IsPaused();
 
 	void SetNextFrameOverclockStatus(bool disabled);
 

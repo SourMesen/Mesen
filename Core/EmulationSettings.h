@@ -31,7 +31,6 @@ enum EmulationFlags : uint64_t
 	
 	SwapDutyCycles = 0x10000,
 
-	DisableGameDatabase = 0x20000,
 	AutoConfigureInput = 0x40000,
 
 	ShowLagCounter = 0x80000,
@@ -68,7 +67,6 @@ enum EmulationFlags : uint64_t
 
 	AdaptiveSpriteLimit = 0x80000000000,
 
-	DisableOsd = 0x100000000000,
 	DisableGameSelectionScreen = 0x200000000000,
 
 	ConfirmExitResetPower = 0x400000000000,
@@ -562,100 +560,124 @@ struct InputDisplaySettings
 class EmulationSettings
 {
 private:
+	static const vector<uint32_t> _speedValues;
+	
 	static uint16_t _versionMajor;
 	static uint8_t _versionMinor;
 	static uint8_t _versionRevision;
-
-	static const vector<uint32_t> _speedValues;
-
-	static uint32_t _ppuPaletteArgb[11][64];
-	static uint32_t _defaultPpuPalette[64];
-	static uint32_t _currentPalette[64];
-	static uint8_t _paletteLut[11][64];
-
-	static string _pauseScreenMessage;
-
-	static uint64_t _flags;
-
 	static Language _displayLanguage;
 
-	static bool _audioSettingsChanged;
-	static uint32_t _audioLatency;
-	static double _channelVolume[11];
-	static double _channelPanning[11];
-	static EqualizerFilterType _equalizerFilterType;
-	static vector<double> _bandGains;
-	static vector<double> _bands;
-	static double _masterVolume;
-	static double _volumeReduction;
-	static uint32_t _sampleRate;
-	static StereoFilter _stereoFilter;
-	static int32_t _stereoDelay;
-	static double _stereoAngle;
-	static double _reverbStrength;
-	static double _reverbDelay;
-	static uint32_t _crossFeedRatio;
-		
-	static NesModel _model;
-	static PpuModel _ppuModel;
-
-	static uint32_t _emulationSpeed;
-	static uint32_t _turboSpeed;
-	static uint32_t _rewindSpeed;
-
-	static uint32_t _rewindBufferSize;
-
-	static bool _hasOverclock;
-	static uint32_t _overclockRate;
-	static bool _overclockAdjustApu;
-	static bool _disableOverclocking;
-	static uint32_t _extraScanlinesBeforeNmi;
-	static uint32_t _extraScanlinesAfterNmi;
-	static double _effectiveOverclockRate;
-	static double _effectiveOverclockRateSound;
-
-	static OverscanDimensions _overscan;
-	static VideoFilterType _videoFilterType;
-	static double _videoScale;
-	static VideoAspectRatio _aspectRatio;
-	static double _customAspectRatio;
-	static VideoResizeFilter _resizeFilter;
-	static PictureSettings _pictureSettings;
-	static NtscFilterSettings _ntscFilterSettings;
-	static bool _backgroundEnabled;
-	static bool _spritesEnabled;
-	static uint32_t _screenRotation;
-	static uint32_t _exclusiveRefreshRate;
-
-	static ConsoleType _consoleType;
-	static ExpansionPortDevice _expansionDevice;
-	static ControllerType _controllerTypes[4];
-	static KeyMappingSet _controllerKeys[4];
-	static bool _needControllerUpdate;
-	static uint32_t _zapperDetectionRadius;
-	static std::unordered_map<int, double> _mouseSensitivity;
-	static int32_t _inputPollScanline;
-
-	static int32_t _nsfAutoDetectSilenceDelay;
-	static int32_t _nsfMoveToNextTrackTime;
-	static bool _nsfDisableApuIrqs;
-
-	static InputDisplaySettings _inputDisplaySettings;
-
-	static uint32_t _autoSaveDelay;
-	static bool _autoSaveNotify;
-
-	static bool _keyboardModeEnabled;
-
-	static std::unordered_map<uint32_t, KeyCombination> _emulatorKeys[3];
-	static std::unordered_map<uint32_t, vector<KeyCombination>> _shortcutSupersets[3];
-
-	static RamPowerOnState _ramPowerOnState;
-	static uint32_t _dipSwitches;
-	
 	static SimpleLock _shortcutLock;
 	static SimpleLock _equalizerLock;
 	static SimpleLock _lock;
+
+	uint32_t _ppuPaletteArgb[11][64] = {
+		/* 2C02 */			{ 0xFF666666, 0xFF002A88, 0xFF1412A7, 0xFF3B00A4, 0xFF5C007E, 0xFF6E0040, 0xFF6C0600, 0xFF561D00, 0xFF333500, 0xFF0B4800, 0xFF005200, 0xFF004F08, 0xFF00404D, 0xFF000000, 0xFF000000, 0xFF000000, 0xFFADADAD, 0xFF155FD9, 0xFF4240FF, 0xFF7527FE, 0xFFA01ACC, 0xFFB71E7B, 0xFFB53120, 0xFF994E00, 0xFF6B6D00, 0xFF388700, 0xFF0C9300, 0xFF008F32, 0xFF007C8D, 0xFF000000, 0xFF000000, 0xFF000000, 0xFFFFFEFF, 0xFF64B0FF, 0xFF9290FF, 0xFFC676FF, 0xFFF36AFF, 0xFFFE6ECC, 0xFFFE8170, 0xFFEA9E22, 0xFFBCBE00, 0xFF88D800, 0xFF5CE430, 0xFF45E082, 0xFF48CDDE, 0xFF4F4F4F, 0xFF000000, 0xFF000000, 0xFFFFFEFF, 0xFFC0DFFF, 0xFFD3D2FF, 0xFFE8C8FF, 0xFFFBC2FF, 0xFFFEC4EA, 0xFFFECCC5, 0xFFF7D8A5, 0xFFE4E594, 0xFFCFEF96, 0xFFBDF4AB, 0xFFB3F3CC, 0xFFB5EBF2, 0xFFB8B8B8, 0xFF000000, 0xFF000000 },
+		/* 2C03 */			{ 0xFF6D6D6D, 0xFF002491, 0xFF0000DA, 0xFF6D48DA, 0xFF91006D, 0xFFB6006D, 0xFFB62400, 0xFF914800, 0xFF6D4800, 0xFF244800, 0xFF006D24, 0xFF009100, 0xFF004848, 0xFF000000, 0xFF000000, 0xFF000000, 0xFFB6B6B6, 0xFF006DDA, 0xFF0048FF, 0xFF9100FF, 0xFFB600FF, 0xFFFF0091, 0xFFFF0000, 0xFFDA6D00, 0xFF916D00, 0xFF249100, 0xFF009100, 0xFF00B66D, 0xFF009191, 0xFF000000, 0xFF000000, 0xFF000000, 0xFFFFFFFF, 0xFF6DB6FF, 0xFF9191FF, 0xFFDA6DFF, 0xFFFF00FF, 0xFFFF6DFF, 0xFFFF9100, 0xFFFFB600, 0xFFDADA00, 0xFF6DDA00, 0xFF00FF00, 0xFF48FFDA, 0xFF00FFFF, 0xFF000000, 0xFF000000, 0xFF000000, 0xFFFFFFFF, 0xFFB6DAFF, 0xFFDAB6FF, 0xFFFFB6FF, 0xFFFF91FF, 0xFFFFB6B6, 0xFFFFDA91, 0xFFFFFF48, 0xFFFFFF6D, 0xFFB6FF48, 0xFF91FF6D, 0xFF48FFDA, 0xFF91DAFF, 0xFF000000, 0xFF000000, 0xFF000000 },
+		/* 2C04-0001 */	{ 0xFFFFB6B6, 0xFFDA6DFF, 0xFFFF0000, 0xFF9191FF, 0xFF009191, 0xFF244800, 0xFF484848, 0xFFFF0091, 0xFFFFFFFF, 0xFF6D6D6D, 0xFFFFB600, 0xFFB6006D, 0xFF91006D, 0xFFDADA00, 0xFF6D4800, 0xFFFFFFFF, 0xFF6DB6FF, 0xFFDAB66D, 0xFF6D2400, 0xFF6DDA00, 0xFF91DAFF, 0xFFDAB6FF, 0xFFFFDA91, 0xFF0048FF, 0xFFFFDA00, 0xFF48FFDA, 0xFF000000, 0xFF480000, 0xFFDADADA, 0xFF919191, 0xFFFF00FF, 0xFF002491, 0xFF00006D, 0xFFB6DAFF, 0xFFFFB6FF, 0xFF00FF00, 0xFF00FFFF, 0xFF004848, 0xFF00B66D, 0xFFB600FF, 0xFF000000, 0xFF914800, 0xFFFF91FF, 0xFFB62400, 0xFF9100FF, 0xFF0000DA, 0xFFFF9100, 0xFF000000, 0xFF000000, 0xFF249100, 0xFFB6B6B6, 0xFF006D24, 0xFFB6FF48, 0xFF6D48DA, 0xFFFFFF00, 0xFFDA6D00, 0xFF004800, 0xFF006DDA, 0xFF009100, 0xFF242424, 0xFFFFFF6D, 0xFFFF6DFF, 0xFF916D00, 0xFF91FF6D },
+		/* 2C04-0002 */	{ 0xFF000000, 0xFFFFB600, 0xFF916D00, 0xFFB6FF48, 0xFF91FF6D, 0xFFFF6DFF, 0xFF009191, 0xFFB6DAFF, 0xFFFF0000, 0xFF9100FF, 0xFFFFFF6D, 0xFFFF91FF, 0xFFFFFFFF, 0xFFDA6DFF, 0xFF91DAFF, 0xFF009100, 0xFF004800, 0xFF6DB6FF, 0xFFB62400, 0xFFDADADA, 0xFF00B66D, 0xFF6DDA00, 0xFF480000, 0xFF9191FF, 0xFF484848, 0xFFFF00FF, 0xFF00006D, 0xFF48FFDA, 0xFFDAB6FF, 0xFF6D4800, 0xFF000000, 0xFF6D48DA, 0xFF91006D, 0xFFFFDA91, 0xFFFF9100, 0xFFFFB6FF, 0xFF006DDA, 0xFF6D2400, 0xFFB6B6B6, 0xFF0000DA, 0xFFB600FF, 0xFFFFDA00, 0xFF6D6D6D, 0xFF244800, 0xFF0048FF, 0xFF000000, 0xFFDADA00, 0xFFFFFFFF, 0xFFDAB66D, 0xFF242424, 0xFF00FF00, 0xFFDA6D00, 0xFF004848, 0xFF002491, 0xFFFF0091, 0xFF249100, 0xFF000000, 0xFF00FFFF, 0xFF914800, 0xFFFFFF00, 0xFFFFB6B6, 0xFFB6006D, 0xFF006D24, 0xFF919191 },
+		/* 2C04-0003 */	{ 0xFFB600FF, 0xFFFF6DFF, 0xFF91FF6D, 0xFFB6B6B6, 0xFF009100, 0xFFFFFFFF, 0xFFB6DAFF, 0xFF244800, 0xFF002491, 0xFF000000, 0xFFFFDA91, 0xFF6D4800, 0xFFFF0091, 0xFFDADADA, 0xFFDAB66D, 0xFF91DAFF, 0xFF9191FF, 0xFF009191, 0xFFB6006D, 0xFF0048FF, 0xFF249100, 0xFF916D00, 0xFFDA6D00, 0xFF00B66D, 0xFF6D6D6D, 0xFF6D48DA, 0xFF000000, 0xFF0000DA, 0xFFFF0000, 0xFFB62400, 0xFFFF91FF, 0xFFFFB6B6, 0xFFDA6DFF, 0xFF004800, 0xFF00006D, 0xFFFFFF00, 0xFF242424, 0xFFFFB600, 0xFFFF9100, 0xFFFFFFFF, 0xFF6DDA00, 0xFF91006D, 0xFF6DB6FF, 0xFFFF00FF, 0xFF006DDA, 0xFF919191, 0xFF000000, 0xFF6D2400, 0xFF00FFFF, 0xFF480000, 0xFFB6FF48, 0xFFFFB6FF, 0xFF914800, 0xFF00FF00, 0xFFDADA00, 0xFF484848, 0xFF006D24, 0xFF000000, 0xFFDAB6FF, 0xFFFFFF6D, 0xFF9100FF, 0xFF48FFDA, 0xFFFFDA00, 0xFF004848 },
+		/* 2C04-0004 */	{ 0xFF916D00, 0xFF6D48DA, 0xFF009191, 0xFFDADA00, 0xFF000000, 0xFFFFB6B6, 0xFF002491, 0xFFDA6D00, 0xFFB6B6B6, 0xFF6D2400, 0xFF00FF00, 0xFF00006D, 0xFFFFDA91, 0xFFFFFF00, 0xFF009100, 0xFFB6FF48, 0xFFFF6DFF, 0xFF480000, 0xFF0048FF, 0xFFFF91FF, 0xFF000000, 0xFF484848, 0xFFB62400, 0xFFFF9100, 0xFFDAB66D, 0xFF00B66D, 0xFF9191FF, 0xFF249100, 0xFF91006D, 0xFF000000, 0xFF91FF6D, 0xFF6DB6FF, 0xFFB6006D, 0xFF006D24, 0xFF914800, 0xFF0000DA, 0xFF9100FF, 0xFFB600FF, 0xFF6D6D6D, 0xFFFF0091, 0xFF004848, 0xFFDADADA, 0xFF006DDA, 0xFF004800, 0xFF242424, 0xFFFFFF6D, 0xFF919191, 0xFFFF00FF, 0xFFFFB6FF, 0xFFFFFFFF, 0xFF6D4800, 0xFFFF0000, 0xFFFFDA00, 0xFF48FFDA, 0xFFFFFFFF, 0xFF91DAFF, 0xFF000000, 0xFFFFB600, 0xFFDA6DFF, 0xFFB6DAFF, 0xFF6DDA00, 0xFFDAB6FF, 0xFF00FFFF, 0xFF244800 },
+		/* 2C05-01 */		{ 0xFF6D6D6D, 0xFF002491, 0xFF0000DA, 0xFF6D48DA, 0xFF91006D, 0xFFB6006D, 0xFFB62400, 0xFF914800, 0xFF6D4800, 0xFF244800, 0xFF006D24, 0xFF009100, 0xFF004848, 0xFF000000, 0xFF000000, 0xFF000000, 0xFFB6B6B6, 0xFF006DDA, 0xFF0048FF, 0xFF9100FF, 0xFFB600FF, 0xFFFF0091, 0xFFFF0000, 0xFFDA6D00, 0xFF916D00, 0xFF249100, 0xFF009100, 0xFF00B66D, 0xFF009191, 0xFF000000, 0xFF000000, 0xFF000000, 0xFFFFFFFF, 0xFF6DB6FF, 0xFF9191FF, 0xFFDA6DFF, 0xFFFF00FF, 0xFFFF6DFF, 0xFFFF9100, 0xFFFFB600, 0xFFDADA00, 0xFF6DDA00, 0xFF00FF00, 0xFF48FFDA, 0xFF00FFFF, 0xFF000000, 0xFF000000, 0xFF000000, 0xFFFFFFFF, 0xFFB6DAFF, 0xFFDAB6FF, 0xFFFFB6FF, 0xFFFF91FF, 0xFFFFB6B6, 0xFFFFDA91, 0xFFFFFF48, 0xFFFFFF6D, 0xFFB6FF48, 0xFF91FF6D, 0xFF48FFDA, 0xFF91DAFF, 0xFF000000, 0xFF000000, 0xFF000000 },
+		/* 2C05-02 */		{ 0xFF6D6D6D, 0xFF002491, 0xFF0000DA, 0xFF6D48DA, 0xFF91006D, 0xFFB6006D, 0xFFB62400, 0xFF914800, 0xFF6D4800, 0xFF244800, 0xFF006D24, 0xFF009100, 0xFF004848, 0xFF000000, 0xFF000000, 0xFF000000, 0xFFB6B6B6, 0xFF006DDA, 0xFF0048FF, 0xFF9100FF, 0xFFB600FF, 0xFFFF0091, 0xFFFF0000, 0xFFDA6D00, 0xFF916D00, 0xFF249100, 0xFF009100, 0xFF00B66D, 0xFF009191, 0xFF000000, 0xFF000000, 0xFF000000, 0xFFFFFFFF, 0xFF6DB6FF, 0xFF9191FF, 0xFFDA6DFF, 0xFFFF00FF, 0xFFFF6DFF, 0xFFFF9100, 0xFFFFB600, 0xFFDADA00, 0xFF6DDA00, 0xFF00FF00, 0xFF48FFDA, 0xFF00FFFF, 0xFF000000, 0xFF000000, 0xFF000000, 0xFFFFFFFF, 0xFFB6DAFF, 0xFFDAB6FF, 0xFFFFB6FF, 0xFFFF91FF, 0xFFFFB6B6, 0xFFFFDA91, 0xFFFFFF48, 0xFFFFFF6D, 0xFFB6FF48, 0xFF91FF6D, 0xFF48FFDA, 0xFF91DAFF, 0xFF000000, 0xFF000000, 0xFF000000 },
+		/* 2C05-03 */		{ 0xFF6D6D6D, 0xFF002491, 0xFF0000DA, 0xFF6D48DA, 0xFF91006D, 0xFFB6006D, 0xFFB62400, 0xFF914800, 0xFF6D4800, 0xFF244800, 0xFF006D24, 0xFF009100, 0xFF004848, 0xFF000000, 0xFF000000, 0xFF000000, 0xFFB6B6B6, 0xFF006DDA, 0xFF0048FF, 0xFF9100FF, 0xFFB600FF, 0xFFFF0091, 0xFFFF0000, 0xFFDA6D00, 0xFF916D00, 0xFF249100, 0xFF009100, 0xFF00B66D, 0xFF009191, 0xFF000000, 0xFF000000, 0xFF000000, 0xFFFFFFFF, 0xFF6DB6FF, 0xFF9191FF, 0xFFDA6DFF, 0xFFFF00FF, 0xFFFF6DFF, 0xFFFF9100, 0xFFFFB600, 0xFFDADA00, 0xFF6DDA00, 0xFF00FF00, 0xFF48FFDA, 0xFF00FFFF, 0xFF000000, 0xFF000000, 0xFF000000, 0xFFFFFFFF, 0xFFB6DAFF, 0xFFDAB6FF, 0xFFFFB6FF, 0xFFFF91FF, 0xFFFFB6B6, 0xFFFFDA91, 0xFFFFFF48, 0xFFFFFF6D, 0xFFB6FF48, 0xFF91FF6D, 0xFF48FFDA, 0xFF91DAFF, 0xFF000000, 0xFF000000, 0xFF000000 },
+		/* 2C05-04 */		{ 0xFF6D6D6D, 0xFF002491, 0xFF0000DA, 0xFF6D48DA, 0xFF91006D, 0xFFB6006D, 0xFFB62400, 0xFF914800, 0xFF6D4800, 0xFF244800, 0xFF006D24, 0xFF009100, 0xFF004848, 0xFF000000, 0xFF000000, 0xFF000000, 0xFFB6B6B6, 0xFF006DDA, 0xFF0048FF, 0xFF9100FF, 0xFFB600FF, 0xFFFF0091, 0xFFFF0000, 0xFFDA6D00, 0xFF916D00, 0xFF249100, 0xFF009100, 0xFF00B66D, 0xFF009191, 0xFF000000, 0xFF000000, 0xFF000000, 0xFFFFFFFF, 0xFF6DB6FF, 0xFF9191FF, 0xFFDA6DFF, 0xFFFF00FF, 0xFFFF6DFF, 0xFFFF9100, 0xFFFFB600, 0xFFDADA00, 0xFF6DDA00, 0xFF00FF00, 0xFF48FFDA, 0xFF00FFFF, 0xFF000000, 0xFF000000, 0xFF000000, 0xFFFFFFFF, 0xFFB6DAFF, 0xFFDAB6FF, 0xFFFFB6FF, 0xFFFF91FF, 0xFFFFB6B6, 0xFFFFDA91, 0xFFFFFF48, 0xFFFFFF6D, 0xFFB6FF48, 0xFF91FF6D, 0xFF48FFDA, 0xFF91DAFF, 0xFF000000, 0xFF000000, 0xFF000000 },
+		/* 2C05-05 */		{ 0xFF6D6D6D, 0xFF002491, 0xFF0000DA, 0xFF6D48DA, 0xFF91006D, 0xFFB6006D, 0xFFB62400, 0xFF914800, 0xFF6D4800, 0xFF244800, 0xFF006D24, 0xFF009100, 0xFF004848, 0xFF000000, 0xFF000000, 0xFF000000, 0xFFB6B6B6, 0xFF006DDA, 0xFF0048FF, 0xFF9100FF, 0xFFB600FF, 0xFFFF0091, 0xFFFF0000, 0xFFDA6D00, 0xFF916D00, 0xFF249100, 0xFF009100, 0xFF00B66D, 0xFF009191, 0xFF000000, 0xFF000000, 0xFF000000, 0xFFFFFFFF, 0xFF6DB6FF, 0xFF9191FF, 0xFFDA6DFF, 0xFFFF00FF, 0xFFFF6DFF, 0xFFFF9100, 0xFFFFB600, 0xFFDADA00, 0xFF6DDA00, 0xFF00FF00, 0xFF48FFDA, 0xFF00FFFF, 0xFF000000, 0xFF000000, 0xFF000000, 0xFFFFFFFF, 0xFFB6DAFF, 0xFFDAB6FF, 0xFFFFB6FF, 0xFFFF91FF, 0xFFFFB6B6, 0xFFFFDA91, 0xFFFFFF48, 0xFFFFFF6D, 0xFFB6FF48, 0xFF91FF6D, 0xFF48FFDA, 0xFF91DAFF, 0xFF000000, 0xFF000000, 0xFF000000 }
+	};
+
+	uint32_t _defaultPpuPalette[64] = { /* 2C02 */ 0xFF666666, 0xFF002A88, 0xFF1412A7, 0xFF3B00A4, 0xFF5C007E, 0xFF6E0040, 0xFF6C0600, 0xFF561D00, 0xFF333500, 0xFF0B4800, 0xFF005200, 0xFF004F08, 0xFF00404D, 0xFF000000, 0xFF000000, 0xFF000000, 0xFFADADAD, 0xFF155FD9, 0xFF4240FF, 0xFF7527FE, 0xFFA01ACC, 0xFFB71E7B, 0xFFB53120, 0xFF994E00, 0xFF6B6D00, 0xFF388700, 0xFF0C9300, 0xFF008F32, 0xFF007C8D, 0xFF000000, 0xFF000000, 0xFF000000, 0xFFFFFEFF, 0xFF64B0FF, 0xFF9290FF, 0xFFC676FF, 0xFFF36AFF, 0xFFFE6ECC, 0xFFFE8170, 0xFFEA9E22, 0xFFBCBE00, 0xFF88D800, 0xFF5CE430, 0xFF45E082, 0xFF48CDDE, 0xFF4F4F4F, 0xFF000000, 0xFF000000, 0xFFFFFEFF, 0xFFC0DFFF, 0xFFD3D2FF, 0xFFE8C8FF, 0xFFFBC2FF, 0xFFFEC4EA, 0xFFFECCC5, 0xFFF7D8A5, 0xFFE4E594, 0xFFCFEF96, 0xFFBDF4AB, 0xFFB3F3CC, 0xFFB5EBF2, 0xFFB8B8B8, 0xFF000000, 0xFF000000 };
+	uint32_t _currentPalette[64] = { 0xFF666666, 0xFF002A88, 0xFF1412A7, 0xFF3B00A4, 0xFF5C007E, 0xFF6E0040, 0xFF6C0600, 0xFF561D00, 0xFF333500, 0xFF0B4800, 0xFF005200, 0xFF004F08, 0xFF00404D, 0xFF000000, 0xFF000000, 0xFF000000, 0xFFADADAD, 0xFF155FD9, 0xFF4240FF, 0xFF7527FE, 0xFFA01ACC, 0xFFB71E7B, 0xFFB53120, 0xFF994E00, 0xFF6B6D00, 0xFF388700, 0xFF0C9300, 0xFF008F32, 0xFF007C8D, 0xFF000000, 0xFF000000, 0xFF000000, 0xFFFFFEFF, 0xFF64B0FF, 0xFF9290FF, 0xFFC676FF, 0xFFF36AFF, 0xFFFE6ECC, 0xFFFE8170, 0xFFEA9E22, 0xFFBCBE00, 0xFF88D800, 0xFF5CE430, 0xFF45E082, 0xFF48CDDE, 0xFF4F4F4F, 0xFF000000, 0xFF000000, 0xFFFFFEFF, 0xFFC0DFFF, 0xFFD3D2FF, 0xFFE8C8FF, 0xFFFBC2FF, 0xFFFEC4EA, 0xFFFECCC5, 0xFFF7D8A5, 0xFFE4E594, 0xFFCFEF96, 0xFFBDF4AB, 0xFFB3F3CC, 0xFFB5EBF2, 0xFFB8B8B8, 0xFF000000, 0xFF000000 };
+
+	static constexpr uint8_t _paletteLut[11][64] = {
+		/* 2C02 */      { 0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63 },
+		/* 2C03 */      { 0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,15,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,15,62,63 },
+		/* 2C04-0001 */ { 53,35,22,34,28,9,29,21,32,0,39,5,4,40,8,32,33,62,31,41,60,50,54,18,63,43,46,30,61,45,36,1,14,49,51,42,44,12,27,20,46,7,52,6,19,2,38,46,46,25,16,10,57,3,55,23,15,17,11,13,56,37,24,58 },
+		/* 2C04-0002 */ { 46,39,24,57,58,37,28,49,22,19,56,52,32,35,60,11,15,33,6,61,27,41,30,34,29,36,14,43,50,8,46,3,4,54,38,51,17,31,16,2,20,63,0,9,18,46,40,32,62,13,42,23,12,1,21,25,46,44,7,55,53,5,10,45 },
+		/* 2C04-0003 */ { 20,37,58,16,11,32,49,9,1,46,54,8,21,61,62,60,34,28,5,18,25,24,23,27,0,3,46,2,22,6,52,53,35,15,14,55,13,39,38,32,41,4,33,36,17,45,46,31,44,30,57,51,7,42,40,29,10,46,50,56,19,43,63,12 },
+		/* 2C04-0004 */ { 24,3,28,40,46,53,1,23,16,31,42,14,54,55,11,57,37,30,18,52,46,29,6,38,62,27,34,25,4,46,58,33,5,10,7,2,19,20,0,21,12,61,17,15,13,56,45,36,51,32,8,22,63,43,32,60,46,39,35,49,41,50,44,9 },
+		/* 2C05-01 */   { 0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,15,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,15,62,63 },
+		/* 2C05-02 */   { 0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,15,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,15,62,63 },
+		/* 2C05-03 */   { 0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,15,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,15,62,63 },
+		/* 2C05-04 */   { 0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,15,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,15,62,63 },
+		/* 2C05-05 */   { 0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,15,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,15,62,63 },
+	};
+
+	string _pauseScreenMessage;
+
+	uint64_t _flags = 0;
+	
+	bool _audioSettingsChanged = false;
+	uint32_t _audioLatency = 50;
+	double _channelVolume[11] = { 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0 };
+	double _channelPanning[11] = { 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0 };
+	EqualizerFilterType _equalizerFilterType = EqualizerFilterType::None;
+	vector<double> _bandGains = { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 };
+	vector<double> _bands = { { 40,56,80,113,160,225,320,450,600,750,1000,2000,3000,4000,5000,6000,7000,10000,12500,15000 } };
+	double _masterVolume = 1.0;
+	double _volumeReduction = 0.75;
+	uint32_t _sampleRate = 48000;
+	StereoFilter _stereoFilter = StereoFilter::None;
+	int32_t _stereoDelay = 0;
+	double _stereoAngle = 0;
+	double _reverbStrength = 0;
+	double _reverbDelay = 0;
+	uint32_t _crossFeedRatio = 0;
+		
+	NesModel _model = NesModel::Auto;
+	PpuModel _ppuModel = PpuModel::Ppu2C02;
+
+	uint32_t _emulationSpeed = 100;
+	uint32_t _turboSpeed = 300;
+	uint32_t _rewindSpeed = 100;
+
+	uint32_t _rewindBufferSize = 300;
+
+	bool _hasOverclock = false;
+	uint32_t _overclockRate = 100;
+	bool _overclockAdjustApu = true;
+	bool _disableOverclocking = false;
+	uint32_t _extraScanlinesBeforeNmi = 0;
+	uint32_t _extraScanlinesAfterNmi = 0;
+	double _effectiveOverclockRate = 100;
+
+	OverscanDimensions _overscan;
+	VideoFilterType _videoFilterType = VideoFilterType::None;
+	double _videoScale = 1;
+	VideoAspectRatio _aspectRatio = VideoAspectRatio::NoStretching;
+	double _customAspectRatio = 1.0;
+	VideoResizeFilter _resizeFilter = VideoResizeFilter::NearestNeighbor;
+	PictureSettings _pictureSettings;
+	NtscFilterSettings _ntscFilterSettings;
+	bool _backgroundEnabled = true;
+	bool _spritesEnabled = true;
+	uint32_t _screenRotation = 0;
+	uint32_t _exclusiveRefreshRate = 60;
+
+	ConsoleType _consoleType = ConsoleType::Nes;
+	ExpansionPortDevice _expansionDevice = ExpansionPortDevice::None;
+	ControllerType _controllerTypes[4] = { ControllerType::None, ControllerType::None, ControllerType::None, ControllerType::None };
+	KeyMappingSet _controllerKeys[4] = { KeyMappingSet(), KeyMappingSet(), KeyMappingSet(), KeyMappingSet() };
+	bool _needControllerUpdate = false;
+	uint32_t _zapperDetectionRadius = 0;
+	std::unordered_map<int, double> _mouseSensitivity;
+	int32_t _inputPollScanline = 241;
+
+	int32_t _nsfAutoDetectSilenceDelay = 3000;
+	int32_t _nsfMoveToNextTrackTime = 120;
+	bool _nsfDisableApuIrqs = true;
+
+	InputDisplaySettings _inputDisplaySettings = { 0, InputDisplayPosition::TopLeft, false };
+
+	uint32_t _autoSaveDelay = 5;
+	bool _autoSaveNotify = false;
+
+	bool _keyboardModeEnabled = false;
+
+	std::unordered_map<uint32_t, KeyCombination> _emulatorKeys[3];
+	std::unordered_map<uint32_t, vector<KeyCombination>> _shortcutSupersets[3];
+
+	RamPowerOnState _ramPowerOnState = RamPowerOnState::AllZeros;
+	uint32_t _dipSwitches = 0;
 
 public:
 	static uint32_t GetMesenVersion()
@@ -668,7 +690,7 @@ public:
 		return std::to_string(_versionMajor) + "." + std::to_string(_versionMinor) + "." + std::to_string(_versionRevision);
 	}
 
-	static void SetFlags(uint64_t flags)
+	void SetFlags(uint64_t flags)
 	{
 		if((_flags & flags) != flags) {
 			//Need a lock to prevent flag changes from being ignored due to multithreaded access
@@ -683,7 +705,7 @@ public:
 		}
 	}
 
-	static void SetFlagState(EmulationFlags flag, bool enabled)
+	void SetFlagState(EmulationFlags flag, bool enabled)
 	{
 		if(enabled) {
 			SetFlags(flag);
@@ -692,7 +714,7 @@ public:
 		}
 	}
 
-	static void ClearFlags(uint64_t flags)
+	void ClearFlags(uint64_t flags)
 	{
 		if((_flags & flags) != 0) {
 			//Need a lock to prevent flag changes from being ignored due to multithreaded access
@@ -707,7 +729,7 @@ public:
 		}
 	}
 
-	static bool CheckFlag(EmulationFlags flag)
+	bool CheckFlag(EmulationFlags flag)
 	{
 		return (_flags & flag) == flag;
 	}
@@ -722,33 +744,33 @@ public:
 		return _displayLanguage;
 	}
 
-	static bool IsPaused()
+	bool NeedsPause()
 	{
 		return (CheckFlag(EmulationFlags::Paused) || (CheckFlag(EmulationFlags::InBackground) && CheckFlag(EmulationFlags::PauseWhenInBackground) && !GameClient::Connected())) && !CheckFlag(EmulationFlags::DebuggerWindowEnabled);
 	}
 
-	static bool InputEnabled()
+	bool InputEnabled()
 	{
-		return !EmulationSettings::CheckFlag(EmulationFlags::InBackground) || EmulationSettings::CheckFlag(EmulationFlags::AllowBackgroundInput);
+		return !CheckFlag(EmulationFlags::InBackground) || CheckFlag(EmulationFlags::AllowBackgroundInput);
 	}
 
-	static void SetNesModel(NesModel model)
+	void SetNesModel(NesModel model)
 	{
 		_model = model;
 	}
 
-	static NesModel GetNesModel()
+	NesModel GetNesModel()
 	{
 		return _model;
 	}
 
-	static void SetPpuModel(PpuModel ppuModel)
+	void SetPpuModel(PpuModel ppuModel)
 	{
 		_ppuModel = ppuModel;
 		UpdateCurrentPalette();
 	}
 
-	static void UpdateCurrentPalette()
+	void UpdateCurrentPalette()
 	{
 		if(CheckFlag(EmulationFlags::UseCustomVsPalette)) {
 			for(int i = 0; i < 64; i++) {
@@ -759,19 +781,19 @@ public:
 		}
 	}
 
-	static PpuModel GetPpuModel()
+	PpuModel GetPpuModel()
 	{
 		return _ppuModel;
 	}
 
 	//0: Muted, 0.5: Default, 1.0: Max volume
-	static void SetChannelVolume(AudioChannel channel, double volume)
+	void SetChannelVolume(AudioChannel channel, double volume)
 	{
 		_channelVolume[(int)channel] = volume;
 		_audioSettingsChanged = true;
 	}
 
-	static void SetMasterVolume(double volume, double volumeReduction = -1.0)
+	void SetMasterVolume(double volume, double volumeReduction = -1.0)
 	{
 		_masterVolume = volume;
 		if(volumeReduction >= 0) {
@@ -780,19 +802,19 @@ public:
 		_audioSettingsChanged = true;
 	}
 
-	static void SetChannelPanning(AudioChannel channel, double panning)
+	void SetChannelPanning(AudioChannel channel, double panning)
 	{
 		_channelPanning[(int)channel] = panning;
 		_audioSettingsChanged = true;
 	}
 
-	static vector<double> GetBandGains()
+	vector<double> GetBandGains()
 	{
 		auto lock = _equalizerLock.AcquireSafe();
 		return _bandGains;
 	}
 
-	static void SetBandGain(int band, double gain)
+	void SetBandGain(int band, double gain)
 	{
 		auto lock = _equalizerLock.AcquireSafe();
 		if(band < (int)_bandGains.size()) {
@@ -801,13 +823,13 @@ public:
 		}
 	}
 
-	static vector<double> GetEqualizerBands()
+	vector<double> GetEqualizerBands()
 	{
 		auto lock = _equalizerLock.AcquireSafe();
 		return _bands;
 	}
 
-	static void SetEqualizerBands(double *bands, uint32_t bandCount)
+	void SetEqualizerBands(double *bands, uint32_t bandCount)
 	{
 		auto lock = _equalizerLock.AcquireSafe();
 		_bands.clear();
@@ -818,91 +840,91 @@ public:
 		}
 	}
 
-	static EqualizerFilterType GetEqualizerFilterType()
+	EqualizerFilterType GetEqualizerFilterType()
 	{
 		return _equalizerFilterType;
 	}
 
-	static void SetEqualizerFilterType(EqualizerFilterType filter)
+	void SetEqualizerFilterType(EqualizerFilterType filter)
 	{
 		_equalizerFilterType = filter;
 		_audioSettingsChanged = true;
 	}
 
-	static void SetSampleRate(uint32_t sampleRate)
+	void SetSampleRate(uint32_t sampleRate)
 	{
 		_sampleRate = sampleRate;
 		_audioSettingsChanged = true;
 	}
 
-	static uint32_t GetSampleRate()
+	uint32_t GetSampleRate()
 	{
 		return _sampleRate;
 	}
 
-	static void SetAudioLatency(uint32_t msLatency)
+	void SetAudioLatency(uint32_t msLatency)
 	{
 		_audioLatency = msLatency;
 		_audioSettingsChanged = true;
 	}
 
-	static void SetStereoFilter(StereoFilter stereoFilter)
+	void SetStereoFilter(StereoFilter stereoFilter)
 	{
 		_stereoFilter = stereoFilter;
 		_audioSettingsChanged = true;
 	}
 
-	static void SetStereoDelay(int32_t delay)
+	void SetStereoDelay(int32_t delay)
 	{
 		_stereoDelay = delay;
 		_audioSettingsChanged = true;
 	}
 
-	static void SetStereoPanningAngle(double angle)
+	void SetStereoPanningAngle(double angle)
 	{
 		_stereoAngle = angle;
 		_audioSettingsChanged = true;
 	}
 
-	static void SetReverbParameters(double strength, double delay)
+	void SetReverbParameters(double strength, double delay)
 	{
 		_reverbStrength = strength;
 		_reverbDelay = delay;
 		_audioSettingsChanged = true;
 	}
 
-	static StereoFilter GetStereoFilter()
+	StereoFilter GetStereoFilter()
 	{
 		return _stereoFilter;
 	}
 
-	static int32_t GetStereoDelay()
+	int32_t GetStereoDelay()
 	{
 		return _stereoDelay;
 	}
 
-	static double GetStereoPanningAngle()
+	double GetStereoPanningAngle()
 	{
 		return _stereoAngle;
 	}
 
-	static double GetReverbStrength()
+	double GetReverbStrength()
 	{
 		return _reverbStrength;
 	}
 
-	static double GetReverbDelay()
+	double GetReverbDelay()
 	{
 		return _reverbDelay;
 	}
 
-	static void SetCrossFeedRatio(uint32_t ratio)
+	void SetCrossFeedRatio(uint32_t ratio)
 	{
 		_crossFeedRatio = ratio;
 		_audioSettingsChanged = true;
 	}
 
-	static bool NeedAudioSettingsUpdate()
+	bool NeedAudioSettingsUpdate()
 	{
 		bool value = _audioSettingsChanged;
 		if(value) {
@@ -911,13 +933,13 @@ public:
 		return value;
 	}
 
-	static uint32_t GetCrossFeedRatio()
+	uint32_t GetCrossFeedRatio()
 	{
 		return _crossFeedRatio;
 	}
 
 	//0: No limit, Number: % of default speed (50/60fps)
-	static void SetEmulationSpeed(uint32_t emulationSpeed, bool displaySpeed = false)
+	void SetEmulationSpeed(uint32_t emulationSpeed, bool displaySpeed = false)
 	{
 		if(_emulationSpeed != emulationSpeed) {
 			_emulationSpeed = emulationSpeed;
@@ -927,58 +949,58 @@ public:
 		}
 	}
 
-	static void IncreaseEmulationSpeed()
+	void IncreaseEmulationSpeed()
 	{
 		if(_emulationSpeed == _speedValues.back()) {
-			EmulationSettings::SetEmulationSpeed(0, true);
+			SetEmulationSpeed(0, true);
 		} else if(_emulationSpeed != 0) {
 			for(size_t i = 0; i < _speedValues.size(); i++) {
 				if(_speedValues[i] > _emulationSpeed) {
-					EmulationSettings::SetEmulationSpeed(_speedValues[i], true);
+					SetEmulationSpeed(_speedValues[i], true);
 					break;
 				}
 			}
 		}
 	}
 
-	static void DecreaseEmulationSpeed()
+	void DecreaseEmulationSpeed()
 	{
 		if(_emulationSpeed == 0) {
-			EmulationSettings::SetEmulationSpeed(_speedValues.back(), true);
+			SetEmulationSpeed(_speedValues.back(), true);
 		} else if(_emulationSpeed > _speedValues.front()) {
 			for(int i = (int)_speedValues.size() - 1; i >= 0; i--) {
 				if(_speedValues[i] < _emulationSpeed) {
-					EmulationSettings::SetEmulationSpeed(_speedValues[i], true);
+					SetEmulationSpeed(_speedValues[i], true);
 					break;
 				}
 			}
 		}
 	}
 
-	static void SetTurboRewindSpeed(uint32_t turboSpeed, uint32_t rewindSpeed)
+	void SetTurboRewindSpeed(uint32_t turboSpeed, uint32_t rewindSpeed)
 	{
 		_turboSpeed = turboSpeed;
 		_rewindSpeed = rewindSpeed;
 	}
 
-	static uint32_t GetRewindSpeed()
+	uint32_t GetRewindSpeed()
 	{
 		return _rewindSpeed;
 	}
 
-	static void SetRewindBufferSize(uint32_t seconds)
+	void SetRewindBufferSize(uint32_t seconds)
 	{
 		_rewindBufferSize = seconds;
 	}
 
-	static uint32_t GetRewindBufferSize()
+	uint32_t GetRewindBufferSize()
 	{
 		return _rewindBufferSize;
 	}
 
-	static uint32_t GetEmulationSpeed(bool ignoreTurbo = false);
+	uint32_t GetEmulationSpeed(bool ignoreTurbo = false);
 
-	static void UpdateEffectiveOverclockRate()
+	void UpdateEffectiveOverclockRate()
 	{
 		if(_disableOverclocking) {
 			_effectiveOverclockRate = 100;
@@ -989,7 +1011,7 @@ public:
 		_audioSettingsChanged = true;
 	}
 
-	static void DisableOverclocking(bool disabled)
+	void DisableOverclocking(bool disabled)
 	{
 		if(_disableOverclocking != disabled) {
 			_disableOverclocking = disabled;
@@ -997,27 +1019,27 @@ public:
 		}
 	}
 
-	static uint32_t GetOverclockRateSetting()
+	uint32_t GetOverclockRateSetting()
 	{
 		return _overclockRate;
 	}
 
-	static bool HasOverclock()
+	bool HasOverclock()
 	{
 		return _hasOverclock;
 	}
 
-	static double GetOverclockRate()
+	double GetOverclockRate()
 	{
 		return _effectiveOverclockRate;
 	}
 
-	static bool GetOverclockAdjustApu()
+	bool GetOverclockAdjustApu()
 	{
 		return _overclockAdjustApu;
 	}
 
-	static void SetOverclockRate(uint32_t overclockRate, bool adjustApu)
+	void SetOverclockRate(uint32_t overclockRate, bool adjustApu)
 	{
 		if(_overclockRate != overclockRate || _overclockAdjustApu != adjustApu) {
 			_overclockRate = overclockRate;
@@ -1028,21 +1050,21 @@ public:
 			//TODOCONSOLE
 			//MessageManager::SendNotification(ConsoleNotificationType::ConfigChanged);
 
-			MessageManager::DisplayMessage("ClockRate", std::to_string((uint32_t)EmulationSettings::GetOverclockRate()) + "%");
+			MessageManager::DisplayMessage("ClockRate", std::to_string((uint32_t)GetOverclockRate()) + "%");
 		}
 	}
 
-	static uint32_t GetPpuExtraScanlinesBeforeNmi()
+	uint32_t GetPpuExtraScanlinesBeforeNmi()
 	{
 		return _disableOverclocking ? 0 : _extraScanlinesBeforeNmi;
 	}
 
-	static uint32_t GetPpuExtraScanlinesAfterNmi()
+	uint32_t GetPpuExtraScanlinesAfterNmi()
 	{
 		return _disableOverclocking ? 0 : _extraScanlinesAfterNmi;
 	}
 
-	static void SetPpuNmiConfig(uint32_t extraScanlinesBeforeNmi, uint32_t extraScanlinesAfterNmi)
+	void SetPpuNmiConfig(uint32_t extraScanlinesBeforeNmi, uint32_t extraScanlinesAfterNmi)
 	{
 		if(_extraScanlinesBeforeNmi != extraScanlinesBeforeNmi || _extraScanlinesAfterNmi != extraScanlinesAfterNmi) {
 			if(extraScanlinesBeforeNmi > 0 || extraScanlinesAfterNmi > 0) {
@@ -1056,7 +1078,7 @@ public:
 		}
 	}
 
-	static void SetOverscanDimensions(uint8_t left, uint8_t right, uint8_t top, uint8_t bottom)
+	void SetOverscanDimensions(uint8_t left, uint8_t right, uint8_t top, uint8_t bottom)
 	{
 		if(_overscan.Left != left || _overscan.Right != right || _overscan.Top != top || _overscan.Bottom != bottom) {
 			_overscan.Left = left;
@@ -1066,73 +1088,73 @@ public:
 		}
 	}
 
-	static OverscanDimensions GetOverscanDimensions()
+	OverscanDimensions GetOverscanDimensions()
 	{
 		return _overscan;
 	}
 
-	static double GetChannelVolume(AudioChannel channel)
+	double GetChannelVolume(AudioChannel channel)
 	{
 		return _channelVolume[(int)channel];
 	}
 
-	static double GetMasterVolume()
+	double GetMasterVolume()
 	{
 		return _masterVolume;
 	}
 
-	static double GetVolumeReduction()
+	double GetVolumeReduction()
 	{
 		return _volumeReduction;
 	}
 
-	static double GetChannelPanning(AudioChannel channel)
+	double GetChannelPanning(AudioChannel channel)
 	{
 		return _channelPanning[(int)channel];
 	}
 
-	static uint32_t GetAudioLatency()
+	uint32_t GetAudioLatency()
 	{
 		return _audioLatency;
 	}
 
-	static void SetVideoFilterType(VideoFilterType videoFilterType)
+	void SetVideoFilterType(VideoFilterType videoFilterType)
 	{
 		_videoFilterType = videoFilterType;
 	}
 
-	static VideoFilterType GetVideoFilterType()
+	VideoFilterType GetVideoFilterType()
 	{
 		return _videoFilterType;
 	}
 
-	static void SetVideoResizeFilter(VideoResizeFilter videoResizeFilter)
+	void SetVideoResizeFilter(VideoResizeFilter videoResizeFilter)
 	{
 		_resizeFilter = videoResizeFilter;
 	}
 
-	static VideoResizeFilter GetVideoResizeFilter()
+	VideoResizeFilter GetVideoResizeFilter()
 	{
 		return _resizeFilter;
 	}
 
-	static void SetVideoAspectRatio(VideoAspectRatio aspectRatio, double customRatio)
+	void SetVideoAspectRatio(VideoAspectRatio aspectRatio, double customRatio)
 	{
 		_aspectRatio = aspectRatio;
 		_customAspectRatio = customRatio;
 	}
 
-	static bool GetBackgroundEnabled()
+	bool GetBackgroundEnabled()
 	{
 		return _backgroundEnabled;
 	}
 
-	static bool GetSpritesEnabled()
+	bool GetSpritesEnabled()
 	{
 		return _spritesEnabled;
 	}
 
-	static void SetPictureSettings(double brightness, double contrast, double saturation, double hue, double scanlineIntensity)
+	void SetPictureSettings(double brightness, double contrast, double saturation, double hue, double scanlineIntensity)
 	{
 		_pictureSettings.Brightness = brightness;
 		_pictureSettings.Contrast = contrast;
@@ -1141,12 +1163,12 @@ public:
 		_pictureSettings.ScanlineIntensity = scanlineIntensity;
 	}
 
-	static PictureSettings GetPictureSettings()
+	PictureSettings GetPictureSettings()
 	{
 		return _pictureSettings;
 	}
 
-	static void SetNtscFilterSettings(double artifacts, double bleed, double fringing, double gamma, double resolution, double sharpness, bool mergeFields, double yFilterLength, double iFilterLength, double qFilterLength, bool verticalBlend, bool keepVerticalResolution)
+	void SetNtscFilterSettings(double artifacts, double bleed, double fringing, double gamma, double resolution, double sharpness, bool mergeFields, double yFilterLength, double iFilterLength, double qFilterLength, bool verticalBlend, bool keepVerticalResolution)
 	{
 		_ntscFilterSettings.Artifacts = artifacts;
 		_ntscFilterSettings.Bleed = bleed;
@@ -1165,111 +1187,112 @@ public:
 		_ntscFilterSettings.KeepVerticalResolution = keepVerticalResolution;
 	}
 
-	static NtscFilterSettings GetNtscFilterSettings()
+	NtscFilterSettings GetNtscFilterSettings()
 	{
 		return _ntscFilterSettings;
 	}
 
-	static double GetAspectRatio(shared_ptr<Console> console);
+	double GetAspectRatio(shared_ptr<Console> console);
+	void InitializeInputDevices(GameInputType inputType, GameSystem system, bool silent);
 
-	static void SetVideoScale(double scale)
+	void SetVideoScale(double scale)
 	{
 		if(_videoScale != scale) {
 			_videoScale = scale;
 		}
 	}
 
-	static double GetVideoScale()
+	double GetVideoScale()
 	{
 		return _videoScale;
 	}
 	
-	static void SetScreenRotation(uint32_t angle)
+	void SetScreenRotation(uint32_t angle)
 	{
 		_screenRotation = angle;
 	}
 
-	static uint32_t GetScreenRotation()
+	uint32_t GetScreenRotation()
 	{
 		return _screenRotation;
 	}
 
-	static void SetExclusiveRefreshRate(uint32_t refreshRate)
+	void SetExclusiveRefreshRate(uint32_t refreshRate)
 	{
 		_exclusiveRefreshRate = refreshRate;
 	}
 
-	static uint32_t GetExclusiveRefreshRate()
+	uint32_t GetExclusiveRefreshRate()
 	{
 		return _exclusiveRefreshRate;
 	}
 
-	static uint32_t* GetRgbPalette()
+	uint32_t* GetRgbPalette()
 	{
 		return _currentPalette;
 	}
 
-	static void GetRgbPalette(uint32_t* paletteBuffer)
+	void GetRgbPalette(uint32_t* paletteBuffer)
 	{
 		memcpy(paletteBuffer, _ppuPaletteArgb[0], sizeof(_ppuPaletteArgb[0]));
 	}
 
-	static void SetRgbPalette(uint32_t* paletteBuffer)
+	void SetRgbPalette(uint32_t* paletteBuffer)
 	{
 		memcpy(_ppuPaletteArgb[0], paletteBuffer, sizeof(_ppuPaletteArgb[0]));
 		UpdateCurrentPalette();
 	}
 
-	static bool IsDefaultPalette()
+	bool IsDefaultPalette()
 	{
 		return memcmp(_defaultPpuPalette, GetRgbPalette(), sizeof(_defaultPpuPalette)) == 0;
 	}
 
-	static void SetExpansionDevice(ExpansionPortDevice expansionDevice)
+	void SetExpansionDevice(ExpansionPortDevice expansionDevice)
 	{
 		_expansionDevice = expansionDevice;
 		_needControllerUpdate = true;
 	}
 	
-	static ExpansionPortDevice GetExpansionDevice()
+	ExpansionPortDevice GetExpansionDevice()
 	{
 		return _expansionDevice;
 	}
 
-	static void SetConsoleType(ConsoleType type)
+	void SetConsoleType(ConsoleType type)
 	{
 		_consoleType = type;
 		_needControllerUpdate = true;
 	}
 
-	static ConsoleType GetConsoleType()
+	ConsoleType GetConsoleType()
 	{
 		return _consoleType;
 	}
 
-	static void SetControllerType(uint8_t port, ControllerType type)
+	void SetControllerType(uint8_t port, ControllerType type)
 	{
 		_controllerTypes[port] = type;
 		_needControllerUpdate = true;
 	}
 
-	static ControllerType GetControllerType(uint8_t port)
+	ControllerType GetControllerType(uint8_t port)
 	{
 		return _controllerTypes[port];
 	}
 
-	static void SetControllerKeys(uint8_t port, KeyMappingSet keyMappings)
+	void SetControllerKeys(uint8_t port, KeyMappingSet keyMappings)
 	{
 		_controllerKeys[port] = keyMappings;
 		_needControllerUpdate = true;
 	}
 
-	static KeyMappingSet GetControllerKeys(uint8_t port)
+	KeyMappingSet GetControllerKeys(uint8_t port)
 	{
 		return _controllerKeys[port];
 	}
 
-	static void ClearShortcutKeys()
+	void ClearShortcutKeys()
 	{
 		auto lock = _shortcutLock.AcquireSafe();
 		_emulatorKeys[0].clear();
@@ -1286,7 +1309,7 @@ public:
 		SetShortcutKey(EmulatorShortcut::Exit, keyComb, 2);
 	}
 
-	static void SetShortcutKey(EmulatorShortcut shortcut, KeyCombination keyCombination, int keySetIndex)
+	void SetShortcutKey(EmulatorShortcut shortcut, KeyCombination keyCombination, int keySetIndex)
 	{
 		auto lock = _shortcutLock.AcquireSafe();
 		_emulatorKeys[keySetIndex][(uint32_t)shortcut] = keyCombination;
@@ -1302,7 +1325,7 @@ public:
 		}
 	}
 
-	static KeyCombination GetShortcutKey(EmulatorShortcut shortcut, int keySetIndex)
+	KeyCombination GetShortcutKey(EmulatorShortcut shortcut, int keySetIndex)
 	{
 		auto lock = _shortcutLock.AcquireSafe();
 		auto result = _emulatorKeys[keySetIndex].find((int)shortcut);
@@ -1312,13 +1335,13 @@ public:
 		return {};
 	}
 	
-	static vector<KeyCombination> GetShortcutSupersets(EmulatorShortcut shortcut, int keySetIndex)
+	vector<KeyCombination> GetShortcutSupersets(EmulatorShortcut shortcut, int keySetIndex)
 	{
 		auto lock = _shortcutLock.AcquireSafe();
 		return _shortcutSupersets[keySetIndex][(uint32_t)shortcut];
 	}
 
-	static bool NeedControllerUpdate()
+	bool NeedControllerUpdate()
 	{
 		if(_needControllerUpdate) {
 			_needControllerUpdate = false;
@@ -1328,12 +1351,12 @@ public:
 		}
 	}
 
-	static void SetMouseSensitivity(MouseDevice device, double sensitivity)
+	void SetMouseSensitivity(MouseDevice device, double sensitivity)
 	{
 		_mouseSensitivity[(int)device] = sensitivity;
 	}
 
-	static double GetMouseSensitivity(MouseDevice device)
+	double GetMouseSensitivity(MouseDevice device)
 	{
 		auto result = _mouseSensitivity.find((int)device);
 		if(result != _mouseSensitivity.end()) {
@@ -1343,106 +1366,106 @@ public:
 		}
 	}
 
-	static void SetZapperDetectionRadius(uint32_t detectionRadius)
+	void SetZapperDetectionRadius(uint32_t detectionRadius)
 	{
 		_zapperDetectionRadius = detectionRadius;
 	}
 
-	static uint32_t GetZapperDetectionRadius()
+	uint32_t GetZapperDetectionRadius()
 	{
 		return _zapperDetectionRadius;
 	}
 
-	static void SetInputPollScanline(int32_t scanline)
+	void SetInputPollScanline(int32_t scanline)
 	{
 		_inputPollScanline = scanline;
 	}
 
-	static int32_t GetInputPollScanline()
+	int32_t GetInputPollScanline()
 	{
 		return _inputPollScanline;
 	}
 
-	static bool HasZapper()
+	bool HasZapper()
 	{
 		return _controllerTypes[0] == ControllerType::Zapper || _controllerTypes[1] == ControllerType::Zapper || (_consoleType == ConsoleType::Famicom && _expansionDevice == ExpansionPortDevice::Zapper);
 	}
 
-	static bool HasArkanoidPaddle()
+	bool HasArkanoidPaddle()
 	{
 		return _controllerTypes[0] == ControllerType::ArkanoidController || _controllerTypes[1] == ControllerType::ArkanoidController || (_consoleType == ConsoleType::Famicom && _expansionDevice == ExpansionPortDevice::ArkanoidController);
 	}
 
-	static void SetNsfConfig(int32_t autoDetectSilence, int32_t moveToNextTrackTime, bool disableApuIrqs)
+	void SetNsfConfig(int32_t autoDetectSilence, int32_t moveToNextTrackTime, bool disableApuIrqs)
 	{
 		_nsfAutoDetectSilenceDelay = autoDetectSilence;
 		_nsfMoveToNextTrackTime = moveToNextTrackTime;
 		_nsfDisableApuIrqs = disableApuIrqs;
 	}
 
-	static int32_t GetNsfAutoDetectSilenceDelay()
+	int32_t GetNsfAutoDetectSilenceDelay()
 	{
 		return _nsfAutoDetectSilenceDelay;
 	}
 
-	static int32_t GetNsfMoveToNextTrackTime()
+	int32_t GetNsfMoveToNextTrackTime()
 	{
 		return _nsfMoveToNextTrackTime;
 	}
 
-	static bool GetNsfDisableApuIrqs()
+	bool GetNsfDisableApuIrqs()
 	{
 		return _nsfDisableApuIrqs;
 	}
 
-	static void SetInputDisplaySettings(uint8_t visiblePorts, InputDisplayPosition displayPosition, bool displayHorizontally)
+	void SetInputDisplaySettings(uint8_t visiblePorts, InputDisplayPosition displayPosition, bool displayHorizontally)
 	{
 		_inputDisplaySettings = { visiblePorts, displayPosition, displayHorizontally };
 	}
 
-	static InputDisplaySettings GetInputDisplaySettings()
+	InputDisplaySettings GetInputDisplaySettings()
 	{
 		return _inputDisplaySettings;
 	}
 
-	static void SetRamPowerOnState(RamPowerOnState state)
+	void SetRamPowerOnState(RamPowerOnState state)
 	{
 		_ramPowerOnState = state;
 	}
 
-	static RamPowerOnState GetRamPowerOnState()
+	RamPowerOnState GetRamPowerOnState()
 	{
 		return _ramPowerOnState;
 	}
 
-	static void SetAutoSaveOptions(uint32_t delayInMinutes, bool showMessage)
+	void SetAutoSaveOptions(uint32_t delayInMinutes, bool showMessage)
 	{
 		_autoSaveDelay = delayInMinutes;
 		_autoSaveNotify = showMessage;
 	}
 
-	static uint32_t GetAutoSaveDelay(bool &showMessage)
+	uint32_t GetAutoSaveDelay(bool &showMessage)
 	{
 		showMessage = _autoSaveNotify;
 		return _autoSaveDelay;
 	}
 
-	static void SetDipSwitches(uint32_t dipSwitches)
+	void SetDipSwitches(uint32_t dipSwitches)
 	{
 		_dipSwitches = dipSwitches;
 	}
 
-	static uint32_t GetDipSwitches()
+	uint32_t GetDipSwitches()
 	{
 		return _dipSwitches;
 	}
 
-	static bool IsKeyboardMode()
+	bool IsKeyboardMode()
 	{
 		return _keyboardModeEnabled;
 	}
 
-	static void EnableKeyboardMode()
+	void EnableKeyboardMode()
 	{
 		if(!_keyboardModeEnabled) {
 			_keyboardModeEnabled = true;
@@ -1450,7 +1473,7 @@ public:
 		}
 	}
 
-	static void DisableKeyboardMode()
+	void DisableKeyboardMode()
 	{
 		if(_keyboardModeEnabled) {
 			_keyboardModeEnabled = false;
@@ -1458,12 +1481,12 @@ public:
 		}
 	}
 
-	static void SetPauseScreenMessage(string message)
+	void SetPauseScreenMessage(string message)
 	{
 		_pauseScreenMessage = message;
 	}
 
-	static string GetPauseScreenMessage()
+	string GetPauseScreenMessage()
 	{
 		return _pauseScreenMessage;
 	}

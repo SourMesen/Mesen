@@ -15,7 +15,7 @@ protected:
 	}
 
 public:
-	FamilyMatTrainer(KeyMappingSet keyMappings) : PowerPad(BaseControlDevice::ExpDevicePort, keyMappings)
+	FamilyMatTrainer(shared_ptr<Console> console, KeyMappingSet keyMappings) : PowerPad(console, BaseControlDevice::ExpDevicePort, keyMappings)
 	{
 	}
 

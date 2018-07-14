@@ -10,17 +10,17 @@ NsfMapper* NsfMapper::_instance;
 NsfMapper::NsfMapper()
 {
 	_instance = this;
-	EmulationSettings::DisableOverclocking(true);
-	EmulationSettings::ClearFlags(EmulationFlags::Paused);
-	EmulationSettings::SetFlags(EmulationFlags::NsfPlayerEnabled);
+	_console->GetSettings()->DisableOverclocking(true);
+	_console->GetSettings()->ClearFlags(EmulationFlags::Paused);
+	_console->GetSettings()->SetFlags(EmulationFlags::NsfPlayerEnabled);
 }
 
 NsfMapper::~NsfMapper()
 {
 	if(_instance == this) {
 		_instance = nullptr;
-		EmulationSettings::DisableOverclocking(false);
-		EmulationSettings::ClearFlags(EmulationFlags::NsfPlayerEnabled);
+		_console->GetSettings()->DisableOverclocking(false);
+		_console->GetSettings()->ClearFlags(EmulationFlags::NsfPlayerEnabled);
 	}
 }
 
@@ -187,7 +187,7 @@ void NsfMapper::ClockLengthAndFadeCounters()
 		}
 	}
 
-	if((_trackEndCounter < 0 || _allowSilenceDetection) && EmulationSettings::GetNsfAutoDetectSilenceDelay() > 0) {
+	if((_trackEndCounter < 0 || _allowSilenceDetection) && _console->GetSettings()->GetNsfAutoDetectSilenceDelay() > 0) {
 		//No track length specified
 		if(_console->GetSoundMixer()->GetMuteFrameCount() * SoundMixer::CycleLength > _silenceDetectDelay) {
 			//Auto detect end of track after AutoDetectSilenceDelay (in ms) has gone by without sound
@@ -213,8 +213,8 @@ void NsfMapper::ClockLengthAndFadeCounters()
 
 void NsfMapper::SelectNextTrack()
 {
-	if(!EmulationSettings::CheckFlag(EmulationFlags::NsfRepeat)) {
-		if(EmulationSettings::CheckFlag(EmulationFlags::NsfShuffle)) {
+	if(!_console->GetSettings()->CheckFlag(EmulationFlags::NsfRepeat)) {
+		if(_console->GetSettings()->CheckFlag(EmulationFlags::NsfShuffle)) {
 			std::random_device rd;
 			std::mt19937 mt(rd());
 			std::uniform_int_distribution<> dist(0, _nsfHeader.TotalSongs - 1);
@@ -229,7 +229,7 @@ void NsfMapper::SelectNextTrack()
 
 void NsfMapper::ProcessCpuClock()
 {
-	_console->GetCpu()->SetIrqMask(EmulationSettings::GetNsfDisableApuIrqs() ? (uint8_t)IRQSource::External : 0xFF);
+	_console->GetCpu()->SetIrqMask(_console->GetSettings()->GetNsfDisableApuIrqs() ? (uint8_t)IRQSource::External : 0xFF);
 
 	if(_needInit) {
 		TriggerIrq(NsfIrqType::Init);
@@ -422,7 +422,7 @@ void NsfMapper::InternalSelectTrack(uint8_t trackNumber, bool requestReset)
 			//Only apply a maximum duration to multi-track NSFs
 			//Single track NSFs will loop or restart after a portion of silence
 			//Substract 1 sec from default track time to account for 1 sec default fade time
-			_trackEndCounter = (EmulationSettings::GetNsfMoveToNextTrackTime() - 1) * GetClockRate();
+			_trackEndCounter = (_console->GetSettings()->GetNsfMoveToNextTrackTime() - 1) * GetClockRate();
 			_allowSilenceDetection = true;
 		}
 		if(_nsfHeader.TrackFade[trackNumber] >= 0) {
@@ -432,7 +432,7 @@ void NsfMapper::InternalSelectTrack(uint8_t trackNumber, bool requestReset)
 			_trackFadeCounter = GetClockRate();
 		}
 
-		_silenceDetectDelay = (uint32_t)((double)EmulationSettings::GetNsfAutoDetectSilenceDelay() / 1000.0 * GetClockRate());
+		_silenceDetectDelay = (uint32_t)((double)_console->GetSettings()->GetNsfAutoDetectSilenceDelay() / 1000.0 * GetClockRate());
 
 		_fadeLength = _trackFadeCounter;
 		TriggerIrq(NsfIrqType::Init);

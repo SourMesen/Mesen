@@ -300,7 +300,7 @@ class MMC3 : public BaseMapper
 					}
 
 					//SubMapper 2 = MC-ACC (Acclaim MMC3 clone)
-					if(!IsMcAcc() && (ForceMmc3RevAIrqs() || EmulationSettings::CheckFlag(EmulationFlags::Mmc3IrqAltBehavior))) {
+					if(!IsMcAcc() && (ForceMmc3RevAIrqs() || _console->GetSettings()->CheckFlag(EmulationFlags::Mmc3IrqAltBehavior))) {
 						//MMC3 Revision A behavior
 						if((count > 0 || _irqReload) && _irqCounter == 0 && _irqEnabled) {
 							TriggerIrq();

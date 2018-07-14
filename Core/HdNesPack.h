@@ -2,10 +2,13 @@
 #include "stdafx.h"
 #include "HdData.h"
 
+class EmulationSettings;
+
 class HdNesPack
 {
 private:
 	shared_ptr<HdPackData> _hdData;
+	EmulationSettings *_settings;
 
 	int32_t _backgroundIndex = -1;
 	HdScreenInfo *_hdScreenInfo = nullptr;
@@ -37,7 +40,7 @@ private:
 public:
 	static constexpr uint32_t CurrentVersion = 102;
 
-	HdNesPack(shared_ptr<HdPackData> hdData);
+	HdNesPack(shared_ptr<HdPackData> hdData, EmulationSettings* settings);
 	~HdNesPack();
 
 	uint32_t GetScale();

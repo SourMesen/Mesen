@@ -387,7 +387,7 @@ namespace Mesen.GUI.Forms
 				mnuDebugDualSystemSecondaryCpu.Checked = !mnuDebugDualSystemSecondaryCpu.Checked;
 				ConfigManager.Config.DebugInfo.DebugConsoleId = mnuDebugDualSystemSecondaryCpu.Checked ? InteropEmu.ConsoleId.Slave : InteropEmu.ConsoleId.Master;
 				ConfigManager.ApplyChanges();
-				InteropEmu.DebugSetDebuggerConsole(ConfigManager.Config.DebugInfo.DebugConsoleId == InteropEmu.ConsoleId.Slave ? 1 : 0);
+				InteropEmu.DebugSetDebuggerConsole(ConfigManager.Config.DebugInfo.DebugConsoleId);
 			}
 		}
 	}

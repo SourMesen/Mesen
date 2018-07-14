@@ -36,6 +36,7 @@ class APU : public Snapshotable, public IMemoryHandler
 
 		shared_ptr<Console> _console;
 		shared_ptr<SoundMixer> _mixer;
+		EmulationSettings* _settings;
 
 		NesModel _nesModel;
 

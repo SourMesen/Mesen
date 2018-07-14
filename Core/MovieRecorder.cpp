@@ -65,9 +65,10 @@ bool MovieRecorder::Record(RecordMovieOptions options)
 
 void MovieRecorder::GetGameSettings(stringstream &out)
 {
+	EmulationSettings* settings = _console->GetSettings();
 	NesModel model = _console->GetModel();
 
-	WriteString(out, MovieKeys::MesenVersion, EmulationSettings::GetMesenVersionString());
+	WriteString(out, MovieKeys::MesenVersion, settings->GetMesenVersionString());
 	WriteInt(out, MovieKeys::MovieFormatVersion, MovieRecorder::MovieFormatVersion);
 
 	VirtualFile romFile = _console->GetRomPath();
@@ -88,40 +89,40 @@ void MovieRecorder::GetGameSettings(stringstream &out)
 		case NesModel::Dendy: WriteString(out, MovieKeys::Region, "Dendy"); break;
 	}
 
-	switch(EmulationSettings::GetConsoleType()) {
+	switch(settings->GetConsoleType()) {
 		case ConsoleType::Nes: WriteString(out, MovieKeys::ConsoleType, "NES"); break;
 		case ConsoleType::Famicom: WriteString(out, MovieKeys::ConsoleType, "Famicom"); break;
 	}
 	
-	WriteString(out, MovieKeys::Controller1, ControllerTypeNames[(int)EmulationSettings::GetControllerType(0)]);
-	WriteString(out, MovieKeys::Controller2, ControllerTypeNames[(int)EmulationSettings::GetControllerType(1)]);
-	if(EmulationSettings::CheckFlag(EmulationFlags::HasFourScore)) {
-		WriteString(out, MovieKeys::Controller3, ControllerTypeNames[(int)EmulationSettings::GetControllerType(2)]);
-		WriteString(out, MovieKeys::Controller4, ControllerTypeNames[(int)EmulationSettings::GetControllerType(3)]);
+	WriteString(out, MovieKeys::Controller1, ControllerTypeNames[(int)settings->GetControllerType(0)]);
+	WriteString(out, MovieKeys::Controller2, ControllerTypeNames[(int)settings->GetControllerType(1)]);
+	if(settings->CheckFlag(EmulationFlags::HasFourScore)) {
+		WriteString(out, MovieKeys::Controller3, ControllerTypeNames[(int)settings->GetControllerType(2)]);
+		WriteString(out, MovieKeys::Controller4, ControllerTypeNames[(int)settings->GetControllerType(3)]);
 	}
 
-	if(EmulationSettings::GetConsoleType() == ConsoleType::Famicom) {
-		WriteString(out, MovieKeys::ExpansionDevice, ExpansionPortDeviceNames[(int)EmulationSettings::GetExpansionDevice()]);
+	if(settings->GetConsoleType() == ConsoleType::Famicom) {
+		WriteString(out, MovieKeys::ExpansionDevice, ExpansionPortDeviceNames[(int)settings->GetExpansionDevice()]);
 	}
 	
-	WriteInt(out, MovieKeys::CpuClockRate, EmulationSettings::GetOverclockRateSetting());
-	WriteInt(out, MovieKeys::ExtraScanlinesBeforeNmi, EmulationSettings::GetPpuExtraScanlinesBeforeNmi());
-	WriteInt(out, MovieKeys::ExtraScanlinesAfterNmi, EmulationSettings::GetPpuExtraScanlinesAfterNmi());
-	WriteInt(out, MovieKeys::InputPollScanline, EmulationSettings::GetInputPollScanline());
+	WriteInt(out, MovieKeys::CpuClockRate, settings->GetOverclockRateSetting());
+	WriteInt(out, MovieKeys::ExtraScanlinesBeforeNmi, settings->GetPpuExtraScanlinesBeforeNmi());
+	WriteInt(out, MovieKeys::ExtraScanlinesAfterNmi, settings->GetPpuExtraScanlinesAfterNmi());
+	WriteInt(out, MovieKeys::InputPollScanline, settings->GetInputPollScanline());
 	
-	if(EmulationSettings::GetOverclockRateSetting() != 100) {
-		WriteBool(out, MovieKeys::OverclockAdjustApu, EmulationSettings::GetOverclockAdjustApu());
+	if(settings->GetOverclockRateSetting() != 100) {
+		WriteBool(out, MovieKeys::OverclockAdjustApu, settings->GetOverclockAdjustApu());
 	}
-	WriteBool(out, MovieKeys::DisablePpu2004Reads, EmulationSettings::CheckFlag(EmulationFlags::DisablePpu2004Reads));
-	WriteBool(out, MovieKeys::DisablePaletteRead, EmulationSettings::CheckFlag(EmulationFlags::DisablePaletteRead));
-	WriteBool(out, MovieKeys::DisableOamAddrBug, EmulationSettings::CheckFlag(EmulationFlags::DisableOamAddrBug));
-	WriteBool(out, MovieKeys::UseNes101Hvc101Behavior, EmulationSettings::CheckFlag(EmulationFlags::UseNes101Hvc101Behavior));
-	WriteBool(out, MovieKeys::EnableOamDecay, EmulationSettings::CheckFlag(EmulationFlags::EnableOamDecay));
-	WriteBool(out, MovieKeys::DisablePpuReset, EmulationSettings::CheckFlag(EmulationFlags::DisablePpuReset));
+	WriteBool(out, MovieKeys::DisablePpu2004Reads, settings->CheckFlag(EmulationFlags::DisablePpu2004Reads));
+	WriteBool(out, MovieKeys::DisablePaletteRead, settings->CheckFlag(EmulationFlags::DisablePaletteRead));
+	WriteBool(out, MovieKeys::DisableOamAddrBug, settings->CheckFlag(EmulationFlags::DisableOamAddrBug));
+	WriteBool(out, MovieKeys::UseNes101Hvc101Behavior, settings->CheckFlag(EmulationFlags::UseNes101Hvc101Behavior));
+	WriteBool(out, MovieKeys::EnableOamDecay, settings->CheckFlag(EmulationFlags::EnableOamDecay));
+	WriteBool(out, MovieKeys::DisablePpuReset, settings->CheckFlag(EmulationFlags::DisablePpuReset));
 
-	WriteInt(out, MovieKeys::ZapperDetectionRadius, EmulationSettings::GetZapperDetectionRadius());
+	WriteInt(out, MovieKeys::ZapperDetectionRadius, settings->GetZapperDetectionRadius());
 
-	switch(EmulationSettings::GetRamPowerOnState()) {
+	switch(settings->GetRamPowerOnState()) {
 		case RamPowerOnState::AllZeros: WriteInt(out, MovieKeys::RamPowerOnState, 0x00); break;
 		case RamPowerOnState::AllOnes: WriteInt(out, MovieKeys::RamPowerOnState, 0xFF); break;
 		case RamPowerOnState::Random: WriteInt(out, MovieKeys::RamPowerOnState, -1); break; //TODO: Shouldn't be used for movies
@@ -129,7 +130,7 @@ void MovieRecorder::GetGameSettings(stringstream &out)
 
 	//VS System flags
 	if(_console->GetAvailableFeatures() == ConsoleFeatures::VsSystem) {
-		WriteString(out, MovieKeys::DipSwitches, HexUtilities::ToHex(EmulationSettings::GetDipSwitches()));
+		WriteString(out, MovieKeys::DipSwitches, HexUtilities::ToHex(settings->GetDipSwitches()));
 	}
 
 	for(CodeInfo &code : _console->GetCheatManager()->GetCheats()) {

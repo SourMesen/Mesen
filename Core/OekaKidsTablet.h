@@ -1,6 +1,8 @@
 #pragma once
 #include "stdafx.h"
 #include "BaseControlDevice.h"
+#include "Console.h"
+#include "EmulationSettings.h"
 
 class OekaKidsTablet : public BaseControlDevice
 {
@@ -20,7 +22,7 @@ protected:
 
 	void InternalSetStateFromInput() override
 	{
-		if(EmulationSettings::InputEnabled()) {
+		if(_console->GetSettings()->InputEnabled()) {
 			MousePosition pos = KeyManager::GetMousePosition();
 			SetPressedState(Buttons::Click, KeyManager::IsMouseButtonPressed(MouseButton::LeftButton));
 			SetPressedState(Buttons::Touch, pos.Y >= 48 || KeyManager::IsMouseButtonPressed(MouseButton::LeftButton));
@@ -35,7 +37,7 @@ protected:
 	}
 
 public:
-	OekaKidsTablet() : BaseControlDevice(BaseControlDevice::ExpDevicePort)
+	OekaKidsTablet(shared_ptr<Console> console) : BaseControlDevice(console, BaseControlDevice::ExpDevicePort)
 	{
 	}
 

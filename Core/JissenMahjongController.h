@@ -32,7 +32,7 @@ protected:
 	}
 
 public:
-	JissenMahjongController(KeyMappingSet keyMappings) : BaseControlDevice(BaseControlDevice::ExpDevicePort, keyMappings)
+	JissenMahjongController(shared_ptr<Console> console, KeyMappingSet keyMappings) : BaseControlDevice(console, BaseControlDevice::ExpDevicePort, keyMappings)
 	{
 	}
 

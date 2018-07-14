@@ -10,6 +10,7 @@
 #include "UnifLoader.h"
 
 std::unordered_map<uint32_t, GameInfo> GameDatabase::_gameDatabase;
+bool GameDatabase::_enabled = true;
 
 template<typename T> 
 T GameDatabase::ToInt(string value)
@@ -217,130 +218,14 @@ GameInputType GameDatabase::GetInputType(GameSystem system, string inputType)
 	}
 }
 
-void GameDatabase::InitializeInputDevices(RomInfo &romInfo)
+void GameDatabase::SetGameDatabaseState(bool enabled)
 {
-	InitDatabase();
-
-	auto result = _gameDatabase.find(romInfo.Hash.PrgChrCrc32);
-	if(romInfo.IsNes20Header || result != _gameDatabase.end()) {
-		InitializeInputDevices(romInfo.InputType, romInfo.System, true);
-	} else {
-		InitializeInputDevices(GameInputType::Default, GameSystem::NesNtsc, true);
-	}
+	_enabled = enabled;
 }
 
-void GameDatabase::InitializeInputDevices(GameInputType inputType, GameSystem system, bool silent)
+bool GameDatabase::IsEnabled()
 {
-	ControllerType controllers[4] = { ControllerType::StandardController, ControllerType::StandardController, ControllerType::None, ControllerType::None };
-	ExpansionPortDevice expDevice = ExpansionPortDevice::None;
-	EmulationSettings::ClearFlags(EmulationFlags::HasFourScore);
-	
-	auto log = [silent](string text) {
-		if(!silent) {
-			MessageManager::Log(text);
-		}
-	};
-
-	bool isFamicom = (system == GameSystem::Famicom || system == GameSystem::FDS || system == GameSystem::Dendy);
-
-	if(inputType == GameInputType::VsZapper) {
-		//VS Duck Hunt, etc. need the zapper in the first port
-		log("[Input] VS Zapper connected");
-		controllers[0] = ControllerType::Zapper;
-	} else if(inputType == GameInputType::Zapper) {
-		log("[Input] Zapper connected");
-		if(isFamicom) {
-			expDevice = ExpansionPortDevice::Zapper;
-		} else {
-			controllers[1] = ControllerType::Zapper;
-		}
-	} else if(inputType == GameInputType::FourScore) {
-		log("[Input] Four score connected");
-		EmulationSettings::SetFlags(EmulationFlags::HasFourScore);
-		controllers[2] = controllers[3] = ControllerType::StandardController;
-	} else if(inputType == GameInputType::FourPlayerAdapter) {
-		log("[Input] Four player adapter connected");
-		EmulationSettings::SetFlags(EmulationFlags::HasFourScore);
-		expDevice = ExpansionPortDevice::FourPlayerAdapter;
-		controllers[2] = controllers[3] = ControllerType::StandardController;
-	} else if(inputType == GameInputType::ArkanoidControllerFamicom) {
-		log("[Input] Arkanoid controller (Famicom) connected");
-		expDevice = ExpansionPortDevice::ArkanoidController;
-	} else if(inputType == GameInputType::ArkanoidControllerNes) {
-		log("[Input] Arkanoid controller (NES) connected");
-		controllers[1] = ControllerType::ArkanoidController;
-	} else if(inputType == GameInputType::OekaKidsTablet) {
-		log("[Input] Oeka Kids Tablet connected");
-		system = GameSystem::Famicom;
-		expDevice = ExpansionPortDevice::OekaKidsTablet;
-	} else if(inputType == GameInputType::KonamiHyperShot) {
-		log("[Input] Konami Hyper Shot connected");
-		system = GameSystem::Famicom;
-		expDevice = ExpansionPortDevice::KonamiHyperShot;
-	} else if(inputType == GameInputType::FamilyBasicKeyboard) {
-		log("[Input] Family Basic Keyboard connected");
-		system = GameSystem::Famicom;
-		expDevice = ExpansionPortDevice::FamilyBasicKeyboard;
-	} else if(inputType == GameInputType::PartyTap) {
-		log("[Input] Party Tap connected");
-		system = GameSystem::Famicom;
-		expDevice = ExpansionPortDevice::PartyTap;
-	} else if(inputType == GameInputType::PachinkoController) {
-		log("[Input] Pachinko controller connected");
-		system = GameSystem::Famicom;
-		expDevice = ExpansionPortDevice::Pachinko;
-	} else if(inputType == GameInputType::ExcitingBoxing) {
-		log("[Input] Exciting Boxing controller connected");
-		system = GameSystem::Famicom;
-		expDevice = ExpansionPortDevice::ExcitingBoxing;
-	} else if(inputType == GameInputType::SuborKeyboardMouse1) {
-		log("[Input] Subor mouse connected");
-		log("[Input] Subor keyboard connected");
-		system = GameSystem::Famicom;
-		expDevice = ExpansionPortDevice::SuborKeyboard;
-		controllers[1] = ControllerType::SuborMouse;
-	} else if(inputType == GameInputType::JissenMahjong) {
-		log("[Input] Jissen Mahjong controller connected");
-		system = GameSystem::Famicom;
-		expDevice = ExpansionPortDevice::JissenMahjong;
-	} else if(inputType == GameInputType::BarcodeBattler) {
-		log("[Input] Barcode Battler barcode reader connected");
-		system = GameSystem::Famicom;
-		expDevice = ExpansionPortDevice::BarcodeBattler;
-	} else if(inputType == GameInputType::BandaiHypershot) {
-		log("[Input] Bandai Hyper Shot gun connected");
-		system = GameSystem::Famicom;
-		expDevice = ExpansionPortDevice::BandaiHyperShot;
-	} else if(inputType == GameInputType::BattleBox) {
-		log("[Input] Battle Box connected");
-		system = GameSystem::Famicom;
-		expDevice = ExpansionPortDevice::BattleBox;
-	} else if(inputType == GameInputType::TurboFile) {
-		log("[Input] Ascii Turbo File connected");
-		system = GameSystem::Famicom;
-		expDevice = ExpansionPortDevice::AsciiTurboFile;
-	} else if(inputType == GameInputType::FamilyTrainerSideA || inputType == GameInputType::FamilyTrainerSideB) {
-		log("[Input] Family Trainer mat connected");
-		system = GameSystem::Famicom;
-		expDevice = ExpansionPortDevice::FamilyTrainerMat;
-	} else if(inputType == GameInputType::PowerPadSideA || inputType == GameInputType::PowerPadSideB) {
-		log("[Input] Power Pad connected");
-		system = GameSystem::NesNtsc;
-		controllers[1] = ControllerType::PowerPad;
-	} else if(inputType == GameInputType::SnesControllers) {
-		log("[Input] 2 SNES controllers connected");
-		controllers[0] = ControllerType::SnesController;
-		controllers[1] = ControllerType::SnesController;
-	} else {
-		log("[Input] 2 standard controllers connected");
-	}
-
-	isFamicom = (system == GameSystem::Famicom || system == GameSystem::FDS || system == GameSystem::Dendy);
-	EmulationSettings::SetConsoleType(isFamicom ? ConsoleType::Famicom : ConsoleType::Nes);
-	for(int i = 0; i < 4; i++) {
-		EmulationSettings::SetControllerType(i, controllers[i]);
-	}
-	EmulationSettings::SetExpansionDevice(expDevice);
+	return _enabled;
 }
 
 uint8_t GameDatabase::GetSubMapper(GameInfo &info)
@@ -591,6 +476,7 @@ void GameDatabase::SetGameInfo(uint32_t romCrc, RomData &romData, bool updateRom
 
 		if(updateRomData) {
 			MessageManager::Log("[DB] Database info will be used instead of file header.");
+			romData.Info.IsInDatabase = true;
 			UpdateRomData(info, romData);
 		}
 
@@ -599,13 +485,6 @@ void GameDatabase::SetGameInfo(uint32_t romCrc, RomData &romData, bool updateRom
 #endif
 	} else {
 		MessageManager::Log("[DB] Game not found in database");
-	}
-
-	if(foundInDatabase || romData.Info.IsNes20Header) {
-		//If in DB or a NES 2.0 file, auto-configure the inputs
-		if(EmulationSettings::CheckFlag(EmulationFlags::AutoConfigureInput)) {
-			InitializeInputDevices(romData.Info.InputType, romData.Info.System);
-		}
 	}
 
 #ifdef LIBRETRO

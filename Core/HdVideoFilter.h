@@ -3,6 +3,7 @@
 #include "BaseVideoFilter.h"
 
 class HdNesPack;
+class Console;
 struct HdScreenInfo;
 struct HdPackData;
 
@@ -15,7 +16,7 @@ private:
 	unique_ptr<HdNesPack> _hdNesPack = nullptr;
 
 public:
-	HdVideoFilter(shared_ptr<HdPackData> hdData);
+	HdVideoFilter(shared_ptr<Console> console, shared_ptr<HdPackData> hdData);
 
 	void ApplyFilter(uint16_t *ppuOutputBuffer) override;
 	FrameInfo GetFrameInfo() override;

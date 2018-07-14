@@ -29,9 +29,9 @@ AviRecorder::~AviRecorder()
 uint32_t AviRecorder::GetFps()
 {
 	if(_console->GetModel() == NesModel::NTSC) {
-		return EmulationSettings::CheckFlag(EmulationFlags::IntegerFpsMode) ? 60000000 : 60098812;
+		return _console->GetSettings()->CheckFlag(EmulationFlags::IntegerFpsMode) ? 60000000 : 60098812;
 	} else {
-		return EmulationSettings::CheckFlag(EmulationFlags::IntegerFpsMode) ? 50000000 : 50006978;
+		return _console->GetSettings()->CheckFlag(EmulationFlags::IntegerFpsMode) ? 50000000 : 50006978;
 	}
 }
 

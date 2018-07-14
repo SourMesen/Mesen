@@ -186,7 +186,7 @@ public:
 
 	uint8_t DebugReadVRAM(uint16_t addr, bool disableSideEffects = true);
 
-	static void InitializeRam(void* data, uint32_t length);
+	void InitializeRam(void* data, uint32_t length);
 
 	void CopyChrRamTile(uint32_t address, uint8_t *dest);
 

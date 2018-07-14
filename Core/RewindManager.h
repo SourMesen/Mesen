@@ -24,6 +24,7 @@ private:
 	static constexpr int32_t BufferSize = 30; //Number of frames between each save state
 
 	shared_ptr<Console> _console;
+	EmulationSettings* _settings;
 
 	std::deque<RewindData> _history;
 	std::deque<RewindData> _historyBackup;

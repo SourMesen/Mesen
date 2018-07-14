@@ -207,10 +207,9 @@ struct HdPackTileInfo : public HdTileKey
 		return true;
 	}
 
-	vector<uint32_t> ToRgb()
+	vector<uint32_t> ToRgb(uint32_t* palette)
 	{
 		vector<uint32_t> rgbBuffer;
-		uint32_t* palette = EmulationSettings::GetRgbPalette();
 		for(uint8_t i = 0; i < 8; i++) {
 			uint8_t lowByte = TileData[i];
 			uint8_t highByte = TileData[i + 8];

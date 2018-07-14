@@ -2,7 +2,7 @@
 #include "RawVideoFilter.h"
 #include "PPU.h"
 
-RawVideoFilter::RawVideoFilter()
+RawVideoFilter::RawVideoFilter(shared_ptr<Console> console) : BaseVideoFilter(console)
 {
 	//Use the same raw output as the Nestopia core
 	for(int i = 0; i < 512; i++) {

@@ -6,7 +6,6 @@
 class SystemActionManager : public BaseControlDevice
 {
 private:
-	std::weak_ptr<Console> _console;
 	bool _needReset = false;
 	bool _needPowerCycle = false;
 
@@ -25,9 +24,8 @@ protected:
 public:
 	enum Buttons { ResetButton = 0, PowerButton = 1 };
 
-	SystemActionManager(std::shared_ptr<Console> console) : BaseControlDevice(BaseControlDevice::ConsoleInputPort)
+	SystemActionManager(std::shared_ptr<Console> console) : BaseControlDevice(console, BaseControlDevice::ConsoleInputPort)
 	{
-		_console = console;
 	}
 
 	uint8_t ReadRAM(uint16_t addr) override
@@ -71,7 +69,7 @@ public:
 
 	void ProcessSystemActions()
 	{
-		shared_ptr<Console> console = _console.lock();
+		shared_ptr<Console> console = _console;
 		if(console) {
 			if(IsPressed(SystemActionManager::Buttons::ResetButton)) {
 				console->ResetComponents(true);

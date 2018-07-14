@@ -30,7 +30,7 @@ protected:
 	}
 
 public:
-	ExcitingBoxingController(KeyMappingSet keyMappings) : BaseControlDevice(BaseControlDevice::ExpDevicePort, keyMappings)
+	ExcitingBoxingController(shared_ptr<Console> console, KeyMappingSet keyMappings) : BaseControlDevice(console, BaseControlDevice::ExpDevicePort, keyMappings)
 	{
 	}
 

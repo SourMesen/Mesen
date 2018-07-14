@@ -103,25 +103,26 @@ void AutomaticRomTest::ProcessNotification(ConsoleNotificationType type, void* p
 
 int32_t AutomaticRomTest::Run(string filename)
 {
-	EmulationSettings::SetMasterVolume(0);
 	_console.reset(new Console());
+	EmulationSettings* settings = _console->GetSettings();
+	settings->SetMasterVolume(0);
 	_console->GetNotificationManager()->RegisterNotificationListener(shared_from_this());
 	if(_console->Initialize(filename)) {
 		_console->GetControlManager()->RegisterInputProvider(this);
 
-		EmulationSettings::SetFlags(EmulationFlags::ForceMaxSpeed);
-		EmulationSettings::ClearFlags(EmulationFlags::Paused);
+		settings->SetFlags(EmulationFlags::ForceMaxSpeed);
+		settings->ClearFlags(EmulationFlags::Paused);
 		_signal.Wait();
 
-		EmulationSettings::SetFlags(EmulationFlags::Paused);
+		settings->SetFlags(EmulationFlags::Paused);
 
 		if(_console->GetFrameCount() < 1800) {
 			//Finished early
 			_errorCode |= 0x10;
 		}
 
-		EmulationSettings::ClearFlags(EmulationFlags::ForceMaxSpeed);
-		EmulationSettings::SetMasterVolume(1.0);
+		settings->ClearFlags(EmulationFlags::ForceMaxSpeed);
+		settings->SetMasterVolume(1.0);
 
 		_console->GetControlManager()->UnregisterInputProvider(this);
 		_console->Stop();

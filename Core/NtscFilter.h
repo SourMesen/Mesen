@@ -3,6 +3,8 @@
 #include "BaseVideoFilter.h"
 #include "../Utilities/nes_ntsc.h"
 
+class Console;
+
 class NtscFilter : public BaseVideoFilter
 {
 private:
@@ -18,7 +20,7 @@ protected:
 	void OnBeforeApplyFilter();
 
 public:
-	NtscFilter();
+	NtscFilter(shared_ptr<Console> console);
 	virtual ~NtscFilter();
 
 	virtual void ApplyFilter(uint16_t *ppuOutputBuffer);

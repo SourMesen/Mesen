@@ -9,7 +9,6 @@ class FamilyBasicDataRecorder : public BaseControlDevice
 {
 private:
 	static constexpr int32_t SamplingRate = 88;
-	shared_ptr<Console> _console;
 	vector<uint8_t> _data;
 	vector<uint8_t> _fileData;
 	bool _enabled = false;
@@ -46,9 +45,8 @@ protected:
 	}	
 
 public:
-	FamilyBasicDataRecorder(shared_ptr<Console> console) : BaseControlDevice(BaseControlDevice::ExpDevicePort2)
+	FamilyBasicDataRecorder(shared_ptr<Console> console) : BaseControlDevice(console, BaseControlDevice::ExpDevicePort2)
 	{
-		_console = console;
 	}
 
 	~FamilyBasicDataRecorder()

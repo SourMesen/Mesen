@@ -30,6 +30,7 @@
 #include "../Core/FdsSystemActionManager.h"
 #include "../Core/VsSystemActionManager.h"
 #include "../Core/KeyManager.h"
+#include "../Core/GameDatabase.h"
 #include "../Utilities/SimpleLock.h"
 
 #ifdef _WIN32
@@ -59,18 +60,19 @@ void* _viewerHandle = nullptr;
 string _returnString;
 string _logString;
 shared_ptr<Console> _console;
+EmulationSettings *_settings = nullptr;
 shared_ptr<RecordedRomTest> _recordedRomTest;
 SimpleLock _externalNotificationListenerLock;
 vector<shared_ptr<INotificationListener>> _externalNotificationListeners;
 
 typedef void (__stdcall *NotificationListenerCallback)(int, void*);
 
-shared_ptr<Console> GetConsoleById(int32_t consoleId)
+shared_ptr<Console> GetConsoleById(ConsoleId consoleId)
 {
 	shared_ptr<Console> console;
-	if(consoleId == 1) {
-		//Get the VS Dualsystem's 2nd CPU, only if it's available (and requested)
-		console = _console->GetDualConsole();
+	switch(consoleId) {
+		case ConsoleId::Slave: console = _console->GetDualConsole(); break;
+		case ConsoleId::HistoryViewer: console = _historyConsole; break;
 	}
 
 	if(!console) {
@@ -123,6 +125,7 @@ namespace InteropEmu {
 		{
 			_console.reset(new Console());
 			_console->Init();
+			_settings = _console->GetSettings();
 		}
 
 		DllExport void __stdcall InitializeEmu(const char* homeFolder, void *windowHandle, void *viewerHandle, bool noAudio, bool noVideo, bool noInput)
@@ -188,7 +191,7 @@ namespace InteropEmu {
 
 		DllExport void __stdcall InitializeHistoryViewer(void *windowHandle, void *viewerHandle)
 		{
-			_historyConsole.reset(new Console());
+			_historyConsole.reset(new Console(nullptr, _settings));
 			_historyConsole->Init();
 			_historyConsole->Initialize(_console->GetRomPath(), _console->GetPatchFile());
 			_historyConsole->CopyRewindData(_console);
@@ -216,21 +219,6 @@ namespace InteropEmu {
 			if(_historyConsole) {
 				_historyConsole->Run();
 			}
-		}
-
-		DllExport void __stdcall SetHistoryViewerPauseStatus(bool paused)
-		{
-			if(_historyConsole) {
-				_historyConsole->SetPauseStatus(paused);
-			}
-		}
-
-		DllExport bool __stdcall GetHistoryViewerPauseStatus()
-		{
-			if(_historyConsole) {
-				return _historyConsole->GetPauseStatus();
-			}
-			return true;
 		}
 
 		DllExport uint32_t __stdcall GetHistoryViewerTotalFrameCount()
@@ -283,23 +271,23 @@ namespace InteropEmu {
 			return _returnString.c_str();
 		}
 
-		DllExport void __stdcall SetControllerType(uint32_t port, ControllerType type) { EmulationSettings::SetControllerType(port, type); }
-		DllExport void __stdcall SetControllerKeys(uint32_t port, KeyMappingSet mappings) { EmulationSettings::SetControllerKeys(port, mappings); }
-		DllExport void __stdcall SetZapperDetectionRadius(uint32_t detectionRadius) { EmulationSettings::SetZapperDetectionRadius(detectionRadius); }
-		DllExport void __stdcall SetExpansionDevice(ExpansionPortDevice device) { EmulationSettings::SetExpansionDevice(device); }
-		DllExport void __stdcall SetConsoleType(ConsoleType type) { EmulationSettings::SetConsoleType(type); }
-		DllExport void __stdcall SetMouseSensitivity(MouseDevice device, double sensitivity) { EmulationSettings::SetMouseSensitivity(device, sensitivity); }
+		DllExport void __stdcall SetControllerType(uint32_t port, ControllerType type) { _settings->SetControllerType(port, type); }
+		DllExport void __stdcall SetControllerKeys(uint32_t port, KeyMappingSet mappings) { _settings->SetControllerKeys(port, mappings); }
+		DllExport void __stdcall SetZapperDetectionRadius(uint32_t detectionRadius) { _settings->SetZapperDetectionRadius(detectionRadius); }
+		DllExport void __stdcall SetExpansionDevice(ExpansionPortDevice device) { _settings->SetExpansionDevice(device); }
+		DllExport void __stdcall SetConsoleType(ConsoleType type) { _settings->SetConsoleType(type); }
+		DllExport void __stdcall SetMouseSensitivity(MouseDevice device, double sensitivity) { _settings->SetMouseSensitivity(device, sensitivity); }
 		
-		DllExport void __stdcall ClearShortcutKeys() { EmulationSettings::ClearShortcutKeys(); }
-		DllExport void __stdcall SetShortcutKey(EmulatorShortcut shortcut, KeyCombination keyCombination, int keySetIndex) { EmulationSettings::SetShortcutKey(shortcut, keyCombination, keySetIndex); }
+		DllExport void __stdcall ClearShortcutKeys() { _settings->ClearShortcutKeys(); }
+		DllExport void __stdcall SetShortcutKey(EmulatorShortcut shortcut, KeyCombination keyCombination, int keySetIndex) { _settings->SetShortcutKey(shortcut, keyCombination, keySetIndex); }
 
-		DllExport ControllerType __stdcall GetControllerType(uint32_t port) { return EmulationSettings::GetControllerType(port); }
-		DllExport ExpansionPortDevice GetExpansionDevice() { return EmulationSettings::GetExpansionDevice(); }
-		DllExport ConsoleType __stdcall GetConsoleType() { return EmulationSettings::GetConsoleType(); }
+		DllExport ControllerType __stdcall GetControllerType(uint32_t port) { return _settings->GetControllerType(port); }
+		DllExport ExpansionPortDevice GetExpansionDevice() { return _settings->GetExpansionDevice(); }
+		DllExport ConsoleType __stdcall GetConsoleType() { return _settings->GetConsoleType(); }
 		
-		DllExport bool __stdcall HasZapper() { return EmulationSettings::HasZapper(); }
-		DllExport bool __stdcall HasFourScore() { return EmulationSettings::CheckFlag(EmulationFlags::HasFourScore); }
-		DllExport bool __stdcall HasArkanoidPaddle() { return EmulationSettings::HasArkanoidPaddle(); }
+		DllExport bool __stdcall HasZapper() { return _settings->HasZapper(); }
+		DllExport bool __stdcall HasFourScore() { return _settings->CheckFlag(EmulationFlags::HasFourScore); }
+		DllExport bool __stdcall HasArkanoidPaddle() { return _settings->HasArkanoidPaddle(); }
 
 		DllExport void __stdcall SetMousePosition(double x, double y) { KeyManager::SetMousePosition(x, y); }
 		DllExport void __stdcall SetMouseMovement(int16_t x, int16_t y) { KeyManager::SetMouseMovement(x, y); }
@@ -343,8 +331,14 @@ namespace InteropEmu {
 			}
 		}
 
-		DllExport void __stdcall Resume() { EmulationSettings::ClearFlags(EmulationFlags::Paused); }
-		DllExport bool __stdcall IsPaused() { return EmulationSettings::CheckFlag(EmulationFlags::Paused); }
+		DllExport void __stdcall Resume(ConsoleId consoleId) { GetConsoleById(consoleId)->GetSettings()->ClearFlags(EmulationFlags::Paused); }
+		DllExport bool __stdcall IsPaused(ConsoleId consoleId) { return GetConsoleById(consoleId)->GetSettings()->CheckFlag(EmulationFlags::Paused); }
+		DllExport void __stdcall Pause(ConsoleId consoleId)
+		{
+			if(!GameClient::Connected()) {
+				GetConsoleById(consoleId)->GetSettings()->SetFlags(EmulationFlags::Paused);
+			}
+		}
 		
 		DllExport void __stdcall Stop()
 		{
@@ -413,7 +407,7 @@ namespace InteropEmu {
 
 		DllExport void __stdcall Disconnect() { GameClient::Disconnect(); }
 		DllExport bool __stdcall IsConnected() { return GameClient::Connected(); }
-		DllExport ControllerType __stdcall NetPlayGetControllerType(int32_t port) { return EmulationSettings::GetControllerType(port); }
+		DllExport ControllerType __stdcall NetPlayGetControllerType(int32_t port) { return _settings->GetControllerType(port); }
 
 		DllExport int32_t __stdcall NetPlayGetAvailableControllers() 
 		{ 
@@ -442,13 +436,6 @@ namespace InteropEmu {
 			}
 		}
 
-		DllExport void __stdcall Pause()
-		{
-			if(!IsConnected()) {
-				EmulationSettings::SetFlags(EmulationFlags::Paused);
-			}
-		}
-
 		DllExport void __stdcall Release()
 		{
 			ReleaseDualSystemAudioVideo();
@@ -473,7 +460,7 @@ namespace InteropEmu {
 
 		DllExport void __stdcall TakeScreenshot() { _console->GetVideoDecoder()->TakeScreenshot(); }
 
-		DllExport INotificationListener* __stdcall RegisterNotificationCallback(int32_t consoleId, NotificationListenerCallback callback)
+		DllExport INotificationListener* __stdcall RegisterNotificationCallback(ConsoleId consoleId, NotificationListenerCallback callback)
 		{
 			auto lock = _externalNotificationListenerLock.AcquireSafe();
 			auto listener = shared_ptr<INotificationListener>(new InteropNotificationListener(callback));
@@ -576,50 +563,53 @@ namespace InteropEmu {
 
 		DllExport void __stdcall SetCheats(CheatInfo cheats[], uint32_t length) { _console->GetCheatManager()->SetCheats(cheats, length); }
 
-		DllExport bool __stdcall CheckFlag(EmulationFlags flags) { return EmulationSettings::CheckFlag(flags); }
-		DllExport void __stdcall SetFlags(EmulationFlags flags) { EmulationSettings::SetFlags(flags); }
-		DllExport void __stdcall ClearFlags(EmulationFlags flags) { EmulationSettings::ClearFlags(flags); }
-		DllExport void __stdcall SetRamPowerOnState(RamPowerOnState state) { EmulationSettings::SetRamPowerOnState(state); }
-		DllExport void __stdcall SetDisplayLanguage(Language lang) { EmulationSettings::SetDisplayLanguage(lang); }
-		DllExport void __stdcall SetChannelVolume(uint32_t channel, double volume) { EmulationSettings::SetChannelVolume((AudioChannel)channel, volume); }
-		DllExport void __stdcall SetChannelPanning(uint32_t channel, double panning) { EmulationSettings::SetChannelPanning((AudioChannel)channel, panning); }
-		DllExport void __stdcall SetEqualizerFilterType(EqualizerFilterType filter) { EmulationSettings::SetEqualizerFilterType(filter); }
-		DllExport void __stdcall SetBandGain(uint32_t band, double gain) { EmulationSettings::SetBandGain(band, gain); }
-		DllExport void __stdcall SetEqualizerBands(double *bands, uint32_t bandCount) { EmulationSettings::SetEqualizerBands(bands, bandCount); }
-		DllExport void __stdcall SetMasterVolume(double volume, double volumeReduction) { EmulationSettings::SetMasterVolume(volume, volumeReduction); }
-		DllExport void __stdcall SetSampleRate(uint32_t sampleRate) { EmulationSettings::SetSampleRate(sampleRate); }
-		DllExport void __stdcall SetAudioLatency(uint32_t msLatency) { EmulationSettings::SetAudioLatency(msLatency); }
-		DllExport void __stdcall SetStereoFilter(StereoFilter stereoFilter) { EmulationSettings::SetStereoFilter(stereoFilter); }
-		DllExport void __stdcall SetStereoDelay(int32_t delay) { EmulationSettings::SetStereoDelay(delay); }
-		DllExport void __stdcall SetStereoPanningAngle(double angle) { EmulationSettings::SetStereoPanningAngle(angle); }
-		DllExport void __stdcall SetReverbParameters(double strength, double delay) { EmulationSettings::SetReverbParameters(strength, delay); }
-		DllExport void __stdcall SetCrossFeedRatio(uint32_t ratio) { EmulationSettings::SetCrossFeedRatio(ratio); }
+		DllExport void __stdcall SetOsdState(bool enabled) { MessageManager::SetOsdState(enabled); }
+		DllExport void __stdcall SetGameDatabaseState(bool enabled) { GameDatabase::SetGameDatabaseState(enabled); }
+
+		DllExport bool __stdcall CheckFlag(EmulationFlags flags) { return _settings->CheckFlag(flags); }
+		DllExport void __stdcall SetFlags(EmulationFlags flags) { _settings->SetFlags(flags); }
+		DllExport void __stdcall ClearFlags(EmulationFlags flags) { _settings->ClearFlags(flags); }
+		DllExport void __stdcall SetRamPowerOnState(RamPowerOnState state) { _settings->SetRamPowerOnState(state); }
+		DllExport void __stdcall SetDisplayLanguage(Language lang) { _settings->SetDisplayLanguage(lang); }
+		DllExport void __stdcall SetChannelVolume(uint32_t channel, double volume) { _settings->SetChannelVolume((AudioChannel)channel, volume); }
+		DllExport void __stdcall SetChannelPanning(uint32_t channel, double panning) { _settings->SetChannelPanning((AudioChannel)channel, panning); }
+		DllExport void __stdcall SetEqualizerFilterType(EqualizerFilterType filter) { _settings->SetEqualizerFilterType(filter); }
+		DllExport void __stdcall SetBandGain(uint32_t band, double gain) { _settings->SetBandGain(band, gain); }
+		DllExport void __stdcall SetEqualizerBands(double *bands, uint32_t bandCount) { _settings->SetEqualizerBands(bands, bandCount); }
+		DllExport void __stdcall SetMasterVolume(double volume, double volumeReduction) { _settings->SetMasterVolume(volume, volumeReduction); }
+		DllExport void __stdcall SetSampleRate(uint32_t sampleRate) { _settings->SetSampleRate(sampleRate); }
+		DllExport void __stdcall SetAudioLatency(uint32_t msLatency) { _settings->SetAudioLatency(msLatency); }
+		DllExport void __stdcall SetStereoFilter(StereoFilter stereoFilter) { _settings->SetStereoFilter(stereoFilter); }
+		DllExport void __stdcall SetStereoDelay(int32_t delay) { _settings->SetStereoDelay(delay); }
+		DllExport void __stdcall SetStereoPanningAngle(double angle) { _settings->SetStereoPanningAngle(angle); }
+		DllExport void __stdcall SetReverbParameters(double strength, double delay) { _settings->SetReverbParameters(strength, delay); }
+		DllExport void __stdcall SetCrossFeedRatio(uint32_t ratio) { _settings->SetCrossFeedRatio(ratio); }
 
 		DllExport NesModel __stdcall GetNesModel() { return _console->GetModel(); }
-		DllExport void __stdcall SetNesModel(uint32_t model) { EmulationSettings::SetNesModel((NesModel)model); }
-		DllExport void __stdcall SetOverscanDimensions(uint32_t left, uint32_t right, uint32_t top, uint32_t bottom) { EmulationSettings::SetOverscanDimensions(left, right, top, bottom); }
-		DllExport void __stdcall SetEmulationSpeed(uint32_t emulationSpeed) { EmulationSettings::SetEmulationSpeed(emulationSpeed, true); }
-		DllExport void __stdcall IncreaseEmulationSpeed() { EmulationSettings::IncreaseEmulationSpeed(); }
-		DllExport void __stdcall DecreaseEmulationSpeed() { EmulationSettings::DecreaseEmulationSpeed(); }
-		DllExport uint32_t __stdcall GetEmulationSpeed() { return EmulationSettings::GetEmulationSpeed(true); }
-		DllExport void __stdcall SetTurboRewindSpeed(uint32_t turboSpeed, uint32_t rewindSpeed) { EmulationSettings::SetTurboRewindSpeed(turboSpeed, rewindSpeed); }
-		DllExport void __stdcall SetRewindBufferSize(uint32_t seconds) { EmulationSettings::SetRewindBufferSize(seconds); }
-		DllExport void __stdcall SetOverclockRate(uint32_t overclockRate, bool adjustApu) { EmulationSettings::SetOverclockRate(overclockRate, adjustApu); }
-		DllExport void __stdcall SetPpuNmiConfig(uint32_t extraScanlinesBeforeNmi, uint32_t extraScanlinesAfterNmi) { EmulationSettings::SetPpuNmiConfig(extraScanlinesBeforeNmi, extraScanlinesAfterNmi); }
-		DllExport void __stdcall SetVideoScale(double scale) { EmulationSettings::SetVideoScale(scale); }
-		DllExport void __stdcall SetScreenRotation(uint32_t angle) { EmulationSettings::SetScreenRotation(angle); }
-		DllExport void __stdcall SetExclusiveRefreshRate(uint32_t angle) { EmulationSettings::SetExclusiveRefreshRate(angle); }
-		DllExport void __stdcall SetVideoAspectRatio(VideoAspectRatio aspectRatio, double customRatio) { EmulationSettings::SetVideoAspectRatio(aspectRatio, customRatio); }
-		DllExport void __stdcall SetVideoFilter(VideoFilterType filter) { EmulationSettings::SetVideoFilterType(filter); }
-		DllExport void __stdcall SetVideoResizeFilter(VideoResizeFilter filter) { EmulationSettings::SetVideoResizeFilter(filter); }
-		DllExport void __stdcall GetRgbPalette(uint32_t *paletteBuffer) { EmulationSettings::GetRgbPalette(paletteBuffer); }
-		DllExport void __stdcall SetRgbPalette(uint32_t *paletteBuffer) { EmulationSettings::SetRgbPalette(paletteBuffer); }
-		DllExport void __stdcall SetPictureSettings(double brightness, double contrast, double saturation, double hue, double scanlineIntensity) { EmulationSettings::SetPictureSettings(brightness, contrast, saturation, hue, scanlineIntensity); }
-		DllExport void __stdcall SetNtscFilterSettings(double artifacts, double bleed, double fringing, double gamma, double resolution, double sharpness, bool mergeFields, double yFilterLength, double iFilterLength, double qFilterLength, bool verticalBlend) { EmulationSettings::SetNtscFilterSettings(artifacts, bleed, fringing, gamma, resolution, sharpness, mergeFields, yFilterLength, iFilterLength, qFilterLength, verticalBlend, false); }
-		DllExport void __stdcall SetPauseScreenMessage(char* message) { EmulationSettings::SetPauseScreenMessage(message); }
+		DllExport void __stdcall SetNesModel(uint32_t model) { _settings->SetNesModel((NesModel)model); }
+		DllExport void __stdcall SetOverscanDimensions(uint32_t left, uint32_t right, uint32_t top, uint32_t bottom) { _settings->SetOverscanDimensions(left, right, top, bottom); }
+		DllExport void __stdcall SetEmulationSpeed(uint32_t emulationSpeed) { _settings->SetEmulationSpeed(emulationSpeed, true); }
+		DllExport void __stdcall IncreaseEmulationSpeed() { _settings->IncreaseEmulationSpeed(); }
+		DllExport void __stdcall DecreaseEmulationSpeed() { _settings->DecreaseEmulationSpeed(); }
+		DllExport uint32_t __stdcall GetEmulationSpeed() { return _settings->GetEmulationSpeed(true); }
+		DllExport void __stdcall SetTurboRewindSpeed(uint32_t turboSpeed, uint32_t rewindSpeed) { _settings->SetTurboRewindSpeed(turboSpeed, rewindSpeed); }
+		DllExport void __stdcall SetRewindBufferSize(uint32_t seconds) { _settings->SetRewindBufferSize(seconds); }
+		DllExport void __stdcall SetOverclockRate(uint32_t overclockRate, bool adjustApu) { _settings->SetOverclockRate(overclockRate, adjustApu); }
+		DllExport void __stdcall SetPpuNmiConfig(uint32_t extraScanlinesBeforeNmi, uint32_t extraScanlinesAfterNmi) { _settings->SetPpuNmiConfig(extraScanlinesBeforeNmi, extraScanlinesAfterNmi); }
+		DllExport void __stdcall SetVideoScale(double scale) { _settings->SetVideoScale(scale); }
+		DllExport void __stdcall SetScreenRotation(uint32_t angle) { _settings->SetScreenRotation(angle); }
+		DllExport void __stdcall SetExclusiveRefreshRate(uint32_t angle) { _settings->SetExclusiveRefreshRate(angle); }
+		DllExport void __stdcall SetVideoAspectRatio(VideoAspectRatio aspectRatio, double customRatio) { _settings->SetVideoAspectRatio(aspectRatio, customRatio); }
+		DllExport void __stdcall SetVideoFilter(VideoFilterType filter) { _settings->SetVideoFilterType(filter); }
+		DllExport void __stdcall SetVideoResizeFilter(VideoResizeFilter filter) { _settings->SetVideoResizeFilter(filter); }
+		DllExport void __stdcall GetRgbPalette(uint32_t *paletteBuffer) { _settings->GetRgbPalette(paletteBuffer); }
+		DllExport void __stdcall SetRgbPalette(uint32_t *paletteBuffer) { _settings->SetRgbPalette(paletteBuffer); }
+		DllExport void __stdcall SetPictureSettings(double brightness, double contrast, double saturation, double hue, double scanlineIntensity) { _settings->SetPictureSettings(brightness, contrast, saturation, hue, scanlineIntensity); }
+		DllExport void __stdcall SetNtscFilterSettings(double artifacts, double bleed, double fringing, double gamma, double resolution, double sharpness, bool mergeFields, double yFilterLength, double iFilterLength, double qFilterLength, bool verticalBlend) { _settings->SetNtscFilterSettings(artifacts, bleed, fringing, gamma, resolution, sharpness, mergeFields, yFilterLength, iFilterLength, qFilterLength, verticalBlend, false); }
+		DllExport void __stdcall SetPauseScreenMessage(char* message) { _settings->SetPauseScreenMessage(message); }
 
-		DllExport void __stdcall SetInputDisplaySettings(uint8_t visiblePorts, InputDisplayPosition displayPosition, bool displayHorizontally) { EmulationSettings::SetInputDisplaySettings(visiblePorts, displayPosition, displayHorizontally); }
-		DllExport void __stdcall SetAutoSaveOptions(uint32_t delayInMinutes, bool showMessage) { EmulationSettings::SetAutoSaveOptions(delayInMinutes, showMessage); }
+		DllExport void __stdcall SetInputDisplaySettings(uint8_t visiblePorts, InputDisplayPosition displayPosition, bool displayHorizontally) { _settings->SetInputDisplaySettings(visiblePorts, displayPosition, displayHorizontally); }
+		DllExport void __stdcall SetAutoSaveOptions(uint32_t delayInMinutes, bool showMessage) { _settings->SetAutoSaveOptions(delayInMinutes, showMessage); }
 
 		DllExport const char* __stdcall GetAudioDevices() 
 		{ 
@@ -659,7 +649,7 @@ namespace InteropEmu {
 			}
 		}
 		DllExport void __stdcall NsfSetNsfConfig(int32_t autoDetectSilenceDelay, int32_t moveToNextTrackTime, bool disableApuIrqs) {
-			EmulationSettings::SetNsfConfig(autoDetectSilenceDelay, moveToNextTrackTime, disableApuIrqs);
+			_settings->SetNsfConfig(autoDetectSilenceDelay, moveToNextTrackTime, disableApuIrqs);
 		}
 
 		//FDS functions
@@ -712,7 +702,7 @@ namespace InteropEmu {
 
 		DllExport void __stdcall SetDipSwitches(uint32_t dipSwitches)
 		{
-			EmulationSettings::SetDipSwitches(dipSwitches);
+			_settings->SetDipSwitches(dipSwitches);
 		}
 
 		DllExport bool __stdcall IsHdPpu() { return _console->IsHdPpu(); }

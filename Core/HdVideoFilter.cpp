@@ -4,10 +4,10 @@
 #include "HdVideoFilter.h"
 #include "Console.h"
 
-HdVideoFilter::HdVideoFilter(shared_ptr<HdPackData> hdData)
+HdVideoFilter::HdVideoFilter(shared_ptr<Console> console, shared_ptr<HdPackData> hdData) : BaseVideoFilter(console)
 {
 	_hdData = hdData;
-	_hdNesPack.reset(new HdNesPack(hdData));
+	_hdNesPack.reset(new HdNesPack(hdData, console->GetSettings()));
 }
 
 FrameInfo HdVideoFilter::GetFrameInfo()

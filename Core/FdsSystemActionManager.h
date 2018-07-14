@@ -36,7 +36,7 @@ public:
 		_mapper = std::dynamic_pointer_cast<FDS>(mapper);
 		_sideCount = std::dynamic_pointer_cast<FDS>(mapper)->GetSideCount();
 
-		if(EmulationSettings::CheckFlag(EmulationFlags::FdsAutoLoadDisk)) {
+		if(console->GetSettings()->CheckFlag(EmulationFlags::FdsAutoLoadDisk)) {
 			InsertDisk(0);
 		}
 	}

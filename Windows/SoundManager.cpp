@@ -125,7 +125,7 @@ bool SoundManager::InitializeDirectSound(uint32_t sampleRate, bool isStereo)
 		return false;
 	}
 
-	int32_t requestedByteLatency = (int32_t)((float)(sampleRate * EmulationSettings::GetAudioLatency()) / 1000.0f * waveFormat.nBlockAlign);
+	int32_t requestedByteLatency = (int32_t)((float)(sampleRate * _console->GetSettings()->GetAudioLatency()) / 1000.0f * waveFormat.nBlockAlign);
 	_bufferSize = (int32_t)std::ceil((double)requestedByteLatency * 2 / 0x10000) * 0x10000;
 
 	// Set the buffer description of the secondary sound buffer that the wave file will be loaded onto.
@@ -263,7 +263,7 @@ void SoundManager::ProcessEndOfFrame()
 	_secondaryBuffer->GetCurrentPosition(&currentPlayCursor, &safeWriteCursor);
 	ValidateWriteCursor(safeWriteCursor);
 
-	uint32_t emulationSpeed = EmulationSettings::GetEmulationSpeed();
+	uint32_t emulationSpeed = _console->GetSettings()->GetEmulationSpeed();
 	uint32_t targetRate = _sampleRate;
 	if(emulationSpeed > 0 && emulationSpeed < 100) {
 		//Slow down playback when playing at less than 100%
@@ -273,7 +273,7 @@ void SoundManager::ProcessEndOfFrame()
 
 	ProcessLatency(currentPlayCursor, _lastWriteOffset);
 
-	if(_averageLatency > 0 && emulationSpeed <= 100 && emulationSpeed > 0 && std::abs(_averageLatency - EmulationSettings::GetAudioLatency()) > 50) {
+	if(_averageLatency > 0 && emulationSpeed <= 100 && emulationSpeed > 0 && std::abs(_averageLatency - _console->GetSettings()->GetAudioLatency()) > 50) {
 		//Latency is way off (over 50ms gap), stop audio & start again
 		Stop();
 	}
@@ -282,7 +282,7 @@ void SoundManager::ProcessEndOfFrame()
 void SoundManager::PlayBuffer(int16_t *soundBuffer, uint32_t sampleCount, uint32_t sampleRate, bool isStereo)
 {
 	uint32_t bytesPerSample = (SoundMixer::BitsPerSample / 8) * (isStereo ? 2 : 1);
-	uint32_t latency = EmulationSettings::GetAudioLatency();
+	uint32_t latency = _console->GetSettings()->GetAudioLatency();
 	if(_sampleRate != sampleRate || _isStereo != isStereo || _needReset || latency != _previousLatency) {
 		_previousLatency = latency;
 		Release();

@@ -23,9 +23,9 @@ protected:
 
 	void InternalSetStateFromInput() override
 	{
-		if(EmulationSettings::InputEnabled()) {
+		if(_console->GetSettings()->InputEnabled()) {
 			SetPressedState(Buttons::Fire, KeyManager::IsMouseButtonPressed(MouseButton::LeftButton));
-			SetMovement(KeyManager::GetMouseMovement(EmulationSettings::GetMouseSensitivity(MouseDevice::ArkanoidController)));
+			SetMovement(KeyManager::GetMouseMovement(_console->GetSettings()->GetMouseSensitivity(MouseDevice::ArkanoidController)));
 		}
 	}
 
@@ -50,7 +50,7 @@ protected:
 	}
 
 public:
-	ArkanoidController(uint8_t port) : BaseControlDevice(port)
+	ArkanoidController(shared_ptr<Console> console, uint8_t port) : BaseControlDevice(console, port)
 	{
 	}
 

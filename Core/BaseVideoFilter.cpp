@@ -6,10 +6,12 @@
 #include "StandardController.h"
 #include "ScaleFilter.h"
 #include "RotateFilter.h"
+#include "Console.h"
 
-BaseVideoFilter::BaseVideoFilter()
+BaseVideoFilter::BaseVideoFilter(shared_ptr<Console> console)
 {
-	_overscan = EmulationSettings::GetOverscanDimensions();
+	_console = console;
+	_overscan = _console->GetSettings()->GetOverscanDimensions();
 }
 
 BaseVideoFilter::~BaseVideoFilter()
@@ -53,7 +55,7 @@ bool BaseVideoFilter::IsOddFrame()
 void BaseVideoFilter::SendFrame(uint16_t *ppuOutputBuffer, uint32_t frameNumber)
 {
 	_frameLock.Acquire();
-	_overscan = EmulationSettings::GetOverscanDimensions();
+	_overscan = _console->GetSettings()->GetOverscanDimensions();
 	_isOddFrame = frameNumber % 2;
 	UpdateBufferSize();
 	OnBeforeApplyFilter();
@@ -67,7 +69,7 @@ uint32_t* BaseVideoFilter::GetOutputBuffer()
 	return _outputBuffer;
 }
 
-void BaseVideoFilter::TakeScreenshot(shared_ptr<Console> console, VideoFilterType filterType, string filename, std::stringstream *stream)
+void BaseVideoFilter::TakeScreenshot(VideoFilterType filterType, string filename, std::stringstream *stream)
 {
 	uint32_t* pngBuffer;
 	FrameInfo frameInfo;
@@ -85,7 +87,7 @@ void BaseVideoFilter::TakeScreenshot(shared_ptr<Console> console, VideoFilterTyp
 
 	pngBuffer = frameBuffer;
 
-	uint32_t rotationAngle = EmulationSettings::GetScreenRotation();
+	uint32_t rotationAngle = _console->GetSettings()->GetScreenRotation();
 	shared_ptr<RotateFilter> rotateFilter;
 	if(rotationAngle > 0) {
 		rotateFilter.reset(new RotateFilter(rotationAngle));
@@ -95,12 +97,12 @@ void BaseVideoFilter::TakeScreenshot(shared_ptr<Console> console, VideoFilterTyp
 
 	shared_ptr<ScaleFilter> scaleFilter = ScaleFilter::GetScaleFilter(filterType);
 	if(scaleFilter) {
-		pngBuffer = scaleFilter->ApplyFilter(pngBuffer, frameInfo.Width, frameInfo.Height);
+		pngBuffer = scaleFilter->ApplyFilter(pngBuffer, frameInfo.Width, frameInfo.Height, _console->GetSettings()->GetPictureSettings().ScanlineIntensity);
 		frameInfo = scaleFilter->GetFrameInfo(frameInfo);
 	}
 
 	VideoHud hud;
-	hud.DrawHud(console, pngBuffer, frameInfo, EmulationSettings::GetOverscanDimensions());
+	hud.DrawHud(_console, pngBuffer, frameInfo, _console->GetSettings()->GetOverscanDimensions());
 
 	if(!filename.empty()) {
 		PNGHelper::WritePNG(filename, pngBuffer, frameInfo.Width, frameInfo.Height);
@@ -111,7 +113,7 @@ void BaseVideoFilter::TakeScreenshot(shared_ptr<Console> console, VideoFilterTyp
 	delete[] frameBuffer;
 }
 
-void BaseVideoFilter::TakeScreenshot(shared_ptr<Console> console, string romName, VideoFilterType filterType)
+void BaseVideoFilter::TakeScreenshot(string romName, VideoFilterType filterType)
 {
 	string romFilename = FolderUtilities::GetFilename(romName, false);
 
@@ -133,7 +135,7 @@ void BaseVideoFilter::TakeScreenshot(shared_ptr<Console> console, string romName
 		counter++;
 	}
 
-	TakeScreenshot(console, filterType, ssFilename);
+	TakeScreenshot(filterType, ssFilename);
 
 	MessageManager::DisplayMessage("ScreenshotSaved", FolderUtilities::GetFilename(ssFilename, true));
 }

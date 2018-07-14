@@ -21,7 +21,7 @@ protected:
 		AddRegisterRange(0x7000, 0x7FFF, MemoryOperation::Write);
 		for(int i = 0; i < 4; i++) {
 			_extraNametables[i] = new uint8_t[0x400];
-			BaseMapper::InitializeRam(_extraNametables[i], 0x400);
+			InitializeRam(_extraNametables[i], 0x400);
 			AddNametable(4 + i, _extraNametables[i]);
 		}
 		_reg = GetPowerOnByte();

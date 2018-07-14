@@ -64,7 +64,7 @@ protected:
 	}
 
 public:
-	SnesController(uint8_t port, KeyMappingSet keyMappings) : BaseControlDevice(port, keyMappings)
+	SnesController(shared_ptr<Console> console, uint8_t port, KeyMappingSet keyMappings) : BaseControlDevice(console, port, keyMappings)
 	{
 	}
 

@@ -6,8 +6,6 @@
 class KonamiHyperShot : public BaseControlDevice
 {
 private:
-	shared_ptr<Console> _console;
-
 	bool _enableP1 = true;
 	bool _enableP2 = true;
 	uint32_t _p1TurboSpeed;
@@ -56,9 +54,8 @@ protected:
 	}
 
 public:
-	KonamiHyperShot(shared_ptr<Console> console, KeyMappingSet p1, KeyMappingSet p2) : BaseControlDevice(BaseControlDevice::ExpDevicePort, p1)
+	KonamiHyperShot(shared_ptr<Console> console, KeyMappingSet p1, KeyMappingSet p2) : BaseControlDevice(console, BaseControlDevice::ExpDevicePort, p1)
 	{
-		_console = console;
 		_p1TurboSpeed = p1.TurboSpeed;
 		_p2TurboSpeed = p2.TurboSpeed;
 		_p2KeyMappings = p2.GetKeyMappingArray();

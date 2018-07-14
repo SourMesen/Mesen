@@ -86,7 +86,7 @@ void HdPackBuilder::AddTile(HdPackTileInfo *tile, uint32_t usageCount)
 void HdPackBuilder::ProcessTile(uint32_t x, uint32_t y, uint16_t tileAddr, HdPpuTileInfo &tile, BaseMapper *mapper, bool isSprite, uint32_t chrBankHash, bool transparencyRequired)
 {
 	if(_flags & HdPackRecordFlags::IgnoreOverscan) {
-		OverscanDimensions overscan = EmulationSettings::GetOverscanDimensions();
+		OverscanDimensions overscan = _console->GetSettings()->GetOverscanDimensions();
 		if(x < overscan.Left || y < overscan.Top || (PPU::ScreenWidth - x - 1) < overscan.Right || (PPU::ScreenHeight - y - 1) < overscan.Bottom) {
 			//Ignore tiles inside overscan
 			return;
@@ -133,7 +133,7 @@ void HdPackBuilder::GenerateHdTile(HdPackTileInfo *tile)
 {
 	uint32_t hdScale = _hdData.Scale;
 
-	vector<uint32_t> originalTile = tile->ToRgb();
+	vector<uint32_t> originalTile = tile->ToRgb(_console->GetSettings()->GetRgbPalette());
 	vector<uint32_t> hdTile(8 * 8 * hdScale*hdScale, 0);
 
 	switch(_filterType) {
@@ -224,7 +224,7 @@ void HdPackBuilder::SaveHdPack()
 	ss << "<scale>" << _hdData.Scale << std::endl;
 	ss << "<supportedRom>" << _console->GetRomInfo().Hash.Sha1 << std::endl;
 	if(_flags & HdPackRecordFlags::IgnoreOverscan) {
-		OverscanDimensions overscan = EmulationSettings::GetOverscanDimensions();
+		OverscanDimensions overscan = _console->GetSettings()->GetOverscanDimensions();
 		ss << "<overscan>" << overscan.Top << "," << overscan.Right << "," << overscan.Bottom << "," << overscan.Left << std::endl;
 	}
 

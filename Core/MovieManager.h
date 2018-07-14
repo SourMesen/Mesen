@@ -11,19 +11,6 @@ class Console;
 
 class IMovie : public IInputProvider
 {
-protected:
-	void EndMovie()
-	{
-		MessageManager::DisplayMessage("Movies", "MovieEnded");
-		
-		//TODOCONSOLE
-		//MessageManager::SendNotification(ConsoleNotificationType::MovieEnded);
-
-		if(EmulationSettings::CheckFlag(EmulationFlags::PauseOnMovieEnd)) {
-			EmulationSettings::SetFlags(EmulationFlags::Paused);
-		}
-	}
-
 public:
 	virtual bool Play(VirtualFile &file) = 0;
 	virtual bool IsPlaying() = 0;

@@ -605,11 +605,17 @@ std::unordered_map<string, string> MessageManager::_caResources = {
 
 std::list<string> MessageManager::_log;
 SimpleLock MessageManager::_logLock;
+bool MessageManager::_osdEnabled = false;
 IMessageManager* MessageManager::_messageManager = nullptr;
 
 void MessageManager::RegisterMessageManager(IMessageManager* messageManager)
 {
 	MessageManager::_messageManager = messageManager;
+}
+
+void MessageManager::SetOsdState(bool enabled)
+{
+	_osdEnabled = enabled;
 }
 
 string MessageManager::Localize(string key)
@@ -656,10 +662,10 @@ void MessageManager::DisplayMessage(string title, string message, string param1,
 			message.replace(startPos, 2, param2);
 		}
 
-		if(EmulationSettings::CheckFlag(EmulationFlags::DisableOsd)) {
-			MessageManager::Log("[" + title + "] " + message);
-		} else {
+		if(_osdEnabled) {
 			MessageManager::_messageManager->DisplayMessage(title, message);
+		} else {
+			MessageManager::Log("[" + title + "] " + message);
 		}
 	}
 }

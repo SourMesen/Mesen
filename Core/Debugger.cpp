@@ -29,10 +29,6 @@
 #include "CodeDataLogger.h"
 #include "NotificationManager.h"
 
-#ifndef UINT32_MAX
-#define UINT32_MAX  ((uint32_t)-1)
-#endif
-
 const int Debugger::BreakpointTypeCount;
 string Debugger::_disassemblerOutput = "";
 
@@ -253,7 +249,7 @@ void Debugger::SetBreakpoints(Breakpoint breakpoints[], uint32_t length)
 	for(uint32_t j = 0; j < length; j++) {
 		Breakpoint &bp = breakpoints[j];
 		for(int i = 0; i < Debugger::BreakpointTypeCount; i++) {
-			bool isEnabled = bp.IsEnabled() && EmulationSettings::CheckFlag(EmulationFlags::DebuggerWindowEnabled);
+			bool isEnabled = bp.IsEnabled() && _console->GetSettings()->CheckFlag(EmulationFlags::DebuggerWindowEnabled);
 			if((bp.IsMarked() || isEnabled) && bp.HasBreakpointType((BreakpointType)i)) {
 				_breakpoints[i].push_back(bp);
 				vector<int> *rpnList = expEval.GetRpnList(bp.GetCondition());
@@ -897,7 +893,7 @@ const char* Debugger::GetCode(uint32_t &length)
 {
 	string previousCode = _disassemblerOutput;
 	GenerateCodeOutput();
-	bool forceRefresh = length == UINT32_MAX;
+	bool forceRefresh = length == (uint32_t)-1;
 	length = (uint32_t)_disassemblerOutput.size();
 	if(!forceRefresh && previousCode.compare(_disassemblerOutput) == 0) {
 		//Return null pointer if the code is identical to last call
@@ -1009,7 +1005,7 @@ shared_ptr<MemoryAccessCounter> Debugger::GetMemoryAccessCounter()
 
 bool Debugger::IsExecutionStopped()
 {
-	return _executionStopped || _console->IsPaused();
+	return _executionStopped || _console->IsExecutionStopped();
 }
 
 bool Debugger::IsPauseIconShown()
@@ -1150,7 +1146,7 @@ void Debugger::StopCodeRunner()
 	//Break debugger when code has finished executing
 	SetNextStatement(_returnToAddress);
 
-	if(EmulationSettings::CheckFlag(EmulationFlags::DebuggerWindowEnabled)) {
+	if(_console->GetSettings()->CheckFlag(EmulationFlags::DebuggerWindowEnabled)) {
 		Step(1);
 	} else {
 		Run();
@@ -1378,7 +1374,7 @@ void Debugger::GetDebugEvents(uint32_t* pictureBuffer, DebugEventInfo *infoArray
 	DebugBreakHelper helper(this);
 
 	uint16_t *buffer = new uint16_t[PPU::PixelCount];
-	uint32_t *palette = EmulationSettings::GetRgbPalette();
+	uint32_t *palette = _console->GetSettings()->GetRgbPalette();
 	_ppu->DebugCopyOutputBuffer(buffer);
 
 	for(int i = 0; i < PPU::PixelCount; i++) {

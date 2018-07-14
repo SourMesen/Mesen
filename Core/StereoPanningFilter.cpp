@@ -1,18 +1,16 @@
 #include "stdafx.h"
 #include "StereoPanningFilter.h"
-#include "EmulationSettings.h"
 #include <cmath>
 
-void StereoPanningFilter::UpdateFactors()
+void StereoPanningFilter::UpdateFactors(double angle)
 {
-	double angle = EmulationSettings::GetStereoPanningAngle();
 	_leftChannelFactor = _baseFactor * (std::cos(angle) - std::sin(angle));
 	_rightChannelFactor = _baseFactor * (std::cos(angle) + std::sin(angle));
 }
 
-void StereoPanningFilter::ApplyFilter(int16_t* stereoBuffer, size_t sampleCount)
+void StereoPanningFilter::ApplyFilter(int16_t* stereoBuffer, size_t sampleCount, double angle)
 {
-	UpdateFactors();
+	UpdateFactors(angle);
 
 	for(size_t i = 0; i < sampleCount * 2; i+=2) {
 		int16_t leftSample = stereoBuffer[i];

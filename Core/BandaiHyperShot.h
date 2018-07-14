@@ -25,7 +25,7 @@ protected:
 	{
 		StandardController::InternalSetStateFromInput();
 
-		if(EmulationSettings::InputEnabled()) {
+		if(_console->GetSettings()->InputEnabled()) {
 			SetPressedState(ZapperButtons::Fire, KeyManager::IsMouseButtonPressed(MouseButton::LeftButton));
 
 			MousePosition pos = KeyManager::GetMousePosition();

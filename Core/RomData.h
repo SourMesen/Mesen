@@ -66,6 +66,7 @@ struct RomInfo
 	RomFormat Format;
 
 	bool IsNes20Header = false;
+	bool IsInDatabase = false;
 
 	uint16_t MapperID = 0;
 	uint8_t SubMapperID = 0;

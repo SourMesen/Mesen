@@ -41,15 +41,18 @@ void HistoryViewer::SeekTo(uint32_t seekPosition)
 	if(index < _history.size()) {
 		_console->Pause();
 		
-		bool wasPaused = _console->GetPauseStatus();
-		_console->SetPauseStatus(false);
+		bool wasPaused = _console->GetSettings()->CheckFlag(EmulationFlags::Paused);
+		_console->GetSettings()->ClearFlags(EmulationFlags::Paused);
 		_position = index;
 		RewindData rewindData = _history[_position];
 		rewindData.LoadState(_console);
 
 		_console->GetSoundMixer()->StopAudio(true);
 		_pollCounter = 0;
-		_console->SetPauseStatus(wasPaused);
+
+		if(wasPaused) {
+			_console->GetSettings()->SetFlags(EmulationFlags::Paused);
+		}
 
 		_console->Resume();
 	}
@@ -77,7 +80,7 @@ void HistoryViewer::ProcessEndOfFrame()
 
 		if(_position >= _history.size()) {
 			//Reached the end of history data
-			_console->SetPauseStatus(true);
+			_console->GetSettings()->SetFlags(EmulationFlags::Paused);
 			return;
 		}
 

@@ -208,7 +208,7 @@ namespace Mesen.GUI.Forms
 			}
 
 			mnuDebugDualSystemSecondaryCpu.Checked = ConfigManager.Config.DebugInfo.DebugConsoleId == InteropEmu.ConsoleId.Slave;
-			InteropEmu.DebugSetDebuggerConsole(ConfigManager.Config.DebugInfo.DebugConsoleId == InteropEmu.ConsoleId.Slave ? 1 : 0);
+			InteropEmu.DebugSetDebuggerConsole(ConfigManager.Config.DebugInfo.DebugConsoleId);
 		}
 
 		private void ProcessFullscreenSwitch(List<string> switches)
@@ -1089,6 +1089,7 @@ namespace Mesen.GUI.Forms
 					mnuStopMovie.Enabled = running && !netPlay && (moviePlaying || movieRecording);
 					mnuRecordMovie.Enabled = running && !moviePlaying && !movieRecording && !isNetPlayClient;
 					mnuGameConfig.Enabled = !moviePlaying && !movieRecording;
+					mnuHistoryViewer.Enabled = running;
 
 					bool waveRecording = InteropEmu.WaveIsRecording();
 					mnuWaveRecord.Enabled = running && !waveRecording;

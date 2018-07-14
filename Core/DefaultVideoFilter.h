@@ -26,7 +26,7 @@ protected:
 	void OnBeforeApplyFilter();
 
 public:
-	DefaultVideoFilter();
+	DefaultVideoFilter(shared_ptr<Console> console);
 	void ApplyFilter(uint16_t *ppuOutputBuffer);
 	FrameInfo GetFrameInfo();
 };

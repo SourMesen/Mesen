@@ -11,7 +11,7 @@
 BizhawkMovie::BizhawkMovie(shared_ptr<Console> console)
 {
 	_console = console;
-	_originalPowerOnState = EmulationSettings::GetRamPowerOnState();
+	_originalPowerOnState = _console->GetSettings()->GetRamPowerOnState();
 }
 
 BizhawkMovie::~BizhawkMovie()
@@ -22,8 +22,14 @@ BizhawkMovie::~BizhawkMovie()
 void BizhawkMovie::Stop()
 {
 	if(_isPlaying) {
-		EndMovie();
-		EmulationSettings::SetRamPowerOnState(_originalPowerOnState);
+		MessageManager::DisplayMessage("Movies", "MovieEnded");
+
+		_console->GetNotificationManager()->SendNotification(ConsoleNotificationType::MovieEnded);
+		if(_console->GetSettings()->CheckFlag(EmulationFlags::PauseOnMovieEnd)) {
+			_console->GetSettings()->SetFlags(EmulationFlags::Paused);
+		}
+
+		_console->GetSettings()->SetRamPowerOnState(_originalPowerOnState);
 		_isPlaying = false;
 	}
 	_console->GetControlManager()->UnregisterInputProvider(this);
@@ -190,7 +196,7 @@ bool BizhawkMovie::Play(VirtualFile &file)
 	reader.LoadArchive(ss);
 	
 	_console->GetNotificationManager()->RegisterNotificationListener(shared_from_this());
-	EmulationSettings::SetRamPowerOnState(RamPowerOnState::AllOnes);
+	_console->GetSettings()->SetRamPowerOnState(RamPowerOnState::AllOnes);
 	if(InitializeInputData(reader) && InitializeGameData(reader)) {
 		//NesHawk initializes memory to 1s
 		_isPlaying = true;

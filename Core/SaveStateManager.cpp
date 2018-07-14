@@ -161,7 +161,7 @@ bool SaveStateManager::LoadState(istream &stream, bool hashCheckRequired)
 			bool gameLoaded = !romInfo.Hash.Sha1.empty();
 			if(romInfo.Hash.Sha1 != string(hash)) {
 				//CRC doesn't match
-				if(!EmulationSettings::CheckFlag(EmulationFlags::AllowMismatchingSaveState) || !gameLoaded ||
+				if(!_console->GetSettings()->CheckFlag(EmulationFlags::AllowMismatchingSaveState) || !gameLoaded ||
 					romInfo.MapperID != mapperId || romInfo.SubMapperID != subMapperId)
 				{
 					//If mismatching states aren't allowed, or a game isn't loaded, or the mapper types don't match, try to find and load the matching ROM
@@ -222,7 +222,7 @@ bool SaveStateManager::LoadState(int stateIndex)
 
 void SaveStateManager::SaveRecentGame(string romName, string romPath, string patchPath)
 {
-	if(!EmulationSettings::CheckFlag(EmulationFlags::ConsoleMode) && !EmulationSettings::CheckFlag(EmulationFlags::DisableGameSelectionScreen) && _console->GetRomInfo().Format != RomFormat::Nsf) {
+	if(!_console->GetSettings()->CheckFlag(EmulationFlags::ConsoleMode) && !_console->GetSettings()->CheckFlag(EmulationFlags::DisableGameSelectionScreen) && _console->GetRomInfo().Format != RomFormat::Nsf) {
 		string filename = FolderUtilities::GetFilename(_console->GetRomInfo().RomName, false) + ".rgd";
 		ZipWriter writer;
 		writer.Initialize(FolderUtilities::CombinePath(FolderUtilities::GetRecentGamesFolder(), filename));

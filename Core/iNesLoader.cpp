@@ -57,7 +57,7 @@ RomData iNesLoader::LoadRom(vector<uint8_t>& romFile, NESHeader *preloadedHeader
 	uint32_t prgSize = 0;
 	uint32_t chrSize = 0;
 
-	if(EmulationSettings::CheckFlag(EmulationFlags::DisableGameDatabase) || !GameDatabase::GetDbRomSize(romData.Info.Hash.PrgChrCrc32, prgSize, chrSize)) {
+	if(!GameDatabase::IsEnabled() || !GameDatabase::GetDbRomSize(romData.Info.Hash.PrgChrCrc32, prgSize, chrSize)) {
 		//Fallback on header sizes when game is not in DB (or DB is disabled)
 		prgSize = header.GetPrgSize();
 		chrSize = header.GetChrSize();
@@ -118,7 +118,7 @@ RomData iNesLoader::LoadRom(vector<uint8_t>& romFile, NESHeader *preloadedHeader
 	}
 
 	if(!_checkOnly) {
-		GameDatabase::SetGameInfo(romData.Info.Hash.PrgChrCrc32, romData, !EmulationSettings::CheckFlag(EmulationFlags::DisableGameDatabase) && header.GetRomHeaderVersion() != RomHeaderVersion::Nes2_0, preloadedHeader != nullptr);
+		GameDatabase::SetGameInfo(romData.Info.Hash.PrgChrCrc32, romData, GameDatabase::IsEnabled() && header.GetRomHeaderVersion() != RomHeaderVersion::Nes2_0, preloadedHeader != nullptr);
 	}
 
 	return romData;

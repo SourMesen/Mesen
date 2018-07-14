@@ -19,10 +19,13 @@ private:
 	static std::unordered_map<string, string> _ptResources;
 	static std::unordered_map<string, string> _caResources;
 
+	static bool _osdEnabled;
 	static SimpleLock _logLock;
 	static std::list<string> _log;
 	
 public:
+	static void SetOsdState(bool enabled);
+
 	static string Localize(string key);
 
 	static void RegisterMessageManager(IMessageManager* messageManager);

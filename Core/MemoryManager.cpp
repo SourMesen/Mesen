@@ -13,7 +13,7 @@ MemoryManager::MemoryManager(shared_ptr<Console> console)
 
 	for(int i = 0; i < 2; i++) {
 		_nametableRAM[i] = new uint8_t[NameTableScreenSize];
-		BaseMapper::InitializeRam(_nametableRAM[i], NameTableScreenSize);
+		_console->GetMapper()->InitializeRam(_nametableRAM[i], NameTableScreenSize);
 	}
 
 	_ramReadHandlers = new IMemoryHandler*[RAMSize];
@@ -47,7 +47,7 @@ void MemoryManager::SetMapper(shared_ptr<BaseMapper> mapper)
 void MemoryManager::Reset(bool softReset)
 {
 	if(!softReset) {
-		BaseMapper::InitializeRam(_internalRAM, InternalRAMSize);
+		_mapper->InitializeRam(_internalRAM, InternalRAMSize);
 	}
 
 	_mapper->Reset(softReset);

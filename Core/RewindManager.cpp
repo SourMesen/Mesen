@@ -10,6 +10,7 @@
 RewindManager::RewindManager(shared_ptr<Console> console)
 {
 	_console = console;
+	_settings = console->GetSettings();
 	_rewindState = RewindState::Stopped;
 	_framesToFastForward = 0;
 	AddHistoryBlock();
@@ -41,7 +42,7 @@ void RewindManager::ClearBuffer()
 void RewindManager::ProcessNotification(ConsoleNotificationType type, void * parameter)
 {
 	if(type == ConsoleNotificationType::PpuFrameDone) {
-		if(EmulationSettings::GetRewindBufferSize() > 0) {
+		if(_settings->GetRewindBufferSize() > 0) {
 			switch(_rewindState) {
 				case RewindState::Starting:
 				case RewindState::Started:
@@ -62,8 +63,8 @@ void RewindManager::ProcessNotification(ConsoleNotificationType type, void * par
 						}
 						_historyBackup.clear();
 						_rewindState = RewindState::Stopped;
-						EmulationSettings::ClearFlags(EmulationFlags::Rewind);
-						EmulationSettings::ClearFlags(EmulationFlags::ForceMaxSpeed);
+						_settings->ClearFlags(EmulationFlags::Rewind);
+						_settings->ClearFlags(EmulationFlags::ForceMaxSpeed);
 					}
 					break;
 			
@@ -79,7 +80,7 @@ void RewindManager::ProcessNotification(ConsoleNotificationType type, void * par
 
 void RewindManager::AddHistoryBlock()
 {
-	uint32_t maxHistorySize = EmulationSettings::GetRewindBufferSize() * 120;	
+	uint32_t maxHistorySize = _settings->GetRewindBufferSize() * 120;	
 	if(maxHistorySize > 0) {
 		while(_history.size() > maxHistorySize) {
 			_history.pop_front();
@@ -114,7 +115,7 @@ void RewindManager::PopHistory()
 
 void RewindManager::Start(bool forDebugger)
 {
-	if(_rewindState == RewindState::Stopped && EmulationSettings::GetRewindBufferSize() > 0) {
+	if(_rewindState == RewindState::Stopped && _settings->GetRewindBufferSize() > 0) {
 		_console->Pause();
 
 		_rewindState = forDebugger ? RewindState::Debugging : RewindState::Starting;
@@ -126,8 +127,8 @@ void RewindManager::Start(bool forDebugger)
 		
 		PopHistory();
 		_console->GetSoundMixer()->StopAudio(true);
-		EmulationSettings::SetFlags(EmulationFlags::ForceMaxSpeed);
-		EmulationSettings::SetFlags(EmulationFlags::Rewind);
+		_settings->SetFlags(EmulationFlags::ForceMaxSpeed);
+		_settings->SetFlags(EmulationFlags::Rewind);
 
 		_console->Resume();
 	}
@@ -143,8 +144,8 @@ void RewindManager::ForceStop()
 		_currentHistory = _historyBackup.front();
 		_historyBackup.clear();
 		_rewindState = RewindState::Stopped;
-		EmulationSettings::ClearFlags(EmulationFlags::ForceMaxSpeed);
-		EmulationSettings::ClearFlags(EmulationFlags::Rewind);
+		_settings->ClearFlags(EmulationFlags::ForceMaxSpeed);
+		_settings->ClearFlags(EmulationFlags::Rewind);
 	}
 }
 
@@ -180,12 +181,12 @@ void RewindManager::Stop()
 		if(_framesToFastForward > 0) {
 			_rewindState = RewindState::Stopping;
 			_currentHistory.FrameCount = 0;
-			EmulationSettings::SetFlags(EmulationFlags::ForceMaxSpeed);
+			_settings->SetFlags(EmulationFlags::ForceMaxSpeed);
 		} else {
 			_rewindState = RewindState::Stopped;
 			_historyBackup.clear();
-			EmulationSettings::ClearFlags(EmulationFlags::ForceMaxSpeed);
-			EmulationSettings::ClearFlags(EmulationFlags::Rewind);
+			_settings->ClearFlags(EmulationFlags::ForceMaxSpeed);
+			_settings->ClearFlags(EmulationFlags::Rewind);
 		}
 
 		_videoHistoryBuilder.clear();
@@ -231,7 +232,7 @@ void RewindManager::ProcessFrame(void * frameBuffer, uint32_t width, uint32_t he
 
 		if(_rewindState == RewindState::Started || _videoHistory.size() >= RewindManager::BufferSize) {
 			_rewindState = RewindState::Started;
-			EmulationSettings::ClearFlags(EmulationFlags::ForceMaxSpeed);
+			_settings->ClearFlags(EmulationFlags::ForceMaxSpeed);
 			if(!_videoHistory.empty()) {
 				_console->GetVideoRenderer()->UpdateFrame(_videoHistory.back().data(), width, height);
 				_videoHistory.pop_back();
@@ -270,7 +271,7 @@ bool RewindManager::ProcessAudio(int16_t * soundBuffer, uint32_t sampleCount, ui
 
 void RewindManager::RecordInput(vector<shared_ptr<BaseControlDevice>> devices)
 {
-	if(EmulationSettings::GetRewindBufferSize() > 0 && _rewindState == RewindState::Stopped) {
+	if(_settings->GetRewindBufferSize() > 0 && _rewindState == RewindState::Stopped) {
 		for(shared_ptr<BaseControlDevice> &device : devices) {
 			_currentHistory.InputLogs[device->GetPort()].push_back(device->GetRawState());
 		}

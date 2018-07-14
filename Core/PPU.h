@@ -30,6 +30,7 @@ class PPU : public IMemoryHandler, public Snapshotable
 {
 	protected:
 		shared_ptr<Console> _console;
+		EmulationSettings* _settings;
 
 		PPUState _state;
 		int32_t _scanline;
@@ -227,13 +228,7 @@ class PPU : public IMemoryHandler, public Snapshotable
 			return _secondarySpriteRAM;
 		}
 		
-		uint32_t GetPixelBrightness(uint8_t x, uint8_t y)
-		{
-			//Used by Zapper, gives a rough approximation of the brightness level of the specific pixel
-			uint16_t pixelData = _currentOutputBuffer[y << 8 | x];
-			uint32_t argbColor = EmulationSettings::GetRgbPalette()[pixelData & 0x3F];
-			return (argbColor & 0xFF) + ((argbColor >> 8) & 0xFF) + ((argbColor >> 16) & 0xFF);
-		}
+		uint32_t GetPixelBrightness(uint8_t x, uint8_t y);
 
 		uint16_t GetPixel(uint8_t x, uint8_t y)
 		{

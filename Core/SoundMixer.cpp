@@ -13,12 +13,13 @@ SoundMixer::SoundMixer(shared_ptr<Console> console)
 {
 	_audioDevice = nullptr;
 	_console = console;
+	_settings = _console->GetSettings();
 	_eqFrequencyGrid.reset(new orfanidis_eq::freq_grid());
 	_oggMixer.reset();
 	_outputBuffer = new int16_t[SoundMixer::MaxSamplesPerFrame];
 	_blipBufLeft = blip_new(SoundMixer::MaxSamplesPerFrame);
 	_blipBufRight = blip_new(SoundMixer::MaxSamplesPerFrame);
-	_sampleRate = EmulationSettings::GetSampleRate();
+	_sampleRate = _settings->GetSampleRate();
 	_model = NesModel::NTSC;
 }
 
@@ -69,7 +70,7 @@ void SoundMixer::StopAudio(bool clearBuffer)
 void SoundMixer::Reset()
 {
 	if(_oggMixer) {
-		_oggMixer->Reset();
+		_oggMixer->Reset(_settings->GetSampleRate());
 	}
 	_fadeRatio = 1.0;
 	_muteFrameCount = 0;
@@ -113,48 +114,48 @@ void SoundMixer::PlayAudioBuffer(uint32_t time)
 	}
 
 	if(_oggMixer) {
-		_oggMixer->ApplySamples(_outputBuffer, sampleCount);
+		_oggMixer->ApplySamples(_outputBuffer, sampleCount, _settings->GetMasterVolume());
 	}
 
 	if(_console->IsDualSystem()) {
-		if(_console->IsMaster() && EmulationSettings::CheckFlag(EmulationFlags::VsDualMuteMaster)) {
+		if(_console->IsMaster() && _settings->CheckFlag(EmulationFlags::VsDualMuteMaster)) {
 			_lowPassFilter.ApplyFilter(_outputBuffer, sampleCount, 0, 0);
-		} else if(!_console->IsMaster() && EmulationSettings::CheckFlag(EmulationFlags::VsDualMuteSlave)) {
+		} else if(!_console->IsMaster() && _settings->CheckFlag(EmulationFlags::VsDualMuteSlave)) {
 			_lowPassFilter.ApplyFilter(_outputBuffer, sampleCount, 0, 0);
 		}
 	}
 
 	RewindManager* rewindManager = _console->GetRewindManager();
 
-	if(!_console->GetVideoRenderer()->IsRecording() && !_waveRecorder && !EmulationSettings::CheckFlag(EmulationFlags::NsfPlayerEnabled)) {
-		if((EmulationSettings::CheckFlag(EmulationFlags::Turbo) || (rewindManager && rewindManager->IsRewinding())) && EmulationSettings::CheckFlag(EmulationFlags::ReduceSoundInFastForward)) {
+	if(!_console->GetVideoRenderer()->IsRecording() && !_waveRecorder && !_settings->CheckFlag(EmulationFlags::NsfPlayerEnabled)) {
+		if((_settings->CheckFlag(EmulationFlags::Turbo) || (rewindManager && rewindManager->IsRewinding())) && _settings->CheckFlag(EmulationFlags::ReduceSoundInFastForward)) {
 			//Reduce volume when fast forwarding or rewinding
-			_lowPassFilter.ApplyFilter(_outputBuffer, sampleCount, 0, 1.0 - EmulationSettings::GetVolumeReduction());
-		} else if(EmulationSettings::CheckFlag(EmulationFlags::InBackground)) {
-			if(EmulationSettings::CheckFlag(EmulationFlags::MuteSoundInBackground)) {
+			_lowPassFilter.ApplyFilter(_outputBuffer, sampleCount, 0, 1.0 - _settings->GetVolumeReduction());
+		} else if(_settings->CheckFlag(EmulationFlags::InBackground)) {
+			if(_settings->CheckFlag(EmulationFlags::MuteSoundInBackground)) {
 				//Mute sound when in background
 				_lowPassFilter.ApplyFilter(_outputBuffer, sampleCount, 0, 0);
-			} else if(EmulationSettings::CheckFlag(EmulationFlags::ReduceSoundInBackground)) {
+			} else if(_settings->CheckFlag(EmulationFlags::ReduceSoundInBackground)) {
 				//Apply low pass filter/volume reduction when in background (based on options)
-				_lowPassFilter.ApplyFilter(_outputBuffer, sampleCount, 0, 1.0 - EmulationSettings::GetVolumeReduction());
+				_lowPassFilter.ApplyFilter(_outputBuffer, sampleCount, 0, 1.0 - _settings->GetVolumeReduction());
 			}
 		}
 	}
 
-	if(EmulationSettings::GetReverbStrength() > 0) {
-		_reverbFilter.ApplyFilter(_outputBuffer, sampleCount, _sampleRate, EmulationSettings::GetReverbStrength(), EmulationSettings::GetReverbDelay());
+	if(_settings->GetReverbStrength() > 0) {
+		_reverbFilter.ApplyFilter(_outputBuffer, sampleCount, _sampleRate, _settings->GetReverbStrength(), _settings->GetReverbDelay());
 	} else {
 		_reverbFilter.ResetFilter();
 	}
 
-	switch(EmulationSettings::GetStereoFilter()) {
+	switch(_settings->GetStereoFilter()) {
 		case StereoFilter::None: break;
-		case StereoFilter::Delay: _stereoDelay.ApplyFilter(_outputBuffer, sampleCount, _sampleRate); break;
-		case StereoFilter::Panning: _stereoPanning.ApplyFilter(_outputBuffer, sampleCount); break;
+		case StereoFilter::Delay: _stereoDelay.ApplyFilter(_outputBuffer, sampleCount, _sampleRate, _settings->GetStereoDelay()); break;
+		case StereoFilter::Panning: _stereoPanning.ApplyFilter(_outputBuffer, sampleCount, _settings->GetStereoPanningAngle()); break;
 	}
 
-	if(EmulationSettings::GetCrossFeedRatio() > 0) {
-		_crossFeedFilter.ApplyFilter(_outputBuffer, sampleCount, EmulationSettings::GetCrossFeedRatio());
+	if(_settings->GetCrossFeedRatio() > 0) {
+		_crossFeedFilter.ApplyFilter(_outputBuffer, sampleCount, _settings->GetCrossFeedRatio());
 	}
 
 	if(rewindManager && rewindManager->SendAudio(_outputBuffer, (uint32_t)sampleCount, _sampleRate)) {
@@ -169,15 +170,15 @@ void SoundMixer::PlayAudioBuffer(uint32_t time)
 
 		_console->GetVideoRenderer()->AddRecordingSound(_outputBuffer, (uint32_t)sampleCount, _sampleRate);
 
-		if(_audioDevice && !EmulationSettings::IsPaused()) {
+		if(_audioDevice && !_console->IsPaused()) {
 			_audioDevice->PlayBuffer(_outputBuffer, (uint32_t)sampleCount, _sampleRate, true);
 		}
 	}
 
-	if(EmulationSettings::NeedAudioSettingsUpdate()) {
-		if(EmulationSettings::GetSampleRate() != _sampleRate) {
+	if(_settings->NeedAudioSettingsUpdate()) {
+		if(_settings->GetSampleRate() != _sampleRate) {
 			//Update sample rate for next frame if setting changed
-			_sampleRate = EmulationSettings::GetSampleRate();
+			_sampleRate = _settings->GetSampleRate();
 			UpdateRates(true);
 			UpdateEqualizers(true);
 		} else {
@@ -198,11 +199,11 @@ void SoundMixer::SetNesModel(NesModel model)
 void SoundMixer::UpdateRates(bool forceUpdate)
 {
 	uint32_t newRate = _console->GetCpu()->GetClockRate(_model);
-	if(!EmulationSettings::GetOverclockAdjustApu()) {
-		newRate = (uint32_t)(newRate * (double)EmulationSettings::GetOverclockRate() / 100);
+	if(!_settings->GetOverclockAdjustApu()) {
+		newRate = (uint32_t)(newRate * (double)_settings->GetOverclockRate() / 100);
 	}
 
-	if(EmulationSettings::CheckFlag(EmulationFlags::IntegerFpsMode)) {
+	if(_settings->CheckFlag(EmulationFlags::IntegerFpsMode)) {
 		//Adjust sample rate when running at 60.0 fps instead of 60.1
 		if(_model == NesModel::NTSC) {
 			newRate = (uint32_t)(newRate * 60.0 / 60.0988118623484);
@@ -212,9 +213,9 @@ void SoundMixer::UpdateRates(bool forceUpdate)
 	}
 
 	AudioStatistics stats = GetStatistics();
-	int32_t requestedLatency = (int32_t)EmulationSettings::GetAudioLatency();
+	int32_t requestedLatency = (int32_t)_settings->GetAudioLatency();
 	double targetRate = _sampleRate;
-	if(stats.AverageLatency > 0 && EmulationSettings::GetEmulationSpeed() == 100) {
+	if(stats.AverageLatency > 0 && _settings->GetEmulationSpeed() == 100) {
 		if(stats.AverageLatency > requestedLatency + 2) {
 			targetRate *= 1.005;
 		} else if(stats.AverageLatency < requestedLatency - 2) {
@@ -233,8 +234,8 @@ void SoundMixer::UpdateRates(bool forceUpdate)
 
 	bool hasPanning = false;
 	for(uint32_t i = 0; i < MaxChannelCount; i++) {
-		_volumes[i] = EmulationSettings::GetChannelVolume((AudioChannel)i);
-		_panning[i] = EmulationSettings::GetChannelPanning((AudioChannel)i);
+		_volumes[i] = _settings->GetChannelVolume((AudioChannel)i);
+		_panning[i] = _settings->GetChannelPanning((AudioChannel)i);
 		if(_panning[i] != 1.0) {
 			if(!_hasPanning) {
 				blip_clear(_blipBufLeft);
@@ -282,7 +283,7 @@ void SoundMixer::AddDelta(AudioChannel channel, uint32_t time, int16_t delta)
 
 void SoundMixer::EndFrame(uint32_t time)
 {
-	double masterVolume = EmulationSettings::GetMasterVolume() * _fadeRatio;
+	double masterVolume = _settings->GetMasterVolume() * _fadeRatio;
 	sort(_timestamps.begin(), _timestamps.end());
 	_timestamps.erase(std::unique(_timestamps.begin(), _timestamps.end()), _timestamps.end());
 
@@ -340,10 +341,10 @@ void SoundMixer::ApplyEqualizer(orfanidis_eq::eq1* equalizer, size_t sampleCount
 
 void SoundMixer::UpdateEqualizers(bool forceUpdate)
 {
-	EqualizerFilterType type = EmulationSettings::GetEqualizerFilterType();
+	EqualizerFilterType type = _settings->GetEqualizerFilterType();
 	if(type != EqualizerFilterType::None) {
-		vector<double> bands = EmulationSettings::GetEqualizerBands();
-		vector<double> bandGains = EmulationSettings::GetBandGains();
+		vector<double> bands = _settings->GetEqualizerBands();
+		vector<double> bandGains = _settings->GetBandGains();
 
 		if(bands.size() != _eqFrequencyGrid->get_number_of_bands()) {
 			_equalizerLeft.reset();
@@ -358,8 +359,8 @@ void SoundMixer::UpdateEqualizers(bool forceUpdate)
 				_eqFrequencyGrid->add_band((bands[i] + bands[i - 1]) / 2, bands[i], (bands[i + 1] + bands[i]) / 2);
 			}
 
-			_equalizerLeft.reset(new orfanidis_eq::eq1(_eqFrequencyGrid.get(), (orfanidis_eq::filter_type)EmulationSettings::GetEqualizerFilterType()));
-			_equalizerRight.reset(new orfanidis_eq::eq1(_eqFrequencyGrid.get(), (orfanidis_eq::filter_type)EmulationSettings::GetEqualizerFilterType()));
+			_equalizerLeft.reset(new orfanidis_eq::eq1(_eqFrequencyGrid.get(), (orfanidis_eq::filter_type)_settings->GetEqualizerFilterType()));
+			_equalizerRight.reset(new orfanidis_eq::eq1(_eqFrequencyGrid.get(), (orfanidis_eq::filter_type)_settings->GetEqualizerFilterType()));
 			_equalizerLeft->set_sample_rate(_sampleRate);
 			_equalizerRight->set_sample_rate(_sampleRate);
 		}
@@ -377,7 +378,7 @@ void SoundMixer::UpdateEqualizers(bool forceUpdate)
 void SoundMixer::StartRecording(string filepath)
 {
 	auto lock = _waveRecorderLock.AcquireSafe();
-	_waveRecorder.reset(new WaveRecorder(filepath, EmulationSettings::GetSampleRate(), true));
+	_waveRecorder.reset(new WaveRecorder(filepath, _settings->GetSampleRate(), true));
 }
 
 void SoundMixer::StopRecording()
@@ -410,6 +411,7 @@ OggMixer* SoundMixer::GetOggMixer()
 {
 	if(!_oggMixer) {
 		_oggMixer.reset(new OggMixer());
+		_oggMixer->Reset(_settings->GetSampleRate());
 	}
 	return _oggMixer.get();
 }
@@ -433,8 +435,8 @@ void SoundMixer::ProcessEndOfFrame()
 void SoundMixer::UpdateTargetSampleRate()
 {
 	AudioStatistics stats = GetStatistics();
-	if(stats.AverageLatency > 0 && EmulationSettings::GetEmulationSpeed() == 100) {
-		int32_t requestedLatency = (int32_t)EmulationSettings::GetAudioLatency();
+	if(stats.AverageLatency > 0 && _settings->GetEmulationSpeed() == 100) {
+		int32_t requestedLatency = (int32_t)_settings->GetAudioLatency();
 		double targetRate = _sampleRate;
 
 		//Try to stay within +/- 2ms of requested latency

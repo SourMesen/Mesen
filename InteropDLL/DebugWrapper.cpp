@@ -9,9 +9,12 @@
 #include "../Core/Assembler.h"
 #include "../Core/TraceLogger.h"
 
+enum class ConsoleId;
+
 extern shared_ptr<Console> _console;
-static int32_t _debugConsoleId = 0;
-extern shared_ptr<Console> GetConsoleById(int32_t consoleId);
+extern shared_ptr<Console> GetConsoleById(ConsoleId consoleId);
+
+static ConsoleId _debugConsoleId = ConsoleId::Master;
 
 shared_ptr<Debugger> GetDebugger()
 {
@@ -36,7 +39,7 @@ extern "C"
 		return GetConsoleById(_debugConsoleId)->GetDebugger(false).get() != nullptr;
 	}
 
-	DllExport void __stdcall DebugSetDebuggerConsole(int32_t consoleId)
+	DllExport void __stdcall DebugSetDebuggerConsole(ConsoleId consoleId)
 	{
 		_debugConsoleId = consoleId;
 	}

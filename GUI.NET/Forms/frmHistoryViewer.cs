@@ -19,13 +19,20 @@ namespace Mesen.GUI.Forms
 		public frmHistoryViewer()
 		{
 			InitializeComponent();
+		}
+
+		protected override void OnShown(EventArgs e)
+		{
+			base.OnShown(e);
 
 			InteropEmu.InitializeHistoryViewer(this.Handle, ctrlRenderer.Handle);
 			trkPosition.Maximum = (int)(InteropEmu.GetHistoryViewerTotalFrameCount() / 60);
 			UpdatePositionLabel(0);
-			InteropEmu.SetHistoryViewerPauseStatus(true);
+			InteropEmu.Pause(InteropEmu.ConsoleId.HistoryViewer);
 			StartEmuThread();
 			tmrUpdatePosition.Start();
+
+			btnPausePlay.Focus();
 		}
 
 		protected override void OnClosing(CancelEventArgs e)
@@ -56,7 +63,11 @@ namespace Mesen.GUI.Forms
 			if(trkPosition.Value == trkPosition.Maximum) {
 				InteropEmu.SetHistoryViewerPosition(0);
 			}
-			InteropEmu.SetHistoryViewerPauseStatus(!_paused);
+			if(_paused) {
+				InteropEmu.Resume(InteropEmu.ConsoleId.HistoryViewer);
+			} else {
+				InteropEmu.Pause(InteropEmu.ConsoleId.HistoryViewer);
+			}
 		}
 
 		private void trkPosition_ValueChanged(object sender, EventArgs e)
@@ -66,7 +77,7 @@ namespace Mesen.GUI.Forms
 
 		private void tmrUpdatePosition_Tick(object sender, EventArgs e)
 		{
-			_paused = InteropEmu.GetHistoryViewerPauseStatus();
+			_paused = InteropEmu.IsPaused(InteropEmu.ConsoleId.HistoryViewer);
 			if(_paused) {
 				btnPausePlay.Image = Properties.Resources.Play;
 			} else {

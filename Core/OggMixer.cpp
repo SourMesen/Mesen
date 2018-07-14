@@ -10,17 +10,16 @@ enum class OggPlaybackOptions
 
 OggMixer::OggMixer()
 {
-	Reset();
 }
 
-void OggMixer::Reset()
+void OggMixer::Reset(uint32_t sampleRate)
 {
 	_bgm.reset();
 	_sfx.clear();
 	_sfxVolume = 128;
 	_bgmVolume = 128;
 	_options = 0;
-	_sampleRate = EmulationSettings::GetSampleRate();
+	_sampleRate = sampleRate;
 	_paused = false;
 }
 
@@ -95,16 +94,16 @@ bool OggMixer::Play(string filename, bool isSfx, uint32_t startOffset)
 	return false;
 }
 
-void OggMixer::ApplySamples(int16_t * buffer, size_t sampleCount)
+void OggMixer::ApplySamples(int16_t * buffer, size_t sampleCount, double masterVolumne)
 {
 	if(_bgm && !_paused) {
-		_bgm->ApplySamples(buffer, sampleCount, _bgmVolume);
+		_bgm->ApplySamples(buffer, sampleCount, _bgmVolume, masterVolumne);
 		if(_bgm->IsPlaybackOver()) {
 			_bgm.reset();
 		}
 	}
 	for(shared_ptr<OggReader> &sfx : _sfx) {
-		sfx->ApplySamples(buffer, sampleCount, _sfxVolume);
+		sfx->ApplySamples(buffer, sampleCount, _sfxVolume, masterVolumne);
 	}
 	_sfx.erase(std::remove_if(_sfx.begin(), _sfx.end(), [](const shared_ptr<OggReader>& o) { return o->IsPlaybackOver(); }), _sfx.end());
 }

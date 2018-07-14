@@ -16,10 +16,10 @@ void BaseExpansionAudio::StreamState(bool saving)
 void BaseExpansionAudio::Clock()
 {
 	if(_console->GetApu()->IsApuEnabled()) {
-		if(EmulationSettings::GetOverclockRate() == 100 || !EmulationSettings::GetOverclockAdjustApu()) {
+		if(_console->GetSettings()->GetOverclockRate() == 100 || !_console->GetSettings()->GetOverclockAdjustApu()) {
 			ClockAudio();
 		} else {
-			_clocksNeeded += 1.0 / ((double)EmulationSettings::GetOverclockRate() / 100);
+			_clocksNeeded += 1.0 / ((double)_console->GetSettings()->GetOverclockRate() / 100);
 			while(_clocksNeeded >= 1.0) {
 				ClockAudio();
 				_clocksNeeded--;

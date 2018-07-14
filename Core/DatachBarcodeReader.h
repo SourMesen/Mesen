@@ -8,7 +8,6 @@
 class DatachBarcodeReader : public BaseControlDevice, public IBarcodeReader
 {
 private:
-	shared_ptr<Console> _console;
 	vector<uint8_t> _data;
 	int32_t _insertCycle = 0;
 	uint64_t _newBarcode = 0;
@@ -29,9 +28,8 @@ protected:
 	}
 
 public:
-	DatachBarcodeReader(shared_ptr<Console> console) : BaseControlDevice(BaseControlDevice::MapperInputPort)
+	DatachBarcodeReader(shared_ptr<Console> console) : BaseControlDevice(console, BaseControlDevice::MapperInputPort)
 	{
-		_console = console;
 	}
 
 	void InternalSetStateFromInput() override

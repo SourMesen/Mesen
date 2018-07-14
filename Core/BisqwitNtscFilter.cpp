@@ -6,8 +6,9 @@
 #include "BisqwitNtscFilter.h"
 #include "PPU.h"
 #include "EmulationSettings.h"
+#include "Console.h"
 
-BisqwitNtscFilter::BisqwitNtscFilter(int resDivider)
+BisqwitNtscFilter::BisqwitNtscFilter(shared_ptr<Console> console, int resDivider) : BaseVideoFilter(console)
 {
 	_resDivider = resDivider;
 	_stopThread = false;
@@ -84,8 +85,8 @@ FrameInfo BisqwitNtscFilter::GetFrameInfo()
 
 void BisqwitNtscFilter::OnBeforeApplyFilter()
 {
-	PictureSettings pictureSettings = EmulationSettings::GetPictureSettings();
-	NtscFilterSettings ntscSettings = EmulationSettings::GetNtscFilterSettings();
+	PictureSettings pictureSettings = _console->GetSettings()->GetPictureSettings();
+	NtscFilterSettings ntscSettings = _console->GetSettings()->GetNtscFilterSettings();
 
 	_keepVerticalRes = ntscSettings.KeepVerticalResolution;
 
@@ -117,7 +118,7 @@ void BisqwitNtscFilter::RecursiveBlend(int iterationCount, uint64_t *output, uin
 	//Blend 2 pixels at once
 	uint32_t width = GetOverscan().GetScreenWidth() * pixelsPerCycle / 2;
 
-	double scanlineIntensity = 1.0 - EmulationSettings::GetPictureSettings().ScanlineIntensity;
+	double scanlineIntensity = 1.0 - _console->GetSettings()->GetPictureSettings().ScanlineIntensity;
 	if(scanlineIntensity < 1.0 && (iterationCount == 2 || _resDivider == 4)) {
 		//Most likely extremely inefficient scanlines, but works
 		for(uint32_t x = 0; x < width; x++) {
@@ -219,7 +220,7 @@ void BisqwitNtscFilter::DecodeFrame(int startRow, int endRow, uint16_t *ppuOutpu
 		//Generate the missing vertical lines
 		outputBuffer = orgBuffer;
 		int lastRow = 239 - GetOverscan().Bottom;
-		bool verticalBlend = EmulationSettings::GetNtscFilterSettings().VerticalBlend;
+		bool verticalBlend = _console->GetSettings()->GetNtscFilterSettings().VerticalBlend;
 		for(int y = startRow; y <= endRow; y++) {
 			uint64_t* currentLine = (uint64_t*)outputBuffer;
 			uint64_t* nextLine = y == lastRow ? currentLine : (uint64_t*)(outputBuffer + rowPixelGap);
@@ -268,7 +269,7 @@ void BisqwitNtscFilter::NtscDecodeLine(int width, const int8_t* signal, uint32_t
 	auto Cos = [=](int pos) -> char { return _sinetable[(pos + 36) % 12 + phase0]; };
 	auto Sin = [=](int pos) -> char { return _sinetable[(pos + 36) % 12 + 3 + phase0]; };
 
-	int brightness = (int)(EmulationSettings::GetPictureSettings().Brightness * 750);
+	int brightness = (int)(_console->GetSettings()->GetPictureSettings().Brightness * 750);
 	int ysum = brightness, isum = 0, qsum = 0;
 	int leftOverscan = GetOverscan().Left * 8;
 	int rightOverscan = width - GetOverscan().Right * 8;

@@ -43,7 +43,7 @@ void GameClientConnection::Shutdown()
 		_console->GetControlManager()->UnregisterInputProvider(this);
 		_console->GetNotificationManager()->SendNotification(ConsoleNotificationType::DisconnectedFromServer);
 		MessageManager::DisplayMessage("NetPlay", "ConnectionLost");
-		EmulationSettings::ClearFlags(EmulationFlags::ForceMaxSpeed);
+		_console->GetSettings()->ClearFlags(EmulationFlags::ForceMaxSpeed);
 	}
 }
 
@@ -122,9 +122,9 @@ void GameClientConnection::ProcessMessage(NetMessage* message)
 
 			_gameLoaded = AttemptLoadGame(gameInfo->GetRomFilename(), gameInfo->GetCrc32Hash());
 			if(gameInfo->IsPaused()) {
-				EmulationSettings::SetFlags(EmulationFlags::Paused);
+				_console->GetSettings()->SetFlags(EmulationFlags::Paused);
 			} else {
-				EmulationSettings::ClearFlags(EmulationFlags::Paused);
+				_console->GetSettings()->ClearFlags(EmulationFlags::Paused);
 			}
 			_console->Resume();
 			break;
@@ -193,10 +193,10 @@ bool GameClientConnection::SetInput(BaseControlDevice *device)
 
 		if(_inputData[port].size() > _minimumQueueSize) {
 			//Too much data, catch up
-			EmulationSettings::SetFlags(EmulationFlags::ForceMaxSpeed);
+			_console->GetSettings()->SetFlags(EmulationFlags::ForceMaxSpeed);
 		} else {
-			EmulationSettings::ClearFlags(EmulationFlags::ForceMaxSpeed);
-			EmulationSettings::SetEmulationSpeed(100);
+			_console->GetSettings()->ClearFlags(EmulationFlags::ForceMaxSpeed);
+			_console->GetSettings()->SetEmulationSpeed(100);
 		}
 
 		device->SetRawState(state);
@@ -207,10 +207,10 @@ bool GameClientConnection::SetInput(BaseControlDevice *device)
 void GameClientConnection::InitControlDevice()
 {
 	if(_controllerPort == BaseControlDevice::ExpDevicePort) {
-		_newControlDevice = ControlManager::CreateExpansionDevice(EmulationSettings::GetExpansionDevice(), _console);
+		_newControlDevice = ControlManager::CreateExpansionDevice(_console->GetSettings()->GetExpansionDevice(), _console);
 	} else {
 		//Pretend we are using port 0 (to use player 1's keybindings during netplay)
-		_newControlDevice = ControlManager::CreateControllerDevice(EmulationSettings::GetControllerType(_controllerPort), 0, _console);
+		_newControlDevice = ControlManager::CreateControllerDevice(_console->GetSettings()->GetControllerType(_controllerPort), 0, _console);
 	}
 }
 

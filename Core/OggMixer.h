@@ -19,9 +19,9 @@ public:
 	OggMixer();
 
 	void SetSampleRate(int sampleRate);
-	void ApplySamples(int16_t* buffer, size_t sampleCount);
+	void ApplySamples(int16_t* buffer, size_t sampleCount, double masterVolumne);
 	
-	void Reset();
+	void Reset(uint32_t sampleRate);
 	bool Play(string filename, bool isSfx, uint32_t startOffset);
 	void SetPlaybackOptions(uint8_t options);
 	void SetPausedFlag(bool paused);

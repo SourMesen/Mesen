@@ -52,7 +52,7 @@ protected:
 	}
 
 public:
-	PowerPad(uint8_t port, KeyMappingSet keyMappings) : BaseControlDevice(port, keyMappings)
+	PowerPad(shared_ptr<Console> console, uint8_t port, KeyMappingSet keyMappings) : BaseControlDevice(console, port, keyMappings)
 	{
 		_useSideA = keyMappings.PowerpadUseSideA;
 	}

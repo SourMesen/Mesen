@@ -23,7 +23,7 @@ protected:
 		SelectPRGPage(1, 0x07);
 		SelectCHRPage(0, 0);
 
-		_mapperControlDevice.reset(new BandaiMicrophone(_console, EmulationSettings::GetControllerKeys(0)));
+		_mapperControlDevice.reset(new BandaiMicrophone(_console, _console->GetSettings()->GetControllerKeys(0)));
 	}
 
 	uint8_t ReadRegister(uint16_t addr) override

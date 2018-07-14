@@ -10,7 +10,6 @@ class Zapper : public BaseControlDevice
 {
 protected:
 	bool HasCoordinates() override { return true; }
-	shared_ptr<Console> _console;
 
 	string GetKeyNames() override
 	{
@@ -21,7 +20,7 @@ protected:
 
 	void InternalSetStateFromInput() override
 	{
-		if(EmulationSettings::InputEnabled()) {
+		if(_console->GetSettings()->InputEnabled()) {
 			SetPressedState(Buttons::Fire, KeyManager::IsMouseButtonPressed(MouseButton::LeftButton));
 		}
 
@@ -39,9 +38,8 @@ protected:
 	}
 
 public:
-	Zapper(shared_ptr<Console> console, uint8_t port) : BaseControlDevice(port)
+	Zapper(shared_ptr<Console> console, uint8_t port) : BaseControlDevice(console, port)
 	{
-		_console = console;
 	}
 
 	uint8_t ReadRAM(uint16_t addr) override
@@ -66,7 +64,7 @@ public:
 
 		int32_t scanline = ppu->GetCurrentScanline();
 		int32_t cycle = ppu->GetCurrentCycle();
-		int radius = (int)EmulationSettings::GetZapperDetectionRadius();
+		int radius = (int)console->GetSettings()->GetZapperDetectionRadius();
 
 		if(pos.X >= 0 && pos.Y >= 0) {
 			for(int yOffset = -radius; yOffset <= radius; yOffset++) {

@@ -1,9 +1,9 @@
 #include "stdafx.h"
 #include "StereoDelayFilter.h"
 
-void StereoDelayFilter::ApplyFilter(int16_t* stereoBuffer, size_t sampleCount, uint32_t sampleRate)
+void StereoDelayFilter::ApplyFilter(int16_t* stereoBuffer, size_t sampleCount, uint32_t sampleRate, int32_t stereoDelay)
 {
-	size_t delaySampleCount = (int32_t)((double)EmulationSettings::GetStereoDelay() / 1000 * sampleRate);
+	size_t delaySampleCount = (int32_t)((double)stereoDelay / 1000 * sampleRate);
 	if(delaySampleCount != _lastDelay) {
 		_delayedSamplesLeft.clear();
 		_delayedSamplesRight.clear();

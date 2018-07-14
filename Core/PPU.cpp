@@ -15,6 +15,7 @@
 PPU::PPU(shared_ptr<Console> console)
 {
 	_console = console;
+	_settings = _console->GetSettings();
 
 	_outputBuffers[0] = new uint16_t[256 * 240];
 	_outputBuffers[1] = new uint16_t[256 * 240];
@@ -27,8 +28,8 @@ PPU::PPU(shared_ptr<Console> console)
 		0x09, 0x01, 0x34, 0x03, 0x00, 0x04, 0x00, 0x14, 0x08, 0x3A, 0x00, 0x02, 0x00, 0x20, 0x2C, 0x08 };
 	memcpy(_paletteRAM, paletteRamBootValues, sizeof(_paletteRAM));
 
-	BaseMapper::InitializeRam(_spriteRAM, 0x100);
-	BaseMapper::InitializeRam(_secondarySpriteRAM, 0x20);
+	_console->GetMapper()->InitializeRam(_spriteRAM, 0x100);
+	_console->GetMapper()->InitializeRam(_secondarySpriteRAM, 0x20);
 
 	Reset();
 }
@@ -98,7 +99,7 @@ void PPU::Reset()
 	_updateVramAddr = 0;
 
 	memset(_oamDecayCycles, 0, sizeof(_oamDecayCycles));
-	_enableOamDecay = EmulationSettings::CheckFlag(EmulationFlags::EnableOamDecay);
+	_enableOamDecay = _settings->CheckFlag(EmulationFlags::EnableOamDecay);
 
 	UpdateMinimumDrawCycles();
 }
@@ -132,10 +133,10 @@ void PPU::SetNesModel(NesModel model)
 			break;
 	}
 
-	_nmiScanline += EmulationSettings::GetPpuExtraScanlinesBeforeNmi();
+	_nmiScanline += _settings->GetPpuExtraScanlinesBeforeNmi();
 	_palSpriteEvalScanline = _nmiScanline + 24;
-	_standardVblankEnd += EmulationSettings::GetPpuExtraScanlinesBeforeNmi();
-	_vblankEnd += EmulationSettings::GetPpuExtraScanlinesAfterNmi() + EmulationSettings::GetPpuExtraScanlinesBeforeNmi();
+	_standardVblankEnd += _settings->GetPpuExtraScanlinesBeforeNmi();
+	_vblankEnd += _settings->GetPpuExtraScanlinesAfterNmi() + _settings->GetPpuExtraScanlinesBeforeNmi();
 }
 
 void PPU::GetState(PPUDebugState &state)
@@ -236,7 +237,7 @@ uint8_t PPU::ReadRAM(uint16_t addr)
 			returnValue = _state.Status;
 			openBusMask = 0x1F;
 
-			switch(EmulationSettings::GetPpuModel()) {
+			switch(_settings->GetPpuModel()) {
 				case PpuModel::Ppu2C05A: openBusMask = 0x00; returnValue |= 0x1B; break;
 				case PpuModel::Ppu2C05B: openBusMask = 0x00; returnValue |= 0x3D; break;
 				case PpuModel::Ppu2C05C: openBusMask = 0x00; returnValue |= 0x1C; break;
@@ -247,7 +248,7 @@ uint8_t PPU::ReadRAM(uint16_t addr)
 			break;
 
 		case PPURegisters::SpriteData:
-			if(!EmulationSettings::CheckFlag(EmulationFlags::DisablePpu2004Reads)) {
+			if(!_settings->CheckFlag(EmulationFlags::DisablePpu2004Reads)) {
 				if(_scanline <= 239 && IsRenderingEnabled()) {
 					//While the screen is begin drawn
 					if(_cycle >= 257 && _cycle <= 320) {
@@ -275,7 +276,7 @@ uint8_t PPU::ReadRAM(uint16_t addr)
 				returnValue = _memoryReadBuffer;
 				_memoryReadBuffer = ReadVram(_ppuBusAddress & 0x3FFF, MemoryOperationType::Read);
 
-				if((_state.VideoRamAddr & 0x3FFF) >= 0x3F00 && !EmulationSettings::CheckFlag(EmulationFlags::DisablePaletteRead)) {
+				if((_state.VideoRamAddr & 0x3FFF) >= 0x3F00 && !_settings->CheckFlag(EmulationFlags::DisablePaletteRead)) {
 					returnValue = ReadPaletteRAM(_state.VideoRamAddr) | (_openBus & 0xC0);
 					_console->DebugProcessVramReadOperation(MemoryOperationType::Read, _state.VideoRamAddr & 0x3FFF, returnValue);
 					openBusMask = 0xC0;
@@ -303,14 +304,14 @@ void PPU::WriteRAM(uint16_t addr, uint8_t value)
 
 	switch(GetRegisterID(addr)) {
 		case PPURegisters::Control:
-			if(EmulationSettings::GetPpuModel() >= PpuModel::Ppu2C05A && EmulationSettings::GetPpuModel() <= PpuModel::Ppu2C05E) {
+			if(_settings->GetPpuModel() >= PpuModel::Ppu2C05A && _settings->GetPpuModel() <= PpuModel::Ppu2C05E) {
 				SetMaskRegister(value);
 			} else {
 				SetControlRegister(value);
 			}
 			break;
 		case PPURegisters::Mask:
-			if(EmulationSettings::GetPpuModel() >= PpuModel::Ppu2C05A && EmulationSettings::GetPpuModel() <= PpuModel::Ppu2C05E) {
+			if(_settings->GetPpuModel() >= PpuModel::Ppu2C05A && _settings->GetPpuModel() <= PpuModel::Ppu2C05E) {
 				SetControlRegister(value);
 			} else {
 				SetMaskRegister(value);
@@ -438,8 +439,8 @@ void PPU::SetControlRegister(uint8_t value)
 
 void PPU::UpdateMinimumDrawCycles()
 {
-	_minimumDrawBgCycle = _flags.BackgroundEnabled ? ((_flags.BackgroundMask || EmulationSettings::CheckFlag(EmulationFlags::ForceBackgroundFirstColumn)) ? 0 : 8) : 300;
-	_minimumDrawSpriteCycle = _flags.SpritesEnabled ? ((_flags.SpriteMask || EmulationSettings::CheckFlag(EmulationFlags::ForceSpritesFirstColumn)) ? 0 : 8) : 300;
+	_minimumDrawBgCycle = _flags.BackgroundEnabled ? ((_flags.BackgroundMask || _settings->CheckFlag(EmulationFlags::ForceBackgroundFirstColumn)) ? 0 : 8) : 300;
+	_minimumDrawSpriteCycle = _flags.SpritesEnabled ? ((_flags.SpriteMask || _settings->CheckFlag(EmulationFlags::ForceSpritesFirstColumn)) ? 0 : 8) : 300;
 	_minimumDrawSpriteStandardCycle = _flags.SpritesEnabled ? (_flags.SpriteMask ? 0 : 8) : 300;
 }
 
@@ -667,10 +668,10 @@ void PPU::LoadSprite(uint8_t spriteY, uint8_t tileIndex, uint8_t attributes, uin
 
 void PPU::LoadExtraSprites()
 {
-	if(_spriteCount == 8 && EmulationSettings::CheckFlag(EmulationFlags::RemoveSpriteLimit)) {
+	if(_spriteCount == 8 && _settings->CheckFlag(EmulationFlags::RemoveSpriteLimit)) {
 		bool loadExtraSprites = true;
 		
-		if(EmulationSettings::CheckFlag(EmulationFlags::AdaptiveSpriteLimit)) {
+		if(_settings->CheckFlag(EmulationFlags::AdaptiveSpriteLimit)) {
 			uint16_t lastPosition = 0xFFFF;
 			uint8_t identicalSpriteCount = 0;
 			uint8_t maxIdenticalSpriteCount = 0;
@@ -729,7 +730,7 @@ uint8_t PPU::GetPixelColor()
 	if(_cycle > _minimumDrawBgCycle) {
 		//BackgroundMask = false: Hide background in leftmost 8 pixels of screen
 		spriteBgColor = (((_state.LowBitShift << offset) & 0x8000) >> 15) | (((_state.HighBitShift << offset) & 0x8000) >> 14);
-		if(EmulationSettings::GetBackgroundEnabled()) {
+		if(_settings->GetBackgroundEnabled()) {
 			backgroundColor = spriteBgColor;
 		}
 	}
@@ -759,7 +760,7 @@ uint8_t PPU::GetPixelColor()
 						_console->DebugProcessEvent(EventType::SpriteZeroHit);
 					}
 
-					if(EmulationSettings::GetSpritesEnabled() && (backgroundColor == 0 || !_spriteTiles[i].BackgroundPriority)) {
+					if(_settings->GetSpritesEnabled() && (backgroundColor == 0 || !_spriteTiles[i].BackgroundPriority)) {
 						//Check sprite priority
 						return _lastSprite->PaletteOffset + spriteColor;
 					}
@@ -840,7 +841,7 @@ void PPU::ProcessScanline()
 			if(_cycle == 1) {
 				_statusFlags.VerticalBlank = false;
 			}
-			if(_state.SpriteRamAddr >= 0x08 && IsRenderingEnabled() && !EmulationSettings::CheckFlag(EmulationFlags::DisableOamAddrBug)) {
+			if(_state.SpriteRamAddr >= 0x08 && IsRenderingEnabled() && !_settings->CheckFlag(EmulationFlags::DisableOamAddrBug)) {
 				//This should only be done if rendering is enabled (otherwise oam_stress test fails immediately)
 				//"If OAMADDR is not less than eight when rendering starts, the eight bytes starting at OAMADDR & 0xF8 are copied to the first eight bytes of OAM"
 				WriteSpriteRam(_cycle - 1, ReadSpriteRam((_state.SpriteRamAddr & 0xF8) + _cycle - 1));
@@ -893,7 +894,7 @@ void PPU::ProcessScanline()
 		if(IsRenderingEnabled()) {
 			ReadVram(GetNameTableAddr());
 
-			if(_scanline == -1 && _cycle == 339 && (_frameCount & 0x01) && _nesModel == NesModel::NTSC && EmulationSettings::GetPpuModel() == PpuModel::Ppu2C02) {
+			if(_scanline == -1 && _cycle == 339 && (_frameCount & 0x01) && _nesModel == NesModel::NTSC && _settings->GetPpuModel() == PpuModel::Ppu2C02) {
 				//This behavior is NTSC-specific - PAL frames are always the same number of cycles
 				//"With rendering enabled, each odd PPU frame is one PPU clock shorter than normal" (skip from 339 to 0, going over 340)
 				_cycle = 340;
@@ -1070,7 +1071,7 @@ void PPU::SendFrame()
 		_console->GetVideoDecoder()->UpdateFrame(_currentOutputBuffer);
 	}
 
-	_enableOamDecay = EmulationSettings::CheckFlag(EmulationFlags::EnableOamDecay);
+	_enableOamDecay = _settings->CheckFlag(EmulationFlags::EnableOamDecay);
 #endif
 }
 
@@ -1128,7 +1129,7 @@ void PPU::Exec()
 		
 		UpdateApuStatus();
 		
-		if(_scanline == EmulationSettings::GetInputPollScanline()) {
+		if(_scanline == _settings->GetInputPollScanline()) {
 			_console->GetControlManager()->UpdateInputState();
 		}
 
@@ -1208,7 +1209,7 @@ void PPU::UpdateState()
 
 void PPU::ProcessCpuClock()
 {
-	if(!EmulationSettings::HasOverclock()) {
+	if(!_settings->HasOverclock()) {
 		Exec();
 		Exec();
 		Exec();
@@ -1219,9 +1220,9 @@ void PPU::ProcessCpuClock()
 	} else {
 		if(_nesModel == NesModel::PAL) {
 			//PAL PPU runs 3.2 clocks for every CPU clock, so we need to run an extra clock every 5 CPU clocks
-			_cyclesNeeded += 3.2 / (EmulationSettings::GetOverclockRate() / 100.0);
+			_cyclesNeeded += 3.2 / (_settings->GetOverclockRate() / 100.0);
 		} else {
-			_cyclesNeeded += 3.0 / (EmulationSettings::GetOverclockRate() / 100.0);
+			_cyclesNeeded += 3.0 / (_settings->GetOverclockRate() / 100.0);
 		}
 
 		while(_cyclesNeeded >= 1.0) {
@@ -1246,6 +1247,14 @@ uint8_t* PPU::GetSpriteRam()
 	return _spriteRAM;
 }
 
+uint32_t PPU::GetPixelBrightness(uint8_t x, uint8_t y)
+{
+	//Used by Zapper, gives a rough approximation of the brightness level of the specific pixel
+	uint16_t pixelData = _currentOutputBuffer[y << 8 | x];
+	uint32_t argbColor = _settings->GetRgbPalette()[pixelData & 0x3F];
+	return (argbColor & 0xFF) + ((argbColor >> 8) & 0xFF) + ((argbColor >> 16) & 0xFF);
+}
+
 void PPU::StreamState(bool saving)
 {
 	ArrayInfo<uint8_t> paletteRam = { _paletteRAM, 0x20 };
@@ -1258,9 +1267,9 @@ void PPU::StreamState(bool saving)
 	bool disableOamAddrBug = false;
 
 	if(saving) {
-		disablePpu2004Reads = EmulationSettings::CheckFlag(EmulationFlags::DisablePpu2004Reads);
-		disablePaletteRead = EmulationSettings::CheckFlag(EmulationFlags::DisablePaletteRead);
-		disableOamAddrBug = EmulationSettings::CheckFlag(EmulationFlags::DisableOamAddrBug);
+		disablePpu2004Reads = _settings->CheckFlag(EmulationFlags::DisablePpu2004Reads);
+		disablePaletteRead = _settings->CheckFlag(EmulationFlags::DisablePaletteRead);
+		disableOamAddrBug = _settings->CheckFlag(EmulationFlags::DisableOamAddrBug);
 	}
 
 	uint16_t unusedSpriteDmaAddr = 0;
@@ -1283,9 +1292,9 @@ void PPU::StreamState(bool saving)
 	}
 
 	if(!saving) {
-		EmulationSettings::SetFlagState(EmulationFlags::DisablePpu2004Reads, disablePpu2004Reads);
-		EmulationSettings::SetFlagState(EmulationFlags::DisablePaletteRead, disablePaletteRead);
-		EmulationSettings::SetFlagState(EmulationFlags::DisableOamAddrBug, disableOamAddrBug);
+		_settings->SetFlagState(EmulationFlags::DisablePpu2004Reads, disablePpu2004Reads);
+		_settings->SetFlagState(EmulationFlags::DisablePaletteRead, disablePaletteRead);
+		_settings->SetFlagState(EmulationFlags::DisableOamAddrBug, disableOamAddrBug);
 
 		SetNesModel(_nesModel);
 		UpdateMinimumDrawCycles();

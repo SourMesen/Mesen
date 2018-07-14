@@ -6,12 +6,15 @@
 #include "ControlDeviceState.h"
 #include "../Utilities/SimpleLock.h"
 
+class Console;
+
 class BaseControlDevice : public Snapshotable
 {
 private:
 	ControlDeviceState _state;
 
 protected:
+	shared_ptr<Console> _console;
 	vector<KeyMapping> _keyMappings;
 	bool _strobe;
 	uint8_t _port;
@@ -49,7 +52,7 @@ public:
 	static constexpr uint8_t ExpDevicePort2 = 7;
 	static constexpr uint8_t PortCount = ExpDevicePort2 + 1;
 
-	BaseControlDevice(uint8_t port, KeyMappingSet keyMappingSet = KeyMappingSet());
+	BaseControlDevice(shared_ptr<Console> console, uint8_t port, KeyMappingSet keyMappingSet = KeyMappingSet());
 	virtual ~BaseControlDevice();
 
 	uint8_t GetPort();

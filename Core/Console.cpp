@@ -46,9 +46,22 @@
 #include "NotificationManager.h"
 #include "HistoryViewer.h"
 
-Console::Console(shared_ptr<Console> master)
+Console::Console(shared_ptr<Console> master, EmulationSettings* initialSettings)
 {
 	_master = master;
+	
+	if(_master) {
+		//Slave console should use the same settings as the master
+		_settings = _master->_settings;
+	} else {
+		if(initialSettings) {
+			_settings.reset(new EmulationSettings(*initialSettings));
+		} else {
+			_settings.reset(new EmulationSettings());
+		}
+		KeyManager::SetSettings(_settings.get());
+	}
+
 	_model = NesModel::NTSC;
 }
 
@@ -295,17 +308,17 @@ bool Console::Initialize(VirtualFile &romFile, VirtualFile &patchFile)
 
 			switch(romInfo.System) {
 				case GameSystem::FDS:
-					EmulationSettings::SetPpuModel(PpuModel::Ppu2C02);
+					_settings->SetPpuModel(PpuModel::Ppu2C02);
 					_systemActionManager.reset(new FdsSystemActionManager(shared_from_this(), _mapper));
 					break;
 				
 				case GameSystem::VsSystem:
-					EmulationSettings::SetPpuModel(romInfo.VsPpuModel);
+					_settings->SetPpuModel(romInfo.VsPpuModel);
 					_systemActionManager.reset(new VsSystemActionManager(shared_from_this()));
 					break;
 				
 				default: 
-					EmulationSettings::SetPpuModel(PpuModel::Ppu2C02);
+					_settings->SetPpuModel(PpuModel::Ppu2C02);
 					_systemActionManager.reset(new SystemActionManager(shared_from_this())); break;
 			}
 
@@ -381,10 +394,10 @@ bool Console::Initialize(VirtualFile &romFile, VirtualFile &patchFile)
 				string modelName = _model == NesModel::PAL ? "PAL" : (_model == NesModel::Dendy ? "Dendy" : "NTSC");
 				string messageTitle = MessageManager::Localize("GameLoaded") + " (" + modelName + ")";
 				MessageManager::DisplayMessage(messageTitle, FolderUtilities::GetFilename(GetRomInfo().RomName, false));
-				if(EmulationSettings::GetOverclockRate() != 100) {
-					MessageManager::DisplayMessage("ClockRate", std::to_string(EmulationSettings::GetOverclockRate()) + "%");
+				if(_settings->GetOverclockRate() != 100) {
+					MessageManager::DisplayMessage("ClockRate", std::to_string(_settings->GetOverclockRate()) + "%");
 				}
-				EmulationSettings::ClearFlags(EmulationFlags::ForceMaxSpeed);
+				_settings->ClearFlags(EmulationFlags::ForceMaxSpeed);
 
 				if(_slave) {
 					_notificationManager->SendNotification(ConsoleNotificationType::VsDualSystemStarted);
@@ -436,6 +449,11 @@ shared_ptr<SoundMixer> Console::GetSoundMixer()
 shared_ptr<NotificationManager> Console::GetNotificationManager()
 {
 	return _notificationManager;
+}
+
+EmulationSettings* Console::GetSettings()
+{
+	return _settings.get();
 }
 
 bool Console::IsDualSystem()
@@ -552,7 +570,7 @@ void Console::ResetComponents(bool softReset)
 	_soundMixer->StopAudio(true);
 
 	_memoryManager->Reset(softReset);
-	if(!EmulationSettings::CheckFlag(EmulationFlags::DisablePpuReset) || !softReset) {
+	if(!_settings->CheckFlag(EmulationFlags::DisablePpuReset) || !softReset) {
 		_ppu->Reset();
 	}
 	_apu->Reset(softReset);
@@ -638,7 +656,7 @@ void Console::RunSingleFrame()
 		}
 	}
 
-	EmulationSettings::DisableOverclocking(_disableOcNextFrame || NsfMapper::GetInstance());
+	_settings->DisableOverclocking(_disableOcNextFrame || NsfMapper::GetInstance());
 	_disableOcNextFrame = false;
 
 	_systemActionManager->ProcessSystemActions();
@@ -704,7 +722,7 @@ void Console::Run()
 					_slave->_soundMixer->ProcessEndOfFrame();
 				}
 
-				bool displayDebugInfo = EmulationSettings::CheckFlag(EmulationFlags::DisplayDebugInfo);
+				bool displayDebugInfo = _settings->CheckFlag(EmulationFlags::DisplayDebugInfo);
 				if(displayDebugInfo) {
 					DisplayDebugInformation(clockTimer, lastFrameTimer, lastFrameMin, lastFrameMax, timeLagData);
 					if(_slave) {
@@ -717,7 +735,7 @@ void Console::Run()
 					_historyViewer->ProcessEndOfFrame();
 				}
 				_rewindManager->ProcessEndOfFrame();
-				EmulationSettings::DisableOverclocking(_disableOcNextFrame || NsfMapper::GetInstance());
+				_settings->DisableOverclocking(_disableOcNextFrame || NsfMapper::GetInstance());
 				_disableOcNextFrame = false;
 
 				//Sleep until we're ready to start the next frame
@@ -732,9 +750,9 @@ void Console::Run()
 
 					_runLock.Acquire();
 				}
-
-				bool paused = EmulationSettings::IsPaused() || _paused;
-				if(paused && !_stop) {
+								
+				bool pausedRequired = _settings->NeedsPause();
+				if(pausedRequired && !_stop && !_settings->CheckFlag(EmulationFlags::DebuggerWindowEnabled)) {
 					_notificationManager->SendNotification(ConsoleNotificationType::GamePaused);
 
 					//Prevent audio from looping endlessly while game is paused
@@ -747,24 +765,21 @@ void Console::Run()
 
 					PlatformUtilities::EnableScreensaver();
 					PlatformUtilities::RestoreTimerResolution();
-					while(paused && !_stop) {
+					while(pausedRequired && !_stop && !_settings->CheckFlag(EmulationFlags::DebuggerWindowEnabled)) {
 						//Sleep until emulation is resumed
 						std::this_thread::sleep_for(std::chrono::duration<int, std::milli>(30));
-						paused = EmulationSettings::IsPaused() || _paused;
+						pausedRequired = _settings->NeedsPause();
+						_paused = true;
 					}
-
-					if(EmulationSettings::CheckFlag(EmulationFlags::DebuggerWindowEnabled)) {
-						//Prevent pausing when debugger is active
-						EmulationSettings::ClearFlags(EmulationFlags::Paused);
-					}
-
+					_paused = false;
+					
 					PlatformUtilities::DisableScreensaver();
 					_runLock.Acquire();
 					_notificationManager->SendNotification(ConsoleNotificationType::GameResumed);
 					lastFrameTimer.Reset();
 				}
 
-				if(EmulationSettings::CheckFlag(EmulationFlags::UseHighResolutionTimer)) {
+				if(_settings->CheckFlag(EmulationFlags::UseHighResolutionTimer)) {
 					PlatformUtilities::EnableHighResolutionTimer();
 				} else {
 					PlatformUtilities::RestoreTimerResolution();
@@ -773,7 +788,7 @@ void Console::Run()
 				_systemActionManager->ProcessSystemActions();
 
 				//Get next target time, and adjust based on whether we are ahead or behind
-				double timeLag = EmulationSettings::GetEmulationSpeed() == 0 ? 0 : clockTimer.GetElapsedMS() - targetTime;
+				double timeLag = _settings->GetEmulationSpeed() == 0 ? 0 : clockTimer.GetElapsedMS() - targetTime;
 				if(displayDebugInfo) {
 					timeLagData[timeLagDataIndex] = timeLag;
 					timeLagDataIndex = (timeLagDataIndex + 1) & 0x0F;
@@ -820,8 +835,7 @@ void Console::Run()
 	PlatformUtilities::EnableScreensaver();
 	PlatformUtilities::RestoreTimerResolution();
 
-	EmulationSettings::ClearFlags(EmulationFlags::Paused);
-	EmulationSettings::ClearFlags(EmulationFlags::ForceMaxSpeed);
+	_settings->ClearFlags(EmulationFlags::ForceMaxSpeed);
 
 	_initialized = false;
 
@@ -853,7 +867,7 @@ bool Console::IsRunning()
 	}
 }
 
-bool Console::IsPaused()
+bool Console::IsExecutionStopped()
 {
 	if(_master) {
 		//For slave CPU, return the master's state
@@ -863,25 +877,24 @@ bool Console::IsPaused()
 	}
 }
 
-bool Console::GetPauseStatus()
+bool Console::IsPaused()
 {
-	return _paused;
-}
-
-void Console::SetPauseStatus(bool paused)
-{
-	_paused = paused;
+	if(_master) {
+		return _master->_paused;
+	} else {
+		return _paused;
+	}
 }
 
 void Console::UpdateNesModel(bool sendNotification)
 {
 	bool configChanged = false;
-	if(EmulationSettings::NeedControllerUpdate()) {
+	if(_settings->NeedControllerUpdate()) {
 		_controlManager->UpdateControlDevices();
 		configChanged = true;
 	}
 
-	NesModel model = EmulationSettings::GetNesModel();
+	NesModel model = _settings->GetNesModel();
 	if(model == NesModel::Auto) {
 		switch(_mapper->GetRomInfo().System) {
 			case GameSystem::NesPal: model = NesModel::PAL; break;
@@ -909,7 +922,7 @@ void Console::UpdateNesModel(bool sendNotification)
 
 double Console::GetFrameDelay()
 {
-	uint32_t emulationSpeed = EmulationSettings::GetEmulationSpeed();
+	uint32_t emulationSpeed = _settings->GetEmulationSpeed();
 	double frameDelay;
 	if(emulationSpeed == 0) {
 		frameDelay = 0;
@@ -917,9 +930,9 @@ double Console::GetFrameDelay()
 		//60.1fps (NTSC), 50.01fps (PAL/Dendy)
 		switch(_model) {
 			default:
-			case NesModel::NTSC: frameDelay = EmulationSettings::CheckFlag(EmulationFlags::IntegerFpsMode) ? 16.6666666666666666667 : 16.63926405550947; break;
+			case NesModel::NTSC: frameDelay = _settings->CheckFlag(EmulationFlags::IntegerFpsMode) ? 16.6666666666666666667 : 16.63926405550947; break;
 			case NesModel::PAL:
-			case NesModel::Dendy: frameDelay = EmulationSettings::CheckFlag(EmulationFlags::IntegerFpsMode) ? 20 : 19.99720920217466; break;
+			case NesModel::Dendy: frameDelay = _settings->CheckFlag(EmulationFlags::IntegerFpsMode) ? 20 : 19.99720920217466; break;
 		}
 		frameDelay /= (double)emulationSpeed / 100.0;
 	}
@@ -999,7 +1012,7 @@ void Console::BreakIfDebugging()
 	shared_ptr<Debugger> debugger = _debugger;
 	if(debugger) {
 		debugger->BreakImmediately();
-	} else if(EmulationSettings::CheckFlag(EmulationFlags::BreakOnCrash)) {
+	} else if(_settings->CheckFlag(EmulationFlags::BreakOnCrash)) {
 		//When "Break on Crash" is enabled, open the debugger and break immediately if a crash occurs
 		debugger = GetDebugger(true);
 		debugger->BreakImmediately();
@@ -1072,7 +1085,7 @@ void Console::LoadHdPack(VirtualFile &romFile, VirtualFile &patchFile)
 {
 	_hdData.reset();
 	_hdAudioDevice.reset();
-	if(EmulationSettings::CheckFlag(EmulationFlags::UseHdPacks)) {
+	if(_settings->CheckFlag(EmulationFlags::UseHdPacks)) {
 		_hdData.reset(new HdPackData());
 		if(!HdPackLoader::LoadHdNesPack(romFile, *_hdData.get())) {
 			_hdData.reset();
@@ -1378,7 +1391,7 @@ void Console::DisplayDebugInformation(Timer &clockTimer, Timer &lastFrameTimer, 
 	_debugHud->DrawString(10, 10, "Audio Stats", 0xFFFFFF, 0xFF000000, 1, startFrame);
 	_debugHud->DrawString(10, 21, "Latency: ", 0xFFFFFF, 0xFF000000, 1, startFrame);
 	
-	int color = (stats.AverageLatency > 0 && std::abs(stats.AverageLatency - EmulationSettings::GetAudioLatency()) > 3) ? 0xFF0000 : 0xFFFFFF;
+	int color = (stats.AverageLatency > 0 && std::abs(stats.AverageLatency - _settings->GetAudioLatency()) > 3) ? 0xFF0000 : 0xFFFFFF;
 	std::stringstream ss;
 	ss << std::fixed << std::setprecision(2) << stats.AverageLatency << " ms";
 	_debugHud->DrawString(54, 21, ss.str(), color, 0xFF000000, 1, startFrame);

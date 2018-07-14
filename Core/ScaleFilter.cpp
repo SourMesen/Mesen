@@ -62,7 +62,7 @@ void ScaleFilter::UpdateOutputBuffer(uint32_t width, uint32_t height)
 	}
 }
 
-uint32_t* ScaleFilter::ApplyFilter(uint32_t *inputArgbBuffer, uint32_t width, uint32_t height)
+uint32_t* ScaleFilter::ApplyFilter(uint32_t *inputArgbBuffer, uint32_t width, uint32_t height, double scanlineIntensity)
 {
 	UpdateOutputBuffer(width, height);
 
@@ -82,7 +82,8 @@ uint32_t* ScaleFilter::ApplyFilter(uint32_t *inputArgbBuffer, uint32_t width, ui
 		ApplyPrescaleFilter(inputArgbBuffer);
 	}
 
-	double scanlineIntensity = 1.0 - EmulationSettings::GetPictureSettings().ScanlineIntensity;
+	scanlineIntensity = 1.0 - scanlineIntensity;
+
 	if(scanlineIntensity < 1.0) {
 		for(int y = 1, yMax = height * _filterScale; y < yMax; y += 2) {
 			for(int x = 0, xMax = width * _filterScale; x < xMax; x++) {

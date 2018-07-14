@@ -3,6 +3,7 @@
 #include "Types.h"
 
 class IKeyManager;
+class EmulationSettings;
 enum class MouseButton;
 
 class KeyManager
@@ -12,9 +13,12 @@ private:
 	static MousePosition _mousePosition;
 	static atomic<int16_t> _xMouseMovement;
 	static atomic<int16_t> _yMouseMovement;
+	static EmulationSettings* _settings;
 
 public:
 	static void RegisterKeyManager(IKeyManager* keyManager);
+	static void SetSettings(EmulationSettings* settings);
+
 	static void RefreshKeyState();
 	static bool IsKeyPressed(uint32_t keyCode);
 	static bool IsMouseButtonPressed(MouseButton button);

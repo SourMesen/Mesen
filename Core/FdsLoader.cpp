@@ -151,10 +151,5 @@ RomData FdsLoader::LoadRom(vector<uint8_t>& romFile, string filename)
 		romData.BiosMissing = true;
 	}
 
-	//Setup default controllers
-	if(!_checkOnly && EmulationSettings::CheckFlag(EmulationFlags::AutoConfigureInput)) {
-		GameDatabase::InitializeInputDevices(GameInputType::FamicomControllers, GameSystem::FDS);
-	}
-
 	return romData;
 }

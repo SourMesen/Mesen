@@ -2,8 +2,9 @@
 #include "NtscFilter.h"
 #include "PPU.h"
 #include "EmulationSettings.h"
+#include "Console.h"
 
-NtscFilter::NtscFilter()
+NtscFilter::NtscFilter(shared_ptr<Console> console) : BaseVideoFilter(console)
 {
 	memset(_basePalette, 0, 64 * 3);
 	_ntscData = new nes_ntsc_t();
@@ -39,7 +40,7 @@ FrameInfo NtscFilter::GetFrameInfo()
 void NtscFilter::OnBeforeApplyFilter()
 {
 	bool paletteChanged = false;
-	uint32_t* palette = EmulationSettings::GetRgbPalette();
+	uint32_t* palette = _console->GetSettings()->GetRgbPalette();
 	for(int i = 0; i < 64; i++) {
 		uint8_t r = (palette[i] >> 16) & 0xFF;
 		uint8_t g = (palette[i] >> 8) & 0xFF;
@@ -54,8 +55,8 @@ void NtscFilter::OnBeforeApplyFilter()
 		}
 	}
 
-	PictureSettings pictureSettings = EmulationSettings::GetPictureSettings();
-	NtscFilterSettings ntscSettings = EmulationSettings::GetNtscFilterSettings();
+	PictureSettings pictureSettings = _console->GetSettings()->GetPictureSettings();
+	NtscFilterSettings ntscSettings = _console->GetSettings()->GetNtscFilterSettings();
 
 	_keepVerticalRes = ntscSettings.KeepVerticalResolution;
 
@@ -76,7 +77,7 @@ void NtscFilter::OnBeforeApplyFilter()
 		_ntscSetup.resolution = ntscSettings.Resolution;
 		_ntscSetup.sharpness = ntscSettings.Sharpness;
 
-		_ntscSetup.base_palette = EmulationSettings::IsDefaultPalette() ? nullptr : _basePalette;
+		_ntscSetup.base_palette = _console->GetSettings()->IsDefaultPalette() ? nullptr : _basePalette;
 
 		nes_ntsc_init(_ntscData, &_ntscSetup);
 	}
@@ -105,8 +106,8 @@ void NtscFilter::GenerateArgbFrame(uint32_t *ntscBuffer)
 			ntscBuffer += rowWidth;
 		}
 	} else {
-		double scanlineIntensity = 1.0 - EmulationSettings::GetPictureSettings().ScanlineIntensity;
-		bool verticalBlend = EmulationSettings::GetNtscFilterSettings().VerticalBlend;
+		double scanlineIntensity = 1.0 - _console->GetSettings()->GetPictureSettings().ScanlineIntensity;
+		bool verticalBlend = _console->GetSettings()->GetNtscFilterSettings().VerticalBlend;
 
 		for(int y = PPU::ScreenHeight - 1 - overscan.Bottom; y >= (int)overscan.Top; y--) {
 			uint32_t const* in = ntscBuffer + y * rowWidth;

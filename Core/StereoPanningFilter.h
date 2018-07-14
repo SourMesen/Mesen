@@ -8,8 +8,8 @@ private:
 	double _leftChannelFactor = 0;
 	double _rightChannelFactor = 0;
 
-	void UpdateFactors();
+	void UpdateFactors(double angle);
 
 public:
-	void ApplyFilter(int16_t* stereoBuffer, size_t sampleCount);
+	void ApplyFilter(int16_t* stereoBuffer, size_t sampleCount, double angle);
 };

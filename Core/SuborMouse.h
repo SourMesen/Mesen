@@ -27,11 +27,11 @@ protected:
 	{
 		SetPressedState(Buttons::Left, KeyManager::IsMouseButtonPressed(MouseButton::LeftButton));
 		SetPressedState(Buttons::Right, KeyManager::IsMouseButtonPressed(MouseButton::RightButton));
-		SetMovement(KeyManager::GetMouseMovement(EmulationSettings::GetMouseSensitivity(MouseDevice::SuborMouse)));
+		SetMovement(KeyManager::GetMouseMovement(_console->GetSettings()->GetMouseSensitivity(MouseDevice::SuborMouse)));
 	}
 
 public:
-	SuborMouse(uint8_t port) : BaseControlDevice(port)
+	SuborMouse(shared_ptr<Console> console, uint8_t port) : BaseControlDevice(console, port)
 	{
 	}
 

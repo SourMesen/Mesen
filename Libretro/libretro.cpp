@@ -120,11 +120,11 @@ extern "C" {
 		_keyManager.reset(new LibretroKeyManager(_console));
 		_messageManager.reset(new LibretroMessageManager(logCallback, retroEnv));
 
-		EmulationSettings::SetFlags(EmulationFlags::FdsAutoLoadDisk);
-		EmulationSettings::SetFlags(EmulationFlags::AutoConfigureInput);
-		EmulationSettings::SetSampleRate(48000);
-		EmulationSettings::SetAutoSaveOptions(0, false);
-		EmulationSettings::SetRewindBufferSize(0);
+		_console->GetSettings()->SetFlags(EmulationFlags::FdsAutoLoadDisk);
+		_console->GetSettings()->SetFlags(EmulationFlags::AutoConfigureInput);
+		_console->GetSettings()->SetSampleRate(48000);
+		_console->GetSettings()->SetAutoSaveOptions(0, false);
+		_console->GetSettings()->SetRewindBufferSize(0);
 	}
 
 	RETRO_API void retro_deinit()
@@ -267,9 +267,9 @@ extern "C" {
 		if(retroEnv(RETRO_ENVIRONMENT_GET_VARIABLE, &var)) {
 			string value = string(var.value);
 			if(value == "disabled") {
-				EmulationSettings::ClearFlags(flagValue);
+				_console->GetSettings()->ClearFlags(flagValue);
 			} else {
-				EmulationSettings::SetFlags(flagValue);
+				_console->GetSettings()->SetFlags(flagValue);
 			}
 		}
 	}
@@ -277,7 +277,7 @@ extern "C" {
 	void load_custom_palette()
 	{
 		//Setup default palette in case we can't load the custom one
-		EmulationSettings::SetRgbPalette(defaultPalette);
+		_console->GetSettings()->SetRgbPalette(defaultPalette);
 
 		//Try to load the custom palette from the MesenPalette.pal file
 		string palettePath = FolderUtilities::CombinePath(FolderUtilities::GetHomeFolder(), "MesenPalette.pal");
@@ -293,7 +293,7 @@ extern "C" {
 				for(int i = 0; i < 64; i++) {
 					customPalette[i] = 0xFF000000 | fileData[i * 3 + 2] | (fileData[i * 3 + 1] << 8) | (fileData[i * 3] << 16);
 				}
-				EmulationSettings::SetRgbPalette(customPalette);
+				_console->GetSettings()->SetRgbPalette(customPalette);
 			}
 		}
 	}
@@ -301,9 +301,9 @@ extern "C" {
 	void update_settings()
 	{
 		struct retro_variable var = { };
-		EmulationSettings::SetPictureSettings(0, 0, 0, 0, 0);
+		_console->GetSettings()->SetPictureSettings(0, 0, 0, 0, 0);
 
-		_hdPacksEnabled = EmulationSettings::CheckFlag(EmulationFlags::UseHdPacks);
+		_hdPacksEnabled = _console->GetSettings()->CheckFlag(EmulationFlags::UseHdPacks);
 
 		set_flag(MesenNoSpriteLimit, EmulationFlags::RemoveSpriteLimit | EmulationFlags::AdaptiveSpriteLimit);
 		set_flag(MesenHdPacks, EmulationFlags::UseHdPacks);
@@ -318,10 +318,10 @@ extern "C" {
 		if(retroEnv(RETRO_ENVIRONMENT_GET_VARIABLE, &var)) {
 			string value = string(var.value);
 			if(value == "enabled") {
-				EmulationSettings::SetStereoFilter(StereoFilter::Delay);
-				EmulationSettings::SetStereoDelay(15);
+				_console->GetSettings()->SetStereoFilter(StereoFilter::Delay);
+				_console->GetSettings()->SetStereoDelay(15);
 			} else {
-				EmulationSettings::SetStereoFilter(StereoFilter::None);
+				_console->GetSettings()->SetStereoFilter(StereoFilter::None);
 			}
 		}
 		
@@ -329,30 +329,30 @@ extern "C" {
 		if(retroEnv(RETRO_ENVIRONMENT_GET_VARIABLE, &var)) {
 			string value = string(var.value);
 			if(value == "Disabled") {
-				EmulationSettings::SetVideoFilterType(VideoFilterType::None);
+				_console->GetSettings()->SetVideoFilterType(VideoFilterType::None);
 			} else if(value == "Composite (Blargg)") {
-				EmulationSettings::SetVideoFilterType(VideoFilterType::NTSC);
-				EmulationSettings::SetNtscFilterSettings(0, 0, 0, 0, 0, 0, false, 0, 0, 0, false, true);
+				_console->GetSettings()->SetVideoFilterType(VideoFilterType::NTSC);
+				_console->GetSettings()->SetNtscFilterSettings(0, 0, 0, 0, 0, 0, false, 0, 0, 0, false, true);
 			} else if(value == "S-Video (Blargg)") {
-				EmulationSettings::SetVideoFilterType(VideoFilterType::NTSC);
-				EmulationSettings::SetNtscFilterSettings(-1.0, 0, -1.0, 0, 0.2, 0.2, false, 0, 0, 0, false, true);
+				_console->GetSettings()->SetVideoFilterType(VideoFilterType::NTSC);
+				_console->GetSettings()->SetNtscFilterSettings(-1.0, 0, -1.0, 0, 0.2, 0.2, false, 0, 0, 0, false, true);
 			} else if(value == "RGB (Blargg)") {
-				EmulationSettings::SetVideoFilterType(VideoFilterType::NTSC);
-				EmulationSettings::SetPictureSettings(0, 0, 0, 0, 0);
-				EmulationSettings::SetNtscFilterSettings(-1.0, -1.0, -1.0, 0, 0.7, 0.2, false, 0, 0, 0, false, true);
+				_console->GetSettings()->SetVideoFilterType(VideoFilterType::NTSC);
+				_console->GetSettings()->SetPictureSettings(0, 0, 0, 0, 0);
+				_console->GetSettings()->SetNtscFilterSettings(-1.0, -1.0, -1.0, 0, 0.7, 0.2, false, 0, 0, 0, false, true);
 			} else if(value == "Monochrome (Blargg)") {
-				EmulationSettings::SetVideoFilterType(VideoFilterType::NTSC);
-				EmulationSettings::SetPictureSettings(0, 0, -1.0, 0, 0);
-				EmulationSettings::SetNtscFilterSettings(-0.2, -0.1, -0.2, 0, 0.7, 0.2, false, 0, 0, 0, false, true);
+				_console->GetSettings()->SetVideoFilterType(VideoFilterType::NTSC);
+				_console->GetSettings()->SetPictureSettings(0, 0, -1.0, 0, 0);
+				_console->GetSettings()->SetNtscFilterSettings(-0.2, -0.1, -0.2, 0, 0.7, 0.2, false, 0, 0, 0, false, true);
 			} else if(value == "Bisqwit 2x") {
-				EmulationSettings::SetVideoFilterType(VideoFilterType::BisqwitNtscQuarterRes);
-				EmulationSettings::SetNtscFilterSettings(0, 0, 0, 0, 0, 0, false, 0, 0, 0, false, true);
+				_console->GetSettings()->SetVideoFilterType(VideoFilterType::BisqwitNtscQuarterRes);
+				_console->GetSettings()->SetNtscFilterSettings(0, 0, 0, 0, 0, 0, false, 0, 0, 0, false, true);
 			} else if(value == "Bisqwit 4x") {
-				EmulationSettings::SetVideoFilterType(VideoFilterType::BisqwitNtscHalfRes);
-				EmulationSettings::SetNtscFilterSettings(0, 0, 0, 0, 0, 0, false, 0, 0, 0, false, true);
+				_console->GetSettings()->SetVideoFilterType(VideoFilterType::BisqwitNtscHalfRes);
+				_console->GetSettings()->SetNtscFilterSettings(0, 0, 0, 0, 0, 0, false, 0, 0, 0, false, true);
 			} else if(value == "Bisqwit 8x") {
-				EmulationSettings::SetVideoFilterType(VideoFilterType::BisqwitNtsc);
-				EmulationSettings::SetNtscFilterSettings(0, 0, 0, 0, 0, 0, false, 0, 0, 0, false, true);
+				_console->GetSettings()->SetVideoFilterType(VideoFilterType::BisqwitNtsc);
+				_console->GetSettings()->SetNtscFilterSettings(0, 0, 0, 0, 0, 0, false, 0, 0, 0, false, true);
 			}
 		}
 
@@ -360,28 +360,28 @@ extern "C" {
 		if(retroEnv(RETRO_ENVIRONMENT_GET_VARIABLE, &var)) {
 			string value = string(var.value);
 			if(value == "Default") {
-				EmulationSettings::SetRgbPalette(defaultPalette);
+				_console->GetSettings()->SetRgbPalette(defaultPalette);
 			} else if(value == "Composite Direct (by FirebrandX)") {
-				EmulationSettings::SetRgbPalette(compositeDirectPalette);
+				_console->GetSettings()->SetRgbPalette(compositeDirectPalette);
 			} else if(value == "Nes Classic") {
-				EmulationSettings::SetRgbPalette(nesClassicPalette);
+				_console->GetSettings()->SetRgbPalette(nesClassicPalette);
 			} else if(value == "Nestopia (RGB)") {
-				EmulationSettings::SetRgbPalette(nestopiaRgbPalette);
+				_console->GetSettings()->SetRgbPalette(nestopiaRgbPalette);
 			} else if(value == "Original Hardware (by FirebrandX)") {
-				EmulationSettings::SetRgbPalette(originalHardwarePalette);
+				_console->GetSettings()->SetRgbPalette(originalHardwarePalette);
 			} else if(value == "PVM Style (by FirebrandX)") {
-				EmulationSettings::SetRgbPalette(pvmStylePalette);
+				_console->GetSettings()->SetRgbPalette(pvmStylePalette);
 			} else if(value == "Sony CXA2025AS") {
-				EmulationSettings::SetRgbPalette(sonyCxa2025AsPalette);
+				_console->GetSettings()->SetRgbPalette(sonyCxa2025AsPalette);
 			} else if(value == "Unsaturated v6 (by FirebrandX)") {
-				EmulationSettings::SetRgbPalette(unsaturatedPalette);
+				_console->GetSettings()->SetRgbPalette(unsaturatedPalette);
 			} else if(value == "YUV v3 (by FirebrandX)") {
-				EmulationSettings::SetRgbPalette(yuvPalette);
+				_console->GetSettings()->SetRgbPalette(yuvPalette);
 			} else if(value == "Custom") {
 				load_custom_palette();
 			} else if(value == "Raw") {
 				//Using the raw palette replaces the NTSC filters, if one is selected
-				EmulationSettings::SetVideoFilterType(VideoFilterType::Raw);
+				_console->GetSettings()->SetVideoFilterType(VideoFilterType::Raw);
 			}
 		}
 
@@ -411,9 +411,9 @@ extern "C" {
 			}
 
 			if(beforeNmi) {
-				EmulationSettings::SetPpuNmiConfig(lineCount, 0);
+				_console->GetSettings()->SetPpuNmiConfig(lineCount, 0);
 			} else {
-				EmulationSettings::SetPpuNmiConfig(0, lineCount);
+				_console->GetSettings()->SetPpuNmiConfig(0, lineCount);
 			}
 		}
 
@@ -438,23 +438,23 @@ extern "C" {
 				overscanVertical = 16;
 			}
 		}
-		EmulationSettings::SetOverscanDimensions(overscanHorizontal, overscanHorizontal, overscanVertical, overscanVertical);
+		_console->GetSettings()->SetOverscanDimensions(overscanHorizontal, overscanHorizontal, overscanVertical, overscanVertical);
 
 		var.key = MesenAspectRatio;
 		if(retroEnv(RETRO_ENVIRONMENT_GET_VARIABLE, &var)) {
 			string value = string(var.value);
 			if(value == "Auto") {
-				EmulationSettings::SetVideoAspectRatio(VideoAspectRatio::Auto, 1.0);
+				_console->GetSettings()->SetVideoAspectRatio(VideoAspectRatio::Auto, 1.0);
 			} else if(value == "No Stretching") {
-				EmulationSettings::SetVideoAspectRatio(VideoAspectRatio::NoStretching, 1.0);
+				_console->GetSettings()->SetVideoAspectRatio(VideoAspectRatio::NoStretching, 1.0);
 			} else if(value == "NTSC") {
-				EmulationSettings::SetVideoAspectRatio(VideoAspectRatio::NTSC, 1.0);
+				_console->GetSettings()->SetVideoAspectRatio(VideoAspectRatio::NTSC, 1.0);
 			} else if(value == "PAL") {
-				EmulationSettings::SetVideoAspectRatio(VideoAspectRatio::PAL, 1.0);
+				_console->GetSettings()->SetVideoAspectRatio(VideoAspectRatio::PAL, 1.0);
 			} else if(value == "4:3") {
-				EmulationSettings::SetVideoAspectRatio(VideoAspectRatio::Standard, 1.0);
+				_console->GetSettings()->SetVideoAspectRatio(VideoAspectRatio::Standard, 1.0);
 			} else if(value == "16:9") {
-				EmulationSettings::SetVideoAspectRatio(VideoAspectRatio::Widescreen, 1.0);
+				_console->GetSettings()->SetVideoAspectRatio(VideoAspectRatio::Widescreen, 1.0);
 			}
 		}
 
@@ -462,13 +462,13 @@ extern "C" {
 		if(retroEnv(RETRO_ENVIRONMENT_GET_VARIABLE, &var)) {
 			string value = string(var.value);
 			if(value == "Auto") {
-				EmulationSettings::SetNesModel(NesModel::Auto);
+				_console->GetSettings()->SetNesModel(NesModel::Auto);
 			} else if(value == "NTSC") {
-				EmulationSettings::SetNesModel(NesModel::NTSC);
+				_console->GetSettings()->SetNesModel(NesModel::NTSC);
 			} else if(value == "PAL") {
-				EmulationSettings::SetNesModel(NesModel::PAL);
+				_console->GetSettings()->SetNesModel(NesModel::PAL);
 			} else if(value == "Dendy") {
-				EmulationSettings::SetNesModel(NesModel::Dendy);
+				_console->GetSettings()->SetNesModel(NesModel::Dendy);
 			}
 		}
 		
@@ -476,11 +476,11 @@ extern "C" {
 		if(retroEnv(RETRO_ENVIRONMENT_GET_VARIABLE, &var)) {
 			string value = string(var.value);
 			if(value == "All 0s (Default)") {
-				EmulationSettings::SetRamPowerOnState(RamPowerOnState::AllZeros);
+				_console->GetSettings()->SetRamPowerOnState(RamPowerOnState::AllZeros);
 			} else if(value == "All 1s") {
-				EmulationSettings::SetRamPowerOnState(RamPowerOnState::AllOnes);
+				_console->GetSettings()->SetRamPowerOnState(RamPowerOnState::AllOnes);
 			} else if(value == "Random Values") {
-				EmulationSettings::SetRamPowerOnState(RamPowerOnState::Random);
+				_console->GetSettings()->SetRamPowerOnState(RamPowerOnState::Random);
 			}
 		}
 
@@ -488,13 +488,13 @@ extern "C" {
 		if(retroEnv(RETRO_ENVIRONMENT_GET_VARIABLE, &var)) {
 			string value = string(var.value);
 			if(value == "None") {
-				EmulationSettings::SetScreenRotation(0);
+				_console->GetSettings()->SetScreenRotation(0);
 			} else if(value == u8"90 degrees") {
-				EmulationSettings::SetScreenRotation(90);
+				_console->GetSettings()->SetScreenRotation(90);
 			} else if(value == u8"180 degrees") {
-				EmulationSettings::SetScreenRotation(180);
+				_console->GetSettings()->SetScreenRotation(180);
 			} else if(value == u8"270 degrees") {
-				EmulationSettings::SetScreenRotation(270);
+				_console->GetSettings()->SetScreenRotation(270);
 			}
 		}
 
@@ -523,7 +523,7 @@ extern "C" {
 		auto getKeyBindings = [=](int port) {
 			KeyMappingSet keyMappings;
 			keyMappings.TurboSpeed = turboSpeed;
-			if(EmulationSettings::GetControllerType(port) == ControllerType::SnesController) {
+			if(_console->GetSettings()->GetControllerType(port) == ControllerType::SnesController) {
 				keyMappings.Mapping1.LButton = getKeyCode(port, RETRO_DEVICE_ID_JOYPAD_L);
 				keyMappings.Mapping1.RButton = getKeyCode(port, RETRO_DEVICE_ID_JOYPAD_R);
 				keyMappings.Mapping1.A = getKeyCode(port, RETRO_DEVICE_ID_JOYPAD_A);
@@ -556,7 +556,7 @@ extern "C" {
 				keyMappings.Mapping1.PartyTapButtons[5] = getKeyCode(4, RETRO_DEVICE_ID_JOYPAD_R);
 
 				unsigned powerPadPort = 0;
-				if(EmulationSettings::GetExpansionDevice() == ExpansionPortDevice::FamilyTrainerMat) {
+				if(_console->GetSettings()->GetExpansionDevice() == ExpansionPortDevice::FamilyTrainerMat) {
 					powerPadPort = 4;
 				}
 
@@ -602,10 +602,10 @@ extern "C" {
 			return keyMappings;
 		};
 
-		EmulationSettings::SetControllerKeys(0, getKeyBindings(0));
-		EmulationSettings::SetControllerKeys(1, getKeyBindings(1));
-		EmulationSettings::SetControllerKeys(2, getKeyBindings(2));
-		EmulationSettings::SetControllerKeys(3, getKeyBindings(3));
+		_console->GetSettings()->SetControllerKeys(0, getKeyBindings(0));
+		_console->GetSettings()->SetControllerKeys(1, getKeyBindings(1));
+		_console->GetSettings()->SetControllerKeys(2, getKeyBindings(2));
+		_console->GetSettings()->SetControllerKeys(3, getKeyBindings(3));
 
 		retro_system_av_info avInfo = {};
 		_renderer->GetSystemAudioVideoInfo(avInfo);
@@ -614,7 +614,7 @@ extern "C" {
 
 	RETRO_API void retro_run()
 	{
-		if(EmulationSettings::CheckFlag(EmulationFlags::ForceMaxSpeed)) {
+		if(_console->GetSettings()->CheckFlag(EmulationFlags::ForceMaxSpeed)) {
 			//Skip frames to speed up emulation while still outputting at 50/60 fps (needed for FDS fast forward while loading)
 			_renderer->SetSkipMode(true);
 			_soundManager->SetSkipMode(true);
@@ -630,7 +630,7 @@ extern "C" {
 		if(retroEnv(RETRO_ENVIRONMENT_GET_VARIABLE_UPDATE, &updated) && updated) {
 			update_settings();
 
-			bool hdPacksEnabled = EmulationSettings::CheckFlag(EmulationFlags::UseHdPacks);
+			bool hdPacksEnabled = _console->GetSettings()->CheckFlag(EmulationFlags::UseHdPacks);
 			if(hdPacksEnabled != _hdPacksEnabled) {
 				//Try to load/unload HD pack when the flag is toggled
 				_console->UpdateHdPackMode();
@@ -727,7 +727,7 @@ extern "C" {
 			unsigned device = _inputDevices[port];
 			if(device == DEVICE_AUTO) {
 				if(port <= 3) {
-					switch(EmulationSettings::GetControllerType(port)) {
+					switch(_console->GetSettings()->GetControllerType(port)) {
 						case ControllerType::StandardController: device = DEVICE_GAMEPAD; break;
 						case ControllerType::PowerPad: device = DEVICE_POWERPAD; break;
 						case ControllerType::SnesController: device = DEVICE_SNESGAMEPAD; break;
@@ -737,7 +737,7 @@ extern "C" {
 						default: return;
 					}
 				} else if(port == 4) {
-					switch(EmulationSettings::GetExpansionDevice()) {
+					switch(_console->GetSettings()->GetExpansionDevice()) {
 						case ExpansionPortDevice::ArkanoidController: device = DEVICE_ARKANOID; break;
 						case ExpansionPortDevice::BandaiHyperShot: device = DEVICE_BANDAIHYPERSHOT; break;
 						case ExpansionPortDevice::ExcitingBoxing: device = DEVICE_EXCITINGBOXING; break;
@@ -836,9 +836,11 @@ extern "C" {
 	{
 		//Setup all "auto" ports
 		RomInfo romInfo = _console->GetRomInfo();
-		GameDatabase::InitializeInputDevices(romInfo);
-
-		//TODO: Four Score		
+		if(romInfo.IsInDatabase || romInfo.IsNes20Header) {
+			_console->GetSettings()->InitializeInputDevices(romInfo.InputType, romInfo.System, true);
+		} else {
+			_console->GetSettings()->InitializeInputDevices(GameInputType::Default, GameSystem::NesNtsc, true);
+		}
 
 		for(int port = 0; port < 5; port++) {
 			if(_inputDevices[port] != DEVICE_AUTO) {
@@ -853,7 +855,7 @@ extern "C" {
 						case DEVICE_SNESGAMEPAD: type = ControllerType::SnesController; break;
 						case DEVICE_SNESMOUSE: type = ControllerType::SnesMouse; break;
 					}
-					EmulationSettings::SetControllerType(port, type);
+					_console->GetSettings()->SetControllerType(port, type);
 				} else {
 					ExpansionPortDevice type = ExpansionPortDevice::None;
 					switch(_inputDevices[port]) {
@@ -871,25 +873,25 @@ extern "C" {
 						case DEVICE_BATTLEBOX: type = ExpansionPortDevice::BattleBox; break;
 						case DEVICE_FOURPLAYERADAPTER: type = ExpansionPortDevice::FourPlayerAdapter; break;
 					}
-					EmulationSettings::SetExpansionDevice(type);
+					_console->GetSettings()->SetExpansionDevice(type);
 				}
 			}
 		}
 
 		bool hasFourScore = false;
-		if(EmulationSettings::GetExpansionDevice() != ExpansionPortDevice::None) {
-			EmulationSettings::SetConsoleType(ConsoleType::Famicom);
-			if(EmulationSettings::GetExpansionDevice() == ExpansionPortDevice::FourPlayerAdapter) {
+		if(_console->GetSettings()->GetExpansionDevice() != ExpansionPortDevice::None) {
+			_console->GetSettings()->SetConsoleType(ConsoleType::Famicom);
+			if(_console->GetSettings()->GetExpansionDevice() == ExpansionPortDevice::FourPlayerAdapter) {
 				hasFourScore = true;
 			}
 		} else {
-			EmulationSettings::SetConsoleType(ConsoleType::Nes);
-			if(EmulationSettings::GetControllerType(2) != ControllerType::None || EmulationSettings::GetControllerType(3) != ControllerType::None) {
+			_console->GetSettings()->SetConsoleType(ConsoleType::Nes);
+			if(_console->GetSettings()->GetControllerType(2) != ControllerType::None || _console->GetSettings()->GetControllerType(3) != ControllerType::None) {
 				hasFourScore = true;
 			}
 		}
 
-		EmulationSettings::SetFlagState(EmulationFlags::HasFourScore, hasFourScore);
+		_console->GetSettings()->SetFlagState(EmulationFlags::HasFourScore, hasFourScore);
 	}
 	
 	void retro_set_memory_maps()
@@ -968,11 +970,11 @@ extern "C" {
 		update_settings();
 
 		//Plug in 2 standard controllers by default, game database will switch the controller types for recognized games
-		EmulationSettings::SetMasterVolume(10.0);
-		EmulationSettings::SetControllerType(0, ControllerType::StandardController);
-		EmulationSettings::SetControllerType(1, ControllerType::StandardController);
-		EmulationSettings::SetControllerType(2, ControllerType::None);
-		EmulationSettings::SetControllerType(3, ControllerType::None);
+		_console->GetSettings()->SetMasterVolume(10.0);
+		_console->GetSettings()->SetControllerType(0, ControllerType::StandardController);
+		_console->GetSettings()->SetControllerType(1, ControllerType::StandardController);
+		_console->GetSettings()->SetControllerType(2, ControllerType::None);
+		_console->GetSettings()->SetControllerType(3, ControllerType::None);
 		bool result = _console->Initialize(game->path);
 
 		if(result) {
@@ -1024,7 +1026,7 @@ extern "C" {
 	{
 		uint32_t hscale = 1;
 		uint32_t vscale = 1;
-		switch(EmulationSettings::GetVideoFilterType()) {
+		switch(_console->GetSettings()->GetVideoFilterType()) {
 			case VideoFilterType::NTSC: hscale = 2; break;
 			case VideoFilterType::BisqwitNtscQuarterRes: hscale = 2; break;
 			case VideoFilterType::BisqwitNtscHalfRes: hscale = 4; break;

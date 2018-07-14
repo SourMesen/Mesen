@@ -26,7 +26,7 @@ protected:
 	void Clock() override
 	{
 		//Feedback is calculated as the exclusive-OR of bit 0 and one other bit: bit 6 if Mode flag is set, otherwise bit 1.
-		bool mode = EmulationSettings::CheckFlag(EmulationFlags::DisableNoiseModeFlag) ? false : _modeFlag;
+		bool mode = _console->GetSettings()->CheckFlag(EmulationFlags::DisableNoiseModeFlag) ? false : _modeFlag;
 
 		uint16_t feedback = (_shiftRegister & 0x01) ^ ((_shiftRegister >> (mode ? 6 : 1)) & 0x01);
 		_shiftRegister >>= 1;

@@ -33,8 +33,6 @@ namespace Mesen.GUI
 		[DllImport(DLLPath)] public static extern UInt32 GetHistoryViewerTotalFrameCount();
 		[DllImport(DLLPath)] public static extern void SetHistoryViewerPosition(UInt32 seekPosition);
 		[DllImport(DLLPath)] public static extern UInt32 GetHistoryViewerPosition();
-		[DllImport(DLLPath)] public static extern void SetHistoryViewerPauseStatus([MarshalAs(UnmanagedType.I1)]bool paused);		
-		[DllImport(DLLPath)] [return: MarshalAs(UnmanagedType.I1)] public static extern bool GetHistoryViewerPauseStatus();		
 
 		[DllImport(DLLPath)] public static extern void SetDisplayLanguage(Language lang);
 
@@ -81,9 +79,9 @@ namespace Mesen.GUI
 		[DllImport(DLLPath)] public static extern void DisableAllKeys([MarshalAs(UnmanagedType.I1)]bool disabled);
 
 		[DllImport(DLLPath)] public static extern void Run();
-		[DllImport(DLLPath)] public static extern void Pause();
-		[DllImport(DLLPath)] public static extern void Resume();
-		[DllImport(DLLPath)] [return: MarshalAs(UnmanagedType.I1)] public static extern bool IsPaused();
+		[DllImport(DLLPath)] public static extern void Resume(ConsoleId consoleId = ConsoleId.Master);
+		[DllImport(DLLPath)] public static extern void Pause(ConsoleId consoleId = ConsoleId.Master);
+		[DllImport(DLLPath)] [return: MarshalAs(UnmanagedType.I1)] public static extern bool IsPaused(ConsoleId consoleId = ConsoleId.Master);
 		[DllImport(DLLPath)] public static extern void Stop();
 
 		[DllImport(DLLPath, EntryPoint = "GetRomInfo")] private static extern UInt32 GetRomInfoWrapper(ref InteropRomInfo romInfo, [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(UTF8Marshaler))]string filename = "");
@@ -106,7 +104,7 @@ namespace Mesen.GUI
 
 		[DllImport(DLLPath)] public static extern void TakeScreenshot();
 
-		[DllImport(DLLPath)] public static extern IntPtr RegisterNotificationCallback(Int32 consoleId, NotificationListener.NotificationCallback callback);
+		[DllImport(DLLPath)] public static extern IntPtr RegisterNotificationCallback(ConsoleId consoleId, NotificationListener.NotificationCallback callback);
 		[DllImport(DLLPath)] public static extern void UnregisterNotificationCallback(IntPtr notificationListener);
 
 		[DllImport(DLLPath)] public static extern void DisplayMessage([MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(UTF8Marshaler))]string title, [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(UTF8Marshaler))]string message, [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(UTF8Marshaler))]string param1 = null);
@@ -168,6 +166,9 @@ namespace Mesen.GUI
 
 		[DllImport(DLLPath)] public static extern void SetCheats([MarshalAs(UnmanagedType.LPArray, SizeParamIndex = 1)]InteropCheatInfo[] cheats, UInt32 length);
 
+		[DllImport(DLLPath)] public static extern void SetOsdState([MarshalAs(UnmanagedType.I1)]bool enabled);
+		[DllImport(DLLPath)] public static extern void SetGameDatabaseState([MarshalAs(UnmanagedType.I1)]bool enabled);
+
 		[DllImport(DLLPath)] [return: MarshalAs(UnmanagedType.I1)] public static extern bool CheckFlag(EmulationFlags flag);
 		[DllImport(DLLPath)] private static extern void SetFlags(EmulationFlags flags);
 		[DllImport(DLLPath)] private static extern void ClearFlags(EmulationFlags flags);
@@ -217,7 +218,7 @@ namespace Mesen.GUI
 		[DllImport(DLLPath, EntryPoint = "GetAudioDevices")] private static extern IntPtr GetAudioDevicesWrapper();
 		[DllImport(DLLPath)] public static extern void SetAudioDevice(string audioDevice);
 
-		[DllImport(DLLPath)] public static extern void DebugSetDebuggerConsole(Int32 consoleId);
+		[DllImport(DLLPath)] public static extern void DebugSetDebuggerConsole(ConsoleId consoleId);
 		[DllImport(DLLPath)] public static extern void DebugInitialize();
 		[DllImport(DLLPath)] [return: MarshalAs(UnmanagedType.I1)] public static extern bool DebugIsDebuggerRunning();
 		[DllImport(DLLPath)] public static extern void DebugRelease();
@@ -1056,7 +1057,8 @@ namespace Mesen.GUI
 		public enum ConsoleId
 		{
 			Master = 0,
-			Slave = 1
+			Slave = 1,
+			HistoryViewer = 2
 		}
 
 		public class NotificationListener : IDisposable
@@ -1074,7 +1076,7 @@ namespace Mesen.GUI
 				_callback = (int type, IntPtr parameter) => {
 					this.ProcessNotification(type, parameter);
 				};
-				_notificationListener = InteropEmu.RegisterNotificationCallback(consoleId == ConsoleId.Slave ? 1 : 0, _callback);
+				_notificationListener = InteropEmu.RegisterNotificationCallback(consoleId, _callback);
 			}
 
 			public void Dispose()
@@ -1502,7 +1504,6 @@ namespace Mesen.GUI
 
 		SwapDutyCycles = 0x10000,
 
-		DisableGameDatabase = 0x20000,
 		AutoConfigureInput = 0x40000,
 
 		ShowLagCounter = 0x80000,
@@ -1539,7 +1540,6 @@ namespace Mesen.GUI
 
 		AdaptiveSpriteLimit = 0x80000000000,
 
-		DisableOsd = 0x100000000000,
 		DisableGameSelectionScreen = 0x200000000000,
 
 		ConfirmExitResetPower = 0x400000000000,

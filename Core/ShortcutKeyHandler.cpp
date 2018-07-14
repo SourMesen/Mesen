@@ -38,8 +38,8 @@ ShortcutKeyHandler::~ShortcutKeyHandler()
 
 bool ShortcutKeyHandler::IsKeyPressed(EmulatorShortcut shortcut)
 {
-	KeyCombination keyComb = EmulationSettings::GetShortcutKey(shortcut, _keySetIndex);
-	vector<KeyCombination> supersets = EmulationSettings::GetShortcutSupersets(shortcut, _keySetIndex);
+	KeyCombination keyComb = _console->GetSettings()->GetShortcutKey(shortcut, _keySetIndex);
+	vector<KeyCombination> supersets = _console->GetSettings()->GetShortcutSupersets(shortcut, _keySetIndex);
 	for(KeyCombination &superset : supersets) {
 		if(IsKeyPressed(superset)) {
 			//A superset is pressed, ignore this subset
@@ -98,21 +98,22 @@ bool ShortcutKeyHandler::DetectKeyRelease(EmulatorShortcut shortcut)
 
 void ShortcutKeyHandler::CheckMappedKeys()
 {
+	EmulationSettings* settings = _console->GetSettings();
 	bool isNetplayClient = GameClient::Connected();
 	bool isMovieActive = MovieManager::Playing() || MovieManager::Recording();
 
 	_keyboardMode = false;
 	if(DetectKeyPress(EmulatorShortcut::ToggleKeyboardMode)) {
-		if(EmulationSettings::IsKeyboardMode()) {
-			EmulationSettings::DisableKeyboardMode();
+		if(settings->IsKeyboardMode()) {
+			settings->DisableKeyboardMode();
 		} else {
 			ControlManager* controlManager = _console->GetControlManager();
 			if(controlManager && controlManager->HasKeyboard()) {
-				EmulationSettings::EnableKeyboardMode();
+				settings->EnableKeyboardMode();
 			}
 		}
 	}
-	_keyboardMode = EmulationSettings::IsKeyboardMode();
+	_keyboardMode = settings->IsKeyboardMode();
 
 	//Let the UI handle these shortcuts
 	for(uint64_t i = (uint64_t)EmulatorShortcut::SwitchDiskSide; i < (uint64_t)EmulatorShortcut::ShortcutCount; i++) {
@@ -123,16 +124,16 @@ void ShortcutKeyHandler::CheckMappedKeys()
 	}
 
 	if(DetectKeyPress(EmulatorShortcut::FastForward)) {
-		EmulationSettings::SetFlags(EmulationFlags::Turbo);
+		settings->SetFlags(EmulationFlags::Turbo);
 	} else if(DetectKeyRelease(EmulatorShortcut::FastForward)) {
-		EmulationSettings::ClearFlags(EmulationFlags::Turbo);
+		settings->ClearFlags(EmulationFlags::Turbo);
 	}
 
 	if(DetectKeyPress(EmulatorShortcut::ToggleFastForward)) {
-		if(EmulationSettings::CheckFlag(EmulationFlags::Turbo)) {
-			EmulationSettings::ClearFlags(EmulationFlags::Turbo);
+		if(settings->CheckFlag(EmulationFlags::Turbo)) {
+			settings->ClearFlags(EmulationFlags::Turbo);
 		} else {
-			EmulationSettings::SetFlags(EmulationFlags::Turbo);
+			settings->SetFlags(EmulationFlags::Turbo);
 		}
 	}
 
@@ -184,49 +185,51 @@ void ShortcutKeyHandler::CheckMappedKeys()
 	}
 
 	if(DetectKeyPress(EmulatorShortcut::RunSingleFrame)) {
-		if(EmulationSettings::CheckFlag(EmulationFlags::DebuggerWindowEnabled)) {
+		if(settings->CheckFlag(EmulationFlags::DebuggerWindowEnabled)) {
 			shared_ptr<Debugger> debugger = _console->GetDebugger(false);
 			if(debugger) {
 				debugger->BreakOnScanline(241);
 			}
 		} else {
-			if(EmulationSettings::CheckFlag(EmulationFlags::Paused)) {
-				EmulationSettings::ClearFlags(EmulationFlags::Paused);
+			if(settings->CheckFlag(EmulationFlags::Paused)) {
+				settings->ClearFlags(EmulationFlags::Paused);
 				_console->Pause();
 				std::this_thread::sleep_for(std::chrono::duration<int, std::milli>(50));
-				EmulationSettings::SetFlags(EmulationFlags::Paused);
+				settings->SetFlags(EmulationFlags::Paused);
 				_console->Resume();
 			} else {
-				EmulationSettings::SetFlags(EmulationFlags::Paused);
+				settings->SetFlags(EmulationFlags::Paused);
 			}
 		}
 	}
 
-	if(!isNetplayClient && !MovieManager::Recording() && !EmulationSettings::CheckFlag(NsfPlayerEnabled)) {
+	if(!isNetplayClient && !MovieManager::Recording() && !settings->CheckFlag(NsfPlayerEnabled)) {
 		RewindManager* rewindManager = _console->GetRewindManager();
-		if(DetectKeyPress(EmulatorShortcut::ToggleRewind)) {
-			if(rewindManager->IsRewinding()) {
-				rewindManager->StopRewinding();
-			} else {
-				rewindManager->StartRewinding();
+		if(rewindManager) {
+			if(DetectKeyPress(EmulatorShortcut::ToggleRewind)) {
+				if(rewindManager->IsRewinding()) {
+					rewindManager->StopRewinding();
+				} else {
+					rewindManager->StartRewinding();
+				}
 			}
-		}
 
-		if(DetectKeyPress(EmulatorShortcut::Rewind)) {
-			rewindManager->StartRewinding();
-		} else if(DetectKeyRelease(EmulatorShortcut::Rewind)) {
-			rewindManager->StopRewinding();
-		} else  if(DetectKeyPress(EmulatorShortcut::RewindTenSecs)) {
-			rewindManager->RewindSeconds(10);
-		} else if(DetectKeyPress(EmulatorShortcut::RewindOneMin)) {
-			rewindManager->RewindSeconds(60);
+			if(DetectKeyPress(EmulatorShortcut::Rewind)) {
+				rewindManager->StartRewinding();
+			} else if(DetectKeyRelease(EmulatorShortcut::Rewind)) {
+				rewindManager->StopRewinding();
+			} else  if(DetectKeyPress(EmulatorShortcut::RewindTenSecs)) {
+				rewindManager->RewindSeconds(10);
+			} else if(DetectKeyPress(EmulatorShortcut::RewindOneMin)) {
+				rewindManager->RewindSeconds(60);
+			}
 		}
 	}
 }
 
 void ShortcutKeyHandler::ProcessKeys()
 {
-	if(!EmulationSettings::InputEnabled()) {
+	if(!_console->GetSettings()->InputEnabled()) {
 		return;
 	}
 

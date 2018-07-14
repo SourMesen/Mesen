@@ -31,7 +31,7 @@ protected:
 	}
 
 public:
-	BattleBox() : BaseControlDevice(BaseControlDevice::ExpDevicePort)
+	BattleBox(shared_ptr<Console> console) : BaseControlDevice(console, BaseControlDevice::ExpDevicePort)
 	{
 		BatteryManager::LoadBattery(".bb", (uint8_t*)_data, BattleBox::FileSize);
 	}

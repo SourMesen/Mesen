@@ -28,10 +28,16 @@ MesenMovie::~MesenMovie()
 void MesenMovie::Stop()
 {
 	if(_playing) {
-		EndMovie();
+		MessageManager::DisplayMessage("Movies", "MovieEnded");
+
+		_console->GetNotificationManager()->SendNotification(ConsoleNotificationType::MovieEnded);
+		if(_console->GetSettings()->CheckFlag(EmulationFlags::PauseOnMovieEnd)) {
+			_console->GetSettings()->SetFlags(EmulationFlags::Paused);
+		}
+
 		_playing = false;
 	}
-	EmulationSettings::SetInputPollScanline(241);
+	_console->GetSettings()->SetInputPollScanline(241);
 	_console->GetControlManager()->UnregisterInputProvider(this);
 }
 
@@ -111,11 +117,11 @@ bool MesenMovie::Play(VirtualFile &file)
 	ApplySettings();
 
 	//Disable auto-configure input option (otherwise the movie file's input types are ignored)
-	bool autoConfigureInput = EmulationSettings::CheckFlag(EmulationFlags::AutoConfigureInput);
-	EmulationSettings::ClearFlags(EmulationFlags::AutoConfigureInput);
+	bool autoConfigureInput = _console->GetSettings()->CheckFlag(EmulationFlags::AutoConfigureInput);
+	_console->GetSettings()->ClearFlags(EmulationFlags::AutoConfigureInput);
 	_console->GetControlManager()->SetPollCounter(0);
 	bool gameLoaded = LoadGame();
-	EmulationSettings::SetFlagState(EmulationFlags::AutoConfigureInput, autoConfigureInput);
+	_console->GetSettings()->SetFlagState(EmulationFlags::AutoConfigureInput, autoConfigureInput);
 
 	if(!gameLoaded) {
 		_console->Resume();
@@ -181,7 +187,7 @@ bool MesenMovie::LoadGame()
 	//string patchFileSha1 = LoadString(_settings, MovieKeys::PatchFileSha1);
 	//string patchedRomSha1 = LoadString(_settings, MovieKeys::PatchedRomSha1);
 
-	if(EmulationSettings::CheckFlag(EmulationFlags::AllowMismatchingSaveState) && _console->GetRomInfo().RomName == gameFile) {
+	if(_console->GetSettings()->CheckFlag(EmulationFlags::AllowMismatchingSaveState) && _console->GetRomInfo().RomName == gameFile) {
 		//Loaded game has the right name, and we don't want to validate the hash values
 		_console->PowerCycle();
 		return true;
@@ -206,6 +212,8 @@ bool MesenMovie::LoadGame()
 
 void MesenMovie::ApplySettings()
 {
+	EmulationSettings* settings = _console->GetSettings();
+
 	NesModel region = FromString(LoadString(_settings, MovieKeys::Region), NesModelNames, NesModel::NTSC);
 	ConsoleType consoleType = FromString(LoadString(_settings, MovieKeys::ConsoleType), ConsoleTypeNames, ConsoleType::Nes);
 	ControllerType controller1 = FromString(LoadString(_settings, MovieKeys::Controller1), ControllerTypeNames, ControllerType::None);
@@ -214,47 +222,47 @@ void MesenMovie::ApplySettings()
 	ControllerType controller4 = FromString(LoadString(_settings, MovieKeys::Controller4), ControllerTypeNames, ControllerType::None);
 	ExpansionPortDevice expansionDevice = FromString<ExpansionPortDevice>(LoadString(_settings, MovieKeys::ExpansionDevice), ExpansionPortDeviceNames, ExpansionPortDevice::None);
 
-	EmulationSettings::SetNesModel(region);
-	EmulationSettings::SetConsoleType(consoleType);
-	EmulationSettings::SetControllerType(0, controller1);
-	EmulationSettings::SetControllerType(1, controller2);
-	EmulationSettings::SetControllerType(2, controller3);
-	EmulationSettings::SetControllerType(3, controller4);
-	EmulationSettings::SetExpansionDevice(expansionDevice);
+	settings->SetNesModel(region);
+	settings->SetConsoleType(consoleType);
+	settings->SetControllerType(0, controller1);
+	settings->SetControllerType(1, controller2);
+	settings->SetControllerType(2, controller3);
+	settings->SetControllerType(3, controller4);
+	settings->SetExpansionDevice(expansionDevice);
 
 	uint32_t ramPowerOnState = LoadInt(_settings, MovieKeys::RamPowerOnState);
 	if(ramPowerOnState == 0xFF) {
-		EmulationSettings::SetRamPowerOnState(RamPowerOnState::AllOnes);
+		settings->SetRamPowerOnState(RamPowerOnState::AllOnes);
 	} else {
-		EmulationSettings::SetRamPowerOnState(RamPowerOnState::AllZeros);
+		settings->SetRamPowerOnState(RamPowerOnState::AllZeros);
 	}
 
-	EmulationSettings::SetInputPollScanline(LoadInt(_settings, MovieKeys::InputPollScanline, 240));
+	settings->SetInputPollScanline(LoadInt(_settings, MovieKeys::InputPollScanline, 240));
 
-	EmulationSettings::SetZapperDetectionRadius(LoadInt(_settings, MovieKeys::ZapperDetectionRadius));
+	settings->SetZapperDetectionRadius(LoadInt(_settings, MovieKeys::ZapperDetectionRadius));
 	
 	uint32_t cpuClockRate = LoadInt(_settings, MovieKeys::CpuClockRate);
 	if(cpuClockRate != 100) {
 		bool adjustApu = LoadBool(_settings, MovieKeys::OverclockAdjustApu);
-		EmulationSettings::SetOverclockRate(cpuClockRate, adjustApu);
+		settings->SetOverclockRate(cpuClockRate, adjustApu);
 	} else {
-		EmulationSettings::SetOverclockRate(100, true);
+		settings->SetOverclockRate(100, true);
 	}
 
-	EmulationSettings::SetPpuNmiConfig(
+	settings->SetPpuNmiConfig(
 		LoadInt(_settings, MovieKeys::ExtraScanlinesBeforeNmi),
 		LoadInt(_settings, MovieKeys::ExtraScanlinesAfterNmi)
 	);
 
-	EmulationSettings::SetFlagState(EmulationFlags::DisablePpu2004Reads, LoadBool(_settings, MovieKeys::DisablePpu2004Reads));
-	EmulationSettings::SetFlagState(EmulationFlags::DisablePaletteRead, LoadBool(_settings, MovieKeys::DisablePaletteRead));
-	EmulationSettings::SetFlagState(EmulationFlags::DisableOamAddrBug, LoadBool(_settings, MovieKeys::DisableOamAddrBug));
-	EmulationSettings::SetFlagState(EmulationFlags::UseNes101Hvc101Behavior, LoadBool(_settings, MovieKeys::UseNes101Hvc101Behavior));
-	EmulationSettings::SetFlagState(EmulationFlags::EnableOamDecay, LoadBool(_settings, MovieKeys::EnableOamDecay));
-	EmulationSettings::SetFlagState(EmulationFlags::DisablePpuReset, LoadBool(_settings, MovieKeys::DisablePpuReset));
+	settings->SetFlagState(EmulationFlags::DisablePpu2004Reads, LoadBool(_settings, MovieKeys::DisablePpu2004Reads));
+	settings->SetFlagState(EmulationFlags::DisablePaletteRead, LoadBool(_settings, MovieKeys::DisablePaletteRead));
+	settings->SetFlagState(EmulationFlags::DisableOamAddrBug, LoadBool(_settings, MovieKeys::DisableOamAddrBug));
+	settings->SetFlagState(EmulationFlags::UseNes101Hvc101Behavior, LoadBool(_settings, MovieKeys::UseNes101Hvc101Behavior));
+	settings->SetFlagState(EmulationFlags::EnableOamDecay, LoadBool(_settings, MovieKeys::EnableOamDecay));
+	settings->SetFlagState(EmulationFlags::DisablePpuReset, LoadBool(_settings, MovieKeys::DisablePpuReset));
 
 	//VS System flags
-	EmulationSettings::SetDipSwitches(HexUtilities::FromHex(LoadString(_settings, MovieKeys::DipSwitches)));
+	settings->SetDipSwitches(HexUtilities::FromHex(LoadString(_settings, MovieKeys::DipSwitches)));
 
 	LoadCheats();
 }

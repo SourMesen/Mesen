@@ -24,7 +24,7 @@ protected:
 	}
 
 public:
-	AsciiTurboFile() : BaseControlDevice(BaseControlDevice::ExpDevicePort)
+	AsciiTurboFile(shared_ptr<Console> console) : BaseControlDevice(console, BaseControlDevice::ExpDevicePort)
 	{
 		BatteryManager::LoadBattery(".tf", _data, AsciiTurboFile::FileSize);
 	}

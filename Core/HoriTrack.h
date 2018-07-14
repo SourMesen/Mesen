@@ -13,7 +13,7 @@ protected:
 		StandardController::InternalSetStateFromInput();
 		SetPressedState(StandardController::Buttons::A, KeyManager::IsMouseButtonPressed(MouseButton::LeftButton));
 		SetPressedState(StandardController::Buttons::B, KeyManager::IsMouseButtonPressed(MouseButton::RightButton));
-		SetMovement(KeyManager::GetMouseMovement(EmulationSettings::GetMouseSensitivity(MouseDevice::HoriTrack)));
+		SetMovement(KeyManager::GetMouseMovement(_console->GetSettings()->GetMouseSensitivity(MouseDevice::HoriTrack)));
 	}
 
 public:

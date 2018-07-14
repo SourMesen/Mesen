@@ -12,27 +12,27 @@
 void VideoHud::DrawHud(shared_ptr<Console> console, uint32_t *outputBuffer, FrameInfo frameInfo, OverscanDimensions overscan)
 {
 	uint32_t displayCount = 0;
-	InputDisplaySettings settings = EmulationSettings::GetInputDisplaySettings();
+	InputDisplaySettings settings = console->GetSettings()->GetInputDisplaySettings();
 	
 	vector<ControlDeviceState> states = console->GetControlManager()->GetPortStates();
 	for(int inputPort = 0; inputPort < 4; inputPort++) {
 		if((settings.VisiblePorts >> inputPort) & 0x01) {
-			if(DisplayControllerInput(states[inputPort], inputPort, outputBuffer, frameInfo, overscan, displayCount)) {
+			if(DisplayControllerInput(console, states[inputPort], inputPort, outputBuffer, frameInfo, overscan, displayCount)) {
 				displayCount++;
 			}
 		}
 	}
 
-	DrawMovieIcons(outputBuffer, frameInfo, overscan);
+	DrawMovieIcons(console, outputBuffer, frameInfo, overscan);
 }
 
-bool VideoHud::DisplayControllerInput(ControlDeviceState &state, int inputPort, uint32_t *outputBuffer, FrameInfo &frameInfo, OverscanDimensions &overscan, uint32_t displayIndex)
+bool VideoHud::DisplayControllerInput(shared_ptr<Console> console, ControlDeviceState &state, int inputPort, uint32_t *outputBuffer, FrameInfo &frameInfo, OverscanDimensions &overscan, uint32_t displayIndex)
 {
-	bool axisInverted = (EmulationSettings::GetScreenRotation() % 180) != 0;
+	bool axisInverted = (console->GetSettings()->GetScreenRotation() % 180) != 0;
 	int scale = frameInfo.Width / (axisInverted ? overscan.GetScreenHeight() : overscan.GetScreenWidth());
 	uint32_t* rgbaBuffer = outputBuffer;
 
-	InputDisplaySettings settings = EmulationSettings::GetInputDisplaySettings();
+	InputDisplaySettings settings = console->GetSettings()->GetInputDisplaySettings();
 	uint32_t yStart, xStart;
 	switch(settings.DisplayPosition) {
 		case InputDisplayPosition::TopLeft:
@@ -56,7 +56,7 @@ bool VideoHud::DisplayControllerInput(ControlDeviceState &state, int inputPort, 
 
 	int32_t buttonState = -1;
 
-	shared_ptr<BaseControlDevice> device = ControlManager::CreateControllerDevice(EmulationSettings::GetControllerType(inputPort), 0, nullptr);
+	shared_ptr<BaseControlDevice> device = ControlManager::CreateControllerDevice(console->GetSettings()->GetControllerType(inputPort), 0, console);
 	if(!device) {
 		return false;
 	}
@@ -109,10 +109,10 @@ bool VideoHud::DisplayControllerInput(ControlDeviceState &state, int inputPort, 
 	return false;
 }
 
-void VideoHud::DrawMovieIcons(uint32_t *outputBuffer, FrameInfo &frameInfo, OverscanDimensions &overscan)
+void VideoHud::DrawMovieIcons(shared_ptr<Console> console, uint32_t *outputBuffer, FrameInfo &frameInfo, OverscanDimensions &overscan)
 {
-	if(EmulationSettings::CheckFlag(EmulationFlags::DisplayMovieIcons) && (MovieManager::Playing() || MovieManager::Recording())) {
-		InputDisplaySettings settings = EmulationSettings::GetInputDisplaySettings();
+	if(console->GetSettings()->CheckFlag(EmulationFlags::DisplayMovieIcons) && (MovieManager::Playing() || MovieManager::Recording())) {
+		InputDisplaySettings settings = console->GetSettings()->GetInputDisplaySettings();
 		uint32_t xOffset = settings.VisiblePorts > 0 && settings.DisplayPosition == InputDisplayPosition::TopRight ? 50 : 27;
 		uint32_t* rgbaBuffer = (uint32_t*)outputBuffer;
 		int scale = frameInfo.Width / overscan.GetScreenWidth();
