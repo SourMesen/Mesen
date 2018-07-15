@@ -8,7 +8,7 @@
 SimpleLock SdlRenderer::_reinitLock;
 SimpleLock SdlRenderer::_frameLock;
 
-SdlRenderer::SdlRenderer(shared_ptr<Console> console, void* windowHandle) : BaseRenderer(console), _windowHandle(windowHandle)
+SdlRenderer::SdlRenderer(shared_ptr<Console> console, void* windowHandle, bool registerAsMessageManager) : BaseRenderer(console, registerAsMessageManager), _windowHandle(windowHandle)
 {
 	_frameBuffer = nullptr;
 	SetScreenSize(256,240);
@@ -115,10 +115,10 @@ void SdlRenderer::SetScreenSize(uint32_t width, uint32_t height)
 	ScreenSize screenSize;
 	_console->GetVideoDecoder()->GetScreenSize(screenSize, false);
 
-	if(_screenHeight != (uint32_t)screenSize.Height || _screenWidth != (uint32_t)screenSize.Width || _nesFrameHeight != height || _nesFrameWidth != width || _resizeFilter != EmulationSettings::GetVideoResizeFilter() || _vsyncEnabled != EmulationSettings::CheckFlag(EmulationFlags::VerticalSync)) {
+	if(_screenHeight != (uint32_t)screenSize.Height || _screenWidth != (uint32_t)screenSize.Width || _nesFrameHeight != height || _nesFrameWidth != width || _resizeFilter != _console->GetSettings()->GetVideoResizeFilter() || _vsyncEnabled != _console->GetSettings()->CheckFlag(EmulationFlags::VerticalSync)) {
 		_reinitLock.Acquire();
 
-		_vsyncEnabled = EmulationSettings::CheckFlag(EmulationFlags::VerticalSync);
+		_vsyncEnabled = _console->GetSettings()->CheckFlag(EmulationFlags::VerticalSync);
 
 		_nesFrameHeight = height;
 		_nesFrameWidth = width;
@@ -127,7 +127,7 @@ void SdlRenderer::SetScreenSize(uint32_t width, uint32_t height)
 		_screenHeight = screenSize.Height;
 		_screenWidth = screenSize.Width;
 
-		_resizeFilter = EmulationSettings::GetVideoResizeFilter();
+		_resizeFilter = _console->GetSettings()->GetVideoResizeFilter();
 
 		SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, _resizeFilter == VideoResizeFilter::Bilinear ? "1" : "0");
 		_screenBufferSize = _screenHeight*_screenWidth;
@@ -152,8 +152,8 @@ void SdlRenderer::Render()
 		return;
 	}
 
-	bool paused = EmulationSettings::IsPaused() && _console->IsRunning();
-	bool disableOverlay = EmulationSettings::CheckFlag(EmulationFlags::HidePauseOverlay);
+	bool paused = _console->IsPaused() && _console->IsRunning();
+	bool disableOverlay = _console->GetSettings()->CheckFlag(EmulationFlags::HidePauseOverlay);
 	shared_ptr<Debugger> debugger = _console->GetDebugger(false);
 	if(debugger && debugger->IsExecutionStopped()) {
 		paused = debugger->IsPauseIconShown();
@@ -188,7 +188,7 @@ void SdlRenderer::Render()
 		SDL_Rect dest = {0, 0, (int)_screenWidth, (int)_screenHeight };
 		SDL_RenderCopy(_sdlRenderer, _sdlTexture, &source, &dest);
 
-		if(paused && !EmulationSettings::CheckFlag(EmulationFlags::HidePauseOverlay)) {
+		if(paused && !_console->GetSettings()->CheckFlag(EmulationFlags::HidePauseOverlay)) {
 			DrawPauseScreen(disableOverlay);
 		} else if(_console->GetVideoDecoder()->IsRunning()) {
 			DrawCounters();
@@ -224,7 +224,7 @@ void SdlRenderer::DrawPauseScreen(bool disableOverlay)
 		XMFLOAT2 size = _largeFont->MeasureString(L"PAUSE");
 		_largeFont->DrawString(_sdlRenderer, L"PAUSE", (int)(_screenWidth / 2 - size.x / 2), (int)(_screenHeight / 2 - size.y / 2 - 8), 250, 235, 215);
 
-		string utf8Message = EmulationSettings::GetPauseScreenMessage();
+		string utf8Message = _console->GetSettings()->GetPauseScreenMessage();
 		if(utf8Message.size() > 0) {
 			std::wstring message = utf8::utf8::decode(utf8Message);
 			float width = MeasureString(message);

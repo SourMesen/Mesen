@@ -7,12 +7,14 @@
 
 IKeyManager* KeyManager::_keyManager = nullptr;
 MousePosition KeyManager::_mousePosition = { 0, 0 };
-atomic<int16_t> KeyManager::_xMouseMovement = 0;
-atomic<int16_t> KeyManager::_yMouseMovement = 0;
+atomic<int16_t> KeyManager::_xMouseMovement;
+atomic<int16_t> KeyManager::_yMouseMovement;
 EmulationSettings* KeyManager::_settings = nullptr;
 
 void KeyManager::RegisterKeyManager(IKeyManager* keyManager)
 {
+	_xMouseMovement = 0;
+	_yMouseMovement = 0;
 	_keyManager = keyManager;
 }
 

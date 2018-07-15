@@ -18,6 +18,7 @@ private:
 
 public:
 	HistoryViewer(shared_ptr<Console> console);
+	virtual ~HistoryViewer();
 
 	void SetHistoryData(std::deque<RewindData> &history);
 	
@@ -33,5 +34,5 @@ public:
 	void ProcessEndOfFrame();
 
 	// Inherited via IInputProvider
-	virtual bool SetInput(BaseControlDevice * device) override;
+	bool SetInput(BaseControlDevice * device) override;
 };

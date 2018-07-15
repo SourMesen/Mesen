@@ -61,7 +61,7 @@ private:
 	bool ContainsCharacter(wchar_t character) override;
 
 public:
-	SdlRenderer(shared_ptr<Console> console, void* windowHandle);
+	SdlRenderer(shared_ptr<Console> console, void* windowHandle, bool registerAsMessageManager);
 	virtual ~SdlRenderer();
 
 	void UpdateFrame(void *frameBuffer, uint32_t width, uint32_t height) override;

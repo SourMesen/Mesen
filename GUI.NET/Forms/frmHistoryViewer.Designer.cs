@@ -143,6 +143,7 @@
 			// 
 			this.ctrlRenderer.Anchor = System.Windows.Forms.AnchorStyles.None;
 			this.ctrlRenderer.Location = new System.Drawing.Point(134, 89);
+			this.ctrlRenderer.Margin = new System.Windows.Forms.Padding(0, 0, 0, 0);
 			this.ctrlRenderer.Name = "ctrlRenderer";
 			this.ctrlRenderer.Size = new System.Drawing.Size(256, 240);
 			this.ctrlRenderer.TabIndex = 0;

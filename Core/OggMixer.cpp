@@ -1,4 +1,5 @@
 #include "stdafx.h"
+#include <algorithm>
 #include "OggReader.h"
 #include "OggMixer.h"
 

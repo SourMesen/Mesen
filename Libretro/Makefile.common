@@ -65,6 +65,7 @@ SOURCES_CXX := $(LIBRETRO_DIR)/libretro.cpp \
                $(CORE_DIR)/HdPackLoader.cpp \
                $(CORE_DIR)/HdPpu.cpp \
                $(CORE_DIR)/HdVideoFilter.cpp \
+               $(CORE_DIR)/HistoryViewer.cpp \
                $(CORE_DIR)/iNesLoader.cpp \
                $(CORE_DIR)/KeyManager.cpp \
                $(CORE_DIR)/LabelManager.cpp \

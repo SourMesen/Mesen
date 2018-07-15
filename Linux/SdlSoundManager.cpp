@@ -50,10 +50,10 @@ bool SdlSoundManager::InitializeAudio(uint32_t sampleRate, bool isStereo)
 
 	_sampleRate = sampleRate;
 	_isStereo = isStereo;
-	_previousLatency = EmulationSettings::GetAudioLatency();
+	_previousLatency = _console->GetSettings()->GetAudioLatency();
 
 	int bytesPerSample = 2 * (isStereo ? 2 : 1);
-	int32_t requestedByteLatency = (int32_t)((float)(sampleRate * EmulationSettings::GetAudioLatency()) / 1000.0f * bytesPerSample);
+	int32_t requestedByteLatency = (int32_t)((float)(sampleRate * _console->GetSettings()->GetAudioLatency()) / 1000.0f * bytesPerSample);
 	_bufferSize = (int32_t)std::ceil((double)requestedByteLatency * 2 / 0x10000) * 0x10000;
 	_buffer = new uint8_t[_bufferSize];
 	memset(_buffer, 0, _bufferSize);
@@ -149,7 +149,7 @@ void SdlSoundManager::WriteToBuffer(uint8_t* input, uint32_t len)
 void SdlSoundManager::PlayBuffer(int16_t *soundBuffer, uint32_t sampleCount, uint32_t sampleRate, bool isStereo)
 {
 	uint32_t bytesPerSample = (SoundMixer::BitsPerSample / 8) * (isStereo ? 2 : 1);
-	uint32_t latency = EmulationSettings::GetAudioLatency();
+	uint32_t latency = _console->GetSettings()->GetAudioLatency();
 	if(_sampleRate != sampleRate || _isStereo != isStereo || _needReset || _previousLatency != latency) {
 		Release();
 		InitializeAudio(sampleRate, isStereo);
@@ -187,8 +187,8 @@ void SdlSoundManager::ProcessEndOfFrame()
 {
 	ProcessLatency(_readPosition, _writePosition);
 
-	uint32_t emulationSpeed = EmulationSettings::GetEmulationSpeed();
-	if(_averageLatency > 0 && emulationSpeed <= 100 && emulationSpeed > 0 && std::abs(_averageLatency - EmulationSettings::GetAudioLatency()) > 50) {
+	uint32_t emulationSpeed = _console->GetSettings()->GetEmulationSpeed();
+	if(_averageLatency > 0 && emulationSpeed <= 100 && emulationSpeed > 0 && std::abs(_averageLatency - _console->GetSettings()->GetAudioLatency()) > 50) {
 		//Latency is way off (over 50ms gap), stop audio & start again
 		Stop();
 	}

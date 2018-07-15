@@ -71,6 +71,7 @@ shared_ptr<Console> GetConsoleById(ConsoleId consoleId)
 {
 	shared_ptr<Console> console;
 	switch(consoleId) {
+		case ConsoleId::Master: console = _console; break;
 		case ConsoleId::Slave: console = _console->GetDualConsole(); break;
 		case ConsoleId::HistoryViewer: console = _historyConsole; break;
 	}
@@ -141,7 +142,7 @@ namespace InteropEmu {
 					#ifdef _WIN32
 						_renderer.reset(new Renderer(_console, (HWND)_viewerHandle, true));
 					#else 
-						_renderer.reset(new SdlRenderer(_console, _viewerHandle));
+						_renderer.reset(new SdlRenderer(_console, _viewerHandle, true));
 					#endif
 				} 
 
@@ -174,7 +175,7 @@ namespace InteropEmu {
 					_dualRenderer.reset(new Renderer(slaveConsole, (HWND)viewerHandle, false));
 					_dualSoundManager.reset(new SoundManager(slaveConsole, (HWND)windowHandle));
 				#else 
-					_dualRenderer.reset(new SdlRenderer(slaveConsole, viewerHandle));
+					_dualRenderer.reset(new SdlRenderer(slaveConsole, viewerHandle, false));
 					_dualSoundManager.reset(new SdlSoundManager(slaveConsole));
 				#endif
 				_console->Resume();
@@ -205,7 +206,7 @@ namespace InteropEmu {
 				_historyRenderer.reset(new Renderer(_historyConsole, (HWND)viewerHandle, false));
 				_historySoundManager.reset(new SoundManager(_historyConsole, (HWND)windowHandle));
 			#else 
-				_historyRenderer.reset(new SdlRenderer(_historyConsole, viewerHandle));
+				_historyRenderer.reset(new SdlRenderer(_historyConsole, viewerHandle, false));
 				_historySoundManager.reset(new SdlSoundManager(_historyConsole));
 			#endif
 		}

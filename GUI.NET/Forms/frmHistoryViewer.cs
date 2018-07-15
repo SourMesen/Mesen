@@ -121,6 +121,7 @@ namespace Mesen.GUI.Forms
 		{
 			InteropEmu.ScreenSize size = InteropEmu.GetScreenSize(false, InteropEmu.ConsoleId.HistoryViewer);
 			if(size.Width != ctrlRenderer.ClientSize.Width || size.Height != ctrlRenderer.ClientSize.Height) {
+				//MessageBox.Show(size.Height.ToString() + " vs " + ctrlRenderer.ClientSize.Height.ToString());
 				ctrlRenderer.ClientSize = new Size(size.Width, size.Height);
 			}
 

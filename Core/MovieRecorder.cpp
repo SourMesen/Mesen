@@ -249,7 +249,7 @@ bool MovieRecorder::CreateMovie(string movieFile, std::deque<RewindData> &data, 
 
 		for(uint32_t i = startPosition; i < endPosition; i++) {
 			RewindData rewindData = data[i];
-			for(int i = 0; i < 30; i++) {
+			for(uint32_t i = 0; i < 30; i++) {
 				for(shared_ptr<BaseControlDevice> &device : devices) {
 					uint8_t port = device->GetPort();
 					if(i < rewindData.InputLogs[port].size()) {

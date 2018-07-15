@@ -15,6 +15,10 @@ HistoryViewer::HistoryViewer(shared_ptr<Console> console)
 	_pollCounter = 0;
 }
 
+HistoryViewer::~HistoryViewer()
+{
+}
+
 void HistoryViewer::SetHistoryData(std::deque<RewindData> &history)
 {
 	_history = history;
@@ -33,8 +37,8 @@ uint32_t HistoryViewer::GetHistoryLength()
 
 void HistoryViewer::GetHistorySegments(uint32_t *segmentBuffer, uint32_t &bufferSize)
 {
-	int segmentIndex = 0;
-	for(int i = 0; i < _history.size(); i++) {
+	size_t segmentIndex = 0;
+	for(size_t i = 0; i < _history.size(); i++) {
 		if(_history[i].EndOfSegment) {
 			segmentBuffer[segmentIndex] = i;
 			segmentIndex++;
