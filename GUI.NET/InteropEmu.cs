@@ -26,13 +26,16 @@ namespace Mesen.GUI
 		[DllImport(DLLPath)] public static extern void InitializeDualSystem(IntPtr windowHandle, IntPtr viewerHandle);
 		[DllImport(DLLPath)] public static extern void ReleaseDualSystemAudioVideo();
 
-		[DllImport(DLLPath)] public static extern void InitializeHistoryViewer(IntPtr windowHandle, IntPtr viewerHandle);
-		[DllImport(DLLPath)] public static extern void ReleaseHistoryViewer();
-		[DllImport(DLLPath)] public static extern void RunHistoryViewer();
-		[DllImport(DLLPath)] public static extern void StopHistoryViewer();
-		[DllImport(DLLPath)] public static extern UInt32 GetHistoryViewerTotalFrameCount();
-		[DllImport(DLLPath)] public static extern void SetHistoryViewerPosition(UInt32 seekPosition);
-		[DllImport(DLLPath)] public static extern UInt32 GetHistoryViewerPosition();
+		[DllImport(DLLPath)] public static extern void HistoryViewerInitialize(IntPtr windowHandle, IntPtr viewerHandle);
+		[DllImport(DLLPath)] public static extern void HistoryViewerRelease();
+		[DllImport(DLLPath)] public static extern void HistoryViewerRun();
+		[DllImport(DLLPath)] public static extern void HistoryViewerStop();
+		[DllImport(DLLPath)] public static extern UInt32 HistoryViewerGetHistoryLength();
+		[DllImport(DLLPath)] [return: MarshalAs(UnmanagedType.I1)] public static extern bool HistoryViewerSaveMovie([MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(UTF8Marshaler))]string movieFile, UInt32 startPosition, UInt32 endPosition);
+		[DllImport(DLLPath)] public static extern void HistoryViewerSetPosition(UInt32 seekPosition);
+		[DllImport(DLLPath)] public static extern void HistoryViewerResumeGameplay(UInt32 seekPosition);
+		[DllImport(DLLPath)] public static extern UInt32 HistoryViewerGetPosition();
+		[DllImport(DLLPath, EntryPoint = "HistoryViewerGetSegments")] public static extern void HistoryViewerGetSegmentsWrapper(IntPtr segmentBuffer, ref UInt32 bufferSize);
 
 		[DllImport(DLLPath)] public static extern void SetDisplayLanguage(Language lang);
 
@@ -173,7 +176,7 @@ namespace Mesen.GUI
 		[DllImport(DLLPath)] private static extern void SetFlags(EmulationFlags flags);
 		[DllImport(DLLPath)] private static extern void ClearFlags(EmulationFlags flags);
 		[DllImport(DLLPath)] public static extern void SetRamPowerOnState(RamPowerOnState state);
-		[DllImport(DLLPath)] public static extern void SetMasterVolume(double volume, double volumeReduction);
+		[DllImport(DLLPath)] public static extern void SetMasterVolume(double volume, double volumeReduction, ConsoleId consoleId = ConsoleId.Master);
 		[DllImport(DLLPath)] public static extern void SetChannelVolume(AudioChannel channel, double volume);
 		[DllImport(DLLPath)] public static extern void SetChannelPanning(AudioChannel channel, double panning);
 		[DllImport(DLLPath)] public static extern void SetEqualizerFilterType(EqualizerFilterType filter);
@@ -198,7 +201,7 @@ namespace Mesen.GUI
 		[DllImport(DLLPath)] public static extern void SetOverclockRate(UInt32 overclockRate, [MarshalAs(UnmanagedType.I1)]bool adjustApu);
 		[DllImport(DLLPath)] public static extern void SetPpuNmiConfig(UInt32 extraScanlinesBeforeNmi, UInt32 extraScanlineAfterNmi);
 		[DllImport(DLLPath)] public static extern void SetOverscanDimensions(UInt32 left, UInt32 right, UInt32 top, UInt32 bottom);
-		[DllImport(DLLPath)] public static extern void SetVideoScale(double scale);
+		[DllImport(DLLPath)] public static extern void SetVideoScale(double scale, ConsoleId consoleId = ConsoleId.Master);
 		[DllImport(DLLPath)] public static extern void SetScreenRotation(UInt32 angle);
 		[DllImport(DLLPath)] public static extern void SetExclusiveRefreshRate(UInt32 refreshRate);
 		[DllImport(DLLPath)] public static extern void SetVideoAspectRatio(VideoAspectRatio aspectRatio, double customRatio);
@@ -213,7 +216,7 @@ namespace Mesen.GUI
 
 		[DllImport(DLLPath, EntryPoint = "GetRgbPalette")] private static extern void GetRgbPaletteWrapper(IntPtr paletteBuffer);
 
-		[DllImport(DLLPath, EntryPoint = "GetScreenSize")] private static extern void GetScreenSizeWrapper(out ScreenSize size, [MarshalAs(UnmanagedType.I1)]bool ignoreScale);
+		[DllImport(DLLPath, EntryPoint = "GetScreenSize")] private static extern void GetScreenSizeWrapper(ConsoleId consoleId, out ScreenSize size, [MarshalAs(UnmanagedType.I1)]bool ignoreScale);
 
 		[DllImport(DLLPath, EntryPoint = "GetAudioDevices")] private static extern IntPtr GetAudioDevicesWrapper();
 		[DllImport(DLLPath)] public static extern void SetAudioDevice(string audioDevice);
@@ -619,6 +622,7 @@ namespace Mesen.GUI
 
 			return callstack;
 		}
+
 		[DllImport(DLLPath)] private static extern Int32 DebugGetFunctionEntryPointCount();
 		[DllImport(DLLPath, EntryPoint = "DebugGetFunctionEntryPoints")] private static extern void DebugGetFunctionEntryPointsWrapper(IntPtr callstackAbsolute, Int32 maxCount);
 		public static Int32[] DebugGetFunctionEntryPoints()
@@ -724,11 +728,27 @@ namespace Mesen.GUI
 			return new RomInfo(romInfo);
 		}
 
-		public static ScreenSize GetScreenSize(bool ignoreScale)
+		public static ScreenSize GetScreenSize(bool ignoreScale, ConsoleId consoleId = ConsoleId.Master)
 		{
 			ScreenSize size;
-			GetScreenSizeWrapper(out size, ignoreScale);
+			GetScreenSizeWrapper(consoleId, out size, ignoreScale);
 			return size;
+		}
+
+		public static UInt32[] HistoryViewerGetSegments()
+		{
+			UInt32[] segmentBuffer = new UInt32[InteropEmu.HistoryViewerGetHistoryLength() / 30];
+			UInt32 bufferSize = (UInt32)segmentBuffer.Length;
+
+			GCHandle hSegmentBuffer = GCHandle.Alloc(segmentBuffer, GCHandleType.Pinned);
+			try {
+				InteropEmu.HistoryViewerGetSegmentsWrapper(hSegmentBuffer.AddrOfPinnedObject(), ref bufferSize);
+			} finally {
+				hSegmentBuffer.Free();
+			}
+			Array.Resize(ref segmentBuffer, (int)bufferSize);
+
+			return segmentBuffer;
 		}
 
 		public static void SetFlag(EmulationFlags flag, bool value)

@@ -22,8 +22,13 @@ public:
 	void SetHistoryData(std::deque<RewindData> &history);
 	
 	uint32_t GetHistoryLength();
+	void GetHistorySegments(uint32_t * segmentBuffer, uint32_t &bufferSize);
 	uint32_t GetPosition();
 	void SeekTo(uint32_t seekPosition);
+
+	bool SaveMovie(string movieFile, uint32_t startPosition, uint32_t endPosition);
+
+	void ResumeGameplay(shared_ptr<Console> console, uint32_t resumePosition);
 	
 	void ProcessEndOfFrame();
 

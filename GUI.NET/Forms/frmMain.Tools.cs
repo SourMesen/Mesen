@@ -103,7 +103,7 @@ namespace Mesen.GUI.Forms
 		{
 			if(_historyViewerWindow == null) {
 				_historyViewerWindow = new frmHistoryViewer();
-				_historyViewerWindow.Show();
+				_historyViewerWindow.Show(sender, this);
 				_historyViewerWindow.FormClosed += (s, evt) => {
 					_historyViewerWindow = null;
 				};

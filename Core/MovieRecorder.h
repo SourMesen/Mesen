@@ -1,5 +1,6 @@
 #pragma once
 #include "stdafx.h"
+#include <deque>
 #include <unordered_map>
 #include "IInputRecorder.h"
 #include "BatteryManager.h"
@@ -8,6 +9,7 @@
 
 class ZipWriter;
 class Console;
+class RewindData;
 struct CodeInfo;
 
 class MovieRecorder : public INotificationListener, public IInputRecorder, public IBatteryRecorder, public IBatteryProvider, public std::enable_shared_from_this<MovieRecorder>
@@ -22,7 +24,7 @@ private:
 	unique_ptr<ZipWriter> _writer;
 	std::unordered_map<string, vector<uint8_t>> _batteryData;
 	stringstream _inputData;
-	bool _hasSaveState;
+	bool _hasSaveState = false;
 	stringstream _saveStateData;
 
 	void GetGameSettings(stringstream &out);
@@ -38,6 +40,9 @@ public:
 	bool Record(RecordMovieOptions options);
 	bool Stop();
 
+	bool CreateMovie(string movieFile, std::deque<RewindData> &data, uint32_t startPosition, uint32_t endPosition);
+
+	// Inherited via IInputRecorder
 	void RecordInput(vector<shared_ptr<BaseControlDevice>> devices) override;
 
 	// Inherited via IBatteryRecorder
@@ -47,7 +52,7 @@ public:
 	virtual vector<uint8_t> LoadBattery(string extension) override;
 
 	// Inherited via INotificationListener
-	virtual void ProcessNotification(ConsoleNotificationType type, void * parameter) override;
+	virtual void ProcessNotification(ConsoleNotificationType type, void *parameter) override;
 };
 
 namespace MovieKeys

@@ -73,6 +73,7 @@ public:
 		if(console) {
 			if(IsPressed(SystemActionManager::Buttons::ResetButton)) {
 				console->ResetComponents(true);
+				console->GetControlManager()->UpdateInputState();
 			}
 			if(IsPressed(SystemActionManager::Buttons::PowerButton)) {
 				console->PowerCycle();

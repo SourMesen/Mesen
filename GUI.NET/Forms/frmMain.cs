@@ -443,7 +443,7 @@ namespace Mesen.GUI.Forms
 			double verticalScale = (double)dimensions.Height / size.Height;
 			double horizontalScale = (double)dimensions.Width / size.Width;
 			double scale = Math.Min(verticalScale, horizontalScale);
-			if(ConfigManager.Config.VideoInfo.FullscreenForceIntegerScale) {
+			if(_fullscreenMode && ConfigManager.Config.VideoInfo.FullscreenForceIntegerScale) {
 				scale = Math.Floor(scale);
 			}
 			UpdateScaleMenu(scale);
@@ -1089,7 +1089,7 @@ namespace Mesen.GUI.Forms
 					mnuStopMovie.Enabled = running && !netPlay && (moviePlaying || movieRecording);
 					mnuRecordMovie.Enabled = running && !moviePlaying && !movieRecording && !isNetPlayClient;
 					mnuGameConfig.Enabled = !moviePlaying && !movieRecording;
-					mnuHistoryViewer.Enabled = running;
+					mnuHistoryViewer.Enabled = running && !InteropEmu.IsNsf();
 
 					bool waveRecording = InteropEmu.WaveIsRecording();
 					mnuWaveRecord.Enabled = running && !waveRecording;

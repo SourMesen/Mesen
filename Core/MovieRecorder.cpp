@@ -1,4 +1,5 @@
 #include "stdafx.h"
+#include <deque>
 #include "../Utilities/HexUtilities.h"
 #include "../Utilities/FolderUtilities.h"
 #include "../Utilities/ZipWriter.h"
@@ -11,6 +12,7 @@
 #include "SaveStateManager.h"
 #include "NotificationManager.h"
 #include "RomData.h"
+#include "RewindData.h"
 
 MovieRecorder::MovieRecorder(shared_ptr<Console> console)
 {
@@ -227,4 +229,40 @@ void MovieRecorder::ProcessNotification(ConsoleNotificationType type, void *para
 	if(type == ConsoleNotificationType::GameLoaded) {
 		_console->GetControlManager()->RegisterInputRecorder(this);
 	}
+}
+
+bool MovieRecorder::CreateMovie(string movieFile, std::deque<RewindData> &data, uint32_t startPosition, uint32_t endPosition)
+{
+	_filename = movieFile;
+	_writer.reset(new ZipWriter());
+	if(startPosition < data.size() && endPosition <= data.size() && _writer->Initialize(_filename)) {
+		vector<shared_ptr<BaseControlDevice>> devices = _console->GetControlManager()->GetControlDevices();
+		
+		if(startPosition > 0) {
+			_hasSaveState = true;
+			_saveStateData = stringstream();
+			_console->GetSaveStateManager()->GetSaveStateHeader(_saveStateData);
+			data[startPosition].GetStateData(_saveStateData);
+		}
+
+		_inputData = stringstream();
+
+		for(uint32_t i = startPosition; i < endPosition; i++) {
+			RewindData rewindData = data[i];
+			for(int i = 0; i < 30; i++) {
+				for(shared_ptr<BaseControlDevice> &device : devices) {
+					uint8_t port = device->GetPort();
+					if(i < rewindData.InputLogs[port].size()) {
+						device->SetRawState(rewindData.InputLogs[port][i]);
+						_inputData << ("|" + device->GetTextState());
+					}
+				}
+				_inputData << "\n";
+			}
+		}
+
+		//Write the movie file
+		return Stop();
+	}
+	return false;
 }

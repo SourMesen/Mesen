@@ -374,7 +374,15 @@ bool Console::Initialize(VirtualFile &romFile, VirtualFile &patchFile)
 				GetDebugger();
 			}
 
+
 			ResetComponents(false);
+
+			//Reset components before creating rewindmanager, otherwise the first save state it takes will be invalid
+			_rewindManager.reset(new RewindManager(shared_from_this()));
+			_notificationManager->RegisterNotificationListener(_rewindManager);
+
+			//Poll controller input after creating rewind manager, to make sure it catches the first frame's input
+			_controlManager->UpdateInputState();
 
 #ifndef LIBRETRO
 			//Don't use auto-save manager for libretro
@@ -383,9 +391,6 @@ bool Console::Initialize(VirtualFile &romFile, VirtualFile &patchFile)
 				_autoSaveManager.reset(new AutoSaveManager(shared_from_this()));
 			}
 #endif
-			_rewindManager.reset(new RewindManager(shared_from_this()));
-			_notificationManager->RegisterNotificationListener(_rewindManager);
-
 			_videoDecoder->StartThread();
 
 			FolderUtilities::AddKnownGameFolder(romFile.GetFolderPath());
@@ -590,8 +595,6 @@ void Console::ResetComponents(bool softReset)
 			debugger->Resume();
 		}
 	}
-
-	_controlManager->UpdateInputState();
 }
 
 void Console::Stop(int stopCode)

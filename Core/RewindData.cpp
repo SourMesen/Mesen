@@ -3,6 +3,15 @@
 #include "Console.h"
 #include "../Utilities/miniz.h"
 
+void RewindData::GetStateData(stringstream &stateData)
+{
+	unsigned long length = OriginalSaveStateSize;
+	uint8_t* buffer = new uint8_t[length];
+	uncompress(buffer, &length, SaveStateData.data(), (unsigned long)SaveStateData.size());
+	stateData.write((char*)buffer, length);
+	delete[] buffer;
+}
+
 void RewindData::LoadState(shared_ptr<Console> &console)
 {
 	if(SaveStateData.size() > 0 && OriginalSaveStateSize > 0) {

@@ -5,6 +5,8 @@
 #include "BaseControlDevice.h"
 #include "SoundMixer.h"
 #include "NotificationManager.h"
+#include "RomData.h"
+#include "MovieRecorder.h"
 
 HistoryViewer::HistoryViewer(shared_ptr<Console> console)
 {
@@ -29,6 +31,23 @@ uint32_t HistoryViewer::GetHistoryLength()
 	return (uint32_t)(_history.size() * HistoryViewer::BufferSize);
 }
 
+void HistoryViewer::GetHistorySegments(uint32_t *segmentBuffer, uint32_t &bufferSize)
+{
+	int segmentIndex = 0;
+	for(int i = 0; i < _history.size(); i++) {
+		if(_history[i].EndOfSegment) {
+			segmentBuffer[segmentIndex] = i;
+			segmentIndex++;
+
+			if(segmentIndex == bufferSize) {
+				//Reached buffer size, can't return any more values
+				break;
+			}
+		}
+	}
+	bufferSize = segmentIndex;
+}
+
 uint32_t HistoryViewer::GetPosition()
 {
 	return _position;
@@ -36,14 +55,13 @@ uint32_t HistoryViewer::GetPosition()
 
 void HistoryViewer::SeekTo(uint32_t seekPosition)
 {
-	//Seek to the specified position, in seconds
-	uint32_t index = (uint32_t)(seekPosition * 60 / HistoryViewer::BufferSize);
-	if(index < _history.size()) {
+	//Seek to the specified position
+	if(seekPosition < _history.size()) {
 		_console->Pause();
 		
 		bool wasPaused = _console->GetSettings()->CheckFlag(EmulationFlags::Paused);
 		_console->GetSettings()->ClearFlags(EmulationFlags::Paused);
-		_position = index;
+		_position = seekPosition;
 		RewindData rewindData = _history[_position];
 		rewindData.LoadState(_console);
 
@@ -56,6 +74,39 @@ void HistoryViewer::SeekTo(uint32_t seekPosition)
 
 		_console->Resume();
 	}
+}
+
+bool HistoryViewer::SaveMovie(string movieFile, uint32_t startPosition, uint32_t endPosition)
+{
+	//Take a savestate to be able to restore it after generating the movie file
+	//(the movie generation uses the console's inputs, which could affect the emulation otherwise)
+	stringstream state;
+	_console->Pause();
+	_console->SaveState(state);
+
+	//Convert the rewind data to a .mmo file
+	unique_ptr<MovieRecorder> recorder(new MovieRecorder(_console));
+	bool result = recorder->CreateMovie(movieFile, _history, startPosition, endPosition);
+
+	//Resume the state and resume
+	_console->LoadState(state);
+	_console->Resume();
+	return result;
+}
+
+void HistoryViewer::ResumeGameplay(shared_ptr<Console> console, uint32_t resumePosition)
+{
+	console->Pause();
+	if(_console->GetRomInfo().Hash.Sha1 != console->GetRomInfo().Hash.Sha1) {
+		//Load game on the main window if they aren't the same
+		console->Initialize(_console->GetRomPath(), _console->GetPatchFile());
+	}
+	if(resumePosition < _history.size()) {
+		_history[resumePosition].LoadState(console);
+	} else {
+		_history[_history.size() - 1].LoadState(console);
+	}
+	console->Resume();
 }
 
 bool HistoryViewer::SetInput(BaseControlDevice *device)

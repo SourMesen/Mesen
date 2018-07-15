@@ -189,12 +189,17 @@ namespace InteropEmu {
 			_console->Resume();
 		}
 
-		DllExport void __stdcall InitializeHistoryViewer(void *windowHandle, void *viewerHandle)
+		DllExport void __stdcall HistoryViewerInitialize(void *windowHandle, void *viewerHandle)
 		{
 			_historyConsole.reset(new Console(nullptr, _settings));
 			_historyConsole->Init();
 			_historyConsole->Initialize(_console->GetRomPath(), _console->GetPatchFile());
 			_historyConsole->CopyRewindData(_console);
+
+			//Force some settings
+			_historyConsole->GetSettings()->SetEmulationSpeed(100);
+			_historyConsole->GetSettings()->SetVideoScale(2);
+			_historyConsole->GetSettings()->ClearFlags(EmulationFlags::InBackground | EmulationFlags::Rewind | EmulationFlags::ForceMaxSpeed);
 
 			#ifdef _WIN32
 				_historyRenderer.reset(new Renderer(_historyConsole, (HWND)viewerHandle, false));
@@ -205,7 +210,7 @@ namespace InteropEmu {
 			#endif
 		}
 
-		DllExport void __stdcall ReleaseHistoryViewer(void *windowHandle, void *viewerHandle)
+		DllExport void __stdcall HistoryViewerRelease(void *windowHandle, void *viewerHandle)
 		{
 			_historyConsole->Stop();
 			_historyConsole->Release(true);
@@ -214,14 +219,14 @@ namespace InteropEmu {
 			_historyConsole.reset();
 		}
 
-		DllExport void __stdcall RunHistoryViewer()
+		DllExport void __stdcall HistoryViewerRun()
 		{
 			if(_historyConsole) {
 				_historyConsole->Run();
 			}
 		}
 
-		DllExport uint32_t __stdcall GetHistoryViewerTotalFrameCount()
+		DllExport uint32_t __stdcall HistoryViewerGetHistoryLength()
 		{
 			if(_historyConsole) {
 				return _historyConsole->GetHistoryViewer()->GetHistoryLength();
@@ -229,14 +234,36 @@ namespace InteropEmu {
 			return 0;
 		}
 
-		DllExport void __stdcall SetHistoryViewerPosition(uint32_t seekPosition)
+		DllExport void __stdcall HistoryViewerGetSegments(uint32_t* segmentBuffer, uint32_t &bufferSize)
+		{
+			if(_historyConsole) {
+				_historyConsole->GetHistoryViewer()->GetHistorySegments(segmentBuffer, bufferSize);
+			}
+		}
+
+		DllExport bool __stdcall HistoryViewerSaveMovie(const char* movieFile, uint32_t startPosition, uint32_t endPosition)
+		{
+			if(_historyConsole) {
+				return _historyConsole->GetHistoryViewer()->SaveMovie(movieFile, startPosition, endPosition);
+			}
+			return false;
+		}
+
+		DllExport void __stdcall HistoryViewerResumeGameplay(uint32_t resumeAtSecond)
+		{
+			if(_historyConsole) {
+				_historyConsole->GetHistoryViewer()->ResumeGameplay(_console, resumeAtSecond);
+			}
+		}
+
+		DllExport void __stdcall HistoryViewerSetPosition(uint32_t seekPosition)
 		{
 			if(_historyConsole) {
 				_historyConsole->GetHistoryViewer()->SeekTo(seekPosition);
 			}
 		}
 
-		DllExport uint32_t __stdcall GetHistoryViewerPosition()
+		DllExport uint32_t __stdcall HistoryViewerGetPosition()
 		{
 			if(_historyConsole) {
 				return _historyConsole->GetHistoryViewer()->GetPosition();
@@ -576,7 +603,7 @@ namespace InteropEmu {
 		DllExport void __stdcall SetEqualizerFilterType(EqualizerFilterType filter) { _settings->SetEqualizerFilterType(filter); }
 		DllExport void __stdcall SetBandGain(uint32_t band, double gain) { _settings->SetBandGain(band, gain); }
 		DllExport void __stdcall SetEqualizerBands(double *bands, uint32_t bandCount) { _settings->SetEqualizerBands(bands, bandCount); }
-		DllExport void __stdcall SetMasterVolume(double volume, double volumeReduction) { _settings->SetMasterVolume(volume, volumeReduction); }
+		DllExport void __stdcall SetMasterVolume(double volume, double volumeReduction, ConsoleId consoleId) { GetConsoleById(consoleId)->GetSettings()->SetMasterVolume(volume, volumeReduction); }
 		DllExport void __stdcall SetSampleRate(uint32_t sampleRate) { _settings->SetSampleRate(sampleRate); }
 		DllExport void __stdcall SetAudioLatency(uint32_t msLatency) { _settings->SetAudioLatency(msLatency); }
 		DllExport void __stdcall SetStereoFilter(StereoFilter stereoFilter) { _settings->SetStereoFilter(stereoFilter); }
@@ -596,7 +623,7 @@ namespace InteropEmu {
 		DllExport void __stdcall SetRewindBufferSize(uint32_t seconds) { _settings->SetRewindBufferSize(seconds); }
 		DllExport void __stdcall SetOverclockRate(uint32_t overclockRate, bool adjustApu) { _settings->SetOverclockRate(overclockRate, adjustApu); }
 		DllExport void __stdcall SetPpuNmiConfig(uint32_t extraScanlinesBeforeNmi, uint32_t extraScanlinesAfterNmi) { _settings->SetPpuNmiConfig(extraScanlinesBeforeNmi, extraScanlinesAfterNmi); }
-		DllExport void __stdcall SetVideoScale(double scale) { _settings->SetVideoScale(scale); }
+		DllExport void __stdcall SetVideoScale(double scale, ConsoleId consoleId) { GetConsoleById(consoleId)->GetSettings()->SetVideoScale(scale); }
 		DllExport void __stdcall SetScreenRotation(uint32_t angle) { _settings->SetScreenRotation(angle); }
 		DllExport void __stdcall SetExclusiveRefreshRate(uint32_t angle) { _settings->SetExclusiveRefreshRate(angle); }
 		DllExport void __stdcall SetVideoAspectRatio(VideoAspectRatio aspectRatio, double customRatio) { _settings->SetVideoAspectRatio(aspectRatio, customRatio); }
@@ -619,7 +646,7 @@ namespace InteropEmu {
 
 		DllExport void __stdcall SetAudioDevice(char* audioDevice) { if(_soundManager) { _soundManager->SetAudioDevice(audioDevice); } }
 
-		DllExport void __stdcall GetScreenSize(ScreenSize &size, bool ignoreScale) { _console->GetVideoDecoder()->GetScreenSize(size, ignoreScale); }
+		DllExport void __stdcall GetScreenSize(ConsoleId consoleId, ScreenSize &size, bool ignoreScale) { GetConsoleById(consoleId)->GetVideoDecoder()->GetScreenSize(size, ignoreScale); }
 
 		DllExport void __stdcall InputBarcode(uint64_t barCode, int32_t digitCount) { _console->InputBarcode(barCode, digitCount); }
 

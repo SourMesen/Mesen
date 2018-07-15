@@ -23,6 +23,8 @@ public:
 	void SaveState();
 	bool LoadState();
 
+	void GetSaveStateHeader(ostream & stream);
+
 	void SaveState(ostream &stream);
 	bool SaveState(string filepath);
 	void SaveState(int stateIndex, bool displayMessage = true);

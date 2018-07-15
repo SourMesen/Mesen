@@ -241,6 +241,7 @@
     <Compile Include="CommandLineHelper.cs" />
     <Compile Include="Config\DebuggerShortcutsConfig.cs" />
     <Compile Include="Config\GameSpecificInfo.cs" />
+    <Compile Include="Config\HistoryViewerInfo.cs" />
     <Compile Include="Config\MovieRecordInfo.cs" />
     <Compile Include="Config\ConfigAttributes.cs" />
     <Compile Include="Config\AviRecordInfo.cs" />

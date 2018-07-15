@@ -99,6 +99,11 @@ shared_ptr<BaseControlDevice> ControlManager::GetControlDevice(uint8_t port)
 	return nullptr;
 }
 
+vector<shared_ptr<BaseControlDevice>> ControlManager::GetControlDevices()
+{
+	return _controlDevices;
+}
+
 void ControlManager::RegisterControlDevice(shared_ptr<BaseControlDevice> controlDevice)
 {
 	_controlDevices.push_back(controlDevice);

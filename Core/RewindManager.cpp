@@ -75,6 +75,11 @@ void RewindManager::ProcessNotification(ConsoleNotificationType type, void * par
 		} else {
 			ClearBuffer();
 		}
+	} else if(type == ConsoleNotificationType::StateLoaded) {
+		if(_rewindState == RewindState::Stopped) {
+			//A save state was loaded by the user, mark as the end of the current "segment" (for history viewer)
+			_currentHistory.EndOfSegment = true;
+		}
 	}
 }
 

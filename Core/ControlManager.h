@@ -66,6 +66,7 @@ public:
 	vector<ControlDeviceState> GetPortStates();
 
 	shared_ptr<BaseControlDevice> GetControlDevice(uint8_t port);
+	vector<shared_ptr<BaseControlDevice>> GetControlDevices();
 	bool HasKeyboard();
 	
 	static shared_ptr<BaseControlDevice> CreateControllerDevice(ControllerType type, uint8_t port, shared_ptr<Console> console);

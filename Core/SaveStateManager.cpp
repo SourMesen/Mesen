@@ -58,7 +58,7 @@ bool SaveStateManager::LoadState()
 	return LoadState(_lastIndex);
 }
 
-void SaveStateManager::SaveState(ostream &stream)
+void SaveStateManager::GetSaveStateHeader(ostream &stream)
 {
 	uint32_t emuVersion = EmulationSettings::GetMesenVersion();
 	uint32_t formatVersion = SaveStateManager::FileFormatVersion;
@@ -69,7 +69,7 @@ void SaveStateManager::SaveState(ostream &stream)
 	RomInfo romInfo = _console->GetRomInfo();
 	stream.write((char*)&romInfo.MapperID, sizeof(uint16_t));
 	stream.write((char*)&romInfo.SubMapperID, sizeof(uint8_t));
-	
+
 	string sha1Hash = romInfo.Hash.Sha1;
 	stream.write(sha1Hash.c_str(), sha1Hash.size());
 
@@ -77,7 +77,11 @@ void SaveStateManager::SaveState(ostream &stream)
 	uint32_t nameLength = (uint32_t)romName.size();
 	stream.write((char*)&nameLength, sizeof(uint32_t));
 	stream.write(romName.c_str(), romName.size());
+}
 
+void SaveStateManager::SaveState(ostream &stream)
+{
+	GetSaveStateHeader(stream);
 	_console->SaveState(stream);
 }
 

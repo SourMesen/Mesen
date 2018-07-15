@@ -28,7 +28,7 @@ namespace Mesen.GUI.Forms
 					}));
 					return result;
 				} else {
-					return MessageBox.Show(mainForm, ResourceHelper.GetMessage(text, args), "Mesen", buttons, icon);
+					return MessageBox.Show(ResourceHelper.GetMessage(text, args), "Mesen", buttons, icon);
 				}
 			}
 		}
