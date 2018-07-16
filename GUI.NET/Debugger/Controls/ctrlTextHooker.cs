@@ -155,7 +155,7 @@ namespace Mesen.GUI.Debugger.Controls
 			}
 
 			txtSelectedText.Text = output.ToString();
-			if(chkAutoCopyToClipboard.Checked) {
+			if(chkAutoCopyToClipboard.Checked && !string.IsNullOrWhiteSpace(txtSelectedText.Text)) {
 				Clipboard.SetText(txtSelectedText.Text);
 			}
 		}
