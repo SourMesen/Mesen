@@ -71,6 +71,7 @@ class MMC1 : public BaseMapper
 				//	- other bits of $8000 (and other regs) are unchanged
 				ResetBuffer();
 				_state.Reg8000 |= 0x0C;
+				UpdateState();
 				return false;
 			} else {
 				_writeBuffer >>= 1;
