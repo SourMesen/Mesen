@@ -1086,7 +1086,10 @@ void Debugger::UpdatePpuCyclesToProcess()
 {
 	memset(_proccessPpuCycle, 0, sizeof(_proccessPpuCycle));
 	for(auto updateCycle : _ppuViewerUpdateCycle) {
-		_proccessPpuCycle[updateCycle.second] = true;
+		int16_t cycle = updateCycle.second >> 9;
+		if(cycle < 341) {
+			_proccessPpuCycle[cycle] = true;
+		}
 	}
 	_proccessPpuCycle[0] = true;
 }
