@@ -211,7 +211,11 @@ namespace Mesen.GUI.Debugger
 		private void ctrlSpriteViewer_OnSelectTilePalette(int tileIndex, int paletteIndex)
 		{
 			ctrlChrViewer.SelectedTileIndex = tileIndex;
-			ctrlChrViewer.SelectedPaletteIndex = paletteIndex;
+			if(!InteropEmu.DebugIsExecutionStopped() || ConfigManager.Config.DebugInfo.PpuRefreshOnBreak) {
+				//Only change the palette if execution is not stopped (or if we're configured to refresh the viewer on break/pause)
+				//Otherwise, the CHR viewer will refresh its data (and it might not match the data we loaded at the specified scanline/cycle anymore)
+				ctrlChrViewer.SelectedPaletteIndex = paletteIndex;
+			}
 			tabMain.SelectTab(tpgChrViewer);
 		}
 	}
