@@ -61,11 +61,8 @@ namespace Mesen.GUI.Debugger
 
 				this.ctrlScanlineCycle.Initialize(_ppuViewerId, ConfigManager.Config.DebugInfo.PpuDisplayScanline, ConfigManager.Config.DebugInfo.PpuDisplayCycle);
 
-				this.ctrlNametableViewer.GetData();
-				this.ctrlChrViewer.GetData();
-				this.ctrlSpriteViewer.GetData();
-				this.ctrlPaletteViewer.GetData();
-
+				GetData();
+				
 				this.ctrlNametableViewer.RefreshViewer();
 				this.ctrlChrViewer.RefreshViewer();
 				this.ctrlSpriteViewer.RefreshViewer();
@@ -117,15 +114,10 @@ namespace Mesen.GUI.Debugger
 
 		private void GetData()
 		{
-			if(_selectedTab == this.tpgNametableViewer) {
-				this.ctrlNametableViewer.GetData();
-			} else if(_selectedTab == this.tpgChrViewer) {
-				this.ctrlChrViewer.GetData();
-			} else if(_selectedTab == this.tpgSpriteViewer) {
-				this.ctrlSpriteViewer.GetData();
-			} else if(_selectedTab == this.tpgPaletteViewer) {
-				this.ctrlPaletteViewer.GetData();
-			}
+			this.ctrlNametableViewer.GetData();
+			this.ctrlChrViewer.GetData();
+			this.ctrlSpriteViewer.GetData();
+			this.ctrlPaletteViewer.GetData();
 		}
 
 		private void RefreshViewers()
@@ -171,7 +163,6 @@ namespace Mesen.GUI.Debugger
 			this._selectedTab = this.tabMain.SelectedTab;
 			if(InteropEmu.DebugIsExecutionStopped()) {
 				//Refresh data when changing tabs when not running
-				this.GetData();
 				this.RefreshViewers();
 			}
 		}
