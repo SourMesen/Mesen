@@ -10,9 +10,6 @@ NsfMapper* NsfMapper::_instance;
 NsfMapper::NsfMapper()
 {
 	_instance = this;
-	_console->GetSettings()->DisableOverclocking(true);
-	_console->GetSettings()->ClearFlags(EmulationFlags::Paused);
-	_console->GetSettings()->SetFlags(EmulationFlags::NsfPlayerEnabled);
 }
 
 NsfMapper::~NsfMapper()
@@ -31,6 +28,10 @@ NsfMapper * NsfMapper::GetInstance()
 
 void NsfMapper::InitMapper()
 {
+	_console->GetSettings()->DisableOverclocking(true);
+	_console->GetSettings()->ClearFlags(EmulationFlags::Paused);
+	_console->GetSettings()->SetFlags(EmulationFlags::NsfPlayerEnabled);
+
 	_mmc5Audio.reset(new MMC5Audio(_console));
 	_vrc6Audio.reset(new Vrc6Audio(_console));
 	_vrc7Audio.reset(new Vrc7Audio(_console));
