@@ -176,3 +176,5 @@ Docs/*.exe
 PGOHelper/PGOMesenHome
 *.profraw
 *.profdata
+
+packages/*

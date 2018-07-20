@@ -37,10 +37,10 @@ uint32_t HistoryViewer::GetHistoryLength()
 
 void HistoryViewer::GetHistorySegments(uint32_t *segmentBuffer, uint32_t &bufferSize)
 {
-	size_t segmentIndex = 0;
+	uint32_t segmentIndex = 0;
 	for(size_t i = 0; i < _history.size(); i++) {
 		if(_history[i].EndOfSegment) {
-			segmentBuffer[segmentIndex] = i;
+			segmentBuffer[segmentIndex] = (uint32_t)i;
 			segmentIndex++;
 
 			if(segmentIndex == bufferSize) {
