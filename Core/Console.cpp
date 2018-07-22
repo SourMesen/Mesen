@@ -74,6 +74,7 @@ Console::~Console()
 void Console::Init()
 {
 	_notificationManager.reset(new NotificationManager());
+	_batteryManager.reset(new BatteryManager());
 	
 	_videoRenderer.reset(new VideoRenderer(shared_from_this()));
 	_videoDecoder.reset(new VideoDecoder(shared_from_this()));
@@ -133,6 +134,11 @@ void Console::Release(bool forShutdown)
 	_mapper.reset();
 	_memoryManager.reset();
 	_controlManager.reset();
+}
+
+shared_ptr<BatteryManager> Console::GetBatteryManager()
+{
+	return _batteryManager;
 }
 
 shared_ptr<SaveStateManager> Console::GetSaveStateManager()
@@ -264,7 +270,7 @@ bool Console::Initialize(VirtualFile &romFile, VirtualFile &patchFile)
 		vector<uint8_t> fileData;
 		romFile.ReadFile(fileData);
 
-		BatteryManager::Initialize(FolderUtilities::GetFilename(romFile.GetFileName(), false));
+		_batteryManager->Initialize(FolderUtilities::GetFilename(romFile.GetFileName(), false));
 		shared_ptr<BaseMapper> mapper = MapperFactory::InitializeFromFile(shared_from_this(), romFile.GetFileName(), fileData);
 		if(mapper) {
 			_soundMixer->StopAudio(true);
@@ -324,7 +330,7 @@ bool Console::Initialize(VirtualFile &romFile, VirtualFile &patchFile)
 			}
 
 			//Temporarely disable battery saves to prevent battery files from being created for the wrong game (for Battle Box & Turbo File)
-			BatteryManager::SetSaveEnabled(false);
+			_batteryManager->SetSaveEnabled(false);
 
 			uint32_t pollCounter = 0;
 			if(_controlManager && !isDifferentGame) {
@@ -341,7 +347,7 @@ bool Console::Initialize(VirtualFile &romFile, VirtualFile &patchFile)
 			_controlManager->UpdateControlDevices();
 			
 			//Re-enable battery saves
-			BatteryManager::SetSaveEnabled(true);
+			_batteryManager->SetSaveEnabled(true);
 			
 			if(_hdData && (!_hdData->Tiles.empty() || !_hdData->Backgrounds.empty())) {
 				_ppu.reset(new HdPpu(shared_from_this(), _hdData.get()));
@@ -415,7 +421,7 @@ bool Console::Initialize(VirtualFile &romFile, VirtualFile &patchFile)
 	}
 
 	//Reset battery source to current game if new game failed to load
-	BatteryManager::Initialize(FolderUtilities::GetFilename(GetRomInfo().RomName, false));
+	_batteryManager->Initialize(FolderUtilities::GetFilename(GetRomInfo().RomName, false));
 	if(_mapper) {
 		_videoDecoder->StartThread();
 	}
@@ -1275,6 +1281,8 @@ void Console::CopyRewindData(shared_ptr<Console> sourceConsole)
 	sourceConsole->Pause();
 	Pause();
 
+	//Disable battery saving for this instance
+	_batteryManager->SetSaveEnabled(false);
 	_historyViewer.reset(new HistoryViewer(shared_from_this()));
 	sourceConsole->_rewindManager->CopyHistory(_historyViewer);
 

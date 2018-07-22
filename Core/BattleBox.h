@@ -33,7 +33,7 @@ protected:
 public:
 	BattleBox(shared_ptr<Console> console) : BaseControlDevice(console, BaseControlDevice::ExpDevicePort)
 	{
-		BatteryManager::LoadBattery(".bb", (uint8_t*)_data, BattleBox::FileSize);
+		_console->GetBatteryManager()->LoadBattery(".bb", (uint8_t*)_data, BattleBox::FileSize);
 	}
 
 	~BattleBox()
@@ -43,7 +43,7 @@ public:
 
 	void SaveBattery() override
 	{
-		BatteryManager::SaveBattery(".bb", (uint8_t*)_data, BattleBox::FileSize);
+		_console->GetBatteryManager()->SaveBattery(".bb", (uint8_t*)_data, BattleBox::FileSize);
 	}
 	
 	uint8_t ReadRAM(uint16_t addr) override

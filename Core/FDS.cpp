@@ -31,7 +31,7 @@ void FDS::InitMapper(RomData &romData)
 	_fdsRawData = romData.RawData;
 	
 	//Apply save data (saved as an IPS file), if found
-	vector<uint8_t> ipsData = BatteryManager::LoadBattery(".ips");
+	vector<uint8_t> ipsData = _console->GetBatteryManager()->LoadBattery(".ips");
 	LoadDiskData(ipsData);
 }
 
@@ -60,7 +60,7 @@ vector<uint8_t> FDS::CreateIpsPatch()
 void FDS::SaveBattery()
 {
 	vector<uint8_t> ipsData = CreateIpsPatch();
-	BatteryManager::SaveBattery(".ips", ipsData.data(), (uint32_t)ipsData.size());
+	_console->GetBatteryManager()->SaveBattery(".ips", ipsData.data(), (uint32_t)ipsData.size());
 }
 
 void FDS::Reset(bool softReset)

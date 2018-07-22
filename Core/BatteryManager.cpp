@@ -3,14 +3,10 @@
 #include "VirtualFile.h"
 #include "../Utilities/FolderUtilities.h"
 
-string BatteryManager::_romName;
-bool BatteryManager::_saveEnabled = true;
-std::weak_ptr<IBatteryRecorder> BatteryManager::_recorder;
-std::weak_ptr<IBatteryProvider> BatteryManager::_provider;
-
 void BatteryManager::Initialize(string romName)
 {
 	_romName = romName;
+	_saveEnabled = true;
 }
 
 string BatteryManager::GetBasePath()

@@ -26,7 +26,7 @@ protected:
 public:
 	AsciiTurboFile(shared_ptr<Console> console) : BaseControlDevice(console, BaseControlDevice::ExpDevicePort)
 	{
-		BatteryManager::LoadBattery(".tf", _data, AsciiTurboFile::FileSize);
+		_console->GetBatteryManager()->LoadBattery(".tf", _data, AsciiTurboFile::FileSize);
 	}
 
 	~AsciiTurboFile()
@@ -36,7 +36,7 @@ public:
 
 	void SaveBattery() override
 	{
-		BatteryManager::SaveBattery(".tf", _data, AsciiTurboFile::FileSize);
+		_console->GetBatteryManager()->SaveBattery(".tf", _data, AsciiTurboFile::FileSize);
 	}
 
 	uint8_t ReadRAM(uint16_t addr) override

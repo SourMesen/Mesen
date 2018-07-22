@@ -40,12 +40,12 @@ bool MovieRecorder::Record(RecordMovieOptions options)
 		_console->Pause();
 
 		if(options.RecordFrom == RecordMovieFrom::StartWithoutSaveData) {
-			BatteryManager::SetBatteryProvider(shared_from_this());
+			_console->GetBatteryManager()->SetBatteryProvider(shared_from_this());
 		}
 
 		//Save existing battery files
 		if(options.RecordFrom == RecordMovieFrom::StartWithSaveData) {
-			BatteryManager::SetBatteryRecorder(shared_from_this());
+			_console->GetBatteryManager()->SetBatteryRecorder(shared_from_this());
 		}
 		
 		_console->GetNotificationManager()->RegisterNotificationListener(shared_from_this());
@@ -56,7 +56,7 @@ bool MovieRecorder::Record(RecordMovieOptions options)
 		} else {
 			_console->PowerCycle();
 		}
-		BatteryManager::SetBatteryRecorder(nullptr);
+		_console->GetBatteryManager()->SetBatteryRecorder(nullptr);
 		_console->Resume();
 
 		MessageManager::DisplayMessage("Movies", "MovieRecordingTo", FolderUtilities::GetFilename(_filename, true));
@@ -238,7 +238,8 @@ bool MovieRecorder::CreateMovie(string movieFile, std::deque<RewindData> &data, 
 	if(startPosition < data.size() && endPosition <= data.size() && _writer->Initialize(_filename)) {
 		vector<shared_ptr<BaseControlDevice>> devices = _console->GetControlManager()->GetControlDevices();
 		
-		if(startPosition > 0) {
+		if(startPosition > 0 || _console->GetRomInfo().HasBattery) {
+			//Create a movie from a savestate if we don't start from the beginning (or if the game has save ram)
 			_hasSaveState = true;
 			_saveStateData = stringstream();
 			_console->GetSaveStateManager()->GetSaveStateHeader(_saveStateData);

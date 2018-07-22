@@ -27,6 +27,7 @@ class SoundMixer;
 class NotificationManager;
 class Debugger;
 class EmulationSettings;
+class BatteryManager;
 
 struct HdPackData;
 struct HashInfo;
@@ -61,7 +62,8 @@ private:
 	//Used by VS-DualSystem
 	shared_ptr<Console> _master;
 	shared_ptr<Console> _slave;
-
+	
+	shared_ptr<BatteryManager> _batteryManager;
 	shared_ptr<SystemActionManager> _systemActionManager;
 
 	shared_ptr<VideoDecoder> _videoDecoder;
@@ -106,6 +108,7 @@ public:
 	void Init();
 	void Release(bool forShutdown);
 
+	shared_ptr<BatteryManager> GetBatteryManager();
 	shared_ptr<SaveStateManager> GetSaveStateManager();
 	shared_ptr<VideoDecoder> GetVideoDecoder();
 	shared_ptr<VideoRenderer> GetVideoRenderer();

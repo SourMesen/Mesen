@@ -353,22 +353,22 @@ bool BaseMapper::HasBattery()
 void BaseMapper::LoadBattery()
 {
 	if(HasBattery() && _saveRamSize > 0) {
-		BatteryManager::LoadBattery(".sav", _saveRam, _saveRamSize);
+		_console->GetBatteryManager()->LoadBattery(".sav", _saveRam, _saveRamSize);
 	}
 
 	if(_hasChrBattery && _chrRamSize > 0) {
-		BatteryManager::LoadBattery(".sav.chr", _chrRam, _chrRamSize);
+		_console->GetBatteryManager()->LoadBattery(".sav.chr", _chrRam, _chrRamSize);
 	}
 }
 
 void BaseMapper::SaveBattery()
 {
 	if(HasBattery() && _saveRamSize > 0) {
-		BatteryManager::SaveBattery(".sav", _saveRam, _saveRamSize);
+		_console->GetBatteryManager()->SaveBattery(".sav", _saveRam, _saveRamSize);
 	}
 
 	if(_hasChrBattery && _chrRamSize > 0) {
-		BatteryManager::SaveBattery(".sav.chr", _chrRam, _chrRamSize);
+		_console->GetBatteryManager()->SaveBattery(".sav.chr", _chrRam, _chrRamSize);
 	}
 }
 

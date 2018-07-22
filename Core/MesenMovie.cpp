@@ -112,7 +112,7 @@ bool MesenMovie::Play(VirtualFile &file)
 	
 	_console->Pause();
 		
-	BatteryManager::SetBatteryProvider(shared_from_this());
+	_console->GetBatteryManager()->SetBatteryProvider(shared_from_this());
 	_console->GetNotificationManager()->RegisterNotificationListener(shared_from_this());
 	ApplySettings();
 

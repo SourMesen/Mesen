@@ -16,25 +16,23 @@ public:
 class BatteryManager
 {
 private:
-	static string _romName;
-	static bool _saveEnabled;
-	static string GetBasePath();
+	string _romName;
+	bool _saveEnabled;
+	string GetBasePath();
 
-	static std::weak_ptr<IBatteryProvider> _provider;
-	static std::weak_ptr<IBatteryRecorder> _recorder;
-
-	BatteryManager() = delete;
+	std::weak_ptr<IBatteryProvider> _provider;
+	std::weak_ptr<IBatteryRecorder> _recorder;
 
 public:
-	static void Initialize(string romName);
+	void Initialize(string romName);
 
-	static void SetSaveEnabled(bool enabled);
+	void SetSaveEnabled(bool enabled);
 	
-	static void SetBatteryProvider(shared_ptr<IBatteryProvider> provider);
-	static void SetBatteryRecorder(shared_ptr<IBatteryRecorder> recorder);
+	void SetBatteryProvider(shared_ptr<IBatteryProvider> provider);
+	void SetBatteryRecorder(shared_ptr<IBatteryRecorder> recorder);
 	
-	static void SaveBattery(string extension, uint8_t* data, uint32_t length);
+	void SaveBattery(string extension, uint8_t* data, uint32_t length);
 	
-	static vector<uint8_t> LoadBattery(string extension);
-	static void LoadBattery(string extension, uint8_t* data, uint32_t length);
+	vector<uint8_t> LoadBattery(string extension);
+	void LoadBattery(string extension, uint8_t* data, uint32_t length);
 };
