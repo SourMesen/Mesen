@@ -1802,7 +1802,7 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <SubType>Designer</SubType>
     </Content>
-    <Content Include="Dependencies\VsSystem.xml">
+    <Content Include="Dependencies\DipswitchDefinitions.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <SubType>Designer</SubType>
     </Content>

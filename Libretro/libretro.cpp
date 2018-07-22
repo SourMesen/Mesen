@@ -978,6 +978,13 @@ extern "C" {
 		bool result = _console->Initialize(game->path);
 
 		if(result) {
+			//Set default dipswitches for some VS System games
+			switch(_console->GetRomInfo().Hash.PrgCrc32) {
+				case 0x8850924B: _console->GetSettings()->SetDipSwitches(32); break; //VS Tetris
+				case 0xE1AA8214: _console->GetSettings()->SetDipSwitches(32); break; //StarLuster
+				default: _console->GetSettings()->SetDipSwitches(0); break;
+			}
+
 			update_core_controllers();
 			update_input_descriptors();
 

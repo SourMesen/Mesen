@@ -487,10 +487,6 @@ void GameDatabase::SetGameInfo(uint32_t romCrc, RomData &romData, bool updateRom
 		MessageManager::Log("[DB] Game not found in database");
 	}
 
-#ifdef LIBRETRO
-	SetVsSystemDefaults(romData.Info.Hash.PrgCrc32);
-#endif
-
 	romData.Info.DatabaseInfo = info;
 }
 
@@ -523,66 +519,5 @@ void GameDatabase::UpdateRomData(GameInfo &info, RomData &romData)
 			case '4': romData.Info.Mirroring = MirroringType::FourScreens; break;
 			case 'a': romData.Info.Mirroring = MirroringType::ScreenAOnly; break;
 		}
-	}
-}
-
-void GameDatabase::SetVsSystemDefaults(uint32_t prgCrc32)
-{
-	//TODO: CLEANUP
-	switch(prgCrc32) {
-		case 0x8850924B:
-			//Tetris
-			//defaultDip = 32; //????
-			break;
-
-
-		case 0xCF36261E:
-			//SuperSkyKid
-			//inputType = VsInputType::SwapControllers;
-			//model = PpuModel::Ppu2C04A;
-			break;
-
-		case 0xE1AA8214:
-			//StarLuster
-			//defaultDip = 32; //????
-			break;
-
-		case 0x43A357EF:
-			//IceClimber
-			//inputType = VsInputType::SwapControllers;
-			//model = PpuModel::Ppu2C04D;
-			break;
-
-		case 0xD4EB5923:
-			//IceClimberB
-			//inputType = VsInputType::SwapControllers;
-			//model = PpuModel::Ppu2C04D;
-			break;
-
-		case 0x737DD1BF: case 0x4BF3972D:
-			//SuperMarioBros
-			//model = PpuModel::Ppu2C04D;
-			break;
-
-		case 0xAE8063EF:
-			//MachRiderFightingCourse, defaults
-			//model = PpuModel::Ppu2C03;
-			break;
-
-		case 0x8A6A9848: //1 crc left
-			//MachRider
-			//model = PpuModel::Ppu2C04B;
-			break;
-
-		case 0xC99EC059:
-			//RaidBungelingBay
-			//inputType = VsInputType::SwapControllers;
-			//model = PpuModel::Ppu2C04B;
-			break;
-
-		case 0xF9D3B0A3: case 0x66BB838F: case 0x9924980A:
-			//SuperXevious
-			//model = PpuModel::Ppu2C04A;
-			break;
 	}
 }
