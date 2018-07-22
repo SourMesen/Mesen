@@ -42,10 +42,10 @@ enum class EventType;
 class Console : public std::enable_shared_from_this<Console>
 {
 private:
-	SimpleLock _pauseLock;
 	SimpleLock _runLock;
 	SimpleLock _stopLock;
 	SimpleLock _debuggerLock;
+	atomic<uint32_t> _pauseCounter;
 
 	shared_ptr<RewindManager> _rewindManager;
 	shared_ptr<HistoryViewer> _historyViewer;

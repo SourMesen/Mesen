@@ -62,6 +62,7 @@ Console::Console(shared_ptr<Console> master, EmulationSettings* initialSettings)
 		KeyManager::SetSettings(_settings.get());
 	}
 
+	_pauseCounter = 0;
 	_model = NesModel::NTSC;
 }
 
@@ -622,8 +623,7 @@ void Console::Pause()
 		//When trying to pause/resume the slave, we need to pause/resume the master instead
 		_master->Pause();
 	} else {
-		_pauseLock.Acquire();
-		//Spin wait until emu pauses
+		_pauseCounter++;
 		_runLock.Acquire();
 	}
 }
@@ -635,7 +635,7 @@ void Console::Resume()
 		_master->Resume();
 	} else {
 		_runLock.Release();
-		_pauseLock.Release();
+		_pauseCounter--;
 	}
 	
 	shared_ptr<Debugger> debugger = _debugger;
@@ -744,12 +744,12 @@ void Console::Run()
 				//Sleep until we're ready to start the next frame
 				clockTimer.WaitUntil(targetTime);
 
-				if(!_pauseLock.IsFree()) {
+				if(_pauseCounter > 0) {
 					//Need to temporarely pause the emu (to save/load a state, etc.)
 					_runLock.Release();
 
 					//Spin wait until we are allowed to start again
-					_pauseLock.WaitForRelease();
+					while(_pauseCounter > 0) { }
 
 					_runLock.Acquire();
 				}
@@ -876,7 +876,7 @@ bool Console::IsExecutionStopped()
 		//For slave CPU, return the master's state
 		return _master->IsPaused();
 	} else {
-		return _runLock.IsFree() || !_pauseLock.IsFree() || !_running;
+		return _runLock.IsFree() || (!_runLock.IsFree() && _pauseCounter > 0) || !_running;
 	}
 }
 
