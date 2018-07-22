@@ -16,6 +16,8 @@ namespace Mesen.GUI.Debugger
 {
 	public partial class frmEditHeader : BaseConfigForm
 	{
+		private static Dictionary<UInt64, int> _validSizeValues = new Dictionary<UInt64, int>();
+
 		public frmEditHeader()
 		{
 			InitializeComponent();
@@ -29,8 +31,11 @@ namespace Mesen.GUI.Debugger
 			AddBinding("SubmapperId", txtSubmapperId, eNumberFormat.Decimal);
 
 			AddBinding("Mirroring", cboMirroringType);
+			AddBinding("Timing", cboFrameTiming);
 			AddBinding("System", cboSystem);
 			AddBinding("VsPpu", cboVsPpuType);
+			AddBinding("VsSystem", cboVsSystemType);
+			AddBinding("InputType", cboInputType);
 
 			AddBinding("HasBattery", chkBattery);
 			AddBinding("HasTrainer", chkTrainer);
@@ -47,6 +52,13 @@ namespace Mesen.GUI.Debugger
 
 			UpdateUI();
 			UpdateVsDropdown();
+
+			_validSizeValues = new Dictionary<UInt64, int>();
+			for(int i = 0; i < 256; i++) {
+				int multiplier = (i & 0x03) * 2 + 1;
+				UInt64 value = ((UInt64)1 << (i >> 2)) / 1024;
+				_validSizeValues[(UInt64)multiplier * value] = i;
+			}
 		}
 
 		protected override void OnFormClosing(FormClosingEventArgs e)
@@ -85,12 +97,16 @@ namespace Mesen.GUI.Debugger
 			UpdateObject();
 
 			NesHeader header = Entity as NesHeader;
-			if((header.PrgRom % 16) != 0) {
+
+			bool isValidPrgSize = header.IsNes20 && _validSizeValues.ContainsKey(header.PrgRom);
+			bool isValidChrSize = header.IsNes20 && _validSizeValues.ContainsKey(header.ChrRom);
+
+			if(!isValidPrgSize && (header.PrgRom % 16) != 0) {
 				lblError.Text = "Error: PRG ROM size must be a multiple of 16 KB";
 				lblError.Visible = true;
 				return false;
 			}
-			if((header.ChrRom % 8) != 0) {
+			if(!isValidChrSize && (header.ChrRom % 8) != 0) {
 				lblError.Text = "Error: CHR ROM size must be a multiple of 8 KB";
 				lblError.Visible = true;
 				return false;
@@ -107,13 +123,13 @@ namespace Mesen.GUI.Debugger
 					lblError.Visible = true;
 					return false;
 				}
-				if(header.ChrRom >= 32768) {
-					lblError.Text = "Error: CHR ROM size must be lower than 32768 KB";
+				if(!isValidChrSize && header.ChrRom >= 16384) {
+					lblError.Text = "Error: CHR ROM size must be lower than 16384 KB";
 					lblError.Visible = true;
 					return false;
 				}
-				if(header.PrgRom >= 65536) {
-					lblError.Text = "Error: PRG ROM size must be lower than 65536 KB";
+				if(!isValidPrgSize && header.PrgRom >= 32768) {
+					lblError.Text = "Error: PRG ROM size must be lower than 32768 KB";
 					lblError.Visible = true;
 					return false;
 				}
@@ -152,10 +168,11 @@ namespace Mesen.GUI.Debugger
 		private void UpdateVsDropdown()
 		{
 			bool isVsSystem = cboSystem.GetEnumValue<TvSystem>() == TvSystem.VsSystem;
-			cboVsPpuType.Visible = isVsSystem;
-			lblVsPpuType.Visible = isVsSystem;
-			if(!isVsSystem) {
+			cboVsPpuType.Enabled = isVsSystem && radNes2.Checked;
+			cboVsSystemType.Enabled = isVsSystem && radNes2.Checked;
+			if(!cboVsPpuType.Enabled) {
 				cboVsPpuType.SelectedIndex = 0;
+				cboVsSystemType.SelectedIndex = 0;
 			}
 		}
 
@@ -170,8 +187,30 @@ namespace Mesen.GUI.Debugger
 			cboChrRamBattery.Enabled = radNes2.Checked;
 			cboSaveRam.Enabled = radNes2.Checked;
 			cboWorkRam.Enabled = radNes2.Checked;
-			cboVsPpuType.Enabled = radNes2.Checked;
+			cboInputType.Enabled = radNes2.Checked;
 			txtSubmapperId.Enabled = radNes2.Checked;
+			UpdateVsDropdown();
+
+			Enum[] hiddenSystems = null;
+			Enum[] hiddenTimings = null;
+			if(!radNes2.Checked) {
+				hiddenSystems = new Enum[] {
+					TvSystem.BitCorporationCreator, TvSystem.Vt01Mono, TvSystem.Vt01RedCyan,
+					TvSystem.Vt02, TvSystem.Vt03, TvSystem.Vt09, TvSystem.Vt36x, TvSystem.Vt3x
+				};
+				hiddenTimings = new Enum[] {
+					FrameTiming.Dendy
+				};
+			}
+			BaseConfigForm.InitializeComboBox(cboSystem, typeof(TvSystem), hiddenSystems);
+			if(cboSystem.SelectedIndex < 0) {
+				cboSystem.SelectedIndex = 0;
+			}
+
+			BaseConfigForm.InitializeComboBox(cboFrameTiming, typeof(FrameTiming), hiddenTimings);
+			if(cboFrameTiming.SelectedIndex < 0) {
+				cboFrameTiming.SelectedIndex = 0;
+			}
 
 			if(!cboChrRam.Enabled) {
 				cboChrRam.SelectedIndex = 0;
@@ -185,9 +224,6 @@ namespace Mesen.GUI.Debugger
 			if(!cboWorkRam.Enabled) {
 				cboWorkRam.SelectedIndex = 0;
 			}
-			if(!cboVsPpuType.Enabled) {
-				cboVsPpuType.SelectedIndex = 0;
-			}
 			if(!txtSubmapperId.Enabled) {
 				txtSubmapperId.Text = "0";
 			}
@@ -200,15 +236,18 @@ namespace Mesen.GUI.Debugger
 			public uint MapperId;
 			public uint SubmapperId;
 
-			public uint PrgRom;
-			public uint ChrRom;
+			public UInt64 PrgRom;
+			public UInt64 ChrRom;
 
 			public iNesMirroringType Mirroring;
 
+			public FrameTiming Timing;
 			public TvSystem System;
 			public bool HasTrainer;
 			public bool HasBattery;
 			public VsPpuType VsPpu;
+			public VsSystemType VsSystem;
+			public GameInputType InputType;
 
 			public MemorySizes WorkRam = MemorySizes.None;
 			public MemorySizes SaveRam = MemorySizes.None;
@@ -223,10 +262,24 @@ namespace Mesen.GUI.Debugger
 				header[2] = 0x53;
 				header[3] = 0x1A;
 
-				uint prgRomValue = PrgRom / 16;
-				uint chrRomValue = ChrRom / 8;
+				UInt64 prgRomValue = PrgRom / 16;
+				UInt64 chrRomValue = ChrRom / 8;
 
 				if(IsNes20) {
+					if((PrgRom % 16) != 0 || PrgRom >= 32768) {
+						if(_validSizeValues.ContainsKey(PrgRom)) {
+							//This value is a valid exponent+multiplier combo (NES 2.0 only)
+							prgRomValue = ((uint)_validSizeValues[PrgRom] & 0xFF) | 0xF00;
+						}
+					}
+
+					if((ChrRom % 8) != 0 || ChrRom >= 16384) {
+						if(_validSizeValues.ContainsKey(ChrRom)) {
+							//This value is a valid exponent+multiplier combo (NES 2.0 only)
+							chrRomValue = ((uint)_validSizeValues[ChrRom] & 0xFF) | 0xF00;
+						}
+					}
+
 					//NES 2.0
 					header[4] = (byte)(prgRomValue);
 					header[5] = (byte)(chrRomValue);
@@ -236,11 +289,17 @@ namespace Mesen.GUI.Debugger
 						(byte)Mirroring | (HasTrainer ? 0x04 : 0x00) | (HasBattery ? 0x02 : 0x00)
 					);
 
-					header[7] =  (byte)(
-						((byte)MapperId & 0xF0) |
-						(byte)(System == TvSystem.VsSystem ? 0x01 : 0x00) | (System == TvSystem.Playchoice ? 0x02 : 0x00) |
-						0x08 //Enable NES 2.0 header
-					);
+					header[7] = (byte)(MapperId & 0xF0);
+
+					switch(System) {
+						case TvSystem.NesFamicomDendy: header[7] |= 0x00; break;
+						case TvSystem.VsSystem: header[7] |= 0x01; break;
+						case TvSystem.Playchoice: header[7] |= 0x02; break;
+						default: header[7] |= 0x03; break;
+					}
+
+					//Enable NES 2.0 header
+					header[7] |= 0x08;
 
 					header[8] = (byte)(((SubmapperId & 0x0F) << 4) | ((MapperId & 0xF00) >> 8));
 					header[9] = (byte)(((prgRomValue & 0xF00) >> 8) | ((chrRomValue & 0xF00) >> 4));
@@ -248,20 +307,34 @@ namespace Mesen.GUI.Debugger
 					header[10] = (byte)((byte)WorkRam | ((byte)SaveRam) << 4);
 					header[11] = (byte)((byte)ChrRam | ((byte)ChrRamBattery) << 4);
 
-					switch(System) {
+					switch(Timing) {
 						default:
-						case TvSystem.Ntsc:
-							header[12] = 0;
-							break;
-						case TvSystem.Pal:
-							header[12] = 1;
-							break;
-						case TvSystem.NtscAndPal:
-							header[12] = 2;
-							break;
+						case FrameTiming.Ntsc: header[12] = 0x00; break;
+						case FrameTiming.Pal: header[12] = 0x01; break;
+						case FrameTiming.NtscAndPal: header[12] = 0x02; break;
+						case FrameTiming.Dendy: header[12] = 0x03; break;
 					}
 
-					header[13] = (byte)VsPpu;
+					if(System == TvSystem.VsSystem) {
+						header[13] = (byte)(((byte)VsPpu & 0x0F) | ((((byte)VsSystem) & 0x0F) << 4));
+					} else {
+						switch(System) {
+							default:
+							case TvSystem.NesFamicomDendy: header[13] = 0x00; break;
+
+							case TvSystem.Playchoice: header[13] = 0x02; break;
+							case TvSystem.BitCorporationCreator: header[13] = 0x03; break;
+							case TvSystem.Vt01Mono: header[13] = 0x04; break;
+							case TvSystem.Vt01RedCyan: header[13] = 0x05; break;
+							case TvSystem.Vt02: header[13] = 0x06; break;
+							case TvSystem.Vt03: header[13] = 0x07; break;
+							case TvSystem.Vt09: header[13] = 0x08; break;
+							case TvSystem.Vt3x: header[13] = 0x09; break;
+							case TvSystem.Vt36x: header[13] = 0x0A; break;
+						}
+					}
+					header[14] = 0;
+					header[15] = (byte)InputType;
 				} else {
 					//iNES
 					if(prgRomValue == 0x100) {
@@ -281,16 +354,14 @@ namespace Mesen.GUI.Debugger
 					);
 
 					header[8] = 0;
-					header[9] = (byte)(System == TvSystem.Pal ? 0x01 : 0x00);
+					header[9] = (byte)(Timing == FrameTiming.Pal ? 0x01 : 0x00);
 					header[10] = 0;
 					header[11] = 0;
 					header[12] = 0;
 					header[13] = 0;
+					header[14] = 0;
+					header[15] = 0;
 				}
-
-				//Reserved bytes
-				header[14] = 0;
-				header[15] = 0;
 
 				return header;
 			}
@@ -301,19 +372,13 @@ namespace Mesen.GUI.Debugger
 
 				NesHeader header = new NesHeader();
 				header.IsNes20 = binHeader.GetRomHeaderVersion() == RomHeaderVersion.Nes2_0;
-				header.PrgRom = (uint)(binHeader.GetPrgSize() * 16);
-				header.ChrRom = (uint)(binHeader.GetChrSize() * 8);
+				header.PrgRom = (uint)(binHeader.GetPrgSize());
+				header.ChrRom = (uint)(binHeader.GetChrSize());
 				header.HasTrainer = binHeader.HasTrainer();
 				header.HasBattery = binHeader.HasBattery();
-				if(binHeader.IsVsSystem()) {
-					header.System = TvSystem.VsSystem;
-				} else if(binHeader.IsPlaychoice()) {
-					header.System = TvSystem.Playchoice;
-				} else if(binHeader.IsPalRom()) {
-					header.System = TvSystem.Pal;
-				} else {
-					header.System = TvSystem.Ntsc;
-				}
+
+				header.System = binHeader.GetTvSystem();
+				header.Timing = binHeader.GetFrameTiming(); 
 
 				header.Mirroring = binHeader.GetMirroringType();
 				header.MapperId = (uint)binHeader.GetMapperID();
@@ -322,7 +387,9 @@ namespace Mesen.GUI.Debugger
 				header.SaveRam = (MemorySizes)binHeader.GetSaveRamSize();
 				header.ChrRam = (MemorySizes)binHeader.GetChrRamSize();
 				header.ChrRamBattery = (MemorySizes)binHeader.GetSaveChrRamSize();
+				header.InputType = binHeader.GetInputType();
 				header.VsPpu = (VsPpuType)bytes[13];
+				header.VsSystem = binHeader.GetVsSystemType();
 
 				return header;
 			}
@@ -375,59 +442,87 @@ namespace Mesen.GUI.Debugger
 				return (_bytes[6] & 0x04) == 0x04;
 			}
 
-			public bool IsPalRom()
-			{
-				switch(GetRomHeaderVersion()) {
-					case RomHeaderVersion.Nes2_0:
-						return (_bytes[12] & 0x01) == 0x01;
-					case RomHeaderVersion.iNes:
-						return (_bytes[9] & 0x01) == 0x01;
-					default:
-						return false;
-				}
-			}
-
-			public bool IsPlaychoice()
-			{
-				switch(GetRomHeaderVersion()) {
-					case RomHeaderVersion.Nes2_0:
-					case RomHeaderVersion.iNes:
-						return (_bytes[7] & 0x02) == 0x02;
-					default:
-						return false;
-				}
-			}
-
-			public bool IsVsSystem()
-			{
-				switch(GetRomHeaderVersion()) {
-					case RomHeaderVersion.Nes2_0:
-					case RomHeaderVersion.iNes:
-						return (_bytes[7] & 0x01) == 0x01;
-					default:
-						return false;
-				}
-			}
-
-			public int GetPrgSize()
+			public FrameTiming GetFrameTiming()
 			{
 				if(GetRomHeaderVersion() == RomHeaderVersion.Nes2_0) {
-					return (((_bytes[9] & 0x0F) << 8) | PrgCount);
+					switch(_bytes[12] & 0x03) {
+						case 0: return FrameTiming.Ntsc;
+						case 1: return FrameTiming.Pal;
+						case 2: return FrameTiming.NtscAndPal;
+						case 3: return FrameTiming.Dendy;
+					}
+				} else if(GetRomHeaderVersion() == RomHeaderVersion.iNes) {
+					return (_bytes[9] & 0x01) == 0x01 ? FrameTiming.Pal : FrameTiming.Ntsc;
+				}
+				return FrameTiming.Ntsc;
+			}
+
+			public TvSystem GetTvSystem()
+			{
+				if(GetRomHeaderVersion() == RomHeaderVersion.Nes2_0) {
+					switch(_bytes[7] & 0x03) {
+						case 0: return TvSystem.NesFamicomDendy;
+						case 1: return TvSystem.VsSystem;
+						case 2: return TvSystem.Playchoice;
+						case 3:
+							switch(_bytes[13]) {
+								case 0: return TvSystem.NesFamicomDendy;
+								case 1: return TvSystem.VsSystem;
+								case 2: return TvSystem.Playchoice;
+								case 3: return TvSystem.BitCorporationCreator;
+								case 4: return TvSystem.Vt01Mono;
+								case 5: return TvSystem.Vt01RedCyan;
+								case 6: return TvSystem.Vt02;
+								case 7: return TvSystem.Vt03;
+								case 8: return TvSystem.Vt09;
+								case 9: return TvSystem.Vt3x;
+								case 10: return TvSystem.Vt36x;
+								default: return TvSystem.NesFamicomDendy;
+							}
+					}
+				} else if(GetRomHeaderVersion() == RomHeaderVersion.iNes) {
+					if((_bytes[7] & 0x01) == 0x01) {
+						return TvSystem.VsSystem;
+					} else if((_bytes[7] & 0x02) == 0x02) {
+						return TvSystem.Playchoice;
+					}
+				}
+				return TvSystem.NesFamicomDendy;
+			}
+
+			private UInt64 GetSizeValue(int exponent, int multiplier)
+			{
+				multiplier = multiplier * 2 + 1;
+				return (UInt64)multiplier * (((UInt64)1 << exponent) / 1024);
+			}
+
+			public UInt64 GetPrgSize()
+			{
+				if(GetRomHeaderVersion() == RomHeaderVersion.Nes2_0) {
+					if((_bytes[9] & 0x0F) == 0x0F) {
+						return GetSizeValue(PrgCount >> 2, PrgCount & 0x03);
+					} else {
+						return (UInt64)(((_bytes[9] & 0x0F) << 8) | PrgCount) * 16;
+					}
 				} else {
 					if(PrgCount == 0) {
-						return 256; //0 is a special value and means 256
+						return 256 * 16; //0 is a special value and means 256
 					} else {
-						return PrgCount;
+						return (UInt64)PrgCount * 16;
 					}
 				}
 			}
 
-			public int GetChrSize()
+			public UInt64 GetChrSize()
 			{
 				if(GetRomHeaderVersion() == RomHeaderVersion.Nes2_0) {
-					return (((_bytes[9] & 0xF0) << 4) | ChrCount);
+					if((_bytes[9] & 0xF0) == 0xF0) {
+						return GetSizeValue(ChrCount >> 2, ChrCount & 0x03);
+					} else {
+						return (UInt64)(((_bytes[9] & 0xF0) << 4) | ChrCount) * 8;
+					}
 				} else {
-					return ChrCount;
+					return (UInt64)ChrCount * 8;
 				}
 			}
 
@@ -484,6 +579,28 @@ namespace Mesen.GUI.Debugger
 					return (_bytes[6] & 0x01) != 0 ? iNesMirroringType.Vertical : iNesMirroringType.Horizontal;
 				}
 			}
+
+			public GameInputType GetInputType()
+			{
+				if(GetRomHeaderVersion() == RomHeaderVersion.Nes2_0) {
+					if(_bytes[15] < Enum.GetValues(typeof(GameInputType)).Length) {
+						return (GameInputType)_bytes[15];
+					}
+					return GameInputType.Default;
+				} else {
+					return GameInputType.Default;
+				}
+			}
+
+			public VsSystemType GetVsSystemType()
+			{
+				if(GetRomHeaderVersion() == RomHeaderVersion.Nes2_0) {
+					if((_bytes[13] >> 4) <= 0x06) {
+						return (VsSystemType)(_bytes[13] >> 4);
+					}
+				}
+				return VsSystemType.Default;
+			}
 		}
 
 		private enum RomHeaderVersion
@@ -500,13 +617,27 @@ namespace Mesen.GUI.Debugger
 			FourScreens = 8
 		}
 
-		private enum TvSystem
+		private enum FrameTiming
 		{
 			Ntsc = 0,
 			Pal = 1,
 			NtscAndPal = 2,
-			VsSystem = 3,
-			Playchoice = 4,
+			Dendy = 3
+		}
+
+		private enum TvSystem
+		{
+			NesFamicomDendy,
+			VsSystem,
+			Playchoice,
+			BitCorporationCreator,
+			Vt01Mono,
+			Vt01RedCyan,
+			Vt02,
+			Vt03,
+			Vt09,
+			Vt3x,
+			Vt36x
 		}
 
 		private enum MemorySizes
@@ -547,6 +678,65 @@ namespace Mesen.GUI.Debugger
 			Undefined = 13,
 			Undefined2 = 14,
 			Undefined3 = 15
+		}
+		
+		private enum VsSystemType
+		{
+			Default = 0,
+			RbiBaseballProtection = 1,
+			TkoBoxingProtection = 2,
+			SuperXeviousProtection = 3,
+			IceClimberProtection = 4,
+			VsDualSystem = 5,
+			RaidOnBungelingBayProtection = 6,
+		}
+
+		private enum GameInputType
+		{
+			Default = 0,
+			FamicomControllers = 1,
+			FourScore = 2,
+			FourPlayerAdapter = 3,
+			VsSystem = 4,
+			VsSystemSwapped = 5,
+			VsSystemSwapAB = 6,
+			VsZapper = 7,
+			Zapper = 8,
+			TwoZappers = 9,
+			BandaiHypershot = 0x0A,
+			PowerPadSideA = 0x0B,
+			PowerPadSideB = 0x0C,
+			FamilyTrainerSideA = 0x0D,
+			FamilyTrainerSideB = 0x0E,
+			ArkanoidControllerNes = 0x0F,
+			ArkanoidControllerFamicom = 0x10,
+			DoubleArkanoidController = 0x11,
+			KonamiHyperShot = 0x12,
+			PachinkoController = 0x13,
+			ExcitingBoxing = 0x14,
+			JissenMahjong = 0x15,
+			PartyTap = 0x16,
+			OekaKidsTablet = 0x17,
+			BarcodeBattler = 0x18,
+			MiraclePiano = 0x19, //not supported yet
+			PokkunMoguraa = 0x1A, //not supported yet
+			TopRider = 0x1B, //not supported yet
+			DoubleFisted = 0x1C, //not supported yet
+			Famicom3dSystem = 0x1D, //not supported yet
+			DoremikkoKeyboard = 0x1E, //not supported yet
+			ROB = 0x1F, //not supported yet
+			FamicomDataRecorder = 0x20,
+			TurboFile = 0x21,
+			BattleBox = 0x22,
+			FamilyBasicKeyboard = 0x23,
+			Pec586Keyboard = 0x24, //not supported yet
+			Bit79Keyboard = 0x25, //not supported yet
+			SuborKeyboard = 0x26,
+			SuborKeyboardMouse1 = 0x27,
+			SuborKeyboardMouse2 = 0x28,
+			SnesMouse = 0x29,
+			GenericMulticart = 0x2A, //not supported yet
+			SnesControllers = 0x2B,
 		}
 	}
 }

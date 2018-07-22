@@ -94,6 +94,10 @@ void EmulationSettings::InitializeInputDevices(GameInputType inputType, GameSyst
 	} else if(inputType == GameInputType::ArkanoidControllerNes) {
 		log("[Input] Arkanoid controller (NES) connected");
 		controllers[1] = ControllerType::ArkanoidController;
+	} else if(inputType == GameInputType::DoubleArkanoidController) {
+		log("[Input] 2x arkanoid controllers (NES) connected");
+		controllers[0] = ControllerType::ArkanoidController;
+		controllers[1] = ControllerType::ArkanoidController;
 	} else if(inputType == GameInputType::OekaKidsTablet) {
 		log("[Input] Oeka Kids Tablet connected");
 		system = GameSystem::Famicom;

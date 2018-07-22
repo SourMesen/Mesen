@@ -1122,12 +1122,24 @@
 			<Value ID="_1024KB">1024 KB</Value>
 			<Value ID="Reserved">Reserved</Value>
 		</Enum>
-		<Enum ID="TvSystem">
+		<Enum ID="FrameTiming">
 			<Value ID="Ntsc">NTSC</Value>
 			<Value ID="Pal">PAL</Value>
 			<Value ID="NtscAndPal">NTSC and PAL</Value>
+			<Value ID="Dendy">Dendy</Value>
+		</Enum>
+		<Enum ID="TvSystem">
+			<Value ID="NesFamicomDendy">NES / Famicom / Dendy</Value>
 			<Value ID="VsSystem">VS System</Value>
 			<Value ID="Playchoice">Playchoice-10</Value>
+			<Value ID="BitCorporationCreator">Bit Corporation Creator</Value>
+			<Value ID="Vt01Mono">VT01 Monochrome</Value>
+			<Value ID="Vt01RedCyan">VT01 Red/Cyan</Value>
+			<Value ID="Vt02">VT02</Value>
+			<Value ID="Vt03">VT03</Value>
+			<Value ID="Vt09">VT09</Value>
+			<Value ID="Vt3x">VT3x</Value>
+			<Value ID="Vt36x">VT36x</Value>
 		</Enum>
 		<Enum ID="iNesMirroringType">
 			<Value ID="Horizontal">Horizontal</Value>
@@ -1167,6 +1179,61 @@
 			<Value ID="Undefined">Undefined</Value>
 			<Value ID="Undefined2">Undefined (2)</Value>
 			<Value ID="Undefined3">Undefined (3)</Value>
+		</Enum>
+		<Enum ID="VsSystemType">
+			<Value ID="Default">Default</Value>
+			<Value ID="RbiBaseballProtection">RBI Baseball</Value>
+			<Value ID="TkoBoxingProtection">TKO Boxing</Value>
+			<Value ID="SuperXeviousProtection">Super Xevious</Value>
+			<Value ID="IceClimberProtection">Ice Climber</Value>
+			<Value ID="VsDualSystem">VS. Dual System</Value>
+			<Value ID="RaidOnBungelingBayProtection">Raid on Bungeling Bay</Value>
+		</Enum>
+		<Enum ID="GameInputType">
+			<Value ID="Default">Default (Standard Controllers)</Value>
+			<Value ID="FamicomControllers">Famicom Controllers</Value>
+			<Value ID="FourScore">Four Score (NES)</Value>
+			<Value ID="FourPlayerAdapter">Four Player Adapter (Famicom)</Value>
+			<Value ID="VsSystem">VS System</Value>
+			<Value ID="VsSystemSwapped">VS System - Swap P1/P2</Value>
+			<Value ID="VsSystemSwapAB">VS System - Swap A/B buttons</Value>
+			<Value ID="VsZapper">VS Zapper</Value>
+			<Value ID="Zapper">Zapper</Value>
+			<Value ID="TwoZappers">2 zappers</Value>
+			<Value ID="BandaiHypershot">Bandai Hypershot</Value>
+			<Value ID="PowerPadSideA">Power Pad Side A</Value>
+			<Value ID="PowerPadSideB">Power Pad Side B</Value>
+			<Value ID="FamilyTrainerSideA">Family Trainer Side A</Value>
+			<Value ID="FamilyTrainerSideB">Family Trainer Side B</Value>
+			<Value ID="ArkanoidControllerNes">Arkanoid Controller (NES)</Value>
+			<Value ID="ArkanoidControllerFamicom">Arkanoid Controller (Famicom)</Value>
+			<Value ID="DoubleArkanoidController">2x Arkanoid Controllers (NES)</Value>
+			<Value ID="KonamiHyperShot">Konami Hyper Shot</Value>
+			<Value ID="PachinkoController">Pachinko Controller</Value>
+			<Value ID="ExcitingBoxing">Exciting Boxing</Value>
+			<Value ID="JissenMahjong">Jissen Mahjong</Value>
+			<Value ID="PartyTap">Party Tap</Value>
+			<Value ID="OekaKidsTablet">Oeka Kids Tablet</Value>
+			<Value ID="BarcodeBattler">Barcode Battler</Value>
+			<Value ID="MiraclePiano">Miracle Piano</Value>
+			<Value ID="PokkunMoguraa">Pokkun Moguraa</Value>
+			<Value ID="TopRider">Top Rider</Value>
+			<Value ID="DoubleFisted">Double Fisted</Value>
+			<Value ID="Famicom3dSystem">Famicom 3D System</Value>
+			<Value ID="DoremikkoKeyboard">Doremikko Keyboard</Value>
+			<Value ID="ROB">ROB</Value>
+			<Value ID="FamicomDataRecorder">Family Data Recorder</Value>
+			<Value ID="TurboFile">Turbo File</Value>
+			<Value ID="BattleBox">Battle Box</Value>
+			<Value ID="FamilyBasicKeyboard">Family Basic Keyboard</Value>
+			<Value ID="Pec586Keyboard">PEC-586 Keyboard</Value>
+			<Value ID="Bit79Keyboard">Bit-79 Keyboard</Value>
+			<Value ID="SuborKeyboard">Subor Keyboard</Value>
+			<Value ID="SuborKeyboardMouse1">Subor Keyboard+Mouse (Type A)</Value>
+			<Value ID="SuborKeyboardMouse2">Subor Keyboard+Mouse (Type B)</Value>
+			<Value ID="SnesMouse">SNES Mouse</Value>
+			<Value ID="GenericMulticart">Generic Multicart</Value>
+			<Value ID="SnesControllers">SNES Controllers</Value>
 		</Enum>
 		<Enum ID="DakutenMode">
 			<Value ID="Ignore">Ignore</Value>

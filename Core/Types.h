@@ -376,7 +376,7 @@ enum class GameInputType
 	FamilyTrainerSideB = 0x0E,
 	ArkanoidControllerNes = 0x0F,
 	ArkanoidControllerFamicom = 0x10,
-	//0x11  2x Vaus
+	DoubleArkanoidController = 0x11,
 	KonamiHyperShot = 0x12,
 	PachinkoController = 0x13,
 	ExcitingBoxing = 0x14,
@@ -384,24 +384,24 @@ enum class GameInputType
 	PartyTap = 0x16,
 	OekaKidsTablet = 0x17,
 	BarcodeBattler = 0x18,
-	//0x19 Miracle Piano
-	//0x1A Pokkun Moguraa
-	//0x1B Top Rider
-	//0x1C Double Fisted
-	//0x1D Famicom 3D System
-	//0x1E Doremikko Keyboard
-	//0x1F ROB
+	MiraclePiano = 0x19, //not supported yet
+	PokkunMoguraa = 0x1A, //not supported yet
+	TopRider = 0x1B, //not supported yet
+	DoubleFisted = 0x1C, //not supported yet
+	Famicom3dSystem = 0x1D, //not supported yet
+	DoremikkoKeyboard = 0x1E, //not supported yet
+	ROB = 0x1F, //not supported yet
 	FamicomDataRecorder = 0x20,
 	TurboFile = 0x21,
 	BattleBox = 0x22,
 	FamilyBasicKeyboard = 0x23,
-	//0x24 PEC 586 keyboard
-	//0x25 Bit-79 Keyboard
+	Pec586Keyboard = 0x24, //not supported yet
+	Bit79Keyboard = 0x25, //not supported yet
 	SuborKeyboard = 0x26,
 	SuborKeyboardMouse1 = 0x27,
 	SuborKeyboardMouse2 = 0x28,
 	SnesMouse = 0x29,
-	//0x2A Generic Multicart
+	GenericMulticart = 0x2A, //not supported yet
 	SnesControllers = 0x2B,
 	LastEntry
 };
