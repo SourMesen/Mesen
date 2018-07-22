@@ -61,6 +61,7 @@
 			<Control ID="mnuEmulationConfig">エミュレーション</Control>
 			<Control ID="mnuPreferences">設定</Control>
 			<Control ID="mnuTools">ツール</Control>
+			<Control ID="mnuHistoryViewer">ヒストリービューア</Control>
 			<Control ID="mnuNetPlay">ネットプレイ</Control>
 			<Control ID="mnuStartServer">サーバを起動する</Control>
 			<Control ID="mnuConnect">サーバに接続</Control>
@@ -585,6 +586,14 @@
 			<Control ID="btnStopRecording">停止</Control>
 			<Control ID="btnOpenFolder">セーブフォルダを開く</Control>
 		</Form>
+		<Form ID="frmHistoryViewer" Title="ヒストリービューア">
+			<Control ID="lblVolume">音量</Control>
+			<Control ID="mnuFile">ファイル</Control>
+			<Control ID="mnuImportMovie">動画をインポートする</Control>
+			<Control ID="mnuExportMovie">動画をエクスポートする</Control>
+			<Control ID="mnuResumeGameplay">ここからゲームを再開する</Control>
+			<Control ID="mnuClose">終了</Control>
+		</Form>
 		<Form ID="frmHelp" Title="コマンドラインオプション">
 			<Control ID="grpExample">使い方</Control>
 			<Control ID="tpgGeneralOptions">全般</Control>
@@ -727,6 +736,9 @@
 
 		<Message ID="LoadFromFile">ファイルからロードする…</Message>
 		<Message ID="SaveToFile">ファイルに保存する…</Message>
+
+		<Message ID="MovieSegment">パート {0}</Message>
+		<Message ID="MovieSaveError">動画エクスポートは失敗しました。</Message>
 
 		<Message ID="ClearHistory">履歴を消去</Message>
 		<Message ID="LastFolderUsed">最後に使用したフォルダ</Message>

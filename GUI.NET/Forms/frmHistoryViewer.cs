@@ -121,7 +121,6 @@ namespace Mesen.GUI.Forms
 		{
 			InteropEmu.ScreenSize size = InteropEmu.GetScreenSize(false, InteropEmu.ConsoleId.HistoryViewer);
 			if(size.Width != ctrlRenderer.ClientSize.Width || size.Height != ctrlRenderer.ClientSize.Height) {
-				//MessageBox.Show(size.Height.ToString() + " vs " + ctrlRenderer.ClientSize.Height.ToString());
 				ctrlRenderer.ClientSize = new Size(size.Width, size.Height);
 			}
 
@@ -179,7 +178,8 @@ namespace Mesen.GUI.Forms
 					TimeSpan start = new TimeSpan(0, 0, (int)(segmentStart) / 2);
 					TimeSpan end = new TimeSpan(0, 0, (int)(segEnd / 2));
 
-					ToolStripMenuItem item = new ToolStripMenuItem("Segment #" + (mnuExportMovie.DropDownItems.Count + 1).ToString() + ", " + start.ToString() + " - " + end.ToString());
+					string segmentName = ResourceHelper.GetMessage("MovieSegment", (mnuExportMovie.DropDownItems.Count + 1).ToString());
+					ToolStripMenuItem item = new ToolStripMenuItem(segmentName + ", " + start.ToString() + " - " + end.ToString());
 					item.Click += (s, evt) => {
 						SaveFileDialog sfd = new SaveFileDialog();
 						sfd.SetFilter(ResourceHelper.GetMessage("FilterMovie"));
@@ -187,7 +187,7 @@ namespace Mesen.GUI.Forms
 						sfd.FileName = InteropEmu.GetRomInfo().GetRomName() + ".mmo";
 						if(sfd.ShowDialog() == DialogResult.OK) {
 							if(!InteropEmu.HistoryViewerSaveMovie(sfd.FileName, segStart, segEnd)) {
-								MessageBox.Show("An error occurred while trying to save the movie file.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+								MesenMsgBox.Show("MovieSaveError", MessageBoxButtons.OK, MessageBoxIcon.Error);
 							}
 						}
 					};

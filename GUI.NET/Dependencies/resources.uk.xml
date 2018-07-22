@@ -59,6 +59,7 @@
 			<Control ID="mnuEmulationConfig">Емуляція</Control>
 			<Control ID="mnuPreferences">Налаштування</Control>
 			<Control ID="mnuTools">Утиліти</Control>
+			<Control ID="mnuHistoryViewer">History Viewer</Control>
 			<Control ID="mnuNetPlay">Гра по мережі</Control>
 			<Control ID="mnuStartServer">Запустити сервер</Control>
 			<Control ID="mnuConnect">Підключитися до сервера</Control>
@@ -583,6 +584,14 @@
 			<Control ID="btnStopRecording">Зупинити запис</Control>
 			<Control ID="btnOpenFolder">Вiдкрити папку збережень</Control>
 		</Form>
+		<Form ID="frmHistoryViewer" Title="History Viewer">
+			<Control ID="lblVolume">Volume</Control>
+			<Control ID="mnuFile">File</Control>
+			<Control ID="mnuImportMovie">Import Movie</Control>
+			<Control ID="mnuExportMovie">Export Movie</Control>
+			<Control ID="mnuResumeGameplay">Resume Gameplay</Control>
+			<Control ID="mnuClose">Close</Control>
+		</Form>
 		<Form ID="frmHelp" Title="Параметри командного рядка">
 			<Control ID="grpExample">Приклад використання</Control>
 			<Control ID="tpgGeneralOptions">Загальний</Control>
@@ -725,6 +734,9 @@
 
 		<Message ID="LoadFromFile">Завантажитти з файлу...</Message>
 		<Message ID="SaveToFile">Зберегти в файл...</Message>
+
+		<Message ID="MovieSegment">Segment #{0}</Message>
+		<Message ID="MovieSaveError">An error occurred while trying to save the movie file.</Message>
 
 		<Message ID="ClearHistory">Очистити історію</Message>
 		<Message ID="LastFolderUsed">Використовувана остання папка</Message>

@@ -116,10 +116,12 @@ void HistoryViewer::ResumeGameplay(shared_ptr<Console> console, uint32_t resumeP
 bool HistoryViewer::SetInput(BaseControlDevice *device)
 {
 	uint8_t port = device->GetPort();
-	std::deque<ControlDeviceState> &stateData = _history[_position].InputLogs[port];
-	if(_pollCounter < stateData.size()) {
-		ControlDeviceState state = stateData[_pollCounter];
-		device->SetRawState(state);
+	if(_position < _history.size()) {
+		std::deque<ControlDeviceState> &stateData = _history[_position].InputLogs[port];
+		if(_pollCounter < stateData.size()) {
+			ControlDeviceState state = stateData[_pollCounter];
+			device->SetRawState(state);
+		}
 	}
 	if(port == 0 && _pollCounter < 30) {
 		_pollCounter++;

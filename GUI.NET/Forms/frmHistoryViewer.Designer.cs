@@ -40,7 +40,7 @@
 			this.trkVolume = new System.Windows.Forms.TrackBar();
 			this.tmrUpdatePosition = new System.Windows.Forms.Timer(this.components);
 			this.menuStrip2 = new System.Windows.Forms.MenuStrip();
-			this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuFile = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuImportMovie = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuExportMovie = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
@@ -143,7 +143,7 @@
 			// 
 			this.ctrlRenderer.Anchor = System.Windows.Forms.AnchorStyles.None;
 			this.ctrlRenderer.Location = new System.Drawing.Point(134, 89);
-			this.ctrlRenderer.Margin = new System.Windows.Forms.Padding(0, 0, 0, 0);
+			this.ctrlRenderer.Margin = new System.Windows.Forms.Padding(0);
 			this.ctrlRenderer.Name = "ctrlRenderer";
 			this.ctrlRenderer.Size = new System.Drawing.Size(256, 240);
 			this.ctrlRenderer.TabIndex = 0;
@@ -196,26 +196,26 @@
 			// menuStrip2
 			// 
 			this.menuStrip2.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.fileToolStripMenuItem});
+            this.mnuFile});
 			this.menuStrip2.Location = new System.Drawing.Point(0, 0);
 			this.menuStrip2.Name = "menuStrip2";
 			this.menuStrip2.Size = new System.Drawing.Size(532, 24);
 			this.menuStrip2.TabIndex = 1;
 			this.menuStrip2.Text = "menuStrip2";
 			// 
-			// fileToolStripMenuItem
+			// mnuFile
 			// 
-			this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+			this.mnuFile.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.mnuImportMovie,
             this.mnuExportMovie,
             this.toolStripMenuItem1,
             this.mnuResumeGameplay,
             this.toolStripMenuItem2,
             this.mnuClose});
-			this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
-			this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
-			this.fileToolStripMenuItem.Text = "File";
-			this.fileToolStripMenuItem.DropDownOpening += new System.EventHandler(this.fileToolStripMenuItem_DropDownOpening);
+			this.mnuFile.Name = "mnuFile";
+			this.mnuFile.Size = new System.Drawing.Size(37, 20);
+			this.mnuFile.Text = "File";
+			this.mnuFile.DropDownOpening += new System.EventHandler(this.fileToolStripMenuItem_DropDownOpening);
 			// 
 			// mnuImportMovie
 			// 
@@ -291,7 +291,7 @@
 		private System.Windows.Forms.Timer tmrUpdatePosition;
 		private System.Windows.Forms.Label lblPosition;
 		private System.Windows.Forms.MenuStrip menuStrip2;
-		private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem mnuFile;
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem1;
 		private System.Windows.Forms.ToolStripMenuItem mnuImportMovie;
 		private System.Windows.Forms.ToolStripMenuItem mnuExportMovie;

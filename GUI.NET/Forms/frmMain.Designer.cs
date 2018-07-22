@@ -162,6 +162,7 @@ namespace Mesen.GUI.Forms
 			this.mnuPlayMovie = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuRecordMovie = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuStopMovie = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuHistoryViewer = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuCheats = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem22 = new System.Windows.Forms.ToolStripSeparator();
 			this.mnuSoundRecorder = new System.Windows.Forms.ToolStripMenuItem();
@@ -213,7 +214,6 @@ namespace Mesen.GUI.Forms
 			this.mnuReportBug = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem5 = new System.Windows.Forms.ToolStripSeparator();
 			this.mnuAbout = new System.Windows.Forms.ToolStripMenuItem();
-			this.mnuHistoryViewer = new System.Windows.Forms.ToolStripMenuItem();
 			this.panelRenderer.SuspendLayout();
 			this.panelInfo.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.picIcon)).BeginInit();
@@ -1307,6 +1307,14 @@ namespace Mesen.GUI.Forms
 			this.mnuStopMovie.Text = "Stop";
 			this.mnuStopMovie.Click += new System.EventHandler(this.mnuStopMovie_Click);
 			// 
+			// mnuHistoryViewer
+			// 
+			this.mnuHistoryViewer.Image = global::Mesen.GUI.Properties.Resources.HistoryViewer;
+			this.mnuHistoryViewer.Name = "mnuHistoryViewer";
+			this.mnuHistoryViewer.Size = new System.Drawing.Size(182, 22);
+			this.mnuHistoryViewer.Text = "History Viewer";
+			this.mnuHistoryViewer.Click += new System.EventHandler(this.mnuHistoryViewer_Click);
+			// 
 			// mnuCheats
 			// 
 			this.mnuCheats.Image = global::Mesen.GUI.Properties.Resources.CheatCode;
@@ -1711,14 +1719,6 @@ namespace Mesen.GUI.Forms
 			this.mnuAbout.Size = new System.Drawing.Size(198, 22);
 			this.mnuAbout.Text = "About";
 			this.mnuAbout.Click += new System.EventHandler(this.mnuAbout_Click);
-			// 
-			// mnuHistoryViewer
-			// 
-			this.mnuHistoryViewer.Image = global::Mesen.GUI.Properties.Resources.Speed;
-			this.mnuHistoryViewer.Name = "mnuHistoryViewer";
-			this.mnuHistoryViewer.Size = new System.Drawing.Size(182, 22);
-			this.mnuHistoryViewer.Text = "History Viewer";
-			this.mnuHistoryViewer.Click += new System.EventHandler(this.mnuHistoryViewer_Click);
 			// 
 			// frmMain
 			// 

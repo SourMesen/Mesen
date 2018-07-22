@@ -59,6 +59,7 @@
 			<Control ID="mnuEmulationConfig">Emulación</Control>
 			<Control ID="mnuPreferences">Preferencias</Control>
 			<Control ID="mnuTools">Utilidades</Control>
+			<Control ID="mnuHistoryViewer">History Viewer</Control>
 			<Control ID="mnuNetPlay">Juego online</Control>
 			<Control ID="mnuStartServer">Iniciar servidor</Control>
 			<Control ID="mnuConnect">Conectar a un servidor</Control>
@@ -583,6 +584,14 @@
 			<Control ID="btnStopRecording">Parar de grabar</Control>
 			<Control ID="btnOpenFolder">Abrir carpeta contenedora</Control>
 		</Form>
+		<Form ID="frmHistoryViewer" Title="History Viewer">
+			<Control ID="lblVolume">Volume</Control>
+			<Control ID="mnuFile">File</Control>
+			<Control ID="mnuImportMovie">Import Movie</Control>
+			<Control ID="mnuExportMovie">Export Movie</Control>
+			<Control ID="mnuResumeGameplay">Resume Gameplay</Control>
+			<Control ID="mnuClose">Close</Control>
+		</Form>
 		<Form ID="frmHelp" Title="Opciones de linea de comandos">
 			<Control ID="grpExample">Ejemplo de uso</Control>
 			<Control ID="tpgGeneralOptions">General</Control>
@@ -724,6 +733,9 @@
 
 		<Message ID="LoadFromFile">Cargar desde archivo...</Message>
 		<Message ID="SaveToFile">Guardar en archivo...</Message>
+
+		<Message ID="MovieSegment">Segment #{0}</Message>
+		<Message ID="MovieSaveError">An error occurred while trying to save the movie file.</Message>
 
 		<Message ID="ClearHistory">Limpiar historial</Message>
 		<Message ID="LastFolderUsed">Última carpeta usada</Message>

@@ -1215,6 +1215,7 @@
     <Compile Include="RuntimeChecker.cs" />
     <Compile Include="SingleInstance.cs" />
     <Compile Include="TestRunner.cs" />
+    <None Include="Resources\HistoryViewer.png" />
     <None Include="Resources\VsButton4.png" />
     <None Include="Resources\VsButton3.png" />
     <None Include="Resources\VsButton2.png" />
