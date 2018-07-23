@@ -59,7 +59,7 @@
 			<Control ID="mnuEmulationConfig">Emulação</Control>
 			<Control ID="mnuPreferences">Preferências</Control>
 			<Control ID="mnuTools">Ferramentas</Control>
-			<Control ID="mnuHistoryViewer">History Viewer</Control>
+			<Control ID="mnuHistoryViewer">Visualizador de histórico</Control>
 			<Control ID="mnuNetPlay">Jogo online</Control>
 			<Control ID="mnuStartServer">Iniciar servidor</Control>
 			<Control ID="mnuConnect">Conectar a um servidor</Control>
@@ -140,7 +140,7 @@
 			<Control ID="lblReverbStrength">Força:</Control>
 			<Control ID="chkMuteSoundInBackground">Silenciar o Mesen quando estiver em segundo plano</Control>
 			<Control ID="chkReduceSoundInBackground">Reduzir o volume do Mesen quando estiver em segundo plano</Control>
-			<Control ID="chkReduceSoundInFastForward">Reduzir volume durante o avanço rápido/rewind</Control>
+			<Control ID="chkReduceSoundInFastForward">Reduzir volume durante o avanço rápido/rebobinar</Control>
 			<Control ID="trkVolumeReduction">Redução de volume (%)</Control>
 			<Control ID="lblVolumeReductionSettings">Configurações de redução de volume</Control>
 			<Control ID="chkEnableAudio">Ativar o som</Control>
@@ -264,8 +264,8 @@
 			<Control ID="trkIFilterLength">Filtro I (Dispersão horizontal)</Control>
 			<Control ID="trkQFilterLength">Filtro Q (Dispersão horizontal)</Control>
 
-			<Control ID="grpScanlines">Linhas de scan</Control>
-			<Control ID="trkScanlines">Linhas de scan</Control>
+			<Control ID="grpScanlines">Linhas de varredura</Control>
+			<Control ID="trkScanlines">Linhas de varredura</Control>
 			<Control ID="btnResetPictureSettings">Reiniciar</Control>
 			<Control ID="mnuPresetComposite">Composto</Control>
 			<Control ID="mnuPresetSVideo">S-Video</Control>
@@ -289,7 +289,7 @@
 			<Control ID="lblTurboSpeed">Velocidade de avanço rápido:</Control>
 			<Control ID="lblEmulationSpeed">Velocidade de emulação:</Control>
 			<Control ID="lblRewindSpeedHint">%  (0 = Velocidade máxima)</Control>
-			<Control ID="lblRewindSpeed">Velocidade de rebobinação:</Control>
+			<Control ID="lblRewindSpeed">Velocidade de rebobinamento:</Control>
 
 			<Control ID="tpgAdvanced">Avançado</Control>
 			<Control ID="chkUseAlternativeMmc3Irq">Utilizar a versão alternativa de componentes de IRQs de MMC3</Control>
@@ -312,16 +312,16 @@
 			<Control ID="lblClockRatePercent">% (Recomendado: 100%)</Control>
 
 			<Control ID="grpPpuTiming">Sincronização da PPU</Control>
-			<Control ID="lblExtraScanlinesBeforeNmi">Número de linhas de scan adicionais antes de NMI: </Control>
-			<Control ID="lblExtraScanlinesAfterNmi">Número de linhas de scan adicionais depois de NMI: </Control>
+			<Control ID="lblExtraScanlinesBeforeNmi">Número de linhas de varredura adicionais antes de NMI: </Control>
+			<Control ID="lblExtraScanlinesAfterNmi">Número de linhas de varredura adicionais depois de NMI: </Control>
 			<Control ID="lblEffectiveClockRate">Frequência de clock (NTSC): </Control>
 			<Control ID="lblEffectiveClockRatePal">Frequência de clock (PAL): </Control>
 			<Control ID="lblEffectiveClockRateDendy">Frequência de clock (Dendy): </Control>
 
 			<Control ID="chkOverclockAdjustApu">Não realizar overclock da APU (Previne a troca de tom causado por overclocking)</Control>
 
-			<Control ID="chkShowLagCounter">Ver contador de lag</Control>
-			<Control ID="btnResetLagCounter">Reiniciar contador de lag</Control>
+			<Control ID="chkShowLagCounter">Ver contador de atraso</Control>
+			<Control ID="btnResetLagCounter">Reiniciar contador de atraso</Control>
 
 			<Control ID="btnOK">OK</Control>
 			<Control ID="btnCancel">Cancelar</Control>
@@ -438,7 +438,7 @@
 			<Control ID="btnCancel">Cancelar</Control>
 		</Form>
 		<Form ID="frmServerConfig" Title="Iniciar um servidor de jogos">
-			<Control ID="lblPort">Port:</Control>
+			<Control ID="lblPort">Porta:</Control>
 			<Control ID="chkPublicServer">Servidor público</Control>
 			<Control ID="lblServerName">Nome do servidor:</Control>
 			<Control ID="chkSpectator">Permitir espectadores</Control>
@@ -544,7 +544,7 @@
 			<Control ID="btnCancel">Cancelar</Control>
 		</Form>
 		<Form ID="frmGetKey" Title="Configuração dos botões">
-			<Control ID="lblSetKeyMessage">Pressione qualquer tecla do teclado ou do joystick para registrar esse botão.</Control>
+			<Control ID="lblSetKeyMessage">Aperte qualquer tecla do teclado ou do joystick para registrar esse botão.</Control>
 		</Form>
 		<Form ID="frmPlayerProfile" Title="Perfil do Jogador">
 			<Control ID="lblName">Nome</Control>
@@ -582,13 +582,13 @@
 			<Control ID="btnStopRecording">Parar gravação</Control>
 			<Control ID="btnOpenFolder">Abrir a pasta de destino</Control>
 		</Form>
-		<Form ID="frmHistoryViewer" Title="History Viewer">
+		<Form ID="frmHistoryViewer" Title="Visualizador de histórico">
 			<Control ID="lblVolume">Volume</Control>
-			<Control ID="mnuFile">File</Control>
-			<Control ID="mnuImportMovie">Import Movie</Control>
-			<Control ID="mnuExportMovie">Export Movie</Control>
-			<Control ID="mnuResumeGameplay">Resume Gameplay</Control>
-			<Control ID="mnuClose">Close</Control>
+			<Control ID="mnuFile">Arquivo</Control>
+			<Control ID="mnuImportMovie">Importar vídeo</Control>
+			<Control ID="mnuExportMovie">Exportar vídeo</Control>
+			<Control ID="mnuResumeGameplay">Continuar jogo</Control>
+			<Control ID="mnuClose">Fechar</Control>
 		</Form>
 		<Form ID="frmHelp" Title="Opções de linha de comando">
 			<Control ID="grpExample">Exemplo de uso</Control>
@@ -596,7 +596,7 @@
 			<Control ID="tpgVideoOptions">Opções de vídeo</Control>
 			<Control ID="tpgAudioOptions">Opções de áudio</Control>
 			<Control ID="tpgEmulationOptions">Opções de emulação</Control>
-			<Control ID="lblExplanation">Isso iniciará o Mesen em modo de tela cheia com a rom "MyGame.nes" carregada. Também usará o filtro NTSC, configurado em uma escala 2x e ajusta as configurações de Overscan. O sinalizador "DoNotSaveSettings" é usado para evitar que a linha de comando altere de forma permanente as configurações do Mesen.</Control>
+			<Control ID="lblExplanation">Isso iniciará o Mesen em modo de tela cheia com a rom "MeuJogo.nes" carregada. Também usará o filtro NTSC, configurado em uma escala 2x e ajusta as configurações de Overscan. O sinalizador "DoNotSaveSettings" é usado para evitar que a linha de comando altere de forma permanente as configurações do Mesen.</Control>
 			<Control ID="txtGeneralOptions">/fullscreen - Inicia o Mesen em modo tela cheia&#13;&#10;/DoNotSaveSettings - Impede que as configurações sejam salvas no disco (útil para evitar que as opções da linha de comando se tornem as configurações padrão)</Control>
 		</Form>
 		<Form ID="frmCopyFiles" Title="Aguarde...">
@@ -732,13 +732,13 @@
 		<Message ID="LoadFromFile">Carregar de um arquivo...</Message>
 		<Message ID="SaveToFile">Salvar para arquivo...</Message>
 
-		<Message ID="MovieSegment">Segment #{0}</Message>
-		<Message ID="MovieSaveError">An error occurred while trying to save the movie file.</Message>
+		<Message ID="MovieSegment">Segmento #{0}</Message>
+		<Message ID="MovieSaveError">Ocorreu um erro ao tentar salvar o vídeo.</Message>
 
 		<Message ID="ClearHistory">Limpar histórico</Message>
 		<Message ID="LastFolderUsed">Última pasta usada</Message>
 
-		<Message ID="MouseModeEnabled">Modo mouse ativado - pressione ESC ou Pause para liberar o cursor.</Message>
+		<Message ID="MouseModeEnabled">Modo mouse ativado - aperte ESC ou Pause para liberar o cursor.</Message>
 		<Message ID="BandaiMicrophone">Microfone Bandai</Message>
 		<Message ID="DatachBarcodeReader">Leitor de código de barras Datach</Message>
 
@@ -751,7 +751,7 @@
 		<Message ID="PlayerNumber">Jogador {0}</Message>
 		<Message ID="ExpansionDevice">Dispositivo de expansão</Message>
 
-		<Message ID="PressToExitFullscreen">Pressione {0} para sair da tela cheia</Message>
+		<Message ID="PressToExitFullscreen">Aperte {0} para sair da tela cheia</Message>
 
 		<Message ID="RomsFound">{0} roms encontradas</Message>
 
@@ -861,7 +861,7 @@
 		<Message ID="EmulatorShortcutMappings_ToggleDebugInfo">Alternar informação de depuração</Message>
 		<Message ID="EmulatorShortcutMappings_ToggleGameTimer">Alternar tempo de jogo</Message>
 		<Message ID="EmulatorShortcutMappings_ToggleFrameCounter">Alternar contador de quadro</Message>
-		<Message ID="EmulatorShortcutMappings_ToggleLagCounter">Alternar contador de lag</Message>
+		<Message ID="EmulatorShortcutMappings_ToggleLagCounter">Alternar contador de atraso</Message>
 		<Message ID="EmulatorShortcutMappings_ToggleOsd">Alternar OSD (Menu na tela)</Message>
 		<Message ID="EmulatorShortcutMappings_ToggleAlwaysOnTop">Alternar exibição na parte superior</Message>
 		<Message ID="EmulatorShortcutMappings_ToggleBackground">Alternar camada de fundo</Message>
