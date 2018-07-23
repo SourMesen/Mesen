@@ -264,8 +264,8 @@
 			<Control ID="trkIFilterLength">Filtro I (Dispersão horizontal)</Control>
 			<Control ID="trkQFilterLength">Filtro Q (Dispersão horizontal)</Control>
 
-			<Control ID="grpScanlines">Linhas de scan</Control>
-			<Control ID="trkScanlines">Linhas de scan</Control>
+			<Control ID="grpScanlines">Linhas de varredura</Control>
+			<Control ID="trkScanlines">Linhas de varredura</Control>
 			<Control ID="btnResetPictureSettings">Reiniciar</Control>
 			<Control ID="mnuPresetComposite">Composto</Control>
 			<Control ID="mnuPresetSVideo">S-Video</Control>
@@ -312,8 +312,8 @@
 			<Control ID="lblClockRatePercent">% (Recomendado: 100%)</Control>
 
 			<Control ID="grpPpuTiming">Sincronização da PPU</Control>
-			<Control ID="lblExtraScanlinesBeforeNmi">Número de linhas de scan adicionais antes de NMI: </Control>
-			<Control ID="lblExtraScanlinesAfterNmi">Número de linhas de scan adicionais depois de NMI: </Control>
+			<Control ID="lblExtraScanlinesBeforeNmi">Número de linhas de varredura adicionais antes de NMI: </Control>
+			<Control ID="lblExtraScanlinesAfterNmi">Número de linhas de varredura adicionais depois de NMI: </Control>
 			<Control ID="lblEffectiveClockRate">Frequência de clock (NTSC): </Control>
 			<Control ID="lblEffectiveClockRatePal">Frequência de clock (PAL): </Control>
 			<Control ID="lblEffectiveClockRateDendy">Frequência de clock (Dendy): </Control>
