@@ -21,6 +21,7 @@ namespace Mesen.GUI.Debugger.Controls
 		private byte[][] _tileData = new byte[4][];
 		private byte[][] _attributeData = new byte[4][];
 		private byte[] _tmpTileData = new byte[16];
+		private byte[] _ppuMemory = new byte[0x4000];
 
 		private Bitmap _nametableImage = new Bitmap(512, 480);
 		private Bitmap _outputImage = new Bitmap(512, 480);
@@ -67,6 +68,7 @@ namespace Mesen.GUI.Debugger.Controls
 				InteropEmu.DebugGetNametable(i, ConfigManager.Config.DebugInfo.NtViewerUseGrayscalePalette, out _nametablePixelData[i], out _tileData[i], out _attributeData[i]);
 			}
 
+			_ppuMemory = InteropEmu.DebugGetMemoryState(DebugMemoryType.PpuMemory);
 			InteropEmu.DebugGetPpuScroll(out _xScroll, out _yScroll);
 			_xScroll &= 0xFFF8;
 			_yScroll &= 0xFFF8;
@@ -187,7 +189,7 @@ namespace Mesen.GUI.Debugger.Controls
 			byte tileIndex = _tileData[nametableIndex][index];
 
 			for(int i = 0; i < 16; i++) {
-				_tmpTileData[i] = InteropEmu.DebugGetMemoryValue(DebugMemoryType.PpuMemory, (UInt32)(_state.PPU.ControlFlags.BackgroundPatternAddr + tileIndex * 16 + i));
+				_tmpTileData[i] = _ppuMemory[_state.PPU.ControlFlags.BackgroundPatternAddr + tileIndex * 16 + i];
 			}
 
 			return ctrlCharacterMapping.GetColorIndependentKey(_tmpTileData);
