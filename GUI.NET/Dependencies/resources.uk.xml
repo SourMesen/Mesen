@@ -59,7 +59,7 @@
 			<Control ID="mnuEmulationConfig">Емуляція</Control>
 			<Control ID="mnuPreferences">Налаштування</Control>
 			<Control ID="mnuTools">Утиліти</Control>
-			<Control ID="mnuHistoryViewer">History Viewer</Control>
+			<Control ID="mnuHistoryViewer">Перегляд історії</Control>
 			<Control ID="mnuNetPlay">Гра по мережі</Control>
 			<Control ID="mnuStartServer">Запустити сервер</Control>
 			<Control ID="mnuConnect">Підключитися до сервера</Control>
@@ -140,9 +140,9 @@
 			<Control ID="lblReverbStrength">Сила :</Control>
 			<Control ID="chkMuteSoundInBackground">Відключати звук при втраті фокуса</Control>
 			<Control ID="chkReduceSoundInBackground">Приглушати звук при потере фокуса</Control>
-			<Control ID="chkReduceSoundInFastForward">Reduce volume during fast forward/rewind</Control>
-			<Control ID="trkVolumeReduction">Volume Reduction (%)</Control>
-			<Control ID="lblVolumeReductionSettings">Volume Reduction Settings</Control>
+			<Control ID="chkReduceSoundInFastForward">Зменшити гучнiсть під час швидкого перемотування вперед/назад</Control>
+			<Control ID="trkVolumeReduction">Зменшення гучності (%)</Control>
+			<Control ID="lblVolumeReductionSettings">Налаштування зменшення гучності</Control>
 			<Control ID="chkEnableAudio">Увімкнути звук</Control>
 			<Control ID="lblSampleRate">Частота дискретизації:</Control>
 			<Control ID="lblLatencyMs">мс</Control>
@@ -415,25 +415,25 @@
 
 			<Control ID="lblFdsSettings">Famicom Disk System Налаштування</Control>
 			<Control ID="lblUiDisplaySettings">Налаштування дисплея інтерфейсу користувача</Control>
-			<Control ID="lblWindowSettings">Window Settings</Control>
-			<Control ID="chkDisableMouseResize">Do not allow the main window to be resized using the mouse</Control>
+			<Control ID="lblWindowSettings">Налаштування вікна</Control>
+			<Control ID="chkDisableMouseResize">Не дозволяти змінювати розмір головного вікна за допомогою миші</Control>
 			<Control ID="lblGameSelectionScreenSettings">Налаштування екрана вибору гри</Control>
 			<Control ID="chkGameSelectionScreenResetGame">Відновити гру з самого початку (замість продовження попередньої гри)</Control>
 			<Control ID="chkDisableGameSelectionScreen">Вимкнути екран вибору гри</Control>
 
 			<Control ID="chkDisableGameDatabase">Відключити ігрову базу даних</Control>
-			<Control ID="chkDisableHighResolutionTimer">Disable high resolution timer</Control>
+			<Control ID="chkDisableHighResolutionTimer">Відключити таймер високо роздільної здатности</Control>
 			<Control ID="chkDisableOsd">Відключення екранних повідомлень (OSD)</Control>
 
 			<Control ID="chkAlwaysOnTop">Завжди відображати поверх інших вікон</Control>
 
 			<Control ID="tpgFdsNfs">FDS / VS / NSF</Control>
-			<Control ID="lblNsfSettings">NSF Settings</Control>
+			<Control ID="lblNsfSettings">Параметри NSF</Control>
 			<Control ID="chkNsfAutoDetectSilence">Відтворити наступний трек після</Control>
 			<Control ID="lblNsfMillisecondsOfSilence">мілісекунд тиші</Control>
 			<Control ID="chkNsfMoveToNextTrackAfterTime">Обмежити тривалість доріжок до</Control>
 			<Control ID="lblNsfSeconds">секунд</Control>
-			<Control ID="chkNsfEnableApuIrqs">Enable APU IRQs for NSF files</Control>
+			<Control ID="chkNsfEnableApuIrqs">Увімкнути APU IRQs для NSF файлiв</Control>
 
 			<Control ID="btnOK">OK</Control>
 			<Control ID="btnCancel">Вiдмiна</Control>
@@ -584,13 +584,13 @@
 			<Control ID="btnStopRecording">Зупинити запис</Control>
 			<Control ID="btnOpenFolder">Вiдкрити папку збережень</Control>
 		</Form>
-		<Form ID="frmHistoryViewer" Title="History Viewer">
-			<Control ID="lblVolume">Volume</Control>
-			<Control ID="mnuFile">File</Control>
-			<Control ID="mnuImportMovie">Import Movie</Control>
-			<Control ID="mnuExportMovie">Export Movie</Control>
-			<Control ID="mnuResumeGameplay">Resume Gameplay</Control>
-			<Control ID="mnuClose">Close</Control>
+		<Form ID="frmHistoryViewer" Title="Перегляд історії">
+			<Control ID="lblVolume">Гучність</Control>
+			<Control ID="mnuFile">Файл</Control>
+			<Control ID="mnuImportMovie">Імпортувати відео</Control>
+			<Control ID="mnuExportMovie">Експортувати вiдео</Control>
+			<Control ID="mnuResumeGameplay">Відновити геймплей</Control>
+			<Control ID="mnuClose">Закрити</Control>
 		</Form>
 		<Form ID="frmHelp" Title="Параметри командного рядка">
 			<Control ID="grpExample">Приклад використання</Control>
@@ -735,8 +735,8 @@
 		<Message ID="LoadFromFile">Завантажитти з файлу...</Message>
 		<Message ID="SaveToFile">Зберегти в файл...</Message>
 
-		<Message ID="MovieSegment">Segment #{0}</Message>
-		<Message ID="MovieSaveError">An error occurred while trying to save the movie file.</Message>
+		<Message ID="MovieSegment">Сегмент #{0}</Message>
+		<Message ID="MovieSaveError">Сталася помилка під час спроби зберегти відео файл.</Message>
 
 		<Message ID="ClearHistory">Очистити історію</Message>
 		<Message ID="LastFolderUsed">Використовувана остання папка</Message>
@@ -753,7 +753,7 @@
 		<Message ID="Disconnect">Відключитися</Message>
 		<Message ID="PlayerNumber">Гравець {0}</Message>
 
-		<Message ID="PressToExitFullscreen">Press {0} to exit fullscreen</Message>
+		<Message ID="PressToExitFullscreen">Натисніть {0} щоб вийти з повноекранного режиму</Message>
 
 		<Message ID="RomsFound">{0} Знайдені ROM  файли</Message>
 
@@ -791,18 +791,18 @@
 		<Message ID="HdPackBuilderLargeSpritesHelp">Якщо увімкнено, ця опція змінить порядок відображення CHR банкiв&#xA;що містять лише спрайти щоб легше редагувати у PNG файлi.</Message>
 		<Message ID="HdPackBuilderIgnoreOverscanHelp">Якщо увімкнено, будівельник буде ігнорувати будь-які пікселі в області перегляду.&#xA;Це корисно в іграх які містять глюки на зовнішньому краю екрана.&#xA;Неправильні комбінації палітр через цi глюки будуть проігноровані і не будуть відображатися в файлах PNG.</Message>
 
-		<Message ID="InstallHdPackWrongRom">The selected HD Pack is not compatible with the currently running game and cannot be installed.</Message>
-		<Message ID="InstallHdPackError">An error occurred while trying to install the HD Pack: &#xA;&#xA;{0}</Message>
-		<Message ID="InstallHdPackInvalidPack">The selected file is not a valid HD Pack.</Message>
-		<Message ID="InstallHdPackInvalidZipFile">The selected file is not a valid Zip file.</Message>
-		<Message ID="InstallHdPackConfirmOverwrite">The destination folder ({0}) already exists - are you sure you want to overwrite it?</Message>
-		<Message ID="InstallHdPackConfirmReset">The HD Pack has been installed successfully. Do you want to reset the game and load the HD Pack now?</Message>
+		<Message ID="InstallHdPackWrongRom">Обраний HD Pack не сумісний із запущеною в даний момент грою і не може бути встановлен.</Message>
+		<Message ID="InstallHdPackError">Виникла помилка пiд час спроби встановити HD Pack: &#xA;&#xA;{0}</Message>
+		<Message ID="InstallHdPackInvalidPack">Вибраний файл недійсний HD Pack.</Message>
+		<Message ID="InstallHdPackInvalidZipFile">Вибраний файл недійсний Zip file.</Message>
+		<Message ID="InstallHdPackConfirmOverwrite">Папка призначення ({0}) вже існує - ви впевнені, що хочете перезаписати її?</Message>
+		<Message ID="InstallHdPackConfirmReset">HD Pack успішно встановлено. Ви хочете скинути гру i завантажити HD Pack зараз?</Message>
 
 		<Message ID="MesenUpToDate">Ви використовуєте останню версію Mesen</Message>
 		<Message ID="PatchAndReset">Пропатчити і скинути поточну гру?</Message>
 		<Message ID="SelectRomIps">Будь ласка, оберіть ROM відповідний IPS/UPS.</Message>
 		<Message ID="UnableToDownload">Неможливо завантажити файл. Перевірте ваше з'єднання з інтернетом і спробуйте ще раз.&#xA;&#xA;Детально:&#xA;{0}</Message>
-		<Message ID="UnableToStartMissingDependencies">Mesen could not launch because it was unable to load MesenCore.dll due to missing dependencies.</Message>
+		<Message ID="UnableToStartMissingDependencies">Mesen не вдалося запустити оскільки вiн не змiг завантажити MesenCore.dll через відсутність залежностей.</Message>
 		<Message ID="UnableToStartMissingFiles">Mesen не може запуститися через відсутні файли.&#xA;&#xA;Помилка: MesenCore.dll не знайдений.</Message>
 		<Message ID="UnexpectedError">Невідома помилка.&#xA;&#xA;Детально:&#xA;{0}</Message>
 		<Message ID="UpdateDownloadFailed">Завантаження не вдалася - файл пошкоджений. Будь ласка відвідайте сайт Mesen і завантажте останню версію вручну.</Message>
