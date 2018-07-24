@@ -43,9 +43,6 @@ namespace Mesen.GUI.Debugger.Controls
 				chkIgnoreMirroredNametables.Checked = debugInfo.TextHookerIgnoreMirroredNametables;
 				chkUseScrollOffsets.Checked = debugInfo.TextHookerAdjustViewportScrolling;
 				chkAutoCopyToClipboard.Checked = debugInfo.TextHookerAutoCopyToClipboard;
-
-				BaseConfigForm.InitializeComboBox(cboDakutenMode, typeof(DakutenMode));
-				cboDakutenMode.SetEnumValue(debugInfo.TextHookerDakutenMode);
 			}
 		}
 
@@ -58,7 +55,6 @@ namespace Mesen.GUI.Debugger.Controls
 				debugInfo.TextHookerIgnoreMirroredNametables = chkIgnoreMirroredNametables.Checked;
 				debugInfo.TextHookerAdjustViewportScrolling = chkUseScrollOffsets.Checked;
 				debugInfo.TextHookerAutoCopyToClipboard = chkAutoCopyToClipboard.Checked;
-				debugInfo.TextHookerDakutenMode = cboDakutenMode.GetEnumValue<DakutenMode>();
 			}
 		}
 
@@ -74,6 +70,18 @@ namespace Mesen.GUI.Debugger.Controls
 			InteropEmu.DebugGetPpuScroll(out _xScroll, out _yScroll);
 			_xScroll &= 0xFFF8;
 			_yScroll &= 0xFFF8;
+		}
+
+		private string GetCharacter(int nt, int y, int x)
+		{
+			int outNt, outY, outX;
+			GetIndexes(nt, y, x, out outNt, out outY, out outX);
+			if(IgnoreTile(outNt)) {
+				return " ";
+			}
+
+			string key = GetTileKey(outNt, (outY << 5) + outX);
+			return GetMappedCharacter(key);
 		}
 
 		public void RefreshViewer()
@@ -102,40 +110,32 @@ namespace Mesen.GUI.Debugger.Controls
 			}
 			picNametable.Image = _outputImage;
 
-			DakutenMode dakutenMode = cboDakutenMode.GetEnumValue<DakutenMode>();
 			StringBuilder output = new StringBuilder();
 			DakutenType[] previousLineDakutenType = new DakutenType[32];
 			for(int nt = 0; nt < 4; nt++) {
 				for(int y = 0; y < 30; y++) {
 					StringBuilder lineOutput = new StringBuilder();
 					for(int x = 0; x < 32; x++) {
-						int outNt, outY, outX;
-						GetIndexes(nt, y, x, out outNt, out outY, out outX);
-						if(IgnoreTile(outNt)) {
-							continue;
-						}
-
-						string key = GetTileKey(outNt, (outY << 5) + outX);
-						string value = GetMappedCharacter(key);
+						string value = GetCharacter(nt, y, x);
 
 						DakutenType dakutenType = GetDakutenType(value);
-						if(dakutenType != DakutenType.None) {
-							previousLineDakutenType[x] = dakutenType;
-						} else {
-							DakutenType effectiveDakuten = dakutenMode == DakutenMode.OnTop ? previousLineDakutenType[x] : DakutenType.None;
-							previousLineDakutenType[x] = DakutenType.None;
-
-							if(effectiveDakuten == DakutenType.None && dakutenMode == DakutenMode.OnTheRight) {
-								GetIndexes(nt, y, x + 1, out outNt, out outY, out outX);
-								string nextTileKey = GetTileKey(outNt, (outY << 5) + outX);
-								string nextTileValue = GetMappedCharacter(nextTileKey);
-								effectiveDakuten = GetDakutenType(nextTileValue);
-							}
-
+						if(dakutenType == DakutenType.None) {
 							bool isKana = (
 								(value[0] >= '\x3041' && value[0] <= '\x3096') || //hiragana
 								(value[0] >= '\x30A1' && value[0] <= '\x30FA') //katakana
 							);
+
+							DakutenType effectiveDakuten = DakutenType.None;
+							if(previousLineDakutenType[x] != DakutenType.None) {
+								effectiveDakuten = previousLineDakutenType[x];
+							} else if(isKana) {
+								effectiveDakuten = GetDakutenType(GetCharacter(nt, y, x + 1));
+								if(effectiveDakuten != DakutenType.None && x < 31) {
+									//Skip next character, to avoid using it for the line below
+									previousLineDakutenType[x + 1] = DakutenType.None;
+									x++;
+								}
+							}
 
 							if(isKana && effectiveDakuten == DakutenType.Dakuten) {
 								lineOutput.Append((char)(value[0] + 1));
@@ -145,6 +145,7 @@ namespace Mesen.GUI.Debugger.Controls
 								lineOutput.Append(value);
 							}
 						}
+						previousLineDakutenType[x] = dakutenType;
 					}
 
 					string rowString = lineOutput.ToString().Trim();

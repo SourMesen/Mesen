@@ -334,7 +334,6 @@ namespace Mesen.GUI.Config
 		public int TextHookerDisplayCycle = 0;
 		public int TextHookerDisplayScanline = 241;
 		public List<CharMap> TextHookerCharMappings = new List<CharMap>();
-		public DakutenMode TextHookerDakutenMode = DakutenMode.OnTop;
 		public bool TextHookerAdjustViewportScrolling = true;
 		public bool TextHookerIgnoreMirroredNametables = true;
 		public bool TextHookerAutoCopyToClipboard = false;
@@ -462,12 +461,5 @@ namespace Mesen.GUI.Config
 		public string Key;
 		[XmlAttribute]
 		public string Value;
-	}
-
-	public enum DakutenMode
-	{
-		Ignore,
-		OnTheRight,
-		OnTop
 	}
 }

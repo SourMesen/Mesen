@@ -1247,10 +1247,5 @@
 			<Value ID="GenericMulticart">Generic Multicart</Value>
 			<Value ID="SnesControllers">SNES Controllers</Value>
 		</Enum>
-		<Enum ID="DakutenMode">
-			<Value ID="Ignore">Ignore</Value>
-			<Value ID="OnTheRight">On the right</Value>
-			<Value ID="OnTop">On top</Value>
-		</Enum>
 	</Enums>
 </Resources>
