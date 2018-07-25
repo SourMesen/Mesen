@@ -137,6 +137,7 @@ namespace Mesen.GUI.Config
 
 		public bool ShowCommentsInLabelList = false;
 
+		public bool AlwaysScrollToCenter = false;
 		public bool SplitView = false;
 		public bool VerticalLayout = false;
 		public bool HexDisplay = true;

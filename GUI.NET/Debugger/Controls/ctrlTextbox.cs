@@ -453,6 +453,11 @@ namespace Mesen.GUI.Debugger
 		public void ScrollToLineIndex(int lineIndex, eHistoryType historyType = eHistoryType.Always, bool scrollToTop = false, bool forceScroll = false)
 		{
 			bool scrolled = false;
+
+			if(!scrollToTop && ConfigManager.Config.DebugInfo.AlwaysScrollToCenter) {
+				forceScroll = true;
+			}
+
 			if(forceScroll || lineIndex < this.ScrollPosition || lineIndex > this.GetLastVisibleLineIndex()) {
 				//Line isn't currently visible, scroll it to the middle of the viewport
 				if(scrollToTop) {

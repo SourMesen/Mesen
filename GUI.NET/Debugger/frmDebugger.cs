@@ -113,6 +113,7 @@ namespace Mesen.GUI.Debugger
 			this.mnuShowVerifiedData.Checked = ConfigManager.Config.DebugInfo.ShowVerifiedData;
 			this.mnuShowUnidentifiedData.Checked = ConfigManager.Config.DebugInfo.ShowUnidentifiedData;
 
+			this.mnuAlwaysScrollToCenter.Checked = ConfigManager.Config.DebugInfo.AlwaysScrollToCenter;
 			this.mnuRefreshWhileRunning.Checked = ConfigManager.Config.DebugInfo.RefreshWhileRunning;
 			this.mnuShowMemoryValues.Checked = ConfigManager.Config.DebugInfo.ShowMemoryValuesInCodeWindow;
 			ctrlDebuggerCode.ShowMemoryValues = mnuShowMemoryValues.Checked;
@@ -1128,6 +1129,12 @@ namespace Mesen.GUI.Debugger
 			ConfigManager.ApplyChanges();
 		}
 
+		private void mnuAlwaysScrollToCenter_Click(object sender, EventArgs e)
+		{
+			ConfigManager.Config.DebugInfo.AlwaysScrollToCenter = mnuAlwaysScrollToCenter.Checked;
+			ConfigManager.ApplyChanges();
+		}
+
 		private void mnuRefreshWhileRunning_Click(object sender, EventArgs e)
 		{
 			ConfigManager.Config.DebugInfo.RefreshWhileRunning = mnuRefreshWhileRunning.Checked;
@@ -1281,7 +1288,7 @@ namespace Mesen.GUI.Debugger
 			UpdateDebuggerFlags();
 			UpdateDebugger(false);
 		}
-
+		
 		private void mnuDisassembleVerifiedData_Click(object sender, EventArgs e)
 		{
 			ConfigManager.Config.DebugInfo.DisassembleVerifiedData = mnuDisassembleVerifiedData.Checked;
