@@ -278,7 +278,7 @@ namespace Mesen.GUI
 			}
 		}
 
-		[DllImport(DLLPath)] public static extern void DebugGetAbsoluteAddressAndType(UInt32 relativeAddr, ref AddressTypeInfo addressTypeInfo);
+		[DllImport(DLLPath)] public static extern void DebugGetAbsoluteAddressAndType(UInt32 relativeAddr, AddressTypeInfo addressTypeInfo);
 		[DllImport(DLLPath)] public static extern void DebugSetPpuViewerScanlineCycle(Int32 ppuViewerId, Int32 scanline, Int32 cycle);
 		[DllImport(DLLPath)] public static extern void DebugClearPpuViewerSettings(Int32 ppuViewerId);
 
@@ -2251,12 +2251,13 @@ namespace Mesen.GUI
 		IgnoreOverscan = 8,
 	}
 
-	public struct AddressTypeInfo
+	[StructLayout(LayoutKind.Sequential)]
+	public class AddressTypeInfo
 	{
 		public Int32 Address;
 		public AddressType Type;
 	}
-
+	
 	public class MD5Helper
 	{
 		public static string GetMD5Hash(string filename)

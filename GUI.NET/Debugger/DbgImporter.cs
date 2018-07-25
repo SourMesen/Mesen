@@ -137,7 +137,7 @@ namespace Mesen.GUI.Debugger
 			return null;
 		}
 
-		public AddressTypeInfo? GetSymbolAddressInfo(SymbolInfo symbol)
+		public AddressTypeInfo GetSymbolAddressInfo(SymbolInfo symbol)
 		{
 			if(symbol.SegmentID == null || symbol.Address == null) {
 				return null;
@@ -310,7 +310,7 @@ namespace Mesen.GUI.Debugger
 							count++;
 						}
 
-						int address = GetSymbolAddressInfo(symbol).Value.Address;
+						int address = GetSymbolAddressInfo(symbol).Address;
 						if(segment.IsRam) {
 							_ramLabels[address] = new CodeLabel() { Label = newName, Address = (UInt32)address, AddressType = AddressType.InternalRam, Comment = string.Empty };
 						} else {

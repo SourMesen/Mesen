@@ -17,8 +17,8 @@ namespace Mesen.GUI.Debugger
 	{
 		private ICodeViewer _codeViewer;
 		private Dictionary<string, string> _values;
-		private AddressTypeInfo? _previewAddress;
-		private string _code;
+		private AddressTypeInfo _previewAddress;
+		private CodeInfo _code;
 		private Ld65DbgImporter _symbolProvider;
 
 		protected override bool ShowWithoutActivation
@@ -26,7 +26,7 @@ namespace Mesen.GUI.Debugger
 			get { return true; }
 		}
 
-		public frmCodeTooltip(Form parent, Dictionary<string, string> values, AddressTypeInfo? previewAddress = null, string code = null, Ld65DbgImporter symbolProvider = null)
+		public frmCodeTooltip(Form parent, Dictionary<string, string> values, AddressTypeInfo previewAddress = null, CodeInfo code = null, Ld65DbgImporter symbolProvider = null)
 		{
 			_parentForm = parent;
 			_values = values;
@@ -66,7 +66,7 @@ namespace Mesen.GUI.Debugger
 				i++;
 			}
 
-			if(_previewAddress.HasValue) {
+			if(_previewAddress != null) {
 				tlpMain.RowStyles.Insert(1, new RowStyle());
 
 				if(_code != null) {
@@ -81,7 +81,7 @@ namespace Mesen.GUI.Debugger
 				_codeViewer.CodeViewer.BaseFont = new Font(ConfigManager.Config.DebugInfo.FontFamily, ConfigManager.Config.DebugInfo.FontSize, ConfigManager.Config.DebugInfo.FontStyle);
 				_codeViewer.CodeViewer.HideSelection = true;
 				_codeViewer.CodeViewer.ShowScrollbars = false;
-				_codeViewer.ScrollToAddress(_previewAddress.Value, true);
+				_codeViewer.ScrollToAddress(_previewAddress, true);
 				_codeViewer.SetConfig(ConfigManager.Config.DebugInfo.LeftView, true);
 
 				Control control = _codeViewer as Control;

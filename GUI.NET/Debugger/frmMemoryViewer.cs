@@ -582,7 +582,7 @@ namespace Mesen.GUI.Debugger
 			switch(_memoryType) {
 				case DebugMemoryType.CpuMemory:
 					AddressTypeInfo info = new AddressTypeInfo();
-					InteropEmu.DebugGetAbsoluteAddressAndType((UInt32)address, ref info);
+					InteropEmu.DebugGetAbsoluteAddressAndType((UInt32)address, info);
 					if(info.Address >= 0) {
 						label = LabelManager.GetLabel((UInt32)info.Address, info.Type);
 					} 

@@ -239,7 +239,7 @@ namespace Mesen.GUI.Debugger.Controls
 		{
 			if(UpdateContextMenu(_lastLocation)) {
 				AddressTypeInfo info = new AddressTypeInfo();
-				InteropEmu.DebugGetAbsoluteAddressAndType((UInt32)_lastClickedAddress, ref info);
+				InteropEmu.DebugGetAbsoluteAddressAndType((UInt32)_lastClickedAddress, info);
 				if(info.Address >= 0) {
 					ctrlLabelList.EditLabel((UInt32)info.Address, info.Type);
 				}

@@ -20,7 +20,7 @@ namespace Mesen.GUI.Debugger
 		private Control _owner = null;
 		private ctrlScrollableTextbox _codeViewer = null;
 
-		public string Code { get; set; }
+		public CodeInfo Code { get; set; }
 		public Ld65DbgImporter SymbolProvider { get; set; }
 
 		public CodeTooltipManager(Control owner, ctrlScrollableTextbox codeViewer)
@@ -29,7 +29,7 @@ namespace Mesen.GUI.Debugger
 			_codeViewer = codeViewer;
 		}
 
-		public void ShowTooltip(string word, Dictionary<string, string> values, int lineAddress, AddressTypeInfo? previewAddress)
+		public void ShowTooltip(string word, Dictionary<string, string> values, int lineAddress, AddressTypeInfo previewAddress)
 		{
 			if(ConfigManager.Config.DebugInfo.OnlyShowTooltipsOnShift && Control.ModifierKeys != Keys.Shift) {
 				return;
@@ -46,7 +46,7 @@ namespace Mesen.GUI.Debugger
 				if(ConfigManager.Config.DebugInfo.ShowOpCodeTooltips && frmOpCodeTooltip.IsOpCode(word)) {
 					_codeTooltip = new frmOpCodeTooltip(parentForm, word, lineAddress);
 				} else {
-					_codeTooltip = new frmCodeTooltip(parentForm, values, previewAddress.HasValue && previewAddress.Value.Type == AddressType.PrgRom ? previewAddress : null, Code, SymbolProvider);
+					_codeTooltip = new frmCodeTooltip(parentForm, values, previewAddress != null && previewAddress.Type == AddressType.PrgRom ? previewAddress : null, Code, SymbolProvider);
 				}
 				_codeTooltip.FormClosed += (s, e) => { _codeTooltip = null; };
 			}
@@ -79,7 +79,7 @@ namespace Mesen.GUI.Debugger
 			};
 
 			AddressTypeInfo addressInfo = new AddressTypeInfo();
-			InteropEmu.DebugGetAbsoluteAddressAndType(address, ref addressInfo);
+			InteropEmu.DebugGetAbsoluteAddressAndType(address, addressInfo);
 			this.ShowTooltip(word, values, -1, addressInfo);
 		}
 
@@ -108,7 +108,7 @@ namespace Mesen.GUI.Debugger
 			byte byteValue = relativeAddress >= 0 ? InteropEmu.DebugGetMemoryValue(DebugMemoryType.CpuMemory, (UInt32)relativeAddress) : (byte)0;
 			UInt16 wordValue = relativeAddress >= 0 ? (UInt16)(byteValue | (InteropEmu.DebugGetMemoryValue(DebugMemoryType.CpuMemory, (UInt32)relativeAddress + 1) << 8)) : (UInt16)0;
 
-			AddressTypeInfo? addressInfo = SymbolProvider.GetSymbolAddressInfo(symbol);
+			AddressTypeInfo addressInfo = SymbolProvider.GetSymbolAddressInfo(symbol);
 
 			if(addressInfo != null) {
 				var values = new Dictionary<string, string>() {
@@ -119,8 +119,8 @@ namespace Mesen.GUI.Debugger
 					values["CPU Address"] = "$" + relativeAddress.ToString("X4");
 				};
 
-				if(addressInfo.Value.Type == AddressType.PrgRom) {
-					values["PRG Offset"] = "$" + addressInfo.Value.Address.ToString("X4");
+				if(addressInfo.Type == AddressType.PrgRom) {
+					values["PRG Offset"] = "$" + addressInfo.Address.ToString("X4");
 				}
 
 				values["Value"] = (relativeAddress >= 0 ? $"${byteValue.ToString("X2")} (byte){Environment.NewLine}${wordValue.ToString("X4")} (word)" : "n/a");
@@ -148,7 +148,7 @@ namespace Mesen.GUI.Debugger
 						UInt32 address = UInt32.Parse(word.Substring(1), NumberStyles.AllowHexSpecifier);
 
 						AddressTypeInfo info = new AddressTypeInfo();
-						InteropEmu.DebugGetAbsoluteAddressAndType(address, ref info);
+						InteropEmu.DebugGetAbsoluteAddressAndType(address, info);
 
 						if(info.Address >= 0) {
 							CodeLabel label = LabelManager.GetLabel((UInt32)info.Address, info.Type);

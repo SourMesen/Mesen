@@ -497,6 +497,7 @@ string Disassembler::GetCode(AddressTypeInfo &addressInfo, uint32_t endAddr, uin
 	string label;
 	string commentString;
 	string commentLines;
+	shared_ptr<DisassemblyInfo> tmpInfo(new DisassemblyInfo());
 	shared_ptr<DisassemblyInfo> info;
 	DataType dataType = DataType::UnidentifiedData;
 	string spaces = "  ";
@@ -542,7 +543,8 @@ string Disassembler::GetCode(AddressTypeInfo &addressInfo, uint32_t endAddr, uin
 		isVerifiedData = addressInfo.Type == AddressType::PrgRom && cdl->IsData(addr&mask);
 		if(!info && ((disassembleUnidentifiedData && !isVerifiedData) || (disassembleVerifiedData && isVerifiedData))) {
 			dataType = isVerifiedData ? DataType::VerifiedData : (addressInfo.Type == AddressType::PrgRom ? DataType::UnidentifiedData : DataType::VerifiedCode);
-			info.reset(new DisassemblyInfo(source + (addr & mask), false));
+			tmpInfo->Initialize(source + (addr & mask), false);
+			info = tmpInfo;
 		} else if(info) {
 			dataType = DataType::VerifiedCode;
 		}

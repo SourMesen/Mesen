@@ -504,7 +504,7 @@ namespace Mesen.GUI.Debugger.Controls
 			UInt32 address = (UInt32)ctrlHexBox.SelectionStart;
 			if(this._memoryType == DebugMemoryType.CpuMemory) {
 				AddressTypeInfo info = new AddressTypeInfo();
-				InteropEmu.DebugGetAbsoluteAddressAndType(address, ref info);
+				InteropEmu.DebugGetAbsoluteAddressAndType(address, info);
 				ctrlLabelList.EditLabel((UInt32)info.Address, info.Type);
 			} else {
 				ctrlLabelList.EditLabel(address, GetAddressType().Value);
@@ -594,7 +594,7 @@ namespace Mesen.GUI.Debugger.Controls
 			bool disableEditLabel = false;
 			if(this._memoryType == DebugMemoryType.CpuMemory) {
 				AddressTypeInfo info = new AddressTypeInfo();
-				InteropEmu.DebugGetAbsoluteAddressAndType(startAddress, ref info);
+				InteropEmu.DebugGetAbsoluteAddressAndType(startAddress, info);
 				disableEditLabel = info.Address == -1;
 			}
 

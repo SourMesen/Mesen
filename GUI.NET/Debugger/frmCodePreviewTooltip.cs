@@ -18,7 +18,7 @@ namespace Mesen.GUI.Debugger
 		private ICodeViewer _codeViewer;
 
 		private int _lineIndex;
-		private string _code;
+		private CodeInfo _code;
 		private Ld65DbgImporter _symbolProvider;
 		private Ld65DbgImporter.FileInfo _selectedFile;
 
@@ -27,7 +27,7 @@ namespace Mesen.GUI.Debugger
 			get { return true; }
 		}
 
-		public frmCodePreviewTooltip(Form parent, int lineIndex, string code = null, Ld65DbgImporter symbolProvider = null, Ld65DbgImporter.FileInfo selectedFile = null)
+		public frmCodePreviewTooltip(Form parent, int lineIndex, CodeInfo code = null, Ld65DbgImporter symbolProvider = null, Ld65DbgImporter.FileInfo selectedFile = null)
 		{
 			_parentForm = parent;
 			_code = code;

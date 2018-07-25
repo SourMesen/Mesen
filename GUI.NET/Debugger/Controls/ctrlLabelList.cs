@@ -254,7 +254,7 @@ namespace Mesen.GUI.Debugger.Controls
 				CodeLabel label = (CodeLabel)GetSelectedItem().SubItems[1].Tag;
 				if(label.AddressType == AddressType.InternalRam || label.AddressType == AddressType.Register) {
 					AddressTypeInfo info = new AddressTypeInfo();
-					InteropEmu.DebugGetAbsoluteAddressAndType(label.Address, ref info);
+					InteropEmu.DebugGetAbsoluteAddressAndType(label.Address, info);
 					if(BreakpointManager.GetMatchingBreakpoint((Int32)label.Address, info) == null) {
 						BreakpointManager.AddBreakpoint(new Breakpoint() {
 							MemoryType = DebugMemoryType.CpuMemory,

@@ -557,7 +557,7 @@ namespace Mesen.GUI.Debugger
 
 			string newCode = InteropEmu.DebugGetCode(_firstBreak);
 			if(newCode != null) {
-				ctrlDebuggerCode.Code = newCode;
+				ctrlDebuggerCode.Code = new CodeInfo(newCode);
 			}
 
 			DebugState state = new DebugState();

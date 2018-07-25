@@ -33,6 +33,11 @@ DisassemblyInfo::DisassemblyInfo()
 {
 }
 
+DisassemblyInfo::DisassemblyInfo(uint8_t* opPointer, bool isSubEntryPoint)
+{
+	Initialize(opPointer, isSubEntryPoint);
+}
+
 void DisassemblyInfo::ToString(string &out, uint32_t memoryAddr, MemoryManager* memoryManager, LabelManager* labelManager, bool extendZeroPage)
 {
 	char buffer[500];
@@ -143,7 +148,7 @@ uint16_t DisassemblyInfo::GetOpAddr(uint16_t memoryAddr)
 	return opAddr;
 }
 
-DisassemblyInfo::DisassemblyInfo(uint8_t* opPointer, bool isSubEntryPoint)
+void DisassemblyInfo::Initialize(uint8_t* opPointer, bool isSubEntryPoint)
 {
 	_isSubEntryPoint = isSubEntryPoint;
 

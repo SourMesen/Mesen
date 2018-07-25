@@ -26,6 +26,8 @@ public:
 	DisassemblyInfo();
 	DisassemblyInfo(uint8_t* opPointer, bool isSubEntryPoint);
 
+	void Initialize(uint8_t * opPointer, bool isSubEntryPoint);
+
 	void SetSubEntryPoint();
 
 	int32_t GetEffectiveAddress(State& cpuState, MemoryManager* memoryManager);

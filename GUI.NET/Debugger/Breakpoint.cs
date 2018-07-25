@@ -174,7 +174,7 @@ namespace Mesen.GUI.Debugger
 			}
 		}
 
-		public bool Matches(int relativeAddress, ref AddressTypeInfo info)
+		public bool Matches(int relativeAddress, AddressTypeInfo info)
 		{
 			if(this.IsCpuBreakpoint && this.AddressType == BreakpointAddressType.SingleAddress) {
 				if(this.MemoryType == DebugMemoryType.CpuMemory) {

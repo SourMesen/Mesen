@@ -334,7 +334,7 @@ namespace Mesen.GUI.Debugger.Controls
 			}
 
 			AddressTypeInfo addressInfo = new AddressTypeInfo();
-			InteropEmu.DebugGetAbsoluteAddressAndType((uint)cpuAddress, ref addressInfo);
+			InteropEmu.DebugGetAbsoluteAddressAndType((uint)cpuAddress, addressInfo);
 			if(addressInfo.Address >= 0 && addressInfo.Type == AddressType.PrgRom) {
 				LineInfo line = _symbolProvider.GetSourceCodeLineInfo(addressInfo.Address);
 				return CurrentFile.ID == line?.FileID;
@@ -345,7 +345,7 @@ namespace Mesen.GUI.Debugger.Controls
 		public void ScrollToLineNumber(int lineNumber, bool scrollToTop = false)
 		{
 			AddressTypeInfo addressInfo = new AddressTypeInfo();
-			InteropEmu.DebugGetAbsoluteAddressAndType((uint)lineNumber, ref addressInfo);
+			InteropEmu.DebugGetAbsoluteAddressAndType((uint)lineNumber, addressInfo);
 			ScrollToAddress(addressInfo, scrollToTop);
 		}
 
@@ -445,7 +445,7 @@ namespace Mesen.GUI.Debugger.Controls
 
 				foreach(Breakpoint breakpoint in BreakpointManager.Breakpoints) {
 					for(int i = 0; i < len; i++) {
-						if(breakpoint.Matches(relativeAddresses[i], ref addressInfo[i])) {
+						if(breakpoint.Matches(relativeAddresses[i], addressInfo[i])) {
 							Color bpColor = breakpoint.BreakOnExec ? info.CodeExecBreakpointColor : (breakpoint.BreakOnWrite ? info.CodeWriteBreakpointColor : info.CodeReadBreakpointColor);
 							_breakpointColors[i] = bpColor;
 						}

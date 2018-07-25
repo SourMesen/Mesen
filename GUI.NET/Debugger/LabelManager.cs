@@ -65,7 +65,7 @@ namespace Mesen.GUI.Debugger
 		public static CodeLabel GetLabel(UInt16 relativeAddress)
 		{
 			AddressTypeInfo info = new AddressTypeInfo();
-			InteropEmu.DebugGetAbsoluteAddressAndType((UInt32)relativeAddress, ref info);
+			InteropEmu.DebugGetAbsoluteAddressAndType((UInt32)relativeAddress, info);
 			if(info.Address >= 0) {
 				return GetLabel((UInt32)info.Address, info.Type);
 			}

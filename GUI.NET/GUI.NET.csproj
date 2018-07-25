@@ -326,6 +326,7 @@
     <Compile Include="Debugger\BreakpointManager.cs" />
     <Compile Include="Debugger\ChrByteColorProvider.cs" />
     <Compile Include="Debugger\ByteColorProvider.cs" />
+    <Compile Include="Debugger\CodeInfo.cs" />
     <Compile Include="Debugger\CodeTooltipManager.cs" />
     <Compile Include="Debugger\Controls\ApuViewer\ctrlEnvelopeInfo.cs">
       <SubType>UserControl</SubType>
@@ -825,6 +826,7 @@
     <Compile Include="Debugger\HexBox\StaticByteProvider.cs" />
     <Compile Include="Debugger\HexBox\TblByteCharConverter.cs" />
     <Compile Include="Debugger\HexBox\Util.cs" />
+    <Compile Include="Debugger\HexConverter.cs" />
     <Compile Include="Debugger\LabelManager.cs" />
     <Compile Include="Debugger\MesenLabelFile.cs" />
     <Compile Include="Debugger\TblLoader.cs" />

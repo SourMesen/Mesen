@@ -70,7 +70,7 @@ namespace Mesen.GUI.Debugger
 
 		public static Breakpoint GetMatchingBreakpoint(int relativeAddress, AddressTypeInfo info)
 		{
-			return Breakpoints.Where((bp) => bp.Matches(relativeAddress, ref info)).FirstOrDefault();
+			return Breakpoints.Where((bp) => bp.Matches(relativeAddress, info)).FirstOrDefault();
 		}
 
 		public static Breakpoint GetMatchingBreakpoint(UInt32 startAddress, UInt32 endAddress, DebugMemoryType memoryType)
