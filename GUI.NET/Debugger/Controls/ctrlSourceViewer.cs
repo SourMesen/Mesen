@@ -210,7 +210,7 @@ namespace Mesen.GUI.Debugger.Controls
 		{
 			if(cboFile.SelectedIndex >= 0) {
 				_selectedFile = cboFile.SelectedItem as Ld65DbgImporter.FileInfo;
-				this.ctrlCodeViewer.ScrollToLineIndex(0, true);
+				this.ctrlCodeViewer.ScrollToLineIndex(0, eHistoryType.Always, true);
 				this.UpdateCode();
 			} else {
 				_selectedFile = null;
@@ -322,7 +322,7 @@ namespace Mesen.GUI.Debugger.Controls
 							break;
 						}
 					}
-					ctrlCodeViewer.ScrollToLineIndex(line.LineNumber, scrollToTop);
+					ctrlCodeViewer.ScrollToLineIndex(line.LineNumber, eHistoryType.Always, scrollToTop);
 				}
 			}
 		}

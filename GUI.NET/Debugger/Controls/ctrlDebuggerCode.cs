@@ -210,10 +210,12 @@ namespace Mesen.GUI.Debugger
 			if(_codeChanged || forceUpdate) {
 				int centerLineIndex = ctrlCodeViewer.GetLineIndexAtPosition(this.Height / 2);
 				int centerLineAddress;
+				int scrollOffset = -1;
 				do {
 					//Save the address at the center of the debug view
 					centerLineAddress = ctrlCodeViewer.GetLineNumber(centerLineIndex);
 					centerLineIndex--;
+					scrollOffset++;
 				} while(centerLineAddress < 0 && centerLineIndex > 0);
 
 				_lineNumbers.Clear();
@@ -317,7 +319,8 @@ namespace Mesen.GUI.Debugger
 
 				if(centerLineAddress >= 0) {
 					//Scroll to the same address as before, to prevent the code view from changing due to setting or banking changes, etc.
-					ctrlCodeViewer.ScrollToLineNumber(centerLineAddress, eHistoryType.None, false);
+					int lineIndex = ctrlCodeViewer.GetLineIndex(centerLineAddress) + scrollOffset;
+					ctrlCodeViewer.ScrollToLineIndex(lineIndex, eHistoryType.None, false, true);
 				}
 
 				return true;

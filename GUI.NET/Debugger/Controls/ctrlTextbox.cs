@@ -450,36 +450,36 @@ namespace Mesen.GUI.Debugger
 			}
 		}
 
-		public void ScrollToLineIndex(int lineIndex, eHistoryType historyType = eHistoryType.Always, bool scrollToTop = false)
+		public void ScrollToLineIndex(int lineIndex, eHistoryType historyType = eHistoryType.Always, bool scrollToTop = false, bool forceScroll = false)
 		{
-			if(this.SelectionStart != lineIndex) {
-				bool scrolled = false;
-				if(lineIndex < this.ScrollPosition || lineIndex > this.GetLastVisibleLineIndex()) {
-					//Line isn't currently visible, scroll it to the middle of the viewport
-					if(scrollToTop) {
-						int scrollPos = lineIndex;
-						while(scrollPos > 0 && _lineNumbers[scrollPos - 1] < 0 && string.IsNullOrWhiteSpace(_lineNumberNotes[scrollPos - 1])) {
-							//Make sure any comment for the line is in scroll view
-							bool emptyLine = string.IsNullOrWhiteSpace(_contents[scrollPos]) && string.IsNullOrWhiteSpace(this.Comments[scrollPos]);
-							if(emptyLine) {
-								//If there's a blank line, stop scrolling up
-								scrollPos++;
-								break;
-							}
-
-							scrollPos--;
-							if(emptyLine || _contents[scrollPos].StartsWith("--") || _contents[scrollPos].StartsWith("__")) {
-								//Reached the start of a block, stop going back up
-								break;
-							}
+			bool scrolled = false;
+			if(forceScroll || lineIndex < this.ScrollPosition || lineIndex > this.GetLastVisibleLineIndex()) {
+				//Line isn't currently visible, scroll it to the middle of the viewport
+				if(scrollToTop) {
+					int scrollPos = lineIndex;
+					while(scrollPos > 0 && _lineNumbers[scrollPos - 1] < 0 && string.IsNullOrWhiteSpace(_lineNumberNotes[scrollPos - 1])) {
+						//Make sure any comment for the line is in scroll view
+						bool emptyLine = string.IsNullOrWhiteSpace(_contents[scrollPos]) && string.IsNullOrWhiteSpace(this.Comments[scrollPos]);
+						if(emptyLine) {
+							//If there's a blank line, stop scrolling up
+							scrollPos++;
+							break;
 						}
-						this.ScrollPosition = scrollPos;
-					} else {
-						this.ScrollPosition = lineIndex - this.GetNumberVisibleLines() / 2;
-					}
-					scrolled = true;
-				}
 
+						scrollPos--;
+						if(emptyLine || _contents[scrollPos].StartsWith("--") || _contents[scrollPos].StartsWith("__")) {
+							//Reached the start of a block, stop going back up
+							break;
+						}
+					}
+					this.ScrollPosition = scrollPos;
+				} else {
+					this.ScrollPosition = lineIndex - this.GetNumberVisibleLines() / 2;
+				}
+				scrolled = true;
+			}
+
+			if(this.SelectionStart != lineIndex) {
 				if(historyType == eHistoryType.Always || scrolled && historyType == eHistoryType.OnScroll) {
 					_history.AddHistory(this.SelectionStart);
 				}
@@ -491,11 +491,11 @@ namespace Mesen.GUI.Debugger
 			}
 		}
 
-		public void ScrollToLineNumber(int lineNumber, eHistoryType historyType = eHistoryType.Always, bool scrollToTop = false)
+		public void ScrollToLineNumber(int lineNumber, eHistoryType historyType = eHistoryType.Always, bool scrollToTop = false, bool forceScroll = false)
 		{
 			int lineIndex = this.GetLineIndex(lineNumber);
 			if(lineIndex >= 0) {
-				ScrollToLineIndex(lineIndex, historyType, scrollToTop);
+				ScrollToLineIndex(lineIndex, historyType, scrollToTop, forceScroll);
 			}
 		}
 

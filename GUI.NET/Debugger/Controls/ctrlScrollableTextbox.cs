@@ -194,14 +194,14 @@ namespace Mesen.GUI.Debugger
 			return this.GetLineNumber(this.GetLineIndexAtPosition(yPos));
 		}
 
-		public void ScrollToLineIndex(int lineIndex, bool scrollToTop = false)
+		public void ScrollToLineIndex(int lineIndex, eHistoryType historyType = eHistoryType.Always, bool scrollToTop = false, bool forceScroll = false)
 		{
-			this.ctrlTextbox.ScrollToLineIndex(lineIndex, eHistoryType.Always, scrollToTop);
+			this.ctrlTextbox.ScrollToLineIndex(lineIndex, historyType, scrollToTop, forceScroll);
 		}
 
-		public void ScrollToLineNumber(int lineNumber, eHistoryType historyType = eHistoryType.Always, bool scrollToTop = false)
+		public void ScrollToLineNumber(int lineNumber, eHistoryType historyType = eHistoryType.Always, bool scrollToTop = false, bool forceScroll = false)
 		{
-			this.ctrlTextbox.ScrollToLineNumber(lineNumber, historyType, scrollToTop);
+			this.ctrlTextbox.ScrollToLineNumber(lineNumber, historyType, scrollToTop, forceScroll);
 		}
 
 		public void CopySelection(bool copyLineNumbers, bool copyContentNotes, bool copyComments)
