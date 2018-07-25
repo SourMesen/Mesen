@@ -66,7 +66,6 @@ namespace Mesen.GUI.Debugger
 		}
 
 		private CodeInfo _code = new CodeInfo("");
-		private bool _codeChanged;
 
 		[Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public CodeInfo Code
@@ -74,7 +73,6 @@ namespace Mesen.GUI.Debugger
 			get { return _code; }
 			set
 			{
-				_codeChanged = true;
 				_code = value;
 				_tooltipManager.Code = value;
 				UpdateCode();
@@ -191,42 +189,33 @@ namespace Mesen.GUI.Debugger
 			return result;
 		}
 
-		public bool UpdateCode(bool forceUpdate = false)
+		private void UpdateCode()
 		{
-			if(_codeChanged || forceUpdate) {
-				int centerLineIndex = ctrlCodeViewer.GetLineIndexAtPosition(this.Height / 2);
-				int centerLineAddress;
-				int scrollOffset = -1;
-				do {
-					//Save the address at the center of the debug view
-					centerLineAddress = ctrlCodeViewer.GetLineNumber(centerLineIndex);
-					centerLineIndex--;
-					scrollOffset++;
-				} while(centerLineAddress < 0 && centerLineIndex > 0);
+			int centerLineIndex = ctrlCodeViewer.GetLineIndexAtPosition(this.Height / 2);
+			int centerLineAddress;
+			int scrollOffset = -1;
+			do {
+				//Save the address at the center of the debug view
+				centerLineAddress = ctrlCodeViewer.GetLineNumber(centerLineIndex);
+				centerLineIndex--;
+				scrollOffset++;
+			} while(centerLineAddress < 0 && centerLineIndex > 0);
 
 
-				ctrlCodeViewer.LineIndentations = _code.LineIndentations;
-				ctrlCodeViewer.Addressing = _code.Addressing;
-				ctrlCodeViewer.Comments = _code.Comments;
+			ctrlCodeViewer.LineIndentations = _code.LineIndentations;
+			ctrlCodeViewer.Addressing = _code.Addressing;
+			ctrlCodeViewer.Comments = _code.Comments;
 
-				ctrlCodeViewer.LineNumbers = _code.LineNumbers;
-				ctrlCodeViewer.TextLineNotes = _code.CodeNotes;
-				ctrlCodeViewer.LineNumberNotes = _code.LineNumberNotes;
-				ctrlCodeViewer.TextLines = _code.CodeLines;
-
-				_codeChanged = false;
-				UpdateLineColors();
-
-				if(centerLineAddress >= 0) {
-					//Scroll to the same address as before, to prevent the code view from changing due to setting or banking changes, etc.
-					int lineIndex = ctrlCodeViewer.GetLineIndex(centerLineAddress) + scrollOffset;
-					ctrlCodeViewer.ScrollToLineIndex(lineIndex, eHistoryType.None, false, true);
-				}
-
-				return true;
+			ctrlCodeViewer.LineNumbers = _code.LineNumbers;
+			ctrlCodeViewer.TextLineNotes = _code.CodeNotes;
+			ctrlCodeViewer.LineNumberNotes = _code.LineNumberNotes;
+			ctrlCodeViewer.TextLines = _code.CodeLines;
+			
+			if(centerLineAddress >= 0) {
+				//Scroll to the same address as before, to prevent the code view from changing due to setting or banking changes, etc.
+				int lineIndex = ctrlCodeViewer.GetLineIndex(centerLineAddress) + scrollOffset;
+				ctrlCodeViewer.ScrollToLineIndex(lineIndex, eHistoryType.None, false, true);
 			}
-			UpdateLineColors();
-			return false;
 		}
 		
 		private void ctrlCodeViewer_MouseLeave(object sender, EventArgs e)
@@ -280,6 +269,12 @@ namespace Mesen.GUI.Debugger
 		public AddressTypeInfo GetAddressInfo(int lineNumber)
 		{
 			AddressTypeInfo info = new AddressTypeInfo();
+			SetAddressInfo(info, lineNumber);
+			return info;
+		}
+
+		private void SetAddressInfo(AddressTypeInfo info, int lineNumber)
+		{
 			if(lineNumber < this._code.AbsoluteLineNumbers.Length) {
 				info.Address = this._code.AbsoluteLineNumbers[lineNumber];
 				switch(this._code.LineMemoryType[lineNumber]) {
@@ -289,7 +284,6 @@ namespace Mesen.GUI.Debugger
 					case 'N': info.Type = AddressType.InternalRam; break;
 				}
 			}
-			return info;
 		}
 
 		private void ctrlCodeViewer_ScrollPositionChanged(object sender, EventArgs e)
@@ -471,16 +465,16 @@ namespace Mesen.GUI.Debugger
 				DebugInfo info = ConfigManager.Config.DebugInfo;
 				int len = _code._code.AbsoluteLineNumbers.Length;
 
-				AddressTypeInfo[] addressInfo = new AddressTypeInfo[len];
-				for(int i = 0; i < len; i++) {
-					addressInfo[i] = _code.GetAddressInfo(i);
-				}
+				AddressTypeInfo addressInfo = new AddressTypeInfo();
 
-				foreach(Breakpoint breakpoint in BreakpointManager.Breakpoints) {
-					for(int i = 0; i < len; i++) {
-						if(breakpoint.Matches(_code._code.LineNumbers[i], addressInfo[i])) {
-							Color bpColor = breakpoint.BreakOnExec ? info.CodeExecBreakpointColor : (breakpoint.BreakOnWrite ? info.CodeWriteBreakpointColor : info.CodeReadBreakpointColor);
+				Breakpoint[] breakpoints = BreakpointManager.Breakpoints.ToArray();
+				for(int i = 0; i < len; i++) {
+					_code.SetAddressInfo(addressInfo, i);
+					for(int j = 0; j < breakpoints.Length; j++) {
+						if(breakpoints[j].Matches(_code._code.LineNumbers[i], addressInfo)) {
+							Color bpColor = breakpoints[j].BreakOnExec ? info.CodeExecBreakpointColor : (breakpoints[j].BreakOnWrite ? info.CodeWriteBreakpointColor : info.CodeReadBreakpointColor);
 							_breakpointColors[i] = bpColor;
+							break;
 						}
 					}
 				}

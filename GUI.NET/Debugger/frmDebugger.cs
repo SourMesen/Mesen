@@ -571,7 +571,6 @@ namespace Mesen.GUI.Debugger
 				if(newCode != null || ctrlDebuggerCodeSplit.Code == null) {
 					ctrlDebuggerCodeSplit.Code = ctrlDebuggerCode.Code;
 				}
-				ctrlDebuggerCodeSplit.UpdateCode(true);
 			} else {
 				_lastCodeWindow = ctrlSourceViewer.Visible ? (ICodeViewer)ctrlSourceViewer : (ICodeViewer)ctrlDebuggerCode;
 			}

@@ -15,6 +15,7 @@ namespace Mesen.GUI.Debugger
 	public partial class ctrlWatch : BaseControl
 	{
 		private int _currentSelection = -1;
+		private int _previousMaxLength = -1;
 
 		public ctrlWatch()
 		{
@@ -81,13 +82,18 @@ namespace Mesen.GUI.Debugger
 			}
 
 			if(updating) {
-				if(autoResizeColumns) {
-					lstWatch.AutoResizeColumn(1, ColumnHeaderAutoResizeStyle.ColumnContent);
+				if(watchContent.Count > 0) {
+					int maxLength = watchContent.Select(info => info.Value.Length).Max();
+					if(_previousMaxLength != maxLength) {
+						if(autoResizeColumns) {
+							lstWatch.AutoResizeColumn(1, ColumnHeaderAutoResizeStyle.ColumnContent);
+						}
+						if(colValue.Width < 100) {
+							colValue.Width = 100;
+						}
+						_previousMaxLength = maxLength;
+					}
 				}
-				if(colValue.Width < 100) {
-					colValue.Width = 100;
-				}
-
 				lstWatch.EndUpdate();
 			}
 
