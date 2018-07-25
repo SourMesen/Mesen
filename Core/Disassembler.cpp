@@ -497,8 +497,7 @@ string Disassembler::GetCode(AddressTypeInfo &addressInfo, uint32_t endAddr, uin
 	string label;
 	string commentString;
 	string commentLines;
-	shared_ptr<DisassemblyInfo> infoRef;
-	DisassemblyInfo* info;
+	shared_ptr<DisassemblyInfo> info;
 	DataType dataType = DataType::UnidentifiedData;
 	string spaces = "  ";
 	string effAddress;
@@ -538,13 +537,12 @@ string Disassembler::GetCode(AddressTypeInfo &addressInfo, uint32_t endAddr, uin
 			commentString.clear();
 		}
 		
-		infoRef = (*cache)[addr&mask];
+		info = (*cache)[addr&mask];
 
 		isVerifiedData = addressInfo.Type == AddressType::PrgRom && cdl->IsData(addr&mask);
-		info = infoRef.get();
 		if(!info && ((disassembleUnidentifiedData && !isVerifiedData) || (disassembleVerifiedData && isVerifiedData))) {
 			dataType = isVerifiedData ? DataType::VerifiedData : (addressInfo.Type == AddressType::PrgRom ? DataType::UnidentifiedData : DataType::VerifiedCode);
-			info = new DisassemblyInfo(source + (addr & mask), false);
+			info.reset(new DisassemblyInfo(source + (addr & mask), false));
 		} else if(info) {
 			dataType = DataType::VerifiedCode;
 		}
@@ -554,7 +552,7 @@ string Disassembler::GetCode(AddressTypeInfo &addressInfo, uint32_t endAddr, uin
 				endDataBlock();
 			}
 
-			GetSubHeader(output, info, label, memoryAddr, resetVector, nmiVector, irqVector);
+			GetSubHeader(output, info.get(), label, memoryAddr, resetVector, nmiVector, irqVector);
 			output += commentLines;
 			if(!label.empty()) {
 				GetLine(output, label + ":", emptyString, -1, -1, dataType, memoryType);
@@ -586,7 +584,6 @@ string Disassembler::GetCode(AddressTypeInfo &addressInfo, uint32_t endAddr, uin
 						break;
 					}
 				}		
-				delete info;
 			} else {
 				addr += info->GetSize();
 				memoryAddr += info->GetSize();
