@@ -210,21 +210,24 @@ namespace Mesen.GUI.Config
 				return keyString.Replace("+None", "").Replace("Oemplus", "+").Replace("Oemtilde", "Tilde").Replace("OemMinus", "-").Replace("Cancel", "Break").Replace("Escape", "Esc");
 			}
 		}
-
+		
 		private static Dictionary<WeakReference<ToolStripMenuItem>, string> _bindings = new Dictionary<WeakReference<ToolStripMenuItem>, string>();
-		private static Dictionary<WeakReference<ToolStripMenuItem>, Control> _parents = new Dictionary<WeakReference<ToolStripMenuItem>, Control>();
+		private static Dictionary<WeakReference<ToolStripMenuItem>, WeakReference<Control>> _parents = new Dictionary<WeakReference<ToolStripMenuItem>, WeakReference<Control>>();
 		public static void RegisterMenuItem(ToolStripMenuItem item, Control parent, string fieldName)
 		{
 			var weakRef = new WeakReference<ToolStripMenuItem>(item);
 			_bindings[weakRef] = fieldName;
-			_parents[weakRef] = parent;
+			_parents[weakRef] = new WeakReference<Control>(parent);
 
 			//Remove old references
-			foreach(WeakReference<ToolStripMenuItem> itemRef in _bindings.Keys.ToArray()) {
+			var dictCopy = new Dictionary<WeakReference<ToolStripMenuItem>, string>(_bindings);
+
+			//Iterate on a copy to avoid "collection was modified" error
+			foreach(var kvp in dictCopy) {
 				ToolStripMenuItem menuItem;
-				if(!itemRef.TryGetTarget(out menuItem)) {
-					_bindings.Remove(itemRef);
-					_parents.Remove(itemRef);
+				if(!kvp.Key.TryGetTarget(out menuItem)) {
+					_bindings.Remove(kvp.Key);
+					_parents.Remove(kvp.Key);
 				}
 			}
 		}
@@ -235,8 +238,11 @@ namespace Mesen.GUI.Config
 				ToolStripMenuItem item;
 				if(itemRef.TryGetTarget(out item)) {
 					string fieldName = _bindings[itemRef];
-					Control parent = _parents[itemRef];
-					UpdateShortcutItem(item, parent, fieldName);
+					Control parent;
+					_parents[itemRef].TryGetTarget(out parent);
+					if(parent != null) {
+						UpdateShortcutItem(item, parent, fieldName);
+					}
 				}
 			}
 		}

@@ -16,6 +16,11 @@
 			if(disposing && (components != null)) {
 				components.Dispose();
 			}
+			if(_codeViewerActions != null) {
+				_codeViewerActions.Dispose();
+				_codeViewerActions = null;
+			}
+
 			base.Dispose(disposing);
 		}
 
