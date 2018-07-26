@@ -318,7 +318,8 @@ int LuaApi::UnregisterEventCallback(lua_State *lua)
 int LuaApi::DrawString(lua_State *lua)
 {
 	LuaCallHelper l(lua);
-	l.ForceParamCount(6);
+	l.ForceParamCount(7);
+	int displayDelay = l.ReadInteger(0);
 	int frameCount = l.ReadInteger(1);
 	int backColor = l.ReadInteger(0);
 	int color = l.ReadInteger(0xFFFFFF);
@@ -327,7 +328,7 @@ int LuaApi::DrawString(lua_State *lua)
 	int x = l.ReadInteger();
 	checkminparams(3);
 
-	int startFrame = _console->GetFrameCount();
+	int startFrame = _console->GetFrameCount() + displayDelay;
 	_console->GetDebugHud()->DrawString(x, y, text, color, backColor, frameCount, startFrame);
 
 	return l.ReturnCount();
@@ -336,7 +337,8 @@ int LuaApi::DrawString(lua_State *lua)
 int LuaApi::DrawLine(lua_State *lua)
 {
 	LuaCallHelper l(lua);
-	l.ForceParamCount(6);
+	l.ForceParamCount(7);
+	int displayDelay = l.ReadInteger(0);
 	int frameCount = l.ReadInteger(1);
 	int color = l.ReadInteger(0xFFFFFF);
 	int y2 = l.ReadInteger();
@@ -345,7 +347,7 @@ int LuaApi::DrawLine(lua_State *lua)
 	int x = l.ReadInteger();
 	checkminparams(4);
 
-	int startFrame = _console->GetFrameCount();
+	int startFrame = _console->GetFrameCount() + displayDelay;
 	_console->GetDebugHud()->DrawLine(x, y, x2, y2, color, frameCount, startFrame);
 
 	return l.ReturnCount();
@@ -354,14 +356,15 @@ int LuaApi::DrawLine(lua_State *lua)
 int LuaApi::DrawPixel(lua_State *lua)
 {
 	LuaCallHelper l(lua);
-	l.ForceParamCount(4);
+	l.ForceParamCount(5);
+	int displayDelay = l.ReadInteger(0);
 	int frameCount = l.ReadInteger(1);
 	int color = l.ReadInteger();
 	int y = l.ReadInteger();
 	int x = l.ReadInteger();
 	checkminparams(3);
 
-	int startFrame = _console->GetFrameCount();
+	int startFrame = _console->GetFrameCount() + displayDelay;
 	_console->GetDebugHud()->DrawPixel(x, y, color, frameCount, startFrame);
 
 	return l.ReturnCount();
@@ -370,7 +373,8 @@ int LuaApi::DrawPixel(lua_State *lua)
 int LuaApi::DrawRectangle(lua_State *lua)
 {
 	LuaCallHelper l(lua);
-	l.ForceParamCount(7);
+	l.ForceParamCount(8);
+	int displayDelay = l.ReadInteger(0);
 	int frameCount = l.ReadInteger(1);
 	bool fill = l.ReadBool(false);
 	int color = l.ReadInteger(0xFFFFFF);
@@ -380,7 +384,7 @@ int LuaApi::DrawRectangle(lua_State *lua)
 	int x = l.ReadInteger();
 	checkminparams(4);
 
-	int startFrame = _console->GetFrameCount();
+	int startFrame = _console->GetFrameCount() + displayDelay;
 	_console->GetDebugHud()->DrawRectangle(x, y, width, height, color, fill, frameCount, startFrame);
 
 	return l.ReturnCount();

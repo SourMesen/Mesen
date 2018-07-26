@@ -451,7 +451,7 @@ void Debugger::ProcessPpuCycle()
 				Step(1);
 				SleepUntilResume(BreakSource::Pause);
 			}
-			if(_ppu->GetCurrentScanline() == 241) {
+			if(_ppu->GetCurrentScanline() == 240) {
 				ProcessEvent(EventType::EndFrame);
 			} else if(_ppu->GetCurrentScanline() == -1) {
 				ProcessEvent(EventType::StartFrame);
