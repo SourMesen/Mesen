@@ -191,7 +191,7 @@ namespace Mesen.GUI.Debugger
 
 		private void UpdateCode()
 		{
-			int centerLineIndex = ctrlCodeViewer.GetLineIndexAtPosition(this.Height / 2);
+			int centerLineIndex = ctrlCodeViewer.GetLineIndexAtPosition(0) + ctrlCodeViewer.GetNumberVisibleLines() / 2;
 			int centerLineAddress;
 			int scrollOffset = -1;
 			do {

@@ -194,6 +194,11 @@ namespace Mesen.GUI.Debugger
 			return this.GetLineNumber(this.GetLineIndexAtPosition(yPos));
 		}
 
+		public int GetNumberVisibleLines()
+		{
+			return this.ctrlTextbox.GetNumberVisibleLines();
+		}
+
 		public void ScrollToLineIndex(int lineIndex, eHistoryType historyType = eHistoryType.Always, bool scrollToTop = false, bool forceScroll = false)
 		{
 			this.ctrlTextbox.ScrollToLineIndex(lineIndex, historyType, scrollToTop, forceScroll);
