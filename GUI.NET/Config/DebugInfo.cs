@@ -154,6 +154,7 @@ namespace Mesen.GUI.Config
 		public bool EventViewerShowIrq = true;
 		public bool EventViewerShowSpriteZeroHit = true;
 		public bool EventViewerShowMarkedBreakpoints = true;
+		public bool EventViewerShowPreviousFrameEvents = true;
 
 		public XmlColor EventViewerMapperRegisterWriteColor = ColorTranslator.FromHtml("#007597");
 		public XmlColor EventViewerMapperRegisterReadColor = ColorTranslator.FromHtml("#C92929");

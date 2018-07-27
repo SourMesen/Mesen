@@ -55,6 +55,7 @@
 			this.mnuConfigureColors = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
 			this.mnuRefreshOnBreak = new System.Windows.Forms.ToolStripMenuItem();
+			this.chkShowPreviousFrameEvents = new System.Windows.Forms.CheckBox();
 			this.tabMain.SuspendLayout();
 			this.tpgPpuView.SuspendLayout();
 			this.tableLayoutPanel1.SuspendLayout();
@@ -149,11 +150,13 @@
 			this.tableLayoutPanel2.Controls.Add(this.chkShowPpuRegisterWrites, 0, 0);
 			this.tableLayoutPanel2.Controls.Add(this.chkShowMapperRegisterWrites, 0, 2);
 			this.tableLayoutPanel2.Controls.Add(this.chkShowSpriteZero, 0, 6);
+			this.tableLayoutPanel2.Controls.Add(this.chkShowPreviousFrameEvents, 0, 8);
 			this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tableLayoutPanel2.Location = new System.Drawing.Point(3, 16);
 			this.tableLayoutPanel2.Margin = new System.Windows.Forms.Padding(0);
 			this.tableLayoutPanel2.Name = "tableLayoutPanel2";
-			this.tableLayoutPanel2.RowCount = 8;
+			this.tableLayoutPanel2.RowCount = 9;
+			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
@@ -162,11 +165,6 @@
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
 			this.tableLayoutPanel2.Size = new System.Drawing.Size(198, 507);
 			this.tableLayoutPanel2.TabIndex = 2;
@@ -309,7 +307,7 @@
 			// 
 			this.mnuClose.Image = global::Mesen.GUI.Properties.Resources.Exit;
 			this.mnuClose.Name = "mnuClose";
-			this.mnuClose.Size = new System.Drawing.Size(103, 22);
+			this.mnuClose.Size = new System.Drawing.Size(152, 22);
 			this.mnuClose.Text = "Close";
 			this.mnuClose.Click += new System.EventHandler(this.mnuClose_Click);
 			// 
@@ -343,6 +341,18 @@
 			this.mnuRefreshOnBreak.Size = new System.Drawing.Size(198, 22);
 			this.mnuRefreshOnBreak.Text = "Refresh on pause/break";
 			this.mnuRefreshOnBreak.Click += new System.EventHandler(this.mnuRefreshOnBreak_Click);
+			// 
+			// chkShowPreviousFrameEvents
+			// 
+			this.chkShowPreviousFrameEvents.AutoSize = true;
+			this.tableLayoutPanel2.SetColumnSpan(this.chkShowPreviousFrameEvents, 2);
+			this.chkShowPreviousFrameEvents.Location = new System.Drawing.Point(3, 187);
+			this.chkShowPreviousFrameEvents.Name = "chkShowPreviousFrameEvents";
+			this.chkShowPreviousFrameEvents.Size = new System.Drawing.Size(167, 17);
+			this.chkShowPreviousFrameEvents.TabIndex = 8;
+			this.chkShowPreviousFrameEvents.Text = "Show previous frame\'s events";
+			this.chkShowPreviousFrameEvents.UseVisualStyleBackColor = true;
+			this.chkShowPreviousFrameEvents.Click += new System.EventHandler(this.chkShowPreviousFrameEvents_Click);
 			// 
 			// frmEventViewer
 			// 
@@ -395,5 +405,6 @@
 		private System.Windows.Forms.ToolStripMenuItem mnuRefreshOnBreak;
 		private System.Windows.Forms.TabPage tpgListView;
 		private Controls.ctrlEventViewerListView ctrlEventViewerListView;
+		private System.Windows.Forms.CheckBox chkShowPreviousFrameEvents;
 	}
 }

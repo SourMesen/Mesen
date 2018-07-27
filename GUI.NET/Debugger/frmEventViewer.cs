@@ -32,6 +32,7 @@ namespace Mesen.GUI.Debugger
 			this.chkShowMapperRegisterWrites.Checked = ConfigManager.Config.DebugInfo.EventViewerShowMapperRegisterWrites;
 			this.chkShowMapperRegisterReads.Checked = ConfigManager.Config.DebugInfo.EventViewerShowMapperRegisterReads;
 			this.chkBreakpoints.Checked = ConfigManager.Config.DebugInfo.EventViewerShowMarkedBreakpoints;
+			this.chkShowPreviousFrameEvents.Checked = ConfigManager.Config.DebugInfo.EventViewerShowPreviousFrameEvents;
 		}
 
 		protected override void OnLoad(EventArgs e)
@@ -172,6 +173,16 @@ namespace Mesen.GUI.Debugger
 			ConfigManager.Config.DebugInfo.EventViewerShowMarkedBreakpoints = chkBreakpoints.Checked;
 			ConfigManager.ApplyChanges();
 			this.RefreshViewer();
+		}
+
+		private void chkShowPreviousFrameEvents_Click(object sender, EventArgs e)
+		{
+			ConfigManager.Config.DebugInfo.EventViewerShowPreviousFrameEvents = chkShowPreviousFrameEvents.Checked;
+			ConfigManager.ApplyChanges();
+			if(InteropEmu.DebugIsExecutionStopped()) {
+				this.GetData();
+				this.RefreshViewer();
+			}
 		}
 
 		private void mnuConfigureColors_Click(object sender, EventArgs e)

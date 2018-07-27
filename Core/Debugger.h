@@ -124,6 +124,7 @@ private:
 
 	uint32_t _inputOverride[4];
 
+	vector<DebugEventInfo> _prevDebugEvents;
 	vector<DebugEventInfo> _debugEvents;
 	vector<vector<int>> _debugEventMarkerRpn;
 
@@ -256,8 +257,8 @@ public:
 	void ProcessPpuOperation(uint16_t addr, uint8_t &value, MemoryOperationType type);
 	void ProcessEvent(EventType type);
 
-	void GetDebugEvents(uint32_t* pictureBuffer, DebugEventInfo *infoArray, uint32_t &maxEventCount);
-	uint32_t GetDebugEventCount();
+	void GetDebugEvents(uint32_t* pictureBuffer, DebugEventInfo *infoArray, uint32_t &maxEventCount, bool returnPreviousFrameData);
+	uint32_t GetDebugEventCount(bool returnPreviousFrameData);
 
 	uint32_t GetScreenPixel(uint8_t x, uint8_t y);
 };

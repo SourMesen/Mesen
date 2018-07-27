@@ -20,7 +20,7 @@ namespace Mesen.GUI.Debugger.Controls
 		private DebugState _state = new DebugState();
 		private byte[] _pictureData = null;
 		private Dictionary<int, List<DebugEventInfo>> _debugEventsByCycle = new Dictionary<int, List<DebugEventInfo>>();
-		private DebugEventInfo[] _debugEvents = new DebugEventInfo[0];
+		private List<DebugEventInfo> _debugEvents = new List<DebugEventInfo>();
 		
 		public ctrlEventViewerPpuView()
 		{
@@ -33,18 +33,43 @@ namespace Mesen.GUI.Debugger.Controls
 			InteropEmu.DebugGetState(ref state);
 
 			DebugEventInfo[] eventInfoArray;
-			InteropEmu.DebugGetDebugEvents(out _pictureData, out eventInfoArray);
+			DebugEventInfo[] prevEventInfoArray = new DebugEventInfo[0];
+
+			InteropEmu.DebugGetDebugEvents(false, out _pictureData, out eventInfoArray);
+			if(ConfigManager.Config.DebugInfo.EventViewerShowPreviousFrameEvents && (state.PPU.Scanline != -1 || state.PPU.Cycle != 0)) {
+				//Get the previous frame's data, too
+				InteropEmu.DebugGetDebugEvents(true, out _pictureData, out prevEventInfoArray);
+			}
+
+			int currentCycle = (int)((state.PPU.Scanline + 1) * 341 + state.PPU.Cycle);
 			var debugEvents = new Dictionary<int, List<DebugEventInfo>>();
-			for(int i = 0; i < eventInfoArray.Length; i++) {
-				int frameCycle = (eventInfoArray[i].Scanline + 1) * 341 + eventInfoArray[i].Cycle;
+
+			List<DebugEventInfo> eventList = new List<DebugEventInfo>(eventInfoArray.Length+prevEventInfoArray.Length);
+			Action<DebugEventInfo> addEvent = (DebugEventInfo eventInfo) => {
+				int frameCycle = (eventInfo.Scanline + 1) * 341 + eventInfo.Cycle;
+
 				List<DebugEventInfo> infoList;
 				if(!debugEvents.TryGetValue(frameCycle, out infoList)) {
 					infoList = new List<DebugEventInfo>();
 					debugEvents[frameCycle] = infoList;
 				}
-				infoList.Add(eventInfoArray[i]);
+				infoList.Add(eventInfo);
+				eventList.Add(eventInfo);
+			};
+
+			for(int i = 0; i < eventInfoArray.Length; i++) {
+				addEvent(eventInfoArray[i]);
 			}
-			_debugEvents = eventInfoArray;
+
+			//Show events from the previous frame, too
+			for(int i = 0; i < prevEventInfoArray.Length; i++) {
+				int frameCycle = (prevEventInfoArray[i].Scanline + 1) * 341 + prevEventInfoArray[i].Cycle;
+				if(frameCycle > currentCycle) {
+					addEvent(prevEventInfoArray[i]);
+				}
+			}
+
+			_debugEvents = eventList;
 			_debugEventsByCycle = debugEvents;
 			_state = state;
 		}

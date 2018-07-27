@@ -1346,6 +1346,7 @@ void Debugger::ProcessEvent(EventType type)
 		if(CheckFlag(DebuggerFlags::PpuPartialDraw)) {
 			_ppu->DebugUpdateFrameBuffer(CheckFlag(DebuggerFlags::PpuShowPreviousFrame));
 		}
+		_prevDebugEvents = _debugEvents;
 		_debugEvents.clear();
 	} else if(type == EventType::Nmi) {
 		AddDebugEvent(DebugEventType::Nmi);
@@ -1372,7 +1373,7 @@ void Debugger::AddDebugEvent(DebugEventType type, uint16_t address, uint8_t valu
 	});
 }
 
-void Debugger::GetDebugEvents(uint32_t* pictureBuffer, DebugEventInfo *infoArray, uint32_t &maxEventCount)
+void Debugger::GetDebugEvents(uint32_t* pictureBuffer, DebugEventInfo *infoArray, uint32_t &maxEventCount, bool returnPreviousFrameData)
 {
 	DebugBreakHelper helper(this);
 
@@ -1383,14 +1384,16 @@ void Debugger::GetDebugEvents(uint32_t* pictureBuffer, DebugEventInfo *infoArray
 	for(int i = 0; i < PPU::PixelCount; i++) {
 		pictureBuffer[i] = palette[buffer[i] & 0x3F];
 	}
-	uint32_t eventCount = std::min(maxEventCount, (uint32_t)_debugEvents.size());
-	memcpy(infoArray, _debugEvents.data(), eventCount * sizeof(DebugEventInfo));
+
+	vector<DebugEventInfo> &events = returnPreviousFrameData ? _prevDebugEvents : _debugEvents;
+	uint32_t eventCount = std::min(maxEventCount, (uint32_t)events.size());
+	memcpy(infoArray, events.data(), eventCount * sizeof(DebugEventInfo));
 	maxEventCount = eventCount;
 }
 
-uint32_t Debugger::GetDebugEventCount()
+uint32_t Debugger::GetDebugEventCount(bool returnPreviousFrameData)
 {
-	return (uint32_t)_debugEvents.size();
+	return (uint32_t)(returnPreviousFrameData ? _prevDebugEvents.size() : _debugEvents.size());
 }
 
 uint32_t Debugger::GetScreenPixel(uint8_t x, uint8_t y)
