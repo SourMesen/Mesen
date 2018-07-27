@@ -99,6 +99,12 @@ namespace Mesen.GUI.Debugger
 
 		public static bool SetLabel(UInt32 address, AddressType type, string label, string comment, bool raiseEvent = true)
 		{
+			if(_reverseLookup.ContainsKey(label)) {
+				//Another identical label exists, we need to remove it
+				CodeLabel existingLabel = _reverseLookup[label];
+				DeleteLabel(existingLabel.Address, existingLabel.AddressType, false);
+			}
+
 			string key = GetKey(address, type);
 			if(_labels.ContainsKey(key)) {
 				_reverseLookup.Remove(_labels[key].Label);
