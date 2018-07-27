@@ -405,7 +405,7 @@ void MemoryDumper::GatherChrPaletteInfo()
 
 void MemoryDumper::GetChrBank(int bankIndex, uint32_t* frameBuffer, uint8_t palette, bool largeSprites, CdlHighlightType highlightType, uint32_t* paletteBuffer)
 {
-	bool autoPalette = (palette & 0x80) == 0x80;
+	bool useAutoPalette = (palette & 0x80) == 0x80;
 	uint8_t paletteBaseAddr = (palette & 0x07) << 2;
 	uint32_t defaultPalette;
 	if(palette & 0x08) {
@@ -451,7 +451,7 @@ void MemoryDumper::GetChrBank(int bankIndex, uint32_t* frameBuffer, uint8_t pale
 			uint8_t tileIndex = y * 16 + x;
 			uint32_t paletteData = defaultPalette;
 
-			if(autoPalette) {
+			if(useAutoPalette) {
 				TileKey key;
 				uint32_t absoluteTileIndex = bankIndex <= 1 ? _mapper->ToAbsoluteChrAddress(bankIndex * 0x1000 + tileIndex * 16) / 16 : ((bankIndex - 2) * 256 + tileIndex);
 				if(_mapper->HasChrRom()) {
@@ -463,7 +463,18 @@ void MemoryDumper::GetChrBank(int bankIndex, uint32_t* frameBuffer, uint8_t pale
 				}
 				auto result = _paletteByTile.find(key);
 				if(result != _paletteByTile.end()) {
-					paletteData = result->second;
+					uint32_t lastPalette = result->second;
+					if(
+						(lastPalette & 0xFF) != ((lastPalette >> 8) & 0xFF) ||
+						(lastPalette & 0xFF) != ((lastPalette >> 16) & 0xFF) ||
+						(lastPalette & 0xFF) != ((lastPalette >> 24) & 0xFF)
+					) {
+						//Only use automatic palette if the result contains more than 1 color
+						paletteData = lastPalette;
+					} else {
+						//Use grayscale if auto-palette results in a single color palette
+						paletteData = 0x2010000F;
+					}
 				}
 			}
 
