@@ -309,7 +309,7 @@
 
 			<Control ID="tpgOverclocking">Overclocking</Control>
 			<Control ID="grpOverclocking">Overclocking du CPU</Control>
-			<Control ID="lblOverclockWarning">ATTENTION: L'overclocking affecte la stabilité de l'émulation et peut faire planter certains jeux!</Control>
+			<Control ID="lblOverclockHint">L'overclocking peut permettre de réduire ou éliminer les ralentissements dans les jeux (mais il peut aussi causer des problèmes avec l'émulation). La façon recommandée d'overclocker est d'augmenter la valeur du champ "lignes avant le NMI" ci-dessous par quelques centaines de lignes (ex: 400+).</Control>
 			<Control ID="lblClockRate">Multiplicateur de la fréquence d'horloge : </Control>
 			<Control ID="lblClockRatePercent">% (Recommandé: 100%)</Control>
 

@@ -47,6 +47,7 @@ namespace Mesen.GUI.Forms.Config
 			this.lblRewindSpeedHint = new System.Windows.Forms.Label();
 			this.tpgAdvanced = new System.Windows.Forms.TabPage();
 			this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+			this.chkMapperRandomPowerOnState = new Mesen.GUI.Controls.ctrlRiskyOption();
 			this.chkEnableOamDecay = new Mesen.GUI.Controls.ctrlRiskyOption();
 			this.chkRemoveSpriteLimit = new System.Windows.Forms.CheckBox();
 			this.flowLayoutPanel8 = new System.Windows.Forms.FlowLayoutPanel();
@@ -61,11 +62,12 @@ namespace Mesen.GUI.Forms.Config
 			this.chkUseAlternativeMmc3Irq = new System.Windows.Forms.CheckBox();
 			this.chkAdaptiveSpriteLimit = new System.Windows.Forms.CheckBox();
 			this.tpgOverclocking = new System.Windows.Forms.TabPage();
+			this.picHint = new System.Windows.Forms.PictureBox();
 			this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
+			this.lblOverclockHint = new Mesen.GUI.Controls.ctrlAutoGrowLabel();
 			this.flowLayoutPanel4 = new System.Windows.Forms.FlowLayoutPanel();
 			this.lblEffectiveClockRateDendy = new System.Windows.Forms.Label();
 			this.lblEffectiveClockRateValueDendy = new System.Windows.Forms.Label();
-			this.lblOverclockWarning = new System.Windows.Forms.Label();
 			this.chkOverclockAdjustApu = new System.Windows.Forms.CheckBox();
 			this.flowLayoutPanel3 = new System.Windows.Forms.FlowLayoutPanel();
 			this.lblEffectiveClockRatePal = new System.Windows.Forms.Label();
@@ -88,7 +90,6 @@ namespace Mesen.GUI.Forms.Config
 			this.chkShowLagCounter = new System.Windows.Forms.CheckBox();
 			this.btnResetLagCounter = new System.Windows.Forms.Button();
 			this.tmrUpdateClockRate = new System.Windows.Forms.Timer(this.components);
-			this.chkMapperRandomPowerOnState = new Mesen.GUI.Controls.ctrlRiskyOption();
 			this.tabMain.SuspendLayout();
 			this.tpgGeneral.SuspendLayout();
 			this.tableLayoutPanel4.SuspendLayout();
@@ -99,6 +100,7 @@ namespace Mesen.GUI.Forms.Config
 			this.tableLayoutPanel1.SuspendLayout();
 			this.flowLayoutPanel8.SuspendLayout();
 			this.tpgOverclocking.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.picHint)).BeginInit();
 			this.tableLayoutPanel3.SuspendLayout();
 			this.flowLayoutPanel4.SuspendLayout();
 			this.flowLayoutPanel3.SuspendLayout();
@@ -133,7 +135,7 @@ namespace Mesen.GUI.Forms.Config
 			this.tpgGeneral.Location = new System.Drawing.Point(4, 22);
 			this.tpgGeneral.Name = "tpgGeneral";
 			this.tpgGeneral.Padding = new System.Windows.Forms.Padding(3);
-			this.tpgGeneral.Size = new System.Drawing.Size(525, 273);
+			this.tpgGeneral.Size = new System.Drawing.Size(525, 295);
 			this.tpgGeneral.TabIndex = 0;
 			this.tpgGeneral.Text = "General";
 			this.tpgGeneral.UseVisualStyleBackColor = true;
@@ -158,7 +160,7 @@ namespace Mesen.GUI.Forms.Config
 			this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel4.Size = new System.Drawing.Size(519, 267);
+			this.tableLayoutPanel4.Size = new System.Drawing.Size(519, 289);
 			this.tableLayoutPanel4.TabIndex = 0;
 			// 
 			// flowLayoutPanel9
@@ -167,10 +169,10 @@ namespace Mesen.GUI.Forms.Config
 			this.flowLayoutPanel9.Controls.Add(this.nudTurboSpeed);
 			this.flowLayoutPanel9.Controls.Add(this.lblTurboSpeedHint);
 			this.flowLayoutPanel9.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.flowLayoutPanel9.Location = new System.Drawing.Point(111, 26);
+			this.flowLayoutPanel9.Location = new System.Drawing.Point(111, 27);
 			this.flowLayoutPanel9.Margin = new System.Windows.Forms.Padding(0);
 			this.flowLayoutPanel9.Name = "flowLayoutPanel9";
-			this.flowLayoutPanel9.Size = new System.Drawing.Size(408, 26);
+			this.flowLayoutPanel9.Size = new System.Drawing.Size(408, 27);
 			this.flowLayoutPanel9.TabIndex = 14;
 			// 
 			// nudTurboSpeed
@@ -193,8 +195,9 @@ namespace Mesen.GUI.Forms.Config
             0,
             0,
             0});
+			this.nudTurboSpeed.MinimumSize = new System.Drawing.Size(0, 21);
 			this.nudTurboSpeed.Name = "nudTurboSpeed";
-			this.nudTurboSpeed.Size = new System.Drawing.Size(48, 20);
+			this.nudTurboSpeed.Size = new System.Drawing.Size(48, 21);
 			this.nudTurboSpeed.TabIndex = 1;
 			this.nudTurboSpeed.Value = new decimal(new int[] {
             0,
@@ -206,7 +209,7 @@ namespace Mesen.GUI.Forms.Config
 			// 
 			this.lblTurboSpeedHint.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.lblTurboSpeedHint.AutoSize = true;
-			this.lblTurboSpeedHint.Location = new System.Drawing.Point(57, 6);
+			this.lblTurboSpeedHint.Location = new System.Drawing.Point(57, 7);
 			this.lblTurboSpeedHint.Name = "lblTurboSpeedHint";
 			this.lblTurboSpeedHint.Size = new System.Drawing.Size(121, 13);
 			this.lblTurboSpeedHint.TabIndex = 2;
@@ -216,7 +219,7 @@ namespace Mesen.GUI.Forms.Config
 			// 
 			this.lblTurboSpeed.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.lblTurboSpeed.AutoSize = true;
-			this.lblTurboSpeed.Location = new System.Drawing.Point(3, 32);
+			this.lblTurboSpeed.Location = new System.Drawing.Point(3, 34);
 			this.lblTurboSpeed.Name = "lblTurboSpeed";
 			this.lblTurboSpeed.Size = new System.Drawing.Size(105, 13);
 			this.lblTurboSpeed.TabIndex = 13;
@@ -231,7 +234,7 @@ namespace Mesen.GUI.Forms.Config
 			this.flowLayoutPanel6.Location = new System.Drawing.Point(111, 0);
 			this.flowLayoutPanel6.Margin = new System.Windows.Forms.Padding(0);
 			this.flowLayoutPanel6.Name = "flowLayoutPanel6";
-			this.flowLayoutPanel6.Size = new System.Drawing.Size(408, 26);
+			this.flowLayoutPanel6.Size = new System.Drawing.Size(408, 27);
 			this.flowLayoutPanel6.TabIndex = 11;
 			// 
 			// nudEmulationSpeed
@@ -254,8 +257,9 @@ namespace Mesen.GUI.Forms.Config
             0,
             0,
             0});
+			this.nudEmulationSpeed.MinimumSize = new System.Drawing.Size(0, 21);
 			this.nudEmulationSpeed.Name = "nudEmulationSpeed";
-			this.nudEmulationSpeed.Size = new System.Drawing.Size(48, 20);
+			this.nudEmulationSpeed.Size = new System.Drawing.Size(48, 21);
 			this.nudEmulationSpeed.TabIndex = 1;
 			this.nudEmulationSpeed.Value = new decimal(new int[] {
             0,
@@ -267,7 +271,7 @@ namespace Mesen.GUI.Forms.Config
 			// 
 			this.lblEmuSpeedHint.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.lblEmuSpeedHint.AutoSize = true;
-			this.lblEmuSpeedHint.Location = new System.Drawing.Point(57, 6);
+			this.lblEmuSpeedHint.Location = new System.Drawing.Point(57, 7);
 			this.lblEmuSpeedHint.Name = "lblEmuSpeedHint";
 			this.lblEmuSpeedHint.Size = new System.Drawing.Size(121, 13);
 			this.lblEmuSpeedHint.TabIndex = 2;
@@ -277,7 +281,7 @@ namespace Mesen.GUI.Forms.Config
 			// 
 			this.lblEmulationSpeed.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.lblEmulationSpeed.AutoSize = true;
-			this.lblEmulationSpeed.Location = new System.Drawing.Point(3, 6);
+			this.lblEmulationSpeed.Location = new System.Drawing.Point(3, 7);
 			this.lblEmulationSpeed.Name = "lblEmulationSpeed";
 			this.lblEmulationSpeed.Size = new System.Drawing.Size(90, 13);
 			this.lblEmulationSpeed.TabIndex = 12;
@@ -287,7 +291,7 @@ namespace Mesen.GUI.Forms.Config
 			// 
 			this.lblRewindSpeed.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.lblRewindSpeed.AutoSize = true;
-			this.lblRewindSpeed.Location = new System.Drawing.Point(3, 58);
+			this.lblRewindSpeed.Location = new System.Drawing.Point(3, 61);
 			this.lblRewindSpeed.Name = "lblRewindSpeed";
 			this.lblRewindSpeed.Size = new System.Drawing.Size(80, 13);
 			this.lblRewindSpeed.TabIndex = 15;
@@ -299,10 +303,10 @@ namespace Mesen.GUI.Forms.Config
 			this.flowLayoutPanel10.Controls.Add(this.nudRewindSpeed);
 			this.flowLayoutPanel10.Controls.Add(this.lblRewindSpeedHint);
 			this.flowLayoutPanel10.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.flowLayoutPanel10.Location = new System.Drawing.Point(111, 52);
+			this.flowLayoutPanel10.Location = new System.Drawing.Point(111, 54);
 			this.flowLayoutPanel10.Margin = new System.Windows.Forms.Padding(0);
 			this.flowLayoutPanel10.Name = "flowLayoutPanel10";
-			this.flowLayoutPanel10.Size = new System.Drawing.Size(408, 26);
+			this.flowLayoutPanel10.Size = new System.Drawing.Size(408, 27);
 			this.flowLayoutPanel10.TabIndex = 16;
 			// 
 			// nudRewindSpeed
@@ -325,8 +329,9 @@ namespace Mesen.GUI.Forms.Config
             0,
             0,
             0});
+			this.nudRewindSpeed.MinimumSize = new System.Drawing.Size(0, 21);
 			this.nudRewindSpeed.Name = "nudRewindSpeed";
-			this.nudRewindSpeed.Size = new System.Drawing.Size(48, 20);
+			this.nudRewindSpeed.Size = new System.Drawing.Size(48, 21);
 			this.nudRewindSpeed.TabIndex = 1;
 			this.nudRewindSpeed.Value = new decimal(new int[] {
             0,
@@ -338,7 +343,7 @@ namespace Mesen.GUI.Forms.Config
 			// 
 			this.lblRewindSpeedHint.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.lblRewindSpeedHint.AutoSize = true;
-			this.lblRewindSpeedHint.Location = new System.Drawing.Point(57, 6);
+			this.lblRewindSpeedHint.Location = new System.Drawing.Point(57, 7);
 			this.lblRewindSpeedHint.Name = "lblRewindSpeedHint";
 			this.lblRewindSpeedHint.Size = new System.Drawing.Size(121, 13);
 			this.lblRewindSpeedHint.TabIndex = 2;
@@ -390,6 +395,18 @@ namespace Mesen.GUI.Forms.Config
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this.tableLayoutPanel1.Size = new System.Drawing.Size(519, 289);
 			this.tableLayoutPanel1.TabIndex = 0;
+			// 
+			// chkMapperRandomPowerOnState
+			// 
+			this.chkMapperRandomPowerOnState.AutoSize = true;
+			this.chkMapperRandomPowerOnState.Checked = false;
+			this.chkMapperRandomPowerOnState.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.chkMapperRandomPowerOnState.Location = new System.Drawing.Point(0, 230);
+			this.chkMapperRandomPowerOnState.MinimumSize = new System.Drawing.Size(0, 23);
+			this.chkMapperRandomPowerOnState.Name = "chkMapperRandomPowerOnState";
+			this.chkMapperRandomPowerOnState.Size = new System.Drawing.Size(519, 23);
+			this.chkMapperRandomPowerOnState.TabIndex = 11;
+			this.chkMapperRandomPowerOnState.Text = "Randomize power-on state for mappers";
 			// 
 			// chkEnableOamDecay
 			// 
@@ -528,30 +545,46 @@ namespace Mesen.GUI.Forms.Config
 			this.chkAdaptiveSpriteLimit.Name = "chkAdaptiveSpriteLimit";
 			this.chkAdaptiveSpriteLimit.Size = new System.Drawing.Size(442, 17);
 			this.chkAdaptiveSpriteLimit.TabIndex = 10;
-			this.chkAdaptiveSpriteLimit.Text = "Automatically re-enable sprite limit as needed to prevent graphical glitches when possible";
+			this.chkAdaptiveSpriteLimit.Text = "Automatically re-enable sprite limit as needed to prevent graphical glitches when" +
+    " possible";
 			this.chkAdaptiveSpriteLimit.UseVisualStyleBackColor = true;
 			// 
 			// tpgOverclocking
 			// 
+			this.tpgOverclocking.Controls.Add(this.picHint);
 			this.tpgOverclocking.Controls.Add(this.tableLayoutPanel3);
 			this.tpgOverclocking.Location = new System.Drawing.Point(4, 22);
 			this.tpgOverclocking.Name = "tpgOverclocking";
 			this.tpgOverclocking.Padding = new System.Windows.Forms.Padding(3);
-			this.tpgOverclocking.Size = new System.Drawing.Size(525, 273);
+			this.tpgOverclocking.Size = new System.Drawing.Size(525, 295);
 			this.tpgOverclocking.TabIndex = 2;
 			this.tpgOverclocking.Text = "Overclocking";
 			this.tpgOverclocking.UseVisualStyleBackColor = true;
+			// 
+			// picHint
+			// 
+			this.picHint.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.picHint.BackgroundImage = global::Mesen.GUI.Properties.Resources.Help;
+			this.picHint.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
+			this.picHint.Location = new System.Drawing.Point(12, 15);
+			this.picHint.Margin = new System.Windows.Forms.Padding(3, 5, 3, 3);
+			this.picHint.Name = "picHint";
+			this.picHint.Size = new System.Drawing.Size(16, 16);
+			this.picHint.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
+			this.picHint.TabIndex = 0;
+			this.picHint.TabStop = false;
 			// 
 			// tableLayoutPanel3
 			// 
 			this.tableLayoutPanel3.ColumnCount = 1;
 			this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+			this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+			this.tableLayoutPanel3.Controls.Add(this.lblOverclockHint, 0, 0);
 			this.tableLayoutPanel3.Controls.Add(this.flowLayoutPanel4, 0, 5);
-			this.tableLayoutPanel3.Controls.Add(this.lblOverclockWarning, 0, 0);
 			this.tableLayoutPanel3.Controls.Add(this.chkOverclockAdjustApu, 0, 6);
 			this.tableLayoutPanel3.Controls.Add(this.flowLayoutPanel3, 0, 4);
-			this.tableLayoutPanel3.Controls.Add(this.grpOverclocking, 0, 1);
-			this.tableLayoutPanel3.Controls.Add(this.grpPpuTiming, 0, 2);
+			this.tableLayoutPanel3.Controls.Add(this.grpOverclocking, 0, 2);
+			this.tableLayoutPanel3.Controls.Add(this.grpPpuTiming, 0, 1);
 			this.tableLayoutPanel3.Controls.Add(this.flowLayoutPanel2, 0, 3);
 			this.tableLayoutPanel3.Controls.Add(this.flowLayoutPanel7, 0, 7);
 			this.tableLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -566,15 +599,26 @@ namespace Mesen.GUI.Forms.Config
 			this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel3.Size = new System.Drawing.Size(519, 267);
+			this.tableLayoutPanel3.Size = new System.Drawing.Size(519, 289);
 			this.tableLayoutPanel3.TabIndex = 0;
+			// 
+			// lblOverclockHint
+			// 
+			this.lblOverclockHint.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this.lblOverclockHint.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.lblOverclockHint.Location = new System.Drawing.Point(3, 0);
+			this.lblOverclockHint.Name = "lblOverclockHint";
+			this.lblOverclockHint.Padding = new System.Windows.Forms.Padding(25, 0, 0, 0);
+			this.lblOverclockHint.Size = new System.Drawing.Size(513, 41);
+			this.lblOverclockHint.TabIndex = 1;
+			this.lblOverclockHint.Text = "Overclocking can help reduce or remove slowdowns in games (but it can also cause issues). The most compatible way to overclock is by increasing the \"Scanline before NMI\" value by a few hundred lines (e.g 400+)";
 			// 
 			// flowLayoutPanel4
 			// 
 			this.flowLayoutPanel4.Controls.Add(this.lblEffectiveClockRateDendy);
 			this.flowLayoutPanel4.Controls.Add(this.lblEffectiveClockRateValueDendy);
 			this.flowLayoutPanel4.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.flowLayoutPanel4.Location = new System.Drawing.Point(0, 185);
+			this.flowLayoutPanel4.Location = new System.Drawing.Point(0, 203);
 			this.flowLayoutPanel4.Margin = new System.Windows.Forms.Padding(0);
 			this.flowLayoutPanel4.Name = "flowLayoutPanel4";
 			this.flowLayoutPanel4.Size = new System.Drawing.Size(519, 20);
@@ -599,21 +643,10 @@ namespace Mesen.GUI.Forms.Config
 			this.lblEffectiveClockRateValueDendy.TabIndex = 1;
 			this.lblEffectiveClockRateValueDendy.Text = "100%";
 			// 
-			// lblOverclockWarning
-			// 
-			this.lblOverclockWarning.AutoSize = true;
-			this.lblOverclockWarning.ForeColor = System.Drawing.Color.Red;
-			this.lblOverclockWarning.Location = new System.Drawing.Point(3, 5);
-			this.lblOverclockWarning.Margin = new System.Windows.Forms.Padding(3, 5, 3, 5);
-			this.lblOverclockWarning.Name = "lblOverclockWarning";
-			this.lblOverclockWarning.Size = new System.Drawing.Size(384, 13);
-			this.lblOverclockWarning.TabIndex = 2;
-			this.lblOverclockWarning.Text = "WARNING: Overclocking will cause stability issues and may crash some games!";
-			// 
 			// chkOverclockAdjustApu
 			// 
 			this.chkOverclockAdjustApu.AutoSize = true;
-			this.chkOverclockAdjustApu.Location = new System.Drawing.Point(3, 208);
+			this.chkOverclockAdjustApu.Location = new System.Drawing.Point(3, 226);
 			this.chkOverclockAdjustApu.Name = "chkOverclockAdjustApu";
 			this.chkOverclockAdjustApu.Size = new System.Drawing.Size(401, 17);
 			this.chkOverclockAdjustApu.TabIndex = 10;
@@ -625,7 +658,7 @@ namespace Mesen.GUI.Forms.Config
 			this.flowLayoutPanel3.Controls.Add(this.lblEffectiveClockRatePal);
 			this.flowLayoutPanel3.Controls.Add(this.lblEffectiveClockRateValuePal);
 			this.flowLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.flowLayoutPanel3.Location = new System.Drawing.Point(0, 168);
+			this.flowLayoutPanel3.Location = new System.Drawing.Point(0, 186);
 			this.flowLayoutPanel3.Margin = new System.Windows.Forms.Padding(0);
 			this.flowLayoutPanel3.Name = "flowLayoutPanel3";
 			this.flowLayoutPanel3.Size = new System.Drawing.Size(519, 17);
@@ -654,7 +687,7 @@ namespace Mesen.GUI.Forms.Config
 			// 
 			this.grpOverclocking.Controls.Add(this.tableLayoutPanel2);
 			this.grpOverclocking.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.grpOverclocking.Location = new System.Drawing.Point(3, 26);
+			this.grpOverclocking.Location = new System.Drawing.Point(3, 121);
 			this.grpOverclocking.Name = "grpOverclocking";
 			this.grpOverclocking.Size = new System.Drawing.Size(513, 45);
 			this.grpOverclocking.TabIndex = 6;
@@ -684,7 +717,7 @@ namespace Mesen.GUI.Forms.Config
 			// 
 			this.lblClockRate.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.lblClockRate.AutoSize = true;
-			this.lblClockRate.Location = new System.Drawing.Point(3, 6);
+			this.lblClockRate.Location = new System.Drawing.Point(3, 7);
 			this.lblClockRate.Margin = new System.Windows.Forms.Padding(3, 0, 0, 0);
 			this.lblClockRate.Name = "lblClockRate";
 			this.lblClockRate.Size = new System.Drawing.Size(107, 13);
@@ -712,8 +745,9 @@ namespace Mesen.GUI.Forms.Config
             0,
             0,
             0});
+			this.nudOverclockRate.MinimumSize = new System.Drawing.Size(0, 21);
 			this.nudOverclockRate.Name = "nudOverclockRate";
-			this.nudOverclockRate.Size = new System.Drawing.Size(46, 20);
+			this.nudOverclockRate.Size = new System.Drawing.Size(46, 21);
 			this.nudOverclockRate.TabIndex = 1;
 			this.nudOverclockRate.Value = new decimal(new int[] {
             100,
@@ -725,7 +759,7 @@ namespace Mesen.GUI.Forms.Config
 			// 
 			this.lblClockRatePercent.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.lblClockRatePercent.AutoSize = true;
-			this.lblClockRatePercent.Location = new System.Drawing.Point(156, 6);
+			this.lblClockRatePercent.Location = new System.Drawing.Point(156, 7);
 			this.lblClockRatePercent.Margin = new System.Windows.Forms.Padding(0, 0, 3, 0);
 			this.lblClockRatePercent.Name = "lblClockRatePercent";
 			this.lblClockRatePercent.Size = new System.Drawing.Size(90, 13);
@@ -736,7 +770,7 @@ namespace Mesen.GUI.Forms.Config
 			// 
 			this.grpPpuTiming.Controls.Add(this.tableLayoutPanel5);
 			this.grpPpuTiming.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.grpPpuTiming.Location = new System.Drawing.Point(3, 77);
+			this.grpPpuTiming.Location = new System.Drawing.Point(3, 44);
 			this.grpPpuTiming.Name = "grpPpuTiming";
 			this.grpPpuTiming.Size = new System.Drawing.Size(513, 71);
 			this.grpPpuTiming.TabIndex = 7;
@@ -770,7 +804,7 @@ namespace Mesen.GUI.Forms.Config
             0,
             0,
             0});
-			this.nudExtraScanlinesAfterNmi.Location = new System.Drawing.Point(165, 29);
+			this.nudExtraScanlinesAfterNmi.Location = new System.Drawing.Point(165, 30);
 			this.nudExtraScanlinesAfterNmi.Margin = new System.Windows.Forms.Padding(0, 3, 0, 3);
 			this.nudExtraScanlinesAfterNmi.Maximum = new decimal(new int[] {
             1000,
@@ -783,8 +817,9 @@ namespace Mesen.GUI.Forms.Config
             0,
             0,
             0});
+			this.nudExtraScanlinesAfterNmi.MinimumSize = new System.Drawing.Size(0, 21);
 			this.nudExtraScanlinesAfterNmi.Name = "nudExtraScanlinesAfterNmi";
-			this.nudExtraScanlinesAfterNmi.Size = new System.Drawing.Size(46, 20);
+			this.nudExtraScanlinesAfterNmi.Size = new System.Drawing.Size(46, 21);
 			this.nudExtraScanlinesAfterNmi.TabIndex = 3;
 			this.nudExtraScanlinesAfterNmi.Value = new decimal(new int[] {
             100,
@@ -813,8 +848,9 @@ namespace Mesen.GUI.Forms.Config
             0,
             0,
             0});
+			this.nudExtraScanlinesBeforeNmi.MinimumSize = new System.Drawing.Size(0, 21);
 			this.nudExtraScanlinesBeforeNmi.Name = "nudExtraScanlinesBeforeNmi";
-			this.nudExtraScanlinesBeforeNmi.Size = new System.Drawing.Size(46, 20);
+			this.nudExtraScanlinesBeforeNmi.Size = new System.Drawing.Size(46, 21);
 			this.nudExtraScanlinesBeforeNmi.TabIndex = 2;
 			this.nudExtraScanlinesBeforeNmi.Value = new decimal(new int[] {
             100,
@@ -826,7 +862,7 @@ namespace Mesen.GUI.Forms.Config
 			// 
 			this.lblExtraScanlinesBeforeNmi.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.lblExtraScanlinesBeforeNmi.AutoSize = true;
-			this.lblExtraScanlinesBeforeNmi.Location = new System.Drawing.Point(3, 6);
+			this.lblExtraScanlinesBeforeNmi.Location = new System.Drawing.Point(3, 7);
 			this.lblExtraScanlinesBeforeNmi.Name = "lblExtraScanlinesBeforeNmi";
 			this.lblExtraScanlinesBeforeNmi.Size = new System.Drawing.Size(159, 13);
 			this.lblExtraScanlinesBeforeNmi.TabIndex = 0;
@@ -836,7 +872,7 @@ namespace Mesen.GUI.Forms.Config
 			// 
 			this.lblExtraScanlinesAfterNmi.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.lblExtraScanlinesAfterNmi.AutoSize = true;
-			this.lblExtraScanlinesAfterNmi.Location = new System.Drawing.Point(3, 32);
+			this.lblExtraScanlinesAfterNmi.Location = new System.Drawing.Point(3, 34);
 			this.lblExtraScanlinesAfterNmi.Name = "lblExtraScanlinesAfterNmi";
 			this.lblExtraScanlinesAfterNmi.Size = new System.Drawing.Size(150, 13);
 			this.lblExtraScanlinesAfterNmi.TabIndex = 1;
@@ -847,7 +883,7 @@ namespace Mesen.GUI.Forms.Config
 			this.flowLayoutPanel2.Controls.Add(this.lblEffectiveClockRate);
 			this.flowLayoutPanel2.Controls.Add(this.lblEffectiveClockRateValue);
 			this.flowLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.flowLayoutPanel2.Location = new System.Drawing.Point(0, 151);
+			this.flowLayoutPanel2.Location = new System.Drawing.Point(0, 169);
 			this.flowLayoutPanel2.Margin = new System.Windows.Forms.Padding(0);
 			this.flowLayoutPanel2.Name = "flowLayoutPanel2";
 			this.flowLayoutPanel2.Size = new System.Drawing.Size(519, 17);
@@ -877,10 +913,10 @@ namespace Mesen.GUI.Forms.Config
 			this.flowLayoutPanel7.Controls.Add(this.chkShowLagCounter);
 			this.flowLayoutPanel7.Controls.Add(this.btnResetLagCounter);
 			this.flowLayoutPanel7.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.flowLayoutPanel7.Location = new System.Drawing.Point(0, 228);
+			this.flowLayoutPanel7.Location = new System.Drawing.Point(0, 246);
 			this.flowLayoutPanel7.Margin = new System.Windows.Forms.Padding(0);
 			this.flowLayoutPanel7.Name = "flowLayoutPanel7";
-			this.flowLayoutPanel7.Size = new System.Drawing.Size(519, 39);
+			this.flowLayoutPanel7.Size = new System.Drawing.Size(519, 43);
 			this.flowLayoutPanel7.TabIndex = 12;
 			// 
 			// chkShowLagCounter
@@ -909,18 +945,6 @@ namespace Mesen.GUI.Forms.Config
 			// 
 			this.tmrUpdateClockRate.Enabled = true;
 			this.tmrUpdateClockRate.Tick += new System.EventHandler(this.tmrUpdateClockRate_Tick);
-			// 
-			// chkMapperRandomPowerOnState
-			// 
-			this.chkMapperRandomPowerOnState.AutoSize = true;
-			this.chkMapperRandomPowerOnState.Checked = false;
-			this.chkMapperRandomPowerOnState.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.chkMapperRandomPowerOnState.Location = new System.Drawing.Point(0, 230);
-			this.chkMapperRandomPowerOnState.MinimumSize = new System.Drawing.Size(0, 23);
-			this.chkMapperRandomPowerOnState.Name = "chkMapperRandomPowerOnState";
-			this.chkMapperRandomPowerOnState.Size = new System.Drawing.Size(519, 23);
-			this.chkMapperRandomPowerOnState.TabIndex = 11;
-			this.chkMapperRandomPowerOnState.Text = "Randomize power-on state for mappers";
 			// 
 			// frmEmulationConfig
 			// 
@@ -955,6 +979,8 @@ namespace Mesen.GUI.Forms.Config
 			this.flowLayoutPanel8.ResumeLayout(false);
 			this.flowLayoutPanel8.PerformLayout();
 			this.tpgOverclocking.ResumeLayout(false);
+			this.tpgOverclocking.PerformLayout();
+			((System.ComponentModel.ISupportInitialize)(this.picHint)).EndInit();
 			this.tableLayoutPanel3.ResumeLayout(false);
 			this.tableLayoutPanel3.PerformLayout();
 			this.flowLayoutPanel4.ResumeLayout(false);
@@ -987,7 +1013,6 @@ namespace Mesen.GUI.Forms.Config
 		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel3;
 		private System.Windows.Forms.GroupBox grpOverclocking;
 		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
-		private System.Windows.Forms.Label lblOverclockWarning;
 		private System.Windows.Forms.Label lblClockRate;
 		private MesenNumericUpDown nudOverclockRate;
 		private System.Windows.Forms.Label lblClockRatePercent;
@@ -1035,5 +1060,7 @@ namespace Mesen.GUI.Forms.Config
 		private System.Windows.Forms.Label lblRewindSpeedHint;
 		private System.Windows.Forms.CheckBox chkAdaptiveSpriteLimit;
 		private ctrlRiskyOption chkMapperRandomPowerOnState;
+		private System.Windows.Forms.PictureBox picHint;
+		private Mesen.GUI.Controls.ctrlAutoGrowLabel lblOverclockHint;
 	}
 }

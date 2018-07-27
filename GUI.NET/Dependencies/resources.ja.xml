@@ -310,7 +310,7 @@
 
 			<Control ID="tpgOverclocking">オーバークロック</Control>
 			<Control ID="grpOverclocking">オーバークロック</Control>
-			<Control ID="lblOverclockWarning">警告: オーバークロックをすることでエミュレーションの精度は下がる。　ゲームがバグる可能性は高い。</Control>
+			<Control ID="lblOverclockHint">オーバークロックを使って実機の処理落ちを直すことができます。&#13;「NMIの前の追加走査線数」を400以上にするのを推奨します。&#13;注意：　場合によって、ゲームがバグることもあります。</Control>
 			<Control ID="lblClockRate">クロックレートの倍率： </Control>
 			<Control ID="lblClockRatePercent">% (デフォルト： 100%)</Control>
 			<Control ID="chkOverclockAdjustApu">APUのオーバークロックを無効にする (オーバークロックによる音声のピッチ変化を中和)</Control>

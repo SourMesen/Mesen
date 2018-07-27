@@ -264,6 +264,9 @@
     <Compile Include="Controls\BaseControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Include="Controls\ctrlAutoGrowLabel.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Controls\ctrlHorizontalTrackbar.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -1628,6 +1631,7 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Config\frmEmulationConfig.resx">
       <DependentUpon>frmEmulationConfig.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Config\frmGetKey.resx">
       <DependentUpon>frmGetKey.cs</DependentUpon>

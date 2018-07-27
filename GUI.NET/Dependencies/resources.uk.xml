@@ -307,7 +307,7 @@
 
 			<Control ID="tpgOverclocking">Розгін</Control>
 			<Control ID="grpOverclocking">Розгін CPU</Control>
-			<Control ID="lblOverclockWarning">УВАГА: Розгін може викликати помилки в деяких іграх!</Control>
+			<Control ID="lblOverclockHint">Overclocking can help reduce or remove slowdowns in games (but it can also cause issues).&#13;The most compatible way to overclock is by increasing the "Scanline before NMI" value by a few hundred lines (e.g 400+)</Control>
 			<Control ID="lblClockRate">Тактова частота : </Control>
 			<Control ID="lblClockRatePercent">% (За замовчуванням: 100%)</Control>
 
