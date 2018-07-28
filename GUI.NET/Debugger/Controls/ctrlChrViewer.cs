@@ -72,7 +72,7 @@ namespace Mesen.GUI.Debugger.Controls
 		[Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 		public int SelectedTileIndex
 		{
-			get { return cboChrSelection.SelectedIndex == 0 ? (_tileIndex + (_bottomBank ? 256 : 0)) : -1; }
+			get { return cboChrSelection.SelectedIndex == 0 ? (GetLargeSpriteIndex(_tileIndex) + (_bottomBank ? 256 : 0)) : -1; }
 			set
 			{
 				_bottomBank = value >= 256 ? true : false;
