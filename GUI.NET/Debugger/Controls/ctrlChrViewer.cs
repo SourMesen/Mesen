@@ -54,7 +54,7 @@ namespace Mesen.GUI.Debugger.Controls
 
 				this.ctrlTilePalette.AllowSelection = true;
 				this.ctrlTilePalette.HighlightMouseOver = true;
-				this.ctrlTilePalette.DisplayIndexes = true;
+				this.ctrlTilePalette.DisplayIndexes = false;
 
 				this.chkAutoPalette.Checked = ConfigManager.Config.DebugInfo.ChrViewerUseAutoPalette;
 				this.chkLargeSprites.Checked = ConfigManager.Config.DebugInfo.ChrViewerUseLargeSprites;
