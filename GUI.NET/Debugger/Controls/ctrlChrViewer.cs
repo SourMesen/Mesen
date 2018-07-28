@@ -293,6 +293,7 @@ namespace Mesen.GUI.Debugger.Controls
 		private void picChrBank_MouseLeave(object sender, EventArgs e)
 		{
 			_hoverTileIndex = -1;
+			RefreshViewer();
 			RefreshPreview(_tileIndex, _bottomBank);
 		}
 
