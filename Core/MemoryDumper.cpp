@@ -351,53 +351,59 @@ void MemoryDumper::GatherChrPaletteInfo()
 		_paletteByTile[key] = palettes[paletteIndex];
 	};
 
-	//Nametables - Check all palette/tile combinations
-	for(int i = 0; i < 4; i++) {
-		uint16_t baseAddr = 0x2000 + i * 0x400;
-		uint16_t baseAttributeAddr = baseAddr + 960;
-		for(uint8_t y = 0; y < 30; y++) {
-			for(uint8_t x = 0; x < 32; x++) {
-				uint16_t ntIndex = (y << 5) + x;
-				uint8_t tileIndex = _mapper->DebugReadVRAM(baseAddr + ntIndex);
+	if(state.ControlFlags.BackgroundEnabled) {
+		//Nametables - Check all palette/tile combinations
+		//Only process nametables when background is enabled (to avoid issues when booting with random RAM contents)
+		for(int i = 0; i < 4; i++) {
+			uint16_t baseAddr = 0x2000 + i * 0x400;
+			uint16_t baseAttributeAddr = baseAddr + 960;
+			for(uint8_t y = 0; y < 30; y++) {
+				for(uint8_t x = 0; x < 32; x++) {
+					uint16_t ntIndex = (y << 5) + x;
+					uint8_t tileIndex = _mapper->DebugReadVRAM(baseAddr + ntIndex);
 
-				uint16_t tileAddr;			
-				uint8_t paletteIndex;
-				if(mmc5 && mmc5->IsExtendedAttributes()) {
-					paletteIndex = mmc5->GetExAttributeNtPalette(ntIndex);
-					tileAddr = mmc5->GetExAttributeAbsoluteTileAddr(ntIndex, tileIndex * 16);
-				} else {
-					uint8_t attribute = _mapper->DebugReadVRAM(baseAttributeAddr + ((y & 0xFC) << 1) + (x >> 2));
-					uint8_t shift = (x & 0x02) | ((y & 0x02) << 1);
-					paletteIndex = ((attribute >> shift) & 0x03);
-					tileAddr = bgAddr + (tileIndex << 4);
+					uint16_t tileAddr;
+					uint8_t paletteIndex;
+					if(mmc5 && mmc5->IsExtendedAttributes()) {
+						paletteIndex = mmc5->GetExAttributeNtPalette(ntIndex);
+						tileAddr = mmc5->GetExAttributeAbsoluteTileAddr(ntIndex, tileIndex * 16);
+					} else {
+						uint8_t attribute = _mapper->DebugReadVRAM(baseAttributeAddr + ((y & 0xFC) << 1) + (x >> 2));
+						uint8_t shift = (x & 0x02) | ((y & 0x02) << 1);
+						paletteIndex = ((attribute >> shift) & 0x03);
+						tileAddr = bgAddr + (tileIndex << 4);
+					}
+
+					processTilePalette(tileAddr, paletteIndex);
 				}
-
-				processTilePalette(tileAddr, paletteIndex);
 			}
 		}
 	}
 
-	//Sprites - Check all sprites palettes
-	uint8_t *spriteRam = _ppu->GetSpriteRam();
-	uint16_t spriteAddr = state.ControlFlags.SpritePatternAddr;
-	bool largeSprites = state.ControlFlags.LargeSprites;
-	for(uint8_t y = 0; y < 8; y++) {
-		for(uint8_t x = 0; x < 8; x++) {
-			uint8_t ramAddr = ((y << 3) + x) << 2;
-			uint8_t tileIndex = spriteRam[ramAddr + 1];
-			uint8_t attributes = spriteRam[ramAddr + 2];
+	if(state.ControlFlags.SpritesEnabled) {
+		//Sprites - Check all sprites palettes
+		//Only process sprites if sprites are enabled (to avoid issues when booting with random RAM contents)
+		uint8_t *spriteRam = _ppu->GetSpriteRam();
+		uint16_t spriteAddr = state.ControlFlags.SpritePatternAddr;
+		bool largeSprites = state.ControlFlags.LargeSprites;
+		for(uint8_t y = 0; y < 8; y++) {
+			for(uint8_t x = 0; x < 8; x++) {
+				uint8_t ramAddr = ((y << 3) + x) << 2;
+				uint8_t tileIndex = spriteRam[ramAddr + 1];
+				uint8_t attributes = spriteRam[ramAddr + 2];
 
-			uint16_t tileAddr;
-			if(largeSprites) {
-				tileAddr = (tileIndex & 0x01 ? 0x1000 : 0x0000) + ((tileIndex & 0xFE) << 4);
-			} else {
-				tileAddr = spriteAddr + (tileIndex << 4);
-			}
+				uint16_t tileAddr;
+				if(largeSprites) {
+					tileAddr = (tileIndex & 0x01 ? 0x1000 : 0x0000) + ((tileIndex & 0xFE) << 4);
+				} else {
+					tileAddr = spriteAddr + (tileIndex << 4);
+				}
 
-			uint8_t palette = (attributes & 0x03) | 0x04;
-			processTilePalette(tileAddr, palette);
-			if(largeSprites) {
-				processTilePalette(tileAddr + 16, palette);
+				uint8_t palette = (attributes & 0x03) | 0x04;
+				processTilePalette(tileAddr, palette);
+				if(largeSprites) {
+					processTilePalette(tileAddr + 16, palette);
+				}
 			}
 		}
 	}
