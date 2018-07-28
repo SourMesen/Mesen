@@ -307,7 +307,7 @@ namespace Mesen.GUI.Debugger.Controls
 			int tileY = tileIndex / 16;
 
 			int realIndex = GetLargeSpriteIndex(tileIndex);
-			ctrlTilePalette.PaletteColors = _paletteData[bottomBank ? 1 : 0][tileIndex];
+			ctrlTilePalette.PaletteColors = _paletteData[bottomBank ? 1 : 0][realIndex];
 
 			this.txtTileIndex.Text = realIndex.ToString("X2");
 			this.txtTileAddress.Text = (baseAddress + realIndex * 16).ToString("X4");
