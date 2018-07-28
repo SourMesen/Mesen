@@ -383,6 +383,8 @@ namespace Mesen.GUI.Config
 
 	public class DebugImportConfig
 	{
+		public bool ResetLabelsOnImport = true;
+
 		public bool DbgImportRamLabels = true;
 		public bool DbgImportPrgRomLabels = true;
 		public bool DbgImportComments = true;

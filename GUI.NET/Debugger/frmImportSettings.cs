@@ -20,6 +20,8 @@ namespace Mesen.GUI.Debugger
 
 			Entity = ConfigManager.Config.DebugInfo.ImportConfig;
 
+			AddBinding("ResetLabelsOnImport", chkResetLabelsOnImport);
+
 			AddBinding("DbgImportRamLabels", chkDbgImportRamLabels);
 			AddBinding("DbgImportPrgRomLabels", chkDbgImportPrgRomLabels);
 			AddBinding("DbgImportComments", chkDbgImportComments);

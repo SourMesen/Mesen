@@ -41,16 +41,21 @@
 			this.chkMlbImportComments = new System.Windows.Forms.CheckBox();
 			this.chkMlbImportSaveRamLabels = new System.Windows.Forms.CheckBox();
 			this.chkDbgImportRegisterLabels = new System.Windows.Forms.CheckBox();
+			this.grpGeneral = new System.Windows.Forms.GroupBox();
+			this.tableLayoutPanel4 = new System.Windows.Forms.TableLayoutPanel();
+			this.chkResetLabelsOnImport = new System.Windows.Forms.CheckBox();
 			this.tableLayoutPanel1.SuspendLayout();
 			this.groupBox1.SuspendLayout();
 			this.tableLayoutPanel2.SuspendLayout();
 			this.groupBox2.SuspendLayout();
 			this.tableLayoutPanel3.SuspendLayout();
+			this.grpGeneral.SuspendLayout();
+			this.tableLayoutPanel4.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// baseConfigPanel
 			// 
-			this.baseConfigPanel.Location = new System.Drawing.Point(0, 164);
+			this.baseConfigPanel.Location = new System.Drawing.Point(0, 222);
 			this.baseConfigPanel.Size = new System.Drawing.Size(419, 29);
 			// 
 			// tableLayoutPanel1
@@ -58,23 +63,25 @@
 			this.tableLayoutPanel1.ColumnCount = 2;
 			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
 			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-			this.tableLayoutPanel1.Controls.Add(this.groupBox1, 0, 0);
-			this.tableLayoutPanel1.Controls.Add(this.groupBox2, 1, 0);
+			this.tableLayoutPanel1.Controls.Add(this.groupBox1, 0, 1);
+			this.tableLayoutPanel1.Controls.Add(this.groupBox2, 1, 1);
+			this.tableLayoutPanel1.Controls.Add(this.grpGeneral, 0, 0);
 			this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
 			this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-			this.tableLayoutPanel1.RowCount = 1;
-			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-			this.tableLayoutPanel1.Size = new System.Drawing.Size(419, 164);
+			this.tableLayoutPanel1.RowCount = 2;
+			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+			this.tableLayoutPanel1.Size = new System.Drawing.Size(419, 222);
 			this.tableLayoutPanel1.TabIndex = 2;
 			// 
 			// groupBox1
 			// 
 			this.groupBox1.Controls.Add(this.tableLayoutPanel2);
 			this.groupBox1.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.groupBox1.Location = new System.Drawing.Point(3, 3);
+			this.groupBox1.Location = new System.Drawing.Point(3, 49);
 			this.groupBox1.Name = "groupBox1";
-			this.groupBox1.Size = new System.Drawing.Size(203, 158);
+			this.groupBox1.Size = new System.Drawing.Size(203, 170);
 			this.groupBox1.TabIndex = 0;
 			this.groupBox1.TabStop = false;
 			this.groupBox1.Text = "DBG files (CA65/CC65 integration)";
@@ -95,7 +102,7 @@
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-			this.tableLayoutPanel2.Size = new System.Drawing.Size(197, 139);
+			this.tableLayoutPanel2.Size = new System.Drawing.Size(197, 151);
 			this.tableLayoutPanel2.TabIndex = 0;
 			// 
 			// chkDbgImportComments
@@ -132,9 +139,9 @@
 			// 
 			this.groupBox2.Controls.Add(this.tableLayoutPanel3);
 			this.groupBox2.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.groupBox2.Location = new System.Drawing.Point(212, 3);
+			this.groupBox2.Location = new System.Drawing.Point(212, 49);
 			this.groupBox2.Name = "groupBox2";
-			this.groupBox2.Size = new System.Drawing.Size(204, 158);
+			this.groupBox2.Size = new System.Drawing.Size(204, 170);
 			this.groupBox2.TabIndex = 1;
 			this.groupBox2.TabStop = false;
 			this.groupBox2.Text = "MLB files (ASM6f integration)";
@@ -160,7 +167,7 @@
 			this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel3.Size = new System.Drawing.Size(198, 139);
+			this.tableLayoutPanel3.Size = new System.Drawing.Size(198, 151);
 			this.tableLayoutPanel3.TabIndex = 1;
 			// 
 			// chkMlbImportPrgRomLabels
@@ -223,11 +230,47 @@
 			this.chkDbgImportRegisterLabels.Text = "Import Register labels";
 			this.chkDbgImportRegisterLabels.UseVisualStyleBackColor = true;
 			// 
+			// grpGeneral
+			// 
+			this.tableLayoutPanel1.SetColumnSpan(this.grpGeneral, 2);
+			this.grpGeneral.Controls.Add(this.tableLayoutPanel4);
+			this.grpGeneral.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.grpGeneral.Location = new System.Drawing.Point(3, 3);
+			this.grpGeneral.Name = "grpGeneral";
+			this.grpGeneral.Size = new System.Drawing.Size(413, 40);
+			this.grpGeneral.TabIndex = 2;
+			this.grpGeneral.TabStop = false;
+			this.grpGeneral.Text = "General Settings";
+			// 
+			// tableLayoutPanel4
+			// 
+			this.tableLayoutPanel4.ColumnCount = 1;
+			this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+			this.tableLayoutPanel4.Controls.Add(this.chkResetLabelsOnImport, 0, 0);
+			this.tableLayoutPanel4.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.tableLayoutPanel4.Location = new System.Drawing.Point(3, 16);
+			this.tableLayoutPanel4.Name = "tableLayoutPanel4";
+			this.tableLayoutPanel4.RowCount = 2;
+			this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+			this.tableLayoutPanel4.Size = new System.Drawing.Size(407, 21);
+			this.tableLayoutPanel4.TabIndex = 0;
+			// 
+			// chkResetLabelsOnImport
+			// 
+			this.chkResetLabelsOnImport.AutoSize = true;
+			this.chkResetLabelsOnImport.Location = new System.Drawing.Point(3, 3);
+			this.chkResetLabelsOnImport.Name = "chkResetLabelsOnImport";
+			this.chkResetLabelsOnImport.Size = new System.Drawing.Size(387, 17);
+			this.chkResetLabelsOnImport.TabIndex = 2;
+			this.chkResetLabelsOnImport.Text = "Reset workspace labels to their default state before importing DBG/MLB files";
+			this.chkResetLabelsOnImport.UseVisualStyleBackColor = true;
+			// 
 			// frmImportSettings
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(419, 193);
+			this.ClientSize = new System.Drawing.Size(419, 251);
 			this.Controls.Add(this.tableLayoutPanel1);
 			this.Name = "frmImportSettings";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
@@ -241,6 +284,9 @@
 			this.groupBox2.ResumeLayout(false);
 			this.tableLayoutPanel3.ResumeLayout(false);
 			this.tableLayoutPanel3.PerformLayout();
+			this.grpGeneral.ResumeLayout(false);
+			this.tableLayoutPanel4.ResumeLayout(false);
+			this.tableLayoutPanel4.PerformLayout();
 			this.ResumeLayout(false);
 
 		}
@@ -261,5 +307,8 @@
 		private System.Windows.Forms.CheckBox chkMlbImportComments;
 		private System.Windows.Forms.CheckBox chkMlbImportSaveRamLabels;
 		private System.Windows.Forms.CheckBox chkDbgImportRegisterLabels;
+		private System.Windows.Forms.GroupBox grpGeneral;
+		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel4;
+		private System.Windows.Forms.CheckBox chkResetLabelsOnImport;
 	}
 }

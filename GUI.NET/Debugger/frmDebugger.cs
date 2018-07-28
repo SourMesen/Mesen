@@ -367,7 +367,7 @@ namespace Mesen.GUI.Debugger
 				} else {
 					string mlbPath = Path.Combine(info.RomFile.Folder, info.GetRomName() + ".mlb");
 					if(File.Exists(mlbPath)) {
-						MesenLabelFile.Import(mlbPath, silent);
+						ImportMlbFile(mlbPath, silent);
 					}
 				}
 			}
@@ -381,8 +381,20 @@ namespace Mesen.GUI.Debugger
 			}
 		}
 
+		private void ImportMlbFile(string mlbPath, bool silent = false)
+		{
+			if(ConfigManager.Config.DebugInfo.ImportConfig.ResetLabelsOnImport) {
+				ResetLabels();
+			}
+			MesenLabelFile.Import(mlbPath, silent);
+		}
+
 		private void ImportDbgFile(string dbgPath, bool silent)
 		{
+			if(ConfigManager.Config.DebugInfo.ImportConfig.ResetLabelsOnImport) {
+				ResetLabels();
+			}
+
 			Ld65DbgImporter dbgImporter = new Ld65DbgImporter();
 			dbgImporter.Import(dbgPath, silent);
 			ctrlDebuggerCode.SymbolProvider = dbgImporter;
@@ -1190,14 +1202,19 @@ namespace Mesen.GUI.Debugger
 			}
 		}
 
+		private void ResetLabels()
+		{
+			LabelManager.ResetLabels();
+			if(!ConfigManager.Config.DebugInfo.DisableDefaultLabels) {
+				LabelManager.SetDefaultLabels(InteropEmu.GetRomInfo().MapperId);
+			}
+			UpdateWorkspace();
+		}
+
 		private void mnuResetLabels_Click(object sender, EventArgs e)
 		{
 			if(MessageBox.Show("This operation will reset labels to their default state." + Environment.NewLine + "Are you sure?", "", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK) {
-				LabelManager.ResetLabels();
-				if(!ConfigManager.Config.DebugInfo.DisableDefaultLabels) {
-					LabelManager.SetDefaultLabels(InteropEmu.GetRomInfo().MapperId);
-				}
-				UpdateWorkspace();
+				ResetLabels();
 				UpdateDebugger(false);
 			}
 		}
@@ -1209,7 +1226,7 @@ namespace Mesen.GUI.Debugger
 			if(ofd.ShowDialog() == DialogResult.OK) {
 				string ext = Path.GetExtension(ofd.FileName).ToLower();
 				if(ext == ".mlb") {
-					MesenLabelFile.Import(ofd.FileName);
+					ImportMlbFile(ofd.FileName);
 				} else {
 					ImportDbgFile(ofd.FileName, false);
 				}					
