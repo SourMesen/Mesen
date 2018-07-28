@@ -43,7 +43,7 @@ namespace Mesen.GUI.Debugger.Controls
 		public void GetData()
 		{
 			UInt32[] paletteData;
-			_chrPixelData = InteropEmu.DebugGetChrBank(_chrSelection, 9, false, CdlHighlightType.None, out paletteData);
+			_chrPixelData = InteropEmu.DebugGetChrBank(_chrSelection, 9, false, CdlHighlightType.None, false, false, out paletteData);
 
 			bool isChrRam = InteropEmu.DebugGetMemorySize(DebugMemoryType.ChrRom) == 0;
 			if(_chrSelection < 2) {

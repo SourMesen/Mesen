@@ -409,9 +409,8 @@ void MemoryDumper::GatherChrPaletteInfo()
 	}
 }
 
-void MemoryDumper::GetChrBank(int bankIndex, uint32_t* frameBuffer, uint8_t palette, bool largeSprites, CdlHighlightType highlightType, uint32_t* paletteBuffer)
+void MemoryDumper::GetChrBank(int bankIndex, uint32_t* frameBuffer, uint8_t palette, bool largeSprites, CdlHighlightType highlightType, bool useAutoPalette, bool showSingleColorTilesInGrayscale, uint32_t* paletteBuffer)
 {
-	bool useAutoPalette = (palette & 0x80) == 0x80;
 	uint8_t paletteBaseAddr = (palette & 0x07) << 2;
 	uint32_t defaultPalette;
 	if(palette & 0x08) {
@@ -469,46 +468,52 @@ void MemoryDumper::GetChrBank(int bankIndex, uint32_t* frameBuffer, uint8_t pale
 				}
 				auto result = _paletteByTile.find(key);
 				if(result != _paletteByTile.end()) {
-					uint32_t lastPalette = result->second;
-					if(
-						(lastPalette & 0xFF) != ((lastPalette >> 8) & 0xFF) ||
-						(lastPalette & 0xFF) != ((lastPalette >> 16) & 0xFF) ||
-						(lastPalette & 0xFF) != ((lastPalette >> 24) & 0xFF)
-					) {
-						//Only use automatic palette if the result contains more than 1 color
-						paletteData = lastPalette;
-					} else {
-						//Use grayscale if auto-palette results in a single color palette
-						paletteData = 0x2010000F;
-					}
+					paletteData = result->second;
 				}
 			}
 
-			paletteBuffer[tileIndex] = paletteData;
+			auto outputTile = [=](uint32_t palette) {
+				paletteBuffer[tileIndex] = palette;
 
-			uint16_t tileAddr = tileIndex << 4;
-			for(uint8_t i = 0; i < 8; i++) {
-				uint8_t lowByte = chrBuffer[tileAddr + i];
-				uint8_t highByte = chrBuffer[tileAddr + i + 8];
-				bool isDrawn = chrIsDrawn[tileAddr + i];
-				for(uint8_t j = 0; j < 8; j++) {
-					uint8_t color = ((lowByte >> (7 - j)) & 0x01) | (((highByte >> (7 - j)) & 0x01) << 1);
+				bool usesSingleColor = true;
+				int64_t previousColor = -1;
+				uint16_t tileAddr = tileIndex << 4;
+				for(uint8_t i = 0; i < 8; i++) {
+					uint8_t lowByte = chrBuffer[tileAddr + i];
+					uint8_t highByte = chrBuffer[tileAddr + i + 8];
+					bool isDrawn = chrIsDrawn[tileAddr + i];
+					for(uint8_t j = 0; j < 8; j++) {
+						uint8_t color = ((lowByte >> (7 - j)) & 0x01) | (((highByte >> (7 - j)) & 0x01) << 1);
 
-					uint32_t position;
-					if(largeSprites) {
-						int tmpX = x / 2 + ((y & 0x01) ? 8 : 0);
-						int tmpY = (y & 0xFE) + ((x & 0x01) ? 1 : 0);
+						uint32_t position;
+						if(largeSprites) {
+							int tmpX = x / 2 + ((y & 0x01) ? 8 : 0);
+							int tmpY = (y & 0xFE) + ((x & 0x01) ? 1 : 0);
 
-						position = (tmpY << 10) + (tmpX << 3) + (i << 7) + j;
-					} else {
-						position = (y << 10) + (x << 3) + (i << 7) + j;
-					}
+							position = (tmpY << 10) + (tmpX << 3) + (i << 7) + j;
+						} else {
+							position = (y << 10) + (x << 3) + (i << 7) + j;
+						}
 
-					frameBuffer[position] = rgbPalette[(paletteData >> (8 * color)) & 0x3F];
-					if(highlightType != CdlHighlightType::None && isDrawn == (highlightType != CdlHighlightType::HighlightUsed)) {
-						frameBuffer[position] &= 0x4FFFFFFF;
+						uint32_t pixelColor = rgbPalette[(palette >> (8 * color)) & 0x3F];
+						frameBuffer[position] = pixelColor;
+						if(previousColor >= 0 && previousColor != pixelColor) {
+							usesSingleColor = false;
+						}
+						previousColor = pixelColor;
+
+						if(highlightType != CdlHighlightType::None && isDrawn == (highlightType != CdlHighlightType::HighlightUsed)) {
+							frameBuffer[position] &= 0x4FFFFFFF;
+						}
 					}
 				}
+
+				return !usesSingleColor;
+			};
+
+			if(!outputTile(paletteData) && showSingleColorTilesInGrayscale) {
+				//Tile is a solid color, redraw it in grayscale
+				outputTile(0x2010000F);
 			}
 		}
 	}

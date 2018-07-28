@@ -31,6 +31,7 @@
 			this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
 			this.grpDisplayOptions = new System.Windows.Forms.GroupBox();
 			this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+			this.chkShowSingleColorTilesInGrayscale = new System.Windows.Forms.CheckBox();
 			this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
 			this.lblPalette = new System.Windows.Forms.Label();
 			this.cboPalette = new System.Windows.Forms.ComboBox();
@@ -104,7 +105,7 @@
 			this.grpDisplayOptions.Dock = System.Windows.Forms.DockStyle.Top;
 			this.grpDisplayOptions.Location = new System.Drawing.Point(269, 300);
 			this.grpDisplayOptions.Name = "grpDisplayOptions";
-			this.grpDisplayOptions.Size = new System.Drawing.Size(264, 162);
+			this.grpDisplayOptions.Size = new System.Drawing.Size(264, 175);
 			this.grpDisplayOptions.TabIndex = 4;
 			this.grpDisplayOptions.TabStop = false;
 			this.grpDisplayOptions.Text = "Display Options";
@@ -113,6 +114,7 @@
 			// 
 			this.tableLayoutPanel1.ColumnCount = 1;
 			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+			this.tableLayoutPanel1.Controls.Add(this.chkShowSingleColorTilesInGrayscale, 0, 5);
 			this.tableLayoutPanel1.Controls.Add(this.flowLayoutPanel1, 0, 1);
 			this.tableLayoutPanel1.Controls.Add(this.chkLargeSprites, 0, 3);
 			this.tableLayoutPanel1.Controls.Add(this.flowLayoutPanel2, 0, 0);
@@ -128,8 +130,19 @@
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel1.Size = new System.Drawing.Size(258, 143);
+			this.tableLayoutPanel1.Size = new System.Drawing.Size(258, 156);
 			this.tableLayoutPanel1.TabIndex = 6;
+			// 
+			// chkShowSingleColorTilesInGrayscale
+			// 
+			this.chkShowSingleColorTilesInGrayscale.AutoSize = true;
+			this.chkShowSingleColorTilesInGrayscale.Location = new System.Drawing.Point(3, 130);
+			this.chkShowSingleColorTilesInGrayscale.Name = "chkShowSingleColorTilesInGrayscale";
+			this.chkShowSingleColorTilesInGrayscale.Size = new System.Drawing.Size(241, 17);
+			this.chkShowSingleColorTilesInGrayscale.TabIndex = 9;
+			this.chkShowSingleColorTilesInGrayscale.Text = "Show single color tiles using grayscale palette";
+			this.chkShowSingleColorTilesInGrayscale.UseVisualStyleBackColor = true;
+			this.chkShowSingleColorTilesInGrayscale.CheckedChanged += new System.EventHandler(this.chkShowSingleColorTilesInGrayscale_CheckedChanged);
 			// 
 			// flowLayoutPanel1
 			// 
@@ -561,5 +574,6 @@
 		private ctrlTilePalette ctrlTilePalette;
 		private System.Windows.Forms.ToolStripMenuItem mnuCopyToClipboard;
 		private System.Windows.Forms.CheckBox chkAutoPalette;
+		private System.Windows.Forms.CheckBox chkShowSingleColorTilesInGrayscale;
 	}
 }

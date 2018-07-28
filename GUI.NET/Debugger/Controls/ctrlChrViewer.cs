@@ -22,6 +22,7 @@ namespace Mesen.GUI.Debugger.Controls
 		private CdlHighlightType _highlightType = CdlHighlightType.None;
 		private bool _useLargeSprites = false;
 		private bool _useAutoPalette = false;
+		private bool _showSingleColorTilesInGrayscale = false;
 		private Bitmap _tilePreview;
 		private Bitmap[] _chrBanks = new Bitmap[2];
 		private HdPackCopyHelper _hdCopyHelper = new HdPackCopyHelper();
@@ -58,6 +59,7 @@ namespace Mesen.GUI.Debugger.Controls
 
 				this.chkAutoPalette.Checked = ConfigManager.Config.DebugInfo.ChrViewerUseAutoPalette;
 				this.chkLargeSprites.Checked = ConfigManager.Config.DebugInfo.ChrViewerUseLargeSprites;
+				this.chkShowSingleColorTilesInGrayscale.Checked = ConfigManager.Config.DebugInfo.ChrViewerShowSingleColorTilesInGrayscale;
 			}
 		}
 
@@ -103,7 +105,15 @@ namespace Mesen.GUI.Debugger.Controls
 		public void GetData()
 		{
 			for(int i = 0; i < 2; i++) {
-				_chrPixelData[i] = InteropEmu.DebugGetChrBank(i + _chrSelection * 2, _selectedPalette + (_useAutoPalette ? 0x80 : 0), _useLargeSprites, _highlightType, out _paletteData[i]);
+				_chrPixelData[i] = InteropEmu.DebugGetChrBank(
+					i + _chrSelection * 2,
+					_selectedPalette,
+					_useLargeSprites,
+					_highlightType,
+					_useAutoPalette,
+					_showSingleColorTilesInGrayscale,
+					out _paletteData[i]
+				);
 			}
 			_hdCopyHelper.RefreshData();
 		}
@@ -205,6 +215,17 @@ namespace Mesen.GUI.Debugger.Controls
 		private void cboPalette_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			this._selectedPalette = this.cboPalette.SelectedIndex;
+			this.GetData();
+			this.RefreshViewer();
+		}
+
+
+		private void chkShowSingleColorTilesInGrayscale_CheckedChanged(object sender, EventArgs e)
+		{
+			ConfigManager.Config.DebugInfo.ChrViewerShowSingleColorTilesInGrayscale = this.chkShowSingleColorTilesInGrayscale.Checked;
+			ConfigManager.ApplyChanges();
+
+			this._showSingleColorTilesInGrayscale = this.chkShowSingleColorTilesInGrayscale.Checked;
 			this.GetData();
 			this.RefreshViewer();
 		}

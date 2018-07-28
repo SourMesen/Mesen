@@ -190,6 +190,7 @@ namespace Mesen.GUI.Config
 
 		public bool ChrViewerUseAutoPalette = true;
 		public bool ChrViewerUseLargeSprites = false;
+		public bool ChrViewerShowSingleColorTilesInGrayscale = false;
 
 		public int PpuDisplayCycle = 0;
 		public int PpuDisplayScanline = 241;
