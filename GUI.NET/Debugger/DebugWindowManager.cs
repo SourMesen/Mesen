@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Mesen.GUI.Forms;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,17 +21,17 @@ namespace Mesen.GUI.Debugger
 				existingWindow.BringToFront();
 				existingWindow.Focus();
 			} else {
-				Form frm = null;
+				BaseForm frm = null;
 				switch(window) {
-					case DebugWindow.PpuViewer: frm = new frmPpuViewer(); break;
-					case DebugWindow.TraceLogger: frm = new frmTraceLogger(); break;
-					case DebugWindow.MemoryViewer: frm = new frmMemoryViewer(); break;
-					case DebugWindow.Assembler: frm = new frmAssembler(); break;
-					case DebugWindow.Debugger: frm = new frmDebugger(); break;
-					case DebugWindow.ScriptWindow: frm = new frmScript(); break;
-					case DebugWindow.ApuViewer: frm = new frmApuViewer(); break;
-					case DebugWindow.EventViewer: frm = new frmEventViewer(); break;
-					case DebugWindow.TextHooker: frm = new frmTextHooker(); break;
+					case DebugWindow.PpuViewer: frm = new frmPpuViewer(); frm.Icon = Properties.Resources.Video; break;
+					case DebugWindow.TraceLogger: frm = new frmTraceLogger(); frm.Icon = Properties.Resources.LogWindow; break;
+					case DebugWindow.MemoryViewer: frm = new frmMemoryViewer(); frm.Icon = Properties.Resources.CheatCode; break;
+					case DebugWindow.Assembler: frm = new frmAssembler(); frm.Icon = Properties.Resources.Chip; break;
+					case DebugWindow.Debugger: frm = new frmDebugger(); frm.Icon = Properties.Resources.Bug; break;
+					case DebugWindow.ScriptWindow: frm = new frmScript(); frm.Icon = Properties.Resources.Script; break;
+					case DebugWindow.ApuViewer: frm = new frmApuViewer(); frm.Icon = Properties.Resources.Audio; break;
+					case DebugWindow.EventViewer: frm = new frmEventViewer(); frm.Icon = Properties.Resources.NesEventViewer; break;
+					case DebugWindow.TextHooker: frm = new frmTextHooker(); frm.Icon = Properties.Resources.Font; break;
 				}
 				_openedWindows.Add(frm);
 				frm.FormClosed += Debugger_FormClosed;
