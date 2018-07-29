@@ -529,6 +529,7 @@
 			<Control ID="lblWebsite">Site:</Control>
 			<Control ID="lblLink">www.mesen.ca</Control>
 			<Control ID="labelVersion">Versão:</Control>
+			<Control ID="lblBuildDateLabel">Build Date:</Control>
 			<Control ID="lblDonate">Caso queira apoiar o Mesen, por favor, considere fazer uma doação ao projeto.&#xA;Obrigado pelo seu apoio!</Control>
 			<Control ID="okButton">&amp;OK</Control>
 		</Form>

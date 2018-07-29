@@ -544,6 +544,7 @@
 			<Control ID="lblWebsite">Website:</Control>
 			<Control ID="lblLink">www.mesen.ca</Control>
 			<Control ID="labelVersion">Version:</Control>
+			<Control ID="lblBuildDateLabel">Build Date:</Control>
 			<Control ID="lblDonate">If you want to support Mesen, please consider donating.&#13;Thank you for your support!</Control>
 			<Control ID="okButton">&amp;OK</Control>
 		</Form>

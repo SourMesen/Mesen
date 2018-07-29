@@ -533,6 +533,7 @@
 			<Control ID="lblWebsite">サイト:</Control>
 			<Control ID="lblLink">www.mesen.ca</Control>
 			<Control ID="labelVersion">バージョン:</Control>
+			<Control ID="lblBuildDateLabel">ビルド日時:</Control>
 			<Control ID="lblDonate">応援ありがとうございます！</Control>
 			<Control ID="okButton">&amp;OK</Control>
 		</Form>

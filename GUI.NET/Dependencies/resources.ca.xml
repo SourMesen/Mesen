@@ -533,6 +533,7 @@
 			<Control ID="lblWebsite">Lloc web:</Control>
 			<Control ID="lblLink">www.mesen.ca</Control>
 			<Control ID="labelVersion">Versió:</Control>
+			<Control ID="lblBuildDateLabel">Build Date:</Control>
 			<Control ID="lblDonate">Si desitgeu col·laborar amb Mesen, si us plau, considereu fer un donatiu.&#xA;Gràcies pel vostre suport.</Control>
 			<Control ID="okButton">&amp;D'acord</Control>
 		</Form>

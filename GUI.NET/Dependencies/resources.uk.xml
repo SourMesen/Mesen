@@ -531,6 +531,7 @@
 			<Control ID="lblWebsite">Сайт:</Control>
 			<Control ID="lblLink">www.mesen.ca</Control>
 			<Control ID="labelVersion">Версiя:</Control>
+			<Control ID="lblBuildDateLabel">Build Date:</Control>
 			<Control ID="lblDonate">Якщо ви хочете підтримати Mesen, будь ласка підтримайте.&#xA;Дякую за вашу підтримку!</Control>
 			<Control ID="okButton">&amp;OK</Control>
 		</Form>
