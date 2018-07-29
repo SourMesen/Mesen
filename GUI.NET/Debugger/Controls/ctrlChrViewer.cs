@@ -44,9 +44,6 @@ namespace Mesen.GUI.Debugger.Controls
 
 			bool designMode = (LicenseManager.UsageMode == LicenseUsageMode.Designtime);
 			if(!designMode) {
-				this.cboPalette.SelectedIndex = 0;
-				this.cboHighlightType.SelectedIndex = 0;
-
 				this.picTile.Cursor = new Cursor(Properties.Resources.Pencil.GetHicon());
 
 				this.toolTip.SetToolTip(this.picTileTooltip, "Click on the tile to draw with the selected color." + Environment.NewLine + "Right button draws the background color.");
@@ -57,6 +54,8 @@ namespace Mesen.GUI.Debugger.Controls
 				this.ctrlTilePalette.HighlightMouseOver = true;
 				this.ctrlTilePalette.DisplayIndexes = false;
 
+				this.cboPalette.SelectedIndex = ConfigManager.Config.DebugInfo.ChrViewerSelectedPalette;
+				this.cboHighlightType.SelectedIndex = (int)ConfigManager.Config.DebugInfo.ChrViewerHighlightType;
 				this.chkAutoPalette.Checked = ConfigManager.Config.DebugInfo.ChrViewerUseAutoPalette;
 				this.chkLargeSprites.Checked = ConfigManager.Config.DebugInfo.ChrViewerUseLargeSprites;
 				this.chkShowSingleColorTilesInGrayscale.Checked = ConfigManager.Config.DebugInfo.ChrViewerShowSingleColorTilesInGrayscale;
@@ -215,6 +214,10 @@ namespace Mesen.GUI.Debugger.Controls
 		private void cboPalette_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			this._selectedPalette = this.cboPalette.SelectedIndex;
+
+			ConfigManager.Config.DebugInfo.ChrViewerSelectedPalette = this._selectedPalette;
+			ConfigManager.ApplyChanges();
+
 			this.GetData();
 			this.RefreshViewer();
 		}
@@ -253,6 +256,10 @@ namespace Mesen.GUI.Debugger.Controls
 		private void cboHighlightType_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			this._highlightType = (CdlHighlightType)this.cboHighlightType.SelectedIndex;
+
+			ConfigManager.Config.DebugInfo.ChrViewerHighlightType = this._highlightType;
+			ConfigManager.ApplyChanges();
+
 			this.GetData();
 			this.RefreshViewer();
 		}
