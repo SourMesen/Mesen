@@ -63,6 +63,8 @@ int LuaApi::GetLibrary(lua_State *lua)
 		{ "write", LuaApi::WriteMemory },
 		{ "readWord", LuaApi::ReadMemoryWord },
 		{ "writeWord", LuaApi::WriteMemoryWord },
+		{ "getPrgRomOffset", LuaApi::GetPrgRomOffset },
+		{ "getChrRomOffset", LuaApi::GetChrRomOffset },
 		{ "revertPrgChrChanges", LuaApi::RevertPrgChrChanges },
 		{ "addMemoryCallback", LuaApi::RegisterMemoryCallback },
 		{ "removeMemoryCallback", LuaApi::UnregisterMemoryCallback },
@@ -233,6 +235,30 @@ int LuaApi::WriteMemoryWord(lua_State *lua)
 	errorCond(value > 65535 || value < -32768, "value out of range");
 	errorCond(address < 0, "address must be >= 0");
 	_memoryDumper->SetMemoryValueWord(memType, address, value, false, disableSideEffects);
+	return l.ReturnCount();
+}
+
+int LuaApi::GetPrgRomOffset(lua_State *lua)
+{
+	LuaCallHelper l(lua);
+	int address = l.ReadInteger();
+	checkminparams(1);
+	errorCond(address < 0 || address > 0xFFFF, "address must be between 0 and $FFFF");
+	
+	int32_t prgRomOffset = _debugger->GetAbsoluteAddress((uint32_t)address);
+	l.Return(prgRomOffset);
+	return l.ReturnCount();
+}
+
+int LuaApi::GetChrRomOffset(lua_State *lua)
+{
+	LuaCallHelper l(lua);
+	int address = l.ReadInteger();
+	checkminparams(1);
+	errorCond(address < 0 || address > 0x3FFF, "address must be between 0 and $3FFF");
+
+	int32_t chrRomOffset = _debugger->GetAbsoluteChrAddress((uint32_t)address);
+	l.Return(chrRomOffset);
 	return l.ReturnCount();
 }
 

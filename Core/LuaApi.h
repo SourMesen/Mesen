@@ -20,6 +20,8 @@ public:
 	static int WriteMemory(lua_State *lua);
 	static int ReadMemoryWord(lua_State *lua);
 	static int WriteMemoryWord(lua_State *lua);
+	static int GetPrgRomOffset(lua_State *lua);
+	static int GetChrRomOffset(lua_State *lua);
 	static int RevertPrgChrChanges(lua_State *lua);
 
 	static int RegisterMemoryCallback(lua_State *lua);
