@@ -52,9 +52,9 @@ namespace Mesen.GUI.Debugger.Controls
 
 			if(a.Text == b.Text) {
 				if(a.Tag == b.Tag) {
-					return aAbsolute > bAbsolute ? 1 : -1;
+					return aAbsolute - bAbsolute;
 				} else {
-					return aRelative > bRelative ? 1 : -1;
+					return aRelative - bRelative;
 				}
 			} else {
 				return string.Compare(aText, bText);

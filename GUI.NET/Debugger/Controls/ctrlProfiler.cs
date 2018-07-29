@@ -187,10 +187,12 @@ namespace Mesen.GUI.Debugger.Controls
 						return String.Compare(((ListViewItem)x).SubItems[0].Text, ((ListViewItem)y).SubItems[0].Text);
 					}
 				} else {
+					Int64 columnValueY = (Int64)((ListViewItem)y).SubItems[_columnIndex].Tag;
+					Int64 columnValueX = (Int64)((ListViewItem)x).SubItems[_columnIndex].Tag;
 					if(_sortOrder) {
-						return (Int64)((ListViewItem)y).SubItems[_columnIndex].Tag > (Int64)((ListViewItem)x).SubItems[_columnIndex].Tag ? 1 : -1;
+						return (int)(columnValueY - columnValueX);
 					} else {
-						return (Int64)((ListViewItem)y).SubItems[_columnIndex].Tag > (Int64)((ListViewItem)x).SubItems[_columnIndex].Tag ? -1 : 1;
+						return (int)(columnValueX - columnValueY);
 					}
 				}
 			}
