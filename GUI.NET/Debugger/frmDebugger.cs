@@ -368,6 +368,11 @@ namespace Mesen.GUI.Debugger
 					string mlbPath = Path.Combine(info.RomFile.Folder, info.GetRomName() + ".mlb");
 					if(File.Exists(mlbPath)) {
 						ImportMlbFile(mlbPath, silent);
+					} else {
+						string fnsPath = Path.Combine(info.RomFile.Folder, info.GetRomName() + ".fns");
+						if(File.Exists(fnsPath)) {
+							ImportNesasmFnsFile(fnsPath, silent);
+						}
 					}
 				}
 			}
@@ -379,6 +384,14 @@ namespace Mesen.GUI.Debugger
 				ctrlDebuggerCodeSplit.Visible = true;
 				ctrlDebuggerCode.Focus();
 			}
+		}
+
+		private void ImportNesasmFnsFile(string fnsPath, bool silent = false)
+		{
+			if(ConfigManager.Config.DebugInfo.ImportConfig.ResetLabelsOnImport) {
+				ResetLabels();
+			}
+			NesasmFnsImporter.Import(fnsPath, silent);
 		}
 
 		private void ImportMlbFile(string mlbPath, bool silent = false)
@@ -1222,11 +1235,13 @@ namespace Mesen.GUI.Debugger
 		private void mnuImportLabels_Click(object sender, EventArgs e)
 		{
 			OpenFileDialog ofd = new OpenFileDialog();
-			ofd.SetFilter("All supported files (*.dbg, *.mlb)|*.dbg;*.mlb");
+			ofd.SetFilter("All supported files (*.dbg, *.mlb, *.fns)|*.dbg;*.mlb;*.fns");
 			if(ofd.ShowDialog() == DialogResult.OK) {
 				string ext = Path.GetExtension(ofd.FileName).ToLower();
 				if(ext == ".mlb") {
 					ImportMlbFile(ofd.FileName);
+				} else if(ext == ".fns") {
+					ImportNesasmFnsFile(ofd.FileName);
 				} else {
 					ImportDbgFile(ofd.FileName, false);
 				}					

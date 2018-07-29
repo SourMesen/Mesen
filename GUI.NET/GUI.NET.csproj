@@ -831,6 +831,7 @@
     <Compile Include="Debugger\HexBox\Util.cs" />
     <Compile Include="Debugger\HexConverter.cs" />
     <Compile Include="Debugger\LabelManager.cs" />
+    <Compile Include="Debugger\NesasmFnsImporter.cs" />
     <Compile Include="Debugger\MesenLabelFile.cs" />
     <Compile Include="Debugger\TblLoader.cs" />
     <Compile Include="Debugger\TextboxHistory.cs" />
