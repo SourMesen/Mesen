@@ -18,15 +18,32 @@ namespace Mesen.GUI.Debugger.Controls
 	public partial class ctrlEventViewerPpuView : BaseControl
 	{
 		private DebugState _state = new DebugState();
+		private Point _lastPos = new Point(-1, -1);
+		private bool _needUpdate = false;
+		private Bitmap _screenBitmap = null;
+		private Bitmap _eventBitmap = null;
+		private Bitmap _overlayBitmap = null;
+		private Bitmap _displayBitmap = null;
 		private byte[] _pictureData = null;
 		private Dictionary<int, List<DebugEventInfo>> _debugEventsByCycle = new Dictionary<int, List<DebugEventInfo>>();
 		private List<DebugEventInfo> _debugEvents = new List<DebugEventInfo>();
+		private Font _overlayFont;
 		
 		public ctrlEventViewerPpuView()
 		{
 			InitializeComponent();
 		}
-		
+
+		protected override void OnLoad(EventArgs e)
+		{
+			base.OnLoad(e);
+
+			if(!IsDesignMode) {
+				tmrOverlay.Start();
+				_overlayFont = new Font(BaseControl.MonospaceFontFamily, 10);
+			}
+		}
+
 		public void GetData()
 		{
 			DebugState state = new DebugState();
@@ -94,11 +111,18 @@ namespace Mesen.GUI.Debugger.Controls
 			GCHandle handle = GCHandle.Alloc(this._pictureData, GCHandleType.Pinned);
 			try {
 				Bitmap source = new Bitmap(256, 240, 256*4, System.Drawing.Imaging.PixelFormat.Format32bppArgb, handle.AddrOfPinnedObject());
-				Bitmap target = new Bitmap(682, (int)_state.PPU.ScanlineCount * 2);
-				this.picPicture.Width = target.Width + 2;
-				this.picPicture.Height = target.Height + 2;
+				int picHeight = (int)_state.PPU.ScanlineCount * 2;
+				if(_eventBitmap == null || _eventBitmap.Height != picHeight) {
+					_screenBitmap = new Bitmap(682, picHeight);
+					_eventBitmap = new Bitmap(682, picHeight);
+					_overlayBitmap = new Bitmap(682, picHeight);
+					_displayBitmap = new Bitmap(682, picHeight);
+				}
+
+				this.picPicture.Width = _eventBitmap.Width + 2;
+				this.picPicture.Height = _eventBitmap.Height + 2;
 				this.Width = this.picPicture.Width + 2;
-				this.Height = this.picPicture.Height + 2;
+				this.Height = this.picPicture.Height + 22;
 
 				var d = ConfigManager.Config.DebugInfo;
 				
@@ -113,8 +137,8 @@ namespace Mesen.GUI.Debugger.Controls
 					new List<Color> { d.EventViewerSpriteZeroHitColor }, //SpriteZeroHit
 					new List<Color> { d.EventViewerBreakpointColor }, //Breakpoint
 				};
-				
-				using(Graphics g = Graphics.FromImage(target)) {
+
+				using(Graphics g = Graphics.FromImage(_screenBitmap)) {
 					g.Clear(Color.Gray);
 					g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
 					g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.None;
@@ -135,13 +159,83 @@ namespace Mesen.GUI.Debugger.Controls
 						int currentScanline = (_state.PPU.Scanline + 1) * 2 + 1;
 						g.FillRectangle(Brushes.Yellow, 0, currentScanline, 682, 2);
 					}
-
+				}
+				
+				using(Graphics g = Graphics.FromImage(_eventBitmap)) {
+					g.Clear(Color.Transparent);
 					DrawEvents(g, colors);
 				}
-				this.picPicture.Image = target;
+				UpdateDisplay(true);
 			} finally {
 				handle.Free();
 			}
+		}
+
+		private void UpdateDisplay(bool forceUpdate)
+		{
+			if(!_needUpdate && !forceUpdate) {
+				return;
+			}
+
+			using(Graphics g = Graphics.FromImage(_displayBitmap)) {
+				g.DrawImage(_screenBitmap, 0, 0);
+				g.DrawImage(_overlayBitmap, 0, 0);
+				g.DrawImage(_eventBitmap, 0, 0);
+
+				if(_lastPos.X >= 0) {
+					string location = _lastPos.X / 2 + ", " + ((_lastPos.Y / 2) - 1);
+					int x = _lastPos.X + 15;
+					int y = _lastPos.Y + 5;
+					SizeF size = g.MeasureString(location, _overlayFont);
+					if(x + size.Width > _displayBitmap.Width - 5) {
+						x -= (int)size.Width + 20;
+					}
+					if(y + size.Height > _displayBitmap.Height - 5) {
+						y -= (int)size.Height + 10;
+					}
+
+					g.DrawOutlinedString(location, _overlayFont, Brushes.White, Brushes.Black, x, y);
+				}
+			}
+
+			picPicture.Image = _displayBitmap;
+			_needUpdate = false;
+		}
+
+		private void UpdateOverlay(Point p)
+		{
+			int x = p.X / 2 * 2;
+			int y = p.Y / 2 * 2;
+
+			if(_lastPos.X == x && _lastPos.Y == y) {
+				//Same x,y location, no need to update
+				return;
+			}
+
+			using(Graphics g = Graphics.FromImage(_overlayBitmap)) {
+				g.Clear(Color.Transparent);
+
+				using(Pen bg = new Pen(Color.FromArgb(128, Color.Black))) {
+					g.DrawRectangle(bg, x - 1, 0, 3, _overlayBitmap.Height);
+					g.DrawRectangle(bg, 0, y - 1, _overlayBitmap.Width, 3);
+				}
+				using(Pen fg = new Pen(Color.FromArgb(230, Color.Orange))) {
+					g.DrawRectangle(fg, x, 0, 1, _overlayBitmap.Height);
+					g.DrawRectangle(fg, 0, y, _overlayBitmap.Width, 1);
+				}
+			}
+
+			_needUpdate = true;
+			_lastPos = new Point(x, y);
+		}
+
+		private void ClearOverlay()
+		{
+			using(Graphics g = Graphics.FromImage(_overlayBitmap)) {
+				g.Clear(Color.Transparent);
+			}
+			UpdateDisplay(false);
+			_lastPos = new Point(-1, -1);
 		}
 
 		private void DrawEvents(Graphics g, List<List<Color>> colors)
@@ -236,6 +330,8 @@ namespace Mesen.GUI.Debugger.Controls
 											break;
 									}
 
+									UpdateOverlay(new Point(debugEvent.Cycle * 2, (debugEvent.Scanline + 1) * 2));
+
 									Form parentForm = this.FindForm();
 									_tooltip = new frmCodeTooltip(parentForm, values);
 									_tooltip.FormClosed += (s, evt) => { _tooltip = null; };
@@ -253,6 +349,8 @@ namespace Mesen.GUI.Debugger.Controls
 				}
 			}
 
+			UpdateOverlay(e.Location);
+
 			//No match found, make sure any existing tooltip is closed
 			ResetTooltip();
 		}
@@ -269,6 +367,12 @@ namespace Mesen.GUI.Debugger.Controls
 		private void picPicture_MouseLeave(object sender, EventArgs e)
 		{
 			ResetTooltip();
+			ClearOverlay();
+		}
+
+		private void tmrOverlay_Tick(object sender, EventArgs e)
+		{
+			UpdateDisplay(false);
 		}
 	}
 }

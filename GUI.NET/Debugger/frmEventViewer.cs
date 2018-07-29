@@ -205,7 +205,7 @@ namespace Mesen.GUI.Debugger
 			int widthDiff = newWidth - panel1.Width;
 			panel1.Width = newWidth;
 
-			int newHeight = ctrlEventViewerPpuView.Height + 5;
+			int newHeight = ctrlEventViewerPpuView.Height + 5 + (Program.IsMono ? 5 : 0);
 			int heightDiff = newHeight - panel1.Height;
 			panel1.Height = newHeight;
 
