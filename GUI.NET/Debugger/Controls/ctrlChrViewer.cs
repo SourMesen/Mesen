@@ -364,6 +364,7 @@ namespace Mesen.GUI.Debugger.Controls
 		{
 			_tilePosX = -1;
 			_tilePosY = -1;
+			RefreshPreview(_tileIndex, _bottomBank);
 		}
 
 		private int GetLargeSpriteIndex(int tileIndex)
