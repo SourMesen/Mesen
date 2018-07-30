@@ -9,16 +9,19 @@ chapter: false
 
 ### New Features ###
 
-* New event callback: [**<kbd>scriptEnded</kbd>**](/apireference/enums.html#eventtype)
+* New event callback: <kbd>[scriptEnded](/apireference/enums.html#eventtype)</kbd>.
+* New functions to get PRG/CHR ROM offsets based on a CPU/PPU address: <kbd>[getPrgRomOffset](/apireference/memoryaccess.html#getprgromoffset)</kbd> and <kbd>[getChrRomOffset](/apireference/memoryaccess.html#getchrromoffset)</kbd>.
 
 ### Changes ###
 
 * The end address parameter for <kbd>[addMemoryCallback](/apireference/callbacks.html#addmemorycallback)</kbd> and <kbd>[removeMemoryCallback](/apireference/callbacks.html#removememorycallback)</kbd> is now optional.
 * The <kbd>[drawRectangle](/apireference/drawing.html#drawrectangle)</kbd> function now accepts negative height/width values.
+* Added a new *delay* parameter to  <kbd>[drawRectangle](/apireference/drawing.html#drawrectangle)</kbd>, <kbd>[drawLine](/apireference/drawing.html#drawline)</kbd>, <kbd>[drawString](/apireference/drawing.html#drawstring)</kbd> and  <kbd>[drawPixel](/apireference/drawing.html#drawpixel)</kbd>.
+* The <kbd>[endFrame](/apireference/enums.html#eventtype)</kbd> event now triggers on scanline 240 instead of scanline 241.
 
 ### Bug Fixes ###
  
-* <kbd>[addMemoryCallback](/apireference/callbacks.html#addmemorycallback)</kbd> and <kbd>[removeMemoryCallback](/apireference/callbacks.html#removememorycallback)</kbd>  no longer exclude the end address from the range.
+* <kbd>[addMemoryCallback](/apireference/callbacks.html#addmemorycallback)</kbd> and <kbd>[removeMemoryCallback](/apireference/callbacks.html#removememorycallback)</kbd> no longer exclude the end address from the range.
 
 
 ## Changes between 0.9.4 and 0.9.5 ##

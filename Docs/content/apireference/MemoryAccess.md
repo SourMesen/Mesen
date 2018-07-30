@@ -65,3 +65,35 @@ To avoid triggering side-effects, use the [memType.cpuDebug](/apireference/enums
 **Description**  
 Reverts all modifications done to PRG-ROM and CHR-ROM via write/writeWord calls.
 
+
+## getPrgRomOffset ##
+
+**Syntax**  
+
+    emu.getPrgRomOffset(address)
+
+**Parameters**  
+address - *Integer* A CPU address (Valid range: $0000-$FFFF)
+
+**Return value**  
+*Integer* The corresponding byte offset in PRG ROM
+
+**Description**  
+Returns an integer representing the byte offset of the specified CPU address in PRG ROM based on the mapper's current configuration. Returns -1 when the specified address is not mapped to PRG ROM.
+
+
+## getChrRomOffset ##
+
+**Syntax**  
+
+    emu.getChrRomOffset(address)
+
+**Parameters**  
+address - *Integer* A PPU address (Valid range: $0000-$3FFF)
+
+**Return value**  
+*Integer* The corresponding byte offset in CHR ROM
+
+**Description**  
+Returns an integer representing the byte offset of the specified PPU address in CHR ROM based on the mapper's current configuration. Returns -1 when the specified address is not mapped to CHR ROM.
+

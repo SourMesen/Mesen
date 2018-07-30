@@ -27,13 +27,14 @@ All drawing-related functions share a few properties:
 
 **Syntax**  
 
-    emu.drawPixel(x, y, color, duration)
+    emu.drawPixel(x, y, color [, duration, delay])
 
 **Parameters**  
 x - *Integer* X position  
 y - *Integer* Y position    
 color - *Integer* Color  
-duration - *Integer* Number of frames to display (Default: 1 frame)
+duration - *Integer* Number of frames to display (Default: 1 frame)  
+delay - *Integer* Number of frames to wait before drawing the pixel (Default: 0 frames)
 
 **Return value**  
 *None*
@@ -45,7 +46,7 @@ Draws a pixel at the specified (x, y) coordinates using the specified color for 
 
 **Syntax**  
 
-    emu.drawLine(x, y, x2, y2, color, duration)
+    emu.drawLine(x, y, x2, y2, color [, duration, delay])
 
 **Parameters**  
 x - *Integer* X position (start of line)  
@@ -53,7 +54,8 @@ y - *Integer* Y position (start of line)
 x2 - *Integer* X position (end of line)  
 y2 - *Integer* Y position (end of line)  
 color - *Integer* Color  
-duration - *Integer* Number of frames to display (Default: 1 frame)
+duration - *Integer* Number of frames to display (Default: 1 frame)  
+delay - *Integer* Number of frames to wait before drawing the line (Default: 0 frames)
 
 **Return value**  
 *None*
@@ -65,7 +67,7 @@ Draws a line between (x, y) to (x2, y2) using the specified color for a specific
 
 **Syntax**  
 
-    emu.drawRectangle(x, y, width, height, color, fill, duration)
+    emu.drawRectangle(x, y, width, height, color, fill [, duration, delay])
 
 **Parameters**  
 x - *Integer* X position  
@@ -74,7 +76,8 @@ width - *Integer* The rectangle's width
 height - *Integer* The rectangle's height  
 color - *Integer* Color  
 fill - *Boolean* Whether or not to draw an outline, or a filled rectangle.  
-duration - *Integer* Number of frames to display (Default: 1 frame)
+duration - *Integer* Number of frames to display (Default: 1 frame)  
+delay - *Integer* Number of frames to wait before drawing the rectangle (Default: 0 frames)
 
 **Return value**  
 *None*
@@ -87,7 +90,7 @@ If *fill* is false, only the rectangle's outline will be drawn.
 
 **Syntax**  
 
-    emu.drawString(x, y, text, textColor, backgroundColor, duration)
+    emu.drawString(x, y, text, textColor, backgroundColor [, duration, delay])
 
 **Parameters**  
 x - *Integer* X position  
@@ -95,7 +98,8 @@ y - *Integer* Y position
 text- *String* The text to display
 textColor - *Integer* Color to use for the text  
 backgroundColor - *Integer* Color to use for the text's background color  
-duration - *Integer* Number of frames to display (Default: 1 frame)
+duration - *Integer* Number of frames to display (Default: 1 frame)  
+delay - *Integer* Number of frames to wait before drawing the text (Default: 0 frames)
 
 **Return value**  
 *None*
