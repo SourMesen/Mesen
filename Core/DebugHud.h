@@ -8,7 +8,7 @@ class DrawCommand;
 class DebugHud
 {
 private:
-	vector<shared_ptr<DrawCommand>> _commands;
+	vector<unique_ptr<DrawCommand>> _commands;
 	SimpleLock _commandLock;
 
 public:
