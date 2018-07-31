@@ -159,16 +159,16 @@ void SoundMixer::PlayAudioBuffer(uint32_t time)
 	}
 
 	if(rewindManager && rewindManager->SendAudio(_outputBuffer, (uint32_t)sampleCount, _sampleRate)) {
-		if(_waveRecorder) {
-			auto lock = _waveRecorderLock.AcquireSafe();
-			if(_waveRecorder) {
-				if(!_waveRecorder->WriteSamples(_outputBuffer, (uint32_t)sampleCount, _sampleRate, true)) {
+		bool isRecording = _waveRecorder || _console->GetVideoRenderer()->IsRecording();
+		if(isRecording) {
+			shared_ptr<WaveRecorder> recorder = _waveRecorder;
+			if(recorder) {
+				if(!recorder->WriteSamples(_outputBuffer, (uint32_t)sampleCount, _sampleRate, true)) {
 					_waveRecorder.reset();
 				}
 			}
+			_console->GetVideoRenderer()->AddRecordingSound(_outputBuffer, (uint32_t)sampleCount, _sampleRate);
 		}
-
-		_console->GetVideoRenderer()->AddRecordingSound(_outputBuffer, (uint32_t)sampleCount, _sampleRate);
 
 		if(_audioDevice && !_console->IsPaused()) {
 			_audioDevice->PlayBuffer(_outputBuffer, (uint32_t)sampleCount, _sampleRate, true);
@@ -212,17 +212,7 @@ void SoundMixer::UpdateRates(bool forceUpdate)
 		}
 	}
 
-	AudioStatistics stats = GetStatistics();
-	int32_t requestedLatency = (int32_t)_settings->GetAudioLatency();
-	double targetRate = _sampleRate;
-	if(stats.AverageLatency > 0 && _settings->GetEmulationSpeed() == 100) {
-		if(stats.AverageLatency > requestedLatency + 2) {
-			targetRate *= 1.005;
-		} else if(stats.AverageLatency < requestedLatency - 2) {
-			targetRate *= 0.995;
-		}
-	}
-
+	double targetRate = _sampleRate * GetTargetRateAdjustment();
 	if(_clockRate != newRate || forceUpdate) {
 		_clockRate = newRate;
 		blip_set_rates(_blipBufLeft, _clockRate, targetRate);
@@ -377,13 +367,11 @@ void SoundMixer::UpdateEqualizers(bool forceUpdate)
 
 void SoundMixer::StartRecording(string filepath)
 {
-	auto lock = _waveRecorderLock.AcquireSafe();
 	_waveRecorder.reset(new WaveRecorder(filepath, _settings->GetSampleRate(), true));
 }
 
 void SoundMixer::StopRecording()
 {
-	auto lock = _waveRecorderLock.AcquireSafe();
 	_waveRecorder.reset();
 }
 
@@ -432,24 +420,34 @@ void SoundMixer::ProcessEndOfFrame()
 	}
 }
 
+double SoundMixer::GetTargetRateAdjustment()
+{
+	bool isRecording = _waveRecorder || _console->GetVideoRenderer()->IsRecording();
+	if(!isRecording) {
+		//Don't deviate from selected sample rate while recording
+		//TODO: Have 2 output streams (one for recording, one for the speakers)
+		AudioStatistics stats = GetStatistics();
+
+		if(stats.AverageLatency > 0 && _settings->GetEmulationSpeed() == 100) {
+			int32_t requestedLatency = (int32_t)_settings->GetAudioLatency();
+
+			//Try to stay within +/- 2ms of requested latency
+			if(stats.AverageLatency > requestedLatency + 2) {
+				return 0.995;
+			} else if(stats.AverageLatency < requestedLatency - 2) {
+				return 1.005;
+			}
+		}
+	}
+	return 1.0;
+}
+
 void SoundMixer::UpdateTargetSampleRate()
 {
-	AudioStatistics stats = GetStatistics();
-	if(stats.AverageLatency > 0 && _settings->GetEmulationSpeed() == 100) {
-		int32_t requestedLatency = (int32_t)_settings->GetAudioLatency();
-		double targetRate = _sampleRate;
-
-		//Try to stay within +/- 2ms of requested latency
-		if(stats.AverageLatency > requestedLatency + 2) {
-			targetRate *= 0.995;
-		} else if(stats.AverageLatency < requestedLatency - 2) {
-			targetRate *= 1.005;
-		}
-
-		if(targetRate != _previousTargetRate) {
-			blip_set_rates(_blipBufLeft, _clockRate, targetRate);
-			blip_set_rates(_blipBufRight, _clockRate, targetRate);
-			_previousTargetRate = targetRate;
-		}
+	double targetRate = _sampleRate * GetTargetRateAdjustment();
+	if(targetRate != _previousTargetRate) {
+		blip_set_rates(_blipBufLeft, _clockRate, targetRate);
+		blip_set_rates(_blipBufRight, _clockRate, targetRate);
+		_previousTargetRate = targetRate;
 	}
 }

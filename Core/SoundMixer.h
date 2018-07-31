@@ -33,8 +33,7 @@ private:
 
 	IAudioDevice* _audioDevice;
 	EmulationSettings* _settings;
-	unique_ptr<WaveRecorder> _waveRecorder;
-	SimpleLock _waveRecorderLock;
+	shared_ptr<WaveRecorder> _waveRecorder;
 	double _fadeRatio;
 	uint32_t _muteFrameCount;
 	unique_ptr<OggMixer> _oggMixer;
@@ -79,6 +78,8 @@ private:
 	
 	void UpdateEqualizers(bool forceUpdate);
 	void ApplyEqualizer(orfanidis_eq::eq1* equalizer, size_t sampleCount);
+	
+	double GetTargetRateAdjustment();
 	void UpdateTargetSampleRate();
 
 protected:
