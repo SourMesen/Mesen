@@ -580,6 +580,7 @@ void Console::ResetComponents(bool softReset)
 	}
 
 	_soundMixer->StopAudio(true);
+	_debugHud->ClearScreen();
 
 	_memoryManager->Reset(softReset);
 	if(!_settings->CheckFlag(EmulationFlags::DisablePpuReset) || !softReset) {
@@ -1001,6 +1002,7 @@ void Console::LoadState(istream &loadStream, uint32_t stateVersion)
 			debugger->ResetCounters();
 		}
 
+		_debugHud->ClearScreen();
 		_notificationManager->SendNotification(ConsoleNotificationType::StateLoaded);
 	}
 }
