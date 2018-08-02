@@ -1064,7 +1064,7 @@ void Console::ResetLagCounter()
 {
 	Console::Pause();
 	_controlManager->ResetLagCounter();
-	Console::Reset();
+	Console::Resume();
 }
 
 bool Console::IsDebuggerAttached()
