@@ -76,6 +76,8 @@
 			this.statusStrip1 = new System.Windows.Forms.StatusStrip();
 			this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
 			this.lblScriptActive = new System.Windows.Forms.ToolStripStatusLabel();
+			this.mnuHelp = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuApiReference = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuMain.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.txtScriptContent)).BeginInit();
 			this.contextMenu.SuspendLayout();
@@ -91,7 +93,8 @@
 			this.mnuMain.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.fileToolStripMenuItem,
             this.mnuView,
-            this.scriptToolStripMenuItem});
+            this.scriptToolStripMenuItem,
+            this.mnuHelp});
 			this.mnuMain.Location = new System.Drawing.Point(0, 0);
 			this.mnuMain.Name = "mnuMain";
 			this.mnuMain.Size = new System.Drawing.Size(965, 24);
@@ -365,6 +368,7 @@
 			this.txtScriptContent.Cursor = System.Windows.Forms.Cursors.IBeam;
 			this.txtScriptContent.DisabledColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
 			this.txtScriptContent.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.txtScriptContent.Font = new System.Drawing.Font("Courier New", 9.75F);
 			this.txtScriptContent.IsReplaceMode = false;
 			this.txtScriptContent.Language = FastColoredTextBoxNS.Language.Lua;
 			this.txtScriptContent.LeftBracket = '(';
@@ -429,6 +433,7 @@
 			// 
 			this.ctrlSplit.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.ctrlSplit.FixedPanel = System.Windows.Forms.FixedPanel.Panel2;
+			this.ctrlSplit.HidePanel2 = false;
 			this.ctrlSplit.Location = new System.Drawing.Point(0, 49);
 			this.ctrlSplit.Name = "ctrlSplit";
 			this.ctrlSplit.Orientation = System.Windows.Forms.Orientation.Horizontal;
@@ -490,6 +495,22 @@
 			this.lblScriptActive.Size = new System.Drawing.Size(109, 17);
 			this.lblScriptActive.Text = "Script is running";
 			this.lblScriptActive.Visible = false;
+			// 
+			// mnuHelp
+			// 
+			this.mnuHelp.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.mnuApiReference});
+			this.mnuHelp.Name = "mnuHelp";
+			this.mnuHelp.Size = new System.Drawing.Size(44, 20);
+			this.mnuHelp.Text = "Help";
+			// 
+			// mnuApiReference
+			// 
+			this.mnuApiReference.Image = global::Mesen.GUI.Properties.Resources.Exclamation;
+			this.mnuApiReference.Name = "mnuApiReference";
+			this.mnuApiReference.Size = new System.Drawing.Size(152, 22);
+			this.mnuApiReference.Text = "API Reference";
+			this.mnuApiReference.Click += new System.EventHandler(this.mnuApiReference_Click);
 			// 
 			// frmScript
 			// 
@@ -566,5 +587,7 @@
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem6;
 		private System.Windows.Forms.ToolStripMenuItem mnuSelectFont;
 		private System.Windows.Forms.ToolStripMenuItem mnuBuiltInScripts;
+		private System.Windows.Forms.ToolStripMenuItem mnuHelp;
+		private System.Windows.Forms.ToolStripMenuItem mnuApiReference;
 	}
 }

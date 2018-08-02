@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -462,6 +463,11 @@ namespace Mesen.GUI.Debugger
 			mnuAutoLoadLastScript.Checked = false;
 			mnuTutorialScript.Checked = false;
 			mnuBlankWindow.Checked = true;
+		}
+		
+		private void mnuApiReference_Click(object sender, EventArgs e)
+		{
+			Process.Start("https://www.mesen.ca/ApiReference.php");
 		}
 
 		static readonly List<List<string>> _availableFunctions = new List<List<string>>() {
