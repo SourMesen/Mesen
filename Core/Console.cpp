@@ -1062,9 +1062,9 @@ uint32_t Console::GetLagCounter()
 
 void Console::ResetLagCounter()
 {
-	Console::Pause();
+	Pause();
 	_controlManager->ResetLagCounter();
-	Console::Resume();
+	Resume();
 }
 
 bool Console::IsDebuggerAttached()
@@ -1111,7 +1111,7 @@ void Console::LoadHdPack(VirtualFile &romFile, VirtualFile &patchFile)
 
 void Console::StartRecordingHdPack(string saveFolder, ScaleFilterType filterType, uint32_t scale, uint32_t flags, uint32_t chrRamBankSize)
 {
-	Console::Pause();
+	Pause();
 	std::stringstream saveState;
 	SaveState(saveState);
 	
@@ -1124,13 +1124,13 @@ void Console::StartRecordingHdPack(string saveFolder, ScaleFilterType filterType
 	_memoryManager->RegisterIODevice(_ppu.get());
 
 	LoadState(saveState);
-	Console::Resume();
+	Resume();
 }
 
 void Console::StopRecordingHdPack()
 {
 	if(_hdPackBuilder) {
-		Console::Pause();
+		Pause();
 		std::stringstream saveState;
 		SaveState(saveState);
 
@@ -1141,14 +1141,14 @@ void Console::StopRecordingHdPack()
 		_hdPackBuilder.reset();
 
 		LoadState(saveState);
-		Console::Resume();
+		Resume();
 	}
 }
 
 bool Console::UpdateHdPackMode()
 {
 	//Switch back and forth between HD PPU and regular PPU as needed
-	Console::Pause();
+	Pause();
 
 	VirtualFile romFile = _romFilepath;
 	VirtualFile patchFile = _patchFilename;
@@ -1178,7 +1178,7 @@ bool Console::UpdateHdPackMode()
 		modeChanged = true;
 	}
 
-	Console::Resume();
+	Resume();
 	
 	return modeChanged;
 }
@@ -1232,9 +1232,9 @@ void Console::LoadTapeFile(string filepath)
 	if(controlManager) {
 		shared_ptr<FamilyBasicDataRecorder> dataRecorder = std::dynamic_pointer_cast<FamilyBasicDataRecorder>(controlManager->GetControlDevice(BaseControlDevice::ExpDevicePort2));
 		if(dataRecorder) {
-			Console::Pause();
+			Pause();
 			dataRecorder->LoadFromFile(filepath);
-			Console::Resume();
+			Resume();
 		}
 	}
 }
@@ -1245,9 +1245,9 @@ void Console::StartRecordingTapeFile(string filepath)
 	if(controlManager) {
 		shared_ptr<FamilyBasicDataRecorder> dataRecorder = std::dynamic_pointer_cast<FamilyBasicDataRecorder>(controlManager->GetControlDevice(BaseControlDevice::ExpDevicePort2));
 		if(dataRecorder) {
-			Console::Pause();
+			Pause();
 			dataRecorder->StartRecording(filepath);
-			Console::Resume();
+			Resume();
 		}
 	}
 }
@@ -1258,9 +1258,9 @@ void Console::StopRecordingTapeFile()
 	if(controlManager) {
 		shared_ptr<FamilyBasicDataRecorder> dataRecorder = std::dynamic_pointer_cast<FamilyBasicDataRecorder>(controlManager->GetControlDevice(BaseControlDevice::ExpDevicePort2));
 		if(dataRecorder) {
-			Console::Pause();
+			Pause();
 			dataRecorder->StopRecording();
-			Console::Resume();
+			Resume();
 		}
 	}
 }
