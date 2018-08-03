@@ -123,6 +123,7 @@
 		<Form ID="frmAudioConfig" Title="Options audio">
 			<Control ID="tpgGeneral">Général</Control>
 			<Control ID="tpgAdvanced">Avancé</Control>
+			<Control ID="chkDisableDynamicSampleRate">Désactiver le taux d'échantillonnage dynamique</Control>
 			<Control ID="chkSwapDutyCycles">Inverser le rapport cyclique des canaux Square 1 et Square 2</Control>
 			<Control ID="chkSilenceTriangleHighFreq">Couper le canal triangle lors de fréquences ultrasoniques (réduit les "pops")</Control>
 			<Control ID="chkReduceDmcPopping">Réduire l'intensité des "pops" du canal DMC</Control>

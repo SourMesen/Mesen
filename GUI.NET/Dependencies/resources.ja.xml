@@ -124,6 +124,7 @@
 		<Form ID="frmAudioConfig" Title="音声設定">
 			<Control ID="tpgGeneral">全般</Control>
 			<Control ID="tpgAdvanced">詳細設定</Control>
+			<Control ID="chkDisableDynamicSampleRate">サンプルレートの自動調整を無効にする</Control>
 			<Control ID="chkSwapDutyCycles">Squareチャンネルのデューティサイクルをスワップする</Control>
 			<Control ID="chkSilenceTriangleHighFreq">Triangleチャンネルが超音波を出す場合、ミュートする　（ポップノイズを軽減する）</Control>
 			<Control ID="chkReduceDmcPopping">DMCチャンネルのポップノイズを軽減する</Control>

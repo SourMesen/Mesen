@@ -123,6 +123,7 @@
 		<Form ID="frmAudioConfig" Title="Opcions de so">
 			<Control ID="tpgGeneral">General</Control>
 			<Control ID="tpgAdvanced">Avançat</Control>
+			<Control ID="chkDisableDynamicSampleRate">Disable dynamic sample rate</Control>
 			<Control ID="chkSwapDutyCycles">Inverteix els cicles dels canals quadrats (imita clons antics)</Control>
 			<Control ID="chkSilenceTriangleHighFreq">Silencia les freqüències ultrasòniques al canal de triangle (redueix els "esclafits")</Control>
 			<Control ID="chkReduceDmcPopping">Redueix els "esclafits" al canal DMC</Control>

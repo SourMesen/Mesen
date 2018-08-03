@@ -136,6 +136,7 @@ namespace Mesen.GUI.Forms.Config
 			this.chkSilenceTriangleHighFreq = new System.Windows.Forms.CheckBox();
 			this.chkSwapDutyCycles = new Mesen.GUI.Controls.ctrlRiskyOption();
 			this.chkReduceDmcPopping = new System.Windows.Forms.CheckBox();
+			this.chkDisableDynamicSampleRate = new Mesen.GUI.Controls.ctrlRiskyOption();
 			this.baseConfigPanel.SuspendLayout();
 			this.grpVolume.SuspendLayout();
 			this.tableLayoutPanel1.SuspendLayout();
@@ -1739,18 +1740,20 @@ namespace Mesen.GUI.Forms.Config
 			// 
 			this.tableLayoutPanel3.ColumnCount = 1;
 			this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel3.Controls.Add(this.chkDisableNoiseModeFlag, 0, 3);
+			this.tableLayoutPanel3.Controls.Add(this.chkDisableDynamicSampleRate, 0, 2);
+			this.tableLayoutPanel3.Controls.Add(this.chkDisableNoiseModeFlag, 0, 4);
 			this.tableLayoutPanel3.Controls.Add(this.chkSilenceTriangleHighFreq, 0, 0);
-			this.tableLayoutPanel3.Controls.Add(this.chkSwapDutyCycles, 0, 2);
+			this.tableLayoutPanel3.Controls.Add(this.chkSwapDutyCycles, 0, 3);
 			this.tableLayoutPanel3.Controls.Add(this.chkReduceDmcPopping, 0, 1);
 			this.tableLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tableLayoutPanel3.Location = new System.Drawing.Point(3, 3);
 			this.tableLayoutPanel3.Name = "tableLayoutPanel3";
-			this.tableLayoutPanel3.RowCount = 5;
-			this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this.tableLayoutPanel3.RowCount = 6;
+			this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
+			this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
+			this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
+			this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
+			this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
 			this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this.tableLayoutPanel3.Size = new System.Drawing.Size(463, 341);
 			this.tableLayoutPanel3.TabIndex = 1;
@@ -1759,9 +1762,9 @@ namespace Mesen.GUI.Forms.Config
 			// 
 			this.chkDisableNoiseModeFlag.Checked = false;
 			this.chkDisableNoiseModeFlag.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.chkDisableNoiseModeFlag.Location = new System.Drawing.Point(0, 70);
+			this.chkDisableNoiseModeFlag.Location = new System.Drawing.Point(0, 96);
 			this.chkDisableNoiseModeFlag.Name = "chkDisableNoiseModeFlag";
-			this.chkDisableNoiseModeFlag.Size = new System.Drawing.Size(463, 23);
+			this.chkDisableNoiseModeFlag.Size = new System.Drawing.Size(463, 24);
 			this.chkDisableNoiseModeFlag.TabIndex = 3;
 			this.chkDisableNoiseModeFlag.Text = "Disable noise channel mode flag";
 			// 
@@ -1778,7 +1781,7 @@ namespace Mesen.GUI.Forms.Config
 			// 
 			this.chkSwapDutyCycles.Checked = false;
 			this.chkSwapDutyCycles.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.chkSwapDutyCycles.Location = new System.Drawing.Point(0, 46);
+			this.chkSwapDutyCycles.Location = new System.Drawing.Point(0, 72);
 			this.chkSwapDutyCycles.Name = "chkSwapDutyCycles";
 			this.chkSwapDutyCycles.Size = new System.Drawing.Size(463, 24);
 			this.chkSwapDutyCycles.TabIndex = 0;
@@ -1788,13 +1791,23 @@ namespace Mesen.GUI.Forms.Config
 			// 
 			this.chkReduceDmcPopping.AutoSize = true;
 			this.chkReduceDmcPopping.CheckAlign = System.Drawing.ContentAlignment.TopLeft;
-			this.chkReduceDmcPopping.Location = new System.Drawing.Point(3, 26);
+			this.chkReduceDmcPopping.Location = new System.Drawing.Point(3, 27);
 			this.chkReduceDmcPopping.Name = "chkReduceDmcPopping";
 			this.chkReduceDmcPopping.Size = new System.Drawing.Size(243, 17);
 			this.chkReduceDmcPopping.TabIndex = 2;
 			this.chkReduceDmcPopping.Text = "Reduce popping sounds on the DMC channel";
 			this.chkReduceDmcPopping.TextAlign = System.Drawing.ContentAlignment.TopLeft;
 			this.chkReduceDmcPopping.UseVisualStyleBackColor = true;
+			// 
+			// chkDisableDynamicSampleRate
+			// 
+			this.chkDisableDynamicSampleRate.Checked = false;
+			this.chkDisableDynamicSampleRate.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.chkDisableDynamicSampleRate.Location = new System.Drawing.Point(0, 48);
+			this.chkDisableDynamicSampleRate.Name = "chkDisableDynamicSampleRate";
+			this.chkDisableDynamicSampleRate.Size = new System.Drawing.Size(463, 24);
+			this.chkDisableDynamicSampleRate.TabIndex = 4;
+			this.chkDisableDynamicSampleRate.Text = "Disable dynamic sample rate";
 			// 
 			// frmAudioConfig
 			// 
@@ -1964,5 +1977,6 @@ namespace Mesen.GUI.Forms.Config
 		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel8;
 		private ctrlHorizontalTrackbar trkVolumeReduction;
 		private System.Windows.Forms.CheckBox chkMuteSoundInBackground;
+		private ctrlRiskyOption chkDisableDynamicSampleRate;
 	}
 }

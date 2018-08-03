@@ -19,6 +19,8 @@ enum EmulationFlags : uint64_t
 	UseHdPacks = 0x20,
 	HasFourScore = 0x40,
 
+	DisableDynamicSampleRate = 0x80,
+
 	PauseOnMovieEnd = 0x0100,
 	PauseWhenInBackground = 0x0200,
 	AllowBackgroundInput = 0x0400,

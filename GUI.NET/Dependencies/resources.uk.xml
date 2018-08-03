@@ -122,6 +122,7 @@
 		<Form ID="frmAudioConfig" Title="Звук">
 			<Control ID="tpgGeneral">Загальнi</Control>
 			<Control ID="tpgAdvanced">Розширені</Control>
+			<Control ID="chkDisableDynamicSampleRate">Disable dynamic sample rate</Control>
 			<Control ID="chkSwapDutyCycles">Переплутана шпаруватість (як на старих клонах)</Control>
 			<Control ID="chkSilenceTriangleHighFreq">Заглушати ультразвукові частоти на каналі triangle (зменшує "трiск")</Control>
 			<Control ID="chkReduceDmcPopping">Зменшити клацання на каналі DMC</Control>

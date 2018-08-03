@@ -1398,8 +1398,8 @@ void Console::DisplayDebugInformation(Timer &clockTimer, Timer &lastFrameTimer, 
 	
 	int startFrame = _ppu->GetFrameCount();
 
-	_debugHud->DrawRectangle(8, 8, 115, 40, 0x40000000, true, 1, startFrame);
-	_debugHud->DrawRectangle(8, 8, 115, 40, 0xFFFFFF, false, 1, startFrame);
+	_debugHud->DrawRectangle(8, 8, 115, 49, 0x40000000, true, 1, startFrame);
+	_debugHud->DrawRectangle(8, 8, 115, 49, 0xFFFFFF, false, 1, startFrame);
 
 	_debugHud->DrawString(10, 10, "Audio Stats", 0xFFFFFF, 0xFF000000, 1, startFrame);
 	_debugHud->DrawString(10, 21, "Latency: ", 0xFFFFFF, 0xFF000000, 1, startFrame);
@@ -1411,6 +1411,7 @@ void Console::DisplayDebugInformation(Timer &clockTimer, Timer &lastFrameTimer, 
 
 	_debugHud->DrawString(10, 30, "Underruns: " + std::to_string(stats.BufferUnderrunEventCount), 0xFFFFFF, 0xFF000000, 1, startFrame);
 	_debugHud->DrawString(10, 39, "Buffer Size: " + std::to_string(stats.BufferSize / 1024) + "kb", 0xFFFFFF, 0xFF000000, 1, startFrame);
+	_debugHud->DrawString(10, 48, "Rate: " + std::to_string((uint32_t)(_settings->GetSampleRate() * _soundMixer->GetRateAdjustment())) + "Hz", 0xFFFFFF, 0xFF000000, 1, startFrame);
 
 	_debugHud->DrawRectangle(136, 8, 115, 58, 0x40000000, true, 1, startFrame);
 	_debugHud->DrawRectangle(136, 8, 115, 58, 0xFFFFFF, false, 1, startFrame);

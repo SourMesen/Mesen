@@ -420,26 +420,57 @@ void SoundMixer::ProcessEndOfFrame()
 	}
 }
 
+double SoundMixer::GetRateAdjustment()
+{
+	return _rateAdjustment;
+}
+
 double SoundMixer::GetTargetRateAdjustment()
 {
 	bool isRecording = _waveRecorder || _console->GetVideoRenderer()->IsRecording();
-	if(!isRecording) {
+	if(!isRecording && !_settings->CheckFlag(EmulationFlags::DisableDynamicSampleRate)) {
 		//Don't deviate from selected sample rate while recording
 		//TODO: Have 2 output streams (one for recording, one for the speakers)
 		AudioStatistics stats = GetStatistics();
 
 		if(stats.AverageLatency > 0 && _settings->GetEmulationSpeed() == 100) {
-			int32_t requestedLatency = (int32_t)_settings->GetAudioLatency();
+			//Try to stay within +/- 3ms of requested latency
+			constexpr int32_t maxGap = 3;
+			constexpr int32_t maxSubAdjustment = 3600;
 
-			//Try to stay within +/- 2ms of requested latency
-			if(stats.AverageLatency > requestedLatency + 2) {
-				return 0.995;
-			} else if(stats.AverageLatency < requestedLatency - 2) {
-				return 1.005;
+			int32_t requestedLatency = (int32_t)_settings->GetAudioLatency();
+			double latencyGap = stats.AverageLatency - requestedLatency;
+			double adjustment = std::min(0.0025, (std::ceil((std::abs(latencyGap) - maxGap) * 8)) * 0.00003125);
+
+			if(latencyGap < 0 && _underTarget < maxSubAdjustment) {
+				_underTarget++;
+			} else if(latencyGap > 0 && _underTarget > -maxSubAdjustment) {
+				_underTarget--;
 			}
+
+			//For every ~1 second spent under/over target latency, further adjust rate (GetTargetRate is called approx. 3x per frame) 
+			//This should slowly get us closer to the actual output rate of the sound card
+			double subAdjustment = 0.00003125 * _underTarget / 180;
+
+			if(adjustment > 0) {
+				if(latencyGap > maxGap) {
+					_rateAdjustment = 1 - adjustment + subAdjustment;
+				} else if(latencyGap < -maxGap) {
+					_rateAdjustment = 1 + adjustment + subAdjustment;
+				}
+			} else if(std::abs(latencyGap) < 1) {
+				//Restore normal rate once we get within +/- 1ms
+				_rateAdjustment = 1.0 + subAdjustment;
+			}
+		} else {
+			_underTarget = 0;
+			_rateAdjustment = 1.0;
 		}
+	} else {
+		_underTarget = 0;
+		_rateAdjustment = 1.0;
 	}
-	return 1.0;
+	return _rateAdjustment;
 }
 
 void SoundMixer::UpdateTargetSampleRate()

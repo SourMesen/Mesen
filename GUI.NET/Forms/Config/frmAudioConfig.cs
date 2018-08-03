@@ -60,6 +60,8 @@ namespace Mesen.GUI.Forms.Config
 			AddBinding("SampleRate", cboSampleRate);
 			AddBinding("AudioDevice", cboAudioDevice);
 
+			AddBinding("DisableDynamicSampleRate", chkDisableDynamicSampleRate);
+
 			AddBinding("EnableEqualizer", chkEnableEqualizer);
 			//TODO: Uncomment when equalizer presets are implemented
 			//AddBinding("EqualizerPreset", cboEqualizerPreset);

@@ -122,6 +122,7 @@
 		<Form ID="frmAudioConfig" Title="Opciones de audio">
 			<Control ID="tpgGeneral">General</Control>
 			<Control ID="tpgAdvanced">Avanzado</Control>
+			<Control ID="chkDisableDynamicSampleRate">Disable dynamic sample rate</Control>
 			<Control ID="chkSwapDutyCycles">Invertir ciclos de canales cuadrados (imita viejos clones)</Control>
 			<Control ID="chkSilenceTriangleHighFreq">Cortar el canal de triángulo a frecuencias ultrasónicas (reduce los "chasquidos")</Control>
 			<Control ID="chkReduceDmcPopping">Reducir los "chasquidos" en el canal DMC</Control>

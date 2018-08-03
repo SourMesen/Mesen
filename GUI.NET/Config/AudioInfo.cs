@@ -7,6 +7,8 @@ namespace Mesen.GUI.Config
 		public string AudioDevice = "";
 		public bool EnableAudio = true;
 
+		public bool DisableDynamicSampleRate = false;
+
 		[MinMax(15, 300)] public UInt32 AudioLatency = 60;
 
 		[MinMax(0, 100)] public UInt32 MasterVolume = 25;
@@ -175,6 +177,7 @@ namespace Mesen.GUI.Config
 			InteropEmu.SetFlag(EmulationFlags.ReduceSoundInBackground, audioInfo.ReduceSoundInBackground);
 			InteropEmu.SetFlag(EmulationFlags.ReduceSoundInFastForward, audioInfo.ReduceSoundInFastForward);
 
+			InteropEmu.SetFlag(EmulationFlags.DisableDynamicSampleRate, audioInfo.DisableDynamicSampleRate);
 			InteropEmu.SetFlag(EmulationFlags.SwapDutyCycles, audioInfo.SwapDutyCycles);
 			InteropEmu.SetFlag(EmulationFlags.SilenceTriangleHighFreq, audioInfo.SilenceTriangleHighFreq);
 			InteropEmu.SetFlag(EmulationFlags.ReduceDmcPopping, audioInfo.ReduceDmcPopping);
@@ -203,5 +206,13 @@ namespace Mesen.GUI.Config
 		Custom = 0,
 		TwinFamicom,
 		TwinFamicom60
+	}
+
+	public enum DynamicRateAdjustmentType
+	{
+		None = 0,
+		Low = 1,
+		Medium = 2,
+		High = 3
 	}
 }
