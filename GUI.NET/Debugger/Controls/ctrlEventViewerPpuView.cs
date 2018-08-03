@@ -184,14 +184,14 @@ namespace Mesen.GUI.Debugger.Controls
 
 				if(_lastPos.X >= 0) {
 					string location = _lastPos.X / 2 + ", " + ((_lastPos.Y / 2) - 1);
-					int x = _lastPos.X + 15;
-					int y = _lastPos.Y + 5;
 					SizeF size = g.MeasureString(location, _overlayFont);
+					int x = _lastPos.X + 15;
+					int y = _lastPos.Y - (int)size.Height - 5;
 					if(x + size.Width > _displayBitmap.Width - 5) {
 						x -= (int)size.Width + 20;
 					}
-					if(y + size.Height > _displayBitmap.Height - 5) {
-						y -= (int)size.Height + 10;
+					if(y < size.Height + 5) {
+						y = _lastPos.Y + 5;
 					}
 
 					g.DrawOutlinedString(location, _overlayFont, Brushes.White, Brushes.Black, x, y);

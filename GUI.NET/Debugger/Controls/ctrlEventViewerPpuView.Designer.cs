@@ -50,6 +50,7 @@
 			// tmrOverlay
 			// 
 			this.tmrOverlay.Interval = 50;
+			this.tmrOverlay.Tick += new System.EventHandler(this.tmrOverlay_Tick);
 			// 
 			// ctrlEventViewerPpuView
 			// 
