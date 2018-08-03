@@ -141,8 +141,10 @@ void NtscFilter::GenerateArgbFrame(uint32_t *ntscBuffer)
 					out++;
 				}
 			} else {
-				memcpy(out, in + overscanLeft, rowWidthOverscan * sizeof(uint32_t));
-				memcpy(out + rowWidthOverscan, in + overscanLeft, rowWidthOverscan * sizeof(uint32_t));
+				for(int i = 0; i < rowWidthOverscan; i++) {
+					out[i] = 0xFF000000 | in[overscanLeft+i];
+				}
+				memcpy(out + rowWidthOverscan, out, rowWidthOverscan * sizeof(uint32_t));
 			}
 		}
 	}
