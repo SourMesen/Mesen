@@ -135,6 +135,10 @@
 			<Control ID="radStereoPanning">Panning</Control>
 			<Control ID="lblStereoDelayMs">ms</Control>
 			<Control ID="lblStereoPanningAngle">(Angle in degrees)</Control>
+			<Control ID="radStereoCombFilter">Comb Filter</Control>
+			<Control ID="lblStereoCombFilterMs">ms</Control>
+			<Control ID="lblStereoCombFilterDelay">Delay:</Control>
+			<Control ID="lblStereoCombFilterStrength">Strength:</Control>
 			<Control ID="chkCrossFeedEnabled">Enable Crossfeed:</Control>
 			<Control ID="grpReverb">Reverb</Control>
 			<Control ID="chkReverbEnabled">Enable Reverb</Control>

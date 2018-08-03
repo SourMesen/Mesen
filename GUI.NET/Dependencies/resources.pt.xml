@@ -134,6 +134,10 @@
 			<Control ID="radStereoPanning">Panorâmico</Control>
 			<Control ID="lblStereoDelayMs">ms</Control>
 			<Control ID="lblStereoPanningAngle">(Ângulo em graus)</Control>
+			<Control ID="radStereoCombFilter">Comb Filter</Control>
+			<Control ID="lblStereoCombFilterMs">ms</Control>
+			<Control ID="lblStereoCombFilterDelay">Atraso:</Control>
+			<Control ID="lblStereoCombFilterStrength">Força:</Control>
 			<Control ID="chkCrossFeedEnabled">Ativar mistura de canais</Control>
 			<Control ID="grpReverb">Ressonância</Control>
 			<Control ID="chkReverbEnabled">Ativar a ressonância</Control>

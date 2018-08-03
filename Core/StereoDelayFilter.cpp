@@ -1,4 +1,5 @@
 #include "stdafx.h"
+#include <algorithm>
 #include "StereoDelayFilter.h"
 
 void StereoDelayFilter::ApplyFilter(int16_t* stereoBuffer, size_t sampleCount, uint32_t sampleRate, int32_t stereoDelay)

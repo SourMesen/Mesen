@@ -542,6 +542,20 @@ enum class StereoFilter
 	None = 0,
 	Delay = 1,
 	Panning = 2,
+	CombFilter = 3,
+};
+
+struct AudioFilterSettings
+{
+	StereoFilter StereoFilter = StereoFilter::None;
+	double Angle = 0;
+	int32_t Delay = 0;
+	int32_t Strength = 0;
+
+	double ReverbDelay = 0;
+	double ReverbStrength = 0;
+
+	int32_t CrossFadeRatio = 0;
 };
 
 enum class InputDisplayPosition
@@ -618,12 +632,7 @@ private:
 	double _masterVolume = 1.0;
 	double _volumeReduction = 0.75;
 	uint32_t _sampleRate = 48000;
-	StereoFilter _stereoFilter = StereoFilter::None;
-	int32_t _stereoDelay = 0;
-	double _stereoAngle = 0;
-	double _reverbStrength = 0;
-	double _reverbDelay = 0;
-	uint32_t _crossFeedRatio = 0;
+	AudioFilterSettings _audioFilterSettings;
 		
 	NesModel _model = NesModel::Auto;
 	PpuModel _ppuModel = PpuModel::Ppu2C02;
@@ -870,60 +879,15 @@ public:
 		_audioSettingsChanged = true;
 	}
 
-	void SetStereoFilter(StereoFilter stereoFilter)
+	void SetAudioFilterSettings(AudioFilterSettings settings)
 	{
-		_stereoFilter = stereoFilter;
+		_audioFilterSettings = settings;
 		_audioSettingsChanged = true;
 	}
 
-	void SetStereoDelay(int32_t delay)
+	AudioFilterSettings GetAudioFilterSettings()
 	{
-		_stereoDelay = delay;
-		_audioSettingsChanged = true;
-	}
-
-	void SetStereoPanningAngle(double angle)
-	{
-		_stereoAngle = angle;
-		_audioSettingsChanged = true;
-	}
-
-	void SetReverbParameters(double strength, double delay)
-	{
-		_reverbStrength = strength;
-		_reverbDelay = delay;
-		_audioSettingsChanged = true;
-	}
-
-	StereoFilter GetStereoFilter()
-	{
-		return _stereoFilter;
-	}
-
-	int32_t GetStereoDelay()
-	{
-		return _stereoDelay;
-	}
-
-	double GetStereoPanningAngle()
-	{
-		return _stereoAngle;
-	}
-
-	double GetReverbStrength()
-	{
-		return _reverbStrength;
-	}
-
-	double GetReverbDelay()
-	{
-		return _reverbDelay;
-	}
-
-	void SetCrossFeedRatio(uint32_t ratio)
-	{
-		_crossFeedRatio = ratio;
-		_audioSettingsChanged = true;
+		return _audioFilterSettings;
 	}
 
 	bool NeedAudioSettingsUpdate()
@@ -934,12 +898,7 @@ public:
 		}
 		return value;
 	}
-
-	uint32_t GetCrossFeedRatio()
-	{
-		return _crossFeedRatio;
-	}
-
+	
 	//0: No limit, Number: % of default speed (50/60fps)
 	void SetEmulationSpeed(uint32_t emulationSpeed, bool displaySpeed = false)
 	{

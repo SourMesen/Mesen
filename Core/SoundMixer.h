@@ -8,6 +8,7 @@
 #include "Snapshotable.h"
 #include "StereoPanningFilter.h"
 #include "StereoDelayFilter.h"
+#include "StereoCombFilter.h"
 #include "ReverbFilter.h"
 #include "CrossFeedFilter.h"
 
@@ -47,6 +48,7 @@ private:
 	LowPassFilter _lowPassFilter;
 	StereoPanningFilter _stereoPanning;
 	StereoDelayFilter _stereoDelay;
+	StereoCombFilter _stereoCombFilter;
 	ReverbFilter _reverbFilter;
 
 	int16_t _previousOutputLeft = 0;

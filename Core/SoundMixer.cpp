@@ -142,20 +142,23 @@ void SoundMixer::PlayAudioBuffer(uint32_t time)
 		}
 	}
 
-	if(_settings->GetReverbStrength() > 0) {
-		_reverbFilter.ApplyFilter(_outputBuffer, sampleCount, _sampleRate, _settings->GetReverbStrength(), _settings->GetReverbDelay());
+	AudioFilterSettings filterSettings = _settings->GetAudioFilterSettings();
+
+	if(filterSettings.ReverbStrength > 0) {
+		_reverbFilter.ApplyFilter(_outputBuffer, sampleCount, _sampleRate, filterSettings.ReverbStrength, filterSettings.ReverbDelay);
 	} else {
 		_reverbFilter.ResetFilter();
 	}
 
-	switch(_settings->GetStereoFilter()) {
+	switch(filterSettings.StereoFilter) {
 		case StereoFilter::None: break;
-		case StereoFilter::Delay: _stereoDelay.ApplyFilter(_outputBuffer, sampleCount, _sampleRate, _settings->GetStereoDelay()); break;
-		case StereoFilter::Panning: _stereoPanning.ApplyFilter(_outputBuffer, sampleCount, _settings->GetStereoPanningAngle()); break;
+		case StereoFilter::Delay: _stereoDelay.ApplyFilter(_outputBuffer, sampleCount, _sampleRate, filterSettings.Delay); break;
+		case StereoFilter::Panning: _stereoPanning.ApplyFilter(_outputBuffer, sampleCount, filterSettings.Angle); break;
+		case StereoFilter::CombFilter: _stereoCombFilter.ApplyFilter(_outputBuffer, sampleCount, _sampleRate, filterSettings.Delay, filterSettings.Strength); break;
 	}
 
-	if(_settings->GetCrossFeedRatio() > 0) {
-		_crossFeedFilter.ApplyFilter(_outputBuffer, sampleCount, _settings->GetCrossFeedRatio());
+	if(filterSettings.CrossFadeRatio > 0) {
+		_crossFeedFilter.ApplyFilter(_outputBuffer, sampleCount, filterSettings.CrossFadeRatio);
 	}
 
 	if(rewindManager && rewindManager->SendAudio(_outputBuffer, (uint32_t)sampleCount, _sampleRate)) {

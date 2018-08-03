@@ -112,6 +112,7 @@ namespace Mesen.GUI.Forms.Config
 			this.tableLayoutPanel4 = new System.Windows.Forms.TableLayoutPanel();
 			this.grpStereo = new System.Windows.Forms.GroupBox();
 			this.tlpStereoFilter = new System.Windows.Forms.TableLayoutPanel();
+			this.radStereoCombFilter = new System.Windows.Forms.RadioButton();
 			this.lblStereoDelayMs = new System.Windows.Forms.Label();
 			this.lblStereoPanningAngle = new System.Windows.Forms.Label();
 			this.radStereoDisabled = new System.Windows.Forms.RadioButton();
@@ -119,6 +120,13 @@ namespace Mesen.GUI.Forms.Config
 			this.radStereoPanning = new System.Windows.Forms.RadioButton();
 			this.nudStereoDelay = new Mesen.GUI.Controls.MesenNumericUpDown();
 			this.nudStereoPanning = new Mesen.GUI.Controls.MesenNumericUpDown();
+			this.tableLayoutPanel9 = new System.Windows.Forms.TableLayoutPanel();
+			this.nudStereoCombFilterStrength = new Mesen.GUI.Controls.MesenNumericUpDown();
+			this.lblStereoCombFilterMs = new System.Windows.Forms.Label();
+			this.nudStereoCombFilterDelay = new Mesen.GUI.Controls.MesenNumericUpDown();
+			this.lblStereoCombFilterDelay = new System.Windows.Forms.Label();
+			this.lblStereoCombFilterStrength = new System.Windows.Forms.Label();
+			this.lblCombFilterPercent = new System.Windows.Forms.Label();
 			this.grpReverb = new System.Windows.Forms.GroupBox();
 			this.tableLayoutPanel5 = new System.Windows.Forms.TableLayoutPanel();
 			this.chkReverbEnabled = new System.Windows.Forms.CheckBox();
@@ -132,11 +140,11 @@ namespace Mesen.GUI.Forms.Config
 			this.lblCrossFeedRatio = new System.Windows.Forms.Label();
 			this.tpgAdvanced = new System.Windows.Forms.TabPage();
 			this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
+			this.chkDisableDynamicSampleRate = new Mesen.GUI.Controls.ctrlRiskyOption();
 			this.chkDisableNoiseModeFlag = new Mesen.GUI.Controls.ctrlRiskyOption();
 			this.chkSilenceTriangleHighFreq = new System.Windows.Forms.CheckBox();
 			this.chkSwapDutyCycles = new Mesen.GUI.Controls.ctrlRiskyOption();
 			this.chkReduceDmcPopping = new System.Windows.Forms.CheckBox();
-			this.chkDisableDynamicSampleRate = new Mesen.GUI.Controls.ctrlRiskyOption();
 			this.baseConfigPanel.SuspendLayout();
 			this.grpVolume.SuspendLayout();
 			this.tableLayoutPanel1.SuspendLayout();
@@ -158,6 +166,7 @@ namespace Mesen.GUI.Forms.Config
 			this.tableLayoutPanel4.SuspendLayout();
 			this.grpStereo.SuspendLayout();
 			this.tlpStereoFilter.SuspendLayout();
+			this.tableLayoutPanel9.SuspendLayout();
 			this.grpReverb.SuspendLayout();
 			this.tableLayoutPanel5.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.trkReverbDelay)).BeginInit();
@@ -1425,7 +1434,7 @@ namespace Mesen.GUI.Forms.Config
 			this.grpStereo.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.grpStereo.Location = new System.Drawing.Point(3, 3);
 			this.grpStereo.Name = "grpStereo";
-			this.grpStereo.Size = new System.Drawing.Size(457, 95);
+			this.grpStereo.Size = new System.Drawing.Size(457, 115);
 			this.grpStereo.TabIndex = 0;
 			this.grpStereo.TabStop = false;
 			this.grpStereo.Text = "Stereo";
@@ -1436,6 +1445,7 @@ namespace Mesen.GUI.Forms.Config
 			this.tlpStereoFilter.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
 			this.tlpStereoFilter.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
 			this.tlpStereoFilter.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+			this.tlpStereoFilter.Controls.Add(this.radStereoCombFilter, 0, 3);
 			this.tlpStereoFilter.Controls.Add(this.lblStereoDelayMs, 2, 1);
 			this.tlpStereoFilter.Controls.Add(this.lblStereoPanningAngle, 2, 2);
 			this.tlpStereoFilter.Controls.Add(this.radStereoDisabled, 0, 0);
@@ -1443,22 +1453,36 @@ namespace Mesen.GUI.Forms.Config
 			this.tlpStereoFilter.Controls.Add(this.radStereoPanning, 0, 2);
 			this.tlpStereoFilter.Controls.Add(this.nudStereoDelay, 1, 1);
 			this.tlpStereoFilter.Controls.Add(this.nudStereoPanning, 1, 2);
+			this.tlpStereoFilter.Controls.Add(this.tableLayoutPanel9, 1, 3);
 			this.tlpStereoFilter.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tlpStereoFilter.Location = new System.Drawing.Point(3, 16);
 			this.tlpStereoFilter.Name = "tlpStereoFilter";
-			this.tlpStereoFilter.RowCount = 4;
+			this.tlpStereoFilter.RowCount = 5;
+			this.tlpStereoFilter.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tlpStereoFilter.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tlpStereoFilter.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tlpStereoFilter.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tlpStereoFilter.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tlpStereoFilter.Size = new System.Drawing.Size(451, 76);
+			this.tlpStereoFilter.Size = new System.Drawing.Size(451, 96);
 			this.tlpStereoFilter.TabIndex = 0;
+			// 
+			// radStereoCombFilter
+			// 
+			this.radStereoCombFilter.AutoSize = true;
+			this.radStereoCombFilter.Location = new System.Drawing.Point(3, 72);
+			this.radStereoCombFilter.Name = "radStereoCombFilter";
+			this.radStereoCombFilter.Size = new System.Drawing.Size(77, 17);
+			this.radStereoCombFilter.TabIndex = 4;
+			this.radStereoCombFilter.TabStop = true;
+			this.radStereoCombFilter.Tag = "Panning";
+			this.radStereoCombFilter.Text = "Comb Filter";
+			this.radStereoCombFilter.UseVisualStyleBackColor = true;
 			// 
 			// lblStereoDelayMs
 			// 
 			this.lblStereoDelayMs.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.lblStereoDelayMs.AutoSize = true;
-			this.lblStereoDelayMs.Location = new System.Drawing.Point(120, 28);
+			this.lblStereoDelayMs.Location = new System.Drawing.Point(131, 28);
 			this.lblStereoDelayMs.Name = "lblStereoDelayMs";
 			this.lblStereoDelayMs.Size = new System.Drawing.Size(20, 13);
 			this.lblStereoDelayMs.TabIndex = 1;
@@ -1468,7 +1492,7 @@ namespace Mesen.GUI.Forms.Config
 			// 
 			this.lblStereoPanningAngle.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.lblStereoPanningAngle.AutoSize = true;
-			this.lblStereoPanningAngle.Location = new System.Drawing.Point(120, 51);
+			this.lblStereoPanningAngle.Location = new System.Drawing.Point(131, 51);
 			this.lblStereoPanningAngle.Name = "lblStereoPanningAngle";
 			this.lblStereoPanningAngle.Size = new System.Drawing.Size(92, 13);
 			this.lblStereoPanningAngle.TabIndex = 1;
@@ -1520,7 +1544,7 @@ namespace Mesen.GUI.Forms.Config
             0,
             0,
             0});
-			this.nudStereoDelay.Location = new System.Drawing.Point(72, 24);
+			this.nudStereoDelay.Location = new System.Drawing.Point(83, 24);
 			this.nudStereoDelay.Margin = new System.Windows.Forms.Padding(0);
 			this.nudStereoDelay.Maximum = new decimal(new int[] {
             100,
@@ -1552,7 +1576,7 @@ namespace Mesen.GUI.Forms.Config
             0,
             0,
             0});
-			this.nudStereoPanning.Location = new System.Drawing.Point(72, 47);
+			this.nudStereoPanning.Location = new System.Drawing.Point(83, 47);
 			this.nudStereoPanning.Margin = new System.Windows.Forms.Padding(0);
 			this.nudStereoPanning.Maximum = new decimal(new int[] {
             180,
@@ -1575,11 +1599,142 @@ namespace Mesen.GUI.Forms.Config
             0,
             0});
 			// 
+			// tableLayoutPanel9
+			// 
+			this.tableLayoutPanel9.ColumnCount = 7;
+			this.tlpStereoFilter.SetColumnSpan(this.tableLayoutPanel9, 2);
+			this.tableLayoutPanel9.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+			this.tableLayoutPanel9.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+			this.tableLayoutPanel9.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+			this.tableLayoutPanel9.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+			this.tableLayoutPanel9.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+			this.tableLayoutPanel9.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+			this.tableLayoutPanel9.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+			this.tableLayoutPanel9.Controls.Add(this.nudStereoCombFilterStrength, 4, 0);
+			this.tableLayoutPanel9.Controls.Add(this.lblStereoCombFilterMs, 2, 0);
+			this.tableLayoutPanel9.Controls.Add(this.nudStereoCombFilterDelay, 1, 0);
+			this.tableLayoutPanel9.Controls.Add(this.lblStereoCombFilterDelay, 0, 0);
+			this.tableLayoutPanel9.Controls.Add(this.lblStereoCombFilterStrength, 3, 0);
+			this.tableLayoutPanel9.Controls.Add(this.lblCombFilterPercent, 5, 0);
+			this.tableLayoutPanel9.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.tableLayoutPanel9.Location = new System.Drawing.Point(83, 69);
+			this.tableLayoutPanel9.Margin = new System.Windows.Forms.Padding(0);
+			this.tableLayoutPanel9.Name = "tableLayoutPanel9";
+			this.tableLayoutPanel9.RowCount = 1;
+			this.tableLayoutPanel9.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+			this.tableLayoutPanel9.Size = new System.Drawing.Size(368, 23);
+			this.tableLayoutPanel9.TabIndex = 5;
+			// 
+			// nudStereoCombFilterStrength
+			// 
+			this.nudStereoCombFilterStrength.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.nudStereoCombFilterStrength.DecimalPlaces = 0;
+			this.nudStereoCombFilterStrength.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+			this.nudStereoCombFilterStrength.Location = new System.Drawing.Point(187, 1);
+			this.nudStereoCombFilterStrength.Margin = new System.Windows.Forms.Padding(0);
+			this.nudStereoCombFilterStrength.Maximum = new decimal(new int[] {
+            200,
+            0,
+            0,
+            0});
+			this.nudStereoCombFilterStrength.MaximumSize = new System.Drawing.Size(10000, 20);
+			this.nudStereoCombFilterStrength.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+			this.nudStereoCombFilterStrength.MinimumSize = new System.Drawing.Size(0, 21);
+			this.nudStereoCombFilterStrength.Name = "nudStereoCombFilterStrength";
+			this.nudStereoCombFilterStrength.Size = new System.Drawing.Size(45, 21);
+			this.nudStereoCombFilterStrength.TabIndex = 5;
+			this.nudStereoCombFilterStrength.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+			// 
+			// lblStereoCombFilterMs
+			// 
+			this.lblStereoCombFilterMs.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.lblStereoCombFilterMs.AutoSize = true;
+			this.lblStereoCombFilterMs.Location = new System.Drawing.Point(91, 5);
+			this.lblStereoCombFilterMs.Name = "lblStereoCombFilterMs";
+			this.lblStereoCombFilterMs.Size = new System.Drawing.Size(20, 13);
+			this.lblStereoCombFilterMs.TabIndex = 3;
+			this.lblStereoCombFilterMs.Text = "ms";
+			// 
+			// nudStereoCombFilterDelay
+			// 
+			this.nudStereoCombFilterDelay.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.nudStereoCombFilterDelay.DecimalPlaces = 0;
+			this.nudStereoCombFilterDelay.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+			this.nudStereoCombFilterDelay.Location = new System.Drawing.Point(43, 1);
+			this.nudStereoCombFilterDelay.Margin = new System.Windows.Forms.Padding(0);
+			this.nudStereoCombFilterDelay.Maximum = new decimal(new int[] {
+            100,
+            0,
+            0,
+            0});
+			this.nudStereoCombFilterDelay.MaximumSize = new System.Drawing.Size(10000, 20);
+			this.nudStereoCombFilterDelay.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+			this.nudStereoCombFilterDelay.MinimumSize = new System.Drawing.Size(0, 21);
+			this.nudStereoCombFilterDelay.Name = "nudStereoCombFilterDelay";
+			this.nudStereoCombFilterDelay.Size = new System.Drawing.Size(45, 21);
+			this.nudStereoCombFilterDelay.TabIndex = 2;
+			this.nudStereoCombFilterDelay.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+			// 
+			// lblStereoCombFilterDelay
+			// 
+			this.lblStereoCombFilterDelay.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.lblStereoCombFilterDelay.AutoSize = true;
+			this.lblStereoCombFilterDelay.Location = new System.Drawing.Point(3, 5);
+			this.lblStereoCombFilterDelay.Name = "lblStereoCombFilterDelay";
+			this.lblStereoCombFilterDelay.Size = new System.Drawing.Size(37, 13);
+			this.lblStereoCombFilterDelay.TabIndex = 0;
+			this.lblStereoCombFilterDelay.Text = "Delay:";
+			// 
+			// lblStereoCombFilterStrength
+			// 
+			this.lblStereoCombFilterStrength.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.lblStereoCombFilterStrength.AutoSize = true;
+			this.lblStereoCombFilterStrength.Location = new System.Drawing.Point(134, 5);
+			this.lblStereoCombFilterStrength.Margin = new System.Windows.Forms.Padding(20, 0, 3, 0);
+			this.lblStereoCombFilterStrength.Name = "lblStereoCombFilterStrength";
+			this.lblStereoCombFilterStrength.Size = new System.Drawing.Size(50, 13);
+			this.lblStereoCombFilterStrength.TabIndex = 4;
+			this.lblStereoCombFilterStrength.Text = "Strength:";
+			// 
+			// lblCombFilterPercent
+			// 
+			this.lblCombFilterPercent.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.lblCombFilterPercent.AutoSize = true;
+			this.lblCombFilterPercent.Location = new System.Drawing.Point(235, 5);
+			this.lblCombFilterPercent.Name = "lblCombFilterPercent";
+			this.lblCombFilterPercent.Size = new System.Drawing.Size(15, 13);
+			this.lblCombFilterPercent.TabIndex = 6;
+			this.lblCombFilterPercent.Text = "%";
+			// 
 			// grpReverb
 			// 
 			this.grpReverb.Controls.Add(this.tableLayoutPanel5);
 			this.grpReverb.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.grpReverb.Location = new System.Drawing.Point(3, 104);
+			this.grpReverb.Location = new System.Drawing.Point(3, 124);
 			this.grpReverb.Name = "grpReverb";
 			this.grpReverb.Size = new System.Drawing.Size(457, 106);
 			this.grpReverb.TabIndex = 1;
@@ -1665,7 +1820,7 @@ namespace Mesen.GUI.Forms.Config
 			this.flowLayoutPanel5.Controls.Add(this.nudCrossFeedRatio);
 			this.flowLayoutPanel5.Controls.Add(this.lblCrossFeedRatio);
 			this.flowLayoutPanel5.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.flowLayoutPanel5.Location = new System.Drawing.Point(6, 213);
+			this.flowLayoutPanel5.Location = new System.Drawing.Point(6, 233);
 			this.flowLayoutPanel5.Margin = new System.Windows.Forms.Padding(6, 0, 0, 0);
 			this.flowLayoutPanel5.Name = "flowLayoutPanel5";
 			this.flowLayoutPanel5.Size = new System.Drawing.Size(457, 25);
@@ -1758,6 +1913,16 @@ namespace Mesen.GUI.Forms.Config
 			this.tableLayoutPanel3.Size = new System.Drawing.Size(463, 341);
 			this.tableLayoutPanel3.TabIndex = 1;
 			// 
+			// chkDisableDynamicSampleRate
+			// 
+			this.chkDisableDynamicSampleRate.Checked = false;
+			this.chkDisableDynamicSampleRate.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.chkDisableDynamicSampleRate.Location = new System.Drawing.Point(0, 48);
+			this.chkDisableDynamicSampleRate.Name = "chkDisableDynamicSampleRate";
+			this.chkDisableDynamicSampleRate.Size = new System.Drawing.Size(463, 24);
+			this.chkDisableDynamicSampleRate.TabIndex = 4;
+			this.chkDisableDynamicSampleRate.Text = "Disable dynamic sample rate";
+			// 
 			// chkDisableNoiseModeFlag
 			// 
 			this.chkDisableNoiseModeFlag.Checked = false;
@@ -1798,16 +1963,6 @@ namespace Mesen.GUI.Forms.Config
 			this.chkReduceDmcPopping.Text = "Reduce popping sounds on the DMC channel";
 			this.chkReduceDmcPopping.TextAlign = System.Drawing.ContentAlignment.TopLeft;
 			this.chkReduceDmcPopping.UseVisualStyleBackColor = true;
-			// 
-			// chkDisableDynamicSampleRate
-			// 
-			this.chkDisableDynamicSampleRate.Checked = false;
-			this.chkDisableDynamicSampleRate.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.chkDisableDynamicSampleRate.Location = new System.Drawing.Point(0, 48);
-			this.chkDisableDynamicSampleRate.Name = "chkDisableDynamicSampleRate";
-			this.chkDisableDynamicSampleRate.Size = new System.Drawing.Size(463, 24);
-			this.chkDisableDynamicSampleRate.TabIndex = 4;
-			this.chkDisableDynamicSampleRate.Text = "Disable dynamic sample rate";
 			// 
 			// frmAudioConfig
 			// 
@@ -1854,6 +2009,8 @@ namespace Mesen.GUI.Forms.Config
 			this.grpStereo.ResumeLayout(false);
 			this.tlpStereoFilter.ResumeLayout(false);
 			this.tlpStereoFilter.PerformLayout();
+			this.tableLayoutPanel9.ResumeLayout(false);
+			this.tableLayoutPanel9.PerformLayout();
 			this.grpReverb.ResumeLayout(false);
 			this.tableLayoutPanel5.ResumeLayout(false);
 			this.tableLayoutPanel5.PerformLayout();
@@ -1978,5 +2135,13 @@ namespace Mesen.GUI.Forms.Config
 		private ctrlHorizontalTrackbar trkVolumeReduction;
 		private System.Windows.Forms.CheckBox chkMuteSoundInBackground;
 		private ctrlRiskyOption chkDisableDynamicSampleRate;
+		private System.Windows.Forms.RadioButton radStereoCombFilter;
+		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel9;
+		private MesenNumericUpDown nudStereoCombFilterStrength;
+		private System.Windows.Forms.Label lblStereoCombFilterMs;
+		private MesenNumericUpDown nudStereoCombFilterDelay;
+		private System.Windows.Forms.Label lblStereoCombFilterDelay;
+		private System.Windows.Forms.Label lblStereoCombFilterStrength;
+		private System.Windows.Forms.Label lblCombFilterPercent;
 	}
 }

@@ -49,9 +49,13 @@ namespace Mesen.GUI.Config
 		public InteropEmu.StereoFilter StereoFilter;
 		[MinMax(0, 100)] public Int32 StereoDelay = 15;
 		[MinMax(-180, 180)] public Int32 StereoPanningAngle = 15;
+		[MinMax(1, 100)] public Int32 StereoCombFilterDelay = 5;
+		[MinMax(1, 200)] public Int32 StereoCombFilterStrength = 100;
+		
 		public bool ReverbEnabled = false;
 		[MinMax(1, 10)] public UInt32 ReverbStrength = 5;
 		[MinMax(1, 30)] public UInt32 ReverbDelay = 10;
+
 		public bool CrossFeedEnabled = false;
 		[MinMax(0, 100)] public UInt32 CrossFeedRatio = 0;
 
@@ -183,21 +187,15 @@ namespace Mesen.GUI.Config
 			InteropEmu.SetFlag(EmulationFlags.ReduceDmcPopping, audioInfo.ReduceDmcPopping);
 			InteropEmu.SetFlag(EmulationFlags.DisableNoiseModeFlag, audioInfo.DisableNoiseModeFlag);
 
-			InteropEmu.SetStereoFilter(audioInfo.StereoFilter);
-			InteropEmu.SetStereoPanningAngle((double)audioInfo.StereoPanningAngle/180*Math.PI);
-			InteropEmu.SetStereoDelay(audioInfo.StereoDelay);
-
-			if(audioInfo.ReverbEnabled) {
-				InteropEmu.SetReverbParameters(audioInfo.ReverbStrength/10.0, audioInfo.ReverbDelay/10.0);
-			} else {
-				InteropEmu.SetReverbParameters(0, 0);
-			}
-
-			if(audioInfo.CrossFeedEnabled) {
-				InteropEmu.SetCrossFeedRatio(audioInfo.CrossFeedRatio);
-			} else {
-				InteropEmu.SetCrossFeedRatio(0);
-			}
+			InteropEmu.SetAudioFilterSettings(new InteropEmu.AudioFilterSettings() {
+				StereoFilter = audioInfo.StereoFilter,
+				Angle = (double)audioInfo.StereoPanningAngle / 180 * Math.PI,
+				Delay = audioInfo.StereoFilter == InteropEmu.StereoFilter.Delay ? audioInfo.StereoDelay : audioInfo.StereoCombFilterDelay,
+				Strength = audioInfo.StereoCombFilterStrength,
+				ReverbDelay = audioInfo.ReverbEnabled ? audioInfo.ReverbDelay / 10.0 : 0,
+				ReverbStrength = audioInfo.ReverbEnabled ? audioInfo.ReverbStrength / 10.0 : 0,
+				CrossFeedRatio = audioInfo.CrossFeedEnabled ? (int)audioInfo.CrossFeedRatio : 0
+			});
 		}
 	}
 

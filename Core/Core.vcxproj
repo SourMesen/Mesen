@@ -561,6 +561,7 @@
     <ClInclude Include="Sachen9602.h" />
     <ClInclude Include="ServerInformationMessage.h" />
     <ClInclude Include="FamicomBox.h" />
+    <ClInclude Include="StereoCombFilter.h" />
     <ClInclude Include="SystemActionManager.h" />
     <ClInclude Include="DatachBarcodeReader.h" />
     <ClInclude Include="DebugHud.h" />
@@ -1050,6 +1051,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='PGO Profile|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='PGO Optimize|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="StereoCombFilter.cpp" />
     <ClCompile Include="StereoDelayFilter.cpp" />
     <ClCompile Include="StereoPanningFilter.cpp" />
     <ClCompile Include="TraceLogger.cpp" />

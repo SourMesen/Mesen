@@ -134,6 +134,10 @@
 			<Control ID="radStereoPanning">Панорамирование</Control>
 			<Control ID="lblStereoDelayMs">мс</Control>
 			<Control ID="lblStereoPanningAngle">угол в градусах</Control>
+			<Control ID="radStereoCombFilter">Comb Filter</Control>
+			<Control ID="lblStereoCombFilterMs">мс</Control>
+			<Control ID="lblStereoCombFilterDelay">Задержка :</Control>
+			<Control ID="lblStereoCombFilterStrength">Сила :</Control>
 			<Control ID="chkCrossFeedEnabled">Enable Crossfeed:</Control>
 			<Control ID="grpReverb">Реверберация</Control>
 			<Control ID="chkReverbEnabled">Включена</Control>

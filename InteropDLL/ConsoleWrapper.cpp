@@ -607,11 +607,7 @@ namespace InteropEmu {
 		DllExport void __stdcall SetMasterVolume(double volume, double volumeReduction, ConsoleId consoleId) { GetConsoleById(consoleId)->GetSettings()->SetMasterVolume(volume, volumeReduction); }
 		DllExport void __stdcall SetSampleRate(uint32_t sampleRate) { _settings->SetSampleRate(sampleRate); }
 		DllExport void __stdcall SetAudioLatency(uint32_t msLatency) { _settings->SetAudioLatency(msLatency); }
-		DllExport void __stdcall SetStereoFilter(StereoFilter stereoFilter) { _settings->SetStereoFilter(stereoFilter); }
-		DllExport void __stdcall SetStereoDelay(int32_t delay) { _settings->SetStereoDelay(delay); }
-		DllExport void __stdcall SetStereoPanningAngle(double angle) { _settings->SetStereoPanningAngle(angle); }
-		DllExport void __stdcall SetReverbParameters(double strength, double delay) { _settings->SetReverbParameters(strength, delay); }
-		DllExport void __stdcall SetCrossFeedRatio(uint32_t ratio) { _settings->SetCrossFeedRatio(ratio); }
+		DllExport void __stdcall SetAudioFilterSettings(AudioFilterSettings settings) { _settings->SetAudioFilterSettings(settings); }
 
 		DllExport NesModel __stdcall GetNesModel() { return _console->GetModel(); }
 		DllExport void __stdcall SetNesModel(uint32_t model) { _settings->SetNesModel((NesModel)model); }

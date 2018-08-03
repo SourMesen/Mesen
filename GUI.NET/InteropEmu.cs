@@ -184,11 +184,7 @@ namespace Mesen.GUI
 		[DllImport(DLLPath)] public static extern void SetBandGain(int band, double gain);
 		[DllImport(DLLPath)] public static extern void SetSampleRate(UInt32 sampleRate);
 		[DllImport(DLLPath)] public static extern void SetAudioLatency(UInt32 msLatency);
-		[DllImport(DLLPath)] public static extern void SetStereoFilter(StereoFilter stereoFilter);
-		[DllImport(DLLPath)] public static extern void SetStereoDelay(Int32 delay);
-		[DllImport(DLLPath)] public static extern void SetStereoPanningAngle(double angle);
-		[DllImport(DLLPath)] public static extern void SetReverbParameters(double strength, double delay);
-		[DllImport(DLLPath)] public static extern void SetCrossFeedRatio(UInt32 ratio);
+		[DllImport(DLLPath)] public static extern void SetAudioFilterSettings(AudioFilterSettings settings);
 
 		[DllImport(DLLPath)] public static extern NesModel GetNesModel();
 		[DllImport(DLLPath)] public static extern void SetNesModel(NesModel model);
@@ -1051,6 +1047,20 @@ namespace Mesen.GUI
 			None = 0,
 			Delay = 1,
 			Panning = 2,
+			CombFilter = 3,
+		}
+
+		public struct AudioFilterSettings
+		{
+			public StereoFilter StereoFilter;
+			public double Angle;
+			public Int32 Delay;
+			public Int32 Strength;
+
+			public double ReverbDelay;
+			public double ReverbStrength;
+
+			public Int32 CrossFeedRatio;
 		}
 
 		public struct ScreenSize

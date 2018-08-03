@@ -101,10 +101,13 @@ namespace Mesen.GUI.Forms.Config
 			radStereoDisabled.Tag = InteropEmu.StereoFilter.None;
 			radStereoDelay.Tag = InteropEmu.StereoFilter.Delay;
 			radStereoPanning.Tag = InteropEmu.StereoFilter.Panning;
+			radStereoCombFilter.Tag = InteropEmu.StereoFilter.CombFilter;
 
 			AddBinding("StereoFilter", tlpStereoFilter);
 			AddBinding("StereoDelay", nudStereoDelay);
 			AddBinding("StereoPanningAngle", nudStereoPanning);
+			AddBinding("StereoCombFilterDelay", nudStereoCombFilterDelay);
+			AddBinding("StereoCombFilterStrength", nudStereoCombFilterStrength);			
 
 			AddBinding("ReverbEnabled", chkReverbEnabled);
 			AddBinding("ReverbDelay", trkReverbDelay);

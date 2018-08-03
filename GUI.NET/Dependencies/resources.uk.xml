@@ -134,6 +134,10 @@
 			<Control ID="radStereoPanning">Панорамування</Control>
 			<Control ID="lblStereoDelayMs">мс</Control>
 			<Control ID="lblStereoPanningAngle">кут в градусах</Control>
+			<Control ID="radStereoCombFilter">Comb Filter</Control>
+			<Control ID="lblStereoCombFilterMs">мс</Control>
+			<Control ID="lblStereoCombFilterDelay">Затримка :</Control>
+			<Control ID="lblStereoCombFilterStrength">Сила :</Control>
 			<Control ID="chkCrossFeedEnabled">Включити кільцювання:</Control>
 			<Control ID="grpReverb">Відлуння</Control>
 			<Control ID="chkReverbEnabled">Включена</Control>

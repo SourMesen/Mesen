@@ -1471,6 +1471,9 @@
     <ClInclude Include="HistoryViewer.h">
       <Filter>Rewinder</Filter>
     </ClInclude>
+    <ClInclude Include="StereoCombFilter.h">
+      <Filter>Nes\APU\Filters</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -1760,6 +1763,9 @@
     </ClCompile>
     <ClCompile Include="HistoryViewer.cpp">
       <Filter>Rewinder</Filter>
+    </ClCompile>
+    <ClCompile Include="StereoCombFilter.cpp">
+      <Filter>Nes\APU\Filters</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
