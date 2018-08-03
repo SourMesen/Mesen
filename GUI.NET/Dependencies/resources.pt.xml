@@ -46,7 +46,7 @@
 			<Control ID="mnuFullscreen">Tela cheia</Control>
 			<Control ID="mnuVideoFilter">Filtro de vídeo</Control>
 			<Control ID="mnuNoneFilter">Nenhum</Control>
-			<Control ID="mnuNtscFilter">NTSC</Control>
+			<Control ID="mnuNtscFilter">NTSC 2x (blargg)</Control>
 			<Control ID="mnuBilinearInterpolation">Usar interpolação bilinear</Control>
 			<Control ID="mnuAudioConfig">Áudio</Control>
 			<Control ID="mnuInput">Controles</Control>
@@ -962,10 +962,10 @@
 		</Enum>
 		<Enum ID="VideoFilterType">
 			<Value ID="None">Nenhum</Value>
-			<Value ID="NTSC">NTSC</Value>
-			<Value ID="BisqwitNtscQuarterRes">NTSC (Bisqwit) - 2x</Value>
-			<Value ID="BisqwitNtscHalfRes">NTSC (Bisqwit) - 4x</Value>
-			<Value ID="BisqwitNtsc">NTSC (Bisqwit) - 8x</Value>
+			<Value ID="NTSC">NTSC 2x (blargg)</Value>
+			<Value ID="BisqwitNtscQuarterRes">NTSC 2x (Bisqwit)</Value>
+			<Value ID="BisqwitNtscHalfRes">NTSC 4x (Bisqwit)</Value>
+			<Value ID="BisqwitNtsc">NTSC 8x (Bisqwit)</Value>
 			<Value ID="xBRZ2x">xBRZ 2x</Value>
 			<Value ID="xBRZ3x">xBRZ 3x</Value>
 			<Value ID="xBRZ4x">xBRZ 4x</Value>

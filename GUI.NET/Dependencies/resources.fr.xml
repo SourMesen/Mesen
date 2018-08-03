@@ -46,7 +46,7 @@
 			<Control ID="mnuFullscreen">Plein écran</Control>
 			<Control ID="mnuVideoFilter">Filtre vidéo</Control>
 			<Control ID="mnuNoneFilter">Aucun</Control>
-			<Control ID="mnuNtscFilter">NTSC</Control>
+			<Control ID="mnuNtscFilter">NTSC 2x (blargg)</Control>
 			<Control ID="mnuBilinearInterpolation">Utiliser l'interpolation bilinéaire</Control>
 			<Control ID="mnuAudioConfig">Audio</Control>
 			<Control ID="mnuInput">Manettes</Control>
@@ -975,10 +975,10 @@
 		</Enum>
 		<Enum ID="VideoFilterType">
 			<Value ID="None">Aucun</Value>
-			<Value ID="NTSC">NTSC</Value>
-			<Value ID="BisqwitNtscQuarterRes">NTSC (Bisqwit) - 2x</Value>
-			<Value ID="BisqwitNtscHalfRes">NTSC (Bisqwit) - 4x</Value>
-			<Value ID="BisqwitNtsc">NTSC (Bisqwit) - 8x</Value>
+			<Value ID="NTSC">NTSC 2x (blargg)</Value>
+			<Value ID="BisqwitNtscQuarterRes">NTSC 2x (Bisqwit)</Value>
+			<Value ID="BisqwitNtscHalfRes">NTSC 4x (Bisqwit)</Value>
+			<Value ID="BisqwitNtsc">NTSC 8x (Bisqwit)</Value>
 			<Value ID="xBRZ2x">xBRZ 2x</Value>
 			<Value ID="xBRZ3x">xBRZ 3x</Value>
 			<Value ID="xBRZ4x">xBRZ 4x</Value>
