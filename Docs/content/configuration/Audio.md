@@ -19,7 +19,7 @@ chapter: false
 
 In addition, the **volume** and **panning** of each sound channel can be adjusted. For more control over the actual sound, the equalizer can be used to alter the relative strength of specific frequencies -- with work, this can be used to make the audio sound more like an actual NES would.
 
-A number of audio effects are available in the `Effects` tab -- the Stereo Delay effect, in particular, produces a relatively nice fake stereo effect.
+A number of audio effects are available in the `Effects` tab, including a few different fake stereo effects.
 
 <div class="clear"></div>
 
@@ -35,6 +35,8 @@ Unlike all the other options before it, the options in this section affect the w
 * **Mute ultrasonic frequencies on the triangle channel**: This option mutes the triangle channel under certain conditions, which prevents it from causing popping sounds.
 
 * **Reduce popping sounds on the DMC channel**: Similar to the previous option, but for the DMC channel -- this option prevents games from changing the output of the DMC channel too abruptly, which often causes popping sounds.
+
+* **Disable dynamic sample rate**: While a game is running, the video and audio typically slowly drift out of sync.  Mesen will automatically make adjustments to the audio sample rate while the game is running to keep them in sync. Disabling this option will typically cause sound issues such as crackling.
 
 * **Swap square channel duty cycles**: This option is to mimic some older NES clones that had incorrect sound output for both of the square channels.  It greatly alters the sound in some games, and shouldn't be enabled unless you want this behavior.
 

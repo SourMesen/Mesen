@@ -17,12 +17,11 @@ chapter: false
 * The end address parameter for <kbd>[addMemoryCallback](/apireference/callbacks.html#addmemorycallback)</kbd> and <kbd>[removeMemoryCallback](/apireference/callbacks.html#removememorycallback)</kbd> is now optional.
 * The <kbd>[drawRectangle](/apireference/drawing.html#drawrectangle)</kbd> function now accepts negative height/width values.
 * Added a new *delay* parameter to  <kbd>[drawRectangle](/apireference/drawing.html#drawrectangle)</kbd>, <kbd>[drawLine](/apireference/drawing.html#drawline)</kbd>, <kbd>[drawString](/apireference/drawing.html#drawstring)</kbd> and  <kbd>[drawPixel](/apireference/drawing.html#drawpixel)</kbd>.
-* The <kbd>[endFrame](/apireference/enums.html#eventtype)</kbd> event now triggers on scanline 240 instead of scanline 241.
 
-### Bug Fixes ###
+### Breaking Changes ###
  
 * <kbd>[addMemoryCallback](/apireference/callbacks.html#addmemorycallback)</kbd> and <kbd>[removeMemoryCallback](/apireference/callbacks.html#removememorycallback)</kbd> no longer exclude the end address from the range.
-
+* The <kbd>[endFrame](/apireference/enums.html#eventtype)</kbd> event now triggers on scanline 240 instead of scanline 241.
 
 ## Changes between 0.9.4 and 0.9.5 ##
 

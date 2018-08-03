@@ -14,6 +14,7 @@ The debugging capabilities of Mesen are split across a number of different tools
 [Memory Tools](/debugging/memorytools.html): Contains a hex editor and performance profiler.      
 [PPU Viewer](/debugging/ppuviewer.html):  Displays information on the nametables, sprites, CHR banks and palette. Contains a CHR graphic editor and a palette editor.    
 [Script Window](/debugging/scriptwindow.html):  Allows the execution of Lua scripts, which can communicate with the emulation via an API.   
+[Text Hooker](/debugging/texthooker.html):  Converts text shown on the screen into a text string (useful when trying to translate games.)  
 [Trace Logger](/debugging/tracelogger.html):  View or log to a file the execution trace of the CPU and PPU.
 
 Additionally, some other smaller features are available from the main debugger window.  e.g:

@@ -292,10 +292,13 @@ For example, a mapper with 2x 8 KB + 1x 16 KB PRG banking is emulated as 4x 8 KB
 The `Show...` submenu contains a number of options to show/hide various elements on the UI.
 Specifically, the toolbar, CPU/PPU memory mappings, function/label lists, watch list, breakpoint list and the call stack window.
 
-Additionally, two special tooltip windows can be enabled here:
+### Tooltip Options ###
+
+A number of tooltip-related options are available here:
 
 * **Show Code Preview in Tooltips**: When enabled, label/address tooltips will now show a preview of the code at the target location.
 * **Show OP Code Info Tooltips**: When enabled, putting the mouse over an OP code will display a tooltip containing information about the OP code and which CPU flags are affected by it.
+* **Only show tooltips when Shift key is pressed**: When enabled, no tooltips will be shown unless the shift key is held down.
 
 ### Break Options ###
 
@@ -305,6 +308,7 @@ The `Break Options` submenu contains a number of options to configure under whic
 * **Break on unofficial opcodes**: Break the emulation whenever an unofficial opcode is about to execute.
 * **Break on BRK**: Break the emulation whenever a BRK instruction is about to execute.
 * **Break on CPU crash**: Break the emulation whenever an instruction that will cause the CPU to freeze is about to execute.
+* **Break on decayed OAM read**: Break whenever the code a read is performed on decayed OAM memory. **Note**: *This option is only available when the `Enable OAM RAM decay` option is enabled in the `Emulation Settings`.*
 * **Break on uninitialized memory read**: Break whenever the code reads from a memory address containing an uninitialized value. **Note**: *This option only works if the debugger has been opened since the last reset or power cycle.*
 * **Break when debugger is opened**: The emulation will break when you first open the debugger.
 * **Break on debugger focus**: Whenever the debugger's window gains focus (e.g by clicking on it), the emulation will break.
@@ -316,12 +320,19 @@ Additionally, you can configure whether or not the debugger window gets focused 
 
 These options configure which portions of the code is copied into the clipboard when copying code from the code window.
 
+### Layout Options ###
+
+* **Split View**: Displays 2 separate code windows side-by-side.
+* **Vertical Layout**: Moves the location of the label and function lists to improve space utilization on larger screens.
+ 
 ### Misc. Options ###
 
 * **Hide Pause Icon**: When enabled, the pause icon that is normally shown whenever execution is paused will be hidden.
 * **Draw Partial Frame**: When enabled, the emulator's main window will display the current partially-drawn frame instead of the last complete frame.
 * **Show previous frame behind current**: When enabled along with `Draw Partial Frame`, the previous frame's data will be shown behind the current frame.
-* **Refresh watch while running**: When enabled, the watch window will continuously refresh itself while the emulation is running (instead of only updating when the execution breaks)
+
+* **Keep active statement in the center**: When enabled, the code window will always put the current statement in the center whenever it updates (causing it to scroll on every step).  When disabled, the code window will only scroll the code when necessary.
+* **Refresh UI while running**: When enabled, the watch window and the CPU/PPU status will be updated continuously while the emulation is running (instead of only updating when the execution breaks)
 
 ## How To: Edit Code ##
 

@@ -8,6 +8,18 @@ HD Packs make it possible to replace a game's graphics and audio with high defin
 
 ## Using HD packs ##
 
+### Installing HD Packs ###
+
+To install an HD Pack:
+
+* First, load the game for which you want to install the HD Pack.
+* Then, click on the **<kbd>Tools&rarr;Install HD Pack</kbd>** menu and select the `.zip` file that contains the HD Pack you want to install.
+* A message will be shown indicating whether the installation succeeded or failed.
+
+### Manual installation ###
+
+If the HD Pack installation tool fails to install the HD Pack, you can try to install it manually with these instructions:  
+
 To use HD packs, first make sure to turn on the [Enable HDNes HD Packs](/configuration/video.html#general-options) option.  
 To install a HD Pack, you should extract it in a subfolder inside the `HdPacks` folder in Mesen's data folder. You can open this folder by clicking on the `Open Mesen Folder` button in the [Preferences](/configuration/preferences.html#general-options) window.
 The subfolder should have the same name as the rom file itself.

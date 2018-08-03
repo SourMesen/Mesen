@@ -15,6 +15,8 @@ The Event Viewer's PPU view allows you to visually check the timing at which var
 
 The colors can be configured and it's also possible to define [breakpoints](/debugging/debugger.html#breakpoint-configuration) as marks to be shown on the Event Viewer. This is done by enabling a breakpoint's `Mark on Event Viewer` option.  This allows the event viewer to be used to display virtually any special event that needs to be tracked.
 
+When the `Show previous frame's events` option is enabled, all events for the last full frame (e.g the last 261 scanlines for NTSC) will be shown. Otherwise, only events that have occurred since the last pre-render scanline (scanline -1) will be shown.
+
 ## List View ##
 
 <div class="imgBox"><div>

@@ -75,7 +75,10 @@ Available shortcuts:
 * **FDS - Eject Disk**: Ejects the currently inserted disk
 * **VS - Insert Coin 1**: Inserts a coin in slot 1.
 * **VS - Insert Coin 2**: Inserts a coin in slot 2.
-* **VS - Service Button**: Press to go to the service menu (only in some VS games)
+* **VS - Insert Coin 3**: Inserts a coin in slot 1 of the second console (VS DualSystem only).
+* **VS - Insert Coin 4**: Inserts a coin in slot 2 of the second console (VS DualSystem only).
+* **VS - Service Button**: Press to activate the service button.
+* **VS - Service Button 2**: Press to activate the service button on the second console (VS DualSystem only).
 * **Input Barcode**: Inputs a barcode into the connected barcode reader device.
 * **Take Screenshot**: Takes a screenshot.
 * **Load Random Game**: Loads a random game from your game folder.
@@ -115,6 +118,41 @@ Available shortcuts:
 * **Load State from File**: Load the game's state from a user-specified file.
 * **Load Last Session**: Restores the game to the state it was the last time you stopped playing it.
 
+## FDS / VS System / NSF settings ##
+
+<div class="imgBox"><div>
+	<img src="/images/Preferences_Nsf.png" />
+	<span>FDS / VS / NSF settings</span>
+</div></div>
+
+### FDS Settings ###
+
+The FDS (Famicom Disk System) is a Famicom-specific add-on that allows games to be stored on special floppy disks. These options help simplify playing FDS games by allowing the emulation to fast-forward through load screens and automatically switch disk when needed.
+
+**Automatically insert disk 1 side A when starting FDS games**: By default, the FDS boots with no disk inserted in the drive.  This option makes it so the player does not need to manually insert disk 1, side A manually.
+
+**Automatically fast forward FDS games when disk or BIOS is loading**: FDS games contain a large number of load screens due to their data being stored on floppy drives.  Mesen needs to emulate this floppy drive's speed to ensure accurate emulation.  This option makes it so Mesen runs the emulation as fast as it can when a game is loading data from the disk, which greatly reduces the time spent on loading screens.
+
+**Automatically switch disks for FDS games**: FDS games are often split into multiple floppy disks, and each disk has 2 separate sides.  Due to this, FDS games often ask the player to change disk, or flip to the other side.  When this option is enabled, Mesen will attempt to detect when a game is asking for another disk and automatically insert it.
+
+### VS DualSystem Settings ###
+
+For VS DualSystem games, 2 separate consoles run at the same time, producing 2 different sets of audio and video. These options allow you to configure which audio/video streams you want to hear/see.
+
+**Show video for [...]**: Selects whether both screens should be shown, or just one of them.
+
+**Play audio for [...]**: Selects whether both audio streams should be played, or just one of them.
+
+
+### NSF Settings ###
+
+**Move to the next track after [x] milliseconds of silence**: If the currently playing track outputs no audio for over X milliseconds, the player will automatically move to the next track.  *Note: This only applies for `.nsf` files, not `.nsfe` files.*
+
+**Limit track run time to [x] seconds**: Once the current track has been playing for over X seconds, the player will automatically move to the next track.  *Note: This only applies for `.nsf` files, not `.nsfe` files.*
+
+**Enable APU IRQs for NSF files**: When enabled, APU IRQs will be allowed when NSF files are playing. Some NSF files do not properly disable APU IRQs in their initialization code, which will cause them to break if this option is enabled. *This option should not be enabled unless absolutely necessary.*
+
+
 ## Folders and File Associations ##
 
 <div class="imgBox"><div>
@@ -141,19 +179,13 @@ Available shortcuts:
 
 **Keep rewind data for the last [x] minutes**: The rewind feature in Mesen periodically takes save states and keeps them in memory to allow the emulator to rewind the game. These save states take a minimal amount of memory (roughly 1MB per minute). To limit the amount of memory that Mesen can use for rewind data, this configures the number of minutes that it is possible to rewind for.
 
-### FDS Settings ###
-
-The FDS (Famicom Disk System) is a Famicom-specific add-on that allows games to be stored on special floppy disks. These options help simplify playing FDS games by allowing the emulation to fast-forward through load screens and automatically switch disk when needed.
-
-**Automatically insert disk 1 side A when starting FDS games**: By default, the FDS boots with no disk inserted in the drive.  This option makes it so the player does not need to manually insert disk 1, side A manually.
-
-**Automatically fast forward FDS games when disk or BIOS is loading**: FDS games contain a large number of load screens due to their data being stored on floppy drives.  Mesen needs to emulate this floppy drive's speed to ensure accurate emulation.  This option makes it so Mesen runs the emulation as fast as it can when a game is loading data from the disk, which greatly reduces the time spent on loading screens.
-
-**Automatically switch disks for FDS games**: FDS games are often split into multiple floppy disks, and each disk has 2 separate sides.  Due to this, FDS games often ask the player to change disk, or flip to the other side.  When this option is enabled, Mesen will attempt to detect when a game is asking for another disk and automatically insert it.
-
-### UI Settings ###
+### Window Settings ###
 
 **Always display on top of other windows**: When enabled, Mesen's window will always be displayed above all other windows.
+
+**Do not allow the main window to be resized using the mouse**: When enabled, the main window can only be resized by changing the video scaling option.
+
+### UI Settings ###
 
 **Disable on-screen display (OSD)**: When enabled, all on-screen messages are disabled.
 

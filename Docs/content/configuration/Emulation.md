@@ -68,11 +68,11 @@ Overclocking can cause issues in some games. The safest way to overclock is to i
 	<span>Overclocking Options</span>
 </div></div>
 
-**Clock Rate Multiplier**: Use this to overclock or underclock the CPU -- this has the same effect as physically changing the clock speed on an actual NES.  Unless you enable the `Do not overclock APU` option below, the audio output will be affected by this.  ***This is not the recommended way to overclock the CPU.***
-
 **Additional scanlines before NMI**: Increases the number of scanlines in the PPU, *before* the NMI signal is triggered at the end of the visible frame. This effectively gives more time for games to perform calculations, which can reduce slowdowns in games. **This is the preferred option for overclocking.**
 
 **Additional scanlines after NMI**: Increases the number of scanlines in the PPU, *after* the NMI signal is triggered at the end of the visible frame. This effectively gives more time for games to perform calculations, which can reduce slowdowns in games. **This option is less compatible and should only be used if the `before NMI` variation does not work as expected.**
+
+**Clock Rate Multiplier**: Use this to overclock or underclock the CPU -- this has the same effect as physically changing the clock speed on an actual NES.  Unless you enable the `Do not overclock APU` option below, the audio output will be affected by this.  ***This is not the recommended way to overclock the CPU.***
 
 **Do not overclock APU**: When the `Clock Rate Multiplier` is not set to 100, the audio will be affected. When this option is enabled, the audio processor is not overclocked, which allows normal sound to be played despite the CPU being overclocked.
 

@@ -54,6 +54,7 @@ You can <kbd>**right-click**</kbd> on a tile to copy the tile's information (bas
 * **Highlight**: This option allows tiles to be highlighted/dimmed based on the CDL file's current data.  This makes it possible to highlight/dim tiles that have never been drawn by the PPU, or vice versa.  *This option is only available for CHR ROM games*.
 * **Display as 16x8 sprites**: When enabled, changes the display order of the tiles to make it easier to visualize 16x8 sprites.
 * **Display tiles using their last known palette**: When enabled, any tile that has appeared in nametable memory since the debugger was opened will be shown using their last known palette (this overrides the palette selection dropdown for those tiles)
+* **Show single color tiles using grayscale palette**: When enabled, any tile that contains a single color will be displayed using the grayscale palette instead (this overrides the palette selection dropdown for those tiles)
 
 ### Editing Tiles ###
 

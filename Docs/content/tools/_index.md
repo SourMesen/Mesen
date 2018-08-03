@@ -62,6 +62,20 @@ When you start recording, a configuration dialog is shown that allows you to sel
 
 To play a movie file, select it via the **<kbd>Tools&rarr;Movies&rarr;Play</kbd>** command.
 
+## History Viewer ##
+
+<div class="imgBox"><div>
+	<img src="/images/HistoryViewer.png" />
+	<span>History Viewer</span>
+</div></div>
+
+The history viewer allows you to replay (in a video player) any gameplay since the last time you power cycled or loaded a game.  
+You can start playback at any point in time, and instantly seek to any point in time, too.  
+
+To resume gameplay from the history viewer's current position, select **<kbd>File&rarr;Resume Gameplay</kbd>**
+
+To export a movie (`.mmo` file) of your gameplay, select **<kbd>File&rarr;Export Movie</kbd>**
+
 ## Cheats ##
 
 <div class="imgBox"><div>
