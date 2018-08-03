@@ -8,64 +8,66 @@
 
 class Debugger;
 
-enum EvalOperators
+enum EvalOperators : int64_t
 {
 	//Binary operators
-	Multiplication = 2000000000,
-	Division = 2000000001,
-	Modulo = 2000000002,
-	Addition = 2000000003,
-	Substration = 2000000004,
-	ShiftLeft = 2000000005,
-	ShiftRight = 2000000006,
-	SmallerThan = 2000000007,
-	SmallerOrEqual = 2000000008,
-	GreaterThan = 2000000009,
-	GreaterOrEqual = 2000000010,
-	Equal = 2000000011,
-	NotEqual = 2000000012,
-	BinaryAnd = 2000000013,
-	BinaryXor = 2000000014,
-	BinaryOr = 2000000015,
-	LogicalAnd = 2000000016,
-	LogicalOr = 2000000017,
+	Multiplication = 20000000000,
+	Division = 20000000001,
+	Modulo = 20000000002,
+	Addition = 20000000003,
+	Substration = 20000000004,
+	ShiftLeft = 20000000005,
+	ShiftRight = 20000000006,
+	SmallerThan = 20000000007,
+	SmallerOrEqual = 20000000008,
+	GreaterThan = 20000000009,
+	GreaterOrEqual = 20000000010,
+	Equal = 20000000011,
+	NotEqual = 20000000012,
+	BinaryAnd = 20000000013,
+	BinaryXor = 20000000014,
+	BinaryOr = 20000000015,
+	LogicalAnd = 20000000016,
+	LogicalOr = 20000000017,
 
 	//Unary operators
-	Plus = 2000000050,
-	Minus = 2000000051,
-	BinaryNot = 2000000052,
-	LogicalNot = 2000000053,
+	Plus = 20000000050,
+	Minus = 20000000051,
+	BinaryNot = 20000000052,
+	LogicalNot = 20000000053,
 
 	//Used to read ram address
-	Bracket = 2000000054, //Read byte
-	Braces = 2000000055, //Read word
+	Bracket = 20000000054, //Read byte
+	Braces = 20000000055, //Read word
 
 	//Special value, not used as an operator
-	Parenthesis = 2000000100,
+	Parenthesis = 20000000100,
 };
 
-enum EvalValues
+enum EvalValues : int64_t
 {
-	RegA = 2000000100,
-	RegX = 2000000101,
-	RegY = 2000000102,
-	RegSP = 2000000103,
-	RegPS = 2000000104,
-	RegPC = 2000000105,
-	RegOpPC = 2000000106,
-	PpuFrameCount = 2000000107,
-	PpuCycle = 2000000108,
-	PpuScanline = 2000000109,
-	Nmi = 2000000110,
-	Irq = 2000000111,
-	Value = 2000000112,
-	Address = 2000000113,
-	AbsoluteAddress = 2000000114,
-	IsWrite = 2000000115,
-	IsRead = 2000000116,
+	RegA = 20000000100,
+	RegX = 20000000101,
+	RegY = 20000000102,
+	RegSP = 20000000103,
+	RegPS = 20000000104,
+	RegPC = 20000000105,
+	RegOpPC = 20000000106,
+	PpuFrameCount = 20000000107,
+	PpuCycle = 20000000108,
+	PpuScanline = 20000000109,
+	Nmi = 20000000110,
+	Irq = 20000000111,
+	Value = 20000000112,
+	Address = 20000000113,
+	AbsoluteAddress = 20000000114,
+	IsWrite = 20000000115,
+	IsRead = 20000000116,
+	
+	FirstLabelIndex = 20000002000,
 };
 
-enum EvalResultType
+enum EvalResultType : int32_t
 {
 	Numeric = 0,
 	Boolean = 1,
@@ -83,6 +85,12 @@ public:
 	}
 };
 
+struct ExpressionData
+{
+	std::vector<int64_t> RpnQueue;
+	std::vector<string> Labels;
+};
+
 class ExpressionEvaluator
 {
 private:
@@ -91,28 +99,27 @@ private:
 	static const vector<string> _unaryOperators;
 	static const vector<int> _unaryPrecedence;
 
-	static std::unordered_map<string, std::vector<int>, StringHasher> _outputCache;
-	static SimpleLock _cacheLock;
+	std::unordered_map<string, ExpressionData, StringHasher> _cache;
+	SimpleLock _cacheLock;
 
-	int operandStack[1000];
+	int64_t operandStack[1000];
 	Debugger* _debugger;
-	bool _containsCustomLabels = false;
 
 	bool IsOperator(string token, int &precedence, bool unaryOperator);
 	EvalOperators GetOperator(string token, bool unaryOperator);
-	bool CheckSpecialTokens(string expression, size_t &pos, string &output);
-	string GetNextToken(string expression, size_t &pos);	
-	bool ProcessSpecialOperator(EvalOperators evalOp, std::stack<EvalOperators> &opStack, std::stack<int> &precedenceStack, vector<int> &outputQueue);
-	bool ToRpn(string expression, vector<int> &outputQueue);
+	bool CheckSpecialTokens(string expression, size_t &pos, string &output, ExpressionData &data);
+	string GetNextToken(string expression, size_t &pos, ExpressionData &data);
+	bool ProcessSpecialOperator(EvalOperators evalOp, std::stack<EvalOperators> &opStack, std::stack<int> &precedenceStack, vector<int64_t> &outputQueue);
+	bool ToRpn(string expression, ExpressionData &data);
 	int32_t PrivateEvaluate(string expression, DebugState &state, EvalResultType &resultType, OperationInfo &operationInfo, bool &success);
-	vector<int>* GetRpnList(string expression, vector<int> &output, bool& success);
+	ExpressionData* PrivateGetRpnList(string expression, bool& success);
 
 public:
 	ExpressionEvaluator(Debugger* debugger);
 
-	int32_t Evaluate(vector<int> &outputQueue, DebugState &state, EvalResultType &resultType, OperationInfo &operationInfo);
+	int32_t Evaluate(ExpressionData &data, DebugState &state, EvalResultType &resultType, OperationInfo &operationInfo);
 	int32_t Evaluate(string expression, DebugState &state, EvalResultType &resultType, OperationInfo &operationInfo);
-	vector<int>* GetRpnList(string expression);
+	ExpressionData GetRpnList(string expression, bool &success);
 
 	bool Validate(string expression);
 };

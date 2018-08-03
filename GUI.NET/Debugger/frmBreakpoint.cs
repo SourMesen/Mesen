@@ -99,7 +99,7 @@ namespace Mesen.GUI.Debugger
 				txtFrom.Focus();
 				txtFrom.SelectionStart = 0;
 				txtFrom.SelectionLength = 0;
-			} else {
+			} else if(bp.AddressType == BreakpointAddressType.SingleAddress) {
 				txtAddress.Focus();
 				txtAddress.SelectionStart = 0;
 				txtAddress.SelectionLength = 0;
@@ -159,7 +159,7 @@ namespace Mesen.GUI.Debugger
 		{
 			if(txtCondition.Text.Trim().Length > 0) {
 				EvalResultType resultType;
-				InteropEmu.DebugEvaluateExpression(txtCondition.Text.Replace(Environment.NewLine, " "), out resultType);
+				InteropEmu.DebugEvaluateExpression(txtCondition.Text.Replace(Environment.NewLine, " "), out resultType, false);
 				if(resultType == EvalResultType.Invalid) {
 					picExpressionWarning.Visible = true;
 					return false;

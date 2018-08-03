@@ -10,7 +10,6 @@ using std::unordered_set;
 
 #include "../Utilities/SimpleLock.h"
 #include "DebuggerTypes.h"
-#include "ExpressionEvaluator.h"
 
 class CPU;
 class APU;
@@ -29,7 +28,10 @@ class ScriptHost;
 class TraceLogger;
 class Breakpoint;
 class CodeDataLogger;
+class ExpressionEvaluator;
+struct ExpressionData;
 
+enum EvalResultType : int32_t;
 enum class CdlStripFlag;
 
 class Debugger
@@ -67,7 +69,7 @@ private:
 	atomic<bool> _executionStopped;
 	atomic<int32_t> _suspendCount;
 	vector<Breakpoint> _breakpoints[BreakpointTypeCount];
-	vector<vector<int>> _breakpointRpnList[BreakpointTypeCount];
+	vector<ExpressionData> _breakpointRpnList[BreakpointTypeCount];
 	bool _hasBreakpoint[BreakpointTypeCount] = {};
 
 	vector<uint8_t> _frozenAddresses;
@@ -79,8 +81,8 @@ private:
 
 	unordered_set<uint32_t> _functionEntryPoints;
 
-	ExpressionEvaluator _watchExpEval = ExpressionEvaluator(this);
-	ExpressionEvaluator _bpExpEval = ExpressionEvaluator(this);
+	unique_ptr<ExpressionEvaluator> _watchExpEval;
+	unique_ptr<ExpressionEvaluator> _bpExpEval;
 	DebugState _debugState;
 
 	SimpleLock _breakLock;
@@ -215,7 +217,7 @@ public:
 	shared_ptr<MemoryDumper> GetMemoryDumper();
 	shared_ptr<MemoryAccessCounter> GetMemoryAccessCounter();
 
-	int32_t EvaluateExpression(string expression, EvalResultType &resultType);
+	int32_t EvaluateExpression(string expression, EvalResultType &resultType, bool useCache);
 	
 	void ProcessPpuCycle();
 	bool ProcessRamOperation(MemoryOperationType type, uint16_t &addr, uint8_t &value);

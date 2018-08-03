@@ -285,7 +285,7 @@ namespace Mesen.GUI
 		[DllImport(DLLPath)] public static extern void DebugSetFreezeState(UInt16 address, [MarshalAs(UnmanagedType.I1)]bool frozen);
 
 		[DllImport(DLLPath)] public static extern void DebugSetNextStatement(UInt16 addr);
-		[DllImport(DLLPath)] public static extern Int32 DebugEvaluateExpression([MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(UTF8Marshaler))]string expression, out EvalResultType resultType);
+		[DllImport(DLLPath)] public static extern Int32 DebugEvaluateExpression([MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(UTF8Marshaler))]string expression, out EvalResultType resultType, [MarshalAs(UnmanagedType.I1)]bool useCache);
 
 		[DllImport(DLLPath)] public static extern void DebugStartTraceLogger([MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(UTF8Marshaler))]string filename);
 		[DllImport(DLLPath)] public static extern void DebugStopTraceLogger();

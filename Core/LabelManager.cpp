@@ -133,7 +133,12 @@ void LabelManager::GetLabelAndComment(uint16_t relativeAddr, string &label, stri
 	}
 }
 
-int32_t LabelManager::GetLabelRelativeAddress(string label)
+bool LabelManager::ContainsLabel(string &label)
+{
+	return _codeLabelReverseLookup.find(label) != _codeLabelReverseLookup.end();
+}
+
+int32_t LabelManager::GetLabelRelativeAddress(string &label)
 {
 	auto result = _codeLabelReverseLookup.find(label);
 	if(result != _codeLabelReverseLookup.end()) {

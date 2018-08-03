@@ -38,7 +38,7 @@ namespace Mesen.GUI.Debugger
 					//Watch expression matches the array display syntax (e.g: [$300,10] = display 10 bytes starting from $300)
 					newValue = ProcessArrayDisplaySyntax(useHex, ref forceHasChanged, match);
 				} else {
-					Int32 result = InteropEmu.DebugEvaluateExpression(expression, out resultType);
+					Int32 result = InteropEmu.DebugEvaluateExpression(expression, out resultType, true);
 					switch(resultType) {
 						case EvalResultType.Numeric: newValue = useHex ? ("$" + result.ToString("X2")) : result.ToString(); break;
 						case EvalResultType.Boolean: newValue = result == 0 ? "false" : "true";	break;

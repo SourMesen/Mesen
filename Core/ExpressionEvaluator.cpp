@@ -8,12 +8,9 @@
 #include "LabelManager.h"
 #include "../Utilities/HexUtilities.h"
 
-std::unordered_map<string, std::vector<int>, StringHasher> ExpressionEvaluator::_outputCache;
-SimpleLock ExpressionEvaluator::_cacheLock;
-
 const vector<string> ExpressionEvaluator::_binaryOperators = { { "*", "/", "%", "+", "-", "<<", ">>", "<", "<=", ">", ">=", "==", "!=", "&", "^", "|", "&&", "||" } };
 const vector<int> ExpressionEvaluator::_binaryPrecedence = { { 10,  10,  10,   9,   9,    8,    8,   7,   7,    7,    7,    6,    6,   5,   4,   3,    2,    1 } };
-const vector<string> ExpressionEvaluator::_unaryOperators = { { "+", "-", "!", "~" } };
+const vector<string> ExpressionEvaluator::_unaryOperators = { { "+", "-", "~", "!" } };
 const vector<int> ExpressionEvaluator::_unaryPrecedence = { { 11,  11,  11,  11 } };
 
 bool ExpressionEvaluator::IsOperator(string token, int &precedence, bool unaryOperator)
@@ -41,20 +38,20 @@ EvalOperators ExpressionEvaluator::GetOperator(string token, bool unaryOperator)
 	if(unaryOperator) {
 		for(size_t i = 0, len = _unaryOperators.size(); i < len; i++) {
 			if(token.compare(_unaryOperators[i]) == 0) {
-				return (EvalOperators)(2000000050 + i);
+				return (EvalOperators)(EvalOperators::Plus + i);
 			}
 		}
 	} else {
 		for(size_t i = 0, len = _binaryOperators.size(); i < len; i++) {
 			if(token.compare(_binaryOperators[i]) == 0) {
-				return (EvalOperators)(2000000000 + i);
+				return (EvalOperators)(EvalOperators::Multiplication + i);
 			}
 		}
 	}
 	return EvalOperators::Addition;
 }
 
-bool ExpressionEvaluator::CheckSpecialTokens(string expression, size_t &pos, string &output)
+bool ExpressionEvaluator::CheckSpecialTokens(string expression, size_t &pos, string &output, ExpressionData &data)
 {
 	string token;
 	size_t initialPos = pos;
@@ -70,46 +67,46 @@ bool ExpressionEvaluator::CheckSpecialTokens(string expression, size_t &pos, str
 		}
 	} while(pos < len);
 
-	if(!token.compare("a")) {
-		output += std::to_string(EvalValues::RegA);
-	} else if(!token.compare("x")) {
-		output += std::to_string(EvalValues::RegX);
-	} else if(!token.compare("y")) {
-		output += std::to_string(EvalValues::RegY);
-	} else if(!token.compare("ps")) {
-		output += std::to_string(EvalValues::RegPS);
-	} else if(!token.compare("sp")) {
-		output += std::to_string(EvalValues::RegSP);
-	} else if(!token.compare("pc")) {
-		output += std::to_string(EvalValues::RegPC);
-	} else if(!token.compare("oppc")) {
-		output += std::to_string(EvalValues::RegOpPC);
-	} else if(!token.compare("frame")) {
-		output += std::to_string(EvalValues::PpuFrameCount);
-	} else if(!token.compare("cycle")) {
-		output += std::to_string(EvalValues::PpuCycle);
-	} else if(!token.compare("scanline")) {
-		output += std::to_string(EvalValues::PpuScanline);
-	} else if(!token.compare("irq")) {
-		output += std::to_string(EvalValues::Irq);
-	} else if(!token.compare("nmi")) {
-		output += std::to_string(EvalValues::Nmi);
-	} else if(!token.compare("value")) {
-		output += std::to_string(EvalValues::Value);
-	} else if(!token.compare("address")) {
-		output += std::to_string(EvalValues::Address);
-	} else if(!token.compare("romaddress")) {
-		output += std::to_string(EvalValues::AbsoluteAddress);
-	} else if(!token.compare("iswrite")) {
-		output += std::to_string(EvalValues::IsWrite);
-	} else if(!token.compare("isread")) {
-		output += std::to_string(EvalValues::IsRead);
+	if(token == "a") {
+		output += std::to_string((int64_t)EvalValues::RegA);
+	} else if(token == "x") {
+		output += std::to_string((int64_t)EvalValues::RegX);
+	} else if(token == "y") {
+		output += std::to_string((int64_t)EvalValues::RegY);
+	} else if(token == "ps") {
+		output += std::to_string((int64_t)EvalValues::RegPS);
+	} else if(token == "sp") {
+		output += std::to_string((int64_t)EvalValues::RegSP);
+	} else if(token == "pc") {
+		output += std::to_string((int64_t)EvalValues::RegPC);
+	} else if(token == "oppc") {
+		output += std::to_string((int64_t)EvalValues::RegOpPC);
+	} else if(token == "frame") {
+		output += std::to_string((int64_t)EvalValues::PpuFrameCount);
+	} else if(token == "cycle") {
+		output += std::to_string((int64_t)EvalValues::PpuCycle);
+	} else if(token == "scanline") {
+		output += std::to_string((int64_t)EvalValues::PpuScanline);
+	} else if(token == "irq") {
+		output += std::to_string((int64_t)EvalValues::Irq);
+	} else if(token == "nmi") {
+		output += std::to_string((int64_t)EvalValues::Nmi);
+	} else if(token == "value") {
+		output += std::to_string((int64_t)EvalValues::Value);
+	} else if(token == "address") {
+		output += std::to_string((int64_t)EvalValues::Address);
+	} else if(token == "romaddress") {
+		output += std::to_string((int64_t)EvalValues::AbsoluteAddress);
+	} else if(token == "iswrite") {
+		output += std::to_string((int64_t)EvalValues::IsWrite);
+	} else if(token == "isread") {
+		output += std::to_string((int64_t)EvalValues::IsRead);
 	} else {
 		string originalExpression = expression.substr(initialPos, pos - initialPos);
-		int32_t address = _debugger->GetLabelManager()->GetLabelRelativeAddress(originalExpression);
-		if(address >= 0) {
-			_containsCustomLabels = true;
-			output += std::to_string(address);
+		bool validLabel = _debugger->GetLabelManager()->ContainsLabel(originalExpression);
+		if(validLabel) {
+			data.Labels.push_back(originalExpression);
+			output += std::to_string(EvalValues::FirstLabelIndex + data.Labels.size() - 1);
 		} else {
 			return false;
 		}
@@ -118,7 +115,7 @@ bool ExpressionEvaluator::CheckSpecialTokens(string expression, size_t &pos, str
 	return true;
 }
 
-string ExpressionEvaluator::GetNextToken(string expression, size_t &pos)
+string ExpressionEvaluator::GetNextToken(string expression, size_t &pos, ExpressionData &data)
 {
 	string output;
 	bool isOperator = false;
@@ -171,7 +168,7 @@ string ExpressionEvaluator::GetNextToken(string expression, size_t &pos)
 					break;
 				} else {
 					if(output.empty()) {
-						if(CheckSpecialTokens(expression, pos, output)) {
+						if(CheckSpecialTokens(expression, pos, output, data)) {
 							break;
 						}
 					}
@@ -188,7 +185,7 @@ string ExpressionEvaluator::GetNextToken(string expression, size_t &pos)
 	return output;
 }
 	
-bool ExpressionEvaluator::ProcessSpecialOperator(EvalOperators evalOp, std::stack<EvalOperators> &opStack, std::stack<int> &precedenceStack, vector<int> &outputQueue)
+bool ExpressionEvaluator::ProcessSpecialOperator(EvalOperators evalOp, std::stack<EvalOperators> &opStack, std::stack<int> &precedenceStack, vector<int64_t> &outputQueue)
 {
 	if(opStack.empty()) {
 		return false;
@@ -211,7 +208,7 @@ bool ExpressionEvaluator::ProcessSpecialOperator(EvalOperators evalOp, std::stac
 	return true;
 }
 
-bool ExpressionEvaluator::ToRpn(string expression, vector<int> &outputQueue)
+bool ExpressionEvaluator::ToRpn(string expression, ExpressionData &data)
 {
 	std::stack<EvalOperators> opStack = std::stack<EvalOperators>();	
 	std::stack<int> precedenceStack;
@@ -223,7 +220,7 @@ bool ExpressionEvaluator::ToRpn(string expression, vector<int> &outputQueue)
 
 	bool previousTokenIsOp = true;
 	while(true) {
-		string token = GetNextToken(expression, position);
+		string token = GetNextToken(expression, position, data);
 		if(token.empty()) {
 			break;
 		}
@@ -239,7 +236,7 @@ bool ExpressionEvaluator::ToRpn(string expression, vector<int> &outputQueue)
 				if((unaryOperator && precedence < precedenceStack.top()) || (!unaryOperator && precedence <= precedenceStack.top())) {
 					opStack.pop();
 					precedenceStack.pop();
-					outputQueue.push_back(topOp);
+					data.RpnQueue.push_back(topOp);
 				}
 			}
 			opStack.push(op);
@@ -253,7 +250,7 @@ bool ExpressionEvaluator::ToRpn(string expression, vector<int> &outputQueue)
 			previousTokenIsOp = true;
 		} else if(token[0] == ')') {
 			parenthesisCount--;
-			if(!ProcessSpecialOperator(EvalOperators::Parenthesis, opStack, precedenceStack, outputQueue)) {
+			if(!ProcessSpecialOperator(EvalOperators::Parenthesis, opStack, precedenceStack, data.RpnQueue)) {
 				return false;
 			}
 		} else if(token[0] == '[') {
@@ -262,7 +259,7 @@ bool ExpressionEvaluator::ToRpn(string expression, vector<int> &outputQueue)
 			precedenceStack.push(0);
 		} else if(token[0] == ']') {
 			bracketCount--;
-			if(!ProcessSpecialOperator(EvalOperators::Bracket, opStack, precedenceStack, outputQueue)) {
+			if(!ProcessSpecialOperator(EvalOperators::Bracket, opStack, precedenceStack, data.RpnQueue)) {
 				return false;
 			}
 		} else if(token[0] == '{') {
@@ -271,14 +268,14 @@ bool ExpressionEvaluator::ToRpn(string expression, vector<int> &outputQueue)
 			precedenceStack.push(0);
 		} else if(token[0] == '}') {
 			braceCount--;
-			if(!ProcessSpecialOperator(EvalOperators::Braces, opStack, precedenceStack, outputQueue)){
+			if(!ProcessSpecialOperator(EvalOperators::Braces, opStack, precedenceStack, data.RpnQueue)){
 				return false;
 			}
 		} else {
 			if(token[0] < '0' || token[0] > '9') {
 				return false;
 			} else {
-				outputQueue.push_back(std::stoi(token));
+				data.RpnQueue.push_back(std::stoll(token));
 			}
 		}
 	}
@@ -289,43 +286,62 @@ bool ExpressionEvaluator::ToRpn(string expression, vector<int> &outputQueue)
 	}
 
 	while(!opStack.empty()) {
-		outputQueue.push_back(opStack.top());
+		data.RpnQueue.push_back(opStack.top());
 		opStack.pop();
 	}
 
 	return true;
 }
 
-int32_t ExpressionEvaluator::Evaluate(vector<int> &rpnList, DebugState &state, EvalResultType &resultType, OperationInfo &operationInfo)
+int32_t ExpressionEvaluator::Evaluate(ExpressionData &data, DebugState &state, EvalResultType &resultType, OperationInfo &operationInfo)
 {
+	if(data.RpnQueue.empty()) {
+		resultType = EvalResultType::Invalid;
+		return 0;
+	}
+
 	int pos = 0;
-	int right = 0;
-	int left = 0;
+	int64_t right = 0;
+	int64_t left = 0;
 	resultType = EvalResultType::Numeric;
 
-	for(size_t i = 0, len = rpnList.size(); i < len; i++) {
-		int token = rpnList[i];
+	for(size_t i = 0, len = data.RpnQueue.size(); i < len; i++) {
+		int64_t token = data.RpnQueue[i];
 
 		if(token >= EvalValues::RegA) {
 			//Replace value with a special value
-			switch(token) {
-				case EvalValues::RegA: token = state.CPU.A; break;
-				case EvalValues::RegX: token = state.CPU.X; break;
-				case EvalValues::RegY: token = state.CPU.Y; break;
-				case EvalValues::RegSP: token = state.CPU.SP; break;
-				case EvalValues::RegPS: token = state.CPU.PS; break;
-				case EvalValues::RegPC: token = state.CPU.PC; break;
-				case EvalValues::RegOpPC: token = state.CPU.DebugPC; break;
-				case EvalValues::PpuFrameCount: token = state.PPU.FrameCount; break;
-				case EvalValues::PpuCycle: token = state.PPU.Cycle; break;
-				case EvalValues::PpuScanline: token = state.PPU.Scanline; break;
-				case EvalValues::Nmi: token = state.CPU.NMIFlag; break;
-				case EvalValues::Irq: token = state.CPU.IRQFlag; break;
-				case EvalValues::Value: token = operationInfo.Value; break;
-				case EvalValues::Address: token = operationInfo.Address; break;
-				case EvalValues::AbsoluteAddress: token = _debugger->GetAbsoluteAddress(operationInfo.Address); break;
-				case EvalValues::IsWrite: token = operationInfo.OperationType == MemoryOperationType::Write; break;
-				case EvalValues::IsRead: token = operationInfo.OperationType == MemoryOperationType::Read; break;
+			if(token >= EvalValues::FirstLabelIndex) {
+				int64_t labelIndex = token - EvalValues::FirstLabelIndex;
+				if((size_t)labelIndex < data.Labels.size()) {
+					token = _debugger->GetLabelManager()->GetLabelRelativeAddress(data.Labels[labelIndex]);
+				} else {
+					token = -1;
+				}
+				if(token < 0) {
+					//Label is no longer valid
+					resultType = EvalResultType::Invalid;
+					return 0;
+				}
+			} else {
+				switch(token) {
+					case EvalValues::RegA: token = state.CPU.A; break;
+					case EvalValues::RegX: token = state.CPU.X; break;
+					case EvalValues::RegY: token = state.CPU.Y; break;
+					case EvalValues::RegSP: token = state.CPU.SP; break;
+					case EvalValues::RegPS: token = state.CPU.PS; break;
+					case EvalValues::RegPC: token = state.CPU.PC; break;
+					case EvalValues::RegOpPC: token = state.CPU.DebugPC; break;
+					case EvalValues::PpuFrameCount: token = state.PPU.FrameCount; break;
+					case EvalValues::PpuCycle: token = state.PPU.Cycle; break;
+					case EvalValues::PpuScanline: token = state.PPU.Scanline; break;
+					case EvalValues::Nmi: token = state.CPU.NMIFlag; break;
+					case EvalValues::Irq: token = state.CPU.IRQFlag; break;
+					case EvalValues::Value: token = operationInfo.Value; break;
+					case EvalValues::Address: token = operationInfo.Address; break;
+					case EvalValues::AbsoluteAddress: token = _debugger->GetAbsoluteAddress(operationInfo.Address); break;
+					case EvalValues::IsWrite: token = operationInfo.OperationType == MemoryOperationType::Write; break;
+					case EvalValues::IsRead: token = operationInfo.OperationType == MemoryOperationType::Read; break;
+				}
 			}
 		} else if(token >= EvalOperators::Multiplication) {
 			right = operandStack[--pos];
@@ -371,14 +387,14 @@ int32_t ExpressionEvaluator::Evaluate(vector<int> &rpnList, DebugState &state, E
 				case EvalOperators::Minus: token = -right; break;
 				case EvalOperators::BinaryNot: token = ~right; break;
 				case EvalOperators::LogicalNot: token = !right; break;
-				case EvalOperators::Bracket: token = _debugger->GetMemoryDumper()->GetMemoryValue(DebugMemoryType::CpuMemory, right); break;
-				case EvalOperators::Braces: token = _debugger->GetMemoryDumper()->GetMemoryValueWord(DebugMemoryType::CpuMemory, right); break;
+				case EvalOperators::Bracket: token = _debugger->GetMemoryDumper()->GetMemoryValue(DebugMemoryType::CpuMemory, (uint32_t)right); break;
+				case EvalOperators::Braces: token = _debugger->GetMemoryDumper()->GetMemoryValueWord(DebugMemoryType::CpuMemory, (uint32_t)right); break;
 				default: throw std::runtime_error("Invalid operator");
 			}
 		}
 		operandStack[pos++] = token;
 	}
-	return operandStack[0];
+	return (int32_t)operandStack[0];
 }
 
 ExpressionEvaluator::ExpressionEvaluator(Debugger* debugger)
@@ -386,55 +402,55 @@ ExpressionEvaluator::ExpressionEvaluator(Debugger* debugger)
 	_debugger = debugger;
 }
 
-vector<int>* ExpressionEvaluator::GetRpnList(string expression)
+ExpressionData ExpressionEvaluator::GetRpnList(string expression, bool &success)
 {
-	vector<int> output;
-	bool success;
-	return GetRpnList(expression, output, success);
+	ExpressionData* cachedData = PrivateGetRpnList(expression, success);
+	if(cachedData) {
+		return *cachedData;
+	} else {
+		return ExpressionData();
+	}
 }
 
-vector<int>* ExpressionEvaluator::GetRpnList(string expression, vector<int> &output, bool& success)
+ExpressionData* ExpressionEvaluator::PrivateGetRpnList(string expression, bool& success)
 {
-	vector<int> *outputQueue = nullptr;
+	ExpressionData *cachedData = nullptr;
 	{
 		LockHandler lock = _cacheLock.AcquireSafe();
 
-		auto cacheOutputQueue = _outputCache.find(expression);
-		if(cacheOutputQueue != _outputCache.end()) {
-			outputQueue = &(cacheOutputQueue->second);
+		auto result = _cache.find(expression);
+		if(result != _cache.end()) {
+			cachedData = &(result->second);
 		}
 	}
 
-	if(outputQueue == nullptr) {
+	if(cachedData == nullptr) {
 		string fixedExp = expression;
 		fixedExp.erase(std::remove(fixedExp.begin(), fixedExp.end(), ' '), fixedExp.end());
-		success = ToRpn(fixedExp, output);
-
-		if(success && !_containsCustomLabels) {
+		ExpressionData data;
+		success = ToRpn(fixedExp, data);
+		if(success) {
 			LockHandler lock = _cacheLock.AcquireSafe();
-			_outputCache[expression] = output;
-			outputQueue = &_outputCache[expression];
+			_cache[expression] = data;
+			cachedData = &_cache[expression];
 		}
+	} else {
+		success = true;
 	}
 
-	return outputQueue;
+	return cachedData;
 }
 
 int32_t ExpressionEvaluator::PrivateEvaluate(string expression, DebugState &state, EvalResultType &resultType, OperationInfo &operationInfo, bool& success)
 {
 	success = true;
-	vector<int> output;
-	vector<int> *rpnList = GetRpnList(expression, output, success);
+	ExpressionData *cachedData = PrivateGetRpnList(expression, success);
 
 	if(!success) {
 		return 0;
 	}
 
-	if(!rpnList) {
-		rpnList = &output;
-	}
-
-	return Evaluate(*rpnList, state, resultType, operationInfo);	
+	return Evaluate(*cachedData, state, resultType, operationInfo);	
 }
 
 int32_t ExpressionEvaluator::Evaluate(string expression, DebugState &state, EvalResultType &resultType, OperationInfo &operationInfo)

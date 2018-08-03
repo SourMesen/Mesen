@@ -56,11 +56,12 @@ void TraceLogger::SetOptions(TraceLoggerOptions options)
 	string format = _options.Format;
 	
 	auto lock = _lock.AcquireSafe();
-	_conditionRpnList.clear();
+	_conditionData = ExpressionData();
 	if(!condition.empty()) {
-		vector<int> *rpnList = _expEvaluator->GetRpnList(condition);
-		if(rpnList) {
-			_conditionRpnList = *rpnList;
+		bool success = false;
+		ExpressionData rpnList = _expEvaluator->GetRpnList(condition, success);
+		if(success) {
+			_conditionData = rpnList;
 		}
 	}
 
@@ -252,9 +253,9 @@ void TraceLogger::GetTraceRow(string &output, State &cpuState, PPUDebugState &pp
 
 bool TraceLogger::ConditionMatches(DebugState &state, DisassemblyInfo &disassemblyInfo, OperationInfo &operationInfo)
 {
-	if(!_conditionRpnList.empty()) {
+	if(!_conditionData.RpnQueue.empty()) {
 		EvalResultType type;
-		if(!_expEvaluator->Evaluate(_conditionRpnList, state, type, operationInfo)) {
+		if(!_expEvaluator->Evaluate(_conditionData, state, type, operationInfo)) {
 			if(operationInfo.OperationType == MemoryOperationType::ExecOpCode) {
 				//Condition did not match, keep state/disassembly info for instruction's subsequent cycles
 				_lastState = state;

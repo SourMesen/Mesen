@@ -3,10 +3,10 @@
 #include "DebuggerTypes.h"
 #include "../Utilities/SimpleLock.h"
 #include "DisassemblyInfo.h"
+#include "ExpressionEvaluator.h"
 
 class MemoryManager;
 class LabelManager;
-class ExpressionEvaluator;
 class Debugger;
 
 enum class RowDataType
@@ -65,7 +65,7 @@ private:
 	shared_ptr<LabelManager> _labelManager;
 	
 	shared_ptr<ExpressionEvaluator> _expEvaluator;
-	vector<int> _conditionRpnList;
+	ExpressionData _conditionData;
 
 	vector<RowPart> _rowParts;
 

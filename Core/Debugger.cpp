@@ -52,6 +52,9 @@ Debugger::Debugger(shared_ptr<Console> console, shared_ptr<CPU> cpu, shared_ptr<
 	_profiler.reset(new Profiler(this));
 	_traceLogger.reset(new TraceLogger(this, memoryManager, _labelManager));
 
+	_bpExpEval.reset(new ExpressionEvaluator(this));
+	_watchExpEval.reset(new ExpressionEvaluator(this));
+
 	_stepOut = false;
 	_stepCount = -1;
 	_stepOverAddr = -1;
@@ -246,15 +249,20 @@ void Debugger::SetBreakpoints(Breakpoint breakpoints[], uint32_t length)
 		_hasBreakpoint[i] = false;
 	}
 
-	ExpressionEvaluator expEval(this);
+	_bpExpEval.reset(new ExpressionEvaluator(this));
 	for(uint32_t j = 0; j < length; j++) {
 		Breakpoint &bp = breakpoints[j];
 		for(int i = 0; i < Debugger::BreakpointTypeCount; i++) {
 			bool isEnabled = bp.IsEnabled() && _console->GetSettings()->CheckFlag(EmulationFlags::DebuggerWindowEnabled);
 			if((bp.IsMarked() || isEnabled) && bp.HasBreakpointType((BreakpointType)i)) {
 				_breakpoints[i].push_back(bp);
-				vector<int> *rpnList = expEval.GetRpnList(bp.GetCondition());
-				_breakpointRpnList[i].push_back(rpnList ? *rpnList : vector<int>());
+
+				bool success = true;
+				if(bp.HasCondition()) {
+					ExpressionData data = _bpExpEval->GetRpnList(bp.GetCondition(), success);
+					_breakpointRpnList[i].push_back(success ? data : ExpressionData());
+				}
+
 				_hasBreakpoint[i] = true;
 			}
 		}
@@ -318,7 +326,7 @@ void Debugger::ProcessBreakpoints(BreakpointType type, OperationInfo &operationI
 					GetState(&_debugState, false);
 					needState = false;
 				}
-				if(_bpExpEval.Evaluate(_breakpointRpnList[(int)type][i], _debugState, resultType, operationInfo) != 0) {
+				if(_bpExpEval->Evaluate(_breakpointRpnList[(int)type][i], _debugState, resultType, operationInfo) != 0) {
 					processBreakpoint(breakpoint);
 				}
 			}
@@ -341,12 +349,17 @@ void Debugger::ProcessBreakpoints(BreakpointType type, OperationInfo &operationI
 	}
 }
 
-int32_t Debugger::EvaluateExpression(string expression, EvalResultType &resultType)
+int32_t Debugger::EvaluateExpression(string expression, EvalResultType &resultType, bool useCache)
 {
 	DebugState state;
 	OperationInfo operationInfo { 0, 0, MemoryOperationType::DummyRead };
 	GetState(&state);
-	return _watchExpEval.Evaluate(expression, state, resultType, operationInfo);
+	if(useCache) {
+		return _watchExpEval->Evaluate(expression, state, resultType, operationInfo);
+	} else {
+		ExpressionEvaluator expEval(this);
+		return expEval.Evaluate(expression, state, resultType, operationInfo);
+	}
 }
 
 void Debugger::UpdateCallstack(uint8_t instruction, uint32_t addr)

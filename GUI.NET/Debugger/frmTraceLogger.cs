@@ -367,7 +367,7 @@ namespace Mesen.GUI.Debugger
 		{
 			if(txtCondition.Text.Length > 0) {
 				EvalResultType resultType;
-				InteropEmu.DebugEvaluateExpression(txtCondition.Text, out resultType);
+				InteropEmu.DebugEvaluateExpression(txtCondition.Text, out resultType, false);
 				picExpressionWarning.Visible = (resultType == EvalResultType.Invalid);
 			} else {
 				picExpressionWarning.Visible = false;
