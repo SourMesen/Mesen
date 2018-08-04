@@ -547,7 +547,7 @@ enum class StereoFilter
 
 struct AudioFilterSettings
 {
-	StereoFilter StereoFilter = StereoFilter::None;
+	StereoFilter Filter = StereoFilter::None;
 	double Angle = 0;
 	int32_t Delay = 0;
 	int32_t Strength = 0;

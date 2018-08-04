@@ -188,7 +188,7 @@ namespace Mesen.GUI.Config
 			InteropEmu.SetFlag(EmulationFlags.DisableNoiseModeFlag, audioInfo.DisableNoiseModeFlag);
 
 			InteropEmu.SetAudioFilterSettings(new InteropEmu.AudioFilterSettings() {
-				StereoFilter = audioInfo.StereoFilter,
+				Filter = audioInfo.StereoFilter,
 				Angle = (double)audioInfo.StereoPanningAngle / 180 * Math.PI,
 				Delay = audioInfo.StereoFilter == InteropEmu.StereoFilter.Delay ? audioInfo.StereoDelay : audioInfo.StereoCombFilterDelay,
 				Strength = audioInfo.StereoCombFilterStrength,

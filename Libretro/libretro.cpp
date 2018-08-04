@@ -317,11 +317,13 @@ extern "C" {
 		var.key = MesenFakeStereo;
 		if(retroEnv(RETRO_ENVIRONMENT_GET_VARIABLE, &var)) {
 			string value = string(var.value);
+			AudioFilterSettings settings;
 			if(value == "enabled") {
-				_console->GetSettings()->SetStereoFilter(StereoFilter::Delay);
-				_console->GetSettings()->SetStereoDelay(15);
+				settings.Filter = StereoFilter::Delay;
+				settings.Delay = 15;
+				_console->GetSettings()->SetAudioFilterSettings(settings);
 			} else {
-				_console->GetSettings()->SetStereoFilter(StereoFilter::None);
+				_console->GetSettings()->SetAudioFilterSettings(settings);
 			}
 		}
 		

@@ -150,7 +150,7 @@ void SoundMixer::PlayAudioBuffer(uint32_t time)
 		_reverbFilter.ResetFilter();
 	}
 
-	switch(filterSettings.StereoFilter) {
+	switch(filterSettings.Filter) {
 		case StereoFilter::None: break;
 		case StereoFilter::Delay: _stereoDelay.ApplyFilter(_outputBuffer, sampleCount, _sampleRate, filterSettings.Delay); break;
 		case StereoFilter::Panning: _stereoPanning.ApplyFilter(_outputBuffer, sampleCount, filterSettings.Angle); break;

@@ -1052,7 +1052,7 @@ namespace Mesen.GUI
 
 		public struct AudioFilterSettings
 		{
-			public StereoFilter StereoFilter;
+			public StereoFilter Filter;
 			public double Angle;
 			public Int32 Delay;
 			public Int32 Strength;
