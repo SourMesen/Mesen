@@ -649,7 +649,7 @@
     <ClInclude Include="DebugBreakHelper.h" />
     <ClInclude Include="DebuggerTypes.h" />
     <ClInclude Include="Eh8813A.h" />
-    <ClInclude Include="MMC3_Fk23C.h" />
+    <ClInclude Include="Fk23C.h" />
     <ClInclude Include="LabelManager.h" />
     <ClInclude Include="MagicKidGooGoo.h" />
     <ClInclude Include="MemoryAccessCounter.h" />
@@ -895,7 +895,6 @@
     <ClInclude Include="Sunsoft89.h" />
     <ClInclude Include="Sunsoft93.h" />
     <ClInclude Include="SunsoftFme7.h" />
-    <ClInclude Include="MMC3_Super24in1Sc03.h" />
     <ClInclude Include="Super40in1Ws.h" />
     <ClInclude Include="Supervision.h" />
     <ClInclude Include="T262.h" />
@@ -948,7 +947,6 @@
     <ClInclude Include="VsZapper.h" />
     <ClInclude Include="Waixing162.h" />
     <ClInclude Include="Waixing164.h" />
-    <ClInclude Include="Waixing176.h" />
     <ClInclude Include="Waixing178.h" />
     <ClInclude Include="Waixing252.h" />
     <ClInclude Include="WaveRecorder.h" />

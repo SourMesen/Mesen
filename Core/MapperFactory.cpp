@@ -59,6 +59,7 @@
 #include "FaridSlrom.h"
 #include "FaridUnrom.h"
 #include "FDS.h"
+#include "Fk23C.h"
 #include "FrontFareast.h"
 #include "Ghostbusters63in1.h"
 #include "Gkcx1.h"
@@ -186,11 +187,9 @@
 #include "MMC3_BmcF15.h"
 #include "MMC3_ChrRam.h"
 #include "MMC3_Coolboy.h"
-#include "MMC3_Fk23C.h"
 #include "MMC3_Kof97.h"
 #include "MMC3_MaliSB.h"
 #include "MMC3_StreetHeroes.h"
-#include "MMC3_Super24in1Sc03.h"
 #include "MMC4.h"
 #include "MMC5.h"
 #include "Namco108.h"
@@ -267,7 +266,6 @@
 #include "VsSystem.h"
 #include "Waixing162.h"
 #include "Waixing164.h"
-#include "Waixing176.h"
 #include "Waixing178.h"
 #include "Waixing252.h"
 #include "Yoko.h"
@@ -466,7 +464,7 @@ BaseMapper* MapperFactory::GetMapperFromID(RomData &romData)
 		case 173: return new Txc22211C();
 		case 174: return new Mapper174();
 		case 175: return new Kaiser7022();
-		case 176: return new Waixing176();
+		case 176: return new Fk23C();
 		case 177: return new Henggedianzi177();
 		case 178: return new Waixing178();
 		case 179: return new Henggedianzi179();
@@ -640,13 +638,10 @@ BaseMapper* MapperFactory::GetMapperFromID(RomData &romData)
 		case UnifBoards::Ac08: return new Ac08(); //mapper 42?
 		case UnifBoards::BmcGn45: return new BmcGn45();
 		case UnifBoards::Cc21: return new Cc21();
-		case UnifBoards::Fk23C: return new MMC3_Fk23C(false); //mapper 176?
-		case UnifBoards::Fk23Ca: return new MMC3_Fk23C(true); //mapper 176?
 		case UnifBoards::Ghostbusters63in1: return new Ghostbusters63in1(); //mapper 226?
 		case UnifBoards::Gs2013: return new Gs2013();
 		case UnifBoards::Malee: return new Malee(); //mapper 42?
 		case UnifBoards::SssNrom256: return new FamicomBox();
-		case UnifBoards::Super24in1Sc03: return new MMC3_Super24in1Sc03(); //mapper 176?
 		case UnifBoards::Unl255in1: return new Unl255in1();
 		case UnifBoards::Unl8237A: return new Unl8237A(); //mapper 215.1
 		case UnifBoards::UnlPuzzle: return new UnlPuzzle();
