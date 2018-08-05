@@ -30,6 +30,7 @@ using namespace std;
 typedef void (__stdcall *NotificationListenerCallback)(ConsoleNotificationType);
 
 extern "C" {
+	void __stdcall InitDll();
 	void __stdcall SetFlags(uint64_t flags);
 	void __stdcall InitializeEmu(const char* homeFolder, void*, void*, bool, bool, bool);
 	void __stdcall SetControllerType(uint32_t port, ControllerType type);
@@ -189,6 +190,7 @@ int main(int argc, char* argv[])
 		std::getchar();
 	} else if(argc == 3) {
 		char* testFilename = argv[2];
+		InitDll();
 		SetFlags(0x8000000000000000); //EmulationFlags::ConsoleMode
 		InitializeEmu(mesenFolder.c_str(), nullptr, nullptr, false, false, false);
 		RegisterNotificationCallback(0, (NotificationListenerCallback)OnNotificationReceived);
