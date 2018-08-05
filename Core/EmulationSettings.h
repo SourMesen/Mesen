@@ -22,7 +22,6 @@ enum EmulationFlags : uint64_t
 	DisableDynamicSampleRate = 0x80,
 
 	PauseOnMovieEnd = 0x0100,
-	PauseWhenInBackground = 0x0200,
 	AllowBackgroundInput = 0x0400,
 	ReduceSoundInBackground = 0x0800,
 	MuteSoundInBackground = 0x1000,
@@ -757,7 +756,7 @@ public:
 
 	bool NeedsPause()
 	{
-		return (CheckFlag(EmulationFlags::Paused) || (CheckFlag(EmulationFlags::InBackground) && CheckFlag(EmulationFlags::PauseWhenInBackground) && !GameClient::Connected())) && !CheckFlag(EmulationFlags::DebuggerWindowEnabled);
+		return CheckFlag(EmulationFlags::Paused) && !CheckFlag(EmulationFlags::DebuggerWindowEnabled);
 	}
 
 	bool InputEnabled()

@@ -187,7 +187,6 @@ namespace Mesen.GUI.Config
 			InteropEmu.SetFlag(EmulationFlags.FdsAutoInsertDisk, preferenceInfo.FdsAutoInsertDisk);
 			InteropEmu.SetFlag(EmulationFlags.PauseOnMovieEnd, preferenceInfo.PauseOnMovieEnd);
 			InteropEmu.SetFlag(EmulationFlags.AllowBackgroundInput, preferenceInfo.AllowBackgroundInput);
-			InteropEmu.SetFlag(EmulationFlags.PauseWhenInBackground, preferenceInfo.PauseWhenInBackground || preferenceInfo.PauseWhenInMenusAndConfig || preferenceInfo.PauseWhenInDebuggingTools);
 			InteropEmu.SetFlag(EmulationFlags.UseHighResolutionTimer, !preferenceInfo.DisableHighResolutionTimer);
 			InteropEmu.SetFlag(EmulationFlags.AllowMismatchingSaveStates, preferenceInfo.AllowMismatchingSaveStates);			
 

@@ -20,6 +20,7 @@ namespace Mesen.GUI.Forms
 		private bool _iconSet = false;
 		protected int _inMenu = 0;
 		private static Timer _tmrUpdateBackground;
+		private static bool _needResume = false;
 
 		static BaseForm()
 		{
@@ -38,6 +39,11 @@ namespace Mesen.GUI.Forms
 
 		protected virtual bool IsConfigForm { get { return false; } }
 
+		public static void StopBackgroundTimer()
+		{
+			_tmrUpdateBackground.Stop();
+		}
+
 		private static void tmrUpdateBackground_Tick(object sender, EventArgs e)
 		{
 			Form focusedForm = null;
@@ -48,14 +54,24 @@ namespace Mesen.GUI.Forms
 				}
 			}
 
-			bool inBackground = focusedForm == null;
+			bool needPause = focusedForm == null && ConfigManager.Config.PreferenceInfo.PauseWhenInBackground;
 			if(focusedForm != null) {
-				inBackground |= ConfigManager.Config.PreferenceInfo.PauseWhenInMenusAndConfig && focusedForm is BaseForm && (((BaseForm)focusedForm)._inMenu > 0 || ((BaseForm)focusedForm).IsConfigForm);
-				inBackground |= ConfigManager.Config.PreferenceInfo.PauseWhenInMenusAndConfig && !(focusedForm is BaseInputForm) && !focusedForm.GetType().FullName.Contains("Debugger");
-				inBackground |= ConfigManager.Config.PreferenceInfo.PauseWhenInDebuggingTools && focusedForm.GetType().FullName.Contains("Debugger");
+				needPause |= ConfigManager.Config.PreferenceInfo.PauseWhenInMenusAndConfig && focusedForm is BaseForm && (((BaseForm)focusedForm)._inMenu > 0 || ((BaseForm)focusedForm).IsConfigForm);
+				needPause |= ConfigManager.Config.PreferenceInfo.PauseWhenInMenusAndConfig && !(focusedForm is BaseInputForm) && !focusedForm.GetType().FullName.Contains("Debugger");
+				needPause |= ConfigManager.Config.PreferenceInfo.PauseWhenInDebuggingTools && focusedForm.GetType().FullName.Contains("Debugger");
 			}
 
-			InteropEmu.SetFlag(EmulationFlags.InBackground, inBackground);
+			if(needPause) {
+				if(!InteropEmu.IsPaused(InteropEmu.ConsoleId.Master)) {
+					_needResume = true;
+					InteropEmu.Pause(InteropEmu.ConsoleId.Master);
+				}
+			} else if(_needResume) {
+				InteropEmu.Resume(InteropEmu.ConsoleId.Master);
+				_needResume = false;
+			}
+
+			InteropEmu.SetFlag(EmulationFlags.InBackground, focusedForm == null);
 		}
 
 		protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
