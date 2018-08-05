@@ -129,10 +129,10 @@ namespace Mesen.GUI.Forms.Cheats
 					matchingAddresses = new HashSet<int>(matchingAddresses.Where(addr => {
 						if(_filters[i].PrevType.HasValue) {
 							switch(_filters[i].PrevType) {
-								case CheatPrevFilterType.Smaller: return _memorySnapshots[i+1][addr] < _memorySnapshots[i][addr];
+								case CheatPrevFilterType.Smaller: return _memorySnapshots[i+1][addr] > _memorySnapshots[i][addr];
 								case CheatPrevFilterType.Equal: return _memorySnapshots[i+1][addr] == _memorySnapshots[i][addr];
 								case CheatPrevFilterType.NotEqual: return _memorySnapshots[i+1][addr] != _memorySnapshots[i][addr];
-								case CheatPrevFilterType.Greater: return _memorySnapshots[i+1][addr] > _memorySnapshots[i][addr];
+								case CheatPrevFilterType.Greater: return _memorySnapshots[i+1][addr] < _memorySnapshots[i][addr];
 							}
 						} else {
 							switch(_filters[i].CurrentType) {
