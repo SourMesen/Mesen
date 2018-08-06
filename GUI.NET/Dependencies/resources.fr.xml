@@ -218,7 +218,7 @@
 			<Control ID="lblDisplayPosition">Position d'affichage :</Control>
 			<Control ID="chkDisplayInputHorizontally">Afficher horizontalement</Control>
 
-			<Control ID="lblKeyBinding">Attention: Votre configuration actuelle contient des conflicts - certaines touches sur votre clavier ou manette sont mappées à plusieurs boutons sur la console. Veuillez réviser votre configuration et la corriger au besoin.</Control>
+			<Control ID="lblKeyBinding">Attention: Votre configuration actuelle contient des conflits - certaines touches sur votre clavier ou manette sont mappées à plusieurs boutons sur la console. Veuillez réviser votre configuration et la corriger au besoin.</Control>
 		</Form>
 		<Form ID="frmVideoConfig" Title="Options vidéo">
 			<Control ID="tpgGeneral">Général</Control>
@@ -397,7 +397,7 @@
 			<Control ID="lblRewindMinutes">minutes (Utilise ≈1MB/min)</Control>
 
 			<Control ID="tpgShortcuts">Raccourcis</Control>
-			<Control ID="lblShortcutWarning">Attention: Votre configuration actuelle contient des conflicts. Veuillez réviser votre configuration et la corriger au besoin.</Control>
+			<Control ID="lblShortcutWarning">Attention: Votre configuration actuelle contient des conflits. Veuillez réviser votre configuration et la corriger au besoin.</Control>
 			<Control ID="colAction">Action</Control>
 			<Control ID="colBinding1">Raccourci #1</Control>
 			<Control ID="colBinding2">Raccourci #2</Control>
