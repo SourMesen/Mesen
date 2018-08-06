@@ -207,7 +207,7 @@ namespace InteropEmu {
 			//Force some settings
 			_historyConsole->GetSettings()->SetEmulationSpeed(100);
 			_historyConsole->GetSettings()->SetVideoScale(2);
-			_historyConsole->GetSettings()->ClearFlags(EmulationFlags::InBackground | EmulationFlags::Rewind | EmulationFlags::ForceMaxSpeed);
+			_historyConsole->GetSettings()->ClearFlags(EmulationFlags::InBackground | EmulationFlags::Rewind | EmulationFlags::ForceMaxSpeed | EmulationFlags::DebuggerWindowEnabled);
 
 			#ifdef _WIN32
 				_historyRenderer.reset(new Renderer(_historyConsole, (HWND)viewerHandle, false));
