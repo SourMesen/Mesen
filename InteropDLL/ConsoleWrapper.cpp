@@ -31,6 +31,7 @@
 #include "../Core/VsSystemActionManager.h"
 #include "../Core/KeyManager.h"
 #include "../Core/GameDatabase.h"
+#include "../Core/RewindManager.h"
 #include "../Utilities/SimpleLock.h"
 
 #ifdef _WIN32
@@ -188,6 +189,12 @@ namespace InteropEmu {
 			_dualRenderer.reset();
 			_dualSoundManager.reset();
 			_console->Resume();
+		}
+
+		DllExport bool __stdcall HistoryViewerEnabled()
+		{
+			shared_ptr<RewindManager> rewindManager = _console->GetRewindManager();
+			return rewindManager ? rewindManager->HasHistory() : false;
 		}
 
 		DllExport void __stdcall HistoryViewerInitialize(void *windowHandle, void *viewerHandle)

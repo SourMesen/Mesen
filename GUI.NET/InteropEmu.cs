@@ -26,6 +26,7 @@ namespace Mesen.GUI
 		[DllImport(DLLPath)] public static extern void InitializeDualSystem(IntPtr windowHandle, IntPtr viewerHandle);
 		[DllImport(DLLPath)] public static extern void ReleaseDualSystemAudioVideo();
 
+		[DllImport(DLLPath)] [return: MarshalAs(UnmanagedType.I1)] public static extern bool HistoryViewerEnabled();
 		[DllImport(DLLPath)] public static extern void HistoryViewerInitialize(IntPtr windowHandle, IntPtr viewerHandle);
 		[DllImport(DLLPath)] public static extern void HistoryViewerRelease();
 		[DllImport(DLLPath)] public static extern void HistoryViewerRun();

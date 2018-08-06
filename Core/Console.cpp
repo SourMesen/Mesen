@@ -511,9 +511,9 @@ CheatManager* Console::GetCheatManager()
 	return _cheatManager.get();
 }
 
-RewindManager* Console::GetRewindManager()
+shared_ptr<RewindManager> Console::GetRewindManager()
 {
-	return _rewindManager.get();
+	return _rewindManager;
 }
 
 HistoryViewer* Console::GetHistoryViewer()

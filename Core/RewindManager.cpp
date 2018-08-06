@@ -13,6 +13,7 @@ RewindManager::RewindManager(shared_ptr<Console> console)
 	_settings = console->GetSettings();
 	_rewindState = RewindState::Stopped;
 	_framesToFastForward = 0;
+	_hasHistory = false;
 	AddHistoryBlock();
 
 	_console->GetControlManager()->RegisterInputProvider(this);
@@ -27,6 +28,7 @@ RewindManager::~RewindManager()
 
 void RewindManager::ClearBuffer()
 {
+	_hasHistory = false;
 	_history.clear();
 	_historyBackup.clear();
 	_currentHistory = RewindData();
@@ -42,6 +44,7 @@ void RewindManager::ClearBuffer()
 void RewindManager::ProcessNotification(ConsoleNotificationType type, void * parameter)
 {
 	if(type == ConsoleNotificationType::PpuFrameDone) {
+		_hasHistory = _history.size() >= 2;
 		if(_settings->GetRewindBufferSize() > 0) {
 			switch(_rewindState) {
 				case RewindState::Starting:
@@ -336,6 +339,11 @@ void RewindManager::RewindSeconds(uint32_t seconds)
 		_currentHistory.LoadState(_console);
 		_console->Resume();
 	}
+}
+
+bool RewindManager::HasHistory()
+{
+	return _hasHistory;
 }
 
 void RewindManager::CopyHistory(shared_ptr<HistoryViewer> destHistoryViewer)

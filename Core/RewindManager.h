@@ -25,6 +25,8 @@ private:
 
 	shared_ptr<Console> _console;
 	EmulationSettings* _settings;
+	
+	bool _hasHistory;
 
 	std::deque<RewindData> _history;
 	std::deque<RewindData> _historyBackup;
@@ -66,6 +68,7 @@ public:
 	bool IsStepBack();
 	void RewindSeconds(uint32_t seconds);
 
+	bool HasHistory();
 	void CopyHistory(shared_ptr<HistoryViewer> destHistoryViewer);
 
 	void SendFrame(void *frameBuffer, uint32_t width, uint32_t height, bool forRewind);

@@ -125,7 +125,7 @@ void SoundMixer::PlayAudioBuffer(uint32_t time)
 		}
 	}
 
-	RewindManager* rewindManager = _console->GetRewindManager();
+	shared_ptr<RewindManager> rewindManager = _console->GetRewindManager();
 
 	if(!_console->GetVideoRenderer()->IsRecording() && !_waveRecorder && !_settings->CheckFlag(EmulationFlags::NsfPlayerEnabled)) {
 		if((_settings->CheckFlag(EmulationFlags::Turbo) || (rewindManager && rewindManager->IsRewinding())) && _settings->CheckFlag(EmulationFlags::ReduceSoundInFastForward)) {

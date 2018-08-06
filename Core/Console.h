@@ -129,7 +129,7 @@ public:
 	ControlManager* GetControlManager();
 	MemoryManager* GetMemoryManager();
 	CheatManager* GetCheatManager();
-	RewindManager* GetRewindManager();
+	shared_ptr<RewindManager> GetRewindManager();
 	HistoryViewer* GetHistoryViewer();
 
 	bool LoadMatchingRom(string romName, HashInfo hashInfo);
