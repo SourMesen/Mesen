@@ -36,6 +36,14 @@ VirtualFile::VirtualFile(const string & file)
 	}
 }
 
+VirtualFile::VirtualFile(const void *buffer, size_t bufferSize, string fileName)
+{
+	_path = fileName;
+
+	_data.resize(bufferSize);
+	memcpy(_data.data(), buffer, bufferSize);
+}
+
 VirtualFile::VirtualFile(std::istream & input, string filePath)
 {
 	_path = filePath;

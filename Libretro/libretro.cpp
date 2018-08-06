@@ -977,7 +977,9 @@ extern "C" {
 		_console->GetSettings()->SetControllerType(1, ControllerType::StandardController);
 		_console->GetSettings()->SetControllerType(2, ControllerType::None);
 		_console->GetSettings()->SetControllerType(3, ControllerType::None);
-		bool result = _console->Initialize(game->path);
+
+		VirtualFile romData(game->data, game->size, game->path);
+		bool result = _console->Initialize(romData);
 
 		if(result) {
 			//Set default dipswitches for some VS System games
@@ -1026,7 +1028,7 @@ extern "C" {
 
 		info->library_name = "Mesen";
 		info->library_version = _mesenVersion.c_str();
-		info->need_fullpath = true;
+		info->need_fullpath = false;
 		info->valid_extensions = "nes|fds|unf|unif";
 		info->block_extract = false;
 	}

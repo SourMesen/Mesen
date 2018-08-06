@@ -20,6 +20,7 @@ public:
 	VirtualFile();
 	VirtualFile(const string &archivePath, const string innerFile);
 	VirtualFile(const string &file);
+	VirtualFile(const void *buffer, size_t bufferSize, string fileName = "noname");
 	VirtualFile(std::istream &input, string filePath);
 
 	operator std::string() const;
