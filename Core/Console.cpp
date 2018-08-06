@@ -259,6 +259,7 @@ bool Console::Initialize(VirtualFile &romFile, VirtualFile &patchFile)
 	if(romFile.IsValid()) {
 		_videoDecoder->StopThread();
 
+		shared_ptr<HdPackData> originalHdPackData = _hdData;
 		LoadHdPack(romFile, patchFile);
 		if(patchFile.IsValid()) {
 			if(romFile.ApplyPatch(patchFile)) {
@@ -367,6 +368,8 @@ bool Console::Initialize(VirtualFile &romFile, VirtualFile &patchFile)
 			if(_hdData && (!_hdData->BgmFilesById.empty() || !_hdData->SfxFilesById.empty())) {
 				_hdAudioDevice.reset(new HdAudioDevice(shared_from_this(), _hdData.get()));
 				_memoryManager->RegisterIODevice(_hdAudioDevice.get());
+			} else {
+				_hdAudioDevice.reset();
 			}
 
 			_model = NesModel::Auto;
@@ -417,6 +420,8 @@ bool Console::Initialize(VirtualFile &romFile, VirtualFile &patchFile)
 			}
 			Resume();
 			return true;
+		} else {
+			_hdData = originalHdPackData;
 		}
 	}
 
@@ -1095,7 +1100,6 @@ bool Console::IsHdPpu()
 void Console::LoadHdPack(VirtualFile &romFile, VirtualFile &patchFile)
 {
 	_hdData.reset();
-	_hdAudioDevice.reset();
 	if(_settings->CheckFlag(EmulationFlags::UseHdPacks)) {
 		_hdData.reset(new HdPackData());
 		if(!HdPackLoader::LoadHdNesPack(romFile, *_hdData.get())) {
