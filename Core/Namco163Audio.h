@@ -105,7 +105,7 @@ private:
 		for(int i = 7, min = 7 - GetNumberOfChannels(); i >= min; i--) {
 			summedOutput += _channelOutput[i];
 		}
-		summedOutput /= GetNumberOfChannels();
+		summedOutput /= GetNumberOfChannels() + 1;
 
 		_console->GetApu()->AddExpansionAudioDelta(AudioChannel::Namco163, summedOutput - _lastOutput);
 		_lastOutput = summedOutput;
@@ -123,7 +123,7 @@ protected:
 
 	void ClockAudio() override
 	{
-		if(!_disableSound && GetNumberOfChannels()) {
+		if(!_disableSound) {
 			_updateCounter++;
 			if(_updateCounter == 15) {
 				UpdateChannel(_currentChannel);
