@@ -25,13 +25,24 @@ uint16_t BaseMapper::InternalGetWorkRamPageSize() { return std::min((uint32_t)Ge
 uint16_t BaseMapper::InternalGetChrPageSize() { return std::min((uint32_t)GetCHRPageSize(), _chrRomSize); }
 uint16_t BaseMapper::InternalGetChrRamPageSize() { return std::min((uint32_t)GetChrRamPageSize(), _chrRamSize); }
 	
+bool BaseMapper::ValidateAddressRange(uint16_t startAddr, uint16_t endAddr)
+{
+	if((startAddr & 0xFF) || (endAddr & 0xFF) != 0xFF) {
+		#ifdef _DEBUG
+			throw new std::runtime_error("Start/End address must be multiples of 256/0x100");
+		#else
+			//Ignore this request in release mode - granularity smaller than 256 bytes is not supported
+			return false;
+		#endif
+	}
+	return true;
+}
+
 void BaseMapper::SetCpuMemoryMapping(uint16_t startAddr, uint16_t endAddr, int16_t pageNumber, PrgMemoryType type, int8_t accessType)
 {
-#ifdef _DEBUG
-	if((startAddr & 0xFF) || (endAddr & 0xFF) != 0xFF) {
-		throw new std::runtime_error("Start/End address must be multiples of 256/0x100");
+	if(!ValidateAddressRange(startAddr, endAddr)) {
+		return;
 	}
-#endif
 
 	uint8_t* source = nullptr;
 	uint32_t pageCount;
@@ -116,11 +127,9 @@ void BaseMapper::SetCpuMemoryMapping(uint16_t startAddr, uint16_t endAddr, int16
 
 void BaseMapper::SetCpuMemoryMapping(uint16_t startAddr, uint16_t endAddr, uint8_t *source, int8_t accessType)
 {
-	#ifdef _DEBUG
-	if((startAddr & 0xFF) || (endAddr & 0xFF) != 0xFF) {
-		throw new std::runtime_error("Start/End address must be multiples of 256/0x100");
+	if(!ValidateAddressRange(startAddr, endAddr)) {
+		return;
 	}
-	#endif
 
 	startAddr >>= 8;
 	endAddr >>= 8;
@@ -140,6 +149,10 @@ void BaseMapper::RemoveCpuMemoryMapping(uint16_t startAddr, uint16_t endAddr)
 
 void BaseMapper::SetPpuMemoryMapping(uint16_t startAddr, uint16_t endAddr, uint16_t pageNumber, ChrMemoryType type, int8_t accessType)
 {
+	if(!ValidateAddressRange(startAddr, endAddr)) {
+		return;
+	}
+
 	uint32_t pageCount = 0;
 	uint32_t pageSize = 0;
 	uint8_t* sourceMemory = nullptr;
@@ -217,11 +230,9 @@ void BaseMapper::SetPpuMemoryMapping(uint16_t startAddr, uint16_t endAddr, uint1
 
 void BaseMapper::SetPpuMemoryMapping(uint16_t startAddr, uint16_t endAddr, uint8_t* sourceMemory, int8_t accessType)
 {
-	#ifdef _DEBUG
-	if((startAddr & 0xFF) || (endAddr & 0xFF) != 0xFF) {
-		throw new std::runtime_error("Start/End address must be multiples of 256/0x100");
+	if(!ValidateAddressRange(startAddr, endAddr)) {
+		return;
 	}
-	#endif
 
 	startAddr >>= 8;
 	endAddr >>= 8;

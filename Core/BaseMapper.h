@@ -22,7 +22,8 @@ private:
 	uint16_t InternalGetSaveRamPageSize();
 	uint16_t InternalGetWorkRamPageSize();
 	uint16_t InternalGetChrPageSize();
-	uint16_t InternalGetChrRamPageSize();	
+	uint16_t InternalGetChrRamPageSize();
+	bool ValidateAddressRange(uint16_t startAddr, uint16_t endAddr);
 
 	uint8_t *_nesNametableRam[2];
 	uint8_t *_cartNametableRam[10];
