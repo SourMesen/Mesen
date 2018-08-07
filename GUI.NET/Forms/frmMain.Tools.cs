@@ -116,14 +116,21 @@ namespace Mesen.GUI.Forms
 
 		private void LoadRandomGame()
 		{
-			IEnumerable<string> gameFolders = ConfigManager.Config.RecentFiles.Select(recentFile => recentFile.RomFile.Folder.ToLowerInvariant()).Distinct();
+			IEnumerable<string> gameFolders;
+			SearchOption searchOptions = SearchOption.TopDirectoryOnly;
+			if(ConfigManager.Config.PreferenceInfo.OverrideGameFolder && Directory.Exists(ConfigManager.Config.PreferenceInfo.GameFolder)) {
+				gameFolders = new List<string>() { ConfigManager.Config.PreferenceInfo.GameFolder };
+				searchOptions = SearchOption.AllDirectories;
+			} else {
+				gameFolders = ConfigManager.Config.RecentFiles.Select(recentFile => recentFile.RomFile.Folder.ToLowerInvariant()).Distinct();
+			}
 			List<string> gameRoms = new List<string>();
 
 			foreach(string folder in gameFolders) {
 				if(Directory.Exists(folder)) {
-					gameRoms.AddRange(Directory.EnumerateFiles(folder, "*.nes", SearchOption.TopDirectoryOnly));
-					gameRoms.AddRange(Directory.EnumerateFiles(folder, "*.unf", SearchOption.TopDirectoryOnly));
-					gameRoms.AddRange(Directory.EnumerateFiles(folder, "*.fds", SearchOption.TopDirectoryOnly));
+					gameRoms.AddRange(Directory.EnumerateFiles(folder, "*.nes", searchOptions));
+					gameRoms.AddRange(Directory.EnumerateFiles(folder, "*.unf", searchOptions));
+					gameRoms.AddRange(Directory.EnumerateFiles(folder, "*.fds", searchOptions));
 				}
 			}
 
