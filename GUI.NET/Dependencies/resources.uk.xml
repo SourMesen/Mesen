@@ -134,7 +134,7 @@
 			<Control ID="radStereoPanning">Панорамування</Control>
 			<Control ID="lblStereoDelayMs">мс</Control>
 			<Control ID="lblStereoPanningAngle">кут в градусах</Control>
-			<Control ID="radStereoCombFilter">Comb Filter</Control>
+			<Control ID="radStereoCombFilter">Гребінчастий фільтр</Control>
 			<Control ID="lblStereoCombFilterMs">мс</Control>
 			<Control ID="lblStereoCombFilterDelay">Затримка :</Control>
 			<Control ID="lblStereoCombFilterStrength">Сила :</Control>
