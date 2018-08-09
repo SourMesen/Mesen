@@ -219,7 +219,7 @@ namespace Mesen.GUI.Debugger
 		private void btnStartLogging_Click(object sender, EventArgs e)
 		{
 			using(SaveFileDialog sfd = new SaveFileDialog()) {
-				sfd.Filter = "Trace logs (*.txt)|*.txt";
+				sfd.SetFilter("Trace logs (*.txt)|*.txt");
 				sfd.FileName = "Trace - " + InteropEmu.GetRomInfo().GetRomName() + ".txt";
 				sfd.InitialDirectory = ConfigManager.DebuggerFolder;
 				if(sfd.ShowDialog() == DialogResult.OK) {

@@ -1814,6 +1814,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <SubType>Designer</SubType>
     </Content>
+    <Content Include="Dependencies\resources.zh.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Dependencies\Zlib.Portable.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

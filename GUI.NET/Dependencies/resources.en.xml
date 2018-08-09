@@ -1047,6 +1047,8 @@
 			<Value ID="Russian">Русский</Value>
 			<Value ID="Spanish">Español</Value>
 			<Value ID="Ukrainian">Українська</Value>
+			<Value ID="Catalan">Català</Value>
+			<Value ID="Chinese">中文</Value>
 		</Enum>
 		<Enum ID="RamPowerOnState">
 			<Value ID="AllZeros">All 0s (Default)</Value>
