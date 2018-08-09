@@ -1,0 +1,1234 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Resources>
+  <Forms>
+	<Form ID="frmMain" Title="Mesen">
+      <Control ID="mnuFile">文件</Control>
+      <Control ID="mnuOpen">打开</Control>
+      <Control ID="mnuSaveState">保存进度</Control>
+      <Control ID="mnuLoadState">载入进度</Control>
+      <Control ID="mnuLoadLastSession">自动载入上次会话</Control>
+      <Control ID="mnuRecentFiles">历史文件</Control>
+      <Control ID="mnuExit">退出</Control>
+      <Control ID="mnuGame">游戏</Control>
+      <Control ID="mnuPause">暂停</Control>
+      <Control ID="mnuReset">重设</Control>
+      <Control ID="mnuPowerCycle">电源</Control>
+      <Control ID="mnuPowerOff">关机</Control>
+      <Control ID="mnuSwitchDiskSide">磁盘换面</Control>
+      <Control ID="mnuSelectDisk">选择磁盘</Control>
+      <Control ID="mnuEjectDisk">取出磁盘</Control>
+      <Control ID="mnuGameConfig">游戏</Control>
+      <Control ID="mnuInsertCoin1">投币 1</Control>
+      <Control ID="mnuInsertCoin2">投币 2</Control>
+	  <Control ID="mnuInsertCoin3">投币 3 （双系统）</Control>
+	  <Control ID="mnuInsertCoin4">投币 4 （双系统）</Control>
+      <Control ID="mnuInputCode">输入条码</Control>
+      <Control ID="mnuTapeRecorder">磁带录音</Control>
+	  <Control ID="mnuLoadTapeFile">从文件载入...</Control>
+	  <Control ID="mnuStartRecordTapeFile">记录到文件...</Control>
+	  <Control ID="mnuStopRecordTapeFile">停止录音</Control>
+	  <Control ID="mnuOptions">设置</Control>
+      <Control ID="mnuEmulationSpeed">速度</Control>
+      <Control ID="mnuEmuSpeedNormal">正常 （100%）</Control>
+      <Control ID="mnuIncreaseSpeed">加速</Control>
+      <Control ID="mnuDecreaseSpeed">减速</Control>
+      <Control ID="mnuEmuSpeedMaximumSpeed">急速</Control>
+      <Control ID="mnuEmuSpeedTriple">300%</Control>
+      <Control ID="mnuEmuSpeedDouble">200%</Control>
+      <Control ID="mnuEmuSpeedHalf">50%</Control>
+      <Control ID="mnuEmuSpeedQuarter">25%</Control>
+      <Control ID="mnuShowFPS">显示帧率</Control>
+      <Control ID="mnuVideoScale">尺寸</Control>
+      <Control ID="mnuScale1x">1 倍</Control>
+      <Control ID="mnuScale2x">2 倍</Control>
+      <Control ID="mnuScale3x">3 倍</Control>
+      <Control ID="mnuScale4x">4 倍</Control>											
+      <Control ID="mnuFullscreen">全屏</Control>
+      <Control ID="mnuVideoFilter">滤镜</Control>
+      <Control ID="mnuNoneFilter">无</Control>
+      <Control ID="mnuNtscFilter">NTSC 2倍（Blargg）</Control>
+      <Control ID="mnuBilinearInterpolation">使用双线性插值</Control>
+      <Control ID="mnuAudioConfig">声音</Control>
+      <Control ID="mnuInput">输入</Control>
+      <Control ID="mnuRegion">区域</Control>
+      <Control ID="mnuRegionAuto">自动</Control>
+      <Control ID="mnuRegionNtsc">NTSC</Control>
+      <Control ID="mnuRegionPal">PAL</Control>
+      <Control ID="mnuRegionDendy">Dendy</Control>
+      <Control ID="mnuVideoConfig">视频</Control>
+      <Control ID="mnuEmulationConfig">模拟</Control>
+      <Control ID="mnuPreferences">配置</Control>
+      <Control ID="mnuTools">工具</Control>
+	  <Control ID="mnuHistoryViewer">历史查看器</Control>
+      <Control ID="mnuNetPlay">网络游戏</Control>
+      <Control ID="mnuStartServer">启动服务器</Control>
+      <Control ID="mnuConnect">连接</Control>
+      <Control ID="mnuNetPlaySelectController">选择控制器</Control>
+      <Control ID="mnuNetPlayPlayer1">玩家 1</Control>
+      <Control ID="mnuNetPlayPlayer2">玩家 2</Control>
+      <Control ID="mnuNetPlayPlayer3">玩家 3</Control>
+      <Control ID="mnuNetPlayPlayer4">玩家 4</Control>
+	  <Control ID="mnuNetPlayPlayer5">扩展设备</Control>													 
+      <Control ID="mnuNetPlaySpectator">旁观</Control>
+      <Control ID="mnuFindServer">查找公共服务器</Control>
+      <Control ID="mnuProfile">配置文件</Control>
+      <Control ID="mnuMovies">影片</Control>
+      <Control ID="mnuPlayMovie">播放...</Control>
+      <Control ID="mnuRecordMovie">录制...</Control>
+      <Control ID="mnuStopMovie">停止</Control>
+      <Control ID="mnuSoundRecorder">录音</Control>
+      <Control ID="mnuWaveRecord">录音...</Control>
+      <Control ID="mnuWaveStop">停止录音</Control>
+      <Control ID="mnuVideoRecorder">录像</Control>
+      <Control ID="mnuAviRecord">录像...</Control>
+      <Control ID="mnuAviStop">停止录像</Control>
+      <Control ID="mnuCheats">作弊</Control>
+      <Control ID="mnuTests">测试</Control>
+	  <Control ID="mnuTestRun">运行...</Control>
+	  <Control ID="mnuTestRecordFrom">记录来自...</Control>
+	  <Control ID="mnuTestRecordStart">开始</Control>
+	  <Control ID="mnuTestRecordNow">现在</Control>
+	  <Control ID="mnuTestRecordMovie">影片</Control>
+	  <Control ID="mnuTestRecordTest">测试</Control>
+	  <Control ID="mnuTestStopRecording">停止</Control>
+	  <Control ID="mnuRunAllTests">运行所有测试</Control>			   
+      <Control ID="mnuDebugger">调试器</Control>
+      <Control ID="mnuLogWindow">日志窗口</Control>
+	  <Control ID="mnuInstallHdPack">安装 HD 包</Control>
+	  <Control ID="mnuHdPackEditor">HD 包生成器</Control>
+      <Control ID="mnuRandomGame">加载随机游戏</Control>
+      <Control ID="mnuTakeScreenshot">截图</Control>
+      <Control ID="mnuHelp">帮助</Control>
+      <Control ID="mnuOnlineHelp">在线帮助</Control>
+      <Control ID="mnuCheckForUpdates">检查更新</Control>
+      <Control ID="mnuReportBug">报告错误</Control>
+      <Control ID="mnuHelpWindow">命令行选项</Control>
+      <Control ID="mnuAbout">关于</Control>
+
+      <!-- Archive Load Message -->
+      <Control ID="lblExtractingFile">正在解压，请稍候&#46;&#46;&#46;</Control>
+
+      <!-- NSF Player -->
+      <Control ID="lblTitle">标题:</Control>
+      <Control ID="lblArtist">艺术家:</Control>
+      <Control ID="lblCopyright">版权:</Control>
+      <Control ID="lblSoundChips">声音芯片:</Control>
+      <Control ID="lblRecording">正在录音</Control>
+      <Control ID="lblSlowMotion">慢放</Control>
+      <Control ID="lblFastForward">快进</Control>
+    </Form>
+    <Form ID="frmLogWindow" Title="日志窗口">
+      <Control ID="btnClose">关闭</Control>
+    </Form>
+    <Form ID="frmAudioConfig" Title="声音选项">
+      <Control ID="tpgGeneral">常规</Control>
+      <Control ID="tpgAdvanced">高级</Control>
+	  <Control ID="chkDisableDynamicSampleRate">禁用动态采样率</Control>
+      <Control ID="chkSwapDutyCycles">互换方波负载周期</Control>
+      <Control ID="chkSilenceTriangleHighFreq">三角波过高频率静音 （减少爆音）</Control>
+      <Control ID="chkReduceDmcPopping">减少 DMC 声道爆音</Control>
+      <Control ID="chkDisableNoiseModeFlag">禁用噪波声道模式标签</Control>
+      <Control ID="tpgEffects">效果</Control>
+      <Control ID="grpStereo">伪立体声</Control>
+      <Control ID="radStereoDisabled">无</Control>
+      <Control ID="radStereoDelay">延迟</Control>
+      <Control ID="radStereoPanning">相位</Control>
+      <Control ID="lblStereoDelayMs">毫秒</Control>
+      <Control ID="lblStereoPanningAngle">（度）</Control>
+	  <Control ID="radStereoCombFilter">梳状滤波器</Control>
+	  <Control ID="lblStereoCombFilterMs">毫秒</Control>
+	  <Control ID="lblStereoCombFilterDelay">延迟:</Control>
+	  <Control ID="lblStereoCombFilterStrength">强度:</Control>
+	  <Control ID="chkCrossFeedEnabled">启用混响:</Control>
+      <Control ID="grpReverb">混响</Control>
+      <Control ID="chkReverbEnabled">启用混响</Control>
+      <Control ID="lblReverbDelay">延迟:</Control>
+      <Control ID="lblReverbStrength">增强:</Control>
+      <Control ID="chkMuteSoundInBackground">后台静音</Control>
+	  <Control ID="chkReduceSoundInBackground">后台减小音量</Control>
+	  <Control ID="chkReduceSoundInFastForward">快进/倒带减小音量</Control>
+	  <Control ID="trkVolumeReduction">减小音量 （%）</Control>
+	  <Control ID="lblVolumeReductionSettings">减小音量设置</Control>
+      <Control ID="chkEnableAudio">启用声音</Control>
+      <Control ID="lblSampleRate">采样率:</Control>
+      <Control ID="lblLatencyMs">毫秒</Control>
+      <Control ID="lblLatencyWarning">延迟过低可能导致声音出问题</Control>
+      <Control ID="lblAudioLatency">延迟:</Control>
+      <Control ID="lblAudioDevice">设备:</Control>
+      <Control ID="tpgVolume">混音器</Control>
+      <Control ID="grpVolume">混音器</Control>
+      <Control ID="btnReset">重设</Control>
+      <Control ID="btnOK">确定</Control>
+      <Control ID="btnCancel">取消</Control>
+      <Control ID="trkDmcVol">DMC</Control>
+      <Control ID="trkNoiseVol">噪波</Control>
+      <Control ID="trkTriangleVol">三角波</Control>
+      <Control ID="trkSquare2Vol">方波 2</Control>
+      <Control ID="trkSquare1Vol">方波 1</Control>
+      <Control ID="trkMaster">主</Control>
+      <Control ID="trkFdsVol">FDS</Control>
+      <Control ID="trkMmc5Vol">MMC5</Control>
+      <Control ID="trkVrc6Vol">VRC6</Control>
+      <Control ID="trkVrc7Vol">VRC7</Control>
+      <Control ID="trkNamco163Vol">Namco</Control>
+      <Control ID="trkSunsoft5b">Sunsoft</Control>
+
+      <Control ID="tpgPanning">相位</Control>
+      <Control ID="trkDmcPan">DMC</Control>
+      <Control ID="trkNoisePan">噪波</Control>
+      <Control ID="trkTrianglePan">三角波</Control>
+      <Control ID="trkSquare2Pan">方波 2</Control>
+      <Control ID="trkSquare1Pan">方波 1</Control>
+      <Control ID="trkFdsPan">FDS</Control>
+      <Control ID="trkMmc5Pan">MMC5</Control>
+      <Control ID="trkVrc6Pan">VRC6</Control>
+      <Control ID="trkVrc7Pan">VRC7</Control>
+      <Control ID="trkNamcoPan">Namco</Control>
+      <Control ID="trkSunsoftPan">Sunsoft</Control>
+
+      <Control ID="tpgEqualizer">均衡器</Control>
+      <Control ID="chkEnableEqualizer">启用</Control>      
+    </Form>
+    <Form ID="frmInputConfig" Title="输入设置">
+      <Control ID="btnOK">确定</Control>
+      <Control ID="btnCancel">取消</Control>
+      <Control ID="tpgControllers">控制器</Control>
+      <Control ID="btnSetupP4">设置</Control>
+      <Control ID="btnSetupP3">设置</Control>
+      <Control ID="btnSetupExp">设置</Control>
+      <Control ID="btnSetupCartridge">设置</Control>
+      <Control ID="lblCartridge">卡带:</Control>
+      <Control ID="lblPlayer1">玩家 1:</Control>
+      <Control ID="lblPlayer2">玩家 2:</Control>
+      <Control ID="lblPlayer4">玩家 4:</Control>
+      <Control ID="lblPlayer3">玩家 3:</Control>
+      <Control ID="btnSetupP1">设置</Control>
+      <Control ID="btnSetupP2">设置</Control>
+      <Control ID="lblNesType">控制台类型:</Control>
+      <Control ID="lblExpansionPort">扩展端口:</Control>
+      <Control ID="chkFourScore">使用四分配件</Control>
+      <Control ID="chkAutoConfigureInput">加载游戏时自动配置控制器</Control>
+
+      <Control ID="tpgAdvanced">高级设置</Control>
+      <Control ID="grpDisplayInput">显示控制器按键</Control>
+      <Control ID="chkDisplayPort1">玩家 1</Control>
+      <Control ID="chkDisplayPort2">玩家 2</Control>
+      <Control ID="chkDisplayPort3">玩家 3</Control>
+      <Control ID="chkDisplayPort4">玩家 4</Control>
+      <Control ID="lblDisplayPosition">显示位置:</Control>
+      <Control ID="chkDisplayInputHorizontally">横向</Control>
+
+      <Control ID="lblKeyBinding">警告：您当前的配置包含冲突的键绑定 - 键盘或游戏手柄上的某些物理按钮映射到NES控制器上的多个按钮.如果这不是故意的，请查看并更正您的按键绑定.</Control>
+    </Form>
+    <Form ID="frmVideoConfig" Title="视频设置">
+      <Control ID="tpgGeneral">常规</Control>
+      <Control ID="lblVideoScale">缩放:</Control>
+      <Control ID="lblVideoFilter">滤镜:</Control>
+      <Control ID="chkIntegerFpsMode">启用整数帧率模式（以 60 帧/秒而不是 60.1 帧/秒运行）</Control>
+      <Control ID="chkVerticalSync">启用垂直同步</Control>
+      <Control ID="lblDisplayRatio">宽高比:</Control>
+      <Control ID="lblCustomRatio">自定义比例:</Control>
+	  <Control ID="chkBilinearInterpolation">缩放时使用双线性插值</Control>
+      <Control ID="chkFullscreenForceIntegerScale">进入全屏模式时使用整数值</Control>
+      <Control ID="chkShowFps">显示帧率</Control>
+      <Control ID="chkUseHdPacks">使用 HDNes 包</Control>
+      <Control ID="chkUseExclusiveFullscreen">使用独占全屏模式</Control>
+      <Control ID="lblRequestedRefreshRate">请求的刷新率:</Control>
+      <Control ID="tpgOverscan">过扫描</Control>
+	  <Control ID="tpgOverscanGlobal">全局</Control>
+	  <Control ID="tpgOverscanGameSpecific">特定游戏</Control>
+	  <Control ID="chkEnableGameSpecificOverscan">启用特定游戏的过扫描设置</Control>
+      <Control ID="lblLeft">左</Control>
+      <Control ID="lblTop">上</Control>
+      <Control ID="lblBottom">下</Control>
+      <Control ID="lblRight">右</Control>
+      <Control ID="tpgPalette">调色板</Control>
+	  <Control ID="chkShowColorIndexes">显示颜色色码</Control>
+      <Control ID="mnuDefaultPalette">默认 （NTSC）</Control>
+      <Control ID="btnSelectPalette">加载预设调色板...</Control>
+      <Control ID="btnExportPalette">导出调色板</Control>
+      <Control ID="btnLoadPalFile">加载调色板文件</Control>
+      <Control ID="chkUseCustomVsPalette">将此调色板用于VS系统游戏</Control>
+      <Control ID="tpgPicture">画面</Control>
+      <Control ID="btnSelectPreset">选择预设...</Control>
+      <Control ID="grpCommon">通用设置</Control>
+      <Control ID="trkBrightness">亮度</Control>
+      <Control ID="trkContrast">对比</Control>
+      <Control ID="trkHue">色调</Control>
+      <Control ID="trkSaturation">饱和</Control>
+      <Control ID="grpNtscFilter">NTSC 滤镜</Control>
+      <Control ID="trkArtifacts">效果</Control>
+      <Control ID="trkBleed">渗色</Control>
+      <Control ID="trkFringing">散射</Control>
+      <Control ID="trkGamma">伽马</Control>
+      <Control ID="trkResolution">分辨率</Control>
+      <Control ID="trkSharpness">锐度</Control>
+      <Control ID="chkMergeFields">合并区域</Control>
+      <Control ID="chkVerticalBlend">应用垂直混合</Control>
+
+      <Control ID="trkYFilterLength">Y 过滤 （横向模糊）</Control>
+      <Control ID="trkIFilterLength">I 过滤 （横向渗色）</Control>
+      <Control ID="trkQFilterLength">Q 过滤 （横向渗色）</Control>
+      
+      <Control ID="grpScanlines">扫描线</Control>
+      <Control ID="trkScanlines">扫描线</Control>
+      <Control ID="btnResetPictureSettings">重置</Control>
+      <Control ID="mnuPresetComposite">复合输出</Control>
+      <Control ID="mnuPresetSVideo">S 端子</Control>
+      <Control ID="mnuPresetRgb">RGB</Control>
+      <Control ID="mnuPresetMonochrome">单色</Control>
+
+      <Control ID="tpgAdvanced">高级</Control>
+      <Control ID="lblScreenRotation">屏幕旋转:</Control>
+      <Control ID="chkDisableBackground">禁用背景</Control>
+      <Control ID="chkDisableSprites">禁用精灵</Control>
+      <Control ID="chkForceBackgroundFirstColumn">在第一列强制显示背景</Control>
+      <Control ID="chkForceSpritesFirstColumn">在第一列强制显示精灵</Control>
+      <Control ID="btnOK">确定</Control>
+      <Control ID="btnCancel">取消</Control>
+    </Form>
+    <Form ID="frmEmulationConfig" Title="模拟器设置">
+      <Control ID="tpgGeneral">常规</Control>
+      <Control ID="lblEmuSpeedHint">%  （0 = 最快）</Control>
+      <Control ID="lblEmulationSpeed">模拟速度:</Control>
+      <Control ID="lblTurboSpeedHint">%  （0 = 最快）</Control>
+      <Control ID="lblTurboSpeed">快进速度:</Control>
+      <Control ID="lblRewindSpeedHint">%  （0 = 最快）</Control>
+      <Control ID="lblRewindSpeed">快退速度:</Control>
+
+      <Control ID="tpgAdvanced">高级</Control>
+      <Control ID="chkUseAlternativeMmc3Irq">使用 MMC3 IRQ 替代行为</Control>
+      <Control ID="chkAllowInvalidInput">允许无效按键 （例如同时按下↑↓/←→）</Control>
+      <Control ID="chkRemoveSpriteLimit">不限制精灵 （缓解闪烁症状）</Control>
+      <Control ID="chkAdaptiveSpriteLimit">在必要时自动重新限制精灵 （缓解取消限制精灵导致的画面问题）</Control>
+      <Control ID="chkEnableOamDecay">模拟 OAM 和 RAM 损坏</Control>
+      <Control ID="chkDisablePpu2004Reads">禁止读取 PPU $2004 地址 （FC 真机）</Control>
+      <Control ID="chkDisableOamAddrBug">不模拟 PPU OAM 地址 BUG</Control>
+      <Control ID="chkDisablePaletteRead">禁止读取 PPU 调色板</Control>
+      <Control ID="chkDisablePpuReset">PPU 不随主机重设 （FC 真机）</Control>
+      <Control ID="chkUseNes101Hvc101Behavior">模拟 HVC-101/NES-101 （Top-Loader/带 AV 端子主机）</Control>
+		<Control ID="chkMapperRandomPowerOnState">随机映射器开机状态</Control>
+
+      <Control ID="lblRamPowerOnState">默认开机 RAM 状态:</Control>
+      <Control ID="tpgOverclocking">超频</Control>
+      <Control ID="grpOverclocking">超频</Control>
+      <Control ID="lblOverclockHint">超频可以缓解游戏拖慢现象，但也可能导致其他问题.最稳妥的超频方法是在 NMI 前增加 400 多条扫描线.</Control>
+      <Control ID="lblClockRate">时钟频率:</Control>
+      <Control ID="lblClockRatePercent">% （默认:100%）</Control>
+
+      <Control ID="grpPpuTiming">PPU垂直空白配置</Control>
+      <Control ID="lblExtraScanlinesBeforeNmi">NMI之前的其他扫描线:</Control>
+      <Control ID="lblExtraScanlinesAfterNmi">NMI之后的其他扫描线:</Control>
+      <Control ID="lblEffectiveClockRate">有效时钟频率（NTSC）:</Control>
+      <Control ID="lblEffectiveClockRatePal">有效时钟频率（PAL）:   </Control>
+      <Control ID="lblEffectiveClockRateDendy">有效时钟频率（Dendy）:</Control>
+
+      <Control ID="chkOverclockAdjustApu">不要超频APU（防止因超频引起的音高变化）</Control>
+	  
+	  <Control ID="chkShowLagCounter">显示延迟数</Control>
+      <Control ID="btnResetLagCounter">重置延迟数</Control>
+      <Control ID="btnOK">确定</Control>
+      <Control ID="btnCancel">取消</Control>
+    </Form>
+    <Form ID="frmPreferences" Title="首选项">
+      <Control ID="tpgGeneral">常规</Control>
+      <Control ID="lblDisplayLanguage">语言:</Control>
+      <Control ID="chkSingleInstance">单实例模式</Control>
+      <Control ID="chkAutomaticallyCheckForUpdates">自动检查更新</Control>
+      <Control ID="chkDeveloperMode">启用开发者模式</Control>
+      <Control ID="lblPauseBackgroundSettings">暂停/后台设置</Control>
+      <Control ID="lblMiscSettings">其他</Control>
+      <Control ID="chkAutoHideMenu">自动隐藏菜单</Control>
+      <Control ID="chkDisplayTitleBarInfo">在标题栏中显示其他信息</Control>
+
+      <Control ID="chkConfirmExitResetPower">复位/电源循环/退出前显示确认对话框</Control>
+      <Control ID="chkPauseOnMovieEnd">电影结束播放时暂停</Control>
+      <Control ID="chkAllowBackgroundInput">允许后台输入</Control>
+	  <Control ID="lblPauseIn">暂停时机:</Control>
+	  <Control ID="chkPauseWhenInBackground">后台</Control>
+	  <Control ID="chkPauseInMenuAndConfig">菜单</Control>
+	  <Control ID="chkPauseInDebugger">调试器</Control>
+      <Control ID="chkPauseWhenInBackground">后台</Control>
+	  <Control ID="chkAutoLoadIps">自动打 IPS/BPS 补丁</Control>
+      <Control ID="chkHidePauseOverlay">暂停不变暗</Control>
+      <Control ID="chkDisplayMovieIcons">显示影片状态图标</Control>
+      <Control ID="btnOpenMesenFolder">打开 Mesen 文件夹</Control>
+      <Control ID="btnResetSettings">重置所有设置</Control>
+
+      <Control ID="tpgFiles">文件 （夹）</Control>
+      <Control ID="grpFileAssociations">关联文件</Control>
+      <Control ID="chkNesFormat">.NES （Famicom 卡带）</Control>
+      <Control ID="chkFdsFormat">.FDS （磁碟）</Control>
+      <Control ID="chkMmoFormat">.MMO （Mesen 影片）</Control>
+      <Control ID="chkMstFormat">.MST （Mesen 进度）</Control>
+      <Control ID="grpDataStorageLocation">存储数据</Control>
+      <Control ID="radStorageDocuments">配置保存在用户文件夹中</Control>
+      <Control ID="radStoragePortable">配置保存在程序文件夹中</Control>
+      <Control ID="lblDataLocation">文件夹:</Control>
+      <Control ID="grpPathOverrides">更改文件夹</Control>
+      <Control ID="chkGameOverride">游戏:</Control>
+      <Control ID="chkAviOverride">视频:</Control>
+      <Control ID="chkScreenshotsOverride">截图:</Control>
+      <Control ID="chkSaveDataOverride">保存:</Control>
+      <Control ID="chkWaveOverride">录音:</Control>
+      <Control ID="chkSaveStatesOverride">进度:</Control>
+      <Control ID="chkMoviesOverride">影片:</Control>
+
+      <Control ID="tpgAdvanced">高级</Control>
+      <Control ID="chkFdsAutoLoadDisk">自动载入磁盘 1 的 A 面</Control>
+      <Control ID="chkFdsFastForwardOnLoad">尽可能快地读取磁盘</Control>
+      <Control ID="chkFdsAutoInsertDisk">磁盘自动换面</Control>
+
+      <Control ID="chkShowFullPathInRecents">历史文件显示完整路径</Control>
+      <Control ID="chkShowFrameCounter">显示帧数</Control>
+      <Control ID="chkShowGameTimer">显示游戏计时器</Control>
+      <Control ID="chkShowVsConfigOnLoad">载入街机游戏时显示配置窗口</Control>
+      <Control ID="lblRewind">保留</Control>
+      <Control ID="lblRewindMinutes">分钟倒带数据 （1MB 内存/分钟）</Control>																														  
+      <Control ID="tpgShortcuts">快捷键</Control>
+      <Control ID="lblShortcutWarning">【警告】快捷键有冲突，如果您不是故意这样做，请重新检查并修正.</Control>
+      <Control ID="colAction">操作</Control>
+      <Control ID="colBinding1">快捷键 1</Control>
+      <Control ID="colBinding2">快捷键 2</Control>
+
+      <Control ID="tpgSaveData">保存数据</Control>
+      <Control ID="grpAutomaticSaves">自动保存状态</Control>
+      <Control ID="chkAutoSave">每次自动创建一个保存状态</Control>
+      <Control ID="lblAutoSave">分钟</Control>
+      <Control ID="chkAutoSaveNotify">自动保存进度时通知我</Control>
+      <Control ID="chkAllowMismatchingSaveStates">允许带补丁载入进度</Control>
+
+      <Control ID="grpCloudSaves">云保存</Control>
+      <Control ID="lblGoogleDriveIntegration">Mesen 可通过 Google Drive 将您的进度保存在云端，即使在其他计算机上，或者本地进度文件丢失，也依然可以同步访问.</Control>
+      <Control ID="lblIntegrationOK">已启用 Google Drive</Control>
+      <Control ID="btnDisableIntegration">禁用 Google Drive</Control>
+      <Control ID="btnEnableIntegration">启用 Google Drive</Control>
+      <Control ID="lblLastSync">上次同步:</Control>
+	  <Control ID="btnResync">同步</Control>
+      		 
+		<Control ID="lblVsDualSystem">双对战系统设置</Control>
+		<Control ID="lblVsDualPlayAudio">播放音频:</Control>
+		<Control ID="lblVsDualShowVideo">显示视频:</Control>
+
+      <Control ID="lblFdsSettings">磁碟机设置</Control>
+      <Control ID="lblUiDisplaySettings">屏显设置</Control>
+	  <Control ID="lblWindowSettings">窗口设置</Control>
+	  <Control ID="chkDisableMouseResize">禁止鼠标调整主窗口尺寸</Control>
+	  <Control ID="lblGameSelectionScreenSettings">选择游戏画面设置</Control>
+      <Control ID="chkGameSelectionScreenResetGame">从头开始，不从上次中断位置继续</Control>
+      <Control ID="chkDisableGameSelectionScreen">不显示选择游戏画面</Control>
+
+      <Control ID="chkDisableGameDatabase">不使用游戏数据库</Control>
+	  <Control ID="chkDisableHighResolutionTimer">禁用高精度计时器</Control>
+	  <Control ID="chkDisableOsd">隐藏屏显信息 （OSD）</Control>													 
+															 																	 
+      <Control ID="chkAlwaysOnTop">窗口总在最前</Control>																										   																						
+
+      <Control ID="tpgFdsNfs">磁碟机/对战/NSF</Control>
+      <Control ID="chkNsfAutoDetectSilence">自动检测静音:</Control>
+      <Control ID="lblNsfMillisecondsOfSilence">毫秒静音后播放下一曲</Control>
+      <Control ID="chkNsfMoveToNextTrackAfterTime">单曲时长</Control>
+      <Control ID="lblNsfSeconds">秒</Control>
+		<Control ID="lblNsfSettings">NSF 设置</Control>
+      <Control ID="chkNsfEnableApuIrqs">启用 NSF APU IRQ</Control>
+
+      <Control ID="btnOK">确定</Control>
+      <Control ID="btnCancel">取消</Control>
+    </Form>
+    <Form ID="frmServerConfig" Title="服务器配置">
+      <Control ID="lblPort">端口:</Control>
+      <Control ID="chkPublicServer">公开服务器</Control>
+      <Control ID="lblServerName">服务器名:</Control>
+      <Control ID="chkSpectator">允许旁观</Control>
+      <Control ID="lblMaxPlayers">最多玩家数:</Control>
+      <Control ID="lblPassword">密码:</Control>
+      <Control ID="btnOK">确定</Control>
+      <Control ID="btnCancel">取消</Control>
+    </Form>
+    <Form ID="frmClientConfig" Title="连接...">
+      <Control ID="lblHost">主机:</Control>
+      <Control ID="lblPort">端口:</Control>
+      <Control ID="lblPassword">密码:</Control>
+	  <Control ID="chkSpectator">作为旁观者加入</Control>
+      <Control ID="btnOK">确定</Control>
+      <Control ID="btnCancel">取消</Control>
+    </Form>
+    <Form ID="frmCheatImport" Title="导入作弊">
+      <Control ID="grpImportOptions">导入选项</Control>
+      <Control ID="lblCheatFile">作弊文件:</Control>
+      <Control ID="lblGame">游戏:</Control>
+      <Control ID="btnBrowseCheat">浏览...</Control>
+      <Control ID="btnBrowseGame">浏览...</Control>
+      <Control ID="btnImport">导入</Control>
+      <Control ID="btnCancel">取消</Control>
+    </Form>
+	<Form ID="frmCheatImport" Title="导入作弊">
+      <Control ID="grpImportOptions">导入选项</Control>
+      <Control ID="lblCheatFile">作弊文件:</Control>
+      <Control ID="lblGame">游戏:</Control>
+      <Control ID="btnBrowseCheat">浏览...</Control>
+      <Control ID="btnBrowseGame">浏览...</Control>
+      <Control ID="btnImport">导入</Control>
+      <Control ID="btnCancel">取消</Control>
+    </Form>
+    <Form ID="frmCheatImportFromDb" Title="选择游戏">
+      <Control ID="lblSearch">搜索:</Control>
+      <Control ID="btnOK">导入</Control>
+      <Control ID="btnCancel">取消</Control>
+    </Form>
+    <Form ID="frmCheatList" Title="作弊">
+      <Control ID="tabCheats">作弊</Control>
+      <Control ID="btnAddCheat">添加作弊</Control>
+      <Control ID="btnDelete">删除</Control>
+      <Control ID="btnDeleteCheat">删除所选作弊</Control>
+      <Control ID="btnDeleteGameCheats">删除该游戏所有作弊</Control>
+      <Control ID="mnuAddCheat">添加作弊...</Control>
+      <Control ID="mnuDeleteGameCheats">删除</Control>
+      <Control ID="mnuDeleteCheat">删除</Control>
+      <Control ID="colGameName">游戏</Control>
+      <Control ID="colCheatName">作弊名</Control>
+      <Control ID="colCode">作弊码</Control>
+      <Control ID="btnImport">导入</Control>
+      <Control ID="btnImportCheatDB">从作弊库</Control>
+      <Control ID="btnImportFromFile">从文件</Control>
+      <Control ID="btnExport">导出</Control>
+      <Control ID="btnExportAllCheats">全部作弊</Control>
+      <Control ID="btnExportGame">所选游戏</Control>
+      <Control ID="mnuExportGame">导出</Control>
+      <Control ID="btnExportSelectedCheats">所选作弊</Control>
+      <Control ID="mnuExportSelectedCheats">导出</Control>
+      <Control ID="chkDisableCheats">禁用全部作弊</Control>
+
+      <Control ID="tpgCheatFinder">查找作弊</Control>
+      <Control ID="btnReset">重设</Control>
+      <Control ID="btnUndo">撤消</Control>
+      <Control ID="lblCurrentValue">现值</Control>
+      <Control ID="lblPreviousValue">前值</Control>
+      <Control ID="btnAddCurrentFilter">过滤</Control>
+      <Control ID="btnAddPrevFilter">过滤</Control>
+      <Control ID="btnCreateCheat">创建作弊</Control>
+      <Control ID="mnuCreateCheat">创建作弊</Control>
+      <Control ID="lblAtAddress">在</Control>
+      <Control ID="chkPauseGameWhileWindowActive">此窗口处于活动状态时自动暂停游戏</Control>
+      
+      <Control ID="btnOK">确定</Control>
+      <Control ID="btnCancel">取消</Control>
+    </Form>
+    <Form ID="frmCheat" Title="编辑作弊">
+      <Control ID="label2">游戏:</Control>
+      <Control ID="label1">作弊码名:</Control>
+      <Control ID="grpCode">作弊码</Control>
+      <Control ID="radCustom">自定义:</Control>
+      <Control ID="radGameGenie">金手指:</Control>
+      <Control ID="radProActionRocky">Pro Action Rocky:</Control>
+      <Control ID="lblAddress">内存地址:</Control>
+      <Control ID="lblNewValue">新值:</Control>
+      <Control ID="radRelativeAddress">相对地址</Control>
+      <Control ID="radAbsoluteAddress">绝对地址</Control>
+      <Control ID="chkCompareValue">比较</Control>
+      <Control ID="btnBrowse">浏览...</Control>
+      <Control ID="chkEnabled">启用作弊</Control>
+      <Control ID="btnOK">确定</Control>
+      <Control ID="btnCancel">取消</Control>
+    </Form>
+    <Form ID="frmAbout" Title="关于 Mesen">
+      <Control ID="labelProductName">Mesen</Control>
+      <Control ID="labelCopyright">© 2018 M. Bibaud （又名 Sour）</Control>
+      <Control ID="lblWebsite">网站:</Control>
+      <Control ID="lblLink">www.mesen.ca</Control>
+      <Control ID="labelVersion">版本:</Control>
+		<Control ID="lblBuildDateLabel">构建日期:</Control>
+      <Control ID="lblDonate">如果您喜欢 Mesen 模拟器，请通过捐赠来支持我们！&#13;感谢你的支持！&#13;汉化：Licardo   邮箱：1014660822@qq.com</Control>
+      <Control ID="okButton">&amp;确定</Control>
+    </Form>
+	 <Form ID="frmGameConfig" Title="游戏游戏配置">
+		<Control ID="grpDipSwitches">DIP 开关</Control>
+	 </Form>
+    <Form ID="frmUpdatePrompt" Title="Mesen 有新版本">
+      <Control ID="lblLatestVersion">最新版本:</Control>
+      <Control ID="lblCurrentVersion">当前版本:</Control>
+      <Control ID="lblChangeLog">更新日志</Control>
+      <Control ID="lblDonate">如果您喜欢 Mesen 模拟器，请通过捐赠来支持我们！谢谢！</Control>
+      <Control ID="btnUpdate">更新</Control>
+      <Control ID="btnCancel">取消</Control>
+    </Form>
+    <Form ID="frmSelectRom" Title="选择ROM...">
+      <Control ID="lblSearch">搜索:</Control>
+      <Control ID="btnOK">确定</Control>
+      <Control ID="btnCancel">取消</Control>
+    </Form>
+    <Form ID="frmGetKey" Title="设置按键绑定...">
+      <Control ID="lblSetKeyMessage">按键盘或控制器上的任意键以设置新的绑定.</Control>
+    </Form>
+    <Form ID="frmPlayerProfile" Title="配置">
+      <Control ID="lblName">玩家名:</Control>
+      <Control ID="btnOK">确定</Control>
+      <Control ID="btnCancel">取消</Control>
+    </Form>
+    <Form ID="frmRecordAvi" Title="视频录制选项">
+      <Control ID="lblAviFile">保存到:</Control>
+      <Control ID="lblCodec">视频编码器:</Control>
+      <Control ID="lblCompressionLevel">压缩级别:</Control>
+      <Control ID="lblLowCompression">低&#13;（快）</Control>
+      <Control ID="lblHighCompression">高&#13;（慢）</Control>
+      <Control ID="btnBrowse">浏览...</Control>
+      <Control ID="btnOK">确定</Control>
+      <Control ID="btnCancel">取消</Control>
+    </Form>
+    <Form ID="frmHdPackEditor" Title="HD包生成器">
+      <Control ID="grpPreview">CHR 岸预览</Control>
+      <Control ID="lblChrBank">CHR 岸:</Control>
+      <Control ID="grpOptions">录制选项</Control>
+      <Control ID="lblBankSize">CHR 岸大小:</Control>
+      <Control ID="lblScale">缩放/过滤</Control>
+      <Control ID="chkSortByFrequency">按使用率排序</Control>
+      <Control ID="chkLargeSprites">8x16 精灵显示模式</Control>
+      <Control ID="chkGroupBlankTiles">空块分组</Control>
+      <Control ID="chkIgnoreOverscan">忽略屏幕外 （过扫描区） 块</Control>
+      <Control ID="lblFolder">保存文件夹:</Control>
+      <Control ID="btnSelectFolder">浏览...</Control>
+      <Control ID="btnStartRecording">开始录制</Control>
+      <Control ID="btnStopRecording">停止录制</Control>
+      <Control ID="btnOpenFolder">打开保存文件夹</Control>
+    </Form>
+	 <Form ID="frmHistoryViewer" Title="历史查看器">
+		<Control ID="lblVolume">音量</Control>
+		<Control ID="mnuFile">文件</Control>
+		<Control ID="mnuImportMovie">导入影片</Control>
+		<Control ID="mnuExportMovie">导出影片</Control>
+		<Control ID="mnuResumeGameplay">继续游戏</Control>
+		<Control ID="mnuClose">关闭</Control>
+	 </Form>
+    <Form ID="frmHelp" Title="命令行选项">
+      <Control ID="grpExample">用法示例</Control>
+      <Control ID="tpgGeneralOptions">常规</Control>
+      <Control ID="tpgVideoOptions">视频选项</Control>
+      <Control ID="tpgAudioOptions">音频选项</Control>
+      <Control ID="tpgEmulationOptions">模拟选项</Control>
+      <Control ID="lblExplanation">使用上面的命令行，Mesen 会以全屏模式启动、加载 "MyGame.nes"、使用 NTSC 滤镜、画面扩大到 2 倍，并且改变过扫描设置. "DoNotSaveSettings" 用于阻止命令行选项替代 Mesen 原本的设置.</Control>
+      <Control ID="txtGeneralOptions">/fullscreen - 全屏模式启动 Mesen&#13;/DoNotSaveSettings - 阻止命令行的选项替代 Mesen 原本的设置（用于防止命令行选项成为默认设置）.</Control>
+    </Form>
+        <Form ID="frmCopyFiles" Title="请稍候。。。">
+      <Control ID="lblCopying">复制中:</Control>
+    </Form>
+    <Form ID="frmConfigWizard" Title="Mesen 设置">
+      <Control ID="lblMesen">Mesen - 红白机模拟器</Control>
+      <Control ID="lblConfigWizard">设置向导</Control>
+      <Control ID="lblInitialSetup">稍微占用您一点时间进行 Mesen 初始化设置.</Control>
+      <Control ID="lblStorageLocation">数据保存位置</Control>
+      <Control ID="lblStorageHint">请选择 Mesen 保存数据的位置:</Control>
+      <Control ID="radStorageDocuments">用户文件夹</Control>
+      <Control ID="radStoragePortable">程序文件夹</Control>
+      <Control ID="lblDataLocation">文件夹:</Control>
+      <Control ID="lblInputMappings">输入映射</Control>
+      <Control ID="lblInputHint">请选择您喜爱的输入方式:</Control>
+      <Control ID="lblMiscOptions">其他</Control>
+      <Control ID="chkCreateShortcut">创建桌面快捷方式</Control>
+      <Control ID="btnOk">确定</Control>
+      <Control ID="lblCancel">取消</Control>
+    </Form>
+    <Form ID="frmRecordMovie" Title="影片录制选项">
+      <Control ID="lblSaveTo">保存到:</Control>
+      <Control ID="lblRecordFrom">始于:</Control>
+      <Control ID="lblMovieInformation">影片信息 （可选）</Control>
+      <Control ID="lblAuthor">作者:</Control>
+      <Control ID="lblDescription">说明:</Control>
+      <Control ID="btnBrowse">浏览...</Control>
+      <Control ID="btnOK">确定</Control>
+      <Control ID="btnCancel">取消</Control>
+    </Form>
+	<Form ID="frmInputBarCode" Title="输入条码...">
+			<Control ID="lblBarcode">条码:</Control>
+			<Control ID="btnOK">确认</Control>
+			<Control ID="btnCancel">取消</Control>
+		</Form>
+		<Form ID="BaseInputConfigForm">
+			<Control ID="lblHint">带有图标的标签包含此播放器的键绑定.&#13;每个按钮可以映射到最多4个不同的键盘键或游戏手柄按键.</Control>
+			<Control ID="tpgSet1">按键设置 #1</Control>
+			<Control ID="tpgSet2">按键设置 #2</Control>
+			<Control ID="tpgSet3">按键设置 #3</Control>
+			<Control ID="tpgSet4">按键设置 #4</Control>
+			<Control ID="btnSetDefault">设置默认绑定</Control>
+			<Control ID="btnClear">清除按键绑定</Control>
+			<Control ID="btnOK">确认</Control>
+			<Control ID="btnCancel">取消</Control>
+		</Form>
+		<Form ID="frmControllerConfig">
+			<Control ID="lblTurboSpeed">涡轮速度:</Control>
+			<Control ID="lblTurboFast">快</Control>
+			<Control ID="lblSlow">慢</Control>
+
+			<Control ID="btnSelectPreset">选择预设...</Control>
+			<Control ID="mnuKeyboard">键盘</Control>
+			<Control ID="mnuWasdLayout">WASD布局</Control>
+			<Control ID="mnuArrowLayout">箭头键布局</Control>
+			<Control ID="mnuFceuxLayout">FCEUX 默认</Control>
+			<Control ID="mnuNestopiaLayout">Nestopia 默认</Control>
+			<Control ID="mnuXboxController">Xbox 控制器</Control>
+			<Control ID="mnuXboxLayout1">控制器 #1</Control>
+			<Control ID="mnuXboxLayout2">控制器 #2</Control>
+			<Control ID="mnuPs4Controller">PS4 控制器</Control>
+			<Control ID="mnuPs4Layout1">控制器 #1</Control>
+			<Control ID="mnuPs4Layout2">控制器 #2</Control>
+			<Control ID="mnuSnes30Controller">SNES30 控制器</Control>
+			<Control ID="mnuSnes30Layout1">控制器 #1</Control>
+			<Control ID="mnuSnes30Layout2">控制器 #2</Control>
+		</Form>
+		<Form ID="frmZapperConfig">
+			<Control ID="lblSmall">小</Control>
+			<Control ID="lblLarge">大</Control>
+			<Control ID="lblDetectRadius">光探测半径:</Control>
+			<Control ID="btnOK">确认</Control>
+			<Control ID="btnCancel">取消</Control>
+		</Form>
+		<Form ID="frmMouseConfig">
+			<Control ID="lblLow">低</Control>
+			<Control ID="lblHigh">高</Control>
+			<Control ID="lblSensitivity">灵敏度:</Control>
+			<Control ID="btnOK">确认</Control>
+			<Control ID="btnCancel">取消</Control>
+		</Form>
+		<Form ID="frmExcitingBoxingConfig">
+		</Form>
+		<Form ID="frmFamilyBasicKeyboardConfig">
+		</Form>
+		<Form ID="frmJissenMahjongConfig">
+		</Form>
+		<Form ID="frmPartyTapConfig">
+		</Form>
+		<Form ID="frmPowerPadConfig">
+			<Control ID="chkUseSideA">使用 A 面</Control>
+		</Form>
+		<Form ID="frmSuborKeyboardConfig">
+		</Form>
+		<Form ID="frmPachinkoConfig">
+		</Form>
+		<Form ID="frmBandaiMicrophone">
+		</Form>
+  </Forms>
+  <UserControls>
+    <UserControl ID="ctrlExcitingBoxingConfig">
+      <Control ID="lblLeftHook">左勾拳</Control>
+      <Control ID="lblRightHook">右勾拳</Control>
+      <Control ID="lblLeftJab">左刺拳</Control>
+      <Control ID="lblRightJab">右刺拳</Control>
+      <Control ID="lblStraight">直拳</Control>
+      <Control ID="lblBody">冲撞</Control>
+      <Control ID="lblMoveLeft">左移</Control>
+      <Control ID="lblMoveRight">右移</Control>
+    </UserControl>
+    <UserControl ID="ctrlPachinkoConfig">
+      <Control ID="lblPress">按下</Control>
+      <Control ID="lblRelease">松开</Control>
+    </UserControl>
+    <UserControl ID="ctrlBandaiMicrophone">
+      <Control ID="lblMicrophone">麦克风</Control>
+    </UserControl>
+  </UserControls>
+  <Messages>
+    <Message ID="FilterAll">所有文件 （*.*）|*.*</Message>
+	 <Message ID="FilterZipFiles">Zip 文件 （*.zip）|*.zip</Message>
+    <Message ID="FilterMovie">影片文件 （*.mmo）|*.mmo|所有文件 （*.*）|*.*</Message>
+    <Message ID="FilterWave">波形文件 （*.wav）|*.wav|所有文件 （*.*）|*.*</Message>
+    <Message ID="FilterAvi">AVI 视频 （*.avi）|*.avi|所有文件 （*.*）|*.*</Message>
+    <Message ID="FilterPalette">调色板 （*.pal）|*.pal|所有文件 （*.*）|*.*</Message>
+    <Message ID="FilterRom">所有支持的格式 （*.nes, *.zip, *.7z, *.nsf, *.nsfe, *.fds, *.unf）|*.NES;*.ZIP;*.7z;*.FDS;*.NSF;*.NSFE;*.UNF|NES ROM （*.nes, *.unf）|*.NES;*.UNF|Famicom 磁盘 （*.fds）|*.FDS|NSF 音乐 （*.nsf, *.nsfe）|*.nsf;*.nsfe|ZIP 档案 （*.zip）|*.ZIP|7-Zip 档案 （*.7z）|*.7z|所有文件 （*.*）|*.*</Message>
+    <Message ID="FilterRomIps">所有支持的格式 （*.nes, *.zip, *.7z, *.fds, *.nsf, *.nsfe, *.unf, *.ips, *.bps, *.ups）|*.NES;*.ZIP;*.7z;*.IPS;*.BPS;*.UPS;*.FDS;*.NSF;*.NSFE;*.UNF|NES ROM （*.nes, *.unf）|*.NES;*.UNF|Famicom 磁盘 （*.fds）|*.FDS|NSF 音乐 （*.nsf, *.nsfe）|*.nsf;*.nsfe|ZIP 档案 （*.zip）|*.ZIP|7-Zip 档案 （*.7z）|*.7z|IPS/UPS/BPS 补丁 （*.ips, *.bps, *.ups）|*.IPS;*.BPS;*.UPS|所有文件 （*.*）|*.*</Message>
+    <Message ID="FilterTest">测试文件 （*.mtp）|*.mtp|所有文件 （*.*）|*.*</Message>
+    <Message ID="FilterCheat">所有支持的格式 （*.cht, *.xml）|*.cht;*.xml</Message>
+    <Message ID="FilterSavestate">Mesen 保存状态 （*.mst）|*.mst|所有文件 （*.*）|*.*</Message>
+    <Message ID="FilterTapeFiles">Family Basic 磁带文件 （*.fbt）|*.fbt|所有文件 （*.*）|*.*</Message>
+    
+	<Message ID="LoadFromFile">从文件载入...</Message>
+    <Message ID="SaveToFile">保存到文件...</Message>
+	 <Message ID="MovieSegment">第 #{0} 段</Message>
+	 <Message ID="MovieSaveError">尝试保存电影文件时发生错误.</Message>		
+    <Message ID="ClearHistory">清除历史</Message>
+    <Message ID="LastFolderUsed">上次使用的文件夹</Message>
+    <Message ID="MouseModeEnabled">启用鼠标模式 - 按 ESC 或 pause 来释放光标.</Message>
+    <Message ID="BandaiMicrophone">Bandai 麦克风</Message>
+    <Message ID="DatachBarcodeReader">附加条码机</Message>
+    <Message ID="Resume">恢复</Message>
+    <Message ID="Pause">暂停</Message>
+    <Message ID="StartServer">启动服务器</Message>
+    <Message ID="StopServer">停止服务器</Message>
+    <Message ID="ConnectToServer">连接到服务器</Message>
+    <Message ID="Disconnect">断开</Message>
+    <Message ID="PlayerNumber">玩家 {0}</Message>
+    <Message ID="ExpansionDevice">扩展设备</Message>									   									   
+											
+    <Message ID="PressToExitFullscreen">按 {0} 退出全屏</Message>
+    <Message ID="RomsFound">已找到 {0} 个 ROM</Message>
+    <Message ID="RiskyOptionHint">（不推荐）</Message>
+    <Message ID="ResetSettingsConfirmation">警告：这将重置所有设置，无法撤消！&#xA;&#xA;继续？</Message>
+    <Message ID="RandomGameNoGameFound">Mesen 找不到任何可以加载的游戏.</Message>		 
+    <Message ID="CannotWriteToFolder">无法写入所选文件夹 - 请选择其他文件夹然后重试。&#xA;&#xA;详细信息：&#xA; {0}</Message>
+    <Message ID="InvalidPaths">以下路径覆盖无效：&#xA;&#xA;{0}&#xA;&#xA;请使用有效和可写的文件夹，然后重试.</Message>
+    <Message ID="CopyMesenDataPrompt">所有文件都将从：&#xA;&#xA;{0}&#xA;复制到&#xA;{1}&#xA;&#xA;复制完成后，Mesen 将重新启动.&#xA;继续？</Message>    
+						 
+    <Message ID="CheatsFound">数据库中有 {0} 个游戏和 {1} 条作弊</Message>
+    <Message ID="CheatsImported">已给 {1} 导入 {0} 条作弊.</Message>    
+
+    <Message ID="NsfNextTrack">下一曲 （按住快进）</Message>
+    <Message ID="NsfUnnamedTrack">&lt;无名称&gt;</Message>
+    <Message ID="NsfUnknownField">&lt;未知&gt;</Message>
+
+    <Message ID="CouldNotInstallRuntime">Visual Studio 运行库未正确安装.</Message>
+    <Message ID="EmptyState">&lt;空&gt;</Message>
+    <Message ID="ErrorWhileCheckingUpdates">检查更新时出错，请确认网络通畅然后再试.&#xA;&#xA;详情:&#xA;{0}</Message>
+    <Message ID="AutoUpdateDisabledMessage">此编译版未启用自动更新，要想获得最新版 Mesen，请下载最新版源码来编译.</Message>
+    <Message ID="FdsBiosNotFound">缺少 FDS 游戏所需 BIOS.&#xA;&#xA;是否要立即手动指定？</Message>
+    <Message ID="FdsDiskSide">磁盘 {0} 的 {1} 面</Message>
+    <Message ID="FileNotFound">文件 {0} 未找到</Message>
+    <Message ID="InvalidFdsBios">所选 BIOS 无效.</Message>
+    <Message ID="HDNesTooltip">载入 HDNes 格式 HD 包.&#xA;&#xA;HD 包应放置在 "HdPacks" 文件夹下对应 ROM 名的子文件夹中.&#xA;例: MyRom.nes 对应 "HdPacks\MyRom\hires.txt".</Message>
+    <Message ID="HdPackBuilderScaleHelp">给 HD 包所用 PNG 文件选择缩放和视频过滤参数&#xA;使用【预缩放】可以创建出缩放比例更大的块，同时像素不变形.</Message>
+    <Message ID="HdPackBuilderBankSizeHelp">仅用于 CHR RAM 游戏，这类游戏的岸数据用代码动态创建，不固定.&#xA;此选项会影响 HD 包构造器给 PNG 组织块的行为，通常来说，岸越小，PNG 文件就越少.&#xA;但有些游戏可能需要把数值调高才能获得更好的效果.</Message>
+    <Message ID="HdPackBuilderFrequencyHelp">根据录制时块在屏幕上的出现率排列 PNG 文件，把更多的共用调色板以指定的岸号组织在一起.&#xA;若取消此项，则会以调色板排序，每个 PNG 文件将最多只包含 4 种颜色.</Message>
+    <Message ID="HdPackBuilderGroupBlankHelp">将全部空块分到同一 PNG 文件中，有助于移除空 PNG 文件以减少文件数量.</Message>
+    <Message ID="HdPackBuilderLargeSpritesHelp">替换 CHR 中纯精灵岸的显示顺序，有助于编辑 PNG 文件.</Message>
+    <Message ID="HdPackBuilderIgnoreOverscanHelp">有些游戏在过扫描区显示不正确，勾选此项可忽略屏幕外 （过扫描） 的块，不会将其存入 PNG 文件中.</Message>
+
+	 <Message ID="InstallHdPackWrongRom">当前游戏不兼容您选择的 HD 包.</Message>
+	 <Message ID="InstallHdPackError">安装 HD 包时出错: &#xA;&#xA;{0}</Message>
+	 <Message ID="InstallHdPackInvalidPack">该文件不是有效 HD 包.</Message>
+	 <Message ID="InstallHdPackInvalidZipFile">改文件不是有效 Zip 文件.</Message>
+	 <Message ID="InstallHdPackConfirmOverwrite">目标文件夹“{0}”已存在，是否覆盖？</Message>
+	 <Message ID="InstallHdPackConfirmReset">HD 包成功安装，是否立即重设游戏并加载？</Message>
+
+    <Message ID="MesenUpToDate">您的 Mesen 已是最新版本.</Message>
+    <Message ID="PatchAndReset">打补丁需要重设游戏，是否继续？</Message>
+    <Message ID="SelectRomIps">请选择补丁对应 ROM.</Message>
+    <Message ID="UnableToDownload">无法载入文件.请检查您的网络连接后再试.&#xA;&#xA;详情:&#xA;{0}</Message>
+    <Message ID="UnableToStartMissingDependencies">Mesen 因无法加载依赖项 MesenCore.dll 而无法启动.</Message>
+    <Message ID="UnableToStartMissingFiles">Mesen 因缺少文件而无法启动.&#xA;&#xA;错误: 缺少 MesenCore.dll.</Message>
+    <Message ID="UnexpectedError">发生意外错误.&#xA;&#xA;详情:&#xA;{0}</Message>
+    <Message ID="UpdateDownloadFailed">下载失败 - 文件损坏.请自行访问 Mesen 官网下载最近版本.</Message>
+    <Message ID="UpdaterNotFound">因文件丢失无法升级.</Message>
+    <Message ID="UpgradeSuccess">升级成功.</Message>
+    <Message ID="Net45NotFound">找不到 Microsoft .NET Framework 4.5，请访问 Microsoft 官网下载之后再试.</Message>
+
+    <Message ID="GoogleDriveIntegrationError">Mesen 无法连接您的 Google Drive 账户 - 请稍后再试.</Message>
+    <Message ID="InvalidCheatFile">{0} 不是有效作弊文件.</Message>
+    <Message ID="InvalidXmlFile">{0} 不是有效 XML 文件.</Message>
+    <Message ID="NoMatchingCheats">{0} 没有对应该游戏的作弊.</Message>
+
+    <Message ID="ConfirmReset">您真的要重设吗？</Message>
+    <Message ID="ConfirmPowerCycle">您真的要执行电源操作吗？</Message>
+    <Message ID="ConfirmExit">您真的要退出吗？</Message>
+
+    <Message ID="EmulatorShortcutMappings_FastForward">快进</Message>
+    <Message ID="EmulatorShortcutMappings_ToggleFastForward">切换快进</Message>
+    <Message ID="EmulatorShortcutMappings_Rewind">倒带</Message>
+    <Message ID="EmulatorShortcutMappings_ToggleRewind">切换倒带</Message>
+    <Message ID="EmulatorShortcutMappings_RewindTenSecs">快退 10 秒</Message>
+    <Message ID="EmulatorShortcutMappings_RewindOneMin">快退 1 分钟</Message>
+    <Message ID="EmulatorShortcutMappings_IncreaseSpeed">加速</Message>
+    <Message ID="EmulatorShortcutMappings_DecreaseSpeed">减速</Message>
+    <Message ID="EmulatorShortcutMappings_Pause">暂停</Message>
+    <Message ID="EmulatorShortcutMappings_Reset">重设</Message>
+     <Message ID="EmulatorShortcutMappings_PowerCycle">电源</Message>
+    <Message ID="EmulatorShortcutMappings_PowerOff">关机</Message>
+    <Message ID="EmulatorShortcutMappings_Exit">退出</Message>
+    <Message ID="EmulatorShortcutMappings_TakeScreenshot">截图</Message>
+    <Message ID="EmulatorShortcutMappings_SwitchDiskSide">磁盘换面</Message>
+    <Message ID="EmulatorShortcutMappings_InsertNextDisk">插入磁盘</Message>
+    <Message ID="EmulatorShortcutMappings_InsertCoin1">投币 1</Message>
+    <Message ID="EmulatorShortcutMappings_InsertCoin2">投币 2</Message>
+	 <Message ID="EmulatorShortcutMappings_InsertCoin3">投币 3 （双系统）</Message>
+	 <Message ID="EmulatorShortcutMappings_InsertCoin4">投币 4 （双系统）</Message>
+	 <Message ID="EmulatorShortcutMappings_InputBarcode">输入条码</Message>
+    <Message ID="EmulatorShortcutMappings_VsServiceButton">服务</Message>
+	 <Message ID="EmulatorShortcutMappings_VsServiceButton2">服务 2 （双系统）</Message>
+	 <Message ID="EmulatorShortcutMappings_MoveToNextStateSlot">下一进度槽</Message>
+    <Message ID="EmulatorShortcutMappings_MoveToPreviousStateSlot">上一进度槽</Message>
+    <Message ID="EmulatorShortcutMappings_SaveState">保存进度</Message>
+    <Message ID="EmulatorShortcutMappings_LoadState">载入进度</Message>
+    <Message ID="EmulatorShortcutMappings_ToggleCheats">启用/禁用作弊码</Message>
+    <Message ID="EmulatorShortcutMappings_ToggleAudio">静音</Message>
+    <Message ID="EmulatorShortcutMappings_RunSingleFrame">帧进</Message>
+
+    <Message ID="EmulatorShortcutMappings_EjectDisk">弹出磁盘</Message>
+    <Message ID="EmulatorShortcutMappings_SetScale1x">缩放 1 倍</Message>
+    <Message ID="EmulatorShortcutMappings_SetScale2x">缩放 2 倍</Message>
+    <Message ID="EmulatorShortcutMappings_SetScale3x">缩放 3 倍</Message>
+    <Message ID="EmulatorShortcutMappings_SetScale4x">缩放 4 倍</Message>
+    <Message ID="EmulatorShortcutMappings_SetScale5x">缩放 5 倍</Message>
+    <Message ID="EmulatorShortcutMappings_SetScale6x">缩放 6 倍</Message>
+    <Message ID="EmulatorShortcutMappings_ToggleFullscreen">全屏</Message>
+    <Message ID="EmulatorShortcutMappings_ToggleFps">显示帧率</Message>
+    <Message ID="EmulatorShortcutMappings_ToggleDebugInfo">显示调试信息</Message>
+    <Message ID="EmulatorShortcutMappings_ToggleGameTimer">显示计时器</Message>
+    <Message ID="EmulatorShortcutMappings_ToggleFrameCounter">显示帧数</Message>
+    <Message ID="EmulatorShortcutMappings_ToggleLagCounter">显示延迟数</Message>
+    <Message ID="EmulatorShortcutMappings_ToggleOsd">显示屏显文字</Message>
+    <Message ID="EmulatorShortcutMappings_ToggleAlwaysOnTop">窗口总在最前</Message>
+    <Message ID="EmulatorShortcutMappings_ToggleBackground">显示背景</Message>
+    <Message ID="EmulatorShortcutMappings_ToggleSprites">显示精灵</Message>
+    <Message ID="EmulatorShortcutMappings_ToggleKeyboardMode">切换键盘模式</Message>							  
+    <Message ID="EmulatorShortcutMappings_MaxSpeed">切换最大速度</Message>	 						  
+    
+	<Message ID="EmulatorShortcutMappings_LoadRandomGame">载入随机游戏</Message>
+    <Message ID="EmulatorShortcutMappings_SaveStateSlot1">保存进度 1</Message>
+    <Message ID="EmulatorShortcutMappings_SaveStateSlot2">保存进度 2</Message>
+    <Message ID="EmulatorShortcutMappings_SaveStateSlot3">保存进度 3</Message>
+    <Message ID="EmulatorShortcutMappings_SaveStateSlot4">保存进度 4</Message>
+    <Message ID="EmulatorShortcutMappings_SaveStateSlot5">保存进度 5</Message>
+    <Message ID="EmulatorShortcutMappings_SaveStateSlot6">保存进度 6</Message>
+    <Message ID="EmulatorShortcutMappings_SaveStateSlot7">保存进度 7</Message>
+    <Message ID="EmulatorShortcutMappings_SaveStateSlot8">保存进度 8</Message>
+    <Message ID="EmulatorShortcutMappings_SaveStateSlot9">保存进度 9</Message>
+    <Message ID="EmulatorShortcutMappings_SaveStateSlot10">保存进度 10</Message>
+    <Message ID="EmulatorShortcutMappings_SaveStateToFile">进度另存为</Message>
+    <Message ID="EmulatorShortcutMappings_LoadStateSlot1">载入进度 1</Message>
+    <Message ID="EmulatorShortcutMappings_LoadStateSlot2">载入进度 2</Message>
+    <Message ID="EmulatorShortcutMappings_LoadStateSlot3">载入进度 3</Message>
+    <Message ID="EmulatorShortcutMappings_LoadStateSlot4">载入进度 4</Message>
+    <Message ID="EmulatorShortcutMappings_LoadStateSlot5">载入进度 5</Message>
+    <Message ID="EmulatorShortcutMappings_LoadStateSlot6">载入进度 6</Message>
+    <Message ID="EmulatorShortcutMappings_LoadStateSlot7">载入进度 7</Message>
+    <Message ID="EmulatorShortcutMappings_LoadStateSlot8">载入进度 8</Message>
+    <Message ID="EmulatorShortcutMappings_LoadStateSlot9">载入进度 9</Message>
+    <Message ID="EmulatorShortcutMappings_LoadStateSlot10">载入进度 10</Message>
+	 <Message ID="EmulatorShortcutMappings_LoadStateSlotAuto">载入自动进度</Message>
+    <Message ID="EmulatorShortcutMappings_LoadStateFromFile">载入进度文件</Message>
+    <Message ID="EmulatorShortcutMappings_LoadLastSession">载入上次会话</Message>
+    <Message ID="EmulatorShortcutMappings_OpenFile">打开文件</Message>
+    <Message ID="EmulatorShortcutMappings_OpenDebugger">打开调试器</Message>
+    <Message ID="EmulatorShortcutMappings_OpenAssembler">打开反编译</Message>
+    <Message ID="EmulatorShortcutMappings_OpenPpuViewer">打开 PPU 查看器</Message>
+    <Message ID="EmulatorShortcutMappings_OpenMemoryTools">打开内存工具</Message>
+    <Message ID="EmulatorShortcutMappings_OpenScriptWindow">打开脚本</Message>
+    <Message ID="EmulatorShortcutMappings_OpenTraceLogger">打开追踪记录器</Message>
+    <Message ID="EmulatorShortcutMappings_OpenApuViewer">打开 APU 查看器</Message>
+    <Message ID="EmulatorShortcutMappings_OpenEventViewer">打开事件查看器</Message>
+  </Messages>
+  <Enums>
+    <Enum ID="ControllerType">
+      <Value ID="None">无</Value>
+      <Value ID="StandardController">标准控制器</Value>
+      <Value ID="Zapper">手枪</Value>
+      <Value ID="ArkanoidController">打砖块摇杆</Value>
+      <Value ID="SnesController">SFC 控制器</Value>
+      <Value ID="PowerPad">Power Pad</Value>
+      <Value ID="SnesMouse">SFC 鼠标</Value>
+      <Value ID="SuborMouse">小霸王鼠标</Value>
+    </Enum>
+        <Enum ID="ExpansionPortDevice">
+      <Value ID="None">无</Value>
+      <Value ID="Zapper">手枪</Value>
+      <Value ID="FourPlayerAdapter">四个适配器</Value>
+      <Value ID="ArkanoidController">打砖块摇杆</Value>
+      <Value ID="OekaKidsTablet">Oeka 儿童输入板</Value>
+      <Value ID="FamilyTrainerMat">家庭训练者</Value>
+      <Value ID="KonamiHyperShot">Konami Hyper Shot</Value>
+      <Value ID="FamilyBasicKeyboard">Family Basic键盘</Value>
+      <Value ID="PartyTap">Partytap</Value>
+      <Value ID="Pachinko">Pachinko 控制器</Value>
+      <Value ID="ExcitingBoxing">令人兴奋的拳击沙袋</Value>
+      <Value ID="JissenMahjong">Jissen麻将 控制器</Value>
+      <Value ID="SuborKeyboard">小霸王键盘</Value>
+      <Value ID="BarcodeBattler">条码机</Value>
+      <Value ID="HoriTrack">搓球</Value>
+      <Value ID="BandaiHyperShot">Bandai Hyper Shot</Value>
+      <Value ID="AsciiTurboFile">Turbo文件</Value>
+      <Value ID="BattleBox">Battle Box</Value>
+      </Enum>
+    <Enum ID="VideoAspectRatio">
+      <Value ID="NoStretching">默认 （不拉伸）</Value>
+      <Value ID="Auto">自动（基于游戏的8：7或11：8）</Value>
+      <Value ID="NTSC">NTSC （8:7）</Value>
+      <Value ID="PAL">PAL （11:8）</Value>
+      <Value ID="Standard">标准 （4:3）</Value>
+      <Value ID="Widescreen">宽屏 （16:9）</Value>
+      <Value ID="Custom">自定义</Value>
+    </Enum>
+    <Enum ID="VideoRefreshRates">
+      <Value ID="_50">50 Hz</Value>
+      <Value ID="_60">60 Hz</Value>
+      <Value ID="_100">100 Hz</Value>
+      <Value ID="_120">120 Hz</Value>
+      <Value ID="_200">200 Hz</Value>
+      <Value ID="_240">240 Hz</Value>
+    </Enum>
+     <Enum ID="ScreenRotation">
+      <Value ID="None">不旋转</Value>
+      <Value ID="_90Degrees">90°</Value>
+      <Value ID="_180Degrees">180°</Value>
+      <Value ID="_270Degrees">270°</Value>
+    </Enum>
+    <Enum ID="VideoFilterType">
+      <Value ID="None">无</Value>
+      <Value ID="NTSC">NTSC 2x （blarg）</Value>
+      <Value ID="BisqwitNtscQuarterRes">NTSC 2x （Bisqwit）</Value>
+      <Value ID="BisqwitNtscHalfRes">NTSC 4x （Bisqwit）</Value>
+      <Value ID="BisqwitNtsc">NTSC 8x （Bisqwit）</Value>
+      <Value ID="xBRZ2x">xBRZ 2x</Value>
+      <Value ID="xBRZ3x">xBRZ 3x</Value>
+      <Value ID="xBRZ4x">xBRZ 4x</Value>
+      <Value ID="xBRZ5x">xBRZ 5x</Value>
+      <Value ID="xBRZ6x">xBRZ 6x</Value>
+      <Value ID="HQ2x">HQ 2x</Value>
+      <Value ID="HQ3x">HQ 3x</Value>
+      <Value ID="HQ4x">HQ 4x</Value>
+      <Value ID="Scale2x">Scale 2x</Value>
+      <Value ID="Scale3x">Scale 3x</Value>
+      <Value ID="Scale4x">Scale 4x</Value>
+      <Value ID="_2xSai">2xSai</Value>
+      <Value ID="Super2xSai">Super2xSai</Value>
+      <Value ID="SuperEagle">SuperEagle</Value>
+      <Value ID="Prescale2x">Prescale 2x</Value>
+      <Value ID="Prescale3x">Prescale 3x</Value>
+      <Value ID="Prescale4x">Prescale 4x</Value>
+      <Value ID="Prescale6x">Prescale 6x</Value>
+      <Value ID="Prescale8x">Prescale 8x</Value>
+      <Value ID="Prescale10x">Prescale 10x</Value>
+    </Enum>
+	 <Enum ID="VsDualOutputOption">
+		<Value ID="Both">双机</Value>
+		<Value ID="MasterOnly">仅主机</Value>
+		<Value ID="SlaveOnly">仅副机</Value>
+	 </Enum>
+    <Enum ID="ConsoleType">
+      <Value ID="Nes">NES</Value>
+      <Value ID="Famicom">Famicom</Value>
+    </Enum>
+	 <Enum ID="VsInputType">
+		<Value ID="Default">默认</Value>
+		<Value ID="SwapControllers">互换控制器</Value>
+		<Value ID="SwapAB">互换 A/B 按钮</Value>	
+    </Enum>
+    <Enum ID="PpuModel">
+      <Value ID="Ppu2C03">RP2C03</Value>
+      <Value ID="Ppu2C04A">RP2C04-0001</Value>
+      <Value ID="Ppu2C04B">RP2C04-0002</Value>
+      <Value ID="Ppu2C04C">RP2C04-0003</Value>
+      <Value ID="Ppu2C04D">RP2C04-0004</Value>
+      <Value ID="Ppu2C05A">RP2C05-01</Value>
+      <Value ID="Ppu2C05B">RP2C05-02</Value>
+      <Value ID="Ppu2C05C">RP2C05-03</Value>
+      <Value ID="Ppu2C05D">RP2C05-04</Value>
+      <Value ID="Ppu2C05E">RP2C05-05</Value>
+    </Enum>
+    <Enum ID="InputDisplayPosition">
+      <Value ID="TopLeft">左上</Value>
+      <Value ID="TopRight">右上</Value>
+      <Value ID="BottomLeft">左下</Value>
+      <Value ID="BottomRight">右下</Value>
+    </Enum>
+	<Enum ID="Language">
+			<Value ID="SystemDefault">用户帐户默认</Value>
+			<Value ID="English">English</Value>
+			<Value ID="French">Français</Value>
+			<Value ID="Japanese">日本語</Value>
+			<Value ID="Portuguese">Português</Value>
+			<Value ID="Russian">Русский</Value>
+			<Value ID="Spanish">Español</Value>
+			<Value ID="Ukrainian">Українська</Value>
+			<Value ID="Chinese">中文</Value>
+	</Enum>				  
+    <Enum ID="RamPowerOnState">
+      <Value ID="AllZeros">全 0 （默认）</Value>
+      <Value ID="AllOnes">全 1</Value>
+      <Value ID="Random">随机</Value>
+    </Enum>
+    <Enum ID="CheatCurrentFilterType">
+      <Value ID="Smaller">小于</Value>
+      <Value ID="Equal">等于</Value>
+      <Value ID="NotEqual">不等于</Value>
+      <Value ID="Greater">大于</Value>
+    </Enum>
+    <Enum ID="CheatPrevFilterType">
+      <Value ID="Smaller">小于</Value>
+      <Value ID="Equal">等于</Value>
+      <Value ID="NotEqual">不等于</Value>
+      <Value ID="Greater">大于</Value>
+    </Enum>
+    <Enum ID="VideoCodec">
+      <Value ID="None">无 （不压缩）</Value>
+      <Value ID="ZMBV">Zip 动态块视频 （ZMBV）</Value>
+      <Value ID="CSCD">Camstudio （CSCD）</Value>
+    </Enum>
+    <Enum ID="RecordMovieFrom">
+      <Value ID="StartWithoutSaveData">从头开始</Value>
+      <Value ID="StartWithSaveData">带进度从头开始</Value>
+      <Value ID="CurrentState">从现在开始</Value>
+    </Enum>
+<!-- Resources below are used by the debugger only - no translation is needed -->
+		<Enum ID="AddressType">
+			<Value ID="InternalRam">NES RAM (2 KB)</Value>
+			<Value ID="PrgRom">PRG ROM</Value>
+			<Value ID="WorkRam">Work RAM</Value>
+			<Value ID="SaveRam">Save RAM</Value>
+			<Value ID="Register">Register</Value>
+		</Enum>
+		<Enum ID="DebugMemoryType">
+			<Value ID="CpuMemory">CPU Memory</Value>
+			<Value ID="PpuMemory">PPU Memory</Value>
+			<Value ID="PaletteMemory">Palette RAM</Value>
+			<Value ID="SpriteMemory">Sprite (OAM) RAM</Value>
+			<Value ID="SecondarySpriteMemory">Secondary OAM RAM</Value>
+			<Value ID="PrgRom">PRG ROM</Value>
+			<Value ID="ChrRom">CHR ROM</Value>
+			<Value ID="ChrRam">CHR RAM</Value>
+			<Value ID="WorkRam">Work RAM</Value>
+			<Value ID="SaveRam">Save RAM</Value>
+			<Value ID="InternalRam">NES RAM (2 KB)</Value>
+		</Enum>
+		<Enum ID="AddrMode">
+			<Value ID="None">None</Value>
+			<Value ID="Acc">Accumulator</Value>
+			<Value ID="Imp">Implicit</Value>
+			<Value ID="Imm">Immediate</Value>
+			<Value ID="Rel">Relative</Value>
+			<Value ID="Zero">Zero Page</Value>
+			<Value ID="Abs">Absolute</Value>
+			<Value ID="ZeroX">Zero Page, X</Value>
+			<Value ID="ZeroY">Zero Page, Y</Value>
+			<Value ID="Ind">Indirect</Value>
+			<Value ID="IndX">Indexed Indirect</Value>
+			<Value ID="IndY">Indirect Indexed</Value>
+			<Value ID="IndYW">Indirect Indexed</Value>
+			<Value ID="AbsX">Absolute, X</Value>
+			<Value ID="AbsXW">Absolute, X</Value>
+			<Value ID="AbsY">Absolute, Y</Value>
+			<Value ID="AbsYW">Absolute, Y</Value>
+		</Enum>
+		<Enum ID="StatusFlagFormat">
+			<Value ID="Hexadecimal">Hexadecimal</Value>
+			<Value ID="Text">Text</Value>
+			<Value ID="CompactText">Text (Active only)</Value>
+		</Enum>
+		<Enum ID="MemorySizes">
+			<Value ID="None">None</Value>
+			<Value ID="_128Bytes">128 bytes</Value>
+			<Value ID="_256Bytes">256 bytes</Value>
+			<Value ID="_512Bytes">512 bytes</Value>
+			<Value ID="_1KB">1 KB</Value>
+			<Value ID="_2KB">2 KB</Value>
+			<Value ID="_4KB">4 KB</Value>
+			<Value ID="_8KB">8 KB</Value>
+			<Value ID="_16KB">16 KB</Value>
+			<Value ID="_32KB">32 KB</Value>
+			<Value ID="_64KB">64 KB</Value>
+			<Value ID="_128KB">128 KB</Value>
+			<Value ID="_256KB">256 KB</Value>
+			<Value ID="_512KB">512 KB</Value>
+			<Value ID="_1024KB">1024 KB</Value>
+			<Value ID="Reserved">Reserved</Value>
+		</Enum>
+		<Enum ID="FrameTiming">
+			<Value ID="Ntsc">NTSC</Value>
+			<Value ID="Pal">PAL</Value>
+			<Value ID="NtscAndPal">NTSC and PAL</Value>
+			<Value ID="Dendy">Dendy</Value>
+		</Enum>
+		<Enum ID="TvSystem">
+			<Value ID="NesFamicomDendy">NES / Famicom / Dendy</Value>
+			<Value ID="VsSystem">VS System</Value>
+			<Value ID="Playchoice">Playchoice-10</Value>
+			<Value ID="BitCorporationCreator">Bit Corporation Creator</Value>
+			<Value ID="Vt01Mono">VT01 Monochrome</Value>
+			<Value ID="Vt01RedCyan">VT01 Red/Cyan</Value>
+			<Value ID="Vt02">VT02</Value>
+			<Value ID="Vt03">VT03</Value>
+			<Value ID="Vt09">VT09</Value>
+			<Value ID="Vt3x">VT3x</Value>
+			<Value ID="Vt36x">VT36x</Value>
+		</Enum>
+		<Enum ID="iNesMirroringType">
+			<Value ID="Horizontal">Horizontal</Value>
+			<Value ID="Vertical">Vertical</Value>
+			<Value ID="FourScreens">Four Screens</Value>
+		</Enum>
+		<Enum ID="MirroringType">
+			<Value ID="Horizontal">Horizontal</Value>
+			<Value ID="Vertical">Vertical</Value>
+			<Value ID="ScreenAOnly">Screen A</Value>
+			<Value ID="ScreenBOnly">Screen B</Value>
+			<Value ID="FourScreens">Four Screens</Value>
+		</Enum>
+		<Enum ID="DebugEventType">
+			<Value ID="PpuRegisterWrite">PPU Register Write</Value>
+			<Value ID="PpuRegisterRead">PPU Register Read</Value>
+			<Value ID="MapperRegisterWrite">Mapper Register Write</Value>
+			<Value ID="MapperRegisterRead">Mapper Register Read</Value>
+			<Value ID="Nmi">NMI</Value>
+			<Value ID="Irq">IRQ</Value>
+			<Value ID="SpriteZeroHit">Sprite 0 Hit</Value>
+		</Enum>
+		<Enum ID="VsPpuType">
+			<Value ID="RP2C03B">RP2C03B</Value>
+			<Value ID="RP2C03G">RP2C03G</Value>
+			<Value ID="RP2C040001">RP2C04-0001</Value>
+			<Value ID="RP2C040002">RP2C04-0002</Value>
+			<Value ID="RP2C040003">RP2C04-0003</Value>
+			<Value ID="RP2C040004">RP2C04-0004</Value>
+			<Value ID="RC2C03B">RC2C03B</Value>
+			<Value ID="RC2C03C">RC2C03C</Value>
+			<Value ID="RC2C0501">RC2C05-01</Value>
+			<Value ID="RC2C0502">RC2C05-02</Value>
+			<Value ID="RC2C0503">RC2C05-03</Value>
+			<Value ID="RC2C0504">RC2C05-04</Value>
+			<Value ID="RC2C0505">RC2C05-05</Value>
+			<Value ID="Undefined">Undefined</Value>
+			<Value ID="Undefined2">Undefined (2)</Value>
+			<Value ID="Undefined3">Undefined (3)</Value>
+		</Enum>
+		<Enum ID="VsSystemType">
+			<Value ID="Default">Default</Value>
+			<Value ID="RbiBaseballProtection">RBI Baseball</Value>
+			<Value ID="TkoBoxingProtection">TKO Boxing</Value>
+			<Value ID="SuperXeviousProtection">Super Xevious</Value>
+			<Value ID="IceClimberProtection">Ice Climber</Value>
+			<Value ID="VsDualSystem">VS. Dual System</Value>
+			<Value ID="RaidOnBungelingBayProtection">Raid on Bungeling Bay</Value>
+		</Enum>
+		<Enum ID="GameInputType">		
+			<Value ID="Default">Default (Standard Controllers)</Value>
+			<Value ID="FamicomControllers">Famicom Controllers</Value>
+			<Value ID="FourScore">Four Score (NES)</Value>
+			<Value ID="FourPlayerAdapter">Four Player Adapter (Famicom)</Value>
+			<Value ID="VsSystem">VS System</Value>
+			<Value ID="VsSystemSwapped">VS System - Swap P1/P2</Value>
+			<Value ID="VsSystemSwapAB">VS System - Swap A/B buttons</Value>
+			<Value ID="VsZapper">VS Zapper</Value>
+			<Value ID="Zapper">Zapper</Value>
+			<Value ID="TwoZappers">2 zappers</Value>
+			<Value ID="BandaiHypershot">Bandai Hypershot</Value>
+			<Value ID="PowerPadSideA">Power Pad Side A</Value>
+			<Value ID="PowerPadSideB">Power Pad Side B</Value>
+			<Value ID="FamilyTrainerSideA">Family Trainer Side A</Value>
+			<Value ID="FamilyTrainerSideB">Family Trainer Side B</Value>
+			<Value ID="ArkanoidControllerNes">Arkanoid Controller (NES)</Value>
+			<Value ID="ArkanoidControllerFamicom">Arkanoid Controller (Famicom)</Value>
+			<Value ID="DoubleArkanoidController">2x Arkanoid Controllers (NES)</Value>
+			<Value ID="KonamiHyperShot">Konami Hyper Shot</Value>
+			<Value ID="PachinkoController">Pachinko Controller</Value>
+			<Value ID="ExcitingBoxing">Exciting Boxing</Value>
+			<Value ID="JissenMahjong">Jissen Mahjong</Value>
+			<Value ID="PartyTap">Party Tap</Value>
+			<Value ID="OekaKidsTablet">Oeka Kids Tablet</Value>
+			<Value ID="BarcodeBattler">Barcode Battler</Value>
+			<Value ID="MiraclePiano">Miracle Piano</Value>
+			<Value ID="PokkunMoguraa">Pokkun Moguraa</Value>
+			<Value ID="TopRider">Top Rider</Value>
+			<Value ID="DoubleFisted">Double Fisted</Value>
+			<Value ID="Famicom3dSystem">Famicom 3D System</Value>
+			<Value ID="DoremikkoKeyboard">Doremikko Keyboard</Value>
+			<Value ID="ROB">ROB</Value>
+			<Value ID="FamicomDataRecorder">Family Data Recorder</Value>
+			<Value ID="TurboFile">Turbo File</Value>
+			<Value ID="BattleBox">Battle Box</Value>
+			<Value ID="FamilyBasicKeyboard">Family Basic Keyboard</Value>
+			<Value ID="Pec586Keyboard">PEC-586 Keyboard</Value>
+			<Value ID="Bit79Keyboard">Bit-79 Keyboard</Value>
+			<Value ID="SuborKeyboard">Subor Keyboard</Value>
+			<Value ID="SuborKeyboardMouse1">Subor Keyboard+Mouse (Type A)</Value>
+			<Value ID="SuborKeyboardMouse2">Subor Keyboard+Mouse (Type B)</Value>
+			<Value ID="SnesMouse">SNES Mouse</Value>
+			<Value ID="GenericMulticart">Generic Multicart</Value>								
+			<Value ID="SnesControllers">SNES Controllers</Value>
+		</Enum>
+	</Enums>
+</Resources>
