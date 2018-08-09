@@ -74,6 +74,17 @@ else ifeq ($(platform), linux-portable)
    fpic := -fPIC -nostdlib
    SHARED := -shared -Wl,--version-script=$(LIBRETRO_DIR)/link.T
   LIBM :=
+else ifeq ($(platform), nintendoc)
+	# Nintendo Classics (Hakchi)
+   CC = arm-linux-gnueabihf-gcc-5
+   CXX = arm-linux-gnueabihf-g++-5
+   EXT ?= so
+   TARGET := $(TARGET_NAME)_libretro.$(EXT)
+   fpic := -fPIC -pthread
+   SHARED := -shared -Wl,--version-script=$(LIBRETRO_DIR)/link.T -Wl,--no-undefined
+   CXXFLAGS += -marm -mcpu=cortex-a7 -mfpu=neon-vfpv4 -mfloat-abi=hard -static -static-libgcc -static-libstdc++
+   CFLAGS += -marm -mcpu=cortex-a7 -mfpu=neon-vfpv4 -mfloat-abi=hard -static -static-libgcc -static-libstdc++
+   LDFLAGS += /usr/lib/gcc-cross/arm-linux-gnueabihf/5/libstdc++.a
 else ifneq (,$(findstring osx,$(platform)))
    TARGET := $(TARGET_NAME)_libretro.dylib
    fpic := -fPIC
@@ -240,7 +251,7 @@ else
 endif
 else
   OBJOUT   = -o
-  LINKOUT  = -o 
+  LINKOUT  = -o
   LD = $(CXX)
 endif
 
@@ -269,6 +280,15 @@ else
 	$(LD) $(fpic) $(SHARED) $(INCLUDES) $(LINKOUT)$@ $(OBJECTS) $(LDFLAGS)
 endif
 
+ifeq ($(platform),nintendoc)
+	@echo "** BUILDING HAKCHI HMOD PACKAGE **"
+	mkdir -p hakchi/etc/libretro/core/ hakchi/etc/libretro/info/ hakchi/etc/preinit.d/
+	rm -f hakchi/etc/libretro/info/*
+	cp $(TARGET_NAME)_libretro.so hakchi/etc/libretro/core/
+	cd hakchi/etc/libretro/info/; wget https://buildbot.libretro.com/assets/frontend/info/$(TARGET_NAME)_libretro.info
+	cd hakchi/; tar -czvf "CORE_$(TARGET_NAME).hmod" *
+endif
+
 %.o: %.c
 	$(CC) $(CFLAGS) $(fpic) -c $< $(OBJOUT)$@
 
@@ -276,7 +296,7 @@ endif
 	$(CXX) $(CXXFLAGS) $(fpic) -c $< $(OBJOUT)$@
 
 clean:
-	rm -f $(OBJECTS) $(TARGET)
+	rm -f $(OBJECTS) $(TARGET) hakchi/CORE_$(TARGET_NAME).hmod
 
 .PHONY: clean
 

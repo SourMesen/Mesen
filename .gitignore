@@ -178,3 +178,5 @@ PGOHelper/PGOMesenHome
 *.profdata
 
 packages/*
+
+!Libretro/hakchi/bin
