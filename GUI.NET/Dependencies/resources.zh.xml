@@ -538,7 +538,7 @@
 			<Control ID="lblLink">www.mesen.ca</Control>
 			<Control ID="labelVersion">版本:</Control>
 			<Control ID="lblBuildDateLabel">构建日期:</Control>
-			<Control ID="lblDonate">如果您喜欢 Mesen 模拟器，请通过捐赠来支持我们！&#13;感谢你的支持！&#13;汉化：Licardo   邮箱：1014660822@qq.com</Control>
+			<Control ID="lblDonate">如果您喜欢 Mesen 模拟器，请通过捐赠来支持我们！&#13;感谢你的支持！&#13;&#13;汉化：Licardo（albert.abdilim@foxmail.com） owomomo（ikyokyo@163.com）&#13;</Control>
 			<Control ID="okButton">&amp;确定</Control>
 		</Form>
 		<Form ID="frmGameConfig" Title="游戏游戏配置">
@@ -639,7 +639,7 @@
 		</Form>
 		<Form ID="frmInputBarCode" Title="输入条码...">
 			<Control ID="lblBarcode">条码:</Control>
-			<Control ID="btnOK">确认</Control>
+			<Control ID="btnOK">确定</Control>
 			<Control ID="btnCancel">取消</Control>
 		</Form>
 		<Form ID="BaseInputConfigForm">
@@ -650,7 +650,7 @@
 			<Control ID="tpgSet4">按键设置 #4</Control>
 			<Control ID="btnSetDefault">设置默认绑定</Control>
 			<Control ID="btnClear">清除按键绑定</Control>
-			<Control ID="btnOK">确认</Control>
+			<Control ID="btnOK">确定</Control>
 			<Control ID="btnCancel">取消</Control>
 		</Form>
 		<Form ID="frmControllerConfig">
@@ -678,14 +678,14 @@
 			<Control ID="lblSmall">小</Control>
 			<Control ID="lblLarge">大</Control>
 			<Control ID="lblDetectRadius">光探测半径:</Control>
-			<Control ID="btnOK">确认</Control>
+			<Control ID="btnOK">确定</Control>
 			<Control ID="btnCancel">取消</Control>
 		</Form>
 		<Form ID="frmMouseConfig">
 			<Control ID="lblLow">低</Control>
 			<Control ID="lblHigh">高</Control>
 			<Control ID="lblSensitivity">灵敏度:</Control>
-			<Control ID="btnOK">确认</Control>
+			<Control ID="btnOK">确定</Control>
 			<Control ID="btnCancel">取消</Control>
 		</Form>
 		<Form ID="frmExcitingBoxingConfig">
