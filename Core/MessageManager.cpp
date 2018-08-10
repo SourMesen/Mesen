@@ -646,7 +646,7 @@ std::unordered_map<string, string> MessageManager::_zhResources = {
 	{ "Mapper", u8"Mapper: %1, 子 mapper: %2" },
 	{ "MovieEnded", u8"影片已结束." },
 	{ "MovieInvalid", u8"影片文件无效." },
-	{ "MovieMissingRom", u8"丢失所需的 ROM (%1) 来播放电影." },
+	{ "MovieMissingRom", u8"丢失所需的 ROM (%1) 来播放影片." },
 	{ "MovieNewerVersion", u8"无法加载由最新版本的 Mesen 创建的影片. 请下载最新版本." },
 	{ "MovieIncompatibleVersion", u8"这部影片与此版本的 Mesen 不兼容." },
 	{ "MoviePlaying", u8"正在播放影片: %1" },
