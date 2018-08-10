@@ -538,8 +538,8 @@
 			<Control ID="lblLink">www.mesen.ca</Control>
 			<Control ID="labelVersion">版本:</Control>
 			<Control ID="lblBuildDateLabel">构建日期:</Control>
-			<Control ID="lblDonate">如果您喜欢 Mesen 模拟器，请通过捐赠来支持我们！&#13;感谢你的支持！&#13;汉化: owomomo (ikyokyo@163.com)  Licardo (1014660822@qq.com)</Control>
-			<Control ID="okButton">确定(&amp;O)</Control>
+			<Control ID="lblDonate">如果您喜欢 Mesen 模拟器，请通过捐赠来支持我们！&#13;感谢你的支持！&#13;&#13;汉化：Licardo（albert.abdilim@foxmail.com） owomomo（ikyokyo@163.com）&#13;</Control>
+			<Control ID="okButton">确定</Control>
 		</Form>
 		<Form ID="frmGameConfig" Title="游戏配置">
 			<Control ID="grpDipSwitches">DIP 开关</Control>
