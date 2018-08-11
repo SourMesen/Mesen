@@ -159,8 +159,8 @@ void BisqwitNtscFilter::RecursiveBlend(int iterationCount, uint64_t *output, uin
 
 void BisqwitNtscFilter::GenerateNtscSignal(int8_t *ntscSignal, int &phase, int rowNumber)
 {
-	for(int x = 0; x < 256; x++) {
-		uint16_t color = _ppuOutputBuffer[(rowNumber << 8) | x];
+	for(int x = -_paddingSize; x < 256 + _paddingSize; x++) {
+		uint16_t color = _ppuOutputBuffer[(rowNumber << 8) | (x < 0 ? 0 : (x >= 256 ? 255 : x))];
 
 		int8_t low = _signalLow[color & 0x3F];
 		int8_t high = _signalHigh[color & 0x3F];
@@ -184,19 +184,20 @@ void BisqwitNtscFilter::GenerateNtscSignal(int8_t *ntscSignal, int &phase, int r
 				voltage -= voltage / 4;
 			}
 
-			ntscSignal[(x << 3) | j] = voltage;
+			ntscSignal[((x + _paddingSize) << 3) | j] = voltage;
 		}
 
 		phase += _signalsPerPixel;
 	}
-	phase += (341 - 256) * _signalsPerPixel;
+	phase += (341 - 256 - _paddingSize * 2) * _signalsPerPixel;
 }
 
 void BisqwitNtscFilter::DecodeFrame(int startRow, int endRow, uint16_t *ppuOutputBuffer, uint32_t* outputBuffer, int startPhase)
 {
 	int pixelsPerCycle = 8 / _resDivider;
 	int phase = startPhase;
-	int8_t rowSignal[256 * _signalsPerPixel];
+	constexpr int lineWidth = 256 + _paddingSize * 2;
+	int8_t rowSignal[lineWidth * _signalsPerPixel];
 	uint32_t rowPixelGap = GetOverscan().GetScreenWidth() * pixelsPerCycle;
 	if(!_keepVerticalRes) {
 		rowPixelGap *= pixelsPerCycle;
@@ -211,7 +212,7 @@ void BisqwitNtscFilter::DecodeFrame(int startRow, int endRow, uint16_t *ppuOutpu
 		GenerateNtscSignal(rowSignal, phase, y);
 
 		//Convert the NTSC signal to RGB
-		NtscDecodeLine(256 * _signalsPerPixel, rowSignal, outputBuffer, (startCycle + 7) % 12);
+		NtscDecodeLine(lineWidth * _signalsPerPixel, rowSignal, outputBuffer, (startCycle + 7) % 12);
 
 		outputBuffer += rowPixelGap;
 	}
@@ -271,8 +272,9 @@ void BisqwitNtscFilter::NtscDecodeLine(int width, const int8_t* signal, uint32_t
 
 	int brightness = (int)(_console->GetSettings()->GetPictureSettings().Brightness * 750);
 	int ysum = brightness, isum = 0, qsum = 0;
-	int leftOverscan = GetOverscan().Left * 8;
-	int rightOverscan = width - GetOverscan().Right * 8;
+	int offset = _resDivider + 4;
+	int leftOverscan = (GetOverscan().Left + _paddingSize) * 8 + offset;
+	int rightOverscan = width - (GetOverscan().Right + _paddingSize) * 8 + offset;
 
 	for(int s = 0; s < rightOverscan; s++) {
 		ysum += Read(s) - Read(s - _yWidth);
