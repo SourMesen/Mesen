@@ -1128,7 +1128,11 @@ void BaseMapper::GetRomFileData(vector<uint8_t> &out, bool asIpsFile, uint8_t* h
 		_console->GetRomPath().ReadFile(originalFile);
 
 		out.insert(out.end(), header, header+sizeof(NESHeader));
-		out.insert(out.end(), originalFile.begin()+sizeof(NESHeader), originalFile.end());
+		if(_romInfo.IsHeaderlessRom) {
+			out.insert(out.end(), originalFile.begin(), originalFile.end());
+		} else {
+			out.insert(out.end(), originalFile.begin() + sizeof(NESHeader), originalFile.end());
+		}
 	} else {
 		vector<uint8_t> newFile;
 		newFile.insert(newFile.end(), (uint8_t*)&_romInfo.NesHeader, ((uint8_t*)&_romInfo.NesHeader) + sizeof(NESHeader));

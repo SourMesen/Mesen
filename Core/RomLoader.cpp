@@ -62,6 +62,7 @@ bool RomLoader::LoadFile(string filename, vector<uint8_t> &fileData)
 			Log("[DB] Headerless ROM file found - using game database data.");
 			iNesLoader loader;
 			_romData = loader.LoadRom(fileData, &header);
+			_romData.Info.IsHeaderlessRom = true;
 		} else {
 			Log("Invalid rom file.");
 			_romData.Error = true;
