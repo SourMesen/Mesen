@@ -56,7 +56,7 @@ namespace Mesen.GUI.Debugger.Controls
 		private List<string> _lineNumberNotes = new List<string>();
 		private void UpdateCode()
 		{
-			if(_symbolProvider == null) {
+			if(_symbolProvider == null || CurrentFile == null) {
 				return;
 			}
 

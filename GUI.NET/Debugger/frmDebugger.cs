@@ -773,13 +773,17 @@ namespace Mesen.GUI.Debugger
 		private void ctrlDebuggerCode_OnSwitchView(ICodeViewer sender)
 		{
 			if(ctrlDebuggerCode == sender) {
-				ctrlDebuggerCode.Visible = false;
-				ctrlSourceViewer.Visible = true;
-				if(ctrlDebuggerCode.CodeViewer.CurrentLine >= 0) {
-					ctrlSourceViewer.ScrollToLineNumber(ctrlDebuggerCode.CodeViewer.CurrentLine);
+				if(ctrlSourceViewer.CurrentFile != null) {
+					ctrlDebuggerCode.Visible = false;
+					ctrlSourceViewer.Visible = true;
+					if(ctrlDebuggerCode.CodeViewer.CurrentLine >= 0) {
+						ctrlSourceViewer.ScrollToLineNumber(ctrlDebuggerCode.CodeViewer.CurrentLine);
+					}
+					ctrlSourceViewer.Focus();
+					ctrlSourceViewer.SetConfig(ConfigManager.Config.DebugInfo.LeftView);
+				} else {
+					MessageBox.Show("Source files could not be found/loaded", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
 				}
-				ctrlSourceViewer.Focus();
-				ctrlSourceViewer.SetConfig(ConfigManager.Config.DebugInfo.LeftView);
 			} else if(ctrlSourceViewer == sender) {
 				ctrlSourceViewer.Visible = false;
 				ctrlDebuggerCode.Visible = true;
@@ -789,13 +793,17 @@ namespace Mesen.GUI.Debugger
 				ctrlDebuggerCode.Focus();
 				ctrlDebuggerCode.SetConfig(ConfigManager.Config.DebugInfo.LeftView);
 			} else if(ctrlSourceViewerSplit == sender) {
-				ctrlSourceViewerSplit.Visible = false;
-				ctrlDebuggerCodeSplit.Visible = true;
-				if(ctrlSourceViewerSplit.CodeViewer.CurrentLine >= 0) {
-					ctrlDebuggerCodeSplit.ScrollToLineNumber(ctrlSourceViewerSplit.CodeViewer.CurrentLine);
+				if(ctrlSourceViewerSplit.CurrentFile != null) {
+					ctrlSourceViewerSplit.Visible = false;
+					ctrlDebuggerCodeSplit.Visible = true;
+					if(ctrlSourceViewerSplit.CodeViewer.CurrentLine >= 0) {
+						ctrlDebuggerCodeSplit.ScrollToLineNumber(ctrlSourceViewerSplit.CodeViewer.CurrentLine);
+					}
+					ctrlDebuggerCodeSplit.Focus();
+					ctrlDebuggerCodeSplit.SetConfig(ConfigManager.Config.DebugInfo.RightView);
+				} else {
+					MessageBox.Show("Source files could not be found/loaded", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
 				}
-				ctrlDebuggerCodeSplit.Focus();
-				ctrlDebuggerCodeSplit.SetConfig(ConfigManager.Config.DebugInfo.RightView);
 			} else {
 				ctrlDebuggerCodeSplit.Visible = false;
 				ctrlSourceViewerSplit.Visible = true;
