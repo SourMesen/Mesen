@@ -162,10 +162,12 @@ namespace Mesen.GUI.Debugger
 					IsRam = true
 				};
 
-				match = _segmentPrgRomRegex.Match(row);
-				if(match.Success && !row.Contains("type=rw")) {
-					segment.FileOffset = Int32.Parse(match.Groups[4].Value);
-					segment.IsRam = false;
+				if(segment.Start >= 0x4020) {
+					match = _segmentPrgRomRegex.Match(row);
+					if(match.Success && !row.Contains("type=rw")) {
+						segment.FileOffset = Int32.Parse(match.Groups[4].Value);
+						segment.IsRam = false;
+					}
 				}
 
 				_segments.Add(segment.ID, segment);
