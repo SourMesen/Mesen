@@ -1232,19 +1232,24 @@ namespace Mesen.GUI.Debugger
 			}
 		}
 
+		private void ImportLabelFile(string path)
+		{
+			string ext = Path.GetExtension(path).ToLower();
+			if(ext == ".mlb") {
+				ImportMlbFile(path);
+			} else if(ext == ".fns") {
+				ImportNesasmFnsFile(path);
+			} else {
+				ImportDbgFile(path, false);
+			}
+		}
+
 		private void mnuImportLabels_Click(object sender, EventArgs e)
 		{
 			OpenFileDialog ofd = new OpenFileDialog();
 			ofd.SetFilter("All supported files (*.dbg, *.mlb, *.fns)|*.dbg;*.mlb;*.fns");
 			if(ofd.ShowDialog() == DialogResult.OK) {
-				string ext = Path.GetExtension(ofd.FileName).ToLower();
-				if(ext == ".mlb") {
-					ImportMlbFile(ofd.FileName);
-				} else if(ext == ".fns") {
-					ImportNesasmFnsFile(ofd.FileName);
-				} else {
-					ImportDbgFile(ofd.FileName, false);
-				}					
+				ImportLabelFile(ofd.FileName);
 			}
 		}
 
@@ -1578,6 +1583,35 @@ namespace Mesen.GUI.Debugger
 		private void mnuBreakOptions_DropDownOpening(object sender, EventArgs e)
 		{
 			this.mnuBreakOnDecayedOamRead.Enabled = ConfigManager.Config.EmulationInfo.EnableOamDecay;
+		}
+
+		private void frmDebugger_DragDrop(object sender, DragEventArgs e)
+		{
+			try {
+				string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
+				if(files != null && File.Exists(files[0])) {
+					ImportLabelFile(files[0]);
+				}
+			} catch(Exception ex) {
+				MesenMsgBox.Show("UnexpectedError", MessageBoxButtons.OK, MessageBoxIcon.Error, ex.ToString());
+			}
+		}
+
+		private void frmDebugger_DragEnter(object sender, DragEventArgs e)
+		{
+			try {
+				if(e.Data != null && e.Data.GetDataPresent(DataFormats.FileDrop)) {
+					string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
+					if(files != null && files.Length > 0) {
+						string ext = Path.GetExtension(files[0]).ToLower();
+						if(ext == ".dbg" || ext == ".mlb" || ext == ".fns") {
+							e.Effect = DragDropEffects.Copy;
+						}
+					}
+				}
+			} catch(Exception ex) {
+				MesenMsgBox.Show("UnexpectedError", MessageBoxButtons.OK, MessageBoxIcon.Error, ex.ToString());
+			}
 		}
 	}
 }
