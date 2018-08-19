@@ -41,8 +41,13 @@ private:
 	uint8_t _prgPageAccessType[0x100];
 	uint8_t _chrPageAccessType[0x100];
 
-	uint32_t _prgPageNumbers[64];
-	uint32_t _chrPageNumbers[64];
+	int32_t _prgMemoryOffset[0x100];
+	PrgMemoryType _prgMemoryType[0x100];
+	MemoryAccessType _prgMemoryAccess[0x100];
+
+	int32_t _chrMemoryOffset[0x40];
+	ChrMemoryType _chrMemoryType[0x40];
+	MemoryAccessType _chrMemoryAccess[0x40];
 
 	vector<uint8_t> _originalPrgRom;
 	vector<uint8_t> _originalChrRom;
@@ -105,6 +110,7 @@ protected:
 	void SelectPrgPage2x(uint16_t slot, uint16_t page, PrgMemoryType memoryType = PrgMemoryType::PrgRom);
 	virtual void SelectPRGPage(uint16_t slot, uint16_t page, PrgMemoryType memoryType = PrgMemoryType::PrgRom);
 	void SetCpuMemoryMapping(uint16_t startAddr, uint16_t endAddr, int16_t pageNumber, PrgMemoryType type, int8_t accessType = -1);
+	void SetCpuMemoryMapping(uint16_t startAddr, uint16_t endAddr, PrgMemoryType type, uint32_t sourceOffset, int8_t accessType);
 	void SetCpuMemoryMapping(uint16_t startAddr, uint16_t endAddr, uint8_t *source, int8_t accessType = -1);
 	void RemoveCpuMemoryMapping(uint16_t startAddr, uint16_t endAddr);
 
@@ -113,6 +119,7 @@ protected:
 	virtual void SelectChrPage2x(uint16_t slot, uint16_t page, ChrMemoryType memoryType = ChrMemoryType::Default);
 	virtual void SelectCHRPage(uint16_t slot, uint16_t page, ChrMemoryType memoryType = ChrMemoryType::Default);
 	void SetPpuMemoryMapping(uint16_t startAddr, uint16_t endAddr, uint16_t pageNumber, ChrMemoryType type = ChrMemoryType::Default, int8_t accessType = -1);
+	void SetPpuMemoryMapping(uint16_t startAddr, uint16_t endAddr, ChrMemoryType type, uint32_t sourceOffset, int8_t accessType);
 	void SetPpuMemoryMapping(uint16_t startAddr, uint16_t endAddr, uint8_t* sourceMemory, int8_t accessType = -1);
 	void RemovePpuMemoryMapping(uint16_t startAddr, uint16_t endAddr);
 
@@ -134,6 +141,8 @@ protected:
 	void RemoveRegisterRange(uint16_t startAddr, uint16_t endAddr, MemoryOperation operation = MemoryOperation::Any);
 
 	virtual void StreamState(bool saving) override;
+
+	void RestorePrgChrState(uint32_t* prgPages, uint32_t* chrPages);
 
 	uint8_t* GetNametable(uint8_t index);
 	void AddNametable(uint8_t index, uint8_t *nametable);

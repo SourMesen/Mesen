@@ -963,16 +963,16 @@ int LuaApi::GetState(lua_State *lua)
 
 	lua_starttable("selectedPrgPages");
 	for(int i = 0, max = 0x8000 / state.Cartridge.PrgPageSize; i < max; i++) {
-		lua_pushinteger(lua, i + 1);
-		lua_pushinteger(lua, (int32_t)state.Cartridge.PrgSelectedPages[i]);
+		lua_pushinteger(lua, i);
+		lua_pushinteger(lua, (int32_t)state.Cartridge.PrgMemoryOffset[0x80 + ((i * state.Cartridge.PrgPageSize) >> 8)] / state.Cartridge.PrgPageSize);
 		lua_settable(lua, -3);
 	}
 	lua_endtable();
 
 	lua_starttable("selectedChrPages");
 	for(int i = 0, max = 0x2000 / state.Cartridge.ChrPageSize; i < max; i++) {
-		lua_pushinteger(lua, i + 1);
-		lua_pushinteger(lua, (int32_t)state.Cartridge.ChrSelectedPages[i]);
+		lua_pushinteger(lua, i);
+		lua_pushinteger(lua, (int32_t)state.Cartridge.ChrMemoryOffset[(i * state.Cartridge.ChrPageSize) >> 8] / state.Cartridge.ChrPageSize);
 		lua_settable(lua, -3);
 	}
 	lua_endtable();

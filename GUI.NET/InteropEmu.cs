@@ -1195,6 +1195,29 @@ namespace Mesen.GUI
 		Irq = 2
 	}
 
+	public enum PrgMemoryType
+	{
+		PrgRom,
+		SaveRam,
+		WorkRam,
+	}
+
+	public enum ChrMemoryType
+	{
+		Default,
+		ChrRom,
+		ChrRam
+	}
+
+	public enum MemoryAccessType
+	{
+		Unspecified = -1,
+		NoAccess = 0x00,
+		Read = 0x01,
+		Write = 0x02,
+		ReadWrite = 0x03
+	}
+	
 	public struct StackFrameInfo
 	{
 		public Int32 JumpSourceAbsolute;
@@ -1222,23 +1245,33 @@ namespace Mesen.GUI
 
 		public UInt32 PrgPageCount;
 		public UInt32 PrgPageSize;
-		[MarshalAs(UnmanagedType.ByValArray, SizeConst = 64)]
-		public UInt32[] PrgSelectedPages;
+
+		[MarshalAs(UnmanagedType.ByValArray, SizeConst = 0x100)]
+		public Int32[] PrgMemoryOffset;
+		[MarshalAs(UnmanagedType.ByValArray, SizeConst = 0x100)]
+		public PrgMemoryType[] PrgMemoryType;
+		[MarshalAs(UnmanagedType.ByValArray, SizeConst = 0x100)]
+		public MemoryAccessType[] PrgMemoryAccess;
 
 		public UInt32 ChrPageCount;
 		public UInt32 ChrPageSize;
-		[MarshalAs(UnmanagedType.ByValArray, SizeConst = 64)]
-		public UInt32[] ChrSelectedPages;
+		[MarshalAs(UnmanagedType.ByValArray, SizeConst = 0x40)]
+		public Int32[] ChrMemoryOffset;
+		[MarshalAs(UnmanagedType.ByValArray, SizeConst = 0x40)]
+		public ChrMemoryType[] ChrMemoryType;
+		[MarshalAs(UnmanagedType.ByValArray, SizeConst = 0x40)]
+		public MemoryAccessType[] ChrMemoryAccess;
 
 		[MarshalAs(UnmanagedType.ByValArray, SizeConst = 8)]
 		public UInt32[] Nametables;
 
-		public Int32 WorkRamStart;
-		public Int32 WorkRamEnd;
-		public Int32 SaveRamStart;
-		public Int32 SaveRamEnd;
+		public UInt32 WorkRamPageSize;
+		public UInt32 SaveRamPageSize;
 
 		public MirroringType Mirroring;
+
+		[MarshalAs(UnmanagedType.I1)]
+		public bool HasBattery;
 	}
 
 	public enum MirroringType

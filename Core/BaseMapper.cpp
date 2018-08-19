@@ -40,22 +40,19 @@ bool BaseMapper::ValidateAddressRange(uint16_t startAddr, uint16_t endAddr)
 
 void BaseMapper::SetCpuMemoryMapping(uint16_t startAddr, uint16_t endAddr, int16_t pageNumber, PrgMemoryType type, int8_t accessType)
 {
-	if(!ValidateAddressRange(startAddr, endAddr)) {
+	if(!ValidateAddressRange(startAddr, endAddr) || startAddr > 0xFF00 || endAddr <= startAddr) {
 		return;
 	}
 
-	uint8_t* source = nullptr;
 	uint32_t pageCount;
 	uint32_t pageSize;
 	uint8_t defaultAccessType = MemoryAccessType::Read;
 	switch(type) {
 		case PrgMemoryType::PrgRom:
-			source = _prgRom;
 			pageCount = GetPRGPageCount();
 			pageSize = InternalGetPrgPageSize();
 			break;
 		case PrgMemoryType::SaveRam:
-			source = _saveRam;
 			pageSize = InternalGetSaveRamPageSize();
 			if(pageSize == 0) {
 				#ifdef _DEBUG
@@ -68,7 +65,6 @@ void BaseMapper::SetCpuMemoryMapping(uint16_t startAddr, uint16_t endAddr, int16
 			defaultAccessType |= MemoryAccessType::Write;
 			break;
 		case PrgMemoryType::WorkRam:
-			source = _workRam;
 			pageSize = InternalGetWorkRamPageSize();
 			if(pageSize == 0) {
 				#ifdef _DEBUG
@@ -102,10 +98,8 @@ void BaseMapper::SetCpuMemoryMapping(uint16_t startAddr, uint16_t endAddr, int16
 	};
 	wrapPageNumber(pageNumber);
 	
-	uint8_t* sourceBuffer = &source[pageNumber * pageSize];
-
 	accessType = accessType != -1 ? accessType : defaultAccessType;
-
+	
 	if((uint16_t)(endAddr - startAddr) >= pageSize) {
 		#ifdef _DEBUG
 		MessageManager::DisplayMessage("Debug", "Tried to map undefined prg - page size too small for selected range.");
@@ -114,15 +108,35 @@ void BaseMapper::SetCpuMemoryMapping(uint16_t startAddr, uint16_t endAddr, int16
 		//If range is bigger than a single page, keep going until we reach the last page
 		uint32_t addr = startAddr;
 		while(addr <= endAddr - pageSize + 1) {
-			SetCpuMemoryMapping(addr, addr + pageSize - 1, sourceBuffer, accessType);
+			SetCpuMemoryMapping(addr, addr + pageSize - 1, type, pageNumber * pageSize, accessType);
 			addr += pageSize;
 			pageNumber++;
 			wrapPageNumber(pageNumber);
-			sourceBuffer = &source[pageNumber * pageSize];
 		}
 	} else {
-		SetCpuMemoryMapping(startAddr, endAddr, sourceBuffer, accessType);
+		SetCpuMemoryMapping(startAddr, endAddr, type, pageNumber * pageSize, accessType);
 	}
+}
+
+void BaseMapper::SetCpuMemoryMapping(uint16_t startAddr, uint16_t endAddr, PrgMemoryType type, uint32_t sourceOffset, int8_t accessType)
+{
+	uint8_t* source = nullptr;
+	switch(type) {
+		default:
+		case PrgMemoryType::PrgRom: source = _prgRom; break;
+		case PrgMemoryType::SaveRam: source = _saveRam; break;
+		case PrgMemoryType::WorkRam: source = _workRam; break;
+	}
+
+	int firstSlot = startAddr >> 8;
+	int slotCount = (endAddr - startAddr + 1) >> 8;
+	for(int i = 0; i < slotCount; i++) {
+		_prgMemoryOffset[firstSlot + i] = sourceOffset + i * 0x100;
+		_prgMemoryType[firstSlot + i] = type;
+		_prgMemoryAccess[firstSlot + i] = (MemoryAccessType)accessType;
+	}
+
+	SetCpuMemoryMapping(startAddr, endAddr, source+sourceOffset, accessType);
 }
 
 void BaseMapper::SetCpuMemoryMapping(uint16_t startAddr, uint16_t endAddr, uint8_t *source, int8_t accessType)
@@ -149,13 +163,12 @@ void BaseMapper::RemoveCpuMemoryMapping(uint16_t startAddr, uint16_t endAddr)
 
 void BaseMapper::SetPpuMemoryMapping(uint16_t startAddr, uint16_t endAddr, uint16_t pageNumber, ChrMemoryType type, int8_t accessType)
 {
-	if(!ValidateAddressRange(startAddr, endAddr)) {
+	if(!ValidateAddressRange(startAddr, endAddr) || startAddr > 0x3F00 || endAddr > 0x3FFF || endAddr <= startAddr) {
 		return;
 	}
 
 	uint32_t pageCount = 0;
 	uint32_t pageSize = 0;
-	uint8_t* sourceMemory = nullptr;
 	uint8_t defaultAccessType = MemoryAccessType::Read;
 	switch(type) {
 		case ChrMemoryType::Default:
@@ -167,7 +180,6 @@ void BaseMapper::SetPpuMemoryMapping(uint16_t startAddr, uint16_t endAddr, uint1
 				return;
 			}
 			pageCount = GetCHRPageCount();
-			sourceMemory = _onlyChrRam ? _chrRam : _chrRom;
 			if(_onlyChrRam) {
 				defaultAccessType |= MemoryAccessType::Write;
 			}
@@ -182,8 +194,6 @@ void BaseMapper::SetPpuMemoryMapping(uint16_t startAddr, uint16_t endAddr, uint1
 				return;
 			}
 			pageCount = GetCHRPageCount();
-
-			sourceMemory = _chrRom;
 			break;
 
 		case ChrMemoryType::ChrRam:
@@ -195,7 +205,6 @@ void BaseMapper::SetPpuMemoryMapping(uint16_t startAddr, uint16_t endAddr, uint1
 				return;
 			}
 			pageCount = _chrRamSize / pageSize;
-			sourceMemory = _chrRam;
 			defaultAccessType |= MemoryAccessType::Write;
 			break;
 	}
@@ -209,8 +218,6 @@ void BaseMapper::SetPpuMemoryMapping(uint16_t startAddr, uint16_t endAddr, uint1
 
 	pageNumber = pageNumber % pageCount;
 
-	uint8_t* sourceBuffer = sourceMemory + pageNumber * pageSize;
-
 	if((uint16_t)(endAddr - startAddr) >= pageSize) {
 		#ifdef _DEBUG
 		MessageManager::DisplayMessage("Debug", "Tried to map undefined chr - page size too small for selected range.");
@@ -218,14 +225,33 @@ void BaseMapper::SetPpuMemoryMapping(uint16_t startAddr, uint16_t endAddr, uint1
 
 		uint32_t addr = startAddr;
 		while(addr <= endAddr - pageSize + 1) {
-			SetPpuMemoryMapping(addr, addr + pageSize - 1, sourceBuffer, accessType);
+			SetPpuMemoryMapping(addr, addr + pageSize - 1, type, pageNumber * pageSize, accessType);
 			addr += pageSize;
 			pageNumber = (pageNumber + 1) % pageCount;
-			sourceBuffer = &sourceMemory[pageNumber * pageSize];
 		}
 	} else {
-		SetPpuMemoryMapping(startAddr, endAddr, sourceBuffer, accessType == -1 ? defaultAccessType : accessType);
+		SetPpuMemoryMapping(startAddr, endAddr, type, pageNumber * pageSize, accessType == -1 ? defaultAccessType : accessType);
 	}
+}
+
+void BaseMapper::SetPpuMemoryMapping(uint16_t startAddr, uint16_t endAddr, ChrMemoryType type, uint32_t sourceOffset, int8_t accessType)
+{
+	uint8_t* sourceMemory = nullptr;
+	switch(type) {
+		default:
+		case ChrMemoryType::Default: sourceMemory = _onlyChrRam ? _chrRam : _chrRom; break;
+		case ChrMemoryType::ChrRom: sourceMemory = _chrRom; break;
+		case ChrMemoryType::ChrRam: sourceMemory = _chrRam; break;
+	}
+	int firstSlot = startAddr >> 8;
+	int slotCount = (endAddr - startAddr + 1) >> 8;
+	for(int i = 0; i < slotCount; i++) {
+		_chrMemoryOffset[firstSlot + i] = sourceOffset + i * 256;
+		_chrMemoryType[firstSlot + i] = type;
+		_chrMemoryAccess[firstSlot + i] = (MemoryAccessType)accessType;
+	}
+
+	SetPpuMemoryMapping(startAddr, endAddr, sourceMemory + sourceOffset, accessType);
 }
 
 void BaseMapper::SetPpuMemoryMapping(uint16_t startAddr, uint16_t endAddr, uint8_t* sourceMemory, int8_t accessType)
@@ -271,8 +297,6 @@ void BaseMapper::SelectPrgPage2x(uint16_t slot, uint16_t page, PrgMemoryType mem
 
 void BaseMapper::SelectPRGPage(uint16_t slot, uint16_t page, PrgMemoryType memoryType)
 {
-	_prgPageNumbers[slot] = page;
-
 	if(_prgSize < 0x8000 && GetPRGPageSize() > _prgSize) {
 		//Total PRG size is smaller than available memory range, map the entire PRG to all slots
 		//i.e same logic as NROM (mapper 0) when PRG is 16kb
@@ -313,8 +337,6 @@ void BaseMapper::SelectChrPage2x(uint16_t slot, uint16_t page, ChrMemoryType mem
 
 void BaseMapper::SelectCHRPage(uint16_t slot, uint16_t page, ChrMemoryType memoryType)
 {
-	_chrPageNumbers[slot] = page;
-
 	uint16_t pageSize = memoryType == ChrMemoryType::ChrRam ? InternalGetChrRamPageSize() : InternalGetChrPageSize();
 	uint16_t startAddr = slot * pageSize;
 	uint16_t endAddr = startAddr + pageSize - 1;
@@ -462,10 +484,27 @@ void BaseMapper::StreamState(bool saving)
 	ArrayInfo<uint8_t> chrRam = { _chrRam, _chrRamSize };
 	ArrayInfo<uint8_t> workRam = { _workRam, _workRamSize };
 	ArrayInfo<uint8_t> saveRam = { _saveRam, _saveRamSize };
-	ArrayInfo<uint32_t> prgPageNumbers = { _prgPageNumbers, 64 };
-	ArrayInfo<uint32_t> chrPageNumbers = { _chrPageNumbers, 64 };
+
+	uint32_t prgPages[64];
+	uint32_t chrPages[64];
+
 	ArrayInfo<uint8_t> nametableIndexes = { _nametableIndexes, 4 };
-	Stream(_mirroringType, chrRam, workRam, saveRam, prgPageNumbers, chrPageNumbers, nametableIndexes);
+
+	if(GetStateVersion() < 9) {
+		ArrayInfo<uint32_t> prgPageNumbers = { prgPages, 64 };
+		ArrayInfo<uint32_t> chrPageNumbers = { chrPages, 64 };
+
+		Stream(_mirroringType, chrRam, workRam, saveRam, prgPageNumbers, chrPageNumbers, nametableIndexes);
+	} else {
+		ArrayInfo<int32_t> prgMemoryOffset = { _prgMemoryOffset, 64 };
+		ArrayInfo<int32_t> chrMemoryOffset = { _chrMemoryOffset, 64 };
+		ArrayInfo<PrgMemoryType> prgMemoryType = { _prgMemoryType, 64 };
+		ArrayInfo<ChrMemoryType> chrMemoryType = { _chrMemoryType, 64 };
+		ArrayInfo<MemoryAccessType> prgMemoryAccess = { _prgMemoryAccess, 64 };
+		ArrayInfo<MemoryAccessType> chrMemoryAccess = { _chrMemoryAccess, 64 };
+
+		Stream(_mirroringType, chrRam, workRam, saveRam, nametableIndexes, prgMemoryAccess, chrMemoryAccess, prgMemoryType, chrMemoryType, prgMemoryAccess, chrMemoryAccess);
+	}
 
 	if(GetStateVersion() >= 7) {
 		bool hasExtraNametable[2] = { _cartNametableRam[0] != nullptr, _cartNametableRam[1] != nullptr };
@@ -484,20 +523,60 @@ void BaseMapper::StreamState(bool saving)
 	}
 	
 	if(!saving) {
-		for(uint16_t i = 0; i < 64; i++) {
-			if(_prgPageNumbers[i] != 0xEEEEEEEE) {
-				BaseMapper::SelectPRGPage(i, (uint16_t)_prgPageNumbers[i]);
-			}
-		}
-
-		for(uint16_t i = 0; i < 64; i++) {
-			if(_chrPageNumbers[i] != 0xEEEEEEEE) {
-				BaseMapper::SelectCHRPage(i, (uint16_t)_chrPageNumbers[i]);
-			}
-		}
+		RestorePrgChrState(prgPages, chrPages);
 
 		for(int i = 0; i < 4; i++) {
 			SetNametable(i, _nametableIndexes[i]);
+		}
+	}
+}
+
+void BaseMapper::RestorePrgChrState(uint32_t* prgPages, uint32_t* chrPages)
+{
+	if(GetStateVersion() < 9) {
+		//Support for older save states
+		for(uint16_t i = 0; i < 64; i++) {
+			if(prgPages[i] != 0xEEEEEEEE) {
+				BaseMapper::SelectPRGPage(i, (uint16_t)prgPages[i]);
+			}
+		}
+
+		for(uint16_t i = 0; i < 64; i++) {
+			if(chrPages[i] != 0xEEEEEEEE) {
+				BaseMapper::SelectCHRPage(i, (uint16_t)chrPages[i]);
+			}
+		}
+	} else {
+		for(uint16_t i = 0; i < 0x100; i++) {
+			uint16_t startAddr = i << 8;
+			if(_prgMemoryAccess[i] != MemoryAccessType::NoAccess) {
+				uint8_t* source = nullptr;
+				switch(_prgMemoryType[i]) {
+					default:
+					case PrgMemoryType::PrgRom: source = _prgRom; break;
+					case PrgMemoryType::SaveRam: source = _saveRam; break;
+					case PrgMemoryType::WorkRam: source = _workRam; break;
+				}
+				SetCpuMemoryMapping(startAddr, startAddr + 0xFF, source + _prgMemoryOffset[i], _prgMemoryAccess[i]);
+			} else {
+				RemoveCpuMemoryMapping(startAddr, startAddr + 0xFF);
+			}
+		}
+
+		for(uint16_t i = 0; i < 0x40; i++) {
+			uint16_t startAddr = i << 8;
+			if(_chrMemoryAccess[i] != MemoryAccessType::NoAccess) {
+				uint8_t* source = nullptr;
+				switch(_chrMemoryType[i]) {
+					default:
+					case ChrMemoryType::Default: source = _onlyChrRam ? _chrRam : _chrRom; break;
+					case ChrMemoryType::ChrRom: source = _chrRom; break;
+					case ChrMemoryType::ChrRam: source = _chrRam; break;
+				}
+				SetPpuMemoryMapping(startAddr, startAddr + 0xFF, source + _chrMemoryOffset[i], _chrMemoryAccess[i]);
+			} else {
+				RemovePpuMemoryMapping(startAddr, startAddr + 0xFF);
+			}
 		}
 	}
 }
@@ -554,9 +633,6 @@ void BaseMapper::Initialize(RomData &romData)
 	InitializeRam(_saveRam, _saveRamSize);
 	InitializeRam(_workRam, _workRamSize);
 
-	memset(_prgPageNumbers, 0xEE, sizeof(_prgPageNumbers));
-	memset(_chrPageNumbers, 0xEE, sizeof(_chrPageNumbers));
-
 	memset(_cartNametableRam, 0, sizeof(_cartNametableRam));
 	memset(_nametableIndexes, 0, sizeof(_nametableIndexes));
 
@@ -566,6 +642,18 @@ void BaseMapper::Initialize(RomData &romData)
 		_prgPageAccessType[i] = MemoryAccessType::NoAccess;
 		_chrPages[i] = nullptr;
 		_chrPageAccessType[i] = MemoryAccessType::NoAccess;
+	}
+
+	for(int i = 0; i < 0x100; i++) {
+		_prgMemoryOffset[i] = -1;
+		_prgMemoryType[i] = PrgMemoryType::PrgRom;
+		_prgMemoryAccess[i] = MemoryAccessType::NoAccess;
+	}
+
+	for(int i = 0; i < 0x40; i++) {
+		_chrMemoryOffset[i] = -1;
+		_chrMemoryType[i] = ChrMemoryType::Default;
+		_chrMemoryAccess[i] = MemoryAccessType::NoAccess;
 	}
 
 	if(_chrRomSize == 0) {
@@ -1062,6 +1150,7 @@ CartridgeState BaseMapper::GetState()
 	CartridgeState state;
 
 	state.Mirroring = _mirroringType;
+	state.HasBattery = _romInfo.HasBattery;
 
 	state.PrgRomSize = _prgSize;
 	state.ChrRomSize = _onlyChrRam ? 0 : _chrRomSize;
@@ -1071,51 +1160,23 @@ CartridgeState BaseMapper::GetState()
 	state.PrgPageSize = InternalGetPrgPageSize();
 	state.ChrPageCount = GetCHRPageCount();
 	state.ChrPageSize = InternalGetChrPageSize();
-	for(int i = 0, max = 0x8000 / state.PrgPageSize; i < max; i++) {
-		if(_prgPageNumbers[i] != 0xEEEEEEEE) {
-			int16_t pageNumber = (int16_t)_prgPageNumbers[i];
-			state.PrgSelectedPages[i] = pageNumber < 0 ? state.PrgPageCount + pageNumber : pageNumber;
-		} else {
-			state.PrgSelectedPages[i] = 0xEEEEEEEE;
-		}
+	for(int i = 0; i < 0x100; i++) {
+		state.PrgMemoryOffset[i] = _prgMemoryOffset[i];
+		state.PrgMemoryType[i] = _prgMemoryType[i];
+		state.PrgMemoryAccess[i] = _prgMemoryAccess[i];
 	}
-
-	for(int i = 0, max = 0x2000 / state.ChrPageSize; i < max; i++) {
-		if(_chrPageNumbers[i] != 0xEEEEEEEE) {
-			int16_t pageNumber = (int16_t)_chrPageNumbers[i];
-			state.ChrSelectedPages[i] = pageNumber < 0 ? state.ChrPageCount + pageNumber : pageNumber;
-		} else {
-			state.ChrSelectedPages[i] = 0xEEEEEEEE;
-		}
+	for(int i = 0; i < 0x40; i++) {
+		state.ChrMemoryOffset[i] = _chrMemoryOffset[i];
+		state.ChrMemoryType[i] = _chrMemoryType[i];
+		state.ChrMemoryAccess[i] = _chrMemoryAccess[i];
 	}
 
 	for(int i = 0; i < 4; i++) {
 		state.Nametables[i] = _nametableIndexes[i];
 	}
 
-	state.WorkRamStart = -1;
-	state.WorkRamEnd = -1;
-	state.SaveRamStart = -1;
-	state.SaveRamEnd = -1;
-	for(int i = 0x40; i < 0x100; i++) {
-		int32_t address = ToAbsoluteWorkRamAddress(i << 8);
-		if(address >= 0) {
-			if(state.WorkRamStart < 0) {
-				state.WorkRamStart = i << 8;
-			} else {
-				state.WorkRamEnd = (i << 8) + 0x100;
-			}
-		} else {
-			address = ToAbsoluteSaveRamAddress(i << 8);
-			if(address >= 0) {
-				if(state.SaveRamStart < 0) {
-					state.SaveRamStart = i << 8;
-				} else {
-					state.SaveRamEnd = (i << 8) + 0x100;
-				}
-			}
-		}
-	}
+	state.WorkRamPageSize = GetWorkRamPageSize();
+	state.SaveRamPageSize = GetSaveRamPageSize();
 	
 	return state;
 }
