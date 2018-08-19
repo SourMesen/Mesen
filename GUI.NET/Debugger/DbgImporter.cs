@@ -14,7 +14,7 @@ namespace Mesen.GUI.Debugger
 {
 	public class Ld65DbgImporter
 	{
-		private const int iNesHeaderSize = 16;
+		private int _headerSize = 16;
 
 		private Dictionary<int, SegmentInfo> _segments = new Dictionary<int, SegmentInfo>();
 		private Dictionary<int, FileInfo> _files = new Dictionary<int, FileInfo>();
@@ -99,7 +99,7 @@ namespace Mesen.GUI.Debugger
 				SegmentInfo seg = _segments[span.SegmentID];
 
 				if(!seg.IsRam) {
-					int spanPrgOffset = seg.FileOffset - iNesHeaderSize + span.Offset;
+					int spanPrgOffset = seg.FileOffset - _headerSize + span.Offset;
 					if(rangeStart < spanPrgOffset + span.Size && rangeEnd >= spanPrgOffset) {
 						if(symbol.ExportSymbolID != null && symbol.Address == null) {
 							return _symbols[symbol.ExportSymbolID.Value];
@@ -147,7 +147,7 @@ namespace Mesen.GUI.Debugger
 			if(segment.IsRam) {
 				return new AddressTypeInfo() { Address = symbol.Address.Value, Type = AddressType.Register };
 			} else {
-				return new AddressTypeInfo() { Address = symbol.Address.Value - segment.Start + segment.FileOffset - iNesHeaderSize, Type = AddressType.PrgRom };
+				return new AddressTypeInfo() { Address = symbol.Address.Value - segment.Start + segment.FileOffset - _headerSize, Type = AddressType.PrgRom };
 			}
 		}
 
@@ -383,7 +383,7 @@ namespace Mesen.GUI.Debugger
 								_ramLabels[span.Offset] = label;
 							}
 						} else {
-							int address = span.Offset + segment.FileOffset - iNesHeaderSize;
+							int address = span.Offset + segment.FileOffset - _headerSize;
 							if(!_romLabels.TryGetValue(address, out label)) {
 								label = new CodeLabel() { Address = (UInt32)address, AddressType = AddressType.PrgRom, Label = string.Empty };
 								_romLabels[span.Offset] = label;
@@ -426,6 +426,12 @@ namespace Mesen.GUI.Debugger
 
 		public void Import(string path, bool silent = false)
 		{
+			if(InteropEmu.IsNsf()) {
+				_headerSize = 0x80;
+			} else {
+				_headerSize = 0x10;
+			}
+
 			string[] fileRows = File.ReadAllLines(path);
 
 			string basePath = Path.GetDirectoryName(path);
@@ -448,7 +454,7 @@ namespace Mesen.GUI.Debugger
 					SegmentInfo segment;
 					if(_segments.TryGetValue(kvp.Value.SegmentID, out segment)) {
 						if(!segment.IsRam && kvp.Value.Size != segment.Size) {
-							int prgAddress = kvp.Value.Offset + segment.FileOffset - iNesHeaderSize;
+							int prgAddress = kvp.Value.Offset + segment.FileOffset - _headerSize;
 
 							if(prgAddress >= 0 && prgAddress < prgSize) {
 								for(int i = 0; i < kvp.Value.Size; i++) {
@@ -475,7 +481,7 @@ namespace Mesen.GUI.Debugger
 				SegmentInfo segment = _segments[span.SegmentID];
 				if(!segment.IsRam) {
 					for(int i = 0; i < span.Size; i++) {
-						int prgAddress = segment.FileOffset - iNesHeaderSize + span.Offset + i;
+						int prgAddress = segment.FileOffset - _headerSize + span.Offset + i;
 
 						LineInfo existingLine;
 						if(_linesByPrgAddress.TryGetValue(prgAddress, out existingLine) && existingLine.Type == LineType.External) {
