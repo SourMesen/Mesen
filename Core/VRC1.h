@@ -32,8 +32,12 @@ protected:
 
 	void WriteRegister(uint16_t addr, uint8_t value) override
 	{
+		//TODO: Create a setting to enable/disable oversized PRG
+		bool allowOversizedPrg = true;
+		uint8_t prgMask = allowOversizedPrg ? 0xFF : 0x0F;
+
 		switch(addr & 0xF000) {
-			case 0x8000: SelectPRGPage(0, value & 0x0F); break;
+			case 0x8000: SelectPRGPage(0, value & prgMask); break;
 			
 			case 0x9000:
 				if(GetMirroringType() != MirroringType::FourScreens) {
@@ -45,8 +49,8 @@ protected:
 				UpdateChrBanks();
 				break;
 
-			case 0xA000: SelectPRGPage(1, value & 0x0F); break;
-			case 0xC000: SelectPRGPage(2, value & 0x0F); break;
+			case 0xA000: SelectPRGPage(1, value & prgMask); break;
+			case 0xC000: SelectPRGPage(2, value & prgMask); break;
 
 			case 0xE000:
 				_chrBanks[0] = (_chrBanks[0] & 0x10) | (value & 0x0F);
