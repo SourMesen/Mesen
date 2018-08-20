@@ -194,7 +194,7 @@ namespace Mesen.GUI.Forms
 
 										//Extract HD pack
 										try {
-											string targetFolder = Path.Combine(ConfigManager.HdPackFolder, Path.GetFileNameWithoutExtension(romInfo.GetRomName()));
+											string targetFolder = Path.Combine(ConfigManager.HdPackFolder, romInfo.GetRomName());
 											if(Directory.Exists(targetFolder)) {
 												//Warn if the folder already exists
 												if(MesenMsgBox.Show("InstallHdPackConfirmOverwrite", MessageBoxButtons.OKCancel, MessageBoxIcon.Question, targetFolder) != DialogResult.OK) {
