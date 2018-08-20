@@ -496,14 +496,14 @@ void BaseMapper::StreamState(bool saving)
 
 		Stream(_mirroringType, chrRam, workRam, saveRam, prgPageNumbers, chrPageNumbers, nametableIndexes);
 	} else {
-		ArrayInfo<int32_t> prgMemoryOffset = { _prgMemoryOffset, 64 };
-		ArrayInfo<int32_t> chrMemoryOffset = { _chrMemoryOffset, 64 };
-		ArrayInfo<PrgMemoryType> prgMemoryType = { _prgMemoryType, 64 };
-		ArrayInfo<ChrMemoryType> chrMemoryType = { _chrMemoryType, 64 };
-		ArrayInfo<MemoryAccessType> prgMemoryAccess = { _prgMemoryAccess, 64 };
-		ArrayInfo<MemoryAccessType> chrMemoryAccess = { _chrMemoryAccess, 64 };
+		ArrayInfo<int32_t> prgMemoryOffset = { _prgMemoryOffset, 0x100 };
+		ArrayInfo<int32_t> chrMemoryOffset = { _chrMemoryOffset, 0x40 };
+		ArrayInfo<PrgMemoryType> prgMemoryType = { _prgMemoryType, 0x100 };
+		ArrayInfo<ChrMemoryType> chrMemoryType = { _chrMemoryType, 0x40 };
+		ArrayInfo<MemoryAccessType> prgMemoryAccess = { _prgMemoryAccess, 0x100 };
+		ArrayInfo<MemoryAccessType> chrMemoryAccess = { _chrMemoryAccess, 0x40 };
 
-		Stream(_mirroringType, chrRam, workRam, saveRam, nametableIndexes, prgMemoryAccess, chrMemoryAccess, prgMemoryType, chrMemoryType, prgMemoryAccess, chrMemoryAccess);
+		Stream(_mirroringType, chrRam, workRam, saveRam, nametableIndexes, prgMemoryOffset, chrMemoryOffset, prgMemoryType, chrMemoryType, prgMemoryAccess, chrMemoryAccess);
 	}
 
 	if(GetStateVersion() >= 7) {
@@ -1162,12 +1162,12 @@ CartridgeState BaseMapper::GetState()
 	state.ChrPageSize = InternalGetChrPageSize();
 	for(int i = 0; i < 0x100; i++) {
 		state.PrgMemoryOffset[i] = _prgMemoryOffset[i];
-		state.PrgMemoryType[i] = _prgMemoryType[i];
+		state.PrgType[i] = _prgMemoryType[i];
 		state.PrgMemoryAccess[i] = _prgMemoryAccess[i];
 	}
 	for(int i = 0; i < 0x40; i++) {
 		state.ChrMemoryOffset[i] = _chrMemoryOffset[i];
-		state.ChrMemoryType[i] = _chrMemoryType[i];
+		state.ChrType[i] = _chrMemoryType[i];
 		state.ChrMemoryAccess[i] = _chrMemoryAccess[i];
 	}
 

@@ -98,13 +98,13 @@ struct CartridgeState
 	uint32_t PrgPageCount;
 	uint32_t PrgPageSize;
 	int32_t PrgMemoryOffset[0x100];
-	PrgMemoryType PrgMemoryType[0x100];
+	PrgMemoryType PrgType[0x100];
 	MemoryAccessType PrgMemoryAccess[0x100];
 
 	uint32_t ChrPageCount;
 	uint32_t ChrPageSize;
 	int32_t ChrMemoryOffset[0x40];
-	ChrMemoryType ChrMemoryType[0x40];
+	ChrMemoryType ChrType[0x40];
 	MemoryAccessType ChrMemoryAccess[0x40];
 
 	uint32_t Nametables[8];
