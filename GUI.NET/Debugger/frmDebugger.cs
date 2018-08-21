@@ -835,6 +835,7 @@ namespace Mesen.GUI.Debugger
 			ConfigManager.Config.DebugInfo.SplitView = this.mnuSplitView.Checked;
 			ConfigManager.ApplyChanges();
 
+			ctrlDebuggerCodeSplit.Code = ctrlDebuggerCode.Code;
 			UpdateDebugger(false);
 		}
 
