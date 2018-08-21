@@ -15,6 +15,10 @@ namespace Mesen.GUI.Debugger
 	public class Ld65DbgImporter
 	{
 		private int _headerSize = 16;
+		private int _workRamStart = int.MaxValue;
+		private int _workRamEnd = int.MinValue;
+		private int _saveRamStart = int.MaxValue;
+		private int _saveRamEnd = int.MinValue;
 
 		private Dictionary<int, SegmentInfo> _segments = new Dictionary<int, SegmentInfo>();
 		private Dictionary<int, FileInfo> _files = new Dictionary<int, FileInfo>();
@@ -26,6 +30,8 @@ namespace Mesen.GUI.Debugger
 		private HashSet<int> _usedFileIds = new HashSet<int>();
 		private HashSet<string> _usedLabels = new HashSet<string>();
 		private Dictionary<int, CodeLabel> _ramLabels = new Dictionary<int, CodeLabel>();
+		private Dictionary<int, CodeLabel> _workRamLabels = new Dictionary<int, CodeLabel>();
+		private Dictionary<int, CodeLabel> _saveRamLabels = new Dictionary<int, CodeLabel>();
 		private Dictionary<int, CodeLabel> _romLabels = new Dictionary<int, CodeLabel>();
 
 		private HashSet<string> _filesNotFound = new HashSet<string>();
@@ -291,6 +297,38 @@ namespace Mesen.GUI.Debugger
 			return false;
 		}
 
+		private CodeLabel CreateLabel(Int32 address, bool isRamLabel)
+		{
+			CodeLabel label = null;
+			if(isRamLabel) {
+				if(address < 0x2000) {
+					if(!_ramLabels.TryGetValue(address, out label)) {
+						label = new CodeLabel() { Address = (UInt32)address, AddressType = AddressType.InternalRam, Comment = string.Empty, Label = string.Empty };
+						_ramLabels[address] = label;
+					}
+				} else if(address >= _workRamStart && address <= _workRamEnd) {
+					int labelAddress = address - _workRamStart;
+					if(!_workRamLabels.TryGetValue(labelAddress, out label)) {
+						label = new CodeLabel() { Address = (UInt32)labelAddress, AddressType = AddressType.WorkRam, Comment = string.Empty, Label = string.Empty };
+						_workRamLabels[labelAddress] = label;
+					}
+				} else if(address >= _saveRamStart && address <= _saveRamEnd) {
+					int labelAddress = address - _saveRamStart;
+					if(!_saveRamLabels.TryGetValue(labelAddress, out label)) {
+						label = new CodeLabel() { Address = (UInt32)labelAddress, AddressType = AddressType.SaveRam, Comment = string.Empty, Label = string.Empty };
+						_saveRamLabels[labelAddress] = label;
+					}
+				}
+			} else {
+				if(!_romLabels.TryGetValue(address, out label)) {
+					label = new CodeLabel() { Address = (UInt32)address, AddressType = AddressType.PrgRom, Comment = string.Empty, Label = string.Empty };
+					_romLabels[address] = label;
+				}
+			}
+
+			return label;
+		}
+
 		private void LoadLabels()
 		{
 			foreach(KeyValuePair<int, SymbolInfo> kvp in _symbols) {
@@ -313,10 +351,9 @@ namespace Mesen.GUI.Debugger
 						}
 
 						int address = GetSymbolAddressInfo(symbol).Address;
-						if(segment.IsRam) {
-							_ramLabels[address] = new CodeLabel() { Label = newName, Address = (UInt32)address, AddressType = AddressType.InternalRam, Comment = string.Empty };
-						} else {
-							_romLabels[address] = new CodeLabel() { Label = newName, Address = (UInt32)address, AddressType = AddressType.PrgRom, Comment = string.Empty };
+						CodeLabel label = this.CreateLabel(address, segment.IsRam);
+						if(label != null) {
+							label.Label = newName;
 						}
 					}
 				} catch {
@@ -377,21 +414,11 @@ namespace Mesen.GUI.Debugger
 					}
 
 					if(comment.Length > 0) {
-						CodeLabel label;
-						if(segment.IsRam) {
-							int address = span.Offset + segment.Start;
-							if(!_ramLabels.TryGetValue(address, out label)) {
-								label = new CodeLabel() { Address = (UInt32)address, AddressType = AddressType.InternalRam, Label = string.Empty };
-								_ramLabels[span.Offset] = label;
-							}
-						} else {
-							int address = span.Offset + segment.FileOffset - _headerSize;
-							if(!_romLabels.TryGetValue(address, out label)) {
-								label = new CodeLabel() { Address = (UInt32)address, AddressType = AddressType.PrgRom, Label = string.Empty };
-								_romLabels[span.Offset] = label;
-							}
+						int address = segment.IsRam ? (span.Offset + segment.Start) : (span.Offset + segment.FileOffset - _headerSize);
+						CodeLabel label = this.CreateLabel(address, segment.IsRam);
+						if(label != null) {
+							label.Comment = comment;
 						}
-						label.Comment = comment;
 					}
 				} catch {
 					_errorCount++;
@@ -430,6 +457,18 @@ namespace Mesen.GUI.Debugger
 		{
 			RomInfo romInfo = InteropEmu.GetRomInfo();
 			_headerSize = (int)romInfo.FilePrgOffset;
+
+			DebugState state = new DebugState();
+			InteropEmu.DebugGetState(ref state);
+			for(int i = 0; i < state.Cartridge.PrgMemoryType.Length; i++) {
+				if(state.Cartridge.PrgMemoryType[i] == PrgMemoryType.WorkRam) {
+					_workRamStart = Math.Min(_workRamStart, i * 0x100);
+					_workRamEnd = Math.Max(_workRamEnd, i * 0x100 + 0xFF);
+				} else if(state.Cartridge.PrgMemoryType[i] == PrgMemoryType.SaveRam) {
+					_saveRamStart = Math.Min(_saveRamStart, i * 0x100);
+					_saveRamEnd = Math.Max(_saveRamEnd, i * 0x100 + 0xFF);
+				}
+			}
 
 			string[] fileRows = File.ReadAllLines(path);
 
@@ -504,14 +543,16 @@ namespace Mesen.GUI.Debugger
 			if(config.DbgImportComments) {
 				LoadComments();
 			}
-			List<CodeLabel> labels = new List<CodeLabel>(_romLabels.Count + _ramLabels.Count);
+			List<CodeLabel> labels = new List<CodeLabel>(_romLabels.Count + _ramLabels.Count + _workRamLabels.Count + _saveRamLabels.Count);
 			if(config.DbgImportPrgRomLabels) {
 				labels.AddRange(_romLabels.Values);
 				labelCount += _romLabels.Count;
 			}
 			if(config.DbgImportRamLabels) {
 				labels.AddRange(_ramLabels.Values);
-				labelCount += _ramLabels.Count;
+				labels.AddRange(_workRamLabels.Values);
+				labels.AddRange(_saveRamLabels.Values);
+				labelCount += _ramLabels.Count + _workRamLabels.Count + _saveRamLabels.Count;
 			}
 			LabelManager.SetLabels(labels);
 			
