@@ -1657,6 +1657,8 @@ namespace Mesen.GUI
 		HidePauseIcon = 0x1000,
 
 		BreakOnDecayedOamRead = 0x2000,
+		BreakOnInit = 0x4000,
+		BreakOnPlay = 0x8000,
 	}
 
 	public struct InteropRomInfo

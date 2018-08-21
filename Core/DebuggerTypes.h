@@ -34,6 +34,8 @@ enum class DebuggerFlags
 	HidePauseIcon = 0x1000,
 
 	BreakOnDecayedOamRead = 0x2000,
+	BreakOnInit = 0x4000,
+	BreakOnPlay = 0x8000,
 };
 
 enum class BreakSource

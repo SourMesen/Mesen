@@ -45,6 +45,7 @@ private:
 	uint32_t _irqReloadValue = 0;
 	uint32_t _irqCounter = 0;
 	NsfIrqType _irqStatus = NsfIrqType::None;
+	NsfIrqType _debugIrqStatus = NsfIrqType::None;
 	uint8_t _mmc5MultiplierValues[2];
 
 	int32_t _trackEndCounter;

@@ -96,6 +96,8 @@ namespace Mesen.GUI.Debugger
 			this.mnuAutoLoadDbgFiles.Checked = ConfigManager.Config.DebugInfo.AutoLoadDbgFiles;
 			this.mnuAutoLoadCdlFiles.Checked = ConfigManager.Config.DebugInfo.AutoLoadCdlFiles;
 			this.mnuBreakOnReset.Checked = ConfigManager.Config.DebugInfo.BreakOnReset;
+			this.mnuBreakOnInit.Checked = ConfigManager.Config.DebugInfo.BreakOnInit;
+			this.mnuBreakOnPlay.Checked = ConfigManager.Config.DebugInfo.BreakOnPlay;
 			this.mnuBreakOnOpen.Checked = ConfigManager.Config.DebugInfo.BreakOnOpen;
 			this.mnuBreakOnUnofficialOpcodes.Checked = ConfigManager.Config.DebugInfo.BreakOnUnofficialOpcodes;
 			this.mnuBreakOnBrk.Checked = ConfigManager.Config.DebugInfo.BreakOnBrk;
@@ -450,19 +452,22 @@ namespace Mesen.GUI.Debugger
 
 		private void UpdateDebuggerFlags()
 		{
-			SetFlag(DebuggerFlags.PpuPartialDraw, mnuPpuPartialDraw.Checked);
-			SetFlag(DebuggerFlags.PpuShowPreviousFrame, mnuPpuShowPreviousFrame.Checked);
-			SetFlag(DebuggerFlags.ShowEffectiveAddresses, mnuShowEffectiveAddresses.Checked);
-			SetFlag(DebuggerFlags.DisplayOpCodesInLowerCase, mnuDisplayOpCodesInLowerCase.Checked);
-			SetFlag(DebuggerFlags.DisassembleVerifiedData, mnuDisassembleVerifiedData.Checked);
-			SetFlag(DebuggerFlags.DisassembleUnidentifiedData, mnuDisassembleUnidentifiedData.Checked);
-			SetFlag(DebuggerFlags.ShowVerifiedData, mnuShowVerifiedData.Checked);
-			SetFlag(DebuggerFlags.ShowUnidentifiedData, mnuShowUnidentifiedData.Checked);
-			SetFlag(DebuggerFlags.BreakOnUnofficialOpCode, mnuBreakOnUnofficialOpcodes.Checked);
-			SetFlag(DebuggerFlags.BreakOnBrk, mnuBreakOnBrk.Checked);
-			SetFlag(DebuggerFlags.BreakOnUninitMemoryRead, mnuBreakOnUninitMemoryRead.Checked);
-			SetFlag(DebuggerFlags.BreakOnDecayedOamRead, mnuBreakOnDecayedOamRead.Checked);
-			SetFlag(DebuggerFlags.HidePauseIcon, mnuHidePauseIcon.Checked);
+			DebugInfo config = ConfigManager.Config.DebugInfo;
+			SetFlag(DebuggerFlags.PpuPartialDraw, config.PpuPartialDraw);
+			SetFlag(DebuggerFlags.PpuShowPreviousFrame, config.PpuShowPreviousFrame);
+			SetFlag(DebuggerFlags.ShowEffectiveAddresses, config.ShowEffectiveAddresses);
+			SetFlag(DebuggerFlags.DisplayOpCodesInLowerCase, config.DisplayOpCodesInLowerCase);
+			SetFlag(DebuggerFlags.DisassembleVerifiedData, config.DisassembleVerifiedData);
+			SetFlag(DebuggerFlags.DisassembleUnidentifiedData, config.DisassembleUnidentifiedData);
+			SetFlag(DebuggerFlags.ShowVerifiedData, config.ShowVerifiedData);
+			SetFlag(DebuggerFlags.ShowUnidentifiedData, config.ShowUnidentifiedData);
+			SetFlag(DebuggerFlags.BreakOnUnofficialOpCode, config.BreakOnUnofficialOpcodes);
+			SetFlag(DebuggerFlags.BreakOnBrk, config.BreakOnBrk);
+			SetFlag(DebuggerFlags.BreakOnUninitMemoryRead, config.BreakOnUninitMemoryRead);
+			SetFlag(DebuggerFlags.BreakOnDecayedOamRead, config.BreakOnDecayedOamRead);
+			SetFlag(DebuggerFlags.BreakOnInit, config.BreakOnInit);
+			SetFlag(DebuggerFlags.BreakOnPlay, config.BreakOnPlay);
+			SetFlag(DebuggerFlags.HidePauseIcon, config.HidePauseIcon);
 			InteropEmu.SetFlag(EmulationFlags.DebuggerWindowEnabled, true);
 		}
 
@@ -503,6 +508,9 @@ namespace Mesen.GUI.Debugger
 
 				case InteropEmu.ConsoleNotificationType.GameReset:
 				case InteropEmu.ConsoleNotificationType.GameLoaded:
+					UpdateDebuggerFlags();
+
+					bool breakOnReset = ConfigManager.Config.DebugInfo.BreakOnReset && !InteropEmu.IsNsf();
 					this.BeginInvoke((MethodInvoker)(() => {
 						this.UpdateWorkspace();
 						this.AutoLoadCdlFiles();
@@ -510,12 +518,12 @@ namespace Mesen.GUI.Debugger
 						UpdateDebugger(true, false);
 						BreakpointManager.SetBreakpoints();
 
-						if(!ConfigManager.Config.DebugInfo.BreakOnReset) {
+						if(!breakOnReset) {
 							ClearActiveStatement();
 						}
 					}));
 
-					if(ConfigManager.Config.DebugInfo.BreakOnReset) {
+					if(breakOnReset) {
 						InteropEmu.DebugStep(1);
 					}
 					break;
@@ -1103,6 +1111,20 @@ namespace Mesen.GUI.Debugger
 			ConfigManager.ApplyChanges();
 		}
 
+		private void mnuBreakOnInit_Click(object sender, EventArgs e)
+		{
+			ConfigManager.Config.DebugInfo.BreakOnInit = mnuBreakOnInit.Checked;
+			ConfigManager.ApplyChanges();
+			UpdateDebuggerFlags();
+		}
+
+		private void mnuBreakOnPlay_Click(object sender, EventArgs e)
+		{
+			ConfigManager.Config.DebugInfo.BreakOnPlay = mnuBreakOnPlay.Checked;
+			ConfigManager.ApplyChanges();
+			UpdateDebuggerFlags();
+		}
+
 		private void mnuBreakOnOpen_Click(object sender, EventArgs e)
 		{
 			ConfigManager.Config.DebugInfo.BreakOnOpen = mnuBreakOnOpen.Checked;
@@ -1592,6 +1614,12 @@ namespace Mesen.GUI.Debugger
 		private void mnuBreakOptions_DropDownOpening(object sender, EventArgs e)
 		{
 			this.mnuBreakOnDecayedOamRead.Enabled = ConfigManager.Config.EmulationInfo.EnableOamDecay;
+
+			bool isNsf = InteropEmu.IsNsf();
+			mnuBreakOnInit.Visible = isNsf;
+			mnuBreakOnPlay.Visible = isNsf;
+
+			mnuBreakOnReset.Enabled = !isNsf;
 		}
 
 		private void frmDebugger_DragDrop(object sender, DragEventArgs e)
