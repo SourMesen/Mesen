@@ -69,6 +69,8 @@ struct RomInfo
 	bool IsInDatabase = false;
 	bool IsHeaderlessRom = false;
 
+	uint32_t FilePrgOffset = 0;
+
 	uint16_t MapperID = 0;
 	uint8_t SubMapperID = 0;
 	

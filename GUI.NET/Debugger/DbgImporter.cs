@@ -428,11 +428,8 @@ namespace Mesen.GUI.Debugger
 
 		public void Import(string path, bool silent = false)
 		{
-			if(InteropEmu.IsNsf()) {
-				_headerSize = 0x80;
-			} else {
-				_headerSize = 0x10;
-			}
+			RomInfo romInfo = InteropEmu.GetRomInfo();
+			_headerSize = (int)romInfo.FilePrgOffset;
 
 			string[] fileRows = File.ReadAllLines(path);
 

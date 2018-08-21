@@ -1670,6 +1670,7 @@ namespace Mesen.GUI
 		public bool IsChrRam;
 
 		public UInt16 MapperId;
+		public UInt32 FilePrgOffset;
 
 		[MarshalAs(UnmanagedType.ByValArray, SizeConst = 40)]
 		public byte[] Sha1;
@@ -1692,6 +1693,7 @@ namespace Mesen.GUI
 		public RomFormat Format;
 		public bool IsChrRam;
 		public UInt16 MapperId;
+		public UInt32 FilePrgOffset;
 		public string Sha1;
 
 		public RomInfo(InteropRomInfo romInfo)
@@ -1702,6 +1704,7 @@ namespace Mesen.GUI
 			this.Format = romInfo.Format;
 			this.IsChrRam = romInfo.IsChrRam;
 			this.MapperId = romInfo.MapperId;
+			this.FilePrgOffset = romInfo.FilePrgOffset;
 			this.Sha1 = Encoding.UTF8.GetString(romInfo.Sha1);
 		}
 

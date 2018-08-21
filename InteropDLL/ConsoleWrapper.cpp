@@ -112,6 +112,7 @@ namespace InteropEmu {
 		RomFormat Format;
 		bool IsChrRam;
 		uint16_t MapperId;
+		uint32_t FilePrgOffset;
 		char Sha1[40];
 	};
 
@@ -396,6 +397,7 @@ namespace InteropEmu {
 				interopRomInfo.Format = romInfo.Format;
 				interopRomInfo.IsChrRam = romInfo.HasChrRam;
 				interopRomInfo.MapperId = romInfo.MapperID;
+				interopRomInfo.FilePrgOffset = romInfo.FilePrgOffset;
 				if(romInfo.Hash.Sha1.size() == 40) {
 					memcpy(interopRomInfo.Sha1, romInfo.Hash.Sha1.c_str(), 40);
 				}
@@ -410,6 +412,7 @@ namespace InteropEmu {
 					interopRomInfo.PrgCrc32 = romData.Info.Hash.PrgCrc32;
 					interopRomInfo.Format = RomFormat::Unknown;
 					interopRomInfo.IsChrRam = romData.ChrRom.size() == 0;
+					interopRomInfo.FilePrgOffset = romData.Info.FilePrgOffset;
 					interopRomInfo.MapperId = 0;
 					if(romData.Info.Hash.Sha1.size() == 40) {
 						memcpy(interopRomInfo.Sha1, romData.Info.Hash.Sha1.c_str(), 40);
@@ -421,6 +424,7 @@ namespace InteropEmu {
 					interopRomInfo.PrgCrc32 = 0;
 					interopRomInfo.Format = RomFormat::Unknown;
 					interopRomInfo.IsChrRam = false;
+					interopRomInfo.FilePrgOffset = 0;
 					interopRomInfo.MapperId = 0;
 				}
 			}
