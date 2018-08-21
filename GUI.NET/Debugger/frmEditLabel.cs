@@ -15,6 +15,11 @@ namespace Mesen.GUI.Debugger
 	public partial class frmEditLabel : BaseConfigForm
 	{
 		private CodeLabel _originalLabel;
+		private const int _maxInternalRamAddress = 0x1FFF;
+		private const int _maxRegisterAddress = 0xFFFF;
+		private int _maxPrgRomAddress = 0;
+		private int _maxWorkRamAddress = 0;
+		private int _maxSaveRamAddress = 0;
 
 		public frmEditLabel(CodeLabel label, CodeLabel originalLabel = null)
 		{
@@ -23,6 +28,10 @@ namespace Mesen.GUI.Debugger
 			_originalLabel = originalLabel;
 
 			Entity = label;
+
+			_maxPrgRomAddress = Math.Max(0, InteropEmu.DebugGetMemorySize(DebugMemoryType.PrgRom) - 1);
+			_maxWorkRamAddress = Math.Max(0, InteropEmu.DebugGetMemorySize(DebugMemoryType.WorkRam) - 1);
+			_maxSaveRamAddress = Math.Max(0, InteropEmu.DebugGetMemorySize(DebugMemoryType.SaveRam) - 1);
 
 			AddBinding("AddressType", cboRegion);
 			AddBinding("Address", txtAddress);
@@ -36,14 +45,37 @@ namespace Mesen.GUI.Debugger
 			txtLabel.Focus();
 		}
 
+		private int GetMaxAddress(AddressType type)
+		{
+			switch(type) {
+				case AddressType.InternalRam: return _maxInternalRamAddress;
+				case AddressType.PrgRom: return _maxPrgRomAddress;
+				case AddressType.WorkRam: return _maxWorkRamAddress;
+				case AddressType.SaveRam: return _maxSaveRamAddress;
+				case AddressType.Register: return _maxRegisterAddress;
+			}
+			return 0;
+		}
+
 		protected override bool ValidateInput()
 		{
 			UpdateObject();
 
+			UInt32 address = ((CodeLabel)Entity).Address;
+			AddressType type = ((CodeLabel)Entity).AddressType;
 			CodeLabel sameLabel = LabelManager.GetLabel(txtLabel.Text);
-			CodeLabel sameAddress = LabelManager.GetLabel(((CodeLabel)Entity).Address, ((CodeLabel)Entity).AddressType);
+			CodeLabel sameAddress = LabelManager.GetLabel(address, type);
 
-			return 
+			int maxAddress = GetMaxAddress(type);
+
+			if(maxAddress <= 0) {
+				lblRange.Text = "(unavailable)";
+			} else {
+				lblRange.Text = "($0000 - $" + maxAddress.ToString("X4") + ")";
+			}
+
+			return
+				address < maxAddress && 
 				(sameLabel == null || sameLabel == _originalLabel) 
 				&& (sameAddress == null || sameAddress == _originalLabel)
 				&& (_originalLabel != null || txtLabel.Text.Length > 0 || txtComment.Text.Length > 0)

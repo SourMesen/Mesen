@@ -28,9 +28,9 @@
 		private void InitializeComponent()
 		{
 			this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
-			this.txtComment = new System.Windows.Forms.TextBox();
 			this.lblLabel = new System.Windows.Forms.Label();
 			this.lblComment = new System.Windows.Forms.Label();
+			this.txtComment = new System.Windows.Forms.TextBox();
 			this.txtLabel = new System.Windows.Forms.TextBox();
 			this.lblRegion = new System.Windows.Forms.Label();
 			this.lblAddress = new System.Windows.Forms.Label();
@@ -38,6 +38,7 @@
 			this.flowLayoutPanel2 = new System.Windows.Forms.FlowLayoutPanel();
 			this.lblAddressSign = new System.Windows.Forms.Label();
 			this.txtAddress = new System.Windows.Forms.TextBox();
+			this.lblRange = new System.Windows.Forms.Label();
 			this.tableLayoutPanel1.SuspendLayout();
 			this.flowLayoutPanel2.SuspendLayout();
 			this.SuspendLayout();
@@ -70,16 +71,6 @@
 			this.tableLayoutPanel1.Size = new System.Drawing.Size(377, 233);
 			this.tableLayoutPanel1.TabIndex = 2;
 			// 
-			// txtComment
-			// 
-			this.txtComment.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.txtComment.Location = new System.Drawing.Point(63, 82);
-			this.txtComment.Multiline = true;
-			this.txtComment.Name = "txtComment";
-			this.txtComment.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-			this.txtComment.Size = new System.Drawing.Size(311, 148);
-			this.txtComment.TabIndex = 3;
-			// 
 			// lblLabel
 			// 
 			this.lblLabel.Anchor = System.Windows.Forms.AnchorStyles.Left;
@@ -99,6 +90,16 @@
 			this.lblComment.Size = new System.Drawing.Size(54, 13);
 			this.lblComment.TabIndex = 1;
 			this.lblComment.Text = "Comment:";
+			// 
+			// txtComment
+			// 
+			this.txtComment.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.txtComment.Location = new System.Drawing.Point(63, 82);
+			this.txtComment.Multiline = true;
+			this.txtComment.Name = "txtComment";
+			this.txtComment.ScrollBars = System.Windows.Forms.ScrollBars.Both;
+			this.txtComment.Size = new System.Drawing.Size(311, 148);
+			this.txtComment.TabIndex = 3;
 			// 
 			// txtLabel
 			// 
@@ -141,6 +142,7 @@
 			// 
 			this.flowLayoutPanel2.Controls.Add(this.lblAddressSign);
 			this.flowLayoutPanel2.Controls.Add(this.txtAddress);
+			this.flowLayoutPanel2.Controls.Add(this.lblRange);
 			this.flowLayoutPanel2.Location = new System.Drawing.Point(60, 27);
 			this.flowLayoutPanel2.Margin = new System.Windows.Forms.Padding(0);
 			this.flowLayoutPanel2.Name = "flowLayoutPanel2";
@@ -165,6 +167,17 @@
 			this.txtAddress.Name = "txtAddress";
 			this.txtAddress.Size = new System.Drawing.Size(57, 20);
 			this.txtAddress.TabIndex = 8;
+			// 
+			// lblRange
+			// 
+			this.lblRange.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.lblRange.AutoSize = true;
+			this.lblRange.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
+			this.lblRange.Location = new System.Drawing.Point(76, 6);
+			this.lblRange.Name = "lblRange";
+			this.lblRange.Size = new System.Drawing.Size(40, 13);
+			this.lblRange.TabIndex = 10;
+			this.lblRange.Text = "(range)";
 			// 
 			// frmEditLabel
 			// 
@@ -200,5 +213,6 @@
 		private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel2;
 		private System.Windows.Forms.Label lblAddressSign;
 		private System.Windows.Forms.TextBox txtAddress;
+		private System.Windows.Forms.Label lblRange;
 	}
 }
