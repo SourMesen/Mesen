@@ -407,12 +407,14 @@ void BaseMapper::SaveBattery()
 
 uint32_t BaseMapper::GetPRGPageCount()
 {
-	return _prgSize / InternalGetPrgPageSize();
+	uint16_t pageSize = InternalGetPrgPageSize();
+	return pageSize ? (_prgSize / pageSize) : 0;
 }
 
 uint32_t BaseMapper::GetCHRPageCount()
 {
-	return _chrRomSize / InternalGetChrPageSize();
+	uint16_t pageSize = InternalGetChrPageSize();
+	return pageSize ? (_chrRomSize / pageSize) : 0;
 }
 
 string BaseMapper::GetBatteryFilename()
