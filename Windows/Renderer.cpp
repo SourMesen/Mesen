@@ -238,6 +238,7 @@ HRESULT Renderer::CreateNesBuffers()
 
 	_largeFont.reset(new SpriteFont(_pd3dDevice, L"Resources\\Font.64.spritefont"));
 	_font.reset(new SpriteFont(_pd3dDevice, L"Resources\\Font.24.spritefont"));
+	_font->SetDefaultCharacter('?');
 
 	return S_OK;
 }
