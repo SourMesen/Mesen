@@ -575,13 +575,13 @@ string Disassembler::GetCode(AddressTypeInfo &addressInfo, uint32_t endAddr, uin
 				GetLine(output, "----");
 			}
 
-			if(dataType == DataType::UnidentifiedData) {
+			if(dataType != DataType::VerifiedCode) {
 				//For unverified code, check if a verified instruction starts between the start of this instruction and its end.
 				//If so, we need to realign the disassembler to the start of the next verified instruction
 				for(uint32_t i = 0; i < info->GetSize(); i++) {
 					addr++;
 					memoryAddr++;
-					if(addr > endAddr || (*cache)[addr&mask] || (addressInfo.Type == AddressType::PrgRom && cdl->IsData(addr))) {
+					if(addr > endAddr || (*cache)[addr&mask] || (!disassembleVerifiedData && addressInfo.Type == AddressType::PrgRom && cdl->IsData(addr))) {
 						//Verified code or verified data found, stop incrementing address counters
 						break;
 					}
