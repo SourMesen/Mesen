@@ -77,7 +77,7 @@ private:
 		return ss.str();
 	}
 
-	bool ReadChunk(uint8_t* &data, uint8_t* dataEnd, RomData& romData)
+	bool ReadChunk(uint8_t* &data, uint8_t* dataEnd, RomData& romData, uint8_t* fileStart)
 	{
 		if(data + 4 > dataEnd) {
 			return false;
@@ -110,6 +110,7 @@ private:
 			//Adjust to match NSF spec
 			header.StartingSong++;
 		} else if(fourCC.compare("DATA") == 0) {
+			romData.Info.FilePrgOffset = (int32_t)(data - fileStart);
 			//Pad start of file to make the first block start at a multiple of 4k
 			romData.PrgRom.insert(romData.PrgRom.end(), header.LoadAddress % 4096, 0);
 
@@ -189,6 +190,7 @@ public:
 
 		romData.Info.Format = RomFormat::Nsf;
 
+		uint8_t* fileStart = romFile.data();
 		uint8_t* data = romFile.data() + 4;
 		uint8_t* endOfData = romFile.data() + romFile.size();
 
@@ -198,7 +200,7 @@ public:
 
 		//Will be set to false when we read NEND block
 		romData.Error = true;
-		while(ReadChunk(data, endOfData, romData)) {
+		while(ReadChunk(data, endOfData, romData, fileStart)) {
 			//Read all chunks
 		}
 

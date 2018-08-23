@@ -163,6 +163,9 @@ RomData NsfLoader::LoadRom(vector<uint8_t>& romFile)
 		romData.PrgRom.insert(romData.PrgRom.end(), 4096 - (romData.PrgRom.size() % 4096), 0);
 	}
 
+	//NSF header size
+	romData.Info.FilePrgOffset = 0x80;
+
 	InitializeFromHeader(romData);
 
 	return romData;

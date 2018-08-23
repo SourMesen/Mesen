@@ -28,54 +28,51 @@ protected:
 	virtual void UpdatePrgMapping() override
 	{
 		if(_exRegs[0] & 0x80) {
-			SelectPrgPage2x(0, _exRegs[0] & 0x1F);
-			SelectPrgPage2x(1, _exRegs[0] & 0x1F);
+			SelectPrgPage2x(0, (_exRegs[0] & 0x0F) << 1);
+			SelectPrgPage2x(1, (_exRegs[0] & 0x0F) << 1);
 		} else {
 			MMC3::UpdatePrgMapping();
 		}
 	}
 
-	virtual void UpdateMirroring() override
-	{
-		//See $8000 writes below
-	}
-
 	virtual void WriteRegister(uint16_t addr, uint8_t value) override
 	{
-		switch(addr & 0xE000) {
-			case 0x4000: case 0x6000:
-				if((addr & 0x07) == 0x00) {
-					_exRegs[0] = value;
-					UpdatePrgMapping();
-				}
-				break;
+		if(addr < 0x8000) {
+			_exRegs[0] = value;
+			UpdatePrgMapping();
+		} else {
+			switch(addr & 0xE001) {
+				case 0x8001: MMC3::WriteRegister(0xA000, value); break;
 
-			case 0x8000:
-				SetMirroringType(value & 0x01 ? MirroringType::Horizontal : MirroringType::Vertical);
-				break;
+				case 0xA000:
+					MMC3::WriteRegister(0x8000, (value & 0xC0) | _security[value & 0x07]);
+					_exRegs[1] = 1;
+					break;
 
-			case 0xA000:
-				value = (value & 0xC0) | _security[value & 0x07];
-				_exRegs[1] = 1;
-				MMC3::WriteRegister(0x8000, value);
-				break;
+				case 0xA001:
+					_irqReloadValue = value;
+					break;
 
-			case 0xC000:
-				if(_exRegs[1]) {
-					_exRegs[1] = 0;
-					MMC3::WriteRegister(0x8001, value);
-				}
-				break;
+				case 0xC000:
+					if(_exRegs[1]) {
+						_exRegs[1] = 0;
+						MMC3::WriteRegister(0x8001, value);
+					}
+					break;
 
-			case 0xE000:
-				if(value > 0) {
-					MMC3::WriteRegister(0xE001, value);
-					MMC3::WriteRegister(0xC000, value);
-					MMC3::WriteRegister(0xC001, value);
-				} else {
-					MMC3::WriteRegister(0xE000, value);
-				}
-				break;
+				case 0xC001:
+					_irqReload = true;
+					break;
+
+				case 0xE000:
+					_console->GetCpu()->ClearIrqSource(IRQSource::External);
+					_irqEnabled = false;
+					break;
+
+				case 0xE001:
+					_irqEnabled = true;
+					break;
+			}
 		}
 	}
 };

@@ -169,6 +169,7 @@ void NsfMapper::TriggerIrq(NsfIrqType type)
 		_trackEnded = false;
 	}
 
+	_debugIrqStatus = type;
 	_irqStatus = type;
 	_console->GetCpu()->SetIrqSource(IRQSource::External);
 }
@@ -230,6 +231,23 @@ void NsfMapper::SelectNextTrack()
 
 void NsfMapper::ProcessCpuClock()
 {
+	if(_console->IsDebuggerAttached()) {
+		shared_ptr<Debugger> debugger = _console->GetDebugger(false);
+		if(debugger) {
+			uint16_t programCounter = _console->GetCpu()->GetPC();
+			if(_debugIrqStatus == NsfIrqType::Init && programCounter == _nsfHeader.InitAddress) {
+				_debugIrqStatus = NsfIrqType::None;
+				if(debugger->CheckFlag(DebuggerFlags::BreakOnInit)) {
+					debugger->Step(1);
+				}
+			} else if(_debugIrqStatus == NsfIrqType::Play && programCounter == _nsfHeader.PlayAddress) {
+				_debugIrqStatus = NsfIrqType::None;
+				if(debugger->CheckFlag(DebuggerFlags::BreakOnPlay)) {
+					debugger->Step(1);
+				}
+			}
+		}
+	}
 	_console->GetCpu()->SetIrqMask(_console->GetSettings()->GetNsfDisableApuIrqs() ? (uint8_t)IRQSource::External : 0xFF);
 
 	if(_needInit) {

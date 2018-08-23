@@ -128,5 +128,11 @@ namespace Mesen.GUI.Controls
 		{
 			this.DoubleBuffered = true;
 		}
+
+		protected override void OnVirtualItemsSelectionRangeChanged(ListViewVirtualItemsSelectionRangeChangedEventArgs e)
+		{
+			base.OnVirtualItemsSelectionRangeChanged(e);
+			base.OnSelectedIndexChanged(e);
+		}
 	}
 }

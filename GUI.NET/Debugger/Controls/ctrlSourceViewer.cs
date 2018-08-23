@@ -56,6 +56,10 @@ namespace Mesen.GUI.Debugger.Controls
 		private List<string> _lineNumberNotes = new List<string>();
 		private void UpdateCode()
 		{
+			if(_symbolProvider == null || CurrentFile == null) {
+				return;
+			}
+
 			List<int> indents = new List<int>();
 			List<string> addressing = new List<string>();
 			List<string> comments = new List<string>();
@@ -185,7 +189,7 @@ namespace Mesen.GUI.Debugger.Controls
 		public void SetActiveAddress(UInt32 address)
 		{
 			_currentActiveAddress = address;
-			this.RefreshViewer();
+			this.UpdateCode();
 		}
 
 		public void SelectActiveAddress(UInt32 address)

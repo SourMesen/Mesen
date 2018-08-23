@@ -49,39 +49,63 @@ namespace Mesen.GUI.Debugger.Controls
 			regions.Add(new MemoryRegionInfo() { Name = "CPU Registers", Size = 0x2020, Color = Color.FromArgb(222, 222, 222) });
 
 			Action<int> addEmpty = (int size) => { regions.Add(new MemoryRegionInfo() { Name = "N/A", Size = size, Color = Color.FromArgb(222, 222, 222) }); };
-			Action addWorkRam = () => { regions.Add(new MemoryRegionInfo() { Name = "Work RAM", Size = state.WorkRamEnd - state.WorkRamStart, Color = Color.FromArgb(0xCD, 0xDC, 0xFA) }); };
-			Action addSaveRam = () => { regions.Add(new MemoryRegionInfo() { Name = "Save RAM", Size = state.SaveRamEnd - state.SaveRamStart, Color = Color.FromArgb(0xFA, 0xDC, 0xCD) }); };
+			Action<int, int> addWorkRam = (int page, int size) => {
+				string name = size >= 0x2000 ? ("Work RAM ($" + page.ToString("X2") + ")") : (size >= 0x800 ? ("$" + page.ToString("X2")) : "");
+				regions.Add(new MemoryRegionInfo() { Name = name, Size = size, Color = Color.FromArgb(0xCD, 0xDC, 0xFA) });
+			};
+			Action<int, int> addSaveRam = (int page, int size) => {
+				string name = size >= 0x2000 ? ("Save RAM ($" + page.ToString("X2") + ")") : (size >= 0x800 ? ("$" + page.ToString("X2")) : "");
+				regions.Add(new MemoryRegionInfo() { Name = name, Size = size, Color = Color.FromArgb(0xFA, 0xDC, 0xCD) });
+			};
+			Action<int, int, Color> addPrgRom = (int page, int size, Color color) => { regions.Add(new MemoryRegionInfo() { Name = "$" + page.ToString("X2"), Size = size, Color = color }); };
 
-			if(state.SaveRamStart > 0 && state.WorkRamStart > 0) {
-				if(state.SaveRamStart > state.WorkRamStart) {
-					addEmpty(state.WorkRamStart - 0x4020);
-					addWorkRam();
-					addEmpty(state.SaveRamStart - state.WorkRamEnd);
-					addSaveRam();
-				} else {
-					addEmpty(state.SaveRamStart - 0x4020);
-					addSaveRam();
-					addEmpty(state.WorkRamStart - state.SaveRamEnd);
-					addWorkRam();
+			PrgMemoryType? memoryType = null;
+			int currentSize = 0;
+			int sizeOffset = -0x20;
+			int startIndex = 0x40;
+			bool alternateColor = true;
+			
+			Action<int> addSection = (int i) => {
+				if(currentSize == 0) {
+					return;
 				}
-			} else if(state.WorkRamStart > 0) {
-				addEmpty(state.WorkRamStart - 0x4020);
-				addWorkRam();
-			} else if(state.SaveRamStart > 0) {
-				addEmpty(state.SaveRamStart - 0x4020);
-				addSaveRam();
-			}
 
-			int currentAddress = regions.Sum((MemoryRegionInfo region) => region.Size);
-			if(currentAddress < 0x8000) {
-				addEmpty(0x8000 - currentAddress);
-				currentAddress = 0x8000;
-			}
+				int size = currentSize + sizeOffset;
+				if(memoryType == null) {
+					addEmpty(size);
+				} else if(memoryType == PrgMemoryType.PrgRom) {
+					addPrgRom((int)(state.PrgMemoryOffset[startIndex] / state.PrgPageSize), size, alternateColor ? Color.FromArgb(0xC4, 0xE7, 0xD4) : Color.FromArgb(0xA4, 0xD7, 0xB4));
+					alternateColor = !alternateColor;
+				} else if(memoryType == PrgMemoryType.WorkRam) {
+					addWorkRam((int)(state.PrgMemoryOffset[startIndex] / state.WorkRamPageSize), size);
+				} else if(memoryType == PrgMemoryType.SaveRam) {
+					if(state.HasBattery) {
+						addSaveRam((int)(state.PrgMemoryOffset[startIndex] / state.SaveRamPageSize), size);
+					} else {
+						addWorkRam((int)(state.PrgMemoryOffset[startIndex] / state.SaveRamPageSize), size);
+					}
+				}
+				sizeOffset = 0;
+				currentSize = 0;
+				startIndex = i;
+			};
 
-			for(int i = (currentAddress - 0x8000) / (int)state.PrgPageSize; i < 0x8000 / state.PrgPageSize; i++) {
-				string text = state.PrgSelectedPages[i] == 0xEEEEEEEE ? "N/A" : ("$" + state.PrgSelectedPages[i].ToString("X2"));
-				regions.Add(new MemoryRegionInfo() { Name = text, Size = (int)state.PrgPageSize, Color = i % 2 == 0 ? Color.FromArgb(0xC4, 0xE7, 0xD4) : Color.FromArgb(0xA4, 0xD7, 0xB4) });
+			for(int i = 0x40; i < 0x100; i++) {
+				if(state.PrgMemoryAccess[i] != MemoryAccessType.NoAccess) {
+					bool forceNewBlock = memoryType == PrgMemoryType.PrgRom && (i - startIndex) << 8 >= state.PrgPageSize;
+					if(forceNewBlock || memoryType != state.PrgMemoryType[i] || state.PrgMemoryOffset[i] - state.PrgMemoryOffset[i-1] != 0x100) {
+						addSection(i);
+					}
+					memoryType = state.PrgMemoryType[i];
+				} else {
+					if(memoryType != null) {
+						addSection(i);
+					}
+					memoryType = null;
+				}
+				currentSize += 0x100;
 			}
+			addSection(-1);
 
 			UpdateRegionArray(regions);
 		}
@@ -90,10 +114,49 @@ namespace Mesen.GUI.Debugger.Controls
 		{
 			List<MemoryRegionInfo> regions = new List<MemoryRegionInfo>();
 
-			for(int i = 0; i < 0x2000 / state.ChrPageSize; i++) {
-				string text = state.ChrSelectedPages[i] == 0xEEEEEEEE ? "N/A" : ("$" + state.ChrSelectedPages[i].ToString("X2"));
-				regions.Add(new MemoryRegionInfo() { Name = text, Size = (int)state.ChrPageSize, Color = i % 2 == 0 ? Color.FromArgb(0xC4, 0xE0, 0xF4) : Color.FromArgb(0xB4, 0xD0, 0xE4) });
+			ChrMemoryType? memoryType = null;
+			int currentSize = 0;
+			int startIndex = 0;
+			bool alternateColor = true;
+
+			Action<int> addSection = (int i) => {
+				if(currentSize == 0) {
+					return;
+				}
+
+				if(memoryType == null) {
+					regions.Add(new MemoryRegionInfo() { Name = "N/A", Size = currentSize, Color = Color.FromArgb(222, 222, 222) });
+				} else if(memoryType == ChrMemoryType.ChrRom || memoryType == ChrMemoryType.Default && state.ChrRomSize > 0) {
+					int page = (int)(state.ChrMemoryOffset[startIndex] / state.ChrPageSize);
+					Color color = alternateColor ? Color.FromArgb(0xC4, 0xE7, 0xD4) : Color.FromArgb(0xA4, 0xD7, 0xB4);
+					alternateColor = !alternateColor;
+					regions.Add(new MemoryRegionInfo() { Name = "$" + page.ToString("X2"), Size = currentSize, Color = color });
+				} else if(memoryType == ChrMemoryType.ChrRam || memoryType == ChrMemoryType.Default && state.ChrRomSize == 0) {
+					int page = (int)(state.ChrMemoryOffset[startIndex] / state.ChrPageSize);
+					Color color = alternateColor ? Color.FromArgb(0xC4, 0xE0, 0xF4) : Color.FromArgb(0xB4, 0xD0, 0xE4);
+					alternateColor = !alternateColor;
+					regions.Add(new MemoryRegionInfo() { Name = "$" + page.ToString("X2"), Size = currentSize, Color = color });
+				}
+				currentSize = 0;
+				startIndex = i;
+			};
+
+			for(int i = 0; i < 0x20; i++) {
+				if(state.ChrMemoryAccess[i] != MemoryAccessType.NoAccess) {
+					bool forceNewBlock = (i - startIndex) << 8 >= state.ChrPageSize;
+					if(forceNewBlock || memoryType != state.ChrMemoryType[i] || state.ChrMemoryOffset[i] - state.ChrMemoryOffset[i - 1] != 0x100) {
+						addSection(i);
+					}
+					memoryType = state.ChrMemoryType[i];
+				} else {
+					if(memoryType != null) {
+						addSection(i);
+					}
+					memoryType = null;
+				}
+				currentSize += 0x100;
 			}
+			addSection(-1);
 
 			for(int i = 0; i < 4; i++) {
 				regions.Add(new MemoryRegionInfo() { Name = "NT " + state.Nametables[i].ToString(), Size = 0x400, Color = i % 2 == 0 ? Color.FromArgb(0xF4, 0xC7, 0xD4) : Color.FromArgb(0xD4, 0xA7, 0xB4) });

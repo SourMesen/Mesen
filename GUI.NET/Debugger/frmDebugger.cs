@@ -96,6 +96,8 @@ namespace Mesen.GUI.Debugger
 			this.mnuAutoLoadDbgFiles.Checked = ConfigManager.Config.DebugInfo.AutoLoadDbgFiles;
 			this.mnuAutoLoadCdlFiles.Checked = ConfigManager.Config.DebugInfo.AutoLoadCdlFiles;
 			this.mnuBreakOnReset.Checked = ConfigManager.Config.DebugInfo.BreakOnReset;
+			this.mnuBreakOnInit.Checked = ConfigManager.Config.DebugInfo.BreakOnInit;
+			this.mnuBreakOnPlay.Checked = ConfigManager.Config.DebugInfo.BreakOnPlay;
 			this.mnuBreakOnOpen.Checked = ConfigManager.Config.DebugInfo.BreakOnOpen;
 			this.mnuBreakOnUnofficialOpcodes.Checked = ConfigManager.Config.DebugInfo.BreakOnUnofficialOpcodes;
 			this.mnuBreakOnBrk.Checked = ConfigManager.Config.DebugInfo.BreakOnBrk;
@@ -450,19 +452,22 @@ namespace Mesen.GUI.Debugger
 
 		private void UpdateDebuggerFlags()
 		{
-			SetFlag(DebuggerFlags.PpuPartialDraw, mnuPpuPartialDraw.Checked);
-			SetFlag(DebuggerFlags.PpuShowPreviousFrame, mnuPpuShowPreviousFrame.Checked);
-			SetFlag(DebuggerFlags.ShowEffectiveAddresses, mnuShowEffectiveAddresses.Checked);
-			SetFlag(DebuggerFlags.DisplayOpCodesInLowerCase, mnuDisplayOpCodesInLowerCase.Checked);
-			SetFlag(DebuggerFlags.DisassembleVerifiedData, mnuDisassembleVerifiedData.Checked);
-			SetFlag(DebuggerFlags.DisassembleUnidentifiedData, mnuDisassembleUnidentifiedData.Checked);
-			SetFlag(DebuggerFlags.ShowVerifiedData, mnuShowVerifiedData.Checked);
-			SetFlag(DebuggerFlags.ShowUnidentifiedData, mnuShowUnidentifiedData.Checked);
-			SetFlag(DebuggerFlags.BreakOnUnofficialOpCode, mnuBreakOnUnofficialOpcodes.Checked);
-			SetFlag(DebuggerFlags.BreakOnBrk, mnuBreakOnBrk.Checked);
-			SetFlag(DebuggerFlags.BreakOnUninitMemoryRead, mnuBreakOnUninitMemoryRead.Checked);
-			SetFlag(DebuggerFlags.BreakOnDecayedOamRead, mnuBreakOnDecayedOamRead.Checked);
-			SetFlag(DebuggerFlags.HidePauseIcon, mnuHidePauseIcon.Checked);
+			DebugInfo config = ConfigManager.Config.DebugInfo;
+			SetFlag(DebuggerFlags.PpuPartialDraw, config.PpuPartialDraw);
+			SetFlag(DebuggerFlags.PpuShowPreviousFrame, config.PpuShowPreviousFrame);
+			SetFlag(DebuggerFlags.ShowEffectiveAddresses, config.ShowEffectiveAddresses);
+			SetFlag(DebuggerFlags.DisplayOpCodesInLowerCase, config.DisplayOpCodesInLowerCase);
+			SetFlag(DebuggerFlags.DisassembleVerifiedData, config.DisassembleVerifiedData);
+			SetFlag(DebuggerFlags.DisassembleUnidentifiedData, config.DisassembleUnidentifiedData);
+			SetFlag(DebuggerFlags.ShowVerifiedData, config.ShowVerifiedData);
+			SetFlag(DebuggerFlags.ShowUnidentifiedData, config.ShowUnidentifiedData);
+			SetFlag(DebuggerFlags.BreakOnUnofficialOpCode, config.BreakOnUnofficialOpcodes);
+			SetFlag(DebuggerFlags.BreakOnBrk, config.BreakOnBrk);
+			SetFlag(DebuggerFlags.BreakOnUninitMemoryRead, config.BreakOnUninitMemoryRead);
+			SetFlag(DebuggerFlags.BreakOnDecayedOamRead, config.BreakOnDecayedOamRead);
+			SetFlag(DebuggerFlags.BreakOnInit, config.BreakOnInit);
+			SetFlag(DebuggerFlags.BreakOnPlay, config.BreakOnPlay);
+			SetFlag(DebuggerFlags.HidePauseIcon, config.HidePauseIcon);
 			InteropEmu.SetFlag(EmulationFlags.DebuggerWindowEnabled, true);
 		}
 
@@ -503,6 +508,9 @@ namespace Mesen.GUI.Debugger
 
 				case InteropEmu.ConsoleNotificationType.GameReset:
 				case InteropEmu.ConsoleNotificationType.GameLoaded:
+					UpdateDebuggerFlags();
+
+					bool breakOnReset = ConfigManager.Config.DebugInfo.BreakOnReset && !InteropEmu.IsNsf();
 					this.BeginInvoke((MethodInvoker)(() => {
 						this.UpdateWorkspace();
 						this.AutoLoadCdlFiles();
@@ -510,12 +518,12 @@ namespace Mesen.GUI.Debugger
 						UpdateDebugger(true, false);
 						BreakpointManager.SetBreakpoints();
 
-						if(!ConfigManager.Config.DebugInfo.BreakOnReset) {
+						if(!breakOnReset) {
 							ClearActiveStatement();
 						}
 					}));
 
-					if(ConfigManager.Config.DebugInfo.BreakOnReset) {
+					if(breakOnReset) {
 						InteropEmu.DebugStep(1);
 					}
 					break;
@@ -773,13 +781,17 @@ namespace Mesen.GUI.Debugger
 		private void ctrlDebuggerCode_OnSwitchView(ICodeViewer sender)
 		{
 			if(ctrlDebuggerCode == sender) {
-				ctrlDebuggerCode.Visible = false;
-				ctrlSourceViewer.Visible = true;
-				if(ctrlDebuggerCode.CodeViewer.CurrentLine >= 0) {
-					ctrlSourceViewer.ScrollToLineNumber(ctrlDebuggerCode.CodeViewer.CurrentLine);
+				if(ctrlSourceViewer.CurrentFile != null) {
+					ctrlDebuggerCode.Visible = false;
+					ctrlSourceViewer.Visible = true;
+					if(ctrlDebuggerCode.CodeViewer.CurrentLine >= 0) {
+						ctrlSourceViewer.ScrollToLineNumber(ctrlDebuggerCode.CodeViewer.CurrentLine);
+					}
+					ctrlSourceViewer.Focus();
+					ctrlSourceViewer.SetConfig(ConfigManager.Config.DebugInfo.LeftView);
+				} else {
+					MessageBox.Show("Source files could not be found/loaded", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
 				}
-				ctrlSourceViewer.Focus();
-				ctrlSourceViewer.SetConfig(ConfigManager.Config.DebugInfo.LeftView);
 			} else if(ctrlSourceViewer == sender) {
 				ctrlSourceViewer.Visible = false;
 				ctrlDebuggerCode.Visible = true;
@@ -789,13 +801,17 @@ namespace Mesen.GUI.Debugger
 				ctrlDebuggerCode.Focus();
 				ctrlDebuggerCode.SetConfig(ConfigManager.Config.DebugInfo.LeftView);
 			} else if(ctrlSourceViewerSplit == sender) {
-				ctrlSourceViewerSplit.Visible = false;
-				ctrlDebuggerCodeSplit.Visible = true;
-				if(ctrlSourceViewerSplit.CodeViewer.CurrentLine >= 0) {
-					ctrlDebuggerCodeSplit.ScrollToLineNumber(ctrlSourceViewerSplit.CodeViewer.CurrentLine);
+				if(ctrlSourceViewerSplit.CurrentFile != null) {
+					ctrlSourceViewerSplit.Visible = false;
+					ctrlDebuggerCodeSplit.Visible = true;
+					if(ctrlSourceViewerSplit.CodeViewer.CurrentLine >= 0) {
+						ctrlDebuggerCodeSplit.ScrollToLineNumber(ctrlSourceViewerSplit.CodeViewer.CurrentLine);
+					}
+					ctrlDebuggerCodeSplit.Focus();
+					ctrlDebuggerCodeSplit.SetConfig(ConfigManager.Config.DebugInfo.RightView);
+				} else {
+					MessageBox.Show("Source files could not be found/loaded", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
 				}
-				ctrlDebuggerCodeSplit.Focus();
-				ctrlDebuggerCodeSplit.SetConfig(ConfigManager.Config.DebugInfo.RightView);
 			} else {
 				ctrlDebuggerCodeSplit.Visible = false;
 				ctrlSourceViewerSplit.Visible = true;
@@ -827,6 +843,7 @@ namespace Mesen.GUI.Debugger
 			ConfigManager.Config.DebugInfo.SplitView = this.mnuSplitView.Checked;
 			ConfigManager.ApplyChanges();
 
+			ctrlDebuggerCodeSplit.Code = ctrlDebuggerCode.Code;
 			UpdateDebugger(false);
 		}
 
@@ -1094,6 +1111,20 @@ namespace Mesen.GUI.Debugger
 			ConfigManager.ApplyChanges();
 		}
 
+		private void mnuBreakOnInit_Click(object sender, EventArgs e)
+		{
+			ConfigManager.Config.DebugInfo.BreakOnInit = mnuBreakOnInit.Checked;
+			ConfigManager.ApplyChanges();
+			UpdateDebuggerFlags();
+		}
+
+		private void mnuBreakOnPlay_Click(object sender, EventArgs e)
+		{
+			ConfigManager.Config.DebugInfo.BreakOnPlay = mnuBreakOnPlay.Checked;
+			ConfigManager.ApplyChanges();
+			UpdateDebuggerFlags();
+		}
+
 		private void mnuBreakOnOpen_Click(object sender, EventArgs e)
 		{
 			ConfigManager.Config.DebugInfo.BreakOnOpen = mnuBreakOnOpen.Checked;
@@ -1232,19 +1263,24 @@ namespace Mesen.GUI.Debugger
 			}
 		}
 
+		private void ImportLabelFile(string path)
+		{
+			string ext = Path.GetExtension(path).ToLower();
+			if(ext == ".mlb") {
+				ImportMlbFile(path);
+			} else if(ext == ".fns") {
+				ImportNesasmFnsFile(path);
+			} else {
+				ImportDbgFile(path, false);
+			}
+		}
+
 		private void mnuImportLabels_Click(object sender, EventArgs e)
 		{
 			OpenFileDialog ofd = new OpenFileDialog();
 			ofd.SetFilter("All supported files (*.dbg, *.mlb, *.fns)|*.dbg;*.mlb;*.fns");
 			if(ofd.ShowDialog() == DialogResult.OK) {
-				string ext = Path.GetExtension(ofd.FileName).ToLower();
-				if(ext == ".mlb") {
-					ImportMlbFile(ofd.FileName);
-				} else if(ext == ".fns") {
-					ImportNesasmFnsFile(ofd.FileName);
-				} else {
-					ImportDbgFile(ofd.FileName, false);
-				}					
+				ImportLabelFile(ofd.FileName);
 			}
 		}
 
@@ -1578,6 +1614,41 @@ namespace Mesen.GUI.Debugger
 		private void mnuBreakOptions_DropDownOpening(object sender, EventArgs e)
 		{
 			this.mnuBreakOnDecayedOamRead.Enabled = ConfigManager.Config.EmulationInfo.EnableOamDecay;
+
+			bool isNsf = InteropEmu.IsNsf();
+			mnuBreakOnInit.Visible = isNsf;
+			mnuBreakOnPlay.Visible = isNsf;
+
+			mnuBreakOnReset.Enabled = !isNsf;
+		}
+
+		private void frmDebugger_DragDrop(object sender, DragEventArgs e)
+		{
+			try {
+				string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
+				if(files != null && File.Exists(files[0])) {
+					ImportLabelFile(files[0]);
+				}
+			} catch(Exception ex) {
+				MesenMsgBox.Show("UnexpectedError", MessageBoxButtons.OK, MessageBoxIcon.Error, ex.ToString());
+			}
+		}
+
+		private void frmDebugger_DragEnter(object sender, DragEventArgs e)
+		{
+			try {
+				if(e.Data != null && e.Data.GetDataPresent(DataFormats.FileDrop)) {
+					string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
+					if(files != null && files.Length > 0) {
+						string ext = Path.GetExtension(files[0]).ToLower();
+						if(ext == ".dbg" || ext == ".mlb" || ext == ".fns") {
+							e.Effect = DragDropEffects.Copy;
+						}
+					}
+				}
+			} catch(Exception ex) {
+				MesenMsgBox.Show("UnexpectedError", MessageBoxButtons.OK, MessageBoxIcon.Error, ex.ToString());
+			}
 		}
 	}
 }

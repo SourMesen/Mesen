@@ -293,6 +293,8 @@ namespace Mesen.GUI.Config
 		public bool BreakOnCrash = false;
 		public bool BreakOnDecayedOamRead = false;
 		public bool BreakOnUninitMemoryRead = false;
+		public bool BreakOnInit = true;
+		public bool BreakOnPlay = false;
 
 		public bool BringToFrontOnPause = false;
 		public bool BringToFrontOnBreak = true;

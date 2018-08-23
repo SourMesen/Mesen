@@ -195,7 +195,7 @@ namespace Mesen.GUI.Debugger.Controls
 				int topIndex = lstLabels.TopItem.Index;
 				int lastSelectedIndex = lstLabels.SelectedIndices[lstLabels.SelectedIndices.Count - 1];
 				for(int i = lstLabels.SelectedIndices.Count - 1; i >= 0; i--) {
-					CodeLabel label = (CodeLabel)GetSelectedItem().SubItems[1].Tag;
+					CodeLabel label = (CodeLabel)_listItems[lstLabels.SelectedIndices[i]].SubItems[1].Tag;
 					LabelManager.DeleteLabel(label.Address, label.AddressType, i == 0);
 				}
 				

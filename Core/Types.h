@@ -97,18 +97,23 @@ struct CartridgeState
 	
 	uint32_t PrgPageCount;
 	uint32_t PrgPageSize;
-	uint32_t PrgSelectedPages[64];
+	int32_t PrgMemoryOffset[0x100];
+	PrgMemoryType PrgType[0x100];
+	MemoryAccessType PrgMemoryAccess[0x100];
+
 	uint32_t ChrPageCount;
 	uint32_t ChrPageSize;
-	uint32_t ChrSelectedPages[64];
+	int32_t ChrMemoryOffset[0x40];
+	ChrMemoryType ChrType[0x40];
+	MemoryAccessType ChrMemoryAccess[0x40];
+
 	uint32_t Nametables[8];
 
-	int32_t WorkRamStart;
-	int32_t WorkRamEnd;
-	int32_t SaveRamStart;
-	int32_t SaveRamEnd;
+	uint32_t WorkRamPageSize;
+	uint32_t SaveRamPageSize;
 
 	MirroringType Mirroring;
+	bool HasBattery;
 };
 
 struct PPUControlFlags
