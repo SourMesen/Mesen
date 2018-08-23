@@ -297,7 +297,9 @@ uint8_t NsfMapper::ReadRegister(uint16_t addr)
 			case 0x3E01: return (_nsfHeader.InitAddress >> 8) & 0xFF;
 			case 0x3E02: return _nsfHeader.PlayAddress & 0xFF;
 			case 0x3E03: return (_nsfHeader.PlayAddress >> 8) & 0xFF;
-			case 0x3E04: 
+			
+			case 0x3E04:
+			case 0x3E05:
 				switch(_model) {
 					default:
 					case NesModel::NTSC: return _ntscSpeed & 0xFF;
@@ -306,7 +308,8 @@ uint8_t NsfMapper::ReadRegister(uint16_t addr)
 				}
 				break;
 
-			case 0x3E06: 
+			case 0x3E06:
+			case 0x3E07:
 				switch(_model) {
 					default:
 					case NesModel::NTSC: return (_ntscSpeed >> 8) & 0xFF;
@@ -315,17 +318,13 @@ uint8_t NsfMapper::ReadRegister(uint16_t addr)
 				}
 				break;
 
-			//These should never be called because $3E11 always returns 0
-			case 0x3E05: return 0xFF;
-			case 0x3E07: return 0xFF;
-
 			case 0x3E08: case 0x3E09: case 0x3E0A: case 0x3E0B:
 			case 0x3E0C: case 0x3E0D: case 0x3E0E: case 0x3E0F:
 				return _nsfHeader.BankSetup[addr & 0x07];
 
 			case 0x3E10: return _songNumber;
 
-			case 0x3E11: return 0x00; //Force "NTSC" mode in the bios
+			case 0x3E11: return _model == NesModel::PAL ? 0x01 : 0x00;
 
 			case 0x3E12: {
 				NsfIrqType result = _irqStatus;
