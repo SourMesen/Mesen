@@ -101,6 +101,8 @@ namespace Mesen.GUI.Debugger
 				GetMember(nameof(DebuggerShortcutsConfig.LabelList_AddBreakpoint)),
 				GetMember(nameof(DebuggerShortcutsConfig.LabelList_AddToWatch)),
 				GetMember(nameof(DebuggerShortcutsConfig.LabelList_FindOccurrences)),
+				GetMember(nameof(DebuggerShortcutsConfig.LabelList_ViewInCpuMemory)),
+				GetMember(nameof(DebuggerShortcutsConfig.LabelList_ViewInMemoryType)),
 				GetMember(nameof(DebuggerShortcutsConfig.BreakpointList_Add)),
 				GetMember(nameof(DebuggerShortcutsConfig.BreakpointList_Edit)),
 				GetMember(nameof(DebuggerShortcutsConfig.BreakpointList_GoToLocation)),

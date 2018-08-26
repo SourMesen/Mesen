@@ -153,6 +153,10 @@ namespace Mesen.GUI.Config
 		public XmlKeys LabelList_AddToWatch = Keys.None;
 		[ShortcutName("Label List: Find Occurrences")]
 		public XmlKeys LabelList_FindOccurrences = Keys.None;
+		[ShortcutName("Label List: View in CPU Memory")]
+		public XmlKeys LabelList_ViewInCpuMemory = Keys.None;
+		[ShortcutName("Label List: View in [memory type]")]
+		public XmlKeys LabelList_ViewInMemoryType = Keys.None;
 
 		[ShortcutName("Breakpoint List: Add Breakpoint")]
 		public XmlKeys BreakpointList_Add = Keys.Insert;

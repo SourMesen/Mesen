@@ -190,16 +190,11 @@ namespace Mesen.GUI.Debugger
 			}
 		}
 
-		public void ShowAddress(int address, bool usePrgRom)
+		public void ShowAddress(int address, DebugMemoryType memoryType)
 		{
 			tabMain.SelectedTab = tpgMemoryViewer;
-			if(usePrgRom) {
-				cboMemoryType.SetEnumValue(DebugMemoryType.PrgRom);
-				ctrlHexViewer.GoToAddress(address);
-			} else {
-				cboMemoryType.SetEnumValue(DebugMemoryType.CpuMemory);
-				ctrlHexViewer.GoToAddress(address);
-			}
+			cboMemoryType.SetEnumValue(memoryType);
+			ctrlHexViewer.GoToAddress(address);
 		}
 		
 		private void InitTblMappings()
