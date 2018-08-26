@@ -96,7 +96,8 @@ ui: InteropDLL/$(OBJFOLDER)/$(SHAREDLIB)
 	cd GUI.NET && xbuild /property:Configuration="Release" /property:Platform="$(MESENPLATFORM)" /property:PreBuildEvent="" /property:DefineConstants="HIDETESTMENU,DISABLEAUTOUPDATE"
 
 libretro: Libretro/$(OBJFOLDER)/$(LIBRETROLIB)
-	cp ./Libretro/$(OBJFOLDER)/$(LIBRETROLIB) ./bin
+	mkdir -p bin
+	cp ./Libretro/$(OBJFOLDER)/$(LIBRETROLIB) ./bin/
 
 core: InteropDLL/$(OBJFOLDER)/$(SHAREDLIB)
 
