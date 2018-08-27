@@ -866,6 +866,11 @@ namespace Mesen.GUI.Debugger
 			ctrlSourceViewerSplit.RefreshViewer();
 		}
 
+		public void ScrollToAddress(int address)
+		{
+			_lastCodeWindow.ScrollToLineNumber(address);
+		}
+
 		private void ctrlDebuggerCode_Enter(object sender, EventArgs e)
 		{
 			_lastCodeWindow = (ICodeViewer)sender;

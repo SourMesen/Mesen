@@ -77,6 +77,7 @@ namespace Mesen.GUI.Debugger
 			this.InitTblMappings();
 
 			this.ctrlHexViewer.StringViewVisible = mnuShowCharacters.Checked;
+			this.ctrlHexViewer.MemoryViewer = this;
 
 			UpdateImportButton();
 			InitMemoryTypeDropdown(true);

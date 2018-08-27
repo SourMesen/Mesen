@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using System.Collections;
 using Mesen.GUI.Controls;
 using Mesen.GUI.Config;
+using Mesen.GUI.Forms;
 
 namespace Mesen.GUI.Debugger.Controls
 {
@@ -199,13 +200,7 @@ namespace Mesen.GUI.Debugger.Controls
 
 				CodeLabel label = (CodeLabel)item.SubItems[1].Tag;
 				if(label.AddressType != AddressType.Register && label.AddressType != AddressType.InternalRam) {
-					string memoryType = "";
-					switch(label.AddressType) {
-						case AddressType.PrgRom: memoryType = "PRG ROM"; break;
-						case AddressType.SaveRam: memoryType = "Save RAM"; break;
-						case AddressType.WorkRam: memoryType = "Work RAM"; break;
-					}
-					mnuViewInMemoryType.Text = "View in " + memoryType;
+					mnuViewInMemoryType.Text = "View in " + ResourceHelper.GetEnumText(label.AddressType);
 					mnuViewInMemoryType.Enabled = true;
 				} else {
 					mnuViewInMemoryType.Enabled = false;

@@ -55,7 +55,10 @@ namespace Mesen.GUI.Debugger
 				GetMember(nameof(DebuggerShortcutsConfig.MemoryViewer_EditBreakpoint)),
 				GetMember(nameof(DebuggerShortcutsConfig.MemoryViewer_EditLabel)),
 				GetMember(nameof(DebuggerShortcutsConfig.MemoryViewer_Import)),
-				GetMember(nameof(DebuggerShortcutsConfig.MemoryViewer_Export))
+				GetMember(nameof(DebuggerShortcutsConfig.MemoryViewer_Export)),
+				GetMember(nameof(DebuggerShortcutsConfig.MemoryViewer_ViewInCpuMemory)),
+				GetMember(nameof(DebuggerShortcutsConfig.MemoryViewer_ViewInMemoryType)),
+				GetMember(nameof(DebuggerShortcutsConfig.MemoryViewer_ViewInDisassembly))
 			};
 
 			ctrlDbgShortcutsScriptWindow.Shortcuts = new FieldInfo[] {
