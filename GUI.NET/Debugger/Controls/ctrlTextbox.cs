@@ -1016,8 +1016,13 @@ namespace Mesen.GUI.Debugger
 					//Display line number
 					string lineNumber = _lineNumbers[currentLine] >= 0 ? _lineNumbers[currentLine].ToString(_showLineInHex ? "X4" : "") : "..";
 
-					if(ShowCompactPrgAddresses && _lineNumberNotes[currentLine].Length > 3) {
-						lineNumber += " [" + _lineNumberNotes[currentLine].Substring(0, _lineNumberNotes[currentLine].Length - 3) + "]";
+					string lineNumberNote = _lineNumberNotes[currentLine];
+					if(ShowCompactPrgAddresses && lineNumberNote.Length > 3) {
+						string compactView = lineNumberNote.Substring(0, lineNumberNote.Length - 3).TrimStart('0');
+						if(compactView.Length == 0) {
+							compactView = "0";
+						}
+						lineNumber += " [" + compactView + "]";
 					}
 
 					float width = g.MeasureString(lineNumber, this.Font, int.MaxValue, StringFormat.GenericTypographic).Width;
