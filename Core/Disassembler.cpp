@@ -190,63 +190,53 @@ void Disassembler::GetInfo(AddressTypeInfo &info, uint8_t** source, uint32_t &si
 
 uint32_t Disassembler::BuildCache(AddressTypeInfo &info, uint16_t cpuAddress, bool isSubEntryPoint)
 {
-	if(info.Type == AddressType::InternalRam) {
-		uint16_t memoryAddr = info.Address & 0x7FF;
-		if(!_disassembleMemoryCache[memoryAddr]) {
-			shared_ptr<DisassemblyInfo> disInfo(new DisassemblyInfo(_memoryManager->GetInternalRAM()+memoryAddr, isSubEntryPoint));
-			_disassembleMemoryCache[memoryAddr] = disInfo;
-			memoryAddr += disInfo->GetSize();
-		} else if(isSubEntryPoint) {
-			_disassembleMemoryCache[memoryAddr]->SetSubEntryPoint();
-		}
-		return memoryAddr;
-	} else {
-		vector<shared_ptr<DisassemblyInfo>> *cache;
-		uint8_t *source;
-		uint32_t size;
-		GetInfo(info, &source, size, &cache);
-		int32_t absoluteAddr = info.Address;
+	uint32_t mask = info.Type == AddressType::InternalRam ? 0x7FF : 0xFFFFFFFF;
 
-		if(info.Address >= 0) {
-			DisassemblyInfo *disInfo = (*cache)[info.Address].get();
-			if(!disInfo) {
-				while(absoluteAddr < (int32_t)size && !(*cache)[absoluteAddr]) {
-					bool isJump = IsUnconditionalJump(source[absoluteAddr]);
-					disInfo = new DisassemblyInfo(source+absoluteAddr, isSubEntryPoint);
-					isSubEntryPoint = false;
+	vector<shared_ptr<DisassemblyInfo>> *cache;
+	uint8_t *source;
+	uint32_t size;
+	GetInfo(info, &source, size, &cache);
+	int32_t absoluteAddr = info.Address & mask;
 
-					(*cache)[absoluteAddr] = shared_ptr<DisassemblyInfo>(disInfo);
+	if(info.Address >= 0) {
+		DisassemblyInfo *disInfo = (*cache)[info.Address].get();
+		if(!disInfo) {
+			while(absoluteAddr < (int32_t)size && !(*cache)[absoluteAddr]) {
+				bool isJump = IsUnconditionalJump(source[absoluteAddr]);
+				disInfo = new DisassemblyInfo(source+absoluteAddr, isSubEntryPoint);
+				isSubEntryPoint = false;
 
-					absoluteAddr += disInfo->GetSize();
-					if(isJump) {
-						//Hit a jump/return instruction, can't assume that what follows is actual code, stop disassembling
-						break;
-					}
-				}
-			} else {
-				if(isSubEntryPoint) {
-					disInfo->SetSubEntryPoint();
-				}
-
-				uint8_t opCode = source[info.Address];
-				if(IsJump(opCode)) {
-					uint16_t jumpDest = disInfo->GetOpAddr(cpuAddress);
-					if(jumpDest != cpuAddress) {
-						AddressTypeInfo addressInfo;
-						_debugger->GetAbsoluteAddressAndType(jumpDest, &addressInfo);
-
-						const uint8_t jsrCode = 0x20;
-						if(addressInfo.Address >= 0) {
-							BuildCache(addressInfo, jumpDest, opCode == jsrCode);
-						}
-					}
-				}
+				(*cache)[absoluteAddr] = shared_ptr<DisassemblyInfo>(disInfo);
 
 				absoluteAddr += disInfo->GetSize();
+				if(isJump) {
+					//Hit a jump/return instruction, can't assume that what follows is actual code, stop disassembling
+					break;
+				}
 			}
+		} else {
+			if(isSubEntryPoint) {
+				disInfo->SetSubEntryPoint();
+			}
+
+			uint8_t opCode = source[info.Address];
+			if(IsJump(opCode)) {
+				uint16_t jumpDest = disInfo->GetOpAddr(cpuAddress);
+				if(jumpDest != cpuAddress) {
+					AddressTypeInfo addressInfo;
+					_debugger->GetAbsoluteAddressAndType(jumpDest, &addressInfo);
+
+					const uint8_t jsrCode = 0x20;
+					if(addressInfo.Address >= 0) {
+						BuildCache(addressInfo, jumpDest, opCode == jsrCode);
+					}
+				}
+			}
+
+			absoluteAddr += disInfo->GetSize();
 		}
-		return absoluteAddr;
 	}
+	return absoluteAddr;
 }
 
 void Disassembler::InvalidateCache(AddressTypeInfo &info)
@@ -542,7 +532,7 @@ string Disassembler::GetCode(AddressTypeInfo &addressInfo, uint32_t endAddr, uin
 
 		isVerifiedData = addressInfo.Type == AddressType::PrgRom && cdl->IsData(addr&mask);
 		if(!info && ((disassembleUnidentifiedData && !isVerifiedData) || (disassembleVerifiedData && isVerifiedData))) {
-			dataType = isVerifiedData ? DataType::VerifiedData : (addressInfo.Type == AddressType::PrgRom ? DataType::UnidentifiedData : DataType::VerifiedCode);
+			dataType = isVerifiedData ? DataType::VerifiedData : DataType::UnidentifiedData;
 			tmpInfo->Initialize(source + (addr & mask), false);
 			info = tmpInfo;
 		} else if(info) {
