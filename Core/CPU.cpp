@@ -83,6 +83,7 @@ void CPU::Reset(bool softReset, NesModel model)
 
 	_dmcCounter = -1;
 	_dmcDmaRunning = false;
+	_warnOnCrash = true;
 
 	//Used by NSF code to disable Frame Counter & DMC interrupts
 	_irqMask = 0xFF;
@@ -232,13 +233,18 @@ uint16_t CPU::FetchOperand()
 	}
 	
 #ifndef LIBRETRO
+	if(_warnOnCrash && _console->GetSettings()->CheckFlag(EmulationFlags::DeveloperMode)) {
+		MessageManager::DisplayMessage("Error", "GameCrash", "Invalid OP code - CPU crashed.");
+		_warnOnCrash = false;
+	}
+
 	_console->BreakIfDebugging();
 	
 	if(NsfMapper::GetInstance()) {
 		//Don't stop emulation on CPU crash when playing NSFs, reset cpu instead
 		_console->Reset(true);
 		return 0;
-	} else if(!_console->GetDebugger(false)) {
+	} else if(!_console->GetDebugger(false) && !_console->GetSettings()->CheckFlag(EmulationFlags::DeveloperMode)) {
 		//Throw an error and stop emulation core (if debugger is not enabled)
 		throw std::runtime_error("Invalid OP code - CPU crashed");
 	} else {

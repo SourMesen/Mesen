@@ -60,6 +60,8 @@ private:
 	bool _prevRunIrq = false;
 	bool _runIrq = false;
 
+	bool _warnOnCrash = true;
+
 	void IncCycleCount();
 	uint16_t FetchOperand();
 	void IRQ();
