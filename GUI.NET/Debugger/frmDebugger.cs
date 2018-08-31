@@ -1623,6 +1623,7 @@ namespace Mesen.GUI.Debugger
 			bool isNsf = InteropEmu.IsNsf();
 			mnuBreakOnInit.Visible = isNsf;
 			mnuBreakOnPlay.Visible = isNsf;
+			sepBreakNsfOptions.Visible = isNsf;
 
 			mnuBreakOnReset.Enabled = !isNsf;
 		}
