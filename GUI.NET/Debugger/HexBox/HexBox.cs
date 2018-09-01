@@ -7,6 +7,7 @@ using System.Security.Permissions;
 using System.Windows.Forms.VisualStyles;
 using System.Text;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 
 namespace Be.Windows.Forms
 {
@@ -2202,6 +2203,8 @@ namespace Be.Windows.Forms
 			return true;
 		}
 
+		private Regex _nonHexRegex = new Regex("[^A-Fa-f0-9]", RegexOptions.Compiled);
+
 		/// <summary>
 		/// Replaces the current selection in the hex box with the contents of the Clipboard.
 		/// </summary>
@@ -2217,7 +2220,20 @@ namespace Be.Windows.Forms
 				ms.Read(buffer, 0, buffer.Length);
 			} else if(da != null && da.GetDataPresent(typeof(string))) {
 				string sBuffer = (string)da.GetData(typeof(string));
-				buffer = System.Text.Encoding.ASCII.GetBytes(sBuffer);
+				if(_keyInterpreter.GetType() == typeof(StringKeyInterpreter)) {
+					//When pasting in text view, assume any string is text
+					buffer = System.Text.Encoding.ASCII.GetBytes(sBuffer);
+				} else {
+					//When pasting in the hex view, assume any string is hex
+					string hexString = _nonHexRegex.Replace(sBuffer, "");
+					if(hexString.Length % 2 != 0) {
+						hexString = "0" + hexString;
+					}
+					buffer = new byte[hexString.Length / 2];
+					for(int i = 0; i < hexString.Length; i += 2) {
+						buffer[i / 2] = Convert.ToByte(hexString.Substring(i, 2), 16);
+					}
+				}
 			} else {
 				return;
 			}
