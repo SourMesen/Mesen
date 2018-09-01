@@ -19,7 +19,9 @@ namespace Mesen.GUI.Debugger
 		protected override void OnLoad(EventArgs e)
 		{
 			base.OnLoad(e);
-			UpdateLocation();
+			if(!DesignMode) {
+				UpdateLocation();
+			}
 		}
 
 		private void UpdateLocation()
