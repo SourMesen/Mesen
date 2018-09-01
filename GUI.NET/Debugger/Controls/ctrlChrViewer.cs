@@ -24,6 +24,7 @@ namespace Mesen.GUI.Debugger.Controls
 		private bool _useAutoPalette = false;
 		private bool _showSingleColorTilesInGrayscale = false;
 		private Bitmap _tilePreview;
+		private Bitmap[] _originalChrBanks = new Bitmap[2];
 		private Bitmap[] _chrBanks = new Bitmap[2];
 		private HdPackCopyHelper _hdCopyHelper = new HdPackCopyHelper();
 
@@ -141,6 +142,7 @@ namespace Mesen.GUI.Debugger.Controls
 						g.DrawImageUnscaled(source, 0, 0);
 					}
 
+					_originalChrBanks[i] = source;
 					_chrBanks[i] = target;
 
 					Bitmap chrBankImage = new Bitmap(256, 256);
@@ -466,10 +468,10 @@ namespace Mesen.GUI.Debugger.Controls
 
 		public void CopyToClipboard()
 		{
-			using(Bitmap copy = new Bitmap(256, 512)) {
+			using(Bitmap copy = new Bitmap(128, 256)) {
 				using(Graphics g = Graphics.FromImage(copy)) {
-					g.DrawImage(_chrBanks[0], 0, 0);
-					g.DrawImage(_chrBanks[1], 0, 256);
+					g.DrawImage(_originalChrBanks[0], 0, 0);
+					g.DrawImage(_originalChrBanks[1], 0, 128);
 				}
 				Clipboard.SetImage(copy);
 			}
