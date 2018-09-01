@@ -93,6 +93,7 @@
 			// 
 			// txtComment
 			// 
+			this.txtComment.AcceptsReturn = true;
 			this.txtComment.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.txtComment.Location = new System.Drawing.Point(63, 82);
 			this.txtComment.Multiline = true;
@@ -181,7 +182,6 @@
 			// 
 			// frmEditLabel
 			// 
-			this.AcceptButton = null;
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(377, 262);
