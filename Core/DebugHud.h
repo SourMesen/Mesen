@@ -8,6 +8,7 @@ class DrawCommand;
 class DebugHud
 {
 private:
+	static constexpr size_t MaxCommandCount = 500000;
 	vector<unique_ptr<DrawCommand>> _commands;
 	SimpleLock _commandLock;
 

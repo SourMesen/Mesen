@@ -650,6 +650,12 @@
     <Compile Include="Debugger\frmAssembler.Designer.cs">
       <DependentUpon>frmAssembler.cs</DependentUpon>
     </Compile>
+    <Compile Include="Debugger\frmSetScriptTimeout.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Debugger\frmSetScriptTimeout.Designer.cs">
+      <DependentUpon>frmSetScriptTimeout.cs</DependentUpon>
+    </Compile>
     <Compile Include="Debugger\frmBreakOn.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -1329,6 +1335,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Debugger\Controls\ctrlSourceViewer.resx">
       <DependentUpon>ctrlSourceViewer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Debugger\frmSetScriptTimeout.resx">
+      <DependentUpon>frmSetScriptTimeout.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Debugger\frmTextHooker.resx">
       <DependentUpon>frmTextHooker.cs</DependentUpon>

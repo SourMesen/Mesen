@@ -6,6 +6,9 @@
 #include "DebuggerTypes.h"
 #include "Debugger.h"
 
+LuaScriptingContext* LuaScriptingContext::_context = nullptr;
+uint32_t LuaScriptingContext::_timeout = 1000;
+
 LuaScriptingContext::LuaScriptingContext(Debugger* debugger) : ScriptingContext(debugger)
 {
 }
@@ -38,18 +41,34 @@ LuaScriptingContext::~LuaScriptingContext()
 	}
 }
 
+void LuaScriptingContext::SetScriptTimeout(uint32_t timeout)
+{
+	_timeout = timeout;
+}
+
+void LuaScriptingContext::ExecutionCountHook(lua_State *lua, lua_Debug *ar)
+{
+	if(_context->_timer.GetElapsedMS() > _timeout) {
+		luaL_error(lua, (std::string("Maximum execution time (") + std::to_string(_timeout) + " ms) exceeded.").c_str());
+	}
+}
+
 bool LuaScriptingContext::LoadScript(string scriptName, string scriptContent, Debugger* debugger)
 {
 	_scriptName = scriptName;
 
 	int iErr = 0;
 	_lua = luaL_newstate();
+	
+	_context = this;
 	LuaApi::SetContext(this);
 
 	luaL_openlibs(_lua);
 	luaL_requiref(_lua, "emu", LuaApi::GetLibrary, 1);
 	Log("Loading script...");
 	if((iErr = luaL_loadbufferx(_lua, scriptContent.c_str(), scriptContent.size(), ("@" + scriptName).c_str(), nullptr)) == 0) {
+		_timer.Reset();
+		lua_sethook(_lua, LuaScriptingContext::ExecutionCountHook, LUA_MASKCOUNT, 1000);
 		if((iErr = lua_pcall(_lua, 0, LUA_MULTRET, 0)) == 0) {
 			//Script loaded properly
 			Log("Script loaded successfully.");
@@ -77,12 +96,19 @@ void LuaScriptingContext::UnregisterEventCallback(EventType type, int reference)
 
 void LuaScriptingContext::InternalCallMemoryCallback(uint16_t addr, uint8_t &value, CallbackType type)
 {
+	if(_callbacks[(int)type][addr].empty()) {
+		return;
+	}
+
+	_timer.Reset();
+	_context = this;
+	lua_sethook(_lua, LuaScriptingContext::ExecutionCountHook, LUA_MASKCOUNT, 1000); 
 	LuaApi::SetContext(this);
 	for(int &ref : _callbacks[(int)type][addr]) {
 		int top = lua_gettop(_lua);
 		lua_rawgeti(_lua, LUA_REGISTRYINDEX, ref);
 		lua_pushinteger(_lua, addr);
-		lua_pushinteger(_lua, value);		
+		lua_pushinteger(_lua, value);
 		if(lua_pcall(_lua, 2, LUA_MULTRET, 0) != 0) {
 			Log(lua_tostring(_lua, -1));
 		} else {
@@ -98,6 +124,13 @@ void LuaScriptingContext::InternalCallMemoryCallback(uint16_t addr, uint8_t &val
 
 int LuaScriptingContext::InternalCallEventCallback(EventType type)
 {
+	if(_eventCallbacks[(int)type].empty()) {
+		return 0;
+	}
+
+	_timer.Reset();
+	_context = this;
+	lua_sethook(_lua, LuaScriptingContext::ExecutionCountHook, LUA_MASKCOUNT, 1000); 
 	LuaApi::SetContext(this);
 	LuaCallHelper l(_lua);
 	for(int &ref : _eventCallbacks[(int)type]) {
