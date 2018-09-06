@@ -199,7 +199,7 @@ uint32_t Disassembler::BuildCache(AddressTypeInfo &info, uint16_t cpuAddress, bo
 	int32_t absoluteAddr = info.Address & mask;
 
 	if(info.Address >= 0) {
-		DisassemblyInfo *disInfo = (*cache)[info.Address].get();
+		DisassemblyInfo *disInfo = (*cache)[absoluteAddr].get();
 		if(!disInfo) {
 			while(absoluteAddr < (int32_t)size && !(*cache)[absoluteAddr]) {
 				bool isJump = IsUnconditionalJump(source[absoluteAddr]);
@@ -219,7 +219,7 @@ uint32_t Disassembler::BuildCache(AddressTypeInfo &info, uint16_t cpuAddress, bo
 				disInfo->SetSubEntryPoint();
 			}
 
-			uint8_t opCode = source[info.Address];
+			uint8_t opCode = source[absoluteAddr];
 			if(IsJump(opCode)) {
 				uint16_t jumpDest = disInfo->GetOpAddr(cpuAddress);
 				if(jumpDest != cpuAddress) {
