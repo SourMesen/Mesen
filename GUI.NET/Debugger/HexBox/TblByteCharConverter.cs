@@ -78,7 +78,9 @@ namespace Be.Windows.Forms
 				do {
 					match = false;
 					foreach(string key in _stringList) {
-						if(text.StartsWith(key)) {
+						//Without an ordinal comparison, it's possible for an empty string to "StartsWith" a non-empty string (e.g replacement char U+FFFD)
+						//This causes a crash here (because key.Length > text.Length)
+						if(text.StartsWith(key, StringComparison.Ordinal)) {
 							bytes.AddRange(_reverseTblRules[key].GetBytes());
 							text = text.Substring(key.Length);
 							match = true;
