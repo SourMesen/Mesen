@@ -209,7 +209,7 @@
 			<Control ID="chkAutoConfigureInput">Configurar controles automáticamente al cargar un juego</Control>
 
 			<Control ID="tpgAdvanced">Avanzado</Control>
-			<Control ID="grpDisplayInput">Controladores de pantalla</Control>
+			<Control ID="grpDisplayInput">Ver controles en pantalla</Control>
 			<Control ID="chkDisplayPort1">Jugador 1</Control>
 			<Control ID="chkDisplayPort2">Jugador 2</Control>
 			<Control ID="chkDisplayPort3">Jugador 3</Control>
@@ -271,7 +271,7 @@
 
 			<Control ID="grpScanlines">Lineas de escaneo</Control>
 			<Control ID="trkScanlines">Lineas de escaneo</Control>
-			<Control ID="btnResetPictureSettings">Reiniciar</Control>
+			<Control ID="btnResetPictureSettings">Restablecer</Control>
 			<Control ID="mnuPresetComposite">Compuesto</Control>
 			<Control ID="mnuPresetSVideo">S-Video</Control>
 			<Control ID="mnuPresetRgb">RGB</Control>
@@ -499,7 +499,7 @@
 			<Control ID="btnExportSelectedCheats">Trucos seleccionados</Control>
 			<Control ID="mnuExportSelectedCheats">Exportar</Control>
 			<Control ID="tpgCheatFinder">Búsqueda de trucos</Control>
-			<Control ID="btnReset">Reiniciar</Control>
+			<Control ID="btnReset">Restablecer</Control>
 			<Control ID="btnUndo">Deshacer</Control>
 			<Control ID="lblCurrentValue">El valor actual es</Control>
 			<Control ID="lblPreviousValue">El valor anterior es</Control>
@@ -1023,7 +1023,7 @@
 			<Value ID="BottomRight">Abajo a la derecha</Value>
 		</Enum>
 		<Enum ID="RamPowerOnState">
-			<Value ID="AllZeros">Todos los bits a 0 (Defecto)</Value>
+			<Value ID="AllZeros">Todos los bits a 0 (por defecto)</Value>
 			<Value ID="AllOnes">Todos los bits a 1</Value>
 			<Value ID="Random">Valores aleatorios</Value>
 		</Enum>
