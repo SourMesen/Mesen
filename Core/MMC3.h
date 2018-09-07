@@ -157,7 +157,7 @@ class MMC3 : public BaseMapper
 			_chrMode = (_state.Reg8000 & 0x80) >> 7;
 			_prgMode = (_state.Reg8000 & 0x40) >> 6;
 
-			if(_romInfo.SubMapperID == 1) {
+			if(_romInfo.MapperID == 4 && _romInfo.SubMapperID == 1) {
 				//bool wramEnabled = (_state.Reg8000 & 0x20) == 0x20;
 				RemoveCpuMemoryMapping(0x6000, 0x7000);
 				
@@ -172,7 +172,7 @@ class MMC3 : public BaseMapper
 				_wramEnabled = (_state.RegA001 & 0x80) == 0x80;
 				_wramWriteProtected = (_state.RegA001 & 0x40) == 0x40;
 
-				if(IsNes20() && _romInfo.SubMapperID == 0) {
+				if(_romInfo.SubMapperID == 0) {
 					if(_wramEnabled) {
 						SetCpuMemoryMapping(0x6000, 0x7FFF, 0, HasBattery() ? PrgMemoryType::SaveRam : PrgMemoryType::WorkRam, CanWriteToWorkRam() ? MemoryAccessType::ReadWrite : MemoryAccessType::Read);
 					} else {
