@@ -499,6 +499,7 @@
 			<Control ID="chkDisableCheats">Відключити всі чіти</Control>
 
 			<Control ID="tpgCheatFinder">Пошук чiтiв</Control>
+			<Control ID="grpFilters">Filters</Control>
 			<Control ID="btnReset">Скидання</Control>
 			<Control ID="btnUndo">Вiдмiна</Control>
 			<Control ID="lblCurrentValue">Поточне значення</Control>

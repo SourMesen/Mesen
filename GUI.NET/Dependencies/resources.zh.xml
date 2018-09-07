@@ -500,6 +500,7 @@
 			<Control ID="chkDisableCheats">禁用全部作弊</Control>
 
 			<Control ID="tpgCheatFinder">查找作弊</Control>
+			<Control ID="grpFilters">Filters</Control>
 			<Control ID="btnReset">重设</Control>
 			<Control ID="btnUndo">撤消</Control>
 			<Control ID="lblCurrentValue">现值</Control>

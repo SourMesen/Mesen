@@ -497,6 +497,7 @@
 			<Control ID="btnExportSelectedCheats">Trapaças selecionadas</Control>
 			<Control ID="mnuExportSelectedCheats">Exportar</Control>
 			<Control ID="tpgCheatFinder">Pesquisa de trapaças</Control>
+			<Control ID="grpFilters">Filters</Control>
 			<Control ID="btnReset">Reiniciar</Control>
 			<Control ID="btnUndo">Desfazer</Control>
 			<Control ID="lblCurrentValue">O valor atual é</Control>

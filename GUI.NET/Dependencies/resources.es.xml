@@ -499,6 +499,7 @@
 			<Control ID="btnExportSelectedCheats">Trucos seleccionados</Control>
 			<Control ID="mnuExportSelectedCheats">Exportar</Control>
 			<Control ID="tpgCheatFinder">Búsqueda de trucos</Control>
+			<Control ID="grpFilters">Filters</Control>
 			<Control ID="btnReset">Restablecer</Control>
 			<Control ID="btnUndo">Deshacer</Control>
 			<Control ID="lblCurrentValue">El valor actual es</Control>
