@@ -43,7 +43,7 @@ public:
 	void BuildOpCodeTables(bool useLowerCase);
 	void Reset();
 	
-	uint32_t BuildCache(AddressTypeInfo &info, uint16_t memoryAddr, bool isSubEntryPoint);
+	uint32_t BuildCache(AddressTypeInfo &info, uint16_t memoryAddr, bool isSubEntryPoint, bool isJumpTarget);
 	void InvalidateCache(AddressTypeInfo &info);
 
 	bool IsUnofficialOpCode(uint8_t opCode);
@@ -51,6 +51,8 @@ public:
 	string GetCode(AddressTypeInfo &addressInfo, uint32_t endAddr, uint16_t memoryAddr, State& cpuState, shared_ptr<MemoryManager> memoryManager, shared_ptr<LabelManager> labelManager);
 
 	DisassemblyInfo GetDisassemblyInfo(AddressTypeInfo &info);
+
+	void GetJumpTargets(bool* jumpTargets);
 
 	void RebuildPrgRomCache(uint32_t absoluteAddr, int32_t length);
 };

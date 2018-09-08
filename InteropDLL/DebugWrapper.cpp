@@ -65,6 +65,8 @@ extern "C"
 	DllExport void __stdcall DebugPpuStep(uint32_t count) { GetDebugger()->PpuStep(count); }
 	DllExport void __stdcall DebugBreakOnScanline(int32_t scanline) { GetDebugger()->BreakOnScanline(scanline); }
 	DllExport const char* __stdcall DebugGetCode(uint32_t &length) { return GetDebugger()->GetCode(length); }
+	
+	DllExport void __stdcall DebugGetJumpTargets(bool* isJumpTarget) { GetDebugger()->GetJumpTargets(isJumpTarget); }
 
 	DllExport void __stdcall DebugSetPpuViewerScanlineCycle(int32_t ppuViewerId, int32_t scanline, int32_t cycle) { return GetDebugger()->SetPpuViewerScanlineCycle(ppuViewerId, scanline, cycle); }
 	DllExport void __stdcall DebugClearPpuViewerSettings(int32_t ppuViewerId) { return GetDebugger()->ClearPpuViewerSettings(ppuViewerId); }

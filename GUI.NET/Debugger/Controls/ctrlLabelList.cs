@@ -33,6 +33,7 @@ namespace Mesen.GUI.Debugger.Controls
 			base.OnLoad(e);
 			if(!IsDesignMode) {
 				mnuShowComments.Checked = ConfigManager.Config.DebugInfo.ShowCommentsInLabelList;
+				mnuShowJumpLabels.Checked = ConfigManager.Config.DebugInfo.ShowJumpLabels;
 				InitShortcuts();
 			}
 		}
@@ -123,7 +124,7 @@ namespace Mesen.GUI.Debugger.Controls
 			List<ListViewItem> items = new List<ListViewItem>(labels.Count);
 			Font italicFont = null;
 			foreach(CodeLabel label in labels) {
-				if(label.Label.Length > 0 || ConfigManager.Config.DebugInfo.ShowCommentsInLabelList) {
+				if((label.Label.Length > 0 || ConfigManager.Config.DebugInfo.ShowCommentsInLabelList) && (!label.Flags.HasFlag(CodeLabelFlags.AutoJumpLabel) || ConfigManager.Config.DebugInfo.ShowJumpLabels)) {
 					ListViewItem item = new ListViewItem(label.Label);
 
 					Int32 relativeAddress = label.GetRelativeAddress();
@@ -216,8 +217,9 @@ namespace Mesen.GUI.Debugger.Controls
 			if(lstLabels.SelectedIndices.Count > 0) {
 				int topIndex = lstLabels.TopItem.Index;
 				int lastSelectedIndex = lstLabels.SelectedIndices[lstLabels.SelectedIndices.Count - 1];
-				for(int i = lstLabels.SelectedIndices.Count - 1; i >= 0; i--) {
-					CodeLabel label = (CodeLabel)_listItems[lstLabels.SelectedIndices[i]].SubItems[1].Tag;
+				List<int> selectedIndexes = new List<int>(lstLabels.SelectedIndices.Cast<int>().ToList());
+				for(int i = selectedIndexes.Count - 1; i >= 0; i--) {
+					CodeLabel label = (CodeLabel)_listItems[selectedIndexes[i]].SubItems[1].Tag;
 					LabelManager.DeleteLabel(label.Address, label.AddressType, i == 0);
 				}
 				
@@ -315,6 +317,13 @@ namespace Mesen.GUI.Debugger.Controls
 		private void mnuShowComments_Click(object sender, EventArgs e)
 		{
 			ConfigManager.Config.DebugInfo.ShowCommentsInLabelList = mnuShowComments.Checked;
+			ConfigManager.ApplyChanges();
+			this.UpdateLabelList();
+		}
+		
+		private void mnuShowJumpLabels_Click(object sender, EventArgs e)
+		{
+			ConfigManager.Config.DebugInfo.ShowJumpLabels = mnuShowJumpLabels.Checked;
 			ConfigManager.ApplyChanges();
 			this.UpdateLabelList();
 		}

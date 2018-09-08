@@ -208,7 +208,7 @@ void Debugger::UpdateCdlCache()
 	for(int i = 0, len = _mapper->GetMemorySize(DebugMemoryType::PrgRom); i < len; i++) {
 		if(_codeDataLogger->IsCode(i)) {
 			AddressTypeInfo info = { i, AddressType::PrgRom };
-			i = _disassembler->BuildCache(info, 0, _codeDataLogger->IsSubEntryPoint(i)) - 1;
+			i = _disassembler->BuildCache(info, 0, _codeDataLogger->IsSubEntryPoint(i), false) - 1;
 		}
 	}
 
@@ -601,7 +601,7 @@ bool Debugger::ProcessRamOperation(MemoryOperationType type, uint16_t &addr, uin
 			}
 		}
 
-		_disassembler->BuildCache(addressInfo, addr, isSubEntryPoint);
+		_disassembler->BuildCache(addressInfo, addr, isSubEntryPoint, false);
 
 		ProcessStepConditions(addr);
 
@@ -927,6 +927,11 @@ const char* Debugger::GetCode(uint32_t &length)
 	} else {
 		return _disassemblerOutput.c_str();
 	}
+}
+
+void Debugger::GetJumpTargets(bool* jumpTargets)
+{
+	_disassembler->GetJumpTargets(jumpTargets);
 }
 
 int32_t Debugger::GetRelativeAddress(uint32_t addr, AddressType type)

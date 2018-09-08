@@ -80,6 +80,7 @@ namespace Mesen.GUI.Debugger
 					}));
 				});
 			}
+			this.mnuAutoCreateJumpLabels.Checked = ConfigManager.Config.DebugInfo.AutoCreateJumpLabels;
 			this.mnuCopyAddresses.Checked = ConfigManager.Config.DebugInfo.CopyAddresses;
 			this.mnuCopyByteCode.Checked = ConfigManager.Config.DebugInfo.CopyByteCode;
 			this.mnuCopyComments.Checked = ConfigManager.Config.DebugInfo.CopyComments;
@@ -583,6 +584,10 @@ namespace Mesen.GUI.Debugger
 				return;
 			}
 
+			if(ConfigManager.Config.DebugInfo.AutoCreateJumpLabels) {
+				LabelManager.CreateAutomaticJumpLabels();
+			}
+
 			ctrlBreakpoints.RefreshListAddresses();
 			ctrlLabelList.UpdateLabelListAddresses();
 			ctrlFunctionList.UpdateFunctionList(false);
@@ -1025,6 +1030,12 @@ namespace Mesen.GUI.Debugger
 		private void mnuTraceLogger_Click(object sender, EventArgs e)
 		{
 			DebugWindowManager.OpenDebugWindow(DebugWindow.TraceLogger);
+		}
+		
+		private void mnuAutoCreateJumpLabels_Click(object sender, EventArgs e)
+		{
+			ConfigManager.Config.DebugInfo.AutoCreateJumpLabels = mnuAutoCreateJumpLabels.Checked;
+			ConfigManager.ApplyChanges();
 		}
 
 		private void mnuCopyAddresses_Click(object sender, EventArgs e)

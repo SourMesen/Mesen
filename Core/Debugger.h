@@ -203,6 +203,8 @@ public:
 
 	void GenerateCodeOutput();
 	const char* GetCode(uint32_t &length);
+
+	void GetJumpTargets(bool* jumpTargets);
 	
 	int32_t GetRelativeAddress(uint32_t addr, AddressType type);
 	int32_t GetAbsoluteAddress(uint32_t addr);	

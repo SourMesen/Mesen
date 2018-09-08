@@ -41,6 +41,7 @@
 			this.mnuFindOccurrences = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripSeparator();
 			this.mnuShowComments = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuShowJumpLabels = new System.Windows.Forms.ToolStripMenuItem();
 			this.lstLabels = new Mesen.GUI.Controls.DoubleBufferedListView();
 			this.colFunctionLabel = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
 			this.colFunctionAddress = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -63,15 +64,16 @@
             this.mnuAddToWatch,
             this.mnuFindOccurrences,
             this.toolStripMenuItem2,
-            this.mnuShowComments});
+            this.mnuShowComments,
+            this.mnuShowJumpLabels});
 			this.contextMenu.Name = "contextMenu";
-			this.contextMenu.Size = new System.Drawing.Size(187, 242);
+			this.contextMenu.Size = new System.Drawing.Size(231, 264);
 			// 
 			// mnuAdd
 			// 
 			this.mnuAdd.Image = global::Mesen.GUI.Properties.Resources.Add;
 			this.mnuAdd.Name = "mnuAdd";
-			this.mnuAdd.Size = new System.Drawing.Size(186, 22);
+			this.mnuAdd.Size = new System.Drawing.Size(230, 22);
 			this.mnuAdd.Text = "Add";
 			this.mnuAdd.Click += new System.EventHandler(this.mnuAdd_Click);
 			// 
@@ -79,7 +81,7 @@
 			// 
 			this.mnuEdit.Image = global::Mesen.GUI.Properties.Resources.EditLabel;
 			this.mnuEdit.Name = "mnuEdit";
-			this.mnuEdit.Size = new System.Drawing.Size(186, 22);
+			this.mnuEdit.Size = new System.Drawing.Size(230, 22);
 			this.mnuEdit.Text = "Edit";
 			this.mnuEdit.Click += new System.EventHandler(this.mnuEdit_Click);
 			// 
@@ -87,20 +89,20 @@
 			// 
 			this.mnuDelete.Image = global::Mesen.GUI.Properties.Resources.Close;
 			this.mnuDelete.Name = "mnuDelete";
-			this.mnuDelete.Size = new System.Drawing.Size(186, 22);
+			this.mnuDelete.Size = new System.Drawing.Size(230, 22);
 			this.mnuDelete.Text = "Delete";
 			this.mnuDelete.Click += new System.EventHandler(this.mnuDelete_Click);
 			// 
 			// toolStripMenuItem1
 			// 
 			this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-			this.toolStripMenuItem1.Size = new System.Drawing.Size(183, 6);
+			this.toolStripMenuItem1.Size = new System.Drawing.Size(227, 6);
 			// 
 			// mnuViewInCpuMemory
 			// 
 			this.mnuViewInCpuMemory.Image = global::Mesen.GUI.Properties.Resources.Chip;
 			this.mnuViewInCpuMemory.Name = "mnuViewInCpuMemory";
-			this.mnuViewInCpuMemory.Size = new System.Drawing.Size(186, 22);
+			this.mnuViewInCpuMemory.Size = new System.Drawing.Size(230, 22);
 			this.mnuViewInCpuMemory.Text = "View in CPU memory";
 			this.mnuViewInCpuMemory.Click += new System.EventHandler(this.mnuViewInCpuMemory_Click);
 			// 
@@ -108,20 +110,20 @@
 			// 
 			this.mnuViewInMemoryType.Image = global::Mesen.GUI.Properties.Resources.CheatCode;
 			this.mnuViewInMemoryType.Name = "mnuViewInMemoryType";
-			this.mnuViewInMemoryType.Size = new System.Drawing.Size(186, 22);
+			this.mnuViewInMemoryType.Size = new System.Drawing.Size(230, 22);
 			this.mnuViewInMemoryType.Text = "View in {0} memory";
 			this.mnuViewInMemoryType.Click += new System.EventHandler(this.mnuViewInMemoryType_Click);
 			// 
 			// toolStripMenuItem3
 			// 
 			this.toolStripMenuItem3.Name = "toolStripMenuItem3";
-			this.toolStripMenuItem3.Size = new System.Drawing.Size(183, 6);
+			this.toolStripMenuItem3.Size = new System.Drawing.Size(227, 6);
 			// 
 			// mnuAddBreakpoint
 			// 
 			this.mnuAddBreakpoint.Image = global::Mesen.GUI.Properties.Resources.Breakpoint;
 			this.mnuAddBreakpoint.Name = "mnuAddBreakpoint";
-			this.mnuAddBreakpoint.Size = new System.Drawing.Size(186, 22);
+			this.mnuAddBreakpoint.Size = new System.Drawing.Size(230, 22);
 			this.mnuAddBreakpoint.Text = "Add breakpoint";
 			this.mnuAddBreakpoint.Click += new System.EventHandler(this.mnuAddBreakpoint_Click);
 			// 
@@ -129,7 +131,7 @@
 			// 
 			this.mnuAddToWatch.Image = global::Mesen.GUI.Properties.Resources.Add;
 			this.mnuAddToWatch.Name = "mnuAddToWatch";
-			this.mnuAddToWatch.Size = new System.Drawing.Size(186, 22);
+			this.mnuAddToWatch.Size = new System.Drawing.Size(230, 22);
 			this.mnuAddToWatch.Text = "Add to watch";
 			this.mnuAddToWatch.Click += new System.EventHandler(this.mnuAddToWatch_Click);
 			// 
@@ -137,22 +139,30 @@
 			// 
 			this.mnuFindOccurrences.Image = global::Mesen.GUI.Properties.Resources.Find;
 			this.mnuFindOccurrences.Name = "mnuFindOccurrences";
-			this.mnuFindOccurrences.Size = new System.Drawing.Size(186, 22);
+			this.mnuFindOccurrences.Size = new System.Drawing.Size(230, 22);
 			this.mnuFindOccurrences.Text = "Find Occurrences";
 			this.mnuFindOccurrences.Click += new System.EventHandler(this.mnuFindOccurrences_Click);
 			// 
 			// toolStripMenuItem2
 			// 
 			this.toolStripMenuItem2.Name = "toolStripMenuItem2";
-			this.toolStripMenuItem2.Size = new System.Drawing.Size(183, 6);
+			this.toolStripMenuItem2.Size = new System.Drawing.Size(227, 6);
 			// 
 			// mnuShowComments
 			// 
 			this.mnuShowComments.CheckOnClick = true;
 			this.mnuShowComments.Name = "mnuShowComments";
-			this.mnuShowComments.Size = new System.Drawing.Size(186, 22);
+			this.mnuShowComments.Size = new System.Drawing.Size(230, 22);
 			this.mnuShowComments.Text = "Show Comments";
 			this.mnuShowComments.Click += new System.EventHandler(this.mnuShowComments_Click);
+			// 
+			// mnuShowJumpLabels
+			// 
+			this.mnuShowJumpLabels.CheckOnClick = true;
+			this.mnuShowJumpLabels.Name = "mnuShowJumpLabels";
+			this.mnuShowJumpLabels.Size = new System.Drawing.Size(230, 22);
+			this.mnuShowJumpLabels.Text = "Show Automatic Jump Labels";
+			this.mnuShowJumpLabels.Click += new System.EventHandler(this.mnuShowJumpLabels_Click);
 			// 
 			// lstLabels
 			// 
@@ -229,5 +239,6 @@
 		private System.Windows.Forms.ToolStripMenuItem mnuViewInCpuMemory;
 		private System.Windows.Forms.ToolStripMenuItem mnuViewInMemoryType;
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem3;
+		private System.Windows.Forms.ToolStripMenuItem mnuShowJumpLabels;
 	}
 }
