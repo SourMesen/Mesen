@@ -1010,10 +1010,12 @@ uint32_t BaseMapper::GetMemorySize(DebugMemoryType type)
 	}
 }
 
-void BaseMapper::CopyChrRamTile(uint32_t address, uint8_t *dest)
+void BaseMapper::CopyChrTile(uint32_t address, uint8_t *dest)
 {
-	if(address <= _chrRamSize - 16) {
+	if(_chrRamSize > 0 && address <= _chrRamSize - 16) {
 		memcpy(dest, _chrRam + address, 16);
+	} else if(_chrRomSize > 0 && address <= _chrRomSize - 16) {
+		memcpy(dest, _chrRom + address, 16);
 	}
 }
 

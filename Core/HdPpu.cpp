@@ -52,7 +52,7 @@ void HdPpu::DrawPixel()
 				if(shift >= 0 && shift < 8) {
 					tileInfo.Sprite[j].TileIndex = sprite.AbsoluteTileAddr / 16;
 					if(isChrRam) {
-						mapper->CopyChrRamTile(sprite.AbsoluteTileAddr & 0xFFFFFFF0, tileInfo.Sprite[j].TileData);
+						mapper->CopyChrTile(sprite.AbsoluteTileAddr & 0xFFFFFFF0, tileInfo.Sprite[j].TileData);
 					}
 					if(_version >= 100) {
 						tileInfo.Sprite[j].PaletteColors = 0xFF000000 | _paletteRAM[sprite.PaletteOffset + 3] | (_paletteRAM[sprite.PaletteOffset + 2] << 8) | (_paletteRAM[sprite.PaletteOffset + 1] << 16);
@@ -100,7 +100,7 @@ void HdPpu::DrawPixel()
 		if(_flags.BackgroundEnabled && _cycle > _minimumDrawBgCycle) {
 			tileInfo.Tile.TileIndex = lastTile->AbsoluteTileAddr / 16;
 			if(isChrRam) {
-				mapper->CopyChrRamTile(lastTile->AbsoluteTileAddr & 0xFFFFFFF0, tileInfo.Tile.TileData);
+				mapper->CopyChrTile(lastTile->AbsoluteTileAddr & 0xFFFFFFF0, tileInfo.Tile.TileData);
 			}
 			if(_version >= 100) {
 				tileInfo.Tile.PaletteColors = _paletteRAM[lastTile->PaletteOffset + 3] | (_paletteRAM[lastTile->PaletteOffset + 2] << 8) | (_paletteRAM[lastTile->PaletteOffset + 1] << 16) | (_paletteRAM[0] << 24);
