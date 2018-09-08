@@ -1091,7 +1091,7 @@
 			<Value ID="CpuMemory">CPU Memory</Value>
 			<Value ID="PpuMemory">PPU Memory</Value>
 			<Value ID="PaletteMemory">Palette RAM</Value>
-			<Value ID="SpriteMemory">Sprite (OAM) RAM</Value>
+			<Value ID="SpriteMemory">Sprite / OAM RAM</Value>
 			<Value ID="SecondarySpriteMemory">Secondary OAM RAM</Value>
 			<Value ID="PrgRom">PRG ROM</Value>
 			<Value ID="ChrRom">CHR ROM</Value>

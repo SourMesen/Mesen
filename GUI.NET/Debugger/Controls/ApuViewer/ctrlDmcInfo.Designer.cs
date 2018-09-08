@@ -135,7 +135,7 @@
 			// 
 			this.lblSampleAddr.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.lblSampleAddr.AutoSize = true;
-			this.lblSampleAddr.Location = new System.Drawing.Point(273, 6);
+			this.lblSampleAddr.Location = new System.Drawing.Point(270, 6);
 			this.lblSampleAddr.Name = "lblSampleAddr";
 			this.lblSampleAddr.Size = new System.Drawing.Size(86, 13);
 			this.lblSampleAddr.TabIndex = 6;
@@ -154,7 +154,7 @@
 			// 
 			this.lblSampleLength.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.lblSampleLength.AutoSize = true;
-			this.lblSampleLength.Location = new System.Drawing.Point(273, 32);
+			this.lblSampleLength.Location = new System.Drawing.Point(270, 32);
 			this.lblSampleLength.Name = "lblSampleLength";
 			this.lblSampleLength.Size = new System.Drawing.Size(81, 13);
 			this.lblSampleLength.TabIndex = 17;
@@ -164,11 +164,11 @@
 			// 
 			this.lblBytesRemaining.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.lblBytesRemaining.AutoSize = true;
-			this.lblBytesRemaining.Location = new System.Drawing.Point(273, 58);
+			this.lblBytesRemaining.Location = new System.Drawing.Point(270, 58);
 			this.lblBytesRemaining.Name = "lblBytesRemaining";
-			this.lblBytesRemaining.Size = new System.Drawing.Size(84, 13);
+			this.lblBytesRemaining.Size = new System.Drawing.Size(89, 13);
 			this.lblBytesRemaining.TabIndex = 18;
-			this.lblBytesRemaining.Text = "Bytes remaining:";
+			this.lblBytesRemaining.Text = "Bytes Remaining:";
 			// 
 			// txtSampleLength
 			// 
@@ -230,7 +230,8 @@
 			// 
 			this.lblHz.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.lblHz.AutoSize = true;
-			this.lblHz.Location = new System.Drawing.Point(247, 58);
+			this.lblHz.Location = new System.Drawing.Point(244, 58);
+			this.lblHz.Margin = new System.Windows.Forms.Padding(0, 0, 3, 0);
 			this.lblHz.Name = "lblHz";
 			this.lblHz.Size = new System.Drawing.Size(20, 13);
 			this.lblHz.TabIndex = 14;
