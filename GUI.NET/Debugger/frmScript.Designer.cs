@@ -62,6 +62,8 @@
 			this.mnuBlankWindow = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuTutorialScript = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuAutoLoadLastScript = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuHelp = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuApiReference = new System.Windows.Forms.ToolStripMenuItem();
 			this.tsToolbar = new Mesen.GUI.Controls.ctrlMesenToolStrip();
 			this.txtScriptContent = new FastColoredTextBoxNS.FastColoredTextBox();
 			this.contextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
@@ -76,8 +78,8 @@
 			this.statusStrip1 = new System.Windows.Forms.StatusStrip();
 			this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
 			this.lblScriptActive = new System.Windows.Forms.ToolStripStatusLabel();
-			this.mnuHelp = new System.Windows.Forms.ToolStripMenuItem();
-			this.mnuApiReference = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuSetScriptTimeout = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem7 = new System.Windows.Forms.ToolStripSeparator();
 			this.mnuMain.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.txtScriptContent)).BeginInit();
 			this.contextMenu.SuspendLayout();
@@ -257,6 +259,8 @@
 			this.scriptToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.mnuRun,
             this.mnuStop,
+            this.toolStripMenuItem7,
+            this.mnuSetScriptTimeout,
             this.toolStripMenuItem3,
             this.mnuSaveBeforeRun,
             this.mnuAutoReload,
@@ -332,6 +336,22 @@
 			this.mnuAutoLoadLastScript.Text = "Load the last script loaded";
 			this.mnuAutoLoadLastScript.Click += new System.EventHandler(this.mnuAutoLoadLastScript_Click);
 			// 
+			// mnuHelp
+			// 
+			this.mnuHelp.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.mnuApiReference});
+			this.mnuHelp.Name = "mnuHelp";
+			this.mnuHelp.Size = new System.Drawing.Size(44, 20);
+			this.mnuHelp.Text = "Help";
+			// 
+			// mnuApiReference
+			// 
+			this.mnuApiReference.Image = global::Mesen.GUI.Properties.Resources.Exclamation;
+			this.mnuApiReference.Name = "mnuApiReference";
+			this.mnuApiReference.Size = new System.Drawing.Size(147, 22);
+			this.mnuApiReference.Text = "API Reference";
+			this.mnuApiReference.Click += new System.EventHandler(this.mnuApiReference_Click);
+			// 
 			// tsToolbar
 			// 
 			this.tsToolbar.Location = new System.Drawing.Point(0, 24);
@@ -368,7 +388,6 @@
 			this.txtScriptContent.Cursor = System.Windows.Forms.Cursors.IBeam;
 			this.txtScriptContent.DisabledColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
 			this.txtScriptContent.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.txtScriptContent.Font = new System.Drawing.Font("Courier New", 9.75F);
 			this.txtScriptContent.IsReplaceMode = false;
 			this.txtScriptContent.Language = FastColoredTextBoxNS.Language.Lua;
 			this.txtScriptContent.LeftBracket = '(';
@@ -496,21 +515,18 @@
 			this.lblScriptActive.Text = "Script is running";
 			this.lblScriptActive.Visible = false;
 			// 
-			// mnuHelp
+			// mnuSetScriptTimeout
 			// 
-			this.mnuHelp.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.mnuApiReference});
-			this.mnuHelp.Name = "mnuHelp";
-			this.mnuHelp.Size = new System.Drawing.Size(44, 20);
-			this.mnuHelp.Text = "Help";
+			this.mnuSetScriptTimeout.Image = global::Mesen.GUI.Properties.Resources.Speed;
+			this.mnuSetScriptTimeout.Name = "mnuSetScriptTimeout";
+			this.mnuSetScriptTimeout.Size = new System.Drawing.Size(258, 22);
+			this.mnuSetScriptTimeout.Text = "Set Script Timeout...";
+			this.mnuSetScriptTimeout.Click += new System.EventHandler(this.mnuSetScriptTimeout_Click);
 			// 
-			// mnuApiReference
+			// toolStripMenuItem7
 			// 
-			this.mnuApiReference.Image = global::Mesen.GUI.Properties.Resources.Exclamation;
-			this.mnuApiReference.Name = "mnuApiReference";
-			this.mnuApiReference.Size = new System.Drawing.Size(152, 22);
-			this.mnuApiReference.Text = "API Reference";
-			this.mnuApiReference.Click += new System.EventHandler(this.mnuApiReference_Click);
+			this.toolStripMenuItem7.Name = "toolStripMenuItem7";
+			this.toolStripMenuItem7.Size = new System.Drawing.Size(255, 6);
 			// 
 			// frmScript
 			// 
@@ -589,5 +605,7 @@
 		private System.Windows.Forms.ToolStripMenuItem mnuBuiltInScripts;
 		private System.Windows.Forms.ToolStripMenuItem mnuHelp;
 		private System.Windows.Forms.ToolStripMenuItem mnuApiReference;
+		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem7;
+		private System.Windows.Forms.ToolStripMenuItem mnuSetScriptTimeout;
 	}
 }

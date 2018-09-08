@@ -866,6 +866,11 @@ namespace Mesen.GUI.Debugger
 			ctrlSourceViewerSplit.RefreshViewer();
 		}
 
+		public void ScrollToAddress(int address)
+		{
+			_lastCodeWindow.ScrollToLineNumber(address);
+		}
+
 		private void ctrlDebuggerCode_Enter(object sender, EventArgs e)
 		{
 			_lastCodeWindow = (ICodeViewer)sender;
@@ -1618,6 +1623,7 @@ namespace Mesen.GUI.Debugger
 			bool isNsf = InteropEmu.IsNsf();
 			mnuBreakOnInit.Visible = isNsf;
 			mnuBreakOnPlay.Visible = isNsf;
+			sepBreakNsfOptions.Visible = isNsf;
 
 			mnuBreakOnReset.Enabled = !isNsf;
 		}

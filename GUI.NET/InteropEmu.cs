@@ -248,6 +248,7 @@ namespace Mesen.GUI
 		[DllImport(DLLPath)] public static extern void DebugSetMemoryValue(DebugMemoryType type, UInt32 address, byte value);
 		[DllImport(DLLPath)] public static extern void DebugSetInputOverride(Int32 port, Int32 state);
 
+		[DllImport(DLLPath)] public static extern void DebugSetScriptTimeout(UInt32 timeout);
 		[DllImport(DLLPath)] public static extern Int32 DebugLoadScript([MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(UTF8Marshaler))]string name, [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(UTF8Marshaler))]string content, Int32 scriptId = -1);
 		[DllImport(DLLPath)] public static extern void DebugRemoveScript(Int32 scriptId);
 		[DllImport(DLLPath, EntryPoint = "DebugGetScriptLog")] private static extern IntPtr DebugGetScriptLogWrapper(Int32 scriptId);
@@ -1559,6 +1560,9 @@ namespace Mesen.GUI
 		DisableDynamicSampleRate = 0x80,
 
 		PauseOnMovieEnd = 0x0100,
+
+		DeveloperMode = 0x0200,
+
 		AllowBackgroundInput = 0x0400,
 		ReduceSoundInBackground = 0x0800,
 		MuteSoundInBackground = 0x1000,

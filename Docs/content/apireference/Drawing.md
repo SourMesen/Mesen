@@ -94,8 +94,8 @@ If *fill* is false, only the rectangle's outline will be drawn.
 
 **Parameters**  
 x - *Integer* X position  
-y - *Integer* Y position
-text- *String* The text to display
+y - *Integer* Y position  
+text- *String* The text to display  
 textColor - *Integer* Color to use for the text  
 backgroundColor - *Integer* Color to use for the text's background color  
 duration - *Integer* Number of frames to display (Default: 1 frame)  

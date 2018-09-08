@@ -38,7 +38,6 @@ Debugger::Debugger(shared_ptr<Console> console, shared_ptr<CPU> cpu, shared_ptr<
 	_romName = console->GetRomInfo().RomName;
 	_console = console;
 	_cpu = cpu;
-	_ppu = ppu;
 	_apu = apu;
 	_memoryManager = memoryManager;
 	_mapper = mapper;
@@ -47,7 +46,9 @@ Debugger::Debugger(shared_ptr<Console> console, shared_ptr<CPU> cpu, shared_ptr<
 	_assembler.reset(new Assembler(_labelManager));
 	_disassembler.reset(new Disassembler(memoryManager.get(), mapper.get(), this));
 	_codeDataLogger.reset(new CodeDataLogger(this, mapper->GetMemorySize(DebugMemoryType::PrgRom), mapper->GetMemorySize(DebugMemoryType::ChrRom)));
-	_memoryDumper.reset(new MemoryDumper(_ppu, _memoryManager, _mapper, _codeDataLogger, this, _disassembler));
+
+	SetPpu(ppu);
+
 	_memoryAccessCounter.reset(new MemoryAccessCounter(this));
 	_profiler.reset(new Profiler(this));
 	_traceLogger.reset(new TraceLogger(this, memoryManager, _labelManager));
@@ -129,6 +130,12 @@ Debugger::~Debugger()
 	_breakLock.Acquire();
 	_breakLock.Release();
 	_console->Resume();
+}
+
+void Debugger::SetPpu(shared_ptr<PPU> ppu)
+{
+	_ppu = ppu;
+	_memoryDumper.reset(new MemoryDumper(_ppu, _memoryManager, _mapper, _codeDataLogger, this, _disassembler));
 }
 
 Console* Debugger::GetConsole()
@@ -714,6 +721,9 @@ bool Debugger::SleepUntilResume(BreakSource source)
 		_pausedForDebugHelper = _breakRequested;
 		while(((stepCount == 0 || _breakRequested) && !_stopFlag && _suspendCount == 0) || _preventResume > 0) {
 			std::this_thread::sleep_for(std::chrono::duration<int, std::milli>(10));
+			if(stepCount == 0) {
+				_console->ResetRunTimers();
+			}
 			stepCount = _stepCount.load();
 		}
 		_pausedForDebugHelper = false;

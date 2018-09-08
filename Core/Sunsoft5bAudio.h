@@ -12,7 +12,7 @@ private:
 	uint8_t _currentRegister;
 	uint8_t _registers[0x10];
 	int16_t _lastOutput;
-	uint16_t _timer[3];
+	int16_t _timer[3];
 	uint8_t _toneStep[3];
 	bool _processTick;
 
@@ -54,8 +54,8 @@ private:
 	void UpdateChannel(int channel)
 	{
 		_timer[channel]--;
-		if(_timer[channel] == 0) {
-			_timer[channel] = GetPeriod(channel) + 1;
+		if(_timer[channel] <= 0) {
+			_timer[channel] = GetPeriod(channel);
 			_toneStep[channel] = (_toneStep[channel] + 1) & 0x0F;
 		}
 	}
@@ -78,7 +78,7 @@ protected:
 	{
 		BaseExpansionAudio::StreamState(saving);
 
-		ArrayInfo<uint16_t> timer{ _timer, 3 };
+		ArrayInfo<int16_t> timer{ _timer, 3 };
 		ArrayInfo<uint8_t> registers{ _registers, 0x10 };
 		ArrayInfo<uint8_t> toneStep{ _toneStep, 3 };
 		Stream(timer, registers, toneStep, _currentRegister, _lastOutput, _processTick);

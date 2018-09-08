@@ -90,6 +90,8 @@ private:
 	bool _running = false;
 	int32_t _stopCode = 0;
 
+	bool _resetRunTimers = false;
+
 	bool _disableOcNextFrame = false;
 
 	bool _initialized = false;
@@ -99,7 +101,7 @@ private:
 
 	void UpdateNesModel(bool sendNotification);
 	double GetFrameDelay();
-	void DisplayDebugInformation(Timer &clockTimer, Timer &lastFrameTimer, double &lastFrameMin, double &lastFrameMax, double *timeLagData);
+	void DisplayDebugInformation(Timer &clockTimer, Timer &lastFrameTimer, double &lastFrameMin, double &lastFrameMax, uint32_t lastPauseFrame);
 
 public:
 	Console(shared_ptr<Console> master = nullptr, EmulationSettings* initialSettings = nullptr);
@@ -142,6 +144,7 @@ public:
 	void SaveBatteries();
 
 	void Run();
+	void ResetRunTimers();
 	void Stop(int stopCode = 0);
 		
 	int32_t GetStopCode();

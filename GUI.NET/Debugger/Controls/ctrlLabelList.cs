@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using System.Collections;
 using Mesen.GUI.Controls;
 using Mesen.GUI.Config;
+using Mesen.GUI.Forms;
 
 namespace Mesen.GUI.Debugger.Controls
 {
@@ -45,6 +46,9 @@ namespace Mesen.GUI.Debugger.Controls
 			mnuAddToWatch.InitShortcut(this, nameof(DebuggerShortcutsConfig.LabelList_AddToWatch));
 			mnuAddBreakpoint.InitShortcut(this, nameof(DebuggerShortcutsConfig.LabelList_AddBreakpoint));
 			mnuFindOccurrences.InitShortcut(this, nameof(DebuggerShortcutsConfig.LabelList_FindOccurrences));
+
+			mnuViewInCpuMemory.InitShortcut(this, nameof(DebuggerShortcutsConfig.LabelList_ViewInCpuMemory));
+			mnuViewInMemoryType.InitShortcut(this, nameof(DebuggerShortcutsConfig.LabelList_ViewInMemoryType));
 		}
 
 		public static void EditLabel(UInt32 address, AddressType type)
@@ -187,6 +191,24 @@ namespace Mesen.GUI.Debugger.Controls
 			mnuFindOccurrences.Enabled = lstLabels.SelectedIndices.Count == 1;
 			mnuAddToWatch.Enabled = lstLabels.SelectedIndices.Count == 1;
 			mnuAddBreakpoint.Enabled = lstLabels.SelectedIndices.Count == 1;
+
+			if(lstLabels.SelectedIndices.Count == 1) {
+				ListViewItem item = GetSelectedItem();
+
+				bool availableInCpuMemory = (int)item.Tag >= 0;
+				mnuViewInCpuMemory.Enabled = availableInCpuMemory;
+
+				CodeLabel label = (CodeLabel)item.SubItems[1].Tag;
+				if(label.AddressType != AddressType.Register && label.AddressType != AddressType.InternalRam) {
+					mnuViewInMemoryType.Text = "View in " + ResourceHelper.GetEnumText(label.AddressType);
+					mnuViewInMemoryType.Enabled = true;
+				} else {
+					mnuViewInMemoryType.Enabled = false;
+				}
+			} else {
+				mnuViewInCpuMemory.Enabled = false;
+				mnuViewInMemoryType.Enabled = false;
+			}
 		}
 
 		private void mnuDelete_Click(object sender, EventArgs e)
@@ -309,6 +331,26 @@ namespace Mesen.GUI.Debugger.Controls
 					e.Index = i;
 					return;
 				}
+			}
+		}
+
+		private void mnuViewInCpuMemory_Click(object sender, EventArgs e)
+		{
+			if(lstLabels.SelectedIndices.Count == 1) {
+				ListViewItem item = GetSelectedItem();
+				int address = (int)item.Tag;
+				if(address >= 0) {
+					DebugWindowManager.OpenMemoryViewer(address, DebugMemoryType.CpuMemory);
+				}
+			}
+		}
+
+		private void mnuViewInMemoryType_Click(object sender, EventArgs e)
+		{
+			if(lstLabels.SelectedIndices.Count == 1) {
+				ListViewItem item = GetSelectedItem();
+				CodeLabel label = (CodeLabel)item.SubItems[1].Tag;
+				DebugWindowManager.OpenMemoryViewer((int)label.Address, label.AddressType.ToMemoryType());
 			}
 		}
 	}

@@ -345,7 +345,7 @@ void MemoryDumper::GatherChrPaletteInfo()
 			key.TileIndex = absoluteAddr / 16;
 			key.IsChrRamTile = false;
 		} else {
-			_mapper->CopyChrRamTile(absoluteAddr, key.TileData);
+			_mapper->CopyChrTile(absoluteAddr, key.TileData);
 			key.IsChrRamTile = true;
 		}
 		_paletteByTile[key] = palettes[paletteIndex];
@@ -463,7 +463,7 @@ void MemoryDumper::GetChrBank(int bankIndex, uint32_t* frameBuffer, uint8_t pale
 					key.TileIndex = absoluteTileIndex;
 					key.IsChrRamTile = false;
 				} else {
-					_mapper->CopyChrRamTile(absoluteTileIndex * 16, key.TileData);
+					_mapper->CopyChrTile(absoluteTileIndex * 16, key.TileData);
 					key.IsChrRamTile = true;
 				}
 				auto result = _paletteByTile.find(key);

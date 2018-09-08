@@ -46,7 +46,7 @@ namespace Mesen.GUI.Debugger
 									key.Length++;
 								}
 
-								dict[key] = data[1];
+								dict[key] = string.IsNullOrEmpty(data[1]) ? " " : data[1];
 							}
 						}
 					}

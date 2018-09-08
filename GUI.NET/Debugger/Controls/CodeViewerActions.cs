@@ -374,7 +374,7 @@ namespace Mesen.GUI.Debugger.Controls
 		private void mnuEditInMemoryViewer_Click(object sender, EventArgs e)
 		{
 			if(UpdateContextMenu(_lastLocation)) {
-				DebugWindowManager.OpenMemoryViewer(_lastClickedAddress, false);
+				DebugWindowManager.OpenMemoryViewer(_lastClickedAddress, DebugMemoryType.CpuMemory);
 			}
 		}
 

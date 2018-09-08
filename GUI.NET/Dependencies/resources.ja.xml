@@ -501,6 +501,7 @@
 			<Control ID="chkDisableCheats">チートコード機能を無効にする</Control>
 
 			<Control ID="tpgCheatFinder">コードファインダー</Control>
+			<Control ID="grpFilters">フィルター</Control>
 			<Control ID="btnReset">リセット</Control>
 			<Control ID="btnUndo">元に戻す</Control>
 			<Control ID="lblCurrentValue">現在の数値は</Control>

@@ -499,6 +499,7 @@
 			<Control ID="chkDisableCheats">Отключить все читы</Control>
 
 			<Control ID="tpgCheatFinder">Поиск читов</Control>
+			<Control ID="grpFilters">Filters</Control>
 			<Control ID="btnReset">Сброс</Control>
 			<Control ID="btnUndo">Отмена</Control>
 			<Control ID="lblCurrentValue">Текущее значение</Control>

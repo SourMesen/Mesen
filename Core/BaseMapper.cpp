@@ -158,6 +158,14 @@ void BaseMapper::SetCpuMemoryMapping(uint16_t startAddr, uint16_t endAddr, uint8
 void BaseMapper::RemoveCpuMemoryMapping(uint16_t startAddr, uint16_t endAddr)
 {
 	//Unmap this section of memory (causing open bus behavior)
+	int firstSlot = startAddr >> 8;
+	int slotCount = (endAddr - startAddr + 1) >> 8;
+	for(int i = 0; i < slotCount; i++) {
+		_prgMemoryOffset[firstSlot + i] = -1;
+		_prgMemoryType[firstSlot + i] = PrgMemoryType::PrgRom;
+		_prgMemoryAccess[firstSlot + i] = MemoryAccessType::NoAccess;
+	}
+
 	SetCpuMemoryMapping(startAddr, endAddr, nullptr, MemoryAccessType::NoAccess);
 }
 
@@ -275,6 +283,14 @@ void BaseMapper::SetPpuMemoryMapping(uint16_t startAddr, uint16_t endAddr, uint8
 void BaseMapper::RemovePpuMemoryMapping(uint16_t startAddr, uint16_t endAddr)
 {
 	//Unmap this section of memory (causing open bus behavior)
+	int firstSlot = startAddr >> 8;
+	int slotCount = (endAddr - startAddr + 1) >> 8;
+	for(int i = 0; i < slotCount; i++) {
+		_chrMemoryOffset[firstSlot + i] = -1;
+		_chrMemoryType[firstSlot + i] = ChrMemoryType::Default;
+		_chrMemoryAccess[firstSlot + i] = MemoryAccessType::NoAccess;
+	}
+
 	SetPpuMemoryMapping(startAddr, endAddr, nullptr, MemoryAccessType::NoAccess);
 }
 
@@ -994,10 +1010,12 @@ uint32_t BaseMapper::GetMemorySize(DebugMemoryType type)
 	}
 }
 
-void BaseMapper::CopyChrRamTile(uint32_t address, uint8_t *dest)
+void BaseMapper::CopyChrTile(uint32_t address, uint8_t *dest)
 {
-	if(address <= _chrRamSize - 16) {
+	if(_chrRamSize > 0 && address <= _chrRamSize - 16) {
 		memcpy(dest, _chrRam + address, 16);
+	} else if(_chrRomSize > 0 && address <= _chrRomSize - 16) {
+		memcpy(dest, _chrRom + address, 16);
 	}
 }
 

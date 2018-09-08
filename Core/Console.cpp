@@ -595,6 +595,8 @@ void Console::ResetComponents(bool softReset)
 	_cpu->Reset(softReset, _model);
 	_controlManager->Reset(softReset);
 
+	_resetRunTimers = true;
+
 	KeyManager::UpdateDevices();
 
 	//This notification MUST be sent before the UpdateInputState() below to allow MovieRecorder to grab the first frame's worth of inputs
@@ -697,12 +699,12 @@ void Console::Run()
 	Timer clockTimer;
 	Timer lastFrameTimer;
 	double targetTime;
-	double timeLagData[16] = {};
-	int timeLagDataIndex = 0;
 	double lastFrameMin = 9999;
 	double lastFrameMax = 0;
-
+	double timeLag = 0;
 	uint32_t lastFrameNumber = -1;
+	uint32_t lastPauseFrame = 0;
+	double lastDelay = GetFrameDelay();
 
 	_runLock.Acquire();
 	_stopLock.Acquire();
@@ -712,7 +714,7 @@ void Console::Run()
 		_slave->_emulationThreadId = std::this_thread::get_id();
 	}
 
-	targetTime = GetFrameDelay();
+	targetTime = lastDelay;
 
 	_videoDecoder->StartThread();
 
@@ -737,21 +739,38 @@ void Console::Run()
 					_slave->_soundMixer->ProcessEndOfFrame();
 				}
 
-				bool displayDebugInfo = _settings->CheckFlag(EmulationFlags::DisplayDebugInfo);
-				if(displayDebugInfo) {
-					DisplayDebugInformation(clockTimer, lastFrameTimer, lastFrameMin, lastFrameMax, timeLagData);
-					if(_slave) {
-						_slave->DisplayDebugInformation(clockTimer, lastFrameTimer, lastFrameMin, lastFrameMax, timeLagData);
-					}
-				}
-				lastFrameTimer.Reset();
-
 				if(_historyViewer) {
 					_historyViewer->ProcessEndOfFrame();
 				}
 				_rewindManager->ProcessEndOfFrame();
 				_settings->DisableOverclocking(_disableOcNextFrame || NsfMapper::GetInstance());
 				_disableOcNextFrame = false;
+
+				//Update model (ntsc/pal) and get delay for next frame
+				UpdateNesModel(true);
+				double delay = GetFrameDelay();
+
+				if(_resetRunTimers || delay != lastDelay) {
+					//Target frame rate changed, reset timers
+					//Also needed when resetting, power cycling, pausing or breaking with the debugger
+					clockTimer.Reset();
+					targetTime = 0;
+					lastPauseFrame = _ppu->GetFrameCount();
+
+					_resetRunTimers = false;
+					lastDelay = delay;
+				}
+
+				targetTime += delay;
+				
+				bool displayDebugInfo = _settings->CheckFlag(EmulationFlags::DisplayDebugInfo);
+				if(displayDebugInfo) {
+					DisplayDebugInformation(clockTimer, lastFrameTimer, lastFrameMin, lastFrameMax, lastPauseFrame);
+					if(_slave) {
+						_slave->DisplayDebugInformation(clockTimer, lastFrameTimer, lastFrameMin, lastFrameMax, lastPauseFrame);
+					}
+				}
+				lastFrameTimer.Reset();
 
 				//Sleep until we're ready to start the next frame
 				clockTimer.WaitUntil(targetTime);
@@ -792,6 +811,9 @@ void Console::Run()
 					_runLock.Acquire();
 					_notificationManager->SendNotification(ConsoleNotificationType::GameResumed);
 					lastFrameTimer.Reset();
+
+					//Reset the timer to avoid speed up after a pause
+					_resetRunTimers = true;
 				}
 
 				if(_settings->CheckFlag(EmulationFlags::UseHighResolutionTimer)) {
@@ -801,21 +823,6 @@ void Console::Run()
 				}
 
 				_systemActionManager->ProcessSystemActions();
-
-				//Get next target time, and adjust based on whether we are ahead or behind
-				double timeLag = _settings->GetEmulationSpeed() == 0 ? 0 : clockTimer.GetElapsedMS() - targetTime;
-				if(displayDebugInfo) {
-					timeLagData[timeLagDataIndex] = timeLag;
-					timeLagDataIndex = (timeLagDataIndex + 1) & 0x0F;
-				}
-				UpdateNesModel(true);
-				targetTime = GetFrameDelay();
-
-				clockTimer.Reset();
-				targetTime -= timeLag;
-				if(targetTime < 0) {
-					targetTime = 0;
-				}
 
 				lastFrameNumber = _ppu->GetFrameCount();
 
@@ -870,6 +877,11 @@ void Console::Run()
 
 	_notificationManager->SendNotification(ConsoleNotificationType::GameStopped);
 	_notificationManager->SendNotification(ConsoleNotificationType::EmulationStopped);
+}
+
+void Console::ResetRunTimers()
+{
+	_resetRunTimers = true;
 }
 
 bool Console::IsRunning()
@@ -1009,6 +1021,8 @@ void Console::LoadState(istream &loadStream, uint32_t stateVersion)
 
 		_debugHud->ClearScreen();
 		_notificationManager->SendNotification(ConsoleNotificationType::StateLoaded);
+		_resetRunTimers = true;
+		UpdateNesModel(false);
 	}
 }
 
@@ -1127,6 +1141,11 @@ void Console::StartRecordingHdPack(string saveFolder, ScaleFilterType filterType
 	_ppu.reset(new HdBuilderPpu(shared_from_this(), _hdPackBuilder.get(), chrRamBankSize));
 	_memoryManager->RegisterIODevice(_ppu.get());
 
+	shared_ptr<Debugger> debugger = _debugger;
+	if(debugger) {
+		debugger->SetPpu(_ppu);
+	}
+
 	LoadState(saveState);
 	Resume();
 }
@@ -1143,6 +1162,11 @@ void Console::StopRecordingHdPack()
 		_ppu.reset(new PPU(shared_from_this()));
 		_memoryManager->RegisterIODevice(_ppu.get());
 		_hdPackBuilder.reset();
+
+		shared_ptr<Debugger> debugger = _debugger;
+		if(debugger) {
+			debugger->SetPpu(_ppu);
+		}
 
 		LoadState(saveState);
 		Resume();
@@ -1396,7 +1420,7 @@ void Console::DebugProcessVramWriteOperation(uint16_t addr, uint8_t & value)
 #endif
 }
 
-void Console::DisplayDebugInformation(Timer &clockTimer, Timer &lastFrameTimer, double &lastFrameMin, double &lastFrameMax, double *timeLagData)
+void Console::DisplayDebugInformation(Timer &clockTimer, Timer &lastFrameTimer, double &lastFrameMin, double &lastFrameMax, uint32_t lastPauseFrame)
 {
 	AudioStatistics stats = _soundMixer->GetStatistics();
 	
@@ -1417,29 +1441,19 @@ void Console::DisplayDebugInformation(Timer &clockTimer, Timer &lastFrameTimer, 
 	_debugHud->DrawString(10, 39, "Buffer Size: " + std::to_string(stats.BufferSize / 1024) + "kb", 0xFFFFFF, 0xFF000000, 1, startFrame);
 	_debugHud->DrawString(10, 48, "Rate: " + std::to_string((uint32_t)(_settings->GetSampleRate() * _soundMixer->GetRateAdjustment())) + "Hz", 0xFFFFFF, 0xFF000000, 1, startFrame);
 
-	_debugHud->DrawRectangle(136, 8, 115, 58, 0x40000000, true, 1, startFrame);
-	_debugHud->DrawRectangle(136, 8, 115, 58, 0xFFFFFF, false, 1, startFrame);
-	_debugHud->DrawString(138, 10, "Video Stats", 0xFFFFFF, 0xFF000000, 1, startFrame);
+	_debugHud->DrawRectangle(132, 8, 115, 49, 0x40000000, true, 1, startFrame);
+	_debugHud->DrawRectangle(132, 8, 115, 49, 0xFFFFFF, false, 1, startFrame);
+	_debugHud->DrawString(134, 10, "Video Stats", 0xFFFFFF, 0xFF000000, 1, startFrame);
 
 	ss = std::stringstream();
-	ss << "Exec Time: " << std::fixed << std::setprecision(2) << clockTimer.GetElapsedMS() << " ms";
-	_debugHud->DrawString(138, 21, ss.str(), 0xFFFFFF, 0xFF000000, 1, startFrame);
-
-	double avgTimeLag = 0;
-	for(int i = 0; i < 16; i++) {
-		avgTimeLag += timeLagData[i];
-	}
-	avgTimeLag /= 16;
-
-	ss = std::stringstream();
-	ss << "Time Gap: " << std::fixed << std::setprecision(2) << avgTimeLag << " ms";
-	_debugHud->DrawString(138, 30, ss.str(), 0xFFFFFF, 0xFF000000, 1, startFrame);
+	ss << "FPS: " << std::fixed << std::setprecision(4) << ((startFrame - lastPauseFrame) / (clockTimer.GetElapsedMS() / 1000));
+	_debugHud->DrawString(134, 21, ss.str(), 0xFFFFFF, 0xFF000000, 1, startFrame);
 
 	double lastFrame = lastFrameTimer.GetElapsedMS();
 
 	ss = std::stringstream();
 	ss << "Last Frame: " << std::fixed << std::setprecision(2) << lastFrame << " ms";
-	_debugHud->DrawString(138, 39, ss.str(), 0xFFFFFF, 0xFF000000, 1, startFrame);
+	_debugHud->DrawString(134, 30, ss.str(), 0xFFFFFF, 0xFF000000, 1, startFrame);
 
 	if(_ppu->GetFrameCount() > 60) {
 		lastFrameMin = (std::min)(lastFrame, lastFrameMin);
@@ -1451,10 +1465,10 @@ void Console::DisplayDebugInformation(Timer &clockTimer, Timer &lastFrameTimer, 
 
 	ss = std::stringstream();
 	ss << "Min Delay: " << std::fixed << std::setprecision(2) << ((lastFrameMin < 9999) ? lastFrameMin : 0.0) << " ms";
-	_debugHud->DrawString(138, 48, ss.str(), 0xFFFFFF, 0xFF000000, 1, startFrame);
+	_debugHud->DrawString(134, 39, ss.str(), 0xFFFFFF, 0xFF000000, 1, startFrame);
 
 	ss = std::stringstream();
 	ss << "Max Delay: " << std::fixed << std::setprecision(2) << lastFrameMax << " ms";
-	_debugHud->DrawString(138, 57, ss.str(), 0xFFFFFF, 0xFF000000, 1, startFrame);
+	_debugHud->DrawString(134, 48, ss.str(), 0xFFFFFF, 0xFF000000, 1, startFrame);
 }
 

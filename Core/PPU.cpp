@@ -340,9 +340,6 @@ void PPU::WriteRAM(uint16_t addr, uint8_t value)
 			} else {
 				_state.XScroll = value & 0x07;
 				_state.TmpVideoRamAddr = (_state.TmpVideoRamAddr & ~0x001F) | (value >> 3);
-
-				//Update debugger overlay X scroll only
-				_console->DebugSetLastFramePpuScroll(_state.TmpVideoRamAddr, _state.XScroll, false);
 			}
 			_state.WriteToggle = !_state.WriteToggle;
 			break;
@@ -854,6 +851,7 @@ void PPU::ProcessScanline()
 			if(_prevRenderingEnabled) {
 				//copy horizontal scrolling value from t
 				_state.VideoRamAddr = (_state.VideoRamAddr & ~0x041F) | (_state.TmpVideoRamAddr & 0x041F);
+				_console->DebugSetLastFramePpuScroll(_state.VideoRamAddr, _state.XScroll, true);
 			}
 		}
 		if(IsRenderingEnabled()) {

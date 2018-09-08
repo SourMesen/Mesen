@@ -54,7 +54,7 @@
 			this.mnuAddToWatch = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuEditBreakpoint = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuEditLabel = new System.Windows.Forms.ToolStripMenuItem();
-			this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripSeparator();
+			this.sepViewActions = new System.Windows.Forms.ToolStripSeparator();
 			this.mnuFreeze = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuUnfreeze = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem3 = new System.Windows.Forms.ToolStripSeparator();
@@ -64,6 +64,10 @@
 			this.mnuPaste = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem5 = new System.Windows.Forms.ToolStripSeparator();
 			this.mnuSelectAll = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuViewInCpuMemory = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem6 = new System.Windows.Forms.ToolStripSeparator();
+			this.mnuViewInMemoryType = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuViewInDisassembly = new System.Windows.Forms.ToolStripMenuItem();
 			this.tlpMain.SuspendLayout();
 			this.flowLayoutPanel1.SuspendLayout();
 			this.panelSearch.SuspendLayout();
@@ -267,6 +271,7 @@
 			// ctrlHexBox
 			// 
 			this.ctrlHexBox.ByteColorProvider = null;
+			this.ctrlHexBox.ByteEditingMode = false;
 			this.ctrlHexBox.ColumnInfoVisible = true;
 			this.ctrlHexBox.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.ctrlHexBox.EnablePerByteNavigation = false;
@@ -314,7 +319,11 @@
             this.mnuAddToWatch,
             this.mnuEditBreakpoint,
             this.mnuEditLabel,
-            this.toolStripMenuItem2,
+            this.sepViewActions,
+            this.mnuViewInCpuMemory,
+            this.mnuViewInMemoryType,
+            this.mnuViewInDisassembly,
+            this.toolStripMenuItem6,
             this.mnuFreeze,
             this.mnuUnfreeze,
             this.toolStripMenuItem3,
@@ -325,7 +334,7 @@
             this.toolStripMenuItem5,
             this.mnuSelectAll});
 			this.ctxMenuStrip.Name = "ctxMenuStrip";
-			this.ctxMenuStrip.Size = new System.Drawing.Size(175, 254);
+			this.ctxMenuStrip.Size = new System.Drawing.Size(187, 348);
 			this.ctxMenuStrip.Opening += new System.ComponentModel.CancelEventHandler(this.ctxMenuStrip_Opening);
 			// 
 			// mnuMarkSelectionAs
@@ -335,14 +344,14 @@
             this.mnuMarkAsData,
             this.mnuMarkAsUnidentifiedData});
 			this.mnuMarkSelectionAs.Name = "mnuMarkSelectionAs";
-			this.mnuMarkSelectionAs.Size = new System.Drawing.Size(174, 22);
+			this.mnuMarkSelectionAs.Size = new System.Drawing.Size(186, 22);
 			this.mnuMarkSelectionAs.Text = "Mark selection as...";
 			// 
 			// mnuMarkAsCode
 			// 
 			this.mnuMarkAsCode.Image = global::Mesen.GUI.Properties.Resources.Accept;
 			this.mnuMarkAsCode.Name = "mnuMarkAsCode";
-			this.mnuMarkAsCode.Size = new System.Drawing.Size(235, 22);
+			this.mnuMarkAsCode.Size = new System.Drawing.Size(199, 22);
 			this.mnuMarkAsCode.Text = "Verified Code";
 			this.mnuMarkAsCode.Click += new System.EventHandler(this.mnuMarkAsCode_Click);
 			// 
@@ -350,7 +359,7 @@
 			// 
 			this.mnuMarkAsData.Image = global::Mesen.GUI.Properties.Resources.VerifiedData;
 			this.mnuMarkAsData.Name = "mnuMarkAsData";
-			this.mnuMarkAsData.Size = new System.Drawing.Size(235, 22);
+			this.mnuMarkAsData.Size = new System.Drawing.Size(199, 22);
 			this.mnuMarkAsData.Text = "Verified Data";
 			this.mnuMarkAsData.Click += new System.EventHandler(this.mnuMarkAsData_Click);
 			// 
@@ -358,20 +367,20 @@
 			// 
 			this.mnuMarkAsUnidentifiedData.Image = global::Mesen.GUI.Properties.Resources.UnidentifiedData;
 			this.mnuMarkAsUnidentifiedData.Name = "mnuMarkAsUnidentifiedData";
-			this.mnuMarkAsUnidentifiedData.Size = new System.Drawing.Size(235, 22);
+			this.mnuMarkAsUnidentifiedData.Size = new System.Drawing.Size(199, 22);
 			this.mnuMarkAsUnidentifiedData.Text = "Unidentified Code/Data";
 			this.mnuMarkAsUnidentifiedData.Click += new System.EventHandler(this.mnuMarkAsUnidentifiedData_Click);
 			// 
 			// toolStripMenuItem1
 			// 
 			this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-			this.toolStripMenuItem1.Size = new System.Drawing.Size(171, 6);
+			this.toolStripMenuItem1.Size = new System.Drawing.Size(183, 6);
 			// 
 			// mnuAddToWatch
 			// 
 			this.mnuAddToWatch.Image = global::Mesen.GUI.Properties.Resources.Add;
 			this.mnuAddToWatch.Name = "mnuAddToWatch";
-			this.mnuAddToWatch.Size = new System.Drawing.Size(174, 22);
+			this.mnuAddToWatch.Size = new System.Drawing.Size(186, 22);
 			this.mnuAddToWatch.Text = "Add to Watch";
 			this.mnuAddToWatch.Click += new System.EventHandler(this.mnuAddToWatch_Click);
 			// 
@@ -379,7 +388,7 @@
 			// 
 			this.mnuEditBreakpoint.Image = global::Mesen.GUI.Properties.Resources.BreakpointEnableDisable;
 			this.mnuEditBreakpoint.Name = "mnuEditBreakpoint";
-			this.mnuEditBreakpoint.Size = new System.Drawing.Size(174, 22);
+			this.mnuEditBreakpoint.Size = new System.Drawing.Size(186, 22);
 			this.mnuEditBreakpoint.Text = "Edit Breakpoint";
 			this.mnuEditBreakpoint.Click += new System.EventHandler(this.mnuEditBreakpoint_Click);
 			// 
@@ -387,20 +396,20 @@
 			// 
 			this.mnuEditLabel.Image = global::Mesen.GUI.Properties.Resources.EditLabel;
 			this.mnuEditLabel.Name = "mnuEditLabel";
-			this.mnuEditLabel.Size = new System.Drawing.Size(174, 22);
+			this.mnuEditLabel.Size = new System.Drawing.Size(186, 22);
 			this.mnuEditLabel.Text = "Edit Label";
 			this.mnuEditLabel.Click += new System.EventHandler(this.mnuEditLabel_Click);
 			// 
-			// toolStripMenuItem2
+			// sepViewActions
 			// 
-			this.toolStripMenuItem2.Name = "toolStripMenuItem2";
-			this.toolStripMenuItem2.Size = new System.Drawing.Size(171, 6);
+			this.sepViewActions.Name = "sepViewActions";
+			this.sepViewActions.Size = new System.Drawing.Size(183, 6);
 			// 
 			// mnuFreeze
 			// 
 			this.mnuFreeze.Image = global::Mesen.GUI.Properties.Resources.Stop;
 			this.mnuFreeze.Name = "mnuFreeze";
-			this.mnuFreeze.Size = new System.Drawing.Size(174, 22);
+			this.mnuFreeze.Size = new System.Drawing.Size(186, 22);
 			this.mnuFreeze.Text = "Freeze";
 			this.mnuFreeze.Click += new System.EventHandler(this.mnuFreeze_Click);
 			// 
@@ -408,33 +417,33 @@
 			// 
 			this.mnuUnfreeze.Image = global::Mesen.GUI.Properties.Resources.Play;
 			this.mnuUnfreeze.Name = "mnuUnfreeze";
-			this.mnuUnfreeze.Size = new System.Drawing.Size(174, 22);
+			this.mnuUnfreeze.Size = new System.Drawing.Size(186, 22);
 			this.mnuUnfreeze.Text = "Unfreeze";
 			this.mnuUnfreeze.Click += new System.EventHandler(this.mnuUnfreeze_Click);
 			// 
 			// toolStripMenuItem3
 			// 
 			this.toolStripMenuItem3.Name = "toolStripMenuItem3";
-			this.toolStripMenuItem3.Size = new System.Drawing.Size(171, 6);
+			this.toolStripMenuItem3.Size = new System.Drawing.Size(183, 6);
 			// 
 			// mnuUndo
 			// 
 			this.mnuUndo.Image = global::Mesen.GUI.Properties.Resources.Undo;
 			this.mnuUndo.Name = "mnuUndo";
-			this.mnuUndo.Size = new System.Drawing.Size(174, 22);
+			this.mnuUndo.Size = new System.Drawing.Size(186, 22);
 			this.mnuUndo.Text = "Undo";
 			this.mnuUndo.Click += new System.EventHandler(this.mnuUndo_Click);
 			// 
 			// toolStripMenuItem4
 			// 
 			this.toolStripMenuItem4.Name = "toolStripMenuItem4";
-			this.toolStripMenuItem4.Size = new System.Drawing.Size(171, 6);
+			this.toolStripMenuItem4.Size = new System.Drawing.Size(183, 6);
 			// 
 			// mnuCopy
 			// 
 			this.mnuCopy.Image = global::Mesen.GUI.Properties.Resources.Copy;
 			this.mnuCopy.Name = "mnuCopy";
-			this.mnuCopy.Size = new System.Drawing.Size(174, 22);
+			this.mnuCopy.Size = new System.Drawing.Size(186, 22);
 			this.mnuCopy.Text = "Copy";
 			this.mnuCopy.Click += new System.EventHandler(this.mnuCopy_Click);
 			// 
@@ -442,22 +451,51 @@
 			// 
 			this.mnuPaste.Image = global::Mesen.GUI.Properties.Resources.Paste;
 			this.mnuPaste.Name = "mnuPaste";
-			this.mnuPaste.Size = new System.Drawing.Size(174, 22);
+			this.mnuPaste.Size = new System.Drawing.Size(186, 22);
 			this.mnuPaste.Text = "Paste";
 			this.mnuPaste.Click += new System.EventHandler(this.mnuPaste_Click);
 			// 
 			// toolStripMenuItem5
 			// 
 			this.toolStripMenuItem5.Name = "toolStripMenuItem5";
-			this.toolStripMenuItem5.Size = new System.Drawing.Size(171, 6);
+			this.toolStripMenuItem5.Size = new System.Drawing.Size(183, 6);
 			// 
 			// mnuSelectAll
 			// 
 			this.mnuSelectAll.Image = global::Mesen.GUI.Properties.Resources.SelectAll;
 			this.mnuSelectAll.Name = "mnuSelectAll";
-			this.mnuSelectAll.Size = new System.Drawing.Size(174, 22);
+			this.mnuSelectAll.Size = new System.Drawing.Size(186, 22);
 			this.mnuSelectAll.Text = "Select All";
 			this.mnuSelectAll.Click += new System.EventHandler(this.mnuSelectAll_Click);
+			// 
+			// mnuViewInCpuMemory
+			// 
+			this.mnuViewInCpuMemory.Image = global::Mesen.GUI.Properties.Resources.SwitchView;
+			this.mnuViewInCpuMemory.Name = "mnuViewInCpuMemory";
+			this.mnuViewInCpuMemory.Size = new System.Drawing.Size(186, 22);
+			this.mnuViewInCpuMemory.Text = "View in CPU memory";
+			this.mnuViewInCpuMemory.Click += new System.EventHandler(this.mnuViewInCpuMemory_Click);
+			// 
+			// toolStripMenuItem6
+			// 
+			this.toolStripMenuItem6.Name = "toolStripMenuItem6";
+			this.toolStripMenuItem6.Size = new System.Drawing.Size(183, 6);
+			// 
+			// mnuViewInMemoryType
+			// 
+			this.mnuViewInMemoryType.Image = global::Mesen.GUI.Properties.Resources.SwitchView;
+			this.mnuViewInMemoryType.Name = "mnuViewInMemoryType";
+			this.mnuViewInMemoryType.Size = new System.Drawing.Size(186, 22);
+			this.mnuViewInMemoryType.Text = "View in {0} memory";
+			this.mnuViewInMemoryType.Click += new System.EventHandler(this.mnuViewInMemoryType_Click);
+			// 
+			// mnuViewInDisassembly
+			// 
+			this.mnuViewInDisassembly.Image = global::Mesen.GUI.Properties.Resources.Bug;
+			this.mnuViewInDisassembly.Name = "mnuViewInDisassembly";
+			this.mnuViewInDisassembly.Size = new System.Drawing.Size(186, 22);
+			this.mnuViewInDisassembly.Text = "View in disassembly";
+			this.mnuViewInDisassembly.Click += new System.EventHandler(this.mnuViewInDisassembly_Click);
 			// 
 			// ctrlHexViewer
 			// 
@@ -514,7 +552,7 @@
 		private System.Windows.Forms.ToolStripMenuItem mnuEditBreakpoint;
 		private System.Windows.Forms.ToolStripMenuItem mnuEditLabel;
 		private System.Windows.Forms.ToolStripMenuItem mnuFreeze;
-		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem2;
+		private System.Windows.Forms.ToolStripSeparator sepViewActions;
 		private System.Windows.Forms.ToolStripMenuItem mnuUnfreeze;
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem3;
 		private System.Windows.Forms.ToolStripMenuItem mnuCopy;
@@ -526,5 +564,9 @@
 		private System.Windows.Forms.ToolStripMenuItem mnuMarkAsUnidentifiedData;
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem4;
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem5;
+		private System.Windows.Forms.ToolStripMenuItem mnuViewInCpuMemory;
+		private System.Windows.Forms.ToolStripMenuItem mnuViewInDisassembly;
+		private System.Windows.Forms.ToolStripMenuItem mnuViewInMemoryType;
+		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem6;
 	}
 }

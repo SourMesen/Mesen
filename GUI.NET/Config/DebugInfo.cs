@@ -321,6 +321,7 @@ namespace Mesen.GUI.Config
 		public FontStyle ScriptFontStyle = FontStyle.Regular;
 		public float ScriptFontSize = BaseControl.DefaultFontSize;
 		public int ScriptZoom = 100;
+		public UInt32 ScriptTimeout = 1000;
 
 		public bool AssemblerCodeHighlighting = true;
 		public XmlColor AssemblerOpcodeColor = Color.FromArgb(22, 37, 37);
@@ -369,6 +370,7 @@ namespace Mesen.GUI.Config
 		static public void ApplyConfig()
 		{
 			InteropEmu.SetFlag(EmulationFlags.BreakOnCrash, ConfigManager.Config.DebugInfo.BreakOnCrash);
+			InteropEmu.DebugSetScriptTimeout(ConfigManager.Config.DebugInfo.ScriptTimeout);
 		}
 
 		public void AddRecentScript(string scriptFile)

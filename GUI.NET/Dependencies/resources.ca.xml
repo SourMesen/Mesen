@@ -501,6 +501,7 @@
 			<Control ID="btnExportSelectedCheats">Trucs seleccionats</Control>
 			<Control ID="mnuExportSelectedCheats">Exporta</Control>
 			<Control ID="tpgCheatFinder">Cercador de trucs</Control>
+			<Control ID="grpFilters">Filters</Control>
 			<Control ID="btnReset">Restableix</Control>
 			<Control ID="btnUndo">Desfés</Control>
 			<Control ID="lblCurrentValue">El valor actual és</Control>

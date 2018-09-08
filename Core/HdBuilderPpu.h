@@ -65,9 +65,7 @@ protected:
 					sprite.TileIndex = (isChrRam ? (_lastSprite->TileAddr & _chrRamIndexMask) : _lastSprite->AbsoluteTileAddr) / 16;
 					sprite.PaletteColors = ReadPaletteRAM(_lastSprite->PaletteOffset + 3) | (ReadPaletteRAM(_lastSprite->PaletteOffset + 2) << 8) | (ReadPaletteRAM(_lastSprite->PaletteOffset + 1) << 16) | 0xFF000000;
 					sprite.IsChrRamTile = isChrRam;
-					for(int i = 0; i < 16; i++) {
-						sprite.TileData[i] = _console->GetMapper()->GetMemoryValue(memoryType, _lastSprite->AbsoluteTileAddr / 16 * 16 + i);
-					}
+					_console->GetMapper()->CopyChrTile(_lastSprite->AbsoluteTileAddr & 0xFFFFFFF0, sprite.TileData);
 
 					_hdPackBuilder->ProcessTile(_cycle - 1, _scanline, _lastSprite->AbsoluteTileAddr, sprite, mapper, false, _bankHashes[_lastSprite->TileAddr / _chrRamBankSize], false);
 				}
@@ -79,9 +77,7 @@ protected:
 					tile.TileIndex = (isChrRam ? (lastTile->TileAddr & _chrRamIndexMask) : lastTile->AbsoluteTileAddr) / 16;
 					tile.PaletteColors = ReadPaletteRAM(lastTile->PaletteOffset + 3) | (ReadPaletteRAM(lastTile->PaletteOffset + 2) << 8) | (ReadPaletteRAM(lastTile->PaletteOffset + 1) << 16) | (ReadPaletteRAM(0) << 24);
 					tile.IsChrRamTile = isChrRam;
-					for(int i = 0; i < 16; i++) {
-						tile.TileData[i] = _console->GetMapper()->GetMemoryValue(memoryType, lastTile->AbsoluteTileAddr / 16 * 16 + i);
-					}
+					_console->GetMapper()->CopyChrTile(lastTile->AbsoluteTileAddr & 0xFFFFFFF0, tile.TileData);
 
 					_hdPackBuilder->ProcessTile(_cycle - 1, _scanline, lastTile->AbsoluteTileAddr, tile, mapper, false, _bankHashes[lastTile->TileAddr / _chrRamBankSize], hasBgSprite);
 				}

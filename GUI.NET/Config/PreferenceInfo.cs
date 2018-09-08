@@ -180,6 +180,8 @@ namespace Mesen.GUI.Config
 			InteropEmu.SetOsdState(!preferenceInfo.DisableOsd);
 			InteropEmu.SetGameDatabaseState(!preferenceInfo.DisableGameDatabase);
 
+			InteropEmu.SetFlag(EmulationFlags.DeveloperMode, preferenceInfo.DeveloperMode);
+
 			InteropEmu.SetFlag(EmulationFlags.AllowInvalidInput, preferenceInfo.AllowInvalidInput);
 			InteropEmu.SetFlag(EmulationFlags.RemoveSpriteLimit, preferenceInfo.RemoveSpriteLimit);
 			InteropEmu.SetFlag(EmulationFlags.FdsAutoLoadDisk, preferenceInfo.FdsAutoLoadDisk);

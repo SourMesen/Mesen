@@ -33,6 +33,9 @@
 			this.mnuEdit = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuDelete = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
+			this.mnuViewInCpuMemory = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuViewInMemoryType = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem3 = new System.Windows.Forms.ToolStripSeparator();
 			this.mnuAddBreakpoint = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuAddToWatch = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuFindOccurrences = new System.Windows.Forms.ToolStripMenuItem();
@@ -53,19 +56,22 @@
             this.mnuEdit,
             this.mnuDelete,
             this.toolStripMenuItem1,
+            this.mnuViewInCpuMemory,
+            this.mnuViewInMemoryType,
+            this.toolStripMenuItem3,
             this.mnuAddBreakpoint,
             this.mnuAddToWatch,
             this.mnuFindOccurrences,
             this.toolStripMenuItem2,
             this.mnuShowComments});
 			this.contextMenu.Name = "contextMenu";
-			this.contextMenu.Size = new System.Drawing.Size(167, 170);
+			this.contextMenu.Size = new System.Drawing.Size(187, 242);
 			// 
 			// mnuAdd
 			// 
 			this.mnuAdd.Image = global::Mesen.GUI.Properties.Resources.Add;
 			this.mnuAdd.Name = "mnuAdd";
-			this.mnuAdd.Size = new System.Drawing.Size(166, 22);
+			this.mnuAdd.Size = new System.Drawing.Size(186, 22);
 			this.mnuAdd.Text = "Add";
 			this.mnuAdd.Click += new System.EventHandler(this.mnuAdd_Click);
 			// 
@@ -73,7 +79,7 @@
 			// 
 			this.mnuEdit.Image = global::Mesen.GUI.Properties.Resources.EditLabel;
 			this.mnuEdit.Name = "mnuEdit";
-			this.mnuEdit.Size = new System.Drawing.Size(166, 22);
+			this.mnuEdit.Size = new System.Drawing.Size(186, 22);
 			this.mnuEdit.Text = "Edit";
 			this.mnuEdit.Click += new System.EventHandler(this.mnuEdit_Click);
 			// 
@@ -81,20 +87,41 @@
 			// 
 			this.mnuDelete.Image = global::Mesen.GUI.Properties.Resources.Close;
 			this.mnuDelete.Name = "mnuDelete";
-			this.mnuDelete.Size = new System.Drawing.Size(166, 22);
+			this.mnuDelete.Size = new System.Drawing.Size(186, 22);
 			this.mnuDelete.Text = "Delete";
 			this.mnuDelete.Click += new System.EventHandler(this.mnuDelete_Click);
 			// 
 			// toolStripMenuItem1
 			// 
 			this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-			this.toolStripMenuItem1.Size = new System.Drawing.Size(163, 6);
+			this.toolStripMenuItem1.Size = new System.Drawing.Size(183, 6);
+			// 
+			// mnuViewInCpuMemory
+			// 
+			this.mnuViewInCpuMemory.Image = global::Mesen.GUI.Properties.Resources.Chip;
+			this.mnuViewInCpuMemory.Name = "mnuViewInCpuMemory";
+			this.mnuViewInCpuMemory.Size = new System.Drawing.Size(186, 22);
+			this.mnuViewInCpuMemory.Text = "View in CPU memory";
+			this.mnuViewInCpuMemory.Click += new System.EventHandler(this.mnuViewInCpuMemory_Click);
+			// 
+			// mnuViewInMemoryType
+			// 
+			this.mnuViewInMemoryType.Image = global::Mesen.GUI.Properties.Resources.CheatCode;
+			this.mnuViewInMemoryType.Name = "mnuViewInMemoryType";
+			this.mnuViewInMemoryType.Size = new System.Drawing.Size(186, 22);
+			this.mnuViewInMemoryType.Text = "View in {0} memory";
+			this.mnuViewInMemoryType.Click += new System.EventHandler(this.mnuViewInMemoryType_Click);
+			// 
+			// toolStripMenuItem3
+			// 
+			this.toolStripMenuItem3.Name = "toolStripMenuItem3";
+			this.toolStripMenuItem3.Size = new System.Drawing.Size(183, 6);
 			// 
 			// mnuAddBreakpoint
 			// 
 			this.mnuAddBreakpoint.Image = global::Mesen.GUI.Properties.Resources.Breakpoint;
 			this.mnuAddBreakpoint.Name = "mnuAddBreakpoint";
-			this.mnuAddBreakpoint.Size = new System.Drawing.Size(166, 22);
+			this.mnuAddBreakpoint.Size = new System.Drawing.Size(186, 22);
 			this.mnuAddBreakpoint.Text = "Add breakpoint";
 			this.mnuAddBreakpoint.Click += new System.EventHandler(this.mnuAddBreakpoint_Click);
 			// 
@@ -102,7 +129,7 @@
 			// 
 			this.mnuAddToWatch.Image = global::Mesen.GUI.Properties.Resources.Add;
 			this.mnuAddToWatch.Name = "mnuAddToWatch";
-			this.mnuAddToWatch.Size = new System.Drawing.Size(166, 22);
+			this.mnuAddToWatch.Size = new System.Drawing.Size(186, 22);
 			this.mnuAddToWatch.Text = "Add to watch";
 			this.mnuAddToWatch.Click += new System.EventHandler(this.mnuAddToWatch_Click);
 			// 
@@ -110,20 +137,20 @@
 			// 
 			this.mnuFindOccurrences.Image = global::Mesen.GUI.Properties.Resources.Find;
 			this.mnuFindOccurrences.Name = "mnuFindOccurrences";
-			this.mnuFindOccurrences.Size = new System.Drawing.Size(166, 22);
+			this.mnuFindOccurrences.Size = new System.Drawing.Size(186, 22);
 			this.mnuFindOccurrences.Text = "Find Occurrences";
 			this.mnuFindOccurrences.Click += new System.EventHandler(this.mnuFindOccurrences_Click);
 			// 
 			// toolStripMenuItem2
 			// 
 			this.toolStripMenuItem2.Name = "toolStripMenuItem2";
-			this.toolStripMenuItem2.Size = new System.Drawing.Size(163, 6);
+			this.toolStripMenuItem2.Size = new System.Drawing.Size(183, 6);
 			// 
 			// mnuShowComments
 			// 
 			this.mnuShowComments.CheckOnClick = true;
 			this.mnuShowComments.Name = "mnuShowComments";
-			this.mnuShowComments.Size = new System.Drawing.Size(166, 22);
+			this.mnuShowComments.Size = new System.Drawing.Size(186, 22);
 			this.mnuShowComments.Text = "Show Comments";
 			this.mnuShowComments.Click += new System.EventHandler(this.mnuShowComments_Click);
 			// 
@@ -199,5 +226,8 @@
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem2;
 		private System.Windows.Forms.ColumnHeader colComment;
 		private System.Windows.Forms.ToolStripMenuItem mnuShowComments;
+		private System.Windows.Forms.ToolStripMenuItem mnuViewInCpuMemory;
+		private System.Windows.Forms.ToolStripMenuItem mnuViewInMemoryType;
+		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem3;
 	}
 }

@@ -511,6 +511,7 @@
 			<Control ID="chkDisableCheats">Disable all cheats</Control>
 
 			<Control ID="tpgCheatFinder">Cheat Finder</Control>
+			<Control ID="grpFilters">Filters</Control>
 			<Control ID="btnReset">Reset</Control>
 			<Control ID="btnUndo">Undo</Control>
 			<Control ID="lblCurrentValue">Current value is</Control>

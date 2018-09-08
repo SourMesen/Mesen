@@ -511,6 +511,7 @@
 			<Control ID="chkDisableCheats">Désactiver tous les codes</Control>
 
 			<Control ID="tpgCheatFinder">Recherche de codes</Control>
+			<Control ID="grpFilters">Filtres</Control>
 			<Control ID="btnReset">Réinitialiser</Control>
 			<Control ID="btnUndo">Annuler</Control>
 			<Control ID="lblCurrentValue">La valeur courante est</Control>

@@ -31,6 +31,8 @@ namespace Mesen.GUI.Debugger
 		{
 			InitializeComponent();
 
+			DebugInfo.ApplyConfig();
+
 			List<string> builtInScripts = new List<string> { "DmcCapture.lua", "DrawMode.lua", "Example.lua", "GameBoyMode.lua", "Grid.lua", "LogParallax.lua", "ModifyScreen.lua", "NtscSafeArea.lua", "ReverseMode.lua", "SpriteBox.lua" };
 			foreach(string script in builtInScripts) {
 				ToolStripItem item = mnuBuiltInScripts.DropDownItems.Add(script);
@@ -468,6 +470,13 @@ namespace Mesen.GUI.Debugger
 		private void mnuApiReference_Click(object sender, EventArgs e)
 		{
 			Process.Start("https://www.mesen.ca/ApiReference.php");
+		}
+
+		private void mnuSetScriptTimeout_Click(object sender, EventArgs e)
+		{
+			using(frmSetScriptTimeout frm = new frmSetScriptTimeout()) {
+				frm.ShowDialog();
+			}
 		}
 
 		static readonly List<List<string>> _availableFunctions = new List<List<string>>() {

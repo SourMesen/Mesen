@@ -153,6 +153,10 @@ namespace Mesen.GUI.Config
 		public XmlKeys LabelList_AddToWatch = Keys.None;
 		[ShortcutName("Label List: Find Occurrences")]
 		public XmlKeys LabelList_FindOccurrences = Keys.None;
+		[ShortcutName("Label List: View in CPU Memory")]
+		public XmlKeys LabelList_ViewInCpuMemory = Keys.None;
+		[ShortcutName("Label List: View in [memory type]")]
+		public XmlKeys LabelList_ViewInMemoryType = Keys.None;
 
 		[ShortcutName("Breakpoint List: Add Breakpoint")]
 		public XmlKeys BreakpointList_Add = Keys.Insert;
@@ -190,6 +194,12 @@ namespace Mesen.GUI.Config
 		public XmlKeys MemoryViewer_Import = Keys.Control | Keys.O;
 		[ShortcutName("Export")]
 		public XmlKeys MemoryViewer_Export = Keys.Control | Keys.S;
+		[ShortcutName("View in CPU Memory")]
+		public XmlKeys MemoryViewer_ViewInCpuMemory = Keys.None;
+		[ShortcutName("View in [memory type]")]
+		public XmlKeys MemoryViewer_ViewInMemoryType = Keys.None;
+		[ShortcutName("View in disassembly")]
+		public XmlKeys MemoryViewer_ViewInDisassembly = Keys.None;
 
 		//Script Window
 		[ShortcutName("Open Script")]
