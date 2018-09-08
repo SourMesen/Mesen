@@ -22,7 +22,7 @@
 			<Control ID="mnuInsertCoin2">投币 2</Control>
 			<Control ID="mnuInsertCoin3">投币 3 (双系统)</Control>
 			<Control ID="mnuInsertCoin4">投币 4 (双系统)</Control>
-			<Control ID="mnuInputCode">输入条码</Control>
+			<Control ID="mnuInputBarode">输入条码</Control>
 			<Control ID="mnuTapeRecorder">磁带录音</Control>
 			<Control ID="mnuLoadTapeFile">从文件载入...</Control>
 			<Control ID="mnuStartRecordTapeFile">记录到文件...</Control>
@@ -323,7 +323,7 @@
 			<Control ID="lblClockRate">时钟频率:</Control>
 			<Control ID="lblClockRatePercent">% (默认:100%)</Control>
 
-			<Control ID="grpPpuTiming">PPU垂直空白配置</Control>
+			<Control ID="grpPpuTiming">PPU 垂直空白配置</Control>
 			<Control ID="lblExtraScanlinesBeforeNmi">NMI 之前的其他扫描线:</Control>
 			<Control ID="lblExtraScanlinesAfterNmi">NMI 之后的其他扫描线:</Control>
 			<Control ID="lblEffectiveClockRate">有效时钟频率 (NTSC):</Control>
@@ -500,7 +500,7 @@
 			<Control ID="chkDisableCheats">禁用全部作弊</Control>
 
 			<Control ID="tpgCheatFinder">查找作弊</Control>
-			<Control ID="grpFilters">Filters</Control>
+			<Control ID="grpFilters">过滤</Control>
 			<Control ID="btnReset">重设</Control>
 			<Control ID="btnUndo">撤消</Control>
 			<Control ID="lblCurrentValue">现值</Control>
@@ -554,7 +554,7 @@
 			<Control ID="btnUpdate">更新</Control>
 			<Control ID="btnCancel">取消</Control>
 		</Form>
-		<Form ID="frmSelectRom" Title="选择ROM...">
+		<Form ID="frmSelectRom" Title="选择 ROM...">
 			<Control ID="lblSearch">搜索:</Control>
 			<Control ID="btnOK">确定</Control>
 			<Control ID="btnCancel">取消</Control>
