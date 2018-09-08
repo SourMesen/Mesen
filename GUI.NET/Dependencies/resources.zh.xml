@@ -22,7 +22,7 @@
 			<Control ID="mnuInsertCoin2">投币 2</Control>
 			<Control ID="mnuInsertCoin3">投币 3 (双系统)</Control>
 			<Control ID="mnuInsertCoin4">投币 4 (双系统)</Control>
-			<Control ID="mnuInputBarode">输入条码</Control>
+			<Control ID="mnuInputBarcode">输入条码</Control>
 			<Control ID="mnuTapeRecorder">磁带录音</Control>
 			<Control ID="mnuLoadTapeFile">从文件载入...</Control>
 			<Control ID="mnuStartRecordTapeFile">记录到文件...</Control>
@@ -392,8 +392,10 @@
 			<Control ID="chkShowFrameCounter">显示帧数</Control>
 			<Control ID="chkShowGameTimer">显示游戏计时器</Control>
 			<Control ID="chkShowVsConfigOnLoad">载入街机游戏时显示配置窗口</Control>
+
 			<Control ID="lblRewind">保留</Control>
 			<Control ID="lblRewindMinutes">分钟倒带数据 (1MB 内存/分钟)</Control>
+
 			<Control ID="tpgShortcuts">快捷键</Control>
 			<Control ID="lblShortcutWarning">【警告】快捷键有冲突，如果您不是故意这样做，请重新检查并修正.</Control>
 			<Control ID="colAction">操作</Control>
