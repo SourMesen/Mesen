@@ -5,10 +5,11 @@
 #include "VideoDecoder.h"
 #include "RewindManager.h"
 #include "HdPackBuilder.h"
+#include "HdPpu.h"
 
 class ControlManager;
 
-class HdBuilderPpu : public PPU
+class HdBuilderPpu : public HdPpu
 {
 private:
 	HdPackBuilder* _hdPackBuilder;
@@ -86,6 +87,10 @@ protected:
 			//"If the current VRAM address points in the range $3F00-$3FFF during forced blanking, the color indicated by this palette location will be shown on screen instead of the backdrop color."
 			_currentOutputBuffer[(_scanline << 8) + _cycle - 1] = _paletteRAM[_state.VideoRamAddr & 0x1F];
 		}
+
+		if(_hdData) {
+			HdPpu::DrawPixel();
+		}
 	}
 
 	void WriteRAM(uint16_t addr, uint8_t value)
@@ -107,7 +112,7 @@ protected:
 	}
 
 public:
-	HdBuilderPpu(shared_ptr<Console> console, HdPackBuilder* hdPackBuilder, uint32_t chrRamBankSize) : PPU(console)
+	HdBuilderPpu(shared_ptr<Console> console, HdPackBuilder* hdPackBuilder, uint32_t chrRamBankSize, shared_ptr<HdPackData> hdData) : HdPpu(console, hdData.get())
 	{
 		_hdPackBuilder = hdPackBuilder;
 		_chrRamBankSize = chrRamBankSize;
@@ -117,6 +122,10 @@ public:
 
 	void SendFrame()
 	{
-		PPU::SendFrame();
+		if(_hdData) {
+			HdPpu::SendFrame();
+		} else {
+			PPU::SendFrame();
+		}
 	}
 };

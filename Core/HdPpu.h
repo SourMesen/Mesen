@@ -13,14 +13,15 @@ private:
 	HdScreenInfo *_screenInfo[2];
 	HdScreenInfo *_info;
 	uint32_t _version;
-	HdPackData *_hdData = nullptr;
 
 protected:
+	HdPackData *_hdData = nullptr;
+
 	void DrawPixel() override;
 
 public:
 	HdPpu(shared_ptr<Console> console, HdPackData* hdData);
-	~HdPpu();
+	virtual ~HdPpu();
 
 	void SendFrame() override;
 };

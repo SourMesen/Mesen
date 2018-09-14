@@ -1138,7 +1138,7 @@ void Console::StartRecordingHdPack(string saveFolder, ScaleFilterType filterType
 
 	_memoryManager->UnregisterIODevice(_ppu.get());
 	_ppu.reset();
-	_ppu.reset(new HdBuilderPpu(shared_from_this(), _hdPackBuilder.get(), chrRamBankSize));
+	_ppu.reset(new HdBuilderPpu(shared_from_this(), _hdPackBuilder.get(), chrRamBankSize, _hdData));
 	_memoryManager->RegisterIODevice(_ppu.get());
 
 	shared_ptr<Debugger> debugger = _debugger;
@@ -1159,7 +1159,11 @@ void Console::StopRecordingHdPack()
 
 		_memoryManager->UnregisterIODevice(_ppu.get());
 		_ppu.reset();
-		_ppu.reset(new PPU(shared_from_this()));
+		if(_hdData && (!_hdData->Tiles.empty() || !_hdData->Backgrounds.empty())) {
+			_ppu.reset(new HdPpu(shared_from_this(), _hdData.get()));
+		} else {
+			_ppu.reset(new PPU(shared_from_this()));
+		}
 		_memoryManager->RegisterIODevice(_ppu.get());
 		_hdPackBuilder.reset();
 
