@@ -148,17 +148,19 @@ For CHR RAM games, `tile data` is a 32-character hexadecimal string representing
 
 The memoryCheck and ppuMemoryCheck conditions are used to compare the value stored at 2 different memory addresses together. (Use the `ppuMemoryCheck` variant to check PPU memory)
 
-**Syntax**: `<condition>[name - text], [conditionType - text], [memory address 1 - hex], [operator - string], [memory address 2 - hex]`  
+**Syntax**: `<condition>[name - text], [conditionType - text], [memory address 1 - hex], [operator - string], [memory address 2 - hex], [mask - hex (optional)]`  
 **Supported operators**: `==`, `!=`, `>`, `<`, `>=`, `<=`  
-**Example**: `<condition>myCondition,memoryCheck,8FFF,>,8000` (If the value stored at $8FFF is greater than the value stored at $8000, the condition will be true)
+**Example**: `<condition>myCondition,memoryCheck,8FFF,>,8000` (If the value stored at $8FFF is greater than the value stored at $8000, the condition will be true)  
+**Example (with mask)**: `<condition>myCondition,memoryCheck,8FFF,==,8000,10` (If the bit 4 of the value stored at $8FFF is equal to bit 4 of the value at $8000, the condition will be true.  i.e: `([$8FFF] & $10) == ([$8000] & $10)`)
 
 #### memoryCheckConstant / ppuMemoryCheckConstant ####
 
 The memoryCheck and ppuMemoryCheck conditions are used to compare the value stored at a memory address with a constant.  (Use the `ppuMemoryCheckConstant` variant to check PPU memory)
 
-**Syntax**: `<condition>[name - text], [conditionType - text], [memory address - hex], [operator - string], [constant - hex]`  
+**Syntax**: `<condition>[name - text], [conditionType - text], [memory address - hex], [operator - string], [constant - hex], [mask - hex (optional)]`  
 **Supported operators**: `==`, `!=`, `>`, `<`, `>=`, `<=`  
-**Example**: `<condition>myCondition,memoryCheck,8FFF,==,3F` (If the value stored at $8FFF is equal to $3F, the condition will be true)
+**Example**: `<condition>myCondition,memoryCheck,8FFF,==,3F` (If the value stored at $8FFF is equal to $3F, the condition will be true)  
+**Example (with mask)**: `<condition>myCondition,memoryCheck,8FFF,==,1F,3F` (If the value stored at $8FFF ANDed with $3F is equal to $1F then the condition will be true. i.e: `([$8FFF] & $3F) == $1F`)
 
 #### frameRange ####
 
