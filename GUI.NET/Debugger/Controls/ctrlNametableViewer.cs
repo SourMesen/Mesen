@@ -448,5 +448,15 @@ namespace Mesen.GUI.Debugger.Controls
 			}
 			Clipboard.SetText(sb.ToString());
 		}
+
+		private void mnuExportToPng_Click(object sender, EventArgs e)
+		{
+			using(SaveFileDialog sfd = new SaveFileDialog()) {
+				sfd.SetFilter("PNG files|*.png");
+				if(sfd.ShowDialog() == DialogResult.OK) {
+					_nametableImage.Save(sfd.FileName, System.Drawing.Imaging.ImageFormat.Png);
+				}
+			}
+		}
 	}
 }

@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using System.Runtime.InteropServices;
 using Mesen.GUI.Controls;
 using Mesen.GUI.Config;
+using Mesen.GUI.Forms;
 
 namespace Mesen.GUI.Debugger.Controls
 {
@@ -466,14 +467,32 @@ namespace Mesen.GUI.Debugger.Controls
 			CopyToClipboard();
 		}
 
+		private Bitmap GetCopyBitmap()
+		{
+			Bitmap copy = new Bitmap(128, 256);
+			using(Graphics g = Graphics.FromImage(copy)) {
+				g.DrawImage(_originalChrBanks[0], 0, 0);
+				g.DrawImage(_originalChrBanks[1], 0, 128);
+			}
+			return copy;
+		}
+
 		public void CopyToClipboard()
 		{
-			using(Bitmap copy = new Bitmap(128, 256)) {
-				using(Graphics g = Graphics.FromImage(copy)) {
-					g.DrawImage(_originalChrBanks[0], 0, 0);
-					g.DrawImage(_originalChrBanks[1], 0, 128);
-				}
+			using(Bitmap copy = GetCopyBitmap()) {
 				Clipboard.SetImage(copy);
+			}
+		}
+
+		private void mnuExportToPng_Click(object sender, EventArgs e)
+		{
+			using(SaveFileDialog sfd = new SaveFileDialog()) {
+				sfd.SetFilter("PNG files|*.png");
+				if(sfd.ShowDialog() == DialogResult.OK) {
+					using(Bitmap copy = GetCopyBitmap()) {
+						copy.Save(sfd.FileName, System.Drawing.Imaging.ImageFormat.Png);
+					}
+				}
 			}
 		}
 	}

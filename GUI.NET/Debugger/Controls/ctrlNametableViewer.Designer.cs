@@ -68,6 +68,8 @@
 			this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
 			this.lblMirroring = new System.Windows.Forms.Label();
 			this.lblMirroringType = new System.Windows.Forms.Label();
+			this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripSeparator();
+			this.mnuExportToPng = new System.Windows.Forms.ToolStripMenuItem();
 			this.tableLayoutPanel1.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.picNametable)).BeginInit();
 			this.ctxMenu.SuspendLayout();
@@ -120,9 +122,11 @@
             this.toolStripMenuItem1,
             this.mnuCopyHdPack,
             this.mnuCopyNametableHdPack,
-            this.mnuCopyToClipboard});
+            this.toolStripMenuItem2,
+            this.mnuCopyToClipboard,
+            this.mnuExportToPng});
 			this.ctxMenu.Name = "ctxMenu";
-			this.ctxMenu.Size = new System.Drawing.Size(261, 98);
+			this.ctxMenu.Size = new System.Drawing.Size(261, 148);
 			this.ctxMenu.Opening += new System.ComponentModel.CancelEventHandler(this.ctxMenu_Opening);
 			// 
 			// mnuShowInChrViewer
@@ -532,6 +536,19 @@
 			this.lblMirroringType.TabIndex = 1;
 			this.lblMirroringType.Text = "Horizontal";
 			// 
+			// toolStripMenuItem2
+			// 
+			this.toolStripMenuItem2.Name = "toolStripMenuItem2";
+			this.toolStripMenuItem2.Size = new System.Drawing.Size(257, 6);
+			// 
+			// mnuExportToPng
+			// 
+			this.mnuExportToPng.Image = global::Mesen.GUI.Properties.Resources.Export;
+			this.mnuExportToPng.Name = "mnuExportToPng";
+			this.mnuExportToPng.Size = new System.Drawing.Size(260, 22);
+			this.mnuExportToPng.Text = "Export image to PNG";
+			this.mnuExportToPng.Click += new System.EventHandler(this.mnuExportToPng_Click);
+			// 
 			// ctrlNametableViewer
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -598,5 +615,7 @@
 		private System.Windows.Forms.CheckBox chkUseGrayscalePalette;
 		private System.Windows.Forms.CheckBox chkHighlightTileUpdates;
 		private System.Windows.Forms.CheckBox chkHighlightAttributeUpdates;
+		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem2;
+		private System.Windows.Forms.ToolStripMenuItem mnuExportToPng;
 	}
 }

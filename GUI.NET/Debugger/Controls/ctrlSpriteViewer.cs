@@ -11,6 +11,7 @@ using System.Runtime.InteropServices;
 using Mesen.GUI.Controls;
 using System.Drawing.Imaging;
 using Mesen.GUI.Config;
+using Mesen.GUI.Forms;
 
 namespace Mesen.GUI.Debugger.Controls
 {
@@ -339,15 +340,33 @@ namespace Mesen.GUI.Debugger.Controls
 			CopyToClipboard();
 		}
 
-		public void CopyToClipboard()
+		private Bitmap GetCopyBitmap()
 		{
 			Bitmap src = _copyPreview ? _screenPreview : _imgSprites;
-			using(Bitmap target = new Bitmap(src.Width, src.Height)) {
-				using(Graphics g = Graphics.FromImage(target)) {
-					g.Clear(Color.FromArgb(64, 64, 64));
-					g.DrawImage(src, 0, 0);
-				}
+			Bitmap target = new Bitmap(src.Width, src.Height);
+			using(Graphics g = Graphics.FromImage(target)) {
+				g.Clear(Color.FromArgb(64, 64, 64));
+				g.DrawImage(src, 0, 0);
+			}
+			return target;
+		}
+
+		public void CopyToClipboard()
+		{
+			using(Bitmap target = GetCopyBitmap()) {
 				Clipboard.SetImage(target);
+			}
+		}
+
+		private void mnuExportToPng_Click(object sender, EventArgs e)
+		{
+			using(SaveFileDialog sfd = new SaveFileDialog()) {
+				sfd.SetFilter("PNG files|*.png");
+				if(sfd.ShowDialog() == DialogResult.OK) {
+					using(Bitmap target = GetCopyBitmap()) {
+						target.Save(sfd.FileName, System.Drawing.Imaging.ImageFormat.Png);
+					}
+				}
 			}
 		}
 

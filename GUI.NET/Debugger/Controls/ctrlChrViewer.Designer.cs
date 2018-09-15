@@ -63,6 +63,8 @@
 			this.mnuCopyToClipboard = new System.Windows.Forms.ToolStripMenuItem();
 			this.picChrBank2 = new System.Windows.Forms.PictureBox();
 			this.toolTip = new System.Windows.Forms.ToolTip(this.components);
+			this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
+			this.mnuExportToPng = new System.Windows.Forms.ToolStripMenuItem();
 			this.tableLayoutPanel3.SuspendLayout();
 			this.grpDisplayOptions.SuspendLayout();
 			this.tableLayoutPanel1.SuspendLayout();
@@ -464,9 +466,11 @@
 			// 
 			this.ctxMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.mnuCopyHdPack,
-            this.mnuCopyToClipboard});
+            this.toolStripMenuItem1,
+            this.mnuCopyToClipboard,
+            this.mnuExportToPng});
 			this.ctxMenu.Name = "ctxMenu";
-			this.ctxMenu.Size = new System.Drawing.Size(222, 48);
+			this.ctxMenu.Size = new System.Drawing.Size(222, 98);
 			this.ctxMenu.Opening += new System.ComponentModel.CancelEventHandler(this.ctxMenu_Opening);
 			// 
 			// mnuCopyHdPack
@@ -505,6 +509,19 @@
 			this.toolTip.AutoPopDelay = 32700;
 			this.toolTip.InitialDelay = 10;
 			this.toolTip.ReshowDelay = 10;
+			// 
+			// toolStripMenuItem1
+			// 
+			this.toolStripMenuItem1.Name = "toolStripMenuItem1";
+			this.toolStripMenuItem1.Size = new System.Drawing.Size(218, 6);
+			// 
+			// mnuExportToPng
+			// 
+			this.mnuExportToPng.Image = global::Mesen.GUI.Properties.Resources.Export;
+			this.mnuExportToPng.Name = "mnuExportToPng";
+			this.mnuExportToPng.Size = new System.Drawing.Size(221, 22);
+			this.mnuExportToPng.Text = "Export image to PNG";
+			this.mnuExportToPng.Click += new System.EventHandler(this.mnuExportToPng_Click);
 			// 
 			// ctrlChrViewer
 			// 
@@ -575,5 +592,7 @@
 		private System.Windows.Forms.ToolStripMenuItem mnuCopyToClipboard;
 		private System.Windows.Forms.CheckBox chkAutoPalette;
 		private System.Windows.Forms.CheckBox chkShowSingleColorTilesInGrayscale;
+		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem1;
+		private System.Windows.Forms.ToolStripMenuItem mnuExportToPng;
 	}
 }
