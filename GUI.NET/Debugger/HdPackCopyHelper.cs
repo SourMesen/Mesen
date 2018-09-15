@@ -45,7 +45,7 @@ namespace Mesen.GUI.Debugger
 						sb.Append(_ppuMemory[tileAddr + i].ToString("X2"));
 					}
 				} else {
-					sb.Append(_absoluteTileIndexes[tileAddr / 16].ToString());
+					sb.Append(_absoluteTileIndexes[tileAddr / 16].ToString("X2"));
 				}
 			}
 

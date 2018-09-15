@@ -173,10 +173,10 @@ The condition is true when the following expression is true:
 ### &lt;tile&gt; tag ###
 
 **Syntax**: `<tile>[img index - integer], [tile data], [palette data], [x - integer], [y - integer], [brightness - 0.0 to 1.0], [default tile - Y or N]`  
-**Example (CHR ROM)**: `<tile>0,20,FF16360F,0,0,1,N`  
+**Example (CHR ROM)**: `<tile>0,2E,FF16360F,0,0,1,N`  
 **Example (CHR RAM)**: `<tile>0,0E0E079C1E3EA7076101586121010000,0F100017,176,1168,1,N`
 
-For CHR ROM games, `tile data` is an integer representing the position of the original tile in CHR ROM.  
+For CHR ROM games, `tile data` is an integer (in hexadecimal) representing the position of the original tile in CHR ROM.  
 For CHR RAM games, `tile data` is a 32-character hexadecimal string representing all 16 bytes of the tile.  
 `palette data` is always an 8-character hexadecimal string representing all 4 bytes of the palette used for the tile.  For sprites, the first byte is always "FF".
 
@@ -305,6 +305,7 @@ These registers return the ASCII string `NEA` (NES Enhanced Audio) - this can be
 ### Version 103 ###
 
 * Added a `Mask` parameter to the memoryCheck and memoryCheckConstant conditions
+* Tile indexes for the `<tile>` tag are now in hex instead of decimal (affects CHR ROM games only)
 
 ### Version 102 ###
 

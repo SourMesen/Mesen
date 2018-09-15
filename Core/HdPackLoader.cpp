@@ -298,7 +298,11 @@ void HdPackLoader::ProcessTileTag(vector<string> &tokens, vector<HdPackCondition
 			tileInfo->IsChrRamTile = true;
 			tileInfo->TileIndex = -1;
 		} else {
-			tileInfo->TileIndex = std::stoi(tileData);
+			if(_data->Version <= 102) {
+				tileInfo->TileIndex = std::stoi(tileData);
+			} else {
+				tileInfo->TileIndex = HexUtilities::FromHex(tileData);
+			}
 			tileInfo->IsChrRamTile = false;
 		}
 		tileInfo->PaletteColors = HexUtilities::FromHex(tokens[index++]);

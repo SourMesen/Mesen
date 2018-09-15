@@ -278,7 +278,7 @@ struct HdPackTileInfo : public HdTileKey
 		} else {
 			out << "<tile>" <<
 				pngIndex << "," <<
-				TileIndex << "," <<
+				HexUtilities::ToHex(TileIndex) << "," <<
 				HexUtilities::ToHex(PaletteColors, true) << "," <<
 				X << "," <<
 				Y << "," <<
