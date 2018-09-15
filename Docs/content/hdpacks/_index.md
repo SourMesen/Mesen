@@ -159,8 +159,8 @@ The memoryCheck and ppuMemoryCheck conditions are used to compare the value stor
 
 **Syntax**: `<condition>[name - text], [conditionType - text], [memory address - hex], [operator - string], [constant - hex], [mask - hex (optional)]`  
 **Supported operators**: `==`, `!=`, `>`, `<`, `>=`, `<=`  
-**Example**: `<condition>myCondition,memoryCheck,8FFF,==,3F` (If the value stored at $8FFF is equal to $3F, the condition will be true)  
-**Example (with mask)**: `<condition>myCondition,memoryCheck,8FFF,==,1F,3F` (If the value stored at $8FFF ANDed with $3F is equal to $1F then the condition will be true. i.e: `([$8FFF] & $3F) == $1F`)
+**Example**: `<condition>myCondition,memoryCheckConstant,8FFF,==,3F` (If the value stored at $8FFF is equal to $3F, the condition will be true)  
+**Example (with mask)**: `<condition>myCondition,memoryCheckConstant,8FFF,==,1F,3F` (If the value stored at $8FFF ANDed with $3F is equal to $1F then the condition will be true. i.e: `([$8FFF] & $3F) == $1F`)
 
 #### frameRange ####
 
