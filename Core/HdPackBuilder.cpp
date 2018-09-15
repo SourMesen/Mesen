@@ -4,6 +4,7 @@
 #include "HdPackBuilder.h"
 #include "HdNesPack.h"
 #include "Console.h"
+#include "ConsolePauseHelper.h"
 
 HdPackBuilder* HdPackBuilder::_instance = nullptr;
 
@@ -350,18 +351,17 @@ void HdPackBuilder::SaveHdPack()
 
 void HdPackBuilder::GetChrBankList(uint32_t *banks)
 {
-	_instance->_console->Pause();
+	ConsolePauseHelper helper(_instance->_console.get());
 	for(std::pair<const uint32_t, std::map<uint32_t, vector<HdPackTileInfo*>>> &kvp : _instance->_tilesByChrBankByPalette) {
 		*banks = kvp.first;
 		banks++;
 	}
 	*banks = -1;
-	_instance->_console->Resume();
 }
 
 void HdPackBuilder::GetBankPreview(uint32_t bankNumber, uint32_t pageNumber, uint32_t *rgbBuffer)
 {
-	_instance->_console->Pause();
+	ConsolePauseHelper helper(_instance->_console.get());
 
 	for(uint32_t i = 0; i < 128 * 128 * _instance->_hdData.Scale*_instance->_hdData.Scale; i++) {
 		rgbBuffer[i] = 0xFF666666;
@@ -410,6 +410,4 @@ void HdPackBuilder::GetBankPreview(uint32_t bankNumber, uint32_t pageNumber, uin
 			}
 		}
 	}
-
-	_instance->_console->Resume();
 }

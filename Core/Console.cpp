@@ -45,6 +45,7 @@
 #include "DebugHud.h"
 #include "NotificationManager.h"
 #include "HistoryViewer.h"
+#include "ConsolePauseHelper.h"
 
 Console::Console(shared_ptr<Console> master, EmulationSettings* initialSettings)
 {
@@ -1129,7 +1130,8 @@ void Console::LoadHdPack(VirtualFile &romFile, VirtualFile &patchFile)
 
 void Console::StartRecordingHdPack(string saveFolder, ScaleFilterType filterType, uint32_t scale, uint32_t flags, uint32_t chrRamBankSize)
 {
-	Pause();
+	ConsolePauseHelper helper(this);
+
 	std::stringstream saveState;
 	SaveState(saveState);
 	
@@ -1147,13 +1149,15 @@ void Console::StartRecordingHdPack(string saveFolder, ScaleFilterType filterType
 	}
 
 	LoadState(saveState);
-	Resume();
+
+	_soundMixer->StopAudio();
 }
 
 void Console::StopRecordingHdPack()
 {
 	if(_hdPackBuilder) {
-		Pause();
+		ConsolePauseHelper helper(this);
+
 		std::stringstream saveState;
 		SaveState(saveState);
 
@@ -1173,7 +1177,8 @@ void Console::StopRecordingHdPack()
 		}
 
 		LoadState(saveState);
-		Resume();
+
+		_soundMixer->StopAudio();
 	}
 }
 

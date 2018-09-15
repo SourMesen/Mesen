@@ -703,11 +703,15 @@ bool Debugger::SleepUntilResume(BreakSource source)
 		source = BreakSource::BreakAfterSuspend;
 	}
 
-	if((stepCount == 0 || _breakRequested) && !_stopFlag && _suspendCount == 0) {
+	//Read both values here since they might change while executing the code below
+	int32_t preventResume = _preventResume;
+	bool breakRequested = _breakRequested;
+
+	if((stepCount == 0 || breakRequested) && !_stopFlag && _suspendCount == 0) {
 		//Break
 		auto lock = _breakLock.AcquireSafe();
 				
-		if(_preventResume == 0) {
+		if(preventResume == 0) {
 			_console->GetSoundMixer()->StopAudio();
 			_console->GetNotificationManager()->SendNotification(ConsoleNotificationType::CodeBreak, (void*)(uint64_t)source);
 			ProcessEvent(EventType::CodeBreak);
@@ -718,7 +722,7 @@ bool Debugger::SleepUntilResume(BreakSource source)
 		}
 
 		_executionStopped = true;
-		_pausedForDebugHelper = _breakRequested;
+		_pausedForDebugHelper = breakRequested;
 		while(((stepCount == 0 || _breakRequested) && !_stopFlag && _suspendCount == 0) || _preventResume > 0) {
 			std::this_thread::sleep_for(std::chrono::duration<int, std::milli>(10));
 			if(stepCount == 0) {
@@ -1039,7 +1043,7 @@ bool Debugger::IsExecutionStopped()
 
 bool Debugger::IsPauseIconShown()
 {
-	return IsExecutionStopped() && !CheckFlag(DebuggerFlags::HidePauseIcon) && _preventResume == 0 && !_pausedForDebugHelper;
+	return (_executionStopped || _console->IsPaused()) && !CheckFlag(DebuggerFlags::HidePauseIcon) && _preventResume == 0 && !_pausedForDebugHelper;
 }
 
 void Debugger::PreventResume()

@@ -1468,6 +1468,9 @@
     <ClInclude Include="StereoCombFilter.h">
       <Filter>Nes\APU\Filters</Filter>
     </ClInclude>
+    <ClInclude Include="ConsolePauseHelper.h">
+      <Filter>Misc</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
