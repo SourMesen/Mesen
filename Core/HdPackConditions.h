@@ -62,12 +62,14 @@ struct HdPackBaseMemoryCondition : public HdPackCondition
 	uint32_t OperandA;
 	HdPackConditionOperator Operator;
 	uint32_t OperandB;
+	uint8_t Mask;
 
-	void Initialize(uint32_t operandA, HdPackConditionOperator op, uint32_t operandB)
+	void Initialize(uint32_t operandA, HdPackConditionOperator op, uint32_t operandB, uint8_t mask)
 	{
 		OperandA = operandA;
 		Operator = op;
 		OperandB = operandB;
+		Mask = mask;
 	}
 
 	bool IsPpuCondition()
@@ -90,6 +92,8 @@ struct HdPackBaseMemoryCondition : public HdPackCondition
 		}
 		out << ",";
 		out << HexUtilities::ToHex(OperandB);
+		out << ",";
+		out << HexUtilities::ToHex(Mask);
 
 		return out.str();
 	}
@@ -138,13 +142,16 @@ struct HdPackMemoryCheckCondition : public HdPackBaseMemoryCondition
 
 	bool InternalCheckCondition(HdScreenInfo *screenInfo, int x, int y, HdPpuTileInfo* tile) override
 	{
+		uint8_t a = (uint8_t)(screenInfo->WatchedAddressValues[OperandA] & Mask);
+		uint8_t b = (uint8_t)(screenInfo->WatchedAddressValues[OperandB] & Mask);
+
 		switch(Operator) {
-			case HdPackConditionOperator::Equal: return screenInfo->WatchedAddressValues[OperandA] == screenInfo->WatchedAddressValues[OperandB];
-			case HdPackConditionOperator::NotEqual: return screenInfo->WatchedAddressValues[OperandA] != screenInfo->WatchedAddressValues[OperandB];
-			case HdPackConditionOperator::GreaterThan: return screenInfo->WatchedAddressValues[OperandA] > screenInfo->WatchedAddressValues[OperandB];
-			case HdPackConditionOperator::LowerThan: return screenInfo->WatchedAddressValues[OperandA] < screenInfo->WatchedAddressValues[OperandB];
-			case HdPackConditionOperator::LowerThanOrEqual: return screenInfo->WatchedAddressValues[OperandA] <= screenInfo->WatchedAddressValues[OperandB];
-			case HdPackConditionOperator::GreaterThanOrEqual: return screenInfo->WatchedAddressValues[OperandA] >= screenInfo->WatchedAddressValues[OperandB];
+			case HdPackConditionOperator::Equal: return a == b;
+			case HdPackConditionOperator::NotEqual: return a != b;
+			case HdPackConditionOperator::GreaterThan: return a > b;
+			case HdPackConditionOperator::LowerThan: return a < b;
+			case HdPackConditionOperator::LowerThanOrEqual: return a <= b;
+			case HdPackConditionOperator::GreaterThanOrEqual: return a >= b;
 		}
 		return false;
 	}
@@ -157,13 +164,16 @@ struct HdPackMemoryCheckConstantCondition : public HdPackBaseMemoryCondition
 
 	bool InternalCheckCondition(HdScreenInfo *screenInfo, int x, int y, HdPpuTileInfo* tile) override
 	{
+		uint8_t a = (uint8_t)(screenInfo->WatchedAddressValues[OperandA] & Mask);
+		uint8_t b = OperandB;
+
 		switch(Operator) {
-			case HdPackConditionOperator::Equal: return screenInfo->WatchedAddressValues[OperandA] == OperandB;
-			case HdPackConditionOperator::NotEqual: return screenInfo->WatchedAddressValues[OperandA] != OperandB;
-			case HdPackConditionOperator::GreaterThan: return screenInfo->WatchedAddressValues[OperandA] > OperandB;
-			case HdPackConditionOperator::LowerThan: return screenInfo->WatchedAddressValues[OperandA] < OperandB;
-			case HdPackConditionOperator::LowerThanOrEqual: return screenInfo->WatchedAddressValues[OperandA] <= OperandB;
-			case HdPackConditionOperator::GreaterThanOrEqual: return screenInfo->WatchedAddressValues[OperandA] >= OperandB;
+			case HdPackConditionOperator::Equal: return a == b;
+			case HdPackConditionOperator::NotEqual: return a != b;
+			case HdPackConditionOperator::GreaterThan: return a > b;
+			case HdPackConditionOperator::LowerThan: return a < b;
+			case HdPackConditionOperator::LowerThanOrEqual: return a <= b;
+			case HdPackConditionOperator::GreaterThanOrEqual: return a >= b;
 		}
 		return false;
 	}

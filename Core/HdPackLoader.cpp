@@ -467,6 +467,11 @@ void HdPackLoader::ProcessConditionTag(vector<string> &tokens, bool createInvert
 		}
 
 		uint32_t operandB = HexUtilities::FromHex(tokens[index++]);
+		uint32_t mask = 0xFF;
+		if(tokens.size() > 5 && _data->Version >= 103) {
+			checkConstraint(operandB <= 0xFF, "[HDPack] Out of range memoryCheck mask");
+			mask = HexUtilities::FromHex(tokens[index++]);
+		}
 
 		if(dynamic_cast<HdPackMemoryCheckCondition*>(condition.get())) {
 			if(usePpuMemory) {
@@ -480,7 +485,7 @@ void HdPackLoader::ProcessConditionTag(vector<string> &tokens, bool createInvert
 			checkConstraint(operandB <= 0xFF, "[HDPack] Out of range memoryCheckConstant operand");
 		}
 		_data->WatchedMemoryAddresses.emplace(operandA);
-		((HdPackBaseMemoryCondition*)condition.get())->Initialize(operandA, op, operandB);
+		((HdPackBaseMemoryCondition*)condition.get())->Initialize(operandA, op, operandB, (uint8_t)mask);
 	} else if(dynamic_cast<HdPackFrameRangeCondition*>(condition.get())) {
 		checkConstraint(_data->Version >= 101, "[HDPack] This feature requires version 101+ of HD Packs");
 		checkConstraint(tokens.size() >= 4, "[HDPack] Condition tag should contain at least 4 parameters");

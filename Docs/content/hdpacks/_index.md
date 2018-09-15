@@ -53,17 +53,16 @@ A number of options exist to control the way the PNG files are generated:
 
 Before you start recording, select the options you want to use and the location to which you want to save the HD Pack, then press the `Start Recording` button.
 
-
 ## File Format (hires.txt) ##
 
-The following are the specifications for the hires.txt file, as of version "101".
+The following are the specifications for the hires.txt file, as of version "103".
 
 ### &lt;ver&gt; tag ###
 
 **Syntax**: `<ver>[integer]`  
-**Example**: `<ver>102`
+**Example**: `<ver>103`
 
-The format's version number (currently 102).
+The format's version number (currently 103).
 
 ### &lt;scale&gt; tag ###
 
@@ -300,3 +299,14 @@ Returns the current revision of the HD Audio API.  This value is currently set t
 #### $4102/$4103/$4104: Signature ####
 
 These registers return the ASCII string `NEA` (NES Enhanced Audio) - this can be used to detect whether or not the audio API is available.
+
+## File Format Changelog ##
+
+### Version 103 ###
+
+* Added a `Mask` parameter to the memoryCheck and memoryCheckConstant conditions
+
+### Version 102 ###
+
+* Operands for memoryCheck/memoryCheckConstant conditions must now be specified in hex (used to be decimal)
+* Added the `Show Behind Background Priority Sprites` option to the `<background>` tag
