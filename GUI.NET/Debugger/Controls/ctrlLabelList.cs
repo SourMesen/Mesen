@@ -202,13 +202,13 @@ namespace Mesen.GUI.Debugger.Controls
 				CodeLabel label = (CodeLabel)item.SubItems[1].Tag;
 				if(label.AddressType != AddressType.Register && label.AddressType != AddressType.InternalRam) {
 					mnuViewInMemoryType.Text = "View in " + ResourceHelper.GetEnumText(label.AddressType);
-					mnuViewInMemoryType.Enabled = true;
+					mnuViewInMemoryType.Visible = true;
 				} else {
-					mnuViewInMemoryType.Enabled = false;
+					mnuViewInMemoryType.Visible = false;
 				}
 			} else {
 				mnuViewInCpuMemory.Enabled = false;
-				mnuViewInMemoryType.Enabled = false;
+				mnuViewInMemoryType.Visible = false;
 			}
 		}
 
@@ -359,7 +359,9 @@ namespace Mesen.GUI.Debugger.Controls
 			if(lstLabels.SelectedIndices.Count == 1) {
 				ListViewItem item = GetSelectedItem();
 				CodeLabel label = (CodeLabel)item.SubItems[1].Tag;
-				DebugWindowManager.OpenMemoryViewer((int)label.Address, label.AddressType.ToMemoryType());
+				if(label.AddressType != AddressType.Register && label.AddressType != AddressType.InternalRam) {
+					DebugWindowManager.OpenMemoryViewer((int)label.Address, label.AddressType.ToMemoryType());
+				}
 			}
 		}
 	}
