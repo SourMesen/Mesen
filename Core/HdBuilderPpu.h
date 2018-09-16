@@ -51,7 +51,6 @@ protected:
 			}
 
 			bool hasBgSprite = false;
-			DebugMemoryType memoryType = isChrRam ? DebugMemoryType::ChrRam : DebugMemoryType::ChrRom;
 			if(_lastSprite && _flags.SpritesEnabled) {
 				if(backgroundColor == 0) {
 					for(uint8_t i = 0; i < _spriteCount; i++) {

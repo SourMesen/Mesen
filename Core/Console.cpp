@@ -702,7 +702,6 @@ void Console::Run()
 	double targetTime;
 	double lastFrameMin = 9999;
 	double lastFrameMax = 0;
-	double timeLag = 0;
 	uint32_t lastFrameNumber = -1;
 	uint32_t lastPauseFrame = 0;
 	double lastDelay = GetFrameDelay();
