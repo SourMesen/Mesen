@@ -48,18 +48,18 @@ namespace Mesen.GUI.Forms.Cheats
 			this.lstAddresses = new Mesen.GUI.Debugger.Controls.ctrlAddressList();
 			this.contextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this.mnuCreateCheat = new System.Windows.Forms.ToolStripMenuItem();
-			this.flowLayoutPanel2 = new System.Windows.Forms.FlowLayoutPanel();
 			this.btnCreateCheat = new System.Windows.Forms.Button();
 			this.lblAtAddress = new System.Windows.Forms.Label();
 			this.lblAddress = new System.Windows.Forms.Label();
 			this.chkPauseGameWhileWindowActive = new System.Windows.Forms.CheckBox();
+			this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
 			this.grpFilters.SuspendLayout();
 			this.tableLayoutPanel2.SuspendLayout();
 			this.flowLayoutPanel1.SuspendLayout();
 			this.flowLayoutPanel4.SuspendLayout();
 			this.tableLayoutPanel1.SuspendLayout();
 			this.contextMenuStrip.SuspendLayout();
-			this.flowLayoutPanel2.SuspendLayout();
+			this.tableLayoutPanel3.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// tmrRefresh
@@ -72,7 +72,7 @@ namespace Mesen.GUI.Forms.Cheats
 			this.grpFilters.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.grpFilters.Location = new System.Drawing.Point(3, 3);
 			this.grpFilters.Name = "grpFilters";
-			this.grpFilters.Size = new System.Drawing.Size(399, 160);
+			this.grpFilters.Size = new System.Drawing.Size(399, 162);
 			this.grpFilters.TabIndex = 4;
 			this.grpFilters.TabStop = false;
 			this.grpFilters.Text = "Filters";
@@ -95,7 +95,7 @@ namespace Mesen.GUI.Forms.Cheats
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-			this.tableLayoutPanel2.Size = new System.Drawing.Size(393, 141);
+			this.tableLayoutPanel2.Size = new System.Drawing.Size(393, 143);
 			this.tableLayoutPanel2.TabIndex = 13;
 			// 
 			// flowLayoutPanel1
@@ -179,6 +179,12 @@ namespace Mesen.GUI.Forms.Cheats
 			// nudCurrentFilterValue
 			// 
 			this.nudCurrentFilterValue.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.nudCurrentFilterValue.DecimalPlaces = 0;
+			this.nudCurrentFilterValue.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
 			this.nudCurrentFilterValue.Location = new System.Drawing.Point(202, 4);
 			this.nudCurrentFilterValue.Margin = new System.Windows.Forms.Padding(0);
 			this.nudCurrentFilterValue.Maximum = new decimal(new int[] {
@@ -186,9 +192,21 @@ namespace Mesen.GUI.Forms.Cheats
             0,
             0,
             0});
+			this.nudCurrentFilterValue.MaximumSize = new System.Drawing.Size(10000, 21);
+			this.nudCurrentFilterValue.Minimum = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+			this.nudCurrentFilterValue.MinimumSize = new System.Drawing.Size(0, 21);
 			this.nudCurrentFilterValue.Name = "nudCurrentFilterValue";
-			this.nudCurrentFilterValue.Size = new System.Drawing.Size(41, 20);
+			this.nudCurrentFilterValue.Size = new System.Drawing.Size(41, 21);
 			this.nudCurrentFilterValue.TabIndex = 1;
+			this.nudCurrentFilterValue.Value = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
 			// 
 			// btnAddCurrentFilter
 			// 
@@ -228,8 +246,8 @@ namespace Mesen.GUI.Forms.Cheats
 			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
 			this.tableLayoutPanel1.Controls.Add(this.grpFilters, 0, 0);
 			this.tableLayoutPanel1.Controls.Add(this.lstAddresses, 1, 0);
-			this.tableLayoutPanel1.Controls.Add(this.flowLayoutPanel2, 1, 1);
 			this.tableLayoutPanel1.Controls.Add(this.chkPauseGameWhileWindowActive, 0, 1);
+			this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanel3, 1, 1);
 			this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
 			this.tableLayoutPanel1.Name = "tableLayoutPanel1";
@@ -243,9 +261,10 @@ namespace Mesen.GUI.Forms.Cheats
 			// 
 			this.lstAddresses.ContextMenuStrip = this.contextMenuStrip;
 			this.lstAddresses.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.lstAddresses.HideSelection = false;
 			this.lstAddresses.Location = new System.Drawing.Point(408, 3);
 			this.lstAddresses.Name = "lstAddresses";
-			this.lstAddresses.Size = new System.Drawing.Size(154, 160);
+			this.lstAddresses.Size = new System.Drawing.Size(154, 162);
 			this.lstAddresses.TabIndex = 3;
 			// 
 			// contextMenuStrip
@@ -263,23 +282,11 @@ namespace Mesen.GUI.Forms.Cheats
 			this.mnuCreateCheat.Text = "Create Cheat";
 			this.mnuCreateCheat.Click += new System.EventHandler(this.btnCreateCheat_Click);
 			// 
-			// flowLayoutPanel2
-			// 
-			this.flowLayoutPanel2.Controls.Add(this.btnCreateCheat);
-			this.flowLayoutPanel2.Controls.Add(this.lblAtAddress);
-			this.flowLayoutPanel2.Controls.Add(this.lblAddress);
-			this.flowLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.flowLayoutPanel2.Location = new System.Drawing.Point(405, 166);
-			this.flowLayoutPanel2.Margin = new System.Windows.Forms.Padding(0);
-			this.flowLayoutPanel2.Name = "flowLayoutPanel2";
-			this.flowLayoutPanel2.Size = new System.Drawing.Size(160, 30);
-			this.flowLayoutPanel2.TabIndex = 5;
-			// 
 			// btnCreateCheat
 			// 
 			this.btnCreateCheat.Location = new System.Drawing.Point(3, 3);
 			this.btnCreateCheat.Name = "btnCreateCheat";
-			this.btnCreateCheat.Size = new System.Drawing.Size(85, 23);
+			this.btnCreateCheat.Size = new System.Drawing.Size(85, 22);
 			this.btnCreateCheat.TabIndex = 5;
 			this.btnCreateCheat.Text = "Create Cheat";
 			this.btnCreateCheat.UseVisualStyleBackColor = true;
@@ -289,7 +296,7 @@ namespace Mesen.GUI.Forms.Cheats
 			// 
 			this.lblAtAddress.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.lblAtAddress.AutoSize = true;
-			this.lblAtAddress.Location = new System.Drawing.Point(94, 8);
+			this.lblAtAddress.Location = new System.Drawing.Point(94, 7);
 			this.lblAtAddress.Name = "lblAtAddress";
 			this.lblAtAddress.Size = new System.Drawing.Size(16, 13);
 			this.lblAtAddress.TabIndex = 6;
@@ -299,7 +306,7 @@ namespace Mesen.GUI.Forms.Cheats
 			// 
 			this.lblAddress.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.lblAddress.AutoSize = true;
-			this.lblAddress.Location = new System.Drawing.Point(116, 8);
+			this.lblAddress.Location = new System.Drawing.Point(116, 7);
 			this.lblAddress.Name = "lblAddress";
 			this.lblAddress.Size = new System.Drawing.Size(37, 13);
 			this.lblAddress.TabIndex = 7;
@@ -309,13 +316,32 @@ namespace Mesen.GUI.Forms.Cheats
 			// 
 			this.chkPauseGameWhileWindowActive.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.chkPauseGameWhileWindowActive.AutoSize = true;
-			this.chkPauseGameWhileWindowActive.Location = new System.Drawing.Point(3, 172);
+			this.chkPauseGameWhileWindowActive.Location = new System.Drawing.Point(3, 173);
 			this.chkPauseGameWhileWindowActive.Name = "chkPauseGameWhileWindowActive";
 			this.chkPauseGameWhileWindowActive.Size = new System.Drawing.Size(278, 17);
 			this.chkPauseGameWhileWindowActive.TabIndex = 6;
 			this.chkPauseGameWhileWindowActive.Text = "Automatically pause game when this window is active";
 			this.chkPauseGameWhileWindowActive.UseVisualStyleBackColor = true;
 			this.chkPauseGameWhileWindowActive.CheckedChanged += new System.EventHandler(this.chkPauseGameWhileWindowActive_CheckedChanged);
+			// 
+			// tableLayoutPanel3
+			// 
+			this.tableLayoutPanel3.ColumnCount = 4;
+			this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+			this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+			this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+			this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+			this.tableLayoutPanel3.Controls.Add(this.lblAddress, 2, 0);
+			this.tableLayoutPanel3.Controls.Add(this.btnCreateCheat, 0, 0);
+			this.tableLayoutPanel3.Controls.Add(this.lblAtAddress, 1, 0);
+			this.tableLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.tableLayoutPanel3.Location = new System.Drawing.Point(405, 168);
+			this.tableLayoutPanel3.Margin = new System.Windows.Forms.Padding(0, 0, 0, 0);
+			this.tableLayoutPanel3.Name = "tableLayoutPanel3";
+			this.tableLayoutPanel3.RowCount = 1;
+			this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+			this.tableLayoutPanel3.Size = new System.Drawing.Size(160, 28);
+			this.tableLayoutPanel3.TabIndex = 7;
 			// 
 			// ctrlCheatFinder
 			// 
@@ -333,8 +359,8 @@ namespace Mesen.GUI.Forms.Cheats
 			this.tableLayoutPanel1.ResumeLayout(false);
 			this.tableLayoutPanel1.PerformLayout();
 			this.contextMenuStrip.ResumeLayout(false);
-			this.flowLayoutPanel2.ResumeLayout(false);
-			this.flowLayoutPanel2.PerformLayout();
+			this.tableLayoutPanel3.ResumeLayout(false);
+			this.tableLayoutPanel3.PerformLayout();
 			this.ResumeLayout(false);
 
 		}
@@ -358,11 +384,11 @@ namespace Mesen.GUI.Forms.Cheats
 		private System.Windows.Forms.Button btnCreateCheat;
 		private System.Windows.Forms.Label lblPreviousValue;
 		private System.Windows.Forms.Label lblCurrentValue;
-		private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel2;
 		private System.Windows.Forms.Label lblAtAddress;
 		private System.Windows.Forms.Label lblAddress;
 		private System.Windows.Forms.ContextMenuStrip contextMenuStrip;
 		private System.Windows.Forms.ToolStripMenuItem mnuCreateCheat;
 		private System.Windows.Forms.CheckBox chkPauseGameWhileWindowActive;
+		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel3;
 	}
 }
