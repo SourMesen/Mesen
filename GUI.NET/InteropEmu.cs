@@ -822,14 +822,18 @@ namespace Mesen.GUI
 			List<byte> filenameBytes = new List<byte>();
 			for(int i = 0; i < buffer.Length - 5; i++) {
 				if(buffer[i] == '[' && buffer[i+1] == '!' && buffer[i+2] == '|' && buffer[i+3] == '!' && buffer[i+4] == ']') {
-					filenames.Add(filenameBytes);
+					if(filenameBytes.Count > 0) {
+						filenames.Add(filenameBytes);
+					}
 					filenameBytes = new List<byte>();
 					i+=4;
 				} else {
 					filenameBytes.Add(buffer[i]);
 				}
 			}
-			filenames.Add(filenameBytes);
+			if(filenameBytes.Count > 0) {
+				filenames.Add(filenameBytes);
+			}
 
 			List<ArchiveRomEntry> entries = new List<ArchiveRomEntry>();
 

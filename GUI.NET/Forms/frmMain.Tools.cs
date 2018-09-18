@@ -131,15 +131,43 @@ namespace Mesen.GUI.Forms
 					gameRoms.AddRange(Directory.EnumerateFiles(folder, "*.nes", searchOptions));
 					gameRoms.AddRange(Directory.EnumerateFiles(folder, "*.unf", searchOptions));
 					gameRoms.AddRange(Directory.EnumerateFiles(folder, "*.fds", searchOptions));
+
+					if(searchOptions == SearchOption.AllDirectories) {
+						//When loading from a user-specified folder, assume zip/7z files will likely contain a ROM
+						gameRoms.AddRange(Directory.EnumerateFiles(folder, "*.zip", searchOptions));
+						gameRoms.AddRange(Directory.EnumerateFiles(folder, "*.7z", searchOptions));
+					}
 				}
 			}
 
 			if(gameRoms.Count == 0) {
 				MesenMsgBox.Show("RandomGameNoGameFound", MessageBoxButtons.OK, MessageBoxIcon.Information);
 			} else {
+				int retryCount = 0;
 				Random random = new Random();
-				string randomGame = gameRoms[random.Next(gameRoms.Count)];
-				LoadFile(randomGame);
+				do {
+					string randomGame = gameRoms[random.Next(gameRoms.Count)];
+
+					if(randomGame.EndsWith(".7z", StringComparison.InvariantCultureIgnoreCase) || randomGame.EndsWith(".zip", StringComparison.InvariantCultureIgnoreCase)) {
+						List<InteropEmu.ArchiveRomEntry> archiveRomList = InteropEmu.GetArchiveRomList(randomGame);
+						if(archiveRomList.Count > 0) {
+							ResourcePath res = new ResourcePath() {
+								InnerFile = archiveRomList[0].Filename,
+								Path = randomGame
+							};
+							if(!archiveRomList[0].IsUtf8) {
+								res.InnerFileIndex = 1;
+							}
+							LoadROM(res);
+							break;
+						} else {
+							retryCount++;
+						}
+					} else {
+						LoadFile(randomGame);
+						break;
+					}
+				} while(retryCount < 5);
 			}
 		}
 
