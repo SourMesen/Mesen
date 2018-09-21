@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <Resources>
 	<Forms>
 		<Form ID="frmMain" Title="Mesen">
@@ -68,6 +68,7 @@
 			<Control ID="mnuNetPlayPlayer2">Jogador 2</Control>
 			<Control ID="mnuNetPlayPlayer3">Jogador 3</Control>
 			<Control ID="mnuNetPlayPlayer4">Jogador 4</Control>
+			<Control ID="mnuNetPlayPlayer5">Dispositivo de expansão</Control>
 			<Control ID="mnuNetPlaySpectator">Espectador</Control>
 			<Control ID="mnuFindServer">Buscar um servidor público...</Control>
 			<Control ID="mnuProfile">Configurar perfil</Control>
@@ -122,7 +123,7 @@
 		<Form ID="frmAudioConfig" Title="Opções de áudio">
 			<Control ID="tpgGeneral">Geral</Control>
 			<Control ID="tpgAdvanced">Avançado</Control>
-			<Control ID="chkDisableDynamicSampleRate">Disable dynamic sample rate</Control>
+			<Control ID="chkDisableDynamicSampleRate">Desabilitar a taxa de amostragem dinâmica</Control>
 			<Control ID="chkSwapDutyCycles">Inverter ciclos de canais quadrados (Imita velhos clones)</Control>
 			<Control ID="chkSilenceTriangleHighFreq">Cortar o canal de triângulo em frequências ultrassônicas (Reduz os "pops")</Control>
 			<Control ID="chkReduceDmcPopping">Reduzir a intensidade dos "pops" no canal DMC</Control>
@@ -299,7 +300,6 @@
 			<Control ID="tpgAdvanced">Avançado</Control>
 			<Control ID="chkUseAlternativeMmc3Irq">Utilizar a versão alternativa de componentes de IRQs de MMC3</Control>
 			<Control ID="chkAllowInvalidInput">Permitir as entradas inválidas (Cima+Baixo e Esquerda+Direita ao mesmo tempo)</Control>
-			<Control ID="lblRamPowerOnState">Estado inicial da memória durante o início:</Control>
 			<Control ID="chkRemoveSpriteLimit">Eliminar o limite de sprites (Reduz os "flashes" em alguns jogos)</Control>
 			<Control ID="chkAdaptiveSpriteLimit">Reativar automaticamente o limite de sprite caso precisar para evitar falhas gráficas quando possível</Control>
 			<Control ID="chkEnableOamDecay">Ativar declínio da RAM OAM</Control>
@@ -310,9 +310,11 @@
 			<Control ID="chkUseNes101Hvc101Behavior">Utilizar comportamento do NES/HVC-101 (Top-loader / AV Famicom)</Control>
 			<Control ID="chkMapperRandomPowerOnState">Aleatorizar o estado de ativação para mapeadores</Control>
 
+			<Control ID="lblRamPowerOnState">Estado inicial da RAM durante o início:</Control>
+
 			<Control ID="tpgOverclocking">Overclock</Control>
 			<Control ID="grpOverclocking">Overclock da CPU</Control>
-			<Control ID="lblOverclockHint">Overclocking can help reduce or remove slowdowns in games (but it can also cause issues).&#13;The most compatible way to overclock is by increasing the "Scanline before NMI" value by a few hundred lines (e.g 400+)</Control>
+			<Control ID="lblOverclockHint">O overclock pode ajudar a reduzir ou remover a lentidão nos jogos (mas também pode causar problemas).&#13; O modo mais compatível de se fazer overclock é aumentando o valor da "Linha de varredura antes de NMI" em algumas centenas de linhas (ex: +400)</Control>
 			<Control ID="lblClockRate">Multiplicar a frequência de clock: </Control>
 			<Control ID="lblClockRatePercent">% (Recomendado: 100%)</Control>
 
@@ -353,6 +355,7 @@
 			<Control ID="chkPauseInMenuAndConfig">Menus e diálogos de configuração</Control>
 			<Control ID="chkPauseInDebugger">Ferramentas de depuração</Control>
 
+			<Control ID="chkPauseWhenInBackground">Segundo plano</Control>
 			<Control ID="chkAutoLoadIps">Carregar os arquivos IPS/BPS automaticamente</Control>
 			<Control ID="chkHidePauseOverlay">Ocultar a tela de pausa</Control>
 			<Control ID="chkDisplayMovieIcons">Exibir ícone de reprodução/gravação ao reproduzir ou gravar um filme</Control>
@@ -384,18 +387,6 @@
 			<Control ID="chkFdsAutoLoadDisk">Inserir a parte A do disco 1 ao carregar um jogo FDS</Control>
 			<Control ID="chkFdsFastForwardOnLoad">Aumentar a velocidade da emulação de jogos ao carregar no FDS</Control>
 			<Control ID="chkFdsAutoInsertDisk">Trocar automaticamente disquetes para os jogos do FDS</Control>
-			<Control ID="tpgShortcuts">Atalhos</Control>
-			<Control ID="lblShortcutWarning">Aviso: Sua configuração atual contém teclas configuráveis conflitantes. Se isso não for intencional, reveja e corrija suas teclas configuráveis.</Control>
-			<Control ID="colAction">Ação</Control>
-			<Control ID="colBinding1">Atalho #1</Control>
-			<Control ID="colBinding2">Atalho #2</Control>
-			<Control ID="tpgSaveData">Cópias de segurança</Control>
-			<Control ID="grpAutomaticSaves">Salvar estado</Control>
-			<Control ID="chkAutoSave">Salvar estado do jogo automaticamente a cada</Control>
-			<Control ID="lblAutoSave">minutos</Control>
-			<Control ID="chkAutoSaveNotify">Mostrar uma notificação na tela ao fazer a cópia de segurança automática</Control>
-			<Control ID="chkAllowMismatchingSaveStates">Permitir carregamento de estados em ROMs modificadas (ex: com patches IPS)</Control>
-			<Control ID="grpCloudSaves">Cópia de segurança online</Control>
 
 			<Control ID="chkShowFullPathInRecents">Mostrar o caminho completo do arquivo na lista de arquivos recentes</Control>
 			<Control ID="chkShowFrameCounter">Mostrar contador de quadros</Control>
@@ -405,8 +396,21 @@
 			<Control ID="lblRewind">Permitir rebobinamento de até</Control>
 			<Control ID="lblRewindMinutes">minutos (Uso de memória ≈1MB/min)</Control>
 
-			<Control ID="tpgCloudSave">Salvar online</Control>
-			<Control ID="lblGoogleDriveIntegration">Mesen pode utilizar o Google Drive para armazenar saves em sua conta do Google Drive. Quando se habilita a integração, todos os dados de cópia de segurança de seus jogos (arquivos .sav e de estados salvos) são facilmente acessíveis de qualquer computador.</Control>
+			<Control ID="tpgShortcuts">Atalhos</Control>
+			<Control ID="lblShortcutWarning">Aviso: Sua configuração atual contém teclas configuráveis conflitantes. Se isso não for intencional, reveja e corrija suas teclas configuráveis.</Control>
+			<Control ID="colAction">Ação</Control>
+			<Control ID="colBinding1">Atalho #1</Control>
+			<Control ID="colBinding2">Atalho #2</Control>
+
+			<Control ID="tpgSaveData">Cópias de segurança</Control>
+			<Control ID="grpAutomaticSaves">Salvar estado</Control>
+			<Control ID="chkAutoSave">Salvar estado do jogo automaticamente a cada</Control>
+			<Control ID="lblAutoSave">minutos</Control>
+			<Control ID="chkAutoSaveNotify">Mostrar uma notificação na tela ao fazer a cópia de segurança automática</Control>
+			<Control ID="chkAllowMismatchingSaveStates">Permitir carregamento de estados em ROMs modificadas (ex: com patches IPS)</Control>
+
+			<Control ID="grpCloudSaves">Jogo salvos online</Control>
+			<Control ID="lblGoogleDriveIntegration">Mesen pode utilizar o Google Drive para armazenar os jogos salvos em sua conta do Google Drive. Quando se habilita a integração, todos os dados de cópia de segurança de seus jogos (arquivos .sav e de estados salvos) são facilmente acessíveis de qualquer computador.</Control>
 			<Control ID="lblIntegrationOK">A integração com o Google Drive está ativada.</Control>
 			<Control ID="btnDisableIntegration">Desativar a integração com o Google Drive</Control>
 			<Control ID="btnEnableIntegration">Integração com Google Drive</Control>
@@ -460,9 +464,13 @@
 			<Control ID="btnOK">OK</Control>
 			<Control ID="btnCancel">Cancelar</Control>
 		</Form>
-		<Form ID="frmCheatImportFromDb" Title="Importar trapaças de BBDD">
-			<Control ID="lblSearch">Buscar</Control>
-			<Control ID="btnOK">OK</Control>
+		<Form ID="frmCheatImport" Title="Importar trapaças">
+			<Control ID="grpImportOptions">Opções de importação</Control>
+			<Control ID="lblCheatFile">Arquivo de trapaça:</Control>
+			<Control ID="lblGame">Jogo:</Control>
+			<Control ID="btnBrowseCheat">Pesquisar...</Control>
+			<Control ID="btnBrowseGame">Pesquisar...</Control>
+			<Control ID="btnImport">Importar</Control>
 			<Control ID="btnCancel">Cancelar</Control>
 		</Form>
 		<Form ID="frmCheatImport" Title="Importar trapaças">
@@ -474,9 +482,13 @@
 			<Control ID="btnImport">Importar</Control>
 			<Control ID="btnCancel">Cancelar</Control>
 		</Form>
-		<Form ID="frmCheatList" Title="Lista de trapaças">
+		<Form ID="frmCheatImportFromDb" Title="Selecionar jogo...">
+			<Control ID="lblSearch">Buscar:</Control>
+			<Control ID="btnOK">Importar</Control>
+			<Control ID="btnCancel">Cancelar</Control>
+		</Form>
+		<Form ID="frmCheatList" Title="Trapaças">
 			<Control ID="tabCheats">Trapaças</Control>
-			<Control ID="chkCurrentGameOnly">Mostrar apenas as trapaças para o jogo atual</Control>
 			<Control ID="btnAddCheat">Adicionar trapaça</Control>
 			<Control ID="btnDelete">Excluir</Control>
 			<Control ID="btnDeleteCheat">Excluir as trapaças selecionadas</Control>
@@ -496,6 +508,8 @@
 			<Control ID="mnuExportGame">Exportar</Control>
 			<Control ID="btnExportSelectedCheats">Trapaças selecionadas</Control>
 			<Control ID="mnuExportSelectedCheats">Exportar</Control>
+			<Control ID="chkDisableCheats">Desativar toas as trapaças</Control>
+
 			<Control ID="tpgCheatFinder">Pesquisa de trapaças</Control>
 			<Control ID="grpFilters">Filters</Control>
 			<Control ID="btnReset">Reiniciar</Control>
@@ -550,18 +564,18 @@
 			<Control ID="btnUpdate">Atualizar</Control>
 			<Control ID="btnCancel">Cancelar</Control>
 		</Form>
+		<Form ID="frmSelectRom" Title="Selecionar ROM...">
+			<Control ID="lblSearch">Buscar:</Control>
+			<Control ID="btnOK">OK</Control>
+			<Control ID="btnCancel">Cancelar</Control>
+		</Form>
 		<Form ID="frmGetKey" Title="Configuração dos botões">
 			<Control ID="lblSetKeyMessage">Aperte qualquer tecla do teclado ou do joystick para registrar esse botão.</Control>
 		</Form>
-		<Form ID="frmPlayerProfile" Title="Perfil do Jogador">
-			<Control ID="lblName">Nome</Control>
+		<Form ID="frmPlayerProfile" Title="Perfil">
+			<Control ID="lblName">Nome do jogador:</Control>
 			<Control ID="btnOK">OK</Control>
 			<Control ID="btnCancel">Cancelar</Control>
-		</Form>
-		<Form ID="frmSelectRom" Title="Selecionar ROM...">
-			<Control ID="btnCancel">Cancelar</Control>
-			<Control ID="btnOK">OK</Control>
-			<Control ID="lblSearch">Buscar</Control>
 		</Form>
 		<Form ID="frmRecordAvi" Title="Gravador de vídeo">
 			<Control ID="lblAviFile">Salvar para:</Control>
@@ -655,6 +669,7 @@
 			<Control ID="lblTurboSpeed">Velocidade de modo turbo:</Control>
 			<Control ID="lblTurboFast">Rápido</Control>
 			<Control ID="lblSlow">Lento</Control>
+
 			<Control ID="btnSelectPreset">Selecionar valor preestabelecido...</Control>
 			<Control ID="mnuKeyboard">Teclado</Control>
 			<Control ID="mnuWasdLayout">Utilizar teclas WASD</Control>
@@ -741,7 +756,7 @@
 
 		<Message ID="MovieSegment">Segmento #{0}</Message>
 		<Message ID="MovieSaveError">Ocorreu um erro ao tentar salvar o vídeo.</Message>
-
+		
 		<Message ID="ClearHistory">Limpar histórico</Message>
 		<Message ID="LastFolderUsed">Última pasta usada</Message>
 
@@ -769,7 +784,7 @@
 		<Message ID="RandomGameNoGameFound">O Mesen não encontrou nenhum jogo para carregar.</Message>
 
 		<Message ID="CannotWriteToFolder">A pasta selecionada não pode ser escrita - selecione outra pasta e tente novamente.&#xA;&#xA;Detalhes:&#xA;{0}</Message>
-		<Message ID="InvalidPaths">As seguintes substituições de pastas são inválidas:&#xA;&#xA;{0}&#xA;&#xA;Use pastas válidas e graváveis ​​e tente novamente.</Message>
+		<Message ID="InvalidPaths">As seguintes substituições de pastas são inválidas:&#xA;&#xA;{0}&#xA;&#xA;Use pastas válidas e graváveis e tente novamente.</Message>
 		<Message ID="CopyMesenDataPrompt">Todos os arquivos serão copiados de:&#xA;&#xA;{0}&#xA;para&#xA;{1}&#xA;&#xA;Uma vez que a cópia esteja completa, o Mesen reiniciará.&#xA;Continuar?</Message>
 
 		<Message ID="CheatsFound">{0} e {1} trapaças de jogos presentes na base de dados</Message>
@@ -789,7 +804,7 @@
 		<Message ID="InvalidFdsBios">A bios selecionada é inválida.</Message>
 
 		<Message ID="HDNesTooltip">Esta opção permite os pacotes de gráficos de alta resolução sejam carregados no mesmo formato que os do emulador HDNes.&#xA;&#xA;Os pacotes de alta resolução devem ser colocados nos "HdPacks" em uma subpasta com o mesmo nome da ROM.&#xA;Exemplo: Um pacote para "MinhaRom.nes" deve ser colocado em "HdPacks\MinhaRom\hires.txt".</Message>
-		<Message ID="HdPackBuilderScaleHelp">Seleciona a escala e o filtro de vídeo a serem usados ​​ao gerar os arquivos PNG&#xA;para o Pacote HD. Usa os filtros "Preescala" para gerar os tiles&#xA;em uma escala maior sem aplicar qualquer transformação aos pixels.</Message>
+		<Message ID="HdPackBuilderScaleHelp">Seleciona a escala e o filtro de vídeo a serem usados ao gerar os arquivos PNG&#xA;para o Pacote HD. Usa os filtros "Preescala" para gerar os tiles&#xA;em uma escala maior sem aplicar qualquer transformação aos pixels.</Message>
 		<Message ID="HdPackBuilderBankSizeHelp">Esta opção está disponível apenas para jogos de RAM CHR.  Jogos de RAM CHR não tem "bancos"&#xA;fixos - eles são criados dinamicamente pelo código do jogo.&#xA;Esta opção altera o comportamento do Criador de Pacotes de Alta Definição agrupando os tiles em &#xA;arquivos PNG - um tamanho de banco menor geralmente resultará em menos arquivos PNG &#xA;(mas, dependendo do código do jogo, valores maiores podem produzir &#xA;melhores resultados).</Message>
 		<Message ID="HdPackBuilderFrequencyHelp">Quando esta opção está habilitada, os tiles em arquivos PNG são classificados pela&#xA;frequência na qual eles são exibidos na tela durante a gravação (paletas &#xA;mais comuns serão agrupadas no primeiro arquivo para um número de banco &#xA;específico). Se esta opção estiver desmarcada, os arquivos PNG serão classificados por paleta - &#xA;nesse caso, cada arquivo PNG conterá apenas 4 cores diferentes.</Message>
 		<Message ID="HdPackBuilderGroupBlankHelp">Esta opção agrupa todas os tiles em branco em sequência para os mesmos arquivos&#xA;PNG - isso ajuda a reduzir o número de arquivos PNG produzidos pela eliminação de &#xA;arquivos PNG quase vazios contendo apenas tiles em branco.</Message>
@@ -1054,7 +1069,6 @@
 			<Value ID="Greater">Maior</Value>
 		</Enum>
 		<Enum ID="VideoCodec">
-
 			<Value ID="None">Nenhum (Sem comprimir)</Value>
 			<Value ID="ZMBV">Zip Motion Block Video (ZMBV)</Value>
 			<Value ID="CSCD">Camstudio (CSCD)</Value>
