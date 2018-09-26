@@ -204,6 +204,8 @@ void Debugger::ResetCdl()
 
 void Debugger::UpdateCdlCache()
 {
+	DebugBreakHelper helper(this);
+
 	_disassembler->Reset();
 	for(int i = 0, len = _mapper->GetMemorySize(DebugMemoryType::PrgRom); i < len; i++) {
 		if(_codeDataLogger->IsCode(i)) {
