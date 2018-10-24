@@ -125,6 +125,7 @@ extern "C" {
 		_console->GetSettings()->SetSampleRate(48000);
 		_console->GetSettings()->SetAutoSaveOptions(0, false);
 		_console->GetSettings()->SetRewindBufferSize(0);
+		_console->GetSettings()->SetAudioLatency(25);
 	}
 
 	RETRO_API void retro_deinit()
