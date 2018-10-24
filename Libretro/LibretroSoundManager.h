@@ -27,7 +27,15 @@ public:
 	virtual void PlayBuffer(int16_t *soundBuffer, uint32_t sampleCount, uint32_t sampleRate, bool isStereo) override
 	{
 		if(!_skipMode && _sendAudioBuffer) {
-			_sendAudioBuffer(soundBuffer, sampleCount);
+			uint32_t ptr = 0;
+			while(sampleCount)
+			{
+				uint32_t count = sampleCount > 1024 ? 1024 : sampleCount;
+				_sendAudioBuffer(soundBuffer + ptr, count);
+
+				ptr += count * (isStereo + 1);
+				sampleCount -= count;
+			}
 		}
 	}
 
