@@ -790,16 +790,16 @@
 		<Message ID="CheatsFound">{0} e {1} trapaças de jogos presentes no banco de dados</Message>
 		<Message ID="CheatsImported">{0} trapaças foram importadas para o jogo {1}.</Message>
 
-		<Message ID="NsfNextTrack">Faixa seguinte (esperar para jogar mais rápido)</Message>
-		<Message ID="NsfUnnamedTrack">[sem nome]</Message>
-		<Message ID="NsfUnknownField">[desconhecido]</Message>
+		<Message ID="NsfNextTrack">Faixa seguinte (segurar para acelerar)</Message>
+		<Message ID="NsfUnnamedTrack">&lt;sem nome&gt;</Message>
+		<Message ID="NsfUnknownField">&lt;desconhecido&gt;</Message>
 
 		<Message ID="CouldNotInstallRuntime">O Pacote Redistribuível do Visual C++ para Visual Studio 2015 não foi instalado corretamente.</Message>
 		<Message ID="EmptyState">&lt;Não há estado salvo&gt;</Message>
 		<Message ID="ErrorWhileCheckingUpdates">Houve um erro na busca por atualizações. Verifique sua conexão com a internet e tente de novo.&#xA;&#xA;Detalhes do erro:&#xA;{0}</Message>
 		<Message ID="AutoUpdateDisabledMessage">As atualizações automáticas não estão ativadas nesta compilação - baixe a versão mais recente do código e recompile o Mesen para obter as atualizações mais recentes.</Message>
 		<Message ID="FdsBiosNotFound">Não foi encontrada uma bios para o FDS. É preciso uma bios para jogos do FDS.&#xA;&#xA;Deseja selecionar uma bios manualmente?</Message>
-		<Message ID="FdsDiskSide">Disco {0} Cara {1}</Message>
+		<Message ID="FdsDiskSide">Disco {0} Lado {1}</Message>
 		<Message ID="FileNotFound">Arquivo não encontrado: {0}</Message>
 		<Message ID="InvalidFdsBios">A bios selecionada é inválida.</Message>
 
@@ -828,7 +828,7 @@
 		<Message ID="UpdateDownloadFailed">Erro ao baixar - o arquivo parece estar danificado. Visite a página do Mesen para baixar manualmente a versão mais recente.</Message>
 		<Message ID="UpgradeSuccess">A atualização foi realizada com sucesso.</Message>
 		<Message ID="UpdaterNotFound">O processo de atualização não se pode iniciar porque faltam alguns arquivos.</Message>
-		<Message ID="Net45NotFound">Microsoft .NET Framework 4.5 não foi encontrado. Baixe a versão mais recente de .NET Framework na página da Microsoft e tente novamente.</Message>
+		<Message ID="Net45NotFound">O Microsoft .NET Framework 4.5 não foi encontrado. Baixe a versão mais recente do .NET Framework na página da Microsoft e tente novamente.</Message>
 
 		<Message ID="GoogleDriveIntegrationError">O Mesen não foi capaz de conectar a sua conta do Google Drive, tente novamente.</Message>
 
