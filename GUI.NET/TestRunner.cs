@@ -31,6 +31,7 @@ namespace Mesen.GUI
 				}
 			}
 
+			InteropEmu.InitDll();
 			ConfigManager.ProcessSwitches(lcArgs);
 			ConfigManager.Config.ApplyConfig();
 			InteropEmu.SetFlag(EmulationFlags.ConsoleMode, true);
