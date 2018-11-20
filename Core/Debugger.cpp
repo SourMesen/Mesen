@@ -1413,13 +1413,15 @@ void Debugger::GetDebugEvents(uint32_t* pictureBuffer, DebugEventInfo *infoArray
 {
 	DebugBreakHelper helper(this);
 
-	uint16_t *buffer = new uint16_t[PPU::PixelCount];
+	uint16_t *ppuBuffer = new uint16_t[PPU::PixelCount];
 	uint32_t *palette = _console->GetSettings()->GetRgbPalette();
-	_ppu->DebugCopyOutputBuffer(buffer);
+	_ppu->DebugCopyOutputBuffer(ppuBuffer);
 
 	for(int i = 0; i < PPU::PixelCount; i++) {
-		pictureBuffer[i] = palette[buffer[i] & 0x3F];
+		pictureBuffer[i] = palette[ppuBuffer[i] & 0x3F];
 	}
+
+	delete[] ppuBuffer;
 
 	vector<DebugEventInfo> &events = returnPreviousFrameData ? _prevDebugEvents : _debugEvents;
 	uint32_t eventCount = std::min(maxEventCount, (uint32_t)events.size());
