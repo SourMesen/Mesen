@@ -143,7 +143,11 @@ namespace Mesen.GUI.Debugger.Controls
 						g.DrawImageUnscaled(source, 0, 0);
 					}
 
-					_originalChrBanks[i] = source;
+					Bitmap originalImg = new Bitmap(128, 128, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+					using(Graphics g = Graphics.FromImage(originalImg)) {
+						g.DrawImage(source, 0, 0);
+					}
+					_originalChrBanks[i] = originalImg;
 					_chrBanks[i] = target;
 
 					Bitmap chrBankImage = new Bitmap(256, 256);

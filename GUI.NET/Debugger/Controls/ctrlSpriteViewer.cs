@@ -68,7 +68,14 @@ namespace Mesen.GUI.Debugger.Controls
 
 			GCHandle handle = GCHandle.Alloc(_spritePixelData, GCHandleType.Pinned);
 			try {
-				_imgSprites = new Bitmap(64, 128, 4*64, PixelFormat.Format32bppArgb, handle.AddrOfPinnedObject());
+				Bitmap source = new Bitmap(64, 128, 4*64, PixelFormat.Format32bppArgb, handle.AddrOfPinnedObject());
+
+				Bitmap sprites = new Bitmap(64, 128, PixelFormat.Format32bppArgb);
+				using(Graphics g = Graphics.FromImage(_imgSprites)) {
+					g.DrawImage(source, 0, 0);
+				}
+				_imgSprites = sprites;
+
 				using(Graphics g = Graphics.FromImage(picSprites.Image)) {
 					g.Clear(Color.FromArgb(64, 64, 64));
 					g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
