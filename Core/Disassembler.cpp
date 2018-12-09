@@ -571,7 +571,13 @@ string Disassembler::GetCode(AddressTypeInfo &addressInfo, uint32_t endAddr, uin
 				GetLine(output, "----");
 			}
 
-			if(dataType != DataType::VerifiedCode) {
+			if(memoryAddr < cpuState.DebugPC && memoryAddr + info->GetSize() > cpuState.DebugPC) {
+				//The current instruction started between the current and next operation.
+				//This can happen when sharing bytes between instructions (and executing one or the other depending on a branch, etc.)
+				//In this case, realign the disassembly with the PC at the start of the instruction
+				addr += cpuState.DebugPC - memoryAddr;
+				memoryAddr = cpuState.DebugPC;
+			} else if(dataType != DataType::VerifiedCode) {
 				//For unverified code, check if a verified instruction starts between the start of this instruction and its end.
 				//If so, we need to realign the disassembler to the start of the next verified instruction
 				for(uint32_t i = 0; i < info->GetSize(); i++) {
