@@ -414,7 +414,6 @@
 			this.Controls.Add(this.tableLayoutPanel1);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
 			this.MaximizeBox = false;
-			this.MinimizeBox = false;
 			this.Name = "frmApuViewer";
 			this.Text = "APU Viewer";
 			this.tableLayoutPanel1.ResumeLayout(false);
