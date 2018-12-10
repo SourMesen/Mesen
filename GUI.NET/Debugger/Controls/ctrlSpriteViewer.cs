@@ -71,7 +71,7 @@ namespace Mesen.GUI.Debugger.Controls
 				Bitmap source = new Bitmap(64, 128, 4*64, PixelFormat.Format32bppArgb, handle.AddrOfPinnedObject());
 
 				Bitmap sprites = new Bitmap(64, 128, PixelFormat.Format32bppArgb);
-				using(Graphics g = Graphics.FromImage(_imgSprites)) {
+				using(Graphics g = Graphics.FromImage(sprites)) {
 					g.DrawImage(source, 0, 0);
 				}
 				_imgSprites = sprites;
@@ -83,7 +83,7 @@ namespace Mesen.GUI.Debugger.Controls
 					g.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.Half;
 					
 					g.ScaleTransform(4, 4);
-					g.DrawImageUnscaled(_imgSprites, 0, 0);
+					g.DrawImageUnscaled(sprites, 0, 0);
 				}
 				picSprites.Invalidate();
 			} finally {
