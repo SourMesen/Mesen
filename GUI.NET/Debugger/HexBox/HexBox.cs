@@ -596,7 +596,7 @@ namespace Be.Windows.Forms
 				_hexBox.ScrollByteIntoView();
 				_hexBox.UpdateCaret();
 				_hexBox.ReleaseSelection();
-
+				_hexBox.Invalidate();
 				return true;
 			}
 
@@ -615,7 +615,7 @@ namespace Be.Windows.Forms
 				_hexBox.ScrollByteIntoView();
 				_hexBox.UpdateCaret();
 				_hexBox.ReleaseSelection();
-
+				_hexBox.Invalidate();
 				return true;
 			}
 
