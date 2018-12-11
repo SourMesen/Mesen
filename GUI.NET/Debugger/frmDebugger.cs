@@ -510,6 +510,7 @@ namespace Mesen.GUI.Debugger
 				case InteropEmu.ConsoleNotificationType.GameReset:
 				case InteropEmu.ConsoleNotificationType.GameLoaded:
 					UpdateDebuggerFlags();
+					BreakpointManager.SetBreakpoints();
 
 					bool breakOnReset = ConfigManager.Config.DebugInfo.BreakOnReset && !InteropEmu.IsNsf();
 					this.BeginInvoke((MethodInvoker)(() => {
@@ -517,7 +518,6 @@ namespace Mesen.GUI.Debugger
 						this.AutoLoadCdlFiles();
 						this.AutoLoadDbgFiles(true);
 						UpdateDebugger(true, false);
-						BreakpointManager.SetBreakpoints();
 
 						if(!breakOnReset) {
 							ClearActiveStatement();
