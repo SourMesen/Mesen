@@ -28,7 +28,7 @@ namespace Mesen.GUI.Debugger
 		{
 			var list = new List<WatchValueInfo>();
 			for(int i = 0; i < _watchEntries.Count; i++) {
-				string expression = _watchEntries[i];
+				string expression = _watchEntries[i].Trim();
 				string newValue = "";
 				EvalResultType resultType;
 
@@ -40,7 +40,12 @@ namespace Mesen.GUI.Debugger
 				} else {
 					Int32 result = InteropEmu.DebugEvaluateExpression(expression, out resultType, true);
 					switch(resultType) {
-						case EvalResultType.Numeric: newValue = useHex ? ("$" + result.ToString("X2")) : result.ToString(); break;
+						case EvalResultType.Numeric:
+							//When using {$00} syntax to show the value of a word, always display 4 hex characters.
+							bool displayAsWord = expression.StartsWith("{") && expression.EndsWith("}");
+							newValue = useHex ? ("$" + result.ToString(displayAsWord ? "X4" : "X2")) : result.ToString();
+							break;
+
 						case EvalResultType.Boolean: newValue = result == 0 ? "false" : "true";	break;
 						case EvalResultType.Invalid: newValue = "<invalid expression>"; forceHasChanged = true; break;
 						case EvalResultType.DivideBy0: newValue = "<division by zero>"; forceHasChanged = true; break;
