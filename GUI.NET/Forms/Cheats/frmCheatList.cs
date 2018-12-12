@@ -32,7 +32,44 @@ namespace Mesen.GUI.Forms.Cheats
 				lstGameList.Select();
 
 				ctrlCheatFinder.OnAddCheat += CtrlCheatFinder_OnAddCheat;
+
+				if(!ConfigManager.Config.CheatWindowSize.IsEmpty) {
+					this.StartPosition = FormStartPosition.Manual;
+					this.Size = ConfigManager.Config.CheatWindowSize;
+					this.Location = ConfigManager.Config.CheatWindowLocation;
+				}
 			}
+		}
+
+		protected override void OnClosing(CancelEventArgs e)
+		{
+			base.OnClosing(e);
+
+			ConfigManager.Config.CheatWindowSize = this.WindowState != FormWindowState.Normal ? this.RestoreBounds.Size : this.Size;
+			ConfigManager.Config.CheatWindowLocation = this.WindowState != FormWindowState.Normal ? this.RestoreBounds.Location : this.Location;
+			ConfigManager.ApplyChanges();
+		}
+
+		protected override void OnShown(EventArgs e)
+		{
+			base.OnShown(e);
+			ResizeColumns();
+		}
+
+		protected override void OnResizeEnd(EventArgs e)
+		{
+			base.OnResizeEnd(e);
+			ResizeColumns();
+		}
+
+		private void ResizeColumns()
+		{
+			colGameName.Width = lstGameList.ClientSize.Width - 5;
+			colCode.AutoResize(ColumnHeaderAutoResizeStyle.ColumnContent);
+			if(colCode.Width < 100) {
+				colCode.Width = 100;
+			}
+			colCheatName.Width = lstCheats.ClientSize.Width - colCode.Width - 5;
 		}
 
 		private void tabMain_SelectedIndexChanged(object sender, EventArgs e)
@@ -143,6 +180,8 @@ namespace Mesen.GUI.Forms.Cheats
 			lstCheats.Sorting = SortOrder.Ascending;
 			lstCheats.ItemChecked += lstCheats_ItemChecked;
 			lstCheats.EndUpdate();
+
+			ResizeColumns();
 		}
 
 		private void lstGameList_SelectedIndexChanged(object sender, EventArgs e)

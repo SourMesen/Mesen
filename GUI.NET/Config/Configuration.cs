@@ -35,6 +35,8 @@ namespace Mesen.GUI.Config
 		public List<GameSpecificInfo> GameSpecificSettings;
 		public Point? WindowLocation;
 		public Size? WindowSize;
+		public Point CheatWindowLocation;
+		public Size CheatWindowSize;
 
 		public Configuration()
 		{

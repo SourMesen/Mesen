@@ -32,12 +32,6 @@ namespace Mesen.GUI.Forms.Cheats
 			this.tabMain = new System.Windows.Forms.TabControl();
 			this.tabCheats = new System.Windows.Forms.TabPage();
 			this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
-			this.splitContainer1 = new System.Windows.Forms.SplitContainer();
-			this.lstGameList = new System.Windows.Forms.ListView();
-			this.colGameName = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-			this.contextMenuGames = new System.Windows.Forms.ContextMenuStrip(this.components);
-			this.mnuDeleteGameCheats = new System.Windows.Forms.ToolStripMenuItem();
-			this.mnuExportGame = new System.Windows.Forms.ToolStripMenuItem();
 			this.lstCheats = new Mesen.GUI.Controls.MyListView();
 			this.colCheatName = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
 			this.colCode = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -57,6 +51,11 @@ namespace Mesen.GUI.Forms.Cheats
 			this.btnExportAllCheats = new System.Windows.Forms.ToolStripMenuItem();
 			this.btnExportGame = new System.Windows.Forms.ToolStripMenuItem();
 			this.btnExportSelectedCheats = new System.Windows.Forms.ToolStripMenuItem();
+			this.lstGameList = new System.Windows.Forms.ListView();
+			this.colGameName = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+			this.contextMenuGames = new System.Windows.Forms.ContextMenuStrip(this.components);
+			this.mnuDeleteGameCheats = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuExportGame = new System.Windows.Forms.ToolStripMenuItem();
 			this.tpgCheatFinder = new System.Windows.Forms.TabPage();
 			this.ctrlCheatFinder = new Mesen.GUI.Forms.Cheats.ctrlCheatFinder();
 			this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
@@ -65,13 +64,9 @@ namespace Mesen.GUI.Forms.Cheats
 			this.tabMain.SuspendLayout();
 			this.tabCheats.SuspendLayout();
 			this.tableLayoutPanel1.SuspendLayout();
-			((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
-			this.splitContainer1.Panel1.SuspendLayout();
-			this.splitContainer1.Panel2.SuspendLayout();
-			this.splitContainer1.SuspendLayout();
-			this.contextMenuGames.SuspendLayout();
 			this.contextMenuCheats.SuspendLayout();
 			this.tsCheatActions.SuspendLayout();
+			this.contextMenuGames.SuspendLayout();
 			this.tpgCheatFinder.SuspendLayout();
 			this.tableLayoutPanel2.SuspendLayout();
 			this.SuspendLayout();
@@ -79,7 +74,7 @@ namespace Mesen.GUI.Forms.Cheats
 			// baseConfigPanel
 			// 
 			this.baseConfigPanel.Controls.Add(this.chkDisableCheats);
-			this.baseConfigPanel.Location = new System.Drawing.Point(0, 257);
+			this.baseConfigPanel.Location = new System.Drawing.Point(0, 256);
 			this.baseConfigPanel.Size = new System.Drawing.Size(616, 29);
 			this.baseConfigPanel.Controls.SetChildIndex(this.chkDisableCheats, 0);
 			// 
@@ -92,7 +87,7 @@ namespace Mesen.GUI.Forms.Cheats
 			this.tabMain.Margin = new System.Windows.Forms.Padding(0);
 			this.tabMain.Name = "tabMain";
 			this.tabMain.SelectedIndex = 0;
-			this.tabMain.Size = new System.Drawing.Size(616, 257);
+			this.tabMain.Size = new System.Drawing.Size(616, 256);
 			this.tabMain.TabIndex = 0;
 			this.tabMain.SelectedIndexChanged += new System.EventHandler(this.tabMain_SelectedIndexChanged);
 			// 
@@ -102,96 +97,27 @@ namespace Mesen.GUI.Forms.Cheats
 			this.tabCheats.Location = new System.Drawing.Point(4, 22);
 			this.tabCheats.Name = "tabCheats";
 			this.tabCheats.Padding = new System.Windows.Forms.Padding(3);
-			this.tabCheats.Size = new System.Drawing.Size(608, 231);
+			this.tabCheats.Size = new System.Drawing.Size(608, 230);
 			this.tabCheats.TabIndex = 0;
 			this.tabCheats.Text = "Cheats";
 			this.tabCheats.UseVisualStyleBackColor = true;
 			// 
 			// tableLayoutPanel1
 			// 
-			this.tableLayoutPanel1.ColumnCount = 1;
-			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-			this.tableLayoutPanel1.Controls.Add(this.splitContainer1, 0, 1);
+			this.tableLayoutPanel1.ColumnCount = 2;
+			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 35F));
+			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 65F));
+			this.tableLayoutPanel1.Controls.Add(this.lstCheats, 1, 1);
 			this.tableLayoutPanel1.Controls.Add(this.tsCheatActions, 0, 0);
+			this.tableLayoutPanel1.Controls.Add(this.lstGameList, 0, 1);
 			this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tableLayoutPanel1.Location = new System.Drawing.Point(3, 3);
 			this.tableLayoutPanel1.Name = "tableLayoutPanel1";
 			this.tableLayoutPanel1.RowCount = 2;
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-			this.tableLayoutPanel1.Size = new System.Drawing.Size(602, 225);
+			this.tableLayoutPanel1.Size = new System.Drawing.Size(602, 224);
 			this.tableLayoutPanel1.TabIndex = 0;
-			// 
-			// splitContainer1
-			// 
-			this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.splitContainer1.Location = new System.Drawing.Point(3, 26);
-			this.splitContainer1.Name = "splitContainer1";
-			// 
-			// splitContainer1.Panel1
-			// 
-			this.splitContainer1.Panel1.Controls.Add(this.lstGameList);
-			// 
-			// splitContainer1.Panel2
-			// 
-			this.splitContainer1.Panel2.Controls.Add(this.lstCheats);
-			this.splitContainer1.Size = new System.Drawing.Size(596, 196);
-			this.splitContainer1.SplitterDistance = 213;
-			this.splitContainer1.TabIndex = 5;
-			// 
-			// lstGameList
-			// 
-			this.lstGameList.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.colGameName});
-			this.lstGameList.ContextMenuStrip = this.contextMenuGames;
-			this.lstGameList.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.lstGameList.FullRowSelect = true;
-			this.lstGameList.GridLines = true;
-			this.lstGameList.HideSelection = false;
-			this.lstGameList.Location = new System.Drawing.Point(0, 0);
-			this.lstGameList.MultiSelect = false;
-			this.lstGameList.Name = "lstGameList";
-			this.lstGameList.Size = new System.Drawing.Size(213, 196);
-			this.lstGameList.Sorting = System.Windows.Forms.SortOrder.Ascending;
-			this.lstGameList.TabIndex = 2;
-			this.lstGameList.UseCompatibleStateImageBehavior = false;
-			this.lstGameList.View = System.Windows.Forms.View.Details;
-			this.lstGameList.ColumnClick += new System.Windows.Forms.ColumnClickEventHandler(this.lstGameList_ColumnClick);
-			this.lstGameList.SelectedIndexChanged += new System.EventHandler(this.lstGameList_SelectedIndexChanged);
-			// 
-			// colGameName
-			// 
-			this.colGameName.Name = "colGameName";
-			this.colGameName.Text = "Game";
-			this.colGameName.Width = 180;
-			// 
-			// contextMenuGames
-			// 
-			this.contextMenuGames.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.mnuDeleteGameCheats,
-            this.mnuExportGame});
-			this.contextMenuGames.Name = "contextMenuCheats";
-			this.contextMenuGames.Size = new System.Drawing.Size(132, 48);
-			// 
-			// mnuDeleteGameCheats
-			// 
-			this.mnuDeleteGameCheats.Enabled = false;
-			this.mnuDeleteGameCheats.Image = global::Mesen.GUI.Properties.Resources.Close;
-			this.mnuDeleteGameCheats.Name = "mnuDeleteGameCheats";
-			this.mnuDeleteGameCheats.ShortcutKeys = System.Windows.Forms.Keys.Delete;
-			this.mnuDeleteGameCheats.Size = new System.Drawing.Size(131, 22);
-			this.mnuDeleteGameCheats.Text = "Delete";
-			this.mnuDeleteGameCheats.Click += new System.EventHandler(this.btnDeleteGameCheats_Click);
-			// 
-			// mnuExportGame
-			// 
-			this.mnuExportGame.Enabled = false;
-			this.mnuExportGame.Image = global::Mesen.GUI.Properties.Resources.Export;
-			this.mnuExportGame.Name = "mnuExportGame";
-			this.mnuExportGame.Size = new System.Drawing.Size(131, 22);
-			this.mnuExportGame.Text = "Export";
-			this.mnuExportGame.Click += new System.EventHandler(this.btnExportGame_Click);
 			// 
 			// lstCheats
 			// 
@@ -204,9 +130,10 @@ namespace Mesen.GUI.Forms.Cheats
 			this.lstCheats.FullRowSelect = true;
 			this.lstCheats.GridLines = true;
 			this.lstCheats.HideSelection = false;
-			this.lstCheats.Location = new System.Drawing.Point(0, 0);
+			this.lstCheats.Location = new System.Drawing.Point(210, 26);
+			this.lstCheats.Margin = new System.Windows.Forms.Padding(0, 3, 0, 0);
 			this.lstCheats.Name = "lstCheats";
-			this.lstCheats.Size = new System.Drawing.Size(379, 196);
+			this.lstCheats.Size = new System.Drawing.Size(392, 198);
 			this.lstCheats.TabIndex = 1;
 			this.lstCheats.UseCompatibleStateImageBehavior = false;
 			this.lstCheats.View = System.Windows.Forms.View.Details;
@@ -264,6 +191,7 @@ namespace Mesen.GUI.Forms.Cheats
 			// 
 			// tsCheatActions
 			// 
+			this.tableLayoutPanel1.SetColumnSpan(this.tsCheatActions, 2);
 			this.tsCheatActions.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.btnAddCheat,
             this.btnDelete,
@@ -373,13 +301,67 @@ namespace Mesen.GUI.Forms.Cheats
 			this.btnExportSelectedCheats.Text = "Selected Cheats";
 			this.btnExportSelectedCheats.Click += new System.EventHandler(this.btnExportSelectedCheats_Click);
 			// 
+			// lstGameList
+			// 
+			this.lstGameList.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.colGameName});
+			this.lstGameList.ContextMenuStrip = this.contextMenuGames;
+			this.lstGameList.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.lstGameList.FullRowSelect = true;
+			this.lstGameList.GridLines = true;
+			this.lstGameList.HideSelection = false;
+			this.lstGameList.Location = new System.Drawing.Point(0, 26);
+			this.lstGameList.Margin = new System.Windows.Forms.Padding(0, 3, 3, 0);
+			this.lstGameList.MultiSelect = false;
+			this.lstGameList.Name = "lstGameList";
+			this.lstGameList.Size = new System.Drawing.Size(207, 198);
+			this.lstGameList.Sorting = System.Windows.Forms.SortOrder.Ascending;
+			this.lstGameList.TabIndex = 2;
+			this.lstGameList.UseCompatibleStateImageBehavior = false;
+			this.lstGameList.View = System.Windows.Forms.View.Details;
+			this.lstGameList.ColumnClick += new System.Windows.Forms.ColumnClickEventHandler(this.lstGameList_ColumnClick);
+			this.lstGameList.SelectedIndexChanged += new System.EventHandler(this.lstGameList_SelectedIndexChanged);
+			// 
+			// colGameName
+			// 
+			this.colGameName.Name = "colGameName";
+			this.colGameName.Text = "Game";
+			this.colGameName.Width = 180;
+			// 
+			// contextMenuGames
+			// 
+			this.contextMenuGames.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.mnuDeleteGameCheats,
+            this.mnuExportGame});
+			this.contextMenuGames.Name = "contextMenuCheats";
+			this.contextMenuGames.Size = new System.Drawing.Size(132, 48);
+			// 
+			// mnuDeleteGameCheats
+			// 
+			this.mnuDeleteGameCheats.Enabled = false;
+			this.mnuDeleteGameCheats.Image = global::Mesen.GUI.Properties.Resources.Close;
+			this.mnuDeleteGameCheats.Name = "mnuDeleteGameCheats";
+			this.mnuDeleteGameCheats.ShortcutKeys = System.Windows.Forms.Keys.Delete;
+			this.mnuDeleteGameCheats.Size = new System.Drawing.Size(131, 22);
+			this.mnuDeleteGameCheats.Text = "Delete";
+			this.mnuDeleteGameCheats.Click += new System.EventHandler(this.btnDeleteGameCheats_Click);
+			// 
+			// mnuExportGame
+			// 
+			this.mnuExportGame.Enabled = false;
+			this.mnuExportGame.Image = global::Mesen.GUI.Properties.Resources.Export;
+			this.mnuExportGame.Name = "mnuExportGame";
+			this.mnuExportGame.Size = new System.Drawing.Size(131, 22);
+			this.mnuExportGame.Text = "Export";
+			this.mnuExportGame.Click += new System.EventHandler(this.btnExportGame_Click);
+			// 
 			// tpgCheatFinder
 			// 
 			this.tpgCheatFinder.Controls.Add(this.ctrlCheatFinder);
 			this.tpgCheatFinder.Location = new System.Drawing.Point(4, 22);
 			this.tpgCheatFinder.Name = "tpgCheatFinder";
 			this.tpgCheatFinder.Padding = new System.Windows.Forms.Padding(3);
-			this.tpgCheatFinder.Size = new System.Drawing.Size(608, 231);
+			this.tpgCheatFinder.Size = new System.Drawing.Size(608, 230);
 			this.tpgCheatFinder.TabIndex = 1;
 			this.tpgCheatFinder.Text = "Cheat Finder";
 			this.tpgCheatFinder.UseVisualStyleBackColor = true;
@@ -389,7 +371,7 @@ namespace Mesen.GUI.Forms.Cheats
 			this.ctrlCheatFinder.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.ctrlCheatFinder.Location = new System.Drawing.Point(3, 3);
 			this.ctrlCheatFinder.Name = "ctrlCheatFinder";
-			this.ctrlCheatFinder.Size = new System.Drawing.Size(602, 225);
+			this.ctrlCheatFinder.Size = new System.Drawing.Size(602, 224);
 			this.ctrlCheatFinder.TabIndex = 0;
 			// 
 			// tableLayoutPanel2
@@ -403,7 +385,7 @@ namespace Mesen.GUI.Forms.Cheats
 			this.tableLayoutPanel2.RowCount = 2;
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this.tableLayoutPanel2.Size = new System.Drawing.Size(616, 257);
+			this.tableLayoutPanel2.Size = new System.Drawing.Size(616, 256);
 			this.tableLayoutPanel2.TabIndex = 2;
 			// 
 			// chkDisableCheats
@@ -421,7 +403,7 @@ namespace Mesen.GUI.Forms.Cheats
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(616, 286);
+			this.ClientSize = new System.Drawing.Size(616, 285);
 			this.Controls.Add(this.tableLayoutPanel2);
 			this.MinimumSize = new System.Drawing.Size(632, 324);
 			this.Name = "frmCheatList";
@@ -436,14 +418,10 @@ namespace Mesen.GUI.Forms.Cheats
 			this.tabCheats.ResumeLayout(false);
 			this.tableLayoutPanel1.ResumeLayout(false);
 			this.tableLayoutPanel1.PerformLayout();
-			this.splitContainer1.Panel1.ResumeLayout(false);
-			this.splitContainer1.Panel2.ResumeLayout(false);
-			((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
-			this.splitContainer1.ResumeLayout(false);
-			this.contextMenuGames.ResumeLayout(false);
 			this.contextMenuCheats.ResumeLayout(false);
 			this.tsCheatActions.ResumeLayout(false);
 			this.tsCheatActions.PerformLayout();
+			this.contextMenuGames.ResumeLayout(false);
 			this.tpgCheatFinder.ResumeLayout(false);
 			this.tableLayoutPanel2.ResumeLayout(false);
 			this.ResumeLayout(false);
@@ -462,7 +440,6 @@ namespace Mesen.GUI.Forms.Cheats
 		private System.Windows.Forms.ToolStripMenuItem mnuAddCheat;
 		private System.Windows.Forms.ToolStripMenuItem mnuDeleteCheat;
 		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
-		private System.Windows.Forms.SplitContainer splitContainer1;
 		private Mesen.GUI.Controls.ctrlMesenToolStrip tsCheatActions;
 		private System.Windows.Forms.ToolStripButton btnAddCheat;
 		private System.Windows.Forms.CheckBox chkDisableCheats;
