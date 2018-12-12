@@ -60,7 +60,7 @@
 			// 
 			// baseConfigPanel
 			// 
-			this.baseConfigPanel.Location = new System.Drawing.Point(0, 273);
+			this.baseConfigPanel.Location = new System.Drawing.Point(0, 272);
 			this.baseConfigPanel.Size = new System.Drawing.Size(385, 29);
 			// 
 			// tableLayoutPanel2
@@ -84,7 +84,7 @@
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel2.Size = new System.Drawing.Size(385, 273);
+			this.tableLayoutPanel2.Size = new System.Drawing.Size(385, 272);
 			this.tableLayoutPanel2.TabIndex = 3;
 			// 
 			// label2
@@ -135,7 +135,7 @@
 			this.grpCode.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.grpCode.Location = new System.Drawing.Point(3, 81);
 			this.grpCode.Name = "grpCode";
-			this.grpCode.Size = new System.Drawing.Size(379, 189);
+			this.grpCode.Size = new System.Drawing.Size(379, 188);
 			this.grpCode.TabIndex = 3;
 			this.grpCode.TabStop = false;
 			this.grpCode.Text = "Code";
@@ -158,7 +158,7 @@
 			this.tlpAdd.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tlpAdd.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tlpAdd.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tlpAdd.Size = new System.Drawing.Size(373, 170);
+			this.tlpAdd.Size = new System.Drawing.Size(373, 169);
 			this.tlpAdd.TabIndex = 0;
 			// 
 			// radCustom
@@ -226,13 +226,14 @@
 			this.tlpCustom.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tlpCustom.Location = new System.Drawing.Point(120, 55);
 			this.tlpCustom.Name = "tlpCustom";
-			this.tlpCustom.RowCount = 5;
+			this.tlpCustom.RowCount = 6;
+			this.tlpCustom.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tlpCustom.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tlpCustom.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tlpCustom.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tlpCustom.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tlpCustom.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tlpCustom.Size = new System.Drawing.Size(250, 112);
+			this.tlpCustom.Size = new System.Drawing.Size(250, 111);
 			this.tlpCustom.TabIndex = 4;
 			// 
 			// lblAddress
@@ -319,9 +320,9 @@
 			// 
 			// chkCompareValue
 			// 
+			this.chkCompareValue.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.chkCompareValue.AutoSize = true;
-			this.chkCompareValue.Location = new System.Drawing.Point(3, 85);
-			this.chkCompareValue.Margin = new System.Windows.Forms.Padding(3, 6, 3, 3);
+			this.chkCompareValue.Location = new System.Drawing.Point(3, 83);
 			this.chkCompareValue.Name = "chkCompareValue";
 			this.chkCompareValue.Size = new System.Drawing.Size(98, 17);
 			this.chkCompareValue.TabIndex = 7;
@@ -342,8 +343,8 @@
 			// 
 			// txtGameName
 			// 
-			this.txtGameName.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.txtGameName.Location = new System.Drawing.Point(78, 3);
+			this.txtGameName.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.txtGameName.Location = new System.Drawing.Point(78, 4);
 			this.txtGameName.Name = "txtGameName";
 			this.txtGameName.ReadOnly = true;
 			this.txtGameName.Size = new System.Drawing.Size(237, 20);
@@ -353,7 +354,7 @@
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(385, 302);
+			this.ClientSize = new System.Drawing.Size(385, 301);
 			this.Controls.Add(this.tableLayoutPanel2);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
 			this.MaximizeBox = false;
