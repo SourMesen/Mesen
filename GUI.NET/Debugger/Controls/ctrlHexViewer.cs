@@ -482,6 +482,8 @@ namespace Mesen.GUI.Debugger.Controls
 					debugger.UpdateDebugger(false, false);
 				}
 			}
+
+			this.RefreshData(_memoryType);
 		}
 
 		private void mnuAddToWatch_Click(object sender, EventArgs e)

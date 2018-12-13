@@ -377,6 +377,7 @@
 			this.mnuHighlightLabelledBytes.Name = "mnuHighlightLabelledBytes";
 			this.mnuHighlightLabelledBytes.Size = new System.Drawing.Size(236, 22);
 			this.mnuHighlightLabelledBytes.Text = "Labelled bytes";
+			this.mnuHighlightLabelledBytes.Click += new System.EventHandler(this.mnuColorProviderOptions_Click);
 			// 
 			// toolStripMenuItem8
 			// 
@@ -389,6 +390,7 @@
 			this.mnuHighlightCodeBytes.Name = "mnuHighlightCodeBytes";
 			this.mnuHighlightCodeBytes.Size = new System.Drawing.Size(236, 22);
 			this.mnuHighlightCodeBytes.Text = "Code bytes (PRG ROM)";
+			this.mnuHighlightCodeBytes.Click += new System.EventHandler(this.mnuColorProviderOptions_Click);
 			// 
 			// mnuHighlightDataBytes
 			// 
@@ -396,6 +398,7 @@
 			this.mnuHighlightDataBytes.Name = "mnuHighlightDataBytes";
 			this.mnuHighlightDataBytes.Size = new System.Drawing.Size(236, 22);
 			this.mnuHighlightDataBytes.Text = "Data bytes (PRG ROM)";
+			this.mnuHighlightDataBytes.Click += new System.EventHandler(this.mnuColorProviderOptions_Click);
 			// 
 			// mnuHighlightDmcDataBytes
 			// 
@@ -403,6 +406,7 @@
 			this.mnuHighlightDmcDataBytes.Name = "mnuHighlightDmcDataBytes";
 			this.mnuHighlightDmcDataBytes.Size = new System.Drawing.Size(236, 22);
 			this.mnuHighlightDmcDataBytes.Text = "DMC sample bytes (PRG ROM)";
+			this.mnuHighlightDmcDataBytes.Click += new System.EventHandler(this.mnuColorProviderOptions_Click);
 			// 
 			// toolStripMenuItem11
 			// 
@@ -415,6 +419,7 @@
 			this.mnuHighlightChrDrawnBytes.Name = "mnuHighlightChrDrawnBytes";
 			this.mnuHighlightChrDrawnBytes.Size = new System.Drawing.Size(236, 22);
 			this.mnuHighlightChrDrawnBytes.Text = "Drawn bytes (CHR ROM)";
+			this.mnuHighlightChrDrawnBytes.Click += new System.EventHandler(this.mnuColorProviderOptions_Click);
 			// 
 			// mnuHighlightChrReadBytes
 			// 
@@ -422,6 +427,7 @@
 			this.mnuHighlightChrReadBytes.Name = "mnuHighlightChrReadBytes";
 			this.mnuHighlightChrReadBytes.Size = new System.Drawing.Size(236, 22);
 			this.mnuHighlightChrReadBytes.Text = "Read bytes (CHR ROM)";
+			this.mnuHighlightChrReadBytes.Click += new System.EventHandler(this.mnuColorProviderOptions_Click);
 			// 
 			// fadeToolStripMenuItem
 			// 
