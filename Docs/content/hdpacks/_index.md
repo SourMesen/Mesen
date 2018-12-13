@@ -55,14 +55,14 @@ Before you start recording, select the options you want to use and the location 
 
 ## File Format (hires.txt) ##
 
-The following are the specifications for the hires.txt file, as of version "103".
+The following are the specifications for the hires.txt file, as of version "104".
 
 ### &lt;ver&gt; tag ###
 
 **Syntax**: `<ver>[integer]`  
-**Example**: `<ver>103`
+**Example**: `<ver>104`
 
-The format's version number (currently 103).
+The format's version number (currently 104).
 
 ### &lt;scale&gt; tag ###
 
@@ -123,7 +123,7 @@ The tileNearby and spriteNearby conditions are used to check whether a specific 
 `<condition>myCondition2,tileNearby,-8,0,[tile data],[palette data]`  
 In this case, `myCondition2` will be true if the tile 8 pixels to the left of the current tile matches the tile+palette data specified.
 
-For CHR ROM games, `tile data` is an integer representing the position of the original tile in CHR ROM.  
+For CHR ROM games, `tile data` is an integer (in hexadecimal) representing the position of the original tile in CHR ROM.  
 For CHR RAM games, `tile data` is a 32-character hexadecimal string representing all 16 bytes of the tile.  
 `palette data` is always an 8-character hexadecimal string representing all 4 bytes of the palette used for the tile.  For sprites, the first byte is always "FF".
 
@@ -140,7 +140,7 @@ The tileAtPosition and spriteAtPosition conditions are used to check whether a s
 `<condition>myCondition,tileAtPosition,10,10,[tile data],[palette data]`  
 In this case, `myCondition` will be true if the tile at position 10,10 on the NES' screen (256x240 resolution) matches the tile+palette data given.
 
-For CHR ROM games, `tile data` is an integer representing the position of the original tile in CHR ROM.  
+For CHR ROM games, `tile data` is an integer (in hexadecimal) representing the position of the original tile in CHR ROM.  
 For CHR RAM games, `tile data` is a 32-character hexadecimal string representing all 16 bytes of the tile.  
 `palette data` is always an 8-character hexadecimal string representing all 4 bytes of the palette used for the tile.  For sprites, the first byte is always "FF".
 
@@ -303,6 +303,10 @@ Returns the current revision of the HD Audio API.  This value is currently set t
 These registers return the ASCII string `NEA` (NES Enhanced Audio) - this can be used to detect whether or not the audio API is available.
 
 ## File Format Changelog ##
+
+### Version 104 ###
+
+* Tile indexes for the `<condition>` tag (tileNearby/spriteNearby/tileAtPosition/spriteAtPosition) are now in hex instead of decimal (affects CHR ROM games only)
 
 ### Version 103 ###
 

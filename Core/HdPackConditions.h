@@ -34,7 +34,7 @@ struct HdPackBaseTileCondition : public HdPackCondition
 		out << TileX << ",";
 		out << TileY << ",";
 		if(TileIndex >= 0) {
-			out << TileIndex << ",";
+			out << HexUtilities::ToHex(TileIndex) << ",";
 		} else {
 			for(int i = 0; i < 16; i++) {
 				out << HexUtilities::ToHex(TileData[i]);

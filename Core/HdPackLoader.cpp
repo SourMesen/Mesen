@@ -433,7 +433,12 @@ void HdPackLoader::ProcessConditionTag(vector<string> &tokens, bool createInvert
 		if(token.size() == 32) {
 			tileData = token;
 		} else {
-			tileIndex = std::stoi(token);
+			if(_data->Version < 104) {
+				tileIndex = std::stoi(token);
+			} else {
+				//Tile indexes are stored as hex starting from version 104+
+				tileIndex = HexUtilities::FromHex(token);
+			}
 		}
 		uint32_t palette = HexUtilities::FromHex(tokens[index++]);
 
