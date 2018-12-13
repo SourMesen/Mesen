@@ -146,7 +146,7 @@ struct HdPackCondition
 	string Name;
 
 	virtual string GetConditionName() = 0;
-	virtual bool IsExcludedFromFile() { return false; }
+	virtual bool IsExcludedFromFile() { return Name.size() > 0 && Name[0] == '!'; }
 	virtual string ToString() = 0;
 
 	virtual ~HdPackCondition() { }
@@ -334,7 +334,8 @@ struct HdBackgroundInfo
 			}
 			out << "]";
 		}
-
+		
+		out << "<background>";
 		out << Data->PngName << ",";
 		out << (Brightness / 255.0);
 
