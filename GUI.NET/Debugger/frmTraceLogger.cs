@@ -94,6 +94,8 @@ namespace Mesen.GUI.Debugger
 			mnuDecreaseFontSize.InitShortcut(this, nameof(DebuggerShortcutsConfig.DecreaseFontSize));
 			mnuResetFontSize.InitShortcut(this, nameof(DebuggerShortcutsConfig.ResetFontSize));
 			mnuRefresh.InitShortcut(this, nameof(DebuggerShortcutsConfig.Refresh));
+			mnuCopy.InitShortcut(this, nameof(DebuggerShortcutsConfig.Copy));
+			mnuSelectAll.InitShortcut(this, nameof(DebuggerShortcutsConfig.SelectAll));
 		}
 
 		protected override void OnLoad(EventArgs e)
@@ -251,22 +253,6 @@ namespace Mesen.GUI.Debugger
 			} catch { }
 		}
 
-		protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
-		{
-			if(keyData == ConfigManager.Config.DebugInfo.Shortcuts.Copy) {
-				if(_previousTrace != null && !this.txtCondition.Focused && txtTraceLog.SelectionStart >= 0) {
-					string[] lines = _previousTrace.Split('\n');
-					StringBuilder sb = new StringBuilder();
-					for(int i = txtTraceLog.SelectionStart, end = txtTraceLog.SelectionStart + txtTraceLog.SelectionLength; i <= end && i < lines.Length; i++) {
-						sb.AppendLine(lines[i]);
-					}
-					Clipboard.SetText(sb.ToString());
-					return true;
-				}
-			}
-			return base.ProcessCmdKey(ref msg, keyData);
-		}
-		
 		private void RefreshLog(bool scrollToBottom, bool forceUpdate)
 		{
 			if(_refreshRunning) {
@@ -468,6 +454,23 @@ namespace Mesen.GUI.Debugger
 				txtFormat.Text = format;
 			}
 			UpdateFormatOptions();
+		}
+
+		private void mnuCopy_Click(object sender, EventArgs e)
+		{
+			string[] lines = _previousTrace.Split('\n');
+			StringBuilder sb = new StringBuilder();
+			for(int i = txtTraceLog.SelectionStart, end = txtTraceLog.SelectionStart + txtTraceLog.SelectionLength; i <= end && i < lines.Length; i++) {
+				sb.Append(lines[i]);
+			}
+			Clipboard.SetText(sb.ToString());
+
+			txtTraceLog.CopySelection(true, true, false);
+		}
+
+		private void mnuSelectAll_Click(object sender, EventArgs e)
+		{
+			txtTraceLog.SelectAll();
 		}
 	}
 }
