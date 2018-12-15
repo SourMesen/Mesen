@@ -41,11 +41,20 @@ namespace Mesen.GUI.Debugger.Controls
 			picSprites.Image = new Bitmap(256, 512, PixelFormat.Format32bppArgb);
 		}
 
+		protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
+		{
+			if(ctxMenu.ProcessCommandKey(ref msg, keyData)) {
+				return true;
+			}
+			return base.ProcessCmdKey(ref msg, keyData);
+		}
+
 		protected override void OnLoad(EventArgs e)
 		{
 			base.OnLoad(e);
 			if(!IsDesignMode) {
 				mnuCopyToClipboard.InitShortcut(this, nameof(DebuggerShortcutsConfig.Copy));
+				mnuEditInMemoryViewer.InitShortcut(this, nameof(DebuggerShortcutsConfig.CodeWindow_EditInMemoryViewer));
 			}
 		}
 
@@ -335,11 +344,17 @@ namespace Mesen.GUI.Debugger.Controls
 		private void picSprites_MouseEnter(object sender, EventArgs e)
 		{
 			_copyPreview = false;
+			if(this.ParentForm.ContainsFocus) {
+				this.Focus();
+			}
 		}
 
 		private void picPreview_MouseEnter(object sender, EventArgs e)
 		{
 			_copyPreview = true;
+			if(this.ParentForm.ContainsFocus) {
+				this.Focus();
+			}
 		}
 
 		private void mnuCopyToClipboard_Click(object sender, EventArgs e)
@@ -403,6 +418,22 @@ namespace Mesen.GUI.Debugger.Controls
 			} else {
 				Clipboard.Clear();
 			}
+		}
+
+		private void mnuEditInMemoryViewer_Click(object sender, EventArgs e)
+		{
+			if(_selectedSprite < 0 && _contextMenuSpriteIndex < 0) {
+				return;
+			}
+
+			int ramAddr = (_selectedSprite >= 0 ? _selectedSprite : _contextMenuSpriteIndex) * 4;
+			int tileIndex = _spriteRam[ramAddr + 1];
+			
+			DebugState state = new DebugState();
+			InteropEmu.DebugGetState(ref state);
+
+			int tileIndexOffset = (!_largeSprites && state.PPU.ControlFlags.SpritePatternAddr == 0x1000) ? 256 : 0;
+			DebugWindowManager.OpenMemoryViewer((tileIndex + tileIndexOffset) * 16, DebugMemoryType.PpuMemory);
 		}
 	}
 }

@@ -170,15 +170,7 @@ namespace Mesen.GUI.Debugger
 		protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
 		{
 			if(!this.ctrlScanlineCycle.ContainsFocus) {
-				if(keyData == ConfigManager.Config.DebugInfo.Shortcuts.Copy) {
-					if(this.tabMain.SelectedTab == tpgNametableViewer) {
-						ctrlNametableViewer.CopyToClipboard();
-					} else if(this.tabMain.SelectedTab == tpgChrViewer) {
-						ctrlChrViewer.CopyToClipboard();
-					} else if(this.tabMain.SelectedTab == tpgSpriteViewer) {
-						ctrlSpriteViewer.CopyToClipboard();
-					}
-				} else if(this.tabMain.SelectedTab == tpgChrViewer) {
+				if(this.tabMain.SelectedTab == tpgChrViewer) {
 					bool shift = keyData.HasFlag(Keys.Shift);
 					keyData &= ~Keys.Shift;
 

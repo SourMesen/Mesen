@@ -1,4 +1,6 @@
-﻿namespace Mesen.GUI.Debugger.Controls
+﻿using Mesen.GUI.Controls;
+
+namespace Mesen.GUI.Debugger.Controls
 {
 	partial class ctrlChrViewer
 	{
@@ -58,13 +60,15 @@
 			this.ctrlTilePalette = new Mesen.GUI.Debugger.Controls.ctrlTilePalette();
 			this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
 			this.picChrBank1 = new System.Windows.Forms.PictureBox();
-			this.ctxMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
+			this.ctxMenu = new ctrlMesenContextMenuStrip(this.components);
 			this.mnuCopyHdPack = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
 			this.mnuCopyToClipboard = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuExportToPng = new System.Windows.Forms.ToolStripMenuItem();
 			this.picChrBank2 = new System.Windows.Forms.PictureBox();
 			this.toolTip = new System.Windows.Forms.ToolTip(this.components);
-			this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
-			this.mnuExportToPng = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuEditInMemoryViewer = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripSeparator();
 			this.tableLayoutPanel3.SuspendLayout();
 			this.grpDisplayOptions.SuspendLayout();
 			this.tableLayoutPanel1.SuspendLayout();
@@ -459,18 +463,21 @@
 			this.picChrBank1.TabIndex = 0;
 			this.picChrBank1.TabStop = false;
 			this.picChrBank1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.picChrBank_MouseDown);
+			this.picChrBank1.MouseEnter += new System.EventHandler(this.picChrBank_MouseEnter);
 			this.picChrBank1.MouseLeave += new System.EventHandler(this.picChrBank_MouseLeave);
 			this.picChrBank1.MouseMove += new System.Windows.Forms.MouseEventHandler(this.picChrBank_MouseMove);
 			// 
 			// ctxMenu
 			// 
 			this.ctxMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.mnuEditInMemoryViewer,
+            this.toolStripMenuItem2,
             this.mnuCopyHdPack,
             this.toolStripMenuItem1,
             this.mnuCopyToClipboard,
             this.mnuExportToPng});
 			this.ctxMenu.Name = "ctxMenu";
-			this.ctxMenu.Size = new System.Drawing.Size(222, 98);
+			this.ctxMenu.Size = new System.Drawing.Size(222, 126);
 			this.ctxMenu.Opening += new System.ComponentModel.CancelEventHandler(this.ctxMenu_Opening);
 			// 
 			// mnuCopyHdPack
@@ -480,6 +487,11 @@
 			this.mnuCopyHdPack.Text = "Copy Tile (HD Pack Format)";
 			this.mnuCopyHdPack.Click += new System.EventHandler(this.mnuCopyHdPack_Click);
 			// 
+			// toolStripMenuItem1
+			// 
+			this.toolStripMenuItem1.Name = "toolStripMenuItem1";
+			this.toolStripMenuItem1.Size = new System.Drawing.Size(218, 6);
+			// 
 			// mnuCopyToClipboard
 			// 
 			this.mnuCopyToClipboard.Image = global::Mesen.GUI.Properties.Resources.Copy;
@@ -487,6 +499,14 @@
 			this.mnuCopyToClipboard.Size = new System.Drawing.Size(221, 22);
 			this.mnuCopyToClipboard.Text = "Copy image to clipboard";
 			this.mnuCopyToClipboard.Click += new System.EventHandler(this.mnuCopyToClipboard_Click);
+			// 
+			// mnuExportToPng
+			// 
+			this.mnuExportToPng.Image = global::Mesen.GUI.Properties.Resources.Export;
+			this.mnuExportToPng.Name = "mnuExportToPng";
+			this.mnuExportToPng.Size = new System.Drawing.Size(221, 22);
+			this.mnuExportToPng.Text = "Export image to PNG";
+			this.mnuExportToPng.Click += new System.EventHandler(this.mnuExportToPng_Click);
 			// 
 			// picChrBank2
 			// 
@@ -501,6 +521,7 @@
 			this.picChrBank2.TabIndex = 1;
 			this.picChrBank2.TabStop = false;
 			this.picChrBank2.MouseDown += new System.Windows.Forms.MouseEventHandler(this.picChrBank_MouseDown);
+			this.picChrBank2.MouseEnter += new System.EventHandler(this.picChrBank_MouseEnter);
 			this.picChrBank2.MouseLeave += new System.EventHandler(this.picChrBank_MouseLeave);
 			this.picChrBank2.MouseMove += new System.Windows.Forms.MouseEventHandler(this.picChrBank_MouseMove);
 			// 
@@ -510,18 +531,18 @@
 			this.toolTip.InitialDelay = 10;
 			this.toolTip.ReshowDelay = 10;
 			// 
-			// toolStripMenuItem1
+			// mnuEditInMemoryViewer
 			// 
-			this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-			this.toolStripMenuItem1.Size = new System.Drawing.Size(218, 6);
+			this.mnuEditInMemoryViewer.Image = global::Mesen.GUI.Properties.Resources.CheatCode;
+			this.mnuEditInMemoryViewer.Name = "mnuEditInMemoryViewer";
+			this.mnuEditInMemoryViewer.Size = new System.Drawing.Size(221, 22);
+			this.mnuEditInMemoryViewer.Text = "Edit in Memory Viewer";
+			this.mnuEditInMemoryViewer.Click += new System.EventHandler(this.mnuEditInMemoryViewer_Click);
 			// 
-			// mnuExportToPng
+			// toolStripMenuItem2
 			// 
-			this.mnuExportToPng.Image = global::Mesen.GUI.Properties.Resources.Export;
-			this.mnuExportToPng.Name = "mnuExportToPng";
-			this.mnuExportToPng.Size = new System.Drawing.Size(221, 22);
-			this.mnuExportToPng.Text = "Export image to PNG";
-			this.mnuExportToPng.Click += new System.EventHandler(this.mnuExportToPng_Click);
+			this.toolStripMenuItem2.Name = "toolStripMenuItem2";
+			this.toolStripMenuItem2.Size = new System.Drawing.Size(218, 6);
 			// 
 			// ctrlChrViewer
 			// 
@@ -586,7 +607,7 @@
 		private System.Windows.Forms.PictureBox picTileTooltip;
 		private System.Windows.Forms.ToolTip toolTip;
 		private System.Windows.Forms.PictureBox picPaletteTooltip;
-		private System.Windows.Forms.ContextMenuStrip ctxMenu;
+		private ctrlMesenContextMenuStrip ctxMenu;
 		private System.Windows.Forms.ToolStripMenuItem mnuCopyHdPack;
 		private ctrlTilePalette ctrlTilePalette;
 		private System.Windows.Forms.ToolStripMenuItem mnuCopyToClipboard;
@@ -594,5 +615,7 @@
 		private System.Windows.Forms.CheckBox chkShowSingleColorTilesInGrayscale;
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem1;
 		private System.Windows.Forms.ToolStripMenuItem mnuExportToPng;
+		private System.Windows.Forms.ToolStripMenuItem mnuEditInMemoryViewer;
+		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem2;
 	}
 }

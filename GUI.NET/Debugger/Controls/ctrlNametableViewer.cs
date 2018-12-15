@@ -54,11 +54,20 @@ namespace Mesen.GUI.Debugger.Controls
 			}
 		}
 
+		protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
+		{
+			if(ctxMenu.ProcessCommandKey(ref msg, keyData)) {
+				return true;
+			}
+			return base.ProcessCmdKey(ref msg, keyData);
+		}
+		
 		protected override void OnLoad(EventArgs e)
 		{
 			base.OnLoad(e);
 			if(!IsDesignMode) {
 				mnuCopyToClipboard.InitShortcut(this, nameof(DebuggerShortcutsConfig.Copy));
+				mnuEditInMemoryViewer.InitShortcut(this, nameof(DebuggerShortcutsConfig.CodeWindow_EditInMemoryViewer));
 			}
 		}
 
@@ -87,8 +96,6 @@ namespace Mesen.GUI.Debugger.Controls
 
 		public void RefreshViewer()
 		{
-			_currentPpuAddress = -1;
-
 			int tileIndexOffset = _state.PPU.ControlFlags.BackgroundPatternAddr == 0x1000 ? 256 : 0;
 			lblMirroringType.Text = ResourceHelper.GetEnumText(_state.Cartridge.Mirroring);
 
@@ -153,6 +160,7 @@ namespace Mesen.GUI.Debugger.Controls
 			this.picNametable.Image = target;
 
 			if(_firstDraw) {
+				_currentPpuAddress = 0x2000;
 				UpdateTileInformation(0, 0, 0x2000, 0);
 				_firstDraw = false;
 			}
@@ -456,6 +464,18 @@ namespace Mesen.GUI.Debugger.Controls
 				if(sfd.ShowDialog() == DialogResult.OK) {
 					_nametableImage.Save(sfd.FileName, System.Drawing.Imaging.ImageFormat.Png);
 				}
+			}
+		}
+
+		private void mnuEditInMemoryViewer_Click(object sender, EventArgs e)
+		{
+			DebugWindowManager.OpenMemoryViewer(_currentPpuAddress, DebugMemoryType.PpuMemory);
+		}
+
+		private void picNametable_MouseEnter(object sender, EventArgs e)
+		{
+			if(this.ParentForm.ContainsFocus) {
+				this.Focus();
 			}
 		}
 	}

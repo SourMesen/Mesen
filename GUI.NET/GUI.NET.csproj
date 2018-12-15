@@ -279,6 +279,9 @@
     <Compile Include="Controls\ctrlLoadingRom.Designer.cs">
       <DependentUpon>ctrlLoadingRom.cs</DependentUpon>
     </Compile>
+    <Compile Include="Controls\ctrlMesenContextMenuStrip.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Controls\ctrlMesenMenuStrip.cs">
       <SubType>Component</SubType>
     </Compile>
