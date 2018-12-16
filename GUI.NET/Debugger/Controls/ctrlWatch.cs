@@ -9,13 +9,19 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Mesen.GUI.Config;
 using Mesen.GUI.Controls;
+using System.Text.RegularExpressions;
+using System.Globalization;
 
 namespace Mesen.GUI.Debugger
 {
 	public partial class ctrlWatch : BaseControl
 	{
+		private static Regex _watchAddressOrLabel = new Regex(@"^(\[|{)(\s*((\$[0-9A-Fa-f]+)|(\d+)|([@_a-zA-Z0-9]+)))\s*[,]{0,1}\d*\s*(\]|})$", RegexOptions.Compiled);
+
 		private int _currentSelection = -1;
 		private int _previousMaxLength = -1;
+		private int _selectedAddress = -1;
+		private CodeLabel _selectedLabel = null;
 
 		public ctrlWatch()
 		{
@@ -31,7 +37,20 @@ namespace Mesen.GUI.Debugger
 				this.mnuHexDisplay.Checked = ConfigManager.Config.DebugInfo.HexDisplay;
 				WatchManager.WatchChanged += WatchManager_WatchChanged;
 				mnuRemoveWatch.InitShortcut(this, nameof(DebuggerShortcutsConfig.WatchList_Delete));
+				mnuEditInMemoryViewer.InitShortcut(this, nameof(DebuggerShortcutsConfig.CodeWindow_EditInMemoryViewer));
+				mnuViewInDisassembly.InitShortcut(this, nameof(DebuggerShortcutsConfig.MemoryViewer_ViewInDisassembly));
 			}
+		}
+
+		protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
+		{
+			UpdateActions();
+			return base.ProcessCmdKey(ref msg, keyData);
+		}
+
+		private void contextMenuWatch_Opening(object sender, CancelEventArgs e)
+		{
+			UpdateActions();
 		}
 
 		private void WatchManager_WatchChanged(object sender, EventArgs e)
@@ -120,6 +139,36 @@ namespace Mesen.GUI.Debugger
 		private void lstWatch_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			mnuRemoveWatch.Enabled = lstWatch.SelectedItems.Count >= 1;
+			UpdateActions();
+		}
+
+		private void UpdateActions()
+		{
+			mnuEditInMemoryViewer.Enabled = false;
+			mnuViewInDisassembly.Enabled = false;
+
+			if(lstWatch.SelectedItems.Count == 1) {
+				Match match = _watchAddressOrLabel.Match(lstWatch.SelectedItems[0].Text);
+				if(match.Success) {
+					string address = match.Groups[3].Value;
+
+					if(address[0] >= '0' && address[0] <= '9' || address[0] == '$') {
+						//CPU Address
+						_selectedAddress = Int32.Parse(address[0] == '$' ? address.Substring(1) : address, address[0] == '$' ? NumberStyles.AllowHexSpecifier : NumberStyles.None);
+						_selectedLabel = null;
+						mnuEditInMemoryViewer.Enabled = true;
+						mnuViewInDisassembly.Enabled = true;
+					} else {
+						//Label
+						_selectedAddress = -1;
+						_selectedLabel = LabelManager.GetLabel(address);
+						if(_selectedLabel != null) {
+							mnuEditInMemoryViewer.Enabled = true;
+							mnuViewInDisassembly.Enabled = true;
+						}
+					}
+				}
+			}
 		}
 
 		private void lstWatch_Click(object sender, EventArgs e)
@@ -147,6 +196,35 @@ namespace Mesen.GUI.Debugger
 					itemsToRemove.Add(item.Index);
 				}
 				WatchManager.RemoveWatch(itemsToRemove.ToArray());
+			}
+		}
+
+		private void mnuViewInDisassembly_Click(object sender, EventArgs e)
+		{
+			if(lstWatch.SelectedItems.Count != 1) {
+				return;
+			}
+
+			if(_selectedAddress >= 0) {
+				DebugWindowManager.GetDebugger().ScrollToAddress(_selectedAddress);
+			} else if(_selectedLabel != null) {
+				int relAddress = _selectedLabel.GetRelativeAddress();
+				if(relAddress >= 0) {
+					DebugWindowManager.GetDebugger().ScrollToAddress(relAddress);
+				}
+			}
+		}
+
+		private void mnuEditInMemoryViewer_Click(object sender, EventArgs e)
+		{
+			if(lstWatch.SelectedItems.Count != 1) {
+				return;
+			}
+
+			if(_selectedAddress >= 0) {
+				DebugWindowManager.OpenMemoryViewer(_selectedAddress, DebugMemoryType.CpuMemory);
+			} else if(_selectedLabel != null) {
+				DebugWindowManager.OpenMemoryViewer((int)_selectedLabel.Address, _selectedLabel.AddressType.ToMemoryType());
 			}
 		}
 	}

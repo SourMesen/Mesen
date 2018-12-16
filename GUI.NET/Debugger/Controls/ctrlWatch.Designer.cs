@@ -36,6 +36,9 @@
 			this.contextMenuWatch = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this.mnuRemoveWatch = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
+			this.mnuEditInMemoryViewer = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuViewInDisassembly = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripSeparator();
 			this.mnuHexDisplay = new System.Windows.Forms.ToolStripMenuItem();
 			this.contextMenuWatch.SuspendLayout();
 			this.SuspendLayout();
@@ -79,22 +82,47 @@
 			this.contextMenuWatch.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.mnuRemoveWatch,
             this.toolStripMenuItem1,
+            this.mnuEditInMemoryViewer,
+            this.mnuViewInDisassembly,
+            this.toolStripMenuItem2,
             this.mnuHexDisplay});
 			this.contextMenuWatch.Name = "contextMenuWatch";
-			this.contextMenuWatch.Size = new System.Drawing.Size(184, 54);
+			this.contextMenuWatch.Size = new System.Drawing.Size(194, 126);
+			this.contextMenuWatch.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuWatch_Opening);
 			// 
 			// mnuRemoveWatch
 			// 
 			this.mnuRemoveWatch.Image = global::Mesen.GUI.Properties.Resources.Close;
 			this.mnuRemoveWatch.Name = "mnuRemoveWatch";
-			this.mnuRemoveWatch.Size = new System.Drawing.Size(183, 22);
+			this.mnuRemoveWatch.Size = new System.Drawing.Size(193, 22);
 			this.mnuRemoveWatch.Text = "Remove";
 			this.mnuRemoveWatch.Click += new System.EventHandler(this.mnuRemoveWatch_Click);
 			// 
 			// toolStripMenuItem1
 			// 
 			this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-			this.toolStripMenuItem1.Size = new System.Drawing.Size(180, 6);
+			this.toolStripMenuItem1.Size = new System.Drawing.Size(190, 6);
+			// 
+			// mnuEditInMemoryViewer
+			// 
+			this.mnuEditInMemoryViewer.Image = global::Mesen.GUI.Properties.Resources.CheatCode;
+			this.mnuEditInMemoryViewer.Name = "mnuEditInMemoryViewer";
+			this.mnuEditInMemoryViewer.Size = new System.Drawing.Size(193, 22);
+			this.mnuEditInMemoryViewer.Text = "Edit in Memory Viewer";
+			this.mnuEditInMemoryViewer.Click += new System.EventHandler(this.mnuEditInMemoryViewer_Click);
+			// 
+			// mnuViewInDisassembly
+			// 
+			this.mnuViewInDisassembly.Image = global::Mesen.GUI.Properties.Resources.Bug;
+			this.mnuViewInDisassembly.Name = "mnuViewInDisassembly";
+			this.mnuViewInDisassembly.Size = new System.Drawing.Size(193, 22);
+			this.mnuViewInDisassembly.Text = "View in disassembly";
+			this.mnuViewInDisassembly.Click += new System.EventHandler(this.mnuViewInDisassembly_Click);
+			// 
+			// toolStripMenuItem2
+			// 
+			this.toolStripMenuItem2.Name = "toolStripMenuItem2";
+			this.toolStripMenuItem2.Size = new System.Drawing.Size(190, 6);
 			// 
 			// mnuHexDisplay
 			// 
@@ -102,7 +130,7 @@
 			this.mnuHexDisplay.CheckOnClick = true;
 			this.mnuHexDisplay.CheckState = System.Windows.Forms.CheckState.Checked;
 			this.mnuHexDisplay.Name = "mnuHexDisplay";
-			this.mnuHexDisplay.Size = new System.Drawing.Size(183, 22);
+			this.mnuHexDisplay.Size = new System.Drawing.Size(193, 22);
 			this.mnuHexDisplay.Text = "Hexadecimal Display";
 			this.mnuHexDisplay.Click += new System.EventHandler(this.mnuHexDisplay_Click);
 			// 
@@ -127,5 +155,8 @@
 		private System.Windows.Forms.ToolStripMenuItem mnuRemoveWatch;
 		private System.Windows.Forms.ToolStripMenuItem mnuHexDisplay;
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem1;
+		private System.Windows.Forms.ToolStripMenuItem mnuEditInMemoryViewer;
+		private System.Windows.Forms.ToolStripMenuItem mnuViewInDisassembly;
+		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem2;
 	}
 }

@@ -51,6 +51,11 @@ namespace Mesen.GUI.Config
 		[ShortcutName("Mark Selection as Unidentified Code/Data")]
 		public XmlKeys MarkAsUnidentified = Keys.Control | Keys.D3;
 
+		[ShortcutName("Edit in Memory Viewer")]
+		public XmlKeys CodeWindow_EditInMemoryViewer = Keys.F1;
+		[ShortcutName("View in disassembly")]
+		public XmlKeys MemoryViewer_ViewInDisassembly = Keys.None;
+
 		[ShortcutName("Open APU Viewer")]
 		public XmlKeys OpenApuViewer = Keys.Control | Keys.U;
 		[ShortcutName("Open Assembler")]
@@ -119,8 +124,6 @@ namespace Mesen.GUI.Config
 		public XmlKeys CodeWindow_EditSubroutine = Keys.F4;
 		[ShortcutName("Code Window: Edit Selected Code")]
 		public XmlKeys CodeWindow_EditSelectedCode = Keys.None;
-		[ShortcutName("Code Window: Edit in Memory Viewer")]
-		public XmlKeys CodeWindow_EditInMemoryViewer = Keys.F1;
 		[ShortcutName("Code Window: Edit Label")]
 		public XmlKeys CodeWindow_EditLabel = Keys.F2;
 		[ShortcutName("Code Window: Navigate Back")]
@@ -198,8 +201,6 @@ namespace Mesen.GUI.Config
 		public XmlKeys MemoryViewer_ViewInCpuMemory = Keys.None;
 		[ShortcutName("View in [memory type]")]
 		public XmlKeys MemoryViewer_ViewInMemoryType = Keys.None;
-		[ShortcutName("View in disassembly")]
-		public XmlKeys MemoryViewer_ViewInDisassembly = Keys.None;
 
 		//Script Window
 		[ShortcutName("Open Script")]
