@@ -68,7 +68,7 @@
 			// 
 			// colFunctionLabel
 			// 
-			this.colFunctionLabel.Text = "Label";
+			this.colFunctionLabel.Text = "Function Name";
 			this.colFunctionLabel.Width = 136;
 			// 
 			// colFunctionAddress
