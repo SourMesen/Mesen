@@ -263,9 +263,16 @@ namespace Mesen.GUI.Debugger.Controls
 
 		public void ToggleBreakpoint(bool toggleEnabledFlag)
 		{
-			int relativeAddress = Viewer.CodeViewer.CurrentLine;
-			AddressTypeInfo info = Viewer.GetAddressInfo(Viewer.CodeViewer.SelectedLine);
+			int lineIndex = Viewer.CodeViewer.SelectedLine;
+			int relativeAddress = Viewer.CodeViewer.GetLineNumber(lineIndex);
+			if(relativeAddress < 0 && Viewer.CodeViewer.LineCount > lineIndex + 1) {
+				//Current line has no address, try using the next line instead.
+				//(Used when trying to set a breakpoint on a row containing only a label)
+				lineIndex++;
+				relativeAddress = Viewer.CodeViewer.GetLineNumber(lineIndex);
+			}
 
+			AddressTypeInfo info = Viewer.GetAddressInfo(lineIndex);
 			BreakpointManager.ToggleBreakpoint(relativeAddress, info, toggleEnabledFlag);
 		}
 
