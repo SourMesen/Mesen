@@ -55,6 +55,8 @@
 			this.scriptToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuRun = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuStop = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem7 = new System.Windows.Forms.ToolStripSeparator();
+			this.mnuSetScriptTimeout = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem3 = new System.Windows.Forms.ToolStripSeparator();
 			this.mnuSaveBeforeRun = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuAutoReload = new System.Windows.Forms.ToolStripMenuItem();
@@ -78,8 +80,6 @@
 			this.statusStrip1 = new System.Windows.Forms.StatusStrip();
 			this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
 			this.lblScriptActive = new System.Windows.Forms.ToolStripStatusLabel();
-			this.mnuSetScriptTimeout = new System.Windows.Forms.ToolStripMenuItem();
-			this.toolStripMenuItem7 = new System.Windows.Forms.ToolStripSeparator();
 			this.mnuMain.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.txtScriptContent)).BeginInit();
 			this.contextMenu.SuspendLayout();
@@ -286,6 +286,19 @@
 			this.mnuStop.Text = "Stop";
 			this.mnuStop.Click += new System.EventHandler(this.mnuStop_Click);
 			// 
+			// toolStripMenuItem7
+			// 
+			this.toolStripMenuItem7.Name = "toolStripMenuItem7";
+			this.toolStripMenuItem7.Size = new System.Drawing.Size(255, 6);
+			// 
+			// mnuSetScriptTimeout
+			// 
+			this.mnuSetScriptTimeout.Image = global::Mesen.GUI.Properties.Resources.Speed;
+			this.mnuSetScriptTimeout.Name = "mnuSetScriptTimeout";
+			this.mnuSetScriptTimeout.Size = new System.Drawing.Size(258, 22);
+			this.mnuSetScriptTimeout.Text = "Set Script Timeout...";
+			this.mnuSetScriptTimeout.Click += new System.EventHandler(this.mnuSetScriptTimeout_Click);
+			// 
 			// toolStripMenuItem3
 			// 
 			this.toolStripMenuItem3.Name = "toolStripMenuItem3";
@@ -413,38 +426,42 @@
             this.toolStripMenuItem5,
             this.mnuSelectAll});
 			this.contextMenu.Name = "contextMenu";
-			this.contextMenu.Size = new System.Drawing.Size(123, 98);
+			this.contextMenu.Size = new System.Drawing.Size(153, 120);
 			// 
 			// mnuCopy
 			// 
+			this.mnuCopy.Image = global::Mesen.GUI.Properties.Resources.Copy;
 			this.mnuCopy.Name = "mnuCopy";
-			this.mnuCopy.Size = new System.Drawing.Size(122, 22);
+			this.mnuCopy.Size = new System.Drawing.Size(152, 22);
 			this.mnuCopy.Text = "Copy";
 			this.mnuCopy.Click += new System.EventHandler(this.mnuCopy_Click);
 			// 
 			// mnuCut
 			// 
+			this.mnuCut.Image = global::Mesen.GUI.Properties.Resources.Cut;
 			this.mnuCut.Name = "mnuCut";
-			this.mnuCut.Size = new System.Drawing.Size(122, 22);
+			this.mnuCut.Size = new System.Drawing.Size(152, 22);
 			this.mnuCut.Text = "Cut";
 			this.mnuCut.Click += new System.EventHandler(this.mnuCut_Click);
 			// 
 			// mnuPaste
 			// 
+			this.mnuPaste.Image = global::Mesen.GUI.Properties.Resources.Paste;
 			this.mnuPaste.Name = "mnuPaste";
-			this.mnuPaste.Size = new System.Drawing.Size(122, 22);
+			this.mnuPaste.Size = new System.Drawing.Size(152, 22);
 			this.mnuPaste.Text = "Paste";
 			this.mnuPaste.Click += new System.EventHandler(this.mnuPaste_Click);
 			// 
 			// toolStripMenuItem5
 			// 
 			this.toolStripMenuItem5.Name = "toolStripMenuItem5";
-			this.toolStripMenuItem5.Size = new System.Drawing.Size(119, 6);
+			this.toolStripMenuItem5.Size = new System.Drawing.Size(149, 6);
 			// 
 			// mnuSelectAll
 			// 
+			this.mnuSelectAll.Image = global::Mesen.GUI.Properties.Resources.SelectAll;
 			this.mnuSelectAll.Name = "mnuSelectAll";
-			this.mnuSelectAll.Size = new System.Drawing.Size(122, 22);
+			this.mnuSelectAll.Size = new System.Drawing.Size(152, 22);
 			this.mnuSelectAll.Text = "Select All";
 			this.mnuSelectAll.Click += new System.EventHandler(this.mnuSelectAll_Click);
 			// 
@@ -514,19 +531,6 @@
 			this.lblScriptActive.Size = new System.Drawing.Size(109, 17);
 			this.lblScriptActive.Text = "Script is running";
 			this.lblScriptActive.Visible = false;
-			// 
-			// mnuSetScriptTimeout
-			// 
-			this.mnuSetScriptTimeout.Image = global::Mesen.GUI.Properties.Resources.Speed;
-			this.mnuSetScriptTimeout.Name = "mnuSetScriptTimeout";
-			this.mnuSetScriptTimeout.Size = new System.Drawing.Size(258, 22);
-			this.mnuSetScriptTimeout.Text = "Set Script Timeout...";
-			this.mnuSetScriptTimeout.Click += new System.EventHandler(this.mnuSetScriptTimeout_Click);
-			// 
-			// toolStripMenuItem7
-			// 
-			this.toolStripMenuItem7.Name = "toolStripMenuItem7";
-			this.toolStripMenuItem7.Size = new System.Drawing.Size(255, 6);
 			// 
 			// frmScript
 			// 
