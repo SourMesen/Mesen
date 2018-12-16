@@ -210,7 +210,7 @@ void Debugger::UpdateCdlCache()
 	for(int i = 0, len = _mapper->GetMemorySize(DebugMemoryType::PrgRom); i < len; i++) {
 		if(_codeDataLogger->IsCode(i)) {
 			AddressTypeInfo info = { i, AddressType::PrgRom };
-			i = _disassembler->BuildCache(info, 0, _codeDataLogger->IsSubEntryPoint(i), false) - 1;
+			i = _disassembler->BuildCache(info, 0, false, false) - 1;
 		}
 	}
 
@@ -218,6 +218,10 @@ void Debugger::UpdateCdlCache()
 	for(int i = 0, len = _mapper->GetMemorySize(DebugMemoryType::PrgRom); i < len; i++) {
 		if(_codeDataLogger->IsSubEntryPoint(i)) {
 			_functionEntryPoints.emplace(i);
+
+			//After resetting the cache, set the entry point flags in the disassembly cache
+			AddressTypeInfo info = { i, AddressType::PrgRom };
+			_disassembler->BuildCache(info, 0, true, false);
 		}
 	}
 }
