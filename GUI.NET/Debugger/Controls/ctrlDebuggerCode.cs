@@ -246,7 +246,7 @@ namespace Mesen.GUI.Debugger
 
 		protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
 		{
-			_codeViewerActions.UpdateContextMenuItemVisibility();
+			_codeViewerActions.UpdateContextMenuItemVisibility(_codeViewerActions.contextMenu.Items);
 			return base.ProcessCmdKey(ref msg, keyData);
 		}
 		

@@ -257,18 +257,20 @@ namespace Mesen.GUI.Config
 			}
 		}
 
-		private static void ClearProcessCmdKeyHandler(ToolStripMenuItem item, Control parent)
+		public static void ClearProcessCmdKeyHandler(ToolStripMenuItem item, Control parent)
 		{
 			Form parentForm = parent.FindForm();
 			if(parentForm is BaseForm) {
-				(parentForm as BaseForm).OnProcessCmdKey -= (ProcessCmdKeyHandler)item.Tag;
+				(parentForm as BaseForm).OnProcessCmdKey -= ((ShortcutInfo)item.Tag).KeyHandler;
 			}
-			item.Tag = null;
+			((ShortcutInfo)item.Tag).KeyHandler = null;
 		}
 
 		public static void UpdateShortcutItem(ToolStripMenuItem item, Control parent, string fieldName)
 		{
-			if(item.Tag is ProcessCmdKeyHandler) {
+			if(item.Tag == null) {
+				item.Tag = new ShortcutInfo() { KeyHandler = null, ShortcutKey = fieldName };
+			} else if(((ShortcutInfo)item.Tag).KeyHandler != null) {
 				ClearProcessCmdKeyHandler(item, parent);
 			}
 
@@ -288,7 +290,7 @@ namespace Mesen.GUI.Config
 						return false;
 					};
 
-					item.Tag = onProcessCmdKeyHandler;
+					((ShortcutInfo)item.Tag).KeyHandler = onProcessCmdKeyHandler;
 					(parentForm as BaseForm).OnProcessCmdKey += onProcessCmdKeyHandler;
 				}
 			} else {
@@ -305,6 +307,12 @@ namespace Mesen.GUI.Config
 			DebuggerShortcutsConfig.UpdateShortcutItem(item, parent, fieldName);
 			DebuggerShortcutsConfig.RegisterMenuItem(item, parent, fieldName);
 		}
+	}
+
+	public class ShortcutInfo
+	{
+		public string ShortcutKey;
+		public ProcessCmdKeyHandler KeyHandler;
 	}
 
 	public class XmlKeys

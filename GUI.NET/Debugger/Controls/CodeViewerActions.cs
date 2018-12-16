@@ -140,7 +140,7 @@ namespace Mesen.GUI.Debugger.Controls
 
 		private void contextMenuCode_Opening(object sender, CancelEventArgs e)
 		{
-			UpdateContextMenuItemVisibility(true);
+			UpdateContextMenuItemVisibility(contextMenu.Items, true);
 
 			int startAddress, endAddress;
 			string range;
@@ -413,48 +413,38 @@ namespace Mesen.GUI.Debugger.Controls
 			mnuEditSubroutine.Enabled = true;
 		}
 
-		public void UpdateContextMenuItemVisibility(bool? visible = null)
+		public void UpdateContextMenuItemVisibility(ToolStripItemCollection items, bool? visible = null)
 		{
-			mnuUndoPrgChrEdit.Enabled = InteropEmu.DebugHasUndoHistory();
-			mnuShowNextStatement.Enabled = Viewer.ActiveAddress.HasValue;
-			mnuSetNextStatement.Enabled = Viewer.ActiveAddress.HasValue;
-			mnuEditSelectedCode.Enabled = mnuEditSubroutine.Enabled = InteropEmu.DebugIsExecutionStopped() && Viewer.CodeViewer.CurrentLine >= 0;
-
-			if(visible.HasValue) {
-				mnuAddToWatch.Visible = visible.Value;
-				mnuEditLabel.Visible = visible.Value;
-				mnuGoToLocation.Visible = visible.Value;
-				mnuToggleBreakpoint.Visible = visible.Value;
-				sepAddToWatch.Visible = visible.Value;
-				sepEditLabel.Visible = visible.Value;
-				mnuFindOccurrences.Visible = visible.Value;
-			}
+			items[nameof(mnuUndoPrgChrEdit)].Enabled = InteropEmu.DebugHasUndoHistory();
+			items[nameof(mnuShowNextStatement)].Enabled = Viewer.ActiveAddress.HasValue;
+			items[nameof(mnuSetNextStatement)].Enabled = Viewer.ActiveAddress.HasValue;
+			items[nameof(mnuEditSelectedCode)].Enabled = items[nameof(mnuEditSubroutine)].Enabled = InteropEmu.DebugIsExecutionStopped() && Viewer.CodeViewer.CurrentLine >= 0;
 
 			if(SourceView) {
-				mnuMarkSelectionAs.Visible = false;
-				mnuShowCodeNotes.Visible = false;
+				items[nameof(mnuMarkSelectionAs)].Visible = false;
+				items[nameof(mnuShowCodeNotes)].Visible = false;
 
-				mnuFindOccurrences.Visible = false;
-				mnuEditSubroutine.Visible = false;
-				mnuEditSelectedCode.Visible = false;
-				mnuNavigateForward.Visible = false;
-				mnuNavigateBackward.Visible = false;
-				mnuEditLabel.Visible = false;
-				sepNavigation.Visible = false;
-				mnuShowSourceAsComments.Visible = false;
+				items[nameof(mnuFindOccurrences)].Visible = false;
+				items[nameof(mnuEditSubroutine)].Visible = false;
+				items[nameof(mnuEditSelectedCode)].Visible = false;
+				items[nameof(mnuNavigateForward)].Visible = false;
+				items[nameof(mnuNavigateBackward)].Visible = false;
+				items[nameof(mnuEditLabel)].Visible = false;
+				items[nameof(sepNavigation)].Visible = false;
+				items[nameof(mnuShowSourceAsComments)].Visible = false;
 			}
 
 			bool hasSymbolProvider = Viewer.SymbolProvider != null;
-			mnuShowSourceAsComments.Visible = hasSymbolProvider;
-			mnuSwitchView.Visible = hasSymbolProvider;
-			sepSwitchView.Visible = hasSymbolProvider;
+			items[nameof(mnuShowSourceAsComments)].Visible = hasSymbolProvider;
+			items[nameof(mnuSwitchView)].Visible = hasSymbolProvider;
+			items[nameof(sepSwitchView)].Visible = hasSymbolProvider;
 		}
 
 		private bool UpdateContextMenu(Point mouseLocation)
 		{
 			_lastLocation = mouseLocation;
 
-			UpdateContextMenuItemVisibility(true);
+			UpdateContextMenuItemVisibility(contextMenu.Items, true);
 
 			mnuSwitchView.Text = SourceView ? "Switch to Disassembly View" : "Switch to Source View";
 
