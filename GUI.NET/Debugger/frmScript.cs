@@ -224,10 +224,10 @@ namespace Mesen.GUI.Debugger
 			txtScriptContent.ClearUndo();
 		}
 
-		public void LoadScriptFile(string filepath, bool runScript = true)
+		public void LoadScriptFile(string filepath, bool runScript = true, bool disableSavePrompt = false)
 		{
 			if(File.Exists(filepath)) {
-				if(!SavePrompt()) {
+				if(!disableSavePrompt && !SavePrompt()) {
 					return;
 				}
 				string content = File.ReadAllText(filepath);
@@ -366,6 +366,7 @@ namespace Mesen.GUI.Debugger
 
 		private void tmrLog_Tick(object sender, EventArgs e)
 		{
+			tmrLog.Stop();
 			if(_scriptId >= 0) {
 				string newLog = InteropEmu.DebugGetScriptLog(_scriptId);
 				if(txtLog.Text != newLog) {
@@ -381,9 +382,18 @@ namespace Mesen.GUI.Debugger
 
 			if(_filePath != null && File.Exists(_filePath) && mnuAutoReload.Checked) {
 				if(_lastTimestamp < File.GetLastWriteTime(_filePath)) {
-					LoadScriptFile(_filePath);
+					if(_originalText != txtScriptContent.Text) {
+						DialogResult result = MessageBox.Show("You have unsaved changes for this script and the file has been modified by another process - would you like to discard the changes and reload the script from the disk?", "Script Window", MessageBoxButtons.YesNo);
+						if(result == DialogResult.Yes) {
+							LoadScriptFile(_filePath, true, true);
+						}
+					} else {
+						LoadScriptFile(_filePath, true, true);
+					}
+					_lastTimestamp = File.GetLastWriteTime(_filePath);
 				}
 			}
+			tmrLog.Start();
 		}
 
 		private void mnuView_DropDownOpening(object sender, EventArgs e)
