@@ -103,6 +103,9 @@ private:
 	atomic<bool> _stepOut;
 	atomic<int32_t> _stepOverAddr;
 	
+	atomic<bool> _released;
+	SimpleLock _releaseLock;
+
 	bool _enableBreakOnUninitRead;
 	
 	atomic<bool> _breakRequested;
@@ -146,6 +149,8 @@ private:
 public:
 	Debugger(shared_ptr<Console> console, shared_ptr<CPU> cpu, shared_ptr<PPU> ppu, shared_ptr<APU> apu, shared_ptr<MemoryManager> memoryManager, shared_ptr<BaseMapper> mapper);
 	~Debugger();
+
+	void ReleaseDebugger();
 
 	void SetPpu(shared_ptr<PPU> ppu);
 	Console* GetConsole();

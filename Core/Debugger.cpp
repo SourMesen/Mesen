@@ -106,30 +106,44 @@ Debugger::Debugger(shared_ptr<Console> console, shared_ptr<CPU> cpu, shared_ptr<
 	_hasScript = false;
 	_nextScriptId = 0;
 
+	_released = false;
+
 	UpdatePpuCyclesToProcess();
 }
 
 Debugger::~Debugger()
 {
-	_codeDataLogger->SaveCdlFile(FolderUtilities::CombinePath(FolderUtilities::GetDebuggerFolder(), FolderUtilities::GetFilename(_romName, false) + ".cdl"));
-
-	_stopFlag = true;
-
-	_console->Pause();
-
-	{
-		auto lock = _scriptLock.AcquireSafe();
-		for(shared_ptr<ScriptHost> script : _scripts) {
-			//Send a ScriptEnded event to all active scripts
-			script->ProcessEvent(EventType::ScriptEnded);
-		}
-		_scripts.clear();
-		_hasScript = false;
+	if(!_released) {
+		ReleaseDebugger();
 	}
+}
 
-	_breakLock.Acquire();
-	_breakLock.Release();
-	_console->Resume();
+void Debugger::ReleaseDebugger()
+{
+	auto lock = _releaseLock.AcquireSafe();
+	if(!_released) {
+		_codeDataLogger->SaveCdlFile(FolderUtilities::CombinePath(FolderUtilities::GetDebuggerFolder(), FolderUtilities::GetFilename(_romName, false) + ".cdl"));
+
+		_stopFlag = true;
+
+		_console->Pause();
+
+		{
+			auto lock = _scriptLock.AcquireSafe();
+			for(shared_ptr<ScriptHost> script : _scripts) {
+				//Send a ScriptEnded event to all active scripts
+				script->ProcessEvent(EventType::ScriptEnded);
+			}
+			_scripts.clear();
+			_hasScript = false;
+		}
+
+		_breakLock.Acquire();
+		_breakLock.Release();
+		_console->Resume();
+
+		_released = true;
+	}
 }
 
 void Debugger::SetPpu(shared_ptr<PPU> ppu)
@@ -729,7 +743,7 @@ bool Debugger::SleepUntilResume(BreakSource source)
 
 		_executionStopped = true;
 		_pausedForDebugHelper = breakRequested;
-		while(((stepCount == 0 || _breakRequested) && !_stopFlag && _suspendCount == 0) || _preventResume > 0) {
+		while((((stepCount == 0 || _breakRequested) && _suspendCount == 0) || _preventResume > 0) && !_stopFlag) {
 			std::this_thread::sleep_for(std::chrono::duration<int, std::milli>(10));
 			if(stepCount == 0) {
 				_console->ResetRunTimers();

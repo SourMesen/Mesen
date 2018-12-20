@@ -1066,6 +1066,7 @@ std::shared_ptr<Debugger> Console::GetDebugger(bool autoStart)
 
 void Console::StopDebugger()
 {
+	_debugger->ReleaseDebugger();
 	_debugger.reset();
 }
 
