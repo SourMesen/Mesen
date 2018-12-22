@@ -606,7 +606,6 @@
 			<Control ID="tpgAudioOptions">Аудiо Опцiї</Control>
 			<Control ID="tpgEmulationOptions">Опцiї Эмуляцiї</Control>
 			<Control ID="lblExplanation">Це запустить Mesen у повноекранному режимi з "MyGame.nes" завантаженим ромом.  Вiн також буде використовувати фiльтр NTSC, встановлений у 2x масштабi та налаштує параметри Overscan. Прапор "DoNotSaveSettings" використовується для запобігання перемикання командного рядка від випадкової зміни налаштувань Mesen.</Control>
-			<Control ID="txtGeneralOptions">/fullscreen - Запустити Mesen у повноекранному режимi&#13;&#10;/DoNotSaveSettings - Заборонити збереження налаштувань на диску (корисно щоб запобігти становленню параметрів командного рядка за замовчуванням)</Control>
 		</Form>
 		<Form ID="frmCopyFiles" Title="Будь ласка зачекайте...">
 			<Control ID="lblCopying">Копіювання:</Control>
@@ -751,6 +750,10 @@
 		<Message ID="MouseModeEnabled">Mouse mode enabled - press ESC or pause to release the cursor.</Message>
 		<Message ID="BandaiMicrophone">Bandai Microphone</Message>
 		<Message ID="DatachBarcodeReader">Datach Barcode Reader</Message>
+
+		<Message ID="HelpFullscreen">/fullscreen - Запустити Mesen у повноекранному режимi</Message>
+		<Message ID="HelpDoNotSaveSettings">/DoNotSaveSettings - Заборонити збереження налаштувань на диску (корисно щоб запобігти становленню параметрів командного рядка за замовчуванням)</Message>
+		<Message ID="HelpRecordMovie">/RecordMovie="filename.mmo" - Start recording a movie after the specified game is loaded.</Message>
 
 		<Message ID="Resume">Продовжити</Message>
 		<Message ID="Pause">Пауза</Message>

@@ -608,7 +608,6 @@
 			<Control ID="tpgAudioOptions">音声</Control>
 			<Control ID="tpgEmulationOptions">エミュレーション</Control>
 			<Control ID="lblExplanation">Mesenを全画面表示の状態で"MyGame.nes"を起動する. 画面エフェクトをNTSCにして、映像サイズを2xにして、オーバースキャン設定を変更する。</Control>
-			<Control ID="txtGeneralOptions">/fullscreen - 全画面表示の状態で起動する&#13;&#10;/DoNotSaveSettings - 設定のセーブ機能を無効にする</Control>
 		</Form>
 		<Form ID="frmCopyFiles" Title="しばらくお待ちください">
 			<Control ID="lblCopying">ファイル：</Control>
@@ -753,6 +752,10 @@
 		<Message ID="MouseModeEnabled">マウスモード有効。 無効にするにはESCやポースボタンを使ってください。</Message>
 		<Message ID="BandaiMicrophone">Bandaiマイクロフォン</Message>
 		<Message ID="DatachBarcodeReader">Datachバーコードリーダー</Message>
+
+		<Message ID="HelpFullscreen">/fullscreen - 全画面表示の状態で起動する</Message>
+		<Message ID="HelpDoNotSaveSettings">/DoNotSaveSettings - 設定のセーブ機能を無効にする</Message>
+		<Message ID="HelpRecordMovie">/RecordMovie="filename.mmo" - ゲームをロードしてから指定されたファイルに動画を録画する。</Message>
 
 		<Message ID="Resume">再開</Message>
 		<Message ID="Pause">ポーズ</Message>

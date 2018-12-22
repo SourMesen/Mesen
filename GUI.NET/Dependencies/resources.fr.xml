@@ -618,7 +618,6 @@
 			<Control ID="tpgAudioOptions">Options audio</Control>
 			<Control ID="tpgEmulationOptions">Options d'émulation</Control>
 			<Control ID="lblExplanation">Cet exemple ouvrira Mesen en mode plein écran avec le jeu "MyGame.nes" de chargé. Le filtre vidéo NTSC avec un facteur d'agrandissement de 2x sera utilisé et les paramètres d'overscan seront modifiés.  L'option "DoNotSaveSettings" empêche les options données en ligne de commande de devenir les options par défaut de l'émulateur.</Control>
-			<Control ID="txtGeneralOptions">/fullscreen - Démarre Mesen en mode plein écran&#13;&#10;/DoNotSaveSettings - Empêche la sauvegarde des paramètres sur le disque (autrement les options données en ligne de commande seront permanentes)</Control>
 		</Form>
 		<Form ID="frmCopyFiles" Title="En cours d'exécution...">
 			<Control ID="lblCopying">Copie de :</Control>
@@ -764,6 +763,10 @@
 		<Message ID="BandaiMicrophone">Microphone Bandai</Message>
 		<Message ID="DatachBarcodeReader">Lecteur code-barres Datach</Message>
 
+		<Message ID="HelpFullscreen">/fullscreen - Démarre Mesen en mode plein écran</Message>
+		<Message ID="HelpDoNotSaveSettings">/DoNotSaveSettings - Empêche la sauvegarde des paramètres sur le disque (autrement les options données en ligne de commande seront permanentes)</Message>
+		<Message ID="HelpRecordMovie">/RecordMovie="nom_du_film.mmo" - Démarre l'enregistrement d'un film pour le jeu spécifié en ligne de commande.</Message>
+		
 		<Message ID="Resume">Continuer</Message>
 		<Message ID="Pause">Pause</Message>
 		<Message ID="StartServer">Démarrer serveur</Message>

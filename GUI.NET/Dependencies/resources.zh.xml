@@ -610,7 +610,6 @@
 			<Control ID="tpgAudioOptions">音频选项</Control>
 			<Control ID="tpgEmulationOptions">模拟选项</Control>
 			<Control ID="lblExplanation">使用上面的命令行，Mesen 会以全屏模式启动、加载 "MyGame.nes"、使用 NTSC 滤镜、画面扩大到 2 倍，并且改变过扫描设置. "DoNotSaveSettings" 用于阻止命令行选项替代 Mesen 原本的设置.</Control>
-			<Control ID="txtGeneralOptions">/fullscreen - 全屏模式启动 Mesen&#13;/DoNotSaveSettings - 阻止命令行的选项替代 Mesen 原本的设置 (防止命令行选项成为默认设置).</Control>
 		</Form>
 		<Form ID="frmCopyFiles" Title="正在复制，请稍候...">
 			<Control ID="lblCopying">复制中:</Control>
@@ -749,9 +748,15 @@
 		<Message ID="MovieSaveError">尝试保存电影文件时发生错误.</Message>
 		<Message ID="ClearHistory">清除历史</Message>
 		<Message ID="LastFolderUsed">上次使用的文件夹</Message>
+		
 		<Message ID="MouseModeEnabled">启用鼠标模式 - 按 ESC 或 pause 来释放光标.</Message>
 		<Message ID="BandaiMicrophone">Bandai 麦克风</Message>
 		<Message ID="DatachBarcodeReader">附加条码机</Message>
+
+		<Message ID="HelpFullscreen">/fullscreen - 全屏模式启动 Mesen</Message>
+		<Message ID="HelpDoNotSaveSettings">/DoNotSaveSettings - 阻止命令行的选项替代 Mesen 原本的设置 (防止命令行选项成为默认设置).</Message>
+		<Message ID="HelpRecordMovie">/RecordMovie="filename.mmo" - Start recording a movie after the specified game is loaded.</Message>
+
 		<Message ID="Resume">恢复</Message>
 		<Message ID="Pause">暂停</Message>
 		<Message ID="StartServer">启动服务器</Message>

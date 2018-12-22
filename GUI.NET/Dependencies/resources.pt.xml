@@ -618,7 +618,6 @@
 			<Control ID="tpgAudioOptions">Opções de áudio</Control>
 			<Control ID="tpgEmulationOptions">Opções de emulação</Control>
 			<Control ID="lblExplanation">Isso iniciará o Mesen em modo de tela cheia com a rom "MeuJogo.nes" carregada. Também usará o filtro NTSC, configurado em uma escala 2x e ajusta as configurações de Overscan. O sinalizador "DoNotSaveSettings" é usado para evitar que a linha de comando altere de forma permanente as configurações do Mesen.</Control>
-			<Control ID="txtGeneralOptions">/fullscreen - Inicia o Mesen em modo tela cheia&#13;&#10;/DoNotSaveSettings - Impede que as configurações sejam salvas no disco (útil para evitar que as opções da linha de comando se tornem as configurações padrão)</Control>
 		</Form>
 		<Form ID="frmCopyFiles" Title="Aguarde...">
 			<Control ID="lblCopying">Copiando:</Control>
@@ -763,6 +762,10 @@
 		<Message ID="MouseModeEnabled">Modo mouse ativado - aperte ESC ou Pause para liberar o cursor.</Message>
 		<Message ID="BandaiMicrophone">Microfone Bandai</Message>
 		<Message ID="DatachBarcodeReader">Leitor de código de barras Datach</Message>
+
+		<Message ID="HelpFullscreen">/fullscreen - Inicia o Mesen em modo tela cheia</Message>
+		<Message ID="HelpDoNotSaveSettings">/DoNotSaveSettings - Impede que as configurações sejam salvas no disco (útil para evitar que as opções da linha de comando se tornem as configurações padrão)</Message>
+		<Message ID="HelpRecordMovie">/RecordMovie="filename.mmo" - Start recording a movie after the specified game is loaded.</Message>
 
 		<Message ID="Resume">Continuar</Message>
 		<Message ID="Pause">Pausar</Message>

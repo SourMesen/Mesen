@@ -606,7 +606,6 @@
 			<Control ID="tpgAudioOptions">Audio Options</Control>
 			<Control ID="tpgEmulationOptions">Emulation Options</Control>
 			<Control ID="lblExplanation">This will start Mesen in fullscreen mode with the "MyGame.nes" rom loaded.  It will also use the NTSC filter, set at a 2x scale and configure the Overscan settings.  The "DoNotSaveSettings" flag is used to prevent the command line switches from pernanently altering Mesen's settings.</Control>
-			<Control ID="txtGeneralOptions">/fullscreen - Start Mesen in fullscreen mode&#13;&#10;/DoNotSaveSettings - Prevent settings from being saved to the disk (useful to prevent command line options from becoming the default settings)</Control>
 		</Form>
 		<Form ID="frmCopyFiles" Title="Please wait...">
 			<Control ID="lblCopying">Copying:</Control>
@@ -751,6 +750,10 @@
 		<Message ID="MouseModeEnabled">Mouse mode enabled - press ESC or pause to release the cursor.</Message>
 		<Message ID="BandaiMicrophone">Bandai Microphone</Message>
 		<Message ID="DatachBarcodeReader">Datach Barcode Reader</Message>
+
+		<Message ID="HelpFullscreen">/fullscreen - Start Mesen in fullscreen mode</Message>
+		<Message ID="HelpDoNotSaveSettings">/DoNotSaveSettings - Prevent settings from being saved to the disk (useful to prevent command line options from becoming the default settings)</Message>
+		<Message ID="HelpRecordMovie">/RecordMovie="filename.mmo" - Start recording a movie after the specified game is loaded.</Message>
 
 		<Message ID="Resume">Продолжить</Message>
 		<Message ID="Pause">Пауза</Message>
