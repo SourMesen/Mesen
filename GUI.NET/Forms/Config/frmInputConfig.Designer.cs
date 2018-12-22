@@ -70,6 +70,7 @@
 			this.flowLayoutPanel3 = new System.Windows.Forms.FlowLayoutPanel();
 			this.lblDisplayPosition = new System.Windows.Forms.Label();
 			this.cboDisplayInputPosition = new System.Windows.Forms.ComboBox();
+			this.chkHideMousePointerForZapper = new Mesen.GUI.Controls.ctrlRiskyOption();
 			this.tabMain.SuspendLayout();
 			this.tpgControllers.SuspendLayout();
 			this.tlpControllers.SuspendLayout();
@@ -442,7 +443,7 @@
 			this.tpgAdvanced.Controls.Add(this.tableLayoutPanel2);
 			this.tpgAdvanced.Location = new System.Drawing.Point(4, 22);
 			this.tpgAdvanced.Name = "tpgAdvanced";
-			this.tpgAdvanced.Size = new System.Drawing.Size(362, 313);
+			this.tpgAdvanced.Size = new System.Drawing.Size(362, 216);
 			this.tpgAdvanced.TabIndex = 5;
 			this.tpgAdvanced.Text = "Advanced";
 			this.tpgAdvanced.UseVisualStyleBackColor = true;
@@ -452,13 +453,15 @@
 			this.tableLayoutPanel2.ColumnCount = 1;
 			this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this.tableLayoutPanel2.Controls.Add(this.grpDisplayInput, 0, 0);
+			this.tableLayoutPanel2.Controls.Add(this.chkHideMousePointerForZapper, 0, 1);
 			this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tableLayoutPanel2.Location = new System.Drawing.Point(0, 0);
 			this.tableLayoutPanel2.Name = "tableLayoutPanel2";
-			this.tableLayoutPanel2.RowCount = 2;
+			this.tableLayoutPanel2.RowCount = 3;
+			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel2.Size = new System.Drawing.Size(362, 313);
+			this.tableLayoutPanel2.Size = new System.Drawing.Size(362, 216);
 			this.tableLayoutPanel2.TabIndex = 0;
 			// 
 			// grpDisplayInput
@@ -583,6 +586,16 @@
 			this.cboDisplayInputPosition.Size = new System.Drawing.Size(121, 21);
 			this.cboDisplayInputPosition.TabIndex = 1;
 			// 
+			// chkHideMousePointerForZapper
+			// 
+			this.chkHideMousePointerForZapper.Checked = false;
+			this.chkHideMousePointerForZapper.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.chkHideMousePointerForZapper.Location = new System.Drawing.Point(0, 96);
+			this.chkHideMousePointerForZapper.Name = "chkHideMousePointerForZapper";
+			this.chkHideMousePointerForZapper.Size = new System.Drawing.Size(362, 23);
+			this.chkHideMousePointerForZapper.TabIndex = 2;
+			this.chkHideMousePointerForZapper.Text = "Hide mouse pointer when using zapper";
+			// 
 			// frmInputConfig
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -663,5 +676,6 @@
 		private System.Windows.Forms.Label lblCartridge;
 		private System.Windows.Forms.ComboBox cboCartridge;
 		private System.Windows.Forms.Button btnSetupCartridge;
+		private Controls.ctrlRiskyOption chkHideMousePointerForZapper;
 	}
 }

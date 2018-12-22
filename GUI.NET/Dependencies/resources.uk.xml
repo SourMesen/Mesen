@@ -216,6 +216,7 @@
 			<Control ID="chkDisplayPort4">Порт 4</Control>
 			<Control ID="lblDisplayPosition">Позиція :</Control>
 			<Control ID="chkDisplayInputHorizontally">Відображати горизонтально</Control>
+			<Control ID="chkHideMousePointerForZapper">Hide mouse pointer when using zapper</Control>
 
 			<Control ID="lblKeyBinding">Увага: Ваша поточна конфігурація містить конфліктуючі поєднання клавіш - деякі фізичні кнопки на вашому ключовому словнику або геймпадi відображаються на кількох кнопках на контролері NES. Якщо це не навмисне, перегляньте та виправте ключi.</Control>
 		</Form>

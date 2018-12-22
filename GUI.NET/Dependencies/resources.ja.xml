@@ -218,6 +218,7 @@
 			<Control ID="chkDisplayPort4">プレーヤー4</Control>
 			<Control ID="lblDisplayPosition">表示位置：</Control>
 			<Control ID="chkDisplayInputHorizontally">水平表示</Control>
+			<Control ID="chkHideMousePointerForZapper">ガンが接続されている時にマウスポインターを隠す</Control>
 
 			<Control ID="lblKeyBinding">注意：　使っている設定の中には同じキーが複数のボタン―にマッピングされています。　間違いでこの設定にした場合は、設定を確認して直してください。</Control>
 		</Form>

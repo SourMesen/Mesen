@@ -51,9 +51,12 @@ You can also configure that controller's turbo buttons' speed with the `Turbo Sp
 	<span>Advanced Options</span>
 </div></div>
 
+**Hide mouse pointer when using zapper**: Hides the mouse pointer completely when a Zapper is connected. This is useful when using light guns (for PCs) that simulate a mouse.
+
 ### Display Controller Input ###
 
 Use these options to display the controller input on the screen.  
 {{% notice warning %}}
 This will be recorded by the [Video Recorder](/tools.html#video-recorder) - so make sure you turn it off if you do not want it to appear on the video.
 {{% /notice %}}
+

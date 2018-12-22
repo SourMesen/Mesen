@@ -216,6 +216,7 @@
 			<Control ID="chkDisplayPort4">Порт 4</Control>
 			<Control ID="lblDisplayPosition">Позиция :</Control>
 			<Control ID="chkDisplayInputHorizontally">Отображать горизонтально</Control>
+			<Control ID="chkHideMousePointerForZapper">Hide mouse pointer when using zapper</Control>
 
 			<Control ID="lblKeyBinding">Warning: Your current configuration contains conflicting key bindings - some physical buttons on your keyboard or gamepad are mapped to multiple buttons on the NES controller. If this is not intentional, please review and correct your key bindings.</Control>
 		</Form>
