@@ -164,6 +164,9 @@ namespace Mesen.GUI.Forms
 			}
 
 			if(_movieToRecord != null) {
+				if(InteropEmu.MovieRecording()) {
+					InteropEmu.MovieStop();
+				}
 				RecordMovieOptions options = new RecordMovieOptions(_movieToRecord, "", "", RecordMovieFrom.StartWithSaveData);
 				InteropEmu.MovieRecord(ref options);
 				_movieToRecord = null;
