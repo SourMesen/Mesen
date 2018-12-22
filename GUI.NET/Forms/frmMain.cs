@@ -36,6 +36,7 @@ namespace Mesen.GUI.Forms
 
 		private string _movieToRecord = null;
 		private List<string> _luaScriptsToLoad = new List<string>();
+		private bool _loadLastSessionRequested = false;
 
 		private Image _pauseButton = Resources.Pause;
 		private Image _playButton = Resources.Play;
@@ -112,6 +113,10 @@ namespace Mesen.GUI.Forms
 				ConfigManager.DoNotSaveSettings = true;
 			}
 
+			if(switches.Contains("/loadlastsession")) {
+				_loadLastSessionRequested = true;
+			}
+
 			Regex recordMovieCommand = new Regex("/recordmovie=([^\"]+)");
 			foreach(string command in switches) {
 				Match match = recordMovieCommand.Match(command);
@@ -146,6 +151,7 @@ namespace Mesen.GUI.Forms
 					//When no ROM is loaded, only process Lua scripts if a ROM was specified as a command line param
 					_luaScriptsToLoad.Clear();
 					_movieToRecord = null;
+					_loadLastSessionRequested = false;
 				} else {
 					//No game was specified, but a game is running already, load the scripts right away
 					ProcessPostLoadCommandSwitches();
@@ -170,6 +176,11 @@ namespace Mesen.GUI.Forms
 				RecordMovieOptions options = new RecordMovieOptions(_movieToRecord, "", "", RecordMovieFrom.StartWithSaveData);
 				InteropEmu.MovieRecord(ref options);
 				_movieToRecord = null;
+			}
+
+			if(_loadLastSessionRequested) {
+				_loadLastSessionRequested = false;
+				LoadLastSession();
 			}
 		}
 

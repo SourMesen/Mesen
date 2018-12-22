@@ -757,6 +757,7 @@
 		<Message ID="HelpFullscreen">/fullscreen - 全画面表示の状態で起動する</Message>
 		<Message ID="HelpDoNotSaveSettings">/DoNotSaveSettings - 設定のセーブ機能を無効にする</Message>
 		<Message ID="HelpRecordMovie">/RecordMovie="filename.mmo" - ゲームをロードしてから指定されたファイルに動画を録画する。</Message>
+		<Message ID="HelpLoadLastSession">/LoadLastSession - 前回ゲーム閉じた時の状況でゲームを始める</Message>
 
 		<Message ID="Resume">再開</Message>
 		<Message ID="Pause">ポーズ</Message>

@@ -51,6 +51,7 @@ namespace Mesen.GUI.Forms
 				ResourceHelper.GetMessage("HelpFullscreen") + Environment.NewLine +
 				ResourceHelper.GetMessage("HelpDoNotSaveSettings") + Environment.NewLine +
 				ResourceHelper.GetMessage("HelpRecordMovie") + Environment.NewLine +
+				ResourceHelper.GetMessage("HelpLoadLastSession") + Environment.NewLine +
 				sb.ToString().Trim()
 			);
 		}

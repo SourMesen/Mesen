@@ -757,6 +757,7 @@
 		<Message ID="HelpFullscreen">/fullscreen - 全屏模式启动 Mesen</Message>
 		<Message ID="HelpDoNotSaveSettings">/DoNotSaveSettings - 阻止命令行的选项替代 Mesen 原本的设置 (防止命令行选项成为默认设置).</Message>
 		<Message ID="HelpRecordMovie">/RecordMovie="filename.mmo" - Start recording a movie after the specified game is loaded.</Message>
+		<Message ID="HelpLoadLastSession">/LoadLastSession - Resumes the game in the state it was left in when it was last played.</Message>
 
 		<Message ID="Resume">恢复</Message>
 		<Message ID="Pause">暂停</Message>

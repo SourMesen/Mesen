@@ -737,6 +737,7 @@
 		<Message ID="HelpFullscreen">/fullscreen - Inicia Mesen en pantalla completa</Message>
 		<Message ID="HelpDoNotSaveSettings">/DoNotSaveSettings - Evita que els canvis es desin (útil per a evitar que les opcions de la línia d'ordres es converteixin en la configuració per defecte)</Message>
 		<Message ID="HelpRecordMovie">/RecordMovie="filename.mmo" - Start recording a movie after the specified game is loaded.</Message>
+		<Message ID="HelpLoadLastSession">/LoadLastSession - Resumes the game in the state it was left in when it was last played.</Message>
 
 		<Message ID="Resume">Continua</Message>
 		<Message ID="Pause">Pausa</Message>

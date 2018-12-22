@@ -754,6 +754,7 @@
 		<Message ID="HelpFullscreen">/fullscreen - Inicia Mesen en pantalla completa</Message>
 		<Message ID="HelpDoNotSaveSettings">/DoNotSaveSettings - Previene que las opciones se graben en disco (útil para evitar que las opciones de la línea de comandos se conviertan en la configuración predeterminada)</Message>
 		<Message ID="HelpRecordMovie">/RecordMovie="filename.mmo" - Start recording a movie after the specified game is loaded.</Message>
+		<Message ID="HelpLoadLastSession">/LoadLastSession - Resumes the game in the state it was left in when it was last played.</Message>
 
 		<Message ID="Resume">Continuar</Message>
 		<Message ID="Pause">Pausa</Message>

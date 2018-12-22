@@ -755,6 +755,7 @@
 		<Message ID="HelpFullscreen">/fullscreen - Запустити Mesen у повноекранному режимi</Message>
 		<Message ID="HelpDoNotSaveSettings">/DoNotSaveSettings - Заборонити збереження налаштувань на диску (корисно щоб запобігти становленню параметрів командного рядка за замовчуванням)</Message>
 		<Message ID="HelpRecordMovie">/RecordMovie="filename.mmo" - Start recording a movie after the specified game is loaded.</Message>
+		<Message ID="HelpLoadLastSession">/LoadLastSession - Resumes the game in the state it was left in when it was last played.</Message>
 
 		<Message ID="Resume">Продовжити</Message>
 		<Message ID="Pause">Пауза</Message>

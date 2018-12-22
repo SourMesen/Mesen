@@ -767,7 +767,8 @@
 		<Message ID="HelpFullscreen">/fullscreen - Démarre Mesen en mode plein écran</Message>
 		<Message ID="HelpDoNotSaveSettings">/DoNotSaveSettings - Empêche la sauvegarde des paramètres sur le disque (autrement les options données en ligne de commande seront permanentes)</Message>
 		<Message ID="HelpRecordMovie">/RecordMovie="nom_du_film.mmo" - Démarre l'enregistrement d'un film pour le jeu spécifié en ligne de commande.</Message>
-		
+		<Message ID="HelpLoadLastSession">/LoadLastSession - Reprend le jeu dans l'état où il était lors dans la dernière session de jeu.</Message>
+
 		<Message ID="Resume">Continuer</Message>
 		<Message ID="Pause">Pause</Message>
 		<Message ID="StartServer">Démarrer serveur</Message>
