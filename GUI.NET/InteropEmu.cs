@@ -225,6 +225,7 @@ namespace Mesen.GUI
 		[DllImport(DLLPath)] public static extern void DebugSetFlags(DebuggerFlags flags);
 		[DllImport(DLLPath)] public static extern void DebugGetState(ref DebugState state);
 		[DllImport(DLLPath)] public static extern void DebugGetApuState(ref ApuState state);
+		[DllImport(DLLPath)] public static extern void DebugGetInstructionProgress(ref InstructionProgress progress);
 		[DllImport(DLLPath)] public static extern void DebugSetState(DebugState state);
 		[DllImport(DLLPath)] public static extern void DebugSetBreakpoints([MarshalAs(UnmanagedType.LPArray, SizeParamIndex = 1)]InteropBreakpoint[] breakpoints, UInt32 length);
 		[DllImport(DLLPath)] public static extern void DebugSetLabel(UInt32 address, AddressType addressType, [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(UTF8Marshaler))]string label, [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(UTF8Marshaler))]string comment);
@@ -1246,6 +1247,13 @@ namespace Mesen.GUI
 		public UInt16 JumpTarget;
 		public StackFrameFlags Flags;
 	};
+
+	public struct InstructionProgress
+	{
+		public byte OpCode;
+		public UInt32 OpCycle;
+		public InteropMemoryOperationType OpMemoryOperationType;
+	}
 
 	public struct DebugState
 	{
@@ -2324,6 +2332,17 @@ namespace Mesen.GUI
 			}
 			return AddressType.Register;
 		}
+	}
+
+	public enum InteropMemoryOperationType
+	{
+		Read = 0,
+		Write = 1,
+		ExecOpCode = 2,
+		ExecOperand = 3,
+		PpuRenderingRead = 4,
+		DummyRead = 5,
+		DmcRead = 6
 	}
 
 	public enum MemoryOperationType

@@ -993,6 +993,8 @@ namespace Mesen.GUI.Debugger
 			}
 
 			this.DrawLineText(g, currentLine, marginLeft, positionY, codeString, addressString, commentString, codeStringLength, addressStringLength, textColor, lineHeight);
+
+			this.DrawLineProgress(g, positionY, lineProperties?.Progress, lineHeight);
 		}
 
 		private void DrawLineNumber(Graphics g, int currentLine, int marginLeft, int positionY, Color addressColor)
@@ -1237,6 +1239,30 @@ namespace Mesen.GUI.Debugger
 			}
 		}
 
+		private void DrawLineProgress(Graphics g, int positionY, LineProgress progress, int lineHeight)
+		{
+			if(progress != null) {
+				int currentStep = progress.Current + 1;
+				int stepCount = Math.Max(progress.Maxixum, currentStep);
+
+				string display = currentStep.ToString() + "/" + stepCount.ToString();
+				SizeF size = g.MeasureString(display, this._noteFont, int.MaxValue, StringFormat.GenericTypographic);
+
+				float width = size.Width + 16;
+				float left = this.ClientSize.Width - 5 - width;
+				float height = size.Height;
+				float top = positionY + (lineHeight - height) / 2;
+
+				g.FillRectangle(Brushes.White, left, top, width, height);
+				using(SolidBrush brush = new SolidBrush(progress.Color)) {
+					g.FillRectangle(brush, left, top, width * currentStep / stepCount, height);
+				}
+				g.DrawRectangle(Pens.Black, left, top, width, height);
+
+				g.DrawString(display, this._noteFont, Brushes.Black, left + (width - size.Width) / 2, top, StringFormat.GenericTypographic);
+			}
+		}
+
 		private void DrawHighlightedCompareString(Graphics g, string lineText, int currentLine, int marginLeft, int positionY)
 		{
 			if(_compareContents != null && _compareContents.Length > currentLine) {
@@ -1305,6 +1331,20 @@ namespace Mesen.GUI.Debugger
 				this.DrawLineSymbols(g, positionY, lineProperties, lineHeight);
 			}
 		}
+		
+		private void DrawMessage(Graphics g)
+		{
+			if(this._message != null && !string.IsNullOrWhiteSpace(this._message.Message)) {
+				//Display message if one is active
+				SizeF textSize = g.MeasureString(this._message.Message, this.Font, int.MaxValue, StringFormat.GenericTypographic);
+
+				using(SolidBrush brush = new SolidBrush(Color.FromArgb(255, 246, 168))) {
+					g.FillRectangle(brush, ClientRectangle.Width - textSize.Width - 10, ClientRectangle.Bottom - textSize.Height - 10, textSize.Width + 4, textSize.Height + 1);
+				}
+				g.DrawRectangle(Pens.Black, ClientRectangle.Width - textSize.Width - 10, ClientRectangle.Bottom - textSize.Height - 10, textSize.Width + 4, textSize.Height + 1);
+				g.DrawString(this._message.Message, this.Font, Brushes.Black, ClientRectangle.Width - textSize.Width - 8, ClientRectangle.Bottom - textSize.Height - 10, StringFormat.GenericTypographic);
+			}
+		}
 
 		protected override void OnPaint(PaintEventArgs pe)
 		{
@@ -1359,16 +1399,7 @@ namespace Mesen.GUI.Debugger
 				currentLine++;
 			}
 
-			if(this._message != null && !string.IsNullOrWhiteSpace(this._message.Message)) {
-				//Display message if one is active
-				SizeF textSize = pe.Graphics.MeasureString(this._message.Message, this.Font, int.MaxValue, StringFormat.GenericTypographic);
-
-				using(SolidBrush brush = new SolidBrush(Color.FromArgb(255, 246, 168))) {
-					pe.Graphics.FillRectangle(brush, ClientRectangle.Width - textSize.Width - 20, ClientRectangle.Bottom - textSize.Height - 20, textSize.Width + 6, textSize.Height + 6);
-				}
-				pe.Graphics.DrawRectangle(Pens.Black, ClientRectangle.Width - textSize.Width - 20, ClientRectangle.Bottom - textSize.Height - 20, textSize.Width + 6, textSize.Height + 6);
-				pe.Graphics.DrawString(this._message.Message, this.Font, Brushes.Black, ClientRectangle.Width - textSize.Width - 17, ClientRectangle.Bottom - textSize.Height - 17, StringFormat.GenericTypographic);
-			}
+			this.DrawMessage(pe.Graphics);
 		}
 	}
 
@@ -1398,6 +1429,15 @@ namespace Mesen.GUI.Debugger
 		public Color? OutlineColor;
 		public Color? AddressColor;
 		public LineSymbol Symbol;
+
+		public LineProgress Progress;
+	}
+
+	public class LineProgress
+	{
+		public int Current;
+		public int Maxixum;
+		public Color Color;
 	}
 
 	public class TextboxMessageInfo

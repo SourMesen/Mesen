@@ -129,6 +129,13 @@ struct DebugState
 	uint32_t ClockRate;
 };
 
+struct InstructionProgress
+{
+	uint8_t OpCode;
+	uint32_t OpCycle;
+	MemoryOperationType OpMemoryOperationType;
+};
+
 struct OperationInfo
 {
 	uint16_t Address;

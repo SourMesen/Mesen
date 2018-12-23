@@ -68,7 +68,6 @@ private:
 
 	uint8_t GetOPCode()
 	{
-		_state.DebugPC = _state.PC;
 		uint8_t opCode = MemoryRead(_state.PC, MemoryOperationType::ExecOpCode);
 		_state.PC++;
 		return opCode;

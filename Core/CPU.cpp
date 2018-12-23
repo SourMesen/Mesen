@@ -206,6 +206,10 @@ uint8_t CPU::MemoryRead(uint16_t addr, MemoryOperationType operationType) {
 		}
 		IncCycleCount();
 	}
+	if(operationType == MemoryOperationType::ExecOpCode) {
+		_state.DebugPC = _state.PC;
+	}
+
 	uint8_t value = _memoryManager->Read(addr, operationType);
 	return value;
 }

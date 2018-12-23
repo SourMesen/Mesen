@@ -74,6 +74,9 @@ private:
 
 	vector<uint8_t> _frozenAddresses;
 
+	uint32_t _opCodeCycle;
+	MemoryOperationType _memoryOperationType;
+
 	deque<StackFrameInfo> _callstack;
 	deque<int32_t> _subReturnAddresses;
 
@@ -168,6 +171,7 @@ public:
 
 	void GetCallstack(StackFrameInfo* callstackArray, uint32_t &callstackSize);
 	
+	void GetInstructionProgress(InstructionProgress &state);
 	void GetApuState(ApuState *state);
 	__forceinline void GetState(DebugState *state, bool includeMapperInfo = true);
 	void SetState(DebugState state);

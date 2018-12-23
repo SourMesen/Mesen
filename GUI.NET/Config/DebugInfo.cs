@@ -141,6 +141,8 @@ namespace Mesen.GUI.Config
 		public bool ShowCommentsInLabelList = false;
 
 		public bool ShowBreakNotifications = true;
+		public bool ShowInstructionProgression = true;
+
 		public bool AlwaysScrollToCenter = false;
 		public bool SplitView = false;
 		public bool VerticalLayout = false;

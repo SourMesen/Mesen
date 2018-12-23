@@ -427,9 +427,7 @@ namespace Mesen.GUI.Debugger.Controls
 				}
 
 				if(isActiveStatement) {
-					props.FgColor = Color.Black;
-					props.TextBgColor = info.CodeActiveStatementColor;
-					props.Symbol |= LineSymbol.Arrow;
+					ctrlDebuggerCode.LineStyleProvider.ConfigureActiveStatement(props);
 				}
 
 				return props;

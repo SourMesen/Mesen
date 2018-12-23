@@ -70,6 +70,7 @@ Debugger::Debugger(shared_ptr<Console> console, shared_ptr<CPU> cpu, shared_ptr<
 	_stopFlag = false;
 	_suspendCount = 0;
 
+	_opCodeCycle = 0;
 	_lastInstruction = 0;
 
 	_stepOutReturnAddress = -1;
@@ -524,6 +525,8 @@ bool Debugger::ProcessRamOperation(MemoryOperationType type, uint16_t &addr, uin
 {
 	OperationInfo operationInfo { addr, (int16_t)value, type };
 
+	_memoryOperationType = type;
+
 	bool isDmcRead = false;
 	if(type == MemoryOperationType::DmcRead) {
 		//Used to flag the data in the CDL file
@@ -614,6 +617,7 @@ bool Debugger::ProcessRamOperation(MemoryOperationType type, uint16_t &addr, uin
 	}
 
 	if(type == MemoryOperationType::ExecOpCode) {
+		_opCodeCycle = 0;
 		_prevInstructionCycle = _curInstructionCycle;
 		_curInstructionCycle = _cpu->GetCycleCount();
 
@@ -671,6 +675,7 @@ bool Debugger::ProcessRamOperation(MemoryOperationType type, uint16_t &addr, uin
 		}
 		_traceLogger->Log(_debugState, disassemblyInfo, operationInfo);
 	} else {
+		_opCodeCycle++;
 		_traceLogger->LogNonExec(operationInfo);
 		_profiler->ProcessCycle();
 	}
@@ -793,6 +798,13 @@ void Debugger::ProcessVramWriteOperation(uint16_t addr, uint8_t &value)
 	}
 
 	ProcessPpuOperation(addr, value, MemoryOperationType::Write);
+}
+
+void Debugger::GetInstructionProgress(InstructionProgress &state)
+{
+	state.OpCode = _lastInstruction;
+	state.OpCycle = _opCodeCycle;
+	state.OpMemoryOperationType = _memoryOperationType;
 }
 
 void Debugger::GetApuState(ApuState *state)

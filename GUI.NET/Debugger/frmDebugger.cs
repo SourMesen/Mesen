@@ -123,6 +123,7 @@ namespace Mesen.GUI.Debugger
 			this.mnuShowUnidentifiedData.Checked = ConfigManager.Config.DebugInfo.ShowUnidentifiedData;
 
 			this.mnuShowBreakNotifications.Checked = ConfigManager.Config.DebugInfo.ShowBreakNotifications;
+			this.mnuShowInstructionProgression.Checked = ConfigManager.Config.DebugInfo.ShowInstructionProgression;
 			this.mnuAlwaysScrollToCenter.Checked = ConfigManager.Config.DebugInfo.AlwaysScrollToCenter;
 			this.mnuRefreshWhileRunning.Checked = ConfigManager.Config.DebugInfo.RefreshWhileRunning;
 			this.mnuShowMemoryValues.Checked = ConfigManager.Config.DebugInfo.ShowMemoryValuesInCodeWindow;
@@ -1259,6 +1260,14 @@ namespace Mesen.GUI.Debugger
 		{
 			ConfigManager.Config.DebugInfo.ShowBreakNotifications = mnuShowBreakNotifications.Checked;
 			ConfigManager.ApplyChanges();
+		}
+
+		private void mnuShowInstructionProgression_Click(object sender, EventArgs e)
+		{
+			ConfigManager.Config.DebugInfo.ShowInstructionProgression = mnuShowInstructionProgression.Checked;
+			ConfigManager.ApplyChanges();
+			
+			UpdateDebugger(false, false);
 		}
 
 		private void mnuAlwaysScrollToCenter_Click(object sender, EventArgs e)
