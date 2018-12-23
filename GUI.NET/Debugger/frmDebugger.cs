@@ -507,7 +507,12 @@ namespace Mesen.GUI.Debugger
 							message += ": " + ResourceHelper.GetEnumText(bpType) + " ($" + bpAddress.ToString("X4") + ")";
 						}
 						if(!string.IsNullOrWhiteSpace(bp.Condition)) {
-							message += Environment.NewLine + bp.Condition;
+							string cond = bp.Condition.Trim();
+							if(cond.Length > 27) {
+								message += Environment.NewLine + cond.Substring(0, 24) + "...";
+							} else {
+								message += Environment.NewLine + cond;
+							}
 						}
 					}
 				} else if(source == BreakSource.CpuStep || source == BreakSource.PpuStep) {
