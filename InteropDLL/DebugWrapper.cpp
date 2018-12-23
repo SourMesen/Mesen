@@ -57,7 +57,7 @@ extern "C"
 
 	DllExport bool __stdcall DebugIsExecutionStopped() { return GetDebugger()->IsExecutionStopped(); }
 	DllExport void __stdcall DebugRun() { GetDebugger()->Run(); }
-	DllExport void __stdcall DebugStep(uint32_t count) { GetDebugger()->Step(count); }
+	DllExport void __stdcall DebugStep(uint32_t count, BreakSource breakSource) { GetDebugger()->Step(count, breakSource); }
 	DllExport void __stdcall DebugStepCycles(uint32_t count) { GetDebugger()->StepCycles(count); }
 	DllExport void __stdcall DebugStepOver() { GetDebugger()->StepOver(); }
 	DllExport void __stdcall DebugStepOut() { GetDebugger()->StepOut(); }

@@ -229,7 +229,7 @@ namespace Mesen.GUI
 		[DllImport(DLLPath)] public static extern void DebugSetBreakpoints([MarshalAs(UnmanagedType.LPArray, SizeParamIndex = 1)]InteropBreakpoint[] breakpoints, UInt32 length);
 		[DllImport(DLLPath)] public static extern void DebugSetLabel(UInt32 address, AddressType addressType, [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(UTF8Marshaler))]string label, [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(UTF8Marshaler))]string comment);
 		[DllImport(DLLPath)] public static extern void DebugDeleteLabels();
-		[DllImport(DLLPath)] public static extern void DebugStep(UInt32 count);
+		[DllImport(DLLPath)] public static extern void DebugStep(UInt32 count, BreakSource source = BreakSource.CpuStep);
 		[DllImport(DLLPath)] public static extern void DebugPpuStep(UInt32 count);
 		[DllImport(DLLPath)] public static extern void DebugStepCycles(UInt32 count);
 		[DllImport(DLLPath)] public static extern void DebugStepOut();
@@ -1945,7 +1945,7 @@ namespace Mesen.GUI
 	{
 		public Int32 Id;
 		public DebugMemoryType MemoryType;
-		public BreakpointType Type;
+		public BreakpointTypeFlags Type;
 		public Int32 StartAddress;
 		public Int32 EndAddress;
 
@@ -2089,9 +2089,19 @@ namespace Mesen.GUI
 
 		public RecordMovieFrom RecordFrom;
 	}
+	
+	public enum BreakpointType
+	{
+		Global = 0,
+		Execute = 1,
+		ReadRam = 2,
+		WriteRam = 3,
+		ReadVram = 4,
+		WriteVram = 5,
+	}
 
 	[Flags]
-	public enum BreakpointType
+	public enum BreakpointTypeFlags
 	{
 		Global = 0,
 		Execute = 1,
@@ -2265,9 +2275,19 @@ namespace Mesen.GUI
 
 	public enum BreakSource
 	{
-		Break = 0,
-		Pause = 1,
-		BreakAfterSuspend = 2,
+		Unspecified = -1,
+		Breakpoint = 0,
+		CpuStep = 1,
+		PpuStep = 2,
+		BreakOnBrk = 3,
+		BreakOnUnofficialOpCode = 4,
+		BreakOnReset = 5,
+		BreakOnFocus = 6,
+		BreakOnUninitMemoryRead = 7,
+		BreakOnDecayedOamRead = 8,
+		BreakOnCpuCrash = 9,
+		Pause = 10,
+		BreakAfterSuspend = 11,
 	}
 
 	public enum AddressType

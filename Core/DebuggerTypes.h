@@ -40,9 +40,19 @@ enum class DebuggerFlags
 
 enum class BreakSource
 {
-	Break = 0,
-	Pause = 1,
-	BreakAfterSuspend = 2,
+	Unspecified = -1,
+	Breakpoint = 0,
+	CpuStep = 1,
+	PpuStep = 2,
+	BreakOnBrk = 3,
+	BreakOnUnofficialOpCode = 4,
+	BreakOnReset = 5,
+	BreakOnFocus = 6,
+	BreakOnUninitMemoryRead = 7,
+	BreakOnDecayedOamRead = 8,
+	BreakOnCpuCrash = 9,
+	Pause = 10,
+	BreakAfterSuspend = 11,
 };
 
 enum class AddressType

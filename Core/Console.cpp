@@ -1041,11 +1041,11 @@ void Console::BreakIfDebugging()
 {
 	shared_ptr<Debugger> debugger = _debugger;
 	if(debugger) {
-		debugger->BreakImmediately();
+		debugger->BreakImmediately(BreakSource::BreakOnCpuCrash);
 	} else if(_settings->CheckFlag(EmulationFlags::BreakOnCrash)) {
 		//When "Break on Crash" is enabled, open the debugger and break immediately if a crash occurs
 		debugger = GetDebugger(true);
-		debugger->BreakImmediately();
+		debugger->BreakImmediately(BreakSource::BreakOnCpuCrash);
 	}
 }
 

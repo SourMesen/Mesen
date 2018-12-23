@@ -64,6 +64,7 @@ Debugger::Debugger(shared_ptr<Console> console, shared_ptr<CPU> cpu, shared_ptr<
 	_breakRequested = false;
 	_pausedForDebugHelper = false;
 	_breakOnScanline = -2;
+	_breakSource = BreakSource::Unspecified;
 
 	_preventResume = 0;
 	_stopFlag = false;
@@ -329,14 +330,18 @@ void Debugger::ProcessBreakpoints(BreakpointType type, OperationInfo &operationI
 	bool needMark = false;
 	bool needState = true;
 	uint32_t markBreakpointId = 0;
+	uint32_t breakpointId = 0;
 	EvalResultType resultType;
 	
-	auto processBreakpoint = [&needMark, &needBreak, &markBreakpointId](Breakpoint &bp) {
+	auto processBreakpoint = [&needMark, &needBreak, &markBreakpointId, &breakpointId](Breakpoint &bp) {
 		if(bp.IsMarked()) {
 			needMark = true;
 			markBreakpointId = bp.GetId();
 		}
-		needBreak |= bp.IsEnabled();
+		if(bp.IsEnabled()) {
+			needBreak = true;
+			breakpointId = bp.GetId();
+		}
 	};
 
 	for(size_t i = 0, len = breakpoints.size(); i < len; i++) {
@@ -372,7 +377,7 @@ void Debugger::ProcessBreakpoints(BreakpointType type, OperationInfo &operationI
 	if(needBreak && allowBreak) {
 		//Found a matching breakpoint, stop execution
 		Step(1);
-		SleepUntilResume();
+		SleepUntilResume(BreakSource::Breakpoint, breakpointId, type, operationInfo.Address);
 	}
 }
 
@@ -510,7 +515,7 @@ void Debugger::ProcessPpuCycle()
 		_ppuStepCount--;
 		if(_ppuStepCount == 0) {
 			Step(1);
-			SleepUntilResume();
+			SleepUntilResume(BreakSource::PpuStep);
 		}
 	}
 }
@@ -587,7 +592,7 @@ bool Debugger::ProcessRamOperation(MemoryOperationType type, uint16_t &addr, uin
 				if(_enableBreakOnUninitRead && CheckFlag(DebuggerFlags::BreakOnUninitMemoryRead)) {
 					//Break on uninit memory read
 					Step(1);
-					breakDone = SleepUntilResume();
+					breakDone = SleepUntilResume(BreakSource::BreakOnUninitMemoryRead);
 				}
 			}
 		}
@@ -627,11 +632,14 @@ bool Debugger::ProcessRamOperation(MemoryOperationType type, uint16_t &addr, uin
 
 		_profiler->ProcessInstructionStart(absoluteAddr);
 
+		BreakSource breakSource = BreakSource::Unspecified;
 		if(value == 0 && CheckFlag(DebuggerFlags::BreakOnBrk)) {
 			Step(1);
+			breakSource = BreakSource::BreakOnBrk;
 		} else if(CheckFlag(DebuggerFlags::BreakOnUnofficialOpCode) && _disassembler->IsUnofficialOpCode(value)) {
 			Step(1);
-		} 
+			breakSource = BreakSource::BreakOnUnofficialOpCode;
+		}
 
 		if(_runToCycle != 0) {
 			if(_cpu->GetCycleCount() >= _runToCycle) {
@@ -647,7 +655,7 @@ bool Debugger::ProcessRamOperation(MemoryOperationType type, uint16_t &addr, uin
 		}
 
 		_lastInstruction = value;
-		breakDone = SleepUntilResume();
+		breakDone = SleepUntilResume(breakSource);
 
 		if(_codeRunner && !_codeRunner->IsRunning()) {
 			_codeRunner.reset();
@@ -711,7 +719,7 @@ bool Debugger::ProcessRamOperation(MemoryOperationType type, uint16_t &addr, uin
 	return true;
 }
 
-bool Debugger::SleepUntilResume(BreakSource source)
+bool Debugger::SleepUntilResume(BreakSource source, uint32_t breakpointId, BreakpointType bpType, uint16_t bpAddress)
 {
 	int32_t stepCount = _stepCount.load();
 	if(stepCount > 0) {
@@ -733,7 +741,14 @@ bool Debugger::SleepUntilResume(BreakSource source)
 				
 		if(preventResume == 0) {
 			_console->GetSoundMixer()->StopAudio();
-			_console->GetNotificationManager()->SendNotification(ConsoleNotificationType::CodeBreak, (void*)(uint64_t)source);
+			if(source == BreakSource::Unspecified) {
+				source = _breakSource;
+			}
+			_breakSource = BreakSource::Unspecified;
+
+			uint64_t param = ((uint64_t)breakpointId << 32) | ((uint64_t)(bpAddress & 0xFFFF) << 16) | ((uint64_t)(bpType & 0xFF) << 8) | ((uint64_t)source & 0xFF);
+			_console->GetNotificationManager()->SendNotification(ConsoleNotificationType::CodeBreak, (void*)(uint64_t)param);
+
 			ProcessEvent(EventType::CodeBreak);
 			_stepOverAddr = -1;
 			if(CheckFlag(DebuggerFlags::PpuPartialDraw)) {
@@ -832,7 +847,7 @@ void Debugger::PpuStep(uint32_t count)
 	_stepOut = false;
 }
 
-void Debugger::Step(uint32_t count)
+void Debugger::Step(uint32_t count, BreakSource source)
 {
 	//Run CPU for [count] INSTRUCTIONS before breaking again
 	_stepOut = false;
@@ -841,6 +856,7 @@ void Debugger::Step(uint32_t count)
 	_ppuStepCount = -1;
 	_stepCount = count;
 	_breakOnScanline = -2;
+	_breakSource = source;
 }
 
 void Debugger::StepCycles(uint32_t count)
@@ -893,10 +909,10 @@ void Debugger::Run()
 	_stepOut = false;
 }
 
-void Debugger::BreakImmediately()
+void Debugger::BreakImmediately(BreakSource source)
 {
 	Step(1);
-	SleepUntilResume();
+	SleepUntilResume(source);
 }
 
 void Debugger::BreakOnScanline(int16_t scanline)

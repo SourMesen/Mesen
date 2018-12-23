@@ -13,6 +13,7 @@ using Mesen.GUI.Config;
 using Mesen.GUI.Debugger.Controls;
 using Mesen.GUI.Forms;
 using Mesen.GUI.Controls;
+using System.Collections.ObjectModel;
 
 namespace Mesen.GUI.Debugger
 {
@@ -121,6 +122,7 @@ namespace Mesen.GUI.Debugger
 			this.mnuShowVerifiedData.Checked = ConfigManager.Config.DebugInfo.ShowVerifiedData;
 			this.mnuShowUnidentifiedData.Checked = ConfigManager.Config.DebugInfo.ShowUnidentifiedData;
 
+			this.mnuShowBreakNotifications.Checked = ConfigManager.Config.DebugInfo.ShowBreakNotifications;
 			this.mnuAlwaysScrollToCenter.Checked = ConfigManager.Config.DebugInfo.AlwaysScrollToCenter;
 			this.mnuRefreshWhileRunning.Checked = ConfigManager.Config.DebugInfo.RefreshWhileRunning;
 			this.mnuShowMemoryValues.Checked = ConfigManager.Config.DebugInfo.ShowMemoryValuesInCodeWindow;
@@ -322,7 +324,7 @@ namespace Mesen.GUI.Debugger
 		{
 			base.OnActivated(e);
 			if(ConfigManager.Config.DebugInfo.BreakOnDebuggerFocus && !InteropEmu.DebugIsExecutionStopped()) {
-				InteropEmu.DebugStep(1);
+				InteropEmu.DebugStep(1, BreakSource.BreakOnFocus);
 			}
 		}
 
@@ -485,6 +487,37 @@ namespace Mesen.GUI.Debugger
 			InteropEmu.SetFlag(EmulationFlags.DebuggerWindowEnabled, true);
 		}
 
+		private string GetBreakNotification(Int64 param)
+		{
+			BreakSource source = (BreakSource)(byte)param;
+
+			string message = null;
+			if(ConfigManager.Config.DebugInfo.ShowBreakNotifications) {
+				message = ResourceHelper.GetEnumText(source);
+				if(source == BreakSource.Breakpoint) {
+					int breakpointId = (int)(param >> 32);
+					BreakpointType bpType = (BreakpointType)(byte)(param >> 8);
+					UInt16 bpAddress = (UInt16)(param >> 16);
+
+					ReadOnlyCollection<Breakpoint> breakpoints = BreakpointManager.Breakpoints;
+					if(breakpointId >= 0 && breakpointId < breakpoints.Count) {
+						Breakpoint bp = breakpoints[breakpointId];
+						if(bpType != BreakpointType.Global) {
+							message += ": " + ResourceHelper.GetEnumText(bpType) + " ($" + bpAddress.ToString("X4") + ")";
+						}
+						if(!string.IsNullOrWhiteSpace(bp.Condition)) {
+							message += Environment.NewLine + bp.Condition;
+						}
+					}
+				} else if(source == BreakSource.CpuStep || source == BreakSource.PpuStep) {
+					//Don't display anything when breaking due to stepping
+					message = null;
+				}
+			}
+
+			return message;
+		}
+
 		private void _notifListener_OnNotification(InteropEmu.NotificationEventArgs e)
 		{
 			switch(e.NotificationType) {
@@ -508,12 +541,16 @@ namespace Mesen.GUI.Debugger
 
 				case InteropEmu.ConsoleNotificationType.CodeBreak:
 					this.BeginInvoke((MethodInvoker)(() => {
-						BreakSource source = (BreakSource)e.Parameter.ToInt32();
+						BreakSource source = (BreakSource)(byte)e.Parameter.ToInt64();
+						
 						bool bringToFront = (
-							source == BreakSource.Break && ConfigManager.Config.DebugInfo.BringToFrontOnBreak ||
+							source < BreakSource.Pause && ConfigManager.Config.DebugInfo.BringToFrontOnBreak ||
 							source == BreakSource.Pause && ConfigManager.Config.DebugInfo.BringToFrontOnPause
 						);
 						UpdateDebugger(true, bringToFront);
+
+						_lastCodeWindow.SetMessage(new TextboxMessageInfo() { Message = GetBreakNotification(e.Parameter.ToInt64()) });
+
 						mnuContinue.Enabled = true;
 						mnuBreak.Enabled = false;
 					}));
@@ -538,7 +575,7 @@ namespace Mesen.GUI.Debugger
 					}));
 
 					if(breakOnReset) {
-						InteropEmu.DebugStep(1);
+						InteropEmu.DebugStep(1, BreakSource.BreakOnReset);
 					}
 					break;
 			}
@@ -670,6 +707,11 @@ namespace Mesen.GUI.Debugger
 
 			ctrlSourceViewer.ClearActiveAddress();
 			ctrlSourceViewerSplit.ClearActiveAddress();
+
+			ctrlDebuggerCode.SetMessage(null);
+			ctrlDebuggerCodeSplit.SetMessage(null);
+			ctrlSourceViewer.SetMessage(null);
+			ctrlSourceViewerSplit.SetMessage(null);
 		}
 
 		public void TogglePause()
@@ -1210,6 +1252,12 @@ namespace Mesen.GUI.Debugger
 		private void mnuBringToFrontOnBreak_Click(object sender, EventArgs e)
 		{
 			ConfigManager.Config.DebugInfo.BringToFrontOnBreak = mnuBringToFrontOnBreak.Checked;
+			ConfigManager.ApplyChanges();
+		}
+		
+		private void mnuShowBreakNotifications_Click(object sender, EventArgs e)
+		{
+			ConfigManager.Config.DebugInfo.ShowBreakNotifications = mnuShowBreakNotifications.Checked;
 			ConfigManager.ApplyChanges();
 		}
 

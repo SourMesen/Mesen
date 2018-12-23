@@ -53,6 +53,11 @@ namespace Mesen.GUI.Debugger
 			}
 		}
 
+		public void SetMessage(TextboxMessageInfo message)
+		{
+			this.ctrlCodeViewer.SetMessage(message);
+		}
+
 		protected override ctrlScrollableTextbox ScrollableTextbox
 		{
 			get { return this.ctrlCodeViewer; }

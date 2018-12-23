@@ -53,6 +53,11 @@ namespace Mesen.GUI.Debugger.Controls
 			}
 		}
 
+		public void SetMessage(TextboxMessageInfo message)
+		{
+			this.ctrlCodeViewer.SetMessage(message);
+		}
+
 		private List<string> _lineNumberNotes = new List<string>();
 		private void UpdateCode()
 		{

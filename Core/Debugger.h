@@ -102,6 +102,7 @@ private:
 	atomic<uint8_t> _lastInstruction;
 	atomic<bool> _stepOut;
 	atomic<int32_t> _stepOverAddr;
+	BreakSource _breakSource;
 	
 	atomic<bool> _released;
 	SimpleLock _releaseLock;
@@ -140,7 +141,7 @@ private:
 	void UpdateCallstack(uint8_t currentInstruction, uint32_t addr);
 
 	void ProcessStepConditions(uint16_t addr);
-	bool SleepUntilResume(BreakSource source = BreakSource::Break);
+	bool SleepUntilResume(BreakSource source, uint32_t breakpointId = 0, BreakpointType bpType = BreakpointType::Global, uint16_t bpAddress = 0);
 
 	void AddDebugEvent(DebugEventType type, uint16_t address = -1, uint8_t value = 0, int16_t breakpointId = -1, int8_t ppuLatch = -1);
 
@@ -178,14 +179,14 @@ public:
 	void ResumeFromBreak();
 
 	void PpuStep(uint32_t count = 1);
-	void Step(uint32_t count = 1);
+	void Step(uint32_t count = 1, BreakSource source = BreakSource::CpuStep);
 	void StepCycles(uint32_t cycleCount = 1);
 	void StepOver();
 	void StepOut();
 	void StepBack();
 	void Run();
 
-	void BreakImmediately();	
+	void BreakImmediately(BreakSource source);
 	void BreakOnScanline(int16_t scanline);
 
 	bool LoadCdlFile(string cdlFilepath);
