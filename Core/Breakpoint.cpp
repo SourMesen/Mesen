@@ -10,8 +10,12 @@ Breakpoint::~Breakpoint()
 {
 }
 
-bool Breakpoint::Matches(uint32_t memoryAddr, AddressTypeInfo &info)
+bool Breakpoint::Matches(uint32_t memoryAddr, AddressTypeInfo &info, MemoryOperationType opType)
 {
+	if(!_processDummyReadWrites && (opType == MemoryOperationType::DummyRead || opType == MemoryOperationType::DummyWrite)) {
+		return false;
+	}
+
 	if(_startAddr == -1) {
 		return true;
 	}

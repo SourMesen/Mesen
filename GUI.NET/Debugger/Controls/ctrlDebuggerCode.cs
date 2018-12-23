@@ -414,10 +414,11 @@ namespace Mesen.GUI.Debugger
 					progress.Current = (int)state.OpCycle;
 					progress.Maxixum = frmOpCodeTooltip.OpCycles[state.OpCode];
 					switch(state.OpMemoryOperationType) {
-						case InteropMemoryOperationType.DummyRead: progress.Color = Color.FromArgb(184, 160, 255); break;
-						case InteropMemoryOperationType.Read: progress.Color = Color.FromArgb(150, 176, 255); break;
-						case InteropMemoryOperationType.Write: progress.Color = Color.FromArgb(255, 171, 150); break;
-						default: progress.Color = Color.FromArgb(143, 255, 173); break;
+						case InteropMemoryOperationType.DummyRead: progress.Color = Color.FromArgb(184, 160, 255); progress.Text = "DR"; break;
+						case InteropMemoryOperationType.DummyWrite: progress.Color = Color.FromArgb(255, 245, 137); progress.Text = "DW"; break;
+						case InteropMemoryOperationType.Read: progress.Color = Color.FromArgb(150, 176, 255); progress.Text = "R"; break;
+						case InteropMemoryOperationType.Write: progress.Color = Color.FromArgb(255, 171, 150); progress.Text = "W"; break;
+						default: progress.Color = Color.FromArgb(143, 255, 173); progress.Text = "X"; break;
 					}
 					props.Progress = progress;
 				}

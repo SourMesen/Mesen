@@ -1245,7 +1245,7 @@ namespace Mesen.GUI.Debugger
 				int currentStep = progress.Current + 1;
 				int stepCount = Math.Max(progress.Maxixum, currentStep);
 
-				string display = currentStep.ToString() + "/" + stepCount.ToString();
+				string display = currentStep.ToString() + "/" + stepCount.ToString() + " " + progress.Text;
 				SizeF size = g.MeasureString(display, this._noteFont, int.MaxValue, StringFormat.GenericTypographic);
 
 				float width = size.Width + 16;
@@ -1437,6 +1437,7 @@ namespace Mesen.GUI.Debugger
 	{
 		public int Current;
 		public int Maxixum;
+		public string Text;
 		public Color Color;
 	}
 

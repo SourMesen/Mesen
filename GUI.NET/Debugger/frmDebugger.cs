@@ -504,7 +504,15 @@ namespace Mesen.GUI.Debugger
 					if(breakpointId >= 0 && breakpointId < breakpoints.Count) {
 						Breakpoint bp = breakpoints[breakpointId];
 						if(bpType != BreakpointType.Global) {
-							message += ": " + ResourceHelper.GetEnumText(bpType) + " ($" + bpAddress.ToString("X4") + ")";
+							string prefix = "";
+							if(bpType == BreakpointType.ReadRam || bpType == BreakpointType.WriteRam) {
+								InstructionProgress progress = new InstructionProgress();
+								InteropEmu.DebugGetInstructionProgress(ref progress);
+								if(progress.OpMemoryOperationType == InteropMemoryOperationType.DummyRead || progress.OpMemoryOperationType == InteropMemoryOperationType.DummyWrite) {
+									prefix = "(Dummy) ";
+								}
+							}
+							message += ": " + prefix + ResourceHelper.GetEnumText(bpType) + " ($" + bpAddress.ToString("X4") + ")";
 						}
 						if(!string.IsNullOrWhiteSpace(bp.Condition)) {
 							string cond = bp.Condition.Trim();

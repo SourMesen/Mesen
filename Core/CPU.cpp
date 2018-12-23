@@ -176,7 +176,7 @@ void CPU::BRK() {
 	_prevRunIrq = false;
 }
 
-void CPU::MemoryWrite(uint16_t addr, uint8_t value)
+void CPU::MemoryWrite(uint16_t addr, uint8_t value, MemoryOperationType operationType)
 {
 	_cpuWrite = true;;
 	_writeAddr = addr;
@@ -184,7 +184,7 @@ void CPU::MemoryWrite(uint16_t addr, uint8_t value)
 	while(_dmcDmaRunning) {
 		IncCycleCount();
 	}
-	_memoryManager->Write(addr, value);
+	_memoryManager->Write(addr, value, operationType);
 
 	//DMA DMC might have started after a write to $4015, stall CPU if needed
 	while(_dmcDmaRunning) {

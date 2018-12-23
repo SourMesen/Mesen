@@ -349,7 +349,7 @@ void Debugger::ProcessBreakpoints(BreakpointType type, OperationInfo &operationI
 		Breakpoint &breakpoint = breakpoints[i];
 		if(
 			type == BreakpointType::Global ||
-			(!isPpuBreakpoint && breakpoint.Matches(operationInfo.Address, info)) ||
+			(!isPpuBreakpoint && breakpoint.Matches(operationInfo.Address, info, operationInfo.OperationType)) ||
 			(isPpuBreakpoint && breakpoint.Matches(operationInfo.Address, ppuInfo))
 		) {
 			if(!breakpoint.HasCondition()) {
@@ -585,7 +585,7 @@ bool Debugger::ProcessRamOperation(MemoryOperationType type, uint16_t &addr, uin
 	int32_t absoluteAddr = addressInfo.Type == AddressType::PrgRom ? addressInfo.Address : -1;
 	int32_t absoluteRamAddr = addressInfo.Type == AddressType::WorkRam ? addressInfo.Address : -1;
 
-	if(addressInfo.Address >= 0 && type != MemoryOperationType::DummyRead) {
+	if(addressInfo.Address >= 0 && type != MemoryOperationType::DummyRead && type != MemoryOperationType::DummyWrite) {
 		if(type == MemoryOperationType::Write && CheckFlag(DebuggerFlags::IgnoreRedundantWrites)) {
 			if(_memoryManager->DebugRead(addr) != value) {
 				_memoryAccessCounter->ProcessMemoryAccess(addressInfo, type, _cpu->GetCycleCount());
@@ -680,17 +680,19 @@ bool Debugger::ProcessRamOperation(MemoryOperationType type, uint16_t &addr, uin
 		_profiler->ProcessCycle();
 	}
 
-	if(type != MemoryOperationType::DummyRead) {
-		BreakpointType breakpointType;
-		switch(type) {
-			default: breakpointType = BreakpointType::Execute; break;
-			case MemoryOperationType::Read: breakpointType = BreakpointType::ReadRam; break;
-			case MemoryOperationType::Write: breakpointType = BreakpointType::WriteRam; break;
-		}
+	BreakpointType breakpointType;
+	switch(type) {
+		default: breakpointType = BreakpointType::Execute; break;
+	
+		case MemoryOperationType::DummyRead:
+		case MemoryOperationType::Read: breakpointType = BreakpointType::ReadRam; break;
 
-		if(_hasBreakpoint[breakpointType]) {
-			ProcessBreakpoints(breakpointType, operationInfo, !breakDone);
-		}
+		case MemoryOperationType::DummyWrite:
+		case MemoryOperationType::Write: breakpointType = BreakpointType::WriteRam; break;
+	}
+
+	if(_hasBreakpoint[breakpointType]) {
+		ProcessBreakpoints(breakpointType, operationInfo, !breakDone);
 	}
 
 	_currentReadAddr = nullptr;

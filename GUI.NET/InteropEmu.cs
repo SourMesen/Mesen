@@ -1963,6 +1963,9 @@ namespace Mesen.GUI
 		[MarshalAs(UnmanagedType.I1)]
 		public bool MarkEvent;
 
+		[MarshalAs(UnmanagedType.I1)]
+		public bool ProcessDummyReadWrites;
+
 		[MarshalAs(UnmanagedType.ByValArray, SizeConst = 1000)]
 		public byte[] Condition;
 	}
@@ -2342,7 +2345,8 @@ namespace Mesen.GUI
 		ExecOperand = 3,
 		PpuRenderingRead = 4,
 		DummyRead = 5,
-		DmcRead = 6
+		DmcRead = 6,
+		DummyWrite = 7
 	}
 
 	public enum MemoryOperationType

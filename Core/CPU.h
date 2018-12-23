@@ -77,7 +77,7 @@ private:
 	{
 		MemoryRead(_state.PC, MemoryOperationType::DummyRead);
 	}
-
+	
 	uint8_t ReadByte()
 	{
 		uint8_t value = MemoryRead(_state.PC, MemoryOperationType::ExecOperand);
@@ -126,7 +126,7 @@ private:
 		return ((valA + valB) & 0xFF00) != (valA & 0xFF00);
 	}
 
-	void MemoryWrite(uint16_t addr, uint8_t value);
+	void MemoryWrite(uint16_t addr, uint8_t value, MemoryOperationType operationType = MemoryOperationType::Write);
 	uint8_t MemoryRead(uint16_t addr, MemoryOperationType operationType = MemoryOperationType::Read);
 
 	uint16_t MemoryReadWord(uint16_t addr, MemoryOperationType operationType = MemoryOperationType::Read) {
@@ -323,7 +323,7 @@ private:
 		ClearFlags(PSFlags::Negative | PSFlags::Zero);
 		uint8_t value = MemoryRead(addr);		
 		
-		MemoryWrite(addr, value); //Dummy write
+		MemoryWrite(addr, value, MemoryOperationType::DummyWrite); //Dummy write
 		
 		value++;
 		SetZeroNegativeFlags(value);
@@ -335,7 +335,7 @@ private:
 		uint16_t addr = GetOperand();
 		ClearFlags(PSFlags::Negative | PSFlags::Zero);
 		uint8_t value = MemoryRead(addr);
-		MemoryWrite(addr, value); //Dummy write
+		MemoryWrite(addr, value, MemoryOperationType::DummyWrite); //Dummy write
 		
 		value--;
 		SetZeroNegativeFlags(value);
@@ -393,28 +393,28 @@ private:
 	void ASLAddr() {
 		uint16_t addr = GetOperand();
 		uint8_t value = MemoryRead(addr);
-		MemoryWrite(addr, value); //Dummy write
+		MemoryWrite(addr, value, MemoryOperationType::DummyWrite); //Dummy write
 		MemoryWrite(addr, ASL(value));
 	}
 
 	void LSRAddr() {
 		uint16_t addr = GetOperand();
 		uint8_t value = MemoryRead(addr);
-		MemoryWrite(addr, value); //Dummy write
+		MemoryWrite(addr, value, MemoryOperationType::DummyWrite); //Dummy write
 		MemoryWrite(addr, LSR(value));
 	}
 
 	void ROLAddr() {
 		uint16_t addr = GetOperand();
 		uint8_t value = MemoryRead(addr);
-		MemoryWrite(addr, value); //Dummy write
+		MemoryWrite(addr, value, MemoryOperationType::DummyWrite); //Dummy write
 		MemoryWrite(addr, ROL(value));
 	}
 
 	void RORAddr() {
 		uint16_t addr = GetOperand();
 		uint8_t value = MemoryRead(addr);
-		MemoryWrite(addr, value); //Dummy write
+		MemoryWrite(addr, value, MemoryOperationType::DummyWrite); //Dummy write
 		MemoryWrite(addr, ROR(value));
 	}
 
@@ -578,7 +578,7 @@ private:
 	{
 		//ASL & ORA
 		uint8_t value = GetOperandValue();
-		MemoryWrite(GetOperand(), value); //Dummy write
+		MemoryWrite(GetOperand(), value, MemoryOperationType::DummyWrite); //Dummy write
 		uint8_t shiftedValue = ASL(value);
 		SetA(A() | shiftedValue);
 		MemoryWrite(GetOperand(), shiftedValue);
@@ -588,7 +588,7 @@ private:
 	{
 		//ROL & AND
 		uint8_t value = GetOperandValue();
-		MemoryWrite(GetOperand(), value); //Dummy write
+		MemoryWrite(GetOperand(), value, MemoryOperationType::DummyWrite); //Dummy write
 		uint8_t shiftedValue = LSR(value);
 		SetA(A() ^ shiftedValue);
 		MemoryWrite(GetOperand(), shiftedValue);
@@ -598,7 +598,7 @@ private:
 	{
 		//LSR & EOR
 		uint8_t value = GetOperandValue();
-		MemoryWrite(GetOperand(), value); //Dummy write
+		MemoryWrite(GetOperand(), value, MemoryOperationType::DummyWrite); //Dummy write
 		uint8_t shiftedValue = ROL(value);
 		SetA(A() & shiftedValue);
 		MemoryWrite(GetOperand(), shiftedValue);
@@ -608,7 +608,7 @@ private:
 	{
 		//ROR & ADC
 		uint8_t value = GetOperandValue();
-		MemoryWrite(GetOperand(), value); //Dummy write
+		MemoryWrite(GetOperand(), value, MemoryOperationType::DummyWrite); //Dummy write
 		uint8_t shiftedValue = ROR(value);
 		ADD(shiftedValue);
 		MemoryWrite(GetOperand(), shiftedValue);
@@ -632,7 +632,7 @@ private:
 	{
 		//DEC & CMP
 		uint8_t value = GetOperandValue();
-		MemoryWrite(GetOperand(), value); //Dummy write
+		MemoryWrite(GetOperand(), value, MemoryOperationType::DummyWrite); //Dummy write
 		value--;
 		CMP(A(), value);
 		MemoryWrite(GetOperand(), value);
@@ -642,7 +642,7 @@ private:
 	{
 		//INC & SBC
 		uint8_t value = GetOperandValue();
-		MemoryWrite(GetOperand(), value); //Dummy write
+		MemoryWrite(GetOperand(), value, MemoryOperationType::DummyWrite); //Dummy write
 		value++;
 		ADD(value ^ 0xFF);
 		MemoryWrite(GetOperand(), value);

@@ -19,7 +19,7 @@ public:
 	Breakpoint();
 	~Breakpoint();
 
-	bool Matches(uint32_t memoryAddr, AddressTypeInfo &info);
+	bool Matches(uint32_t memoryAddr, AddressTypeInfo &info, MemoryOperationType opType);
 	bool Matches(uint32_t memoryAddr, PpuAddressTypeInfo &info);
 	bool HasBreakpointType(BreakpointType type);
 	string GetCondition();
@@ -38,5 +38,6 @@ private:
 	int32_t _endAddr;
 	bool _enabled;
 	bool _markEvent;
+	bool _processDummyReadWrites;
 	char _condition[1000];
 };

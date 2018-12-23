@@ -51,7 +51,7 @@ class MemoryManager : public Snapshotable
 		uint8_t* GetInternalRAM();
 
 		uint8_t Read(uint16_t addr, MemoryOperationType operationType = MemoryOperationType::Read);
-		void Write(uint16_t addr, uint8_t value);
+		void Write(uint16_t addr, uint8_t value, MemoryOperationType operationType);
 
 		uint32_t ToAbsolutePrgAddress(uint16_t ramAddr);
 

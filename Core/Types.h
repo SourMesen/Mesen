@@ -32,7 +32,8 @@ enum class MemoryOperationType
 	ExecOperand = 3,
 	PpuRenderingRead = 4,
 	DummyRead = 5,
-	DmcRead = 6
+	DmcRead = 6,
+	DummyWrite = 7
 };
 
 struct State
