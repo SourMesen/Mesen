@@ -596,7 +596,7 @@ namespace Be.Windows.Forms
 				_hexBox.ScrollByteIntoView();
 				_hexBox.UpdateCaret();
 				_hexBox.ReleaseSelection();
-
+				_hexBox.Invalidate();
 				return true;
 			}
 
@@ -615,7 +615,7 @@ namespace Be.Windows.Forms
 				_hexBox.ScrollByteIntoView();
 				_hexBox.UpdateCaret();
 				_hexBox.ReleaseSelection();
-
+				_hexBox.Invalidate();
 				return true;
 			}
 
@@ -2728,7 +2728,7 @@ namespace Be.Windows.Forms
 
 				stringToDisplay += s;
 
-				if(s.Length > 1 || s.Length > 0 && s[0] > 127 || s[0] < 32) {
+				if(s.Length > 1 || (s.Length > 0 && (s[0] > 127 || s[0] < 32))) {
 					//Force draw if we hit a non-ascii character (to avoid minor positioning issues)
 					forceDraw = true;
 				}

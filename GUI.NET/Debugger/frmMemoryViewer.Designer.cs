@@ -94,6 +94,7 @@
 			this.toolStripMenuItem10 = new System.Windows.Forms.ToolStripSeparator();
 			this.mnuIgnoreRedundantWrites = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuEnablePerByteNavigation = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuByteEditingMode = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuFind = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuFindNext = new System.Windows.Forms.ToolStripMenuItem();
@@ -106,7 +107,6 @@
 			this.ctrlMemoryAccessCounters = new Mesen.GUI.Debugger.Controls.ctrlMemoryAccessCounters();
 			this.tpgProfiler = new System.Windows.Forms.TabPage();
 			this.ctrlProfiler = new Mesen.GUI.Debugger.Controls.ctrlProfiler();
-			this.mnuByteEditingMode = new System.Windows.Forms.ToolStripMenuItem();
 			this.flowLayoutPanel1.SuspendLayout();
 			this.menuStrip1.SuspendLayout();
 			this.tabMain.SuspendLayout();
@@ -138,7 +138,7 @@
 			this.flowLayoutPanel1.Location = new System.Drawing.Point(0, 0);
 			this.flowLayoutPanel1.Margin = new System.Windows.Forms.Padding(0);
 			this.flowLayoutPanel1.Name = "flowLayoutPanel1";
-			this.flowLayoutPanel1.Size = new System.Drawing.Size(166, 27);
+			this.flowLayoutPanel1.Size = new System.Drawing.Size(207, 27);
 			this.flowLayoutPanel1.TabIndex = 1;
 			this.flowLayoutPanel1.WrapContents = false;
 			// 
@@ -159,7 +159,7 @@
 			this.cboMemoryType.FormattingEnabled = true;
 			this.cboMemoryType.Location = new System.Drawing.Point(42, 3);
 			this.cboMemoryType.Name = "cboMemoryType";
-			this.cboMemoryType.Size = new System.Drawing.Size(121, 21);
+			this.cboMemoryType.Size = new System.Drawing.Size(162, 21);
 			this.cboMemoryType.TabIndex = 1;
 			// 
 			// menuStrip1
@@ -377,6 +377,7 @@
 			this.mnuHighlightLabelledBytes.Name = "mnuHighlightLabelledBytes";
 			this.mnuHighlightLabelledBytes.Size = new System.Drawing.Size(236, 22);
 			this.mnuHighlightLabelledBytes.Text = "Labelled bytes";
+			this.mnuHighlightLabelledBytes.Click += new System.EventHandler(this.mnuColorProviderOptions_Click);
 			// 
 			// toolStripMenuItem8
 			// 
@@ -389,6 +390,7 @@
 			this.mnuHighlightCodeBytes.Name = "mnuHighlightCodeBytes";
 			this.mnuHighlightCodeBytes.Size = new System.Drawing.Size(236, 22);
 			this.mnuHighlightCodeBytes.Text = "Code bytes (PRG ROM)";
+			this.mnuHighlightCodeBytes.Click += new System.EventHandler(this.mnuColorProviderOptions_Click);
 			// 
 			// mnuHighlightDataBytes
 			// 
@@ -396,6 +398,7 @@
 			this.mnuHighlightDataBytes.Name = "mnuHighlightDataBytes";
 			this.mnuHighlightDataBytes.Size = new System.Drawing.Size(236, 22);
 			this.mnuHighlightDataBytes.Text = "Data bytes (PRG ROM)";
+			this.mnuHighlightDataBytes.Click += new System.EventHandler(this.mnuColorProviderOptions_Click);
 			// 
 			// mnuHighlightDmcDataBytes
 			// 
@@ -403,6 +406,7 @@
 			this.mnuHighlightDmcDataBytes.Name = "mnuHighlightDmcDataBytes";
 			this.mnuHighlightDmcDataBytes.Size = new System.Drawing.Size(236, 22);
 			this.mnuHighlightDmcDataBytes.Text = "DMC sample bytes (PRG ROM)";
+			this.mnuHighlightDmcDataBytes.Click += new System.EventHandler(this.mnuColorProviderOptions_Click);
 			// 
 			// toolStripMenuItem11
 			// 
@@ -415,6 +419,7 @@
 			this.mnuHighlightChrDrawnBytes.Name = "mnuHighlightChrDrawnBytes";
 			this.mnuHighlightChrDrawnBytes.Size = new System.Drawing.Size(236, 22);
 			this.mnuHighlightChrDrawnBytes.Text = "Drawn bytes (CHR ROM)";
+			this.mnuHighlightChrDrawnBytes.Click += new System.EventHandler(this.mnuColorProviderOptions_Click);
 			// 
 			// mnuHighlightChrReadBytes
 			// 
@@ -422,6 +427,7 @@
 			this.mnuHighlightChrReadBytes.Name = "mnuHighlightChrReadBytes";
 			this.mnuHighlightChrReadBytes.Size = new System.Drawing.Size(236, 22);
 			this.mnuHighlightChrReadBytes.Text = "Read bytes (CHR ROM)";
+			this.mnuHighlightChrReadBytes.Click += new System.EventHandler(this.mnuColorProviderOptions_Click);
 			// 
 			// fadeToolStripMenuItem
 			// 
@@ -639,6 +645,14 @@
 			this.mnuEnablePerByteNavigation.Text = "Use per-byte left/right navigation";
 			this.mnuEnablePerByteNavigation.CheckedChanged += new System.EventHandler(this.mnuEnablePerByteNavigation_CheckedChanged);
 			// 
+			// mnuByteEditingMode
+			// 
+			this.mnuByteEditingMode.CheckOnClick = true;
+			this.mnuByteEditingMode.Name = "mnuByteEditingMode";
+			this.mnuByteEditingMode.Size = new System.Drawing.Size(256, 22);
+			this.mnuByteEditingMode.Text = "Use per-byte editing mode";
+			this.mnuByteEditingMode.CheckedChanged += new System.EventHandler(this.mnuByteEditingMode_CheckedChanged);
+			// 
 			// toolStripMenuItem1
 			// 
 			this.toolStripMenuItem1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -757,14 +771,6 @@
 			this.ctrlProfiler.Name = "ctrlProfiler";
 			this.ctrlProfiler.Size = new System.Drawing.Size(606, 343);
 			this.ctrlProfiler.TabIndex = 0;
-			// 
-			// mnuByteEditingMode
-			// 
-			this.mnuByteEditingMode.CheckOnClick = true;
-			this.mnuByteEditingMode.Name = "mnuByteEditingMode";
-			this.mnuByteEditingMode.Size = new System.Drawing.Size(256, 22);
-			this.mnuByteEditingMode.Text = "Use per-byte editing mode";
-			this.mnuByteEditingMode.CheckedChanged += new System.EventHandler(this.mnuByteEditingMode_CheckedChanged);
 			// 
 			// frmMemoryViewer
 			// 

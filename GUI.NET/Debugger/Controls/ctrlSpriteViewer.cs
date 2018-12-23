@@ -11,6 +11,7 @@ using System.Runtime.InteropServices;
 using Mesen.GUI.Controls;
 using System.Drawing.Imaging;
 using Mesen.GUI.Config;
+using Mesen.GUI.Forms;
 
 namespace Mesen.GUI.Debugger.Controls
 {
@@ -40,11 +41,20 @@ namespace Mesen.GUI.Debugger.Controls
 			picSprites.Image = new Bitmap(256, 512, PixelFormat.Format32bppArgb);
 		}
 
+		protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
+		{
+			if(ctxMenu.ProcessCommandKey(ref msg, keyData)) {
+				return true;
+			}
+			return base.ProcessCmdKey(ref msg, keyData);
+		}
+
 		protected override void OnLoad(EventArgs e)
 		{
 			base.OnLoad(e);
 			if(!IsDesignMode) {
 				mnuCopyToClipboard.InitShortcut(this, nameof(DebuggerShortcutsConfig.Copy));
+				mnuEditInMemoryViewer.InitShortcut(this, nameof(DebuggerShortcutsConfig.CodeWindow_EditInMemoryViewer));
 			}
 		}
 
@@ -67,7 +77,14 @@ namespace Mesen.GUI.Debugger.Controls
 
 			GCHandle handle = GCHandle.Alloc(_spritePixelData, GCHandleType.Pinned);
 			try {
-				_imgSprites = new Bitmap(64, 128, 4*64, PixelFormat.Format32bppArgb, handle.AddrOfPinnedObject());
+				Bitmap source = new Bitmap(64, 128, 4*64, PixelFormat.Format32bppArgb, handle.AddrOfPinnedObject());
+
+				Bitmap sprites = new Bitmap(64, 128, PixelFormat.Format32bppArgb);
+				using(Graphics g = Graphics.FromImage(sprites)) {
+					g.DrawImage(source, 0, 0);
+				}
+				_imgSprites = sprites;
+
 				using(Graphics g = Graphics.FromImage(picSprites.Image)) {
 					g.Clear(Color.FromArgb(64, 64, 64));
 					g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
@@ -75,7 +92,7 @@ namespace Mesen.GUI.Debugger.Controls
 					g.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.Half;
 					
 					g.ScaleTransform(4, 4);
-					g.DrawImageUnscaled(_imgSprites, 0, 0);
+					g.DrawImageUnscaled(sprites, 0, 0);
 				}
 				picSprites.Invalidate();
 			} finally {
@@ -327,11 +344,17 @@ namespace Mesen.GUI.Debugger.Controls
 		private void picSprites_MouseEnter(object sender, EventArgs e)
 		{
 			_copyPreview = false;
+			if(this.ParentForm.ContainsFocus) {
+				this.Focus();
+			}
 		}
 
 		private void picPreview_MouseEnter(object sender, EventArgs e)
 		{
 			_copyPreview = true;
+			if(this.ParentForm.ContainsFocus) {
+				this.Focus();
+			}
 		}
 
 		private void mnuCopyToClipboard_Click(object sender, EventArgs e)
@@ -339,15 +362,33 @@ namespace Mesen.GUI.Debugger.Controls
 			CopyToClipboard();
 		}
 
-		public void CopyToClipboard()
+		private Bitmap GetCopyBitmap()
 		{
 			Bitmap src = _copyPreview ? _screenPreview : _imgSprites;
-			using(Bitmap target = new Bitmap(src.Width, src.Height)) {
-				using(Graphics g = Graphics.FromImage(target)) {
-					g.Clear(Color.FromArgb(64, 64, 64));
-					g.DrawImage(src, 0, 0);
-				}
+			Bitmap target = new Bitmap(src.Width, src.Height);
+			using(Graphics g = Graphics.FromImage(target)) {
+				g.Clear(Color.FromArgb(64, 64, 64));
+				g.DrawImage(src, 0, 0);
+			}
+			return target;
+		}
+
+		public void CopyToClipboard()
+		{
+			using(Bitmap target = GetCopyBitmap()) {
 				Clipboard.SetImage(target);
+			}
+		}
+
+		private void mnuExportToPng_Click(object sender, EventArgs e)
+		{
+			using(SaveFileDialog sfd = new SaveFileDialog()) {
+				sfd.SetFilter("PNG files|*.png");
+				if(sfd.ShowDialog() == DialogResult.OK) {
+					using(Bitmap target = GetCopyBitmap()) {
+						target.Save(sfd.FileName, System.Drawing.Imaging.ImageFormat.Png);
+					}
+				}
 			}
 		}
 
@@ -377,6 +418,22 @@ namespace Mesen.GUI.Debugger.Controls
 			} else {
 				Clipboard.Clear();
 			}
+		}
+
+		private void mnuEditInMemoryViewer_Click(object sender, EventArgs e)
+		{
+			if(_selectedSprite < 0 && _contextMenuSpriteIndex < 0) {
+				return;
+			}
+
+			int ramAddr = (_selectedSprite >= 0 ? _selectedSprite : _contextMenuSpriteIndex) * 4;
+			int tileIndex = _spriteRam[ramAddr + 1];
+			
+			DebugState state = new DebugState();
+			InteropEmu.DebugGetState(ref state);
+
+			int tileIndexOffset = (!_largeSprites && state.PPU.ControlFlags.SpritePatternAddr == 0x1000) ? 256 : 0;
+			DebugWindowManager.OpenMemoryViewer((tileIndex + tileIndexOffset) * 16, DebugMemoryType.PpuMemory);
 		}
 	}
 }

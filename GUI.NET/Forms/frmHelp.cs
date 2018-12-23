@@ -46,7 +46,14 @@ namespace Mesen.GUI.Forms
 
 			sb.Clear();
 			DisplayOptions(typeof(Configuration), sb);
-			txtGeneralOptions.Text = ConvertSlashes(txtGeneralOptions.Text + Environment.NewLine + sb.ToString().Trim());
+
+			txtGeneralOptions.Text = ConvertSlashes(
+				ResourceHelper.GetMessage("HelpFullscreen") + Environment.NewLine +
+				ResourceHelper.GetMessage("HelpDoNotSaveSettings") + Environment.NewLine +
+				ResourceHelper.GetMessage("HelpRecordMovie") + Environment.NewLine +
+				ResourceHelper.GetMessage("HelpLoadLastSession") + Environment.NewLine +
+				sb.ToString().Trim()
+			);
 		}
 
 		private string ConvertSlashes(string options)

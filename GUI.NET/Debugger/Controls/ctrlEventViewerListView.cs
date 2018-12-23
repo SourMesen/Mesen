@@ -104,7 +104,11 @@ namespace Mesen.GUI.Debugger.Controls
 				_sortColumn = sortColumn;
 				_sortAscending = true;
 			}
+
+			lstEvents.BeginUpdate();
 			SortData();
+			lstEvents.VirtualListSize = _debugEvents.Count;
+			lstEvents.EndUpdate();
 		}
 
 		private void SortData()

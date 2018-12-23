@@ -218,6 +218,7 @@
 			<Control ID="chkDisplayPort4">プレーヤー4</Control>
 			<Control ID="lblDisplayPosition">表示位置：</Control>
 			<Control ID="chkDisplayInputHorizontally">水平表示</Control>
+			<Control ID="chkHideMousePointerForZapper">ガンが接続されている時にマウスポインターを隠す</Control>
 
 			<Control ID="lblKeyBinding">注意：　使っている設定の中には同じキーが複数のボタン―にマッピングされています。　間違いでこの設定にした場合は、設定を確認して直してください。</Control>
 		</Form>
@@ -608,7 +609,6 @@
 			<Control ID="tpgAudioOptions">音声</Control>
 			<Control ID="tpgEmulationOptions">エミュレーション</Control>
 			<Control ID="lblExplanation">Mesenを全画面表示の状態で"MyGame.nes"を起動する. 画面エフェクトをNTSCにして、映像サイズを2xにして、オーバースキャン設定を変更する。</Control>
-			<Control ID="txtGeneralOptions">/fullscreen - 全画面表示の状態で起動する&#13;&#10;/DoNotSaveSettings - 設定のセーブ機能を無効にする</Control>
 		</Form>
 		<Form ID="frmCopyFiles" Title="しばらくお待ちください">
 			<Control ID="lblCopying">ファイル：</Control>
@@ -753,6 +753,11 @@
 		<Message ID="MouseModeEnabled">マウスモード有効。 無効にするにはESCやポースボタンを使ってください。</Message>
 		<Message ID="BandaiMicrophone">Bandaiマイクロフォン</Message>
 		<Message ID="DatachBarcodeReader">Datachバーコードリーダー</Message>
+
+		<Message ID="HelpFullscreen">/fullscreen - 全画面表示の状態で起動する</Message>
+		<Message ID="HelpDoNotSaveSettings">/DoNotSaveSettings - 設定のセーブ機能を無効にする</Message>
+		<Message ID="HelpRecordMovie">/RecordMovie="filename.mmo" - ゲームをロードしてから指定されたファイルに動画を録画する。</Message>
+		<Message ID="HelpLoadLastSession">/LoadLastSession - 前回ゲーム閉じた時の状況でゲームを始める</Message>
 
 		<Message ID="Resume">再開</Message>
 		<Message ID="Pause">ポーズ</Message>

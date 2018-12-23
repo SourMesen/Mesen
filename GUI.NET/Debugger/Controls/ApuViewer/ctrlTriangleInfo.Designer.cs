@@ -38,10 +38,10 @@
 			this.txtOutputVolume = new System.Windows.Forms.TextBox();
 			this.txtSequencePosition = new System.Windows.Forms.TextBox();
 			this.grpLengthCounter = new System.Windows.Forms.GroupBox();
-			this.ctrlLengthCounterInfo = new Mesen.GUI.Debugger.Controls.ApuViewer.ctrlLengthCounterInfo();
 			this.lblHz = new System.Windows.Forms.Label();
 			this.lblTimer = new System.Windows.Forms.Label();
 			this.txtTimer = new System.Windows.Forms.TextBox();
+			this.ctrlLengthCounterInfo = new Mesen.GUI.Debugger.Controls.ApuViewer.ctrlLengthCounterInfo();
 			this.tableLayoutPanel1.SuspendLayout();
 			this.grpLengthCounter.SuspendLayout();
 			this.SuspendLayout();
@@ -97,7 +97,8 @@
 			// 
 			this.lblPeriod.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.lblPeriod.AutoSize = true;
-			this.lblPeriod.Location = new System.Drawing.Point(3, 29);
+			this.lblPeriod.Location = new System.Drawing.Point(0, 29);
+			this.lblPeriod.Margin = new System.Windows.Forms.Padding(0, 0, 0, 0);
 			this.lblPeriod.Name = "lblPeriod";
 			this.lblPeriod.Size = new System.Drawing.Size(40, 13);
 			this.lblPeriod.TabIndex = 0;
@@ -106,7 +107,7 @@
 			// txtPeriod
 			// 
 			this.txtPeriod.BackColor = System.Drawing.Color.White;
-			this.txtPeriod.Location = new System.Drawing.Point(102, 26);
+			this.txtPeriod.Location = new System.Drawing.Point(83, 26);
 			this.txtPeriod.Name = "txtPeriod";
 			this.txtPeriod.ReadOnly = true;
 			this.txtPeriod.Size = new System.Drawing.Size(39, 20);
@@ -116,7 +117,8 @@
 			// 
 			this.lblFrequency.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.lblFrequency.AutoSize = true;
-			this.lblFrequency.Location = new System.Drawing.Point(3, 81);
+			this.lblFrequency.Location = new System.Drawing.Point(0, 81);
+			this.lblFrequency.Margin = new System.Windows.Forms.Padding(0, 0, 0, 0);
 			this.lblFrequency.Name = "lblFrequency";
 			this.lblFrequency.Size = new System.Drawing.Size(60, 13);
 			this.lblFrequency.TabIndex = 1;
@@ -125,7 +127,7 @@
 			// txtFrequency
 			// 
 			this.txtFrequency.BackColor = System.Drawing.Color.White;
-			this.txtFrequency.Location = new System.Drawing.Point(102, 78);
+			this.txtFrequency.Location = new System.Drawing.Point(83, 78);
 			this.txtFrequency.Name = "txtFrequency";
 			this.txtFrequency.ReadOnly = true;
 			this.txtFrequency.Size = new System.Drawing.Size(59, 20);
@@ -136,17 +138,18 @@
 			this.lblSequencePosition.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.lblSequencePosition.AutoSize = true;
 			this.lblSequencePosition.Location = new System.Drawing.Point(0, 107);
-			this.lblSequencePosition.Margin = new System.Windows.Forms.Padding(0);
+			this.lblSequencePosition.Margin = new System.Windows.Forms.Padding(0, 0, 0, 0);
 			this.lblSequencePosition.Name = "lblSequencePosition";
-			this.lblSequencePosition.Size = new System.Drawing.Size(99, 13);
+			this.lblSequencePosition.Size = new System.Drawing.Size(80, 13);
 			this.lblSequencePosition.TabIndex = 6;
-			this.lblSequencePosition.Text = "Sequence Position:";
+			this.lblSequencePosition.Text = "Sequence Pos:";
 			// 
 			// label1
 			// 
 			this.label1.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.label1.AutoSize = true;
-			this.label1.Location = new System.Drawing.Point(3, 133);
+			this.label1.Location = new System.Drawing.Point(0, 133);
+			this.label1.Margin = new System.Windows.Forms.Padding(0, 0, 0, 0);
 			this.label1.Name = "label1";
 			this.label1.Size = new System.Drawing.Size(80, 13);
 			this.label1.TabIndex = 7;
@@ -155,7 +158,7 @@
 			// txtOutputVolume
 			// 
 			this.txtOutputVolume.BackColor = System.Drawing.Color.White;
-			this.txtOutputVolume.Location = new System.Drawing.Point(102, 130);
+			this.txtOutputVolume.Location = new System.Drawing.Point(83, 130);
 			this.txtOutputVolume.Name = "txtOutputVolume";
 			this.txtOutputVolume.ReadOnly = true;
 			this.txtOutputVolume.Size = new System.Drawing.Size(39, 20);
@@ -164,7 +167,7 @@
 			// txtSequencePosition
 			// 
 			this.txtSequencePosition.BackColor = System.Drawing.Color.White;
-			this.txtSequencePosition.Location = new System.Drawing.Point(102, 104);
+			this.txtSequencePosition.Location = new System.Drawing.Point(83, 104);
 			this.txtSequencePosition.Name = "txtSequencePosition";
 			this.txtSequencePosition.ReadOnly = true;
 			this.txtSequencePosition.Size = new System.Drawing.Size(39, 20);
@@ -176,7 +179,7 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.grpLengthCounter.Controls.Add(this.ctrlLengthCounterInfo);
-			this.grpLengthCounter.Location = new System.Drawing.Point(187, 3);
+			this.grpLengthCounter.Location = new System.Drawing.Point(168, 3);
 			this.grpLengthCounter.Name = "grpLengthCounter";
 			this.tableLayoutPanel1.SetRowSpan(this.grpLengthCounter, 7);
 			this.grpLengthCounter.Size = new System.Drawing.Size(126, 150);
@@ -184,19 +187,11 @@
 			this.grpLengthCounter.TabStop = false;
 			this.grpLengthCounter.Text = "Length Counter";
 			// 
-			// ctrlLengthCounterInfo
-			// 
-			this.ctrlLengthCounterInfo.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.ctrlLengthCounterInfo.Location = new System.Drawing.Point(3, 16);
-			this.ctrlLengthCounterInfo.Name = "ctrlLengthCounterInfo";
-			this.ctrlLengthCounterInfo.Size = new System.Drawing.Size(120, 131);
-			this.ctrlLengthCounterInfo.TabIndex = 2;
-			// 
 			// lblHz
 			// 
 			this.lblHz.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.lblHz.AutoSize = true;
-			this.lblHz.Location = new System.Drawing.Point(164, 81);
+			this.lblHz.Location = new System.Drawing.Point(145, 81);
 			this.lblHz.Margin = new System.Windows.Forms.Padding(0);
 			this.lblHz.Name = "lblHz";
 			this.lblHz.Size = new System.Drawing.Size(20, 13);
@@ -207,7 +202,8 @@
 			// 
 			this.lblTimer.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.lblTimer.AutoSize = true;
-			this.lblTimer.Location = new System.Drawing.Point(3, 55);
+			this.lblTimer.Location = new System.Drawing.Point(0, 55);
+			this.lblTimer.Margin = new System.Windows.Forms.Padding(0, 0, 0, 0);
 			this.lblTimer.Name = "lblTimer";
 			this.lblTimer.Size = new System.Drawing.Size(36, 13);
 			this.lblTimer.TabIndex = 15;
@@ -216,11 +212,19 @@
 			// txtTimer
 			// 
 			this.txtTimer.BackColor = System.Drawing.Color.White;
-			this.txtTimer.Location = new System.Drawing.Point(102, 52);
+			this.txtTimer.Location = new System.Drawing.Point(83, 52);
 			this.txtTimer.Name = "txtTimer";
 			this.txtTimer.ReadOnly = true;
 			this.txtTimer.Size = new System.Drawing.Size(39, 20);
 			this.txtTimer.TabIndex = 16;
+			// 
+			// ctrlLengthCounterInfo
+			// 
+			this.ctrlLengthCounterInfo.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.ctrlLengthCounterInfo.Location = new System.Drawing.Point(3, 16);
+			this.ctrlLengthCounterInfo.Name = "ctrlLengthCounterInfo";
+			this.ctrlLengthCounterInfo.Size = new System.Drawing.Size(120, 131);
+			this.ctrlLengthCounterInfo.TabIndex = 2;
 			// 
 			// ctrlTriangleInfo
 			// 

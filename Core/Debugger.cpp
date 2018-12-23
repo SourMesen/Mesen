@@ -106,30 +106,44 @@ Debugger::Debugger(shared_ptr<Console> console, shared_ptr<CPU> cpu, shared_ptr<
 	_hasScript = false;
 	_nextScriptId = 0;
 
+	_released = false;
+
 	UpdatePpuCyclesToProcess();
 }
 
 Debugger::~Debugger()
 {
-	_codeDataLogger->SaveCdlFile(FolderUtilities::CombinePath(FolderUtilities::GetDebuggerFolder(), FolderUtilities::GetFilename(_romName, false) + ".cdl"));
-
-	_stopFlag = true;
-
-	_console->Pause();
-
-	{
-		auto lock = _scriptLock.AcquireSafe();
-		for(shared_ptr<ScriptHost> script : _scripts) {
-			//Send a ScriptEnded event to all active scripts
-			script->ProcessEvent(EventType::ScriptEnded);
-		}
-		_scripts.clear();
-		_hasScript = false;
+	if(!_released) {
+		ReleaseDebugger();
 	}
+}
 
-	_breakLock.Acquire();
-	_breakLock.Release();
-	_console->Resume();
+void Debugger::ReleaseDebugger()
+{
+	auto lock = _releaseLock.AcquireSafe();
+	if(!_released) {
+		_codeDataLogger->SaveCdlFile(FolderUtilities::CombinePath(FolderUtilities::GetDebuggerFolder(), FolderUtilities::GetFilename(_romName, false) + ".cdl"));
+
+		_stopFlag = true;
+
+		_console->Pause();
+
+		{
+			auto lock = _scriptLock.AcquireSafe();
+			for(shared_ptr<ScriptHost> script : _scripts) {
+				//Send a ScriptEnded event to all active scripts
+				script->ProcessEvent(EventType::ScriptEnded);
+			}
+			_scripts.clear();
+			_hasScript = false;
+		}
+
+		_breakLock.Acquire();
+		_breakLock.Release();
+		_console->Resume();
+
+		_released = true;
+	}
 }
 
 void Debugger::SetPpu(shared_ptr<PPU> ppu)
@@ -204,11 +218,13 @@ void Debugger::ResetCdl()
 
 void Debugger::UpdateCdlCache()
 {
+	DebugBreakHelper helper(this);
+
 	_disassembler->Reset();
 	for(int i = 0, len = _mapper->GetMemorySize(DebugMemoryType::PrgRom); i < len; i++) {
 		if(_codeDataLogger->IsCode(i)) {
 			AddressTypeInfo info = { i, AddressType::PrgRom };
-			i = _disassembler->BuildCache(info, 0, _codeDataLogger->IsSubEntryPoint(i)) - 1;
+			i = _disassembler->BuildCache(info, 0, false, false) - 1;
 		}
 	}
 
@@ -216,6 +232,10 @@ void Debugger::UpdateCdlCache()
 	for(int i = 0, len = _mapper->GetMemorySize(DebugMemoryType::PrgRom); i < len; i++) {
 		if(_codeDataLogger->IsSubEntryPoint(i)) {
 			_functionEntryPoints.emplace(i);
+
+			//After resetting the cache, set the entry point flags in the disassembly cache
+			AddressTypeInfo info = { i, AddressType::PrgRom };
+			_disassembler->BuildCache(info, 0, true, false);
 		}
 	}
 }
@@ -601,7 +621,7 @@ bool Debugger::ProcessRamOperation(MemoryOperationType type, uint16_t &addr, uin
 			}
 		}
 
-		_disassembler->BuildCache(addressInfo, addr, isSubEntryPoint);
+		_disassembler->BuildCache(addressInfo, addr, isSubEntryPoint, false);
 
 		ProcessStepConditions(addr);
 
@@ -703,11 +723,15 @@ bool Debugger::SleepUntilResume(BreakSource source)
 		source = BreakSource::BreakAfterSuspend;
 	}
 
-	if((stepCount == 0 || _breakRequested) && !_stopFlag && _suspendCount == 0) {
+	//Read both values here since they might change while executing the code below
+	int32_t preventResume = _preventResume;
+	bool breakRequested = _breakRequested;
+
+	if((stepCount == 0 || breakRequested) && !_stopFlag && _suspendCount == 0) {
 		//Break
 		auto lock = _breakLock.AcquireSafe();
 				
-		if(_preventResume == 0) {
+		if(preventResume == 0) {
 			_console->GetSoundMixer()->StopAudio();
 			_console->GetNotificationManager()->SendNotification(ConsoleNotificationType::CodeBreak, (void*)(uint64_t)source);
 			ProcessEvent(EventType::CodeBreak);
@@ -718,8 +742,8 @@ bool Debugger::SleepUntilResume(BreakSource source)
 		}
 
 		_executionStopped = true;
-		_pausedForDebugHelper = _breakRequested;
-		while(((stepCount == 0 || _breakRequested) && !_stopFlag && _suspendCount == 0) || _preventResume > 0) {
+		_pausedForDebugHelper = breakRequested;
+		while((((stepCount == 0 || _breakRequested) && _suspendCount == 0) || _preventResume > 0) && !_stopFlag) {
 			std::this_thread::sleep_for(std::chrono::duration<int, std::milli>(10));
 			if(stepCount == 0) {
 				_console->ResetRunTimers();
@@ -929,6 +953,11 @@ const char* Debugger::GetCode(uint32_t &length)
 	}
 }
 
+void Debugger::GetJumpTargets(bool* jumpTargets)
+{
+	_disassembler->GetJumpTargets(jumpTargets);
+}
+
 int32_t Debugger::GetRelativeAddress(uint32_t addr, AddressType type)
 {
 	switch(type) {
@@ -1034,7 +1063,7 @@ bool Debugger::IsExecutionStopped()
 
 bool Debugger::IsPauseIconShown()
 {
-	return IsExecutionStopped() && !CheckFlag(DebuggerFlags::HidePauseIcon) && _preventResume == 0 && !_pausedForDebugHelper;
+	return (_executionStopped || _console->IsPaused()) && !CheckFlag(DebuggerFlags::HidePauseIcon) && _preventResume == 0 && !_pausedForDebugHelper;
 }
 
 void Debugger::PreventResume()
@@ -1402,13 +1431,15 @@ void Debugger::GetDebugEvents(uint32_t* pictureBuffer, DebugEventInfo *infoArray
 {
 	DebugBreakHelper helper(this);
 
-	uint16_t *buffer = new uint16_t[PPU::PixelCount];
+	uint16_t *ppuBuffer = new uint16_t[PPU::PixelCount];
 	uint32_t *palette = _console->GetSettings()->GetRgbPalette();
-	_ppu->DebugCopyOutputBuffer(buffer);
+	_ppu->DebugCopyOutputBuffer(ppuBuffer);
 
 	for(int i = 0; i < PPU::PixelCount; i++) {
-		pictureBuffer[i] = palette[buffer[i] & 0x3F];
+		pictureBuffer[i] = palette[ppuBuffer[i] & 0x3F];
 	}
+
+	delete[] ppuBuffer;
 
 	vector<DebugEventInfo> &events = returnPreviousFrameData ? _prevDebugEvents : _debugEvents;
 	uint32_t eventCount = std::min(maxEventCount, (uint32_t)events.size());

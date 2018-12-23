@@ -66,7 +66,8 @@
 			// 
 			this.lblCurrentStep.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.lblCurrentStep.AutoSize = true;
-			this.lblCurrentStep.Location = new System.Drawing.Point(3, 52);
+			this.lblCurrentStep.Location = new System.Drawing.Point(0, 52);
+			this.lblCurrentStep.Margin = new System.Windows.Forms.Padding(0, 0, 0, 0);
 			this.lblCurrentStep.Name = "lblCurrentStep";
 			this.lblCurrentStep.Size = new System.Drawing.Size(69, 13);
 			this.lblCurrentStep.TabIndex = 0;
@@ -75,7 +76,7 @@
 			// txtCurrentStep
 			// 
 			this.txtCurrentStep.BackColor = System.Drawing.Color.White;
-			this.txtCurrentStep.Location = new System.Drawing.Point(78, 49);
+			this.txtCurrentStep.Location = new System.Drawing.Point(72, 49);
 			this.txtCurrentStep.Name = "txtCurrentStep";
 			this.txtCurrentStep.ReadOnly = true;
 			this.txtCurrentStep.Size = new System.Drawing.Size(39, 20);
@@ -102,9 +103,9 @@
 			this.tableLayoutPanel1.SetColumnSpan(this.chkFiveStepMode, 2);
 			this.chkFiveStepMode.Location = new System.Drawing.Point(3, 3);
 			this.chkFiveStepMode.Name = "chkFiveStepMode";
-			this.chkFiveStepMode.Size = new System.Drawing.Size(84, 17);
+			this.chkFiveStepMode.Size = new System.Drawing.Size(85, 17);
 			this.chkFiveStepMode.TabIndex = 15;
-			this.chkFiveStepMode.Text = "5-step mode";
+			this.chkFiveStepMode.Text = "5-step Mode";
 			this.chkFiveStepMode.UseVisualStyleBackColor = true;
 			// 
 			// ctrlFrameCounterInfo

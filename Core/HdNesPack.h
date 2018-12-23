@@ -38,7 +38,7 @@ private:
 	__forceinline void ProcessGrayscaleAndEmphasis(HdPpuPixelInfo &pixelInfo, uint32_t* outputBuffer, uint32_t hdScreenWidth);
 
 public:
-	static constexpr uint32_t CurrentVersion = 102;
+	static constexpr uint32_t CurrentVersion = 104;
 
 	HdNesPack(shared_ptr<HdPackData> hdData, EmulationSettings* settings);
 	~HdNesPack();

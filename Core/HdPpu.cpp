@@ -123,18 +123,23 @@ void HdPpu::DrawPixel()
 HdPpu::HdPpu(shared_ptr<Console> console, HdPackData * hdData) : PPU(console)
 {
 	_hdData = hdData;
-	_version = _hdData->Version;
 
-	bool isChrRamGame = !console->GetMapper()->HasChrRom();
-	_screenInfo[0] = new HdScreenInfo(isChrRamGame);
-	_screenInfo[1] = new HdScreenInfo(isChrRamGame);
-	_info = _screenInfo[0];
+	if(_hdData) {
+		_version = _hdData->Version;
+
+		bool isChrRamGame = !console->GetMapper()->HasChrRom();
+		_screenInfo[0] = new HdScreenInfo(isChrRamGame);
+		_screenInfo[1] = new HdScreenInfo(isChrRamGame);
+		_info = _screenInfo[0];
+	}
 }
 
 HdPpu::~HdPpu()
 {
-	delete _screenInfo[0];
-	delete _screenInfo[1];
+	if(_hdData) {
+		delete _screenInfo[0];
+		delete _screenInfo[1];
+	}
 }
 
 void HdPpu::SendFrame()

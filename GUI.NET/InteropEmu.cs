@@ -365,6 +365,21 @@ namespace Mesen.GUI
 			return assembledCode;
 		}
 
+		[DllImport(DLLPath, EntryPoint = "DebugGetJumpTargets")] private static extern void DebugGetJumpTargetsWrapper(IntPtr isJumpTargets);
+		public static bool[] DebugGetJumpTargets()
+		{
+			bool[] isJumpTarget = new bool[InteropEmu.DebugGetMemorySize(DebugMemoryType.PrgRom)];
+
+			GCHandle hJumpTarget = GCHandle.Alloc(isJumpTarget, GCHandleType.Pinned);
+			try {
+				InteropEmu.DebugGetJumpTargetsWrapper(hJumpTarget.AddrOfPinnedObject());
+			} finally {
+				hJumpTarget.Free();
+			}
+
+			return isJumpTarget;
+		}
+
 		[DllImport(DLLPath, EntryPoint = "DebugGetMemoryState")] private static extern UInt32 DebugGetMemoryStateWrapper(DebugMemoryType type, IntPtr buffer);
 		public static byte[] DebugGetMemoryState(DebugMemoryType type)
 		{
@@ -807,14 +822,18 @@ namespace Mesen.GUI
 			List<byte> filenameBytes = new List<byte>();
 			for(int i = 0; i < buffer.Length - 5; i++) {
 				if(buffer[i] == '[' && buffer[i+1] == '!' && buffer[i+2] == '|' && buffer[i+3] == '!' && buffer[i+4] == ']') {
-					filenames.Add(filenameBytes);
+					if(filenameBytes.Count > 0) {
+						filenames.Add(filenameBytes);
+					}
 					filenameBytes = new List<byte>();
 					i+=4;
 				} else {
 					filenameBytes.Add(buffer[i]);
 				}
 			}
-			filenames.Add(filenameBytes);
+			if(filenameBytes.Count > 0) {
+				filenames.Add(filenameBytes);
+			}
 
 			List<ArchiveRomEntry> entries = new List<ArchiveRomEntry>();
 

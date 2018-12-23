@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <Resources>
 	<Forms>
 		<Form ID="frmMain" Title="Mesen">
@@ -62,12 +62,13 @@
 			<Control ID="mnuHistoryViewer">Visualizador de histórico</Control>
 			<Control ID="mnuNetPlay">Jogo online</Control>
 			<Control ID="mnuStartServer">Iniciar servidor</Control>
-			<Control ID="mnuConnect">Conectar a um servidor</Control>
+			<Control ID="mnuConnect">Conectar-se a um servidor</Control>
 			<Control ID="mnuNetPlaySelectController">Selecionar controles</Control>
 			<Control ID="mnuNetPlayPlayer1">Jogador 1</Control>
 			<Control ID="mnuNetPlayPlayer2">Jogador 2</Control>
 			<Control ID="mnuNetPlayPlayer3">Jogador 3</Control>
 			<Control ID="mnuNetPlayPlayer4">Jogador 4</Control>
+			<Control ID="mnuNetPlayPlayer5">Dispositivo de expansão</Control>
 			<Control ID="mnuNetPlaySpectator">Espectador</Control>
 			<Control ID="mnuFindServer">Buscar um servidor público...</Control>
 			<Control ID="mnuProfile">Configurar perfil</Control>
@@ -100,12 +101,12 @@
 			<Control ID="mnuHelp">Ajuda</Control>
 			<Control ID="mnuOnlineHelp">Ajuda online</Control>
 			<Control ID="mnuCheckForUpdates">Procurar atualizações</Control>
-			<Control ID="mnuReportBug">Reportar um erro</Control>
+			<Control ID="mnuReportBug">Relatar um erro</Control>
 			<Control ID="mnuHelpWindow">Opções de linha de comando</Control>
 			<Control ID="mnuAbout">Sobre...</Control>
 
 			<!-- Archive Load Message -->
-			<Control ID="lblExtractingFile">Extraindo arquivo, por favor aguarde...</Control>
+			<Control ID="lblExtractingFile">Extraindo arquivo, aguarde...</Control>
 
 			<!-- NSF Player -->
 			<Control ID="lblTitle">Título</Control>
@@ -122,7 +123,7 @@
 		<Form ID="frmAudioConfig" Title="Opções de áudio">
 			<Control ID="tpgGeneral">Geral</Control>
 			<Control ID="tpgAdvanced">Avançado</Control>
-			<Control ID="chkDisableDynamicSampleRate">Disable dynamic sample rate</Control>
+			<Control ID="chkDisableDynamicSampleRate">Desabilitar a taxa de amostragem dinâmica</Control>
 			<Control ID="chkSwapDutyCycles">Inverter ciclos de canais quadrados (Imita velhos clones)</Control>
 			<Control ID="chkSilenceTriangleHighFreq">Cortar o canal de triângulo em frequências ultrassônicas (Reduz os "pops")</Control>
 			<Control ID="chkReduceDmcPopping">Reduzir a intensidade dos "pops" no canal DMC</Control>
@@ -216,6 +217,7 @@
 			<Control ID="chkDisplayPort4">Jogador 4</Control>
 			<Control ID="lblDisplayPosition">Posição da tela</Control>
 			<Control ID="chkDisplayInputHorizontally">Mostrar horizontalmente</Control>
+			<Control ID="chkHideMousePointerForZapper">Hide mouse pointer when using zapper</Control>
 
 			<Control ID="lblKeyBinding">Aviso: a configuração atual contém atribuições conflitantes - alguns botões físicos em seu teclado ou gamepad são mapeados para vários botões no controle NES. Se isso não for intencional, reveja e corrija suas atribuições.</Control>
 		</Form>
@@ -299,7 +301,6 @@
 			<Control ID="tpgAdvanced">Avançado</Control>
 			<Control ID="chkUseAlternativeMmc3Irq">Utilizar a versão alternativa de componentes de IRQs de MMC3</Control>
 			<Control ID="chkAllowInvalidInput">Permitir as entradas inválidas (Cima+Baixo e Esquerda+Direita ao mesmo tempo)</Control>
-			<Control ID="lblRamPowerOnState">Estado inicial da memória durante o início:</Control>
 			<Control ID="chkRemoveSpriteLimit">Eliminar o limite de sprites (Reduz os "flashes" em alguns jogos)</Control>
 			<Control ID="chkAdaptiveSpriteLimit">Reativar automaticamente o limite de sprite caso precisar para evitar falhas gráficas quando possível</Control>
 			<Control ID="chkEnableOamDecay">Ativar declínio da RAM OAM</Control>
@@ -310,9 +311,11 @@
 			<Control ID="chkUseNes101Hvc101Behavior">Utilizar comportamento do NES/HVC-101 (Top-loader / AV Famicom)</Control>
 			<Control ID="chkMapperRandomPowerOnState">Aleatorizar o estado de ativação para mapeadores</Control>
 
+			<Control ID="lblRamPowerOnState">Estado inicial da RAM durante o início:</Control>
+
 			<Control ID="tpgOverclocking">Overclock</Control>
 			<Control ID="grpOverclocking">Overclock da CPU</Control>
-			<Control ID="lblOverclockHint">Overclocking can help reduce or remove slowdowns in games (but it can also cause issues).&#13;The most compatible way to overclock is by increasing the "Scanline before NMI" value by a few hundred lines (e.g 400+)</Control>
+			<Control ID="lblOverclockHint">O overclock pode ajudar a reduzir ou remover a lentidão nos jogos (mas também pode causar problemas).&#13; O modo mais compatível de se fazer overclock é aumentando o valor da "Linha de varredura antes de NMI" em algumas centenas de linhas (ex: +400)</Control>
 			<Control ID="lblClockRate">Multiplicar a frequência de clock: </Control>
 			<Control ID="lblClockRatePercent">% (Recomendado: 100%)</Control>
 
@@ -353,6 +356,7 @@
 			<Control ID="chkPauseInMenuAndConfig">Menus e diálogos de configuração</Control>
 			<Control ID="chkPauseInDebugger">Ferramentas de depuração</Control>
 
+			<Control ID="chkPauseWhenInBackground">Segundo plano</Control>
 			<Control ID="chkAutoLoadIps">Carregar os arquivos IPS/BPS automaticamente</Control>
 			<Control ID="chkHidePauseOverlay">Ocultar a tela de pausa</Control>
 			<Control ID="chkDisplayMovieIcons">Exibir ícone de reprodução/gravação ao reproduzir ou gravar um filme</Control>
@@ -384,18 +388,6 @@
 			<Control ID="chkFdsAutoLoadDisk">Inserir a parte A do disco 1 ao carregar um jogo FDS</Control>
 			<Control ID="chkFdsFastForwardOnLoad">Aumentar a velocidade da emulação de jogos ao carregar no FDS</Control>
 			<Control ID="chkFdsAutoInsertDisk">Trocar automaticamente disquetes para os jogos do FDS</Control>
-			<Control ID="tpgShortcuts">Atalhos</Control>
-			<Control ID="lblShortcutWarning">Aviso: Sua configuração atual contém teclas configuráveis conflitantes. Se isso não for intencional, reveja e corrija suas teclas configuráveis.</Control>
-			<Control ID="colAction">Ação</Control>
-			<Control ID="colBinding1">Atalho #1</Control>
-			<Control ID="colBinding2">Atalho #2</Control>
-			<Control ID="tpgSaveData">Cópias de segurança</Control>
-			<Control ID="grpAutomaticSaves">Salvar estado</Control>
-			<Control ID="chkAutoSave">Salvar estado do jogo automaticamente a cada</Control>
-			<Control ID="lblAutoSave">minutos</Control>
-			<Control ID="chkAutoSaveNotify">Mostrar uma notificação na tela ao fazer a cópia de segurança automática</Control>
-			<Control ID="chkAllowMismatchingSaveStates">Permitir carregamento de estados em ROMs modificadas (ex: com patches IPS)</Control>
-			<Control ID="grpCloudSaves">Cópia de segurança online</Control>
 
 			<Control ID="chkShowFullPathInRecents">Mostrar o caminho completo do arquivo na lista de arquivos recentes</Control>
 			<Control ID="chkShowFrameCounter">Mostrar contador de quadros</Control>
@@ -405,8 +397,21 @@
 			<Control ID="lblRewind">Permitir rebobinamento de até</Control>
 			<Control ID="lblRewindMinutes">minutos (Uso de memória ≈1MB/min)</Control>
 
-			<Control ID="tpgCloudSave">Salvar online</Control>
-			<Control ID="lblGoogleDriveIntegration">Mesen pode utilizar o Google Drive para armazenar saves em sua conta do Google Drive. Quando se habilita a integração, todos os dados de cópia de segurança de seus jogos (arquivos .sav e de estados salvos) são facilmente acessíveis de qualquer computador.</Control>
+			<Control ID="tpgShortcuts">Atalhos</Control>
+			<Control ID="lblShortcutWarning">Aviso: sua configuração atual contém teclas configuráveis conflitantes. Se isso não for intencional, reveja e corrija suas teclas configuráveis.</Control>
+			<Control ID="colAction">Ação</Control>
+			<Control ID="colBinding1">Atalho #1</Control>
+			<Control ID="colBinding2">Atalho #2</Control>
+
+			<Control ID="tpgSaveData">Cópias de segurança</Control>
+			<Control ID="grpAutomaticSaves">Salvar estado</Control>
+			<Control ID="chkAutoSave">Salvar estado do jogo automaticamente a cada</Control>
+			<Control ID="lblAutoSave">minutos</Control>
+			<Control ID="chkAutoSaveNotify">Mostrar uma notificação na tela ao fazer a cópia de segurança automática</Control>
+			<Control ID="chkAllowMismatchingSaveStates">Permitir carregamento de estados em ROMs modificadas (ex: com patches IPS)</Control>
+
+			<Control ID="grpCloudSaves">Jogo salvos online</Control>
+			<Control ID="lblGoogleDriveIntegration">O Mesen pode utilizar o Google Drive para armazenar os jogos salvos em sua conta do Google Drive. Quando se habilita a integração, todos os dados de cópia de segurança de seus jogos (arquivos .sav e de estados salvos) são facilmente acessíveis de qualquer computador.</Control>
 			<Control ID="lblIntegrationOK">A integração com o Google Drive está ativada.</Control>
 			<Control ID="btnDisableIntegration">Desativar a integração com o Google Drive</Control>
 			<Control ID="btnEnableIntegration">Integração com Google Drive</Control>
@@ -460,9 +465,13 @@
 			<Control ID="btnOK">OK</Control>
 			<Control ID="btnCancel">Cancelar</Control>
 		</Form>
-		<Form ID="frmCheatImportFromDb" Title="Importar trapaças de BBDD">
-			<Control ID="lblSearch">Buscar</Control>
-			<Control ID="btnOK">OK</Control>
+		<Form ID="frmCheatImport" Title="Importar trapaças">
+			<Control ID="grpImportOptions">Opções de importação</Control>
+			<Control ID="lblCheatFile">Arquivo de trapaça:</Control>
+			<Control ID="lblGame">Jogo:</Control>
+			<Control ID="btnBrowseCheat">Pesquisar...</Control>
+			<Control ID="btnBrowseGame">Pesquisar...</Control>
+			<Control ID="btnImport">Importar</Control>
 			<Control ID="btnCancel">Cancelar</Control>
 		</Form>
 		<Form ID="frmCheatImport" Title="Importar trapaças">
@@ -474,9 +483,13 @@
 			<Control ID="btnImport">Importar</Control>
 			<Control ID="btnCancel">Cancelar</Control>
 		</Form>
-		<Form ID="frmCheatList" Title="Lista de trapaças">
+		<Form ID="frmCheatImportFromDb" Title="Selecionar jogo...">
+			<Control ID="lblSearch">Buscar:</Control>
+			<Control ID="btnOK">Importar</Control>
+			<Control ID="btnCancel">Cancelar</Control>
+		</Form>
+		<Form ID="frmCheatList" Title="Trapaças">
 			<Control ID="tabCheats">Trapaças</Control>
-			<Control ID="chkCurrentGameOnly">Mostrar apenas as trapaças para o jogo atual</Control>
 			<Control ID="btnAddCheat">Adicionar trapaça</Control>
 			<Control ID="btnDelete">Excluir</Control>
 			<Control ID="btnDeleteCheat">Excluir as trapaças selecionadas</Control>
@@ -496,6 +509,8 @@
 			<Control ID="mnuExportGame">Exportar</Control>
 			<Control ID="btnExportSelectedCheats">Trapaças selecionadas</Control>
 			<Control ID="mnuExportSelectedCheats">Exportar</Control>
+			<Control ID="chkDisableCheats">Desativar toas as trapaças</Control>
+
 			<Control ID="tpgCheatFinder">Pesquisa de trapaças</Control>
 			<Control ID="grpFilters">Filters</Control>
 			<Control ID="btnReset">Reiniciar</Control>
@@ -536,7 +551,7 @@
 			<Control ID="lblLink">www.mesen.ca</Control>
 			<Control ID="labelVersion">Versão:</Control>
 			<Control ID="lblBuildDateLabel">Build Date:</Control>
-			<Control ID="lblDonate">Caso queira apoiar o Mesen, por favor, considere fazer uma doação ao projeto.&#xA;Obrigado pelo seu apoio!</Control>
+			<Control ID="lblDonate">Caso queira apoiar o Mesen, considere fazer uma doação ao projeto.&#xA;Obrigado pelo seu apoio!</Control>
 			<Control ID="okButton">&amp;OK</Control>
 		</Form>
 		<Form ID="frmGameConfig" Title="Configuração de jogo">
@@ -546,22 +561,22 @@
 			<Control ID="lblLatestVersion">Última versão: </Control>
 			<Control ID="lblCurrentVersion">Versão atual: </Control>
 			<Control ID="lblChangeLog">Relatório de alterações</Control>
-			<Control ID="lblDonate">Caso queira apoiar o Mesen, por favor, considere fazer uma doação ao projeto. Obrigado!</Control>
+			<Control ID="lblDonate">Caso queira apoiar o Mesen, considere fazer uma doação ao projeto. Obrigado!</Control>
 			<Control ID="btnUpdate">Atualizar</Control>
+			<Control ID="btnCancel">Cancelar</Control>
+		</Form>
+		<Form ID="frmSelectRom" Title="Selecionar ROM...">
+			<Control ID="lblSearch">Buscar:</Control>
+			<Control ID="btnOK">OK</Control>
 			<Control ID="btnCancel">Cancelar</Control>
 		</Form>
 		<Form ID="frmGetKey" Title="Configuração dos botões">
 			<Control ID="lblSetKeyMessage">Aperte qualquer tecla do teclado ou do joystick para registrar esse botão.</Control>
 		</Form>
-		<Form ID="frmPlayerProfile" Title="Perfil do Jogador">
-			<Control ID="lblName">Nome</Control>
+		<Form ID="frmPlayerProfile" Title="Perfil">
+			<Control ID="lblName">Nome do jogador:</Control>
 			<Control ID="btnOK">OK</Control>
 			<Control ID="btnCancel">Cancelar</Control>
-		</Form>
-		<Form ID="frmSelectRom" Title="Selecionar ROM...">
-			<Control ID="btnCancel">Cancelar</Control>
-			<Control ID="btnOK">OK</Control>
-			<Control ID="lblSearch">Buscar</Control>
 		</Form>
 		<Form ID="frmRecordAvi" Title="Gravador de vídeo">
 			<Control ID="lblAviFile">Salvar para:</Control>
@@ -604,7 +619,6 @@
 			<Control ID="tpgAudioOptions">Opções de áudio</Control>
 			<Control ID="tpgEmulationOptions">Opções de emulação</Control>
 			<Control ID="lblExplanation">Isso iniciará o Mesen em modo de tela cheia com a rom "MeuJogo.nes" carregada. Também usará o filtro NTSC, configurado em uma escala 2x e ajusta as configurações de Overscan. O sinalizador "DoNotSaveSettings" é usado para evitar que a linha de comando altere de forma permanente as configurações do Mesen.</Control>
-			<Control ID="txtGeneralOptions">/fullscreen - Inicia o Mesen em modo tela cheia&#13;&#10;/DoNotSaveSettings - Impede que as configurações sejam salvas no disco (útil para evitar que as opções da linha de comando se tornem as configurações padrão)</Control>
 		</Form>
 		<Form ID="frmCopyFiles" Title="Aguarde...">
 			<Control ID="lblCopying">Copiando:</Control>
@@ -635,7 +649,7 @@
 			<Control ID="btnOK">OK</Control>
 			<Control ID="btnCancel">Cancelar</Control>
 		</Form>
-		<Form ID="frmInputBarCode" Title="Entrada de Código de barras...">
+		<Form ID="frmInputBarCode" Title="Entrada de código de barras...">
 			<Control ID="lblBarcode">Código de barras:</Control>
 			<Control ID="btnOK">OK</Control>
 			<Control ID="btnCancel">Cancelar</Control>
@@ -655,6 +669,7 @@
 			<Control ID="lblTurboSpeed">Velocidade de modo turbo:</Control>
 			<Control ID="lblTurboFast">Rápido</Control>
 			<Control ID="lblSlow">Lento</Control>
+
 			<Control ID="btnSelectPreset">Selecionar valor preestabelecido...</Control>
 			<Control ID="mnuKeyboard">Teclado</Control>
 			<Control ID="mnuWasdLayout">Utilizar teclas WASD</Control>
@@ -662,14 +677,14 @@
 			<Control ID="mnuFceuxLayout">Controles de FCEUX</Control>
 			<Control ID="mnuNestopiaLayout">Controles de Nestopia</Control>
 			<Control ID="mnuXboxController">Controle de Xbox</Control>
-			<Control ID="mnuXboxLayout1">Layout #1</Control>
-			<Control ID="mnuXboxLayout2">Layout #2</Control>
+			<Control ID="mnuXboxLayout1">Esquema #1</Control>
+			<Control ID="mnuXboxLayout2">Esquema #2</Control>
 			<Control ID="mnuPs4Controller">Controle de Ps4</Control>
-			<Control ID="mnuPs4Layout1">Layout #1</Control>
-			<Control ID="mnuPs4Layout2">Layout #2</Control>
+			<Control ID="mnuPs4Layout1">Esquema #1</Control>
+			<Control ID="mnuPs4Layout2">Esquema #2</Control>
 			<Control ID="mnuSnes30Controller">Controle de SNES30</Control>
-			<Control ID="mnuSnes30Layout1">Layout #1</Control>
-			<Control ID="mnuSnes30Layout2">Layout #2</Control>
+			<Control ID="mnuSnes30Layout1">Esquema #1</Control>
+			<Control ID="mnuSnes30Layout2">Esquema #2</Control>
 		</Form>
 		<Form ID="frmZapperConfig">
 			<Control ID="lblSmall">Curta</Control>
@@ -729,10 +744,10 @@
 		<Message ID="FilterWave">Arquivos wave (*.wav)|*.wav|Todos os arquivos (*.*)|*.*</Message>
 		<Message ID="FilterAvi">Arquivos avi (*.avi)|*.avi|Todos os arquivos (*.*)|*.*</Message>
 		<Message ID="FilterPalette">Arquivos pal (*.pal)|*.pal|Todos os arquivos (*.*)|*.*</Message>
-		<Message ID="FilterRom">Todos os formatos suportados (*.nes, *.zip, *.7z, *.fds, *.nsf, *.nsfe, *.unf)|*.NES;*.ZIP;*.7z;*.FDS;*.NSF;*.NSFE;*.UNF|Roms de NES (*.nes, *.unf)|*.NES;*.UNF|Roms de Famicom Disk System (*.fds)|*.FDS|Arquivos NSF (*.nsf, *.nsfe)|*.NSF;*.NSFE|Arquivos ZIP (*.zip)|*.ZIP|Arquivos 7-Zip (*.7z)|*.7z|Todos os arquivos (*.*)|*.*</Message>
-		<Message ID="FilterRomIps">Todos os formatos suportados (*.nes, *.zip, *.7z, *.fds, *.nsf, *.nsfe, *.unf, *.ips, *.bps, *.ups)|*.NES;*.ZIP;*.7z;*.IPS;*.BPS;*.UPS;*.FDS;*.NSF;*.NSFE;*.UNF|Roms de NES(*.nes, *.unf)|*.NES;*.UNF|Roms de Famicom Disk System (*.fds)|*.FDS|Arquivos NSF (*.nsf, *.nsfe)|*.NSF;*.NSFE|Arquivos ZIP (*.zip)|*.ZIP|Arquivos 7-Zip (*.7z)|*.7z|Arquivos IPS/UPS/BPS (*.ips, *.bps, *.ups)|*.IPS;*.BPS;*.UPS|Todos os arquivos (*.*)|*.*</Message>
+		<Message ID="FilterRom">Todos os formatos compatíveis (*.nes, *.zip, *.7z, *.fds, *.nsf, *.nsfe, *.unf)|*.NES;*.ZIP;*.7z;*.FDS;*.NSF;*.NSFE;*.UNF|Roms de NES (*.nes, *.unf)|*.NES;*.UNF|Roms de Famicom Disk System (*.fds)|*.FDS|Arquivos NSF (*.nsf, *.nsfe)|*.NSF;*.NSFE|Arquivos ZIP (*.zip)|*.ZIP|Arquivos 7-Zip (*.7z)|*.7z|Todos os arquivos (*.*)|*.*</Message>
+		<Message ID="FilterRomIps">Todos os formatos compatíveis (*.nes, *.zip, *.7z, *.fds, *.nsf, *.nsfe, *.unf, *.ips, *.bps, *.ups)|*.NES;*.ZIP;*.7z;*.IPS;*.BPS;*.UPS;*.FDS;*.NSF;*.NSFE;*.UNF|Roms de NES(*.nes, *.unf)|*.NES;*.UNF|Roms de Famicom Disk System (*.fds)|*.FDS|Arquivos NSF (*.nsf, *.nsfe)|*.NSF;*.NSFE|Arquivos ZIP (*.zip)|*.ZIP|Arquivos 7-Zip (*.7z)|*.7z|Arquivos IPS/UPS/BPS (*.ips, *.bps, *.ups)|*.IPS;*.BPS;*.UPS|Todos os arquivos (*.*)|*.*</Message>
 		<Message ID="FilterTest">Arquivos de teste (*.mtp)|*.mtp|Todos os arquivos (*.*)|*.*</Message>
-		<Message ID="FilterCheat">Todos os formatos suportados (*.cht, *.xml)|*.cht;*.xml</Message>
+		<Message ID="FilterCheat">Todos os formatos compatíveis (*.cht, *.xml)|*.cht;*.xml</Message>
 		<Message ID="FilterSavestate">Estados salvos do Mesen (*.mst)|*.mst|Todos os arquivos (*.*)|*.*</Message>
 		<Message ID="FilterTapeFiles">Arquivos Family Basic Tape (*.fbt)|*.fbt|Todos os arquivos (*.*)|*.*</Message>
 
@@ -741,7 +756,7 @@
 
 		<Message ID="MovieSegment">Segmento #{0}</Message>
 		<Message ID="MovieSaveError">Ocorreu um erro ao tentar salvar o vídeo.</Message>
-
+		
 		<Message ID="ClearHistory">Limpar histórico</Message>
 		<Message ID="LastFolderUsed">Última pasta usada</Message>
 
@@ -749,11 +764,16 @@
 		<Message ID="BandaiMicrophone">Microfone Bandai</Message>
 		<Message ID="DatachBarcodeReader">Leitor de código de barras Datach</Message>
 
+		<Message ID="HelpFullscreen">/fullscreen - Inicia o Mesen em modo tela cheia</Message>
+		<Message ID="HelpDoNotSaveSettings">/DoNotSaveSettings - Impede que as configurações sejam salvas no disco (útil para evitar que as opções da linha de comando se tornem as configurações padrão)</Message>
+		<Message ID="HelpRecordMovie">/RecordMovie="filename.mmo" - Start recording a movie after the specified game is loaded.</Message>
+		<Message ID="HelpLoadLastSession">/LoadLastSession - Resumes the game in the state it was left in when it was last played.</Message>
+
 		<Message ID="Resume">Continuar</Message>
 		<Message ID="Pause">Pausar</Message>
 		<Message ID="StartServer">Iniciar servidor</Message>
 		<Message ID="StopServer">Parar servidor</Message>
-		<Message ID="ConnectToServer">Conectar a um servidor</Message>
+		<Message ID="ConnectToServer">Conectar-se a um servidor</Message>
 		<Message ID="Disconnect">Desconectar</Message>
 		<Message ID="PlayerNumber">Jogador {0}</Message>
 		<Message ID="ExpansionDevice">Dispositivo de expansão</Message>
@@ -764,44 +784,44 @@
 
 		<Message ID="RiskyOptionHint">(Não recomendado)</Message>
 
-		<Message ID="ResetSettingsConfirmation">Aviso: isso irá redefinir TODAS as configurações e não pode ser desfeito!&#xA;&#xA;Continuar?</Message>
+		<Message ID="ResetSettingsConfirmation">Aviso: isso redefinirá TODAS as configurações e não pode ser desfeito!&#xA;&#xA;Continuar?</Message>
 
 		<Message ID="RandomGameNoGameFound">O Mesen não encontrou nenhum jogo para carregar.</Message>
 
 		<Message ID="CannotWriteToFolder">A pasta selecionada não pode ser escrita - selecione outra pasta e tente novamente.&#xA;&#xA;Detalhes:&#xA;{0}</Message>
-		<Message ID="InvalidPaths">As seguintes substituições de pastas são inválidas:&#xA;&#xA;{0}&#xA;&#xA;Use pastas válidas e graváveis ​​e tente novamente.</Message>
+		<Message ID="InvalidPaths">As seguintes substituições de pastas são inválidas:&#xA;&#xA;{0}&#xA;&#xA;Use pastas válidas e graváveis e tente novamente.</Message>
 		<Message ID="CopyMesenDataPrompt">Todos os arquivos serão copiados de:&#xA;&#xA;{0}&#xA;para&#xA;{1}&#xA;&#xA;Uma vez que a cópia esteja completa, o Mesen reiniciará.&#xA;Continuar?</Message>
 
-		<Message ID="CheatsFound">{0} e {1} trapaças de jogos presentes na base de dados</Message>
+		<Message ID="CheatsFound">{0} e {1} trapaças de jogos presentes no banco de dados</Message>
 		<Message ID="CheatsImported">{0} trapaças foram importadas para o jogo {1}.</Message>
 
-		<Message ID="NsfNextTrack">Faixa seguinte (Esperar para jogar mais rápido)</Message>
-		<Message ID="NsfUnnamedTrack">[sem nome]</Message>
-		<Message ID="NsfUnknownField">[desconhecido]</Message>
+		<Message ID="NsfNextTrack">Faixa seguinte (segurar para acelerar)</Message>
+		<Message ID="NsfUnnamedTrack">&lt;sem nome&gt;</Message>
+		<Message ID="NsfUnknownField">&lt;desconhecido&gt;</Message>
 
 		<Message ID="CouldNotInstallRuntime">O Pacote Redistribuível do Visual C++ para Visual Studio 2015 não foi instalado corretamente.</Message>
 		<Message ID="EmptyState">&lt;Não há estado salvo&gt;</Message>
 		<Message ID="ErrorWhileCheckingUpdates">Houve um erro na busca por atualizações. Verifique sua conexão com a internet e tente de novo.&#xA;&#xA;Detalhes do erro:&#xA;{0}</Message>
-		<Message ID="AutoUpdateDisabledMessage">As atualizações automáticas não estão ativadas nesta compilação - faça o download da versão mais recente do código e recompile o Mesen para obter as atualizações mais recentes.</Message>
+		<Message ID="AutoUpdateDisabledMessage">As atualizações automáticas não estão ativadas nesta compilação - baixe a versão mais recente do código e recompile o Mesen para obter as atualizações mais recentes.</Message>
 		<Message ID="FdsBiosNotFound">Não foi encontrada uma bios para o FDS. É preciso uma bios para jogos do FDS.&#xA;&#xA;Deseja selecionar uma bios manualmente?</Message>
-		<Message ID="FdsDiskSide">Disco {0} Cara {1}</Message>
+		<Message ID="FdsDiskSide">Disco {0} Lado {1}</Message>
 		<Message ID="FileNotFound">Arquivo não encontrado: {0}</Message>
 		<Message ID="InvalidFdsBios">A bios selecionada é inválida.</Message>
 
 		<Message ID="HDNesTooltip">Esta opção permite os pacotes de gráficos de alta resolução sejam carregados no mesmo formato que os do emulador HDNes.&#xA;&#xA;Os pacotes de alta resolução devem ser colocados nos "HdPacks" em uma subpasta com o mesmo nome da ROM.&#xA;Exemplo: Um pacote para "MinhaRom.nes" deve ser colocado em "HdPacks\MinhaRom\hires.txt".</Message>
-		<Message ID="HdPackBuilderScaleHelp">Seleciona a escala e o filtro de vídeo a serem usados ​​ao gerar os arquivos PNG&#xA;para o Pacote HD. Usa os filtros "Preescala" para gerar os tiles&#xA;em uma escala maior sem aplicar qualquer transformação aos pixels.</Message>
+		<Message ID="HdPackBuilderScaleHelp">Seleciona a escala e o filtro de vídeo a serem usados ao gerar os arquivos PNG&#xA;para o Pacote HD. Usa os filtros "Preescala" para gerar os tiles&#xA;em uma escala maior sem aplicar qualquer transformação aos pixels.</Message>
 		<Message ID="HdPackBuilderBankSizeHelp">Esta opção está disponível apenas para jogos de RAM CHR.  Jogos de RAM CHR não tem "bancos"&#xA;fixos - eles são criados dinamicamente pelo código do jogo.&#xA;Esta opção altera o comportamento do Criador de Pacotes de Alta Definição agrupando os tiles em &#xA;arquivos PNG - um tamanho de banco menor geralmente resultará em menos arquivos PNG &#xA;(mas, dependendo do código do jogo, valores maiores podem produzir &#xA;melhores resultados).</Message>
 		<Message ID="HdPackBuilderFrequencyHelp">Quando esta opção está habilitada, os tiles em arquivos PNG são classificados pela&#xA;frequência na qual eles são exibidos na tela durante a gravação (paletas &#xA;mais comuns serão agrupadas no primeiro arquivo para um número de banco &#xA;específico). Se esta opção estiver desmarcada, os arquivos PNG serão classificados por paleta - &#xA;nesse caso, cada arquivo PNG conterá apenas 4 cores diferentes.</Message>
 		<Message ID="HdPackBuilderGroupBlankHelp">Esta opção agrupa todas os tiles em branco em sequência para os mesmos arquivos&#xA;PNG - isso ajuda a reduzir o número de arquivos PNG produzidos pela eliminação de &#xA;arquivos PNG quase vazios contendo apenas tiles em branco.</Message>
-		<Message ID="HdPackBuilderLargeSpritesHelp">Se habilitada, esta opção irá alterar a ordem de exibição dos bancos de CHR&#xA;contendo apenas sprites, de modo a tornar os sprites mais fáceis de editar no arquivo PNG.</Message>
+		<Message ID="HdPackBuilderLargeSpritesHelp">Se habilitada, esta opção alterará a ordem de exibição dos bancos de CHR&#xA;contendo apenas sprites, de modo a tornar os sprites mais fáceis de editar no arquivo PNG.</Message>
 		<Message ID="HdPackBuilderIgnoreOverscanHelp">Quando habilitado, isso fará com que o construtor ignore quaisquer pixels na área de overscan.&#xA;Isso é útil em jogos que contenham falhas na borda externa da tela.&#xA;Combinações de paleta incorretas devido a essas falhas serão ignoradas e não serão mostradas nos arquivos PNG.</Message>
 
 		<Message ID="InstallHdPackWrongRom">O pacote de alta definição selecionado não é compatível com o jogo atualmente em execução e não pode ser instalado.</Message>
 		<Message ID="InstallHdPackError">Ocorreu um erro ao tentar instalar o pacote de alta definição: &#xA;&#xA;{0}</Message>
 		<Message ID="InstallHdPackInvalidPack">O arquivo selecionado não é um pacote de alta definição válido.</Message>
 		<Message ID="InstallHdPackInvalidZipFile">O arquivo selecionado não é um arquivo Zip válido.</Message>
-		<Message ID="InstallHdPackConfirmOverwrite">A pasta de destino ({0}) já existe. Tem certeza de que quer sobrescrevê-la?</Message>
-		<Message ID="InstallHdPackConfirmReset">O pacote de alta definição foi instalado com sucesso. Você quer reiniciar o jogo e carregar o pacote agora?</Message>
+		<Message ID="InstallHdPackConfirmOverwrite">A pasta de destino ({0}) já existe. Deseja mesmo sobrescrevê-la?</Message>
+		<Message ID="InstallHdPackConfirmReset">O pacote de alta definição foi instalado com sucesso. Deseja reiniciar o jogo e carregar o pacote agora?</Message>
 
 		<Message ID="MesenUpToDate">Você já utiliza a versão mais recente do Mesen.</Message>
 		<Message ID="PatchAndReset">Aplicar o patch e reiniciar o jogo?</Message>
@@ -810,20 +830,20 @@
 		<Message ID="UnableToStartMissingDependencies">O Mesen não pode iniciar pois foi incapaz de carregar MesenCore.dll devido a falta de dependências.</Message>
 		<Message ID="UnableToStartMissingFiles">Mesen não pode iniciar devido a falta de arquivos.&#xA;&#xA;Erro: Não se encontra o arquivo MesenCore.dll.</Message>
 		<Message ID="UnexpectedError">Houve um erro inesperado.&#xA;&#xA;Detalhes do erro:&#xA;{0}</Message>
-		<Message ID="UpdateDownloadFailed">Erro ao baixar - o arquivo parece estar danificado. Por favor, visite o site do Mesen para baixar manualmente a versão mais recente.</Message>
+		<Message ID="UpdateDownloadFailed">Erro ao baixar - o arquivo parece estar danificado. Visite a página do Mesen para baixar manualmente a versão mais recente.</Message>
 		<Message ID="UpgradeSuccess">A atualização foi realizada com sucesso.</Message>
 		<Message ID="UpdaterNotFound">O processo de atualização não se pode iniciar porque faltam alguns arquivos.</Message>
-		<Message ID="Net45NotFound">Microsoft .NET Framework 4.5 não foi encontrado. Por favor, baixe a versão mais recente de .NET Framework do site da Microsoft e tente novamente.</Message>
+		<Message ID="Net45NotFound">O Microsoft .NET Framework 4.5 não foi encontrado. Baixe a versão mais recente do .NET Framework na página da Microsoft e tente novamente.</Message>
 
-		<Message ID="GoogleDriveIntegrationError">Mesen não foi capaz de conectar a sua conta do Google Drive, por favor tente novamente.</Message>
+		<Message ID="GoogleDriveIntegrationError">O Mesen não foi capaz de conectar a sua conta do Google Drive, tente novamente.</Message>
 
 		<Message ID="InvalidCheatFile">O arquivo selecionado ({0}) não é um arquivo de trapaças válido.</Message>
 		<Message ID="InvalidXmlFile">O arquivo selecionado ({0}) não é um arquivo XML válido.</Message>
 		<Message ID="NoMatchingCheats">O arquivo de trapaças selecionado ({0}) não contém trapaças que pertencem ao jogo selecionado.</Message>
 
-		<Message ID="ConfirmReset">Tem certeza de que deseja reiniciar?</Message>
-		<Message ID="ConfirmPowerCycle">Tem certeza de que deseja parar e reiniciar?</Message>
-		<Message ID="ConfirmExit">Tem certeza que quer sair?</Message>
+		<Message ID="ConfirmReset">Deseja mesmo reiniciar?</Message>
+		<Message ID="ConfirmPowerCycle">Deseja mesmo parar e reiniciar?</Message>
+		<Message ID="ConfirmExit">Deseja mesmo sair?</Message>
 
 		<Message ID="EmulatorShortcutMappings_FastForward">Avançar rapidamente</Message>
 		<Message ID="EmulatorShortcutMappings_ToggleFastForward">Alternar avançar rapidamente</Message>
@@ -876,7 +896,7 @@
 		<Message ID="EmulatorShortcutMappings_ToggleKeyboardMode">Alternar modo de teclado</Message>
 
 		<Message ID="EmulatorShortcutMappings_MaxSpeed">Alternar velocidade máxima</Message>
-		<Message ID="EmulatorShortcutMappings_LoadRandomGame">Carrear jogo aleatório</Message>
+		<Message ID="EmulatorShortcutMappings_LoadRandomGame">Carregar jogo aleatório</Message>
 		<Message ID="EmulatorShortcutMappings_SaveStateSlot1">Salvar estado - Compartimento 1</Message>
 		<Message ID="EmulatorShortcutMappings_SaveStateSlot2">Salvar estado - Compartimento 2</Message>
 		<Message ID="EmulatorShortcutMappings_SaveStateSlot3">Salvar estado - Compartimento 3</Message>
@@ -948,7 +968,7 @@
 			<Value ID="NTSC">NTSC (8:7)</Value>
 			<Value ID="PAL">PAL (11:8)</Value>
 			<Value ID="Standard">Padrão (4:3)</Value>
-			<Value ID="Widescreen">Widescreen (16:9)</Value>
+			<Value ID="Widescreen">Panorâmico (16:9)</Value>
 			<Value ID="Custom">Personalizado</Value>
 		</Enum>
 		<Enum ID="VideoRefreshRates">
@@ -1029,7 +1049,7 @@
 			<Value ID="English">English</Value>
 			<Value ID="French">Français</Value>
 			<Value ID="Japanese">日本語</Value>
-			<Value ID="Portuguese">Português Brasileiro</Value>
+			<Value ID="Portuguese">Português</Value>
 			<Value ID="Russian">Русский</Value>
 			<Value ID="Spanish">Español</Value>
 			<Value ID="Ukrainian">Українська</Value>
@@ -1054,14 +1074,13 @@
 			<Value ID="Greater">Maior</Value>
 		</Enum>
 		<Enum ID="VideoCodec">
-
-			<Value ID="None">Nenhum (Sem comprimir)</Value>
+			<Value ID="None">Nenhum (sem comprimir)</Value>
 			<Value ID="ZMBV">Zip Motion Block Video (ZMBV)</Value>
 			<Value ID="CSCD">Camstudio (CSCD)</Value>
 		</Enum>
 		<Enum ID="RecordMovieFrom">
-			<Value ID="StartWithoutSaveData">Ligar</Value>
-			<Value ID="StartWithSaveData">Ligar, com dados de salvamento</Value>
+			<Value ID="StartWithoutSaveData">Iniciar</Value>
+			<Value ID="StartWithSaveData">Iniciar com salvamento de dados</Value>
 			<Value ID="CurrentState">Estado atual</Value>
 		</Enum>
 	</Enums>

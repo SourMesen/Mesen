@@ -129,6 +129,9 @@ namespace Mesen.GUI.Config
 		public bool DisplayOpCodesInLowerCase = false;
 		public bool ShowEffectiveAddresses = true;
 
+		public bool AutoCreateJumpLabels = false;
+		public bool ShowJumpLabels = false;
+
 		public bool DisassembleVerifiedData = false;
 		public bool DisassembleUnidentifiedData = false;
 

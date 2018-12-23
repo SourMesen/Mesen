@@ -9,7 +9,7 @@ This section documents the Mesen-specific Lua API that is available in scripts v
 
 ## Changelog ##
 
-The Lua is still a recent feature and not completely stable yet. To get a list of the major changes between different versions of Mesen, take a look at the [Changelog](/apireference/changelog.html).
+Lua scripting is still a relatively recent feature and the API is not quite stable yet. To get a list of the major changes between different versions of Mesen, take a look at the [Changelog](/apireference/changelog.html).
 
 ## API References ##
 

@@ -45,6 +45,7 @@
 #include "DebugHud.h"
 #include "NotificationManager.h"
 #include "HistoryViewer.h"
+#include "ConsolePauseHelper.h"
 
 Console::Console(shared_ptr<Console> master, EmulationSettings* initialSettings)
 {
@@ -701,7 +702,6 @@ void Console::Run()
 	double targetTime;
 	double lastFrameMin = 9999;
 	double lastFrameMax = 0;
-	double timeLag = 0;
 	uint32_t lastFrameNumber = -1;
 	uint32_t lastPauseFrame = 0;
 	double lastDelay = GetFrameDelay();
@@ -1066,6 +1066,7 @@ std::shared_ptr<Debugger> Console::GetDebugger(bool autoStart)
 
 void Console::StopDebugger()
 {
+	_debugger->ReleaseDebugger();
 	_debugger.reset();
 }
 
@@ -1129,7 +1130,8 @@ void Console::LoadHdPack(VirtualFile &romFile, VirtualFile &patchFile)
 
 void Console::StartRecordingHdPack(string saveFolder, ScaleFilterType filterType, uint32_t scale, uint32_t flags, uint32_t chrRamBankSize)
 {
-	Pause();
+	ConsolePauseHelper helper(this);
+
 	std::stringstream saveState;
 	SaveState(saveState);
 	
@@ -1138,7 +1140,7 @@ void Console::StartRecordingHdPack(string saveFolder, ScaleFilterType filterType
 
 	_memoryManager->UnregisterIODevice(_ppu.get());
 	_ppu.reset();
-	_ppu.reset(new HdBuilderPpu(shared_from_this(), _hdPackBuilder.get(), chrRamBankSize));
+	_ppu.reset(new HdBuilderPpu(shared_from_this(), _hdPackBuilder.get(), chrRamBankSize, _hdData));
 	_memoryManager->RegisterIODevice(_ppu.get());
 
 	shared_ptr<Debugger> debugger = _debugger;
@@ -1147,19 +1149,25 @@ void Console::StartRecordingHdPack(string saveFolder, ScaleFilterType filterType
 	}
 
 	LoadState(saveState);
-	Resume();
+
+	_soundMixer->StopAudio();
 }
 
 void Console::StopRecordingHdPack()
 {
 	if(_hdPackBuilder) {
-		Pause();
+		ConsolePauseHelper helper(this);
+
 		std::stringstream saveState;
 		SaveState(saveState);
 
 		_memoryManager->UnregisterIODevice(_ppu.get());
 		_ppu.reset();
-		_ppu.reset(new PPU(shared_from_this()));
+		if(_hdData && (!_hdData->Tiles.empty() || !_hdData->Backgrounds.empty())) {
+			_ppu.reset(new HdPpu(shared_from_this(), _hdData.get()));
+		} else {
+			_ppu.reset(new PPU(shared_from_this()));
+		}
 		_memoryManager->RegisterIODevice(_ppu.get());
 		_hdPackBuilder.reset();
 
@@ -1169,7 +1177,8 @@ void Console::StopRecordingHdPack()
 		}
 
 		LoadState(saveState);
-		Resume();
+
+		_soundMixer->StopAudio();
 	}
 }
 

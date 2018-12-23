@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using System.Runtime.InteropServices;
 using Mesen.GUI.Controls;
 using Mesen.GUI.Config;
+using Mesen.GUI.Forms;
 
 namespace Mesen.GUI.Debugger.Controls
 {
@@ -68,7 +69,16 @@ namespace Mesen.GUI.Debugger.Controls
 			base.OnLoad(e);
 			if(!IsDesignMode) {
 				mnuCopyToClipboard.InitShortcut(this, nameof(DebuggerShortcutsConfig.Copy));
+				mnuEditInMemoryViewer.InitShortcut(this, nameof(DebuggerShortcutsConfig.CodeWindow_EditInMemoryViewer));
 			}
+		}
+
+		protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
+		{
+			if(ctxMenu.ProcessCommandKey(ref msg, keyData)) {
+				return true;
+			}
+			return base.ProcessCmdKey(ref msg, keyData);
 		}
 
 		[Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
@@ -142,7 +152,11 @@ namespace Mesen.GUI.Debugger.Controls
 						g.DrawImageUnscaled(source, 0, 0);
 					}
 
-					_originalChrBanks[i] = source;
+					Bitmap originalImg = new Bitmap(128, 128, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+					using(Graphics g = Graphics.FromImage(originalImg)) {
+						g.DrawImage(source, 0, 0);
+					}
+					_originalChrBanks[i] = originalImg;
 					_chrBanks[i] = target;
 
 					Bitmap chrBankImage = new Bitmap(256, 256);
@@ -466,15 +480,55 @@ namespace Mesen.GUI.Debugger.Controls
 			CopyToClipboard();
 		}
 
+		private Bitmap GetCopyBitmap()
+		{
+			Bitmap copy = new Bitmap(128, 256);
+			using(Graphics g = Graphics.FromImage(copy)) {
+				g.DrawImage(_originalChrBanks[0], 0, 0);
+				g.DrawImage(_originalChrBanks[1], 0, 128);
+			}
+			return copy;
+		}
+
 		public void CopyToClipboard()
 		{
-			using(Bitmap copy = new Bitmap(128, 256)) {
-				using(Graphics g = Graphics.FromImage(copy)) {
-					g.DrawImage(_originalChrBanks[0], 0, 0);
-					g.DrawImage(_originalChrBanks[1], 0, 128);
-				}
+			using(Bitmap copy = GetCopyBitmap()) {
 				Clipboard.SetImage(copy);
 			}
+		}
+
+		private void mnuExportToPng_Click(object sender, EventArgs e)
+		{
+			using(SaveFileDialog sfd = new SaveFileDialog()) {
+				sfd.SetFilter("PNG files|*.png");
+				if(sfd.ShowDialog() == DialogResult.OK) {
+					using(Bitmap copy = GetCopyBitmap()) {
+						copy.Save(sfd.FileName, System.Drawing.Imaging.ImageFormat.Png);
+					}
+				}
+			}
+		}
+
+		private void picChrBank_MouseEnter(object sender, EventArgs e)
+		{
+			if(this.ParentForm.ContainsFocus) {
+				this.Focus();
+			}
+		}
+
+		private void mnuEditInMemoryViewer_Click(object sender, EventArgs e)
+		{
+			int baseAddress = _hoverBottomBank ? 0x1000 : 0x0000;
+			if(this.cboChrSelection.SelectedIndex > 1) {
+				baseAddress += (this.cboChrSelection.SelectedIndex - 1) * 0x2000;
+			}
+
+			bool ppuMemory = this.cboChrSelection.SelectedIndex == 0;
+			bool isChrRam = InteropEmu.DebugGetMemorySize(DebugMemoryType.ChrRom) == 0;
+			DebugMemoryType memType = ppuMemory ? DebugMemoryType.PpuMemory : (isChrRam ? DebugMemoryType.ChrRam : DebugMemoryType.ChrRom);
+
+			int tileIndex = GetLargeSpriteIndex(_hoverTileIndex >= 0 ? _hoverTileIndex : _tileIndex);
+			DebugWindowManager.OpenMemoryViewer(baseAddress + tileIndex * 16, memType);
 		}
 	}
 }

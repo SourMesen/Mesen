@@ -53,17 +53,16 @@ A number of options exist to control the way the PNG files are generated:
 
 Before you start recording, select the options you want to use and the location to which you want to save the HD Pack, then press the `Start Recording` button.
 
-
 ## File Format (hires.txt) ##
 
-The following are the specifications for the hires.txt file, as of version "101".
+The following are the specifications for the hires.txt file, as of version "104".
 
 ### &lt;ver&gt; tag ###
 
 **Syntax**: `<ver>[integer]`  
-**Example**: `<ver>102`
+**Example**: `<ver>104`
 
-The format's version number (currently 102).
+The format's version number (currently 104).
 
 ### &lt;scale&gt; tag ###
 
@@ -124,7 +123,7 @@ The tileNearby and spriteNearby conditions are used to check whether a specific 
 `<condition>myCondition2,tileNearby,-8,0,[tile data],[palette data]`  
 In this case, `myCondition2` will be true if the tile 8 pixels to the left of the current tile matches the tile+palette data specified.
 
-For CHR ROM games, `tile data` is an integer representing the position of the original tile in CHR ROM.  
+For CHR ROM games, `tile data` is an integer (in hexadecimal) representing the position of the original tile in CHR ROM.  
 For CHR RAM games, `tile data` is a 32-character hexadecimal string representing all 16 bytes of the tile.  
 `palette data` is always an 8-character hexadecimal string representing all 4 bytes of the palette used for the tile.  For sprites, the first byte is always "FF".
 
@@ -141,7 +140,7 @@ The tileAtPosition and spriteAtPosition conditions are used to check whether a s
 `<condition>myCondition,tileAtPosition,10,10,[tile data],[palette data]`  
 In this case, `myCondition` will be true if the tile at position 10,10 on the NES' screen (256x240 resolution) matches the tile+palette data given.
 
-For CHR ROM games, `tile data` is an integer representing the position of the original tile in CHR ROM.  
+For CHR ROM games, `tile data` is an integer (in hexadecimal) representing the position of the original tile in CHR ROM.  
 For CHR RAM games, `tile data` is a 32-character hexadecimal string representing all 16 bytes of the tile.  
 `palette data` is always an 8-character hexadecimal string representing all 4 bytes of the palette used for the tile.  For sprites, the first byte is always "FF".
 
@@ -149,17 +148,19 @@ For CHR RAM games, `tile data` is a 32-character hexadecimal string representing
 
 The memoryCheck and ppuMemoryCheck conditions are used to compare the value stored at 2 different memory addresses together. (Use the `ppuMemoryCheck` variant to check PPU memory)
 
-**Syntax**: `<condition>[name - text], [conditionType - text], [memory address 1 - hex], [operator - string], [memory address 2 - hex]`  
+**Syntax**: `<condition>[name - text], [conditionType - text], [memory address 1 - hex], [operator - string], [memory address 2 - hex], [mask - hex (optional)]`  
 **Supported operators**: `==`, `!=`, `>`, `<`, `>=`, `<=`  
-**Example**: `<condition>myCondition,memoryCheck,8FFF,>,8000` (If the value stored at $8FFF is greater than the value stored at $8000, the condition will be true)
+**Example**: `<condition>myCondition,memoryCheck,8FFF,>,8000` (If the value stored at $8FFF is greater than the value stored at $8000, the condition will be true)  
+**Example (with mask)**: `<condition>myCondition,memoryCheck,8FFF,==,8000,10` (If the bit 4 of the value stored at $8FFF is equal to bit 4 of the value at $8000, the condition will be true.  i.e: `([$8FFF] & $10) == ([$8000] & $10)`)
 
 #### memoryCheckConstant / ppuMemoryCheckConstant ####
 
 The memoryCheck and ppuMemoryCheck conditions are used to compare the value stored at a memory address with a constant.  (Use the `ppuMemoryCheckConstant` variant to check PPU memory)
 
-**Syntax**: `<condition>[name - text], [conditionType - text], [memory address - hex], [operator - string], [constant - hex]`  
+**Syntax**: `<condition>[name - text], [conditionType - text], [memory address - hex], [operator - string], [constant - hex], [mask - hex (optional)]`  
 **Supported operators**: `==`, `!=`, `>`, `<`, `>=`, `<=`  
-**Example**: `<condition>myCondition,memoryCheck,8FFF,==,3F` (If the value stored at $8FFF is equal to $3F, the condition will be true)
+**Example**: `<condition>myCondition,memoryCheckConstant,8FFF,==,3F` (If the value stored at $8FFF is equal to $3F, the condition will be true)  
+**Example (with mask)**: `<condition>myCondition,memoryCheckConstant,8FFF,==,1F,3F` (If the value stored at $8FFF ANDed with $3F is equal to $1F then the condition will be true. i.e: `([$8FFF] & $3F) == $1F`)
 
 #### frameRange ####
 
@@ -174,10 +175,10 @@ The condition is true when the following expression is true:
 ### &lt;tile&gt; tag ###
 
 **Syntax**: `<tile>[img index - integer], [tile data], [palette data], [x - integer], [y - integer], [brightness - 0.0 to 1.0], [default tile - Y or N]`  
-**Example (CHR ROM)**: `<tile>0,20,FF16360F,0,0,1,N`  
+**Example (CHR ROM)**: `<tile>0,2E,FF16360F,0,0,1,N`  
 **Example (CHR RAM)**: `<tile>0,0E0E079C1E3EA7076101586121010000,0F100017,176,1168,1,N`
 
-For CHR ROM games, `tile data` is an integer representing the position of the original tile in CHR ROM.  
+For CHR ROM games, `tile data` is an integer (in hexadecimal) representing the position of the original tile in CHR ROM.  
 For CHR RAM games, `tile data` is a 32-character hexadecimal string representing all 16 bytes of the tile.  
 `palette data` is always an 8-character hexadecimal string representing all 4 bytes of the palette used for the tile.  For sprites, the first byte is always "FF".
 
@@ -300,3 +301,19 @@ Returns the current revision of the HD Audio API.  This value is currently set t
 #### $4102/$4103/$4104: Signature ####
 
 These registers return the ASCII string `NEA` (NES Enhanced Audio) - this can be used to detect whether or not the audio API is available.
+
+## File Format Changelog ##
+
+### Version 104 ###
+
+* Tile indexes for the `<condition>` tag (tileNearby/spriteNearby/tileAtPosition/spriteAtPosition) are now in hex instead of decimal (affects CHR ROM games only)
+
+### Version 103 ###
+
+* Added a `Mask` parameter to the memoryCheck and memoryCheckConstant conditions
+* Tile indexes for the `<tile>` tag are now in hex instead of decimal (affects CHR ROM games only)
+
+### Version 102 ###
+
+* Operands for memoryCheck/memoryCheckConstant conditions must now be specified in hex (used to be decimal)
+* Added the `Show Behind Background Priority Sprites` option to the `<background>` tag

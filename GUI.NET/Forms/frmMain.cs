@@ -33,7 +33,11 @@ namespace Mesen.GUI.Forms
 		private frmHistoryViewer _historyViewerWindow;
 		private frmHdPackEditor _hdPackEditorWindow;
 		private ResourcePath? _currentRomPath = null;
-		List<string> _luaScriptsToLoad = new List<string>();
+
+		private string _movieToRecord = null;
+		private List<string> _luaScriptsToLoad = new List<string>();
+		private bool _loadLastSessionRequested = false;
+
 		private Image _pauseButton = Resources.Pause;
 		private Image _playButton = Resources.Play;
 		private string _currentGame = null;
@@ -109,6 +113,29 @@ namespace Mesen.GUI.Forms
 				ConfigManager.DoNotSaveSettings = true;
 			}
 
+			if(switches.Contains("/loadlastsession")) {
+				_loadLastSessionRequested = true;
+			}
+
+			Regex recordMovieCommand = new Regex("/recordmovie=([^\"]+)");
+			foreach(string command in switches) {
+				Match match = recordMovieCommand.Match(command);
+				if(match.Success) {
+					string moviePath = match.Groups[1].Value;
+					string folder = Path.GetDirectoryName(moviePath);
+					if(string.IsNullOrWhiteSpace(folder)) {
+						moviePath = Path.Combine(ConfigManager.MovieFolder, moviePath);
+					} else if(!Path.IsPathRooted(moviePath)) {
+						moviePath = Path.Combine(Program.OriginalFolder, moviePath);
+					}
+					if(!moviePath.ToLower().EndsWith(".mmo")) {
+						moviePath += ".mmo";
+					}
+					_movieToRecord = moviePath;
+					break;
+				}
+			}
+
 			ConfigManager.ProcessSwitches(switches);
 		}
 
@@ -120,18 +147,19 @@ namespace Mesen.GUI.Forms
 			if(romPath != null) {
 				this.LoadFile(romPath);
 			} else {
-
 				if(_emuThread == null) {
 					//When no ROM is loaded, only process Lua scripts if a ROM was specified as a command line param
 					_luaScriptsToLoad.Clear();
+					_movieToRecord = null;
+					_loadLastSessionRequested = false;
 				} else {
 					//No game was specified, but a game is running already, load the scripts right away
-					LoadLuaScripts();
+					ProcessPostLoadCommandSwitches();
 				}
 			}
 		}
 
-		private void LoadLuaScripts()
+		private void ProcessPostLoadCommandSwitches()
 		{
 			if(_luaScriptsToLoad.Count > 0) {
 				foreach(string luaScript in _luaScriptsToLoad) {
@@ -139,6 +167,20 @@ namespace Mesen.GUI.Forms
 					scriptWindow.LoadScriptFile(luaScript);
 				}
 				_luaScriptsToLoad.Clear();
+			}
+
+			if(_movieToRecord != null) {
+				if(InteropEmu.MovieRecording()) {
+					InteropEmu.MovieStop();
+				}
+				RecordMovieOptions options = new RecordMovieOptions(_movieToRecord, "", "", RecordMovieFrom.StartWithSaveData);
+				InteropEmu.MovieRecord(ref options);
+				_movieToRecord = null;
+			}
+
+			if(_loadLastSessionRequested) {
+				_loadLastSessionRequested = false;
+				LoadLastSession();
 			}
 		}
 
@@ -610,7 +652,7 @@ namespace Mesen.GUI.Forms
 					this.StartEmuThread();
 					this.BeginInvoke((MethodInvoker)(() => {
 						UpdateViewerSize();
-						LoadLuaScripts();
+						ProcessPostLoadCommandSwitches();
 					}));
 
 					Task.Run(() => {

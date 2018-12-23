@@ -172,10 +172,10 @@
 			// 
 			this.grpPPUStatus.Controls.Add(this.tableLayoutPanel8);
 			this.grpPPUStatus.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.grpPPUStatus.Location = new System.Drawing.Point(0, 128);
-			this.grpPPUStatus.Margin = new System.Windows.Forms.Padding(0);
+			this.grpPPUStatus.Location = new System.Drawing.Point(1, 128);
+			this.grpPPUStatus.Margin = new System.Windows.Forms.Padding(1, 0, 1, 0);
 			this.grpPPUStatus.Name = "grpPPUStatus";
-			this.grpPPUStatus.Size = new System.Drawing.Size(453, 173);
+			this.grpPPUStatus.Size = new System.Drawing.Size(451, 173);
 			this.grpPPUStatus.TabIndex = 2;
 			this.grpPPUStatus.TabStop = false;
 			this.grpPPUStatus.Text = "PPU Status";
@@ -193,7 +193,7 @@
 			this.tableLayoutPanel8.Name = "tableLayoutPanel8";
 			this.tableLayoutPanel8.RowCount = 1;
 			this.tableLayoutPanel8.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-			this.tableLayoutPanel8.Size = new System.Drawing.Size(447, 154);
+			this.tableLayoutPanel8.Size = new System.Drawing.Size(445, 154);
 			this.tableLayoutPanel8.TabIndex = 1;
 			// 
 			// tableLayoutPanel7
@@ -230,7 +230,7 @@
 			this.tableLayoutPanel7.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
 			this.tableLayoutPanel7.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel7.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel7.Size = new System.Drawing.Size(194, 148);
+			this.tableLayoutPanel7.Size = new System.Drawing.Size(193, 148);
 			this.tableLayoutPanel7.TabIndex = 0;
 			// 
 			// txtNTAddr
@@ -338,7 +338,7 @@
 			this.tableLayoutPanel5.RowCount = 2;
 			this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this.tableLayoutPanel5.Size = new System.Drawing.Size(194, 36);
+			this.tableLayoutPanel5.Size = new System.Drawing.Size(193, 36);
 			this.tableLayoutPanel5.TabIndex = 10;
 			// 
 			// chkWriteToggle
@@ -356,8 +356,8 @@
 			// chkSpriteOverflow
 			// 
 			this.chkSpriteOverflow.AutoSize = true;
-			this.chkSpriteOverflow.Location = new System.Drawing.Point(0, 19);
-			this.chkSpriteOverflow.Margin = new System.Windows.Forms.Padding(0);
+			this.chkSpriteOverflow.Location = new System.Drawing.Point(0, 21);
+			this.chkSpriteOverflow.Margin = new System.Windows.Forms.Padding(0, 2, 0, 0);
 			this.chkSpriteOverflow.Name = "chkSpriteOverflow";
 			this.chkSpriteOverflow.Size = new System.Drawing.Size(98, 17);
 			this.chkSpriteOverflow.TabIndex = 8;
@@ -368,8 +368,8 @@
 			// chkSprite0Hit
 			// 
 			this.chkSprite0Hit.AutoSize = true;
-			this.chkSprite0Hit.Location = new System.Drawing.Point(0, 0);
-			this.chkSprite0Hit.Margin = new System.Windows.Forms.Padding(0);
+			this.chkSprite0Hit.Location = new System.Drawing.Point(0, 2);
+			this.chkSprite0Hit.Margin = new System.Windows.Forms.Padding(0, 2, 0, 0);
 			this.chkSprite0Hit.Name = "chkSprite0Hit";
 			this.chkSprite0Hit.Size = new System.Drawing.Size(78, 17);
 			this.chkSprite0Hit.TabIndex = 9;
@@ -458,10 +458,10 @@
 			this.grpControlMask.AutoSize = true;
 			this.grpControlMask.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
 			this.grpControlMask.Controls.Add(this.tableLayoutPanel9);
-			this.grpControlMask.Location = new System.Drawing.Point(197, 0);
+			this.grpControlMask.Location = new System.Drawing.Point(196, 0);
 			this.grpControlMask.Margin = new System.Windows.Forms.Padding(0);
 			this.grpControlMask.Name = "grpControlMask";
-			this.grpControlMask.Size = new System.Drawing.Size(250, 138);
+			this.grpControlMask.Size = new System.Drawing.Size(249, 138);
 			this.grpControlMask.TabIndex = 1;
 			this.grpControlMask.TabStop = false;
 			this.grpControlMask.Text = "Control && Mask";
@@ -495,7 +495,7 @@
 			this.tableLayoutPanel9.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel9.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel9.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel9.Size = new System.Drawing.Size(244, 119);
+			this.tableLayoutPanel9.Size = new System.Drawing.Size(243, 119);
 			this.tableLayoutPanel9.TabIndex = 1;
 			// 
 			// chkDrawLeftSpr
@@ -584,7 +584,7 @@
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this.tableLayoutPanel1.Size = new System.Drawing.Size(107, 51);
+			this.tableLayoutPanel1.Size = new System.Drawing.Size(106, 51);
 			this.tableLayoutPanel1.TabIndex = 5;
 			// 
 			// chkNMIOnBlank
@@ -719,14 +719,12 @@
 			// 
 			// grpCPUStatus
 			// 
-			this.grpCPUStatus.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
 			this.grpCPUStatus.Controls.Add(this.tableLayoutPanel3);
-			this.grpCPUStatus.Location = new System.Drawing.Point(0, 0);
-			this.grpCPUStatus.Margin = new System.Windows.Forms.Padding(0);
+			this.grpCPUStatus.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.grpCPUStatus.Location = new System.Drawing.Point(1, 0);
+			this.grpCPUStatus.Margin = new System.Windows.Forms.Padding(1, 0, 1, 0);
 			this.grpCPUStatus.Name = "grpCPUStatus";
-			this.grpCPUStatus.Size = new System.Drawing.Size(453, 128);
+			this.grpCPUStatus.Size = new System.Drawing.Size(451, 128);
 			this.grpCPUStatus.TabIndex = 0;
 			this.grpCPUStatus.TabStop = false;
 			this.grpCPUStatus.Text = "CPU Status";
@@ -746,7 +744,7 @@
 			this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel3.Size = new System.Drawing.Size(447, 109);
+			this.tableLayoutPanel3.Size = new System.Drawing.Size(445, 109);
 			this.tableLayoutPanel3.TabIndex = 0;
 			// 
 			// grpFlags
@@ -757,7 +755,7 @@
 			this.grpFlags.Margin = new System.Windows.Forms.Padding(0, 0, 2, 0);
 			this.grpFlags.Name = "grpFlags";
 			this.grpFlags.Padding = new System.Windows.Forms.Padding(2);
-			this.grpFlags.Size = new System.Drawing.Size(370, 82);
+			this.grpFlags.Size = new System.Drawing.Size(368, 82);
 			this.grpFlags.TabIndex = 3;
 			this.grpFlags.TabStop = false;
 			this.grpFlags.Text = "Flags";
@@ -797,7 +795,7 @@
 			this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 8F));
 			this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel4.Size = new System.Drawing.Size(366, 65);
+			this.tableLayoutPanel4.Size = new System.Drawing.Size(364, 65);
 			this.tableLayoutPanel4.TabIndex = 0;
 			// 
 			// chkFrameCounter
@@ -985,7 +983,7 @@
 			// 
 			this.grpStack.Controls.Add(this.tableLayoutPanel6);
 			this.grpStack.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.grpStack.Location = new System.Drawing.Point(372, 0);
+			this.grpStack.Location = new System.Drawing.Point(370, 0);
 			this.grpStack.Margin = new System.Windows.Forms.Padding(0);
 			this.grpStack.Name = "grpStack";
 			this.grpStack.Padding = new System.Windows.Forms.Padding(2);
@@ -1073,7 +1071,7 @@
 			this.flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.flowLayoutPanel1.Location = new System.Drawing.Point(3, 3);
 			this.flowLayoutPanel1.Name = "flowLayoutPanel1";
-			this.flowLayoutPanel1.Size = new System.Drawing.Size(366, 21);
+			this.flowLayoutPanel1.Size = new System.Drawing.Size(364, 21);
 			this.flowLayoutPanel1.TabIndex = 2;
 			// 
 			// lblA
@@ -1233,10 +1231,10 @@
 			// 
 			this.grpInputStatus.Controls.Add(this.tableLayoutPanel11);
 			this.grpInputStatus.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.grpInputStatus.Location = new System.Drawing.Point(0, 301);
-			this.grpInputStatus.Margin = new System.Windows.Forms.Padding(0);
+			this.grpInputStatus.Location = new System.Drawing.Point(1, 301);
+			this.grpInputStatus.Margin = new System.Windows.Forms.Padding(1, 0, 1, 0);
 			this.grpInputStatus.Name = "grpInputStatus";
-			this.grpInputStatus.Size = new System.Drawing.Size(453, 67);
+			this.grpInputStatus.Size = new System.Drawing.Size(451, 67);
 			this.grpInputStatus.TabIndex = 4;
 			this.grpInputStatus.TabStop = false;
 			this.grpInputStatus.Text = "Input Button Setup";
@@ -1257,7 +1255,7 @@
 			this.tableLayoutPanel11.Name = "tableLayoutPanel11";
 			this.tableLayoutPanel11.RowCount = 1;
 			this.tableLayoutPanel11.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel11.Size = new System.Drawing.Size(447, 48);
+			this.tableLayoutPanel11.Size = new System.Drawing.Size(445, 48);
 			this.tableLayoutPanel11.TabIndex = 0;
 			// 
 			// ctrlControllerInput3
@@ -1273,7 +1271,7 @@
 			// ctrlControllerInput4
 			// 
 			this.ctrlControllerInput4.Anchor = System.Windows.Forms.AnchorStyles.None;
-			this.ctrlControllerInput4.Location = new System.Drawing.Point(346, 8);
+			this.ctrlControllerInput4.Location = new System.Drawing.Point(345, 8);
 			this.ctrlControllerInput4.Name = "ctrlControllerInput4";
 			this.ctrlControllerInput4.PlayerNumber = 3;
 			this.ctrlControllerInput4.Size = new System.Drawing.Size(88, 32);

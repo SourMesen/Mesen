@@ -73,7 +73,7 @@
 			// txtDivider
 			// 
 			this.txtDivider.BackColor = System.Drawing.Color.White;
-			this.txtDivider.Location = new System.Drawing.Point(56, 98);
+			this.txtDivider.Location = new System.Drawing.Point(50, 98);
 			this.txtDivider.Name = "txtDivider";
 			this.txtDivider.ReadOnly = true;
 			this.txtDivider.Size = new System.Drawing.Size(40, 20);
@@ -82,7 +82,7 @@
 			// txtCounter
 			// 
 			this.txtCounter.BackColor = System.Drawing.Color.White;
-			this.txtCounter.Location = new System.Drawing.Point(56, 72);
+			this.txtCounter.Location = new System.Drawing.Point(50, 72);
 			this.txtCounter.Name = "txtCounter";
 			this.txtCounter.ReadOnly = true;
 			this.txtCounter.Size = new System.Drawing.Size(40, 20);
@@ -92,7 +92,8 @@
 			// 
 			this.lblCounter.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.lblCounter.AutoSize = true;
-			this.lblCounter.Location = new System.Drawing.Point(3, 75);
+			this.lblCounter.Location = new System.Drawing.Point(0, 75);
+			this.lblCounter.Margin = new System.Windows.Forms.Padding(0);
 			this.lblCounter.Name = "lblCounter";
 			this.lblCounter.Size = new System.Drawing.Size(47, 13);
 			this.lblCounter.TabIndex = 2;
@@ -102,7 +103,8 @@
 			// 
 			this.lblDivider.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.lblDivider.AutoSize = true;
-			this.lblDivider.Location = new System.Drawing.Point(3, 101);
+			this.lblDivider.Location = new System.Drawing.Point(0, 101);
+			this.lblDivider.Margin = new System.Windows.Forms.Padding(0);
 			this.lblDivider.Name = "lblDivider";
 			this.lblDivider.Size = new System.Drawing.Size(43, 13);
 			this.lblDivider.TabIndex = 1;
@@ -114,8 +116,7 @@
 			this.chkStart.AutoCheck = false;
 			this.chkStart.AutoSize = true;
 			this.tableLayoutPanel1.SetColumnSpan(this.chkStart, 2);
-			this.chkStart.Location = new System.Drawing.Point(0, 3);
-			this.chkStart.Margin = new System.Windows.Forms.Padding(0, 3, 0, 3);
+			this.chkStart.Location = new System.Drawing.Point(3, 3);
 			this.chkStart.Name = "chkStart";
 			this.chkStart.Size = new System.Drawing.Size(71, 17);
 			this.chkStart.TabIndex = 6;
@@ -128,8 +129,7 @@
 			this.chkConstantVolume.AutoCheck = false;
 			this.chkConstantVolume.AutoSize = true;
 			this.tableLayoutPanel1.SetColumnSpan(this.chkConstantVolume, 2);
-			this.chkConstantVolume.Location = new System.Drawing.Point(0, 49);
-			this.chkConstantVolume.Margin = new System.Windows.Forms.Padding(0, 3, 0, 3);
+			this.chkConstantVolume.Location = new System.Drawing.Point(3, 49);
 			this.chkConstantVolume.Name = "chkConstantVolume";
 			this.chkConstantVolume.Size = new System.Drawing.Size(106, 17);
 			this.chkConstantVolume.TabIndex = 8;
@@ -140,7 +140,8 @@
 			// 
 			this.lblVolume.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.lblVolume.AutoSize = true;
-			this.lblVolume.Location = new System.Drawing.Point(3, 127);
+			this.lblVolume.Location = new System.Drawing.Point(0, 127);
+			this.lblVolume.Margin = new System.Windows.Forms.Padding(0);
 			this.lblVolume.Name = "lblVolume";
 			this.lblVolume.Size = new System.Drawing.Size(45, 13);
 			this.lblVolume.TabIndex = 9;
@@ -149,7 +150,7 @@
 			// txtVolume
 			// 
 			this.txtVolume.BackColor = System.Drawing.Color.White;
-			this.txtVolume.Location = new System.Drawing.Point(56, 124);
+			this.txtVolume.Location = new System.Drawing.Point(50, 124);
 			this.txtVolume.Name = "txtVolume";
 			this.txtVolume.ReadOnly = true;
 			this.txtVolume.Size = new System.Drawing.Size(40, 20);
@@ -161,8 +162,7 @@
 			this.chkLoop.AutoCheck = false;
 			this.chkLoop.AutoSize = true;
 			this.tableLayoutPanel1.SetColumnSpan(this.chkLoop, 2);
-			this.chkLoop.Location = new System.Drawing.Point(0, 26);
-			this.chkLoop.Margin = new System.Windows.Forms.Padding(0, 3, 0, 3);
+			this.chkLoop.Location = new System.Drawing.Point(3, 26);
 			this.chkLoop.Name = "chkLoop";
 			this.chkLoop.Size = new System.Drawing.Size(50, 17);
 			this.chkLoop.TabIndex = 7;

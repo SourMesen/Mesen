@@ -226,6 +226,13 @@ namespace Mesen.GUI.Debugger.Controls
 			AddressTypeInfo info = GetAddressInfo(ctrlCodeViewer.SelectedLine);
 			if(info.Address >= 0) {
 				BreakpointManager.ToggleBreakpoint(-1, info, false);
+			} else {
+				//Current line has no address, try using the next line instead.
+				//(Used when trying to set a breakpoint on a row containing only a label)
+				info = GetAddressInfo(ctrlCodeViewer.SelectedLine + 1);
+				if(info.Address >= 0) {
+					BreakpointManager.ToggleBreakpoint(-1, info, false);
+				}
 			}
 		}
 		

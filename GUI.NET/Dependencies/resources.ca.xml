@@ -217,6 +217,7 @@
 			<Control ID="chkDisplayPort4">Jugador 4</Control>
 			<Control ID="lblDisplayPosition">Posició de pantalla:</Control>
 			<Control ID="chkDisplayInputHorizontally">Mostra horitzontalment</Control>
+			<Control ID="chkHideMousePointerForZapper">Hide mouse pointer when using zapper</Control>
 
 			<Control ID="lblKeyBinding">Advertència: La vostra configuració actual conté assignacions conflictives - algunes tecles del vostre teclat o botons del comandament han estat assignats a múltiples botons al comandament de la NES. Si això no ha estat intencionat, us preguem que reviseu i corregiu les vostres assignacions.</Control>
 		</Form>
@@ -608,7 +609,6 @@
 			<Control ID="tpgAudioOptions">Opcions de so</Control>
 			<Control ID="tpgEmulationOptions">Opcions de l'emulació</Control>
 			<Control ID="lblExplanation">Això iniciarà Mesen en mode de pantalla completa i amb la rom "MyGame.nes" carregada. A més, farà servir el filtre NTSC ajustat a una escala de 2x i configurarà les opcions de sobreescaneig. El paràmetre "DoNotSaveSettings" s'utilitza per evitar que els canvis efectuats des de la línia d'ordres es desin permanentment a la configuració de Mesen.</Control>
-			<Control ID="txtGeneralOptions">/fullscreen - Inicia Mesen en pantalla completa&#13;&#10;/DoNotSaveSettings - Evita que els canvis es desin (útil per a evitar que les opcions de la línia d'ordres es converteixin en la configuració per defecte)</Control>
 		</Form>
 		<Form ID="frmRecordMovie" Title="Movie Recording Options">
 			<Control ID="lblSaveTo">Save to:</Control>
@@ -733,6 +733,11 @@
 		<Message ID="MouseModeEnabled">Mouse mode enabled - press ESC or pause to release the cursor.</Message>
 		<Message ID="BandaiMicrophone">Bandai Microphone</Message>
 		<Message ID="DatachBarcodeReader">Datach Barcode Reader</Message>
+
+		<Message ID="HelpFullscreen">/fullscreen - Inicia Mesen en pantalla completa</Message>
+		<Message ID="HelpDoNotSaveSettings">/DoNotSaveSettings - Evita que els canvis es desin (útil per a evitar que les opcions de la línia d'ordres es converteixin en la configuració per defecte)</Message>
+		<Message ID="HelpRecordMovie">/RecordMovie="filename.mmo" - Start recording a movie after the specified game is loaded.</Message>
+		<Message ID="HelpLoadLastSession">/LoadLastSession - Resumes the game in the state it was left in when it was last played.</Message>
 
 		<Message ID="Resume">Continua</Message>
 		<Message ID="Pause">Pausa</Message>

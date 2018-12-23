@@ -15,7 +15,7 @@ namespace Mesen.GUI.Config
 		private const int MaxRecentFiles = 10;
 		private bool _needToSave = false;
 
-		public string MesenVersion = "0.9.6";
+		public string MesenVersion = "0.9.7";
 		public PreferenceInfo PreferenceInfo;
 		public AudioInfo AudioInfo;
 		public VideoInfo VideoInfo;
@@ -35,6 +35,8 @@ namespace Mesen.GUI.Config
 		public List<GameSpecificInfo> GameSpecificSettings;
 		public Point? WindowLocation;
 		public Size? WindowSize;
+		public Point CheatWindowLocation;
+		public Size CheatWindowSize;
 
 		public Configuration()
 		{

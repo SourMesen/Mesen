@@ -216,6 +216,7 @@
 			<Control ID="chkDisplayPort4">Jugador 4</Control>
 			<Control ID="lblDisplayPosition">Posición de pantalla:</Control>
 			<Control ID="chkDisplayInputHorizontally">Mostrar horizontalmente</Control>
+			<Control ID="chkHideMousePointerForZapper">Hide mouse pointer when using zapper</Control>
 
 			<Control ID="lblKeyBinding">Advertencia: su configuración actual contiene asignaciones conflictivas - algunas teclas de su teclado o botones del mando se han asignado a varios botones del mando de la NES. Si esto no es intencionado, revise y corrija las asignaciones.</Control>
 		</Form>
@@ -499,7 +500,7 @@
 			<Control ID="btnExportSelectedCheats">Trucos seleccionados</Control>
 			<Control ID="mnuExportSelectedCheats">Exportar</Control>
 			<Control ID="tpgCheatFinder">Búsqueda de trucos</Control>
-			<Control ID="grpFilters">Filters</Control>
+			<Control ID="grpFilters">Filtros</Control>
 			<Control ID="btnReset">Restablecer</Control>
 			<Control ID="btnUndo">Deshacer</Control>
 			<Control ID="lblCurrentValue">El valor actual es</Control>
@@ -606,7 +607,6 @@
 			<Control ID="tpgAudioOptions">Opciones de audio</Control>
 			<Control ID="tpgEmulationOptions">Opciones de emulación</Control>
 			<Control ID="lblExplanation">Esto iniciará Mesen en modo de pantalla completa con la rom "MyGame.nes" cargada. También usa el filtro NTSC, ajuste a escala 2x y establece la configuración de Overscan. El parámetro "DoNotSaveSettings" se usa para prevenir que las opciones dadas desde la línea de comandos alteren la configuración de Mesen.</Control>
-			<Control ID="txtGeneralOptions">/fullscreen - Inicia Mesen en pantalla completa&#13;&#10;/DoNotSaveSettings - Previene que las opciones se graben en disco (útil para evitar que las opciones de la línea de comandos se conviertan en la configuración predeterminada)</Control>
 		</Form>
 		<Form ID="frmCopyFiles" Title="Por favor espere...">
 			<Control ID="lblCopying">Copiando:</Control>
@@ -750,6 +750,11 @@
 		<Message ID="MouseModeEnabled">Modo de ratón habilitado: presione ESC o pausa para liberar el cursor.</Message>
 		<Message ID="BandaiMicrophone">Micrófono Bandai</Message>
 		<Message ID="DatachBarcodeReader">Lector de código de barras Datach</Message>
+
+		<Message ID="HelpFullscreen">/fullscreen - Inicia Mesen en pantalla completa</Message>
+		<Message ID="HelpDoNotSaveSettings">/DoNotSaveSettings - Previene que las opciones se graben en disco (útil para evitar que las opciones de la línea de comandos se conviertan en la configuración predeterminada)</Message>
+		<Message ID="HelpRecordMovie">/RecordMovie="filename.mmo" - Start recording a movie after the specified game is loaded.</Message>
+		<Message ID="HelpLoadLastSession">/LoadLastSession - Resumes the game in the state it was left in when it was last played.</Message>
 
 		<Message ID="Resume">Continuar</Message>
 		<Message ID="Pause">Pausa</Message>

@@ -81,6 +81,9 @@
 			this.mnuAutoRefresh = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
 			this.mnuRefresh = new System.Windows.Forms.ToolStripMenuItem();
+			this.ctxMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
+			this.mnuCopy = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuSelectAll = new System.Windows.Forms.ToolStripMenuItem();
 			this.tableLayoutPanel1.SuspendLayout();
 			this.grpLogOptions.SuspendLayout();
 			this.tableLayoutPanel2.SuspendLayout();
@@ -92,6 +95,7 @@
 			this.tableLayoutPanel3.SuspendLayout();
 			this.grpExecutionLog.SuspendLayout();
 			this.menuStrip1.SuspendLayout();
+			this.ctxMenu.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// tableLayoutPanel1
@@ -548,6 +552,7 @@
 			// 
 			this.txtTraceLog.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.txtTraceLog.CodeHighlightingEnabled = true;
+			this.txtTraceLog.ContextMenuStrip = this.ctxMenu;
 			this.txtTraceLog.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.txtTraceLog.HideSelection = false;
 			this.txtTraceLog.Location = new System.Drawing.Point(3, 16);
@@ -717,6 +722,30 @@
 			this.mnuRefresh.Text = "Refresh";
 			this.mnuRefresh.Click += new System.EventHandler(this.mnuRefresh_Click);
 			// 
+			// ctxMenu
+			// 
+			this.ctxMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.mnuCopy,
+            this.mnuSelectAll});
+			this.ctxMenu.Name = "ctxMenu";
+			this.ctxMenu.Size = new System.Drawing.Size(123, 48);
+			// 
+			// mnuCopy
+			// 
+			this.mnuCopy.Image = global::Mesen.GUI.Properties.Resources.Copy;
+			this.mnuCopy.Name = "mnuCopy";
+			this.mnuCopy.Size = new System.Drawing.Size(122, 22);
+			this.mnuCopy.Text = "Copy";
+			this.mnuCopy.Click += new System.EventHandler(this.mnuCopy_Click);
+			// 
+			// mnuSelectAll
+			// 
+			this.mnuSelectAll.Image = global::Mesen.GUI.Properties.Resources.SelectAll;
+			this.mnuSelectAll.Name = "mnuSelectAll";
+			this.mnuSelectAll.Size = new System.Drawing.Size(122, 22);
+			this.mnuSelectAll.Text = "Select All";
+			this.mnuSelectAll.Click += new System.EventHandler(this.mnuSelectAll_Click);
+			// 
 			// frmTraceLogger
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -743,6 +772,7 @@
 			this.grpExecutionLog.ResumeLayout(false);
 			this.menuStrip1.ResumeLayout(false);
 			this.menuStrip1.PerformLayout();
+			this.ctxMenu.ResumeLayout(false);
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -803,5 +833,8 @@
 		private System.Windows.Forms.CheckBox chkExtendZeroPage;
 		private System.Windows.Forms.ToolStripMenuItem mnu5000Lines;
 		private System.Windows.Forms.ToolStripMenuItem mnu15000Lines;
+		private System.Windows.Forms.ContextMenuStrip ctxMenu;
+		private System.Windows.Forms.ToolStripMenuItem mnuCopy;
+		private System.Windows.Forms.ToolStripMenuItem mnuSelectAll;
 	}
 }

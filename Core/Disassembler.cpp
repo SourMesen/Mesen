@@ -188,7 +188,7 @@ void Disassembler::GetInfo(AddressTypeInfo &info, uint8_t** source, uint32_t &si
 }
 
 
-uint32_t Disassembler::BuildCache(AddressTypeInfo &info, uint16_t cpuAddress, bool isSubEntryPoint)
+uint32_t Disassembler::BuildCache(AddressTypeInfo &info, uint16_t cpuAddress, bool isSubEntryPoint, bool isJumpTarget)
 {
 	uint32_t mask = info.Type == AddressType::InternalRam ? 0x7FF : 0xFFFFFFFF;
 
@@ -203,8 +203,9 @@ uint32_t Disassembler::BuildCache(AddressTypeInfo &info, uint16_t cpuAddress, bo
 		if(!disInfo) {
 			while(absoluteAddr < (int32_t)size && !(*cache)[absoluteAddr]) {
 				bool isJump = IsUnconditionalJump(source[absoluteAddr]);
-				disInfo = new DisassemblyInfo(source+absoluteAddr, isSubEntryPoint);
+				disInfo = new DisassemblyInfo(source+absoluteAddr, isSubEntryPoint, isJumpTarget);
 				isSubEntryPoint = false;
+				isJumpTarget = false;
 
 				(*cache)[absoluteAddr] = shared_ptr<DisassemblyInfo>(disInfo);
 
@@ -218,6 +219,9 @@ uint32_t Disassembler::BuildCache(AddressTypeInfo &info, uint16_t cpuAddress, bo
 			if(isSubEntryPoint) {
 				disInfo->SetSubEntryPoint();
 			}
+			if(isJumpTarget) {
+				disInfo->SetJumpTarget();
+			}
 
 			uint8_t opCode = source[absoluteAddr];
 			if(IsJump(opCode)) {
@@ -228,7 +232,9 @@ uint32_t Disassembler::BuildCache(AddressTypeInfo &info, uint16_t cpuAddress, bo
 
 					const uint8_t jsrCode = 0x20;
 					if(addressInfo.Address >= 0) {
-						BuildCache(addressInfo, jumpDest, opCode == jsrCode);
+						BuildCache(addressInfo, jumpDest, opCode == jsrCode, true);
+					} else {
+						disInfo->SetJumpTarget();
 					}
 				}
 			}
@@ -306,7 +312,7 @@ void Disassembler::RebuildPrgRomCache(uint32_t absoluteAddr, int32_t length)
 
 	uint16_t memoryAddr = _debugger->GetRelativeAddress(absoluteAddr, AddressType::PrgRom);
 	AddressTypeInfo info = { (int32_t)absoluteAddr, AddressType::PrgRom };
-	BuildCache(info, memoryAddr, isSubEntryPoint);
+	BuildCache(info, memoryAddr, isSubEntryPoint, false);
 }
 
 static const char* hexTable[256] = {
@@ -533,7 +539,7 @@ string Disassembler::GetCode(AddressTypeInfo &addressInfo, uint32_t endAddr, uin
 		isVerifiedData = addressInfo.Type == AddressType::PrgRom && cdl->IsData(addr&mask);
 		if(!info && ((disassembleUnidentifiedData && !isVerifiedData) || (disassembleVerifiedData && isVerifiedData))) {
 			dataType = isVerifiedData ? DataType::VerifiedData : DataType::UnidentifiedData;
-			tmpInfo->Initialize(source + (addr & mask), false);
+			tmpInfo->Initialize(source + (addr & mask), false, false);
 			info = tmpInfo;
 		} else if(info) {
 			dataType = DataType::VerifiedCode;
@@ -565,7 +571,13 @@ string Disassembler::GetCode(AddressTypeInfo &addressInfo, uint32_t endAddr, uin
 				GetLine(output, "----");
 			}
 
-			if(dataType != DataType::VerifiedCode) {
+			if(memoryAddr < cpuState.DebugPC && memoryAddr + info->GetSize() > cpuState.DebugPC) {
+				//The current instruction started between the current and next operation.
+				//This can happen when sharing bytes between instructions (and executing one or the other depending on a branch, etc.)
+				//In this case, realign the disassembly with the PC at the start of the instruction
+				addr += cpuState.DebugPC - memoryAddr;
+				memoryAddr = cpuState.DebugPC;
+			} else if(dataType != DataType::VerifiedCode) {
 				//For unverified code, check if a verified instruction starts between the start of this instruction and its end.
 				//If so, we need to realign the disassembler to the start of the next verified instruction
 				for(uint32_t i = 0; i < info->GetSize(); i++) {
@@ -672,5 +684,16 @@ DisassemblyInfo Disassembler::GetDisassemblyInfo(AddressTypeInfo &info)
 		return *disassemblyInfo;
 	} else {
 		return DisassemblyInfo();
+	}
+}
+
+void Disassembler::GetJumpTargets(bool* jumpTargets)
+{
+	memset(jumpTargets, 0, _disassembleCache.size());
+	for(size_t i = 0, len = _disassembleCache.size(); i < len;  i++) {
+		shared_ptr<DisassemblyInfo> disInfo = _disassembleCache[i];
+		if(disInfo && disInfo->IsJumpTarget()) {
+			jumpTargets[i] = true;
+		}
 	}
 }

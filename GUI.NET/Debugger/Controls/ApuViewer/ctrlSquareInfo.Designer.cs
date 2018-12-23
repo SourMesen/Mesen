@@ -39,7 +39,6 @@
 			this.txtOutputVolume = new System.Windows.Forms.TextBox();
 			this.txtDutyPosition = new System.Windows.Forms.TextBox();
 			this.grpEnvelope = new System.Windows.Forms.GroupBox();
-			this.ctrlEnvelopeInfo = new Mesen.GUI.Debugger.Controls.ApuViewer.ctrlEnvelopeInfo();
 			this.grpSweep = new System.Windows.Forms.GroupBox();
 			this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
 			this.chkSweepEnabled = new System.Windows.Forms.CheckBox();
@@ -50,10 +49,11 @@
 			this.txtSweepShift = new System.Windows.Forms.TextBox();
 			this.txtDuty = new System.Windows.Forms.TextBox();
 			this.grpLengthCounter = new System.Windows.Forms.GroupBox();
-			this.ctrlLengthCounterInfo = new Mesen.GUI.Debugger.Controls.ApuViewer.ctrlLengthCounterInfo();
 			this.lblHz = new System.Windows.Forms.Label();
 			this.lblTimer = new System.Windows.Forms.Label();
 			this.txtTimer = new System.Windows.Forms.TextBox();
+			this.ctrlEnvelopeInfo = new Mesen.GUI.Debugger.Controls.ApuViewer.ctrlEnvelopeInfo();
+			this.ctrlLengthCounterInfo = new Mesen.GUI.Debugger.Controls.ApuViewer.ctrlLengthCounterInfo();
 			this.tableLayoutPanel1.SuspendLayout();
 			this.grpEnvelope.SuspendLayout();
 			this.grpSweep.SuspendLayout();
@@ -100,7 +100,7 @@
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel1.Size = new System.Drawing.Size(546, 180);
+			this.tableLayoutPanel1.Size = new System.Drawing.Size(526, 180);
 			this.tableLayoutPanel1.TabIndex = 0;
 			// 
 			// chkEnabled
@@ -212,22 +212,13 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.grpEnvelope.Controls.Add(this.ctrlEnvelopeInfo);
-			this.grpEnvelope.Location = new System.Drawing.Point(273, 3);
+			this.grpEnvelope.Location = new System.Drawing.Point(267, 3);
 			this.grpEnvelope.Name = "grpEnvelope";
 			this.tableLayoutPanel1.SetRowSpan(this.grpEnvelope, 7);
-			this.grpEnvelope.Size = new System.Drawing.Size(133, 173);
+			this.grpEnvelope.Size = new System.Drawing.Size(116, 173);
 			this.grpEnvelope.TabIndex = 12;
 			this.grpEnvelope.TabStop = false;
 			this.grpEnvelope.Text = "Envelope";
-			// 
-			// ctrlEnvelopeInfo
-			// 
-			this.ctrlEnvelopeInfo.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.ctrlEnvelopeInfo.Location = new System.Drawing.Point(3, 16);
-			this.ctrlEnvelopeInfo.Margin = new System.Windows.Forms.Padding(0);
-			this.ctrlEnvelopeInfo.Name = "ctrlEnvelopeInfo";
-			this.ctrlEnvelopeInfo.Size = new System.Drawing.Size(127, 154);
-			this.ctrlEnvelopeInfo.TabIndex = 1;
 			// 
 			// grpSweep
 			// 
@@ -238,7 +229,7 @@
 			this.grpSweep.Location = new System.Drawing.Point(168, 3);
 			this.grpSweep.Name = "grpSweep";
 			this.tableLayoutPanel1.SetRowSpan(this.grpSweep, 7);
-			this.grpSweep.Size = new System.Drawing.Size(99, 173);
+			this.grpSweep.Size = new System.Drawing.Size(93, 173);
 			this.grpSweep.TabIndex = 11;
 			this.grpSweep.TabStop = false;
 			this.grpSweep.Text = "Sweep Unit";
@@ -264,7 +255,7 @@
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel2.Size = new System.Drawing.Size(93, 154);
+			this.tableLayoutPanel2.Size = new System.Drawing.Size(87, 154);
 			this.tableLayoutPanel2.TabIndex = 0;
 			// 
 			// chkSweepEnabled
@@ -283,7 +274,8 @@
 			// 
 			this.lblSweepShift.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.lblSweepShift.AutoSize = true;
-			this.lblSweepShift.Location = new System.Drawing.Point(3, 78);
+			this.lblSweepShift.Location = new System.Drawing.Point(0, 78);
+			this.lblSweepShift.Margin = new System.Windows.Forms.Padding(0, 0, 0, 0);
 			this.lblSweepShift.Name = "lblSweepShift";
 			this.lblSweepShift.Size = new System.Drawing.Size(31, 13);
 			this.lblSweepShift.TabIndex = 7;
@@ -293,7 +285,8 @@
 			// 
 			this.lblSweepPeriod.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.lblSweepPeriod.AutoSize = true;
-			this.lblSweepPeriod.Location = new System.Drawing.Point(3, 52);
+			this.lblSweepPeriod.Location = new System.Drawing.Point(0, 52);
+			this.lblSweepPeriod.Margin = new System.Windows.Forms.Padding(0, 0, 0, 0);
 			this.lblSweepPeriod.Name = "lblSweepPeriod";
 			this.lblSweepPeriod.Size = new System.Drawing.Size(40, 13);
 			this.lblSweepPeriod.TabIndex = 1;
@@ -314,7 +307,7 @@
 			// txtSweepPeriod
 			// 
 			this.txtSweepPeriod.BackColor = System.Drawing.Color.White;
-			this.txtSweepPeriod.Location = new System.Drawing.Point(49, 49);
+			this.txtSweepPeriod.Location = new System.Drawing.Point(43, 49);
 			this.txtSweepPeriod.Name = "txtSweepPeriod";
 			this.txtSweepPeriod.ReadOnly = true;
 			this.txtSweepPeriod.Size = new System.Drawing.Size(39, 20);
@@ -323,7 +316,7 @@
 			// txtSweepShift
 			// 
 			this.txtSweepShift.BackColor = System.Drawing.Color.White;
-			this.txtSweepShift.Location = new System.Drawing.Point(49, 75);
+			this.txtSweepShift.Location = new System.Drawing.Point(43, 75);
 			this.txtSweepShift.Name = "txtSweepShift";
 			this.txtSweepShift.ReadOnly = true;
 			this.txtSweepShift.Size = new System.Drawing.Size(39, 20);
@@ -344,21 +337,13 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.grpLengthCounter.Controls.Add(this.ctrlLengthCounterInfo);
-			this.grpLengthCounter.Location = new System.Drawing.Point(412, 3);
+			this.grpLengthCounter.Location = new System.Drawing.Point(389, 3);
 			this.grpLengthCounter.Name = "grpLengthCounter";
 			this.tableLayoutPanel1.SetRowSpan(this.grpLengthCounter, 7);
 			this.grpLengthCounter.Size = new System.Drawing.Size(130, 173);
 			this.grpLengthCounter.TabIndex = 10;
 			this.grpLengthCounter.TabStop = false;
 			this.grpLengthCounter.Text = "Length Counter";
-			// 
-			// ctrlLengthCounterInfo
-			// 
-			this.ctrlLengthCounterInfo.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.ctrlLengthCounterInfo.Location = new System.Drawing.Point(3, 16);
-			this.ctrlLengthCounterInfo.Name = "ctrlLengthCounterInfo";
-			this.ctrlLengthCounterInfo.Size = new System.Drawing.Size(124, 154);
-			this.ctrlLengthCounterInfo.TabIndex = 2;
 			// 
 			// lblHz
 			// 
@@ -391,13 +376,30 @@
 			this.txtTimer.Size = new System.Drawing.Size(39, 20);
 			this.txtTimer.TabIndex = 16;
 			// 
+			// ctrlEnvelopeInfo
+			// 
+			this.ctrlEnvelopeInfo.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.ctrlEnvelopeInfo.Location = new System.Drawing.Point(3, 16);
+			this.ctrlEnvelopeInfo.Margin = new System.Windows.Forms.Padding(0);
+			this.ctrlEnvelopeInfo.Name = "ctrlEnvelopeInfo";
+			this.ctrlEnvelopeInfo.Size = new System.Drawing.Size(110, 154);
+			this.ctrlEnvelopeInfo.TabIndex = 1;
+			// 
+			// ctrlLengthCounterInfo
+			// 
+			this.ctrlLengthCounterInfo.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.ctrlLengthCounterInfo.Location = new System.Drawing.Point(3, 16);
+			this.ctrlLengthCounterInfo.Name = "ctrlLengthCounterInfo";
+			this.ctrlLengthCounterInfo.Size = new System.Drawing.Size(124, 154);
+			this.ctrlLengthCounterInfo.TabIndex = 2;
+			// 
 			// ctrlSquareInfo
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.Controls.Add(this.tableLayoutPanel1);
 			this.Name = "ctrlSquareInfo";
-			this.Size = new System.Drawing.Size(546, 180);
+			this.Size = new System.Drawing.Size(526, 180);
 			this.tableLayoutPanel1.ResumeLayout(false);
 			this.tableLayoutPanel1.PerformLayout();
 			this.grpEnvelope.ResumeLayout(false);

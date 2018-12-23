@@ -137,6 +137,8 @@ namespace Mesen.GUI.Config
 		public InteropEmu.InputDisplayPosition DisplayInputPosition = InteropEmu.InputDisplayPosition.BottomRight;
 		public bool DisplayInputHorizontally = true;
 
+		public bool HideMousePointerForZapper = true;
+
 		[XmlElement(ElementName = "InputDevice")]
 		public List<ControllerInfo> Controllers = new List<ControllerInfo>();
 		public ZapperInfo Zapper = new ZapperInfo();

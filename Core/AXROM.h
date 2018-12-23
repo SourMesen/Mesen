@@ -10,8 +10,8 @@ class AXROM : public BaseMapper
 
 		void InitMapper() override 
 		{
-			SelectPRGPage(0, GetPowerOnByte());
 			SelectCHRPage(0, 0);
+			WriteRegister(0, GetPowerOnByte());
 		}
 
 		bool HasBusConflicts() override { return _romInfo.SubMapperID == 2; }

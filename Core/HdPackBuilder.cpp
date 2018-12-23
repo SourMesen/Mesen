@@ -4,6 +4,7 @@
 #include "HdPackBuilder.h"
 #include "HdNesPack.h"
 #include "Console.h"
+#include "ConsolePauseHelper.h"
 
 HdPackBuilder* HdPackBuilder::_instance = nullptr;
 
@@ -76,7 +77,18 @@ void HdPackBuilder::AddTile(HdPackTileInfo *tile, uint32_t usageCount)
 			_blankTilePalette++;
 		}
 	} else {
-		paletteMap[palette][tile->TileIndex % 256] = tile;
+		if(tile->TileIndex >= 0) {
+			paletteMap[palette][tile->TileIndex % 256] = tile;
+		} else {
+			//FIXME: This will result in data loss if more than 256 tiles of the same palette exist in the hires.txt file
+			//Currently this way to prevent issues when loading a CHR RAM HD pack into the recorder (because TileIndex is -1 in that case)
+			for(int i = 0; i < 256; i++) {
+				if(paletteMap[palette][i] == nullptr) {
+					paletteMap[palette][i] = tile;
+					break;
+				}
+			}
+		}
 	}
 
 	_tilesByKey[tile->GetKey(false)] = tile;
@@ -339,6 +351,34 @@ void HdPackBuilder::SaveHdPack()
 		ss << bgInfo.ToString() << std::endl;
 	}
 
+	for(auto &bgmInfo : _hdData.BgmFilesById) {
+		ss << "<bgm>" << std::to_string(bgmInfo.first >> 8) << "," << std::to_string(bgmInfo.first & 0xFF) << "," << VirtualFile(bgmInfo.second).GetFileName() << std::endl;
+	}
+
+	for(auto &sfxInfo : _hdData.SfxFilesById) {
+		ss << "<sfx>" << std::to_string(sfxInfo.first >> 8) << "," << std::to_string(sfxInfo.first & 0xFF) << "," << VirtualFile(sfxInfo.second).GetFileName() << std::endl;
+	}
+
+	for(auto &patchInfo : _hdData.PatchesByHash) {
+		ss << "<patch>" << VirtualFile(patchInfo.second).GetFileName() << "," << patchInfo.first << std::endl;
+	}
+
+	if(_hdData.OptionFlags != 0) {
+		ss << "<options>";
+		if(_hdData.OptionFlags & (int)HdPackOptions::NoSpriteLimit) {
+			ss << "disableSpriteLimit,";
+		}
+		if(_hdData.OptionFlags & (int)HdPackOptions::AlternateRegisterRange) {
+			ss << "alternateRegisterRange,";
+		}
+		if(_hdData.OptionFlags & (int)HdPackOptions::NoContours) {
+			ss << "disableContours,";
+		}
+		if(_hdData.OptionFlags & (int)HdPackOptions::DisableCache) {
+			ss << "disableCache,";
+		}
+	}
+
 	ss << tileRows.str();
 
 	ofstream hiresFile(FolderUtilities::CombinePath(_saveFolder, "hires.txt"), ios::out);
@@ -350,18 +390,17 @@ void HdPackBuilder::SaveHdPack()
 
 void HdPackBuilder::GetChrBankList(uint32_t *banks)
 {
-	_instance->_console->Pause();
+	ConsolePauseHelper helper(_instance->_console.get());
 	for(std::pair<const uint32_t, std::map<uint32_t, vector<HdPackTileInfo*>>> &kvp : _instance->_tilesByChrBankByPalette) {
 		*banks = kvp.first;
 		banks++;
 	}
 	*banks = -1;
-	_instance->_console->Resume();
 }
 
 void HdPackBuilder::GetBankPreview(uint32_t bankNumber, uint32_t pageNumber, uint32_t *rgbBuffer)
 {
-	_instance->_console->Pause();
+	ConsolePauseHelper helper(_instance->_console.get());
 
 	for(uint32_t i = 0; i < 128 * 128 * _instance->_hdData.Scale*_instance->_hdData.Scale; i++) {
 		rgbBuffer[i] = 0xFF666666;
@@ -410,6 +449,4 @@ void HdPackBuilder::GetBankPreview(uint32_t bankNumber, uint32_t pageNumber, uin
 			}
 		}
 	}
-
-	_instance->_console->Resume();
 }

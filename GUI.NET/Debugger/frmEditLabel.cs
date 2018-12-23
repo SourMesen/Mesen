@@ -75,7 +75,7 @@ namespace Mesen.GUI.Debugger
 			}
 
 			return
-				address < maxAddress && 
+				address <= maxAddress && 
 				(sameLabel == null || sameLabel == _originalLabel) 
 				&& (sameAddress == null || sameAddress == _originalLabel)
 				&& (_originalLabel != null || txtLabel.Text.Length > 0 || txtComment.Text.Length > 0)

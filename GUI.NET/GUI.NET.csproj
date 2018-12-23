@@ -279,6 +279,9 @@
     <Compile Include="Controls\ctrlLoadingRom.Designer.cs">
       <DependentUpon>ctrlLoadingRom.cs</DependentUpon>
     </Compile>
+    <Compile Include="Controls\ctrlMesenContextMenuStrip.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Controls\ctrlMesenMenuStrip.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -1227,6 +1230,7 @@
     <Compile Include="RuntimeChecker.cs" />
     <Compile Include="SingleInstance.cs" />
     <Compile Include="TestRunner.cs" />
+    <None Include="Resources\Cut.png" />
     <None Include="Resources\HistoryViewer.png" />
     <None Include="Resources\VsButton4.png" />
     <None Include="Resources\VsButton3.png" />

@@ -246,7 +246,7 @@ namespace Mesen.GUI.Debugger
 
 		protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
 		{
-			_codeViewerActions.UpdateContextMenuItemVisibility();
+			_codeViewerActions.UpdateContextMenuItemVisibility(_codeViewerActions.contextMenu.Items);
 			return base.ProcessCmdKey(ref msg, keyData);
 		}
 		
@@ -260,8 +260,16 @@ namespace Mesen.GUI.Debugger
 			_tooltipManager.Close();
 
 			if(e.Button == MouseButtons.Left && e.Location.X < this.ctrlCodeViewer.CodeMargin / 4) {
-				int relativeAddress = ctrlCodeViewer.GetLineNumberAtPosition(e.Y);
-				AddressTypeInfo info = GetAddressInfo(ctrlCodeViewer.GetLineIndexAtPosition(e.Y));
+				int lineIndex = ctrlCodeViewer.GetLineIndexAtPosition(e.Y);
+				int relativeAddress = ctrlCodeViewer.GetLineNumber(lineIndex);
+				if(relativeAddress < 0 && ctrlCodeViewer.LineCount > lineIndex + 1) {
+					//Current line has no address, try using the next line instead.
+					//(Used when trying to set a breakpoint on a row containing only a label)
+					lineIndex++;
+					relativeAddress = ctrlCodeViewer.GetLineNumber(lineIndex);
+				}
+
+				AddressTypeInfo info = GetAddressInfo(lineIndex);
 				BreakpointManager.ToggleBreakpoint(relativeAddress, info, false);
 			}
 		}

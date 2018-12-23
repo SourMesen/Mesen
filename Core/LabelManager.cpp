@@ -52,7 +52,7 @@ int32_t LabelManager::GetLabelAddress(uint32_t absoluteAddr, AddressType address
 	return absoluteAddr;
 }
 
-int32_t LabelManager::GetLabelAddress(uint16_t relativeAddr, bool checkRegisters)
+int32_t LabelManager::GetLabelAddress(uint16_t relativeAddr)
 {
 	if(relativeAddr < 0x2000) {
 		return relativeAddr | 0x70000000;
@@ -74,11 +74,6 @@ int32_t LabelManager::GetLabelAddress(uint16_t relativeAddr, bool checkRegisters
 			//Save RAM
 			return addr | 0x40000000;
 		}
-
-		//Register
-		if(checkRegisters) {
-			return relativeAddr | 0x30000000;
-		}
 	}
 
 	return -1;
@@ -86,9 +81,18 @@ int32_t LabelManager::GetLabelAddress(uint16_t relativeAddr, bool checkRegisters
 
 string LabelManager::GetLabel(uint16_t relativeAddr, bool checkRegisters)
 {
-	int32_t labelAddr = GetLabelAddress(relativeAddr, checkRegisters);
+	int32_t labelAddr = GetLabelAddress(relativeAddr);
 
 	if(labelAddr >= 0) {
+		auto result = _codeLabels.find(labelAddr);
+		if(result != _codeLabels.end()) {
+			return result->second;
+		}
+	}
+
+	if(checkRegisters) {
+		labelAddr = relativeAddr | 0x30000000;
+
 		auto result = _codeLabels.find(labelAddr);
 		if(result != _codeLabels.end()) {
 			return result->second;
@@ -100,7 +104,7 @@ string LabelManager::GetLabel(uint16_t relativeAddr, bool checkRegisters)
 
 string LabelManager::GetComment(uint16_t relativeAddr)
 {
-	int32_t labelAddr = GetLabelAddress(relativeAddr, false);
+	int32_t labelAddr = GetLabelAddress(relativeAddr);
 
 	if(labelAddr >= 0) {
 		auto result = _codeComments.find(labelAddr);
@@ -114,7 +118,7 @@ string LabelManager::GetComment(uint16_t relativeAddr)
 
 void LabelManager::GetLabelAndComment(uint16_t relativeAddr, string &label, string &comment)
 {
-	int32_t labelAddr = GetLabelAddress(relativeAddr, false);
+	int32_t labelAddr = GetLabelAddress(relativeAddr);
 
 	if(labelAddr >= 0) {
 		auto result = _codeLabels.find(labelAddr);
@@ -164,7 +168,7 @@ int32_t LabelManager::GetLabelRelativeAddress(string &label)
 
 bool LabelManager::HasLabelOrComment(uint16_t relativeAddr)
 {
-	int32_t labelAddr = GetLabelAddress(relativeAddr, true);
+	int32_t labelAddr = GetLabelAddress(relativeAddr);
 
 	if(labelAddr >= 0) {
 		return

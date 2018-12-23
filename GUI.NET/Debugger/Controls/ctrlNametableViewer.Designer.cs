@@ -1,4 +1,6 @@
-﻿namespace Mesen.GUI.Debugger.Controls
+﻿using Mesen.GUI.Controls;
+
+namespace Mesen.GUI.Debugger.Controls
 {
 	partial class ctrlNametableViewer
 	{
@@ -30,12 +32,15 @@
 			this.components = new System.ComponentModel.Container();
 			this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
 			this.picNametable = new System.Windows.Forms.PictureBox();
-			this.ctxMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
+			this.ctxMenu = new ctrlMesenContextMenuStrip(this.components);
+			this.mnuEditInMemoryViewer = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuShowInChrViewer = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
 			this.mnuCopyHdPack = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuCopyNametableHdPack = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripSeparator();
 			this.mnuCopyToClipboard = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuExportToPng = new System.Windows.Forms.ToolStripMenuItem();
 			this.grpTileInfo = new System.Windows.Forms.GroupBox();
 			this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
 			this.txtPpuAddress = new System.Windows.Forms.TextBox();
@@ -111,19 +116,31 @@
 			this.picNametable.TabIndex = 0;
 			this.picNametable.TabStop = false;
 			this.picNametable.DoubleClick += new System.EventHandler(this.picNametable_DoubleClick);
+			this.picNametable.MouseEnter += new System.EventHandler(this.picNametable_MouseEnter);
 			this.picNametable.MouseMove += new System.Windows.Forms.MouseEventHandler(this.picNametable_MouseMove);
 			// 
 			// ctxMenu
 			// 
 			this.ctxMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.mnuEditInMemoryViewer,
             this.mnuShowInChrViewer,
             this.toolStripMenuItem1,
             this.mnuCopyHdPack,
             this.mnuCopyNametableHdPack,
-            this.mnuCopyToClipboard});
+            this.toolStripMenuItem2,
+            this.mnuCopyToClipboard,
+            this.mnuExportToPng});
 			this.ctxMenu.Name = "ctxMenu";
-			this.ctxMenu.Size = new System.Drawing.Size(261, 98);
+			this.ctxMenu.Size = new System.Drawing.Size(261, 148);
 			this.ctxMenu.Opening += new System.ComponentModel.CancelEventHandler(this.ctxMenu_Opening);
+			// 
+			// mnuEditInMemoryViewer
+			// 
+			this.mnuEditInMemoryViewer.Image = global::Mesen.GUI.Properties.Resources.CheatCode;
+			this.mnuEditInMemoryViewer.Name = "mnuEditInMemoryViewer";
+			this.mnuEditInMemoryViewer.Size = new System.Drawing.Size(260, 22);
+			this.mnuEditInMemoryViewer.Text = "Edit in Memory Viewer";
+			this.mnuEditInMemoryViewer.Click += new System.EventHandler(this.mnuEditInMemoryViewer_Click);
 			// 
 			// mnuShowInChrViewer
 			// 
@@ -153,6 +170,11 @@
 			this.mnuCopyNametableHdPack.Text = "Copy Nametable (HD Pack Format)";
 			this.mnuCopyNametableHdPack.Click += new System.EventHandler(this.mnuCopyNametableHdPack_Click);
 			// 
+			// toolStripMenuItem2
+			// 
+			this.toolStripMenuItem2.Name = "toolStripMenuItem2";
+			this.toolStripMenuItem2.Size = new System.Drawing.Size(257, 6);
+			// 
 			// mnuCopyToClipboard
 			// 
 			this.mnuCopyToClipboard.Image = global::Mesen.GUI.Properties.Resources.Copy;
@@ -160,6 +182,14 @@
 			this.mnuCopyToClipboard.Size = new System.Drawing.Size(260, 22);
 			this.mnuCopyToClipboard.Text = "Copy image to clipboard";
 			this.mnuCopyToClipboard.Click += new System.EventHandler(this.mnuCopyToClipboard_Click);
+			// 
+			// mnuExportToPng
+			// 
+			this.mnuExportToPng.Image = global::Mesen.GUI.Properties.Resources.Export;
+			this.mnuExportToPng.Name = "mnuExportToPng";
+			this.mnuExportToPng.Size = new System.Drawing.Size(260, 22);
+			this.mnuExportToPng.Text = "Export image to PNG";
+			this.mnuExportToPng.Click += new System.EventHandler(this.mnuExportToPng_Click);
 			// 
 			// grpTileInfo
 			// 
@@ -584,7 +614,7 @@
 		private System.Windows.Forms.Label lblLocation;
 		private System.Windows.Forms.TextBox txtPpuAddress;
 		private System.Windows.Forms.Label lblPpuAddress;
-		private System.Windows.Forms.ContextMenuStrip ctxMenu;
+		private ctrlMesenContextMenuStrip ctxMenu;
 		private System.Windows.Forms.ToolStripMenuItem mnuCopyHdPack;
 		private ctrlTilePalette ctrlTilePalette;
 		private System.Windows.Forms.CheckBox chkHighlightChrTile;
@@ -598,5 +628,8 @@
 		private System.Windows.Forms.CheckBox chkUseGrayscalePalette;
 		private System.Windows.Forms.CheckBox chkHighlightTileUpdates;
 		private System.Windows.Forms.CheckBox chkHighlightAttributeUpdates;
+		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem2;
+		private System.Windows.Forms.ToolStripMenuItem mnuExportToPng;
+		private System.Windows.Forms.ToolStripMenuItem mnuEditInMemoryViewer;
 	}
 }

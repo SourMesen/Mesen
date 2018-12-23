@@ -69,9 +69,9 @@
 			// tableLayoutPanel1
 			// 
 			this.tableLayoutPanel1.ColumnCount = 4;
-			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 66.66666F));
+			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 65.60197F));
 			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
+			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 34.39803F));
 			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
 			this.tableLayoutPanel1.Controls.Add(this.grpChannelControl, 2, 2);
 			this.tableLayoutPanel1.Controls.Add(this.grpSquare1, 0, 0);
@@ -88,16 +88,16 @@
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel1.Size = new System.Drawing.Size(987, 533);
+			this.tableLayoutPanel1.Size = new System.Drawing.Size(971, 533);
 			this.tableLayoutPanel1.TabIndex = 0;
 			// 
 			// grpChannelControl
 			// 
 			this.grpChannelControl.Controls.Add(this.tableLayoutPanel2);
 			this.grpChannelControl.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.grpChannelControl.Location = new System.Drawing.Point(712, 408);
+			this.grpChannelControl.Location = new System.Drawing.Point(693, 408);
 			this.grpChannelControl.Name = "grpChannelControl";
-			this.grpChannelControl.Size = new System.Drawing.Size(270, 121);
+			this.grpChannelControl.Size = new System.Drawing.Size(274, 121);
 			this.grpChannelControl.TabIndex = 8;
 			this.grpChannelControl.TabStop = false;
 			this.grpChannelControl.Text = "Channel Control (uncheck to mute)";
@@ -105,9 +105,9 @@
 			// tableLayoutPanel2
 			// 
 			this.tableLayoutPanel2.ColumnCount = 3;
-			this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
-			this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33334F));
-			this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33334F));
+			this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 35.84906F));
+			this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 38.49057F));
+			this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25.28302F));
 			this.tableLayoutPanel2.Controls.Add(this.chkFds, 1, 0);
 			this.tableLayoutPanel2.Controls.Add(this.chkSquare1, 0, 0);
 			this.tableLayoutPanel2.Controls.Add(this.chkSquare2, 0, 1);
@@ -128,7 +128,7 @@
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel2.Size = new System.Drawing.Size(264, 102);
+			this.tableLayoutPanel2.Size = new System.Drawing.Size(268, 102);
 			this.tableLayoutPanel2.TabIndex = 0;
 			// 
 			// chkFds
@@ -136,7 +136,7 @@
 			this.chkFds.AutoSize = true;
 			this.chkFds.Checked = true;
 			this.chkFds.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.chkFds.Location = new System.Drawing.Point(90, 0);
+			this.chkFds.Location = new System.Drawing.Point(99, 0);
 			this.chkFds.Margin = new System.Windows.Forms.Padding(3, 0, 3, 3);
 			this.chkFds.Name = "chkFds";
 			this.chkFds.Size = new System.Drawing.Size(47, 17);
@@ -206,7 +206,7 @@
 			this.chkMmc5.AutoSize = true;
 			this.chkMmc5.Checked = true;
 			this.chkMmc5.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.chkMmc5.Location = new System.Drawing.Point(90, 20);
+			this.chkMmc5.Location = new System.Drawing.Point(99, 20);
 			this.chkMmc5.Margin = new System.Windows.Forms.Padding(3, 0, 3, 3);
 			this.chkMmc5.Name = "chkMmc5";
 			this.chkMmc5.Size = new System.Drawing.Size(57, 17);
@@ -220,12 +220,12 @@
 			this.chkNamco.AutoSize = true;
 			this.chkNamco.Checked = true;
 			this.chkNamco.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.chkNamco.Location = new System.Drawing.Point(90, 40);
+			this.chkNamco.Location = new System.Drawing.Point(99, 40);
 			this.chkNamco.Margin = new System.Windows.Forms.Padding(3, 0, 3, 3);
 			this.chkNamco.Name = "chkNamco";
-			this.chkNamco.Size = new System.Drawing.Size(60, 17);
+			this.chkNamco.Size = new System.Drawing.Size(89, 17);
 			this.chkNamco.TabIndex = 6;
-			this.chkNamco.Text = "Namco";
+			this.chkNamco.Text = "Namco N163";
 			this.chkNamco.UseVisualStyleBackColor = true;
 			this.chkNamco.CheckedChanged += new System.EventHandler(this.chkSoundChannel_CheckedChanged);
 			// 
@@ -234,7 +234,7 @@
 			this.chkVrc7.AutoSize = true;
 			this.chkVrc7.Checked = true;
 			this.chkVrc7.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.chkVrc7.Location = new System.Drawing.Point(178, 20);
+			this.chkVrc7.Location = new System.Drawing.Point(202, 20);
 			this.chkVrc7.Margin = new System.Windows.Forms.Padding(3, 0, 3, 3);
 			this.chkVrc7.Name = "chkVrc7";
 			this.chkVrc7.Size = new System.Drawing.Size(54, 17);
@@ -262,12 +262,12 @@
 			this.chkSunsoft.AutoSize = true;
 			this.chkSunsoft.Checked = true;
 			this.chkSunsoft.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.chkSunsoft.Location = new System.Drawing.Point(90, 60);
+			this.chkSunsoft.Location = new System.Drawing.Point(99, 60);
 			this.chkSunsoft.Margin = new System.Windows.Forms.Padding(3, 0, 3, 3);
 			this.chkSunsoft.Name = "chkSunsoft";
-			this.chkSunsoft.Size = new System.Drawing.Size(62, 17);
+			this.chkSunsoft.Size = new System.Drawing.Size(78, 17);
 			this.chkSunsoft.TabIndex = 10;
-			this.chkSunsoft.Text = "Sunsoft";
+			this.chkSunsoft.Text = "Sunsoft 5B";
 			this.chkSunsoft.UseVisualStyleBackColor = true;
 			this.chkSunsoft.CheckedChanged += new System.EventHandler(this.chkSoundChannel_CheckedChanged);
 			// 
@@ -276,7 +276,7 @@
 			this.chkVrc6.AutoSize = true;
 			this.chkVrc6.Checked = true;
 			this.chkVrc6.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.chkVrc6.Location = new System.Drawing.Point(178, 0);
+			this.chkVrc6.Location = new System.Drawing.Point(202, 0);
 			this.chkVrc6.Margin = new System.Windows.Forms.Padding(3, 0, 3, 3);
 			this.chkVrc6.Name = "chkVrc6";
 			this.chkVrc6.Size = new System.Drawing.Size(54, 17);
@@ -291,7 +291,7 @@
 			this.grpSquare1.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.grpSquare1.Location = new System.Drawing.Point(3, 3);
 			this.grpSquare1.Name = "grpSquare1";
-			this.grpSquare1.Size = new System.Drawing.Size(547, 196);
+			this.grpSquare1.Size = new System.Drawing.Size(528, 196);
 			this.grpSquare1.TabIndex = 3;
 			this.grpSquare1.TabStop = false;
 			this.grpSquare1.Text = "Square 1";
@@ -301,7 +301,7 @@
 			this.ctrlSquareInfo1.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.ctrlSquareInfo1.Location = new System.Drawing.Point(3, 16);
 			this.ctrlSquareInfo1.Name = "ctrlSquareInfo1";
-			this.ctrlSquareInfo1.Size = new System.Drawing.Size(541, 177);
+			this.ctrlSquareInfo1.Size = new System.Drawing.Size(522, 177);
 			this.ctrlSquareInfo1.TabIndex = 1;
 			// 
 			// grpSquare2
@@ -310,7 +310,7 @@
 			this.grpSquare2.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.grpSquare2.Location = new System.Drawing.Point(3, 205);
 			this.grpSquare2.Name = "grpSquare2";
-			this.grpSquare2.Size = new System.Drawing.Size(547, 197);
+			this.grpSquare2.Size = new System.Drawing.Size(528, 197);
 			this.grpSquare2.TabIndex = 2;
 			this.grpSquare2.TabStop = false;
 			this.grpSquare2.Text = "Square 2";
@@ -320,7 +320,7 @@
 			this.ctrlSquareInfo2.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.ctrlSquareInfo2.Location = new System.Drawing.Point(3, 16);
 			this.ctrlSquareInfo2.Name = "ctrlSquareInfo2";
-			this.ctrlSquareInfo2.Size = new System.Drawing.Size(541, 178);
+			this.ctrlSquareInfo2.Size = new System.Drawing.Size(522, 178);
 			this.ctrlSquareInfo2.TabIndex = 1;
 			// 
 			// grpTriangle
@@ -328,9 +328,9 @@
 			this.tableLayoutPanel1.SetColumnSpan(this.grpTriangle, 2);
 			this.grpTriangle.Controls.Add(this.ctrlTriangleInfo);
 			this.grpTriangle.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.grpTriangle.Location = new System.Drawing.Point(556, 3);
+			this.grpTriangle.Location = new System.Drawing.Point(537, 3);
 			this.grpTriangle.Name = "grpTriangle";
-			this.grpTriangle.Size = new System.Drawing.Size(426, 196);
+			this.grpTriangle.Size = new System.Drawing.Size(430, 196);
 			this.grpTriangle.TabIndex = 4;
 			this.grpTriangle.TabStop = false;
 			this.grpTriangle.Text = "Triangle";
@@ -340,7 +340,7 @@
 			this.ctrlTriangleInfo.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.ctrlTriangleInfo.Location = new System.Drawing.Point(3, 16);
 			this.ctrlTriangleInfo.Name = "ctrlTriangleInfo";
-			this.ctrlTriangleInfo.Size = new System.Drawing.Size(420, 177);
+			this.ctrlTriangleInfo.Size = new System.Drawing.Size(424, 177);
 			this.ctrlTriangleInfo.TabIndex = 0;
 			// 
 			// grpNoise
@@ -348,9 +348,9 @@
 			this.tableLayoutPanel1.SetColumnSpan(this.grpNoise, 2);
 			this.grpNoise.Controls.Add(this.ctrlNoiseInfo);
 			this.grpNoise.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.grpNoise.Location = new System.Drawing.Point(556, 205);
+			this.grpNoise.Location = new System.Drawing.Point(537, 205);
 			this.grpNoise.Name = "grpNoise";
-			this.grpNoise.Size = new System.Drawing.Size(426, 197);
+			this.grpNoise.Size = new System.Drawing.Size(430, 197);
 			this.grpNoise.TabIndex = 5;
 			this.grpNoise.TabStop = false;
 			this.grpNoise.Text = "Noise";
@@ -360,7 +360,7 @@
 			this.ctrlNoiseInfo.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.ctrlNoiseInfo.Location = new System.Drawing.Point(3, 16);
 			this.ctrlNoiseInfo.Name = "ctrlNoiseInfo";
-			this.ctrlNoiseInfo.Size = new System.Drawing.Size(420, 178);
+			this.ctrlNoiseInfo.Size = new System.Drawing.Size(424, 178);
 			this.ctrlNoiseInfo.TabIndex = 0;
 			// 
 			// grpDmc
@@ -369,7 +369,7 @@
 			this.grpDmc.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.grpDmc.Location = new System.Drawing.Point(3, 408);
 			this.grpDmc.Name = "grpDmc";
-			this.grpDmc.Size = new System.Drawing.Size(547, 121);
+			this.grpDmc.Size = new System.Drawing.Size(528, 121);
 			this.grpDmc.TabIndex = 6;
 			this.grpDmc.TabStop = false;
 			this.grpDmc.Text = "DMC";
@@ -379,14 +379,14 @@
 			this.ctrlDmcInfo.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.ctrlDmcInfo.Location = new System.Drawing.Point(3, 16);
 			this.ctrlDmcInfo.Name = "ctrlDmcInfo";
-			this.ctrlDmcInfo.Size = new System.Drawing.Size(541, 102);
+			this.ctrlDmcInfo.Size = new System.Drawing.Size(522, 102);
 			this.ctrlDmcInfo.TabIndex = 0;
 			// 
 			// grpFrameCounter
 			// 
 			this.grpFrameCounter.Controls.Add(this.ctrlFrameCounterInfo);
 			this.grpFrameCounter.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.grpFrameCounter.Location = new System.Drawing.Point(556, 408);
+			this.grpFrameCounter.Location = new System.Drawing.Point(537, 408);
 			this.grpFrameCounter.Name = "grpFrameCounter";
 			this.grpFrameCounter.Size = new System.Drawing.Size(150, 121);
 			this.grpFrameCounter.TabIndex = 7;
@@ -410,11 +410,10 @@
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(987, 533);
+			this.ClientSize = new System.Drawing.Size(971, 533);
 			this.Controls.Add(this.tableLayoutPanel1);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
 			this.MaximizeBox = false;
-			this.MinimizeBox = false;
 			this.Name = "frmApuViewer";
 			this.Text = "APU Viewer";
 			this.tableLayoutPanel1.ResumeLayout(false);

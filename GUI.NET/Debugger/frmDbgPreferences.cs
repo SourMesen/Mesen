@@ -36,6 +36,8 @@ namespace Mesen.GUI.Debugger
 				GetMember(nameof(DebuggerShortcutsConfig.MarkAsCode)),
 				GetMember(nameof(DebuggerShortcutsConfig.MarkAsData)),
 				GetMember(nameof(DebuggerShortcutsConfig.MarkAsUnidentified)),
+				GetMember(nameof(DebuggerShortcutsConfig.CodeWindow_EditInMemoryViewer)),
+				GetMember(nameof(DebuggerShortcutsConfig.MemoryViewer_ViewInDisassembly)),
 
 				GetMember(nameof(DebuggerShortcutsConfig.OpenApuViewer)),
 				GetMember(nameof(DebuggerShortcutsConfig.OpenAssembler)),
@@ -57,8 +59,7 @@ namespace Mesen.GUI.Debugger
 				GetMember(nameof(DebuggerShortcutsConfig.MemoryViewer_Import)),
 				GetMember(nameof(DebuggerShortcutsConfig.MemoryViewer_Export)),
 				GetMember(nameof(DebuggerShortcutsConfig.MemoryViewer_ViewInCpuMemory)),
-				GetMember(nameof(DebuggerShortcutsConfig.MemoryViewer_ViewInMemoryType)),
-				GetMember(nameof(DebuggerShortcutsConfig.MemoryViewer_ViewInDisassembly))
+				GetMember(nameof(DebuggerShortcutsConfig.MemoryViewer_ViewInMemoryType))
 			};
 
 			ctrlDbgShortcutsScriptWindow.Shortcuts = new FieldInfo[] {
@@ -88,7 +89,6 @@ namespace Mesen.GUI.Debugger
 				GetMember(nameof(DebuggerShortcutsConfig.CodeWindow_SetNextStatement)),
 				GetMember(nameof(DebuggerShortcutsConfig.CodeWindow_EditSubroutine)),
 				GetMember(nameof(DebuggerShortcutsConfig.CodeWindow_EditSelectedCode)),
-				GetMember(nameof(DebuggerShortcutsConfig.CodeWindow_EditInMemoryViewer)),
 				GetMember(nameof(DebuggerShortcutsConfig.CodeWindow_EditLabel)),
 				GetMember(nameof(DebuggerShortcutsConfig.CodeWindow_NavigateBack)),
 				GetMember(nameof(DebuggerShortcutsConfig.CodeWindow_NavigateForward)),

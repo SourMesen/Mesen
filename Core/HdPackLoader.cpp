@@ -298,7 +298,11 @@ void HdPackLoader::ProcessTileTag(vector<string> &tokens, vector<HdPackCondition
 			tileInfo->IsChrRamTile = true;
 			tileInfo->TileIndex = -1;
 		} else {
-			tileInfo->TileIndex = std::stoi(tileData);
+			if(_data->Version <= 102) {
+				tileInfo->TileIndex = std::stoi(tileData);
+			} else {
+				tileInfo->TileIndex = HexUtilities::FromHex(tileData);
+			}
 			tileInfo->IsChrRamTile = false;
 		}
 		tileInfo->PaletteColors = HexUtilities::FromHex(tokens[index++]);
@@ -429,7 +433,12 @@ void HdPackLoader::ProcessConditionTag(vector<string> &tokens, bool createInvert
 		if(token.size() == 32) {
 			tileData = token;
 		} else {
-			tileIndex = std::stoi(token);
+			if(_data->Version < 104) {
+				tileIndex = std::stoi(token);
+			} else {
+				//Tile indexes are stored as hex starting from version 104+
+				tileIndex = HexUtilities::FromHex(token);
+			}
 		}
 		uint32_t palette = HexUtilities::FromHex(tokens[index++]);
 
@@ -467,6 +476,11 @@ void HdPackLoader::ProcessConditionTag(vector<string> &tokens, bool createInvert
 		}
 
 		uint32_t operandB = HexUtilities::FromHex(tokens[index++]);
+		uint32_t mask = 0xFF;
+		if(tokens.size() > 5 && _data->Version >= 103) {
+			checkConstraint(operandB <= 0xFF, "[HDPack] Out of range memoryCheck mask");
+			mask = HexUtilities::FromHex(tokens[index++]);
+		}
 
 		if(dynamic_cast<HdPackMemoryCheckCondition*>(condition.get())) {
 			if(usePpuMemory) {
@@ -480,7 +494,7 @@ void HdPackLoader::ProcessConditionTag(vector<string> &tokens, bool createInvert
 			checkConstraint(operandB <= 0xFF, "[HDPack] Out of range memoryCheckConstant operand");
 		}
 		_data->WatchedMemoryAddresses.emplace(operandA);
-		((HdPackBaseMemoryCondition*)condition.get())->Initialize(operandA, op, operandB);
+		((HdPackBaseMemoryCondition*)condition.get())->Initialize(operandA, op, operandB, (uint8_t)mask);
 	} else if(dynamic_cast<HdPackFrameRangeCondition*>(condition.get())) {
 		checkConstraint(_data->Version >= 101, "[HDPack] This feature requires version 101+ of HD Packs");
 		checkConstraint(tokens.size() >= 4, "[HDPack] Condition tag should contain at least 4 parameters");

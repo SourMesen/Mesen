@@ -14,6 +14,7 @@ namespace Mesen.GUI.Debugger
 		public AddressType AddressType;
 		public string Label;
 		public string Comment;
+		public CodeLabelFlags Flags;
 
 		public override string ToString()
 		{
@@ -80,7 +81,7 @@ namespace Mesen.GUI.Debugger
 		public static void SetLabels(IEnumerable<CodeLabel> labels, bool raiseEvents = true)
 		{
 			foreach(CodeLabel label in labels) {
-				SetLabel(label.Address, label.AddressType, label.Label, label.Comment, false);
+				SetLabel(label.Address, label.AddressType, label.Label, label.Comment, false, label.Flags);
 			}
 			if(raiseEvents) {
 				OnLabelUpdated?.Invoke(null, null);
@@ -97,7 +98,7 @@ namespace Mesen.GUI.Debugger
 			return address.ToString() + addressType.ToString();
 		}
 
-		public static bool SetLabel(UInt32 address, AddressType type, string label, string comment, bool raiseEvent = true)
+		public static bool SetLabel(UInt32 address, AddressType type, string label, string comment, bool raiseEvent = true, CodeLabelFlags flags = CodeLabelFlags.None)
 		{
 			if(_reverseLookup.ContainsKey(label)) {
 				//Another identical label exists, we need to remove it
@@ -110,7 +111,7 @@ namespace Mesen.GUI.Debugger
 				_reverseLookup.Remove(_labels[key].Label);
 			}
 
-			_labels[key] = new CodeLabel() { Address = address, AddressType = type, Label = label, Comment = comment };
+			_labels[key] = new CodeLabel() { Address = address, AddressType = type, Label = label, Comment = comment, Flags = flags };
 			if(label.Length > 0) {
 				_reverseLookup[label] = _labels[key];
 			}
@@ -134,6 +135,20 @@ namespace Mesen.GUI.Debugger
 				if(raiseEvent) {
 					OnLabelUpdated?.Invoke(null, null);
 				}
+			}
+		}
+
+		public static void CreateAutomaticJumpLabels()
+		{
+			bool[] jumpTargets = InteropEmu.DebugGetJumpTargets();
+			List<CodeLabel> labelsToAdd = new List<CodeLabel>();
+			for(int i = 0; i < jumpTargets.Length; i++) {
+				if(jumpTargets[i] && LabelManager.GetLabel((uint)i, AddressType.PrgRom) == null) {
+					labelsToAdd.Add(new CodeLabel() { Flags = CodeLabelFlags.AutoJumpLabel, Address = (uint)i, AddressType = AddressType.PrgRom, Label = "L" + i.ToString("X4"), Comment = "" });
+				}
+			}
+			if(labelsToAdd.Count > 0) {
+				LabelManager.SetLabels(labelsToAdd, true);
 			}
 		}
 
@@ -257,5 +272,12 @@ namespace Mesen.GUI.Debugger
 				LabelManager.SetLabel(0x0C22, AddressType.PrgRom, "unk_EC22", "Some kind of logic that some games use. (detail is under analysis)", false);
 			}
 		}
+	}
+
+	[Flags]
+	public enum CodeLabelFlags
+	{
+		None = 0,
+		AutoJumpLabel = 1
 	}
 }

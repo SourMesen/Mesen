@@ -33,9 +33,9 @@ DisassemblyInfo::DisassemblyInfo()
 {
 }
 
-DisassemblyInfo::DisassemblyInfo(uint8_t* opPointer, bool isSubEntryPoint)
+DisassemblyInfo::DisassemblyInfo(uint8_t* opPointer, bool isSubEntryPoint, bool isJumpTarget)
 {
-	Initialize(opPointer, isSubEntryPoint);
+	Initialize(opPointer, isSubEntryPoint, isJumpTarget);
 }
 
 void DisassemblyInfo::ToString(string &out, uint32_t memoryAddr, MemoryManager* memoryManager, LabelManager* labelManager, bool extendZeroPage)
@@ -148,9 +148,10 @@ uint16_t DisassemblyInfo::GetOpAddr(uint16_t memoryAddr)
 	return opAddr;
 }
 
-void DisassemblyInfo::Initialize(uint8_t* opPointer, bool isSubEntryPoint)
+void DisassemblyInfo::Initialize(uint8_t* opPointer, bool isSubEntryPoint, bool isJumpTarget)
 {
 	_isSubEntryPoint = isSubEntryPoint;
+	_isJumpTarget = isJumpTarget;
 
 	uint8_t opCode = *opPointer;
 	_opSize = DisassemblyInfo::OPSize[opCode];
@@ -166,6 +167,11 @@ void DisassemblyInfo::Initialize(uint8_t* opPointer, bool isSubEntryPoint)
 void DisassemblyInfo::SetSubEntryPoint()
 {
 	_isSubEntryPoint = true;
+}
+
+void DisassemblyInfo::SetJumpTarget()
+{
+	_isJumpTarget = true;
 }
 
 int32_t DisassemblyInfo::GetMemoryValue(State& cpuState, MemoryManager* memoryManager)
@@ -300,4 +306,9 @@ bool DisassemblyInfo::IsSubEntryPoint()
 bool DisassemblyInfo::IsSubExitPoint()
 {
 	return _isSubExitPoint;
+}
+
+bool DisassemblyInfo::IsJumpTarget()
+{
+	return _isJumpTarget;
 }

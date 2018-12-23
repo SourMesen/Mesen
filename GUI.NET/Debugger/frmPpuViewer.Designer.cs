@@ -166,7 +166,7 @@ namespace Mesen.GUI.Debugger
 			this.tpgChrViewer.Controls.Add(this.ctrlChrViewer);
 			this.tpgChrViewer.Location = new System.Drawing.Point(4, 22);
 			this.tpgChrViewer.Name = "tpgChrViewer";
-			this.tpgChrViewer.Size = new System.Drawing.Size(701, 525);
+			this.tpgChrViewer.Size = new System.Drawing.Size(701, 527);
 			this.tpgChrViewer.TabIndex = 1;
 			this.tpgChrViewer.Text = "CHR Viewer";
 			this.tpgChrViewer.UseVisualStyleBackColor = true;
@@ -177,7 +177,7 @@ namespace Mesen.GUI.Debugger
 			this.ctrlChrViewer.Location = new System.Drawing.Point(0, 0);
 			this.ctrlChrViewer.Margin = new System.Windows.Forms.Padding(0);
 			this.ctrlChrViewer.Name = "ctrlChrViewer";
-			this.ctrlChrViewer.Size = new System.Drawing.Size(701, 525);
+			this.ctrlChrViewer.Size = new System.Drawing.Size(701, 527);
 			this.ctrlChrViewer.TabIndex = 2;
 			// 
 			// tpgSpriteViewer
@@ -185,7 +185,7 @@ namespace Mesen.GUI.Debugger
 			this.tpgSpriteViewer.Controls.Add(this.ctrlSpriteViewer);
 			this.tpgSpriteViewer.Location = new System.Drawing.Point(4, 22);
 			this.tpgSpriteViewer.Name = "tpgSpriteViewer";
-			this.tpgSpriteViewer.Size = new System.Drawing.Size(701, 525);
+			this.tpgSpriteViewer.Size = new System.Drawing.Size(701, 527);
 			this.tpgSpriteViewer.TabIndex = 2;
 			this.tpgSpriteViewer.Text = "Sprite Viewer";
 			this.tpgSpriteViewer.UseVisualStyleBackColor = true;
@@ -195,7 +195,7 @@ namespace Mesen.GUI.Debugger
 			this.ctrlSpriteViewer.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.ctrlSpriteViewer.Location = new System.Drawing.Point(0, 0);
 			this.ctrlSpriteViewer.Name = "ctrlSpriteViewer";
-			this.ctrlSpriteViewer.Size = new System.Drawing.Size(701, 525);
+			this.ctrlSpriteViewer.Size = new System.Drawing.Size(701, 527);
 			this.ctrlSpriteViewer.TabIndex = 0;
 			this.ctrlSpriteViewer.OnSelectTilePalette += new Mesen.GUI.Debugger.Controls.ctrlSpriteViewer.SelectTilePaletteHandler(this.ctrlSpriteViewer_OnSelectTilePalette);
 			// 
@@ -204,7 +204,7 @@ namespace Mesen.GUI.Debugger
 			this.tpgPaletteViewer.Controls.Add(this.ctrlPaletteViewer);
 			this.tpgPaletteViewer.Location = new System.Drawing.Point(4, 22);
 			this.tpgPaletteViewer.Name = "tpgPaletteViewer";
-			this.tpgPaletteViewer.Size = new System.Drawing.Size(701, 525);
+			this.tpgPaletteViewer.Size = new System.Drawing.Size(701, 527);
 			this.tpgPaletteViewer.TabIndex = 3;
 			this.tpgPaletteViewer.Text = "Palette Viewer";
 			this.tpgPaletteViewer.UseVisualStyleBackColor = true;
@@ -214,7 +214,7 @@ namespace Mesen.GUI.Debugger
 			this.ctrlPaletteViewer.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.ctrlPaletteViewer.Location = new System.Drawing.Point(0, 0);
 			this.ctrlPaletteViewer.Name = "ctrlPaletteViewer";
-			this.ctrlPaletteViewer.Size = new System.Drawing.Size(701, 525);
+			this.ctrlPaletteViewer.Size = new System.Drawing.Size(701, 527);
 			this.ctrlPaletteViewer.TabIndex = 0;
 			// 
 			// ctrlScanlineCycle
@@ -236,7 +236,6 @@ namespace Mesen.GUI.Debugger
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
 			this.MainMenuStrip = this.menuStrip1;
 			this.MaximizeBox = false;
-			this.MinimizeBox = false;
 			this.MinimumSize = new System.Drawing.Size(725, 644);
 			this.Name = "frmPpuViewer";
 			this.Text = "PPU Viewer";

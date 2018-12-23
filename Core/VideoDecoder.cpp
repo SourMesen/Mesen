@@ -232,7 +232,7 @@ bool VideoDecoder::IsRunning()
 void VideoDecoder::TakeScreenshot()
 {
 	if(_videoFilter) {
-		_videoFilter->TakeScreenshot(_console->GetRomPath(), _videoFilterType);
+		_videoFilter->TakeScreenshot(_console->GetRomPath().GetFileName(), _videoFilterType);
 	}
 }
 
