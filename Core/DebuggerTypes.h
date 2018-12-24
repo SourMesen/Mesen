@@ -36,6 +36,8 @@ enum class DebuggerFlags
 	BreakOnDecayedOamRead = 0x2000,
 	BreakOnInit = 0x4000,
 	BreakOnPlay = 0x8000,
+
+	BreakOnFirstCycle = 0x10000,
 };
 
 enum class BreakSource
@@ -117,6 +119,8 @@ struct PPUDebugState
 	uint32_t NmiScanline;
 	uint32_t ScanlineCount;
 	uint32_t SafeOamScanline;
+	uint16_t BusAddress;
+	uint8_t MemoryReadBuffer;
 };
 
 struct DebugState

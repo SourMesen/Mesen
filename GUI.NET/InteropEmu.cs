@@ -1322,6 +1322,8 @@ namespace Mesen.GUI
 		public UInt32 NmiScanline;
 		public UInt32 ScanlineCount;
 		public UInt32 SafeOamScanline;
+		public UInt16 BusAddress;
+		public byte MemoryReadBuffer;
 	}
 
 	public struct PPUState
@@ -1690,6 +1692,8 @@ namespace Mesen.GUI
 		BreakOnDecayedOamRead = 0x2000,
 		BreakOnInit = 0x4000,
 		BreakOnPlay = 0x8000,
+
+		BreakOnFirstCycle = 0x10000,
 	}
 
 	public struct InteropRomInfo

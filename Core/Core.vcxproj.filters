@@ -1471,6 +1471,9 @@
     <ClInclude Include="ConsolePauseHelper.h">
       <Filter>Misc</Filter>
     </ClInclude>
+    <ClInclude Include="DummyCpu.h">
+      <Filter>Debugger</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">

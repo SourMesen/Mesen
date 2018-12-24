@@ -533,6 +533,7 @@
     <ClInclude Include="Dance2000.h" />
     <ClInclude Include="DragonFighter.h" />
     <ClInclude Include="DrawScreenBufferCommand.h" />
+    <ClInclude Include="DummyCpu.h" />
     <ClInclude Include="FaridSlrom.h" />
     <ClInclude Include="FaridUnrom.h" />
     <ClInclude Include="FdsSystemActionManager.h" />

@@ -29,6 +29,7 @@
 #include "CodeDataLogger.h"
 #include "NotificationManager.h"
 #include "DebugHud.h"
+#include "DummyCpu.h"
 
 const int Debugger::BreakpointTypeCount;
 string Debugger::_disassemblerOutput = "";
@@ -41,6 +42,9 @@ Debugger::Debugger(shared_ptr<Console> console, shared_ptr<CPU> cpu, shared_ptr<
 	_apu = apu;
 	_memoryManager = memoryManager;
 	_mapper = mapper;
+
+	_dummyCpu.reset(new DummyCpu(console));
+	_breakOnFirstCycle = false;
 
 	_labelManager.reset(new LabelManager(_mapper));
 	_assembler.reset(new Assembler(_labelManager));
@@ -177,6 +181,7 @@ void Debugger::SetFlags(uint32_t flags)
 {
 	bool needUpdate = ((flags ^ _flags) & (int)DebuggerFlags::DisplayOpCodesInLowerCase) != 0;
 	_flags = flags;
+	_breakOnFirstCycle = CheckFlag(DebuggerFlags::BreakOnFirstCycle);
 	if(needUpdate) {
 		_disassembler->BuildOpCodeTables(CheckFlag(DebuggerFlags::DisplayOpCodesInLowerCase));
 	}
@@ -298,11 +303,11 @@ void Debugger::SetBreakpoints(Breakpoint breakpoints[], uint32_t length)
 	}
 }
 
-void Debugger::ProcessBreakpoints(BreakpointType type, OperationInfo &operationInfo, bool allowBreak)
+bool Debugger::ProcessBreakpoints(BreakpointType type, OperationInfo &operationInfo, bool allowBreak, bool allowMark)
 {
 	if(_runToCycle != 0) {
 		//Disable all breakpoints while stepping backwards
-		return;
+		return false;
 	}
 
 	AddressTypeInfo info { -1, AddressType::InternalRam };
@@ -347,6 +352,11 @@ void Debugger::ProcessBreakpoints(BreakpointType type, OperationInfo &operationI
 
 	for(size_t i = 0, len = breakpoints.size(); i < len; i++) {
 		Breakpoint &breakpoint = breakpoints[i];
+		if(!((breakpoint.IsEnabled() && allowBreak) || (breakpoint.IsMarked() && allowMark))) {
+			//Skip breakpoints we don't need to process
+			continue;
+		}
+
 		if(
 			type == BreakpointType::Global ||
 			(!isPpuBreakpoint && breakpoint.Matches(operationInfo.Address, info, operationInfo.OperationType)) ||
@@ -365,20 +375,117 @@ void Debugger::ProcessBreakpoints(BreakpointType type, OperationInfo &operationI
 			}
 		}
 
-		if(needMark && needBreak) {
+		if((needMark || !allowMark) && (needBreak || !allowBreak)) {
 			//No need to process remaining breakpoints
 			break;
 		}
 	}
 
-	if(needMark) {
+	if(needMark && allowMark) {
 		AddDebugEvent(DebugEventType::Breakpoint, operationInfo.Address, (uint8_t)operationInfo.Value, markBreakpointId);
 	}
 
 	if(needBreak && allowBreak) {
 		//Found a matching breakpoint, stop execution
 		Step(1);
-		SleepUntilResume(BreakSource::Breakpoint, breakpointId, type, operationInfo.Address);
+		SleepUntilResume(BreakSource::Breakpoint, breakpointId, type, operationInfo.Address, operationInfo.OperationType);
+		return true;
+	} else {
+		return false;
+	}
+}
+
+void Debugger::ProcessAllBreakpoints(OperationInfo &operationInfo, AddressTypeInfo &addressInfo)
+{
+	if(_hasBreakpoint[BreakpointType::Execute]) {
+		ProcessBreakpoints(BreakpointType::Execute, operationInfo, true, true);
+	}
+
+	_dummyCpu->SetDummyState(_cpu.get());
+	_dummyCpu->Exec();
+
+	DebugState &state = _debugState;
+	uint32_t readCount = _dummyCpu->GetReadCount();
+	if(readCount > 0) {
+		uint16_t addr;
+		bool isDummyRead;
+		for(uint32_t i = 0; i < readCount; i++) {
+			_dummyCpu->GetReadAddr(i, addr, isDummyRead);
+
+			OperationInfo info;
+
+			if(addr >= 0x2000 && addr < 0x4000 && (addr & 0x07) == 0x07) {
+				//Reads to $2007 will trigger a PPU read
+				if(_hasBreakpoint[BreakpointType::ReadVram]) {
+					OperationInfo ppuInfo;
+					ppuInfo.OperationType = MemoryOperationType::Read;
+					if((state.PPU.State.VideoRamAddr & 0x3FFF) >= 0x3F00) {
+						ppuInfo.Address = state.PPU.State.VideoRamAddr;
+						ppuInfo.Value = _ppu->ReadPaletteRAM(ppuInfo.Address);
+					} else {
+						ppuInfo.Address = state.PPU.BusAddress;
+						ppuInfo.Value = _mapper->DebugReadVRAM(ppuInfo.Address);
+					}
+					if(ProcessBreakpoints(BreakpointType::ReadVram, ppuInfo, true, false)) {
+						return;
+					}
+				}
+
+				info.Value = state.PPU.MemoryReadBuffer;
+			} else {
+				if(_enableBreakOnUninitRead && CheckFlag(DebuggerFlags::BreakOnUninitMemoryRead)) {
+					//Break on uninit memory read
+					if(_memoryAccessCounter->IsAddressUninitialized(addressInfo)) {
+						Step(1);
+						SleepUntilResume(BreakSource::BreakOnUninitMemoryRead, 0, BreakpointType::ReadRam, addr);
+						return;
+					}
+				}
+
+				info.Value = _memoryManager->DebugRead(addr);
+			}
+
+			if(_hasBreakpoint[BreakpointType::ReadRam]) {
+				info.Address = addr;
+				info.OperationType = isDummyRead ? MemoryOperationType::DummyRead : MemoryOperationType::Read;
+				if(ProcessBreakpoints(BreakpointType::ReadRam, info, true, false)) {
+					return;
+				}
+			}
+		}
+	}
+	
+	uint32_t writeCount = _dummyCpu->GetWriteCount();
+	if(writeCount > 0 && (_hasBreakpoint[BreakpointType::WriteRam] || _hasBreakpoint[BreakpointType::WriteVram])) {
+		uint16_t addr;
+		uint8_t value;
+		bool isDummyWrite;
+		for(uint32_t i = 0; i < writeCount; i++) {
+			_dummyCpu->GetWriteAddrValue(i, addr, value, isDummyWrite);
+
+			if(_hasBreakpoint[BreakpointType::WriteRam]) {
+				OperationInfo info;
+				info.Address = addr;
+				info.Value = value;
+				info.OperationType = isDummyWrite ? MemoryOperationType::DummyWrite : MemoryOperationType::Write;
+				if(ProcessBreakpoints(BreakpointType::WriteRam, info, true, false)) {
+					return;
+				}
+			}
+
+			if(_hasBreakpoint[BreakpointType::WriteVram]) {
+				if(addr >= 0x2000 && addr < 0x4000 && (addr & 0x07) == 0x07) {
+					//Write to $2007 will trigger a PPU write
+					OperationInfo ppuInfo;
+					ppuInfo.Address = state.PPU.BusAddress;
+					ppuInfo.Value = value;
+					ppuInfo.OperationType = MemoryOperationType::Write;
+					if(ProcessBreakpoints(BreakpointType::WriteVram, ppuInfo, true, false)) {
+						return;
+					}
+				}
+			}
+		}
 	}
 }
 
@@ -592,7 +699,7 @@ bool Debugger::ProcessRamOperation(MemoryOperationType type, uint16_t &addr, uin
 			}
 		} else {
 			if(_memoryAccessCounter->ProcessMemoryAccess(addressInfo, type, _cpu->GetCycleCount())) {
-				if(_enableBreakOnUninitRead && CheckFlag(DebuggerFlags::BreakOnUninitMemoryRead)) {
+				if(!_breakOnFirstCycle && _enableBreakOnUninitRead && CheckFlag(DebuggerFlags::BreakOnUninitMemoryRead)) {
 					//Break on uninit memory read
 					Step(1);
 					breakDone = SleepUntilResume(BreakSource::BreakOnUninitMemoryRead);
@@ -683,7 +790,7 @@ bool Debugger::ProcessRamOperation(MemoryOperationType type, uint16_t &addr, uin
 	BreakpointType breakpointType;
 	switch(type) {
 		default: breakpointType = BreakpointType::Execute; break;
-	
+
 		case MemoryOperationType::DummyRead:
 		case MemoryOperationType::Read: breakpointType = BreakpointType::ReadRam; break;
 
@@ -691,8 +798,17 @@ bool Debugger::ProcessRamOperation(MemoryOperationType type, uint16_t &addr, uin
 		case MemoryOperationType::Write: breakpointType = BreakpointType::WriteRam; break;
 	}
 
-	if(_hasBreakpoint[breakpointType]) {
-		ProcessBreakpoints(breakpointType, operationInfo, !breakDone);
+	if(_breakOnFirstCycle) {
+		if(type == MemoryOperationType::ExecOpCode && !breakDone) {
+			ProcessAllBreakpoints(operationInfo, addressInfo);
+		}
+
+		//Process marked breakpoints
+		ProcessBreakpoints(breakpointType, operationInfo, false, true);
+	} else {
+		if(_hasBreakpoint[breakpointType]) {
+			ProcessBreakpoints(breakpointType, operationInfo, !breakDone, true);
+		}
 	}
 
 	_currentReadAddr = nullptr;
@@ -726,7 +842,7 @@ bool Debugger::ProcessRamOperation(MemoryOperationType type, uint16_t &addr, uin
 	return true;
 }
 
-bool Debugger::SleepUntilResume(BreakSource source, uint32_t breakpointId, BreakpointType bpType, uint16_t bpAddress)
+bool Debugger::SleepUntilResume(BreakSource source, uint32_t breakpointId, BreakpointType bpType, uint16_t bpAddress, MemoryOperationType bpMemOpType)
 {
 	int32_t stepCount = _stepCount.load();
 	if(stepCount > 0) {
@@ -753,7 +869,14 @@ bool Debugger::SleepUntilResume(BreakSource source, uint32_t breakpointId, Break
 			}
 			_breakSource = BreakSource::Unspecified;
 
-			uint64_t param = ((uint64_t)breakpointId << 32) | ((uint64_t)(bpAddress & 0xFFFF) << 16) | ((uint64_t)(bpType & 0xFF) << 8) | ((uint64_t)source & 0xFF);
+			uint64_t param = (
+				((uint64_t)breakpointId << 32) | 
+				((uint64_t)(bpAddress & 0xFFFF) << 16) | 
+				((uint64_t)((int)bpMemOpType & 0x0F) << 12) |
+				((uint64_t)(bpType & 0x0F) << 8) |
+				((uint64_t)source & 0xFF)
+			);
+
 			_console->GetNotificationManager()->SendNotification(ConsoleNotificationType::CodeBreak, (void*)(uint64_t)param);
 
 			ProcessEvent(EventType::CodeBreak);
@@ -784,7 +907,7 @@ void Debugger::ProcessVramReadOperation(MemoryOperationType type, uint16_t addr,
 	int32_t absoluteAddr = _mapper->ToAbsoluteChrAddress(addr);
 	_codeDataLogger->SetFlag(absoluteAddr, type == MemoryOperationType::Read ? CdlChrFlags::Read : CdlChrFlags::Drawn);
 
-	if(_hasBreakpoint[BreakpointType::ReadVram]) {
+	if(!_breakOnFirstCycle && _hasBreakpoint[BreakpointType::ReadVram]) {
 		OperationInfo operationInfo{ addr, value, type };
 		ProcessBreakpoints(BreakpointType::ReadVram, operationInfo);
 	}
@@ -794,7 +917,7 @@ void Debugger::ProcessVramReadOperation(MemoryOperationType type, uint16_t addr,
 
 void Debugger::ProcessVramWriteOperation(uint16_t addr, uint8_t &value)
 {
-	if(_hasBreakpoint[BreakpointType::WriteVram]) {
+	if(!_breakOnFirstCycle && _hasBreakpoint[BreakpointType::WriteVram]) {
 		OperationInfo operationInfo{ addr, value, MemoryOperationType::Write };
 		ProcessBreakpoints(BreakpointType::WriteVram, operationInfo);
 	}

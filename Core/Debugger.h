@@ -29,6 +29,7 @@ class TraceLogger;
 class Breakpoint;
 class CodeDataLogger;
 class ExpressionEvaluator;
+class DummyCpu;
 struct ExpressionData;
 
 enum EvalResultType : int32_t;
@@ -58,6 +59,9 @@ private:
 	shared_ptr<APU> _apu;
 	shared_ptr<MemoryManager> _memoryManager;
 	shared_ptr<BaseMapper> _mapper;
+	
+	shared_ptr<DummyCpu> _dummyCpu;
+	bool _breakOnFirstCycle;
 
 	bool _hasScript;
 	SimpleLock _scriptLock;
@@ -138,13 +142,14 @@ private:
 	vector<vector<int>> _debugEventMarkerRpn;
 
 private:
-	void ProcessBreakpoints(BreakpointType type, OperationInfo &operationInfo, bool allowBreak = true);
+	bool ProcessBreakpoints(BreakpointType type, OperationInfo &operationInfo, bool allowBreak = true, bool allowMark = true);
+	void ProcessAllBreakpoints(OperationInfo &operationInfo, AddressTypeInfo &addressInfo);
 	
 	void AddCallstackFrame(uint16_t source, uint16_t target, StackFrameFlags flags);
 	void UpdateCallstack(uint8_t currentInstruction, uint32_t addr);
 
 	void ProcessStepConditions(uint16_t addr);
-	bool SleepUntilResume(BreakSource source, uint32_t breakpointId = 0, BreakpointType bpType = BreakpointType::Global, uint16_t bpAddress = 0);
+	bool SleepUntilResume(BreakSource source, uint32_t breakpointId = 0, BreakpointType bpType = BreakpointType::Global, uint16_t bpAddress = 0, MemoryOperationType bpMemOpType = MemoryOperationType::Read);
 
 	void AddDebugEvent(DebugEventType type, uint16_t address = -1, uint8_t value = 0, int16_t breakpointId = -1, int8_t ppuLatch = -1);
 

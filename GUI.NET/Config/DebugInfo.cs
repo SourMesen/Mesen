@@ -301,6 +301,7 @@ namespace Mesen.GUI.Config
 		public bool BreakOnUninitMemoryRead = false;
 		public bool BreakOnInit = true;
 		public bool BreakOnPlay = false;
+		public bool BreakOnFirstCycle = true;
 
 		public bool BringToFrontOnPause = false;
 		public bool BringToFrontOnBreak = true;

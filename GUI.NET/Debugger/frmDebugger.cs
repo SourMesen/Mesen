@@ -102,6 +102,7 @@ namespace Mesen.GUI.Debugger
 			this.mnuShowPpuMemoryMapping.Checked = ConfigManager.Config.DebugInfo.ShowPpuMemoryMapping;
 			this.mnuAutoLoadDbgFiles.Checked = ConfigManager.Config.DebugInfo.AutoLoadDbgFiles;
 			this.mnuAutoLoadCdlFiles.Checked = ConfigManager.Config.DebugInfo.AutoLoadCdlFiles;
+			this.mnuEnableSubInstructionBreakpoints.Checked = !ConfigManager.Config.DebugInfo.BreakOnFirstCycle;
 			this.mnuBreakOnReset.Checked = ConfigManager.Config.DebugInfo.BreakOnReset;
 			this.mnuBreakOnInit.Checked = ConfigManager.Config.DebugInfo.BreakOnInit;
 			this.mnuBreakOnPlay.Checked = ConfigManager.Config.DebugInfo.BreakOnPlay;
@@ -484,6 +485,7 @@ namespace Mesen.GUI.Debugger
 			SetFlag(DebuggerFlags.BreakOnDecayedOamRead, config.BreakOnDecayedOamRead);
 			SetFlag(DebuggerFlags.BreakOnInit, config.BreakOnInit);
 			SetFlag(DebuggerFlags.BreakOnPlay, config.BreakOnPlay);
+			SetFlag(DebuggerFlags.BreakOnFirstCycle, config.BreakOnFirstCycle);
 			SetFlag(DebuggerFlags.HidePauseIcon, config.HidePauseIcon);
 			InteropEmu.SetFlag(EmulationFlags.DebuggerWindowEnabled, true);
 		}
@@ -497,7 +499,8 @@ namespace Mesen.GUI.Debugger
 				message = ResourceHelper.GetEnumText(source);
 				if(source == BreakSource.Breakpoint) {
 					int breakpointId = (int)(param >> 32);
-					BreakpointType bpType = (BreakpointType)(byte)(param >> 8);
+					BreakpointType bpType = (BreakpointType)(byte)((param >> 8) & 0x0F);
+					InteropMemoryOperationType memOpType = (InteropMemoryOperationType)(byte)((param >> 12) & 0x0F);
 					UInt16 bpAddress = (UInt16)(param >> 16);
 
 					ReadOnlyCollection<Breakpoint> breakpoints = BreakpointManager.Breakpoints;
@@ -506,9 +509,7 @@ namespace Mesen.GUI.Debugger
 						if(bpType != BreakpointType.Global) {
 							string prefix = "";
 							if(bpType == BreakpointType.ReadRam || bpType == BreakpointType.WriteRam) {
-								InstructionProgress progress = new InstructionProgress();
-								InteropEmu.DebugGetInstructionProgress(ref progress);
-								if(progress.OpMemoryOperationType == InteropMemoryOperationType.DummyRead || progress.OpMemoryOperationType == InteropMemoryOperationType.DummyWrite) {
+								if(memOpType == InteropMemoryOperationType.DummyRead || memOpType == InteropMemoryOperationType.DummyWrite) {
 									prefix = "(Dummy) ";
 								}
 							}
@@ -523,6 +524,9 @@ namespace Mesen.GUI.Debugger
 							}
 						}
 					}
+				} else if(source == BreakSource.BreakOnUninitMemoryRead) {
+					UInt16 address = (UInt16)(param >> 16);
+					message += " ($" + address.ToString("X4") + ")";
 				} else if(source == BreakSource.CpuStep || source == BreakSource.PpuStep) {
 					//Don't display anything when breaking due to stepping
 					message = null;
@@ -1188,6 +1192,13 @@ namespace Mesen.GUI.Debugger
 		{
 			ConfigManager.Config.DebugInfo.OnlyShowTooltipsOnShift = mnuOnlyShowTooltipOnShift.Checked;
 			ConfigManager.ApplyChanges();
+		}
+		
+		private void mnuBreakOnFirstCycle_Click(object sender, EventArgs e)
+		{
+			ConfigManager.Config.DebugInfo.BreakOnFirstCycle = !mnuEnableSubInstructionBreakpoints.Checked;
+			ConfigManager.ApplyChanges();
+			UpdateDebuggerFlags();
 		}
 
 		private void mnuBreakOnReset_Click(object sender, EventArgs e)

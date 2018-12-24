@@ -1,6 +1,21 @@
 #pragma once
 #include "stdafx.h"
 
+namespace PSFlags
+{
+	enum PSFlags : uint8_t
+	{
+		Carry = 0x01,
+		Zero = 0x02,
+		Interrupt = 0x04,
+		Decimal = 0x08,
+		Break = 0x10,
+		Reserved = 0x20,
+		Overflow = 0x40,
+		Negative = 0x80
+	};
+}
+
 enum class AddrMode
 {
 	None, Acc, Imp, Imm, Rel,

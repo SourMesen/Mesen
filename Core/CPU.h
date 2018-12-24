@@ -1,4 +1,9 @@
-#pragma once
+#if (defined(DUMMYCPU) && !defined(__DUMMYCPU__H)) || (!defined(DUMMYCPU) && !defined(__CPU__H))
+#ifdef DUMMYCPU
+#define __DUMMYCPU__H
+#else
+#define __CPU__H
+#endif
 
 #include "stdafx.h"
 #include "Snapshotable.h"
@@ -7,24 +12,12 @@
 enum class NesModel;
 class Console;
 class MemoryManager;
-
-namespace PSFlags
-{
-	enum PSFlags : uint8_t
-	{
-		Carry = 0x01,
-		Zero = 0x02,
-		Interrupt = 0x04,
-		Decimal = 0x08,
-		Break = 0x10,
-		Reserved = 0x20,
-		Overflow = 0x40,
-		Negative = 0x80
-	};
-}
+class DummyCpu;
 
 class CPU : public Snapshotable
 {
+	friend DummyCpu;
+
 public:
 	static constexpr uint16_t NMIVector = 0xFFFA;
 	static constexpr uint16_t ResetVector = 0xFFFC;
@@ -61,6 +54,17 @@ private:
 	bool _runIrq = false;
 
 	bool _warnOnCrash = true;
+
+#ifdef DUMMYCPU
+	uint32_t _writeCounter = 0;
+	uint16_t _writeAddresses[10];
+	uint8_t _writeValue[10];
+	bool _isDummyWrite[10];
+
+	uint32_t _readCounter = 0;
+	uint16_t _readAddresses[10];
+	bool _isDummyRead[10];
+#endif
 
 	void IncCycleCount();
 	uint16_t FetchOperand();
@@ -818,4 +822,53 @@ public:
 		state.PC = originalPc;
 		state.DebugPC = originalDebugPc;
 	}
+
+#ifdef DUMMYCPU
+#undef CPU
+	void SetDummyState(CPU *c)
+	{
+#define CPU DummyCpu
+		_writeCounter = 0;
+		_readCounter = 0;
+
+		_state = c->_state;
+
+		_cycleCount = c->_cycleCount;
+		_operand = c->_operand;
+		_spriteDmaCounter = c->_spriteDmaCounter;
+		_spriteDmaTransfer = c->_spriteDmaTransfer;
+		_dmcCounter = c->_dmcCounter;
+		_dmcDmaRunning = c->_dmcDmaRunning;
+		_cpuWrite = c->_cpuWrite;
+		_irqMask = c->_irqMask;
+		_prevRunIrq = c->_prevRunIrq;
+		_runIrq = c->_runIrq;
+		_cycleCount = c->_cycleCount;
+	}
+
+	uint32_t GetWriteCount()
+	{
+		return _writeCounter;
+	}
+
+	uint32_t GetReadCount()
+	{
+		return _readCounter;
+	}
+
+	void GetWriteAddrValue(uint32_t index, uint16_t &addr, uint8_t &value, bool &isDummyWrite)
+	{
+		addr = _writeAddresses[index];
+		value = _writeValue[index];
+		isDummyWrite = _isDummyWrite[index];
+	}
+
+	void GetReadAddr(uint32_t index, uint16_t &addr, bool &isDummyRead)
+	{
+		addr = _readAddresses[index];
+		isDummyRead = _isDummyRead[index];
+	}
+#endif
 };
+
+#endif
