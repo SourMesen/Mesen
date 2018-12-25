@@ -398,7 +398,6 @@ namespace Mesen.GUI.Debugger.Controls
 
 			public LineProperties GetLineStyle(int cpuAddress, int lineIndex)
 			{
-				DebugInfo info = ConfigManager.Config.DebugInfo;
 				LineProperties props = new LineProperties();
 
 				int nextLineIndex = lineIndex + 1;

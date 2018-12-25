@@ -128,7 +128,6 @@ void CPU::Exec()
 
 void CPU::IRQ() 
 {
-	uint16_t originalPc = PC();
 	DummyRead();  //fetch opcode (and discard it - $00 (BRK) is forced into the opcode register instead)
 	DummyRead();  //read next instruction byte (actually the same as above, since PC increment is suppressed. Also discarded.)
 	Push((uint16_t)(PC()));
@@ -137,6 +136,7 @@ void CPU::IRQ()
 		Push((uint8_t)(PS() | PSFlags::Reserved));
 		SetFlags(PSFlags::Interrupt);
 
+		uint16_t originalPc = PC();
 		SetPC(MemoryReadWord(CPU::NMIVector));
 		_state.NMIFlag = false;
 
@@ -147,6 +147,8 @@ void CPU::IRQ()
 	} else {
 		Push((uint8_t)(PS() | PSFlags::Reserved));
 		SetFlags(PSFlags::Interrupt);
+
+		uint16_t originalPc = PC();
 		SetPC(MemoryReadWord(CPU::IRQVector));
 
 		#ifndef DUMMYCPU

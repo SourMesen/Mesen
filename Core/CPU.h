@@ -16,7 +16,9 @@ class DummyCpu;
 
 class CPU : public Snapshotable
 {
+#ifndef DUMMYCPU
 	friend DummyCpu;
+#endif
 
 public:
 	static constexpr uint16_t NMIVector = 0xFFFA;

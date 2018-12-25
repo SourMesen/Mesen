@@ -501,7 +501,6 @@ namespace Mesen.GUI.Debugger
 					int breakpointId = (int)(param >> 40);
 					byte bpValue = (byte)((param >> 32) & 0xFF);
 					BreakpointType bpType = (BreakpointType)(byte)((param >> 8) & 0x0F);
-					InteropMemoryOperationType memOpType = (InteropMemoryOperationType)(byte)((param >> 12) & 0x0F);
 					UInt16 bpAddress = (UInt16)(param >> 16);
 
 					ReadOnlyCollection<Breakpoint> breakpoints = BreakpointManager.Breakpoints;
