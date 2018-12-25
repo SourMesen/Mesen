@@ -220,7 +220,7 @@
 			<Control ID="chkDisplayPort4">玩家 4</Control>
 			<Control ID="lblDisplayPosition">显示位置:</Control>
 			<Control ID="chkDisplayInputHorizontally">横向</Control>
-			<Control ID="chkHideMousePointerForZapper">Hide mouse pointer when using zapper</Control>
+			<Control ID="chkHideMousePointerForZapper">使用手枪时隐藏鼠标指针</Control>
 
 			<Control ID="lblKeyBinding">警告：您当前的配置包含冲突的键绑定 - 键盘或游戏手柄上的某些物理按钮映射到NES控制器上的多个按钮.如果这不是故意的，请查看并更正您的按键绑定.</Control>
 		</Form>
@@ -753,6 +753,11 @@
 		<Message ID="MouseModeEnabled">启用鼠标模式 - 按 ESC 或 pause 来释放光标.</Message>
 		<Message ID="BandaiMicrophone">Bandai 麦克风</Message>
 		<Message ID="DatachBarcodeReader">附加条码机</Message>
+
+		<Message ID="HelpFullscreen">/fullscreen - 全屏模式启动 Mesen</Message>
+		<Message ID="HelpDoNotSaveSettings">/DoNotSaveSettings - 阻止命令行的选项替代 Mesen 原本的设置 (防止命令行选项成为默认设置).</Message>
+		<Message ID="HelpRecordMovie">/RecordMovie="filename.mmo" - /RecordMovie="filename.mmo" - 载入指定游戏后开始录制电影。</Message>
+		<Message ID="HelpLoadLastSession">/LoadLastSession - 从上次中断的位置继续。</Message>
 
 		<Message ID="HelpFullscreen">/fullscreen - 全屏模式启动 Mesen</Message>
 		<Message ID="HelpDoNotSaveSettings">/DoNotSaveSettings - 阻止命令行的选项替代 Mesen 原本的设置 (防止命令行选项成为默认设置).</Message>
