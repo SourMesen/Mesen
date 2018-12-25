@@ -18,6 +18,11 @@ public:
 		return _lastReadValue;
 	}
 
+	uint8_t PeekRAM(uint16_t addr) override
+	{
+		return addr >> 8; //Fake open bus for debugger
+	}
+
 	__forceinline uint8_t GetOpenBus()
 	{
 		return _lastReadValue;

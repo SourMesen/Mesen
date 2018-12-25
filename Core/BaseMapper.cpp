@@ -855,6 +855,11 @@ uint8_t BaseMapper::ReadRAM(uint16_t addr)
 	return _console->GetMemoryManager()->GetOpenBus();
 }
 
+uint8_t BaseMapper::PeekRAM(uint16_t addr)
+{
+	return DebugReadRAM(addr);
+}
+
 uint8_t BaseMapper::DebugReadRAM(uint16_t addr)
 {
 	if(_prgPageAccessType[addr >> 8] & MemoryAccessType::Read) {

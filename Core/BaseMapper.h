@@ -176,6 +176,7 @@ public:
 	RomInfo GetRomInfo();
 
 	__forceinline uint8_t ReadRAM(uint16_t addr) override;
+	uint8_t PeekRAM(uint16_t addr) override;
 	uint8_t DebugReadRAM(uint16_t addr);
 	virtual void WriteRAM(uint16_t addr, uint8_t value) override;
 	void DebugWriteRAM(uint16_t addr, uint8_t value);

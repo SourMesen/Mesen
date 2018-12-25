@@ -100,10 +100,7 @@ uint8_t MemoryManager::DebugRead(uint16_t addr, bool disableSideEffects)
 		IMemoryHandler* handler = _ramReadHandlers[addr];
 		if(handler) {
 			if(disableSideEffects) {
-				if(handler == _mapper.get()) {
-					//Only allow reads from prg/chr ram/rom (e.g not ppu, apu, mapper registers, etc.)
-					value = ((BaseMapper*)handler)->DebugReadRAM(addr);
-				}
+				value = handler->PeekRAM(addr);
 			} else {
 				value = handler->ReadRAM(addr);
 			}

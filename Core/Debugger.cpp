@@ -436,13 +436,8 @@ void Debugger::ProcessAllBreakpoints(OperationInfo &operationInfo, AddressTypeIn
 				if(_hasBreakpoint[BreakpointType::ReadVram]) {
 					OperationInfo ppuInfo;
 					ppuInfo.OperationType = MemoryOperationType::Read;
-					if((state.PPU.State.VideoRamAddr & 0x3FFF) >= 0x3F00) {
-						ppuInfo.Address = state.PPU.State.VideoRamAddr;
-						ppuInfo.Value = _ppu->ReadPaletteRAM(ppuInfo.Address);
-					} else {
-						ppuInfo.Address = state.PPU.BusAddress;
-						ppuInfo.Value = _mapper->DebugReadVRAM(ppuInfo.Address);
-					}
+					ppuInfo.Address = state.PPU.BusAddress;
+					ppuInfo.Value = _ppu->PeekRAM(addr);
 					if(ProcessBreakpoints(BreakpointType::ReadVram, ppuInfo, true, false)) {
 						return;
 					}

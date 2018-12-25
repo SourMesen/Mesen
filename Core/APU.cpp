@@ -78,7 +78,7 @@ void APU::FrameCounterTick(FrameType type)
 	}
 }
 
-uint8_t APU::ReadRAM(uint16_t addr)
+uint8_t APU::GetStatus()
 {
 	//$4015 read
 	Run();
@@ -92,10 +92,22 @@ uint8_t APU::ReadRAM(uint16_t addr)
 	status |= _console->GetCpu()->HasIrqSource(IRQSource::FrameCounter) ? 0x40 : 0x00;
 	status |= _console->GetCpu()->HasIrqSource(IRQSource::DMC) ? 0x80 : 0x00;
 
+	return status;
+}
+
+uint8_t APU::ReadRAM(uint16_t addr)
+{
+	uint8_t status = GetStatus();
+
 	//Reading $4015 clears the Frame Counter interrupt flag.
 	_console->GetCpu()->ClearIrqSource(IRQSource::FrameCounter);
 
 	return status;
+}
+
+uint8_t APU::PeekRAM(uint16_t addr)
+{
+	return GetStatus();
 }
 
 void APU::WriteRAM(uint16_t addr, uint8_t value)
