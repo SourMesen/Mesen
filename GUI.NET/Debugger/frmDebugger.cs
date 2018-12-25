@@ -507,13 +507,7 @@ namespace Mesen.GUI.Debugger
 					if(breakpointId >= 0 && breakpointId < breakpoints.Count) {
 						Breakpoint bp = breakpoints[breakpointId];
 						if(bpType != BreakpointType.Global) {
-							string prefix = "";
-							if(bpType == BreakpointType.ReadRam || bpType == BreakpointType.WriteRam) {
-								if(memOpType == InteropMemoryOperationType.DummyRead || memOpType == InteropMemoryOperationType.DummyWrite) {
-									prefix = "(Dummy) ";
-								}
-							}
-							message += ": " + prefix + ResourceHelper.GetEnumText(bpType) + " ($" + bpAddress.ToString("X4") + ")";
+							message += ": " + ResourceHelper.GetEnumText(bpType) + " ($" + bpAddress.ToString("X4") + ")";
 						}
 						if(!string.IsNullOrWhiteSpace(bp.Condition)) {
 							string cond = bp.Condition.Trim();

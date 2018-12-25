@@ -63,6 +63,7 @@ private:
 
 	uint32_t _readCounter = 0;
 	uint16_t _readAddresses[10];
+	uint8_t _readValue[10];
 	bool _isDummyRead[10];
 #endif
 
@@ -863,9 +864,10 @@ public:
 		isDummyWrite = _isDummyWrite[index];
 	}
 
-	void GetReadAddr(uint32_t index, uint16_t &addr, bool &isDummyRead)
+	void GetReadAddr(uint32_t index, uint16_t &addr, uint8_t &value, bool &isDummyRead)
 	{
 		addr = _readAddresses[index];
+		value = _readValue[index];
 		isDummyRead = _isDummyRead[index];
 	}
 #endif

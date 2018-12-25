@@ -1194,6 +1194,8 @@
 			<Value ID="WriteRam">CPU Write</Value>
 			<Value ID="ReadVram">PPU Read</Value>
 			<Value ID="WriteVram">PPU Write</Value>
+			<Value ID="DummyReadRam">(Dummy) CPU Read</Value>
+			<Value ID="DummyWriteRam">(Dummy) CPU Write</Value>
 		</Enum>
 		<Enum ID="BreakSource">
 			<Value ID="Breakpoint">Breakpoint</Value>

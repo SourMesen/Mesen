@@ -56,6 +56,7 @@ extern "C" {
 	void __stdcall Release();
 	void __stdcall Stop();
 	void __stdcall DebugInitialize();
+	void __stdcall DebugSetFlags(uint32_t flags);
 }
 
 vector<string> GetFilesInFolder(string rootFolder, std::unordered_set<string> extensions)
@@ -104,6 +105,7 @@ int main(int argc, char* argv[])
 			SetVideoFilter(filterTypes[i % 13]);
 			LoadROM(testRoms[i].c_str(), "");
 			DebugInitialize();
+			DebugSetFlags(0x10000 /*DebuggerFlags::BreakOnFirstCycle*/);
 		}
 		std::this_thread::sleep_for(std::chrono::duration<int, std::milli>(5000));
 		Stop();

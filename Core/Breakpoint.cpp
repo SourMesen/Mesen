@@ -10,12 +10,8 @@ Breakpoint::~Breakpoint()
 {
 }
 
-bool Breakpoint::Matches(uint32_t memoryAddr, AddressTypeInfo &info, MemoryOperationType opType)
+bool Breakpoint::Matches(uint32_t memoryAddr, AddressTypeInfo &info)
 {
-	if(!_processDummyReadWrites && (opType == MemoryOperationType::DummyRead || opType == MemoryOperationType::DummyWrite)) {
-		return false;
-	}
-
 	if(_startAddr == -1) {
 		return true;
 	}
@@ -72,11 +68,13 @@ bool Breakpoint::HasBreakpointType(BreakpointType type)
 {
 	switch(type) {
 		case BreakpointType::Global: return (_type == BreakpointTypeFlags::Global);
-		case BreakpointType::Execute: return (_type & BreakpointTypeFlags::Execute) == BreakpointTypeFlags::Execute;
-		case BreakpointType::ReadRam: return (_type & BreakpointTypeFlags::ReadRam) == BreakpointTypeFlags::ReadRam;
-		case BreakpointType::WriteRam: return (_type & BreakpointTypeFlags::WriteRam) == BreakpointTypeFlags::WriteRam;
-		case BreakpointType::ReadVram: return (_type & BreakpointTypeFlags::ReadVram) == BreakpointTypeFlags::ReadVram;
-		case BreakpointType::WriteVram: return (_type & BreakpointTypeFlags::WriteVram) == BreakpointTypeFlags::WriteVram;
+		case BreakpointType::Execute: return (_type & BreakpointTypeFlags::Execute) != 0;
+		case BreakpointType::ReadRam: return (_type & BreakpointTypeFlags::ReadRam) != 0;
+		case BreakpointType::WriteRam: return (_type & BreakpointTypeFlags::WriteRam) != 0;
+		case BreakpointType::ReadVram: return (_type & BreakpointTypeFlags::ReadVram) != 0;
+		case BreakpointType::WriteVram: return (_type & BreakpointTypeFlags::WriteVram) != 0;
+		case BreakpointType::DummyReadRam: return (_type & BreakpointTypeFlags::ReadRam) != 0 && _processDummyReadWrites;
+		case BreakpointType::DummyWriteRam: return (_type & BreakpointTypeFlags::WriteRam) != 0 && _processDummyReadWrites;
 	}
 	return false;
 }

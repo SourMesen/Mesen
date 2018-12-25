@@ -2113,6 +2113,8 @@ namespace Mesen.GUI
 		WriteRam = 3,
 		ReadVram = 4,
 		WriteVram = 5,
+		DummyReadRam = 6,
+		DummyWriteRam = 7
 	}
 
 	[Flags]

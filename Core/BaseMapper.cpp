@@ -1058,6 +1058,29 @@ void BaseMapper::SetMemoryValue(DebugMemoryType memoryType, uint32_t address, ui
 	}
 }
 
+void BaseMapper::GetAbsoluteAddressAndType(uint32_t relativeAddr, AddressTypeInfo* info)
+{
+	if(relativeAddr < 0x2000) {
+		info->Address = relativeAddr;
+		info->Type = AddressType::InternalRam;
+	} else {
+		uint8_t *prgAddr = _prgPages[relativeAddr >> 8] + (uint8_t)relativeAddr;
+		if(prgAddr >= _prgRom && prgAddr < _prgRom + _prgSize) {
+			info->Address = (uint32_t)(prgAddr - _prgRom);
+			info->Type = AddressType::PrgRom;
+		} else if(prgAddr >= _workRam && prgAddr < _workRam + _workRamSize) {
+			info->Address = (uint32_t)(prgAddr - _workRam);
+			info->Type = AddressType::WorkRam;
+		} else if(prgAddr >= _saveRam && prgAddr < _saveRam + _saveRamSize) {
+			info->Address = (uint32_t)(prgAddr - _saveRam);
+			info->Type = AddressType::SaveRam;
+		} else {
+			info->Address = -1;
+			info->Type = AddressType::InternalRam;
+		}
+	}
+}
+
 int32_t BaseMapper::ToAbsoluteAddress(uint16_t addr)
 {
 	uint8_t *prgAddr = _prgPages[addr >> 8] + (uint8_t)addr;

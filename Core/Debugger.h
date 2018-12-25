@@ -38,7 +38,7 @@ enum class CdlStripFlag;
 class Debugger
 {
 private:
-	static constexpr int BreakpointTypeCount = 6;
+	static constexpr int BreakpointTypeCount = 8;
 
 	//Must be static to be thread-safe when switching game
 	static string _disassemblerOutput;
@@ -61,6 +61,7 @@ private:
 	shared_ptr<BaseMapper> _mapper;
 	
 	shared_ptr<DummyCpu> _dummyCpu;
+	bool _bpDummyCpuRequired;
 	bool _breakOnFirstCycle;
 
 	bool _hasScript;
@@ -168,6 +169,8 @@ public:
 	bool CheckFlag(DebuggerFlags flag);
 	
 	void SetBreakpoints(Breakpoint breakpoints[], uint32_t length);
+
+	void ProcessMarkedBreakpoints(BreakpointType type, OperationInfo &operationInfo);
 	
 	shared_ptr<LabelManager> GetLabelManager();
 

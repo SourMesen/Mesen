@@ -186,13 +186,6 @@ void CPU::BRK() {
 
 void CPU::MemoryWrite(uint16_t addr, uint8_t value, MemoryOperationType operationType)
 {
-	_cpuWrite = true;;
-	_writeAddr = addr;
-	IncCycleCount();
-	while(_dmcDmaRunning) {
-		IncCycleCount();
-	}
-
 #ifdef DUMMYCPU
 	if(operationType == MemoryOperationType::Write || operationType == MemoryOperationType::DummyWrite) {
 		_writeAddresses[_writeCounter] = addr;
@@ -201,17 +194,34 @@ void CPU::MemoryWrite(uint16_t addr, uint8_t value, MemoryOperationType operatio
 		_writeCounter++;
 	}
 #else
+	_cpuWrite = true;;
+	_writeAddr = addr;
+	IncCycleCount();
+	while(_dmcDmaRunning) {
+		IncCycleCount();
+	}
+
 	_memoryManager->Write(addr, value, operationType);
-#endif
 
 	//DMA DMC might have started after a write to $4015, stall CPU if needed
 	while(_dmcDmaRunning) {
 		IncCycleCount();
 	}
 	_cpuWrite = false;
+#endif
 }
 
 uint8_t CPU::MemoryRead(uint16_t addr, MemoryOperationType operationType) {
+#ifdef DUMMYCPU
+	uint8_t value = _memoryManager->DebugRead(addr);
+	if(operationType == MemoryOperationType::Read || operationType == MemoryOperationType::DummyRead) {
+		_readAddresses[_readCounter] = addr;
+		_readValue[_readCounter] = value;
+		_isDummyRead[_readCounter] = operationType == MemoryOperationType::DummyRead;
+		_readCounter++;
+	}
+	return value;
+#else 
 	IncCycleCount();
 	while(_dmcDmaRunning) {
 		//Stall CPU until we can process a DMC read
@@ -220,24 +230,11 @@ uint8_t CPU::MemoryRead(uint16_t addr, MemoryOperationType operationType) {
 			//Reads are only performed every other cycle? This fixes "dma_2007_read" test
 			//This behavior causes the $4016/7 data corruption when a DMC is running.
 			//When reading $4016/7, only the last read counts (because this only occurs to low-to-high transitions, i.e once in this case)
-			#ifdef DUMMYCPU
-			_memoryManager->DebugRead(addr);
-			#else
 			_memoryManager->Read(addr);
-			#endif
 		}
 		IncCycleCount();
 	}
 
-#ifdef DUMMYCPU
-	if(operationType == MemoryOperationType::Read || operationType == MemoryOperationType::DummyRead) {
-		_readAddresses[_readCounter] = addr;
-		_isDummyRead[_readCounter] = operationType == MemoryOperationType::DummyRead;
-		_readCounter++;
-	}
-
-	return _memoryManager->DebugRead(addr);
-#else 
 	if(operationType == MemoryOperationType::ExecOpCode) {
 		_state.DebugPC = _state.PC;
 	}
@@ -310,9 +307,7 @@ void CPU::IncCycleCount()
 		}
 	}
 
-	#ifndef DUMMYCPU
 	_console->ProcessCpuClock();
-	#endif
 
 	if(!_spriteDmaTransfer && !_dmcDmaRunning) {
 		//IRQ flags are ignored during Sprite DMA - fixes irq_and_dma
