@@ -150,7 +150,7 @@ private:
 	void UpdateCallstack(uint8_t currentInstruction, uint32_t addr);
 
 	void ProcessStepConditions(uint16_t addr);
-	bool SleepUntilResume(BreakSource source, uint32_t breakpointId = 0, BreakpointType bpType = BreakpointType::Global, uint16_t bpAddress = 0, MemoryOperationType bpMemOpType = MemoryOperationType::Read);
+	bool SleepUntilResume(BreakSource source, uint32_t breakpointId = 0, BreakpointType bpType = BreakpointType::Global, uint16_t bpAddress = 0, uint8_t bpValue = 0, MemoryOperationType bpMemOpType = MemoryOperationType::Read);
 
 	void AddDebugEvent(DebugEventType type, uint16_t address = -1, uint8_t value = 0, int16_t breakpointId = -1, int8_t ppuLatch = -1);
 

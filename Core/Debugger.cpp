@@ -397,7 +397,7 @@ bool Debugger::ProcessBreakpoints(BreakpointType type, OperationInfo &operationI
 	if(needBreak && allowBreak) {
 		//Found a matching breakpoint, stop execution
 		Step(1);
-		SleepUntilResume(BreakSource::Breakpoint, breakpointId, type, operationInfo.Address, operationInfo.OperationType);
+		SleepUntilResume(BreakSource::Breakpoint, breakpointId, type, operationInfo.Address, operationInfo.Value, operationInfo.OperationType);
 		return true;
 	} else {
 		return false;
@@ -449,7 +449,7 @@ void Debugger::ProcessAllBreakpoints(OperationInfo &operationInfo, AddressTypeIn
 					//Break on uninit memory read
 					if(_memoryAccessCounter->IsAddressUninitialized(addressInfo)) {
 						Step(1);
-						SleepUntilResume(BreakSource::BreakOnUninitMemoryRead, 0, BreakpointType::ReadRam, addr);
+						SleepUntilResume(BreakSource::BreakOnUninitMemoryRead, 0, BreakpointType::ReadRam, addr, value);
 						return;
 					}
 				}
@@ -874,7 +874,7 @@ bool Debugger::ProcessRamOperation(MemoryOperationType type, uint16_t &addr, uin
 	return true;
 }
 
-bool Debugger::SleepUntilResume(BreakSource source, uint32_t breakpointId, BreakpointType bpType, uint16_t bpAddress, MemoryOperationType bpMemOpType)
+bool Debugger::SleepUntilResume(BreakSource source, uint32_t breakpointId, BreakpointType bpType, uint16_t bpAddress, uint8_t bpValue, MemoryOperationType bpMemOpType)
 {
 	int32_t stepCount = _stepCount.load();
 	if(stepCount > 0) {
@@ -902,7 +902,8 @@ bool Debugger::SleepUntilResume(BreakSource source, uint32_t breakpointId, Break
 			_breakSource = BreakSource::Unspecified;
 
 			uint64_t param = (
-				((uint64_t)breakpointId << 32) | 
+				((uint64_t)breakpointId << 40) | 
+				((uint64_t)bpValue << 32) |
 				((uint64_t)(bpAddress & 0xFFFF) << 16) | 
 				((uint64_t)((int)bpMemOpType & 0x0F) << 12) |
 				((uint64_t)(bpType & 0x0F) << 8) |

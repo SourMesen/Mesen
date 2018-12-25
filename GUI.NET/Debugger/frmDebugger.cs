@@ -498,7 +498,8 @@ namespace Mesen.GUI.Debugger
 			if(ConfigManager.Config.DebugInfo.ShowBreakNotifications) {
 				message = ResourceHelper.GetEnumText(source);
 				if(source == BreakSource.Breakpoint) {
-					int breakpointId = (int)(param >> 32);
+					int breakpointId = (int)(param >> 40);
+					byte bpValue = (byte)((param >> 32) & 0xFF);
 					BreakpointType bpType = (BreakpointType)(byte)((param >> 8) & 0x0F);
 					InteropMemoryOperationType memOpType = (InteropMemoryOperationType)(byte)((param >> 12) & 0x0F);
 					UInt16 bpAddress = (UInt16)(param >> 16);
@@ -507,7 +508,7 @@ namespace Mesen.GUI.Debugger
 					if(breakpointId >= 0 && breakpointId < breakpoints.Count) {
 						Breakpoint bp = breakpoints[breakpointId];
 						if(bpType != BreakpointType.Global) {
-							message += ": " + ResourceHelper.GetEnumText(bpType) + " ($" + bpAddress.ToString("X4") + ")";
+							message += ": " + ResourceHelper.GetEnumText(bpType) + " ($" + bpAddress.ToString("X4") + ":$" + bpValue.ToString("X2") + ")";
 						}
 						if(!string.IsNullOrWhiteSpace(bp.Condition)) {
 							string cond = bp.Condition.Trim();
@@ -520,7 +521,8 @@ namespace Mesen.GUI.Debugger
 					}
 				} else if(source == BreakSource.BreakOnUninitMemoryRead) {
 					UInt16 address = (UInt16)(param >> 16);
-					message += " ($" + address.ToString("X4") + ")";
+					byte value = (byte)((param >> 32) & 0xFF);
+					message += " ($" + address.ToString("X4") + ":$" + value.ToString("X2") + ")";
 				} else if(source == BreakSource.CpuStep || source == BreakSource.PpuStep) {
 					//Don't display anything when breaking due to stepping
 					message = null;
