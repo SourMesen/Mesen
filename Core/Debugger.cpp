@@ -674,6 +674,8 @@ bool Debugger::ProcessRamOperation(MemoryOperationType type, uint16_t &addr, uin
 	ProcessCpuOperation(addr, value, type);
 
 	if(type == MemoryOperationType::ExecOpCode) {
+		_cpu->SetDebugPC(addr);
+
 		if(_runToCycle == 0) {
 			_rewindCache.clear();
 			_rewindPrevInstructionCycleCache.clear();
