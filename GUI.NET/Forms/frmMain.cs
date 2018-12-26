@@ -563,6 +563,11 @@ namespace Mesen.GUI.Forms
 				enabled = false;
 			}
 
+			if(_fullscreenMode == enabled) {
+				//Fullscreen mode already matches, no need to do anything
+				return;
+			}
+
 			//Setup message to show on screen when paused while in fullscreen (instructions to revert to windowed mode)
 			InteropEmu.SetPauseScreenMessage("");
 			if(enabled) {
