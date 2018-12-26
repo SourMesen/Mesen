@@ -80,9 +80,6 @@ void APU::FrameCounterTick(FrameType type)
 
 uint8_t APU::GetStatus()
 {
-	//$4015 read
-	Run();
-
 	uint8_t status = 0;
 	status |= _squareChannel[0]->GetStatus() ? 0x01 : 0x00;
 	status |= _squareChannel[1]->GetStatus() ? 0x02 : 0x00;
@@ -97,6 +94,9 @@ uint8_t APU::GetStatus()
 
 uint8_t APU::ReadRAM(uint16_t addr)
 {
+	//$4015 read
+	Run();
+
 	uint8_t status = GetStatus();
 
 	//Reading $4015 clears the Frame Counter interrupt flag.
@@ -107,6 +107,10 @@ uint8_t APU::ReadRAM(uint16_t addr)
 
 uint8_t APU::PeekRAM(uint16_t addr)
 {
+	if(_console->GetEmulationThreadId() == std::this_thread::get_id()) {
+		//Only run the APU (to catch up) if we're running this in the emulation thread (not 100% accurate, but we can't run the APU from any other thread without locking)
+		Run();
+	}
 	return GetStatus();
 }
 
