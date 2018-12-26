@@ -670,27 +670,25 @@ namespace InteropEmu {
 		DllExport ConsoleFeatures __stdcall GetAvailableFeatures() { return _console->GetAvailableFeatures(); }
 
 		//NSF functions
-		DllExport bool __stdcall IsNsf() { return NsfMapper::GetInstance() != nullptr; }
-		DllExport uint32_t __stdcall NsfGetFrameCount() {
-			if(NsfMapper::GetInstance()) {
-				return _console->GetPpu()->GetFrameCount();
-			}
-			return 0;
-		}
+		DllExport bool __stdcall IsNsf() { return _console->IsNsf(); }
+		DllExport uint32_t __stdcall NsfGetFrameCount() { return _console->GetPpu()->GetFrameCount(); }
 		DllExport void __stdcall NsfSelectTrack(uint8_t trackNumber) {
-			if(NsfMapper::GetInstance()) {
-				NsfMapper::GetInstance()->SelectTrack(trackNumber);
+			NsfMapper* nsfMapper = dynamic_cast<NsfMapper*>(_console->GetMapper());
+			if(nsfMapper) {
+				nsfMapper->SelectTrack(trackNumber);
 			}
 		}
 		DllExport int32_t __stdcall NsfGetCurrentTrack() {
-			if(NsfMapper::GetInstance()) {
-				return NsfMapper::GetInstance()->GetCurrentTrack();
+			NsfMapper* nsfMapper = dynamic_cast<NsfMapper*>(_console->GetMapper());
+			if(nsfMapper) {
+				return nsfMapper->GetCurrentTrack();
 			}
 			return -1;
 		}
 		DllExport void __stdcall NsfGetHeader(NsfHeader* header) { 
-			if(NsfMapper::GetInstance()) {
-				*header = NsfMapper::GetInstance()->GetNsfHeader();
+			NsfMapper* nsfMapper = dynamic_cast<NsfMapper*>(_console->GetMapper());
+			if(nsfMapper) {
+				*header = nsfMapper->GetNsfHeader();
 			}
 		}
 		DllExport void __stdcall NsfSetNsfConfig(int32_t autoDetectSilenceDelay, int32_t moveToNextTrackTime, bool disableApuIrqs) {

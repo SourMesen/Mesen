@@ -168,6 +168,7 @@ public:
 	void StartRecordingTapeFile(string filepath);
 	void StopRecordingTapeFile();
 	bool IsRecordingTapeFile();
+	bool IsNsf();
 		
 	std::thread::id GetEmulationThreadId();
 

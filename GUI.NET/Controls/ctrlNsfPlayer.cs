@@ -122,6 +122,12 @@ namespace Mesen.GUI.Controls
 			NsfHeader header = InteropEmu.NsfGetHeader();
 			int currentTrack = InteropEmu.NsfGetCurrentTrack();
 
+			if(currentTrack != cboTrack.SelectedIndex) {
+				cboTrack.SelectedIndexChanged -= cboTrack_SelectedIndexChanged;
+				cboTrack.SelectedIndex = currentTrack;
+				cboTrack.SelectedIndexChanged += cboTrack_SelectedIndexChanged;
+			}
+
 			TimeSpan time = TimeSpan.FromSeconds((double)elapsedFrames / ((header.Flags & 0x01) == 0x01 ? 50.006978 : 60.098812));
 			string label = time.ToString(time.TotalHours < 1 ? @"mm\:ss" : @"hh\:mm\:ss");
 
@@ -135,10 +141,11 @@ namespace Mesen.GUI.Controls
 				label += Environment.NewLine + (string.IsNullOrWhiteSpace(trackNames[currentTrack]) ? ResourceHelper.GetMessage("NsfUnnamedTrack") : trackNames[currentTrack]);
 			}
 
+			bool rewinding = InteropEmu.IsRewinding();
 			lblRecording.Visible = lblRecordingDot.Visible = InteropEmu.WaveIsRecording();
-			lblRewinding.Visible = lblRewindIcon.Visible = InteropEmu.IsRewinding();
-			lblFastForward.Visible = lblFastForwardIcon.Visible = InteropEmu.GetEmulationSpeed() > 100 || InteropEmu.GetEmulationSpeed() == 0 || InteropEmu.CheckFlag(EmulationFlags.Turbo);
-			lblSlowMotion.Visible = lblSlowMotionIcon.Visible = InteropEmu.GetEmulationSpeed() < 100 && InteropEmu.GetEmulationSpeed() > 0 && !InteropEmu.CheckFlag(EmulationFlags.Turbo);
+			lblRewinding.Visible = lblRewindIcon.Visible = rewinding;
+			lblFastForward.Visible = lblFastForwardIcon.Visible = (InteropEmu.GetEmulationSpeed() > 100 || InteropEmu.GetEmulationSpeed() == 0 || InteropEmu.CheckFlag(EmulationFlags.Turbo)) && !rewinding;
+			lblSlowMotion.Visible = lblSlowMotionIcon.Visible = InteropEmu.GetEmulationSpeed() < 100 && InteropEmu.GetEmulationSpeed() > 0 && !InteropEmu.CheckFlag(EmulationFlags.Turbo) && !rewinding;
 
 			lblTime.Text = label;
 		}

@@ -33,7 +33,7 @@
 			this.btnPausePlay = new System.Windows.Forms.Button();
 			this.lblPosition = new System.Windows.Forms.Label();
 			this.pnlRenderer = new System.Windows.Forms.Panel();
-			this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
+			this.tlpRenderer = new System.Windows.Forms.TableLayoutPanel();
 			this.ctrlRenderer = new System.Windows.Forms.Panel();
 			this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
 			this.lblVolume = new System.Windows.Forms.Label();
@@ -47,13 +47,15 @@
 			this.mnuResumeGameplay = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripSeparator();
 			this.mnuClose = new System.Windows.Forms.ToolStripMenuItem();
+			this.picNsfIcon = new System.Windows.Forms.PictureBox();
 			this.tableLayoutPanel1.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.trkPosition)).BeginInit();
 			this.pnlRenderer.SuspendLayout();
-			this.tableLayoutPanel2.SuspendLayout();
+			this.tlpRenderer.SuspendLayout();
 			this.tableLayoutPanel3.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.trkVolume)).BeginInit();
 			this.menuStrip2.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.picNsfIcon)).BeginInit();
 			this.SuspendLayout();
 			// 
 			// tableLayoutPanel1
@@ -74,16 +76,16 @@
 			this.tableLayoutPanel1.RowCount = 2;
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this.tableLayoutPanel1.Size = new System.Drawing.Size(532, 477);
+			this.tableLayoutPanel1.Size = new System.Drawing.Size(557, 454);
 			this.tableLayoutPanel1.TabIndex = 0;
 			// 
 			// trkPosition
 			// 
 			this.trkPosition.Dock = System.Windows.Forms.DockStyle.Top;
 			this.trkPosition.LargeChange = 10;
-			this.trkPosition.Location = new System.Drawing.Point(56, 429);
+			this.trkPosition.Location = new System.Drawing.Point(56, 406);
 			this.trkPosition.Name = "trkPosition";
-			this.trkPosition.Size = new System.Drawing.Size(312, 45);
+			this.trkPosition.Size = new System.Drawing.Size(337, 45);
 			this.trkPosition.TabIndex = 1;
 			this.trkPosition.TickFrequency = 10;
 			this.trkPosition.TickStyle = System.Windows.Forms.TickStyle.Both;
@@ -93,7 +95,7 @@
 			// 
 			this.btnPausePlay.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.btnPausePlay.Image = global::Mesen.GUI.Properties.Resources.Play;
-			this.btnPausePlay.Location = new System.Drawing.Point(3, 433);
+			this.btnPausePlay.Location = new System.Drawing.Point(3, 410);
 			this.btnPausePlay.Name = "btnPausePlay";
 			this.btnPausePlay.Size = new System.Drawing.Size(47, 36);
 			this.btnPausePlay.TabIndex = 2;
@@ -103,7 +105,7 @@
 			// 
 			this.lblPosition.Anchor = System.Windows.Forms.AnchorStyles.Right;
 			this.lblPosition.AutoSize = true;
-			this.lblPosition.Location = new System.Drawing.Point(374, 445);
+			this.lblPosition.Location = new System.Drawing.Point(399, 422);
 			this.lblPosition.MinimumSize = new System.Drawing.Size(49, 13);
 			this.lblPosition.Name = "lblPosition";
 			this.lblPosition.Size = new System.Drawing.Size(49, 13);
@@ -116,33 +118,34 @@
 			this.pnlRenderer.BackColor = System.Drawing.Color.Black;
 			this.pnlRenderer.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.tableLayoutPanel1.SetColumnSpan(this.pnlRenderer, 4);
-			this.pnlRenderer.Controls.Add(this.tableLayoutPanel2);
+			this.pnlRenderer.Controls.Add(this.picNsfIcon);
+			this.pnlRenderer.Controls.Add(this.tlpRenderer);
 			this.pnlRenderer.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.pnlRenderer.Location = new System.Drawing.Point(3, 3);
 			this.pnlRenderer.Name = "pnlRenderer";
-			this.pnlRenderer.Size = new System.Drawing.Size(526, 420);
+			this.pnlRenderer.Size = new System.Drawing.Size(551, 397);
 			this.pnlRenderer.TabIndex = 0;
 			// 
-			// tableLayoutPanel2
+			// tlpRenderer
 			// 
-			this.tableLayoutPanel2.ColumnCount = 1;
-			this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-			this.tableLayoutPanel2.Controls.Add(this.ctrlRenderer, 0, 0);
-			this.tableLayoutPanel2.Cursor = System.Windows.Forms.Cursors.Hand;
-			this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.tableLayoutPanel2.Location = new System.Drawing.Point(0, 0);
-			this.tableLayoutPanel2.Margin = new System.Windows.Forms.Padding(0);
-			this.tableLayoutPanel2.Name = "tableLayoutPanel2";
-			this.tableLayoutPanel2.RowCount = 1;
-			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-			this.tableLayoutPanel2.Size = new System.Drawing.Size(524, 418);
-			this.tableLayoutPanel2.TabIndex = 0;
-			this.tableLayoutPanel2.MouseClick += new System.Windows.Forms.MouseEventHandler(this.ctrlRenderer_MouseClick);
+			this.tlpRenderer.ColumnCount = 1;
+			this.tlpRenderer.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+			this.tlpRenderer.Controls.Add(this.ctrlRenderer, 0, 0);
+			this.tlpRenderer.Cursor = System.Windows.Forms.Cursors.Hand;
+			this.tlpRenderer.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.tlpRenderer.Location = new System.Drawing.Point(0, 0);
+			this.tlpRenderer.Margin = new System.Windows.Forms.Padding(0);
+			this.tlpRenderer.Name = "tlpRenderer";
+			this.tlpRenderer.RowCount = 1;
+			this.tlpRenderer.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+			this.tlpRenderer.Size = new System.Drawing.Size(549, 395);
+			this.tlpRenderer.TabIndex = 0;
+			this.tlpRenderer.MouseClick += new System.Windows.Forms.MouseEventHandler(this.ctrlRenderer_MouseClick);
 			// 
 			// ctrlRenderer
 			// 
 			this.ctrlRenderer.Anchor = System.Windows.Forms.AnchorStyles.None;
-			this.ctrlRenderer.Location = new System.Drawing.Point(134, 89);
+			this.ctrlRenderer.Location = new System.Drawing.Point(146, 77);
 			this.ctrlRenderer.Margin = new System.Windows.Forms.Padding(0);
 			this.ctrlRenderer.Name = "ctrlRenderer";
 			this.ctrlRenderer.Size = new System.Drawing.Size(256, 240);
@@ -156,7 +159,7 @@
 			this.tableLayoutPanel3.Controls.Add(this.lblVolume, 0, 1);
 			this.tableLayoutPanel3.Controls.Add(this.trkVolume, 0, 0);
 			this.tableLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.tableLayoutPanel3.Location = new System.Drawing.Point(429, 429);
+			this.tableLayoutPanel3.Location = new System.Drawing.Point(454, 406);
 			this.tableLayoutPanel3.Name = "tableLayoutPanel3";
 			this.tableLayoutPanel3.RowCount = 2;
 			this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 31F));
@@ -199,7 +202,7 @@
             this.mnuFile});
 			this.menuStrip2.Location = new System.Drawing.Point(0, 0);
 			this.menuStrip2.Name = "menuStrip2";
-			this.menuStrip2.Size = new System.Drawing.Size(532, 24);
+			this.menuStrip2.Size = new System.Drawing.Size(557, 24);
 			this.menuStrip2.TabIndex = 1;
 			this.menuStrip2.Text = "menuStrip2";
 			// 
@@ -257,11 +260,24 @@
 			this.mnuClose.Text = "Close";
 			this.mnuClose.Click += new System.EventHandler(this.mnuClose_Click);
 			// 
+			// picNsfIcon
+			// 
+			this.picNsfIcon.Anchor = System.Windows.Forms.AnchorStyles.None;
+			this.picNsfIcon.BackgroundImage = global::Mesen.GUI.Properties.Resources.NsfBackground;
+			this.picNsfIcon.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+			this.picNsfIcon.Location = new System.Drawing.Point(199, 152);
+			this.picNsfIcon.Margin = new System.Windows.Forms.Padding(0);
+			this.picNsfIcon.MaximumSize = new System.Drawing.Size(500, 90);
+			this.picNsfIcon.Name = "picNsfIcon";
+			this.picNsfIcon.Size = new System.Drawing.Size(150, 90);
+			this.picNsfIcon.TabIndex = 6;
+			this.picNsfIcon.TabStop = false;
+			// 
 			// frmHistoryViewer
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(532, 501);
+			this.ClientSize = new System.Drawing.Size(557, 478);
 			this.Controls.Add(this.tableLayoutPanel1);
 			this.Controls.Add(this.menuStrip2);
 			this.MinimumSize = new System.Drawing.Size(331, 384);
@@ -271,12 +287,13 @@
 			this.tableLayoutPanel1.PerformLayout();
 			((System.ComponentModel.ISupportInitialize)(this.trkPosition)).EndInit();
 			this.pnlRenderer.ResumeLayout(false);
-			this.tableLayoutPanel2.ResumeLayout(false);
+			this.tlpRenderer.ResumeLayout(false);
 			this.tableLayoutPanel3.ResumeLayout(false);
 			this.tableLayoutPanel3.PerformLayout();
 			((System.ComponentModel.ISupportInitialize)(this.trkVolume)).EndInit();
 			this.menuStrip2.ResumeLayout(false);
 			this.menuStrip2.PerformLayout();
+			((System.ComponentModel.ISupportInitialize)(this.picNsfIcon)).EndInit();
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -298,10 +315,11 @@
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem2;
 		private System.Windows.Forms.ToolStripMenuItem mnuClose;
 		private System.Windows.Forms.ToolStripMenuItem mnuResumeGameplay;
-		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
+		private System.Windows.Forms.TableLayoutPanel tlpRenderer;
 		private System.Windows.Forms.Panel ctrlRenderer;
 		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel3;
 		private System.Windows.Forms.Label lblVolume;
 		private System.Windows.Forms.TrackBar trkVolume;
+		private System.Windows.Forms.PictureBox picNsfIcon;
 	}
 }

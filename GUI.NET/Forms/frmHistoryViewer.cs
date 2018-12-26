@@ -16,6 +16,7 @@ namespace Mesen.GUI.Forms
 	{
 		private Thread _emuThread;
 		private bool _paused = true;
+		private bool _isNsf = false;
 
 		public frmHistoryViewer()
 		{
@@ -33,6 +34,10 @@ namespace Mesen.GUI.Forms
 				this.StartPosition = FormStartPosition.Manual;
 				this.Location = ConfigManager.Config.HistoryViewerInfo.WindowLocation.Value;
 			}
+
+			_isNsf = InteropEmu.IsNsf();
+			tlpRenderer.Visible = !_isNsf;
+			picNsfIcon.Visible = _isNsf;
 
 			trkVolume.Value = ConfigManager.Config.HistoryViewerInfo.Volume;
 		}
@@ -197,7 +202,7 @@ namespace Mesen.GUI.Forms
 			}
 
 			mnuImportMovie.Visible = false;
-			mnuExportMovie.Enabled = mnuExportMovie.HasDropDownItems;
+			mnuExportMovie.Enabled = mnuExportMovie.HasDropDownItems && !_isNsf;
 		}
 
 		private void btnPausePlay_Click(object sender, EventArgs e)

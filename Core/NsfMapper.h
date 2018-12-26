@@ -18,8 +18,6 @@ enum class NsfIrqType
 class NsfMapper : public BaseMapper
 {
 private:
-	static NsfMapper *_instance;
-
 	enum NsfSoundChips
 	{
 		VRC6 = 0x01,
@@ -120,8 +118,6 @@ protected:
 public:
 	NsfMapper();
 	~NsfMapper();
-
-	static NsfMapper* GetInstance();
 
 	void SetNesModel(NesModel model) override;
 	ConsoleFeatures GetAvailableFeatures() override;

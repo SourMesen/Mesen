@@ -589,7 +589,7 @@ void Console::ResetComponents(bool softReset)
 	_debugHud->ClearScreen();
 
 	_memoryManager->Reset(softReset);
-	if(!_settings->CheckFlag(EmulationFlags::DisablePpuReset) || !softReset || NsfMapper::GetInstance()) {
+	if(!_settings->CheckFlag(EmulationFlags::DisablePpuReset) || !softReset || IsNsf()) {
 		_ppu->Reset();
 	}
 	_apu->Reset(softReset);
@@ -674,7 +674,7 @@ void Console::RunSingleFrame()
 		}
 	}
 
-	_settings->DisableOverclocking(_disableOcNextFrame || NsfMapper::GetInstance());
+	_settings->DisableOverclocking(_disableOcNextFrame || IsNsf());
 	_disableOcNextFrame = false;
 
 	_systemActionManager->ProcessSystemActions();
@@ -743,7 +743,7 @@ void Console::Run()
 					_historyViewer->ProcessEndOfFrame();
 				}
 				_rewindManager->ProcessEndOfFrame();
-				_settings->DisableOverclocking(_disableOcNextFrame || NsfMapper::GetInstance());
+				_settings->DisableOverclocking(_disableOcNextFrame || IsNsf());
 				_disableOcNextFrame = false;
 
 				//Update model (ntsc/pal) and get delay for next frame
@@ -1313,6 +1313,11 @@ bool Console::IsRecordingTapeFile()
 	}
 
 	return false;
+}
+
+bool Console::IsNsf()
+{
+	return std::dynamic_pointer_cast<NsfMapper>(_mapper) != nullptr;
 }
 
 void Console::CopyRewindData(shared_ptr<Console> sourceConsole)

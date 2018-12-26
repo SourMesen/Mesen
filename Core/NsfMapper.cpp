@@ -5,25 +5,14 @@
 #include "Console.h"
 #include "MemoryManager.h"
 
-NsfMapper* NsfMapper::_instance;
-
 NsfMapper::NsfMapper()
 {
-	_instance = this;
 }
 
 NsfMapper::~NsfMapper()
 {
-	if(_instance == this) {
-		_instance = nullptr;
-		_console->GetSettings()->DisableOverclocking(false);
-		_console->GetSettings()->ClearFlags(EmulationFlags::NsfPlayerEnabled);
-	}
-}
-
-NsfMapper * NsfMapper::GetInstance()
-{
-	return _instance;
+	_console->GetSettings()->DisableOverclocking(false);
+	_console->GetSettings()->ClearFlags(EmulationFlags::NsfPlayerEnabled);
 }
 
 void NsfMapper::InitMapper()

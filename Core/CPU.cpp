@@ -274,7 +274,7 @@ uint16_t CPU::FetchOperand()
 
 	_console->BreakIfDebugging();
 	
-	if(NsfMapper::GetInstance()) {
+	if(_console->IsNsf()) {
 		//Don't stop emulation on CPU crash when playing NSFs, reset cpu instead
 		_console->Reset(true);
 		return 0;
