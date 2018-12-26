@@ -115,6 +115,7 @@
 			<Control ID="lblSoundChips">Chip de áudio</Control>
 			<Control ID="lblRecording">REC</Control>
 			<Control ID="lblSlowMotion">Câmera lenta</Control>
+			<Control ID="lblRewinding">Rewinding</Control>
 			<Control ID="lblFastForward">Acelerar</Control>
 		</Form>
 		<Form ID="frmLogWindow" Title="Janela de relatório">

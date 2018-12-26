@@ -629,6 +629,10 @@ namespace InteropEmu {
 		DllExport uint32_t __stdcall GetEmulationSpeed() { return _settings->GetEmulationSpeed(true); }
 		DllExport void __stdcall SetTurboRewindSpeed(uint32_t turboSpeed, uint32_t rewindSpeed) { _settings->SetTurboRewindSpeed(turboSpeed, rewindSpeed); }
 		DllExport void __stdcall SetRewindBufferSize(uint32_t seconds) { _settings->SetRewindBufferSize(seconds); }
+		DllExport bool __stdcall IsRewinding() {
+			shared_ptr<RewindManager> rewindManager = _console->GetRewindManager();
+			return rewindManager ? rewindManager->IsRewinding() : false;
+		}
 		DllExport void __stdcall SetOverclockRate(uint32_t overclockRate, bool adjustApu) { _settings->SetOverclockRate(overclockRate, adjustApu); }
 		DllExport void __stdcall SetPpuNmiConfig(uint32_t extraScanlinesBeforeNmi, uint32_t extraScanlinesAfterNmi) { _settings->SetPpuNmiConfig(extraScanlinesBeforeNmi, extraScanlinesAfterNmi); }
 		DllExport void __stdcall SetVideoScale(double scale, ConsoleId consoleId) { GetConsoleById(consoleId)->GetSettings()->SetVideoScale(scale); }
@@ -667,6 +671,12 @@ namespace InteropEmu {
 
 		//NSF functions
 		DllExport bool __stdcall IsNsf() { return NsfMapper::GetInstance() != nullptr; }
+		DllExport uint32_t __stdcall NsfGetFrameCount() {
+			if(NsfMapper::GetInstance()) {
+				return _console->GetPpu()->GetFrameCount();
+			}
+			return 0;
+		}
 		DllExport void __stdcall NsfSelectTrack(uint8_t trackNumber) {
 			if(NsfMapper::GetInstance()) {
 				NsfMapper::GetInstance()->SelectTrack(trackNumber);

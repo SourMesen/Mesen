@@ -589,7 +589,7 @@ void Console::ResetComponents(bool softReset)
 	_debugHud->ClearScreen();
 
 	_memoryManager->Reset(softReset);
-	if(!_settings->CheckFlag(EmulationFlags::DisablePpuReset) || !softReset) {
+	if(!_settings->CheckFlag(EmulationFlags::DisablePpuReset) || !softReset || NsfMapper::GetInstance()) {
 		_ppu->Reset();
 	}
 	_apu->Reset(softReset);

@@ -114,6 +114,7 @@
 			<Control ID="lblSoundChips">Звукові чіпи</Control>
 			<Control ID="lblRecording">REC</Control>
 			<Control ID="lblSlowMotion">Сповільнений Рух</Control>
+			<Control ID="lblRewinding">Rewinding</Control>
 			<Control ID="lblFastForward">Перемотування Вперед</Control>
 		</Form>
 		<Form ID="frmLogWindow" Title="Лог">

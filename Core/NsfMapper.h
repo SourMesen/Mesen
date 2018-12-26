@@ -106,6 +106,8 @@ protected:
 	uint32_t GetWorkRamPageSize() override { return 0x1000; }
 	bool AllowRegisterRead() override { return true; }
 
+	void StreamState(bool saving) override;
+
 	void InitMapper() override;
 	void InitMapper(RomData& romData) override;
 	void Reset(bool softReset) override;

@@ -137,7 +137,7 @@ namespace Mesen.GUI.Forms
 					ResourceHelper.UpdateEmuLanguage();
 					ResourceHelper.ApplyResources(this);
 					UpdateMenus();
-					InitializeNsfMode(true);
+					InitializeNsfMode();
 					ctrlRecentGames.UpdateGameInfo();
 					TopMost = ConfigManager.Config.PreferenceInfo.AlwaysOnTop;
 					FormBorderStyle = ConfigManager.Config.PreferenceInfo.DisableMouseResize ? FormBorderStyle.Fixed3D : FormBorderStyle.Sizable;

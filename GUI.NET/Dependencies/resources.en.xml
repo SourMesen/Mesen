@@ -115,6 +115,7 @@
 			<Control ID="lblSoundChips">Sound Chips:</Control>
 			<Control ID="lblRecording">REC</Control>
 			<Control ID="lblSlowMotion">Slow Motion</Control>
+			<Control ID="lblRewinding">Rewinding</Control>
 			<Control ID="lblFastForward">Fast Forward</Control>
 		</Form>
 		<Form ID="frmLogWindow" Title="Log Window">

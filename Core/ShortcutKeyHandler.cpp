@@ -203,7 +203,7 @@ void ShortcutKeyHandler::CheckMappedKeys()
 		}
 	}
 
-	if(!isNetplayClient && !MovieManager::Recording() && !settings->CheckFlag(NsfPlayerEnabled)) {
+	if(!isNetplayClient && !MovieManager::Recording()) {
 		shared_ptr<RewindManager> rewindManager = _console->GetRewindManager();
 		if(rewindManager) {
 			if(DetectKeyPress(EmulatorShortcut::ToggleRewind)) {
