@@ -397,7 +397,7 @@ bool Debugger::ProcessBreakpoints(BreakpointType type, OperationInfo &operationI
 	if(needBreak && allowBreak) {
 		//Found a matching breakpoint, stop execution
 		Step(1);
-		SleepUntilResume(BreakSource::Breakpoint, breakpointId, type, operationInfo.Address, operationInfo.Value, operationInfo.OperationType);
+		SleepUntilResume(BreakSource::Breakpoint, breakpointId, type, operationInfo.Address, (uint8_t)operationInfo.Value, operationInfo.OperationType);
 		return true;
 	} else {
 		return false;
