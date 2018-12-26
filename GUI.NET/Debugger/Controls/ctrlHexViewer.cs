@@ -423,9 +423,13 @@ namespace Mesen.GUI.Debugger.Controls
 		public event ByteMouseHoverHandler ByteMouseHover; 
 		private void ctrlHexBox_MouseMove(object sender, MouseEventArgs e)
 		{
-			BytePositionInfo bpi = ctrlHexBox.GetHexBytePositionInfo(e.Location);
-			Point position = ctrlHexBox.GetBytePosition(bpi.Index);
-			ByteMouseHover?.Invoke((int)bpi.Index, new Point(position.X + (int)(ctrlHexBox.CharSize.Width * 2.5), position.Y + (int)(ctrlHexBox.CharSize.Height * 1.1)));
+			BytePositionInfo? bpi = ctrlHexBox.GetRestrictedHexBytePositionInfo(e.Location);
+			if(bpi.HasValue) {
+				Point position = ctrlHexBox.GetBytePosition(bpi.Value.Index);
+				ByteMouseHover?.Invoke((int)bpi.Value.Index, new Point(position.X + (int)(ctrlHexBox.CharSize.Width * 2.5), position.Y + (int)(ctrlHexBox.CharSize.Height * 1.1)));
+			} else {
+				ByteMouseHover?.Invoke(-1, Point.Empty);
+			}
 		}
 
 		private void ctrlHexBox_MouseLeave(object sender, EventArgs e)

@@ -564,6 +564,7 @@ namespace Mesen.GUI.Debugger
 				if(_tooltip != null) {
 					_tooltip.Close();
 					_lastLabelTooltip = null;
+					_lastTooltipAddress = -1;
 				}
 				return;
 			}
@@ -629,6 +630,7 @@ namespace Mesen.GUI.Debugger
 				if(_tooltip != null) {
 					_tooltip.Close();
 					_lastLabelTooltip = null;
+					_lastTooltipAddress = -1;
 				}
 			}
 		}

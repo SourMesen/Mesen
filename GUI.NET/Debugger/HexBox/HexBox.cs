@@ -1829,6 +1829,15 @@ namespace Be.Windows.Forms
 			return;
 		}
 
+		internal BytePositionInfo? GetRestrictedHexBytePositionInfo(Point p)
+		{
+			if(_recHex.Contains(p) && p.X < _recHex.Left + (HorizontalByteCount * 3 - 1) * _charSize.Width) {
+				//Only return the position if the mouse is over a hex digit
+				return GetHexBytePositionInfo(p);
+			}
+			return null;
+		}
+
 		BytePositionInfo? GetBytePositionInfo(Point p)
 		{
 			if(_recHex.Contains(p)) {
@@ -2906,7 +2915,7 @@ namespace Be.Windows.Forms
 			{
 				SetHorizontalByteCount(_bytesPerLine);
 				_recHex.Width = (int)Math.Floor(((double)_iHexMaxHBytes) * _charSize.Width * 3 + (2 * _charSize.Width));
-                requiredWidth += _recHex.Width;
+				requiredWidth += _recHex.Width;
 			}
 			else
 			{
