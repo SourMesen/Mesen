@@ -2953,6 +2953,17 @@ namespace Be.Windows.Forms
 			UpdateScrollSize();
 		}
 
+		public Point GetBytePosition(long byteIndex)
+		{
+			if(byteIndex < _startByte) {
+				return Point.Empty;
+			}
+
+			Point gp = GetGridBytePoint(byteIndex - _startByte);
+			PointF pos = GetBytePointF(gp);
+			return this.PointToScreen(new Point((int)pos.X, (int)pos.Y));
+		}
+
 		PointF GetBytePointF(long byteIndex)
 		{
 			Point gp = GetGridBytePoint(byteIndex);

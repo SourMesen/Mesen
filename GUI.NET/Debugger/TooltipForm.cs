@@ -45,7 +45,7 @@ namespace Mesen.GUI.Debugger
 
 			if(!this.Visible) {
 				this._parentContainedFocus = focusTarget.ContainsFocus;
-				this.Location = _requestedLocation;
+				UpdateLocation();
 				this.Show();
 			} else {
 				UpdateLocation();
