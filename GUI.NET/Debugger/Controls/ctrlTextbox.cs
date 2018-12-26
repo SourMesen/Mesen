@@ -993,8 +993,6 @@ namespace Mesen.GUI.Debugger
 			}
 
 			this.DrawLineText(g, currentLine, marginLeft, positionY, codeString, addressString, commentString, codeStringLength, addressStringLength, textColor, lineHeight);
-
-			this.DrawLineProgress(g, positionY, lineProperties?.Progress, lineHeight);
 		}
 
 		private void DrawLineNumber(Graphics g, int currentLine, int marginLeft, int positionY, Color addressColor)
@@ -1315,6 +1313,10 @@ namespace Mesen.GUI.Debugger
 		private void DrawMargin(Graphics g, int currentLine, int marginLeft, int regularMargin, int positionY, int lineHeight)
 		{
 			LineProperties lineProperties = GetLineStyle(currentLine);
+
+			//Draw instruction progress here to avoid it being scrolled horizontally when window is small (or comments/etc exist)
+			this.DrawLineProgress(g, positionY, lineProperties?.Progress, lineHeight);
+
 			if(this.ShowLineNumbers) {
 				//Show line number
 				Color lineNumberColor = lineProperties != null && lineProperties.AddressColor.HasValue ? lineProperties.AddressColor.Value : Color.Gray;
