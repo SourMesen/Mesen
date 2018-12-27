@@ -21,6 +21,7 @@
 #include "KeyManager.h"
 #include "MemoryAccessCounter.h"
 #include "RomData.h"
+#include "LabelManager.h"
 
 #define lua_pushintvalue(name, value) lua_pushliteral(lua, #name); lua_pushinteger(lua, (int)value); lua_settable(lua, -3);
 #define lua_pushdoublevalue(name, value) lua_pushliteral(lua, #name); lua_pushnumber(lua, (double)value); lua_settable(lua, -3);
@@ -106,6 +107,7 @@ int LuaApi::GetLibrary(lua_State *lua)
 		{ "getScriptDataFolder", LuaApi::GetScriptDataFolder },
 		{ "getRomInfo", LuaApi::GetRomInfo },
 		{ "getLogWindowLog", LuaApi::GetLogWindowLog },
+		{ "getLabelAddress", LuaApi::GetLabelAddress },
 		{ NULL,NULL }
 	};
 
@@ -174,6 +176,22 @@ int LuaApi::GetLibrary(lua_State *lua)
 	lua_settable(lua, -3);
 
 	return 1;
+}
+
+int LuaApi::GetLabelAddress(lua_State *lua)
+{
+	LuaCallHelper l(lua);
+	l.ForceParamCount(1);
+	string label = l.ReadString();
+	checkminparams();
+	errorCond(label.length() == 0, "label cannot be empty");
+
+	std::shared_ptr<LabelManager> lblMan = _debugger->GetLabelManager();
+	int32_t value = lblMan->GetLabelRelativeAddress(label);
+	errorCond(value < 0, "label not found");
+
+	l.Return(value);
+	return l.ReturnCount();
 }
 
 int LuaApi::ReadMemory(lua_State *lua)
