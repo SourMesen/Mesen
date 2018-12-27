@@ -223,7 +223,7 @@ extern "C" {
 			{ pads2, 7 },
 			{ pads3, 2 },
 			{ pads4, 2 },
-			{ pads5, 12 },
+			{ pads5, 13 },
 			{ 0 },
 		};
 
