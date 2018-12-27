@@ -16,6 +16,8 @@ public:
 	static void SetContext(ScriptingContext *context);
 	static int GetLibrary(lua_State *lua);
 
+	static int GetLabelAddress(lua_State *lua);
+
 	static int ReadMemory(lua_State *lua);
 	static int WriteMemory(lua_State *lua);
 	static int ReadMemoryWord(lua_State *lua);
