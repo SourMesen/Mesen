@@ -122,7 +122,7 @@ extern "C" {
 
 		_console->GetSettings()->SetFlags(EmulationFlags::FdsAutoLoadDisk);
 		_console->GetSettings()->SetFlags(EmulationFlags::AutoConfigureInput);
-		_console->GetSettings()->SetSampleRate(48000);
+		_console->GetSettings()->SetSampleRate(96000);
 		_console->GetSettings()->SetAutoSaveOptions(0, false);
 		_console->GetSettings()->SetRewindBufferSize(0);
 	}
@@ -151,7 +151,7 @@ extern "C" {
 			{ MesenRegion, "Region; Auto|NTSC|PAL|Dendy" },
 			{ MesenOverscanVertical, "Vertical Overscan; None|8px|16px" },
 			{ MesenOverscanHorizontal, "Horizontal Overscan; None|8px|16px" },
-			{ MesenAspectRatio ,  "Aspect Ratio; Auto|No Stretching|NTSC|PAL|4:3|16:9" },
+			{ MesenAspectRatio, "Aspect Ratio; Auto|No Stretching|NTSC|PAL|4:3|16:9" },
 			{ MesenControllerTurboSpeed, "Controller Turbo Speed; Fast|Very Fast|Disabled|Slow|Normal" },
 			{ MesenHdPacks, "Enable HD Packs; enabled|disabled" },
 			{ MesenNoSpriteLimit, "Remove sprite limit; enabled|disabled" },
@@ -238,16 +238,16 @@ extern "C" {
 
 	RETRO_API void retro_set_audio_sample(retro_audio_sample_t sendAudioSample)
 	{
+		_soundManager->SetSendAudioSample(sendAudioSample);
 	}
 
 	RETRO_API void retro_set_audio_sample_batch(retro_audio_sample_batch_t audioSampleBatch)
 	{
-		_soundManager->SetSendAudioBuffer(audioSampleBatch);
 	}
 
 	RETRO_API void retro_set_input_poll(retro_input_poll_t pollInput)
 	{	
-		_keyManager->SetPollInput(pollInput);		
+		_keyManager->SetPollInput(pollInput);
 	}
 
 	RETRO_API void retro_set_input_state(retro_input_state_t getInputState)

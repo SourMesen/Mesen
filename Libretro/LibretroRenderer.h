@@ -54,7 +54,7 @@ public:
 	void GetSystemAudioVideoInfo(retro_system_av_info &info, int32_t maxWidth = 0, int32_t maxHeight = 0)
 	{
 		info.timing.fps = _console->GetModel() == NesModel::NTSC ? 60.098811862348404716732985230828 : 50.006977968268290848936010226333;
-		info.timing.sample_rate = 48000;
+		info.timing.sample_rate = _console->GetSettings()->GetSampleRate();
 
 		float ratio = (float)_console->GetSettings()->GetAspectRatio(_console);
 		if(ratio == 0.0f) {
