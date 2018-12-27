@@ -108,8 +108,11 @@ uint32_t MemoryDumper::GetMemoryState(DebugMemoryType type, uint8_t *buffer)
 			return 0x10000;
 
 		case DebugMemoryType::PpuMemory:
-			for(int i = 0; i <= 0x3FFF; i++) {
+			for(int i = 0; i < 0x3F00; i++) {
 				buffer[i] = _mapper->DebugReadVRAM(i);
+			}
+			for(int i = 0x3F00; i <= 0x3FFF; i++) {
+				buffer[i] = _ppu->ReadPaletteRAM(i);
 			}
 			return 0x4000;
 
@@ -190,7 +193,13 @@ void MemoryDumper::SetMemoryValue(DebugMemoryType memoryType, uint32_t address, 
 			}
 			break;
 
-		case DebugMemoryType::PpuMemory: _mapper->DebugWriteVRAM(address, value, disableSideEffects); break;
+		case DebugMemoryType::PpuMemory:
+			if(address < 0x3F00) {
+				_mapper->DebugWriteVRAM(address, value, disableSideEffects);
+			} else {
+				_ppu->WritePaletteRAM(address, value);
+			}
+			break;
 		case DebugMemoryType::PaletteMemory: _ppu->WritePaletteRAM(address, value); break;
 		case DebugMemoryType::SpriteMemory: _ppu->GetSpriteRam()[address % 0x100] = value; break;
 		case DebugMemoryType::SecondarySpriteMemory: _ppu->GetSecondarySpriteRam()[address % 0x20] = value; break;
