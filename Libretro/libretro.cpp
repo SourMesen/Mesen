@@ -115,7 +115,7 @@ extern "C" {
 		_console.reset(new Console());
 		_console->Init();
 
-		_renderer.reset(new LibretroRenderer(_console));
+		_renderer.reset(new LibretroRenderer(_console, retroEnv));
 		_soundManager.reset(new LibretroSoundManager(_console));
 		_keyManager.reset(new LibretroKeyManager(_console));
 		_messageManager.reset(new LibretroMessageManager(logCallback, retroEnv));
@@ -233,7 +233,7 @@ extern "C" {
 
 	RETRO_API void retro_set_video_refresh(retro_video_refresh_t sendFrame)
 	{
-		_renderer->SetCallbacks(sendFrame, retroEnv);
+		_renderer->SetVideoCallback(sendFrame);
 	}
 
 	RETRO_API void retro_set_audio_sample(retro_audio_sample_t sendAudioSample)
@@ -259,12 +259,21 @@ extern "C" {
 	{
 		_console->Reset(true);
 	}
-	
+
+	bool readVariable(const char* key, retro_variable &var)
+	{
+		var.key = key;
+		var.value = nullptr;
+		if(retroEnv(RETRO_ENVIRONMENT_GET_VARIABLE, &var) && var.value != nullptr) {
+			return true;
+		}
+		return false;
+	}
+
 	void set_flag(const char* flagName, uint64_t flagValue)
 	{
 		struct retro_variable var = {};
-		var.key = flagName;
-		if(retroEnv(RETRO_ENVIRONMENT_GET_VARIABLE, &var)) {
+		if(readVariable(flagName, var)) {
 			string value = string(var.value);
 			if(value == "disabled") {
 				_console->GetSettings()->ClearFlags(flagValue);
@@ -314,8 +323,7 @@ extern "C" {
 		set_flag(MesenFdsAutoSelectDisk, EmulationFlags::FdsAutoInsertDisk);
 		set_flag(MesenFdsFastForwardLoad, EmulationFlags::FdsFastForwardOnLoad);
 
-		var.key = MesenFakeStereo;
-		if(retroEnv(RETRO_ENVIRONMENT_GET_VARIABLE, &var)) {
+		if(readVariable(MesenFakeStereo, var)) {
 			string value = string(var.value);
 			AudioFilterSettings settings;
 			if(value == "enabled") {
@@ -327,8 +335,7 @@ extern "C" {
 			}
 		}
 		
-		var.key = MesenNtscFilter;
-		if(retroEnv(RETRO_ENVIRONMENT_GET_VARIABLE, &var)) {
+		if(readVariable(MesenNtscFilter, var)) {
 			string value = string(var.value);
 			if(value == "Disabled") {
 				_console->GetSettings()->SetVideoFilterType(VideoFilterType::None);
@@ -358,8 +365,7 @@ extern "C" {
 			}
 		}
 
-		var.key = MesenPalette;
-		if(retroEnv(RETRO_ENVIRONMENT_GET_VARIABLE, &var)) {
+		if(readVariable(MesenPalette, var)) {
 			string value = string(var.value);
 			if(value == "Default") {
 				_console->GetSettings()->SetRgbPalette(defaultPalette);
@@ -388,16 +394,14 @@ extern "C" {
 		}
 
 		bool beforeNmi = true;
-		var.key = MesenOverclockType;
-		if(retroEnv(RETRO_ENVIRONMENT_GET_VARIABLE, &var)) {
+		if(readVariable(MesenOverclockType, var)) {
 			string value = string(var.value);
 			if(value == "After NMI") {
 				beforeNmi = false;
 			}
 		}
 
-		var.key = MesenOverclock;
-		if(retroEnv(RETRO_ENVIRONMENT_GET_VARIABLE, &var)) {
+		if(readVariable(MesenOverclock, var)) {
 			string value = string(var.value);
 			int lineCount = 0;
 			if(value == "None") {
@@ -421,8 +425,7 @@ extern "C" {
 
 		int overscanHorizontal = 0;
 		int overscanVertical = 0;		
-		var.key = MesenOverscanHorizontal;
-		if(retroEnv(RETRO_ENVIRONMENT_GET_VARIABLE, &var)) {
+		if(readVariable(MesenOverscanHorizontal, var)) {
 			string value = string(var.value);
 			if(value == "8px") {
 				overscanHorizontal = 8;
@@ -431,8 +434,7 @@ extern "C" {
 			}
 		}
 
-		var.key = MesenOverscanVertical;
-		if(retroEnv(RETRO_ENVIRONMENT_GET_VARIABLE, &var)) {
+		if(readVariable(MesenOverscanVertical, var)) {
 			string value = string(var.value);
 			if(value == "8px") {
 				overscanVertical = 8;
@@ -442,8 +444,7 @@ extern "C" {
 		}
 		_console->GetSettings()->SetOverscanDimensions(overscanHorizontal, overscanHorizontal, overscanVertical, overscanVertical);
 
-		var.key = MesenAspectRatio;
-		if(retroEnv(RETRO_ENVIRONMENT_GET_VARIABLE, &var)) {
+		if(readVariable(MesenAspectRatio, var)) {
 			string value = string(var.value);
 			if(value == "Auto") {
 				_console->GetSettings()->SetVideoAspectRatio(VideoAspectRatio::Auto, 1.0);
@@ -460,8 +461,7 @@ extern "C" {
 			}
 		}
 
-		var.key = MesenRegion;
-		if(retroEnv(RETRO_ENVIRONMENT_GET_VARIABLE, &var)) {
+		if(readVariable(MesenRegion, var)) {
 			string value = string(var.value);
 			if(value == "Auto") {
 				_console->GetSettings()->SetNesModel(NesModel::Auto);
@@ -474,8 +474,7 @@ extern "C" {
 			}
 		}
 		
-		var.key = MesenRamState;
-		if(retroEnv(RETRO_ENVIRONMENT_GET_VARIABLE, &var)) {
+		if(readVariable(MesenRamState, var)) {
 			string value = string(var.value);
 			if(value == "All 0s (Default)") {
 				_console->GetSettings()->SetRamPowerOnState(RamPowerOnState::AllZeros);
@@ -486,8 +485,7 @@ extern "C" {
 			}
 		}
 
-		var.key = MesenScreenRotation;
-		if(retroEnv(RETRO_ENVIRONMENT_GET_VARIABLE, &var)) {
+		if(readVariable(MesenScreenRotation, var)) {
 			string value = string(var.value);
 			if(value == "None") {
 				_console->GetSettings()->SetScreenRotation(0);
@@ -502,8 +500,7 @@ extern "C" {
 
 		int turboSpeed = 0;
 		bool turboEnabled = true;
-		var.key = MesenControllerTurboSpeed;
-		if(retroEnv(RETRO_ENVIRONMENT_GET_VARIABLE, &var)) {
+		if(readVariable(MesenControllerTurboSpeed, var)) {
 			string value = string(var.value);
 			if(value == "Slow") {
 				turboSpeed = 0;
