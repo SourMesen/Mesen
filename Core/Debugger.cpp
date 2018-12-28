@@ -299,7 +299,7 @@ void Debugger::SetBreakpoints(Breakpoint breakpoints[], uint32_t length)
 					_breakpointRpnList[i].push_back(success ? data : ExpressionData());
 				}
 
-				if(bp.IsEnabled()) {
+				if(isEnabled) {
 					bool isReadWriteBp = i == BreakpointType::ReadVram || i == BreakpointType::ReadRam || i == BreakpointType::WriteVram || i == BreakpointType::WriteRam || i == BreakpointType::DummyReadRam || i == BreakpointType::DummyWriteRam;
 					_bpDummyCpuRequired |= isReadWriteBp;
 				}
@@ -312,8 +312,14 @@ void Debugger::SetBreakpoints(Breakpoint breakpoints[], uint32_t length)
 
 bool Debugger::ProcessBreakpoints(BreakpointType type, OperationInfo &operationInfo, bool allowBreak, bool allowMark)
 {
+	//Disable breakpoints if debugger window is closed
+	allowBreak &= _console->GetSettings()->CheckFlag(EmulationFlags::DebuggerWindowEnabled);
+
 	if(_runToCycle != 0) {
 		//Disable all breakpoints while stepping backwards
+		return false;
+	} else if(!allowBreak && !allowMark) {
+		//Nothing to be done, skip processing
 		return false;
 	}
 
@@ -361,15 +367,12 @@ bool Debugger::ProcessBreakpoints(BreakpointType type, OperationInfo &operationI
 
 	for(size_t i = 0, len = breakpoints.size(); i < len; i++) {
 		Breakpoint &breakpoint = breakpoints[i];
-		if(!((breakpoint.IsEnabled() && allowBreak) || (breakpoint.IsMarked() && allowMark))) {
-			//Skip breakpoints we don't need to process
-			continue;
-		}
 
 		if(
-			type == BreakpointType::Global ||
+			((breakpoint.IsEnabled() && allowBreak) || (breakpoint.IsMarked() && allowMark)) &&
+			(type == BreakpointType::Global ||
 			(!isPpuBreakpoint && breakpoint.Matches(operationInfo.Address, info)) ||
-			(isPpuBreakpoint && breakpoint.Matches(operationInfo.Address, ppuInfo))
+			(isPpuBreakpoint && breakpoint.Matches(operationInfo.Address, ppuInfo)))
 		) {
 			if(!breakpoint.HasCondition()) {
 				processBreakpoint(breakpoint);
@@ -382,11 +385,11 @@ bool Debugger::ProcessBreakpoints(BreakpointType type, OperationInfo &operationI
 					processBreakpoint(breakpoint);
 				}
 			}
-		}
 
-		if((needMark || !allowMark) && (needBreak || !allowBreak)) {
-			//No need to process remaining breakpoints
-			break;
+			if((needMark || !allowMark) && (needBreak || !allowBreak)) {
+				//No need to process remaining breakpoints
+				break;
+			}
 		}
 	}
 
