@@ -243,16 +243,31 @@ namespace Mesen.GUI.Debugger.Controls
 
 		private void ShowInSplitView()
 		{
-			this.OnShowInSplitView?.Invoke(Viewer, new AddressEventArgs() { Address = (UInt32)_lastClickedAddress });
+			if(_lastClickedAddress >= 0) {
+				this.OnShowInSplitView?.Invoke(Viewer, new AddressEventArgs() { Address = (UInt32)_lastClickedAddress });
+			} else if(_lastClickedSymbol != null) {
+				AddressTypeInfo info = Viewer.SymbolProvider.GetSymbolAddressInfo(_lastClickedSymbol);
+				if(info != null && info.Address >= 0) {
+					int relAddress = InteropEmu.DebugGetRelativeAddress((UInt32)info.Address, info.Type);
+					this.OnShowInSplitView?.Invoke(Viewer, new AddressEventArgs() { Address = (UInt32)relAddress });
+				}
+			}
 		}
 		
 		private void mnuEditLabel_Click(object sender, EventArgs e)
 		{
 			if(UpdateContextMenu(_lastLocation)) {
-				AddressTypeInfo info = new AddressTypeInfo();
-				InteropEmu.DebugGetAbsoluteAddressAndType((UInt32)_lastClickedAddress, info);
-				if(info.Address >= 0) {
-					ctrlLabelList.EditLabel((UInt32)info.Address, info.Type);
+				if(_lastClickedAddress >= 0) {
+					AddressTypeInfo info = new AddressTypeInfo();
+					InteropEmu.DebugGetAbsoluteAddressAndType((UInt32)_lastClickedAddress, info);
+					if(info.Address >= 0) {
+						ctrlLabelList.EditLabel((UInt32)info.Address, info.Type);
+					}
+				} else if(_lastClickedSymbol != null) {
+					AddressTypeInfo info = Viewer.SymbolProvider.GetSymbolAddressInfo(_lastClickedSymbol);
+					if(info != null && info.Address >= 0) {
+						ctrlLabelList.EditLabel((UInt32)info.Address, info.Type);
+					}
 				}
 			}
 		}
@@ -392,7 +407,14 @@ namespace Mesen.GUI.Debugger.Controls
 		private void mnuEditInMemoryViewer_Click(object sender, EventArgs e)
 		{
 			if(UpdateContextMenu(_lastLocation)) {
-				DebugWindowManager.OpenMemoryViewer(_lastClickedAddress, DebugMemoryType.CpuMemory);
+				if(_lastClickedAddress >= 0) {
+					DebugWindowManager.OpenMemoryViewer(_lastClickedAddress, DebugMemoryType.CpuMemory);
+				} else {
+					AddressTypeInfo info = Viewer.SymbolProvider.GetSymbolAddressInfo(_lastClickedSymbol);
+					if(info != null && info.Address >= 0) {
+						DebugWindowManager.OpenMemoryViewer(info.Address, info.Type.ToMemoryType());
+					}
+				}
 			}
 		}
 
