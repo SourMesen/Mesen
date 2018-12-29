@@ -261,6 +261,7 @@ namespace Mesen.GUI.Debugger
 			mnuRunScanline.InitShortcut(this, nameof(DebuggerShortcutsConfig.RunPpuScanline));
 			mnuRunOneFrame.InitShortcut(this, nameof(DebuggerShortcutsConfig.RunPpuFrame));
 
+			mnuGoToAll.InitShortcut(this, nameof(DebuggerShortcutsConfig.GoToAll));
 			mnuGoToAddress.InitShortcut(this, nameof(DebuggerShortcutsConfig.GoTo));
 			mnuFind.InitShortcut(this, nameof(DebuggerShortcutsConfig.Find));
 			mnuFindNext.InitShortcut(this, nameof(DebuggerShortcutsConfig.FindNext));
@@ -1796,6 +1797,41 @@ namespace Mesen.GUI.Debugger
 				}
 			} catch(Exception ex) {
 				MesenMsgBox.Show("UnexpectedError", MessageBoxButtons.OK, MessageBoxIcon.Error, ex.ToString());
+			}
+		}
+
+		private void mnuGoToAll_Click(object sender, EventArgs e)
+		{
+			using(frmGoToAll frm = new frmGoToAll(_lastCodeWindow.SymbolProvider)) {
+				if(frm.ShowDialog() == DialogResult.OK) {
+					frmGoToAll.GoToDestination dest = frm.Destination;
+
+					if(_lastCodeWindow is ctrlSourceViewer && !string.IsNullOrWhiteSpace(dest.File)) {
+						((ctrlSourceViewer)_lastCodeWindow).ScrollToFileLine(dest.File, dest.Line);
+					} else if(dest.Label != null && dest.Label.GetRelativeAddress() >= 0) {
+						_lastCodeWindow.ScrollToAddress(new AddressTypeInfo() { Address = (int)dest.Label.Address, Type = dest.Label.AddressType });
+					} else if(!string.IsNullOrWhiteSpace(dest.File)) {
+						if(!(_lastCodeWindow is ctrlSourceViewer)) {
+							ctrlDebuggerCode_OnSwitchView(_lastCodeWindow);
+						}
+						if(_lastCodeWindow is ctrlSourceViewer) {
+							((ctrlSourceViewer)_lastCodeWindow).ScrollToFileLine(dest.File, dest.Line);
+						}
+					}
+
+					if(Program.IsMono) {
+						//Delay by 150ms before giving focus when running on Mono
+						//Otherwise this doesn't work (presumably because Mono sets the debugger form to disabled while the popup is opened)
+						Task.Run(() => {
+							System.Threading.Thread.Sleep(150);
+							this.BeginInvoke((Action)(() => {
+								_lastCodeWindow.CodeViewer.Focus();
+							}));
+						});
+					} else {
+						_lastCodeWindow.CodeViewer.Focus();
+					}
+				}
 			}
 		}
 	}

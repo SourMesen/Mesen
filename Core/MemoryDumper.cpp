@@ -240,23 +240,7 @@ void MemoryDumper::SetMemoryValueWord(DebugMemoryType memoryType, uint32_t addre
 uint8_t MemoryDumper::GetMemoryValue(DebugMemoryType memoryType, uint32_t address, bool disableSideEffects)
 {
 	switch(memoryType) {
-		case DebugMemoryType::CpuMemory:
-			if(disableSideEffects) {
-				AddressTypeInfo info;
-				_debugger->GetAbsoluteAddressAndType(address, &info);
-				if(info.Address >= 0) {
-					switch(info.Type) {
-						case AddressType::Register: return 0; //not supported
-						case AddressType::InternalRam: return GetMemoryValue(DebugMemoryType::InternalRam, info.Address, true);
-						case AddressType::PrgRom: return GetMemoryValue(DebugMemoryType::PrgRom, info.Address, true);
-						case AddressType::WorkRam: return GetMemoryValue(DebugMemoryType::WorkRam, info.Address, true);
-						case AddressType::SaveRam: return GetMemoryValue(DebugMemoryType::SaveRam, info.Address, true);
-					}
-				}
-			} else {
-				return _memoryManager->DebugRead(address, false);
-			}
-			break;
+		case DebugMemoryType::CpuMemory: return _memoryManager->DebugRead(address, disableSideEffects);
 
 		case DebugMemoryType::PpuMemory: return _mapper->DebugReadVRAM(address, disableSideEffects);
 		case DebugMemoryType::PaletteMemory: return _ppu->ReadPaletteRAM(address);

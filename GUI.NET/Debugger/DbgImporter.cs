@@ -93,6 +93,21 @@ namespace Mesen.GUI.Debugger
 			return null;
 		}
 
+		public DefinitionInfo GetSymbolDefinition(SymbolInfo symbol)
+		{
+			foreach(int definition in symbol.Definitions) {
+				LineInfo line = _lines[definition];
+				string fileName = _files[line.FileID].Name;
+
+				return new DefinitionInfo() {
+					FileName = fileName,
+					Line = line.LineNumber
+				};
+			}
+
+			return null;
+		}
+
 		private SymbolInfo GetMatchingSymbol(SymbolInfo symbol, int rangeStart, int rangeEnd)
 		{
 			foreach(int reference in symbol.References) {
@@ -116,6 +131,11 @@ namespace Mesen.GUI.Debugger
 				}
 			}									
 			return null;
+		}
+
+		internal List<SymbolInfo> GetSymbols()
+		{
+			return _symbols.Values.ToList();
 		}
 
 		internal SymbolInfo GetSymbol(string word, int prgStartAddress, int prgEndAddress)
@@ -151,7 +171,14 @@ namespace Mesen.GUI.Debugger
 
 			SegmentInfo segment = _segments[symbol.SegmentID.Value];
 			if(segment.IsRam) {
-				return new AddressTypeInfo() { Address = symbol.Address.Value, Type = AddressType.Register };
+				int labelAddress;
+				AddressType? addressType;
+				GetRamLabelAddressAndType(symbol.Address.Value, out labelAddress, out addressType);
+				if(addressType.HasValue) {
+					return new AddressTypeInfo() { Address = labelAddress, Type = addressType.Value };
+				} else {
+					return null;
+				}
 			} else {
 				return new AddressTypeInfo() { Address = symbol.Address.Value - segment.Start + segment.FileOffset - _headerSize, Type = AddressType.PrgRom };
 			}
@@ -297,23 +324,41 @@ namespace Mesen.GUI.Debugger
 			return false;
 		}
 
+		private void GetRamLabelAddressAndType(int address, out int absoluteAddress, out AddressType? addressType)
+		{
+			if(address < 0x2000) {
+				absoluteAddress = address;
+				addressType = AddressType.InternalRam;
+			} else if(address >= _workRamStart && address <= _workRamEnd) {
+				absoluteAddress = address - _workRamStart;
+				addressType = AddressType.WorkRam;
+			} else if(address >= _saveRamStart && address <= _saveRamEnd) {
+				absoluteAddress = address - _saveRamStart;
+				addressType = AddressType.SaveRam;
+			} else {
+				absoluteAddress = -1;
+				addressType = null;
+			}
+		}
+
 		private CodeLabel CreateLabel(Int32 address, bool isRamLabel)
 		{
 			CodeLabel label = null;
 			if(isRamLabel) {
-				if(address < 0x2000) {
-					if(!_ramLabels.TryGetValue(address, out label)) {
-						label = new CodeLabel() { Address = (UInt32)address, AddressType = AddressType.InternalRam, Comment = string.Empty, Label = string.Empty };
-						_ramLabels[address] = label;
+				int labelAddress;
+				AddressType? addressType;
+				GetRamLabelAddressAndType(address, out labelAddress, out addressType);
+				if(addressType == AddressType.InternalRam) {
+					if(!_ramLabels.TryGetValue(labelAddress, out label)) {
+						label = new CodeLabel() { Address = (UInt32)labelAddress, AddressType = AddressType.InternalRam, Comment = string.Empty, Label = string.Empty };
+						_ramLabels[labelAddress] = label;
 					}
-				} else if(address >= _workRamStart && address <= _workRamEnd) {
-					int labelAddress = address - _workRamStart;
+				} else if(addressType == AddressType.WorkRam) {
 					if(!_workRamLabels.TryGetValue(labelAddress, out label)) {
 						label = new CodeLabel() { Address = (UInt32)labelAddress, AddressType = AddressType.WorkRam, Comment = string.Empty, Label = string.Empty };
 						_workRamLabels[labelAddress] = label;
 					}
-				} else if(address >= _saveRamStart && address <= _saveRamEnd) {
-					int labelAddress = address - _saveRamStart;
+				} else if(addressType == AddressType.SaveRam) {
 					if(!_saveRamLabels.TryGetValue(labelAddress, out label)) {
 						label = new CodeLabel() { Address = (UInt32)labelAddress, AddressType = AddressType.SaveRam, Comment = string.Empty, Label = string.Empty };
 						_saveRamLabels[labelAddress] = label;
@@ -645,6 +690,12 @@ namespace Mesen.GUI.Debugger
 			public int ID;
 			public string Name;
 			public int? SymbolID;
+		}
+
+		public class DefinitionInfo
+		{
+			public string FileName;
+			public int Line;
 		}
 	}
 }

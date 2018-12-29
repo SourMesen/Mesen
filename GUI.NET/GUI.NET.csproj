@@ -466,6 +466,12 @@
     <Compile Include="Debugger\Controls\ctrlScanlineCycleSelect.Designer.cs">
       <DependentUpon>ctrlScanlineCycleSelect.cs</DependentUpon>
     </Compile>
+    <Compile Include="Debugger\Controls\ctrlSearchResult.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Debugger\Controls\ctrlSearchResult.Designer.cs">
+      <DependentUpon>ctrlSearchResult.cs</DependentUpon>
+    </Compile>
     <Compile Include="Debugger\Controls\ctrlTextHooker.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -545,7 +551,9 @@
     <Compile Include="Debugger\Controls\ApuViewer\ctrlSquareInfo.Designer.cs">
       <DependentUpon>ctrlSquareInfo.cs</DependentUpon>
     </Compile>
-    <Compile Include="Debugger\Controls\ctrlTextbox.cs" />
+    <Compile Include="Debugger\Controls\ctrlTextbox.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Debugger\Controls\ctrlTextbox.Designer.cs">
       <DependentUpon>ctrlTextbox.cs</DependentUpon>
     </Compile>
@@ -652,6 +660,12 @@
     </Compile>
     <Compile Include="Debugger\frmAssembler.Designer.cs">
       <DependentUpon>frmAssembler.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Debugger\frmGoToAll.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Debugger\frmGoToAll.Designer.cs">
+      <DependentUpon>frmGoToAll.cs</DependentUpon>
     </Compile>
     <Compile Include="Debugger\frmSetScriptTimeout.cs">
       <SubType>Form</SubType>
@@ -1230,6 +1244,8 @@
     <Compile Include="RuntimeChecker.cs" />
     <Compile Include="SingleInstance.cs" />
     <Compile Include="TestRunner.cs" />
+    <None Include="Resources\RegisterIcon.png" />
+    <None Include="Resources\JumpTarget.png" />
     <None Include="Resources\Cut.png" />
     <None Include="Resources\HistoryViewer.png" />
     <None Include="Resources\VsButton4.png" />
@@ -1334,11 +1350,17 @@
     <EmbeddedResource Include="Debugger\Controls\ctrlScanlineCycleSelect.resx">
       <DependentUpon>ctrlScanlineCycleSelect.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Debugger\Controls\ctrlSearchResult.resx">
+      <DependentUpon>ctrlSearchResult.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Debugger\Controls\ctrlTextHooker.resx">
       <DependentUpon>ctrlTextHooker.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Debugger\Controls\ctrlSourceViewer.resx">
       <DependentUpon>ctrlSourceViewer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Debugger\frmGoToAll.resx">
+      <DependentUpon>frmGoToAll.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Debugger\frmSetScriptTimeout.resx">
       <DependentUpon>frmSetScriptTimeout.cs</DependentUpon>

@@ -40,6 +40,11 @@ namespace Mesen.GUI.Debugger
 		{
 			return InteropEmu.DebugGetRelativeAddress(this.Address, this.AddressType);
 		}
+
+		public byte GetValue()
+		{
+			return InteropEmu.DebugGetMemoryValue(AddressType.ToMemoryType(), Address);
+		}
 	}
 
 	public class LabelManager

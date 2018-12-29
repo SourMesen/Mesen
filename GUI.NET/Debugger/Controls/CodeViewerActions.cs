@@ -19,6 +19,7 @@ namespace Mesen.GUI.Debugger.Controls
 		public event SwitchToSourceEventHandler OnSwitchView;
 
 		private int _lastClickedAddress = Int32.MaxValue;
+		private Ld65DbgImporter.SymbolInfo _lastClickedSymbol = null;
 		private string _newWatchValue = string.Empty;
 		private string _lastWord = string.Empty;
 		private Point _lastLocation = Point.Empty;
@@ -212,7 +213,17 @@ namespace Mesen.GUI.Debugger.Controls
 
 		private void GoToLocation()
 		{
-			Viewer.ScrollToLineNumber((int)_lastClickedAddress);
+			if(_lastClickedSymbol != null && Viewer is ctrlSourceViewer) {
+				Ld65DbgImporter.DefinitionInfo def = Viewer.SymbolProvider.GetSymbolDefinition(_lastClickedSymbol);
+				if(def != null) {
+					((ctrlSourceViewer)Viewer).ScrollToFileLine(def.FileName, def.Line);
+					return;
+				}
+			}
+
+			if(_lastClickedAddress >= 0) {
+				Viewer.ScrollToLineNumber((int)_lastClickedAddress);
+			}
 		}
 
 		private void mnuAddToWatch_Click(object sender, EventArgs e)
@@ -480,16 +491,17 @@ namespace Mesen.GUI.Debugger.Controls
 				if(word.StartsWith("$")) {
 					//CPU Address
 					_lastClickedAddress = Int32.Parse(word.Substring(1), NumberStyles.AllowHexSpecifier);
+					_lastClickedSymbol = null;
 					_newWatchValue = "[$" + _lastClickedAddress.ToString("X") + "]";
 				} else if(symbol != null) {
 					//Symbol
-					AddressTypeInfo addressInfo = (AddressTypeInfo)Viewer.SymbolProvider.GetSymbolAddressInfo(symbol);
-					_lastClickedAddress = (Int32)InteropEmu.DebugGetRelativeAddress((uint)addressInfo.Address, addressInfo.Type);
-					bool matchingLabelExists = codeLabel != null && codeLabel.Label == symbol.Name;
-					_newWatchValue = matchingLabelExists ? $"[{word}]" : $"[${_lastClickedAddress.ToString("X2")}]";
+					_lastClickedAddress = -1;
+					_lastClickedSymbol = symbol;
+					_newWatchValue = "[" + word + "]";
 				} else if(codeLabel != null) {
 					//Label
 					_lastClickedAddress = (Int32)InteropEmu.DebugGetRelativeAddress(codeLabel.Address, codeLabel.AddressType);
+					_lastClickedSymbol = null;
 					_newWatchValue = "[" + word + "]";
 				}
 
@@ -525,7 +537,8 @@ namespace Mesen.GUI.Debugger.Controls
 				mnuEditLabel.Text = "Edit Label";
 				mnuEditInMemoryViewer.Enabled = false;
 				mnuEditInMemoryViewer.Text = $"Edit in Memory Viewer";
-				
+
+				_lastClickedSymbol = null;
 				if(mouseLocation.X < Viewer.CodeViewer.CodeMargin) {
 					_lastClickedAddress = Viewer.CodeViewer.GetLineNumberAtPosition(mouseLocation.Y);
 				} else {

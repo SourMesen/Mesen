@@ -327,6 +327,17 @@ namespace Mesen.GUI.Debugger.Controls
 			_tooltipManager?.Close();
 		}
 
+		public void ScrollToFileLine(string filename, int lineNumber)
+		{
+			foreach(Ld65DbgImporter.FileInfo fileInfo in cboFile.Items) {
+				if(fileInfo.Name == filename) {
+					cboFile.SelectedItem = fileInfo;
+					ctrlCodeViewer.ScrollToLineIndex(lineNumber);
+					break;
+				}
+			}
+		}
+
 		public void ScrollToAddress(AddressTypeInfo addressInfo, bool scrollToTop = false)
 		{
 			if(addressInfo.Address >= 0 && addressInfo.Type == AddressType.PrgRom) {

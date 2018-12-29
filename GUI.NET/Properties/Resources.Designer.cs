@@ -493,6 +493,16 @@ namespace Mesen.GUI.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap JumpTarget {
+            get {
+                object obj = ResourceManager.GetObject("JumpTarget", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap LogWindow {
             get {
                 object obj = ResourceManager.GetObject("LogWindow", resourceCulture);
@@ -746,6 +756,16 @@ namespace Mesen.GUI.Properties {
         internal static System.Drawing.Bitmap Record {
             get {
                 object obj = ResourceManager.GetObject("Record", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap RegisterIcon {
+            get {
+                object obj = ResourceManager.GetObject("RegisterIcon", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
