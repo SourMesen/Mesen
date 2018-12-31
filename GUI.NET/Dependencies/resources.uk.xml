@@ -535,7 +535,7 @@
 		</Form>
 		<Form ID="frmAbout" Title="Про програму">
 			<Control ID="labelProductName">Mesen</Control>
-			<Control ID="labelCopyright">© 2018 M. Bibaud (aka Sour)</Control>
+			<Control ID="labelCopyright">© 2019 M. Bibaud (aka Sour)</Control>
 			<Control ID="lblWebsite">Сайт:</Control>
 			<Control ID="lblLink">www.mesen.ca</Control>
 			<Control ID="labelVersion">Версiя:</Control>
