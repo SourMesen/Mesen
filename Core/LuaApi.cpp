@@ -181,9 +181,8 @@ int LuaApi::GetLibrary(lua_State *lua)
 int LuaApi::GetLabelAddress(lua_State *lua)
 {
 	LuaCallHelper l(lua);
-	l.ForceParamCount(1);
 	string label = l.ReadString();
-	checkminparams();
+	checkparams();
 	errorCond(label.length() == 0, "label cannot be empty");
 
 	std::shared_ptr<LabelManager> lblMan = _debugger->GetLabelManager();
