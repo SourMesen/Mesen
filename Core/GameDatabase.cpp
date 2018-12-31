@@ -62,24 +62,29 @@ void GameDatabase::LoadGameDb(vector<string> data)
 	MessageManager::Log("[DB] Initialized - " + std::to_string(_gameDatabase.size()) + " games in DB");
 }
 
+void GameDatabase::LoadGameDb(std::istream &db)
+{
+	vector<string> dbData;
+	while(db.good()) {
+		string lineContent;
+		std::getline(db, lineContent);
+		if(lineContent[lineContent.size() - 1] == '\r') {
+			lineContent = lineContent.substr(0, lineContent.size() - 1);
+		}
+		if(lineContent.empty() || lineContent[0] == '#') {
+			continue;
+		}
+		dbData.push_back(lineContent);
+	}
+	LoadGameDb(dbData);
+}
+
 void GameDatabase::InitDatabase()
 {
 	if(_gameDatabase.size() == 0) {
 		string dbPath = FolderUtilities::CombinePath(FolderUtilities::GetHomeFolder(), "MesenDB.txt");
 		ifstream db(dbPath, ios::in | ios::binary);
-		vector<string> dbData;
-		while(db.good()) {
-			string lineContent;
-			std::getline(db, lineContent);
-			if(lineContent[lineContent.size() - 1] == '\r') {
-				lineContent = lineContent.substr(0, lineContent.size() - 1);
-			}
-			if(lineContent.empty() || lineContent[0] == '#') {
-				continue;
-			}
-			dbData.push_back(lineContent);
-		}
-		LoadGameDb(dbData);
+		LoadGameDb(db);
 	}
 }
 

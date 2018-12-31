@@ -46,10 +46,8 @@ static int32_t _saveStateSize = -1;
 static struct retro_memory_descriptor _descriptors[3];
 static struct retro_memory_map _memoryMap;
 
-//Include game database as an array of strings (need an automated way to generate the include file)
-static vector<string> gameDb = {
+//Include game database as a byte array (representing the MesenDB.txt file)
 #include "MesenDB.inc"
-};
 
 static std::shared_ptr<Console> _console;
 static std::unique_ptr<LibretroRenderer> _renderer;
@@ -111,8 +109,6 @@ extern "C" {
 			logCallback = nullptr;
 		}
 
-		GameDatabase::LoadGameDb(gameDb);
-
 		_console.reset(new Console());
 		_console->Init();
 
@@ -120,6 +116,10 @@ extern "C" {
 		_soundManager.reset(new LibretroSoundManager(_console));
 		_keyManager.reset(new LibretroKeyManager(_console));
 		_messageManager.reset(new LibretroMessageManager(logCallback, retroEnv));
+
+		std::stringstream databaseData;
+		databaseData.write((const char*)MesenDatabase, sizeof(MesenDatabase));
+		GameDatabase::LoadGameDb(databaseData);
 
 		_console->GetSettings()->SetFlags(EmulationFlags::FdsAutoLoadDisk);
 		_console->GetSettings()->SetFlags(EmulationFlags::AutoConfigureInput);
