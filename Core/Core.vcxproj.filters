@@ -1767,5 +1767,11 @@
     <ClCompile Include="StereoCombFilter.cpp">
       <Filter>Nes\APU\Filters</Filter>
     </ClCompile>
+    <ClCompile Include="PgoUtilities.h">
+      <Filter>Misc</Filter>
+    </ClCompile>
+    <ClCompile Include="PgoUtilities.cpp">
+      <Filter>Misc</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

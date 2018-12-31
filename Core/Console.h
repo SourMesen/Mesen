@@ -103,6 +103,8 @@ private:
 	double GetFrameDelay();
 	void DisplayDebugInformation(Timer &clockTimer, Timer &lastFrameTimer, double &lastFrameMin, double &lastFrameMax, uint32_t lastPauseFrame);
 
+	void ExportStub();
+
 public:
 	Console(shared_ptr<Console> master = nullptr, EmulationSettings* initialSettings = nullptr);
 	~Console();

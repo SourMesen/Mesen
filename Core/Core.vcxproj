@@ -954,6 +954,7 @@
     <ClInclude Include="WaveRecorder.h" />
     <ClInclude Include="Yoko.h" />
     <ClInclude Include="Zapper.h" />
+    <ClInclude Include="PgoUtilities.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="APU.cpp" />
@@ -984,6 +985,7 @@
     <ClCompile Include="NsfPpu.cpp" />
     <ClCompile Include="OggMixer.cpp" />
     <ClCompile Include="OggReader.cpp" />
+    <ClCompile Include="PgoUtilities.cpp" />
     <ClCompile Include="RawVideoFilter.cpp" />
     <ClCompile Include="RecordedRomTest.cpp" />
     <ClCompile Include="AutoSaveManager.cpp" />

@@ -46,6 +46,7 @@
 #include "NotificationManager.h"
 #include "HistoryViewer.h"
 #include "ConsolePauseHelper.h"
+#include "PgoUtilities.h"
 
 Console::Console(shared_ptr<Console> master, EmulationSettings* initialSettings)
 {
@@ -1486,3 +1487,9 @@ void Console::DisplayDebugInformation(Timer &clockTimer, Timer &lastFrameTimer, 
 	_debugHud->DrawString(134, 48, ss.str(), 0xFFFFFF, 0xFF000000, 1, startFrame);
 }
 
+void Console::ExportStub()
+{
+	//Force the compiler to export the PgoRunTest function - otherwise it seems to be ignored since it is unused
+	vector<string> testRoms;
+	PgoRunTest(testRoms, true);
+}

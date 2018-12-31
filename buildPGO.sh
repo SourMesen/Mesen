@@ -14,17 +14,16 @@
 #  Note: While GCC runs through this script just fine, the runtime performance is pretty terrible (something must be wrong with the way this is built)
 #
 # This will produce the following binary: bin/x64/Release/Mesen.exe
-
-if [ "$BUILDTARGET" = core ]; then
-	TARG="core"
-else
-	TARG=""
-fi
-
 if [ "$MESENPLATFORM" = x86 ]; then
 	PLAT="x86"
 else
 	PLAT="x64"
+fi
+
+if [ "$BUILDTARGET" = libretro ]; then
+	TARG="libretro"
+else
+	TARG="core"
 fi
 
 OBJ="PGOHelper/obj.${PLAT}/"
@@ -33,8 +32,9 @@ FLAGS="LTO=true MESENPLATFORM=${PLAT}"
 eval ${FLAGS} make clean
 
 #create instrumented binary
-eval ${FLAGS} PGO=profile make pgohelper -j 16
-eval cp InteropDLL/obj.${PLAT}/libMesenCore.${PLAT}.dll ${OBJ}
+eval ${FLAGS} PGO=profile make ${TARG} -j 16
+eval ${FLAGS} PGO=profile make pgohelper -B
+eval cp bin/pgohelperlib.so ${OBJ}
 
 #run the instrumented binary
 cd ${OBJ}
@@ -48,6 +48,10 @@ if [ "$USE_GCC" != true ]; then
 	eval ${FLAGS} make clean
 else
 	cd ..
+fi
+
+if [ "$BUILDTARGET" = "" ]; then
+	TARG=""
 fi
 
 #rebuild using the profiling data to optimize
