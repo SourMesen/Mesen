@@ -107,6 +107,8 @@
 			this.ctrlMemoryAccessCounters = new Mesen.GUI.Debugger.Controls.ctrlMemoryAccessCounters();
 			this.tpgProfiler = new System.Windows.Forms.TabPage();
 			this.ctrlProfiler = new Mesen.GUI.Debugger.Controls.ctrlProfiler();
+			this.mnuGoToAll = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem14 = new System.Windows.Forms.ToolStripSeparator();
 			this.flowLayoutPanel1.SuspendLayout();
 			this.menuStrip1.SuspendLayout();
 			this.tabMain.SuspendLayout();
@@ -656,10 +658,12 @@
 			// toolStripMenuItem1
 			// 
 			this.toolStripMenuItem1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.mnuGoToAll,
+            this.mnuGoTo,
+            this.toolStripMenuItem14,
             this.mnuFind,
             this.mnuFindNext,
-            this.mnuFindPrev,
-            this.mnuGoTo});
+            this.mnuFindPrev});
 			this.toolStripMenuItem1.Name = "toolStripMenuItem1";
 			this.toolStripMenuItem1.Size = new System.Drawing.Size(54, 20);
 			this.toolStripMenuItem1.Text = "Search";
@@ -668,7 +672,7 @@
 			// 
 			this.mnuFind.Image = global::Mesen.GUI.Properties.Resources.Find;
 			this.mnuFind.Name = "mnuFind";
-			this.mnuFind.Size = new System.Drawing.Size(145, 22);
+			this.mnuFind.Size = new System.Drawing.Size(152, 22);
 			this.mnuFind.Text = "Find...";
 			this.mnuFind.Click += new System.EventHandler(this.mnuFind_Click);
 			// 
@@ -676,7 +680,7 @@
 			// 
 			this.mnuFindNext.Image = global::Mesen.GUI.Properties.Resources.NextArrow;
 			this.mnuFindNext.Name = "mnuFindNext";
-			this.mnuFindNext.Size = new System.Drawing.Size(145, 22);
+			this.mnuFindNext.Size = new System.Drawing.Size(152, 22);
 			this.mnuFindNext.Text = "Find Next";
 			this.mnuFindNext.Click += new System.EventHandler(this.mnuFindNext_Click);
 			// 
@@ -684,14 +688,14 @@
 			// 
 			this.mnuFindPrev.Image = global::Mesen.GUI.Properties.Resources.PreviousArrow;
 			this.mnuFindPrev.Name = "mnuFindPrev";
-			this.mnuFindPrev.Size = new System.Drawing.Size(145, 22);
+			this.mnuFindPrev.Size = new System.Drawing.Size(152, 22);
 			this.mnuFindPrev.Text = "Find Previous";
 			this.mnuFindPrev.Click += new System.EventHandler(this.mnuFindPrev_Click);
 			// 
 			// mnuGoTo
 			// 
 			this.mnuGoTo.Name = "mnuGoTo";
-			this.mnuGoTo.Size = new System.Drawing.Size(145, 22);
+			this.mnuGoTo.Size = new System.Drawing.Size(152, 22);
 			this.mnuGoTo.Text = "Go To...";
 			this.mnuGoTo.Click += new System.EventHandler(this.mnuGoTo_Click);
 			// 
@@ -771,6 +775,18 @@
 			this.ctrlProfiler.Name = "ctrlProfiler";
 			this.ctrlProfiler.Size = new System.Drawing.Size(606, 343);
 			this.ctrlProfiler.TabIndex = 0;
+			// 
+			// mnuGoToAll
+			// 
+			this.mnuGoToAll.Name = "mnuGoToAll";
+			this.mnuGoToAll.Size = new System.Drawing.Size(152, 22);
+			this.mnuGoToAll.Text = "Go to All";
+			this.mnuGoToAll.Click += new System.EventHandler(this.mnuGoToAll_Click);
+			// 
+			// toolStripMenuItem14
+			// 
+			this.toolStripMenuItem14.Name = "toolStripMenuItem14";
+			this.toolStripMenuItem14.Size = new System.Drawing.Size(149, 6);
 			// 
 			// frmMemoryViewer
 			// 
@@ -876,5 +892,7 @@
 		private System.Windows.Forms.ToolStripMenuItem mnuSelectFont;
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem13;
 		private System.Windows.Forms.ToolStripMenuItem mnuByteEditingMode;
+		private System.Windows.Forms.ToolStripMenuItem mnuGoToAll;
+		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem14;
 	}
 }

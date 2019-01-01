@@ -221,7 +221,7 @@ namespace Mesen.GUI.Config
 				return "";
 			} else {
 				string keyString = new KeysConverter().ConvertToString(keys);
-				return keyString.Replace("+None", "").Replace("Oemplus", "+").Replace("Oemtilde", "Tilde").Replace("OemMinus", "-").Replace("Cancel", "Break").Replace("Escape", "Esc");
+				return keyString.Replace("+None", "").Replace("Oemcomma", ",").Replace("Oemplus", "+").Replace("Oemtilde", "Tilde").Replace("OemMinus", "-").Replace("Cancel", "Break").Replace("Escape", "Esc");
 			}
 		}
 		

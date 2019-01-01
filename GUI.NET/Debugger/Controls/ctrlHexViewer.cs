@@ -182,12 +182,13 @@ namespace Mesen.GUI.Debugger.Controls
 			int currentAddr = (int)(this.ctrlHexBox.CurrentLine - 1) * this.ctrlHexBox.BytesPerLine;
 			address.Address = (UInt32)currentAddr;
 
-			frmGoToLine frm = new frmGoToLine(address, (_byteProvider.Length - 1).ToString("X").Length);
-			frm.StartPosition = FormStartPosition.Manual;
-			Point topLeft = this.PointToScreen(new Point(0, 0));
-			frm.Location = new Point(topLeft.X + (this.Width - frm.Width) / 2, topLeft.Y + (this.Height - frm.Height) / 2);
-			if(frm.ShowDialog() == DialogResult.OK) {
-				GoToAddress((int)address.Address);
+			using(frmGoToLine frm = new frmGoToLine(address, (_byteProvider.Length - 1).ToString("X").Length)) {
+				frm.StartPosition = FormStartPosition.Manual;
+				Point topLeft = this.PointToScreen(new Point(0, 0));
+				frm.Location = new Point(topLeft.X + (this.Width - frm.Width) / 2, topLeft.Y + (this.Height - frm.Height) / 2);
+				if(frm.ShowDialog() == DialogResult.OK) {
+					GoToAddress((int)address.Address);
+				}
 			}
 		}
 

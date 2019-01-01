@@ -35,6 +35,8 @@ namespace Mesen.GUI.Debugger
 		{
 			base.OnLoad(e);
 
+			DebugWorkspaceManager.AutoLoadDbgFiles(true);
+
 			this._selectedTab = this.tabMain.SelectedTab;
 
 			DebugInfo config = ConfigManager.Config.DebugInfo;
@@ -129,6 +131,7 @@ namespace Mesen.GUI.Debugger
 
 			mnuRefresh.InitShortcut(this, nameof(DebuggerShortcutsConfig.Refresh));
 
+			mnuGoToAll.InitShortcut(this, nameof(DebuggerShortcutsConfig.GoToAll));
 			mnuGoTo.InitShortcut(this, nameof(DebuggerShortcutsConfig.GoTo));
 			mnuFind.InitShortcut(this, nameof(DebuggerShortcutsConfig.Find));
 			mnuFindNext.InitShortcut(this, nameof(DebuggerShortcutsConfig.FindNext));
@@ -197,7 +200,30 @@ namespace Mesen.GUI.Debugger
 			cboMemoryType.SetEnumValue(memoryType);
 			ctrlHexViewer.GoToAddress(address);
 		}
-		
+
+		public void GoToAll()
+		{
+			using(frmGoToAll frm = new frmGoToAll(true, false)) {
+				if(frm.ShowDialog() == DialogResult.OK) {
+					frmGoToAll.GoToDestination dest = frm.Destination;
+
+					tabMain.SelectedTab = tpgMemoryViewer;
+					if(_memoryType == DebugMemoryType.CpuMemory && dest.CpuAddress >= 0) {
+						ctrlHexViewer.GoToAddress(dest.CpuAddress);
+					} else {
+						DebugMemoryType memType = dest.AddressInfo.Type.ToMemoryType();
+						if(memType == DebugMemoryType.InternalRam) {
+							//There is no specific "tab" for the internal ram, show it in the cpu memory tab
+							memType = DebugMemoryType.CpuMemory;
+						}
+
+						cboMemoryType.SetEnumValue(memType);
+						ctrlHexViewer.GoToAddress(dest.AddressInfo.Address);
+					}
+				}
+			}
+		}
+
 		private void InitTblMappings()
 		{
 			DebugWorkspace workspace = DebugWorkspaceManager.GetWorkspace();
@@ -351,6 +377,11 @@ namespace Mesen.GUI.Debugger
 		private void mnuGoTo_Click(object sender, EventArgs e)
 		{
 			this.ctrlHexViewer.GoToAddress();
+		}
+
+		private void mnuGoToAll_Click(object sender, EventArgs e)
+		{
+			this.GoToAll();
 		}
 
 		private void mnuIncreaseFontSize_Click(object sender, EventArgs e)

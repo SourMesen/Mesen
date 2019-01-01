@@ -21,14 +21,18 @@ namespace Mesen.GUI.Debugger
 		private int _selectedResult = 0;
 		private int _resultCount = 0;
 		private Ld65DbgImporter _symbolProvider;
+		private bool _allowOutOfScope;
+		private bool _showFilesAndConstants;
 
 		public GoToDestination Destination { get; private set; }
 
-		public frmGoToAll()
+		public frmGoToAll(bool allowOutOfScope, bool showFilesAndConstants)
 		{
 			InitializeComponent();
 
 			_symbolProvider = DebugWorkspaceManager.SymbolProvider;
+			_allowOutOfScope = allowOutOfScope;
+			_showFilesAndConstants = showFilesAndConstants;
 
 			tlpResults.SuspendLayout();
 			for(int i = 0; i < MaxResultCount; i++) {
@@ -130,18 +134,20 @@ namespace Mesen.GUI.Debugger
 
 			if(!string.IsNullOrWhiteSpace(searchString)) {
 				if(_symbolProvider != null) {
-					foreach(Ld65DbgImporter.FileInfo file in _symbolProvider.Files.Values) {
-						if(file.Name.ToLower().Contains(searchString)) {
-							searchResults.Add(new SearchResultInfo() {
-								Caption = Path.GetFileName(file.Name),
-								AbsoluteAddress = -1,
-								MemoryType = AddressType.InternalRam,
-								SearchResultType = SearchResultType.File,
-								Filename = file.Name,
-								FileLineNumber = 0,
-								RelativeAddress = -1,
-								CodeLabel = null
-							});
+					if(_showFilesAndConstants) {
+						foreach(Ld65DbgImporter.FileInfo file in _symbolProvider.Files.Values) {
+							if(file.Name.ToLower().Contains(searchString)) {
+								searchResults.Add(new SearchResultInfo() {
+									Caption = Path.GetFileName(file.Name),
+									AbsoluteAddress = -1,
+									MemoryType = AddressType.InternalRam,
+									SearchResultType = SearchResultType.File,
+									Filename = file.Name,
+									FileLineNumber = 0,
+									RelativeAddress = -1,
+									CodeLabel = null
+								});
+							}
 						}
 					}
 
@@ -152,6 +158,10 @@ namespace Mesen.GUI.Debugger
 							int value = 0;
 							int relAddress = -1;
 							bool isConstant = addressInfo == null;
+							if(!_showFilesAndConstants && isConstant) {
+								continue;
+							}
+
 							if(addressInfo != null) {
 								value = InteropEmu.DebugGetMemoryValue(addressInfo.Type.ToMemoryType(), (uint)addressInfo.Address);
 								relAddress = InteropEmu.DebugGetRelativeAddress((uint)addressInfo.Address, addressInfo.Type);
@@ -201,7 +211,7 @@ namespace Mesen.GUI.Debugger
 								MemoryType = label.AddressType,
 								SearchResultType = resultType,
 								Filename = "",
-								Disabled = relativeAddress < 0,
+								Disabled = !_allowOutOfScope && relativeAddress < 0,
 								RelativeAddress = relativeAddress,
 								CodeLabel = label
 							});
@@ -275,7 +285,14 @@ namespace Mesen.GUI.Debugger
 			if(_resultCount > 0) {
 				SearchResultInfo searchResult = _results[_selectedResult].Tag as SearchResultInfo;
 				if(!searchResult.Disabled) {
-					Destination = new GoToDestination() { Label = searchResult.CodeLabel, File = searchResult.Filename, Line = searchResult.FileLineNumber };
+					AddressTypeInfo addressInfo = new AddressTypeInfo() { Address = searchResult.AbsoluteAddress, Type = searchResult.MemoryType };
+					Destination = new GoToDestination() {
+						AddressInfo = addressInfo,
+						CpuAddress = addressInfo.Address >= 0 ? InteropEmu.DebugGetRelativeAddress((UInt32)addressInfo.Address, addressInfo.Type) : -1,
+						Label = searchResult.CodeLabel,
+						File = searchResult.Filename,
+						Line = searchResult.FileLineNumber
+					};
 					DialogResult = DialogResult.OK;
 					Close();
 				}
@@ -285,6 +302,7 @@ namespace Mesen.GUI.Debugger
 		public struct GoToDestination
 		{
 			public CodeLabel Label;
+			public AddressTypeInfo AddressInfo;
 			public int CpuAddress;
 			public string File;
 			public int Line;

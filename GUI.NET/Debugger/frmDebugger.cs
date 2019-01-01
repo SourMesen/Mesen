@@ -1730,7 +1730,7 @@ namespace Mesen.GUI.Debugger
 
 		private void mnuGoToAll_Click(object sender, EventArgs e)
 		{
-			using(frmGoToAll frm = new frmGoToAll()) {
+			using(frmGoToAll frm = new frmGoToAll(false, true)) {
 				if(frm.ShowDialog() == DialogResult.OK) {
 					frmGoToAll.GoToDestination dest = frm.Destination;
 
