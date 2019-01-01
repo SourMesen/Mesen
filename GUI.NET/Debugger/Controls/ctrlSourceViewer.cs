@@ -84,17 +84,30 @@ namespace Mesen.GUI.Debugger.Controls
 			_lineNumberNotes = new List<string>();
 			List<string> codeLines = new List<string>();
 
+			byte[] prgRomContent = InteropEmu.DebugGetMemoryState(DebugMemoryType.PrgRom);
+
 			bool isC = CurrentFile.Name.EndsWith(".h") || CurrentFile.Name.EndsWith(".c");
-			int index = 0;
+			int lineIndex = 0;
 			foreach(string line in CurrentFile.Data) {
 				string l = line.Replace("\t", "  ");
 
 				addressing.Add("");
 
-				int prgAddress = _symbolProvider.GetPrgAddress(CurrentFile.ID, index);
+				int prgAddress = _symbolProvider.GetPrgAddress(CurrentFile.ID, lineIndex);
+
+				if(prgAddress >= 0) {
+					int opSize = frmOpCodeTooltip.GetOpSize(prgRomContent[prgAddress]);
+					string byteCode = "";
+					for(int i = prgAddress, end = prgAddress + opSize; i < end ; i++) {
+						byteCode += "$" + prgRomContent[i].ToString("X2") + " ";
+					}
+					lineNotes.Add(byteCode);
+				} else {
+					lineNotes.Add("");
+				}
+
 				int relativeAddress = InteropEmu.DebugGetRelativeAddress((uint)prgAddress, AddressType.PrgRom);
 				lineNumbers.Add(relativeAddress);
-				lineNotes.Add("");
 				_lineNumberNotes.Add(prgAddress >= 0 ? prgAddress.ToString("X4") : "");
 
 				string trimmed = l.TrimStart();
@@ -115,7 +128,7 @@ namespace Mesen.GUI.Debugger.Controls
 					comments.Add("");
 					codeLines.Add(trimmed);
 				}
-				index++;
+				lineIndex++;
 			}
 
 			ctrlCodeViewer.CodeHighlightingEnabled = !isC;

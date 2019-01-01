@@ -33,7 +33,7 @@
 			this.mnuMarkAsCode = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuMarkAsData = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuMarkAsUnidentifiedData = new System.Windows.Forms.ToolStripMenuItem();
-			this.toolStripMenuItem4 = new System.Windows.Forms.ToolStripSeparator();
+			this.sepMarkSelectionAs = new System.Windows.Forms.ToolStripSeparator();
 			this.mnuEditSelectedCode = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuEditSubroutine = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuUndoPrgChrEdit = new System.Windows.Forms.ToolStripMenuItem();
@@ -76,7 +76,7 @@
 			// 
 			this.contextMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.mnuMarkSelectionAs,
-            this.toolStripMenuItem4,
+            this.sepMarkSelectionAs,
             this.mnuEditSelectedCode,
             this.mnuEditSubroutine,
             this.mnuUndoPrgChrEdit,
@@ -142,10 +142,10 @@
 			this.mnuMarkAsUnidentifiedData.Text = "Unidentified Code/Data";
 			this.mnuMarkAsUnidentifiedData.Click += new System.EventHandler(this.mnuMarkAsUnidentifiedData_Click);
 			// 
-			// toolStripMenuItem4
+			// sepMarkSelectionAs
 			// 
-			this.toolStripMenuItem4.Name = "toolStripMenuItem4";
-			this.toolStripMenuItem4.Size = new System.Drawing.Size(250, 6);
+			this.sepMarkSelectionAs.Name = "sepMarkSelectionAs";
+			this.sepMarkSelectionAs.Size = new System.Drawing.Size(250, 6);
 			// 
 			// mnuEditSelectedCode
 			// 
@@ -417,7 +417,7 @@
 		private System.Windows.Forms.ToolStripMenuItem mnuMarkAsCode;
 		private System.Windows.Forms.ToolStripMenuItem mnuMarkAsData;
 		private System.Windows.Forms.ToolStripMenuItem mnuMarkAsUnidentifiedData;
-		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem4;
+		private System.Windows.Forms.ToolStripSeparator sepMarkSelectionAs;
 		private System.Windows.Forms.ToolStripMenuItem mnuEditSelectedCode;
 		private System.Windows.Forms.ToolStripMenuItem mnuEditSubroutine;
 		private System.Windows.Forms.ToolStripMenuItem mnuUndoPrgChrEdit;

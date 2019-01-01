@@ -26,7 +26,7 @@ namespace Mesen.GUI.Debugger.Controls
 		private DebugViewInfo _config;
 
 		public ICodeViewer Viewer { get; set; }
-		public bool SourceView { get; set; }
+		public bool SourceView { get; private set; }
 
 		public CodeViewerActions()
 		{
@@ -465,9 +465,13 @@ namespace Mesen.GUI.Debugger.Controls
 			items[nameof(mnuSetNextStatement)].Enabled = Viewer.ActiveAddress.HasValue;
 			items[nameof(mnuEditSelectedCode)].Enabled = items[nameof(mnuEditSubroutine)].Enabled = InteropEmu.DebugIsExecutionStopped() && Viewer.CodeViewer.CurrentLine >= 0;
 
+			bool hasSymbolProvider = Viewer.SymbolProvider != null;
+			items[nameof(mnuShowSourceAsComments)].Visible = hasSymbolProvider;
+			items[nameof(mnuSwitchView)].Visible = hasSymbolProvider;
+			items[nameof(sepSwitchView)].Visible = hasSymbolProvider;
+			
 			if(SourceView) {
 				items[nameof(mnuMarkSelectionAs)].Visible = false;
-				items[nameof(mnuShowCodeNotes)].Visible = false;
 
 				items[nameof(mnuFindOccurrences)].Visible = false;
 				items[nameof(mnuEditSubroutine)].Visible = false;
@@ -477,12 +481,8 @@ namespace Mesen.GUI.Debugger.Controls
 				items[nameof(mnuEditLabel)].Visible = false;
 				items[nameof(sepNavigation)].Visible = false;
 				items[nameof(mnuShowSourceAsComments)].Visible = false;
+				items[nameof(sepMarkSelectionAs)].Visible = false;
 			}
-
-			bool hasSymbolProvider = Viewer.SymbolProvider != null;
-			items[nameof(mnuShowSourceAsComments)].Visible = hasSymbolProvider;
-			items[nameof(mnuSwitchView)].Visible = hasSymbolProvider;
-			items[nameof(sepSwitchView)].Visible = hasSymbolProvider;
 		}
 
 		private bool UpdateContextMenu(Point mouseLocation)
