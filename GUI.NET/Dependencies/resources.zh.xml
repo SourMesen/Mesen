@@ -118,7 +118,7 @@
 			<Control ID="lblSoundChips">声音芯片:</Control>
 			<Control ID="lblRecording">正在录音</Control>
 			<Control ID="lblSlowMotion">慢放</Control>
-			<Control ID="lblRewinding">Rewinding</Control>
+			<Control ID="lblRewinding">倒带</Control>
 			<Control ID="lblFastForward">快进</Control>
 		</Form>
 		<Form ID="frmLogWindow" Title="日志窗口">
@@ -829,9 +829,9 @@
 		<Message ID="ConfirmPowerCycle">您真的要执行电源操作吗？</Message>
 		<Message ID="ConfirmExit">您真的要退出吗？</Message>
 
-		<Message ID="EmulatorShortcutMappings_FastForward">快进</Message>
+		<Message ID="EmulatorShortcutMappings_FastForward">快进 (按住）</Message>
 		<Message ID="EmulatorShortcutMappings_ToggleFastForward">切换快进</Message>
-		<Message ID="EmulatorShortcutMappings_Rewind">倒带</Message>
+		<Message ID="EmulatorShortcutMappings_Rewind">倒带 (按住)</Message>
 		<Message ID="EmulatorShortcutMappings_ToggleRewind">切换倒带</Message>
 		<Message ID="EmulatorShortcutMappings_RewindTenSecs">快退 10 秒</Message>
 		<Message ID="EmulatorShortcutMappings_RewindOneMin">快退 1 分钟</Message>
