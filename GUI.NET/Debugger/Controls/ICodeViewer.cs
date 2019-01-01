@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace Mesen.GUI.Debugger.Controls
 {
 	public delegate void SetNextStatementEventHandler(AddressEventArgs args);
-	public delegate void ShowInSplitViewEventHandler(ICodeViewer sender, AddressEventArgs args);
+	public delegate void ShowInSplitViewEventHandler(ICodeViewer sender, GoToDestination dest);
 	public delegate void SwitchToSourceEventHandler(ICodeViewer sender);
 
 	public interface ICodeViewer

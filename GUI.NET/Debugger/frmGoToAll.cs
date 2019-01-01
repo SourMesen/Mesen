@@ -298,14 +298,14 @@ namespace Mesen.GUI.Debugger
 				}
 			}
 		}
+	}
 
-		public struct GoToDestination
-		{
-			public CodeLabel Label;
-			public AddressTypeInfo AddressInfo;
-			public int CpuAddress;
-			public string File;
-			public int Line;
-		}
+	public struct GoToDestination
+	{
+		public CodeLabel Label;
+		public AddressTypeInfo AddressInfo;
+		public int CpuAddress;
+		public string File;
+		public int Line;
 	}
 }

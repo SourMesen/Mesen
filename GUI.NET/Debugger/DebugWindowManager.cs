@@ -47,7 +47,7 @@ namespace Mesen.GUI.Debugger
 			frm.Show();
 		}
 
-		public static void OpenMemoryViewer(int address, DebugMemoryType memoryType)
+		private static frmMemoryViewer OpenMemoryViewer()
 		{
 			frmMemoryViewer frm = GetMemoryViewer();
 			if(frm == null) {
@@ -56,7 +56,19 @@ namespace Mesen.GUI.Debugger
 				_openedWindows.Add(frm);
 			}
 			frm.Show();
+			return frm;
+		}
+
+		public static void OpenMemoryViewer(int address, DebugMemoryType memoryType)
+		{
+			frmMemoryViewer frm = OpenMemoryViewer();
 			frm.ShowAddress(address, memoryType);
+		}
+
+		public static void OpenMemoryViewer(GoToDestination dest)
+		{
+			frmMemoryViewer frm = OpenMemoryViewer();
+			frm.GoToDestination(dest);
 		}
 
 		public static frmScript OpenScriptWindow(bool forceBlank)

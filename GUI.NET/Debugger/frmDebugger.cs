@@ -606,7 +606,7 @@ namespace Mesen.GUI.Debugger
 			_previousCycle = state.CPU.CycleCount;
 
 			if(UpdateSplitView()) {
-				if(newCode != null || ctrlDebuggerCodeSplit.Code == null) {
+				if(ctrlDebuggerCodeSplit.Code != ctrlDebuggerCode.Code) {
 					ctrlDebuggerCodeSplit.Code = ctrlDebuggerCode.Code;
 				}
 			} else {
@@ -756,7 +756,7 @@ namespace Mesen.GUI.Debugger
 			InteropEmu.DebugPpuStep((UInt32)cycleCount);
 		}
 		
-		private void ctrlDebuggerCode_OnShowInSplitView(ICodeViewer sender, AddressEventArgs args)
+		private void ctrlDebuggerCode_OnShowInSplitView(ICodeViewer sender, GoToDestination dest)
 		{
 			if(!ConfigManager.Config.DebugInfo.SplitView) {
 				mnuSplitView.Checked = true;
@@ -765,18 +765,17 @@ namespace Mesen.GUI.Debugger
 				UpdateDebugger(false);
 			}
 
-			UInt16 addr = (UInt16)args.Address;
 			if(sender == ctrlDebuggerCode || sender == ctrlSourceViewer) {
 				if(ctrlSourceViewerSplit.Visible) {
-					ctrlSourceViewerSplit.ScrollToLineNumber(addr);
+					GoToDestination(ctrlSourceViewerSplit, dest);
 				} else {
-					ctrlDebuggerCodeSplit.ScrollToLineNumber(addr);
+					GoToDestination(ctrlDebuggerCodeSplit, dest);
 				}
 			} else {
 				if(ctrlSourceViewer.Visible) {
-					ctrlSourceViewer.ScrollToLineNumber(addr);
+					GoToDestination(ctrlSourceViewer, dest);
 				} else {
-					ctrlDebuggerCode.ScrollToLineNumber(addr);
+					GoToDestination(ctrlDebuggerCode, dest);
 				}
 			}
 		}
@@ -1728,24 +1727,44 @@ namespace Mesen.GUI.Debugger
 			}
 		}
 
+		private ICodeViewer GetAlternateView(ICodeViewer viewer)
+		{
+			if(viewer == ctrlDebuggerCode) {
+				return ctrlSourceViewer;
+			} else if(viewer == ctrlSourceViewer) {
+				return ctrlDebuggerCode;
+			} else if(viewer == ctrlDebuggerCodeSplit) {
+				return ctrlSourceViewerSplit;
+			} else if(viewer == ctrlSourceViewerSplit) {
+				return ctrlDebuggerCodeSplit;
+			}
+			return null;
+		}
+
+		private void GoToDestination(ICodeViewer target, GoToDestination dest)
+		{
+			if(target is ctrlSourceViewer && !string.IsNullOrWhiteSpace(dest.File)) {
+				((ctrlSourceViewer)target).ScrollToFileLine(dest.File, dest.Line);
+			} else if(dest.Label != null && dest.Label.GetRelativeAddress() >= 0) {
+				target.ScrollToAddress(new AddressTypeInfo() { Address = (int)dest.Label.Address, Type = dest.Label.AddressType });
+			} else if(!string.IsNullOrWhiteSpace(dest.File)) {
+				if(!(target is ctrlSourceViewer)) {
+					ctrlDebuggerCode_OnSwitchView(target);
+					target = GetAlternateView(target);
+				}
+				if(target is ctrlSourceViewer) {
+					((ctrlSourceViewer)target).ScrollToFileLine(dest.File, dest.Line);
+				}
+			} else if(dest.CpuAddress >= 0) {
+				target.ScrollToLineNumber(dest.CpuAddress);
+			}
+		}
+
 		private void mnuGoToAll_Click(object sender, EventArgs e)
 		{
 			using(frmGoToAll frm = new frmGoToAll(false, true)) {
 				if(frm.ShowDialog() == DialogResult.OK) {
-					frmGoToAll.GoToDestination dest = frm.Destination;
-
-					if(_lastCodeWindow is ctrlSourceViewer && !string.IsNullOrWhiteSpace(dest.File)) {
-						((ctrlSourceViewer)_lastCodeWindow).ScrollToFileLine(dest.File, dest.Line);
-					} else if(dest.Label != null && dest.Label.GetRelativeAddress() >= 0) {
-						_lastCodeWindow.ScrollToAddress(new AddressTypeInfo() { Address = (int)dest.Label.Address, Type = dest.Label.AddressType });
-					} else if(!string.IsNullOrWhiteSpace(dest.File)) {
-						if(!(_lastCodeWindow is ctrlSourceViewer)) {
-							ctrlDebuggerCode_OnSwitchView(_lastCodeWindow);
-						}
-						if(_lastCodeWindow is ctrlSourceViewer) {
-							((ctrlSourceViewer)_lastCodeWindow).ScrollToFileLine(dest.File, dest.Line);
-						}
-					}
+					GoToDestination(_lastCodeWindow, frm.Destination);
 
 					if(Program.IsMono) {
 						//Delay by 150ms before giving focus when running on Mono

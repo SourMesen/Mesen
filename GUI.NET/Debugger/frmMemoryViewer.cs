@@ -196,30 +196,37 @@ namespace Mesen.GUI.Debugger
 
 		public void ShowAddress(int address, DebugMemoryType memoryType)
 		{
+			if(memoryType == DebugMemoryType.InternalRam) {
+				//There is no specific "tab" for the internal ram, show it in the cpu memory tab
+				memoryType = DebugMemoryType.CpuMemory;
+			}
+
 			tabMain.SelectedTab = tpgMemoryViewer;
 			cboMemoryType.SetEnumValue(memoryType);
 			ctrlHexViewer.GoToAddress(address);
+		}
+
+		public void GoToDestination(GoToDestination dest)
+		{
+			if(_memoryType == DebugMemoryType.CpuMemory && dest.CpuAddress >= 0) {
+				this.ShowAddress(dest.CpuAddress, DebugMemoryType.CpuMemory);
+			} else if(dest.AddressInfo != null) {
+				this.ShowAddress(dest.AddressInfo.Address, dest.AddressInfo.Type.ToMemoryType());
+			} else if(dest.Label != null) {
+				int relAddress = dest.Label.GetRelativeAddress();
+				if(_memoryType == DebugMemoryType.CpuMemory && relAddress >= 0) {
+					this.ShowAddress(relAddress, DebugMemoryType.CpuMemory);
+				} else {
+					this.ShowAddress((int)dest.Label.Address, dest.Label.AddressType.ToMemoryType());
+				}
+			}
 		}
 
 		public void GoToAll()
 		{
 			using(frmGoToAll frm = new frmGoToAll(true, false)) {
 				if(frm.ShowDialog() == DialogResult.OK) {
-					frmGoToAll.GoToDestination dest = frm.Destination;
-
-					tabMain.SelectedTab = tpgMemoryViewer;
-					if(_memoryType == DebugMemoryType.CpuMemory && dest.CpuAddress >= 0) {
-						ctrlHexViewer.GoToAddress(dest.CpuAddress);
-					} else {
-						DebugMemoryType memType = dest.AddressInfo.Type.ToMemoryType();
-						if(memType == DebugMemoryType.InternalRam) {
-							//There is no specific "tab" for the internal ram, show it in the cpu memory tab
-							memType = DebugMemoryType.CpuMemory;
-						}
-
-						cboMemoryType.SetEnumValue(memType);
-						ctrlHexViewer.GoToAddress(dest.AddressInfo.Address);
-					}
+					GoToDestination(frm.Destination);
 				}
 			}
 		}
