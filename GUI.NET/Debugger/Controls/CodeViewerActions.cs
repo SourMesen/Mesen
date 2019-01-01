@@ -289,17 +289,17 @@ namespace Mesen.GUI.Debugger.Controls
 
 		public void ToggleBreakpoint(bool toggleEnabledFlag)
 		{
-			int lineIndex = Viewer.CodeViewer.SelectedLine;
-			int relativeAddress = Viewer.CodeViewer.GetLineNumber(lineIndex);
-			if(relativeAddress < 0 && Viewer.CodeViewer.LineCount > lineIndex + 1) {
+			AddressTypeInfo info = Viewer.GetAddressInfo(Viewer.CodeViewer.SelectedLine);
+			if(info.Address >= 0) {
+				BreakpointManager.ToggleBreakpoint(-1, info, toggleEnabledFlag);
+			} else {
 				//Current line has no address, try using the next line instead.
 				//(Used when trying to set a breakpoint on a row containing only a label)
-				lineIndex++;
-				relativeAddress = Viewer.CodeViewer.GetLineNumber(lineIndex);
+				info = Viewer.GetAddressInfo(Viewer.CodeViewer.SelectedLine + 1);
+				if(info.Address >= 0) {
+					BreakpointManager.ToggleBreakpoint(-1, info, toggleEnabledFlag);
+				}
 			}
-
-			AddressTypeInfo info = Viewer.GetAddressInfo(lineIndex);
-			BreakpointManager.ToggleBreakpoint(relativeAddress, info, toggleEnabledFlag);
 		}
 
 		private void mnuShowByteCodeOnLeft_Click(object sender, EventArgs e)

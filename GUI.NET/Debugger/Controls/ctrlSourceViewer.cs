@@ -191,7 +191,7 @@ namespace Mesen.GUI.Debugger.Controls
 
 		private void mnuToggleBreakpoint_Click(object sender, EventArgs e)
 		{
-			ToggleBreakpoint();
+			_codeViewerActions.ToggleBreakpoint(false);
 		}
 
 		public AddressTypeInfo GetAddressInfo(int lineIndex)
@@ -237,21 +237,6 @@ namespace Mesen.GUI.Debugger.Controls
 			}
 		}
 
-		public void ToggleBreakpoint()
-		{
-			AddressTypeInfo info = GetAddressInfo(ctrlCodeViewer.SelectedLine);
-			if(info.Address >= 0) {
-				BreakpointManager.ToggleBreakpoint(-1, info, false);
-			} else {
-				//Current line has no address, try using the next line instead.
-				//(Used when trying to set a breakpoint on a row containing only a label)
-				info = GetAddressInfo(ctrlCodeViewer.SelectedLine + 1);
-				if(info.Address >= 0) {
-					BreakpointManager.ToggleBreakpoint(-1, info, false);
-				}
-			}
-		}
-		
 		private void ctrlCodeViewer_MouseMove(object sender, MouseEventArgs e)
 		{
 			if(e.Location.X < this.ctrlCodeViewer.CodeMargin / 4) {
@@ -266,7 +251,7 @@ namespace Mesen.GUI.Debugger.Controls
 		private void ctrlCodeViewer_MouseDown(object sender, MouseEventArgs e)
 		{
 			if(e.Button == MouseButtons.Left && e.Location.X < this.ctrlCodeViewer.CodeMargin / 4) {
-				ToggleBreakpoint();
+				_codeViewerActions.ToggleBreakpoint(false);
 			}
 		}
 
