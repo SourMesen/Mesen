@@ -122,9 +122,37 @@ namespace Mesen.GUI.Debugger
 			}
 		}
 
+		private bool Contains(string label, List<string> searchStrings)
+		{
+			label = label.ToLower();
+			if(searchStrings.Count == 1) {
+				return label.Contains(searchStrings[0]);
+			} else {
+				for(int i = 1; i < searchStrings.Count; i++) {
+					if(!label.Contains(searchStrings[i])) {
+						return false;
+					}
+				}
+				return true;
+			}
+		}
+
 		private void UpdateResults()
 		{
-			string searchString = txtSearch.Text.ToLower();
+			string searchString = txtSearch.Text.Trim();
+
+			List<string> searchStrings = new List<string>();
+			searchStrings.Add(searchString.ToLower());
+			searchStrings.AddRange(searchString.ToLower().Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries));
+			for(int i = 0; i < searchString.Length; i++) {
+				char ch = searchString[i];
+				if(ch >= 'A' && ch <= 'Z') {
+					searchString = searchString.Remove(i, 1).Insert(i, " " + (char)(ch + 'a' - 'A'));
+				}
+			}
+			searchStrings.AddRange(searchString.ToLower().Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries));
+			searchStrings = searchStrings.Distinct().ToList();
+
 			_resultCount = 0;
 
 			HashSet<int> entryPoints = new HashSet<int>(InteropEmu.DebugGetFunctionEntryPoints());
@@ -136,7 +164,7 @@ namespace Mesen.GUI.Debugger
 				if(_symbolProvider != null) {
 					if(_showFilesAndConstants) {
 						foreach(Ld65DbgImporter.FileInfo file in _symbolProvider.Files.Values) {
-							if(file.Name.ToLower().Contains(searchString)) {
+							if(Contains(file.Name, searchStrings)) {
 								searchResults.Add(new SearchResultInfo() {
 									Caption = Path.GetFileName(file.Name),
 									AbsoluteAddress = -1,
@@ -152,7 +180,7 @@ namespace Mesen.GUI.Debugger
 					}
 
 					foreach(Ld65DbgImporter.SymbolInfo symbol in _symbolProvider.GetSymbols()) {
-						if(symbol.Name.ToLower().Contains(searchString)) {
+						if(Contains(symbol.Name, searchStrings)) {
 							Ld65DbgImporter.DefinitionInfo def = _symbolProvider.GetSymbolDefinition(symbol);
 							AddressTypeInfo addressInfo = _symbolProvider.GetSymbolAddressInfo(symbol);
 							int value = 0;
@@ -194,7 +222,7 @@ namespace Mesen.GUI.Debugger
 					}
 				} else {
 					foreach(CodeLabel label in LabelManager.GetLabels()) {
-						if(label.Label.ToLower().Contains(searchString)) {
+						if(Contains(label.Label, searchStrings)) {
 							SearchResultType resultType = SearchResultType.Data;
 							if(label.AddressType == AddressType.PrgRom && entryPoints.Contains((int)label.Address)) {
 								resultType = SearchResultType.Function;
