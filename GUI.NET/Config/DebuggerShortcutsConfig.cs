@@ -51,6 +51,9 @@ namespace Mesen.GUI.Config
 		[ShortcutName("Mark Selection as Unidentified Code/Data")]
 		public XmlKeys MarkAsUnidentified = Keys.Control | Keys.D3;
 
+		[ShortcutName("Go to All")]
+		public XmlKeys GoToAll = Keys.Control | Keys.Oemcomma;
+
 		[ShortcutName("Edit in Memory Viewer")]
 		public XmlKeys CodeWindow_EditInMemoryViewer = Keys.F1;
 		[ShortcutName("View in disassembly")]

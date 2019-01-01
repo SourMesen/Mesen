@@ -176,6 +176,7 @@ public:
 	RomInfo GetRomInfo();
 
 	__forceinline uint8_t ReadRAM(uint16_t addr) override;
+	uint8_t PeekRAM(uint16_t addr) override;
 	uint8_t DebugReadRAM(uint16_t addr);
 	virtual void WriteRAM(uint16_t addr, uint8_t value) override;
 	void DebugWriteRAM(uint16_t addr, uint8_t value);
@@ -215,6 +216,8 @@ public:
 
 	uint32_t CopyMemory(DebugMemoryType type, uint8_t* buffer);
 	void WriteMemory(DebugMemoryType type, uint8_t* buffer);
+
+	void GetAbsoluteAddressAndType(uint32_t relativeAddr, AddressTypeInfo *info);
 	int32_t ToAbsoluteAddress(uint16_t addr);
 	int32_t ToAbsoluteSaveRamAddress(uint16_t addr);
 	int32_t ToAbsoluteWorkRamAddress(uint16_t addr);

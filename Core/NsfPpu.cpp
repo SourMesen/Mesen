@@ -6,8 +6,3 @@
 void NsfPpu::DrawPixel()
 {
 }
-
-void NsfPpu::SendFrame()
-{
-	_console->GetNotificationManager()->SendNotification(ConsoleNotificationType::PpuFrameDone);
-}

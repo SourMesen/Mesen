@@ -140,6 +140,9 @@ namespace Mesen.GUI.Config
 
 		public bool ShowCommentsInLabelList = false;
 
+		public bool ShowBreakNotifications = true;
+		public bool ShowInstructionProgression = true;
+
 		public bool AlwaysScrollToCenter = false;
 		public bool SplitView = false;
 		public bool VerticalLayout = false;
@@ -298,6 +301,7 @@ namespace Mesen.GUI.Config
 		public bool BreakOnUninitMemoryRead = false;
 		public bool BreakOnInit = true;
 		public bool BreakOnPlay = false;
+		public bool BreakOnFirstCycle = true;
 
 		public bool BringToFrontOnPause = false;
 		public bool BringToFrontOnBreak = true;

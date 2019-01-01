@@ -38,5 +38,6 @@ private:
 	int32_t _endAddr;
 	bool _enabled;
 	bool _markEvent;
+	bool _processDummyReadWrites;
 	char _condition[1000];
 };

@@ -19,7 +19,7 @@ bool LuaCallHelper::CheckParamCount(int minParamCount)
 		return true;
 	}
 	if(_stackSize != _paramCount) {
-		string message = string("too ") + (_stackSize < _paramCount ? "little" : "many") + " parameters.  expected " + std::to_string(_paramCount) + " got " + std::to_string(_stackSize);
+		string message = string("too ") + (_stackSize < _paramCount ? "few" : "many") + " parameters.  expected " + std::to_string(_paramCount) + " got " + std::to_string(_stackSize);
 		luaL_error(_lua, message.c_str());
 		return false;
 	}

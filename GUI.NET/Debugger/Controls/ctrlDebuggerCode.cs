@@ -53,6 +53,11 @@ namespace Mesen.GUI.Debugger
 			}
 		}
 
+		public void SetMessage(TextboxMessageInfo message)
+		{
+			this.ctrlCodeViewer.SetMessage(message);
+		}
+
 		protected override ctrlScrollableTextbox ScrollableTextbox
 		{
 			get { return this.ctrlCodeViewer; }
@@ -395,6 +400,30 @@ namespace Mesen.GUI.Debugger
 				return null;
 			}
 
+			public static void ConfigureActiveStatement(LineProperties props)
+			{
+				props.FgColor = Color.Black;
+				props.TextBgColor = ConfigManager.Config.DebugInfo.CodeActiveStatementColor;
+				props.Symbol |= LineSymbol.Arrow;
+
+				if(ConfigManager.Config.DebugInfo.ShowInstructionProgression) {
+					InstructionProgress state = new InstructionProgress();
+					InteropEmu.DebugGetInstructionProgress(ref state);
+
+					LineProgress progress = new LineProgress();
+					progress.Current = (int)state.OpCycle;
+					progress.Maxixum = frmOpCodeTooltip.OpCycles[state.OpCode];
+					switch(state.OpMemoryOperationType) {
+						case InteropMemoryOperationType.DummyRead: progress.Color = Color.FromArgb(184, 160, 255); progress.Text = "DR"; break;
+						case InteropMemoryOperationType.DummyWrite: progress.Color = Color.FromArgb(255, 245, 137); progress.Text = "DW"; break;
+						case InteropMemoryOperationType.Read: progress.Color = Color.FromArgb(150, 176, 255); progress.Text = "R"; break;
+						case InteropMemoryOperationType.Write: progress.Color = Color.FromArgb(255, 171, 150); progress.Text = "W"; break;
+						default: progress.Color = Color.FromArgb(143, 255, 173); progress.Text = "X"; break;
+					}
+					props.Progress = progress;
+				}
+			}
+
 			public LineProperties GetLineStyle(int cpuAddress, int lineNumber)
 			{
 				DebugInfo info = ConfigManager.Config.DebugInfo;
@@ -404,9 +433,7 @@ namespace Mesen.GUI.Debugger
 
 				bool isActiveStatement = _code._currentActiveAddress.HasValue && _code.ctrlCodeViewer.GetLineIndex((int)_code._currentActiveAddress.Value) == lineNumber;
 				if(isActiveStatement) {
-					props.FgColor = Color.Black;
-					props.TextBgColor = info.CodeActiveStatementColor;
-					props.Symbol |= LineSymbol.Arrow;
+					ConfigureActiveStatement(props);
 				} else if(_code._code.UnexecutedAddresses.Contains(lineNumber)) {
 					props.LineBgColor = info.CodeUnexecutedCodeColor;
 				} else if(_code._code.SpeculativeCodeAddreses.Contains(lineNumber)) {

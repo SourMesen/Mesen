@@ -10,6 +10,7 @@
 CPU::CPU(shared_ptr<Console> console)
 {
 	_console = console;
+	_memoryManager = _console->GetMemoryManager();
 
 	Func opTable[] = { 
 	//	0				1				2				3				4				5				6						7				8				9				A						B				C						D				E						F
@@ -64,7 +65,7 @@ CPU::CPU(shared_ptr<Console> console)
 	_dmcCounter = 0;
 	_dmcDmaRunning = false;
 	_cpuWrite = false;
-	_writeAddr = false;
+	_writeAddr = 0;
 	_irqMask = 0;
 	_state = {};
 	_prevRunIrq = false;
@@ -73,7 +74,6 @@ CPU::CPU(shared_ptr<Console> console)
 
 void CPU::Reset(bool softReset, NesModel model)
 {
-	_memoryManager = _console->GetMemoryManager();
 	_state.NMIFlag = false;
 	_state.IRQFlag = 0;
 	_cycleCount = -1;
@@ -128,7 +128,10 @@ void CPU::Exec()
 
 void CPU::IRQ() 
 {
+#ifndef DUMMYCPU
 	uint16_t originalPc = PC();
+#endif
+
 	DummyRead();  //fetch opcode (and discard it - $00 (BRK) is forced into the opcode register instead)
 	DummyRead();  //read next instruction byte (actually the same as above, since PC increment is suppressed. Also discarded.)
 	Push((uint16_t)(PC()));
@@ -140,15 +143,20 @@ void CPU::IRQ()
 		SetPC(MemoryReadWord(CPU::NMIVector));
 		_state.NMIFlag = false;
 
+		#ifndef DUMMYCPU
 		_console->DebugAddTrace("NMI");
 		_console->DebugProcessInterrupt(originalPc, _state.PC, true);
+		#endif
 	} else {
 		Push((uint8_t)(PS() | PSFlags::Reserved));
 		SetFlags(PSFlags::Interrupt);
+
 		SetPC(MemoryReadWord(CPU::IRQVector));
 
+		#ifndef DUMMYCPU
 		_console->DebugAddTrace("IRQ");
 		_console->DebugProcessInterrupt(originalPc, _state.PC, false);
+		#endif
 	}
 }
 
@@ -162,38 +170,62 @@ void CPU::BRK() {
 
 		SetPC(MemoryReadWord(CPU::NMIVector));
 
+		#ifndef DUMMYCPU
 		_console->DebugAddTrace("NMI");
+		#endif
 	} else {
 		Push((uint8_t)flags);
 		SetFlags(PSFlags::Interrupt);
 
 		SetPC(MemoryReadWord(CPU::IRQVector));
 
+		#ifndef DUMMYCPU
 		_console->DebugAddTrace("IRQ");
+		#endif
 	}
 
 	//Since we just set the flag to prevent interrupts, do not run one right away after this (fixes nmi_and_brk & nmi_and_irq tests)
 	_prevRunIrq = false;
 }
 
-void CPU::MemoryWrite(uint16_t addr, uint8_t value)
+void CPU::MemoryWrite(uint16_t addr, uint8_t value, MemoryOperationType operationType)
 {
+#ifdef DUMMYCPU
+	if(operationType == MemoryOperationType::Write || operationType == MemoryOperationType::DummyWrite) {
+		_writeAddresses[_writeCounter] = addr;
+		_isDummyWrite[_writeCounter] = operationType == MemoryOperationType::DummyWrite;
+		_writeValue[_writeCounter] = value;
+		_writeCounter++;
+	}
+#else
 	_cpuWrite = true;;
 	_writeAddr = addr;
 	IncCycleCount();
 	while(_dmcDmaRunning) {
 		IncCycleCount();
 	}
-	_memoryManager->Write(addr, value);
+
+	_memoryManager->Write(addr, value, operationType);
 
 	//DMA DMC might have started after a write to $4015, stall CPU if needed
 	while(_dmcDmaRunning) {
 		IncCycleCount();
 	}
 	_cpuWrite = false;
+#endif
 }
 
 uint8_t CPU::MemoryRead(uint16_t addr, MemoryOperationType operationType) {
+#ifdef DUMMYCPU
+	uint8_t value = _memoryManager->DebugRead(addr);
+	if(operationType == MemoryOperationType::Read || operationType == MemoryOperationType::DummyRead) {
+		_readAddresses[_readCounter] = addr;
+		_readValue[_readCounter] = value;
+		_isDummyRead[_readCounter] = operationType == MemoryOperationType::DummyRead;
+		_readCounter++;
+	}
+	return value;
+#else 
 	IncCycleCount();
 	while(_dmcDmaRunning) {
 		//Stall CPU until we can process a DMC read
@@ -206,8 +238,10 @@ uint8_t CPU::MemoryRead(uint16_t addr, MemoryOperationType operationType) {
 		}
 		IncCycleCount();
 	}
+
 	uint8_t value = _memoryManager->Read(addr, operationType);
 	return value;
+#endif
 }
 
 uint16_t CPU::FetchOperand()
@@ -232,7 +266,7 @@ uint16_t CPU::FetchOperand()
 		default: break;
 	}
 	
-#ifndef LIBRETRO
+#if !defined(LIBRETRO) && !defined(DUMMYCPU)
 	if(_warnOnCrash && _console->GetSettings()->CheckFlag(EmulationFlags::DeveloperMode)) {
 		MessageManager::DisplayMessage("Error", "GameCrash", "Invalid OP code - CPU crashed.");
 		_warnOnCrash = false;
@@ -240,7 +274,7 @@ uint16_t CPU::FetchOperand()
 
 	_console->BreakIfDebugging();
 	
-	if(NsfMapper::GetInstance()) {
+	if(_console->IsNsf()) {
 		//Don't stop emulation on CPU crash when playing NSFs, reset cpu instead
 		_console->Reset(true);
 		return 0;
@@ -266,8 +300,10 @@ void CPU::IncCycleCount()
 		if(_dmcCounter == 0) {
 			//Update the DMC buffer when the stall period is completed
 			_dmcDmaRunning = false;
+			#ifndef DUMMYCPU
 			_console->GetApu()->FillDmcReadBuffer();
 			_console->DebugAddTrace("DMC DMA End");
+			#endif
 		}
 	}
 

@@ -28,7 +28,6 @@
 		private void InitializeComponent()
 		{
 			this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
-			this.chkMarkOnEventViewer = new System.Windows.Forms.CheckBox();
 			this.lblBreakpointType = new System.Windows.Forms.Label();
 			this.flowLayoutPanel2 = new System.Windows.Forms.FlowLayoutPanel();
 			this.chkRead = new System.Windows.Forms.CheckBox();
@@ -57,8 +56,10 @@
 			this.tableLayoutPanel6 = new System.Windows.Forms.TableLayoutPanel();
 			this.label1 = new System.Windows.Forms.Label();
 			this.lblCondition = new System.Windows.Forms.Label();
+			this.chkMarkOnEventViewer = new System.Windows.Forms.CheckBox();
 			this.chkEnabled = new System.Windows.Forms.CheckBox();
-			this.baseConfigPanel.SuspendLayout();
+			this.tableLayoutPanel7 = new System.Windows.Forms.TableLayoutPanel();
+			this.chkProcessDummyReadWrites = new System.Windows.Forms.CheckBox();
 			this.tableLayoutPanel1.SuspendLayout();
 			this.flowLayoutPanel2.SuspendLayout();
 			this.tableLayoutPanel2.SuspendLayout();
@@ -68,21 +69,19 @@
 			this.tableLayoutPanel5.SuspendLayout();
 			this.tableLayoutPanel4.SuspendLayout();
 			this.tableLayoutPanel6.SuspendLayout();
+			this.tableLayoutPanel7.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// baseConfigPanel
 			// 
-			this.baseConfigPanel.Controls.Add(this.chkEnabled);
 			this.baseConfigPanel.Location = new System.Drawing.Point(0, 212);
 			this.baseConfigPanel.Size = new System.Drawing.Size(426, 29);
-			this.baseConfigPanel.Controls.SetChildIndex(this.chkEnabled, 0);
 			// 
 			// tableLayoutPanel1
 			// 
 			this.tableLayoutPanel1.ColumnCount = 2;
 			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
 			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel1.Controls.Add(this.chkMarkOnEventViewer, 0, 5);
 			this.tableLayoutPanel1.Controls.Add(this.lblBreakpointType, 0, 0);
 			this.tableLayoutPanel1.Controls.Add(this.flowLayoutPanel2, 1, 1);
 			this.tableLayoutPanel1.Controls.Add(this.lblBreakOn, 0, 1);
@@ -101,20 +100,9 @@
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
 			this.tableLayoutPanel1.Size = new System.Drawing.Size(426, 241);
 			this.tableLayoutPanel1.TabIndex = 2;
-			// 
-			// chkMarkOnEventViewer
-			// 
-			this.chkMarkOnEventViewer.AutoSize = true;
-			this.tableLayoutPanel1.SetColumnSpan(this.chkMarkOnEventViewer, 2);
-			this.chkMarkOnEventViewer.Location = new System.Drawing.Point(6, 194);
-			this.chkMarkOnEventViewer.Margin = new System.Windows.Forms.Padding(6, 6, 3, 3);
-			this.chkMarkOnEventViewer.Name = "chkMarkOnEventViewer";
-			this.chkMarkOnEventViewer.Size = new System.Drawing.Size(131, 17);
-			this.chkMarkOnEventViewer.TabIndex = 15;
-			this.chkMarkOnEventViewer.Text = "Mark on Event Viewer";
-			this.chkMarkOnEventViewer.UseVisualStyleBackColor = true;
 			// 
 			// lblBreakpointType
 			// 
@@ -148,6 +136,7 @@
 			this.chkRead.TabIndex = 4;
 			this.chkRead.Text = "Read";
 			this.chkRead.UseVisualStyleBackColor = true;
+			this.chkRead.CheckedChanged += new System.EventHandler(this.chkRead_CheckedChanged);
 			// 
 			// chkWrite
 			// 
@@ -158,6 +147,7 @@
 			this.chkWrite.TabIndex = 5;
 			this.chkWrite.Text = "Write";
 			this.chkWrite.UseVisualStyleBackColor = true;
+			this.chkWrite.CheckedChanged += new System.EventHandler(this.chkWrite_CheckedChanged);
 			// 
 			// chkExec
 			// 
@@ -461,21 +451,64 @@
 			this.lblCondition.TabIndex = 7;
 			this.lblCondition.Text = "Condition:";
 			// 
+			// chkMarkOnEventViewer
+			// 
+			this.chkMarkOnEventViewer.AutoSize = true;
+			this.chkMarkOnEventViewer.Location = new System.Drawing.Point(3, 17);
+			this.chkMarkOnEventViewer.Margin = new System.Windows.Forms.Padding(3, 0, 3, 0);
+			this.chkMarkOnEventViewer.Name = "chkMarkOnEventViewer";
+			this.chkMarkOnEventViewer.Size = new System.Drawing.Size(131, 17);
+			this.chkMarkOnEventViewer.TabIndex = 15;
+			this.chkMarkOnEventViewer.Text = "Mark on Event Viewer";
+			this.chkMarkOnEventViewer.UseVisualStyleBackColor = true;
+			// 
 			// chkEnabled
 			// 
 			this.chkEnabled.AutoSize = true;
-			this.chkEnabled.Location = new System.Drawing.Point(6, 7);
+			this.chkEnabled.Location = new System.Drawing.Point(3, 34);
+			this.chkEnabled.Margin = new System.Windows.Forms.Padding(3, 0, 3, 0);
 			this.chkEnabled.Name = "chkEnabled";
 			this.chkEnabled.Size = new System.Drawing.Size(104, 17);
 			this.chkEnabled.TabIndex = 2;
 			this.chkEnabled.Text = "Break Execution";
 			this.chkEnabled.UseVisualStyleBackColor = true;
 			// 
+			// tableLayoutPanel7
+			// 
+			this.tableLayoutPanel7.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.tableLayoutPanel7.ColumnCount = 1;
+			this.tableLayoutPanel7.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+			this.tableLayoutPanel7.Controls.Add(this.chkProcessDummyReadWrites, 0, 1);
+			this.tableLayoutPanel7.Controls.Add(this.chkEnabled, 0, 3);
+			this.tableLayoutPanel7.Controls.Add(this.chkMarkOnEventViewer, 0, 2);
+			this.tableLayoutPanel7.Location = new System.Drawing.Point(0, 189);
+			this.tableLayoutPanel7.Margin = new System.Windows.Forms.Padding(0);
+			this.tableLayoutPanel7.Name = "tableLayoutPanel7";
+			this.tableLayoutPanel7.RowCount = 4;
+			this.tableLayoutPanel7.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+			this.tableLayoutPanel7.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this.tableLayoutPanel7.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this.tableLayoutPanel7.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this.tableLayoutPanel7.Size = new System.Drawing.Size(243, 51);
+			this.tableLayoutPanel7.TabIndex = 3;
+			// 
+			// chkProcessDummyReadWrites
+			// 
+			this.chkProcessDummyReadWrites.AutoSize = true;
+			this.chkProcessDummyReadWrites.Location = new System.Drawing.Point(3, 0);
+			this.chkProcessDummyReadWrites.Margin = new System.Windows.Forms.Padding(3, 0, 3, 0);
+			this.chkProcessDummyReadWrites.Name = "chkProcessDummyReadWrites";
+			this.chkProcessDummyReadWrites.Size = new System.Drawing.Size(229, 17);
+			this.chkProcessDummyReadWrites.TabIndex = 16;
+			this.chkProcessDummyReadWrites.Text = "Process breakpoint on dummy reads/writes";
+			this.chkProcessDummyReadWrites.UseVisualStyleBackColor = true;
+			// 
 			// frmBreakpoint
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(426, 241);
+			this.Controls.Add(this.tableLayoutPanel7);
 			this.Controls.Add(this.tableLayoutPanel1);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
 			this.Name = "frmBreakpoint";
@@ -483,8 +516,7 @@
 			this.Text = "Breakpoint";
 			this.Controls.SetChildIndex(this.tableLayoutPanel1, 0);
 			this.Controls.SetChildIndex(this.baseConfigPanel, 0);
-			this.baseConfigPanel.ResumeLayout(false);
-			this.baseConfigPanel.PerformLayout();
+			this.Controls.SetChildIndex(this.tableLayoutPanel7, 0);
 			this.tableLayoutPanel1.ResumeLayout(false);
 			this.tableLayoutPanel1.PerformLayout();
 			this.flowLayoutPanel2.ResumeLayout(false);
@@ -501,6 +533,8 @@
 			this.tableLayoutPanel4.PerformLayout();
 			this.tableLayoutPanel6.ResumeLayout(false);
 			this.tableLayoutPanel6.PerformLayout();
+			this.tableLayoutPanel7.ResumeLayout(false);
+			this.tableLayoutPanel7.PerformLayout();
 			this.ResumeLayout(false);
 
 		}
@@ -538,5 +572,7 @@
 		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel6;
 		private System.Windows.Forms.Label label1;
 		private System.Windows.Forms.CheckBox chkMarkOnEventViewer;
+		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel7;
+		private System.Windows.Forms.CheckBox chkProcessDummyReadWrites;
 	}
 }

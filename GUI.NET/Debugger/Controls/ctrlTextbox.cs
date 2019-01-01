@@ -14,34 +14,6 @@ using System.Windows.Forms;
 
 namespace Mesen.GUI.Debugger
 {
-	[Flags]
-	public enum LineSymbol
-	{
-		None = 0,
-		Circle = 1,
-		CircleOutline = 2,
-		Arrow = 4,
-		Mark = 8,
-		Plus = 16
-	}
-
-	public enum eHistoryType
-	{
-		Always,
-		OnScroll,
-		None
-	}
-
-	public class LineProperties
-	{
-		public Color? LineBgColor;
-		public Color? TextBgColor;
-		public Color? FgColor;
-		public Color? OutlineColor;
-		public Color? AddressColor;
-		public LineSymbol Symbol;
-	}
-
 	public partial class ctrlTextbox : Control
 	{
 		private Regex _codeRegex = new Regex("^(\\s*)([a-z]{3})([*]{0,1})($|[ ]){1}([(]{0,1})(([$][0-9a-f]*)|(#[@$:_0-9a-z]*)|([@_a-z]([@_a-z0-9])*)){0,1}([)]{0,1})(,X|,Y){0,1}([)]{0,1})(.*)", RegexOptions.IgnoreCase | RegexOptions.Compiled);
@@ -78,6 +50,7 @@ namespace Mesen.GUI.Debugger
 		private int _extendedMarginWidth = 13;
 		private float _maxLineWidth = 0;
 		private int _maxLineWidthIndex = 0;
+		private TextboxMessageInfo _message;
 
 		public ctrlTextbox()
 		{
@@ -760,6 +733,10 @@ namespace Mesen.GUI.Debugger
 				if(!_disableScrollPositionChangedEvent && this.ScrollPositionChanged != null) {
 					ScrollPositionChanged(this, null);
 				}
+
+				//Clear message if scroll position changes
+				this.SetMessage(null);
+
 				this.Invalidate();
 			}
 		}
@@ -795,6 +772,14 @@ namespace Mesen.GUI.Debugger
 			}
 		}
 
+		public void SetMessage(TextboxMessageInfo message)
+		{
+			if(_message != message) {
+				_message = message;
+				Invalidate();
+			}
+		}
+
 		protected override void OnResize(EventArgs e)
 		{
 			base.OnResize(e);
@@ -827,11 +812,22 @@ namespace Mesen.GUI.Debugger
 			}
 		}
 
+		protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
+		{
+			//Clear message if a key is pressed
+			this.SetMessage(null);
+
+			return base.ProcessCmdKey(ref msg, keyData);
+		}
+
 		int _clickedLine;
 		bool _mouseDragging;
 		protected override void OnMouseDown(MouseEventArgs e)
 		{
 			this.Focus();
+
+			//Clear message if a mouse button is clicked
+			this.SetMessage(null);
 
 			if(e.Button == MouseButtons.XButton1) {
 				this.NavigateBackward();
@@ -1241,6 +1237,30 @@ namespace Mesen.GUI.Debugger
 			}
 		}
 
+		private void DrawLineProgress(Graphics g, int positionY, LineProgress progress, int lineHeight)
+		{
+			if(progress != null) {
+				int currentStep = progress.Current + 1;
+				int stepCount = Math.Max(progress.Maxixum, currentStep);
+
+				string display = currentStep.ToString() + "/" + stepCount.ToString() + " " + progress.Text;
+				SizeF size = g.MeasureString(display, this._noteFont, int.MaxValue, StringFormat.GenericTypographic);
+
+				float width = size.Width + 16;
+				float left = this.ClientSize.Width - 5 - width;
+				float height = size.Height;
+				float top = positionY + (lineHeight - height) / 2;
+
+				g.FillRectangle(Brushes.White, left, top, width, height);
+				using(SolidBrush brush = new SolidBrush(progress.Color)) {
+					g.FillRectangle(brush, left, top, width * currentStep / stepCount, height);
+				}
+				g.DrawRectangle(Pens.Black, left, top, width, height);
+
+				g.DrawString(display, this._noteFont, Brushes.Black, left + (width - size.Width) / 2, top, StringFormat.GenericTypographic);
+			}
+		}
+
 		private void DrawHighlightedCompareString(Graphics g, string lineText, int currentLine, int marginLeft, int positionY)
 		{
 			if(_compareContents != null && _compareContents.Length > currentLine) {
@@ -1293,6 +1313,10 @@ namespace Mesen.GUI.Debugger
 		private void DrawMargin(Graphics g, int currentLine, int marginLeft, int regularMargin, int positionY, int lineHeight)
 		{
 			LineProperties lineProperties = GetLineStyle(currentLine);
+
+			//Draw instruction progress here to avoid it being scrolled horizontally when window is small (or comments/etc exist)
+			this.DrawLineProgress(g, positionY, lineProperties?.Progress, lineHeight);
+
 			if(this.ShowLineNumbers) {
 				//Show line number
 				Color lineNumberColor = lineProperties != null && lineProperties.AddressColor.HasValue ? lineProperties.AddressColor.Value : Color.Gray;
@@ -1307,6 +1331,20 @@ namespace Mesen.GUI.Debugger
 
 			if(lineProperties != null) {
 				this.DrawLineSymbols(g, positionY, lineProperties, lineHeight);
+			}
+		}
+		
+		private void DrawMessage(Graphics g)
+		{
+			if(this._message != null && !string.IsNullOrWhiteSpace(this._message.Message)) {
+				//Display message if one is active
+				SizeF textSize = g.MeasureString(this._message.Message, this.Font, int.MaxValue, StringFormat.GenericTypographic);
+
+				using(SolidBrush brush = new SolidBrush(Color.FromArgb(255, 246, 168))) {
+					g.FillRectangle(brush, ClientRectangle.Width - textSize.Width - 10, ClientRectangle.Bottom - textSize.Height - 10, textSize.Width + 4, textSize.Height + 1);
+				}
+				g.DrawRectangle(Pens.Black, ClientRectangle.Width - textSize.Width - 10, ClientRectangle.Bottom - textSize.Height - 10, textSize.Width + 4, textSize.Height + 1);
+				g.DrawString(this._message.Message, this.Font, Brushes.Black, ClientRectangle.Width - textSize.Width - 8, ClientRectangle.Bottom - textSize.Height - 10, StringFormat.GenericTypographic);
 			}
 		}
 
@@ -1362,6 +1400,51 @@ namespace Mesen.GUI.Debugger
 				positionY += lineHeight;
 				currentLine++;
 			}
+
+			this.DrawMessage(pe.Graphics);
 		}
+	}
+
+	[Flags]
+	public enum LineSymbol
+	{
+		None = 0,
+		Circle = 1,
+		CircleOutline = 2,
+		Arrow = 4,
+		Mark = 8,
+		Plus = 16
+	}
+
+	public enum eHistoryType
+	{
+		Always,
+		OnScroll,
+		None
+	}
+
+	public class LineProperties
+	{
+		public Color? LineBgColor;
+		public Color? TextBgColor;
+		public Color? FgColor;
+		public Color? OutlineColor;
+		public Color? AddressColor;
+		public LineSymbol Symbol;
+
+		public LineProgress Progress;
+	}
+
+	public class LineProgress
+	{
+		public int Current;
+		public int Maxixum;
+		public string Text;
+		public Color Color;
+	}
+
+	public class TextboxMessageInfo
+	{
+		public string Message;
 	}
 }

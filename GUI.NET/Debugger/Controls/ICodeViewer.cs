@@ -19,6 +19,8 @@ namespace Mesen.GUI.Debugger.Controls
 		void EditSubroutine();
 		void EditSelectedCode();
 
+		void SetMessage(TextboxMessageInfo message);
+
 		CodeViewerActions CodeViewerActions { get; }
 		ctrlScrollableTextbox CodeViewer { get; }
 		Ld65DbgImporter SymbolProvider { get; set; }

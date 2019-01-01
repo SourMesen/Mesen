@@ -5,25 +5,14 @@
 #include "Console.h"
 #include "MemoryManager.h"
 
-NsfMapper* NsfMapper::_instance;
-
 NsfMapper::NsfMapper()
 {
-	_instance = this;
 }
 
 NsfMapper::~NsfMapper()
 {
-	if(_instance == this) {
-		_instance = nullptr;
-		_console->GetSettings()->DisableOverclocking(false);
-		_console->GetSettings()->ClearFlags(EmulationFlags::NsfPlayerEnabled);
-	}
-}
-
-NsfMapper * NsfMapper::GetInstance()
-{
-	return _instance;
+	_console->GetSettings()->DisableOverclocking(false);
+	_console->GetSettings()->ClearFlags(EmulationFlags::NsfPlayerEnabled);
 }
 
 void NsfMapper::InitMapper()
@@ -39,7 +28,7 @@ void NsfMapper::InitMapper()
 	_namcoAudio.reset(new Namco163Audio(_console));
 	_sunsoftAudio.reset(new Sunsoft5bAudio(_console));
 
-	SetCpuMemoryMapping(0x3F00, 0x3FFF, GetWorkRam() + 0x2000, MemoryAccessType::Read);
+	SetCpuMemoryMapping(0x3F00, 0x3FFF, PrgMemoryType::WorkRam, 0x2000, MemoryAccessType::Read);
 	memcpy(GetWorkRam() + 0x2000, _nsfBios, 0x100);
 
 	//Clear all register settings
@@ -92,7 +81,7 @@ void NsfMapper::InitMapper(RomData& romData)
 	if(_nsfHeader.SoundChips & NsfSoundChips::MMC5) {
 		AddRegisterRange(0x5000, 0x5015, MemoryOperation::Write); //Registers
 		AddRegisterRange(0x5205, 0x5206, MemoryOperation::Any); //Multiplication
-		SetCpuMemoryMapping(0x5C00, 0x5FFF, GetWorkRam() + 0x3000, MemoryAccessType::ReadWrite); //Exram
+		SetCpuMemoryMapping(0x5C00, 0x5FFF, PrgMemoryType::WorkRam, 0x3000, MemoryAccessType::ReadWrite); //Exram
 	}
 
 	if(_nsfHeader.SoundChips & NsfSoundChips::VRC6) {
@@ -477,4 +466,22 @@ NsfHeader NsfMapper::GetNsfHeader()
 ConsoleFeatures NsfMapper::GetAvailableFeatures()
 {
 	return ConsoleFeatures::Nsf;
+}
+
+void NsfMapper::StreamState(bool saving)
+{
+	BaseMapper::StreamState(saving);
+
+	SnapshotInfo mmc5Audio { _mmc5Audio.get() };
+	SnapshotInfo vrc6Audio { _vrc6Audio.get() };
+	SnapshotInfo vrc7Audio { _vrc7Audio.get() };
+	SnapshotInfo fdsAudio { _fdsAudio.get() };
+	SnapshotInfo namcoAudio { _namcoAudio.get() };
+	SnapshotInfo sunsoftAudio { _sunsoftAudio.get() };
+
+	Stream(
+		_model, _needInit, _irqEnabled, _irqReloadValue, _irqCounter, _irqStatus, _debugIrqStatus, _mmc5MultiplierValues[0], _mmc5MultiplierValues[1],
+		_trackEndCounter, _trackFadeCounter, _fadeLength, _silenceDetectDelay, _trackEnded, _allowSilenceDetection, _hasBankSwitching, _ntscSpeed,
+		_palSpeed, _dendySpeed, _songNumber, mmc5Audio, vrc6Audio, vrc7Audio, fdsAudio, namcoAudio, sunsoftAudio
+	);
 }

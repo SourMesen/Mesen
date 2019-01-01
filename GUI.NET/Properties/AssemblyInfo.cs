@@ -10,7 +10,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Mesen")]
 [assembly: AssemblyProduct("Mesen (Beta)")]
-[assembly: AssemblyCopyright("Copyright © 2018 M. Bibaud")]
+[assembly: AssemblyCopyright("Copyright © 2019 M. Bibaud")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

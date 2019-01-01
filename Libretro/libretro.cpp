@@ -46,10 +46,8 @@ static int32_t _saveStateSize = -1;
 static struct retro_memory_descriptor _descriptors[3];
 static struct retro_memory_map _memoryMap;
 
-//Include game database as an array of strings (need an automated way to generate the include file)
-static vector<string> gameDb = {
+//Include game database as a byte array (representing the MesenDB.txt file)
 #include "MesenDB.inc"
-};
 
 static std::shared_ptr<Console> _console;
 static std::unique_ptr<LibretroRenderer> _renderer;
@@ -87,6 +85,7 @@ uint32_t nesClassicPalette[0x40] { 0xFF60615F, 0xFF000083, 0xFF1D0195, 0xFF34087
 uint32_t originalHardwarePalette[0x40] { 0xFF6A6D6A, 0xFF00127D, 0xFF1E008A, 0xFF3B007D, 0xFF56005D, 0xFF5A0018, 0xFF4F0D00, 0xFF381E00, 0xFF203100, 0xFF003D00, 0xFF004000, 0xFF003B1E, 0xFF002E55, 0xFF000000, 0xFF000000, 0xFF000000, 0xFFB9BCB9, 0xFF194EC8, 0xFF472FE3, 0xFF751FD7, 0xFF931EAD, 0xFF9E245E, 0xFF963800, 0xFF7B5000, 0xFF5B6700, 0xFF267A00, 0xFF007F00, 0xFF007842, 0xFF006E8A, 0xFF000000, 0xFF000000, 0xFF000000, 0xFFFFFFFF, 0xFF69AEFF, 0xFF9798FF, 0xFFB687FF, 0xFFE278FF, 0xFFF279C7, 0xFFF58F6F, 0xFFDDA932, 0xFFBCB70D, 0xFF88D015, 0xFF60DB49, 0xFF4FD687, 0xFF50CACE, 0xFF515451, 0xFF000000, 0xFF000000, 0xFFFFFFFF, 0xFFCCEAFF, 0xFFDEE2FF, 0xFFEEDAFF, 0xFFFAD7FD, 0xFFFDD7F6, 0xFFFDDCD0, 0xFFFAE8B6, 0xFFF2F1A9, 0xFFDBFBA9, 0xFFCAFFBD, 0xFFC3FBD8, 0xFFC4F6F6, 0xFFBEC1BE, 0xFF000000, 0xFF000000 };
 uint32_t pvmStylePalette[0x40] { 0xFF696964, 0xFF001774, 0xFF28007D, 0xFF3E006D, 0xFF560057, 0xFF5E0013, 0xFF531A00, 0xFF3B2400, 0xFF2A3000, 0xFF143A00, 0xFF003F00, 0xFF003B1E, 0xFF003050, 0xFF000000, 0xFF000000, 0xFF000000, 0xFFB9B9B4, 0xFF1453B9, 0xFF4D2CDA, 0xFF7A1EC8, 0xFF98189C, 0xFF9D2344, 0xFFA03E00, 0xFF8D5500, 0xFF656D00, 0xFF2C7900, 0xFF008100, 0xFF007D42, 0xFF00788A, 0xFF000000, 0xFF000000, 0xFF000000, 0xFFFFFFFF, 0xFF69A8FF, 0xFF9A96FF, 0xFFC28AFA, 0xFFEA7DFA, 0xFFF387B4, 0xFFF1986C, 0xFFE6B327, 0xFFD7C805, 0xFF90DF07, 0xFF64E53C, 0xFF45E27D, 0xFF48D5D9, 0xFF4B4B46, 0xFF000000, 0xFF000000, 0xFFFFFFFF, 0xFFD2EAFF, 0xFFE2E2FF, 0xFFF2D8FF, 0xFFF8D2FF, 0xFFF8D9EA, 0xFFFADEB9, 0xFFF9E89B, 0xFFF3F28C, 0xFFD3FA91, 0xFFB8FCA8, 0xFFAEFACA, 0xFFCAF3F3, 0xFFBEBEB9, 0xFF000000, 0xFF000000 };
 uint32_t sonyCxa2025AsPalette[0x40] { 0xFF585858, 0xFF00238C, 0xFF00139B, 0xFF2D0585, 0xFF5D0052, 0xFF7A0017, 0xFF7A0800, 0xFF5F1800, 0xFF352A00, 0xFF093900, 0xFF003F00, 0xFF003C22, 0xFF00325D, 0xFF000000, 0xFF000000, 0xFF000000, 0xFFA1A1A1, 0xFF0053EE, 0xFF153CFE, 0xFF6028E4, 0xFFA91D98, 0xFFD41E41, 0xFFD22C00, 0xFFAA4400, 0xFF6C5E00, 0xFF2D7300, 0xFF007D06, 0xFF007852, 0xFF0069A9, 0xFF000000, 0xFF000000, 0xFF000000, 0xFFFFFFFF, 0xFF1FA5FE, 0xFF5E89FE, 0xFFB572FE, 0xFFFE65F6, 0xFFFE6790, 0xFFFE773C, 0xFFFE9308, 0xFFC4B200, 0xFF79CA10, 0xFF3AD54A, 0xFF11D1A4, 0xFF06BFFE, 0xFF424242, 0xFF000000, 0xFF000000, 0xFFFFFFFF, 0xFFA0D9FE, 0xFFBDCCFE, 0xFFE1C2FE, 0xFFFEBCFB, 0xFFFEBDD0, 0xFFFEC5A9, 0xFFFED18E, 0xFFE9DE86, 0xFFC7E992, 0xFFA8EEB0, 0xFF95ECD9, 0xFF91E4FE, 0xFFACACAC, 0xFF000000, 0xFF000000 };
+uint32_t wavebeamPalette[0x40] { 0xFF6B6B6B, 0xFF001B88, 0xFF21009A, 0xFF40008C, 0xFF600067, 0xFF64001E, 0xFF590800, 0xFF481600, 0xFF283600, 0xFF004500, 0xFF004908, 0xFF00421D, 0xFF003659, 0xFF000000, 0xFF000000, 0xFF000000, 0xFFB4B4B4, 0xFF1555D3, 0xFF4337EF, 0xFF7425DF, 0xFF9C19B9, 0xFFAC0F64, 0xFFAA2C00, 0xFF8A4B00, 0xFF666B00, 0xFF218300, 0xFF008A00, 0xFF008144, 0xFF007691, 0xFF000000, 0xFF000000, 0xFF000000, 0xFFFFFFFF, 0xFF63B2FF, 0xFF7C9CFF, 0xFFC07DFE, 0xFFE977FF, 0xFFF572CD, 0xFFF4886B, 0xFFDDA029, 0xFFBDBD0A, 0xFF89D20E, 0xFF5CDE3E, 0xFF4BD886, 0xFF4DCFD2, 0xFF525252, 0xFF000000, 0xFF000000, 0xFFFFFFFF, 0xFFBCDFFF, 0xFFD2D2FF, 0xFFE1C8FF, 0xFFEFC7FF, 0xFFFFC3E1, 0xFFFFCAC6, 0xFFF2DAAD, 0xFFEBE3A0, 0xFFD2EDA2, 0xFFBCF4B4, 0xFFB5F1CE, 0xFFB6ECF1, 0xFFBFBFBF, 0xFF000000, 0xFF000000 };
 
 extern "C" {
 	void logMessage(retro_log_level level, const char* message)
@@ -110,19 +109,21 @@ extern "C" {
 			logCallback = nullptr;
 		}
 
-		GameDatabase::LoadGameDb(gameDb);
-
 		_console.reset(new Console());
 		_console->Init();
 
-		_renderer.reset(new LibretroRenderer(_console));
+		_renderer.reset(new LibretroRenderer(_console, retroEnv));
 		_soundManager.reset(new LibretroSoundManager(_console));
 		_keyManager.reset(new LibretroKeyManager(_console));
 		_messageManager.reset(new LibretroMessageManager(logCallback, retroEnv));
 
+		std::stringstream databaseData;
+		databaseData.write((const char*)MesenDatabase, sizeof(MesenDatabase));
+		GameDatabase::LoadGameDb(databaseData);
+
 		_console->GetSettings()->SetFlags(EmulationFlags::FdsAutoLoadDisk);
 		_console->GetSettings()->SetFlags(EmulationFlags::AutoConfigureInput);
-		_console->GetSettings()->SetSampleRate(48000);
+		_console->GetSettings()->SetSampleRate(96000);
 		_console->GetSettings()->SetAutoSaveOptions(0, false);
 		_console->GetSettings()->SetRewindBufferSize(0);
 	}
@@ -145,13 +146,13 @@ extern "C" {
 
 		static const struct retro_variable vars[] = {
 			{ MesenNtscFilter, "NTSC filter; Disabled|Composite (Blargg)|S-Video (Blargg)|RGB (Blargg)|Monochrome (Blargg)|Bisqwit 2x|Bisqwit 4x|Bisqwit 8x" },
-			{ MesenPalette, "Palette; Default|Composite Direct (by FirebrandX)|Nes Classic|Nestopia (RGB)|Original Hardware (by FirebrandX)|PVM Style (by FirebrandX)|Sony CXA2025AS|Unsaturated v6 (by FirebrandX)|YUV v3 (by FirebrandX)|Custom|Raw" },
+			{ MesenPalette, "Palette; Default|Composite Direct (by FirebrandX)|Nes Classic|Nestopia (RGB)|Original Hardware (by FirebrandX)|PVM Style (by FirebrandX)|Sony CXA2025AS|Unsaturated v6 (by FirebrandX)|YUV v3 (by FirebrandX)|Wavebeam (by nakedarthur)|Custom|Raw" },
 			{ MesenOverclock, "Overclock; None|Low|Medium|High|Very High" },
 			{ MesenOverclockType, "Overclock Type; Before NMI (Recommended)|After NMI" },
 			{ MesenRegion, "Region; Auto|NTSC|PAL|Dendy" },
 			{ MesenOverscanVertical, "Vertical Overscan; None|8px|16px" },
 			{ MesenOverscanHorizontal, "Horizontal Overscan; None|8px|16px" },
-			{ MesenAspectRatio ,  "Aspect Ratio; Auto|No Stretching|NTSC|PAL|4:3|16:9" },
+			{ MesenAspectRatio, "Aspect Ratio; Auto|No Stretching|NTSC|PAL|4:3|16:9" },
 			{ MesenControllerTurboSpeed, "Controller Turbo Speed; Fast|Very Fast|Disabled|Slow|Normal" },
 			{ MesenHdPacks, "Enable HD Packs; enabled|disabled" },
 			{ MesenNoSpriteLimit, "Remove sprite limit; enabled|disabled" },
@@ -223,7 +224,7 @@ extern "C" {
 			{ pads2, 7 },
 			{ pads3, 2 },
 			{ pads4, 2 },
-			{ pads5, 12 },
+			{ pads5, 13 },
 			{ 0 },
 		};
 
@@ -233,21 +234,21 @@ extern "C" {
 
 	RETRO_API void retro_set_video_refresh(retro_video_refresh_t sendFrame)
 	{
-		_renderer->SetCallbacks(sendFrame, retroEnv);
+		_renderer->SetVideoCallback(sendFrame);
 	}
 
 	RETRO_API void retro_set_audio_sample(retro_audio_sample_t sendAudioSample)
 	{
+		_soundManager->SetSendAudioSample(sendAudioSample);
 	}
 
 	RETRO_API void retro_set_audio_sample_batch(retro_audio_sample_batch_t audioSampleBatch)
 	{
-		_soundManager->SetSendAudioBuffer(audioSampleBatch);
 	}
 
 	RETRO_API void retro_set_input_poll(retro_input_poll_t pollInput)
 	{	
-		_keyManager->SetPollInput(pollInput);		
+		_keyManager->SetPollInput(pollInput);
 	}
 
 	RETRO_API void retro_set_input_state(retro_input_state_t getInputState)
@@ -259,12 +260,21 @@ extern "C" {
 	{
 		_console->Reset(true);
 	}
-	
+
+	bool readVariable(const char* key, retro_variable &var)
+	{
+		var.key = key;
+		var.value = nullptr;
+		if(retroEnv(RETRO_ENVIRONMENT_GET_VARIABLE, &var) && var.value != nullptr) {
+			return true;
+		}
+		return false;
+	}
+
 	void set_flag(const char* flagName, uint64_t flagValue)
 	{
 		struct retro_variable var = {};
-		var.key = flagName;
-		if(retroEnv(RETRO_ENVIRONMENT_GET_VARIABLE, &var)) {
+		if(readVariable(flagName, var)) {
 			string value = string(var.value);
 			if(value == "disabled") {
 				_console->GetSettings()->ClearFlags(flagValue);
@@ -314,8 +324,7 @@ extern "C" {
 		set_flag(MesenFdsAutoSelectDisk, EmulationFlags::FdsAutoInsertDisk);
 		set_flag(MesenFdsFastForwardLoad, EmulationFlags::FdsFastForwardOnLoad);
 
-		var.key = MesenFakeStereo;
-		if(retroEnv(RETRO_ENVIRONMENT_GET_VARIABLE, &var)) {
+		if(readVariable(MesenFakeStereo, var)) {
 			string value = string(var.value);
 			AudioFilterSettings settings;
 			if(value == "enabled") {
@@ -327,8 +336,7 @@ extern "C" {
 			}
 		}
 		
-		var.key = MesenNtscFilter;
-		if(retroEnv(RETRO_ENVIRONMENT_GET_VARIABLE, &var)) {
+		if(readVariable(MesenNtscFilter, var)) {
 			string value = string(var.value);
 			if(value == "Disabled") {
 				_console->GetSettings()->SetVideoFilterType(VideoFilterType::None);
@@ -358,8 +366,7 @@ extern "C" {
 			}
 		}
 
-		var.key = MesenPalette;
-		if(retroEnv(RETRO_ENVIRONMENT_GET_VARIABLE, &var)) {
+		if(readVariable(MesenPalette, var)) {
 			string value = string(var.value);
 			if(value == "Default") {
 				_console->GetSettings()->SetRgbPalette(defaultPalette);
@@ -379,6 +386,8 @@ extern "C" {
 				_console->GetSettings()->SetRgbPalette(unsaturatedPalette);
 			} else if(value == "YUV v3 (by FirebrandX)") {
 				_console->GetSettings()->SetRgbPalette(yuvPalette);
+			} else if(value == "Wavebeam (by nakedarthur)") {
+				_console->GetSettings()->SetRgbPalette(wavebeamPalette);
 			} else if(value == "Custom") {
 				load_custom_palette();
 			} else if(value == "Raw") {
@@ -388,16 +397,14 @@ extern "C" {
 		}
 
 		bool beforeNmi = true;
-		var.key = MesenOverclockType;
-		if(retroEnv(RETRO_ENVIRONMENT_GET_VARIABLE, &var)) {
+		if(readVariable(MesenOverclockType, var)) {
 			string value = string(var.value);
 			if(value == "After NMI") {
 				beforeNmi = false;
 			}
 		}
 
-		var.key = MesenOverclock;
-		if(retroEnv(RETRO_ENVIRONMENT_GET_VARIABLE, &var)) {
+		if(readVariable(MesenOverclock, var)) {
 			string value = string(var.value);
 			int lineCount = 0;
 			if(value == "None") {
@@ -421,8 +428,7 @@ extern "C" {
 
 		int overscanHorizontal = 0;
 		int overscanVertical = 0;		
-		var.key = MesenOverscanHorizontal;
-		if(retroEnv(RETRO_ENVIRONMENT_GET_VARIABLE, &var)) {
+		if(readVariable(MesenOverscanHorizontal, var)) {
 			string value = string(var.value);
 			if(value == "8px") {
 				overscanHorizontal = 8;
@@ -431,8 +437,7 @@ extern "C" {
 			}
 		}
 
-		var.key = MesenOverscanVertical;
-		if(retroEnv(RETRO_ENVIRONMENT_GET_VARIABLE, &var)) {
+		if(readVariable(MesenOverscanVertical, var)) {
 			string value = string(var.value);
 			if(value == "8px") {
 				overscanVertical = 8;
@@ -442,8 +447,7 @@ extern "C" {
 		}
 		_console->GetSettings()->SetOverscanDimensions(overscanHorizontal, overscanHorizontal, overscanVertical, overscanVertical);
 
-		var.key = MesenAspectRatio;
-		if(retroEnv(RETRO_ENVIRONMENT_GET_VARIABLE, &var)) {
+		if(readVariable(MesenAspectRatio, var)) {
 			string value = string(var.value);
 			if(value == "Auto") {
 				_console->GetSettings()->SetVideoAspectRatio(VideoAspectRatio::Auto, 1.0);
@@ -460,8 +464,7 @@ extern "C" {
 			}
 		}
 
-		var.key = MesenRegion;
-		if(retroEnv(RETRO_ENVIRONMENT_GET_VARIABLE, &var)) {
+		if(readVariable(MesenRegion, var)) {
 			string value = string(var.value);
 			if(value == "Auto") {
 				_console->GetSettings()->SetNesModel(NesModel::Auto);
@@ -474,8 +477,7 @@ extern "C" {
 			}
 		}
 		
-		var.key = MesenRamState;
-		if(retroEnv(RETRO_ENVIRONMENT_GET_VARIABLE, &var)) {
+		if(readVariable(MesenRamState, var)) {
 			string value = string(var.value);
 			if(value == "All 0s (Default)") {
 				_console->GetSettings()->SetRamPowerOnState(RamPowerOnState::AllZeros);
@@ -486,8 +488,7 @@ extern "C" {
 			}
 		}
 
-		var.key = MesenScreenRotation;
-		if(retroEnv(RETRO_ENVIRONMENT_GET_VARIABLE, &var)) {
+		if(readVariable(MesenScreenRotation, var)) {
 			string value = string(var.value);
 			if(value == "None") {
 				_console->GetSettings()->SetScreenRotation(0);
@@ -502,8 +503,7 @@ extern "C" {
 
 		int turboSpeed = 0;
 		bool turboEnabled = true;
-		var.key = MesenControllerTurboSpeed;
-		if(retroEnv(RETRO_ENVIRONMENT_GET_VARIABLE, &var)) {
+		if(readVariable(MesenControllerTurboSpeed, var)) {
 			string value = string(var.value);
 			if(value == "Slow") {
 				turboSpeed = 0;
@@ -587,7 +587,7 @@ extern "C" {
 				keyMappings.Mapping1.ExcitingBoxingButtons[6] = getKeyCode(4, RETRO_DEVICE_ID_JOYPAD_X); //right jab
 				keyMappings.Mapping1.ExcitingBoxingButtons[7] = getKeyCode(4, RETRO_DEVICE_ID_JOYPAD_R); //straight
 			} else if(port == 1) {
-				keyMappings.Mapping1.Microphone = getKeyCode(1, RETRO_DEVICE_ID_JOYPAD_L3);
+				keyMappings.Mapping1.Microphone = getKeyCode(0, RETRO_DEVICE_ID_JOYPAD_L3);
 				keyMappings.Mapping1.PowerPadButtons[0] = getKeyCode(1, RETRO_DEVICE_ID_JOYPAD_B);
 				keyMappings.Mapping1.PowerPadButtons[1] = getKeyCode(1, RETRO_DEVICE_ID_JOYPAD_A);
 				keyMappings.Mapping1.PowerPadButtons[2] = getKeyCode(1, RETRO_DEVICE_ID_JOYPAD_Y);
@@ -781,8 +781,7 @@ extern "C" {
 						addDesc(port, RETRO_DEVICE_ID_JOYPAD_R, "(FDS) Switch Disk Side");
 						addDesc(port, RETRO_DEVICE_ID_JOYPAD_L2, "(VS) Insert Coin 1");
 						addDesc(port, RETRO_DEVICE_ID_JOYPAD_R2, "(VS) Insert Coin 2");
-					} else if(port == 1) {
-						addDesc(port, RETRO_DEVICE_ID_JOYPAD_L3, "(Famicom) Microphone");
+						addDesc(port, RETRO_DEVICE_ID_JOYPAD_L3, "(Famicom) Microphone (P2)");
 					}
 				}
 				addDesc(port, RETRO_DEVICE_ID_JOYPAD_START, "Start");
@@ -881,7 +880,8 @@ extern "C" {
 		}
 
 		bool hasFourScore = false;
-		if(_console->GetSettings()->GetExpansionDevice() != ExpansionPortDevice::None) {
+		bool isFamicom = (_console->GetSettings()->GetExpansionDevice() != ExpansionPortDevice::None || romInfo.System == GameSystem::Famicom || romInfo.System == GameSystem::FDS || romInfo.System == GameSystem::Dendy);
+		if(isFamicom) {
 			_console->GetSettings()->SetConsoleType(ConsoleType::Famicom);
 			if(_console->GetSettings()->GetExpansionDevice() == ExpansionPortDevice::FourPlayerAdapter) {
 				hasFourScore = true;

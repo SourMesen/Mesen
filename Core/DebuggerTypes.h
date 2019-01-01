@@ -10,6 +10,8 @@ enum BreakpointType
 	WriteRam = 3,
 	ReadVram = 4,
 	WriteVram = 5,
+	DummyReadRam = 6,
+	DummyWriteRam = 7
 };
 
 enum class DebuggerFlags
@@ -36,13 +38,25 @@ enum class DebuggerFlags
 	BreakOnDecayedOamRead = 0x2000,
 	BreakOnInit = 0x4000,
 	BreakOnPlay = 0x8000,
+
+	BreakOnFirstCycle = 0x10000,
 };
 
 enum class BreakSource
 {
-	Break = 0,
-	Pause = 1,
-	BreakAfterSuspend = 2,
+	Unspecified = -1,
+	Breakpoint = 0,
+	CpuStep = 1,
+	PpuStep = 2,
+	BreakOnBrk = 3,
+	BreakOnUnofficialOpCode = 4,
+	BreakOnReset = 5,
+	BreakOnFocus = 6,
+	BreakOnUninitMemoryRead = 7,
+	BreakOnDecayedOamRead = 8,
+	BreakOnCpuCrash = 9,
+	Pause = 10,
+	BreakAfterSuspend = 11,
 };
 
 enum class AddressType
@@ -107,6 +121,8 @@ struct PPUDebugState
 	uint32_t NmiScanline;
 	uint32_t ScanlineCount;
 	uint32_t SafeOamScanline;
+	uint16_t BusAddress;
+	uint8_t MemoryReadBuffer;
 };
 
 struct DebugState
@@ -117,6 +133,13 @@ struct DebugState
 	ApuState APU;
 	NesModel Model;
 	uint32_t ClockRate;
+};
+
+struct InstructionProgress
+{
+	uint8_t OpCode;
+	uint32_t OpCycle;
+	MemoryOperationType OpMemoryOperationType;
 };
 
 struct OperationInfo

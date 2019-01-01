@@ -558,12 +558,13 @@ namespace Mesen.GUI.Debugger
 		private frmCodeTooltip _tooltip = null;
 		private CodeLabel _lastLabelTooltip = null;
 		private int _lastTooltipAddress = -1;
-		private void ctrlHexViewer_ByteMouseHover(int address)
+		private void ctrlHexViewer_ByteMouseHover(int address, Point position)
 		{
 			if(address < 0 || !mnuShowLabelInfoOnMouseOver.Checked) {
 				if(_tooltip != null) {
 					_tooltip.Close();
 					_lastLabelTooltip = null;
+					_lastTooltipAddress = -1;
 				}
 				return;
 			}
@@ -622,13 +623,14 @@ namespace Mesen.GUI.Debugger
 
 					_tooltip = new frmCodeTooltip(this, values);
 					_tooltip.FormClosed += (s, evt) => { _tooltip = null; };
-					_tooltip.SetFormLocation(new Point(Cursor.Position.X + 10, Cursor.Position.Y + 10), ctrlHexViewer);
+					_tooltip.SetFormLocation(new Point(position.X, position.Y), ctrlHexViewer);
 					_lastLabelTooltip = label;
 				}
 			} else {
 				if(_tooltip != null) {
 					_tooltip.Close();
 					_lastLabelTooltip = null;
+					_lastTooltipAddress = -1;
 				}
 			}
 		}

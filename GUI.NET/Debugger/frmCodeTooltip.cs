@@ -93,6 +93,11 @@ namespace Mesen.GUI.Debugger
 			}
 			tlpMain.ResumeLayout();
 			this.Width = this.tlpMain.Width;
+			if(this.Location.X + this.Width > _parentForm.ClientSize.Width) {
+				int maxWidth = _parentForm.ClientSize.Width - this.Location.X - 10;
+				this.tlpMain.MaximumSize = new Size(maxWidth, _parentForm.ClientSize.Height - 10);
+				this.MaximumSize = new Size(maxWidth, _parentForm.ClientSize.Height - 10);
+			}
 			this.Height = this.tlpMain.Height; 
 			this.BringToFront();
 

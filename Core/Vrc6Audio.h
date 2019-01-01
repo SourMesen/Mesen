@@ -9,8 +9,8 @@ private:
 	Vrc6Pulse _pulse1;
 	Vrc6Pulse _pulse2;
 	Vrc6Saw _saw;
-	bool _haltAudio;
-	int32_t _lastOutput;
+	bool _haltAudio = false;
+	int32_t _lastOutput = 0;
 
 protected:
 	void StreamState(bool saving) override
@@ -38,6 +38,7 @@ protected:
 public:
 	Vrc6Audio(shared_ptr<Console> console) : BaseExpansionAudio(console)
 	{
+		Reset();
 	}
 
 	void Reset()

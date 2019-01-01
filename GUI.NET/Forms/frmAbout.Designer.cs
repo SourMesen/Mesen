@@ -148,7 +148,7 @@
 			this.labelCopyright.Name = "labelCopyright";
 			this.labelCopyright.Size = new System.Drawing.Size(244, 17);
 			this.labelCopyright.TabIndex = 21;
-			this.labelCopyright.Text = "© 2018 M. Bibaud (aka Sour)";
+			this.labelCopyright.Text = "© 2019 M. Bibaud (aka Sour)";
 			this.labelCopyright.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// flowLayoutPanel1

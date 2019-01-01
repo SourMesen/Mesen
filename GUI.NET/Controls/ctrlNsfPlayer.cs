@@ -15,7 +15,6 @@ namespace Mesen.GUI.Controls
 	public partial class ctrlNsfPlayer : BaseControl
 	{
 		private List<ComboboxItem> _trackList = new List<ComboboxItem>();
-		private int _frameCount = 0;
 		private bool _fastForwarding = false;
 		private UInt32 _originalSpeed = 100;
 		private bool _disableShortcutKeys = false;
@@ -112,31 +111,24 @@ namespace Mesen.GUI.Controls
 			trkVolume.Value = (int)ConfigManager.Config.AudioInfo.MasterVolume;
 		}
 
-		public void ResetCount()
-		{
-			_frameCount = 0;
-			this.BeginInvoke((MethodInvoker)(() => this.UpdateTimeDisplay(_frameCount)));
-		}
-
-		public void CountFrame()
-		{
-			_frameCount++;
-			if(_frameCount % 30 == 0) {
-				this.BeginInvoke((MethodInvoker)(() => this.UpdateTimeDisplay(_frameCount)));
-			}
-		}
-
-		private void UpdateTimeDisplay(int frameCount)
+		private void UpdateTimeDisplay()
 		{
 			if(!InteropEmu.IsNsf()) {
-				_frameCount = 0;
 				return;
 			}
+
+			UInt32 elapsedFrames = InteropEmu.NsfGetFrameCount();
 
 			NsfHeader header = InteropEmu.NsfGetHeader();
 			int currentTrack = InteropEmu.NsfGetCurrentTrack();
 
-			TimeSpan time = TimeSpan.FromSeconds((double)frameCount / ((header.Flags & 0x01) == 0x01 ? 50.006978 : 60.098812));
+			if(currentTrack != cboTrack.SelectedIndex) {
+				cboTrack.SelectedIndexChanged -= cboTrack_SelectedIndexChanged;
+				cboTrack.SelectedIndex = currentTrack;
+				cboTrack.SelectedIndexChanged += cboTrack_SelectedIndexChanged;
+			}
+
+			TimeSpan time = TimeSpan.FromSeconds((double)elapsedFrames / ((header.Flags & 0x01) == 0x01 ? 50.006978 : 60.098812));
 			string label = time.ToString(time.TotalHours < 1 ? @"mm\:ss" : @"hh\:mm\:ss");
 
 			TimeSpan trackTime = GetTrackLength(header, currentTrack);
@@ -149,9 +141,11 @@ namespace Mesen.GUI.Controls
 				label += Environment.NewLine + (string.IsNullOrWhiteSpace(trackNames[currentTrack]) ? ResourceHelper.GetMessage("NsfUnnamedTrack") : trackNames[currentTrack]);
 			}
 
+			bool rewinding = InteropEmu.IsRewinding();
 			lblRecording.Visible = lblRecordingDot.Visible = InteropEmu.WaveIsRecording();
-			lblFastForward.Visible = lblFastForwardIcon.Visible = InteropEmu.GetEmulationSpeed() > 100 || InteropEmu.GetEmulationSpeed() == 0 || InteropEmu.CheckFlag(EmulationFlags.Turbo);
-			lblSlowMotion.Visible = lblSlowMotionIcon.Visible = InteropEmu.GetEmulationSpeed() < 100 && InteropEmu.GetEmulationSpeed() > 0 && !InteropEmu.CheckFlag(EmulationFlags.Turbo);
+			lblRewinding.Visible = lblRewindIcon.Visible = rewinding;
+			lblFastForward.Visible = lblFastForwardIcon.Visible = (InteropEmu.GetEmulationSpeed() > 100 || InteropEmu.GetEmulationSpeed() == 0 || InteropEmu.CheckFlag(EmulationFlags.Turbo)) && !rewinding;
+			lblSlowMotion.Visible = lblSlowMotionIcon.Visible = InteropEmu.GetEmulationSpeed() < 100 && InteropEmu.GetEmulationSpeed() > 0 && !InteropEmu.CheckFlag(EmulationFlags.Turbo) && !rewinding;
 
 			lblTime.Text = label;
 		}
@@ -211,6 +205,7 @@ namespace Mesen.GUI.Controls
 			} else {
 				if(InteropEmu.IsNsf()) {
 					UpdateTrackDisplay();
+					UpdateTimeDisplay();
 
 					toolTip.SetToolTip(btnNext, ResourceHelper.GetMessage("NsfNextTrack"));
 
@@ -259,7 +254,6 @@ namespace Mesen.GUI.Controls
 					newTrack = (InteropEmu.NsfGetCurrentTrack() + 1) % trackCount;
 				}
 				InteropEmu.NsfSelectTrack((byte)newTrack);
-				_frameCount = 0;
 			}
 		}
 
@@ -267,7 +261,9 @@ namespace Mesen.GUI.Controls
 		{
 			int soundCount = InteropEmu.NsfGetHeader().TotalSongs;
 			int currentTrack = InteropEmu.NsfGetCurrentTrack();
-			if(_frameCount < 120) {
+
+			UInt32 elapsedFrames = InteropEmu.NsfGetFrameCount();
+			if(elapsedFrames < 120) {
 				//Reload current track if it has been playing for more than 2 seconds
 				currentTrack--;
 				if(currentTrack < 0) {
@@ -275,7 +271,6 @@ namespace Mesen.GUI.Controls
 				}
 			}
 			InteropEmu.NsfSelectTrack((byte)currentTrack);
-			_frameCount = 0;
 		}
 
 		private void trkVolume_ValueChanged(object sender, EventArgs e)
@@ -405,7 +400,6 @@ namespace Mesen.GUI.Controls
 			int currentTrack = InteropEmu.NsfGetCurrentTrack();
 			if(currentTrack != cboTrack.SelectedIndex) {
 				InteropEmu.NsfSelectTrack((byte)cboTrack.SelectedIndex);
-				_frameCount = 0;
 			}
 		}
 
@@ -435,6 +429,11 @@ namespace Mesen.GUI.Controls
 				this.tlpMain.MouseMove -= value;
 				this.tlpNsfInfo.MouseMove -= value;
 			}
+		}
+
+		private void tmrUpdate_Tick(object sender, EventArgs e)
+		{
+			UpdateTimeDisplay();
 		}
 	}
 

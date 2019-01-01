@@ -115,6 +115,7 @@
 			<Control ID="lblSoundChips">Xip de so</Control>
 			<Control ID="lblRecording">REC</Control>
 			<Control ID="lblSlowMotion">Càmera lenta</Control>
+			<Control ID="lblRewinding">Rewinding</Control>
 			<Control ID="lblFastForward">Avanç ràpid</Control>
 		</Form>
 		<Form ID="frmLogWindow" Title="Finestra del registre">
@@ -536,7 +537,7 @@
 		</Form>
 		<Form ID="frmAbout" Title="Quant a...">
 			<Control ID="labelProductName">Mesen</Control>
-			<Control ID="labelCopyright">© 2018 M. Bibaud (aka Sour)</Control>
+			<Control ID="labelCopyright">© 2019 M. Bibaud (aka Sour)</Control>
 			<Control ID="lblWebsite">Lloc web:</Control>
 			<Control ID="lblLink">www.mesen.ca</Control>
 			<Control ID="labelVersion">Versió:</Control>

@@ -61,14 +61,18 @@
 			this.lblFastForward = new System.Windows.Forms.Label();
 			this.lblFastForwardIcon = new System.Windows.Forms.Label();
 			this.tableLayoutPanel4 = new System.Windows.Forms.TableLayoutPanel();
+			this.panel4 = new System.Windows.Forms.Panel();
+			this.lblRewinding = new System.Windows.Forms.Label();
+			this.lblRewindIcon = new System.Windows.Forms.Label();
+			this.panel2 = new System.Windows.Forms.Panel();
+			this.panel1 = new System.Windows.Forms.Panel();
 			this.panel3 = new System.Windows.Forms.Panel();
 			this.lblSlowMotion = new System.Windows.Forms.Label();
 			this.lblSlowMotionIcon = new System.Windows.Forms.Label();
-			this.panel2 = new System.Windows.Forms.Panel();
-			this.panel1 = new System.Windows.Forms.Panel();
 			this.tlpRepeatShuffle = new System.Windows.Forms.TableLayoutPanel();
 			this.picRepeat = new System.Windows.Forms.PictureBox();
 			this.picShuffle = new System.Windows.Forms.PictureBox();
+			this.tmrUpdate = new System.Windows.Forms.Timer(this.components);
 			this.tlpMain.SuspendLayout();
 			this.tlpNsfInfo.SuspendLayout();
 			this.tableLayoutPanel3.SuspendLayout();
@@ -77,9 +81,10 @@
 			this.pnlBackground.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.picBackground)).BeginInit();
 			this.tableLayoutPanel4.SuspendLayout();
-			this.panel3.SuspendLayout();
+			this.panel4.SuspendLayout();
 			this.panel2.SuspendLayout();
 			this.panel1.SuspendLayout();
+			this.panel3.SuspendLayout();
 			this.tlpRepeatShuffle.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.picRepeat)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.picShuffle)).BeginInit();
@@ -514,19 +519,80 @@
 			// 
 			this.tableLayoutPanel4.ColumnCount = 1;
 			this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel4.Controls.Add(this.panel3, 0, 2);
+			this.tableLayoutPanel4.Controls.Add(this.panel4, 0, 2);
 			this.tableLayoutPanel4.Controls.Add(this.panel2, 0, 0);
 			this.tableLayoutPanel4.Controls.Add(this.panel1, 0, 1);
+			this.tableLayoutPanel4.Controls.Add(this.panel3, 0, 3);
 			this.tableLayoutPanel4.Location = new System.Drawing.Point(5, 5);
 			this.tableLayoutPanel4.Margin = new System.Windows.Forms.Padding(0);
 			this.tableLayoutPanel4.Name = "tableLayoutPanel4";
-			this.tableLayoutPanel4.RowCount = 4;
+			this.tableLayoutPanel4.RowCount = 5;
+			this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel4.Size = new System.Drawing.Size(121, 60);
+			this.tableLayoutPanel4.Size = new System.Drawing.Size(121, 85);
 			this.tableLayoutPanel4.TabIndex = 13;
+			// 
+			// panel4
+			// 
+			this.panel4.AutoSize = true;
+			this.panel4.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+			this.panel4.Controls.Add(this.lblRewinding);
+			this.panel4.Controls.Add(this.lblRewindIcon);
+			this.panel4.Location = new System.Drawing.Point(0, 36);
+			this.panel4.Margin = new System.Windows.Forms.Padding(0);
+			this.panel4.Name = "panel4";
+			this.panel4.Size = new System.Drawing.Size(71, 18);
+			this.panel4.TabIndex = 3;
+			// 
+			// lblRewinding
+			// 
+			this.lblRewinding.AutoSize = true;
+			this.lblRewinding.ForeColor = System.Drawing.Color.DarkOrange;
+			this.lblRewinding.Location = new System.Drawing.Point(14, 4);
+			this.lblRewinding.Margin = new System.Windows.Forms.Padding(0);
+			this.lblRewinding.Name = "lblRewinding";
+			this.lblRewinding.Size = new System.Drawing.Size(57, 13);
+			this.lblRewinding.TabIndex = 11;
+			this.lblRewinding.Text = "Rewinding";
+			// 
+			// lblRewindIcon
+			// 
+			this.lblRewindIcon.AutoSize = true;
+			this.lblRewindIcon.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.lblRewindIcon.ForeColor = System.Drawing.Color.DarkOrange;
+			this.lblRewindIcon.Location = new System.Drawing.Point(0, 0);
+			this.lblRewindIcon.Margin = new System.Windows.Forms.Padding(0);
+			this.lblRewindIcon.Name = "lblRewindIcon";
+			this.lblRewindIcon.Size = new System.Drawing.Size(17, 18);
+			this.lblRewindIcon.TabIndex = 12;
+			this.lblRewindIcon.Text = "«";
+			// 
+			// panel2
+			// 
+			this.panel2.AutoSize = true;
+			this.panel2.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+			this.panel2.Controls.Add(this.lblRecordingDot);
+			this.panel2.Controls.Add(this.lblRecording);
+			this.panel2.Location = new System.Drawing.Point(0, 0);
+			this.panel2.Margin = new System.Windows.Forms.Padding(0);
+			this.panel2.Name = "panel2";
+			this.panel2.Size = new System.Drawing.Size(44, 18);
+			this.panel2.TabIndex = 1;
+			// 
+			// panel1
+			// 
+			this.panel1.AutoSize = true;
+			this.panel1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+			this.panel1.Controls.Add(this.lblFastForward);
+			this.panel1.Controls.Add(this.lblFastForwardIcon);
+			this.panel1.Location = new System.Drawing.Point(0, 18);
+			this.panel1.Margin = new System.Windows.Forms.Padding(0);
+			this.panel1.Name = "panel1";
+			this.panel1.Size = new System.Drawing.Size(82, 18);
+			this.panel1.TabIndex = 0;
 			// 
 			// panel3
 			// 
@@ -534,7 +600,7 @@
 			this.panel3.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
 			this.panel3.Controls.Add(this.lblSlowMotion);
 			this.panel3.Controls.Add(this.lblSlowMotionIcon);
-			this.panel3.Location = new System.Drawing.Point(0, 36);
+			this.panel3.Location = new System.Drawing.Point(0, 54);
 			this.panel3.Margin = new System.Windows.Forms.Padding(0);
 			this.panel3.Name = "panel3";
 			this.panel3.Size = new System.Drawing.Size(79, 18);
@@ -562,30 +628,6 @@
 			this.lblSlowMotionIcon.Size = new System.Drawing.Size(17, 18);
 			this.lblSlowMotionIcon.TabIndex = 12;
 			this.lblSlowMotionIcon.Text = "«";
-			// 
-			// panel2
-			// 
-			this.panel2.AutoSize = true;
-			this.panel2.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-			this.panel2.Controls.Add(this.lblRecordingDot);
-			this.panel2.Controls.Add(this.lblRecording);
-			this.panel2.Location = new System.Drawing.Point(0, 0);
-			this.panel2.Margin = new System.Windows.Forms.Padding(0);
-			this.panel2.Name = "panel2";
-			this.panel2.Size = new System.Drawing.Size(44, 18);
-			this.panel2.TabIndex = 1;
-			// 
-			// panel1
-			// 
-			this.panel1.AutoSize = true;
-			this.panel1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-			this.panel1.Controls.Add(this.lblFastForward);
-			this.panel1.Controls.Add(this.lblFastForwardIcon);
-			this.panel1.Location = new System.Drawing.Point(0, 18);
-			this.panel1.Margin = new System.Windows.Forms.Padding(0);
-			this.panel1.Name = "panel1";
-			this.panel1.Size = new System.Drawing.Size(82, 18);
-			this.panel1.TabIndex = 0;
 			// 
 			// tlpRepeatShuffle
 			// 
@@ -629,6 +671,12 @@
 			this.picShuffle.TabStop = false;
 			this.picShuffle.Click += new System.EventHandler(this.picShuffle_Click);
 			// 
+			// tmrUpdate
+			// 
+			this.tmrUpdate.Enabled = true;
+			this.tmrUpdate.Interval = 250;
+			this.tmrUpdate.Tick += new System.EventHandler(this.tmrUpdate_Tick);
+			// 
 			// ctrlNsfPlayer
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -653,12 +701,14 @@
 			((System.ComponentModel.ISupportInitialize)(this.picBackground)).EndInit();
 			this.tableLayoutPanel4.ResumeLayout(false);
 			this.tableLayoutPanel4.PerformLayout();
-			this.panel3.ResumeLayout(false);
-			this.panel3.PerformLayout();
+			this.panel4.ResumeLayout(false);
+			this.panel4.PerformLayout();
 			this.panel2.ResumeLayout(false);
 			this.panel2.PerformLayout();
 			this.panel1.ResumeLayout(false);
 			this.panel1.PerformLayout();
+			this.panel3.ResumeLayout(false);
+			this.panel3.PerformLayout();
 			this.tlpRepeatShuffle.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)(this.picRepeat)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.picShuffle)).EndInit();
@@ -709,5 +759,9 @@
 		private System.Windows.Forms.PictureBox picShuffle;
 		private System.Windows.Forms.PictureBox picRepeat;
 		private System.Windows.Forms.Panel pnlBackground;
+		private System.Windows.Forms.Timer tmrUpdate;
+		private System.Windows.Forms.Panel panel4;
+		private System.Windows.Forms.Label lblRewinding;
+		private System.Windows.Forms.Label lblRewindIcon;
 	}
 }

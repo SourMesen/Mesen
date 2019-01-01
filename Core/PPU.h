@@ -114,6 +114,8 @@ class PPU : public IMemoryHandler, public Snapshotable
 		void SetOpenBus(uint8_t mask, uint8_t value);
 		uint8_t ApplyOpenBus(uint8_t mask, uint8_t value);
 
+		void ProcessStatusRegOpenBus(uint8_t & openBusMask, uint8_t & returnValue);
+
 		void UpdateVideoRamAddr();
 		void IncVerticalScrolling();
 		void IncHorizontalScrolling();
@@ -189,6 +191,7 @@ class PPU : public IMemoryHandler, public Snapshotable
 		void WritePaletteRAM(uint16_t addr, uint8_t value);
 
 		uint8_t ReadRAM(uint16_t addr) override;
+		uint8_t PeekRAM(uint16_t addr) override;
 		void WriteRAM(uint16_t addr, uint8_t value) override;
 
 		void SetNesModel(NesModel model);

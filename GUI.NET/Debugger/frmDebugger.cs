@@ -13,6 +13,7 @@ using Mesen.GUI.Config;
 using Mesen.GUI.Debugger.Controls;
 using Mesen.GUI.Forms;
 using Mesen.GUI.Controls;
+using System.Collections.ObjectModel;
 
 namespace Mesen.GUI.Debugger
 {
@@ -101,6 +102,7 @@ namespace Mesen.GUI.Debugger
 			this.mnuShowPpuMemoryMapping.Checked = ConfigManager.Config.DebugInfo.ShowPpuMemoryMapping;
 			this.mnuAutoLoadDbgFiles.Checked = ConfigManager.Config.DebugInfo.AutoLoadDbgFiles;
 			this.mnuAutoLoadCdlFiles.Checked = ConfigManager.Config.DebugInfo.AutoLoadCdlFiles;
+			this.mnuEnableSubInstructionBreakpoints.Checked = !ConfigManager.Config.DebugInfo.BreakOnFirstCycle;
 			this.mnuBreakOnReset.Checked = ConfigManager.Config.DebugInfo.BreakOnReset;
 			this.mnuBreakOnInit.Checked = ConfigManager.Config.DebugInfo.BreakOnInit;
 			this.mnuBreakOnPlay.Checked = ConfigManager.Config.DebugInfo.BreakOnPlay;
@@ -121,6 +123,8 @@ namespace Mesen.GUI.Debugger
 			this.mnuShowVerifiedData.Checked = ConfigManager.Config.DebugInfo.ShowVerifiedData;
 			this.mnuShowUnidentifiedData.Checked = ConfigManager.Config.DebugInfo.ShowUnidentifiedData;
 
+			this.mnuShowBreakNotifications.Checked = ConfigManager.Config.DebugInfo.ShowBreakNotifications;
+			this.mnuShowInstructionProgression.Checked = ConfigManager.Config.DebugInfo.ShowInstructionProgression;
 			this.mnuAlwaysScrollToCenter.Checked = ConfigManager.Config.DebugInfo.AlwaysScrollToCenter;
 			this.mnuRefreshWhileRunning.Checked = ConfigManager.Config.DebugInfo.RefreshWhileRunning;
 			this.mnuShowMemoryValues.Checked = ConfigManager.Config.DebugInfo.ShowMemoryValuesInCodeWindow;
@@ -257,6 +261,7 @@ namespace Mesen.GUI.Debugger
 			mnuRunScanline.InitShortcut(this, nameof(DebuggerShortcutsConfig.RunPpuScanline));
 			mnuRunOneFrame.InitShortcut(this, nameof(DebuggerShortcutsConfig.RunPpuFrame));
 
+			mnuGoToAll.InitShortcut(this, nameof(DebuggerShortcutsConfig.GoToAll));
 			mnuGoToAddress.InitShortcut(this, nameof(DebuggerShortcutsConfig.GoTo));
 			mnuFind.InitShortcut(this, nameof(DebuggerShortcutsConfig.Find));
 			mnuFindNext.InitShortcut(this, nameof(DebuggerShortcutsConfig.FindNext));
@@ -322,7 +327,7 @@ namespace Mesen.GUI.Debugger
 		{
 			base.OnActivated(e);
 			if(ConfigManager.Config.DebugInfo.BreakOnDebuggerFocus && !InteropEmu.DebugIsExecutionStopped()) {
-				InteropEmu.DebugStep(1);
+				InteropEmu.DebugStep(1, BreakSource.BreakOnFocus);
 			}
 		}
 
@@ -481,8 +486,50 @@ namespace Mesen.GUI.Debugger
 			SetFlag(DebuggerFlags.BreakOnDecayedOamRead, config.BreakOnDecayedOamRead);
 			SetFlag(DebuggerFlags.BreakOnInit, config.BreakOnInit);
 			SetFlag(DebuggerFlags.BreakOnPlay, config.BreakOnPlay);
+			SetFlag(DebuggerFlags.BreakOnFirstCycle, config.BreakOnFirstCycle);
 			SetFlag(DebuggerFlags.HidePauseIcon, config.HidePauseIcon);
 			InteropEmu.SetFlag(EmulationFlags.DebuggerWindowEnabled, true);
+		}
+
+		private string GetBreakNotification(Int64 param)
+		{
+			BreakSource source = (BreakSource)(byte)param;
+
+			string message = null;
+			if(ConfigManager.Config.DebugInfo.ShowBreakNotifications) {
+				message = ResourceHelper.GetEnumText(source);
+				if(source == BreakSource.Breakpoint) {
+					int breakpointId = (int)(param >> 40);
+					byte bpValue = (byte)((param >> 32) & 0xFF);
+					BreakpointType bpType = (BreakpointType)(byte)((param >> 8) & 0x0F);
+					UInt16 bpAddress = (UInt16)(param >> 16);
+
+					ReadOnlyCollection<Breakpoint> breakpoints = BreakpointManager.Breakpoints;
+					if(breakpointId >= 0 && breakpointId < breakpoints.Count) {
+						Breakpoint bp = breakpoints[breakpointId];
+						if(bpType != BreakpointType.Global) {
+							message += ": " + ResourceHelper.GetEnumText(bpType) + " ($" + bpAddress.ToString("X4") + ":$" + bpValue.ToString("X2") + ")";
+						}
+						if(!string.IsNullOrWhiteSpace(bp.Condition)) {
+							string cond = bp.Condition.Trim();
+							if(cond.Length > 27) {
+								message += Environment.NewLine + cond.Substring(0, 24) + "...";
+							} else {
+								message += Environment.NewLine + cond;
+							}
+						}
+					}
+				} else if(source == BreakSource.BreakOnUninitMemoryRead) {
+					UInt16 address = (UInt16)(param >> 16);
+					byte value = (byte)((param >> 32) & 0xFF);
+					message += " ($" + address.ToString("X4") + ":$" + value.ToString("X2") + ")";
+				} else if(source == BreakSource.CpuStep || source == BreakSource.PpuStep) {
+					//Don't display anything when breaking due to stepping
+					message = null;
+				}
+			}
+
+			return message;
 		}
 
 		private void _notifListener_OnNotification(InteropEmu.NotificationEventArgs e)
@@ -508,12 +555,16 @@ namespace Mesen.GUI.Debugger
 
 				case InteropEmu.ConsoleNotificationType.CodeBreak:
 					this.BeginInvoke((MethodInvoker)(() => {
-						BreakSource source = (BreakSource)e.Parameter.ToInt32();
+						BreakSource source = (BreakSource)(byte)e.Parameter.ToInt64();
+						
 						bool bringToFront = (
-							source == BreakSource.Break && ConfigManager.Config.DebugInfo.BringToFrontOnBreak ||
+							source < BreakSource.Pause && ConfigManager.Config.DebugInfo.BringToFrontOnBreak ||
 							source == BreakSource.Pause && ConfigManager.Config.DebugInfo.BringToFrontOnPause
 						);
 						UpdateDebugger(true, bringToFront);
+
+						_lastCodeWindow.SetMessage(new TextboxMessageInfo() { Message = GetBreakNotification(e.Parameter.ToInt64()) });
+
 						mnuContinue.Enabled = true;
 						mnuBreak.Enabled = false;
 					}));
@@ -538,7 +589,7 @@ namespace Mesen.GUI.Debugger
 					}));
 
 					if(breakOnReset) {
-						InteropEmu.DebugStep(1);
+						InteropEmu.DebugStep(1, BreakSource.BreakOnReset);
 					}
 					break;
 			}
@@ -670,6 +721,11 @@ namespace Mesen.GUI.Debugger
 
 			ctrlSourceViewer.ClearActiveAddress();
 			ctrlSourceViewerSplit.ClearActiveAddress();
+
+			ctrlDebuggerCode.SetMessage(null);
+			ctrlDebuggerCodeSplit.SetMessage(null);
+			ctrlSourceViewer.SetMessage(null);
+			ctrlSourceViewerSplit.SetMessage(null);
 		}
 
 		public void TogglePause()
@@ -1133,6 +1189,13 @@ namespace Mesen.GUI.Debugger
 			ConfigManager.Config.DebugInfo.OnlyShowTooltipsOnShift = mnuOnlyShowTooltipOnShift.Checked;
 			ConfigManager.ApplyChanges();
 		}
+		
+		private void mnuBreakOnFirstCycle_Click(object sender, EventArgs e)
+		{
+			ConfigManager.Config.DebugInfo.BreakOnFirstCycle = !mnuEnableSubInstructionBreakpoints.Checked;
+			ConfigManager.ApplyChanges();
+			UpdateDebuggerFlags();
+		}
 
 		private void mnuBreakOnReset_Click(object sender, EventArgs e)
 		{
@@ -1211,6 +1274,20 @@ namespace Mesen.GUI.Debugger
 		{
 			ConfigManager.Config.DebugInfo.BringToFrontOnBreak = mnuBringToFrontOnBreak.Checked;
 			ConfigManager.ApplyChanges();
+		}
+		
+		private void mnuShowBreakNotifications_Click(object sender, EventArgs e)
+		{
+			ConfigManager.Config.DebugInfo.ShowBreakNotifications = mnuShowBreakNotifications.Checked;
+			ConfigManager.ApplyChanges();
+		}
+
+		private void mnuShowInstructionProgression_Click(object sender, EventArgs e)
+		{
+			ConfigManager.Config.DebugInfo.ShowInstructionProgression = mnuShowInstructionProgression.Checked;
+			ConfigManager.ApplyChanges();
+			
+			UpdateDebugger(false, false);
 		}
 
 		private void mnuAlwaysScrollToCenter_Click(object sender, EventArgs e)
@@ -1720,6 +1797,41 @@ namespace Mesen.GUI.Debugger
 				}
 			} catch(Exception ex) {
 				MesenMsgBox.Show("UnexpectedError", MessageBoxButtons.OK, MessageBoxIcon.Error, ex.ToString());
+			}
+		}
+
+		private void mnuGoToAll_Click(object sender, EventArgs e)
+		{
+			using(frmGoToAll frm = new frmGoToAll(_lastCodeWindow.SymbolProvider)) {
+				if(frm.ShowDialog() == DialogResult.OK) {
+					frmGoToAll.GoToDestination dest = frm.Destination;
+
+					if(_lastCodeWindow is ctrlSourceViewer && !string.IsNullOrWhiteSpace(dest.File)) {
+						((ctrlSourceViewer)_lastCodeWindow).ScrollToFileLine(dest.File, dest.Line);
+					} else if(dest.Label != null && dest.Label.GetRelativeAddress() >= 0) {
+						_lastCodeWindow.ScrollToAddress(new AddressTypeInfo() { Address = (int)dest.Label.Address, Type = dest.Label.AddressType });
+					} else if(!string.IsNullOrWhiteSpace(dest.File)) {
+						if(!(_lastCodeWindow is ctrlSourceViewer)) {
+							ctrlDebuggerCode_OnSwitchView(_lastCodeWindow);
+						}
+						if(_lastCodeWindow is ctrlSourceViewer) {
+							((ctrlSourceViewer)_lastCodeWindow).ScrollToFileLine(dest.File, dest.Line);
+						}
+					}
+
+					if(Program.IsMono) {
+						//Delay by 150ms before giving focus when running on Mono
+						//Otherwise this doesn't work (presumably because Mono sets the debugger form to disabled while the popup is opened)
+						Task.Run(() => {
+							System.Threading.Thread.Sleep(150);
+							this.BeginInvoke((Action)(() => {
+								_lastCodeWindow.CodeViewer.Focus();
+							}));
+						});
+					} else {
+						_lastCodeWindow.CodeViewer.Focus();
+					}
+				}
 			}
 		}
 	}

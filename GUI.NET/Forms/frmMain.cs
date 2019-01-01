@@ -563,6 +563,11 @@ namespace Mesen.GUI.Forms
 				enabled = false;
 			}
 
+			if(_fullscreenMode == enabled) {
+				//Fullscreen mode already matches, no need to do anything
+				return;
+			}
+
 			//Setup message to show on screen when paused while in fullscreen (instructions to revert to windowed mode)
 			InteropEmu.SetPauseScreenMessage("");
 			if(enabled) {
@@ -638,7 +643,7 @@ namespace Mesen.GUI.Forms
 					VideoInfo.ApplyOverscanConfig();
 					_currentGame = InteropEmu.GetRomInfo().GetRomName();
 					InteropEmu.SetNesModel(ConfigManager.Config.Region);
-					InitializeNsfMode(false, true);
+					InitializeNsfMode(true);
 					CheatInfo.ApplyCheats();
 					GameSpecificInfo.ApplyGameSpecificConfig();
 					UpdateStateMenu(mnuSaveState, true);
@@ -659,12 +664,6 @@ namespace Mesen.GUI.Forms
 						//If a workspace is already loaded for this game, make sure we setup the labels, watch, etc properly
 						DebugWorkspaceManager.SetupWorkspace();
 					});
-					break;
-
-				case InteropEmu.ConsoleNotificationType.PpuFrameDone:
-					if(InteropEmu.IsNsf()) {
-						this.ctrlNsfPlayer.CountFrame();
-					}
 					break;
 
 				case InteropEmu.ConsoleNotificationType.GameReset:
@@ -1132,7 +1131,7 @@ namespace Mesen.GUI.Forms
 					mnuStopMovie.Enabled = running && !netPlay && (moviePlaying || movieRecording);
 					mnuRecordMovie.Enabled = running && !moviePlaying && !movieRecording && !isNetPlayClient;
 					mnuGameConfig.Enabled = !moviePlaying && !movieRecording;
-					mnuHistoryViewer.Enabled = running && !InteropEmu.IsNsf() && InteropEmu.HistoryViewerEnabled();
+					mnuHistoryViewer.Enabled = running && InteropEmu.HistoryViewerEnabled();
 
 					bool waveRecording = InteropEmu.WaveIsRecording();
 					mnuWaveRecord.Enabled = running && !waveRecording;
@@ -1386,7 +1385,7 @@ namespace Mesen.GUI.Forms
 			}
 		}
 
-		private void InitializeNsfMode(bool updateTextOnly = false, bool gameLoaded = false)
+		private void InitializeNsfMode(bool gameLoaded = false)
 		{
 			if(this.InvokeRequired) {
 				if(InteropEmu.IsNsf()) {
@@ -1397,7 +1396,7 @@ namespace Mesen.GUI.Forms
 						InteropEmu.StopServer();
 					}
 				}
-				this.BeginInvoke((MethodInvoker)(() => this.InitializeNsfMode(updateTextOnly, gameLoaded)));
+				this.BeginInvoke((MethodInvoker)(() => this.InitializeNsfMode(gameLoaded)));
 			} else {
 				if(InteropEmu.IsNsf()) {
 					this.SetFullscreenState(false);
@@ -1415,9 +1414,6 @@ namespace Mesen.GUI.Forms
 					}
 					this._isNsfPlayerMode = true;
 					this.ctrlNsfPlayer.UpdateText();
-					if(!updateTextOnly) {
-						this.ctrlNsfPlayer.ResetCount();
-					}
 					this.ctrlNsfPlayer.Visible = true;					
 					this.ctrlNsfPlayer.Focus();
 

@@ -20,9 +20,10 @@ private:
 
 	static void InitDatabase();
 	static void UpdateRomData(GameInfo &info, RomData &romData);
+	static void LoadGameDb(vector<string> data);
 
 public:
-	static void LoadGameDb(vector<string> data);
+	static void LoadGameDb(std::istream & db);
 	
 	static void SetGameDatabaseState(bool enabled);
 	static bool IsEnabled();

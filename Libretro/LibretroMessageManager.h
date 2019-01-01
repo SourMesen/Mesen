@@ -17,7 +17,7 @@ public:
 		MessageManager::RegisterMessageManager(this);
 	}
 
-	~LibretroMessageManager()
+	virtual ~LibretroMessageManager()
 	{
 		MessageManager::RegisterMessageManager(nullptr);
 	}

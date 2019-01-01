@@ -339,8 +339,8 @@ int32_t ExpressionEvaluator::Evaluate(ExpressionData &data, DebugState &state, E
 					case EvalValues::Value: token = operationInfo.Value; break;
 					case EvalValues::Address: token = operationInfo.Address; break;
 					case EvalValues::AbsoluteAddress: token = _debugger->GetAbsoluteAddress(operationInfo.Address); break;
-					case EvalValues::IsWrite: token = operationInfo.OperationType == MemoryOperationType::Write; break;
-					case EvalValues::IsRead: token = operationInfo.OperationType == MemoryOperationType::Read; break;
+					case EvalValues::IsWrite: token = operationInfo.OperationType == MemoryOperationType::Write || operationInfo.OperationType == MemoryOperationType::DummyWrite; break;
+					case EvalValues::IsRead: token = operationInfo.OperationType == MemoryOperationType::Read || operationInfo.OperationType == MemoryOperationType::DummyRead; break;
 				}
 			}
 		} else if(token >= EvalOperators::Multiplication) {

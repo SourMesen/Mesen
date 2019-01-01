@@ -104,20 +104,22 @@ namespace Mesen.GUI.Debugger
 
 		private void DisplaySymbolTooltip(Ld65DbgImporter.SymbolInfo symbol)
 		{
-			int relativeAddress = symbol.Address.HasValue ? symbol.Address.Value : -1;
-			byte byteValue = relativeAddress >= 0 ? InteropEmu.DebugGetMemoryValue(DebugMemoryType.CpuMemory, (UInt32)relativeAddress) : (byte)0;
-			UInt16 wordValue = relativeAddress >= 0 ? (UInt16)(byteValue | (InteropEmu.DebugGetMemoryValue(DebugMemoryType.CpuMemory, (UInt32)relativeAddress + 1) << 8)) : (UInt16)0;
-
 			AddressTypeInfo addressInfo = SymbolProvider.GetSymbolAddressInfo(symbol);
 
-			if(addressInfo != null) {
+			if(addressInfo != null && addressInfo.Address >= 0) {
+				int relativeAddress = InteropEmu.DebugGetRelativeAddress((uint)addressInfo.Address, addressInfo.Type);
+				byte byteValue = relativeAddress >= 0 ? InteropEmu.DebugGetMemoryValue(DebugMemoryType.CpuMemory, (UInt32)relativeAddress) : (byte)0;
+				UInt16 wordValue = relativeAddress >= 0 ? (UInt16)(byteValue | (InteropEmu.DebugGetMemoryValue(DebugMemoryType.CpuMemory, (UInt32)relativeAddress + 1) << 8)) : (UInt16)0;
+
 				var values = new Dictionary<string, string>() {
 					{ "Symbol", symbol.Name }
 				};
 
 				if(relativeAddress >= 0) {
 					values["CPU Address"] = "$" + relativeAddress.ToString("X4");
-				};
+				} else {
+					values["CPU Address"] = "<out of scope>";
+				}
 
 				if(addressInfo.Type == AddressType.PrgRom) {
 					values["PRG Offset"] = "$" + addressInfo.Address.ToString("X4");
@@ -129,7 +131,7 @@ namespace Mesen.GUI.Debugger
 			} else {
 				var values = new Dictionary<string, string>() {
 					{ "Symbol", symbol.Name },
-					{ "Constant", "$" + relativeAddress.ToString("X2") }
+					{ "Constant", symbol.Address.HasValue ? ("$" + symbol.Address.Value.ToString("X2")) : "<unknown>" }
 				};
 				ShowTooltip(symbol.Name, values, -1, addressInfo);
 			}

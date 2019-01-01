@@ -50,6 +50,7 @@ extern "C"
 	DllExport void __stdcall DebugGetState(DebugState *state) { GetDebugger()->GetState(state); }
 	DllExport void __stdcall DebugSetState(DebugState state) { GetDebugger()->SetState(state); }
 	DllExport void __stdcall DebugGetApuState(ApuState *state) { GetDebugger()->GetApuState(state); }
+	DllExport void __stdcall DebugGetInstructionProgress(InstructionProgress *state) { GetDebugger()->GetInstructionProgress(*state); }
 
 	DllExport void __stdcall DebugSetBreakpoints(Breakpoint breakpoints[], uint32_t length) { GetDebugger()->SetBreakpoints(breakpoints, length); }
 	DllExport void __stdcall DebugSetLabel(uint32_t address, AddressType addressType, char* label, char* comment) { GetDebugger()->GetLabelManager()->SetLabel(address, addressType, label, comment); }
@@ -57,7 +58,7 @@ extern "C"
 
 	DllExport bool __stdcall DebugIsExecutionStopped() { return GetDebugger()->IsExecutionStopped(); }
 	DllExport void __stdcall DebugRun() { GetDebugger()->Run(); }
-	DllExport void __stdcall DebugStep(uint32_t count) { GetDebugger()->Step(count); }
+	DllExport void __stdcall DebugStep(uint32_t count, BreakSource breakSource) { GetDebugger()->Step(count, breakSource); }
 	DllExport void __stdcall DebugStepCycles(uint32_t count) { GetDebugger()->StepCycles(count); }
 	DllExport void __stdcall DebugStepOver() { GetDebugger()->StepOver(); }
 	DllExport void __stdcall DebugStepOut() { GetDebugger()->StepOut(); }

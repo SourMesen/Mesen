@@ -18,9 +18,10 @@ private:
 	int32_t _previousWidth = -1;
 
 public:
-	LibretroRenderer(shared_ptr<Console> console)
+	LibretroRenderer(shared_ptr<Console> console, retro_environment_t retroEnv)
 	{
 		_console = console;
+		_retroEnv = retroEnv;
 		_console->GetVideoRenderer()->RegisterRenderingDevice(this);
 	}
 
@@ -36,7 +37,7 @@ public:
 			//Use Blargg's NTSC filter's max size as a minimum resolution, to prevent changing resolution too often
 			int32_t newWidth = std::max<int32_t>(width, NES_NTSC_OUT_WIDTH(256));
 			int32_t newHeight = std::max<int32_t>(height, 240);
-			if(_previousWidth != newWidth || _previousHeight != newHeight) {
+			if(_retroEnv != nullptr && (_previousWidth != newWidth || _previousHeight != newHeight)) {
 				//Resolution change is needed
 				retro_system_av_info avInfo = {};
 				GetSystemAudioVideoInfo(avInfo, newWidth, newHeight);
@@ -53,7 +54,7 @@ public:
 	void GetSystemAudioVideoInfo(retro_system_av_info &info, int32_t maxWidth = 0, int32_t maxHeight = 0)
 	{
 		info.timing.fps = _console->GetModel() == NesModel::NTSC ? 60.098811862348404716732985230828 : 50.006977968268290848936010226333;
-		info.timing.sample_rate = 48000;
+		info.timing.sample_rate = _console->GetSettings()->GetSampleRate();
 
 		float ratio = (float)_console->GetSettings()->GetAspectRatio(_console);
 		if(ratio == 0.0f) {
@@ -79,11 +80,10 @@ public:
 		}
 	}
 
-	void SetCallbacks(retro_video_refresh_t sendFrame, retro_environment_t retroEnv)
+	void SetVideoCallback(retro_video_refresh_t sendFrame)
 	{
 		_sendFrame = sendFrame;
-		_retroEnv = retroEnv;
-	}	
+	}
 
 	void SetSkipMode(bool skip)
 	{

@@ -25,6 +25,11 @@ public:
 		return _internalRam[addr & Mask];
 	}
 
+	uint8_t PeekRAM(uint16_t addr) override
+	{
+		return ReadRAM(addr);
+	}
+
 	void WriteRAM(uint16_t addr, uint8_t value) override
 	{
 		_internalRam[addr & Mask] = value;

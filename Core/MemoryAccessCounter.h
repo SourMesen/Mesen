@@ -21,12 +21,14 @@ private:
 	vector<uint8_t> _uninitReads[4];
 
 	vector<int32_t>& GetArray(MemoryOperationType operationType, AddressType addressType, bool stampArray);
-	
+
 public:
 	MemoryAccessCounter(Debugger* debugger);
 
 	bool ProcessMemoryAccess(AddressTypeInfo &addressInfo, MemoryOperationType operation, int32_t cpuCycle);
 	void ResetCounts();
+
+	bool IsAddressUninitialized(AddressTypeInfo &addressInfo);
 	
 	void GetAccessCounts(AddressType memoryType, MemoryOperationType operationType, uint32_t counts[], bool forUninitReads);
 	void GetAccessCountsEx(uint32_t offset, uint32_t length, DebugMemoryType memoryType, MemoryOperationType operationType, int32_t counts[]);

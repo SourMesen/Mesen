@@ -1,4 +1,9 @@
-#pragma once
+#if (defined(DUMMYCPU) && !defined(__DUMMYCPU__H)) || (!defined(DUMMYCPU) && !defined(__CPU__H))
+#ifdef DUMMYCPU
+#define __DUMMYCPU__H
+#else
+#define __CPU__H
+#endif
 
 #include "stdafx.h"
 #include "Snapshotable.h"
@@ -7,24 +12,14 @@
 enum class NesModel;
 class Console;
 class MemoryManager;
-
-namespace PSFlags
-{
-	enum PSFlags : uint8_t
-	{
-		Carry = 0x01,
-		Zero = 0x02,
-		Interrupt = 0x04,
-		Decimal = 0x08,
-		Break = 0x10,
-		Reserved = 0x20,
-		Overflow = 0x40,
-		Negative = 0x80
-	};
-}
+class DummyCpu;
 
 class CPU : public Snapshotable
 {
+#ifndef DUMMYCPU
+	friend DummyCpu;
+#endif
+
 public:
 	static constexpr uint16_t NMIVector = 0xFFFA;
 	static constexpr uint16_t ResetVector = 0xFFFC;
@@ -62,13 +57,24 @@ private:
 
 	bool _warnOnCrash = true;
 
+#ifdef DUMMYCPU
+	uint32_t _writeCounter = 0;
+	uint16_t _writeAddresses[10];
+	uint8_t _writeValue[10];
+	bool _isDummyWrite[10];
+
+	uint32_t _readCounter = 0;
+	uint16_t _readAddresses[10];
+	uint8_t _readValue[10];
+	bool _isDummyRead[10];
+#endif
+
 	void IncCycleCount();
 	uint16_t FetchOperand();
 	void IRQ();
 
 	uint8_t GetOPCode()
 	{
-		_state.DebugPC = _state.PC;
 		uint8_t opCode = MemoryRead(_state.PC, MemoryOperationType::ExecOpCode);
 		_state.PC++;
 		return opCode;
@@ -78,7 +84,7 @@ private:
 	{
 		MemoryRead(_state.PC, MemoryOperationType::DummyRead);
 	}
-
+	
 	uint8_t ReadByte()
 	{
 		uint8_t value = MemoryRead(_state.PC, MemoryOperationType::ExecOperand);
@@ -127,7 +133,7 @@ private:
 		return ((valA + valB) & 0xFF00) != (valA & 0xFF00);
 	}
 
-	void MemoryWrite(uint16_t addr, uint8_t value);
+	void MemoryWrite(uint16_t addr, uint8_t value, MemoryOperationType operationType = MemoryOperationType::Write);
 	uint8_t MemoryRead(uint16_t addr, MemoryOperationType operationType = MemoryOperationType::Read);
 
 	uint16_t MemoryReadWord(uint16_t addr, MemoryOperationType operationType = MemoryOperationType::Read) {
@@ -324,7 +330,7 @@ private:
 		ClearFlags(PSFlags::Negative | PSFlags::Zero);
 		uint8_t value = MemoryRead(addr);		
 		
-		MemoryWrite(addr, value); //Dummy write
+		MemoryWrite(addr, value, MemoryOperationType::DummyWrite); //Dummy write
 		
 		value++;
 		SetZeroNegativeFlags(value);
@@ -336,7 +342,7 @@ private:
 		uint16_t addr = GetOperand();
 		ClearFlags(PSFlags::Negative | PSFlags::Zero);
 		uint8_t value = MemoryRead(addr);
-		MemoryWrite(addr, value); //Dummy write
+		MemoryWrite(addr, value, MemoryOperationType::DummyWrite); //Dummy write
 		
 		value--;
 		SetZeroNegativeFlags(value);
@@ -394,28 +400,28 @@ private:
 	void ASLAddr() {
 		uint16_t addr = GetOperand();
 		uint8_t value = MemoryRead(addr);
-		MemoryWrite(addr, value); //Dummy write
+		MemoryWrite(addr, value, MemoryOperationType::DummyWrite); //Dummy write
 		MemoryWrite(addr, ASL(value));
 	}
 
 	void LSRAddr() {
 		uint16_t addr = GetOperand();
 		uint8_t value = MemoryRead(addr);
-		MemoryWrite(addr, value); //Dummy write
+		MemoryWrite(addr, value, MemoryOperationType::DummyWrite); //Dummy write
 		MemoryWrite(addr, LSR(value));
 	}
 
 	void ROLAddr() {
 		uint16_t addr = GetOperand();
 		uint8_t value = MemoryRead(addr);
-		MemoryWrite(addr, value); //Dummy write
+		MemoryWrite(addr, value, MemoryOperationType::DummyWrite); //Dummy write
 		MemoryWrite(addr, ROL(value));
 	}
 
 	void RORAddr() {
 		uint16_t addr = GetOperand();
 		uint8_t value = MemoryRead(addr);
-		MemoryWrite(addr, value); //Dummy write
+		MemoryWrite(addr, value, MemoryOperationType::DummyWrite); //Dummy write
 		MemoryWrite(addr, ROR(value));
 	}
 
@@ -579,7 +585,7 @@ private:
 	{
 		//ASL & ORA
 		uint8_t value = GetOperandValue();
-		MemoryWrite(GetOperand(), value); //Dummy write
+		MemoryWrite(GetOperand(), value, MemoryOperationType::DummyWrite); //Dummy write
 		uint8_t shiftedValue = ASL(value);
 		SetA(A() | shiftedValue);
 		MemoryWrite(GetOperand(), shiftedValue);
@@ -589,7 +595,7 @@ private:
 	{
 		//ROL & AND
 		uint8_t value = GetOperandValue();
-		MemoryWrite(GetOperand(), value); //Dummy write
+		MemoryWrite(GetOperand(), value, MemoryOperationType::DummyWrite); //Dummy write
 		uint8_t shiftedValue = LSR(value);
 		SetA(A() ^ shiftedValue);
 		MemoryWrite(GetOperand(), shiftedValue);
@@ -599,7 +605,7 @@ private:
 	{
 		//LSR & EOR
 		uint8_t value = GetOperandValue();
-		MemoryWrite(GetOperand(), value); //Dummy write
+		MemoryWrite(GetOperand(), value, MemoryOperationType::DummyWrite); //Dummy write
 		uint8_t shiftedValue = ROL(value);
 		SetA(A() & shiftedValue);
 		MemoryWrite(GetOperand(), shiftedValue);
@@ -609,7 +615,7 @@ private:
 	{
 		//ROR & ADC
 		uint8_t value = GetOperandValue();
-		MemoryWrite(GetOperand(), value); //Dummy write
+		MemoryWrite(GetOperand(), value, MemoryOperationType::DummyWrite); //Dummy write
 		uint8_t shiftedValue = ROR(value);
 		ADD(shiftedValue);
 		MemoryWrite(GetOperand(), shiftedValue);
@@ -633,7 +639,7 @@ private:
 	{
 		//DEC & CMP
 		uint8_t value = GetOperandValue();
-		MemoryWrite(GetOperand(), value); //Dummy write
+		MemoryWrite(GetOperand(), value, MemoryOperationType::DummyWrite); //Dummy write
 		value--;
 		CMP(A(), value);
 		MemoryWrite(GetOperand(), value);
@@ -643,7 +649,7 @@ private:
 	{
 		//INC & SBC
 		uint8_t value = GetOperandValue();
-		MemoryWrite(GetOperand(), value); //Dummy write
+		MemoryWrite(GetOperand(), value, MemoryOperationType::DummyWrite); //Dummy write
 		value++;
 		ADD(value ^ 0xFF);
 		MemoryWrite(GetOperand(), value);
@@ -819,4 +825,54 @@ public:
 		state.PC = originalPc;
 		state.DebugPC = originalDebugPc;
 	}
+
+#ifdef DUMMYCPU
+#undef CPU
+	void SetDummyState(CPU *c)
+	{
+#define CPU DummyCpu
+		_writeCounter = 0;
+		_readCounter = 0;
+
+		_state = c->_state;
+
+		_cycleCount = c->_cycleCount;
+		_operand = c->_operand;
+		_spriteDmaCounter = c->_spriteDmaCounter;
+		_spriteDmaTransfer = c->_spriteDmaTransfer;
+		_dmcCounter = c->_dmcCounter;
+		_dmcDmaRunning = c->_dmcDmaRunning;
+		_cpuWrite = c->_cpuWrite;
+		_irqMask = c->_irqMask;
+		_prevRunIrq = c->_prevRunIrq;
+		_runIrq = c->_runIrq;
+		_cycleCount = c->_cycleCount;
+	}
+
+	uint32_t GetWriteCount()
+	{
+		return _writeCounter;
+	}
+
+	uint32_t GetReadCount()
+	{
+		return _readCounter;
+	}
+
+	void GetWriteAddrValue(uint32_t index, uint16_t &addr, uint8_t &value, bool &isDummyWrite)
+	{
+		addr = _writeAddresses[index];
+		value = _writeValue[index];
+		isDummyWrite = _isDummyWrite[index];
+	}
+
+	void GetReadAddr(uint32_t index, uint16_t &addr, uint8_t &value, bool &isDummyRead)
+	{
+		addr = _readAddresses[index];
+		value = _readValue[index];
+		isDummyRead = _isDummyRead[index];
+	}
+#endif
 };
+
+#endif

@@ -6,7 +6,6 @@ class NsfPpu : public PPU
 {
 protected:
 	void DrawPixel() override;
-	void SendFrame() override;
 
 public:
 	using PPU::PPU;

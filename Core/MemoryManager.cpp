@@ -100,10 +100,7 @@ uint8_t MemoryManager::DebugRead(uint16_t addr, bool disableSideEffects)
 		IMemoryHandler* handler = _ramReadHandlers[addr];
 		if(handler) {
 			if(disableSideEffects) {
-				if(handler == _mapper.get()) {
-					//Only allow reads from prg/chr ram/rom (e.g not ppu, apu, mapper registers, etc.)
-					value = ((BaseMapper*)handler)->DebugReadRAM(addr);
-				}
+				value = handler->PeekRAM(addr);
 			} else {
 				value = handler->ReadRAM(addr);
 			}
@@ -134,9 +131,9 @@ uint8_t MemoryManager::Read(uint16_t addr, MemoryOperationType operationType)
 	return value;
 }
 
-void MemoryManager::Write(uint16_t addr, uint8_t value)
+void MemoryManager::Write(uint16_t addr, uint8_t value, MemoryOperationType operationType)
 {
-	if(_console->DebugProcessRamOperation(MemoryOperationType::Write, addr, value)) {
+	if(_console->DebugProcessRamOperation(operationType, addr, value)) {
 		_ramWriteHandlers[addr]->WriteRAM(addr, value);
 	}
 }

@@ -213,6 +213,11 @@ namespace Mesen.GUI.Debugger
 		{
 			this.ctrlTextbox.CopySelection(copyLineNumbers, copyContentNotes, copyComments);
 		}
+
+		public void SetMessage(TextboxMessageInfo message)
+		{
+			this.ctrlTextbox.SetMessage(message);
+		}
 		
 		public int CurrentLine
 		{

@@ -419,17 +419,22 @@ namespace Mesen.GUI.Debugger.Controls
 			set { this.ctrlHexBox.ByteEditingMode = value; }
 		}
 
-		public delegate void ByteMouseHoverHandler(int address);
+		public delegate void ByteMouseHoverHandler(int address, Point position);
 		public event ByteMouseHoverHandler ByteMouseHover; 
 		private void ctrlHexBox_MouseMove(object sender, MouseEventArgs e)
 		{
-			BytePositionInfo bpi = ctrlHexBox.GetHexBytePositionInfo(e.Location);
-			ByteMouseHover?.Invoke((int)bpi.Index);
+			BytePositionInfo? bpi = ctrlHexBox.GetRestrictedHexBytePositionInfo(e.Location);
+			if(bpi.HasValue) {
+				Point position = ctrlHexBox.GetBytePosition(bpi.Value.Index);
+				ByteMouseHover?.Invoke((int)bpi.Value.Index, new Point(position.X + (int)(ctrlHexBox.CharSize.Width * 2.5), position.Y + (int)(ctrlHexBox.CharSize.Height * 1.1)));
+			} else {
+				ByteMouseHover?.Invoke(-1, Point.Empty);
+			}
 		}
 
 		private void ctrlHexBox_MouseLeave(object sender, EventArgs e)
 		{
-			ByteMouseHover?.Invoke(-1);
+			ByteMouseHover?.Invoke(-1, Point.Empty);
 		}
 
 		private void UpdateLocationLabel()

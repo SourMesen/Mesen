@@ -150,6 +150,8 @@ void PPU::GetState(PPUDebugState &state)
 	state.NmiScanline = _nmiScanline;
 	state.ScanlineCount = _vblankEnd + 2;
 	state.SafeOamScanline = _nesModel == NesModel::NTSC ? _nmiScanline + 19 : _palSpriteEvalScanline;
+	state.BusAddress = _ppuBusAddress;
+	state.MemoryReadBuffer = _memoryReadBuffer;
 }
 
 void PPU::SetState(PPUDebugState &state)
@@ -225,6 +227,68 @@ uint8_t PPU::ApplyOpenBus(uint8_t mask, uint8_t value)
 	return value | (_openBus & mask);
 }
 
+void PPU::ProcessStatusRegOpenBus(uint8_t &openBusMask, uint8_t &returnValue)
+{
+	switch(_settings->GetPpuModel()) {
+		case PpuModel::Ppu2C05A: openBusMask = 0x00; returnValue |= 0x1B; break;
+		case PpuModel::Ppu2C05B: openBusMask = 0x00; returnValue |= 0x3D; break;
+		case PpuModel::Ppu2C05C: openBusMask = 0x00; returnValue |= 0x1C; break;
+		case PpuModel::Ppu2C05D: openBusMask = 0x00; returnValue |= 0x1B; break;
+		case PpuModel::Ppu2C05E: openBusMask = 0x00; break;
+		default: break;
+	}
+}
+
+uint8_t PPU::PeekRAM(uint16_t addr)
+{
+	//Used by debugger to get register values without side-effects (heavily edited copy of ReadRAM)
+	uint8_t openBusMask = 0xFF;
+	uint8_t returnValue = 0;
+	switch(GetRegisterID(addr)) {
+		case PPURegisters::Status:
+			returnValue = ((uint8_t)_statusFlags.SpriteOverflow << 5) | ((uint8_t)_statusFlags.Sprite0Hit << 6) | ((uint8_t)_statusFlags.VerticalBlank << 7);
+			if(_scanline == 241 && _cycle < 3) {
+				//Clear vertical blank flag
+				returnValue &= 0x7F;
+			}
+			openBusMask = 0x1F;
+			ProcessStatusRegOpenBus(openBusMask, returnValue);
+			break;
+
+		case PPURegisters::SpriteData:
+			if(!_settings->CheckFlag(EmulationFlags::DisablePpu2004Reads)) {
+				if(_scanline <= 239 && IsRenderingEnabled()) {
+					if(_cycle >= 257 && _cycle <= 320) {
+						uint8_t step = ((_cycle - 257) % 8) > 3 ? 3 : ((_cycle - 257) % 8);
+						uint8_t addr = (_cycle - 257) / 8 * 4 + step;
+						returnValue = _secondarySpriteRAM[addr];
+					} else {
+						returnValue = _oamCopybuffer;
+					}
+				} else {
+					returnValue = _spriteRAM[_state.SpriteRamAddr];
+				}
+				openBusMask = 0x00;
+			}
+			break;
+
+		case PPURegisters::VideoMemoryData:
+			returnValue = _memoryReadBuffer;
+
+			if((_state.VideoRamAddr & 0x3FFF) >= 0x3F00 && !_settings->CheckFlag(EmulationFlags::DisablePaletteRead)) {
+				returnValue = ReadPaletteRAM(_state.VideoRamAddr) | (_openBus & 0xC0);
+				openBusMask = 0xC0;
+			} else {
+				openBusMask = 0x00;
+			}
+			break;
+
+		default:
+			break;
+	}
+	return returnValue | (_openBus & openBusMask);
+}
+
 uint8_t PPU::ReadRAM(uint16_t addr)
 {
 	uint8_t openBusMask = 0xFF;
@@ -237,14 +301,7 @@ uint8_t PPU::ReadRAM(uint16_t addr)
 			returnValue = _state.Status;
 			openBusMask = 0x1F;
 
-			switch(_settings->GetPpuModel()) {
-				case PpuModel::Ppu2C05A: openBusMask = 0x00; returnValue |= 0x1B; break;
-				case PpuModel::Ppu2C05B: openBusMask = 0x00; returnValue |= 0x3D; break;
-				case PpuModel::Ppu2C05C: openBusMask = 0x00; returnValue |= 0x1C; break;
-				case PpuModel::Ppu2C05D: openBusMask = 0x00; returnValue |= 0x1B; break;
-				case PpuModel::Ppu2C05E: openBusMask = 0x00; break;
-				default: break;
-			}
+			ProcessStatusRegOpenBus(openBusMask, returnValue);
 			break;
 
 		case PPURegisters::SpriteData:
@@ -1026,7 +1083,7 @@ uint8_t PPU::ReadSpriteRam(uint8_t addr)
 			//If this 8-byte row hasn't been read/written to in over 3000 cpu cycles (~1.7ms), return 0xFF to simulate decay
 			shared_ptr<Debugger> debugger = _console->GetDebugger(false);
 			if(debugger && debugger->CheckFlag(DebuggerFlags::BreakOnDecayedOamRead)) {
-				debugger->BreakImmediately();
+				debugger->BreakImmediately(BreakSource::BreakOnDecayedOamRead);
 			}
 			return 0x10;
 		}

@@ -46,6 +46,7 @@
 #include "NotificationManager.h"
 #include "HistoryViewer.h"
 #include "ConsolePauseHelper.h"
+#include "PgoUtilities.h"
 
 Console::Console(shared_ptr<Console> master, EmulationSettings* initialSettings)
 {
@@ -589,7 +590,7 @@ void Console::ResetComponents(bool softReset)
 	_debugHud->ClearScreen();
 
 	_memoryManager->Reset(softReset);
-	if(!_settings->CheckFlag(EmulationFlags::DisablePpuReset) || !softReset) {
+	if(!_settings->CheckFlag(EmulationFlags::DisablePpuReset) || !softReset || IsNsf()) {
 		_ppu->Reset();
 	}
 	_apu->Reset(softReset);
@@ -674,7 +675,7 @@ void Console::RunSingleFrame()
 		}
 	}
 
-	_settings->DisableOverclocking(_disableOcNextFrame || NsfMapper::GetInstance());
+	_settings->DisableOverclocking(_disableOcNextFrame || IsNsf());
 	_disableOcNextFrame = false;
 
 	_systemActionManager->ProcessSystemActions();
@@ -743,7 +744,7 @@ void Console::Run()
 					_historyViewer->ProcessEndOfFrame();
 				}
 				_rewindManager->ProcessEndOfFrame();
-				_settings->DisableOverclocking(_disableOcNextFrame || NsfMapper::GetInstance());
+				_settings->DisableOverclocking(_disableOcNextFrame || IsNsf());
 				_disableOcNextFrame = false;
 
 				//Update model (ntsc/pal) and get delay for next frame
@@ -1041,11 +1042,11 @@ void Console::BreakIfDebugging()
 {
 	shared_ptr<Debugger> debugger = _debugger;
 	if(debugger) {
-		debugger->BreakImmediately();
+		debugger->BreakImmediately(BreakSource::BreakOnCpuCrash);
 	} else if(_settings->CheckFlag(EmulationFlags::BreakOnCrash)) {
 		//When "Break on Crash" is enabled, open the debugger and break immediately if a crash occurs
 		debugger = GetDebugger(true);
-		debugger->BreakImmediately();
+		debugger->BreakImmediately(BreakSource::BreakOnCpuCrash);
 	}
 }
 
@@ -1315,6 +1316,11 @@ bool Console::IsRecordingTapeFile()
 	return false;
 }
 
+bool Console::IsNsf()
+{
+	return std::dynamic_pointer_cast<NsfMapper>(_mapper) != nullptr;
+}
+
 void Console::CopyRewindData(shared_ptr<Console> sourceConsole)
 {
 	sourceConsole->Pause();
@@ -1481,3 +1487,9 @@ void Console::DisplayDebugInformation(Timer &clockTimer, Timer &lastFrameTimer, 
 	_debugHud->DrawString(134, 48, ss.str(), 0xFFFFFF, 0xFF000000, 1, startFrame);
 }
 
+void Console::ExportStub()
+{
+	//Force the compiler to export the PgoRunTest function - otherwise it seems to be ignored since it is unused
+	vector<string> testRoms;
+	PgoRunTest(testRoms, true);
+}

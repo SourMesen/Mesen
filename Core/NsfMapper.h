@@ -18,8 +18,6 @@ enum class NsfIrqType
 class NsfMapper : public BaseMapper
 {
 private:
-	static NsfMapper *_instance;
-
 	enum NsfSoundChips
 	{
 		VRC6 = 0x01,
@@ -106,6 +104,8 @@ protected:
 	uint32_t GetWorkRamPageSize() override { return 0x1000; }
 	bool AllowRegisterRead() override { return true; }
 
+	void StreamState(bool saving) override;
+
 	void InitMapper() override;
 	void InitMapper(RomData& romData) override;
 	void Reset(bool softReset) override;
@@ -118,8 +118,6 @@ protected:
 public:
 	NsfMapper();
 	~NsfMapper();
-
-	static NsfMapper* GetInstance();
 
 	void SetNesModel(NesModel model) override;
 	ConsoleFeatures GetAvailableFeatures() override;

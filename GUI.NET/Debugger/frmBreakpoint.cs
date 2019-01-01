@@ -29,6 +29,7 @@ namespace Mesen.GUI.Debugger
 			AddBinding("MemoryType", cboBreakpointType);
 			AddBinding("Enabled", chkEnabled);
 			AddBinding("MarkEvent", chkMarkOnEventViewer);
+			AddBinding("ProcessDummyReadWrites", chkProcessDummyReadWrites);
 			AddBinding("Address", txtAddress);
 			AddBinding("StartAddress", txtFrom);
 			AddBinding("EndAddress", txtTo);
@@ -212,18 +213,38 @@ namespace Mesen.GUI.Debugger
 		{
 			radRange.Checked = true;
 		}
-
-
+		
 		private void cboBreakpointType_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			DebugMemoryType type = cboBreakpointType.GetEnumValue<DebugMemoryType>();
 
 			chkExec.Visible = Breakpoint.IsTypeCpuBreakpoint(type);
+			chkProcessDummyReadWrites.Visible = Breakpoint.IsTypeCpuBreakpoint(type);
 
 			string maxValue = (InteropEmu.DebugGetMemorySize(type) - 1).ToString("X2");
 			string minValue = "".PadLeft(maxValue.Length, '0');
 
 			lblRange.Text = $"(range: ${minValue}-${maxValue})";
+		}
+
+		private void UpdateDummyReadWriteCheckbox()
+		{
+			if(chkRead.Checked || chkWrite.Checked) {
+				chkProcessDummyReadWrites.Enabled = true;
+			} else {
+				chkProcessDummyReadWrites.Enabled = false;
+				chkProcessDummyReadWrites.Checked = false;
+			}
+		}
+
+		private void chkRead_CheckedChanged(object sender, EventArgs e)
+		{
+			UpdateDummyReadWriteCheckbox();
+		}
+
+		private void chkWrite_CheckedChanged(object sender, EventArgs e)
+		{
+			UpdateDummyReadWriteCheckbox();
 		}
 	}
 }

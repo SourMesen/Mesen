@@ -53,6 +53,11 @@ namespace Mesen.GUI.Debugger.Controls
 			}
 		}
 
+		public void SetMessage(TextboxMessageInfo message)
+		{
+			this.ctrlCodeViewer.SetMessage(message);
+		}
+
 		private List<string> _lineNumberNotes = new List<string>();
 		private void UpdateCode()
 		{
@@ -322,6 +327,17 @@ namespace Mesen.GUI.Debugger.Controls
 			_tooltipManager?.Close();
 		}
 
+		public void ScrollToFileLine(string filename, int lineNumber)
+		{
+			foreach(Ld65DbgImporter.FileInfo fileInfo in cboFile.Items) {
+				if(fileInfo.Name == filename) {
+					cboFile.SelectedItem = fileInfo;
+					ctrlCodeViewer.ScrollToLineIndex(lineNumber);
+					break;
+				}
+			}
+		}
+
 		public void ScrollToAddress(AddressTypeInfo addressInfo, bool scrollToTop = false)
 		{
 			if(addressInfo.Address >= 0 && addressInfo.Type == AddressType.PrgRom) {
@@ -393,7 +409,6 @@ namespace Mesen.GUI.Debugger.Controls
 
 			public LineProperties GetLineStyle(int cpuAddress, int lineIndex)
 			{
-				DebugInfo info = ConfigManager.Config.DebugInfo;
 				LineProperties props = new LineProperties();
 
 				int nextLineIndex = lineIndex + 1;
@@ -422,9 +437,7 @@ namespace Mesen.GUI.Debugger.Controls
 				}
 
 				if(isActiveStatement) {
-					props.FgColor = Color.Black;
-					props.TextBgColor = info.CodeActiveStatementColor;
-					props.Symbol |= LineSymbol.Arrow;
+					ctrlDebuggerCode.LineStyleProvider.ConfigureActiveStatement(props);
 				}
 
 				return props;

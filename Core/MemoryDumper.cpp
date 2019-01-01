@@ -108,8 +108,11 @@ uint32_t MemoryDumper::GetMemoryState(DebugMemoryType type, uint8_t *buffer)
 			return 0x10000;
 
 		case DebugMemoryType::PpuMemory:
-			for(int i = 0; i <= 0x3FFF; i++) {
+			for(int i = 0; i < 0x3F00; i++) {
 				buffer[i] = _mapper->DebugReadVRAM(i);
+			}
+			for(int i = 0x3F00; i <= 0x3FFF; i++) {
+				buffer[i] = _ppu->ReadPaletteRAM(i);
 			}
 			return 0x4000;
 
@@ -190,7 +193,13 @@ void MemoryDumper::SetMemoryValue(DebugMemoryType memoryType, uint32_t address, 
 			}
 			break;
 
-		case DebugMemoryType::PpuMemory: _mapper->DebugWriteVRAM(address, value, disableSideEffects); break;
+		case DebugMemoryType::PpuMemory:
+			if(address < 0x3F00) {
+				_mapper->DebugWriteVRAM(address, value, disableSideEffects);
+			} else {
+				_ppu->WritePaletteRAM(address, value);
+			}
+			break;
 		case DebugMemoryType::PaletteMemory: _ppu->WritePaletteRAM(address, value); break;
 		case DebugMemoryType::SpriteMemory: _ppu->GetSpriteRam()[address % 0x100] = value; break;
 		case DebugMemoryType::SecondarySpriteMemory: _ppu->GetSecondarySpriteRam()[address % 0x20] = value; break;
@@ -231,23 +240,7 @@ void MemoryDumper::SetMemoryValueWord(DebugMemoryType memoryType, uint32_t addre
 uint8_t MemoryDumper::GetMemoryValue(DebugMemoryType memoryType, uint32_t address, bool disableSideEffects)
 {
 	switch(memoryType) {
-		case DebugMemoryType::CpuMemory:
-			if(disableSideEffects) {
-				AddressTypeInfo info;
-				_debugger->GetAbsoluteAddressAndType(address, &info);
-				if(info.Address >= 0) {
-					switch(info.Type) {
-						case AddressType::Register: return 0; //not supported
-						case AddressType::InternalRam: return GetMemoryValue(DebugMemoryType::InternalRam, info.Address, true);
-						case AddressType::PrgRom: return GetMemoryValue(DebugMemoryType::PrgRom, info.Address, true);
-						case AddressType::WorkRam: return GetMemoryValue(DebugMemoryType::WorkRam, info.Address, true);
-						case AddressType::SaveRam: return GetMemoryValue(DebugMemoryType::SaveRam, info.Address, true);
-					}
-				}
-			} else {
-				return _memoryManager->DebugRead(address, false);
-			}
-			break;
+		case DebugMemoryType::CpuMemory: return _memoryManager->DebugRead(address, disableSideEffects);
 
 		case DebugMemoryType::PpuMemory: return _mapper->DebugReadVRAM(address, disableSideEffects);
 		case DebugMemoryType::PaletteMemory: return _ppu->ReadPaletteRAM(address);

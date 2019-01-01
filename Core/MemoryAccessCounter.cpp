@@ -42,6 +42,15 @@ vector<int32_t>& MemoryAccessCounter::GetArray(MemoryOperationType operationType
 	}
 }
 
+bool MemoryAccessCounter::IsAddressUninitialized(AddressTypeInfo &addressInfo)
+{
+	if(addressInfo.Type == AddressType::InternalRam || addressInfo.Type == AddressType::WorkRam) {
+		int index = (int)addressInfo.Type;
+		return !_initWrites[index][addressInfo.Address];
+	}
+	return false;
+}
+
 bool MemoryAccessCounter::ProcessMemoryAccess(AddressTypeInfo &addressInfo, MemoryOperationType operation, int32_t cpuCycle)
 {
 	int index = (int)addressInfo.Type;

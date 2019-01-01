@@ -146,6 +146,7 @@ namespace Mesen.GUI
 		[DllImport(DLLPath)] [return: MarshalAs(UnmanagedType.I1)] public static extern bool IsNsf();
 		[DllImport(DLLPath)] public static extern void NsfSelectTrack(Byte trackNumber);
 		[DllImport(DLLPath)] public static extern Int32 NsfGetCurrentTrack();
+		[DllImport(DLLPath)] public static extern UInt32 NsfGetFrameCount();
 		[DllImport(DLLPath, EntryPoint = "NsfGetHeader")] private static extern void NsfGetHeaderWrapper(out NsfHeader header);
 		[DllImport(DLLPath)] public static extern void NsfSetNsfConfig(Int32 autoDetectSilenceDelay, Int32 moveToNextTrackTime, [MarshalAs(UnmanagedType.I1)]bool disableApuIrqs);
 
@@ -195,6 +196,7 @@ namespace Mesen.GUI
 		[DllImport(DLLPath)] public static extern UInt32 GetEmulationSpeed();
 		[DllImport(DLLPath)] public static extern void SetTurboRewindSpeed(UInt32 turboSpeed, UInt32 rewindSpeed);
 		[DllImport(DLLPath)] public static extern void SetRewindBufferSize(UInt32 seconds);
+		[DllImport(DLLPath)] [return: MarshalAs(UnmanagedType.I1)] public static extern bool IsRewinding();
 		[DllImport(DLLPath)] public static extern void SetOverclockRate(UInt32 overclockRate, [MarshalAs(UnmanagedType.I1)]bool adjustApu);
 		[DllImport(DLLPath)] public static extern void SetPpuNmiConfig(UInt32 extraScanlinesBeforeNmi, UInt32 extraScanlineAfterNmi);
 		[DllImport(DLLPath)] public static extern void SetOverscanDimensions(UInt32 left, UInt32 right, UInt32 top, UInt32 bottom);
@@ -225,11 +227,12 @@ namespace Mesen.GUI
 		[DllImport(DLLPath)] public static extern void DebugSetFlags(DebuggerFlags flags);
 		[DllImport(DLLPath)] public static extern void DebugGetState(ref DebugState state);
 		[DllImport(DLLPath)] public static extern void DebugGetApuState(ref ApuState state);
+		[DllImport(DLLPath)] public static extern void DebugGetInstructionProgress(ref InstructionProgress progress);
 		[DllImport(DLLPath)] public static extern void DebugSetState(DebugState state);
 		[DllImport(DLLPath)] public static extern void DebugSetBreakpoints([MarshalAs(UnmanagedType.LPArray, SizeParamIndex = 1)]InteropBreakpoint[] breakpoints, UInt32 length);
 		[DllImport(DLLPath)] public static extern void DebugSetLabel(UInt32 address, AddressType addressType, [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(UTF8Marshaler))]string label, [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(UTF8Marshaler))]string comment);
 		[DllImport(DLLPath)] public static extern void DebugDeleteLabels();
-		[DllImport(DLLPath)] public static extern void DebugStep(UInt32 count);
+		[DllImport(DLLPath)] public static extern void DebugStep(UInt32 count, BreakSource source = BreakSource.CpuStep);
 		[DllImport(DLLPath)] public static extern void DebugPpuStep(UInt32 count);
 		[DllImport(DLLPath)] public static extern void DebugStepCycles(UInt32 count);
 		[DllImport(DLLPath)] public static extern void DebugStepOut();
@@ -1247,6 +1250,13 @@ namespace Mesen.GUI
 		public StackFrameFlags Flags;
 	};
 
+	public struct InstructionProgress
+	{
+		public byte OpCode;
+		public UInt32 OpCycle;
+		public InteropMemoryOperationType OpMemoryOperationType;
+	}
+
 	public struct DebugState
 	{
 		public CPUState CPU;
@@ -1314,6 +1324,8 @@ namespace Mesen.GUI
 		public UInt32 NmiScanline;
 		public UInt32 ScanlineCount;
 		public UInt32 SafeOamScanline;
+		public UInt16 BusAddress;
+		public byte MemoryReadBuffer;
 	}
 
 	public struct PPUState
@@ -1682,6 +1694,8 @@ namespace Mesen.GUI
 		BreakOnDecayedOamRead = 0x2000,
 		BreakOnInit = 0x4000,
 		BreakOnPlay = 0x8000,
+
+		BreakOnFirstCycle = 0x10000,
 	}
 
 	public struct InteropRomInfo
@@ -1945,7 +1959,7 @@ namespace Mesen.GUI
 	{
 		public Int32 Id;
 		public DebugMemoryType MemoryType;
-		public BreakpointType Type;
+		public BreakpointTypeFlags Type;
 		public Int32 StartAddress;
 		public Int32 EndAddress;
 
@@ -1954,6 +1968,9 @@ namespace Mesen.GUI
 
 		[MarshalAs(UnmanagedType.I1)]
 		public bool MarkEvent;
+
+		[MarshalAs(UnmanagedType.I1)]
+		public bool ProcessDummyReadWrites;
 
 		[MarshalAs(UnmanagedType.ByValArray, SizeConst = 1000)]
 		public byte[] Condition;
@@ -2089,9 +2106,21 @@ namespace Mesen.GUI
 
 		public RecordMovieFrom RecordFrom;
 	}
+	
+	public enum BreakpointType
+	{
+		Global = 0,
+		Execute = 1,
+		ReadRam = 2,
+		WriteRam = 3,
+		ReadVram = 4,
+		WriteVram = 5,
+		DummyReadRam = 6,
+		DummyWriteRam = 7
+	}
 
 	[Flags]
-	public enum BreakpointType
+	public enum BreakpointTypeFlags
 	{
 		Global = 0,
 		Execute = 1,
@@ -2265,9 +2294,19 @@ namespace Mesen.GUI
 
 	public enum BreakSource
 	{
-		Break = 0,
-		Pause = 1,
-		BreakAfterSuspend = 2,
+		Unspecified = -1,
+		Breakpoint = 0,
+		CpuStep = 1,
+		PpuStep = 2,
+		BreakOnBrk = 3,
+		BreakOnUnofficialOpCode = 4,
+		BreakOnReset = 5,
+		BreakOnFocus = 6,
+		BreakOnUninitMemoryRead = 7,
+		BreakOnDecayedOamRead = 8,
+		BreakOnCpuCrash = 9,
+		Pause = 10,
+		BreakAfterSuspend = 11,
 	}
 
 	public enum AddressType
@@ -2304,6 +2343,18 @@ namespace Mesen.GUI
 			}
 			return AddressType.Register;
 		}
+	}
+
+	public enum InteropMemoryOperationType
+	{
+		Read = 0,
+		Write = 1,
+		ExecOpCode = 2,
+		ExecOperand = 3,
+		PpuRenderingRead = 4,
+		DummyRead = 5,
+		DmcRead = 6,
+		DummyWrite = 7
 	}
 
 	public enum MemoryOperationType

@@ -94,7 +94,7 @@ LTO is supported under clang, which gives a large performance boost (25-30%+), s
 
 Mesen is available under the GPL V3 license.  Full text here: <http://www.gnu.org/licenses/gpl-3.0.en.html>
 
-Copyright (C) 2014-2018 M. Bibaud
+Copyright (C) 2014-2019 M. Bibaud
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

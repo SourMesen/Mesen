@@ -215,7 +215,7 @@ namespace Mesen.GUI.Debugger
 			AddrMode.Rel,  AddrMode.IndY,    AddrMode.None, AddrMode.IndYW,   AddrMode.ZeroX,   AddrMode.ZeroX,   AddrMode.ZeroX,   AddrMode.ZeroX,   AddrMode.Imp,  AddrMode.AbsY, AddrMode.Imp,  AddrMode.AbsYW,AddrMode.AbsX, AddrMode.AbsX, AddrMode.AbsXW,AddrMode.AbsXW,
 		};
 
-		private int[] OpCycles = new int[256] {
+		public static readonly int[] OpCycles = new int[256] {
 			7, 6, 2, 8, 3, 3, 5, 5, 3, 2, 2, 2, 4, 4, 6, 6,
 			2, 5, 2, 8, 4, 4, 6, 6, 2, 4, 2, 7, 4, 4, 7, 7,
 			6, 6, 2, 8, 3, 3, 5, 5, 4, 2, 2, 2, 4, 4, 6, 6,

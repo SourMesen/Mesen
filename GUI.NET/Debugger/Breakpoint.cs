@@ -32,6 +32,7 @@ namespace Mesen.GUI.Debugger
 
 		public bool Enabled = true;
 		public bool MarkEvent = false;
+		public bool ProcessDummyReadWrites = false;
 		public UInt32 Address;
 		public UInt32 StartAddress;
 		public UInt32 EndAddress;
@@ -99,19 +100,19 @@ namespace Mesen.GUI.Debugger
 
 		public bool IsCpuBreakpoint { get { return this._isCpuBreakpoint; } }
 
-		private BreakpointType Type
+		private BreakpointTypeFlags Type
 		{
 			get
 			{
-				BreakpointType type = BreakpointType.Global;
+				BreakpointTypeFlags type = BreakpointTypeFlags.Global;
 				if(BreakOnRead) {
-					type |= IsCpuBreakpoint ? BreakpointType.Read : BreakpointType.ReadVram;
+					type |= IsCpuBreakpoint ? BreakpointTypeFlags.Read : BreakpointTypeFlags.ReadVram;
 				}
 				if(BreakOnWrite) {
-					type |= IsCpuBreakpoint ? BreakpointType.Write : BreakpointType.WriteVram;
+					type |= IsCpuBreakpoint ? BreakpointTypeFlags.Write : BreakpointTypeFlags.WriteVram;
 				}
 				if(BreakOnExec && IsCpuBreakpoint) {
-					type |= BreakpointType.Execute;
+					type |= BreakpointTypeFlags.Execute;
 				}
 				return type;
 			}
@@ -193,6 +194,7 @@ namespace Mesen.GUI.Debugger
 				MemoryType = MemoryType,
 				Type = Type,
 				MarkEvent = MarkEvent,
+				ProcessDummyReadWrites = ProcessDummyReadWrites,
 				Enabled = Enabled
 			};
 			switch(AddressType) {
