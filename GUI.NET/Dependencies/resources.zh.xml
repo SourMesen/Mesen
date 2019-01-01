@@ -118,6 +118,7 @@
 			<Control ID="lblSoundChips">声音芯片:</Control>
 			<Control ID="lblRecording">正在录音</Control>
 			<Control ID="lblSlowMotion">慢放</Control>
+			<Control ID="lblRewinding">倒带</Control>
 			<Control ID="lblFastForward">快进</Control>
 		</Form>
 		<Form ID="frmLogWindow" Title="日志窗口">
@@ -537,7 +538,7 @@
 		</Form>
 		<Form ID="frmAbout" Title="关于 Mesen">
 			<Control ID="labelProductName">Mesen</Control>
-			<Control ID="labelCopyright">© 2018 M. Bibaud (又名 Sour)</Control>
+			<Control ID="labelCopyright">© 2019 M. Bibaud (又名 Sour)</Control>
 			<Control ID="lblWebsite">网站:</Control>
 			<Control ID="lblLink">www.mesen.ca</Control>
 			<Control ID="labelVersion">版本:</Control>
@@ -756,13 +757,8 @@
 
 		<Message ID="HelpFullscreen">/fullscreen - 全屏模式启动 Mesen</Message>
 		<Message ID="HelpDoNotSaveSettings">/DoNotSaveSettings - 阻止命令行的选项替代 Mesen 原本的设置 (防止命令行选项成为默认设置).</Message>
-		<Message ID="HelpRecordMovie">/RecordMovie="filename.mmo" - /RecordMovie="filename.mmo" - 载入指定游戏后开始录制电影。</Message>
+		<Message ID="HelpRecordMovie">/RecordMovie="filename.mmo" - 载入指定游戏后开始录制电影。</Message>
 		<Message ID="HelpLoadLastSession">/LoadLastSession - 从上次中断的位置继续。</Message>
-
-		<Message ID="HelpFullscreen">/fullscreen - 全屏模式启动 Mesen</Message>
-		<Message ID="HelpDoNotSaveSettings">/DoNotSaveSettings - 阻止命令行的选项替代 Mesen 原本的设置 (防止命令行选项成为默认设置).</Message>
-		<Message ID="HelpRecordMovie">/RecordMovie="filename.mmo" - Start recording a movie after the specified game is loaded.</Message>
-		<Message ID="HelpLoadLastSession">/LoadLastSession - Resumes the game in the state it was left in when it was last played.</Message>
 
 		<Message ID="Resume">恢复</Message>
 		<Message ID="Pause">暂停</Message>
