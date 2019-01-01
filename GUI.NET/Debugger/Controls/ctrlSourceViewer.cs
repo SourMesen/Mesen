@@ -33,6 +33,17 @@ namespace Mesen.GUI.Debugger.Controls
 			base.OnLoad(e);
 			if(!IsDesignMode) {
 				_codeViewerActions = new CodeViewerActions(this, true);
+
+				this.SymbolProvider = DebugWorkspaceManager.SymbolProvider;
+				DebugWorkspaceManager.SymbolProviderChanged += UpdateSymbolProvider;
+			}
+		}
+
+		private void UpdateSymbolProvider(Ld65DbgImporter symbolProvider)
+		{
+			this.SymbolProvider = symbolProvider;
+			if(symbolProvider == null && this.Visible) {
+				_codeViewerActions.SwitchView();
 			}
 		}
 
@@ -341,7 +352,7 @@ namespace Mesen.GUI.Debugger.Controls
 		public void ScrollToAddress(AddressTypeInfo addressInfo, bool scrollToTop = false)
 		{
 			if(addressInfo.Address >= 0 && addressInfo.Type == AddressType.PrgRom) {
-				LineInfo line = _symbolProvider.GetSourceCodeLineInfo(addressInfo.Address);
+				LineInfo line = _symbolProvider?.GetSourceCodeLineInfo(addressInfo.Address);
 				if(line != null) {
 					foreach(Ld65DbgImporter.FileInfo fileInfo in cboFile.Items) {
 						if(fileInfo.ID == line.FileID) {
@@ -363,7 +374,7 @@ namespace Mesen.GUI.Debugger.Controls
 			AddressTypeInfo addressInfo = new AddressTypeInfo();
 			InteropEmu.DebugGetAbsoluteAddressAndType((uint)cpuAddress, addressInfo);
 			if(addressInfo.Address >= 0 && addressInfo.Type == AddressType.PrgRom) {
-				LineInfo line = _symbolProvider.GetSourceCodeLineInfo(addressInfo.Address);
+				LineInfo line = _symbolProvider?.GetSourceCodeLineInfo(addressInfo.Address);
 				return CurrentFile.ID == line?.FileID;
 			}
 			return false;
@@ -426,7 +437,7 @@ namespace Mesen.GUI.Debugger.Controls
 					)
 				);
 
-				int prgAddress = _viewer._symbolProvider.GetPrgAddress(_viewer.CurrentFile.ID, lineIndex);
+				int prgAddress = _viewer._symbolProvider?.GetPrgAddress(_viewer.CurrentFile.ID, lineIndex) ?? -1;
 
 				if(prgAddress >= 0) {
 					AddressTypeInfo addressInfo = new AddressTypeInfo();

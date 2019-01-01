@@ -70,7 +70,7 @@ namespace Mesen.GUI.Debugger
 
 			this.UpdateWorkspace();
 			this.AutoLoadCdlFiles();
-			this.AutoLoadDbgFiles(true);
+			DebugWorkspaceManager.AutoLoadDbgFiles(true);
 
 			if(!Program.IsMono) {
 				this.mnuSplitView.Checked = ConfigManager.Config.DebugInfo.SplitView;
@@ -373,70 +373,6 @@ namespace Mesen.GUI.Debugger
 			}
 		}
 
-		private void AutoLoadDbgFiles(bool silent)
-		{
-			ctrlSourceViewer.SymbolProvider = null;
-			ctrlSourceViewerSplit.SymbolProvider = null;
-			ctrlDebuggerCode.SymbolProvider = null;
-			ctrlDebuggerCodeSplit.SymbolProvider = null;
-
-			if(ConfigManager.Config.DebugInfo.AutoLoadDbgFiles) {
-				RomInfo info = InteropEmu.GetRomInfo();
-				string dbgPath = Path.Combine(info.RomFile.Folder, info.GetRomName() + ".dbg");
-				if(File.Exists(dbgPath)) {
-					ImportDbgFile(dbgPath, silent);
-				} else {
-					string mlbPath = Path.Combine(info.RomFile.Folder, info.GetRomName() + ".mlb");
-					if(File.Exists(mlbPath)) {
-						ImportMlbFile(mlbPath, silent);
-					} else {
-						string fnsPath = Path.Combine(info.RomFile.Folder, info.GetRomName() + ".fns");
-						if(File.Exists(fnsPath)) {
-							ImportNesasmFnsFile(fnsPath, silent);
-						}
-					}
-				}
-			}
-
-			if(ctrlSourceViewer.SymbolProvider == null) {
-				ctrlSourceViewer.Visible = false;
-				ctrlSourceViewerSplit.Visible = false;
-				ctrlDebuggerCode.Visible = true;
-				ctrlDebuggerCodeSplit.Visible = true;
-				ctrlDebuggerCode.Focus();
-			}
-		}
-
-		private void ImportNesasmFnsFile(string fnsPath, bool silent = false)
-		{
-			if(ConfigManager.Config.DebugInfo.ImportConfig.ResetLabelsOnImport) {
-				ResetLabels();
-			}
-			NesasmFnsImporter.Import(fnsPath, silent);
-		}
-
-		private void ImportMlbFile(string mlbPath, bool silent = false)
-		{
-			if(ConfigManager.Config.DebugInfo.ImportConfig.ResetLabelsOnImport) {
-				ResetLabels();
-			}
-			MesenLabelFile.Import(mlbPath, silent);
-		}
-
-		private void ImportDbgFile(string dbgPath, bool silent)
-		{
-			if(ConfigManager.Config.DebugInfo.ImportConfig.ResetLabelsOnImport) {
-				ResetLabels();
-			}
-
-			Ld65DbgImporter dbgImporter = new Ld65DbgImporter();
-			dbgImporter.Import(dbgPath, silent);
-			ctrlDebuggerCode.SymbolProvider = dbgImporter;
-			ctrlDebuggerCodeSplit.SymbolProvider = dbgImporter;
-			ctrlSourceViewer.SymbolProvider = dbgImporter;
-			ctrlSourceViewerSplit.SymbolProvider = dbgImporter;
-		}
-
 		private void UpdateWorkspace()
 		{
 			DebugWorkspaceManager.SaveWorkspace();
@@ -580,7 +516,7 @@ namespace Mesen.GUI.Debugger
 					this.BeginInvoke((MethodInvoker)(() => {
 						this.UpdateWorkspace();
 						this.AutoLoadCdlFiles();
-						this.AutoLoadDbgFiles(true);
+						DebugWorkspaceManager.AutoLoadDbgFiles(true);
 						UpdateDebugger(true, false);
 
 						if(!breakOnReset) {
@@ -1352,19 +1288,11 @@ namespace Mesen.GUI.Debugger
 			}
 		}
 
-		private void ResetLabels()
-		{
-			LabelManager.ResetLabels();
-			if(!ConfigManager.Config.DebugInfo.DisableDefaultLabels) {
-				LabelManager.SetDefaultLabels(InteropEmu.GetRomInfo().MapperId);
-			}
-			UpdateWorkspace();
-		}
-
 		private void mnuResetLabels_Click(object sender, EventArgs e)
 		{
 			if(MessageBox.Show("This operation will reset labels to their default state." + Environment.NewLine + "Are you sure?", "", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK) {
-				ResetLabels();
+				DebugWorkspaceManager.ResetLabels();
+				UpdateWorkspace();
 				UpdateDebugger(false);
 			}
 		}
@@ -1373,11 +1301,11 @@ namespace Mesen.GUI.Debugger
 		{
 			string ext = Path.GetExtension(path).ToLower();
 			if(ext == ".mlb") {
-				ImportMlbFile(path);
+				DebugWorkspaceManager.ImportMlbFile(path);
 			} else if(ext == ".fns") {
-				ImportNesasmFnsFile(path);
+				DebugWorkspaceManager.ImportNesasmFnsFile(path);
 			} else {
-				ImportDbgFile(path, false);
+				DebugWorkspaceManager.ImportDbgFile(path, false);
 			}
 		}
 
@@ -1437,7 +1365,7 @@ namespace Mesen.GUI.Debugger
 			if(_debuggerInitialized) {
 				ConfigManager.Config.DebugInfo.AutoLoadDbgFiles = mnuAutoLoadDbgFiles.Checked;
 				ConfigManager.ApplyChanges();
-				AutoLoadDbgFiles(false);
+				DebugWorkspaceManager.AutoLoadDbgFiles(false);
 			}
 		}
 
@@ -1802,7 +1730,7 @@ namespace Mesen.GUI.Debugger
 
 		private void mnuGoToAll_Click(object sender, EventArgs e)
 		{
-			using(frmGoToAll frm = new frmGoToAll(_lastCodeWindow.SymbolProvider)) {
+			using(frmGoToAll frm = new frmGoToAll()) {
 				if(frm.ShowDialog() == DialogResult.OK) {
 					frmGoToAll.GoToDestination dest = frm.Destination;
 

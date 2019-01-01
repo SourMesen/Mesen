@@ -421,8 +421,13 @@ namespace Mesen.GUI.Debugger.Controls
 		private void mnuSwitchView_Click(object sender, EventArgs e)
 		{
 			if(Viewer.SymbolProvider != null) {
-				this.OnSwitchView?.Invoke(Viewer);
+				this.SwitchView();
 			}
+		}
+
+		public void SwitchView()
+		{
+			this.OnSwitchView?.Invoke(Viewer);
 		}
 
 		public void ProcessMouseUp(Point location, MouseButtons button)

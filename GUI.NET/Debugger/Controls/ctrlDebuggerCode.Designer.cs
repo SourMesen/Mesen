@@ -20,7 +20,7 @@
 				_codeViewerActions.Dispose();
 				_codeViewerActions = null;
 			}
-
+			DebugWorkspaceManager.SymbolProviderChanged -= UpdateSymbolProvider;
 			base.Dispose(disposing);
 		}
 

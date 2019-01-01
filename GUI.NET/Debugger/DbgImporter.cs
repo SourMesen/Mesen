@@ -55,6 +55,8 @@ namespace Mesen.GUI.Debugger
 
 		public Dictionary<int, FileInfo> Files { get { return _files; } }
 
+		public DateTime DbgFileStamp { get; private set; }
+
 		public int GetPrgAddress(int fileID, int lineIndex)
 		{
 			int prgAddress;
@@ -216,9 +218,14 @@ namespace Mesen.GUI.Debugger
 		{
 			Match match = _fileRegex.Match(row);
 			if(match.Success) {
+				string filename = Path.GetFullPath(Path.Combine(basePath, match.Groups[2].Value.Replace('/', Path.DirectorySeparatorChar).Replace('\\', Path.DirectorySeparatorChar))).Replace(basePath + Path.DirectorySeparatorChar, "");
+				string ext = Path.GetExtension(filename).ToLower();
+				bool isAsm = ext != ".c" && ext != ".h";
+
 				FileInfo file = new FileInfo() {
 					ID = Int32.Parse(match.Groups[1].Value),
-					Name = Path.GetFullPath(Path.Combine(basePath, match.Groups[2].Value.Replace('/', Path.DirectorySeparatorChar).Replace('\\', Path.DirectorySeparatorChar))).Replace(basePath + Path.DirectorySeparatorChar, "")
+					Name = filename,
+					IsAssembly = isAsm
 				};
 
 				_files.Add(file.ID, file);
@@ -427,8 +434,7 @@ namespace Mesen.GUI.Debugger
 						continue;
 					}
 
-					string ext = Path.GetExtension(_files[line.FileID].Name).ToLower();
-					bool isAsm = ext != ".c" && ext != ".h";
+					bool isAsm = _files[line.FileID].IsAssembly;
 
 					string comment = "";
 					for(int i = line.LineNumber; i >= 0; i--) {
@@ -515,6 +521,7 @@ namespace Mesen.GUI.Debugger
 				}
 			}
 
+			DbgFileStamp = File.GetLastWriteTime(path);
 			string[] fileRows = File.ReadAllLines(path);
 
 			string basePath = Path.GetDirectoryName(path);
@@ -599,7 +606,7 @@ namespace Mesen.GUI.Debugger
 				labels.AddRange(_saveRamLabels.Values);
 				labelCount += _ramLabels.Count + _workRamLabels.Count + _saveRamLabels.Count;
 			}
-			LabelManager.SetLabels(labels);
+			LabelManager.SetLabels(labels, !silent);
 			
 			if(!silent) {
 				if(_errorCount > 0) {
@@ -635,6 +642,7 @@ namespace Mesen.GUI.Debugger
 			public int ID;
 			public string Name;
 			public string[] Data;
+			public bool IsAssembly;
 
 			public override string ToString()
 			{

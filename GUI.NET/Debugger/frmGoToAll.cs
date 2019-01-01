@@ -24,11 +24,11 @@ namespace Mesen.GUI.Debugger
 
 		public GoToDestination Destination { get; private set; }
 
-		public frmGoToAll(Ld65DbgImporter symbolProvider = null)
+		public frmGoToAll()
 		{
 			InitializeComponent();
 
-			_symbolProvider = symbolProvider;
+			_symbolProvider = DebugWorkspaceManager.SymbolProvider;
 
 			tlpResults.SuspendLayout();
 			for(int i = 0; i < MaxResultCount; i++) {

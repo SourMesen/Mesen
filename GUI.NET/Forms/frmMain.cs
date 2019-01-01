@@ -659,11 +659,6 @@ namespace Mesen.GUI.Forms
 						UpdateViewerSize();
 						ProcessPostLoadCommandSwitches();
 					}));
-
-					Task.Run(() => {
-						//If a workspace is already loaded for this game, make sure we setup the labels, watch, etc properly
-						DebugWorkspaceManager.SetupWorkspace();
-					});
 					break;
 
 				case InteropEmu.ConsoleNotificationType.GameReset:

@@ -38,7 +38,15 @@ namespace Mesen.GUI.Debugger
 
 				ctrlFindOccurrences.Viewer = this;
 				splitContainer.Panel2Collapsed = true;
+
+				this.SymbolProvider = DebugWorkspaceManager.SymbolProvider;
+				DebugWorkspaceManager.SymbolProviderChanged += UpdateSymbolProvider;
 			}
+		}
+
+		private void UpdateSymbolProvider(Ld65DbgImporter symbolProvider)
+		{
+			this.SymbolProvider = symbolProvider;
 		}
 
 		public void SetConfig(DebugViewInfo config, bool disableActions = false)
