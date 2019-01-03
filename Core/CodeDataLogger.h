@@ -11,9 +11,16 @@ enum class CdlPrgFlags
 	None = 0x00,
 	Code = 0x01,
 	Data = 0x02,
-	IndirectCode = 0x10,
+	
+	//Bit 0x10 is used for "indirectly accessed as code" in FCEUX
+	//Repurposed to mean the address is the target of a jump instruction
+	JumpTarget = 0x10,
+
 	IndirectData = 0x20,
 	PcmData = 0x40,
+
+	//Unused bit in original CDL spec
+	//Used to denote that the byte is the start of function (sub)
 	SubEntryPoint = 0x80
 };
 
@@ -74,6 +81,7 @@ public:
 	CdlRatios GetRatios();
 
 	bool IsCode(uint32_t absoluteAddr);
+	bool IsJumpTarget(uint32_t absoluteAddr);
 	bool IsSubEntryPoint(uint32_t absoluteAddr);
 	bool IsData(uint32_t absoluteAddr);
 	bool IsRead(uint32_t absoluteAddr);

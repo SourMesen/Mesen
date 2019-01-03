@@ -33,9 +33,9 @@ DisassemblyInfo::DisassemblyInfo()
 {
 }
 
-DisassemblyInfo::DisassemblyInfo(uint8_t* opPointer, bool isSubEntryPoint, bool isJumpTarget)
+DisassemblyInfo::DisassemblyInfo(uint8_t* opPointer, bool isSubEntryPoint)
 {
-	Initialize(opPointer, isSubEntryPoint, isJumpTarget);
+	Initialize(opPointer, isSubEntryPoint);
 }
 
 void DisassemblyInfo::ToString(string &out, uint32_t memoryAddr, MemoryManager* memoryManager, LabelManager* labelManager, bool extendZeroPage)
@@ -148,10 +148,9 @@ uint16_t DisassemblyInfo::GetOpAddr(uint16_t memoryAddr)
 	return opAddr;
 }
 
-void DisassemblyInfo::Initialize(uint8_t* opPointer, bool isSubEntryPoint, bool isJumpTarget)
+void DisassemblyInfo::Initialize(uint8_t* opPointer, bool isSubEntryPoint)
 {
 	_isSubEntryPoint = isSubEntryPoint;
-	_isJumpTarget = isJumpTarget;
 
 	uint8_t opCode = *opPointer;
 	_opSize = DisassemblyInfo::OPSize[opCode];
@@ -169,11 +168,6 @@ void DisassemblyInfo::SetSubEntryPoint()
 	_isSubEntryPoint = true;
 }
 
-void DisassemblyInfo::SetJumpTarget()
-{
-	_isJumpTarget = true;
-}
-
 int32_t DisassemblyInfo::GetMemoryValue(State& cpuState, MemoryManager* memoryManager)
 {
 	int32_t address = -1;
@@ -183,6 +177,22 @@ int32_t DisassemblyInfo::GetMemoryValue(State& cpuState, MemoryManager* memoryMa
 		}
 	} else {
 		address = GetEffectiveAddress(cpuState, memoryManager);
+	}
+
+	if(address >= 0 && address <= 0xFFFF) {
+		return memoryManager->DebugRead(address);
+	} else {
+		return -1;
+	}
+}
+
+int32_t DisassemblyInfo::GetJumpDestination(uint16_t pc, MemoryManager* memoryManager)
+{
+	int32_t address = -1;
+	if(_opMode == AddrMode::Rel || _opMode == AddrMode::Abs) {
+		address = GetOpAddr(pc);
+	} else if(_opMode == AddrMode::Ind) {
+		address = GetIndirectJumpDestination(memoryManager);
 	}
 
 	if(address >= 0 && address <= 0xFFFF) {
@@ -318,9 +328,4 @@ bool DisassemblyInfo::IsSubEntryPoint()
 bool DisassemblyInfo::IsSubExitPoint()
 {
 	return _isSubExitPoint;
-}
-
-bool DisassemblyInfo::IsJumpTarget()
-{
-	return _isJumpTarget;
 }

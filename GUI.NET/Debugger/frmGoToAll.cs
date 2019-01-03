@@ -156,7 +156,7 @@ namespace Mesen.GUI.Debugger
 			_resultCount = 0;
 
 			HashSet<int> entryPoints = new HashSet<int>(InteropEmu.DebugGetFunctionEntryPoints());
-			bool[] isJumpTargets = InteropEmu.DebugGetJumpTargets();
+			byte[] cdlData = InteropEmu.DebugGetPrgCdlData();
 
 			List<SearchResultInfo> searchResults = new List<SearchResultInfo>();
 
@@ -201,7 +201,7 @@ namespace Mesen.GUI.Debugger
 							SearchResultType resultType = SearchResultType.Data;
 							if(addressInfo?.Type == AddressType.PrgRom && entryPoints.Contains(addressInfo.Address)) {
 								resultType = SearchResultType.Function;
-							} else if(addressInfo?.Type == AddressType.PrgRom && addressInfo.Address < isJumpTargets.Length && isJumpTargets[addressInfo.Address]) {
+							} else if(addressInfo?.Type == AddressType.PrgRom && addressInfo.Address < cdlData.Length && (cdlData[addressInfo.Address] & (byte)CdlPrgFlags.JumpTarget) != 0) {
 								resultType = SearchResultType.JumpTarget;
 							} else if(isConstant) {
 								resultType = SearchResultType.Constant;
@@ -226,7 +226,7 @@ namespace Mesen.GUI.Debugger
 							SearchResultType resultType = SearchResultType.Data;
 							if(label.AddressType == AddressType.PrgRom && entryPoints.Contains((int)label.Address)) {
 								resultType = SearchResultType.Function;
-							} else if(label.AddressType == AddressType.PrgRom && label.Address < isJumpTargets.Length && isJumpTargets[label.Address]) {
+							} else if(label.AddressType == AddressType.PrgRom && label.Address < cdlData.Length && (cdlData[label.Address] & (byte)CdlPrgFlags.JumpTarget) != 0) {
 								resultType = SearchResultType.JumpTarget;
 							}
 

@@ -145,10 +145,10 @@ namespace Mesen.GUI.Debugger
 
 		public static void CreateAutomaticJumpLabels()
 		{
-			bool[] jumpTargets = InteropEmu.DebugGetJumpTargets();
+			byte[] cdlData = InteropEmu.DebugGetPrgCdlData();
 			List<CodeLabel> labelsToAdd = new List<CodeLabel>();
-			for(int i = 0; i < jumpTargets.Length; i++) {
-				if(jumpTargets[i] && LabelManager.GetLabel((uint)i, AddressType.PrgRom) == null) {
+			for(int i = 0; i < cdlData.Length; i++) {
+				if((cdlData[i] & (byte)CdlPrgFlags.JumpTarget) != 0 && LabelManager.GetLabel((uint)i, AddressType.PrgRom) == null) {
 					labelsToAdd.Add(new CodeLabel() { Flags = CodeLabelFlags.AutoJumpLabel, Address = (uint)i, AddressType = AddressType.PrgRom, Label = "L" + i.ToString("X4"), Comment = "" });
 				}
 			}

@@ -28,8 +28,6 @@ private:
 	vector<shared_ptr<DisassemblyInfo>> _disassembleSaveRamCache;
 	vector<shared_ptr<DisassemblyInfo>> _disassembleMemoryCache;
 
-	bool IsJump(uint8_t opCode);
-	bool IsUnconditionalJump(uint8_t opCode);
 	void GetLine(string &out, string code = "", string comment = string(), int32_t cpuAddress = -1, int32_t absoluteAddress = -1, DataType dataType = DataType::VerifiedCode, char memoryType = ' ');
 	void GetCodeLine(string &out, string &code, string &comment, int32_t cpuAddress, int32_t absoluteAddress, string &byteCode, string &addressing, DataType dataType, bool isIndented, char memoryType = ' ');
 	void GetSubHeader(string &out, DisassemblyInfo *info, string &label, uint16_t relativeAddr, uint16_t resetVector, uint16_t nmiVector, uint16_t irqVector);
@@ -43,16 +41,16 @@ public:
 	void BuildOpCodeTables(bool useLowerCase);
 	void Reset();
 	
-	uint32_t BuildCache(AddressTypeInfo &info, uint16_t memoryAddr, bool isSubEntryPoint, bool isJumpTarget);
+	uint32_t BuildCache(AddressTypeInfo &info, uint16_t memoryAddr, bool isSubEntryPoint, bool processJumps);
 	void InvalidateCache(AddressTypeInfo &info);
 
 	bool IsUnofficialOpCode(uint8_t opCode);
+	bool IsJump(uint8_t opCode);
+	bool IsUnconditionalJump(uint8_t opCode);
 
 	string GetCode(AddressTypeInfo &addressInfo, uint32_t endAddr, uint16_t memoryAddr, State& cpuState, shared_ptr<MemoryManager> memoryManager, shared_ptr<LabelManager> labelManager);
 
 	DisassemblyInfo GetDisassemblyInfo(AddressTypeInfo &info);
-
-	void GetJumpTargets(bool* jumpTargets);
 
 	void RebuildPrgRomCache(uint32_t absoluteAddr, int32_t length);
 };

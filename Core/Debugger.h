@@ -170,8 +170,6 @@ public:
 	
 	void SetBreakpoints(Breakpoint breakpoints[], uint32_t length);
 
-	void ProcessMarkedBreakpoints(BreakpointType type, OperationInfo &operationInfo);
-	
 	shared_ptr<LabelManager> GetLabelManager();
 
 	void GetFunctionEntryPoints(int32_t* entryPoints, int32_t maxCount);
@@ -222,8 +220,6 @@ public:
 	void GenerateCodeOutput();
 	const char* GetCode(uint32_t &length);
 
-	void GetJumpTargets(bool* jumpTargets);
-	
 	int32_t GetRelativeAddress(uint32_t addr, AddressType type);
 	int32_t GetAbsoluteAddress(uint32_t addr);	
 	int32_t GetAbsoluteChrAddress(uint32_t addr);

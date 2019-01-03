@@ -765,14 +765,18 @@ bool Debugger::ProcessRamOperation(MemoryOperationType type, uint16_t &addr, uin
 
 		bool isSubEntryPoint = _lastInstruction == 0x20; //Previous instruction was a JSR
 		if(absoluteAddr >= 0) {
+			bool isJumpTarget = _disassembler->IsJump(_lastInstruction);
 			_codeDataLogger->SetFlag(absoluteAddr, CdlPrgFlags::Code);
 			if(isSubEntryPoint) {
 				_codeDataLogger->SetFlag(absoluteAddr, CdlPrgFlags::SubEntryPoint);
 				_functionEntryPoints.emplace(absoluteAddr);
+			} else if(isJumpTarget) {
+				//Only mark as jump target if not marked as sub entry point
+				_codeDataLogger->SetFlag(absoluteAddr, CdlPrgFlags::JumpTarget);
 			}
 		}
 
-		_disassembler->BuildCache(addressInfo, addr, isSubEntryPoint, false);
+		_disassembler->BuildCache(addressInfo, addr, isSubEntryPoint, true);
 
 		ProcessStepConditions(addr);
 
@@ -1140,11 +1144,6 @@ const char* Debugger::GetCode(uint32_t &length)
 	} else {
 		return _disassemblerOutput.c_str();
 	}
-}
-
-void Debugger::GetJumpTargets(bool* jumpTargets)
-{
-	_disassembler->GetJumpTargets(jumpTargets);
 }
 
 int32_t Debugger::GetRelativeAddress(uint32_t addr, AddressType type)

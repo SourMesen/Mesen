@@ -146,12 +146,30 @@ bool Disassembler::IsUnofficialOpCode(uint8_t opCode)
 
 bool Disassembler::IsJump(uint8_t opCode)
 {
-	return opCode == 0x10 || opCode == 0x30|| opCode == 0x50 || opCode == 0x70 || opCode == 0x90 || opCode == 0xB0 || opCode == 0xD0 || opCode == 0xF0 || opCode == 0x4C || opCode == 0x20;
+	return (
+		opCode == 0x10 || //BPL
+		opCode == 0x30 || //BMI
+		opCode == 0x50 || //BVC
+		opCode == 0x70 || //BVS
+		opCode == 0x90 || //BCC
+		opCode == 0xB0 || //BCS
+		opCode == 0xD0 || //BNE
+		opCode == 0xF0 || //BEQ
+		opCode == 0x4C || //JMP (Absolute)
+		opCode == 0x6C || //JMP (Indirect)
+		opCode == 0x20 //JSR
+	);
 }
 
 bool Disassembler::IsUnconditionalJump(uint8_t opCode)
 {
-	return opCode == 0x40 || opCode == 0x60 || opCode == 0x6C || opCode == 0x4C || opCode == 0x20;
+	return (
+		opCode == 0x40 || //RTI
+		opCode == 0x60 || //RTS
+		opCode == 0x6C || //JMP (Indirect)
+		opCode == 0x4C || //JMP (Absolute)
+		opCode == 0x20 //JSR
+	);
 }
 
 void Disassembler::GetInfo(AddressTypeInfo &info, uint8_t** source, uint32_t &size, vector<shared_ptr<DisassemblyInfo>> **cache)
@@ -188,7 +206,7 @@ void Disassembler::GetInfo(AddressTypeInfo &info, uint8_t** source, uint32_t &si
 }
 
 
-uint32_t Disassembler::BuildCache(AddressTypeInfo &info, uint16_t cpuAddress, bool isSubEntryPoint, bool isJumpTarget)
+uint32_t Disassembler::BuildCache(AddressTypeInfo &info, uint16_t cpuAddress, bool isSubEntryPoint, bool processJumps)
 {
 	uint32_t mask = info.Type == AddressType::InternalRam ? 0x7FF : 0xFFFFFFFF;
 
@@ -203,9 +221,8 @@ uint32_t Disassembler::BuildCache(AddressTypeInfo &info, uint16_t cpuAddress, bo
 		if(!disInfo) {
 			while(absoluteAddr < (int32_t)size && !(*cache)[absoluteAddr]) {
 				bool isJump = IsUnconditionalJump(source[absoluteAddr]);
-				disInfo = new DisassemblyInfo(source+absoluteAddr, isSubEntryPoint, isJumpTarget);
+				disInfo = new DisassemblyInfo(source+absoluteAddr, isSubEntryPoint);
 				isSubEntryPoint = false;
-				isJumpTarget = false;
 
 				(*cache)[absoluteAddr] = shared_ptr<DisassemblyInfo>(disInfo);
 
@@ -219,22 +236,17 @@ uint32_t Disassembler::BuildCache(AddressTypeInfo &info, uint16_t cpuAddress, bo
 			if(isSubEntryPoint) {
 				disInfo->SetSubEntryPoint();
 			}
-			if(isJumpTarget) {
-				disInfo->SetJumpTarget();
-			}
 
 			uint8_t opCode = source[absoluteAddr];
-			if(IsJump(opCode)) {
-				uint16_t jumpDest = disInfo->GetOpAddr(cpuAddress);
+			if(processJumps && IsJump(opCode)) {
+				uint16_t jumpDest = disInfo->GetJumpDestination(cpuAddress, _memoryManager);
 				if(jumpDest != cpuAddress) {
 					AddressTypeInfo addressInfo;
 					_debugger->GetAbsoluteAddressAndType(jumpDest, &addressInfo);
 
-					const uint8_t jsrCode = 0x20;
+					constexpr uint8_t jsrCode = 0x20;
 					if(addressInfo.Address >= 0) {
-						BuildCache(addressInfo, jumpDest, opCode == jsrCode, true);
-					} else {
-						disInfo->SetJumpTarget();
+						BuildCache(addressInfo, jumpDest, opCode == jsrCode, false);
 					}
 				}
 			}
@@ -539,7 +551,7 @@ string Disassembler::GetCode(AddressTypeInfo &addressInfo, uint32_t endAddr, uin
 		isVerifiedData = addressInfo.Type == AddressType::PrgRom && cdl->IsData(addr&mask);
 		if(!info && ((disassembleUnidentifiedData && !isVerifiedData) || (disassembleVerifiedData && isVerifiedData))) {
 			dataType = isVerifiedData ? DataType::VerifiedData : DataType::UnidentifiedData;
-			tmpInfo->Initialize(source + (addr & mask), false, false);
+			tmpInfo->Initialize(source + (addr & mask), false);
 			info = tmpInfo;
 		} else if(info) {
 			dataType = DataType::VerifiedCode;
@@ -684,16 +696,5 @@ DisassemblyInfo Disassembler::GetDisassemblyInfo(AddressTypeInfo &info)
 		return *disassemblyInfo;
 	} else {
 		return DisassemblyInfo();
-	}
-}
-
-void Disassembler::GetJumpTargets(bool* jumpTargets)
-{
-	memset(jumpTargets, 0, _disassembleCache.size());
-	for(size_t i = 0, len = _disassembleCache.size(); i < len;  i++) {
-		shared_ptr<DisassemblyInfo> disInfo = _disassembleCache[i];
-		if(disInfo && disInfo->IsJumpTarget()) {
-			jumpTargets[i] = true;
-		}
 	}
 }
