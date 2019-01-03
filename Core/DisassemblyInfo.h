@@ -37,6 +37,7 @@ public:
 	
 	void GetEffectiveAddressString(string &out, State& cpuState, MemoryManager* memoryManager, LabelManager* labelManager);
 	int32_t GetMemoryValue(State& cpuState, MemoryManager* memoryManager);
+	uint16_t GetIndirectJumpDestination(MemoryManager* memoryManager);
 	void ToString(string &out, uint32_t memoryAddr, MemoryManager* memoryManager, LabelManager* labelManager, bool extendZeroPage);
 	void GetByteCode(string &out);
 	uint32_t GetSize();

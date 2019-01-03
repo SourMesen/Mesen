@@ -192,6 +192,19 @@ int32_t DisassemblyInfo::GetMemoryValue(State& cpuState, MemoryManager* memoryMa
 	}
 }
 
+uint16_t DisassemblyInfo::GetIndirectJumpDestination(MemoryManager* memoryManager)
+{
+	uint16_t addr = _byteCode[1] | (_byteCode[2] << 8);
+	if((addr & 0xFF) == 0xFF) {
+		//CPU bug when indirect address starts at the end of a page
+		uint8_t lo = memoryManager->DebugRead(addr);
+		uint8_t hi = memoryManager->DebugRead(addr & 0xFF00);
+		return lo | (hi << 8);
+	} else {
+		return memoryManager->DebugReadWord(addr);
+	}
+}
+
 void DisassemblyInfo::GetEffectiveAddressString(string &out, State& cpuState, MemoryManager* memoryManager, LabelManager* labelManager)
 {
 	if(_opMode <= AddrMode::Abs) {
@@ -255,8 +268,7 @@ int32_t DisassemblyInfo::GetEffectiveAddress(State& cpuState, MemoryManager* mem
 		}
 
 		case AddrMode::Ind: {
-			uint8_t zeroAddr = _byteCode[1];
-			return memoryManager->DebugRead(zeroAddr) | memoryManager->DebugRead((uint8_t)(zeroAddr + 1)) << 8;
+			return GetIndirectJumpDestination(memoryManager);
 		}
 
 		case AddrMode::AbsX:
