@@ -49,7 +49,7 @@ namespace Mesen.GUI.Debugger
 
 	public class LabelManager
 	{
-		private static Dictionary<string, CodeLabel> _labels = new Dictionary<string, CodeLabel>();
+		private static Dictionary<UInt32, CodeLabel> _labels = new Dictionary<UInt32, CodeLabel>();
 		private static Dictionary<string, CodeLabel> _reverseLookup = new Dictionary<string, CodeLabel>();
 
 		public static event EventHandler OnLabelUpdated;
@@ -98,9 +98,16 @@ namespace Mesen.GUI.Debugger
 			return _labels.Values.ToList<CodeLabel>();
 		}
 
-		private static string GetKey(UInt32 address, AddressType addressType)
+		private static UInt32 GetKey(UInt32 address, AddressType addressType)
 		{
-			return address.ToString() + addressType.ToString();
+			switch(addressType) {
+				case AddressType.InternalRam: return address | 0x80000000;
+				case AddressType.PrgRom: return address | 0xE0000000;
+				case AddressType.WorkRam: return address | 0xC0000000;
+				case AddressType.SaveRam: return address | 0xA0000000;
+				case AddressType.Register: return address | 0x60000000;
+			}
+			throw new Exception("Invalid type");
 		}
 
 		public static bool SetLabel(UInt32 address, AddressType type, string label, string comment, bool raiseEvent = true, CodeLabelFlags flags = CodeLabelFlags.None)
@@ -111,7 +118,7 @@ namespace Mesen.GUI.Debugger
 				DeleteLabel(existingLabel.Address, existingLabel.AddressType, false);
 			}
 
-			string key = GetKey(address, type);
+			UInt32 key = GetKey(address, type);
 			if(_labels.ContainsKey(key)) {
 				_reverseLookup.Remove(_labels[key].Label);
 			}
@@ -131,7 +138,7 @@ namespace Mesen.GUI.Debugger
 
 		public static void DeleteLabel(UInt32 address, AddressType type, bool raiseEvent)
 		{
-			string key = GetKey(address, type);
+			UInt32 key = GetKey(address, type);
 			if(_labels.ContainsKey(key)) {
 				_reverseLookup.Remove(_labels[key].Label);
 			}

@@ -16,6 +16,7 @@ namespace Mesen.GUI.Debugger
 		Int32[] _execCounts;
 		bool[] _freezeState;
 		byte[] _cdlData;
+		bool[] _hasLabel;
 		DebugState _state = new DebugState();
 		bool _showExec;
 		bool _showWrite;
@@ -61,7 +62,7 @@ namespace Mesen.GUI.Debugger
 			_execCounts = InteropEmu.DebugGetMemoryAccessCountsEx((UInt32)firstByteIndex, (UInt32)(lastByteIndex - firstByteIndex + 1), _memoryType, MemoryOperationType.Exec);
 
 			_cdlData = null;
-			if(_highlightDmcDataBytes || _highlightDataBytes || _highlightCodeBytes || _highlightLabelledBytes) {
+			if(_highlightDmcDataBytes || _highlightDataBytes || _highlightCodeBytes) {
 				switch(_memoryType) {
 					case DebugMemoryType.ChrRom:
 					case DebugMemoryType.PpuMemory:
@@ -69,6 +70,22 @@ namespace Mesen.GUI.Debugger
 					case DebugMemoryType.PrgRom:
 						_cdlData = InteropEmu.DebugGetCdlData((UInt32)firstByteIndex, (UInt32)(lastByteIndex - firstByteIndex + 1), _memoryType);
 						break;
+				}
+			}
+
+			_hasLabel = new bool[lastByteIndex - firstByteIndex + 1];
+			if(_highlightLabelledBytes) {
+				if(_memoryType == DebugMemoryType.CpuMemory) {
+					for(long i = 0; i < _hasLabel.Length; i++) {
+						_hasLabel[i] = (
+							!string.IsNullOrWhiteSpace(LabelManager.GetLabel((UInt16)(i + firstByteIndex))?.Label) ||
+							!string.IsNullOrWhiteSpace(LabelManager.GetLabel((uint)(i + firstByteIndex), AddressType.Register)?.Label)
+						);
+					}
+				} else if(_memoryType == DebugMemoryType.PrgRom || _memoryType == DebugMemoryType.WorkRam || _memoryType == DebugMemoryType.SaveRam) {
+					for(long i = 0; i < _hasLabel.Length; i++) {
+						_hasLabel[i] = !string.IsNullOrWhiteSpace(LabelManager.GetLabel((uint)(firstByteIndex  + i), _memoryType.ToAddressType())?.Label);
+					}
 				}
 			}
 
@@ -111,19 +128,21 @@ namespace Mesen.GUI.Debugger
 
 			bgColor = Color.Transparent;
 			if(_cdlData != null) {
-				if((_cdlData[index] & 0x04) != 0 && _highlightLabelledBytes) {
-					//Labels/comments
-					bgColor = ConfigManager.Config.DebugInfo.RamLabelledByteColor;
-				} else if((_cdlData[index] & 0x01) != 0 && _highlightCodeBytes) {
+				if((_cdlData[index] & (byte)CdlPrgFlags.Code) != 0 && _highlightCodeBytes) {
 					//Code
 					bgColor = ConfigManager.Config.DebugInfo.RamCodeByteColor;
-				} else if((_cdlData[index] & 0x40) != 0 && _highlightDmcDataBytes) {
+				} else if((_cdlData[index] & (byte)CdlPrgFlags.PcmData) != 0 && _highlightDmcDataBytes) {
 					//DMC channel Data
 					bgColor = ConfigManager.Config.DebugInfo.RamDmcDataByteColor;
-				} else if((_cdlData[index] & 0x02) != 0 && _highlightDataBytes) {
+				} else if((_cdlData[index] & (byte)CdlPrgFlags.Data) != 0 && _highlightDataBytes) {
 					//Data
 					bgColor = ConfigManager.Config.DebugInfo.RamDataByteColor;
 				}
+			}
+
+			if(_hasLabel[index]) {
+				//Labels/comments
+				bgColor = ConfigManager.Config.DebugInfo.RamLabelledByteColor;
 			}
 
 			if(_freezeState != null && _freezeState[index]) {
