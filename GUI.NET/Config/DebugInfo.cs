@@ -34,6 +34,7 @@ namespace Mesen.GUI.Config
 		public ByteCodePosition ByteCodePosition = ByteCodePosition.Hidden;
 		public PrgAddressPosition PrgAddressPosition = PrgAddressPosition.Hidden;
 		public int TextZoom = 100;
+		public bool UsingSourceView = false;
 	}
 
 	public class DebugWorkspace

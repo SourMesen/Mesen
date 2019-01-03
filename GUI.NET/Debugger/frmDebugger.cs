@@ -645,6 +645,14 @@ namespace Mesen.GUI.Debugger
 					ResumeExecution();
 				}
 				_firstBreak = false;
+
+				//Switch to source viewer after reopening debugger if we were in source viewer when we closed it
+				if(ctrlSourceViewer.CurrentFile != null && ConfigManager.Config.DebugInfo.LeftView.UsingSourceView) {
+					ctrlDebuggerCode_OnSwitchView(this.ctrlDebuggerCode);
+				}
+				if(ctrlSourceViewerSplit.CurrentFile != null && ConfigManager.Config.DebugInfo.RightView.UsingSourceView) {
+					ctrlDebuggerCode_OnSwitchView(this.ctrlDebuggerCodeSplit);
+				}
 			}
 		}
 
@@ -961,6 +969,10 @@ namespace Mesen.GUI.Debugger
 			ConfigManager.Config.DebugInfo.WindowHeight = this.WindowState != FormWindowState.Normal ? this.RestoreBounds.Height : this.Height;
 			ConfigManager.Config.DebugInfo.TopPanelHeight = this.splitContainer.GetSplitterDistance();
 			ConfigManager.Config.DebugInfo.LeftPanelWidth = this.ctrlSplitContainerTop.GetSplitterDistance();
+
+			ConfigManager.Config.DebugInfo.LeftView.UsingSourceView = this.ctrlSourceViewer.Visible;
+			ConfigManager.Config.DebugInfo.RightView.UsingSourceView = this.ctrlSourceViewerSplit.Visible;
+
 			ConfigManager.ApplyChanges();
 
 			DebugWorkspaceManager.SaveWorkspace();
