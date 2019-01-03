@@ -186,19 +186,12 @@ int32_t DisassemblyInfo::GetMemoryValue(State& cpuState, MemoryManager* memoryMa
 	}
 }
 
-int32_t DisassemblyInfo::GetJumpDestination(uint16_t pc, MemoryManager* memoryManager)
+uint16_t DisassemblyInfo::GetJumpDestination(uint16_t pc, MemoryManager* memoryManager)
 {
-	int32_t address = -1;
 	if(_opMode == AddrMode::Rel || _opMode == AddrMode::Abs) {
-		address = GetOpAddr(pc);
+		return GetOpAddr(pc);
 	} else if(_opMode == AddrMode::Ind) {
-		address = GetIndirectJumpDestination(memoryManager);
-	}
-
-	if(address >= 0 && address <= 0xFFFF) {
-		return memoryManager->DebugRead(address);
-	} else {
-		return -1;
+		return GetIndirectJumpDestination(memoryManager);
 	}
 }
 
