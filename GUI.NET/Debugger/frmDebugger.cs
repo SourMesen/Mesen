@@ -1745,8 +1745,8 @@ namespace Mesen.GUI.Debugger
 		{
 			if(target is ctrlSourceViewer && !string.IsNullOrWhiteSpace(dest.File)) {
 				((ctrlSourceViewer)target).ScrollToFileLine(dest.File, dest.Line);
-			} else if(dest.Label != null && dest.Label.GetRelativeAddress() >= 0) {
-				target.ScrollToAddress(new AddressTypeInfo() { Address = (int)dest.Label.Address, Type = dest.Label.AddressType });
+			} else if(dest.CpuAddress >= 0) {
+				target.ScrollToLineNumber(dest.CpuAddress);
 			} else if(!string.IsNullOrWhiteSpace(dest.File)) {
 				if(!(target is ctrlSourceViewer)) {
 					ctrlDebuggerCode_OnSwitchView(target);
@@ -1755,8 +1755,8 @@ namespace Mesen.GUI.Debugger
 				if(target is ctrlSourceViewer) {
 					((ctrlSourceViewer)target).ScrollToFileLine(dest.File, dest.Line);
 				}
-			} else if(dest.CpuAddress >= 0) {
-				target.ScrollToLineNumber(dest.CpuAddress);
+			} else if(dest.Label != null && dest.Label.GetRelativeAddress() >= 0) {
+				target.ScrollToAddress(new AddressTypeInfo() { Address = (int)dest.Label.Address, Type = dest.Label.AddressType });
 			}
 		}
 
