@@ -399,28 +399,23 @@ namespace Mesen.GUI.Debugger
 			}
 		}
 
-		private CodeLabel CreateLabel(Int32 address, bool isRamLabel)
+		private CodeLabel CreateLabel(Int32 address, AddressType addressType)
 		{
 			CodeLabel label = null;
-			if(isRamLabel) {
-				int labelAddress;
-				AddressType? addressType;
-				GetRamLabelAddressAndType(address, out labelAddress, out addressType);
-				if(addressType == AddressType.InternalRam) {
-					if(!_ramLabels.TryGetValue(labelAddress, out label)) {
-						label = new CodeLabel() { Address = (UInt32)labelAddress, AddressType = AddressType.InternalRam, Comment = string.Empty, Label = string.Empty };
-						_ramLabels[labelAddress] = label;
-					}
-				} else if(addressType == AddressType.WorkRam) {
-					if(!_workRamLabels.TryGetValue(labelAddress, out label)) {
-						label = new CodeLabel() { Address = (UInt32)labelAddress, AddressType = AddressType.WorkRam, Comment = string.Empty, Label = string.Empty };
-						_workRamLabels[labelAddress] = label;
-					}
-				} else if(addressType == AddressType.SaveRam) {
-					if(!_saveRamLabels.TryGetValue(labelAddress, out label)) {
-						label = new CodeLabel() { Address = (UInt32)labelAddress, AddressType = AddressType.SaveRam, Comment = string.Empty, Label = string.Empty };
-						_saveRamLabels[labelAddress] = label;
-					}
+			if(addressType == AddressType.InternalRam) {
+				if(!_ramLabels.TryGetValue(address, out label)) {
+					label = new CodeLabel() { Address = (UInt32)address, AddressType = AddressType.InternalRam, Comment = string.Empty, Label = string.Empty };
+					_ramLabels[address] = label;
+				}
+			} else if(addressType == AddressType.WorkRam) {
+				if(!_workRamLabels.TryGetValue(address, out label)) {
+					label = new CodeLabel() { Address = (UInt32)address, AddressType = AddressType.WorkRam, Comment = string.Empty, Label = string.Empty };
+					_workRamLabels[address] = label;
+				}
+			} else if(addressType == AddressType.SaveRam) {
+				if(!_saveRamLabels.TryGetValue(address, out label)) {
+					label = new CodeLabel() { Address = (UInt32)address, AddressType = AddressType.SaveRam, Comment = string.Empty, Label = string.Empty };
+					_saveRamLabels[address] = label;
 				}
 			} else {
 				if(!_romLabels.TryGetValue(address, out label)) {
@@ -454,9 +449,9 @@ namespace Mesen.GUI.Debugger
 						}
 
 						AddressTypeInfo addressInfo = GetSymbolAddressInfo(symbol);
-						if(addressInfo != null) {
+						if(symbol.Address != null) {
 							int address = addressInfo.Address;
-							CodeLabel label = this.CreateLabel(address, segment.IsRam);
+							CodeLabel label = this.CreateLabel(addressInfo.Address, addressInfo.Type);
 							if(label != null) {
 								label.Label = newName;
 							}
@@ -519,10 +514,20 @@ namespace Mesen.GUI.Debugger
 					}
 
 					if(comment.Length > 0) {
-						int address = segment.IsRam ? (span.Offset + segment.Start) : (span.Offset + segment.FileOffset - _headerSize);
-						CodeLabel label = this.CreateLabel(address, segment.IsRam);
-						if(label != null) {
-							label.Comment = comment;
+						int address = -1;
+						AddressType? addressType;
+						if(segment.IsRam) {
+							GetRamLabelAddressAndType(span.Offset + segment.Start, out address, out addressType);
+						} else {
+							address = GetPrgAddress(span);
+							addressType = AddressType.PrgRom;
+						}
+
+						if(address >= 0 && addressType != null) {
+							CodeLabel label = this.CreateLabel(address, addressType.Value);
+							if(label != null) {
+								label.Comment = comment;
+							}
 						}
 					}
 				} catch {
