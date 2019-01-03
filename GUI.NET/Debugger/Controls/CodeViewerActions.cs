@@ -298,15 +298,14 @@ namespace Mesen.GUI.Debugger.Controls
 		public void ToggleBreakpoint(bool toggleEnabledFlag)
 		{
 			AddressTypeInfo info = Viewer.GetAddressInfo(Viewer.CodeViewer.SelectedLine);
-			if(info.Address >= 0) {
-				BreakpointManager.ToggleBreakpoint(-1, info, toggleEnabledFlag);
-			} else {
+			if(info.Address < 0) {
 				//Current line has no address, try using the next line instead.
 				//(Used when trying to set a breakpoint on a row containing only a label)
 				info = Viewer.GetAddressInfo(Viewer.CodeViewer.SelectedLine + 1);
-				if(info.Address >= 0) {
-					BreakpointManager.ToggleBreakpoint(-1, info, toggleEnabledFlag);
-				}
+			}
+
+			if(info.Address >= 0) {
+				BreakpointManager.ToggleBreakpoint(info, toggleEnabledFlag);
 			}
 		}
 
