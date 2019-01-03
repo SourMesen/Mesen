@@ -68,6 +68,7 @@ namespace Mesen.GUI.Debugger
 			this.mnuHideExecutedBytes.Checked = config.RamHideExecutedBytes;
 
 			this.mnuHighlightLabelledBytes.Checked = config.RamHighlightLabelledBytes;
+			this.mnuHighlightBreakpoints.Checked = config.RamHighlightBreakpoints;
 			this.mnuHighlightChrDrawnBytes.Checked = config.RamHighlightChrDrawnBytes;
 			this.mnuHighlightChrReadBytes.Checked = config.RamHighlightChrReadBytes;
 			this.mnuHighlightCodeBytes.Checked = config.RamHighlightCodeBytes;
@@ -321,16 +322,20 @@ namespace Mesen.GUI.Debugger
 						mnuHighlightDmcDataBytes.Checked,
 						mnuHighlightDataBytes.Checked,
 						mnuHighlightCodeBytes.Checked,
-						mnuHighlightLabelledBytes.Checked
+						mnuHighlightLabelledBytes.Checked,
+						mnuHighlightBreakpoints.Checked
 					);
 					break;
 
 				case DebugMemoryType.PpuMemory:
 				case DebugMemoryType.ChrRom:
+				case DebugMemoryType.ChrRam:
+				case DebugMemoryType.PaletteMemory:
 					this.ctrlHexViewer.ByteColorProvider = new ChrByteColorProvider(
 						this._memoryType,
 						mnuHighlightChrDrawnBytes.Checked,
-						mnuHighlightChrReadBytes.Checked
+						mnuHighlightChrReadBytes.Checked,
+						mnuHighlightBreakpoints.Checked
 					);
 					break;
 
@@ -440,6 +445,7 @@ namespace Mesen.GUI.Debugger
 			ConfigManager.Config.DebugInfo.RamHideExecutedBytes = this.mnuHideExecutedBytes.Checked;
 			ConfigManager.Config.DebugInfo.RamHideExecutedBytes = this.mnuHideExecutedBytes.Checked;
 
+			ConfigManager.Config.DebugInfo.RamHighlightBreakpoints = this.mnuHighlightBreakpoints.Checked;
 			ConfigManager.Config.DebugInfo.RamHighlightLabelledBytes = this.mnuHighlightLabelledBytes.Checked;
 			ConfigManager.Config.DebugInfo.RamHighlightChrDrawnBytes = this.mnuHighlightChrDrawnBytes.Checked;
 			ConfigManager.Config.DebugInfo.RamHighlightChrReadBytes = this.mnuHighlightChrReadBytes.Checked;

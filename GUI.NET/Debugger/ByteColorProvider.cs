@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Drawing;
+using System.Linq;
 using Be.Windows.Forms;
 using Mesen.GUI.Config;
 
@@ -30,9 +31,12 @@ namespace Mesen.GUI.Debugger
 		bool _highlightDataBytes;
 		bool _highlightCodeBytes;
 		bool _highlightLabelledBytes;
+		bool _highlightBreakpoints;
+		ByteColors _colors = new ByteColors();
+		BreakpointType[] _breakpointTypes;
 
-		public ByteColorProvider(DebugMemoryType memoryType, bool showExec, bool showWrite, bool showRead, int framesToFade, bool hideUnusedBytes, bool hideReadBytes, bool hideWrittenBytes, bool hideExecutedBytes, bool highlightDmcDataBytes, bool highlightDataBytes, bool highlightCodeBytes, bool highlightLabelledBytes)
-		{
+		public ByteColorProvider(DebugMemoryType memoryType, bool showExec, bool showWrite, bool showRead, int framesToFade, bool hideUnusedBytes, bool hideReadBytes, bool hideWrittenBytes, bool hideExecutedBytes, bool highlightDmcDataBytes, bool highlightDataBytes, bool highlightCodeBytes, bool highlightLabelledBytes, bool highlightBreakpoints)
+		{			
 			_memoryType = memoryType;
 			_showExec = showExec;
 			_showWrite = showWrite;
@@ -46,20 +50,40 @@ namespace Mesen.GUI.Debugger
 			_highlightDataBytes = highlightDataBytes;
 			_highlightCodeBytes = highlightCodeBytes;
 			_highlightLabelledBytes = highlightLabelledBytes;
+			_highlightBreakpoints = highlightBreakpoints;
 		}
 
 		public void Prepare(long firstByteIndex, long lastByteIndex)
 		{
-			_readStamps = InteropEmu.DebugGetMemoryAccessStamps((UInt32)firstByteIndex, (UInt32)(lastByteIndex - firstByteIndex + 1), _memoryType, MemoryOperationType.Read);
-			_writeStamps = InteropEmu.DebugGetMemoryAccessStamps((UInt32)firstByteIndex, (UInt32)(lastByteIndex - firstByteIndex + 1), _memoryType, MemoryOperationType.Write);
-			_execStamps = InteropEmu.DebugGetMemoryAccessStamps((UInt32)firstByteIndex, (UInt32)(lastByteIndex - firstByteIndex + 1), _memoryType, MemoryOperationType.Exec);
-			if(_memoryType == DebugMemoryType.CpuMemory) {
-				_freezeState = InteropEmu.DebugGetFreezeState((UInt16)firstByteIndex, (UInt16)(lastByteIndex - firstByteIndex + 1));
+			int visibleByteCount = (int)(lastByteIndex - firstByteIndex + 1);
+
+			if(_highlightBreakpoints) {
+				Breakpoint[] breakpoints = BreakpointManager.Breakpoints.ToArray();
+				_breakpointTypes = new BreakpointType[visibleByteCount];
+
+				for(int i = 0; i < visibleByteCount; i++) {
+					int byteIndex = i + (int)firstByteIndex;
+					foreach(Breakpoint bp in breakpoints) {
+						if(bp.Enabled && bp.IsCpuBreakpoint && bp.Matches(byteIndex, _memoryType)) {
+							_breakpointTypes[i] = bp.BreakOnExec ? BreakpointType.Execute : (bp.BreakOnWrite ? BreakpointType.WriteRam : BreakpointType.ReadRam);
+							break;
+						}
+					}
+				}
+			} else {
+				_breakpointTypes = null;
 			}
 
-			_readCounts = InteropEmu.DebugGetMemoryAccessCountsEx((UInt32)firstByteIndex, (UInt32)(lastByteIndex - firstByteIndex + 1), _memoryType, MemoryOperationType.Read);
-			_writeCounts = InteropEmu.DebugGetMemoryAccessCountsEx((UInt32)firstByteIndex, (UInt32)(lastByteIndex - firstByteIndex + 1), _memoryType, MemoryOperationType.Write);
-			_execCounts = InteropEmu.DebugGetMemoryAccessCountsEx((UInt32)firstByteIndex, (UInt32)(lastByteIndex - firstByteIndex + 1), _memoryType, MemoryOperationType.Exec);
+			_readStamps = InteropEmu.DebugGetMemoryAccessStamps((UInt32)firstByteIndex, (UInt32)visibleByteCount, _memoryType, MemoryOperationType.Read);
+			_writeStamps = InteropEmu.DebugGetMemoryAccessStamps((UInt32)firstByteIndex, (UInt32)visibleByteCount, _memoryType, MemoryOperationType.Write);
+			_execStamps = InteropEmu.DebugGetMemoryAccessStamps((UInt32)firstByteIndex, (UInt32)visibleByteCount, _memoryType, MemoryOperationType.Exec);
+			if(_memoryType == DebugMemoryType.CpuMemory) {
+				_freezeState = InteropEmu.DebugGetFreezeState((UInt16)firstByteIndex, (UInt16)visibleByteCount);
+			}
+
+			_readCounts = InteropEmu.DebugGetMemoryAccessCountsEx((UInt32)firstByteIndex, (UInt32)visibleByteCount, _memoryType, MemoryOperationType.Read);
+			_writeCounts = InteropEmu.DebugGetMemoryAccessCountsEx((UInt32)firstByteIndex, (UInt32)visibleByteCount, _memoryType, MemoryOperationType.Write);
+			_execCounts = InteropEmu.DebugGetMemoryAccessCountsEx((UInt32)firstByteIndex, (UInt32)visibleByteCount, _memoryType, MemoryOperationType.Exec);
 
 			_cdlData = null;
 			if(_highlightDmcDataBytes || _highlightDataBytes || _highlightCodeBytes) {
@@ -68,12 +92,12 @@ namespace Mesen.GUI.Debugger
 					case DebugMemoryType.PpuMemory:
 					case DebugMemoryType.CpuMemory:
 					case DebugMemoryType.PrgRom:
-						_cdlData = InteropEmu.DebugGetCdlData((UInt32)firstByteIndex, (UInt32)(lastByteIndex - firstByteIndex + 1), _memoryType);
+						_cdlData = InteropEmu.DebugGetCdlData((UInt32)firstByteIndex, (UInt32)visibleByteCount, _memoryType);
 						break;
 				}
 			}
 
-			_hasLabel = new bool[lastByteIndex - firstByteIndex + 1];
+			_hasLabel = new bool[visibleByteCount];
 			if(_highlightLabelledBytes) {
 				if(_memoryType == DebugMemoryType.CpuMemory) {
 					for(long i = 0; i < _hasLabel.Length; i++) {
@@ -105,7 +129,7 @@ namespace Mesen.GUI.Debugger
 			return Color.FromArgb((int)(input.R * brightnessPercentage), (int)(input.G * brightnessPercentage), (int)(input.B * brightnessPercentage));
 		}
 
-		public Color GetByteColor(long firstByteIndex, long byteIndex, out Color bgColor)
+		public ByteColors GetByteColor(long firstByteIndex, long byteIndex)
 		{
 			const int CyclesPerFrame = 29780;
 			long index = byteIndex - firstByteIndex;
@@ -126,36 +150,47 @@ namespace Mesen.GUI.Debugger
 				alpha = 255;
 			}
 
-			bgColor = Color.Transparent;
+			_colors.BackColor = Color.Transparent;
 			if(_cdlData != null) {
 				if((_cdlData[index] & (byte)CdlPrgFlags.Code) != 0 && _highlightCodeBytes) {
 					//Code
-					bgColor = ConfigManager.Config.DebugInfo.RamCodeByteColor;
+					_colors.BackColor = ConfigManager.Config.DebugInfo.RamCodeByteColor;
 				} else if((_cdlData[index] & (byte)CdlPrgFlags.PcmData) != 0 && _highlightDmcDataBytes) {
 					//DMC channel Data
-					bgColor = ConfigManager.Config.DebugInfo.RamDmcDataByteColor;
+					_colors.BackColor = ConfigManager.Config.DebugInfo.RamDmcDataByteColor;
 				} else if((_cdlData[index] & (byte)CdlPrgFlags.Data) != 0 && _highlightDataBytes) {
 					//Data
-					bgColor = ConfigManager.Config.DebugInfo.RamDataByteColor;
+					_colors.BackColor = ConfigManager.Config.DebugInfo.RamDataByteColor;
 				}
 			}
 
 			if(_hasLabel[index]) {
 				//Labels/comments
-				bgColor = ConfigManager.Config.DebugInfo.RamLabelledByteColor;
+				_colors.BackColor = ConfigManager.Config.DebugInfo.RamLabelledByteColor;
+			}
+
+			_colors.BorderColor = Color.Empty;
+			if(_breakpointTypes != null) {
+				switch(_breakpointTypes[index]) {
+					case BreakpointType.Execute: _colors.BorderColor = ConfigManager.Config.DebugInfo.CodeExecBreakpointColor; break;
+					case BreakpointType.WriteRam: _colors.BorderColor =  ConfigManager.Config.DebugInfo.CodeWriteBreakpointColor; break;
+					case BreakpointType.ReadRam: _colors.BorderColor =  ConfigManager.Config.DebugInfo.CodeReadBreakpointColor; break;
+				}
 			}
 
 			if(_freezeState != null && _freezeState[index]) {
-				return Color.Magenta;
+				_colors.ForeColor = Color.Magenta;
 			} else if(_showExec && _execStamps[index] != 0 && framesSinceExec >= 0 && (framesSinceExec < _framesToFade || _framesToFade == 0)) {
-				return Color.FromArgb(alpha, DarkerColor(ConfigManager.Config.DebugInfo.RamExecColor, (_framesToFade - framesSinceExec) / _framesToFade));
+				_colors.ForeColor = Color.FromArgb(alpha, DarkerColor(ConfigManager.Config.DebugInfo.RamExecColor, (_framesToFade - framesSinceExec) / _framesToFade));
 			} else if(_showWrite && _writeStamps[index] != 0 && framesSinceWrite >= 0 && (framesSinceWrite < _framesToFade || _framesToFade == 0)) {
-				return Color.FromArgb(alpha, DarkerColor(ConfigManager.Config.DebugInfo.RamWriteColor, (_framesToFade - framesSinceWrite) / _framesToFade));
+				_colors.ForeColor = Color.FromArgb(alpha, DarkerColor(ConfigManager.Config.DebugInfo.RamWriteColor, (_framesToFade - framesSinceWrite) / _framesToFade));
 			} else if(_showRead && _readStamps[index] != 0 && framesSinceRead >= 0 && (framesSinceRead < _framesToFade || _framesToFade == 0)) {
-				return Color.FromArgb(alpha, DarkerColor(ConfigManager.Config.DebugInfo.RamReadColor, (_framesToFade - framesSinceRead) / _framesToFade));
+				_colors.ForeColor = Color.FromArgb(alpha, DarkerColor(ConfigManager.Config.DebugInfo.RamReadColor, (_framesToFade - framesSinceRead) / _framesToFade));
+			} else {
+				_colors.ForeColor = Color.FromArgb(alpha, Color.Black);
 			}
 
-			return Color.FromArgb(alpha, Color.Black);
+			return _colors;
 		}
 	}
 }

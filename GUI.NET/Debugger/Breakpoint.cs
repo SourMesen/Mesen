@@ -167,12 +167,46 @@ namespace Mesen.GUI.Debugger
 			if(this.IsAbsoluteAddress) {
 				if(IsCpuBreakpoint) {
 					return InteropEmu.DebugGetRelativeAddress(address, this.MemoryType.ToAddressType());
-				} else {
+				} else if(_memoryType == DebugMemoryType.ChrRam || _memoryType == DebugMemoryType.ChrRom) {
 					return InteropEmu.DebugGetRelativeChrAddress(address);
 				}
-			} else {
-				return -1;
 			}
+			return -1;
+		}
+
+		private int GetRelativeAddressEnd()
+		{
+			if(this.AddressType == BreakpointAddressType.AddressRange && this.IsAbsoluteAddress) {
+				if(IsCpuBreakpoint) {
+					return InteropEmu.DebugGetRelativeAddress(this.EndAddress, this.MemoryType.ToAddressType());
+				} else if(_memoryType == DebugMemoryType.ChrRam || _memoryType == DebugMemoryType.ChrRom) {
+					return InteropEmu.DebugGetRelativeChrAddress(this.EndAddress);
+				}
+			}
+			return -1;
+		}
+
+		public bool Matches(int address, DebugMemoryType type)
+		{
+			if(IsTypeCpuBreakpoint(type) != this.IsCpuBreakpoint) {
+				return false;
+			}
+
+			bool isRelativeMemory = type == DebugMemoryType.CpuMemory || type == DebugMemoryType.PpuMemory;
+
+			if(this.AddressType == BreakpointAddressType.SingleAddress) {
+				if(isRelativeMemory && this.IsAbsoluteAddress) {
+					return address == this.GetRelativeAddress();
+				}
+				return address == this.Address && type == this.MemoryType;
+			} else if(this.AddressType == BreakpointAddressType.AddressRange) {
+				if(isRelativeMemory && this.IsAbsoluteAddress) {
+					return address >= GetRelativeAddress() && address <= this.GetRelativeAddressEnd();
+				}
+				return address >= this.StartAddress && address <= this.EndAddress && type == this.MemoryType;
+			}
+
+			return false;
 		}
 
 		public bool Matches(int relativeAddress, AddressTypeInfo info)

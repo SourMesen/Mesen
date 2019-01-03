@@ -96,10 +96,12 @@
 			this.mnuEnablePerByteNavigation = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuByteEditingMode = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuGoToAll = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuGoTo = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem14 = new System.Windows.Forms.ToolStripSeparator();
 			this.mnuFind = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuFindNext = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuFindPrev = new System.Windows.Forms.ToolStripMenuItem();
-			this.mnuGoTo = new System.Windows.Forms.ToolStripMenuItem();
 			this.tabMain = new System.Windows.Forms.TabControl();
 			this.tpgMemoryViewer = new System.Windows.Forms.TabPage();
 			this.panel1 = new System.Windows.Forms.Panel();
@@ -107,8 +109,7 @@
 			this.ctrlMemoryAccessCounters = new Mesen.GUI.Debugger.Controls.ctrlMemoryAccessCounters();
 			this.tpgProfiler = new System.Windows.Forms.TabPage();
 			this.ctrlProfiler = new Mesen.GUI.Debugger.Controls.ctrlProfiler();
-			this.mnuGoToAll = new System.Windows.Forms.ToolStripMenuItem();
-			this.toolStripMenuItem14 = new System.Windows.Forms.ToolStripSeparator();
+			this.mnuHighlightBreakpoints = new System.Windows.Forms.ToolStripMenuItem();
 			this.flowLayoutPanel1.SuspendLayout();
 			this.menuStrip1.SuspendLayout();
 			this.tabMain.SuspendLayout();
@@ -362,6 +363,7 @@
 			// 
 			this.dataTypeHighlightingToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.mnuHighlightLabelledBytes,
+            this.mnuHighlightBreakpoints,
             this.toolStripMenuItem8,
             this.mnuHighlightCodeBytes,
             this.mnuHighlightDataBytes,
@@ -378,7 +380,7 @@
 			this.mnuHighlightLabelledBytes.CheckOnClick = true;
 			this.mnuHighlightLabelledBytes.Name = "mnuHighlightLabelledBytes";
 			this.mnuHighlightLabelledBytes.Size = new System.Drawing.Size(236, 22);
-			this.mnuHighlightLabelledBytes.Text = "Labelled bytes";
+			this.mnuHighlightLabelledBytes.Text = "Labeled bytes";
 			this.mnuHighlightLabelledBytes.Click += new System.EventHandler(this.mnuColorProviderOptions_Click);
 			// 
 			// toolStripMenuItem8
@@ -668,11 +670,30 @@
 			this.toolStripMenuItem1.Size = new System.Drawing.Size(54, 20);
 			this.toolStripMenuItem1.Text = "Search";
 			// 
+			// mnuGoToAll
+			// 
+			this.mnuGoToAll.Name = "mnuGoToAll";
+			this.mnuGoToAll.Size = new System.Drawing.Size(145, 22);
+			this.mnuGoToAll.Text = "Go to All";
+			this.mnuGoToAll.Click += new System.EventHandler(this.mnuGoToAll_Click);
+			// 
+			// mnuGoTo
+			// 
+			this.mnuGoTo.Name = "mnuGoTo";
+			this.mnuGoTo.Size = new System.Drawing.Size(145, 22);
+			this.mnuGoTo.Text = "Go To...";
+			this.mnuGoTo.Click += new System.EventHandler(this.mnuGoTo_Click);
+			// 
+			// toolStripMenuItem14
+			// 
+			this.toolStripMenuItem14.Name = "toolStripMenuItem14";
+			this.toolStripMenuItem14.Size = new System.Drawing.Size(142, 6);
+			// 
 			// mnuFind
 			// 
 			this.mnuFind.Image = global::Mesen.GUI.Properties.Resources.Find;
 			this.mnuFind.Name = "mnuFind";
-			this.mnuFind.Size = new System.Drawing.Size(152, 22);
+			this.mnuFind.Size = new System.Drawing.Size(145, 22);
 			this.mnuFind.Text = "Find...";
 			this.mnuFind.Click += new System.EventHandler(this.mnuFind_Click);
 			// 
@@ -680,7 +701,7 @@
 			// 
 			this.mnuFindNext.Image = global::Mesen.GUI.Properties.Resources.NextArrow;
 			this.mnuFindNext.Name = "mnuFindNext";
-			this.mnuFindNext.Size = new System.Drawing.Size(152, 22);
+			this.mnuFindNext.Size = new System.Drawing.Size(145, 22);
 			this.mnuFindNext.Text = "Find Next";
 			this.mnuFindNext.Click += new System.EventHandler(this.mnuFindNext_Click);
 			// 
@@ -688,16 +709,9 @@
 			// 
 			this.mnuFindPrev.Image = global::Mesen.GUI.Properties.Resources.PreviousArrow;
 			this.mnuFindPrev.Name = "mnuFindPrev";
-			this.mnuFindPrev.Size = new System.Drawing.Size(152, 22);
+			this.mnuFindPrev.Size = new System.Drawing.Size(145, 22);
 			this.mnuFindPrev.Text = "Find Previous";
 			this.mnuFindPrev.Click += new System.EventHandler(this.mnuFindPrev_Click);
-			// 
-			// mnuGoTo
-			// 
-			this.mnuGoTo.Name = "mnuGoTo";
-			this.mnuGoTo.Size = new System.Drawing.Size(152, 22);
-			this.mnuGoTo.Text = "Go To...";
-			this.mnuGoTo.Click += new System.EventHandler(this.mnuGoTo_Click);
 			// 
 			// tabMain
 			// 
@@ -776,17 +790,13 @@
 			this.ctrlProfiler.Size = new System.Drawing.Size(606, 343);
 			this.ctrlProfiler.TabIndex = 0;
 			// 
-			// mnuGoToAll
+			// mnuHighlightBreakpoints
 			// 
-			this.mnuGoToAll.Name = "mnuGoToAll";
-			this.mnuGoToAll.Size = new System.Drawing.Size(152, 22);
-			this.mnuGoToAll.Text = "Go to All";
-			this.mnuGoToAll.Click += new System.EventHandler(this.mnuGoToAll_Click);
-			// 
-			// toolStripMenuItem14
-			// 
-			this.toolStripMenuItem14.Name = "toolStripMenuItem14";
-			this.toolStripMenuItem14.Size = new System.Drawing.Size(149, 6);
+			this.mnuHighlightBreakpoints.CheckOnClick = true;
+			this.mnuHighlightBreakpoints.Name = "mnuHighlightBreakpoints";
+			this.mnuHighlightBreakpoints.Size = new System.Drawing.Size(236, 22);
+			this.mnuHighlightBreakpoints.Text = "Breakpoints";
+			this.mnuHighlightBreakpoints.Click += new System.EventHandler(this.mnuColorProviderOptions_Click);
 			// 
 			// frmMemoryViewer
 			// 
@@ -894,5 +904,6 @@
 		private System.Windows.Forms.ToolStripMenuItem mnuByteEditingMode;
 		private System.Windows.Forms.ToolStripMenuItem mnuGoToAll;
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem14;
+		private System.Windows.Forms.ToolStripMenuItem mnuHighlightBreakpoints;
 	}
 }

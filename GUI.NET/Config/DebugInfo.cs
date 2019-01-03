@@ -251,6 +251,7 @@ namespace Mesen.GUI.Config
 		public bool RamHideReadBytes = false;
 		public bool RamHideWrittenBytes = false;
 		public bool RamHideExecutedBytes = false;
+		public bool RamHighlightBreakpoints = false;
 		public bool RamHighlightLabelledBytes = false;
 		public bool RamHighlightChrDrawnBytes = false;
 		public bool RamHighlightChrReadBytes = false;

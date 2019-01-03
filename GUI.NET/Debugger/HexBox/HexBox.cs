@@ -2548,17 +2548,20 @@ namespace Be.Windows.Forms
 			g.DrawString(sB.Substring(1, 1), Font, brush, headerPointF, _stringFormat);
 		}
 
-		void PaintHexStringSelected(Graphics g, string hexString, Brush brush, Brush brushBack, Point gridPoint)
+		void PaintHexStringSelected(Graphics g, string hexString, Brush brush, Brush brushBack, Point gridPoint, Color borderColor)
 		{
 			PointF bytePointF = GetBytePointF(gridPoint);
 
 			float width = hexString.Length * _charSize.Width;
 			float xPos = bytePointF.X - _charSize.Width / 2;
 
-			if(HighDensityMode) {
-				g.FillRectangle(brushBack, xPos, bytePointF.Y + _highDensityModeOffset, width, _charSize.Height);
-			} else {
-				g.FillRectangle(brushBack, xPos, bytePointF.Y, width, _charSize.Height);
+			float offset = HighDensityMode ? _highDensityModeOffset : 0;
+			g.FillRectangle(brushBack, xPos, bytePointF.Y + offset, width, _charSize.Height);
+
+			if(!borderColor.IsEmpty) {
+				using(Pen p = new Pen(borderColor, 2)) {
+					g.DrawRectangle(p, xPos, bytePointF.Y + offset, width - 1, _charSize.Height - 1);
+				}
 			}
 
 			if(_selectionLength == 0 && _caretPos.Y == bytePointF.Y && _caretPos.X >= bytePointF.X && _caretPos.X <= bytePointF.X + width) {
@@ -2602,15 +2605,24 @@ namespace Be.Windows.Forms
 			bool forceDraw = false;
 			float prevXOffset = 0;
 			bool prevSelected = false;
-			Color prevByteColor = Color.Transparent;
-			Color prevBgColor = Color.Transparent;
-			Color prevDrawnColor = Color.Transparent;
+
+			ByteColors defaultColors = new ByteColors() {
+				ForeColor = defaultForeColor,
+				BackColor = Color.Transparent,
+				BorderColor = Color.Transparent
+			};
+
+			ByteColors prevColors = new ByteColors() {
+				ForeColor = defaultForeColor,
+				BackColor = Color.Transparent,
+				BorderColor = Color.Transparent
+			};
 
 			Point gridPoint = GetGridBytePoint(0);
 			List<byte> bytesToDisplay = new List<byte>();
 			string stringToDisplay = string.Empty;
 			float caretWidth = 0;
-			Action<Color, Color> outputHex = (Color byteColor, Color bgColor) => {
+			Action<Color, Color, Color> outputHex = (Color byteColor, Color bgColor, Color borderColor) => {
 				StringBuilder sb = new StringBuilder();
 				foreach(byte b in bytesToDisplay) {
 					sb.Append(b.ToString("X2"));
@@ -2633,14 +2645,19 @@ namespace Be.Windows.Forms
 				};
 
 				using(Brush fgBrush = new SolidBrush(byteColor)) {
-					if(bgColor != Color.Transparent) {
+					if(bgColor != Color.Transparent || !borderColor.IsEmpty) {
 						using(Brush bgBrush = new SolidBrush(bgColor)) {
-							PaintHexStringSelected(g, sb.ToString(), fgBrush, bgBrush, gridPoint);
+							PaintHexStringSelected(g, sb.ToString(), fgBrush, bgBrush, gridPoint, borderColor);
 
 							//Draw string view
 							SizeF stringSize = g.MeasureString(stringToDisplay, Font, 1000, _stringFormat);
 							float yPos = bytePointF.Y + (HighDensityMode ? _highDensityModeOffset : 0);
 							g.FillRectangle(bgBrush, xPos, yPos, stringSize.Width, _charSize.Height);
+
+							using(Pen p = new Pen(borderColor, 2)) {
+								g.DrawRectangle(p, xPos, yPos, stringSize.Width - 1, _charSize.Height - 1);
+							}
+
 							drawCaret();
 							g.DrawString(stringToDisplay, Font, fgBrush, new PointF(xPos, bytePointF.Y), _stringFormat);
 						}
@@ -2651,19 +2668,19 @@ namespace Be.Windows.Forms
 						drawCaret();
 						g.DrawString(stringToDisplay, Font, fgBrush, new PointF(xPos, bytePointF.Y), _stringFormat);
 					}
-				}				
+				}
 
-				prevDrawnColor = bgColor;
 				bytesToDisplay = new List<byte>();
 				stringToDisplay = string.Empty;
 			};
 
 			for(long i = startByte; i < intern_endByte + 1; i++) {
-				Color byteColor = defaultForeColor;
-				Color bgColor = Color.Transparent;
+				ByteColors colors;
 				bool isSelectedByte = i >= _bytePos && i <= (_bytePos + _selectionLength - 1) && _selectionLength != 0;
 				if(this.ByteColorProvider != null) {
-					byteColor = this.ByteColorProvider.GetByteColor(_startByte, i, out bgColor);
+					colors = this.ByteColorProvider.GetByteColor(_startByte, i);
+				} else {
+					colors = defaultColors;
 				}
 
 				counter++;
@@ -2682,8 +2699,8 @@ namespace Be.Windows.Forms
 					lineChanged = true;
 				}
 
-				if(forceDraw || lineChanged || byteColor != prevByteColor || bgColor != prevBgColor || prevSelected != isSelectedByte) {
-					outputHex(this.ByteColorProvider != null ? prevByteColor : (prevSelected ? _selectionForeColor : defaultForeColor), prevSelected ? _selectionBackColor : prevBgColor);
+				if(forceDraw || lineChanged || colors.ForeColor != prevColors.ForeColor || colors.BackColor != prevColors.BackColor || colors.BorderColor != prevColors.BorderColor || prevSelected != isSelectedByte) {
+					outputHex(this.ByteColorProvider != null ? prevColors.ForeColor : (prevSelected ? _selectionForeColor : defaultForeColor), prevSelected ? _selectionBackColor : prevColors.BackColor, prevColors.BorderColor);
 					gridPoint = GetGridBytePoint(counter);
 					prevXOffset = xOffset;
 					forceDraw = false;
@@ -2693,8 +2710,9 @@ namespace Be.Windows.Forms
 				bytesToDisplay.Add(b);
 
 				prevSelected = isSelectedByte;
-				prevBgColor = bgColor;
-				prevByteColor = byteColor;
+				prevColors.ForeColor = colors.ForeColor;
+				prevColors.BackColor = colors.BackColor;
+				prevColors.BorderColor = colors.BorderColor;
 
 				if(!_stringViewVisible) {
 					continue;
@@ -2745,7 +2763,7 @@ namespace Be.Windows.Forms
 				xOffset += width - _charSize.Width;
 				xPrevious = xPos + width;
 			}
-			outputHex(this.ByteColorProvider != null ? prevByteColor : (prevSelected ? _selectionForeColor : defaultForeColor), prevSelected ? _selectionBackColor : prevBgColor);
+			outputHex(this.ByteColorProvider != null ? prevColors.ForeColor : (prevSelected ? _selectionForeColor : defaultForeColor), prevSelected ? _selectionBackColor : prevColors.BackColor, prevColors.BorderColor);
 		}
 
 		float GetLineWidth(int y)
