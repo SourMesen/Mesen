@@ -1272,9 +1272,14 @@ namespace Mesen.GUI.Debugger
 			this.UpdateDebugger(false);
 		}
 
-		private void ctrlFunctionList_OnFunctionSelected(object relativeAddress, EventArgs e)
+		private void ctrlFunctionList_OnFunctionSelected(GoToDestination dest)
 		{
-			LastCodeWindow.ScrollToLineNumber((Int32)relativeAddress);
+			GoToDestination(LastCodeWindow, dest);
+		}
+
+		private void ctrlLabelList_OnLabelSelected(GoToDestination dest)
+		{
+			GoToDestination(LastCodeWindow, dest);
 		}
 
 		private void LabelManager_OnLabelUpdated(object sender, EventArgs e)
@@ -1283,11 +1288,6 @@ namespace Mesen.GUI.Debugger
 			ctrlLabelList.UpdateLabelList();
 			ctrlFunctionList.UpdateFunctionList(true);
 			UpdateDebugger(false, false);
-		}
-
-		private void ctrlLabelList_OnLabelSelected(object relativeAddress, EventArgs e)
-		{
-			LastCodeWindow.ScrollToLineNumber((Int32)relativeAddress);
 		}
 
 		private void mnuResetWorkspace_Click(object sender, EventArgs e)
@@ -1767,8 +1767,20 @@ namespace Mesen.GUI.Debugger
 				if(target is ctrlSourceViewer) {
 					((ctrlSourceViewer)target).ScrollToFileLine(dest.File, dest.Line);
 				}
-			} else if(dest.Label != null && dest.Label.GetRelativeAddress() >= 0) {
-				target.ScrollToAddress(new AddressTypeInfo() { Address = (int)dest.Label.Address, Type = dest.Label.AddressType });
+			} else {
+				AddressTypeInfo addressInfo = dest.AddressInfo;
+				if(addressInfo == null && dest.Label != null) {
+					addressInfo = new AddressTypeInfo() { Address = (int)dest.Label.Address, Type = dest.Label.AddressType };
+				}
+
+				if(InteropEmu.DebugGetRelativeAddress((uint)addressInfo.Address, addressInfo.Type) < 0) {
+					//Try to display the label in the source view if possible (when code is out of scope)
+					if(ctrlSourceViewer.CurrentFile != null && !(target is ctrlSourceViewer)) {
+						ctrlDebuggerCode_OnSwitchView(target);
+						target = GetAlternateView(target);
+					}
+				}
+				target.ScrollToAddress(addressInfo);
 			}
 		}
 

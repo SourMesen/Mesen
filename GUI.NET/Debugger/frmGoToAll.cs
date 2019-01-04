@@ -328,6 +328,8 @@ namespace Mesen.GUI.Debugger
 		}
 	}
 
+	public delegate void GoToDestinationEventHandler(GoToDestination dest);
+
 	public struct GoToDestination
 	{
 		public CodeLabel Label;

@@ -458,7 +458,7 @@ namespace Mesen.GUI.Debugger
 			this.ctrlLabelList.Size = new System.Drawing.Size(306, 177);
 			this.ctrlLabelList.TabIndex = 0;
 			this.ctrlLabelList.OnFindOccurrence += new System.EventHandler(this.ctrlLabelList_OnFindOccurrence);
-			this.ctrlLabelList.OnLabelSelected += new System.EventHandler(this.ctrlLabelList_OnLabelSelected);
+			this.ctrlLabelList.OnLabelSelected += new GoToDestinationEventHandler(this.ctrlLabelList_OnLabelSelected);
 			// 
 			// grpFunctions
 			// 
@@ -479,7 +479,7 @@ namespace Mesen.GUI.Debugger
 			this.ctrlFunctionList.Size = new System.Drawing.Size(306, 177);
 			this.ctrlFunctionList.TabIndex = 0;
 			this.ctrlFunctionList.OnFindOccurrence += new System.EventHandler(this.ctrlFunctionList_OnFindOccurrence);
-			this.ctrlFunctionList.OnFunctionSelected += new System.EventHandler(this.ctrlFunctionList_OnFunctionSelected);
+			this.ctrlFunctionList.OnFunctionSelected += new GoToDestinationEventHandler(this.ctrlFunctionList_OnFunctionSelected);
 			// 
 			// picWatchHelp
 			// 

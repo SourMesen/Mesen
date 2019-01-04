@@ -17,7 +17,7 @@ namespace Mesen.GUI.Debugger.Controls
 	public partial class ctrlLabelList : BaseControl
 	{
 		public event EventHandler OnFindOccurrence;
-		public event EventHandler OnLabelSelected;
+		public event GoToDestinationEventHandler OnLabelSelected;
 
 		private List<ListViewItem> _listItems = new List<ListViewItem>();
 		private int _sortColumn = 0;
@@ -178,10 +178,11 @@ namespace Mesen.GUI.Debugger.Controls
 		{
 			if(lstLabels.SelectedIndices.Count > 0) {
 				Int32 relativeAddress = (Int32)GetSelectedItem().Tag;
-
-				if(relativeAddress >= 0) {
-					OnLabelSelected?.Invoke(relativeAddress, e);
-				}
+				CodeLabel label = (CodeLabel)GetSelectedItem().SubItems[1].Tag;
+				OnLabelSelected?.Invoke(new GoToDestination() {
+					CpuAddress = relativeAddress,
+					Label = label
+				});
 			}
 		}
 		

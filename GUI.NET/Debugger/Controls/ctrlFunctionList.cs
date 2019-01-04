@@ -16,7 +16,7 @@ namespace Mesen.GUI.Debugger.Controls
 	public partial class ctrlFunctionList : BaseControl
 	{
 		public event EventHandler OnFindOccurrence;
-		public event EventHandler OnFunctionSelected;
+		public event GoToDestinationEventHandler OnFunctionSelected;
 
 		private List<ListViewItem> _listItems = new List<ListViewItem>();
 		private Dictionary<Int32, ListViewItem> _functions = new Dictionary<int, ListViewItem>();
@@ -134,10 +134,11 @@ namespace Mesen.GUI.Debugger.Controls
 		{
 			if(lstFunctions.SelectedIndices.Count > 0) {
 				Int32 relativeAddress = (Int32)GetSelectedItem().SubItems[1].Tag;
-
-				if(relativeAddress >= 0) {
-					OnFunctionSelected?.Invoke(relativeAddress, e);
-				}
+				Int32 absoluteAddress = (Int32)GetSelectedItem().SubItems[2].Tag;
+				OnFunctionSelected?.Invoke(new GoToDestination() {
+					AddressInfo = new AddressTypeInfo() { Address = absoluteAddress, Type = AddressType.PrgRom },
+					CpuAddress = relativeAddress
+				});
 			}
 		}
 
@@ -204,7 +205,12 @@ namespace Mesen.GUI.Debugger.Controls
 
 		private void lstFunctions_SearchForVirtualItem(object sender, SearchForVirtualItemEventArgs e)
 		{
-
+			for(int i = 0; i < _listItems.Count; i++) {
+				if(_listItems[i].Text.StartsWith(e.Text, StringComparison.InvariantCultureIgnoreCase)) {
+					e.Index = i;
+					return;
+				}
+			}
 		}
 	}
 }
