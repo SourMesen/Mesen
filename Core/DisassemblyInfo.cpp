@@ -193,6 +193,11 @@ uint16_t DisassemblyInfo::GetJumpDestination(uint16_t pc, MemoryManager* memoryM
 	} else if(_opMode == AddrMode::Ind) {
 		return GetIndirectJumpDestination(memoryManager);
 	}
+#ifdef _DEBUG
+	throw std::runtime_error("Invalid jump operation");
+#else
+	return 0;
+#endif
 }
 
 uint16_t DisassemblyInfo::GetIndirectJumpDestination(MemoryManager* memoryManager)
