@@ -231,11 +231,6 @@ namespace Mesen.GUI.Debugger
 			}
 		}
 		
-		private void ctrlCodeViewer_MouseLeave(object sender, EventArgs e)
-		{
-			_tooltipManager.Close();
-		}
-		
 		private Breakpoint GetCurrentLineBreakpoint()
 		{
 			AddressTypeInfo addressInfo = GetAddressInfo(ctrlCodeViewer.SelectedLine);
@@ -253,8 +248,6 @@ namespace Mesen.GUI.Debugger
 			} else {
 				this.ctrlCodeViewer.ContextMenuStrip = _codeViewerActions.contextMenu;
 			}
-
-			_tooltipManager.ProcessMouseMove(e.Location);
 		}
 
 		protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
@@ -270,8 +263,6 @@ namespace Mesen.GUI.Debugger
 
 		private void ctrlCodeViewer_MouseDown(object sender, MouseEventArgs e)
 		{
-			_tooltipManager.Close();
-
 			if(e.Button == MouseButtons.Left && e.Location.X < this.ctrlCodeViewer.CodeMargin / 4) {
 				_codeViewerActions.ToggleBreakpoint(false);
 			}
@@ -296,12 +287,7 @@ namespace Mesen.GUI.Debugger
 				}
 			}
 		}
-
-		private void ctrlCodeViewer_ScrollPositionChanged(object sender, EventArgs e)
-		{
-			_tooltipManager?.Close();
-		}
-
+		
 		private void ctrlCodeViewer_MouseDoubleClick(object sender, MouseEventArgs e)
 		{
 			if(e.Location.X > this.ctrlCodeViewer.CodeMargin / 2 && e.Location.X < this.ctrlCodeViewer.CodeMargin) {

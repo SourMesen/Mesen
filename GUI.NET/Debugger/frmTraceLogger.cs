@@ -24,6 +24,7 @@ namespace Mesen.GUI.Debugger
 		private string _previousTrace;
 		private volatile bool _refreshRunning;
 		private bool _initialized;
+		private CodeTooltipManager _tooltipManager;
 
 		public frmTraceLogger()
 		{
@@ -35,6 +36,8 @@ namespace Mesen.GUI.Debugger
 				this.Size = debugInfo.TraceLoggerSize;
 				this.Location = debugInfo.TraceLoggerLocation;
 			}
+
+			_tooltipManager = new CodeTooltipManager(this, txtTraceLog);
 
 			txtTraceLog.BaseFont = new Font(debugInfo.TraceFontFamily, debugInfo.TraceFontSize, debugInfo.TraceFontStyle);
 			txtTraceLog.TextZoom = debugInfo.TraceTextZoom;

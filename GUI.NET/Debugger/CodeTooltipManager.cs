@@ -11,7 +11,7 @@ using System.Windows.Forms;
 
 namespace Mesen.GUI.Debugger
 {
-	class CodeTooltipManager
+	class CodeTooltipManager : IDisposable
 	{
 		private string _hoverLastWord = "";
 		private int _hoverLastLineAddress = -1;
@@ -27,6 +27,11 @@ namespace Mesen.GUI.Debugger
 		{
 			_owner = owner;
 			_codeViewer = codeViewer;
+
+			_codeViewer.MouseMove += ctrlCodeViewer_MouseMove;
+			_codeViewer.MouseLeave += ctrlCodeViewer_MouseLeave;
+			_codeViewer.MouseDown += ctrlCodeViewer_MouseDown;
+			_codeViewer.ScrollPositionChanged += ctrlCodeViewer_ScrollPositionChanged;
 		}
 
 		public void ShowTooltip(string word, Dictionary<string, string> values, int lineAddress, AddressTypeInfo previewAddress)
@@ -195,6 +200,34 @@ namespace Mesen.GUI.Debugger
 					this.Close();
 				}
 			}
+		}
+
+		private void ctrlCodeViewer_MouseMove(object sender, MouseEventArgs e)
+		{
+			ProcessMouseMove(e.Location);
+		}
+
+		private void ctrlCodeViewer_MouseLeave(object sender, EventArgs e)
+		{
+			Close();
+		}
+
+		private void ctrlCodeViewer_MouseDown(object sender, MouseEventArgs e)
+		{
+			Close();
+		}
+
+		private void ctrlCodeViewer_ScrollPositionChanged(object sender, EventArgs e)
+		{
+			Close();
+		}
+
+		public void Dispose()
+		{
+			_codeViewer.MouseMove -= ctrlCodeViewer_MouseMove;
+			_codeViewer.MouseLeave -= ctrlCodeViewer_MouseLeave;
+			_codeViewer.MouseDown -= ctrlCodeViewer_MouseDown;
+			_codeViewer.ScrollPositionChanged -= ctrlCodeViewer_ScrollPositionChanged;
 		}
 	}
 }

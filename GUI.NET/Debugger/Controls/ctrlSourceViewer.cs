@@ -257,8 +257,6 @@ namespace Mesen.GUI.Debugger.Controls
 			} else {
 				this.ctrlCodeViewer.ContextMenuStrip = _codeViewerActions.contextMenu;
 			}
-
-			_tooltipManager.ProcessMouseMove(e.Location);
 		}
 
 		private void ctrlCodeViewer_MouseDown(object sender, MouseEventArgs e)
@@ -324,16 +322,6 @@ namespace Mesen.GUI.Debugger.Controls
 			} else {
 				e.Cancel = true;
 			}
-		}
-
-		private void ctrlCodeViewer_MouseLeave(object sender, EventArgs e)
-		{
-			_tooltipManager.Close();
-		}
-
-		private void ctrlCodeViewer_ScrollPositionChanged(object sender, EventArgs e)
-		{
-			_tooltipManager?.Close();
 		}
 
 		public void ScrollToFileLine(string filename, int lineNumber)

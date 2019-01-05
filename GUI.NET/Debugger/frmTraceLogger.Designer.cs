@@ -16,6 +16,10 @@
 			if(disposing && (components != null)) {
 				components.Dispose();
 			}
+			if(_tooltipManager != null) {
+				_tooltipManager.Dispose();
+				_tooltipManager = null;
+			}
 			base.Dispose(disposing);
 		}
 
