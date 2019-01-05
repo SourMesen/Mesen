@@ -498,9 +498,10 @@ namespace Mesen.GUI.Debugger
 
 		public int GetLineIndexAtPosition(int yPos)
 		{
-			int charIndex;
-			int lineIndex;
-			GetCharIndex(new Point(0, yPos), out charIndex, out lineIndex);
+			int lineIndex = this.ScrollPosition + this.GetLineAtPosition(yPos);
+			if(lineIndex > _contents.Length && _contents.Length != 0) {
+				lineIndex = _contents.Length - 1;
+			}
 			return lineIndex;
 		}
 
@@ -515,29 +516,20 @@ namespace Mesen.GUI.Debugger
 
 		private bool GetCharIndex(Point position, out int charIndex, out int lineIndex)
 		{
-			charIndex = -1;
+			charIndex = int.MaxValue;
 			using(Graphics g = Graphics.FromHwnd(this.Handle)) {
 				int marginLeft = this.GetMargin(g, true);
-				int positionX = position.X - marginLeft;
-				lineIndex = this.ScrollPosition + this.GetLineAtPosition(position.Y);
-				if(lineIndex > _contents.Length && _contents.Length != 0) {
-					lineIndex = _contents.Length - 1;
+				lineIndex = this.GetLineIndexAtPosition(position.Y);
+				if(lineIndex >= _contents.Length) {
+					return false;
 				}
 
-				if(positionX >= 0 && lineIndex < _contents.Length) {
-					string text = this.GetFullWidthString(lineIndex).Trim();
-					//Adjust background color highlights based on number of spaces in front of content
-					positionX -= (LineIndentations != null ? LineIndentations[lineIndex] : 0);
-
-					int previousWidth = 0;
-					for(int i = 0, len = text.Length; i < len; i++) {
-						int width = (int)g.MeasureString(text.Substring(0, i+1), this.Font, int.MaxValue, StringFormat.GenericTypographic).Width;
-						if(width >= positionX && previousWidth <= positionX) {
-							charIndex = i;
-							return true;
-						}
-						previousWidth = width;
-					}
+				int positionX = position.X - marginLeft;
+				positionX -= (LineIndentations != null ? LineIndentations[lineIndex] : 0);
+				if(positionX >= 0) {
+					float charWidth = g.MeasureString("W", this.Font, int.MaxValue, StringFormat.GenericTypographic).Width;
+					charIndex = (int)(positionX / charWidth);
+					return true;
 				}
 			}
 			return false;
@@ -549,22 +541,23 @@ namespace Mesen.GUI.Debugger
 			int charIndex; 
 			int lineIndex;
 			if(this.GetCharIndex(position, out charIndex, out lineIndex)) {
-				string text = this.GetFullWidthString(lineIndex).Trim();
-				
-				if(_wordDelimiters.Contains(text[charIndex])) {
-					return string.Empty;
-				} else {
-					int endIndex = text.IndexOfAny(_wordDelimiters, charIndex);
-					if(endIndex == -1) {
-						endIndex = text.Length;
-					}
-					int startIndex = text.LastIndexOfAny(_wordDelimiters, charIndex);
-					
-					if(startIndex >= 0 && text[startIndex] == '#' && text.Length > startIndex && text[startIndex + 1] == '$') {
-						//Special case for immediate values. e.g: we want to show a tooltip for #MyLabel, but not for #$EF
-						return text.Substring(startIndex, endIndex - startIndex);
+				string text = this.GetFullWidthString(lineIndex);
+				if(charIndex < text.Length) {
+					if(_wordDelimiters.Contains(text[charIndex])) {
+						return string.Empty;
 					} else {
-						return text.Substring(startIndex + 1, endIndex - startIndex - 1);
+						int endIndex = text.IndexOfAny(_wordDelimiters, charIndex);
+						if(endIndex == -1) {
+							endIndex = text.Length;
+						}
+						int startIndex = text.LastIndexOfAny(_wordDelimiters, charIndex);
+
+						if(startIndex >= 0 && text[startIndex] == '#' && text.Length > startIndex && text[startIndex + 1] == '$') {
+							//Special case for immediate values. e.g: we want to show a tooltip for #MyLabel, but not for #$EF
+							return text.Substring(startIndex, endIndex - startIndex);
+						} else {
+							return text.Substring(startIndex + 1, endIndex - startIndex - 1);
+						}
 					}
 				}
 			}
