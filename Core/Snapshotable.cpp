@@ -99,8 +99,6 @@ void Snapshotable::LoadSnapshot(istream* file, uint32_t stateVersion)
 	file->read((char*)_stream, _streamSize);
 	StreamState(_saving);
 
-	AfterLoadState();
-
 	delete[] _stream;
 
 	if(_blockBuffer) {
