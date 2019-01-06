@@ -3,6 +3,7 @@
 #include <stack>
 #include <deque>
 #include <unordered_map>
+#include <unordered_set>
 #include "../Utilities/SimpleLock.h"
 #include "DebuggerTypes.h"
 
@@ -98,6 +99,7 @@ private:
 	static const vector<int> _binaryPrecedence;
 	static const vector<string> _unaryOperators;
 	static const vector<int> _unaryPrecedence;
+	static const std::unordered_set<string> _operators;
 
 	std::unordered_map<string, ExpressionData, StringHasher> _cache;
 	SimpleLock _cacheLock;
@@ -122,4 +124,8 @@ public:
 	ExpressionData GetRpnList(string expression, bool &success);
 
 	bool Validate(string expression);
+
+#if _DEBUG
+	void RunTests();
+#endif
 };

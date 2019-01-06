@@ -60,6 +60,10 @@ Debugger::Debugger(shared_ptr<Console> console, shared_ptr<CPU> cpu, shared_ptr<
 	_bpExpEval.reset(new ExpressionEvaluator(this));
 	_watchExpEval.reset(new ExpressionEvaluator(this));
 
+#if _DEBUG
+	_bpExpEval->RunTests();
+#endif
+
 	_stepOut = false;
 	_stepCount = -1;
 	_stepOverAddr = -1;

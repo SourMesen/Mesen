@@ -12,6 +12,7 @@ const vector<string> ExpressionEvaluator::_binaryOperators = { { "*", "/", "%", 
 const vector<int> ExpressionEvaluator::_binaryPrecedence = { { 10,  10,  10,   9,   9,    8,    8,   7,   7,    7,    7,    6,    6,   5,   4,   3,    2,    1 } };
 const vector<string> ExpressionEvaluator::_unaryOperators = { { "+", "-", "~", "!" } };
 const vector<int> ExpressionEvaluator::_unaryPrecedence = { { 11,  11,  11,  11 } };
+const std::unordered_set<string> ExpressionEvaluator::_operators = { { "*", "/", "%", "+", "-", "<<", ">>", "<", "<=", ">", ">=", "==", "!=", "&", "^", "|", "&&", "||", "~", "!", "(", ")", "{", "}", "[", "]" } };
 
 bool ExpressionEvaluator::IsOperator(string token, int &precedence, bool unaryOperator)
 {
@@ -118,68 +119,46 @@ bool ExpressionEvaluator::CheckSpecialTokens(string expression, size_t &pos, str
 string ExpressionEvaluator::GetNextToken(string expression, size_t &pos, ExpressionData &data)
 {
 	string output;
-	bool isOperator = false;
-	bool isNumber = false;
-	bool isHex = false;
-	size_t initialPos = pos;
-	for(size_t len = expression.size(); pos < len; pos++) {
-		char c = std::tolower(expression[pos]);
-
-		if(c == '$' && pos == initialPos) {
-			isHex = true;
-		} else if((c >= '0' && c <= '9') || (isHex && c >= 'a' && c <= 'f')) {
-			if(isNumber || output.empty()) {
-				output += c;
-				isNumber = true;
-			} else {
-				//Just hit the start of a number, done reading current token
-				break;
-			}
-		} else if(isNumber) {
-			//First non-numeric character, done
-			break;
-		} else if(c == '(' || c == ')' || c == '[' || c == ']' || c == '{' || c == '}' || c == '-' || c == '+' || c == '~') {
-			if(output.empty()) {
-				output += c;
-				pos++;
-			}
-			break;
-		} else if(c == '!') {
-			//Figure out if it's ! or !=
-			if(pos < len - 1) {
-				if(expression[pos + 1] == '=') {
-					output += "!=";
-					pos+=2;
-				} else {
-					output += "!";
-					pos++;
-				}
-			}
-			break;
-		} else {
-			if(c == '$') {
-				break;
-			} else if((c < 'a' || c > 'z') && c != '_' && c != '@') {
-				//Not a number, not a letter, this is an operator
-				isOperator = true;
+	char c = std::tolower(expression[pos]);
+	if(c == '$') {
+		//Hex numbers
+		pos++;
+		for(size_t len = expression.size(); pos < len; pos++) {
+			c = std::tolower(expression[pos]);
+			if((c >= '0' && c <= '9') || (c >= 'a' && c <= 'f')) {
 				output += c;
 			} else {
-				if(isOperator) {
-					break;
-				} else {
-					if(output.empty()) {
-						if(CheckSpecialTokens(expression, pos, output, data)) {
-							break;
-						}
-					}
-					output += c;
-				}
+				break;
 			}
 		}
-	}
-
-	if(isHex) {
-		output = std::to_string(HexUtilities::FromHex(output));
+		output = std::to_string((uint32_t)HexUtilities::FromHex(output));
+	} else if(c >= '0' && c <= '9') {
+		//Regular numbers
+		for(size_t len = expression.size(); pos < len; pos++) {
+			c = std::tolower(expression[pos]);
+			if(c >= '0' && c <= '9') {
+				output += c;
+			} else {
+				break;
+			}
+		}
+	} else if((c < 'a' || c > 'z') && c != '_' && c != '@') {
+		//Operators
+		string operatorToken;
+		for(size_t len = expression.size(); pos < len; pos++) {
+			c = std::tolower(expression[pos]);
+			operatorToken += c;
+			if(output.empty() || _operators.find(operatorToken) != _operators.end()) {
+				//If appending the next char results in a valid operator, append it (or if this is the first character)
+				output += c;
+			} else {
+				//Reached the end of the operator, return
+				break;
+			}
+		}
+	} else {
+		//Special tokens and labels
+		CheckSpecialTokens(expression, pos, output, data);
 	}
 
 	return output;
@@ -231,13 +210,12 @@ bool ExpressionEvaluator::ToRpn(string expression, ExpressionData &data)
 		int precedence = 0;
 		if(IsOperator(token, precedence, unaryOperator)) {
 			EvalOperators op = GetOperator(token, unaryOperator);
-			if(!opStack.empty()) {
-				EvalOperators topOp = opStack.top();
-				if((unaryOperator && precedence < precedenceStack.top()) || (!unaryOperator && precedence <= precedenceStack.top())) {
-					opStack.pop();
-					precedenceStack.pop();
-					data.RpnQueue.push_back(topOp);
-				}
+			bool rightAssociative = unaryOperator;
+			while(!opStack.empty() && ((rightAssociative && precedence < precedenceStack.top()) || (!rightAssociative && precedence <= precedenceStack.top()))) {
+				//Pop operators from the stack until we find something with higher priority (or empty the stack)
+				data.RpnQueue.push_back(opStack.top());
+				opStack.pop();
+				precedenceStack.pop();
 			}
 			opStack.push(op);
 			precedenceStack.push(precedence);
@@ -447,6 +425,7 @@ int32_t ExpressionEvaluator::PrivateEvaluate(string expression, DebugState &stat
 	ExpressionData *cachedData = PrivateGetRpnList(expression, success);
 
 	if(!success) {
+		resultType = EvalResultType::Invalid;
 		return 0;
 	}
 
@@ -480,3 +459,48 @@ bool ExpressionEvaluator::Validate(string expression)
 		return false;
 	}
 }
+
+#if _DEBUG
+#include <assert.h>
+void ExpressionEvaluator::RunTests()
+{
+	//Some basic unit tests to run in debug mode
+	auto test = [=](string expr, EvalResultType expectedType, int expectedResult) {
+		DebugState state = { 0 };
+		OperationInfo opInfo = { 0 };
+		EvalResultType type;
+		int32_t result = Evaluate(expr, state, type, opInfo);
+
+		assert(type == expectedType);
+		assert(result == expectedResult);
+	};
+	
+	test("1 - -1", EvalResultType::Numeric, 2);
+	test("1 - (-1)", EvalResultType::Numeric, 2);
+	test("1 - -(-1)", EvalResultType::Numeric, 0);
+	test("(0 - 1) == -1 && 5 < 10", EvalResultType::Boolean, true);
+	test("(0 - 1) == 0 || 5 < 10", EvalResultType::Boolean, true);
+	test("(0 - 1) == 0 || 5 < -10", EvalResultType::Boolean, false);
+	test("(0 - 1) == 0 || 15 < 10", EvalResultType::Boolean, false);
+
+	test("10 != $10", EvalResultType::Boolean, true);
+	test("10 == $A", EvalResultType::Boolean, true);
+	test("10 == $0A", EvalResultType::Boolean, true);
+
+	test("(0 - 1 == 0 || 15 < 10", EvalResultType::Invalid, 0);
+	test("10 / 0", EvalResultType::DivideBy0, 0);
+
+	test("x + 5", EvalResultType::Numeric, 5);
+	test("x == 0", EvalResultType::Boolean, true);
+	test("x == y", EvalResultType::Boolean, true);
+	test("x == y == scanline", EvalResultType::Boolean, false); //because (x == y) is true, and true != scanline
+	test("x == y && !(a == x)", EvalResultType::Boolean, false);
+
+	test("(~0 & ~1) & $FFF == $FFE", EvalResultType::Numeric, 0); //because of operator priority (& is done after ==)
+	test("((~0 & ~1) & $FFF) == $FFE", EvalResultType::Boolean, true);
+
+	test("1+3*3+10/(3+4)", EvalResultType::Numeric, 11);
+	test("(1+3*3+10)/(3+4)", EvalResultType::Numeric, 2);
+	test("(1+3*3+10)/3+4", EvalResultType::Numeric, 10);
+}
+#endif
