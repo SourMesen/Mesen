@@ -181,7 +181,7 @@ namespace Mesen.GUI.Debugger
 
 					foreach(Ld65DbgImporter.SymbolInfo symbol in _symbolProvider.GetSymbols()) {
 						if(Contains(symbol.Name, searchStrings)) {
-							Ld65DbgImporter.DefinitionInfo def = _symbolProvider.GetSymbolDefinition(symbol);
+							Ld65DbgImporter.ReferenceInfo def = _symbolProvider.GetSymbolDefinition(symbol);
 							AddressTypeInfo addressInfo = _symbolProvider.GetSymbolAddressInfo(symbol);
 							int value = 0;
 							int relAddress = -1;
@@ -214,7 +214,7 @@ namespace Mesen.GUI.Debugger
 								SearchResultType = resultType,
 								Value = value,
 								Filename = def?.FileName ?? "",
-								FileLineNumber = def?.Line ?? 0,
+								FileLineNumber = def?.LineNumber ?? 0,
 								RelativeAddress = relAddress,
 								CodeLabel = LabelManager.GetLabel(symbol.Name)
 							});
@@ -330,7 +330,7 @@ namespace Mesen.GUI.Debugger
 
 	public delegate void GoToDestinationEventHandler(GoToDestination dest);
 
-	public struct GoToDestination
+	public class GoToDestination
 	{
 		public CodeLabel Label;
 		public AddressTypeInfo AddressInfo;

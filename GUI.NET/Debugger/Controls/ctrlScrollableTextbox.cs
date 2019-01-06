@@ -549,9 +549,9 @@ namespace Mesen.GUI.Debugger
 			}
 		}
 
-		public List<Tuple<int, int, string>> FindAllOccurrences(string text, bool matchWholeWord, bool matchCase)
+		public string GetLineContent(int lineIndex)
 		{
-			return this.ctrlTextbox.FindAllOccurrences(text, matchWholeWord, matchCase);
+			return this.ctrlTextbox.GetFullWidthString(lineIndex);
 		}
 
 		public void NavigateForward()
@@ -569,8 +569,15 @@ namespace Mesen.GUI.Debugger
 			rangeStart = -1;
 			rangeEnd = -1;
 			int lineIndex = GetLineIndexAtPosition(yPos);
+
+			while(lineIndex < LineCount - 2 && string.IsNullOrWhiteSpace(GetLineNoteAtLineIndex(lineIndex))) {
+				//Find the address of the next line with an address
+				lineIndex++;
+			}
+
 			if(Int32.TryParse(GetLineNoteAtLineIndex(lineIndex), NumberStyles.AllowHexSpecifier, null, out rangeStart)) {
 				while(lineIndex < LineCount - 2 && string.IsNullOrWhiteSpace(GetLineNoteAtLineIndex(lineIndex + 1))) {
+					//Find the next line with an address
 					lineIndex++;
 				}
 				if(Int32.TryParse(GetLineNoteAtLineIndex(lineIndex + 1), NumberStyles.AllowHexSpecifier, null, out rangeEnd)) {

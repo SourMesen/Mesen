@@ -210,18 +210,22 @@ namespace Mesen.GUI.Debugger
 
 			ctrlDebuggerCode.CodeViewerActions.OnSetNextStatement += ctrlDebuggerCode_OnSetNextStatement;
 			ctrlDebuggerCode.CodeViewerActions.OnShowInSplitView += ctrlDebuggerCode_OnShowInSplitView;
+			ctrlDebuggerCode.CodeViewerActions.OnGoToDestination += ctrlDebuggerCode_OnGoToDestination;
 			ctrlDebuggerCode.CodeViewerActions.OnSwitchView += ctrlDebuggerCode_OnSwitchView;
 
 			ctrlDebuggerCodeSplit.CodeViewerActions.OnSetNextStatement += ctrlDebuggerCode_OnSetNextStatement;
 			ctrlDebuggerCodeSplit.CodeViewerActions.OnShowInSplitView += ctrlDebuggerCode_OnShowInSplitView;
+			ctrlDebuggerCodeSplit.CodeViewerActions.OnGoToDestination += ctrlDebuggerCode_OnGoToDestination;
 			ctrlDebuggerCodeSplit.CodeViewerActions.OnSwitchView += ctrlDebuggerCode_OnSwitchView;
 
 			ctrlSourceViewer.CodeViewerActions.OnSetNextStatement += ctrlDebuggerCode_OnSetNextStatement;
 			ctrlSourceViewer.CodeViewerActions.OnShowInSplitView += ctrlDebuggerCode_OnShowInSplitView;
+			ctrlSourceViewer.CodeViewerActions.OnGoToDestination += ctrlDebuggerCode_OnGoToDestination;
 			ctrlSourceViewer.CodeViewerActions.OnSwitchView += ctrlDebuggerCode_OnSwitchView;
 
 			ctrlSourceViewerSplit.CodeViewerActions.OnSetNextStatement += ctrlDebuggerCode_OnSetNextStatement;
 			ctrlSourceViewerSplit.CodeViewerActions.OnShowInSplitView += ctrlDebuggerCode_OnShowInSplitView;
+			ctrlSourceViewerSplit.CodeViewerActions.OnGoToDestination += ctrlDebuggerCode_OnGoToDestination;
 			ctrlSourceViewerSplit.CodeViewerActions.OnSwitchView += ctrlDebuggerCode_OnSwitchView;
 
 			ctrlDebuggerCode.SetConfig(ConfigManager.Config.DebugInfo.LeftView);
@@ -763,7 +767,12 @@ namespace Mesen.GUI.Debugger
 			int cycleCount = ((model == NesModel.NTSC ? 262 : 312) + extraScanlines) * 341;
 			InteropEmu.DebugPpuStep((UInt32)cycleCount);
 		}
-		
+
+		private void ctrlDebuggerCode_OnGoToDestination(ICodeViewer sender, GoToDestination dest)
+		{
+			GoToDestination(sender, dest);
+		}
+
 		private void ctrlDebuggerCode_OnShowInSplitView(ICodeViewer sender, GoToDestination dest)
 		{
 			if(!ConfigManager.Config.DebugInfo.SplitView) {

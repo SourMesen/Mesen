@@ -16,6 +16,7 @@ namespace Mesen.GUI.Debugger.Controls
 	{
 		public event SetNextStatementEventHandler OnSetNextStatement;
 		public event ShowInSplitViewEventHandler OnShowInSplitView;
+		public event ShowInSplitViewEventHandler OnGoToDestination;
 		public event SwitchToSourceEventHandler OnSwitchView;
 
 		private int _lastClickedAddress = Int32.MaxValue;
@@ -212,32 +213,27 @@ namespace Mesen.GUI.Debugger.Controls
 			GoToLocation();
 		}
 
+		public void GoToDestination(GoToDestination dest)
+		{
+			this.OnGoToDestination?.Invoke(Viewer, dest);
+		}
+
 		private GoToDestination GetDestination()
 		{
-			Ld65DbgImporter.DefinitionInfo definitionInfo = _lastClickedSymbol != null ? Viewer.SymbolProvider?.GetSymbolDefinition(_lastClickedSymbol) : null;
+			Ld65DbgImporter.ReferenceInfo definitionInfo = _lastClickedSymbol != null ? Viewer.SymbolProvider?.GetSymbolDefinition(_lastClickedSymbol) : null;
 			AddressTypeInfo addressInfo = _lastClickedSymbol != null ? Viewer.SymbolProvider?.GetSymbolAddressInfo(_lastClickedSymbol) : null;
 			return new GoToDestination() {
 				CpuAddress = _lastClickedAddress >= 0 ? _lastClickedAddress : (addressInfo != null ? InteropEmu.DebugGetRelativeAddress((UInt32)addressInfo.Address, addressInfo.Type) : -1),
 				Label = _lastClickedLabel,
 				AddressInfo = addressInfo,
 				File = definitionInfo?.FileName,
-				Line = definitionInfo?.Line ?? 0
+				Line = definitionInfo?.LineNumber ?? 0
 			};
 		}
 
 		private void GoToLocation()
 		{
-			if(_lastClickedSymbol != null && Viewer is ctrlSourceViewer) {
-				Ld65DbgImporter.DefinitionInfo def = Viewer.SymbolProvider.GetSymbolDefinition(_lastClickedSymbol);
-				if(def != null) {
-					((ctrlSourceViewer)Viewer).ScrollToFileLine(def.FileName, def.Line);
-					return;
-				}
-			} else if(_lastClickedLabel != null) {
-				Viewer.ScrollToAddress(new AddressTypeInfo() { Address = (int)_lastClickedLabel.Address, Type = _lastClickedLabel.AddressType });
-			} else if(_lastClickedAddress >= 0) {
-				Viewer.ScrollToLineNumber((int)_lastClickedAddress);
-			}
+			GoToDestination(GetDestination());
 		}
 
 		private void mnuAddToWatch_Click(object sender, EventArgs e)
@@ -382,7 +378,16 @@ namespace Mesen.GUI.Debugger.Controls
 
 		private void mnuFindOccurrences_Click(object sender, EventArgs e)
 		{
-			Viewer.FindAllOccurrences(_lastWord, true, true);
+			FindOccurrences();
+		}
+
+		private void FindOccurrences()
+		{
+			if(_lastClickedSymbol != null) {
+				Viewer.FindAllOccurrences(_lastClickedSymbol);
+			} else {
+				Viewer.FindAllOccurrences(_lastWord, true, true);
+			}
 		}
 
 		private void mnuUndoPrgChrEdit_Click(object sender, EventArgs e)
@@ -439,7 +444,7 @@ namespace Mesen.GUI.Debugger.Controls
 					} else if(ModifierKeys.HasFlag(Keys.Control)) {
 						AddWatch();
 					} else if(ModifierKeys.HasFlag(Keys.Alt)) {
-						Viewer.FindAllOccurrences(_lastWord, true, true);
+						FindOccurrences();
 					}
 				}
 			}
@@ -473,7 +478,6 @@ namespace Mesen.GUI.Debugger.Controls
 			if(IsSourceView) {
 				items[nameof(mnuMarkSelectionAs)].Visible = false;
 
-				items[nameof(mnuFindOccurrences)].Visible = false;
 				items[nameof(mnuEditSubroutine)].Visible = false;
 				items[nameof(mnuEditSelectedCode)].Visible = false;
 				items[nameof(mnuNavigateForward)].Visible = false;

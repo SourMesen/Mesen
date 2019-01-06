@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using Mesen.GUI.Debugger.Controls;
 using Mesen.GUI.Config;
 using Mesen.GUI.Controls;
+using System.Text.RegularExpressions;
 
 namespace Mesen.GUI.Debugger
 {
@@ -353,9 +354,51 @@ namespace Mesen.GUI.Debugger
 			}
 		}
 
+		public void FindAllOccurrences(Ld65DbgImporter.SymbolInfo symbol)
+		{
+			FindAllOccurrences(symbol.Name, true, true);
+		}
+
 		public void FindAllOccurrences(string text, bool matchWholeWord, bool matchCase)
 		{
-			ctrlFindOccurrences.FindAllOccurrences(text, matchWholeWord, matchCase);
+			List<FindAllOccurrenceResult> results = new List<FindAllOccurrenceResult>();
+
+			string regexPattern;
+			if(matchWholeWord) {
+				regexPattern = $"([^0-9a-zA-Z_#@]+|^){Regex.Escape(text)}([^0-9a-zA-Z_#@]+|$)";
+			} else {
+				regexPattern = Regex.Escape(text);
+			}
+
+			Regex regex = new Regex(regexPattern, matchCase ? RegexOptions.None : RegexOptions.IgnoreCase);
+
+			for(int i = 0, len = ctrlCodeViewer.LineCount; i < len; i++) {
+				string line = ctrlCodeViewer.GetLineContent(i);
+				if(regex.IsMatch(line)) {
+					if(line.StartsWith("__") && line.EndsWith("__")) {
+						line = "Function: " + line.Substring(2, line.Length - 4);
+					}
+					if(line.StartsWith("--") && line.EndsWith("--")) {
+						continue;
+					}
+
+					int j = i;
+					while(j < ctrlCodeViewer.LineCount && ctrlCodeViewer.GetLineNumber(j) < 0) {
+						j++;
+					}
+
+					int cpuAddress = ctrlCodeViewer.GetLineNumber(j);
+					results.Add(new FindAllOccurrenceResult() {
+						MatchedLine = line,
+						Location = "$" + cpuAddress.ToString("X4"),
+						Destination = new GoToDestination() {
+							CpuAddress = cpuAddress
+						}
+					});
+				}
+			}
+
+			ctrlFindOccurrences.FindAllOccurrences(text, results);
 			this.splitContainer.Panel2Collapsed = false;
 		}
 

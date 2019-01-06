@@ -290,39 +290,6 @@ namespace Mesen.GUI.Debugger
 
 		public bool CodeHighlightingEnabled { get; set; } = true;
 
-		public List<Tuple<int, int, string>> FindAllOccurrences(string text, bool matchWholeWord, bool matchCase)
-		{
-			List<Tuple<int, int, string>> result = new List<Tuple<int, int, string>>();
-			string regex;
-			if(matchWholeWord) {
-				regex = $"[^0-9a-zA-Z_#@]+{Regex.Escape(text)}[^0-9a-zA-Z_#@]+";
-			} else {
-				regex = Regex.Escape(text);
-			}
-
-			for(int i = 0, len = _contents.Length; i < len; i++) {
-				string line = _contents[i] + Addressing?[i] + (Comments != null ? ("\t" + Comments[i]) : null);
-				if(Regex.IsMatch(line, regex, matchCase ? RegexOptions.None : RegexOptions.IgnoreCase)) {
-					if(line.StartsWith("__") && line.EndsWith("__")) {
-						line = "Block: " + line.Substring(2, line.Length - 4);
-					}
-
-					if(line.StartsWith("--") && line.EndsWith("--")) {
-						continue;
-					}
-
-					int j = i;
-					while(j < _lineNumbers.Length && _lineNumbers[j] < 0) {
-						j++;
-					}
-
-					var searchResult = new Tuple<int, int, string>(_lineNumbers[j], i, line);
-					result.Add(searchResult);
-				}
-			}
-			return result;
-		}
-
 		public bool Search(string searchString, bool searchBackwards, bool isNewSearch)
 		{
 			if(string.IsNullOrWhiteSpace(searchString)) {
@@ -505,7 +472,7 @@ namespace Mesen.GUI.Debugger
 			return lineIndex;
 		}
 
-		private string GetFullWidthString(int lineIndex)
+		public string GetFullWidthString(int lineIndex)
 		{
 			string text = _contents[lineIndex] + Addressing?[lineIndex];
 			if(Comments?[lineIndex].Length > 0) {

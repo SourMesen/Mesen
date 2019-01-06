@@ -107,19 +107,49 @@ namespace Mesen.GUI.Debugger
 			return null;
 		}
 
-		public DefinitionInfo GetSymbolDefinition(SymbolInfo symbol)
+		private ReferenceInfo GetReferenceInfo(int referenceId)
 		{
-			foreach(int definition in symbol.Definitions) {
-				LineInfo line = _lines[definition];
-				string fileName = _files[line.FileID].Name;
+			FileInfo file;
+			LineInfo line;
+			if(_lines.TryGetValue(referenceId, out line)) {
+				string lineContent = "";
+				if(_files.TryGetValue(line.FileID, out file) && file.Data.Length > line.LineNumber) {
+					lineContent = file.Data[line.LineNumber];
+				}
 
-				return new DefinitionInfo() {
-					FileName = fileName,
-					Line = line.LineNumber
+				return new ReferenceInfo() {
+					FileName = _files[line.FileID].Name,
+					LineNumber = line.LineNumber,
+					LineContent = lineContent
 				};
 			}
 
 			return null;
+		}
+
+		public ReferenceInfo GetSymbolDefinition(SymbolInfo symbol)
+		{
+			foreach(int definition in symbol.Definitions) {
+				ReferenceInfo refInfo = GetReferenceInfo(definition);
+
+				if(refInfo != null) {
+					return refInfo;
+				}
+			}
+
+			return null;
+		}
+		
+		public List<ReferenceInfo> GetSymbolReferences(SymbolInfo symbol)
+		{
+			List<ReferenceInfo> references = new List<ReferenceInfo>();
+			foreach(int reference in symbol.References) {
+				ReferenceInfo refInfo = GetReferenceInfo(reference);
+				if(refInfo != null) {
+					references.Add(refInfo);
+				}
+			}
+			return references;
 		}
 
 		private SpanInfo GetSymbolDefinitionSpan(SymbolInfo symbol)
@@ -150,6 +180,12 @@ namespace Mesen.GUI.Debugger
 
 		private SymbolInfo GetMatchingSymbol(SymbolInfo symbol, int rangeStart, int rangeEnd)
 		{
+			AddressTypeInfo symbolAddress = GetSymbolAddressInfo(symbol);
+			if(symbolAddress != null && symbolAddress.Type == AddressType.PrgRom && symbolAddress.Address >= rangeStart && symbolAddress.Address <= rangeEnd) {
+				//If the range start/end matches the symbol's definition, return it
+				return symbol;
+			}
+
 			foreach(int reference in symbol.References) {
 				LineInfo line = _lines[reference];
 
@@ -168,7 +204,7 @@ namespace Mesen.GUI.Debugger
 						}
 					}
 				}
-			}									
+			}
 			return null;
 		}
 
@@ -827,10 +863,11 @@ namespace Mesen.GUI.Debugger
 			public int? SymbolID;
 		}
 
-		public class DefinitionInfo
+		public class ReferenceInfo
 		{
 			public string FileName;
-			public int Line;
+			public int LineNumber;
+			public string LineContent;
 		}
 	}
 }

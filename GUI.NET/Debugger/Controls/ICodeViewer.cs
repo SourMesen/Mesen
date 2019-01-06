@@ -27,7 +27,9 @@ namespace Mesen.GUI.Debugger.Controls
 
 		UInt32? ActiveAddress { get; }
 
+		void FindAllOccurrences(Ld65DbgImporter.SymbolInfo symbol);
 		void FindAllOccurrences(string text, bool matchWholeWord, bool matchCase);
+
 		void SelectActiveAddress(UInt32 activeAddress);
 		void ClearActiveAddress();
 		AddressTypeInfo GetAddressInfo(int lineIndex);

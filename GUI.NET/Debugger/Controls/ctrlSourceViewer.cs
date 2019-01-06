@@ -11,6 +11,7 @@ using static Mesen.GUI.Debugger.Ld65DbgImporter;
 using System.IO;
 using Mesen.GUI.Config;
 using Mesen.GUI.Controls;
+using System.Text.RegularExpressions;
 
 namespace Mesen.GUI.Debugger.Controls
 {
@@ -33,6 +34,9 @@ namespace Mesen.GUI.Debugger.Controls
 			base.OnLoad(e);
 			if(!IsDesignMode) {
 				_codeViewerActions = new CodeViewerActions(this, true);
+
+				ctrlFindOccurrences.Viewer = this;
+				splitContainer.Panel2Collapsed = true;
 
 				this.SymbolProvider = DebugWorkspaceManager.SymbolProvider;
 				DebugWorkspaceManager.SymbolProviderChanged += UpdateSymbolProvider;
@@ -382,10 +386,71 @@ namespace Mesen.GUI.Debugger.Controls
 		{
 			//Not supported
 		}
+		
+		public void FindAllOccurrences(SymbolInfo symbol)
+		{
+			List<FindAllOccurrenceResult> results = new List<FindAllOccurrenceResult>();
+
+			List<ReferenceInfo> references = _symbolProvider.GetSymbolReferences(symbol);
+			ReferenceInfo definition = _symbolProvider.GetSymbolDefinition(symbol);
+			if(definition != null) {
+				references.Insert(0, definition);
+			}
+
+			foreach(ReferenceInfo reference in references) {
+				results.Add(new FindAllOccurrenceResult() {
+					MatchedLine = reference.LineContent.Trim(),
+					Location = Path.GetFileName(reference.FileName) + ":" + (reference.LineNumber + 1).ToString(),
+					Destination = new GoToDestination() {
+						CpuAddress = -1,
+						Line = reference.LineNumber,
+						File = reference.FileName,
+					}
+				});
+			}
+
+			ctrlFindOccurrences.FindAllOccurrences(symbol.Name, results);
+			this.splitContainer.Panel2Collapsed = false;
+		}
 
 		public void FindAllOccurrences(string text, bool matchWholeWord, bool matchCase)
 		{
-			//Not supported (yet?)
+			List<FindAllOccurrenceResult> results = new List<FindAllOccurrenceResult>();
+
+			string regexPattern;
+			if(matchWholeWord) {
+				regexPattern = $"([^0-9a-zA-Z_#@]+|^){Regex.Escape(text)}([^0-9a-zA-Z_#@]+|$)";
+			} else {
+				regexPattern = Regex.Escape(text);
+			}
+
+			Regex regex = new Regex(regexPattern, matchCase ? RegexOptions.None : RegexOptions.IgnoreCase);
+			foreach(Ld65DbgImporter.FileInfo file in _symbolProvider.Files.Values) {
+				if(file.Data != null && file.Data.Length > 0 && !file.Name.ToLower().EndsWith(".chr")) {
+					for(int i = 0; i < file.Data.Length; i++) {
+						string line = file.Data[i];
+						if(regex.IsMatch(line)) {
+							results.Add(new FindAllOccurrenceResult() {
+								MatchedLine = line.Trim(),
+								Location = Path.GetFileName(file.Name) + ":" + (i + 1).ToString(),
+								Destination = new GoToDestination() {
+									CpuAddress = -1,
+									Line = i,
+									File = file.Name,
+								}
+							});
+						}
+					}
+				}
+			}
+
+			ctrlFindOccurrences.FindAllOccurrences(text, results);
+			this.splitContainer.Panel2Collapsed = false;
+		}
+
+		private void ctrlFindOccurrences_OnSearchResultsClosed(object sender, EventArgs e)
+		{
+			this.splitContainer.Panel2Collapsed = true;
 		}
 
 		#region Scrollbar / Code highlighting
