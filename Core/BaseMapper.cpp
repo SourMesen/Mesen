@@ -568,14 +568,7 @@ void BaseMapper::RestorePrgChrState(uint32_t* prgPages, uint32_t* chrPages)
 		for(uint16_t i = 0; i < 0x100; i++) {
 			uint16_t startAddr = i << 8;
 			if(_prgMemoryAccess[i] != MemoryAccessType::NoAccess) {
-				uint8_t* source = nullptr;
-				switch(_prgMemoryType[i]) {
-					default:
-					case PrgMemoryType::PrgRom: source = _prgRom; break;
-					case PrgMemoryType::SaveRam: source = _saveRam; break;
-					case PrgMemoryType::WorkRam: source = _workRam; break;
-				}
-				SetCpuMemoryMapping(startAddr, startAddr + 0xFF, source + _prgMemoryOffset[i], _prgMemoryAccess[i]);
+				SetCpuMemoryMapping(startAddr, startAddr + 0xFF, _prgMemoryType[i], _prgMemoryOffset[i], _prgMemoryAccess[i]);
 			} else {
 				RemoveCpuMemoryMapping(startAddr, startAddr + 0xFF);
 			}
@@ -584,14 +577,7 @@ void BaseMapper::RestorePrgChrState(uint32_t* prgPages, uint32_t* chrPages)
 		for(uint16_t i = 0; i < 0x40; i++) {
 			uint16_t startAddr = i << 8;
 			if(_chrMemoryAccess[i] != MemoryAccessType::NoAccess) {
-				uint8_t* source = nullptr;
-				switch(_chrMemoryType[i]) {
-					default:
-					case ChrMemoryType::Default: source = _onlyChrRam ? _chrRam : _chrRom; break;
-					case ChrMemoryType::ChrRom: source = _chrRom; break;
-					case ChrMemoryType::ChrRam: source = _chrRam; break;
-				}
-				SetPpuMemoryMapping(startAddr, startAddr + 0xFF, source + _chrMemoryOffset[i], _chrMemoryAccess[i]);
+				SetPpuMemoryMapping(startAddr, startAddr + 0xFF, _chrMemoryType[i], _chrMemoryOffset[i], _chrMemoryAccess[i]);
 			} else {
 				RemovePpuMemoryMapping(startAddr, startAddr + 0xFF);
 			}
