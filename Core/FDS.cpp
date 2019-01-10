@@ -474,17 +474,11 @@ void FDS::StreamState(bool saving)
 {
 	BaseMapper::StreamState(saving);
 
-	bool unusedNeedIrq = false;
-	uint32_t unusedNewDiskNumber = 0;
-	uint32_t unusedNewDiskInsertDelay = 0;
-	bool unusedIsDirty = false;
-
 	SnapshotInfo audio{ _audio.get() };
 	
 	Stream(_irqReloadValue, _irqCounter, _irqEnabled, _irqRepeatEnabled, _diskRegEnabled, _soundRegEnabled, _writeDataReg, _motorOn, _resetTransfer,
 		_readMode, _crcControl, _diskReady, _diskIrqEnabled, _extConWriteReg, _badCrc, _endOfHead, _readWriteEnabled, _readDataReg, _diskWriteProtected,
-		_diskNumber, unusedNewDiskNumber, unusedNewDiskInsertDelay, _diskPosition, _delay, _previousCrcControlFlag, _gapEnded, _scanningDisk, unusedNeedIrq,
-		_transferComplete, unusedIsDirty, audio);
+		_diskNumber, _diskPosition, _delay, _previousCrcControlFlag, _gapEnded, _scanningDisk, _transferComplete, audio);
 
 	if(saving) {
 		vector<uint8_t> ipsData = CreateIpsPatch();
