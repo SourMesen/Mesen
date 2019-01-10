@@ -129,27 +129,18 @@ bool SaveStateManager::LoadState(istream &stream, bool hashCheckRequired)
 		}
 
 		stream.read((char*)&fileFormatVersion, sizeof(fileFormatVersion));
-		if(fileFormatVersion < 5) {
+		if(fileFormatVersion < 10) {
 			MessageManager::DisplayMessage("SaveStates", "SaveStateIncompatibleVersion");
 			return false;
-		} else if(fileFormatVersion == 5) {
-			//No SHA1 field in version 5
-			if(hashCheckRequired) {
-				//Can't manually load < v5 save states, since we can't know what game the save state is for
-				MessageManager::DisplayMessage("SaveStates", "SaveStateIncompatibleVersion");
-				return false;
-			}
 		} else {
 			int32_t mapperId = -1;
 			int32_t subMapperId = -1;
-			if(fileFormatVersion >= 8) {
-				uint16_t id;
-				uint8_t sid;
-				stream.read((char*)&id, sizeof(uint16_t));
-				stream.read((char*)&sid, sizeof(uint8_t));
-				mapperId = id;
-				subMapperId = sid;
-			}
+			uint16_t id;
+			uint8_t sid;
+			stream.read((char*)&id, sizeof(uint16_t));
+			stream.read((char*)&sid, sizeof(uint8_t));
+			mapperId = id;
+			subMapperId = sid;
 
 			char hash[41] = {};
 			stream.read(hash, 40);

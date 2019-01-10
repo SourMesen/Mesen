@@ -1227,7 +1227,8 @@ namespace Mesen.GUI
 	{
 		Default,
 		ChrRom,
-		ChrRam
+		ChrRam,
+		NametableRam
 	}
 
 	public enum MemoryAccessType
@@ -1289,9 +1290,6 @@ namespace Mesen.GUI
 		public ChrMemoryType[] ChrMemoryType;
 		[MarshalAs(UnmanagedType.ByValArray, SizeConst = 0x40)]
 		public MemoryAccessType[] ChrMemoryAccess;
-
-		[MarshalAs(UnmanagedType.ByValArray, SizeConst = 8)]
-		public UInt32[] Nametables;
 
 		public UInt32 WorkRamPageSize;
 		public UInt32 SaveRamPageSize;

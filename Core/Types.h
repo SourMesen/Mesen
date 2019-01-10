@@ -78,7 +78,8 @@ enum class ChrMemoryType
 {
 	Default,
 	ChrRom,
-	ChrRam
+	ChrRam,
+	NametableRam
 };
 
 enum MemoryAccessType
@@ -88,12 +89,6 @@ enum MemoryAccessType
 	Read = 0x01,
 	Write = 0x02,
 	ReadWrite = 0x03
-};
-
-enum ChrSpecialPage
-{
-	NametableA = 0x7000,
-	NametableB = 0x7001
 };
 
 enum class MirroringType
@@ -122,8 +117,6 @@ struct CartridgeState
 	int32_t ChrMemoryOffset[0x40];
 	ChrMemoryType ChrType[0x40];
 	MemoryAccessType ChrMemoryAccess[0x40];
-
-	uint32_t Nametables[8];
 
 	uint32_t WorkRamPageSize;
 	uint32_t SaveRamPageSize;

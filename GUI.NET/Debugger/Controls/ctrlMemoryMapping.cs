@@ -135,6 +135,11 @@ namespace Mesen.GUI.Debugger.Controls
 
 				if(memoryType == null) {
 					regions.Add(new MemoryRegionInfo() { Name = "N/A", Size = currentSize, Color = Color.FromArgb(222, 222, 222) });
+				} else if(memoryType == ChrMemoryType.NametableRam) {
+					int page = (int)(state.ChrMemoryOffset[startIndex] / 0x400);
+					Color color = alternateColor ? Color.FromArgb(0xF4, 0xC7, 0xD4) : Color.FromArgb(0xD4, 0xA7, 0xB4);
+					alternateColor = !alternateColor;
+					regions.Add(new MemoryRegionInfo() { Name = "NT" + page.ToString(), Size = currentSize, Color = color });
 				} else if(memoryType == ChrMemoryType.ChrRom || memoryType == ChrMemoryType.Default && state.ChrRomSize > 0) {
 					int page = (int)(state.ChrMemoryOffset[startIndex] / state.ChrPageSize);
 					Color color = alternateColor ? Color.FromArgb(0xC4, 0xE7, 0xD4) : Color.FromArgb(0xA4, 0xD7, 0xB4);
@@ -150,9 +155,16 @@ namespace Mesen.GUI.Debugger.Controls
 				startIndex = i;
 			};
 
-			for(int i = 0; i < 0x20; i++) {
+			for(int i = 0; i < 0x30; i++) {
 				if(state.ChrMemoryAccess[i] != MemoryAccessType.NoAccess) {
-					bool forceNewBlock = (i - startIndex) << 8 >= state.ChrPageSize;
+					bool forceNewBlock = false;
+					int blockSize = (i - startIndex) << 8;
+					if(memoryType == ChrMemoryType.NametableRam && blockSize >= 0x400) {
+						forceNewBlock = true;
+					} else if(memoryType != ChrMemoryType.NametableRam && blockSize >= state.ChrPageSize) {
+						forceNewBlock = true;
+					}
+
 					if(forceNewBlock || memoryType != state.ChrMemoryType[i] || state.ChrMemoryOffset[i] - state.ChrMemoryOffset[i - 1] != 0x100) {
 						addSection(i);
 					}
@@ -168,10 +180,6 @@ namespace Mesen.GUI.Debugger.Controls
 				currentSize += 0x100;
 			}
 			addSection(-1);
-
-			for(int i = 0; i < 4; i++) {
-				regions.Add(new MemoryRegionInfo() { Name = "NT " + state.Nametables[i].ToString(), Size = 0x400, Color = i % 2 == 0 ? Color.FromArgb(0xF4, 0xC7, 0xD4) : Color.FromArgb(0xD4, 0xA7, 0xB4) });
-			}
 
 			UpdateRegionArray(regions);
 		}

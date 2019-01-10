@@ -14,13 +14,11 @@ class MemoryManager : public Snapshotable
 	private:
 		static constexpr int RAMSize = 0x10000;
 		static constexpr int VRAMSize = 0x4000;
-		static constexpr int NameTableScreenSize = 0x400;
 		
 		shared_ptr<Console> _console;
 		shared_ptr<BaseMapper> _mapper;
 
 		uint8_t *_internalRAM;
-		uint8_t *_nametableRAM[2];
 
 		OpenBusHandler _openBusHandler;
 		InternalRamHandler<0x7FF> _internalRamHandler;

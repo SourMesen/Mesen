@@ -149,7 +149,7 @@ void BaseMapper::SetCpuMemoryMapping(uint16_t startAddr, uint16_t endAddr, uint8
 	endAddr >>= 8;
 	for(uint16_t i = startAddr; i <= endAddr; i++) {
 		_prgPages[i] = source;
-		_prgPageAccessType[i] = accessType != -1 ? accessType : (uint8_t)MemoryAccessType::Read;
+		_prgMemoryAccess[i] = accessType != -1 ? (MemoryAccessType)accessType : MemoryAccessType::Read;
 
 		source += 0x100;
 	}
@@ -215,6 +215,12 @@ void BaseMapper::SetPpuMemoryMapping(uint16_t startAddr, uint16_t endAddr, uint1
 			pageCount = _chrRamSize / pageSize;
 			defaultAccessType |= MemoryAccessType::Write;
 			break;
+
+		case ChrMemoryType::NametableRam:
+			pageSize = BaseMapper::NametableSize;
+			pageCount = BaseMapper::NametableCount;
+			defaultAccessType |= MemoryAccessType::Write;
+			break;
 	}
 
 	if(pageCount == 0) {
@@ -250,6 +256,7 @@ void BaseMapper::SetPpuMemoryMapping(uint16_t startAddr, uint16_t endAddr, ChrMe
 		case ChrMemoryType::Default: sourceMemory = _onlyChrRam ? _chrRam : _chrRom; break;
 		case ChrMemoryType::ChrRom: sourceMemory = _chrRom; break;
 		case ChrMemoryType::ChrRam: sourceMemory = _chrRam; break;
+		case ChrMemoryType::NametableRam: sourceMemory = _nametableRam; break;
 	}
 	int firstSlot = startAddr >> 8;
 	int slotCount = (endAddr - startAddr + 1) >> 8;
@@ -272,7 +279,7 @@ void BaseMapper::SetPpuMemoryMapping(uint16_t startAddr, uint16_t endAddr, uint8
 	endAddr >>= 8;
 	for(uint16_t i = startAddr; i <= endAddr; i++) {
 		_chrPages[i] = sourceMemory;
-		_chrPageAccessType[i] = accessType != -1 ? accessType : (uint8_t)MemoryAccessType::ReadWrite;
+		_chrMemoryAccess[i] = accessType != -1 ? (MemoryAccessType)accessType : MemoryAccessType::ReadWrite;
 
 		if(sourceMemory != nullptr) {
 			sourceMemory += 0x100;
@@ -353,16 +360,16 @@ void BaseMapper::SelectChrPage2x(uint16_t slot, uint16_t page, ChrMemoryType mem
 
 void BaseMapper::SelectCHRPage(uint16_t slot, uint16_t page, ChrMemoryType memoryType)
 {
-	uint16_t pageSize = memoryType == ChrMemoryType::ChrRam ? InternalGetChrRamPageSize() : InternalGetChrPageSize();
+	uint16_t pageSize;
+	if(memoryType == ChrMemoryType::NametableRam) {
+		pageSize = BaseMapper::NametableSize;
+	} else {
+		pageSize = memoryType == ChrMemoryType::ChrRam ? InternalGetChrRamPageSize() : InternalGetChrPageSize();
+	}
+
 	uint16_t startAddr = slot * pageSize;
 	uint16_t endAddr = startAddr + pageSize - 1;
-	if(page == ChrSpecialPage::NametableA) {
-		SetPpuMemoryMapping(startAddr, endAddr, GetNametable(0));
-	} else if(page == ChrSpecialPage::NametableB) {
-		SetPpuMemoryMapping(startAddr, endAddr, GetNametable(1));
-	} else {
-		SetPpuMemoryMapping(startAddr, endAddr, page, memoryType);
-	}
+	SetPpuMemoryMapping(startAddr, endAddr, page, memoryType);
 }
 
 void BaseMapper::InitializeRam(void* data, uint32_t length)
@@ -499,88 +506,45 @@ void BaseMapper::RemoveRegisterRange(uint16_t startAddr, uint16_t endAddr, Memor
 
 void BaseMapper::StreamState(bool saving)
 {
+	//Need to get the number of nametables in the state first, before we try to stream the nametable ram array
+	Stream(_nametableCount);
+
 	ArrayInfo<uint8_t> chrRam = { _chrRam, _chrRamSize };
 	ArrayInfo<uint8_t> workRam = { _workRam, _workRamSize };
 	ArrayInfo<uint8_t> saveRam = { _saveRam, _saveRamSize };
+	ArrayInfo<uint8_t> nametableRam = { _nametableRam, _nametableCount * BaseMapper::NametableSize };
 
-	uint32_t prgPages[64];
-	uint32_t chrPages[64];
+	ArrayInfo<int32_t> prgMemoryOffset = { _prgMemoryOffset, 0x100 };
+	ArrayInfo<int32_t> chrMemoryOffset = { _chrMemoryOffset, 0x40 };
+	ArrayInfo<PrgMemoryType> prgMemoryType = { _prgMemoryType, 0x100 };
+	ArrayInfo<ChrMemoryType> chrMemoryType = { _chrMemoryType, 0x40 };
+	ArrayInfo<MemoryAccessType> prgMemoryAccess = { _prgMemoryAccess, 0x100 };
+	ArrayInfo<MemoryAccessType> chrMemoryAccess = { _chrMemoryAccess, 0x40 };
 
-	ArrayInfo<uint8_t> nametableIndexes = { _nametableIndexes, 4 };
+	Stream(_mirroringType, chrRam, workRam, saveRam, nametableRam, prgMemoryOffset, chrMemoryOffset, prgMemoryType, chrMemoryType, prgMemoryAccess, chrMemoryAccess);
 
-	if(GetStateVersion() < 9) {
-		ArrayInfo<uint32_t> prgPageNumbers = { prgPages, 64 };
-		ArrayInfo<uint32_t> chrPageNumbers = { chrPages, 64 };
-
-		Stream(_mirroringType, chrRam, workRam, saveRam, prgPageNumbers, chrPageNumbers, nametableIndexes);
-	} else {
-		ArrayInfo<int32_t> prgMemoryOffset = { _prgMemoryOffset, 0x100 };
-		ArrayInfo<int32_t> chrMemoryOffset = { _chrMemoryOffset, 0x40 };
-		ArrayInfo<PrgMemoryType> prgMemoryType = { _prgMemoryType, 0x100 };
-		ArrayInfo<ChrMemoryType> chrMemoryType = { _chrMemoryType, 0x40 };
-		ArrayInfo<MemoryAccessType> prgMemoryAccess = { _prgMemoryAccess, 0x100 };
-		ArrayInfo<MemoryAccessType> chrMemoryAccess = { _chrMemoryAccess, 0x40 };
-
-		Stream(_mirroringType, chrRam, workRam, saveRam, nametableIndexes, prgMemoryOffset, chrMemoryOffset, prgMemoryType, chrMemoryType, prgMemoryAccess, chrMemoryAccess);
-	}
-
-	if(GetStateVersion() >= 7) {
-		bool hasExtraNametable[2] = { _cartNametableRam[0] != nullptr, _cartNametableRam[1] != nullptr };
-		Stream(hasExtraNametable[0], hasExtraNametable[1]);
-
-		for(int i = 0; i < 2; i++) {
-			if(hasExtraNametable[i]) {
-				if(!_cartNametableRam[i]) {
-					_cartNametableRam[i] = new uint8_t[0x400];
-				}
-
-				ArrayInfo<uint8_t> ram = { _cartNametableRam[i], 0x400 };
-				Stream(ram);
-			}
-		}
-	}
-	
 	if(!saving) {
-		RestorePrgChrState(prgPages, chrPages);
-
-		for(int i = 0; i < 4; i++) {
-			SetNametable(i, _nametableIndexes[i]);
-		}
+		RestorePrgChrState();
 	}
 }
 
-void BaseMapper::RestorePrgChrState(uint32_t* prgPages, uint32_t* chrPages)
+void BaseMapper::RestorePrgChrState()
 {
-	if(GetStateVersion() < 9) {
-		//Support for older save states
-		for(uint16_t i = 0; i < 64; i++) {
-			if(prgPages[i] != 0xEEEEEEEE) {
-				BaseMapper::SelectPRGPage(i, (uint16_t)prgPages[i]);
-			}
+	for(uint16_t i = 0; i < 0x100; i++) {
+		uint16_t startAddr = i << 8;
+		if(_prgMemoryAccess[i] != MemoryAccessType::NoAccess) {
+			SetCpuMemoryMapping(startAddr, startAddr + 0xFF, _prgMemoryType[i], _prgMemoryOffset[i], _prgMemoryAccess[i]);
+		} else {
+			RemoveCpuMemoryMapping(startAddr, startAddr + 0xFF);
 		}
+	}
 
-		for(uint16_t i = 0; i < 64; i++) {
-			if(chrPages[i] != 0xEEEEEEEE) {
-				BaseMapper::SelectCHRPage(i, (uint16_t)chrPages[i]);
-			}
-		}
-	} else {
-		for(uint16_t i = 0; i < 0x100; i++) {
-			uint16_t startAddr = i << 8;
-			if(_prgMemoryAccess[i] != MemoryAccessType::NoAccess) {
-				SetCpuMemoryMapping(startAddr, startAddr + 0xFF, _prgMemoryType[i], _prgMemoryOffset[i], _prgMemoryAccess[i]);
-			} else {
-				RemoveCpuMemoryMapping(startAddr, startAddr + 0xFF);
-			}
-		}
-
-		for(uint16_t i = 0; i < 0x40; i++) {
-			uint16_t startAddr = i << 8;
-			if(_chrMemoryAccess[i] != MemoryAccessType::NoAccess) {
-				SetPpuMemoryMapping(startAddr, startAddr + 0xFF, _chrMemoryType[i], _chrMemoryOffset[i], _chrMemoryAccess[i]);
-			} else {
-				RemovePpuMemoryMapping(startAddr, startAddr + 0xFF);
-			}
+	for(uint16_t i = 0; i < 0x40; i++) {
+		uint16_t startAddr = i << 8;
+		if(_chrMemoryAccess[i] != MemoryAccessType::NoAccess) {
+			SetPpuMemoryMapping(startAddr, startAddr + 0xFF, _chrMemoryType[i], _chrMemoryOffset[i], _chrMemoryAccess[i]);
+		} else {
+			RemovePpuMemoryMapping(startAddr, startAddr + 0xFF);
 		}
 	}
 }
@@ -609,8 +573,6 @@ void BaseMapper::Initialize(RomData &romData)
 	memset(_isWriteRegisterAddr, 0, sizeof(_isWriteRegisterAddr));
 	AddRegisterRange(RegisterStartAddress(), RegisterEndAddress(), MemoryOperation::Any);
 
-	_mirroringType = romData.Info.Mirroring;
-
 	_prgSize = (uint32_t)romData.PrgRom.size();
 	_chrRomSize = (uint32_t)romData.ChrRom.size();
 	_originalPrgRom = romData.PrgRom;
@@ -637,24 +599,18 @@ void BaseMapper::Initialize(RomData &romData)
 	InitializeRam(_saveRam, _saveRamSize);
 	InitializeRam(_workRam, _workRamSize);
 
-	memset(_cartNametableRam, 0, sizeof(_cartNametableRam));
-	memset(_nametableIndexes, 0, sizeof(_nametableIndexes));
-
-	for(int i = 0; i <= 0xFF; i++) {
-		//Allow us to map a different page every 256 bytes
-		_prgPages[i] = nullptr;
-		_prgPageAccessType[i] = MemoryAccessType::NoAccess;
-		_chrPages[i] = nullptr;
-		_chrPageAccessType[i] = MemoryAccessType::NoAccess;
-	}
+	_nametableCount = 2;
+	_nametableRam = new uint8_t[BaseMapper::NametableSize*BaseMapper::NametableCount];
+	InitializeRam(_nametableRam, BaseMapper::NametableSize*BaseMapper::NametableCount);
 
 	for(int i = 0; i < 0x100; i++) {
+		//Allow us to map a different page every 256 bytes
+		_prgPages[i] = nullptr;
 		_prgMemoryOffset[i] = -1;
 		_prgMemoryType[i] = PrgMemoryType::PrgRom;
 		_prgMemoryAccess[i] = MemoryAccessType::NoAccess;
-	}
 
-	for(int i = 0; i < 0x40; i++) {
+		_chrPages[i] = nullptr;
 		_chrMemoryOffset[i] = -1;
 		_chrMemoryType[i] = ChrMemoryType::Default;
 		_chrMemoryAccess[i] = MemoryAccessType::NoAccess;
@@ -687,6 +643,8 @@ void BaseMapper::Initialize(RomData &romData)
 
 	SetupDefaultWorkRam();
 
+	SetMirroringType(romData.Info.Mirroring);
+
 	InitMapper();
 	InitMapper(romData);
 
@@ -702,14 +660,7 @@ BaseMapper::~BaseMapper()
 	delete[] _prgRom;
 	delete[] _saveRam;
 	delete[] _workRam;
-
-	if(_cartNametableRam[0]) {
-		delete[] _cartNametableRam[0];
-	}
-
-	if(_cartNametableRam[1]) {
-		delete[] _cartNametableRam[1];
-	}
+	delete[] _nametableRam;
 }
 
 void BaseMapper::ProcessNotification(ConsoleNotificationType type, void* parameter)
@@ -746,47 +697,35 @@ void BaseMapper::SetConsole(shared_ptr<Console> console)
 	_console = console;
 }
 
-void BaseMapper::SetDefaultNametables(uint8_t* nametableA, uint8_t* nametableB)
+uint8_t* BaseMapper::GetNametable(uint8_t nametableIndex)
 {
-	_nesNametableRam[0] = nametableA;
-	_nesNametableRam[1] = nametableB;
-	SetMirroringType(_mirroringType);
-}
-
-void BaseMapper::AddNametable(uint8_t index, uint8_t *nametable)
-{
-	assert(index >= 4);
-	_cartNametableRam[index - 2] = nametable;
-}
-
-uint8_t* BaseMapper::GetNametable(uint8_t index)
-{
-	if(index <= 1) {
-		return _nesNametableRam[index];
-	} else {
-		return _cartNametableRam[index - 2];
+	if(nametableIndex >= BaseMapper::NametableCount) {
+		#ifdef _DEBUG
+		MessageManager::Log("Invalid nametable index");
+		#endif
+		return _nametableRam;
 	}
+	_nametableCount = std::max<uint8_t>(_nametableCount, nametableIndex);
+
+	return _nametableRam + (nametableIndex * BaseMapper::NametableSize);
 }
 
 void BaseMapper::SetNametable(uint8_t index, uint8_t nametableIndex)
 {
-	if(nametableIndex == 2 && _cartNametableRam[0] == nullptr) {
-		_cartNametableRam[0] = new uint8_t[0x400];
-		InitializeRam(_cartNametableRam[0], 0x400);
+	if(nametableIndex >= BaseMapper::NametableCount) {
+		#ifdef _DEBUG
+		MessageManager::Log("Invalid nametable index");
+		#endif
+		return;
 	}
-	if(nametableIndex == 3 && _cartNametableRam[1] == nullptr) {
-		_cartNametableRam[1] = new uint8_t[0x400];
-		InitializeRam(_cartNametableRam[1], 0x400);
-	}
+	_nametableCount = std::max<uint8_t>(_nametableCount, nametableIndex);
 
-	_nametableIndexes[index] = nametableIndex;
-
-	SetPpuMemoryMapping(0x2000 + index * 0x400, 0x2000 + (index + 1) * 0x400 - 1, GetNametable(nametableIndex));
+	SetPpuMemoryMapping(0x2000 + index * 0x400, 0x2000 + (index + 1) * 0x400 - 1, nametableIndex, ChrMemoryType::NametableRam);
 	
 	//Mirror $2000-$2FFF to $3000-$3FFF, while keeping a distinction between the addresses
 	//Previously, $3000-$3FFF was being "redirected" to $2000-$2FFF to avoid MMC3 IRQ issues (which is incorrect)
 	//More info here: https://forums.nesdev.com/viewtopic.php?p=132145#p132145
-	SetPpuMemoryMapping(0x3000 + index * 0x400, 0x3000 + (index + 1) * 0x400 - 1, GetNametable(nametableIndex));
+	SetPpuMemoryMapping(0x3000 + index * 0x400, 0x3000 + (index + 1) * 0x400 - 1, nametableIndex, ChrMemoryType::NametableRam);
 }
 
 void BaseMapper::SetNametables(uint8_t nametable1Index, uint8_t nametable2Index, uint8_t nametable3Index, uint8_t nametable4Index)
@@ -833,7 +772,7 @@ uint8_t BaseMapper::ReadRAM(uint16_t addr)
 {
 	if(_allowRegisterRead && _isReadRegisterAddr[addr]) {
 		return ReadRegister(addr);
-	} else if(_prgPageAccessType[addr >> 8] & MemoryAccessType::Read) {
+	} else if(_prgMemoryAccess[addr >> 8] & MemoryAccessType::Read) {
 		return _prgPages[addr >> 8][(uint8_t)addr];
 	} else {
 		//assert(false);
@@ -848,7 +787,7 @@ uint8_t BaseMapper::PeekRAM(uint16_t addr)
 
 uint8_t BaseMapper::DebugReadRAM(uint16_t addr)
 {
-	if(_prgPageAccessType[addr >> 8] & MemoryAccessType::Read) {
+	if(_prgMemoryAccess[addr >> 8] & MemoryAccessType::Read) {
 		return _prgPages[addr >> 8][(uint8_t)addr];
 	} else {
 		//assert(false);
@@ -883,7 +822,7 @@ void BaseMapper::DebugWriteRAM(uint16_t addr, uint8_t value)
 
 void BaseMapper::WritePrgRam(uint16_t addr, uint8_t value)
 {
-	if(_prgPageAccessType[addr >> 8] & MemoryAccessType::Write) {
+	if(_prgMemoryAccess[addr >> 8] & MemoryAccessType::Write) {
 		_prgPages[addr >> 8][(uint8_t)addr] = value;
 	}
 }
@@ -896,7 +835,7 @@ void BaseMapper::NotifyVRAMAddressChange(uint16_t addr)
 
 uint8_t BaseMapper::InternalReadVRAM(uint16_t addr)
 {
-	if(_chrPageAccessType[addr >> 8] & MemoryAccessType::Read) {
+	if(_chrMemoryAccess[addr >> 8] & MemoryAccessType::Read) {
 		return _chrPages[addr >> 8][(uint8_t)addr];
 	}
 
@@ -928,7 +867,7 @@ void BaseMapper::DebugWriteVRAM(uint16_t addr, uint8_t value, bool disableSideEf
 		}
 	} else {
 		NotifyVRAMAddressChange(addr);
-		if(_chrPageAccessType[addr >> 8] & MemoryAccessType::Write) {
+		if(_chrMemoryAccess[addr >> 8] & MemoryAccessType::Write) {
 			_chrPages[addr >> 8][(uint8_t)addr] = value;
 		}
 	}
@@ -938,7 +877,7 @@ void BaseMapper::WriteVRAM(uint16_t addr, uint8_t value)
 {
 	_console->DebugProcessVramWriteOperation(addr, value);
 
-	if(_chrPageAccessType[addr >> 8] & MemoryAccessType::Write) {
+	if(_chrMemoryAccess[addr >> 8] & MemoryAccessType::Write) {
 		_chrPages[addr >> 8][(uint8_t)addr] = value;
 	}
 }
@@ -1203,10 +1142,6 @@ CartridgeState BaseMapper::GetState()
 		state.ChrMemoryOffset[i] = _chrMemoryOffset[i];
 		state.ChrType[i] = _chrMemoryType[i];
 		state.ChrMemoryAccess[i] = _chrMemoryAccess[i];
-	}
-
-	for(int i = 0; i < 4; i++) {
-		state.Nametables[i] = _nametableIndexes[i];
 	}
 
 	state.WorkRamPageSize = GetWorkRamPageSize();

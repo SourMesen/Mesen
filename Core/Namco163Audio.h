@@ -118,7 +118,7 @@ protected:
 
 		ArrayInfo<uint8_t> internalRam{ _internalRam, 0x80 };
 		ArrayInfo<int16_t> channelOutput{ _channelOutput, 8 };
-		Stream(internalRam, channelOutput, _ramPosition, _autoIncrement, _updateCounter, _currentChannel, _lastOutput);
+		Stream(internalRam, channelOutput, _ramPosition, _autoIncrement, _updateCounter, _currentChannel, _lastOutput, _disableSound);
 	}
 
 	void ClockAudio() override

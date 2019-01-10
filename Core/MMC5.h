@@ -8,8 +8,8 @@ class MMC5 : public BaseMapper
 {
 private:
 	const uint8_t NtWorkRamIndex = 4;
-	const uint8_t NtEmptyIndex = 5;
-	const uint8_t NtFillModeIndex = 6;
+	const uint8_t NtEmptyIndex = 2;
+	const uint8_t NtFillModeIndex = 3;
 
 	unique_ptr<MMC5Audio> _audio;
 
@@ -18,9 +18,6 @@ private:
 
 	uint8_t _fillModeTile;
 	uint8_t _fillModeColor;
-	uint8_t *_fillModeNametable;
-
-	uint8_t *_emptyNametable;
 
 	bool _verticalSplitEnabled;
 	bool _verticalSplitRightSide;
@@ -227,7 +224,14 @@ private:
 			NtFillModeIndex //"3 - Fill-mode data"
 		};
 
-		SetNametables(nametables[value & 0x03], nametables[(value >> 2) & 0x03], nametables[(value >> 4) & 0x03], nametables[(value >> 6) & 0x03]);
+		for(int i = 0; i < 4; i++) {
+			uint8_t nametableId = nametables[(value >> (i * 2)) & 0x03];
+			if(nametableId == NtWorkRamIndex) {
+				SetPpuMemoryMapping(0x2000+i*0x400, 0x2000+i*0x400+0x3FF, _workRam, MemoryAccessType::ReadWrite);
+			} else {
+				SetNametable(i, nametableId);
+			}
+		}
 	}
 
 	void SetExtendedRamMode(uint8_t mode)
@@ -252,13 +256,13 @@ private:
 	void SetFillModeTile(uint8_t tile)
 	{
 		_fillModeTile = tile;
-		memset(_fillModeNametable, tile, 32 * 30); //32 tiles per row, 30 rows
+		memset(GetNametable(NtFillModeIndex), tile, 32 * 30); //32 tiles per row, 30 rows
 	}
 
 	void SetFillModeColor(uint8_t color)
 	{
 		_fillModeColor = color;
-		memset(_fillModeNametable + 32 * 30, color, 64); //Attribute table is 64 bytes
+		memset(GetNametable(NtFillModeIndex) + 32 * 30, color, 64); //Attribute table is 64 bytes
 	}
 
 	bool IsSpriteFetch()
@@ -317,17 +321,10 @@ protected:
 		_splitTile = 0;
 		_splitTileNumber = -1;
 
-		_fillModeNametable = new uint8_t[0x400];
-		_emptyNametable = new uint8_t[0x400];
-		InitializeRam(_emptyNametable, 0x400);
-		InitializeRam(_fillModeNametable, 0x400);
+		memset(GetNametable(NtEmptyIndex), 0, BaseMapper::NametableSize);
 
 		//"Expansion RAM ($5C00-$5FFF, read/write)"
 		SetCpuMemoryMapping(0x5C00, 0x5FFF, 0, PrgMemoryType::WorkRam);
-
-		AddNametable(NtWorkRamIndex, _workRam);
-		AddNametable(NtEmptyIndex, _emptyNametable);
-		AddNametable(NtFillModeIndex, _fillModeNametable);
 
 		//"Additionally, Romance of the 3 Kingdoms 2 seems to expect it to be in 8k PRG mode ($5100 = $03)."
 		WriteRegister(0x5100, 0x03);
@@ -336,29 +333,23 @@ protected:
 		WriteRegister(0x5117, 0xFF);
 	}
 
-	virtual ~MMC5()
-	{
-		delete[] _fillModeNametable;
-		delete[] _emptyNametable;
-	}
-
 	void StreamState(bool saving) override
 	{
 		BaseMapper::StreamState(saving);
 
 		ArrayInfo<uint8_t> prgBanks = { _prgBanks, 5 };
 		ArrayInfo<uint16_t> chrBanks = { _chrBanks, 12 };
-		ArrayInfo<uint8_t> fillModeNametable = { _fillModeNametable, 0x400 };
 		SnapshotInfo audio{ _audio.get() };
 		Stream(_prgRamProtect1, _prgRamProtect2, _fillModeTile, _fillModeColor, _verticalSplitEnabled, _verticalSplitRightSide,
 				_verticalSplitDelimiterTile, _verticalSplitScroll, _verticalSplitBank, _multiplierValue1, _multiplierValue2,
 				_nametableMapping, _extendedRamMode, _exAttributeLastNametableFetch, _exAttrLastFetchCounter, _exAttrSelectedChrBank, 
 				_prgMode, prgBanks, _chrMode, _chrUpperBits, chrBanks, _lastChrReg, 
-				_spriteFetch, _largeSprites, _irqCounterTarget, _irqEnabled, _previousScanline, _irqCounter, _irqPending, _ppuInFrame, audio, fillModeNametable,
+				_spriteFetch, _largeSprites, _irqCounterTarget, _irqEnabled, _previousScanline, _irqCounter, _irqPending, _ppuInFrame, audio,
 				_splitInSplitRegion, _splitVerticalScroll, _splitTile, _splitTileNumber, _lastVramOperationType);
 
 		if(!saving) {
 			UpdatePrgBanks();
+			SetNametableMapping(_nametableMapping);
 		}
 	}
 
