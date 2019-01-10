@@ -6,8 +6,11 @@
 
 class Namco163Audio : public BaseExpansionAudio
 {
+public:
+	static constexpr uint32_t AudioRamSize = 0x80;
+
 private:
-	uint8_t _internalRam[0x80];
+	uint8_t _internalRam[Namco163Audio::AudioRamSize];
 	int16_t _channelOutput[8];
 	uint8_t _ramPosition;
 	bool _autoIncrement;
@@ -148,6 +151,11 @@ public:
 		_currentChannel = 7;
 		_lastOutput = 0;
 		_disableSound = false;
+	}
+
+	uint8_t* GetInternalRam()
+	{
+		return _internalRam;
 	}
 
 	void WriteRegister(uint16_t addr, uint8_t value)

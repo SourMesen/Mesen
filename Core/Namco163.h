@@ -2,6 +2,8 @@
 #include "stdafx.h"
 #include "BaseMapper.h"
 #include "Namco163Audio.h"
+#include "Console.h"
+#include "BatteryManager.h"
 
 enum class NamcoVariant
 {
@@ -106,6 +108,28 @@ protected:
 		Stream(_variant, _notNamco340, _autoDetectVariant, _writeProtect, _lowChrNtMode, _highChrNtMode, _irqCounter, audio);
 		if(!saving) {
 			UpdateSaveRamAccess();
+		}
+	}
+
+	void LoadBattery() override
+	{
+		if(HasBattery()) {
+			vector<uint8_t> batteryContent(_saveRamSize + Namco163Audio::AudioRamSize, 0);
+			_console->GetBatteryManager()->LoadBattery(".sav", batteryContent.data(), (uint32_t)batteryContent.size());
+
+			memcpy(_saveRam, batteryContent.data(), _saveRamSize);
+			memcpy(_audio->GetInternalRam(), batteryContent.data()+_saveRamSize, Namco163Audio::AudioRamSize);
+		}
+	}
+
+	void SaveBattery() override
+	{
+		if(HasBattery()) {
+			vector<uint8_t> batteryContent(_saveRamSize + Namco163Audio::AudioRamSize, 0);
+			memcpy(batteryContent.data(), _saveRam, _saveRamSize);
+			memcpy(batteryContent.data() + _saveRamSize, _audio->GetInternalRam(), Namco163Audio::AudioRamSize);
+
+			_console->GetBatteryManager()->SaveBattery(".sav", batteryContent.data(), (uint32_t)batteryContent.size());
 		}
 	}
 

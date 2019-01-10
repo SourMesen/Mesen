@@ -629,9 +629,6 @@ void BaseMapper::Initialize(RomData &romData)
 	} else if(GetChrRamSize()) {
 		InitializeChrRam();
 	}
-	
-	//Load battery data if present
-	LoadBattery();
 
 	if(romData.Info.HasTrainer) {
 		if(_workRamSize >= 0x2000) {
@@ -647,6 +644,9 @@ void BaseMapper::Initialize(RomData &romData)
 
 	InitMapper();
 	InitMapper(romData);
+
+	//Load battery data if present
+	LoadBattery();
 
 	ApplyCheats();
 
