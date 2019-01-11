@@ -24,6 +24,8 @@ namespace Mesen.GUI.Debugger
 
 			AddBinding("DbgImportRamLabels", chkDbgImportRamLabels);
 			AddBinding("DbgImportPrgRomLabels", chkDbgImportPrgRomLabels);
+			AddBinding("DbgImportWorkRamLabels", chkDbgImportWorkRamLabels);
+			AddBinding("DbgImportSaveRamLabels", chkDbgImportSaveRamLabels);
 			AddBinding("DbgImportComments", chkDbgImportComments);
 
 			AddBinding("MlbImportInternalRamLabels", chkMlbImportInternalRamLabels);

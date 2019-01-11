@@ -402,6 +402,8 @@ namespace Mesen.GUI.Config
 		public bool ResetLabelsOnImport = true;
 
 		public bool DbgImportRamLabels = true;
+		public bool DbgImportWorkRamLabels = true;
+		public bool DbgImportSaveRamLabels = true;
 		public bool DbgImportPrgRomLabels = true;
 		public bool DbgImportComments = true;
 

@@ -765,10 +765,17 @@ namespace Mesen.GUI.Debugger
 			}
 			if(config.DbgImportRamLabels) {
 				labels.AddRange(_ramLabels.Values);
-				labels.AddRange(_workRamLabels.Values);
-				labels.AddRange(_saveRamLabels.Values);
-				labelCount += _ramLabels.Count + _workRamLabels.Count + _saveRamLabels.Count;
+				labelCount += _ramLabels.Count;
 			}
+			if(config.DbgImportWorkRamLabels) {
+				labels.AddRange(_workRamLabels.Values);
+				labelCount += _workRamLabels.Count;
+			}
+			if(config.DbgImportSaveRamLabels) {
+				labels.AddRange(_saveRamLabels.Values);
+				labelCount += _saveRamLabels.Count;
+			}
+
 			LabelManager.SetLabels(labels, true);
 			
 			if(!silent) {
