@@ -30,6 +30,7 @@ namespace Mesen.GUI.Debugger
 		{
 			InitializeComponent();
 
+			Icon = Properties.Resources.Find;
 			_symbolProvider = DebugWorkspaceManager.SymbolProvider;
 			_allowOutOfScope = allowOutOfScope;
 			_showFilesAndConstants = showFilesAndConstants;
@@ -271,6 +272,11 @@ namespace Mesen.GUI.Debugger
 				pnlResults.BackColor = SystemColors.ControlLight;
 			} else {
 				pnlResults.BackColor = SystemColors.ControlDarkDark;
+			}
+
+			lblResultCount.Text = searchResults.Count.ToString() + " results";
+			if(searchResults.Count > MaxResultCount) {
+				lblResultCount.Text += " (" + MaxResultCount.ToString() + " shown)";
 			}
 
 			if(Program.IsMono) {
