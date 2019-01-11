@@ -143,7 +143,7 @@ namespace Mesen.GUI.Debugger.Controls
 
 		private void contextMenuCode_Opening(object sender, CancelEventArgs e)
 		{
-			UpdateContextMenuItemVisibility(contextMenu.Items, true);
+			UpdateContextMenuItemVisibility(contextMenu.Items);
 
 			int startAddress, endAddress;
 			string range;
@@ -463,7 +463,7 @@ namespace Mesen.GUI.Debugger.Controls
 			mnuEditSubroutine.Enabled = true;
 		}
 
-		public void UpdateContextMenuItemVisibility(ToolStripItemCollection items, bool? visible = null)
+		public void UpdateContextMenuItemVisibility(ToolStripItemCollection items)
 		{
 			items[nameof(mnuUndoPrgChrEdit)].Enabled = InteropEmu.DebugHasUndoHistory();
 			items[nameof(mnuShowNextStatement)].Enabled = Viewer.ActiveAddress.HasValue;
@@ -493,7 +493,7 @@ namespace Mesen.GUI.Debugger.Controls
 		{
 			_lastLocation = mouseLocation;
 
-			UpdateContextMenuItemVisibility(contextMenu.Items, true);
+			UpdateContextMenuItemVisibility(contextMenu.Items);
 
 			mnuSwitchView.Text = IsSourceView ? "Switch to Disassembly View" : "Switch to Source View";
 

@@ -311,7 +311,7 @@ namespace Mesen.GUI.Debugger
 				CleanupMenu(mnuCode.DropDownItems);
 				mnuCode.DropDownItems.Clear();
 			} else {
-				this.LastCodeWindow.CodeViewerActions.UpdateContextMenuItemVisibility(mnuCode.DropDownItems);
+				UpdateCodeMenu();
 			}
 
 			if(keyData == ConfigManager.Config.DebugInfo.Shortcuts.ToggleBreakContinue) {
@@ -1603,7 +1603,7 @@ namespace Mesen.GUI.Debugger
 			CleanupMenu(mnuCode.DropDownItems);
 			mnuCode.DropDownItems.Clear();
 			CopyMenu(this.LastCodeWindow.CodeViewerActions.contextMenu.Items, mnuCode.DropDownItems);
-			this.LastCodeWindow.CodeViewerActions.UpdateContextMenuItemVisibility(mnuCode.DropDownItems, false);
+			this.LastCodeWindow.CodeViewerActions.UpdateContextMenuItemVisibility(mnuCode.DropDownItems);
 		}
 		
 		private void mnuCode_DropDownOpening(object sender, EventArgs e)
