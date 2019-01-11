@@ -5,12 +5,23 @@ pre: ""
 chapter: false
 ---
 
+## Changes between 0.9.7 and 0.9.8 ##
+
+### New Features ###
+
+* New function to get a label's current CPU address: <kbd>[getLabelAddress](/apireference/memoryaccess.html#getlabeladdress)</kbd>
+
+## Changes between 0.9.6 and 0.9.7 ##
+
+*No changes.*
+
 ## Changes between 0.9.5 and 0.9.6 ##
 
 ### New Features ###
 
 * New event callback: <kbd>[scriptEnded](/apireference/enums.html#eventtype)</kbd>.
 * New functions to get PRG/CHR ROM offsets based on a CPU/PPU address: <kbd>[getPrgRomOffset](/apireference/memoryaccess.html#getprgromoffset)</kbd> and <kbd>[getChrRomOffset](/apireference/memoryaccess.html#getchrromoffset)</kbd>.
+* New function for use with the [test runner mode](/apireference.html#test-runner-mode): <kbd>[stop](/apireference/emulation.html#stop)</kbd>
 
 ### Changes ###
 

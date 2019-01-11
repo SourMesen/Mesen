@@ -19,6 +19,20 @@ Most elements in the debugger's interface have right-click menu options - make s
 Watch expressions, breakpoints and labels are automatically saved on a per-rom basis in a **Workspace**.  
 You can completely reset the workspace for a specific rom by using the **<kbd>File&rarr;Workspace&rarr;Reset Workspace</kbd>** command.
 
+## Search Tools ##
+
+There are a number of different tools that can be used to search/navigate the code:
+
+<div class="imgBox"><div>
+	<img src="/images/GoToAll.png" />
+	<span>Go To All</span>
+</div></div>
+
+* **Go To All**: The *Go To All* feature allows you to search for any label by its name and navigate to it. It also works with CA/CC65 and displays the location of the labels in the original source code. (**<kbd>Ctrl+,</kbd>**)
+* **Find/Find Next/Find Previous**: Incremental search that can be used to search through any text shown in the code window (**<kbd>Ctrl+F</kbd>**)
+* **Find All Occurrences**: Search the code for a specific string or label and return all the results in a list. (**<kbd>Ctrl+Shift+F</kbd>**)
+* **Go To...**: These options allow you to quickly reach the NMI, IRQ or Reset handlers or a specific address (**<kbd>Ctrl+G</kbd>**)
+
 
 ## Customizing the debugger ##
 
@@ -185,7 +199,10 @@ Select which address or address range this breakpoint should apply to.
 It is also possible to specify no address at all by selecting **Any** - in this case, breakpoints will be evaluated on every CPU cycle.  
 
 **Condition** (optional)  
-Conditions allow you to use the same expression syntax as the one used in the [Watch Window](#watch-window) to cause a breakpoint to trigger under very specific conditions.
+Conditions allow you to use the same expression syntax as the one used in the [Watch Window](#watch-window) to cause a breakpoint to trigger under specific conditions.
+
+**Process breakpoint on dummy reads/writes**  
+When enabled, the breakpoint will be processed for dummy reads and writes (only available for read or write breakpoints). When disabled, the debugger will never break on a dummy read or write for this breakpoint.
 
 **Mark on Event Viewer**  
 When enabled, a mark will be visible on the [Event Viewer](/debugging/eventviewer.html) whenever this breakpoint's conditions are met. This can be used to add marks to the event viewer based on a variety of conditions by using conditional breakpoints.
@@ -321,6 +338,8 @@ The `Break Options` submenu contains a number of options to configure under whic
 * **Break on Init (NSF)**: Break when the NSF's Init routine is called.
 * **Break on Play (NSF)**: Break when the NSF's Play routine is called.
 
+**Enable sub-instruction breakpoints**: This option allow Mesen to process breakpoints in the middle of CPU instructions.  This was the default up to version 0.9.7.  When this option is disabled, the debugger will break at the beginning of CPU instructions only (and will only break once per instruction). This is the new default as of 0.9.8.
+
 Additionally, you can configure whether or not the debugger window gets focused when a break or pause occurs.
 
 ### Copy Options ###
@@ -339,11 +358,13 @@ These options configure which portions of the code is copied into the clipboard 
 <div></div>
 
 * **Hide Pause Icon**: When enabled, the pause icon that is normally shown whenever execution is paused will be hidden.
+* **Draw Partial Frame**: When enabled, the emulator's main window will display the current partially-drawn frame instead of the last complete frame.
+* **Show previous frame behind current**: When enabled along with `Draw Partial Frame`, the previous frame's data will be shown behind the current frame.
 
 <div></div>
 
-* **Draw Partial Frame**: When enabled, the emulator's main window will display the current partially-drawn frame instead of the last complete frame.
-* **Show previous frame behind current**: When enabled along with `Draw Partial Frame`, the previous frame's data will be shown behind the current frame.
+* **Show break notifications**: When enabled, a "notification" will be shown over the disassembly window indicating what caused the debugger to break the execution (e.g: a CPU/PPU read/write, a decayed OAM read, etc.)
+* **Show instruction progression**: When enabled, the code window will display an indicator showing how far along into the current instruction the execution is. This also shows an estimate of how many cycles the instruction will take to complete (this estimate may increase for various reasons such as a page being crossed, etc.)
 
 <div></div>
 
@@ -352,6 +373,26 @@ These options configure which portions of the code is copied into the clipboard 
 <div></div>
 
 * **Refresh UI while running**: When enabled, the watch window and the CPU/PPU status will be updated continuously while the emulation is running (instead of only updating when the execution breaks)
+
+## Workspaces ##
+
+Debugger "workspaces" are used to store information specific to each ROM you debug. This includes watch expressions, breakpoints and labels.
+
+### Default Workspace Labels ###
+
+By default, Mesen setups labels for the NES' PPU and APU registers. These can be enabling the `Disable default labels` option.  
+  
+Additionally, it's possible to setup your own set of default labels by creating a file called `DefaultLabels.Global.mlb` in the `Debugger` folder (where the workspace and CDL files are stored). When Mesen finds this file, it will ignore the its own default labels and use the ones contained in that file instead, for all ROMs.  
+
+You can also setup default labels for specific mappers by creating a file called `DefaultLabels.[mapper number].mlb` (e.g, for MMC3 games: `DefaultLabels.4.mlb`).  
+For FDS and NSF ROMs, `DefaultLabels.FDS.mlb` and `DefaultLabels.NSF.mlb` can be used, respectively.  
+
+If both a global and mapper-specific `mlb` is found, both of them will be used (with the mapper-specific file having priority in case of conflicting labels).
+
+{{% notice tip %}}
+`.mlb` files are a Mesen-specific file format to define labels/comments in the code. They are written in a simple text format and can also be created by using the debugger's `Export Labels` feature.
+{{% /notice %}}
+
 
 ## How To: Edit Code ##
 

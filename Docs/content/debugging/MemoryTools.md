@@ -15,16 +15,24 @@ The memory viewer offers read and write access to all types of ROM and RAM:
 
 * CPU Memory
 * PPU Memory
-* Palette RAM
-* OAM RAM
-* Secondary OAM RAM
+
+<div></div>
+
 * PRG ROM
-* CHR ROM
-* CHR RAM
 * Work RAM
 * Save RAM
 
+<div></div>
+
+* CHR ROM
+* CHR RAM
+* Palette RAM
+* Sprite / OAM RAM
+* Secondary OAM RAM
+
 **Note:** Only memory types that are available for the currently loaded ROM will be shown in the dropdown.
+
+<div style="clear:both"></div>
 
 {{% notice tip %}}
 PRG ROM and CHR ROM *are* writable from the memory viewer.  Any change will remain in effect until a power cycle. If you want to save your PRG/CHR ROM modifications to a .nes file, or as an IPS patch, you can use the **<kbd>File&rarr;Save</kbd>** or **<kbd>File&rarr;Save edits as IPS</kbd>** commands in the [debugger window](/debugging/debugger.html).
@@ -36,7 +44,15 @@ There are a number of highlighting/coloring options in the memory viewer.
 
 <kbd>**View&rarr;Memory Access Highlighting**</kbd> has coloring options for addresses that were recently read, written or executed (colored in <span class="blue">blue</span>, <span class="red">red</span> and <span class="green">green</span>, respectively). A fade-out period can also be configured, after which the byte will revert to its normal black color.  
 
-<kbd>**View&rarr;Data Type Highlighting**</kbd> offers options to change the background color of specific bytes based on their type.</span>.
+<kbd>**View&rarr;Data Type Highlighting**</kbd> offers options to change the background color of specific bytes based on their type:</span>
+	
+* Labeled bytes
+* Breakpoints
+* Code bytes *(PRG ROM only)*
+* Data bytes *(PRG ROM only)**
+* DMC sample bytes *(PRG ROM only)*
+* Drawn bytes *(CHR ROM only)*
+* Read bytes *(CHR ROM only)*
 
 <kbd>**View&rarr;De-emphasize**</kbd> offers options to display bytes matching certain conditions (unused, read, written or executed) in <span class="gray">gray</span>.
 
