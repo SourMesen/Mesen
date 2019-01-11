@@ -556,6 +556,18 @@ string Disassembler::GetCode(AddressTypeInfo &addressInfo, uint32_t endAddr, uin
 		} else if(info) {
 			dataType = DataType::VerifiedCode;
 		}
+
+		if(!label.empty()) {
+			size_t arrayNotationIndex = label.find_first_of('+');
+			if(arrayNotationIndex != string::npos && label.size() > arrayNotationIndex + 1) {
+				if(label[arrayNotationIndex + 1] != '0') {
+					//Ignore array labels except the +0 variation
+					label = "";
+				} else {
+					label = label.substr(0, label.size() - 2);
+				}
+			}
+		}
 		
 		if(info && addr + info->GetSize() <= endAddr + 1) {
 			if(insideDataBlock) {

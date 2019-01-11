@@ -601,6 +601,7 @@ namespace Mesen.GUI.Debugger
 
 		private frmCodeTooltip _tooltip = null;
 		private CodeLabel _lastLabelTooltip = null;
+		private int _lastLabelArrayOffset = -1;
 		private int _lastTooltipAddress = -1;
 		private void ctrlHexViewer_ByteMouseHover(int address, Point position)
 		{
@@ -608,6 +609,7 @@ namespace Mesen.GUI.Debugger
 				if(_tooltip != null) {
 					_tooltip.Close();
 					_lastLabelTooltip = null;
+					_lastLabelArrayOffset = -1;
 					_lastTooltipAddress = -1;
 				}
 				return;
@@ -620,37 +622,34 @@ namespace Mesen.GUI.Debugger
 			_lastTooltipAddress = address;
 
 			CodeLabel label = null;
+			int arrayOffset = 0;
 			switch(_memoryType) {
 				case DebugMemoryType.CpuMemory:
 					AddressTypeInfo info = new AddressTypeInfo();
 					InteropEmu.DebugGetAbsoluteAddressAndType((UInt32)address, info);
 					if(info.Address >= 0) {
 						label = LabelManager.GetLabel((UInt32)info.Address, info.Type);
+						if(label != null) {
+							arrayOffset = info.Address - (int)label.Address;
+						} else {
+							label = LabelManager.GetLabel((UInt32)address, AddressType.Register);
+						}
 					} 
-					if(label == null) {
-						label = LabelManager.GetLabel((UInt32)address, AddressType.Register);
-					}
 					break;
 
 				case DebugMemoryType.InternalRam:
-					label = LabelManager.GetLabel((UInt32)address, AddressType.InternalRam);
-					break;
-
 				case DebugMemoryType.WorkRam:
-					label = LabelManager.GetLabel((UInt32)address, AddressType.WorkRam);
-					break;
-
 				case DebugMemoryType.SaveRam:
-					label = LabelManager.GetLabel((UInt32)address, AddressType.SaveRam);
-					break;
-
 				case DebugMemoryType.PrgRom:
-					label = LabelManager.GetLabel((UInt32)address, AddressType.PrgRom);
+					label = LabelManager.GetLabel((UInt32)address, _memoryType.ToAddressType());
+					if(label != null) {
+						arrayOffset = address - (int)label.Address;
+					}
 					break;
 			}
 
 			if(label != null) {
-				if(_lastLabelTooltip != label) {
+				if(_lastLabelTooltip != label || _lastLabelArrayOffset != arrayOffset) {
 					if(_tooltip != null) {
 						_tooltip.Close();
 					}
@@ -658,8 +657,11 @@ namespace Mesen.GUI.Debugger
 					Dictionary<string, string> values = new Dictionary<string, string>();
 					if(!string.IsNullOrWhiteSpace(label.Label)) {
 						values["Label"] = label.Label;
+						if(label.Length > 1) {
+							values["Label"] += "+" + arrayOffset.ToString();
+						}
 					}
-					values["Address"] = "$" + label.Address.ToString("X4");
+					values["Address"] = "$" + (label.Address + arrayOffset).ToString("X4");
 					values["Address Type"] = label.AddressType.ToString();
 					if(!string.IsNullOrWhiteSpace(label.Comment)) {
 						values["Comment"] = label.Comment;
@@ -669,11 +671,13 @@ namespace Mesen.GUI.Debugger
 					_tooltip.FormClosed += (s, evt) => { _tooltip = null; };
 					_tooltip.SetFormLocation(new Point(position.X, position.Y), ctrlHexViewer);
 					_lastLabelTooltip = label;
+					_lastLabelArrayOffset = arrayOffset;
 				}
 			} else {
 				if(_tooltip != null) {
 					_tooltip.Close();
 					_lastLabelTooltip = null;
+					_lastLabelArrayOffset = -1;
 					_lastTooltipAddress = -1;
 				}
 			}

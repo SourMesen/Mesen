@@ -16,7 +16,7 @@ namespace Mesen.GUI.Debugger
 {
 	public partial class ctrlTextbox : Control
 	{
-		private Regex _codeRegex = new Regex("^(\\s*)([a-z]{3})([*]{0,1})($|[ ]){1}([(]{0,1})(([$][0-9a-f]*)|(#[@$:_0-9a-z]*)|([@_a-z]([@_a-z0-9])*)){0,1}([)]{0,1})(,X|,Y){0,1}([)]{0,1})(.*)", RegexOptions.IgnoreCase | RegexOptions.Compiled);
+		private Regex _codeRegex = new Regex("^(\\s*)([a-z]{3})([*]{0,1})($|[ ]){1}([(]{0,1})(([$][0-9a-f]*)|(#[@$:_0-9a-z]*)|([@_a-z]([@_a-z0-9])*){0,1}(\\+(\\d+)){0,1}){0,1}([)]{0,1})(,X|,Y){0,1}([)]{0,1})(.*)", RegexOptions.IgnoreCase | RegexOptions.Compiled);
 		public event EventHandler ScrollPositionChanged;
 		public event EventHandler SelectedLineChanged;
 		private bool _disableScrollPositionChangedEvent;
@@ -502,7 +502,7 @@ namespace Mesen.GUI.Debugger
 			return false;
 		}
 
-		char[] _wordDelimiters = new char[] { ' ', ',', '|', ';', '(', ')', '.', '-', ':', '+', '<', '>', '#', '*', '/', '&', '[', ']', '~', '%' };
+		char[] _wordDelimiters = new char[] { ' ', ',', '|', ';', '(', ')', '.', '-', ':', '<', '>', '#', '*', '/', '&', '[', ']', '~', '%' };
 		public string GetWordUnderLocation(Point position)
 		{
 			int charIndex; 
@@ -1044,10 +1044,11 @@ namespace Mesen.GUI.Debugger
 						string invalidStar = match.Groups[3].Value;
 						string paren1 = match.Groups[5].Value;
 						string operand = match.Groups[6].Value;
-						string paren2 = match.Groups[11].Value;
-						string indirect = match.Groups[12].Value;
-						string paren3 = match.Groups[13].Value;
-						string rest = match.Groups[14].Value;
+						string arrayPosition = match.Groups[12].Value;
+						string paren2 = match.Groups[13].Value;
+						string indirect = match.Groups[14].Value;
+						string paren3 = match.Groups[15].Value;
+						string rest = match.Groups[16].Value;
 						Color operandColor = operand.Length > 0 ? (operand[0] == '#' ? (Color)info.AssemblerImmediateColor : (operand[0] == '$' ? (Color)info.AssemblerAddressColor : (Color)info.AssemblerLabelDefinitionColor)) : Color.Black;
 						List<Color> colors = new List<Color>() { defaultColor, info.AssemblerOpcodeColor, defaultColor, defaultColor, defaultColor, operandColor, defaultColor, defaultColor, defaultColor };
 						int codePartCount = colors.Count;
@@ -1068,9 +1069,15 @@ namespace Mesen.GUI.Debugger
 								Int32.TryParse(memoryAddress.Substring(1), System.Globalization.NumberStyles.AllowHexSpecifier, null, out address);
 							} else {
 								//Label
+								UInt32 arrayOffset = 0;
+								if(!string.IsNullOrWhiteSpace(arrayPosition)) {
+									memoryAddress = memoryAddress.Substring(0, memoryAddress.Length - arrayPosition.Length - 1);
+									arrayOffset = UInt32.Parse(arrayPosition);
+								}
+
 								CodeLabel label = LabelManager.GetLabel(memoryAddress);
 								if(label != null) {
-									address = label.GetRelativeAddress();
+									address = InteropEmu.DebugGetRelativeAddress(label.Address + arrayOffset, label.AddressType);
 								}
 							}
 

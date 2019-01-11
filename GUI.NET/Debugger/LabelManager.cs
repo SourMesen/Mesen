@@ -15,6 +15,7 @@ namespace Mesen.GUI.Debugger
 		public string Label;
 		public string Comment;
 		public CodeLabelFlags Flags;
+		public UInt32 Length = 1;
 
 		public override string ToString()
 		{
@@ -49,7 +50,8 @@ namespace Mesen.GUI.Debugger
 
 	public class LabelManager
 	{
-		private static Dictionary<UInt32, CodeLabel> _labels = new Dictionary<UInt32, CodeLabel>();
+		private static Dictionary<UInt32, CodeLabel> _labelsByKey = new Dictionary<UInt32, CodeLabel>();
+		private static HashSet<CodeLabel> _labels = new HashSet<CodeLabel>();
 		private static Dictionary<string, CodeLabel> _reverseLookup = new Dictionary<string, CodeLabel>();
 
 		public static event EventHandler OnLabelUpdated;
@@ -58,13 +60,14 @@ namespace Mesen.GUI.Debugger
 		{
 			InteropEmu.DebugDeleteLabels();
 			_labels.Clear();
+			_labelsByKey.Clear();
 			_reverseLookup.Clear();
 		}
 
 		public static CodeLabel GetLabel(UInt32 address, AddressType type)
 		{
 			CodeLabel label;
-			_labels.TryGetValue(GetKey(address, type), out label);
+			_labelsByKey.TryGetValue(GetKey(address, type), out label);
 			return label;
 		}
 
@@ -86,7 +89,7 @@ namespace Mesen.GUI.Debugger
 		public static void SetLabels(IEnumerable<CodeLabel> labels, bool raiseEvents = true)
 		{
 			foreach(CodeLabel label in labels) {
-				SetLabel(label.Address, label.AddressType, label.Label, label.Comment, false, label.Flags);
+				SetLabel(label.Address, label.AddressType, label.Label, label.Comment, false, label.Flags, label.Length);
 			}
 			if(raiseEvents) {
 				OnLabelUpdated?.Invoke(null, null);
@@ -95,7 +98,7 @@ namespace Mesen.GUI.Debugger
 
 		public static List<CodeLabel> GetLabels()
 		{
-			return _labels.Values.ToList<CodeLabel>();
+			return _labels.ToList<CodeLabel>();
 		}
 
 		private static UInt32 GetKey(UInt32 address, AddressType addressType)
@@ -110,25 +113,39 @@ namespace Mesen.GUI.Debugger
 			throw new Exception("Invalid type");
 		}
 
-		public static bool SetLabel(UInt32 address, AddressType type, string label, string comment, bool raiseEvent = true, CodeLabelFlags flags = CodeLabelFlags.None)
+		public static bool SetLabel(UInt32 address, AddressType type, string label, string comment, bool raiseEvent = true, CodeLabelFlags flags = CodeLabelFlags.None, UInt32 labelLength = 1)
 		{
 			if(_reverseLookup.ContainsKey(label)) {
 				//Another identical label exists, we need to remove it
 				CodeLabel existingLabel = _reverseLookup[label];
-				DeleteLabel(existingLabel.Address, existingLabel.AddressType, false);
+				DeleteLabel(existingLabel, false);
 			}
 
-			UInt32 key = GetKey(address, type);
-			if(_labels.ContainsKey(key)) {
-				_reverseLookup.Remove(_labels[key].Label);
+			CodeLabel newLabel = new CodeLabel() { Address = address, AddressType = type, Label = label, Comment = comment, Flags = flags, Length = labelLength };
+			for(UInt32 i = address; i < address + labelLength; i++) {
+				UInt32 key = GetKey(i, type);
+				CodeLabel existingLabel;
+				if(_labelsByKey.TryGetValue(key, out existingLabel)) {
+					_reverseLookup.Remove(existingLabel.Label);
+				}
+
+				_labelsByKey[key] = newLabel;
+
+				if(labelLength == 1) {
+					InteropEmu.DebugSetLabel(i, type, label, comment.Replace(Environment.NewLine, "\n"));
+				} else {
+					InteropEmu.DebugSetLabel(i, type, label + "+" + (i - address).ToString(), comment.Replace(Environment.NewLine, "\n"));
+
+					//Only set the comment on the first byte of multi-byte comments
+					comment = "";
+				}
 			}
 
-			_labels[key] = new CodeLabel() { Address = address, AddressType = type, Label = label, Comment = comment, Flags = flags };
+			_labels.Add(newLabel);
 			if(label.Length > 0) {
-				_reverseLookup[label] = _labels[key];
+				_reverseLookup[label] = newLabel;
 			}
 
-			InteropEmu.DebugSetLabel(address, type, label, comment.Replace(Environment.NewLine, "\n"));
 			if(raiseEvent) {
 				OnLabelUpdated?.Invoke(null, null);
 			}
@@ -136,17 +153,27 @@ namespace Mesen.GUI.Debugger
 			return true;
 		}
 
-		public static void DeleteLabel(UInt32 address, AddressType type, bool raiseEvent)
+		public static void DeleteLabel(CodeLabel label, bool raiseEvent)
 		{
-			UInt32 key = GetKey(address, type);
-			if(_labels.ContainsKey(key)) {
-				_reverseLookup.Remove(_labels[key].Label);
-			}
-			if(_labels.Remove(key)) {
-				InteropEmu.DebugSetLabel(address, type, string.Empty, string.Empty);
-				if(raiseEvent) {
-					OnLabelUpdated?.Invoke(null, null);
+			bool needEvent = false;
+
+			_labels.Remove(label);
+			for(UInt32 i = label.Address; i < label.Address + label.Length; i++) {
+				UInt32 key = GetKey(i, label.AddressType);
+				if(_labelsByKey.ContainsKey(key)) {
+					_reverseLookup.Remove(_labelsByKey[key].Label);
 				}
+
+				if(_labelsByKey.Remove(key)) {
+					InteropEmu.DebugSetLabel(i, label.AddressType, string.Empty, string.Empty);
+					if(raiseEvent) {
+						needEvent = true;
+					}
+				}
+			}
+
+			if(needEvent) {
+				OnLabelUpdated?.Invoke(null, null);
 			}
 		}
 

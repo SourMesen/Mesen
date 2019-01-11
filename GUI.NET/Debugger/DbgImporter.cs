@@ -42,7 +42,7 @@ namespace Mesen.GUI.Debugger
 		private static Regex _lineRegex = new Regex("^line\tid=([0-9]+),.*file=([0-9]+),.*line=([0-9]+)(,.*type=([0-9]+)){0,1}(,.*span=([0-9+]+)){0,1}", RegexOptions.Compiled);
 		private static Regex _fileRegex = new Regex("^file\tid=([0-9]+),.*name=\"([^\"]+)\"", RegexOptions.Compiled);
 		private static Regex _spanRegex = new Regex("^span\tid=([0-9]+),.*seg=([0-9]+),.*start=([0-9]+),.*size=([0-9]+)(,.*type=([0-9]+)){0,1}", RegexOptions.Compiled);
-		private static Regex _symbolRegex = new Regex("^sym\tid=([0-9]+).*name=\"([0-9a-zA-Z@_-]+)\"(,.*def=([0-9+]+)){0,1}(,.*ref=([0-9+]+)){0,1}(,.*val=0x([0-9a-fA-F]+)){0,1}(,.*seg=([0-9]+)){0,1}(,.*exp=([0-9]+)){0,1}", RegexOptions.Compiled);
+		private static Regex _symbolRegex = new Regex("^sym\tid=([0-9]+).*name=\"([0-9a-zA-Z@_-]+)\"(,.*size=([0-9]+)){0,1}(,.*def=([0-9+]+)){0,1}(,.*ref=([0-9+]+)){0,1}(,.*val=0x([0-9a-fA-F]+)){0,1}(,.*seg=([0-9]+)){0,1}(,.*exp=([0-9]+)){0,1}", RegexOptions.Compiled);
 		private static Regex _cSymbolRegex = new Regex("^csym\tid=([0-9]+).*name=\"([0-9a-zA-Z@_-]+)\"(,.*sym=([0-9+]+)){0,1}", RegexOptions.Compiled);
 
 		private static Regex _asmFirstLineRegex = new Regex(";(.*)", RegexOptions.Compiled);
@@ -160,7 +160,7 @@ namespace Mesen.GUI.Debugger
 				if(_lines.TryGetValue(definition, out definitionLine)) {
 					if(_files.TryGetValue(definitionLine.FileID, out file)) {
 						int lineNumber = definitionLine.LineNumber;
-						while(!(definitionLine?.SpanIDs.Count > 0) && lineNumber < file.Data.Length - 1) {
+						while(!(definitionLine?.SpanIDs.Count > 0) && lineNumber < _linesByFile[file.ID].Length - 1) {
 							//Definition line contains no code, try the next line
 							lineNumber++;
 							definitionLine = _linesByFile[file.ID][lineNumber];
@@ -392,19 +392,23 @@ namespace Mesen.GUI.Debugger
 				SymbolInfo symbol = new SymbolInfo() {
 					ID = Int32.Parse(match.Groups[1].Value),
 					Name = match.Groups[2].Value,
-					Address = match.Groups[8].Success ? (int?)Int32.Parse(match.Groups[8].Value, NumberStyles.HexNumber) : null,
-					SegmentID = match.Groups[10].Success ? (int?)Int32.Parse(match.Groups[10].Value) : null,
-					ExportSymbolID = match.Groups[12].Success ? (int?)Int32.Parse(match.Groups[12].Value) : null
+					Address = match.Groups[10].Success ? (int?)Int32.Parse(match.Groups[10].Value, NumberStyles.HexNumber) : null,
+					SegmentID = match.Groups[12].Success ? (int?)Int32.Parse(match.Groups[12].Value) : null,
+					ExportSymbolID = match.Groups[14].Success ? (int?)Int32.Parse(match.Groups[14].Value) : null
 				};
 
 				if(match.Groups[4].Success) {
-					symbol.Definitions = match.Groups[4].Value.Split('+').Select(o => Int32.Parse(o)).ToList();
+					symbol.Size = Int32.Parse(match.Groups[4].Value);
+				}
+
+				if(match.Groups[6].Success) {
+					symbol.Definitions = match.Groups[6].Value.Split('+').Select(o => Int32.Parse(o)).ToList();
 				} else {
 					symbol.Definitions = new List<int>();
 				}
 
-				if(match.Groups[6].Success) {
-					symbol.References = match.Groups[6].Value.Split('+').Select(o => Int32.Parse(o)).ToList();
+				if(match.Groups[8].Success) {
+					symbol.References = match.Groups[8].Value.Split('+').Select(o => Int32.Parse(o)).ToList();
 				} else {
 					symbol.References = new List<int>();
 				}
@@ -416,6 +420,20 @@ namespace Mesen.GUI.Debugger
 			}
 
 			return false;
+		}
+
+		public int GetSymbolSize(SymbolInfo symbol)
+		{
+			if(symbol.SegmentID != null && _segments.ContainsKey(symbol.SegmentID.Value)) {
+				SegmentInfo segment = _segments[symbol.SegmentID.Value];
+				SpanInfo defSpan = null;
+				if(!segment.IsRam) {
+					defSpan = GetSymbolDefinitionSpan(symbol);
+				}
+				return (defSpan == null || defSpan.IsData) ? (symbol.Size ?? 1) : 1;
+			}
+
+			return 1;
 		}
 
 		private void GetRamLabelAddressAndType(int address, out int absoluteAddress, out AddressType? addressType)
@@ -435,27 +453,27 @@ namespace Mesen.GUI.Debugger
 			}
 		}
 
-		private CodeLabel CreateLabel(Int32 address, AddressType addressType)
+		private CodeLabel CreateLabel(Int32 address, AddressType addressType, UInt32 length)
 		{
 			CodeLabel label = null;
 			if(addressType == AddressType.InternalRam) {
 				if(!_ramLabels.TryGetValue(address, out label)) {
-					label = new CodeLabel() { Address = (UInt32)address, AddressType = AddressType.InternalRam, Comment = string.Empty, Label = string.Empty };
+					label = new CodeLabel() { Address = (UInt32)address, AddressType = AddressType.InternalRam, Comment = string.Empty, Label = string.Empty, Length = length };
 					_ramLabels[address] = label;
 				}
 			} else if(addressType == AddressType.WorkRam) {
 				if(!_workRamLabels.TryGetValue(address, out label)) {
-					label = new CodeLabel() { Address = (UInt32)address, AddressType = AddressType.WorkRam, Comment = string.Empty, Label = string.Empty };
+					label = new CodeLabel() { Address = (UInt32)address, AddressType = AddressType.WorkRam, Comment = string.Empty, Label = string.Empty, Length = length };
 					_workRamLabels[address] = label;
 				}
 			} else if(addressType == AddressType.SaveRam) {
 				if(!_saveRamLabels.TryGetValue(address, out label)) {
-					label = new CodeLabel() { Address = (UInt32)address, AddressType = AddressType.SaveRam, Comment = string.Empty, Label = string.Empty };
+					label = new CodeLabel() { Address = (UInt32)address, AddressType = AddressType.SaveRam, Comment = string.Empty, Label = string.Empty, Length = length };
 					_saveRamLabels[address] = label;
 				}
 			} else {
 				if(!_romLabels.TryGetValue(address, out label)) {
-					label = new CodeLabel() { Address = (UInt32)address, AddressType = AddressType.PrgRom, Comment = string.Empty, Label = string.Empty };
+					label = new CodeLabel() { Address = (UInt32)address, AddressType = AddressType.PrgRom, Comment = string.Empty, Label = string.Empty, Length = length };
 					_romLabels[address] = label;
 				}
 			}
@@ -487,7 +505,7 @@ namespace Mesen.GUI.Debugger
 						AddressTypeInfo addressInfo = GetSymbolAddressInfo(symbol);
 						if(symbol.Address != null) {
 							int address = addressInfo.Address;
-							CodeLabel label = this.CreateLabel(addressInfo.Address, addressInfo.Type);
+							CodeLabel label = this.CreateLabel(addressInfo.Address, addressInfo.Type, (uint)GetSymbolSize(symbol));
 							if(label != null) {
 								label.Label = newName;
 							}
@@ -560,7 +578,7 @@ namespace Mesen.GUI.Debugger
 						}
 
 						if(address >= 0 && addressType != null) {
-							CodeLabel label = this.CreateLabel(address, addressType.Value);
+							CodeLabel label = this.CreateLabel(address, addressType.Value, 1);
 							if(label != null) {
 								label.Comment = comment;
 							}
@@ -859,6 +877,7 @@ namespace Mesen.GUI.Debugger
 			public int? Address;
 			public int? SegmentID;
 			public int? ExportSymbolID;
+			public int? Size;
 			public List<int> References;
 			public List<int> Definitions;
 		}

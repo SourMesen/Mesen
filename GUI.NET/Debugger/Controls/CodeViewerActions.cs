@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Mesen.GUI.Config;
 using System.Globalization;
+using System.Text.RegularExpressions;
 
 namespace Mesen.GUI.Debugger.Controls
 {
@@ -502,6 +503,11 @@ namespace Mesen.GUI.Debugger.Controls
 			CodeLabel codeLabel = null;
 
 			if(!word.StartsWith("$")) {
+				Match arrayMatch = CodeTooltipManager.LabelArrayFormat.Match(word);
+				if(arrayMatch.Success) {
+					word = arrayMatch.Groups[1].Value;
+				}
+
 				codeLabel = LabelManager.GetLabel(word);
 
 				if(Viewer.SymbolProvider != null && IsSourceView) {

@@ -37,6 +37,7 @@ namespace Mesen.GUI.Debugger
 			AddBinding("Address", txtAddress);
 			AddBinding("Label", txtLabel);
 			AddBinding("Comment", txtComment);
+			AddBinding("Length", nudLength);
 		}
 
 		protected override void OnShown(EventArgs e)
@@ -62,6 +63,7 @@ namespace Mesen.GUI.Debugger
 			UpdateObject();
 
 			UInt32 address = ((CodeLabel)Entity).Address;
+			UInt32 length = ((CodeLabel)Entity).Length;
 			AddressType type = ((CodeLabel)Entity).AddressType;
 			CodeLabel sameLabel = LabelManager.GetLabel(txtLabel.Text);
 			CodeLabel sameAddress = LabelManager.GetLabel(address, type);
@@ -75,7 +77,8 @@ namespace Mesen.GUI.Debugger
 			}
 
 			return
-				address <= maxAddress && 
+				length >= 1 && length <= 65536 &&
+				address + (length - 1) <= maxAddress &&
 				(sameLabel == null || sameLabel == _originalLabel) 
 				&& (sameAddress == null || sameAddress == _originalLabel)
 				&& (_originalLabel != null || txtLabel.Text.Length > 0 || txtComment.Text.Length > 0)

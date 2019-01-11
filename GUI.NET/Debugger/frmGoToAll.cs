@@ -211,6 +211,7 @@ namespace Mesen.GUI.Debugger
 							searchResults.Add(new SearchResultInfo() {
 								Caption = symbol.Name,
 								AbsoluteAddress = addressInfo?.Address ?? -1,
+								Length = _symbolProvider.GetSymbolSize(symbol),
 								MemoryType = addressInfo?.Type ?? AddressType.InternalRam,
 								SearchResultType = resultType,
 								Value = value,
@@ -236,6 +237,7 @@ namespace Mesen.GUI.Debugger
 							searchResults.Add(new SearchResultInfo() {
 								Caption = label.Label,
 								AbsoluteAddress = (int)label.Address,
+								Length = (int)label.Length,
 								Value = label.GetValue(),
 								MemoryType = label.AddressType,
 								SearchResultType = resultType,
