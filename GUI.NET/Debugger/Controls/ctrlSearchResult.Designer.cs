@@ -51,7 +51,7 @@
 			// 
 			this.tableLayoutPanel1.ColumnCount = 2;
 			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 160F));
 			this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanel4, 1, 1);
 			this.tableLayoutPanel1.Controls.Add(this.lblLocation, 0, 1);
 			this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanel2, 1, 0);
@@ -74,12 +74,12 @@
 			this.tableLayoutPanel4.Controls.Add(this.lblCpu, 0, 0);
 			this.tableLayoutPanel4.Controls.Add(this.lblRelativeAddress, 1, 0);
 			this.tableLayoutPanel4.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.tableLayoutPanel4.Location = new System.Drawing.Point(148, 17);
+			this.tableLayoutPanel4.Location = new System.Drawing.Point(114, 17);
 			this.tableLayoutPanel4.Margin = new System.Windows.Forms.Padding(0);
 			this.tableLayoutPanel4.Name = "tableLayoutPanel4";
 			this.tableLayoutPanel4.RowCount = 1;
 			this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel4.Size = new System.Drawing.Size(126, 17);
+			this.tableLayoutPanel4.Size = new System.Drawing.Size(160, 17);
 			this.tableLayoutPanel4.TabIndex = 6;
 			// 
 			// lblCpu
@@ -88,7 +88,7 @@
 			this.lblCpu.AutoSize = true;
 			this.lblCpu.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.lblCpu.ForeColor = System.Drawing.SystemColors.GrayText;
-			this.lblCpu.Location = new System.Drawing.Point(34, 0);
+			this.lblCpu.Location = new System.Drawing.Point(68, 0);
 			this.lblCpu.Name = "lblCpu";
 			this.lblCpu.Padding = new System.Windows.Forms.Padding(0, 3, 0, 0);
 			this.lblCpu.Size = new System.Drawing.Size(25, 15);
@@ -99,7 +99,7 @@
 			// 
 			this.lblRelativeAddress.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.lblRelativeAddress.AutoSize = true;
-			this.lblRelativeAddress.Location = new System.Drawing.Point(65, 2);
+			this.lblRelativeAddress.Location = new System.Drawing.Point(99, 2);
 			this.lblRelativeAddress.Name = "lblRelativeAddress";
 			this.lblRelativeAddress.Padding = new System.Windows.Forms.Padding(0, 0, 0, 2);
 			this.lblRelativeAddress.Size = new System.Drawing.Size(58, 15);
@@ -125,19 +125,19 @@
 			this.tableLayoutPanel2.Controls.Add(this.lblAbsoluteAddress, 1, 0);
 			this.tableLayoutPanel2.Controls.Add(this.lblMemoryType, 0, 0);
 			this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.tableLayoutPanel2.Location = new System.Drawing.Point(148, 0);
+			this.tableLayoutPanel2.Location = new System.Drawing.Point(114, 0);
 			this.tableLayoutPanel2.Margin = new System.Windows.Forms.Padding(0);
 			this.tableLayoutPanel2.Name = "tableLayoutPanel2";
 			this.tableLayoutPanel2.RowCount = 1;
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel2.Size = new System.Drawing.Size(126, 17);
+			this.tableLayoutPanel2.Size = new System.Drawing.Size(160, 17);
 			this.tableLayoutPanel2.TabIndex = 4;
 			// 
 			// lblAbsoluteAddress
 			// 
 			this.lblAbsoluteAddress.Anchor = System.Windows.Forms.AnchorStyles.Right;
 			this.lblAbsoluteAddress.AutoSize = true;
-			this.lblAbsoluteAddress.Location = new System.Drawing.Point(59, 1);
+			this.lblAbsoluteAddress.Location = new System.Drawing.Point(93, 1);
 			this.lblAbsoluteAddress.Name = "lblAbsoluteAddress";
 			this.lblAbsoluteAddress.Padding = new System.Windows.Forms.Padding(0, 2, 0, 0);
 			this.lblAbsoluteAddress.Size = new System.Drawing.Size(64, 15);
@@ -150,12 +150,12 @@
 			this.lblMemoryType.AutoSize = true;
 			this.lblMemoryType.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.lblMemoryType.ForeColor = System.Drawing.SystemColors.GrayText;
-			this.lblMemoryType.Location = new System.Drawing.Point(3, 0);
+			this.lblMemoryType.Location = new System.Drawing.Point(11, 0);
 			this.lblMemoryType.Name = "lblMemoryType";
 			this.lblMemoryType.Padding = new System.Windows.Forms.Padding(0, 3, 0, 0);
-			this.lblMemoryType.Size = new System.Drawing.Size(50, 15);
+			this.lblMemoryType.Size = new System.Drawing.Size(76, 15);
 			this.lblMemoryType.TabIndex = 4;
-			this.lblMemoryType.Text = "PRG ROM";
+			this.lblMemoryType.Text = "NES RAM (2 KB)";
 			// 
 			// tableLayoutPanel3
 			// 
@@ -172,7 +172,7 @@
 			this.tableLayoutPanel3.Name = "tableLayoutPanel3";
 			this.tableLayoutPanel3.RowCount = 1;
 			this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this.tableLayoutPanel3.Size = new System.Drawing.Size(148, 17);
+			this.tableLayoutPanel3.Size = new System.Drawing.Size(114, 17);
 			this.tableLayoutPanel3.TabIndex = 5;
 			// 
 			// picWarning
@@ -182,6 +182,7 @@
 			this.picWarning.Margin = new System.Windows.Forms.Padding(1, 0, 0, 0);
 			this.picWarning.Name = "picWarning";
 			this.picWarning.Size = new System.Drawing.Size(16, 16);
+			this.picWarning.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
 			this.picWarning.TabIndex = 2;
 			this.picWarning.TabStop = false;
 			// 
@@ -191,7 +192,7 @@
 			this.lblLabelName.Location = new System.Drawing.Point(37, 0);
 			this.lblLabelName.Name = "lblLabelName";
 			this.lblLabelName.Padding = new System.Windows.Forms.Padding(0, 2, 0, 0);
-			this.lblLabelName.Size = new System.Drawing.Size(75, 15);
+			this.lblLabelName.Size = new System.Drawing.Size(69, 28);
 			this.lblLabelName.TabIndex = 0;
 			this.lblLabelName.Text = "MyLabelName";
 			// 
@@ -201,6 +202,7 @@
 			this.picType.Margin = new System.Windows.Forms.Padding(1, 0, 0, 0);
 			this.picType.Name = "picType";
 			this.picType.Size = new System.Drawing.Size(16, 16);
+			this.picType.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
 			this.picType.TabIndex = 1;
 			this.picType.TabStop = false;
 			// 
