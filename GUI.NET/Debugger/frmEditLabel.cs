@@ -43,6 +43,7 @@ namespace Mesen.GUI.Debugger
 		protected override void OnShown(EventArgs e)
 		{
 			base.OnShown(e);
+			UpdateByteLabel();
 			txtLabel.Focus();
 		}
 
@@ -99,6 +100,20 @@ namespace Mesen.GUI.Debugger
 				this.Close();
 			}
 			return base.ProcessCmdKey(ref msg, keyData);
+		}
+
+		private void nudLength_ValueChanged(object sender, EventArgs e)
+		{
+			UpdateByteLabel();
+		}
+
+		private void UpdateByteLabel()
+		{
+			if(nudLength.Value > 1) {
+				lblBytes.Text = "bytes";
+			} else {
+				lblBytes.Text = "byte";
+			}
 		}
 	}
 }

@@ -283,7 +283,9 @@ Various types of labels can be defined:
 - **Register**: These are used to give name to built-in or mapper-specific registers.  For example, the $2000 PPU register could be renamed to "PpuControl". 
    
 There are some restrictions on what a label can contain -- in general, they must begin with a letter or an underscore and cannot contain spaces or most non-alphanumeric characters.
-Every type of label can also contain a comment.  Comments are shown in the code window as well as in the tooltips that are displayed when putting your cursor over a label in the code window. 
+Labels can also contain a comment which is shown in the code window as well as in the tooltips that are displayed when putting your cursor over a label in the code window. 
+
+Multi-byte labels can be defined using the `Length` setting. This can be used to define multi-byte values, arrays or pointers in the code. Multi-byte labels will be shown with a +X offset modifier when referred to in the code window (e.g: `MyArrayLabel+2`)
 
 ## Function List ##
 

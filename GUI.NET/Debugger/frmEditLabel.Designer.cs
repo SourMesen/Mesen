@@ -28,6 +28,10 @@
 		private void InitializeComponent()
 		{
 			this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+			this.flowLayoutPanel3 = new System.Windows.Forms.FlowLayoutPanel();
+			this.nudLength = new Mesen.GUI.Controls.MesenNumericUpDown();
+			this.lblBytes = new System.Windows.Forms.Label();
+			this.lblLength = new System.Windows.Forms.Label();
 			this.lblLabel = new System.Windows.Forms.Label();
 			this.lblComment = new System.Windows.Forms.Label();
 			this.txtComment = new System.Windows.Forms.TextBox();
@@ -39,13 +43,9 @@
 			this.lblAddressSign = new System.Windows.Forms.Label();
 			this.txtAddress = new System.Windows.Forms.TextBox();
 			this.lblRange = new System.Windows.Forms.Label();
-			this.lblLength = new System.Windows.Forms.Label();
-			this.nudLength = new Mesen.GUI.Controls.MesenNumericUpDown();
-			this.flowLayoutPanel3 = new System.Windows.Forms.FlowLayoutPanel();
-			this.lblBytes = new System.Windows.Forms.Label();
 			this.tableLayoutPanel1.SuspendLayout();
-			this.flowLayoutPanel2.SuspendLayout();
 			this.flowLayoutPanel3.SuspendLayout();
+			this.flowLayoutPanel2.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// baseConfigPanel
@@ -79,6 +79,68 @@
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel1.Size = new System.Drawing.Size(377, 242);
 			this.tableLayoutPanel1.TabIndex = 2;
+			// 
+			// flowLayoutPanel3
+			// 
+			this.flowLayoutPanel3.Controls.Add(this.nudLength);
+			this.flowLayoutPanel3.Controls.Add(this.lblBytes);
+			this.flowLayoutPanel3.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
+			this.flowLayoutPanel3.Location = new System.Drawing.Point(60, 216);
+			this.flowLayoutPanel3.Margin = new System.Windows.Forms.Padding(0);
+			this.flowLayoutPanel3.Name = "flowLayoutPanel3";
+			this.flowLayoutPanel3.Size = new System.Drawing.Size(200, 26);
+			this.flowLayoutPanel3.TabIndex = 9;
+			// 
+			// nudLength
+			// 
+			this.nudLength.DecimalPlaces = 0;
+			this.nudLength.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+			this.nudLength.Location = new System.Drawing.Point(3, 3);
+			this.nudLength.Maximum = new decimal(new int[] {
+            65536,
+            0,
+            0,
+            0});
+			this.nudLength.MaximumSize = new System.Drawing.Size(10000, 21);
+			this.nudLength.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+			this.nudLength.MinimumSize = new System.Drawing.Size(0, 21);
+			this.nudLength.Name = "nudLength";
+			this.nudLength.Size = new System.Drawing.Size(52, 21);
+			this.nudLength.TabIndex = 9;
+			this.nudLength.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+			this.nudLength.ValueChanged += new System.EventHandler(this.nudLength_ValueChanged);
+			// 
+			// lblBytes
+			// 
+			this.lblBytes.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.lblBytes.AutoSize = true;
+			this.lblBytes.Location = new System.Drawing.Point(61, 7);
+			this.lblBytes.Name = "lblBytes";
+			this.lblBytes.Size = new System.Drawing.Size(32, 13);
+			this.lblBytes.TabIndex = 10;
+			this.lblBytes.Text = "bytes";
+			// 
+			// lblLength
+			// 
+			this.lblLength.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.lblLength.AutoSize = true;
+			this.lblLength.Location = new System.Drawing.Point(3, 222);
+			this.lblLength.Name = "lblLength";
+			this.lblLength.Size = new System.Drawing.Size(43, 13);
+			this.lblLength.TabIndex = 8;
+			this.lblLength.Text = "Length:";
 			// 
 			// lblLabel
 			// 
@@ -189,67 +251,6 @@
 			this.lblRange.TabIndex = 10;
 			this.lblRange.Text = "(range)";
 			// 
-			// lblLength
-			// 
-			this.lblLength.Anchor = System.Windows.Forms.AnchorStyles.Left;
-			this.lblLength.AutoSize = true;
-			this.lblLength.Location = new System.Drawing.Point(3, 222);
-			this.lblLength.Name = "lblLength";
-			this.lblLength.Size = new System.Drawing.Size(43, 13);
-			this.lblLength.TabIndex = 8;
-			this.lblLength.Text = "Length:";
-			// 
-			// nudLength
-			// 
-			this.nudLength.DecimalPlaces = 0;
-			this.nudLength.Increment = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-			this.nudLength.Location = new System.Drawing.Point(3, 3);
-			this.nudLength.Maximum = new decimal(new int[] {
-            65536,
-            0,
-            0,
-            0});
-			this.nudLength.MaximumSize = new System.Drawing.Size(10000, 21);
-			this.nudLength.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-			this.nudLength.MinimumSize = new System.Drawing.Size(0, 21);
-			this.nudLength.Name = "nudLength";
-			this.nudLength.Size = new System.Drawing.Size(52, 21);
-			this.nudLength.TabIndex = 9;
-			this.nudLength.Value = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-			// 
-			// flowLayoutPanel3
-			// 
-			this.flowLayoutPanel3.Controls.Add(this.nudLength);
-			this.flowLayoutPanel3.Controls.Add(this.lblBytes);
-			this.flowLayoutPanel3.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
-			this.flowLayoutPanel3.Location = new System.Drawing.Point(60, 216);
-			this.flowLayoutPanel3.Margin = new System.Windows.Forms.Padding(0);
-			this.flowLayoutPanel3.Name = "flowLayoutPanel3";
-			this.flowLayoutPanel3.Size = new System.Drawing.Size(200, 26);
-			this.flowLayoutPanel3.TabIndex = 9;
-			// 
-			// lblBytes
-			// 
-			this.lblBytes.Anchor = System.Windows.Forms.AnchorStyles.Left;
-			this.lblBytes.AutoSize = true;
-			this.lblBytes.Location = new System.Drawing.Point(61, 7);
-			this.lblBytes.Name = "lblBytes";
-			this.lblBytes.Size = new System.Drawing.Size(84, 13);
-			this.lblBytes.TabIndex = 10;
-			this.lblBytes.Text = "bytes (for arrays)";
-			// 
 			// frmEditLabel
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -264,10 +265,10 @@
 			this.Controls.SetChildIndex(this.tableLayoutPanel1, 0);
 			this.tableLayoutPanel1.ResumeLayout(false);
 			this.tableLayoutPanel1.PerformLayout();
-			this.flowLayoutPanel2.ResumeLayout(false);
-			this.flowLayoutPanel2.PerformLayout();
 			this.flowLayoutPanel3.ResumeLayout(false);
 			this.flowLayoutPanel3.PerformLayout();
+			this.flowLayoutPanel2.ResumeLayout(false);
+			this.flowLayoutPanel2.PerformLayout();
 			this.ResumeLayout(false);
 
 		}
