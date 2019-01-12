@@ -7,9 +7,10 @@
 class MMC5 : public BaseMapper
 {
 private:
-	const uint8_t NtWorkRamIndex = 4;
-	const uint8_t NtEmptyIndex = 2;
-	const uint8_t NtFillModeIndex = 3;
+	static constexpr int ExRamSize = 0x400;
+	static constexpr uint8_t NtWorkRamIndex = 4;
+	static constexpr uint8_t NtEmptyIndex = 2;
+	static constexpr uint8_t NtFillModeIndex = 3;
 
 	unique_ptr<MMC5Audio> _audio;
 
@@ -46,7 +47,7 @@ private:
 
 	//CHR-related fields
 	uint8_t _chrMode;
-	uint8_t _chrUpperBits;	
+	uint8_t _chrUpperBits;
 	uint16_t _chrBanks[12];
 	uint16_t _lastChrReg;
 	bool _spriteFetch;
@@ -74,10 +75,40 @@ private:
 		memoryType = PrgMemoryType::PrgRom;
 		if((((bankNumber & 0x80) == 0x00) && reg != 0x5117) || reg == 0x5113) {
 			bankNumber &= 0x07;
-			memoryType = PrgMemoryType::SaveRam;
 			accessType = MemoryAccessType::Read;
 			if(_prgRamProtect1 == 0x02 && _prgRamProtect2 == 0x01) {
 				accessType |= MemoryAccessType::Write;
+			}
+
+			// WRAM/SRAM mirroring logic (only supports existing/known licensed MMC5 boards)
+			//            Bank number
+			//            0 1 2 3 4 5 6 7
+			// --------------------------
+			// None     : - - - - - - - -
+			// 1x 8kb   : 0 0 0 0 - - - -
+			// 2x 8kb   : 0 0 0 0 1 1 1 1
+			// 1x 32kb  : 0 1 2 3 - - - -
+			int32_t realWorkRamSize = _workRamSize - MMC5::ExRamSize;
+			if(IsNes20() || _romInfo.IsInDatabase) {
+				memoryType = PrgMemoryType::WorkRam;
+				if(HasBattery() && (bankNumber <= 3 || _saveRamSize > 0x2000)) {
+					memoryType = PrgMemoryType::SaveRam;
+				}
+
+				if(_saveRamSize + realWorkRamSize != 0x4000 && bankNumber >= 4) {
+					//When not 2x 8kb (=16kb), banks 4/5/6/7 select the empty socket and return open bus
+					accessType = MemoryAccessType::NoAccess;
+				}
+			} else {
+				memoryType = HasBattery() ? PrgMemoryType::SaveRam : PrgMemoryType::WorkRam;
+			}			
+
+			if(memoryType == PrgMemoryType::WorkRam) {
+				//Properly mirror work ram (by ignoring the extra 1kb ExRAM section)
+				bankNumber &= (realWorkRamSize / 0x2000) - 1;
+				if(_workRamSize == MMC5::ExRamSize) {
+					accessType = MemoryAccessType::NoAccess;
+				}
 			}
 		} else {
 			accessType = MemoryAccessType::Read;
@@ -90,10 +121,10 @@ private:
 		uint8_t value;
 		PrgMemoryType memoryType;
 		uint8_t accessType;
-			
+
 		GetCpuBankInfo(0x5113, value, memoryType, accessType);
 		SetCpuMemoryMapping(0x6000, 0x7FFF, value, memoryType, accessType);
-			
+
 		//PRG Bank 0
 		//Mode 0,1,2 - Ignored
 		//Mode 3 - Select an 8KB PRG bank at $8000-$9FFF
@@ -136,7 +167,7 @@ private:
 	void SwitchChrBank(uint16_t reg, uint8_t value)
 	{
 		_chrBanks[reg - 0x5120] = value | (_chrUpperBits << 8);
-		
+
 		if(_largeSprites) {
 			_lastChrReg = reg;
 		} else {
@@ -217,7 +248,7 @@ private:
 	{
 		_nametableMapping = value;
 
-		uint8_t nametables[4] = { 
+		uint8_t nametables[4] = {
 			0,  //"0 - On-board VRAM page 0"
 			1,  //"1 - On-board VRAM page 1"
 			_extendedRamMode <= 1 ? NtWorkRamIndex : NtEmptyIndex, //"2 - Internal Expansion RAM, only if the Extended RAM mode allows it ($5104 is 00/01); otherwise, the nametable will read as all zeros,"
@@ -238,17 +269,19 @@ private:
 	{
 		_extendedRamMode = mode;
 
+		MemoryAccessType accessType;
 		if(_extendedRamMode <= 1) {
 			//"Mode 0/1 - Not readable (returns open bus), can only be written while the PPU is rendering (otherwise, 0 is written)"
 			//See overridden WriteRam function for implementation
-			SetCpuMemoryMapping(0x5C00, 0x5FFF, 0, PrgMemoryType::WorkRam, MemoryAccessType::Write);
+			accessType = MemoryAccessType::Write;
 		} else if(_extendedRamMode == 2) {
 			//"Mode 2 - Readable and writable"
-			SetCpuMemoryMapping(0x5C00, 0x5FFF, 0, PrgMemoryType::WorkRam, MemoryAccessType::ReadWrite);
+			accessType = MemoryAccessType::ReadWrite;
 		} else {
 			//"Mode 3 - Read-only"
-			SetCpuMemoryMapping(0x5C00, 0x5FFF, 0, PrgMemoryType::WorkRam, MemoryAccessType::Read);
+			accessType = MemoryAccessType::Read;
 		}
+		SetCpuMemoryMapping(0x5C00, 0x5FFF, PrgMemoryType::WorkRam, _workRamSize - MMC5::ExRamSize, accessType);
 
 		SetNametableMapping(_nametableMapping);
 	}
@@ -272,28 +305,49 @@ private:
 
 protected:
 	virtual uint16_t GetPRGPageSize() override { return 0x2000; }
-	virtual uint16_t GetCHRPageSize() override {	return 0x400; }
+	virtual uint16_t GetCHRPageSize() override { return 0x400; }
 	virtual uint16_t RegisterStartAddress() override { return 0x5000; }
 	virtual uint16_t RegisterEndAddress() override { return 0x5206; }
-	virtual uint32_t GetSaveRamSize() override { return 0x10000; } //Emulate as if a single 64k block of saved ram existed
 	virtual uint32_t GetSaveRamPageSize() override { return 0x2000; }
-	virtual uint32_t GetWorkRamSize() override { return 0x400; } 
-	virtual uint32_t GetWorkRamPageSize() override { return 0x400; }
+	virtual uint32_t GetWorkRamPageSize() override { return 0x2000; }
 	virtual bool ForceSaveRamSize() override { return true; }
 	virtual bool ForceWorkRamSize() override { return true; }
+
+	virtual uint32_t GetSaveRamSize() override
+	{
+		if(IsNes20()) {
+			return _saveRamSize;
+		} else if(_romInfo.IsInDatabase) {
+			return _romInfo.DatabaseInfo.SaveRamSize;
+		} else {
+			//Emulate as if a single 64k block of work/save ram existed
+			return _romInfo.HasBattery ? 0x10000 : 0;
+		}
+	}
+
+	virtual uint32_t GetWorkRamSize() override
+	{
+		if(IsNes20()) {
+			return _workRamSize + MMC5::ExRamSize;
+		} else if(_romInfo.IsInDatabase) {
+			return _romInfo.DatabaseInfo.WorkRamSize + MMC5::ExRamSize;
+		} else {
+			//Emulate as if a single 64k block of work/save ram existed (+ 1kb of ExRAM)
+			return (_romInfo.HasBattery ? 0 : 0x10000) + MMC5::ExRamSize;
+		}
+	}
 
 	virtual bool AllowRegisterRead() override { return true; }
 
 	virtual void InitMapper() override
 	{
 		_audio.reset(new MMC5Audio(_console));
-
-		_romInfo.HasBattery = true;
-
+		
 		_chrMode = 0;
 		_prgRamProtect1 = 0;
 		_prgRamProtect2 = 0;
 		_extendedRamMode = 0;
+		_nametableMapping = 0;
 		_fillModeColor = 0;
 		_fillModeTile = 0;
 		_verticalSplitScroll = 0;
@@ -323,8 +377,7 @@ protected:
 
 		memset(GetNametable(NtEmptyIndex), 0, BaseMapper::NametableSize);
 
-		//"Expansion RAM ($5C00-$5FFF, read/write)"
-		SetCpuMemoryMapping(0x5C00, 0x5FFF, 0, PrgMemoryType::WorkRam);
+		SetExtendedRamMode(0);
 
 		//"Additionally, Romance of the 3 Kingdoms 2 seems to expect it to be in 8k PRG mode ($5100 = $03)."
 		WriteRegister(0x5100, 0x03);

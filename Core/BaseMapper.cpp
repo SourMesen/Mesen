@@ -554,17 +554,14 @@ void BaseMapper::Initialize(RomData &romData)
 	_romInfo = romData.Info;
 
 	_batteryFilename = GetBatteryFilename();
+	_saveRamSize = romData.SaveRamSize;
+	_workRamSize = romData.WorkRamSize;
 	
-	if(romData.SaveRamSize == -1 || ForceSaveRamSize()) {
+	if(_saveRamSize == -1 || ForceSaveRamSize()) {
 		_saveRamSize = GetSaveRamSize();
-	} else {
-		_saveRamSize = romData.SaveRamSize;
 	}
-
-	if(romData.WorkRamSize == -1 || ForceWorkRamSize()) {
+	if(_workRamSize == -1 || ForceWorkRamSize()) {
 		_workRamSize = GetWorkRamSize();
-	} else {
-		_workRamSize = romData.WorkRamSize;
 	}
 
 	_allowRegisterRead = AllowRegisterRead();
