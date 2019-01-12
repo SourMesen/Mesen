@@ -504,7 +504,6 @@ namespace Mesen.GUI.Debugger
 
 						AddressTypeInfo addressInfo = GetSymbolAddressInfo(symbol);
 						if(symbol.Address != null) {
-							int address = addressInfo.Address;
 							CodeLabel label = this.CreateLabel(addressInfo.Address, addressInfo.Type, (uint)GetSymbolSize(symbol));
 							if(label != null) {
 								label.Label = newName;

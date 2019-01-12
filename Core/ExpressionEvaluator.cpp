@@ -291,7 +291,7 @@ int32_t ExpressionEvaluator::Evaluate(ExpressionData &data, DebugState &state, E
 			if(token >= EvalValues::FirstLabelIndex) {
 				int64_t labelIndex = token - EvalValues::FirstLabelIndex;
 				if((size_t)labelIndex < data.Labels.size()) {
-					token = _debugger->GetLabelManager()->GetLabelRelativeAddress(data.Labels[labelIndex]);
+					token = _debugger->GetLabelManager()->GetLabelRelativeAddress(data.Labels[(uint32_t)labelIndex]);
 				} else {
 					token = -1;
 				}
