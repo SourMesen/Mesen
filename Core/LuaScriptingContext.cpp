@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "../Lua/lua.hpp"
+#include "../Lua/luasocket.hpp"
 #include "LuaScriptingContext.h"
 #include "LuaApi.h"
 #include "LuaCallHelper.h"
@@ -64,6 +65,16 @@ bool LuaScriptingContext::LoadScript(string scriptName, string scriptContent, De
 	LuaApi::SetContext(this);
 
 	luaL_openlibs(_lua);
+
+	//Load LuaSocket into Lua core
+	lua_getglobal(_lua, "package");
+	lua_getfield(_lua, -1, "preload");
+	lua_pushcfunction(_lua, luaopen_socket_core);
+	lua_setfield(_lua, -2, "socket.core");
+	lua_pushcfunction(_lua, luaopen_mime_core);
+	lua_setfield(_lua, -2, "mime.core");
+	lua_pop(_lua, 2);
+
 	luaL_requiref(_lua, "emu", LuaApi::GetLibrary, 1);
 	Log("Loading script...");
 	if((iErr = luaL_loadbufferx(_lua, scriptContent.c_str(), scriptContent.size(), ("@" + scriptName).c_str(), nullptr)) == 0) {
