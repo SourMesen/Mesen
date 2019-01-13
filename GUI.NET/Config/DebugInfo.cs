@@ -194,6 +194,7 @@ namespace Mesen.GUI.Config
 		public bool NtViewerUseGrayscalePalette = false;
 		public bool NtViewerHighlightTileUpdates = false;
 		public bool NtViewerHighlightAttributeUpdates = false;
+		public bool NtViewerIgnoreRedundantWrites = false;
 
 		public int ChrViewerSelectedPalette = 0;
 		public CdlHighlightType ChrViewerHighlightType = CdlHighlightType.None;

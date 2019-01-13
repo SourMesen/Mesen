@@ -37,6 +37,7 @@ namespace Mesen.GUI.Debugger.Controls
 		private DebugState _state = new DebugState();
 		private HdPackCopyHelper _hdCopyHelper = new HdPackCopyHelper();
 		private bool _firstDraw = true;
+		private bool[] _ntChanged = null;
 
 		public ctrlNametableViewer()
 		{
@@ -51,6 +52,9 @@ namespace Mesen.GUI.Debugger.Controls
 				chkUseGrayscalePalette.Checked = ConfigManager.Config.DebugInfo.NtViewerUseGrayscalePalette;
 				chkHighlightTileUpdates.Checked = ConfigManager.Config.DebugInfo.NtViewerHighlightTileUpdates;
 				chkHighlightAttributeUpdates.Checked = ConfigManager.Config.DebugInfo.NtViewerHighlightAttributeUpdates;
+				chkIgnoreRedundantWrites.Checked = ConfigManager.Config.DebugInfo.NtViewerIgnoreRedundantWrites;
+
+				UpdateIgnoreWriteCheckbox();
 			}
 		}
 
@@ -80,6 +84,8 @@ namespace Mesen.GUI.Debugger.Controls
 		{
 			InteropEmu.DebugGetPpuScroll(out _xScroll, out _yScroll);
 			InteropEmu.DebugGetState(ref _state);
+
+			_ntChanged = InteropEmu.DebugGetNametableChangedData();
 
 			//Keep a copy of the previous frame to highlight modifications
 			for(int i = 0; i < 4; i++) {
@@ -168,30 +174,45 @@ namespace Mesen.GUI.Debugger.Controls
 
 		private void DrawEditHighlights(Graphics g)
 		{
+			bool ignoreRedundantWrites = chkIgnoreRedundantWrites.Checked;
 			using(Brush redBrush = new SolidBrush(Color.FromArgb(128, Color.Red))) {
 				using(Brush yellowBrush = new SolidBrush(Color.FromArgb(128, Color.Yellow))) {
 					for(int nt = 0; nt < 4; nt++) {
-						if(_prevTileData[nt] == null || _prevAttributeData[nt] == null) {
+						if(_prevTileData[nt] == null || _prevAttributeData[nt] == null || _ntChanged == null) {
 							continue;
 						}
 
+						int ntBaseAddress = nt * 0x400;
 						for(int y = 0; y < 30; y++) {
 							for(int x = 0; x < 32; x++) {
 								int tileX = ((nt % 2 == 1) ? x + 32 : x) * 8;
 								int tileY = ((nt >= 2) ? y + 30 : y) * 8;
-								if(chkHighlightTileUpdates.Checked && _prevTileData[nt][y * 32 + x] != _tileData[nt][y * 32 + x]) {
+
+								bool tileChanged = false;
+								bool attrChanged = false;
+
+								if(ignoreRedundantWrites) {
+									tileChanged = _prevTileData[nt][y * 32 + x] != _tileData[nt][y * 32 + x];
+									int shift = (x & 0x02) | ((y & 0x02) << 1);
+									int attribute = (_attributeData[nt][y * 32 + x] >> shift) & 0x03;
+									int prevAttribute = (_prevAttributeData[nt][y * 32 + x] >> shift) & 0x03;
+									attrChanged = attribute != prevAttribute;
+								} else {
+									int tileAddress = ntBaseAddress + y * 32 + x;
+									int attrAddress = ntBaseAddress + 32 * 30 + ((y & 0xFC) << 1) + (x >> 2);
+
+									tileChanged = _ntChanged[tileAddress];
+									attrChanged = _ntChanged[attrAddress];
+								}
+
+								if(chkHighlightTileUpdates.Checked && tileChanged) {
 									g.FillRectangle(redBrush, tileX, tileY, 8, 8);
 									g.DrawRectangle(Pens.Red, tileX, tileY, 8, 8);
 								}
 
-								if(chkHighlightAttributeUpdates.Checked) {
-									int shift = (x & 0x02) | ((y & 0x02) << 1);
-									int attribute = (_attributeData[nt][y * 32 + x] >> shift) & 0x03;
-									int prevAttribute = (_prevAttributeData[nt][y * 32 + x] >> shift) & 0x03;
-									if(prevAttribute != attribute) {
-										g.FillRectangle(yellowBrush, tileX, tileY, 8, 8);
-										g.DrawRectangle(Pens.Yellow, tileX, tileY, 8, 8);
-									}
+								if(chkHighlightAttributeUpdates.Checked && attrChanged) {
+									g.FillRectangle(yellowBrush, tileX, tileY, 8, 8);
+									g.DrawRectangle(Pens.Yellow, tileX, tileY, 8, 8);
 								}
 							}
 						}
@@ -368,6 +389,7 @@ namespace Mesen.GUI.Debugger.Controls
 			ConfigManager.Config.DebugInfo.NtViewerHighlightTileUpdates = chkHighlightTileUpdates.Checked;
 			ConfigManager.ApplyChanges();
 			this.RefreshViewer();
+			UpdateIgnoreWriteCheckbox();
 		}
 
 		private void chkHighlightAttributeUpdates_Click(object sender, EventArgs e)
@@ -375,6 +397,19 @@ namespace Mesen.GUI.Debugger.Controls
 			ConfigManager.Config.DebugInfo.NtViewerHighlightAttributeUpdates = chkHighlightAttributeUpdates.Checked;
 			ConfigManager.ApplyChanges();
 			this.RefreshViewer();
+			UpdateIgnoreWriteCheckbox();
+		}
+
+		private void chkIgnoreRedundantWrites_Click(object sender, EventArgs e)
+		{
+			ConfigManager.Config.DebugInfo.NtViewerIgnoreRedundantWrites = chkIgnoreRedundantWrites.Checked;
+			ConfigManager.ApplyChanges();
+			this.RefreshViewer();
+		}
+
+		private void UpdateIgnoreWriteCheckbox()
+		{
+			chkIgnoreRedundantWrites.Enabled = chkHighlightAttributeUpdates.Checked || chkHighlightTileUpdates.Checked;
 		}
 
 		string _copyData;

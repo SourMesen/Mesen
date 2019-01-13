@@ -88,6 +88,7 @@ uint32_t MemoryDumper::GetMemorySize(DebugMemoryType type)
 		case DebugMemoryType::SpriteMemory: return 0x100;
 		case DebugMemoryType::SecondarySpriteMemory: return 0x20;
 		case DebugMemoryType::InternalRam: return 0x800;
+		case DebugMemoryType::NametableRam:
 		case DebugMemoryType::PrgRom:
 		case DebugMemoryType::ChrRom:
 		case DebugMemoryType::ChrRam:

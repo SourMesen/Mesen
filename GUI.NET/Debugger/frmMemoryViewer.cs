@@ -333,6 +333,12 @@ namespace Mesen.GUI.Debugger
 				case DebugMemoryType.PaletteMemory:
 					this.ctrlHexViewer.ByteColorProvider = new ChrByteColorProvider(
 						this._memoryType,
+						mnuHighlightWrites.Checked,
+						mnuHightlightReads.Checked,
+						ConfigManager.Config.DebugInfo.RamFadeSpeed,
+						mnuHideUnusedBytes.Checked,
+						mnuHideReadBytes.Checked,
+						mnuHideWrittenBytes.Checked,
 						mnuHighlightChrDrawnBytes.Checked,
 						mnuHighlightChrReadBytes.Checked,
 						mnuHighlightBreakpoints.Checked

@@ -511,15 +511,24 @@ namespace Mesen.GUI
 			return profileData;
 		}
 
-		[DllImport(DLLPath, EntryPoint = "DebugGetMemoryAccessCounts")] private static extern void DebugGetMemoryAccessCountsWrapper(AddressType type, MemoryOperationType operationType, IntPtr counts, [MarshalAs(UnmanagedType.I1)]bool forUninitReads);
-		public static Int32[] DebugGetMemoryAccessCounts(AddressType type, MemoryOperationType operationType, bool forUninitReads)
+		public static Int32[] DebugGetMemoryAccessCounts(DebugMemoryType type, MemoryOperationType operationType)
 		{
-			int size = 0;
-			switch(type) {
-				case AddressType.InternalRam: size = 0x2000; break;
-				case AddressType.PrgRom: size = InteropEmu.DebugGetMemorySize(DebugMemoryType.PrgRom); break;
-				case AddressType.WorkRam: size = InteropEmu.DebugGetMemorySize(DebugMemoryType.WorkRam); break;
-				case AddressType.SaveRam: size = InteropEmu.DebugGetMemorySize(DebugMemoryType.SaveRam); break;
+			int size = InteropEmu.DebugGetMemorySize(type);
+			return InteropEmu.DebugGetMemoryAccessCounts(0, (uint)size, type, operationType);
+		}
+
+		public static Int32[] DebugGetMemoryAccessStamps(DebugMemoryType type, MemoryOperationType operationType)
+		{
+			int size = InteropEmu.DebugGetMemorySize(type);
+			return InteropEmu.DebugGetMemoryAccessStamps(0, (uint)size, type, operationType);
+		}
+
+		[DllImport(DLLPath, EntryPoint = "DebugGetUninitMemoryReads")] private static extern void DebugGetUninitMemoryReadsWrapper(DebugMemoryType type, IntPtr counts);
+		public static Int32[] DebugGetUninitMemoryReads(DebugMemoryType type)
+		{
+			int size = InteropEmu.DebugGetMemorySize(type);
+			if(type == DebugMemoryType.InternalRam) {
+				size = 0x2000;
 			}
 
 			Int32[] counts = new Int32[size];
@@ -527,7 +536,7 @@ namespace Mesen.GUI
 			if(size > 0) {
 				GCHandle hCounts = GCHandle.Alloc(counts, GCHandleType.Pinned);
 				try {
-					InteropEmu.DebugGetMemoryAccessCountsWrapper(type, operationType, hCounts.AddrOfPinnedObject(), forUninitReads);
+					InteropEmu.DebugGetUninitMemoryReadsWrapper(type, hCounts.AddrOfPinnedObject());
 				} finally {
 					hCounts.Free();
 				}
@@ -551,19 +560,34 @@ namespace Mesen.GUI
 			return stamps;
 		}
 
-		[DllImport(DLLPath, EntryPoint = "DebugGetMemoryAccessCountsEx")] private static extern void DebugGetMemoryAccessCountsExWrapper(UInt32 offset, UInt32 length, DebugMemoryType type, MemoryOperationType operationType, IntPtr counts);
-		public static Int32[] DebugGetMemoryAccessCountsEx(UInt32 offset, UInt32 length, DebugMemoryType type, MemoryOperationType operationType)
+		[DllImport(DLLPath, EntryPoint = "DebugGetMemoryAccessCounts")] private static extern void DebugGetMemoryAccessCountsWrapper(UInt32 offset, UInt32 length, DebugMemoryType type, MemoryOperationType operationType, IntPtr counts);
+		public static Int32[] DebugGetMemoryAccessCounts(UInt32 offset, UInt32 length, DebugMemoryType type, MemoryOperationType operationType)
 		{
 			Int32[] counts = new Int32[length];
 
 			GCHandle hResult = GCHandle.Alloc(counts, GCHandleType.Pinned);
 			try {
-				InteropEmu.DebugGetMemoryAccessCountsExWrapper(offset, length, type, operationType, hResult.AddrOfPinnedObject());
+				InteropEmu.DebugGetMemoryAccessCountsWrapper(offset, length, type, operationType, hResult.AddrOfPinnedObject());
 			} finally {
 				hResult.Free();
 			}
 
 			return counts;
+		}
+		
+		[DllImport(DLLPath, EntryPoint = "DebugGetNametableChangedData")] private static extern void DebugGetNametableChangedDataWrapper(IntPtr ntChangedData);
+		public static bool[] DebugGetNametableChangedData()
+		{
+			bool[] ntChangedData = new bool[0x1000];
+
+			GCHandle hNtChangedData = GCHandle.Alloc(ntChangedData, GCHandleType.Pinned);
+			try {
+				InteropEmu.DebugGetNametableChangedDataWrapper(hNtChangedData.AddrOfPinnedObject());
+			} finally {
+				hNtChangedData.Free();
+			}
+			
+			return ntChangedData;
 		}
 
 		[DllImport(DLLPath, EntryPoint = "DebugGetFreezeState")] private static extern void DebugGetFreezeStateWrapper(UInt16 startAddress, UInt16 length, IntPtr freezeState);
@@ -2285,7 +2309,8 @@ namespace Mesen.GUI
 		ChrRam = 7,
 		WorkRam = 8,
 		SaveRam = 9,
-		InternalRam = 10
+		InternalRam = 10,
+		NametableRam = 11
 	}
 
 	public enum BreakSource

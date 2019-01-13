@@ -931,6 +931,7 @@ uint32_t BaseMapper::GetMemorySize(DebugMemoryType type)
 		default: return 0;
 		case DebugMemoryType::ChrRom: return _onlyChrRam ? 0 : _chrRomSize;
 		case DebugMemoryType::ChrRam: return _chrRamSize;
+		case DebugMemoryType::NametableRam: return _nametableCount * BaseMapper::NametableSize;
 		case DebugMemoryType::SaveRam: return _saveRamSize;
 		case DebugMemoryType::PrgRom: return _prgSize;
 		case DebugMemoryType::WorkRam: return _workRamSize;
@@ -1033,6 +1034,29 @@ int32_t BaseMapper::ToAbsoluteSaveRamAddress(uint16_t addr)
 		return (uint32_t)(prgRamAddr - _saveRam);
 	}
 	return -1;
+}
+
+void BaseMapper::GetPpuAbsoluteAddressAndType(uint32_t relativeAddr, PpuAddressTypeInfo* info)
+{
+	if(relativeAddr >= 0x3F00) {
+		info->Address = relativeAddr & 0x1F;
+		info->Type = PpuAddressType::PaletteRam;
+	} else {
+		uint8_t *addr = _chrPages[relativeAddr >> 8] + (uint8_t)relativeAddr;
+		if(addr >= _chrRom && addr < _chrRom + _chrRomSize) {
+			info->Address = (uint32_t)(addr - _chrRom);
+			info->Type = PpuAddressType::ChrRom;
+		} else if(addr >= _chrRam && addr < _chrRam + _chrRamSize) {
+			info->Address = (uint32_t)(addr - _chrRam);
+			info->Type = PpuAddressType::ChrRam;
+		} else if(addr >= _nametableRam && addr < _nametableRam + BaseMapper::NametableSize * BaseMapper::NametableCount) {
+			info->Address = (uint32_t)(addr - _nametableRam);
+			info->Type = PpuAddressType::NametableRam;
+		} else {
+			info->Address = -1;
+			info->Type = PpuAddressType::None;
+		}
+	}
 }
 
 int32_t BaseMapper::ToAbsoluteChrAddress(uint16_t addr)

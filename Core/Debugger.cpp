@@ -749,7 +749,7 @@ bool Debugger::ProcessRamOperation(MemoryOperationType type, uint16_t &addr, uin
 				if(!_breakOnFirstCycle && _enableBreakOnUninitRead && CheckFlag(DebuggerFlags::BreakOnUninitMemoryRead)) {
 					//Break on uninit memory read
 					Step(1);
-					breakDone = SleepUntilResume(BreakSource::BreakOnUninitMemoryRead, 0, BreakpointType::Global, operationInfo.Address, operationInfo.Value, operationInfo.OperationType);
+					breakDone = SleepUntilResume(BreakSource::BreakOnUninitMemoryRead, 0, BreakpointType::Global, operationInfo.Address, (uint8_t)operationInfo.Value, operationInfo.OperationType);
 				}
 			}
 		}
@@ -956,24 +956,28 @@ bool Debugger::SleepUntilResume(BreakSource source, uint32_t breakpointId, Break
 
 void Debugger::ProcessVramReadOperation(MemoryOperationType type, uint16_t addr, uint8_t &value)
 {
-	int32_t absoluteAddr = _mapper->ToAbsoluteChrAddress(addr);
-	_codeDataLogger->SetFlag(absoluteAddr, type == MemoryOperationType::Read ? CdlChrFlags::Read : CdlChrFlags::Drawn);
+	PpuAddressTypeInfo addressInfo;
+	_mapper->GetPpuAbsoluteAddressAndType(addr, &addressInfo);
+	_codeDataLogger->SetFlag(addressInfo.Address, type == MemoryOperationType::Read ? CdlChrFlags::Read : CdlChrFlags::Drawn);
 
 	if(_hasBreakpoint[BreakpointType::ReadVram]) {
 		OperationInfo operationInfo{ addr, value, type };
 		ProcessBreakpoints(BreakpointType::ReadVram, operationInfo, !_breakOnFirstCycle, true);
 	}
-
+	_memoryAccessCounter->ProcessPpuMemoryAccess(addressInfo, type, _cpu->GetCycleCount());
 	ProcessPpuOperation(addr, value, MemoryOperationType::Read);
 }
 
 void Debugger::ProcessVramWriteOperation(uint16_t addr, uint8_t &value)
 {
+	PpuAddressTypeInfo addressInfo;
+	_mapper->GetPpuAbsoluteAddressAndType(addr, &addressInfo);
+
 	if(_hasBreakpoint[BreakpointType::WriteVram]) {
 		OperationInfo operationInfo{ addr, value, MemoryOperationType::Write };
 		ProcessBreakpoints(BreakpointType::WriteVram, operationInfo, !_breakOnFirstCycle, true);
 	}
-
+	_memoryAccessCounter->ProcessPpuMemoryAccess(addressInfo, MemoryOperationType::Write, _cpu->GetCycleCount());
 	ProcessPpuOperation(addr, value, MemoryOperationType::Write);
 }
 
@@ -1283,28 +1287,7 @@ void Debugger::GetAbsoluteAddressAndType(uint32_t relativeAddr, AddressTypeInfo*
 
 void Debugger::GetPpuAbsoluteAddressAndType(uint32_t relativeAddr, PpuAddressTypeInfo* info)
 {
-	if(relativeAddr >= 0x3F00) {
-		info->Address = relativeAddr & 0x1F;
-		info->Type = PpuAddressType::PaletteRam;
-		return;
-	}
-
-	int32_t addr = _mapper->ToAbsoluteChrRomAddress(relativeAddr);
-	if(addr >= 0) {
-		info->Address = addr;
-		info->Type = PpuAddressType::ChrRom;
-		return;
-	}
-
-	addr = _mapper->ToAbsoluteChrRamAddress(relativeAddr);
-	if(addr >= 0) {
-		info->Address = addr;
-		info->Type = PpuAddressType::ChrRam;
-		return;
-	}
-
-	info->Address = -1;
-	info->Type = PpuAddressType::None;
+	return _mapper->GetPpuAbsoluteAddressAndType(relativeAddr, info);
 }
 
 void Debugger::UpdatePpuCyclesToProcess()

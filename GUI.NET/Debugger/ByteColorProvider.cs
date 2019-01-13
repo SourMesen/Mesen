@@ -81,9 +81,9 @@ namespace Mesen.GUI.Debugger
 				_freezeState = InteropEmu.DebugGetFreezeState((UInt16)firstByteIndex, (UInt16)visibleByteCount);
 			}
 
-			_readCounts = InteropEmu.DebugGetMemoryAccessCountsEx((UInt32)firstByteIndex, (UInt32)visibleByteCount, _memoryType, MemoryOperationType.Read);
-			_writeCounts = InteropEmu.DebugGetMemoryAccessCountsEx((UInt32)firstByteIndex, (UInt32)visibleByteCount, _memoryType, MemoryOperationType.Write);
-			_execCounts = InteropEmu.DebugGetMemoryAccessCountsEx((UInt32)firstByteIndex, (UInt32)visibleByteCount, _memoryType, MemoryOperationType.Exec);
+			_readCounts = InteropEmu.DebugGetMemoryAccessCounts((UInt32)firstByteIndex, (UInt32)visibleByteCount, _memoryType, MemoryOperationType.Read);
+			_writeCounts = InteropEmu.DebugGetMemoryAccessCounts((UInt32)firstByteIndex, (UInt32)visibleByteCount, _memoryType, MemoryOperationType.Write);
+			_execCounts = InteropEmu.DebugGetMemoryAccessCounts((UInt32)firstByteIndex, (UInt32)visibleByteCount, _memoryType, MemoryOperationType.Exec);
 
 			_cdlData = null;
 			if(_highlightDmcDataBytes || _highlightDataBytes || _highlightCodeBytes) {
@@ -116,7 +116,7 @@ namespace Mesen.GUI.Debugger
 			InteropEmu.DebugGetState(ref _state);
 		}
 
-		public Color DarkerColor(Color input, double brightnessPercentage)
+		public static Color DarkerColor(Color input, double brightnessPercentage)
 		{
 			if(double.IsInfinity(brightnessPercentage)) {
 				brightnessPercentage = 1.0;

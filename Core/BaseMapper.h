@@ -51,9 +51,6 @@ private:
 	vector<uint8_t> _originalChrRom;
 
 protected:
-	static constexpr uint32_t NametableCount = 0x10;
-	static constexpr uint32_t NametableSize = 0x400;
-
 	RomInfo _romInfo;
 
 	shared_ptr<BaseControlDevice> _mapperControlDevice;
@@ -152,6 +149,9 @@ protected:
 	MirroringType GetMirroringType();
 
 public:
+	static constexpr uint32_t NametableCount = 0x10;
+	static constexpr uint32_t NametableSize = 0x400;
+
 	void Initialize(RomData &romData);
 
 	virtual ~BaseMapper();
@@ -217,6 +217,7 @@ public:
 	void WriteMemory(DebugMemoryType type, uint8_t* buffer);
 
 	void GetAbsoluteAddressAndType(uint32_t relativeAddr, AddressTypeInfo *info);
+	void GetPpuAbsoluteAddressAndType(uint32_t relativeAddr, PpuAddressTypeInfo *info);
 	int32_t ToAbsoluteAddress(uint16_t addr);
 	int32_t ToAbsoluteSaveRamAddress(uint16_t addr);
 	int32_t ToAbsoluteWorkRamAddress(uint16_t addr);

@@ -1105,6 +1105,7 @@
 			<Value ID="WorkRam">Work RAM</Value>
 			<Value ID="SaveRam">Save RAM</Value>
 			<Value ID="InternalRam">NES RAM (2 KB)</Value>
+			<Value ID="NametableRam">Nametable RAM</Value>
 		</Enum>
 		<Enum ID="AddrMode">
 			<Value ID="None">None</Value>

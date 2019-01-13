@@ -19,17 +19,28 @@ private:
 
 	vector<uint8_t> _uninitReads[4];
 
-	vector<int32_t>& GetArray(MemoryOperationType operationType, AddressType addressType, bool stampArray);
+	vector<int32_t> _ppuReadCounts[4];
+	vector<int32_t> _ppuWriteCounts[4];
+	vector<int32_t> _ppuReadStamps[4];
+	vector<int32_t> _ppuWriteStamps[4];
+
+	vector<int32_t>& GetCountArray(MemoryOperationType operationType, AddressType addressType);
+	vector<int32_t>& GetStampArray(MemoryOperationType operationType, AddressType addressType);
+
+	vector<int32_t>& GetPpuCountArray(MemoryOperationType operationType, PpuAddressType addressType);
+	vector<int32_t>& GetPpuStampArray(MemoryOperationType operationType, PpuAddressType addressType);
 
 public:
 	MemoryAccessCounter(Debugger* debugger);
 
+	void ProcessPpuMemoryAccess(PpuAddressTypeInfo &addressInfo, MemoryOperationType operation, int32_t cpuCycle);
 	bool ProcessMemoryAccess(AddressTypeInfo &addressInfo, MemoryOperationType operation, int32_t cpuCycle);
 	void ResetCounts();
 
 	bool IsAddressUninitialized(AddressTypeInfo &addressInfo);
 	
-	void GetAccessCounts(AddressType memoryType, MemoryOperationType operationType, uint32_t counts[], bool forUninitReads);
-	void GetAccessCountsEx(uint32_t offset, uint32_t length, DebugMemoryType memoryType, MemoryOperationType operationType, int32_t counts[]);
+	void GetUninitMemoryReads(DebugMemoryType memoryType, int32_t counts[]);
+	void GetNametableChangedData(bool ntChangedData[]);
+	void GetAccessCounts(uint32_t offset, uint32_t length, DebugMemoryType memoryType, MemoryOperationType operationType, int32_t counts[]);
 	void GetAccessStamps(uint32_t offset, uint32_t length, DebugMemoryType memoryType, MemoryOperationType operationType, uint32_t stamps[]);
 };
