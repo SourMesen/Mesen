@@ -411,8 +411,13 @@ bool Debugger::ProcessBreakpoints(BreakpointType type, OperationInfo &operationI
 	}
 }
 
-void Debugger::ProcessAllBreakpoints(OperationInfo &operationInfo, AddressTypeInfo &addressInfo)
+void Debugger::ProcessAllBreakpoints(OperationInfo &operationInfo)
 {
+	if(_runToCycle != 0) {
+		//Disable all breakpoints while stepping backwards
+		return;
+	}
+
 	if(_hasBreakpoint[BreakpointType::Execute]) {
 		ProcessBreakpoints(BreakpointType::Execute, operationInfo, true, true);
 	}
@@ -454,7 +459,9 @@ void Debugger::ProcessAllBreakpoints(OperationInfo &operationInfo, AddressTypeIn
 			} else {
 				if(!isDummyRead && checkUninitReads) {
 					//Break on uninit memory read
-					if(_memoryAccessCounter->IsAddressUninitialized(addressInfo)) {
+					AddressTypeInfo info;
+					GetAbsoluteAddressAndType(addr, &info);
+					if(_memoryAccessCounter->IsAddressUninitialized(info)) {
 						Step(1);
 						SleepUntilResume(BreakSource::BreakOnUninitMemoryRead, 0, BreakpointType::ReadRam, addr, value);
 						return;
@@ -731,7 +738,8 @@ bool Debugger::ProcessRamOperation(MemoryOperationType type, uint16_t &addr, uin
 	int32_t absoluteAddr = addressInfo.Type == AddressType::PrgRom ? addressInfo.Address : -1;
 	int32_t absoluteRamAddr = addressInfo.Type == AddressType::WorkRam ? addressInfo.Address : -1;
 
-	if(addressInfo.Address >= 0 && type != MemoryOperationType::DummyRead && type != MemoryOperationType::DummyWrite) {
+	if(addressInfo.Address >= 0 && type != MemoryOperationType::DummyRead && type != MemoryOperationType::DummyWrite && _runToCycle == 0) {
+		//Ignore dummy read/writes and do not change counters while using the step back feature
 		if(type == MemoryOperationType::Write && CheckFlag(DebuggerFlags::IgnoreRedundantWrites)) {
 			if(_memoryManager->DebugRead(addr) != value) {
 				_memoryAccessCounter->ProcessMemoryAccess(addressInfo, type, _cpu->GetCycleCount());
@@ -741,7 +749,7 @@ bool Debugger::ProcessRamOperation(MemoryOperationType type, uint16_t &addr, uin
 				if(!_breakOnFirstCycle && _enableBreakOnUninitRead && CheckFlag(DebuggerFlags::BreakOnUninitMemoryRead)) {
 					//Break on uninit memory read
 					Step(1);
-					breakDone = SleepUntilResume(BreakSource::BreakOnUninitMemoryRead);
+					breakDone = SleepUntilResume(BreakSource::BreakOnUninitMemoryRead, 0, BreakpointType::Global, operationInfo.Address, operationInfo.Value, operationInfo.OperationType);
 				}
 			}
 		}
@@ -843,7 +851,7 @@ bool Debugger::ProcessRamOperation(MemoryOperationType type, uint16_t &addr, uin
 
 	if(_breakOnFirstCycle) {
 		if(type == MemoryOperationType::ExecOpCode && !breakDone) {
-			ProcessAllBreakpoints(operationInfo, addressInfo);
+			ProcessAllBreakpoints(operationInfo);
 		} else if(_hasBreakpoint[breakpointType]) {
 			//Process marked breakpoints
 			ProcessBreakpoints(breakpointType, operationInfo, false, true);
@@ -1485,7 +1493,11 @@ const char* Debugger::GetScriptLog(int32_t scriptId)
 
 void Debugger::ResetCounters()
 {
-	_memoryAccessCounter->ResetCounts();
+	//This is called when loading a state (among other things)
+	//Prevent counter reset when using step back (_runToCycle != 0), because step back will load a state
+	if(_runToCycle == 0) {
+		_memoryAccessCounter->ResetCounts();
+	}
 	_profiler->Reset();
 }
 

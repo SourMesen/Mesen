@@ -25,7 +25,6 @@ MemoryAccessCounter::MemoryAccessCounter(Debugger* debugger)
 		_writeStamps[i].insert(_writeStamps[i].end(), memorySizes[i], 0);
 		_execStamps[i].insert(_execStamps[i].end(), memorySizes[i], 0);
 
-		_initWrites[i].insert(_initWrites[i].end(), memorySizes[i], 0);
 		_uninitReads[i].insert(_uninitReads[i].end(), memorySizes[i], 0);
 	}
 }
@@ -46,7 +45,7 @@ bool MemoryAccessCounter::IsAddressUninitialized(AddressTypeInfo &addressInfo)
 {
 	if(addressInfo.Type == AddressType::InternalRam || addressInfo.Type == AddressType::WorkRam) {
 		int index = (int)addressInfo.Type;
-		return !_initWrites[index][addressInfo.Address];
+		return _writeCounts[index][addressInfo.Address] == 0;
 	}
 	return false;
 }
@@ -60,9 +59,7 @@ bool MemoryAccessCounter::ProcessMemoryAccess(AddressTypeInfo &addressInfo, Memo
 	vector<int> &stamps = GetArray(operation, addressInfo.Type, true);
 	stamps.data()[addressInfo.Address] = cpuCycle;
 
-	if(operation == MemoryOperationType::Write) {
-		_initWrites[index][addressInfo.Address] = true;
-	} else if((addressInfo.Type == AddressType::InternalRam || addressInfo.Type == AddressType::WorkRam) && !_initWrites[index][addressInfo.Address]) {
+	if(operation == MemoryOperationType::Read && (addressInfo.Type == AddressType::InternalRam || addressInfo.Type == AddressType::WorkRam) && !_writeCounts[index][addressInfo.Address]) {
 		//Mark address as read before being written to (if trying to read/execute)
 		_uninitReads[index][addressInfo.Address] = true;
 		return true;

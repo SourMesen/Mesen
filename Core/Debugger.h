@@ -144,7 +144,7 @@ private:
 
 private:
 	bool ProcessBreakpoints(BreakpointType type, OperationInfo &operationInfo, bool allowBreak = true, bool allowMark = true);
-	void ProcessAllBreakpoints(OperationInfo &operationInfo, AddressTypeInfo &addressInfo);
+	void ProcessAllBreakpoints(OperationInfo &operationInfo);
 	
 	void AddCallstackFrame(uint16_t source, uint16_t target, StackFrameFlags flags);
 	void UpdateCallstack(uint8_t currentInstruction, uint32_t addr);
