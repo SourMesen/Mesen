@@ -785,7 +785,13 @@ void Console::Run()
 
 					_runLock.Acquire();
 				}
-								
+
+				if(_pauseOnNextFrameRequested) {
+					//Used by "Run Single Frame" option
+					_settings->SetFlags(EmulationFlags::Paused);
+					_pauseOnNextFrameRequested = false;
+				}
+
 				bool pausedRequired = _settings->NeedsPause();
 				if(pausedRequired && !_stop && !_settings->CheckFlag(EmulationFlags::DebuggerWindowEnabled)) {
 					_notificationManager->SendNotification(ConsoleNotificationType::GamePaused);
@@ -912,6 +918,11 @@ bool Console::IsPaused()
 	} else {
 		return _paused;
 	}
+}
+
+void Console::PauseOnNextFrame()
+{
+	_pauseOnNextFrameRequested = true;
 }
 
 void Console::UpdateNesModel(bool sendNotification)
