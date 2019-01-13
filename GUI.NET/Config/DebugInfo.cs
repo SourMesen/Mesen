@@ -355,6 +355,9 @@ namespace Mesen.GUI.Config
 		public bool TextHookerIgnoreMirroredNametables = true;
 		public bool TextHookerAutoCopyToClipboard = false;
 
+		public string ExternalEditorPath;
+		public string ExternalEditorArguments;
+
 		public DebuggerShortcutsConfig Shortcuts = new DebuggerShortcutsConfig();
 		public DebugImportConfig ImportConfig = new DebugImportConfig();
 
@@ -374,6 +377,34 @@ namespace Mesen.GUI.Config
 				UseLabels = false,
 				StatusFormat = StatusFlagFormat.Hexadecimal
 			};
+
+			if(ExternalEditorPath == null || ExternalEditorArguments == null) {
+				ExternalEditorPath = "";
+				ExternalEditorArguments = "";
+
+				//Setup a default editor when possible
+				if(Program.IsMono) {
+					string geditPath = "/usr/bin/gedit";
+					string katePath = "/usr/bin/kate";
+					if(File.Exists(geditPath)) {
+						ExternalEditorPath = geditPath;
+						ExternalEditorArguments = "+%L %F";
+					} else if(File.Exists(katePath)) {
+						ExternalEditorPath = katePath;
+						ExternalEditorArguments = "%F -l %L";
+					}
+				} else {
+					string notepadPath32 = "C:\\Program Files (x86)\\Notepad++\\notepad++.exe";
+					string notepadPath64 = "C:\\Program Files\\Notepad++\\notepad++.exe";
+					if(File.Exists(notepadPath32)) {
+						ExternalEditorPath = notepadPath32;
+						ExternalEditorArguments = "%F -n%L";
+					} else if(File.Exists(notepadPath64)) {
+						ExternalEditorPath = notepadPath64;
+						ExternalEditorArguments = "%F -n%L";
+					}
+				}
+			}
 		}
 
 		static public void ApplyConfig()

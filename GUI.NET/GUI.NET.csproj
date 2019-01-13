@@ -661,6 +661,12 @@
     <Compile Include="Debugger\frmAssembler.Designer.cs">
       <DependentUpon>frmAssembler.cs</DependentUpon>
     </Compile>
+    <Compile Include="Debugger\frmExternalEditorConfig.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Debugger\frmExternalEditorConfig.Designer.cs">
+      <DependentUpon>frmExternalEditorConfig.cs</DependentUpon>
+    </Compile>
     <Compile Include="Debugger\frmGoToAll.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -1358,6 +1364,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Debugger\Controls\ctrlSourceViewer.resx">
       <DependentUpon>ctrlSourceViewer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Debugger\frmExternalEditorConfig.resx">
+      <DependentUpon>frmExternalEditorConfig.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Debugger\frmGoToAll.resx">
       <DependentUpon>frmGoToAll.cs</DependentUpon>

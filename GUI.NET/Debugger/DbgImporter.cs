@@ -57,6 +57,7 @@ namespace Mesen.GUI.Debugger
 		public Dictionary<int, FileInfo> Files { get { return _files; } }
 
 		public DateTime DbgFileStamp { get; private set; }
+		public string DbgPath { get; private set; }
 
 		public int GetPrgAddress(int fileID, int lineIndex)
 		{
@@ -726,6 +727,7 @@ namespace Mesen.GUI.Debugger
 			string[] fileRows = File.ReadAllLines(path);
 
 			string basePath = Path.GetDirectoryName(path);
+			DbgPath = basePath;
 			foreach(string row in fileRows) {
 				try {
 					if(LoadLines(row) || LoadSpans(row) || LoadSymbols(row) || LoadCSymbols(row) || LoadFiles(row, basePath) || LoadSegments(row)) {

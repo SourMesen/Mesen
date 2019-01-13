@@ -69,6 +69,7 @@
 			this.sepSwitchView = new System.Windows.Forms.ToolStripSeparator();
 			this.mnuSwitchView = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuShowSourceAsComments = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuEditSourceFile = new System.Windows.Forms.ToolStripMenuItem();
 			this.contextMenu.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -77,6 +78,7 @@
 			this.contextMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.mnuMarkSelectionAs,
             this.sepMarkSelectionAs,
+            this.mnuEditSourceFile,
             this.mnuEditSelectedCode,
             this.mnuEditSubroutine,
             this.mnuUndoPrgChrEdit,
@@ -104,7 +106,7 @@
             this.mnuSwitchView,
             this.mnuShowSourceAsComments});
 			this.contextMenu.Name = "contextMenuWatch";
-			this.contextMenu.Size = new System.Drawing.Size(254, 514);
+			this.contextMenu.Size = new System.Drawing.Size(254, 536);
 			this.contextMenu.Closed += new System.Windows.Forms.ToolStripDropDownClosedEventHandler(this.contextMenuCode_Closed);
 			this.contextMenu.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuCode_Opening);
 			// 
@@ -402,6 +404,14 @@
 			this.mnuShowSourceAsComments.Text = "Show source code as comments";
 			this.mnuShowSourceAsComments.Click += new System.EventHandler(this.mnuShowSourceAsComments_Click);
 			// 
+			// mnuEditSourceFile
+			// 
+			this.mnuEditSourceFile.Image = global::Mesen.GUI.Properties.Resources.Edit;
+			this.mnuEditSourceFile.Name = "mnuEditSourceFile";
+			this.mnuEditSourceFile.Size = new System.Drawing.Size(253, 22);
+			this.mnuEditSourceFile.Text = "Edit Source File";
+			this.mnuEditSourceFile.Click += new System.EventHandler(this.mnuEditSourceFile_Click);
+			// 
 			// CodeViewerActions
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -454,5 +464,6 @@
 		private System.Windows.Forms.ToolStripMenuItem mnuSwitchView;
 		public System.Windows.Forms.ContextMenuStrip contextMenu;
 		private System.Windows.Forms.ToolStripMenuItem mnuShowSourceAsComments;
+		private System.Windows.Forms.ToolStripMenuItem mnuEditSourceFile;
 	}
 }

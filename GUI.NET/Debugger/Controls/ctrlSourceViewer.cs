@@ -12,6 +12,7 @@ using System.IO;
 using Mesen.GUI.Config;
 using Mesen.GUI.Controls;
 using System.Text.RegularExpressions;
+using System.Diagnostics;
 
 namespace Mesen.GUI.Debugger.Controls
 {
@@ -385,6 +386,28 @@ namespace Mesen.GUI.Debugger.Controls
 		public void EditSelectedCode()
 		{
 			//Not supported
+		}
+
+		public void EditSourceFile()
+		{
+			if(string.IsNullOrWhiteSpace(ConfigManager.Config.DebugInfo.ExternalEditorPath) || !File.Exists(ConfigManager.Config.DebugInfo.ExternalEditorPath)) {
+				using(frmExternalEditorConfig frm = new frmExternalEditorConfig()) {
+					frm.ShowDialog(null, this.ParentForm);
+				}
+			}
+
+			if(File.Exists(ConfigManager.Config.DebugInfo.ExternalEditorPath)) {
+				string filePath = Path.Combine(_symbolProvider.DbgPath, CurrentFile.Name);
+				if(File.Exists(filePath)) {
+					filePath = "\"" + filePath + "\"";
+					string lineNumber = (ctrlCodeViewer.SelectedLine + 1).ToString();
+
+					Process.Start(
+						ConfigManager.Config.DebugInfo.ExternalEditorPath,
+						ConfigManager.Config.DebugInfo.ExternalEditorArguments.Replace("%F", filePath).Replace("%f", filePath).Replace("%L", lineNumber).Replace("%l", lineNumber)
+					);
+				}
+			}
 		}
 		
 		public void FindAllOccurrences(SymbolInfo symbol)

@@ -354,6 +354,11 @@ namespace Mesen.GUI.Debugger
 			}
 		}
 
+		public void EditSourceFile()
+		{
+			//TODO: Not supported yet
+		}
+
 		public void FindAllOccurrences(Ld65DbgImporter.SymbolInfo symbol)
 		{
 			FindAllOccurrences(symbol.Name, true, true);

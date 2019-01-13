@@ -68,6 +68,8 @@ namespace Mesen.GUI.Debugger.Controls
 				mnuMarkAsCode.InitShortcut(parent, nameof(DebuggerShortcutsConfig.MarkAsCode));
 				mnuMarkAsData.InitShortcut(parent, nameof(DebuggerShortcutsConfig.MarkAsData));
 				mnuMarkAsUnidentifiedData.InitShortcut(parent, nameof(DebuggerShortcutsConfig.MarkAsUnidentified));
+			} else {
+				mnuEditSourceFile.InitShortcut(parent, nameof(DebuggerShortcutsConfig.CodeWindow_EditSourceFile));
 			}
 		}
 
@@ -407,6 +409,11 @@ namespace Mesen.GUI.Debugger.Controls
 			this.OnSetNextStatement?.Invoke(new AddressEventArgs() { Address = (UInt32)Viewer.CodeViewer.CurrentLine });
 		}
 
+		private void mnuEditSourceFile_Click(object sender, EventArgs e)
+		{
+			Viewer.EditSourceFile();
+		}
+
 		private void mnuEditSubroutine_Click(object sender, EventArgs e)
 		{
 			Viewer.EditSubroutine();
@@ -462,6 +469,7 @@ namespace Mesen.GUI.Debugger.Controls
 		{
 			mnuEditSelectedCode.Enabled = true;
 			mnuEditSubroutine.Enabled = true;
+			mnuEditSourceFile.Enabled = true;
 		}
 
 		public void UpdateContextMenuItemVisibility(ToolStripItemCollection items)
@@ -475,7 +483,7 @@ namespace Mesen.GUI.Debugger.Controls
 			items[nameof(mnuShowSourceAsComments)].Visible = hasSymbolProvider;
 			items[nameof(mnuSwitchView)].Visible = hasSymbolProvider;
 			items[nameof(sepSwitchView)].Visible = hasSymbolProvider;
-			
+
 			if(IsSourceView) {
 				items[nameof(mnuMarkSelectionAs)].Visible = false;
 
@@ -487,6 +495,8 @@ namespace Mesen.GUI.Debugger.Controls
 				items[nameof(sepNavigation)].Visible = false;
 				items[nameof(mnuShowSourceAsComments)].Visible = false;
 				items[nameof(sepMarkSelectionAs)].Visible = false;
+			} else {
+				items[nameof(mnuEditSourceFile)].Visible = false;
 			}
 		}
 

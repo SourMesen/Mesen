@@ -18,6 +18,7 @@ namespace Mesen.GUI.Debugger.Controls
 		void SetConfig(DebugViewInfo config, bool disableActions = false);
 		void EditSubroutine();
 		void EditSelectedCode();
+		void EditSourceFile();
 
 		void SetMessage(TextboxMessageInfo message);
 

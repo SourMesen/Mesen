@@ -127,6 +127,8 @@ namespace Mesen.GUI.Config
 		public XmlKeys CodeWindow_EditSubroutine = Keys.F4;
 		[ShortcutName("Code Window: Edit Selected Code")]
 		public XmlKeys CodeWindow_EditSelectedCode = Keys.None;
+		[ShortcutName("Code Window: Edit Source File (Source View)")]
+		public XmlKeys CodeWindow_EditSourceFile = Keys.F4;
 		[ShortcutName("Code Window: Edit Label")]
 		public XmlKeys CodeWindow_EditLabel = Keys.F2;
 		[ShortcutName("Code Window: Navigate Back")]

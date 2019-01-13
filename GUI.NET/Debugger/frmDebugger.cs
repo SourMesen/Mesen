@@ -1814,5 +1814,12 @@ namespace Mesen.GUI.Debugger
 				}
 			}
 		}
+
+		private void mnuConfigureExternalEditor_Click(object sender, EventArgs e)
+		{
+			using(frmExternalEditorConfig frm = new frmExternalEditorConfig()) {
+				frm.ShowDialog(mnuConfigureExternalEditor, this);
+			}
+		}
 	}
 }

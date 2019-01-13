@@ -90,6 +90,7 @@ namespace Mesen.GUI.Debugger
 				GetMember(nameof(DebuggerShortcutsConfig.CodeWindow_SetNextStatement)),
 				GetMember(nameof(DebuggerShortcutsConfig.CodeWindow_EditSubroutine)),
 				GetMember(nameof(DebuggerShortcutsConfig.CodeWindow_EditSelectedCode)),
+				GetMember(nameof(DebuggerShortcutsConfig.CodeWindow_EditSourceFile)),
 				GetMember(nameof(DebuggerShortcutsConfig.CodeWindow_EditLabel)),
 				GetMember(nameof(DebuggerShortcutsConfig.CodeWindow_NavigateBack)),
 				GetMember(nameof(DebuggerShortcutsConfig.CodeWindow_NavigateForward)),
