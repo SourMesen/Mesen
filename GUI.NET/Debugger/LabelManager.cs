@@ -28,6 +28,9 @@ namespace Mesen.GUI.Debugger
 				case AddressType.Register: sb.Append("G:"); break;
 			}
 			sb.Append(Address.ToString("X4"));
+			if(Length > 1) {
+				sb.Append("-" + (Address+Length-1).ToString("X4"));
+			}
 			sb.Append(":");
 			sb.Append(Label);
 			if(!string.IsNullOrWhiteSpace(Comment)) {
