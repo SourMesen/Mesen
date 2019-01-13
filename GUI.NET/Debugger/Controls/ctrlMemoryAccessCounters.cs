@@ -179,6 +179,11 @@ namespace Mesen.GUI.Debugger.Controls
 			RefreshData();
 		}
 
+		public void GoToAddress()
+		{
+			ctrlScrollableTextbox.GoToAddress();
+		}
+
 		private enum SortType
 		{
 			Address = 0,

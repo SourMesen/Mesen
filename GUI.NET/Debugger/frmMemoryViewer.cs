@@ -388,7 +388,11 @@ namespace Mesen.GUI.Debugger
 
 		private void mnuGoTo_Click(object sender, EventArgs e)
 		{
-			this.ctrlHexViewer.GoToAddress();
+			if(_selectedTab == tpgMemoryViewer) {
+				this.ctrlHexViewer.GoToAddress();
+			} else if(_selectedTab == tpgAccessCounters) {
+				this.ctrlMemoryAccessCounters.GoToAddress();
+			}
 		}
 
 		private void mnuGoToAll_Click(object sender, EventArgs e)
