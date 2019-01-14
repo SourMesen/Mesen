@@ -47,6 +47,7 @@ void MemoryDumper::SetMemoryState(DebugMemoryType type, uint8_t *buffer)
 		case DebugMemoryType::ChrRam:
 		case DebugMemoryType::WorkRam:
 		case DebugMemoryType::SaveRam:
+		case DebugMemoryType::NametableRam:
 			_mapper->WriteMemory(type, buffer);
 			break;
 	}
@@ -136,6 +137,7 @@ uint32_t MemoryDumper::GetMemoryState(DebugMemoryType type, uint8_t *buffer)
 		case DebugMemoryType::ChrRam:
 		case DebugMemoryType::WorkRam:
 		case DebugMemoryType::SaveRam:
+		case DebugMemoryType::NametableRam:
 			return _mapper->CopyMemory(type, buffer);
 
 		case DebugMemoryType::InternalRam:
@@ -216,6 +218,7 @@ void MemoryDumper::SetMemoryValue(DebugMemoryType memoryType, uint32_t address, 
 		case DebugMemoryType::ChrRam:
 		case DebugMemoryType::WorkRam:
 		case DebugMemoryType::SaveRam:
+		case DebugMemoryType::NametableRam:
 			_mapper->SetMemoryValue(memoryType, address, value);
 			break;
 

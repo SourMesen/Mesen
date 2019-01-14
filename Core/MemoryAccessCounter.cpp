@@ -90,11 +90,13 @@ bool MemoryAccessCounter::IsAddressUninitialized(AddressTypeInfo &addressInfo)
 
 void MemoryAccessCounter::ProcessPpuMemoryAccess(PpuAddressTypeInfo &addressInfo, MemoryOperationType operation, int32_t cpuCycle)
 {
-	vector<int> &counts = GetPpuCountArray(operation, addressInfo.Type);
-	counts.data()[addressInfo.Address]++;
+	if(addressInfo.Address >= 0) {
+		vector<int> &counts = GetPpuCountArray(operation, addressInfo.Type);
+		counts.data()[addressInfo.Address]++;
 
-	vector<int> &stamps = GetPpuStampArray(operation, addressInfo.Type);
-	stamps.data()[addressInfo.Address] = cpuCycle;
+		vector<int> &stamps = GetPpuStampArray(operation, addressInfo.Type);
+		stamps.data()[addressInfo.Address] = cpuCycle;
+	}
 }
 
 bool MemoryAccessCounter::ProcessMemoryAccess(AddressTypeInfo &addressInfo, MemoryOperationType operation, int32_t cpuCycle)

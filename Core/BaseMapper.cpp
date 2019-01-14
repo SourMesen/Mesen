@@ -702,7 +702,7 @@ uint8_t* BaseMapper::GetNametable(uint8_t nametableIndex)
 		#endif
 		return _nametableRam;
 	}
-	_nametableCount = std::max<uint8_t>(_nametableCount, nametableIndex);
+	_nametableCount = std::max<uint8_t>(_nametableCount, nametableIndex + 1);
 
 	return _nametableRam + (nametableIndex * BaseMapper::NametableSize);
 }
@@ -715,7 +715,7 @@ void BaseMapper::SetNametable(uint8_t index, uint8_t nametableIndex)
 		#endif
 		return;
 	}
-	_nametableCount = std::max<uint8_t>(_nametableCount, nametableIndex);
+	_nametableCount = std::max<uint8_t>(_nametableCount, nametableIndex + 1);
 
 	SetPpuMemoryMapping(0x2000 + index * 0x400, 0x2000 + (index + 1) * 0x400 - 1, nametableIndex, ChrMemoryType::NametableRam);
 	
@@ -902,26 +902,28 @@ uint8_t* BaseMapper::GetWorkRam()
 
 uint32_t BaseMapper::CopyMemory(DebugMemoryType type, uint8_t* buffer)
 {
-	uint32_t chrRomSize = _onlyChrRam ? 0 : _chrRomSize;
+	uint32_t size = GetMemorySize(type);
 	switch(type) {
 		default: break;
-		case DebugMemoryType::ChrRam: memcpy(buffer, _chrRam, _chrRamSize); return _chrRamSize;
-		case DebugMemoryType::ChrRom: memcpy(buffer, _chrRom, chrRomSize); return chrRomSize;
-		case DebugMemoryType::PrgRom: memcpy(buffer, _prgRom, _prgSize); return _prgSize;
-		case DebugMemoryType::SaveRam: memcpy(buffer, _saveRam, _saveRamSize); return _saveRamSize;
-		case DebugMemoryType::WorkRam: memcpy(buffer, _workRam, _workRamSize); return _workRamSize;
+		case DebugMemoryType::ChrRam: memcpy(buffer, _chrRam, size); break;
+		case DebugMemoryType::ChrRom: memcpy(buffer, _chrRom, size); break;
+		case DebugMemoryType::NametableRam: memcpy(buffer, _nametableRam, size); break;
+		case DebugMemoryType::SaveRam: memcpy(buffer, _saveRam, size); break;
+		case DebugMemoryType::PrgRom: memcpy(buffer, _prgRom, size); break;
+		case DebugMemoryType::WorkRam: memcpy(buffer, _workRam, size); break;
 	}
-
-	return 0;
+	return size;
 }
 
 void BaseMapper::WriteMemory(DebugMemoryType type, uint8_t* buffer)
 {
+	uint32_t size = GetMemorySize(type);
 	switch(type) {
 		default: break;
-		case DebugMemoryType::ChrRam: memcpy(_chrRam, buffer, _chrRamSize); break;
-		case DebugMemoryType::SaveRam: memcpy(_saveRam, buffer, _saveRamSize); break;
-		case DebugMemoryType::WorkRam: memcpy(_workRam, buffer, _workRamSize); break;
+		case DebugMemoryType::ChrRam: memcpy(_chrRam, buffer, size); break;
+		case DebugMemoryType::SaveRam: memcpy(_saveRam, buffer, size); break;
+		case DebugMemoryType::WorkRam: memcpy(_workRam, buffer, size); break;
+		case DebugMemoryType::NametableRam: memcpy(_nametableRam, buffer, size); break;
 	}
 }
 
@@ -962,6 +964,7 @@ uint8_t BaseMapper::GetMemoryValue(DebugMemoryType memoryType, uint32_t address)
 			case DebugMemoryType::SaveRam: return _saveRam[address];
 			case DebugMemoryType::PrgRom: return _prgRom[address];
 			case DebugMemoryType::WorkRam: return _workRam[address];
+			case DebugMemoryType::NametableRam: return _nametableRam[address];
 		}
 	}
 	return 0;
@@ -982,6 +985,7 @@ void BaseMapper::SetMemoryValue(DebugMemoryType memoryType, uint32_t address, ui
 			case DebugMemoryType::SaveRam: _saveRam[address] = value; break;
 			case DebugMemoryType::PrgRom: _prgRom[address] = value; break;
 			case DebugMemoryType::WorkRam: _workRam[address] = value; break;
+			case DebugMemoryType::NametableRam: _nametableRam[address] = value; break;
 		}
 	}
 }

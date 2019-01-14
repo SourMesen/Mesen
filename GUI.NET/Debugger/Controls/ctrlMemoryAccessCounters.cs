@@ -68,8 +68,8 @@ namespace Mesen.GUI.Debugger.Controls
 			if(InteropEmu.DebugGetMemorySize(DebugMemoryType.ChrRam) > 0) {
 				cboMemoryType.Items.Add(ResourceHelper.GetEnumText(DebugMemoryType.ChrRam));
 			}
-			cboMemoryType.Items.Add(ResourceHelper.GetEnumText(DebugMemoryType.PaletteMemory));
 			cboMemoryType.Items.Add(ResourceHelper.GetEnumText(DebugMemoryType.NametableRam));
+			cboMemoryType.Items.Add(ResourceHelper.GetEnumText(DebugMemoryType.PaletteMemory));
 
 			cboMemoryType.SelectedIndex = 0;
 			cboMemoryType.SetEnumValue(originalValue);

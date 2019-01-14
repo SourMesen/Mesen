@@ -174,6 +174,7 @@ namespace Mesen.GUI.Debugger
 				cboMemoryType.Items.Add(ResourceHelper.GetEnumText(DebugMemoryType.ChrRam));
 			}
 
+			cboMemoryType.Items.Add(ResourceHelper.GetEnumText(DebugMemoryType.NametableRam));
 			cboMemoryType.Items.Add(ResourceHelper.GetEnumText(DebugMemoryType.PaletteMemory));
 			cboMemoryType.Items.Add(ResourceHelper.GetEnumText(DebugMemoryType.SpriteMemory));
 			cboMemoryType.Items.Add(ResourceHelper.GetEnumText(DebugMemoryType.SecondarySpriteMemory));
@@ -331,6 +332,7 @@ namespace Mesen.GUI.Debugger
 				case DebugMemoryType.ChrRom:
 				case DebugMemoryType.ChrRam:
 				case DebugMemoryType.PaletteMemory:
+				case DebugMemoryType.NametableRam:
 					this.ctrlHexViewer.ByteColorProvider = new ChrByteColorProvider(
 						this._memoryType,
 						mnuHighlightWrites.Checked,
@@ -477,6 +479,7 @@ namespace Mesen.GUI.Debugger
 				case DebugMemoryType.ChrRam:
 				case DebugMemoryType.InternalRam:
 				case DebugMemoryType.PaletteMemory:
+				case DebugMemoryType.NametableRam:
 				case DebugMemoryType.SecondarySpriteMemory:
 				case DebugMemoryType.SpriteMemory:
 				case DebugMemoryType.WorkRam:
