@@ -1795,7 +1795,7 @@ namespace Be.Windows.Forms
 		#region Caret methods
 		void CreateCaret()
 		{
-			if (_byteProvider == null || _keyInterpreter == null || _caretVisible || !this.Focused)
+			if (_byteProvider == null || _keyInterpreter == null || _caretVisible)
 				return;
 
 			System.Diagnostics.Debug.WriteLine("CreateCaret()", "HexBox");
@@ -2444,7 +2444,7 @@ namespace Be.Windows.Forms
 
 			UpdateVisibilityBytes();
 
-			if(_caretVisible && this.Focused && _keyInterpreter.GetType() != typeof(StringKeyInterpreter)) {
+			if(_caretVisible && _keyInterpreter.GetType() != typeof(StringKeyInterpreter)) {
 				int caretWidth = (this.InsertActive) ? 1 : (int)_charSize.Width;
 				int caretHeight = (int)_charSize.Height;
 				e.Graphics.FillRectangle(Brushes.Yellow, _caretPos.X - 1, _caretPos.Y, caretWidth, caretHeight);
@@ -2462,7 +2462,7 @@ namespace Be.Windows.Forms
 			if (_groupSeparatorVisible)
 				PaintColumnSeparator(e.Graphics);
 
-			if(_caretVisible && this.Focused && _keyInterpreter.GetType() != typeof(StringKeyInterpreter)) {
+			if(_caretVisible && _keyInterpreter.GetType() != typeof(StringKeyInterpreter)) {
 				float caretWidth = (this.InsertActive) ? 1 : _charSize.Width;
 				float caretHeight = _charSize.Height;
 				e.Graphics.DrawRectangle(Pens.Gray, _caretPos.X - 1, _caretPos.Y, caretWidth, caretHeight);
@@ -2565,7 +2565,7 @@ namespace Be.Windows.Forms
 			}
 
 			if(_selectionLength == 0 && _caretPos.Y == bytePointF.Y && _caretPos.X >= bytePointF.X && _caretPos.X <= bytePointF.X + width) {
-				if(_caretVisible && this.Focused && _keyInterpreter.GetType() != typeof(StringKeyInterpreter)) {
+				if(_caretVisible && _keyInterpreter.GetType() != typeof(StringKeyInterpreter)) {
 					//Redraw caret over background color
 					float caretWidth = (this.InsertActive) ? 1 : _charSize.Width;
 					float caretHeight = (int)_charSize.Height;
@@ -2592,7 +2592,7 @@ namespace Be.Windows.Forms
 			float xPrevious = 0;
 
 			Point? caretPoint = null;
-			if(_caretVisible && this.Focused && _keyInterpreter.GetType() == typeof(StringKeyInterpreter)) {
+			if(_caretVisible && _keyInterpreter.GetType() == typeof(StringKeyInterpreter)) {
 				long byteIndex = _bytePos - _startByte;
 				caretPoint = GetGridBytePoint(byteIndex);
 			}
@@ -2637,7 +2637,7 @@ namespace Be.Windows.Forms
 				Action drawCaret = () => {
 					float yPos = bytePointF.Y + (HighDensityMode ? _highDensityModeOffset : 0);
 					if(_selectionLength == 0 && _caretPos.Y == yPos && _caretPos.X >= xPos) {
-						if(_caretVisible && this.Focused && _keyInterpreter.GetType() == typeof(StringKeyInterpreter)) {
+						if(_caretVisible && _keyInterpreter.GetType() == typeof(StringKeyInterpreter)) {
 							g.FillRectangle(Brushes.Yellow, _caretPos.X, _caretPos.Y, this.InsertActive ? 1 : caretWidth, _charSize.Height);
 							g.DrawRectangle(Pens.Gray, _caretPos.X, _caretPos.Y, this.InsertActive ? 1 : caretWidth, _charSize.Height);
 						}
@@ -3293,7 +3293,7 @@ namespace Be.Windows.Forms
 						SetSelectionLength(0);
 					}
 
-					if (_caretVisible && Focused)
+					if (_caretVisible)
 						UpdateCaret();
 					else
 						CreateCaret();
