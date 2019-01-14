@@ -214,7 +214,7 @@ public:
 	uint32_t GetMemorySize(DebugMemoryType type);
 
 	uint32_t CopyMemory(DebugMemoryType type, uint8_t* buffer);
-	void WriteMemory(DebugMemoryType type, uint8_t* buffer);
+	void WriteMemory(DebugMemoryType type, uint8_t* buffer, int32_t length);
 
 	void GetAbsoluteAddressAndType(uint32_t relativeAddr, AddressTypeInfo *info);
 	void GetPpuAbsoluteAddressAndType(uint32_t relativeAddr, PpuAddressTypeInfo *info);

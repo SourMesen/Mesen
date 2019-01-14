@@ -71,7 +71,7 @@ extern "C"
 	DllExport void __stdcall DebugClearPpuViewerSettings(int32_t ppuViewerId) { return GetDebugger()->ClearPpuViewerSettings(ppuViewerId); }
 
 	DllExport void __stdcall DebugSetNextStatement(uint16_t addr) { GetDebugger()->SetNextStatement(addr); }
-	DllExport void __stdcall DebugSetMemoryState(DebugMemoryType type, uint8_t *buffer) { GetDebugger()->GetMemoryDumper()->SetMemoryState(type, buffer); }
+	DllExport void __stdcall DebugSetMemoryState(DebugMemoryType type, uint8_t *buffer, int32_t length) { GetDebugger()->GetMemoryDumper()->SetMemoryState(type, buffer, length); }
 
 	DllExport uint32_t __stdcall DebugGetMemorySize(DebugMemoryType type) { return GetDebugger()->GetMemoryDumper()->GetMemorySize(type); }
 	DllExport uint32_t __stdcall DebugGetMemoryState(DebugMemoryType type, uint8_t *buffer) { return GetDebugger()->GetMemoryDumper()->GetMemoryState(type, buffer); }

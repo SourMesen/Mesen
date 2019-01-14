@@ -915,9 +915,9 @@ uint32_t BaseMapper::CopyMemory(DebugMemoryType type, uint8_t* buffer)
 	return size;
 }
 
-void BaseMapper::WriteMemory(DebugMemoryType type, uint8_t* buffer)
+void BaseMapper::WriteMemory(DebugMemoryType type, uint8_t* buffer, int32_t length)
 {
-	uint32_t size = GetMemorySize(type);
+	int32_t size = std::min(length, (int32_t)GetMemorySize(type));
 	switch(type) {
 		default: break;
 		case DebugMemoryType::ChrRam: memcpy(_chrRam, buffer, size); break;

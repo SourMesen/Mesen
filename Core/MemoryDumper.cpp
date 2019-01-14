@@ -20,7 +20,7 @@ MemoryDumper::MemoryDumper(shared_ptr<PPU> ppu, shared_ptr<MemoryManager> memory
 	_disassembler = disassembler;
 }
 
-void MemoryDumper::SetMemoryState(DebugMemoryType type, uint8_t *buffer)
+void MemoryDumper::SetMemoryState(DebugMemoryType type, uint8_t *buffer, int32_t length)
 {
 	switch(type) {
 		case DebugMemoryType::ChrRom:
@@ -30,25 +30,25 @@ void MemoryDumper::SetMemoryState(DebugMemoryType type, uint8_t *buffer)
 			break;
 
 		case DebugMemoryType::InternalRam:
-			for(int i = 0; i < 0x800; i++) {
+			for(int i = 0; i < 0x800 && i < length; i++) {
 				_memoryManager->DebugWrite(i, buffer[i]);
 			}
 			break;
 
 		case DebugMemoryType::PaletteMemory:
-			for(int i = 0; i < 0x20; i++) {
+			for(int i = 0; i < 0x20 && i < length; i++) {
 				_ppu->WritePaletteRAM(i, buffer[i]);
 			}
 			break;
 
-		case DebugMemoryType::SpriteMemory: memcpy(_ppu->GetSpriteRam(), buffer, 0x100); break;
-		case DebugMemoryType::SecondarySpriteMemory: memcpy(_ppu->GetSecondarySpriteRam(), buffer, 0x20); break;
+		case DebugMemoryType::SpriteMemory: memcpy(_ppu->GetSpriteRam(), buffer, std::min(length, 0x100)); break;
+		case DebugMemoryType::SecondarySpriteMemory: memcpy(_ppu->GetSecondarySpriteRam(), buffer, std::min(length, 0x20)); break;
 
 		case DebugMemoryType::ChrRam:
 		case DebugMemoryType::WorkRam:
 		case DebugMemoryType::SaveRam:
 		case DebugMemoryType::NametableRam:
-			_mapper->WriteMemory(type, buffer);
+			_mapper->WriteMemory(type, buffer, length);
 			break;
 	}
 }

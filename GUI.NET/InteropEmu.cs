@@ -382,12 +382,12 @@ namespace Mesen.GUI
 			return buffer;
 		}
 
-		[DllImport(DLLPath, EntryPoint = "DebugSetMemoryState")] private static extern void DebugSetMemoryStateWrapper(DebugMemoryType type, IntPtr buffer);
+		[DllImport(DLLPath, EntryPoint = "DebugSetMemoryState")] private static extern void DebugSetMemoryStateWrapper(DebugMemoryType type, IntPtr buffer, Int32 length);
 		public static void DebugSetMemoryState(DebugMemoryType type, byte[] data)
 		{
 			GCHandle handle = GCHandle.Alloc(data, GCHandleType.Pinned);
 			try {
-				InteropEmu.DebugSetMemoryStateWrapper(type, handle.AddrOfPinnedObject());
+				InteropEmu.DebugSetMemoryStateWrapper(type, handle.AddrOfPinnedObject(), data.Length);
 			} finally {
 				handle.Free();
 			}
