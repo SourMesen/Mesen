@@ -195,6 +195,7 @@ class PPU : public IMemoryHandler, public Snapshotable
 		void WriteRAM(uint16_t addr, uint8_t value) override;
 
 		void SetNesModel(NesModel model);
+		double GetOverclockRate();
 		
 		void Exec();
 		void ProcessCpuClock();

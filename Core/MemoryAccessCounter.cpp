@@ -5,6 +5,7 @@
 #include "DebugBreakHelper.h"
 #include "Debugger.h"
 #include "MemoryDumper.h"
+#include "PPU.h"
 #include "BaseMapper.h"
 
 MemoryAccessCounter::MemoryAccessCounter(Debugger* debugger)
@@ -194,7 +195,11 @@ void MemoryAccessCounter::GetNametableChangedData(bool ntChangedData[])
 {
 	PpuAddressTypeInfo addressInfo;
 	int32_t cpuCycle = _debugger->GetConsole()->GetCpu()->GetCycleCount();
-	int32_t cyclesPerFrame = _debugger->GetConsole()->GetCpu()->GetClockRate(_debugger->GetConsole()->GetModel()) / 60;
+	NesModel model = _debugger->GetConsole()->GetModel();
+	double frameRate = model == NesModel::NTSC ? 60.1 : 50.01;
+	double overclockRate = _debugger->GetConsole()->GetPpu()->GetOverclockRate() * (_debugger->GetConsole()->GetSettings()->GetOverclockRate() / 100);
+	int32_t cyclesPerFrame = (int32_t)(_debugger->GetConsole()->GetCpu()->GetClockRate(model) / frameRate * overclockRate);
+
 	for(int i = 0; i < 0x1000; i++) {
 		_debugger->GetPpuAbsoluteAddressAndType(0x2000+i, &addressInfo);
 		if(addressInfo.Type != PpuAddressType::None) {

@@ -139,6 +139,19 @@ void PPU::SetNesModel(NesModel model)
 	_vblankEnd += _settings->GetPpuExtraScanlinesAfterNmi() + _settings->GetPpuExtraScanlinesBeforeNmi();
 }
 
+double PPU::GetOverclockRate()
+{
+	uint32_t regularVblankEnd;
+	switch(_nesModel) {
+		default:
+		case NesModel::NTSC: regularVblankEnd = 260; break;
+		case NesModel::PAL: regularVblankEnd = 310; break;
+		case NesModel::Dendy: regularVblankEnd = 310; break;
+	}
+
+	return (double)(_vblankEnd + 2) / (regularVblankEnd + 2);
+}
+
 void PPU::GetState(PPUDebugState &state)
 {
 	state.ControlFlags = _flags;
