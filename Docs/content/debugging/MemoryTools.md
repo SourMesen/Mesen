@@ -26,6 +26,7 @@ The memory viewer offers read and write access to all types of ROM and RAM:
 
 * CHR ROM
 * CHR RAM
+* Nametable RAM
 * Palette RAM
 * Sprite / OAM RAM
 * Secondary OAM RAM
@@ -49,7 +50,7 @@ There are a number of highlighting/coloring options in the memory viewer.
 * Labeled bytes
 * Breakpoints
 * Code bytes *(PRG ROM only)*
-* Data bytes *(PRG ROM only)**
+* Data bytes *(PRG ROM only)*
 * DMC sample bytes *(PRG ROM only)*
 * Drawn bytes *(CHR ROM only)*
 * Read bytes *(CHR ROM only)*

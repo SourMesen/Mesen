@@ -21,19 +21,31 @@ All tabs share some common settings:
 
 The nametable viewer displays the contents of all 4 nametables (PPU addresses $2000 to $2FFF).  
 Mouve-over a tile to display that tile's information on the right.
+<kbd>**Double-click**</kbd> on a tile in the nametable viewer to view/edit it in the CHR Viewer.
+
+Additionally, you can <kbd>**right-click**</kbd> on a tile to get more options:  
+
+* **Edit in Memory Viewer**: Opens up the memory tools at this specific tile's location in nametable memory.
+* **View in CHR Viewer**: Switches to the CHR Viewer and selects the tile (same as double-clicking)
+* **Copy Tile (HD Pack format)**: Copies the tile's information (text) to the clipboard (for use with [HD Packs](/hdpacks.html)).
+* **Copy image to clipboard**: Copies the nametable to the clipboard.
+* **Export image to PNG**: Exports the current nametable image to a PNG file.
+
 There are also a number of display options:
 
 * **Show PPU Scroll Overlay**: Shows a blue rectangular overlay showing the current scroll position of the screen.
 * **Show Tile Grid**: Displays a 8x8 pixels <span class="red">red</span> grid.
 * **Show Attribute Grid**: Displays a 16x16 pixels <span class="blue">blue</span> grid.
 * **Use Grayscale Palette**: Forces the nametables to be shown in a 4-color grayscale palette.
-* **Highlight Tile Updates**: Displays a 8x8 red square overlay over tiles that have changed since the last frame.
-* **Highlight Attribute Updates**: Displays a 16x16 yellow square overlay over attributes that have changed since the last frame.
 * **Highlight tile selected in CHR viewer**: When enabled, click on a tile in the CHR viewer to select it, all occurrences of that tile will then be marked by a <span class="red">red</span> rectangle in the nametable viewer. 
 
-<kbd>**Double-click**</kbd> on a tile in the nametable viewer to view/edit it in the CHR Viewer.
+### Update Highlighting ###
 
-Additionally, you can <kbd>**right-click**</kbd> on a tile to copy the tile's information to the clipboard (for use with [HD Packs](/hdpacks.html)).
+The nametable viewer can display nametable (tiles and attributes) updates by highlighting the tiles affected by the updates.
+
+* **Tile Updates**: Displays a 8x8 red square overlay over tiles that have changed since the last frame.
+* **Attribute Updates**: Displays a 16x16 yellow square overlay over attributes that have changed since the last frame.
+* **Ignore writes that do not alter data**: By default, all memory locations written to during the last frame will be highlighted. By enabling this option, only memory locations that have changed value will be highlighted.
 
 ## CHR Viewer/Editor ##
 
