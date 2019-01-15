@@ -245,7 +245,7 @@ namespace Mesen.GUI
 		[DllImport(DLLPath)] public static extern Int32 DebugFindSubEntryPoint(UInt16 relativeAddr);
 		[DllImport(DLLPath)] public static extern Int32 DebugGetAbsoluteAddress(UInt32 relativeAddr);
 		[DllImport(DLLPath)] public static extern Int32 DebugGetAbsoluteChrAddress(UInt32 relativeAddr);
-		[DllImport(DLLPath)] public static extern Int32 DebugGetRelativeChrAddress(UInt32 absoluteAddr);
+		[DllImport(DLLPath)] public static extern Int32 DebugGetRelativePpuAddress(UInt32 absoluteAddr, PpuAddressType type);
 		[DllImport(DLLPath)] public static extern Int32 DebugGetMemorySize(DebugMemoryType type);
 		[DllImport(DLLPath)] public static extern Byte DebugGetMemoryValue(DebugMemoryType type, UInt32 address);
 		[DllImport(DLLPath)] public static extern void DebugSetMemoryValue(DebugMemoryType type, UInt32 address, byte value);
@@ -280,6 +280,15 @@ namespace Mesen.GUI
 		}
 
 		[DllImport(DLLPath)] public static extern void DebugGetAbsoluteAddressAndType(UInt32 relativeAddr, AddressTypeInfo addressTypeInfo);
+
+		[DllImport(DLLPath, EntryPoint = "DebugGetPpuAbsoluteAddressAndType")] private static extern void DebugGetPpuAbsoluteAddressAndTypeWrapper(UInt32 relativeAddr, PpuAddressTypeInfo addressTypeInfo);
+		public static PpuAddressTypeInfo DebugGetPpuAbsoluteAddressAndType(UInt32 relativeAddr)
+		{
+			PpuAddressTypeInfo addressTypeInfo = new PpuAddressTypeInfo();
+			InteropEmu.DebugGetPpuAbsoluteAddressAndTypeWrapper(relativeAddr, addressTypeInfo);
+			return addressTypeInfo;
+		}
+
 		[DllImport(DLLPath)] public static extern void DebugSetPpuViewerScanlineCycle(Int32 ppuViewerId, Int32 scanline, Int32 cycle);
 		[DllImport(DLLPath)] public static extern void DebugClearPpuViewerSettings(Int32 ppuViewerId);
 
@@ -2329,6 +2338,14 @@ namespace Mesen.GUI
 		Pause = 10,
 		BreakAfterSuspend = 11,
 	}
+	
+	public enum PpuAddressType
+	{
+		ChrRom = 0,
+		ChrRam = 1,
+		PaletteRam = 2,
+		NametableRam = 3
+	}
 
 	public enum AddressType
 	{
@@ -2338,7 +2355,7 @@ namespace Mesen.GUI
 		SaveRam = 3,
 		Register = 4
 	}
-
+	
 	public static class AddressTypeExtensions
 	{
 		public static DebugMemoryType ToMemoryType(this AddressType type)
@@ -2353,6 +2370,17 @@ namespace Mesen.GUI
 			return DebugMemoryType.CpuMemory;
 		}
 
+		public static DebugMemoryType ToMemoryType(this PpuAddressType type)
+		{
+			switch(type) {
+				case PpuAddressType.ChrRom: return DebugMemoryType.ChrRom;
+				case PpuAddressType.ChrRam: return DebugMemoryType.ChrRam;
+				case PpuAddressType.NametableRam: return DebugMemoryType.NametableRam;
+				case PpuAddressType.PaletteRam: return DebugMemoryType.PaletteMemory;
+			}
+			throw new Exception("Invalid memory type");
+		}
+
 		public static AddressType ToAddressType(this DebugMemoryType type)
 		{
 			switch(type) {
@@ -2363,6 +2391,17 @@ namespace Mesen.GUI
 				case DebugMemoryType.SaveRam: return AddressType.SaveRam;
 			}
 			return AddressType.Register;
+		}
+
+		public static PpuAddressType ToPpuAddressType(this DebugMemoryType type)
+		{
+			switch(type) {
+				case DebugMemoryType.ChrRom: return PpuAddressType.ChrRom;
+				case DebugMemoryType.ChrRam: return PpuAddressType.ChrRam;
+				case DebugMemoryType.NametableRam: return PpuAddressType.NametableRam;
+				case DebugMemoryType.PaletteMemory: return PpuAddressType.PaletteRam;
+			}
+			throw new Exception("Invalid memory type");
 		}
 	}
 
@@ -2402,7 +2441,14 @@ namespace Mesen.GUI
 		public Int32 Address;
 		public AddressType Type;
 	}
-	
+
+	[StructLayout(LayoutKind.Sequential)]
+	public class PpuAddressTypeInfo
+	{
+		public Int32 Address;
+		public PpuAddressType Type;
+	}
+
 	public class MD5Helper
 	{
 		public static string GetMD5Hash(string filename)

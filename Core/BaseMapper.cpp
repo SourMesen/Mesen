@@ -1133,6 +1133,29 @@ int32_t BaseMapper::FromAbsoluteAddress(uint32_t addr, AddressType type)
 	return -1;
 }
 
+int32_t BaseMapper::FromAbsolutePpuAddress(uint32_t addr, PpuAddressType type)
+{
+	uint8_t* ptrAddress;
+
+	switch(type) {
+		case PpuAddressType::ChrRom: ptrAddress = _chrRom; break;
+		case PpuAddressType::ChrRam: ptrAddress = _chrRam; break;
+		case PpuAddressType::NametableRam: ptrAddress = _nametableRam; break;
+		default: return -1;
+	}
+	ptrAddress += addr;
+
+	for(int i = 0; i < 0x40; i++) {
+		uint8_t* pageAddress = _chrPages[i];
+		if(pageAddress != nullptr && ptrAddress >= pageAddress && ptrAddress <= pageAddress + 0xFF) {
+			return (i << 8) + (uint32_t)(ptrAddress - pageAddress);
+		}
+	}
+
+	//Address is currently not mapped
+	return -1;
+}
+
 bool BaseMapper::IsWriteRegister(uint16_t addr)
 {
 	return _isWriteRegisterAddr[addr];

@@ -85,10 +85,11 @@ extern "C"
 	DllExport void __stdcall DebugGetFunctionEntryPoints(int32_t *entryPoints, int32_t maxCount) { GetDebugger()->GetFunctionEntryPoints(entryPoints, maxCount); }
 	
 	DllExport int32_t __stdcall DebugGetRelativeAddress(uint32_t addr, AddressType type) { return GetDebugger()->GetRelativeAddress(addr, type); }
+	DllExport int32_t __stdcall DebugGetRelativePpuAddress(uint32_t addr, PpuAddressType type) { return GetDebugger()->GetRelativePpuAddress(addr, type); }
 	DllExport int32_t __stdcall DebugGetAbsoluteAddress(uint32_t addr) { return GetDebugger()->GetAbsoluteAddress(addr); }
 	DllExport int32_t __stdcall DebugGetAbsoluteChrAddress(uint32_t addr) { return GetDebugger()->GetAbsoluteChrAddress(addr); }
-	DllExport int32_t __stdcall DebugGetRelativeChrAddress(uint32_t addr) { return GetDebugger()->GetRelativeChrAddress(addr); }
 	DllExport void __stdcall DebugGetAbsoluteAddressAndType(uint32_t relativeAddr, AddressTypeInfo* info) { return GetDebugger()->GetAbsoluteAddressAndType(relativeAddr, info); }
+	DllExport void __stdcall DebugGetPpuAbsoluteAddressAndType(uint32_t relativeAddr, PpuAddressTypeInfo* info) { return GetDebugger()->GetPpuAbsoluteAddressAndType(relativeAddr, info); }
 
 	DllExport bool __stdcall DebugLoadCdlFile(char* cdlFilepath) { return GetDebugger()->LoadCdlFile(cdlFilepath); }
 	DllExport bool __stdcall DebugSaveCdlFile(char* cdlFilepath) { return GetDebugger()->GetCodeDataLogger()->SaveCdlFile(cdlFilepath); }

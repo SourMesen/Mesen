@@ -123,7 +123,7 @@ namespace Mesen.GUI.Debugger
 			string type;
 
 			switch(MemoryType) {
-				default:
+				default: throw new Exception("invalid type");
 				case DebugMemoryType.CpuMemory: type = "CPU"; break;
 				case DebugMemoryType.PpuMemory: type = "PPU"; break;
 				case DebugMemoryType.PrgRom: type = "PRG"; break;
@@ -131,6 +131,7 @@ namespace Mesen.GUI.Debugger
 				case DebugMemoryType.SaveRam: type = "SRAM"; break;
 				case DebugMemoryType.ChrRam: type = "CHR"; break;
 				case DebugMemoryType.ChrRom: type = "CHR"; break;
+				case DebugMemoryType.NametableRam: type = "NT"; break;
 				case DebugMemoryType.PaletteMemory: type = "PAL"; break;
 			}
 
@@ -167,8 +168,8 @@ namespace Mesen.GUI.Debugger
 			if(this.IsAbsoluteAddress) {
 				if(IsCpuBreakpoint) {
 					return InteropEmu.DebugGetRelativeAddress(address, this.MemoryType.ToAddressType());
-				} else if(_memoryType == DebugMemoryType.ChrRam || _memoryType == DebugMemoryType.ChrRom) {
-					return InteropEmu.DebugGetRelativeChrAddress(address);
+				} else {
+					return InteropEmu.DebugGetRelativePpuAddress(address, this.MemoryType.ToPpuAddressType());
 				}
 			}
 			return -1;
@@ -179,8 +180,8 @@ namespace Mesen.GUI.Debugger
 			if(this.AddressType == BreakpointAddressType.AddressRange && this.IsAbsoluteAddress) {
 				if(IsCpuBreakpoint) {
 					return InteropEmu.DebugGetRelativeAddress(this.EndAddress, this.MemoryType.ToAddressType());
-				} else if(_memoryType == DebugMemoryType.ChrRam || _memoryType == DebugMemoryType.ChrRom) {
-					return InteropEmu.DebugGetRelativeChrAddress(this.EndAddress);
+				} else {
+					return InteropEmu.DebugGetRelativePpuAddress(this.EndAddress, this.MemoryType.ToPpuAddressType());
 				}
 			}
 			return -1;

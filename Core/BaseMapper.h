@@ -226,6 +226,7 @@ public:
 	int32_t ToAbsoluteChrRomAddress(uint16_t addr);
 	int32_t FromAbsoluteChrAddress(uint32_t addr);
 	int32_t FromAbsoluteAddress(uint32_t addr, AddressType type = AddressType::PrgRom);
+	int32_t FromAbsolutePpuAddress(uint32_t addr, PpuAddressType type);
 
 	bool IsWriteRegister(uint16_t addr);
 	bool IsReadRegister(uint16_t addr);

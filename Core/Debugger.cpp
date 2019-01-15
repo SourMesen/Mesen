@@ -1178,6 +1178,14 @@ int32_t Debugger::GetRelativeAddress(uint32_t addr, AddressType type)
 	return -1;
 }
 
+int32_t Debugger::GetRelativePpuAddress(uint32_t addr, PpuAddressType type)
+{
+	if(type == PpuAddressType::PaletteRam) {
+		return 0x3F00 | (addr & 0x1F);
+	}
+	return _mapper->FromAbsolutePpuAddress(addr, type);
+}
+
 int32_t Debugger::GetAbsoluteAddress(uint32_t addr)
 {
 	return _mapper->ToAbsoluteAddress(addr);
@@ -1186,11 +1194,6 @@ int32_t Debugger::GetAbsoluteAddress(uint32_t addr)
 int32_t Debugger::GetAbsoluteChrAddress(uint32_t addr)
 {
 	return _mapper->ToAbsoluteChrAddress(addr);
-}
-
-int32_t Debugger::GetRelativeChrAddress(uint32_t absoluteAddr)
-{
-	return _mapper->FromAbsoluteChrAddress(absoluteAddr);
 }
 
 void Debugger::SetNextStatement(uint16_t addr)

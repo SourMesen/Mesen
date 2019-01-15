@@ -50,7 +50,8 @@ bool Breakpoint::Matches(uint32_t memoryAddr, PpuAddressTypeInfo &info)
 	} else if(
 		(_memoryType == DebugMemoryType::ChrRam && info.Type == PpuAddressType::ChrRam) ||
 		(_memoryType == DebugMemoryType::ChrRom && info.Type == PpuAddressType::ChrRom) ||
-		(_memoryType == DebugMemoryType::PaletteMemory && info.Type == PpuAddressType::PaletteRam)
+		(_memoryType == DebugMemoryType::PaletteMemory && info.Type == PpuAddressType::PaletteRam) ||
+		(_memoryType == DebugMemoryType::NametableRam && info.Type == PpuAddressType::NametableRam)
 	) {
 		if(_startAddr == -1) {
 			return true;

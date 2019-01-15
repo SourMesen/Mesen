@@ -65,6 +65,7 @@ namespace Mesen.GUI.Debugger
 				cboBreakpointType.Items.Add(ResourceHelper.GetEnumText(DebugMemoryType.ChrRam));
 			}
 
+			cboBreakpointType.Items.Add(ResourceHelper.GetEnumText(DebugMemoryType.NametableRam));
 			cboBreakpointType.Items.Add(ResourceHelper.GetEnumText(DebugMemoryType.PaletteMemory));
 
 			this.toolTip.SetToolTip(this.picExpressionWarning, "Condition contains invalid syntax or symbols.");
