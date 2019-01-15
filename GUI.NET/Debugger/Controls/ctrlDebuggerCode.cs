@@ -446,6 +446,7 @@ namespace Mesen.GUI.Debugger
 					progress.Current = (int)state.OpCycle;
 					progress.Maxixum = frmOpCodeTooltip.OpCycles[state.OpCode];
 					switch(state.OpMemoryOperationType) {
+						case InteropMemoryOperationType.DmcRead: progress.Color = Color.FromArgb(255, 160, 221); progress.Text = "DMC"; break;
 						case InteropMemoryOperationType.DummyRead: progress.Color = Color.FromArgb(184, 160, 255); progress.Text = "DR"; break;
 						case InteropMemoryOperationType.DummyWrite: progress.Color = Color.FromArgb(255, 245, 137); progress.Text = "DW"; break;
 						case InteropMemoryOperationType.Read: progress.Color = Color.FromArgb(150, 176, 255); progress.Text = "R"; break;
