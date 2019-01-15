@@ -183,6 +183,7 @@ namespace Mesen.GUI.Config
 
 		public Point? PpuWindowLocation = null;
 		public bool PpuAutoRefresh = true;
+		public RefreshSpeed PpuAutoRefreshSpeed = RefreshSpeed.Normal;
 		public bool PpuRefreshOnBreak = true;
 		public bool PpuPartialDraw = false;
 		public bool PpuShowPreviousFrame = false;

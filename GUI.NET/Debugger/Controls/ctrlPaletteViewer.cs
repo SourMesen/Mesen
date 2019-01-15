@@ -59,6 +59,8 @@ namespace Mesen.GUI.Debugger.Controls
 				handle.Free();
 			}
 
+			this.picPalette.Refresh();
+
 			if(_paletteIndex == -1) {
 				UpdateColorInformation(0);
 			}

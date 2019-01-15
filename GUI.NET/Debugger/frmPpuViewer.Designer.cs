@@ -38,6 +38,10 @@ namespace Mesen.GUI.Debugger
 			this.mnuClose = new System.Windows.Forms.ToolStripMenuItem();
 			this.viewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuRefresh = new System.Windows.Forms.ToolStripMenuItem();
+			this.autorefreshSpeedToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuAutoRefreshLow = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuAutoRefreshNormal = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuAutoRefreshHigh = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
 			this.mnuAutoRefresh = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuRefreshOnBreak = new System.Windows.Forms.ToolStripMenuItem();
@@ -90,6 +94,7 @@ namespace Mesen.GUI.Debugger
 			// 
 			this.viewToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.mnuRefresh,
+            this.autorefreshSpeedToolStripMenuItem,
             this.toolStripMenuItem1,
             this.mnuAutoRefresh,
             this.mnuRefreshOnBreak});
@@ -104,6 +109,38 @@ namespace Mesen.GUI.Debugger
 			this.mnuRefresh.Size = new System.Drawing.Size(198, 22);
 			this.mnuRefresh.Text = "Refresh";
 			this.mnuRefresh.Click += new System.EventHandler(this.mnuRefresh_Click);
+			// 
+			// autorefreshSpeedToolStripMenuItem
+			// 
+			this.autorefreshSpeedToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.mnuAutoRefreshLow,
+            this.mnuAutoRefreshNormal,
+            this.mnuAutoRefreshHigh});
+			this.autorefreshSpeedToolStripMenuItem.Image = global::Mesen.GUI.Properties.Resources.Speed;
+			this.autorefreshSpeedToolStripMenuItem.Name = "autorefreshSpeedToolStripMenuItem";
+			this.autorefreshSpeedToolStripMenuItem.Size = new System.Drawing.Size(198, 22);
+			this.autorefreshSpeedToolStripMenuItem.Text = "Auto-refresh Speed";
+			// 
+			// mnuAutoRefreshLow
+			// 
+			this.mnuAutoRefreshLow.Name = "mnuAutoRefreshLow";
+			this.mnuAutoRefreshLow.Size = new System.Drawing.Size(159, 22);
+			this.mnuAutoRefreshLow.Text = "Low (15 FPS)";
+			this.mnuAutoRefreshLow.Click += new System.EventHandler(this.mnuAutoRefreshSpeed_Click);
+			// 
+			// mnuAutoRefreshNormal
+			// 
+			this.mnuAutoRefreshNormal.Name = "mnuAutoRefreshNormal";
+			this.mnuAutoRefreshNormal.Size = new System.Drawing.Size(159, 22);
+			this.mnuAutoRefreshNormal.Text = "Normal (30 FPS)";
+			this.mnuAutoRefreshNormal.Click += new System.EventHandler(this.mnuAutoRefreshSpeed_Click);
+			// 
+			// mnuAutoRefreshHigh
+			// 
+			this.mnuAutoRefreshHigh.Name = "mnuAutoRefreshHigh";
+			this.mnuAutoRefreshHigh.Size = new System.Drawing.Size(159, 22);
+			this.mnuAutoRefreshHigh.Text = "High (60 FPS)";
+			this.mnuAutoRefreshHigh.Click += new System.EventHandler(this.mnuAutoRefreshSpeed_Click);
 			// 
 			// toolStripMenuItem1
 			// 
@@ -271,5 +308,9 @@ namespace Mesen.GUI.Debugger
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem1;
 		private System.Windows.Forms.ToolStripMenuItem mnuRefreshOnBreak;
 		private Controls.ctrlScanlineCycleSelect ctrlScanlineCycle;
+		private System.Windows.Forms.ToolStripMenuItem autorefreshSpeedToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem mnuAutoRefreshLow;
+		private System.Windows.Forms.ToolStripMenuItem mnuAutoRefreshNormal;
+		private System.Windows.Forms.ToolStripMenuItem mnuAutoRefreshHigh;
 	}
 }

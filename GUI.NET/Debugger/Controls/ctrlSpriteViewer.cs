@@ -103,6 +103,8 @@ namespace Mesen.GUI.Debugger.Controls
 				SelectSpriteUnderCursor();
 			}
 			CreateScreenPreview();
+			picPreview.Refresh();
+			picSprites.Refresh();
 
 			if(_firstDraw) {
 				//Update the UI with the first sprite when showing for the first time

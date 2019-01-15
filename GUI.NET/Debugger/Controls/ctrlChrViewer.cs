@@ -128,7 +128,7 @@ namespace Mesen.GUI.Debugger.Controls
 			_hdCopyHelper.RefreshData();
 		}
 
-		public void RefreshViewer(bool refreshPreview = false)
+		public void RefreshViewer()
 		{
 			_forceChrRefresh = true;
 
@@ -183,6 +183,7 @@ namespace Mesen.GUI.Debugger.Controls
 						}
 					}
 					chrBanks[i].Image = chrBankImage;
+					chrBanks[i].Refresh();
 				} finally {
 					handle.Free();
 				}

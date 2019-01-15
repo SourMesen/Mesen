@@ -165,6 +165,7 @@ namespace Mesen.GUI.Debugger.Controls
 			}
 
 			this.picNametable.Image = target;
+			this.picNametable.Refresh();
 
 			if(_firstDraw) {
 				_currentPpuAddress = 0x2000;

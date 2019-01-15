@@ -1,13 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using Mesen.GUI.Config;
 using Mesen.GUI.Forms;
@@ -69,6 +60,7 @@ namespace Mesen.GUI.Debugger
 				this.ctrlPaletteViewer.RefreshViewer();
 
 				this.InitShortcuts();
+				this.UpdateRefreshSpeedMenu();
 			}
 		}
 
@@ -96,11 +88,16 @@ namespace Mesen.GUI.Debugger
 
 				case InteropEmu.ConsoleNotificationType.PpuViewerDisplayFrame:
 					if(e.Parameter.ToInt32() == _ppuViewerId) {
-						if(ConfigManager.Config.DebugInfo.PpuAutoRefresh && !_refreshing && (DateTime.Now - _lastUpdate).Milliseconds > 66) {
-							//Update at 15 fps most
+						int refreshDelay = 60;
+						switch(ConfigManager.Config.DebugInfo.PpuAutoRefreshSpeed) {
+							case RefreshSpeed.Low: refreshDelay= 60; break;
+							case RefreshSpeed.Normal: refreshDelay = 30; break;
+							case RefreshSpeed.High: refreshDelay = 12; break;
+						}
+						if(ConfigManager.Config.DebugInfo.PpuAutoRefresh && !_refreshing && (DateTime.Now - _lastUpdate).Milliseconds > refreshDelay) {
+							_lastUpdate = DateTime.Now;
 							this.GetData();
 							this.BeginInvoke((MethodInvoker)(() => this.RefreshViewers()));
-							_lastUpdate = DateTime.Now;
 						}
 					}
 					break;
@@ -209,6 +206,27 @@ namespace Mesen.GUI.Debugger
 				ctrlChrViewer.SelectedPaletteIndex = paletteIndex;
 			}
 			tabMain.SelectTab(tpgChrViewer);
+		}
+
+		private void UpdateRefreshSpeedMenu()
+		{
+			mnuAutoRefreshLow.Checked = ConfigManager.Config.DebugInfo.PpuAutoRefreshSpeed == RefreshSpeed.Low;
+			mnuAutoRefreshNormal.Checked = ConfigManager.Config.DebugInfo.PpuAutoRefreshSpeed == RefreshSpeed.Normal;
+			mnuAutoRefreshHigh.Checked = ConfigManager.Config.DebugInfo.PpuAutoRefreshSpeed == RefreshSpeed.High;
+		}
+
+		private void mnuAutoRefreshSpeed_Click(object sender, EventArgs e)
+		{
+			if(sender == mnuAutoRefreshLow) {
+				ConfigManager.Config.DebugInfo.PpuAutoRefreshSpeed = RefreshSpeed.Low;
+			} else if(sender == mnuAutoRefreshNormal) {
+				ConfigManager.Config.DebugInfo.PpuAutoRefreshSpeed = RefreshSpeed.Normal;
+			} else if(sender == mnuAutoRefreshHigh) {
+				ConfigManager.Config.DebugInfo.PpuAutoRefreshSpeed = RefreshSpeed.High;
+			}
+			ConfigManager.ApplyChanges();
+
+			UpdateRefreshSpeedMenu();
 		}
 	}
 }
