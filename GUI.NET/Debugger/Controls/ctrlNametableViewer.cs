@@ -72,6 +72,7 @@ namespace Mesen.GUI.Debugger.Controls
 			if(!IsDesignMode) {
 				mnuCopyToClipboard.InitShortcut(this, nameof(DebuggerShortcutsConfig.Copy));
 				mnuEditInMemoryViewer.InitShortcut(this, nameof(DebuggerShortcutsConfig.CodeWindow_EditInMemoryViewer));
+				mnuAddBreakpoint.InitShortcut(this, nameof(DebuggerShortcutsConfig.CodeWindow_ToggleBreakpoint));
 			}
 		}
 
@@ -437,6 +438,9 @@ namespace Mesen.GUI.Debugger.Controls
 
 		private void ctxMenu_Opening(object sender, CancelEventArgs e)
 		{
+			mnuAddBreakpoint.Text = "Add breakpoint ($" + _currentPpuAddress.ToString("X4") + ")";
+			mnuEditInMemoryViewer.Text = "Edit in Memory Viewer ($" + _currentPpuAddress.ToString("X4") + ")";
+			mnuAddBreakpoint.Enabled = DebugWindowManager.GetDebugger() != null;
 			mnuCopyNametableHdPack.Visible = Control.ModifierKeys == Keys.Shift;
 			_copyData = ToHdPackFormat(_nametableIndex, _tileY * 32 + _tileX);
 		}
@@ -505,6 +509,26 @@ namespace Mesen.GUI.Debugger.Controls
 		private void mnuEditInMemoryViewer_Click(object sender, EventArgs e)
 		{
 			DebugWindowManager.OpenMemoryViewer(_currentPpuAddress, DebugMemoryType.PpuMemory);
+		}
+
+		private void mnuToggleBreakpoint_Click(object sender, EventArgs e)
+		{
+			if(DebugWindowManager.GetDebugger() == null) {
+				return;
+			}
+
+			PpuAddressTypeInfo addressInfo = InteropEmu.DebugGetPpuAbsoluteAddressAndType((uint)_currentPpuAddress);
+
+			BreakpointManager.EditBreakpoint(new Breakpoint() {
+				MemoryType = addressInfo.Type.ToMemoryType(),
+				BreakOnExec = false,
+				BreakOnRead = true,
+				BreakOnWrite = true,
+				Address = (UInt32)addressInfo.Address,
+				StartAddress = (UInt32)addressInfo.Address,
+				EndAddress = (UInt32)addressInfo.Address,
+				AddressType = BreakpointAddressType.SingleAddress
+			});
 		}
 
 		private void picNametable_MouseEnter(object sender, EventArgs e)

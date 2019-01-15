@@ -33,6 +33,7 @@ namespace Mesen.GUI.Debugger.Controls
 			this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
 			this.picNametable = new System.Windows.Forms.PictureBox();
 			this.ctxMenu = new Mesen.GUI.Controls.ctrlMesenContextMenuStrip(this.components);
+			this.mnuAddBreakpoint = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuEditInMemoryViewer = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuShowInChrViewer = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
@@ -125,6 +126,7 @@ namespace Mesen.GUI.Debugger.Controls
 			// ctxMenu
 			// 
 			this.ctxMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.mnuAddBreakpoint,
             this.mnuEditInMemoryViewer,
             this.mnuShowInChrViewer,
             this.toolStripMenuItem1,
@@ -134,8 +136,16 @@ namespace Mesen.GUI.Debugger.Controls
             this.mnuCopyToClipboard,
             this.mnuExportToPng});
 			this.ctxMenu.Name = "ctxMenu";
-			this.ctxMenu.Size = new System.Drawing.Size(261, 148);
+			this.ctxMenu.Size = new System.Drawing.Size(261, 170);
 			this.ctxMenu.Opening += new System.ComponentModel.CancelEventHandler(this.ctxMenu_Opening);
+			// 
+			// mnuAddBreakpoint
+			// 
+			this.mnuAddBreakpoint.Image = global::Mesen.GUI.Properties.Resources.Breakpoint;
+			this.mnuAddBreakpoint.Name = "mnuAddBreakpoint";
+			this.mnuAddBreakpoint.Size = new System.Drawing.Size(260, 22);
+			this.mnuAddBreakpoint.Text = "Add breakpoint";
+			this.mnuAddBreakpoint.Click += new System.EventHandler(this.mnuToggleBreakpoint_Click);
 			// 
 			// mnuEditInMemoryViewer
 			// 
@@ -669,5 +679,6 @@ namespace Mesen.GUI.Debugger.Controls
 		private System.Windows.Forms.ToolStripMenuItem mnuEditInMemoryViewer;
 		private System.Windows.Forms.Label lblHighlight;
 		private System.Windows.Forms.CheckBox chkIgnoreRedundantWrites;
+		private System.Windows.Forms.ToolStripMenuItem mnuAddBreakpoint;
 	}
 }
