@@ -849,7 +849,8 @@ bool Debugger::ProcessRamOperation(MemoryOperationType type, uint16_t &addr, uin
 		case MemoryOperationType::Write: breakpointType = BreakpointType::WriteRam; break;
 	}
 
-	if(_breakOnFirstCycle) {
+	//For DMC reads, always break when it happens, rather than at the start (because we can't predict it easily)
+	if(_breakOnFirstCycle && !isDmcRead) {
 		if(type == MemoryOperationType::ExecOpCode && !breakDone) {
 			ProcessAllBreakpoints(operationInfo);
 		} else if(_hasBreakpoint[breakpointType]) {
