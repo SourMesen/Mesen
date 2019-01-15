@@ -32,6 +32,7 @@ namespace Mesen.GUI.Debugger.Controls
 			this.ctrlHexBox.ShadowSelectionColor = Color.FromArgb(100, 60, 128, 200);
 			this.ctrlHexBox.InfoBackColor = Color.FromArgb(235, 235, 235);
 			this.ctrlHexBox.InfoForeColor = Color.Gray;
+			this.ctrlHexBox.HighlightCurrentRowColumn = true;
 		}
 
 		protected override void OnLoad(EventArgs e)
@@ -418,6 +419,13 @@ namespace Mesen.GUI.Debugger.Controls
 		{
 			get { return this.ctrlHexBox.ByteEditingMode; }
 			set { this.ctrlHexBox.ByteEditingMode = value; }
+		}
+
+		[Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+		public bool HighlightCurrentRowColumn
+		{
+			get { return this.ctrlHexBox.HighlightCurrentRowColumn; }
+			set { this.ctrlHexBox.HighlightCurrentRowColumn = value; }
 		}
 
 		public delegate void ByteMouseHoverHandler(int address, Point position);

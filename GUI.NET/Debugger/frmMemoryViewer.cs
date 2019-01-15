@@ -50,6 +50,9 @@ namespace Mesen.GUI.Debugger
 			this.mnuIgnoreRedundantWrites.Checked = config.RamIgnoreRedundantWrites;
 			this.UpdateFlags();
 
+			this.mnuHighlightCurrentRowColumn.Checked = config.RamHighlightCurrentRowColumn;
+			this.ctrlHexViewer.HighlightCurrentRowColumn = config.RamHighlightCurrentRowColumn;
+
 			this.mnuShowCharacters.Checked = config.RamShowCharacters;
 			this.mnuShowLabelInfoOnMouseOver.Checked = config.RamShowLabelInfo;
 
@@ -439,6 +442,7 @@ namespace Mesen.GUI.Debugger
 			ConfigManager.Config.DebugInfo.RamAutoRefresh = this.mnuAutoRefresh.Checked;
 
 			ConfigManager.Config.DebugInfo.RamIgnoreRedundantWrites = this.mnuIgnoreRedundantWrites.Checked;
+			ConfigManager.Config.DebugInfo.RamHighlightCurrentRowColumn = this.mnuHighlightCurrentRowColumn.Checked;
 
 			ConfigManager.Config.DebugInfo.RamShowCharacters = this.mnuShowCharacters.Checked;
 			ConfigManager.Config.DebugInfo.RamShowLabelInfo = this.mnuShowLabelInfoOnMouseOver.Checked;
@@ -742,6 +746,11 @@ namespace Mesen.GUI.Debugger
 			ConfigManager.Config.DebugInfo.RamByteEditingMode = mnuByteEditingMode.Checked;
 			ConfigManager.ApplyChanges();
 			ctrlHexViewer.ByteEditingMode = ConfigManager.Config.DebugInfo.RamByteEditingMode;
+		}
+
+		private void mnuHighlightCurrentRowColumn_CheckedChanged(object sender, EventArgs e)
+		{
+			ctrlHexViewer.HighlightCurrentRowColumn = mnuHighlightCurrentRowColumn.Checked;
 		}
 	}
 }

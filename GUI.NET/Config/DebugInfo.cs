@@ -236,6 +236,7 @@ namespace Mesen.GUI.Config
 		public bool RamAutoRefresh = true;
 		public RefreshSpeed RamAutoRefreshSpeed = RefreshSpeed.Normal;
 		public bool RamIgnoreRedundantWrites = false;
+		public bool RamHighlightCurrentRowColumn = true;
 		public int RamColumnCount = 2;
 
 		public string RamFontFamily = BaseControl.MonospaceFontFamily;

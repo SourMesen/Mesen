@@ -2442,6 +2442,8 @@ namespace Be.Windows.Forms
 			r.Exclude(_recContent);
 			e.Graphics.ExcludeClip(r);
 
+			e.Graphics.CompositingQuality = System.Drawing.Drawing2D.CompositingQuality.Default;
+
 			UpdateVisibilityBytes();
 
 			if(_caretVisible && _keyInterpreter.GetType() != typeof(StringKeyInterpreter)) {
@@ -2450,16 +2452,16 @@ namespace Be.Windows.Forms
 				e.Graphics.FillRectangle(Brushes.Yellow, _caretPos.X - 1, _caretPos.Y, caretWidth, caretHeight);
 			}
 
-			if (_lineInfoVisible)
-				PaintLineInfo(e.Graphics, _startByte, _endByte);
-
 			PaintHexAndStringView(e.Graphics, _startByte, _endByte);
 			if (_shadowSelectionVisible && _stringViewVisible)
 				PaintCurrentBytesSign(e.Graphics);
-				
-			if (_columnInfoVisible)
+
+			if(_lineInfoVisible)
+				PaintLineInfo(e.Graphics, _startByte, _endByte);
+			if(_columnInfoVisible)
 				PaintHeaderRow(e.Graphics);
-			if (_groupSeparatorVisible)
+
+			if(_groupSeparatorVisible)
 				PaintColumnSeparator(e.Graphics);
 
 			if(_caretVisible && _keyInterpreter.GetType() != typeof(StringKeyInterpreter)) {
@@ -2483,6 +2485,7 @@ namespace Be.Windows.Forms
 
 					g.FillRectangle(backBrush, _recLineInfo.X-4, _recLineInfo.Y, _recLineInfo.Width, _recLineInfo.Height);
 
+					Point gp = GetGridBytePoint(_bytePos - _startByte);
 					for(int i = 0; i < maxLine; i++) {
 						long firstLineByte = (startByte + (_iHexMaxHBytes) * i) + _lineInfoOffset;
 
@@ -2496,6 +2499,13 @@ namespace Be.Windows.Forms
 							formattedInfo = new string('~', LineInfoCharCount);
 						}
 
+						if(gp.Y == i && _highlightCurrentRowColumn && !(_keyInterpreter is StringKeyInterpreter)) {
+							using(SolidBrush highlightBrush = new SolidBrush(Color.FromArgb(15, 0, 0, 0))) {
+								g.FillRectangle(highlightBrush, _recHex.X, bytePointF.Y, _recHex.Width - (int)(_charSize.Width*2.5), _charSize.Height);
+							}
+							g.FillRectangle(Brushes.White, _recLineInfo.X - 4, bytePointF.Y, _recLineInfo.Width, _charSize.Height);							
+						}
+
 						g.DrawString(formattedInfo, Font, brush, new PointF(_recLineInfo.X, bytePointF.Y), _stringFormat);
 					}
 				}
@@ -2507,6 +2517,18 @@ namespace Be.Windows.Forms
 			using(Brush brush = new SolidBrush(this.InfoForeColor)) {
 				using(Brush backBrush = new SolidBrush(this.InfoBackColor)) {
 					g.FillRectangle(backBrush, 0, 0, this.ClientRectangle.Width, _recLineInfo.Y);
+
+					if(_highlightCurrentRowColumn && !(_keyInterpreter is StringKeyInterpreter)) {
+						Point gp = GetGridBytePoint(_bytePos - _startByte);
+						PointF bytePointF = GetBytePointF(gp);
+						float columnLeft = _recColumnInfo.Left + _charSize.Width * gp.X * 3 - _charSize.Width / 2;
+						using(SolidBrush highlightBrush = new SolidBrush(Color.FromArgb(15, 0, 0, 0))) {
+							g.FillRectangle(highlightBrush, columnLeft, _recHex.Y, _charSize.Width * 3, bytePointF.Y - _recHex.Y);
+							g.FillRectangle(highlightBrush, columnLeft, bytePointF.Y + _charSize.Height, _charSize.Width * 3, _recHex.Height - (bytePointF.Y - _recHex.Y) - _charSize.Height);
+						}
+						g.FillRectangle(Brushes.White, columnLeft, 0, _charSize.Width * 3, _recLineInfo.Y);
+					}
+
 					for(int col = 0; col < _iHexMaxHBytes; col++) {
 						PaintColumnInfo(g, (byte)col, brush, col);
 					}
@@ -2824,7 +2846,6 @@ namespace Be.Windows.Forms
 				}
 			}
 
-			g.CompositingQuality = System.Drawing.Drawing2D.CompositingQuality.GammaCorrected;
 			g.DrawImage(bitmap, rec.Left, rec.Top);
 		}
 
@@ -3262,12 +3283,7 @@ namespace Be.Windows.Forms
 				if (_byteProvider == value)
 					return;
 
-				if(_keyInterpreter == null) {
-					if(value == null)
-						ActivateEmptyKeyInterpreter();
-					else
-						ActivateKeyInterpreter();
-				}
+				ActivateKeyInterpreter();
 
 				if (_byteProvider != null)
 					_byteProvider.LengthChanged -= new EventHandler(_byteProvider_LengthChanged);
@@ -3292,11 +3308,6 @@ namespace Be.Windows.Forms
 						SetPosition(0, 0);
 						SetSelectionLength(0);
 					}
-
-					if (_caretVisible)
-						UpdateCaret();
-					else
-						CreateCaret();
 				}
 
 				CheckCurrentLineChanged();
@@ -3308,6 +3319,11 @@ namespace Be.Windows.Forms
 
 				UpdateVisibilityBytes();
 				UpdateRectanglePositioning();
+
+				if(_caretVisible)
+					UpdateCaret();
+				else
+					CreateCaret();
 
 				Invalidate();
 			}
@@ -3514,7 +3530,18 @@ namespace Be.Windows.Forms
 				Invalidate();
 			}
 		} long _selectionLength;
-
+		
+		[Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+		public bool HighlightCurrentRowColumn
+		{
+			get { return _highlightCurrentRowColumn; }
+			set
+			{
+				_highlightCurrentRowColumn = value;
+				Invalidate();
+			}
+		}
+		bool _highlightCurrentRowColumn;
 
 		/// <summary>
 		/// Gets or sets the info color used for column info and line info. When this property is null, then ForeColor property is used.

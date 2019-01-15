@@ -59,6 +59,7 @@
 			this.mnuCustomFadeSpeed = new System.Windows.Forms.ToolStripMenuItem();
 			this.dataTypeHighlightingToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuHighlightLabelledBytes = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuHighlightBreakpoints = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem8 = new System.Windows.Forms.ToolStripSeparator();
 			this.mnuHighlightCodeBytes = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuHighlightDataBytes = new System.Windows.Forms.ToolStripMenuItem();
@@ -109,7 +110,7 @@
 			this.ctrlMemoryAccessCounters = new Mesen.GUI.Debugger.Controls.ctrlMemoryAccessCounters();
 			this.tpgProfiler = new System.Windows.Forms.TabPage();
 			this.ctrlProfiler = new Mesen.GUI.Debugger.Controls.ctrlProfiler();
-			this.mnuHighlightBreakpoints = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuHighlightCurrentRowColumn = new System.Windows.Forms.ToolStripMenuItem();
 			this.flowLayoutPanel1.SuspendLayout();
 			this.menuStrip1.SuspendLayout();
 			this.tabMain.SuspendLayout();
@@ -258,7 +259,8 @@
             this.toolStripMenuItem10,
             this.mnuIgnoreRedundantWrites,
             this.mnuEnablePerByteNavigation,
-            this.mnuByteEditingMode});
+            this.mnuByteEditingMode,
+            this.mnuHighlightCurrentRowColumn});
 			this.mnuView.Name = "mnuView";
 			this.mnuView.Size = new System.Drawing.Size(44, 20);
 			this.mnuView.Text = "View";
@@ -382,6 +384,14 @@
 			this.mnuHighlightLabelledBytes.Size = new System.Drawing.Size(236, 22);
 			this.mnuHighlightLabelledBytes.Text = "Labeled bytes";
 			this.mnuHighlightLabelledBytes.Click += new System.EventHandler(this.mnuColorProviderOptions_Click);
+			// 
+			// mnuHighlightBreakpoints
+			// 
+			this.mnuHighlightBreakpoints.CheckOnClick = true;
+			this.mnuHighlightBreakpoints.Name = "mnuHighlightBreakpoints";
+			this.mnuHighlightBreakpoints.Size = new System.Drawing.Size(236, 22);
+			this.mnuHighlightBreakpoints.Text = "Breakpoints";
+			this.mnuHighlightBreakpoints.Click += new System.EventHandler(this.mnuColorProviderOptions_Click);
 			// 
 			// toolStripMenuItem8
 			// 
@@ -790,13 +800,13 @@
 			this.ctrlProfiler.Size = new System.Drawing.Size(606, 343);
 			this.ctrlProfiler.TabIndex = 0;
 			// 
-			// mnuHighlightBreakpoints
+			// mnuHighlightCurrentRowColumn
 			// 
-			this.mnuHighlightBreakpoints.CheckOnClick = true;
-			this.mnuHighlightBreakpoints.Name = "mnuHighlightBreakpoints";
-			this.mnuHighlightBreakpoints.Size = new System.Drawing.Size(236, 22);
-			this.mnuHighlightBreakpoints.Text = "Breakpoints";
-			this.mnuHighlightBreakpoints.Click += new System.EventHandler(this.mnuColorProviderOptions_Click);
+			this.mnuHighlightCurrentRowColumn.CheckOnClick = true;
+			this.mnuHighlightCurrentRowColumn.Name = "mnuHighlightCurrentRowColumn";
+			this.mnuHighlightCurrentRowColumn.Size = new System.Drawing.Size(256, 22);
+			this.mnuHighlightCurrentRowColumn.Text = "Highlight current row/column";
+			this.mnuHighlightCurrentRowColumn.CheckedChanged += new System.EventHandler(this.mnuHighlightCurrentRowColumn_CheckedChanged);
 			// 
 			// frmMemoryViewer
 			// 
@@ -905,5 +915,6 @@
 		private System.Windows.Forms.ToolStripMenuItem mnuGoToAll;
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem14;
 		private System.Windows.Forms.ToolStripMenuItem mnuHighlightBreakpoints;
+		private System.Windows.Forms.ToolStripMenuItem mnuHighlightCurrentRowColumn;
 	}
 }
