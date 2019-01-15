@@ -1088,9 +1088,9 @@ uint8_t PPU::ReadSpriteRam(uint8_t addr)
 	if(!_enableOamDecay) {
 		return _spriteRAM[addr];
 	} else {
-		int32_t cycle = _console->GetCpu()->GetCycleCount();
-		if(_oamDecayCycles[addr >> 3] >= cycle) {
-			_oamDecayCycles[addr >> 3] = cycle + 3000;
+		int32_t elapsedCycle = _console->GetCpu()->GetElapsedCycles(_oamDecayCycles[addr >> 3]);
+		if(elapsedCycle <= PPU::OamDecayCycleCount) {
+			_oamDecayCycles[addr >> 3] = _console->GetCpu()->GetCycleCount();
 			return _spriteRAM[addr];
 		} else {
 			if(_flags.SpritesEnabled) {
@@ -1110,7 +1110,7 @@ void PPU::WriteSpriteRam(uint8_t addr, uint8_t value)
 {
 	_spriteRAM[addr] = value;
 	if(_enableOamDecay) {
-		_oamDecayCycles[addr >> 3] = _console->GetCpu()->GetCycleCount() + 3000;
+		_oamDecayCycles[addr >> 3] = _console->GetCpu()->GetCycleCount();
 	}
 }
 
@@ -1307,10 +1307,9 @@ uint8_t* PPU::GetSpriteRam()
 {
 	//Used by debugger
 	if(_enableOamDecay) {
-		int32_t cycle = _console->GetCpu()->GetCycleCount();
 		for(int i = 0; i < 0x100; i++) {
 			//Apply OAM decay to sprite RAM before letting debugger access it
-			if(_oamDecayCycles[i >> 3] < cycle) {
+			if(_console->GetCpu()->GetElapsedCycles(_oamDecayCycles[i >> 3]) > PPU::OamDecayCycleCount) {
 				_spriteRAM[i] = 0x10;
 			}
 		}
@@ -1367,8 +1366,8 @@ void PPU::StreamState(bool saving)
 		UpdateMinimumDrawCycles();
 
 		for(int i = 0; i < 0x20; i++) {
-			//Set max value to ensure oam decay doesn't cause issues with savestates when used
-			_oamDecayCycles[i] = 0x7FFFFFFF;
+			//Set oam decay cycle to the current cycle to ensure it doesn't decay when loading a state
+			_oamDecayCycles[i] = _console->GetCpu()->GetCycleCount();
 		}
 
 		for(int i = 0; i < 257; i++) {
