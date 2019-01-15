@@ -306,8 +306,8 @@ namespace Mesen.GUI.Debugger
 
 		protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
 		{
-			if(ctrlWatch.ContainsFocus) {
-				//Allow Ctrl+C, etc to work normally while editing watch
+			if(!((UserControl)LastCodeWindow).ContainsFocus) {
+				//Allow Ctrl+C, etc to work normally while editing watch, or other fields
 				CleanupMenu(mnuCode.DropDownItems);
 				mnuCode.DropDownItems.Clear();
 			} else {
