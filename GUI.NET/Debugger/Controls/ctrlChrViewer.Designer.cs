@@ -60,15 +60,15 @@ namespace Mesen.GUI.Debugger.Controls
 			this.ctrlTilePalette = new Mesen.GUI.Debugger.Controls.ctrlTilePalette();
 			this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
 			this.picChrBank1 = new System.Windows.Forms.PictureBox();
-			this.ctxMenu = new ctrlMesenContextMenuStrip(this.components);
+			this.ctxMenu = new Mesen.GUI.Controls.ctrlMesenContextMenuStrip(this.components);
+			this.mnuEditInMemoryViewer = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripSeparator();
 			this.mnuCopyHdPack = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
 			this.mnuCopyToClipboard = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuExportToPng = new System.Windows.Forms.ToolStripMenuItem();
 			this.picChrBank2 = new System.Windows.Forms.PictureBox();
 			this.toolTip = new System.Windows.Forms.ToolTip(this.components);
-			this.mnuEditInMemoryViewer = new System.Windows.Forms.ToolStripMenuItem();
-			this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripSeparator();
 			this.tableLayoutPanel3.SuspendLayout();
 			this.grpDisplayOptions.SuspendLayout();
 			this.tableLayoutPanel1.SuspendLayout();
@@ -477,8 +477,21 @@ namespace Mesen.GUI.Debugger.Controls
             this.mnuCopyToClipboard,
             this.mnuExportToPng});
 			this.ctxMenu.Name = "ctxMenu";
-			this.ctxMenu.Size = new System.Drawing.Size(222, 126);
+			this.ctxMenu.Size = new System.Drawing.Size(222, 104);
 			this.ctxMenu.Opening += new System.ComponentModel.CancelEventHandler(this.ctxMenu_Opening);
+			// 
+			// mnuEditInMemoryViewer
+			// 
+			this.mnuEditInMemoryViewer.Image = global::Mesen.GUI.Properties.Resources.CheatCode;
+			this.mnuEditInMemoryViewer.Name = "mnuEditInMemoryViewer";
+			this.mnuEditInMemoryViewer.Size = new System.Drawing.Size(221, 22);
+			this.mnuEditInMemoryViewer.Text = "Edit in Memory Viewer";
+			this.mnuEditInMemoryViewer.Click += new System.EventHandler(this.mnuEditInMemoryViewer_Click);
+			// 
+			// toolStripMenuItem2
+			// 
+			this.toolStripMenuItem2.Name = "toolStripMenuItem2";
+			this.toolStripMenuItem2.Size = new System.Drawing.Size(218, 6);
 			// 
 			// mnuCopyHdPack
 			// 
@@ -530,19 +543,6 @@ namespace Mesen.GUI.Debugger.Controls
 			this.toolTip.AutoPopDelay = 32700;
 			this.toolTip.InitialDelay = 10;
 			this.toolTip.ReshowDelay = 10;
-			// 
-			// mnuEditInMemoryViewer
-			// 
-			this.mnuEditInMemoryViewer.Image = global::Mesen.GUI.Properties.Resources.CheatCode;
-			this.mnuEditInMemoryViewer.Name = "mnuEditInMemoryViewer";
-			this.mnuEditInMemoryViewer.Size = new System.Drawing.Size(221, 22);
-			this.mnuEditInMemoryViewer.Text = "Edit in Memory Viewer";
-			this.mnuEditInMemoryViewer.Click += new System.EventHandler(this.mnuEditInMemoryViewer_Click);
-			// 
-			// toolStripMenuItem2
-			// 
-			this.toolStripMenuItem2.Name = "toolStripMenuItem2";
-			this.toolStripMenuItem2.Size = new System.Drawing.Size(218, 6);
 			// 
 			// ctrlChrViewer
 			// 

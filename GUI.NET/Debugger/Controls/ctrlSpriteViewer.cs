@@ -15,7 +15,7 @@ using Mesen.GUI.Forms;
 
 namespace Mesen.GUI.Debugger.Controls
 {
-	public partial class ctrlSpriteViewer : BaseControl
+	public partial class ctrlSpriteViewer : BaseControl, ICompactControl
 	{
 		public delegate void SelectTilePaletteHandler(int tileIndex, int paletteIndex);
 		public event SelectTilePaletteHandler OnSelectTilePalette;
@@ -39,6 +39,11 @@ namespace Mesen.GUI.Debugger.Controls
 
 			picPreview.Image = new Bitmap(256, 240, PixelFormat.Format32bppArgb);
 			picSprites.Image = new Bitmap(256, 512, PixelFormat.Format32bppArgb);
+		}
+		
+		public Size GetCompactSize()
+		{
+			return new Size(picSprites.Width, picSprites.Height);
 		}
 
 		protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
@@ -167,8 +172,8 @@ namespace Mesen.GUI.Debugger.Controls
 		{
 			_previewMousePosition = null;
 
-			int tileX = Math.Min(e.X * 256 / (picSprites.Width - 2) / 32, 31);
-			int tileY = Math.Min(e.Y * 512 / (picSprites.Height - 2) / 64, 63);
+			int tileX = Math.Max(0, Math.Min(e.X * 256 / (picSprites.Width - 2) / 32, 31));
+			int tileY = Math.Max(0, Math.Min(e.Y * 512 / (picSprites.Height - 2) / 64, 63));
 			int ramAddr = ((tileY << 3) + tileX) << 2;
 
 			if(ramAddr / 4 == _selectedSprite && !_forceRefresh) {

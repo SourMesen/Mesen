@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Drawing;
 using System.Windows.Forms;
 using Mesen.GUI.Config;
 using Mesen.GUI.Forms;
@@ -11,6 +12,8 @@ namespace Mesen.GUI.Debugger
 		private InteropEmu.NotificationListener _notifListener;
 		private TabPage _selectedTab;
 		private bool _refreshing = false;
+		private Size _originalSize;
+		private bool _isCompact;
 
 		private static int _nextPpuViewerId = 0;
 		private int _ppuViewerId = 0;
@@ -61,6 +64,12 @@ namespace Mesen.GUI.Debugger
 
 				this.InitShortcuts();
 				this.UpdateRefreshSpeedMenu();
+
+				string toggleViewTooltip = "Toggle Compact/Normal View";
+				if(ConfigManager.Config.DebugInfo.Shortcuts.PpuViewer_ToggleView != Keys.None) {
+					toggleViewTooltip += " (" + DebuggerShortcutsConfig.GetShortcutDisplay(ConfigManager.Config.DebugInfo.Shortcuts.PpuViewer_ToggleView) + ")";
+				}
+				this.toolTip.SetToolTip(this.btnToggleView, toggleViewTooltip);
 			}
 		}
 
@@ -166,6 +175,11 @@ namespace Mesen.GUI.Debugger
 
 		protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
 		{
+			if(keyData == ConfigManager.Config.DebugInfo.Shortcuts.PpuViewer_ToggleView) {
+				ToggleView();
+				return true;
+			}
+
 			if(!this.ctrlScanlineCycle.ContainsFocus) {
 				if(this.tabMain.SelectedTab == tpgChrViewer) {
 					bool shift = keyData.HasFlag(Keys.Shift);
@@ -228,5 +242,62 @@ namespace Mesen.GUI.Debugger
 
 			UpdateRefreshSpeedMenu();
 		}
+
+		private void ToggleCompactMode(ICompactControl control, TabPage tab, string title)
+		{
+			if(!_isCompact) {
+				Point tabTopLeft = tabMain.PointToScreen(Point.Empty);
+				Point tabContentTopLeft = ctrlNametableViewer.PointToScreen(Point.Empty);
+
+				int heightGap = tabContentTopLeft.Y - tabTopLeft.Y + ctrlScanlineCycle.Height;
+
+				_isCompact = true;
+				_originalSize = this.Size;
+				Size size = control.GetCompactSize();
+				int widthDiff = ((Control)control).Width - size.Width;
+				int heightDiff = ((Control)control).Height - size.Height;
+
+				this.Controls.Add((Control)control);
+				((Control)control).BringToFront();
+
+				tabMain.Visible = false;
+				ctrlScanlineCycle.Visible = false;
+				this.Text = title;
+
+				this.Size = new Size(this.Width - widthDiff, this.Height - heightDiff - heightGap + 3);
+			} else {
+				_isCompact = false;
+				this.Size = _originalSize;
+				tabMain.Visible = true;
+				tab.Controls.Add((Control)control);
+				ctrlScanlineCycle.Visible = true;
+				this.Text = "PPU Viewer";
+			}
+
+			btnToggleView.Image = _isCompact ? Properties.Resources.Expand : Properties.Resources.Collapse;
+		}
+
+		private void ToggleView()
+		{
+			if(_selectedTab == tpgChrViewer) {
+				ToggleCompactMode(ctrlChrViewer, tpgChrViewer, "CHR Viewer");
+			} else if(_selectedTab == tpgPaletteViewer) {
+				ToggleCompactMode(ctrlPaletteViewer, tpgPaletteViewer, "Palette Viewer");
+			} else if(_selectedTab == tpgSpriteViewer) {
+				ToggleCompactMode(ctrlSpriteViewer, tpgSpriteViewer, "Sprite Viewer");
+			} else if(_selectedTab == tpgNametableViewer) {
+				ToggleCompactMode(ctrlNametableViewer, tpgNametableViewer, "Nametable Viewer");
+			}
+		}
+
+		private void btnToggleView_Click(object sender, EventArgs e)
+		{
+			ToggleView();
+		}
+	}
+
+	public interface ICompactControl
+	{
+		Size GetCompactSize();
 	}
 }

@@ -54,6 +54,9 @@ namespace Mesen.GUI.Config
 		[ShortcutName("Go to All")]
 		public XmlKeys GoToAll = Keys.Control | Keys.Oemcomma;
 
+		[ShortcutName("PPU Viewer: Toggle View")]
+		public XmlKeys PpuViewer_ToggleView = Keys.Control | Keys.Q;
+
 		[ShortcutName("Edit in Memory Viewer")]
 		public XmlKeys CodeWindow_EditInMemoryViewer = Keys.F1;
 		[ShortcutName("View in disassembly")]

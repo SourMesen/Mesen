@@ -14,7 +14,7 @@ using Mesen.GUI.Forms;
 
 namespace Mesen.GUI.Debugger.Controls
 {
-	public partial class ctrlChrViewer : BaseControl
+	public partial class ctrlChrViewer : BaseControl, ICompactControl
 	{
 		private byte[][] _chrPixelData = new byte[2][];
 		private UInt32[][] _paletteData = new UInt32[2][];
@@ -62,6 +62,11 @@ namespace Mesen.GUI.Debugger.Controls
 				this.chkLargeSprites.Checked = ConfigManager.Config.DebugInfo.ChrViewerUseLargeSprites;
 				this.chkShowSingleColorTilesInGrayscale.Checked = ConfigManager.Config.DebugInfo.ChrViewerShowSingleColorTilesInGrayscale;
 			}
+		}
+
+		public Size GetCompactSize()
+		{
+			return new Size(picChrBank1.Width, picChrBank1.Height * 2 + picChrBank1.Margin.Bottom * 2);
 		}
 
 		protected override void OnLoad(EventArgs e)
@@ -239,7 +244,6 @@ namespace Mesen.GUI.Debugger.Controls
 			this.RefreshViewer();
 		}
 
-
 		private void chkShowSingleColorTilesInGrayscale_CheckedChanged(object sender, EventArgs e)
 		{
 			ConfigManager.Config.DebugInfo.ChrViewerShowSingleColorTilesInGrayscale = this.chkShowSingleColorTilesInGrayscale.Checked;
@@ -290,8 +294,8 @@ namespace Mesen.GUI.Debugger.Controls
 
 		private void picChrBank_MouseMove(object sender, MouseEventArgs e)
 		{
-			int tileX = Math.Min(e.X * 256 / (picChrBank1.Width - 2) / 16, 15);
-			int tileY = Math.Min(e.Y * 256 / (picChrBank1.Height - 2) / 16, 15);
+			int tileX = Math.Max(0, Math.Min(e.X * 256 / (picChrBank1.Width - 2) / 16, 15));
+			int tileY = Math.Max(0, Math.Min(e.Y * 256 / (picChrBank1.Height - 2) / 16, 15));
 
 			bool bottomBank = sender == this.picChrBank2;
 			int tileIndex = tileY * 16 + tileX;

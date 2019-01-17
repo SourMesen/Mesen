@@ -55,6 +55,7 @@ namespace Mesen.GUI.Debugger
 			this.tpgPaletteViewer = new System.Windows.Forms.TabPage();
 			this.ctrlPaletteViewer = new Mesen.GUI.Debugger.Controls.ctrlPaletteViewer();
 			this.ctrlScanlineCycle = new Mesen.GUI.Debugger.Controls.ctrlScanlineCycleSelect();
+			this.btnToggleView = new System.Windows.Forms.Button();
 			this.menuStrip1.SuspendLayout();
 			this.tabMain.SuspendLayout();
 			this.tpgNametableViewer.SuspendLayout();
@@ -212,7 +213,6 @@ namespace Mesen.GUI.Debugger
 			// 
 			this.ctrlChrViewer.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.ctrlChrViewer.Location = new System.Drawing.Point(0, 0);
-			this.ctrlChrViewer.Margin = new System.Windows.Forms.Padding(0);
 			this.ctrlChrViewer.Name = "ctrlChrViewer";
 			this.ctrlChrViewer.Size = new System.Drawing.Size(701, 527);
 			this.ctrlChrViewer.TabIndex = 2;
@@ -262,18 +262,29 @@ namespace Mesen.GUI.Debugger
 			this.ctrlScanlineCycle.Size = new System.Drawing.Size(709, 28);
 			this.ctrlScanlineCycle.TabIndex = 4;
 			// 
+			// btnToggleView
+			// 
+			this.btnToggleView.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.btnToggleView.Image = global::Mesen.GUI.Properties.Resources.Collapse;
+			this.btnToggleView.Location = new System.Drawing.Point(680, 1);
+			this.btnToggleView.Name = "btnToggleView";
+			this.btnToggleView.Size = new System.Drawing.Size(27, 22);
+			this.btnToggleView.TabIndex = 1;
+			this.btnToggleView.UseVisualStyleBackColor = true;
+			this.btnToggleView.Click += new System.EventHandler(this.btnToggleView_Click);
+			// 
 			// frmPpuViewer
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(709, 605);
+			this.Controls.Add(this.btnToggleView);
 			this.Controls.Add(this.tabMain);
 			this.Controls.Add(this.menuStrip1);
 			this.Controls.Add(this.ctrlScanlineCycle);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
 			this.MainMenuStrip = this.menuStrip1;
 			this.MaximizeBox = false;
-			this.MinimumSize = new System.Drawing.Size(725, 644);
 			this.Name = "frmPpuViewer";
 			this.Text = "PPU Viewer";
 			this.menuStrip1.ResumeLayout(false);
@@ -312,5 +323,6 @@ namespace Mesen.GUI.Debugger
 		private System.Windows.Forms.ToolStripMenuItem mnuAutoRefreshLow;
 		private System.Windows.Forms.ToolStripMenuItem mnuAutoRefreshNormal;
 		private System.Windows.Forms.ToolStripMenuItem mnuAutoRefreshHigh;
+		private System.Windows.Forms.Button btnToggleView;
 	}
 }

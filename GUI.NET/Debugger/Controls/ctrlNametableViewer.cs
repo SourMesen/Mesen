@@ -14,7 +14,7 @@ using Mesen.GUI.Forms;
 
 namespace Mesen.GUI.Debugger.Controls
 {
-	public partial class ctrlNametableViewer : BaseControl
+	public partial class ctrlNametableViewer : BaseControl, ICompactControl
 	{
 		public event EventHandler OnSelectChrTile;
 
@@ -56,6 +56,11 @@ namespace Mesen.GUI.Debugger.Controls
 
 				UpdateIgnoreWriteCheckbox();
 			}
+		}
+
+		public Size GetCompactSize()
+		{
+			return new Size(picNametable.Width, picNametable.Height);
 		}
 
 		protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
@@ -278,8 +283,8 @@ namespace Mesen.GUI.Debugger.Controls
 
 		private void picNametable_MouseMove(object sender, MouseEventArgs e)
 		{
-			int xPos = e.X * 512 / (picNametable.Width - 2);
-			int yPos = e.Y * 480 / (picNametable.Height - 2);
+			int xPos = Math.Max(0, e.X * 512 / (picNametable.Width - 2));
+			int yPos = Math.Max(0, e.Y * 480 / (picNametable.Height - 2));
 
 			_nametableIndex = 0;
 			if(xPos >= 256) {

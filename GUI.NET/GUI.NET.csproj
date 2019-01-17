@@ -1250,6 +1250,8 @@
     <Compile Include="RuntimeChecker.cs" />
     <Compile Include="SingleInstance.cs" />
     <Compile Include="TestRunner.cs" />
+    <None Include="Resources\Expand.png" />
+    <None Include="Resources\Collapse.png" />
     <None Include="Resources\RegisterIcon.png" />
     <None Include="Resources\JumpTarget.png" />
     <None Include="Resources\Cut.png" />
