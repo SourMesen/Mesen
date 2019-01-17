@@ -274,7 +274,7 @@ void ShortcutKeyHandler::ProcessKeys()
 
 	if(_runSingleFrameRepeatTimer) {
 		double elapsedMs = _runSingleFrameRepeatTimer->GetElapsedMS();
-		if(_repeatStarted && elapsedMs >= 50 || !_repeatStarted && elapsedMs >= 500) {
+		if((_repeatStarted && elapsedMs >= 50) || (!_repeatStarted && elapsedMs >= 500)) {
 			//Over 500ms has elapsed since the key was first pressed, or over 50ms since repeat mode started (20fps)
 			//In this case, run another frame and pause again.
 			_repeatStarted = true;

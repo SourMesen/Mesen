@@ -256,6 +256,7 @@ uint8_t MemoryDumper::GetMemoryValue(DebugMemoryType memoryType, uint32_t addres
 		case DebugMemoryType::ChrRam:
 		case DebugMemoryType::WorkRam:
 		case DebugMemoryType::SaveRam:
+		case DebugMemoryType::NametableRam:
 			return _mapper->GetMemoryValue(memoryType, address);
 
 		case DebugMemoryType::InternalRam: return _memoryManager->DebugRead(address);
