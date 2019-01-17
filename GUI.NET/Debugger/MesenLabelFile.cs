@@ -87,6 +87,7 @@ namespace Mesen.GUI.Debugger
 						codeLabel.Comment = rowData[3].Replace("\\n", "\n");
 					}
 					codeLabel.Label = rowData[2].Replace("\\n", "\n").Replace("\n", "");
+					codeLabel.Length = length;
 				}
 			}
 
