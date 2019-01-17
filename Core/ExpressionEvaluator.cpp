@@ -105,6 +105,12 @@ bool ExpressionEvaluator::CheckSpecialTokens(string expression, size_t &pos, str
 	} else {
 		string originalExpression = expression.substr(initialPos, pos - initialPos);
 		bool validLabel = _debugger->GetLabelManager()->ContainsLabel(originalExpression);
+		if(!validLabel) {
+			//Check if a multi-byte label exists for this name
+			string label = originalExpression + "+0";
+			validLabel = _debugger->GetLabelManager()->ContainsLabel(label);
+		}
+
 		if(validLabel) {
 			data.Labels.push_back(originalExpression);
 			output += std::to_string(EvalValues::FirstLabelIndex + data.Labels.size() - 1);
@@ -292,12 +298,17 @@ int32_t ExpressionEvaluator::Evaluate(ExpressionData &data, DebugState &state, E
 				int64_t labelIndex = token - EvalValues::FirstLabelIndex;
 				if((size_t)labelIndex < data.Labels.size()) {
 					token = _debugger->GetLabelManager()->GetLabelRelativeAddress(data.Labels[(uint32_t)labelIndex]);
+					if(token < -1) {
+						//Label doesn't exist, try to find a matching multi-byte label
+						string label = data.Labels[(uint32_t)labelIndex] + "+0";
+						token = _debugger->GetLabelManager()->GetLabelRelativeAddress(label);
+					}
 				} else {
-					token = -1;
+					token = -2;
 				}
 				if(token < 0) {
 					//Label is no longer valid
-					resultType = EvalResultType::Invalid;
+					resultType = token == -1 ? EvalResultType::OutOfScope : EvalResultType::Invalid;
 					return 0;
 				}
 			} else {
@@ -502,5 +513,8 @@ void ExpressionEvaluator::RunTests()
 	test("1+3*3+10/(3+4)", EvalResultType::Numeric, 11);
 	test("(1+3*3+10)/(3+4)", EvalResultType::Numeric, 2);
 	test("(1+3*3+10)/3+4", EvalResultType::Numeric, 10);
+
+	test("{$4500}", EvalResultType::Numeric, 0x4545);
+	test("[$4500]", EvalResultType::Numeric, 0x45);
 }
 #endif

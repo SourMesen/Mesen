@@ -2164,7 +2164,8 @@ namespace Mesen.GUI
 		Numeric = 0,
 		Boolean = 1,
 		Invalid = 2,
-		DivideBy0 = 3
+		DivideBy0 = 3,
+		OutOfScope = 4
 	}
 
 	public enum NesModel
