@@ -1093,6 +1093,12 @@
 			<Value ID="SaveRam">Save RAM</Value>
 			<Value ID="Register">Register</Value>
 		</Enum>
+		<Enum ID="PpuAddressType">
+			<Value ID="ChrRom">CHR ROM</Value>
+			<Value ID="ChrRam">CHR RAM</Value>
+			<Value ID="NametableRam">Nametable RAM</Value>
+			<Value ID="PaletteRam">Palette RAM</Value>
+		</Enum>
 		<Enum ID="DebugMemoryType">
 			<Value ID="CpuMemory">CPU Memory</Value>
 			<Value ID="PpuMemory">PPU Memory</Value>

@@ -205,7 +205,7 @@ namespace Mesen.GUI.Config
 		public XmlKeys MemoryViewer_Import = Keys.Control | Keys.O;
 		[ShortcutName("Export")]
 		public XmlKeys MemoryViewer_Export = Keys.Control | Keys.S;
-		[ShortcutName("View in CPU Memory")]
+		[ShortcutName("View in CPU/PPU Memory")]
 		public XmlKeys MemoryViewer_ViewInCpuMemory = Keys.None;
 		[ShortcutName("View in [memory type]")]
 		public XmlKeys MemoryViewer_ViewInMemoryType = Keys.None;
