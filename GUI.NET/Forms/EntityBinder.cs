@@ -163,17 +163,41 @@ namespace Mesen.GUI.Forms
 								}
 							}
 							if(field.FieldType == typeof(UInt32)) {
-								value = (object)UInt32.Parse((string)value, numberStyle);
+								UInt32 result;
+								if(!UInt32.TryParse((string)value, numberStyle, null, out result)) {
+									continue; //Invalid value, ignore it
+								}
+								value = result;
 							} else if(field.FieldType == typeof(Int32)) {
-								value = (object)Int32.Parse((string)value, numberStyle);
+								Int32 result;
+								if(!Int32.TryParse((string)value, numberStyle, null, out result)) {
+									continue; //Invalid value, ignore it
+								}
+								value = result;
 							} else if(field.FieldType == typeof(Byte)) {
-								value = (object)Byte.Parse((string)value, numberStyle);
+								Byte result;
+								if(!Byte.TryParse((string)value, numberStyle, null, out result)) {
+									continue; //Invalid value, ignore it
+								}
+								value = result;
 							} else if(field.FieldType == typeof(UInt16)) {
-								value = (object)UInt16.Parse((string)value, numberStyle);
+								UInt16 result;
+								if(!UInt16.TryParse((string)value, numberStyle, null, out result)) {
+									continue; //Invalid value, ignore it
+								}
+								value = result;
 							} else if(field.FieldType == typeof(UInt64)) {
-								value = (object)UInt64.Parse((string)value, numberStyle);
+								UInt64 result;
+								if(!UInt64.TryParse((string)value, numberStyle, null, out result)) {
+									continue; //Invalid value, ignore it
+								}
+								value = result;
 							} else if(field.FieldType == typeof(Int64)) {
-								value = (object)Int64.Parse((string)value, numberStyle);
+								Int64 result;
+								if(!Int64.TryParse((string)value, numberStyle, null, out result)) {
+									continue; //Invalid value, ignore it
+								}
+								value = result;
 							}
 							field.SetValue(Entity, value);
 						} else if(kvp.Value is ctrlPathSelection) {
