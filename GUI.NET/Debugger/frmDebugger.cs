@@ -895,6 +895,11 @@ namespace Mesen.GUI.Debugger
 		public void ScrollToAddress(int address)
 		{
 			LastCodeWindow.ScrollToLineNumber(address);
+			if(WindowState == FormWindowState.Minimized) {
+				//Unminimize window if it was minimized
+				WindowState = FormWindowState.Normal;
+			}
+			BringToFront();
 		}
 
 		private void ctrlDebuggerCode_Enter(object sender, EventArgs e)
@@ -1791,6 +1796,17 @@ namespace Mesen.GUI.Debugger
 				}
 				target.ScrollToAddress(addressInfo);
 			}
+
+			if(WindowState == FormWindowState.Minimized) {
+				//Unminimize window if it was minimized
+				WindowState = FormWindowState.Normal;
+			}
+			BringToFront();
+		}
+
+		public void GoToDestination(GoToDestination dest)
+		{
+			GoToDestination(LastCodeWindow, dest);
 		}
 
 		private void mnuGoToAll_Click(object sender, EventArgs e)

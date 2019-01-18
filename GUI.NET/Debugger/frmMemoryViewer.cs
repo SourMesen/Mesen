@@ -224,7 +224,11 @@ namespace Mesen.GUI.Debugger
 				} else {
 					this.ShowAddress((int)dest.Label.Address, dest.Label.AddressType.ToMemoryType());
 				}
+			} else if(dest.CpuAddress >= 0) {
+				this.ShowAddress(dest.CpuAddress, DebugMemoryType.CpuMemory);
 			}
+
+			this.BringToFront();
 		}
 
 		public void GoToAll()

@@ -19,6 +19,10 @@ namespace Mesen.GUI.Debugger
 			Form existingWindow = GetExistingSingleInstanceWindow(window);
 			if(existingWindow != null) {
 				existingWindow.BringToFront();
+				if(existingWindow.WindowState == FormWindowState.Minimized) {
+					//Unminimize window if it was minimized
+					existingWindow.WindowState = FormWindowState.Normal;
+				}
 				existingWindow.Focus();
 			} else {
 				BaseForm frm = null;
@@ -54,6 +58,12 @@ namespace Mesen.GUI.Debugger
 				frm = new frmMemoryViewer();
 				frm.FormClosed += Debugger_FormClosed;
 				_openedWindows.Add(frm);
+			} else {
+				if(frm.WindowState == FormWindowState.Minimized) {
+					//Unminimize window if it was minimized
+					frm.WindowState = FormWindowState.Normal;
+				}
+				frm.BringToFront();
 			}
 			frm.Show();
 			return frm;

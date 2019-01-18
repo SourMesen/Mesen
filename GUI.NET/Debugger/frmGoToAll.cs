@@ -342,7 +342,7 @@ namespace Mesen.GUI.Debugger
 	{
 		public CodeLabel Label;
 		public AddressTypeInfo AddressInfo;
-		public int CpuAddress;
+		public int CpuAddress = -1;
 		public string File;
 		public int Line;
 	}
