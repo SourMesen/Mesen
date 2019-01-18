@@ -46,6 +46,7 @@ namespace Mesen.GUI.Debugger
 		public static void OpenAssembler(string code = "", UInt16 startAddress = 0, UInt16 blockLength = 0)
 		{
 			frmAssembler frm = new frmAssembler(code, startAddress, blockLength);
+			frm.Icon = Properties.Resources.Chip;
 			_openedWindows.Add(frm);
 			frm.FormClosed += Debugger_FormClosed;
 			frm.Show();
@@ -56,6 +57,7 @@ namespace Mesen.GUI.Debugger
 			frmMemoryViewer frm = GetMemoryViewer();
 			if(frm == null) {
 				frm = new frmMemoryViewer();
+				frm.Icon = Properties.Resources.CheatCode;
 				frm.FormClosed += Debugger_FormClosed;
 				_openedWindows.Add(frm);
 			} else {
@@ -84,6 +86,7 @@ namespace Mesen.GUI.Debugger
 		public static frmScript OpenScriptWindow(bool forceBlank)
 		{
 			frmScript frm = new frmScript(forceBlank);
+			frm.Icon = Properties.Resources.Script;
 			_openedWindows.Add(frm);
 			frm.FormClosed += Debugger_FormClosed;
 			frm.Show();
