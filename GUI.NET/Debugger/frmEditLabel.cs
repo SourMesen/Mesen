@@ -84,7 +84,7 @@ namespace Mesen.GUI.Debugger
 				&& (sameAddress == null || sameAddress == _originalLabel)
 				&& (_originalLabel != null || txtLabel.Text.Length > 0 || txtComment.Text.Length > 0)
 				&& !txtComment.Text.Contains('\x1')
-				&& (txtLabel.Text.Length == 0 || Regex.IsMatch(txtLabel.Text, "^[@_a-zA-Z]+[@_a-zA-Z0-9]*$"));
+				&& (txtLabel.Text.Length == 0 || LabelManager.LabelRegex.IsMatch(txtLabel.Text));
 		}
 
 		protected override void OnFormClosed(FormClosedEventArgs e)

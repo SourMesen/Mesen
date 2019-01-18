@@ -496,6 +496,11 @@ namespace Mesen.GUI.Debugger
 
 						int count = 2;
 						string orgSymbolName = symbol.Name;
+						if(!LabelManager.LabelRegex.IsMatch(orgSymbolName)) {
+							//ignore labels that don't respect the label naming restrictions
+							continue;
+						}
+
 						string newName = symbol.Name;
 						while(!_usedLabels.Add(newName)) {
 							//Ensure labels are unique

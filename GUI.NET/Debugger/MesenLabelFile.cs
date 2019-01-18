@@ -73,6 +73,13 @@ namespace Mesen.GUI.Debugger
 						length = 1;
 					}
 
+					string labelName = rowData[2];
+					if(!LabelManager.LabelRegex.IsMatch(labelName)) {
+						//Reject labels that don't respect the label naming restrictions
+						errorCount++;
+						continue;
+					}
+
 					CodeLabel codeLabel;
 					if(!labels[type].TryGetValue(address, out codeLabel)) {
 						codeLabel = new CodeLabel();
@@ -86,7 +93,7 @@ namespace Mesen.GUI.Debugger
 					if(rowData.Length > 3 && config.MlbImportComments) {
 						codeLabel.Comment = rowData[3].Replace("\\n", "\n");
 					}
-					codeLabel.Label = rowData[2].Replace("\\n", "\n").Replace("\n", "");
+					codeLabel.Label = labelName;
 					codeLabel.Length = length;
 				}
 			}

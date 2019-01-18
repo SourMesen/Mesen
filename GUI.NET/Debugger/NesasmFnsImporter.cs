@@ -17,6 +17,7 @@ namespace Mesen.GUI.Debugger
 			//This only works reliably for NROM games with 32kb PRG
 			DebugState state = new DebugState();
 			InteropEmu.DebugGetState(ref state);
+			int errorCount = 0;
 
 			bool hasLargePrg = state.Cartridge.PrgRomSize != 0x8000;
 			if(!silent && hasLargePrg) {
@@ -36,6 +37,13 @@ namespace Mesen.GUI.Debugger
 
 				uint address;
 				if(UInt32.TryParse(rowData[1].Trim().Substring(1), NumberStyles.HexNumber, CultureInfo.InvariantCulture, out address)) {
+					string labelName = rowData[0].Trim();
+					if(!LabelManager.LabelRegex.IsMatch(labelName)) {
+						//Reject labels that don't respect the label naming restrictions
+						errorCount++;
+						continue;
+					}
+
 					CodeLabel codeLabel;
 					if(!labels.TryGetValue(address, out codeLabel)) {
 						codeLabel = new CodeLabel();
@@ -46,14 +54,20 @@ namespace Mesen.GUI.Debugger
 						labels[address] = codeLabel;
 					}
 
-					codeLabel.Label = rowData[0].Trim();
+					codeLabel.Label = labelName;
+				} else {
+					errorCount++;
 				}
 			}
 
 			LabelManager.SetLabels(labels.Values);
 
 			if(!silent) {
-				MessageBox.Show($"Import completed with {labels.Values.Count} labels imported.", "Mesen", MessageBoxButtons.OK, MessageBoxIcon.Information);
+				string message = $"Import completed with {labels.Values.Count} labels imported";
+				if(errorCount > 0) {
+					message += $" and {errorCount} error(s)";
+				}
+				MessageBox.Show(message, "Mesen", MessageBoxButtons.OK, MessageBoxIcon.Information);
 			}
 		}
 	}

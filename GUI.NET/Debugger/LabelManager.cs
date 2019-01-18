@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace Mesen.GUI.Debugger
@@ -53,6 +54,8 @@ namespace Mesen.GUI.Debugger
 
 	public class LabelManager
 	{
+		public static Regex LabelRegex { get; } = new Regex("^[@_a-zA-Z]+[@_a-zA-Z0-9]*$", RegexOptions.Compiled);
+
 		private static Dictionary<UInt32, CodeLabel> _labelsByKey = new Dictionary<UInt32, CodeLabel>();
 		private static HashSet<CodeLabel> _labels = new HashSet<CodeLabel>();
 		private static Dictionary<string, CodeLabel> _reverseLookup = new Dictionary<string, CodeLabel>();
