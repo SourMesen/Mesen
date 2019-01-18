@@ -40,7 +40,7 @@ namespace Mesen.GUI.Debugger.Controls
 			GCHandle handle = GCHandle.Alloc(this._palettePixelData, GCHandleType.Pinned);
 			try {
 				for(int i = 0; i < 2; i++) {
-					Bitmap source = new Bitmap(4, 4, 4 * 4, System.Drawing.Imaging.PixelFormat.Format32bppArgb, handle.AddrOfPinnedObject()+i*16);
+					Bitmap source = new Bitmap(4, 4, 4 * 4, System.Drawing.Imaging.PixelFormat.Format32bppArgb, handle.AddrOfPinnedObject()+i*16*4);
 					Bitmap target = new Bitmap(128, 128);
 
 					using(Graphics g = Graphics.FromImage(target)) {
