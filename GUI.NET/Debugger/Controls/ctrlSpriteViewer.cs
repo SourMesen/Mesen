@@ -25,7 +25,8 @@ namespace Mesen.GUI.Debugger.Controls
 		private int _selectedSprite = -1;
 		private SpriteInfo _spriteInfo = new SpriteInfo();
 
-		private bool _largeSprites;
+		private bool _largeSprites = false;
+		private bool _prevLargeSprites = true;
 		private int _spritePatternAddr;
 		private bool _forceRefresh;
 		private Point? _previewMousePosition = null;
@@ -36,6 +37,8 @@ namespace Mesen.GUI.Debugger.Controls
 		private Bitmap _screenPreview = new Bitmap(256, 240, PixelFormat.Format32bppArgb);
 		private HdPackCopyHelper _hdCopyHelper = new HdPackCopyHelper();
 		private bool _firstDraw = true;
+		private int _originalSpriteHeight = 0;
+		private int _originalTileHeight = 0;
 
 		public ctrlSpriteViewer()
 		{
@@ -43,11 +46,14 @@ namespace Mesen.GUI.Debugger.Controls
 
 			picPreview.Image = new Bitmap(256, 240, PixelFormat.Format32bppArgb);
 			picSprites.Image = new Bitmap(256, 512, PixelFormat.Format32bppArgb);
+
+			_originalSpriteHeight = picSprites.Height;
+			_originalTileHeight = picTile.Height;
 		}
 		
 		public Size GetCompactSize()
 		{
-			return new Size(picSprites.Width, picSprites.Height);
+			return new Size(picSprites.Width, _prevLargeSprites ? picSprites.Height : (picSprites.Height + picPreview.Height + picPreview.Margin.Top + picSprites.Margin.Bottom));
 		}
 
 		protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
@@ -90,7 +96,13 @@ namespace Mesen.GUI.Debugger.Controls
 
 				Bitmap sprites = new Bitmap(64, 128, PixelFormat.Format32bppArgb);
 				using(Graphics g = Graphics.FromImage(sprites)) {
-					g.DrawImage(source, 0, 0);
+					if(_largeSprites) {
+						g.DrawImage(source, 0, 0);
+					} else {
+						for(int i = 0; i < 8; i++) {
+							g.DrawImage(source, 0, 8 * i, new RectangleF(0, 8 * i * 2, 64, 8), GraphicsUnit.Pixel);
+						}
+					}
 				}
 				_imgSprites = sprites;
 
@@ -105,6 +117,29 @@ namespace Mesen.GUI.Debugger.Controls
 				}
 			} finally {
 				handle.Free();
+			}
+
+			if(_prevLargeSprites != _largeSprites) {
+				if(_largeSprites) {
+					picSprites.Image = new Bitmap(256, 512, PixelFormat.Format32bppArgb);
+					picSprites.Height = _originalSpriteHeight;
+					picTile.Height = _originalTileHeight;
+
+					tlpMain.SetRowSpan(picSprites, 2);
+					tlpMain.SetColumnSpan(picPreview, 4);
+					tlpInfo.Controls.Add(picPreview, 1, 5);
+					lblScreenPreview.Visible = true;
+				} else {
+					picSprites.Image = new Bitmap(256, 256, PixelFormat.Format32bppArgb);
+					picSprites.Height = (_originalSpriteHeight - 2) / 2 + 2;
+					picTile.Height = (_originalTileHeight - 2) / 2 + 2;
+
+					tlpMain.SetRowSpan(picSprites, 1);
+					tlpMain.SetColumnSpan(picPreview, 1);
+					tlpMain.Controls.Add(picPreview, 0, 1);
+					lblScreenPreview.Visible = false;
+				}
+				_prevLargeSprites = _largeSprites;
 			}
 
 			if(_previewMousePosition.HasValue) {
@@ -133,9 +168,9 @@ namespace Mesen.GUI.Debugger.Controls
 					int y = _selectedSprite / 8;
 					int spriteHeight = _largeSprites ? 64 : 32;
 					using(SolidBrush brush = new SolidBrush(Color.FromArgb(100, 255, 255, 255))) {
-						g.FillRectangle(brush, x * 32, y * 64, 32, spriteHeight);
+						g.FillRectangle(brush, x * 32, y * spriteHeight, 32, spriteHeight);
 					}
-					g.DrawRectangle(Pens.White, x * 32, y * 64, 31, spriteHeight - 1);
+					g.DrawRectangle(Pens.White, x * 32, y * spriteHeight, 31, spriteHeight - 1);
 
 					if(ConfigManager.Config.DebugInfo.PpuShowInformationOverlay) {
 						string tooltipText = (
@@ -208,8 +243,17 @@ namespace Mesen.GUI.Debugger.Controls
 			_previewMousePosition = null;
 
 			int tileX = Math.Max(0, Math.Min(e.X * 256 / (picSprites.Width - 2) / 32, 31));
-			int tileY = Math.Max(0, Math.Min(e.Y * 512 / (picSprites.Height - 2) / 64, 63));
-			int ramAddr = ((tileY << 3) + tileX) << 2;
+			int tileY = 0;
+			int ramAddr = 0;
+			if(_largeSprites) {
+				tileY = Math.Max(0, Math.Min(e.Y * 512 / (picSprites.Height - 2) / 64, 63));
+				ramAddr = ((tileY << 3) + tileX) << 2;
+			} else {
+				tileY = Math.Max(0, Math.Min(e.Y * 256 / (picSprites.Height - 2) / 32, 31));
+				ramAddr = ((tileY << 3) + tileX) << 2;
+			}
+
+			ramAddr = Math.Min(ramAddr, 63 * 4);
 
 			if(ramAddr / 4 == _selectedSprite && !_forceRefresh) {
 				return;
@@ -266,7 +310,8 @@ namespace Mesen.GUI.Debugger.Controls
 			int tileX = _selectedSprite % 8;
 			int tileY = _selectedSprite / 8;
 
-			picTile.Image = PpuViewerHelper.GetPreview(new Point(tileX * 32, tileY * 64), new Size(32, 64), 2, _scaledSprites);
+			int spriteHeight = _largeSprites ? 64 : 32;
+			picTile.Image = PpuViewerHelper.GetPreview(new Point(tileX * 32, tileY * spriteHeight), new Size(32, spriteHeight), 2, _scaledSprites);
 
 			this.CreateScreenPreview();
 		}
@@ -317,6 +362,7 @@ namespace Mesen.GUI.Debugger.Controls
 		{
 			_previewMousePosition = e.Location;
 			SelectSpriteUnderCursor();
+			DrawHud();
 		}
 
 		private void SelectSpriteUnderCursor()
