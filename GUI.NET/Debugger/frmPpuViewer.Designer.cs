@@ -56,6 +56,7 @@ namespace Mesen.GUI.Debugger
 			this.ctrlPaletteViewer = new Mesen.GUI.Debugger.Controls.ctrlPaletteViewer();
 			this.ctrlScanlineCycle = new Mesen.GUI.Debugger.Controls.ctrlScanlineCycleSelect();
 			this.btnToggleView = new System.Windows.Forms.Button();
+			this.mnuShowInformationOverlay = new System.Windows.Forms.ToolStripMenuItem();
 			this.menuStrip1.SuspendLayout();
 			this.tabMain.SuspendLayout();
 			this.tpgNametableViewer.SuspendLayout();
@@ -98,7 +99,8 @@ namespace Mesen.GUI.Debugger
             this.autorefreshSpeedToolStripMenuItem,
             this.toolStripMenuItem1,
             this.mnuAutoRefresh,
-            this.mnuRefreshOnBreak});
+            this.mnuRefreshOnBreak,
+            this.mnuShowInformationOverlay});
 			this.viewToolStripMenuItem.Name = "viewToolStripMenuItem";
 			this.viewToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
 			this.viewToolStripMenuItem.Text = "View";
@@ -107,7 +109,7 @@ namespace Mesen.GUI.Debugger
 			// 
 			this.mnuRefresh.Image = global::Mesen.GUI.Properties.Resources.Reset;
 			this.mnuRefresh.Name = "mnuRefresh";
-			this.mnuRefresh.Size = new System.Drawing.Size(198, 22);
+			this.mnuRefresh.Size = new System.Drawing.Size(210, 22);
 			this.mnuRefresh.Text = "Refresh";
 			this.mnuRefresh.Click += new System.EventHandler(this.mnuRefresh_Click);
 			// 
@@ -119,7 +121,7 @@ namespace Mesen.GUI.Debugger
             this.mnuAutoRefreshHigh});
 			this.autorefreshSpeedToolStripMenuItem.Image = global::Mesen.GUI.Properties.Resources.Speed;
 			this.autorefreshSpeedToolStripMenuItem.Name = "autorefreshSpeedToolStripMenuItem";
-			this.autorefreshSpeedToolStripMenuItem.Size = new System.Drawing.Size(198, 22);
+			this.autorefreshSpeedToolStripMenuItem.Size = new System.Drawing.Size(210, 22);
 			this.autorefreshSpeedToolStripMenuItem.Text = "Auto-refresh Speed";
 			// 
 			// mnuAutoRefreshLow
@@ -146,7 +148,7 @@ namespace Mesen.GUI.Debugger
 			// toolStripMenuItem1
 			// 
 			this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-			this.toolStripMenuItem1.Size = new System.Drawing.Size(195, 6);
+			this.toolStripMenuItem1.Size = new System.Drawing.Size(207, 6);
 			// 
 			// mnuAutoRefresh
 			// 
@@ -154,7 +156,7 @@ namespace Mesen.GUI.Debugger
 			this.mnuAutoRefresh.CheckOnClick = true;
 			this.mnuAutoRefresh.CheckState = System.Windows.Forms.CheckState.Checked;
 			this.mnuAutoRefresh.Name = "mnuAutoRefresh";
-			this.mnuAutoRefresh.Size = new System.Drawing.Size(198, 22);
+			this.mnuAutoRefresh.Size = new System.Drawing.Size(210, 22);
 			this.mnuAutoRefresh.Text = "Auto-refresh";
 			this.mnuAutoRefresh.Click += new System.EventHandler(this.mnuAutoRefresh_Click);
 			// 
@@ -162,7 +164,7 @@ namespace Mesen.GUI.Debugger
 			// 
 			this.mnuRefreshOnBreak.CheckOnClick = true;
 			this.mnuRefreshOnBreak.Name = "mnuRefreshOnBreak";
-			this.mnuRefreshOnBreak.Size = new System.Drawing.Size(198, 22);
+			this.mnuRefreshOnBreak.Size = new System.Drawing.Size(210, 22);
 			this.mnuRefreshOnBreak.Text = "Refresh on pause/break";
 			this.mnuRefreshOnBreak.Click += new System.EventHandler(this.mnuRefreshOnBreak_Click);
 			// 
@@ -273,6 +275,14 @@ namespace Mesen.GUI.Debugger
 			this.btnToggleView.UseVisualStyleBackColor = true;
 			this.btnToggleView.Click += new System.EventHandler(this.btnToggleView_Click);
 			// 
+			// mnuShowInformationOverlay
+			// 
+			this.mnuShowInformationOverlay.CheckOnClick = true;
+			this.mnuShowInformationOverlay.Name = "mnuShowInformationOverlay";
+			this.mnuShowInformationOverlay.Size = new System.Drawing.Size(210, 22);
+			this.mnuShowInformationOverlay.Text = "Show information overlay";
+			this.mnuShowInformationOverlay.Click += new System.EventHandler(this.mnuShowInformationOverlay_Click);
+			// 
 			// frmPpuViewer
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -324,5 +334,6 @@ namespace Mesen.GUI.Debugger
 		private System.Windows.Forms.ToolStripMenuItem mnuAutoRefreshNormal;
 		private System.Windows.Forms.ToolStripMenuItem mnuAutoRefreshHigh;
 		private System.Windows.Forms.Button btnToggleView;
+		private System.Windows.Forms.ToolStripMenuItem mnuShowInformationOverlay;
 	}
 }

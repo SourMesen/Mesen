@@ -27,6 +27,9 @@ namespace Mesen.GUI.Debugger.Controls
 		private byte[][] _attributeData = new byte[4][];
 		private Bitmap _gridOverlay;
 		private Bitmap _nametableImage = new Bitmap(512, 480);
+		private Bitmap _finalImage = new Bitmap(512, 480);
+		private Bitmap _hudImage = new Bitmap(512, 480);
+		private TileInfo _tileInfo;
 		private int _currentPpuAddress = -1;
 		private int _tileX = 0;
 		private int _tileY = 0;
@@ -70,7 +73,7 @@ namespace Mesen.GUI.Debugger.Controls
 			}
 			return base.ProcessCmdKey(ref msg, keyData);
 		}
-		
+
 		protected override void OnLoad(EventArgs e)
 		{
 			base.OnLoad(e);
@@ -111,9 +114,6 @@ namespace Mesen.GUI.Debugger.Controls
 			int tileIndexOffset = _state.PPU.ControlFlags.BackgroundPatternAddr == 0x1000 ? 256 : 0;
 			lblMirroringType.Text = ResourceHelper.GetEnumText(_state.Cartridge.Mirroring);
 
-			Bitmap target = new Bitmap(512, 480);
-			_nametableImage = new Bitmap(512, 480);
-
 			using(Graphics gNametable = Graphics.FromImage(_nametableImage)) {
 				for(int i = 0; i < 4; i++) {
 					GCHandle handle = GCHandle.Alloc(_nametablePixelData[i], GCHandleType.Pinned);
@@ -147,7 +147,7 @@ namespace Mesen.GUI.Debugger.Controls
 				}
 			}
 
-			using(Graphics g = Graphics.FromImage(target)) {
+			using(Graphics g = Graphics.FromImage(_finalImage)) {
 				g.DrawImage(_nametableImage, 0, 0);
 
 				for(int i = 0; i < 4; i++) {
@@ -163,22 +163,53 @@ namespace Mesen.GUI.Debugger.Controls
 				if(chkShowPpuScrollOverlay.Checked) {
 					DrawScrollOverlay(_xScroll, _yScroll, g);
 				}
-				
+
 				if(chkHighlightAttributeUpdates.Checked || chkHighlightTileUpdates.Checked) {
 					DrawEditHighlights(g);
 				}
 			}
-
-			this.picNametable.Image = target;
-			this.picNametable.Refresh();
 
 			if(_firstDraw) {
 				_currentPpuAddress = 0x2000;
 				UpdateTileInformation(0, 0, 0x2000, 0);
 				_firstDraw = false;
 			}
+
+			this.DrawHud();
 		}
 
+		private void DrawHud()
+		{
+			using(Graphics g = Graphics.FromImage(_hudImage)) {
+				g.DrawImage(_finalImage, 0, 0);
+
+				if(_currentPpuAddress >= 0) {
+					//Draw overlay over current tile
+					int x = _tileX + ((_nametableIndex & 0x01) == 1 ? 32 : 0);
+					int y = _tileY + (_nametableIndex >= 2 ? 30 : 0);
+					using(SolidBrush brush = new SolidBrush(Color.FromArgb(100, 255, 255, 255))) {
+						g.FillRectangle(brush, x * 8, y * 8, 8, 8);
+					}
+					g.DrawRectangle(Pens.White, x * 8, y * 8, 7, 7);
+
+					if(ConfigManager.Config.DebugInfo.PpuShowInformationOverlay) {
+						//Draw tooltip box with information
+						string tooltipText = (
+							"Tile:      $" + _tileInfo.PpuAddress.ToString("X4") + " = $" + _tileInfo.TileIndex.ToString("X2") + Environment.NewLine +
+							"Position:  " + _tileInfo.TileX.ToString() + ", " + _tileInfo.TileY.ToString() + Environment.NewLine +
+							"Attribute: $" + _tileInfo.AttributeAddress.ToString("X4") + " = $" + _tileInfo.AttributeData.ToString("X2") + Environment.NewLine +
+							"Palette:   " + (_tileInfo.PaletteAddress >> 2).ToString() + " ($" + (0x3F00 + _tileInfo.PaletteAddress).ToString("X4") + ")" + Environment.NewLine
+						);
+
+						PpuViewerHelper.DrawOverlayTooltip(_hudImage, tooltipText, picTile.Image, _tileInfo.PaletteAddress >> 2, _nametableIndex >= 2, g);
+					}
+				}
+			}
+
+			picNametable.Image = _hudImage;
+			picNametable.Refresh();
+		}
+		
 		private void DrawEditHighlights(Graphics g)
 		{
 			bool ignoreRedundantWrites = chkIgnoreRedundantWrites.Checked;
@@ -281,6 +312,12 @@ namespace Mesen.GUI.Debugger.Controls
 			}
 		}
 
+		private void picNametable_MouseLeave(object sender, EventArgs e)
+		{
+			_currentPpuAddress = -1;
+			DrawHud();
+		}
+
 		private void picNametable_MouseMove(object sender, MouseEventArgs e)
 		{
 			int xPos = Math.Max(0, e.X * 512 / (picNametable.Width - 2));
@@ -313,6 +350,7 @@ namespace Mesen.GUI.Debugger.Controls
 			}
 			_currentPpuAddress = ppuAddress;
 
+			DrawHud();
 			UpdateTileInformation(xPos, yPos, baseAddress, shift);
 		}
 
@@ -322,35 +360,33 @@ namespace Mesen.GUI.Debugger.Controls
 			InteropEmu.DebugGetState(ref state);
 			int bgAddr = state.PPU.ControlFlags.BackgroundPatternAddr;
 
-			int tileIndex = _tileData[_nametableIndex][_tileY * 32 + _tileX];
-			int attributeData = _attributeData[_nametableIndex][_tileY * 32 + _tileX];
-			int attributeAddr = baseAddress + 960 + ((_tileY & 0xFC) << 1) + (_tileX >> 2);
-			int paletteBaseAddr = ((attributeData >> shift) & 0x03) << 2;
+			byte tileIndex = _tileData[_nametableIndex][_tileY * 32 + _tileX];
+			byte attributeData = _attributeData[_nametableIndex][_tileY * 32 + _tileX];
 
-			this.ctrlTilePalette.SelectedPalette = (paletteBaseAddr >> 2);
+			_tileInfo = new TileInfo() {
+				PpuAddress = _currentPpuAddress,
+				TileIndex = tileIndex,
+				AttributeData = attributeData,
+				AttributeAddress = baseAddress + 960 + ((_tileY & 0xFC) << 1) + (_tileX >> 2),
+				PaletteAddress = ((attributeData >> shift) & 0x03) << 2,
+				TileX = _tileX,
+				TileY = _tileY,
+				Nametable = _nametableIndex,
+				TileAddress = bgAddr + tileIndex * 16
+			};
 
-			this.txtPpuAddress.Text = _currentPpuAddress.ToString("X4");
-			this.txtNametable.Text = _nametableIndex.ToString();
-			this.txtLocation.Text = _tileX.ToString() + ", " + _tileY.ToString();
-			this.txtTileIndex.Text = tileIndex.ToString("X2");
-			this.txtTileAddress.Text = (bgAddr + tileIndex * 16).ToString("X4");
-			this.txtAttributeData.Text = attributeData.ToString("X2");
-			this.txtAttributeAddress.Text = attributeAddr.ToString("X4");
-			this.txtPaletteAddress.Text = (0x3F00 + paletteBaseAddr).ToString("X4");
+			this.ctrlTilePalette.SelectedPalette = (_tileInfo.PaletteAddress >> 2);
 
-			Bitmap tile = new Bitmap(64, 64);
-			Bitmap tilePreview = new Bitmap(8, 8);
-			using(Graphics g = Graphics.FromImage(tilePreview)) {
-				g.DrawImage(_nametableImage, new Rectangle(0, 0, 8, 8), new Rectangle(xPos / 8 * 8, yPos / 8 * 8, 8, 8), GraphicsUnit.Pixel);
-			}
-			using(Graphics g = Graphics.FromImage(tile)) {
-				g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
-				g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.None;
-				g.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.Half;
-				g.ScaleTransform(8, 8);
-				g.DrawImageUnscaled(tilePreview, 0, 0);
-			}
-			this.picTile.Image = tile;
+			this.txtPpuAddress.Text = _tileInfo.PpuAddress.ToString("X4");
+			this.txtNametable.Text = _tileInfo.Nametable.ToString();
+			this.txtLocation.Text = _tileInfo.TileX.ToString() + ", " + _tileInfo.TileY.ToString();
+			this.txtTileIndex.Text = _tileInfo.TileIndex.ToString("X2");
+			this.txtTileAddress.Text = _tileInfo.TileAddress.ToString("X4");
+			this.txtAttributeData.Text = _tileInfo.AttributeData.ToString("X2");
+			this.txtAttributeAddress.Text = _tileInfo.AttributeAddress.ToString("X4");
+			this.txtPaletteAddress.Text = (0x3F00 + _tileInfo.PaletteAddress).ToString("X4");
+
+			picTile.Image = PpuViewerHelper.GetPreview(new Point(xPos / 8 * 8, yPos / 8 * 8), new Size(8, 8), 8, _nametableImage);
 		}
 
 		private void chkShowScrollWindow_Click(object sender, EventArgs e)
@@ -542,6 +578,19 @@ namespace Mesen.GUI.Debugger.Controls
 			if(this.ParentForm.ContainsFocus) {
 				this.Focus();
 			}
+		}
+
+		private class TileInfo
+		{
+			public int PpuAddress;
+			public byte TileIndex;
+			public int TileAddress;
+			public byte AttributeData;
+			public int AttributeAddress;
+			public int PaletteAddress;
+			public int TileX;
+			public int TileY;
+			public int Nametable;
 		}
 	}
 }

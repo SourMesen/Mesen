@@ -27,6 +27,7 @@ namespace Mesen.GUI.Debugger
 			this._selectedTab = this.tpgNametableViewer;
 			this.mnuAutoRefresh.Checked = ConfigManager.Config.DebugInfo.PpuAutoRefresh;
 			this.mnuRefreshOnBreak.Checked = ConfigManager.Config.DebugInfo.PpuRefreshOnBreak;
+			this.mnuShowInformationOverlay.Checked = ConfigManager.Config.DebugInfo.PpuShowInformationOverlay;
 			this.ctrlNametableViewer.Connect(this.ctrlChrViewer);
 
 			if(ConfigManager.Config.DebugInfo.PpuWindowLocation.HasValue) {
@@ -163,7 +164,13 @@ namespace Mesen.GUI.Debugger
 			ConfigManager.Config.DebugInfo.PpuRefreshOnBreak = this.mnuRefreshOnBreak.Checked;
 			ConfigManager.ApplyChanges();
 		}
-				
+
+		private void mnuShowInformationOverlay_Click(object sender, EventArgs e)
+		{
+			ConfigManager.Config.DebugInfo.PpuShowInformationOverlay = this.mnuShowInformationOverlay.Checked;
+			ConfigManager.ApplyChanges();
+		}
+
 		private void tabMain_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			this._selectedTab = this.tabMain.SelectedTab;

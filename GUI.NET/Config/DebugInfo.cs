@@ -185,6 +185,7 @@ namespace Mesen.GUI.Config
 		public bool PpuAutoRefresh = true;
 		public RefreshSpeed PpuAutoRefreshSpeed = RefreshSpeed.Normal;
 		public bool PpuRefreshOnBreak = true;
+		public bool PpuShowInformationOverlay = true;
 		public bool PpuPartialDraw = false;
 		public bool PpuShowPreviousFrame = false;
 		public bool HidePauseIcon = false;

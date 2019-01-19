@@ -121,6 +121,7 @@ namespace Mesen.GUI.Debugger.Controls
 			this.picNametable.TabStop = false;
 			this.picNametable.DoubleClick += new System.EventHandler(this.picNametable_DoubleClick);
 			this.picNametable.MouseEnter += new System.EventHandler(this.picNametable_MouseEnter);
+			this.picNametable.MouseLeave += new System.EventHandler(this.picNametable_MouseLeave);
 			this.picNametable.MouseMove += new System.Windows.Forms.MouseEventHandler(this.picNametable_MouseMove);
 			// 
 			// ctxMenu

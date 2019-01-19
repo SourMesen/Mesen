@@ -11,6 +11,7 @@ using System.Runtime.InteropServices;
 using Mesen.GUI.Controls;
 using Mesen.GUI.Config;
 using Mesen.GUI.Forms;
+using System.Drawing.Drawing2D;
 
 namespace Mesen.GUI.Debugger.Controls
 {
@@ -32,6 +33,7 @@ namespace Mesen.GUI.Debugger.Controls
 		private bool _bottomBank = false;
 		private int _tileIndex = 0;
 
+		private TileInfo _hoverTileInfo = new TileInfo();
 		private bool _hoverBottomBank = false;
 		private int _hoverTileIndex = -1;
 
@@ -139,8 +141,6 @@ namespace Mesen.GUI.Debugger.Controls
 
 			UpdateDropdown();
 
-			PictureBox[] chrBanks = new PictureBox[] { this.picChrBank1, this.picChrBank2 };
-
 			for(int i = 0; i < 2; i++) {
 				byte[] pixelData = _chrPixelData[i];
 
@@ -163,39 +163,59 @@ namespace Mesen.GUI.Debugger.Controls
 					}
 					_originalChrBanks[i] = originalImg;
 					_chrBanks[i] = target;
-
-					Bitmap chrBankImage = new Bitmap(256, 256);
-					using(Graphics g = Graphics.FromImage(chrBankImage)) {
-						g.DrawImage(_chrBanks[i], 0, 0);
-
-						if((_bottomBank && i == 1) || (!_bottomBank && i == 0)) {
-							int tileX = _tileIndex % 16;
-							int tileY = _tileIndex / 16;
-							using(Brush brush = new SolidBrush(Color.FromArgb(192, Color.White))) {
-								g.FillRectangle(brush, tileX * 16, tileY * 16, 16, 16);
-								g.DrawRectangle(Pens.Black, tileX * 16, tileY * 16, 16, 16);
-							}
-						}
-						if(_hoverTileIndex >= 0) {
-							if((_hoverBottomBank && i == 1) || (!_hoverBottomBank && i == 0)) {
-								int tileX = _hoverTileIndex % 16;
-								int tileY = _hoverTileIndex / 16;
-								using(Brush brush = new SolidBrush(Color.FromArgb(192, Color.LightBlue))) {
-									g.FillRectangle(brush, tileX * 16, tileY * 16, 16, 16);
-									g.DrawRectangle(Pens.Black, tileX * 16 - 1, tileY * 16 - 1, 18, 18);
-								}
-							}
-						}
-					}
-					chrBanks[i].Image = chrBankImage;
-					chrBanks[i].Refresh();
 				} finally {
 					handle.Free();
 				}
 			}
 
-			this.RefreshPreview(_hoverTileIndex >= 0 ? _hoverTileIndex : _tileIndex, _hoverTileIndex >= 0 ? _hoverBottomBank : _bottomBank);
+			RefreshPreview(_hoverTileIndex >= 0 ? _hoverTileIndex : _tileIndex, _hoverTileIndex >= 0 ? _hoverBottomBank : _bottomBank);
+			DrawHud(0);
+			DrawHud(1);
+
 			ctrlTilePalette.RefreshPalette();
+		}
+
+		private void DrawHud(int chrBank)
+		{
+			Bitmap chrBankImage = new Bitmap(256, 256);
+			using(Graphics g = Graphics.FromImage(chrBankImage)) {
+				g.DrawImage(_chrBanks[chrBank], 0, 0);
+
+				if(_bottomBank == (chrBank == 1)) {
+					int tileX = _tileIndex % 16;
+					int tileY = _tileIndex / 16;
+					using(Brush brush = new SolidBrush(Color.FromArgb(192, Color.White))) {
+						g.FillRectangle(brush, tileX * 16, tileY * 16, 16, 16);
+						g.DrawRectangle(Pens.Black, tileX * 16, tileY * 16, 16, 16);
+					}
+				}
+
+				if(_hoverTileIndex >= 0) {
+					int tileX = _hoverTileIndex % 16;
+					int tileY = _hoverTileIndex / 16;
+					if(_hoverBottomBank == (chrBank == 1)) {
+						using(Brush brush = new SolidBrush(Color.FromArgb(192, Color.LightBlue))) {
+							g.FillRectangle(brush, tileX * 16, tileY * 16, 16, 16);
+							g.DrawRectangle(Pens.White, tileX * 16 - 1, tileY * 16 - 1, 17, 17);
+						}
+					} else {
+						if(ConfigManager.Config.DebugInfo.PpuShowInformationOverlay) {
+							string tooltipText = (
+								"Tile:      $" + _hoverTileInfo.TileIndex.ToString("X2") + Environment.NewLine +
+								"PPU Addr.: $" + _hoverTileInfo.TileAddress.ToString("X4") + Environment.NewLine +
+								"CHR Addr.: $" + _hoverTileInfo.AbsoluteTileAddress.ToString("X4") + Environment.NewLine
+							);
+
+							Bitmap preview = PpuViewerHelper.GetPreview(new Point(tileX * 16, tileY * 16), new Size(16, 16), 4, _chrBanks[chrBank == 0 ? 1 : 0]);
+							PpuViewerHelper.DrawOverlayTooltip(chrBankImage, tooltipText, preview, -1, chrBank == 0, g);
+						}
+					}
+				}
+			}
+
+			PictureBox[] chrBanks = new PictureBox[] { this.picChrBank1, this.picChrBank2 };
+			chrBanks[chrBank].Image = chrBankImage;
+			chrBanks[chrBank].Refresh();
 		}
 
 		private UInt32 _chrSize;
@@ -338,21 +358,27 @@ namespace Mesen.GUI.Debugger.Controls
 			int realIndex = GetLargeSpriteIndex(tileIndex);
 			ctrlTilePalette.PaletteColors = _paletteData[bottomBank ? 1 : 0][realIndex];
 
-			this.txtTileIndex.Text = realIndex.ToString("X2");
-			this.txtTileAddress.Text = (baseAddress + realIndex * 16).ToString("X4");
+			int relativeAddress = 0;
+			int absoluteAddress = 0;
+			if(cboChrSelection.SelectedIndex > 1) {
+				absoluteAddress = baseAddress + realIndex * 16;
+				relativeAddress = InteropEmu.DebugGetRelativePpuAddress((uint)absoluteAddress, GetChrMemoryType().ToPpuAddressType());
+			} else {
+				relativeAddress = baseAddress + realIndex * 16;
+				absoluteAddress = InteropEmu.DebugGetPpuAbsoluteAddressAndType((uint)relativeAddress).Address;
+			}
 
-			_tilePreview = new Bitmap(128, 128);
-			Bitmap source = new Bitmap(16, 16);
-			using(Graphics g = Graphics.FromImage(source)) {
-				g.DrawImage(bottomBank ? this._chrBanks[1]: this._chrBanks[0], new Rectangle(0, 0, 16, 16), new Rectangle(tileX*16, tileY*16, 16, 16), GraphicsUnit.Pixel);
-			}
-			using(Graphics g = Graphics.FromImage(_tilePreview)) {
-				g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
-				g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.None;
-				g.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.Half;
-				g.ScaleTransform(8, 8);
-				g.DrawImageUnscaled(source, 0, 0);
-			}
+			_hoverTileInfo = new TileInfo() {
+				BaseAddress = baseAddress,
+				TileIndex = realIndex,
+				TileAddress = relativeAddress,
+				AbsoluteTileAddress = absoluteAddress
+			};
+
+			this.txtTileIndex.Text = _hoverTileInfo.TileIndex.ToString("X2");
+			this.txtTileAddress.Text = _hoverTileInfo.TileAddress.ToString("X4");
+
+			_tilePreview = PpuViewerHelper.GetPreview(new Point(tileX * 16, tileY * 16), new Size(16, 16), 8, bottomBank ? this._chrBanks[1] : this._chrBanks[0]);
 
 			Bitmap tile = new Bitmap(128, 128);
 			using(Graphics g = Graphics.FromImage(tile)) {
@@ -402,18 +428,23 @@ namespace Mesen.GUI.Debugger.Controls
 			}
 		}
 
+		private DebugMemoryType GetChrMemoryType()
+		{
+			bool ppuMemory = this.cboChrSelection.SelectedIndex == 0;
+			bool isChrRam = InteropEmu.DebugGetMemorySize(DebugMemoryType.ChrRom) == 0;
+			return ppuMemory ? DebugMemoryType.PpuMemory : (isChrRam ? DebugMemoryType.ChrRam : DebugMemoryType.ChrRom);
+		}
+
 		private void DrawPixel(bool leftButton, int x, int y)
 		{
 			int baseAddress = _bottomBank ? 0x1000 : 0x0000;
-			bool ppuMemory = this.cboChrSelection.SelectedIndex == 0;
 			if(this.cboChrSelection.SelectedIndex > 1) {
 				baseAddress += (this.cboChrSelection.SelectedIndex - 1) * 0x2000;
 			}
 
 			int tileIndex = GetLargeSpriteIndex(_tileIndex);
 
-			bool isChrRam = InteropEmu.DebugGetMemorySize(DebugMemoryType.ChrRom) == 0;
-			DebugMemoryType memType = ppuMemory? DebugMemoryType.PpuMemory : (isChrRam ? DebugMemoryType.ChrRam : DebugMemoryType.ChrRom);
+			DebugMemoryType memType = GetChrMemoryType();
 
 			byte orgByte1 = InteropEmu.DebugGetMemoryValue(memType, (UInt32)(baseAddress + tileIndex * 16 + y));
 			byte orgByte2 = InteropEmu.DebugGetMemoryValue(memType, (UInt32)(baseAddress + tileIndex * 16 + y + 8));
@@ -528,12 +559,16 @@ namespace Mesen.GUI.Debugger.Controls
 				baseAddress += (this.cboChrSelection.SelectedIndex - 1) * 0x2000;
 			}
 
-			bool ppuMemory = this.cboChrSelection.SelectedIndex == 0;
-			bool isChrRam = InteropEmu.DebugGetMemorySize(DebugMemoryType.ChrRom) == 0;
-			DebugMemoryType memType = ppuMemory ? DebugMemoryType.PpuMemory : (isChrRam ? DebugMemoryType.ChrRam : DebugMemoryType.ChrRom);
-
 			int tileIndex = GetLargeSpriteIndex(_hoverTileIndex >= 0 ? _hoverTileIndex : _tileIndex);
-			DebugWindowManager.OpenMemoryViewer(baseAddress + tileIndex * 16, memType);
+			DebugWindowManager.OpenMemoryViewer(baseAddress + tileIndex * 16, GetChrMemoryType());
+		}
+
+		private class TileInfo
+		{
+			public int BaseAddress;
+			public int TileIndex;
+			public int TileAddress;
+			public int AbsoluteTileAddress;
 		}
 	}
 }

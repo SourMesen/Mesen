@@ -93,7 +93,7 @@ namespace Mesen.GUI.Debugger.Controls
 		private void UpdateColorInformation(int paletteIndex)
 		{
 			int tileX = paletteIndex % 4;
-			int tileY = paletteIndex / 4;
+			int tileY = (paletteIndex / 4) % 4;
 			_paletteIndex = paletteIndex;
 
 			this.txtColor.Text = _paletteRam[paletteIndex].ToString("X2");
@@ -102,14 +102,7 @@ namespace Mesen.GUI.Debugger.Controls
 			this.txtColorCodeHex.Text = GetHexColorString();
 			this.txtColorCodeRgb.Text = GetRgbColorString();
 
-			Bitmap tile = new Bitmap(64, 64);
-			using(Graphics g = Graphics.FromImage(tile)) {
-				g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
-				g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.None;
-				g.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.Half;
-				g.DrawImage(picPaletteBg.Image, new Rectangle(0, 0, 64, 64), new Rectangle(tileX * 32, tileY * 32, 32, 32), GraphicsUnit.Pixel);
-			}
-			this.picColor.Image = tile;
+			this.picColor.Image = PpuViewerHelper.GetPreview(new Point(tileX * 32, tileY * 32), new Size(32, 32), 2, paletteIndex >= 16 ? picPaletteSprites.Image : picPaletteBg.Image);
 		}
 
 		private void picPalette_MouseDown(object sender, MouseEventArgs e)

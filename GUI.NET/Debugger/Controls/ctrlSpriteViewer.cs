@@ -21,7 +21,10 @@ namespace Mesen.GUI.Debugger.Controls
 		public event SelectTilePaletteHandler OnSelectTilePalette;
 		private byte[] _spriteRam;
 		private byte[] _spritePixelData;
+
 		private int _selectedSprite = -1;
+		private SpriteInfo _spriteInfo = new SpriteInfo();
+
 		private bool _largeSprites;
 		private int _spritePatternAddr;
 		private bool _forceRefresh;
@@ -29,6 +32,7 @@ namespace Mesen.GUI.Debugger.Controls
 		private int _contextMenuSpriteIndex = -1;
 		private bool _copyPreview = false;
 		private Bitmap _imgSprites;
+		private Bitmap _scaledSprites = new Bitmap(256, 512);
 		private Bitmap _screenPreview = new Bitmap(256, 240, PixelFormat.Format32bppArgb);
 		private HdPackCopyHelper _hdCopyHelper = new HdPackCopyHelper();
 		private bool _firstDraw = true;
@@ -90,7 +94,7 @@ namespace Mesen.GUI.Debugger.Controls
 				}
 				_imgSprites = sprites;
 
-				using(Graphics g = Graphics.FromImage(picSprites.Image)) {
+				using(Graphics g = Graphics.FromImage(_scaledSprites)) {
 					g.Clear(Color.FromArgb(64, 64, 64));
 					g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
 					g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.None;
@@ -99,7 +103,6 @@ namespace Mesen.GUI.Debugger.Controls
 					g.ScaleTransform(4, 4);
 					g.DrawImageUnscaled(sprites, 0, 0);
 				}
-				picSprites.Invalidate();
 			} finally {
 				handle.Free();
 			}
@@ -109,7 +112,6 @@ namespace Mesen.GUI.Debugger.Controls
 			}
 			CreateScreenPreview();
 			picPreview.Refresh();
-			picSprites.Refresh();
 
 			if(_firstDraw) {
 				//Update the UI with the first sprite when showing for the first time
@@ -117,6 +119,39 @@ namespace Mesen.GUI.Debugger.Controls
 				_selectedSprite = -1;
 				_firstDraw = false;
 			}
+
+			DrawHud();
+		}
+
+		private void DrawHud()
+		{
+			using(Graphics g = Graphics.FromImage(picSprites.Image)) {
+				g.DrawImage(_scaledSprites, 0, 0);
+
+				if(_selectedSprite >= 0) {
+					int x = _selectedSprite % 8;
+					int y = _selectedSprite / 8;
+					int spriteHeight = _largeSprites ? 64 : 32;
+					using(SolidBrush brush = new SolidBrush(Color.FromArgb(100, 255, 255, 255))) {
+						g.FillRectangle(brush, x * 32, y * 64, 32, spriteHeight);
+					}
+					g.DrawRectangle(Pens.White, x * 32, y * 64, 31, spriteHeight - 1);
+
+					if(ConfigManager.Config.DebugInfo.PpuShowInformationOverlay) {
+						string tooltipText = (
+							"Sprite:    $" + _spriteInfo.SpriteIndex.ToString("X2") + Environment.NewLine +
+							"Tile:      $" + _spriteInfo.TileIndex.ToString("X2") + Environment.NewLine +
+							"Position:  " + _spriteInfo.SpriteX.ToString() + ", " + _spriteInfo.SpriteY.ToString() + Environment.NewLine +
+							"Flags:     " + (_spriteInfo.HorizontalMirror ? "H" : "-") + (_spriteInfo.VerticalMirror ? "V" : "-") + (_spriteInfo.BackgroundPriority ? "B" : "-") + Environment.NewLine +
+							"Palette:   " + _spriteInfo.PaletteIndex.ToString() + " ($" + (0x3F10 + (_spriteInfo.PaletteIndex << 2)).ToString("X4") + ")" + Environment.NewLine
+						);
+
+						PpuViewerHelper.DrawOverlayTooltip(picSprites.Image, tooltipText, picTile.Image, _spriteInfo.PaletteIndex + 4, _selectedSprite >= 32, g);
+					}
+				}
+			}
+			
+			picSprites.Refresh();
 		}
 
 		private void CreateScreenPreview()
@@ -181,6 +216,7 @@ namespace Mesen.GUI.Debugger.Controls
 			}
 
 			UpdateTileInfo(ramAddr);
+			DrawHud();
 		}
 
 		private void UpdateTileInfo(int ramAddr)
@@ -207,6 +243,17 @@ namespace Mesen.GUI.Debugger.Controls
 			bool horizontalMirror = (attributes & 0x40) == 0x40;
 			bool backgroundPriority = (attributes & 0x20) == 0x20;
 
+			_spriteInfo = new SpriteInfo() {
+				SpriteIndex = _selectedSprite,
+				SpriteX = spriteX,
+				SpriteY = spriteY,
+				TileIndex = tileIndex,
+				HorizontalMirror = horizontalMirror,
+				VerticalMirror = verticalMirror,
+				BackgroundPriority = backgroundPriority,
+				PaletteIndex = (attributes & 0x03)
+			};
+
 			this.txtSpriteIndex.Text = _selectedSprite.ToString("X2");
 			this.txtTileIndex.Text = tileIndex.ToString("X2");
 			this.txtTileAddress.Text = tileAddr.ToString("X4");
@@ -219,19 +266,7 @@ namespace Mesen.GUI.Debugger.Controls
 			int tileX = _selectedSprite % 8;
 			int tileY = _selectedSprite / 8;
 
-			Bitmap tile = new Bitmap(64, 128);
-			Bitmap tilePreview = new Bitmap(8, 16);
-			using(Graphics g = Graphics.FromImage(tilePreview)) {
-				g.DrawImage(picSprites.Image, new Rectangle(0, 0, 8, 16), new Rectangle(tileX*32, tileY*64, 32, 64), GraphicsUnit.Pixel);
-			}
-			using(Graphics g = Graphics.FromImage(tile)) {
-				g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
-				g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.None;
-				g.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.Half;
-				g.ScaleTransform(8, 8);
-				g.DrawImageUnscaled(tilePreview, 0, 0);
-			}
-			this.picTile.Image = tile;
+			picTile.Image = PpuViewerHelper.GetPreview(new Point(tileX * 32, tileY * 64), new Size(32, 64), 2, _scaledSprites);
 
 			this.CreateScreenPreview();
 		}
@@ -240,6 +275,7 @@ namespace Mesen.GUI.Debugger.Controls
 		{
 			this._selectedSprite = -1;
 			this.CreateScreenPreview();
+			this.DrawHud();
 		}
 
 		string _copyData;
@@ -441,6 +477,18 @@ namespace Mesen.GUI.Debugger.Controls
 
 			int tileIndexOffset = (!_largeSprites && state.PPU.ControlFlags.SpritePatternAddr == 0x1000) ? 256 : 0;
 			DebugWindowManager.OpenMemoryViewer((tileIndex + tileIndexOffset) * 16, DebugMemoryType.PpuMemory);
+		}
+
+		private class SpriteInfo
+		{
+			public int SpriteIndex;
+			public int TileIndex;
+			public bool HorizontalMirror;
+			public bool VerticalMirror;
+			public bool BackgroundPriority;
+			public int SpriteX;
+			public int SpriteY;
+			public int PaletteIndex;
 		}
 	}
 }
