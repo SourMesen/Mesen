@@ -187,7 +187,13 @@ int LuaApi::GetLabelAddress(lua_State *lua)
 
 	std::shared_ptr<LabelManager> lblMan = _debugger->GetLabelManager();
 	int32_t value = lblMan->GetLabelRelativeAddress(label);
-	errorCond(value < 0, "label not found");
+	if(value == -2) {
+		//Check to see if the label is a multi-byte label instead
+		string mbLabel = label + "+0";
+		value = lblMan->GetLabelRelativeAddress(mbLabel);
+	}
+	errorCond(value == -1, "label out of scope (not mapped to CPU memory)");
+	errorCond(value <= -2, "label not found");
 
 	l.Return(value);
 	return l.ReturnCount();
