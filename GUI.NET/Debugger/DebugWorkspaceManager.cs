@@ -135,14 +135,12 @@ namespace Mesen.GUI.Debugger
 
 		public static void AutoLoadDbgFiles(bool silent)
 		{
-			Ld65DbgImporter oldSymbolProvider = SymbolProvider;
-
 			if(ConfigManager.Config.DebugInfo.AutoLoadDbgFiles) {
 				RomInfo info = InteropEmu.GetRomInfo();
 				string dbgPath = Path.Combine(info.RomFile.Folder, info.GetRomName() + ".dbg");
 				if(File.Exists(dbgPath)) {
 					DateTime lastDbgUpdate = File.GetLastWriteTime(dbgPath);
-					if(lastDbgUpdate != oldSymbolProvider?.DbgFileStamp) {
+					if(lastDbgUpdate != SymbolProvider?.DbgFileStamp) {
 						ImportDbgFile(dbgPath, silent);
 					} else {
 						//Currently loaded symbol provider is still valid
@@ -159,10 +157,6 @@ namespace Mesen.GUI.Debugger
 						}
 					}
 				}
-			}
-
-			if(oldSymbolProvider == SymbolProvider) {
-				SymbolProvider = null;
 			}
 		}
 
