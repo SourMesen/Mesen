@@ -114,7 +114,7 @@ namespace Mesen.GUI.Debugger
 			LineInfo line;
 			if(_lines.TryGetValue(referenceId, out line)) {
 				string lineContent = "";
-				if(_files.TryGetValue(line.FileID, out file) && file.Data.Length > line.LineNumber) {
+				if(_files.TryGetValue(line.FileID, out file) && file.Data != null && file.Data.Length > line.LineNumber) {
 					lineContent = file.Data[line.LineNumber];
 				}
 
