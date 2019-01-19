@@ -519,6 +519,7 @@ namespace Mesen.GUI.Debugger
 					bool breakOnReset = ConfigManager.Config.DebugInfo.BreakOnReset && !InteropEmu.IsNsf();
 					this.BeginInvoke((MethodInvoker)(() => {
 						this.UpdateWorkspace();
+						LabelManager.RefreshLabels();
 						this.AutoLoadCdlFiles();
 						DebugWorkspaceManager.AutoLoadDbgFiles(true);
 						UpdateDebugger(true, false);

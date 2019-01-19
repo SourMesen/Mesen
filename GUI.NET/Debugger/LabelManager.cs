@@ -197,6 +197,12 @@ namespace Mesen.GUI.Debugger
 			}
 		}
 
+		public static void RefreshLabels()
+		{
+			InteropEmu.DebugDeleteLabels();
+			LabelManager.SetLabels(GetLabels(), true);
+		}
+
 		private const int FdsMapperID = 65535;
 		private const int NsfMapperID = 65534;
 
