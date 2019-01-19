@@ -190,6 +190,7 @@ namespace Mesen.GUI.Config
 		public bool PpuShowPreviousFrame = false;
 		public bool HidePauseIcon = false;
 		public bool ShowPpuScrollOverlay = true;
+		public bool ShowAttributeColorsOnly = false;
 		public bool ShowTileGrid = false;
 		public bool ShowAttributeGrid = false;
 		public bool HighlightChrTile = false;

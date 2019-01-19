@@ -207,3 +207,10 @@ struct StackFrameInfo
 	uint16_t JumpTarget;
 	StackFrameFlags Flags;
 };
+
+enum class NametableDisplayMode
+{
+	Normal = 0,
+	Grayscale = 1,
+	AttributeView = 2
+};

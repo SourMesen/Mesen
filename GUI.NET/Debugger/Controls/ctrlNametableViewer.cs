@@ -41,6 +41,7 @@ namespace Mesen.GUI.Debugger.Controls
 		private HdPackCopyHelper _hdCopyHelper = new HdPackCopyHelper();
 		private bool _firstDraw = true;
 		private bool[] _ntChanged = null;
+		private bool _showAttributeColorsOnly = false;
 
 		public ctrlNametableViewer()
 		{
@@ -56,6 +57,10 @@ namespace Mesen.GUI.Debugger.Controls
 				chkHighlightTileUpdates.Checked = ConfigManager.Config.DebugInfo.NtViewerHighlightTileUpdates;
 				chkHighlightAttributeUpdates.Checked = ConfigManager.Config.DebugInfo.NtViewerHighlightAttributeUpdates;
 				chkIgnoreRedundantWrites.Checked = ConfigManager.Config.DebugInfo.NtViewerIgnoreRedundantWrites;
+
+				chkShowAttributeColorsOnly.Checked = ConfigManager.Config.DebugInfo.ShowAttributeColorsOnly;
+				_showAttributeColorsOnly = ConfigManager.Config.DebugInfo.ShowAttributeColorsOnly;
+				chkUseGrayscalePalette.Enabled = !_showAttributeColorsOnly;
 
 				UpdateIgnoreWriteCheckbox();
 			}
@@ -102,8 +107,17 @@ namespace Mesen.GUI.Debugger.Controls
 				_prevAttributeData[i] = _attributeData[i] != null ? (byte[])_attributeData[i].Clone() : null;
 			}
 
+			NametableDisplayMode mode;
+			if(_showAttributeColorsOnly) {
+				mode = NametableDisplayMode.AttributeView;
+			} else if(ConfigManager.Config.DebugInfo.NtViewerUseGrayscalePalette) {
+				mode = NametableDisplayMode.Grayscale;
+			} else {
+				mode = NametableDisplayMode.Normal;
+			}
+
 			for(int i = 0; i < 4; i++) {
-				InteropEmu.DebugGetNametable(i, ConfigManager.Config.DebugInfo.NtViewerUseGrayscalePalette, out _nametablePixelData[i], out _tileData[i], out _attributeData[i]);
+				InteropEmu.DebugGetNametable(i, mode, out _nametablePixelData[i], out _tileData[i], out _attributeData[i]);
 			}
 
 			_hdCopyHelper.RefreshData();
@@ -393,6 +407,17 @@ namespace Mesen.GUI.Debugger.Controls
 		{
 			ConfigManager.Config.DebugInfo.ShowPpuScrollOverlay = chkShowPpuScrollOverlay.Checked;
 			ConfigManager.ApplyChanges();
+			this.RefreshViewer();
+		}
+
+		private void chkShowAttributeColorsOnly_Click(object sender, EventArgs e)
+		{
+			ConfigManager.Config.DebugInfo.ShowAttributeColorsOnly = chkShowAttributeColorsOnly.Checked;
+			ConfigManager.ApplyChanges();
+
+			_showAttributeColorsOnly = chkShowAttributeColorsOnly.Checked;
+			chkUseGrayscalePalette.Enabled = !chkShowAttributeColorsOnly.Checked;
+			this.GetData();
 			this.RefreshViewer();
 		}
 

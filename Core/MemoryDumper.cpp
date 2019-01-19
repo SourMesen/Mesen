@@ -265,7 +265,7 @@ uint8_t MemoryDumper::GetMemoryValue(DebugMemoryType memoryType, uint32_t addres
 	return 0;
 }
 
-void MemoryDumper::GetNametable(int nametableIndex, bool useGrayscalePalette, uint32_t* frameBuffer, uint8_t* tileData, uint8_t* paletteData)
+void MemoryDumper::GetNametable(int nametableIndex, NametableDisplayMode mode, uint32_t* frameBuffer, uint8_t* tileData, uint8_t* paletteData)
 {
 	shared_ptr<MMC5> mmc5 = std::dynamic_pointer_cast<MMC5>(_mapper);
 	uint32_t *rgbPalette = _debugger->GetConsole()->GetSettings()->GetRgbPalette();
@@ -291,21 +291,30 @@ void MemoryDumper::GetNametable(int nametableIndex, bool useGrayscalePalette, ui
 				paletteBaseAddr = ((attribute >> shift) & 0x03) << 2;
 			}
 			uint16_t tileAddr = bgAddr + (tileIndex << 4);
-			for(uint8_t i = 0; i < 8; i++) {
-				uint8_t lowByte, highByte;
-				if(mmc5 && mmc5->IsExtendedAttributes()) {
-					lowByte = mmc5->GetExAttributeTileData(ntIndex, tileAddr + i);
-					highByte = mmc5->GetExAttributeTileData(ntIndex, tileAddr + i + 8);
-				} else {
-					lowByte = _mapper->DebugReadVRAM(tileAddr + i);
-					highByte = _mapper->DebugReadVRAM(tileAddr + i + 8);
+			if(mode == NametableDisplayMode::AttributeView) {
+				for(uint8_t i = 0; i < 8; i++) {
+					for(uint8_t j = 0; j < 8; j++) {
+						uint8_t color = ((j & 0x04) >> 2) + ((i & 0x04) >> 1);
+						frameBuffer[(y << 11) + (x << 3) + (i << 8) + j] = rgbPalette[_ppu->ReadPaletteRAM(color == 0 ? 0 : (paletteBaseAddr + color))];
+					}
 				}
-				for(uint8_t j = 0; j < 8; j++) {
-					uint8_t color = ((lowByte >> (7 - j)) & 0x01) | (((highByte >> (7 - j)) & 0x01) << 1);
-					if(useGrayscalePalette) {
-						frameBuffer[(y << 11) + (x << 3) + (i << 8) + j] = rgbPalette[grayscalePalette[color]];
+			} else {
+				for(uint8_t i = 0; i < 8; i++) {
+					uint8_t lowByte, highByte;
+					if(mmc5 && mmc5->IsExtendedAttributes()) {
+						lowByte = mmc5->GetExAttributeTileData(ntIndex, tileAddr + i);
+						highByte = mmc5->GetExAttributeTileData(ntIndex, tileAddr + i + 8);
 					} else {
-						frameBuffer[(y << 11) + (x << 3) + (i << 8) + j] = rgbPalette[(color == 0 ? _ppu->ReadPaletteRAM(0) : _ppu->ReadPaletteRAM(paletteBaseAddr + color)) & 0x3F];
+						lowByte = _mapper->DebugReadVRAM(tileAddr + i);
+						highByte = _mapper->DebugReadVRAM(tileAddr + i + 8);
+					}
+					for(uint8_t j = 0; j < 8; j++) {
+						uint8_t color = ((lowByte >> (7 - j)) & 0x01) | (((highByte >> (7 - j)) & 0x01) << 1);
+						if(mode == NametableDisplayMode::Grayscale) {
+							frameBuffer[(y << 11) + (x << 3) + (i << 8) + j] = rgbPalette[grayscalePalette[color]];
+						} else {
+							frameBuffer[(y << 11) + (x << 3) + (i << 8) + j] = rgbPalette[(color == 0 ? _ppu->ReadPaletteRAM(0) : _ppu->ReadPaletteRAM(paletteBaseAddr + color)) & 0x3F];
+						}
 					}
 				}
 			}

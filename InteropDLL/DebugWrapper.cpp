@@ -75,7 +75,7 @@ extern "C"
 
 	DllExport uint32_t __stdcall DebugGetMemorySize(DebugMemoryType type) { return GetDebugger()->GetMemoryDumper()->GetMemorySize(type); }
 	DllExport uint32_t __stdcall DebugGetMemoryState(DebugMemoryType type, uint8_t *buffer) { return GetDebugger()->GetMemoryDumper()->GetMemoryState(type, buffer); }
-	DllExport void __stdcall DebugGetNametable(uint32_t nametableIndex, bool useGrayscalePalette, uint32_t *frameBuffer, uint8_t *tileData, uint8_t *attributeData) { GetDebugger()->GetMemoryDumper()->GetNametable(nametableIndex, useGrayscalePalette, frameBuffer, tileData, attributeData); }
+	DllExport void __stdcall DebugGetNametable(uint32_t nametableIndex, NametableDisplayMode mode, uint32_t *frameBuffer, uint8_t *tileData, uint8_t *attributeData) { GetDebugger()->GetMemoryDumper()->GetNametable(nametableIndex, mode, frameBuffer, tileData, attributeData); }
 	DllExport void __stdcall DebugGetChrBank(uint32_t bankIndex, uint32_t *frameBuffer, uint8_t palette, bool largeSprites, CdlHighlightType highlightType, bool useAutoPalette, bool showSingleColorTilesInGrayscale, uint32_t *paletteBuffer) { GetDebugger()->GetMemoryDumper()->GetChrBank(bankIndex, frameBuffer, palette, largeSprites, highlightType, useAutoPalette, showSingleColorTilesInGrayscale, paletteBuffer); }
 	DllExport void __stdcall DebugGetSprites(uint32_t *frameBuffer) { GetDebugger()->GetMemoryDumper()->GetSprites(frameBuffer); }
 	DllExport void __stdcall DebugGetPalette(uint32_t *frameBuffer) { GetDebugger()->GetMemoryDumper()->GetPalette(frameBuffer); }

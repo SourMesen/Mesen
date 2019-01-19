@@ -415,8 +415,8 @@ namespace Mesen.GUI
 			return buffer;
 		}
 
-		[DllImport(DLLPath, EntryPoint = "DebugGetNametable")] private static extern void DebugGetNametableWrapper(UInt32 nametableIndex, [MarshalAs(UnmanagedType.I1)]bool useGrayscalePalette, IntPtr frameBuffer, IntPtr tileData, IntPtr attributeData);
-		public static void DebugGetNametable(int nametableIndex, bool useGrayscalePalette, out byte[] frameData, out byte[] tileData, out byte[] attributeData)
+		[DllImport(DLLPath, EntryPoint = "DebugGetNametable")] private static extern void DebugGetNametableWrapper(UInt32 nametableIndex, NametableDisplayMode mode, IntPtr frameBuffer, IntPtr tileData, IntPtr attributeData);
+		public static void DebugGetNametable(int nametableIndex, NametableDisplayMode mode, out byte[] frameData, out byte[] tileData, out byte[] attributeData)
 		{
 			frameData = new byte[256*240*4];
 			tileData = new byte[32*30];
@@ -426,7 +426,7 @@ namespace Mesen.GUI
 			GCHandle hTileData = GCHandle.Alloc(tileData, GCHandleType.Pinned);
 			GCHandle hAttributeData = GCHandle.Alloc(attributeData, GCHandleType.Pinned);
 			try {
-				InteropEmu.DebugGetNametableWrapper((UInt32)nametableIndex, useGrayscalePalette, hFrameData.AddrOfPinnedObject(), hTileData.AddrOfPinnedObject(), hAttributeData.AddrOfPinnedObject());
+				InteropEmu.DebugGetNametableWrapper((UInt32)nametableIndex, mode, hFrameData.AddrOfPinnedObject(), hTileData.AddrOfPinnedObject(), hAttributeData.AddrOfPinnedObject());
 			} finally {
 				hFrameData.Free();
 				hTileData.Free();
@@ -2305,6 +2305,13 @@ namespace Mesen.GUI
 		_90Degrees = 90,
 		_180Degrees = 180,
 		_270Degrees = 270
+	}
+
+	public enum NametableDisplayMode
+	{
+		Normal = 0,
+		Grayscale = 1,
+		AttributeView = 2
 	}
 
 	public enum DebugMemoryType

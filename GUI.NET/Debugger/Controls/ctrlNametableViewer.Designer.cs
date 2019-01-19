@@ -76,6 +76,7 @@ namespace Mesen.GUI.Debugger.Controls
 			this.chkHighlightAttributeUpdates = new System.Windows.Forms.CheckBox();
 			this.lblHighlight = new System.Windows.Forms.Label();
 			this.chkIgnoreRedundantWrites = new System.Windows.Forms.CheckBox();
+			this.chkShowAttributeColorsOnly = new System.Windows.Forms.CheckBox();
 			this.tableLayoutPanel1.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.picNametable)).BeginInit();
 			this.ctxMenu.SuspendLayout();
@@ -449,6 +450,7 @@ namespace Mesen.GUI.Debugger.Controls
 			this.flowLayoutPanel1.AutoSize = true;
 			this.flowLayoutPanel1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
 			this.flowLayoutPanel1.Controls.Add(this.chkShowPpuScrollOverlay);
+			this.flowLayoutPanel1.Controls.Add(this.chkShowAttributeColorsOnly);
 			this.flowLayoutPanel1.Controls.Add(this.chkShowTileGrid);
 			this.flowLayoutPanel1.Controls.Add(this.chkShowAttributeGrid);
 			this.flowLayoutPanel1.Controls.Add(this.chkUseGrayscalePalette);
@@ -475,7 +477,7 @@ namespace Mesen.GUI.Debugger.Controls
 			// chkShowTileGrid
 			// 
 			this.chkShowTileGrid.AutoSize = true;
-			this.chkShowTileGrid.Location = new System.Drawing.Point(3, 26);
+			this.chkShowTileGrid.Location = new System.Drawing.Point(3, 49);
 			this.chkShowTileGrid.Name = "chkShowTileGrid";
 			this.chkShowTileGrid.Size = new System.Drawing.Size(95, 17);
 			this.chkShowTileGrid.TabIndex = 2;
@@ -486,7 +488,7 @@ namespace Mesen.GUI.Debugger.Controls
 			// chkShowAttributeGrid
 			// 
 			this.chkShowAttributeGrid.AutoSize = true;
-			this.chkShowAttributeGrid.Location = new System.Drawing.Point(3, 49);
+			this.chkShowAttributeGrid.Location = new System.Drawing.Point(3, 72);
 			this.chkShowAttributeGrid.Name = "chkShowAttributeGrid";
 			this.chkShowAttributeGrid.Size = new System.Drawing.Size(117, 17);
 			this.chkShowAttributeGrid.TabIndex = 3;
@@ -497,7 +499,7 @@ namespace Mesen.GUI.Debugger.Controls
 			// chkUseGrayscalePalette
 			// 
 			this.chkUseGrayscalePalette.AutoSize = true;
-			this.chkUseGrayscalePalette.Location = new System.Drawing.Point(3, 72);
+			this.chkUseGrayscalePalette.Location = new System.Drawing.Point(3, 95);
 			this.chkUseGrayscalePalette.Name = "chkUseGrayscalePalette";
 			this.chkUseGrayscalePalette.Size = new System.Drawing.Size(131, 17);
 			this.chkUseGrayscalePalette.TabIndex = 5;
@@ -508,7 +510,7 @@ namespace Mesen.GUI.Debugger.Controls
 			// chkHighlightChrTile
 			// 
 			this.chkHighlightChrTile.CheckAlign = System.Drawing.ContentAlignment.TopLeft;
-			this.chkHighlightChrTile.Location = new System.Drawing.Point(3, 95);
+			this.chkHighlightChrTile.Location = new System.Drawing.Point(3, 118);
 			this.chkHighlightChrTile.Name = "chkHighlightChrTile";
 			this.chkHighlightChrTile.Size = new System.Drawing.Size(150, 31);
 			this.chkHighlightChrTile.TabIndex = 4;
@@ -609,6 +611,17 @@ namespace Mesen.GUI.Debugger.Controls
 			this.chkIgnoreRedundantWrites.UseVisualStyleBackColor = true;
 			this.chkIgnoreRedundantWrites.Click += new System.EventHandler(this.chkIgnoreRedundantWrites_Click);
 			// 
+			// chkShowAttributeColorsOnly
+			// 
+			this.chkShowAttributeColorsOnly.AutoSize = true;
+			this.chkShowAttributeColorsOnly.Location = new System.Drawing.Point(3, 26);
+			this.chkShowAttributeColorsOnly.Name = "chkShowAttributeColorsOnly";
+			this.chkShowAttributeColorsOnly.Size = new System.Drawing.Size(147, 17);
+			this.chkShowAttributeColorsOnly.TabIndex = 6;
+			this.chkShowAttributeColorsOnly.Text = "Show attribute colors only";
+			this.chkShowAttributeColorsOnly.UseVisualStyleBackColor = true;
+			this.chkShowAttributeColorsOnly.Click += new System.EventHandler(this.chkShowAttributeColorsOnly_Click);
+			// 
 			// ctrlNametableViewer
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -681,5 +694,6 @@ namespace Mesen.GUI.Debugger.Controls
 		private System.Windows.Forms.Label lblHighlight;
 		private System.Windows.Forms.CheckBox chkIgnoreRedundantWrites;
 		private System.Windows.Forms.ToolStripMenuItem mnuAddBreakpoint;
+		private System.Windows.Forms.CheckBox chkShowAttributeColorsOnly;
 	}
 }

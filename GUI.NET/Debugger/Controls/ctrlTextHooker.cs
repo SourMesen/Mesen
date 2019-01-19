@@ -65,7 +65,7 @@ namespace Mesen.GUI.Debugger.Controls
 			InteropEmu.DebugGetState(ref _state);
 
 			for(int i = 0; i < 4; i++) {
-				InteropEmu.DebugGetNametable(i, ConfigManager.Config.DebugInfo.NtViewerUseGrayscalePalette, out _nametablePixelData[i], out _tileData[i], out _attributeData[i]);
+				InteropEmu.DebugGetNametable(i, NametableDisplayMode.Normal, out _nametablePixelData[i], out _tileData[i], out _attributeData[i]);
 			}
 
 			_ppuMemory = InteropEmu.DebugGetMemoryState(DebugMemoryType.PpuMemory);
