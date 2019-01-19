@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Drawing;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using Mesen.GUI.Config;
 using Mesen.GUI.Forms;
@@ -71,6 +72,8 @@ namespace Mesen.GUI.Debugger
 					toggleViewTooltip += " (" + DebuggerShortcutsConfig.GetShortcutDisplay(ConfigManager.Config.DebugInfo.Shortcuts.PpuViewer_ToggleView) + ")";
 				}
 				this.toolTip.SetToolTip(this.btnToggleView, toggleViewTooltip);
+
+				_selectedTab = tabMain.SelectedTab;
 			}
 		}
 
@@ -213,20 +216,48 @@ namespace Mesen.GUI.Debugger
 			return base.ProcessCmdKey(ref msg, keyData);
 		}
 
-		private void ctrlNametableViewer_OnSelectChrTile(object sender, EventArgs e)
+		public void SelectChrTile(int tileIndex, int paletteIndex, bool allowOpenWindow)
 		{
-			tabMain.SelectTab(tpgChrViewer);
+			if(_isCompact && allowOpenWindow) {
+				//If in compact mode, don't move to the CHR tab, open or use another window instead
+				frmPpuViewer otherPpuViewer = null;
+				foreach(BaseForm frm in DebugWindowManager.GetWindows()) {
+					if(frm != this && frm is frmPpuViewer && (!((frmPpuViewer)frm)._isCompact || ((frmPpuViewer)frm)._selectedTab == ((frmPpuViewer)frm).tpgChrViewer)) {
+						//If a window exists and is either not in compact mode, or in compact mode and showing the CHR viewer, use it
+						otherPpuViewer = frm as frmPpuViewer;
+						break;
+					}
+				}
+				if(otherPpuViewer == null) {
+					//Open up a new viewer, in compact mode
+					otherPpuViewer = (frmPpuViewer)DebugWindowManager.OpenDebugWindow(DebugWindow.PpuViewer);
+					otherPpuViewer.SelectChrTile(tileIndex, paletteIndex, false);
+					otherPpuViewer.ToggleView();
+				} else {
+					//Reuse an existing viewer that's not in compact mode
+					otherPpuViewer.SelectChrTile(tileIndex, paletteIndex, false);
+					otherPpuViewer.BringToFront();
+				}
+			} else {
+				if(!InteropEmu.DebugIsExecutionStopped() || ConfigManager.Config.DebugInfo.PpuRefreshOnBreak) {
+					//Only change the palette if execution is not stopped (or if we're configured to refresh the viewer on break/pause)
+					//Otherwise, the CHR viewer will refresh its data (and it might not match the data we loaded at the specified scanline/cycle anymore)
+					ctrlChrViewer.SelectedPaletteIndex = paletteIndex;
+				}
+				ctrlChrViewer.SelectedTileIndex = tileIndex;
+				tabMain.SelectTab(tpgChrViewer);
+				_selectedTab = tpgChrViewer;
+			}
+		}
+
+		private void ctrlNametableViewer_OnSelectChrTile(int tileIndex, int paletteIndex)
+		{
+			SelectChrTile(tileIndex, paletteIndex, true);
 		}
 
 		private void ctrlSpriteViewer_OnSelectTilePalette(int tileIndex, int paletteIndex)
 		{
-			ctrlChrViewer.SelectedTileIndex = tileIndex;
-			if(!InteropEmu.DebugIsExecutionStopped() || ConfigManager.Config.DebugInfo.PpuRefreshOnBreak) {
-				//Only change the palette if execution is not stopped (or if we're configured to refresh the viewer on break/pause)
-				//Otherwise, the CHR viewer will refresh its data (and it might not match the data we loaded at the specified scanline/cycle anymore)
-				ctrlChrViewer.SelectedPaletteIndex = paletteIndex;
-			}
-			tabMain.SelectTab(tpgChrViewer);
+			SelectChrTile(tileIndex, paletteIndex, true);
 		}
 
 		private void UpdateRefreshSpeedMenu()
@@ -254,7 +285,7 @@ namespace Mesen.GUI.Debugger
 		{
 			if(!_isCompact) {
 				Point tabTopLeft = tabMain.PointToScreen(Point.Empty);
-				Point tabContentTopLeft = ctrlNametableViewer.PointToScreen(Point.Empty);
+				Point tabContentTopLeft = tab.PointToScreen(Point.Empty);
 
 				int heightGap = tabContentTopLeft.Y - tabTopLeft.Y + ctrlScanlineCycle.Height;
 

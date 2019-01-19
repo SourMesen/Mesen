@@ -12,9 +12,14 @@ namespace Mesen.GUI.Debugger
 	{
 		private static HashSet<Form> _openedWindows = new HashSet<Form>();
 
+		public static List<Form> GetWindows()
+		{
+			return new List<Form>(_openedWindows);
+		}
+
 		public static bool ScriptWindowOpened { get { return _openedWindows.Any(wnd => wnd is frmScript); } }
 
-		public static void OpenDebugWindow(DebugWindow window)
+		public static Form OpenDebugWindow(DebugWindow window)
 		{
 			Form existingWindow = GetExistingSingleInstanceWindow(window);
 			if(existingWindow != null) {
@@ -24,6 +29,7 @@ namespace Mesen.GUI.Debugger
 					existingWindow.WindowState = FormWindowState.Normal;
 				}
 				existingWindow.Focus();
+				return existingWindow;
 			} else {
 				BaseForm frm = null;
 				switch(window) {
@@ -40,6 +46,7 @@ namespace Mesen.GUI.Debugger
 				_openedWindows.Add(frm);
 				frm.FormClosed += Debugger_FormClosed;
 				frm.Show();
+				return frm;
 			}
 		}
 

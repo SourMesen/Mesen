@@ -16,7 +16,8 @@ namespace Mesen.GUI.Debugger.Controls
 {
 	public partial class ctrlNametableViewer : BaseControl, ICompactControl
 	{
-		public event EventHandler OnSelectChrTile;
+		public delegate void OnSelectChrTileHandler(int tileIndex, int paletteIndex);
+		public event OnSelectChrTileHandler OnSelectChrTile;
 
 		private byte[][] _nametablePixelData = new byte[4][];
 
@@ -523,13 +524,7 @@ namespace Mesen.GUI.Debugger.Controls
 			InteropEmu.DebugGetState(ref state);
 			int tileIndexOffset = state.PPU.ControlFlags.BackgroundPatternAddr == 0x1000 ? 256 : 0;
 
-			if(!InteropEmu.DebugIsExecutionStopped() || ConfigManager.Config.DebugInfo.PpuRefreshOnBreak) {
-				//Only change the palette if execution is not stopped (or if we're configured to refresh the viewer on break/pause)
-				//Otherwise, the CHR viewer will refresh its data (and it might not match the data we loaded at the specified scanline/cycle anymore)
-				_chrViewer.SelectedPaletteIndex = paletteIndex;
-			}
-			_chrViewer.SelectedTileIndex = tileIndex + tileIndexOffset;
-			OnSelectChrTile?.Invoke(null, EventArgs.Empty);
+			OnSelectChrTile?.Invoke(tileIndex + tileIndexOffset, paletteIndex);
 		}
 
 		private void picNametable_DoubleClick(object sender, EventArgs e)
