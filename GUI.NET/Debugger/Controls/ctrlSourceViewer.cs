@@ -103,7 +103,7 @@ namespace Mesen.GUI.Debugger.Controls
 				if(prgAddress >= 0) {
 					int opSize = frmOpCodeTooltip.GetOpSize(prgRomContent[prgAddress]);
 					string byteCode = "";
-					for(int i = prgAddress, end = prgAddress + opSize; i < end ; i++) {
+					for(int i = prgAddress, end = prgAddress + opSize; i < end && i < prgRomContent.Length; i++) {
 						byteCode += "$" + prgRomContent[i].ToString("X2") + " ";
 					}
 					lineNotes.Add(byteCode);
