@@ -15,15 +15,17 @@ namespace Mesen.GUI.Debugger
 		private bool _refreshing = false;
 		private Size _originalSize;
 		private bool _isCompact;
+		private PpuViewerMode _mode;
 
 		private static int _nextPpuViewerId = 0;
 		private int _ppuViewerId = 0;
 
-		public frmPpuViewer()
+		public frmPpuViewer(PpuViewerMode mode = PpuViewerMode.Combined)
 		{
 			InitializeComponent();
 
 			_ppuViewerId = GetNextPpuViewerId();
+			_mode = mode;
 
 			this._selectedTab = this.tpgNametableViewer;
 			this.mnuAutoRefresh.Checked = ConfigManager.Config.DebugInfo.PpuAutoRefresh;
@@ -31,9 +33,18 @@ namespace Mesen.GUI.Debugger
 			this.mnuShowInformationOverlay.Checked = ConfigManager.Config.DebugInfo.PpuShowInformationOverlay;
 			this.ctrlNametableViewer.Connect(this.ctrlChrViewer);
 
-			if(ConfigManager.Config.DebugInfo.PpuWindowLocation.HasValue) {
+			Point? startupLocation;
+			switch(_mode) {
+				case PpuViewerMode.NametableViewer: startupLocation = ConfigManager.Config.DebugInfo.PpuNametableViewerLocation; break;
+				case PpuViewerMode.ChrViewer: startupLocation = ConfigManager.Config.DebugInfo.PpuChrViewerLocation; break;
+				case PpuViewerMode.SpriteViewer: startupLocation = ConfigManager.Config.DebugInfo.PpuSpriteViewerLocation; break;
+				case PpuViewerMode.PaletteViewer: startupLocation = ConfigManager.Config.DebugInfo.PpuPaletteViewerLocation; break;
+				default: startupLocation = ConfigManager.Config.DebugInfo.PpuWindowLocation; break;
+			}
+
+			if(startupLocation.HasValue) {
 				this.StartPosition = FormStartPosition.Manual;
-				this.Location = ConfigManager.Config.DebugInfo.PpuWindowLocation.Value;
+				this.Location = startupLocation.Value;
 			}
 		}
 
@@ -74,6 +85,19 @@ namespace Mesen.GUI.Debugger
 				this.toolTip.SetToolTip(this.btnToggleView, toggleViewTooltip);
 
 				_selectedTab = tabMain.SelectedTab;
+				if(_mode != PpuViewerMode.Combined) {
+					TabPage page = _selectedTab;
+					switch(_mode) {
+						case PpuViewerMode.NametableViewer: page = tpgNametableViewer; break;
+						case PpuViewerMode.ChrViewer: page = tpgChrViewer; break;
+						case PpuViewerMode.SpriteViewer: page = tpgSpriteViewer; break;
+						case PpuViewerMode.PaletteViewer: page = tpgPaletteViewer; break;
+					}
+
+					_selectedTab = page;
+					tabMain.SelectTab(page);
+					ToggleView();
+				}
 			}
 		}
 
@@ -81,7 +105,16 @@ namespace Mesen.GUI.Debugger
 		{
 			base.OnFormClosing(e);
 			this._notifListener.OnNotification -= this._notifListener_OnNotification;
-			ConfigManager.Config.DebugInfo.PpuWindowLocation = this.WindowState != FormWindowState.Normal ? this.RestoreBounds.Location : this.Location;
+
+			Point location = this.WindowState != FormWindowState.Normal ? this.RestoreBounds.Location : this.Location;
+			switch(_mode) {
+				case PpuViewerMode.NametableViewer: ConfigManager.Config.DebugInfo.PpuNametableViewerLocation = location; break;
+				case PpuViewerMode.ChrViewer: ConfigManager.Config.DebugInfo.PpuChrViewerLocation = location; break;
+				case PpuViewerMode.SpriteViewer: ConfigManager.Config.DebugInfo.PpuSpriteViewerLocation = location; break;
+				case PpuViewerMode.PaletteViewer: ConfigManager.Config.DebugInfo.PpuPaletteViewerLocation = location; break;
+				default: ConfigManager.Config.DebugInfo.PpuWindowLocation = location; break;
+			}
+
 			ConfigManager.Config.DebugInfo.PpuDisplayScanline = ctrlScanlineCycle.Scanline;
 			ConfigManager.Config.DebugInfo.PpuDisplayCycle = ctrlScanlineCycle.Cycle;
 			ConfigManager.ApplyChanges();
@@ -230,9 +263,8 @@ namespace Mesen.GUI.Debugger
 				}
 				if(otherPpuViewer == null) {
 					//Open up a new viewer, in compact mode
-					otherPpuViewer = (frmPpuViewer)DebugWindowManager.OpenDebugWindow(DebugWindow.PpuViewer);
+					otherPpuViewer = DebugWindowManager.OpenPpuViewer(PpuViewerMode.ChrViewer);
 					otherPpuViewer.SelectChrTile(tileIndex, paletteIndex, false);
-					otherPpuViewer.ToggleView();
 				} else {
 					//Reuse an existing viewer that's not in compact mode
 					otherPpuViewer.SelectChrTile(tileIndex, paletteIndex, false);
@@ -281,7 +313,7 @@ namespace Mesen.GUI.Debugger
 			UpdateRefreshSpeedMenu();
 		}
 
-		private void ToggleCompactMode(ICompactControl control, TabPage tab, string title)
+		private void ToggleCompactMode(PpuViewerMode mode, ICompactControl control, TabPage tab, string title)
 		{
 			if(!_isCompact) {
 				Point tabTopLeft = tabMain.PointToScreen(Point.Empty);
@@ -304,6 +336,7 @@ namespace Mesen.GUI.Debugger
 
 				this.Size = new Size(this.Width - widthDiff, this.Height - heightDiff - heightGap + 3);
 			} else {
+				_mode = PpuViewerMode.Combined;
 				_isCompact = false;
 				this.Size = _originalSize;
 				tabMain.Visible = true;
@@ -318,13 +351,13 @@ namespace Mesen.GUI.Debugger
 		private void ToggleView()
 		{
 			if(_selectedTab == tpgChrViewer) {
-				ToggleCompactMode(ctrlChrViewer, tpgChrViewer, "CHR Viewer");
+				ToggleCompactMode(PpuViewerMode.ChrViewer, ctrlChrViewer, tpgChrViewer, "CHR Viewer");
 			} else if(_selectedTab == tpgPaletteViewer) {
-				ToggleCompactMode(ctrlPaletteViewer, tpgPaletteViewer, "Palette Viewer");
+				ToggleCompactMode(PpuViewerMode.PaletteViewer, ctrlPaletteViewer, tpgPaletteViewer, "Palette Viewer");
 			} else if(_selectedTab == tpgSpriteViewer) {
-				ToggleCompactMode(ctrlSpriteViewer, tpgSpriteViewer, "Sprite Viewer");
+				ToggleCompactMode(PpuViewerMode.SpriteViewer, ctrlSpriteViewer, tpgSpriteViewer, "Sprite Viewer");
 			} else if(_selectedTab == tpgNametableViewer) {
-				ToggleCompactMode(ctrlNametableViewer, tpgNametableViewer, "Nametable Viewer");
+				ToggleCompactMode(PpuViewerMode.NametableViewer, ctrlNametableViewer, tpgNametableViewer, "Nametable Viewer");
 			}
 		}
 
@@ -332,6 +365,15 @@ namespace Mesen.GUI.Debugger
 		{
 			ToggleView();
 		}
+	}
+
+	public enum PpuViewerMode
+	{
+		Combined = 0,
+		NametableViewer = 1,
+		ChrViewer = 2,
+		SpriteViewer = 3,
+		PaletteViewer = 4,
 	}
 
 	public interface ICompactControl

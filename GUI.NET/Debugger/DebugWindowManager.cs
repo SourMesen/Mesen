@@ -90,6 +90,16 @@ namespace Mesen.GUI.Debugger
 			frm.GoToDestination(dest);
 		}
 
+		public static frmPpuViewer OpenPpuViewer(PpuViewerMode mode)
+		{
+			frmPpuViewer frm = new frmPpuViewer(mode);
+			frm.Icon = Properties.Resources.Video;
+			_openedWindows.Add(frm);
+			frm.FormClosed += Debugger_FormClosed;
+			frm.Show();
+			return frm;
+		}
+
 		public static frmScript OpenScriptWindow(bool forceBlank)
 		{
 			frmScript frm = new frmScript(forceBlank);

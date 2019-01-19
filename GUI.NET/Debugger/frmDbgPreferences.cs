@@ -49,7 +49,12 @@ namespace Mesen.GUI.Debugger
 				GetMember(nameof(DebuggerShortcutsConfig.OpenPpuViewer)),
 				GetMember(nameof(DebuggerShortcutsConfig.OpenScriptWindow)),
 				GetMember(nameof(DebuggerShortcutsConfig.OpenTextHooker)),
-				GetMember(nameof(DebuggerShortcutsConfig.OpenTraceLogger))
+				GetMember(nameof(DebuggerShortcutsConfig.OpenTraceLogger)),
+
+				GetMember(nameof(DebuggerShortcutsConfig.OpenNametableViewer)),
+				GetMember(nameof(DebuggerShortcutsConfig.OpenChrViewer)),
+				GetMember(nameof(DebuggerShortcutsConfig.OpenSpriteViewer)),
+				GetMember(nameof(DebuggerShortcutsConfig.OpenPaletteViewer)),
 			};
 
 			ctrlDbgShortcutsMemoryViewer.Shortcuts = new FieldInfo[] {

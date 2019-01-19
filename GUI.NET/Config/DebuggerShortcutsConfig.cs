@@ -81,6 +81,15 @@ namespace Mesen.GUI.Config
 		[ShortcutName("Open Text Hooker")]
 		public XmlKeys OpenTextHooker = Keys.Control | Keys.H;
 
+		[ShortcutName("Open Nametabler Viewer (Compact)")]
+		public XmlKeys OpenNametableViewer = Keys.Control | Keys.D1;
+		[ShortcutName("Open CHR Viewer (Compact)")]
+		public XmlKeys OpenChrViewer = Keys.Control | Keys.D2;
+		[ShortcutName("Open Sprite Viewer (Compact)")]
+		public XmlKeys OpenSpriteViewer = Keys.Control | Keys.D3;
+		[ShortcutName("Open Palette Viewer (Compact)")]
+		public XmlKeys OpenPaletteViewer = Keys.Control | Keys.D4;
+
 		//Debugger window
 		[ShortcutName("Reset")]
 		public XmlKeys Reset = Keys.Control | Keys.R;

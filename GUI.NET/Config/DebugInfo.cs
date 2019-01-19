@@ -182,6 +182,12 @@ namespace Mesen.GUI.Config
 		public bool CopyComments = false;
 
 		public Point? PpuWindowLocation = null;
+
+		public Point? PpuNametableViewerLocation = null;
+		public Point? PpuChrViewerLocation = null;
+		public Point? PpuSpriteViewerLocation = null;
+		public Point? PpuPaletteViewerLocation = null;
+
 		public bool PpuAutoRefresh = true;
 		public RefreshSpeed PpuAutoRefreshSpeed = RefreshSpeed.Normal;
 		public bool PpuRefreshOnBreak = true;

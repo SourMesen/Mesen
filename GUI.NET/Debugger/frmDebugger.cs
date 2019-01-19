@@ -283,6 +283,11 @@ namespace Mesen.GUI.Debugger
 			mnuScriptWindow.InitShortcut(this, nameof(DebuggerShortcutsConfig.OpenScriptWindow));
 			mnuTraceLogger.InitShortcut(this, nameof(DebuggerShortcutsConfig.OpenTraceLogger));
 			mnuTextHooker.InitShortcut(this, nameof(DebuggerShortcutsConfig.OpenTextHooker));
+
+			mnuOpenNametableViewer.InitShortcut(this, nameof(DebuggerShortcutsConfig.OpenNametableViewer));
+			mnuOpenChrViewer.InitShortcut(this, nameof(DebuggerShortcutsConfig.OpenChrViewer));
+			mnuOpenSpriteViewer.InitShortcut(this, nameof(DebuggerShortcutsConfig.OpenSpriteViewer));
+			mnuOpenPaletteViewer.InitShortcut(this, nameof(DebuggerShortcutsConfig.OpenPaletteViewer));
 		}
 
 		private void InitToolbar()
@@ -1837,6 +1842,26 @@ namespace Mesen.GUI.Debugger
 			using(frmExternalEditorConfig frm = new frmExternalEditorConfig()) {
 				frm.ShowDialog(mnuConfigureExternalEditor, this);
 			}
+		}
+
+		private void mnuOpenChrViewer_Click(object sender, EventArgs e)
+		{
+			DebugWindowManager.OpenPpuViewer(PpuViewerMode.ChrViewer);
+		}
+
+		private void mnuOpenNametableViewer_Click(object sender, EventArgs e)
+		{
+			DebugWindowManager.OpenPpuViewer(PpuViewerMode.NametableViewer);
+		}
+
+		private void mnuOpenSpriteViewer_Click(object sender, EventArgs e)
+		{
+			DebugWindowManager.OpenPpuViewer(PpuViewerMode.SpriteViewer);
+		}
+
+		private void mnuOpenPaletteViewer_Click(object sender, EventArgs e)
+		{
+			DebugWindowManager.OpenPpuViewer(PpuViewerMode.PaletteViewer);
 		}
 	}
 }
