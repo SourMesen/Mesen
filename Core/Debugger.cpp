@@ -461,7 +461,7 @@ void Debugger::ProcessAllBreakpoints(OperationInfo &operationInfo)
 					//Break on uninit memory read
 					AddressTypeInfo info;
 					GetAbsoluteAddressAndType(addr, &info);
-					if(_memoryAccessCounter->IsAddressUninitialized(info)) {
+					if(info.Address >= 0 && _memoryAccessCounter->IsAddressUninitialized(info)) {
 						Step(1);
 						SleepUntilResume(BreakSource::BreakOnUninitMemoryRead, 0, BreakpointType::ReadRam, addr, value);
 						return;
