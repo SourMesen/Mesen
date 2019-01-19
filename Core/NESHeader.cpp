@@ -203,9 +203,9 @@ GameInputType NESHeader::GetInputType()
 		}
 
 		MessageManager::Log("[iNes] Unknown controller type.");
-		return GameInputType::Default;
+		return GameInputType::Unspecified;
 	} else {
-		return GameInputType::Default;
+		return GameInputType::Unspecified;
 	}
 }
 

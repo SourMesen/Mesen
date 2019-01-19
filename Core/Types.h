@@ -373,8 +373,8 @@ enum class VsSystemType
 
 enum class GameInputType
 {
-	Default = 0,
-	FamicomControllers = 1,
+	Unspecified = 0,
+	StandardControllers = 1,
 	FourScore = 2,
 	FourPlayerAdapter = 3,
 	VsSystem = 4,
@@ -417,6 +417,8 @@ enum class GameInputType
 	SnesMouse = 0x29,
 	GenericMulticart = 0x2A, //not supported yet
 	SnesControllers = 0x2B,
+	RacermateBicycle = 0x2C, //not supported yet
+	UForce = 0x2D, //not supported yet
 	LastEntry
 };
 

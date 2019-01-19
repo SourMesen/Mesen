@@ -219,7 +219,7 @@ GameInputType GameDatabase::GetInputType(GameSystem system, string inputType)
 	} else if(inputType.compare("VsSwapAB") == 0) {
 		return GameInputType::VsSystemSwapAB;
 	} else {
-		return GameInputType::Default;
+		return GameInputType::StandardControllers;
 	}
 }
 
