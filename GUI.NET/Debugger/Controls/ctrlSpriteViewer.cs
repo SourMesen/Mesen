@@ -47,6 +47,8 @@ namespace Mesen.GUI.Debugger.Controls
 			picPreview.Image = new Bitmap(256, 240, PixelFormat.Format32bppArgb);
 			picSprites.Image = new Bitmap(256, 512, PixelFormat.Format32bppArgb);
 
+			chkDisplaySpriteOutlines.Checked = ConfigManager.Config.DebugInfo.SpriteViewerDisplaySpriteOutlines;
+
 			_originalSpriteHeight = picSprites.Height;
 			_originalTileHeight = picTile.Height;
 		}
@@ -204,6 +206,16 @@ namespace Mesen.GUI.Debugger.Controls
 					for(int i = 63; i >= 0; i--) {
 						if(i != _selectedSprite) {
 							DrawSprite(source, g, i);
+						}
+					}
+
+					if(ConfigManager.Config.DebugInfo.SpriteViewerDisplaySpriteOutlines) {
+						using(Pen pen = new Pen(Color.White, 1)) {
+							for(int i = 63; i >= 0; i--) {
+								int spriteY = _spriteRam[i * 4];
+								int spriteX = _spriteRam[i * 4 + 3];
+								g.DrawRectangle(pen, new Rectangle(spriteX, spriteY, 9, _largeSprites ? 17 : 9));
+							}
 						}
 					}
 
@@ -523,6 +535,13 @@ namespace Mesen.GUI.Debugger.Controls
 
 			int tileIndexOffset = (!_largeSprites && state.PPU.ControlFlags.SpritePatternAddr == 0x1000) ? 256 : 0;
 			DebugWindowManager.OpenMemoryViewer((tileIndex + tileIndexOffset) * 16, DebugMemoryType.PpuMemory);
+		}
+
+		private void chkDisplaySpriteOutlines_Click(object sender, EventArgs e)
+		{
+			ConfigManager.Config.DebugInfo.SpriteViewerDisplaySpriteOutlines = chkDisplaySpriteOutlines.Checked;
+			ConfigManager.ApplyChanges();
+			RefreshViewer();
 		}
 
 		private class SpriteInfo
