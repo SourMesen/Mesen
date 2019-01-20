@@ -1448,6 +1448,7 @@ namespace Mesen.GUI
 		public bool NMIFlag;
 
 		public UInt16 DebugPC;
+		public UInt16 PreviousDebugPC;
 	}
 
 	public struct ApuLengthCounterState

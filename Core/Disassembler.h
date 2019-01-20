@@ -45,7 +45,7 @@ public:
 	void InvalidateCache(AddressTypeInfo &info);
 
 	bool IsUnofficialOpCode(uint8_t opCode);
-	bool IsJump(uint8_t opCode);
+	static bool IsJump(uint8_t opCode);
 	bool IsUnconditionalJump(uint8_t opCode);
 
 	string GetCode(AddressTypeInfo &addressInfo, uint32_t endAddr, uint16_t memoryAddr, State& cpuState, shared_ptr<MemoryManager> memoryManager, shared_ptr<LabelManager> labelManager);

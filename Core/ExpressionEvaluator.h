@@ -64,7 +64,12 @@ enum EvalValues : int64_t
 	AbsoluteAddress = 20000000114,
 	IsWrite = 20000000115,
 	IsRead = 20000000116,
-	
+	PreviousOpPC = 20000000117,
+	Sprite0Hit = 20000000118,
+	SpriteOverflow = 20000000119,
+	VerticalBlank = 20000000120,
+	Branched = 20000000121,
+
 	FirstLabelIndex = 20000002000,
 };
 

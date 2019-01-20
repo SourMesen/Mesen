@@ -65,6 +65,7 @@ struct State
 
 	//Used by debugger
 	uint16_t DebugPC = 0;
+	uint16_t PreviousDebugPC = 0;
 };
 
 enum class PrgMemoryType

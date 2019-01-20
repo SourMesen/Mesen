@@ -5,6 +5,7 @@
 #include "Console.h"
 #include "Debugger.h"
 #include "MemoryDumper.h"
+#include "Disassembler.h"
 #include "LabelManager.h"
 #include "../Utilities/HexUtilities.h"
 
@@ -82,6 +83,8 @@ bool ExpressionEvaluator::CheckSpecialTokens(string expression, size_t &pos, str
 		output += std::to_string((int64_t)EvalValues::RegPC);
 	} else if(token == "oppc") {
 		output += std::to_string((int64_t)EvalValues::RegOpPC);
+	} else if(token == "previousoppc") {
+		output += std::to_string((int64_t)EvalValues::PreviousOpPC);
 	} else if(token == "frame") {
 		output += std::to_string((int64_t)EvalValues::PpuFrameCount);
 	} else if(token == "cycle") {
@@ -92,6 +95,12 @@ bool ExpressionEvaluator::CheckSpecialTokens(string expression, size_t &pos, str
 		output += std::to_string((int64_t)EvalValues::Irq);
 	} else if(token == "nmi") {
 		output += std::to_string((int64_t)EvalValues::Nmi);
+	} else if(token == "verticalblank") {
+		output += std::to_string((int64_t)EvalValues::VerticalBlank);
+	} else if(token == "sprite0hit") {
+		output += std::to_string((int64_t)EvalValues::Sprite0Hit);
+	} else if(token == "spriteoverflow") {
+		output += std::to_string((int64_t)EvalValues::SpriteOverflow);
 	} else if(token == "value") {
 		output += std::to_string((int64_t)EvalValues::Value);
 	} else if(token == "address") {
@@ -102,6 +111,8 @@ bool ExpressionEvaluator::CheckSpecialTokens(string expression, size_t &pos, str
 		output += std::to_string((int64_t)EvalValues::IsWrite);
 	} else if(token == "isread") {
 		output += std::to_string((int64_t)EvalValues::IsRead);
+	} else if(token == "branched") {
+		output += std::to_string((int64_t)EvalValues::Branched);
 	} else {
 		string originalExpression = expression.substr(initialPos, pos - initialPos);
 		bool validLabel = _debugger->GetLabelManager()->ContainsLabel(originalExpression);
@@ -323,13 +334,18 @@ int32_t ExpressionEvaluator::Evaluate(ExpressionData &data, DebugState &state, E
 					case EvalValues::PpuFrameCount: token = state.PPU.FrameCount; break;
 					case EvalValues::PpuCycle: token = state.PPU.Cycle; break;
 					case EvalValues::PpuScanline: token = state.PPU.Scanline; break;
-					case EvalValues::Nmi: token = state.CPU.NMIFlag; break;
-					case EvalValues::Irq: token = state.CPU.IRQFlag; break;
+					case EvalValues::Nmi: token = state.CPU.NMIFlag; resultType = EvalResultType::Boolean; break;
+					case EvalValues::Irq: token = state.CPU.IRQFlag; resultType = EvalResultType::Boolean; break;
 					case EvalValues::Value: token = operationInfo.Value; break;
 					case EvalValues::Address: token = operationInfo.Address; break;
 					case EvalValues::AbsoluteAddress: token = _debugger->GetAbsoluteAddress(operationInfo.Address); break;
 					case EvalValues::IsWrite: token = operationInfo.OperationType == MemoryOperationType::Write || operationInfo.OperationType == MemoryOperationType::DummyWrite; break;
 					case EvalValues::IsRead: token = operationInfo.OperationType == MemoryOperationType::Read || operationInfo.OperationType == MemoryOperationType::DummyRead; break;
+					case EvalValues::PreviousOpPC: token = state.CPU.PreviousDebugPC; break;
+					case EvalValues::Sprite0Hit: token = state.PPU.StatusFlags.Sprite0Hit; resultType = EvalResultType::Boolean; break;
+					case EvalValues::SpriteOverflow: token = state.PPU.StatusFlags.SpriteOverflow; resultType = EvalResultType::Boolean; break;
+					case EvalValues::VerticalBlank: token = state.PPU.StatusFlags.VerticalBlank; resultType = EvalResultType::Boolean; break;
+					case EvalValues::Branched: token = Disassembler::IsJump(_debugger->GetMemoryDumper()->GetMemoryValue(DebugMemoryType::CpuMemory, state.CPU.PreviousDebugPC, true)); resultType = EvalResultType::Boolean; break;
 				}
 			}
 		} else if(token >= EvalOperators::Multiplication) {

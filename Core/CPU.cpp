@@ -90,6 +90,8 @@ void CPU::Reset(bool softReset, NesModel model)
 
 	//Use _memoryManager->Read() directly to prevent clocking the PPU/APU when setting PC at reset
 	_state.PC = _memoryManager->Read(CPU::ResetVector) | _memoryManager->Read(CPU::ResetVector+1) << 8;
+	_state.DebugPC = _state.PC;
+	_state.PreviousDebugPC = _state.PC;
 
 	if(softReset) {
 		SetFlags(PSFlags::Interrupt);
