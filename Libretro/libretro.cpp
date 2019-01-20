@@ -840,7 +840,7 @@ extern "C" {
 		if(romInfo.IsInDatabase || romInfo.IsNes20Header) {
 			_console->GetSettings()->InitializeInputDevices(romInfo.InputType, romInfo.System, true);
 		} else {
-			_console->GetSettings()->InitializeInputDevices(GameInputType::Default, GameSystem::NesNtsc, true);
+			_console->GetSettings()->InitializeInputDevices(GameInputType::StandardControllers, GameSystem::NesNtsc, true);
 		}
 
 		for(int port = 0; port < 5; port++) {
