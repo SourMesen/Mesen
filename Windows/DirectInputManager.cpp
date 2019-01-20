@@ -13,34 +13,36 @@
 
 LPDIRECTINPUT8 DirectInputManager::_directInput = nullptr;
 vector<DirectInputData> DirectInputManager::_joysticks;
+vector<DirectInputData> DirectInputManager::_joysticksToAdd;
+std::vector<GUID> DirectInputManager::_processedGuids;
 std::vector<GUID> DirectInputManager::_xinputDeviceGuids;
-std::vector<GUID> DirectInputManager::_directInputDeviceGuids;
-bool DirectInputManager::_needToUpdate = false;
 HWND DirectInputManager::_hWnd = nullptr;
 
-bool DirectInputManager::Initialize()
+void DirectInputManager::Initialize()
 {
 	HRESULT hr;
 
 	// Register with the DirectInput subsystem and get a pointer to a IDirectInput interface we can use.
 	// Create a DInput object
 	if(FAILED(hr = DirectInput8Create(GetModuleHandle(nullptr), DIRECTINPUT_VERSION, IID_IDirectInput8, (VOID**)&_directInput, nullptr))) {
-		return false;
+		MessageManager::Log("[DInput] DirectInput8Create failed: " + std::to_string(hr));
+		return;
 	}
 
 	IDirectInputJoyConfig8* pJoyConfig = nullptr;
 	if(FAILED(hr = _directInput->QueryInterface(IID_IDirectInputJoyConfig8, (void**)&pJoyConfig))) {
-		return false;
+		MessageManager::Log("[DInput] QueryInterface failed: " + std::to_string(hr));
+		return;
 	}
 
 	if(pJoyConfig) {
 		pJoyConfig->Release();
 	}
 
-	return UpdateDeviceList();
+	UpdateDeviceList();
 }
 
-bool DirectInputManager::ProcessDevice(const DIDEVICEINSTANCE* pdidInstance, bool checkOnly)
+bool DirectInputManager::ProcessDevice(const DIDEVICEINSTANCE* pdidInstance)
 {
 	const GUID* deviceGuid = &pdidInstance->guidInstance;
 
@@ -51,16 +53,14 @@ bool DirectInputManager::ProcessDevice(const DIDEVICEINSTANCE* pdidInstance, boo
 			memcmp(guid.Data4, deviceGuid->Data4, sizeof(guid.Data4)) == 0;
 	};
 
-	bool knownXInputDevice = std::find_if(_xinputDeviceGuids.begin(), _xinputDeviceGuids.end(), comp) != _xinputDeviceGuids.end();
-	bool knownDirectInputDevice = std::find_if(_directInputDeviceGuids.begin(), _directInputDeviceGuids.end(), comp) != _directInputDeviceGuids.end();
-	if(knownXInputDevice || knownDirectInputDevice) {
+	bool wasProcessedBefore = std::find_if(_processedGuids.begin(), _processedGuids.end(), comp) != _processedGuids.end();
+	if(wasProcessedBefore) {
 		return false;
 	} else {
 		bool isXInput = IsXInputDevice(&pdidInstance->guidProduct);
-		if(!checkOnly) {
-			if(isXInput) {
-				_xinputDeviceGuids.push_back(*deviceGuid);
-			}
+		if(isXInput) {
+			_xinputDeviceGuids.push_back(*deviceGuid);
+			_processedGuids.push_back(*deviceGuid);
 		}
 		return !isXInput;
 	}
@@ -188,51 +188,36 @@ LCleanup:
 	return bIsXinputDevice;
 }
 
-bool DirectInputManager::NeedToUpdate()
+void DirectInputManager::UpdateDeviceList()
 {
-	HRESULT hr;
-	_needToUpdate = false;
-	// Enumerate devices
-	if(FAILED(hr = _directInput->EnumDevices(DI8DEVCLASS_GAMECTRL, NeedToUpdateCallback, nullptr, DIEDFL_ALLDEVICES))) {
-		return false;
+	if(_needToUpdate) {
+		//An update is already pending, skip
+		return;
 	}
-	return _needToUpdate;
-}
 
-int DirectInputManager::NeedToUpdateCallback(const DIDEVICEINSTANCE* pdidInstance, void* pContext)
-{
-	if(ProcessDevice(pdidInstance, true)) {
+	HRESULT hr;
+
+	// Enumerate devices
+	if(SUCCEEDED(hr = _directInput->EnumDevices(DI8DEVCLASS_GAMECTRL, EnumJoysticksCallback, nullptr, DIEDFL_ALLDEVICES))) {
+		if(!_joysticksToAdd.empty()) {
+			//Sleeping apparently lets us read accurate "default" values, otherwise a PS4 controller returns all 0s, despite not doing so normally
+			for(DirectInputData &joystick : _joysticksToAdd) {
+				UpdateInputState(joystick);
+			}
+			std::this_thread::sleep_for(std::chrono::duration<int, std::milli>(100));
+
+			for(DirectInputData &joystick : _joysticksToAdd) {
+				UpdateInputState(joystick);
+				joystick.defaultState = joystick.state;
+			}
+			_needToUpdate = true;
+		}
+	}
+
+	if(_requestUpdate) {
+		_requestUpdate = false;
 		_needToUpdate = true;
-		return DIENUM_STOP;
 	}
-
-	return DIENUM_CONTINUE;
-}
-
-
-bool DirectInputManager::UpdateDeviceList()
-{
-	HRESULT hr;
-
-	// Enumerate devices
-	if(FAILED(hr = _directInput->EnumDevices(DI8DEVCLASS_GAMECTRL, EnumJoysticksCallback, nullptr, DIEDFL_ALLDEVICES))) {
-		return false;
-	}
-
-	// Make sure we got a joystick
-	if(_joysticks.empty()) {
-		return false;
-	}
-
-	//Sleeping apparently lets us read accurate "default" values, otherwise a PS4 controller returns all 0s, despite not doing so normally
-	RefreshState();
-	std::this_thread::sleep_for(std::chrono::duration<int, std::milli>(100));
-	RefreshState();
-	for(DirectInputData &joystick : _joysticks) {
-		joystick.defaultState = joystick.state;
-	}
-
-	return true;
 }
 
 //-----------------------------------------------------------------------------
@@ -244,7 +229,9 @@ int DirectInputManager::EnumJoysticksCallback(const DIDEVICEINSTANCE* pdidInstan
 {
 	HRESULT hr;
 
-	if(ProcessDevice(pdidInstance, false)) {
+	if(ProcessDevice(pdidInstance)) {
+		_processedGuids.push_back(pdidInstance->guidInstance);
+
 		// Obtain an interface to the enumerated joystick.
 		LPDIRECTINPUTDEVICE8 pJoystick = nullptr;
 		hr = _directInput->CreateDevice(pdidInstance->guidInstance, &pJoystick, nullptr);
@@ -263,11 +250,18 @@ int DirectInputManager::EnumJoysticksCallback(const DIDEVICEINSTANCE* pdidInstan
 				if(SUCCEEDED(hr = data.joystick->SetCooperativeLevel(_hWnd, DISCL_NONEXCLUSIVE | DISCL_BACKGROUND))) {
 					// Enumerate the joystick objects. The callback function enabled user interface elements for objects that are found, and sets the min/max values property for discovered axes.
 					if(SUCCEEDED(hr = data.joystick->EnumObjects(EnumObjectsCallback, data.joystick, DIDFT_ALL))) {
-						_directInputDeviceGuids.push_back(pdidInstance->guidInstance);
-						_joysticks.push_back(data);
+						_joysticksToAdd.push_back(data);
+					} else {
+						MessageManager::Log("[DInput] Failed to enumerate objects: " + std::to_string(hr));
 					}
+				} else {
+					MessageManager::Log("[DInput] Failed to set cooperative level: " + std::to_string(hr));
 				}
+			} else {
+				MessageManager::Log("[DInput] Failed to set data format: " + std::to_string(hr));
 			}
+		} else {
+			MessageManager::Log("[DInput] Failed to create directinput device" + std::to_string(hr));
 		}
 	}
 	return DIENUM_CONTINUE;
@@ -282,9 +276,6 @@ int DirectInputManager::EnumJoysticksCallback(const DIDEVICEINSTANCE* pdidInstan
 int DirectInputManager::EnumObjectsCallback(const DIDEVICEOBJECTINSTANCE* pdidoi, void* pContext)
 {
 	LPDIRECTINPUTDEVICE8 joystick = (LPDIRECTINPUTDEVICE8)pContext;
-
-	static int nSliderCount = 0;  // Number of returned slider controls
-	static int nPOVCount = 0;     // Number of returned POV controls
 
 	// For axes that are returned, set the DIPROP_RANGE property for the enumerated axis in order to scale min/max values.
 	if(pdidoi->dwType & DIDFT_AXIS) {
@@ -308,6 +299,41 @@ int DirectInputManager::EnumObjectsCallback(const DIDEVICEOBJECTINSTANCE* pdidoi
 
 void DirectInputManager::RefreshState()
 {
+	if(_needToUpdate) {
+		vector<DirectInputData> joysticks;
+		//Keep exisiting joysticks, if they still work, otherwise remove them from the list
+		for(DirectInputData &joystick : _joysticks) {
+			if(joystick.stateValid) {
+				joysticks.push_back(joystick);
+			} else {
+				MessageManager::Log("[DInput] Device lost, trying to reacquire...");
+				
+				//Release the joystick, we'll try to initialize it again if it still exists
+				const GUID* deviceGuid = &joystick.instanceInfo.guidInstance;
+
+				auto comp = [=](GUID guid) {
+					return guid.Data1 == deviceGuid->Data1 &&
+						guid.Data2 == deviceGuid->Data2 &&
+						guid.Data3 == deviceGuid->Data3 &&
+						memcmp(guid.Data4, deviceGuid->Data4, sizeof(guid.Data4)) == 0;
+				};
+				_processedGuids.erase(std::remove_if(_processedGuids.begin(), _processedGuids.end(), comp), _processedGuids.end());				
+
+				joystick.joystick->Unacquire();
+				joystick.joystick->Release();
+			}
+		}
+
+		//Add the newly-found joysticks
+		for(DirectInputData &joystick : _joysticksToAdd) {
+			joysticks.push_back(joystick);
+		}
+
+		_joysticks = joysticks;
+		_joysticksToAdd.clear();
+		_needToUpdate = false;
+	}
+
 	for(DirectInputData &joystick : _joysticks) {
 		UpdateInputState(joystick);
 	}
@@ -373,13 +399,16 @@ void DirectInputManager::UpdateInputState(DirectInputData &data)
 		// switching, so just try again later 
 		if(FAILED(hr)) {
 			data.stateValid = false;
+			_requestUpdate = true;
 			return;
 		}
 	}
 
 	// Get the input's device state
 	if(FAILED(hr = data.joystick->GetDeviceState(sizeof(DIJOYSTATE2), &newState))) {
+		MessageManager::Log("[DInput] Failed to get device state: " + std::to_string(hr));
 		data.stateValid = false;
+		_requestUpdate = true;
 		return; // The device should have been acquired during the Poll()
 	}
 
@@ -400,7 +429,12 @@ DirectInputManager::~DirectInputManager()
 		data.joystick->Unacquire();
 		data.joystick->Release();
 	}
+
+	_needToUpdate = false;
 	_joysticks.clear();
+	_joysticksToAdd.clear();
+	_processedGuids.clear();
+	_xinputDeviceGuids.clear();
 
 	if(_directInput) {
 		_directInput->Release();

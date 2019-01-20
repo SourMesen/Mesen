@@ -260,11 +260,7 @@ void WindowsKeyManager::StartUpdateDeviceThread()
 			if(_xInput->NeedToUpdate()) {
 				_xInput->UpdateDeviceList();
 			}
-			if(_directInput->NeedToUpdate()) {
-				_console->Pause();
-				_directInput->UpdateDeviceList();
-				_console->Resume();
-			}
+			_directInput->UpdateDeviceList();
 
 			_stopSignal.Wait(5000);
 		}

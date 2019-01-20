@@ -16,17 +16,19 @@ class DirectInputManager
 {
 private:
 	static HWND _hWnd;
-	static bool _needToUpdate;
+	bool _needToUpdate = false;
+	bool _requestUpdate = false;
 	static LPDIRECTINPUT8 _directInput;
 	static vector<DirectInputData> _joysticks;
-	static std::vector<GUID> _xinputDeviceGuids;
-	static std::vector<GUID> _directInputDeviceGuids;
+	static vector<DirectInputData> _joysticksToAdd;
 
-	bool Initialize();
+	static std::vector<GUID> _processedGuids;
+	static std::vector<GUID> _xinputDeviceGuids;
+
+	void Initialize();
 	void UpdateInputState(DirectInputData& joystick);
-	static bool ProcessDevice(const DIDEVICEINSTANCE* pdidInstance, bool checkOnly);
+	static bool ProcessDevice(const DIDEVICEINSTANCE* pdidInstance);
 	static bool IsXInputDevice(const GUID* pGuidProductFromDirectInput);
-	static int __stdcall NeedToUpdateCallback(const DIDEVICEINSTANCE* pdidInstance, void* pContext);
 	static int __stdcall EnumJoysticksCallback(const DIDEVICEINSTANCE* pdidInstance, void* pContext);
 	static int __stdcall EnumObjectsCallback(const DIDEVICEOBJECTINSTANCE* pdidoi, void* pContext);
 
@@ -35,8 +37,7 @@ public:
 	~DirectInputManager();
 
 	void RefreshState();
-	bool NeedToUpdate();
-	bool UpdateDeviceList();
+	void UpdateDeviceList();
 	int GetJoystickCount();
 	bool IsPressed(int port, int button);
 };
