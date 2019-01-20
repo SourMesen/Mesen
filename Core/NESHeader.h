@@ -48,5 +48,4 @@ struct NESHeader
 	GameInputType GetInputType();
 	VsSystemType GetVsSystemType();
 	PpuModel GetVsSystemPpuModel();
-	void SanitizeHeader(size_t romLength);
 };
