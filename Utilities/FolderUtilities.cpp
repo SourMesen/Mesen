@@ -160,13 +160,20 @@ vector<string> FolderUtilities::GetFilesInFolder(string rootFolder, std::unorder
 	}
 
 	if(recursive) {
-		for(string subFolder : GetFolders(rootFolder)) {
-			folders.push_back(subFolder);
+		for(fs::recursive_directory_iterator i(fs::u8path(rootFolder)), end; i != end; i++) {
+			if(i.depth() > 1) {
+				//Prevent excessive recursion
+				i.disable_recursion_pending();
+			} else {
+				string extension = i->path().extension().u8string();
+				std::transform(extension.begin(), extension.end(), extension.begin(), ::tolower);
+				if(extensions.find(extension) != extensions.end()) {
+					files.push_back(i->path().u8string());
+				}
+			}
 		}
-	}
-
-	for(string folder : folders) {
-		for(fs::directory_iterator i(fs::u8path(folder.c_str())), end; i != end; i++) {
+	} else {
+		for(fs::directory_iterator i(fs::u8path(rootFolder)), end; i != end; i++) {
 			string extension = i->path().extension().u8string();
 			std::transform(extension.begin(), extension.end(), extension.begin(), ::tolower);
 			if(extensions.find(extension) != extensions.end()) {

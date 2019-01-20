@@ -223,13 +223,16 @@ string Console::FindMatchingRom(string romName, HashInfo hashInfo)
 		romFiles.insert(romFiles.end(), files.begin(), files.end());
 	}
 
-	string match = RomLoader::FindMatchingRom(romFiles, romName, hashInfo, true);
-	if(!match.empty()) {
-		return match;
+	if(!romName.empty()) {
+		//Perform quick search based on file name
+		string match = RomLoader::FindMatchingRom(romFiles, romName, hashInfo, true);
+		if(!match.empty()) {
+			return match;
+		}
 	}
 
 	//Perform slow CRC32 search for ROM
-	match = RomLoader::FindMatchingRom(romFiles, romName, hashInfo, false);
+	string match = RomLoader::FindMatchingRom(romFiles, romName, hashInfo, false);
 	if(!match.empty()) {
 		return match;
 	}
