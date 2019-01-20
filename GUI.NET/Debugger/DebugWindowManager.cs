@@ -42,6 +42,7 @@ namespace Mesen.GUI.Debugger
 					case DebugWindow.ApuViewer: frm = new frmApuViewer(); frm.Icon = Properties.Resources.Audio; break;
 					case DebugWindow.EventViewer: frm = new frmEventViewer(); frm.Icon = Properties.Resources.NesEventViewer; break;
 					case DebugWindow.TextHooker: frm = new frmTextHooker(); frm.Icon = Properties.Resources.Font; break;
+					case DebugWindow.Profiler: frm = new frmProfiler(); frm.Icon = Properties.Resources.Speed; break;
 				}
 				_openedWindows.Add(frm);
 				frm.FormClosed += Debugger_FormClosed;
@@ -145,6 +146,7 @@ namespace Mesen.GUI.Debugger
 				case DebugWindow.Debugger: return _openedWindows.ToList().Find((form) => form.GetType() == typeof(frmDebugger));
 				case DebugWindow.ApuViewer: return _openedWindows.ToList().Find((form) => form.GetType() == typeof(frmApuViewer));
 				case DebugWindow.TextHooker: return _openedWindows.ToList().Find((form) => form.GetType() == typeof(frmTextHooker));
+				case DebugWindow.Profiler: return _openedWindows.ToList().Find((form) => form.GetType() == typeof(frmProfiler));
 			}
 
 			return null;
@@ -181,5 +183,6 @@ namespace Mesen.GUI.Debugger
 		ApuViewer,
 		EventViewer,
 		TextHooker,
+		Profiler,
 	}
 }

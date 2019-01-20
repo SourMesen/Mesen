@@ -403,6 +403,11 @@ namespace Mesen.GUI.Forms
 			DebugWindowManager.OpenDebugWindow(DebugWindow.TextHooker);
 		}
 
+		private void mnuProfiler_Click(object sender, EventArgs e)
+		{
+			DebugWindowManager.OpenDebugWindow(DebugWindow.Profiler);
+		}
+
 		private void mnuOpenNametableViewer_Click(object sender, EventArgs e)
 		{
 			DebugWindowManager.OpenPpuViewer(PpuViewerMode.NametableViewer);

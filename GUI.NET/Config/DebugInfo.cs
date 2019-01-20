@@ -284,6 +284,9 @@ namespace Mesen.GUI.Config
 		public Point MemoryViewerLocation;
 		public Point? ApuViewerLocation;
 
+		public Size ProfilerSize = new Size(0, 0);
+		public Point ProfilerLocation;
+
 		public Point WindowLocation;
 		public int WindowWidth = -1;
 		public int WindowHeight = -1;

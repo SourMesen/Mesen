@@ -191,6 +191,7 @@ namespace Mesen.GUI.Debugger
 			this.mnuEventViewer = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuMemoryViewer = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuPpuViewer = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuProfiler = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuScriptWindow = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuTextHooker = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuTraceLogger = new System.Windows.Forms.ToolStripMenuItem();
@@ -1670,6 +1671,7 @@ namespace Mesen.GUI.Debugger
             this.mnuAssembler,
             this.mnuEventViewer,
             this.mnuMemoryViewer,
+            this.mnuProfiler,
             this.mnuPpuViewer,
             this.mnuScriptWindow,
             this.mnuTextHooker,
@@ -1723,6 +1725,14 @@ namespace Mesen.GUI.Debugger
 			this.mnuPpuViewer.Size = new System.Drawing.Size(194, 22);
 			this.mnuPpuViewer.Text = "PPU Viewer";
 			this.mnuPpuViewer.Click += new System.EventHandler(this.mnuNametableViewer_Click);
+			// 
+			// mnuProfiler
+			// 
+			this.mnuProfiler.Image = global::Mesen.GUI.Properties.Resources.Speed;
+			this.mnuProfiler.Name = "mnuProfiler";
+			this.mnuProfiler.Size = new System.Drawing.Size(194, 22);
+			this.mnuProfiler.Text = "Performance Profiler";
+			this.mnuProfiler.Click += new System.EventHandler(this.mnuProfiler_Click);
 			// 
 			// mnuScriptWindow
 			// 
@@ -2227,5 +2237,6 @@ namespace Mesen.GUI.Debugger
 		private System.Windows.Forms.ToolStripMenuItem mnuOpenSpriteViewer;
 		private System.Windows.Forms.ToolStripMenuItem mnuOpenPaletteViewer;
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem30;
+		private System.Windows.Forms.ToolStripMenuItem mnuProfiler;
 	}
 }

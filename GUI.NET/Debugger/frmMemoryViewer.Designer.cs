@@ -96,6 +96,7 @@
 			this.mnuIgnoreRedundantWrites = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuEnablePerByteNavigation = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuByteEditingMode = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuHighlightCurrentRowColumn = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuGoToAll = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuGoTo = new System.Windows.Forms.ToolStripMenuItem();
@@ -108,16 +109,12 @@
 			this.panel1 = new System.Windows.Forms.Panel();
 			this.tpgAccessCounters = new System.Windows.Forms.TabPage();
 			this.ctrlMemoryAccessCounters = new Mesen.GUI.Debugger.Controls.ctrlMemoryAccessCounters();
-			this.tpgProfiler = new System.Windows.Forms.TabPage();
-			this.ctrlProfiler = new Mesen.GUI.Debugger.Controls.ctrlProfiler();
-			this.mnuHighlightCurrentRowColumn = new System.Windows.Forms.ToolStripMenuItem();
 			this.flowLayoutPanel1.SuspendLayout();
 			this.menuStrip1.SuspendLayout();
 			this.tabMain.SuspendLayout();
 			this.tpgMemoryViewer.SuspendLayout();
 			this.panel1.SuspendLayout();
 			this.tpgAccessCounters.SuspendLayout();
-			this.tpgProfiler.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// ctrlHexViewer
@@ -667,6 +664,14 @@
 			this.mnuByteEditingMode.Text = "Use per-byte editing mode";
 			this.mnuByteEditingMode.CheckedChanged += new System.EventHandler(this.mnuByteEditingMode_CheckedChanged);
 			// 
+			// mnuHighlightCurrentRowColumn
+			// 
+			this.mnuHighlightCurrentRowColumn.CheckOnClick = true;
+			this.mnuHighlightCurrentRowColumn.Name = "mnuHighlightCurrentRowColumn";
+			this.mnuHighlightCurrentRowColumn.Size = new System.Drawing.Size(256, 22);
+			this.mnuHighlightCurrentRowColumn.Text = "Highlight current row/column";
+			this.mnuHighlightCurrentRowColumn.CheckedChanged += new System.EventHandler(this.mnuHighlightCurrentRowColumn_CheckedChanged);
+			// 
 			// toolStripMenuItem1
 			// 
 			this.toolStripMenuItem1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -727,7 +732,6 @@
 			// 
 			this.tabMain.Controls.Add(this.tpgMemoryViewer);
 			this.tabMain.Controls.Add(this.tpgAccessCounters);
-			this.tabMain.Controls.Add(this.tpgProfiler);
 			this.tabMain.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tabMain.Location = new System.Drawing.Point(0, 24);
 			this.tabMain.Name = "tabMain";
@@ -780,34 +784,6 @@
 			this.ctrlMemoryAccessCounters.TabIndex = 0;
 			this.ctrlMemoryAccessCounters.TextZoom = 100;
 			// 
-			// tpgProfiler
-			// 
-			this.tpgProfiler.Controls.Add(this.ctrlProfiler);
-			this.tpgProfiler.Location = new System.Drawing.Point(4, 22);
-			this.tpgProfiler.Margin = new System.Windows.Forms.Padding(0);
-			this.tpgProfiler.Name = "tpgProfiler";
-			this.tpgProfiler.Size = new System.Drawing.Size(606, 343);
-			this.tpgProfiler.TabIndex = 2;
-			this.tpgProfiler.Text = "Profiler";
-			this.tpgProfiler.UseVisualStyleBackColor = true;
-			// 
-			// ctrlProfiler
-			// 
-			this.ctrlProfiler.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.ctrlProfiler.Location = new System.Drawing.Point(0, 0);
-			this.ctrlProfiler.Margin = new System.Windows.Forms.Padding(0);
-			this.ctrlProfiler.Name = "ctrlProfiler";
-			this.ctrlProfiler.Size = new System.Drawing.Size(606, 343);
-			this.ctrlProfiler.TabIndex = 0;
-			// 
-			// mnuHighlightCurrentRowColumn
-			// 
-			this.mnuHighlightCurrentRowColumn.CheckOnClick = true;
-			this.mnuHighlightCurrentRowColumn.Name = "mnuHighlightCurrentRowColumn";
-			this.mnuHighlightCurrentRowColumn.Size = new System.Drawing.Size(256, 22);
-			this.mnuHighlightCurrentRowColumn.Text = "Highlight current row/column";
-			this.mnuHighlightCurrentRowColumn.CheckedChanged += new System.EventHandler(this.mnuHighlightCurrentRowColumn_CheckedChanged);
-			// 
 			// frmMemoryViewer
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -828,7 +804,6 @@
 			this.panel1.ResumeLayout(false);
 			this.panel1.PerformLayout();
 			this.tpgAccessCounters.ResumeLayout(false);
-			this.tpgProfiler.ResumeLayout(false);
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -863,8 +838,6 @@
 		private System.Windows.Forms.TabPage tpgMemoryViewer;
 		private System.Windows.Forms.TabPage tpgAccessCounters;
 		private Controls.ctrlMemoryAccessCounters ctrlMemoryAccessCounters;
-		private System.Windows.Forms.TabPage tpgProfiler;
-		private Controls.ctrlProfiler ctrlProfiler;
 		private System.Windows.Forms.ToolStripMenuItem mnuLoadTblFile;
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem4;
 		private System.Windows.Forms.ToolStripMenuItem mnuShowCharacters;

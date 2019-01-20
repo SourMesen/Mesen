@@ -827,6 +827,7 @@ namespace Mesen.GUI.Forms
 			mnuScriptWindow.InitShortcut(this, nameof(DebuggerShortcutsConfig.OpenScriptWindow));
 			mnuTraceLogger.InitShortcut(this, nameof(DebuggerShortcutsConfig.OpenTraceLogger));
 			mnuTextHooker.InitShortcut(this, nameof(DebuggerShortcutsConfig.OpenTextHooker));
+			mnuProfiler.InitShortcut(this, nameof(DebuggerShortcutsConfig.OpenProfiler));
 
 			mnuOpenNametableViewer.InitShortcut(this, nameof(DebuggerShortcutsConfig.OpenNametableViewer));
 			mnuOpenChrViewer.InitShortcut(this, nameof(DebuggerShortcutsConfig.OpenChrViewer));
@@ -1168,6 +1169,7 @@ namespace Mesen.GUI.Forms
 					mnuScriptWindow.Enabled = running;
 					mnuTextHooker.Enabled = running;
 					mnuTraceLogger.Enabled = running;
+					mnuProfiler.Enabled = running;
 
 					mnuPpuViewerCompact.Enabled = running;
 					mnuOpenNametableViewer.Enabled = running;

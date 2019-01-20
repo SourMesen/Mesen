@@ -280,10 +280,6 @@ namespace Mesen.GUI.Debugger
 						case RefreshSpeed.High: refreshDelay = 16; break;
 					}
 
-					if(_selectedTab == tpgProfiler) {
-						refreshDelay *= 10;
-					}
-
 					DateTime now = DateTime.Now;
 					if(!_updating && ConfigManager.Config.DebugInfo.RamAutoRefresh && (now - _lastUpdate).Milliseconds >= refreshDelay) {
 						_lastUpdate = now;
@@ -381,8 +377,6 @@ namespace Mesen.GUI.Debugger
 			} else if(this.tabMain.SelectedTab == this.tpgMemoryViewer) {
 				this.UpdateByteColorProvider();
 				this.ctrlHexViewer.RefreshData(_memoryType);
-			} else if(this.tabMain.SelectedTab == this.tpgProfiler) {
-				this.ctrlProfiler.RefreshData();
 			}
 		}
 

@@ -673,6 +673,12 @@
     <Compile Include="Debugger\frmGoToAll.Designer.cs">
       <DependentUpon>frmGoToAll.cs</DependentUpon>
     </Compile>
+    <Compile Include="Debugger\frmProfiler.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Debugger\frmProfiler.Designer.cs">
+      <DependentUpon>frmProfiler.cs</DependentUpon>
+    </Compile>
     <Compile Include="Debugger\frmSetScriptTimeout.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -1373,6 +1379,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Debugger\frmGoToAll.resx">
       <DependentUpon>frmGoToAll.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Debugger\frmProfiler.resx">
+      <DependentUpon>frmProfiler.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Debugger\frmSetScriptTimeout.resx">
       <DependentUpon>frmSetScriptTimeout.cs</DependentUpon>

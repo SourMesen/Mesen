@@ -30,12 +30,12 @@
 			this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
 			this.btnReset = new System.Windows.Forms.Button();
 			this.lstFunctions = new Mesen.GUI.Controls.DoubleBufferedListView();
-			this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+			this.colFunction = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
 			this.columnHeader4 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
 			this.columnHeader3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
 			this.columnHeader5 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
 			this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-			this.columnHeader6 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+			this.colExclusiveTimePercent = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
 			this.tableLayoutPanel1.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -54,13 +54,13 @@
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this.tableLayoutPanel1.Size = new System.Drawing.Size(514, 307);
+			this.tableLayoutPanel1.Size = new System.Drawing.Size(673, 307);
 			this.tableLayoutPanel1.TabIndex = 3;
 			// 
 			// btnReset
 			// 
 			this.btnReset.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.btnReset.Location = new System.Drawing.Point(436, 281);
+			this.btnReset.Location = new System.Drawing.Point(595, 281);
 			this.btnReset.Name = "btnReset";
 			this.btnReset.Size = new System.Drawing.Size(75, 23);
 			this.btnReset.TabIndex = 5;
@@ -71,12 +71,12 @@
 			// lstFunctions
 			// 
 			this.lstFunctions.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.columnHeader1,
+            this.colFunction,
             this.columnHeader4,
             this.columnHeader3,
             this.columnHeader5,
             this.columnHeader2,
-            this.columnHeader6});
+            this.colExclusiveTimePercent});
 			this.tableLayoutPanel1.SetColumnSpan(this.lstFunctions, 2);
 			this.lstFunctions.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.lstFunctions.FullRowSelect = true;
@@ -85,16 +85,17 @@
 			this.lstFunctions.Location = new System.Drawing.Point(0, 0);
 			this.lstFunctions.Margin = new System.Windows.Forms.Padding(0);
 			this.lstFunctions.Name = "lstFunctions";
-			this.lstFunctions.Size = new System.Drawing.Size(514, 278);
+			this.lstFunctions.Size = new System.Drawing.Size(673, 278);
 			this.lstFunctions.TabIndex = 7;
 			this.lstFunctions.UseCompatibleStateImageBehavior = false;
 			this.lstFunctions.View = System.Windows.Forms.View.Details;
 			this.lstFunctions.ColumnClick += new System.Windows.Forms.ColumnClickEventHandler(this.lstFunctions_ColumnClick);
 			this.lstFunctions.DoubleClick += new System.EventHandler(this.lstFunctions_DoubleClick);
 			// 
-			// columnHeader1
+			// colFunction
 			// 
-			this.columnHeader1.Text = "Function (Entry Addr)";
+			this.colFunction.Text = "Function (Entry Addr)";
+			this.colFunction.Width = 120;
 			// 
 			// columnHeader4
 			// 
@@ -103,19 +104,22 @@
 			// columnHeader3
 			// 
 			this.columnHeader3.Text = "Inclusive Time (Cyc)";
-			this.columnHeader3.Width = 137;
+			this.columnHeader3.Width = 79;
 			// 
 			// columnHeader5
 			// 
 			this.columnHeader5.Text = "Inclusive Time (%)";
+			this.columnHeader5.Width = 70;
 			// 
 			// columnHeader2
 			// 
 			this.columnHeader2.Text = "Exclusive Time (Cyc)";
+			this.columnHeader2.Width = 72;
 			// 
-			// columnHeader6
+			// colExclusiveTimePercent
 			// 
-			this.columnHeader6.Text = "Exclusive Time (%)";
+			this.colExclusiveTimePercent.Text = "Exclusive Time (%)";
+			this.colExclusiveTimePercent.Width = 57;
 			// 
 			// ctrlProfiler
 			// 
@@ -124,7 +128,7 @@
 			this.Controls.Add(this.tableLayoutPanel1);
 			this.Margin = new System.Windows.Forms.Padding(0);
 			this.Name = "ctrlProfiler";
-			this.Size = new System.Drawing.Size(514, 307);
+			this.Size = new System.Drawing.Size(673, 307);
 			this.tableLayoutPanel1.ResumeLayout(false);
 			this.ResumeLayout(false);
 
@@ -134,11 +138,11 @@
 		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
 		private System.Windows.Forms.Button btnReset;
 		private Mesen.GUI.Controls.DoubleBufferedListView lstFunctions;
-		private System.Windows.Forms.ColumnHeader columnHeader1;
+		private System.Windows.Forms.ColumnHeader colFunction;
 		private System.Windows.Forms.ColumnHeader columnHeader4;
 		private System.Windows.Forms.ColumnHeader columnHeader2;
 		private System.Windows.Forms.ColumnHeader columnHeader3;
 		private System.Windows.Forms.ColumnHeader columnHeader5;
-		private System.Windows.Forms.ColumnHeader columnHeader6;
+		private System.Windows.Forms.ColumnHeader colExclusiveTimePercent;
 	}
 }

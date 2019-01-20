@@ -74,6 +74,8 @@ namespace Mesen.GUI.Config
 		public XmlKeys OpenMemoryTools = Keys.Control | Keys.M;
 		[ShortcutName("Open PPU Viewer")]
 		public XmlKeys OpenPpuViewer = Keys.Control | Keys.P;
+		[ShortcutName("Open Performance Profiler")]
+		public XmlKeys OpenProfiler = Keys.Control | Keys.Y;
 		[ShortcutName("Open Script Window")]
 		public XmlKeys OpenScriptWindow = Keys.Control | Keys.N;
 		[ShortcutName("Open Trace Logger")]

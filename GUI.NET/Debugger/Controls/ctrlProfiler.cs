@@ -26,10 +26,18 @@ namespace Mesen.GUI.Debugger.Controls
 		public ctrlProfiler()
 		{
 			InitializeComponent();
+		}
+
+		protected override void OnLoad(EventArgs e)
+		{
+			base.OnLoad(e);
 
 			bool designMode = (LicenseManager.UsageMode == LicenseUsageMode.Designtime);
 			if(!designMode) {
 				lstFunctions.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize);
+				int newWidth = Math.Max(colFunction.Width * 2, 250);
+				colExclusiveTimePercent.Width -= (newWidth - colFunction.Width) + 30;
+				colFunction.Width = newWidth;
 			}
 		}
 
