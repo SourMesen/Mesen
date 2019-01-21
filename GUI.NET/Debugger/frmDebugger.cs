@@ -22,6 +22,7 @@ namespace Mesen.GUI.Debugger
 		private bool _debuggerInitialized = false;
 		private bool _firstBreak = true;
 		private bool _wasPaused = false;
+		private bool _executionIsStopped = false; //Flag used to break on the first instruction after power cycle/reset if execution was stopped before the reset
 		private int _previousCycle = 0;
 
 		private InteropEmu.NotificationListener _notifListener;
@@ -503,6 +504,8 @@ namespace Mesen.GUI.Debugger
 					break;
 
 				case InteropEmu.ConsoleNotificationType.CodeBreak:
+					this._executionIsStopped = true;
+
 					this.BeginInvoke((MethodInvoker)(() => {
 						BreakSource source = (BreakSource)(byte)e.Parameter.ToInt64();
 						
@@ -538,7 +541,7 @@ namespace Mesen.GUI.Debugger
 						}
 					}));
 
-					if(breakOnReset) {
+					if(breakOnReset || _executionIsStopped) {
 						InteropEmu.DebugStep(1, BreakSource.BreakOnReset);
 					}
 					break;
@@ -703,6 +706,7 @@ namespace Mesen.GUI.Debugger
 		
 		private void ResumeExecution()
 		{
+			_executionIsStopped = false;
 			mnuContinue.Enabled = false;
 			mnuBreak.Enabled = true;
 
