@@ -629,8 +629,6 @@ void Debugger::ProcessStepConditions(uint16_t addr)
 		Step(1);
 	} else if(_stepOverAddr != -1 && addr == (uint32_t)_stepOverAddr) {
 		Step(1);
-	} else if(_stepCycleCount != -1 && abs(_cpu->GetCycleCount() - _stepCycleCount) < 100 && _cpu->GetCycleCount() >= _stepCycleCount) {
-		Step(1);
 	}
 }
 
@@ -838,6 +836,14 @@ bool Debugger::ProcessRamOperation(MemoryOperationType type, uint16_t &addr, uin
 		_profiler->ProcessCycle();
 	}
 
+	if(!breakDone && _stepCycleCount > 0) {
+		_stepCycleCount--;
+		if(_stepCycleCount == 0) {
+			Step(1);
+			breakDone = SleepUntilResume(BreakSource::CpuStep);
+		}
+	}
+
 	BreakpointType breakpointType;
 	switch(type) {
 		default: breakpointType = BreakpointType::Execute; break;
@@ -1031,9 +1037,9 @@ void Debugger::ResumeFromBreak()
 	_breakRequested = false;
 }
 
-void Debugger::PpuStep(uint32_t count)
+void Debugger::ResetStepState()
 {
-	_ppuStepCount = count;
+	_ppuStepCount = -1;
 	_stepOverAddr = -1;
 	_stepCycleCount = -1;
 	_stepCount = -1;
@@ -1041,22 +1047,27 @@ void Debugger::PpuStep(uint32_t count)
 	_stepOut = false;
 }
 
+void Debugger::PpuStep(uint32_t count)
+{
+	ResetStepState();
+	_ppuStepCount = count;
+	_breakSource = BreakSource::PpuStep;
+}
+
 void Debugger::Step(uint32_t count, BreakSource source)
 {
 	//Run CPU for [count] INSTRUCTIONS before breaking again
-	_stepOut = false;
-	_stepOverAddr = -1;
-	_stepCycleCount = -1;
-	_ppuStepCount = -1;
+	ResetStepState();
 	_stepCount = count;
-	_breakOnScanline = -2;
 	_breakSource = source;
 }
 
 void Debugger::StepCycles(uint32_t count)
 {
 	//Run CPU for [count] CYCLES before breaking again
-	PpuStep((uint32_t)(count * (_console->GetModel() == NesModel::NTSC ? 3 : 3.2)));
+	ResetStepState();
+	_stepCycleCount = count;
+	_breakSource = BreakSource::CpuStep;
 }
 
 void Debugger::StepOut()
@@ -1065,12 +1076,9 @@ void Debugger::StepOut()
 		return;
 	}
 
+	ResetStepState();
 	_stepOut = true;
 	_stepOutReturnAddress = _subReturnAddresses.back();
-	_stepOverAddr = -1;
-	_stepCycleCount = -1;
-	_stepCount = -1;
-	_breakOnScanline = -2;
 }
 
 void Debugger::StepOver()
@@ -1097,10 +1105,7 @@ void Debugger::StepBack()
 void Debugger::Run()
 {
 	//Resume execution after a breakpoint has been hit
-	_ppuStepCount = -1;
-	_stepCount = -1;
-	_breakOnScanline = -2;
-	_stepOut = false;
+	ResetStepState();
 }
 
 void Debugger::BreakImmediately(BreakSource source)

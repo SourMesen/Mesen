@@ -190,8 +190,8 @@ namespace Mesen.GUI.Debugger
 			this.mnuAssembler = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuEventViewer = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuMemoryViewer = new System.Windows.Forms.ToolStripMenuItem();
-			this.mnuPpuViewer = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuProfiler = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuPpuViewer = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuScriptWindow = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuTextHooker = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuTraceLogger = new System.Windows.Forms.ToolStripMenuItem();
@@ -225,6 +225,7 @@ namespace Mesen.GUI.Debugger
 			this.ctrlPpuMemoryMapping = new Mesen.GUI.Debugger.Controls.ctrlMemoryMapping();
 			this.ctrlCpuMemoryMapping = new Mesen.GUI.Debugger.Controls.ctrlMemoryMapping();
 			this.tsToolbar = new Mesen.GUI.Controls.ctrlMesenToolStrip();
+			this.mnuRunCpuCycle = new System.Windows.Forms.ToolStripMenuItem();
 			((System.ComponentModel.ISupportInitialize)(this.splitContainer)).BeginInit();
 			this.splitContainer.Panel1.SuspendLayout();
 			this.splitContainer.Panel2.SuspendLayout();
@@ -769,6 +770,7 @@ namespace Mesen.GUI.Debugger
             this.mnuToggleBreakpoint,
             this.mnuDisableEnableBreakpoint,
             this.toolStripMenuItem2,
+            this.mnuRunCpuCycle,
             this.mnuRunPpuCycle,
             this.mnuRunScanline,
             this.mnuRunOneFrame,
@@ -1718,14 +1720,6 @@ namespace Mesen.GUI.Debugger
 			this.mnuMemoryViewer.Text = "Memory Tools";
 			this.mnuMemoryViewer.Click += new System.EventHandler(this.mnuMemoryViewer_Click);
 			// 
-			// mnuPpuViewer
-			// 
-			this.mnuPpuViewer.Image = global::Mesen.GUI.Properties.Resources.Video;
-			this.mnuPpuViewer.Name = "mnuPpuViewer";
-			this.mnuPpuViewer.Size = new System.Drawing.Size(194, 22);
-			this.mnuPpuViewer.Text = "PPU Viewer";
-			this.mnuPpuViewer.Click += new System.EventHandler(this.mnuNametableViewer_Click);
-			// 
 			// mnuProfiler
 			// 
 			this.mnuProfiler.Image = global::Mesen.GUI.Properties.Resources.Speed;
@@ -1733,6 +1727,14 @@ namespace Mesen.GUI.Debugger
 			this.mnuProfiler.Size = new System.Drawing.Size(194, 22);
 			this.mnuProfiler.Text = "Performance Profiler";
 			this.mnuProfiler.Click += new System.EventHandler(this.mnuProfiler_Click);
+			// 
+			// mnuPpuViewer
+			// 
+			this.mnuPpuViewer.Image = global::Mesen.GUI.Properties.Resources.Video;
+			this.mnuPpuViewer.Name = "mnuPpuViewer";
+			this.mnuPpuViewer.Size = new System.Drawing.Size(194, 22);
+			this.mnuPpuViewer.Text = "PPU Viewer";
+			this.mnuPpuViewer.Click += new System.EventHandler(this.mnuNametableViewer_Click);
 			// 
 			// mnuScriptWindow
 			// 
@@ -1993,6 +1995,14 @@ namespace Mesen.GUI.Debugger
 			this.tsToolbar.Text = "toolStrip1";
 			this.tsToolbar.Visible = false;
 			// 
+			// mnuRunCpuCycle
+			// 
+			this.mnuRunCpuCycle.Image = global::Mesen.GUI.Properties.Resources.JumpTarget;
+			this.mnuRunCpuCycle.Name = "mnuRunCpuCycle";
+			this.mnuRunCpuCycle.Size = new System.Drawing.Size(212, 22);
+			this.mnuRunCpuCycle.Text = "Run one CPU cycle";
+			this.mnuRunCpuCycle.Click += new System.EventHandler(this.mnuRunCpuCycle_Click);
+			// 
 			// frmDebugger
 			// 
 			this.AllowDrop = true;
@@ -2238,5 +2248,6 @@ namespace Mesen.GUI.Debugger
 		private System.Windows.Forms.ToolStripMenuItem mnuOpenPaletteViewer;
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem30;
 		private System.Windows.Forms.ToolStripMenuItem mnuProfiler;
+		private System.Windows.Forms.ToolStripMenuItem mnuRunCpuCycle;
 	}
 }

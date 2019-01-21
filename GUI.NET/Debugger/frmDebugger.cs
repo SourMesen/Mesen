@@ -261,6 +261,7 @@ namespace Mesen.GUI.Debugger
 			mnuStepInto.InitShortcut(this, nameof(DebuggerShortcutsConfig.StepInto));
 			mnuStepOver.InitShortcut(this, nameof(DebuggerShortcutsConfig.StepOver));
 
+			mnuRunCpuCycle.InitShortcut(this, nameof(DebuggerShortcutsConfig.RunCpuCycle));
 			mnuRunPpuCycle.InitShortcut(this, nameof(DebuggerShortcutsConfig.RunPpuCycle));
 			mnuRunScanline.InitShortcut(this, nameof(DebuggerShortcutsConfig.RunPpuScanline));
 			mnuRunOneFrame.InitShortcut(this, nameof(DebuggerShortcutsConfig.RunPpuFrame));
@@ -298,6 +299,7 @@ namespace Mesen.GUI.Debugger
 				mnuImportLabels, mnuExportLabels, null,
 				mnuContinue, mnuBreak, null,
 				mnuStepInto, mnuStepOver, mnuStepOut, mnuStepBack, null,
+				mnuRunCpuCycle, null,
 				mnuRunPpuCycle, mnuRunScanline, mnuRunOneFrame, null,
 				mnuToggleBreakpoint, mnuDisableEnableBreakpoint, null,
 				mnuFind, mnuFindPrev, mnuFindNext, null,
@@ -752,6 +754,12 @@ namespace Mesen.GUI.Debugger
 		{
 			ctrlConsoleStatus.ApplyChanges();
 			InteropEmu.DebugStepBack();
+		}
+
+		private void mnuRunCpuCycle_Click(object sender, EventArgs e)
+		{
+			ctrlConsoleStatus.ApplyChanges();
+			InteropEmu.DebugStepCycles(1);
 		}
 
 		private void mnuRunPpuCycle_Click(object sender, EventArgs e)

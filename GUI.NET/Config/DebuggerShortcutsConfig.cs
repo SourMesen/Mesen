@@ -115,6 +115,8 @@ namespace Mesen.GUI.Config
 		[ShortcutName("Step Back")]
 		public XmlKeys StepBack = Keys.Shift | Keys.F10;
 
+		[ShortcutName("Run one CPU Cycle")]
+		public XmlKeys RunCpuCycle = Keys.None;
 		[ShortcutName("Run one PPU Cycle")]
 		public XmlKeys RunPpuCycle = Keys.F6;
 		[ShortcutName("Run one scanline")]
