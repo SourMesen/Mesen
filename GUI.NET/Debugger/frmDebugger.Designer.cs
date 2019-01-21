@@ -89,6 +89,7 @@ namespace Mesen.GUI.Debugger
 			this.mnuToggleBreakpoint = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuDisableEnableBreakpoint = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripSeparator();
+			this.mnuRunCpuCycle = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuRunPpuCycle = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuRunScanline = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuRunOneFrame = new System.Windows.Forms.ToolStripMenuItem();
@@ -118,7 +119,7 @@ namespace Mesen.GUI.Debugger
 			this.mnuDisassembleVerifiedData = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuDisassembleUnidentifiedData = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuShow = new System.Windows.Forms.ToolStripMenuItem();
-			this.mnuShowDisassembledCode = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuShowVerifiedCode = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuShowVerifiedData = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuShowUnidentifiedData = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem7 = new System.Windows.Forms.ToolStripSeparator();
@@ -225,7 +226,6 @@ namespace Mesen.GUI.Debugger
 			this.ctrlPpuMemoryMapping = new Mesen.GUI.Debugger.Controls.ctrlMemoryMapping();
 			this.ctrlCpuMemoryMapping = new Mesen.GUI.Debugger.Controls.ctrlMemoryMapping();
 			this.tsToolbar = new Mesen.GUI.Controls.ctrlMesenToolStrip();
-			this.mnuRunCpuCycle = new System.Windows.Forms.ToolStripMenuItem();
 			((System.ComponentModel.ISupportInitialize)(this.splitContainer)).BeginInit();
 			this.splitContainer.Panel1.SuspendLayout();
 			this.splitContainer.Panel2.SuspendLayout();
@@ -879,6 +879,14 @@ namespace Mesen.GUI.Debugger
 			this.toolStripMenuItem2.Name = "toolStripMenuItem2";
 			this.toolStripMenuItem2.Size = new System.Drawing.Size(209, 6);
 			// 
+			// mnuRunCpuCycle
+			// 
+			this.mnuRunCpuCycle.Image = global::Mesen.GUI.Properties.Resources.JumpTarget;
+			this.mnuRunCpuCycle.Name = "mnuRunCpuCycle";
+			this.mnuRunCpuCycle.Size = new System.Drawing.Size(212, 22);
+			this.mnuRunCpuCycle.Text = "Run one CPU cycle";
+			this.mnuRunCpuCycle.Click += new System.EventHandler(this.mnuRunCpuCycle_Click);
+			// 
 			// mnuRunPpuCycle
 			// 
 			this.mnuRunPpuCycle.Image = global::Mesen.GUI.Properties.Resources.RunPpuCycle;
@@ -1129,21 +1137,21 @@ namespace Mesen.GUI.Debugger
 			// mnuShow
 			// 
 			this.mnuShow.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.mnuShowDisassembledCode,
+            this.mnuShowVerifiedCode,
             this.mnuShowVerifiedData,
             this.mnuShowUnidentifiedData});
 			this.mnuShow.Name = "mnuShow";
 			this.mnuShow.Size = new System.Drawing.Size(236, 22);
 			this.mnuShow.Text = "Show...";
 			// 
-			// mnuShowDisassembledCode
+			// mnuShowVerifiedCode
 			// 
-			this.mnuShowDisassembledCode.Checked = true;
-			this.mnuShowDisassembledCode.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.mnuShowDisassembledCode.Enabled = false;
-			this.mnuShowDisassembledCode.Name = "mnuShowDisassembledCode";
-			this.mnuShowDisassembledCode.Size = new System.Drawing.Size(199, 22);
-			this.mnuShowDisassembledCode.Text = "Disassembled Code";
+			this.mnuShowVerifiedCode.Checked = true;
+			this.mnuShowVerifiedCode.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.mnuShowVerifiedCode.Enabled = false;
+			this.mnuShowVerifiedCode.Name = "mnuShowVerifiedCode";
+			this.mnuShowVerifiedCode.Size = new System.Drawing.Size(199, 22);
+			this.mnuShowVerifiedCode.Text = "Verified Code";
 			// 
 			// mnuShowVerifiedData
 			// 
@@ -1995,14 +2003,6 @@ namespace Mesen.GUI.Debugger
 			this.tsToolbar.Text = "toolStrip1";
 			this.tsToolbar.Visible = false;
 			// 
-			// mnuRunCpuCycle
-			// 
-			this.mnuRunCpuCycle.Image = global::Mesen.GUI.Properties.Resources.JumpTarget;
-			this.mnuRunCpuCycle.Name = "mnuRunCpuCycle";
-			this.mnuRunCpuCycle.Size = new System.Drawing.Size(212, 22);
-			this.mnuRunCpuCycle.Text = "Run one CPU cycle";
-			this.mnuRunCpuCycle.Click += new System.EventHandler(this.mnuRunCpuCycle_Click);
-			// 
 			// frmDebugger
 			// 
 			this.AllowDrop = true;
@@ -2179,7 +2179,7 @@ namespace Mesen.GUI.Debugger
 		private System.Windows.Forms.ToolStripMenuItem mnuShowCodePreview;
 		private System.Windows.Forms.ToolStripMenuItem mnuShowOpCodeTooltips;
 		private System.Windows.Forms.ToolStripMenuItem mnuShow;
-		private System.Windows.Forms.ToolStripMenuItem mnuShowDisassembledCode;
+		private System.Windows.Forms.ToolStripMenuItem mnuShowVerifiedCode;
 		private System.Windows.Forms.ToolStripMenuItem mnuShowVerifiedData;
 		private System.Windows.Forms.ToolStripMenuItem mnuShowUnidentifiedData;
 		private System.Windows.Forms.ToolStripMenuItem mnuConfigureColors;

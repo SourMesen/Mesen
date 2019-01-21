@@ -474,10 +474,10 @@ string Disassembler::GetCode(AddressTypeInfo &addressInfo, uint32_t endAddr, uin
 	string dbBuffer;
 
 	bool showEffectiveAddresses = _debugger->CheckFlag(DebuggerFlags::ShowEffectiveAddresses);
-	bool disassembleVerifiedData = _debugger->CheckFlag(DebuggerFlags::DisassembleVerifiedData);
-	bool disassembleUnidentifiedData = _debugger->CheckFlag(DebuggerFlags::DisassembleUnidentifiedData);
 	bool showUnidentifiedData = _debugger->CheckFlag(DebuggerFlags::ShowUnidentifiedData);
 	bool showVerifiedData = _debugger->CheckFlag(DebuggerFlags::ShowVerifiedData);
+	bool disassembleVerifiedData = showVerifiedData && _debugger->CheckFlag(DebuggerFlags::DisassembleVerifiedData);
+	bool disassembleUnidentifiedData = showUnidentifiedData && _debugger->CheckFlag(DebuggerFlags::DisassembleUnidentifiedData);
 
 	uint16_t resetVector = memoryManager->DebugReadWord(CPU::ResetVector);
 	uint16_t nmiVector = memoryManager->DebugReadWord(CPU::NMIVector);
