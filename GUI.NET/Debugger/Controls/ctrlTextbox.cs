@@ -1282,7 +1282,11 @@ namespace Mesen.GUI.Debugger
 			LineProperties lineProperties = GetLineStyle(currentLine);
 
 			//Draw instruction progress here to avoid it being scrolled horizontally when window is small (or comments/etc exist)
-			this.DrawLineProgress(g, positionY, lineProperties?.Progress, lineHeight);
+			if(lineProperties?.Progress != null) {
+				this.DrawLineProgress(g, positionY, lineProperties?.Progress, lineHeight);
+			} else {
+				this.DrawSelectionLength(g, currentLine, positionY, lineHeight);
+			}
 
 			if(this.ShowLineNumbers) {
 				//Show line number
@@ -1300,7 +1304,36 @@ namespace Mesen.GUI.Debugger
 				this.DrawLineSymbols(g, positionY, lineProperties, lineHeight);
 			}
 		}
-		
+
+		private void DrawSelectionLength(Graphics g, int currentLine, int positionY, int lineHeight)
+		{
+			if(ConfigManager.Config.DebugInfo.ShowSelectionLength && currentLine == this.SelectedLine && this.SelectionLength > 0) {
+				int startAddress = -1;
+				int endAddress = -1;
+
+				int end = this.SelectionStart + this.SelectionLength + 1;
+				while(endAddress < 0 && end < _lineNumbers.Length) {
+					endAddress = _lineNumbers[end];
+					end++;
+				}
+
+				int start = this.SelectionStart;
+				while(startAddress < 0 && start < _lineNumbers.Length && start < end) {
+					startAddress = _lineNumbers[start];
+					start++;
+				}
+
+				if(startAddress >= 0 && endAddress > startAddress) {
+					string text = (endAddress - startAddress).ToString() + " bytes";
+					SizeF textSize = g.MeasureString(text, this._noteFont);
+					PointF position = new PointF(this.ClientSize.Width - textSize.Width - 5, positionY + 3);
+					g.FillRectangle(Brushes.White, position.X, position.Y, textSize.Width, lineHeight - 4);
+					g.DrawRectangle(Pens.Black, position.X, position.Y, textSize.Width, lineHeight - 4);
+					g.DrawString(text, this._noteFont, Brushes.Black, position.X, position.Y - 1);
+				}
+			}
+		}
+
 		private void DrawMessage(Graphics g)
 		{
 			if(this._message != null && !string.IsNullOrWhiteSpace(this._message.Message)) {

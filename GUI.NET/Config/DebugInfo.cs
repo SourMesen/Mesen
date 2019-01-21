@@ -143,6 +143,7 @@ namespace Mesen.GUI.Config
 
 		public bool ShowBreakNotifications = true;
 		public bool ShowInstructionProgression = true;
+		public bool ShowSelectionLength = false;
 
 		public bool AlwaysScrollToCenter = false;
 		public bool SplitView = false;
