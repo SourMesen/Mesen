@@ -754,9 +754,12 @@ void Console::Run()
 				UpdateNesModel(true);
 				double delay = GetFrameDelay();
 
-				if(_resetRunTimers || delay != lastDelay) {
-					//Target frame rate changed, reset timers
-					//Also needed when resetting, power cycling, pausing or breaking with the debugger
+				if(_resetRunTimers || delay != lastDelay || (clockTimer.GetElapsedMS() - targetTime) > 300) {
+					//Reset the timers, this can happen in 3 scenarios:
+					//1) Target frame rate changed
+					//2) The console was reset/power cycled or the emulation was paused (with or without the debugger)
+					//3) As a satefy net, if we overshoot our target by over 300 milliseconds, the timer is reset, too.
+					//   This can happen when something slows the emulator down severely (or when breaking execution in VS when debugging Mesen itself, etc.)
 					clockTimer.Reset();
 					targetTime = 0;
 					lastPauseFrame = _ppu->GetFrameCount();
