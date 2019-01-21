@@ -120,27 +120,41 @@ The watch window allows you to evaluate expression and see their value. Mesen su
 
 ### Syntax ###
 
-The used syntax is identical to C/C++ syntax (e.g && for and, || for or, etc.) and should have the same operator precedence as C/C++.
+The used syntax is identical to C/C++ syntax (e.g && for and, || for or, etc.) and have the same operator precedence as C/C++.
 
 **Note:** Use the $ prefix to denote hexadecimal values.
 
-**Special values**
-```text
-A/X/Y/PS/SP: Value of corresponding registers
-PC: Program Counter
-OpPC: Address of the current instruction's first byte
-Irq/Nmi: True if the Irq/Nmi flags are set
-Cycle/Scanline: Current cycle (0-340)/scanline(-1 to 260) of the PPU
-Frame: PPU frame number (since power on/reset)
-Value: Current value being read/written from/to memory
-IsRead: True if the CPU is reading from a memory address
-IsWrite: True if the CPU is writing to a memory address
-Address: Current CPU memory address being read/written
-RomAddress: Current ROM address being read/written
-[<address>]: (Byte) Memory value at <address> (CPU)
-{<address>}: (Word) Memory value at <address> (CPU)
-```
-**Examples**
+#### Special values ####
+
+The following "variables" can be used in both the watch window and contional breakpoints to check the state of specific portions of the emulation core.
+
+**Numeric values**
+
+* **A/X/Y/PS/SP**: Value of corresponding registers
+* **PC**: Program Counter
+* **OpPC**: Address of the current instruction's first byte
+* **PreviousOpPC**: Address of the previous instruction's first byte
+* **Cycle/Scanline**: Current cycle (0-340)/scanline(-1 to 260) of the PPU
+* **Frame**: PPU frame number (since power on/reset)
+* **Value**: Current value being read/written from/to memory
+* **Address**: Current CPU memory address being read/written
+* **RomAddress**: Current ROM address being read/written
+* **[&lt;address&gt;]**: (Byte) Memory value at &lt;address&gt; (CPU)
+* **{&lt;address&gt;}**: (Word) Memory value at &lt;address&gt; (CPU)
+
+**Flags**
+
+* **Branched**: true if the current instruction was reached by a branch/jump instruction
+* **IsRead**: true if the CPU is reading from a memory address
+* **IsWrite**: true if the CPU is writing to a memory address  
+* **IRQ**: true if the IRQ flag is set
+* **NMI**: true if the NMI flag is set
+* **Sprite0Hit**: true if the PPU's "Sprite 0 Hit" flag is set
+* **SpriteOverflow**: true if the PPU's "Sprite Overflow" flag is set
+* **VerticalBlank**: true if the PPU's "Vertical Blank" flag is set
+
+  
+#### Usage Examples ####
 ```
 [$10] //Displays the value of memory at address $10 (CPU)
 a == 10 || x == $23
