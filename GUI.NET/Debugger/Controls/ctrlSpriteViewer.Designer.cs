@@ -36,7 +36,7 @@ namespace Mesen.GUI.Debugger.Controls
 			this.lblPalette = new System.Windows.Forms.Label();
 			this.txtSpriteIndex = new System.Windows.Forms.TextBox();
 			this.lblSpriteIndex = new System.Windows.Forms.Label();
-			this.picPreview = new System.Windows.Forms.PictureBox();
+			this.picPreview = new Mesen.GUI.Controls.ctrlMesenPictureBox();
 			this.ctxMenu = new Mesen.GUI.Controls.ctrlMesenContextMenuStrip(this.components);
 			this.mnuEditInMemoryViewer = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuShowInChrViewer = new System.Windows.Forms.ToolStripMenuItem();
@@ -63,7 +63,7 @@ namespace Mesen.GUI.Debugger.Controls
 			this.lblTile = new System.Windows.Forms.Label();
 			this.picTile = new System.Windows.Forms.PictureBox();
 			this.chkDisplaySpriteOutlines = new System.Windows.Forms.CheckBox();
-			this.picSprites = new System.Windows.Forms.PictureBox();
+			this.picSprites = new Mesen.GUI.Controls.ctrlMesenPictureBox();
 			this.tlpMain.SuspendLayout();
 			this.grpSpriteInfo.SuspendLayout();
 			this.tlpInfo.SuspendLayout();
@@ -94,7 +94,7 @@ namespace Mesen.GUI.Debugger.Controls
 			// grpSpriteInfo
 			// 
 			this.grpSpriteInfo.Controls.Add(this.tlpInfo);
-			this.grpSpriteInfo.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.grpSpriteInfo.Dock = System.Windows.Forms.DockStyle.Top;
 			this.grpSpriteInfo.Location = new System.Drawing.Point(269, 3);
 			this.grpSpriteInfo.Name = "grpSpriteInfo";
 			this.tlpMain.SetRowSpan(this.grpSpriteInfo, 2);
@@ -179,7 +179,9 @@ namespace Mesen.GUI.Debugger.Controls
 			this.picPreview.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.tlpInfo.SetColumnSpan(this.picPreview, 4);
 			this.picPreview.ContextMenuStrip = this.ctxMenu;
-			this.picPreview.Location = new System.Drawing.Point(75, 231);
+			this.picPreview.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.Default;
+			this.picPreview.Location = new System.Drawing.Point(76, 232);
+			this.picPreview.Margin = new System.Windows.Forms.Padding(4);
 			this.picPreview.Name = "picPreview";
 			this.picPreview.Size = new System.Drawing.Size(258, 242);
 			this.picPreview.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -439,7 +441,7 @@ namespace Mesen.GUI.Debugger.Controls
 			// 
 			this.chkDisplaySpriteOutlines.AutoSize = true;
 			this.tlpInfo.SetColumnSpan(this.chkDisplaySpriteOutlines, 4);
-			this.chkDisplaySpriteOutlines.Location = new System.Drawing.Point(3, 479);
+			this.chkDisplaySpriteOutlines.Location = new System.Drawing.Point(3, 481);
 			this.chkDisplaySpriteOutlines.Name = "chkDisplaySpriteOutlines";
 			this.chkDisplaySpriteOutlines.Size = new System.Drawing.Size(227, 17);
 			this.chkDisplaySpriteOutlines.TabIndex = 27;
@@ -451,6 +453,7 @@ namespace Mesen.GUI.Debugger.Controls
 			// 
 			this.picSprites.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.picSprites.ContextMenuStrip = this.ctxMenu;
+			this.picSprites.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.Default;
 			this.picSprites.Location = new System.Drawing.Point(4, 4);
 			this.picSprites.Margin = new System.Windows.Forms.Padding(4);
 			this.picSprites.Name = "picSprites";
@@ -488,7 +491,7 @@ namespace Mesen.GUI.Debugger.Controls
 		#endregion
 
 		private System.Windows.Forms.TableLayoutPanel tlpMain;
-		private System.Windows.Forms.PictureBox picSprites;
+		private ctrlMesenPictureBox picSprites;
 		private System.Windows.Forms.GroupBox grpSpriteInfo;
 		private System.Windows.Forms.TableLayoutPanel tlpInfo;
 		private System.Windows.Forms.TextBox txtTileAddress;
@@ -504,7 +507,7 @@ namespace Mesen.GUI.Debugger.Controls
 		private System.Windows.Forms.Label lblPaletteAddr;
 		private System.Windows.Forms.Label lblPosition;
 		private System.Windows.Forms.CheckBox chkBackgroundPriority;
-		private System.Windows.Forms.PictureBox picPreview;
+		private ctrlMesenPictureBox picPreview;
 		private System.Windows.Forms.Label lblScreenPreview;
 		private System.Windows.Forms.Label lblSpriteIndex;
 		private System.Windows.Forms.TextBox txtSpriteIndex;

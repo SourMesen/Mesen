@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using System.Runtime.InteropServices;
 using Mesen.GUI.Controls;
 using Mesen.GUI.Forms;
+using System.Drawing.Drawing2D;
 
 namespace Mesen.GUI.Debugger.Controls
 {
@@ -24,9 +25,18 @@ namespace Mesen.GUI.Debugger.Controls
 			InitializeComponent();
 		}
 
-		public Size GetCompactSize()
+		public Size GetCompactSize(bool includeMargins)
 		{
-			return new Size(picPaletteBg.Width * 2 + picPaletteBg.Margin.Right * 2, picPaletteBg.Height);
+			int margins = includeMargins ? (picPaletteBg.Margin.Right + picPaletteSprites.Margin.Left) : 0;
+			return new Size(picPaletteBg.Width * 2 + margins, picPaletteBg.Height);
+		}
+
+		public void ScaleImage(double scale)
+		{
+			picPaletteBg.Size = new Size((int)(picPaletteBg.Width * scale), (int)(picPaletteBg.Height * scale));
+			picPaletteSprites.Size = new Size((int)(picPaletteSprites.Width * scale), (int)(picPaletteSprites.Height * scale));
+			picPaletteBg.InterpolationMode = scale > 1 ? InterpolationMode.NearestNeighbor : InterpolationMode.Default;
+			picPaletteSprites.InterpolationMode = scale > 1 ? InterpolationMode.NearestNeighbor : InterpolationMode.Default;
 		}
 
 		public void GetData()
@@ -80,8 +90,8 @@ namespace Mesen.GUI.Debugger.Controls
 
 		private void picPalette_MouseMove(object sender, MouseEventArgs e)
 		{
-			int tileX = Math.Max(0, Math.Min(e.X * 128 / (picPaletteBg.Width - 2) / 32, 31));
-			int tileY = Math.Max(0, Math.Min(e.Y * 128 / (picPaletteBg.Height - 2) / 32, 31));
+			int tileX = Math.Max(0, Math.Min(e.X * 128 / (picPaletteBg.Width - 2) / 32, 3));
+			int tileY = Math.Max(0, Math.Min(e.Y * 128 / (picPaletteBg.Height - 2) / 32, 3));
 
 			int paletteIndex = tileY * 4 + tileX + (sender == picPaletteSprites ? 16 : 0);
 

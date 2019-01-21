@@ -56,6 +56,8 @@ namespace Mesen.GUI.Config
 
 		[ShortcutName("PPU Viewer: Toggle View")]
 		public XmlKeys PpuViewer_ToggleView = Keys.Control | Keys.Q;
+		[ShortcutName("PPU Viewer: Toggle Zoom")]
+		public XmlKeys PpuViewer_ToggleZoom = Keys.Control | Keys.W;
 
 		[ShortcutName("Edit in Memory Viewer")]
 		public XmlKeys CodeWindow_EditInMemoryViewer = Keys.F1;

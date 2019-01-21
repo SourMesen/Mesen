@@ -66,9 +66,19 @@ namespace Mesen.GUI.Debugger.Controls
 			}
 		}
 
-		public Size GetCompactSize()
+		public Size GetCompactSize(bool includeMargins)
 		{
-			return new Size(picChrBank1.Width, picChrBank1.Height * 2 + picChrBank1.Margin.Bottom * 2);
+			int margins = includeMargins ? (picChrBank1.Margin.Bottom + picChrBank2.Margin.Top) : 0;
+			return new Size(picChrBank1.Width, picChrBank1.Height * 2 + margins);
+		}
+		
+		public void ScaleImage(double scale)
+		{
+			picChrBank1.Size = new Size((int)(picChrBank1.Width * scale), (int)(picChrBank1.Height * scale));
+			picChrBank2.Size = new Size((int)(picChrBank2.Width * scale), (int)(picChrBank2.Height * scale));
+
+			picChrBank1.InterpolationMode = scale > 1 ? InterpolationMode.NearestNeighbor : InterpolationMode.Default;
+			picChrBank2.InterpolationMode = scale > 1 ? InterpolationMode.NearestNeighbor : InterpolationMode.Default;
 		}
 
 		protected override void OnLoad(EventArgs e)

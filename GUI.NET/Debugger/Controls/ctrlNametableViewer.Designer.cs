@@ -31,7 +31,7 @@ namespace Mesen.GUI.Debugger.Controls
 		{
 			this.components = new System.ComponentModel.Container();
 			this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
-			this.picNametable = new System.Windows.Forms.PictureBox();
+			this.picNametable = new Mesen.GUI.Controls.ctrlMesenPictureBox();
 			this.ctxMenu = new Mesen.GUI.Controls.ctrlMesenContextMenuStrip(this.components);
 			this.mnuAddBreakpoint = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuEditInMemoryViewer = new System.Windows.Forms.ToolStripMenuItem();
@@ -65,6 +65,7 @@ namespace Mesen.GUI.Debugger.Controls
 			this.ctrlTilePalette = new Mesen.GUI.Debugger.Controls.ctrlTilePalette();
 			this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
 			this.chkShowPpuScrollOverlay = new System.Windows.Forms.CheckBox();
+			this.chkShowAttributeColorsOnly = new System.Windows.Forms.CheckBox();
 			this.chkShowTileGrid = new System.Windows.Forms.CheckBox();
 			this.chkShowAttributeGrid = new System.Windows.Forms.CheckBox();
 			this.chkUseGrayscalePalette = new System.Windows.Forms.CheckBox();
@@ -76,7 +77,6 @@ namespace Mesen.GUI.Debugger.Controls
 			this.chkHighlightAttributeUpdates = new System.Windows.Forms.CheckBox();
 			this.lblHighlight = new System.Windows.Forms.Label();
 			this.chkIgnoreRedundantWrites = new System.Windows.Forms.CheckBox();
-			this.chkShowAttributeColorsOnly = new System.Windows.Forms.CheckBox();
 			this.tableLayoutPanel1.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.picNametable)).BeginInit();
 			this.ctxMenu.SuspendLayout();
@@ -96,7 +96,6 @@ namespace Mesen.GUI.Debugger.Controls
 			this.tableLayoutPanel1.Controls.Add(this.grpTileInfo, 1, 0);
 			this.tableLayoutPanel1.Controls.Add(this.flowLayoutPanel1, 1, 1);
 			this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanel3, 0, 2);
-			this.tableLayoutPanel1.Controls.Add(this.chkIgnoreRedundantWrites, 0, 3);
 			this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
 			this.tableLayoutPanel1.Name = "tableLayoutPanel1";
@@ -105,13 +104,14 @@ namespace Mesen.GUI.Debugger.Controls
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel1.Size = new System.Drawing.Size(697, 530);
+			this.tableLayoutPanel1.Size = new System.Drawing.Size(701, 530);
 			this.tableLayoutPanel1.TabIndex = 2;
 			// 
 			// picNametable
 			// 
 			this.picNametable.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.picNametable.ContextMenuStrip = this.ctxMenu;
+			this.picNametable.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.Default;
 			this.picNametable.Location = new System.Drawing.Point(4, 4);
 			this.picNametable.Margin = new System.Windows.Forms.Padding(4, 4, 4, 0);
 			this.picNametable.Name = "picNametable";
@@ -208,11 +208,10 @@ namespace Mesen.GUI.Debugger.Controls
 			// 
 			// grpTileInfo
 			// 
-			this.grpTileInfo.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
 			this.grpTileInfo.Controls.Add(this.tableLayoutPanel2);
 			this.grpTileInfo.Location = new System.Drawing.Point(525, 3);
 			this.grpTileInfo.Name = "grpTileInfo";
-			this.grpTileInfo.Size = new System.Drawing.Size(169, 345);
+			this.grpTileInfo.Size = new System.Drawing.Size(173, 345);
 			this.grpTileInfo.TabIndex = 4;
 			this.grpTileInfo.TabStop = false;
 			this.grpTileInfo.Text = "Tile Info";
@@ -259,7 +258,7 @@ namespace Mesen.GUI.Debugger.Controls
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel2.Size = new System.Drawing.Size(163, 326);
+			this.tableLayoutPanel2.Size = new System.Drawing.Size(167, 326);
 			this.tableLayoutPanel2.TabIndex = 0;
 			// 
 			// txtPpuAddress
@@ -447,15 +446,12 @@ namespace Mesen.GUI.Debugger.Controls
 			// 
 			// flowLayoutPanel1
 			// 
-			this.flowLayoutPanel1.AutoSize = true;
-			this.flowLayoutPanel1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
 			this.flowLayoutPanel1.Controls.Add(this.chkShowPpuScrollOverlay);
 			this.flowLayoutPanel1.Controls.Add(this.chkShowAttributeColorsOnly);
 			this.flowLayoutPanel1.Controls.Add(this.chkShowTileGrid);
 			this.flowLayoutPanel1.Controls.Add(this.chkShowAttributeGrid);
 			this.flowLayoutPanel1.Controls.Add(this.chkUseGrayscalePalette);
 			this.flowLayoutPanel1.Controls.Add(this.chkHighlightChrTile);
-			this.flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.flowLayoutPanel1.Location = new System.Drawing.Point(522, 351);
 			this.flowLayoutPanel1.Margin = new System.Windows.Forms.Padding(0);
 			this.flowLayoutPanel1.Name = "flowLayoutPanel1";
@@ -473,6 +469,17 @@ namespace Mesen.GUI.Debugger.Controls
 			this.chkShowPpuScrollOverlay.Text = "Show PPU Scroll Overlay";
 			this.chkShowPpuScrollOverlay.UseVisualStyleBackColor = true;
 			this.chkShowPpuScrollOverlay.Click += new System.EventHandler(this.chkShowScrollWindow_Click);
+			// 
+			// chkShowAttributeColorsOnly
+			// 
+			this.chkShowAttributeColorsOnly.AutoSize = true;
+			this.chkShowAttributeColorsOnly.Location = new System.Drawing.Point(3, 26);
+			this.chkShowAttributeColorsOnly.Name = "chkShowAttributeColorsOnly";
+			this.chkShowAttributeColorsOnly.Size = new System.Drawing.Size(147, 17);
+			this.chkShowAttributeColorsOnly.TabIndex = 6;
+			this.chkShowAttributeColorsOnly.Text = "Show attribute colors only";
+			this.chkShowAttributeColorsOnly.UseVisualStyleBackColor = true;
+			this.chkShowAttributeColorsOnly.Click += new System.EventHandler(this.chkShowAttributeColorsOnly_Click);
 			// 
 			// chkShowTileGrid
 			// 
@@ -531,14 +538,15 @@ namespace Mesen.GUI.Debugger.Controls
 			this.tableLayoutPanel3.Controls.Add(this.lblMirroringType, 1, 0);
 			this.tableLayoutPanel3.Controls.Add(this.chkHighlightTileUpdates, 4, 0);
 			this.tableLayoutPanel3.Controls.Add(this.chkHighlightAttributeUpdates, 5, 0);
+			this.tableLayoutPanel3.Controls.Add(this.chkIgnoreRedundantWrites, 4, 1);
 			this.tableLayoutPanel3.Controls.Add(this.lblHighlight, 3, 0);
-			this.tableLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tableLayoutPanel3.Location = new System.Drawing.Point(0, 486);
 			this.tableLayoutPanel3.Margin = new System.Windows.Forms.Padding(0);
 			this.tableLayoutPanel3.Name = "tableLayoutPanel3";
-			this.tableLayoutPanel3.RowCount = 1;
+			this.tableLayoutPanel3.RowCount = 2;
 			this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel3.Size = new System.Drawing.Size(522, 20);
+			this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+			this.tableLayoutPanel3.Size = new System.Drawing.Size(522, 40);
 			this.tableLayoutPanel3.TabIndex = 6;
 			// 
 			// lblMirroring
@@ -602,7 +610,8 @@ namespace Mesen.GUI.Debugger.Controls
 			// 
 			this.chkIgnoreRedundantWrites.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.chkIgnoreRedundantWrites.AutoSize = true;
-			this.chkIgnoreRedundantWrites.Location = new System.Drawing.Point(332, 507);
+			this.tableLayoutPanel3.SetColumnSpan(this.chkIgnoreRedundantWrites, 2);
+			this.chkIgnoreRedundantWrites.Location = new System.Drawing.Point(332, 21);
 			this.chkIgnoreRedundantWrites.Margin = new System.Windows.Forms.Padding(3, 1, 3, 0);
 			this.chkIgnoreRedundantWrites.Name = "chkIgnoreRedundantWrites";
 			this.chkIgnoreRedundantWrites.Size = new System.Drawing.Size(187, 17);
@@ -611,26 +620,14 @@ namespace Mesen.GUI.Debugger.Controls
 			this.chkIgnoreRedundantWrites.UseVisualStyleBackColor = true;
 			this.chkIgnoreRedundantWrites.Click += new System.EventHandler(this.chkIgnoreRedundantWrites_Click);
 			// 
-			// chkShowAttributeColorsOnly
-			// 
-			this.chkShowAttributeColorsOnly.AutoSize = true;
-			this.chkShowAttributeColorsOnly.Location = new System.Drawing.Point(3, 26);
-			this.chkShowAttributeColorsOnly.Name = "chkShowAttributeColorsOnly";
-			this.chkShowAttributeColorsOnly.Size = new System.Drawing.Size(147, 17);
-			this.chkShowAttributeColorsOnly.TabIndex = 6;
-			this.chkShowAttributeColorsOnly.Text = "Show attribute colors only";
-			this.chkShowAttributeColorsOnly.UseVisualStyleBackColor = true;
-			this.chkShowAttributeColorsOnly.Click += new System.EventHandler(this.chkShowAttributeColorsOnly_Click);
-			// 
 			// ctrlNametableViewer
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.Controls.Add(this.tableLayoutPanel1);
 			this.Name = "ctrlNametableViewer";
-			this.Size = new System.Drawing.Size(697, 530);
+			this.Size = new System.Drawing.Size(701, 530);
 			this.tableLayoutPanel1.ResumeLayout(false);
-			this.tableLayoutPanel1.PerformLayout();
 			((System.ComponentModel.ISupportInitialize)(this.picNametable)).EndInit();
 			this.ctxMenu.ResumeLayout(false);
 			this.grpTileInfo.ResumeLayout(false);
@@ -649,7 +646,7 @@ namespace Mesen.GUI.Debugger.Controls
 		#endregion
 
 		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
-		private System.Windows.Forms.PictureBox picNametable;
+		private ctrlMesenPictureBox picNametable;
 		private System.Windows.Forms.GroupBox grpTileInfo;
 		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
 		private System.Windows.Forms.TextBox txtPaletteAddress;

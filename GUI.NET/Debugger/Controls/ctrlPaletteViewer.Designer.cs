@@ -1,4 +1,6 @@
-﻿namespace Mesen.GUI.Debugger.Controls
+﻿using Mesen.GUI.Controls;
+
+namespace Mesen.GUI.Debugger.Controls
 {
 	partial class ctrlPaletteViewer
 	{
@@ -42,11 +44,11 @@
 			this.txtColorCodeRgb = new System.Windows.Forms.TextBox();
 			this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
 			this.lblPaletteSprites = new System.Windows.Forms.Label();
-			this.picPaletteSprites = new System.Windows.Forms.PictureBox();
+			this.picPaletteSprites = new Mesen.GUI.Controls.ctrlMesenPictureBox();
 			this.ctxMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this.mnuCopyHexColor = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuCopyRgbColor = new System.Windows.Forms.ToolStripMenuItem();
-			this.picPaletteBg = new System.Windows.Forms.PictureBox();
+			this.picPaletteBg = new Mesen.GUI.Controls.ctrlMesenPictureBox();
 			this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
 			this.picHelp = new System.Windows.Forms.PictureBox();
 			this.lblClickColorHint = new System.Windows.Forms.Label();
@@ -65,11 +67,10 @@
 			// grpColorInfo
 			// 
 			this.grpColorInfo.Controls.Add(this.tableLayoutPanel4);
-			this.grpColorInfo.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.grpColorInfo.Location = new System.Drawing.Point(273, 3);
 			this.grpColorInfo.Name = "grpColorInfo";
 			this.tableLayoutPanel3.SetRowSpan(this.grpColorInfo, 3);
-			this.grpColorInfo.Size = new System.Drawing.Size(406, 305);
+			this.grpColorInfo.Size = new System.Drawing.Size(425, 205);
 			this.grpColorInfo.TabIndex = 4;
 			this.grpColorInfo.TabStop = false;
 			this.grpColorInfo.Text = "Color Info";
@@ -89,7 +90,6 @@
 			this.tableLayoutPanel4.Controls.Add(this.label1, 0, 4);
 			this.tableLayoutPanel4.Controls.Add(this.txtColorCodeHex, 1, 3);
 			this.tableLayoutPanel4.Controls.Add(this.txtColorCodeRgb, 1, 4);
-			this.tableLayoutPanel4.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tableLayoutPanel4.Location = new System.Drawing.Point(3, 16);
 			this.tableLayoutPanel4.Name = "tableLayoutPanel4";
 			this.tableLayoutPanel4.RowCount = 6;
@@ -99,7 +99,7 @@
 			this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel4.Size = new System.Drawing.Size(400, 286);
+			this.tableLayoutPanel4.Size = new System.Drawing.Size(382, 183);
 			this.tableLayoutPanel4.TabIndex = 0;
 			// 
 			// txtPaletteAddress
@@ -217,7 +217,7 @@
 			this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel3.Size = new System.Drawing.Size(682, 311);
+			this.tableLayoutPanel3.Size = new System.Drawing.Size(701, 311);
 			this.tableLayoutPanel3.TabIndex = 3;
 			// 
 			// lblPaletteSprites
@@ -236,6 +236,7 @@
 			this.picPaletteSprites.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.picPaletteSprites.ContextMenuStrip = this.ctxMenu;
 			this.picPaletteSprites.Cursor = System.Windows.Forms.Cursors.Hand;
+			this.picPaletteSprites.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.Default;
 			this.picPaletteSprites.Location = new System.Drawing.Point(138, 4);
 			this.picPaletteSprites.Margin = new System.Windows.Forms.Padding(2, 4, 2, 4);
 			this.picPaletteSprites.Name = "picPaletteSprites";
@@ -272,6 +273,7 @@
 			this.picPaletteBg.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.picPaletteBg.ContextMenuStrip = this.ctxMenu;
 			this.picPaletteBg.Cursor = System.Windows.Forms.Cursors.Hand;
+			this.picPaletteBg.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.Default;
 			this.picPaletteBg.Location = new System.Drawing.Point(4, 4);
 			this.picPaletteBg.Margin = new System.Windows.Forms.Padding(4, 4, 2, 4);
 			this.picPaletteBg.Name = "picPaletteBg";
@@ -284,12 +286,10 @@
 			// 
 			// flowLayoutPanel1
 			// 
-			this.flowLayoutPanel1.AutoSize = true;
 			this.flowLayoutPanel1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
 			this.tableLayoutPanel3.SetColumnSpan(this.flowLayoutPanel1, 2);
 			this.flowLayoutPanel1.Controls.Add(this.picHelp);
 			this.flowLayoutPanel1.Controls.Add(this.lblClickColorHint);
-			this.flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Top;
 			this.flowLayoutPanel1.Location = new System.Drawing.Point(3, 154);
 			this.flowLayoutPanel1.Name = "flowLayoutPanel1";
 			this.flowLayoutPanel1.Size = new System.Drawing.Size(264, 26);
@@ -332,7 +332,7 @@
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.Controls.Add(this.tableLayoutPanel3);
 			this.Name = "ctrlPaletteViewer";
-			this.Size = new System.Drawing.Size(682, 311);
+			this.Size = new System.Drawing.Size(701, 311);
 			this.grpColorInfo.ResumeLayout(false);
 			this.tableLayoutPanel4.ResumeLayout(false);
 			this.tableLayoutPanel4.PerformLayout();
@@ -351,7 +351,7 @@
 
 		#endregion
 
-		private System.Windows.Forms.PictureBox picPaletteBg;
+		private ctrlMesenPictureBox picPaletteBg;
 		private System.Windows.Forms.GroupBox grpColorInfo;
 		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel4;
 		private System.Windows.Forms.TextBox txtPaletteAddress;
@@ -371,7 +371,7 @@
 		private System.Windows.Forms.ContextMenuStrip ctxMenu;
 		private System.Windows.Forms.ToolStripMenuItem mnuCopyHexColor;
 		private System.Windows.Forms.ToolStripMenuItem mnuCopyRgbColor;
-		private System.Windows.Forms.PictureBox picPaletteSprites;
+		private ctrlMesenPictureBox picPaletteSprites;
 		private System.Windows.Forms.Label lblBgPalette;
 		private System.Windows.Forms.Label lblPaletteSprites;
 	}

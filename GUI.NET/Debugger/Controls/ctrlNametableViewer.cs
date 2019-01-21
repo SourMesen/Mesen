@@ -11,6 +11,7 @@ using System.Runtime.InteropServices;
 using Mesen.GUI.Config;
 using Mesen.GUI.Controls;
 using Mesen.GUI.Forms;
+using System.Drawing.Drawing2D;
 
 namespace Mesen.GUI.Debugger.Controls
 {
@@ -67,9 +68,15 @@ namespace Mesen.GUI.Debugger.Controls
 			}
 		}
 
-		public Size GetCompactSize()
+		public Size GetCompactSize(bool includeMargins)
 		{
 			return new Size(picNametable.Width, picNametable.Height);
+		}
+
+		public void ScaleImage(double scale)
+		{
+			picNametable.Size = new Size((int)(picNametable.Width * scale), (int)(picNametable.Height * scale));
+			picNametable.InterpolationMode = scale > 1 ? InterpolationMode.NearestNeighbor : InterpolationMode.Default;
 		}
 
 		protected override bool ProcessCmdKey(ref Message msg, Keys keyData)

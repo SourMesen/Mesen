@@ -14,7 +14,8 @@ namespace Mesen.GUI.Debugger
 		private TabPage _selectedTab;
 		private bool _refreshing = false;
 		private Size _originalSize;
-		private bool _isCompact;
+		private bool _isCompact = false;
+		private bool _isZoomed = false;
 		private PpuViewerMode _mode;
 
 		private static int _nextPpuViewerId = 0;
@@ -26,6 +27,11 @@ namespace Mesen.GUI.Debugger
 
 			_ppuViewerId = GetNextPpuViewerId();
 			_mode = mode;
+
+			if(Program.IsMono) {
+				btnToggleView.Top -= 1;
+				chkToggleZoom.Top -= 1;
+			}
 
 			this._selectedTab = this.tpgNametableViewer;
 			this.mnuAutoRefresh.Checked = ConfigManager.Config.DebugInfo.PpuAutoRefresh;
@@ -83,6 +89,12 @@ namespace Mesen.GUI.Debugger
 					toggleViewTooltip += " (" + DebuggerShortcutsConfig.GetShortcutDisplay(ConfigManager.Config.DebugInfo.Shortcuts.PpuViewer_ToggleView) + ")";
 				}
 				this.toolTip.SetToolTip(this.btnToggleView, toggleViewTooltip);
+
+				string toggleZoomTooltip = "Toggle 2x Zoom";
+				if(ConfigManager.Config.DebugInfo.Shortcuts.PpuViewer_ToggleZoom != Keys.None) {
+					toggleZoomTooltip += " (" + DebuggerShortcutsConfig.GetShortcutDisplay(ConfigManager.Config.DebugInfo.Shortcuts.PpuViewer_ToggleZoom) + ")";
+				}
+				this.toolTip.SetToolTip(this.chkToggleZoom, toggleZoomTooltip);
 
 				_selectedTab = tabMain.SelectedTab;
 				if(_mode != PpuViewerMode.Combined) {
@@ -209,16 +221,59 @@ namespace Mesen.GUI.Debugger
 
 		private void tabMain_SelectedIndexChanged(object sender, EventArgs e)
 		{
+			bool wasZoomedIn = _isZoomed;
+			if(wasZoomedIn) {
+				this.ToggleZoom();
+			}
+
 			this._selectedTab = this.tabMain.SelectedTab;
+
+			if(wasZoomedIn) {
+				this.ToggleZoom();
+			}
+
 			if(InteropEmu.DebugIsExecutionStopped()) {
 				//Refresh data when changing tabs when not running
 				this.RefreshViewers();
 			}
 		}
 
+		private void ToggleZoom()
+		{
+			ICompactControl ctrl = null;
+			if(_selectedTab == tpgChrViewer) {
+				ctrl = ctrlChrViewer;
+			} else if(_selectedTab == tpgPaletteViewer) {
+				ctrl = ctrlPaletteViewer;
+			} else if(_selectedTab == tpgSpriteViewer) {
+				ctrl = ctrlSpriteViewer;
+			} else if(_selectedTab == tpgNametableViewer) {
+				ctrl = ctrlNametableViewer;
+			}
+
+			if(!_isZoomed) {
+				Size pictureSize = ctrl.GetCompactSize(false);
+				this.Size += pictureSize;
+				_originalSize += pictureSize;
+				ctrl.ScaleImage(2);
+				_isZoomed = true;
+			} else {
+				Size pictureSize = ctrl.GetCompactSize(false);
+				Size halfSize = new Size(pictureSize.Width / 2, pictureSize.Height / 2);
+				this.Size -= halfSize;
+				_originalSize -= halfSize;
+				ctrl.ScaleImage(0.5);
+				_isZoomed = false;
+			}
+			chkToggleZoom.Checked = _isZoomed;
+		}
+
 		protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
 		{
-			if(keyData == ConfigManager.Config.DebugInfo.Shortcuts.PpuViewer_ToggleView) {
+			if(keyData == ConfigManager.Config.DebugInfo.Shortcuts.PpuViewer_ToggleZoom) {
+				ToggleZoom();
+				return true;
+			} else if(keyData == ConfigManager.Config.DebugInfo.Shortcuts.PpuViewer_ToggleView) {
 				ToggleView();
 				return true;
 			}
@@ -323,7 +378,7 @@ namespace Mesen.GUI.Debugger
 
 				_isCompact = true;
 				_originalSize = this.Size;
-				Size size = control.GetCompactSize();
+				Size size = control.GetCompactSize(true);
 				int widthDiff = ((Control)control).Width - size.Width;
 				int heightDiff = ((Control)control).Height - size.Height;
 
@@ -365,6 +420,11 @@ namespace Mesen.GUI.Debugger
 		{
 			ToggleView();
 		}
+
+		private void chkToggleZoom_Click(object sender, EventArgs e)
+		{
+			ToggleZoom();
+		}
 	}
 
 	public enum PpuViewerMode
@@ -378,6 +438,7 @@ namespace Mesen.GUI.Debugger
 
 	public interface ICompactControl
 	{
-		Size GetCompactSize();
+		Size GetCompactSize(bool includeMargins);
+		void ScaleImage(double scale);
 	}
 }

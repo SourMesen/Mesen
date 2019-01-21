@@ -12,6 +12,7 @@ using Mesen.GUI.Controls;
 using System.Drawing.Imaging;
 using Mesen.GUI.Config;
 using Mesen.GUI.Forms;
+using System.Drawing.Drawing2D;
 
 namespace Mesen.GUI.Debugger.Controls
 {
@@ -39,23 +40,44 @@ namespace Mesen.GUI.Debugger.Controls
 		private bool _firstDraw = true;
 		private int _originalSpriteHeight = 0;
 		private int _originalTileHeight = 0;
+		private Size _originalPreviewSize;
+		private double _scale = 1;
 
 		public ctrlSpriteViewer()
 		{
 			InitializeComponent();
 
-			picPreview.Image = new Bitmap(256, 240, PixelFormat.Format32bppArgb);
-			picSprites.Image = new Bitmap(256, 512, PixelFormat.Format32bppArgb);
+			if(!IsDesignMode) {
+				picPreview.Image = new Bitmap(256, 240, PixelFormat.Format32bppArgb);
+				picSprites.Image = new Bitmap(256, 512, PixelFormat.Format32bppArgb);
 
-			chkDisplaySpriteOutlines.Checked = ConfigManager.Config.DebugInfo.SpriteViewerDisplaySpriteOutlines;
+				chkDisplaySpriteOutlines.Checked = ConfigManager.Config.DebugInfo.SpriteViewerDisplaySpriteOutlines;
 
-			_originalSpriteHeight = picSprites.Height;
-			_originalTileHeight = picTile.Height;
+				_originalSpriteHeight = picSprites.Height;
+				_originalTileHeight = picTile.Height;
+				_originalPreviewSize = picPreview.Size;
+			}
 		}
 		
-		public Size GetCompactSize()
+		public Size GetCompactSize(bool includeMargins)
 		{
-			return new Size(picSprites.Width, _prevLargeSprites ? picSprites.Height : (picSprites.Height + picPreview.Height + picPreview.Margin.Top + picSprites.Margin.Bottom));
+			return new Size(picSprites.Width, _prevLargeSprites ? picSprites.Height : (picSprites.Height * 2));
+		}
+
+		public void ScaleImage(double scale)
+		{
+			_scale *= scale;
+
+			picSprites.Size = new Size((int)(picSprites.Width * scale), (int)(picSprites.Height * scale));
+			if(_largeSprites) {
+				picPreview.Size = _originalPreviewSize;
+			} else {
+				picPreview.Size = new Size((int)(_originalPreviewSize.Width * _scale), (int)(_originalPreviewSize.Height * _scale));
+			}
+			_originalSpriteHeight = (int)(_originalSpriteHeight * scale);
+
+			picSprites.InterpolationMode = scale > 1 ? InterpolationMode.NearestNeighbor : InterpolationMode.Default;
+			picPreview.InterpolationMode = scale > 1 ? InterpolationMode.NearestNeighbor : InterpolationMode.Default;
 		}
 
 		protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
@@ -122,25 +144,7 @@ namespace Mesen.GUI.Debugger.Controls
 			}
 
 			if(_prevLargeSprites != _largeSprites) {
-				if(_largeSprites) {
-					picSprites.Image = new Bitmap(256, 512, PixelFormat.Format32bppArgb);
-					picSprites.Height = _originalSpriteHeight;
-					picTile.Height = _originalTileHeight;
-
-					tlpMain.SetRowSpan(picSprites, 2);
-					tlpMain.SetColumnSpan(picPreview, 4);
-					tlpInfo.Controls.Add(picPreview, 1, 5);
-					lblScreenPreview.Visible = true;
-				} else {
-					picSprites.Image = new Bitmap(256, 256, PixelFormat.Format32bppArgb);
-					picSprites.Height = (_originalSpriteHeight - 2) / 2 + 2;
-					picTile.Height = (_originalTileHeight - 2) / 2 + 2;
-
-					tlpMain.SetRowSpan(picSprites, 1);
-					tlpMain.SetColumnSpan(picPreview, 1);
-					tlpMain.Controls.Add(picPreview, 0, 1);
-					lblScreenPreview.Visible = false;
-				}
+				ToggleSpriteMode();
 				_prevLargeSprites = _largeSprites;
 			}
 
@@ -158,6 +162,31 @@ namespace Mesen.GUI.Debugger.Controls
 			}
 
 			DrawHud();
+		}
+
+		private void ToggleSpriteMode()
+		{
+			if(_largeSprites) {
+				picSprites.Image = new Bitmap(256, 512, PixelFormat.Format32bppArgb);
+				picSprites.Height = _originalSpriteHeight;
+				picTile.Height = _originalTileHeight;
+				picPreview.Size = _originalPreviewSize;
+
+				tlpMain.SetRowSpan(picSprites, 2);
+				tlpMain.SetColumnSpan(picPreview, 4);
+				tlpInfo.Controls.Add(picPreview, 1, 5);
+				lblScreenPreview.Visible = true;
+			} else {
+				picSprites.Image = new Bitmap(256, 256, PixelFormat.Format32bppArgb);
+				picSprites.Height = (_originalSpriteHeight - 2) / 2 + 2;
+				picTile.Height = (_originalTileHeight - 2) / 2 + 2;
+				picPreview.Size = new Size((int)(_originalPreviewSize.Width * _scale), (int)(_originalPreviewSize.Height * _scale));
+
+				tlpMain.SetRowSpan(picSprites, 1);
+				tlpMain.SetColumnSpan(picPreview, 1);
+				tlpMain.Controls.Add(picPreview, 0, 1);
+				lblScreenPreview.Visible = false;
+			}
 		}
 
 		private void DrawHud()

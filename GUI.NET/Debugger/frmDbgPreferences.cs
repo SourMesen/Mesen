@@ -40,6 +40,7 @@ namespace Mesen.GUI.Debugger
 				GetMember(nameof(DebuggerShortcutsConfig.CodeWindow_EditInMemoryViewer)),
 				GetMember(nameof(DebuggerShortcutsConfig.MemoryViewer_ViewInDisassembly)),
 				GetMember(nameof(DebuggerShortcutsConfig.PpuViewer_ToggleView)),
+				GetMember(nameof(DebuggerShortcutsConfig.PpuViewer_ToggleZoom)),
 
 				GetMember(nameof(DebuggerShortcutsConfig.OpenApuViewer)),
 				GetMember(nameof(DebuggerShortcutsConfig.OpenAssembler)),
