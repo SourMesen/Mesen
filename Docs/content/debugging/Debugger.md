@@ -71,9 +71,9 @@ The code window displays the disassembled code and contains a number of features
 
 **Show...**:
 
-* **Disassembled Code**: (Always enabled) Any portions of the CPU memory that has been disassembled (based on the previous options) will be shown in the code window.
-* **Verified Data**: Verified data blocks will be shown (every byte of the block will be shown in the code window).  Note: this has no effect if verified code is disassembled based on the previous options.
-* **Unidentified Code/Data**: Blocks of bytes that are not marked as data nor code will be shown (every byte of the block will be shown in the code window).  Note: this has no effect if unidentified blocks are disassembled based on the previous options.
+* **Verified Code**: (Always enabled) All verified code will be disassembled and shown in the code window.
+* **Verified Data**: Verified data blocks will be shown. If the option to disassemble verified data is enabled, a disassembly of the data will be shown.
+* **Unidentified Code/Data**: Blocks that are not marked as data nor code will be shown. If the option to disassemble unidentified data/code is enabled, a disassembly of the bytes will be shown.
 
 **Display OP codes in lower case**: When enabled, OP codes are displayed in lowercase letters
 
@@ -381,6 +381,7 @@ These options configure which portions of the code is copied into the clipboard 
 
 * **Show break notifications**: When enabled, a "notification" will be shown over the disassembly window indicating what caused the debugger to break the execution (e.g: a CPU/PPU read/write, a decayed OAM read, etc.)
 * **Show instruction progression**: When enabled, the code window will display an indicator showing how far along into the current instruction the execution is. This also shows an estimate of how many cycles the instruction will take to complete (this estimate may increase for various reasons such as a page being crossed, etc.)
+* **Show selection length**: When enabled, the code window will display the current selection's length in bytes (when more than 1 line is selected)
 
 <div></div>
 

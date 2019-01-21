@@ -126,3 +126,7 @@ You can click on any color to select another color for that slot.
 All PPU viewer tabs can be toggled to a standalone compact window, this can be done by pressing on the green arrow at the top right of the window. There is also a customizable keyboard shortcut for this (Default: `Ctrl+Q`) and the windows can be opened in compact mode directly using keyboard shortcuts or the `PPU Viewer (Compact)` menu in the `Tools` or `Debug` menus.  
 
 The compact viewers save their own position independently from the regular full-sized PPU window.
+
+## Zoomed View ##
+
+In addition to the compact view, it's also possible to double the size of the viewers by clicking on the `2x` button next to the compact view button at the top right of the window. There is a shortcut for this as well (Default: `Ctrl+W`).
