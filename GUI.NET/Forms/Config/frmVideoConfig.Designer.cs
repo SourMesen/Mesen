@@ -153,6 +153,8 @@ namespace Mesen.GUI.Forms.Config
 			this.mnuPaletteSonyCxa2025As = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuPaletteUnsaturated = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuPaletteYuv = new System.Windows.Forms.ToolStripMenuItem();
+			this.chkRemoveSpriteLimit = new System.Windows.Forms.CheckBox();
+			this.chkAdaptiveSpriteLimit = new System.Windows.Forms.CheckBox();
 			this.tlpMain.SuspendLayout();
 			this.flowLayoutPanel7.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.picHdNesTooltip)).BeginInit();
@@ -1762,16 +1764,21 @@ namespace Mesen.GUI.Forms.Config
 			this.tableLayoutPanel9.ColumnCount = 2;
 			this.tableLayoutPanel9.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
 			this.tableLayoutPanel9.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel9.Controls.Add(this.chkDisableBackground, 0, 1);
-			this.tableLayoutPanel9.Controls.Add(this.chkDisableSprites, 0, 2);
-			this.tableLayoutPanel9.Controls.Add(this.chkForceBackgroundFirstColumn, 0, 3);
-			this.tableLayoutPanel9.Controls.Add(this.chkForceSpritesFirstColumn, 0, 4);
-			this.tableLayoutPanel9.Controls.Add(this.lblScreenRotation, 0, 0);
-			this.tableLayoutPanel9.Controls.Add(this.cboScreenRotation, 1, 0);
+			this.tableLayoutPanel9.Controls.Add(this.chkDisableBackground, 0, 3);
+			this.tableLayoutPanel9.Controls.Add(this.chkDisableSprites, 0, 4);
+			this.tableLayoutPanel9.Controls.Add(this.chkForceBackgroundFirstColumn, 0, 5);
+			this.tableLayoutPanel9.Controls.Add(this.chkForceSpritesFirstColumn, 0, 6);
+			this.tableLayoutPanel9.Controls.Add(this.lblScreenRotation, 0, 7);
+			this.tableLayoutPanel9.Controls.Add(this.cboScreenRotation, 1, 7);
+			this.tableLayoutPanel9.Controls.Add(this.chkRemoveSpriteLimit, 0, 0);
+			this.tableLayoutPanel9.Controls.Add(this.chkAdaptiveSpriteLimit, 0, 1);
 			this.tableLayoutPanel9.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tableLayoutPanel9.Location = new System.Drawing.Point(3, 3);
 			this.tableLayoutPanel9.Name = "tableLayoutPanel9";
-			this.tableLayoutPanel9.RowCount = 6;
+			this.tableLayoutPanel9.RowCount = 9;
+			this.tableLayoutPanel9.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this.tableLayoutPanel9.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this.tableLayoutPanel9.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel9.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel9.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel9.RowStyles.Add(new System.Windows.Forms.RowStyle());
@@ -1786,7 +1793,7 @@ namespace Mesen.GUI.Forms.Config
 			this.chkDisableBackground.Checked = false;
 			this.tableLayoutPanel9.SetColumnSpan(this.chkDisableBackground, 2);
 			this.chkDisableBackground.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.chkDisableBackground.Location = new System.Drawing.Point(0, 27);
+			this.chkDisableBackground.Location = new System.Drawing.Point(0, 46);
 			this.chkDisableBackground.MinimumSize = new System.Drawing.Size(0, 21);
 			this.chkDisableBackground.Name = "chkDisableBackground";
 			this.chkDisableBackground.Size = new System.Drawing.Size(521, 23);
@@ -1798,7 +1805,7 @@ namespace Mesen.GUI.Forms.Config
 			this.chkDisableSprites.Checked = false;
 			this.tableLayoutPanel9.SetColumnSpan(this.chkDisableSprites, 2);
 			this.chkDisableSprites.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.chkDisableSprites.Location = new System.Drawing.Point(0, 50);
+			this.chkDisableSprites.Location = new System.Drawing.Point(0, 69);
 			this.chkDisableSprites.MinimumSize = new System.Drawing.Size(0, 21);
 			this.chkDisableSprites.Name = "chkDisableSprites";
 			this.chkDisableSprites.Size = new System.Drawing.Size(521, 23);
@@ -1810,7 +1817,7 @@ namespace Mesen.GUI.Forms.Config
 			this.chkForceBackgroundFirstColumn.Checked = false;
 			this.tableLayoutPanel9.SetColumnSpan(this.chkForceBackgroundFirstColumn, 2);
 			this.chkForceBackgroundFirstColumn.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.chkForceBackgroundFirstColumn.Location = new System.Drawing.Point(0, 73);
+			this.chkForceBackgroundFirstColumn.Location = new System.Drawing.Point(0, 92);
 			this.chkForceBackgroundFirstColumn.MinimumSize = new System.Drawing.Size(0, 21);
 			this.chkForceBackgroundFirstColumn.Name = "chkForceBackgroundFirstColumn";
 			this.chkForceBackgroundFirstColumn.Size = new System.Drawing.Size(521, 23);
@@ -1822,7 +1829,7 @@ namespace Mesen.GUI.Forms.Config
 			this.chkForceSpritesFirstColumn.Checked = false;
 			this.tableLayoutPanel9.SetColumnSpan(this.chkForceSpritesFirstColumn, 2);
 			this.chkForceSpritesFirstColumn.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.chkForceSpritesFirstColumn.Location = new System.Drawing.Point(0, 96);
+			this.chkForceSpritesFirstColumn.Location = new System.Drawing.Point(0, 115);
 			this.chkForceSpritesFirstColumn.MinimumSize = new System.Drawing.Size(0, 21);
 			this.chkForceSpritesFirstColumn.Name = "chkForceSpritesFirstColumn";
 			this.chkForceSpritesFirstColumn.Size = new System.Drawing.Size(521, 23);
@@ -1833,7 +1840,7 @@ namespace Mesen.GUI.Forms.Config
 			// 
 			this.lblScreenRotation.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.lblScreenRotation.AutoSize = true;
-			this.lblScreenRotation.Location = new System.Drawing.Point(3, 7);
+			this.lblScreenRotation.Location = new System.Drawing.Point(3, 145);
 			this.lblScreenRotation.Name = "lblScreenRotation";
 			this.lblScreenRotation.Size = new System.Drawing.Size(87, 13);
 			this.lblScreenRotation.TabIndex = 4;
@@ -1843,7 +1850,7 @@ namespace Mesen.GUI.Forms.Config
 			// 
 			this.cboScreenRotation.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.cboScreenRotation.FormattingEnabled = true;
-			this.cboScreenRotation.Location = new System.Drawing.Point(96, 3);
+			this.cboScreenRotation.Location = new System.Drawing.Point(96, 141);
 			this.cboScreenRotation.Name = "cboScreenRotation";
 			this.cboScreenRotation.Size = new System.Drawing.Size(77, 21);
 			this.cboScreenRotation.TabIndex = 5;
@@ -1970,6 +1977,32 @@ namespace Mesen.GUI.Forms.Config
 			this.mnuPaletteYuv.Size = new System.Drawing.Size(254, 22);
 			this.mnuPaletteYuv.Text = "YUV v3 (by FirebrandX)";
 			this.mnuPaletteYuv.Click += new System.EventHandler(this.mnuPaletteYuv_Click);
+			// 
+			// chkRemoveSpriteLimit
+			// 
+			this.chkRemoveSpriteLimit.AutoSize = true;
+			this.tableLayoutPanel9.SetColumnSpan(this.chkRemoveSpriteLimit, 2);
+			this.chkRemoveSpriteLimit.Location = new System.Drawing.Point(3, 3);
+			this.chkRemoveSpriteLimit.Name = "chkRemoveSpriteLimit";
+			this.chkRemoveSpriteLimit.Size = new System.Drawing.Size(205, 17);
+			this.chkRemoveSpriteLimit.TabIndex = 6;
+			this.chkRemoveSpriteLimit.Text = "Remove sprite limit (Reduces flashing)";
+			this.chkRemoveSpriteLimit.UseVisualStyleBackColor = true;
+			this.chkRemoveSpriteLimit.CheckedChanged += new System.EventHandler(this.chkRemoveSpriteLimit_CheckedChanged);
+			// 
+			// chkAdaptiveSpriteLimit
+			// 
+			this.chkAdaptiveSpriteLimit.AutoSize = true;
+			this.tableLayoutPanel9.SetColumnSpan(this.chkAdaptiveSpriteLimit, 2);
+			this.chkAdaptiveSpriteLimit.Enabled = false;
+			this.chkAdaptiveSpriteLimit.Location = new System.Drawing.Point(18, 26);
+			this.chkAdaptiveSpriteLimit.Margin = new System.Windows.Forms.Padding(18, 3, 3, 3);
+			this.chkAdaptiveSpriteLimit.Name = "chkAdaptiveSpriteLimit";
+			this.chkAdaptiveSpriteLimit.Size = new System.Drawing.Size(442, 17);
+			this.chkAdaptiveSpriteLimit.TabIndex = 11;
+			this.chkAdaptiveSpriteLimit.Text = "Automatically re-enable sprite limit as needed to prevent graphical glitches when" +
+    " possible";
+			this.chkAdaptiveSpriteLimit.UseVisualStyleBackColor = true;
 			// 
 			// frmVideoConfig
 			// 
@@ -2175,5 +2208,7 @@ namespace Mesen.GUI.Forms.Config
 		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel18;
 		private MesenNumericUpDown nudGameSpecificOverscanLeft;
 		private System.Windows.Forms.Label lblGameSpecificOverscanLeft;
+		private System.Windows.Forms.CheckBox chkRemoveSpriteLimit;
+		private System.Windows.Forms.CheckBox chkAdaptiveSpriteLimit;
 	}
 }

@@ -281,6 +281,8 @@
 
 			<Control ID="tpgAdvanced">Advanced</Control>
 			<Control ID="lblScreenRotation">Screen Rotation:</Control>
+			<Control ID="chkRemoveSpriteLimit">Отключить лимит спрайтов (уменьшает мерцание)</Control>
+			<Control ID="chkAdaptiveSpriteLimit">Automatically re-enable sprite limit as needed to prevent graphical glitches when possible</Control>
 			<Control ID="chkDisableBackground">Disable background</Control>
 			<Control ID="chkDisableSprites">Disable sprites</Control>
 			<Control ID="chkForceBackgroundFirstColumn">Force background display in first column</Control>
@@ -302,8 +304,6 @@
 			<Control ID="chkUseAlternativeMmc3Irq">Использовать альтернативный IRQ MMC3</Control>
 			<Control ID="chkAllowInvalidInput">Разрешить недопустимые комбинации (Вниз+Вверх и Влево+Вправо)</Control>
 			<Control ID="lblRamPowerOnState">Содержимое ОЗУ при включении : </Control>
-			<Control ID="chkRemoveSpriteLimit">Отключить лимит спрайтов (уменьшает мерцание)</Control>
-			<Control ID="chkAdaptiveSpriteLimit">Automatically re-enable sprite limit as needed to prevent graphical glitches when possible</Control>
 			<Control ID="chkEnableOamDecay">Enable OAM RAM decay</Control>
 			<Control ID="chkDisablePpu2004Reads">Disable PPU $2004 reads (Famicom behavior)</Control>
 			<Control ID="chkDisableOamAddrBug">Disable PPU OAMADDR bug emulation</Control>

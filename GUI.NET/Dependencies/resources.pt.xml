@@ -282,6 +282,8 @@
 
 			<Control ID="tpgAdvanced">Avançado</Control>
 			<Control ID="lblScreenRotation">Rotação da tela:</Control>
+			<Control ID="chkRemoveSpriteLimit">Eliminar o limite de sprites (Reduz os "flashes" em alguns jogos)</Control>
+			<Control ID="chkAdaptiveSpriteLimit">Quando possível auto reativar o limite de sprite para evitar falhas gráficas caso precisar</Control>
 			<Control ID="chkDisableBackground">Desabilitar fundo</Control>
 			<Control ID="chkDisableSprites">Desabilitar sprites</Control>
 			<Control ID="chkForceBackgroundFirstColumn">Forçar ver fundo em primeira coluna</Control>
@@ -302,8 +304,6 @@
 			<Control ID="tpgAdvanced">Avançado</Control>
 			<Control ID="chkUseAlternativeMmc3Irq">Utilizar a versão alternativa de componentes de IRQs de MMC3</Control>
 			<Control ID="chkAllowInvalidInput">Permitir as entradas inválidas (Cima+Baixo e Esquerda+Direita ao mesmo tempo)</Control>
-			<Control ID="chkRemoveSpriteLimit">Eliminar o limite de sprites (Reduz os "flashes" em alguns jogos)</Control>
-			<Control ID="chkAdaptiveSpriteLimit">Quando possível auto reativar o limite de sprite para evitar falhas gráficas caso precisar</Control>
 			<Control ID="chkEnableOamDecay">Ativar declínio da RAM OAM</Control>
 			<Control ID="chkDisablePpu2004Reads">Desativar leitura da PPU $2004 (Comportamento do Famicom)</Control>
 			<Control ID="chkDisableOamAddrBug">Desativar emulação do erro OAMADDR da PPU</Control>

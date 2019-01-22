@@ -282,6 +282,8 @@
 
 			<Control ID="tpgAdvanced">Avançat</Control>
 			<Control ID="lblScreenRotation">Rotació de la pantalla:</Control>
+			<Control ID="chkRemoveSpriteLimit">Elimina el límit de sprites (redueix les pampallugues en certs jocs)</Control>
+			<Control ID="chkAdaptiveSpriteLimit">Torna a activar el límit de sprites quan faci falta per tal de prevenir errors gràfics</Control>
 			<Control ID="chkDisableBackground">Desactiva el fons</Control>
 			<Control ID="chkDisableSprites">Desactiva els sprites</Control>
 			<Control ID="chkForceBackgroundFirstColumn">Força l'aparició del fons a la primera columna</Control>
@@ -303,8 +305,6 @@
 			<Control ID="chkUseAlternativeMmc3Irq">Fes servir el comportament alternatiu de les IRQ de MMC3</Control>
 			<Control ID="chkAllowInvalidInput">Permet entrades invàlides (ex. Amunt+Avall i Esquerra+Dreta alhora)</Control>
 			<Control ID="lblRamPowerOnState">Estat inicial de la memòria durant l'arrancada:</Control>
-			<Control ID="chkRemoveSpriteLimit">Elimina el límit de sprites (redueix les pampallugues en certs jocs)</Control>
-			<Control ID="chkAdaptiveSpriteLimit">Torna a activar el límit de sprites quan faci falta per tal de prevenir errors gràfics</Control>
 			<Control ID="chkEnableOamDecay">Activa l'emulació de la degradació de la memòria OAM</Control>
 			<Control ID="chkDisablePpu2004Reads">Impedeix la lectura del valor $2004 de la PPU (comportament de la Famicom)</Control>
 			<Control ID="chkDisableOamAddrBug">Desactiva l'emulació d'errors OAMADDR de la PPU</Control>

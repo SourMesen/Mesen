@@ -64,6 +64,8 @@ namespace Mesen.GUI.Forms.Config
 			AddBinding("NtscIFilterLength", trkIFilterLength);
 			AddBinding("NtscQFilterLength", trkQFilterLength);
 
+			AddBinding("RemoveSpriteLimit", chkRemoveSpriteLimit);
+			AddBinding("AdaptiveSpriteLimit", chkAdaptiveSpriteLimit);
 			AddBinding("DisableBackground", chkDisableBackground);
 			AddBinding("DisableSprites", chkDisableSprites);
 			AddBinding("ForceBackgroundFirstColumn", chkForceBackgroundFirstColumn);
@@ -474,6 +476,11 @@ namespace Mesen.GUI.Forms.Config
 			nudGameSpecificOverscanLeft.Enabled = chkEnableGameSpecificOverscan.Checked;
 			nudGameSpecificOverscanRight.Enabled = chkEnableGameSpecificOverscan.Checked;
 			nudGameSpecificOverscanTop.Enabled = chkEnableGameSpecificOverscan.Checked;
+		}
+
+		private void chkRemoveSpriteLimit_CheckedChanged(object sender, EventArgs e)
+		{
+			chkAdaptiveSpriteLimit.Enabled = chkRemoveSpriteLimit.Checked;
 		}
 	}
 }

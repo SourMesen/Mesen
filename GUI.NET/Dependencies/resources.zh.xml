@@ -289,6 +289,8 @@
 
 			<Control ID="tpgAdvanced">高级</Control>
 			<Control ID="lblScreenRotation">屏幕旋转:</Control>
+			<Control ID="chkRemoveSpriteLimit">不限制精灵 (缓解闪烁症状)</Control>
+			<Control ID="chkAdaptiveSpriteLimit">在必要时自动重新限制精灵 (缓解取消限制精灵导致的画面问题)</Control>
 			<Control ID="chkDisableBackground">禁用背景</Control>
 			<Control ID="chkDisableSprites">禁用精灵</Control>
 			<Control ID="chkForceBackgroundFirstColumn">在第一列强制显示背景</Control>
@@ -308,8 +310,6 @@
 			<Control ID="tpgAdvanced">高级</Control>
 			<Control ID="chkUseAlternativeMmc3Irq">使用 MMC3 IRQ 替代行为</Control>
 			<Control ID="chkAllowInvalidInput">允许无效按键 (例如同时按下↑↓/←→)</Control>
-			<Control ID="chkRemoveSpriteLimit">不限制精灵 (缓解闪烁症状)</Control>
-			<Control ID="chkAdaptiveSpriteLimit">在必要时自动重新限制精灵 (缓解取消限制精灵导致的画面问题)</Control>
 			<Control ID="chkEnableOamDecay">模拟 OAM 和 RAM 损坏</Control>
 			<Control ID="chkDisablePpu2004Reads">禁止读取 PPU $2004 地址 (FC 真机)</Control>
 			<Control ID="chkDisableOamAddrBug">不模拟 PPU OAM 地址 BUG</Control>

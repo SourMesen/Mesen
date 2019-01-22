@@ -281,6 +281,8 @@
 
 			<Control ID="tpgAdvanced">Розширенi</Control>
 			<Control ID="lblScreenRotation">Обертання екрана:</Control>
+			<Control ID="chkRemoveSpriteLimit">Відключити ліміт спрайтів (зменшує мерехтіння)</Control>
+			<Control ID="chkAdaptiveSpriteLimit">Автоматичне повторне ввімкнення обмеження спрайтiв якщо потрібно щоб зменшити проблеми з графікою</Control>
 			<Control ID="chkDisableBackground">Вимкнути фон</Control>
 			<Control ID="chkDisableSprites">Вимкнути спрайти</Control>
 			<Control ID="chkForceBackgroundFirstColumn">Примусове відображення фону в першому стовпчику</Control>
@@ -302,8 +304,6 @@
 			<Control ID="chkUseAlternativeMmc3Irq">Використовувати альтернативний IRQ MMC3</Control>
 			<Control ID="chkAllowInvalidInput">Дозволити неприпустимі комбінації (Вниз+Вгору і Ліворуч+Вправо)</Control>
 			<Control ID="lblRamPowerOnState">Вміст ОЗУ при включенні : </Control>
-			<Control ID="chkRemoveSpriteLimit">Відключити ліміт спрайтів (зменшує мерехтіння)</Control>
-			<Control ID="chkAdaptiveSpriteLimit">Автоматичне повторне ввімкнення обмеження спрайтiв якщо потрібно щоб зменшити проблеми з графікою</Control>
 			<Control ID="chkEnableOamDecay">Увімкнути емуляцію погіршення пам'яті OAM</Control>
 			<Control ID="chkDisablePpu2004Reads">Запобігання ведення реєстру PPU $2004 (Famicom)</Control>
 			<Control ID="chkDisableOamAddrBug">Вимкнути емуляцію помилок OAMADDR з PPU</Control>

@@ -15,8 +15,6 @@ namespace Mesen.GUI.Config
 	public class EmulationInfo
 	{
 		public bool AllowInvalidInput = false;
-		public bool RemoveSpriteLimit = false;
-		public bool AdaptiveSpriteLimit = true;
 		public bool DisablePpu2004Reads = false;
 		public bool DisablePaletteRead = false;
 		public bool DisableOamAddrBug = false;
@@ -54,8 +52,6 @@ namespace Mesen.GUI.Config
 
 			InteropEmu.SetFlag(EmulationFlags.Mmc3IrqAltBehavior, emulationInfo.UseAlternativeMmc3Irq);
 			InteropEmu.SetFlag(EmulationFlags.AllowInvalidInput, emulationInfo.AllowInvalidInput);
-			InteropEmu.SetFlag(EmulationFlags.RemoveSpriteLimit, emulationInfo.RemoveSpriteLimit);
-			InteropEmu.SetFlag(EmulationFlags.AdaptiveSpriteLimit, emulationInfo.AdaptiveSpriteLimit);
 			InteropEmu.SetFlag(EmulationFlags.ShowLagCounter, emulationInfo.ShowLagCounter);
 			InteropEmu.SetFlag(EmulationFlags.DisablePpu2004Reads, emulationInfo.DisablePpu2004Reads);
 			InteropEmu.SetFlag(EmulationFlags.DisablePaletteRead, emulationInfo.DisablePaletteRead);

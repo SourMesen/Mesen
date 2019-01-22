@@ -281,6 +281,8 @@
 
 			<Control ID="tpgAdvanced">Avanzado</Control>
 			<Control ID="lblScreenRotation">Rotación de pantalla:</Control>
+			<Control ID="chkRemoveSpriteLimit">Eliminar el límite de sprites (Reduce el parpadeo en algunos juegos)</Control>
+			<Control ID="chkAdaptiveSpriteLimit">Volver a habilitar el límite de sprites cuando haga falta para prevenir errores gráficos</Control>
 			<Control ID="chkDisableBackground">Deshabilitar fondo</Control>
 			<Control ID="chkDisableSprites">Deshabilitar sprites</Control>
 			<Control ID="chkForceBackgroundFirstColumn">Forzar ver fondo en primera columna</Control>
@@ -302,8 +304,6 @@
 			<Control ID="chkUseAlternativeMmc3Irq">Utilizar la versión alternativa de componentes de IRQs de MMC3</Control>
 			<Control ID="chkAllowInvalidInput">Permitir las entradas inválidas (Arriba+Abajo e Izquierda+Derecha al mismo tiempo)</Control>
 			<Control ID="lblRamPowerOnState">Estado inicial de la memoria durante el inicio:</Control>
-			<Control ID="chkRemoveSpriteLimit">Eliminar el límite de sprites (Reduce el parpadeo en algunos juegos)</Control>
-			<Control ID="chkAdaptiveSpriteLimit">Volver a habilitar el límite de sprites cuando haga falta para prevenir errores gráficos</Control>
 			<Control ID="chkEnableOamDecay">Activar la emulación de la degradación de la memoria OAM</Control>
 			<Control ID="chkDisablePpu2004Reads">Impedir la reproducción del registro $2004 de la PPU (Famicom)</Control>
 			<Control ID="chkDisableOamAddrBug">Desactivar la emulación de errores OAMADDR de la PPU</Control>

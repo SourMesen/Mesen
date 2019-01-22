@@ -283,6 +283,8 @@
 
 			<Control ID="tpgAdvanced">詳細設定</Control>
 			<Control ID="lblScreenRotation">画面の回転:</Control>
+			<Control ID="chkRemoveSpriteLimit">スプライトの制限を解除　(点滅を軽減する)</Control>
+			<Control ID="chkAdaptiveSpriteLimit">必要な時だけにスプライトの制限を戻す（制限解除による映像バグの発生率を軽減する）</Control>
 			<Control ID="chkDisableBackground">バックグラウンドを隠す</Control>
 			<Control ID="chkDisableSprites">スプライトを隠す</Control>
 			<Control ID="chkForceBackgroundFirstColumn">ゲームの設定を無視して、画面の一番左側にバックグラウンドを表す</Control>
@@ -303,8 +305,6 @@
 			<Control ID="tpgAdvanced">詳細設定</Control>
 			<Control ID="chkUseAlternativeMmc3Irq">MMC3AのIRQ仕様を使う</Control>
 			<Control ID="chkAllowInvalidInput">コントローラでは不可能インプットを可能にする　（同時に上と下や右と左）</Control>
-			<Control ID="chkRemoveSpriteLimit">スプライトの制限を解除　(点滅を軽減する)</Control>
-			<Control ID="chkAdaptiveSpriteLimit">必要な時だけにスプライトの制限を戻す（制限解除による映像バグの発生率を軽減する）</Control>
 			<Control ID="chkEnableOamDecay">オブジェクト・アトリビュート・メモリーの崩壊現象を再現する</Control>
 			<Control ID="chkDisablePpu2004Reads">PPUの$2004を読み込み不可能にする　（ファミコン同様）</Control>
 			<Control ID="chkDisableOamAddrBug">PPUのOAMADDRバグを無効にする</Control>

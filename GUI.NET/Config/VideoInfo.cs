@@ -46,6 +46,8 @@ namespace Mesen.GUI.Config
 		[MinMax(0, 400)] public Int32 NtscIFilterLength = 50;
 		[MinMax(0, 400)] public Int32 NtscQFilterLength = 50;
 
+		public bool RemoveSpriteLimit = false;
+		public bool AdaptiveSpriteLimit = true;
 		public bool DisableBackground = false;
 		public bool DisableSprites = false;
 		public bool ForceBackgroundFirstColumn = false;
@@ -84,6 +86,8 @@ namespace Mesen.GUI.Config
 			InteropEmu.SetFlag(EmulationFlags.UseHdPacks, videoInfo.UseHdPacks);
 			InteropEmu.SetFlag(EmulationFlags.IntegerFpsMode, videoInfo.IntegerFpsMode);
 
+			InteropEmu.SetFlag(EmulationFlags.RemoveSpriteLimit, videoInfo.RemoveSpriteLimit);
+			InteropEmu.SetFlag(EmulationFlags.AdaptiveSpriteLimit, videoInfo.AdaptiveSpriteLimit);
 			InteropEmu.SetFlag(EmulationFlags.DisableBackground, videoInfo.DisableBackground);
 			InteropEmu.SetFlag(EmulationFlags.DisableSprites, videoInfo.DisableSprites);
 			InteropEmu.SetFlag(EmulationFlags.ForceBackgroundFirstColumn, videoInfo.ForceBackgroundFirstColumn);
