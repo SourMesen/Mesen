@@ -302,6 +302,8 @@
 			<Control ID="lblRewindSpeed">Velocidade de rebobinamento:</Control>
 
 			<Control ID="tpgAdvanced">Avançado</Control>
+			<Control ID="lblDeveloperSettings">Recommended settings for developers (homebrew / ROM hacking)</Control>
+			<Control ID="lblMiscSettings">Configurações diversas</Control>
 			<Control ID="chkUseAlternativeMmc3Irq">Utilizar a versão alternativa de componentes de IRQs de MMC3</Control>
 			<Control ID="chkAllowInvalidInput">Permitir as entradas inválidas (Cima+Baixo e Esquerda+Direita ao mesmo tempo)</Control>
 			<Control ID="chkEnableOamDecay">Ativar declínio da RAM OAM</Control>

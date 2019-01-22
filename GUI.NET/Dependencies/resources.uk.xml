@@ -301,6 +301,8 @@
 			<Control ID="lblRewindSpeed">Швидкість перемотування:</Control>
 
 			<Control ID="tpgAdvanced">Розширені</Control>
+			<Control ID="lblDeveloperSettings">Recommended settings for developers (homebrew / ROM hacking)</Control>
+			<Control ID="lblMiscSettings">Різнi настройки</Control>
 			<Control ID="chkUseAlternativeMmc3Irq">Використовувати альтернативний IRQ MMC3</Control>
 			<Control ID="chkAllowInvalidInput">Дозволити неприпустимі комбінації (Вниз+Вгору і Ліворуч+Вправо)</Control>
 			<Control ID="lblRamPowerOnState">Вміст ОЗУ при включенні : </Control>

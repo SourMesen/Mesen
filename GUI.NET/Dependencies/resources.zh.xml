@@ -308,6 +308,8 @@
 			<Control ID="lblRewindSpeed">快退速度:</Control>
 
 			<Control ID="tpgAdvanced">高级</Control>
+			<Control ID="lblDeveloperSettings">Recommended settings for developers (homebrew / ROM hacking)</Control>
+			<Control ID="lblMiscSettings">其他</Control>
 			<Control ID="chkUseAlternativeMmc3Irq">使用 MMC3 IRQ 替代行为</Control>
 			<Control ID="chkAllowInvalidInput">允许无效按键 (例如同时按下↑↓/←→)</Control>
 			<Control ID="chkEnableOamDecay">模拟 OAM 和 RAM 损坏</Control>

@@ -301,6 +301,8 @@
 			<Control ID="lblRewindSpeed">Rewind Speed:</Control>
 
 			<Control ID="tpgAdvanced">Расширенные</Control>
+			<Control ID="lblDeveloperSettings">Recommended settings for developers (homebrew / ROM hacking)</Control>
+			<Control ID="lblMiscSettings">Miscellaneous Settings</Control>
 			<Control ID="chkUseAlternativeMmc3Irq">Использовать альтернативный IRQ MMC3</Control>
 			<Control ID="chkAllowInvalidInput">Разрешить недопустимые комбинации (Вниз+Вверх и Влево+Вправо)</Control>
 			<Control ID="lblRamPowerOnState">Содержимое ОЗУ при включении : </Control>
@@ -342,7 +344,7 @@
 			<Control ID="chkDeveloperMode">Enable developer mode</Control>
 
 			<Control ID="lblPauseBackgroundSettings">Pause/Background Settings</Control>
-			<Control ID="lblMiscSettings">Misc. Settings</Control>
+			<Control ID="lblMiscSettings">Miscellaneous Settings</Control>
 			<Control ID="chkAutoHideMenu">Automatically hide menu bar</Control>
 			<Control ID="chkDisplayTitleBarInfo">Display additional information in title bar</Control>
 

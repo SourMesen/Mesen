@@ -302,6 +302,8 @@
 			<Control ID="lblRewindSpeed">Rewind Speed:</Control>
 
 			<Control ID="tpgAdvanced">Advanced</Control>
+			<Control ID="lblDeveloperSettings">Recommended settings for developers (homebrew / ROM hacking)</Control>
+			<Control ID="lblMiscSettings">Miscellaneous Settings</Control>
 			<Control ID="chkUseAlternativeMmc3Irq">Use alternative MMC3 IRQ behavior</Control>
 			<Control ID="chkAllowInvalidInput">Allow invalid input (e.g Down + Up or Left + Right at the same time)</Control>
 			<Control ID="chkEnableOamDecay">Enable OAM RAM decay</Control>
@@ -344,7 +346,7 @@
 			<Control ID="chkDeveloperMode">Enable developer mode</Control>
 
 			<Control ID="lblPauseBackgroundSettings">Pause/Background Settings</Control>
-			<Control ID="lblMiscSettings">Misc. Settings</Control>
+			<Control ID="lblMiscSettings">Miscellaneous Settings</Control>
 			<Control ID="chkAutoHideMenu">Automatically hide menu bar</Control>
 			<Control ID="chkDisplayTitleBarInfo">Display additional information in title bar</Control>
 
