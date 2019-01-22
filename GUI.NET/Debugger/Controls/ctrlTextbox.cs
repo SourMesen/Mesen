@@ -1059,6 +1059,10 @@ namespace Mesen.GUI.Debugger
 							colors.Add(info.CodeEffectiveAddressColor);
 							parts.Add(addressString);
 							memoryAddress = addressString.Substring(3).Trim();
+
+							//Update the contents of "arrayPosition" based on the address string, rather than use the one from the original address
+							int plusIndex = memoryAddress.IndexOf("+");
+							arrayPosition = plusIndex >= 0 ? memoryAddress.Substring(plusIndex+1) : "";
 						} else if(operand.Length > 0 && operand[0] != '#') {
 							memoryAddress = operand.Trim();
 						}
