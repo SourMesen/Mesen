@@ -271,10 +271,13 @@ namespace Mesen.GUI.Debugger
 					IsRam = true
 				};
 
-				if(segment.Start >= 0x4020) {
-					match = _segmentPrgRomRegex.Match(row);
-					if(match.Success && !row.Contains("type=rw")) {
-						segment.FileOffset = Int32.Parse(match.Groups[4].Value);
+				match = _segmentPrgRomRegex.Match(row);
+				if(match.Success) {
+					segment.FileOffset = Int32.Parse(match.Groups[4].Value);
+					if(!row.Contains("type=rw") && segment.Start >= 0x4020) {
+						segment.IsRam = false;
+					} else if(segment.FileOffset < this._headerSize) {
+						//This usually means this is the segment for the iNES header
 						segment.IsRam = false;
 					}
 				}
@@ -509,7 +512,7 @@ namespace Mesen.GUI.Debugger
 						}
 
 						AddressTypeInfo addressInfo = GetSymbolAddressInfo(symbol);
-						if(symbol.Address != null) {
+						if(symbol.Address != null && symbol.Address >= 0) {
 							CodeLabel label = this.CreateLabel(addressInfo.Address, addressInfo.Type, (uint)GetSymbolSize(symbol));
 							if(label != null) {
 								label.Label = newName;
