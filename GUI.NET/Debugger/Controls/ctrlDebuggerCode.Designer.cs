@@ -20,7 +20,11 @@
 				_codeViewerActions.Dispose();
 				_codeViewerActions = null;
 			}
-
+			if(_tooltipManager != null) {
+				_tooltipManager.Dispose();
+				_tooltipManager = null;
+			}
+			DebugWorkspaceManager.SymbolProviderChanged -= UpdateSymbolProvider;
 			base.Dispose(disposing);
 		}
 
@@ -64,12 +68,10 @@
 			this.ctrlCodeViewer.ShowSingleLineLineNumberNotes = false;
 			this.ctrlCodeViewer.Size = new System.Drawing.Size(479, 150);
 			this.ctrlCodeViewer.TabIndex = 1;
-			this.ctrlCodeViewer.ScrollPositionChanged += new System.EventHandler(this.ctrlCodeViewer_ScrollPositionChanged);
 			this.ctrlCodeViewer.MouseUp += new System.Windows.Forms.MouseEventHandler(this.ctrlCodeViewer_MouseUp);
 			this.ctrlCodeViewer.MouseMove += new System.Windows.Forms.MouseEventHandler(this.ctrlCodeViewer_MouseMove);
 			this.ctrlCodeViewer.MouseDown += new System.Windows.Forms.MouseEventHandler(this.ctrlCodeViewer_MouseDown);
 			this.ctrlCodeViewer.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.ctrlCodeViewer_MouseDoubleClick);
-			this.ctrlCodeViewer.MouseLeave += new System.EventHandler(this.ctrlCodeViewer_MouseLeave);
 			this.ctrlCodeViewer.TextZoomChanged += new System.EventHandler(this.ctrlCodeViewer_TextZoomChanged);
 			// 
 			// contextMenuMargin

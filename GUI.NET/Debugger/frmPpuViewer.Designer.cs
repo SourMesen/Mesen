@@ -33,14 +33,19 @@ namespace Mesen.GUI.Debugger
 		/// </summary>
 		private void InitializeComponent()
 		{
-			this.menuStrip1 = new Mesen.GUI.Controls.ctrlMesenMenuStrip();
+			this.menuStrip = new Mesen.GUI.Controls.ctrlMesenMenuStrip();
 			this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuClose = new System.Windows.Forms.ToolStripMenuItem();
 			this.viewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuRefresh = new System.Windows.Forms.ToolStripMenuItem();
+			this.autorefreshSpeedToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuAutoRefreshLow = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuAutoRefreshNormal = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuAutoRefreshHigh = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
 			this.mnuAutoRefresh = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuRefreshOnBreak = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuShowInformationOverlay = new System.Windows.Forms.ToolStripMenuItem();
 			this.tabMain = new System.Windows.Forms.TabControl();
 			this.tpgNametableViewer = new System.Windows.Forms.TabPage();
 			this.ctrlNametableViewer = new Mesen.GUI.Debugger.Controls.ctrlNametableViewer();
@@ -51,7 +56,9 @@ namespace Mesen.GUI.Debugger
 			this.tpgPaletteViewer = new System.Windows.Forms.TabPage();
 			this.ctrlPaletteViewer = new Mesen.GUI.Debugger.Controls.ctrlPaletteViewer();
 			this.ctrlScanlineCycle = new Mesen.GUI.Debugger.Controls.ctrlScanlineCycleSelect();
-			this.menuStrip1.SuspendLayout();
+			this.btnToggleView = new System.Windows.Forms.Button();
+			this.chkToggleZoom = new System.Windows.Forms.CheckBox();
+			this.menuStrip.SuspendLayout();
 			this.tabMain.SuspendLayout();
 			this.tpgNametableViewer.SuspendLayout();
 			this.tpgChrViewer.SuspendLayout();
@@ -59,16 +66,16 @@ namespace Mesen.GUI.Debugger
 			this.tpgPaletteViewer.SuspendLayout();
 			this.SuspendLayout();
 			// 
-			// menuStrip1
+			// menuStrip
 			// 
-			this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+			this.menuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.fileToolStripMenuItem,
             this.viewToolStripMenuItem});
-			this.menuStrip1.Location = new System.Drawing.Point(0, 0);
-			this.menuStrip1.Name = "menuStrip1";
-			this.menuStrip1.Size = new System.Drawing.Size(709, 24);
-			this.menuStrip1.TabIndex = 2;
-			this.menuStrip1.Text = "menuStrip1";
+			this.menuStrip.Location = new System.Drawing.Point(0, 0);
+			this.menuStrip.Name = "menuStrip";
+			this.menuStrip.Size = new System.Drawing.Size(709, 24);
+			this.menuStrip.TabIndex = 2;
+			this.menuStrip.Text = "menuStrip1";
 			// 
 			// fileToolStripMenuItem
 			// 
@@ -90,9 +97,11 @@ namespace Mesen.GUI.Debugger
 			// 
 			this.viewToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.mnuRefresh,
+            this.autorefreshSpeedToolStripMenuItem,
             this.toolStripMenuItem1,
             this.mnuAutoRefresh,
-            this.mnuRefreshOnBreak});
+            this.mnuRefreshOnBreak,
+            this.mnuShowInformationOverlay});
 			this.viewToolStripMenuItem.Name = "viewToolStripMenuItem";
 			this.viewToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
 			this.viewToolStripMenuItem.Text = "View";
@@ -101,14 +110,46 @@ namespace Mesen.GUI.Debugger
 			// 
 			this.mnuRefresh.Image = global::Mesen.GUI.Properties.Resources.Reset;
 			this.mnuRefresh.Name = "mnuRefresh";
-			this.mnuRefresh.Size = new System.Drawing.Size(198, 22);
+			this.mnuRefresh.Size = new System.Drawing.Size(210, 22);
 			this.mnuRefresh.Text = "Refresh";
 			this.mnuRefresh.Click += new System.EventHandler(this.mnuRefresh_Click);
+			// 
+			// autorefreshSpeedToolStripMenuItem
+			// 
+			this.autorefreshSpeedToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.mnuAutoRefreshLow,
+            this.mnuAutoRefreshNormal,
+            this.mnuAutoRefreshHigh});
+			this.autorefreshSpeedToolStripMenuItem.Image = global::Mesen.GUI.Properties.Resources.Speed;
+			this.autorefreshSpeedToolStripMenuItem.Name = "autorefreshSpeedToolStripMenuItem";
+			this.autorefreshSpeedToolStripMenuItem.Size = new System.Drawing.Size(210, 22);
+			this.autorefreshSpeedToolStripMenuItem.Text = "Auto-refresh Speed";
+			// 
+			// mnuAutoRefreshLow
+			// 
+			this.mnuAutoRefreshLow.Name = "mnuAutoRefreshLow";
+			this.mnuAutoRefreshLow.Size = new System.Drawing.Size(159, 22);
+			this.mnuAutoRefreshLow.Text = "Low (15 FPS)";
+			this.mnuAutoRefreshLow.Click += new System.EventHandler(this.mnuAutoRefreshSpeed_Click);
+			// 
+			// mnuAutoRefreshNormal
+			// 
+			this.mnuAutoRefreshNormal.Name = "mnuAutoRefreshNormal";
+			this.mnuAutoRefreshNormal.Size = new System.Drawing.Size(159, 22);
+			this.mnuAutoRefreshNormal.Text = "Normal (30 FPS)";
+			this.mnuAutoRefreshNormal.Click += new System.EventHandler(this.mnuAutoRefreshSpeed_Click);
+			// 
+			// mnuAutoRefreshHigh
+			// 
+			this.mnuAutoRefreshHigh.Name = "mnuAutoRefreshHigh";
+			this.mnuAutoRefreshHigh.Size = new System.Drawing.Size(159, 22);
+			this.mnuAutoRefreshHigh.Text = "High (60 FPS)";
+			this.mnuAutoRefreshHigh.Click += new System.EventHandler(this.mnuAutoRefreshSpeed_Click);
 			// 
 			// toolStripMenuItem1
 			// 
 			this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-			this.toolStripMenuItem1.Size = new System.Drawing.Size(195, 6);
+			this.toolStripMenuItem1.Size = new System.Drawing.Size(207, 6);
 			// 
 			// mnuAutoRefresh
 			// 
@@ -116,7 +157,7 @@ namespace Mesen.GUI.Debugger
 			this.mnuAutoRefresh.CheckOnClick = true;
 			this.mnuAutoRefresh.CheckState = System.Windows.Forms.CheckState.Checked;
 			this.mnuAutoRefresh.Name = "mnuAutoRefresh";
-			this.mnuAutoRefresh.Size = new System.Drawing.Size(198, 22);
+			this.mnuAutoRefresh.Size = new System.Drawing.Size(210, 22);
 			this.mnuAutoRefresh.Text = "Auto-refresh";
 			this.mnuAutoRefresh.Click += new System.EventHandler(this.mnuAutoRefresh_Click);
 			// 
@@ -124,9 +165,17 @@ namespace Mesen.GUI.Debugger
 			// 
 			this.mnuRefreshOnBreak.CheckOnClick = true;
 			this.mnuRefreshOnBreak.Name = "mnuRefreshOnBreak";
-			this.mnuRefreshOnBreak.Size = new System.Drawing.Size(198, 22);
+			this.mnuRefreshOnBreak.Size = new System.Drawing.Size(210, 22);
 			this.mnuRefreshOnBreak.Text = "Refresh on pause/break";
 			this.mnuRefreshOnBreak.Click += new System.EventHandler(this.mnuRefreshOnBreak_Click);
+			// 
+			// mnuShowInformationOverlay
+			// 
+			this.mnuShowInformationOverlay.CheckOnClick = true;
+			this.mnuShowInformationOverlay.Name = "mnuShowInformationOverlay";
+			this.mnuShowInformationOverlay.Size = new System.Drawing.Size(210, 22);
+			this.mnuShowInformationOverlay.Text = "Show information overlay";
+			this.mnuShowInformationOverlay.Click += new System.EventHandler(this.mnuShowInformationOverlay_Click);
 			// 
 			// tabMain
 			// 
@@ -159,7 +208,6 @@ namespace Mesen.GUI.Debugger
 			this.ctrlNametableViewer.Name = "ctrlNametableViewer";
 			this.ctrlNametableViewer.Size = new System.Drawing.Size(701, 527);
 			this.ctrlNametableViewer.TabIndex = 0;
-			this.ctrlNametableViewer.OnSelectChrTile += new System.EventHandler(this.ctrlNametableViewer_OnSelectChrTile);
 			// 
 			// tpgChrViewer
 			// 
@@ -175,7 +223,6 @@ namespace Mesen.GUI.Debugger
 			// 
 			this.ctrlChrViewer.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.ctrlChrViewer.Location = new System.Drawing.Point(0, 0);
-			this.ctrlChrViewer.Margin = new System.Windows.Forms.Padding(0);
 			this.ctrlChrViewer.Name = "ctrlChrViewer";
 			this.ctrlChrViewer.Size = new System.Drawing.Size(701, 527);
 			this.ctrlChrViewer.TabIndex = 2;
@@ -225,22 +272,47 @@ namespace Mesen.GUI.Debugger
 			this.ctrlScanlineCycle.Size = new System.Drawing.Size(709, 28);
 			this.ctrlScanlineCycle.TabIndex = 4;
 			// 
+			// btnToggleView
+			// 
+			this.btnToggleView.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.btnToggleView.Image = global::Mesen.GUI.Properties.Resources.Collapse;
+			this.btnToggleView.Location = new System.Drawing.Point(680, 1);
+			this.btnToggleView.Name = "btnToggleView";
+			this.btnToggleView.Size = new System.Drawing.Size(27, 22);
+			this.btnToggleView.TabIndex = 1;
+			this.btnToggleView.UseVisualStyleBackColor = true;
+			this.btnToggleView.Click += new System.EventHandler(this.btnToggleView_Click);
+			// 
+			// chkToggleZoom
+			// 
+			this.chkToggleZoom.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.chkToggleZoom.Appearance = System.Windows.Forms.Appearance.Button;
+			this.chkToggleZoom.AutoCheck = false;
+			this.chkToggleZoom.Image = global::Mesen.GUI.Properties.Resources.Zoom2x;
+			this.chkToggleZoom.Location = new System.Drawing.Point(647, 1);
+			this.chkToggleZoom.Name = "chkToggleZoom";
+			this.chkToggleZoom.Size = new System.Drawing.Size(27, 22);
+			this.chkToggleZoom.TabIndex = 6;
+			this.chkToggleZoom.UseVisualStyleBackColor = true;
+			this.chkToggleZoom.Click += new System.EventHandler(this.chkToggleZoom_Click);
+			// 
 			// frmPpuViewer
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(709, 605);
+			this.Controls.Add(this.chkToggleZoom);
+			this.Controls.Add(this.btnToggleView);
 			this.Controls.Add(this.tabMain);
-			this.Controls.Add(this.menuStrip1);
+			this.Controls.Add(this.menuStrip);
 			this.Controls.Add(this.ctrlScanlineCycle);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
-			this.MainMenuStrip = this.menuStrip1;
+			this.MainMenuStrip = this.menuStrip;
 			this.MaximizeBox = false;
-			this.MinimumSize = new System.Drawing.Size(725, 644);
 			this.Name = "frmPpuViewer";
 			this.Text = "PPU Viewer";
-			this.menuStrip1.ResumeLayout(false);
-			this.menuStrip1.PerformLayout();
+			this.menuStrip.ResumeLayout(false);
+			this.menuStrip.PerformLayout();
 			this.tabMain.ResumeLayout(false);
 			this.tpgNametableViewer.ResumeLayout(false);
 			this.tpgChrViewer.ResumeLayout(false);
@@ -253,7 +325,7 @@ namespace Mesen.GUI.Debugger
 
 		#endregion
 
-		private Mesen.GUI.Controls.ctrlMesenMenuStrip menuStrip1;
+		private Mesen.GUI.Controls.ctrlMesenMenuStrip menuStrip;
 		private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem mnuClose;
 		private System.Windows.Forms.ToolStripMenuItem viewToolStripMenuItem;
@@ -271,5 +343,12 @@ namespace Mesen.GUI.Debugger
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem1;
 		private System.Windows.Forms.ToolStripMenuItem mnuRefreshOnBreak;
 		private Controls.ctrlScanlineCycleSelect ctrlScanlineCycle;
+		private System.Windows.Forms.ToolStripMenuItem autorefreshSpeedToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem mnuAutoRefreshLow;
+		private System.Windows.Forms.ToolStripMenuItem mnuAutoRefreshNormal;
+		private System.Windows.Forms.ToolStripMenuItem mnuAutoRefreshHigh;
+		private System.Windows.Forms.Button btnToggleView;
+		private System.Windows.Forms.ToolStripMenuItem mnuShowInformationOverlay;
+		private System.Windows.Forms.CheckBox chkToggleZoom;
 	}
 }

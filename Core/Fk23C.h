@@ -44,10 +44,10 @@ protected:
 	uint16_t GetPRGPageSize() override { return 0x2000; }
 	uint16_t GetCHRPageSize() override { return 0x0400; }
 	
-	uint32_t GetChrRamSize() override { return 0x20000; } //only used for iNES 1.0 files w/ no DB entry
+	uint32_t GetChrRamSize() override { return 0x40000; } //Some games have up to 256kb of CHR RAM (only used for iNES 1.0 files w/ no DB entry)
 	uint16_t GetChrRamPageSize() override { return 0x400; }
 
-	uint32_t GetWorkRamSize() override { return 0x8000; } //only used for iNES 1.0 files w/ no DB entry
+	uint32_t GetWorkRamSize() override { return 0x8000; } //Somes games have up to 32kb of Work RAM (only used for iNES 1.0 files w/ no DB entry)
 	uint32_t GetWorkRamPageSize() override { return 0x2000; }
 
 	void InitMapper() override
@@ -222,8 +222,8 @@ protected:
 
 		if(_wramConfigEnabled) {
 			uint8_t nextBank = (_wramBankSelect + 1) & 0x03;
-			SetCpuMemoryMapping(0x4000, 0x5FFF, (nextBank & 0x02) >> 1, (nextBank & 0x01) ? PrgMemoryType::SaveRam : PrgMemoryType::WorkRam, MemoryAccessType::ReadWrite);
-			SetCpuMemoryMapping(0x6000, 0x7FFF, (_wramBankSelect & 0x02) >> 1, (_wramBankSelect & 0x01) ? PrgMemoryType::SaveRam : PrgMemoryType::WorkRam, MemoryAccessType::ReadWrite);
+			SetCpuMemoryMapping(0x4000, 0x5FFF, nextBank, HasBattery() ? PrgMemoryType::SaveRam : PrgMemoryType::WorkRam, MemoryAccessType::ReadWrite);
+			SetCpuMemoryMapping(0x6000, 0x7FFF, _wramBankSelect, HasBattery() ? PrgMemoryType::SaveRam : PrgMemoryType::WorkRam, MemoryAccessType::ReadWrite);
 		} else {
 			if(_wramEnabled) {
 				SetCpuMemoryMapping(0x6000, 0x7FFF, 0, PrgMemoryType::WorkRam, _wramWriteProtected ? MemoryAccessType::Read : MemoryAccessType::ReadWrite);

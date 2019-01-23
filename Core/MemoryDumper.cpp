@@ -20,7 +20,7 @@ MemoryDumper::MemoryDumper(shared_ptr<PPU> ppu, shared_ptr<MemoryManager> memory
 	_disassembler = disassembler;
 }
 
-void MemoryDumper::SetMemoryState(DebugMemoryType type, uint8_t *buffer)
+void MemoryDumper::SetMemoryState(DebugMemoryType type, uint8_t *buffer, int32_t length)
 {
 	switch(type) {
 		case DebugMemoryType::ChrRom:
@@ -30,24 +30,25 @@ void MemoryDumper::SetMemoryState(DebugMemoryType type, uint8_t *buffer)
 			break;
 
 		case DebugMemoryType::InternalRam:
-			for(int i = 0; i < 0x800; i++) {
+			for(int i = 0; i < 0x800 && i < length; i++) {
 				_memoryManager->DebugWrite(i, buffer[i]);
 			}
 			break;
 
 		case DebugMemoryType::PaletteMemory:
-			for(int i = 0; i < 0x20; i++) {
+			for(int i = 0; i < 0x20 && i < length; i++) {
 				_ppu->WritePaletteRAM(i, buffer[i]);
 			}
 			break;
 
-		case DebugMemoryType::SpriteMemory: memcpy(_ppu->GetSpriteRam(), buffer, 0x100); break;
-		case DebugMemoryType::SecondarySpriteMemory: memcpy(_ppu->GetSecondarySpriteRam(), buffer, 0x20); break;
+		case DebugMemoryType::SpriteMemory: memcpy(_ppu->GetSpriteRam(), buffer, std::min(length, 0x100)); break;
+		case DebugMemoryType::SecondarySpriteMemory: memcpy(_ppu->GetSecondarySpriteRam(), buffer, std::min(length, 0x20)); break;
 
 		case DebugMemoryType::ChrRam:
 		case DebugMemoryType::WorkRam:
 		case DebugMemoryType::SaveRam:
-			_mapper->WriteMemory(type, buffer);
+		case DebugMemoryType::NametableRam:
+			_mapper->WriteMemory(type, buffer, length);
 			break;
 	}
 }
@@ -88,6 +89,7 @@ uint32_t MemoryDumper::GetMemorySize(DebugMemoryType type)
 		case DebugMemoryType::SpriteMemory: return 0x100;
 		case DebugMemoryType::SecondarySpriteMemory: return 0x20;
 		case DebugMemoryType::InternalRam: return 0x800;
+		case DebugMemoryType::NametableRam:
 		case DebugMemoryType::PrgRom:
 		case DebugMemoryType::ChrRom:
 		case DebugMemoryType::ChrRam:
@@ -135,6 +137,7 @@ uint32_t MemoryDumper::GetMemoryState(DebugMemoryType type, uint8_t *buffer)
 		case DebugMemoryType::ChrRam:
 		case DebugMemoryType::WorkRam:
 		case DebugMemoryType::SaveRam:
+		case DebugMemoryType::NametableRam:
 			return _mapper->CopyMemory(type, buffer);
 
 		case DebugMemoryType::InternalRam:
@@ -215,6 +218,7 @@ void MemoryDumper::SetMemoryValue(DebugMemoryType memoryType, uint32_t address, 
 		case DebugMemoryType::ChrRam:
 		case DebugMemoryType::WorkRam:
 		case DebugMemoryType::SaveRam:
+		case DebugMemoryType::NametableRam:
 			_mapper->SetMemoryValue(memoryType, address, value);
 			break;
 
@@ -252,6 +256,7 @@ uint8_t MemoryDumper::GetMemoryValue(DebugMemoryType memoryType, uint32_t addres
 		case DebugMemoryType::ChrRam:
 		case DebugMemoryType::WorkRam:
 		case DebugMemoryType::SaveRam:
+		case DebugMemoryType::NametableRam:
 			return _mapper->GetMemoryValue(memoryType, address);
 
 		case DebugMemoryType::InternalRam: return _memoryManager->DebugRead(address);
@@ -260,7 +265,7 @@ uint8_t MemoryDumper::GetMemoryValue(DebugMemoryType memoryType, uint32_t addres
 	return 0;
 }
 
-void MemoryDumper::GetNametable(int nametableIndex, bool useGrayscalePalette, uint32_t* frameBuffer, uint8_t* tileData, uint8_t* paletteData)
+void MemoryDumper::GetNametable(int nametableIndex, NametableDisplayMode mode, uint32_t* frameBuffer, uint8_t* tileData, uint8_t* paletteData)
 {
 	shared_ptr<MMC5> mmc5 = std::dynamic_pointer_cast<MMC5>(_mapper);
 	uint32_t *rgbPalette = _debugger->GetConsole()->GetSettings()->GetRgbPalette();
@@ -286,21 +291,30 @@ void MemoryDumper::GetNametable(int nametableIndex, bool useGrayscalePalette, ui
 				paletteBaseAddr = ((attribute >> shift) & 0x03) << 2;
 			}
 			uint16_t tileAddr = bgAddr + (tileIndex << 4);
-			for(uint8_t i = 0; i < 8; i++) {
-				uint8_t lowByte, highByte;
-				if(mmc5 && mmc5->IsExtendedAttributes()) {
-					lowByte = mmc5->GetExAttributeTileData(ntIndex, tileAddr + i);
-					highByte = mmc5->GetExAttributeTileData(ntIndex, tileAddr + i + 8);
-				} else {
-					lowByte = _mapper->DebugReadVRAM(tileAddr + i);
-					highByte = _mapper->DebugReadVRAM(tileAddr + i + 8);
+			if(mode == NametableDisplayMode::AttributeView) {
+				for(uint8_t i = 0; i < 8; i++) {
+					for(uint8_t j = 0; j < 8; j++) {
+						uint8_t color = ((j & 0x04) >> 2) + ((i & 0x04) >> 1);
+						frameBuffer[(y << 11) + (x << 3) + (i << 8) + j] = rgbPalette[_ppu->ReadPaletteRAM(color == 0 ? 0 : (paletteBaseAddr + color))];
+					}
 				}
-				for(uint8_t j = 0; j < 8; j++) {
-					uint8_t color = ((lowByte >> (7 - j)) & 0x01) | (((highByte >> (7 - j)) & 0x01) << 1);
-					if(useGrayscalePalette) {
-						frameBuffer[(y << 11) + (x << 3) + (i << 8) + j] = rgbPalette[grayscalePalette[color]];
+			} else {
+				for(uint8_t i = 0; i < 8; i++) {
+					uint8_t lowByte, highByte;
+					if(mmc5 && mmc5->IsExtendedAttributes()) {
+						lowByte = mmc5->GetExAttributeTileData(ntIndex, tileAddr + i);
+						highByte = mmc5->GetExAttributeTileData(ntIndex, tileAddr + i + 8);
 					} else {
-						frameBuffer[(y << 11) + (x << 3) + (i << 8) + j] = rgbPalette[(color == 0 ? _ppu->ReadPaletteRAM(0) : _ppu->ReadPaletteRAM(paletteBaseAddr + color)) & 0x3F];
+						lowByte = _mapper->DebugReadVRAM(tileAddr + i);
+						highByte = _mapper->DebugReadVRAM(tileAddr + i + 8);
+					}
+					for(uint8_t j = 0; j < 8; j++) {
+						uint8_t color = ((lowByte >> (7 - j)) & 0x01) | (((highByte >> (7 - j)) & 0x01) << 1);
+						if(mode == NametableDisplayMode::Grayscale) {
+							frameBuffer[(y << 11) + (x << 3) + (i << 8) + j] = rgbPalette[grayscalePalette[color]];
+						} else {
+							frameBuffer[(y << 11) + (x << 3) + (i << 8) + j] = rgbPalette[(color == 0 ? _ppu->ReadPaletteRAM(0) : _ppu->ReadPaletteRAM(paletteBaseAddr + color)) & 0x3F];
+						}
 					}
 				}
 			}

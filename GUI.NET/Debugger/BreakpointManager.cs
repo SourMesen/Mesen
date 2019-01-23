@@ -82,10 +82,10 @@ namespace Mesen.GUI.Debugger
 				).FirstOrDefault();
 		}
 
-		public static void ToggleBreakpoint(int relativeAddress, AddressTypeInfo info, bool toggleEnabled)
+		public static void ToggleBreakpoint(AddressTypeInfo info, bool toggleEnabled)
 		{
-			if(relativeAddress >= 0 || info.Address >= 0) {
-				Breakpoint breakpoint = BreakpointManager.GetMatchingBreakpoint(relativeAddress, info);
+			if(info.Address >= 0) {
+				Breakpoint breakpoint = BreakpointManager.GetMatchingBreakpoint(InteropEmu.DebugGetRelativeAddress((uint)info.Address, info.Type), info);
 				if(breakpoint != null) {
 					if(toggleEnabled) {
 						breakpoint.SetEnabled(!breakpoint.Enabled);
@@ -93,13 +93,13 @@ namespace Mesen.GUI.Debugger
 						BreakpointManager.RemoveBreakpoint(breakpoint);
 					}
 				} else {
-					if(info.Address < 0 || info.Type == AddressType.InternalRam) {
+					if(info.Type == AddressType.InternalRam) {
 						breakpoint = new Breakpoint() {
 							MemoryType = DebugMemoryType.CpuMemory,
 							BreakOnExec = true,
 							BreakOnRead = true,
 							BreakOnWrite = true,
-							Address = (UInt32)relativeAddress,
+							Address = (UInt32)info.Address,
 							Enabled = true
 						};
 					} else {

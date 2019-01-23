@@ -217,6 +217,11 @@
 			<Control ID="chkDisplayPort4">Порт 4</Control>
 			<Control ID="lblDisplayPosition">Позиция :</Control>
 			<Control ID="chkDisplayInputHorizontally">Отображать горизонтально</Control>
+
+			<Control ID="lblSmall">Small</Control>
+			<Control ID="lblLarge">Large</Control>
+			<Control ID="lblDeadzone">Controller axis deadzone size:</Control>
+			
 			<Control ID="chkHideMousePointerForZapper">Hide mouse pointer when using zapper</Control>
 
 			<Control ID="lblKeyBinding">Warning: Your current configuration contains conflicting key bindings - some physical buttons on your keyboard or gamepad are mapped to multiple buttons on the NES controller. If this is not intentional, please review and correct your key bindings.</Control>
@@ -281,6 +286,8 @@
 
 			<Control ID="tpgAdvanced">Advanced</Control>
 			<Control ID="lblScreenRotation">Screen Rotation:</Control>
+			<Control ID="chkRemoveSpriteLimit">Отключить лимит спрайтов (уменьшает мерцание)</Control>
+			<Control ID="chkAdaptiveSpriteLimit">Automatically re-enable sprite limit as needed to prevent graphical glitches when possible</Control>
 			<Control ID="chkDisableBackground">Disable background</Control>
 			<Control ID="chkDisableSprites">Disable sprites</Control>
 			<Control ID="chkForceBackgroundFirstColumn">Force background display in first column</Control>
@@ -299,11 +306,11 @@
 			<Control ID="lblRewindSpeed">Rewind Speed:</Control>
 
 			<Control ID="tpgAdvanced">Расширенные</Control>
+			<Control ID="lblDeveloperSettings">Recommended settings for developers (homebrew / ROM hacking)</Control>
+			<Control ID="lblMiscSettings">Miscellaneous Settings</Control>
 			<Control ID="chkUseAlternativeMmc3Irq">Использовать альтернативный IRQ MMC3</Control>
 			<Control ID="chkAllowInvalidInput">Разрешить недопустимые комбинации (Вниз+Вверх и Влево+Вправо)</Control>
 			<Control ID="lblRamPowerOnState">Содержимое ОЗУ при включении : </Control>
-			<Control ID="chkRemoveSpriteLimit">Отключить лимит спрайтов (уменьшает мерцание)</Control>
-			<Control ID="chkAdaptiveSpriteLimit">Automatically re-enable sprite limit as needed to prevent graphical glitches when possible</Control>
 			<Control ID="chkEnableOamDecay">Enable OAM RAM decay</Control>
 			<Control ID="chkDisablePpu2004Reads">Disable PPU $2004 reads (Famicom behavior)</Control>
 			<Control ID="chkDisableOamAddrBug">Disable PPU OAMADDR bug emulation</Control>
@@ -342,7 +349,7 @@
 			<Control ID="chkDeveloperMode">Enable developer mode</Control>
 
 			<Control ID="lblPauseBackgroundSettings">Pause/Background Settings</Control>
-			<Control ID="lblMiscSettings">Misc. Settings</Control>
+			<Control ID="lblMiscSettings">Miscellaneous Settings</Control>
 			<Control ID="chkAutoHideMenu">Automatically hide menu bar</Control>
 			<Control ID="chkDisplayTitleBarInfo">Display additional information in title bar</Control>
 

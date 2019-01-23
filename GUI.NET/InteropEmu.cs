@@ -61,6 +61,7 @@ namespace Mesen.GUI
 		[DllImport(DLLPath)] public static extern void SetControllerType(int port, ControllerType type);
 		[DllImport(DLLPath)] public static extern void SetControllerKeys(int port, KeyMappingSet mapping);
 		[DllImport(DLLPath)] public static extern void SetZapperDetectionRadius(UInt32 detectionRadius);
+		[DllImport(DLLPath)] public static extern void SetControllerDeadzoneSize(UInt32 deadzoneSize);
 		[DllImport(DLLPath)] public static extern void SetExpansionDevice(ExpansionPortDevice device);
 		[DllImport(DLLPath)] public static extern void SetConsoleType(ConsoleType type);
 		[DllImport(DLLPath)] public static extern void SetMouseSensitivity(MouseDevice device, double sensitivity);
@@ -245,7 +246,7 @@ namespace Mesen.GUI
 		[DllImport(DLLPath)] public static extern Int32 DebugFindSubEntryPoint(UInt16 relativeAddr);
 		[DllImport(DLLPath)] public static extern Int32 DebugGetAbsoluteAddress(UInt32 relativeAddr);
 		[DllImport(DLLPath)] public static extern Int32 DebugGetAbsoluteChrAddress(UInt32 relativeAddr);
-		[DllImport(DLLPath)] public static extern Int32 DebugGetRelativeChrAddress(UInt32 absoluteAddr);
+		[DllImport(DLLPath)] public static extern Int32 DebugGetRelativePpuAddress(UInt32 absoluteAddr, PpuAddressType type);
 		[DllImport(DLLPath)] public static extern Int32 DebugGetMemorySize(DebugMemoryType type);
 		[DllImport(DLLPath)] public static extern Byte DebugGetMemoryValue(DebugMemoryType type, UInt32 address);
 		[DllImport(DLLPath)] public static extern void DebugSetMemoryValue(DebugMemoryType type, UInt32 address, byte value);
@@ -280,6 +281,15 @@ namespace Mesen.GUI
 		}
 
 		[DllImport(DLLPath)] public static extern void DebugGetAbsoluteAddressAndType(UInt32 relativeAddr, AddressTypeInfo addressTypeInfo);
+
+		[DllImport(DLLPath, EntryPoint = "DebugGetPpuAbsoluteAddressAndType")] private static extern void DebugGetPpuAbsoluteAddressAndTypeWrapper(UInt32 relativeAddr, PpuAddressTypeInfo addressTypeInfo);
+		public static PpuAddressTypeInfo DebugGetPpuAbsoluteAddressAndType(UInt32 relativeAddr)
+		{
+			PpuAddressTypeInfo addressTypeInfo = new PpuAddressTypeInfo();
+			InteropEmu.DebugGetPpuAbsoluteAddressAndTypeWrapper(relativeAddr, addressTypeInfo);
+			return addressTypeInfo;
+		}
+
 		[DllImport(DLLPath)] public static extern void DebugSetPpuViewerScanlineCycle(Int32 ppuViewerId, Int32 scanline, Int32 cycle);
 		[DllImport(DLLPath)] public static extern void DebugClearPpuViewerSettings(Int32 ppuViewerId);
 
@@ -368,21 +378,6 @@ namespace Mesen.GUI
 			return assembledCode;
 		}
 
-		[DllImport(DLLPath, EntryPoint = "DebugGetJumpTargets")] private static extern void DebugGetJumpTargetsWrapper(IntPtr isJumpTargets);
-		public static bool[] DebugGetJumpTargets()
-		{
-			bool[] isJumpTarget = new bool[InteropEmu.DebugGetMemorySize(DebugMemoryType.PrgRom)];
-
-			GCHandle hJumpTarget = GCHandle.Alloc(isJumpTarget, GCHandleType.Pinned);
-			try {
-				InteropEmu.DebugGetJumpTargetsWrapper(hJumpTarget.AddrOfPinnedObject());
-			} finally {
-				hJumpTarget.Free();
-			}
-
-			return isJumpTarget;
-		}
-
 		[DllImport(DLLPath, EntryPoint = "DebugGetMemoryState")] private static extern UInt32 DebugGetMemoryStateWrapper(DebugMemoryType type, IntPtr buffer);
 		public static byte[] DebugGetMemoryState(DebugMemoryType type)
 		{
@@ -397,12 +392,12 @@ namespace Mesen.GUI
 			return buffer;
 		}
 
-		[DllImport(DLLPath, EntryPoint = "DebugSetMemoryState")] private static extern void DebugSetMemoryStateWrapper(DebugMemoryType type, IntPtr buffer);
+		[DllImport(DLLPath, EntryPoint = "DebugSetMemoryState")] private static extern void DebugSetMemoryStateWrapper(DebugMemoryType type, IntPtr buffer, Int32 length);
 		public static void DebugSetMemoryState(DebugMemoryType type, byte[] data)
 		{
 			GCHandle handle = GCHandle.Alloc(data, GCHandleType.Pinned);
 			try {
-				InteropEmu.DebugSetMemoryStateWrapper(type, handle.AddrOfPinnedObject());
+				InteropEmu.DebugSetMemoryStateWrapper(type, handle.AddrOfPinnedObject(), data.Length);
 			} finally {
 				handle.Free();
 			}
@@ -421,8 +416,8 @@ namespace Mesen.GUI
 			return buffer;
 		}
 
-		[DllImport(DLLPath, EntryPoint = "DebugGetNametable")] private static extern void DebugGetNametableWrapper(UInt32 nametableIndex, [MarshalAs(UnmanagedType.I1)]bool useGrayscalePalette, IntPtr frameBuffer, IntPtr tileData, IntPtr attributeData);
-		public static void DebugGetNametable(int nametableIndex, bool useGrayscalePalette, out byte[] frameData, out byte[] tileData, out byte[] attributeData)
+		[DllImport(DLLPath, EntryPoint = "DebugGetNametable")] private static extern void DebugGetNametableWrapper(UInt32 nametableIndex, NametableDisplayMode mode, IntPtr frameBuffer, IntPtr tileData, IntPtr attributeData);
+		public static void DebugGetNametable(int nametableIndex, NametableDisplayMode mode, out byte[] frameData, out byte[] tileData, out byte[] attributeData)
 		{
 			frameData = new byte[256*240*4];
 			tileData = new byte[32*30];
@@ -432,7 +427,7 @@ namespace Mesen.GUI
 			GCHandle hTileData = GCHandle.Alloc(tileData, GCHandleType.Pinned);
 			GCHandle hAttributeData = GCHandle.Alloc(attributeData, GCHandleType.Pinned);
 			try {
-				InteropEmu.DebugGetNametableWrapper((UInt32)nametableIndex, useGrayscalePalette, hFrameData.AddrOfPinnedObject(), hTileData.AddrOfPinnedObject(), hAttributeData.AddrOfPinnedObject());
+				InteropEmu.DebugGetNametableWrapper((UInt32)nametableIndex, mode, hFrameData.AddrOfPinnedObject(), hTileData.AddrOfPinnedObject(), hAttributeData.AddrOfPinnedObject());
 			} finally {
 				hFrameData.Free();
 				hTileData.Free();
@@ -526,15 +521,24 @@ namespace Mesen.GUI
 			return profileData;
 		}
 
-		[DllImport(DLLPath, EntryPoint = "DebugGetMemoryAccessCounts")] private static extern void DebugGetMemoryAccessCountsWrapper(AddressType type, MemoryOperationType operationType, IntPtr counts, [MarshalAs(UnmanagedType.I1)]bool forUninitReads);
-		public static Int32[] DebugGetMemoryAccessCounts(AddressType type, MemoryOperationType operationType, bool forUninitReads)
+		public static Int32[] DebugGetMemoryAccessCounts(DebugMemoryType type, MemoryOperationType operationType)
 		{
-			int size = 0;
-			switch(type) {
-				case AddressType.InternalRam: size = 0x2000; break;
-				case AddressType.PrgRom: size = InteropEmu.DebugGetMemorySize(DebugMemoryType.PrgRom); break;
-				case AddressType.WorkRam: size = InteropEmu.DebugGetMemorySize(DebugMemoryType.WorkRam); break;
-				case AddressType.SaveRam: size = InteropEmu.DebugGetMemorySize(DebugMemoryType.SaveRam); break;
+			int size = InteropEmu.DebugGetMemorySize(type);
+			return InteropEmu.DebugGetMemoryAccessCounts(0, (uint)size, type, operationType);
+		}
+
+		public static Int32[] DebugGetMemoryAccessStamps(DebugMemoryType type, MemoryOperationType operationType)
+		{
+			int size = InteropEmu.DebugGetMemorySize(type);
+			return InteropEmu.DebugGetMemoryAccessStamps(0, (uint)size, type, operationType);
+		}
+
+		[DllImport(DLLPath, EntryPoint = "DebugGetUninitMemoryReads")] private static extern void DebugGetUninitMemoryReadsWrapper(DebugMemoryType type, IntPtr counts);
+		public static Int32[] DebugGetUninitMemoryReads(DebugMemoryType type)
+		{
+			int size = InteropEmu.DebugGetMemorySize(type);
+			if(type == DebugMemoryType.InternalRam) {
+				size = 0x2000;
 			}
 
 			Int32[] counts = new Int32[size];
@@ -542,7 +546,7 @@ namespace Mesen.GUI
 			if(size > 0) {
 				GCHandle hCounts = GCHandle.Alloc(counts, GCHandleType.Pinned);
 				try {
-					InteropEmu.DebugGetMemoryAccessCountsWrapper(type, operationType, hCounts.AddrOfPinnedObject(), forUninitReads);
+					InteropEmu.DebugGetUninitMemoryReadsWrapper(type, hCounts.AddrOfPinnedObject());
 				} finally {
 					hCounts.Free();
 				}
@@ -566,19 +570,34 @@ namespace Mesen.GUI
 			return stamps;
 		}
 
-		[DllImport(DLLPath, EntryPoint = "DebugGetMemoryAccessCountsEx")] private static extern void DebugGetMemoryAccessCountsExWrapper(UInt32 offset, UInt32 length, DebugMemoryType type, MemoryOperationType operationType, IntPtr counts);
-		public static Int32[] DebugGetMemoryAccessCountsEx(UInt32 offset, UInt32 length, DebugMemoryType type, MemoryOperationType operationType)
+		[DllImport(DLLPath, EntryPoint = "DebugGetMemoryAccessCounts")] private static extern void DebugGetMemoryAccessCountsWrapper(UInt32 offset, UInt32 length, DebugMemoryType type, MemoryOperationType operationType, IntPtr counts);
+		public static Int32[] DebugGetMemoryAccessCounts(UInt32 offset, UInt32 length, DebugMemoryType type, MemoryOperationType operationType)
 		{
 			Int32[] counts = new Int32[length];
 
 			GCHandle hResult = GCHandle.Alloc(counts, GCHandleType.Pinned);
 			try {
-				InteropEmu.DebugGetMemoryAccessCountsExWrapper(offset, length, type, operationType, hResult.AddrOfPinnedObject());
+				InteropEmu.DebugGetMemoryAccessCountsWrapper(offset, length, type, operationType, hResult.AddrOfPinnedObject());
 			} finally {
 				hResult.Free();
 			}
 
 			return counts;
+		}
+		
+		[DllImport(DLLPath, EntryPoint = "DebugGetNametableChangedData")] private static extern void DebugGetNametableChangedDataWrapper(IntPtr ntChangedData);
+		public static bool[] DebugGetNametableChangedData()
+		{
+			bool[] ntChangedData = new bool[0x1000];
+
+			GCHandle hNtChangedData = GCHandle.Alloc(ntChangedData, GCHandleType.Pinned);
+			try {
+				InteropEmu.DebugGetNametableChangedDataWrapper(hNtChangedData.AddrOfPinnedObject());
+			} finally {
+				hNtChangedData.Free();
+			}
+			
+			return ntChangedData;
 		}
 
 		[DllImport(DLLPath, EntryPoint = "DebugGetFreezeState")] private static extern void DebugGetFreezeStateWrapper(UInt16 startAddress, UInt16 length, IntPtr freezeState);
@@ -608,6 +627,12 @@ namespace Mesen.GUI
 		}
 
 		[DllImport(DLLPath, EntryPoint = "DebugGetCdlData")] private static extern void DebugGetCdlDataWrapper(UInt32 offset, UInt32 length, DebugMemoryType type, IntPtr counts);
+
+		public static byte[] DebugGetPrgCdlData()
+		{
+			return DebugGetCdlData(0, (uint)InteropEmu.DebugGetMemorySize(DebugMemoryType.PrgRom), DebugMemoryType.PrgRom);
+		}
+		
 		public static byte[] DebugGetCdlData(UInt32 offset, UInt32 length, DebugMemoryType type)
 		{
 			byte[] cdlData = new byte[length];
@@ -1180,9 +1205,16 @@ namespace Mesen.GUI
 		None = 0x00,
 		Code = 0x01,
 		Data = 0x02,
-		IndirectCode = 0x10,
+
+		//Bit 0x10 is used for "indirectly accessed as code" in FCEUX
+		//Repurposed to mean the address is the target of a jump instruction
+		JumpTarget = 0x10,
+
 		IndirectData = 0x20,
 		PcmData = 0x40,
+
+		//Unused bit in original CDL spec
+		//Used to denote that the byte is the start of function (sub)
 		SubEntryPoint = 0x80
 	}
 
@@ -1229,7 +1261,8 @@ namespace Mesen.GUI
 	{
 		Default,
 		ChrRom,
-		ChrRam
+		ChrRam,
+		NametableRam
 	}
 
 	public enum MemoryAccessType
@@ -1291,9 +1324,6 @@ namespace Mesen.GUI
 		public ChrMemoryType[] ChrMemoryType;
 		[MarshalAs(UnmanagedType.ByValArray, SizeConst = 0x40)]
 		public MemoryAccessType[] ChrMemoryAccess;
-
-		[MarshalAs(UnmanagedType.ByValArray, SizeConst = 8)]
-		public UInt32[] Nametables;
 
 		public UInt32 WorkRamPageSize;
 		public UInt32 SaveRamPageSize;
@@ -1419,6 +1449,7 @@ namespace Mesen.GUI
 		public bool NMIFlag;
 
 		public UInt16 DebugPC;
+		public UInt16 PreviousDebugPC;
 	}
 
 	public struct ApuLengthCounterState
@@ -2135,7 +2166,8 @@ namespace Mesen.GUI
 		Numeric = 0,
 		Boolean = 1,
 		Invalid = 2,
-		DivideBy0 = 3
+		DivideBy0 = 3,
+		OutOfScope = 4
 	}
 
 	public enum NesModel
@@ -2277,6 +2309,13 @@ namespace Mesen.GUI
 		_270Degrees = 270
 	}
 
+	public enum NametableDisplayMode
+	{
+		Normal = 0,
+		Grayscale = 1,
+		AttributeView = 2
+	}
+
 	public enum DebugMemoryType
 	{
 		CpuMemory = 0,
@@ -2289,7 +2328,8 @@ namespace Mesen.GUI
 		ChrRam = 7,
 		WorkRam = 8,
 		SaveRam = 9,
-		InternalRam = 10
+		InternalRam = 10,
+		NametableRam = 11
 	}
 
 	public enum BreakSource
@@ -2308,6 +2348,14 @@ namespace Mesen.GUI
 		Pause = 10,
 		BreakAfterSuspend = 11,
 	}
+	
+	public enum PpuAddressType
+	{
+		ChrRom = 0,
+		ChrRam = 1,
+		PaletteRam = 2,
+		NametableRam = 3
+	}
 
 	public enum AddressType
 	{
@@ -2317,7 +2365,7 @@ namespace Mesen.GUI
 		SaveRam = 3,
 		Register = 4
 	}
-
+	
 	public static class AddressTypeExtensions
 	{
 		public static DebugMemoryType ToMemoryType(this AddressType type)
@@ -2332,6 +2380,17 @@ namespace Mesen.GUI
 			return DebugMemoryType.CpuMemory;
 		}
 
+		public static DebugMemoryType ToMemoryType(this PpuAddressType type)
+		{
+			switch(type) {
+				case PpuAddressType.ChrRom: return DebugMemoryType.ChrRom;
+				case PpuAddressType.ChrRam: return DebugMemoryType.ChrRam;
+				case PpuAddressType.NametableRam: return DebugMemoryType.NametableRam;
+				case PpuAddressType.PaletteRam: return DebugMemoryType.PaletteMemory;
+			}
+			throw new Exception("Invalid memory type");
+		}
+
 		public static AddressType ToAddressType(this DebugMemoryType type)
 		{
 			switch(type) {
@@ -2342,6 +2401,17 @@ namespace Mesen.GUI
 				case DebugMemoryType.SaveRam: return AddressType.SaveRam;
 			}
 			return AddressType.Register;
+		}
+
+		public static PpuAddressType ToPpuAddressType(this DebugMemoryType type)
+		{
+			switch(type) {
+				case DebugMemoryType.ChrRom: return PpuAddressType.ChrRom;
+				case DebugMemoryType.ChrRam: return PpuAddressType.ChrRam;
+				case DebugMemoryType.NametableRam: return PpuAddressType.NametableRam;
+				case DebugMemoryType.PaletteMemory: return PpuAddressType.PaletteRam;
+			}
+			throw new Exception("Invalid memory type");
 		}
 	}
 
@@ -2381,7 +2451,14 @@ namespace Mesen.GUI
 		public Int32 Address;
 		public AddressType Type;
 	}
-	
+
+	[StructLayout(LayoutKind.Sequential)]
+	public class PpuAddressTypeInfo
+	{
+		public Int32 Address;
+		public PpuAddressType Type;
+	}
+
 	public class MD5Helper
 	{
 		public static string GetMD5Hash(string filename)

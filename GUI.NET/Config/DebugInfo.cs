@@ -34,6 +34,7 @@ namespace Mesen.GUI.Config
 		public ByteCodePosition ByteCodePosition = ByteCodePosition.Hidden;
 		public PrgAddressPosition PrgAddressPosition = PrgAddressPosition.Hidden;
 		public int TextZoom = 100;
+		public bool UsingSourceView = false;
 	}
 
 	public class DebugWorkspace
@@ -142,6 +143,7 @@ namespace Mesen.GUI.Config
 
 		public bool ShowBreakNotifications = true;
 		public bool ShowInstructionProgression = true;
+		public bool ShowSelectionLength = false;
 
 		public bool AlwaysScrollToCenter = false;
 		public bool SplitView = false;
@@ -181,18 +183,29 @@ namespace Mesen.GUI.Config
 		public bool CopyComments = false;
 
 		public Point? PpuWindowLocation = null;
+
+		public Point? PpuNametableViewerLocation = null;
+		public Point? PpuChrViewerLocation = null;
+		public Point? PpuSpriteViewerLocation = null;
+		public Point? PpuPaletteViewerLocation = null;
+
 		public bool PpuAutoRefresh = true;
+		public RefreshSpeed PpuAutoRefreshSpeed = RefreshSpeed.Normal;
 		public bool PpuRefreshOnBreak = true;
+		public bool PpuShowInformationOverlay = true;
 		public bool PpuPartialDraw = false;
 		public bool PpuShowPreviousFrame = false;
 		public bool HidePauseIcon = false;
 		public bool ShowPpuScrollOverlay = true;
+		public bool ShowAttributeColorsOnly = false;
 		public bool ShowTileGrid = false;
 		public bool ShowAttributeGrid = false;
 		public bool HighlightChrTile = false;
 		public bool NtViewerUseGrayscalePalette = false;
 		public bool NtViewerHighlightTileUpdates = false;
 		public bool NtViewerHighlightAttributeUpdates = false;
+		public bool NtViewerIgnoreRedundantWrites = false;
+		public bool SpriteViewerDisplaySpriteOutlines = false;
 
 		public int ChrViewerSelectedPalette = 0;
 		public CdlHighlightType ChrViewerHighlightType = CdlHighlightType.None;
@@ -233,6 +246,7 @@ namespace Mesen.GUI.Config
 		public bool RamAutoRefresh = true;
 		public RefreshSpeed RamAutoRefreshSpeed = RefreshSpeed.Normal;
 		public bool RamIgnoreRedundantWrites = false;
+		public bool RamHighlightCurrentRowColumn = true;
 		public int RamColumnCount = 2;
 
 		public string RamFontFamily = BaseControl.MonospaceFontFamily;
@@ -250,6 +264,7 @@ namespace Mesen.GUI.Config
 		public bool RamHideReadBytes = false;
 		public bool RamHideWrittenBytes = false;
 		public bool RamHideExecutedBytes = false;
+		public bool RamHighlightBreakpoints = false;
 		public bool RamHighlightLabelledBytes = false;
 		public bool RamHighlightChrDrawnBytes = false;
 		public bool RamHighlightChrReadBytes = false;
@@ -270,6 +285,9 @@ namespace Mesen.GUI.Config
 		public Size MemoryViewerSize = new Size(0, 0);
 		public Point MemoryViewerLocation;
 		public Point? ApuViewerLocation;
+
+		public Size ProfilerSize = new Size(0, 0);
+		public Point ProfilerLocation;
 
 		public Point WindowLocation;
 		public int WindowWidth = -1;
@@ -353,6 +371,9 @@ namespace Mesen.GUI.Config
 		public bool TextHookerIgnoreMirroredNametables = true;
 		public bool TextHookerAutoCopyToClipboard = false;
 
+		public string ExternalEditorPath;
+		public string ExternalEditorArguments;
+
 		public DebuggerShortcutsConfig Shortcuts = new DebuggerShortcutsConfig();
 		public DebugImportConfig ImportConfig = new DebugImportConfig();
 
@@ -372,6 +393,34 @@ namespace Mesen.GUI.Config
 				UseLabels = false,
 				StatusFormat = StatusFlagFormat.Hexadecimal
 			};
+
+			if(ExternalEditorPath == null || ExternalEditorArguments == null) {
+				ExternalEditorPath = "";
+				ExternalEditorArguments = "";
+
+				//Setup a default editor when possible
+				if(Program.IsMono) {
+					string geditPath = "/usr/bin/gedit";
+					string katePath = "/usr/bin/kate";
+					if(File.Exists(geditPath)) {
+						ExternalEditorPath = geditPath;
+						ExternalEditorArguments = "+%L %F";
+					} else if(File.Exists(katePath)) {
+						ExternalEditorPath = katePath;
+						ExternalEditorArguments = "%F -l %L";
+					}
+				} else {
+					string notepadPath32 = "C:\\Program Files (x86)\\Notepad++\\notepad++.exe";
+					string notepadPath64 = "C:\\Program Files\\Notepad++\\notepad++.exe";
+					if(File.Exists(notepadPath32)) {
+						ExternalEditorPath = notepadPath32;
+						ExternalEditorArguments = "%F -n%L";
+					} else if(File.Exists(notepadPath64)) {
+						ExternalEditorPath = notepadPath64;
+						ExternalEditorArguments = "%F -n%L";
+					}
+				}
+			}
 		}
 
 		static public void ApplyConfig()
@@ -400,6 +449,8 @@ namespace Mesen.GUI.Config
 		public bool ResetLabelsOnImport = true;
 
 		public bool DbgImportRamLabels = true;
+		public bool DbgImportWorkRamLabels = true;
+		public bool DbgImportSaveRamLabels = true;
 		public bool DbgImportPrgRomLabels = true;
 		public bool DbgImportComments = true;
 

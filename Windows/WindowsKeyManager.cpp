@@ -252,19 +252,15 @@ WindowsKeyManager::~WindowsKeyManager()
 void WindowsKeyManager::StartUpdateDeviceThread()
 {
 	_updateDeviceThread = std::thread([=]() {
-		_xInput.reset(new XInputManager());
-		_directInput.reset(new DirectInputManager(_hWnd));
+		_xInput.reset(new XInputManager(_console));
+		_directInput.reset(new DirectInputManager(_console, _hWnd));
 
 		while(!_stopUpdateDeviceThread) {
 			//Check for newly plugged in controllers every 5 secs (this takes ~60-70ms when no new controllers are found)
 			if(_xInput->NeedToUpdate()) {
 				_xInput->UpdateDeviceList();
 			}
-			if(_directInput->NeedToUpdate()) {
-				_console->Pause();
-				_directInput->UpdateDeviceList();
-				_console->Resume();
-			}
+			_directInput->UpdateDeviceList();
 
 			_stopSignal.Wait(5000);
 		}

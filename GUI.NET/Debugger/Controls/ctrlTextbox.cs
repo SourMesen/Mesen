@@ -16,7 +16,7 @@ namespace Mesen.GUI.Debugger
 {
 	public partial class ctrlTextbox : Control
 	{
-		private Regex _codeRegex = new Regex("^(\\s*)([a-z]{3})([*]{0,1})($|[ ]){1}([(]{0,1})(([$][0-9a-f]*)|(#[@$:_0-9a-z]*)|([@_a-z]([@_a-z0-9])*)){0,1}([)]{0,1})(,X|,Y){0,1}([)]{0,1})(.*)", RegexOptions.IgnoreCase | RegexOptions.Compiled);
+		private Regex _codeRegex = new Regex("^(\\s*)([a-z]{3})([*]{0,1})($|[ ]){1}([(]{0,1})(([$][0-9a-f]*)|(#[@$:_0-9a-z]*)|([@_a-z]([@_a-z0-9])*){0,1}(\\+(\\d+)){0,1}){0,1}([)]{0,1})(,X|,Y){0,1}([)]{0,1})(.*)", RegexOptions.IgnoreCase | RegexOptions.Compiled);
 		public event EventHandler ScrollPositionChanged;
 		public event EventHandler SelectedLineChanged;
 		private bool _disableScrollPositionChangedEvent;
@@ -290,39 +290,6 @@ namespace Mesen.GUI.Debugger
 
 		public bool CodeHighlightingEnabled { get; set; } = true;
 
-		public List<Tuple<int, int, string>> FindAllOccurrences(string text, bool matchWholeWord, bool matchCase)
-		{
-			List<Tuple<int, int, string>> result = new List<Tuple<int, int, string>>();
-			string regex;
-			if(matchWholeWord) {
-				regex = $"[^0-9a-zA-Z_#@]+{Regex.Escape(text)}[^0-9a-zA-Z_#@]+";
-			} else {
-				regex = Regex.Escape(text);
-			}
-
-			for(int i = 0, len = _contents.Length; i < len; i++) {
-				string line = _contents[i] + Addressing?[i] + (Comments != null ? ("\t" + Comments[i]) : null);
-				if(Regex.IsMatch(line, regex, matchCase ? RegexOptions.None : RegexOptions.IgnoreCase)) {
-					if(line.StartsWith("__") && line.EndsWith("__")) {
-						line = "Block: " + line.Substring(2, line.Length - 4);
-					}
-
-					if(line.StartsWith("--") && line.EndsWith("--")) {
-						continue;
-					}
-
-					int j = i;
-					while(j < _lineNumbers.Length && _lineNumbers[j] < 0) {
-						j++;
-					}
-
-					var searchResult = new Tuple<int, int, string>(_lineNumbers[j], i, line);
-					result.Add(searchResult);
-				}
-			}
-			return result;
-		}
-
 		public bool Search(string searchString, bool searchBackwards, bool isNewSearch)
 		{
 			if(string.IsNullOrWhiteSpace(searchString)) {
@@ -498,13 +465,14 @@ namespace Mesen.GUI.Debugger
 
 		public int GetLineIndexAtPosition(int yPos)
 		{
-			int charIndex;
-			int lineIndex;
-			GetCharIndex(new Point(0, yPos), out charIndex, out lineIndex);
+			int lineIndex = this.ScrollPosition + this.GetLineAtPosition(yPos);
+			if(lineIndex > _contents.Length && _contents.Length != 0) {
+				lineIndex = _contents.Length - 1;
+			}
 			return lineIndex;
 		}
 
-		private string GetFullWidthString(int lineIndex)
+		public string GetFullWidthString(int lineIndex)
 		{
 			string text = _contents[lineIndex] + Addressing?[lineIndex];
 			if(Comments?[lineIndex].Length > 0) {
@@ -515,56 +483,48 @@ namespace Mesen.GUI.Debugger
 
 		private bool GetCharIndex(Point position, out int charIndex, out int lineIndex)
 		{
-			charIndex = -1;
+			charIndex = int.MaxValue;
 			using(Graphics g = Graphics.FromHwnd(this.Handle)) {
 				int marginLeft = this.GetMargin(g, true);
-				int positionX = position.X - marginLeft;
-				lineIndex = this.ScrollPosition + this.GetLineAtPosition(position.Y);
-				if(lineIndex > _contents.Length && _contents.Length != 0) {
-					lineIndex = _contents.Length - 1;
+				lineIndex = this.GetLineIndexAtPosition(position.Y);
+				if(lineIndex >= _contents.Length) {
+					return false;
 				}
 
-				if(positionX >= 0 && lineIndex < _contents.Length) {
-					string text = this.GetFullWidthString(lineIndex).Trim();
-					//Adjust background color highlights based on number of spaces in front of content
-					positionX -= (LineIndentations != null ? LineIndentations[lineIndex] : 0);
-
-					int previousWidth = 0;
-					for(int i = 0, len = text.Length; i < len; i++) {
-						int width = (int)g.MeasureString(text.Substring(0, i+1), this.Font, int.MaxValue, StringFormat.GenericTypographic).Width;
-						if(width >= positionX && previousWidth <= positionX) {
-							charIndex = i;
-							return true;
-						}
-						previousWidth = width;
-					}
+				int positionX = position.X - marginLeft;
+				positionX -= (LineIndentations != null ? LineIndentations[lineIndex] : 0);
+				if(positionX >= 0) {
+					float charWidth = g.MeasureString("W", this.Font, int.MaxValue, StringFormat.GenericTypographic).Width;
+					charIndex = (int)(positionX / charWidth);
+					return true;
 				}
 			}
 			return false;
 		}
 
-		char[] _wordDelimiters = new char[] { ' ', ',', '|', ';', '(', ')', '.', '-', ':', '+', '<', '>', '#', '*', '/', '&', '[', ']', '~', '%' };
+		char[] _wordDelimiters = new char[] { ' ', ',', '|', ';', '(', ')', '.', '-', ':', '<', '>', '#', '*', '/', '&', '[', ']', '~', '%' };
 		public string GetWordUnderLocation(Point position)
 		{
 			int charIndex; 
 			int lineIndex;
 			if(this.GetCharIndex(position, out charIndex, out lineIndex)) {
-				string text = this.GetFullWidthString(lineIndex).Trim();
-				
-				if(_wordDelimiters.Contains(text[charIndex])) {
-					return string.Empty;
-				} else {
-					int endIndex = text.IndexOfAny(_wordDelimiters, charIndex);
-					if(endIndex == -1) {
-						endIndex = text.Length;
-					}
-					int startIndex = text.LastIndexOfAny(_wordDelimiters, charIndex);
-					
-					if(startIndex >= 0 && text[startIndex] == '#' && text.Length > startIndex && text[startIndex + 1] == '$') {
-						//Special case for immediate values. e.g: we want to show a tooltip for #MyLabel, but not for #$EF
-						return text.Substring(startIndex, endIndex - startIndex);
+				string text = this.GetFullWidthString(lineIndex);
+				if(charIndex < text.Length) {
+					if(_wordDelimiters.Contains(text[charIndex])) {
+						return string.Empty;
 					} else {
-						return text.Substring(startIndex + 1, endIndex - startIndex - 1);
+						int endIndex = text.IndexOfAny(_wordDelimiters, charIndex);
+						if(endIndex == -1) {
+							endIndex = text.Length;
+						}
+						int startIndex = text.LastIndexOfAny(_wordDelimiters, charIndex);
+
+						if(startIndex >= 0 && text[startIndex] == '#' && text.Length > startIndex && text[startIndex + 1] == '$') {
+							//Special case for immediate values. e.g: we want to show a tooltip for #MyLabel, but not for #$EF
+							return text.Substring(startIndex, endIndex - startIndex);
+						} else {
+							return text.Substring(startIndex + 1, endIndex - startIndex - 1);
+						}
 					}
 				}
 			}
@@ -1084,10 +1044,11 @@ namespace Mesen.GUI.Debugger
 						string invalidStar = match.Groups[3].Value;
 						string paren1 = match.Groups[5].Value;
 						string operand = match.Groups[6].Value;
-						string paren2 = match.Groups[11].Value;
-						string indirect = match.Groups[12].Value;
-						string paren3 = match.Groups[13].Value;
-						string rest = match.Groups[14].Value;
+						string arrayPosition = match.Groups[12].Value;
+						string paren2 = match.Groups[13].Value;
+						string indirect = match.Groups[14].Value;
+						string paren3 = match.Groups[15].Value;
+						string rest = match.Groups[16].Value;
 						Color operandColor = operand.Length > 0 ? (operand[0] == '#' ? (Color)info.AssemblerImmediateColor : (operand[0] == '$' ? (Color)info.AssemblerAddressColor : (Color)info.AssemblerLabelDefinitionColor)) : Color.Black;
 						List<Color> colors = new List<Color>() { defaultColor, info.AssemblerOpcodeColor, defaultColor, defaultColor, defaultColor, operandColor, defaultColor, defaultColor, defaultColor };
 						int codePartCount = colors.Count;
@@ -1098,6 +1059,10 @@ namespace Mesen.GUI.Debugger
 							colors.Add(info.CodeEffectiveAddressColor);
 							parts.Add(addressString);
 							memoryAddress = addressString.Substring(3).Trim();
+
+							//Update the contents of "arrayPosition" based on the address string, rather than use the one from the original address
+							int plusIndex = memoryAddress.IndexOf("+");
+							arrayPosition = plusIndex >= 0 ? memoryAddress.Substring(plusIndex+1) : "";
 						} else if(operand.Length > 0 && operand[0] != '#') {
 							memoryAddress = operand.Trim();
 						}
@@ -1108,9 +1073,15 @@ namespace Mesen.GUI.Debugger
 								Int32.TryParse(memoryAddress.Substring(1), System.Globalization.NumberStyles.AllowHexSpecifier, null, out address);
 							} else {
 								//Label
+								UInt32 arrayOffset = 0;
+								if(!string.IsNullOrWhiteSpace(arrayPosition)) {
+									memoryAddress = memoryAddress.Substring(0, memoryAddress.Length - arrayPosition.Length - 1);
+									arrayOffset = UInt32.Parse(arrayPosition);
+								}
+
 								CodeLabel label = LabelManager.GetLabel(memoryAddress);
 								if(label != null) {
-									address = label.GetRelativeAddress();
+									address = InteropEmu.DebugGetRelativeAddress(label.Address + arrayOffset, label.AddressType);
 								}
 							}
 
@@ -1315,7 +1286,11 @@ namespace Mesen.GUI.Debugger
 			LineProperties lineProperties = GetLineStyle(currentLine);
 
 			//Draw instruction progress here to avoid it being scrolled horizontally when window is small (or comments/etc exist)
-			this.DrawLineProgress(g, positionY, lineProperties?.Progress, lineHeight);
+			if(lineProperties?.Progress != null) {
+				this.DrawLineProgress(g, positionY, lineProperties?.Progress, lineHeight);
+			} else {
+				this.DrawSelectionLength(g, currentLine, positionY, lineHeight);
+			}
 
 			if(this.ShowLineNumbers) {
 				//Show line number
@@ -1333,7 +1308,36 @@ namespace Mesen.GUI.Debugger
 				this.DrawLineSymbols(g, positionY, lineProperties, lineHeight);
 			}
 		}
-		
+
+		private void DrawSelectionLength(Graphics g, int currentLine, int positionY, int lineHeight)
+		{
+			if(ConfigManager.Config.DebugInfo.ShowSelectionLength && currentLine == this.SelectedLine && this.SelectionLength > 0) {
+				int startAddress = -1;
+				int endAddress = -1;
+
+				int end = this.SelectionStart + this.SelectionLength + 1;
+				while(endAddress < 0 && end < _lineNumbers.Length) {
+					endAddress = _lineNumbers[end];
+					end++;
+				}
+
+				int start = this.SelectionStart;
+				while(startAddress < 0 && start < _lineNumbers.Length && start < end) {
+					startAddress = _lineNumbers[start];
+					start++;
+				}
+
+				if(startAddress >= 0 && endAddress > startAddress) {
+					string text = (endAddress - startAddress).ToString() + " bytes";
+					SizeF textSize = g.MeasureString(text, this._noteFont);
+					PointF position = new PointF(this.ClientSize.Width - textSize.Width - 5, positionY + 3);
+					g.FillRectangle(Brushes.White, position.X, position.Y, textSize.Width, lineHeight - 4);
+					g.DrawRectangle(Pens.Black, position.X, position.Y, textSize.Width, lineHeight - 4);
+					g.DrawString(text, this._noteFont, Brushes.Black, position.X, position.Y - 1);
+				}
+			}
+		}
+
 		private void DrawMessage(Graphics g)
 		{
 			if(this._message != null && !string.IsNullOrWhiteSpace(this._message.Message)) {

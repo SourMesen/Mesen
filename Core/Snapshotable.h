@@ -213,7 +213,6 @@ private:
 
 protected:
 	virtual void StreamState(bool saving) = 0;
-	virtual void AfterLoadState() { }
 
 	uint32_t GetStateVersion() { return _stateVersion; }
 

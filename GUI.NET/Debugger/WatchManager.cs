@@ -49,6 +49,7 @@ namespace Mesen.GUI.Debugger
 						case EvalResultType.Boolean: newValue = result == 0 ? "false" : "true";	break;
 						case EvalResultType.Invalid: newValue = "<invalid expression>"; forceHasChanged = true; break;
 						case EvalResultType.DivideBy0: newValue = "<division by zero>"; forceHasChanged = true; break;
+						case EvalResultType.OutOfScope: newValue = "<label out of scope>"; forceHasChanged = true; break;
 					}
 				}
 

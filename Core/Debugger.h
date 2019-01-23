@@ -144,7 +144,7 @@ private:
 
 private:
 	bool ProcessBreakpoints(BreakpointType type, OperationInfo &operationInfo, bool allowBreak = true, bool allowMark = true);
-	void ProcessAllBreakpoints(OperationInfo &operationInfo, AddressTypeInfo &addressInfo);
+	void ProcessAllBreakpoints(OperationInfo &operationInfo);
 	
 	void AddCallstackFrame(uint16_t source, uint16_t target, StackFrameFlags flags);
 	void UpdateCallstack(uint8_t currentInstruction, uint32_t addr);
@@ -155,6 +155,7 @@ private:
 	void AddDebugEvent(DebugEventType type, uint16_t address = -1, uint8_t value = 0, int16_t breakpointId = -1, int8_t ppuLatch = -1);
 
 	void UpdatePpuCyclesToProcess();
+	void ResetStepState();
 
 public:
 	Debugger(shared_ptr<Console> console, shared_ptr<CPU> cpu, shared_ptr<PPU> ppu, shared_ptr<APU> apu, shared_ptr<MemoryManager> memoryManager, shared_ptr<BaseMapper> mapper);
@@ -170,8 +171,6 @@ public:
 	
 	void SetBreakpoints(Breakpoint breakpoints[], uint32_t length);
 
-	void ProcessMarkedBreakpoints(BreakpointType type, OperationInfo &operationInfo);
-	
 	shared_ptr<LabelManager> GetLabelManager();
 
 	void GetFunctionEntryPoints(int32_t* entryPoints, int32_t maxCount);
@@ -222,12 +221,10 @@ public:
 	void GenerateCodeOutput();
 	const char* GetCode(uint32_t &length);
 
-	void GetJumpTargets(bool* jumpTargets);
-	
 	int32_t GetRelativeAddress(uint32_t addr, AddressType type);
+	int32_t GetRelativePpuAddress(uint32_t addr, PpuAddressType type);
 	int32_t GetAbsoluteAddress(uint32_t addr);	
 	int32_t GetAbsoluteChrAddress(uint32_t addr);
-	int32_t GetRelativeChrAddress(uint32_t addr);
 	
 	void GetAbsoluteAddressAndType(uint32_t relativeAddr, AddressTypeInfo* info);
 	void GetPpuAbsoluteAddressAndType(uint32_t relativeAddr, PpuAddressTypeInfo* info);

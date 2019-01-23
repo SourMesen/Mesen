@@ -3,6 +3,7 @@
 #include <stack>
 #include <deque>
 #include <unordered_map>
+#include <unordered_set>
 #include "../Utilities/SimpleLock.h"
 #include "DebuggerTypes.h"
 
@@ -63,7 +64,12 @@ enum EvalValues : int64_t
 	AbsoluteAddress = 20000000114,
 	IsWrite = 20000000115,
 	IsRead = 20000000116,
-	
+	PreviousOpPC = 20000000117,
+	Sprite0Hit = 20000000118,
+	SpriteOverflow = 20000000119,
+	VerticalBlank = 20000000120,
+	Branched = 20000000121,
+
 	FirstLabelIndex = 20000002000,
 };
 
@@ -72,7 +78,8 @@ enum EvalResultType : int32_t
 	Numeric = 0,
 	Boolean = 1,
 	Invalid = 2,
-	DivideBy0 = 3
+	DivideBy0 = 3,
+	OutOfScope = 4
 };
 
 class StringHasher
@@ -98,6 +105,7 @@ private:
 	static const vector<int> _binaryPrecedence;
 	static const vector<string> _unaryOperators;
 	static const vector<int> _unaryPrecedence;
+	static const std::unordered_set<string> _operators;
 
 	std::unordered_map<string, ExpressionData, StringHasher> _cache;
 	SimpleLock _cacheLock;
@@ -122,4 +130,8 @@ public:
 	ExpressionData GetRpnList(string expression, bool &success);
 
 	bool Validate(string expression);
+
+#if _DEBUG
+	void RunTests();
+#endif
 };

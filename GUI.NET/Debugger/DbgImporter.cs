@@ -24,6 +24,7 @@ namespace Mesen.GUI.Debugger
 		private Dictionary<int, FileInfo> _files = new Dictionary<int, FileInfo>();
 		private Dictionary<int, LineInfo> _lines = new Dictionary<int, LineInfo>();
 		private Dictionary<int, SpanInfo> _spans = new Dictionary<int, SpanInfo>();
+		private Dictionary<int, ScopeInfo> _scopes = new Dictionary<int, ScopeInfo>();
 		private Dictionary<int, SymbolInfo> _symbols = new Dictionary<int, SymbolInfo>();
 		private Dictionary<int, CSymbolInfo> _cSymbols = new Dictionary<int, CSymbolInfo>();
 
@@ -39,11 +40,12 @@ namespace Mesen.GUI.Debugger
 
 		private static Regex _segmentRegex = new Regex("^seg\tid=([0-9]+),.*start=0x([0-9a-fA-F]+),.*size=0x([0-9A-Fa-f]+)", RegexOptions.Compiled);
 		private static Regex _segmentPrgRomRegex = new Regex("^seg\tid=([0-9]+),.*start=0x([0-9a-fA-F]+),.*size=0x([0-9A-Fa-f]+),.*ooffs=([0-9]+)", RegexOptions.Compiled);
-		private static Regex _lineRegex = new Regex("^line\tid=([0-9]+),.*file=([0-9]+),.*line=([0-9]+)(,.*type=([0-9]+)){0,1}(,.*span=([0-9]+)){0,1}", RegexOptions.Compiled);
+		private static Regex _lineRegex = new Regex("^line\tid=([0-9]+),.*file=([0-9]+),.*line=([0-9]+)(,.*type=([0-9]+)){0,1}(,.*span=([0-9+]+)){0,1}", RegexOptions.Compiled);
 		private static Regex _fileRegex = new Regex("^file\tid=([0-9]+),.*name=\"([^\"]+)\"", RegexOptions.Compiled);
 		private static Regex _spanRegex = new Regex("^span\tid=([0-9]+),.*seg=([0-9]+),.*start=([0-9]+),.*size=([0-9]+)(,.*type=([0-9]+)){0,1}", RegexOptions.Compiled);
-		private static Regex _symbolRegex = new Regex("^sym\tid=([0-9]+).*name=\"([0-9a-zA-Z@_-]+)\"(,.*def=([0-9+]+)){0,1}(,.*ref=([0-9+]+)){0,1}(,.*val=0x([0-9a-fA-F]+)){0,1}(,.*seg=([0-9]+)){0,1}(,.*exp=([0-9]+)){0,1}", RegexOptions.Compiled);
-		private static Regex _cSymbolRegex = new Regex("^csym\tid=([0-9]+).*name=\"([0-9a-zA-Z@_-]+)\"(,.*sym=([0-9+]+)){0,1}", RegexOptions.Compiled);
+		private static Regex _scopeRegex = new Regex("^scope\tid=([0-9]+),.*name=\"([0-9a-zA-Z@_-]+)\"(,.*sym=([0-9+]+)){0,1}", RegexOptions.Compiled);
+		private static Regex _symbolRegex = new Regex("^sym\tid=([0-9]+),.*name=\"([0-9a-zA-Z@_-]+)\"(,.*size=([0-9]+)){0,1}(,.*def=([0-9+]+)){0,1}(,.*ref=([0-9+]+)){0,1}(,.*val=0x([0-9a-fA-F]+)){0,1}(,.*seg=([0-9]+)){0,1}(,.*exp=([0-9]+)){0,1}", RegexOptions.Compiled);
+		private static Regex _cSymbolRegex = new Regex("^csym\tid=([0-9]+),.*name=\"([0-9a-zA-Z@_-]+)\"(,.*sym=([0-9+]+)){0,1}", RegexOptions.Compiled);
 
 		private static Regex _asmFirstLineRegex = new Regex(";(.*)", RegexOptions.Compiled);
 		private static Regex _asmPreviousLinesRegex = new Regex("^\\s*;(.*)", RegexOptions.Compiled);
@@ -51,15 +53,32 @@ namespace Mesen.GUI.Debugger
 		private static Regex _cPreviousLinesRegex = new Regex("^\\s*//(.*)", RegexOptions.Compiled);
 
 		private Dictionary<int, LineInfo> _linesByPrgAddress = new Dictionary<int, LineInfo>();
+		private Dictionary<int, LineInfo[]> _linesByFile = new Dictionary<int, LineInfo[]>();
 		private Dictionary<string, int> _prgAddressByLine = new Dictionary<string, int>();
 
+		private Dictionary<int, ScopeInfo> _scopesBySymbol = new Dictionary<int, ScopeInfo>();
+
 		public Dictionary<int, FileInfo> Files { get { return _files; } }
+
+		public DateTime DbgFileStamp { get; private set; }
+		public string DbgPath { get; private set; }
 
 		public int GetPrgAddress(int fileID, int lineIndex)
 		{
 			int prgAddress;
 			if(_prgAddressByLine.TryGetValue(fileID.ToString() + "_" + lineIndex.ToString(), out prgAddress)) {
 				return prgAddress;
+			}
+			return -1;
+		}
+
+		private int GetPrgAddress(SpanInfo span)
+		{
+			SegmentInfo segment;
+			if(_segments.TryGetValue(span.SegmentID, out segment)) {
+				if(!segment.IsRam && span.Size != segment.Size) {
+					return span.Offset + segment.FileOffset - _headerSize;
+				}
 			}
 			return -1;
 		}
@@ -93,43 +112,104 @@ namespace Mesen.GUI.Debugger
 			return null;
 		}
 
-		public DefinitionInfo GetSymbolDefinition(SymbolInfo symbol)
+		private ReferenceInfo GetReferenceInfo(int referenceId)
 		{
-			foreach(int definition in symbol.Definitions) {
-				LineInfo line = _lines[definition];
-				string fileName = _files[line.FileID].Name;
+			FileInfo file;
+			LineInfo line;
+			if(_lines.TryGetValue(referenceId, out line)) {
+				string lineContent = "";
+				if(_files.TryGetValue(line.FileID, out file) && file.Data != null && file.Data.Length > line.LineNumber) {
+					lineContent = file.Data[line.LineNumber];
+				}
 
-				return new DefinitionInfo() {
-					FileName = fileName,
-					Line = line.LineNumber
+				return new ReferenceInfo() {
+					FileName = _files[line.FileID].Name,
+					LineNumber = line.LineNumber,
+					LineContent = lineContent
 				};
 			}
 
 			return null;
 		}
 
-		private SymbolInfo GetMatchingSymbol(SymbolInfo symbol, int rangeStart, int rangeEnd)
+		public ReferenceInfo GetSymbolDefinition(SymbolInfo symbol)
 		{
-			foreach(int reference in symbol.References) {
-				LineInfo line = _lines[reference];
-				if(line.SpanID == null) {
-					continue;
+			foreach(int definition in symbol.Definitions) {
+				ReferenceInfo refInfo = GetReferenceInfo(definition);
+
+				if(refInfo != null) {
+					return refInfo;
 				}
+			}
 
-				SpanInfo span = _spans[line.SpanID.Value];
-				SegmentInfo seg = _segments[span.SegmentID];
+			return null;
+		}
+		
+		public List<ReferenceInfo> GetSymbolReferences(SymbolInfo symbol)
+		{
+			List<ReferenceInfo> references = new List<ReferenceInfo>();
+			foreach(int reference in symbol.References) {
+				ReferenceInfo refInfo = GetReferenceInfo(reference);
+				if(refInfo != null) {
+					references.Add(refInfo);
+				}
+			}
+			return references;
+		}
 
-				if(!seg.IsRam) {
-					int spanPrgOffset = seg.FileOffset - _headerSize + span.Offset;
-					if(rangeStart < spanPrgOffset + span.Size && rangeEnd >= spanPrgOffset) {
-						if(symbol.ExportSymbolID != null && symbol.Address == null) {
-							return _symbols[symbol.ExportSymbolID.Value];
-						} else {
-							return symbol;
+		private SpanInfo GetSymbolDefinitionSpan(SymbolInfo symbol)
+		{
+			foreach(int definition in symbol.Definitions) {
+				LineInfo definitionLine;
+				FileInfo file;
+				if(_lines.TryGetValue(definition, out definitionLine)) {
+					if(_files.TryGetValue(definitionLine.FileID, out file)) {
+						int lineNumber = definitionLine.LineNumber;
+						while(!(definitionLine?.SpanIDs.Count > 0) && lineNumber < _linesByFile[file.ID].Length - 1) {
+							//Definition line contains no code, try the next line
+							lineNumber++;
+							definitionLine = _linesByFile[file.ID][lineNumber];
+						}
+
+						if(definitionLine != null && definitionLine.SpanIDs.Count > 0) {
+							SpanInfo span;
+							if(_spans.TryGetValue(definitionLine.SpanIDs[0], out span)) {
+								return span;
+							}
 						}
 					}
 				}
-			}									
+			}
+			return null;
+		}
+
+		private SymbolInfo GetMatchingSymbol(SymbolInfo symbol, int rangeStart, int rangeEnd)
+		{
+			AddressTypeInfo symbolAddress = GetSymbolAddressInfo(symbol);
+			if(symbolAddress != null && symbolAddress.Type == AddressType.PrgRom && symbolAddress.Address >= rangeStart && symbolAddress.Address <= rangeEnd) {
+				//If the range start/end matches the symbol's definition, return it
+				return symbol;
+			}
+
+			foreach(int reference in symbol.References) {
+				LineInfo line = _lines[reference];
+
+				foreach(int spanID in line.SpanIDs) {
+					SpanInfo span = _spans[spanID];
+					SegmentInfo seg = _segments[span.SegmentID];
+
+					if(!seg.IsRam) {
+						int spanPrgOffset = seg.FileOffset - _headerSize + span.Offset;
+						if(rangeStart < spanPrgOffset + span.Size && rangeEnd >= spanPrgOffset) {
+							if(symbol.ExportSymbolID != null && symbol.Address == null) {
+								return _symbols[symbol.ExportSymbolID.Value];
+							} else {
+								return symbol;
+							}
+						}
+					}
+				}
+			}
 			return null;
 		}
 
@@ -195,10 +275,13 @@ namespace Mesen.GUI.Debugger
 					IsRam = true
 				};
 
-				if(segment.Start >= 0x4020) {
-					match = _segmentPrgRomRegex.Match(row);
-					if(match.Success && !row.Contains("type=rw")) {
-						segment.FileOffset = Int32.Parse(match.Groups[4].Value);
+				match = _segmentPrgRomRegex.Match(row);
+				if(match.Success) {
+					segment.FileOffset = Int32.Parse(match.Groups[4].Value);
+					if(!row.Contains("type=rw") && segment.Start >= 0x4020) {
+						segment.IsRam = false;
+					} else if(segment.FileOffset < this._headerSize) {
+						//This usually means this is the segment for the iNES header
 						segment.IsRam = false;
 					}
 				}
@@ -216,9 +299,14 @@ namespace Mesen.GUI.Debugger
 		{
 			Match match = _fileRegex.Match(row);
 			if(match.Success) {
+				string filename = Path.GetFullPath(Path.Combine(basePath, match.Groups[2].Value.Replace('/', Path.DirectorySeparatorChar).Replace('\\', Path.DirectorySeparatorChar))).Replace(basePath + Path.DirectorySeparatorChar, "");
+				string ext = Path.GetExtension(filename).ToLower();
+				bool isAsm = ext != ".c" && ext != ".h";
+
 				FileInfo file = new FileInfo() {
 					ID = Int32.Parse(match.Groups[1].Value),
-					Name = Path.GetFullPath(Path.Combine(basePath, match.Groups[2].Value.Replace('/', Path.DirectorySeparatorChar).Replace('\\', Path.DirectorySeparatorChar))).Replace(basePath + Path.DirectorySeparatorChar, "")
+					Name = filename,
+					IsAssembly = isAsm
 				};
 
 				_files.Add(file.ID, file);
@@ -239,9 +327,23 @@ namespace Mesen.GUI.Debugger
 					FileID = Int32.Parse(match.Groups[2].Value),
 					LineNumber = Int32.Parse(match.Groups[3].Value) - 1,
 					Type = match.Groups[5].Success ? (LineType)Int32.Parse(match.Groups[5].Value) : LineType.Assembly,
-					SpanID = match.Groups[7].Success ? (int?)Int32.Parse(match.Groups[7].Value) : null
 				};
 
+				if(line.LineNumber < 0) {
+					line.LineNumber = 0;
+				}
+
+				if(match.Groups[7].Success) {
+					string[] spanIDs = match.Groups[7].Value.Split('+');
+					line.SpanIDs = new List<int>(spanIDs.Length);
+					for(int i = spanIDs.Length - 1; i >= 0; i--) {
+						//Read them backwards to get them in order
+						line.SpanIDs.Add(Int32.Parse(spanIDs[i]));
+					}
+				} else {
+					line.SpanIDs = new List<int>();
+				}
+				
 				_usedFileIds.Add(line.FileID);
 				_lines.Add(line.ID, line);
 				return true;
@@ -291,6 +393,29 @@ namespace Mesen.GUI.Debugger
 			return false;
 		}
 
+		private bool LoadScopes(string row)
+		{
+			Match match = _scopeRegex.Match(row);
+			if(match.Success) {
+				ScopeInfo scope = new ScopeInfo() {
+					ID = Int32.Parse(match.Groups[1].Value),
+					Name = match.Groups[2].Value,
+					SymbolID = match.Groups[4].Success ? (int?)Int32.Parse(match.Groups[4].Value) : null,
+				};
+
+				if(scope.SymbolID.HasValue) {
+					_scopesBySymbol[scope.SymbolID.Value] = scope;
+				}
+
+				_scopes.Add(scope.ID, scope);
+				return true;
+			} else if(row.StartsWith("scope")) {
+				System.Diagnostics.Debug.Fail("Regex doesn't match scope");
+			}
+
+			return false;
+		}
+
 		private bool LoadSymbols(string row)
 		{
 			Match match = _symbolRegex.Match(row);
@@ -298,19 +423,23 @@ namespace Mesen.GUI.Debugger
 				SymbolInfo symbol = new SymbolInfo() {
 					ID = Int32.Parse(match.Groups[1].Value),
 					Name = match.Groups[2].Value,
-					Address = match.Groups[8].Success ? (int?)Int32.Parse(match.Groups[8].Value, NumberStyles.HexNumber) : null,
-					SegmentID = match.Groups[10].Success ? (int?)Int32.Parse(match.Groups[10].Value) : null,
-					ExportSymbolID = match.Groups[12].Success ? (int?)Int32.Parse(match.Groups[12].Value) : null
+					Address = match.Groups[10].Success ? (int?)Int32.Parse(match.Groups[10].Value, NumberStyles.HexNumber) : null,
+					SegmentID = match.Groups[12].Success ? (int?)Int32.Parse(match.Groups[12].Value) : null,
+					ExportSymbolID = match.Groups[14].Success ? (int?)Int32.Parse(match.Groups[14].Value) : null
 				};
 
 				if(match.Groups[4].Success) {
-					symbol.Definitions = match.Groups[4].Value.Split('+').Select(o => Int32.Parse(o)).ToList();
+					symbol.Size = Int32.Parse(match.Groups[4].Value);
+				}
+
+				if(match.Groups[6].Success) {
+					symbol.Definitions = match.Groups[6].Value.Split('+').Select(o => Int32.Parse(o)).ToList();
 				} else {
 					symbol.Definitions = new List<int>();
 				}
 
-				if(match.Groups[6].Success) {
-					symbol.References = match.Groups[6].Value.Split('+').Select(o => Int32.Parse(o)).ToList();
+				if(match.Groups[8].Success) {
+					symbol.References = match.Groups[8].Value.Split('+').Select(o => Int32.Parse(o)).ToList();
 				} else {
 					symbol.References = new List<int>();
 				}
@@ -322,6 +451,27 @@ namespace Mesen.GUI.Debugger
 			}
 
 			return false;
+		}
+
+		public int GetSymbolSize(SymbolInfo symbol)
+		{
+			if(symbol.SegmentID != null && _segments.ContainsKey(symbol.SegmentID.Value)) {
+				SegmentInfo segment = _segments[symbol.SegmentID.Value];
+				SpanInfo defSpan = null;
+				if(!segment.IsRam) {
+					defSpan = GetSymbolDefinitionSpan(symbol);
+				}
+
+				ScopeInfo scope = null;
+				if(_scopesBySymbol.TryGetValue(symbol.ID, out scope)) {
+					//This symbol actually denotes the start of a scope (.scope or .proc) and isn't actually data, return a size of 1
+					return 1;
+				} else {
+					return (defSpan == null || defSpan.IsData) ? (symbol.Size ?? 1) : 1;
+				}
+			}
+
+			return 1;
 		}
 
 		private void GetRamLabelAddressAndType(int address, out int absoluteAddress, out AddressType? addressType)
@@ -341,32 +491,27 @@ namespace Mesen.GUI.Debugger
 			}
 		}
 
-		private CodeLabel CreateLabel(Int32 address, bool isRamLabel)
+		private CodeLabel CreateLabel(Int32 address, AddressType addressType, UInt32 length)
 		{
 			CodeLabel label = null;
-			if(isRamLabel) {
-				int labelAddress;
-				AddressType? addressType;
-				GetRamLabelAddressAndType(address, out labelAddress, out addressType);
-				if(addressType == AddressType.InternalRam) {
-					if(!_ramLabels.TryGetValue(labelAddress, out label)) {
-						label = new CodeLabel() { Address = (UInt32)labelAddress, AddressType = AddressType.InternalRam, Comment = string.Empty, Label = string.Empty };
-						_ramLabels[labelAddress] = label;
-					}
-				} else if(addressType == AddressType.WorkRam) {
-					if(!_workRamLabels.TryGetValue(labelAddress, out label)) {
-						label = new CodeLabel() { Address = (UInt32)labelAddress, AddressType = AddressType.WorkRam, Comment = string.Empty, Label = string.Empty };
-						_workRamLabels[labelAddress] = label;
-					}
-				} else if(addressType == AddressType.SaveRam) {
-					if(!_saveRamLabels.TryGetValue(labelAddress, out label)) {
-						label = new CodeLabel() { Address = (UInt32)labelAddress, AddressType = AddressType.SaveRam, Comment = string.Empty, Label = string.Empty };
-						_saveRamLabels[labelAddress] = label;
-					}
+			if(addressType == AddressType.InternalRam) {
+				if(!_ramLabels.TryGetValue(address, out label)) {
+					label = new CodeLabel() { Address = (UInt32)address, AddressType = AddressType.InternalRam, Comment = string.Empty, Label = string.Empty, Length = length };
+					_ramLabels[address] = label;
+				}
+			} else if(addressType == AddressType.WorkRam) {
+				if(!_workRamLabels.TryGetValue(address, out label)) {
+					label = new CodeLabel() { Address = (UInt32)address, AddressType = AddressType.WorkRam, Comment = string.Empty, Label = string.Empty, Length = length };
+					_workRamLabels[address] = label;
+				}
+			} else if(addressType == AddressType.SaveRam) {
+				if(!_saveRamLabels.TryGetValue(address, out label)) {
+					label = new CodeLabel() { Address = (UInt32)address, AddressType = AddressType.SaveRam, Comment = string.Empty, Label = string.Empty, Length = length };
+					_saveRamLabels[address] = label;
 				}
 			} else {
 				if(!_romLabels.TryGetValue(address, out label)) {
-					label = new CodeLabel() { Address = (UInt32)address, AddressType = AddressType.PrgRom, Comment = string.Empty, Label = string.Empty };
+					label = new CodeLabel() { Address = (UInt32)address, AddressType = AddressType.PrgRom, Comment = string.Empty, Label = string.Empty, Length = length };
 					_romLabels[address] = label;
 				}
 			}
@@ -388,6 +533,11 @@ namespace Mesen.GUI.Debugger
 
 						int count = 2;
 						string orgSymbolName = symbol.Name;
+						if(!LabelManager.LabelRegex.IsMatch(orgSymbolName)) {
+							//ignore labels that don't respect the label naming restrictions
+							continue;
+						}
+
 						string newName = symbol.Name;
 						while(!_usedLabels.Add(newName)) {
 							//Ensure labels are unique
@@ -395,10 +545,12 @@ namespace Mesen.GUI.Debugger
 							count++;
 						}
 
-						int address = GetSymbolAddressInfo(symbol).Address;
-						CodeLabel label = this.CreateLabel(address, segment.IsRam);
-						if(label != null) {
-							label.Label = newName;
+						AddressTypeInfo addressInfo = GetSymbolAddressInfo(symbol);
+						if(symbol.Address != null && symbol.Address >= 0) {
+							CodeLabel label = this.CreateLabel(addressInfo.Address, addressInfo.Type, (uint)GetSymbolSize(symbol));
+							if(label != null) {
+								label.Label = newName;
+							}
 						}
 					}
 				} catch {
@@ -412,11 +564,11 @@ namespace Mesen.GUI.Debugger
 			foreach(KeyValuePair<int, LineInfo> kvp in _lines) {
 				try {
 					LineInfo line = kvp.Value;
-					if(line.SpanID == null) {
+					if(line.SpanIDs.Count == 0) {
 						continue;
 					}
 
-					SpanInfo span = _spans[line.SpanID.Value];
+					SpanInfo span = _spans[line.SpanIDs[0]];
 					SegmentInfo segment = _segments[span.SegmentID];
 
 					if(_files[line.FileID].Data == null) {
@@ -427,8 +579,7 @@ namespace Mesen.GUI.Debugger
 						continue;
 					}
 
-					string ext = Path.GetExtension(_files[line.FileID].Name).ToLower();
-					bool isAsm = ext != ".c" && ext != ".h";
+					bool isAsm = _files[line.FileID].IsAssembly;
 
 					string comment = "";
 					for(int i = line.LineNumber; i >= 0; i--) {
@@ -459,10 +610,20 @@ namespace Mesen.GUI.Debugger
 					}
 
 					if(comment.Length > 0) {
-						int address = segment.IsRam ? (span.Offset + segment.Start) : (span.Offset + segment.FileOffset - _headerSize);
-						CodeLabel label = this.CreateLabel(address, segment.IsRam);
-						if(label != null) {
-							label.Comment = comment;
+						int address = -1;
+						AddressType? addressType;
+						if(segment.IsRam) {
+							GetRamLabelAddressAndType(span.Offset + segment.Start, out address, out addressType);
+						} else {
+							address = GetPrgAddress(span);
+							addressType = AddressType.PrgRom;
+						}
+
+						if(address >= 0 && addressType != null) {
+							CodeLabel label = this.CreateLabel(address, addressType.Value, 1);
+							if(label != null) {
+								label.Comment = comment;
+							}
 						}
 					}
 				} catch {
@@ -473,6 +634,19 @@ namespace Mesen.GUI.Debugger
 
 		private void LoadFileData(string path)
 		{
+			Dictionary<int, int> maxLineCountByFile = new Dictionary<int, int>();
+
+			foreach(LineInfo line in _lines.Values) {
+				int currentMax;
+				if(maxLineCountByFile.TryGetValue(line.FileID, out currentMax)) {
+					if(currentMax < line.LineNumber) {
+						maxLineCountByFile[line.FileID] = line.LineNumber;
+					}
+				} else {
+					maxLineCountByFile[line.FileID] = line.LineNumber;
+				}
+			}
+
 			foreach(FileInfo file in _files.Values) {
 				if(_usedFileIds.Contains(file.ID)) {
 					try {
@@ -491,11 +665,87 @@ namespace Mesen.GUI.Debugger
 						if(File.Exists(sourceFile)) {
 							file.Data = File.ReadAllLines(sourceFile);
 						}
+
+						LineInfo[] fileInfos = new LineInfo[maxLineCountByFile[file.ID] + 1];
+						foreach(LineInfo line in _lines.Values) {
+							if(line.FileID == file.ID) {
+								fileInfos[line.LineNumber] = line;
+							}
+						}
+						_linesByFile[file.ID] = fileInfos;
 					} catch {
 						_errorCount++;
 					}
 				}
 			}
+		}
+
+		private void BuildCdlData()
+		{
+			int prgSize = InteropEmu.DebugGetMemorySize(DebugMemoryType.PrgRom);
+			if(prgSize <= 0) {
+				return;
+			}
+
+			byte[] cdlFile = new byte[prgSize];
+
+			//Mark data/code regions
+			foreach(SpanInfo span in _spans.Values) {
+				int prgAddress = GetPrgAddress(span);
+				if(prgAddress >= 0 && prgAddress < prgSize) {
+					for(int i = 0; i < span.Size; i++) {
+						if(cdlFile[prgAddress + i] != (byte)CdlPrgFlags.Data && !span.IsData && span.Size <= 3) {
+							cdlFile[prgAddress + i] = (byte)CdlPrgFlags.Code;
+						} else if(span.IsData) {
+							cdlFile[prgAddress + i] = (byte)CdlPrgFlags.Data;
+						} else if(cdlFile[prgAddress + i] == 0) {
+							//Mark bytes as tentative data, until we know that the bytes are actually code
+							cdlFile[prgAddress + i] = 0x04; 
+						}
+					}
+				}
+			}
+			for(int i = 0; i < cdlFile.Length; i++) {
+				if(cdlFile[i] == 0x04) {
+					//Mark all bytes marked as tentative data as data
+					cdlFile[i] = (byte)CdlPrgFlags.Data;
+				}
+			}
+
+			//Find/identify functions and jump targets
+			byte[] prgRomContent = InteropEmu.DebugGetMemoryState(DebugMemoryType.PrgRom);
+			foreach(SymbolInfo symbol in _symbols.Values) {
+				LineInfo line;
+				if(!symbol.SegmentID.HasValue) {
+					//This is a constant, ignore it
+					continue;
+				}
+
+				foreach(int reference in symbol.References) {
+					if(_lines.TryGetValue(reference, out line) && line.SpanIDs.Count > 0) {
+						SpanInfo span;
+						if(_spans.TryGetValue(line.SpanIDs[0], out span) && !span.IsData && span.Size <= 3) {
+							int referencePrgAddr = GetPrgAddress(span);
+							if(referencePrgAddr >= 0 && referencePrgAddr < prgRomContent.Length) {
+								byte opCode = prgRomContent[referencePrgAddr];
+								if(opCode == 0x20 || opCode == 0x10 || opCode == 0x30 || opCode == 0x50 || opCode == 0x70 || opCode == 0x90 || opCode == 0xB0 || opCode == 0xD0 || opCode == 0xF0 || opCode == 0x4C || opCode == 0x20 || opCode == 0x4C || opCode == 0x6C) {
+									//This symbol is used with a JSR/jump instruction, so it's either a function or jump target
+									bool isJsr = opCode == 0x20;
+									SpanInfo definitionSpan = GetSymbolDefinitionSpan(symbol);
+									if(definitionSpan != null) {
+										int definitionPrgAddr = GetPrgAddress(definitionSpan);
+										if(definitionPrgAddr >= 0 && definitionPrgAddr < prgRomContent.Length) {
+											cdlFile[definitionPrgAddr] |= (byte)(isJsr ? CdlPrgFlags.SubEntryPoint : CdlPrgFlags.JumpTarget);
+											break;
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+			InteropEmu.DebugSetCdlData(cdlFile);
 		}
 
 		public void Import(string path, bool silent = false)
@@ -515,12 +765,14 @@ namespace Mesen.GUI.Debugger
 				}
 			}
 
+			DbgFileStamp = File.GetLastWriteTime(path);
 			string[] fileRows = File.ReadAllLines(path);
 
 			string basePath = Path.GetDirectoryName(path);
+			DbgPath = basePath;
 			foreach(string row in fileRows) {
 				try {
-					if(LoadLines(row) || LoadSpans(row) || LoadSymbols(row) || LoadCSymbols(row) || LoadFiles(row, basePath) || LoadSegments(row)) {
+					if(LoadLines(row) || LoadSpans(row) || LoadSymbols(row) || LoadCSymbols(row) || LoadScopes(row) || LoadFiles(row, basePath) || LoadSegments(row)) {
 						continue;
 					}
 				} catch {
@@ -530,51 +782,30 @@ namespace Mesen.GUI.Debugger
 
 			LoadFileData(basePath);
 
-			int prgSize = InteropEmu.DebugGetMemorySize(DebugMemoryType.PrgRom);
-			if(prgSize > 0) {
-				byte[] cdlFile = new byte[prgSize];
-				foreach(KeyValuePair<int, SpanInfo> kvp in _spans) {
-					SegmentInfo segment;
-					if(_segments.TryGetValue(kvp.Value.SegmentID, out segment)) {
-						if(!segment.IsRam && kvp.Value.Size != segment.Size) {
-							int prgAddress = kvp.Value.Offset + segment.FileOffset - _headerSize;
-
-							if(prgAddress >= 0 && prgAddress < prgSize) {
-								for(int i = 0; i < kvp.Value.Size; i++) {
-									if(cdlFile[prgAddress + i] == 0 && !kvp.Value.IsData && kvp.Value.Size <= 3) {
-										cdlFile[prgAddress + i] = (byte)0x01;
-									} else if(kvp.Value.IsData) {
-										cdlFile[prgAddress + i] = (byte)0x02;
-									}
-								}
-							}
-						}
-					}
-				}
-				InteropEmu.DebugSetCdlData(cdlFile);
-			}
+			BuildCdlData();
 
 			foreach(LineInfo line in _lines.Values) {
-				if(line.SpanID == null) {
-					continue;
-				}
+				foreach(int spanID in line.SpanIDs) {
+					SpanInfo span;
+					if(_spans.TryGetValue(spanID, out span)) {
+						SegmentInfo segment;
+						if(_segments.TryGetValue(span.SegmentID, out segment) && !segment.IsRam) {
+							for(int i = 0; i < span.Size; i++) {
+								int prgAddress = segment.FileOffset - _headerSize + span.Offset + i;
 
-				FileInfo file = _files[line.FileID];
-				SpanInfo span = _spans[line.SpanID.Value];
-				SegmentInfo segment = _segments[span.SegmentID];
-				if(!segment.IsRam) {
-					for(int i = 0; i < span.Size; i++) {
-						int prgAddress = segment.FileOffset - _headerSize + span.Offset + i;
+								LineInfo existingLine;
+								if(_linesByPrgAddress.TryGetValue(prgAddress, out existingLine) && existingLine.Type == LineType.External) {
+									//Give priority to lines that come from C files
+									continue;
+								}
 
-						LineInfo existingLine;
-						if(_linesByPrgAddress.TryGetValue(prgAddress, out existingLine) && existingLine.Type == LineType.External) {
-							//Give priority to lines that come from C files
-							continue;
-						}
-
-						_linesByPrgAddress[prgAddress] = line;
-						if(i == 0) {
-							_prgAddressByLine[file.ID.ToString() + "_" + line.LineNumber.ToString()] = prgAddress;
+								_linesByPrgAddress[prgAddress] = line;
+								if(i == 0 && spanID == line.SpanIDs[0]) {
+									//Mark the first byte of the first span representing this line as the PRG address for this line of code
+									FileInfo file = _files[line.FileID];
+									_prgAddressByLine[file.ID.ToString() + "_" + line.LineNumber.ToString()] = prgAddress;
+								}
+							}
 						}
 					}
 				}
@@ -595,11 +826,18 @@ namespace Mesen.GUI.Debugger
 			}
 			if(config.DbgImportRamLabels) {
 				labels.AddRange(_ramLabels.Values);
-				labels.AddRange(_workRamLabels.Values);
-				labels.AddRange(_saveRamLabels.Values);
-				labelCount += _ramLabels.Count + _workRamLabels.Count + _saveRamLabels.Count;
+				labelCount += _ramLabels.Count;
 			}
-			LabelManager.SetLabels(labels);
+			if(config.DbgImportWorkRamLabels) {
+				labels.AddRange(_workRamLabels.Values);
+				labelCount += _workRamLabels.Count;
+			}
+			if(config.DbgImportSaveRamLabels) {
+				labels.AddRange(_saveRamLabels.Values);
+				labelCount += _saveRamLabels.Count;
+			}
+
+			LabelManager.SetLabels(labels, true);
 			
 			if(!silent) {
 				if(_errorCount > 0) {
@@ -635,6 +873,7 @@ namespace Mesen.GUI.Debugger
 			public int ID;
 			public string Name;
 			public string[] Data;
+			public bool IsAssembly;
 
 			public override string ToString()
 			{
@@ -652,7 +891,7 @@ namespace Mesen.GUI.Debugger
 		{
 			public int ID;
 			public int FileID;
-			public int? SpanID;
+			public List<int> SpanIDs;
 			public LineType Type;
 
 			public int LineNumber;
@@ -681,8 +920,16 @@ namespace Mesen.GUI.Debugger
 			public int? Address;
 			public int? SegmentID;
 			public int? ExportSymbolID;
+			public int? Size;
 			public List<int> References;
 			public List<int> Definitions;
+		}
+
+		public class ScopeInfo
+		{
+			public int ID;
+			public string Name;
+			public int? SymbolID;
 		}
 
 		public class CSymbolInfo
@@ -692,10 +939,11 @@ namespace Mesen.GUI.Debugger
 			public int? SymbolID;
 		}
 
-		public class DefinitionInfo
+		public class ReferenceInfo
 		{
 			public string FileName;
-			public int Line;
+			public int LineNumber;
+			public string LineContent;
 		}
 	}
 }

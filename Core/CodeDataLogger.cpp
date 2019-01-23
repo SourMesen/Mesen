@@ -151,6 +151,11 @@ bool CodeDataLogger::IsCode(uint32_t absoluteAddr)
 	return (_cdlData[absoluteAddr] & (uint8_t)CdlPrgFlags::Code) == (uint8_t)CdlPrgFlags::Code;
 }
 
+bool CodeDataLogger::IsJumpTarget(uint32_t absoluteAddr)
+{
+	return (_cdlData[absoluteAddr] & (uint8_t)CdlPrgFlags::JumpTarget) == (uint8_t)CdlPrgFlags::JumpTarget;
+}
+
 bool CodeDataLogger::IsSubEntryPoint(uint32_t absoluteAddr)
 {
 	return (_cdlData[absoluteAddr] & (uint8_t)CdlPrgFlags::SubEntryPoint) == (uint8_t)CdlPrgFlags::SubEntryPoint;
@@ -179,26 +184,16 @@ void CodeDataLogger::SetCdlData(uint8_t *cdlData, uint32_t length)
 	}
 }
 
-void CodeDataLogger::GetCdlData(uint32_t offset, uint32_t length, DebugMemoryType memoryType, uint8_t * cdlData)
+void CodeDataLogger::GetCdlData(uint32_t offset, uint32_t length, DebugMemoryType memoryType, uint8_t *cdlData)
 {
 	if(memoryType == DebugMemoryType::PrgRom) {
-		for(uint32_t i = 0; i < length; i++) {
-			cdlData[i] = _cdlData[offset + i];
-			if(_debugger->GetLabelManager()->HasLabelOrComment(offset + i, AddressType::PrgRom)) {
-				cdlData[i] |= 0x04; //Has label or comment
-			}
-		}
+		memcpy(cdlData, _cdlData + offset, length);
 	} else if(memoryType == DebugMemoryType::ChrRom) {
-		for(uint32_t i = 0; i < length; i++) {
-			cdlData[i] = _cdlData[_prgSize + offset + i];
-		}
+		memcpy(cdlData, _cdlData + _prgSize + offset, length);
 	} else if(memoryType == DebugMemoryType::CpuMemory) {
 		for(uint32_t i = 0; i < length; i++) {
 			int32_t absoluteAddress = _debugger->GetAbsoluteAddress(offset + i);
 			cdlData[i] = absoluteAddress >= 0 ? _cdlData[absoluteAddress] : 0;
-			if(_debugger->GetLabelManager()->HasLabelOrComment(offset + i)) {
-				cdlData[i] |= 0x04; //Has label or comment
-			}
 		}
 	} else if(memoryType == DebugMemoryType::PpuMemory) {
 		for(uint32_t i = 0; i < length; i++) {

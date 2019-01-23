@@ -374,12 +374,8 @@ void ControlManager::StreamState(bool saving)
 		}
 	}
 
-	int32_t unusedMousePositionX = 0;
-	int32_t unusedMousePositionY = 0;
-	bool unusedRefreshState = false;
-
 	ArrayInfo<ControllerType> types = { controllerTypes, 4 };
-	Stream(unusedRefreshState, unusedMousePositionX, unusedMousePositionY, nesModel, expansionDevice, consoleType, types, hasFourScore, useNes101Hvc101Behavior, zapperDetectionRadius, _lagCounter, _pollCounter);
+	Stream(nesModel, expansionDevice, consoleType, types, hasFourScore, useNes101Hvc101Behavior, zapperDetectionRadius, _lagCounter, _pollCounter);
 
 	if(!saving) {
 		settings->SetNesModel(nesModel);
@@ -396,10 +392,8 @@ void ControlManager::StreamState(bool saving)
 		UpdateControlDevices();
 	}
 
-	if(GetStateVersion() >= 7) {
-		for(uint8_t i = 0; i < _controlDevices.size(); i++) {
-			SnapshotInfo device{ _controlDevices[i].get() };
-			Stream(device);
-		}
+	for(uint8_t i = 0; i < _controlDevices.size(); i++) {
+		SnapshotInfo device{ _controlDevices[i].get() };
+		Stream(device);
 	}
 }

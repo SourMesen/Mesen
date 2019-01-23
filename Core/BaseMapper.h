@@ -25,9 +25,8 @@ private:
 	uint16_t InternalGetChrRamPageSize();
 	bool ValidateAddressRange(uint16_t startAddr, uint16_t endAddr);
 
-	uint8_t *_nesNametableRam[2];
-	uint8_t *_cartNametableRam[10];
-	uint8_t _nametableIndexes[4];
+	uint8_t *_nametableRam = nullptr;
+	uint8_t _nametableCount = 2;
 
 	bool _onlyChrRam = false;
 	bool _hasBusConflicts = false;
@@ -36,18 +35,17 @@ private:
 	bool _isReadRegisterAddr[0x10000];
 	bool _isWriteRegisterAddr[0x10000];
 
+	MemoryAccessType _prgMemoryAccess[0x100];
 	uint8_t* _prgPages[0x100];
+
+	MemoryAccessType _chrMemoryAccess[0x100];
 	uint8_t* _chrPages[0x100];
-	uint8_t _prgPageAccessType[0x100];
-	uint8_t _chrPageAccessType[0x100];
 
 	int32_t _prgMemoryOffset[0x100];
 	PrgMemoryType _prgMemoryType[0x100];
-	MemoryAccessType _prgMemoryAccess[0x100];
 
-	int32_t _chrMemoryOffset[0x40];
-	ChrMemoryType _chrMemoryType[0x40];
-	MemoryAccessType _chrMemoryAccess[0x40];
+	int32_t _chrMemoryOffset[0x100];
+	ChrMemoryType _chrMemoryType[0x100];
 
 	vector<uint8_t> _originalPrgRom;
 	vector<uint8_t> _originalChrRom;
@@ -124,7 +122,7 @@ protected:
 	void RemovePpuMemoryMapping(uint16_t startAddr, uint16_t endAddr);
 
 	bool HasBattery();
-	void LoadBattery();
+	virtual void LoadBattery();
 	string GetBatteryFilename();
 
 	uint32_t GetPRGPageCount();
@@ -142,16 +140,18 @@ protected:
 
 	virtual void StreamState(bool saving) override;
 
-	void RestorePrgChrState(uint32_t* prgPages, uint32_t* chrPages);
+	void RestorePrgChrState();
 
-	uint8_t* GetNametable(uint8_t index);
-	void AddNametable(uint8_t index, uint8_t *nametable);
+	uint8_t* GetNametable(uint8_t nametableIndex);
 	void SetNametable(uint8_t index, uint8_t nametableIndex);
 	void SetNametables(uint8_t nametable1Index, uint8_t nametable2Index, uint8_t nametable3Index, uint8_t nametable4Index);
 	void SetMirroringType(MirroringType type);
 	MirroringType GetMirroringType();
 
 public:
+	static constexpr uint32_t NametableCount = 0x10;
+	static constexpr uint32_t NametableSize = 0x400;
+
 	void Initialize(RomData &romData);
 
 	virtual ~BaseMapper();
@@ -170,7 +170,6 @@ public:
 	virtual void SaveBattery() override;
 
 	void SetConsole(shared_ptr<Console> console);
-	virtual void SetDefaultNametables(uint8_t* nametableA, uint8_t* nametableB);
 
 	shared_ptr<BaseControlDevice> GetMapperControlDevice();
 	RomInfo GetRomInfo();
@@ -215,9 +214,10 @@ public:
 	uint32_t GetMemorySize(DebugMemoryType type);
 
 	uint32_t CopyMemory(DebugMemoryType type, uint8_t* buffer);
-	void WriteMemory(DebugMemoryType type, uint8_t* buffer);
+	void WriteMemory(DebugMemoryType type, uint8_t* buffer, int32_t length);
 
 	void GetAbsoluteAddressAndType(uint32_t relativeAddr, AddressTypeInfo *info);
+	void GetPpuAbsoluteAddressAndType(uint32_t relativeAddr, PpuAddressTypeInfo *info);
 	int32_t ToAbsoluteAddress(uint16_t addr);
 	int32_t ToAbsoluteSaveRamAddress(uint16_t addr);
 	int32_t ToAbsoluteWorkRamAddress(uint16_t addr);
@@ -226,6 +226,7 @@ public:
 	int32_t ToAbsoluteChrRomAddress(uint16_t addr);
 	int32_t FromAbsoluteChrAddress(uint32_t addr);
 	int32_t FromAbsoluteAddress(uint32_t addr, AddressType type = AddressType::PrgRom);
+	int32_t FromAbsolutePpuAddress(uint32_t addr, PpuAddressType type);
 
 	bool IsWriteRegister(uint16_t addr);
 	bool IsReadRegister(uint16_t addr);

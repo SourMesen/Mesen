@@ -1,6 +1,6 @@
 ---
 title: Trace Logger
-weight: 17
+weight: 35
 chapter: false
 ---
 

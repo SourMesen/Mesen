@@ -217,6 +217,11 @@
 			<Control ID="chkDisplayPort4">Jugador 4</Control>
 			<Control ID="lblDisplayPosition">Posición de pantalla:</Control>
 			<Control ID="chkDisplayInputHorizontally">Mostrar horizontalmente</Control>
+
+			<Control ID="lblSmall">Corto</Control>
+			<Control ID="lblLarge">Largo</Control>
+			<Control ID="lblDeadzone">Controller axis deadzone size:</Control>
+
 			<Control ID="chkHideMousePointerForZapper">Hide mouse pointer when using zapper</Control>
 
 			<Control ID="lblKeyBinding">Advertencia: su configuración actual contiene asignaciones conflictivas - algunas teclas de su teclado o botones del mando se han asignado a varios botones del mando de la NES. Si esto no es intencionado, revise y corrija las asignaciones.</Control>
@@ -281,6 +286,8 @@
 
 			<Control ID="tpgAdvanced">Avanzado</Control>
 			<Control ID="lblScreenRotation">Rotación de pantalla:</Control>
+			<Control ID="chkRemoveSpriteLimit">Eliminar el límite de sprites (Reduce el parpadeo en algunos juegos)</Control>
+			<Control ID="chkAdaptiveSpriteLimit">Volver a habilitar el límite de sprites cuando haga falta para prevenir errores gráficos</Control>
 			<Control ID="chkDisableBackground">Deshabilitar fondo</Control>
 			<Control ID="chkDisableSprites">Deshabilitar sprites</Control>
 			<Control ID="chkForceBackgroundFirstColumn">Forzar ver fondo en primera columna</Control>
@@ -299,11 +306,11 @@
 			<Control ID="lblRewindSpeed">Velocidad de rebobinado:</Control>
 
 			<Control ID="tpgAdvanced">Avanzado</Control>
+			<Control ID="lblDeveloperSettings">Recommended settings for developers (homebrew / ROM hacking)</Control>
+			<Control ID="lblMiscSettings">Configuraciones varias</Control>
 			<Control ID="chkUseAlternativeMmc3Irq">Utilizar la versión alternativa de componentes de IRQs de MMC3</Control>
 			<Control ID="chkAllowInvalidInput">Permitir las entradas inválidas (Arriba+Abajo e Izquierda+Derecha al mismo tiempo)</Control>
 			<Control ID="lblRamPowerOnState">Estado inicial de la memoria durante el inicio:</Control>
-			<Control ID="chkRemoveSpriteLimit">Eliminar el límite de sprites (Reduce el parpadeo en algunos juegos)</Control>
-			<Control ID="chkAdaptiveSpriteLimit">Volver a habilitar el límite de sprites cuando haga falta para prevenir errores gráficos</Control>
 			<Control ID="chkEnableOamDecay">Activar la emulación de la degradación de la memoria OAM</Control>
 			<Control ID="chkDisablePpu2004Reads">Impedir la reproducción del registro $2004 de la PPU (Famicom)</Control>
 			<Control ID="chkDisableOamAddrBug">Desactivar la emulación de errores OAMADDR de la PPU</Control>

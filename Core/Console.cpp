@@ -223,13 +223,16 @@ string Console::FindMatchingRom(string romName, HashInfo hashInfo)
 		romFiles.insert(romFiles.end(), files.begin(), files.end());
 	}
 
-	string match = RomLoader::FindMatchingRom(romFiles, romName, hashInfo, true);
-	if(!match.empty()) {
-		return match;
+	if(!romName.empty()) {
+		//Perform quick search based on file name
+		string match = RomLoader::FindMatchingRom(romFiles, romName, hashInfo, true);
+		if(!match.empty()) {
+			return match;
+		}
 	}
 
 	//Perform slow CRC32 search for ROM
-	match = RomLoader::FindMatchingRom(romFiles, romName, hashInfo, false);
+	string match = RomLoader::FindMatchingRom(romFiles, romName, hashInfo, false);
 	if(!match.empty()) {
 		return match;
 	}
@@ -751,9 +754,12 @@ void Console::Run()
 				UpdateNesModel(true);
 				double delay = GetFrameDelay();
 
-				if(_resetRunTimers || delay != lastDelay) {
-					//Target frame rate changed, reset timers
-					//Also needed when resetting, power cycling, pausing or breaking with the debugger
+				if(_resetRunTimers || delay != lastDelay || (clockTimer.GetElapsedMS() - targetTime) > 300) {
+					//Reset the timers, this can happen in 3 scenarios:
+					//1) Target frame rate changed
+					//2) The console was reset/power cycled or the emulation was paused (with or without the debugger)
+					//3) As a satefy net, if we overshoot our target by over 300 milliseconds, the timer is reset, too.
+					//   This can happen when something slows the emulator down severely (or when breaking execution in VS when debugging Mesen itself, etc.)
 					clockTimer.Reset();
 					targetTime = 0;
 					lastPauseFrame = _ppu->GetFrameCount();
@@ -785,7 +791,13 @@ void Console::Run()
 
 					_runLock.Acquire();
 				}
-								
+
+				if(_pauseOnNextFrameRequested) {
+					//Used by "Run Single Frame" option
+					_settings->SetFlags(EmulationFlags::Paused);
+					_pauseOnNextFrameRequested = false;
+				}
+
 				bool pausedRequired = _settings->NeedsPause();
 				if(pausedRequired && !_stop && !_settings->CheckFlag(EmulationFlags::DebuggerWindowEnabled)) {
 					_notificationManager->SendNotification(ConsoleNotificationType::GamePaused);
@@ -912,6 +924,11 @@ bool Console::IsPaused()
 	} else {
 		return _paused;
 	}
+}
+
+void Console::PauseOnNextFrame()
+{
+	_pauseOnNextFrameRequested = true;
 }
 
 void Console::UpdateNesModel(bool sendNotification)

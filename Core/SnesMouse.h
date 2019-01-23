@@ -50,7 +50,7 @@ public:
 		uint8_t output = 0;
 		if((addr == 0x4016 && (_port & 0x01) == 0) || (addr == 0x4017 && (_port & 0x01) == 1)) {
 			if(_strobe) {
-				_sensitivity = (_sensitivity + 1) & 0x03;
+				_sensitivity = (_sensitivity + 1) % 3;
 			}
 
 			output = (_stateBuffer & 0x80000000) >> 31;

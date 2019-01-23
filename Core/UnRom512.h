@@ -24,15 +24,11 @@ protected:
 		} else {
 			_enableMirroringBit = GetMirroringType() == MirroringType::FourScreens;
 		}
-	}
 
-	void SetDefaultNametables(uint8_t* nametableA, uint8_t* nametableB) override
-	{
-		BaseMapper::SetDefaultNametables(nametableA, nametableB);
 		if(GetMirroringType() == MirroringType::FourScreens && _chrRam && _chrRamSize >= 0x8000) {
 			//InfiniteNesLives four-screen mirroring variation, last 8kb of CHR RAM is always mapped to 0x2000-0x3FFF (0x3EFF due to palette)
 			//This "breaks" the "UNROM512_4screen_test" test ROM - was the ROM actually tested on this board? Seems to contradict hardware specs
-			SetPpuMemoryMapping(0x2000, 0x3FFF, _chrRam + 0x6000);
+			SetPpuMemoryMapping(0x2000, 0x3FFF, ChrMemoryType::ChrRam, 0x6000, MemoryAccessType::ReadWrite);
 		}
 	}
 

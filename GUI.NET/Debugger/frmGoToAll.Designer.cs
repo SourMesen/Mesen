@@ -32,8 +32,11 @@
 			this.txtSearch = new System.Windows.Forms.TextBox();
 			this.pnlResults = new System.Windows.Forms.Panel();
 			this.tlpResults = new System.Windows.Forms.TableLayoutPanel();
+			this.statusStrip1 = new System.Windows.Forms.StatusStrip();
+			this.lblResultCount = new System.Windows.Forms.ToolStripStatusLabel();
 			this.tableLayoutPanel1.SuspendLayout();
 			this.pnlResults.SuspendLayout();
+			this.statusStrip1.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// tableLayoutPanel1
@@ -50,7 +53,8 @@
 			this.tableLayoutPanel1.RowCount = 2;
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel1.Size = new System.Drawing.Size(386, 421);
+			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+			this.tableLayoutPanel1.Size = new System.Drawing.Size(386, 417);
 			this.tableLayoutPanel1.TabIndex = 0;
 			// 
 			// lblSearch
@@ -82,7 +86,7 @@
 			this.pnlResults.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.pnlResults.Location = new System.Drawing.Point(3, 29);
 			this.pnlResults.Name = "pnlResults";
-			this.pnlResults.Size = new System.Drawing.Size(380, 389);
+			this.pnlResults.Size = new System.Drawing.Size(380, 385);
 			this.pnlResults.TabIndex = 2;
 			// 
 			// tlpResults
@@ -97,12 +101,30 @@
 			this.tlpResults.Size = new System.Drawing.Size(361, 457);
 			this.tlpResults.TabIndex = 0;
 			// 
+			// statusStrip1
+			// 
+			this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.lblResultCount});
+			this.statusStrip1.Location = new System.Drawing.Point(0, 417);
+			this.statusStrip1.Name = "statusStrip1";
+			this.statusStrip1.Size = new System.Drawing.Size(386, 22);
+			this.statusStrip1.SizingGrip = false;
+			this.statusStrip1.TabIndex = 1;
+			this.statusStrip1.Text = "statusStrip1";
+			// 
+			// lblResultCount
+			// 
+			this.lblResultCount.Name = "lblResultCount";
+			this.lblResultCount.Size = new System.Drawing.Size(54, 17);
+			this.lblResultCount.Text = "xx results";
+			// 
 			// frmGoToAll
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(386, 421);
+			this.ClientSize = new System.Drawing.Size(386, 439);
 			this.Controls.Add(this.tableLayoutPanel1);
+			this.Controls.Add(this.statusStrip1);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
 			this.Name = "frmGoToAll";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
@@ -110,7 +132,10 @@
 			this.tableLayoutPanel1.ResumeLayout(false);
 			this.tableLayoutPanel1.PerformLayout();
 			this.pnlResults.ResumeLayout(false);
+			this.statusStrip1.ResumeLayout(false);
+			this.statusStrip1.PerformLayout();
 			this.ResumeLayout(false);
+			this.PerformLayout();
 
 		}
 
@@ -121,5 +146,7 @@
 		private System.Windows.Forms.TextBox txtSearch;
 		private System.Windows.Forms.Panel pnlResults;
 		private System.Windows.Forms.TableLayoutPanel tlpResults;
+		private System.Windows.Forms.StatusStrip statusStrip1;
+		private System.Windows.Forms.ToolStripStatusLabel lblResultCount;
 	}
 }

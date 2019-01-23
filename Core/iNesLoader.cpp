@@ -15,11 +15,9 @@ RomData iNesLoader::LoadRom(vector<uint8_t>& romFile, NESHeader *preloadedHeader
 	uint32_t dataSize = (uint32_t)romFile.size();
 	if(preloadedHeader) {
 		header = *preloadedHeader;
-		header.SanitizeHeader(romFile.size() + sizeof(NESHeader));
 	} else {
 		memcpy((char*)&header, buffer, sizeof(NESHeader));
 		buffer += sizeof(NESHeader);
-		header.SanitizeHeader(romFile.size());
 		dataSize -= sizeof(NESHeader);
 	}
 
@@ -46,9 +44,16 @@ RomData iNesLoader::LoadRom(vector<uint8_t>& romFile, NESHeader *preloadedHeader
 	romData.SaveRamSize = header.GetSaveRamSize();
 
 	if(romData.Info.HasTrainer) {
-		//512-byte trainer at $7000-$71FF (stored before PRG data)
-		romData.TrainerData.insert(romData.TrainerData.end(), buffer, buffer + 512);
-		buffer += 512;
+		if(dataSize >= 512) {
+			//512-byte trainer at $7000-$71FF (stored before PRG data)
+			romData.TrainerData.insert(romData.TrainerData.end(), buffer, buffer + 512);
+			buffer += 512;
+			dataSize -= 512;
+		} else {
+			romData.Error = true;
+			MessageManager::Log("[iNes] Invalid file (file length does not match header information) - load operation cancelled.");
+			return romData;
+		}
 	}
 
 	size_t bytesRead = buffer - romFile.data();
@@ -68,8 +73,11 @@ RomData iNesLoader::LoadRom(vector<uint8_t>& romFile, NESHeader *preloadedHeader
 
 	if(prgSize + chrSize > dataSize) {
 		//Invalid rom file
+		MessageManager::Log("[iNes] Invalid file (file length does not match header information) - load operation cancelled.");
 		romData.Error = true;
 		return romData;
+	} else if(prgSize + chrSize < dataSize) {
+		MessageManager::Log("[iNes] Warning: File is larger than excepted (based on the file header).");
 	}
 
 	romData.PrgRom.insert(romData.PrgRom.end(), buffer, buffer + prgSize);

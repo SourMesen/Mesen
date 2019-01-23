@@ -24,6 +24,8 @@ namespace Mesen.GUI.Debugger
 		private string _previousTrace;
 		private volatile bool _refreshRunning;
 		private bool _initialized;
+		private CodeTooltipManager _tooltipManager;
+		private GoToDestination _destination;
 
 		public frmTraceLogger()
 		{
@@ -35,6 +37,8 @@ namespace Mesen.GUI.Debugger
 				this.Size = debugInfo.TraceLoggerSize;
 				this.Location = debugInfo.TraceLoggerLocation;
 			}
+
+			_tooltipManager = new CodeTooltipManager(this, txtTraceLog);
 
 			txtTraceLog.BaseFont = new Font(debugInfo.TraceFontFamily, debugInfo.TraceFontSize, debugInfo.TraceFontStyle);
 			txtTraceLog.TextZoom = debugInfo.TraceTextZoom;
@@ -96,6 +100,9 @@ namespace Mesen.GUI.Debugger
 			mnuRefresh.InitShortcut(this, nameof(DebuggerShortcutsConfig.Refresh));
 			mnuCopy.InitShortcut(this, nameof(DebuggerShortcutsConfig.Copy));
 			mnuSelectAll.InitShortcut(this, nameof(DebuggerShortcutsConfig.SelectAll));
+
+			mnuEditInMemoryViewer.InitShortcut(this, nameof(DebuggerShortcutsConfig.CodeWindow_EditInMemoryViewer));
+			mnuViewInDisassembly.InitShortcut(this, nameof(DebuggerShortcutsConfig.MemoryViewer_ViewInDisassembly));
 		}
 
 		protected override void OnLoad(EventArgs e)
@@ -471,6 +478,55 @@ namespace Mesen.GUI.Debugger
 		private void mnuSelectAll_Click(object sender, EventArgs e)
 		{
 			txtTraceLog.SelectAll();
+		}
+
+		private void mnuViewInDisassembly_Click(object sender, EventArgs e)
+		{
+			frmDebugger debugger = DebugWindowManager.GetDebugger();
+			if(_destination != null && debugger != null) {
+				debugger.GoToDestination(_destination);
+			}
+		}
+
+		private void mnuEditInMemoryViewer_Click(object sender, EventArgs e)
+		{
+			if(_destination != null) {
+				DebugWindowManager.OpenMemoryViewer(_destination);
+			}
+		}
+
+		private void txtTraceLog_MouseUp(object sender, MouseEventArgs e)
+		{
+			if(e.Button == MouseButtons.Right) {
+				string suffix = "";
+				string word = txtTraceLog.GetWordUnderLocation(e.Location);
+				if(word.StartsWith("$")) {
+					_destination = new GoToDestination() {
+						CpuAddress = Int32.Parse(word.Substring(1), System.Globalization.NumberStyles.AllowHexSpecifier)
+					};
+					suffix += " (" + word + ")";
+				} else {
+					CodeLabel label = LabelManager.GetLabel(word);
+					if(label != null) {
+						_destination = new GoToDestination() {
+							Label = label
+						};
+						suffix += " (" + label.Label + ")";
+					} else {
+						//Use the current row's address
+						_destination = new GoToDestination() {
+							CpuAddress = txtTraceLog.CurrentLine,
+						};
+						suffix += " ($" + txtTraceLog.CurrentLine.ToString("X4") + ")";
+					}
+				}
+
+				mnuViewInDisassembly.Enabled = DebugWindowManager.GetDebugger() != null;
+				mnuEditInMemoryViewer.Enabled = true;
+
+				mnuEditInMemoryViewer.Text = "Edit in Memory Viewer" + suffix;
+				mnuViewInDisassembly.Text = "View in Disassembly" + suffix;
+			}
 		}
 	}
 }

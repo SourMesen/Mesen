@@ -35,6 +35,8 @@ namespace Mesen.GUI.Debugger
 		{
 			base.OnLoad(e);
 
+			DebugWorkspaceManager.AutoLoadDbgFiles(true);
+
 			this._selectedTab = this.tabMain.SelectedTab;
 
 			DebugInfo config = ConfigManager.Config.DebugInfo;
@@ -47,6 +49,9 @@ namespace Mesen.GUI.Debugger
 
 			this.mnuIgnoreRedundantWrites.Checked = config.RamIgnoreRedundantWrites;
 			this.UpdateFlags();
+
+			this.mnuHighlightCurrentRowColumn.Checked = config.RamHighlightCurrentRowColumn;
+			this.ctrlHexViewer.HighlightCurrentRowColumn = config.RamHighlightCurrentRowColumn;
 
 			this.mnuShowCharacters.Checked = config.RamShowCharacters;
 			this.mnuShowLabelInfoOnMouseOver.Checked = config.RamShowLabelInfo;
@@ -66,6 +71,7 @@ namespace Mesen.GUI.Debugger
 			this.mnuHideExecutedBytes.Checked = config.RamHideExecutedBytes;
 
 			this.mnuHighlightLabelledBytes.Checked = config.RamHighlightLabelledBytes;
+			this.mnuHighlightBreakpoints.Checked = config.RamHighlightBreakpoints;
 			this.mnuHighlightChrDrawnBytes.Checked = config.RamHighlightChrDrawnBytes;
 			this.mnuHighlightChrReadBytes.Checked = config.RamHighlightChrReadBytes;
 			this.mnuHighlightCodeBytes.Checked = config.RamHighlightCodeBytes;
@@ -129,6 +135,7 @@ namespace Mesen.GUI.Debugger
 
 			mnuRefresh.InitShortcut(this, nameof(DebuggerShortcutsConfig.Refresh));
 
+			mnuGoToAll.InitShortcut(this, nameof(DebuggerShortcutsConfig.GoToAll));
 			mnuGoTo.InitShortcut(this, nameof(DebuggerShortcutsConfig.GoTo));
 			mnuFind.InitShortcut(this, nameof(DebuggerShortcutsConfig.Find));
 			mnuFindNext.InitShortcut(this, nameof(DebuggerShortcutsConfig.FindNext));
@@ -170,6 +177,7 @@ namespace Mesen.GUI.Debugger
 				cboMemoryType.Items.Add(ResourceHelper.GetEnumText(DebugMemoryType.ChrRam));
 			}
 
+			cboMemoryType.Items.Add(ResourceHelper.GetEnumText(DebugMemoryType.NametableRam));
 			cboMemoryType.Items.Add(ResourceHelper.GetEnumText(DebugMemoryType.PaletteMemory));
 			cboMemoryType.Items.Add(ResourceHelper.GetEnumText(DebugMemoryType.SpriteMemory));
 			cboMemoryType.Items.Add(ResourceHelper.GetEnumText(DebugMemoryType.SecondarySpriteMemory));
@@ -193,11 +201,45 @@ namespace Mesen.GUI.Debugger
 
 		public void ShowAddress(int address, DebugMemoryType memoryType)
 		{
+			if(memoryType == DebugMemoryType.InternalRam) {
+				//There is no specific "tab" for the internal ram, show it in the cpu memory tab
+				memoryType = DebugMemoryType.CpuMemory;
+			}
+
 			tabMain.SelectedTab = tpgMemoryViewer;
 			cboMemoryType.SetEnumValue(memoryType);
 			ctrlHexViewer.GoToAddress(address);
 		}
-		
+
+		public void GoToDestination(GoToDestination dest)
+		{
+			if(_memoryType == DebugMemoryType.CpuMemory && dest.CpuAddress >= 0) {
+				this.ShowAddress(dest.CpuAddress, DebugMemoryType.CpuMemory);
+			} else if(dest.AddressInfo != null) {
+				this.ShowAddress(dest.AddressInfo.Address, dest.AddressInfo.Type.ToMemoryType());
+			} else if(dest.Label != null) {
+				int relAddress = dest.Label.GetRelativeAddress();
+				if(_memoryType == DebugMemoryType.CpuMemory && relAddress >= 0) {
+					this.ShowAddress(relAddress, DebugMemoryType.CpuMemory);
+				} else {
+					this.ShowAddress((int)dest.Label.Address, dest.Label.AddressType.ToMemoryType());
+				}
+			} else if(dest.CpuAddress >= 0) {
+				this.ShowAddress(dest.CpuAddress, DebugMemoryType.CpuMemory);
+			}
+
+			this.BringToFront();
+		}
+
+		public void GoToAll()
+		{
+			using(frmGoToAll frm = new frmGoToAll(true, false)) {
+				if(frm.ShowDialog() == DialogResult.OK) {
+					GoToDestination(frm.Destination);
+				}
+			}
+		}
+
 		private void InitTblMappings()
 		{
 			DebugWorkspace workspace = DebugWorkspaceManager.GetWorkspace();
@@ -236,10 +278,6 @@ namespace Mesen.GUI.Debugger
 						case RefreshSpeed.Low: refreshDelay= 90; break;
 						case RefreshSpeed.Normal: refreshDelay = 32; break;
 						case RefreshSpeed.High: refreshDelay = 16; break;
-					}
-
-					if(_selectedTab == tpgProfiler) {
-						refreshDelay *= 10;
 					}
 
 					DateTime now = DateTime.Now;
@@ -288,16 +326,27 @@ namespace Mesen.GUI.Debugger
 						mnuHighlightDmcDataBytes.Checked,
 						mnuHighlightDataBytes.Checked,
 						mnuHighlightCodeBytes.Checked,
-						mnuHighlightLabelledBytes.Checked
+						mnuHighlightLabelledBytes.Checked,
+						mnuHighlightBreakpoints.Checked
 					);
 					break;
 
 				case DebugMemoryType.PpuMemory:
 				case DebugMemoryType.ChrRom:
+				case DebugMemoryType.ChrRam:
+				case DebugMemoryType.PaletteMemory:
+				case DebugMemoryType.NametableRam:
 					this.ctrlHexViewer.ByteColorProvider = new ChrByteColorProvider(
 						this._memoryType,
+						mnuHighlightWrites.Checked,
+						mnuHightlightReads.Checked,
+						ConfigManager.Config.DebugInfo.RamFadeSpeed,
+						mnuHideUnusedBytes.Checked,
+						mnuHideReadBytes.Checked,
+						mnuHideWrittenBytes.Checked,
 						mnuHighlightChrDrawnBytes.Checked,
-						mnuHighlightChrReadBytes.Checked
+						mnuHighlightChrReadBytes.Checked,
+						mnuHighlightBreakpoints.Checked
 					);
 					break;
 
@@ -328,8 +377,6 @@ namespace Mesen.GUI.Debugger
 			} else if(this.tabMain.SelectedTab == this.tpgMemoryViewer) {
 				this.UpdateByteColorProvider();
 				this.ctrlHexViewer.RefreshData(_memoryType);
-			} else if(this.tabMain.SelectedTab == this.tpgProfiler) {
-				this.ctrlProfiler.RefreshData();
 			}
 		}
 
@@ -350,7 +397,16 @@ namespace Mesen.GUI.Debugger
 
 		private void mnuGoTo_Click(object sender, EventArgs e)
 		{
-			this.ctrlHexViewer.GoToAddress();
+			if(_selectedTab == tpgMemoryViewer) {
+				this.ctrlHexViewer.GoToAddress();
+			} else if(_selectedTab == tpgAccessCounters) {
+				this.ctrlMemoryAccessCounters.GoToAddress();
+			}
+		}
+
+		private void mnuGoToAll_Click(object sender, EventArgs e)
+		{
+			this.GoToAll();
 		}
 
 		private void mnuIncreaseFontSize_Click(object sender, EventArgs e)
@@ -384,6 +440,7 @@ namespace Mesen.GUI.Debugger
 			ConfigManager.Config.DebugInfo.RamAutoRefresh = this.mnuAutoRefresh.Checked;
 
 			ConfigManager.Config.DebugInfo.RamIgnoreRedundantWrites = this.mnuIgnoreRedundantWrites.Checked;
+			ConfigManager.Config.DebugInfo.RamHighlightCurrentRowColumn = this.mnuHighlightCurrentRowColumn.Checked;
 
 			ConfigManager.Config.DebugInfo.RamShowCharacters = this.mnuShowCharacters.Checked;
 			ConfigManager.Config.DebugInfo.RamShowLabelInfo = this.mnuShowLabelInfoOnMouseOver.Checked;
@@ -402,6 +459,7 @@ namespace Mesen.GUI.Debugger
 			ConfigManager.Config.DebugInfo.RamHideExecutedBytes = this.mnuHideExecutedBytes.Checked;
 			ConfigManager.Config.DebugInfo.RamHideExecutedBytes = this.mnuHideExecutedBytes.Checked;
 
+			ConfigManager.Config.DebugInfo.RamHighlightBreakpoints = this.mnuHighlightBreakpoints.Checked;
 			ConfigManager.Config.DebugInfo.RamHighlightLabelledBytes = this.mnuHighlightLabelledBytes.Checked;
 			ConfigManager.Config.DebugInfo.RamHighlightChrDrawnBytes = this.mnuHighlightChrDrawnBytes.Checked;
 			ConfigManager.Config.DebugInfo.RamHighlightChrReadBytes = this.mnuHighlightChrReadBytes.Checked;
@@ -423,6 +481,7 @@ namespace Mesen.GUI.Debugger
 				case DebugMemoryType.ChrRam:
 				case DebugMemoryType.InternalRam:
 				case DebugMemoryType.PaletteMemory:
+				case DebugMemoryType.NametableRam:
 				case DebugMemoryType.SecondarySpriteMemory:
 				case DebugMemoryType.SpriteMemory:
 				case DebugMemoryType.WorkRam:
@@ -557,6 +616,7 @@ namespace Mesen.GUI.Debugger
 
 		private frmCodeTooltip _tooltip = null;
 		private CodeLabel _lastLabelTooltip = null;
+		private int _lastLabelArrayOffset = -1;
 		private int _lastTooltipAddress = -1;
 		private void ctrlHexViewer_ByteMouseHover(int address, Point position)
 		{
@@ -564,6 +624,7 @@ namespace Mesen.GUI.Debugger
 				if(_tooltip != null) {
 					_tooltip.Close();
 					_lastLabelTooltip = null;
+					_lastLabelArrayOffset = -1;
 					_lastTooltipAddress = -1;
 				}
 				return;
@@ -576,37 +637,34 @@ namespace Mesen.GUI.Debugger
 			_lastTooltipAddress = address;
 
 			CodeLabel label = null;
+			int arrayOffset = 0;
 			switch(_memoryType) {
 				case DebugMemoryType.CpuMemory:
 					AddressTypeInfo info = new AddressTypeInfo();
 					InteropEmu.DebugGetAbsoluteAddressAndType((UInt32)address, info);
 					if(info.Address >= 0) {
 						label = LabelManager.GetLabel((UInt32)info.Address, info.Type);
+						if(label != null) {
+							arrayOffset = info.Address - (int)label.Address;
+						} else {
+							label = LabelManager.GetLabel((UInt32)address, AddressType.Register);
+						}
 					} 
-					if(label == null) {
-						label = LabelManager.GetLabel((UInt32)address, AddressType.Register);
-					}
 					break;
 
 				case DebugMemoryType.InternalRam:
-					label = LabelManager.GetLabel((UInt32)address, AddressType.InternalRam);
-					break;
-
 				case DebugMemoryType.WorkRam:
-					label = LabelManager.GetLabel((UInt32)address, AddressType.WorkRam);
-					break;
-
 				case DebugMemoryType.SaveRam:
-					label = LabelManager.GetLabel((UInt32)address, AddressType.SaveRam);
-					break;
-
 				case DebugMemoryType.PrgRom:
-					label = LabelManager.GetLabel((UInt32)address, AddressType.PrgRom);
+					label = LabelManager.GetLabel((UInt32)address, _memoryType.ToAddressType());
+					if(label != null) {
+						arrayOffset = address - (int)label.Address;
+					}
 					break;
 			}
 
 			if(label != null) {
-				if(_lastLabelTooltip != label) {
+				if(_lastLabelTooltip != label || _lastLabelArrayOffset != arrayOffset) {
 					if(_tooltip != null) {
 						_tooltip.Close();
 					}
@@ -614,8 +672,11 @@ namespace Mesen.GUI.Debugger
 					Dictionary<string, string> values = new Dictionary<string, string>();
 					if(!string.IsNullOrWhiteSpace(label.Label)) {
 						values["Label"] = label.Label;
+						if(label.Length > 1) {
+							values["Label"] += "+" + arrayOffset.ToString();
+						}
 					}
-					values["Address"] = "$" + label.Address.ToString("X4");
+					values["Address"] = "$" + (label.Address + arrayOffset).ToString("X4");
 					values["Address Type"] = label.AddressType.ToString();
 					if(!string.IsNullOrWhiteSpace(label.Comment)) {
 						values["Comment"] = label.Comment;
@@ -625,11 +686,13 @@ namespace Mesen.GUI.Debugger
 					_tooltip.FormClosed += (s, evt) => { _tooltip = null; };
 					_tooltip.SetFormLocation(new Point(position.X, position.Y), ctrlHexViewer);
 					_lastLabelTooltip = label;
+					_lastLabelArrayOffset = arrayOffset;
 				}
 			} else {
 				if(_tooltip != null) {
 					_tooltip.Close();
 					_lastLabelTooltip = null;
+					_lastLabelArrayOffset = -1;
 					_lastTooltipAddress = -1;
 				}
 			}
@@ -681,6 +744,11 @@ namespace Mesen.GUI.Debugger
 			ConfigManager.Config.DebugInfo.RamByteEditingMode = mnuByteEditingMode.Checked;
 			ConfigManager.ApplyChanges();
 			ctrlHexViewer.ByteEditingMode = ConfigManager.Config.DebugInfo.RamByteEditingMode;
+		}
+
+		private void mnuHighlightCurrentRowColumn_CheckedChanged(object sender, EventArgs e)
+		{
+			ctrlHexViewer.HighlightCurrentRowColumn = mnuHighlightCurrentRowColumn.Checked;
 		}
 	}
 }

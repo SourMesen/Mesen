@@ -112,17 +112,7 @@ namespace Mesen.GUI.Debugger
 
 			if(relativeAddress >= 0) {
 				byte opCode = InteropEmu.DebugGetMemoryValue(DebugMemoryType.CpuMemory, (UInt32)relativeAddress);
-
-				int opSize = 1;
-				switch(AddressingModes[opCode]) {
-					case AddrMode.Abs: case AddrMode.AbsX: case AddrMode.AbsXW: case AddrMode.AbsY: case AddrMode.AbsYW: case AddrMode.Ind:
-						opSize = 3;
-						break;
-
-					case AddrMode.Imm: case AddrMode.IndX: case AddrMode.IndY: case AddrMode.IndYW: case AddrMode.Rel: case AddrMode.Zero: case AddrMode.ZeroX: case AddrMode.ZeroY:
-						opSize = 2;
-						break;
-				}
+				int opSize = GetOpSize(opCode);
 
 				string byteCode = "";
 				for(int i = 0; i < opSize; i++) {
@@ -171,6 +161,21 @@ namespace Mesen.GUI.Debugger
 			base.OnLoad(e);
 		}
 
+		public static int GetOpSize(byte opCode)
+		{
+			int opSize = 1;
+			switch(AddressingModes[opCode]) {
+				case AddrMode.Abs: case AddrMode.AbsX: case AddrMode.AbsXW: case AddrMode.AbsY: case AddrMode.AbsYW: case AddrMode.Ind:
+					opSize = 3;
+					break;
+
+				case AddrMode.Imm: case AddrMode.IndX: case AddrMode.IndY: case AddrMode.IndYW: case AddrMode.Rel: case AddrMode.Zero: case AddrMode.ZeroX: case AddrMode.ZeroY:
+					opSize = 2;
+					break;
+			}
+			return opSize;
+		}
+
 		[Flags]
 		enum CpuFlag { None = 0, Carry = 1, Decimal = 2, Interrupt = 4, Negative = 8, Overflow = 16, Zero = 32 }
 
@@ -196,7 +201,7 @@ namespace Mesen.GUI.Debugger
 			AbsX, AbsXW, AbsY, AbsYW
 		}
 
-		private AddrMode[] AddressingModes = new AddrMode[256] {
+		private static AddrMode[] AddressingModes = new AddrMode[256] {
 			AddrMode.Imp,  AddrMode.IndX,    AddrMode.None, AddrMode.IndX,    AddrMode.Zero,    AddrMode.Zero,    AddrMode.Zero,    AddrMode.Zero,    AddrMode.Imp,  AddrMode.Imm,  AddrMode.Acc,  AddrMode.Imm,  AddrMode.Abs,  AddrMode.Abs,  AddrMode.Abs,  AddrMode.Abs,
 			AddrMode.Rel,  AddrMode.IndY,    AddrMode.None, AddrMode.IndYW,   AddrMode.ZeroX,   AddrMode.ZeroX,   AddrMode.ZeroX,   AddrMode.ZeroX,   AddrMode.Imp,  AddrMode.AbsY, AddrMode.Imp,  AddrMode.AbsYW,AddrMode.AbsX, AddrMode.AbsX, AddrMode.AbsXW,AddrMode.AbsXW,
 			AddrMode.Abs,  AddrMode.IndX,    AddrMode.None, AddrMode.IndX,    AddrMode.Zero,    AddrMode.Zero,    AddrMode.Zero,    AddrMode.Zero,    AddrMode.Imp,  AddrMode.Imm,  AddrMode.Acc,  AddrMode.Imm,  AddrMode.Abs,  AddrMode.Abs,  AddrMode.Abs,  AddrMode.Abs,

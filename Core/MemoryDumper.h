@@ -96,7 +96,7 @@ public:
 
 	uint32_t GetMemorySize(DebugMemoryType type);
 	uint32_t GetMemoryState(DebugMemoryType type, uint8_t *buffer);
-	void GetNametable(int nametableIndex, bool useGrayscalePalette, uint32_t* frameBuffer, uint8_t* tileData, uint8_t* paletteData);
+	void GetNametable(int nametableIndex, NametableDisplayMode mode, uint32_t* frameBuffer, uint8_t* tileData, uint8_t* paletteData);
 	void GetChrBank(int bankIndex, uint32_t* frameBuffer, uint8_t palette, bool largeSprites, CdlHighlightType highlightType, bool useAutoPalette, bool showSingleColorTilesInGrayscale, uint32_t* paletteBuffer);
 	void GetSprites(uint32_t* frameBuffer);
 	void GetPalette(uint32_t* frameBuffer);
@@ -106,5 +106,5 @@ public:
 	void SetMemoryValue(DebugMemoryType memoryType, uint32_t address, uint8_t value, bool preventRebuildCache = false, bool disableSideEffects = true);
 	void SetMemoryValueWord(DebugMemoryType memoryType, uint32_t address, uint16_t value, bool preventRebuildCache = false, bool disableSideEffects = true);
 	void SetMemoryValues(DebugMemoryType memoryType, uint32_t address, uint8_t* data, int32_t length);
-	void SetMemoryState(DebugMemoryType type, uint8_t *buffer);
+	void SetMemoryState(DebugMemoryType type, uint8_t *buffer, int32_t length);
 };

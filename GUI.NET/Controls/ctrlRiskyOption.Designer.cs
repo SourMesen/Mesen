@@ -51,8 +51,8 @@
 			this.lblNotRecommended.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.lblNotRecommended.AutoSize = true;
 			this.lblNotRecommended.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.lblNotRecommended.Location = new System.Drawing.Point(89, 4);
-			this.lblNotRecommended.Margin = new System.Windows.Forms.Padding(0);
+			this.lblNotRecommended.Location = new System.Drawing.Point(89, 3);
+			this.lblNotRecommended.Margin = new System.Windows.Forms.Padding(0, 0, 0, 2);
 			this.lblNotRecommended.Name = "lblNotRecommended";
 			this.lblNotRecommended.Size = new System.Drawing.Size(98, 13);
 			this.lblNotRecommended.TabIndex = 1;
@@ -71,7 +71,7 @@
 			this.tableLayoutPanel1.Name = "tableLayoutPanel1";
 			this.tableLayoutPanel1.RowCount = 1;
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 226F));
 			this.tableLayoutPanel1.Size = new System.Drawing.Size(193, 21);
 			this.tableLayoutPanel1.TabIndex = 1;
 			// 

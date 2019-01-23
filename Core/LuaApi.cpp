@@ -187,7 +187,13 @@ int LuaApi::GetLabelAddress(lua_State *lua)
 
 	std::shared_ptr<LabelManager> lblMan = _debugger->GetLabelManager();
 	int32_t value = lblMan->GetLabelRelativeAddress(label);
-	errorCond(value < 0, "label not found");
+	if(value == -2) {
+		//Check to see if the label is a multi-byte label instead
+		string mbLabel = label + "+0";
+		value = lblMan->GetLabelRelativeAddress(mbLabel);
+	}
+	errorCond(value == -1, "label out of scope (not mapped to CPU memory)");
+	errorCond(value <= -2, "label not found");
 
 	l.Return(value);
 	return l.ReturnCount();
@@ -760,18 +766,34 @@ int LuaApi::GetAccessCounters(lua_State *lua)
 	errorCond(memoryType >= AddressType::Register, "Invalid memory type");
 	checkparams();
 
+	DebugMemoryType debugMemoryType;
 	uint32_t size = 0;
 	switch(memoryType) {
 		case AddressType::Register: error("Invalid memory type"); break;
-		case AddressType::InternalRam: size = 0x2000; break;
-		case AddressType::PrgRom: size = _memoryDumper->GetMemorySize(DebugMemoryType::PrgRom); break;
-		case AddressType::WorkRam: size = _memoryDumper->GetMemorySize(DebugMemoryType::WorkRam); break;
-		case AddressType::SaveRam: size = _memoryDumper->GetMemorySize(DebugMemoryType::SaveRam); break;
+		case AddressType::InternalRam:
+			debugMemoryType = DebugMemoryType::InternalRam;
+			size = 0x2000;
+			break;
+
+		case AddressType::PrgRom:
+			debugMemoryType = DebugMemoryType::PrgRom;
+			size = _memoryDumper->GetMemorySize(DebugMemoryType::PrgRom);
+			break;
+
+		case AddressType::WorkRam:
+			debugMemoryType = DebugMemoryType::WorkRam;
+			size = _memoryDumper->GetMemorySize(DebugMemoryType::WorkRam);
+			break;
+
+		case AddressType::SaveRam:
+			debugMemoryType = DebugMemoryType::SaveRam;
+			size = _memoryDumper->GetMemorySize(DebugMemoryType::SaveRam);
+			break;
 	}
 
-	vector<uint32_t> counts;
+	vector<int32_t> counts;
 	counts.resize(size, 0);
-	_debugger->GetMemoryAccessCounter()->GetAccessCounts(memoryType, operationType, counts.data(), false);
+	_debugger->GetMemoryAccessCounter()->GetAccessCounts(0, size, debugMemoryType, operationType, counts.data());
 
 	lua_newtable(lua);
 	for(uint32_t i = 0; i < size; i++) {

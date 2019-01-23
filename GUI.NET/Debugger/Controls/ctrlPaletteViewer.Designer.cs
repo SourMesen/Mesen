@@ -1,4 +1,6 @@
-﻿namespace Mesen.GUI.Debugger.Controls
+﻿using Mesen.GUI.Controls;
+
+namespace Mesen.GUI.Debugger.Controls
 {
 	partial class ctrlPaletteViewer
 	{
@@ -41,31 +43,34 @@
 			this.txtColorCodeHex = new System.Windows.Forms.TextBox();
 			this.txtColorCodeRgb = new System.Windows.Forms.TextBox();
 			this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
-			this.picPalette = new System.Windows.Forms.PictureBox();
-			this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
-			this.picHelp = new System.Windows.Forms.PictureBox();
-			this.lblClickColorHint = new System.Windows.Forms.Label();
+			this.lblPaletteSprites = new System.Windows.Forms.Label();
+			this.picPaletteSprites = new Mesen.GUI.Controls.ctrlMesenPictureBox();
 			this.ctxMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this.mnuCopyHexColor = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuCopyRgbColor = new System.Windows.Forms.ToolStripMenuItem();
+			this.picPaletteBg = new Mesen.GUI.Controls.ctrlMesenPictureBox();
+			this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
+			this.picHelp = new System.Windows.Forms.PictureBox();
+			this.lblClickColorHint = new System.Windows.Forms.Label();
+			this.lblBgPalette = new System.Windows.Forms.Label();
 			this.grpColorInfo.SuspendLayout();
 			this.tableLayoutPanel4.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.picColor)).BeginInit();
 			this.tableLayoutPanel3.SuspendLayout();
-			((System.ComponentModel.ISupportInitialize)(this.picPalette)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.picPaletteSprites)).BeginInit();
+			this.ctxMenu.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.picPaletteBg)).BeginInit();
 			this.flowLayoutPanel1.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.picHelp)).BeginInit();
-			this.ctxMenu.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// grpColorInfo
 			// 
 			this.grpColorInfo.Controls.Add(this.tableLayoutPanel4);
-			this.grpColorInfo.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.grpColorInfo.Location = new System.Drawing.Point(141, 3);
+			this.grpColorInfo.Location = new System.Drawing.Point(273, 3);
 			this.grpColorInfo.Name = "grpColorInfo";
-			this.tableLayoutPanel3.SetRowSpan(this.grpColorInfo, 2);
-			this.grpColorInfo.Size = new System.Drawing.Size(538, 305);
+			this.tableLayoutPanel3.SetRowSpan(this.grpColorInfo, 3);
+			this.grpColorInfo.Size = new System.Drawing.Size(425, 205);
 			this.grpColorInfo.TabIndex = 4;
 			this.grpColorInfo.TabStop = false;
 			this.grpColorInfo.Text = "Color Info";
@@ -85,7 +90,6 @@
 			this.tableLayoutPanel4.Controls.Add(this.label1, 0, 4);
 			this.tableLayoutPanel4.Controls.Add(this.txtColorCodeHex, 1, 3);
 			this.tableLayoutPanel4.Controls.Add(this.txtColorCodeRgb, 1, 4);
-			this.tableLayoutPanel4.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tableLayoutPanel4.Location = new System.Drawing.Point(3, 16);
 			this.tableLayoutPanel4.Name = "tableLayoutPanel4";
 			this.tableLayoutPanel4.RowCount = 6;
@@ -95,7 +99,7 @@
 			this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel4.Size = new System.Drawing.Size(532, 286);
+			this.tableLayoutPanel4.Size = new System.Drawing.Size(382, 183);
 			this.tableLayoutPanel4.TabIndex = 0;
 			// 
 			// txtPaletteAddress
@@ -200,61 +204,48 @@
 			this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
 			this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
 			this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+			this.tableLayoutPanel3.Controls.Add(this.lblPaletteSprites, 1, 1);
+			this.tableLayoutPanel3.Controls.Add(this.picPaletteSprites, 1, 0);
 			this.tableLayoutPanel3.Controls.Add(this.grpColorInfo, 2, 0);
-			this.tableLayoutPanel3.Controls.Add(this.picPalette, 0, 0);
-			this.tableLayoutPanel3.Controls.Add(this.flowLayoutPanel1, 0, 1);
+			this.tableLayoutPanel3.Controls.Add(this.picPaletteBg, 0, 0);
+			this.tableLayoutPanel3.Controls.Add(this.flowLayoutPanel1, 0, 2);
+			this.tableLayoutPanel3.Controls.Add(this.lblBgPalette, 0, 1);
 			this.tableLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tableLayoutPanel3.Location = new System.Drawing.Point(0, 0);
 			this.tableLayoutPanel3.Name = "tableLayoutPanel3";
-			this.tableLayoutPanel3.RowCount = 2;
+			this.tableLayoutPanel3.RowCount = 3;
+			this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel3.Size = new System.Drawing.Size(682, 311);
+			this.tableLayoutPanel3.Size = new System.Drawing.Size(701, 311);
 			this.tableLayoutPanel3.TabIndex = 3;
 			// 
-			// picPalette
+			// lblPaletteSprites
 			// 
-			this.picPalette.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.picPalette.ContextMenuStrip = this.ctxMenu;
-			this.picPalette.Cursor = System.Windows.Forms.Cursors.Hand;
-			this.picPalette.Location = new System.Drawing.Point(4, 4);
-			this.picPalette.Margin = new System.Windows.Forms.Padding(4);
-			this.picPalette.Name = "picPalette";
-			this.picPalette.Size = new System.Drawing.Size(130, 258);
-			this.picPalette.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-			this.picPalette.TabIndex = 0;
-			this.picPalette.TabStop = false;
-			this.picPalette.MouseDown += new System.Windows.Forms.MouseEventHandler(this.picPalette_MouseDown);
-			this.picPalette.MouseMove += new System.Windows.Forms.MouseEventHandler(this.picPalette_MouseMove);
+			this.lblPaletteSprites.Anchor = System.Windows.Forms.AnchorStyles.Top;
+			this.lblPaletteSprites.AutoSize = true;
+			this.lblPaletteSprites.Location = new System.Drawing.Point(183, 138);
+			this.lblPaletteSprites.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+			this.lblPaletteSprites.Name = "lblPaletteSprites";
+			this.lblPaletteSprites.Size = new System.Drawing.Size(39, 13);
+			this.lblPaletteSprites.TabIndex = 8;
+			this.lblPaletteSprites.Text = "Sprites";
 			// 
-			// flowLayoutPanel1
+			// picPaletteSprites
 			// 
-			this.flowLayoutPanel1.AutoSize = true;
-			this.flowLayoutPanel1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-			this.flowLayoutPanel1.Controls.Add(this.picHelp);
-			this.flowLayoutPanel1.Controls.Add(this.lblClickColorHint);
-			this.flowLayoutPanel1.Location = new System.Drawing.Point(3, 269);
-			this.flowLayoutPanel1.Name = "flowLayoutPanel1";
-			this.flowLayoutPanel1.Size = new System.Drawing.Size(122, 39);
-			this.flowLayoutPanel1.TabIndex = 5;
-			// 
-			// picHelp
-			// 
-			this.picHelp.Image = global::Mesen.GUI.Properties.Resources.Help;
-			this.picHelp.Location = new System.Drawing.Point(3, 5);
-			this.picHelp.Margin = new System.Windows.Forms.Padding(3, 5, 3, 3);
-			this.picHelp.Name = "picHelp";
-			this.picHelp.Size = new System.Drawing.Size(18, 18);
-			this.picHelp.TabIndex = 9;
-			this.picHelp.TabStop = false;
-			// 
-			// lblClickColorHint
-			// 
-			this.lblClickColorHint.Location = new System.Drawing.Point(27, 0);
-			this.lblClickColorHint.Name = "lblClickColorHint";
-			this.lblClickColorHint.Size = new System.Drawing.Size(92, 42);
-			this.lblClickColorHint.TabIndex = 5;
-			this.lblClickColorHint.Text = "Click on a color to change it";
+			this.picPaletteSprites.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this.picPaletteSprites.ContextMenuStrip = this.ctxMenu;
+			this.picPaletteSprites.Cursor = System.Windows.Forms.Cursors.Hand;
+			this.picPaletteSprites.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.Default;
+			this.picPaletteSprites.Location = new System.Drawing.Point(138, 4);
+			this.picPaletteSprites.Margin = new System.Windows.Forms.Padding(2, 4, 2, 4);
+			this.picPaletteSprites.Name = "picPaletteSprites";
+			this.picPaletteSprites.Size = new System.Drawing.Size(130, 130);
+			this.picPaletteSprites.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+			this.picPaletteSprites.TabIndex = 6;
+			this.picPaletteSprites.TabStop = false;
+			this.picPaletteSprites.MouseDown += new System.Windows.Forms.MouseEventHandler(this.picPalette_MouseDown);
+			this.picPaletteSprites.MouseMove += new System.Windows.Forms.MouseEventHandler(this.picPalette_MouseMove);
 			// 
 			// ctxMenu
 			// 
@@ -262,7 +253,7 @@
             this.mnuCopyHexColor,
             this.mnuCopyRgbColor});
 			this.ctxMenu.Name = "ctxMenu";
-			this.ctxMenu.Size = new System.Drawing.Size(160, 70);
+			this.ctxMenu.Size = new System.Drawing.Size(160, 48);
 			this.ctxMenu.Opening += new System.ComponentModel.CancelEventHandler(this.ctxMenu_Opening);
 			// 
 			// mnuCopyHexColor
@@ -277,30 +268,90 @@
 			this.mnuCopyRgbColor.Size = new System.Drawing.Size(159, 22);
 			this.mnuCopyRgbColor.Text = "Copy RGB Color";
 			// 
+			// picPaletteBg
+			// 
+			this.picPaletteBg.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this.picPaletteBg.ContextMenuStrip = this.ctxMenu;
+			this.picPaletteBg.Cursor = System.Windows.Forms.Cursors.Hand;
+			this.picPaletteBg.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.Default;
+			this.picPaletteBg.Location = new System.Drawing.Point(4, 4);
+			this.picPaletteBg.Margin = new System.Windows.Forms.Padding(4, 4, 2, 4);
+			this.picPaletteBg.Name = "picPaletteBg";
+			this.picPaletteBg.Size = new System.Drawing.Size(130, 130);
+			this.picPaletteBg.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+			this.picPaletteBg.TabIndex = 0;
+			this.picPaletteBg.TabStop = false;
+			this.picPaletteBg.MouseDown += new System.Windows.Forms.MouseEventHandler(this.picPalette_MouseDown);
+			this.picPaletteBg.MouseMove += new System.Windows.Forms.MouseEventHandler(this.picPalette_MouseMove);
+			// 
+			// flowLayoutPanel1
+			// 
+			this.flowLayoutPanel1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+			this.tableLayoutPanel3.SetColumnSpan(this.flowLayoutPanel1, 2);
+			this.flowLayoutPanel1.Controls.Add(this.picHelp);
+			this.flowLayoutPanel1.Controls.Add(this.lblClickColorHint);
+			this.flowLayoutPanel1.Location = new System.Drawing.Point(3, 154);
+			this.flowLayoutPanel1.Name = "flowLayoutPanel1";
+			this.flowLayoutPanel1.Size = new System.Drawing.Size(264, 26);
+			this.flowLayoutPanel1.TabIndex = 5;
+			// 
+			// picHelp
+			// 
+			this.picHelp.Image = global::Mesen.GUI.Properties.Resources.Help;
+			this.picHelp.Location = new System.Drawing.Point(3, 5);
+			this.picHelp.Margin = new System.Windows.Forms.Padding(3, 5, 3, 3);
+			this.picHelp.Name = "picHelp";
+			this.picHelp.Size = new System.Drawing.Size(18, 18);
+			this.picHelp.TabIndex = 9;
+			this.picHelp.TabStop = false;
+			// 
+			// lblClickColorHint
+			// 
+			this.lblClickColorHint.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.lblClickColorHint.AutoSize = true;
+			this.lblClickColorHint.Location = new System.Drawing.Point(27, 6);
+			this.lblClickColorHint.Name = "lblClickColorHint";
+			this.lblClickColorHint.Size = new System.Drawing.Size(139, 13);
+			this.lblClickColorHint.TabIndex = 5;
+			this.lblClickColorHint.Text = "Click on a color to change it";
+			// 
+			// lblBgPalette
+			// 
+			this.lblBgPalette.Anchor = System.Windows.Forms.AnchorStyles.Top;
+			this.lblBgPalette.AutoSize = true;
+			this.lblBgPalette.Location = new System.Drawing.Point(36, 138);
+			this.lblBgPalette.Margin = new System.Windows.Forms.Padding(4, 0, 2, 0);
+			this.lblBgPalette.Name = "lblBgPalette";
+			this.lblBgPalette.Size = new System.Drawing.Size(65, 13);
+			this.lblBgPalette.TabIndex = 7;
+			this.lblBgPalette.Text = "Background";
+			// 
 			// ctrlPaletteViewer
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.Controls.Add(this.tableLayoutPanel3);
 			this.Name = "ctrlPaletteViewer";
-			this.Size = new System.Drawing.Size(682, 311);
+			this.Size = new System.Drawing.Size(701, 311);
 			this.grpColorInfo.ResumeLayout(false);
 			this.tableLayoutPanel4.ResumeLayout(false);
 			this.tableLayoutPanel4.PerformLayout();
 			((System.ComponentModel.ISupportInitialize)(this.picColor)).EndInit();
 			this.tableLayoutPanel3.ResumeLayout(false);
 			this.tableLayoutPanel3.PerformLayout();
-			((System.ComponentModel.ISupportInitialize)(this.picPalette)).EndInit();
-			this.flowLayoutPanel1.ResumeLayout(false);
-			((System.ComponentModel.ISupportInitialize)(this.picHelp)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.picPaletteSprites)).EndInit();
 			this.ctxMenu.ResumeLayout(false);
+			((System.ComponentModel.ISupportInitialize)(this.picPaletteBg)).EndInit();
+			this.flowLayoutPanel1.ResumeLayout(false);
+			this.flowLayoutPanel1.PerformLayout();
+			((System.ComponentModel.ISupportInitialize)(this.picHelp)).EndInit();
 			this.ResumeLayout(false);
 
 		}
 
 		#endregion
 
-		private System.Windows.Forms.PictureBox picPalette;
+		private ctrlMesenPictureBox picPaletteBg;
 		private System.Windows.Forms.GroupBox grpColorInfo;
 		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel4;
 		private System.Windows.Forms.TextBox txtPaletteAddress;
@@ -320,5 +371,8 @@
 		private System.Windows.Forms.ContextMenuStrip ctxMenu;
 		private System.Windows.Forms.ToolStripMenuItem mnuCopyHexColor;
 		private System.Windows.Forms.ToolStripMenuItem mnuCopyRgbColor;
+		private ctrlMesenPictureBox picPaletteSprites;
+		private System.Windows.Forms.Label lblBgPalette;
+		private System.Windows.Forms.Label lblPaletteSprites;
 	}
 }

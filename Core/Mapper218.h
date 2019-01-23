@@ -14,11 +14,6 @@ protected:
 		if(GetMirroringType() == MirroringType::FourScreens) {
 			SetMirroringType(_romInfo.NesHeader.Byte6 & 0x01 ? MirroringType::ScreenBOnly : MirroringType::ScreenAOnly);
 		}
-	}
-
-	void SetDefaultNametables(uint8_t* nametableA, uint8_t* nametableB) override
-	{
-		BaseMapper::SetDefaultNametables(nametableA, nametableB);
 
 		uint16_t mask = 0;
 		switch(GetMirroringType()) {
@@ -30,7 +25,7 @@ protected:
 		}
 
 		for(int i = 0; i < 8; i++) {
-			SetPpuMemoryMapping(i * 0x400, i * 0x400 + 0x3FF, (i * 0x400) & mask ? GetNametable(1) : GetNametable(0));
+			SetPpuMemoryMapping(i*0x400, i*0x400+0x3FF, ((i * 0x400) & mask) ? 1 : 0, ChrMemoryType::NametableRam);
 		}
 	}
 };

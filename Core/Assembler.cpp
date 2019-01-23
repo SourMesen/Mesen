@@ -8,7 +8,7 @@
 #include "DisassemblyInfo.h"
 #include "LabelManager.h"
 
-static const std::regex instRegex = std::regex("^\\s*([a-zA-Z]{3})[*]{0,1}[\\s]*([#]{0,1})([(]{0,1})[\\s]*([$]{0,1})([^,)(;:]*)[\\s]*((,x\\)|\\),y|,x|,y|\\)){0,1})\\s*(;*)(.*)", std::regex_constants::icase);
+static const std::regex instRegex = std::regex("^\\s*([a-zA-Z]{3})[*]{0,1}[\\s]*(#%|#){0,1}([(]{0,1})[\\s]*([$]{0,1})([^,)(;:]*)[\\s]*((,x\\)|\\),y|,x|,y|\\)){0,1})\\s*(;*)(.*)", std::regex_constants::icase);
 static const std::regex isCommentOrBlank = std::regex("^\\s*([;]+.*$|\\s*$)", std::regex_constants::icase);
 static const std::regex labelRegex = std::regex("^\\s*([@_a-zA-Z][@_a-zA-Z0-9]*):(.*)", std::regex_constants::icase);
 static const std::regex byteRegex = std::regex("^\\s*[.]byte\\s+((\\$[a-fA-F0-9]{1,2},)*)(\\$[a-fA-F0-9]{1,2})+\\s*(;*)(.*)$", std::regex_constants::icase);
@@ -83,6 +83,8 @@ void Assembler::ProcessLine(string code, uint16_t &instructionAddress, vector<in
 
 AssemblerSpecialCodes Assembler::GetLineData(std::smatch match, LineData &lineData, std::unordered_map<string, uint16_t> &labels, bool firstPass)
 {
+	bool isBinary = match.str(2).length() > 1 && match.str(2)[1] == '%'; //Immediate + binary: "#%"
+
 	lineData.OpCode = match.str(1);
 	lineData.IsImmediate = !match.str(2).empty();
 	lineData.IsHex = !match.str(4).empty();
@@ -102,11 +104,30 @@ AssemblerSpecialCodes Assembler::GetLineData(std::smatch match, LineData &lineDa
 			} else if(lineData.IsHex && !((c >= '0' && c <= '9') || (c >= 'A' && c <= 'F') || (c >= 'a' && c <= 'f'))) {
 				//invalid hex
 				return AssemblerSpecialCodes::InvalidHex;
+			} else if(isBinary && c != '0' && c != '1') {
+				return AssemblerSpecialCodes::InvalidBinaryValue;
 			}
 
 			lineData.Operand.push_back(c);
 		} else {
 			foundSpace = true;
+		}
+	}
+
+	if(isBinary) {
+		//Convert the binary value to hex
+		if(lineData.Operand.size() == 0) {
+			return AssemblerSpecialCodes::MissingOperand;
+		} else if(lineData.Operand.size() <= 8) {
+			lineData.IsHex = true;
+			int value = 0;
+			for(int i = 0; i < lineData.Operand.size(); i++) {
+				value <<= 1;
+				value |= lineData.Operand[i] == '1' ? 1 : 0;
+			}
+			lineData.Operand = HexUtilities::ToHex(value, false);
+		} else {
+			return AssemblerSpecialCodes::OperandOutOfRange;
 		}
 	}
 

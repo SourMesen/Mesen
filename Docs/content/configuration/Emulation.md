@@ -40,7 +40,7 @@ Several options in this section should NOT be enabled to avoid issues in some ga
 
 **Use alternative MMC3 IRQ behavior**: The MMC3 has a number of different variants (A, B and C).  By default, Mesen uses the IRQ behavior for versions B and C.  By turning this option on, Mesen will default to using the MMC3A's IRQ behavior instead. There is usually no reason to enable this.
 
-**Enable OAM RAM decay**: On all models, OAM RAM decays whenever rendering is disabled. This causes the values in OAM RAM to randomly change, which may cause sprite-related glitches on the screen. No known game relies on this -- the option is offered here mostly for the sake of homebrew software testing.
+**Enable OAM RAM decay**: On all models, OAM RAM decays whenever rendering is disabled. This causes the values in OAM RAM to decay to a specific value after a certain amount of time has elapsed since the last time the value was read or written (which may cause sprite-related glitches to appear on the screen). No known game relies on this -- the option is offered here mostly for the sake of homebrew software testing. There is a corresponding option to break on decayed OAM reads available in the debugger to help find and debug OAM decay-related bugs.
 
 **Do not reset PPU when resetting console**: On the Famicom and top loader NES, the PPU does not reset when pressing the reset button (only the CPU is reset). When enabled, only the CPU resets when the reset button is pressed.
 

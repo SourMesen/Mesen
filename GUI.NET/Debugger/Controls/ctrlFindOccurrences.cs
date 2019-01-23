@@ -23,15 +23,18 @@ namespace Mesen.GUI.Debugger.Controls
 
 		public ICodeViewer Viewer { get; set; }
 
-		public void FindAllOccurrences(string text, bool matchWholeWord, bool matchCase)
+		public void FindAllOccurrences(string text, List<FindAllOccurrenceResult> results)
 		{
+			this.lstSearchResult.BeginUpdate();
 			this.lstSearchResult.Items.Clear();
-			foreach(Tuple<int, int, string> searchResult in Viewer.CodeViewer.FindAllOccurrences(text, matchWholeWord, matchCase)) {
-				var item = this.lstSearchResult.Items.Add(searchResult.Item1.ToString("X4"));
-				item.Tag = searchResult.Item2;
-				item.SubItems.Add(searchResult.Item3);
+			foreach(FindAllOccurrenceResult searchResult in results) {
+				var item = this.lstSearchResult.Items.Add(searchResult.Location);
+				item.Tag = searchResult.Destination;
+				item.SubItems.Add(searchResult.MatchedLine);
 				item.SubItems.Add("");
 			}
+			this.lstSearchResult.EndUpdate();
+
 			this.lblSearchResult.Text = $"Search results for: {text} ({this.lstSearchResult.Items.Count} results)";
 			this.lstSearchResult.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
 			this.lstSearchResult.Columns[0].Width += 20;
@@ -54,9 +57,16 @@ namespace Mesen.GUI.Debugger.Controls
 		private void lstSearchResult_DoubleClick(object sender, EventArgs e)
 		{
 			if(lstSearchResult.SelectedItems.Count > 0) {
-				int lineIndex = (int)lstSearchResult.SelectedItems[0].Tag;
-				Viewer.CodeViewer.ScrollToLineIndex(lineIndex);
+				GoToDestination dest = lstSearchResult.SelectedItems[0].Tag as GoToDestination;
+				Viewer.CodeViewerActions.GoToDestination(dest);
 			}
 		}
+	}
+
+	public class FindAllOccurrenceResult
+	{
+		public string Location;
+		public string MatchedLine;
+		public GoToDestination Destination;
 	}
 }

@@ -17,7 +17,6 @@ public:
 
 private:
 	uint8_t _byteCode[3];
-	bool _isJumpTarget = false;
 	bool _isSubEntryPoint = false;
 	bool _isSubExitPoint = false;
 	uint32_t _opSize = 0;
@@ -25,18 +24,18 @@ private:
 	
 public:
 	DisassemblyInfo();
-	DisassemblyInfo(uint8_t* opPointer, bool isSubEntryPoint, bool isJumpTarget);
+	DisassemblyInfo(uint8_t* opPointer, bool isSubEntryPoint);
 
-	void Initialize(uint8_t * opPointer, bool isSubEntryPoint, bool isJumpTarget);
+	void Initialize(uint8_t * opPointer, bool isSubEntryPoint);
 
 	void SetSubEntryPoint();
-
-	void SetJumpTarget();
 
 	int32_t GetEffectiveAddress(State& cpuState, MemoryManager* memoryManager);
 	
 	void GetEffectiveAddressString(string &out, State& cpuState, MemoryManager* memoryManager, LabelManager* labelManager);
 	int32_t GetMemoryValue(State& cpuState, MemoryManager* memoryManager);
+	uint16_t GetJumpDestination(uint16_t pc, MemoryManager* memoryManager);
+	uint16_t GetIndirectJumpDestination(MemoryManager* memoryManager);
 	void ToString(string &out, uint32_t memoryAddr, MemoryManager* memoryManager, LabelManager* labelManager, bool extendZeroPage);
 	void GetByteCode(string &out);
 	uint32_t GetSize();
@@ -44,6 +43,5 @@ public:
 
 	bool IsSubEntryPoint();
 	bool IsSubExitPoint();
-	bool IsJumpTarget();
 };
 

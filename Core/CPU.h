@@ -802,7 +802,11 @@ public:
 	bool IsCpuWrite() { return _cpuWrite; }
 		
 	//Used by debugger for "Set Next Statement"
-	void SetDebugPC(uint16_t value) { SetPC(value); _state.DebugPC = value; }
+	void SetDebugPC(uint16_t value) {
+		SetPC(value);
+		_state.PreviousDebugPC = _state.DebugPC;
+		_state.DebugPC = value;
+	}
 
 	void Reset(bool softReset, NesModel model);
 	void Exec();

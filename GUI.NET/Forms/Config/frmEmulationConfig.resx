@@ -120,6 +120,9 @@
   <metadata name="toolTip.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>17, 17</value>
   </metadata>
+  <data name="lblOverclockHint.Text" xml:space="preserve">
+    <value>Overclocking can help reduce or remove slowdowns in games (but it can also cause issues). The most compatible way to overclock is by increasing the "Scanline before NMI" value by a few hundred lines (e.g 400+)</value>
+  </data>
   <metadata name="tmrUpdateClockRate.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>107, 17</value>
   </metadata>

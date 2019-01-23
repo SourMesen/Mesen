@@ -136,8 +136,6 @@ RomData FdsLoader::LoadRom(vector<uint8_t>& romFile, string filename)
 {
 	RomData romData;
 
-	romData.Info.Hash.Sha1 = SHA1::GetHash(romFile);
-	romData.Info.Hash.Crc32 = CRC32::GetCRC(romFile.data(), romFile.size());
 	romData.Info.Hash.PrgCrc32 = CRC32::GetCRC(romFile.data(), romFile.size());
 
 	romData.Info.Format = RomFormat::Fds;

@@ -218,6 +218,11 @@
 			<Control ID="chkDisplayPort4">Jugador 4</Control>
 			<Control ID="lblDisplayPosition">Posició de pantalla:</Control>
 			<Control ID="chkDisplayInputHorizontally">Mostra horitzontalment</Control>
+
+			<Control ID="lblSmall">Curt</Control>
+			<Control ID="lblLarge">Llarg</Control>
+			<Control ID="lblDeadzone">Controller axis deadzone size:</Control>
+
 			<Control ID="chkHideMousePointerForZapper">Hide mouse pointer when using zapper</Control>
 
 			<Control ID="lblKeyBinding">Advertència: La vostra configuració actual conté assignacions conflictives - algunes tecles del vostre teclat o botons del comandament han estat assignats a múltiples botons al comandament de la NES. Si això no ha estat intencionat, us preguem que reviseu i corregiu les vostres assignacions.</Control>
@@ -282,6 +287,8 @@
 
 			<Control ID="tpgAdvanced">Avançat</Control>
 			<Control ID="lblScreenRotation">Rotació de la pantalla:</Control>
+			<Control ID="chkRemoveSpriteLimit">Elimina el límit de sprites (redueix les pampallugues en certs jocs)</Control>
+			<Control ID="chkAdaptiveSpriteLimit">Torna a activar el límit de sprites quan faci falta per tal de prevenir errors gràfics</Control>
 			<Control ID="chkDisableBackground">Desactiva el fons</Control>
 			<Control ID="chkDisableSprites">Desactiva els sprites</Control>
 			<Control ID="chkForceBackgroundFirstColumn">Força l'aparició del fons a la primera columna</Control>
@@ -300,11 +307,11 @@
 			<Control ID="lblRewindSpeed">Velocitat del rebobinat:</Control>
 
 			<Control ID="tpgAdvanced">Avançat</Control>
+			<Control ID="lblDeveloperSettings">Recommended settings for developers (homebrew / ROM hacking)</Control>
+			<Control ID="lblMiscSettings">Configuracions diverses</Control>
 			<Control ID="chkUseAlternativeMmc3Irq">Fes servir el comportament alternatiu de les IRQ de MMC3</Control>
 			<Control ID="chkAllowInvalidInput">Permet entrades invàlides (ex. Amunt+Avall i Esquerra+Dreta alhora)</Control>
 			<Control ID="lblRamPowerOnState">Estat inicial de la memòria durant l'arrancada:</Control>
-			<Control ID="chkRemoveSpriteLimit">Elimina el límit de sprites (redueix les pampallugues en certs jocs)</Control>
-			<Control ID="chkAdaptiveSpriteLimit">Torna a activar el límit de sprites quan faci falta per tal de prevenir errors gràfics</Control>
 			<Control ID="chkEnableOamDecay">Activa l'emulació de la degradació de la memòria OAM</Control>
 			<Control ID="chkDisablePpu2004Reads">Impedeix la lectura del valor $2004 de la PPU (comportament de la Famicom)</Control>
 			<Control ID="chkDisableOamAddrBug">Desactiva l'emulació d'errors OAMADDR de la PPU</Control>

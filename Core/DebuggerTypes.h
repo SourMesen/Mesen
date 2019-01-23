@@ -70,10 +70,11 @@ enum class AddressType
 
 enum class PpuAddressType
 {
-	None = 0,
-	ChrRom = 1,
-	ChrRam = 2,
-	PaletteRam = 3
+	None = -1,
+	ChrRom = 0,
+	ChrRam = 1,
+	PaletteRam = 2,
+	NametableRam = 3
 };
 
 struct AddressTypeInfo
@@ -100,7 +101,8 @@ enum class DebugMemoryType
 	ChrRam = 7,
 	WorkRam = 8,
 	SaveRam = 9,
-	InternalRam = 10
+	InternalRam = 10,
+	NametableRam = 11,
 };
 
 enum class CdlHighlightType
@@ -204,4 +206,11 @@ struct StackFrameInfo
 	uint16_t JumpSource;
 	uint16_t JumpTarget;
 	StackFrameFlags Flags;
+};
+
+enum class NametableDisplayMode
+{
+	Normal = 0,
+	Grayscale = 1,
+	AttributeView = 2
 };

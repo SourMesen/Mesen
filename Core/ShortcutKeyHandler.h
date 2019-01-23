@@ -3,6 +3,7 @@
 #include <thread>
 #include <unordered_set>
 #include "../Utilities/SimpleLock.h"
+#include "../Utilities/Timer.h"
 #include "EmulationSettings.h"
 
 class Console;
@@ -22,6 +23,9 @@ private:
 	bool _isKeyUp;
 	bool _keyboardMode;
 
+	shared_ptr<Timer> _runSingleFrameRepeatTimer;
+	bool _repeatStarted;
+
 	std::unordered_set<uint32_t> _keysDown[2];
 	std::unordered_set<uint32_t> _prevKeysDown[2];
 	
@@ -33,6 +37,8 @@ private:
 
 	bool DetectKeyPress(EmulatorShortcut key);
 	bool DetectKeyRelease(EmulatorShortcut key);
+
+	void ProcessRunSingleFrame();
 
 public:
 	ShortcutKeyHandler(shared_ptr<Console> console);

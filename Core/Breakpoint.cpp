@@ -12,12 +12,10 @@ Breakpoint::~Breakpoint()
 
 bool Breakpoint::Matches(uint32_t memoryAddr, AddressTypeInfo &info)
 {
-	if(_startAddr == -1) {
-		return true;
-	}
-
 	if(_memoryType == DebugMemoryType::CpuMemory) {
-		if(_endAddr == -1) {
+		if(_startAddr == -1) {
+			return true;
+		} else if(_endAddr == -1) {
 			return (int32_t)memoryAddr == _startAddr;
 		} else {
 			return (int32_t)memoryAddr >= _startAddr && (int32_t)memoryAddr <= _endAddr;
@@ -27,7 +25,9 @@ bool Breakpoint::Matches(uint32_t memoryAddr, AddressTypeInfo &info)
 		(_memoryType == DebugMemoryType::WorkRam && info.Type == AddressType::WorkRam) ||
 		(_memoryType == DebugMemoryType::SaveRam && info.Type == AddressType::SaveRam)
 	) {
-		if(_endAddr == -1) {
+		if(_startAddr == -1) {
+			return true;
+		} else if(_endAddr == -1) {
 			return info.Address == _startAddr;
 		} else {
 			return info.Address >= _startAddr && info.Address <= _endAddr;
@@ -39,12 +39,10 @@ bool Breakpoint::Matches(uint32_t memoryAddr, AddressTypeInfo &info)
 
 bool Breakpoint::Matches(uint32_t memoryAddr, PpuAddressTypeInfo &info)
 {
-	if(_startAddr == -1) {
-		return true;
-	}
-
 	if(_memoryType == DebugMemoryType::PpuMemory) {
-		if(_endAddr == -1) {
+		if(_startAddr == -1) {
+			return true;
+		} else if(_endAddr == -1) {
 			return (int32_t)memoryAddr == _startAddr;
 		} else {
 			return (int32_t)memoryAddr >= _startAddr && (int32_t)memoryAddr <= _endAddr;
@@ -52,9 +50,12 @@ bool Breakpoint::Matches(uint32_t memoryAddr, PpuAddressTypeInfo &info)
 	} else if(
 		(_memoryType == DebugMemoryType::ChrRam && info.Type == PpuAddressType::ChrRam) ||
 		(_memoryType == DebugMemoryType::ChrRom && info.Type == PpuAddressType::ChrRom) ||
-		(_memoryType == DebugMemoryType::PaletteMemory && info.Type == PpuAddressType::PaletteRam)
+		(_memoryType == DebugMemoryType::PaletteMemory && info.Type == PpuAddressType::PaletteRam) ||
+		(_memoryType == DebugMemoryType::NametableRam && info.Type == PpuAddressType::NametableRam)
 	) {
-		if(_endAddr == -1) {
+		if(_startAddr == -1) {
+			return true;
+		} else if(_endAddr == -1) {
 			return info.Address == _startAddr;
 		} else {
 			return info.Address >= _startAddr && info.Address <= _endAddr;

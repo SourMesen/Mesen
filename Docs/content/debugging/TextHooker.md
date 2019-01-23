@@ -1,6 +1,6 @@
 ---
 title: Text Hooker
-weight: 16
+weight: 30
 chapter: false
 ---
 
@@ -26,4 +26,6 @@ To configure character mappings, see the `Character Mappings` section below.
 
 This tab allows you to configure the mappings between CHR tiles and text characters. These mappings are based on the shape of the tile and are shared between all games. A number of mappings are built into Mesen, so some characters may already be recognized automatically.  
 
-When you want to add new mappings, simply edit the textbox below the tile you want to configure.
+When you want to add new mappings, simply edit the textbox below the tile you want to configure.  
+
+For Japanese text, you can specify `dakuten` (濁点) and `handakuten` (半濁点) by typing `daku` and `han` in the textbox. Alternatively, you can also use the Unicode characters for them: `ﾞ` (U+3099) and `ﾟ` (U+309A), respectively.

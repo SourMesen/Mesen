@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,8 +11,24 @@ namespace Mesen.GUI.Debugger
 	public class DebugWorkspaceManager
 	{
 		private static DebugWorkspace _workspace;
+		private static Ld65DbgImporter _symbolProvider;
 		private static string _romName;
 		private static object _lock = new object();
+
+		public delegate void SymbolProviderChangedHandler(Ld65DbgImporter provider);
+		public static event SymbolProviderChangedHandler SymbolProviderChanged;
+
+		public static Ld65DbgImporter SymbolProvider
+		{
+			get { return _symbolProvider; }
+			private set
+			{
+				if(_symbolProvider != value) {
+					_symbolProvider = value;
+					SymbolProviderChanged?.Invoke(value);
+				}
+			}
+		}
 
 		public static void SaveWorkspace()
 		{
@@ -32,6 +49,7 @@ namespace Mesen.GUI.Debugger
 			lock(_lock) {
 				_workspace = null;
 				_romName = null;
+				SymbolProvider = null;
 			}
 		}
 
@@ -53,41 +71,11 @@ namespace Mesen.GUI.Debugger
 			}
 		}
 
-		public static void SetupWorkspace(bool saveCurrentWorkspace = true)
-		{
-			string romName = InteropEmu.GetRomInfo().GetRomName();
-			lock(_lock) {
-				if(_workspace != null && _romName == romName) {
-					if(saveCurrentWorkspace) {
-						SaveWorkspace();
-					}
-
-					//Setup labels
-					if(_workspace.Labels.Count == 0) {
-						LabelManager.ResetLabels();
-						if(!ConfigManager.Config.DebugInfo.DisableDefaultLabels) {
-							LabelManager.SetDefaultLabels(InteropEmu.GetRomInfo().MapperId);
-						}
-					} else {
-						LabelManager.ResetLabels();
-						LabelManager.SetLabels(_workspace.Labels, false);
-					}
-
-					//Load watch entries
-					WatchManager.WatchEntries = _workspace.WatchValues;
-
-					//Load breakpoints
-					BreakpointManager.SetBreakpoints(_workspace.Breakpoints);
-				} else {
-					Clear();
-				}
-			}
-		}
-
 		public static DebugWorkspace GetWorkspace()
 		{
 			string romName = InteropEmu.GetRomInfo().GetRomName();
 			if(_workspace == null || _romName != romName) {
+				SymbolProvider = null;
 				lock(_lock) {
 					if(_workspace == null || _romName != romName) {
 						if(_workspace != null) {
@@ -95,7 +83,23 @@ namespace Mesen.GUI.Debugger
 						}
 						_romName = InteropEmu.GetRomInfo().GetRomName();
 						_workspace = DebugWorkspace.GetWorkspace();
-						SetupWorkspace(false);						
+
+						//Setup labels
+						if(_workspace.Labels.Count == 0) {
+							LabelManager.ResetLabels();
+							if(!ConfigManager.Config.DebugInfo.DisableDefaultLabels) {
+								LabelManager.SetDefaultLabels(InteropEmu.GetRomInfo().MapperId);
+							}
+						} else {
+							LabelManager.ResetLabels();
+							LabelManager.SetLabels(_workspace.Labels, true);
+						}
+
+						//Load watch entries
+						WatchManager.WatchEntries = _workspace.WatchValues;
+
+						//Load breakpoints
+						BreakpointManager.SetBreakpoints(_workspace.Breakpoints);
 					}
 				}
 			}
@@ -117,6 +121,71 @@ namespace Mesen.GUI.Debugger
 				_flags &= ~flags;
 			}
 			InteropEmu.DebugSetFlags(_flags);
+		}
+
+		public static void ResetLabels()
+		{
+			LabelManager.ResetLabels();
+			if(!ConfigManager.Config.DebugInfo.DisableDefaultLabels) {
+				LabelManager.SetDefaultLabels(InteropEmu.GetRomInfo().MapperId);
+			}
+			SaveWorkspace();
+			GetWorkspace();
+		}
+
+		public static void AutoLoadDbgFiles(bool silent)
+		{
+			if(ConfigManager.Config.DebugInfo.AutoLoadDbgFiles) {
+				RomInfo info = InteropEmu.GetRomInfo();
+				string dbgPath = Path.Combine(info.RomFile.Folder, info.GetRomName() + ".dbg");
+				if(File.Exists(dbgPath)) {
+					DateTime lastDbgUpdate = File.GetLastWriteTime(dbgPath);
+					if(lastDbgUpdate != SymbolProvider?.DbgFileStamp) {
+						ImportDbgFile(dbgPath, silent);
+					} else {
+						//Currently loaded symbol provider is still valid
+						return;
+					}
+				} else {
+					string mlbPath = Path.Combine(info.RomFile.Folder, info.GetRomName() + ".mlb");
+					if(File.Exists(mlbPath)) {
+						ImportMlbFile(mlbPath, silent);
+					} else {
+						string fnsPath = Path.Combine(info.RomFile.Folder, info.GetRomName() + ".fns");
+						if(File.Exists(fnsPath)) {
+							ImportNesasmFnsFile(fnsPath, silent);
+						}
+					}
+				}
+			}
+		}
+
+		public static void ImportNesasmFnsFile(string fnsPath, bool silent = false)
+		{
+			if(ConfigManager.Config.DebugInfo.ImportConfig.ResetLabelsOnImport) {
+				ResetLabels();
+			}
+			NesasmFnsImporter.Import(fnsPath, silent);
+		}
+
+		public static void ImportMlbFile(string mlbPath, bool silent = false)
+		{
+			if(ConfigManager.Config.DebugInfo.ImportConfig.ResetLabelsOnImport) {
+				ResetLabels();
+			}
+			MesenLabelFile.Import(mlbPath, silent);
+		}
+
+		public static void ImportDbgFile(string dbgPath, bool silent)
+		{
+			if(ConfigManager.Config.DebugInfo.ImportConfig.ResetLabelsOnImport) {
+				ResetLabels();
+			}
+
+			Ld65DbgImporter dbgImporter = new Ld65DbgImporter();
+			dbgImporter.Import(dbgPath, silent);
+
+			DebugWorkspaceManager.SymbolProvider = dbgImporter;
 		}
 	}
 }

@@ -33,9 +33,9 @@ DisassemblyInfo::DisassemblyInfo()
 {
 }
 
-DisassemblyInfo::DisassemblyInfo(uint8_t* opPointer, bool isSubEntryPoint, bool isJumpTarget)
+DisassemblyInfo::DisassemblyInfo(uint8_t* opPointer, bool isSubEntryPoint)
 {
-	Initialize(opPointer, isSubEntryPoint, isJumpTarget);
+	Initialize(opPointer, isSubEntryPoint);
 }
 
 void DisassemblyInfo::ToString(string &out, uint32_t memoryAddr, MemoryManager* memoryManager, LabelManager* labelManager, bool extendZeroPage)
@@ -148,10 +148,9 @@ uint16_t DisassemblyInfo::GetOpAddr(uint16_t memoryAddr)
 	return opAddr;
 }
 
-void DisassemblyInfo::Initialize(uint8_t* opPointer, bool isSubEntryPoint, bool isJumpTarget)
+void DisassemblyInfo::Initialize(uint8_t* opPointer, bool isSubEntryPoint)
 {
 	_isSubEntryPoint = isSubEntryPoint;
-	_isJumpTarget = isJumpTarget;
 
 	uint8_t opCode = *opPointer;
 	_opSize = DisassemblyInfo::OPSize[opCode];
@@ -169,11 +168,6 @@ void DisassemblyInfo::SetSubEntryPoint()
 	_isSubEntryPoint = true;
 }
 
-void DisassemblyInfo::SetJumpTarget()
-{
-	_isJumpTarget = true;
-}
-
 int32_t DisassemblyInfo::GetMemoryValue(State& cpuState, MemoryManager* memoryManager)
 {
 	int32_t address = -1;
@@ -189,6 +183,33 @@ int32_t DisassemblyInfo::GetMemoryValue(State& cpuState, MemoryManager* memoryMa
 		return memoryManager->DebugRead(address);
 	} else {
 		return -1;
+	}
+}
+
+uint16_t DisassemblyInfo::GetJumpDestination(uint16_t pc, MemoryManager* memoryManager)
+{
+	if(_opMode == AddrMode::Rel || _opMode == AddrMode::Abs) {
+		return GetOpAddr(pc);
+	} else if(_opMode == AddrMode::Ind) {
+		return GetIndirectJumpDestination(memoryManager);
+	}
+#ifdef _DEBUG
+	throw std::runtime_error("Invalid jump operation");
+#else
+	return 0;
+#endif
+}
+
+uint16_t DisassemblyInfo::GetIndirectJumpDestination(MemoryManager* memoryManager)
+{
+	uint16_t addr = _byteCode[1] | (_byteCode[2] << 8);
+	if((addr & 0xFF) == 0xFF) {
+		//CPU bug when indirect address starts at the end of a page
+		uint8_t lo = memoryManager->DebugRead(addr);
+		uint8_t hi = memoryManager->DebugRead(addr & 0xFF00);
+		return lo | (hi << 8);
+	} else {
+		return memoryManager->DebugReadWord(addr);
 	}
 }
 
@@ -255,8 +276,7 @@ int32_t DisassemblyInfo::GetEffectiveAddress(State& cpuState, MemoryManager* mem
 		}
 
 		case AddrMode::Ind: {
-			uint8_t zeroAddr = _byteCode[1];
-			return memoryManager->DebugRead(zeroAddr) | memoryManager->DebugRead((uint8_t)(zeroAddr + 1)) << 8;
+			return GetIndirectJumpDestination(memoryManager);
 		}
 
 		case AddrMode::AbsX:
@@ -306,9 +326,4 @@ bool DisassemblyInfo::IsSubEntryPoint()
 bool DisassemblyInfo::IsSubExitPoint()
 {
 	return _isSubExitPoint;
-}
-
-bool DisassemblyInfo::IsJumpTarget()
-{
-	return _isJumpTarget;
 }

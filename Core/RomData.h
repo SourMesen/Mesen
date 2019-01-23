@@ -76,7 +76,7 @@ struct RomInfo
 	
 	GameSystem System = GameSystem::Unknown;
 	VsSystemType VsType = VsSystemType::Default;
-	GameInputType InputType = GameInputType::Default;
+	GameInputType InputType = GameInputType::Unspecified;
 	PpuModel VsPpuModel = PpuModel::Ppu2C02;
 
 	bool HasChrRam = false;

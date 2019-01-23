@@ -54,6 +54,11 @@ namespace Mesen.GUI.Config
 		[ShortcutName("Go to All")]
 		public XmlKeys GoToAll = Keys.Control | Keys.Oemcomma;
 
+		[ShortcutName("PPU Viewer: Toggle View")]
+		public XmlKeys PpuViewer_ToggleView = Keys.Control | Keys.Q;
+		[ShortcutName("PPU Viewer: Toggle Zoom")]
+		public XmlKeys PpuViewer_ToggleZoom = Keys.Control | Keys.W;
+
 		[ShortcutName("Edit in Memory Viewer")]
 		public XmlKeys CodeWindow_EditInMemoryViewer = Keys.F1;
 		[ShortcutName("View in disassembly")]
@@ -71,12 +76,23 @@ namespace Mesen.GUI.Config
 		public XmlKeys OpenMemoryTools = Keys.Control | Keys.M;
 		[ShortcutName("Open PPU Viewer")]
 		public XmlKeys OpenPpuViewer = Keys.Control | Keys.P;
+		[ShortcutName("Open Performance Profiler")]
+		public XmlKeys OpenProfiler = Keys.Control | Keys.Y;
 		[ShortcutName("Open Script Window")]
 		public XmlKeys OpenScriptWindow = Keys.Control | Keys.N;
 		[ShortcutName("Open Trace Logger")]
 		public XmlKeys OpenTraceLogger = Keys.Control | Keys.J;
 		[ShortcutName("Open Text Hooker")]
 		public XmlKeys OpenTextHooker = Keys.Control | Keys.H;
+
+		[ShortcutName("Open Nametabler Viewer (Compact)")]
+		public XmlKeys OpenNametableViewer = Keys.Control | Keys.D1;
+		[ShortcutName("Open CHR Viewer (Compact)")]
+		public XmlKeys OpenChrViewer = Keys.Control | Keys.D2;
+		[ShortcutName("Open Sprite Viewer (Compact)")]
+		public XmlKeys OpenSpriteViewer = Keys.Control | Keys.D3;
+		[ShortcutName("Open Palette Viewer (Compact)")]
+		public XmlKeys OpenPaletteViewer = Keys.Control | Keys.D4;
 
 		//Debugger window
 		[ShortcutName("Reset")]
@@ -99,6 +115,8 @@ namespace Mesen.GUI.Config
 		[ShortcutName("Step Back")]
 		public XmlKeys StepBack = Keys.Shift | Keys.F10;
 
+		[ShortcutName("Run one CPU Cycle")]
+		public XmlKeys RunCpuCycle = Keys.None;
 		[ShortcutName("Run one PPU Cycle")]
 		public XmlKeys RunPpuCycle = Keys.F6;
 		[ShortcutName("Run one scanline")]
@@ -127,6 +145,8 @@ namespace Mesen.GUI.Config
 		public XmlKeys CodeWindow_EditSubroutine = Keys.F4;
 		[ShortcutName("Code Window: Edit Selected Code")]
 		public XmlKeys CodeWindow_EditSelectedCode = Keys.None;
+		[ShortcutName("Code Window: Edit Source File (Source View)")]
+		public XmlKeys CodeWindow_EditSourceFile = Keys.F4;
 		[ShortcutName("Code Window: Edit Label")]
 		public XmlKeys CodeWindow_EditLabel = Keys.F2;
 		[ShortcutName("Code Window: Navigate Back")]
@@ -200,7 +220,7 @@ namespace Mesen.GUI.Config
 		public XmlKeys MemoryViewer_Import = Keys.Control | Keys.O;
 		[ShortcutName("Export")]
 		public XmlKeys MemoryViewer_Export = Keys.Control | Keys.S;
-		[ShortcutName("View in CPU Memory")]
+		[ShortcutName("View in CPU/PPU Memory")]
 		public XmlKeys MemoryViewer_ViewInCpuMemory = Keys.None;
 		[ShortcutName("View in [memory type]")]
 		public XmlKeys MemoryViewer_ViewInMemoryType = Keys.None;
@@ -221,7 +241,7 @@ namespace Mesen.GUI.Config
 				return "";
 			} else {
 				string keyString = new KeysConverter().ConvertToString(keys);
-				return keyString.Replace("+None", "").Replace("Oemplus", "+").Replace("Oemtilde", "Tilde").Replace("OemMinus", "-").Replace("Cancel", "Break").Replace("Escape", "Esc");
+				return keyString.Replace("+None", "").Replace("Oemcomma", ",").Replace("Oemplus", "+").Replace("Oemtilde", "Tilde").Replace("OemMinus", "-").Replace("Cancel", "Break").Replace("Escape", "Esc");
 			}
 		}
 		

@@ -659,11 +659,6 @@ namespace Mesen.GUI.Forms
 						UpdateViewerSize();
 						ProcessPostLoadCommandSwitches();
 					}));
-
-					Task.Run(() => {
-						//If a workspace is already loaded for this game, make sure we setup the labels, watch, etc properly
-						DebugWorkspaceManager.SetupWorkspace();
-					});
 					break;
 
 				case InteropEmu.ConsoleNotificationType.GameReset:
@@ -832,8 +827,14 @@ namespace Mesen.GUI.Forms
 			mnuScriptWindow.InitShortcut(this, nameof(DebuggerShortcutsConfig.OpenScriptWindow));
 			mnuTraceLogger.InitShortcut(this, nameof(DebuggerShortcutsConfig.OpenTraceLogger));
 			mnuTextHooker.InitShortcut(this, nameof(DebuggerShortcutsConfig.OpenTextHooker));
+			mnuProfiler.InitShortcut(this, nameof(DebuggerShortcutsConfig.OpenProfiler));
+
+			mnuOpenNametableViewer.InitShortcut(this, nameof(DebuggerShortcutsConfig.OpenNametableViewer));
+			mnuOpenChrViewer.InitShortcut(this, nameof(DebuggerShortcutsConfig.OpenChrViewer));
+			mnuOpenSpriteViewer.InitShortcut(this, nameof(DebuggerShortcutsConfig.OpenSpriteViewer));
+			mnuOpenPaletteViewer.InitShortcut(this, nameof(DebuggerShortcutsConfig.OpenPaletteViewer));
 		}
-		
+
 		private void BindShortcut(ToolStripMenuItem item, EmulatorShortcut shortcut, Func<bool> isActionEnabled = null)
 		{
 			item.Click += (object sender, EventArgs e) => {
@@ -1168,6 +1169,13 @@ namespace Mesen.GUI.Forms
 					mnuScriptWindow.Enabled = running;
 					mnuTextHooker.Enabled = running;
 					mnuTraceLogger.Enabled = running;
+					mnuProfiler.Enabled = running;
+
+					mnuPpuViewerCompact.Enabled = running;
+					mnuOpenNametableViewer.Enabled = running;
+					mnuOpenChrViewer.Enabled = running;
+					mnuOpenSpriteViewer.Enabled = running;
+					mnuOpenPaletteViewer.Enabled = running;
 
 #if !HIDETESTMENU
 					//Keep this option hidden for now, until some remaining issues are fixed.

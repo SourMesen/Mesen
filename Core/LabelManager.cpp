@@ -159,11 +159,13 @@ int32_t LabelManager::GetLabelRelativeAddress(string &label)
 		} else if((address & 0x30000000) == 0x30000000) {
 			type = AddressType::Register;
 		} else {
+			//Label is out of scope
 			return -1;
 		}
 		return _mapper->FromAbsoluteAddress(address & 0x0FFFFFFF, type);
 	}
-	return -1;
+	//Label doesn't exist
+	return -2;
 }
 
 bool LabelManager::HasLabelOrComment(uint16_t relativeAddr)

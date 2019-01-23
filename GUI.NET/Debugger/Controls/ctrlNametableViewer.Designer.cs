@@ -31,8 +31,9 @@ namespace Mesen.GUI.Debugger.Controls
 		{
 			this.components = new System.ComponentModel.Container();
 			this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
-			this.picNametable = new System.Windows.Forms.PictureBox();
-			this.ctxMenu = new ctrlMesenContextMenuStrip(this.components);
+			this.picNametable = new Mesen.GUI.Controls.ctrlMesenPictureBox();
+			this.ctxMenu = new Mesen.GUI.Controls.ctrlMesenContextMenuStrip(this.components);
+			this.mnuAddBreakpoint = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuEditInMemoryViewer = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuShowInChrViewer = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
@@ -64,15 +65,18 @@ namespace Mesen.GUI.Debugger.Controls
 			this.ctrlTilePalette = new Mesen.GUI.Debugger.Controls.ctrlTilePalette();
 			this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
 			this.chkShowPpuScrollOverlay = new System.Windows.Forms.CheckBox();
+			this.chkShowAttributeColorsOnly = new System.Windows.Forms.CheckBox();
 			this.chkShowTileGrid = new System.Windows.Forms.CheckBox();
 			this.chkShowAttributeGrid = new System.Windows.Forms.CheckBox();
 			this.chkUseGrayscalePalette = new System.Windows.Forms.CheckBox();
-			this.chkHighlightTileUpdates = new System.Windows.Forms.CheckBox();
-			this.chkHighlightAttributeUpdates = new System.Windows.Forms.CheckBox();
 			this.chkHighlightChrTile = new System.Windows.Forms.CheckBox();
 			this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
 			this.lblMirroring = new System.Windows.Forms.Label();
 			this.lblMirroringType = new System.Windows.Forms.Label();
+			this.chkHighlightTileUpdates = new System.Windows.Forms.CheckBox();
+			this.chkHighlightAttributeUpdates = new System.Windows.Forms.CheckBox();
+			this.lblHighlight = new System.Windows.Forms.Label();
+			this.chkIgnoreRedundantWrites = new System.Windows.Forms.CheckBox();
 			this.tableLayoutPanel1.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.picNametable)).BeginInit();
 			this.ctxMenu.SuspendLayout();
@@ -100,15 +104,16 @@ namespace Mesen.GUI.Debugger.Controls
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel1.Size = new System.Drawing.Size(697, 530);
+			this.tableLayoutPanel1.Size = new System.Drawing.Size(701, 530);
 			this.tableLayoutPanel1.TabIndex = 2;
 			// 
 			// picNametable
 			// 
 			this.picNametable.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.picNametable.ContextMenuStrip = this.ctxMenu;
+			this.picNametable.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.Default;
 			this.picNametable.Location = new System.Drawing.Point(4, 4);
-			this.picNametable.Margin = new System.Windows.Forms.Padding(4);
+			this.picNametable.Margin = new System.Windows.Forms.Padding(4, 4, 4, 0);
 			this.picNametable.Name = "picNametable";
 			this.tableLayoutPanel1.SetRowSpan(this.picNametable, 2);
 			this.picNametable.Size = new System.Drawing.Size(514, 482);
@@ -117,11 +122,13 @@ namespace Mesen.GUI.Debugger.Controls
 			this.picNametable.TabStop = false;
 			this.picNametable.DoubleClick += new System.EventHandler(this.picNametable_DoubleClick);
 			this.picNametable.MouseEnter += new System.EventHandler(this.picNametable_MouseEnter);
+			this.picNametable.MouseLeave += new System.EventHandler(this.picNametable_MouseLeave);
 			this.picNametable.MouseMove += new System.Windows.Forms.MouseEventHandler(this.picNametable_MouseMove);
 			// 
 			// ctxMenu
 			// 
 			this.ctxMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.mnuAddBreakpoint,
             this.mnuEditInMemoryViewer,
             this.mnuShowInChrViewer,
             this.toolStripMenuItem1,
@@ -131,8 +138,16 @@ namespace Mesen.GUI.Debugger.Controls
             this.mnuCopyToClipboard,
             this.mnuExportToPng});
 			this.ctxMenu.Name = "ctxMenu";
-			this.ctxMenu.Size = new System.Drawing.Size(261, 148);
+			this.ctxMenu.Size = new System.Drawing.Size(261, 170);
 			this.ctxMenu.Opening += new System.ComponentModel.CancelEventHandler(this.ctxMenu_Opening);
+			// 
+			// mnuAddBreakpoint
+			// 
+			this.mnuAddBreakpoint.Image = global::Mesen.GUI.Properties.Resources.Breakpoint;
+			this.mnuAddBreakpoint.Name = "mnuAddBreakpoint";
+			this.mnuAddBreakpoint.Size = new System.Drawing.Size(260, 22);
+			this.mnuAddBreakpoint.Text = "Add breakpoint";
+			this.mnuAddBreakpoint.Click += new System.EventHandler(this.mnuToggleBreakpoint_Click);
 			// 
 			// mnuEditInMemoryViewer
 			// 
@@ -193,11 +208,10 @@ namespace Mesen.GUI.Debugger.Controls
 			// 
 			// grpTileInfo
 			// 
-			this.grpTileInfo.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
 			this.grpTileInfo.Controls.Add(this.tableLayoutPanel2);
 			this.grpTileInfo.Location = new System.Drawing.Point(525, 3);
 			this.grpTileInfo.Name = "grpTileInfo";
-			this.grpTileInfo.Size = new System.Drawing.Size(169, 345);
+			this.grpTileInfo.Size = new System.Drawing.Size(173, 345);
 			this.grpTileInfo.TabIndex = 4;
 			this.grpTileInfo.TabStop = false;
 			this.grpTileInfo.Text = "Tile Info";
@@ -244,7 +258,7 @@ namespace Mesen.GUI.Debugger.Controls
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel2.Size = new System.Drawing.Size(163, 326);
+			this.tableLayoutPanel2.Size = new System.Drawing.Size(167, 326);
 			this.tableLayoutPanel2.TabIndex = 0;
 			// 
 			// txtPpuAddress
@@ -432,16 +446,12 @@ namespace Mesen.GUI.Debugger.Controls
 			// 
 			// flowLayoutPanel1
 			// 
-			this.flowLayoutPanel1.AutoSize = true;
-			this.flowLayoutPanel1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
 			this.flowLayoutPanel1.Controls.Add(this.chkShowPpuScrollOverlay);
+			this.flowLayoutPanel1.Controls.Add(this.chkShowAttributeColorsOnly);
 			this.flowLayoutPanel1.Controls.Add(this.chkShowTileGrid);
 			this.flowLayoutPanel1.Controls.Add(this.chkShowAttributeGrid);
 			this.flowLayoutPanel1.Controls.Add(this.chkUseGrayscalePalette);
-			this.flowLayoutPanel1.Controls.Add(this.chkHighlightTileUpdates);
-			this.flowLayoutPanel1.Controls.Add(this.chkHighlightAttributeUpdates);
 			this.flowLayoutPanel1.Controls.Add(this.chkHighlightChrTile);
-			this.flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.flowLayoutPanel1.Location = new System.Drawing.Point(522, 351);
 			this.flowLayoutPanel1.Margin = new System.Windows.Forms.Padding(0);
 			this.flowLayoutPanel1.Name = "flowLayoutPanel1";
@@ -460,10 +470,21 @@ namespace Mesen.GUI.Debugger.Controls
 			this.chkShowPpuScrollOverlay.UseVisualStyleBackColor = true;
 			this.chkShowPpuScrollOverlay.Click += new System.EventHandler(this.chkShowScrollWindow_Click);
 			// 
+			// chkShowAttributeColorsOnly
+			// 
+			this.chkShowAttributeColorsOnly.AutoSize = true;
+			this.chkShowAttributeColorsOnly.Location = new System.Drawing.Point(3, 26);
+			this.chkShowAttributeColorsOnly.Name = "chkShowAttributeColorsOnly";
+			this.chkShowAttributeColorsOnly.Size = new System.Drawing.Size(147, 17);
+			this.chkShowAttributeColorsOnly.TabIndex = 6;
+			this.chkShowAttributeColorsOnly.Text = "Show attribute colors only";
+			this.chkShowAttributeColorsOnly.UseVisualStyleBackColor = true;
+			this.chkShowAttributeColorsOnly.Click += new System.EventHandler(this.chkShowAttributeColorsOnly_Click);
+			// 
 			// chkShowTileGrid
 			// 
 			this.chkShowTileGrid.AutoSize = true;
-			this.chkShowTileGrid.Location = new System.Drawing.Point(3, 26);
+			this.chkShowTileGrid.Location = new System.Drawing.Point(3, 49);
 			this.chkShowTileGrid.Name = "chkShowTileGrid";
 			this.chkShowTileGrid.Size = new System.Drawing.Size(95, 17);
 			this.chkShowTileGrid.TabIndex = 2;
@@ -474,7 +495,7 @@ namespace Mesen.GUI.Debugger.Controls
 			// chkShowAttributeGrid
 			// 
 			this.chkShowAttributeGrid.AutoSize = true;
-			this.chkShowAttributeGrid.Location = new System.Drawing.Point(3, 49);
+			this.chkShowAttributeGrid.Location = new System.Drawing.Point(3, 72);
 			this.chkShowAttributeGrid.Name = "chkShowAttributeGrid";
 			this.chkShowAttributeGrid.Size = new System.Drawing.Size(117, 17);
 			this.chkShowAttributeGrid.TabIndex = 3;
@@ -485,7 +506,7 @@ namespace Mesen.GUI.Debugger.Controls
 			// chkUseGrayscalePalette
 			// 
 			this.chkUseGrayscalePalette.AutoSize = true;
-			this.chkUseGrayscalePalette.Location = new System.Drawing.Point(3, 72);
+			this.chkUseGrayscalePalette.Location = new System.Drawing.Point(3, 95);
 			this.chkUseGrayscalePalette.Name = "chkUseGrayscalePalette";
 			this.chkUseGrayscalePalette.Size = new System.Drawing.Size(131, 17);
 			this.chkUseGrayscalePalette.TabIndex = 5;
@@ -493,32 +514,10 @@ namespace Mesen.GUI.Debugger.Controls
 			this.chkUseGrayscalePalette.UseVisualStyleBackColor = true;
 			this.chkUseGrayscalePalette.Click += new System.EventHandler(this.chkUseGrayscalePalette_Click);
 			// 
-			// chkHighlightTileUpdates
-			// 
-			this.chkHighlightTileUpdates.AutoSize = true;
-			this.chkHighlightTileUpdates.Location = new System.Drawing.Point(3, 95);
-			this.chkHighlightTileUpdates.Name = "chkHighlightTileUpdates";
-			this.chkHighlightTileUpdates.Size = new System.Drawing.Size(130, 17);
-			this.chkHighlightTileUpdates.TabIndex = 6;
-			this.chkHighlightTileUpdates.Text = "Highlight Tile Updates";
-			this.chkHighlightTileUpdates.UseVisualStyleBackColor = true;
-			this.chkHighlightTileUpdates.Click += new System.EventHandler(this.chkHighlightTileUpdates_Click);
-			// 
-			// chkHighlightAttributeUpdates
-			// 
-			this.chkHighlightAttributeUpdates.AutoSize = true;
-			this.chkHighlightAttributeUpdates.Location = new System.Drawing.Point(3, 118);
-			this.chkHighlightAttributeUpdates.Name = "chkHighlightAttributeUpdates";
-			this.chkHighlightAttributeUpdates.Size = new System.Drawing.Size(152, 17);
-			this.chkHighlightAttributeUpdates.TabIndex = 7;
-			this.chkHighlightAttributeUpdates.Text = "Highlight Attribute Updates";
-			this.chkHighlightAttributeUpdates.UseVisualStyleBackColor = true;
-			this.chkHighlightAttributeUpdates.Click += new System.EventHandler(this.chkHighlightAttributeUpdates_Click);
-			// 
 			// chkHighlightChrTile
 			// 
 			this.chkHighlightChrTile.CheckAlign = System.Drawing.ContentAlignment.TopLeft;
-			this.chkHighlightChrTile.Location = new System.Drawing.Point(3, 141);
+			this.chkHighlightChrTile.Location = new System.Drawing.Point(3, 118);
 			this.chkHighlightChrTile.Name = "chkHighlightChrTile";
 			this.chkHighlightChrTile.Size = new System.Drawing.Size(150, 31);
 			this.chkHighlightChrTile.TabIndex = 4;
@@ -528,25 +527,33 @@ namespace Mesen.GUI.Debugger.Controls
 			// 
 			// tableLayoutPanel3
 			// 
-			this.tableLayoutPanel3.ColumnCount = 3;
+			this.tableLayoutPanel3.ColumnCount = 6;
 			this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
 			this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
 			this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+			this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+			this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+			this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
 			this.tableLayoutPanel3.Controls.Add(this.lblMirroring, 0, 0);
 			this.tableLayoutPanel3.Controls.Add(this.lblMirroringType, 1, 0);
-			this.tableLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.tableLayoutPanel3.Location = new System.Drawing.Point(0, 490);
+			this.tableLayoutPanel3.Controls.Add(this.chkHighlightTileUpdates, 4, 0);
+			this.tableLayoutPanel3.Controls.Add(this.chkHighlightAttributeUpdates, 5, 0);
+			this.tableLayoutPanel3.Controls.Add(this.chkIgnoreRedundantWrites, 4, 1);
+			this.tableLayoutPanel3.Controls.Add(this.lblHighlight, 3, 0);
+			this.tableLayoutPanel3.Location = new System.Drawing.Point(0, 486);
 			this.tableLayoutPanel3.Margin = new System.Windows.Forms.Padding(0);
 			this.tableLayoutPanel3.Name = "tableLayoutPanel3";
-			this.tableLayoutPanel3.RowCount = 1;
+			this.tableLayoutPanel3.RowCount = 2;
 			this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel3.Size = new System.Drawing.Size(522, 16);
+			this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+			this.tableLayoutPanel3.Size = new System.Drawing.Size(522, 40);
 			this.tableLayoutPanel3.TabIndex = 6;
 			// 
 			// lblMirroring
 			// 
+			this.lblMirroring.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.lblMirroring.AutoSize = true;
-			this.lblMirroring.Location = new System.Drawing.Point(3, 0);
+			this.lblMirroring.Location = new System.Drawing.Point(3, 3);
 			this.lblMirroring.Name = "lblMirroring";
 			this.lblMirroring.Size = new System.Drawing.Size(80, 13);
 			this.lblMirroring.TabIndex = 0;
@@ -554,13 +561,64 @@ namespace Mesen.GUI.Debugger.Controls
 			// 
 			// lblMirroringType
 			// 
+			this.lblMirroringType.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.lblMirroringType.AutoSize = true;
 			this.lblMirroringType.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.lblMirroringType.Location = new System.Drawing.Point(89, 0);
+			this.lblMirroringType.Location = new System.Drawing.Point(89, 3);
 			this.lblMirroringType.Name = "lblMirroringType";
 			this.lblMirroringType.Size = new System.Drawing.Size(64, 13);
 			this.lblMirroringType.TabIndex = 1;
 			this.lblMirroringType.Text = "Horizontal";
+			// 
+			// chkHighlightTileUpdates
+			// 
+			this.chkHighlightTileUpdates.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.chkHighlightTileUpdates.AutoSize = true;
+			this.chkHighlightTileUpdates.Location = new System.Drawing.Point(319, 3);
+			this.chkHighlightTileUpdates.Margin = new System.Windows.Forms.Padding(3, 3, 3, 0);
+			this.chkHighlightTileUpdates.Name = "chkHighlightTileUpdates";
+			this.chkHighlightTileUpdates.Size = new System.Drawing.Size(86, 17);
+			this.chkHighlightTileUpdates.TabIndex = 6;
+			this.chkHighlightTileUpdates.Text = "Tile Updates";
+			this.chkHighlightTileUpdates.UseVisualStyleBackColor = true;
+			this.chkHighlightTileUpdates.Click += new System.EventHandler(this.chkHighlightTileUpdates_Click);
+			// 
+			// chkHighlightAttributeUpdates
+			// 
+			this.chkHighlightAttributeUpdates.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.chkHighlightAttributeUpdates.AutoSize = true;
+			this.chkHighlightAttributeUpdates.Location = new System.Drawing.Point(411, 3);
+			this.chkHighlightAttributeUpdates.Margin = new System.Windows.Forms.Padding(3, 3, 3, 0);
+			this.chkHighlightAttributeUpdates.Name = "chkHighlightAttributeUpdates";
+			this.chkHighlightAttributeUpdates.Size = new System.Drawing.Size(108, 17);
+			this.chkHighlightAttributeUpdates.TabIndex = 7;
+			this.chkHighlightAttributeUpdates.Text = "Attribute Updates";
+			this.chkHighlightAttributeUpdates.UseVisualStyleBackColor = true;
+			this.chkHighlightAttributeUpdates.Click += new System.EventHandler(this.chkHighlightAttributeUpdates_Click);
+			// 
+			// lblHighlight
+			// 
+			this.lblHighlight.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.lblHighlight.AutoSize = true;
+			this.lblHighlight.Location = new System.Drawing.Point(262, 3);
+			this.lblHighlight.Name = "lblHighlight";
+			this.lblHighlight.Size = new System.Drawing.Size(51, 13);
+			this.lblHighlight.TabIndex = 2;
+			this.lblHighlight.Text = "Highlight:";
+			// 
+			// chkIgnoreRedundantWrites
+			// 
+			this.chkIgnoreRedundantWrites.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.chkIgnoreRedundantWrites.AutoSize = true;
+			this.tableLayoutPanel3.SetColumnSpan(this.chkIgnoreRedundantWrites, 2);
+			this.chkIgnoreRedundantWrites.Location = new System.Drawing.Point(332, 21);
+			this.chkIgnoreRedundantWrites.Margin = new System.Windows.Forms.Padding(3, 1, 3, 0);
+			this.chkIgnoreRedundantWrites.Name = "chkIgnoreRedundantWrites";
+			this.chkIgnoreRedundantWrites.Size = new System.Drawing.Size(187, 17);
+			this.chkIgnoreRedundantWrites.TabIndex = 7;
+			this.chkIgnoreRedundantWrites.Text = "Ignore writes that do not alter data";
+			this.chkIgnoreRedundantWrites.UseVisualStyleBackColor = true;
+			this.chkIgnoreRedundantWrites.Click += new System.EventHandler(this.chkIgnoreRedundantWrites_Click);
 			// 
 			// ctrlNametableViewer
 			// 
@@ -568,9 +626,8 @@ namespace Mesen.GUI.Debugger.Controls
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.Controls.Add(this.tableLayoutPanel1);
 			this.Name = "ctrlNametableViewer";
-			this.Size = new System.Drawing.Size(697, 530);
+			this.Size = new System.Drawing.Size(701, 530);
 			this.tableLayoutPanel1.ResumeLayout(false);
-			this.tableLayoutPanel1.PerformLayout();
 			((System.ComponentModel.ISupportInitialize)(this.picNametable)).EndInit();
 			this.ctxMenu.ResumeLayout(false);
 			this.grpTileInfo.ResumeLayout(false);
@@ -589,7 +646,7 @@ namespace Mesen.GUI.Debugger.Controls
 		#endregion
 
 		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
-		private System.Windows.Forms.PictureBox picNametable;
+		private ctrlMesenPictureBox picNametable;
 		private System.Windows.Forms.GroupBox grpTileInfo;
 		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
 		private System.Windows.Forms.TextBox txtPaletteAddress;
@@ -631,5 +688,9 @@ namespace Mesen.GUI.Debugger.Controls
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem2;
 		private System.Windows.Forms.ToolStripMenuItem mnuExportToPng;
 		private System.Windows.Forms.ToolStripMenuItem mnuEditInMemoryViewer;
+		private System.Windows.Forms.Label lblHighlight;
+		private System.Windows.Forms.CheckBox chkIgnoreRedundantWrites;
+		private System.Windows.Forms.ToolStripMenuItem mnuAddBreakpoint;
+		private System.Windows.Forms.CheckBox chkShowAttributeColorsOnly;
 	}
 }

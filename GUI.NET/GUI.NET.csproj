@@ -285,6 +285,9 @@
     <Compile Include="Controls\ctrlMesenMenuStrip.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Controls\ctrlMesenPictureBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Controls\ctrlMesenToolStrip.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -661,11 +664,23 @@
     <Compile Include="Debugger\frmAssembler.Designer.cs">
       <DependentUpon>frmAssembler.cs</DependentUpon>
     </Compile>
+    <Compile Include="Debugger\frmExternalEditorConfig.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Debugger\frmExternalEditorConfig.Designer.cs">
+      <DependentUpon>frmExternalEditorConfig.cs</DependentUpon>
+    </Compile>
     <Compile Include="Debugger\frmGoToAll.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Debugger\frmGoToAll.Designer.cs">
       <DependentUpon>frmGoToAll.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Debugger\frmProfiler.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Debugger\frmProfiler.Designer.cs">
+      <DependentUpon>frmProfiler.cs</DependentUpon>
     </Compile>
     <Compile Include="Debugger\frmSetScriptTimeout.cs">
       <SubType>Form</SubType>
@@ -856,6 +871,7 @@
     <Compile Include="Debugger\LabelManager.cs" />
     <Compile Include="Debugger\NesasmFnsImporter.cs" />
     <Compile Include="Debugger\MesenLabelFile.cs" />
+    <Compile Include="Debugger\PpuViewerHelper.cs" />
     <Compile Include="Debugger\TblLoader.cs" />
     <Compile Include="Debugger\TextboxHistory.cs" />
     <Compile Include="Debugger\TooltipForm.cs">
@@ -1244,6 +1260,9 @@
     <Compile Include="RuntimeChecker.cs" />
     <Compile Include="SingleInstance.cs" />
     <Compile Include="TestRunner.cs" />
+    <None Include="Resources\Zoom2x.png" />
+    <None Include="Resources\Expand.png" />
+    <None Include="Resources\Collapse.png" />
     <None Include="Resources\RegisterIcon.png" />
     <None Include="Resources\JumpTarget.png" />
     <None Include="Resources\Cut.png" />
@@ -1359,8 +1378,14 @@
     <EmbeddedResource Include="Debugger\Controls\ctrlSourceViewer.resx">
       <DependentUpon>ctrlSourceViewer.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Debugger\frmExternalEditorConfig.resx">
+      <DependentUpon>frmExternalEditorConfig.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Debugger\frmGoToAll.resx">
       <DependentUpon>frmGoToAll.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Debugger\frmProfiler.resx">
+      <DependentUpon>frmProfiler.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Debugger\frmSetScriptTimeout.resx">
       <DependentUpon>frmSetScriptTimeout.cs</DependentUpon>

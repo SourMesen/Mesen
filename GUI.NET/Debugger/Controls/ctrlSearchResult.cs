@@ -52,6 +52,13 @@ namespace Mesen.GUI.Debugger.Controls
 		public void Initialize(SearchResultInfo info)
 		{
 			lblLabelName.Text = info.Caption;
+			if(info.Length > 1) {
+				if(info.Length == 2) {
+					lblLabelName.Text += " (word)";
+				} else {
+					lblLabelName.Text += $" ({info.Length} bytes)";
+				}
+			}
 			if(info.AbsoluteAddress >= 0) {
 				lblAbsoluteAddress.Text = "$" + info.AbsoluteAddress.ToString("X4") + ":$" + info.Value.ToString("X2");
 				if(info.RelativeAddress >= 0) {
@@ -126,6 +133,7 @@ namespace Mesen.GUI.Debugger.Controls
 		public int AbsoluteAddress;
 		public int RelativeAddress;
 		public int Value;
+		public int Length;
 		public string Filename;
 		public int FileLineNumber;
 		public AddressType MemoryType;

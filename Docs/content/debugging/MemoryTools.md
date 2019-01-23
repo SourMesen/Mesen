@@ -15,16 +15,25 @@ The memory viewer offers read and write access to all types of ROM and RAM:
 
 * CPU Memory
 * PPU Memory
-* Palette RAM
-* OAM RAM
-* Secondary OAM RAM
+
+<div></div>
+
 * PRG ROM
-* CHR ROM
-* CHR RAM
 * Work RAM
 * Save RAM
 
+<div></div>
+
+* CHR ROM
+* CHR RAM
+* Nametable RAM
+* Palette RAM
+* Sprite / OAM RAM
+* Secondary OAM RAM
+
 **Note:** Only memory types that are available for the currently loaded ROM will be shown in the dropdown.
+
+<div style="clear:both"></div>
 
 {{% notice tip %}}
 PRG ROM and CHR ROM *are* writable from the memory viewer.  Any change will remain in effect until a power cycle. If you want to save your PRG/CHR ROM modifications to a .nes file, or as an IPS patch, you can use the **<kbd>File&rarr;Save</kbd>** or **<kbd>File&rarr;Save edits as IPS</kbd>** commands in the [debugger window](/debugging/debugger.html).
@@ -36,7 +45,15 @@ There are a number of highlighting/coloring options in the memory viewer.
 
 <kbd>**View&rarr;Memory Access Highlighting**</kbd> has coloring options for addresses that were recently read, written or executed (colored in <span class="blue">blue</span>, <span class="red">red</span> and <span class="green">green</span>, respectively). A fade-out period can also be configured, after which the byte will revert to its normal black color.  
 
-<kbd>**View&rarr;Data Type Highlighting**</kbd> offers options to change the background color of specific bytes based on their type.</span>.
+<kbd>**View&rarr;Data Type Highlighting**</kbd> offers options to change the background color of specific bytes based on their type:</span>
+	
+* Labeled bytes
+* Breakpoints
+* Code bytes *(PRG ROM only)*
+* Data bytes *(PRG ROM only)*
+* DMC sample bytes *(PRG ROM only)*
+* Drawn bytes *(CHR ROM only)*
+* Read bytes *(CHR ROM only)*
 
 <kbd>**View&rarr;De-emphasize**</kbd> offers options to display bytes matching certain conditions (unused, read, written or executed) in <span class="gray">gray</span>.
 
@@ -103,25 +120,3 @@ Use the `Sort By` option to sort the list based on different criteria.
 The `Reset` button allows you to reset all counters back to 0 -- this is useful when you are trying to gather data for a specific portion of the execution.  
 
 Use the `Highlight uninitialized memory reads` option to track down any reads done to RAM memory before the RAM memory has been initialized after a power cycle -- reading from uninitialized memory can produce random behavior, which is usually unwanted.
-
-## Profiler ##
-
-<div class="imgBox"><div>
-	<img src="/images/Profiler.png" />
-	<span>Code Profiler</span>
-</div></div>
-
-The profiler automatically collects data about all function calls done by the code, as well as the number of clock cycles spent in each respective function.  
-
-Using the profiler makes it is easy to find the bottlenecks in a game's code, which can help code optimization efforts.
-
-If you are familiar with Visual Studio's profiler, these columns should be familiar:  
-
-* **Call Count**: The number of times this function was called during profiling
-* **Inclusive Time (Cyc)**: The amount of CPU cycles spent within this function (including the cycles spent by all functions called by this function)
-* **Inclusive Time (%)**: The relative portion of CPU time spent within this function (including the time spent by all functions called by this function)
-* **Exclusive Time (Cyc)**: The amount of CPU cycles spent within this function (functions called by this function are excluded)
-* **Exclusive Time (%)**: The relative portion of CPU time spent within this function (functions called by this function are excluded)
-* **Call Count**: The number of times this function was called during profiling
-
-Use the `Reset` button to reset the profiler's data -- use this when you want to profile a specific portion of the execution.

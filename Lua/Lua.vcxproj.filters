@@ -110,6 +110,51 @@
     <ClCompile Include="lzio.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="auxiliar.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="buffer.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="except.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="inet.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="io.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="luasocket.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="mime.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="options.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="select.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="tcp.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="timeout.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="udp.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="usocket.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="wsocket.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="compat.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="lapi.h">
@@ -188,6 +233,57 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="lzio.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="auxiliar.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="buffer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="compat.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="except.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="inet.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="io.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="luasocket.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="mime.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="options.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="pierror.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="select.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="socket.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="tcp.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="timeout.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="udp.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="usocket.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="wsocket.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

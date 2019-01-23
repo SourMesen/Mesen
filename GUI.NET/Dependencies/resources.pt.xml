@@ -76,12 +76,12 @@
 			<Control ID="mnuPlayMovie">Reproduzir...</Control>
 			<Control ID="mnuRecordMovie">Gravar...</Control>
 			<Control ID="mnuStopMovie">Parar</Control>
+			<Control ID="mnuSoundRecorder">Gravador de som</Control>
+			<Control ID="mnuWaveRecord">Gravar...</Control>
+			<Control ID="mnuWaveStop">Parar gravação</Control>
 			<Control ID="mnuVideoRecorder">Gravador de vídeo</Control>
 			<Control ID="mnuAviRecord">Gravar...</Control>
-			<Control ID="mnuAviStop">Parar</Control>
-			<Control ID="mnuSoundRecorder">Gravar som</Control>
-			<Control ID="mnuWaveRecord">Gravar...</Control>
-			<Control ID="mnuWaveStop">Parar</Control>
+			<Control ID="mnuAviStop">Parar gravação</Control>
 			<Control ID="mnuCheats">Trapaças</Control>
 			<Control ID="mnuTests">Testes</Control>
 			<Control ID="mnuTestRun">Iniciar...</Control>
@@ -96,8 +96,8 @@
 			<Control ID="mnuLogWindow">Janela de relatório</Control>
 			<Control ID="mnuInstallHdPack">Instalar pacote de alta definição</Control>
 			<Control ID="mnuHdPackEditor">Criador de pacote de alta definição</Control>
-			<Control ID="mnuTakeScreenshot">Captura de tela</Control>
 			<Control ID="mnuRandomGame">Carregar jogo aleatório</Control>
+			<Control ID="mnuTakeScreenshot">Captura de tela</Control>
 			<Control ID="mnuHelp">Ajuda</Control>
 			<Control ID="mnuOnlineHelp">Ajuda online</Control>
 			<Control ID="mnuCheckForUpdates">Procurar atualizações</Control>
@@ -115,7 +115,7 @@
 			<Control ID="lblSoundChips">Chip de áudio</Control>
 			<Control ID="lblRecording">REC</Control>
 			<Control ID="lblSlowMotion">Câmera lenta</Control>
-			<Control ID="lblRewinding">Rewinding</Control>
+			<Control ID="lblRewinding">Rebobinar</Control>
 			<Control ID="lblFastForward">Acelerar</Control>
 		</Form>
 		<Form ID="frmLogWindow" Title="Janela de relatório">
@@ -218,7 +218,12 @@
 			<Control ID="chkDisplayPort4">Jogador 4</Control>
 			<Control ID="lblDisplayPosition">Posição da tela</Control>
 			<Control ID="chkDisplayInputHorizontally">Mostrar horizontalmente</Control>
-			<Control ID="chkHideMousePointerForZapper">Hide mouse pointer when using zapper</Control>
+
+			<Control ID="lblSmall">Curta</Control>
+			<Control ID="lblLarge">Longa</Control>
+			<Control ID="lblDeadzone">Controller axis deadzone size:</Control>
+			
+			<Control ID="chkHideMousePointerForZapper">Esconder o ponteiro do mouse ao usar a pistola zapper</Control>
 
 			<Control ID="lblKeyBinding">Aviso: a configuração atual contém atribuições conflitantes - alguns botões físicos em seu teclado ou gamepad são mapeados para vários botões no controle NES. Se isso não for intencional, reveja e corrija suas atribuições.</Control>
 		</Form>
@@ -282,6 +287,8 @@
 
 			<Control ID="tpgAdvanced">Avançado</Control>
 			<Control ID="lblScreenRotation">Rotação da tela:</Control>
+			<Control ID="chkRemoveSpriteLimit">Eliminar o limite de sprites (Reduz os "flashes" em alguns jogos)</Control>
+			<Control ID="chkAdaptiveSpriteLimit">Quando possível auto reativar o limite de sprite para evitar falhas gráficas caso precisar</Control>
 			<Control ID="chkDisableBackground">Desabilitar fundo</Control>
 			<Control ID="chkDisableSprites">Desabilitar sprites</Control>
 			<Control ID="chkForceBackgroundFirstColumn">Forçar ver fundo em primeira coluna</Control>
@@ -293,17 +300,17 @@
 		<Form ID="frmEmulationConfig" Title="Parâmetros de emulação">
 			<Control ID="tpgGeneral">Geral</Control>
 			<Control ID="lblEmuSpeedHint">%  (0 = Velocidade máxima)</Control>
+			<Control ID="lblEmulationSpeed">Velocidade de emulação:</Control>
 			<Control ID="lblTurboSpeedHint">%  (0 = Velocidade máxima)</Control>
 			<Control ID="lblTurboSpeed">Velocidade de avanço rápido:</Control>
-			<Control ID="lblEmulationSpeed">Velocidade de emulação:</Control>
 			<Control ID="lblRewindSpeedHint">%  (0 = Velocidade máxima)</Control>
 			<Control ID="lblRewindSpeed">Velocidade de rebobinamento:</Control>
 
 			<Control ID="tpgAdvanced">Avançado</Control>
+			<Control ID="lblDeveloperSettings">Recommended settings for developers (homebrew / ROM hacking)</Control>
+			<Control ID="lblMiscSettings">Configurações diversas</Control>
 			<Control ID="chkUseAlternativeMmc3Irq">Utilizar a versão alternativa de componentes de IRQs de MMC3</Control>
 			<Control ID="chkAllowInvalidInput">Permitir as entradas inválidas (Cima+Baixo e Esquerda+Direita ao mesmo tempo)</Control>
-			<Control ID="chkRemoveSpriteLimit">Eliminar o limite de sprites (Reduz os "flashes" em alguns jogos)</Control>
-			<Control ID="chkAdaptiveSpriteLimit">Reativar automaticamente o limite de sprite caso precisar para evitar falhas gráficas quando possível</Control>
 			<Control ID="chkEnableOamDecay">Ativar declínio da RAM OAM</Control>
 			<Control ID="chkDisablePpu2004Reads">Desativar leitura da PPU $2004 (Comportamento do Famicom)</Control>
 			<Control ID="chkDisableOamAddrBug">Desativar emulação do erro OAMADDR da PPU</Control>
@@ -766,9 +773,9 @@
 		<Message ID="DatachBarcodeReader">Leitor de código de barras Datach</Message>
 
 		<Message ID="HelpFullscreen">/fullscreen - Inicia o Mesen em modo tela cheia</Message>
-		<Message ID="HelpDoNotSaveSettings">/DoNotSaveSettings - Impede que as configurações sejam salvas no disco (útil para evitar que as opções da linha de comando se tornem as configurações padrão)</Message>
-		<Message ID="HelpRecordMovie">/RecordMovie="filename.mmo" - Start recording a movie after the specified game is loaded.</Message>
-		<Message ID="HelpLoadLastSession">/LoadLastSession - Resumes the game in the state it was left in when it was last played.</Message>
+		<Message ID="HelpDoNotSaveSettings">/DoNotSaveSettings - Impede que as configurações sejam salvas no disco (útil para evitar que as opções da linha de comando se tornem as configurações padrões)</Message>
+		<Message ID="HelpRecordMovie">/RecordMovie="filename.mmo" - Começa a gravar um vídeo depois que o jogo especificado for carregado.</Message>
+		<Message ID="HelpLoadLastSession">/LoadLastSession - Continua o jogo do estado em que foi deixado quando foi jogado pela última vez.</Message>
 
 		<Message ID="Resume">Continuar</Message>
 		<Message ID="Pause">Pausar</Message>

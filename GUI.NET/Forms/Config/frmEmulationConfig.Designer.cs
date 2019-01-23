@@ -30,6 +30,7 @@ namespace Mesen.GUI.Forms.Config
 		private void InitializeComponent()
 		{
 			this.components = new System.ComponentModel.Container();
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmEmulationConfig));
 			this.tabMain = new System.Windows.Forms.TabControl();
 			this.tpgGeneral = new System.Windows.Forms.TabPage();
 			this.tableLayoutPanel4 = new System.Windows.Forms.TableLayoutPanel();
@@ -47,9 +48,9 @@ namespace Mesen.GUI.Forms.Config
 			this.lblRewindSpeedHint = new System.Windows.Forms.Label();
 			this.tpgAdvanced = new System.Windows.Forms.TabPage();
 			this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+			this.lblMiscSettings = new System.Windows.Forms.Label();
 			this.chkMapperRandomPowerOnState = new Mesen.GUI.Controls.ctrlRiskyOption();
 			this.chkEnableOamDecay = new Mesen.GUI.Controls.ctrlRiskyOption();
-			this.chkRemoveSpriteLimit = new System.Windows.Forms.CheckBox();
 			this.flowLayoutPanel8 = new System.Windows.Forms.FlowLayoutPanel();
 			this.lblRamPowerOnState = new System.Windows.Forms.Label();
 			this.cboRamPowerOnState = new System.Windows.Forms.ComboBox();
@@ -60,7 +61,7 @@ namespace Mesen.GUI.Forms.Config
 			this.chkUseNes101Hvc101Behavior = new System.Windows.Forms.CheckBox();
 			this.chkAllowInvalidInput = new Mesen.GUI.Controls.ctrlRiskyOption();
 			this.chkUseAlternativeMmc3Irq = new System.Windows.Forms.CheckBox();
-			this.chkAdaptiveSpriteLimit = new System.Windows.Forms.CheckBox();
+			this.lblDeveloperSettings = new System.Windows.Forms.Label();
 			this.tpgOverclocking = new System.Windows.Forms.TabPage();
 			this.picHint = new System.Windows.Forms.PictureBox();
 			this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
@@ -364,27 +365,27 @@ namespace Mesen.GUI.Forms.Config
 			// 
 			this.tableLayoutPanel1.ColumnCount = 1;
 			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel1.Controls.Add(this.chkMapperRandomPowerOnState, 0, 10);
-			this.tableLayoutPanel1.Controls.Add(this.chkEnableOamDecay, 0, 4);
-			this.tableLayoutPanel1.Controls.Add(this.chkRemoveSpriteLimit, 0, 0);
-			this.tableLayoutPanel1.Controls.Add(this.flowLayoutPanel8, 0, 11);
-			this.tableLayoutPanel1.Controls.Add(this.chkDisablePaletteRead, 0, 8);
-			this.tableLayoutPanel1.Controls.Add(this.chkDisableOamAddrBug, 0, 7);
-			this.tableLayoutPanel1.Controls.Add(this.chkDisablePpuReset, 0, 5);
-			this.tableLayoutPanel1.Controls.Add(this.chkDisablePpu2004Reads, 0, 6);
-			this.tableLayoutPanel1.Controls.Add(this.chkUseNes101Hvc101Behavior, 0, 2);
-			this.tableLayoutPanel1.Controls.Add(this.chkAllowInvalidInput, 0, 9);
-			this.tableLayoutPanel1.Controls.Add(this.chkUseAlternativeMmc3Irq, 0, 3);
-			this.tableLayoutPanel1.Controls.Add(this.chkAdaptiveSpriteLimit, 0, 1);
+			this.tableLayoutPanel1.Controls.Add(this.lblMiscSettings, 0, 4);
+			this.tableLayoutPanel1.Controls.Add(this.chkMapperRandomPowerOnState, 0, 2);
+			this.tableLayoutPanel1.Controls.Add(this.chkEnableOamDecay, 0, 1);
+			this.tableLayoutPanel1.Controls.Add(this.flowLayoutPanel8, 0, 3);
+			this.tableLayoutPanel1.Controls.Add(this.chkDisablePaletteRead, 0, 10);
+			this.tableLayoutPanel1.Controls.Add(this.chkDisableOamAddrBug, 0, 8);
+			this.tableLayoutPanel1.Controls.Add(this.chkDisablePpuReset, 0, 7);
+			this.tableLayoutPanel1.Controls.Add(this.chkDisablePpu2004Reads, 0, 9);
+			this.tableLayoutPanel1.Controls.Add(this.chkUseNes101Hvc101Behavior, 0, 6);
+			this.tableLayoutPanel1.Controls.Add(this.chkAllowInvalidInput, 0, 11);
+			this.tableLayoutPanel1.Controls.Add(this.chkUseAlternativeMmc3Irq, 0, 5);
+			this.tableLayoutPanel1.Controls.Add(this.lblDeveloperSettings, 0, 0);
 			this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tableLayoutPanel1.Location = new System.Drawing.Point(3, 3);
 			this.tableLayoutPanel1.Name = "tableLayoutPanel1";
 			this.tableLayoutPanel1.RowCount = 13;
+			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
@@ -396,15 +397,28 @@ namespace Mesen.GUI.Forms.Config
 			this.tableLayoutPanel1.Size = new System.Drawing.Size(519, 289);
 			this.tableLayoutPanel1.TabIndex = 0;
 			// 
+			// lblMiscSettings
+			// 
+			this.lblMiscSettings.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.lblMiscSettings.AutoSize = true;
+			this.lblMiscSettings.ForeColor = System.Drawing.SystemColors.GrayText;
+			this.lblMiscSettings.Location = new System.Drawing.Point(0, 98);
+			this.lblMiscSettings.Margin = new System.Windows.Forms.Padding(0, 0, 3, 2);
+			this.lblMiscSettings.Name = "lblMiscSettings";
+			this.lblMiscSettings.Size = new System.Drawing.Size(115, 13);
+			this.lblMiscSettings.TabIndex = 35;
+			this.lblMiscSettings.Text = "Miscellaneous Settings";
+			// 
 			// chkMapperRandomPowerOnState
 			// 
 			this.chkMapperRandomPowerOnState.AutoSize = true;
 			this.chkMapperRandomPowerOnState.Checked = false;
 			this.chkMapperRandomPowerOnState.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.chkMapperRandomPowerOnState.Location = new System.Drawing.Point(0, 230);
+			this.chkMapperRandomPowerOnState.Location = new System.Drawing.Point(10, 43);
+			this.chkMapperRandomPowerOnState.Margin = new System.Windows.Forms.Padding(10, 0, 0, 0);
 			this.chkMapperRandomPowerOnState.MinimumSize = new System.Drawing.Size(0, 23);
 			this.chkMapperRandomPowerOnState.Name = "chkMapperRandomPowerOnState";
-			this.chkMapperRandomPowerOnState.Size = new System.Drawing.Size(519, 23);
+			this.chkMapperRandomPowerOnState.Size = new System.Drawing.Size(509, 23);
 			this.chkMapperRandomPowerOnState.TabIndex = 11;
 			this.chkMapperRandomPowerOnState.Text = "Randomize power-on state for mappers";
 			// 
@@ -412,33 +426,23 @@ namespace Mesen.GUI.Forms.Config
 			// 
 			this.chkEnableOamDecay.Checked = false;
 			this.chkEnableOamDecay.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.chkEnableOamDecay.Location = new System.Drawing.Point(0, 92);
+			this.chkEnableOamDecay.Location = new System.Drawing.Point(10, 20);
+			this.chkEnableOamDecay.Margin = new System.Windows.Forms.Padding(10, 0, 0, 0);
 			this.chkEnableOamDecay.MinimumSize = new System.Drawing.Size(0, 21);
 			this.chkEnableOamDecay.Name = "chkEnableOamDecay";
-			this.chkEnableOamDecay.Size = new System.Drawing.Size(519, 23);
+			this.chkEnableOamDecay.Size = new System.Drawing.Size(509, 23);
 			this.chkEnableOamDecay.TabIndex = 9;
 			this.chkEnableOamDecay.Text = "Enable OAM RAM decay";
-			// 
-			// chkRemoveSpriteLimit
-			// 
-			this.chkRemoveSpriteLimit.AutoSize = true;
-			this.chkRemoveSpriteLimit.Location = new System.Drawing.Point(3, 3);
-			this.chkRemoveSpriteLimit.Name = "chkRemoveSpriteLimit";
-			this.chkRemoveSpriteLimit.Size = new System.Drawing.Size(205, 17);
-			this.chkRemoveSpriteLimit.TabIndex = 2;
-			this.chkRemoveSpriteLimit.Text = "Remove sprite limit (Reduces flashing)";
-			this.chkRemoveSpriteLimit.UseVisualStyleBackColor = true;
-			this.chkRemoveSpriteLimit.CheckedChanged += new System.EventHandler(this.chkRemoveSpriteLimit_CheckedChanged);
 			// 
 			// flowLayoutPanel8
 			// 
 			this.flowLayoutPanel8.Controls.Add(this.lblRamPowerOnState);
 			this.flowLayoutPanel8.Controls.Add(this.cboRamPowerOnState);
 			this.flowLayoutPanel8.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.flowLayoutPanel8.Location = new System.Drawing.Point(0, 253);
-			this.flowLayoutPanel8.Margin = new System.Windows.Forms.Padding(0);
+			this.flowLayoutPanel8.Location = new System.Drawing.Point(7, 66);
+			this.flowLayoutPanel8.Margin = new System.Windows.Forms.Padding(7, 0, 0, 0);
 			this.flowLayoutPanel8.Name = "flowLayoutPanel8";
-			this.flowLayoutPanel8.Size = new System.Drawing.Size(519, 27);
+			this.flowLayoutPanel8.Size = new System.Drawing.Size(512, 27);
 			this.flowLayoutPanel8.TabIndex = 3;
 			// 
 			// lblRamPowerOnState
@@ -464,10 +468,11 @@ namespace Mesen.GUI.Forms.Config
 			// 
 			this.chkDisablePaletteRead.Checked = false;
 			this.chkDisablePaletteRead.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.chkDisablePaletteRead.Location = new System.Drawing.Point(0, 184);
+			this.chkDisablePaletteRead.Location = new System.Drawing.Point(10, 228);
+			this.chkDisablePaletteRead.Margin = new System.Windows.Forms.Padding(10, 0, 0, 0);
 			this.chkDisablePaletteRead.MinimumSize = new System.Drawing.Size(0, 21);
 			this.chkDisablePaletteRead.Name = "chkDisablePaletteRead";
-			this.chkDisablePaletteRead.Size = new System.Drawing.Size(519, 23);
+			this.chkDisablePaletteRead.Size = new System.Drawing.Size(509, 23);
 			this.chkDisablePaletteRead.TabIndex = 6;
 			this.chkDisablePaletteRead.Text = "Disable PPU palette reads";
 			// 
@@ -475,10 +480,11 @@ namespace Mesen.GUI.Forms.Config
 			// 
 			this.chkDisableOamAddrBug.Checked = false;
 			this.chkDisableOamAddrBug.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.chkDisableOamAddrBug.Location = new System.Drawing.Point(0, 161);
+			this.chkDisableOamAddrBug.Location = new System.Drawing.Point(10, 182);
+			this.chkDisableOamAddrBug.Margin = new System.Windows.Forms.Padding(10, 0, 0, 0);
 			this.chkDisableOamAddrBug.MinimumSize = new System.Drawing.Size(0, 21);
 			this.chkDisableOamAddrBug.Name = "chkDisableOamAddrBug";
-			this.chkDisableOamAddrBug.Size = new System.Drawing.Size(519, 23);
+			this.chkDisableOamAddrBug.Size = new System.Drawing.Size(509, 23);
 			this.chkDisableOamAddrBug.TabIndex = 5;
 			this.chkDisableOamAddrBug.Text = "Disable PPU OAMADDR bug emulation";
 			// 
@@ -486,10 +492,11 @@ namespace Mesen.GUI.Forms.Config
 			// 
 			this.chkDisablePpuReset.Checked = false;
 			this.chkDisablePpuReset.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.chkDisablePpuReset.Location = new System.Drawing.Point(0, 115);
+			this.chkDisablePpuReset.Location = new System.Drawing.Point(10, 159);
+			this.chkDisablePpuReset.Margin = new System.Windows.Forms.Padding(10, 0, 0, 0);
 			this.chkDisablePpuReset.MinimumSize = new System.Drawing.Size(0, 21);
 			this.chkDisablePpuReset.Name = "chkDisablePpuReset";
-			this.chkDisablePpuReset.Size = new System.Drawing.Size(519, 23);
+			this.chkDisablePpuReset.Size = new System.Drawing.Size(509, 23);
 			this.chkDisablePpuReset.TabIndex = 7;
 			this.chkDisablePpuReset.Text = "Do not reset PPU when resetting console (Famicom behavior)";
 			// 
@@ -497,17 +504,19 @@ namespace Mesen.GUI.Forms.Config
 			// 
 			this.chkDisablePpu2004Reads.Checked = false;
 			this.chkDisablePpu2004Reads.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.chkDisablePpu2004Reads.Location = new System.Drawing.Point(0, 138);
+			this.chkDisablePpu2004Reads.Location = new System.Drawing.Point(10, 205);
+			this.chkDisablePpu2004Reads.Margin = new System.Windows.Forms.Padding(10, 0, 0, 0);
 			this.chkDisablePpu2004Reads.MinimumSize = new System.Drawing.Size(0, 21);
 			this.chkDisablePpu2004Reads.Name = "chkDisablePpu2004Reads";
-			this.chkDisablePpu2004Reads.Size = new System.Drawing.Size(519, 23);
+			this.chkDisablePpu2004Reads.Size = new System.Drawing.Size(509, 23);
 			this.chkDisablePpu2004Reads.TabIndex = 4;
 			this.chkDisablePpu2004Reads.Text = "Disable PPU $2004 reads (Famicom behavior)";
 			// 
 			// chkUseNes101Hvc101Behavior
 			// 
 			this.chkUseNes101Hvc101Behavior.AutoSize = true;
-			this.chkUseNes101Hvc101Behavior.Location = new System.Drawing.Point(3, 49);
+			this.chkUseNes101Hvc101Behavior.Location = new System.Drawing.Point(13, 139);
+			this.chkUseNes101Hvc101Behavior.Margin = new System.Windows.Forms.Padding(13, 3, 3, 3);
 			this.chkUseNes101Hvc101Behavior.Name = "chkUseNes101Hvc101Behavior";
 			this.chkUseNes101Hvc101Behavior.Size = new System.Drawing.Size(292, 17);
 			this.chkUseNes101Hvc101Behavior.TabIndex = 8;
@@ -519,35 +528,36 @@ namespace Mesen.GUI.Forms.Config
 			this.chkAllowInvalidInput.AutoSize = true;
 			this.chkAllowInvalidInput.Checked = false;
 			this.chkAllowInvalidInput.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.chkAllowInvalidInput.Location = new System.Drawing.Point(0, 207);
+			this.chkAllowInvalidInput.Location = new System.Drawing.Point(10, 251);
+			this.chkAllowInvalidInput.Margin = new System.Windows.Forms.Padding(10, 0, 0, 0);
 			this.chkAllowInvalidInput.MinimumSize = new System.Drawing.Size(0, 23);
 			this.chkAllowInvalidInput.Name = "chkAllowInvalidInput";
-			this.chkAllowInvalidInput.Size = new System.Drawing.Size(519, 23);
+			this.chkAllowInvalidInput.Size = new System.Drawing.Size(509, 23);
 			this.chkAllowInvalidInput.TabIndex = 1;
 			this.chkAllowInvalidInput.Text = "Allow invalid input (e.g Down + Up or Left + Right at the same time)";
 			// 
 			// chkUseAlternativeMmc3Irq
 			// 
 			this.chkUseAlternativeMmc3Irq.AutoSize = true;
-			this.chkUseAlternativeMmc3Irq.Location = new System.Drawing.Point(3, 72);
+			this.chkUseAlternativeMmc3Irq.Location = new System.Drawing.Point(13, 116);
+			this.chkUseAlternativeMmc3Irq.Margin = new System.Windows.Forms.Padding(13, 3, 3, 3);
 			this.chkUseAlternativeMmc3Irq.Name = "chkUseAlternativeMmc3Irq";
 			this.chkUseAlternativeMmc3Irq.Size = new System.Drawing.Size(197, 17);
 			this.chkUseAlternativeMmc3Irq.TabIndex = 0;
 			this.chkUseAlternativeMmc3Irq.Text = "Use alternative MMC3 IRQ behavior";
 			this.chkUseAlternativeMmc3Irq.UseVisualStyleBackColor = true;
 			// 
-			// chkAdaptiveSpriteLimit
+			// lblDeveloperSettings
 			// 
-			this.chkAdaptiveSpriteLimit.AutoSize = true;
-			this.chkAdaptiveSpriteLimit.Enabled = false;
-			this.chkAdaptiveSpriteLimit.Location = new System.Drawing.Point(18, 26);
-			this.chkAdaptiveSpriteLimit.Margin = new System.Windows.Forms.Padding(18, 3, 3, 3);
-			this.chkAdaptiveSpriteLimit.Name = "chkAdaptiveSpriteLimit";
-			this.chkAdaptiveSpriteLimit.Size = new System.Drawing.Size(442, 17);
-			this.chkAdaptiveSpriteLimit.TabIndex = 10;
-			this.chkAdaptiveSpriteLimit.Text = "Automatically re-enable sprite limit as needed to prevent graphical glitches when" +
-    " possible";
-			this.chkAdaptiveSpriteLimit.UseVisualStyleBackColor = true;
+			this.lblDeveloperSettings.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.lblDeveloperSettings.AutoSize = true;
+			this.lblDeveloperSettings.ForeColor = System.Drawing.SystemColors.GrayText;
+			this.lblDeveloperSettings.Location = new System.Drawing.Point(0, 5);
+			this.lblDeveloperSettings.Margin = new System.Windows.Forms.Padding(0, 0, 3, 2);
+			this.lblDeveloperSettings.Name = "lblDeveloperSettings";
+			this.lblDeveloperSettings.Size = new System.Drawing.Size(284, 13);
+			this.lblDeveloperSettings.TabIndex = 33;
+			this.lblDeveloperSettings.Text = "Recommended for developers (homebrew / ROM hacking)";
 			// 
 			// tpgOverclocking
 			// 
@@ -611,7 +621,7 @@ namespace Mesen.GUI.Forms.Config
 			this.lblOverclockHint.Padding = new System.Windows.Forms.Padding(25, 0, 0, 0);
 			this.lblOverclockHint.Size = new System.Drawing.Size(513, 41);
 			this.lblOverclockHint.TabIndex = 1;
-			this.lblOverclockHint.Text = "Overclocking can help reduce or remove slowdowns in games (but it can also cause issues). The most compatible way to overclock is by increasing the \"Scanline before NMI\" value by a few hundred lines (e.g 400+)";
+			this.lblOverclockHint.Text = resources.GetString("lblOverclockHint.Text");
 			// 
 			// flowLayoutPanel4
 			// 
@@ -1008,7 +1018,6 @@ namespace Mesen.GUI.Forms.Config
 		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
 		private System.Windows.Forms.CheckBox chkUseAlternativeMmc3Irq;
 		private ctrlRiskyOption chkAllowInvalidInput;
-		private System.Windows.Forms.CheckBox chkRemoveSpriteLimit;
 		private System.Windows.Forms.TabPage tpgOverclocking;
 		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel3;
 		private System.Windows.Forms.GroupBox grpOverclocking;
@@ -1052,15 +1061,16 @@ namespace Mesen.GUI.Forms.Config
 		private ctrlRiskyOption chkDisableOamAddrBug;
 		private ctrlRiskyOption chkDisablePaletteRead;
 		private ctrlRiskyOption chkDisablePpuReset;
-		private System.Windows.Forms.CheckBox chkUseNes101Hvc101Behavior;
 		private Mesen.GUI.Controls.ctrlRiskyOption chkEnableOamDecay;
 		private System.Windows.Forms.Label lblRewindSpeed;
 		private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel10;
 		private MesenNumericUpDown nudRewindSpeed;
 		private System.Windows.Forms.Label lblRewindSpeedHint;
-		private System.Windows.Forms.CheckBox chkAdaptiveSpriteLimit;
 		private ctrlRiskyOption chkMapperRandomPowerOnState;
 		private System.Windows.Forms.PictureBox picHint;
 		private Mesen.GUI.Controls.ctrlAutoGrowLabel lblOverclockHint;
+		private System.Windows.Forms.CheckBox chkUseNes101Hvc101Behavior;
+		private System.Windows.Forms.Label lblDeveloperSettings;
+		private System.Windows.Forms.Label lblMiscSettings;
 	}
 }

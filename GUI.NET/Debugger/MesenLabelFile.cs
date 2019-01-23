@@ -24,6 +24,7 @@ namespace Mesen.GUI.Debugger
 
 			DebugImportConfig config = ConfigManager.Config.DebugInfo.ImportConfig;
 
+			int errorCount = 0;
 			char[] separator = new char[1] { ':' };
 			foreach(string row in File.ReadAllLines(path, Encoding.UTF8)) {
 				string[] rowData = row.Split(separator, 4);
@@ -42,8 +43,43 @@ namespace Mesen.GUI.Debugger
 					default: continue;
 				}
 
-				uint address;
-				if(importLabel && UInt32.TryParse(rowData[1], NumberStyles.HexNumber, CultureInfo.InvariantCulture, out address)) {
+				if(importLabel) {
+					string addressString = rowData[1];
+					uint address = 0;
+					uint length = 1;
+					if(addressString.Contains("-")) {
+						uint addressEnd;
+						string[] addressStartEnd = addressString.Split('-');
+						if(UInt32.TryParse(addressStartEnd[0], NumberStyles.HexNumber, CultureInfo.InvariantCulture, out address) &&
+							UInt32.TryParse(addressStartEnd[1], NumberStyles.HexNumber, CultureInfo.InvariantCulture, out addressEnd)) {
+							if(addressEnd > address) {
+								length = addressEnd - address;
+							} else {
+								//Invalid label (start < end)
+								errorCount++;
+								continue;
+							}
+						} else {
+							//Invalid label (can't parse)
+							errorCount++;
+							continue;
+						}
+					} else {
+						if(!UInt32.TryParse(rowData[1], NumberStyles.HexNumber, CultureInfo.InvariantCulture, out address)) {
+							//Invalid label (can't parse)
+							errorCount++;
+							continue;
+						}
+						length = 1;
+					}
+
+					string labelName = rowData[2];
+					if(!LabelManager.LabelRegex.IsMatch(labelName)) {
+						//Reject labels that don't respect the label naming restrictions
+						errorCount++;
+						continue;
+					}
+
 					CodeLabel codeLabel;
 					if(!labels[type].TryGetValue(address, out codeLabel)) {
 						codeLabel = new CodeLabel();
@@ -57,7 +93,8 @@ namespace Mesen.GUI.Debugger
 					if(rowData.Length > 3 && config.MlbImportComments) {
 						codeLabel.Comment = rowData[3].Replace("\\n", "\n");
 					}
-					codeLabel.Label = rowData[2].Replace("\\n", "\n").Replace("\n", "");
+					codeLabel.Label = labelName;
+					codeLabel.Length = length;
 				}
 			}
 
@@ -72,7 +109,11 @@ namespace Mesen.GUI.Debugger
 			LabelManager.SetLabels(codeLabels);
 
 			if(!silent) {
-				MessageBox.Show($"Import completed with {labelCount} labels imported.", "Mesen", MessageBoxButtons.OK, MessageBoxIcon.Information);
+				string message = $"Import completed with {labelCount} labels imported";
+				if(errorCount > 0) {
+					message += $" and {errorCount} error(s)";
+				}
+				MessageBox.Show(message, "Mesen", MessageBoxButtons.OK, MessageBoxIcon.Information);
 			}
 		}
 

@@ -104,11 +104,11 @@ Returns an integer representing the byte offset of the specified PPU address in 
     emu.getLabelAddress(label)
 
 **Parameters**  
-label - *String* A label to look up.
+label - *String* The label to look up
 
 **Return value**  
-*Integer* The corresponding integer address.
+*Integer* The corresponding CPU address
 
 **Description**  
-Returns an integer representing the address of the specified label. The return value can be passed directly to `read()` and `readWord()`.
+Returns the address of the specified label. This address can be used with the memory read/write functions (`read()`, `readWord()`, `write()`, `writeWord()`) using the `emu.memType.cpu` or `emu.memType.cpuDebug` memory types.
 

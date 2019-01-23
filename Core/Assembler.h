@@ -34,6 +34,7 @@ enum AssemblerSpecialCodes
 	TrailingText = -9,
 	UnknownLabel = -10,
 	InvalidInstruction = -11,
+	InvalidBinaryValue = -12,
 };
 
 class Assembler

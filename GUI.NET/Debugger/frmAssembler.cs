@@ -204,6 +204,7 @@ namespace Mesen.GUI.Debugger
 								case AssemblerSpecialCodes.TrailingText: message = "Invalid text trailing at the end of line"; break;
 								case AssemblerSpecialCodes.UnknownLabel: message = "Unknown label"; break;
 								case AssemblerSpecialCodes.InvalidInstruction: message = "Invalid instruction"; break;
+								case AssemblerSpecialCodes.InvalidBinaryValue: message = "Invalid binary value"; break;
 							}
 							errorList.Add(new ErrorDetail() { Message = message + " - " + codeLines[line-1], LineNumber = line });
 							line++;
@@ -443,6 +444,7 @@ namespace Mesen.GUI.Debugger
 			TrailingText = -9,
 			UnknownLabel = -10,
 			InvalidInstruction = -11,
+			InvalidBinaryValue = -12
 		}
 
 		private void lstErrors_DoubleClick(object sender, EventArgs e)

@@ -15,16 +15,18 @@ private:
 
 	void UpdateNametables()
 	{
-		AddNametable(4, _chrRom + _ntRegs[0] * 0x400);
-		AddNametable(5, _chrRom + _ntRegs[1] * 0x400);
-
 		if(_useChrForNametables) {
-			switch(GetMirroringType()) {
-				case MirroringType::FourScreens: break; //4-screen mirroring is not supported by this mapper
-				case MirroringType::Vertical: SetNametables(4, 5, 4, 5); break;
-				case MirroringType::Horizontal: SetNametables(4, 4, 5, 5); break;
-				case MirroringType::ScreenAOnly: SetNametables(4, 4, 4, 4);	break;
-				case MirroringType::ScreenBOnly: SetNametables(5, 5, 5, 5);	break;
+			for(int i = 0; i < 4; i++) {
+				uint8_t reg = 0;
+				switch(GetMirroringType()) {
+					case MirroringType::FourScreens: break; //4-screen mirroring is not supported by this mapper
+					case MirroringType::Vertical: reg = i & 0x01; break;
+					case MirroringType::Horizontal: reg = (i & 0x02) >> 1; break;
+					case MirroringType::ScreenAOnly: reg = 0; break;
+					case MirroringType::ScreenBOnly: reg = 1; break;
+				}
+
+				SetPpuMemoryMapping(0x2000+i*0x400, 0x2000+i*0x400+0x3FF, ChrMemoryType::Default, _ntRegs[reg] * 0x400, _chrRamSize > 0 ? MemoryAccessType::ReadWrite : MemoryAccessType::Read);
 			}
 		} else {
 			//Reset to default mirroring
@@ -57,11 +59,6 @@ protected:
 		BaseMapper::StreamState(saving);
 		
 		Stream(_ntRegs[0], _ntRegs[1], _useChrForNametables, _prgRamEnabled, _usingExternalRom, _externalPage);
-
-		if(!saving) {
-			UpdateNametables();
-			UpdateState();
-		}
 	}
 
 	void UpdateState()

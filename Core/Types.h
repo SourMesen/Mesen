@@ -65,6 +65,7 @@ struct State
 
 	//Used by debugger
 	uint16_t DebugPC = 0;
+	uint16_t PreviousDebugPC = 0;
 };
 
 enum class PrgMemoryType
@@ -78,7 +79,8 @@ enum class ChrMemoryType
 {
 	Default,
 	ChrRom,
-	ChrRam
+	ChrRam,
+	NametableRam
 };
 
 enum MemoryAccessType
@@ -88,12 +90,6 @@ enum MemoryAccessType
 	Read = 0x01,
 	Write = 0x02,
 	ReadWrite = 0x03
-};
-
-enum ChrSpecialPage
-{
-	NametableA = 0x7000,
-	NametableB = 0x7001
 };
 
 enum class MirroringType
@@ -122,8 +118,6 @@ struct CartridgeState
 	int32_t ChrMemoryOffset[0x40];
 	ChrMemoryType ChrType[0x40];
 	MemoryAccessType ChrMemoryAccess[0x40];
-
-	uint32_t Nametables[8];
 
 	uint32_t WorkRamPageSize;
 	uint32_t SaveRamPageSize;
@@ -380,8 +374,8 @@ enum class VsSystemType
 
 enum class GameInputType
 {
-	Default = 0,
-	FamicomControllers = 1,
+	Unspecified = 0,
+	StandardControllers = 1,
 	FourScore = 2,
 	FourPlayerAdapter = 3,
 	VsSystem = 4,
@@ -424,6 +418,8 @@ enum class GameInputType
 	SnesMouse = 0x29,
 	GenericMulticart = 0x2A, //not supported yet
 	SnesControllers = 0x2B,
+	RacermateBicycle = 0x2C, //not supported yet
+	UForce = 0x2D, //not supported yet
 	LastEntry
 };
 

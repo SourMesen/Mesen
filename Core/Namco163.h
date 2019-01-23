@@ -2,6 +2,8 @@
 #include "stdafx.h"
 #include "BaseMapper.h"
 #include "Namco163Audio.h"
+#include "Console.h"
+#include "BatteryManager.h"
 
 enum class NamcoVariant
 {
@@ -109,6 +111,28 @@ protected:
 		}
 	}
 
+	void LoadBattery() override
+	{
+		if(HasBattery()) {
+			vector<uint8_t> batteryContent(_saveRamSize + Namco163Audio::AudioRamSize, 0);
+			_console->GetBatteryManager()->LoadBattery(".sav", batteryContent.data(), (uint32_t)batteryContent.size());
+
+			memcpy(_saveRam, batteryContent.data(), _saveRamSize);
+			memcpy(_audio->GetInternalRam(), batteryContent.data()+_saveRamSize, Namco163Audio::AudioRamSize);
+		}
+	}
+
+	void SaveBattery() override
+	{
+		if(HasBattery()) {
+			vector<uint8_t> batteryContent(_saveRamSize + Namco163Audio::AudioRamSize, 0);
+			memcpy(batteryContent.data(), _saveRam, _saveRamSize);
+			memcpy(batteryContent.data() + _saveRamSize, _audio->GetInternalRam(), Namco163Audio::AudioRamSize);
+
+			_console->GetBatteryManager()->SaveBattery(".sav", batteryContent.data(), (uint32_t)batteryContent.size());
+		}
+	}
+
 	void ProcessCpuClock() override
 	{
 		if(_irqCounter & 0x8000 && (_irqCounter & 0x7FFF) != 0x7FFF) {
@@ -169,7 +193,7 @@ protected:
 			case 0x8000: case 0x8800: case 0x9000: case 0x9800: {
 				uint8_t bankNumber = (addr - 0x8000) >> 11;
 				if(!_lowChrNtMode && value >= 0xE0 && _variant == NamcoVariant::Namco163) {
-					SelectCHRPage(bankNumber, (value & 0x01) == 0x01 ? ChrSpecialPage::NametableB : ChrSpecialPage::NametableA);
+					SelectCHRPage(bankNumber, value & 0x01, ChrMemoryType::NametableRam);
 				} else {
 					SelectCHRPage(bankNumber, value);
 				}
@@ -179,7 +203,7 @@ protected:
 			case 0xA000: case 0xA800: case 0xB000: case 0xB800: {
 				uint8_t bankNumber = ((addr - 0xA000) >> 11) + 4;
 				if(!_highChrNtMode && value >= 0xE0 && _variant == NamcoVariant::Namco163) {
-					SelectCHRPage(bankNumber, (value & 0x01) == 0x01 ? ChrSpecialPage::NametableB : ChrSpecialPage::NametableA);
+					SelectCHRPage(bankNumber, value & 0x01, ChrMemoryType::NametableRam);
 				} else {
 					SelectCHRPage(bankNumber, value);
 				}
@@ -199,7 +223,7 @@ protected:
 				} else {
 					uint8_t bankNumber = ((addr - 0xC000) >> 11) + 8;
 					if(value >= 0xE0) {
-						SelectCHRPage(bankNumber, (value & 0x01) == 0x01 ? ChrSpecialPage::NametableB : ChrSpecialPage::NametableA);
+						SelectCHRPage(bankNumber, value & 0x01, ChrMemoryType::NametableRam);
 					} else {
 						SelectCHRPage(bankNumber, value);
 					}

@@ -11,11 +11,6 @@ MemoryManager::MemoryManager(shared_ptr<Console> console)
 	_internalRAM = new uint8_t[InternalRAMSize];
 	_internalRamHandler.SetInternalRam(_internalRAM);
 
-	for(int i = 0; i < 2; i++) {
-		_nametableRAM[i] = new uint8_t[NameTableScreenSize];
-		_console->GetMapper()->InitializeRam(_nametableRAM[i], NameTableScreenSize);
-	}
-
 	_ramReadHandlers = new IMemoryHandler*[RAMSize];
 	_ramWriteHandlers = new IMemoryHandler*[RAMSize];
 
@@ -30,9 +25,6 @@ MemoryManager::MemoryManager(shared_ptr<Console> console)
 MemoryManager::~MemoryManager()
 {
 	delete[] _internalRAM;
-	for(int i = 0; i < 2; i++) {
-		delete[] _nametableRAM[i];
-	}
 
 	delete[] _ramReadHandlers;
 	delete[] _ramWriteHandlers;
@@ -41,7 +33,6 @@ MemoryManager::~MemoryManager()
 void MemoryManager::SetMapper(shared_ptr<BaseMapper> mapper)
 {
 	_mapper = mapper;
-	_mapper->SetDefaultNametables(_nametableRAM[0], _nametableRAM[1]);
 }
 
 void MemoryManager::Reset(bool softReset)
@@ -165,9 +156,7 @@ uint32_t MemoryManager::ToAbsolutePrgAddress(uint16_t ramAddr)
 void MemoryManager::StreamState(bool saving)
 {
 	ArrayInfo<uint8_t> internalRam = { _internalRAM, MemoryManager::InternalRAMSize };
-	ArrayInfo<uint8_t> nameTable0Ram = { _nametableRAM[0], MemoryManager::NameTableScreenSize };
-	ArrayInfo<uint8_t> nameTable1Ram = { _nametableRAM[1], MemoryManager::NameTableScreenSize };
-	Stream(internalRam, nameTable0Ram, nameTable1Ram);
+	Stream(internalRam);
 }
 
 uint8_t MemoryManager::GetOpenBus(uint8_t mask)

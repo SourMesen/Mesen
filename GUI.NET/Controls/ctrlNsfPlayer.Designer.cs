@@ -673,7 +673,7 @@
 			// 
 			// tmrUpdate
 			// 
-			this.tmrUpdate.Enabled = true;
+			this.tmrUpdate.Enabled = false;
 			this.tmrUpdate.Interval = 250;
 			this.tmrUpdate.Tick += new System.EventHandler(this.tmrUpdate_Tick);
 			// 

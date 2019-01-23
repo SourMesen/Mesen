@@ -8,10 +8,12 @@ class ArchiveReader;
 class RomLoader : public BaseLoader
 {
 private:
+	static constexpr int MaxFilesToCheck = 100;
+
 	RomData _romData;
 	string _filename;
 
-	static string FindMatchingRomInFile(string filePath, HashInfo hashInfo);
+	static string FindMatchingRomInFile(string filePath, HashInfo hashInfo, int &iterationCount);
 	
 public:
 	using BaseLoader::BaseLoader;

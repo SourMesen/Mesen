@@ -44,5 +44,5 @@ void CodeRunner::WriteRAM(uint16_t addr, uint8_t value)
 
 DisassemblyInfo CodeRunner::GetDisassemblyInfo(uint16_t cpuAddress)
 {
-	return DisassemblyInfo(_byteCode.data() + cpuAddress - CodeRunner::BaseAddress, false, false);
+	return DisassemblyInfo(_byteCode.data() + cpuAddress - CodeRunner::BaseAddress, false);
 }

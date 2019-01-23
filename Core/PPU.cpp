@@ -139,6 +139,19 @@ void PPU::SetNesModel(NesModel model)
 	_vblankEnd += _settings->GetPpuExtraScanlinesAfterNmi() + _settings->GetPpuExtraScanlinesBeforeNmi();
 }
 
+double PPU::GetOverclockRate()
+{
+	uint32_t regularVblankEnd;
+	switch(_nesModel) {
+		default:
+		case NesModel::NTSC: regularVblankEnd = 260; break;
+		case NesModel::PAL: regularVblankEnd = 310; break;
+		case NesModel::Dendy: regularVblankEnd = 310; break;
+	}
+
+	return (double)(_vblankEnd + 2) / (regularVblankEnd + 2);
+}
+
 void PPU::GetState(PPUDebugState &state)
 {
 	state.ControlFlags = _flags;
@@ -1075,16 +1088,19 @@ uint8_t PPU::ReadSpriteRam(uint8_t addr)
 	if(!_enableOamDecay) {
 		return _spriteRAM[addr];
 	} else {
-		int32_t cycle = _console->GetCpu()->GetCycleCount();
-		if(_oamDecayCycles[addr >> 3] >= cycle) {
-			_oamDecayCycles[addr >> 3] = cycle + 3000;
+		int32_t elapsedCycle = _console->GetCpu()->GetElapsedCycles(_oamDecayCycles[addr >> 3]);
+		if(elapsedCycle <= PPU::OamDecayCycleCount) {
+			_oamDecayCycles[addr >> 3] = _console->GetCpu()->GetCycleCount();
 			return _spriteRAM[addr];
 		} else {
-			//If this 8-byte row hasn't been read/written to in over 3000 cpu cycles (~1.7ms), return 0xFF to simulate decay
-			shared_ptr<Debugger> debugger = _console->GetDebugger(false);
-			if(debugger && debugger->CheckFlag(DebuggerFlags::BreakOnDecayedOamRead)) {
-				debugger->BreakImmediately(BreakSource::BreakOnDecayedOamRead);
+			if(_flags.SpritesEnabled) {
+				shared_ptr<Debugger> debugger = _console->GetDebugger(false);
+				if(debugger && debugger->CheckFlag(DebuggerFlags::BreakOnDecayedOamRead)) {
+					//When debugging with the break on decayed oam read flag turned on, break (only if sprite rendering is enabled to avoid false positives)
+					debugger->BreakImmediately(BreakSource::BreakOnDecayedOamRead);
+				}
 			}
+			//If this 8-byte row hasn't been read/written to in over 3000 cpu cycles (~1.7ms), return 0xFF to simulate decay
 			return 0x10;
 		}
 	}
@@ -1094,7 +1110,7 @@ void PPU::WriteSpriteRam(uint8_t addr, uint8_t value)
 {
 	_spriteRAM[addr] = value;
 	if(_enableOamDecay) {
-		_oamDecayCycles[addr >> 3] = _console->GetCpu()->GetCycleCount() + 3000;
+		_oamDecayCycles[addr >> 3] = _console->GetCpu()->GetCycleCount();
 	}
 }
 
@@ -1291,10 +1307,9 @@ uint8_t* PPU::GetSpriteRam()
 {
 	//Used by debugger
 	if(_enableOamDecay) {
-		int32_t cycle = _console->GetCpu()->GetCycleCount();
 		for(int i = 0; i < 0x100; i++) {
 			//Apply OAM decay to sprite RAM before letting debugger access it
-			if(_oamDecayCycles[i >> 3] < cycle) {
+			if(_console->GetCpu()->GetElapsedCycles(_oamDecayCycles[i >> 3]) > PPU::OamDecayCycleCount) {
 				_spriteRAM[i] = 0x10;
 			}
 		}
@@ -1327,18 +1342,14 @@ void PPU::StreamState(bool saving)
 		disableOamAddrBug = _settings->CheckFlag(EmulationFlags::DisableOamAddrBug);
 	}
 
-	uint16_t unusedSpriteDmaAddr = 0;
-	uint16_t unusedSpriteDmaCounter = 0;
-	bool unusedSkipScrollIncrement = false;
-
 	Stream(_state.Control, _state.Mask, _state.Status, _state.SpriteRamAddr, _state.VideoRamAddr, _state.XScroll, _state.TmpVideoRamAddr, _state.WriteToggle,
 		_state.HighBitShift, _state.LowBitShift, _flags.VerticalWrite, _flags.SpritePatternAddr, _flags.BackgroundPatternAddr, _flags.LargeSprites, _flags.VBlank,
 		_flags.Grayscale, _flags.BackgroundMask, _flags.SpriteMask, _flags.BackgroundEnabled, _flags.SpritesEnabled, _flags.IntensifyRed, _flags.IntensifyGreen,
 		_flags.IntensifyBlue, _paletteRamMask, _intensifyColorBits, _statusFlags.SpriteOverflow, _statusFlags.Sprite0Hit, _statusFlags.VerticalBlank, _scanline,
 		_cycle, _frameCount, _memoryReadBuffer, _currentTile.LowByte, _currentTile.HighByte, _currentTile.PaletteOffset, _nextTile.LowByte, _nextTile.HighByte,
 		_nextTile.PaletteOffset, _nextTile.TileAddr, _previousTile.LowByte, _previousTile.HighByte, _previousTile.PaletteOffset, _spriteIndex, _spriteCount,
-		_secondaryOAMAddr, _sprite0Visible, _oamCopybuffer, _spriteInRange, _sprite0Added, _spriteAddrH, _spriteAddrL, _oamCopyDone, _nesModel, unusedSpriteDmaAddr,
-		unusedSpriteDmaCounter, _prevRenderingEnabled, _renderingEnabled, _openBus, _ignoreVramRead, unusedSkipScrollIncrement, paletteRam, spriteRam, secondarySpriteRam,
+		_secondaryOAMAddr, _sprite0Visible, _oamCopybuffer, _spriteInRange, _sprite0Added, _spriteAddrH, _spriteAddrL, _oamCopyDone, _nesModel,
+		_prevRenderingEnabled, _renderingEnabled, _openBus, _ignoreVramRead, paletteRam, spriteRam, secondarySpriteRam,
 		openBusDecayStamp, _cyclesNeeded, disablePpu2004Reads, disablePaletteRead, disableOamAddrBug, _overflowBugCounter, _updateVramAddr, _updateVramAddrDelay,
 		_needStateUpdate, _ppuBusAddress);
 
@@ -1355,8 +1366,8 @@ void PPU::StreamState(bool saving)
 		UpdateMinimumDrawCycles();
 
 		for(int i = 0; i < 0x20; i++) {
-			//Set max value to ensure oam decay doesn't cause issues with savestates when used
-			_oamDecayCycles[i] = 0x7FFFFFFF;
+			//Set oam decay cycle to the current cycle to ensure it doesn't decay when loading a state
+			_oamDecayCycles[i] = _console->GetCpu()->GetCycleCount();
 		}
 
 		for(int i = 0; i < 257; i++) {

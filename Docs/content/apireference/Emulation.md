@@ -236,6 +236,22 @@ Runs the emulator for the specified number of cycles/instructions and then break
 **Description**  
 Resets the current game.  
 
+## stop ##
+
+**Syntax**  
+
+    emu.stop(exitCode)
+
+**Parameters**  
+exitCode - *Integer* The exit code that the Mesen process will return when exiting (when used in [test runner mode](/apireference.html#test-runner-mode))
+
+**Return value**  
+*None*
+
+**Description**  
+Stops and unloads the current game.  When in [test runner mode](/apireference.html#test-runner-mode), this will also exit Mesen itself and the Mesen process will return the specified exit code.  
+
+
 ## resume ##
 
 **Syntax**  

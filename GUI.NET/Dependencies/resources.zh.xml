@@ -221,6 +221,11 @@
 			<Control ID="chkDisplayPort4">玩家 4</Control>
 			<Control ID="lblDisplayPosition">显示位置:</Control>
 			<Control ID="chkDisplayInputHorizontally">横向</Control>
+
+			<Control ID="lblSmall">小</Control>
+			<Control ID="lblLarge">大</Control>
+			<Control ID="lblDeadzone">Controller axis deadzone size:</Control>
+			
 			<Control ID="chkHideMousePointerForZapper">使用手枪时隐藏鼠标指针</Control>
 
 			<Control ID="lblKeyBinding">警告：您当前的配置包含冲突的键绑定 - 键盘或游戏手柄上的某些物理按钮映射到NES控制器上的多个按钮.如果这不是故意的，请查看并更正您的按键绑定.</Control>
@@ -289,6 +294,8 @@
 
 			<Control ID="tpgAdvanced">高级</Control>
 			<Control ID="lblScreenRotation">屏幕旋转:</Control>
+			<Control ID="chkRemoveSpriteLimit">不限制精灵 (缓解闪烁症状)</Control>
+			<Control ID="chkAdaptiveSpriteLimit">在必要时自动重新限制精灵 (缓解取消限制精灵导致的画面问题)</Control>
 			<Control ID="chkDisableBackground">禁用背景</Control>
 			<Control ID="chkDisableSprites">禁用精灵</Control>
 			<Control ID="chkForceBackgroundFirstColumn">在第一列强制显示背景</Control>
@@ -306,10 +313,10 @@
 			<Control ID="lblRewindSpeed">快退速度:</Control>
 
 			<Control ID="tpgAdvanced">高级</Control>
+			<Control ID="lblDeveloperSettings">Recommended settings for developers (homebrew / ROM hacking)</Control>
+			<Control ID="lblMiscSettings">其他</Control>
 			<Control ID="chkUseAlternativeMmc3Irq">使用 MMC3 IRQ 替代行为</Control>
 			<Control ID="chkAllowInvalidInput">允许无效按键 (例如同时按下↑↓/←→)</Control>
-			<Control ID="chkRemoveSpriteLimit">不限制精灵 (缓解闪烁症状)</Control>
-			<Control ID="chkAdaptiveSpriteLimit">在必要时自动重新限制精灵 (缓解取消限制精灵导致的画面问题)</Control>
 			<Control ID="chkEnableOamDecay">模拟 OAM 和 RAM 损坏</Control>
 			<Control ID="chkDisablePpu2004Reads">禁止读取 PPU $2004 地址 (FC 真机)</Control>
 			<Control ID="chkDisableOamAddrBug">不模拟 PPU OAM 地址 BUG</Control>

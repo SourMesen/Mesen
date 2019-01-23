@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace Mesen.GUI.Debugger.Controls
 {
 	public delegate void SetNextStatementEventHandler(AddressEventArgs args);
-	public delegate void ShowInSplitViewEventHandler(ICodeViewer sender, AddressEventArgs args);
+	public delegate void ShowInSplitViewEventHandler(ICodeViewer sender, GoToDestination dest);
 	public delegate void SwitchToSourceEventHandler(ICodeViewer sender);
 
 	public interface ICodeViewer
@@ -18,6 +18,7 @@ namespace Mesen.GUI.Debugger.Controls
 		void SetConfig(DebugViewInfo config, bool disableActions = false);
 		void EditSubroutine();
 		void EditSelectedCode();
+		void EditSourceFile();
 
 		void SetMessage(TextboxMessageInfo message);
 
@@ -27,7 +28,9 @@ namespace Mesen.GUI.Debugger.Controls
 
 		UInt32? ActiveAddress { get; }
 
+		void FindAllOccurrences(Ld65DbgImporter.SymbolInfo symbol);
 		void FindAllOccurrences(string text, bool matchWholeWord, bool matchCase);
+
 		void SelectActiveAddress(UInt32 activeAddress);
 		void ClearActiveAddress();
 		AddressTypeInfo GetAddressInfo(int lineIndex);

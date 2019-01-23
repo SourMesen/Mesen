@@ -959,7 +959,7 @@ namespace Mesen.GUI.Forms.Config
 			this.lblVsDualShowVideo.Location = new System.Drawing.Point(10, 7);
 			this.lblVsDualShowVideo.Margin = new System.Windows.Forms.Padding(10, 0, 3, 0);
 			this.lblVsDualShowVideo.Name = "lblVsDualShowVideo";
-			this.lblVsDualShowVideo.Size = new System.Drawing.Size(114, 13);
+			this.lblVsDualShowVideo.Size = new System.Drawing.Size(81, 13);
 			this.lblVsDualShowVideo.TabIndex = 4;
 			this.lblVsDualShowVideo.Text = "Show video for:";
 			// 
@@ -967,7 +967,7 @@ namespace Mesen.GUI.Forms.Config
 			// 
 			this.cboVsDualVideoOutput.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.cboVsDualVideoOutput.FormattingEnabled = true;
-			this.cboVsDualVideoOutput.Location = new System.Drawing.Point(130, 3);
+			this.cboVsDualVideoOutput.Location = new System.Drawing.Point(97, 3);
 			this.cboVsDualVideoOutput.Name = "cboVsDualVideoOutput";
 			this.cboVsDualVideoOutput.Size = new System.Drawing.Size(127, 21);
 			this.cboVsDualVideoOutput.TabIndex = 5;

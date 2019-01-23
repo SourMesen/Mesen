@@ -1,6 +1,6 @@
 ---
 title: PPU Viewer
-weight: 15
+weight: 20
 pre: ""
 chapter: false
 ---
@@ -10,6 +10,8 @@ The PPU Viewer is a collection of tools allowing you to view/edit the current st
 All tabs share some common settings:
 
 * **Auto-refresh**: Enabled by default, this makes the PPU viewer refresh at a rate of 15 FPS.
+* **Auto-refresh speed**: Configures at what speed the PPU viewer will refresh itself (15/30/60 FPS)
+* **Show information overlay**: When enabled, a mouse-over overlay is shown in the nametable/CHR/sprite viewers with information on the tile/sprite below the mouse cursor.
 * **When emulation is running, show PPU data at scanline [y] and cycle [x]**: When using the auto-refresh option, this allows you to control at which point in a frame (cycle & scanline) the data is refreshed while the emulation is running. This is useful for games that perform CHR bank switching in the middle of a frame, for example.
 
 ## Nametable Viewer ##
@@ -21,19 +23,32 @@ All tabs share some common settings:
 
 The nametable viewer displays the contents of all 4 nametables (PPU addresses $2000 to $2FFF).  
 Mouve-over a tile to display that tile's information on the right.
+<kbd>**Double-click**</kbd> on a tile in the nametable viewer to view/edit it in the CHR Viewer.
+
+Additionally, you can <kbd>**right-click**</kbd> on a tile to get more options:  
+
+* **Edit in Memory Viewer**: Opens up the memory tools at this specific tile's location in nametable memory.
+* **View in CHR Viewer**: Switches to the CHR Viewer and selects the tile (same as double-clicking)
+* **Copy Tile (HD Pack format)**: Copies the tile's information (text) to the clipboard (for use with [HD Packs](/hdpacks.html)).
+* **Copy image to clipboard**: Copies the nametable to the clipboard.
+* **Export image to PNG**: Exports the current nametable image to a PNG file.
+
 There are also a number of display options:
 
 * **Show PPU Scroll Overlay**: Shows a blue rectangular overlay showing the current scroll position of the screen.
+* **Show attribute colors only**: When enabled, the viewer will show the 4 colors available in each tile, rather than the actual contents of the nametables. This can be useful when trying to debug attribute-related coloring issues.
 * **Show Tile Grid**: Displays a 8x8 pixels <span class="red">red</span> grid.
 * **Show Attribute Grid**: Displays a 16x16 pixels <span class="blue">blue</span> grid.
 * **Use Grayscale Palette**: Forces the nametables to be shown in a 4-color grayscale palette.
-* **Highlight Tile Updates**: Displays a 8x8 red square overlay over tiles that have changed since the last frame.
-* **Highlight Attribute Updates**: Displays a 16x16 yellow square overlay over attributes that have changed since the last frame.
 * **Highlight tile selected in CHR viewer**: When enabled, click on a tile in the CHR viewer to select it, all occurrences of that tile will then be marked by a <span class="red">red</span> rectangle in the nametable viewer. 
 
-<kbd>**Double-click**</kbd> on a tile in the nametable viewer to view/edit it in the CHR Viewer.
+### Update Highlighting ###
 
-Additionally, you can <kbd>**right-click**</kbd> on a tile to copy the tile's information to the clipboard (for use with [HD Packs](/hdpacks.html)).
+The nametable viewer can display nametable (tiles and attributes) updates by highlighting the tiles affected by the updates.
+
+* **Tile Updates**: Displays a 8x8 red square overlay over tiles that have changed since the last frame.
+* **Attribute Updates**: Displays a 16x16 yellow square overlay over attributes that have changed since the last frame.
+* **Ignore writes that do not alter data**: By default, all memory locations written to during the last frame will be highlighted. By enabling this option, only memory locations that have changed value will be highlighted.
 
 ## CHR Viewer/Editor ##
 
@@ -83,6 +98,8 @@ Like the nametable viewer, <kbd>**double-click**</kbd> on a tile to view/edit it
 
 Additionally, you can <kbd>**right-click**</kbd> on a tile to copy the tile's information to the clipboard (for use with [HD Packs](/hdpacks.html)).
 
+**Display outline around all sprites in preview**: When enabled, all the sprites shown in the preview screen will be highlighted by a white rectangle.
+
 ## Palette Viewer/Editor ##
 
 <div class="imgBox"><div>
@@ -93,3 +110,23 @@ Additionally, you can <kbd>**right-click**</kbd> on a tile to copy the tile's in
 The Palette Viewer displays basic information about the current state of palette RAM.  
 It shows which colors are configured in each of the 8 available palettes.  
 You can click on any color to select another color for that slot.
+
+## Compact View ##
+
+<div class="imgBox"><div>
+	<img src="/images/SpriteViewerCompact.png" />
+	<span>Sprite Viewer (Compact View)</span>
+</div></div>
+
+<div class="imgBox" style="clear: none;"><div>
+	<img src="/images/PaletteViewerCompact.png" />
+	<span>Palette Viewer (Compact View)</span>
+</div></div>
+
+All PPU viewer tabs can be toggled to a standalone compact window, this can be done by pressing on the green arrow at the top right of the window. There is also a customizable keyboard shortcut for this (Default: `Ctrl+Q`) and the windows can be opened in compact mode directly using keyboard shortcuts or the `PPU Viewer (Compact)` menu in the `Tools` or `Debug` menus.  
+
+The compact viewers save their own position independently from the regular full-sized PPU window.
+
+## Zoomed View ##
+
+In addition to the compact view, it's also possible to double the size of the viewers by clicking on the `2x` button next to the compact view button at the top right of the window. There is a shortcut for this as well (Default: `Ctrl+W`).

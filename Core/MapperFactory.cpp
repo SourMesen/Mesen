@@ -663,7 +663,7 @@ shared_ptr<BaseMapper> MapperFactory::InitializeFromFile(shared_ptr<Console> con
 	if(loader.LoadFile(romFilename, fileData)) {
 		RomData romData = loader.GetRomData();
 
-		if(romData.Info.IsInDatabase || romData.Info.IsNes20Header) {
+		if((romData.Info.IsInDatabase || romData.Info.IsNes20Header) && romData.Info.InputType != GameInputType::Unspecified) {
 			//If in DB or a NES 2.0 file, auto-configure the inputs
 			if(console->GetSettings()->CheckFlag(EmulationFlags::AutoConfigureInput)) {
 				console->GetSettings()->InitializeInputDevices(romData.Info.InputType, romData.Info.System, false);

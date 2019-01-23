@@ -71,6 +71,11 @@
 			this.lblDisplayPosition = new System.Windows.Forms.Label();
 			this.cboDisplayInputPosition = new System.Windows.Forms.ComboBox();
 			this.chkHideMousePointerForZapper = new Mesen.GUI.Controls.ctrlRiskyOption();
+			this.tableLayoutPanel4 = new System.Windows.Forms.TableLayoutPanel();
+			this.lblDeadzone = new System.Windows.Forms.Label();
+			this.trkControllerDeadzoneSize = new System.Windows.Forms.TrackBar();
+			this.lblSmall = new System.Windows.Forms.Label();
+			this.lblLarge = new System.Windows.Forms.Label();
 			this.tabMain.SuspendLayout();
 			this.tpgControllers.SuspendLayout();
 			this.tlpControllers.SuspendLayout();
@@ -83,6 +88,8 @@
 			this.tableLayoutPanel3.SuspendLayout();
 			this.flowLayoutPanel2.SuspendLayout();
 			this.flowLayoutPanel3.SuspendLayout();
+			this.tableLayoutPanel4.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.trkControllerDeadzoneSize)).BeginInit();
 			this.SuspendLayout();
 			// 
 			// baseConfigPanel
@@ -453,11 +460,13 @@
 			this.tableLayoutPanel2.ColumnCount = 1;
 			this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this.tableLayoutPanel2.Controls.Add(this.grpDisplayInput, 0, 0);
-			this.tableLayoutPanel2.Controls.Add(this.chkHideMousePointerForZapper, 0, 1);
+			this.tableLayoutPanel2.Controls.Add(this.chkHideMousePointerForZapper, 0, 2);
+			this.tableLayoutPanel2.Controls.Add(this.tableLayoutPanel4, 0, 1);
 			this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tableLayoutPanel2.Location = new System.Drawing.Point(0, 0);
 			this.tableLayoutPanel2.Name = "tableLayoutPanel2";
-			this.tableLayoutPanel2.RowCount = 3;
+			this.tableLayoutPanel2.RowCount = 4;
+			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
@@ -590,11 +599,72 @@
 			// 
 			this.chkHideMousePointerForZapper.Checked = false;
 			this.chkHideMousePointerForZapper.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.chkHideMousePointerForZapper.Location = new System.Drawing.Point(0, 96);
+			this.chkHideMousePointerForZapper.Location = new System.Drawing.Point(0, 151);
 			this.chkHideMousePointerForZapper.Name = "chkHideMousePointerForZapper";
 			this.chkHideMousePointerForZapper.Size = new System.Drawing.Size(362, 23);
 			this.chkHideMousePointerForZapper.TabIndex = 2;
 			this.chkHideMousePointerForZapper.Text = "Hide mouse pointer when using zapper";
+			// 
+			// tableLayoutPanel4
+			// 
+			this.tableLayoutPanel4.ColumnCount = 4;
+			this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+			this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+			this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+			this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+			this.tableLayoutPanel4.Controls.Add(this.lblDeadzone, 0, 0);
+			this.tableLayoutPanel4.Controls.Add(this.trkControllerDeadzoneSize, 1, 0);
+			this.tableLayoutPanel4.Controls.Add(this.lblSmall, 1, 1);
+			this.tableLayoutPanel4.Controls.Add(this.lblLarge, 2, 1);
+			this.tableLayoutPanel4.Location = new System.Drawing.Point(0, 96);
+			this.tableLayoutPanel4.Margin = new System.Windows.Forms.Padding(0);
+			this.tableLayoutPanel4.Name = "tableLayoutPanel4";
+			this.tableLayoutPanel4.RowCount = 2;
+			this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+			this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+			this.tableLayoutPanel4.Size = new System.Drawing.Size(356, 55);
+			this.tableLayoutPanel4.TabIndex = 3;
+			// 
+			// lblDeadzone
+			// 
+			this.lblDeadzone.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.lblDeadzone.AutoSize = true;
+			this.lblDeadzone.Location = new System.Drawing.Point(3, 11);
+			this.lblDeadzone.Name = "lblDeadzone";
+			this.lblDeadzone.Size = new System.Drawing.Size(146, 13);
+			this.lblDeadzone.TabIndex = 0;
+			this.lblDeadzone.Text = "Controller axis deadzone size:";
+			// 
+			// trkControllerDeadzoneSize
+			// 
+			this.trkControllerDeadzoneSize.BackColor = System.Drawing.SystemColors.ControlLightLight;
+			this.tableLayoutPanel4.SetColumnSpan(this.trkControllerDeadzoneSize, 2);
+			this.trkControllerDeadzoneSize.LargeChange = 1;
+			this.trkControllerDeadzoneSize.Location = new System.Drawing.Point(155, 3);
+			this.trkControllerDeadzoneSize.Maximum = 4;
+			this.trkControllerDeadzoneSize.Name = "trkControllerDeadzoneSize";
+			this.trkControllerDeadzoneSize.Size = new System.Drawing.Size(106, 29);
+			this.trkControllerDeadzoneSize.TabIndex = 1;
+			// 
+			// lblSmall
+			// 
+			this.lblSmall.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.lblSmall.AutoSize = true;
+			this.lblSmall.Location = new System.Drawing.Point(155, 38);
+			this.lblSmall.Name = "lblSmall";
+			this.lblSmall.Size = new System.Drawing.Size(32, 13);
+			this.lblSmall.TabIndex = 2;
+			this.lblSmall.Text = "Small";
+			// 
+			// lblLarge
+			// 
+			this.lblLarge.Anchor = System.Windows.Forms.AnchorStyles.Right;
+			this.lblLarge.AutoSize = true;
+			this.lblLarge.Location = new System.Drawing.Point(227, 38);
+			this.lblLarge.Name = "lblLarge";
+			this.lblLarge.Size = new System.Drawing.Size(34, 13);
+			this.lblLarge.TabIndex = 3;
+			this.lblLarge.Text = "Large";
 			// 
 			// frmInputConfig
 			// 
@@ -628,6 +698,9 @@
 			this.flowLayoutPanel2.PerformLayout();
 			this.flowLayoutPanel3.ResumeLayout(false);
 			this.flowLayoutPanel3.PerformLayout();
+			this.tableLayoutPanel4.ResumeLayout(false);
+			this.tableLayoutPanel4.PerformLayout();
+			((System.ComponentModel.ISupportInitialize)(this.trkControllerDeadzoneSize)).EndInit();
 			this.ResumeLayout(false);
 
 		}
@@ -677,5 +750,10 @@
 		private System.Windows.Forms.ComboBox cboCartridge;
 		private System.Windows.Forms.Button btnSetupCartridge;
 		private Controls.ctrlRiskyOption chkHideMousePointerForZapper;
+		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel4;
+		private System.Windows.Forms.Label lblDeadzone;
+		private System.Windows.Forms.TrackBar trkControllerDeadzoneSize;
+		private System.Windows.Forms.Label lblSmall;
+		private System.Windows.Forms.Label lblLarge;
 	}
 }

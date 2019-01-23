@@ -218,6 +218,11 @@
 			<Control ID="chkDisplayPort4">Joueur 4</Control>
 			<Control ID="lblDisplayPosition">Position d'affichage :</Control>
 			<Control ID="chkDisplayInputHorizontally">Afficher horizontalement</Control>
+
+			<Control ID="lblSmall">Petit</Control>
+			<Control ID="lblLarge">Large</Control>
+			<Control ID="lblDeadzone">Taille du deadzone :</Control>
+
 			<Control ID="chkHideMousePointerForZapper">Cacher la souris lorsqu'un zapper est connecté</Control>
 
 			<Control ID="lblKeyBinding">Attention: Votre configuration actuelle contient des conflits - certaines touches sur votre clavier ou manette sont mappées à plusieurs boutons sur la console. Veuillez réviser votre configuration et la corriger au besoin.</Control>
@@ -282,6 +287,8 @@
 
 			<Control ID="tpgAdvanced">Avancé</Control>
 			<Control ID="lblScreenRotation">Rotation de l'écran :</Control>
+			<Control ID="chkRemoveSpriteLimit">Éliminer la limite de sprites (Réduit le clignotement dans certains jeux)</Control>
+			<Control ID="chkAdaptiveSpriteLimit">Automatiquement réactiver la limite de sprites au besoin pour réduire les problèmes graphiques</Control>
 			<Control ID="chkDisableBackground">Désactiver l'arrière-plan</Control>
 			<Control ID="chkDisableSprites">Désactiver les sprites</Control>
 			<Control ID="chkForceBackgroundFirstColumn">Forcer l'affichage de l'arrière-plan dans la première colonne</Control>
@@ -300,10 +307,10 @@
 			<Control ID="lblRewindSpeed">Vitesse du rembobinage :</Control>
 
 			<Control ID="tpgAdvanced">Avancé</Control>
+			<Control ID="lblDeveloperSettings">Options recommandées pour les développeurs (homebrew / ROM hacking)</Control>
+			<Control ID="lblMiscSettings">Options diverses</Control>
 			<Control ID="chkUseAlternativeMmc3Irq">Utiliser la version alternative du comportement des IRQs du MMC3</Control>
 			<Control ID="chkAllowInvalidInput">Permettre les entrées invalides (Bas+Haut ou Gauche+Droite en même temps)</Control>
-			<Control ID="chkRemoveSpriteLimit">Éliminer la limite de sprites (Réduit le clignotement dans certains jeux)</Control>
-			<Control ID="chkAdaptiveSpriteLimit">Automatiquement réactiver la limite de sprites au besoin pour réduire les problèmes graphiques</Control>
 			<Control ID="chkEnableOamDecay">Activer l'émulation de la dégradation de la mémoire OAM</Control>
 			<Control ID="chkDisablePpu2004Reads">Empêcher la lecture du registre $2004 du PPU (Famicom)</Control>
 			<Control ID="chkDisableOamAddrBug">Désactiver l'émulation du bug de OAMADDR du PPU</Control>

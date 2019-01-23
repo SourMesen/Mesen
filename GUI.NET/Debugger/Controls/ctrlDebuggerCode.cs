@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using Mesen.GUI.Debugger.Controls;
 using Mesen.GUI.Config;
 using Mesen.GUI.Controls;
+using System.Text.RegularExpressions;
 
 namespace Mesen.GUI.Debugger
 {
@@ -38,7 +39,15 @@ namespace Mesen.GUI.Debugger
 
 				ctrlFindOccurrences.Viewer = this;
 				splitContainer.Panel2Collapsed = true;
+
+				this.SymbolProvider = DebugWorkspaceManager.SymbolProvider;
+				DebugWorkspaceManager.SymbolProviderChanged += UpdateSymbolProvider;
 			}
+		}
+
+		private void UpdateSymbolProvider(Ld65DbgImporter symbolProvider)
+		{
+			this.SymbolProvider = symbolProvider;
 		}
 
 		public void SetConfig(DebugViewInfo config, bool disableActions = false)
@@ -223,11 +232,6 @@ namespace Mesen.GUI.Debugger
 			}
 		}
 		
-		private void ctrlCodeViewer_MouseLeave(object sender, EventArgs e)
-		{
-			_tooltipManager.Close();
-		}
-		
 		private Breakpoint GetCurrentLineBreakpoint()
 		{
 			AddressTypeInfo addressInfo = GetAddressInfo(ctrlCodeViewer.SelectedLine);
@@ -245,8 +249,6 @@ namespace Mesen.GUI.Debugger
 			} else {
 				this.ctrlCodeViewer.ContextMenuStrip = _codeViewerActions.contextMenu;
 			}
-
-			_tooltipManager.ProcessMouseMove(e.Location);
 		}
 
 		protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
@@ -262,20 +264,8 @@ namespace Mesen.GUI.Debugger
 
 		private void ctrlCodeViewer_MouseDown(object sender, MouseEventArgs e)
 		{
-			_tooltipManager.Close();
-
 			if(e.Button == MouseButtons.Left && e.Location.X < this.ctrlCodeViewer.CodeMargin / 4) {
-				int lineIndex = ctrlCodeViewer.GetLineIndexAtPosition(e.Y);
-				int relativeAddress = ctrlCodeViewer.GetLineNumber(lineIndex);
-				if(relativeAddress < 0 && ctrlCodeViewer.LineCount > lineIndex + 1) {
-					//Current line has no address, try using the next line instead.
-					//(Used when trying to set a breakpoint on a row containing only a label)
-					lineIndex++;
-					relativeAddress = ctrlCodeViewer.GetLineNumber(lineIndex);
-				}
-
-				AddressTypeInfo info = GetAddressInfo(lineIndex);
-				BreakpointManager.ToggleBreakpoint(relativeAddress, info, false);
+				_codeViewerActions.ToggleBreakpoint(false);
 			}
 		}
 
@@ -298,12 +288,7 @@ namespace Mesen.GUI.Debugger
 				}
 			}
 		}
-
-		private void ctrlCodeViewer_ScrollPositionChanged(object sender, EventArgs e)
-		{
-			_tooltipManager?.Close();
-		}
-
+		
 		private void ctrlCodeViewer_MouseDoubleClick(object sender, MouseEventArgs e)
 		{
 			if(e.Location.X > this.ctrlCodeViewer.CodeMargin / 2 && e.Location.X < this.ctrlCodeViewer.CodeMargin) {
@@ -369,9 +354,56 @@ namespace Mesen.GUI.Debugger
 			}
 		}
 
+		public void EditSourceFile()
+		{
+			//TODO: Not supported yet
+		}
+
+		public void FindAllOccurrences(Ld65DbgImporter.SymbolInfo symbol)
+		{
+			FindAllOccurrences(symbol.Name, true, true);
+		}
+
 		public void FindAllOccurrences(string text, bool matchWholeWord, bool matchCase)
 		{
-			ctrlFindOccurrences.FindAllOccurrences(text, matchWholeWord, matchCase);
+			List<FindAllOccurrenceResult> results = new List<FindAllOccurrenceResult>();
+
+			string regexPattern;
+			if(matchWholeWord) {
+				regexPattern = $"([^0-9a-zA-Z_#@]+|^){Regex.Escape(text)}([^0-9a-zA-Z_#@]+|$)";
+			} else {
+				regexPattern = Regex.Escape(text);
+			}
+
+			Regex regex = new Regex(regexPattern, matchCase ? RegexOptions.None : RegexOptions.IgnoreCase);
+
+			for(int i = 0, len = ctrlCodeViewer.LineCount; i < len; i++) {
+				string line = ctrlCodeViewer.GetLineContent(i);
+				if(regex.IsMatch(line)) {
+					if(line.StartsWith("__") && line.EndsWith("__")) {
+						line = "Function: " + line.Substring(2, line.Length - 4);
+					}
+					if(line.StartsWith("--") && line.EndsWith("--")) {
+						continue;
+					}
+
+					int j = i;
+					while(j < ctrlCodeViewer.LineCount && ctrlCodeViewer.GetLineNumber(j) < 0) {
+						j++;
+					}
+
+					int cpuAddress = ctrlCodeViewer.GetLineNumber(j);
+					results.Add(new FindAllOccurrenceResult() {
+						MatchedLine = line,
+						Location = "$" + cpuAddress.ToString("X4"),
+						Destination = new GoToDestination() {
+							CpuAddress = cpuAddress
+						}
+					});
+				}
+			}
+
+			ctrlFindOccurrences.FindAllOccurrences(text, results);
 			this.splitContainer.Panel2Collapsed = false;
 		}
 
@@ -414,6 +446,7 @@ namespace Mesen.GUI.Debugger
 					progress.Current = (int)state.OpCycle;
 					progress.Maxixum = frmOpCodeTooltip.OpCycles[state.OpCode];
 					switch(state.OpMemoryOperationType) {
+						case InteropMemoryOperationType.DmcRead: progress.Color = Color.FromArgb(255, 160, 221); progress.Text = "DMC"; break;
 						case InteropMemoryOperationType.DummyRead: progress.Color = Color.FromArgb(184, 160, 255); progress.Text = "DR"; break;
 						case InteropMemoryOperationType.DummyWrite: progress.Color = Color.FromArgb(255, 245, 137); progress.Text = "DW"; break;
 						case InteropMemoryOperationType.Read: progress.Color = Color.FromArgb(150, 176, 255); progress.Text = "R"; break;

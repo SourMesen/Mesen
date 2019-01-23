@@ -33,6 +33,8 @@
 			this.chkDbgImportComments = new System.Windows.Forms.CheckBox();
 			this.chkDbgImportPrgRomLabels = new System.Windows.Forms.CheckBox();
 			this.chkDbgImportRamLabels = new System.Windows.Forms.CheckBox();
+			this.chkDbgImportWorkRamLabels = new System.Windows.Forms.CheckBox();
+			this.chkDbgImportSaveRamLabels = new System.Windows.Forms.CheckBox();
 			this.groupBox2 = new System.Windows.Forms.GroupBox();
 			this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
 			this.chkMlbImportPrgRomLabels = new System.Windows.Forms.CheckBox();
@@ -90,25 +92,28 @@
 			// 
 			this.tableLayoutPanel2.ColumnCount = 1;
 			this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel2.Controls.Add(this.chkDbgImportComments, 0, 2);
-			this.tableLayoutPanel2.Controls.Add(this.chkDbgImportPrgRomLabels, 0, 1);
+			this.tableLayoutPanel2.Controls.Add(this.chkDbgImportComments, 0, 4);
 			this.tableLayoutPanel2.Controls.Add(this.chkDbgImportRamLabels, 0, 0);
+			this.tableLayoutPanel2.Controls.Add(this.chkDbgImportWorkRamLabels, 0, 1);
+			this.tableLayoutPanel2.Controls.Add(this.chkDbgImportPrgRomLabels, 0, 3);
+			this.tableLayoutPanel2.Controls.Add(this.chkDbgImportSaveRamLabels, 0, 2);
 			this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tableLayoutPanel2.Location = new System.Drawing.Point(3, 16);
 			this.tableLayoutPanel2.Name = "tableLayoutPanel2";
-			this.tableLayoutPanel2.RowCount = 4;
+			this.tableLayoutPanel2.RowCount = 6;
+			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
 			this.tableLayoutPanel2.Size = new System.Drawing.Size(197, 151);
 			this.tableLayoutPanel2.TabIndex = 0;
 			// 
 			// chkDbgImportComments
 			// 
 			this.chkDbgImportComments.AutoSize = true;
-			this.chkDbgImportComments.Location = new System.Drawing.Point(3, 49);
+			this.chkDbgImportComments.Location = new System.Drawing.Point(3, 95);
 			this.chkDbgImportComments.Name = "chkDbgImportComments";
 			this.chkDbgImportComments.Size = new System.Drawing.Size(106, 17);
 			this.chkDbgImportComments.TabIndex = 2;
@@ -118,7 +123,7 @@
 			// chkDbgImportPrgRomLabels
 			// 
 			this.chkDbgImportPrgRomLabels.AutoSize = true;
-			this.chkDbgImportPrgRomLabels.Location = new System.Drawing.Point(3, 26);
+			this.chkDbgImportPrgRomLabels.Location = new System.Drawing.Point(3, 72);
 			this.chkDbgImportPrgRomLabels.Name = "chkDbgImportPrgRomLabels";
 			this.chkDbgImportPrgRomLabels.Size = new System.Drawing.Size(139, 17);
 			this.chkDbgImportPrgRomLabels.TabIndex = 1;
@@ -134,6 +139,26 @@
 			this.chkDbgImportRamLabels.TabIndex = 0;
 			this.chkDbgImportRamLabels.Text = "Import RAM labels";
 			this.chkDbgImportRamLabels.UseVisualStyleBackColor = true;
+			// 
+			// chkDbgImportWorkRamLabels
+			// 
+			this.chkDbgImportWorkRamLabels.AutoSize = true;
+			this.chkDbgImportWorkRamLabels.Location = new System.Drawing.Point(3, 26);
+			this.chkDbgImportWorkRamLabels.Name = "chkDbgImportWorkRamLabels";
+			this.chkDbgImportWorkRamLabels.Size = new System.Drawing.Size(141, 17);
+			this.chkDbgImportWorkRamLabels.TabIndex = 3;
+			this.chkDbgImportWorkRamLabels.Text = "Import Work RAM labels";
+			this.chkDbgImportWorkRamLabels.UseVisualStyleBackColor = true;
+			// 
+			// chkDbgImportSaveRamLabels
+			// 
+			this.chkDbgImportSaveRamLabels.AutoSize = true;
+			this.chkDbgImportSaveRamLabels.Location = new System.Drawing.Point(3, 49);
+			this.chkDbgImportSaveRamLabels.Name = "chkDbgImportSaveRamLabels";
+			this.chkDbgImportSaveRamLabels.Size = new System.Drawing.Size(140, 17);
+			this.chkDbgImportSaveRamLabels.TabIndex = 4;
+			this.chkDbgImportSaveRamLabels.Text = "Import Save RAM labels";
+			this.chkDbgImportSaveRamLabels.UseVisualStyleBackColor = true;
 			// 
 			// groupBox2
 			// 
@@ -310,5 +335,7 @@
 		private System.Windows.Forms.GroupBox grpGeneral;
 		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel4;
 		private System.Windows.Forms.CheckBox chkResetLabelsOnImport;
+		private System.Windows.Forms.CheckBox chkDbgImportWorkRamLabels;
+		private System.Windows.Forms.CheckBox chkDbgImportSaveRamLabels;
 	}
 }

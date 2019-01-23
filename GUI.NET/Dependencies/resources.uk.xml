@@ -217,6 +217,11 @@
 			<Control ID="chkDisplayPort4">Порт 4</Control>
 			<Control ID="lblDisplayPosition">Позиція :</Control>
 			<Control ID="chkDisplayInputHorizontally">Відображати горизонтально</Control>
+
+			<Control ID="lblSmall">Малий</Control>
+			<Control ID="lblLarge">Великий</Control>
+			<Control ID="lblDeadzone">Controller axis deadzone size:</Control>
+			
 			<Control ID="chkHideMousePointerForZapper">Hide mouse pointer when using zapper</Control>
 
 			<Control ID="lblKeyBinding">Увага: Ваша поточна конфігурація містить конфліктуючі поєднання клавіш - деякі фізичні кнопки на вашому ключовому словнику або геймпадi відображаються на кількох кнопках на контролері NES. Якщо це не навмисне, перегляньте та виправте ключi.</Control>
@@ -281,6 +286,8 @@
 
 			<Control ID="tpgAdvanced">Розширенi</Control>
 			<Control ID="lblScreenRotation">Обертання екрана:</Control>
+			<Control ID="chkRemoveSpriteLimit">Відключити ліміт спрайтів (зменшує мерехтіння)</Control>
+			<Control ID="chkAdaptiveSpriteLimit">Автоматичне повторне ввімкнення обмеження спрайтiв якщо потрібно щоб зменшити проблеми з графікою</Control>
 			<Control ID="chkDisableBackground">Вимкнути фон</Control>
 			<Control ID="chkDisableSprites">Вимкнути спрайти</Control>
 			<Control ID="chkForceBackgroundFirstColumn">Примусове відображення фону в першому стовпчику</Control>
@@ -299,11 +306,11 @@
 			<Control ID="lblRewindSpeed">Швидкість перемотування:</Control>
 
 			<Control ID="tpgAdvanced">Розширені</Control>
+			<Control ID="lblDeveloperSettings">Recommended settings for developers (homebrew / ROM hacking)</Control>
+			<Control ID="lblMiscSettings">Різнi настройки</Control>
 			<Control ID="chkUseAlternativeMmc3Irq">Використовувати альтернативний IRQ MMC3</Control>
 			<Control ID="chkAllowInvalidInput">Дозволити неприпустимі комбінації (Вниз+Вгору і Ліворуч+Вправо)</Control>
 			<Control ID="lblRamPowerOnState">Вміст ОЗУ при включенні : </Control>
-			<Control ID="chkRemoveSpriteLimit">Відключити ліміт спрайтів (зменшує мерехтіння)</Control>
-			<Control ID="chkAdaptiveSpriteLimit">Автоматичне повторне ввімкнення обмеження спрайтiв якщо потрібно щоб зменшити проблеми з графікою</Control>
 			<Control ID="chkEnableOamDecay">Увімкнути емуляцію погіршення пам'яті OAM</Control>
 			<Control ID="chkDisablePpu2004Reads">Запобігання ведення реєстру PPU $2004 (Famicom)</Control>
 			<Control ID="chkDisableOamAddrBug">Вимкнути емуляцію помилок OAMADDR з PPU</Control>

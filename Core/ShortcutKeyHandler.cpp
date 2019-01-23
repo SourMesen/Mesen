@@ -20,6 +20,7 @@ ShortcutKeyHandler::ShortcutKeyHandler(shared_ptr<Console> console)
 	_keySetIndex = 0;
 	_isKeyUp = false;
 	_keyboardMode = false;
+	_repeatStarted = false;
 
 	_stopThread = false;
 	_thread = std::thread([=]() {
@@ -94,6 +95,25 @@ bool ShortcutKeyHandler::DetectKeyRelease(EmulatorShortcut shortcut)
 		}
 	}
 	return false;
+}
+
+void ShortcutKeyHandler::ProcessRunSingleFrame()
+{
+	EmulationSettings* settings = _console->GetSettings();
+	if(!_runSingleFrameRepeatTimer) {
+		_runSingleFrameRepeatTimer.reset(new Timer());
+	}
+	_runSingleFrameRepeatTimer->Reset();
+
+	if(settings->CheckFlag(EmulationFlags::DebuggerWindowEnabled)) {
+		shared_ptr<Debugger> debugger = _console->GetDebugger(false);
+		if(debugger) {
+			debugger->BreakOnScanline(241);
+		}
+	} else {
+		_console->PauseOnNextFrame();
+		settings->ClearFlags(EmulationFlags::Paused);
+	}
 }
 
 void ShortcutKeyHandler::CheckMappedKeys()
@@ -185,22 +205,12 @@ void ShortcutKeyHandler::CheckMappedKeys()
 	}
 
 	if(DetectKeyPress(EmulatorShortcut::RunSingleFrame)) {
-		if(settings->CheckFlag(EmulationFlags::DebuggerWindowEnabled)) {
-			shared_ptr<Debugger> debugger = _console->GetDebugger(false);
-			if(debugger) {
-				debugger->BreakOnScanline(241);
-			}
-		} else {
-			if(settings->CheckFlag(EmulationFlags::Paused)) {
-				settings->ClearFlags(EmulationFlags::Paused);
-				_console->Pause();
-				std::this_thread::sleep_for(std::chrono::duration<int, std::milli>(50));
-				settings->SetFlags(EmulationFlags::Paused);
-				_console->Resume();
-			} else {
-				settings->SetFlags(EmulationFlags::Paused);
-			}
-		}
+		ProcessRunSingleFrame();
+	}
+
+	if(DetectKeyRelease(EmulatorShortcut::RunSingleFrame)) {
+		_runSingleFrameRepeatTimer.reset();
+		_repeatStarted = false;
 	}
 
 	if(!isNetplayClient && !MovieManager::Recording()) {
@@ -239,26 +249,36 @@ void ShortcutKeyHandler::ProcessKeys()
 	_pressedKeys = KeyManager::GetPressedKeys();
 	_isKeyUp = _pressedKeys.size() < _lastPressedKeys.size();
 
+	bool noChange = false;
 	if(_pressedKeys.size() == _lastPressedKeys.size()) {
-		bool noChange = true;
+		noChange = true;
 		for(size_t i = 0; i < _pressedKeys.size(); i++) {
 			if(_pressedKeys[i] != _lastPressedKeys[i]) {
 				noChange = false;
 				break;
 			}
 		}
-		if(noChange) {
-			//Same keys as before, nothing to do
-			return;
+	}
+
+	if(!noChange) {
+		//Only run this if the keys have changed
+		for(int i = 0; i < 2; i++) {
+			_keysDown[i].clear();
+			_keySetIndex = i;
+			CheckMappedKeys();
+			_prevKeysDown[i] = _keysDown[i];
+		}
+
+		_lastPressedKeys = _pressedKeys;
+	}
+
+	if(_runSingleFrameRepeatTimer) {
+		double elapsedMs = _runSingleFrameRepeatTimer->GetElapsedMS();
+		if((_repeatStarted && elapsedMs >= 50) || (!_repeatStarted && elapsedMs >= 500)) {
+			//Over 500ms has elapsed since the key was first pressed, or over 50ms since repeat mode started (20fps)
+			//In this case, run another frame and pause again.
+			_repeatStarted = true;
+			ProcessRunSingleFrame();
 		}
 	}
-
-	for(int i = 0; i < 2; i++) {
-		_keysDown[i].clear();
-		_keySetIndex = i;
-		CheckMappedKeys();
-		_prevKeysDown[i] = _keysDown[i];
-	}
-
-	_lastPressedKeys = _pressedKeys;
 }

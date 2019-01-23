@@ -66,7 +66,7 @@ namespace Mesen.GUI.Debugger
 				i++;
 			}
 
-			if(_previewAddress != null && ConfigManager.Config.DebugInfo.ShowCodePreview) {
+			if((_code != null || _symbolProvider != null) && _previewAddress != null && ConfigManager.Config.DebugInfo.ShowCodePreview) {
 				tlpMain.RowStyles.Insert(1, new RowStyle());
 
 				if(_code != null) {

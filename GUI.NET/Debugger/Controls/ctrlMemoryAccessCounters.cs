@@ -16,7 +16,7 @@ namespace Mesen.GUI.Debugger.Controls
 	public partial class ctrlMemoryAccessCounters : BaseControl
 	{
 		private MemoryCountData[] _data;
-		private AddressType _memoryType = AddressType.InternalRam;
+		private DebugMemoryType _memoryType = DebugMemoryType.InternalRam;
 		private SortType _sortType = SortType.Address;
 
 		public ctrlMemoryAccessCounters()
@@ -46,21 +46,30 @@ namespace Mesen.GUI.Debugger.Controls
 		{
 			cboMemoryType.SelectedIndexChanged -= cboMemoryType_SelectedIndexChanged;
 
-			AddressType originalValue = cboMemoryType.GetEnumValue<AddressType>();
+			DebugMemoryType originalValue = cboMemoryType.GetEnumValue<DebugMemoryType>();
 
 			cboMemoryType.BeginUpdate();
 			cboMemoryType.Items.Clear();
 
-			cboMemoryType.Items.Add(ResourceHelper.GetEnumText(AddressType.InternalRam));
+			cboMemoryType.Items.Add(ResourceHelper.GetEnumText(DebugMemoryType.InternalRam));
 			if(InteropEmu.DebugGetMemorySize(DebugMemoryType.PrgRom) > 0) {
-				cboMemoryType.Items.Add(ResourceHelper.GetEnumText(AddressType.PrgRom));
+				cboMemoryType.Items.Add(ResourceHelper.GetEnumText(DebugMemoryType.PrgRom));
 			}
 			if(InteropEmu.DebugGetMemorySize(DebugMemoryType.WorkRam) > 0) {
-				cboMemoryType.Items.Add(ResourceHelper.GetEnumText(AddressType.WorkRam));
+				cboMemoryType.Items.Add(ResourceHelper.GetEnumText(DebugMemoryType.WorkRam));
 			}
 			if(InteropEmu.DebugGetMemorySize(DebugMemoryType.SaveRam) > 0) {
-				cboMemoryType.Items.Add(ResourceHelper.GetEnumText(AddressType.SaveRam));
+				cboMemoryType.Items.Add(ResourceHelper.GetEnumText(DebugMemoryType.SaveRam));
 			}
+
+			if(InteropEmu.DebugGetMemorySize(DebugMemoryType.ChrRom) > 0) {
+				cboMemoryType.Items.Add(ResourceHelper.GetEnumText(DebugMemoryType.ChrRom));
+			}
+			if(InteropEmu.DebugGetMemorySize(DebugMemoryType.ChrRam) > 0) {
+				cboMemoryType.Items.Add(ResourceHelper.GetEnumText(DebugMemoryType.ChrRam));
+			}
+			cboMemoryType.Items.Add(ResourceHelper.GetEnumText(DebugMemoryType.NametableRam));
+			cboMemoryType.Items.Add(ResourceHelper.GetEnumText(DebugMemoryType.PaletteMemory));
 
 			cboMemoryType.SelectedIndex = 0;
 			cboMemoryType.SetEnumValue(originalValue);
@@ -75,11 +84,18 @@ namespace Mesen.GUI.Debugger.Controls
 
 		public void RefreshData()
 		{
-			int[] readCounts = InteropEmu.DebugGetMemoryAccessCounts(_memoryType, MemoryOperationType.Read, false);
-			int[] writeCounts = InteropEmu.DebugGetMemoryAccessCounts(_memoryType, MemoryOperationType.Write, false);
-			int[] execCounts = InteropEmu.DebugGetMemoryAccessCounts(_memoryType, MemoryOperationType.Exec, false);
+			bool isPpu = (
+				_memoryType == DebugMemoryType.ChrRom ||
+				_memoryType == DebugMemoryType.ChrRam ||
+				_memoryType == DebugMemoryType.PaletteMemory ||
+				_memoryType == DebugMemoryType.NametableRam
+			);
 
-			int[] uninitReads = InteropEmu.DebugGetMemoryAccessCounts(_memoryType, MemoryOperationType.Read, true);
+			int[] readCounts = InteropEmu.DebugGetMemoryAccessCounts(_memoryType, MemoryOperationType.Read);
+			int[] writeCounts = InteropEmu.DebugGetMemoryAccessCounts(_memoryType, MemoryOperationType.Write);
+			int[] execCounts = isPpu ? new int[readCounts.Length] : InteropEmu.DebugGetMemoryAccessCounts(_memoryType, MemoryOperationType.Exec);
+
+			int[] uninitReads = isPpu ? new int[readCounts.Length] : InteropEmu.DebugGetUninitMemoryReads(_memoryType);
 
 			List<int> addresses = new List<int>(readCounts.Length);
 			List<string> content = new List<string>(readCounts.Length);
@@ -97,6 +113,7 @@ namespace Mesen.GUI.Debugger.Controls
 				_data[i].WriteCount = writeCounts[i];
 				_data[i].ExecCount = execCounts[i];
 				_data[i].UninitRead = uninitReads[i] > 0;
+				_data[i].IsPpu = isPpu;
 			}
 
 			MemoryCountData[] data = new MemoryCountData[readCounts.Length];
@@ -123,7 +140,11 @@ namespace Mesen.GUI.Debugger.Controls
 			} else {
 				ctrlScrollableTextbox.StyleProvider = null;
 			}
-			ctrlScrollableTextbox.Header = " " + "Read".PadRight(12) + "Write".PadRight(12) + "Execute";
+			if(isPpu) {
+				ctrlScrollableTextbox.Header = " " + "Read".PadRight(12) + "Write";
+			} else {
+				ctrlScrollableTextbox.Header = " " + "Read".PadRight(12) + "Write".PadRight(12) + "Execute";
+			}
 			ctrlScrollableTextbox.LineNumbers = addresses.ToArray();
 			ctrlScrollableTextbox.TextLines = content.ToArray();
 		}
@@ -158,7 +179,7 @@ namespace Mesen.GUI.Debugger.Controls
 
 		private void UpdateMemoryType()
 		{
-			_memoryType = cboMemoryType.GetEnumValue<AddressType>();
+			_memoryType = cboMemoryType.GetEnumValue<DebugMemoryType>();
 			RefreshData();
 		}
 
@@ -177,6 +198,11 @@ namespace Mesen.GUI.Debugger.Controls
 		{
 			InteropEmu.DebugResetMemoryAccessCounts();
 			RefreshData();
+		}
+
+		public void GoToAddress()
+		{
+			ctrlScrollableTextbox.GoToAddress();
 		}
 
 		private enum SortType
@@ -243,7 +269,7 @@ namespace Mesen.GUI.Debugger.Controls
 					if(this._needRecalc) {
 						_content = " " + (_readCount == 0 ? "0" : _readCount.ToString()).PadRight(12) +
 									(_writeCount == 0 ? "0" : _writeCount.ToString()).PadRight(12) +
-									(_execCount == 0 ? "0" : _execCount.ToString());
+									(IsPpu ? "" : (_execCount == 0 ? "0" : _execCount.ToString()));
 						_needRecalc = false;
 					}
 					return _content;
@@ -251,6 +277,7 @@ namespace Mesen.GUI.Debugger.Controls
 			}
 
 			public bool UninitRead { get; set; }
+			public bool IsPpu { get; set; }
 		}
 
 		private void mnuCopy_Click(object sender, EventArgs e)

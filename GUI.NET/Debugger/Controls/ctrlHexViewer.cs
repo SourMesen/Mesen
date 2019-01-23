@@ -32,6 +32,7 @@ namespace Mesen.GUI.Debugger.Controls
 			this.ctrlHexBox.ShadowSelectionColor = Color.FromArgb(100, 60, 128, 200);
 			this.ctrlHexBox.InfoBackColor = Color.FromArgb(235, 235, 235);
 			this.ctrlHexBox.InfoForeColor = Color.Gray;
+			this.ctrlHexBox.HighlightCurrentRowColumn = true;
 		}
 
 		protected override void OnLoad(EventArgs e)
@@ -182,12 +183,13 @@ namespace Mesen.GUI.Debugger.Controls
 			int currentAddr = (int)(this.ctrlHexBox.CurrentLine - 1) * this.ctrlHexBox.BytesPerLine;
 			address.Address = (UInt32)currentAddr;
 
-			frmGoToLine frm = new frmGoToLine(address, (_byteProvider.Length - 1).ToString("X").Length);
-			frm.StartPosition = FormStartPosition.Manual;
-			Point topLeft = this.PointToScreen(new Point(0, 0));
-			frm.Location = new Point(topLeft.X + (this.Width - frm.Width) / 2, topLeft.Y + (this.Height - frm.Height) / 2);
-			if(frm.ShowDialog() == DialogResult.OK) {
-				GoToAddress((int)address.Address);
+			using(frmGoToLine frm = new frmGoToLine(address, (_byteProvider.Length - 1).ToString("X").Length)) {
+				frm.StartPosition = FormStartPosition.Manual;
+				Point topLeft = this.PointToScreen(new Point(0, 0));
+				frm.Location = new Point(topLeft.X + (this.Width - frm.Width) / 2, topLeft.Y + (this.Height - frm.Height) / 2);
+				if(frm.ShowDialog() == DialogResult.OK) {
+					GoToAddress((int)address.Address);
+				}
 			}
 		}
 
@@ -419,6 +421,13 @@ namespace Mesen.GUI.Debugger.Controls
 			set { this.ctrlHexBox.ByteEditingMode = value; }
 		}
 
+		[Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+		public bool HighlightCurrentRowColumn
+		{
+			get { return this.ctrlHexBox.HighlightCurrentRowColumn; }
+			set { this.ctrlHexBox.HighlightCurrentRowColumn = value; }
+		}
+
 		public delegate void ByteMouseHoverHandler(int address, Point position);
 		public event ByteMouseHoverHandler ByteMouseHover; 
 		private void ctrlHexBox_MouseMove(object sender, MouseEventArgs e)
@@ -575,29 +584,46 @@ namespace Mesen.GUI.Debugger.Controls
 
 			mnuViewInDisassembly.Text = $"View in disassembly ({address})";
 
-			bool viewInCpuMemoryVisible = (_memoryType == DebugMemoryType.PrgRom || _memoryType == DebugMemoryType.WorkRam || _memoryType == DebugMemoryType.SaveRam);
-			bool viewInMemoryTypeVisible = _memoryType == DebugMemoryType.CpuMemory;
-			mnuViewInCpuMemory.Visible = viewInCpuMemoryVisible;
+			bool viewInCpuMemoryVisible = false;
+			bool viewInPpuMemoryVisible = false;
+			if(_memoryType == DebugMemoryType.PrgRom || _memoryType == DebugMemoryType.WorkRam || _memoryType == DebugMemoryType.SaveRam) {
+				viewInCpuMemoryVisible = true;
+			} else if(_memoryType == DebugMemoryType.ChrRom || _memoryType == DebugMemoryType.ChrRam || _memoryType == DebugMemoryType.NametableRam || _memoryType == DebugMemoryType.PaletteMemory) {
+				viewInPpuMemoryVisible = true;
+			}
+			bool viewInMemoryTypeVisible = _memoryType == DebugMemoryType.CpuMemory || _memoryType == DebugMemoryType.PpuMemory;
+			mnuViewInCpuMemory.Visible = viewInCpuMemoryVisible || viewInPpuMemoryVisible;
 			mnuViewInMemoryType.Visible = viewInMemoryTypeVisible;
 			mnuViewInDisassembly.Visible = (viewInCpuMemoryVisible || viewInMemoryTypeVisible);
-			sepViewActions.Visible = (viewInCpuMemoryVisible || viewInMemoryTypeVisible);
+			sepViewActions.Visible = (viewInCpuMemoryVisible || viewInPpuMemoryVisible || viewInMemoryTypeVisible);
 
 			if(viewInMemoryTypeVisible) {
-				frmDebugger debugger = DebugWindowManager.GetDebugger();
-				AddressTypeInfo addressInfo = new AddressTypeInfo();
-				InteropEmu.DebugGetAbsoluteAddressAndType(startAddress, addressInfo);
-				mnuViewInMemoryType.Text = $"View in " + ResourceHelper.GetEnumText(addressInfo.Type) + $" ({address})";
-				mnuViewInDisassembly.Enabled = debugger != null;
-				bool viewInMemoryTypeEnabled = addressInfo.Address >= 0 && (addressInfo.Type == AddressType.PrgRom || addressInfo.Type == AddressType.WorkRam || addressInfo.Type == AddressType.SaveRam);
+				bool viewInMemoryTypeEnabled = false;
+				if(_memoryType == DebugMemoryType.CpuMemory) {
+					AddressTypeInfo addressInfo = new AddressTypeInfo();
+					InteropEmu.DebugGetAbsoluteAddressAndType(startAddress, addressInfo);
+					mnuViewInMemoryType.Text = $"View in " + ResourceHelper.GetEnumText(addressInfo.Type) + $" ({address})";
+					viewInMemoryTypeEnabled = addressInfo.Address >= 0 && (addressInfo.Type == AddressType.PrgRom || addressInfo.Type == AddressType.WorkRam || addressInfo.Type == AddressType.SaveRam);
+				} else {
+					PpuAddressTypeInfo addressInfo = InteropEmu.DebugGetPpuAbsoluteAddressAndType(startAddress);
+					mnuViewInMemoryType.Text = $"View in " + ResourceHelper.GetEnumText(addressInfo.Type) + $" ({address})";
+					viewInMemoryTypeEnabled = addressInfo.Address >= 0 && (addressInfo.Type == PpuAddressType.ChrRam || addressInfo.Type == PpuAddressType.ChrRom || addressInfo.Type == PpuAddressType.NametableRam || addressInfo.Type == PpuAddressType.PaletteRam);
+				}
+				mnuViewInDisassembly.Enabled = DebugWindowManager.GetDebugger() != null;
 				mnuViewInMemoryType.Enabled = viewInMemoryTypeEnabled;
 				mnuViewInMemoryType.Visible = viewInMemoryTypeEnabled;
 				mnuViewInCpuMemory.Enabled = false;
-			} else if(viewInCpuMemoryVisible) {
-				frmDebugger debugger = DebugWindowManager.GetDebugger();
-				int relativeAddress = InteropEmu.DebugGetRelativeAddress(startAddress, _memoryType.ToAddressType());
-				mnuViewInCpuMemory.Text = $"View in CPU memory ({address})";
+			} else if(viewInCpuMemoryVisible || viewInPpuMemoryVisible) {
+				int relativeAddress = -1;
+				if(viewInCpuMemoryVisible) {
+					relativeAddress = InteropEmu.DebugGetRelativeAddress(startAddress, _memoryType.ToAddressType());
+					mnuViewInCpuMemory.Text = $"View in CPU memory ({address})";
+				} else {
+					relativeAddress = InteropEmu.DebugGetRelativePpuAddress(startAddress, _memoryType.ToPpuAddressType());
+					mnuViewInCpuMemory.Text = $"View in PPU memory ({address})";
+				}
 				mnuViewInCpuMemory.Enabled = relativeAddress >= 0;
-				mnuViewInDisassembly.Enabled = debugger != null && relativeAddress >= 0;
+				mnuViewInDisassembly.Enabled = viewInCpuMemoryVisible && DebugWindowManager.GetDebugger() != null && relativeAddress >= 0;
 				mnuViewInMemoryType.Enabled = false;
 			} else {
 				mnuViewInMemoryType.Enabled = false;
@@ -692,18 +718,32 @@ namespace Mesen.GUI.Debugger.Controls
 
 		private void mnuViewInCpuMemory_Click(object sender, EventArgs e)
 		{
-			int relativeAddress = InteropEmu.DebugGetRelativeAddress((UInt32)SelectionStartAddress, _memoryType.ToAddressType());
-			if(relativeAddress >= 0) {
-				MemoryViewer.ShowAddress(relativeAddress, DebugMemoryType.CpuMemory);
+			if(_memoryType == DebugMemoryType.WorkRam || _memoryType == DebugMemoryType.SaveRam || _memoryType == DebugMemoryType.PrgRom) {
+				int relativeAddress = InteropEmu.DebugGetRelativeAddress((UInt32)SelectionStartAddress, _memoryType.ToAddressType());
+				if(relativeAddress >= 0) {
+					MemoryViewer.ShowAddress(relativeAddress, DebugMemoryType.CpuMemory);
+				}
+			} else {
+				int relativeAddress = InteropEmu.DebugGetRelativePpuAddress((UInt32)SelectionStartAddress, _memoryType.ToPpuAddressType());
+				if(relativeAddress >= 0) {
+					MemoryViewer.ShowAddress(relativeAddress, DebugMemoryType.PpuMemory);
+				}
 			}
 		}
 
 		private void mnuViewInMemoryType_Click(object sender, EventArgs e)
 		{
-			AddressTypeInfo addressInfo = new AddressTypeInfo();
-			InteropEmu.DebugGetAbsoluteAddressAndType((UInt32)SelectionStartAddress, addressInfo);
-			if(addressInfo.Address >= 0 && (addressInfo.Type == AddressType.PrgRom || addressInfo.Type == AddressType.WorkRam || addressInfo.Type == AddressType.SaveRam)) {
-				MemoryViewer.ShowAddress(addressInfo.Address, addressInfo.Type.ToMemoryType());
+			if(_memoryType == DebugMemoryType.CpuMemory) {
+				AddressTypeInfo addressInfo = new AddressTypeInfo();
+				InteropEmu.DebugGetAbsoluteAddressAndType((UInt32)SelectionStartAddress, addressInfo);
+				if(addressInfo.Address >= 0 && (addressInfo.Type == AddressType.PrgRom || addressInfo.Type == AddressType.WorkRam || addressInfo.Type == AddressType.SaveRam)) {
+					MemoryViewer.ShowAddress(addressInfo.Address, addressInfo.Type.ToMemoryType());
+				}
+			} else {
+				PpuAddressTypeInfo addressInfo = InteropEmu.DebugGetPpuAbsoluteAddressAndType((UInt32)SelectionStartAddress);
+				if(addressInfo.Address >= 0) {
+					MemoryViewer.ShowAddress(addressInfo.Address, addressInfo.Type.ToMemoryType());
+				}
 			}
 		}
 

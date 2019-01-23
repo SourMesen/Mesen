@@ -25,11 +25,14 @@ namespace Mesen.GUI.Controls
 		{
 			InitializeComponent();
 
-			this.btnNext.KeyUp += Child_KeyUp;
-			this.btnPause.KeyUp += Child_KeyUp;
-			this.btnPrevious.KeyUp += Child_KeyUp;
-			this.cboTrack.KeyUp += Child_KeyUp;
-			this.trkVolume.KeyUp += Child_KeyUp;
+			if(!IsDesignMode) {
+				this.tmrUpdate.Enabled = true;
+				this.btnNext.KeyUp += Child_KeyUp;
+				this.btnPause.KeyUp += Child_KeyUp;
+				this.btnPrevious.KeyUp += Child_KeyUp;
+				this.cboTrack.KeyUp += Child_KeyUp;
+				this.trkVolume.KeyUp += Child_KeyUp;
+			}
 		}
 
 		protected override void ScaleControl(SizeF factor, BoundsSpecified specified)

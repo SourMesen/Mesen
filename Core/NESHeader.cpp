@@ -203,9 +203,9 @@ GameInputType NESHeader::GetInputType()
 		}
 
 		MessageManager::Log("[iNes] Unknown controller type.");
-		return GameInputType::Default;
+		return GameInputType::Unspecified;
 	} else {
-		return GameInputType::Default;
+		return GameInputType::Unspecified;
 	}
 }
 
@@ -247,31 +247,4 @@ PpuModel NESHeader::GetVsSystemPpuModel()
 		}
 	}
 	return PpuModel::Ppu2C03;
-}
-
-void NESHeader::SanitizeHeader(size_t romLength)
-{
-	uint32_t originalPrgSize = GetPrgSize();
-	uint32_t originalChrSize = GetChrSize();
-
-	size_t calculatedLength = sizeof(NESHeader) + GetPrgSize();
-	while(calculatedLength > romLength) {
-		Byte9 = 0;
-		PrgCount--;
-		calculatedLength = sizeof(NESHeader) + GetPrgSize();
-	}
-
-	calculatedLength = sizeof(NESHeader) + GetPrgSize() + GetChrSize();
-	while(calculatedLength > romLength) {
-		Byte9 = 0;
-		ChrCount--;
-		calculatedLength = sizeof(NESHeader) + GetPrgSize() + GetChrSize();
-	}
-
-	if(originalPrgSize != GetPrgSize()) {
-		MessageManager::Log("[iNes] Invalid ROM file length - PRG data has been truncated.");
-	}
-	if(originalChrSize != GetChrSize()) {
-		MessageManager::Log("[iNes] Invalid ROM file length - CHR data has been truncated.");
-	}
 }

@@ -673,6 +673,7 @@ private:
 	KeyMappingSet _controllerKeys[4] = { KeyMappingSet(), KeyMappingSet(), KeyMappingSet(), KeyMappingSet() };
 	bool _needControllerUpdate = false;
 	uint32_t _zapperDetectionRadius = 0;
+	uint32_t _controllerDeadzoneSize = 2;
 	std::unordered_map<int, double> _mouseSensitivity;
 	int32_t _inputPollScanline = 241;
 
@@ -1324,6 +1325,22 @@ public:
 			return result->second;
 		} else {
 			return 1.0;
+		}
+	}
+
+	void SetControllerDeadzoneSize(uint32_t deadzoneSize)
+	{
+		_controllerDeadzoneSize = deadzoneSize;
+	}
+
+	double GetControllerDeadzoneRatio()
+	{
+		switch(_controllerDeadzoneSize) {
+			case 0: return 0.5;
+			case 1: return 0.75;
+			case 2: return 1;
+			case 3: return 1.25;
+			case 4: return 1.5;
 		}
 	}
 
