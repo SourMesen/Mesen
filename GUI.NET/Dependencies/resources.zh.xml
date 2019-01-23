@@ -224,7 +224,7 @@
 
 			<Control ID="lblSmall">小</Control>
 			<Control ID="lblLarge">大</Control>
-			<Control ID="lblDeadzone">Controller axis deadzone size:</Control>
+			<Control ID="lblDeadzone">死区大小:</Control>
 			
 			<Control ID="chkHideMousePointerForZapper">使用手枪时隐藏鼠标指针</Control>
 
@@ -313,7 +313,7 @@
 			<Control ID="lblRewindSpeed">快退速度:</Control>
 
 			<Control ID="tpgAdvanced">高级</Control>
-			<Control ID="lblDeveloperSettings">Recommended settings for developers (homebrew / ROM hacking)</Control>
+			<Control ID="lblDeveloperSettings">开发者推荐设置 (自作/修改 ROM)</Control>
 			<Control ID="lblMiscSettings">其他</Control>
 			<Control ID="chkUseAlternativeMmc3Irq">使用 MMC3 IRQ 替代行为</Control>
 			<Control ID="chkAllowInvalidInput">允许无效按键 (例如同时按下↑↓/←→)</Control>
