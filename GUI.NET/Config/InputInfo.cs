@@ -137,6 +137,7 @@ namespace Mesen.GUI.Config
 		public InteropEmu.InputDisplayPosition DisplayInputPosition = InteropEmu.InputDisplayPosition.BottomRight;
 		public bool DisplayInputHorizontally = true;
 
+		[MinMax(0, 4)] public UInt32 ControllerDeadzoneSize = 2;
 		public bool HideMousePointerForZapper = true;
 
 		[XmlElement(ElementName = "InputDevice")]
@@ -219,6 +220,7 @@ namespace Mesen.GUI.Config
 			InteropEmu.SetInputDisplaySettings(displayPorts, inputInfo.DisplayInputPosition, inputInfo.DisplayInputHorizontally);
 
 			InteropEmu.SetZapperDetectionRadius(inputInfo.Zapper.DetectionRadius);
+			InteropEmu.SetControllerDeadzoneSize(inputInfo.ControllerDeadzoneSize);
 
 			InteropEmu.SetMouseSensitivity(InteropEmu.MouseDevice.ArkanoidController, (inputInfo.ArkanoidController.Sensitivity + 1) / 2.0);
 			InteropEmu.SetMouseSensitivity(InteropEmu.MouseDevice.HoriTrack, (inputInfo.HoriTrack.Sensitivity + 1) / 2.0);

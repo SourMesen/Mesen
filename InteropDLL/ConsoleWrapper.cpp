@@ -310,6 +310,7 @@ namespace InteropEmu {
 		DllExport void __stdcall SetControllerType(uint32_t port, ControllerType type) { _settings->SetControllerType(port, type); }
 		DllExport void __stdcall SetControllerKeys(uint32_t port, KeyMappingSet mappings) { _settings->SetControllerKeys(port, mappings); }
 		DllExport void __stdcall SetZapperDetectionRadius(uint32_t detectionRadius) { _settings->SetZapperDetectionRadius(detectionRadius); }
+		DllExport void __stdcall SetControllerDeadzoneSize(uint32_t deadzoneSize) { _settings->SetControllerDeadzoneSize(deadzoneSize); }
 		DllExport void __stdcall SetExpansionDevice(ExpansionPortDevice device) { _settings->SetExpansionDevice(device); }
 		DllExport void __stdcall SetConsoleType(ConsoleType type) { _settings->SetConsoleType(type); }
 		DllExport void __stdcall SetMouseSensitivity(MouseDevice device, double sensitivity) { _settings->SetMouseSensitivity(device, sensitivity); }

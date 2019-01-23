@@ -221,6 +221,11 @@
 			<Control ID="chkDisplayPort4">玩家 4</Control>
 			<Control ID="lblDisplayPosition">显示位置:</Control>
 			<Control ID="chkDisplayInputHorizontally">横向</Control>
+
+			<Control ID="lblSmall">小</Control>
+			<Control ID="lblLarge">大</Control>
+			<Control ID="lblDeadzone">Controller axis deadzone size:</Control>
+			
 			<Control ID="chkHideMousePointerForZapper">使用手枪时隐藏鼠标指针</Control>
 
 			<Control ID="lblKeyBinding">警告：您当前的配置包含冲突的键绑定 - 键盘或游戏手柄上的某些物理按钮映射到NES控制器上的多个按钮.如果这不是故意的，请查看并更正您的按键绑定.</Control>

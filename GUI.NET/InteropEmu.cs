@@ -61,6 +61,7 @@ namespace Mesen.GUI
 		[DllImport(DLLPath)] public static extern void SetControllerType(int port, ControllerType type);
 		[DllImport(DLLPath)] public static extern void SetControllerKeys(int port, KeyMappingSet mapping);
 		[DllImport(DLLPath)] public static extern void SetZapperDetectionRadius(UInt32 detectionRadius);
+		[DllImport(DLLPath)] public static extern void SetControllerDeadzoneSize(UInt32 deadzoneSize);
 		[DllImport(DLLPath)] public static extern void SetExpansionDevice(ExpansionPortDevice device);
 		[DllImport(DLLPath)] public static extern void SetConsoleType(ConsoleType type);
 		[DllImport(DLLPath)] public static extern void SetMouseSensitivity(MouseDevice device, double sensitivity);

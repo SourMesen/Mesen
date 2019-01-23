@@ -1,8 +1,11 @@
 #include "stdafx.h"
 #include "XInputManager.h"
+#include "../Core/Console.h"
+#include "../Core/EmulationSettings.h"
 
-XInputManager::XInputManager()
+XInputManager::XInputManager(shared_ptr<Console> console)
 {
+	_console = console;
 	for(int i = 0; i < XUSER_MAX_COUNT; i++) {
 		_gamePadStates.push_back(shared_ptr<XINPUT_STATE>(new XINPUT_STATE()));
 		_gamePadConnected.push_back(true);
@@ -54,17 +57,19 @@ bool XInputManager::IsPressed(uint8_t gamepadPort, uint8_t button)
 			WORD xinputButton = 1 << (button - 1);
 			return (_gamePadStates[gamepadPort]->Gamepad.wButtons & xinputButton) != 0;
 		} else {
+			double ratio = _console->GetSettings()->GetControllerDeadzoneRatio() * 2;
+
 			switch(button) {
-				case 17: return gamepad.bLeftTrigger > XINPUT_GAMEPAD_TRIGGER_THRESHOLD;
-				case 18: return gamepad.bRightTrigger > XINPUT_GAMEPAD_TRIGGER_THRESHOLD;
-				case 19: return gamepad.sThumbRY > XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE;
-				case 20: return gamepad.sThumbRY < -XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE;
-				case 21: return gamepad.sThumbRX < -XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE;
-				case 22: return gamepad.sThumbRX > XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE;
-				case 23: return gamepad.sThumbLY > XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE;
-				case 24: return gamepad.sThumbLY < -XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE;
-				case 25: return gamepad.sThumbLX < -XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE;
-				case 26: return gamepad.sThumbLX > XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE;
+				case 17: return gamepad.bLeftTrigger > (XINPUT_GAMEPAD_TRIGGER_THRESHOLD * ratio);
+				case 18: return gamepad.bRightTrigger > (XINPUT_GAMEPAD_TRIGGER_THRESHOLD * ratio);
+				case 19: return gamepad.sThumbRY > (XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE * ratio);
+				case 20: return gamepad.sThumbRY < -(XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE * ratio);
+				case 21: return gamepad.sThumbRX < -(XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE * ratio);
+				case 22: return gamepad.sThumbRX > (XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE * ratio);
+				case 23: return gamepad.sThumbLY > (XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE * ratio);
+				case 24: return gamepad.sThumbLY < -(XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE * ratio);
+				case 25: return gamepad.sThumbLX < -(XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE * ratio);
+				case 26: return gamepad.sThumbLX > (XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE * ratio);
 			}
 		}
 	}

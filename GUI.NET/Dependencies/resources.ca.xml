@@ -218,6 +218,11 @@
 			<Control ID="chkDisplayPort4">Jugador 4</Control>
 			<Control ID="lblDisplayPosition">Posició de pantalla:</Control>
 			<Control ID="chkDisplayInputHorizontally">Mostra horitzontalment</Control>
+
+			<Control ID="lblSmall">Curt</Control>
+			<Control ID="lblLarge">Llarg</Control>
+			<Control ID="lblDeadzone">Controller axis deadzone size:</Control>
+
 			<Control ID="chkHideMousePointerForZapper">Hide mouse pointer when using zapper</Control>
 
 			<Control ID="lblKeyBinding">Advertència: La vostra configuració actual conté assignacions conflictives - algunes tecles del vostre teclat o botons del comandament han estat assignats a múltiples botons al comandament de la NES. Si això no ha estat intencionat, us preguem que reviseu i corregiu les vostres assignacions.</Control>

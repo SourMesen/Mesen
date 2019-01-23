@@ -218,6 +218,11 @@
 			<Control ID="chkDisplayPort4">Jogador 4</Control>
 			<Control ID="lblDisplayPosition">Posição da tela</Control>
 			<Control ID="chkDisplayInputHorizontally">Mostrar horizontalmente</Control>
+
+			<Control ID="lblSmall">Curta</Control>
+			<Control ID="lblLarge">Longa</Control>
+			<Control ID="lblDeadzone">Controller axis deadzone size:</Control>
+			
 			<Control ID="chkHideMousePointerForZapper">Esconder o ponteiro do mouse ao usar a pistola zapper</Control>
 
 			<Control ID="lblKeyBinding">Aviso: a configuração atual contém atribuições conflitantes - alguns botões físicos em seu teclado ou gamepad são mapeados para vários botões no controle NES. Se isso não for intencional, reveja e corrija suas atribuições.</Control>

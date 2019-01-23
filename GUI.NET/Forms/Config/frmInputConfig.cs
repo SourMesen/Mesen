@@ -43,6 +43,7 @@ namespace Mesen.GUI.Forms.Config
 			AddBinding("DisplayInputPort4", chkDisplayPort4);
 			AddBinding("DisplayInputPosition", cboDisplayInputPosition);
 			AddBinding("DisplayInputHorizontally", chkDisplayInputHorizontally);
+			AddBinding("ControllerDeadzoneSize", trkControllerDeadzoneSize);
 			AddBinding("HideMousePointerForZapper", chkHideMousePointerForZapper);
 
 			//Sort expansion port dropdown alphabetically, but keep the "None" option at the top

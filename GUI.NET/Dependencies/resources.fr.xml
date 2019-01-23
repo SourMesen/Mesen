@@ -218,6 +218,11 @@
 			<Control ID="chkDisplayPort4">Joueur 4</Control>
 			<Control ID="lblDisplayPosition">Position d'affichage :</Control>
 			<Control ID="chkDisplayInputHorizontally">Afficher horizontalement</Control>
+
+			<Control ID="lblSmall">Petit</Control>
+			<Control ID="lblLarge">Large</Control>
+			<Control ID="lblDeadzone">Taille du deadzone :</Control>
+
 			<Control ID="chkHideMousePointerForZapper">Cacher la souris lorsqu'un zapper est connecté</Control>
 
 			<Control ID="lblKeyBinding">Attention: Votre configuration actuelle contient des conflits - certaines touches sur votre clavier ou manette sont mappées à plusieurs boutons sur la console. Veuillez réviser votre configuration et la corriger au besoin.</Control>
