@@ -24,6 +24,7 @@ namespace Mesen.GUI.Debugger
 		private Dictionary<int, FileInfo> _files = new Dictionary<int, FileInfo>();
 		private Dictionary<int, LineInfo> _lines = new Dictionary<int, LineInfo>();
 		private Dictionary<int, SpanInfo> _spans = new Dictionary<int, SpanInfo>();
+		private Dictionary<int, ScopeInfo> _scopes = new Dictionary<int, ScopeInfo>();
 		private Dictionary<int, SymbolInfo> _symbols = new Dictionary<int, SymbolInfo>();
 		private Dictionary<int, CSymbolInfo> _cSymbols = new Dictionary<int, CSymbolInfo>();
 
@@ -42,8 +43,9 @@ namespace Mesen.GUI.Debugger
 		private static Regex _lineRegex = new Regex("^line\tid=([0-9]+),.*file=([0-9]+),.*line=([0-9]+)(,.*type=([0-9]+)){0,1}(,.*span=([0-9+]+)){0,1}", RegexOptions.Compiled);
 		private static Regex _fileRegex = new Regex("^file\tid=([0-9]+),.*name=\"([^\"]+)\"", RegexOptions.Compiled);
 		private static Regex _spanRegex = new Regex("^span\tid=([0-9]+),.*seg=([0-9]+),.*start=([0-9]+),.*size=([0-9]+)(,.*type=([0-9]+)){0,1}", RegexOptions.Compiled);
-		private static Regex _symbolRegex = new Regex("^sym\tid=([0-9]+).*name=\"([0-9a-zA-Z@_-]+)\"(,.*size=([0-9]+)){0,1}(,.*def=([0-9+]+)){0,1}(,.*ref=([0-9+]+)){0,1}(,.*val=0x([0-9a-fA-F]+)){0,1}(,.*seg=([0-9]+)){0,1}(,.*exp=([0-9]+)){0,1}", RegexOptions.Compiled);
-		private static Regex _cSymbolRegex = new Regex("^csym\tid=([0-9]+).*name=\"([0-9a-zA-Z@_-]+)\"(,.*sym=([0-9+]+)){0,1}", RegexOptions.Compiled);
+		private static Regex _scopeRegex = new Regex("^scope\tid=([0-9]+),.*name=\"([0-9a-zA-Z@_-]+)\"(,.*sym=([0-9+]+)){0,1}", RegexOptions.Compiled);
+		private static Regex _symbolRegex = new Regex("^sym\tid=([0-9]+),.*name=\"([0-9a-zA-Z@_-]+)\"(,.*size=([0-9]+)){0,1}(,.*def=([0-9+]+)){0,1}(,.*ref=([0-9+]+)){0,1}(,.*val=0x([0-9a-fA-F]+)){0,1}(,.*seg=([0-9]+)){0,1}(,.*exp=([0-9]+)){0,1}", RegexOptions.Compiled);
+		private static Regex _cSymbolRegex = new Regex("^csym\tid=([0-9]+),.*name=\"([0-9a-zA-Z@_-]+)\"(,.*sym=([0-9+]+)){0,1}", RegexOptions.Compiled);
 
 		private static Regex _asmFirstLineRegex = new Regex(";(.*)", RegexOptions.Compiled);
 		private static Regex _asmPreviousLinesRegex = new Regex("^\\s*;(.*)", RegexOptions.Compiled);
@@ -53,6 +55,8 @@ namespace Mesen.GUI.Debugger
 		private Dictionary<int, LineInfo> _linesByPrgAddress = new Dictionary<int, LineInfo>();
 		private Dictionary<int, LineInfo[]> _linesByFile = new Dictionary<int, LineInfo[]>();
 		private Dictionary<string, int> _prgAddressByLine = new Dictionary<string, int>();
+
+		private Dictionary<int, ScopeInfo> _scopesBySymbol = new Dictionary<int, ScopeInfo>();
 
 		public Dictionary<int, FileInfo> Files { get { return _files; } }
 
@@ -389,6 +393,29 @@ namespace Mesen.GUI.Debugger
 			return false;
 		}
 
+		private bool LoadScopes(string row)
+		{
+			Match match = _scopeRegex.Match(row);
+			if(match.Success) {
+				ScopeInfo scope = new ScopeInfo() {
+					ID = Int32.Parse(match.Groups[1].Value),
+					Name = match.Groups[2].Value,
+					SymbolID = match.Groups[4].Success ? (int?)Int32.Parse(match.Groups[4].Value) : null,
+				};
+
+				if(scope.SymbolID.HasValue) {
+					_scopesBySymbol[scope.SymbolID.Value] = scope;
+				}
+
+				_scopes.Add(scope.ID, scope);
+				return true;
+			} else if(row.StartsWith("scope")) {
+				System.Diagnostics.Debug.Fail("Regex doesn't match scope");
+			}
+
+			return false;
+		}
+
 		private bool LoadSymbols(string row)
 		{
 			Match match = _symbolRegex.Match(row);
@@ -434,7 +461,14 @@ namespace Mesen.GUI.Debugger
 				if(!segment.IsRam) {
 					defSpan = GetSymbolDefinitionSpan(symbol);
 				}
-				return (defSpan == null || defSpan.IsData) ? (symbol.Size ?? 1) : 1;
+
+				ScopeInfo scope = null;
+				if(_scopesBySymbol.TryGetValue(symbol.ID, out scope)) {
+					//This symbol actually denotes the start of a scope (.scope or .proc) and isn't actually data, return a size of 1
+					return 1;
+				} else {
+					return (defSpan == null || defSpan.IsData) ? (symbol.Size ?? 1) : 1;
+				}
 			}
 
 			return 1;
@@ -738,7 +772,7 @@ namespace Mesen.GUI.Debugger
 			DbgPath = basePath;
 			foreach(string row in fileRows) {
 				try {
-					if(LoadLines(row) || LoadSpans(row) || LoadSymbols(row) || LoadCSymbols(row) || LoadFiles(row, basePath) || LoadSegments(row)) {
+					if(LoadLines(row) || LoadSpans(row) || LoadSymbols(row) || LoadCSymbols(row) || LoadScopes(row) || LoadFiles(row, basePath) || LoadSegments(row)) {
 						continue;
 					}
 				} catch {
@@ -889,6 +923,13 @@ namespace Mesen.GUI.Debugger
 			public int? Size;
 			public List<int> References;
 			public List<int> Definitions;
+		}
+
+		public class ScopeInfo
+		{
+			public int ID;
+			public string Name;
+			public int? SymbolID;
 		}
 
 		public class CSymbolInfo
