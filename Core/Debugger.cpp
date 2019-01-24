@@ -30,6 +30,7 @@
 #include "NotificationManager.h"
 #include "DebugHud.h"
 #include "DummyCpu.h"
+#include "PerformanceTracker.h"
 
 const int Debugger::BreakpointTypeCount;
 string Debugger::_disassemblerOutput = "";
@@ -55,6 +56,7 @@ Debugger::Debugger(shared_ptr<Console> console, shared_ptr<CPU> cpu, shared_ptr<
 
 	_memoryAccessCounter.reset(new MemoryAccessCounter(this));
 	_profiler.reset(new Profiler(this));
+	_performanceTracker.reset(new PerformanceTracker(console));
 	_traceLogger.reset(new TraceLogger(this, memoryManager, _labelManager));
 
 	_bpExpEval.reset(new ExpressionEvaluator(this));
@@ -790,6 +792,7 @@ bool Debugger::ProcessRamOperation(MemoryOperationType type, uint16_t &addr, uin
 
 		ProcessStepConditions(addr);
 
+		_performanceTracker->ProcessCpuExec(addressInfo);
 		_profiler->ProcessInstructionStart(absoluteAddr);
 
 		BreakSource breakSource = BreakSource::Unspecified;
@@ -1273,6 +1276,11 @@ shared_ptr<MemoryAccessCounter> Debugger::GetMemoryAccessCounter()
 	return _memoryAccessCounter;
 }
 
+shared_ptr<PerformanceTracker> Debugger::GetPerformanceTracker()
+{
+	return _performanceTracker;
+}
+
 bool Debugger::IsExecutionStopped()
 {
 	return _executionStopped || _console->IsExecutionStopped();
@@ -1563,6 +1571,7 @@ void Debugger::ProcessEvent(EventType type)
 			}
 		}
 	} else if(type == EventType::EndFrame) {
+		_performanceTracker->ProcessEndOfFrame();
 		_memoryDumper->GatherChrPaletteInfo();
 	} else if(type == EventType::StartFrame) {
 		//Update the event viewer

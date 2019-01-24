@@ -558,6 +558,7 @@
     <ClInclude Include="NESHeader.h" />
     <ClInclude Include="NotificationManager.h" />
     <ClInclude Include="OpenBusHandler.h" />
+    <ClInclude Include="PerformanceTracker.h" />
     <ClInclude Include="RawVideoFilter.h" />
     <ClInclude Include="ResetTxrom.h" />
     <ClInclude Include="Sachen9602.h" />
@@ -985,6 +986,7 @@
     <ClCompile Include="NsfPpu.cpp" />
     <ClCompile Include="OggMixer.cpp" />
     <ClCompile Include="OggReader.cpp" />
+    <ClCompile Include="PerformanceTracker.cpp" />
     <ClCompile Include="PgoUtilities.cpp" />
     <ClCompile Include="RawVideoFilter.cpp" />
     <ClCompile Include="RecordedRomTest.cpp" />

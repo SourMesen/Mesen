@@ -508,6 +508,16 @@ namespace Mesen.GUI.Debugger.Controls
 
 			mnuSwitchView.Text = IsSourceView ? "Switch to Disassembly View" : "Switch to Source View";
 
+			AddressTypeInfo addressInfo = Viewer.GetAddressInfo(Viewer.CodeViewer.SelectedLine);
+			if(addressInfo.Address >= 0) {
+				int relAddress = InteropEmu.DebugGetRelativeAddress((uint)addressInfo.Address, addressInfo.Type);
+				mnuPerfTracker.Text = "Performance Tracker ($" + relAddress.ToString("X4") + ")";
+				mnuPerfTracker.Enabled = true;
+			} else {
+				mnuPerfTracker.Text = "Performance Tracker";
+				mnuPerfTracker.Enabled = false;
+			}
+
 			string word = Viewer.CodeViewer.GetWordUnderLocation(mouseLocation);
 			Ld65DbgImporter.SymbolInfo symbol = null;
 			CodeLabel codeLabel = null;
@@ -614,6 +624,41 @@ namespace Mesen.GUI.Debugger.Controls
 
 				return false;
 			}
+		}
+
+		private void SetPerformanceTracker(PerfTrackerMode mode)
+		{
+			AddressTypeInfo addressInfo = Viewer.GetAddressInfo(Viewer.CodeViewer.SelectedLine);
+			InteropEmu.DebugSetPerformanceTracker(addressInfo.Address, addressInfo.Type, mode);
+		}
+
+		private void mnuPerfTrackerFullscreen_Click(object sender, EventArgs e)
+		{
+			SetPerformanceTracker(PerfTrackerMode.Fullscreen);
+		}
+
+		private void mnuPerfTrackerCompact_Click(object sender, EventArgs e)
+		{
+			SetPerformanceTracker(PerfTrackerMode.Compact);
+		}
+
+		private void mnuPerfTrackerTextOnly_Click(object sender, EventArgs e)
+		{
+			SetPerformanceTracker(PerfTrackerMode.TextOnly);
+		}
+
+		private void mnuPerfTrackerDisabled_Click(object sender, EventArgs e)
+		{
+			SetPerformanceTracker(PerfTrackerMode.Disabled);
+		}
+
+		private void mnuPerfTracker_DropDownOpening(object sender, EventArgs e)
+		{
+			PerfTrackerMode mode = InteropEmu.DebugGetPerformanceTrackerMode();
+			mnuPerfTrackerFullscreen.Checked = mode == PerfTrackerMode.Fullscreen;
+			mnuPerfTrackerCompact.Checked = mode == PerfTrackerMode.Compact;
+			mnuPerfTrackerTextOnly.Checked = mode == PerfTrackerMode.TextOnly;
+			mnuPerfTrackerDisabled.Checked = mode == PerfTrackerMode.Disabled;
 		}
 	}
 }

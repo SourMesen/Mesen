@@ -8,6 +8,7 @@
 #include "../Core/Profiler.h"
 #include "../Core/Assembler.h"
 #include "../Core/TraceLogger.h"
+#include "../Core/PerformanceTracker.h"
 #include "../Core/LuaScriptingContext.h"
 
 enum class ConsoleId;
@@ -136,6 +137,9 @@ extern "C"
 	DllExport void __stdcall DebugPerformUndo() { GetDebugger()->GetMemoryDumper()->PerformUndo(); }
 
 	DllExport int32_t __stdcall DebugFindSubEntryPoint(uint16_t relativeAddress) { return GetDebugger()->FindSubEntryPoint(relativeAddress); }
+
+	DllExport PerfTrackerMode __stdcall DebugGetPerformanceTrackerMode() { return GetDebugger()->GetPerformanceTracker()->GetMode(); }
+	DllExport void __stdcall DebugSetPerformanceTracker(uint32_t address, AddressType type, PerfTrackerMode mode) { GetDebugger()->GetPerformanceTracker()->Initialize(address, type, mode); }
 
 	DllExport void __stdcall DebugSetInputOverride(uint32_t port, uint32_t state) { GetDebugger()->SetInputOverride(port, state); }
 

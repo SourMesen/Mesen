@@ -1260,6 +1260,7 @@
     <Compile Include="RuntimeChecker.cs" />
     <Compile Include="SingleInstance.cs" />
     <Compile Include="TestRunner.cs" />
+    <None Include="Resources\PerfTracker.png" />
     <None Include="Resources\Zoom2x.png" />
     <None Include="Resources\Expand.png" />
     <None Include="Resources\Collapse.png" />

@@ -214,3 +214,11 @@ enum class NametableDisplayMode
 	Grayscale = 1,
 	AttributeView = 2
 };
+
+enum PerfTrackerMode
+{
+	Disabled = 0,
+	Fullscreen = 1,
+	Compact = 2,
+	TextOnly = 3
+};

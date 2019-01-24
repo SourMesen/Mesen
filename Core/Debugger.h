@@ -26,6 +26,7 @@ class CodeRunner;
 class BaseMapper;
 class ScriptHost;
 class TraceLogger;
+class PerformanceTracker;
 class Breakpoint;
 class CodeDataLogger;
 class ExpressionEvaluator;
@@ -51,6 +52,7 @@ private:
 	shared_ptr<LabelManager> _labelManager;
 	shared_ptr<TraceLogger> _traceLogger;
 	shared_ptr<Profiler> _profiler;
+	shared_ptr<PerformanceTracker> _performanceTracker;
 	unique_ptr<CodeRunner> _codeRunner;
 
 	shared_ptr<Console> _console;
@@ -234,6 +236,7 @@ public:
 	shared_ptr<TraceLogger> GetTraceLogger();
 	shared_ptr<MemoryDumper> GetMemoryDumper();
 	shared_ptr<MemoryAccessCounter> GetMemoryAccessCounter();
+	shared_ptr<PerformanceTracker> GetPerformanceTracker();
 
 	int32_t EvaluateExpression(string expression, EvalResultType &resultType, bool useCache);
 	
