@@ -498,6 +498,16 @@ namespace Mesen.GUI.Debugger.Controls
 			} else {
 				items[nameof(mnuEditSourceFile)].Visible = false;
 			}
+
+			AddressTypeInfo addressInfo = Viewer.GetAddressInfo(Viewer.CodeViewer.SelectedLine);
+			if(addressInfo.Address >= 0) {
+				int relAddress = InteropEmu.DebugGetRelativeAddress((uint)addressInfo.Address, addressInfo.Type);
+				items[nameof(mnuPerfTracker)].Text = "Performance Tracker ($" + relAddress.ToString("X4") + ")";
+				items[nameof(mnuPerfTracker)].Enabled = true;
+			} else {
+				items[nameof(mnuPerfTracker)].Text = "Performance Tracker";
+				items[nameof(mnuPerfTracker)].Enabled = false;
+			}
 		}
 
 		private bool UpdateContextMenu(Point mouseLocation)
@@ -507,16 +517,6 @@ namespace Mesen.GUI.Debugger.Controls
 			UpdateContextMenuItemVisibility(contextMenu.Items);
 
 			mnuSwitchView.Text = IsSourceView ? "Switch to Disassembly View" : "Switch to Source View";
-
-			AddressTypeInfo addressInfo = Viewer.GetAddressInfo(Viewer.CodeViewer.SelectedLine);
-			if(addressInfo.Address >= 0) {
-				int relAddress = InteropEmu.DebugGetRelativeAddress((uint)addressInfo.Address, addressInfo.Type);
-				mnuPerfTracker.Text = "Performance Tracker ($" + relAddress.ToString("X4") + ")";
-				mnuPerfTracker.Enabled = true;
-			} else {
-				mnuPerfTracker.Text = "Performance Tracker";
-				mnuPerfTracker.Enabled = false;
-			}
 
 			string word = Viewer.CodeViewer.GetWordUnderLocation(mouseLocation);
 			Ld65DbgImporter.SymbolInfo symbol = null;

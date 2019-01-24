@@ -1353,8 +1353,8 @@ namespace Mesen.GUI.Forms
 
 		private void ctrlRenderer_DoubleClick(object sender, EventArgs e)
 		{
-			if(!CursorManager.NeedMouseIcon && !CursorManager.AllowMouseCapture && !DebugWindowManager.ScriptWindowOpened) {
-				//Disable double clicking (used to switch to fullscreen mode) when using a mouse-controlled device
+			if(!CursorManager.NeedMouseIcon && !CursorManager.AllowMouseCapture && !DebugWindowManager.HasOpenedWindow) {
+				//Disable double clicking (used to switch to fullscreen mode) when using a mouse-controlled device (or when debugger is opened)
 				ToggleFullscreen();
 			}
 		}

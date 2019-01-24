@@ -3,6 +3,7 @@
 
 struct PerfTrackerData
 {
+	int updateTimer = 0;
 	int frameCount = 0;
 	int prevFrameCount = 0;
 	bool frameProcessed = false;
@@ -23,6 +24,12 @@ struct PerfTrackerData
 	int cpuChartDataPoints[256] = {};
 };
 
+enum PerfTrackerSpeed
+{
+	Normal = 0,
+	Fast = 1
+};
+
 class PerformanceTracker
 {
 private:
@@ -32,8 +39,12 @@ private:
 	int32_t _address = -1;
 	AddressType _type = AddressType::InternalRam;
 	PerfTrackerMode _mode = PerfTrackerMode::Disabled;
+	PerfTrackerSpeed _updateSpeed = PerfTrackerSpeed::Normal;
 	bool _needReset = false;
+	bool _leftButtonPressed = false;
+	bool _rightButtonPressed = false;
 
+	void ProcessMouseInput();
 	void DrawChart(int *dataPoints, int startPos, int color, int scale, int maxValue);
 
 public:

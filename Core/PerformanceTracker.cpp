@@ -8,6 +8,8 @@ The original scripts can be found on his blog here: http://upsilandre.over-blog.
 #include "Console.h"
 #include "PPU.h"
 #include "DebugHud.h"
+#include "IKeyManager.h"
+#include "KeyManager.h"
 
 enum Colors
 {
@@ -40,11 +42,33 @@ PerfTrackerMode PerformanceTracker::GetMode()
 	return _mode;
 }
 
+void PerformanceTracker::ProcessMouseInput()
+{
+	bool leftButtonPressed = KeyManager::IsMouseButtonPressed(MouseButton::LeftButton);
+	bool rightButtonPressed = KeyManager::IsMouseButtonPressed(MouseButton::RightButton);
+	if(_leftButtonPressed && leftButtonPressed != _leftButtonPressed) {
+		//Left button was clicked
+		_mode = (PerfTrackerMode)((_mode + 1) % 4);
+		if(_mode == PerfTrackerMode::Disabled) {
+			_mode = PerfTrackerMode::Fullscreen;
+		}
+	}
+	if(_rightButtonPressed && rightButtonPressed != _rightButtonPressed) {
+		//Right button was clicked
+		_updateSpeed = _updateSpeed == PerfTrackerSpeed::Fast ? PerfTrackerSpeed::Normal : PerfTrackerSpeed::Fast;
+	}
+
+	_leftButtonPressed = leftButtonPressed;
+	_rightButtonPressed = rightButtonPressed;
+}
+
 void PerformanceTracker::ProcessEndOfFrame()
 {
 	if(_mode == PerfTrackerMode::Disabled) {
 		return;
 	}
+
+	ProcessMouseInput();
 
 	_data.frameCount++;
 	_data.frameProcessed = false;
@@ -144,8 +168,6 @@ void PerformanceTracker::ProcessCpuExec(AddressTypeInfo & addressInfo)
 
 		//Store the current frame's CPU usage as a data point for the chart (each lag frame counts as +100% CPU)
 		int finalCpu = _data.partialCpu + (lag * 100);
-		_data.cpuChartDataPoints[_data.cpuChartPos] = finalCpu;
-		_data.cpuChartPos = (_data.cpuChartPos + 1) % 256;
 
 		//Update the average CPU statistic
 		_data.totalCpu += finalCpu;
@@ -161,19 +183,25 @@ void PerformanceTracker::ProcessCpuExec(AddressTypeInfo & addressInfo)
 
 		_data.gameFrame++;
 
-		//Update the onscreen display for the CPU %
-		_data.updateCpu = finalCpu;
+		_data.updateTimer++;
+		if(_updateSpeed == PerfTrackerSpeed::Fast || _data.updateTimer == 8) {
+			_data.updateTimer = 0;
+			_data.cpuChartDataPoints[_data.cpuChartPos] = finalCpu;
+			_data.cpuChartPos = (_data.cpuChartPos + 1) % 256;
 
-		//Calculate the average FPS for the last 20 frames (and add it as a data point for the chart)
-		_data.fps = 0;
-		int i = _data.isLagFramePos < 20 ? (60 - (20 - _data.isLagFramePos)) : (_data.isLagFramePos - 20);
-		do {
-			_data.fps += _data.isLagFrame[i] ? 0 : 1;
-			i = (i + 1) % 60;
-		} while(i != _data.isLagFramePos);
-		_data.fps *= 3;
+			//Update the onscreen display for the CPU %
+			_data.updateCpu = finalCpu;
 
-		_data.fpsChartDataPoints[_data.fpsChartPos] = _data.fps;
-		_data.fpsChartPos = (_data.fpsChartPos + 1) % 256;
+			//Calculate the average FPS for the last 60 frames (and add it as a data point for the chart)
+			_data.fps = 0;
+			int i = _data.isLagFramePos;
+			do {
+				_data.fps += _data.isLagFrame[i] ? 0 : 1;
+				i = (i + 1) % 60;
+			} while(i != _data.isLagFramePos);
+
+			_data.fpsChartDataPoints[_data.fpsChartPos] = _data.fps;
+			_data.fpsChartPos = (_data.fpsChartPos + 1) % 256;
+		}
 	}
 }
