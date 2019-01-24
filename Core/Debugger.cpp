@@ -1105,7 +1105,11 @@ void Debugger::StepBack()
 void Debugger::Run()
 {
 	//Resume execution after a breakpoint has been hit
-	ResetStepState();
+	_ppuStepCount = -1;
+	_stepCount = -1;
+	_breakOnScanline = -2;
+	_stepCycleCount = -1;
+	_stepOut = false;
 }
 
 void Debugger::BreakImmediately(BreakSource source)
