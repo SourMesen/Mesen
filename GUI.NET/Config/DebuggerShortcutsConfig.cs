@@ -306,12 +306,11 @@ namespace Mesen.GUI.Config
 
 				Form parentForm = parent.FindForm();
 				if(parentForm is BaseForm) {
-					ProcessCmdKeyHandler onProcessCmdKeyHandler = (Keys keyData) => {
-						if(parent.ContainsFocus && keyData == keys) {
+					ProcessCmdKeyHandler onProcessCmdKeyHandler = (Keys keyData, ref bool processed) => {
+						if(!processed && parent.ContainsFocus && keyData == keys) {
 							item.PerformClick();
-							return true;
+							processed = true;
 						}
-						return false;
 					};
 
 					((ShortcutInfo)item.Tag).KeyHandler = onProcessCmdKeyHandler;

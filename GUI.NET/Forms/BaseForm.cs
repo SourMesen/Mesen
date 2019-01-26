@@ -12,7 +12,7 @@ namespace Mesen.GUI.Forms
 {
 	public class BaseForm : Form
 	{
-		public delegate bool ProcessCmdKeyHandler(Keys keyData);
+		public delegate void ProcessCmdKeyHandler(Keys keyData, ref bool processed);
 		public event ProcessCmdKeyHandler OnProcessCmdKey;
 
 		protected ToolTip toolTip;
@@ -76,12 +76,9 @@ namespace Mesen.GUI.Forms
 
 		protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
 		{
-			bool? result = OnProcessCmdKey?.Invoke(keyData);
-			if(result == true) {
-				return true;
-			} else {
-				return base.ProcessCmdKey(ref msg, keyData);
-			}
+			bool processed = false;
+			OnProcessCmdKey?.Invoke(keyData, ref processed);
+			return processed || base.ProcessCmdKey(ref msg, keyData);
 		}
 
 		public void Show(object sender, IWin32Window owner = null)
