@@ -178,12 +178,7 @@ bool APU::NeedToRun(uint32_t currentCycle)
 	}
 
 	uint32_t cyclesToRun = currentCycle - _previousCycle;
-	if(_frameCounter->IrqPending(cyclesToRun)) {
-		return true;
-	} else if(_deltaModulationChannel->IrqPending(cyclesToRun)) {
-		return true;
-	}
-	return false;
+	return _frameCounter->NeedToRun(cyclesToRun) || _deltaModulationChannel->IrqPending(cyclesToRun);
 }
 
 void APU::Exec()
