@@ -87,8 +87,12 @@ namespace Mesen.GUI.Config
 			CreateShortcutFile(desktopFile, mimeTypes);
 
 			//Update databases
-			System.Diagnostics.Process.Start("update-mime-database", mimeFolder).WaitForExit();
-			System.Diagnostics.Process.Start("update-desktop-database", desktopFolder);
+			try {
+				System.Diagnostics.Process.Start("update-mime-database", mimeFolder).WaitForExit();
+				System.Diagnostics.Process.Start("update-desktop-database", desktopFolder);
+			} catch {
+				InteropEmu.WriteLogEntry("An error occurred while updating file associations");
+			}
 		}
 
 		static public void CreateShortcutFile(string filename, List<string> mimeTypes = null)
