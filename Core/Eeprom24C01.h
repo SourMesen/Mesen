@@ -41,7 +41,7 @@ public:
 		_console->GetBatteryManager()->SaveBattery(".eeprom128", _romData, 128);
 	}
 
-	void Write(uint8_t scl, uint8_t sda)
+	void Write(uint8_t scl, uint8_t sda) override
 	{
 		if(_prevScl && scl && sda < _prevSda) {
 			//"START is identified by a high to low transition of the SDA line while the clock SCL is *stable* in the high state"
@@ -82,6 +82,8 @@ public:
 						_nextMode = Mode::Idle;
 					}
 					break;
+
+				default: break;
 			}
 		} else if(scl < _prevScl) {
 			//Clock fall
@@ -118,6 +120,8 @@ public:
 						_address = (_address + 1) & 0x7F;
 					}
 					break;
+
+				default: break;
 			}
 		}
 		_prevScl = scl;

@@ -316,7 +316,7 @@ protected:
 	virtual uint32_t GetSaveRamSize() override
 	{
 		if(IsNes20()) {
-			return _saveRamSize;
+			return _romInfo.NesHeader.GetSaveRamSize();
 		} else if(_romInfo.IsInDatabase) {
 			return _romInfo.DatabaseInfo.SaveRamSize;
 		} else {
@@ -328,7 +328,7 @@ protected:
 	virtual uint32_t GetWorkRamSize() override
 	{
 		if(IsNes20()) {
-			return _workRamSize + MMC5::ExRamSize;
+			return _romInfo.NesHeader.GetWorkRamSize() + MMC5::ExRamSize;
 		} else if(_romInfo.IsInDatabase) {
 			return _romInfo.DatabaseInfo.WorkRamSize + MMC5::ExRamSize;
 		} else {

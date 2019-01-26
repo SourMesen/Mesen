@@ -41,7 +41,7 @@ public:
 		_console->GetBatteryManager()->SaveBattery(".eeprom256", _romData, 256);
 	}
 
-	void Write(uint8_t scl, uint8_t sda)
+	void Write(uint8_t scl, uint8_t sda) override
 	{
 		if(_prevScl && scl && sda < _prevSda) {
 			//"START is identified by a high to low transition of the SDA line while the clock SCL is *stable* in the high state"
@@ -55,6 +55,7 @@ public:
 		} else if(scl > _prevScl) {
 			//Clock rise
 			switch(_mode) {
+				default: break;
 				case Mode::ChipAddress: WriteBit(_chipAddress, sda); break;
 				case Mode::Address: WriteBit(_address, sda); break;
 				case Mode::Read: ReadBit(); break;
@@ -137,6 +138,9 @@ public:
 					_mode = _nextMode;
 					_counter = 0;
 					_output = 1;
+					break;
+
+				default:
 					break;
 			}
 		}

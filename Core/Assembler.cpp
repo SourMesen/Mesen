@@ -121,7 +121,7 @@ AssemblerSpecialCodes Assembler::GetLineData(std::smatch match, LineData &lineDa
 		} else if(lineData.Operand.size() <= 8) {
 			lineData.IsHex = true;
 			int value = 0;
-			for(int i = 0; i < lineData.Operand.size(); i++) {
+			for(size_t i = 0; i < lineData.Operand.size(); i++) {
 				value <<= 1;
 				value |= lineData.Operand[i] == '1' ? 1 : 0;
 			}
