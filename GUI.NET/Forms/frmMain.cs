@@ -317,6 +317,7 @@ namespace Mesen.GUI.Forms
 			}
 
 			_shuttingDown = true;
+			CursorManager.StopTimers();
 			BaseForm.StopBackgroundTimer();
 			_logWindow?.Close();
 			_historyViewerWindow?.Close();
