@@ -513,6 +513,7 @@
     <ClInclude Include="BandaiHyperShot.h" />
     <ClInclude Include="BandaiMicrophone.h" />
     <ClInclude Include="BarcodeBattlerReader.h" />
+    <ClInclude Include="BaseEeprom24C0X.h" />
     <ClInclude Include="BaseLoader.h" />
     <ClInclude Include="BaseRenderer.h" />
     <ClInclude Include="BaseSoundManager.h" />
@@ -534,6 +535,8 @@
     <ClInclude Include="DragonFighter.h" />
     <ClInclude Include="DrawScreenBufferCommand.h" />
     <ClInclude Include="DummyCpu.h" />
+    <ClInclude Include="Eeprom24C01.h" />
+    <ClInclude Include="Eeprom24C02.h" />
     <ClInclude Include="FaridSlrom.h" />
     <ClInclude Include="FaridUnrom.h" />
     <ClInclude Include="FdsSystemActionManager.h" />

@@ -374,7 +374,12 @@ void BaseMapper::SelectCHRPage(uint16_t slot, uint16_t page, ChrMemoryType memor
 
 void BaseMapper::InitializeRam(void* data, uint32_t length)
 {
-	switch(_console->GetSettings()->GetRamPowerOnState()) {
+	InitializeRam(_console->GetSettings()->GetRamPowerOnState(), data, length);
+}
+
+void BaseMapper::InitializeRam(RamPowerOnState powerOnState, void* data, uint32_t length)
+{
+	switch(powerOnState) {
 		default:
 		case RamPowerOnState::AllZeros: memset(data, 0, length); break;
 		case RamPowerOnState::AllOnes: memset(data, 0xFF, length); break;

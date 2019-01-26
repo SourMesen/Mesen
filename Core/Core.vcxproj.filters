@@ -1478,6 +1478,15 @@
     <ClInclude Include="PerformanceTracker.h">
       <Filter>Debugger</Filter>
     </ClInclude>
+    <ClInclude Include="Eeprom24C01.h">
+      <Filter>Nes\Mappers\Bandai</Filter>
+    </ClInclude>
+    <ClInclude Include="Eeprom24C02.h">
+      <Filter>Nes\Mappers\Bandai</Filter>
+    </ClInclude>
+    <ClInclude Include="BaseEeprom24C0X.h">
+      <Filter>Nes\Mappers\Bandai</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
