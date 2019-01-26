@@ -13,8 +13,13 @@ void DeltaModulationChannel::Reset(bool softReset)
 {
 	BaseApuChannel::Reset(softReset);
 
-	_sampleAddr = 0;
-	_sampleLength = 0;
+	if(!softReset) {
+		//At power on, the sample address is set to $C000 and the sample length is set to 1
+		//Resetting does not reset their value
+		_sampleAddr = 0xC000;
+		_sampleLength = 1;
+	}
+
 	_outputLevel = 0;
 	_irqEnabled = false;
 	_loopFlag = false;
