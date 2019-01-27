@@ -1,4 +1,6 @@
 #include "../Core/MessageManager.h"
+#include "../Core/Console.h"
+#include "../Core/EmulationSettings.h"
 #include "LinuxGameController.h"
 #include <libevdev/libevdev.h>
 #include <unistd.h>
@@ -10,7 +12,7 @@
 #include <fcntl.h>
 #include <iostream>
 
-std::shared_ptr<LinuxGameController> LinuxGameController::GetController(int deviceID, bool logInformation)
+std::shared_ptr<LinuxGameController> LinuxGameController::GetController(shared_ptr<Console> console, int deviceID, bool logInformation)
 {
 	std::string deviceName = "/dev/input/event" + std::to_string(deviceID);
 	struct stat buffer;   
@@ -36,7 +38,7 @@ std::shared_ptr<LinuxGameController> LinuxGameController::GetController(int devi
 		if((libevdev_has_event_type(device, EV_KEY) && libevdev_has_event_code(device, EV_KEY, BTN_GAMEPAD)) ||
 			(libevdev_has_event_type(device, EV_ABS) && libevdev_has_event_code(device, EV_ABS, ABS_X))) {
 			MessageManager::Log(std::string("[Input Connected] Name: ") + libevdev_get_name(device) + " Vendor: " + std::to_string(libevdev_get_id_vendor(device)) + " Product: " + std::to_string(libevdev_get_id_product(device)));
-			return std::shared_ptr<LinuxGameController>(new LinuxGameController(deviceID, fd, device));
+			return std::shared_ptr<LinuxGameController>(new LinuxGameController(console, deviceID, fd, device));
 		} else {
 			MessageManager::Log(std::string("[Input] Device ignored (Not a gamepad) - Name: ") + libevdev_get_name(device) + " Vendor: " + std::to_string(libevdev_get_id_vendor(device)) + " Product: " + std::to_string(libevdev_get_id_product(device)));
 			close(fd);			
@@ -45,8 +47,9 @@ std::shared_ptr<LinuxGameController> LinuxGameController::GetController(int devi
 	return nullptr;
 }
 
-LinuxGameController::LinuxGameController(int deviceID, int fileDescriptor, libevdev* device)
+LinuxGameController::LinuxGameController(shared_ptr<Console> console, int deviceID, int fileDescriptor, libevdev* device)
 {
+	_console = console;
 	_deviceID = deviceID;
 	_stopFlag = false;
 	_device = device;
@@ -119,8 +122,9 @@ void LinuxGameController::Calibrate()
 
 bool LinuxGameController::CheckAxis(unsigned int code, bool forPositive)
 {
-	int deadZoneNegative = (_axisDefaultValue[code] - libevdev_get_abs_minimum(_device, code)) * 0.225;
-	int deadZonePositive = (libevdev_get_abs_maximum(_device, code) - _axisDefaultValue[code]) * 0.225;
+	double deadZoneRatio = _console->GetSettings()->GetControllerDeadzoneRatio();
+	int deadZoneNegative = (_axisDefaultValue[code] - libevdev_get_abs_minimum(_device, code)) * 0.400 * deadZoneRatio;
+	int deadZonePositive = (libevdev_get_abs_maximum(_device, code) - _axisDefaultValue[code]) * 0.400 * deadZoneRatio;
 	
 	if(forPositive) {
 		return libevdev_get_event_value(_device, EV_ABS, code) - _axisDefaultValue[code] > deadZonePositive;
