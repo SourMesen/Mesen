@@ -307,7 +307,7 @@ namespace Mesen.GUI.Config
 				Form parentForm = parent.FindForm();
 				if(parentForm is BaseForm) {
 					ProcessCmdKeyHandler onProcessCmdKeyHandler = (Keys keyData, ref bool processed) => {
-						if(!processed && parent.ContainsFocus && keyData == keys) {
+						if(!processed && item.Enabled && parent.ContainsFocus && keyData == keys) {
 							item.PerformClick();
 							processed = true;
 						}
