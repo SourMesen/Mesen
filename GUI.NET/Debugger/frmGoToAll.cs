@@ -160,8 +160,8 @@ namespace Mesen.GUI.Debugger
 			byte[] cdlData = InteropEmu.DebugGetPrgCdlData();
 
 			List<SearchResultInfo> searchResults = new List<SearchResultInfo>();
-
-			if(!string.IsNullOrWhiteSpace(searchString)) {
+			bool isEmptySearch = string.IsNullOrWhiteSpace(searchString);
+			if(!isEmptySearch) {
 				if(_symbolProvider != null) {
 					if(_showFilesAndConstants) {
 						foreach(Ld65DbgImporter.FileInfo file in _symbolProvider.Files.Values) {
@@ -269,14 +269,15 @@ namespace Mesen.GUI.Debugger
 			_resultCount = Math.Min(searchResults.Count, MaxResultCount);
 			SelectedResult = 0;
 
-			if(searchResults.Count == 0) {
+			if(searchResults.Count == 0 && !isEmptySearch) {
 				searchResults.Add(new SearchResultInfo() { Caption = "No results found.", AbsoluteAddress = -1 });
 				pnlResults.BackColor = SystemColors.ControlLight;
 			} else {
 				pnlResults.BackColor = SystemColors.ControlDarkDark;
 			}
 
-			lblResultCount.Text = searchResults.Count.ToString() + " results";
+			lblResultCount.Visible = !isEmptySearch;
+			lblResultCount.Text = _resultCount.ToString() + (_resultCount == 1 ? " result" : " results");
 			if(searchResults.Count > MaxResultCount) {
 				lblResultCount.Text += " (" + MaxResultCount.ToString() + " shown)";
 			}
@@ -288,7 +289,7 @@ namespace Mesen.GUI.Debugger
 				tlpResults.SuspendLayout();
 			}
 
-			for(int i = 0; i < _resultCount; i++) {
+			for(int i = 0; i < searchResults.Count; i++) {
 				_results[i].Initialize(searchResults[i]);
 				_results[i].Tag = searchResults[i];
 				_results[i].Visible = true;
@@ -299,7 +300,7 @@ namespace Mesen.GUI.Debugger
 			}
 
 			pnlResults.VerticalScroll.Value = 0;
-			tlpResults.Height = (_results[0].Height + 1) * _resultCount;
+			tlpResults.Height = (_results[0].Height + 1) * searchResults.Count;
 			
 			pnlResults.ResumeLayout();
 			if(Program.IsMono) {
