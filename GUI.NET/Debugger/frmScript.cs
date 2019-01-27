@@ -31,6 +31,7 @@ namespace Mesen.GUI.Debugger
 		{
 			InitializeComponent();
 			ThemeHelper.ExcludeFromTheme(txtScriptContent);
+			txtScriptContent.ForeColor = Color.Black;
 
 			DebugInfo.ApplyConfig();
 

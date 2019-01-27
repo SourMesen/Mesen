@@ -32,6 +32,7 @@ namespace Mesen.GUI.Debugger
 		{
 			InitializeComponent();
 			ThemeHelper.ExcludeFromTheme(txtCode);
+			txtCode.ForeColor = Color.Black;
 
 			DebugInfo config = ConfigManager.Config.DebugInfo;
 
