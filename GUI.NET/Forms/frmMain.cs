@@ -702,6 +702,7 @@ namespace Mesen.GUI.Forms
 					break;
 
 				case InteropEmu.ConsoleNotificationType.BeforeEmulationStop:
+					//Close all debugger windows before continuing.
 					this.Invoke((Action)(() => {
 						DebugWindowManager.CloseAll();
 					}));

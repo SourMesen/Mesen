@@ -157,11 +157,7 @@ namespace Mesen.GUI.Debugger
 			if(_openedWindows.Count == 0) {
 				//All windows have been closed, disable debugger
 				DebugWorkspaceManager.Clear();
-
-				Task.Run(() => {
-					//Run this in another thread to avoid deadlocks when this is called within a notification handler
-					InteropEmu.DebugRelease();
-				});
+				InteropEmu.DebugRelease();
 			}
 		}
 

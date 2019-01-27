@@ -126,11 +126,11 @@ Debugger::Debugger(shared_ptr<Console> console, shared_ptr<CPU> cpu, shared_ptr<
 Debugger::~Debugger()
 {
 	if(!_released) {
-		ReleaseDebugger();
+		ReleaseDebugger(true);
 	}
 }
 
-void Debugger::ReleaseDebugger()
+void Debugger::ReleaseDebugger(bool needPause)
 {
 	auto lock = _releaseLock.AcquireSafe();
 	if(!_released) {
@@ -138,7 +138,12 @@ void Debugger::ReleaseDebugger()
 
 		_stopFlag = true;
 
-		_console->Pause();
+		if(needPause) {
+			//ReleaseDebugger is called in the callback for "BeforeEmulationStop"
+			//calling Pause in this scenario will cause a deadlock, but doing so is
+			//unnecessary, so we can just skip it.
+			_console->Pause();
+		}
 
 		{
 			auto lock = _scriptLock.AcquireSafe();
@@ -152,7 +157,10 @@ void Debugger::ReleaseDebugger()
 
 		_breakLock.Acquire();
 		_breakLock.Release();
-		_console->Resume();
+
+		if(needPause) {
+			_console->Resume();
+		}
 
 		_released = true;
 	}
