@@ -24,7 +24,7 @@ namespace Mesen.GUI.Controls
 
 		private void chkOption_CheckedChanged(object sender, EventArgs e)
 		{
-			this.lblNotRecommended.ForeColor = this.chkOption.Checked ? Color.Red : SystemColors.ControlDark;
+			this.lblNotRecommended.ForeColor = this.chkOption.Checked ? ThemeHelper.Theme.ErrorTextColor : ThemeHelper.Theme.GrayTextColor;
 		}
 
 		[Bindable(true)]

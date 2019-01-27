@@ -1254,12 +1254,16 @@
     <Compile Include="GoogleDriveIntegration\GoogleDriveAccessor.cs" />
     <Compile Include="GoogleDriveIntegration\MesenCodeReceiver.cs" />
     <Compile Include="InteropEmu.cs" />
+    <Compile Include="ThemeHelper.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ResourceManager.cs" />
     <Compile Include="RuntimeChecker.cs" />
     <Compile Include="SingleInstance.cs" />
     <Compile Include="TestRunner.cs" />
+    <None Include="Resources\NudDownArrowDarkTheme.png" />
+    <None Include="Resources\DownArrowDarkTheme.png" />
+    <None Include="Resources\NudUpArrowDarkTheme.png" />
     <None Include="Resources\PerfTracker.png" />
     <None Include="Resources\Zoom2x.png" />
     <None Include="Resources\Expand.png" />

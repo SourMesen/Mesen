@@ -45,7 +45,7 @@ namespace Mesen.GUI.Controls
 				if(!Program.IsMono && Environment.OSVersion.Version >= new Version(6, 2)) {
 					return Properties.Resources.DownArrowWin10;
 				} else {
-					return Properties.Resources.DownArrow;
+					return ThemeHelper.IsDark ? Properties.Resources.DownArrowDarkTheme : Properties.Resources.DownArrow;
 				}
 			}
 		}

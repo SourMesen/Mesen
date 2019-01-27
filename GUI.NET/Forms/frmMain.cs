@@ -72,7 +72,11 @@ namespace Mesen.GUI.Forms
 
 		public frmMain(string[] args)
 		{
+			ThemeHelper.InitTheme(this.BackColor);
 			InitializeComponent();
+
+			ThemeHelper.ExcludeFromTheme(panelInfo);
+			ThemeHelper.ExcludeFromTheme(panelRenderer);
 
 			this.StartPosition = FormStartPosition.CenterScreen;
 
@@ -251,6 +255,8 @@ namespace Mesen.GUI.Forms
 
 			mnuDebugDualSystemSecondaryCpu.Checked = ConfigManager.Config.DebugInfo.DebugConsoleId == InteropEmu.ConsoleId.Slave;
 			InteropEmu.DebugSetDebuggerConsole(ConfigManager.Config.DebugInfo.DebugConsoleId);
+
+			BaseForm.StartBackgroundTimer();
 		}
 
 		private void ProcessFullscreenSwitch(List<string> switches)

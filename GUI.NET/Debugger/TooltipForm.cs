@@ -20,6 +20,7 @@ namespace Mesen.GUI.Debugger
 		{
 			base.OnLoad(e);
 			if(!DesignMode) {
+				ThemeHelper.FixMonoColors(this);
 				UpdateLocation();
 			}
 		}

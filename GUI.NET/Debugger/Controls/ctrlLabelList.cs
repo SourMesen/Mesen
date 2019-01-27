@@ -97,14 +97,14 @@ namespace Mesen.GUI.Debugger.Controls
 					needUpdate = true;
 					if(relativeAddress >= 0) {
 						item.SubItems[1].Text = "$" + relativeAddress.ToString("X4");
-						item.ForeColor = Color.Black;
+						item.ForeColor = ThemeHelper.Theme.LabelForeColor;
 						if(regularFont == null) {
 							regularFont = new Font(item.Font, FontStyle.Regular);
 						}
 						item.Font = regularFont;
 					} else {
 						item.SubItems[1].Text = "[n/a]";
-						item.ForeColor = Color.Gray;
+						item.ForeColor = ThemeHelper.Theme.LabelDisabledForeColor;
 						if(italicFont == null) {
 							italicFont = new Font(item.Font, FontStyle.Italic);
 						}
@@ -132,7 +132,7 @@ namespace Mesen.GUI.Debugger.Controls
 						item.SubItems.Add("$" + relativeAddress.ToString("X4"));
 					} else {
 						item.SubItems.Add("[n/a]");
-						item.ForeColor = Color.Gray;
+						item.ForeColor = ThemeHelper.Theme.LabelDisabledForeColor;
 						if(italicFont == null) {
 							italicFont = new Font(item.Font, FontStyle.Italic);
 						}

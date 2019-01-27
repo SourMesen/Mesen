@@ -105,7 +105,8 @@ namespace Mesen.GUI.Debugger.Controls
 				} else {
 					_txtMappings[i].Text = "";
 					_txtMappings[i].BackColor = Color.White;
-				}				
+				}
+				_txtMappings[i].ForeColor = Color.Black;
 			}
 		}
 

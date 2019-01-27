@@ -18,6 +18,7 @@ namespace Mesen.GUI.Forms
 		public frmHelp()
 		{
 			InitializeComponent();
+			ThemeHelper.ExcludeFromTheme(lblExample);
 		}
 
 		protected override void OnLoad(EventArgs e)

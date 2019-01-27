@@ -75,7 +75,7 @@ namespace Mesen.GUI.Debugger
 				foreach(WatchValueInfo watch in watchContent) {
 					ListViewItem item = new ListViewItem(watch.Expression);
 					item.UseItemStyleForSubItems = false;
-					item.SubItems.Add(watch.Value).ForeColor = watch.HasChanged ? Color.Red : Color.Black;
+					item.SubItems.Add(watch.Value).ForeColor = watch.HasChanged ? ThemeHelper.Theme.ErrorTextColor : ThemeHelper.Theme.LabelForeColor;
 					itemsToAdd.Add(item);
 				}
 				var lastItem = new ListViewItem("");
@@ -89,13 +89,13 @@ namespace Mesen.GUI.Debugger
 					bool needUpdate = (
 						item.SubItems[0].Text != watchContent[i].Expression ||
 						item.SubItems[1].Text != watchContent[i].Value ||
-						item.SubItems[1].ForeColor != (watchContent[i].HasChanged ? Color.Red : Color.Black)
+						item.SubItems[1].ForeColor != (watchContent[i].HasChanged ? ThemeHelper.Theme.ErrorTextColor : ThemeHelper.Theme.LabelForeColor)
 					);
 					if(needUpdate) {
 						updating = true;
 						item.SubItems[0].Text = watchContent[i].Expression;
 						item.SubItems[1].Text = watchContent[i].Value;
-						item.SubItems[1].ForeColor = watchContent[i].HasChanged ? Color.Red : Color.Black;
+						item.SubItems[1].ForeColor = watchContent[i].HasChanged ? ThemeHelper.Theme.ErrorTextColor : ThemeHelper.Theme.LabelForeColor;
 					}
 				}
 			}

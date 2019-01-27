@@ -28,6 +28,7 @@ namespace Mesen.GUI.Debugger
 		public ctrlConsoleStatus()
 		{
 			InitializeComponent();
+			ThemeHelper.FixMonoColors(contextGoTo);
 
 			bool designMode = (LicenseManager.UsageMode == LicenseUsageMode.Designtime);
 			if(!designMode) {

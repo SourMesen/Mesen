@@ -22,16 +22,6 @@ namespace Mesen.GUI.Forms
 		private static Timer _tmrUpdateBackground;
 		private static bool _needResume = false;
 
-		static BaseForm()
-		{
-			bool designMode = (LicenseManager.UsageMode == LicenseUsageMode.Designtime);
-			if(!designMode) {
-				_tmrUpdateBackground = new Timer();
-				_tmrUpdateBackground.Start();
-				_tmrUpdateBackground.Tick += tmrUpdateBackground_Tick;
-			}
-		}
-
 		public BaseForm()
 		{
 			InitializeComponent();
@@ -39,9 +29,16 @@ namespace Mesen.GUI.Forms
 
 		protected virtual bool IsConfigForm { get { return false; } }
 
+		public static void StartBackgroundTimer()
+		{
+			_tmrUpdateBackground = new Timer();
+			_tmrUpdateBackground.Start();
+			_tmrUpdateBackground.Tick += tmrUpdateBackground_Tick;
+		}
+
 		public static void StopBackgroundTimer()
 		{
-			_tmrUpdateBackground.Stop();
+			_tmrUpdateBackground?.Stop();
 		}
 
 		private static void tmrUpdateBackground_Tick(object sender, EventArgs e)
@@ -128,6 +125,7 @@ namespace Mesen.GUI.Forms
 			}
 
 			int tabIndex = 0;
+			ThemeHelper.FixMonoColors(this);
 			InitializeTabIndexes(this, ref tabIndex);
 			ResourceHelper.ApplyResources(this);
 		}
@@ -153,35 +151,6 @@ namespace Mesen.GUI.Forms
 
 		private void InitializeTabIndexes(Control container, ref int tabIndex)
 		{
-			if(Program.IsMono) {
-				if(container is TextBox) {
-					((TextBox)container).BorderStyle = BorderStyle.FixedSingle;
-					((TextBox)container).BackColor = ((TextBox)container).ReadOnly ? Color.FromArgb(240, 240, 240) : Color.FromArgb(255, 255, 255);
-					((TextBox)container).ReadOnlyChanged += (object sender, EventArgs e) => {
-						((TextBox)sender).BackColor = ((TextBox)sender).ReadOnly ? Color.FromArgb(240, 240, 240) : Color.FromArgb(255, 255, 255);
-					};
-				} else if(container is CheckBox) {
-					((CheckBox)container).FlatStyle = FlatStyle.Flat;
-				} else if(container is Button) {
-					((Button)container).FlatStyle = FlatStyle.Flat;
-					((Button)container).BackColor = ((Button)container).Enabled ? Color.FromArgb(230, 230, 230) : Color.FromArgb(180, 180, 180);
-					((Button)container).EnabledChanged += (object sender, EventArgs e) => {
-						((Button)sender).BackColor = ((Button)sender).Enabled ? Color.FromArgb(230, 230, 230) : Color.FromArgb(180, 180, 180);
-					};
-				} else if(container is ComboBox) {
-					((ComboBox)container).FlatStyle = FlatStyle.Flat;
-					((ComboBox)container).BackColor = ((ComboBox)container).Enabled ? Color.FromArgb(230, 230, 230) : Color.FromArgb(180, 180, 180);
-					((ComboBox)container).EnabledChanged += (object sender, EventArgs e) => {
-						((ComboBox)sender).BackColor = ((ComboBox)sender).Enabled ? Color.FromArgb(230, 230, 230) : Color.FromArgb(180, 180, 180);
-					};
-				} else if(container is TabPage) {
-					((TabPage)container).BackColor = Color.White;
-				} else if(container is MenuStrip) {
-					((MenuStrip)container).RenderMode = ToolStripRenderMode.System;
-				} else if(container is ToolStrip) {
-					((ToolStrip)container).RenderMode = ToolStripRenderMode.System;
-				}
-			}			
 			container.TabIndex = tabIndex;
 			tabIndex++;
 

@@ -20,12 +20,20 @@ namespace Mesen.GUI.Forms
 	{
 		public frmConfigWizard()
 		{
+			ThemeHelper.InitTheme(this.BackColor);
+
 			InitializeComponent();
 
 			this.Icon = Properties.Resources.MesenIcon;
+		}
+
+		protected override void OnLoad(EventArgs e)
+		{
+			base.OnLoad(e);
+			ThemeHelper.FixMonoColors(this);
 			lblLocation.Text = ConfigManager.DefaultDocumentsFolder;
-			lblLocation.ForeColor = Color.FromArgb(61,125,255);
-			lblCancel.ForeColor = Color.FromArgb(61, 125, 255);
+			lblLocation.ForeColor = ThemeHelper.Theme.LinkTextColor;
+			lblCancel.ForeColor = ThemeHelper.Theme.LinkTextColor;
 		}
 
 		private void InitializeConfig()

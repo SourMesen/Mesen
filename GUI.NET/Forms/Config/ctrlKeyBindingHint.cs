@@ -15,6 +15,7 @@ namespace Mesen.GUI.Forms.Config
 		public ctrlKeyBindingHint()
 		{
 			InitializeComponent();
+			ThemeHelper.ExcludeFromTheme(this);
 		}
 	}
 }
