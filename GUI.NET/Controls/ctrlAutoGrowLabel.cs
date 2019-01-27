@@ -23,7 +23,7 @@ namespace Mesen.GUI.Controls
 				_growing = true;
 				Size textSize = new Size(this.ClientSize.Width - this.Padding.Left - this.Padding.Right, Int32.MaxValue);
 				textSize = TextRenderer.MeasureText(this.Text, this.Font, textSize, TextFormatFlags.WordBreak);
-				this.ClientSize = new Size(this.ClientSize.Width, textSize.Height);
+				this.ClientSize = new Size(textSize.Width + this.Margin.Size.Width + this.Padding.Size.Width, textSize.Height);
 			} finally {
 				_growing = false;
 			}

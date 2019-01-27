@@ -27,65 +27,42 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
-			this.panel1 = new System.Windows.Forms.Panel();
-			this.tlpMain = new System.Windows.Forms.TableLayoutPanel();
-			this.panel1.SuspendLayout();
+			this.panel = new System.Windows.Forms.Panel();
 			this.SuspendLayout();
 			// 
-			// panel1
+			// panel
 			// 
-			this.panel1.AutoSize = true;
-			this.panel1.BackColor = System.Drawing.SystemColors.Info;
-			this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.panel1.Controls.Add(this.tlpMain);
-			this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.panel1.Location = new System.Drawing.Point(0, 0);
-			this.panel1.Name = "panel1";
-			this.panel1.Size = new System.Drawing.Size(10, 10);
-			this.panel1.TabIndex = 0;
+			this.panel.BackColor = System.Drawing.SystemColors.Info;
+			this.panel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this.panel.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.panel.Location = new System.Drawing.Point(0, 0);
+			this.panel.Name = "panel";
+			this.panel.Padding = new System.Windows.Forms.Padding(2);
+			this.panel.Size = new System.Drawing.Size(416, 328);
+			this.panel.TabIndex = 0;
 			// 
-			// tlpMain
-			// 
-			this.tlpMain.AutoSize = true;
-			this.tlpMain.ColumnCount = 2;
-			this.tlpMain.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-			this.tlpMain.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tlpMain.Location = new System.Drawing.Point(0, 0);
-			this.tlpMain.Name = "tlpMain";
-			this.tlpMain.RowCount = 2;
-			this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-			this.tlpMain.Size = new System.Drawing.Size(8, 8);
-			this.tlpMain.TabIndex = 0;
-			// 
-			// frmCodeTooltip
+			// frmCodePreviewTooltip
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.AutoSize = true;
-			this.ClientSize = new System.Drawing.Size(10, 10);
+			this.ClientSize = new System.Drawing.Size(416, 328);
 			this.ControlBox = false;
-			this.Controls.Add(this.panel1);
+			this.Controls.Add(this.panel);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
 			this.MaximizeBox = false;
 			this.MinimizeBox = false;
-			this.Name = "frmCodeTooltip";
+			this.Name = "frmCodePreviewTooltip";
 			this.ShowIcon = false;
 			this.ShowInTaskbar = false;
-			this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
 			this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
+			this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
 			this.Text = "frmCodeTooltip";
-			this.panel1.ResumeLayout(false);
-			this.panel1.PerformLayout();
 			this.ResumeLayout(false);
-			this.PerformLayout();
 
 		}
 
 		#endregion
 
-		private System.Windows.Forms.Panel panel1;
-		private System.Windows.Forms.TableLayoutPanel tlpMain;
+		private System.Windows.Forms.Panel panel;
 	}
 }

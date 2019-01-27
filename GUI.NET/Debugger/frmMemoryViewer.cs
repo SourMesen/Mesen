@@ -646,10 +646,11 @@ namespace Mesen.GUI.Debugger
 						label = LabelManager.GetLabel((UInt32)info.Address, info.Type);
 						if(label != null) {
 							arrayOffset = info.Address - (int)label.Address;
-						} else {
-							label = LabelManager.GetLabel((UInt32)address, AddressType.Register);
 						}
-					} 
+					}
+					if(label == null) {
+						label = LabelManager.GetLabel((UInt32)address, AddressType.Register);
+					}
 					break;
 
 				case DebugMemoryType.InternalRam:

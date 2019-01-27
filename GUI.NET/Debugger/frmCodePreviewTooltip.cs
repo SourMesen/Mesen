@@ -43,8 +43,7 @@ namespace Mesen.GUI.Debugger
 
 		protected override void OnLoad(EventArgs e)
 		{
-			tlpMain.SuspendLayout();
-			tlpMain.RowStyles.Insert(1, new RowStyle());
+			panel.SuspendLayout();
 
 			if(_code != null) {
 				_codeViewer = new ctrlDebuggerCode();
@@ -68,17 +67,13 @@ namespace Mesen.GUI.Debugger
 
 			Control control = _codeViewer as Control;
 			control.Dock = DockStyle.Fill;
-			tlpMain.SetRow(control, 0);
-			tlpMain.SetColumn(control, 0);
-			tlpMain.SetColumnSpan(control, 2);
-			tlpMain.Controls.Add(control);
+			panel.Controls.Add(control);
 
-			tlpMain.ResumeLayout();
-			this.Width = this.tlpMain.Width;
-			this.Height = this.tlpMain.Height;
+			panel.ResumeLayout();
 			this.BringToFront();
-
 			base.OnLoad(e);
+
+			panel.BackColor = ThemeHelper.IsDark ? ThemeHelper.Theme.FormBgColor : SystemColors.Info;
 		}
 
 		public void ScrollToLineIndex(int lineIndex)

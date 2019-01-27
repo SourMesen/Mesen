@@ -302,7 +302,7 @@ namespace Mesen.GUI.Config
 		public bool FindOccurrencesMatchWholeWord = false;
 		public string FindOccurrencesLastSearch = string.Empty;
 
-		public bool AutoLoadDbgFiles = false;
+		public bool AutoLoadDbgFiles = true;
 		public bool AutoLoadCdlFiles = false;
 		public bool DisableDefaultLabels = false;
 

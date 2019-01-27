@@ -42,26 +42,28 @@ namespace Mesen.GUI.Debugger
 		protected override void OnLoad(EventArgs e)
 		{
 			tlpMain.SuspendLayout();
+
+			TableLayoutPanel tlpLabels = new TableLayoutPanel();
+			tlpLabels.SuspendLayout();
+			tlpLabels.AutoSize = true;
+			tlpMain.Controls.Add(tlpLabels, 0, 0);
 			int i = 0;
+			int maxLabelWidth = (_parentForm.ClientSize.Width - this.Location.X - 150);
 			foreach(KeyValuePair<string, string> kvp in _values) {
-				tlpMain.RowStyles.Insert(1, new RowStyle());
+				tlpLabels.RowStyles.Add(new RowStyle());
 				Label lbl = new Label();
 				lbl.Margin = new Padding(2, 3, 2, 2);
 				lbl.Text = kvp.Key + ":";
 				lbl.Font = new Font(lbl.Font, FontStyle.Bold);
 				lbl.AutoSize = true;
-				tlpMain.SetRow(lbl, i);
-				tlpMain.SetColumn(lbl, 0);
-				tlpMain.Controls.Add(lbl);
+				tlpLabels.Controls.Add(lbl, 0, i);
 
-				lbl = new Label();
+				lbl = new ctrlAutoGrowLabel();
 				lbl.Font = new Font(BaseControl.MonospaceFontFamily, 10);
 				lbl.Margin = new Padding(2);
-				lbl.AutoSize = true;
 				lbl.Text = kvp.Value;
-				tlpMain.SetRow(lbl, i);
-				tlpMain.SetColumn(lbl, 1);
-				tlpMain.Controls.Add(lbl);
+				lbl.Size = new Size(maxLabelWidth, 10);
+				tlpLabels.Controls.Add(lbl, 1, i);
 
 				i++;
 			}
@@ -86,11 +88,9 @@ namespace Mesen.GUI.Debugger
 
 				Control control = _codeViewer as Control;
 				control.Dock = DockStyle.Fill;
-				tlpMain.SetRow(control, i);
-				tlpMain.SetColumn(control, 0);
-				tlpMain.SetColumnSpan(control, 2);
-				tlpMain.Controls.Add(control);
+				tlpMain.Controls.Add(control, 0, 1);
 			}
+			tlpLabels.ResumeLayout();
 			tlpMain.ResumeLayout();
 			this.Width = this.tlpMain.Width;
 			if(this.Location.X + this.Width > _parentForm.ClientSize.Width) {
@@ -98,10 +98,12 @@ namespace Mesen.GUI.Debugger
 				this.tlpMain.MaximumSize = new Size(maxWidth, _parentForm.ClientSize.Height - 10);
 				this.MaximumSize = new Size(maxWidth, _parentForm.ClientSize.Height - 10);
 			}
-			this.Height = this.tlpMain.Height; 
+			this.Height = this.tlpMain.Height;
 			this.BringToFront();
 
 			base.OnLoad(e);
+
+			panel.BackColor = ThemeHelper.IsDark ? ThemeHelper.Theme.FormBgColor : SystemColors.Info;
 		}
 	}
 }
