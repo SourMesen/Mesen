@@ -36,6 +36,7 @@ namespace Mesen.GUI.Forms
 			this.ctrlRendererDualSystem = new Mesen.GUI.Controls.ctrlRenderer();
 			this.ctrlLoading = new Mesen.GUI.Controls.ctrlLoadingRom();
 			this.panelInfo = new System.Windows.Forms.Panel();
+			this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
 			this.picIcon = new System.Windows.Forms.PictureBox();
 			this.lblVersion = new System.Windows.Forms.Label();
 			this.ctrlRecentGames = new Mesen.GUI.Controls.ctrlRecentGames();
@@ -223,6 +224,7 @@ namespace Mesen.GUI.Forms
 			this.mnuProfiler = new System.Windows.Forms.ToolStripMenuItem();
 			this.panelRenderer.SuspendLayout();
 			this.panelInfo.SuspendLayout();
+			this.tableLayoutPanel1.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.picIcon)).BeginInit();
 			this.menuStrip.SuspendLayout();
 			this.SuspendLayout();
@@ -274,19 +276,34 @@ namespace Mesen.GUI.Forms
 			// 
 			this.panelInfo.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.panelInfo.BackColor = System.Drawing.Color.Transparent;
-			this.panelInfo.Controls.Add(this.picIcon);
-			this.panelInfo.Controls.Add(this.lblVersion);
-			this.panelInfo.Location = new System.Drawing.Point(359, 283);
+			this.panelInfo.Controls.Add(this.tableLayoutPanel1);
+			this.panelInfo.Location = new System.Drawing.Point(353, 283);
 			this.panelInfo.Name = "panelInfo";
-			this.panelInfo.Size = new System.Drawing.Size(71, 26);
+			this.panelInfo.Size = new System.Drawing.Size(77, 26);
 			this.panelInfo.TabIndex = 6;
+			// 
+			// tableLayoutPanel1
+			// 
+			this.tableLayoutPanel1.ColumnCount = 2;
+			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+			this.tableLayoutPanel1.Controls.Add(this.picIcon, 1, 0);
+			this.tableLayoutPanel1.Controls.Add(this.lblVersion, 0, 0);
+			this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
+			this.tableLayoutPanel1.Margin = new System.Windows.Forms.Padding(0);
+			this.tableLayoutPanel1.Name = "tableLayoutPanel1";
+			this.tableLayoutPanel1.RowCount = 1;
+			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+			this.tableLayoutPanel1.Size = new System.Drawing.Size(77, 26);
+			this.tableLayoutPanel1.TabIndex = 6;
 			// 
 			// picIcon
 			// 
-			this.picIcon.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.picIcon.Anchor = System.Windows.Forms.AnchorStyles.None;
 			this.picIcon.BackgroundImage = global::Mesen.GUI.Properties.Resources.MesenIconSmall;
 			this.picIcon.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
-			this.picIcon.Location = new System.Drawing.Point(50, 5);
+			this.picIcon.Location = new System.Drawing.Point(58, 5);
 			this.picIcon.Name = "picIcon";
 			this.picIcon.Size = new System.Drawing.Size(16, 16);
 			this.picIcon.TabIndex = 5;
@@ -294,14 +311,16 @@ namespace Mesen.GUI.Forms
 			// 
 			// lblVersion
 			// 
-			this.lblVersion.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.lblVersion.Anchor = System.Windows.Forms.AnchorStyles.Right;
 			this.lblVersion.AutoSize = true;
 			this.lblVersion.BackColor = System.Drawing.Color.Transparent;
 			this.lblVersion.ForeColor = System.Drawing.Color.White;
-			this.lblVersion.Location = new System.Drawing.Point(4, 7);
+			this.lblVersion.Location = new System.Drawing.Point(55, 5);
+			this.lblVersion.Margin = new System.Windows.Forms.Padding(0, 1, 0, 0);
 			this.lblVersion.Name = "lblVersion";
-			this.lblVersion.Size = new System.Drawing.Size(0, 13);
+			this.lblVersion.Size = new System.Drawing.Size(0, 16);
 			this.lblVersion.TabIndex = 6;
+			this.lblVersion.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// ctrlRecentGames
 			// 
@@ -1801,7 +1820,8 @@ namespace Mesen.GUI.Forms
 			this.Resize += new System.EventHandler(this.frmMain_Resize);
 			this.panelRenderer.ResumeLayout(false);
 			this.panelInfo.ResumeLayout(false);
-			this.panelInfo.PerformLayout();
+			this.tableLayoutPanel1.ResumeLayout(false);
+			this.tableLayoutPanel1.PerformLayout();
 			((System.ComponentModel.ISupportInitialize)(this.picIcon)).EndInit();
 			this.menuStrip.ResumeLayout(false);
 			this.menuStrip.PerformLayout();
@@ -2002,6 +2022,7 @@ namespace Mesen.GUI.Forms
 		private System.Windows.Forms.ToolStripMenuItem mnuOpenPaletteViewer;
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem28;
 		private System.Windows.Forms.ToolStripMenuItem mnuProfiler;
+		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
 	}
 }
 
