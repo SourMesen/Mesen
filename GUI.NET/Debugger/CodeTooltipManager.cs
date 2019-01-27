@@ -46,10 +46,7 @@ namespace Mesen.GUI.Debugger
 			Form parentForm = _owner.FindForm();
 
 			if(_hoverLastWord != word || _hoverLastLineAddress != lineAddress || _codeTooltip == null) {
-				if(_codeTooltip != null) {
-					_codeTooltip.Close();
-					_codeTooltip = null;
-				}
+				this.Close();
 
 				if(ConfigManager.Config.DebugInfo.ShowOpCodeTooltips && frmOpCodeTooltip.IsOpCode(word)) {
 					_codeTooltip = new frmOpCodeTooltip(parentForm, word, lineAddress);
