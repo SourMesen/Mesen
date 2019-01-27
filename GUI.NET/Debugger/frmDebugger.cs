@@ -47,6 +47,9 @@ namespace Mesen.GUI.Debugger
 
 		protected override void OnLoad(EventArgs e)
 		{
+			this.InitShortcuts();
+			this.InitToolbar();
+
 			base.OnLoad(e);
 
 			_minimumSize = this.MinimumSize;
@@ -65,9 +68,6 @@ namespace Mesen.GUI.Debugger
 			ctrlDebuggerCodeSplit.CodeViewer.BaseFont = font;
 			ctrlSourceViewer.CodeViewer.BaseFont = font;
 			ctrlSourceViewerSplit.CodeViewer.BaseFont = font;
-
-			this.InitShortcuts();
-			this.InitToolbar();
 
 			this.UpdateWorkspace();
 			this.AutoLoadCdlFiles();
