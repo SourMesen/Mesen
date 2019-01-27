@@ -71,6 +71,8 @@ namespace Mesen.GUI
 		{
 			item.ForeColor = item.Enabled ? theme.ToolStripItemForeColor : theme.ToolStripItemDisabledForeColor;
 			item.BackColor = theme.ToolStripItemBgColor;
+			item.Font = new Font("Microsoft Sans Serif", 8.25f);
+
 			item.EnabledChanged += (object sender, EventArgs e) => {
 				((ToolStripItem)sender).ForeColor = ((ToolStripItem)sender).Enabled ? theme.ToolStripItemForeColor : theme.ToolStripItemDisabledForeColor;
 			};

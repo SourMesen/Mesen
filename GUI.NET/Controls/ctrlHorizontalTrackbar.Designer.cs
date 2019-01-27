@@ -47,16 +47,18 @@
 			this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
 			this.tableLayoutPanel1.Margin = new System.Windows.Forms.Padding(0);
 			this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-			this.tableLayoutPanel1.RowCount = 2;
-			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+			this.tableLayoutPanel1.RowCount = 3;
+			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel1.Size = new System.Drawing.Size(206, 55);
+			this.tableLayoutPanel1.Size = new System.Drawing.Size(206, 50);
 			this.tableLayoutPanel1.TabIndex = 0;
 			// 
 			// trackBar
 			// 
+			this.trackBar.AutoSize = false;
 			this.trackBar.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.trackBar.Location = new System.Drawing.Point(0, 20);
+			this.trackBar.Location = new System.Drawing.Point(0, 13);
 			this.trackBar.Margin = new System.Windows.Forms.Padding(0);
 			this.trackBar.Maximum = 100;
 			this.trackBar.Minimum = -100;
@@ -72,7 +74,7 @@
 			this.lblValue.Anchor = System.Windows.Forms.AnchorStyles.Top;
 			this.lblValue.BackColor = System.Drawing.Color.White;
 			this.lblValue.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.lblValue.Location = new System.Drawing.Point(174, 20);
+			this.lblValue.Location = new System.Drawing.Point(174, 13);
 			this.lblValue.MinimumSize = new System.Drawing.Size(30, 17);
 			this.lblValue.Name = "lblValue";
 			this.lblValue.Size = new System.Drawing.Size(30, 17);
@@ -86,7 +88,7 @@
 			this.lblText.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.lblText.Location = new System.Drawing.Point(3, 0);
 			this.lblText.Name = "lblText";
-			this.lblText.Size = new System.Drawing.Size(165, 20);
+			this.lblText.Size = new System.Drawing.Size(165, 13);
 			this.lblText.TabIndex = 18;
 			this.lblText.Text = "Text";
 			this.lblText.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -97,10 +99,8 @@
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.Controls.Add(this.tableLayoutPanel1);
 			this.Margin = new System.Windows.Forms.Padding(0);
-			this.MaximumSize = new System.Drawing.Size(400, 55);
-			this.MinimumSize = new System.Drawing.Size(206, 55);
 			this.Name = "ctrlHorizontalTrackbar";
-			this.Size = new System.Drawing.Size(206, 55);
+			this.Size = new System.Drawing.Size(206, 50);
 			this.tableLayoutPanel1.ResumeLayout(false);
 			this.tableLayoutPanel1.PerformLayout();
 			((System.ComponentModel.ISupportInitialize)(this.trackBar)).EndInit();

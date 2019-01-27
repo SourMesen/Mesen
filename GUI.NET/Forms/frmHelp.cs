@@ -26,10 +26,12 @@ namespace Mesen.GUI.Forms
 			base.OnLoad(e);
 
 			lblExample.Font = new Font(BaseControl.MonospaceFontFamily, BaseControl.DefaultFontSize - 2);
-			txtAudioOptions.Font = new Font(BaseControl.MonospaceFontFamily, BaseControl.DefaultFontSize - 4);
-			txtEmulationOptions.Font = new Font(BaseControl.MonospaceFontFamily, BaseControl.DefaultFontSize - 4);
-			txtVideoOptions.Font = new Font(BaseControl.MonospaceFontFamily, BaseControl.DefaultFontSize - 4);
-			txtGeneralOptions.Font = new Font(BaseControl.MonospaceFontFamily, BaseControl.DefaultFontSize - 4);
+
+			float fontSize = BaseControl.DefaultFontSize - (Program.IsMono ? 2 : 4); 
+			txtAudioOptions.Font = new Font(BaseControl.MonospaceFontFamily, fontSize);
+			txtEmulationOptions.Font = new Font(BaseControl.MonospaceFontFamily, fontSize);
+			txtVideoOptions.Font = new Font(BaseControl.MonospaceFontFamily, fontSize);
+			txtGeneralOptions.Font = new Font(BaseControl.MonospaceFontFamily, fontSize);
 
 			lblExample.Text = ConvertSlashes(lblExample.Text);
 

@@ -620,8 +620,8 @@
 			this.tableLayoutPanel4.Margin = new System.Windows.Forms.Padding(0);
 			this.tableLayoutPanel4.Name = "tableLayoutPanel4";
 			this.tableLayoutPanel4.RowCount = 2;
-			this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+			this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
+			this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel4.Size = new System.Drawing.Size(356, 55);
 			this.tableLayoutPanel4.TabIndex = 3;
 			// 
@@ -642,6 +642,8 @@
 			this.trkControllerDeadzoneSize.LargeChange = 1;
 			this.trkControllerDeadzoneSize.Location = new System.Drawing.Point(155, 3);
 			this.trkControllerDeadzoneSize.Maximum = 4;
+			this.trkControllerDeadzoneSize.MaximumSize = new System.Drawing.Size(106, 29);
+			this.trkControllerDeadzoneSize.MinimumSize = new System.Drawing.Size(106, 29);
 			this.trkControllerDeadzoneSize.Name = "trkControllerDeadzoneSize";
 			this.trkControllerDeadzoneSize.Size = new System.Drawing.Size(106, 29);
 			this.trkControllerDeadzoneSize.TabIndex = 1;
