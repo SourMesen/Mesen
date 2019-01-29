@@ -1254,6 +1254,7 @@
     <Compile Include="GoogleDriveIntegration\GoogleDriveAccessor.cs" />
     <Compile Include="GoogleDriveIntegration\MesenCodeReceiver.cs" />
     <Compile Include="InteropEmu.cs" />
+    <Compile Include="MonoToolStripHelper.cs" />
     <Compile Include="ThemeHelper.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

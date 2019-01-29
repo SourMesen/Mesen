@@ -11,7 +11,7 @@ namespace Mesen.GUI
 	public static class ThemeHelper
 	{
 		public static MonoTheme Theme { get; private set; } = new MonoTheme();
-		public static Dictionary<string, List<WeakReference<object>>> _excludedControls = new Dictionary<string, List<WeakReference<object>>>();
+		private static Dictionary<string, List<WeakReference<object>>> _excludedControls = new Dictionary<string, List<WeakReference<object>>>();
 
 		public static void InitTheme(Color backColor)
 		{
@@ -60,10 +60,14 @@ namespace Mesen.GUI
 			}
 		}
 
-		public static void FixMonoColors(Control ctrl)
+		public static void FixMonoColors(ContextMenuStrip menu)
 		{
 			if(Program.IsMono) {
-				FixMonoColors(ctrl, Theme);
+				if(menu.Tag == null || (bool)menu.Tag != true) {
+					//Only process this context menu a single time (uses its Tag to know if we've processed it or not)
+					FixMonoColors(menu, Theme);
+					menu.Tag = true;
+				}
 			}
 		}
 
@@ -78,14 +82,19 @@ namespace Mesen.GUI
 			};
 
 			if(item is ToolStripDropDownItem) {
-				((ToolStripDropDownItem)item).DropDownOpening += (object sender, EventArgs e) => {
-					((ToolStripDropDownItem)item).DropDown.BackColor = theme.ToolStripItemBgColor;
-					foreach(ToolStripItem subItem in ((ToolStripDropDownItem)item).DropDownItems) {
+				ToolStripDropDownItem ddItem = item as ToolStripDropDownItem;
+
+				ddItem.DropDownOpening += MonoToolStripHelper.DropdownOpening;
+				ddItem.DropDownClosed += MonoToolStripHelper.DropdownClosed;
+
+				ddItem.DropDownOpening += (s, e) => {
+					ddItem.DropDown.BackColor = theme.ToolStripItemBgColor;
+					foreach(ToolStripItem subItem in ddItem.DropDownItems) {
 						FixMonoColors(subItem, theme);
 					}
 				};
 
-				foreach(ToolStripItem subItem in ((ToolStripDropDownItem)item).DropDownItems) {
+				foreach(ToolStripItem subItem in ddItem.DropDownItems) {
 					FixMonoColors(subItem, theme);
 				}
 			}
@@ -186,14 +195,23 @@ namespace Mesen.GUI
 				((ListView)container).ForeColor = theme.LabelForeColor;
 			} else if(container is ToolStrip) {
 				((ToolStrip)container).BackColor = theme.FormBgColor;
-				((ToolStrip)container).RenderMode = ToolStripRenderMode.System;
+
+				if(container is ContextMenuStrip) {
+					((ContextMenuStrip)container).Opening += MonoToolStripHelper.ContextMenuOpening;
+					((ContextMenuStrip)container).Closed += MonoToolStripHelper.ContextMenuClosed;
+				} else {
+					((ToolStrip)container).RenderMode = ToolStripRenderMode.System;
+				}
+
 				foreach(ToolStripItem item in ((ToolStrip)container).Items) {
 					FixMonoColors(item, theme);
 				}
 			}
 
 			if(container.ContextMenuStrip != null) {
-				container.ContextMenuStrip.RenderMode = ToolStripRenderMode.System;
+				container.ContextMenuStrip.Opening += MonoToolStripHelper.ContextMenuOpening;
+				container.ContextMenuStrip.Closed += MonoToolStripHelper.ContextMenuClosed;
+
 				foreach(ToolStripItem item in container.ContextMenuStrip.Items) {
 					FixMonoColors(item, theme);
 				}
