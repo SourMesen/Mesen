@@ -133,9 +133,11 @@ bool ExpressionEvaluator::CheckSpecialTokens(string expression, size_t &pos, str
 	return true;
 }
 
-string ExpressionEvaluator::GetNextToken(string expression, size_t &pos, ExpressionData &data)
+string ExpressionEvaluator::GetNextToken(string expression, size_t &pos, ExpressionData &data, bool &success)
 {
 	string output;
+	success = true;
+
 	char c = std::tolower(expression[pos]);
 	if(c == '$') {
 		//Hex numbers
@@ -147,6 +149,10 @@ string ExpressionEvaluator::GetNextToken(string expression, size_t &pos, Express
 			} else {
 				break;
 			}
+		}
+		if(output.empty()) {
+			//No numbers followed the hex mark, this isn't a valid expression
+			success = false;
 		}
 		output = std::to_string((uint32_t)HexUtilities::FromHex(output));
 	} else if(c >= '0' && c <= '9') {
@@ -175,7 +181,7 @@ string ExpressionEvaluator::GetNextToken(string expression, size_t &pos, Express
 		}
 	} else {
 		//Special tokens and labels
-		CheckSpecialTokens(expression, pos, output, data);
+		success = CheckSpecialTokens(expression, pos, output, data);
 	}
 
 	return output;
@@ -216,7 +222,12 @@ bool ExpressionEvaluator::ToRpn(string expression, ExpressionData &data)
 
 	bool previousTokenIsOp = true;
 	while(true) {
-		string token = GetNextToken(expression, position, data);
+		bool success = true;
+		string token = GetNextToken(expression, position, data, success);
+		if(!success) {
+			return false;
+		}
+
 		if(token.empty()) {
 			break;
 		}

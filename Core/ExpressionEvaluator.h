@@ -116,7 +116,7 @@ private:
 	bool IsOperator(string token, int &precedence, bool unaryOperator);
 	EvalOperators GetOperator(string token, bool unaryOperator);
 	bool CheckSpecialTokens(string expression, size_t &pos, string &output, ExpressionData &data);
-	string GetNextToken(string expression, size_t &pos, ExpressionData &data);
+	string GetNextToken(string expression, size_t &pos, ExpressionData &data, bool &success);
 	bool ProcessSpecialOperator(EvalOperators evalOp, std::stack<EvalOperators> &opStack, std::stack<int> &precedenceStack, vector<int64_t> &outputQueue);
 	bool ToRpn(string expression, ExpressionData &data);
 	int32_t PrivateEvaluate(string expression, DebugState &state, EvalResultType &resultType, OperationInfo &operationInfo, bool &success);
