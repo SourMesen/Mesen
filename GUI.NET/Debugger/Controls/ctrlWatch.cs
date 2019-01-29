@@ -18,10 +18,14 @@ namespace Mesen.GUI.Debugger
 	{
 		private static Regex _watchAddressOrLabel = new Regex(@"^(\[|{)(\s*((\$[0-9A-Fa-f]+)|(\d+)|([@_a-zA-Z0-9]+)))\s*[,]{0,1}\d*\s*(\]|})$", RegexOptions.Compiled);
 
-		private int _currentSelection = -1;
 		private int _previousMaxLength = -1;
 		private int _selectedAddress = -1;
 		private CodeLabel _selectedLabel = null;
+
+		private bool _isEditing = false;
+		ListViewItem _keyDownItem = null;
+
+		public bool IsEditing { get { return _isEditing; } }
 
 		public ctrlWatch()
 		{
@@ -44,6 +48,26 @@ namespace Mesen.GUI.Debugger
 
 		protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
 		{
+			if(lstWatch.SelectedItems.Count > 0) {
+				//Used to prevent a Mono issue where pressing a key will change the selected item before we get a chance to edit it
+				_keyDownItem = lstWatch.SelectedItems[0];
+			} else {
+				_keyDownItem = null;
+			}
+			
+			if((_isEditing && keyData == Keys.Escape) || keyData == Keys.Enter) {
+				if(keyData == Keys.Enter) {
+					if(_isEditing) {
+						ApplyEdit();
+					} else {
+						StartEdit(lstWatch.SelectedItems[0].Text);
+					}
+				} else if(keyData == Keys.Escape) {
+					CancelEdit();
+				}
+				return true;
+			}
+
 			UpdateActions();
 			return base.ProcessCmdKey(ref msg, keyData);
 		}
@@ -65,6 +89,8 @@ namespace Mesen.GUI.Debugger
 		public void UpdateWatch(bool autoResizeColumns = true)
 		{
 			List<WatchValueInfo> watchContent = WatchManager.GetWatchContent(mnuHexDisplay.Checked);
+
+			int currentSelection = lstWatch.SelectedIndices.Count > 0 ? lstWatch.SelectedIndices[0] : -1;
 
 			bool updating = false;
 			if(watchContent.Count != lstWatch.Items.Count - 1) {
@@ -116,19 +142,12 @@ namespace Mesen.GUI.Debugger
 				lstWatch.EndUpdate();
 			}
 
-			if(_currentSelection >= 0 && lstWatch.Items.Count > _currentSelection) {
-				lstWatch.FocusedItem = lstWatch.Items[_currentSelection];
-				lstWatch.Items[_currentSelection].Selected = true;
-				_currentSelection = -1;
+			if(currentSelection >= 0 && lstWatch.Items.Count > currentSelection) {
+				lstWatch.FocusedItem = lstWatch.Items[currentSelection];
+				lstWatch.Items[currentSelection].Selected = true;
 			}
 		}
 				
-		private void lstWatch_AfterEdit(object sender, LabelEditEventArgs e)
-		{
-			_currentSelection = e.Item;
-			WatchManager.UpdateWatch(e.Item, e.Label);
-		}
-
 		private void mnuHexDisplay_Click(object sender, EventArgs e)
 		{
 			ConfigManager.Config.DebugInfo.HexDisplay = this.mnuHexDisplay.Checked;
@@ -171,28 +190,11 @@ namespace Mesen.GUI.Debugger
 			}
 		}
 
-		private void lstWatch_Click(object sender, EventArgs e)
-		{
-			if(lstWatch.SelectedItems.Count == 1 && string.IsNullOrWhiteSpace(lstWatch.SelectedItems[0].Text)) {
-				lstWatch.SelectedItems[0].BeginEdit();
-			}
-		}
-
-		private void lstWatch_DoubleClick(object sender, EventArgs e)
-		{
-			if(lstWatch.SelectedItems.Count == 1) {
-				lstWatch.SelectedItems[0].BeginEdit();
-			}
-		}
-
 		private void mnuRemoveWatch_Click(object sender, EventArgs e)
 		{
-			if(lstWatch.SelectedItems.Count >= 1 && !lstWatch.IsEditing) {
+			if(lstWatch.SelectedItems.Count >= 1) {
 				var itemsToRemove = new List<int>();
 				foreach(ListViewItem item in lstWatch.SelectedItems) {
-					if(_currentSelection == -1) {
-						_currentSelection = item.Index;
-					}
 					itemsToRemove.Add(item.Index);
 				}
 				WatchManager.RemoveWatch(itemsToRemove.ToArray());
@@ -226,6 +228,71 @@ namespace Mesen.GUI.Debugger
 			} else if(_selectedLabel != null) {
 				DebugWindowManager.OpenMemoryViewer((int)_selectedLabel.Address, _selectedLabel.AddressType.ToMemoryType());
 			}
+		}
+
+		private void StartEdit(string text, ListViewItem selectedItem = null)
+		{
+			if(selectedItem == null) {
+				selectedItem = lstWatch.SelectedItems[0];
+			}
+
+			foreach(ListViewItem item in lstWatch.Items) {
+				item.Selected = selectedItem == item;
+			}
+			lstWatch.FocusedItem = selectedItem;
+
+			txtEdit.Location = selectedItem.Position;
+			txtEdit.Width = selectedItem.Bounds.Width;
+			txtEdit.Text = text;
+			txtEdit.SelectionLength = 0;
+			txtEdit.SelectionStart = text.Length;
+			txtEdit.Visible = true;
+			txtEdit.Focus();
+			_isEditing = true;
+		}
+
+		private void lstWatch_Click(object sender, EventArgs e)
+		{
+			if(lstWatch.SelectedItems.Count == 1 && string.IsNullOrWhiteSpace(lstWatch.SelectedItems[0].Text)) {
+				StartEdit("");
+			}
+		}
+
+		private void lstWatch_DoubleClick(object sender, EventArgs e)
+		{
+			if(lstWatch.SelectedItems.Count == 1) {
+				StartEdit(lstWatch.SelectedItems[0].Text);
+			}
+		}
+
+		private void ApplyEdit()
+		{
+			lstWatch.SelectedItems[0].Text = txtEdit.Text;
+			WatchManager.UpdateWatch(lstWatch.SelectedIndices[0], txtEdit.Text);
+			lstWatch.Focus();
+		}
+
+		private void CancelEdit()
+		{
+			txtEdit.Text = lstWatch.SelectedItems[0].Text;
+			lstWatch.Focus();
+		}
+
+		private void lstWatch_KeyPress(object sender, KeyPressEventArgs e)
+		{
+			if(lstWatch.SelectedItems.Count > 0) {
+				e.Handled = true;
+				StartEdit(e.KeyChar.ToString(), _keyDownItem);
+				_keyDownItem = null;
+			}
+		}
+
+		private void txtEdit_Leave(object sender, EventArgs e)
+		{
+			_isEditing = false;
+			txtEdit.Visible = false;
+			lstWatch.Focus();
+			ApplyEdit();
 		}
 	}
 }

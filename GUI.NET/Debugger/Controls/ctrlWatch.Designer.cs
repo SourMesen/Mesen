@@ -30,7 +30,7 @@
 		{
 			this.components = new System.ComponentModel.Container();
 			System.Windows.Forms.ListViewItem listViewItem1 = new System.Windows.Forms.ListViewItem("");
-			this.lstWatch = new Mesen.GUI.Controls.WatchList();
+			this.lstWatch = new Mesen.GUI.Controls.DoubleBufferedListView();
 			this.colName = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
 			this.colValue = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
 			this.contextMenuWatch = new System.Windows.Forms.ContextMenuStrip(this.components);
@@ -40,6 +40,7 @@
 			this.mnuViewInDisassembly = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripSeparator();
 			this.mnuHexDisplay = new System.Windows.Forms.ToolStripMenuItem();
+			this.txtEdit = new System.Windows.Forms.TextBox();
 			this.contextMenuWatch.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -55,17 +56,16 @@
 			this.lstWatch.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
 			this.lstWatch.Items.AddRange(new System.Windows.Forms.ListViewItem[] {
             listViewItem1});
-			this.lstWatch.LabelEdit = true;
 			this.lstWatch.Location = new System.Drawing.Point(0, 0);
 			this.lstWatch.Name = "lstWatch";
 			this.lstWatch.Size = new System.Drawing.Size(378, 112);
 			this.lstWatch.TabIndex = 6;
 			this.lstWatch.UseCompatibleStateImageBehavior = false;
 			this.lstWatch.View = System.Windows.Forms.View.Details;
-			this.lstWatch.AfterEdit += new System.Windows.Forms.LabelEditEventHandler(this.lstWatch_AfterEdit);
 			this.lstWatch.SelectedIndexChanged += new System.EventHandler(this.lstWatch_SelectedIndexChanged);
 			this.lstWatch.Click += new System.EventHandler(this.lstWatch_Click);
 			this.lstWatch.DoubleClick += new System.EventHandler(this.lstWatch_DoubleClick);
+			this.lstWatch.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.lstWatch_KeyPress);
 			// 
 			// colName
 			// 
@@ -87,7 +87,7 @@
             this.toolStripMenuItem2,
             this.mnuHexDisplay});
 			this.contextMenuWatch.Name = "contextMenuWatch";
-			this.contextMenuWatch.Size = new System.Drawing.Size(194, 126);
+			this.contextMenuWatch.Size = new System.Drawing.Size(194, 104);
 			this.contextMenuWatch.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuWatch_Opening);
 			// 
 			// mnuRemoveWatch
@@ -134,21 +134,33 @@
 			this.mnuHexDisplay.Text = "Hexadecimal Display";
 			this.mnuHexDisplay.Click += new System.EventHandler(this.mnuHexDisplay_Click);
 			// 
+			// txtEdit
+			// 
+			this.txtEdit.AcceptsReturn = true;
+			this.txtEdit.Location = new System.Drawing.Point(3, 24);
+			this.txtEdit.Name = "txtEdit";
+			this.txtEdit.Size = new System.Drawing.Size(177, 20);
+			this.txtEdit.TabIndex = 7;
+			this.txtEdit.Visible = false;
+			this.txtEdit.Leave += new System.EventHandler(this.txtEdit_Leave);
+			// 
 			// ctrlWatch
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+			this.Controls.Add(this.txtEdit);
 			this.Controls.Add(this.lstWatch);
 			this.Name = "ctrlWatch";
 			this.Size = new System.Drawing.Size(378, 112);
 			this.contextMenuWatch.ResumeLayout(false);
 			this.ResumeLayout(false);
+			this.PerformLayout();
 
 		}
 
 		#endregion
 
-		private Mesen.GUI.Controls.WatchList lstWatch;
+		private Mesen.GUI.Controls.DoubleBufferedListView lstWatch;
 		private System.Windows.Forms.ColumnHeader colName;
 		private System.Windows.Forms.ColumnHeader colValue;
 		private System.Windows.Forms.ContextMenuStrip contextMenuWatch;
@@ -158,5 +170,6 @@
 		private System.Windows.Forms.ToolStripMenuItem mnuEditInMemoryViewer;
 		private System.Windows.Forms.ToolStripMenuItem mnuViewInDisassembly;
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem2;
+		private System.Windows.Forms.TextBox txtEdit;
 	}
 }
