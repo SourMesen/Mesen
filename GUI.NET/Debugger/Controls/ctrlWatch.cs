@@ -293,9 +293,11 @@ namespace Mesen.GUI.Debugger
 		private void lstWatch_KeyPress(object sender, KeyPressEventArgs e)
 		{
 			if(lstWatch.SelectedItems.Count > 0) {
-				e.Handled = true;
-				StartEdit(e.KeyChar.ToString(), _keyDownItem);
-				_keyDownItem = null;
+				if(e.KeyChar >= ' ' && e.KeyChar < 128) {
+					e.Handled = true;
+					StartEdit(e.KeyChar.ToString(), _keyDownItem);
+					_keyDownItem = null;
+				}
 			}
 		}
 
