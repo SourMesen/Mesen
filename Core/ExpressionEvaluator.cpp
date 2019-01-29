@@ -221,6 +221,7 @@ bool ExpressionEvaluator::ToRpn(string expression, ExpressionData &data)
 	int braceCount = 0;
 
 	bool previousTokenIsOp = true;
+	bool operatorExpected = false;
 	while(true) {
 		bool success = true;
 		string token = GetNextToken(expression, position, data, success);
@@ -232,6 +233,8 @@ bool ExpressionEvaluator::ToRpn(string expression, ExpressionData &data)
 			break;
 		}
 
+		bool requireOperator = operatorExpected;
+		operatorExpected = false;
 		bool unaryOperator = previousTokenIsOp;
 		previousTokenIsOp = false;
 
@@ -249,6 +252,9 @@ bool ExpressionEvaluator::ToRpn(string expression, ExpressionData &data)
 			precedenceStack.push(precedence);
 			
 			previousTokenIsOp = true;
+		} else if(requireOperator) {
+			//We needed an operator, and got something else, this isn't a valid expression (e.g "(3)4" or "[$00]22")
+			return false;
 		} else if(token[0] == '(') {
 			parenthesisCount++;
 			opStack.push(EvalOperators::Parenthesis);
@@ -259,6 +265,7 @@ bool ExpressionEvaluator::ToRpn(string expression, ExpressionData &data)
 			if(!ProcessSpecialOperator(EvalOperators::Parenthesis, opStack, precedenceStack, data.RpnQueue)) {
 				return false;
 			}
+			operatorExpected = true;
 		} else if(token[0] == '[') {
 			bracketCount++;
 			opStack.push(EvalOperators::Bracket);
@@ -268,6 +275,7 @@ bool ExpressionEvaluator::ToRpn(string expression, ExpressionData &data)
 			if(!ProcessSpecialOperator(EvalOperators::Bracket, opStack, precedenceStack, data.RpnQueue)) {
 				return false;
 			}
+			operatorExpected = true;
 		} else if(token[0] == '{') {
 			braceCount++;
 			opStack.push(EvalOperators::Braces);
@@ -277,6 +285,7 @@ bool ExpressionEvaluator::ToRpn(string expression, ExpressionData &data)
 			if(!ProcessSpecialOperator(EvalOperators::Braces, opStack, precedenceStack, data.RpnQueue)){
 				return false;
 			}
+			operatorExpected = true;
 		} else {
 			if(token[0] < '0' || token[0] > '9') {
 				return false;
