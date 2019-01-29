@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -119,6 +120,18 @@ namespace Mesen.GUI.Debugger
 			_watchEntries = _watchEntries.Where((el, index) => !set.Contains(index)).ToList();
 			//_previousValues = _previousValues.Where((el, index) => !set.Contains(index)).ToList();
 			WatchChanged?.Invoke(null, EventArgs.Empty);
+		}
+
+		public static void Import(string filename)
+		{
+			if(File.Exists(filename)) {
+				WatchManager.WatchEntries = new List<string>(File.ReadAllLines(filename));
+			}
+		}
+
+		public static void Export(string filename)
+		{
+			File.WriteAllLines(filename, WatchManager.WatchEntries);
 		}
 	}
 

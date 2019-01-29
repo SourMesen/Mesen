@@ -44,6 +44,9 @@
 			this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripSeparator();
 			this.mnuHexDisplay = new System.Windows.Forms.ToolStripMenuItem();
 			this.txtEdit = new System.Windows.Forms.TextBox();
+			this.toolStripMenuItem3 = new System.Windows.Forms.ToolStripSeparator();
+			this.mnuImport = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuExport = new System.Windows.Forms.ToolStripMenuItem();
 			this.contextMenuWatch.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -92,9 +95,12 @@
             this.mnuMoveUp,
             this.mnuMoveDown,
             this.toolStripMenuItem2,
-            this.mnuHexDisplay});
+            this.mnuHexDisplay,
+            this.toolStripMenuItem3,
+            this.mnuImport,
+            this.mnuExport});
 			this.contextMenuWatch.Name = "contextMenuWatch";
-			this.contextMenuWatch.Size = new System.Drawing.Size(194, 154);
+			this.contextMenuWatch.Size = new System.Drawing.Size(194, 226);
 			this.contextMenuWatch.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuWatch_Opening);
 			// 
 			// mnuRemoveWatch
@@ -172,6 +178,27 @@
 			this.txtEdit.Visible = false;
 			this.txtEdit.Leave += new System.EventHandler(this.txtEdit_Leave);
 			// 
+			// toolStripMenuItem3
+			// 
+			this.toolStripMenuItem3.Name = "toolStripMenuItem3";
+			this.toolStripMenuItem3.Size = new System.Drawing.Size(190, 6);
+			// 
+			// mnuImport
+			// 
+			this.mnuImport.Image = global::Mesen.GUI.Properties.Resources.Import;
+			this.mnuImport.Name = "mnuImport";
+			this.mnuImport.Size = new System.Drawing.Size(193, 22);
+			this.mnuImport.Text = "Import...";
+			this.mnuImport.Click += new System.EventHandler(this.mnuImport_Click);
+			// 
+			// mnuExport
+			// 
+			this.mnuExport.Image = global::Mesen.GUI.Properties.Resources.Export;
+			this.mnuExport.Name = "mnuExport";
+			this.mnuExport.Size = new System.Drawing.Size(193, 22);
+			this.mnuExport.Text = "Export...";
+			this.mnuExport.Click += new System.EventHandler(this.mnuExport_Click);
+			// 
 			// ctrlWatch
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -202,5 +229,8 @@
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem4;
 		private System.Windows.Forms.ToolStripMenuItem mnuMoveUp;
 		private System.Windows.Forms.ToolStripMenuItem mnuMoveDown;
+		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem3;
+		private System.Windows.Forms.ToolStripMenuItem mnuImport;
+		private System.Windows.Forms.ToolStripMenuItem mnuExport;
 	}
 }

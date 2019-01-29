@@ -11,6 +11,7 @@ using Mesen.GUI.Config;
 using Mesen.GUI.Controls;
 using System.Text.RegularExpressions;
 using System.Globalization;
+using Mesen.GUI.Forms;
 
 namespace Mesen.GUI.Debugger
 {
@@ -378,6 +379,26 @@ namespace Mesen.GUI.Debugger
 			} else if(keyData == ConfigManager.Config.DebugInfo.Shortcuts.WatchList_MoveDown) {
 				MoveDown();
 				processed = true;
+			}
+		}
+
+		private void mnuImport_Click(object sender, EventArgs e)
+		{
+			using(OpenFileDialog ofd = new OpenFileDialog()) {
+				ofd.SetFilter("Watch files (*.mwf)|*.mwf");
+				if(ofd.ShowDialog() == DialogResult.OK) {
+					WatchManager.Import(ofd.FileName);
+				}
+			}
+		}
+
+		private void mnuExport_Click(object sender, EventArgs e)
+		{
+			using(SaveFileDialog sfd = new SaveFileDialog()) {
+				sfd.SetFilter("Watch files (*.mwf)|*.mwf");
+				if(sfd.ShowDialog() == DialogResult.OK) {
+					WatchManager.Export(sfd.FileName);
+				}
 			}
 		}
 	}
