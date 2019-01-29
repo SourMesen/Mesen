@@ -84,6 +84,12 @@ namespace Mesen.GUI.Debugger
 						_romName = InteropEmu.GetRomInfo().GetRomName();
 						_workspace = DebugWorkspace.GetWorkspace();
 
+						//Load watch entries
+						WatchManager.WatchEntries = _workspace.WatchValues;
+
+						//Load breakpoints
+						BreakpointManager.SetBreakpoints(_workspace.Breakpoints);
+
 						//Setup labels
 						if(_workspace.Labels.Count == 0) {
 							LabelManager.ResetLabels();
@@ -94,12 +100,6 @@ namespace Mesen.GUI.Debugger
 							LabelManager.ResetLabels();
 							LabelManager.SetLabels(_workspace.Labels, true);
 						}
-
-						//Load watch entries
-						WatchManager.WatchEntries = _workspace.WatchValues;
-
-						//Load breakpoints
-						BreakpointManager.SetBreakpoints(_workspace.Breakpoints);
 					}
 				}
 			}
