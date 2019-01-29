@@ -198,6 +198,7 @@ namespace Mesen.GUI.Forms
 			this.mnuDebugDebugger = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuEventViewer = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuMemoryViewer = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuProfiler = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuPpuViewer = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuScriptWindow = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuTextHooker = new System.Windows.Forms.ToolStripMenuItem();
@@ -221,7 +222,7 @@ namespace Mesen.GUI.Forms
 			this.mnuReportBug = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem5 = new System.Windows.Forms.ToolStripSeparator();
 			this.mnuAbout = new System.Windows.Forms.ToolStripMenuItem();
-			this.mnuProfiler = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuWatchWindow = new System.Windows.Forms.ToolStripMenuItem();
 			this.panelRenderer.SuspendLayout();
 			this.panelInfo.SuspendLayout();
 			this.tableLayoutPanel1.SuspendLayout();
@@ -315,10 +316,10 @@ namespace Mesen.GUI.Forms
 			this.lblVersion.AutoSize = true;
 			this.lblVersion.BackColor = System.Drawing.Color.Transparent;
 			this.lblVersion.ForeColor = System.Drawing.Color.White;
-			this.lblVersion.Location = new System.Drawing.Point(55, 5);
+			this.lblVersion.Location = new System.Drawing.Point(55, 7);
 			this.lblVersion.Margin = new System.Windows.Forms.Padding(0, 1, 0, 0);
 			this.lblVersion.Name = "lblVersion";
-			this.lblVersion.Size = new System.Drawing.Size(0, 16);
+			this.lblVersion.Size = new System.Drawing.Size(0, 13);
 			this.lblVersion.TabIndex = 6;
 			this.lblVersion.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
@@ -1567,6 +1568,7 @@ namespace Mesen.GUI.Forms
             this.mnuScriptWindow,
             this.mnuTextHooker,
             this.mnuTraceLogger,
+            this.mnuWatchWindow,
             this.sepDebugDualSystemSecondaryCpu,
             this.mnuDebugDualSystemSecondaryCpu,
             this.toolStripMenuItem25,
@@ -1619,6 +1621,14 @@ namespace Mesen.GUI.Forms
 			this.mnuMemoryViewer.Size = new System.Drawing.Size(258, 22);
 			this.mnuMemoryViewer.Text = "Memory Tools";
 			this.mnuMemoryViewer.Click += new System.EventHandler(this.mnuMemoryViewer_Click);
+			// 
+			// mnuProfiler
+			// 
+			this.mnuProfiler.Image = global::Mesen.GUI.Properties.Resources.Speed;
+			this.mnuProfiler.Name = "mnuProfiler";
+			this.mnuProfiler.Size = new System.Drawing.Size(258, 22);
+			this.mnuProfiler.Text = "Performance Profiler";
+			this.mnuProfiler.Click += new System.EventHandler(this.mnuProfiler_Click);
 			// 
 			// mnuPpuViewer
 			// 
@@ -1794,13 +1804,13 @@ namespace Mesen.GUI.Forms
 			this.mnuAbout.Text = "About";
 			this.mnuAbout.Click += new System.EventHandler(this.mnuAbout_Click);
 			// 
-			// mnuProfiler
+			// mnuWatchWindow
 			// 
-			this.mnuProfiler.Image = global::Mesen.GUI.Properties.Resources.Speed;
-			this.mnuProfiler.Name = "mnuProfiler";
-			this.mnuProfiler.Size = new System.Drawing.Size(258, 22);
-			this.mnuProfiler.Text = "Performance Profiler";
-			this.mnuProfiler.Click += new System.EventHandler(this.mnuProfiler_Click);
+			this.mnuWatchWindow.Image = global::Mesen.GUI.Properties.Resources.Find;
+			this.mnuWatchWindow.Name = "mnuWatchWindow";
+			this.mnuWatchWindow.Size = new System.Drawing.Size(258, 22);
+			this.mnuWatchWindow.Text = "Watch Window";
+			this.mnuWatchWindow.Click += new System.EventHandler(this.mnuWatchWindow_Click);
 			// 
 			// frmMain
 			// 
@@ -2023,6 +2033,7 @@ namespace Mesen.GUI.Forms
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem28;
 		private System.Windows.Forms.ToolStripMenuItem mnuProfiler;
 		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
+		private System.Windows.Forms.ToolStripMenuItem mnuWatchWindow;
 	}
 }
 

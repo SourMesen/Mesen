@@ -180,6 +180,7 @@ namespace Mesen.GUI.Debugger
 			this.toolStripMenuItem19 = new System.Windows.Forms.ToolStripSeparator();
 			this.mnuShowBreakNotifications = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuShowInstructionProgression = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuShowSelectionLength = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem27 = new System.Windows.Forms.ToolStripSeparator();
 			this.mnuAlwaysScrollToCenter = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuRefreshWhileRunning = new System.Windows.Forms.ToolStripMenuItem();
@@ -196,6 +197,7 @@ namespace Mesen.GUI.Debugger
 			this.mnuScriptWindow = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuTextHooker = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuTraceLogger = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuWatchWindow = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem13 = new System.Windows.Forms.ToolStripSeparator();
 			this.pPUViewerCompactToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuOpenNametableViewer = new System.Windows.Forms.ToolStripMenuItem();
@@ -226,7 +228,6 @@ namespace Mesen.GUI.Debugger
 			this.ctrlPpuMemoryMapping = new Mesen.GUI.Debugger.Controls.ctrlMemoryMapping();
 			this.ctrlCpuMemoryMapping = new Mesen.GUI.Debugger.Controls.ctrlMemoryMapping();
 			this.tsToolbar = new Mesen.GUI.Controls.ctrlMesenToolStrip();
-			this.mnuShowSelectionLength = new System.Windows.Forms.ToolStripMenuItem();
 			((System.ComponentModel.ISupportInitialize)(this.splitContainer)).BeginInit();
 			this.splitContainer.Panel1.SuspendLayout();
 			this.splitContainer.Panel2.SuspendLayout();
@@ -1634,6 +1635,14 @@ namespace Mesen.GUI.Debugger
 			this.mnuShowInstructionProgression.Text = "Show instruction progression";
 			this.mnuShowInstructionProgression.Click += new System.EventHandler(this.mnuShowInstructionProgression_Click);
 			// 
+			// mnuShowSelectionLength
+			// 
+			this.mnuShowSelectionLength.CheckOnClick = true;
+			this.mnuShowSelectionLength.Name = "mnuShowSelectionLength";
+			this.mnuShowSelectionLength.Size = new System.Drawing.Size(266, 22);
+			this.mnuShowSelectionLength.Text = "Show selection length";
+			this.mnuShowSelectionLength.Click += new System.EventHandler(this.mnuShowSelectionLength_Click);
+			// 
 			// toolStripMenuItem27
 			// 
 			this.toolStripMenuItem27.Name = "toolStripMenuItem27";
@@ -1688,6 +1697,7 @@ namespace Mesen.GUI.Debugger
             this.mnuScriptWindow,
             this.mnuTextHooker,
             this.mnuTraceLogger,
+            this.mnuWatchWindow,
             this.toolStripMenuItem13,
             this.pPUViewerCompactToolStripMenuItem,
             this.toolStripMenuItem17,
@@ -1769,6 +1779,14 @@ namespace Mesen.GUI.Debugger
 			this.mnuTraceLogger.Size = new System.Drawing.Size(194, 22);
 			this.mnuTraceLogger.Text = "Trace Logger";
 			this.mnuTraceLogger.Click += new System.EventHandler(this.mnuTraceLogger_Click);
+			// 
+			// mnuWatchWindow
+			// 
+			this.mnuWatchWindow.Image = global::Mesen.GUI.Properties.Resources.Find;
+			this.mnuWatchWindow.Name = "mnuWatchWindow";
+			this.mnuWatchWindow.Size = new System.Drawing.Size(194, 22);
+			this.mnuWatchWindow.Text = "Watch Window";
+			this.mnuWatchWindow.Click += new System.EventHandler(this.mnuWatchWindow_Click);
 			// 
 			// toolStripMenuItem13
 			// 
@@ -2004,14 +2022,6 @@ namespace Mesen.GUI.Debugger
 			this.tsToolbar.TabIndex = 6;
 			this.tsToolbar.Text = "toolStrip1";
 			this.tsToolbar.Visible = false;
-			// 
-			// mnuShowSelectionLength
-			// 
-			this.mnuShowSelectionLength.CheckOnClick = true;
-			this.mnuShowSelectionLength.Name = "mnuShowSelectionLength";
-			this.mnuShowSelectionLength.Size = new System.Drawing.Size(266, 22);
-			this.mnuShowSelectionLength.Text = "Show selection length";
-			this.mnuShowSelectionLength.Click += new System.EventHandler(this.mnuShowSelectionLength_Click);
 			// 
 			// frmDebugger
 			// 
@@ -2260,5 +2270,6 @@ namespace Mesen.GUI.Debugger
 		private System.Windows.Forms.ToolStripMenuItem mnuProfiler;
 		private System.Windows.Forms.ToolStripMenuItem mnuRunCpuCycle;
 		private System.Windows.Forms.ToolStripMenuItem mnuShowSelectionLength;
+		private System.Windows.Forms.ToolStripMenuItem mnuWatchWindow;
 	}
 }

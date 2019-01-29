@@ -287,6 +287,7 @@ namespace Mesen.GUI.Debugger
 			mnuTraceLogger.InitShortcut(this, nameof(DebuggerShortcutsConfig.OpenTraceLogger));
 			mnuTextHooker.InitShortcut(this, nameof(DebuggerShortcutsConfig.OpenTextHooker));
 			mnuProfiler.InitShortcut(this, nameof(DebuggerShortcutsConfig.OpenProfiler));
+			mnuWatchWindow.InitShortcut(this, nameof(DebuggerShortcutsConfig.OpenWatchWindow));
 
 			mnuOpenNametableViewer.InitShortcut(this, nameof(DebuggerShortcutsConfig.OpenNametableViewer));
 			mnuOpenChrViewer.InitShortcut(this, nameof(DebuggerShortcutsConfig.OpenChrViewer));
@@ -1889,6 +1890,11 @@ namespace Mesen.GUI.Debugger
 		private void mnuOpenPaletteViewer_Click(object sender, EventArgs e)
 		{
 			DebugWindowManager.OpenPpuViewer(PpuViewerMode.PaletteViewer);
+		}
+
+		private void mnuWatchWindow_Click(object sender, EventArgs e)
+		{
+			DebugWindowManager.OpenDebugWindow(DebugWindow.WatchWindow);
 		}
 	}
 }

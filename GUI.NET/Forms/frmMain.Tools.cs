@@ -398,6 +398,11 @@ namespace Mesen.GUI.Forms
 			DebugWindowManager.OpenDebugWindow(DebugWindow.TraceLogger);
 		}
 
+		private void mnuWatchWindow_Click(object sender, EventArgs e)
+		{
+			DebugWindowManager.OpenDebugWindow(DebugWindow.WatchWindow);
+		}
+
 		private void mnuTextHooker_Click(object sender, EventArgs e)
 		{
 			DebugWindowManager.OpenDebugWindow(DebugWindow.TextHooker);

@@ -11,7 +11,6 @@ namespace Mesen.GUI.Debugger
 	{
 		public static event EventHandler WatchChanged;
 		private static List<string> _watchEntries = new List<string>();
-		private static List<WatchValueInfo> _previousValues = new List<WatchValueInfo>();
 		private static Regex _arrayWatchRegex = new Regex(@"\[((\$[0-9A-Fa-f]+)|(\d+)|([@_a-zA-Z0-9]+))\s*,\s*(\d+)\]", RegexOptions.Compiled);
 
 		public static List<string> WatchEntries
@@ -24,7 +23,7 @@ namespace Mesen.GUI.Debugger
 			}
 		}
 
-		public static List<WatchValueInfo> GetWatchContent(bool useHex)
+		public static List<WatchValueInfo> GetWatchContent(bool useHex, List<WatchValueInfo> previousValues)
 		{
 			var list = new List<WatchValueInfo>();
 			for(int i = 0; i < _watchEntries.Count; i++) {
@@ -53,10 +52,9 @@ namespace Mesen.GUI.Debugger
 					}
 				}
 
-				list.Add(new WatchValueInfo() { Expression = expression, Value = newValue, HasChanged = forceHasChanged || (i < _previousValues.Count ? (_previousValues[i].Value != newValue) : false) });
+				list.Add(new WatchValueInfo() { Expression = expression, Value = newValue, HasChanged = forceHasChanged || (i < previousValues.Count ? (previousValues[i].Value != newValue) : false) });
 			}
 
-			_previousValues = list;
 			return list;
 		}
 
@@ -119,7 +117,7 @@ namespace Mesen.GUI.Debugger
 		{
 			HashSet<int> set = new HashSet<int>(indexes);
 			_watchEntries = _watchEntries.Where((el, index) => !set.Contains(index)).ToList();
-			_previousValues = _previousValues.Where((el, index) => !set.Contains(index)).ToList();
+			//_previousValues = _previousValues.Where((el, index) => !set.Contains(index)).ToList();
 			WatchChanged?.Invoke(null, EventArgs.Empty);
 		}
 	}

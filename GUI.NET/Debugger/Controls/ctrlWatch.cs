@@ -21,6 +21,7 @@ namespace Mesen.GUI.Debugger
 		private int _previousMaxLength = -1;
 		private int _selectedAddress = -1;
 		private CodeLabel _selectedLabel = null;
+		private List<WatchValueInfo> _previousValues = new List<WatchValueInfo>();
 
 		private bool _isEditing = false;
 		ListViewItem _keyDownItem = null;
@@ -90,7 +91,8 @@ namespace Mesen.GUI.Debugger
 
 		public void UpdateWatch(bool autoResizeColumns = true)
 		{
-			List<WatchValueInfo> watchContent = WatchManager.GetWatchContent(mnuHexDisplay.Checked);
+			List<WatchValueInfo> watchContent = WatchManager.GetWatchContent(mnuHexDisplay.Checked, _previousValues);
+			_previousValues = watchContent;
 
 			int currentSelection = lstWatch.FocusedItem?.Index ?? -1;
 

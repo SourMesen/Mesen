@@ -844,6 +844,12 @@
     <Compile Include="Debugger\frmTraceLogger.Designer.cs">
       <DependentUpon>frmTraceLogger.cs</DependentUpon>
     </Compile>
+    <Compile Include="Debugger\frmWatchWindow.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Debugger\frmWatchWindow.Designer.cs">
+      <DependentUpon>frmWatchWindow.cs</DependentUpon>
+    </Compile>
     <Compile Include="Debugger\HdPackCopyHelper.cs" />
     <Compile Include="Debugger\HexBox\BuiltInContextMenu.cs">
       <SubType>Component</SubType>
@@ -1400,6 +1406,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Debugger\frmTextHooker.resx">
       <DependentUpon>frmTextHooker.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Debugger\frmWatchWindow.resx">
+      <DependentUpon>frmWatchWindow.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Dependencies\LuaScripts\Example.lua">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

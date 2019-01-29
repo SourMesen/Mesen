@@ -289,6 +289,9 @@ namespace Mesen.GUI.Config
 		public Size ProfilerSize = new Size(0, 0);
 		public Point ProfilerLocation;
 
+		public Size WatchWindowSize = new Size(0, 0);
+		public Point WatchWindowLocation;
+
 		public Point WindowLocation;
 		public int WindowWidth = -1;
 		public int WindowHeight = -1;

@@ -43,7 +43,6 @@
 			this.mnuMoveDown = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripSeparator();
 			this.mnuHexDisplay = new System.Windows.Forms.ToolStripMenuItem();
-			this.toolStripMenuItem3 = new System.Windows.Forms.ToolStripSeparator();
 			this.txtEdit = new System.Windows.Forms.TextBox();
 			this.contextMenuWatch.SuspendLayout();
 			this.SuspendLayout();
@@ -93,10 +92,9 @@
             this.mnuMoveUp,
             this.mnuMoveDown,
             this.toolStripMenuItem2,
-            this.mnuHexDisplay,
-            this.toolStripMenuItem3});
+            this.mnuHexDisplay});
 			this.contextMenuWatch.Name = "contextMenuWatch";
-			this.contextMenuWatch.Size = new System.Drawing.Size(194, 160);
+			this.contextMenuWatch.Size = new System.Drawing.Size(194, 154);
 			this.contextMenuWatch.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuWatch_Opening);
 			// 
 			// mnuRemoveWatch
@@ -164,11 +162,6 @@
 			this.mnuHexDisplay.Text = "Hexadecimal Display";
 			this.mnuHexDisplay.Click += new System.EventHandler(this.mnuHexDisplay_Click);
 			// 
-			// toolStripMenuItem3
-			// 
-			this.toolStripMenuItem3.Name = "toolStripMenuItem3";
-			this.toolStripMenuItem3.Size = new System.Drawing.Size(190, 6);
-			// 
 			// txtEdit
 			// 
 			this.txtEdit.AcceptsReturn = true;
@@ -209,6 +202,5 @@
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem4;
 		private System.Windows.Forms.ToolStripMenuItem mnuMoveUp;
 		private System.Windows.Forms.ToolStripMenuItem mnuMoveDown;
-		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem3;
 	}
 }

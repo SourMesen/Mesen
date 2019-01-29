@@ -84,6 +84,8 @@ namespace Mesen.GUI.Config
 		public XmlKeys OpenTraceLogger = Keys.Control | Keys.J;
 		[ShortcutName("Open Text Hooker")]
 		public XmlKeys OpenTextHooker = Keys.Control | Keys.H;
+		[ShortcutName("Open Watch Window")]
+		public XmlKeys OpenWatchWindow = Keys.Control | Keys.W;
 
 		[ShortcutName("Open Nametabler Viewer (Compact)")]
 		public XmlKeys OpenNametableViewer = Keys.Control | Keys.D1;
