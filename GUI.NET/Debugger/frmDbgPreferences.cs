@@ -121,6 +121,8 @@ namespace Mesen.GUI.Debugger
 				GetMember(nameof(DebuggerShortcutsConfig.BreakpointList_GoToLocation)),
 				GetMember(nameof(DebuggerShortcutsConfig.BreakpointList_Delete)),
 				GetMember(nameof(DebuggerShortcutsConfig.WatchList_Delete)),
+				GetMember(nameof(DebuggerShortcutsConfig.WatchList_MoveUp)),
+				GetMember(nameof(DebuggerShortcutsConfig.WatchList_MoveDown)),
 				GetMember(nameof(DebuggerShortcutsConfig.SaveRom)),
 				GetMember(nameof(DebuggerShortcutsConfig.SaveRomAs)),
 				GetMember(nameof(DebuggerShortcutsConfig.SaveEditAsIps)),

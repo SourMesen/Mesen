@@ -1262,6 +1262,8 @@
     <Compile Include="RuntimeChecker.cs" />
     <Compile Include="SingleInstance.cs" />
     <Compile Include="TestRunner.cs" />
+    <None Include="Resources\MoveDown.png" />
+    <None Include="Resources\MoveUp.png" />
     <None Include="Resources\NudDownArrowDarkTheme.png" />
     <None Include="Resources\DownArrowDarkTheme.png" />
     <None Include="Resources\NudUpArrowDarkTheme.png" />

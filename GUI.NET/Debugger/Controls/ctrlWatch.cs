@@ -43,6 +43,8 @@ namespace Mesen.GUI.Debugger
 				mnuRemoveWatch.InitShortcut(this, nameof(DebuggerShortcutsConfig.WatchList_Delete));
 				mnuEditInMemoryViewer.InitShortcut(this, nameof(DebuggerShortcutsConfig.CodeWindow_EditInMemoryViewer));
 				mnuViewInDisassembly.InitShortcut(this, nameof(DebuggerShortcutsConfig.MemoryViewer_ViewInDisassembly));
+				mnuMoveUp.InitShortcut(this, nameof(DebuggerShortcutsConfig.WatchList_MoveUp));
+				mnuMoveDown.InitShortcut(this, nameof(DebuggerShortcutsConfig.WatchList_MoveDown));
 			}
 		}
 
@@ -51,21 +53,21 @@ namespace Mesen.GUI.Debugger
 			if(lstWatch.SelectedItems.Count > 0) {
 				//Used to prevent a Mono issue where pressing a key will change the selected item before we get a chance to edit it
 				_keyDownItem = lstWatch.SelectedItems[0];
+
+				if((_isEditing && keyData == Keys.Escape) || keyData == Keys.Enter) {
+					if(keyData == Keys.Enter) {
+						if(_isEditing) {
+							ApplyEdit();
+						} else {
+							StartEdit(lstWatch.SelectedItems[0].Text);
+						}
+					} else if(keyData == Keys.Escape) {
+						CancelEdit();
+					}
+					return true;
+				}
 			} else {
 				_keyDownItem = null;
-			}
-			
-			if((_isEditing && keyData == Keys.Escape) || keyData == Keys.Enter) {
-				if(keyData == Keys.Enter) {
-					if(_isEditing) {
-						ApplyEdit();
-					} else {
-						StartEdit(lstWatch.SelectedItems[0].Text);
-					}
-				} else if(keyData == Keys.Escape) {
-					CancelEdit();
-				}
-				return true;
 			}
 
 			UpdateActions();
@@ -90,7 +92,7 @@ namespace Mesen.GUI.Debugger
 		{
 			List<WatchValueInfo> watchContent = WatchManager.GetWatchContent(mnuHexDisplay.Checked);
 
-			int currentSelection = lstWatch.SelectedIndices.Count > 0 ? lstWatch.SelectedIndices[0] : -1;
+			int currentSelection = lstWatch.FocusedItem?.Index ?? -1;
 
 			bool updating = false;
 			if(watchContent.Count != lstWatch.Items.Count - 1) {
@@ -143,8 +145,7 @@ namespace Mesen.GUI.Debugger
 			}
 
 			if(currentSelection >= 0 && lstWatch.Items.Count > currentSelection) {
-				lstWatch.FocusedItem = lstWatch.Items[currentSelection];
-				lstWatch.Items[currentSelection].Selected = true;
+				SetSelectedItem(currentSelection);
 			}
 		}
 				
@@ -165,6 +166,8 @@ namespace Mesen.GUI.Debugger
 		{
 			mnuEditInMemoryViewer.Enabled = false;
 			mnuViewInDisassembly.Enabled = false;
+			mnuMoveUp.Enabled = false;
+			mnuMoveDown.Enabled = false;
 
 			if(lstWatch.SelectedItems.Count == 1) {
 				Match match = _watchAddressOrLabel.Match(lstWatch.SelectedItems[0].Text);
@@ -187,6 +190,9 @@ namespace Mesen.GUI.Debugger
 						}
 					}
 				}
+
+				mnuMoveUp.Enabled = lstWatch.SelectedIndices[0] > 0 && lstWatch.SelectedIndices[0] < lstWatch.Items.Count - 1;
+				mnuMoveDown.Enabled = lstWatch.SelectedIndices[0] < lstWatch.Items.Count - 2;
 			}
 		}
 
@@ -267,14 +273,18 @@ namespace Mesen.GUI.Debugger
 
 		private void ApplyEdit()
 		{
-			lstWatch.SelectedItems[0].Text = txtEdit.Text;
-			WatchManager.UpdateWatch(lstWatch.SelectedIndices[0], txtEdit.Text);
+			if(lstWatch.SelectedItems.Count > 0) {
+				lstWatch.SelectedItems[0].Text = txtEdit.Text;
+				WatchManager.UpdateWatch(lstWatch.SelectedIndices[0], txtEdit.Text);
+			}
 			lstWatch.Focus();
 		}
 
 		private void CancelEdit()
 		{
-			txtEdit.Text = lstWatch.SelectedItems[0].Text;
+			if(lstWatch.SelectedItems.Count > 0) {
+				txtEdit.Text = lstWatch.SelectedItems[0].Text;
+			}
 			lstWatch.Focus();
 		}
 
@@ -293,6 +303,78 @@ namespace Mesen.GUI.Debugger
 			txtEdit.Visible = false;
 			lstWatch.Focus();
 			ApplyEdit();
+		}
+
+		private void mnuMoveUp_Click(object sender, EventArgs e)
+		{
+			MoveUp(false);
+		}
+
+		private void mnuMoveDown_Click(object sender, EventArgs e)
+		{
+			MoveDown();
+		}
+
+		private void SetSelectedItem(int index)
+		{
+			if(index < lstWatch.Items.Count) {
+				lstWatch.FocusedItem = lstWatch.Items[index];
+				foreach(ListViewItem item in lstWatch.Items) {
+					item.Selected = lstWatch.FocusedItem == item;
+				}
+			}
+		}
+
+		private void MoveUp(bool fromUpDownArrow)
+		{
+			if(lstWatch.SelectedIndices.Count == 0) {
+				return;
+			}
+
+			int index = lstWatch.SelectedIndices[0];
+			if(Program.IsMono && fromUpDownArrow) {
+				//Mono appears to move the selection up before processing this
+				index++;
+			}
+
+			if(index > 0 && index < lstWatch.Items.Count - 1) {
+				string currentEntry = lstWatch.Items[index].SubItems[0].Text;
+				string entryAbove = lstWatch.Items[index - 1].SubItems[0].Text;
+				SetSelectedItem(index - 1);
+				WatchManager.UpdateWatch(index - 1, currentEntry);
+				WatchManager.UpdateWatch(index, entryAbove);
+			} else {
+				SetSelectedItem(index);
+			}
+		}
+
+		private void MoveDown()
+		{
+			if(lstWatch.SelectedIndices.Count == 0) {
+				return;
+			}
+
+			int index = lstWatch.SelectedIndices[0];
+			if(index < lstWatch.Items.Count - 2) {
+				string currentEntry = lstWatch.Items[index].SubItems[0].Text;
+				string entryBelow = lstWatch.Items[index + 1].SubItems[0].Text;
+				SetSelectedItem(index + 1);
+				WatchManager.UpdateWatch(index + 1, currentEntry);
+				WatchManager.UpdateWatch(index, entryBelow);
+			} else {
+				SetSelectedItem(index);
+			}
+		}
+
+		private void lstWatch_OnMoveUpDown(Keys keyData, ref bool processed)
+		{
+			if(keyData == ConfigManager.Config.DebugInfo.Shortcuts.WatchList_MoveUp) {
+				MoveUp(true);
+				processed = true;
+			} else if(keyData == ConfigManager.Config.DebugInfo.Shortcuts.WatchList_MoveDown) {
+				MoveDown();
+				processed = true;
+			}
 		}
 	}
 }

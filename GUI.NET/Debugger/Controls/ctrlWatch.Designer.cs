@@ -30,7 +30,7 @@
 		{
 			this.components = new System.ComponentModel.Container();
 			System.Windows.Forms.ListViewItem listViewItem1 = new System.Windows.Forms.ListViewItem("");
-			this.lstWatch = new Mesen.GUI.Controls.DoubleBufferedListView();
+			this.lstWatch = new Mesen.GUI.Controls.WatchListView();
 			this.colName = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
 			this.colValue = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
 			this.contextMenuWatch = new System.Windows.Forms.ContextMenuStrip(this.components);
@@ -38,8 +38,12 @@
 			this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
 			this.mnuEditInMemoryViewer = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuViewInDisassembly = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem4 = new System.Windows.Forms.ToolStripSeparator();
+			this.mnuMoveUp = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuMoveDown = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripSeparator();
 			this.mnuHexDisplay = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem3 = new System.Windows.Forms.ToolStripSeparator();
 			this.txtEdit = new System.Windows.Forms.TextBox();
 			this.contextMenuWatch.SuspendLayout();
 			this.SuspendLayout();
@@ -62,6 +66,7 @@
 			this.lstWatch.TabIndex = 6;
 			this.lstWatch.UseCompatibleStateImageBehavior = false;
 			this.lstWatch.View = System.Windows.Forms.View.Details;
+			this.lstWatch.OnMoveUpDown += new Mesen.GUI.Controls.WatchListView.MoveUpDownHandler(this.lstWatch_OnMoveUpDown);
 			this.lstWatch.SelectedIndexChanged += new System.EventHandler(this.lstWatch_SelectedIndexChanged);
 			this.lstWatch.Click += new System.EventHandler(this.lstWatch_Click);
 			this.lstWatch.DoubleClick += new System.EventHandler(this.lstWatch_DoubleClick);
@@ -84,10 +89,14 @@
             this.toolStripMenuItem1,
             this.mnuEditInMemoryViewer,
             this.mnuViewInDisassembly,
+            this.toolStripMenuItem4,
+            this.mnuMoveUp,
+            this.mnuMoveDown,
             this.toolStripMenuItem2,
-            this.mnuHexDisplay});
+            this.mnuHexDisplay,
+            this.toolStripMenuItem3});
 			this.contextMenuWatch.Name = "contextMenuWatch";
-			this.contextMenuWatch.Size = new System.Drawing.Size(194, 104);
+			this.contextMenuWatch.Size = new System.Drawing.Size(194, 160);
 			this.contextMenuWatch.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuWatch_Opening);
 			// 
 			// mnuRemoveWatch
@@ -119,6 +128,27 @@
 			this.mnuViewInDisassembly.Text = "View in disassembly";
 			this.mnuViewInDisassembly.Click += new System.EventHandler(this.mnuViewInDisassembly_Click);
 			// 
+			// toolStripMenuItem4
+			// 
+			this.toolStripMenuItem4.Name = "toolStripMenuItem4";
+			this.toolStripMenuItem4.Size = new System.Drawing.Size(190, 6);
+			// 
+			// mnuMoveUp
+			// 
+			this.mnuMoveUp.Image = global::Mesen.GUI.Properties.Resources.MoveUp;
+			this.mnuMoveUp.Name = "mnuMoveUp";
+			this.mnuMoveUp.Size = new System.Drawing.Size(193, 22);
+			this.mnuMoveUp.Text = "Move up";
+			this.mnuMoveUp.Click += new System.EventHandler(this.mnuMoveUp_Click);
+			// 
+			// mnuMoveDown
+			// 
+			this.mnuMoveDown.Image = global::Mesen.GUI.Properties.Resources.MoveDown;
+			this.mnuMoveDown.Name = "mnuMoveDown";
+			this.mnuMoveDown.Size = new System.Drawing.Size(193, 22);
+			this.mnuMoveDown.Text = "Move down";
+			this.mnuMoveDown.Click += new System.EventHandler(this.mnuMoveDown_Click);
+			// 
 			// toolStripMenuItem2
 			// 
 			this.toolStripMenuItem2.Name = "toolStripMenuItem2";
@@ -133,6 +163,11 @@
 			this.mnuHexDisplay.Size = new System.Drawing.Size(193, 22);
 			this.mnuHexDisplay.Text = "Hexadecimal Display";
 			this.mnuHexDisplay.Click += new System.EventHandler(this.mnuHexDisplay_Click);
+			// 
+			// toolStripMenuItem3
+			// 
+			this.toolStripMenuItem3.Name = "toolStripMenuItem3";
+			this.toolStripMenuItem3.Size = new System.Drawing.Size(190, 6);
 			// 
 			// txtEdit
 			// 
@@ -160,7 +195,7 @@
 
 		#endregion
 
-		private Mesen.GUI.Controls.DoubleBufferedListView lstWatch;
+		private Mesen.GUI.Controls.WatchListView lstWatch;
 		private System.Windows.Forms.ColumnHeader colName;
 		private System.Windows.Forms.ColumnHeader colValue;
 		private System.Windows.Forms.ContextMenuStrip contextMenuWatch;
@@ -171,5 +206,9 @@
 		private System.Windows.Forms.ToolStripMenuItem mnuViewInDisassembly;
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem2;
 		private System.Windows.Forms.TextBox txtEdit;
+		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem4;
+		private System.Windows.Forms.ToolStripMenuItem mnuMoveUp;
+		private System.Windows.Forms.ToolStripMenuItem mnuMoveDown;
+		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem3;
 	}
 }

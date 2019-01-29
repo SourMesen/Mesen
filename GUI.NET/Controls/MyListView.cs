@@ -44,7 +44,25 @@ namespace Mesen.GUI.Controls
 			base.OnKeyDown(e);
 		}
 	}
-	
+
+	public class WatchListView : DoubleBufferedListView
+	{
+		public delegate void MoveUpDownHandler(Keys keyData, ref bool processed);
+		public event MoveUpDownHandler OnMoveUpDown;
+
+		protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
+		{
+			if(keyData.HasFlag(Keys.Up) || keyData.HasFlag(Keys.Down)) {
+				bool processed = false;
+				OnMoveUpDown?.Invoke(keyData, ref processed);
+				if(processed) {
+					return true;
+				}
+			}
+			return base.ProcessCmdKey(ref msg, keyData);
+		}
+	}
+
 	public class DoubleBufferedListView : ListView
 	{
 		public DoubleBufferedListView()

@@ -195,6 +195,10 @@ namespace Mesen.GUI.Config
 
 		[ShortcutName("Watch List: Delete")]
 		public XmlKeys WatchList_Delete = Keys.Delete;
+		[ShortcutName("Watch List: Move Up")]
+		public XmlKeys WatchList_MoveUp = Keys.Control | Keys.Up;
+		[ShortcutName("Watch List: Move Down")]
+		public XmlKeys WatchList_MoveDown = Keys.Control | Keys.Down;
 
 		[ShortcutName("Save Rom")]
 		public XmlKeys SaveRom = Keys.Control | Keys.S;
