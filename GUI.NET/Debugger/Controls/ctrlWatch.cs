@@ -27,8 +27,6 @@ namespace Mesen.GUI.Debugger
 		private bool _isEditing = false;
 		ListViewItem _keyDownItem = null;
 
-		public bool IsEditing { get { return _isEditing; } }
-
 		public ctrlWatch()
 		{
 			InitializeComponent();
@@ -95,7 +93,7 @@ namespace Mesen.GUI.Debugger
 			List<WatchValueInfo> watchContent = WatchManager.GetWatchContent(mnuHexDisplay.Checked, _previousValues);
 			_previousValues = watchContent;
 
-			int currentSelection = lstWatch.FocusedItem?.Index ?? -1;
+			int currentSelection = lstWatch.FocusedItem?.Selected == true ? (lstWatch.FocusedItem?.Index ?? -1) : -1;
 
 			bool updating = false;
 			if(watchContent.Count != lstWatch.Items.Count - 1) {
@@ -245,10 +243,7 @@ namespace Mesen.GUI.Debugger
 				selectedItem = lstWatch.SelectedItems[0];
 			}
 
-			foreach(ListViewItem item in lstWatch.Items) {
-				item.Selected = selectedItem == item;
-			}
-			lstWatch.FocusedItem = selectedItem;
+			SetSelectedItem(selectedItem.Index);
 
 			txtEdit.Location = selectedItem.Position;
 			txtEdit.Width = selectedItem.Bounds.Width;
