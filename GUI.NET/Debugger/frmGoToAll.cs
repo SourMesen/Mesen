@@ -269,17 +269,18 @@ namespace Mesen.GUI.Debugger
 			_resultCount = Math.Min(searchResults.Count, MaxResultCount);
 			SelectedResult = 0;
 
+			lblResultCount.Visible = !isEmptySearch;
+			lblResultCount.Text = searchResults.Count.ToString() + (searchResults.Count == 1 ? " result" : " results");
+			if(searchResults.Count > MaxResultCount) {
+				lblResultCount.Text += " (" + MaxResultCount.ToString() + " shown)";
+			}
+
 			if(searchResults.Count == 0 && !isEmptySearch) {
+				_resultCount++;
 				searchResults.Add(new SearchResultInfo() { Caption = "No results found.", AbsoluteAddress = -1 });
 				pnlResults.BackColor = SystemColors.ControlLight;
 			} else {
 				pnlResults.BackColor = SystemColors.ControlDarkDark;
-			}
-
-			lblResultCount.Visible = !isEmptySearch;
-			lblResultCount.Text = _resultCount.ToString() + (_resultCount == 1 ? " result" : " results");
-			if(searchResults.Count > MaxResultCount) {
-				lblResultCount.Text += " (" + MaxResultCount.ToString() + " shown)";
 			}
 
 			if(Program.IsMono) {
@@ -289,18 +290,18 @@ namespace Mesen.GUI.Debugger
 				tlpResults.SuspendLayout();
 			}
 
-			for(int i = 0; i < searchResults.Count; i++) {
+			for(int i = 0; i < _resultCount; i++) {
 				_results[i].Initialize(searchResults[i]);
 				_results[i].Tag = searchResults[i];
 				_results[i].Visible = true;
 			}
 
-			for(int i = searchResults.Count; i < MaxResultCount; i++) {
+			for(int i = _resultCount; i < MaxResultCount; i++) {
 				_results[i].Visible = false;
 			}
 
 			pnlResults.VerticalScroll.Value = 0;
-			tlpResults.Height = (_results[0].Height + 1) * searchResults.Count;
+			tlpResults.Height = (_results[0].Height + 1) * _resultCount;
 			
 			pnlResults.ResumeLayout();
 			if(Program.IsMono) {
