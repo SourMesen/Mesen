@@ -492,8 +492,6 @@ namespace InteropEmu {
 
 			_console->Release(true);
 			_console.reset();
-
-			MessageManager::RegisterMessageManager(nullptr);
 			
 			_shortcutKeyHandler.reset();
 		}
