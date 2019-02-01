@@ -26,6 +26,8 @@ namespace Mesen.GUI.Debugger
 					this.Size = ConfigManager.Config.DebugInfo.WatchWindowSize;
 					this.Location = ConfigManager.Config.DebugInfo.WatchWindowLocation;
 				}
+
+				this.toolTip.SetToolTip(picWatchHelp, ctrlWatch.GetTooltipText());
 			}
 		}
 

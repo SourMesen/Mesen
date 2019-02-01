@@ -148,7 +148,7 @@ namespace Mesen.GUI.Config
 		public bool AlwaysScrollToCenter = false;
 		public bool SplitView = false;
 		public bool VerticalLayout = false;
-		public bool HexDisplay = true;
+		public WatchFormatStyle WatchFormat = WatchFormatStyle.Hex;
 		public bool ShowBreakpointLabels = true;
 
 		public Size EventViewerSize = new Size(0, 0);

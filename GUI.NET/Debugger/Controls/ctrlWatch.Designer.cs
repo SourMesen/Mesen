@@ -42,11 +42,28 @@
 			this.mnuMoveUp = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuMoveDown = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripSeparator();
+			this.mnuDecimalDisplay = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuHexDisplay = new System.Windows.Forms.ToolStripMenuItem();
-			this.txtEdit = new System.Windows.Forms.TextBox();
+			this.mnuBinaryDisplay = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem5 = new System.Windows.Forms.ToolStripSeparator();
+			this.mnuRowDisplayFormat = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuRowBinary = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem8 = new System.Windows.Forms.ToolStripSeparator();
+			this.mnuRowHex1 = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuRowHex2 = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuRowHex3 = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem6 = new System.Windows.Forms.ToolStripSeparator();
+			this.mnuRowSigned1 = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuRowSigned2 = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuRowSigned3 = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem7 = new System.Windows.Forms.ToolStripSeparator();
+			this.mnuRowUnsigned = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem9 = new System.Windows.Forms.ToolStripSeparator();
+			this.mnuRowClearFormat = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem3 = new System.Windows.Forms.ToolStripSeparator();
 			this.mnuImport = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuExport = new System.Windows.Forms.ToolStripMenuItem();
+			this.txtEdit = new System.Windows.Forms.TextBox();
 			this.contextMenuWatch.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -95,12 +112,16 @@
             this.mnuMoveUp,
             this.mnuMoveDown,
             this.toolStripMenuItem2,
-            this.mnuHexDisplay,
+            this.mnuRowDisplayFormat,
             this.toolStripMenuItem3,
+            this.mnuDecimalDisplay,
+            this.mnuHexDisplay,
+            this.mnuBinaryDisplay,
+            this.toolStripMenuItem5,
             this.mnuImport,
             this.mnuExport});
 			this.contextMenuWatch.Name = "contextMenuWatch";
-			this.contextMenuWatch.Size = new System.Drawing.Size(194, 226);
+			this.contextMenuWatch.Size = new System.Drawing.Size(194, 298);
 			this.contextMenuWatch.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuWatch_Opening);
 			// 
 			// mnuRemoveWatch
@@ -158,25 +179,137 @@
 			this.toolStripMenuItem2.Name = "toolStripMenuItem2";
 			this.toolStripMenuItem2.Size = new System.Drawing.Size(190, 6);
 			// 
+			// mnuDecimalDisplay
+			// 
+			this.mnuDecimalDisplay.Name = "mnuDecimalDisplay";
+			this.mnuDecimalDisplay.Size = new System.Drawing.Size(193, 22);
+			this.mnuDecimalDisplay.Text = "Decimal Display";
+			this.mnuDecimalDisplay.Click += new System.EventHandler(this.mnuDecimalDisplay_Click);
+			// 
 			// mnuHexDisplay
 			// 
 			this.mnuHexDisplay.Checked = true;
-			this.mnuHexDisplay.CheckOnClick = true;
 			this.mnuHexDisplay.CheckState = System.Windows.Forms.CheckState.Checked;
 			this.mnuHexDisplay.Name = "mnuHexDisplay";
 			this.mnuHexDisplay.Size = new System.Drawing.Size(193, 22);
 			this.mnuHexDisplay.Text = "Hexadecimal Display";
 			this.mnuHexDisplay.Click += new System.EventHandler(this.mnuHexDisplay_Click);
 			// 
-			// txtEdit
+			// mnuBinaryDisplay
 			// 
-			this.txtEdit.AcceptsReturn = true;
-			this.txtEdit.Location = new System.Drawing.Point(3, 24);
-			this.txtEdit.Name = "txtEdit";
-			this.txtEdit.Size = new System.Drawing.Size(177, 20);
-			this.txtEdit.TabIndex = 7;
-			this.txtEdit.Visible = false;
-			this.txtEdit.Leave += new System.EventHandler(this.txtEdit_Leave);
+			this.mnuBinaryDisplay.Name = "mnuBinaryDisplay";
+			this.mnuBinaryDisplay.Size = new System.Drawing.Size(193, 22);
+			this.mnuBinaryDisplay.Text = "Binary Display";
+			this.mnuBinaryDisplay.Click += new System.EventHandler(this.mnuBinaryDisplay_Click);
+			// 
+			// toolStripMenuItem5
+			// 
+			this.toolStripMenuItem5.Name = "toolStripMenuItem5";
+			this.toolStripMenuItem5.Size = new System.Drawing.Size(190, 6);
+			// 
+			// mnuRowDisplayFormat
+			// 
+			this.mnuRowDisplayFormat.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.mnuRowBinary,
+            this.toolStripMenuItem8,
+            this.mnuRowHex1,
+            this.mnuRowHex2,
+            this.mnuRowHex3,
+            this.toolStripMenuItem6,
+            this.mnuRowSigned1,
+            this.mnuRowSigned2,
+            this.mnuRowSigned3,
+            this.toolStripMenuItem7,
+            this.mnuRowUnsigned,
+            this.toolStripMenuItem9,
+            this.mnuRowClearFormat});
+			this.mnuRowDisplayFormat.Name = "mnuRowDisplayFormat";
+			this.mnuRowDisplayFormat.Size = new System.Drawing.Size(193, 22);
+			this.mnuRowDisplayFormat.Text = "Row Display Format";
+			// 
+			// mnuRowBinary
+			// 
+			this.mnuRowBinary.Name = "mnuRowBinary";
+			this.mnuRowBinary.Size = new System.Drawing.Size(197, 22);
+			this.mnuRowBinary.Text = "Binary";
+			this.mnuRowBinary.Click += new System.EventHandler(this.mnuRowBinary_Click);
+			// 
+			// toolStripMenuItem8
+			// 
+			this.toolStripMenuItem8.Name = "toolStripMenuItem8";
+			this.toolStripMenuItem8.Size = new System.Drawing.Size(194, 6);
+			// 
+			// mnuRowHex1
+			// 
+			this.mnuRowHex1.Name = "mnuRowHex1";
+			this.mnuRowHex1.Size = new System.Drawing.Size(197, 22);
+			this.mnuRowHex1.Text = "Hexadecimal (8-bit)";
+			this.mnuRowHex1.Click += new System.EventHandler(this.mnuRowHex1_Click);
+			// 
+			// mnuRowHex2
+			// 
+			this.mnuRowHex2.Name = "mnuRowHex2";
+			this.mnuRowHex2.Size = new System.Drawing.Size(197, 22);
+			this.mnuRowHex2.Text = "Hexadecimal (16-bit)";
+			this.mnuRowHex2.Click += new System.EventHandler(this.mnuRowHex2_Click);
+			// 
+			// mnuRowHex3
+			// 
+			this.mnuRowHex3.Name = "mnuRowHex3";
+			this.mnuRowHex3.Size = new System.Drawing.Size(197, 22);
+			this.mnuRowHex3.Text = "Hexadecimal (24-bit)";
+			this.mnuRowHex3.Click += new System.EventHandler(this.mnuRowHex3_Click);
+			// 
+			// toolStripMenuItem6
+			// 
+			this.toolStripMenuItem6.Name = "toolStripMenuItem6";
+			this.toolStripMenuItem6.Size = new System.Drawing.Size(194, 6);
+			// 
+			// mnuRowSigned1
+			// 
+			this.mnuRowSigned1.Name = "mnuRowSigned1";
+			this.mnuRowSigned1.Size = new System.Drawing.Size(197, 22);
+			this.mnuRowSigned1.Text = "Signed decimal (8-bit)";
+			this.mnuRowSigned1.Click += new System.EventHandler(this.mnuRowSigned1_Click);
+			// 
+			// mnuRowSigned2
+			// 
+			this.mnuRowSigned2.Name = "mnuRowSigned2";
+			this.mnuRowSigned2.Size = new System.Drawing.Size(197, 22);
+			this.mnuRowSigned2.Text = "Signed decimal (16-bit)";
+			this.mnuRowSigned2.Click += new System.EventHandler(this.mnuRowSigned2_Click);
+			// 
+			// mnuRowSigned3
+			// 
+			this.mnuRowSigned3.Name = "mnuRowSigned3";
+			this.mnuRowSigned3.Size = new System.Drawing.Size(197, 22);
+			this.mnuRowSigned3.Text = "Signed decimal (24-bit)";
+			this.mnuRowSigned3.Click += new System.EventHandler(this.mnuRowSigned3_Click);
+			// 
+			// toolStripMenuItem7
+			// 
+			this.toolStripMenuItem7.Name = "toolStripMenuItem7";
+			this.toolStripMenuItem7.Size = new System.Drawing.Size(194, 6);
+			// 
+			// mnuRowUnsigned
+			// 
+			this.mnuRowUnsigned.Name = "mnuRowUnsigned";
+			this.mnuRowUnsigned.Size = new System.Drawing.Size(197, 22);
+			this.mnuRowUnsigned.Text = "Unsigned decimal";
+			this.mnuRowUnsigned.Click += new System.EventHandler(this.mnuRowUnsigned_Click);
+			// 
+			// toolStripMenuItem9
+			// 
+			this.toolStripMenuItem9.Name = "toolStripMenuItem9";
+			this.toolStripMenuItem9.Size = new System.Drawing.Size(194, 6);
+			// 
+			// mnuRowClearFormat
+			// 
+			this.mnuRowClearFormat.Image = global::Mesen.GUI.Properties.Resources.Close;
+			this.mnuRowClearFormat.Name = "mnuRowClearFormat";
+			this.mnuRowClearFormat.Size = new System.Drawing.Size(197, 22);
+			this.mnuRowClearFormat.Text = "Clear";
+			this.mnuRowClearFormat.Click += new System.EventHandler(this.mnuRowClearFormat_Click);
 			// 
 			// toolStripMenuItem3
 			// 
@@ -198,6 +331,16 @@
 			this.mnuExport.Size = new System.Drawing.Size(193, 22);
 			this.mnuExport.Text = "Export...";
 			this.mnuExport.Click += new System.EventHandler(this.mnuExport_Click);
+			// 
+			// txtEdit
+			// 
+			this.txtEdit.AcceptsReturn = true;
+			this.txtEdit.Location = new System.Drawing.Point(3, 24);
+			this.txtEdit.Name = "txtEdit";
+			this.txtEdit.Size = new System.Drawing.Size(177, 20);
+			this.txtEdit.TabIndex = 7;
+			this.txtEdit.Visible = false;
+			this.txtEdit.Leave += new System.EventHandler(this.txtEdit_Leave);
 			// 
 			// ctrlWatch
 			// 
@@ -232,5 +375,22 @@
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem3;
 		private System.Windows.Forms.ToolStripMenuItem mnuImport;
 		private System.Windows.Forms.ToolStripMenuItem mnuExport;
+		private System.Windows.Forms.ToolStripMenuItem mnuDecimalDisplay;
+		private System.Windows.Forms.ToolStripMenuItem mnuBinaryDisplay;
+		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem5;
+		private System.Windows.Forms.ToolStripMenuItem mnuRowDisplayFormat;
+		private System.Windows.Forms.ToolStripMenuItem mnuRowSigned1;
+		private System.Windows.Forms.ToolStripMenuItem mnuRowSigned2;
+		private System.Windows.Forms.ToolStripMenuItem mnuRowSigned3;
+		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem6;
+		private System.Windows.Forms.ToolStripMenuItem mnuRowHex1;
+		private System.Windows.Forms.ToolStripMenuItem mnuRowHex2;
+		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem7;
+		private System.Windows.Forms.ToolStripMenuItem mnuRowUnsigned;
+		private System.Windows.Forms.ToolStripMenuItem mnuRowBinary;
+		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem8;
+		private System.Windows.Forms.ToolStripMenuItem mnuRowHex3;
+		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem9;
+		private System.Windows.Forms.ToolStripMenuItem mnuRowClearFormat;
 	}
 }

@@ -167,12 +167,7 @@ namespace Mesen.GUI.Debugger
 
 			LastCodeWindow = ctrlDebuggerCode;
 
-			this.toolTip.SetToolTip(this.picWatchHelp,
-				frmBreakpoint.GetConditionTooltip(true) + Environment.NewLine + Environment.NewLine +
-				"Additionally, the watch window supports a syntax to display X bytes starting from a specific address. e.g:" + Environment.NewLine +
-				"[$10, 16]: Display 16 bytes starting from address $10" + Environment.NewLine +
-				"[MyLabel, 4]: Display 4 bytes starting from the address the specified label (MyLabel) refers to"
-			);
+			this.toolTip.SetToolTip(this.picWatchHelp, ctrlWatch.GetTooltipText());
 
 			_notifListener = new InteropEmu.NotificationListener(ConfigManager.Config.DebugInfo.DebugConsoleId);
 			_notifListener.OnNotification += _notifListener_OnNotification;
