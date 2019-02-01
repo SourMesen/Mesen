@@ -20,7 +20,7 @@ void DefaultVideoFilter::InitConversionMatrix(double hueShift, double saturation
 	_pictureSettings.Hue = hueShift;
 	_pictureSettings.Saturation = saturationShift;
 
-	double hue = hueShift * M_PI - 15 * M_PI / 180;
+	double hue = hueShift * M_PI;
 	double sat = saturationShift + 1;
 
 	double baseValues[6] = { 0.956f, 0.621f, -0.272f, -0.647f, -1.105f, 1.702f };
