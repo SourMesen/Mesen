@@ -7,6 +7,7 @@
 #include "NotificationManager.h"
 #include "RomData.h"
 #include "MovieRecorder.h"
+#include "SaveStateManager.h"
 
 HistoryViewer::HistoryViewer(shared_ptr<Console> console)
 {
@@ -78,6 +79,23 @@ void HistoryViewer::SeekTo(uint32_t seekPosition)
 
 		_console->Resume();
 	}
+}
+
+bool HistoryViewer::CreateSaveState(string outputFile, uint32_t position)
+{
+	if(position < _history.size()) {
+		std::stringstream stateData;
+		_console->GetSaveStateManager()->GetSaveStateHeader(stateData);
+		_history[position].GetStateData(stateData);
+
+		ofstream output(outputFile, ios::binary);
+		if(output) {
+			output << stateData.rdbuf();
+			output.close();
+			return true;
+		}
+	}
+	return false;
 }
 
 bool HistoryViewer::SaveMovie(string movieFile, uint32_t startPosition, uint32_t endPosition)

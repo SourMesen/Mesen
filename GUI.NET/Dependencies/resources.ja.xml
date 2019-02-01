@@ -607,6 +607,7 @@
 			<Control ID="mnuFile">ファイル</Control>
 			<Control ID="mnuImportMovie">動画をインポートする</Control>
 			<Control ID="mnuExportMovie">動画をエクスポートする</Control>
+			<Control ID="mnuCreateSaveState">クイックセーブを作る</Control>
 			<Control ID="mnuResumeGameplay">ここからゲームを再開する</Control>
 			<Control ID="mnuClose">終了</Control>
 		</Form>
@@ -754,6 +755,7 @@
 
 		<Message ID="MovieSegment">パート {0}</Message>
 		<Message ID="MovieSaveError">動画エクスポートは失敗しました。</Message>
+		<Message ID="FileSaveError">ファイルの保存に失敗しました。</Message>
 
 		<Message ID="ClearHistory">履歴を消去</Message>
 		<Message ID="LastFolderUsed">最後に使用したフォルダ</Message>

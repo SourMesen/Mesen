@@ -33,6 +33,7 @@ namespace Mesen.GUI
 		[DllImport(DLLPath)] public static extern void HistoryViewerStop();
 		[DllImport(DLLPath)] public static extern UInt32 HistoryViewerGetHistoryLength();
 		[DllImport(DLLPath)] [return: MarshalAs(UnmanagedType.I1)] public static extern bool HistoryViewerSaveMovie([MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(UTF8Marshaler))]string movieFile, UInt32 startPosition, UInt32 endPosition);
+		[DllImport(DLLPath)] [return: MarshalAs(UnmanagedType.I1)] public static extern bool HistoryViewerCreateSaveState([MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(UTF8Marshaler))]string outfileFile, UInt32 position);
 		[DllImport(DLLPath)] public static extern void HistoryViewerSetPosition(UInt32 seekPosition);
 		[DllImport(DLLPath)] public static extern void HistoryViewerResumeGameplay(UInt32 seekPosition);
 		[DllImport(DLLPath)] public static extern UInt32 HistoryViewerGetPosition();

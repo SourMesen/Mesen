@@ -605,6 +605,7 @@
 			<Control ID="mnuFile">Файл</Control>
 			<Control ID="mnuImportMovie">Імпортувати відео</Control>
 			<Control ID="mnuExportMovie">Експортувати вiдео</Control>
+			<Control ID="mnuCreateSaveState">Create Save State</Control>
 			<Control ID="mnuResumeGameplay">Відновити геймплей</Control>
 			<Control ID="mnuClose">Закрити</Control>
 		</Form>
@@ -752,6 +753,7 @@
 
 		<Message ID="MovieSegment">Сегмент #{0}</Message>
 		<Message ID="MovieSaveError">Сталася помилка під час спроби зберегти відео файл.</Message>
+		<Message ID="FileSaveError">An error occurred while trying to save the file.</Message>
 
 		<Message ID="ClearHistory">Очистити історію</Message>
 		<Message ID="LastFolderUsed">Використовувана остання папка</Message>

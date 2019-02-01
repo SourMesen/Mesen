@@ -250,6 +250,14 @@ namespace InteropEmu {
 			}
 		}
 
+		DllExport bool __stdcall HistoryViewerCreateSaveState(const char* outputFile, uint32_t position)
+		{
+			if(_historyConsole) {
+				return _historyConsole->GetHistoryViewer()->CreateSaveState(outputFile, position);
+			}
+			return false;
+		}
+
 		DllExport bool __stdcall HistoryViewerSaveMovie(const char* movieFile, uint32_t startPosition, uint32_t endPosition)
 		{
 			if(_historyConsole) {

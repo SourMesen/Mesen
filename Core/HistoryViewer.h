@@ -27,6 +27,7 @@ public:
 	uint32_t GetPosition();
 	void SeekTo(uint32_t seekPosition);
 
+	bool CreateSaveState(string outputFile, uint32_t position);
 	bool SaveMovie(string movieFile, uint32_t startPosition, uint32_t endPosition);
 
 	void ResumeGameplay(shared_ptr<Console> console, uint32_t resumePosition);
