@@ -36,6 +36,14 @@ namespace Mesen.GUI.GoogleDriveIntegration
 				}
 			} else {
 				try {
+					string googleDriveFolder = Path.Combine(ConfigManager.HomeFolder, "GoogleDrive");
+					if(!Directory.Exists(googleDriveFolder) || Directory.EnumerateFiles(googleDriveFolder).Where((string filename) => filename.Contains("TokenResponse")).Count() == 0) {
+						//Sync token has been deleted, disable sync
+						ConfigManager.Config.PreferenceInfo.CloudSaveIntegration = false;
+						ConfigManager.ApplyChanges();
+						return false;
+					}
+
 					InteropEmu.DisplayMessage("GoogleDrive", "SynchronizationStarted");
 					using(_accessor = new GoogleDriveAccessor()) {
 						FileDownloadResult result = CloudSyncHelper.DownloadData();

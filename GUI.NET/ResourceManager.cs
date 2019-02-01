@@ -100,12 +100,25 @@ namespace Mesen.GUI
 			} catch { }
 		}
 
+		public static void ExtractGoogleDriveResources()
+		{
+			Directory.CreateDirectory(Path.Combine(ConfigManager.HomeFolder, "GoogleDrive"));
+			ZipArchive zip = new ZipArchive(Assembly.GetExecutingAssembly().GetManifestResourceStream("Mesen.GUI.Dependencies.Dependencies.zip"));
+
+			//Extract Google Drive-related DLLs
+			foreach(ZipArchiveEntry entry in zip.Entries) {
+				if(ResourceManager.GoogleDlls.Contains(entry.Name)) {
+					string outputFilename = Path.Combine(ConfigManager.HomeFolder, "GoogleDrive", entry.Name);
+					ExtractFile(entry, outputFilename);
+				}
+			}
+		}
+
 		public static bool ExtractResources()
 		{
 			CleanupOldFiles();
 
 			Directory.CreateDirectory(Path.Combine(ConfigManager.HomeFolder, "Resources"));
-			Directory.CreateDirectory(Path.Combine(ConfigManager.HomeFolder, "GoogleDrive"));
 
 			ZipArchive zip = new ZipArchive(Assembly.GetExecutingAssembly().GetManifestResourceStream("Mesen.GUI.Dependencies.Dependencies.zip"));
 						
@@ -120,9 +133,6 @@ namespace Mesen.GUI
 					ExtractFile(entry, outputFilename);
 				} else if(entry.Name == "MesenUpdater.exe" || entry.Name == "MesenDB.txt") {
 					string outputFilename = Path.Combine(ConfigManager.HomeFolder, entry.Name);
-					ExtractFile(entry, outputFilename);
-				} else if(entry.Name.StartsWith("Google.Apis") || entry.Name == "BouncyCastle.Crypto.dll" || entry.Name == "Zlib.Portable.dll" || entry.Name == "Newtonsoft.Json.dll") {
-					string outputFilename = Path.Combine(ConfigManager.HomeFolder, "GoogleDrive", entry.Name);
 					ExtractFile(entry, outputFilename);
 				} else if(entry.Name == "Font.24.spritefont" || entry.Name == "Font.64.spritefont" || entry.Name == "LICENSE.txt" || entry.Name == "PixelFont.ttf") {
 					string outputFilename = Path.Combine(ConfigManager.HomeFolder, "Resources", entry.Name);
@@ -141,5 +151,17 @@ namespace Mesen.GUI
 
 			return true;
 		}
+
+		public static HashSet<string> GoogleDlls = new HashSet<string>() {
+			"BouncyCastle.Crypto.dll",
+			"Google.Apis.Auth.dll",
+			"Google.Apis.Auth.PlatformServices.dll",
+			"Google.Apis.Core.dll",
+			"Google.Apis.dll",
+			"Google.Apis.Drive.v3.dll",
+			"Google.Apis.PlatformServices.dll",
+			"Newtonsoft.Json.dll",
+			"Zlib.Portable.dll"
+		};
 	}
 }
