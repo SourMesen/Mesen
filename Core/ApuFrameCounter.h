@@ -23,7 +23,6 @@ private:
 	shared_ptr<Console> _console;
 	int32_t _stepCycles[2][6];
 	NesModel _nesModel;
-	int32_t _nextIrqCycle;
 	int32_t _previousCycle;
 	uint32_t _currentStep;
 	uint32_t _stepMode; //0: 4-step mode, 1: 5-step mode
@@ -42,8 +41,6 @@ public:
 	void Reset(bool softReset)
 	{
 		_nesModel = NesModel::Auto;
-
-		_nextIrqCycle = 29828;
 
 		_previousCycle = 0;
 
@@ -67,7 +64,8 @@ public:
 
 	void StreamState(bool saving) override
 	{
-		Stream(_nextIrqCycle, _previousCycle, _currentStep, _stepMode, _inhibitIRQ, _nesModel, _blockFrameCounterTick, _writeDelayCounter, _newValue);
+		int32_t unusednextIrqCycle;
+		Stream(unusednextIrqCycle, _previousCycle, _currentStep, _stepMode, _inhibitIRQ, _nesModel, _blockFrameCounterTick, _writeDelayCounter, _newValue);
 
 		if(!saving) {
 			SetNesModel(_nesModel);
@@ -103,7 +101,6 @@ public:
 			if(!_inhibitIRQ && _stepMode == 0 && _currentStep >= 3) {
 				//Set irq on the last 3 cycles for 4-step mode
 				_console->GetCpu()->SetIrqSource(IRQSource::FrameCounter);
-				_nextIrqCycle++;
 			}
 
 			FrameType type = _frameType[_stepMode][_currentStep];
@@ -127,9 +124,6 @@ public:
 			if(_currentStep == 6) {
 				_currentStep = 0;
 				_previousCycle = 0;
-				if(_stepMode == 0 && !_inhibitIRQ) {
-					_nextIrqCycle = 29828;
-				}
 			} else {
 				_previousCycle += cyclesRan;
 			}
@@ -144,12 +138,6 @@ public:
 			if(_writeDelayCounter == 0) {
 				//Apply new value after the appropriate number of cycles has elapsed
 				_stepMode = ((_newValue & 0x80) == 0x80) ? 1 : 0;
-
-				if(!_inhibitIRQ && _stepMode == 0) {
-					_nextIrqCycle = 29828;
-				} else {
-					_nextIrqCycle = -1;
-				}
 
 				_writeDelayCounter = -1;
 				_currentStep = 0;
@@ -171,22 +159,13 @@ public:
 		return cyclesRan;
 	}
 
-	bool IrqPending(uint32_t cyclesToRun)
+	bool NeedToRun(uint32_t cyclesToRun)
 	{
-		if(_newValue >= 0 || _blockFrameCounterTick > 0) {
-			return true;
-		}
-
-		if(_previousCycle + (int32_t)cyclesToRun >= _stepCycles[_stepMode][_currentStep]) {
-			return true;
-		}
-
-		if(_nextIrqCycle != -1) {
-			if(_previousCycle + cyclesToRun >= (uint32_t)_nextIrqCycle) {
-				return true;
-			}
-		}
-		return false;
+		//Run APU when:
+		// -A new value is pending
+		// -The "blockFrameCounterTick" process is running
+		// -We're at the before-last or last tick of the current step
+		return _newValue >= 0 || _blockFrameCounterTick > 0 || (_previousCycle + (int32_t)cyclesToRun >= _stepCycles[_stepMode][_currentStep] - 1);
 	}
 
 	void GetMemoryRanges(MemoryRanges &ranges) override

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Mesen.GUI.Forms;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -10,7 +11,7 @@ using System.Windows.Forms;
 
 namespace Mesen.GUI.Debugger
 {
-	public class TooltipForm : Form
+	public class TooltipForm : BaseForm
 	{
 		protected Form _parentForm;
 		private Point _requestedLocation;

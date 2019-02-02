@@ -28,6 +28,7 @@ protected:
 	uint32_t _renderedFrameCount = 0;	
 
 	BaseRenderer(shared_ptr<Console> console, bool registerAsMessageManager);
+	virtual ~BaseRenderer();
 
 	bool IsMessageShown();	
 

@@ -47,6 +47,9 @@ namespace Mesen.GUI.Debugger
 
 		protected override void OnLoad(EventArgs e)
 		{
+			this.InitShortcuts();
+			this.InitToolbar();
+
 			base.OnLoad(e);
 
 			_minimumSize = this.MinimumSize;
@@ -65,9 +68,6 @@ namespace Mesen.GUI.Debugger
 			ctrlDebuggerCodeSplit.CodeViewer.BaseFont = font;
 			ctrlSourceViewer.CodeViewer.BaseFont = font;
 			ctrlSourceViewerSplit.CodeViewer.BaseFont = font;
-
-			this.InitShortcuts();
-			this.InitToolbar();
 
 			this.UpdateWorkspace();
 			this.AutoLoadCdlFiles();
@@ -167,12 +167,7 @@ namespace Mesen.GUI.Debugger
 
 			LastCodeWindow = ctrlDebuggerCode;
 
-			this.toolTip.SetToolTip(this.picWatchHelp,
-				frmBreakpoint.GetConditionTooltip(true) + Environment.NewLine + Environment.NewLine +
-				"Additionally, the watch window supports a syntax to display X bytes starting from a specific address. e.g:" + Environment.NewLine +
-				"[$10, 16]: Display 16 bytes starting from address $10" + Environment.NewLine +
-				"[MyLabel, 4]: Display 4 bytes starting from the address the specified label (MyLabel) refers to"
-			);
+			this.toolTip.SetToolTip(this.picWatchHelp, ctrlWatch.GetTooltipText());
 
 			_notifListener = new InteropEmu.NotificationListener(ConfigManager.Config.DebugInfo.DebugConsoleId);
 			_notifListener.OnNotification += _notifListener_OnNotification;
@@ -287,6 +282,7 @@ namespace Mesen.GUI.Debugger
 			mnuTraceLogger.InitShortcut(this, nameof(DebuggerShortcutsConfig.OpenTraceLogger));
 			mnuTextHooker.InitShortcut(this, nameof(DebuggerShortcutsConfig.OpenTextHooker));
 			mnuProfiler.InitShortcut(this, nameof(DebuggerShortcutsConfig.OpenProfiler));
+			mnuWatchWindow.InitShortcut(this, nameof(DebuggerShortcutsConfig.OpenWatchWindow));
 
 			mnuOpenNametableViewer.InitShortcut(this, nameof(DebuggerShortcutsConfig.OpenNametableViewer));
 			mnuOpenChrViewer.InitShortcut(this, nameof(DebuggerShortcutsConfig.OpenChrViewer));
@@ -1889,6 +1885,11 @@ namespace Mesen.GUI.Debugger
 		private void mnuOpenPaletteViewer_Click(object sender, EventArgs e)
 		{
 			DebugWindowManager.OpenPpuViewer(PpuViewerMode.PaletteViewer);
+		}
+
+		private void mnuWatchWindow_Click(object sender, EventArgs e)
+		{
+			DebugWindowManager.OpenDebugWindow(DebugWindow.WatchWindow);
 		}
 	}
 }

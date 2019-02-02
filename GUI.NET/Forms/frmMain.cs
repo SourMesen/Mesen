@@ -72,22 +72,31 @@ namespace Mesen.GUI.Forms
 
 		public frmMain(string[] args)
 		{
+			ThemeHelper.InitTheme(this.BackColor);
 			InitializeComponent();
+
+			ThemeHelper.ExcludeFromTheme(panelInfo);
+			ThemeHelper.ExcludeFromTheme(panelRenderer);
 
 			this.StartPosition = FormStartPosition.CenterScreen;
 
 			Version currentVersion = new Version(InteropEmu.GetMesenVersion());
 			lblVersion.Text = currentVersion.ToString();
 
-			_fonts.AddFontFile(Path.Combine(ConfigManager.HomeFolder, "Resources", "PixelFont.ttf"));
-			lblVersion.Font = new Font(_fonts.Families[0], 11);
+			if(!Program.IsMono) {
+				_fonts.AddFontFile(Path.Combine(ConfigManager.HomeFolder, "Resources", "PixelFont.ttf"));
+				lblVersion.Font = new Font(_fonts.Families[0], 10);
+			} else {
+				lblVersion.Margin = new Padding(0, 0, 3, 0);
+				picIcon.Margin = new Padding(3, 5, 3, 3);
+			}
 
 #if AUTOBUILD
 			string devVersion = ResourceManager.ReadZippedResource("DevBuild.txt");
 			if(devVersion != null) {
 				Size versionSize = TextRenderer.MeasureText(devVersion, lblVersion.Font);
 				lblVersion.Text = devVersion;
-				lblVersion.Anchor = AnchorStyles.Left;
+				lblVersion.Anchor = AnchorStyles.Right;
 				int newWidth = versionSize.Width + 30;
 				panelInfo.Left -= newWidth - panelInfo.Width;
 				panelInfo.Width = newWidth;
@@ -251,6 +260,8 @@ namespace Mesen.GUI.Forms
 
 			mnuDebugDualSystemSecondaryCpu.Checked = ConfigManager.Config.DebugInfo.DebugConsoleId == InteropEmu.ConsoleId.Slave;
 			InteropEmu.DebugSetDebuggerConsole(ConfigManager.Config.DebugInfo.DebugConsoleId);
+
+			BaseForm.StartBackgroundTimer();
 		}
 
 		private void ProcessFullscreenSwitch(List<string> switches)
@@ -317,6 +328,7 @@ namespace Mesen.GUI.Forms
 			}
 
 			_shuttingDown = true;
+			CursorManager.StopTimers();
 			BaseForm.StopBackgroundTimer();
 			_logWindow?.Close();
 			_historyViewerWindow?.Close();
@@ -690,6 +702,7 @@ namespace Mesen.GUI.Forms
 					break;
 
 				case InteropEmu.ConsoleNotificationType.BeforeEmulationStop:
+					//Close all debugger windows before continuing.
 					this.Invoke((Action)(() => {
 						DebugWindowManager.CloseAll();
 					}));
@@ -828,6 +841,7 @@ namespace Mesen.GUI.Forms
 			mnuTraceLogger.InitShortcut(this, nameof(DebuggerShortcutsConfig.OpenTraceLogger));
 			mnuTextHooker.InitShortcut(this, nameof(DebuggerShortcutsConfig.OpenTextHooker));
 			mnuProfiler.InitShortcut(this, nameof(DebuggerShortcutsConfig.OpenProfiler));
+			mnuWatchWindow.InitShortcut(this, nameof(DebuggerShortcutsConfig.OpenWatchWindow));
 
 			mnuOpenNametableViewer.InitShortcut(this, nameof(DebuggerShortcutsConfig.OpenNametableViewer));
 			mnuOpenChrViewer.InitShortcut(this, nameof(DebuggerShortcutsConfig.OpenChrViewer));
@@ -1170,6 +1184,7 @@ namespace Mesen.GUI.Forms
 					mnuTextHooker.Enabled = running;
 					mnuTraceLogger.Enabled = running;
 					mnuProfiler.Enabled = running;
+					mnuWatchWindow.Enabled = running;
 
 					mnuPpuViewerCompact.Enabled = running;
 					mnuOpenNametableViewer.Enabled = running;
@@ -1353,8 +1368,8 @@ namespace Mesen.GUI.Forms
 
 		private void ctrlRenderer_DoubleClick(object sender, EventArgs e)
 		{
-			if(!CursorManager.NeedMouseIcon && !CursorManager.AllowMouseCapture && !DebugWindowManager.ScriptWindowOpened) {
-				//Disable double clicking (used to switch to fullscreen mode) when using a mouse-controlled device
+			if(!CursorManager.NeedMouseIcon && !CursorManager.AllowMouseCapture && !DebugWindowManager.HasOpenedWindow) {
+				//Disable double clicking (used to switch to fullscreen mode) when using a mouse-controlled device (or when debugger is opened)
 				ToggleFullscreen();
 			}
 		}

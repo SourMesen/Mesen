@@ -52,6 +52,7 @@ namespace Mesen.GUI.Debugger
 				GetMember(nameof(DebuggerShortcutsConfig.OpenScriptWindow)),
 				GetMember(nameof(DebuggerShortcutsConfig.OpenTextHooker)),
 				GetMember(nameof(DebuggerShortcutsConfig.OpenTraceLogger)),
+				GetMember(nameof(DebuggerShortcutsConfig.OpenWatchWindow)),
 
 				GetMember(nameof(DebuggerShortcutsConfig.OpenNametableViewer)),
 				GetMember(nameof(DebuggerShortcutsConfig.OpenChrViewer)),
@@ -121,6 +122,8 @@ namespace Mesen.GUI.Debugger
 				GetMember(nameof(DebuggerShortcutsConfig.BreakpointList_GoToLocation)),
 				GetMember(nameof(DebuggerShortcutsConfig.BreakpointList_Delete)),
 				GetMember(nameof(DebuggerShortcutsConfig.WatchList_Delete)),
+				GetMember(nameof(DebuggerShortcutsConfig.WatchList_MoveUp)),
+				GetMember(nameof(DebuggerShortcutsConfig.WatchList_MoveDown)),
 				GetMember(nameof(DebuggerShortcutsConfig.SaveRom)),
 				GetMember(nameof(DebuggerShortcutsConfig.SaveRomAs)),
 				GetMember(nameof(DebuggerShortcutsConfig.SaveEditAsIps)),

@@ -617,6 +617,7 @@
 			<Control ID="mnuFile">Fichier</Control>
 			<Control ID="mnuImportMovie">Importer un film</Control>
 			<Control ID="mnuExportMovie">Exporter un film</Control>
+			<Control ID="mnuCreateSaveState">Créer une sauvegarde d'état</Control>
 			<Control ID="mnuResumeGameplay">Reprendre le jeu</Control>
 			<Control ID="mnuClose">Fermer</Control>
 		</Form>
@@ -764,6 +765,7 @@
 
 		<Message ID="MovieSegment">Segment #{0}</Message>
 		<Message ID="MovieSaveError">Une erreur est survenue pendant la sauvegarde du film.</Message>
+		<Message ID="FileSaveError">Une erreur est survenue pendant la sauvegarde du fichier.</Message>
 
 		<Message ID="ClearHistory">Effacer l'historique</Message>
 		<Message ID="LastFolderUsed">Dernier dossier utilisé</Message>

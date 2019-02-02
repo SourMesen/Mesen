@@ -33,6 +33,7 @@
 			this.btnPausePlay = new System.Windows.Forms.Button();
 			this.lblPosition = new System.Windows.Forms.Label();
 			this.pnlRenderer = new System.Windows.Forms.Panel();
+			this.picNsfIcon = new System.Windows.Forms.PictureBox();
 			this.tlpRenderer = new System.Windows.Forms.TableLayoutPanel();
 			this.ctrlRenderer = new System.Windows.Forms.Panel();
 			this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
@@ -44,18 +45,18 @@
 			this.mnuImportMovie = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuExportMovie = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
+			this.mnuCreateSaveState = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuResumeGameplay = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripSeparator();
 			this.mnuClose = new System.Windows.Forms.ToolStripMenuItem();
-			this.picNsfIcon = new System.Windows.Forms.PictureBox();
 			this.tableLayoutPanel1.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.trkPosition)).BeginInit();
 			this.pnlRenderer.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.picNsfIcon)).BeginInit();
 			this.tlpRenderer.SuspendLayout();
 			this.tableLayoutPanel3.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.trkVolume)).BeginInit();
 			this.menuStrip2.SuspendLayout();
-			((System.ComponentModel.ISupportInitialize)(this.picNsfIcon)).BeginInit();
 			this.SuspendLayout();
 			// 
 			// tableLayoutPanel1
@@ -125,6 +126,19 @@
 			this.pnlRenderer.Name = "pnlRenderer";
 			this.pnlRenderer.Size = new System.Drawing.Size(551, 397);
 			this.pnlRenderer.TabIndex = 0;
+			// 
+			// picNsfIcon
+			// 
+			this.picNsfIcon.Anchor = System.Windows.Forms.AnchorStyles.None;
+			this.picNsfIcon.BackgroundImage = global::Mesen.GUI.Properties.Resources.NsfBackground;
+			this.picNsfIcon.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+			this.picNsfIcon.Location = new System.Drawing.Point(199, 152);
+			this.picNsfIcon.Margin = new System.Windows.Forms.Padding(0);
+			this.picNsfIcon.MaximumSize = new System.Drawing.Size(500, 90);
+			this.picNsfIcon.Name = "picNsfIcon";
+			this.picNsfIcon.Size = new System.Drawing.Size(150, 90);
+			this.picNsfIcon.TabIndex = 6;
+			this.picNsfIcon.TabStop = false;
 			// 
 			// tlpRenderer
 			// 
@@ -212,13 +226,14 @@
             this.mnuImportMovie,
             this.mnuExportMovie,
             this.toolStripMenuItem1,
+            this.mnuCreateSaveState,
             this.mnuResumeGameplay,
             this.toolStripMenuItem2,
             this.mnuClose});
 			this.mnuFile.Name = "mnuFile";
 			this.mnuFile.Size = new System.Drawing.Size(37, 20);
 			this.mnuFile.Text = "File";
-			this.mnuFile.DropDownOpening += new System.EventHandler(this.fileToolStripMenuItem_DropDownOpening);
+			this.mnuFile.DropDownOpening += new System.EventHandler(this.mnuFile_DropDownOpening);
 			// 
 			// mnuImportMovie
 			// 
@@ -238,6 +253,14 @@
 			// 
 			this.toolStripMenuItem1.Name = "toolStripMenuItem1";
 			this.toolStripMenuItem1.Size = new System.Drawing.Size(168, 6);
+			// 
+			// mnuCreateSaveState
+			// 
+			this.mnuCreateSaveState.Image = global::Mesen.GUI.Properties.Resources.Floppy;
+			this.mnuCreateSaveState.Name = "mnuCreateSaveState";
+			this.mnuCreateSaveState.Size = new System.Drawing.Size(171, 22);
+			this.mnuCreateSaveState.Text = "Create Save State";
+			this.mnuCreateSaveState.Click += new System.EventHandler(this.mnuCreateSaveState_Click);
 			// 
 			// mnuResumeGameplay
 			// 
@@ -260,19 +283,6 @@
 			this.mnuClose.Text = "Close";
 			this.mnuClose.Click += new System.EventHandler(this.mnuClose_Click);
 			// 
-			// picNsfIcon
-			// 
-			this.picNsfIcon.Anchor = System.Windows.Forms.AnchorStyles.None;
-			this.picNsfIcon.BackgroundImage = global::Mesen.GUI.Properties.Resources.NsfBackground;
-			this.picNsfIcon.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-			this.picNsfIcon.Location = new System.Drawing.Point(199, 152);
-			this.picNsfIcon.Margin = new System.Windows.Forms.Padding(0);
-			this.picNsfIcon.MaximumSize = new System.Drawing.Size(500, 90);
-			this.picNsfIcon.Name = "picNsfIcon";
-			this.picNsfIcon.Size = new System.Drawing.Size(150, 90);
-			this.picNsfIcon.TabIndex = 6;
-			this.picNsfIcon.TabStop = false;
-			// 
 			// frmHistoryViewer
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -287,13 +297,13 @@
 			this.tableLayoutPanel1.PerformLayout();
 			((System.ComponentModel.ISupportInitialize)(this.trkPosition)).EndInit();
 			this.pnlRenderer.ResumeLayout(false);
+			((System.ComponentModel.ISupportInitialize)(this.picNsfIcon)).EndInit();
 			this.tlpRenderer.ResumeLayout(false);
 			this.tableLayoutPanel3.ResumeLayout(false);
 			this.tableLayoutPanel3.PerformLayout();
 			((System.ComponentModel.ISupportInitialize)(this.trkVolume)).EndInit();
 			this.menuStrip2.ResumeLayout(false);
 			this.menuStrip2.PerformLayout();
-			((System.ComponentModel.ISupportInitialize)(this.picNsfIcon)).EndInit();
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -321,5 +331,6 @@
 		private System.Windows.Forms.Label lblVolume;
 		private System.Windows.Forms.TrackBar trkVolume;
 		private System.Windows.Forms.PictureBox picNsfIcon;
+		private System.Windows.Forms.ToolStripMenuItem mnuCreateSaveState;
 	}
 }

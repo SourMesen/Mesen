@@ -513,6 +513,7 @@
     <ClInclude Include="BandaiHyperShot.h" />
     <ClInclude Include="BandaiMicrophone.h" />
     <ClInclude Include="BarcodeBattlerReader.h" />
+    <ClInclude Include="BaseEeprom24C0X.h" />
     <ClInclude Include="BaseLoader.h" />
     <ClInclude Include="BaseRenderer.h" />
     <ClInclude Include="BaseSoundManager.h" />
@@ -534,6 +535,8 @@
     <ClInclude Include="DragonFighter.h" />
     <ClInclude Include="DrawScreenBufferCommand.h" />
     <ClInclude Include="DummyCpu.h" />
+    <ClInclude Include="Eeprom24C01.h" />
+    <ClInclude Include="Eeprom24C02.h" />
     <ClInclude Include="FaridSlrom.h" />
     <ClInclude Include="FaridUnrom.h" />
     <ClInclude Include="FdsSystemActionManager.h" />
@@ -558,6 +561,7 @@
     <ClInclude Include="NESHeader.h" />
     <ClInclude Include="NotificationManager.h" />
     <ClInclude Include="OpenBusHandler.h" />
+    <ClInclude Include="PerformanceTracker.h" />
     <ClInclude Include="RawVideoFilter.h" />
     <ClInclude Include="ResetTxrom.h" />
     <ClInclude Include="Sachen9602.h" />
@@ -985,6 +989,7 @@
     <ClCompile Include="NsfPpu.cpp" />
     <ClCompile Include="OggMixer.cpp" />
     <ClCompile Include="OggReader.cpp" />
+    <ClCompile Include="PerformanceTracker.cpp" />
     <ClCompile Include="PgoUtilities.cpp" />
     <ClCompile Include="RawVideoFilter.cpp" />
     <ClCompile Include="RecordedRomTest.cpp" />

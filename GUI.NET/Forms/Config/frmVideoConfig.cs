@@ -22,6 +22,9 @@ namespace Mesen.GUI.Forms.Config
 		{
 			InitializeComponent();
 
+			ThemeHelper.FixMonoColors(contextPaletteList);
+			ThemeHelper.FixMonoColors(contextPicturePresets);
+
 			Entity = ConfigManager.Config.VideoInfo;
 			
 			AddBinding("ShowFPS", chkShowFps);

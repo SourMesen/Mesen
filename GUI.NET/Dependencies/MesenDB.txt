@@ -4,7 +4,7 @@
 #
 # Automatically generated database based on Nestopia's DB and NesCartDB
 #
-# Generated on 2018-07-08 using:
+# Generated on 2019-01-26 using:
 #     -NesCartDB (dated 2017-08-21)
 #     -Nestopia UE's latest DB (dated 2015-10-22) 
 # 
@@ -3829,7 +3829,7 @@
 3F111334,NesNtsc,UNK,,,245,256,256,,0,8,1,h,,,,,
 3F13E300,NesNtsc,UNK,,,0,16,8,,0,0,0,v,,,,,
 3F15A573,NesNtsc,UNK,,,1,128,,,0,0,0,h,,,,,
-3F15D20D,Famicom,BANDAI-JUMP2,BA-JUMP2,FCG-3,16,512,,8,0,8,1,,,,,,
+3F15D20D,Famicom,BANDAI-JUMP2,BA-JUMP2,FCG-3,153,512,,8,0,8,1,,,,,,
 3F17204B,NesNtsc,UNK,,,1,128,128,,0,0,0,h,,,,,
 3F1E3F2A,NesNtsc,UNK,,,0,32,8,,0,0,0,h,,,,,
 3F20B2B5,NesNtsc,UNK,,,4,128,256,,0,0,0,h,,,,,

@@ -16,6 +16,11 @@ BaseRenderer::BaseRenderer(shared_ptr<Console> console, bool registerAsMessageMa
 	}
 }
 
+BaseRenderer::~BaseRenderer()
+{
+	MessageManager::UnregisterMessageManager(this);
+}
+
 void BaseRenderer::DisplayMessage(string title, string message)
 {
 	shared_ptr<ToastInfo> toast(new ToastInfo(title, message, 4000));

@@ -372,8 +372,8 @@ namespace Mesen.GUI.Debugger.Controls
 			}
 			_currentPpuAddress = ppuAddress;
 
-			DrawHud();
 			UpdateTileInformation(xPos, yPos, baseAddress, shift);
+			DrawHud();
 		}
 
 		private void UpdateTileInformation(int xPos, int yPos, int baseAddress, int shift)

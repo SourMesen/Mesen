@@ -194,10 +194,10 @@ namespace Mesen.GUI.Debugger
 		{
 			int value = -1;
 			if(!int.TryParse(field.Text, NumberStyles.HexNumber, null, out value) || value > maxValue) {
-				field.ForeColor = Color.Red;
+				field.ForeColor = ThemeHelper.Theme.ErrorTextColor;
 				value = -1;
 			} else {
-				field.ForeColor = SystemColors.WindowText;
+				field.ForeColor = ThemeHelper.Theme.TextBoxForeColor;
 			}
 			return value;
 		}

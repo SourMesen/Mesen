@@ -31,16 +31,20 @@
 			this.panel2 = new System.Windows.Forms.Panel();
 			this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
 			this.lblMiscOptions = new System.Windows.Forms.Label();
-			this.pictureBox1 = new System.Windows.Forms.PictureBox();
+			this.picLogo = new System.Windows.Forms.PictureBox();
 			this.lblStorageLocation = new System.Windows.Forms.Label();
 			this.lblMesen = new System.Windows.Forms.Label();
 			this.lblConfigWizard = new System.Windows.Forms.Label();
 			this.lblInputMappings = new System.Windows.Forms.Label();
 			this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
+			this.chkArrows = new System.Windows.Forms.CheckBox();
+			this.chkWasd = new System.Windows.Forms.CheckBox();
+			this.chkPs4 = new System.Windows.Forms.CheckBox();
 			this.picPs4 = new System.Windows.Forms.PictureBox();
 			this.picXbox = new System.Windows.Forms.PictureBox();
 			this.picWasd = new System.Windows.Forms.PictureBox();
 			this.picArrows = new System.Windows.Forms.PictureBox();
+			this.chkXbox = new System.Windows.Forms.CheckBox();
 			this.lblInputHint = new System.Windows.Forms.Label();
 			this.panel3 = new System.Windows.Forms.Panel();
 			this.tableLayoutPanel4 = new System.Windows.Forms.TableLayoutPanel();
@@ -54,14 +58,10 @@
 			this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
 			this.lblLocation = new System.Windows.Forms.Label();
 			this.lblDataLocation = new System.Windows.Forms.Label();
-			this.chkXbox = new System.Windows.Forms.CheckBox();
-			this.chkPs4 = new System.Windows.Forms.CheckBox();
-			this.chkWasd = new System.Windows.Forms.CheckBox();
-			this.chkArrows = new System.Windows.Forms.CheckBox();
 			this.panel1.SuspendLayout();
 			this.panel2.SuspendLayout();
 			this.tableLayoutPanel1.SuspendLayout();
-			((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.picLogo)).BeginInit();
 			this.tableLayoutPanel3.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.picPs4)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.picXbox)).BeginInit();
@@ -85,7 +85,7 @@
 			// 
 			// panel2
 			// 
-			this.panel2.BackColor = System.Drawing.Color.White;
+			this.panel2.BackColor = System.Drawing.SystemColors.Window;
 			this.panel2.Controls.Add(this.tableLayoutPanel1);
 			this.panel2.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.panel2.Location = new System.Drawing.Point(3, 3);
@@ -99,7 +99,7 @@
 			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
 			this.tableLayoutPanel1.Controls.Add(this.lblMiscOptions, 0, 10);
-			this.tableLayoutPanel1.Controls.Add(this.pictureBox1, 1, 0);
+			this.tableLayoutPanel1.Controls.Add(this.picLogo, 1, 0);
 			this.tableLayoutPanel1.Controls.Add(this.lblStorageLocation, 0, 3);
 			this.tableLayoutPanel1.Controls.Add(this.lblMesen, 0, 0);
 			this.tableLayoutPanel1.Controls.Add(this.lblConfigWizard, 0, 1);
@@ -149,16 +149,16 @@
 			this.lblMiscOptions.TabIndex = 34;
 			this.lblMiscOptions.Text = "Other Options";
 			// 
-			// pictureBox1
+			// picLogo
 			// 
-			this.pictureBox1.Anchor = System.Windows.Forms.AnchorStyles.Right;
-			this.pictureBox1.BackgroundImage = global::Mesen.GUI.Properties.Resources.MesenLogo;
-			this.pictureBox1.Location = new System.Drawing.Point(337, 14);
-			this.pictureBox1.Name = "pictureBox1";
-			this.tableLayoutPanel1.SetRowSpan(this.pictureBox1, 2);
-			this.pictureBox1.Size = new System.Drawing.Size(64, 64);
-			this.pictureBox1.TabIndex = 0;
-			this.pictureBox1.TabStop = false;
+			this.picLogo.Anchor = System.Windows.Forms.AnchorStyles.Right;
+			this.picLogo.Image = global::Mesen.GUI.Properties.Resources.MesenLogo;
+			this.picLogo.Location = new System.Drawing.Point(337, 14);
+			this.picLogo.Name = "picLogo";
+			this.tableLayoutPanel1.SetRowSpan(this.picLogo, 2);
+			this.picLogo.Size = new System.Drawing.Size(64, 64);
+			this.picLogo.TabIndex = 0;
+			this.picLogo.TabStop = false;
 			// 
 			// lblStorageLocation
 			// 
@@ -233,6 +233,43 @@
 			this.tableLayoutPanel3.Size = new System.Drawing.Size(388, 90);
 			this.tableLayoutPanel3.TabIndex = 28;
 			// 
+			// chkArrows
+			// 
+			this.chkArrows.AutoSize = true;
+			this.chkArrows.CheckAlign = System.Drawing.ContentAlignment.MiddleCenter;
+			this.chkArrows.Checked = true;
+			this.chkArrows.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.chkArrows.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.chkArrows.Location = new System.Drawing.Point(294, 73);
+			this.chkArrows.Name = "chkArrows";
+			this.chkArrows.Size = new System.Drawing.Size(91, 14);
+			this.chkArrows.TabIndex = 33;
+			this.chkArrows.UseVisualStyleBackColor = true;
+			this.chkArrows.CheckedChanged += new System.EventHandler(this.chkArrows_CheckedChanged);
+			// 
+			// chkWasd
+			// 
+			this.chkWasd.AutoSize = true;
+			this.chkWasd.CheckAlign = System.Drawing.ContentAlignment.MiddleCenter;
+			this.chkWasd.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.chkWasd.Location = new System.Drawing.Point(197, 73);
+			this.chkWasd.Name = "chkWasd";
+			this.chkWasd.Size = new System.Drawing.Size(91, 14);
+			this.chkWasd.TabIndex = 32;
+			this.chkWasd.UseVisualStyleBackColor = true;
+			this.chkWasd.CheckedChanged += new System.EventHandler(this.chkWasd_CheckedChanged);
+			// 
+			// chkPs4
+			// 
+			this.chkPs4.AutoSize = true;
+			this.chkPs4.CheckAlign = System.Drawing.ContentAlignment.MiddleCenter;
+			this.chkPs4.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.chkPs4.Location = new System.Drawing.Point(100, 73);
+			this.chkPs4.Name = "chkPs4";
+			this.chkPs4.Size = new System.Drawing.Size(91, 14);
+			this.chkPs4.TabIndex = 31;
+			this.chkPs4.UseVisualStyleBackColor = true;
+			// 
 			// picPs4
 			// 
 			this.picPs4.Cursor = System.Windows.Forms.Cursors.Hand;
@@ -284,6 +321,19 @@
 			this.picArrows.TabIndex = 29;
 			this.picArrows.TabStop = false;
 			this.picArrows.Click += new System.EventHandler(this.picArrows_Click);
+			// 
+			// chkXbox
+			// 
+			this.chkXbox.AutoSize = true;
+			this.chkXbox.CheckAlign = System.Drawing.ContentAlignment.MiddleCenter;
+			this.chkXbox.Checked = true;
+			this.chkXbox.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.chkXbox.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.chkXbox.Location = new System.Drawing.Point(3, 73);
+			this.chkXbox.Name = "chkXbox";
+			this.chkXbox.Size = new System.Drawing.Size(91, 14);
+			this.chkXbox.TabIndex = 30;
+			this.chkXbox.UseVisualStyleBackColor = true;
 			// 
 			// lblInputHint
 			// 
@@ -393,8 +443,9 @@
 			// chkCreateShortcut
 			// 
 			this.chkCreateShortcut.AutoSize = true;
-			this.tableLayoutPanel1.SetColumnSpan(this.chkCreateShortcut, 2);
 			this.chkCreateShortcut.Checked = true;
+			this.chkCreateShortcut.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.tableLayoutPanel1.SetColumnSpan(this.chkCreateShortcut, 2);
 			this.chkCreateShortcut.Cursor = System.Windows.Forms.Cursors.Hand;
 			this.chkCreateShortcut.Location = new System.Drawing.Point(21, 415);
 			this.chkCreateShortcut.Margin = new System.Windows.Forms.Padding(11, 6, 3, 3);
@@ -454,60 +505,11 @@
 			this.lblDataLocation.TabIndex = 0;
 			this.lblDataLocation.Text = "Folder:";
 			// 
-			// chkXbox
-			// 
-			this.chkXbox.AutoSize = true;
-			this.chkXbox.CheckAlign = System.Drawing.ContentAlignment.MiddleCenter;
-			this.chkXbox.Checked = true;
-			this.chkXbox.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.chkXbox.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.chkXbox.Location = new System.Drawing.Point(3, 73);
-			this.chkXbox.Name = "chkXbox";
-			this.chkXbox.Size = new System.Drawing.Size(91, 14);
-			this.chkXbox.TabIndex = 30;
-			this.chkXbox.UseVisualStyleBackColor = true;
-			// 
-			// chkPs4
-			// 
-			this.chkPs4.AutoSize = true;
-			this.chkPs4.CheckAlign = System.Drawing.ContentAlignment.MiddleCenter;
-			this.chkPs4.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.chkPs4.Location = new System.Drawing.Point(100, 73);
-			this.chkPs4.Name = "chkPs4";
-			this.chkPs4.Size = new System.Drawing.Size(91, 14);
-			this.chkPs4.TabIndex = 31;
-			this.chkPs4.UseVisualStyleBackColor = true;
-			// 
-			// chkWasd
-			// 
-			this.chkWasd.AutoSize = true;
-			this.chkWasd.CheckAlign = System.Drawing.ContentAlignment.MiddleCenter;
-			this.chkWasd.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.chkWasd.Location = new System.Drawing.Point(197, 73);
-			this.chkWasd.Name = "chkWasd";
-			this.chkWasd.Size = new System.Drawing.Size(91, 14);
-			this.chkWasd.TabIndex = 32;
-			this.chkWasd.UseVisualStyleBackColor = true;
-			this.chkWasd.CheckedChanged += new System.EventHandler(this.chkWasd_CheckedChanged);
-			// 
-			// chkArrows
-			// 
-			this.chkArrows.AutoSize = true;
-			this.chkArrows.CheckAlign = System.Drawing.ContentAlignment.MiddleCenter;
-			this.chkArrows.Checked = true;
-			this.chkArrows.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.chkArrows.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.chkArrows.Location = new System.Drawing.Point(294, 73);
-			this.chkArrows.Name = "chkArrows";
-			this.chkArrows.Size = new System.Drawing.Size(91, 14);
-			this.chkArrows.TabIndex = 33;
-			this.chkArrows.UseVisualStyleBackColor = true;
-			this.chkArrows.CheckedChanged += new System.EventHandler(this.chkArrows_CheckedChanged);
-			// 
 			// frmConfigWizard
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+			this.BackColor = System.Drawing.SystemColors.Window;
 			this.ClientSize = new System.Drawing.Size(420, 484);
 			this.Controls.Add(this.panel1);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
@@ -518,7 +520,7 @@
 			this.panel2.ResumeLayout(false);
 			this.tableLayoutPanel1.ResumeLayout(false);
 			this.tableLayoutPanel1.PerformLayout();
-			((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.picLogo)).EndInit();
 			this.tableLayoutPanel3.ResumeLayout(false);
 			this.tableLayoutPanel3.PerformLayout();
 			((System.ComponentModel.ISupportInitialize)(this.picPs4)).EndInit();
@@ -539,7 +541,7 @@
 		private System.Windows.Forms.Panel panel1;
 		private System.Windows.Forms.Panel panel2;
 		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
-		private System.Windows.Forms.PictureBox pictureBox1;
+		private System.Windows.Forms.PictureBox picLogo;
 		private System.Windows.Forms.Label lblMesen;
 		private System.Windows.Forms.Label lblConfigWizard;
 		private System.Windows.Forms.Label lblStorageLocation;

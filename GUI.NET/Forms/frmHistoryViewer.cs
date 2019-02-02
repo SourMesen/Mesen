@@ -167,7 +167,7 @@ namespace Mesen.GUI.Forms
 			InteropEmu.HistoryViewerResumeGameplay(InteropEmu.HistoryViewerGetPosition());
 		}
 		
-		private void fileToolStripMenuItem_DropDownOpening(object sender, EventArgs e)
+		private void mnuFile_DropDownOpening(object sender, EventArgs e)
 		{
 			mnuExportMovie.DropDownItems.Clear();
 
@@ -186,13 +186,14 @@ namespace Mesen.GUI.Forms
 					string segmentName = ResourceHelper.GetMessage("MovieSegment", (mnuExportMovie.DropDownItems.Count + 1).ToString());
 					ToolStripMenuItem item = new ToolStripMenuItem(segmentName + ", " + start.ToString() + " - " + end.ToString());
 					item.Click += (s, evt) => {
-						SaveFileDialog sfd = new SaveFileDialog();
-						sfd.SetFilter(ResourceHelper.GetMessage("FilterMovie"));
-						sfd.InitialDirectory = ConfigManager.MovieFolder;
-						sfd.FileName = InteropEmu.GetRomInfo().GetRomName() + ".mmo";
-						if(sfd.ShowDialog() == DialogResult.OK) {
-							if(!InteropEmu.HistoryViewerSaveMovie(sfd.FileName, segStart, segEnd)) {
-								MesenMsgBox.Show("MovieSaveError", MessageBoxButtons.OK, MessageBoxIcon.Error);
+						using(SaveFileDialog sfd = new SaveFileDialog()) {
+							sfd.SetFilter(ResourceHelper.GetMessage("FilterMovie"));
+							sfd.InitialDirectory = ConfigManager.MovieFolder;
+							sfd.FileName = InteropEmu.GetRomInfo().GetRomName() + ".mmo";
+							if(sfd.ShowDialog() == DialogResult.OK) {
+								if(!InteropEmu.HistoryViewerSaveMovie(sfd.FileName, segStart, segEnd)) {
+									MesenMsgBox.Show("MovieSaveError", MessageBoxButtons.OK, MessageBoxIcon.Error);
+								}
 							}
 						}
 					};
@@ -203,6 +204,20 @@ namespace Mesen.GUI.Forms
 
 			mnuImportMovie.Visible = false;
 			mnuExportMovie.Enabled = mnuExportMovie.HasDropDownItems && !_isNsf;
+		}
+		
+		private void mnuCreateSaveState_Click(object sender, EventArgs e)
+		{
+			using(SaveFileDialog sfd = new SaveFileDialog()) {
+				sfd.SetFilter(ResourceHelper.GetMessage("FilterSavestate"));
+				sfd.InitialDirectory = ConfigManager.SaveStateFolder;
+				sfd.FileName = InteropEmu.GetRomInfo().GetRomName() + ".mst";
+				if(sfd.ShowDialog() == DialogResult.OK) {
+					if(!InteropEmu.HistoryViewerCreateSaveState(sfd.FileName, InteropEmu.HistoryViewerGetPosition())) {
+						MesenMsgBox.Show("FileSaveError", MessageBoxButtons.OK, MessageBoxIcon.Error);
+					}
+				}
+			}
 		}
 
 		private void btnPausePlay_Click(object sender, EventArgs e)

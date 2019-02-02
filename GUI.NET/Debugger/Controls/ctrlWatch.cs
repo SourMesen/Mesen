@@ -11,6 +11,7 @@ using Mesen.GUI.Config;
 using Mesen.GUI.Controls;
 using System.Text.RegularExpressions;
 using System.Globalization;
+using Mesen.GUI.Forms;
 
 namespace Mesen.GUI.Debugger
 {
@@ -18,10 +19,13 @@ namespace Mesen.GUI.Debugger
 	{
 		private static Regex _watchAddressOrLabel = new Regex(@"^(\[|{)(\s*((\$[0-9A-Fa-f]+)|(\d+)|([@_a-zA-Z0-9]+)))\s*[,]{0,1}\d*\s*(\]|})$", RegexOptions.Compiled);
 
-		private int _currentSelection = -1;
 		private int _previousMaxLength = -1;
 		private int _selectedAddress = -1;
 		private CodeLabel _selectedLabel = null;
+		private List<WatchValueInfo> _previousValues = new List<WatchValueInfo>();
+
+		private bool _isEditing = false;
+		ListViewItem _keyDownItem = null;
 
 		public ctrlWatch()
 		{
@@ -34,16 +38,47 @@ namespace Mesen.GUI.Debugger
 		{
 			base.OnLoad(e);
 			if(!IsDesignMode) {
-				this.mnuHexDisplay.Checked = ConfigManager.Config.DebugInfo.HexDisplay;
 				WatchManager.WatchChanged += WatchManager_WatchChanged;
 				mnuRemoveWatch.InitShortcut(this, nameof(DebuggerShortcutsConfig.WatchList_Delete));
 				mnuEditInMemoryViewer.InitShortcut(this, nameof(DebuggerShortcutsConfig.CodeWindow_EditInMemoryViewer));
 				mnuViewInDisassembly.InitShortcut(this, nameof(DebuggerShortcutsConfig.MemoryViewer_ViewInDisassembly));
+				mnuMoveUp.InitShortcut(this, nameof(DebuggerShortcutsConfig.WatchList_MoveUp));
+				mnuMoveDown.InitShortcut(this, nameof(DebuggerShortcutsConfig.WatchList_MoveDown));
 			}
+		}
+
+		public string GetTooltipText()
+		{
+			return (
+				frmBreakpoint.GetConditionTooltip(true) + Environment.NewLine + Environment.NewLine +
+				"Additionally, the watch window supports a syntax to display X bytes starting from a specific address. e.g:" + Environment.NewLine +
+				"[$10, 16]: Display 16 bytes starting from address $10" + Environment.NewLine +
+				"[MyLabel, 4]: Display 4 bytes starting from the address the specified label (MyLabel) refers to"
+			);
 		}
 
 		protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
 		{
+			if(lstWatch.SelectedItems.Count > 0) {
+				//Used to prevent a Mono issue where pressing a key will change the selected item before we get a chance to edit it
+				_keyDownItem = lstWatch.SelectedItems[0];
+
+				if((_isEditing && keyData == Keys.Escape) || keyData == Keys.Enter) {
+					if(keyData == Keys.Enter) {
+						if(_isEditing) {
+							ApplyEdit();
+						} else {
+							StartEdit(lstWatch.SelectedItems[0].Text);
+						}
+					} else if(keyData == Keys.Escape) {
+						CancelEdit();
+					}
+					return true;
+				}
+			} else {
+				_keyDownItem = null;
+			}
+
 			UpdateActions();
 			return base.ProcessCmdKey(ref msg, keyData);
 		}
@@ -64,10 +99,12 @@ namespace Mesen.GUI.Debugger
 
 		public void UpdateWatch(bool autoResizeColumns = true)
 		{
-			List<WatchValueInfo> watchContent = WatchManager.GetWatchContent(mnuHexDisplay.Checked);
+			List<WatchValueInfo> watchContent = WatchManager.GetWatchContent(_previousValues);
+			_previousValues = watchContent;
 
 			bool updating = false;
 			if(watchContent.Count != lstWatch.Items.Count - 1) {
+				int currentFocus = lstWatch.FocusedItem?.Selected == true ? (lstWatch.FocusedItem?.Index ?? -1) : -1;
 				lstWatch.BeginUpdate();
 				lstWatch.Items.Clear();
 
@@ -75,13 +112,16 @@ namespace Mesen.GUI.Debugger
 				foreach(WatchValueInfo watch in watchContent) {
 					ListViewItem item = new ListViewItem(watch.Expression);
 					item.UseItemStyleForSubItems = false;
-					item.SubItems.Add(watch.Value).ForeColor = watch.HasChanged ? Color.Red : Color.Black;
+					item.SubItems.Add(watch.Value).ForeColor = watch.HasChanged ? ThemeHelper.Theme.ErrorTextColor : ThemeHelper.Theme.LabelForeColor;
 					itemsToAdd.Add(item);
 				}
 				var lastItem = new ListViewItem("");
 				lastItem.SubItems.Add("");
 				itemsToAdd.Add(lastItem);
 				lstWatch.Items.AddRange(itemsToAdd.ToArray());
+				if(currentFocus >= 0 && currentFocus < lstWatch.Items.Count) {
+					SetSelectedItem(currentFocus);
+				}
 				updating = true;
 			} else {
 				for(int i = 0; i < watchContent.Count; i++) {
@@ -89,13 +129,13 @@ namespace Mesen.GUI.Debugger
 					bool needUpdate = (
 						item.SubItems[0].Text != watchContent[i].Expression ||
 						item.SubItems[1].Text != watchContent[i].Value ||
-						item.SubItems[1].ForeColor != (watchContent[i].HasChanged ? Color.Red : Color.Black)
+						item.SubItems[1].ForeColor != (watchContent[i].HasChanged ? ThemeHelper.Theme.ErrorTextColor : ThemeHelper.Theme.LabelForeColor)
 					);
 					if(needUpdate) {
 						updating = true;
 						item.SubItems[0].Text = watchContent[i].Expression;
 						item.SubItems[1].Text = watchContent[i].Value;
-						item.SubItems[1].ForeColor = watchContent[i].HasChanged ? Color.Red : Color.Black;
+						item.SubItems[1].ForeColor = watchContent[i].HasChanged ? ThemeHelper.Theme.ErrorTextColor : ThemeHelper.Theme.LabelForeColor;
 					}
 				}
 			}
@@ -115,27 +155,8 @@ namespace Mesen.GUI.Debugger
 				}
 				lstWatch.EndUpdate();
 			}
-
-			if(_currentSelection >= 0 && lstWatch.Items.Count > _currentSelection) {
-				lstWatch.FocusedItem = lstWatch.Items[_currentSelection];
-				lstWatch.Items[_currentSelection].Selected = true;
-				_currentSelection = -1;
-			}
 		}
 				
-		private void lstWatch_AfterEdit(object sender, LabelEditEventArgs e)
-		{
-			_currentSelection = e.Item;
-			WatchManager.UpdateWatch(e.Item, e.Label);
-		}
-
-		private void mnuHexDisplay_Click(object sender, EventArgs e)
-		{
-			ConfigManager.Config.DebugInfo.HexDisplay = this.mnuHexDisplay.Checked;
-			ConfigManager.ApplyChanges();
-			UpdateWatch();
-		}
-
 		private void lstWatch_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			mnuRemoveWatch.Enabled = lstWatch.SelectedItems.Count >= 1;
@@ -144,8 +165,15 @@ namespace Mesen.GUI.Debugger
 
 		private void UpdateActions()
 		{
+			mnuHexDisplay.Checked = ConfigManager.Config.DebugInfo.WatchFormat == WatchFormatStyle.Hex;
+			mnuDecimalDisplay.Checked = ConfigManager.Config.DebugInfo.WatchFormat == WatchFormatStyle.Signed;
+			mnuBinaryDisplay.Checked = ConfigManager.Config.DebugInfo.WatchFormat == WatchFormatStyle.Binary;
+			mnuRowDisplayFormat.Enabled = lstWatch.SelectedItems.Count > 0;
+
 			mnuEditInMemoryViewer.Enabled = false;
 			mnuViewInDisassembly.Enabled = false;
+			mnuMoveUp.Enabled = false;
+			mnuMoveDown.Enabled = false;
 
 			if(lstWatch.SelectedItems.Count == 1) {
 				Match match = _watchAddressOrLabel.Match(lstWatch.SelectedItems[0].Text);
@@ -168,31 +196,17 @@ namespace Mesen.GUI.Debugger
 						}
 					}
 				}
-			}
-		}
 
-		private void lstWatch_Click(object sender, EventArgs e)
-		{
-			if(lstWatch.SelectedItems.Count == 1 && string.IsNullOrWhiteSpace(lstWatch.SelectedItems[0].Text)) {
-				lstWatch.SelectedItems[0].BeginEdit();
-			}
-		}
-
-		private void lstWatch_DoubleClick(object sender, EventArgs e)
-		{
-			if(lstWatch.SelectedItems.Count == 1) {
-				lstWatch.SelectedItems[0].BeginEdit();
+				mnuMoveUp.Enabled = lstWatch.SelectedIndices[0] > 0 && lstWatch.SelectedIndices[0] < lstWatch.Items.Count - 1;
+				mnuMoveDown.Enabled = lstWatch.SelectedIndices[0] < lstWatch.Items.Count - 2;
 			}
 		}
 
 		private void mnuRemoveWatch_Click(object sender, EventArgs e)
 		{
-			if(lstWatch.SelectedItems.Count >= 1 && !lstWatch.IsEditing) {
+			if(lstWatch.SelectedItems.Count >= 1) {
 				var itemsToRemove = new List<int>();
 				foreach(ListViewItem item in lstWatch.SelectedItems) {
-					if(_currentSelection == -1) {
-						_currentSelection = item.Index;
-					}
 					itemsToRemove.Add(item.Index);
 				}
 				WatchManager.RemoveWatch(itemsToRemove.ToArray());
@@ -226,6 +240,268 @@ namespace Mesen.GUI.Debugger
 			} else if(_selectedLabel != null) {
 				DebugWindowManager.OpenMemoryViewer((int)_selectedLabel.Address, _selectedLabel.AddressType.ToMemoryType());
 			}
+		}
+
+		private void StartEdit(string text, ListViewItem selectedItem = null)
+		{
+			if(selectedItem == null) {
+				selectedItem = lstWatch.SelectedItems[0];
+			}
+
+			SetSelectedItem(selectedItem.Index);
+
+			txtEdit.Location = selectedItem.Position;
+			txtEdit.Width = selectedItem.Bounds.Width;
+			txtEdit.Text = text;
+			txtEdit.SelectionLength = 0;
+			txtEdit.SelectionStart = text.Length;
+			txtEdit.Visible = true;
+			txtEdit.Focus();
+			_isEditing = true;
+		}
+
+		private void lstWatch_Click(object sender, EventArgs e)
+		{
+			if(lstWatch.SelectedItems.Count == 1 && string.IsNullOrWhiteSpace(lstWatch.SelectedItems[0].Text)) {
+				StartEdit("");
+			}
+		}
+
+		private void lstWatch_DoubleClick(object sender, EventArgs e)
+		{
+			if(lstWatch.SelectedItems.Count == 1) {
+				StartEdit(lstWatch.SelectedItems[0].Text);
+			}
+		}
+
+		private void ApplyEdit()
+		{
+			if(lstWatch.SelectedItems.Count > 0) {
+				lstWatch.SelectedItems[0].Text = txtEdit.Text;
+				WatchManager.UpdateWatch(lstWatch.SelectedIndices[0], txtEdit.Text);
+			}
+			lstWatch.Focus();
+		}
+
+		private void CancelEdit()
+		{
+			if(lstWatch.SelectedItems.Count > 0) {
+				txtEdit.Text = lstWatch.SelectedItems[0].Text;
+			}
+			lstWatch.Focus();
+		}
+
+		private void lstWatch_KeyPress(object sender, KeyPressEventArgs e)
+		{
+			if(lstWatch.SelectedItems.Count > 0) {
+				if(e.KeyChar >= ' ' && e.KeyChar < 128) {
+					e.Handled = true;
+					StartEdit(e.KeyChar.ToString(), _keyDownItem);
+					_keyDownItem = null;
+				}
+			}
+		}
+
+		private void txtEdit_Leave(object sender, EventArgs e)
+		{
+			_isEditing = false;
+			txtEdit.Visible = false;
+			lstWatch.Focus();
+			ApplyEdit();
+		}
+
+		private void mnuMoveUp_Click(object sender, EventArgs e)
+		{
+			MoveUp(false);
+		}
+
+		private void mnuMoveDown_Click(object sender, EventArgs e)
+		{
+			MoveDown();
+		}
+
+		private void SetSelectedItem(int index)
+		{
+			if(index < lstWatch.Items.Count) {
+				lstWatch.FocusedItem = lstWatch.Items[index];
+				foreach(ListViewItem item in lstWatch.Items) {
+					item.Selected = lstWatch.FocusedItem == item;
+				}
+			}
+		}
+
+		private void MoveUp(bool fromUpDownArrow)
+		{
+			if(lstWatch.SelectedIndices.Count == 0) {
+				return;
+			}
+
+			int index = lstWatch.SelectedIndices[0];
+			if(Program.IsMono && fromUpDownArrow) {
+				//Mono appears to move the selection up before processing this
+				index++;
+			}
+
+			if(index > 0 && index < lstWatch.Items.Count - 1) {
+				string currentEntry = lstWatch.Items[index].SubItems[0].Text;
+				string entryAbove = lstWatch.Items[index - 1].SubItems[0].Text;
+				SetSelectedItem(index - 1);
+				WatchManager.UpdateWatch(index - 1, currentEntry);
+				WatchManager.UpdateWatch(index, entryAbove);
+			} else {
+				SetSelectedItem(index);
+			}
+		}
+
+		private void MoveDown()
+		{
+			if(lstWatch.SelectedIndices.Count == 0) {
+				return;
+			}
+
+			int index = lstWatch.SelectedIndices[0];
+			if(index < lstWatch.Items.Count - 2) {
+				string currentEntry = lstWatch.Items[index].SubItems[0].Text;
+				string entryBelow = lstWatch.Items[index + 1].SubItems[0].Text;
+				SetSelectedItem(index + 1);
+				WatchManager.UpdateWatch(index + 1, currentEntry);
+				WatchManager.UpdateWatch(index, entryBelow);
+			} else {
+				SetSelectedItem(index);
+			}
+		}
+
+		private void lstWatch_OnMoveUpDown(Keys keyData, ref bool processed)
+		{
+			if(keyData == ConfigManager.Config.DebugInfo.Shortcuts.WatchList_MoveUp) {
+				MoveUp(true);
+				processed = true;
+			} else if(keyData == ConfigManager.Config.DebugInfo.Shortcuts.WatchList_MoveDown) {
+				MoveDown();
+				processed = true;
+			}
+		}
+
+		private void mnuImport_Click(object sender, EventArgs e)
+		{
+			using(OpenFileDialog ofd = new OpenFileDialog()) {
+				ofd.SetFilter("Watch files (*.mwf)|*.mwf");
+				if(ofd.ShowDialog() == DialogResult.OK) {
+					WatchManager.Import(ofd.FileName);
+				}
+			}
+		}
+
+		private void mnuExport_Click(object sender, EventArgs e)
+		{
+			using(SaveFileDialog sfd = new SaveFileDialog()) {
+				sfd.SetFilter("Watch files (*.mwf)|*.mwf");
+				if(sfd.ShowDialog() == DialogResult.OK) {
+					WatchManager.Export(sfd.FileName);
+				}
+			}
+		}
+
+		private void mnuHexDisplay_Click(object sender, EventArgs e)
+		{
+			ConfigManager.Config.DebugInfo.WatchFormat = WatchFormatStyle.Hex;
+			ConfigManager.ApplyChanges();
+			UpdateWatch();
+		}
+
+		private void mnuDecimalDisplay_Click(object sender, EventArgs e)
+		{
+			ConfigManager.Config.DebugInfo.WatchFormat = WatchFormatStyle.Signed;
+			ConfigManager.ApplyChanges();
+			UpdateWatch();
+		}
+
+		private void mnuBinaryDisplay_Click(object sender, EventArgs e)
+		{
+			ConfigManager.Config.DebugInfo.WatchFormat = WatchFormatStyle.Binary;
+			ConfigManager.ApplyChanges();
+			UpdateWatch();
+		}
+
+		private string GetFormatString(WatchFormatStyle format, int byteLength)
+		{
+			string formatString = ", ";
+			switch(format) {
+				case WatchFormatStyle.Binary: formatString += "B"; break;
+				case WatchFormatStyle.Hex: formatString += "H"; break;
+				case WatchFormatStyle.Signed: formatString += "S"; break;
+				case WatchFormatStyle.Unsigned: formatString += "U"; break;
+				default: throw new Exception("Unsupported type");
+			}
+			if(byteLength > 1) {
+				formatString += byteLength.ToString();
+			}
+			return formatString;
+		}
+
+		private void SetSelectionFormat(WatchFormatStyle format, int byteLength)
+		{
+			SetSelectionFormat(GetFormatString(format, byteLength));
+		}
+
+		private void SetSelectionFormat(string formatString)
+		{
+			List<string> entries = WatchManager.WatchEntries;
+			foreach(int i in lstWatch.SelectedIndices) {
+				if(i < entries.Count) {
+					Match match = WatchManager.FormatSuffixRegex.Match(entries[i]);
+					if(match.Success) {
+						WatchManager.UpdateWatch(i, match.Groups[1].Value + formatString);
+					} else {
+						WatchManager.UpdateWatch(i, entries[i] + formatString);
+					}					
+				}
+			}
+		}
+
+		private void mnuRowBinary_Click(object sender, EventArgs e)
+		{
+			SetSelectionFormat(WatchFormatStyle.Binary, 1);
+		}
+
+		private void mnuRowHex1_Click(object sender, EventArgs e)
+		{
+			SetSelectionFormat(WatchFormatStyle.Hex, 1);
+		}
+
+		private void mnuRowHex2_Click(object sender, EventArgs e)
+		{
+			SetSelectionFormat(WatchFormatStyle.Hex, 2);
+		}
+
+		private void mnuRowHex3_Click(object sender, EventArgs e)
+		{
+			SetSelectionFormat(WatchFormatStyle.Hex, 3);
+		}
+
+		private void mnuRowSigned1_Click(object sender, EventArgs e)
+		{
+			SetSelectionFormat(WatchFormatStyle.Signed, 1);
+		}
+
+		private void mnuRowSigned2_Click(object sender, EventArgs e)
+		{
+			SetSelectionFormat(WatchFormatStyle.Signed, 2);
+		}
+
+		private void mnuRowSigned3_Click(object sender, EventArgs e)
+		{
+			SetSelectionFormat(WatchFormatStyle.Unsigned, 1);
+		}
+
+		private void mnuRowUnsigned_Click(object sender, EventArgs e)
+		{
+			SetSelectionFormat(WatchFormatStyle.Unsigned, 1);
+		}
+
+		private void mnuRowClearFormat_Click(object sender, EventArgs e)
+		{
+			SetSelectionFormat("");
 		}
 	}
 }

@@ -29,6 +29,12 @@ namespace Mesen.GUI
 			_tmrCheckMouseMove.Start();
 		}
 
+		public static void StopTimers()
+		{
+			_tmrCheckMouseMove.Stop();
+			_tmrHideMouse.Stop();
+		}
+
 		private static void tmrCheckMouseMove_Tick(object sender, EventArgs e)
 		{
 			//Rarely the cursor becomes hidden despite leaving the window or moving

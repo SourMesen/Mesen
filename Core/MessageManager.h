@@ -22,6 +22,7 @@ private:
 
 	static bool _osdEnabled;
 	static SimpleLock _logLock;
+	static SimpleLock _messageLock;
 	static std::list<string> _log;
 	
 public:
@@ -30,6 +31,7 @@ public:
 	static string Localize(string key);
 
 	static void RegisterMessageManager(IMessageManager* messageManager);
+	static void UnregisterMessageManager(IMessageManager* messageManager);
 	static void DisplayMessage(string title, string message, string param1 = "", string param2 = "");
 
 	static void Log(string message = "");

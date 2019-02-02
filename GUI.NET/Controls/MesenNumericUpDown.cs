@@ -33,6 +33,9 @@ namespace Mesen.GUI.Controls
 				this.MinimumSize = new Size(0, 21);
 				this.Size = new Size(62, 21);
 
+				this.btnDown.Image = ThemeHelper.IsDark ? Properties.Resources.NudDownArrowDarkTheme : Properties.Resources.NudDownArrow;
+				this.btnUp.Image = ThemeHelper.IsDark ? Properties.Resources.NudUpArrowDarkTheme : Properties.Resources.NudUpArrow;
+
 				if(Program.IsMono) {
 					this.BorderStyle = BorderStyle.None;
 					this.txtValue.Dock = DockStyle.Fill;
@@ -221,7 +224,6 @@ namespace Mesen.GUI.Controls
 			// 
 			// btnUp
 			// 
-			this.btnUp.Image = Properties.Resources.NudUpArrow;
 			this.btnUp.Location = new System.Drawing.Point(1, -1);
 			this.btnUp.Margin = new System.Windows.Forms.Padding(0);
 			this.btnUp.Name = "btnUp";
@@ -235,7 +237,6 @@ namespace Mesen.GUI.Controls
 			// 
 			// btnDown
 			// 
-			this.btnDown.Image = Properties.Resources.NudDownArrow;
 			this.btnDown.Location = new System.Drawing.Point(1, 9);
 			this.btnDown.Margin = new System.Windows.Forms.Padding(0);
 			this.btnDown.Name = "btnDown";

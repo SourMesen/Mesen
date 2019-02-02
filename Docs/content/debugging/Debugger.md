@@ -105,24 +105,33 @@ While execution is paused, most fields are editable. Altering the value of any f
 This section lets you force certain buttons to be held down on the NES' controller. This is often useful when trying to debug input-related code.  
 Clicking on a button on the mini NES controllers will toggle its state - green buttons are currently being held down.
 
-## Watch Window ##
+## Watch List/Window ##
 
 <div class="imgBox"><div>
-	<img src="/images/WatchList.png" />
+	<img src="/images/WatchWindow.png" />
 	<span>Watch Window</span>
 </div></div>
 
-The watch window allows you to evaluate expression and see their value. Mesen supports complex expressions in C/C++ style syntax.
+<div class="imgBox" style="margin-top: 10px"><div>
+	<img src="/images/WatchList.png" />
+	<span>Watch List</span>
+</div></div>
 
-**To add a new watch expression**, click on the last empty line in the list and start typing.  
-**To edit a watch expression**, double-click on it and start typing.    
-**To switch between hex and decimal**, right-click in the watch and toggle the **Hexadecimal Display** option.
+The watch window and watch list allow you to evaluate expression and see their value. The `Watch Window` is a standalone window that can be resized and moved independently from everything else, whereas the `Watch List` is a part of the main debugger window for quick access to watch expressions.
+
+**To add a new watch expression**, click on the last empty line in the list to enter edit mode.  
+**To edit a watch expression**, double-click on it to enter edit mode.  
+
+You can use the right-click context menu to delete or move entries, as well as select formatting options.  
+An import and export feature is also available to save/load watch expressions from a plain text file.
 
 ### Syntax ###
 
-The used syntax is identical to C/C++ syntax (e.g && for and, || for or, etc.) and have the same operator precedence as C/C++.
+The syntax is identical to C/C++ (e.g `&&` for AND, `||` for OR) and uses the same operator precedence as well.
 
-**Note:** Use the $ prefix to denote hexadecimal values.
+{{% notice tip %}}
+Use the $ prefix to denote hexadecimal values (e.g: `$FF`) or the % prefix for binary values (e.g: `%1101`)
+{{% /notice  %}}
 
 #### Special values ####
 
@@ -153,6 +162,30 @@ The following "variables" can be used in both the watch window and contional bre
 * **SpriteOverflow**: true if the PPU's "Sprite Overflow" flag is set
 * **VerticalBlank**: true if the PPU's "Vertical Blank" flag is set
 
+#### Formatting ####
+
+It is possible to customize the format of each entry by adding a suffix to the expression.
+Suffixes contain a single letter and are optionally followed by a number indicating the number of bytes expected in the return value (up to 4).
+
+The available suffixes are:
+
+* `S` - Signed decimal value
+* `U` - Unsigned decimal value
+* `H` - Hexadecimal
+* `B` - Binary
+
+For example, suffixing an expression with:
+
+* `, H2` will display the result as a 2-byte hexadecimal value (e.g: `26, H2` will display as `$001A`)
+* `, B` will display the result as a binary value (e.g: `141,B` will display as `%10001101`)
+* `, S2` will display the result as a 16-bit signed decimal value (e.g: `$FE4F, S2` will display as `-433`)
+* `, U` will display the result as an unsigned decimal value (e.g: `180, U` will display as `180`)
+
+You can select the default format to use for entries without prefixes by right-clicking and choosing between:
+
+* **Decimal Display** (equivalent to `S4` to all entries - displays the result as 32-bit signed decimal values)
+* **Hexadecimal Display** (equivalent to `H1` to all entries)
+* **Binary Display** (equivalent to `B1` to all entries)
   
 #### Usage Examples ####
 ```
@@ -162,6 +195,7 @@ scanline == 10 && (cycle >= 55 && cycle <= 100)
 x == [$150] || y == [10]
 [[$15] + y]   //Reads the value at address $15, adds Y to it and reads the value at the resulting address.
 {$FFFA}  //Returns the NMI handler's address.
+[$14] | ([$15] << 8), H2  //Display the value of the 2-byte variable stored at $14 in hexadecimal format.
 ```
 
 **Using labels**

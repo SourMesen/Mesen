@@ -245,9 +245,15 @@ namespace Mesen.GUI.Debugger
 		private void ctrlCodeViewer_MouseMove(object sender, MouseEventArgs e)
 		{
 			if(e.Location.X < this.ctrlCodeViewer.CodeMargin / 4) {
-				this.ctrlCodeViewer.ContextMenuStrip = contextMenuMargin;
+				if(this.ctrlCodeViewer.ContextMenuStrip != contextMenuMargin) {
+					this.ctrlCodeViewer.ContextMenuStrip = contextMenuMargin;
+					ThemeHelper.FixMonoColors(contextMenuMargin);
+				}
 			} else {
-				this.ctrlCodeViewer.ContextMenuStrip = _codeViewerActions.contextMenu;
+				if(this.ctrlCodeViewer.ContextMenuStrip != _codeViewerActions.contextMenu) {
+					this.ctrlCodeViewer.ContextMenuStrip = _codeViewerActions.contextMenu;
+					ThemeHelper.FixMonoColors(this.ctrlCodeViewer.ContextMenuStrip);
+				}
 			}
 		}
 

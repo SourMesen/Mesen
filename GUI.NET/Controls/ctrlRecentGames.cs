@@ -41,6 +41,7 @@ namespace Mesen.GUI.Controls
 		public ctrlRecentGames()
 		{
 			InitializeComponent();
+			ThemeHelper.ExcludeFromTheme(this);
 
 			DoubleBuffered = true;
 

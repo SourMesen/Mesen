@@ -33,6 +33,7 @@ namespace Mesen.GUI
 		[DllImport(DLLPath)] public static extern void HistoryViewerStop();
 		[DllImport(DLLPath)] public static extern UInt32 HistoryViewerGetHistoryLength();
 		[DllImport(DLLPath)] [return: MarshalAs(UnmanagedType.I1)] public static extern bool HistoryViewerSaveMovie([MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(UTF8Marshaler))]string movieFile, UInt32 startPosition, UInt32 endPosition);
+		[DllImport(DLLPath)] [return: MarshalAs(UnmanagedType.I1)] public static extern bool HistoryViewerCreateSaveState([MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(UTF8Marshaler))]string outfileFile, UInt32 position);
 		[DllImport(DLLPath)] public static extern void HistoryViewerSetPosition(UInt32 seekPosition);
 		[DllImport(DLLPath)] public static extern void HistoryViewerResumeGameplay(UInt32 seekPosition);
 		[DllImport(DLLPath)] public static extern UInt32 HistoryViewerGetPosition();
@@ -251,6 +252,9 @@ namespace Mesen.GUI
 		[DllImport(DLLPath)] public static extern Byte DebugGetMemoryValue(DebugMemoryType type, UInt32 address);
 		[DllImport(DLLPath)] public static extern void DebugSetMemoryValue(DebugMemoryType type, UInt32 address, byte value);
 		[DllImport(DLLPath)] public static extern void DebugSetInputOverride(Int32 port, Int32 state);
+
+		[DllImport(DLLPath)] public static extern PerfTrackerMode DebugGetPerformanceTrackerMode();
+		[DllImport(DLLPath)] public static extern void DebugSetPerformanceTracker(Int32 address, AddressType type, PerfTrackerMode mode);		
 
 		[DllImport(DLLPath)] public static extern void DebugSetScriptTimeout(UInt32 timeout);
 		[DllImport(DLLPath)] public static extern Int32 DebugLoadScript([MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(UTF8Marshaler))]string name, [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(UTF8Marshaler))]string content, Int32 scriptId = -1);
@@ -2413,6 +2417,14 @@ namespace Mesen.GUI
 			}
 			throw new Exception("Invalid memory type");
 		}
+	}
+
+	public enum PerfTrackerMode
+	{
+		Disabled = 0,
+		Fullscreen = 1,
+		Compact = 2,
+		TextOnly = 3
 	}
 
 	public enum InteropMemoryOperationType

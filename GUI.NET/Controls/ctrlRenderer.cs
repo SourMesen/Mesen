@@ -20,6 +20,7 @@ namespace Mesen.GUI.Controls
 		public ctrlRenderer()
 		{
 			InitializeComponent();
+			ThemeHelper.ExcludeFromTheme(this);
 		}
 
 		protected override void OnMouseDown(MouseEventArgs e)

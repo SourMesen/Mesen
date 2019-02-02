@@ -1474,6 +1474,19 @@
     <ClInclude Include="DummyCpu.h">
       <Filter>Debugger</Filter>
     </ClInclude>
+    <ClInclude Include="PgoUtilities.h" />
+    <ClInclude Include="PerformanceTracker.h">
+      <Filter>Debugger</Filter>
+    </ClInclude>
+    <ClInclude Include="Eeprom24C01.h">
+      <Filter>Nes\Mappers\Bandai</Filter>
+    </ClInclude>
+    <ClInclude Include="Eeprom24C02.h">
+      <Filter>Nes\Mappers\Bandai</Filter>
+    </ClInclude>
+    <ClInclude Include="BaseEeprom24C0X.h">
+      <Filter>Nes\Mappers\Bandai</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -1767,11 +1780,11 @@
     <ClCompile Include="StereoCombFilter.cpp">
       <Filter>Nes\APU\Filters</Filter>
     </ClCompile>
-    <ClCompile Include="PgoUtilities.h">
-      <Filter>Misc</Filter>
-    </ClCompile>
     <ClCompile Include="PgoUtilities.cpp">
       <Filter>Misc</Filter>
+    </ClCompile>
+    <ClCompile Include="PerformanceTracker.cpp">
+      <Filter>Debugger</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

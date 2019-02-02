@@ -703,11 +703,12 @@ void Console::Run()
 {
 	Timer clockTimer;
 	Timer lastFrameTimer;
+	double frameDurations[60] = {};
+	uint32_t frameDurationIndex = 0;
 	double targetTime;
 	double lastFrameMin = 9999;
 	double lastFrameMax = 0;
 	uint32_t lastFrameNumber = -1;
-	uint32_t lastPauseFrame = 0;
 	double lastDelay = GetFrameDelay();
 
 	_runLock.Acquire();
@@ -762,7 +763,6 @@ void Console::Run()
 					//   This can happen when something slows the emulator down severely (or when breaking execution in VS when debugging Mesen itself, etc.)
 					clockTimer.Reset();
 					targetTime = 0;
-					lastPauseFrame = _ppu->GetFrameCount();
 
 					_resetRunTimers = false;
 					lastDelay = delay;
@@ -772,12 +772,16 @@ void Console::Run()
 				
 				bool displayDebugInfo = _settings->CheckFlag(EmulationFlags::DisplayDebugInfo);
 				if(displayDebugInfo) {
-					DisplayDebugInformation(clockTimer, lastFrameTimer, lastFrameMin, lastFrameMax, lastPauseFrame);
+					double lastFrameTime = lastFrameTimer.GetElapsedMS();
+					lastFrameTimer.Reset();
+					frameDurations[frameDurationIndex] = lastFrameTime;
+					frameDurationIndex = (frameDurationIndex + 1) % 60;
+
+					DisplayDebugInformation(lastFrameTime, lastFrameMin, lastFrameMax, frameDurations);
 					if(_slave) {
-						_slave->DisplayDebugInformation(clockTimer, lastFrameTimer, lastFrameMin, lastFrameMax, lastPauseFrame);
+						_slave->DisplayDebugInformation(lastFrameTime, lastFrameMin, lastFrameMax, frameDurations);
 					}
 				}
-				lastFrameTimer.Reset();
 
 				//Sleep until we're ready to start the next frame
 				clockTimer.WaitUntil(targetTime);
@@ -1039,7 +1043,6 @@ void Console::LoadState(istream &loadStream, uint32_t stateVersion)
 
 		_debugHud->ClearScreen();
 		_notificationManager->SendNotification(ConsoleNotificationType::StateLoaded);
-		_resetRunTimers = true;
 		UpdateNesModel(false);
 	}
 }
@@ -1084,7 +1087,9 @@ std::shared_ptr<Debugger> Console::GetDebugger(bool autoStart)
 
 void Console::StopDebugger()
 {
-	_debugger->ReleaseDebugger();
+	if(_debugger) {
+		_debugger->ReleaseDebugger(_running);
+	}
 	_debugger.reset();
 }
 
@@ -1452,7 +1457,7 @@ void Console::DebugProcessVramWriteOperation(uint16_t addr, uint8_t & value)
 #endif
 }
 
-void Console::DisplayDebugInformation(Timer &clockTimer, Timer &lastFrameTimer, double &lastFrameMin, double &lastFrameMax, uint32_t lastPauseFrame)
+void Console::DisplayDebugInformation(double lastFrame, double &lastFrameMin, double &lastFrameMax, double frameDurations[60])
 {
 	AudioStatistics stats = _soundMixer->GetStatistics();
 	
@@ -1477,11 +1482,14 @@ void Console::DisplayDebugInformation(Timer &clockTimer, Timer &lastFrameTimer, 
 	_debugHud->DrawRectangle(132, 8, 115, 49, 0xFFFFFF, false, 1, startFrame);
 	_debugHud->DrawString(134, 10, "Video Stats", 0xFFFFFF, 0xFF000000, 1, startFrame);
 
-	ss = std::stringstream();
-	ss << "FPS: " << std::fixed << std::setprecision(4) << ((startFrame - lastPauseFrame) / (clockTimer.GetElapsedMS() / 1000));
-	_debugHud->DrawString(134, 21, ss.str(), 0xFFFFFF, 0xFF000000, 1, startFrame);
+	double totalDuration = 0;
+	for(int i = 0; i < 60; i++) {
+		totalDuration += frameDurations[i];
+	}
 
-	double lastFrame = lastFrameTimer.GetElapsedMS();
+	ss = std::stringstream();
+	ss << "FPS: " << std::fixed << std::setprecision(4) << (1000 / (totalDuration/60));
+	_debugHud->DrawString(134, 21, ss.str(), 0xFFFFFF, 0xFF000000, 1, startFrame);
 
 	ss = std::stringstream();
 	ss << "Last Frame: " << std::fixed << std::setprecision(2) << lastFrame << " ms";

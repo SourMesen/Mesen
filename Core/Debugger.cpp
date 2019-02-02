@@ -30,6 +30,7 @@
 #include "NotificationManager.h"
 #include "DebugHud.h"
 #include "DummyCpu.h"
+#include "PerformanceTracker.h"
 
 const int Debugger::BreakpointTypeCount;
 string Debugger::_disassemblerOutput = "";
@@ -55,6 +56,7 @@ Debugger::Debugger(shared_ptr<Console> console, shared_ptr<CPU> cpu, shared_ptr<
 
 	_memoryAccessCounter.reset(new MemoryAccessCounter(this));
 	_profiler.reset(new Profiler(this));
+	_performanceTracker.reset(new PerformanceTracker(console));
 	_traceLogger.reset(new TraceLogger(this, memoryManager, _labelManager));
 
 	_bpExpEval.reset(new ExpressionEvaluator(this));
@@ -124,11 +126,11 @@ Debugger::Debugger(shared_ptr<Console> console, shared_ptr<CPU> cpu, shared_ptr<
 Debugger::~Debugger()
 {
 	if(!_released) {
-		ReleaseDebugger();
+		ReleaseDebugger(true);
 	}
 }
 
-void Debugger::ReleaseDebugger()
+void Debugger::ReleaseDebugger(bool needPause)
 {
 	auto lock = _releaseLock.AcquireSafe();
 	if(!_released) {
@@ -136,7 +138,12 @@ void Debugger::ReleaseDebugger()
 
 		_stopFlag = true;
 
-		_console->Pause();
+		if(needPause) {
+			//ReleaseDebugger is called in the callback for "BeforeEmulationStop"
+			//calling Pause in this scenario will cause a deadlock, but doing so is
+			//unnecessary, so we can just skip it.
+			_console->Pause();
+		}
 
 		{
 			auto lock = _scriptLock.AcquireSafe();
@@ -150,7 +157,10 @@ void Debugger::ReleaseDebugger()
 
 		_breakLock.Acquire();
 		_breakLock.Release();
-		_console->Resume();
+
+		if(needPause) {
+			_console->Resume();
+		}
 
 		_released = true;
 	}
@@ -790,6 +800,7 @@ bool Debugger::ProcessRamOperation(MemoryOperationType type, uint16_t &addr, uin
 
 		ProcessStepConditions(addr);
 
+		_performanceTracker->ProcessCpuExec(addressInfo);
 		_profiler->ProcessInstructionStart(absoluteAddr);
 
 		BreakSource breakSource = BreakSource::Unspecified;
@@ -1105,7 +1116,11 @@ void Debugger::StepBack()
 void Debugger::Run()
 {
 	//Resume execution after a breakpoint has been hit
-	ResetStepState();
+	_ppuStepCount = -1;
+	_stepCount = -1;
+	_breakOnScanline = -2;
+	_stepCycleCount = -1;
+	_stepOut = false;
 }
 
 void Debugger::BreakImmediately(BreakSource source)
@@ -1267,6 +1282,11 @@ shared_ptr<MemoryDumper> Debugger::GetMemoryDumper()
 shared_ptr<MemoryAccessCounter> Debugger::GetMemoryAccessCounter()
 {
 	return _memoryAccessCounter;
+}
+
+shared_ptr<PerformanceTracker> Debugger::GetPerformanceTracker()
+{
+	return _performanceTracker;
 }
 
 bool Debugger::IsExecutionStopped()
@@ -1559,6 +1579,7 @@ void Debugger::ProcessEvent(EventType type)
 			}
 		}
 	} else if(type == EventType::EndFrame) {
+		_performanceTracker->ProcessEndOfFrame();
 		_memoryDumper->GatherChrPaletteInfo();
 	} else if(type == EventType::StartFrame) {
 		//Update the event viewer

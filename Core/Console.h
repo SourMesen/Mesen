@@ -102,7 +102,7 @@ private:
 
 	void UpdateNesModel(bool sendNotification);
 	double GetFrameDelay();
-	void DisplayDebugInformation(Timer &clockTimer, Timer &lastFrameTimer, double &lastFrameMin, double &lastFrameMax, uint32_t lastPauseFrame);
+	void DisplayDebugInformation(double lastFrame, double &lastFrameMin, double &lastFrameMax, double frameDurations[60]);
 
 	void ExportStub();
 

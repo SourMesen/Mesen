@@ -607,6 +607,7 @@
 			<Control ID="mnuFile">File</Control>
 			<Control ID="mnuImportMovie">Import Movie</Control>
 			<Control ID="mnuExportMovie">Export Movie</Control>
+			<Control ID="mnuCreateSaveState">Create Save State</Control>
 			<Control ID="mnuResumeGameplay">Resume Gameplay</Control>
 			<Control ID="mnuClose">Close</Control>
 		</Form>
@@ -734,6 +735,7 @@
 
 		<Message ID="MovieSegment">Segment #{0}</Message>
 		<Message ID="MovieSaveError">An error occurred while trying to save the movie file.</Message>
+		<Message ID="FileSaveError">An error occurred while trying to save the file.</Message>
 
 		<Message ID="ClearHistory">Esborra el registre</Message>
 		<Message ID="LastFolderUsed">Darrera carpeta utilitzada</Message>

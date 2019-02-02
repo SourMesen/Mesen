@@ -24,6 +24,12 @@ namespace Mesen.GUI.Controls
 		public ctrlNsfPlayer()
 		{
 			InitializeComponent();
+			ThemeHelper.ExcludeFromTheme(this);
+		}
+
+		protected override void OnLoad(EventArgs e)
+		{
+			base.OnLoad(e);
 
 			if(!IsDesignMode) {
 				this.tmrUpdate.Enabled = true;

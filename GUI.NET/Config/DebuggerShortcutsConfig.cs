@@ -84,6 +84,8 @@ namespace Mesen.GUI.Config
 		public XmlKeys OpenTraceLogger = Keys.Control | Keys.J;
 		[ShortcutName("Open Text Hooker")]
 		public XmlKeys OpenTextHooker = Keys.Control | Keys.H;
+		[ShortcutName("Open Watch Window")]
+		public XmlKeys OpenWatchWindow = Keys.Control | Keys.W;
 
 		[ShortcutName("Open Nametabler Viewer (Compact)")]
 		public XmlKeys OpenNametableViewer = Keys.Control | Keys.D1;
@@ -195,6 +197,10 @@ namespace Mesen.GUI.Config
 
 		[ShortcutName("Watch List: Delete")]
 		public XmlKeys WatchList_Delete = Keys.Delete;
+		[ShortcutName("Watch List: Move Up")]
+		public XmlKeys WatchList_MoveUp = Keys.Control | Keys.Up;
+		[ShortcutName("Watch List: Move Down")]
+		public XmlKeys WatchList_MoveDown = Keys.Control | Keys.Down;
 
 		[ShortcutName("Save Rom")]
 		public XmlKeys SaveRom = Keys.Control | Keys.S;
@@ -306,12 +312,11 @@ namespace Mesen.GUI.Config
 
 				Form parentForm = parent.FindForm();
 				if(parentForm is BaseForm) {
-					ProcessCmdKeyHandler onProcessCmdKeyHandler = (Keys keyData) => {
-						if(parent.ContainsFocus && keyData == keys) {
+					ProcessCmdKeyHandler onProcessCmdKeyHandler = (Keys keyData, ref bool processed) => {
+						if(!processed && item.Enabled && parent.ContainsFocus && keyData == keys) {
 							item.PerformClick();
-							return true;
+							processed = true;
 						}
-						return false;
 					};
 
 					((ShortcutInfo)item.Tag).KeyHandler = onProcessCmdKeyHandler;

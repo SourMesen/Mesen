@@ -18,6 +18,7 @@ namespace Mesen.GUI.Forms.Config
 		public frmInputConfig()
 		{
 			InitializeComponent();
+			ThemeHelper.ExcludeFromTheme(pnlConflictWarning);
 
 			tlpControllers.Enabled = !InteropEmu.MoviePlaying() && !InteropEmu.MovieRecording();
 

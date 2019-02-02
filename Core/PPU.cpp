@@ -346,9 +346,9 @@ uint8_t PPU::ReadRAM(uint16_t addr)
 				returnValue = _memoryReadBuffer;
 				_memoryReadBuffer = ReadVram(_ppuBusAddress & 0x3FFF, MemoryOperationType::Read);
 
-				if((_state.VideoRamAddr & 0x3FFF) >= 0x3F00 && !_settings->CheckFlag(EmulationFlags::DisablePaletteRead)) {
-					returnValue = ReadPaletteRAM(_state.VideoRamAddr) | (_openBus & 0xC0);
-					_console->DebugProcessVramReadOperation(MemoryOperationType::Read, _state.VideoRamAddr & 0x3FFF, returnValue);
+				if((_ppuBusAddress & 0x3FFF) >= 0x3F00 && !_settings->CheckFlag(EmulationFlags::DisablePaletteRead)) {
+					returnValue = ReadPaletteRAM(_ppuBusAddress) | (_openBus & 0xC0);
+					_console->DebugProcessVramReadOperation(MemoryOperationType::Read, _ppuBusAddress & 0x3FFF, returnValue);
 					openBusMask = 0xC0;
 				} else {
 					openBusMask = 0x00;
@@ -429,11 +429,16 @@ void PPU::WriteRAM(uint16_t addr, uint8_t value)
 			_state.WriteToggle = !_state.WriteToggle;
 			break;
 		case PPURegisters::VideoMemoryData:
-			if((_state.VideoRamAddr & 0x3FFF) >= 0x3F00) {
-				WritePaletteRAM(_state.VideoRamAddr, value);
-				_console->DebugProcessVramWriteOperation(_state.VideoRamAddr & 0x3FFF, value);
+			if((_ppuBusAddress & 0x3FFF) >= 0x3F00) {
+				WritePaletteRAM(_ppuBusAddress, value);
+				_console->DebugProcessVramWriteOperation(_ppuBusAddress & 0x3FFF, value);
 			} else {
-				_console->GetMapper()->WriteVRAM(_ppuBusAddress & 0x3FFF, value);
+				if(_scanline >= 240 || !IsRenderingEnabled()) {
+					_console->GetMapper()->WriteVRAM(_ppuBusAddress & 0x3FFF, value);
+				} else {
+					//During rendering, the value written is ignored, and instead the address' LSB is used (not confirmed, based on Visual NES)
+					_console->GetMapper()->WriteVRAM(_ppuBusAddress & 0x3FFF, _ppuBusAddress & 0xFF);
+				}
 			}
 			UpdateVideoRamAddr();
 			break;
@@ -1212,6 +1217,9 @@ void PPU::Exec()
 			//Switch to alternate output buffer (VideoDecoder may still be decoding the last frame buffer)
 			_currentOutputBuffer = (_currentOutputBuffer == _outputBuffers[0]) ? _outputBuffers[1] : _outputBuffers[0];
 		} else if(_scanline == 240) {
+			//At the start of vblank, the bus address is set back to VideoRamAddr.
+			//According to Visual NES, this occurs on scanline 240, cycle 1, but is done here on cycle for performance reasons
+			SetBusAddress(_state.VideoRamAddr);
 			SendFrame();
 			_frameCount++;
 		} else if(_scanline == _nmiScanline) {

@@ -13,8 +13,13 @@ void DeltaModulationChannel::Reset(bool softReset)
 {
 	BaseApuChannel::Reset(softReset);
 
-	_sampleAddr = 0;
-	_sampleLength = 0;
+	if(!softReset) {
+		//At power on, the sample address is set to $C000 and the sample length is set to 1
+		//Resetting does not reset their value
+		_sampleAddr = 0xC000;
+		_sampleLength = 1;
+	}
+
 	_outputLevel = 0;
 	_irqEnabled = false;
 	_loopFlag = false;
@@ -59,7 +64,12 @@ void DeltaModulationChannel::FillReadBuffer()
 		_readBuffer = _console->GetMemoryManager()->Read(_currentAddr, MemoryOperationType::DmcRead);
 		_bufferEmpty = false;
 
+		//"The address is incremented; if it exceeds $FFFF, it is wrapped around to $8000."
 		_currentAddr++;
+		if(_currentAddr == 0) {
+			_currentAddr = 0x8000;
+		}
+
 		_bytesRemaining--;
 
 		if(_bytesRemaining == 0) {

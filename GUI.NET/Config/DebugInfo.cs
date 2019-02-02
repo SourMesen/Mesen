@@ -148,7 +148,7 @@ namespace Mesen.GUI.Config
 		public bool AlwaysScrollToCenter = false;
 		public bool SplitView = false;
 		public bool VerticalLayout = false;
-		public bool HexDisplay = true;
+		public WatchFormatStyle WatchFormat = WatchFormatStyle.Hex;
 		public bool ShowBreakpointLabels = true;
 
 		public Size EventViewerSize = new Size(0, 0);
@@ -289,6 +289,9 @@ namespace Mesen.GUI.Config
 		public Size ProfilerSize = new Size(0, 0);
 		public Point ProfilerLocation;
 
+		public Size WatchWindowSize = new Size(0, 0);
+		public Point WatchWindowLocation;
+
 		public Point WindowLocation;
 		public int WindowWidth = -1;
 		public int WindowHeight = -1;
@@ -302,7 +305,7 @@ namespace Mesen.GUI.Config
 		public bool FindOccurrencesMatchWholeWord = false;
 		public string FindOccurrencesLastSearch = string.Empty;
 
-		public bool AutoLoadDbgFiles = false;
+		public bool AutoLoadDbgFiles = true;
 		public bool AutoLoadCdlFiles = false;
 		public bool DisableDefaultLabels = false;
 

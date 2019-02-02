@@ -609,6 +609,7 @@
 			<Control ID="mnuFile">文件</Control>
 			<Control ID="mnuImportMovie">导入影片</Control>
 			<Control ID="mnuExportMovie">导出影片</Control>
+			<Control ID="mnuCreateSaveState">Create Save State</Control>
 			<Control ID="mnuResumeGameplay">继续播放</Control>
 			<Control ID="mnuClose">关闭</Control>
 		</Form>
@@ -755,6 +756,8 @@
 		<Message ID="SaveToFile">保存到文件...</Message>
 		<Message ID="MovieSegment">第 #{0} 段</Message>
 		<Message ID="MovieSaveError">尝试保存电影文件时发生错误.</Message>
+		<Message ID="FileSaveError">An error occurred while trying to save the file.</Message>
+		
 		<Message ID="ClearHistory">清除历史</Message>
 		<Message ID="LastFolderUsed">上次使用的文件夹</Message>
 		

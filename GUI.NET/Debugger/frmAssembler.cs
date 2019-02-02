@@ -31,6 +31,8 @@ namespace Mesen.GUI.Debugger
 		public frmAssembler(string code = "", UInt16 startAddress = 0, UInt16 blockLength = 0)
 		{
 			InitializeComponent();
+			ThemeHelper.ExcludeFromTheme(txtCode);
+			txtCode.ForeColor = Color.Black;
 
 			DebugInfo config = ConfigManager.Config.DebugInfo;
 

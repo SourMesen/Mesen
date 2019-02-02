@@ -354,7 +354,7 @@ bool DirectInputManager::IsPressed(int port, int button)
 
 	DIJOYSTATE2& state = _joysticks[port].state;
 	DIJOYSTATE2& defaultState = _joysticks[port].defaultState;
-	int deadRange = 500 * _console->GetSettings()->GetControllerDeadzoneRatio();
+	int deadRange = (int)(500 * _console->GetSettings()->GetControllerDeadzoneRatio());
 
 	int povDirection = state.rgdwPOV[0] / 4500;
 	bool povCentered = (LOWORD(state.rgdwPOV[0]) == 0xFFFF) || povDirection >= 8;

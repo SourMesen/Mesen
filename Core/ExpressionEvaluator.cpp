@@ -133,9 +133,11 @@ bool ExpressionEvaluator::CheckSpecialTokens(string expression, size_t &pos, str
 	return true;
 }
 
-string ExpressionEvaluator::GetNextToken(string expression, size_t &pos, ExpressionData &data)
+string ExpressionEvaluator::GetNextToken(string expression, size_t &pos, ExpressionData &data, bool &success)
 {
 	string output;
+	success = true;
+
 	char c = std::tolower(expression[pos]);
 	if(c == '$') {
 		//Hex numbers
@@ -148,7 +150,33 @@ string ExpressionEvaluator::GetNextToken(string expression, size_t &pos, Express
 				break;
 			}
 		}
+		if(output.empty()) {
+			//No numbers followed the hex mark, this isn't a valid expression
+			success = false;
+		}
 		output = std::to_string((uint32_t)HexUtilities::FromHex(output));
+	} else if(c == '%') {
+		//Binary numbers
+		pos++;
+		for(size_t len = expression.size(); pos < len; pos++) {
+			c = std::tolower(expression[pos]);
+			if(c == '0' || c <= '1') {
+				output += c;
+			} else {
+				break;
+			}
+		}
+		if(output.empty()) {
+			//No numbers followed the binary mark, this isn't a valid expression
+			success = false;
+		}
+
+		uint32_t value = 0;
+		for(size_t i = 0; i < output.size(); i++) {
+			value <<= 1;
+			value |= output[i] == '1' ? 1 : 0;
+		}
+		output = std::to_string(value);
 	} else if(c >= '0' && c <= '9') {
 		//Regular numbers
 		for(size_t len = expression.size(); pos < len; pos++) {
@@ -175,7 +203,7 @@ string ExpressionEvaluator::GetNextToken(string expression, size_t &pos, Express
 		}
 	} else {
 		//Special tokens and labels
-		CheckSpecialTokens(expression, pos, output, data);
+		success = CheckSpecialTokens(expression, pos, output, data);
 	}
 
 	return output;
@@ -215,15 +243,27 @@ bool ExpressionEvaluator::ToRpn(string expression, ExpressionData &data)
 	int braceCount = 0;
 
 	bool previousTokenIsOp = true;
+	bool operatorExpected = false;
+	bool operatorOrEndTokenExpected = false;
 	while(true) {
-		string token = GetNextToken(expression, position, data);
+		bool success = true;
+		string token = GetNextToken(expression, position, data, success);
+		if(!success) {
+			return false;
+		}
+
 		if(token.empty()) {
 			break;
 		}
 
+		bool requireOperator = operatorExpected;
+		bool requireOperatorOrEndToken = operatorOrEndTokenExpected;
 		bool unaryOperator = previousTokenIsOp;
+		
+		operatorExpected = false;
+		operatorOrEndTokenExpected = false;
 		previousTokenIsOp = false;
-
+		
 		int precedence = 0;
 		if(IsOperator(token, precedence, unaryOperator)) {
 			EvalOperators op = GetOperator(token, unaryOperator);
@@ -236,8 +276,14 @@ bool ExpressionEvaluator::ToRpn(string expression, ExpressionData &data)
 			}
 			opStack.push(op);
 			precedenceStack.push(precedence);
-			
+
 			previousTokenIsOp = true;
+		} else if(requireOperator) {
+			//We needed an operator, and got something else, this isn't a valid expression (e.g "(3)4" or "[$00]22")
+			return false;
+		} else if(requireOperatorOrEndToken && token[0] != ')' && token[0] != ']' && token[0] != '}') {
+			//We needed an operator or close token - this isn't a valid expression (e.g "%1134")
+			return false;
 		} else if(token[0] == '(') {
 			parenthesisCount++;
 			opStack.push(EvalOperators::Parenthesis);
@@ -248,6 +294,7 @@ bool ExpressionEvaluator::ToRpn(string expression, ExpressionData &data)
 			if(!ProcessSpecialOperator(EvalOperators::Parenthesis, opStack, precedenceStack, data.RpnQueue)) {
 				return false;
 			}
+			operatorExpected = true;
 		} else if(token[0] == '[') {
 			bracketCount++;
 			opStack.push(EvalOperators::Bracket);
@@ -257,6 +304,7 @@ bool ExpressionEvaluator::ToRpn(string expression, ExpressionData &data)
 			if(!ProcessSpecialOperator(EvalOperators::Bracket, opStack, precedenceStack, data.RpnQueue)) {
 				return false;
 			}
+			operatorExpected = true;
 		} else if(token[0] == '{') {
 			braceCount++;
 			opStack.push(EvalOperators::Braces);
@@ -266,11 +314,13 @@ bool ExpressionEvaluator::ToRpn(string expression, ExpressionData &data)
 			if(!ProcessSpecialOperator(EvalOperators::Braces, opStack, precedenceStack, data.RpnQueue)){
 				return false;
 			}
+			operatorExpected = true;
 		} else {
 			if(token[0] < '0' || token[0] > '9') {
 				return false;
 			} else {
 				data.RpnQueue.push_back(std::stoll(token));
+				operatorOrEndTokenExpected = true;
 			}
 		}
 	}
@@ -532,5 +582,14 @@ void ExpressionEvaluator::RunTests()
 
 	test("{$4500}", EvalResultType::Numeric, 0x4545);
 	test("[$4500]", EvalResultType::Numeric, 0x45);
+	
+	test("[$45]3", EvalResultType::Invalid, 0);
+	test("($45)3", EvalResultType::Invalid, 0);
+	test("($45]", EvalResultType::Invalid, 0);
+	
+	test("%11", EvalResultType::Numeric, 3);
+	test("%011", EvalResultType::Numeric, 3);
+	test("%1011", EvalResultType::Numeric, 11);
+	test("%12", EvalResultType::Invalid, 0);
 }
 #endif

@@ -94,11 +94,11 @@ namespace Mesen.GUI.Debugger.Controls
 				item.SubItems[1].Text = "@ $" + stackInfo.CurrentRelativeAddr.ToString("X4");
 				item.SubItems[2].Text = "[$" + stackInfo.CurrentAbsoluteAddr.ToString("X4") + "]";
 
-				if(!stackInfo.IsMapped && item.ForeColor != Color.Gray) {
-					item.ForeColor = Color.Gray;
+				if(!stackInfo.IsMapped && item.ForeColor != ThemeHelper.Theme.LabelDisabledForeColor) {
+					item.ForeColor = ThemeHelper.Theme.LabelDisabledForeColor;
 					item.Font = new Font(item.Font, FontStyle.Italic);
-				} else if(stackInfo.IsMapped && item.ForeColor != Color.Black) {
-					item.ForeColor = Color.Black;
+				} else if(stackInfo.IsMapped && item.ForeColor != ThemeHelper.Theme.LabelForeColor) {
+					item.ForeColor = ThemeHelper.Theme.LabelForeColor;
 					item.Font = new Font(item.Font, FontStyle.Regular);
 				}
 			}

@@ -7,17 +7,17 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Mesen.GUI.Controls;
 
 namespace Mesen.GUI.Debugger.Controls
 {
-	public partial class ctrlFlagStatus : UserControl
+	public partial class ctrlFlagStatus : BaseControl
 	{
 		public ctrlFlagStatus()
 		{
 			InitializeComponent();
 			if(Program.IsMono) {
-				lblLetter.Padding = Padding.Empty;
-				lblLetter.Width = 16;
+				lblLetter.Location = new Point(-1, -1);
 			}
 		}
 
@@ -25,8 +25,9 @@ namespace Mesen.GUI.Debugger.Controls
 		{
 			set
 			{
-				panel2.BackColor = value ? Color.Red : Color.LightGray;
-				lblLetter.BackColor = value ? Color.White : Color.DarkGray;
+				panelBorder.BackColor = value ? Color.Red : Color.LightGray;
+				panelBg.BackColor = value ? Color.White : Color.DarkGray;
+				lblLetter.ForeColor = Color.Black;
 			}
 		}
 

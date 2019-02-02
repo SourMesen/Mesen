@@ -680,12 +680,22 @@ std::unordered_map<string, string> MessageManager::_zhResources = {
 
 std::list<string> MessageManager::_log;
 SimpleLock MessageManager::_logLock;
+SimpleLock MessageManager::_messageLock;
 bool MessageManager::_osdEnabled = false;
 IMessageManager* MessageManager::_messageManager = nullptr;
 
 void MessageManager::RegisterMessageManager(IMessageManager* messageManager)
 {
+	auto lock = _messageLock.AcquireSafe();
 	MessageManager::_messageManager = messageManager;
+}
+
+void MessageManager::UnregisterMessageManager(IMessageManager* messageManager)
+{
+	auto lock = _messageLock.AcquireSafe();
+	if(MessageManager::_messageManager == messageManager) {
+		MessageManager::_messageManager = nullptr;
+	}
 }
 
 void MessageManager::SetOsdState(bool enabled)
@@ -725,6 +735,11 @@ string MessageManager::Localize(string key)
 void MessageManager::DisplayMessage(string title, string message, string param1, string param2)
 {
 	if(MessageManager::_messageManager) {
+		auto lock = _messageLock.AcquireSafe();
+		if(!MessageManager::_messageManager) {
+			return;
+		}
+
 		title = Localize(title);
 		message = Localize(message);
 

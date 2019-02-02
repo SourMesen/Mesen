@@ -16,6 +16,7 @@ namespace Mesen.GUI.Debugger
 	public partial class frmOpCodeTooltip : TooltipForm
 	{
 		static private Dictionary<string, OpCodeDesc> _descriptions;
+		private OpCodeDesc _desc;
 
 		protected override bool ShowWithoutActivation
 		{
@@ -108,7 +109,7 @@ namespace Mesen.GUI.Debugger
 			_parentForm = parent;
 			InitializeComponent();
 
-			OpCodeDesc desc = _descriptions[opcode.ToLowerInvariant()];
+			_desc = _descriptions[opcode.ToLowerInvariant()];
 
 			if(relativeAddress >= 0) {
 				byte opCode = InteropEmu.DebugGetMemoryValue(DebugMemoryType.CpuMemory, (UInt32)relativeAddress);
@@ -137,15 +138,8 @@ namespace Mesen.GUI.Debugger
 			ctrlFlagOverflow.Letter = "V";
 			ctrlFlagZero.Letter = "Z";
 
-			lblName.Text = desc.Name;
-			lblOpCodeDescription.Text = desc.Description;
-
-			ctrlFlagCarry.Active = desc.Flags.HasFlag(CpuFlag.Carry);
-			ctrlFlagDecimal.Active = desc.Flags.HasFlag(CpuFlag.Decimal);
-			ctrlFlagInterrupt.Active = desc.Flags.HasFlag(CpuFlag.Interrupt);
-			ctrlFlagNegative.Active = desc.Flags.HasFlag(CpuFlag.Negative);
-			ctrlFlagOverflow.Active = desc.Flags.HasFlag(CpuFlag.Overflow);
-			ctrlFlagZero.Active = desc.Flags.HasFlag(CpuFlag.Zero);
+			lblName.Text = _desc.Name;
+			lblOpCodeDescription.Text = _desc.Description;
 
 			this.TopLevel = false;
 			this.Parent = _parentForm;
@@ -154,11 +148,18 @@ namespace Mesen.GUI.Debugger
 
 		protected override void OnLoad(EventArgs e)
 		{
-			this.Width = this.tlpMain.Width;
 			this.Height = this.tlpMain.Height;
 			this.BringToFront();
 
 			base.OnLoad(e);
+
+			panel.BackColor = ThemeHelper.IsDark ? ThemeHelper.Theme.FormBgColor : SystemColors.Info;
+			ctrlFlagCarry.Active = _desc.Flags.HasFlag(CpuFlag.Carry);
+			ctrlFlagDecimal.Active = _desc.Flags.HasFlag(CpuFlag.Decimal);
+			ctrlFlagInterrupt.Active = _desc.Flags.HasFlag(CpuFlag.Interrupt);
+			ctrlFlagNegative.Active = _desc.Flags.HasFlag(CpuFlag.Negative);
+			ctrlFlagOverflow.Active = _desc.Flags.HasFlag(CpuFlag.Overflow);
+			ctrlFlagZero.Active = _desc.Flags.HasFlag(CpuFlag.Zero);
 		}
 
 		public static int GetOpSize(byte opCode)

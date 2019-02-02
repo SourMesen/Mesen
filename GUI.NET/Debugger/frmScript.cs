@@ -30,6 +30,8 @@ namespace Mesen.GUI.Debugger
 		public frmScript(bool forceBlank = false)
 		{
 			InitializeComponent();
+			ThemeHelper.ExcludeFromTheme(txtScriptContent);
+			txtScriptContent.ForeColor = Color.Black;
 
 			DebugInfo.ApplyConfig();
 

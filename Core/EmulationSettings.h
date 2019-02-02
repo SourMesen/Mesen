@@ -1342,6 +1342,7 @@ public:
 			case 3: return 1.25;
 			case 4: return 1.5;
 		}
+		return 1;
 	}
 
 	void SetZapperDetectionRadius(uint32_t detectionRadius)

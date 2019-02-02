@@ -43,6 +43,7 @@ namespace Mesen.GUI.Debugger
 					case DebugWindow.EventViewer: frm = new frmEventViewer(); frm.Icon = Properties.Resources.NesEventViewer; break;
 					case DebugWindow.TextHooker: frm = new frmTextHooker(); frm.Icon = Properties.Resources.Font; break;
 					case DebugWindow.Profiler: frm = new frmProfiler(); frm.Icon = Properties.Resources.Speed; break;
+					case DebugWindow.WatchWindow: frm = new frmWatchWindow(); frm.Icon = Properties.Resources.Find; break;
 				}
 				_openedWindows.Add(frm);
 				frm.FormClosed += Debugger_FormClosed;
@@ -147,6 +148,7 @@ namespace Mesen.GUI.Debugger
 				case DebugWindow.ApuViewer: return _openedWindows.ToList().Find((form) => form.GetType() == typeof(frmApuViewer));
 				case DebugWindow.TextHooker: return _openedWindows.ToList().Find((form) => form.GetType() == typeof(frmTextHooker));
 				case DebugWindow.Profiler: return _openedWindows.ToList().Find((form) => form.GetType() == typeof(frmProfiler));
+				case DebugWindow.WatchWindow: return _openedWindows.ToList().Find((form) => form.GetType() == typeof(frmWatchWindow));
 			}
 
 			return null;
@@ -156,12 +158,9 @@ namespace Mesen.GUI.Debugger
 		{
 			if(_openedWindows.Count == 0) {
 				//All windows have been closed, disable debugger
+				DebugWorkspaceManager.SaveWorkspace();
 				DebugWorkspaceManager.Clear();
-
-				Task.Run(() => {
-					//Run this in another thread to avoid deadlocks when this is called within a notification handler
-					InteropEmu.DebugRelease();
-				});
+				InteropEmu.DebugRelease();
 			}
 		}
 
@@ -184,5 +183,6 @@ namespace Mesen.GUI.Debugger
 		EventViewer,
 		TextHooker,
 		Profiler,
+		WatchWindow,
 	}
 }

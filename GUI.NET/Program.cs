@@ -44,6 +44,10 @@ namespace Mesen.GUI
 			string absoluteFolder = new FileInfo((new System.Uri(Assembly.GetExecutingAssembly().CodeBase)).LocalPath).Directory.FullName;
 			string targetPath = Path.Combine(ConfigManager.HomeFolder, "GoogleDrive", assemblyFile);
 
+			if(ResourceManager.GoogleDlls.Contains(assemblyFile)) {
+				ResourceManager.ExtractGoogleDriveResources();
+			}
+
 			try {
 				if(File.Exists(targetPath)) {
 					return Assembly.LoadFile(targetPath);
