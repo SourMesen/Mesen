@@ -1254,8 +1254,8 @@
 			<Value ID="RaidOnBungelingBayProtection">Raid on Bungeling Bay</Value>
 		</Enum>
 		<Enum ID="GameInputType">
-			<Value ID="Default">Default (Standard Controllers)</Value>
-			<Value ID="FamicomControllers">Famicom Controllers</Value>
+			<Value ID="Unspecified">Unspecified</Value>
+			<Value ID="StandardControllers">Standard Controllers</Value>
 			<Value ID="FourScore">Four Score (NES)</Value>
 			<Value ID="FourPlayerAdapter">Four Player Adapter (Famicom)</Value>
 			<Value ID="VsSystem">VS System</Value>
