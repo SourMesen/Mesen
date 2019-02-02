@@ -4,7 +4,7 @@
 #
 # Automatically generated database based on Nestopia's DB and NesCartDB
 #
-# Generated on 2019-01-26 using:
+# Generated on 2019-02-02 using:
 #     -NesCartDB (dated 2017-08-21)
 #     -Nestopia UE's latest DB (dated 2015-10-22) 
 # 
@@ -251,7 +251,7 @@
 03CFB522,NesNtsc,UNK,,,4,256,216,,0,0,0,v,,,,,
 03D2686D,NesNtsc,UNK,,,4,256,128,,0,0,0,v,,,,,
 03D4D97D,NesNtsc,UNK,,,2,128,,,0,0,0,v,,,,,
-03D56CF7,Famicom,,,,1,128,,8,8,0,0,,,,,,
+03D56CF7,Famicom,,,,1,128,,8,0,0,0,,,,,,
 03D6B055,NesNtsc,UNK,,,245,128,,,0,8,1,h,,,,,
 03DA35AD,NesNtsc,UNK,,,0,32,8,,0,0,0,v,,,,,
 03E2898F,Famicom,HVC-TKROM,HVC-TKROM-03,MMC3C,4,256,256,,0,8,1,,,,,,
@@ -3820,7 +3820,7 @@
 3EFA7E44,NesNtsc,UNK,,,2,128,,,0,0,0,v,,,,,
 3EFC1D51,NesNtsc,UNK,,,0,32,8,,0,0,0,h,,,,,
 3EFDB0B7,NesNtsc,UNK,,,1,128,128,,0,0,0,v,,,,,
-3EFF62E4,Famicom,,,,4,256,128,,8,0,0,,,,,,
+3EFF62E4,Famicom,,,,4,256,128,,0,8,1,,,,,,
 3F0154A2,NesNtsc,UNK,,,4,256,256,,0,8,1,h,,,,,
 3F053E94,NesNtsc,UNK,,,3,32,32,,0,0,0,v,,,,,
 3F058747,NesNtsc,UNK,,,4,256,128,,0,8,1,h,,,,,
@@ -8557,7 +8557,7 @@
 8D74EEB0,NesNtsc,UNK,,,3,32,32,,0,0,0,v,,,,,
 8D759703,NesNtsc,UNK,,,4,128,128,,0,0,0,h,,,,,
 8D75EA14,NesNtsc,UNK,,,4,256,128,,0,0,0,h,,,,,
-8D77E5E6,Famicom,,,,4,256,,8,0,8,1,,,,,,
+8D77E5E6,Famicom,,,,4,256,,8,8,0,0,,,,,,
 8D7CBF44,NesNtsc,UNK,,,4,64,32,,0,0,0,h,,,,,
 8D7DA6F2,NesNtsc,UNK,,,4,32,16,,0,0,0,h,,,,,
 8D7F5802,NesNtsc,UNK,,,4,256,128,,0,0,0,h,,,,,
@@ -14511,7 +14511,7 @@ EEB1DF38,NesNtsc,UNK,,,1,256,,,0,8,1,h,,,,,
 EEB20F84,Playchoice,,,,1,128,128,,0,0,0,,,,,,
 EEB9252B,NesNtsc,UNK,,,3,32,32,,0,0,0,v,,,,,
 EEB9991A,NesNtsc,UNK,,,3,32,16,,0,0,0,v,,,,,
-EEBEE0C8,Famicom,,,,195,256,256,,1,8,1,4,,,,,
+EEBEE0C8,Famicom,,,,176,256,256,,0,8,1,,,,,,
 EECF8CFB,NesNtsc,UNK,,,4,128,128,,0,0,0,h,,,,,
 EED58081,NesNtsc,UNK,,,19,256,256,,0,8,1,v,,,,,
 EEE0C7F8,NesPal,,,,0,16,8,,0,0,0,v,,,,,
