@@ -15,8 +15,10 @@ using System.Collections.ObjectModel;
 
 namespace Mesen.GUI.Debugger.Controls
 {
-	public partial class ctrlEventViewerPpuView : BaseControl
+	public partial class ctrlEventViewerPpuView : BaseControl, ICompactControl
 	{
+		public event EventHandler OnPictureResized;
+
 		private DebugState _state = new DebugState();
 		private Point _lastPos = new Point(-1, -1);
 		private bool _needUpdate = false;
@@ -28,6 +30,7 @@ namespace Mesen.GUI.Debugger.Controls
 		private Dictionary<int, List<DebugEventInfo>> _debugEventsByCycle = new Dictionary<int, List<DebugEventInfo>>();
 		private List<DebugEventInfo> _debugEvents = new List<DebugEventInfo>();
 		private Font _overlayFont;
+		private double _scale = 1;
 		
 		public ctrlEventViewerPpuView()
 		{
@@ -119,10 +122,11 @@ namespace Mesen.GUI.Debugger.Controls
 					_displayBitmap = new Bitmap(682, picHeight);
 				}
 
-				this.picPicture.Width = _eventBitmap.Width + 2;
-				this.picPicture.Height = _eventBitmap.Height + 2;
-				this.Width = this.picPicture.Width + 2;
-				this.Height = this.picPicture.Height + 22;
+				Size picSize = new Size((int)((_eventBitmap.Width * _scale) + 2), (int)((_eventBitmap.Height * _scale) + 2));
+				if(picSize != this.picPicture.Size) {
+					this.picPicture.Size = picSize;
+					this.OnPictureResized?.Invoke(this, EventArgs.Empty);
+				}
 
 				var d = ConfigManager.Config.DebugInfo;
 				
@@ -204,8 +208,8 @@ namespace Mesen.GUI.Debugger.Controls
 
 		private void UpdateOverlay(Point p)
 		{
-			int x = p.X / 2 * 2;
-			int y = p.Y / 2 * 2;
+			int x = (int)(p.X / 2 * 2 / _scale);
+			int y = (int)(p.Y / 2 * 2 / _scale);
 
 			if(_lastPos.X == x && _lastPos.Y == y) {
 				//Same x,y location, no need to update
@@ -330,10 +334,10 @@ namespace Mesen.GUI.Debugger.Controls
 											break;
 									}
 
-									UpdateOverlay(new Point(debugEvent.Cycle * 2, (debugEvent.Scanline + 1) * 2));
+									UpdateOverlay(new Point((int)(debugEvent.Cycle * 2 * _scale), (int)((debugEvent.Scanline + 1) * 2 * _scale)));
 
 									Form parentForm = this.FindForm();
-									_tooltip = new frmCodeTooltip(parentForm, values);
+									_tooltip = new frmCodeTooltip(parentForm, values, null, null, null, 10);
 									_tooltip.FormClosed += (s, evt) => { _tooltip = null; };
 									Point location = PointToScreen(e.Location);
 									location.Offset(10, 10);
@@ -373,6 +377,17 @@ namespace Mesen.GUI.Debugger.Controls
 		private void tmrOverlay_Tick(object sender, EventArgs e)
 		{
 			UpdateDisplay(false);
+		}
+
+		public Size GetCompactSize(bool includeMargins)
+		{
+			return picPicture.Size + picPicture.Margin.Size;
+		}
+
+		public void ScaleImage(double scale)
+		{
+			_scale *= scale;
+			picPicture.Size = new Size((int)(picPicture.Width * scale), (int)(picPicture.Height * scale));
 		}
 	}
 }

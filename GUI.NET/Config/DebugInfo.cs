@@ -151,7 +151,6 @@ namespace Mesen.GUI.Config
 		public WatchFormatStyle WatchFormat = WatchFormatStyle.Hex;
 		public bool ShowBreakpointLabels = true;
 
-		public Size EventViewerSize = new Size(0, 0);
 		public Point EventViewerLocation;
 		public bool EventViewerRefreshOnBreak = true;
 		public bool EventViewerShowPpuRegisterWrites = true;
