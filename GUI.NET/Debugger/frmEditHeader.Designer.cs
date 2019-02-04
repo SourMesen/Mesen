@@ -149,7 +149,7 @@
 			this.cboInputType.FormattingEnabled = true;
 			this.cboInputType.Location = new System.Drawing.Point(97, 163);
 			this.cboInputType.Name = "cboInputType";
-			this.cboInputType.Size = new System.Drawing.Size(192, 21);
+			this.cboInputType.Size = new System.Drawing.Size(191, 21);
 			this.cboInputType.TabIndex = 33;
 			// 
 			// tableLayoutPanel4
@@ -165,7 +165,7 @@
 			this.tableLayoutPanel4.Name = "tableLayoutPanel4";
 			this.tableLayoutPanel4.RowCount = 1;
 			this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this.tableLayoutPanel4.Size = new System.Drawing.Size(198, 26);
+			this.tableLayoutPanel4.Size = new System.Drawing.Size(197, 26);
 			this.tableLayoutPanel4.TabIndex = 31;
 			// 
 			// radNes2
@@ -200,12 +200,12 @@
 			this.tableLayoutPanel3.Controls.Add(this.label6, 1, 0);
 			this.tableLayoutPanel3.Controls.Add(this.txtChrRomSize, 0, 0);
 			this.tableLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.tableLayoutPanel3.Location = new System.Drawing.Point(386, 26);
+			this.tableLayoutPanel3.Location = new System.Drawing.Point(385, 26);
 			this.tableLayoutPanel3.Margin = new System.Windows.Forms.Padding(0);
 			this.tableLayoutPanel3.Name = "tableLayoutPanel3";
 			this.tableLayoutPanel3.RowCount = 1;
 			this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this.tableLayoutPanel3.Size = new System.Drawing.Size(123, 26);
+			this.tableLayoutPanel3.Size = new System.Drawing.Size(124, 26);
 			this.tableLayoutPanel3.TabIndex = 29;
 			// 
 			// label6
@@ -229,7 +229,7 @@
 			// 
 			this.lblPrgSize.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.lblPrgSize.AutoSize = true;
-			this.lblPrgSize.Location = new System.Drawing.Point(295, 6);
+			this.lblPrgSize.Location = new System.Drawing.Point(294, 6);
 			this.lblPrgSize.Name = "lblPrgSize";
 			this.lblPrgSize.Size = new System.Drawing.Size(61, 13);
 			this.lblPrgSize.TabIndex = 4;
@@ -239,7 +239,7 @@
 			// 
 			this.label2.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.label2.AutoSize = true;
-			this.label2.Location = new System.Drawing.Point(295, 32);
+			this.label2.Location = new System.Drawing.Point(294, 32);
 			this.label2.Name = "label2";
 			this.label2.Size = new System.Drawing.Size(61, 13);
 			this.label2.TabIndex = 5;
@@ -249,7 +249,7 @@
 			// 
 			this.label3.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.label3.AutoSize = true;
-			this.label3.Location = new System.Drawing.Point(295, 59);
+			this.label3.Location = new System.Drawing.Point(294, 59);
 			this.label3.Name = "label3";
 			this.label3.Size = new System.Drawing.Size(63, 13);
 			this.label3.TabIndex = 7;
@@ -259,7 +259,7 @@
 			// 
 			this.label4.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.label4.AutoSize = true;
-			this.label4.Location = new System.Drawing.Point(295, 86);
+			this.label4.Location = new System.Drawing.Point(294, 86);
 			this.label4.Name = "label4";
 			this.label4.Size = new System.Drawing.Size(62, 13);
 			this.label4.TabIndex = 8;
@@ -268,7 +268,7 @@
 			// cboWorkRam
 			// 
 			this.cboWorkRam.FormattingEnabled = true;
-			this.cboWorkRam.Location = new System.Drawing.Point(389, 55);
+			this.cboWorkRam.Location = new System.Drawing.Point(388, 55);
 			this.cboWorkRam.Name = "cboWorkRam";
 			this.cboWorkRam.Size = new System.Drawing.Size(84, 21);
 			this.cboWorkRam.TabIndex = 10;
@@ -276,7 +276,7 @@
 			// cboSaveRam
 			// 
 			this.cboSaveRam.FormattingEnabled = true;
-			this.cboSaveRam.Location = new System.Drawing.Point(389, 82);
+			this.cboSaveRam.Location = new System.Drawing.Point(388, 82);
 			this.cboSaveRam.Name = "cboSaveRam";
 			this.cboSaveRam.Size = new System.Drawing.Size(84, 21);
 			this.cboSaveRam.TabIndex = 12;
@@ -315,7 +315,7 @@
 			this.cboSystem.FormattingEnabled = true;
 			this.cboSystem.Location = new System.Drawing.Point(97, 136);
 			this.cboSystem.Name = "cboSystem";
-			this.cboSystem.Size = new System.Drawing.Size(192, 21);
+			this.cboSystem.Size = new System.Drawing.Size(191, 21);
 			this.cboSystem.TabIndex = 23;
 			this.cboSystem.SelectedIndexChanged += new System.EventHandler(this.cboSystem_SelectedIndexChanged);
 			// 
@@ -355,12 +355,12 @@
 			this.tableLayoutPanel2.Controls.Add(this.lblPrgKb, 1, 0);
 			this.tableLayoutPanel2.Controls.Add(this.txtPrgRomSize, 0, 0);
 			this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.tableLayoutPanel2.Location = new System.Drawing.Point(386, 0);
+			this.tableLayoutPanel2.Location = new System.Drawing.Point(385, 0);
 			this.tableLayoutPanel2.Margin = new System.Windows.Forms.Padding(0);
 			this.tableLayoutPanel2.Name = "tableLayoutPanel2";
 			this.tableLayoutPanel2.RowCount = 1;
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this.tableLayoutPanel2.Size = new System.Drawing.Size(123, 26);
+			this.tableLayoutPanel2.Size = new System.Drawing.Size(124, 26);
 			this.tableLayoutPanel2.TabIndex = 28;
 			// 
 			// lblPrgKb
@@ -492,7 +492,7 @@
 			// 
 			this.label1.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.label1.AutoSize = true;
-			this.label1.Location = new System.Drawing.Point(295, 113);
+			this.label1.Location = new System.Drawing.Point(294, 113);
 			this.label1.Name = "label1";
 			this.label1.Size = new System.Drawing.Size(60, 13);
 			this.label1.TabIndex = 6;
@@ -501,7 +501,7 @@
 			// cboChrRam
 			// 
 			this.cboChrRam.FormattingEnabled = true;
-			this.cboChrRam.Location = new System.Drawing.Point(389, 109);
+			this.cboChrRam.Location = new System.Drawing.Point(388, 109);
 			this.cboChrRam.Name = "cboChrRam";
 			this.cboChrRam.Size = new System.Drawing.Size(84, 21);
 			this.cboChrRam.TabIndex = 11;
@@ -510,7 +510,7 @@
 			// 
 			this.label5.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.label5.AutoSize = true;
-			this.label5.Location = new System.Drawing.Point(295, 140);
+			this.label5.Location = new System.Drawing.Point(294, 140);
 			this.label5.Name = "label5";
 			this.label5.Size = new System.Drawing.Size(88, 13);
 			this.label5.TabIndex = 9;
@@ -519,7 +519,7 @@
 			// cboChrRamBattery
 			// 
 			this.cboChrRamBattery.FormattingEnabled = true;
-			this.cboChrRamBattery.Location = new System.Drawing.Point(389, 136);
+			this.cboChrRamBattery.Location = new System.Drawing.Point(388, 136);
 			this.cboChrRamBattery.Name = "cboChrRamBattery";
 			this.cboChrRamBattery.Size = new System.Drawing.Size(84, 21);
 			this.cboChrRamBattery.TabIndex = 13;
@@ -528,7 +528,7 @@
 			// chkBattery
 			// 
 			this.chkBattery.AutoSize = true;
-			this.chkBattery.Location = new System.Drawing.Point(295, 163);
+			this.chkBattery.Location = new System.Drawing.Point(294, 163);
 			this.chkBattery.Name = "chkBattery";
 			this.chkBattery.Size = new System.Drawing.Size(59, 17);
 			this.chkBattery.TabIndex = 19;
@@ -538,7 +538,7 @@
 			// chkTrainer
 			// 
 			this.chkTrainer.AutoSize = true;
-			this.chkTrainer.Location = new System.Drawing.Point(295, 190);
+			this.chkTrainer.Location = new System.Drawing.Point(294, 190);
 			this.chkTrainer.Name = "chkTrainer";
 			this.chkTrainer.Size = new System.Drawing.Size(59, 17);
 			this.chkTrainer.TabIndex = 21;

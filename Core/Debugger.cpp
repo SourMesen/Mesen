@@ -784,19 +784,23 @@ bool Debugger::ProcessRamOperation(MemoryOperationType type, uint16_t &addr, uin
 		_curInstructionCycle = _cpu->GetCycleCount();
 
 		bool isSubEntryPoint = _lastInstruction == 0x20; //Previous instruction was a JSR
+		_disassembler->BuildCache(addressInfo, addr, isSubEntryPoint, true);
+
 		if(absoluteAddr >= 0) {
-			bool isJumpTarget = _disassembler->IsJump(_lastInstruction);
 			_codeDataLogger->SetFlag(absoluteAddr, CdlPrgFlags::Code);
 			if(isSubEntryPoint) {
 				_codeDataLogger->SetFlag(absoluteAddr, CdlPrgFlags::SubEntryPoint);
 				_functionEntryPoints.emplace(absoluteAddr);
-			} else if(isJumpTarget) {
+			}
+
+			if(_disassembler->IsJump(value) && value != 0x20) {
 				//Only mark as jump target if not marked as sub entry point
-				_codeDataLogger->SetFlag(absoluteAddr, CdlPrgFlags::JumpTarget);
+				int32_t targetAddr = GetAbsoluteAddress(_disassembler->GetDisassemblyInfo(addressInfo).GetJumpDestination(_cpu->GetPC(), _memoryManager.get()));
+				if(targetAddr >= 0) {
+					_codeDataLogger->SetFlag(targetAddr, CdlPrgFlags::JumpTarget);
+				}
 			}
 		}
-
-		_disassembler->BuildCache(addressInfo, addr, isSubEntryPoint, true);
 
 		ProcessStepConditions(addr);
 

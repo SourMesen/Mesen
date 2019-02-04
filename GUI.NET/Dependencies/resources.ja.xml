@@ -610,6 +610,21 @@
 			<Control ID="mnuCreateSaveState">クイックセーブを作る</Control>
 			<Control ID="mnuResumeGameplay">ここからゲームを再開する</Control>
 			<Control ID="mnuClose">終了</Control>
+
+			<Control ID="mnuOptions">設定</Control>
+			<Control ID="mnuVideoScale">映像サイズ</Control>
+			<Control ID="mnuScale1x">１倍</Control>
+			<Control ID="mnuScale2x">２倍</Control>
+			<Control ID="mnuScale3x">３倍</Control>
+			<Control ID="mnuScale4x">４倍</Control>
+			<Control ID="mnuScale5x">５倍</Control>
+			<Control ID="mnuScale6x">６倍</Control>
+		</Form>
+		<Form ID="frmSelectExportRange" Title="エクスポート範囲を指定する...">
+			<Control ID="lblStartTime">開始時点:</Control>
+			<Control ID="lblEndTime">終了時点:</Control>
+			<Control ID="btnOK">OK</Control>
+			<Control ID="btnCancel">キャンセル</Control>
 		</Form>
 		<Form ID="frmHelp" Title="コマンドラインオプション">
 			<Control ID="grpExample">使い方</Control>
@@ -754,6 +769,8 @@
 		<Message ID="SaveToFile">ファイルに保存する…</Message>
 
 		<Message ID="MovieSegment">パート {0}</Message>
+		<Message ID="MovieExportEntireSegment">全部エクスポートする</Message>
+		<Message ID="MovieExportSpecificRange">範囲を指定してエクスポートする...</Message>
 		<Message ID="MovieSaveError">動画エクスポートは失敗しました。</Message>
 		<Message ID="FileSaveError">ファイルの保存に失敗しました。</Message>
 

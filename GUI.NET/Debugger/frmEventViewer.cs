@@ -18,21 +18,14 @@ namespace Mesen.GUI.Debugger
 		private InteropEmu.NotificationListener _notifListener;
 		private bool _inListViewTab = false;
 		private bool _refreshing = false;
+		private bool _isZoomed = false;
+		private bool _isCompact = false;
+		private Size _originalSize;
+		private Size _previousPictureSize;
 
 		public frmEventViewer()
 		{
 			InitializeComponent();
-
-			this.mnuRefreshOnBreak.Checked = ConfigManager.Config.DebugInfo.EventViewerRefreshOnBreak;
-			this.chkShowPpuRegisterWrites.Checked = ConfigManager.Config.DebugInfo.EventViewerShowPpuRegisterWrites;
-			this.chkShowPpuRegisterReads.Checked = ConfigManager.Config.DebugInfo.EventViewerShowPpuRegisterReads;
-			this.chkShowIrq.Checked = ConfigManager.Config.DebugInfo.EventViewerShowIrq;
-			this.chkShowNmi.Checked = ConfigManager.Config.DebugInfo.EventViewerShowNmi;
-			this.chkShowSpriteZero.Checked = ConfigManager.Config.DebugInfo.EventViewerShowSpriteZeroHit;
-			this.chkShowMapperRegisterWrites.Checked = ConfigManager.Config.DebugInfo.EventViewerShowMapperRegisterWrites;
-			this.chkShowMapperRegisterReads.Checked = ConfigManager.Config.DebugInfo.EventViewerShowMapperRegisterReads;
-			this.chkBreakpoints.Checked = ConfigManager.Config.DebugInfo.EventViewerShowMarkedBreakpoints;
-			this.chkShowPreviousFrameEvents.Checked = ConfigManager.Config.DebugInfo.EventViewerShowPreviousFrameEvents;
 		}
 
 		protected override void OnLoad(EventArgs e)
@@ -40,14 +33,38 @@ namespace Mesen.GUI.Debugger
 			base.OnLoad(e);
 
 			if(!this.DesignMode) {
+				this.mnuRefreshOnBreak.Checked = ConfigManager.Config.DebugInfo.EventViewerRefreshOnBreak;
+				this.chkShowPpuRegisterWrites.Checked = ConfigManager.Config.DebugInfo.EventViewerShowPpuRegisterWrites;
+				this.chkShowPpuRegisterReads.Checked = ConfigManager.Config.DebugInfo.EventViewerShowPpuRegisterReads;
+				this.chkShowIrq.Checked = ConfigManager.Config.DebugInfo.EventViewerShowIrq;
+				this.chkShowNmi.Checked = ConfigManager.Config.DebugInfo.EventViewerShowNmi;
+				this.chkShowSpriteZero.Checked = ConfigManager.Config.DebugInfo.EventViewerShowSpriteZeroHit;
+				this.chkShowMapperRegisterWrites.Checked = ConfigManager.Config.DebugInfo.EventViewerShowMapperRegisterWrites;
+				this.chkShowMapperRegisterReads.Checked = ConfigManager.Config.DebugInfo.EventViewerShowMapperRegisterReads;
+				this.chkBreakpoints.Checked = ConfigManager.Config.DebugInfo.EventViewerShowMarkedBreakpoints;
+				this.chkShowPreviousFrameEvents.Checked = ConfigManager.Config.DebugInfo.EventViewerShowPreviousFrameEvents;
+
+				string toggleViewTooltip = "Toggle Compact/Normal View";
+				if(ConfigManager.Config.DebugInfo.Shortcuts.PpuViewer_ToggleView != Keys.None) {
+					toggleViewTooltip += " (" + DebuggerShortcutsConfig.GetShortcutDisplay(ConfigManager.Config.DebugInfo.Shortcuts.PpuViewer_ToggleView) + ")";
+				}
+				this.toolTip.SetToolTip(this.btnToggleView, toggleViewTooltip);
+
+				string toggleZoomTooltip = "Toggle 2x Zoom";
+				if(ConfigManager.Config.DebugInfo.Shortcuts.PpuViewer_ToggleZoom != Keys.None) {
+					toggleZoomTooltip += " (" + DebuggerShortcutsConfig.GetShortcutDisplay(ConfigManager.Config.DebugInfo.Shortcuts.PpuViewer_ToggleZoom) + ")";
+				}
+				this.toolTip.SetToolTip(this.chkToggleZoom, toggleZoomTooltip);
+
+				_previousPictureSize = ctrlEventViewerPpuView.Size;
+
 				this.GetData();
 				this.RefreshViewer();
 
 				DebugWorkspaceManager.GetWorkspace();
 
-				if(!ConfigManager.Config.DebugInfo.EventViewerSize.IsEmpty) {
+				if(!ConfigManager.Config.DebugInfo.EventViewerLocation.IsEmpty) {
 					this.StartPosition = FormStartPosition.Manual;
-					this.Size = ConfigManager.Config.DebugInfo.EventViewerSize;
 					this.Location = ConfigManager.Config.DebugInfo.EventViewerLocation;
 				}
 
@@ -60,8 +77,19 @@ namespace Mesen.GUI.Debugger
 		{
 			base.OnFormClosing(e);
 			this._notifListener.OnNotification -= this._notifListener_OnNotification;
-			ConfigManager.Config.DebugInfo.EventViewerSize = this.WindowState != FormWindowState.Normal ? this.RestoreBounds.Size : this.Size;
 			ConfigManager.Config.DebugInfo.EventViewerLocation = this.WindowState != FormWindowState.Normal ? this.RestoreBounds.Location : this.Location;
+		}
+
+		protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
+		{
+			if(keyData == ConfigManager.Config.DebugInfo.Shortcuts.PpuViewer_ToggleZoom) {
+				ToggleZoom();
+				return true;
+			} else if(keyData == ConfigManager.Config.DebugInfo.Shortcuts.PpuViewer_ToggleView) {
+				ToggleView();
+				return true;
+			}
+			return base.ProcessCmdKey(ref msg, keyData);
 		}
 
 		private void _notifListener_OnNotification(InteropEmu.NotificationEventArgs e)
@@ -199,19 +227,67 @@ namespace Mesen.GUI.Debugger
 			}
 		}
 
-		private void ctrlEventViewerPpuView_SizeChanged(object sender, EventArgs e)
+		private void ctrlEventViewerPpuView_OnPictureResized(object sender, EventArgs e)
 		{
-			int newWidth = ctrlEventViewerPpuView.Width + 20;
-			int widthDiff = newWidth - panel1.Width;
-			panel1.Width = newWidth;
+			Size picSize = ctrlEventViewerPpuView.GetCompactSize(false);
+			this.Size += (picSize - _previousPictureSize);
+			_originalSize += (picSize - _previousPictureSize);
+			ctrlEventViewerPpuView.Size += (picSize - _previousPictureSize);
+			_previousPictureSize = picSize;
+		}
 
-			int newHeight = ctrlEventViewerPpuView.Height + 5 + (Program.IsMono ? 5 : 0);
-			int heightDiff = newHeight - panel1.Height;
-			panel1.Height = newHeight;
+		private void ToggleView()
+		{
+			if(!_isCompact) {
+				_isCompact = true;
+				_originalSize = this.Size;
 
-			int minWidth = this.MinimumSize.Width + widthDiff;
-			int minHeight = this.MinimumSize.Height + heightDiff;
-			this.MinimumSize = new Size(minWidth, Math.Min(800, minHeight));
+				this.ClientSize = ctrlEventViewerPpuView.GetCompactSize(false) + new Size(3, menuStrip1.Height + 3);
+
+				this.Controls.Add(ctrlEventViewerPpuView);
+				ctrlEventViewerPpuView.BringToFront();
+				ctrlEventViewerPpuView.Dock = DockStyle.Fill;
+
+				tabMain.Visible = false;
+			} else {
+				_isCompact = false;
+				this.Size = _originalSize;
+				ctrlEventViewerPpuView.Dock = DockStyle.None;
+				ctrlEventViewerPpuView.Size = ctrlEventViewerPpuView.GetCompactSize(false);
+				tabMain.Visible = true;
+				tpgPpuView.Controls.Add(ctrlEventViewerPpuView);
+			}
+
+			btnToggleView.Image = _isCompact ? Properties.Resources.Expand : Properties.Resources.Collapse;
+			RefreshViewer();
+		}
+
+		private void ToggleZoom()
+		{
+			ICompactControl ctrl = ctrlEventViewerPpuView;
+
+			if(!_isZoomed) {
+				Size pictureSize = ctrl.GetCompactSize(false);
+				ctrl.ScaleImage(2);
+				_isZoomed = true;
+			} else {
+				Size pictureSize = ctrl.GetCompactSize(false);
+				Size halfSize = new Size(pictureSize.Width / 2, pictureSize.Height / 2);
+				ctrl.ScaleImage(0.5);
+				_isZoomed = false;
+			}
+			chkToggleZoom.Checked = _isZoomed;
+			RefreshViewer();
+		}
+
+		private void btnToggleView_Click(object sender, EventArgs e)
+		{
+			ToggleView();
+		}
+
+		private void chkToggleZoom_Click(object sender, EventArgs e)
+		{
+			ToggleZoom();
 		}
 	}
 }

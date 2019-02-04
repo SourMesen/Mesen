@@ -1209,6 +1209,12 @@
     <Compile Include="Forms\frmRecordAvi.Designer.cs">
       <DependentUpon>frmRecordAvi.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\frmSelectExportRange.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\frmSelectExportRange.Designer.cs">
+      <DependentUpon>frmSelectExportRange.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\frmSelectRom.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -1771,6 +1777,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\frmRecordAvi.resx">
       <DependentUpon>frmRecordAvi.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\frmSelectExportRange.resx">
+      <DependentUpon>frmSelectExportRange.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\frmSelectRom.resx">
       <DependentUpon>frmSelectRom.cs</DependentUpon>

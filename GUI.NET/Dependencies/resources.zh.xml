@@ -634,6 +634,21 @@
 			<Control ID="mnuCreateSaveState">创建进度</Control>
 			<Control ID="mnuResumeGameplay">继续播放</Control>
 			<Control ID="mnuClose">关闭</Control>
+
+			<Control ID="mnuOptions">设置</Control>
+			<Control ID="mnuVideoScale">尺寸</Control>
+			<Control ID="mnuScale1x">1 倍</Control>
+			<Control ID="mnuScale2x">2 倍</Control>
+			<Control ID="mnuScale3x">3 倍</Control>
+			<Control ID="mnuScale4x">4 倍</Control>
+			<Control ID="mnuScale5x">5 倍</Control>
+			<Control ID="mnuScale6x">6 倍</Control>
+		</Form>
+		<Form ID="frmSelectExportRange" Title="导出范围...">
+			<Control ID="lblStartTime">开始时间:</Control>
+			<Control ID="lblEndTime">结束时间:</Control>
+			<Control ID="btnOK">确定</Control>
+			<Control ID="btnCancel">取消</Control>
 		</Form>
 		<Form ID="frmHelp" Title="命令行选项">
 			<Control ID="grpExample">用法示例</Control>
@@ -776,7 +791,10 @@
 
 		<Message ID="LoadFromFile">从文件载入...</Message>
 		<Message ID="SaveToFile">保存到文件...</Message>
+		
 		<Message ID="MovieSegment">第 #{0} 段</Message>
+		<Message ID="MovieExportEntireSegment">导出整段</Message>
+		<Message ID="MovieExportSpecificRange">导出范围...</Message>
 		<Message ID="MovieSaveError">导出电影失败.</Message>
 		<Message ID="FileSaveError">保存文件失败.</Message>
 		
