@@ -621,6 +621,12 @@
 			<Control ID="mnuResumeGameplay">Reprendre le jeu</Control>
 			<Control ID="mnuClose">Fermer</Control>
 		</Form>
+		<Form ID="frmSelectExportRange" Title="Exporter une portion...">
+			<Control ID="lblStartTime">Début:</Control>
+			<Control ID="lblEndTime">Fin:</Control>
+			<Control ID="btnOK">OK</Control>
+			<Control ID="btnCancel">Annuler</Control>
+		</Form>
 		<Form ID="frmHelp" Title="Options de ligne de commande">
 			<Control ID="grpExample">Exemple d'utilisation</Control>
 			<Control ID="tpgGeneralOptions">Général</Control>
@@ -764,6 +770,8 @@
 		<Message ID="SaveToFile">Sauvegarder dans un fichier...</Message>
 
 		<Message ID="MovieSegment">Segment #{0}</Message>
+		<Message ID="MovieExportEntireSegment">Exporter le segment entier</Message>
+		<Message ID="MovieExportSpecificRange">Exporter une portion du segment...</Message>
 		<Message ID="MovieSaveError">Une erreur est survenue pendant la sauvegarde du film.</Message>
 		<Message ID="FileSaveError">Une erreur est survenue pendant la sauvegarde du fichier.</Message>
 

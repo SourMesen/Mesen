@@ -635,6 +635,12 @@
 			<Control ID="mnuResumeGameplay">继续播放</Control>
 			<Control ID="mnuClose">关闭</Control>
 		</Form>
+		<Form ID="frmSelectExportRange" Title="Export specific range...">
+			<Control ID="lblStartTime">Start time:</Control>
+			<Control ID="lblEndTime">End time:</Control>
+			<Control ID="btnOK">确定</Control>
+			<Control ID="btnCancel">取消</Control>
+		</Form>
 		<Form ID="frmHelp" Title="命令行选项">
 			<Control ID="grpExample">用法示例</Control>
 			<Control ID="tpgGeneralOptions">常规</Control>
@@ -776,7 +782,10 @@
 
 		<Message ID="LoadFromFile">从文件载入...</Message>
 		<Message ID="SaveToFile">保存到文件...</Message>
+		
 		<Message ID="MovieSegment">第 #{0} 段</Message>
+		<Message ID="MovieExportEntireSegment">Export entire segment</Message>
+		<Message ID="MovieExportSpecificRange">Export specific range...</Message>
 		<Message ID="MovieSaveError">导出电影失败.</Message>
 		<Message ID="FileSaveError">保存文件失败.</Message>
 		

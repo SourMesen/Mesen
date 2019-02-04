@@ -621,6 +621,12 @@
 			<Control ID="mnuResumeGameplay">Continuar jogo</Control>
 			<Control ID="mnuClose">Fechar</Control>
 		</Form>
+		<Form ID="frmSelectExportRange" Title="Export specific range...">
+			<Control ID="lblStartTime">Start time:</Control>
+			<Control ID="lblEndTime">End time:</Control>
+			<Control ID="btnOK">OK</Control>
+			<Control ID="btnCancel">Cancelar</Control>
+		</Form>
 		<Form ID="frmHelp" Title="Opções de linha de comando">
 			<Control ID="grpExample">Exemplo de uso</Control>
 			<Control ID="tpgGeneralOptions">Geral</Control>
@@ -764,6 +770,8 @@
 		<Message ID="SaveToFile">Salvar para arquivo...</Message>
 
 		<Message ID="MovieSegment">Segmento #{0}</Message>
+		<Message ID="MovieExportEntireSegment">Export entire segment</Message>
+		<Message ID="MovieExportSpecificRange">Export specific range...</Message>
 		<Message ID="MovieSaveError">Ocorreu um erro ao tentar salvar o vídeo.</Message>
 		<Message ID="FileSaveError">An error occurred while trying to save the file.</Message>
 

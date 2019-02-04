@@ -184,20 +184,25 @@ namespace Mesen.GUI.Forms
 					TimeSpan end = new TimeSpan(0, 0, (int)(segEnd / 2));
 
 					string segmentName = ResourceHelper.GetMessage("MovieSegment", (mnuExportMovie.DropDownItems.Count + 1).ToString());
-					ToolStripMenuItem item = new ToolStripMenuItem(segmentName + ", " + start.ToString() + " - " + end.ToString());
-					item.Click += (s, evt) => {
-						using(SaveFileDialog sfd = new SaveFileDialog()) {
-							sfd.SetFilter(ResourceHelper.GetMessage("FilterMovie"));
-							sfd.InitialDirectory = ConfigManager.MovieFolder;
-							sfd.FileName = InteropEmu.GetRomInfo().GetRomName() + ".mmo";
-							if(sfd.ShowDialog() == DialogResult.OK) {
-								if(!InteropEmu.HistoryViewerSaveMovie(sfd.FileName, segStart, segEnd)) {
-									MesenMsgBox.Show("MovieSaveError", MessageBoxButtons.OK, MessageBoxIcon.Error);
-								}
+					ToolStripMenuItem segmentItem = new ToolStripMenuItem(segmentName + ", " + start.ToString() + " - " + end.ToString());
+
+					ToolStripMenuItem exportFull  = new ToolStripMenuItem(ResourceHelper.GetMessage("MovieExportEntireSegment"));
+					exportFull.Click += (s, evt) => {
+						ExportMovie(segStart, segEnd);
+					};
+
+					ToolStripMenuItem exportCustomRange = new ToolStripMenuItem(ResourceHelper.GetMessage("MovieExportSpecificRange"));
+					exportCustomRange.Click += (s, evt) => {
+						using(frmSelectExportRange frm = new frmSelectExportRange(segStart, segEnd)) {
+							if(frm.ShowDialog(this) == DialogResult.OK) {
+								ExportMovie(frm.ExportStart, frm.ExportEnd);
 							}
 						}
 					};
-					mnuExportMovie.DropDownItems.Add(item);
+
+					segmentItem.DropDown.Items.Add(exportFull);
+					segmentItem.DropDown.Items.Add(exportCustomRange);
+					mnuExportMovie.DropDownItems.Add(segmentItem);
 				}
 				segmentStart = segments[i] + 1;
 			}
@@ -205,7 +210,21 @@ namespace Mesen.GUI.Forms
 			mnuImportMovie.Visible = false;
 			mnuExportMovie.Enabled = mnuExportMovie.HasDropDownItems && !_isNsf;
 		}
-		
+
+		private void ExportMovie(UInt32 segStart, UInt32 segEnd)
+		{
+			using(SaveFileDialog sfd = new SaveFileDialog()) {
+				sfd.SetFilter(ResourceHelper.GetMessage("FilterMovie"));
+				sfd.InitialDirectory = ConfigManager.MovieFolder;
+				sfd.FileName = InteropEmu.GetRomInfo().GetRomName() + ".mmo";
+				if(sfd.ShowDialog() == DialogResult.OK) {
+					if(!InteropEmu.HistoryViewerSaveMovie(sfd.FileName, segStart, segEnd)) {
+						MesenMsgBox.Show("MovieSaveError", MessageBoxButtons.OK, MessageBoxIcon.Error);
+					}
+				}
+			}
+		}
+
 		private void mnuCreateSaveState_Click(object sender, EventArgs e)
 		{
 			using(SaveFileDialog sfd = new SaveFileDialog()) {
