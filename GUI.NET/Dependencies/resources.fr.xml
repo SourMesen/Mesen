@@ -43,6 +43,8 @@
 			<Control ID="mnuScale2x">2x</Control>
 			<Control ID="mnuScale3x">3x</Control>
 			<Control ID="mnuScale4x">4x</Control>
+			<Control ID="mnuScale5x">5x</Control>
+			<Control ID="mnuScale6x">6x</Control>
 			<Control ID="mnuFullscreen">Plein écran</Control>
 			<Control ID="mnuVideoFilter">Filtre vidéo</Control>
 			<Control ID="mnuNoneFilter">Aucun</Control>
@@ -620,6 +622,15 @@
 			<Control ID="mnuCreateSaveState">Créer une sauvegarde d'état</Control>
 			<Control ID="mnuResumeGameplay">Reprendre le jeu</Control>
 			<Control ID="mnuClose">Fermer</Control>
+
+			<Control ID="mnuOptions">Options</Control>
+			<Control ID="mnuVideoScale">Taille de l'image</Control>
+			<Control ID="mnuScale1x">1x</Control>
+			<Control ID="mnuScale2x">2x</Control>
+			<Control ID="mnuScale3x">3x</Control>
+			<Control ID="mnuScale4x">4x</Control>
+			<Control ID="mnuScale5x">5x</Control>
+			<Control ID="mnuScale6x">6x</Control>
 		</Form>
 		<Form ID="frmSelectExportRange" Title="Exporter une portion...">
 			<Control ID="lblStartTime">Début:</Control>

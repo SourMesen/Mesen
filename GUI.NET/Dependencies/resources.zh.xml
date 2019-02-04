@@ -634,6 +634,15 @@
 			<Control ID="mnuCreateSaveState">创建进度</Control>
 			<Control ID="mnuResumeGameplay">继续播放</Control>
 			<Control ID="mnuClose">关闭</Control>
+
+			<Control ID="mnuOptions">设置</Control>
+			<Control ID="mnuVideoScale">尺寸</Control>
+			<Control ID="mnuScale1x">1 倍</Control>
+			<Control ID="mnuScale2x">2 倍</Control>
+			<Control ID="mnuScale3x">3 倍</Control>
+			<Control ID="mnuScale4x">4 倍</Control>
+			<Control ID="mnuScale5x">5 倍</Control>
+			<Control ID="mnuScale6x">6 倍</Control>
 		</Form>
 		<Form ID="frmSelectExportRange" Title="Export specific range...">
 			<Control ID="lblStartTime">Start time:</Control>

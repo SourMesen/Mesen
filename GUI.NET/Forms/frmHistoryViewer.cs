@@ -111,6 +111,17 @@ namespace Mesen.GUI.Forms
 			InteropEmu.HistoryViewerSetPosition((UInt32)trkPosition.Value * 2);
 		}
 
+		private void SetScale(int scale)
+		{
+			InteropEmu.ScreenSize size = InteropEmu.GetScreenSize(true);
+			Size newSize = new Size(size.Width * scale, size.Height * scale);
+			if(this.WindowState != FormWindowState.Maximized) {
+				Size sizeGap = newSize - ctrlRenderer.Size;
+				this.ClientSize += sizeGap;
+			}
+			ctrlRenderer.Size = newSize;
+		}
+
 		private void UpdateScale()
 		{
 			Size dimensions = pnlRenderer.ClientSize;
@@ -254,6 +265,36 @@ namespace Mesen.GUI.Forms
 		private void trkVolume_ValueChanged(object sender, EventArgs e)
 		{
 			InteropEmu.SetMasterVolume(trkVolume.Value / 10d, 0, InteropEmu.ConsoleId.HistoryViewer);
+		}
+
+		private void mnuScale1x_Click(object sender, EventArgs e)
+		{
+			SetScale(1);
+		}
+
+		private void mnuScale2x_Click(object sender, EventArgs e)
+		{
+			SetScale(2);
+		}
+
+		private void mnuScale3x_Click(object sender, EventArgs e)
+		{
+			SetScale(3);
+		}
+
+		private void mnuScale4x_Click(object sender, EventArgs e)
+		{
+			SetScale(4);
+		}
+
+		private void mnuScale5x_Click(object sender, EventArgs e)
+		{
+			SetScale(5);
+		}
+
+		private void mnuScale6x_Click(object sender, EventArgs e)
+		{
+			SetScale(6);
 		}
 	}
 }
