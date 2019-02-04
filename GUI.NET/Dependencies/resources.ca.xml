@@ -43,6 +43,8 @@
 			<Control ID="mnuScale2x">2x</Control>
 			<Control ID="mnuScale3x">3x</Control>
 			<Control ID="mnuScale4x">4x</Control>
+			<Control ID="mnuScale5x">5x</Control>
+			<Control ID="mnuScale6x">6x</Control>
 			<Control ID="mnuFullscreen">Pantalla completa</Control>
 			<Control ID="mnuVideoFilter">Filtre de vídeo</Control>
 			<Control ID="mnuNoneFilter">Cap</Control>
@@ -610,6 +612,21 @@
 			<Control ID="mnuCreateSaveState">Create Save State</Control>
 			<Control ID="mnuResumeGameplay">Resume Gameplay</Control>
 			<Control ID="mnuClose">Close</Control>
+
+			<Control ID="mnuOptions">Opcions</Control>
+			<Control ID="mnuVideoScale">Mida de vídeo</Control>
+			<Control ID="mnuScale1x">1x</Control>
+			<Control ID="mnuScale2x">2x</Control>
+			<Control ID="mnuScale3x">3x</Control>
+			<Control ID="mnuScale4x">4x</Control>
+			<Control ID="mnuScale5x">5x</Control>
+			<Control ID="mnuScale6x">6x</Control>
+		</Form>
+		<Form ID="frmSelectExportRange" Title="Export specific range...">
+			<Control ID="lblStartTime">Start time:</Control>
+			<Control ID="lblEndTime">End time:</Control>
+			<Control ID="btnOK">D'acord</Control>
+			<Control ID="btnCancel">Cancel·la</Control>
 		</Form>
 		<Form ID="frmHelp" Title="Opcions de la línia d'ordres">
 			<Control ID="grpExample">Exemple d'ús</Control>
@@ -734,6 +751,8 @@
 		<Message ID="SaveToFile">Desa al fitxer...</Message>
 
 		<Message ID="MovieSegment">Segment #{0}</Message>
+		<Message ID="MovieExportEntireSegment">Export entire segment</Message>
+		<Message ID="MovieExportSpecificRange">Export specific range...</Message>
 		<Message ID="MovieSaveError">An error occurred while trying to save the movie file.</Message>
 		<Message ID="FileSaveError">An error occurred while trying to save the file.</Message>
 

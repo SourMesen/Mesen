@@ -586,9 +586,9 @@ namespace Mesen.GUI.Debugger
 					if(_bytes[15] < Enum.GetValues(typeof(GameInputType)).Length) {
 						return (GameInputType)_bytes[15];
 					}
-					return GameInputType.Default;
+					return GameInputType.Unspecified;
 				} else {
-					return GameInputType.Default;
+					return GameInputType.Unspecified;
 				}
 			}
 
@@ -693,8 +693,8 @@ namespace Mesen.GUI.Debugger
 
 		private enum GameInputType
 		{
-			Default = 0,
-			FamicomControllers = 1,
+			Unspecified = 0,
+			StandardControllers = 1,
 			FourScore = 2,
 			FourPlayerAdapter = 3,
 			VsSystem = 4,

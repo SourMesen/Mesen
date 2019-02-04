@@ -1,4 +1,6 @@
-﻿namespace Mesen.GUI.Debugger.Controls
+﻿using Mesen.GUI.Controls;
+
+namespace Mesen.GUI.Debugger.Controls
 {
 	partial class ctrlEventViewerPpuView
 	{
@@ -28,7 +30,7 @@
 		private void InitializeComponent()
 		{
 			this.components = new System.ComponentModel.Container();
-			this.picPicture = new System.Windows.Forms.PictureBox();
+			this.picPicture = new Mesen.GUI.Controls.ctrlMesenPictureBox();
 			this.tmrOverlay = new System.Windows.Forms.Timer(this.components);
 			((System.ComponentModel.ISupportInitialize)(this.picPicture)).BeginInit();
 			this.SuspendLayout();
@@ -37,6 +39,7 @@
 			// 
 			this.picPicture.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.picPicture.Cursor = System.Windows.Forms.Cursors.Default;
+			this.picPicture.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
 			this.picPicture.Location = new System.Drawing.Point(1, 1);
 			this.picPicture.Margin = new System.Windows.Forms.Padding(0);
 			this.picPicture.Name = "picPicture";
@@ -66,7 +69,7 @@
 
 		#endregion
 
-		private System.Windows.Forms.PictureBox picPicture;
+		private ctrlMesenPictureBox picPicture;
 		private System.Windows.Forms.Timer tmrOverlay;
 	}
 }

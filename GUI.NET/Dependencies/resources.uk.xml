@@ -43,6 +43,8 @@
 			<Control ID="mnuScale2x">2x</Control>
 			<Control ID="mnuScale3x">3x</Control>
 			<Control ID="mnuScale4x">4x</Control>
+			<Control ID="mnuScale5x">5x</Control>
+			<Control ID="mnuScale6x">6x</Control>
 			<Control ID="mnuFullscreen">Повний екран</Control>
 			<Control ID="mnuVideoFilter">Фільтр зображення</Control>
 			<Control ID="mnuNoneFilter">Немає</Control>
@@ -608,6 +610,21 @@
 			<Control ID="mnuCreateSaveState">Create Save State</Control>
 			<Control ID="mnuResumeGameplay">Відновити геймплей</Control>
 			<Control ID="mnuClose">Закрити</Control>
+
+			<Control ID="mnuOptions">Опції</Control>
+			<Control ID="mnuVideoScale">Розмір екрану</Control>
+			<Control ID="mnuScale1x">1x</Control>
+			<Control ID="mnuScale2x">2x</Control>
+			<Control ID="mnuScale3x">3x</Control>
+			<Control ID="mnuScale4x">4x</Control>
+			<Control ID="mnuScale5x">5x</Control>
+			<Control ID="mnuScale6x">6x</Control>
+		</Form>
+		<Form ID="frmSelectExportRange" Title="Export specific range...">
+			<Control ID="lblStartTime">Start time:</Control>
+			<Control ID="lblEndTime">End time:</Control>
+			<Control ID="btnOK">ОК</Control>
+			<Control ID="btnCancel">Вiдмiна</Control>
 		</Form>
 		<Form ID="frmHelp" Title="Параметри командного рядка">
 			<Control ID="grpExample">Приклад використання</Control>
@@ -752,6 +769,8 @@
 		<Message ID="SaveToFile">Зберегти в файл...</Message>
 
 		<Message ID="MovieSegment">Сегмент #{0}</Message>
+		<Message ID="MovieExportEntireSegment">Export entire segment</Message>
+		<Message ID="MovieExportSpecificRange">Export specific range...</Message>
 		<Message ID="MovieSaveError">Сталася помилка під час спроби зберегти відео файл.</Message>
 		<Message ID="FileSaveError">An error occurred while trying to save the file.</Message>
 
