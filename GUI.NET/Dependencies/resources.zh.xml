@@ -644,9 +644,9 @@
 			<Control ID="mnuScale5x">5 倍</Control>
 			<Control ID="mnuScale6x">6 倍</Control>
 		</Form>
-		<Form ID="frmSelectExportRange" Title="Export specific range...">
-			<Control ID="lblStartTime">Start time:</Control>
-			<Control ID="lblEndTime">End time:</Control>
+		<Form ID="frmSelectExportRange" Title="导出范围...">
+			<Control ID="lblStartTime">开始时间:</Control>
+			<Control ID="lblEndTime">结束时间:</Control>
 			<Control ID="btnOK">确定</Control>
 			<Control ID="btnCancel">取消</Control>
 		</Form>
@@ -793,8 +793,8 @@
 		<Message ID="SaveToFile">保存到文件...</Message>
 		
 		<Message ID="MovieSegment">第 #{0} 段</Message>
-		<Message ID="MovieExportEntireSegment">Export entire segment</Message>
-		<Message ID="MovieExportSpecificRange">Export specific range...</Message>
+		<Message ID="MovieExportEntireSegment">导出整段</Message>
+		<Message ID="MovieExportSpecificRange">导出范围...</Message>
 		<Message ID="MovieSaveError">导出电影失败.</Message>
 		<Message ID="FileSaveError">保存文件失败.</Message>
 		
