@@ -79,6 +79,10 @@ namespace Mesen.GUI.Forms.Config
 			AddBinding("ShowColorIndexes", chkShowColorIndexes);
 
 			_paletteData = InteropEmu.GetRgbPalette();
+			if(!ConfigManager.Config.VideoInfo.IsFullColorPalette()) {
+				Array.Resize(ref _paletteData, 64);
+			}
+			
 			RefreshPalette();
 
 			toolTip.SetToolTip(picHdNesTooltip, ResourceHelper.GetMessage("HDNesTooltip"));
@@ -138,7 +142,7 @@ namespace Mesen.GUI.Forms.Config
 		{
 			byte[] result = new byte[_paletteData.Length * sizeof(int)];
 			Buffer.BlockCopy(_paletteData, 0, result, 0, result.Length);
-			((VideoInfo)Entity).PaletteData = System.Convert.ToBase64String(result);
+			((VideoInfo)Entity).PaletteData = Convert.ToBase64String(result);
 		}
 
 		protected override bool ValidateInput()
@@ -215,13 +219,14 @@ namespace Mesen.GUI.Forms.Config
 		{
 			OpenFileDialog ofd = new OpenFileDialog();
 			ofd.SetFilter("Palette Files (*.pal)|*.pal|All Files (*.*)|*.*");
-			if(ofd.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
+			if(ofd.ShowDialog() == DialogResult.OK) {
 				using(FileStream paletteFile = File.OpenRead(ofd.FileName)) {
-					byte[] paletteFileData = new byte[64*3];
-					if(paletteFile.Read(paletteFileData, 0, 64*3) == 64*3) {
-						for(int i = 0; i < 64; i++) {
-							int fileOffset = i * 3;
-							_paletteData[i] = (Int32)((UInt32)0xFF000000 | (UInt32)paletteFileData[fileOffset+2] | (UInt32)(paletteFileData[fileOffset+1] << 8) | (UInt32)(paletteFileData[fileOffset] << 16));
+					byte[] paletteFileData = new byte[512*3];
+					int byteCount = paletteFile.Read(paletteFileData, 0, 512 * 3);
+					if(byteCount == 64*3 || byteCount == 512*3) {
+						_paletteData = new Int32[byteCount / 3];
+						for(int i = 0; i < byteCount; i += 3) {
+							_paletteData[i / 3] = (Int32)((UInt32)0xFF000000 | (UInt32)paletteFileData[i + 2] | (UInt32)(paletteFileData[i + 1] << 8) | (UInt32)(paletteFileData[i] << 16));
 						}
 						RefreshPalette();
 
@@ -366,7 +371,8 @@ namespace Mesen.GUI.Forms.Config
 
 		private void UpdatePalette(UInt32[] newPalette)
 		{
-			for(int i = 0; i < 64; i++) {
+			_paletteData = new Int32[newPalette.Length];
+			for(int i = 0; i < newPalette.Length; i++) {
 				_paletteData[i] = (Int32)newPalette[i];
 			}
 			RefreshPalette();
@@ -439,7 +445,7 @@ namespace Mesen.GUI.Forms.Config
 		{
 			SaveFileDialog sfd = new SaveFileDialog();
 			sfd.SetFilter("Palette Files (*.pal)|*.pal");
-			if(sfd.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
+			if(sfd.ShowDialog() == DialogResult.OK) {
 				List<byte>bytePalette = new List<byte>();
 				foreach(int value in _paletteData) {
 					bytePalette.Add((byte)(value >> 16 & 0xFF));

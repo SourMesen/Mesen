@@ -287,23 +287,23 @@ extern "C" {
 	void load_custom_palette()
 	{
 		//Setup default palette in case we can't load the custom one
-		_console->GetSettings()->SetRgbPalette(defaultPalette);
+		_console->GetSettings()->SetUserRgbPalette(defaultPalette);
 
 		//Try to load the custom palette from the MesenPalette.pal file
 		string palettePath = FolderUtilities::CombinePath(FolderUtilities::GetHomeFolder(), "MesenPalette.pal");
-		uint8_t fileData[64 * 3] = {};
+		uint8_t fileData[512 * 3] = {};
 		ifstream palette(palettePath, ios::binary);
 		if(palette) {
 			palette.seekg(0, ios::end);
-			std::streampos fileSize = palette.tellg();
+			std::streamoff fileSize = palette.tellg();
 			palette.seekg(0, ios::beg);
-			if(fileSize >= 64 * 3) {
-				palette.read((char*)fileData, 64 * 3);
-				uint32_t customPalette[64];
-				for(int i = 0; i < 64; i++) {
+			if((fileSize == 64 * 3) || (fileSize == 512 * 3)) {
+				palette.read((char*)fileData, fileSize);
+				uint32_t customPalette[512];
+				for(int i = 0; i < fileSize / 3; i++) {
 					customPalette[i] = 0xFF000000 | fileData[i * 3 + 2] | (fileData[i * 3 + 1] << 8) | (fileData[i * 3] << 16);
 				}
-				_console->GetSettings()->SetRgbPalette(customPalette);
+				_console->GetSettings()->SetUserRgbPalette(customPalette, (uint32_t)fileSize / 3);
 			}
 		}
 	}
@@ -369,25 +369,25 @@ extern "C" {
 		if(readVariable(MesenPalette, var)) {
 			string value = string(var.value);
 			if(value == "Default") {
-				_console->GetSettings()->SetRgbPalette(defaultPalette);
+				_console->GetSettings()->SetUserRgbPalette(defaultPalette);
 			} else if(value == "Composite Direct (by FirebrandX)") {
-				_console->GetSettings()->SetRgbPalette(compositeDirectPalette);
+				_console->GetSettings()->SetUserRgbPalette(compositeDirectPalette);
 			} else if(value == "Nes Classic") {
-				_console->GetSettings()->SetRgbPalette(nesClassicPalette);
+				_console->GetSettings()->SetUserRgbPalette(nesClassicPalette);
 			} else if(value == "Nestopia (RGB)") {
-				_console->GetSettings()->SetRgbPalette(nestopiaRgbPalette);
+				_console->GetSettings()->SetUserRgbPalette(nestopiaRgbPalette);
 			} else if(value == "Original Hardware (by FirebrandX)") {
-				_console->GetSettings()->SetRgbPalette(originalHardwarePalette);
+				_console->GetSettings()->SetUserRgbPalette(originalHardwarePalette);
 			} else if(value == "PVM Style (by FirebrandX)") {
-				_console->GetSettings()->SetRgbPalette(pvmStylePalette);
+				_console->GetSettings()->SetUserRgbPalette(pvmStylePalette);
 			} else if(value == "Sony CXA2025AS") {
-				_console->GetSettings()->SetRgbPalette(sonyCxa2025AsPalette);
+				_console->GetSettings()->SetUserRgbPalette(sonyCxa2025AsPalette);
 			} else if(value == "Unsaturated v6 (by FirebrandX)") {
-				_console->GetSettings()->SetRgbPalette(unsaturatedPalette);
+				_console->GetSettings()->SetUserRgbPalette(unsaturatedPalette);
 			} else if(value == "YUV v3 (by FirebrandX)") {
-				_console->GetSettings()->SetRgbPalette(yuvPalette);
+				_console->GetSettings()->SetUserRgbPalette(yuvPalette);
 			} else if(value == "Wavebeam (by nakedarthur)") {
-				_console->GetSettings()->SetRgbPalette(wavebeamPalette);
+				_console->GetSettings()->SetUserRgbPalette(wavebeamPalette);
 			} else if(value == "Custom") {
 				load_custom_palette();
 			} else if(value == "Raw") {

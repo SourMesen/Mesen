@@ -208,7 +208,7 @@ namespace Mesen.GUI
 		[DllImport(DLLPath)] public static extern void SetVideoAspectRatio(VideoAspectRatio aspectRatio, double customRatio);
 		[DllImport(DLLPath)] public static extern void SetVideoFilter(VideoFilterType filter);
 		[DllImport(DLLPath)] public static extern void SetVideoResizeFilter(VideoResizeFilter filter);
-		[DllImport(DLLPath)] public static extern void SetRgbPalette(byte[] palette);
+		[DllImport(DLLPath)] public static extern void SetRgbPalette(byte[] palette, UInt32 paletteSize);
 		[DllImport(DLLPath)] public static extern void SetPictureSettings(double brightness, double contrast, double saturation, double hue, double scanlineIntensity);
 		[DllImport(DLLPath)] public static extern void SetNtscFilterSettings(double artifacts, double bleed, double fringing, double gamma, double resolution, double sharpness, [MarshalAs(UnmanagedType.I1)]bool mergeFields, double yFilterLength, double iFilterLength, double qFilterLength, [MarshalAs(UnmanagedType.I1)]bool verticalBlend);
 		[DllImport(DLLPath)] public static extern void SetInputDisplaySettings(byte visiblePorts, InputDisplayPosition displayPosition, [MarshalAs(UnmanagedType.I1)]bool displayHorizontally);
@@ -816,7 +816,7 @@ namespace Mesen.GUI
 
 		public static Int32[] GetRgbPalette()
 		{
-			Int32[] paleteData = new Int32[64];
+			Int32[] paleteData = new Int32[512];
 
 			GCHandle hPaletteData = GCHandle.Alloc(paleteData, GCHandleType.Pinned);
 			try {

@@ -6,15 +6,10 @@
 class DefaultVideoFilter : public BaseVideoFilter
 {
 private:
-	double _redDecodeTable[256][8];
-	double _greenDecodeTable[256][8];
-	double _blueDecodeTable[256][8];
-
 	double _yiqToRgbMatrix[6];
 	PictureSettings _pictureSettings;
 	bool _needToProcess = false;
 
-	void InitDecodeTables();
 	void InitConversionMatrix(double hueShift, double saturationShift);
 
 	void RgbToYiq(double r, double g, double b, double &y, double &i, double &q);

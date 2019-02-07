@@ -226,7 +226,7 @@ PpuModel NESHeader::GetVsSystemPpuModel()
 		switch(Byte13 & 0x0F) {
 			case 0: return PpuModel::Ppu2C03;
 			case 1:
-				MessageManager::Log("[iNes] Unsupport VS System Palette specified (2C03G).");
+				MessageManager::Log("[iNes] Unsupported VS System Palette specified (2C03G).");
 				return PpuModel::Ppu2C03;
 
 			case 2: return PpuModel::Ppu2C04A;

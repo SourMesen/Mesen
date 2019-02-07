@@ -110,17 +110,26 @@ namespace Mesen.GUI.Config
 
 			if(!string.IsNullOrWhiteSpace(videoInfo.PaletteData)) {
 				try {
-					byte[] palette = System.Convert.FromBase64String(videoInfo.PaletteData);
-					if(palette.Length == 64*4) {
-						InteropEmu.SetRgbPalette(palette);
+					byte[] palette = Convert.FromBase64String(videoInfo.PaletteData);
+					if(palette.Length == 64*4 || palette.Length == 512*4) {
+						InteropEmu.SetRgbPalette(palette, (UInt32)(palette.Length / 4));
 					}
 				} catch { }
 			}
 		}
 
+		public bool IsFullColorPalette()
+		{
+			if(!string.IsNullOrWhiteSpace(this.PaletteData)) {
+				byte[] palette = Convert.FromBase64String(this.PaletteData);
+				return palette.Length == 512 * 4;
+			}
+			return false;
+		}
+
 		public void AddPalette(string paletteName, byte[] paletteData)
 		{
-			string base64Data = System.Convert.ToBase64String(paletteData);
+			string base64Data = Convert.ToBase64String(paletteData);
 			foreach(PaletteInfo existingPalette in this.SavedPalettes) {
 				if(existingPalette.Name == paletteName) {
 					//Update existing palette
@@ -144,7 +153,7 @@ namespace Mesen.GUI.Config
 		{
 			foreach(PaletteInfo existingPalette in this.SavedPalettes) {
 				if(existingPalette.Name == paletteName) {
-					byte[] paletteData = System.Convert.FromBase64String(existingPalette.Palette);
+					byte[] paletteData = Convert.FromBase64String(existingPalette.Palette);
 
 					int[] result = new int[paletteData.Length / sizeof(int)];
 					Buffer.BlockCopy(paletteData, 0, result, 0, paletteData.Length);

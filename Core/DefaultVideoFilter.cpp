@@ -10,8 +10,6 @@
 
 DefaultVideoFilter::DefaultVideoFilter(shared_ptr<Console> console) : BaseVideoFilter(console)
 {
-	InitDecodeTables();
-
 	InitConversionMatrix(_pictureSettings.Hue, _pictureSettings.Saturation);
 }
 
@@ -93,53 +91,15 @@ void DefaultVideoFilter::YiqToRgb(double y, double i, double q, double &r, doubl
 	b = std::max(0.0, std::min(1.0, (y + _yiqToRgbMatrix[4] * i + _yiqToRgbMatrix[5] * q)));
 }
 
-void DefaultVideoFilter::InitDecodeTables()
-{
-	for(int i = 0; i < 256; i++) {
-		for(int j = 0; j < 8; j++) {
-			double redColor = i;
-			double greenColor = i;
-			double blueColor = i;
-			if(j & 0x01) {
-				//Intensify red
-				redColor *= 1.1;
-				greenColor *= 0.9;
-				blueColor *= 0.9;
-			}
-			if(j & 0x02) {
-				//Intensify green
-				greenColor *= 1.1;
-				redColor *= 0.9;
-				blueColor *= 0.9;
-			}
-			if(j & 0x04) {
-				//Intensify blue
-				blueColor *= 1.1;
-				redColor *= 0.9;
-				greenColor *= 0.9;
-			}
-
-			redColor = (redColor > 255 ? 255 : redColor) / 255.0;
-			greenColor = (greenColor > 255 ? 255 : greenColor) / 255.0;
-			blueColor = (blueColor > 255 ? 255 : blueColor) / 255.0;
-
-			_redDecodeTable[i][j] = redColor;
-			_greenDecodeTable[i][j] = greenColor;
-			_blueDecodeTable[i][j] = blueColor;
-		}
-	}
-}
-
 uint32_t DefaultVideoFilter::ProcessIntensifyBits(uint16_t ppuPixel, double scanlineIntensity)
 {
-	uint32_t pixelOutput = _console->GetSettings()->GetRgbPalette()[ppuPixel & 0x3F];
-	uint32_t intensifyBits = (ppuPixel >> 6) & 0x07;
+	uint32_t pixelOutput = _console->GetSettings()->GetRgbPalette()[ppuPixel & 0x1FF];
 
-	if(intensifyBits || _needToProcess || scanlineIntensity < 1.0) {
+	if(_needToProcess || scanlineIntensity < 1.0) {
 		//Incorrect emphasis bit implementation, but will do for now.
-		double redChannel = _redDecodeTable[((pixelOutput & 0xFF0000) >> 16)][intensifyBits];
-		double greenChannel = _greenDecodeTable[((pixelOutput & 0xFF00) >> 8)][intensifyBits];
-		double blueChannel = _blueDecodeTable[(pixelOutput & 0xFF)][intensifyBits];
+		double redChannel = ((pixelOutput & 0xFF0000) >> 16) / 255.0;
+		double greenChannel = ((pixelOutput & 0xFF00) >> 8) / 255.0;
+		double blueChannel = (pixelOutput & 0xFF) / 255.0;
 
 		//Apply brightness, contrast, hue & saturation
 		if(_needToProcess) {
