@@ -7,6 +7,7 @@ class DefaultVideoFilter : public BaseVideoFilter
 {
 private:
 	double _yiqToRgbMatrix[6];
+	uint32_t _calculatedPalette[512];
 	PictureSettings _pictureSettings;
 	bool _needToProcess = false;
 
@@ -17,7 +18,7 @@ private:
 
 protected:
 	void DecodePpuBuffer(uint16_t *ppuOutputBuffer, uint32_t* outputBuffer, bool displayScanlines);
-	uint32_t ProcessIntensifyBits(uint16_t ppuPixel, double scanlineIntensity = 1.0);
+	uint32_t ApplyScanlineEffect(uint16_t ppuPixel, uint8_t scanlineIntensity);
 	void OnBeforeApplyFilter();
 
 public:
