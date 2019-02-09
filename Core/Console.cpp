@@ -1408,7 +1408,7 @@ void Console::DebugAddTrace(const char * log)
 void Console::DebugProcessPpuCycle()
 {
 #ifndef LIBRETRO
-	if(_debugger) {
+	if(_debugger && _debugger->IsPpuCycleToProcess()) {
 		_debugger->ProcessPpuCycle();
 	}
 #endif

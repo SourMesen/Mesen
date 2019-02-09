@@ -642,6 +642,11 @@ void Debugger::ProcessStepConditions(uint16_t addr)
 	}
 }
 
+bool Debugger::IsPpuCycleToProcess()
+{
+	return _proccessPpuCycle[_ppu->GetCurrentCycle()] || _hasBreakpoint[BreakpointType::Global] || _ppuStepCount > 0;
+}
+
 void Debugger::ProcessPpuCycle()
 {
 	if(_proccessPpuCycle[_ppu->GetCurrentCycle()]) {
@@ -665,9 +670,8 @@ void Debugger::ProcessPpuCycle()
 		}
 	}
 
-	OperationInfo operationInfo { 0, 0, MemoryOperationType::DummyRead };
-	
 	if(_hasBreakpoint[BreakpointType::Global]) {
+		OperationInfo operationInfo { 0, 0, MemoryOperationType::DummyRead };
 		ProcessBreakpoints(BreakpointType::Global, operationInfo);
 	}
 

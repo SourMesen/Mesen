@@ -240,6 +240,7 @@ public:
 
 	int32_t EvaluateExpression(string expression, EvalResultType &resultType, bool useCache);
 	
+	bool IsPpuCycleToProcess();
 	void ProcessPpuCycle();
 	bool ProcessRamOperation(MemoryOperationType type, uint16_t &addr, uint8_t &value);
 	void ProcessVramReadOperation(MemoryOperationType type, uint16_t addr, uint8_t &value);
