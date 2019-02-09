@@ -8,7 +8,7 @@ private:
 	uint8_t _exReg;
 
 protected:
-	uint32_t GetDipSwitchCount() { return 1; }
+	uint32_t GetDipSwitchCount() override { return 1; }
 
 	void InitMapper() override
 	{
