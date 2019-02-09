@@ -31,6 +31,7 @@ private:
 	bool _disableAllKeys;
 
 	void StartUpdateDeviceThread();
+	void CheckForGamepads(bool logInformation);
 
 public:
 	LinuxKeyManager(shared_ptr<Console> console);
