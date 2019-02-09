@@ -30,7 +30,7 @@ namespace Mesen.GUI.Forms.Config
 				_dipSwitches = dipswitchDefinition.DipSwitches;
 			} else {
 				_dipSwitches = new List<List<string>>();
-				for(int i = 0; i < (InteropEmu.IsVsDualSystem() ? 16 : 8); i++) {
+				for(int i = 0, len = (int)InteropEmu.GetDipSwitchCount(); i < len; i++) {
 					_dipSwitches.Add(new List<string>(new string[] { "Dipswitch #" + i.ToString(), "Off", "On" }));
 				}
 			}
@@ -147,11 +147,11 @@ namespace Mesen.GUI.Forms.Config
 
 		protected override void OnFormClosed(FormClosedEventArgs e)
 		{
+			base.OnFormClosed(e);
 			if(this.DialogResult == DialogResult.OK) {
 				GameSpecificInfo.AddGameSpecificConfig((GameSpecificInfo)Entity);
 				GameSpecificInfo.ApplyGameSpecificConfig();
 			}
-			base.OnFormClosed(e);
 		}
 
 		private void btnReset_Click(object sender, EventArgs e)

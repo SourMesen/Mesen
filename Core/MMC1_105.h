@@ -9,6 +9,8 @@ private:
 	bool _irqEnabled;
 
 protected:
+	uint32_t GetDipSwitchCount() override { return 4; }
+
 	void InitMapper() override
 	{
 		MMC1::InitMapper();
@@ -28,8 +30,9 @@ protected:
 	{
 		if(_irqEnabled) {
 			_irqCounter++;
-			//TODO: Counter hardcoded - should be based on dip switches
-			if(_irqCounter == 0x28000000) {
+			
+			uint32_t maxCounter = 0x20000000 | (GetDipSwitches() << 25);
+			if(_irqCounter >= maxCounter) {
 				_console->GetCpu()->SetIrqSource(IRQSource::External);
 				_irqEnabled = false;
 			}

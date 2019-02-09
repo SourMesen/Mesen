@@ -14,12 +14,12 @@ class Mapper83 : public BaseMapper
 	uint8_t _bank;
 	uint16_t _irqCounter;
 	bool _irqEnabled;
-	uint8_t _resetBit;
 
 protected:
-	virtual uint16_t GetPRGPageSize() override { return 0x2000; }
-	virtual uint16_t GetCHRPageSize() override { return 0x400; }
-	virtual bool AllowRegisterRead() override { return true; }
+	uint32_t GetDipSwitchCount() override { return 2; }
+	uint16_t GetPRGPageSize() override { return 0x2000; }
+	uint16_t GetCHRPageSize() override { return 0x400; }
+	bool AllowRegisterRead() override { return true; }
 
 	void InitMapper() override
 	{
@@ -31,7 +31,6 @@ protected:
 		_bank = 0;
 		_irqCounter = 0;
 		_irqEnabled = false;
-		_resetBit = 0;
 
 		AddRegisterRange(0x5000, 0x5000, MemoryOperation::Read);
 		AddRegisterRange(0x5100, 0x5103, MemoryOperation::Any);
@@ -46,14 +45,7 @@ protected:
 
 		ArrayInfo<uint8_t> regs{ _regs, 11 };
 		ArrayInfo<uint8_t> exRegs{ _exRegs, 4 };
-		Stream(regs, exRegs, _is2kBank, _isNot2kBank, _mode, _bank, _irqCounter, _irqEnabled, _resetBit);
-	}
-
-	void Reset(bool softReset) override
-	{
-		if(softReset) {
-			_resetBit ^= 1;
-		}
+		Stream(regs, exRegs, _is2kBank, _isNot2kBank, _mode, _bank, _irqCounter, _irqEnabled);
 	}
 
 	void ProcessCpuClock() override
@@ -102,7 +94,7 @@ protected:
 	uint8_t ReadRegister(uint16_t addr) override
 	{
 		if(addr == 0x5000) {
-			return (_console->GetMemoryManager()->GetOpenBus() & 0xFC) | _resetBit;
+			return (_console->GetMemoryManager()->GetOpenBus() & 0xFC) | GetDipSwitches();
 		} else {
 			return _exRegs[addr & 0x03];
 		}

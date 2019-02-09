@@ -750,6 +750,8 @@ namespace InteropEmu {
 			}
 		}
 
+		DllExport uint32_t __stdcall GetDipSwitchCount() { return _console->GetDipSwitchCount(); }
+
 		DllExport void __stdcall SetDipSwitches(uint32_t dipSwitches)
 		{
 			_settings->SetDipSwitches(dipSwitches);

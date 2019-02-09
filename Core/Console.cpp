@@ -1243,6 +1243,20 @@ bool Console::UpdateHdPackMode()
 	return modeChanged;
 }
 
+uint32_t Console::GetDipSwitchCount()
+{
+	shared_ptr<ControlManager> controlManager = _controlManager;
+	shared_ptr<BaseMapper> mapper = _mapper;
+	
+	if(std::dynamic_pointer_cast<VsControlManager>(controlManager)) {
+		return IsDualSystem() ? 16 : 8;
+	} else if(mapper) {
+		return mapper->GetMapperDipSwitchCount();
+	}
+
+	return 0;
+}
+
 ConsoleFeatures Console::GetAvailableFeatures()
 {
 	ConsoleFeatures features = ConsoleFeatures::None;

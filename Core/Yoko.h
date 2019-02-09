@@ -12,14 +12,14 @@ class Yoko : public BaseMapper
 	uint8_t _bank;
 	uint16_t _irqCounter;
 	bool _irqEnabled;
-	uint8_t _dipSwitch;
 
 protected:
-	virtual uint16_t RegisterStartAddress() override { return 0x5000; }
-	virtual uint16_t RegisterEndAddress() override { return 0x5FFF; }
-	virtual uint16_t GetPRGPageSize() override { return 0x2000; }
-	virtual uint16_t GetCHRPageSize() override { return 0x800; }
-	virtual bool AllowRegisterRead() override { return true; }
+	uint32_t GetDipSwitchCount() override { return 2; }
+	uint16_t RegisterStartAddress() override { return 0x5000; }
+	uint16_t RegisterEndAddress() override { return 0x5FFF; }
+	uint16_t GetPRGPageSize() override { return 0x2000; }
+	uint16_t GetCHRPageSize() override { return 0x800; }
+	bool AllowRegisterRead() override { return true; }
 
 	void InitMapper() override
 	{
@@ -29,7 +29,6 @@ protected:
 		_bank = 0;
 		_irqCounter = 0;
 		_irqEnabled = false;
-		_dipSwitch = 3;
 
 		RemoveRegisterRange(0x5000, 0x53FF, MemoryOperation::Write);
 		AddRegisterRange(0x8000, 0xFFFF, MemoryOperation::Write);
@@ -43,13 +42,12 @@ protected:
 
 		ArrayInfo<uint8_t> regs { _regs, 7 };
 		ArrayInfo<uint8_t> exRegs { _exRegs, 4 };
-		Stream(regs, exRegs, _mode, _bank, _irqCounter, _irqEnabled, _dipSwitch);
+		Stream(regs, exRegs, _mode, _bank, _irqCounter, _irqEnabled);
 	}
 
 	void Reset(bool softReset) override
 	{
 		if(softReset) {
-			_dipSwitch = (_dipSwitch + 1) & 0x03;
 			_mode = 0;
 			_bank = 0;
 		}
@@ -93,7 +91,7 @@ protected:
 	uint8_t ReadRegister(uint16_t addr) override
 	{
 		if(addr <= 0x53FF) {
-			return (_console->GetMemoryManager()->GetOpenBus() & 0xFC) | _dipSwitch;
+			return (_console->GetMemoryManager()->GetOpenBus() & 0xFC) | GetDipSwitches();
 		} else {
 			return _exRegs[addr & 0x03];
 		}

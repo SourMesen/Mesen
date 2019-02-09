@@ -261,7 +261,6 @@ void MesenMovie::ApplySettings()
 	settings->SetFlagState(EmulationFlags::EnableOamDecay, LoadBool(_settings, MovieKeys::EnableOamDecay));
 	settings->SetFlagState(EmulationFlags::DisablePpuReset, LoadBool(_settings, MovieKeys::DisablePpuReset));
 
-	//VS System flags
 	settings->SetDipSwitches(HexUtilities::FromHex(LoadString(_settings, MovieKeys::DipSwitches)));
 
 	LoadCheats();

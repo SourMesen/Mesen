@@ -405,6 +405,12 @@ uint8_t BaseMapper::GetPowerOnByte(uint8_t defaultValue)
 		return defaultValue;
 	}
 }
+
+uint32_t BaseMapper::GetDipSwitches()
+{
+	uint32_t mask = (1 << GetDipSwitchCount()) - 1;
+	return _console->GetSettings()->GetDipSwitches() & mask;
+}
 		
 bool BaseMapper::HasBattery()
 {
@@ -766,6 +772,11 @@ shared_ptr<BaseControlDevice> BaseMapper::GetMapperControlDevice()
 RomInfo BaseMapper::GetRomInfo()
 {
 	return _romInfo;
+}
+
+uint32_t BaseMapper::GetMapperDipSwitchCount()
+{
+	return GetDipSwitchCount();
 }
 
 MirroringType BaseMapper::GetMirroringType()

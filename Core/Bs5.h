@@ -4,10 +4,8 @@
 
 class Bs5 : public BaseMapper
 {
-private:
-	uint8_t _dipSwitch = 0;
-
 protected:
+	uint32_t GetDipSwitchCount() override { return 2; }
 	uint16_t GetPRGPageSize() override { return 0x2000; }
 	uint16_t GetCHRPageSize() override { return 0x800; }
 
@@ -16,19 +14,6 @@ protected:
 		for(int i = 0; i < 4; i++) {
 			SelectPRGPage(i, -1);
 			SelectCHRPage(i, -1);
-		}
-	}
-
-	void StreamState(bool saving) override
-	{
-		BaseMapper::StreamState(saving);
-		Stream(_dipSwitch);
-	}
-
-	void Reset(bool softReset) override
-	{
-		if(softReset) {
-			_dipSwitch = (_dipSwitch + 1) & 0x03;
 		}
 	}
 
@@ -41,7 +26,7 @@ protected:
 				break;
 
 			case 0xA000:
-				if(addr & (1 << (_dipSwitch + 4))) {
+				if(addr & (1 << (GetDipSwitches() + 4))) {
 					SelectPRGPage(bank, addr & 0x0F);
 				}
 				break;

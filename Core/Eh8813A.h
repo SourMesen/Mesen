@@ -5,37 +5,35 @@
 class Eh8813A : public BaseMapper
 {
 private:
-	uint8_t _dipSwitch;
 	bool _alterReadAddress;
 
 protected:
+	uint32_t GetDipSwitchCount() override { return 4; }
 	uint16_t GetPRGPageSize() override { return 0x4000; }
 	uint16_t GetCHRPageSize() override { return 0x2000; }
 	bool AllowRegisterRead() override {	return true; }
 
 	void InitMapper() override
 	{
-		_dipSwitch = -1;
 		SetMirroringType(MirroringType::Vertical);
 	}
 
 	void Reset(bool softReset) override
 	{
 		WriteRegister(0x8000, 0);
-		_dipSwitch++;
 		_alterReadAddress = false;
 	}
 
 	void StreamState(bool saving) override
 	{
 		BaseMapper::StreamState(saving);
-		Stream(_dipSwitch, _alterReadAddress);
+		Stream(_alterReadAddress);
 	}
 
 	uint8_t ReadRegister(uint16_t addr) override
 	{
 		if(_alterReadAddress) {
-			addr = (addr & 0xFFF0) + _dipSwitch;
+			addr = (addr & 0xFFF0) + GetDipSwitches();
 		}
 		return InternalReadRam(addr);
 	}

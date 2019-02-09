@@ -9,11 +9,11 @@ class FamicomBox : public BaseMapper
 {
 private:
 	uint8_t _regs[8];
-	uint8_t _dipSwitches;
 	uint8_t _extInternalRam[0x2000];
 	InternalRamHandler<0x1FFF> _extendedRamHandler;
 
 protected:
+	uint32_t GetDipSwitchCount() override { return 8; }
 	uint16_t RegisterStartAddress() override { return 0x5000; }
 	uint16_t RegisterEndAddress() override { return 0x5FFF; }	
 	uint16_t GetPRGPageSize() override { return 0x4000; }
@@ -23,7 +23,6 @@ protected:
 	void InitMapper() override
 	{
 		_regs[7] = 0xFF;
-		_dipSwitches = 0xC0;
 
 		SelectPRGPage(0, 0);
 		SelectPRGPage(1, 1);
@@ -38,7 +37,7 @@ protected:
 		BaseMapper::StreamState(saving);
 		ArrayInfo<uint8_t> regs { _regs, 8 };
 		ArrayInfo<uint8_t> extRam { _extInternalRam, 0x2000 };
-		Stream(_dipSwitches, regs, extRam);
+		Stream(regs, extRam);
 	}
 
 	void Reset(bool softReset) override
@@ -95,7 +94,7 @@ protected:
 						10: Coin Mode
 						11: Free Play
 				*/
-				return _dipSwitches;
+				return GetDipSwitches();
 			
 			case 3:
 				/*5003R

@@ -130,8 +130,7 @@ void MovieRecorder::GetGameSettings(stringstream &out)
 		case RamPowerOnState::Random: WriteInt(out, MovieKeys::RamPowerOnState, -1); break; //TODO: Shouldn't be used for movies
 	}	
 
-	//VS System flags
-	if(_console->GetAvailableFeatures() == ConsoleFeatures::VsSystem) {
+	if(_console->GetDipSwitchCount() > 0) {
 		WriteString(out, MovieKeys::DipSwitches, HexUtilities::ToHex(settings->GetDipSwitches()));
 	}
 

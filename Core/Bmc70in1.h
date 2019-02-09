@@ -9,10 +9,10 @@ private:
 	uint8_t _outerBank;
 	uint8_t _prgReg;
 	uint8_t _chrReg;
-	uint8_t _dipSwitch;
 	bool _useOuterBank;
 
 protected:
+	uint32_t GetDipSwitchCount() override { return 4; }
 	uint16_t GetPRGPageSize() override { return 0x4000; }
 	uint16_t GetCHRPageSize() override { return 0x2000; }
 	bool AllowRegisterRead() override { return true; }
@@ -24,10 +24,8 @@ protected:
 
 		if(HasChrRom()) {
 			_useOuterBank = false;
-			_dipSwitch = 0x0C;
 		} else {
 			_useOuterBank = true;
-			_dipSwitch = 0x05;
 		}
 
 		SelectCHRPage(0, 0);
@@ -37,7 +35,7 @@ protected:
 	void StreamState(bool saving) override
 	{
 		BaseMapper::StreamState(saving);
-		Stream(_bankMode, _outerBank, _prgReg, _chrReg, _dipSwitch);
+		Stream(_bankMode, _outerBank, _prgReg, _chrReg);
 	}
 
 	void Reset(bool softReset) override
@@ -46,7 +44,6 @@ protected:
 
 		_bankMode = 0;
 		_outerBank = 0;
-		_dipSwitch = (_dipSwitch + 1) & 0x0F;
 	}
 
 	void UpdateState()
@@ -75,7 +72,7 @@ protected:
 	uint8_t ReadRegister(uint16_t addr) override
 	{
 		if(_bankMode == 0x10) {
-			return InternalReadRam((addr & 0xFFF0) | _dipSwitch);
+			return InternalReadRam((addr & 0xFFF0) | GetDipSwitches());
 		} else {
 			return InternalReadRam(addr);
 		}
