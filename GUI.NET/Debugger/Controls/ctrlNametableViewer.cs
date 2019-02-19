@@ -577,7 +577,7 @@ namespace Mesen.GUI.Debugger.Controls
 
 		private void mnuEditInMemoryViewer_Click(object sender, EventArgs e)
 		{
-			DebugWindowManager.OpenMemoryViewer(_currentPpuAddress, DebugMemoryType.PpuMemory);
+			DebugWindowManager.OpenMemoryViewer(_tileInfo.PpuAddress, DebugMemoryType.PpuMemory);
 		}
 
 		private void mnuToggleBreakpoint_Click(object sender, EventArgs e)
@@ -586,7 +586,7 @@ namespace Mesen.GUI.Debugger.Controls
 				return;
 			}
 
-			PpuAddressTypeInfo addressInfo = InteropEmu.DebugGetPpuAbsoluteAddressAndType((uint)_currentPpuAddress);
+			PpuAddressTypeInfo addressInfo = InteropEmu.DebugGetPpuAbsoluteAddressAndType((uint)_tileInfo.PpuAddress);
 
 			BreakpointManager.EditBreakpoint(new Breakpoint() {
 				MemoryType = addressInfo.Type.ToMemoryType(),
