@@ -307,10 +307,12 @@ void Debugger::SetBreakpoints(Breakpoint breakpoints[], uint32_t length)
 			if((bp.IsMarked() || isEnabled) && bp.HasBreakpointType((BreakpointType)i)) {
 				_breakpoints[i].push_back(bp);
 
-				bool success = true;
 				if(bp.HasCondition()) {
+					bool success = true;
 					ExpressionData data = _bpExpEval->GetRpnList(bp.GetCondition(), success);
 					_breakpointRpnList[i].push_back(success ? data : ExpressionData());
+				} else {
+					_breakpointRpnList[i].push_back(ExpressionData());
 				}
 
 				if(isEnabled) {
