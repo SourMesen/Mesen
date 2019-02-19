@@ -59,6 +59,11 @@ namespace Mesen.GUI.Config
 		[ShortcutName("PPU Viewer: Toggle Zoom")]
 		public XmlKeys PpuViewer_ToggleZoom = Keys.Control | Keys.W;
 
+		[ShortcutName("Nametable Viewer: Add breakpoint (Tile)")]
+		public XmlKeys PpuViewer_AddBreakpointTile = Keys.F9;
+		[ShortcutName("Nametable Viewer: Add breakpoint (Attribute)")]
+		public XmlKeys PpuViewer_AddBreakpointAttribute = Keys.F10;
+
 		[ShortcutName("Edit in Memory Viewer")]
 		public XmlKeys CodeWindow_EditInMemoryViewer = Keys.F1;
 		[ShortcutName("View in disassembly")]

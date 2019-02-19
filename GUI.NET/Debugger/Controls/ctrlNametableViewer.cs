@@ -93,7 +93,8 @@ namespace Mesen.GUI.Debugger.Controls
 			if(!IsDesignMode) {
 				mnuCopyToClipboard.InitShortcut(this, nameof(DebuggerShortcutsConfig.Copy));
 				mnuEditInMemoryViewer.InitShortcut(this, nameof(DebuggerShortcutsConfig.CodeWindow_EditInMemoryViewer));
-				mnuAddBreakpoint.InitShortcut(this, nameof(DebuggerShortcutsConfig.CodeWindow_ToggleBreakpoint));
+				mnuAddBreakpoint.InitShortcut(this, nameof(DebuggerShortcutsConfig.PpuViewer_AddBreakpointTile));
+				mnuAddBreakpointAttribute.InitShortcut(this, nameof(DebuggerShortcutsConfig.PpuViewer_AddBreakpointAttribute));
 			}
 		}
 
@@ -513,9 +514,11 @@ namespace Mesen.GUI.Debugger.Controls
 
 		private void ctxMenu_Opening(object sender, CancelEventArgs e)
 		{
-			mnuAddBreakpoint.Text = "Add breakpoint ($" + _currentPpuAddress.ToString("X4") + ")";
+			mnuAddBreakpoint.Text = "Add breakpoint (Tile - $" + _tileInfo.PpuAddress.ToString("X4") + ")";
+			mnuAddBreakpointAttribute.Text = "Add breakpoint (Attribute - $" + _tileInfo.AttributeAddress.ToString("X4") + ")";
 			mnuEditInMemoryViewer.Text = "Edit in Memory Viewer ($" + _currentPpuAddress.ToString("X4") + ")";
 			mnuAddBreakpoint.Enabled = DebugWindowManager.GetDebugger() != null;
+			mnuAddBreakpointAttribute.Enabled = DebugWindowManager.GetDebugger() != null;
 			mnuCopyNametableHdPack.Visible = Control.ModifierKeys == Keys.Shift;
 			_copyData = ToHdPackFormat(_nametableIndex, _tileY * 32 + _tileX);
 		}
@@ -580,13 +583,9 @@ namespace Mesen.GUI.Debugger.Controls
 			DebugWindowManager.OpenMemoryViewer(_tileInfo.PpuAddress, DebugMemoryType.PpuMemory);
 		}
 
-		private void mnuToggleBreakpoint_Click(object sender, EventArgs e)
+		private void AddBreakpoint(int address)
 		{
-			if(DebugWindowManager.GetDebugger() == null) {
-				return;
-			}
-
-			PpuAddressTypeInfo addressInfo = InteropEmu.DebugGetPpuAbsoluteAddressAndType((uint)_tileInfo.PpuAddress);
+			PpuAddressTypeInfo addressInfo = InteropEmu.DebugGetPpuAbsoluteAddressAndType((uint)address);
 
 			BreakpointManager.EditBreakpoint(new Breakpoint() {
 				MemoryType = addressInfo.Type.ToMemoryType(),
@@ -598,6 +597,22 @@ namespace Mesen.GUI.Debugger.Controls
 				EndAddress = (UInt32)addressInfo.Address,
 				AddressType = BreakpointAddressType.SingleAddress
 			});
+		}
+
+		private void mnuAddBreakpointAttribute_Click(object sender, EventArgs e)
+		{
+			if(DebugWindowManager.GetDebugger() == null) {
+				return;
+			}
+			AddBreakpoint(_tileInfo.AttributeAddress);
+		}
+
+		private void mnuAddBreakpoint_Click(object sender, EventArgs e)
+		{
+			if(DebugWindowManager.GetDebugger() == null) {
+				return;
+			}
+			AddBreakpoint(_tileInfo.PpuAddress);
 		}
 
 		private void picNametable_MouseEnter(object sender, EventArgs e)

@@ -37,12 +37,15 @@
 			this.tabPage4 = new System.Windows.Forms.TabPage();
 			this.ctrlDbgShortcutsScriptWindow = new Mesen.GUI.Debugger.ctrlDbgShortcuts();
 			this.btnReset = new System.Windows.Forms.Button();
+			this.tpgPpuViewer = new System.Windows.Forms.TabPage();
+			this.ctrlDbgShortcutsPpuViewer = new Mesen.GUI.Debugger.ctrlDbgShortcuts();
 			this.baseConfigPanel.SuspendLayout();
 			this.tabMain.SuspendLayout();
 			this.tabPage1.SuspendLayout();
 			this.tabPage2.SuspendLayout();
 			this.tabPage3.SuspendLayout();
 			this.tabPage4.SuspendLayout();
+			this.tpgPpuViewer.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// baseConfigPanel
@@ -66,6 +69,7 @@
 			this.tabMain.Controls.Add(this.tabPage2);
 			this.tabMain.Controls.Add(this.tabPage3);
 			this.tabMain.Controls.Add(this.tabPage4);
+			this.tabMain.Controls.Add(this.tpgPpuViewer);
 			this.tabMain.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tabMain.Location = new System.Drawing.Point(0, 0);
 			this.tabMain.Name = "tabMain";
@@ -151,6 +155,25 @@
 			this.btnReset.UseVisualStyleBackColor = true;
 			this.btnReset.Click += new System.EventHandler(this.btnReset_Click);
 			// 
+			// tpgPpuViewer
+			// 
+			this.tpgPpuViewer.Controls.Add(this.ctrlDbgShortcutsPpuViewer);
+			this.tpgPpuViewer.Location = new System.Drawing.Point(4, 22);
+			this.tpgPpuViewer.Name = "tpgPpuViewer";
+			this.tpgPpuViewer.Padding = new System.Windows.Forms.Padding(3);
+			this.tpgPpuViewer.Size = new System.Drawing.Size(597, 434);
+			this.tpgPpuViewer.TabIndex = 4;
+			this.tpgPpuViewer.Text = "PPU Viewer";
+			this.tpgPpuViewer.UseVisualStyleBackColor = true;
+			// 
+			// ctrlDbgShortcutsPpuViewer
+			// 
+			this.ctrlDbgShortcutsPpuViewer.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.ctrlDbgShortcutsPpuViewer.Location = new System.Drawing.Point(3, 3);
+			this.ctrlDbgShortcutsPpuViewer.Name = "ctrlDbgShortcutsPpuViewer";
+			this.ctrlDbgShortcutsPpuViewer.Size = new System.Drawing.Size(591, 428);
+			this.ctrlDbgShortcutsPpuViewer.TabIndex = 4;
+			// 
 			// frmDbgPreferences
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -168,6 +191,7 @@
 			this.tabPage2.ResumeLayout(false);
 			this.tabPage3.ResumeLayout(false);
 			this.tabPage4.ResumeLayout(false);
+			this.tpgPpuViewer.ResumeLayout(false);
 			this.ResumeLayout(false);
 
 		}
@@ -184,5 +208,7 @@
 		private System.Windows.Forms.TabPage tabPage4;
 		private ctrlDbgShortcuts ctrlDbgShortcutsScriptWindow;
 		private System.Windows.Forms.Button btnReset;
+		private System.Windows.Forms.TabPage tpgPpuViewer;
+		private ctrlDbgShortcuts ctrlDbgShortcutsPpuViewer;
 	}
 }

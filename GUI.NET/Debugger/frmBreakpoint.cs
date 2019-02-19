@@ -79,7 +79,7 @@ namespace Mesen.GUI.Debugger
 			Breakpoint bp = (Breakpoint)this.Entity;
 			if(!BreakpointManager.Breakpoints.Contains(bp)) {
 				//This is a new breakpoint, make sure address fields are empty instead of 0
-				if(txtAddress.Text == "0") {
+				if(bp.Address == UInt32.MaxValue) {
 					txtAddress.Text = "";
 				}
 				if(txtFrom.Text == "0") {

@@ -33,7 +33,7 @@ namespace Mesen.GUI.Debugger
 		public bool Enabled = true;
 		public bool MarkEvent = false;
 		public bool ProcessDummyReadWrites = false;
-		public UInt32 Address;
+		public UInt32 Address = UInt32.MaxValue;
 		public UInt32 StartAddress;
 		public UInt32 EndAddress;
 		public BreakpointAddressType AddressType = BreakpointAddressType.SingleAddress;
