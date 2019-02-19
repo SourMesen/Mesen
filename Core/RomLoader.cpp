@@ -85,6 +85,8 @@ bool RomLoader::LoadFile(string filename, vector<uint8_t> &fileData)
 			_romData.Info.System = GameSystem::NesPal;
 		} else if(name.find("(vs)") != string::npos) {
 			_romData.Info.System = GameSystem::VsSystem;
+		} else {
+			_romData.Info.System = GameSystem::NesNtsc;
 		}
 	}
 

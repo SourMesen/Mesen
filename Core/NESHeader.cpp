@@ -36,9 +36,9 @@ GameSystem NESHeader::GetNesGameSystem()
 			case 3: return GameSystem::Dendy;
 		}
 	} else if(GetRomHeaderVersion() == RomHeaderVersion::iNes) {
-		return (Byte9 & 0x01) ? GameSystem::NesPal : GameSystem::NesNtsc;
+		return (Byte9 & 0x01) ? GameSystem::NesPal : GameSystem::Unknown;
 	}
-	return GameSystem::NesNtsc;
+	return GameSystem::Unknown;
 }
 
 GameSystem NESHeader::GetGameSystem()
