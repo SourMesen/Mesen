@@ -74,7 +74,7 @@ namespace Mesen.GUI.Debugger
 					}
 
 					string labelName = rowData[2];
-					if(!LabelManager.LabelRegex.IsMatch(labelName)) {
+					if(!string.IsNullOrEmpty(labelName) && !LabelManager.LabelRegex.IsMatch(labelName)) {
 						//Reject labels that don't respect the label naming restrictions
 						errorCount++;
 						continue;
