@@ -267,6 +267,8 @@ namespace Mesen.GUI.Debugger.Controls
 					InteropEmu.DebugGetAbsoluteAddressAndType((UInt32)_lastClickedAddress, info);
 					if(info.Address >= 0) {
 						ctrlLabelList.EditLabel((UInt32)info.Address, info.Type);
+					} else {
+						ctrlLabelList.EditLabel((UInt32)_lastClickedAddress, AddressType.Register);
 					}
 				} else if(_lastClickedLabel != null) {
 					ctrlLabelList.EditLabel(_lastClickedLabel.Address, _lastClickedLabel.AddressType);
