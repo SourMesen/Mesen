@@ -119,7 +119,13 @@ bool MesenMovie::Play(VirtualFile &file)
 	//Disable auto-configure input option (otherwise the movie file's input types are ignored)
 	bool autoConfigureInput = _console->GetSettings()->CheckFlag(EmulationFlags::AutoConfigureInput);
 	_console->GetSettings()->ClearFlags(EmulationFlags::AutoConfigureInput);
-	_console->GetControlManager()->SetPollCounter(0);
+
+	ControlManager *controlManager = _console->GetControlManager();
+	if(controlManager) {
+		//ControlManager can be empty if no game is loaded
+		controlManager->SetPollCounter(0);
+	}
+
 	bool gameLoaded = LoadGame();
 	_console->GetSettings()->SetFlagState(EmulationFlags::AutoConfigureInput, autoConfigureInput);
 
