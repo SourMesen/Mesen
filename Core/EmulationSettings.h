@@ -696,6 +696,11 @@ private:
 	uint32_t _dipSwitches = 0;
 
 public:
+	EmulationSettings()
+	{
+		memcpy(_userPalette, _ppuPaletteArgb, sizeof(_userPalette));
+	}
+
 	static uint32_t GetMesenVersion()
 	{
 		return (_versionMajor << 16) | (_versionMinor << 8) | _versionRevision;
