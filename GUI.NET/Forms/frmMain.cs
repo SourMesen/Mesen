@@ -253,11 +253,7 @@ namespace Mesen.GUI.Forms
 			if(ConfigManager.Config.WindowSize.HasValue && !_overrideWindowSize) {
 				this.ClientSize = ConfigManager.Config.WindowSize.Value;
 			}
-
-			if(ConfigManager.Config.PreferenceInfo.DisableMouseResize) {
-				this.FormBorderStyle = FormBorderStyle.Fixed3D;
-			}
-
+			
 			mnuDebugDualSystemSecondaryCpu.Checked = ConfigManager.Config.DebugInfo.DebugConsoleId == InteropEmu.ConsoleId.Slave;
 			InteropEmu.DebugSetDebuggerConsole(ConfigManager.Config.DebugInfo.DebugConsoleId);
 
@@ -285,6 +281,11 @@ namespace Mesen.GUI.Forms
 		protected override void OnShown(EventArgs e)
 		{
 			base.OnShown(e);
+
+			if(ConfigManager.Config.PreferenceInfo.DisableMouseResize) {
+				//This must be in the OnShown event, otherwise the application won't show up in the taskbar until it is given focus
+				this.FormBorderStyle = FormBorderStyle.Fixed3D;
+			}
 
 			this.BindShortcuts();
 
