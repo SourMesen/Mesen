@@ -295,7 +295,8 @@ private:
 	void SetFillModeColor(uint8_t color)
 	{
 		_fillModeColor = color;
-		memset(GetNametable(NtFillModeIndex) + 32 * 30, color, 64); //Attribute table is 64 bytes
+		uint8_t attributeByte = color | color << 2 | color << 4 | color << 6;
+		memset(GetNametable(NtFillModeIndex) + 32 * 30, attributeByte, 64); //Attribute table is 64 bytes
 	}
 
 	bool IsSpriteFetch()
