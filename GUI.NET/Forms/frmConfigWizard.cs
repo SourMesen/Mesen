@@ -34,6 +34,8 @@ namespace Mesen.GUI.Forms
 			lblLocation.Text = ConfigManager.DefaultDocumentsFolder;
 			lblLocation.ForeColor = ThemeHelper.Theme.LinkTextColor;
 			lblCancel.ForeColor = ThemeHelper.Theme.LinkTextColor;
+
+			ResourceHelper.ApplyResources(this);
 		}
 
 		private void InitializeConfig()

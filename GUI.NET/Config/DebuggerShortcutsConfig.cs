@@ -92,7 +92,7 @@ namespace Mesen.GUI.Config
 		[ShortcutName("Open Watch Window")]
 		public XmlKeys OpenWatchWindow = Keys.Control | Keys.W;
 
-		[ShortcutName("Open Nametabler Viewer (Compact)")]
+		[ShortcutName("Open Nametable Viewer (Compact)")]
 		public XmlKeys OpenNametableViewer = Keys.Control | Keys.D1;
 		[ShortcutName("Open CHR Viewer (Compact)")]
 		public XmlKeys OpenChrViewer = Keys.Control | Keys.D2;
