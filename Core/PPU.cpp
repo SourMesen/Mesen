@@ -309,7 +309,6 @@ uint8_t PPU::ReadRAM(uint16_t addr)
 	switch(GetRegisterID(addr)) {
 		case PPURegisters::Status:
 			_state.WriteToggle = false;
-			_flags.IntensifyBlue = false;
 			UpdateStatusFlag();
 			returnValue = _state.Status;
 			openBusMask = 0x1F;
