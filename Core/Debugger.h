@@ -142,7 +142,6 @@ private:
 
 	vector<DebugEventInfo> _prevDebugEvents;
 	vector<DebugEventInfo> _debugEvents;
-	vector<vector<int>> _debugEventMarkerRpn;
 
 private:
 	bool ProcessBreakpoints(BreakpointType type, OperationInfo &operationInfo, bool allowBreak = true, bool allowMark = true);

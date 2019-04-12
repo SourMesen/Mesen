@@ -1652,6 +1652,7 @@ void Debugger::GetDebugEvents(uint32_t* pictureBuffer, DebugEventInfo *infoArray
 
 uint32_t Debugger::GetDebugEventCount(bool returnPreviousFrameData)
 {
+	DebugBreakHelper helper(this);
 	return (uint32_t)(returnPreviousFrameData ? _prevDebugEvents.size() : _debugEvents.size());
 }
 
