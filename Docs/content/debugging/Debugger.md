@@ -431,7 +431,7 @@ Debugger "workspaces" are used to store information specific to each ROM you deb
 
 ### Default Workspace Labels ###
 
-By default, Mesen setups labels for the NES' PPU and APU registers. These can be enabling the `Disable default labels` option.  
+By default, Mesen setups labels for the NES' PPU and APU registers. These can be disabled using the `Disable default labels` option.  
   
 Additionally, it's possible to setup your own set of default labels by creating a file called `DefaultLabels.Global.mlb` in the `Debugger` folder (where the workspace and CDL files are stored). When Mesen finds this file, it will ignore the its own default labels and use the ones contained in that file instead, for all ROMs.  
 
