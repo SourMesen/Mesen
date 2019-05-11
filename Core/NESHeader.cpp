@@ -180,16 +180,7 @@ uint8_t NESHeader::GetSubMapper()
 MirroringType NESHeader::GetMirroringType()
 {
 	if(Byte6 & 0x08) {
-		if(GetRomHeaderVersion() == RomHeaderVersion::Nes2_0) {
-			if(Byte6 & 0x01) {
-				//Based on proposal by rainwarrior/Myask: http://wiki.nesdev.com/w/index.php/Talk:NES_2.0
-				return MirroringType::ScreenAOnly;
-			} else {
-				return MirroringType::FourScreens;
-			}
-		} else {
-			return MirroringType::FourScreens;
-		}
+		return MirroringType::FourScreens;
 	} else {
 		return Byte6 & 0x01 ? MirroringType::Vertical : MirroringType::Horizontal;
 	}
