@@ -441,9 +441,21 @@ For FDS and NSF ROMs, `DefaultLabels.FDS.mlb` and `DefaultLabels.NSF.mlb` can be
 If both a global and mapper-specific `mlb` is found, both of them will be used (with the mapper-specific file having priority in case of conflicting labels).
 
 {{% notice tip %}}
-`.mlb` files are a Mesen-specific file format to define labels/comments in the code. They are written in a simple text format and can also be created by using the debugger's `Export Labels` feature.
+`.mlb` files are a [Mesen-specific file format](debuggerintegration.html#mesen-label-files-mlb) to define labels/comments in the code. They are written in a simple text format and can also be created by using the debugger's `Export Labels` feature.
 {{% /notice %}}
 
+
+## Performance Tracker ##
+
+<div class="imgBox"><div>
+	<img src="/images/PerformanceTracker.png" />
+	<span>Use the performance tracker to track in-game CPU usage and FPS</span>
+</div></div>
+
+From the code window, you can right-click on an address and activate the "performance tracker".
+This feature will track when the selected address is executed by the CPU on each frame, and display a CPU/FPS chart overlay based on those statistics.
+
+By setting the performance tracker to the part of the code that most games use to wait for vertical blank after the next frame's logic is done processing, you can get an estimate of how much extra CPU time remains on each frame.
 
 ## How To: Edit Code ##
 
@@ -459,3 +471,4 @@ When you're ready to apply your modifications, press the Apply button.
 {{% notice tip %}}
 If you want to save your code modifications to a .nes file, or as an IPS patch, you can use the **<kbd>File&rarr;Save</kbd>** or **<kbd>File&rarr;Save edits as IPS</kbd>** commands.
 {{% /notice %}}
+

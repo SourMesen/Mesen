@@ -58,6 +58,26 @@ Mesen can also import and export labels in `.mlb` format. This is the same forma
 
 <div style="clear:both"></div>
 
+### Mesen Label Files (.mlb) ###
+
+The `.mlb` files used by Mesen to import/export labels is a simple text format.  For example, this defines a label and comment on byte $100 of PRG ROM:
+```
+P:100:MyLabel:This is a comment
+```
+The format also supports multi-byte labels, defined by giving specifying an address range:
+```
+R:200-2FF:ShadowOam
+```
+
+The first letter on each row is used to specify the label's type:
+```
+P: PRG ROM labels
+R: RAM labels (for the NES' internal 2kb RAM)
+S: Save RAM labels
+W: Work RAM labels
+G: Register labels (these are used to define PPU/APU/Mapper registers, etc.)
+```
+
 ### Import Settings ###
 
 <div class="imgBox"><div>

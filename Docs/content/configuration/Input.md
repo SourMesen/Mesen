@@ -51,6 +51,8 @@ You can also configure that controller's turbo buttons' speed with the `Turbo Sp
 	<span>Advanced Options</span>
 </div></div>
 
+**Controller axis deadzone size**: Controls the deadzone size for analog sticks. A larger deadzone means that the analog stick will need to be moved more before a button press is registered.
+
 **Hide mouse pointer when using zapper**: Hides the mouse pointer completely when a Zapper is connected. This is useful when using light guns (for PCs) that simulate a mouse.
 
 ### Display Controller Input ###

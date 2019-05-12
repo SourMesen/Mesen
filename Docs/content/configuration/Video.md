@@ -88,7 +88,7 @@ Click on any color in the palette to manually change its color.
 
 **Load Preset Palette**: Mesen comes with a number of built-in palette options - you can select them from here.
 
-**Load Palette File**: Use this to load a .pal file into the emulator.
+**Load Palette File**: Use this to load a .pal file into the emulator. Mesen supports both 64-color (192 bytes) and 512-color (1536 bytes) palette files.  The 512-color palette files can be used to control the colors used when the PPU's R/G/B emphasis bits are turned on.
 
 **Export Palette**: Use this to export your current palette into a .pal file.
 
@@ -105,7 +105,9 @@ Click on any color in the palette to manually change its color.
 These options should not be used if you are looking for accurate emulation.
 {{% /notice %}}
 
-**Screen Rotation**: Rotates the display by the specified angle. This is useful to play games (generally homebrew games) designed for a vertical display.
+**Remove sprite limit**: The NES can normally only draw up to 8 sprites per line -- this limitation is indirectly responsible for *some* of the flickering seen in games at times.  When this option is enabled, the limit is disabled, allowing up to 64 sprites to be drawn on the same line.
+
+**Automatically re-enable sprite limit as needed to prevent graphical glitches when possible**: Some games rely on the sprite limit to hide objects from view. These games will have graphical glitches when the `Remove sprite limit` option is enabled. By enabling this option, Mesen will try to detect when games are attempting to hit the sprite limit on purpose and temporarely re-enable the limit in these specific cases. This option is not perfect and may not work in certain games, but it helps reduce the potential negative impacts of the `Remove sprite limit` option.
 
 **Disable background**: Disables rendering of the background layer.
 
@@ -114,3 +116,5 @@ These options should not be used if you are looking for accurate emulation.
 **Force background display in first column**: The NES has a flag that prevents the background from rendering in the first 8 pixels on the left of the screen. When enabled, this option forces the background to be rendered in the first 8 pixels, no matter what the flag's value is.
 
 **Force sprite display in first column**: The NES has a flag that prevents sprites from rendering in the first 8 pixels on the left of the screen. When enabled, this option forces the sprites to be rendered in the first 8 pixels, no matter what the flag's value is.
+
+**Screen Rotation**: Rotates the display by the specified angle. This is useful to play games (generally homebrew games) designed for a vertical display.
