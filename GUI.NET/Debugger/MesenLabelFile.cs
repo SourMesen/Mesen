@@ -53,7 +53,7 @@ namespace Mesen.GUI.Debugger
 						if(UInt32.TryParse(addressStartEnd[0], NumberStyles.HexNumber, CultureInfo.InvariantCulture, out address) &&
 							UInt32.TryParse(addressStartEnd[1], NumberStyles.HexNumber, CultureInfo.InvariantCulture, out addressEnd)) {
 							if(addressEnd > address) {
-								length = addressEnd - address;
+								length = addressEnd - address + 1;
 							} else {
 								//Invalid label (start < end)
 								errorCount++;
