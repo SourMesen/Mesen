@@ -112,7 +112,7 @@ extern "C"
 	DllExport void __stdcall DebugSetMemoryValues(DebugMemoryType type, uint32_t address, uint8_t* data, int32_t length) { return GetDebugger()->GetMemoryDumper()->SetMemoryValues(type, address, data, length); }
 	
 	DllExport void __stdcall DebugResetMemoryAccessCounts() { GetDebugger()->GetMemoryAccessCounter()->ResetCounts(); }
-	DllExport void __stdcall DebugGetMemoryAccessStamps(uint32_t offset, uint32_t length, DebugMemoryType memoryType, MemoryOperationType operationType, uint32_t* stamps) { GetDebugger()->GetMemoryAccessCounter()->GetAccessStamps(offset, length, memoryType, operationType, stamps); }
+	DllExport void __stdcall DebugGetMemoryAccessStamps(uint32_t offset, uint32_t length, DebugMemoryType memoryType, MemoryOperationType operationType, uint64_t* stamps) { GetDebugger()->GetMemoryAccessCounter()->GetAccessStamps(offset, length, memoryType, operationType, stamps); }
 	DllExport void __stdcall DebugGetMemoryAccessCounts(uint32_t offset, uint32_t length, DebugMemoryType memoryType, MemoryOperationType operationType, int32_t* counts) { GetDebugger()->GetMemoryAccessCounter()->GetAccessCounts(offset, length, memoryType, operationType, counts); }
 	DllExport void __stdcall DebugGetUninitMemoryReads(DebugMemoryType memoryType, int32_t* counts) { GetDebugger()->GetMemoryAccessCounter()->GetUninitMemoryReads(memoryType, counts); }
 	DllExport void __stdcall DebugGetNametableChangedData(bool* ntChangedData) { GetDebugger()->GetMemoryAccessCounter()->GetNametableChangedData(ntChangedData); }

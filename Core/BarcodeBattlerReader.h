@@ -12,7 +12,7 @@ private:
 	uint32_t _newBarcodeDigitCount = 0;
 
 	uint8_t _barcodeStream[BarcodeBattlerReader::StreamSize];
-	int32_t _insertCycle = 0;
+	uint64_t _insertCycle = 0;
 
 protected:
 	void StreamState(bool saving) override
@@ -88,10 +88,10 @@ public:
 	uint8_t ReadRAM(uint16_t addr) override
 	{
 		if(addr == 0x4017) {
-			int32_t elapsedCycles = _console->GetCpu()->GetElapsedCycles(_insertCycle);
+			uint64_t elapsedCycles = _console->GetCpu()->GetCycleCount() - _insertCycle;
 			constexpr uint32_t cyclesPerBit = CPU::ClockRateNtsc / 1200;
 
-			uint32_t streamPosition = elapsedCycles / cyclesPerBit;
+			uint32_t streamPosition = (uint32_t)(elapsedCycles / cyclesPerBit);
 			if(streamPosition < BarcodeBattlerReader::StreamSize) {
 				return _barcodeStream[streamPosition] << 2;
 			}

@@ -31,7 +31,7 @@ public:
 private:
 	typedef void(CPU::*Func)();
 
-	int32_t _cycleCount;
+	uint64_t _cycleCount;
 	uint16_t _operand;
 
 	Func _opTable[256];
@@ -777,17 +777,7 @@ protected:
 public:
 	CPU(shared_ptr<Console> console);
 	
-	int32_t GetCycleCount() { return _cycleCount; }
-	
-	int32_t GetElapsedCycles(int32_t prevCycleCount)
-	{
-		if(prevCycleCount > _cycleCount) {
-			return 0xFFFFFFFF - prevCycleCount + _cycleCount + 1;
-		} else {
-			return _cycleCount - prevCycleCount;
-		}
-	}
-
+	uint64_t GetCycleCount() { return _cycleCount; }
 	void SetNmiFlag() { _state.NMIFlag = true; }
 	void ClearNmiFlag() { _state.NMIFlag = false; }
 	void SetIrqMask(uint8_t mask) { _irqMask = mask; }

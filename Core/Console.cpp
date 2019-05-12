@@ -687,11 +687,11 @@ void Console::RunSingleFrame()
 
 void Console::RunSlaveCpu()
 {
-	int32_t cycleGap;
+	int64_t cycleGap;
 	while(true) {
 		//Run the slave until it catches up to the master CPU (and take into account the CPU count overflow that occurs every ~20mins)
-		cycleGap = _cpu->GetCycleCount() - _slave->_cpu->GetCycleCount();
-		if(cycleGap > 5 || cycleGap < -10000 || _ppu->GetFrameCount() > _slave->_ppu->GetFrameCount()) {
+		cycleGap = (int64_t)(_cpu->GetCycleCount() - _slave->_cpu->GetCycleCount());
+		if(cycleGap > 5 || _ppu->GetFrameCount() > _slave->_ppu->GetFrameCount()) {
 			_slave->_cpu->Exec();
 		} else {
 			break;

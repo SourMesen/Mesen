@@ -151,7 +151,7 @@ void TraceLogger::StopLogging()
 	}
 }
 
-void TraceLogger::LogExtraInfo(const char *log, uint32_t cycleCount)
+void TraceLogger::LogExtraInfo(const char *log, uint64_t cycleCount)
 {
 	if(_logToFile && _options.ShowExtraInfo) {
 		//Flush current buffer

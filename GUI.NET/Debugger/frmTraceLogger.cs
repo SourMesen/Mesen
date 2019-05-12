@@ -20,7 +20,7 @@ namespace Mesen.GUI.Debugger
 		private bool _loggingEnabled = false;
 		private string _lastFilename;
 		private EntityBinder _entityBinder = new EntityBinder();
-		private int _previousCycleCount;
+		private UInt64 _previousCycleCount;
 		private string _previousTrace;
 		private volatile bool _refreshRunning;
 		private bool _initialized;

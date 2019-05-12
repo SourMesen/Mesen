@@ -104,7 +104,7 @@ public:
 	void StartLogging(string filename);
 	void StopLogging();
 
-	void LogExtraInfo(const char *log, uint32_t cycleCount);
+	void LogExtraInfo(const char *log, uint64_t cycleCount);
 
 	const char* GetExecutionTrace(uint32_t lineCount);
 };

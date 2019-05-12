@@ -532,7 +532,7 @@ namespace Mesen.GUI
 			return InteropEmu.DebugGetMemoryAccessCounts(0, (uint)size, type, operationType);
 		}
 
-		public static Int32[] DebugGetMemoryAccessStamps(DebugMemoryType type, MemoryOperationType operationType)
+		public static UInt64[] DebugGetMemoryAccessStamps(DebugMemoryType type, MemoryOperationType operationType)
 		{
 			int size = InteropEmu.DebugGetMemorySize(type);
 			return InteropEmu.DebugGetMemoryAccessStamps(0, (uint)size, type, operationType);
@@ -561,9 +561,9 @@ namespace Mesen.GUI
 		}
 
 		[DllImport(DLLPath, EntryPoint = "DebugGetMemoryAccessStamps")] private static extern void DebugGetMemoryAccessStampsWrapper(UInt32 offset, UInt32 length, DebugMemoryType type, MemoryOperationType operationType, IntPtr stamps);
-		public static Int32[] DebugGetMemoryAccessStamps(UInt32 offset, UInt32 length, DebugMemoryType type, MemoryOperationType operationType)
+		public static UInt64[] DebugGetMemoryAccessStamps(UInt32 offset, UInt32 length, DebugMemoryType type, MemoryOperationType operationType)
 		{
-			Int32[] stamps = new Int32[length];
+			UInt64[] stamps = new UInt64[length];
 
 			GCHandle hStamps = GCHandle.Alloc(stamps, GCHandleType.Pinned);
 			try {
@@ -1448,7 +1448,7 @@ namespace Mesen.GUI
 		public Byte Y;
 		public Byte PS;
 		public IRQSource IRQFlag;
-		public Int32 CycleCount;
+		public UInt64 CycleCount;
 
 		[MarshalAs(UnmanagedType.I1)]
 		public bool NMIFlag;

@@ -101,7 +101,7 @@ class PPU : public IMemoryHandler, public Snapshotable
 		uint32_t _minimumDrawSpriteCycle;
 		uint32_t _minimumDrawSpriteStandardCycle;
 
-		int32_t _oamDecayCycles[0x40];
+		uint64_t _oamDecayCycles[0x40];
 		bool _enableOamDecay;
 
 		void UpdateStatusFlag();
