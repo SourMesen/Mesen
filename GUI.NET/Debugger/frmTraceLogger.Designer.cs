@@ -63,12 +63,16 @@
 			this.cboStatusFlagFormat = new System.Windows.Forms.ComboBox();
 			this.chkUseWindowsEol = new System.Windows.Forms.CheckBox();
 			this.chkExtendZeroPage = new System.Windows.Forms.CheckBox();
+			this.btnClearLog = new System.Windows.Forms.Button();
 			this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
 			this.grpExecutionLog = new System.Windows.Forms.GroupBox();
 			this.txtTraceLog = new Mesen.GUI.Debugger.ctrlScrollableTextbox();
 			this.ctxMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this.mnuCopy = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuSelectAll = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripSeparator();
+			this.mnuViewInDisassembly = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuEditInMemoryViewer = new System.Windows.Forms.ToolStripMenuItem();
 			this.tmrUpdateLog = new System.Windows.Forms.Timer(this.components);
 			this.menuStrip1 = new Mesen.GUI.Controls.ctrlMesenMenuStrip();
 			this.showToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -88,9 +92,6 @@
 			this.mnuAutoRefresh = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
 			this.mnuRefresh = new System.Windows.Forms.ToolStripMenuItem();
-			this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripSeparator();
-			this.mnuViewInDisassembly = new System.Windows.Forms.ToolStripMenuItem();
-			this.mnuEditInMemoryViewer = new System.Windows.Forms.ToolStripMenuItem();
 			this.tableLayoutPanel1.SuspendLayout();
 			this.grpLogOptions.SuspendLayout();
 			this.tableLayoutPanel2.SuspendLayout();
@@ -107,14 +108,16 @@
 			// 
 			// tableLayoutPanel1
 			// 
-			this.tableLayoutPanel1.ColumnCount = 3;
+			this.tableLayoutPanel1.ColumnCount = 4;
+			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
 			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
 			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
 			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel1.Controls.Add(this.btnOpenTrace, 2, 0);
+			this.tableLayoutPanel1.Controls.Add(this.btnOpenTrace, 3, 0);
 			this.tableLayoutPanel1.Controls.Add(this.btnStartLogging, 0, 0);
 			this.tableLayoutPanel1.Controls.Add(this.btnStopLogging, 1, 0);
 			this.tableLayoutPanel1.Controls.Add(this.grpLogOptions, 0, 1);
+			this.tableLayoutPanel1.Controls.Add(this.btnClearLog, 2, 0);
 			this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tableLayoutPanel1.Location = new System.Drawing.Point(3, 200);
 			this.tableLayoutPanel1.Name = "tableLayoutPanel1";
@@ -122,7 +125,6 @@
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
 			this.tableLayoutPanel1.Size = new System.Drawing.Size(778, 182);
 			this.tableLayoutPanel1.TabIndex = 0;
 			// 
@@ -162,7 +164,7 @@
 			// 
 			// grpLogOptions
 			// 
-			this.tableLayoutPanel1.SetColumnSpan(this.grpLogOptions, 3);
+			this.tableLayoutPanel1.SetColumnSpan(this.grpLogOptions, 4);
 			this.grpLogOptions.Controls.Add(this.tableLayoutPanel2);
 			this.grpLogOptions.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.grpLogOptions.Location = new System.Drawing.Point(3, 32);
@@ -528,6 +530,16 @@
 			this.chkExtendZeroPage.UseVisualStyleBackColor = true;
 			this.chkExtendZeroPage.CheckedChanged += new System.EventHandler(this.chkOptions_CheckedChanged);
 			// 
+			// btnClearLog
+			// 
+			this.btnClearLog.Location = new System.Drawing.Point(205, 3);
+			this.btnClearLog.Name = "btnClearLog";
+			this.btnClearLog.Size = new System.Drawing.Size(81, 23);
+			this.btnClearLog.TabIndex = 4;
+			this.btnClearLog.Text = "Clear Log";
+			this.btnClearLog.UseVisualStyleBackColor = true;
+			this.btnClearLog.Click += new System.EventHandler(this.btnClearLog_Click);
+			// 
 			// tableLayoutPanel3
 			// 
 			this.tableLayoutPanel3.ColumnCount = 1;
@@ -590,7 +602,7 @@
 			// 
 			this.mnuCopy.Image = global::Mesen.GUI.Properties.Resources.Copy;
 			this.mnuCopy.Name = "mnuCopy";
-			this.mnuCopy.Size = new System.Drawing.Size(122, 22);
+			this.mnuCopy.Size = new System.Drawing.Size(193, 22);
 			this.mnuCopy.Text = "Copy";
 			this.mnuCopy.Click += new System.EventHandler(this.mnuCopy_Click);
 			// 
@@ -598,9 +610,30 @@
 			// 
 			this.mnuSelectAll.Image = global::Mesen.GUI.Properties.Resources.SelectAll;
 			this.mnuSelectAll.Name = "mnuSelectAll";
-			this.mnuSelectAll.Size = new System.Drawing.Size(122, 22);
+			this.mnuSelectAll.Size = new System.Drawing.Size(193, 22);
 			this.mnuSelectAll.Text = "Select All";
 			this.mnuSelectAll.Click += new System.EventHandler(this.mnuSelectAll_Click);
+			// 
+			// toolStripMenuItem2
+			// 
+			this.toolStripMenuItem2.Name = "toolStripMenuItem2";
+			this.toolStripMenuItem2.Size = new System.Drawing.Size(190, 6);
+			// 
+			// mnuViewInDisassembly
+			// 
+			this.mnuViewInDisassembly.Image = global::Mesen.GUI.Properties.Resources.Bug;
+			this.mnuViewInDisassembly.Name = "mnuViewInDisassembly";
+			this.mnuViewInDisassembly.Size = new System.Drawing.Size(193, 22);
+			this.mnuViewInDisassembly.Text = "View in disassembly";
+			this.mnuViewInDisassembly.Click += new System.EventHandler(this.mnuViewInDisassembly_Click);
+			// 
+			// mnuEditInMemoryViewer
+			// 
+			this.mnuEditInMemoryViewer.Image = global::Mesen.GUI.Properties.Resources.CheatCode;
+			this.mnuEditInMemoryViewer.Name = "mnuEditInMemoryViewer";
+			this.mnuEditInMemoryViewer.Size = new System.Drawing.Size(193, 22);
+			this.mnuEditInMemoryViewer.Text = "Edit in Memory Viewer";
+			this.mnuEditInMemoryViewer.Click += new System.EventHandler(this.mnuEditInMemoryViewer_Click);
 			// 
 			// tmrUpdateLog
 			// 
@@ -757,27 +790,6 @@
 			this.mnuRefresh.Text = "Refresh";
 			this.mnuRefresh.Click += new System.EventHandler(this.mnuRefresh_Click);
 			// 
-			// toolStripMenuItem2
-			// 
-			this.toolStripMenuItem2.Name = "toolStripMenuItem2";
-			this.toolStripMenuItem2.Size = new System.Drawing.Size(176, 6);
-			// 
-			// mnuViewInDisassembly
-			// 
-			this.mnuViewInDisassembly.Image = global::Mesen.GUI.Properties.Resources.Bug;
-			this.mnuViewInDisassembly.Name = "mnuViewInDisassembly";
-			this.mnuViewInDisassembly.Size = new System.Drawing.Size(193, 22);
-			this.mnuViewInDisassembly.Text = "View in disassembly";
-			this.mnuViewInDisassembly.Click += new System.EventHandler(this.mnuViewInDisassembly_Click);
-			// 
-			// mnuEditInMemoryViewer
-			// 
-			this.mnuEditInMemoryViewer.Image = global::Mesen.GUI.Properties.Resources.CheatCode;
-			this.mnuEditInMemoryViewer.Name = "mnuEditInMemoryViewer";
-			this.mnuEditInMemoryViewer.Size = new System.Drawing.Size(193, 22);
-			this.mnuEditInMemoryViewer.Text = "Edit in Memory Viewer";
-			this.mnuEditInMemoryViewer.Click += new System.EventHandler(this.mnuEditInMemoryViewer_Click);
-			// 
 			// frmTraceLogger
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -871,5 +883,6 @@
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem2;
 		private System.Windows.Forms.ToolStripMenuItem mnuViewInDisassembly;
 		private System.Windows.Forms.ToolStripMenuItem mnuEditInMemoryViewer;
+		private System.Windows.Forms.Button btnClearLog;
 	}
 }

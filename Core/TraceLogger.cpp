@@ -307,6 +307,11 @@ void TraceLogger::Log(DebugState &state, DisassemblyInfo &disassemblyInfo, Opera
 	}
 }
 
+void TraceLogger::Clear()
+{
+	_logCount = 0;
+}
+
 const char* TraceLogger::GetExecutionTrace(uint32_t lineCount)
 {
 	int startPos;

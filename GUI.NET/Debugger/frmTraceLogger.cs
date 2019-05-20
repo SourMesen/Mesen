@@ -528,5 +528,11 @@ namespace Mesen.GUI.Debugger
 				mnuViewInDisassembly.Text = "View in Disassembly" + suffix;
 			}
 		}
+
+		private void btnClearLog_Click(object sender, EventArgs e)
+		{
+			InteropEmu.DebugClearTraceLog();
+			RefreshLog(true, true);
+		}
 	}
 }

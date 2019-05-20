@@ -106,6 +106,7 @@ extern "C"
 	DllExport void __stdcall DebugStartTraceLogger(char* filename) { GetDebugger()->GetTraceLogger()->StartLogging(filename); }
 	DllExport void __stdcall DebugStopTraceLogger() { GetDebugger()->GetTraceLogger()->StopLogging(); }
 	DllExport const char* DebugGetExecutionTrace(uint32_t lineCount) { return GetDebugger()->GetTraceLogger()->GetExecutionTrace(lineCount); }
+	DllExport void __stdcall DebugClearTraceLog() { GetDebugger()->GetTraceLogger()->Clear(); }
 
 	DllExport uint8_t __stdcall DebugGetMemoryValue(DebugMemoryType type, uint32_t address) { return GetDebugger()->GetMemoryDumper()->GetMemoryValue(type, address); }
 	DllExport void __stdcall DebugSetMemoryValue(DebugMemoryType type, uint32_t address, uint8_t value) { return GetDebugger()->GetMemoryDumper()->SetMemoryValue(type, address, value); }
