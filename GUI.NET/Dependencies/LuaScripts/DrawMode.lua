@@ -12,13 +12,13 @@ function Main()
     if not hold then
       hold = true
     else
-      emu.drawLine( oldX, oldY, mouse.x, mouse.y, 0xFF0000, 10000000)
+      emu.drawLine(oldX, oldY, mouse.x, mouse.y, 0xFF0000, 10000000)
     end
     oldX = mouse.x
     oldY = mouse.y
   else
     hold = false
-  end  
+  end
   if mouse.right then
     emu.clearScreen()
   end
@@ -26,5 +26,5 @@ end
 
 
 hold = false
-emu.addEventCallback(Main, emu.eventType.endFrame);
+emu.addEventCallback(Main, emu.eventType.endFrame)
 emu.displayMessage("Script", "Draw Mode")
