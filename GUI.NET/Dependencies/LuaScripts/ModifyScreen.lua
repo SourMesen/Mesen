@@ -14,7 +14,7 @@ end
 
 function makeRed()
   local buffer = emu.getScreenBuffer()
-  for i, p in pairs(buffer) do 
+  for i, p in pairs(buffer) do
     buffer[i] = buffer[i] & 0xFFFF0000
   end
   emu.setScreenBuffer(buffer)
@@ -39,7 +39,7 @@ function blink()
    local blinkPeriod = 24*5
    local blinkTime = 10
    if frame % blinkPeriod < blinkTime then
-     for i, p in pairs(buffer) do 
+     for i, p in pairs(buffer) do
        buffer[i] = 0x0000FF00
      end
    end
@@ -101,11 +101,11 @@ function checkKeys()
   elseif emu.isKeyPressed("4") and shaderType ~= 4 then
     shaderType = 4
     emu.displayMessage("Info", "Shader Waves selected")
-  end 
+  end
 end
 
-emu.addEventCallback(endFrame, emu.eventType.endFrame);
-emu.addEventCallback(checkKeys, emu.eventType.inputPolled);
+emu.addEventCallback(endFrame, emu.eventType.endFrame)
+emu.addEventCallback(checkKeys, emu.eventType.inputPolled)
 
 local infoStr = "Press keys from 0 to 4 to change shaders"
 emu.displayMessage("Info", infoStr)
