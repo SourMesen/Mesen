@@ -20,7 +20,7 @@ chapter: false
 	  status: int,
 	  a: int,
 	  irqFlag: int,
-	  cycleCount: int,
+	  cycleCount: int (64-bit, unsigned),
 	  pc: int,
 	  y: int,
 	  x: int,
