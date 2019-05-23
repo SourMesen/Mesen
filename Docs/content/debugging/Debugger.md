@@ -414,7 +414,7 @@ These options configure which portions of the code is copied into the clipboard 
 <div></div>
 
 * **Show break notifications**: When enabled, a "notification" will be shown over the disassembly window indicating what caused the debugger to break the execution (e.g: a CPU/PPU read/write, a decayed OAM read, etc.)
-* **Show instruction progression**: When enabled, the code window will display an indicator showing how far along into the current instruction the execution is. This also shows an estimate of how many cycles the instruction will take to complete (this estimate may increase for various reasons such as a page being crossed, etc.)
+* **Show instruction progression**: When enabled, the code window will display an indicator showing how far along into the current instruction the execution is. This also shows an estimate of how many cycles the instruction will take to complete (this estimate may increase for various reasons such as a page being crossed, etc.). `R` is Read, `W` is Write, `X` is execution or PPU rendering read, `DR` is a dummy read, and `DMC` is an APU DMC read
 * **Show selection length**: When enabled, the code window will display the current selection's length in bytes (when more than 1 line is selected)
 
 <div></div>
