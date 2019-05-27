@@ -74,6 +74,7 @@ namespace Mesen.GUI.Config
 			try {
 				XmlWriterSettings ws = new XmlWriterSettings();
 				ws.NewLineHandling = NewLineHandling.Entitize;
+				ws.Indent = true;
 
 				XmlSerializer xmlSerializer = new XmlSerializer(typeof(DebugWorkspace));
 				using(XmlWriter xmlWriter = XmlWriter.Create(_filePath, ws)) {
