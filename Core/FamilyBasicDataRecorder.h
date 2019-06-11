@@ -13,7 +13,7 @@ private:
 	vector<uint8_t> _fileData;
 	bool _enabled = false;
 	bool _isPlaying = false;
-	int32_t _cycle = -1;
+	uint64_t _cycle = 0;
 
 	bool _isRecording = false;
 	string _recordFilePath;
@@ -115,9 +115,9 @@ public:
 	uint8_t ReadRAM(uint16_t addr) override
 	{
 		if(addr == 0x4016 && _isPlaying) {
-			int32_t readPos = _console->GetCpu()->GetElapsedCycles(_cycle) / FamilyBasicDataRecorder::SamplingRate;
+			uint32_t readPos = (uint32_t)((_console->GetCpu()->GetCycleCount() / _cycle) / FamilyBasicDataRecorder::SamplingRate);
 
-			if((int32_t)_data.size() > readPos / 8) {
+			if((uint32_t)_data.size() > readPos / 8) {
 				uint8_t value = ((_data[readPos / 8] >> (readPos % 8)) & 0x01) << 1;
 				return _enabled ? value : 0;
 			} else {
@@ -133,7 +133,7 @@ public:
 		_enabled = (value & 0x04) != 0;
 
 		if(_isRecording) {
-			while(_console->GetCpu()->GetElapsedCycles(_cycle) > FamilyBasicDataRecorder::SamplingRate) {
+			while(_console->GetCpu()->GetCycleCount() - _cycle > FamilyBasicDataRecorder::SamplingRate) {
 				_data.push_back(value & 0x01);
 				_cycle += 88;
 			}

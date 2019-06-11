@@ -167,7 +167,7 @@ vector<string> FolderUtilities::GetFilesInFolder(string rootFolder, std::unorder
 			} else {
 				string extension = i->path().extension().u8string();
 				std::transform(extension.begin(), extension.end(), extension.begin(), ::tolower);
-				if(extensions.find(extension) != extensions.end()) {
+				if(extensions.empty() || extensions.find(extension) != extensions.end()) {
 					files.push_back(i->path().u8string());
 				}
 			}
@@ -176,7 +176,7 @@ vector<string> FolderUtilities::GetFilesInFolder(string rootFolder, std::unorder
 		for(fs::directory_iterator i(fs::u8path(rootFolder)), end; i != end; i++) {
 			string extension = i->path().extension().u8string();
 			std::transform(extension.begin(), extension.end(), extension.begin(), ::tolower);
-			if(extensions.find(extension) != extensions.end()) {
+			if(extensions.empty() || extensions.find(extension) != extensions.end()) {
 				files.push_back(i->path().u8string());
 			}
 		}

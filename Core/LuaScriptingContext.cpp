@@ -27,7 +27,7 @@ LuaScriptingContext::~LuaScriptingContext()
 			}
 		}
 
-		for(int i = (int)EventType::Reset; i <= (int)EventType::StateSaved; i++) {
+		for(int i = (int)EventType::Reset; i < (int)EventType::EventTypeSize; i++) {
 			for(int &ref : _eventCallbacks[i]) {
 				references.emplace(ref);
 			}

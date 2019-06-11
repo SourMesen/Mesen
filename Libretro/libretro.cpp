@@ -55,26 +55,26 @@ static std::unique_ptr<LibretroSoundManager> _soundManager;
 static std::unique_ptr<LibretroKeyManager> _keyManager;
 static std::unique_ptr<LibretroMessageManager> _messageManager;
 
-static const char* MesenNtscFilter = "mesen_ntsc_filter";
-static const char* MesenPalette = "mesen_palette";
-static const char* MesenNoSpriteLimit = "mesen_nospritelimit";
-static const char* MesenOverclock = "mesen_overclock";
-static const char* MesenOverclockType = "mesen_overclock_type";
-static const char* MesenOverscanVertical = "mesen_overscan_vertical";
-static const char* MesenOverscanHorizontal = "mesen_overscan_horizontal";
-static const char* MesenAspectRatio = "mesen_aspect_ratio";
-static const char* MesenRegion = "mesen_region";
-static const char* MesenRamState = "mesen_ramstate";
-static const char* MesenControllerTurboSpeed = "mesen_controllerturbospeed";
-static const char* MesenFdsAutoSelectDisk = "mesen_fdsautoinsertdisk";
-static const char* MesenFdsFastForwardLoad = "mesen_fdsfastforwardload";
-static const char* MesenHdPacks = "mesen_hdpacks";
-static const char* MesenScreenRotation = "mesen_screenrotation";
-static const char* MesenFakeStereo = "mesen_fake_stereo";
-static const char* MesenMuteTriangleUltrasonic = "mesen_mute_triangle_ultrasonic";
-static const char* MesenReduceDmcPopping = "mesen_reduce_dmc_popping";
-static const char* MesenSwapDutyCycle = "mesen_swap_duty_cycle";
-static const char* MesenDisableNoiseModeFlag = "mesen_disable_noise_mode_flag";
+static constexpr char* MesenNtscFilter = "mesen_ntsc_filter";
+static constexpr char* MesenPalette = "mesen_palette";
+static constexpr char* MesenNoSpriteLimit = "mesen_nospritelimit";
+static constexpr char* MesenOverclock = "mesen_overclock";
+static constexpr char* MesenOverclockType = "mesen_overclock_type";
+static constexpr char* MesenOverscanVertical = "mesen_overscan_vertical";
+static constexpr char* MesenOverscanHorizontal = "mesen_overscan_horizontal";
+static constexpr char* MesenAspectRatio = "mesen_aspect_ratio";
+static constexpr char* MesenRegion = "mesen_region";
+static constexpr char* MesenRamState = "mesen_ramstate";
+static constexpr char* MesenControllerTurboSpeed = "mesen_controllerturbospeed";
+static constexpr char* MesenFdsAutoSelectDisk = "mesen_fdsautoinsertdisk";
+static constexpr char* MesenFdsFastForwardLoad = "mesen_fdsfastforwardload";
+static constexpr char* MesenHdPacks = "mesen_hdpacks";
+static constexpr char* MesenScreenRotation = "mesen_screenrotation";
+static constexpr char* MesenFakeStereo = "mesen_fake_stereo";
+static constexpr char* MesenMuteTriangleUltrasonic = "mesen_mute_triangle_ultrasonic";
+static constexpr char* MesenReduceDmcPopping = "mesen_reduce_dmc_popping";
+static constexpr char* MesenSwapDutyCycle = "mesen_swap_duty_cycle";
+static constexpr char* MesenDisableNoiseModeFlag = "mesen_disable_noise_mode_flag";
 
 uint32_t defaultPalette[0x40] { 0xFF666666, 0xFF002A88, 0xFF1412A7, 0xFF3B00A4, 0xFF5C007E, 0xFF6E0040, 0xFF6C0600, 0xFF561D00, 0xFF333500, 0xFF0B4800, 0xFF005200, 0xFF004F08, 0xFF00404D, 0xFF000000, 0xFF000000, 0xFF000000, 0xFFADADAD, 0xFF155FD9, 0xFF4240FF, 0xFF7527FE, 0xFFA01ACC, 0xFFB71E7B, 0xFFB53120, 0xFF994E00, 0xFF6B6D00, 0xFF388700, 0xFF0C9300, 0xFF008F32, 0xFF007C8D, 0xFF000000, 0xFF000000, 0xFF000000, 0xFFFFFEFF, 0xFF64B0FF, 0xFF9290FF, 0xFFC676FF, 0xFFF36AFF, 0xFFFE6ECC, 0xFFFE8170, 0xFFEA9E22, 0xFFBCBE00, 0xFF88D800, 0xFF5CE430, 0xFF45E082, 0xFF48CDDE, 0xFF4F4F4F, 0xFF000000, 0xFF000000, 0xFFFFFEFF, 0xFFC0DFFF, 0xFFD3D2FF, 0xFFE8C8FF, 0xFFFBC2FF, 0xFFFEC4EA, 0xFFFECCC5, 0xFFF7D8A5, 0xFFE4E594, 0xFFCFEF96, 0xFFBDF4AB, 0xFFB3F3CC, 0xFFB5EBF2, 0xFFB8B8B8, 0xFF000000, 0xFF000000 };
 uint32_t unsaturatedPalette[0x40] { 0xFF6B6B6B, 0xFF001E87, 0xFF1F0B96, 0xFF3B0C87, 0xFF590D61, 0xFF5E0528, 0xFF551100, 0xFF461B00, 0xFF303200, 0xFF0A4800, 0xFF004E00, 0xFF004619, 0xFF003A58, 0xFF000000, 0xFF000000, 0xFF000000, 0xFFB2B2B2, 0xFF1A53D1, 0xFF4835EE, 0xFF7123EC, 0xFF9A1EB7, 0xFFA51E62, 0xFFA52D19, 0xFF874B00, 0xFF676900, 0xFF298400, 0xFF038B00, 0xFF008240, 0xFF007891, 0xFF000000, 0xFF000000, 0xFF000000, 0xFFFFFFFF, 0xFF63ADFD, 0xFF908AFE, 0xFFB977FC, 0xFFE771FE, 0xFFF76FC9, 0xFFF5836A, 0xFFDD9C29, 0xFFBDB807, 0xFF84D107, 0xFF5BDC3B, 0xFF48D77D, 0xFF48CCCE, 0xFF555555, 0xFF000000, 0xFF000000, 0xFFFFFFFF, 0xFFC4E3FE, 0xFFD7D5FE, 0xFFE6CDFE, 0xFFF9CAFE, 0xFFFEC9F0, 0xFFFED1C7, 0xFFF7DCAC, 0xFFE8E89C, 0xFFD1F29D, 0xFFBFF4B1, 0xFFB7F5CD, 0xFFB7F0EE, 0xFFBEBEBE, 0xFF000000, 0xFF000000 };
@@ -144,7 +144,7 @@ extern "C" {
 	{
 		retroEnv = env;
 
-		static const struct retro_variable vars[] = {
+		static constexpr struct retro_variable vars[] = {
 			{ MesenNtscFilter, "NTSC filter; Disabled|Composite (Blargg)|S-Video (Blargg)|RGB (Blargg)|Monochrome (Blargg)|Bisqwit 2x|Bisqwit 4x|Bisqwit 8x" },
 			{ MesenPalette, "Palette; Default|Composite Direct (by FirebrandX)|Nes Classic|Nestopia (RGB)|Original Hardware (by FirebrandX)|PVM Style (by FirebrandX)|Sony CXA2025AS|Unsaturated v6 (by FirebrandX)|YUV v3 (by FirebrandX)|Wavebeam (by nakedarthur)|Custom|Raw" },
 			{ MesenOverclock, "Overclock; None|Low|Medium|High|Very High" },
@@ -168,7 +168,7 @@ extern "C" {
 			{ NULL, NULL },
 		};
 
-		static const struct retro_controller_description pads1[] = {
+		static constexpr struct retro_controller_description pads1[] = {
 			{ "Auto", DEVICE_AUTO },
 			{ "Standard Controller", DEVICE_GAMEPAD },
 			{ "Zapper", DEVICE_ZAPPER },
@@ -179,7 +179,7 @@ extern "C" {
 			{ NULL, 0 },
 		};
 
-		static const struct retro_controller_description pads2[] = {
+		static constexpr struct retro_controller_description pads2[] = {
 			{ "Auto", DEVICE_AUTO },
 			{ "Standard Controller", DEVICE_GAMEPAD },
 			{ "Zapper", DEVICE_ZAPPER },
@@ -190,19 +190,19 @@ extern "C" {
 			{ NULL, 0 },
 		};
 
-		static const struct retro_controller_description pads3[] = {
+		static constexpr struct retro_controller_description pads3[] = {
 			{ "Auto", DEVICE_AUTO },
 			{ "Standard Controller", DEVICE_GAMEPAD },
 			{ NULL, 0 },
 		};
 
-		static const struct retro_controller_description pads4[] = {
+		static constexpr struct retro_controller_description pads4[] = {
 			{ "Auto", DEVICE_AUTO },
 			{ "Standard Controller", DEVICE_GAMEPAD },
 			{ NULL, 0 },
 		};
 		
-		static const struct retro_controller_description pads5[] = {
+		static constexpr struct retro_controller_description pads5[] = {
 			{ "Auto",     RETRO_DEVICE_JOYPAD },
 			{ "Arkanoid", DEVICE_ARKANOID },
 			{ "Ascii Turbo File", DEVICE_ASCIITURBOFILE },
@@ -219,7 +219,7 @@ extern "C" {
 			{ NULL, 0 },
 		};
 		
-		static const struct retro_controller_info ports[] = {
+		static constexpr struct retro_controller_info ports[] = {
 			{ pads1, 7 },
 			{ pads2, 7 },
 			{ pads3, 2 },
@@ -287,23 +287,23 @@ extern "C" {
 	void load_custom_palette()
 	{
 		//Setup default palette in case we can't load the custom one
-		_console->GetSettings()->SetRgbPalette(defaultPalette);
+		_console->GetSettings()->SetUserRgbPalette(defaultPalette);
 
 		//Try to load the custom palette from the MesenPalette.pal file
 		string palettePath = FolderUtilities::CombinePath(FolderUtilities::GetHomeFolder(), "MesenPalette.pal");
-		uint8_t fileData[64 * 3] = {};
+		uint8_t fileData[512 * 3] = {};
 		ifstream palette(palettePath, ios::binary);
 		if(palette) {
 			palette.seekg(0, ios::end);
-			std::streampos fileSize = palette.tellg();
+			std::streamoff fileSize = palette.tellg();
 			palette.seekg(0, ios::beg);
-			if(fileSize >= 64 * 3) {
-				palette.read((char*)fileData, 64 * 3);
-				uint32_t customPalette[64];
-				for(int i = 0; i < 64; i++) {
+			if((fileSize == 64 * 3) || (fileSize == 512 * 3)) {
+				palette.read((char*)fileData, fileSize);
+				uint32_t customPalette[512];
+				for(int i = 0; i < fileSize / 3; i++) {
 					customPalette[i] = 0xFF000000 | fileData[i * 3 + 2] | (fileData[i * 3 + 1] << 8) | (fileData[i * 3] << 16);
 				}
-				_console->GetSettings()->SetRgbPalette(customPalette);
+				_console->GetSettings()->SetUserRgbPalette(customPalette, (uint32_t)fileSize / 3);
 			}
 		}
 	}
@@ -369,25 +369,25 @@ extern "C" {
 		if(readVariable(MesenPalette, var)) {
 			string value = string(var.value);
 			if(value == "Default") {
-				_console->GetSettings()->SetRgbPalette(defaultPalette);
+				_console->GetSettings()->SetUserRgbPalette(defaultPalette);
 			} else if(value == "Composite Direct (by FirebrandX)") {
-				_console->GetSettings()->SetRgbPalette(compositeDirectPalette);
+				_console->GetSettings()->SetUserRgbPalette(compositeDirectPalette);
 			} else if(value == "Nes Classic") {
-				_console->GetSettings()->SetRgbPalette(nesClassicPalette);
+				_console->GetSettings()->SetUserRgbPalette(nesClassicPalette);
 			} else if(value == "Nestopia (RGB)") {
-				_console->GetSettings()->SetRgbPalette(nestopiaRgbPalette);
+				_console->GetSettings()->SetUserRgbPalette(nestopiaRgbPalette);
 			} else if(value == "Original Hardware (by FirebrandX)") {
-				_console->GetSettings()->SetRgbPalette(originalHardwarePalette);
+				_console->GetSettings()->SetUserRgbPalette(originalHardwarePalette);
 			} else if(value == "PVM Style (by FirebrandX)") {
-				_console->GetSettings()->SetRgbPalette(pvmStylePalette);
+				_console->GetSettings()->SetUserRgbPalette(pvmStylePalette);
 			} else if(value == "Sony CXA2025AS") {
-				_console->GetSettings()->SetRgbPalette(sonyCxa2025AsPalette);
+				_console->GetSettings()->SetUserRgbPalette(sonyCxa2025AsPalette);
 			} else if(value == "Unsaturated v6 (by FirebrandX)") {
-				_console->GetSettings()->SetRgbPalette(unsaturatedPalette);
+				_console->GetSettings()->SetUserRgbPalette(unsaturatedPalette);
 			} else if(value == "YUV v3 (by FirebrandX)") {
-				_console->GetSettings()->SetRgbPalette(yuvPalette);
+				_console->GetSettings()->SetUserRgbPalette(yuvPalette);
 			} else if(value == "Wavebeam (by nakedarthur)") {
-				_console->GetSettings()->SetRgbPalette(wavebeamPalette);
+				_console->GetSettings()->SetUserRgbPalette(wavebeamPalette);
 			} else if(value == "Custom") {
 				load_custom_palette();
 			} else if(value == "Raw") {

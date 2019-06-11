@@ -9,8 +9,8 @@ namespace Mesen.GUI.Debugger
 	public class ChrByteColorProvider : IByteColorProvider
 	{
 		DebugMemoryType _memoryType;
-		Int32[] _readStamps;
-		Int32[] _writeStamps;
+		UInt64[] _readStamps;
+		UInt64[] _writeStamps;
 		Int32[] _readCounts;
 		Int32[] _writeCounts;
 		DebugState _state = new DebugState();

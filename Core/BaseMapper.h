@@ -97,6 +97,8 @@ protected:
 	virtual uint16_t RegisterEndAddress() { return 0xFFFF; }
 	virtual bool AllowRegisterRead() { return false; }
 
+	virtual uint32_t GetDipSwitchCount() { return 0; }
+
 	virtual bool HasBusConflicts() { return false; }
 
 	uint8_t InternalReadRam(uint16_t addr);
@@ -129,7 +131,8 @@ protected:
 	uint32_t GetCHRPageCount();
 
 	uint8_t GetPowerOnByte(uint8_t defaultValue = 0);
-	
+	uint32_t GetDipSwitches();
+
 	void SetupDefaultWorkRam();
 
 	void RestoreOriginalPrgRam();
@@ -151,7 +154,7 @@ protected:
 public:
 	static constexpr uint32_t NametableCount = 0x10;
 	static constexpr uint32_t NametableSize = 0x400;
-
+	
 	void Initialize(RomData &romData);
 
 	virtual ~BaseMapper();
@@ -173,6 +176,7 @@ public:
 
 	shared_ptr<BaseControlDevice> GetMapperControlDevice();
 	RomInfo GetRomInfo();
+	uint32_t GetMapperDipSwitchCount();
 
 	__forceinline uint8_t ReadRAM(uint16_t addr) override;
 	uint8_t PeekRAM(uint16_t addr) override;

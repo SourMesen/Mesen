@@ -99,12 +99,13 @@ public:
 	~TraceLogger();
 
 	void Log(DebugState &state, DisassemblyInfo &disassemblyInfo, OperationInfo &operationInfo);
+	void Clear();
 	void LogNonExec(OperationInfo& operationInfo);
 	void SetOptions(TraceLoggerOptions options);
 	void StartLogging(string filename);
 	void StopLogging();
 
-	void LogExtraInfo(const char *log, uint32_t cycleCount);
+	void LogExtraInfo(const char *log, uint64_t cycleCount);
 
 	const char* GetExecutionTrace(uint32_t lineCount);
 };

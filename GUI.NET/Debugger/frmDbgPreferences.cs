@@ -39,8 +39,6 @@ namespace Mesen.GUI.Debugger
 				GetMember(nameof(DebuggerShortcutsConfig.GoToAll)),
 				GetMember(nameof(DebuggerShortcutsConfig.CodeWindow_EditInMemoryViewer)),
 				GetMember(nameof(DebuggerShortcutsConfig.MemoryViewer_ViewInDisassembly)),
-				GetMember(nameof(DebuggerShortcutsConfig.PpuViewer_ToggleView)),
-				GetMember(nameof(DebuggerShortcutsConfig.PpuViewer_ToggleZoom)),
 
 				GetMember(nameof(DebuggerShortcutsConfig.OpenApuViewer)),
 				GetMember(nameof(DebuggerShortcutsConfig.OpenAssembler)),
@@ -77,6 +75,13 @@ namespace Mesen.GUI.Debugger
 				GetMember(nameof(DebuggerShortcutsConfig.ScriptWindow_SaveScript)),
 				GetMember(nameof(DebuggerShortcutsConfig.ScriptWindow_RunScript)),
 				GetMember(nameof(DebuggerShortcutsConfig.ScriptWindow_StopScript))
+			};
+
+			ctrlDbgShortcutsPpuViewer.Shortcuts = new FieldInfo[] {
+				GetMember(nameof(DebuggerShortcutsConfig.PpuViewer_ToggleView)),
+				GetMember(nameof(DebuggerShortcutsConfig.PpuViewer_ToggleZoom)),
+				GetMember(nameof(DebuggerShortcutsConfig.PpuViewer_AddBreakpointTile)),
+				GetMember(nameof(DebuggerShortcutsConfig.PpuViewer_AddBreakpointAttribute)),
 			};
 
 			ctrlDbgShortcutsDebugger.Shortcuts = new FieldInfo[] {
@@ -156,6 +161,7 @@ namespace Mesen.GUI.Debugger
 			ctrlDbgShortcutsMemoryViewer.InitializeGrid();
 			ctrlDbgShortcutsScriptWindow.InitializeGrid();
 			ctrlDbgShortcutsShared.InitializeGrid();
+			ctrlDbgShortcutsPpuViewer.InitializeGrid();
 		}
 	}
 }

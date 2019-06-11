@@ -14,8 +14,6 @@ namespace Mesen.GUI.Config
 		public bool PauseWhenInDebuggingTools = false;
 		public bool AllowBackgroundInput = false;
 		public bool AutoLoadIpsPatches = true;
-		public bool AllowInvalidInput = false;
-		public bool RemoveSpriteLimit = false;
 
 		public bool DisplayMovieIcons = false;
 		public bool HidePauseOverlay = false;
@@ -182,8 +180,6 @@ namespace Mesen.GUI.Config
 
 			InteropEmu.SetFlag(EmulationFlags.DeveloperMode, preferenceInfo.DeveloperMode);
 
-			InteropEmu.SetFlag(EmulationFlags.AllowInvalidInput, preferenceInfo.AllowInvalidInput);
-			InteropEmu.SetFlag(EmulationFlags.RemoveSpriteLimit, preferenceInfo.RemoveSpriteLimit);
 			InteropEmu.SetFlag(EmulationFlags.FdsAutoLoadDisk, preferenceInfo.FdsAutoLoadDisk);
 			InteropEmu.SetFlag(EmulationFlags.FdsFastForwardOnLoad, preferenceInfo.FdsFastForwardOnLoad);
 			InteropEmu.SetFlag(EmulationFlags.FdsAutoInsertDisk, preferenceInfo.FdsAutoInsertDisk);

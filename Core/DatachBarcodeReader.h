@@ -9,7 +9,7 @@ class DatachBarcodeReader : public BaseControlDevice, public IBarcodeReader
 {
 private:
 	vector<uint8_t> _data;
-	int32_t _insertCycle = 0;
+	uint64_t _insertCycle = 0;
 	uint64_t _newBarcode = 0;
 	uint32_t _newBarcodeDigitCount = 0;
 
@@ -53,9 +53,9 @@ public:
 
 	uint8_t GetOutput()
 	{
-		int32_t elapsedCycles = _console->GetCpu()->GetElapsedCycles(_insertCycle);
-		int32_t bitNumber = elapsedCycles / 1000;
-		if(bitNumber < (int32_t)_data.size()) {
+		uint64_t elapsedCycles = _console->GetCpu()->GetCycleCount() - _insertCycle;
+		uint32_t bitNumber = (uint32_t)(elapsedCycles / 1000);
+		if(bitNumber < (uint32_t)_data.size()) {
 			return _data[bitNumber];
 		} else {
 			return 0;

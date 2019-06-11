@@ -44,7 +44,7 @@ class MMC1 : public BaseMapper
 		uint8_t _chrReg1;
 		uint8_t _prgReg;
 
-		int32_t _lastWriteCycle = -1;
+		uint64_t _lastWriteCycle = 0;
 		
 		bool _forceWramOn;
 		MMC1Registers _lastChrReg;
@@ -195,10 +195,10 @@ class MMC1 : public BaseMapper
 
 		virtual void WriteRegister(uint16_t addr, uint8_t value) override
 		{
-			int32_t currentCycle = _console->GetCpu()->GetCycleCount();
+			uint64_t currentCycle = _console->GetCpu()->GetCycleCount();
 			
 			//Ignore write if within 2 cycles of another write (i.e the real write after a dummy write)
-			if(abs(currentCycle - _lastWriteCycle) >= 2) {
+			if(currentCycle - _lastWriteCycle >= 2) {
 				if(IsBufferFull(value)) {
 					switch((MMC1Registers)((addr & 0x6000) >> 13)) {
 						case MMC1Registers::Reg8000: _state.Reg8000 = _writeBuffer; break;

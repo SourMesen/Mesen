@@ -24,6 +24,7 @@
 #include "LabelManager.h"
 
 #define lua_pushintvalue(name, value) lua_pushliteral(lua, #name); lua_pushinteger(lua, (int)value); lua_settable(lua, -3);
+#define lua_pushint64value(name, value) lua_pushliteral(lua, #name); lua_pushinteger(lua, (int64_t)value); lua_settable(lua, -3);
 #define lua_pushdoublevalue(name, value) lua_pushliteral(lua, #name); lua_pushnumber(lua, (double)value); lua_settable(lua, -3);
 #define lua_pushboolvalue(name, value) lua_pushliteral(lua, #name); lua_pushboolean(lua, (int)value); lua_settable(lua, -3);
 #define lua_pushstringvalue(name, value) lua_pushliteral(lua, #name); lua_pushstring(lua, value.c_str()); lua_settable(lua, -3);
@@ -941,7 +942,7 @@ int LuaApi::GetState(lua_State *lua)
 
 	lua_starttable("cpu");
 	lua_pushintvalue(a, state.CPU.A);
-	lua_pushintvalue(cycleCount, state.CPU.CycleCount);
+	lua_pushint64value(cycleCount, state.CPU.CycleCount);
 	lua_pushintvalue(irqFlag, state.CPU.IRQFlag);
 	lua_pushboolvalue(nmiFlag, state.CPU.NMIFlag);
 	lua_pushintvalue(pc, state.CPU.PC);

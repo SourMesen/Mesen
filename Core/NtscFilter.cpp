@@ -6,8 +6,8 @@
 
 NtscFilter::NtscFilter(shared_ptr<Console> console) : BaseVideoFilter(console)
 {
-	memset(_basePalette, 0, 64 * 3);
-	_ntscData = new nes_ntsc_t();
+	memset(_palette, 0, sizeof(_palette));
+	memset(&_ntscData, 0, sizeof(_ntscData));
 	_ntscSetup = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 	_ntscBuffer = new uint32_t[NES_NTSC_OUT_WIDTH(256) * 240];
 }
@@ -41,17 +41,17 @@ void NtscFilter::OnBeforeApplyFilter()
 {
 	bool paletteChanged = false;
 	uint32_t* palette = _console->GetSettings()->GetRgbPalette();
-	for(int i = 0; i < 64; i++) {
+	for(int i = 0, len = _console->GetSettings()->IsFullColorPalette() ? 512 : 64; i < len; i++) {
 		uint8_t r = (palette[i] >> 16) & 0xFF;
 		uint8_t g = (palette[i] >> 8) & 0xFF;
 		uint8_t b = palette[i] & 0xFF;
 
-		if(_basePalette[i * 3] != r || _basePalette[i * 3 + 1] != g || _basePalette[i * 3 + 2] != b) {
+		if(_palette[i * 3] != r || _palette[i * 3 + 1] != g || _palette[i * 3 + 2] != b) {
 			paletteChanged = true;
 
-			_basePalette[i * 3] = (palette[i] >> 16) & 0xFF;
-			_basePalette[i * 3 + 1] = (palette[i] >> 8) & 0xFF;
-			_basePalette[i * 3 + 2] = palette[i] & 0xFF;
+			_palette[i * 3] = (palette[i] >> 16) & 0xFF;
+			_palette[i * 3 + 1] = (palette[i] >> 8) & 0xFF;
+			_palette[i * 3 + 2] = palette[i] & 0xFF;
 		}
 	}
 
@@ -63,7 +63,6 @@ void NtscFilter::OnBeforeApplyFilter()
 	if(paletteChanged || _ntscSetup.hue != pictureSettings.Hue || _ntscSetup.saturation != pictureSettings.Saturation || _ntscSetup.brightness != pictureSettings.Brightness || _ntscSetup.contrast != pictureSettings.Contrast ||
 		_ntscSetup.artifacts != ntscSettings.Artifacts || _ntscSetup.bleed != ntscSettings.Bleed || _ntscSetup.fringing != ntscSettings.Fringing || _ntscSetup.gamma != ntscSettings.Gamma ||
 		(_ntscSetup.merge_fields == 1) != ntscSettings.MergeFields || _ntscSetup.resolution != ntscSettings.Resolution || _ntscSetup.sharpness != ntscSettings.Sharpness) {
-		
 		_ntscSetup.hue = pictureSettings.Hue;
 		_ntscSetup.saturation = pictureSettings.Saturation;
 		_ntscSetup.brightness = pictureSettings.Brightness;
@@ -77,15 +76,21 @@ void NtscFilter::OnBeforeApplyFilter()
 		_ntscSetup.resolution = ntscSettings.Resolution;
 		_ntscSetup.sharpness = ntscSettings.Sharpness;
 
-		_ntscSetup.base_palette = _console->GetSettings()->IsDefaultPalette() ? nullptr : _basePalette;
+		if(_console->GetSettings()->IsFullColorPalette()) {
+			_ntscSetup.base_palette = nullptr;
+			_ntscSetup.palette = _palette;
+		} else {
+			_ntscSetup.base_palette = _palette;
+			_ntscSetup.palette = nullptr;
+		}
 
-		nes_ntsc_init(_ntscData, &_ntscSetup);
+		nes_ntsc_init(&_ntscData, &_ntscSetup);
 	}
 }
 
 void NtscFilter::ApplyFilter(uint16_t *ppuOutputBuffer)
 {
-	nes_ntsc_blit(_ntscData, ppuOutputBuffer, PPU::ScreenWidth, IsOddFrame() ? 0 : 1, PPU::ScreenWidth, 240, _ntscBuffer, NES_NTSC_OUT_WIDTH(PPU::ScreenWidth)*4);
+	nes_ntsc_blit(&_ntscData, ppuOutputBuffer, PPU::ScreenWidth, IsOddFrame() ? 0 : 1, PPU::ScreenWidth, 240, _ntscBuffer, NES_NTSC_OUT_WIDTH(PPU::ScreenWidth)*4);
 	GenerateArgbFrame(_ntscBuffer);
 }
 
@@ -152,6 +157,5 @@ void NtscFilter::GenerateArgbFrame(uint32_t *ntscBuffer)
 
 NtscFilter::~NtscFilter()
 {
-	delete _ntscData;
 	delete[] _ntscBuffer;
 }

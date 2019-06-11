@@ -164,6 +164,7 @@ public:
 		return std::dynamic_pointer_cast<T>(_systemActionManager);
 	}
 
+	uint32_t GetDipSwitchCount();
 	ConsoleFeatures GetAvailableFeatures();
 	void InputBarcode(uint64_t barcode, uint32_t digitCount);
 

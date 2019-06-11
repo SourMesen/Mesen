@@ -307,10 +307,12 @@ void Debugger::SetBreakpoints(Breakpoint breakpoints[], uint32_t length)
 			if((bp.IsMarked() || isEnabled) && bp.HasBreakpointType((BreakpointType)i)) {
 				_breakpoints[i].push_back(bp);
 
-				bool success = true;
 				if(bp.HasCondition()) {
+					bool success = true;
 					ExpressionData data = _bpExpEval->GetRpnList(bp.GetCondition(), success);
 					_breakpointRpnList[i].push_back(success ? data : ExpressionData());
+				} else {
+					_breakpointRpnList[i].push_back(ExpressionData());
 				}
 
 				if(isEnabled) {
@@ -642,6 +644,11 @@ void Debugger::ProcessStepConditions(uint16_t addr)
 	}
 }
 
+bool Debugger::IsPpuCycleToProcess()
+{
+	return _proccessPpuCycle[_ppu->GetCurrentCycle()] || _hasBreakpoint[BreakpointType::Global] || _ppuStepCount > 0;
+}
+
 void Debugger::ProcessPpuCycle()
 {
 	if(_proccessPpuCycle[_ppu->GetCurrentCycle()]) {
@@ -665,9 +672,8 @@ void Debugger::ProcessPpuCycle()
 		}
 	}
 
-	OperationInfo operationInfo { 0, 0, MemoryOperationType::DummyRead };
-	
 	if(_hasBreakpoint[BreakpointType::Global]) {
+		OperationInfo operationInfo { 0, 0, MemoryOperationType::DummyRead };
 		ProcessBreakpoints(BreakpointType::Global, operationInfo);
 	}
 
@@ -783,21 +789,25 @@ bool Debugger::ProcessRamOperation(MemoryOperationType type, uint16_t &addr, uin
 		_prevInstructionCycle = _curInstructionCycle;
 		_curInstructionCycle = _cpu->GetCycleCount();
 
-		bool isSubEntryPoint = _lastInstruction == 0x20; //Previous instruction was a JSR
-		_disassembler->BuildCache(addressInfo, addr, isSubEntryPoint, true);
-
+		_disassembler->BuildCache(addressInfo, addr, false, true);
+		
 		if(absoluteAddr >= 0) {
 			_codeDataLogger->SetFlag(absoluteAddr, CdlPrgFlags::Code);
-			if(isSubEntryPoint) {
-				_codeDataLogger->SetFlag(absoluteAddr, CdlPrgFlags::SubEntryPoint);
-				_functionEntryPoints.emplace(absoluteAddr);
-			}
+		}
 
-			if(_disassembler->IsJump(value) && value != 0x20) {
-				//Only mark as jump target if not marked as sub entry point
-				int32_t targetAddr = GetAbsoluteAddress(_disassembler->GetDisassemblyInfo(addressInfo).GetJumpDestination(_cpu->GetPC(), _memoryManager.get()));
-				if(targetAddr >= 0) {
-					_codeDataLogger->SetFlag(targetAddr, CdlPrgFlags::JumpTarget);
+		if(_disassembler->IsJump(value)) {
+			uint16_t targetPc = _disassembler->GetDisassemblyInfo(addressInfo).GetJumpDestination(_cpu->GetPC(), _memoryManager.get());
+			AddressTypeInfo addressInfo;
+			GetAbsoluteAddressAndType(targetPc, &addressInfo);
+			if(addressInfo.Address >= 0 && addressInfo.Type == AddressType::PrgRom) {
+				if(value == 0x20) {
+					//JSR, mark target as a sub entry point
+					_disassembler->BuildCache(addressInfo, targetPc, true, false);
+					_functionEntryPoints.emplace(addressInfo.Address);
+					_codeDataLogger->SetFlag(addressInfo.Address, CdlPrgFlags::SubEntryPoint);
+				} else {
+					//Only mark as jump target if not marked as sub entry point
+					_codeDataLogger->SetFlag(addressInfo.Address, CdlPrgFlags::JumpTarget);
 				}
 			}
 		}
@@ -1642,6 +1652,7 @@ void Debugger::GetDebugEvents(uint32_t* pictureBuffer, DebugEventInfo *infoArray
 
 uint32_t Debugger::GetDebugEventCount(bool returnPreviousFrameData)
 {
+	DebugBreakHelper helper(this);
 	return (uint32_t)(returnPreviousFrameData ? _prevDebugEvents.size() : _debugEvents.size());
 }
 

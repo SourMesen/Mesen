@@ -18,7 +18,7 @@ function Main()
     end
   end
   emu.setScreenBuffer(bufferO)
-end  
+end
 
 emu.addEventCallback(Main, emu.eventType.inputPolled)
 emu.displayMessage("Script", "Reverse Mode")

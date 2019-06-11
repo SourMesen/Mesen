@@ -9,9 +9,9 @@ namespace Mesen.GUI.Debugger
 	public class ByteColorProvider : IByteColorProvider
 	{
 		DebugMemoryType _memoryType;
-		Int32[] _readStamps;
-		Int32[] _writeStamps;
-		Int32[] _execStamps;
+		UInt64[] _readStamps;
+		UInt64[] _writeStamps;
+		UInt64[] _execStamps;
 		Int32[] _readCounts;
 		Int32[] _writeCounts;
 		Int32[] _execCounts;

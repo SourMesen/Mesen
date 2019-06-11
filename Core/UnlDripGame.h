@@ -14,9 +14,9 @@ private:
 	bool _irqEnabled;
 	bool _extAttributesEnabled;
 	bool _wramWriteEnabled;
-	bool _dipSwitch;
 
 protected:
+	uint32_t GetDipSwitchCount() override { return 1; }
 	uint16_t GetPRGPageSize() override { return 0x4000; }
 	uint16_t GetCHRPageSize() override { return 0x800; }
 	bool AllowRegisterRead() override { return true; }
@@ -33,7 +33,6 @@ protected:
 		_irqEnabled = false;
 		_extAttributesEnabled = false;
 		_wramWriteEnabled = false;
-		_dipSwitch = false;
 		_lastNametableFetchAddr = 0;
 
 		InitializeRam(_extendedAttributes[0], 0x400);
@@ -55,7 +54,7 @@ protected:
 		SnapshotInfo audioChannel2 { _audioChannels[1].get() };
 
 		Stream(extAttributes1, extAttributes2, audioChannel1, audioChannel2, _lowByteIrqCounter, _irqCounter, _irqEnabled,
-				 _extAttributesEnabled, _wramWriteEnabled, _dipSwitch);
+				 _extAttributesEnabled, _wramWriteEnabled);
 		
 		if(!saving) {
 			UpdateWorkRamState();
@@ -114,7 +113,7 @@ protected:
 	uint8_t ReadRegister(uint16_t addr) override
 	{
 		switch(addr & 0x5800) {
-			case 0x4800: return (_dipSwitch ? 0x80 : 0) | 0x64;
+			case 0x4800: return (GetDipSwitches() ? 0x80 : 0) | 0x64;
 			case 0x5000: return _audioChannels[0]->ReadRegister();
 			case 0x5800: return _audioChannels[1]->ReadRegister();
 		}

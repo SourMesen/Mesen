@@ -7,7 +7,7 @@
 --
 -- Each scanline with overflow will be marked by a small red line on the left side of the screen.
 -- As the number of sprites over the limit increases, the line will progressively turn orange, yellow and then white.
--- 
+--
 -- Sprites with a red box as normal priority sprites, those in blue are background priority sprites.
 --
 -- 4 different display modes exist (change mode by right-clicking on the screen):
@@ -30,14 +30,14 @@ function Main()
     height = 16
   else
     height = 8
-  end  
+  end
 
   for oamAddr = 0, 252, 4 do
     spriteY = emu.read(oamAddr, emu.memType.oam) + 1
     if spriteY < 240 then
       spritesOnScreen = spritesOnScreen + 1
       for i = 0, (height - 1 ) do
-        spritesOnLine[spriteY + i] = spritesOnLine[spriteY + i] + 1 
+        spritesOnLine[spriteY + i] = spritesOnLine[spriteY + i] + 1
       end
     end
     spriteX = emu.read(oamAddr + 3, emu.memType.oam)
@@ -46,7 +46,7 @@ function Main()
     else
       color = 0x0000ff
     end
-    if mode == 2 then 
+    if mode == 2 then
       alpha = oamAddr / 4 * 0x03000000 + 0x20000000
     end
     emu.drawRectangle(spriteX, spriteY, 8, height, color + alpha, fill, 1)
@@ -60,8 +60,8 @@ function Main()
       elseif overflow > 8 then
         overflowColor = 0xFFFF00 + (((overflow - 1) & 7) << 5)
       else
-        overflowColor = 0xFF0000 + (((overflow - 1) & 7) << 13)  
-      end  
+        overflowColor = 0xFF0000 + (((overflow - 1) & 7) << 13)
+      end
       emu.drawLine(0, scanline, 7, scanline, overflowColor, 1)
       counterColor = 0xFF0000
     end
@@ -78,7 +78,7 @@ function SelectMode()
     if not holdButton then
       mode = (mode + 1) & 3
       emu.drawRectangle(94, 87, 68, 12, 0x404040, true, 50)
-      emu.drawRectangle(93, 86, 70, 14, 0x808080, false, 50)    
+      emu.drawRectangle(93, 86, 70, 14, 0x808080, false, 50)
       if mode == 0 then
         fill = false
         alpha = 0x40000000
@@ -96,11 +96,11 @@ function SelectMode()
       holdButton = true
     end
   else
-    holdButton = false  
-  end  
+    holdButton = false
+  end
 end
 
-  
+
 mode = 0
 alpha = 0x40000000
 holdButton = false

@@ -604,8 +604,9 @@ private:
 		/* 2C05-05 */		{ 0xFF6D6D6D, 0xFF002491, 0xFF0000DA, 0xFF6D48DA, 0xFF91006D, 0xFFB6006D, 0xFFB62400, 0xFF914800, 0xFF6D4800, 0xFF244800, 0xFF006D24, 0xFF009100, 0xFF004848, 0xFF000000, 0xFF000000, 0xFF000000, 0xFFB6B6B6, 0xFF006DDA, 0xFF0048FF, 0xFF9100FF, 0xFFB600FF, 0xFFFF0091, 0xFFFF0000, 0xFFDA6D00, 0xFF916D00, 0xFF249100, 0xFF009100, 0xFF00B66D, 0xFF009191, 0xFF000000, 0xFF000000, 0xFF000000, 0xFFFFFFFF, 0xFF6DB6FF, 0xFF9191FF, 0xFFDA6DFF, 0xFFFF00FF, 0xFFFF6DFF, 0xFFFF9100, 0xFFFFB600, 0xFFDADA00, 0xFF6DDA00, 0xFF00FF00, 0xFF48FFDA, 0xFF00FFFF, 0xFF000000, 0xFF000000, 0xFF000000, 0xFFFFFFFF, 0xFFB6DAFF, 0xFFDAB6FF, 0xFFFFB6FF, 0xFFFF91FF, 0xFFFFB6B6, 0xFFFFDA91, 0xFFFFFF48, 0xFFFFFF6D, 0xFFB6FF48, 0xFF91FF6D, 0xFF48FFDA, 0xFF91DAFF, 0xFF000000, 0xFF000000, 0xFF000000 }
 	};
 
-	uint32_t _defaultPpuPalette[64] = { /* 2C02 */ 0xFF666666, 0xFF002A88, 0xFF1412A7, 0xFF3B00A4, 0xFF5C007E, 0xFF6E0040, 0xFF6C0600, 0xFF561D00, 0xFF333500, 0xFF0B4800, 0xFF005200, 0xFF004F08, 0xFF00404D, 0xFF000000, 0xFF000000, 0xFF000000, 0xFFADADAD, 0xFF155FD9, 0xFF4240FF, 0xFF7527FE, 0xFFA01ACC, 0xFFB71E7B, 0xFFB53120, 0xFF994E00, 0xFF6B6D00, 0xFF388700, 0xFF0C9300, 0xFF008F32, 0xFF007C8D, 0xFF000000, 0xFF000000, 0xFF000000, 0xFFFFFEFF, 0xFF64B0FF, 0xFF9290FF, 0xFFC676FF, 0xFFF36AFF, 0xFFFE6ECC, 0xFFFE8170, 0xFFEA9E22, 0xFFBCBE00, 0xFF88D800, 0xFF5CE430, 0xFF45E082, 0xFF48CDDE, 0xFF4F4F4F, 0xFF000000, 0xFF000000, 0xFFFFFEFF, 0xFFC0DFFF, 0xFFD3D2FF, 0xFFE8C8FF, 0xFFFBC2FF, 0xFFFEC4EA, 0xFFFECCC5, 0xFFF7D8A5, 0xFFE4E594, 0xFFCFEF96, 0xFFBDF4AB, 0xFFB3F3CC, 0xFFB5EBF2, 0xFFB8B8B8, 0xFF000000, 0xFF000000 };
-	uint32_t _currentPalette[64] = { 0xFF666666, 0xFF002A88, 0xFF1412A7, 0xFF3B00A4, 0xFF5C007E, 0xFF6E0040, 0xFF6C0600, 0xFF561D00, 0xFF333500, 0xFF0B4800, 0xFF005200, 0xFF004F08, 0xFF00404D, 0xFF000000, 0xFF000000, 0xFF000000, 0xFFADADAD, 0xFF155FD9, 0xFF4240FF, 0xFF7527FE, 0xFFA01ACC, 0xFFB71E7B, 0xFFB53120, 0xFF994E00, 0xFF6B6D00, 0xFF388700, 0xFF0C9300, 0xFF008F32, 0xFF007C8D, 0xFF000000, 0xFF000000, 0xFF000000, 0xFFFFFEFF, 0xFF64B0FF, 0xFF9290FF, 0xFFC676FF, 0xFFF36AFF, 0xFFFE6ECC, 0xFFFE8170, 0xFFEA9E22, 0xFFBCBE00, 0xFF88D800, 0xFF5CE430, 0xFF45E082, 0xFF48CDDE, 0xFF4F4F4F, 0xFF000000, 0xFF000000, 0xFFFFFEFF, 0xFFC0DFFF, 0xFFD3D2FF, 0xFFE8C8FF, 0xFFFBC2FF, 0xFFFEC4EA, 0xFFFECCC5, 0xFFF7D8A5, 0xFFE4E594, 0xFFCFEF96, 0xFFBDF4AB, 0xFFB3F3CC, 0xFFB5EBF2, 0xFFB8B8B8, 0xFF000000, 0xFF000000 };
+	bool _isFullColorPalette = false;
+	uint32_t _userPalette[512] = { };
+	uint32_t _currentPalette[512] = { };
 
 	const uint8_t _paletteLut[11][64] = {
 		/* 2C02 */      { 0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63 },
@@ -695,6 +696,11 @@ private:
 	uint32_t _dipSwitches = 0;
 
 public:
+	EmulationSettings()
+	{
+		memcpy(_userPalette, _ppuPaletteArgb, sizeof(_userPalette));
+	}
+
 	static uint32_t GetMesenVersion()
 	{
 		return (_versionMajor << 16) | (_versionMinor << 8) | _versionRevision;
@@ -785,20 +791,90 @@ public:
 		UpdateCurrentPalette();
 	}
 
+	PpuModel GetPpuModel()
+	{
+		return _ppuModel;
+	}
+
 	void UpdateCurrentPalette()
 	{
 		if(CheckFlag(EmulationFlags::UseCustomVsPalette)) {
 			for(int i = 0; i < 64; i++) {
-				_currentPalette[i] = _ppuPaletteArgb[0][_paletteLut[(int)_ppuModel][i]];
+				for(int j = 0; j < 8; j++) {
+					_currentPalette[(j << 6) | i] = _userPalette[(j << 6) | (_paletteLut[(int)_ppuModel][i])];
+				}
 			}
+		} else if(_ppuModel == PpuModel::Ppu2C02) {
+			memcpy(_currentPalette, _userPalette, sizeof(_userPalette));
 		} else {
-			memcpy(_currentPalette, _ppuPaletteArgb[(int)_ppuModel], sizeof(_currentPalette));
+			memcpy(_currentPalette, _ppuPaletteArgb[(int)_ppuModel], sizeof(_ppuPaletteArgb[0]));
+			GenerateFullColorPalette(_currentPalette);
 		}
 	}
 
-	PpuModel GetPpuModel()
+	uint32_t* GetRgbPalette()
 	{
-		return _ppuModel;
+		return _currentPalette;
+	}
+
+	void GetUserRgbPalette(uint32_t* paletteBuffer)
+	{
+		memcpy(paletteBuffer, _userPalette, sizeof(_userPalette));
+	}
+
+	void SetUserRgbPalette(uint32_t* paletteBuffer, uint32_t size = 64)
+	{
+		if(size != 64 && size != 512) {
+			throw new std::runtime_error("Invalid palette buffer size");
+		}
+
+		memcpy(_userPalette, paletteBuffer, size * sizeof(uint32_t));
+		if(size == 64) {
+			GenerateFullColorPalette(_userPalette);
+		}
+		_isFullColorPalette = (size == 512);
+		UpdateCurrentPalette();
+	}
+
+	bool IsFullColorPalette()
+	{
+		return _isFullColorPalette;
+	}
+
+	void GenerateFullColorPalette(uint32_t* paletteBuffer)
+	{
+		for(int i = 0; i < 64; i++) {
+			for(int j = 1; j < 8; j++) {
+				double redColor = (uint8_t)(paletteBuffer[i] >> 16);
+				double greenColor = (uint8_t)(paletteBuffer[i] >> 8);
+				double blueColor = (uint8_t)paletteBuffer[i];
+				if(j & 0x01) {
+					//Intensify red
+					redColor *= 1.1;
+					greenColor *= 0.9;
+					blueColor *= 0.9;
+				}
+				if(j & 0x02) {
+					//Intensify green
+					greenColor *= 1.1;
+					redColor *= 0.9;
+					blueColor *= 0.9;
+				}
+				if(j & 0x04) {
+					//Intensify blue
+					blueColor *= 1.1;
+					redColor *= 0.9;
+					greenColor *= 0.9;
+				}
+
+				uint8_t r = (uint8_t)(redColor > 255 ? 255 : redColor);
+				uint8_t g = (uint8_t)(greenColor > 255 ? 255 : greenColor);
+				uint8_t b = (uint8_t)(blueColor > 255 ? 255 : blueColor);
+
+				uint32_t color = 0xFF000000 | (r << 16) | (g << 8) | b;
+				paletteBuffer[(j << 6) | i] = color;
+			}
+		}
 	}
 
 	//0: Muted, 0.5: Default, 1.0: Max volume
@@ -1187,27 +1263,6 @@ public:
 	uint32_t GetExclusiveRefreshRate()
 	{
 		return _exclusiveRefreshRate;
-	}
-
-	uint32_t* GetRgbPalette()
-	{
-		return _currentPalette;
-	}
-
-	void GetRgbPalette(uint32_t* paletteBuffer)
-	{
-		memcpy(paletteBuffer, _ppuPaletteArgb[0], sizeof(_ppuPaletteArgb[0]));
-	}
-
-	void SetRgbPalette(uint32_t* paletteBuffer)
-	{
-		memcpy(_ppuPaletteArgb[0], paletteBuffer, sizeof(_ppuPaletteArgb[0]));
-		UpdateCurrentPalette();
-	}
-
-	bool IsDefaultPalette()
-	{
-		return memcmp(_defaultPpuPalette, GetRgbPalette(), sizeof(_defaultPpuPalette)) == 0;
 	}
 
 	void SetExpansionDevice(ExpansionPortDevice expansionDevice)

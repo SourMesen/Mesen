@@ -162,6 +162,7 @@ namespace Mesen.GUI
 		[DllImport(DLLPath)] [return: MarshalAs(UnmanagedType.I1)] public static extern bool IsVsDualSystem();
 		[DllImport(DLLPath)] public static extern void VsInsertCoin(UInt32 port);
 
+		[DllImport(DLLPath)] public static extern UInt32 GetDipSwitchCount();
 		[DllImport(DLLPath)] public static extern void SetDipSwitches(UInt32 dipSwitches);
 
 		[DllImport(DLLPath)] public static extern void InputBarcode(UInt64 barcode, Int32 digitCount);
@@ -208,7 +209,7 @@ namespace Mesen.GUI
 		[DllImport(DLLPath)] public static extern void SetVideoAspectRatio(VideoAspectRatio aspectRatio, double customRatio);
 		[DllImport(DLLPath)] public static extern void SetVideoFilter(VideoFilterType filter);
 		[DllImport(DLLPath)] public static extern void SetVideoResizeFilter(VideoResizeFilter filter);
-		[DllImport(DLLPath)] public static extern void SetRgbPalette(byte[] palette);
+		[DllImport(DLLPath)] public static extern void SetRgbPalette(byte[] palette, UInt32 paletteSize);
 		[DllImport(DLLPath)] public static extern void SetPictureSettings(double brightness, double contrast, double saturation, double hue, double scanlineIntensity);
 		[DllImport(DLLPath)] public static extern void SetNtscFilterSettings(double artifacts, double bleed, double fringing, double gamma, double resolution, double sharpness, [MarshalAs(UnmanagedType.I1)]bool mergeFields, double yFilterLength, double iFilterLength, double qFilterLength, [MarshalAs(UnmanagedType.I1)]bool verticalBlend);
 		[DllImport(DLLPath)] public static extern void SetInputDisplaySettings(byte visiblePorts, InputDisplayPosition displayPosition, [MarshalAs(UnmanagedType.I1)]bool displayHorizontally);
@@ -304,6 +305,7 @@ namespace Mesen.GUI
 
 		[DllImport(DLLPath)] public static extern void DebugStartTraceLogger([MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(UTF8Marshaler))]string filename);
 		[DllImport(DLLPath)] public static extern void DebugStopTraceLogger();
+		[DllImport(DLLPath)] public static extern void DebugClearTraceLog();
 		[DllImport(DLLPath)] public static extern void DebugSetTraceOptions(InteropTraceLoggerOptions options);
 		[DllImport(DLLPath, EntryPoint = "DebugGetExecutionTrace")] private static extern IntPtr DebugGetExecutionTraceWrapper(UInt32 lineCount);
 		public static string DebugGetExecutionTrace(UInt32 lineCount) { return PtrToStringUtf8(InteropEmu.DebugGetExecutionTraceWrapper(lineCount)); }
@@ -531,7 +533,7 @@ namespace Mesen.GUI
 			return InteropEmu.DebugGetMemoryAccessCounts(0, (uint)size, type, operationType);
 		}
 
-		public static Int32[] DebugGetMemoryAccessStamps(DebugMemoryType type, MemoryOperationType operationType)
+		public static UInt64[] DebugGetMemoryAccessStamps(DebugMemoryType type, MemoryOperationType operationType)
 		{
 			int size = InteropEmu.DebugGetMemorySize(type);
 			return InteropEmu.DebugGetMemoryAccessStamps(0, (uint)size, type, operationType);
@@ -560,9 +562,9 @@ namespace Mesen.GUI
 		}
 
 		[DllImport(DLLPath, EntryPoint = "DebugGetMemoryAccessStamps")] private static extern void DebugGetMemoryAccessStampsWrapper(UInt32 offset, UInt32 length, DebugMemoryType type, MemoryOperationType operationType, IntPtr stamps);
-		public static Int32[] DebugGetMemoryAccessStamps(UInt32 offset, UInt32 length, DebugMemoryType type, MemoryOperationType operationType)
+		public static UInt64[] DebugGetMemoryAccessStamps(UInt32 offset, UInt32 length, DebugMemoryType type, MemoryOperationType operationType)
 		{
-			Int32[] stamps = new Int32[length];
+			UInt64[] stamps = new UInt64[length];
 
 			GCHandle hStamps = GCHandle.Alloc(stamps, GCHandleType.Pinned);
 			try {
@@ -816,7 +818,7 @@ namespace Mesen.GUI
 
 		public static Int32[] GetRgbPalette()
 		{
-			Int32[] paleteData = new Int32[64];
+			Int32[] paleteData = new Int32[512];
 
 			GCHandle hPaletteData = GCHandle.Alloc(paleteData, GCHandleType.Pinned);
 			try {
@@ -1447,7 +1449,7 @@ namespace Mesen.GUI
 		public Byte Y;
 		public Byte PS;
 		public IRQSource IRQFlag;
-		public Int32 CycleCount;
+		public UInt64 CycleCount;
 
 		[MarshalAs(UnmanagedType.I1)]
 		public bool NMIFlag;

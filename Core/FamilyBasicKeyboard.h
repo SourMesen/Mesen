@@ -10,7 +10,7 @@ private:
 	bool _enabled = false;
 
 	const uint32_t _keyMatrix[72] = {
-		F8, Return, RightBracket, LeftBracket,
+		F8, Return, LeftBracket, RightBracket,
 		Kana, RightShift, Yen, Stop,
 		F7, AtSign, Colon, SemiColon,
 		Underscore, Slash, Minus, Caret,

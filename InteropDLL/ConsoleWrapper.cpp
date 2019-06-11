@@ -648,8 +648,8 @@ namespace InteropEmu {
 		DllExport void __stdcall SetVideoAspectRatio(VideoAspectRatio aspectRatio, double customRatio) { _settings->SetVideoAspectRatio(aspectRatio, customRatio); }
 		DllExport void __stdcall SetVideoFilter(VideoFilterType filter) { _settings->SetVideoFilterType(filter); }
 		DllExport void __stdcall SetVideoResizeFilter(VideoResizeFilter filter) { _settings->SetVideoResizeFilter(filter); }
-		DllExport void __stdcall GetRgbPalette(uint32_t *paletteBuffer) { _settings->GetRgbPalette(paletteBuffer); }
-		DllExport void __stdcall SetRgbPalette(uint32_t *paletteBuffer) { _settings->SetRgbPalette(paletteBuffer); }
+		DllExport void __stdcall GetRgbPalette(uint32_t *paletteBuffer) { _settings->GetUserRgbPalette(paletteBuffer); }
+		DllExport void __stdcall SetRgbPalette(uint32_t *paletteBuffer, uint32_t paletteSize) { _settings->SetUserRgbPalette(paletteBuffer, paletteSize); }
 		DllExport void __stdcall SetPictureSettings(double brightness, double contrast, double saturation, double hue, double scanlineIntensity) { _settings->SetPictureSettings(brightness, contrast, saturation, hue, scanlineIntensity); }
 		DllExport void __stdcall SetNtscFilterSettings(double artifacts, double bleed, double fringing, double gamma, double resolution, double sharpness, bool mergeFields, double yFilterLength, double iFilterLength, double qFilterLength, bool verticalBlend) { _settings->SetNtscFilterSettings(artifacts, bleed, fringing, gamma, resolution, sharpness, mergeFields, yFilterLength, iFilterLength, qFilterLength, verticalBlend, false); }
 		DllExport void __stdcall SetPauseScreenMessage(char* message) { _settings->SetPauseScreenMessage(message); }
@@ -749,6 +749,8 @@ namespace InteropEmu {
 				sam->InsertCoin(port);
 			}
 		}
+
+		DllExport uint32_t __stdcall GetDipSwitchCount() { return _console->GetDipSwitchCount(); }
 
 		DllExport void __stdcall SetDipSwitches(uint32_t dipSwitches)
 		{

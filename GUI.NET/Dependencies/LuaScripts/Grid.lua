@@ -10,7 +10,7 @@ function Main()
     if not hold then
       hold = true
       mode = (mode + 1) % 3
-      emu.drawRectangle( 95, 87, 67, 11, 0x808080, false, 50)
+      emu.drawRectangle(95, 87, 67, 11, 0x808080, false, 50)
       if mode == 0 then
         size = 8
         emu.drawString(96, 89, "  8x8 Grid  ", 0xFFFFFF, 0x404040, 50)
@@ -23,13 +23,13 @@ function Main()
       end
     end
   else
-    hold = false  
+    hold = false
   end
   for i = 0, 239, size do
-    emu.drawLine( 0, i, 255, i, color, 1)
+    emu.drawLine(0, i, 255, i, color, 1)
   end
   for i = 0, 255, size do
-    emu.drawLine( i, 0, i, 239, color, 1)
+    emu.drawLine(i, 0, i, 239, color, 1)
   end
 end
 
@@ -38,5 +38,5 @@ color = 0xC0FF0000
 hold = false
 mode = 0
 size = 8
-emu.addEventCallback(Main, emu.eventType.endFrame);
+emu.addEventCallback(Main, emu.eventType.endFrame)
 emu.displayMessage("Script", "Grid")

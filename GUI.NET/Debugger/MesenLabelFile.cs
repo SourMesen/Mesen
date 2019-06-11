@@ -53,7 +53,7 @@ namespace Mesen.GUI.Debugger
 						if(UInt32.TryParse(addressStartEnd[0], NumberStyles.HexNumber, CultureInfo.InvariantCulture, out address) &&
 							UInt32.TryParse(addressStartEnd[1], NumberStyles.HexNumber, CultureInfo.InvariantCulture, out addressEnd)) {
 							if(addressEnd > address) {
-								length = addressEnd - address;
+								length = addressEnd - address + 1;
 							} else {
 								//Invalid label (start < end)
 								errorCount++;
@@ -74,7 +74,7 @@ namespace Mesen.GUI.Debugger
 					}
 
 					string labelName = rowData[2];
-					if(!LabelManager.LabelRegex.IsMatch(labelName)) {
+					if(!string.IsNullOrEmpty(labelName) && !LabelManager.LabelRegex.IsMatch(labelName)) {
 						//Reject labels that don't respect the label naming restrictions
 						errorCount++;
 						continue;

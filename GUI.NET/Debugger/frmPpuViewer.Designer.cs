@@ -208,6 +208,7 @@ namespace Mesen.GUI.Debugger
 			this.ctrlNametableViewer.Name = "ctrlNametableViewer";
 			this.ctrlNametableViewer.Size = new System.Drawing.Size(701, 527);
 			this.ctrlNametableViewer.TabIndex = 0;
+			this.ctrlNametableViewer.OnSelectChrTile += new Mesen.GUI.Debugger.Controls.ctrlNametableViewer.OnSelectChrTileHandler(this.ctrlNametableViewer_OnSelectChrTile);
 			// 
 			// tpgChrViewer
 			// 

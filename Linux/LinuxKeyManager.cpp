@@ -1,6 +1,7 @@
 ﻿#include <algorithm>
 #include "LinuxKeyManager.h"
 #include "LinuxGameController.h"
+#include "../Utilities/FolderUtilities.h"
 #include "../Core/ControlManager.h"
 #include "../Core/Console.h"
 
@@ -257,12 +258,7 @@ LinuxKeyManager::LinuxKeyManager(shared_ptr<Console> console)
 		_keyCodes[keyDef.description] = keyDef.keyCode;
 	}
 
-	for(int i = 0; i < 30; i++) {
-		std::shared_ptr<LinuxGameController> controller = LinuxGameController::GetController(_console, i, true);
-		if(controller) {
-			_controllers.push_back(controller);
-		}
-	}
+	CheckForGamepads(true);
 
 	_disableAllKeys = false;
 	_stopUpdateDeviceThread = false;
@@ -354,30 +350,50 @@ void LinuxKeyManager::UpdateDevices()
 	//Only needed to detect newly plugged in devices
 }
 
+void LinuxKeyManager::CheckForGamepads(bool logInformation)
+{
+	vector<int> connectedIDs; 
+	for(int i = _controllers.size() - 1; i >= 0; i--) {
+		if(!_controllers[i]->IsDisconnected()) {
+			connectedIDs.push_back(_controllers[i]->GetDeviceID());
+		}
+	}
+
+	vector<string> files = FolderUtilities::GetFilesInFolder("/dev/input/", {}, false);
+	for(size_t i = 0; i < files.size(); i++) {
+		string filename = FolderUtilities::GetFilename(files[i], false);
+		if(filename.find("event", 0) == 0) {
+			int deviceId = 0;
+			try {
+				deviceId = std::stoi(filename.substr(5));
+			} catch(std::exception e) {
+				continue;
+			}
+
+			if(std::find(connectedIDs.begin(), connectedIDs.end(), deviceId) == connectedIDs.end()) {
+				std::shared_ptr<LinuxGameController> controller = LinuxGameController::GetController(_console, deviceId, logInformation);
+				if(controller) {
+					_controllers.push_back(controller);
+				}
+			}
+		}
+	}
+}
+
 void LinuxKeyManager::StartUpdateDeviceThread()
 {
 	_updateDeviceThread = std::thread([=]() {
 		while(!_stopUpdateDeviceThread) {
-			//Check for newly plugged in controllers every 2 secs
+			//Check for newly plugged in controllers every 5 secs
+			vector<shared_ptr<LinuxGameController>> controllersToAdd; 
 			vector<int> indexesToRemove;
-			vector<int> connectedIDs;
-			std::vector<shared_ptr<LinuxGameController>> controllersToAdd;
 			for(int i = _controllers.size() - 1; i >= 0; i--) {
 				if(_controllers[i]->IsDisconnected()) {
 					indexesToRemove.push_back(i);
-				} else {
-					connectedIDs.push_back(_controllers[i]->GetDeviceID());
 				}
 			}
 
-			for(int i = 0; i < 30; i++) {
-				if(std::find(connectedIDs.begin(), connectedIDs.end(), i) == connectedIDs.end()) { 
-					std::shared_ptr<LinuxGameController> controller = LinuxGameController::GetController(_console, i, false);
-					if(controller) {
-						controllersToAdd.push_back(controller);
-					}
-				}
-			}
+			CheckForGamepads(false);
 
 			if(!indexesToRemove.empty() || !controllersToAdd.empty()) {
 				_console->Pause();
@@ -390,7 +406,7 @@ void LinuxKeyManager::StartUpdateDeviceThread()
 				_console->Resume();
 			}
 
-			_stopSignal.Wait(2000);
+			_stopSignal.Wait(5000);
 		}
 	});
 }	

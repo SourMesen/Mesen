@@ -9,9 +9,9 @@ class NtscFilter : public BaseVideoFilter
 {
 private:
 	nes_ntsc_setup_t _ntscSetup;
-	nes_ntsc_t* _ntscData;
+	nes_ntsc_t _ntscData;
 	bool _keepVerticalRes = false;
-	uint8_t _basePalette[64 * 3];
+	uint8_t _palette[512 * 3];
 	uint32_t* _ntscBuffer;
 
 	void GenerateArgbFrame(uint32_t *outputBuffer);

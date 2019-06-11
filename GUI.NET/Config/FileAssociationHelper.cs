@@ -91,7 +91,12 @@ namespace Mesen.GUI.Config
 				System.Diagnostics.Process.Start("update-mime-database", mimeFolder).WaitForExit();
 				System.Diagnostics.Process.Start("update-desktop-database", desktopFolder);
 			} catch {
-				InteropEmu.WriteLogEntry("An error occurred while updating file associations");
+				try {
+					InteropEmu.WriteLogEntry("An error occurred while updating file associations");
+				} catch {
+					//For some reason, Mono crashes when trying to call this if libMesenCore.dll was not already next to the .exe before the process starts?
+					//This causes a "MesenCore.dll not found" popup, so catch it here and ignore it.
+				}
 			}
 		}
 

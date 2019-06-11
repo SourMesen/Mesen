@@ -130,19 +130,18 @@ private:
 	uint16_t _ppuScrollX;
 	uint16_t _ppuScrollY;
 
-	int32_t _prevInstructionCycle;
-	int32_t _curInstructionCycle;
-	int32_t _runToCycle;
+	uint64_t _prevInstructionCycle;
+	uint64_t _curInstructionCycle;
+	uint64_t _runToCycle;
 	bool _needRewind;
 	
 	vector<stringstream> _rewindCache;
-	vector<uint32_t> _rewindPrevInstructionCycleCache;
+	vector<uint64_t> _rewindPrevInstructionCycleCache;
 
 	uint32_t _inputOverride[4];
 
 	vector<DebugEventInfo> _prevDebugEvents;
 	vector<DebugEventInfo> _debugEvents;
-	vector<vector<int>> _debugEventMarkerRpn;
 
 private:
 	bool ProcessBreakpoints(BreakpointType type, OperationInfo &operationInfo, bool allowBreak = true, bool allowMark = true);
@@ -240,6 +239,7 @@ public:
 
 	int32_t EvaluateExpression(string expression, EvalResultType &resultType, bool useCache);
 	
+	bool IsPpuCycleToProcess();
 	void ProcessPpuCycle();
 	bool ProcessRamOperation(MemoryOperationType type, uint16_t &addr, uint8_t &value);
 	void ProcessVramReadOperation(MemoryOperationType type, uint16_t addr, uint8_t &value);

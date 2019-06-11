@@ -10,8 +10,6 @@
 
 DefaultVideoFilter::DefaultVideoFilter(shared_ptr<Console> console) : BaseVideoFilter(console)
 {
-	InitDecodeTables();
-
 	InitConversionMatrix(_pictureSettings.Hue, _pictureSettings.Saturation);
 }
 
@@ -52,22 +50,48 @@ void DefaultVideoFilter::OnBeforeApplyFilter()
 	}
 	_pictureSettings = currentSettings;
 	_needToProcess = _pictureSettings.Hue != 0 || _pictureSettings.Saturation != 0 || _pictureSettings.Brightness || _pictureSettings.Contrast;
+
+	if(_needToProcess) {
+		double y, i, q;
+		uint32_t* originalPalette = _console->GetSettings()->GetRgbPalette();
+
+		for(int pal = 0; pal < 512; pal++) {
+			uint32_t pixelOutput = originalPalette[pal];
+			double redChannel = ((pixelOutput & 0xFF0000) >> 16) / 255.0;
+			double greenChannel = ((pixelOutput & 0xFF00) >> 8) / 255.0;
+			double blueChannel = (pixelOutput & 0xFF) / 255.0;
+
+			//Apply brightness, contrast, hue & saturation
+			RgbToYiq(redChannel, greenChannel, blueChannel, y, i, q);
+			y *= _pictureSettings.Contrast * 0.5f + 1;
+			y += _pictureSettings.Brightness * 0.5f;
+			YiqToRgb(y, i, q, redChannel, greenChannel, blueChannel);
+
+			int r = std::min(255, (int)(redChannel * 255));
+			int g = std::min(255, (int)(greenChannel * 255));
+			int b = std::min(255, (int)(blueChannel * 255));
+
+			_calculatedPalette[pal] = 0xFF000000 | (r << 16) | (g << 8) | b;
+		}
+	} else {
+		memcpy(_calculatedPalette, _console->GetSettings()->GetRgbPalette(), sizeof(_calculatedPalette));
+	}
 }
 
 void DefaultVideoFilter::DecodePpuBuffer(uint16_t *ppuOutputBuffer, uint32_t* outputBuffer, bool displayScanlines)
 {
 	uint32_t* out = outputBuffer;
 	OverscanDimensions overscan = GetOverscan();
-	double scanlineIntensity = 1.0 - _console->GetSettings()->GetPictureSettings().ScanlineIntensity;
+	uint8_t scanlineIntensity = (uint8_t)((1.0 - _console->GetSettings()->GetPictureSettings().ScanlineIntensity) * 255);
 	for(uint32_t i = overscan.Top, iMax = 240 - overscan.Bottom; i < iMax; i++) {
 		if(displayScanlines && (i + overscan.Top) % 2 == 0) {
 			for(uint32_t j = overscan.Left, jMax = 256 - overscan.Right; j < jMax; j++) {
-				*out = ProcessIntensifyBits(ppuOutputBuffer[i * 256 + j], scanlineIntensity);
+				*out = ApplyScanlineEffect(ppuOutputBuffer[i * 256 + j], scanlineIntensity);
 				out++;
 			}
 		} else {
 			for(uint32_t j = overscan.Left, jMax = 256 - overscan.Right; j < jMax; j++) {
-				*out = ProcessIntensifyBits(ppuOutputBuffer[i * 256 + j]);
+				*out = _calculatedPalette[ppuOutputBuffer[i * 256 + j]];
 				out++;
 			}
 		}
@@ -93,75 +117,13 @@ void DefaultVideoFilter::YiqToRgb(double y, double i, double q, double &r, doubl
 	b = std::max(0.0, std::min(1.0, (y + _yiqToRgbMatrix[4] * i + _yiqToRgbMatrix[5] * q)));
 }
 
-void DefaultVideoFilter::InitDecodeTables()
+uint32_t DefaultVideoFilter::ApplyScanlineEffect(uint16_t ppuPixel, uint8_t scanlineIntensity)
 {
-	for(int i = 0; i < 256; i++) {
-		for(int j = 0; j < 8; j++) {
-			double redColor = i;
-			double greenColor = i;
-			double blueColor = i;
-			if(j & 0x01) {
-				//Intensify red
-				redColor *= 1.1;
-				greenColor *= 0.9;
-				blueColor *= 0.9;
-			}
-			if(j & 0x02) {
-				//Intensify green
-				greenColor *= 1.1;
-				redColor *= 0.9;
-				blueColor *= 0.9;
-			}
-			if(j & 0x04) {
-				//Intensify blue
-				blueColor *= 1.1;
-				redColor *= 0.9;
-				greenColor *= 0.9;
-			}
+	uint32_t pixelOutput = _calculatedPalette[ppuPixel];
 
-			redColor = (redColor > 255 ? 255 : redColor) / 255.0;
-			greenColor = (greenColor > 255 ? 255 : greenColor) / 255.0;
-			blueColor = (blueColor > 255 ? 255 : blueColor) / 255.0;
+	uint8_t r = ((pixelOutput & 0xFF0000) >> 16) * scanlineIntensity / 255;
+	uint8_t g = ((pixelOutput & 0xFF00) >> 8) * scanlineIntensity / 255;
+	uint8_t b = (pixelOutput & 0xFF) * scanlineIntensity / 255;
 
-			_redDecodeTable[i][j] = redColor;
-			_greenDecodeTable[i][j] = greenColor;
-			_blueDecodeTable[i][j] = blueColor;
-		}
-	}
-}
-
-uint32_t DefaultVideoFilter::ProcessIntensifyBits(uint16_t ppuPixel, double scanlineIntensity)
-{
-	uint32_t pixelOutput = _console->GetSettings()->GetRgbPalette()[ppuPixel & 0x3F];
-	uint32_t intensifyBits = (ppuPixel >> 6) & 0x07;
-
-	if(intensifyBits || _needToProcess || scanlineIntensity < 1.0) {
-		//Incorrect emphasis bit implementation, but will do for now.
-		double redChannel = _redDecodeTable[((pixelOutput & 0xFF0000) >> 16)][intensifyBits];
-		double greenChannel = _greenDecodeTable[((pixelOutput & 0xFF00) >> 8)][intensifyBits];
-		double blueChannel = _blueDecodeTable[(pixelOutput & 0xFF)][intensifyBits];
-
-		//Apply brightness, contrast, hue & saturation
-		if(_needToProcess) {
-			double y, i, q;
-			RgbToYiq(redChannel, greenChannel, blueChannel, y, i, q);
-			y *= _pictureSettings.Contrast * 0.5f + 1;
-			y += _pictureSettings.Brightness * 0.5f;
-			YiqToRgb(y, i, q, redChannel, greenChannel, blueChannel);
-		}
-
-		if(scanlineIntensity < 1.0) {
-			redChannel *= scanlineIntensity;
-			greenChannel *= scanlineIntensity;
-			blueChannel *= scanlineIntensity;
-		}
-
-		int r = std::min(255, (int)(redChannel * 255));
-		int g = std::min(255, (int)(greenChannel * 255));
-		int b = std::min(255, (int)(blueChannel * 255));
-
-		return 0xFF000000 | (r << 16) | (g << 8) | b;
-	} else {
-		return pixelOutput;
-	}
+	return 0xFF000000 | (r << 16) | (g << 8) | b;
 }

@@ -19,10 +19,13 @@ protected:
 	void InitMapper() override
 	{
 		SelectPRGPage(1, -1);
-		if(IsNes20()) {
-			_enableMirroringBit = GetMirroringType() == MirroringType::ScreenAOnly;			
-		} else {
-			_enableMirroringBit = GetMirroringType() == MirroringType::FourScreens;
+
+		_enableMirroringBit = false;
+		switch(_romInfo.NesHeader.Byte6 & 0x09) {
+			case 0: SetMirroringType(MirroringType::Vertical); break;
+			case 1: SetMirroringType(MirroringType::Horizontal); break;
+			case 8: SetMirroringType(MirroringType::ScreenAOnly); _enableMirroringBit = true; break;
+			case 9: SetMirroringType(MirroringType::FourScreens); break;
 		}
 
 		if(GetMirroringType() == MirroringType::FourScreens && _chrRam && _chrRamSize >= 0x8000) {

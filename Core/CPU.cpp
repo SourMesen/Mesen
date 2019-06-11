@@ -395,13 +395,15 @@ void CPU::StreamState(bool saving)
 	bool overclockAdjustApu = settings->GetOverclockAdjustApu();
 	uint32_t extraScanlinesBeforeNmi = settings->GetPpuExtraScanlinesBeforeNmi();
 	uint32_t extraScanlinesAfterNmi = settings->GetPpuExtraScanlinesAfterNmi();
+	uint32_t dipSwitches = _console->GetSettings()->GetDipSwitches();
 
 	Stream(_state.PC, _state.SP, _state.PS, _state.A, _state.X, _state.Y, _cycleCount, _state.NMIFlag, 
 			_state.IRQFlag, _dmcCounter, _dmcDmaRunning, _spriteDmaCounter, _spriteDmaTransfer, 
-			overclockRate, overclockAdjustApu, extraScanlinesBeforeNmi, extraScanlinesBeforeNmi);
+			overclockRate, overclockAdjustApu, extraScanlinesBeforeNmi, extraScanlinesBeforeNmi, dipSwitches);
 
 	if(!saving) {
 		settings->SetOverclockRate(overclockRate, overclockAdjustApu);
 		settings->SetPpuNmiConfig(extraScanlinesBeforeNmi, extraScanlinesAfterNmi);
+		settings->SetDipSwitches(dipSwitches);
 	}
 }

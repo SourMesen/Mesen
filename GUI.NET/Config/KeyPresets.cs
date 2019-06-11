@@ -161,7 +161,7 @@ namespace Mesen.GUI.Config
 					InteropEmu.GetKeyCode("6"), InteropEmu.GetKeyCode("7"), InteropEmu.GetKeyCode("8"), InteropEmu.GetKeyCode("9"),
 					InteropEmu.GetKeyCode("Enter"), InteropEmu.GetKeyCode("Spacebar"), InteropEmu.GetKeyCode("Backspace"), InteropEmu.GetKeyCode("Insert"),
 					InteropEmu.GetKeyCode("Esc"), InteropEmu.GetKeyCode("Ctrl"), InteropEmu.GetKeyCode("Menu"), InteropEmu.GetKeyCode("Shift"),
-					InteropEmu.GetKeyCode("["), InteropEmu.GetKeyCode("]"),
+					InteropEmu.GetKeyCode("]"), InteropEmu.GetKeyCode("["),
 					InteropEmu.GetKeyCode("Up Arrow"), InteropEmu.GetKeyCode("Down Arrow"), InteropEmu.GetKeyCode("Left Arrow"), InteropEmu.GetKeyCode("Right Arrow"),
 					InteropEmu.GetKeyCode("."), InteropEmu.GetKeyCode(","), InteropEmu.GetKeyCode("'"), InteropEmu.GetKeyCode(";"),
 					InteropEmu.GetKeyCode("="), InteropEmu.GetKeyCode("/"), InteropEmu.GetKeyCode("-"), InteropEmu.GetKeyCode("`"),

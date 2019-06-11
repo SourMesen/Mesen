@@ -34,6 +34,7 @@ namespace Mesen.GUI.Debugger.Controls
 			this.picNametable = new Mesen.GUI.Controls.ctrlMesenPictureBox();
 			this.ctxMenu = new Mesen.GUI.Controls.ctrlMesenContextMenuStrip(this.components);
 			this.mnuAddBreakpoint = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuAddBreakpointAttribute = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuEditInMemoryViewer = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuShowInChrViewer = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
@@ -75,8 +76,8 @@ namespace Mesen.GUI.Debugger.Controls
 			this.lblMirroringType = new System.Windows.Forms.Label();
 			this.chkHighlightTileUpdates = new System.Windows.Forms.CheckBox();
 			this.chkHighlightAttributeUpdates = new System.Windows.Forms.CheckBox();
-			this.lblHighlight = new System.Windows.Forms.Label();
 			this.chkIgnoreRedundantWrites = new System.Windows.Forms.CheckBox();
+			this.lblHighlight = new System.Windows.Forms.Label();
 			this.tableLayoutPanel1.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.picNametable)).BeginInit();
 			this.ctxMenu.SuspendLayout();
@@ -129,6 +130,7 @@ namespace Mesen.GUI.Debugger.Controls
 			// 
 			this.ctxMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.mnuAddBreakpoint,
+            this.mnuAddBreakpointAttribute,
             this.mnuEditInMemoryViewer,
             this.mnuShowInChrViewer,
             this.toolStripMenuItem1,
@@ -138,7 +140,7 @@ namespace Mesen.GUI.Debugger.Controls
             this.mnuCopyToClipboard,
             this.mnuExportToPng});
 			this.ctxMenu.Name = "ctxMenu";
-			this.ctxMenu.Size = new System.Drawing.Size(261, 170);
+			this.ctxMenu.Size = new System.Drawing.Size(261, 214);
 			this.ctxMenu.Opening += new System.ComponentModel.CancelEventHandler(this.ctxMenu_Opening);
 			// 
 			// mnuAddBreakpoint
@@ -146,8 +148,16 @@ namespace Mesen.GUI.Debugger.Controls
 			this.mnuAddBreakpoint.Image = global::Mesen.GUI.Properties.Resources.Breakpoint;
 			this.mnuAddBreakpoint.Name = "mnuAddBreakpoint";
 			this.mnuAddBreakpoint.Size = new System.Drawing.Size(260, 22);
-			this.mnuAddBreakpoint.Text = "Add breakpoint";
-			this.mnuAddBreakpoint.Click += new System.EventHandler(this.mnuToggleBreakpoint_Click);
+			this.mnuAddBreakpoint.Text = "Add breakpoint (Tile)";
+			this.mnuAddBreakpoint.Click += new System.EventHandler(this.mnuAddBreakpoint_Click);
+			// 
+			// mnuAddBreakpointAttribute
+			// 
+			this.mnuAddBreakpointAttribute.Image = global::Mesen.GUI.Properties.Resources.Breakpoint;
+			this.mnuAddBreakpointAttribute.Name = "mnuAddBreakpointAttribute";
+			this.mnuAddBreakpointAttribute.Size = new System.Drawing.Size(260, 22);
+			this.mnuAddBreakpointAttribute.Text = "Add breakpoint (Attribute)";
+			this.mnuAddBreakpointAttribute.Click += new System.EventHandler(this.mnuAddBreakpointAttribute_Click);
 			// 
 			// mnuEditInMemoryViewer
 			// 
@@ -596,16 +606,6 @@ namespace Mesen.GUI.Debugger.Controls
 			this.chkHighlightAttributeUpdates.UseVisualStyleBackColor = true;
 			this.chkHighlightAttributeUpdates.Click += new System.EventHandler(this.chkHighlightAttributeUpdates_Click);
 			// 
-			// lblHighlight
-			// 
-			this.lblHighlight.Anchor = System.Windows.Forms.AnchorStyles.Left;
-			this.lblHighlight.AutoSize = true;
-			this.lblHighlight.Location = new System.Drawing.Point(262, 3);
-			this.lblHighlight.Name = "lblHighlight";
-			this.lblHighlight.Size = new System.Drawing.Size(51, 13);
-			this.lblHighlight.TabIndex = 2;
-			this.lblHighlight.Text = "Highlight:";
-			// 
 			// chkIgnoreRedundantWrites
 			// 
 			this.chkIgnoreRedundantWrites.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
@@ -619,6 +619,16 @@ namespace Mesen.GUI.Debugger.Controls
 			this.chkIgnoreRedundantWrites.Text = "Ignore writes that do not alter data";
 			this.chkIgnoreRedundantWrites.UseVisualStyleBackColor = true;
 			this.chkIgnoreRedundantWrites.Click += new System.EventHandler(this.chkIgnoreRedundantWrites_Click);
+			// 
+			// lblHighlight
+			// 
+			this.lblHighlight.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.lblHighlight.AutoSize = true;
+			this.lblHighlight.Location = new System.Drawing.Point(262, 3);
+			this.lblHighlight.Name = "lblHighlight";
+			this.lblHighlight.Size = new System.Drawing.Size(51, 13);
+			this.lblHighlight.TabIndex = 2;
+			this.lblHighlight.Text = "Highlight:";
 			// 
 			// ctrlNametableViewer
 			// 
@@ -692,5 +702,6 @@ namespace Mesen.GUI.Debugger.Controls
 		private System.Windows.Forms.CheckBox chkIgnoreRedundantWrites;
 		private System.Windows.Forms.ToolStripMenuItem mnuAddBreakpoint;
 		private System.Windows.Forms.CheckBox chkShowAttributeColorsOnly;
+		private System.Windows.Forms.ToolStripMenuItem mnuAddBreakpointAttribute;
 	}
 }

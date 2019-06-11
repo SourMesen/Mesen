@@ -72,9 +72,11 @@ To play a movie file, select it via the **<kbd>Tools&rarr;Movies&rarr;Play</kbd>
 The history viewer allows you to replay (in a video player) any gameplay since the last time you power cycled or loaded a game.  
 You can start playback at any point in time, and instantly seek to any point in time, too.  
 
-To resume gameplay from the history viewer's current position, select **<kbd>File&rarr;Resume Gameplay</kbd>**
+To resume gameplay from the history viewer's current position, select **<kbd>File&rarr;Resume Gameplay</kbd>**  
+To create a save state for the current position, select **<kbd>File&rarr;Create Save State</kbd>**  
 
-To export a movie (`.mmo` file) of your gameplay, select **<kbd>File&rarr;Export Movie</kbd>**
+To export a movie (`.mmo` file) of your gameplay, select **<kbd>File&rarr;Export Movie</kbd>**  
+When exporting a movie, you can select the specific time range you want to export.
 
 ## Cheats ##
 

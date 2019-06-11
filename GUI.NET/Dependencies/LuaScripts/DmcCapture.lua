@@ -27,11 +27,11 @@ function Main()
       sample.addr[nbSample] = dmc.sampleAddr
       sample.length[nbSample] = dmc.sampleLength
       sample.period[nbSample] = dmc.period
-      emu.log(nbSample.." >>  $"..string.format("%X  ", dmc.sampleAddr)..string.format("%4d bytes  ",dmc.sampleLength)..string.format("%5d hertz ",freq)..stringR)  
+      emu.log(nbSample.." >>  $"..string.format("%X  ", dmc.sampleAddr)..string.format("%4d bytes  ",dmc.sampleLength)..string.format("%5d hertz ",freq)..stringR)
       if record then
         SampleRecord(dmc.sampleAddr, dmc.sampleLength, freq)
       end
-    end  
+    end
     if dmc.sampleAddr ~= lastSampleAddr or dmc.sampleLength ~= lastSampleLength or dmc.period ~= lastSamplePeriod then
       lastSampleAddr = dmc.sampleAddr
       lastSampleLength = dmc.sampleLength
@@ -53,7 +53,7 @@ function SelectRecord()
       emu.log("______________________________________________________________________\n")
       if record then
         emu.log("File path = "..emu.getScriptDataFolder().."\\\n")
-      end  
+      end
     end
   else
     hold = false
@@ -61,11 +61,11 @@ function SelectRecord()
   if record then
     stringR = "  recorded"
     emu.drawRectangle(193, 5, 42, 11, 0x404040, true, 1)
-    emu.drawRectangle(192, 4, 44, 13, 0x808080, false, 1)    
-    emu.drawString(196, 7, "RECORD", 0xFF0000, 0xFF000000, 1)    
+    emu.drawRectangle(192, 4, 44, 13, 0x808080, false, 1)
+    emu.drawString(196, 7, "RECORD", 0xFF0000, 0xFF000000, 1)
   else
-    stringR = "" 
-  end  
+    stringR = ""
+  end
 end
 
 
@@ -76,7 +76,7 @@ function SampleRecord(addr, length, freq)
   header[25] = freq & 255
   header[26] = freq >> 8
   header[29] = header[25]
-  header[30] = header[26]  
+  header[30] = header[26]
   header[41] = dataLen & 255
   header[42] = dataLen >> 8
   header[45] = 0x80
@@ -94,14 +94,14 @@ function SampleRecord(addr, length, freq)
         newSample = lastSample + 4
         if newSample == 256 then
           newSample = 252
-        end  
+        end
       else
         newSample = lastSample - 4
         if newSample == -4 then
           newSample = 0
         end
       end
-      fileOutput:write(string.char(newSample))        
+      fileOutput:write(string.char(newSample))
       lastSample = newSample
       bitMask = bitMask << 1
     end
@@ -123,5 +123,5 @@ header = {0x52,0x49,0x46,0x46,0x00,0x00,0x00,0x00,
           0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,
           0x01,0x00,0x08,0x00,0x64,0x61,0x74,0x61,
           0x00,0x00,0x00,0x00}
-emu.addEventCallback(Main, emu.eventType.endFrame);
+emu.addEventCallback(Main, emu.eventType.endFrame)
 emu.displayMessage("Script", "DMC Capture")

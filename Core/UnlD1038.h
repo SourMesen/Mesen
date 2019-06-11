@@ -5,37 +5,30 @@
 class UnlD1038 : public BaseMapper
 {
 private:
-	uint8_t _dipSwitch;
 	bool _returnDipSwitch;
 
 protected:
+	uint32_t GetDipSwitchCount() override { return 2; }
 	uint16_t GetPRGPageSize() override { return 0x4000; }
 	uint16_t GetCHRPageSize() override { return 0x2000; }
 	bool AllowRegisterRead() override { return true; }
 
 	void InitMapper() override
 	{
-		_dipSwitch = 0;
+		_returnDipSwitch = false;
 		WriteRegister(0x8000, 0);
-	}
-
-	void Reset(bool softReset) override
-	{
-		if(softReset) {
-			_dipSwitch = (_dipSwitch + 1) & 0x03;
-		}
 	}
 
 	void StreamState(bool saving) override
 	{
 		BaseMapper::StreamState(saving);
-		Stream(_dipSwitch, _returnDipSwitch);
+		Stream(_returnDipSwitch);
 	}
 
 	uint8_t ReadRegister(uint16_t addr) override
 	{
 		if(_returnDipSwitch) {
-			return _dipSwitch;
+			return GetDipSwitches();
 		} else {
 			return InternalReadRam(addr);
 		}

@@ -7,16 +7,15 @@ class BmcHpxx : public MMC3
 private:
 	uint8_t _exRegs[5];
 	bool _locked;
-	uint8_t _dipSwitch;
 
 protected:
+	uint32_t GetDipSwitchCount() override { return 4; }
 	bool AllowRegisterRead() override { return true; }
 
 	void InitMapper() override
 	{
 		memset(_exRegs, 0, sizeof(_exRegs));
 		_locked = false;
-		_dipSwitch = 0;
 
 		MMC3::InitMapper();
 		AddRegisterRange(0x5000, 0x5FFF, MemoryOperation::Any);
@@ -28,7 +27,6 @@ protected:
 		MMC3::Reset(softReset);
 		memset(_exRegs, 0, sizeof(_exRegs));
 		_locked = false;
-		_dipSwitch = (_dipSwitch + 1) & 0x0F;
 		MMC3::ResetMmc3();
 		UpdateState();
 	}
@@ -36,7 +34,7 @@ protected:
 	void StreamState(bool saving) override
 	{
 		MMC3::StreamState(saving);
-		Stream(_exRegs[0], _exRegs[1], _exRegs[2], _exRegs[3], _exRegs[4], _locked, _dipSwitch);
+		Stream(_exRegs[0], _exRegs[1], _exRegs[2], _exRegs[3], _exRegs[4], _locked);
 	}
 
 	void SelectCHRPage(uint16_t slot, uint16_t page, ChrMemoryType memoryType = ChrMemoryType::Default) override
@@ -94,7 +92,7 @@ protected:
 
 	uint8_t ReadRegister(uint16_t addr) override
 	{
-		return _dipSwitch;
+		return GetDipSwitches();
 	}
 
 	void WriteRegister(uint16_t addr, uint8_t value) override

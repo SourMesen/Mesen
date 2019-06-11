@@ -42,7 +42,7 @@ The following tags can be used to customize the format:
 [Cycle]: The current PPU cycle.
 [Scanline]: The current PPU scanline.
 [FrameCount]: The current PPU frame.
-[CycleCount]: The current CPU cycle (32-bit signed value, resets to 0 at power on)
+[CycleCount]: The current CPU cycle (64-bit unsigned value, resets to 0 at power on)
 ```
 
 You can also specify some options by using a comma. e.g:

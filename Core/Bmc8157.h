@@ -7,9 +7,9 @@ class Bmc8157 : public BaseMapper
 {
 private:
 	uint16_t _lastAddr;
-	bool _dipSwitch;
 
 protected:
+	uint32_t GetDipSwitchCount() override { return 1; }
 	uint16_t GetPRGPageSize() override { return 0x4000; }
 	uint16_t GetCHRPageSize() override { return 0x2000; }
 
@@ -20,15 +20,10 @@ protected:
 		SelectCHRPage(0, 0);
 	}
 
-	void Reset(bool softReset) override
-	{
-		_dipSwitch = !_dipSwitch;
-	}
-
 	void StreamState(bool saving) override
 	{
 		BaseMapper::StreamState(saving);
-		Stream(_lastAddr, _dipSwitch);
+		Stream(_lastAddr);
 
 		if(!saving) {
 			UpdateState();
@@ -51,7 +46,7 @@ protected:
 			baseBank = 7;
 		}
 
-		if(outer512Prg && _prgSize <= 1024 * 512 && _dipSwitch) {
+		if(outer512Prg && _prgSize <= 1024 * 512 && GetDipSwitches() != 0) {
 			RemoveCpuMemoryMapping(0x8000, 0xFFFF);
 		} else {
 			SelectPRGPage(0, (outer512Prg << 6) | (outer128Prg << 3) | innerPrg0);

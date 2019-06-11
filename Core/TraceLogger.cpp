@@ -151,7 +151,7 @@ void TraceLogger::StopLogging()
 	}
 }
 
-void TraceLogger::LogExtraInfo(const char *log, uint32_t cycleCount)
+void TraceLogger::LogExtraInfo(const char *log, uint64_t cycleCount)
 {
 	if(_logToFile && _options.ShowExtraInfo) {
 		//Flush current buffer
@@ -305,6 +305,11 @@ void TraceLogger::Log(DebugState &state, DisassemblyInfo &disassemblyInfo, Opera
 	if(ConditionMatches(state, disassemblyInfo, operationInfo)) {
 		AddRow(disassemblyInfo, state);
 	}
+}
+
+void TraceLogger::Clear()
+{
+	_logCount = 0;
 }
 
 const char* TraceLogger::GetExecutionTrace(uint32_t lineCount)

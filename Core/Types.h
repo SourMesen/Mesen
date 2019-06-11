@@ -60,7 +60,7 @@ struct State
 	uint8_t Y = 0;
 	uint8_t PS = 0;
 	uint32_t IRQFlag = 0;
-	int32_t CycleCount = 0;
+	uint64_t CycleCount = 0;
 	bool NMIFlag = false;
 
 	//Used by debugger

@@ -58,7 +58,7 @@ vector<int32_t>& MemoryAccessCounter::GetCountArray(MemoryOperationType operatio
 	}
 }
 
-vector<int32_t>& MemoryAccessCounter::GetStampArray(MemoryOperationType operationType, AddressType addressType)
+vector<uint64_t>& MemoryAccessCounter::GetStampArray(MemoryOperationType operationType, AddressType addressType)
 {
 	switch(operationType) {
 		case MemoryOperationType::Read: return _readStamps[(int)addressType];
@@ -75,7 +75,7 @@ vector<int32_t>& MemoryAccessCounter::GetPpuCountArray(MemoryOperationType opera
 	return operationType == MemoryOperationType::Write ? _ppuWriteCounts[(int)addressType] : _ppuReadCounts[(int)addressType];
 }
 
-vector<int32_t>& MemoryAccessCounter::GetPpuStampArray(MemoryOperationType operationType, PpuAddressType addressType)
+vector<uint64_t>& MemoryAccessCounter::GetPpuStampArray(MemoryOperationType operationType, PpuAddressType addressType)
 {
 	return operationType == MemoryOperationType::Write ? _ppuWriteStamps[(int)addressType] : _ppuReadStamps[(int)addressType];
 }
@@ -89,23 +89,23 @@ bool MemoryAccessCounter::IsAddressUninitialized(AddressTypeInfo &addressInfo)
 	return false;
 }
 
-void MemoryAccessCounter::ProcessPpuMemoryAccess(PpuAddressTypeInfo &addressInfo, MemoryOperationType operation, int32_t cpuCycle)
+void MemoryAccessCounter::ProcessPpuMemoryAccess(PpuAddressTypeInfo &addressInfo, MemoryOperationType operation, uint64_t cpuCycle)
 {
 	if(addressInfo.Address >= 0) {
 		vector<int> &counts = GetPpuCountArray(operation, addressInfo.Type);
 		counts.data()[addressInfo.Address]++;
 
-		vector<int> &stamps = GetPpuStampArray(operation, addressInfo.Type);
+		vector<uint64_t> &stamps = GetPpuStampArray(operation, addressInfo.Type);
 		stamps.data()[addressInfo.Address] = cpuCycle;
 	}
 }
 
-bool MemoryAccessCounter::ProcessMemoryAccess(AddressTypeInfo &addressInfo, MemoryOperationType operation, int32_t cpuCycle)
+bool MemoryAccessCounter::ProcessMemoryAccess(AddressTypeInfo &addressInfo, MemoryOperationType operation, uint64_t cpuCycle)
 {
 	vector<int> &counts = GetCountArray(operation, addressInfo.Type);
 	counts.data()[addressInfo.Address]++;
 
-	vector<int> &stamps = GetStampArray(operation, addressInfo.Type);
+	vector<uint64_t> &stamps = GetStampArray(operation, addressInfo.Type);
 	stamps.data()[addressInfo.Address] = cpuCycle;
 
 	if(operation == MemoryOperationType::Read && (addressInfo.Type == AddressType::InternalRam || addressInfo.Type == AddressType::WorkRam) && !_writeCounts[(int)addressInfo.Type][addressInfo.Address]) {
@@ -125,9 +125,9 @@ void MemoryAccessCounter::ResetCounts()
 		memset(_writeCounts[i].data(), 0, _writeCounts[i].size() * sizeof(uint32_t));
 		memset(_execCounts[i].data(), 0, _execCounts[i].size() * sizeof(uint32_t));
 
-		memset(_readStamps[i].data(), 0, _readStamps[i].size() * sizeof(uint32_t));
-		memset(_writeStamps[i].data(), 0, _writeStamps[i].size() * sizeof(uint32_t));
-		memset(_execStamps[i].data(), 0, _execStamps[i].size() * sizeof(uint32_t));
+		memset(_readStamps[i].data(), 0, _readStamps[i].size() * sizeof(uint64_t));
+		memset(_writeStamps[i].data(), 0, _writeStamps[i].size() * sizeof(uint64_t));
+		memset(_execStamps[i].data(), 0, _execStamps[i].size() * sizeof(uint64_t));
 
 		memset(_ppuReadCounts[i].data(), 0, _ppuReadCounts[i].size() * sizeof(uint32_t));
 		memset(_ppuWriteCounts[i].data(), 0, _ppuWriteCounts[i].size() * sizeof(uint32_t));
@@ -136,41 +136,41 @@ void MemoryAccessCounter::ResetCounts()
 	}
 }
 
-void MemoryAccessCounter::GetAccessStamps(uint32_t offset, uint32_t length, DebugMemoryType memoryType, MemoryOperationType operationType, uint32_t stamps[])
+void MemoryAccessCounter::GetAccessStamps(uint32_t offset, uint32_t length, DebugMemoryType memoryType, MemoryOperationType operationType, uint64_t stamps[])
 {
 	switch(memoryType) {
 		default: break;
 
 		case DebugMemoryType::InternalRam:
-			memcpy(stamps, GetStampArray(operationType, AddressType::InternalRam).data() + offset, length * sizeof(uint32_t));
+			memcpy(stamps, GetStampArray(operationType, AddressType::InternalRam).data() + offset, length * sizeof(uint64_t));
 			break;
 
 		case DebugMemoryType::WorkRam:
-			memcpy(stamps, GetStampArray(operationType, AddressType::WorkRam).data() + offset, length * sizeof(uint32_t));
+			memcpy(stamps, GetStampArray(operationType, AddressType::WorkRam).data() + offset, length * sizeof(uint64_t));
 			break;
 
 		case DebugMemoryType::SaveRam:
-			memcpy(stamps, GetStampArray(operationType, AddressType::SaveRam).data() + offset, length * sizeof(uint32_t));
+			memcpy(stamps, GetStampArray(operationType, AddressType::SaveRam).data() + offset, length * sizeof(uint64_t));
 			break;
 
 		case DebugMemoryType::PrgRom:
-			memcpy(stamps, GetStampArray(operationType, AddressType::PrgRom).data() + offset, length * sizeof(uint32_t));
+			memcpy(stamps, GetStampArray(operationType, AddressType::PrgRom).data() + offset, length * sizeof(uint64_t));
 			break;
 
 		case DebugMemoryType::ChrRom:
-			memcpy(stamps, GetPpuStampArray(operationType, PpuAddressType::ChrRom).data() + offset, length * sizeof(uint32_t));
+			memcpy(stamps, GetPpuStampArray(operationType, PpuAddressType::ChrRom).data() + offset, length * sizeof(uint64_t));
 			break;
 
 		case DebugMemoryType::ChrRam:
-			memcpy(stamps, GetPpuStampArray(operationType, PpuAddressType::ChrRam).data() + offset, length * sizeof(uint32_t));
+			memcpy(stamps, GetPpuStampArray(operationType, PpuAddressType::ChrRam).data() + offset, length * sizeof(uint64_t));
 			break;
 
 		case DebugMemoryType::NametableRam:
-			memcpy(stamps, GetPpuStampArray(operationType, PpuAddressType::NametableRam).data() + offset, length * sizeof(uint32_t));
+			memcpy(stamps, GetPpuStampArray(operationType, PpuAddressType::NametableRam).data() + offset, length * sizeof(uint64_t));
 			break;
 
 		case DebugMemoryType::PaletteMemory:
-			memcpy(stamps, GetPpuStampArray(operationType, PpuAddressType::PaletteRam).data() + offset, length * sizeof(uint32_t));
+			memcpy(stamps, GetPpuStampArray(operationType, PpuAddressType::PaletteRam).data() + offset, length * sizeof(uint64_t));
 			break;
 
 		case DebugMemoryType::CpuMemory:
@@ -194,7 +194,7 @@ void MemoryAccessCounter::GetAccessStamps(uint32_t offset, uint32_t length, Debu
 void MemoryAccessCounter::GetNametableChangedData(bool ntChangedData[])
 {
 	PpuAddressTypeInfo addressInfo;
-	int32_t cpuCycle = _debugger->GetConsole()->GetCpu()->GetCycleCount();
+	uint64_t cpuCycle = _debugger->GetConsole()->GetCpu()->GetCycleCount();
 	NesModel model = _debugger->GetConsole()->GetModel();
 	double frameRate = model == NesModel::NTSC ? 60.1 : 50.01;
 	double overclockRate = _debugger->GetConsole()->GetPpu()->GetOverclockRate() * (_debugger->GetConsole()->GetSettings()->GetOverclockRate() / 100);

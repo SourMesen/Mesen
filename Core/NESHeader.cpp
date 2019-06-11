@@ -36,9 +36,9 @@ GameSystem NESHeader::GetNesGameSystem()
 			case 3: return GameSystem::Dendy;
 		}
 	} else if(GetRomHeaderVersion() == RomHeaderVersion::iNes) {
-		return (Byte9 & 0x01) ? GameSystem::NesPal : GameSystem::NesNtsc;
+		return (Byte9 & 0x01) ? GameSystem::NesPal : GameSystem::Unknown;
 	}
-	return GameSystem::NesNtsc;
+	return GameSystem::Unknown;
 }
 
 GameSystem NESHeader::GetGameSystem()
@@ -180,16 +180,7 @@ uint8_t NESHeader::GetSubMapper()
 MirroringType NESHeader::GetMirroringType()
 {
 	if(Byte6 & 0x08) {
-		if(GetRomHeaderVersion() == RomHeaderVersion::Nes2_0) {
-			if(Byte6 & 0x01) {
-				//Based on proposal by rainwarrior/Myask: http://wiki.nesdev.com/w/index.php/Talk:NES_2.0
-				return MirroringType::ScreenAOnly;
-			} else {
-				return MirroringType::FourScreens;
-			}
-		} else {
-			return MirroringType::FourScreens;
-		}
+		return MirroringType::FourScreens;
 	} else {
 		return Byte6 & 0x01 ? MirroringType::Vertical : MirroringType::Horizontal;
 	}
@@ -226,7 +217,7 @@ PpuModel NESHeader::GetVsSystemPpuModel()
 		switch(Byte13 & 0x0F) {
 			case 0: return PpuModel::Ppu2C03;
 			case 1:
-				MessageManager::Log("[iNes] Unsupport VS System Palette specified (2C03G).");
+				MessageManager::Log("[iNes] Unsupported VS System Palette specified (2C03G).");
 				return PpuModel::Ppu2C03;
 
 			case 2: return PpuModel::Ppu2C04A;

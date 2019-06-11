@@ -309,7 +309,6 @@ uint8_t PPU::ReadRAM(uint16_t addr)
 	switch(GetRegisterID(addr)) {
 		case PPURegisters::Status:
 			_state.WriteToggle = false;
-			_flags.IntensifyBlue = false;
 			UpdateStatusFlag();
 			returnValue = _state.Status;
 			openBusMask = 0x1F;
@@ -1093,8 +1092,8 @@ uint8_t PPU::ReadSpriteRam(uint8_t addr)
 	if(!_enableOamDecay) {
 		return _spriteRAM[addr];
 	} else {
-		int32_t elapsedCycle = _console->GetCpu()->GetElapsedCycles(_oamDecayCycles[addr >> 3]);
-		if(elapsedCycle <= PPU::OamDecayCycleCount) {
+		uint64_t elapsedCycles = _console->GetCpu()->GetCycleCount() - _oamDecayCycles[addr >> 3];
+		if(elapsedCycles <= PPU::OamDecayCycleCount) {
 			_oamDecayCycles[addr >> 3] = _console->GetCpu()->GetCycleCount();
 			return _spriteRAM[addr];
 		} else {
@@ -1326,7 +1325,7 @@ uint8_t* PPU::GetSpriteRam()
 	if(_enableOamDecay) {
 		for(int i = 0; i < 0x100; i++) {
 			//Apply OAM decay to sprite RAM before letting debugger access it
-			if(_console->GetCpu()->GetElapsedCycles(_oamDecayCycles[i >> 3]) > PPU::OamDecayCycleCount) {
+			if((_console->GetCpu()->GetCycleCount() - _oamDecayCycles[i >> 3]) > PPU::OamDecayCycleCount) {
 				_spriteRAM[i] = 0x10;
 			}
 		}
