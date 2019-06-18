@@ -129,7 +129,7 @@ bool SaveStateManager::LoadState(istream &stream, bool hashCheckRequired)
 		}
 
 		stream.read((char*)&fileFormatVersion, sizeof(fileFormatVersion));
-		if(fileFormatVersion < 10) {
+		if(fileFormatVersion <= 10) {
 			MessageManager::DisplayMessage("SaveStates", "SaveStateIncompatibleVersion");
 			return false;
 		} else {
