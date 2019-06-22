@@ -37,7 +37,6 @@ protected:
 			SelectPRGPage(1, 0x07 | (_outerReg << 3));
 		} else {
 			//UOROM mode
-			//FIXME: Mermaid game doesn't work
 			SelectPRGPage(0, _innerReg | (_outerReg << 3));
 			SelectPRGPage(1, 0x0F | (_outerReg << 3));
 		}
@@ -46,7 +45,7 @@ protected:
 	void WriteRegister(uint16_t addr, uint8_t value) override
 	{
 		_innerReg = value & 0x0F;
-		if((addr & 0xF0E0) == 0xF0E0) {
+		if((addr & 0xFFE0) == 0xF0E0) {
 			_outerReg = addr & 0x0F;
 			_prgMode = (addr >> 4) & 0x01;
 		}
