@@ -184,7 +184,7 @@ namespace Mesen.GUI.Forms
 		private void LoadPatchFile(string patchFile)
 		{
 			string patchFolder = Path.GetDirectoryName(patchFile);
-			HashSet<string> romExtensions = new HashSet<string>() { ".nes", ".fds", ".unf" };
+			HashSet<string> romExtensions = new HashSet<string>() { ".nes", ".fds", ".unf", "*.unif" };
 			List<string> romsInFolder = new List<string>();
 			foreach(string filepath in Directory.EnumerateFiles(patchFolder)) {
 				if(romExtensions.Contains(Path.GetExtension(filepath).ToLowerInvariant())) {
