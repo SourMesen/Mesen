@@ -755,7 +755,7 @@
 			this.grpFlags.Margin = new System.Windows.Forms.Padding(0, 0, 2, 0);
 			this.grpFlags.Name = "grpFlags";
 			this.grpFlags.Padding = new System.Windows.Forms.Padding(2);
-			this.grpFlags.Size = new System.Drawing.Size(368, 82);
+			this.grpFlags.Size = new System.Drawing.Size(356, 82);
 			this.grpFlags.TabIndex = 3;
 			this.grpFlags.TabStop = false;
 			this.grpFlags.Text = "Flags";
@@ -795,7 +795,7 @@
 			this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 8F));
 			this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel4.Size = new System.Drawing.Size(364, 65);
+			this.tableLayoutPanel4.Size = new System.Drawing.Size(352, 65);
 			this.tableLayoutPanel4.TabIndex = 0;
 			// 
 			// chkFrameCounter
@@ -983,12 +983,12 @@
 			// 
 			this.grpStack.Controls.Add(this.tableLayoutPanel6);
 			this.grpStack.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.grpStack.Location = new System.Drawing.Point(370, 0);
+			this.grpStack.Location = new System.Drawing.Point(358, 0);
 			this.grpStack.Margin = new System.Windows.Forms.Padding(0);
 			this.grpStack.Name = "grpStack";
 			this.grpStack.Padding = new System.Windows.Forms.Padding(2);
 			this.tableLayoutPanel3.SetRowSpan(this.grpStack, 3);
-			this.grpStack.Size = new System.Drawing.Size(75, 109);
+			this.grpStack.Size = new System.Drawing.Size(87, 109);
 			this.grpStack.TabIndex = 1;
 			this.grpStack.TabStop = false;
 			this.grpStack.Text = "Stack";
@@ -1007,7 +1007,7 @@
 			this.tableLayoutPanel6.RowCount = 2;
 			this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this.tableLayoutPanel6.Size = new System.Drawing.Size(71, 89);
+			this.tableLayoutPanel6.Size = new System.Drawing.Size(83, 89);
 			this.tableLayoutPanel6.TabIndex = 1;
 			// 
 			// flowLayoutPanel4
@@ -1018,7 +1018,7 @@
 			this.flowLayoutPanel4.Location = new System.Drawing.Point(0, 0);
 			this.flowLayoutPanel4.Margin = new System.Windows.Forms.Padding(0);
 			this.flowLayoutPanel4.Name = "flowLayoutPanel4";
-			this.flowLayoutPanel4.Size = new System.Drawing.Size(71, 21);
+			this.flowLayoutPanel4.Size = new System.Drawing.Size(83, 21);
 			this.flowLayoutPanel4.TabIndex = 3;
 			// 
 			// lblSP
@@ -1053,7 +1053,7 @@
 			this.txtStack.Name = "txtStack";
 			this.txtStack.ReadOnly = true;
 			this.txtStack.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-			this.txtStack.Size = new System.Drawing.Size(71, 68);
+			this.txtStack.Size = new System.Drawing.Size(83, 68);
 			this.txtStack.TabIndex = 4;
 			// 
 			// flowLayoutPanel1
@@ -1071,7 +1071,7 @@
 			this.flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.flowLayoutPanel1.Location = new System.Drawing.Point(3, 3);
 			this.flowLayoutPanel1.Name = "flowLayoutPanel1";
-			this.flowLayoutPanel1.Size = new System.Drawing.Size(364, 21);
+			this.flowLayoutPanel1.Size = new System.Drawing.Size(352, 21);
 			this.flowLayoutPanel1.TabIndex = 2;
 			// 
 			// lblA
