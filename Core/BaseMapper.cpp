@@ -372,28 +372,6 @@ void BaseMapper::SelectCHRPage(uint16_t slot, uint16_t page, ChrMemoryType memor
 	SetPpuMemoryMapping(startAddr, endAddr, page, memoryType);
 }
 
-void BaseMapper::InitializeRam(void* data, uint32_t length)
-{
-	InitializeRam(_console->GetSettings()->GetRamPowerOnState(), data, length);
-}
-
-void BaseMapper::InitializeRam(RamPowerOnState powerOnState, void* data, uint32_t length)
-{
-	switch(powerOnState) {
-		default:
-		case RamPowerOnState::AllZeros: memset(data, 0, length); break;
-		case RamPowerOnState::AllOnes: memset(data, 0xFF, length); break;
-		case RamPowerOnState::Random:
-			std::random_device rd;
-			std::mt19937 mt(rd());
-			std::uniform_int_distribution<> dist(0, 255);
-			for(uint32_t i = 0; i < length; i++) {
-				((uint8_t*)data)[i] = dist(mt);
-			}
-			break;
-	}
-}
-
 uint8_t BaseMapper::GetPowerOnByte(uint8_t defaultValue)
 {
 	if(_console->GetSettings()->CheckFlag(EmulationFlags::RandomizeMapperPowerOnState)) {
@@ -467,7 +445,7 @@ void BaseMapper::InitializeChrRam(int32_t chrRamSize)
 	_chrRamSize = chrRamSize >= 0 ? chrRamSize : defaultRamSize;
 	if(_chrRamSize > 0) {
 		_chrRam = new uint8_t[_chrRamSize];
-		InitializeRam(_chrRam, _chrRamSize);
+		_console->InitializeRam(_chrRam, _chrRamSize);
 	}
 }
 
@@ -607,12 +585,12 @@ void BaseMapper::Initialize(RomData &romData)
 	_saveRam = new uint8_t[_saveRamSize];
 	_workRam = new uint8_t[_workRamSize];
 
-	InitializeRam(_saveRam, _saveRamSize);
-	InitializeRam(_workRam, _workRamSize);
+	_console->InitializeRam(_saveRam, _saveRamSize);
+	_console->InitializeRam(_workRam, _workRamSize);
 
 	_nametableCount = 2;
 	_nametableRam = new uint8_t[BaseMapper::NametableSize*BaseMapper::NametableCount];
-	InitializeRam(_nametableRam, BaseMapper::NametableSize*BaseMapper::NametableCount);
+	_console->InitializeRam(_nametableRam, BaseMapper::NametableSize*BaseMapper::NametableCount);
 
 	for(int i = 0; i < 0x100; i++) {
 		//Allow us to map a different page every 256 bytes

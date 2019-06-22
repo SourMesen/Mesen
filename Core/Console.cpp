@@ -1,4 +1,5 @@
 #include "stdafx.h"
+#include <random>
 #include <thread>
 #include "Console.h"
 #include "CPU.h"
@@ -277,7 +278,9 @@ bool Console::Initialize(VirtualFile &romFile, VirtualFile &patchFile)
 		romFile.ReadFile(fileData);
 
 		_batteryManager->Initialize(FolderUtilities::GetFilename(romFile.GetFileName(), false));
-		shared_ptr<BaseMapper> mapper = MapperFactory::InitializeFromFile(shared_from_this(), romFile.GetFileName(), fileData);
+
+		RomData romData;
+		shared_ptr<BaseMapper> mapper = MapperFactory::InitializeFromFile(shared_from_this(), romFile.GetFileName(), fileData, romData);
 		if(mapper) {
 			_soundMixer->StopAudio(true);
 
@@ -363,6 +366,10 @@ bool Console::Initialize(VirtualFile &romFile, VirtualFile &patchFile)
 			} else {
 				_ppu.reset(new PPU(shared_from_this()));
 			}
+
+			_mapper->SetConsole(shared_from_this());
+			_mapper->Initialize(romData);
+			GetNotificationManager()->RegisterNotificationListener(_mapper);
 
 			_memoryManager->SetMapper(_mapper);
 			_memoryManager->RegisterIODevice(_ppu.get());
@@ -1123,6 +1130,28 @@ void Console::SetNextFrameOverclockStatus(bool disabled)
 int32_t Console::GetStopCode()
 {
 	return _stopCode;
+}
+
+void Console::InitializeRam(void* data, uint32_t length)
+{
+	InitializeRam(_settings->GetRamPowerOnState(), data, length);
+}
+
+void Console::InitializeRam(RamPowerOnState powerOnState, void* data, uint32_t length)
+{
+	switch(powerOnState) {
+		default:
+		case RamPowerOnState::AllZeros: memset(data, 0, length); break;
+		case RamPowerOnState::AllOnes: memset(data, 0xFF, length); break;
+		case RamPowerOnState::Random:
+			std::random_device rd;
+			std::mt19937 mt(rd());
+			std::uniform_int_distribution<> dist(0, 255);
+			for(uint32_t i = 0; i < length; i++) {
+				((uint8_t*)data)[i] = dist(mt);
+			}
+			break;
+	}
 }
 
 shared_ptr<HdPackData> Console::GetHdData()

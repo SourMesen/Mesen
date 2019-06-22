@@ -27,7 +27,7 @@ public:
 	Eeprom24C01(shared_ptr<Console> console)
 	{
 		_console = console;
-		BaseMapper::InitializeRam(_console->GetSettings()->GetRamPowerOnState(), _romData, 128);
+		_console->InitializeRam(_romData, 128);
 		_console->GetBatteryManager()->LoadBattery(".eeprom128", _romData, 128);
 	}
 

@@ -28,8 +28,8 @@ PPU::PPU(shared_ptr<Console> console)
 		0x09, 0x01, 0x34, 0x03, 0x00, 0x04, 0x00, 0x14, 0x08, 0x3A, 0x00, 0x02, 0x00, 0x20, 0x2C, 0x08 };
 	memcpy(_paletteRAM, paletteRamBootValues, sizeof(_paletteRAM));
 
-	_console->GetMapper()->InitializeRam(_spriteRAM, 0x100);
-	_console->GetMapper()->InitializeRam(_secondarySpriteRAM, 0x20);
+	_console->InitializeRam(_spriteRAM, 0x100);
+	_console->InitializeRam(_secondarySpriteRAM, 0x20);
 
 	Reset();
 }
