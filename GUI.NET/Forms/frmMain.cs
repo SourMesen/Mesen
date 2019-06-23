@@ -684,9 +684,12 @@ namespace Mesen.GUI.Forms
 					}));
 					break;
 
+				case InteropEmu.ConsoleNotificationType.EmulationStopped:
+					InitializeNsfMode();
+					break;
+
 				case InteropEmu.ConsoleNotificationType.GameStopped:
 					this._currentGame = null;
-					InitializeNsfMode();
 					CheatInfo.ClearCheats();
 					this.BeginInvoke((MethodInvoker)(() => {
 						if(_hdPackEditorWindow != null) {
