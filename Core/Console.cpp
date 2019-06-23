@@ -310,6 +310,10 @@ bool Console::Initialize(VirtualFile &romFile, VirtualFile &patchFile)
 			_cpu.reset(new CPU(shared_from_this()));
 			_apu.reset(new APU(shared_from_this()));
 
+			_mapper->SetConsole(shared_from_this());
+			_mapper->Initialize(romData);
+			GetNotificationManager()->RegisterNotificationListener(_mapper);
+
 			if(_slave) {
 				_slave->Release(false);
 				_slave.reset();
@@ -366,10 +370,6 @@ bool Console::Initialize(VirtualFile &romFile, VirtualFile &patchFile)
 			} else {
 				_ppu.reset(new PPU(shared_from_this()));
 			}
-
-			_mapper->SetConsole(shared_from_this());
-			_mapper->Initialize(romData);
-			GetNotificationManager()->RegisterNotificationListener(_mapper);
 
 			_memoryManager->SetMapper(_mapper);
 			_memoryManager->RegisterIODevice(_ppu.get());
