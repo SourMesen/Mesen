@@ -11,6 +11,7 @@ using System.Runtime.InteropServices;
 using Mesen.GUI.Controls;
 using Mesen.GUI.Config;
 using System.Collections.Concurrent;
+using System.Drawing.Imaging;
 
 namespace Mesen.GUI.Debugger.Controls
 {
@@ -33,7 +34,7 @@ namespace Mesen.GUI.Debugger.Controls
 					tlpTileMappings.Controls.Add(mapping);
 					tlpTileMappings.SetColumn(mapping, x);
 					tlpTileMappings.SetRow(mapping, y + 1);
-					mapping.picTiles.Image = new Bitmap(416, 20);
+					mapping.picTiles.Image = new Bitmap(416, 20, PixelFormat.Format32bppPArgb);
 					_mappings[(y << 1) + x] = mapping;
 				}
 			}
@@ -68,7 +69,7 @@ namespace Mesen.GUI.Debugger.Controls
 
 			GCHandle handle = GCHandle.Alloc(_chrPixelData, GCHandleType.Pinned);
 			try {
-				Bitmap source = new Bitmap(128, 128, 4*128, System.Drawing.Imaging.PixelFormat.Format32bppArgb, handle.AddrOfPinnedObject());
+				Bitmap source = new Bitmap(128, 128, 4*128, PixelFormat.Format32bppPArgb, handle.AddrOfPinnedObject());
 
 				for(int y = 0; y < 16; y++) {
 					using(Graphics g = Graphics.FromImage(_mappings[y].picTiles.Image)) {

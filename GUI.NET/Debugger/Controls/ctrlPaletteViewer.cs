@@ -11,6 +11,7 @@ using System.Runtime.InteropServices;
 using Mesen.GUI.Controls;
 using Mesen.GUI.Forms;
 using System.Drawing.Drawing2D;
+using System.Drawing.Imaging;
 
 namespace Mesen.GUI.Debugger.Controls
 {
@@ -50,13 +51,13 @@ namespace Mesen.GUI.Debugger.Controls
 			GCHandle handle = GCHandle.Alloc(this._palettePixelData, GCHandleType.Pinned);
 			try {
 				for(int i = 0; i < 2; i++) {
-					Bitmap source = new Bitmap(4, 4, 4 * 4, System.Drawing.Imaging.PixelFormat.Format32bppArgb, handle.AddrOfPinnedObject()+i*16*4);
-					Bitmap target = new Bitmap(128, 128);
+					Bitmap source = new Bitmap(4, 4, 4 * 4, PixelFormat.Format32bppPArgb, handle.AddrOfPinnedObject()+i*16*4);
+					Bitmap target = new Bitmap(128, 128, PixelFormat.Format32bppPArgb);
 
 					using(Graphics g = Graphics.FromImage(target)) {
-						g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
-						g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.None;
-						g.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.Half;
+						g.InterpolationMode = InterpolationMode.NearestNeighbor;
+						g.SmoothingMode = SmoothingMode.None;
+						g.PixelOffsetMode = PixelOffsetMode.Half;
 						g.ScaleTransform(32, 32);
 						g.DrawImageUnscaled(source, 0, 0);
 

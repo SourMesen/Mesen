@@ -34,8 +34,8 @@ namespace Mesen.GUI.Debugger.Controls
 		private int _contextMenuSpriteIndex = -1;
 		private bool _copyPreview = false;
 		private Bitmap _imgSprites;
-		private Bitmap _scaledSprites = new Bitmap(256, 512);
-		private Bitmap _screenPreview = new Bitmap(256, 240, PixelFormat.Format32bppArgb);
+		private Bitmap _scaledSprites = new Bitmap(256, 512, PixelFormat.Format32bppPArgb);
+		private Bitmap _screenPreview = new Bitmap(256, 240, PixelFormat.Format32bppPArgb);
 		private HdPackCopyHelper _hdCopyHelper = new HdPackCopyHelper();
 		private bool _firstDraw = true;
 		private int _originalSpriteHeight = 0;
@@ -48,8 +48,8 @@ namespace Mesen.GUI.Debugger.Controls
 			InitializeComponent();
 
 			if(!IsDesignMode) {
-				picPreview.Image = new Bitmap(256, 240, PixelFormat.Format32bppArgb);
-				picSprites.Image = new Bitmap(256, 512, PixelFormat.Format32bppArgb);
+				picPreview.Image = new Bitmap(256, 240, PixelFormat.Format32bppPArgb);
+				picSprites.Image = new Bitmap(256, 512, PixelFormat.Format32bppPArgb);
 
 				chkDisplaySpriteOutlines.Checked = ConfigManager.Config.DebugInfo.SpriteViewerDisplaySpriteOutlines;
 
@@ -116,9 +116,9 @@ namespace Mesen.GUI.Debugger.Controls
 
 			GCHandle handle = GCHandle.Alloc(_spritePixelData, GCHandleType.Pinned);
 			try {
-				Bitmap source = new Bitmap(64, 128, 4*64, PixelFormat.Format32bppArgb, handle.AddrOfPinnedObject());
+				Bitmap source = new Bitmap(64, 128, 4*64, PixelFormat.Format32bppPArgb, handle.AddrOfPinnedObject());
 
-				Bitmap sprites = new Bitmap(64, 128, PixelFormat.Format32bppArgb);
+				Bitmap sprites = new Bitmap(64, 128, PixelFormat.Format32bppPArgb);
 				using(Graphics g = Graphics.FromImage(sprites)) {
 					if(_largeSprites) {
 						g.DrawImage(source, 0, 0);
@@ -167,7 +167,7 @@ namespace Mesen.GUI.Debugger.Controls
 		private void ToggleSpriteMode()
 		{
 			if(_largeSprites) {
-				picSprites.Image = new Bitmap(256, 512, PixelFormat.Format32bppArgb);
+				picSprites.Image = new Bitmap(256, 512, PixelFormat.Format32bppPArgb);
 				picSprites.Height = _originalSpriteHeight;
 				picTile.Height = _originalTileHeight;
 				picPreview.Size = _originalPreviewSize;
@@ -177,7 +177,7 @@ namespace Mesen.GUI.Debugger.Controls
 				tlpInfo.Controls.Add(picPreview, 1, 5);
 				lblScreenPreview.Visible = true;
 			} else {
-				picSprites.Image = new Bitmap(256, 256, PixelFormat.Format32bppArgb);
+				picSprites.Image = new Bitmap(256, 256, PixelFormat.Format32bppPArgb);
 				picSprites.Height = (_originalSpriteHeight - 2) / 2 + 2;
 				picTile.Height = (_originalTileHeight - 2) / 2 + 2;
 				picPreview.Size = new Size((int)(_originalPreviewSize.Width * _scale), (int)(_originalPreviewSize.Height * _scale));
@@ -224,12 +224,12 @@ namespace Mesen.GUI.Debugger.Controls
 		{
 			GCHandle handle = GCHandle.Alloc(_spritePixelData, GCHandleType.Pinned);
 			try {
-				Bitmap source = new Bitmap(64, 128, 4*64, PixelFormat.Format32bppArgb, handle.AddrOfPinnedObject());
+				Bitmap source = new Bitmap(64, 128, 4*64, PixelFormat.Format32bppPArgb, handle.AddrOfPinnedObject());
 
 				using(Graphics g = Graphics.FromImage(_screenPreview)) {
-					g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
-					g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.None;
-					g.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.Half;
+					g.InterpolationMode = InterpolationMode.NearestNeighbor;
+					g.SmoothingMode = SmoothingMode.None;
+					g.PixelOffsetMode = PixelOffsetMode.Half;
 					g.Clear(Color.Transparent);
 
 					for(int i = 63; i >= 0; i--) {

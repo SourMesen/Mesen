@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
+using System.Drawing.Imaging;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -19,7 +20,7 @@ namespace Mesen.GUI.Debugger
 		{
 			int[] palette = InteropEmu.DebugGetPalette();
 			GCHandle handle = GCHandle.Alloc(palette, GCHandleType.Pinned);
-			Bitmap source = new Bitmap(4, 1, 4 * 4, System.Drawing.Imaging.PixelFormat.Format32bppArgb, handle.AddrOfPinnedObject() + paletteIndex * 16);
+			Bitmap source = new Bitmap(4, 1, 4 * 4, PixelFormat.Format32bppPArgb, handle.AddrOfPinnedObject() + paletteIndex * 16);
 
 			g.InterpolationMode = InterpolationMode.NearestNeighbor;
 			g.SmoothingMode = SmoothingMode.None;
@@ -62,8 +63,8 @@ namespace Mesen.GUI.Debugger
 
 		public static Bitmap GetPreview(Point originalPos, Size originalSize, int scale, Image source)
 		{
-			Bitmap tile = new Bitmap(originalSize.Width * scale, originalSize.Height * scale);
-			Bitmap tilePreview = new Bitmap(originalSize.Width, originalSize.Height);
+			Bitmap tile = new Bitmap(originalSize.Width * scale, originalSize.Height * scale, PixelFormat.Format32bppPArgb);
+			Bitmap tilePreview = new Bitmap(originalSize.Width, originalSize.Height, PixelFormat.Format32bppPArgb);
 			using(Graphics g = Graphics.FromImage(tilePreview)) {
 				g.DrawImage(source, 0, 0, new Rectangle(originalPos.X, originalPos.Y, originalSize.Width, originalSize.Height), GraphicsUnit.Pixel);
 			}

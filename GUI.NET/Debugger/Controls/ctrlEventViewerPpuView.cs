@@ -12,6 +12,7 @@ using Mesen.GUI.Controls;
 using Mesen.GUI.Forms;
 using Mesen.GUI.Config;
 using System.Collections.ObjectModel;
+using System.Drawing.Imaging;
 
 namespace Mesen.GUI.Debugger.Controls
 {
@@ -113,13 +114,13 @@ namespace Mesen.GUI.Debugger.Controls
 		{
 			GCHandle handle = GCHandle.Alloc(this._pictureData, GCHandleType.Pinned);
 			try {
-				Bitmap source = new Bitmap(256, 240, 256*4, System.Drawing.Imaging.PixelFormat.Format32bppArgb, handle.AddrOfPinnedObject());
+				Bitmap source = new Bitmap(256, 240, 256*4, PixelFormat.Format32bppPArgb, handle.AddrOfPinnedObject());
 				int picHeight = (int)_state.PPU.ScanlineCount * 2;
 				if(_eventBitmap == null || _eventBitmap.Height != picHeight) {
-					_screenBitmap = new Bitmap(682, picHeight);
-					_eventBitmap = new Bitmap(682, picHeight);
-					_overlayBitmap = new Bitmap(682, picHeight);
-					_displayBitmap = new Bitmap(682, picHeight);
+					_screenBitmap = new Bitmap(682, picHeight, PixelFormat.Format32bppPArgb);
+					_eventBitmap = new Bitmap(682, picHeight, PixelFormat.Format32bppPArgb);
+					_overlayBitmap = new Bitmap(682, picHeight, PixelFormat.Format32bppPArgb);
+					_displayBitmap = new Bitmap(682, picHeight, PixelFormat.Format32bppPArgb);
 				}
 
 				Size picSize = new Size((int)((_eventBitmap.Width * _scale) + 2), (int)((_eventBitmap.Height * _scale) + 2));
