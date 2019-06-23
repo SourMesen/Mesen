@@ -11,7 +11,7 @@ home = [ "HTML", "RSS", "JSON"]
 
 [params]
 themeVariant = "green"
-mesenVersion = "0.9.7"
+mesenVersion = "0.9.8"
 
 [[menu.shortcuts]] 
 name = "<img style='vertical-align: middle' src='/images/favicon.png'/> <span style='display: inline;vertical-align: middle'>Website</span>"
