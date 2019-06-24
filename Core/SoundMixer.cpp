@@ -12,6 +12,7 @@
 SoundMixer::SoundMixer(shared_ptr<Console> console)
 {
 	_audioDevice = nullptr;
+	_clockRate = 0;
 	_console = console;
 	_settings = _console->GetSettings();
 	_eqFrequencyGrid.reset(new orfanidis_eq::freq_grid());

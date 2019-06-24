@@ -64,7 +64,7 @@ public:
 
 	void StreamState(bool saving) override
 	{
-		int32_t unusednextIrqCycle;
+		int32_t unusednextIrqCycle = 0;
 		Stream(unusednextIrqCycle, _previousCycle, _currentStep, _stepMode, _inhibitIRQ, _nesModel, _blockFrameCounterTick, _writeDelayCounter, _newValue);
 
 		if(!saving) {

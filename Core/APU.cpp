@@ -14,6 +14,7 @@ APU::APU(shared_ptr<Console> console)
 {
 	_nesModel = NesModel::Auto;
 	_apuEnabled = true;
+	_needToRun = false;
 
 	_console = console;
 	_mixer = _console->GetSoundMixer();
