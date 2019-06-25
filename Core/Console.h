@@ -39,6 +39,7 @@ enum class ScaleFilterType;
 enum class ConsoleFeatures;
 enum class DebugMemoryType;
 enum class EventType;
+enum class RamPowerOnState;
 
 class Console : public std::enable_shared_from_this<Console>
 {
@@ -213,6 +214,9 @@ public:
 	void SetNextFrameOverclockStatus(bool disabled);
 
 	bool IsDebuggerAttached();
+
+	void InitializeRam(void* data, uint32_t length);
+	static void InitializeRam(RamPowerOnState powerOnState, void* data, uint32_t length);
 
 	shared_ptr<HdPackData> GetHdData();
 	bool IsHdPpu();

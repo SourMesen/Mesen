@@ -12,6 +12,7 @@ using Mesen.GUI.Controls;
 using Mesen.GUI.Config;
 using Mesen.GUI.Forms;
 using System.Drawing.Drawing2D;
+using System.Drawing.Imaging;
 
 namespace Mesen.GUI.Debugger.Controls
 {
@@ -156,18 +157,18 @@ namespace Mesen.GUI.Debugger.Controls
 
 				GCHandle handle = GCHandle.Alloc(pixelData, GCHandleType.Pinned);
 				try {
-					Bitmap source = new Bitmap(128, 128, 4*128, System.Drawing.Imaging.PixelFormat.Format32bppArgb, handle.AddrOfPinnedObject());
-					Bitmap target = new Bitmap(256, 256);
+					Bitmap source = new Bitmap(128, 128, 4*128, PixelFormat.Format32bppPArgb, handle.AddrOfPinnedObject());
+					Bitmap target = new Bitmap(256, 256, PixelFormat.Format32bppPArgb);
 
 					using(Graphics g = Graphics.FromImage(target)) {
-						g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
-						g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.None;
-						g.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.Half;
+						g.InterpolationMode = InterpolationMode.NearestNeighbor;
+						g.SmoothingMode = SmoothingMode.None;
+						g.PixelOffsetMode = PixelOffsetMode.Half;
 						g.ScaleTransform(2, 2);
 						g.DrawImageUnscaled(source, 0, 0);
 					}
 
-					Bitmap originalImg = new Bitmap(128, 128, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+					Bitmap originalImg = new Bitmap(128, 128, PixelFormat.Format32bppPArgb);
 					using(Graphics g = Graphics.FromImage(originalImg)) {
 						g.DrawImage(source, 0, 0);
 					}
@@ -187,7 +188,7 @@ namespace Mesen.GUI.Debugger.Controls
 
 		private void DrawHud(int chrBank)
 		{
-			Bitmap chrBankImage = new Bitmap(256, 256);
+			Bitmap chrBankImage = new Bitmap(256, 256, PixelFormat.Format32bppPArgb);
 			using(Graphics g = Graphics.FromImage(chrBankImage)) {
 				g.DrawImage(_chrBanks[chrBank], 0, 0);
 
@@ -390,7 +391,7 @@ namespace Mesen.GUI.Debugger.Controls
 
 			_tilePreview = PpuViewerHelper.GetPreview(new Point(tileX * 16, tileY * 16), new Size(16, 16), 8, bottomBank ? this._chrBanks[1] : this._chrBanks[0]);
 
-			Bitmap tile = new Bitmap(128, 128);
+			Bitmap tile = new Bitmap(128, 128, PixelFormat.Format32bppPArgb);
 			using(Graphics g = Graphics.FromImage(tile)) {
 				g.DrawImageUnscaled(_tilePreview, 0, 0);
 				using(Brush brush = new SolidBrush(Color.FromArgb(128, Color.White))) {
@@ -528,7 +529,7 @@ namespace Mesen.GUI.Debugger.Controls
 
 		private Bitmap GetCopyBitmap()
 		{
-			Bitmap copy = new Bitmap(128, 256);
+			Bitmap copy = new Bitmap(128, 256, PixelFormat.Format32bppPArgb);
 			using(Graphics g = Graphics.FromImage(copy)) {
 				g.DrawImage(_originalChrBanks[0], 0, 0);
 				g.DrawImage(_originalChrBanks[1], 0, 128);
@@ -549,7 +550,7 @@ namespace Mesen.GUI.Debugger.Controls
 				sfd.SetFilter("PNG files|*.png");
 				if(sfd.ShowDialog() == DialogResult.OK) {
 					using(Bitmap copy = GetCopyBitmap()) {
-						copy.Save(sfd.FileName, System.Drawing.Imaging.ImageFormat.Png);
+						copy.Save(sfd.FileName, ImageFormat.Png);
 					}
 				}
 			}

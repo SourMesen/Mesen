@@ -353,6 +353,9 @@ protected:
 		_fillModeTile = 0;
 		_verticalSplitScroll = 0;
 		_verticalSplitBank = 0;
+		_verticalSplitEnabled = false;
+		_verticalSplitDelimiterTile = 0;
+		_verticalSplitRightSide = false;
 		_multiplierValue1 = 0;
 		_multiplierValue2 = 0;
 		_chrUpperBits = 0;
@@ -365,11 +368,14 @@ protected:
 		_exAttributeLastNametableFetch = 0;
 		_exAttrSelectedChrBank = 0;
 		
+		_irqPending = false;
 		_irqCounterTarget = 0;
 		_irqCounter = 0;
 		_irqEnabled = false;
 		_previousScanline = -1;
 		_ppuInFrame = false;
+
+		_lastVramOperationType = MemoryOperationType::Read;
 
 		_splitInSplitRegion = false;
 		_splitVerticalScroll = 0;

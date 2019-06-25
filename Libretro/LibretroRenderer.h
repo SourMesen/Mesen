@@ -58,7 +58,7 @@ public:
 
 		float ratio = (float)_console->GetSettings()->GetAspectRatio(_console);
 		if(ratio == 0.0f) {
-			ratio = 1.0f;
+			ratio = (float)256 / 240;
 		}
 		ratio *= (float)_console->GetSettings()->GetOverscanDimensions().GetScreenWidth() / _console->GetSettings()->GetOverscanDimensions().GetScreenHeight() / 256 * 240;
 

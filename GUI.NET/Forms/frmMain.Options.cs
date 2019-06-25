@@ -125,6 +125,13 @@ namespace Mesen.GUI.Forms
 				VsDualOutputOption originalVsDualOutput = ConfigManager.Config.PreferenceInfo.VsDualVideoOutput;
 
 				if(frm.ShowDialog(sender, this) == DialogResult.OK) {
+					if(frm.NeedRestart) {
+						//Data folder has changed, end process
+						ConfigManager.DoNotSaveSettings = true;
+						this.Close();
+						return;
+					}
+
 					VsDualOutputOption newVsDualOutput = ConfigManager.Config.PreferenceInfo.VsDualVideoOutput;
 					if(originalVsDualOutput != newVsDualOutput) {
 						if(newVsDualOutput == VsDualOutputOption.Both || originalVsDualOutput == VsDualOutputOption.Both) {

@@ -21,6 +21,7 @@ public:
 	{
 		_currentOutput = 0;
 		_isMmc5Square = true;
+		Reset(false);
 	}
 
 	int8_t GetOutput()

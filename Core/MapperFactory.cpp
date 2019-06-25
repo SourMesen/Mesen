@@ -656,7 +656,7 @@ BaseMapper* MapperFactory::GetMapperFromID(RomData &romData)
 	return nullptr;
 }
 
-shared_ptr<BaseMapper> MapperFactory::InitializeFromFile(shared_ptr<Console> console, string romFilename, vector<uint8_t> &fileData)
+shared_ptr<BaseMapper> MapperFactory::InitializeFromFile(shared_ptr<Console> console, string romFilename, vector<uint8_t> &fileData, RomData &outRomData)
 {
 	RomLoader loader;
 
@@ -673,9 +673,7 @@ shared_ptr<BaseMapper> MapperFactory::InitializeFromFile(shared_ptr<Console> con
 		shared_ptr<BaseMapper> mapper(GetMapperFromID(romData));
 
 		if(mapper) {
-			mapper->SetConsole(console);
-			mapper->Initialize(romData);
-			console->GetNotificationManager()->RegisterNotificationListener(mapper);
+			outRomData = romData;
 			return mapper;
 		}
 	} else if(loader.GetRomData().BiosMissing) {

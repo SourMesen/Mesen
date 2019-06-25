@@ -169,10 +169,23 @@ namespace Mesen.GUI.Debugger
 
 		private void GetData()
 		{
-			this.ctrlNametableViewer.GetData();
-			this.ctrlChrViewer.GetData();
-			this.ctrlSpriteViewer.GetData();
-			this.ctrlPaletteViewer.GetData();
+			if(_isCompact) {
+				//In compact mode, only load data for the current tab
+				if(_selectedTab == this.tpgNametableViewer) {
+					this.ctrlNametableViewer.GetData();
+				} else if(_selectedTab == this.tpgChrViewer) {
+					this.ctrlChrViewer.GetData();
+				} else if(_selectedTab == this.tpgSpriteViewer) {
+					this.ctrlSpriteViewer.GetData();
+				} else if(_selectedTab == this.tpgPaletteViewer) {
+					this.ctrlPaletteViewer.GetData();
+				}
+			} else {
+				this.ctrlNametableViewer.GetData();
+				this.ctrlChrViewer.GetData();
+				this.ctrlSpriteViewer.GetData();
+				this.ctrlPaletteViewer.GetData();
+			}
 		}
 
 		private void RefreshViewers()

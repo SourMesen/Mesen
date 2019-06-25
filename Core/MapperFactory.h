@@ -15,5 +15,5 @@ class MapperFactory
 		static constexpr uint16_t FdsMapperID = 65535;
 		static constexpr uint16_t NsfMapperID = 65534;
 
-		static shared_ptr<BaseMapper> InitializeFromFile(shared_ptr<Console> console, string romFilename, vector<uint8_t> &fileData);
+		static shared_ptr<BaseMapper> InitializeFromFile(shared_ptr<Console> console, string romFilename, vector<uint8_t> &fileData, RomData &outRomData);
 };

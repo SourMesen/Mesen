@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using Mesen.GUI.Forms;
 using System.Runtime.InteropServices;
 using Mesen.GUI.Controls;
+using System.Drawing.Imaging;
 
 namespace Mesen.GUI.Debugger
 {
@@ -65,8 +66,8 @@ namespace Mesen.GUI.Debugger
 
 			GCHandle handle = GCHandle.Alloc(this.PaletteData, GCHandleType.Pinned);
 			try {
-				Bitmap source = new Bitmap(16, 4, 16*4, System.Drawing.Imaging.PixelFormat.Format32bppArgb, handle.AddrOfPinnedObject());
-				Bitmap target = new Bitmap(336, 336);
+				Bitmap source = new Bitmap(16, 4, 16*4, PixelFormat.Format32bppPArgb, handle.AddrOfPinnedObject());
+				Bitmap target = new Bitmap(336, 336, PixelFormat.Format32bppPArgb);
 
 				Font font = new Font(BaseControl.MonospaceFontFamily, BaseControl.DefaultFontSize - 2, GraphicsUnit.Pixel);
 				using(Graphics g = Graphics.FromImage(target)) {

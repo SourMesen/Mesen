@@ -12,6 +12,7 @@ using Mesen.GUI.Config;
 using Mesen.GUI.Controls;
 using Mesen.GUI.Forms;
 using System.Drawing.Drawing2D;
+using System.Drawing.Imaging;
 
 namespace Mesen.GUI.Debugger.Controls
 {
@@ -28,9 +29,9 @@ namespace Mesen.GUI.Debugger.Controls
 		private byte[][] _tileData = new byte[4][];
 		private byte[][] _attributeData = new byte[4][];
 		private Bitmap _gridOverlay;
-		private Bitmap _nametableImage = new Bitmap(512, 480);
-		private Bitmap _finalImage = new Bitmap(512, 480);
-		private Bitmap _hudImage = new Bitmap(512, 480);
+		private Bitmap _nametableImage = new Bitmap(512, 480, PixelFormat.Format32bppPArgb);
+		private Bitmap _finalImage = new Bitmap(512, 480, PixelFormat.Format32bppPArgb);
+		private Bitmap _hudImage = new Bitmap(512, 480, PixelFormat.Format32bppPArgb);
 		private TileInfo _tileInfo;
 		private int _currentPpuAddress = -1;
 		private int _tileX = 0;
@@ -140,7 +141,7 @@ namespace Mesen.GUI.Debugger.Controls
 			using(Graphics gNametable = Graphics.FromImage(_nametableImage)) {
 				for(int i = 0; i < 4; i++) {
 					GCHandle handle = GCHandle.Alloc(_nametablePixelData[i], GCHandleType.Pinned);
-					Bitmap source = new Bitmap(256, 240, 4*256, System.Drawing.Imaging.PixelFormat.Format32bppArgb, handle.AddrOfPinnedObject());
+					Bitmap source = new Bitmap(256, 240, 4*256, PixelFormat.Format32bppPArgb, handle.AddrOfPinnedObject());
 					try {
 						gNametable.DrawImage(source, new Rectangle(i % 2 == 0 ? 0 : 256, i <= 1 ? 0 : 240, 256, 240), new Rectangle(0, 0, 256, 240), GraphicsUnit.Pixel);
 					} finally {
@@ -150,13 +151,13 @@ namespace Mesen.GUI.Debugger.Controls
 			}
 
 			if(this._gridOverlay == null && (chkShowTileGrid.Checked || chkShowAttributeGrid.Checked)) {
-				this._gridOverlay = new Bitmap(512, 480);
+				this._gridOverlay = new Bitmap(512, 480, PixelFormat.Format32bppPArgb);
 
 				using(Graphics overlay = Graphics.FromImage(this._gridOverlay)) {
 					if(chkShowTileGrid.Checked) {
 						using(Pen pen = new Pen(Color.FromArgb(chkShowAttributeGrid.Checked ? 120 : 180, 240, 100, 120))) {
 							if(chkShowAttributeGrid.Checked) {
-								pen.DashStyle = System.Drawing.Drawing2D.DashStyle.Dot;
+								pen.DashStyle = DashStyle.Dot;
 							}
 							DrawGrid(overlay, pen, 1);
 						}

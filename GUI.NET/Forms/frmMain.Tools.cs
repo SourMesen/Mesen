@@ -130,6 +130,7 @@ namespace Mesen.GUI.Forms
 				if(Directory.Exists(folder)) {
 					gameRoms.AddRange(Directory.EnumerateFiles(folder, "*.nes", searchOptions));
 					gameRoms.AddRange(Directory.EnumerateFiles(folder, "*.unf", searchOptions));
+					gameRoms.AddRange(Directory.EnumerateFiles(folder, "*.unif", searchOptions));
 					gameRoms.AddRange(Directory.EnumerateFiles(folder, "*.fds", searchOptions));
 
 					if(searchOptions == SearchOption.AllDirectories) {

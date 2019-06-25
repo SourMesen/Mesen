@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
@@ -29,7 +30,7 @@ namespace Mesen.GUI.Forms.HdPackEditor
 			}
 
 			txtSaveFolder.Text = Path.Combine(ConfigManager.HdPackFolder, InteropEmu.GetRomInfo().GetRomName());
-			picBankPreview.BackgroundImage = new Bitmap(256, 256);
+			picBankPreview.BackgroundImage = new Bitmap(256, 256, PixelFormat.Format32bppPArgb);
 			picBankPreview.BackgroundImageLayout = ImageLayout.Zoom;
 
 			UpdateFilterDropdown();
@@ -99,7 +100,7 @@ namespace Mesen.GUI.Forms.HdPackEditor
 				using(Graphics g = Graphics.FromImage(picBankPreview.BackgroundImage)) {
 					Byte[] rgbBuffer = InteropEmu.HdBuilderGetBankPreview((uint)cboBank.SelectedItem, scale, 0);
 					GCHandle handle = GCHandle.Alloc(rgbBuffer, GCHandleType.Pinned);
-					Bitmap source = new Bitmap(128*scale, 128*scale, 4*128*scale, System.Drawing.Imaging.PixelFormat.Format32bppArgb, handle.AddrOfPinnedObject());
+					Bitmap source = new Bitmap(128*scale, 128*scale, 4*128*scale, PixelFormat.Format32bppPArgb, handle.AddrOfPinnedObject());
 					try {
 						g.Clear(Color.Black);
 						g.DrawImage(source, 0, 0, 256, 256);

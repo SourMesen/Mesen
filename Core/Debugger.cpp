@@ -76,6 +76,9 @@ Debugger::Debugger(shared_ptr<Console> console, shared_ptr<CPU> cpu, shared_ptr<
 	_breakOnScanline = -2;
 	_breakSource = BreakSource::Unspecified;
 
+	memset(_hasBreakpoint, 0, sizeof(_hasBreakpoint));
+	_bpDummyCpuRequired = false;
+
 	_preventResume = 0;
 	_stopFlag = false;
 	_suspendCount = 0;

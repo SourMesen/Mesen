@@ -782,8 +782,8 @@
 		<Message ID="FilterWave">波形文件 (*.wav)|*.wav|所有文件 (*.*)|*.*</Message>
 		<Message ID="FilterAvi">AVI 视频 (*.avi)|*.avi|所有文件 (*.*)|*.*</Message>
 		<Message ID="FilterPalette">调色板 (*.pal)|*.pal|所有文件 (*.*)|*.*</Message>
-		<Message ID="FilterRom">所有支持的格式 (*.nes, *.zip, *.7z, *.nsf, *.nsfe, *.fds, *.unf)|*.NES;*.ZIP;*.7z;*.FDS;*.NSF;*.NSFE;*.UNF|NES ROM (*.nes, *.unf)|*.NES;*.UNF|Famicom 磁盘 (*.fds)|*.FDS|NSF 音乐 (*.nsf, *.nsfe)|*.nsf;*.nsfe|ZIP 档案 (*.zip)|*.ZIP|7-Zip 档案 (*.7z)|*.7z|所有文件 (*.*)|*.*</Message>
-		<Message ID="FilterRomIps">所有支持的格式 (*.nes, *.zip, *.7z, *.fds, *.nsf, *.nsfe, *.unf, *.ips, *.bps, *.ups)|*.NES;*.ZIP;*.7z;*.IPS;*.BPS;*.UPS;*.FDS;*.NSF;*.NSFE;*.UNF|NES ROM (*.nes, *.unf)|*.NES;*.UNF|Famicom 磁盘 (*.fds)|*.FDS|NSF 音乐 (*.nsf, *.nsfe)|*.nsf;*.nsfe|ZIP 档案 (*.zip)|*.ZIP|7-Zip 档案 (*.7z)|*.7z|IPS/UPS/BPS 补丁 (*.ips, *.bps, *.ups)|*.IPS;*.BPS;*.UPS|所有文件 (*.*)|*.*</Message>
+		<Message ID="FilterRom">所有支持的格式 (*.nes, *.zip, *.7z, *.nsf, *.nsfe, *.fds, *.unf, *.unif)|*.NES;*.ZIP;*.7z;*.FDS;*.NSF;*.NSFE;*.UNF;*.UNIF|NES ROM (*.nes, *.unf, *.unif)|*.NES;*.UNF;*.UNIF|Famicom 磁盘 (*.fds)|*.FDS|NSF 音乐 (*.nsf, *.nsfe)|*.nsf;*.nsfe|ZIP 档案 (*.zip)|*.ZIP|7-Zip 档案 (*.7z)|*.7z|所有文件 (*.*)|*.*</Message>
+		<Message ID="FilterRomIps">所有支持的格式 (*.nes, *.zip, *.7z, *.fds, *.nsf, *.nsfe, *.unf, *.unif, *.ips, *.bps, *.ups)|*.NES;*.ZIP;*.7z;*.IPS;*.BPS;*.UPS;*.FDS;*.NSF;*.NSFE;*.UNF;*.UNIF|NES ROM (*.nes, *.unf, *.unif)|*.NES;*.UNF;*.UNIF|Famicom 磁盘 (*.fds)|*.FDS|NSF 音乐 (*.nsf, *.nsfe)|*.nsf;*.nsfe|ZIP 档案 (*.zip)|*.ZIP|7-Zip 档案 (*.7z)|*.7z|IPS/UPS/BPS 补丁 (*.ips, *.bps, *.ups)|*.IPS;*.BPS;*.UPS|所有文件 (*.*)|*.*</Message>
 		<Message ID="FilterTest">测试文件 (*.mtp)|*.mtp|所有文件 (*.*)|*.*</Message>
 		<Message ID="FilterCheat">所有支持的格式 (*.cht, *.xml)|*.cht;*.xml</Message>
 		<Message ID="FilterSavestate">Mesen 进度 (*.mst)|*.mst|所有文件 (*.*)|*.*</Message>

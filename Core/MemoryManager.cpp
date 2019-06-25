@@ -38,7 +38,7 @@ void MemoryManager::SetMapper(shared_ptr<BaseMapper> mapper)
 void MemoryManager::Reset(bool softReset)
 {
 	if(!softReset) {
-		_mapper->InitializeRam(_internalRAM, InternalRAMSize);
+		_console->InitializeRam(_internalRAM, InternalRAMSize);
 	}
 
 	_mapper->Reset(softReset);

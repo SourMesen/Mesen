@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using System.Runtime.InteropServices;
 using Mesen.GUI.Forms;
 using Mesen.GUI.Controls;
+using System.Drawing.Imaging;
 
 namespace Mesen.GUI.Debugger.Controls
 {
@@ -118,8 +119,8 @@ namespace Mesen.GUI.Debugger.Controls
 
 			GCHandle handle = GCHandle.Alloc(_currentPalette, GCHandleType.Pinned);
 			try {
-				Bitmap source = new Bitmap(4, 1, 4*4, System.Drawing.Imaging.PixelFormat.Format32bppArgb, handle.AddrOfPinnedObject());
-				Bitmap target = new Bitmap(128, 32);
+				Bitmap source = new Bitmap(4, 1, 4*4, PixelFormat.Format32bppPArgb, handle.AddrOfPinnedObject());
+				Bitmap target = new Bitmap(128, 32, PixelFormat.Format32bppPArgb);
 
 				using(Graphics g = Graphics.FromImage(target)) {
 					g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
