@@ -698,7 +698,7 @@ private:
 public:
 	EmulationSettings()
 	{
-		memcpy(_userPalette, _ppuPaletteArgb, sizeof(_userPalette));
+		SetUserRgbPalette(_ppuPaletteArgb[0]);
 	}
 
 	static uint32_t GetMesenVersion()
