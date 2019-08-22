@@ -19,6 +19,7 @@ private:
 	static std::unordered_map<string, string> _ptResources;
 	static std::unordered_map<string, string> _caResources;
 	static std::unordered_map<string, string> _zhResources;
+	static std::unordered_map<string, string> _itResources;
 
 	static bool _osdEnabled;
 	static SimpleLock _logLock;
