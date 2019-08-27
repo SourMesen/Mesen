@@ -87,7 +87,7 @@ protected:
 				_mirroringBit = (value & 0x01);
 			}
 
-			_regs[_selectedReg] = value & 0x3F;
+			_regs[_selectedReg] = value;
 			UpdateState();
 		}
 	}
