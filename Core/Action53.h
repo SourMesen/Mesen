@@ -66,7 +66,7 @@ protected:
 				case 2: SelectPRGPage(bank, (outerPrgSelect & 0x1F8) | (prgSelect & 0x07)); break;
 				case 3: SelectPRGPage(bank, (outerPrgSelect & 0x1F0) | (prgSelect & 0x0F)); break;
 			}
-			SelectPRGPage(slotSelect ? 1 : 0, (outerPrgSelect & 0x7E) | slotSelect);
+			SelectPRGPage(slotSelect ? 1 : 0, (outerPrgSelect & 0x1FE) | slotSelect);
 		} else {
 			prgSelect <<= 1;
 			uint16_t outerAnd[4]{ 0x1FE, 0x1FC, 0x1F8, 0x1F0 };
