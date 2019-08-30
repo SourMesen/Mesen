@@ -21,11 +21,10 @@ HdNesPack::~HdNesPack()
 
 void HdNesPack::BlendColors(uint8_t output[4], uint8_t input[4])
 {
-	uint8_t alpha = input[3] + 1;
 	uint8_t invertedAlpha = 256 - input[3];
-	output[0] = (uint8_t)((alpha * input[0] + invertedAlpha * output[0]) >> 8);
-	output[1] = (uint8_t)((alpha * input[1] + invertedAlpha * output[1]) >> 8);
-	output[2] = (uint8_t)((alpha * input[2] + invertedAlpha * output[2]) >> 8);
+	output[0] = (uint8_t)((input[0] + invertedAlpha * output[0]) >> 8);
+	output[1] = (uint8_t)((input[1] + invertedAlpha * output[1]) >> 8);
+	output[2] = (uint8_t)((input[2] + invertedAlpha * output[2]) >> 8);
 	output[3] = 0xFF;
 }
 
