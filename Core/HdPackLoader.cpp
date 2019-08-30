@@ -216,7 +216,7 @@ bool HdPackLoader::ProcessImgTag(string src)
 		//premultiply alpha
 		for (int i = 0; i < bitmapInfo.PixelData.size(); ++i) {
 			if (bitmapInfo.PixelData[i] < 0xFF000000) {
-				uint8_t output[4] = (uint8_t*)&(bitmapInfo.PixelData[i]);
+				uint8_t* output = (uint8_t*)(bitmapInfo.PixelData.data() + i);
 				uint8_t alpha = output[3] + 1;
 				output[0] = (uint8_t)((alpha * output[0]) >> 8);
 				output[1] = (uint8_t)((alpha * output[1]) >> 8);
@@ -554,7 +554,7 @@ void HdPackLoader::ProcessBackgroundTag(vector<string> &tokens, vector<HdPackCon
 				//premultiply alpha
 				for (int i = 0; i < bgFileData->PixelData.size(); ++i) {
 					if (bgFileData->PixelData[i] < 0xFF000000) {
-						uint8_t output[4] = (uint8_t*)&(bgFileData->PixelData[i]);
+						uint8_t* output = (uint8_t*)(bgFileData->PixelData.data() + i);
 						uint8_t alpha = output[3] + 1;
 						output[0] = (uint8_t)((alpha * output[0]) >> 8);
 						output[1] = (uint8_t)((alpha * output[1]) >> 8);

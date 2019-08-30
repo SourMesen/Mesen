@@ -22,9 +22,9 @@ HdNesPack::~HdNesPack()
 void HdNesPack::BlendColors(uint8_t output[4], uint8_t input[4])
 {
 	uint8_t invertedAlpha = 256 - input[3];
-	output[0] = (uint8_t)((input[0] + invertedAlpha * output[0]) >> 8);
-	output[1] = (uint8_t)((input[1] + invertedAlpha * output[1]) >> 8);
-	output[2] = (uint8_t)((input[2] + invertedAlpha * output[2]) >> 8);
+	output[0] = input[0] + (uint8_t)((invertedAlpha * output[0]) >> 8);
+	output[1] = input[1] + (uint8_t)((invertedAlpha * output[1]) >> 8);
+	output[2] = input[2] + (uint8_t)((invertedAlpha * output[2]) >> 8);
 	output[3] = 0xFF;
 }
 
@@ -56,23 +56,25 @@ void HdNesPack::DrawCustomBackground(uint32_t *outputBuffer, uint32_t x, uint32_
 	uint32_t width = _hdData->Backgrounds[_backgroundIndex].Data->Width;
 	uint32_t *pngData = _hdData->Backgrounds[_backgroundIndex].data() + (y * _hdData->Scale * width) + (x * _hdData->Scale);
 
-	if(scale == 1) {
-		if(brightness == 255) {
+	if (scale == 1) {
+		if (brightness == 255) {
 			*outputBuffer = *pngData;
-		} else {
+		}
+		else {
 			*outputBuffer = AdjustBrightness((uint8_t*)pngData, brightness);
 		}
-	} else {
-		uint32_t *buffer = outputBuffer;
-		for(uint32_t i = 0; i < scale; i++) {
+	}
+	else {
+		uint32_t* buffer = outputBuffer;
+		for (uint32_t i = 0; i < scale; i++) {
 			memcpy(outputBuffer, pngData, sizeof(uint32_t) * scale);
 			outputBuffer += screenWidth;
 			pngData += width;
 		}
 
-		if(brightness < 255) {
-			for(uint32_t i = 0; i < scale; i++) {
-				for(uint32_t j = 0; j < scale; j++) {
+		if (brightness < 255) {
+			for (uint32_t i = 0; i < scale; i++) {
+				for (uint32_t j = 0; j < scale; j++) {
 					*buffer = AdjustBrightness((uint8_t*)buffer, brightness);
 					buffer++;
 				}
