@@ -55,32 +55,27 @@ void HdNesPack::DrawCustomBackground(uint32_t *outputBuffer, uint32_t x, uint32_
 	uint8_t brightness = _hdData->Backgrounds[_backgroundIndex].Brightness;
 	uint32_t width = _hdData->Backgrounds[_backgroundIndex].Data->Width;
 	uint32_t *pngData = _hdData->Backgrounds[_backgroundIndex].data() + (y * _hdData->Scale * width) + (x * _hdData->Scale);
+	uint32_t pixelColor;
 
-	if (scale == 1) {
-		if (brightness == 255) {
-			*outputBuffer = *pngData;
-		}
-		else {
-			*outputBuffer = AdjustBrightness((uint8_t*)pngData, brightness);
-		}
-	}
-	else {
-		uint32_t* buffer = outputBuffer;
-		for (uint32_t i = 0; i < scale; i++) {
-			memcpy(outputBuffer, pngData, sizeof(uint32_t) * scale);
-			outputBuffer += screenWidth;
-			pngData += width;
-		}
-
-		if (brightness < 255) {
-			for (uint32_t i = 0; i < scale; i++) {
-				for (uint32_t j = 0; j < scale; j++) {
-					*buffer = AdjustBrightness((uint8_t*)buffer, brightness);
-					buffer++;
-				}
-				buffer += screenWidth - scale;
+	for (uint32_t i = 0; i < scale; i++) {
+		for (uint32_t j = 0; j < scale; j++) {
+			if (brightness == 255) {
+				pixelColor = *pngData;
 			}
+			else {
+				pixelColor = AdjustBrightness((uint8_t*)pngData, brightness);
+			}
+			if (((uint8_t*)pngData)[3] == 0xff) {
+				*outputBuffer = pixelColor;
+			}
+			else if (((uint8_t*)pngData)[3]) {
+				BlendColors((uint8_t*)outputBuffer, (uint8_t*)(&pixelColor));
+			}
+			outputBuffer++;
+			pngData++;
 		}
+		outputBuffer += screenWidth - scale;
+		pngData += width - scale;
 	}
 }
 
