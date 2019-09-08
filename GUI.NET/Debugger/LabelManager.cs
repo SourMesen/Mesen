@@ -59,6 +59,7 @@ namespace Mesen.GUI.Debugger
 		private static Dictionary<UInt32, CodeLabel> _labelsByKey = new Dictionary<UInt32, CodeLabel>();
 		private static HashSet<CodeLabel> _labels = new HashSet<CodeLabel>();
 		private static Dictionary<string, CodeLabel> _reverseLookup = new Dictionary<string, CodeLabel>();
+		private static Dictionary<string, CodeLabel> _reverseLookupNames = new Dictionary<string, CodeLabel>();
 
 		public static event EventHandler OnLabelUpdated;
 
@@ -68,6 +69,7 @@ namespace Mesen.GUI.Debugger
 			_labels.Clear();
 			_labelsByKey.Clear();
 			_reverseLookup.Clear();
+			_reverseLookupNames.Clear();
 		}
 
 		public static CodeLabel GetLabel(UInt32 address, AddressType type)
@@ -89,7 +91,7 @@ namespace Mesen.GUI.Debugger
 
 		public static CodeLabel GetLabel(string label)
 		{
-			return _reverseLookup.ContainsKey(label) ? _reverseLookup[label] : null;
+			return _reverseLookupNames.ContainsKey(label) ? _reverseLookupNames[label] : null;
 		}
 
 		public static void SetLabels(IEnumerable<CodeLabel> labels, bool raiseEvents = true)
@@ -132,12 +134,23 @@ namespace Mesen.GUI.Debugger
 				DeleteLabel(existingLabel, false);
 			}
 
+			// We still want to disallow duplicate labels names, however.  The _reverseLookupNames
+			// dictionary allows the lookup of duplicate label names regardless of address.
+			if(_reverseLookupNames.ContainsKey(label)) {
+				//Another identical label exists, we need to remove it
+				CodeLabel existingLabel = _reverseLookupNames[label];
+				DeleteLabel(existingLabel, false);
+			}
+
 			CodeLabel newLabel = new CodeLabel() { Address = address, AddressType = type, Label = label, Comment = comment, Flags = flags, Length = labelLength };
 			for(UInt32 i = address; i < address + labelLength; i++) {
 				UInt32 key = GetKey(i, type);
 				CodeLabel existingLabel;
 				if(_labelsByKey.TryGetValue(key, out existingLabel)) {
 					_reverseLookup.Remove(labelId);
+					if (label.Length > 0) {
+						_reverseLookupNames.Remove(label);
+					}
 				}
 
 				_labelsByKey[key] = newLabel;
@@ -154,6 +167,9 @@ namespace Mesen.GUI.Debugger
 
 			_labels.Add(newLabel);
 			_reverseLookup[labelId] = newLabel;
+			if (newLabel.Label.Length > 0) {
+				_reverseLookupNames[newLabel.Label] = newLabel;
+			}
 
 			if(raiseEvent) {
 				OnLabelUpdated?.Invoke(null, null);
