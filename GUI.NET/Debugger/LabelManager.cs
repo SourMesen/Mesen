@@ -121,9 +121,14 @@ namespace Mesen.GUI.Debugger
 
 		public static bool SetLabel(UInt32 address, AddressType type, string label, string comment, bool raiseEvent = true, CodeLabelFlags flags = CodeLabelFlags.None, UInt32 labelLength = 1)
 		{
-			if(_reverseLookup.ContainsKey(label)) {
+			// Construct a label ID.  This is used in the reverse lookup dictionary instead of
+			// the label text to avoid duplicating "labels" that have an address, a comment, but
+			// no label name (ie, CodeLabel.Label == "").
+			string labelId = type.ToString() + ":" + address.ToString();
+
+			if(_reverseLookup.ContainsKey(labelId)) {
 				//Another identical label exists, we need to remove it
-				CodeLabel existingLabel = _reverseLookup[label];
+				CodeLabel existingLabel = _reverseLookup[labelId];
 				DeleteLabel(existingLabel, false);
 			}
 
@@ -132,7 +137,7 @@ namespace Mesen.GUI.Debugger
 				UInt32 key = GetKey(i, type);
 				CodeLabel existingLabel;
 				if(_labelsByKey.TryGetValue(key, out existingLabel)) {
-					_reverseLookup.Remove(existingLabel.Label);
+					_reverseLookup.Remove(labelId);
 				}
 
 				_labelsByKey[key] = newLabel;
@@ -148,9 +153,7 @@ namespace Mesen.GUI.Debugger
 			}
 
 			_labels.Add(newLabel);
-			if(label.Length > 0) {
-				_reverseLookup[label] = newLabel;
-			}
+			_reverseLookup[labelId] = newLabel;
 
 			if(raiseEvent) {
 				OnLabelUpdated?.Invoke(null, null);
