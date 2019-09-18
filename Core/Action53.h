@@ -54,22 +54,22 @@ protected:
 		uint8_t slotSelect = (_regs[2] & 0x04) >> 2;
 		uint8_t chrSelect = _regs[0] & 0x03;
 		uint8_t prgSelect = _regs[1] & 0x0F;
-		uint8_t outerPrgSelect = (_regs[3] & 0x3F) << 1;
+		uint16_t outerPrgSelect = _regs[3] << 1;
 
 		SelectCHRPage(0, chrSelect);
 
 		if(prgSize) {
 			uint8_t bank = (slotSelect ? 0 : 1);
 			switch(gameSize) {
-				case 0: SelectPRGPage(bank, (outerPrgSelect & 0x7E) | (prgSelect & 0x01)); break;
-				case 1: SelectPRGPage(bank, (outerPrgSelect & 0x7C) | (prgSelect & 0x03)); break;
-				case 2: SelectPRGPage(bank, (outerPrgSelect & 0x78) | (prgSelect & 0x07)); break;
-				case 3: SelectPRGPage(bank, (outerPrgSelect & 0x70) | (prgSelect & 0x0F)); break;
+				case 0: SelectPRGPage(bank, (outerPrgSelect & 0x1FE) | (prgSelect & 0x01)); break;
+				case 1: SelectPRGPage(bank, (outerPrgSelect & 0x1FC) | (prgSelect & 0x03)); break;
+				case 2: SelectPRGPage(bank, (outerPrgSelect & 0x1F8) | (prgSelect & 0x07)); break;
+				case 3: SelectPRGPage(bank, (outerPrgSelect & 0x1F0) | (prgSelect & 0x0F)); break;
 			}
-			SelectPRGPage(slotSelect ? 1 : 0, (outerPrgSelect & 0x7E) | slotSelect);
+			SelectPRGPage(slotSelect ? 1 : 0, (outerPrgSelect & 0x1FE) | slotSelect);
 		} else {
 			prgSelect <<= 1;
-			uint8_t outerAnd[4]{ 0x7E, 0x7C, 0x78, 0x70 };
+			uint16_t outerAnd[4]{ 0x1FE, 0x1FC, 0x1F8, 0x1F0 };
 			uint8_t innerAnd[4]{ 0x01, 0x03, 0x07, 0x0F };
 			SelectPRGPage(0, (outerPrgSelect & outerAnd[gameSize]) | (prgSelect & innerAnd[gameSize]));
 			SelectPRGPage(1, (outerPrgSelect & outerAnd[gameSize]) | ((prgSelect | 0x01) & innerAnd[gameSize]));
@@ -87,7 +87,7 @@ protected:
 				_mirroringBit = (value & 0x01);
 			}
 
-			_regs[_selectedReg] = value & 0x3F;
+			_regs[_selectedReg] = value;
 			UpdateState();
 		}
 	}
