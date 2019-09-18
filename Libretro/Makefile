@@ -126,14 +126,29 @@ ifeq ($(IOSSDK),)
 endif
 
   DEFINES := -DIOS
+ifeq ($(platform), ios-arm64)
+  CC = cc -arch arm64 -isysroot $(IOSSDK) -stdlib=libc++
+else
   CC = cc -arch armv7 -isysroot $(IOSSDK)
-ifeq ($(platform),ios9)
+endif
+ifeq ($(platform),$(filter $(platform),ios9 ios-arm64))
 CC     += -miphoneos-version-min=8.0
 CXXFLAGS += -miphoneos-version-min=8.0
 else
 CC     += -miphoneos-version-min=5.0
 CXXFLAGS += -miphoneos-version-min=5.0
 endif
+
+else ifeq ($(platform), tvos-arm64)
+   TARGET := $(TARGET_NAME)_libretro_tvos.dylib
+   fpic := -fPIC
+   SHARED := -dynamiclib
+   DEFINES := -DIOS -stdlib=libc++
+
+ifeq ($(IOSSDK),)
+   IOSSDK := $(shell xcodebuild -version -sdk appletvos Path)
+endif
+
 else ifneq (,$(findstring qnx,$(platform)))
   TARGET := $(TARGET_NAME)_libretro_qnx.so
    fpic := -fPIC
