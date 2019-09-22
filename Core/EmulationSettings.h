@@ -529,6 +529,7 @@ enum class Language
 	Portuguese = 7,
 	Catalan = 8,
 	Chinese = 9,
+	Italian = 10,
 };
 
 enum class MouseDevice
@@ -698,7 +699,7 @@ private:
 public:
 	EmulationSettings()
 	{
-		memcpy(_userPalette, _ppuPaletteArgb, sizeof(_userPalette));
+		SetUserRgbPalette(_ppuPaletteArgb[0]);
 	}
 
 	static uint32_t GetMesenVersion()

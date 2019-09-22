@@ -1082,6 +1082,7 @@
 			<Value ID="Ukrainian">Українська</Value>
 			<Value ID="Catalan">Català</Value>
 			<Value ID="Chinese">中文</Value>
+			<Value ID="Italian">Italiano</Value>
 		</Enum>
 		<Enum ID="RamPowerOnState">
 			<Value ID="AllZeros">Tous les bits à 0 (Défaut)</Value>
