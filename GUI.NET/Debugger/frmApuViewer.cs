@@ -25,10 +25,7 @@ namespace Mesen.GUI.Debugger
 					this.Width = (int)(this.Width * 1.2);
 				}
 
-				if(ConfigManager.Config.DebugInfo.ApuViewerLocation.HasValue) {
-					this.StartPosition = FormStartPosition.Manual;
-					this.Location = ConfigManager.Config.DebugInfo.ApuViewerLocation.Value;
-				}
+				RestoreLocation(ConfigManager.Config.DebugInfo.ApuViewerLocation);
 			}
 		}
 

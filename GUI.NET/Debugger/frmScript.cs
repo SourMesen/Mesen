@@ -103,11 +103,7 @@ namespace Mesen.GUI.Debugger
 				}
 			}
 
-			if(!config.ScriptWindowSize.IsEmpty) {
-				this.StartPosition = FormStartPosition.Manual;
-				this.Size = config.ScriptWindowSize;
-				this.Location = config.ScriptWindowLocation;
-			}
+			RestoreLocation(config.ScriptWindowLocation, config.ScriptWindowSize);
 			mnuSaveBeforeRun.Checked = config.SaveScriptBeforeRun;
 
 			if(config.ScriptCodeWindowHeight >= ctrlSplit.Panel1MinSize) {

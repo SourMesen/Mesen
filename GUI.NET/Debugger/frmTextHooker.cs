@@ -36,10 +36,7 @@ namespace Mesen.GUI.Debugger
 			this.mnuAutoRefresh.Checked = ConfigManager.Config.DebugInfo.TextHookerAutoRefresh;
 			this.mnuRefreshOnBreak.Checked = ConfigManager.Config.DebugInfo.TextHookerRefreshOnBreak;
 
-			if(ConfigManager.Config.DebugInfo.TextHookerWindowLocation.HasValue) {
-				this.StartPosition = FormStartPosition.Manual;
-				this.Location = ConfigManager.Config.DebugInfo.TextHookerWindowLocation.Value;
-			}
+			RestoreLocation(ConfigManager.Config.DebugInfo.TextHookerWindowLocation);
 		}
 
 		static frmTextHooker()

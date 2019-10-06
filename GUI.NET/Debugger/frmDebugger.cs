@@ -134,10 +134,7 @@ namespace Mesen.GUI.Debugger
 			ctrlDebuggerCodeSplit.ShowMemoryValues = mnuShowMemoryValues.Checked;
 
 			if(ConfigManager.Config.DebugInfo.WindowWidth > -1) {
-				this.StartPosition = FormStartPosition.Manual;
-				this.Width = ConfigManager.Config.DebugInfo.WindowWidth;
-				this.Height = ConfigManager.Config.DebugInfo.WindowHeight;
-				this.Location = ConfigManager.Config.DebugInfo.WindowLocation;
+				RestoreLocation(ConfigManager.Config.DebugInfo.WindowLocation, new Size(ConfigManager.Config.DebugInfo.WindowWidth, ConfigManager.Config.DebugInfo.WindowHeight));
 			}
 
 			tsToolbar.Visible = mnuShowToolbar.Checked;

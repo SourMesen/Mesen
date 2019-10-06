@@ -237,10 +237,7 @@ namespace Mesen.GUI.Forms
 			InitializeStateMenu(mnuSaveState, true);
 			InitializeStateMenu(mnuLoadState, false);
 
-			if(ConfigManager.Config.WindowLocation.HasValue) {
-				this.StartPosition = FormStartPosition.Manual;
-				this.Location = ConfigManager.Config.WindowLocation.Value;
-			}
+			RestoreLocation(ConfigManager.Config.WindowLocation);
 
 			if(ConfigManager.Config.PreferenceInfo.CloudSaveIntegration) {
 				Task.Run(() => CloudSyncHelper.Sync());

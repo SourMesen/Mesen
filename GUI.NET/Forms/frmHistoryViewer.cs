@@ -27,13 +27,7 @@ namespace Mesen.GUI.Forms
 		{
 			base.OnLoad(e);
 
-			if(ConfigManager.Config.HistoryViewerInfo.WindowSize.HasValue) {
-				this.Size = ConfigManager.Config.HistoryViewerInfo.WindowSize.Value;
-			}
-			if(ConfigManager.Config.HistoryViewerInfo.WindowLocation.HasValue) {
-				this.StartPosition = FormStartPosition.Manual;
-				this.Location = ConfigManager.Config.HistoryViewerInfo.WindowLocation.Value;
-			}
+			RestoreLocation(ConfigManager.Config.HistoryViewerInfo.WindowLocation, ConfigManager.Config.HistoryViewerInfo.WindowSize);
 
 			_isNsf = InteropEmu.IsNsf();
 			tlpRenderer.Visible = !_isNsf;

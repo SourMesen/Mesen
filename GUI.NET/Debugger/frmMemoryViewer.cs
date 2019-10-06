@@ -94,11 +94,7 @@ namespace Mesen.GUI.Debugger
 			this.mnuShowCharacters.CheckedChanged += this.mnuShowCharacters_CheckedChanged;
 			this.mnuIgnoreRedundantWrites.CheckedChanged += mnuIgnoreRedundantWrites_CheckedChanged;
 
-			if(!ConfigManager.Config.DebugInfo.MemoryViewerSize.IsEmpty) {
-				this.StartPosition = FormStartPosition.Manual;
-				this.Size = ConfigManager.Config.DebugInfo.MemoryViewerSize;
-				this.Location = ConfigManager.Config.DebugInfo.MemoryViewerLocation;
-			}
+			RestoreLocation(ConfigManager.Config.DebugInfo.MemoryViewerLocation, ConfigManager.Config.DebugInfo.MemoryViewerSize);
 
 			this.InitShortcuts();
 		}
