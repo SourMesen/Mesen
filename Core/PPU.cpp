@@ -1260,13 +1260,18 @@ void PPU::UpdateState()
 		_needStateUpdate = true;
 	}
 
-	if(_prevRenderingEnabled && !_renderingEnabled && _cycle >= 65 && _cycle <= 256 && _scanline < 240) {
-		//Disabling rendering during OAM evaluation will trigger a glitch causing the current address to be incremented by 1
-		//The increment can be "delayed" by 1 PPU cycle depending on whether or not rendering is disabled on an even/odd cycle
-		//e.g, if rendering is disabled on an even cycle, the following PPU cycle will increment the address by 5 (instead of 4)
-		//     if rendering is disabled on an odd cycle, the increment will wait until the next odd cycle (at which point it will be incremented by 1)
-		//In practice, there is no way to see the difference, so we just increment by 1 at the end of the next cycle after rendering was disabled
-		_state.SpriteRamAddr++;
+	if(_prevRenderingEnabled && !_renderingEnabled && _scanline < 240) {
+		//When rendering is disabled midscreen, set the vram bus back to the value of 'v'
+		SetBusAddress(_state.VideoRamAddr & 0x3FFF);
+
+		if(_cycle >= 65 && _cycle <= 256) {
+			//Disabling rendering during OAM evaluation will trigger a glitch causing the current address to be incremented by 1
+			//The increment can be "delayed" by 1 PPU cycle depending on whether or not rendering is disabled on an even/odd cycle
+			//e.g, if rendering is disabled on an even cycle, the following PPU cycle will increment the address by 5 (instead of 4)
+			//     if rendering is disabled on an odd cycle, the increment will wait until the next odd cycle (at which point it will be incremented by 1)
+			//In practice, there is no way to see the difference, so we just increment by 1 at the end of the next cycle after rendering was disabled
+			_state.SpriteRamAddr++;
+		}
 	}
 
 	if(_updateVramAddrDelay > 0) {
