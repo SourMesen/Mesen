@@ -95,7 +95,6 @@ namespace Mesen.GUI
 					Application.Run(new frmConfigWizard());
 
 					if(ConfigManager.GetConfigFile() == null) {
-						Application.Exit();
 						return;
 					}
 				}

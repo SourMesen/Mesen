@@ -120,7 +120,7 @@ namespace Mesen.GUI.Forms
 							this.BeginInvoke((MethodInvoker)(() => {
 								using(frmUpdatePrompt frmUpdate = new frmUpdatePrompt(currentVersion, latestVersion, changeLog, fileHash, donateText)) {
 									if(frmUpdate.ShowDialog(null, this) == DialogResult.OK) {
-										Application.Exit();
+										Close();
 									}
 								}
 							}));
