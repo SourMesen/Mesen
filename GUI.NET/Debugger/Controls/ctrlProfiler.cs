@@ -15,9 +15,11 @@ namespace Mesen.GUI.Debugger.Controls
 	public partial class ctrlProfiler : BaseControl
 	{
 		public static event EventHandler OnFunctionSelected;
-		private Int64[] _exclusiveTime;
-		private Int64[] _inclusiveTime;
-		private Int64[] _callCount;
+		private UInt64[] _exclusiveTime;
+		private UInt64[] _inclusiveTime;
+		private UInt64[] _callCount;
+		private UInt64[] _minCycles;
+		private UInt64[] _maxCycles;
 		private object _resetLock = new object();
 
 		private int _sortColumn = 5;
@@ -36,7 +38,7 @@ namespace Mesen.GUI.Debugger.Controls
 			if(!designMode) {
 				lstFunctions.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize);
 				int newWidth = Math.Max(colFunction.Width * 2, 250);
-				colExclusiveTimePercent.Width -= (newWidth - colFunction.Width) + 30;
+				columnHeader7.Width -= (newWidth - colFunction.Width) + 30;
 				colFunction.Width = newWidth;
 			}
 		}
@@ -47,6 +49,8 @@ namespace Mesen.GUI.Debugger.Controls
 				_exclusiveTime = InteropEmu.DebugGetProfilerData(ProfilerDataType.FunctionExclusive);
 				_inclusiveTime = InteropEmu.DebugGetProfilerData(ProfilerDataType.FunctionInclusive);
 				_callCount = InteropEmu.DebugGetProfilerData(ProfilerDataType.FunctionCallCount);
+				_minCycles = InteropEmu.DebugGetProfilerData(ProfilerDataType.MinCycles);
+				_maxCycles = InteropEmu.DebugGetProfilerData(ProfilerDataType.MaxCycles);
 			}
 			RefreshList();
 		}
@@ -68,7 +72,10 @@ namespace Mesen.GUI.Debugger.Controls
 
 		private void RefreshList()
 		{
-			Int64 exclusiveTotal = _exclusiveTime.Sum();
+			UInt64 exclusiveTotal = 0;
+			foreach(UInt64 time in _exclusiveTime) {
+				exclusiveTotal += time;
+			}
 			
 			int hexCount = GetMaxAddrHexSize();
 
@@ -103,6 +110,9 @@ namespace Mesen.GUI.Debugger.Controls
 						item.SubItems.Add("");
 						item.SubItems.Add("");
 						item.SubItems.Add("");
+						item.SubItems.Add("");
+						item.SubItems.Add("");
+						item.SubItems.Add("");
 					} else {
 						item = lstFunctions.Items[itemNumber];
 					}
@@ -121,14 +131,24 @@ namespace Mesen.GUI.Debugger.Controls
 
 					double ratio = ((double)_inclusiveTime[i] / exclusiveTotal) *100;
 					item.SubItems[3].Text = ratio.ToString("0.00");
-					item.SubItems[3].Tag = (Int64)(ratio*100);
+					item.SubItems[3].Tag = (UInt64)(ratio*100);
 
 					item.SubItems[4].Text = _exclusiveTime[i].ToString();
 					item.SubItems[4].Tag = _exclusiveTime[i];
 
 					ratio = ((double)_exclusiveTime[i] / exclusiveTotal)*100;
 					item.SubItems[5].Text = ratio.ToString("0.00");
-					item.SubItems[5].Tag = (Int64)(ratio*100);
+					item.SubItems[5].Tag = (UInt64)(ratio*100);
+
+					UInt64 avgCycles = _callCount[i] == 0 ? 0 : (_inclusiveTime[i] / _callCount[i]);
+					item.SubItems[6].Text = avgCycles.ToString();
+					item.SubItems[6].Tag = avgCycles;
+
+					item.SubItems[7].Text = _minCycles[i] == UInt64.MaxValue ? "n/a" : _minCycles[i].ToString();
+					item.SubItems[7].Tag = _minCycles[i];
+
+					item.SubItems[8].Text = _maxCycles[i] == 0 ? "n/a" : _maxCycles[i].ToString();
+					item.SubItems[8].Tag = _maxCycles[i];
 
 					itemNumber++;
 				}
@@ -195,8 +215,8 @@ namespace Mesen.GUI.Debugger.Controls
 						return String.Compare(((ListViewItem)x).SubItems[0].Text, ((ListViewItem)y).SubItems[0].Text);
 					}
 				} else {
-					Int64 columnValueY = (Int64)((ListViewItem)y).SubItems[_columnIndex].Tag;
-					Int64 columnValueX = (Int64)((ListViewItem)x).SubItems[_columnIndex].Tag;
+					UInt64 columnValueY = (UInt64)((ListViewItem)y).SubItems[_columnIndex].Tag;
+					UInt64 columnValueX = (UInt64)((ListViewItem)x).SubItems[_columnIndex].Tag;
 					if(_sortOrder) {
 						return (int)(columnValueY - columnValueX);
 					} else {

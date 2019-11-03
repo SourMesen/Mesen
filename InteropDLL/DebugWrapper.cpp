@@ -118,7 +118,7 @@ extern "C"
 	DllExport void __stdcall DebugGetUninitMemoryReads(DebugMemoryType memoryType, int32_t* counts) { GetDebugger()->GetMemoryAccessCounter()->GetUninitMemoryReads(memoryType, counts); }
 	DllExport void __stdcall DebugGetNametableChangedData(bool* ntChangedData) { GetDebugger()->GetMemoryAccessCounter()->GetNametableChangedData(ntChangedData); }
 
-	DllExport void __stdcall DebugGetProfilerData(int64_t* profilerData, ProfilerDataType dataType) { GetDebugger()->GetProfiler()->GetProfilerData(profilerData, dataType); }
+	DllExport void __stdcall DebugGetProfilerData(uint64_t* profilerData, ProfilerDataType dataType) { GetDebugger()->GetProfiler()->GetProfilerData(profilerData, dataType); }
 	DllExport void __stdcall DebugResetProfiler() { GetDebugger()->GetProfiler()->Reset(); }
 
 	DllExport void __stdcall DebugSetFreezeState(uint16_t address, bool frozen) { GetDebugger()->SetFreezeState(address, frozen); }

@@ -612,7 +612,7 @@ namespace Mesen.GUI.Debugger
 			DebugState state = new DebugState();
 			InteropEmu.DebugGetState(ref state);
 
-			lblCyclesElapsedCount.Text = (state.CPU.CycleCount - _previousCycle).ToString();
+			lblCyclesElapsedCount.Text = ((Int64)state.CPU.CycleCount - (Int64)_previousCycle).ToString();
 			_previousCycle = state.CPU.CycleCount;
 
 			if(UpdateSplitView()) {

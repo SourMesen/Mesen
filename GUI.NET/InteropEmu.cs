@@ -514,9 +514,9 @@ namespace Mesen.GUI
 		}
 
 		[DllImport(DLLPath, EntryPoint = "DebugGetProfilerData")] private static extern void DebugGetProfilerDataWrapper(IntPtr profilerData, ProfilerDataType dataType);
-		public static Int64[] DebugGetProfilerData(ProfilerDataType dataType)
+		public static UInt64[] DebugGetProfilerData(ProfilerDataType dataType)
 		{
-			Int64[] profileData = new Int64[InteropEmu.DebugGetMemorySize(DebugMemoryType.PrgRom) + 2];
+			UInt64[] profileData = new UInt64[InteropEmu.DebugGetMemorySize(DebugMemoryType.PrgRom) + 2];
 
 			GCHandle hProfilerData = GCHandle.Alloc(profileData, GCHandleType.Pinned);
 			try {
@@ -1592,6 +1592,8 @@ namespace Mesen.GUI
 		FunctionInclusive = 1,
 		Instructions = 2,
 		FunctionCallCount = 3,
+		MinCycles = 4,
+		MaxCycles = 5,
 	}
 
 	[Flags]
