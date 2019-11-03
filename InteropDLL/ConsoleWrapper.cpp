@@ -674,6 +674,8 @@ namespace InteropEmu {
 		DllExport void __stdcall StopRecordingTapeFile() { _console->StopRecordingTapeFile(); }
 		DllExport bool __stdcall IsRecordingTapeFile() { return _console->IsRecordingTapeFile(); }
 
+		DllExport bool __stdcall IsKeyboardMode() { return _settings->IsKeyboardMode(); }
+
 		DllExport ConsoleFeatures __stdcall GetAvailableFeatures() { return _console->GetAvailableFeatures(); }
 
 		//NSF functions

@@ -75,6 +75,7 @@ namespace Mesen.GUI
 
 		[DllImport(DLLPath)] public static extern void UpdateInputDevices();
 
+		[DllImport(DLLPath)] [return: MarshalAs(UnmanagedType.I1)] public static extern bool IsKeyboardMode();
 		[DllImport(DLLPath)] public static extern ConsoleFeatures GetAvailableFeatures();
 
 		[DllImport(DLLPath, EntryPoint = "GetPressedKeys")] private static extern void GetPressedKeysWrapper(IntPtr keyBuffer);

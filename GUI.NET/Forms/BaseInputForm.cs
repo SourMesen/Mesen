@@ -35,6 +35,9 @@ namespace Mesen.GUI.Forms
 				//Prevent default Windows behavior on F10 / Shift+F10 presses, which causes issues
 				//such as the Shift key not being processed as being released, etc.
 				return true;
+			} else if(keyData.HasFlag(Keys.Alt) && InteropEmu.IsKeyboardMode()) {
+				//Prevent Alt key from activating menu when in keyboard mode
+				return true;
 			}
 
 			return result;
