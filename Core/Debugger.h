@@ -130,9 +130,9 @@ private:
 	uint16_t _ppuScrollX;
 	uint16_t _ppuScrollY;
 
-	uint64_t _prevInstructionCycle;
-	uint64_t _curInstructionCycle;
-	uint64_t _runToCycle;
+	int64_t _prevInstructionCycle;
+	int64_t _curInstructionCycle;
+	int64_t _runToCycle;
 	bool _needRewind;
 	
 	vector<stringstream> _rewindCache;
