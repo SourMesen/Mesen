@@ -36,10 +36,11 @@ enum EvalOperators : int64_t
 	Minus = 20000000051,
 	BinaryNot = 20000000052,
 	LogicalNot = 20000000053,
+	AbsoluteAddress = 20000000054,
 
 	//Used to read ram address
-	Bracket = 20000000054, //Read byte
-	Braces = 20000000055, //Read word
+	Bracket = 20000000060, //Read byte
+	Braces = 20000000061, //Read word
 
 	//Special value, not used as an operator
 	Parenthesis = 20000000100,
@@ -61,7 +62,6 @@ enum EvalValues : int64_t
 	Irq = 20000000111,
 	Value = 20000000112,
 	Address = 20000000113,
-	AbsoluteAddress = 20000000114,
 	IsWrite = 20000000115,
 	IsRead = 20000000116,
 	PreviousOpPC = 20000000117,

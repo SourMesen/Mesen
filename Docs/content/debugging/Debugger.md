@@ -133,6 +133,20 @@ The syntax is identical to C/C++ (e.g `&&` for AND, `||` for OR) and uses the sa
 Use the $ prefix to denote hexadecimal values (e.g: `$FF`) or the % prefix for binary values (e.g: `%1101`)
 {{% /notice  %}}
 
+#### Operators ####
+
+The following operators are supported (same usage/precedence as C):  
+`*`, `/`, `%`, `+`, `-`, `<<`, `>>`, `<`, `<=`, `>`, `>=`, `==`, `!=`, `&`, `^`, `|`, `&&`, `||`, `~`, `!`, `(`, `)`
+
+Additionally, the following special operators exist:
+
+* **[*address/label*]**: Surrounding a value/expression with brackets will read the corresponding memory address and return its value (1 byte).
+  * e.g: `[$8000]` will read the value at address $8000 and return it.
+* **{*address/label*}**: Surrounding a value/expression with curly brackets will read the corresponding memory address and return its value (2 byte).
+  * e.g: `{myLabel}` will read 2 bytes of memory at the address represented by the `myLabel` label and return its value
+* **:*address/label***: Prepending a `:` before an address/label will return the offset of the corresponding address within that memory type. If an address is not mapped to any type of memory, `-1` will be returned.
+  * e.g: `:$8000` will return the offset in PRG ROM of the byte currently mapped at the CPU address $8000.
+
 #### Special values ####
 
 The following "variables" can be used in both the watch window and contional breakpoints to check the state of specific portions of the emulation core.
@@ -147,9 +161,6 @@ The following "variables" can be used in both the watch window and contional bre
 * **Frame**: PPU frame number (since power on/reset)
 * **Value**: Current value being read/written from/to memory
 * **Address**: Current CPU memory address being read/written
-* **RomAddress**: Current ROM address being read/written
-* **[&lt;address&gt;]**: (Byte) Memory value at &lt;address&gt; (CPU)
-* **{&lt;address&gt;}**: (Word) Memory value at &lt;address&gt; (CPU)
 
 **Flags**
 
