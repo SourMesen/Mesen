@@ -320,6 +320,7 @@
 			<Control ID="chkDisablePpuReset">Non resettare la PPU quando resetti la console (Famicom)</Control>
 			<Control ID="chkUseNes101Hvc101Behavior">Usa NES/HVC-101 (Top-loader / AV Famicom)</Control>
 			<Control ID="chkMapperRandomPowerOnState">Valori casuali durante accensione per i mapper</Control>
+			<Control ID="chkRandomizeCpuPpuAlignment">Randomize power-on CPU/PPU alignment</Control>
 
 			<Control ID="lblRamPowerOnState">Stato di accensione predefinito per la RAM:</Control>
 

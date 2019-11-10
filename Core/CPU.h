@@ -32,19 +32,23 @@ private:
 	typedef void(CPU::*Func)();
 
 	uint64_t _cycleCount;
+	uint64_t _masterClock;
+	uint8_t _ppuOffset;
+	uint8_t _startClockCount;
+	uint8_t _endClockCount;
 	uint16_t _operand;
 
 	Func _opTable[256];
 	AddrMode _addrMode[256];
 	AddrMode _instAddrMode;
 
-	uint16_t _spriteDmaCounter;
-	bool _spriteDmaTransfer;
+	bool _needHalt = false;
+	bool _spriteDmaTransfer = false;
+	bool _dmcDmaRunning = false;
+	bool _needDummyRead = false;
+	uint8_t _spriteDmaOffset;
 
-	int8_t _dmcCounter;
-	bool _dmcDmaRunning;
 	bool _cpuWrite = false;
-	uint16_t _writeAddr = 0;
 
 	uint8_t _irqMask;
 
@@ -69,8 +73,10 @@ private:
 	bool _isDummyRead[10];
 #endif
 
-	void IncCycleCount();
-	uint16_t FetchOperand();
+	__forceinline void StartCpuCycle(bool forRead);
+	__forceinline void ProcessPendingDma(uint16_t readAddress);
+	__forceinline uint16_t FetchOperand();
+	__forceinline void EndCpuCycle(bool forRead);
 	void IRQ();
 
 	uint8_t GetOPCode()
@@ -778,6 +784,7 @@ public:
 	CPU(shared_ptr<Console> console);
 	
 	uint64_t GetCycleCount() { return _cycleCount; }
+	void SetMasterClockDivider(NesModel region);
 	void SetNmiFlag() { _state.NMIFlag = true; }
 	void ClearNmiFlag() { _state.NMIFlag = false; }
 	void SetIrqMask(uint8_t mask) { _irqMask = mask; }
@@ -832,11 +839,13 @@ public:
 
 		_cycleCount = c->_cycleCount;
 		_operand = c->_operand;
-		_spriteDmaCounter = c->_spriteDmaCounter;
 		_spriteDmaTransfer = c->_spriteDmaTransfer;
-		_dmcCounter = c->_dmcCounter;
+		_needHalt = c->_needHalt;
 		_dmcDmaRunning = c->_dmcDmaRunning;
 		_cpuWrite = c->_cpuWrite;
+		_needDummyRead = c->_needDummyRead;
+		_needHalt = c->_needHalt;
+		_spriteDmaOffset = c->_spriteDmaOffset;
 		_irqMask = c->_irqMask;
 		_prevRunIrq = c->_prevRunIrq;
 		_runIrq = c->_runIrq;

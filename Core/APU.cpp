@@ -171,7 +171,7 @@ void APU::SetNeedToRun()
 
 bool APU::NeedToRun(uint32_t currentCycle)
 {
-	if(_needToRun || _deltaModulationChannel->NeedToRun()) {
+	if(_deltaModulationChannel->NeedToRun() || _needToRun) {
 		//Need to run whenever we alter the length counters
 		//Need to run every cycle when DMC is running to get accurate emulation (CPU stalling, interaction with sprite DMA, etc.)
 		_needToRun = false;
@@ -210,22 +210,13 @@ void APU::EndFrame()
 void APU::ProcessCpuClock()
 {
 	if(_apuEnabled) {
-		if(_settings->GetOverclockRate() == 100 || !_settings->GetOverclockAdjustApu()) {
-			Exec();
-		} else {
-			_cyclesNeeded += 1.0 / ((double)_settings->GetOverclockRate() / 100.0);
-			while(_cyclesNeeded >= 1.0) {
-				Exec();
-				_cyclesNeeded--;
-			}
-		}
+		Exec();
 	}
 }
 
 void APU::Reset(bool softReset)
 {
 	_apuEnabled = true;
-	_cyclesNeeded = 0;
 	_currentCycle = 0;
 	_previousCycle = 0;
 	_squareChannel[0]->Reset(softReset);
@@ -253,7 +244,7 @@ void APU::StreamState(bool saving)
 	SnapshotInfo deltaModulationChannel{ _deltaModulationChannel.get() };
 	SnapshotInfo frameCounter{ _frameCounter.get() };
 	SnapshotInfo mixer{ _mixer.get() };
-	Stream(_nesModel, squareChannel0, squareChannel1, triangleChannel, noiseChannel, deltaModulationChannel, frameCounter, mixer, _cyclesNeeded);
+	Stream(_nesModel, squareChannel0, squareChannel1, triangleChannel, noiseChannel, deltaModulationChannel, frameCounter, mixer);
 }
 
 void APU::AddExpansionAudioDelta(AudioChannel channel, int16_t delta)
@@ -275,9 +266,14 @@ bool APU::IsApuEnabled()
 	return _apuEnabled;
 }
 
-void APU::FillDmcReadBuffer()
+uint16_t APU::GetDmcReadAddress()
 {
-	_deltaModulationChannel->FillReadBuffer();
+	return _deltaModulationChannel->GetDmcReadAddress();
+}
+
+void APU::SetDmcReadBuffer(uint8_t value)
+{
+	_deltaModulationChannel->SetDmcReadBuffer(value);
 }
 
 ApuState APU::GetState()

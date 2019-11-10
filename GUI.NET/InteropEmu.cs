@@ -201,7 +201,6 @@ namespace Mesen.GUI
 		[DllImport(DLLPath)] public static extern void SetTurboRewindSpeed(UInt32 turboSpeed, UInt32 rewindSpeed);
 		[DllImport(DLLPath)] public static extern void SetRewindBufferSize(UInt32 seconds);
 		[DllImport(DLLPath)] [return: MarshalAs(UnmanagedType.I1)] public static extern bool IsRewinding();
-		[DllImport(DLLPath)] public static extern void SetOverclockRate(UInt32 overclockRate, [MarshalAs(UnmanagedType.I1)]bool adjustApu);
 		[DllImport(DLLPath)] public static extern void SetPpuNmiConfig(UInt32 extraScanlinesBeforeNmi, UInt32 extraScanlineAfterNmi);
 		[DllImport(DLLPath)] public static extern void SetOverscanDimensions(UInt32 left, UInt32 right, UInt32 top, UInt32 bottom);
 		[DllImport(DLLPath)] public static extern void SetVideoScale(double scale, ConsoleId consoleId = ConsoleId.Master);
@@ -1703,6 +1702,8 @@ namespace Mesen.GUI
 
 		VsDualMuteMaster = 0x200000000000000,
 		VsDualMuteSlave = 0x400000000000000,
+
+		RandomizeCpuPpuAlignment = 0x800000000000000,
 
 		ForceMaxSpeed = 0x4000000000000000,
 		ConsoleMode = 0x8000000000000000,

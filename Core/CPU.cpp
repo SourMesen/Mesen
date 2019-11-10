@@ -1,4 +1,6 @@
 #include "stdafx.h"
+#include <random>
+#include <assert.h>
 #include "CPU.h"
 #include "PPU.h"
 #include "APU.h"
@@ -60,12 +62,15 @@ CPU::CPU(shared_ptr<Console> console)
 	_state = {};
 	_cycleCount = 0;
 	_operand = 0;
-	_spriteDmaCounter = 0;
 	_spriteDmaTransfer = false;
-	_dmcCounter = 0;
+	_spriteDmaOffset = 0;
+	_needHalt = false;
+	_ppuOffset = 0;
+	_startClockCount = 6;
+	_endClockCount = 6;
+	_masterClock = 0;
 	_dmcDmaRunning = false;
 	_cpuWrite = false;
-	_writeAddr = 0;
 	_irqMask = 0;
 	_state = {};
 	_prevRunIrq = false;
@@ -76,12 +81,10 @@ void CPU::Reset(bool softReset, NesModel model)
 {
 	_state.NMIFlag = false;
 	_state.IRQFlag = 0;
-	_cycleCount = -1;
 
 	_spriteDmaTransfer = false;
-	_spriteDmaCounter = 0;
-
-	_dmcCounter = -1;
+	_spriteDmaOffset = 0;
+	_needHalt = false;
 	_dmcDmaRunning = false;
 	_warnOnCrash = true;
 
@@ -106,13 +109,50 @@ void CPU::Reset(bool softReset, NesModel model)
 		_runIrq = false;
 	}
 
-	//The CPU takes some cycles before starting its execution after a reset/power up
-	for(int i = 0; i < (model == NesModel::NTSC ? 28 : 30); i++) {
-		_console->GetPpu()->Exec();
+	if(!softReset) {
+		uint8_t ppuDivider;
+		uint8_t cpuDivider;
+		switch(model) {
+			default:
+			case NesModel::NTSC:
+				ppuDivider = 4;
+				cpuDivider = 12;
+				break;
+
+			case NesModel::PAL:
+				ppuDivider = 5;
+				cpuDivider = 16;
+				break;
+
+			case NesModel::Dendy:
+				ppuDivider = 5;
+				cpuDivider = 15;
+				break;
+		}
+
+		_cycleCount = -1;
+		_masterClock = 0;
+
+		uint8_t cpuOffset = 0;
+		if(_console->GetSettings()->CheckFlag(EmulationFlags::RandomizeCpuPpuAlignment)) {
+			std::random_device rd;
+			std::mt19937 mt(rd());
+			std::uniform_int_distribution<> distPpu(0, ppuDivider - 1);
+			std::uniform_int_distribution<> distCpu(0, cpuDivider - 1);
+			_ppuOffset = distPpu(mt);
+			cpuOffset += distCpu(mt);
+		} else {
+			_ppuOffset = 2;
+			cpuOffset = 0;
+		}
+
+		_masterClock += cpuDivider + cpuOffset;
 	}
 
-	for(int i = 0; i < 10; i++) {
-		_console->GetApu()->ProcessCpuClock();
+	//The CPU takes 8 cycles before it starts executing the ROM's code after a reset/power up
+	for(int i = 0; i < 8; i++) {
+		StartCpuCycle(true);
+		EndCpuCycle(true);
 	}
 }
 
@@ -200,19 +240,10 @@ void CPU::MemoryWrite(uint16_t addr, uint8_t value, MemoryOperationType operatio
 		_writeCounter++;
 	}
 #else
-	_cpuWrite = true;;
-	_writeAddr = addr;
-	IncCycleCount();
-	while(_dmcDmaRunning) {
-		IncCycleCount();
-	}
-
+	_cpuWrite = true;
+	StartCpuCycle(false);
 	_memoryManager->Write(addr, value, operationType);
-
-	//DMA DMC might have started after a write to $4015, stall CPU if needed
-	while(_dmcDmaRunning) {
-		IncCycleCount();
-	}
+	EndCpuCycle(false);
 	_cpuWrite = false;
 #endif
 }
@@ -228,20 +259,11 @@ uint8_t CPU::MemoryRead(uint16_t addr, MemoryOperationType operationType) {
 	}
 	return value;
 #else 
-	IncCycleCount();
-	while(_dmcDmaRunning) {
-		//Stall CPU until we can process a DMC read
-		if((addr != 0x4016 && addr != 0x4017 && (_cycleCount & 0x01)) || _dmcCounter == 1) {
-			//While the CPU is stalled, reads are performed on the current address
-			//Reads are only performed every other cycle? This fixes "dma_2007_read" test
-			//This behavior causes the $4016/7 data corruption when a DMC is running.
-			//When reading $4016/7, only the last read counts (because this only occurs to low-to-high transitions, i.e once in this case)
-			_memoryManager->Read(addr);
-		}
-		IncCycleCount();
-	}
+	ProcessPendingDma(addr);
 
+	StartCpuCycle(true);
 	uint8_t value = _memoryManager->Read(addr, operationType);
+	EndCpuCycle(true);
 	return value;
 #endif
 }
@@ -292,90 +314,112 @@ uint16_t CPU::FetchOperand()
 
 }
 
-void CPU::IncCycleCount()
+void CPU::EndCpuCycle(bool forRead)
 {
-	_cycleCount++;
+	_masterClock += forRead ? (_endClockCount + 1) : (_endClockCount - 1);
+	_console->GetPpu()->Run(_masterClock - _ppuOffset);
 
-	if(_dmcDmaRunning) {
-		//CPU is being stalled by the DMC's DMA transfer
-		_dmcCounter--;
-		if(_dmcCounter == 0) {
-			//Update the DMC buffer when the stall period is completed
-			_dmcDmaRunning = false;
-			#ifndef DUMMYCPU
-			_console->GetApu()->FillDmcReadBuffer();
-			_console->DebugAddTrace("DMC DMA End");
-			#endif
-		}
+	//"it's really the status of the interrupt lines at the end of the second-to-last cycle that matters."
+	//Keep the irq lines values from the previous cycle.  The before-to-last cycle's values will be used
+	_prevRunIrq = _runIrq;
+	_runIrq = _state.NMIFlag || ((_state.IRQFlag & _irqMask) > 0 && !CheckFlag(PSFlags::Interrupt));
+}
+
+void CPU::StartCpuCycle(bool forRead)
+{
+	_masterClock += forRead ? (_startClockCount - 1) : (_startClockCount + 1);
+	_cycleCount++;
+	_console->GetPpu()->Run(_masterClock - _ppuOffset);
+	_console->ProcessCpuClock();
+}
+
+void CPU::ProcessPendingDma(uint16_t readAddress)
+{
+	if(!_needHalt) {
+		return;
 	}
 
-	_console->ProcessCpuClock();
+	//"If this cycle is a read, hijack the read, discard the value, and prevent all other actions that occur on this cycle (PC not incremented, etc)"
+	StartCpuCycle(true);
+	_memoryManager->Read(readAddress, MemoryOperationType::DummyRead);
+	EndCpuCycle(true);
+	_needHalt = false;
 
-	if(!_spriteDmaTransfer && !_dmcDmaRunning) {
-		//IRQ flags are ignored during Sprite DMA - fixes irq_and_dma
+	uint16_t spriteDmaCounter = 0;
+	uint8_t spriteReadAddr = 0;
+	uint8_t readValue = 0;
+	bool skipDummyReads = (readAddress == 0x4016 || readAddress == 0x4017);
 
-		//"it's really the status of the interrupt lines at the end of the second-to-last cycle that matters."
-		//Keep the irq lines values from the previous cycle.  The before-to-last cycle's values will be used
-		_prevRunIrq = _runIrq;
-		_runIrq = _state.NMIFlag || ((_state.IRQFlag & _irqMask) > 0 && !CheckFlag(PSFlags::Interrupt));
+	auto processCycle = [this] {
+		//Sprite DMA cycles count as halt/dummy cycles for the DMC DMA when both run at the same time
+		if(_needHalt) {
+			_needHalt = false;
+		} else if(_needDummyRead) {
+			_needDummyRead = false;
+		}
+		StartCpuCycle(true);
+	};
+
+	while(_dmcDmaRunning || _spriteDmaTransfer) {
+		bool getCycle = (_cycleCount & 0x01) == 0;
+		if(getCycle) {
+			if(_dmcDmaRunning && !_needHalt && !_needDummyRead) {
+				//DMC DMA is ready to read a byte (both halt and dummy read cycles were performed before this)
+				processCycle();
+				readValue = _memoryManager->Read(_console->GetApu()->GetDmcReadAddress(), MemoryOperationType::DmcRead);
+				EndCpuCycle(true); 
+				_console->GetApu()->SetDmcReadBuffer(readValue);
+				_dmcDmaRunning = false;
+			} else if(_spriteDmaTransfer) {
+				//DMC DMA is not running, or not ready, run sprite DMA
+				processCycle();
+				readValue = _memoryManager->Read(_spriteDmaOffset * 0x100 + spriteReadAddr);
+				EndCpuCycle(true);
+				spriteReadAddr++;
+				spriteDmaCounter++;
+			} else {
+				//DMC DMA is running, but not ready (need halt/dummy read) and sprite DMA isn't runnnig, perform a dummy read
+				assert(_needHalt || _needDummyRead);
+				processCycle();
+				if(!skipDummyReads) {
+					_memoryManager->Read(readAddress, MemoryOperationType::DummyRead);
+				}
+				EndCpuCycle(true);
+			}
+		} else {
+			if(_spriteDmaTransfer && (spriteDmaCounter & 0x01)) {
+				//Sprite DMA write cycle (only do this if a sprite dma read was performed last cycle)
+				processCycle();
+				_memoryManager->Write(0x2004, readValue, MemoryOperationType::Write);
+				EndCpuCycle(true);
+				spriteDmaCounter++;
+				if(spriteDmaCounter == 0x200) {
+					_spriteDmaTransfer = false;
+				}
+			} else {
+				//Align to read cycle before starting sprite DMA (or align to perform DMC read)
+				processCycle();
+				if(!skipDummyReads) {
+					_memoryManager->Read(readAddress, MemoryOperationType::DummyRead);
+				}
+				EndCpuCycle(true);
+			}
+		}
 	}
 }
 
 void CPU::RunDMATransfer(uint8_t offsetValue)
 {
-	_console->DebugAddTrace("Sprite DMA Start");
 	_spriteDmaTransfer = true;
-	
-	//"The CPU is suspended during the transfer, which will take 513 or 514 cycles after the $4014 write tick."
-	//"(1 dummy read cycle while waiting for writes to complete, +1 if on an odd CPU cycle, then 256 alternating read/write cycles.)"
-	if(_cycleCount % 2 != 0) {
-		DummyRead();
-	}
-	DummyRead();
-
-	_spriteDmaCounter = 256;
-
-	//DMA transfer starts at SpriteRamAddr and wraps around
-	for(int i = 0; i < 0x100; i++) {
-		//Read value
-		uint8_t readValue = MemoryRead(offsetValue * 0x100 + i);
-		
-		//Write to sprite ram via $2004 ("DMA is implemented in the 2A03/7 chip and works by repeatedly writing to OAMDATA")
-		MemoryWrite(0x2004, readValue);
-
-		_spriteDmaCounter--;
-	}
-	
-	_spriteDmaTransfer = false;
-
-	_console->DebugAddTrace("Sprite DMA End");
+	_spriteDmaOffset = offsetValue;
+	_needHalt = true;
 }
 
 void CPU::StartDmcTransfer()
 {
-	//"DMC DMA adds 4 cycles normally, 2 if it lands on the $4014 write or during OAM DMA"
-	//3 cycles if it lands on the last write cycle of any instruction
-	_console->DebugAddTrace("DMC DMA Start");
 	_dmcDmaRunning = true;
-	if(_spriteDmaTransfer) {
-		if(_spriteDmaCounter == 2) {
-			_dmcCounter = 1;
-		} else if(_spriteDmaCounter == 1) {
-			_dmcCounter = 3;
-		} else {
-			_dmcCounter = 2;
-		}
-	} else {
-		if(_cpuWrite) {
-			if(_writeAddr == 0x4014) {
-				_dmcCounter = 2;
-			} else {
-				_dmcCounter = 3;
-			}
-		} else {
-			_dmcCounter = 4;
-		}
-	}
+	_needDummyRead = true;
+	_needHalt = true;
 }
 
 uint32_t CPU::GetClockRate(NesModel model)
@@ -388,21 +432,39 @@ uint32_t CPU::GetClockRate(NesModel model)
 	}
 }
 
+void CPU::SetMasterClockDivider(NesModel region)
+{
+	switch(region) {
+		case NesModel::NTSC:
+			_startClockCount = 6;
+			_endClockCount = 6;
+			break;
+
+		case NesModel::PAL:
+			_startClockCount = 8;
+			_endClockCount = 8;
+			break;
+
+		case NesModel::Dendy:
+			_startClockCount = 7;
+			_endClockCount = 8;
+			break;
+	}
+}
+
 void CPU::StreamState(bool saving)
 {
 	EmulationSettings* settings = _console->GetSettings();
-	uint32_t overclockRate = settings->GetOverclockRateSetting();
-	bool overclockAdjustApu = settings->GetOverclockAdjustApu();
 	uint32_t extraScanlinesBeforeNmi = settings->GetPpuExtraScanlinesBeforeNmi();
 	uint32_t extraScanlinesAfterNmi = settings->GetPpuExtraScanlinesAfterNmi();
 	uint32_t dipSwitches = _console->GetSettings()->GetDipSwitches();
 
 	Stream(_state.PC, _state.SP, _state.PS, _state.A, _state.X, _state.Y, _cycleCount, _state.NMIFlag, 
-			_state.IRQFlag, _dmcCounter, _dmcDmaRunning, _spriteDmaCounter, _spriteDmaTransfer, 
-			overclockRate, overclockAdjustApu, extraScanlinesBeforeNmi, extraScanlinesBeforeNmi, dipSwitches);
+			_state.IRQFlag, _dmcDmaRunning, _spriteDmaTransfer,
+			extraScanlinesBeforeNmi, extraScanlinesBeforeNmi, dipSwitches,
+			_needDummyRead, _needHalt, _startClockCount, _endClockCount, _ppuOffset, _masterClock);
 
 	if(!saving) {
-		settings->SetOverclockRate(overclockRate, overclockAdjustApu);
 		settings->SetPpuNmiConfig(extraScanlinesBeforeNmi, extraScanlinesAfterNmi);
 		settings->SetDipSwitches(dipSwitches);
 	}

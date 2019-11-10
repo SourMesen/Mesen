@@ -7,9 +7,6 @@ class MemoryManager;
 
 class BaseExpansionAudio : public Snapshotable
 {
-private:
-	double _clocksNeeded = 0;
-
 protected: 
 	shared_ptr<Console> _console = nullptr;
 

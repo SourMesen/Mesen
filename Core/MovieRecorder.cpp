@@ -107,14 +107,10 @@ void MovieRecorder::GetGameSettings(stringstream &out)
 		WriteString(out, MovieKeys::ExpansionDevice, ExpansionPortDeviceNames[(int)settings->GetExpansionDevice()]);
 	}
 	
-	WriteInt(out, MovieKeys::CpuClockRate, settings->GetOverclockRateSetting());
 	WriteInt(out, MovieKeys::ExtraScanlinesBeforeNmi, settings->GetPpuExtraScanlinesBeforeNmi());
 	WriteInt(out, MovieKeys::ExtraScanlinesAfterNmi, settings->GetPpuExtraScanlinesAfterNmi());
 	WriteInt(out, MovieKeys::InputPollScanline, settings->GetInputPollScanline());
 	
-	if(settings->GetOverclockRateSetting() != 100) {
-		WriteBool(out, MovieKeys::OverclockAdjustApu, settings->GetOverclockAdjustApu());
-	}
 	WriteBool(out, MovieKeys::DisablePpu2004Reads, settings->CheckFlag(EmulationFlags::DisablePpu2004Reads));
 	WriteBool(out, MovieKeys::DisablePaletteRead, settings->CheckFlag(EmulationFlags::DisablePaletteRead));
 	WriteBool(out, MovieKeys::DisableOamAddrBug, settings->CheckFlag(EmulationFlags::DisableOamAddrBug));

@@ -320,6 +320,7 @@
 			<Control ID="chkDisablePpuReset">Do not reset PPU when resetting console (Famicom behavior)</Control>
 			<Control ID="chkUseNes101Hvc101Behavior">Use NES/HVC-101 (Top-loader / AV Famicom) behavior</Control>
 			<Control ID="chkMapperRandomPowerOnState">Randomize power-on state for mappers</Control>
+			<Control ID="chkRandomizeCpuPpuAlignment">Randomize power-on CPU/PPU alignment</Control>
 
 			<Control ID="tpgOverclocking">Разгон</Control>
 			<Control ID="grpOverclocking">Разгон CPU</Control>

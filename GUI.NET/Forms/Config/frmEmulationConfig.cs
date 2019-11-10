@@ -37,9 +37,7 @@ namespace Mesen.GUI.Forms.Config
 			AddBinding("EnableOamDecay", chkEnableOamDecay);
 			AddBinding("UseNes101Hvc101Behavior", chkUseNes101Hvc101Behavior);
 			AddBinding("EnableMapperRandomPowerOnState", chkMapperRandomPowerOnState);
-
-			AddBinding("OverclockRate", nudOverclockRate);
-			AddBinding("OverclockAdjustApu", chkOverclockAdjustApu);
+			AddBinding("RandomizeCpuPpuAlignment", chkRandomizeCpuPpuAlignment);
 
 			AddBinding("PpuExtraScanlinesBeforeNmi", nudExtraScanlinesBeforeNmi);
 			AddBinding("PpuExtraScanlinesAfterNmi", nudExtraScanlinesAfterNmi);
@@ -57,9 +55,9 @@ namespace Mesen.GUI.Forms.Config
 
 		private void tmrUpdateClockRate_Tick(object sender, EventArgs e)
 		{
-			decimal clockRateMultiplierNtsc = (nudOverclockRate.Value * (1 + (nudExtraScanlinesAfterNmi.Value + nudExtraScanlinesBeforeNmi.Value) / 262));
-			decimal clockRateMultiplierPal = (nudOverclockRate.Value * (1 + (nudExtraScanlinesAfterNmi.Value + nudExtraScanlinesBeforeNmi.Value) / 312));
-			decimal clockRateMultiplierDendy = (nudOverclockRate.Value * (1 + (nudExtraScanlinesAfterNmi.Value + nudExtraScanlinesBeforeNmi.Value) / 312));
+			decimal clockRateMultiplierNtsc = (100 * (1 + (nudExtraScanlinesAfterNmi.Value + nudExtraScanlinesBeforeNmi.Value) / 262));
+			decimal clockRateMultiplierPal = (100 * (1 + (nudExtraScanlinesAfterNmi.Value + nudExtraScanlinesBeforeNmi.Value) / 312));
+			decimal clockRateMultiplierDendy = (100 * (1 + (nudExtraScanlinesAfterNmi.Value + nudExtraScanlinesBeforeNmi.Value) / 312));
 			lblEffectiveClockRateValue.Text = (1789773 * clockRateMultiplierNtsc / 100000000).ToString("#.####") + " mhz (" + ((int)clockRateMultiplierNtsc).ToString() + "%)";
 			lblEffectiveClockRateValuePal.Text = (1662607 * clockRateMultiplierPal / 100000000).ToString("#.####") + " mhz (" + ((int)clockRateMultiplierPal).ToString() + "%)";
 			lblEffectiveClockRateValueDendy.Text = (1773448 * clockRateMultiplierDendy / 100000000).ToString("#.####") + " mhz (" + ((int)clockRateMultiplierDendy).ToString() + "%)";

@@ -71,10 +71,8 @@ namespace MovieKeys
 	constexpr const char* Controller3 = "Controller3";
 	constexpr const char* Controller4 = "Controller4";
 	constexpr const char* ExpansionDevice = "ExpansionDevice";
-	constexpr const char* CpuClockRate = "CpuClockRate";
 	constexpr const char* ExtraScanlinesBeforeNmi = "ExtraScanlinesBeforeNmi";
 	constexpr const char* ExtraScanlinesAfterNmi = "ExtraScanlinesAfterNmi";
-	constexpr const char* OverclockAdjustApu = "OverclockAdjustApu";
 	constexpr const char* DisablePpu2004Reads = "DisablePpu2004Reads";
 	constexpr const char* DisablePaletteRead = "DisablePaletteRead";
 	constexpr const char* DisableOamAddrBug = "DisableOamAddrBug";

@@ -247,14 +247,6 @@ void MesenMovie::ApplySettings()
 
 	settings->SetZapperDetectionRadius(LoadInt(_settings, MovieKeys::ZapperDetectionRadius));
 	
-	uint32_t cpuClockRate = LoadInt(_settings, MovieKeys::CpuClockRate);
-	if(cpuClockRate != 100) {
-		bool adjustApu = LoadBool(_settings, MovieKeys::OverclockAdjustApu);
-		settings->SetOverclockRate(cpuClockRate, adjustApu);
-	} else {
-		settings->SetOverclockRate(100, true);
-	}
-
 	settings->SetPpuNmiConfig(
 		LoadInt(_settings, MovieKeys::ExtraScanlinesBeforeNmi),
 		LoadInt(_settings, MovieKeys::ExtraScanlinesAfterNmi)

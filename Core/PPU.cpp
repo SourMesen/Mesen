@@ -15,6 +15,8 @@
 PPU::PPU(shared_ptr<Console> console)
 {
 	_console = console;
+	_masterClock = 0;
+	_masterClockDivider = 4;
 	_settings = _console->GetSettings();
 
 	_outputBuffers[0] = new uint16_t[256 * 240];
@@ -42,7 +44,7 @@ PPU::~PPU()
 
 void PPU::Reset()
 {
-	_cyclesNeeded = 0;
+	_preventVblFlag = false;
 
 	_needStateUpdate = false;
 	_prevRenderingEnabled = false;
@@ -73,7 +75,6 @@ void PPU::Reset()
 	_oamCopyDone = false;
 	_renderingEnabled = false;
 	_prevRenderingEnabled = false;
-	_cyclesNeeded = 0.0;
 
 	memset(_hasSprite, 0, sizeof(_hasSprite));
 	memset(_spriteTiles, 0, sizeof(_spriteTiles));
@@ -118,18 +119,21 @@ void PPU::SetNesModel(NesModel model)
 			_vblankEnd = 260;
 			_standardNmiScanline = 241;
 			_standardVblankEnd = 260;
+			_masterClockDivider = 4;
 			break;
 		case NesModel::PAL:
 			_nmiScanline = 241;
 			_vblankEnd = 310;
 			_standardNmiScanline = 241;
 			_standardVblankEnd = 310;
+			_masterClockDivider = 5;
 			break;
 		case NesModel::Dendy:
 			_nmiScanline = 291;
 			_vblankEnd = 310;
 			_standardNmiScanline = 291;
 			_standardVblankEnd = 310;
+			_masterClockDivider = 5;
 			break;
 	}
 
@@ -561,8 +565,7 @@ void PPU::UpdateStatusFlag()
 		_console->GetCpu()->ClearNmiFlag();
 
 		if(_cycle == 0) {
-			//"Reading one PPU clock before reads it as clear and never sets the flag or generates NMI for that frame. "
-			_state.Status = ((uint8_t)_statusFlags.SpriteOverflow << 5) | ((uint8_t)_statusFlags.Sprite0Hit << 6);
+			_preventVblFlag = true;
 		}
 	}
 }
@@ -639,8 +642,8 @@ void PPU::WriteVram(uint16_t addr, uint8_t value)
 void PPU::LoadTileInfo()
 {
 	if(IsRenderingEnabled()) {
-		switch((_cycle - 1) & 0x07) {
-			case 0: {
+		switch(_cycle & 0x07) {
+			case 1: {
 				_previousTile = _currentTile;
 				_currentTile = _nextTile;
 
@@ -653,18 +656,18 @@ void PPU::LoadTileInfo()
 				break;
 			}
 
-			case 2: {
+			case 3: {
 				uint8_t shift = ((_state.VideoRamAddr >> 4) & 0x04) | (_state.VideoRamAddr & 0x02);
 				_nextTile.PaletteOffset = ((ReadVram(GetAttributeAddr()) >> shift) & 0x03) << 2;
 				break;
 			}
 
-			case 3:
+			case 5:
 				_nextTile.LowByte = ReadVram(_nextTile.TileAddr);
 				_nextTile.AbsoluteTileAddr = _console->GetMapper()->ToAbsoluteChrAddress(_nextTile.TileAddr);
 				break;
 
-			case 5:
+			case 7:
 				_nextTile.HighByte = ReadVram(_nextTile.TileAddr + 8);
 				break;
 		}
@@ -864,10 +867,10 @@ void PPU::UpdateGrayscaleAndIntensifyBits()
 	int pixelNumber;
 	if(_scanline >= 240) {
 		pixelNumber = 61439;
-	} else if(_cycle < 3) {
+	} else if(_cycle < 4) {
 		pixelNumber = (_scanline << 8) - 1;
 	} else if(_cycle <= 258) {
-		pixelNumber = (_scanline << 8) + _cycle - 3;
+		pixelNumber = (_scanline << 8) + _cycle - 4;
 	} else {
 		pixelNumber = (_scanline << 8) + 255;
 	}
@@ -932,7 +935,7 @@ void PPU::ProcessScanline()
 			//"OAMADDR is set to 0 during each of ticks 257-320 (the sprite tile loading interval) of the pre-render and visible scanlines." (When rendering)
 			_state.SpriteRamAddr = 0;
 
-			if((_cycle - 260) % 8 == 0) {
+			if((_cycle - 261) % 8 == 0) {
 				//Cycle 260, 268, etc.  This is an approximation (each tile is actually loaded in 8 steps (e.g from 257 to 264))
 				LoadSpriteTileInfo();
 			} else if((_cycle - 257) % 8 == 0) {
@@ -1157,7 +1160,6 @@ void PPU::BeginVBlank()
 
 void PPU::TriggerNmi()
 {
-	_statusFlags.VerticalBlank = true;
 	if(_flags.VBlank) {
 		_console->GetCpu()->SetNmiFlag();
 	}
@@ -1222,7 +1224,6 @@ void PPU::Exec()
 			SendFrame();
 			_frameCount++;
 		} else if(_scanline == _nmiScanline) {
-			BeginVBlank();
 		}
 	} else {
 		//Cycle > 0
@@ -1231,6 +1232,12 @@ void PPU::Exec()
 		_console->DebugProcessPpuCycle();
 		if(_scanline < 240) {
 			ProcessScanline();
+		} else if(_cycle == 1 && _scanline == _nmiScanline) {
+			if(!_preventVblFlag) {
+				_statusFlags.VerticalBlank = true;
+				BeginVBlank();
+			}
+			_preventVblFlag = false;
 		} else if(_nesModel == NesModel::PAL && _scanline >= _palSpriteEvalScanline) {
 			//"On a PAL machine, because of its extended vertical blank, the PPU begins refreshing OAM roughly 21 scanlines after NMI[2], to prevent it 
 			//from decaying during the longer hiatus of rendering. Additionally, it will continue to refresh during the visible portion of the screen 
@@ -1299,31 +1306,6 @@ void PPU::UpdateState()
 	}
 }
 
-void PPU::ProcessCpuClock()
-{
-	if(!_settings->HasOverclock()) {
-		Exec();
-		Exec();
-		Exec();
-		if(_nesModel == NesModel::PAL && _console->GetCpu()->GetCycleCount() % 5 == 0) {
-			//PAL PPU runs 3.2 clocks for every CPU clock, so we need to run an extra clock every 5 CPU clocks
-			Exec();
-		}
-	} else {
-		if(_nesModel == NesModel::PAL) {
-			//PAL PPU runs 3.2 clocks for every CPU clock, so we need to run an extra clock every 5 CPU clocks
-			_cyclesNeeded += 3.2 / (_settings->GetOverclockRate() / 100.0);
-		} else {
-			_cyclesNeeded += 3.0 / (_settings->GetOverclockRate() / 100.0);
-		}
-
-		while(_cyclesNeeded >= 1.0) {
-			Exec();
-			_cyclesNeeded--;
-		}
-	}
-}
-
 uint8_t* PPU::GetSpriteRam()
 {
 	//Used by debugger
@@ -1371,8 +1353,8 @@ void PPU::StreamState(bool saving)
 		_nextTile.PaletteOffset, _nextTile.TileAddr, _previousTile.LowByte, _previousTile.HighByte, _previousTile.PaletteOffset, _spriteIndex, _spriteCount,
 		_secondaryOAMAddr, _sprite0Visible, _oamCopybuffer, _spriteInRange, _sprite0Added, _spriteAddrH, _spriteAddrL, _oamCopyDone, _nesModel,
 		_prevRenderingEnabled, _renderingEnabled, _openBus, _ignoreVramRead, paletteRam, spriteRam, secondarySpriteRam,
-		openBusDecayStamp, _cyclesNeeded, disablePpu2004Reads, disablePaletteRead, disableOamAddrBug, _overflowBugCounter, _updateVramAddr, _updateVramAddrDelay,
-		_needStateUpdate, _ppuBusAddress);
+		openBusDecayStamp, disablePpu2004Reads, disablePaletteRead, disableOamAddrBug, _overflowBugCounter, _updateVramAddr, _updateVramAddrDelay,
+		_needStateUpdate, _ppuBusAddress, _preventVblFlag, _masterClock);
 
 	for(int i = 0; i < 64; i++) {
 		Stream(_spriteTiles[i].SpriteX, _spriteTiles[i].LowByte, _spriteTiles[i].HighByte, _spriteTiles[i].PaletteOffset, _spriteTiles[i].HorizontalMirror, _spriteTiles[i].BackgroundPriority);
