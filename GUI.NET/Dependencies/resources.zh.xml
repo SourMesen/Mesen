@@ -346,7 +346,7 @@
 			<Control ID="chkDisablePpuReset">PPU 不随主机重设 (FC 真机)</Control>
 			<Control ID="chkUseNes101Hvc101Behavior">模拟 HVC-101/NES-101 (Top-Loader/带 AV 端子主机)</Control>
 			<Control ID="chkMapperRandomPowerOnState">随机 Mapper 开机状态</Control>
-			<Control ID="chkRandomizeCpuPpuAlignment">Randomize power-on CPU/PPU alignment</Control>
+			<Control ID="chkRandomizeCpuPpuAlignment">随机 CPU/PPU 开机对齐</Control>
 
 			<Control ID="lblRamPowerOnState">默认开机 RAM 状态:</Control>
 			<Control ID="tpgOverclocking">超频</Control>
