@@ -63,10 +63,7 @@ namespace Mesen.GUI.Debugger
 
 				DebugWorkspaceManager.GetWorkspace();
 
-				if(!ConfigManager.Config.DebugInfo.EventViewerLocation.IsEmpty) {
-					this.StartPosition = FormStartPosition.Manual;
-					this.Location = ConfigManager.Config.DebugInfo.EventViewerLocation;
-				}
+				RestoreLocation(ConfigManager.Config.DebugInfo.EventViewerLocation);
 
 				this._notifListener = new InteropEmu.NotificationListener(ConfigManager.Config.DebugInfo.DebugConsoleId);
 				this._notifListener.OnNotification += this._notifListener_OnNotification;

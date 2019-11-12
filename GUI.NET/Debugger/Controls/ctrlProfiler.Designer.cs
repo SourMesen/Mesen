@@ -36,6 +36,9 @@
 			this.columnHeader5 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
 			this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
 			this.colExclusiveTimePercent = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+			this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+			this.columnHeader6 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+			this.columnHeader7 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
 			this.tableLayoutPanel1.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -76,7 +79,10 @@
             this.columnHeader3,
             this.columnHeader5,
             this.columnHeader2,
-            this.colExclusiveTimePercent});
+            this.colExclusiveTimePercent,
+            this.columnHeader1,
+            this.columnHeader6,
+            this.columnHeader7});
 			this.tableLayoutPanel1.SetColumnSpan(this.lstFunctions, 2);
 			this.lstFunctions.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.lstFunctions.FullRowSelect = true;
@@ -121,6 +127,18 @@
 			this.colExclusiveTimePercent.Text = "Exclusive Time (%)";
 			this.colExclusiveTimePercent.Width = 57;
 			// 
+			// columnHeader1
+			// 
+			this.columnHeader1.Text = "Avg. Cycles";
+			// 
+			// columnHeader6
+			// 
+			this.columnHeader6.Text = "Min. Cycles";
+			// 
+			// columnHeader7
+			// 
+			this.columnHeader7.Text = "Max. Cycles";
+			// 
 			// ctrlProfiler
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -144,5 +162,8 @@
 		private System.Windows.Forms.ColumnHeader columnHeader3;
 		private System.Windows.Forms.ColumnHeader columnHeader5;
 		private System.Windows.Forms.ColumnHeader colExclusiveTimePercent;
+		private System.Windows.Forms.ColumnHeader columnHeader1;
+		private System.Windows.Forms.ColumnHeader columnHeader6;
+		private System.Windows.Forms.ColumnHeader columnHeader7;
 	}
 }

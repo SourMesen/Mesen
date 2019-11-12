@@ -15,6 +15,8 @@
 PPU::PPU(shared_ptr<Console> console)
 {
 	_console = console;
+	_masterClock = 0;
+	_masterClockDivider = 4;
 	_settings = _console->GetSettings();
 
 	_outputBuffers[0] = new uint16_t[256 * 240];
@@ -42,7 +44,7 @@ PPU::~PPU()
 
 void PPU::Reset()
 {
-	_cyclesNeeded = 0;
+	_preventVblFlag = false;
 
 	_needStateUpdate = false;
 	_prevRenderingEnabled = false;
@@ -73,7 +75,6 @@ void PPU::Reset()
 	_oamCopyDone = false;
 	_renderingEnabled = false;
 	_prevRenderingEnabled = false;
-	_cyclesNeeded = 0.0;
 
 	memset(_hasSprite, 0, sizeof(_hasSprite));
 	memset(_spriteTiles, 0, sizeof(_spriteTiles));
@@ -118,18 +119,21 @@ void PPU::SetNesModel(NesModel model)
 			_vblankEnd = 260;
 			_standardNmiScanline = 241;
 			_standardVblankEnd = 260;
+			_masterClockDivider = 4;
 			break;
 		case NesModel::PAL:
 			_nmiScanline = 241;
 			_vblankEnd = 310;
 			_standardNmiScanline = 241;
 			_standardVblankEnd = 310;
+			_masterClockDivider = 5;
 			break;
 		case NesModel::Dendy:
 			_nmiScanline = 291;
 			_vblankEnd = 310;
 			_standardNmiScanline = 291;
 			_standardVblankEnd = 310;
+			_masterClockDivider = 5;
 			break;
 	}
 
@@ -419,7 +423,7 @@ void PPU::WriteRAM(uint16_t addr, uint8_t value)
 				//Video RAM update is apparently delayed by 2-3 PPU cycles (based on Visual NES findings)
 				//A 3-cycle delay causes issues with the scanline test.
 				_needStateUpdate = true;
-				_updateVramAddrDelay = 2;
+				_updateVramAddrDelay = 3;
 				_updateVramAddr = _state.TmpVideoRamAddr;
 				_console->DebugSetLastFramePpuScroll(_updateVramAddr, _state.XScroll, false);
 			} else {
@@ -561,8 +565,7 @@ void PPU::UpdateStatusFlag()
 		_console->GetCpu()->ClearNmiFlag();
 
 		if(_cycle == 0) {
-			//"Reading one PPU clock before reads it as clear and never sets the flag or generates NMI for that frame. "
-			_state.Status = ((uint8_t)_statusFlags.SpriteOverflow << 5) | ((uint8_t)_statusFlags.Sprite0Hit << 6);
+			_preventVblFlag = true;
 		}
 	}
 }
@@ -639,8 +642,8 @@ void PPU::WriteVram(uint16_t addr, uint8_t value)
 void PPU::LoadTileInfo()
 {
 	if(IsRenderingEnabled()) {
-		switch((_cycle - 1) & 0x07) {
-			case 0: {
+		switch(_cycle & 0x07) {
+			case 1: {
 				_previousTile = _currentTile;
 				_currentTile = _nextTile;
 
@@ -653,18 +656,18 @@ void PPU::LoadTileInfo()
 				break;
 			}
 
-			case 2: {
+			case 3: {
 				uint8_t shift = ((_state.VideoRamAddr >> 4) & 0x04) | (_state.VideoRamAddr & 0x02);
 				_nextTile.PaletteOffset = ((ReadVram(GetAttributeAddr()) >> shift) & 0x03) << 2;
 				break;
 			}
 
-			case 3:
+			case 5:
 				_nextTile.LowByte = ReadVram(_nextTile.TileAddr);
 				_nextTile.AbsoluteTileAddr = _console->GetMapper()->ToAbsoluteChrAddress(_nextTile.TileAddr);
 				break;
 
-			case 5:
+			case 7:
 				_nextTile.HighByte = ReadVram(_nextTile.TileAddr + 8);
 				break;
 		}
@@ -864,10 +867,10 @@ void PPU::UpdateGrayscaleAndIntensifyBits()
 	int pixelNumber;
 	if(_scanline >= 240) {
 		pixelNumber = 61439;
-	} else if(_cycle < 3) {
+	} else if(_cycle < 4) {
 		pixelNumber = (_scanline << 8) - 1;
 	} else if(_cycle <= 258) {
-		pixelNumber = (_scanline << 8) + _cycle - 3;
+		pixelNumber = (_scanline << 8) + _cycle - 4;
 	} else {
 		pixelNumber = (_scanline << 8) + 255;
 	}
@@ -932,7 +935,7 @@ void PPU::ProcessScanline()
 			//"OAMADDR is set to 0 during each of ticks 257-320 (the sprite tile loading interval) of the pre-render and visible scanlines." (When rendering)
 			_state.SpriteRamAddr = 0;
 
-			if((_cycle - 260) % 8 == 0) {
+			if((_cycle - 261) % 8 == 0) {
 				//Cycle 260, 268, etc.  This is an approximation (each tile is actually loaded in 8 steps (e.g from 257 to 264))
 				LoadSpriteTileInfo();
 			} else if((_cycle - 257) % 8 == 0) {
@@ -1157,7 +1160,6 @@ void PPU::BeginVBlank()
 
 void PPU::TriggerNmi()
 {
-	_statusFlags.VerticalBlank = true;
 	if(_flags.VBlank) {
 		_console->GetCpu()->SetNmiFlag();
 	}
@@ -1222,7 +1224,6 @@ void PPU::Exec()
 			SendFrame();
 			_frameCount++;
 		} else if(_scanline == _nmiScanline) {
-			BeginVBlank();
 		}
 	} else {
 		//Cycle > 0
@@ -1231,6 +1232,12 @@ void PPU::Exec()
 		_console->DebugProcessPpuCycle();
 		if(_scanline < 240) {
 			ProcessScanline();
+		} else if(_cycle == 1 && _scanline == _nmiScanline) {
+			if(!_preventVblFlag) {
+				_statusFlags.VerticalBlank = true;
+				BeginVBlank();
+			}
+			_preventVblFlag = false;
 		} else if(_nesModel == NesModel::PAL && _scanline >= _palSpriteEvalScanline) {
 			//"On a PAL machine, because of its extended vertical blank, the PPU begins refreshing OAM roughly 21 scanlines after NMI[2], to prevent it 
 			//from decaying during the longer hiatus of rendering. Additionally, it will continue to refresh during the visible portion of the screen 
@@ -1260,22 +1267,49 @@ void PPU::UpdateState()
 		_needStateUpdate = true;
 	}
 
-	if(_prevRenderingEnabled && !_renderingEnabled && _cycle >= 65 && _cycle <= 256 && _scanline < 240) {
-		//Disabling rendering during OAM evaluation will trigger a glitch causing the current address to be incremented by 1
-		//The increment can be "delayed" by 1 PPU cycle depending on whether or not rendering is disabled on an even/odd cycle
-		//e.g, if rendering is disabled on an even cycle, the following PPU cycle will increment the address by 5 (instead of 4)
-		//     if rendering is disabled on an odd cycle, the increment will wait until the next odd cycle (at which point it will be incremented by 1)
-		//In practice, there is no way to see the difference, so we just increment by 1 at the end of the next cycle after rendering was disabled
-		_state.SpriteRamAddr++;
+	if(_prevRenderingEnabled && !_renderingEnabled && _scanline < 240) {
+		//When rendering is disabled midscreen, set the vram bus back to the value of 'v'
+		SetBusAddress(_state.VideoRamAddr & 0x3FFF);
+
+		if(_cycle >= 65 && _cycle <= 256) {
+			//Disabling rendering during OAM evaluation will trigger a glitch causing the current address to be incremented by 1
+			//The increment can be "delayed" by 1 PPU cycle depending on whether or not rendering is disabled on an even/odd cycle
+			//e.g, if rendering is disabled on an even cycle, the following PPU cycle will increment the address by 5 (instead of 4)
+			//     if rendering is disabled on an odd cycle, the increment will wait until the next odd cycle (at which point it will be incremented by 1)
+			//In practice, there is no way to see the difference, so we just increment by 1 at the end of the next cycle after rendering was disabled
+			_state.SpriteRamAddr++;
+		}
 	}
 
 	if(_updateVramAddrDelay > 0) {
 		_updateVramAddrDelay--;
 		if(_updateVramAddrDelay == 0) {
-			_state.VideoRamAddr = _updateVramAddr;
+			if(_scanline < 240 && IsRenderingEnabled()) {
+				//When a $2006 address update lands on the Y or X increment, the written value is bugged and is ANDed with the incremented value
+				if(_cycle == 257) {
+					_state.VideoRamAddr &= _updateVramAddr;
+					shared_ptr<Debugger> debugger = _console->GetDebugger(false);
+					if(debugger && debugger->CheckFlag(DebuggerFlags::BreakOnPpu2006ScrollGlitch)) {
+						debugger->BreakImmediately(BreakSource::BreakOnPpu2006ScrollGlitch);
+					}
+				} else if(_cycle > 0 && (_cycle & 0x07) == 0 && (_cycle <= 256 || _cycle > 320)) {
+					_state.VideoRamAddr = (_updateVramAddr & ~0x1F) | (_state.VideoRamAddr & _updateVramAddr & 0x1F);
+					shared_ptr<Debugger> debugger = _console->GetDebugger(false);
+					if(debugger && debugger->CheckFlag(DebuggerFlags::BreakOnPpu2006ScrollGlitch)) {
+						debugger->BreakImmediately(BreakSource::BreakOnPpu2006ScrollGlitch);
+					}
+				} else {
+					_state.VideoRamAddr = _updateVramAddr;
+				}
+			} else {
+				_state.VideoRamAddr = _updateVramAddr;
+			}
+
+			//The glitches updates corrupt both V and T, so set the new value of V back into T
+			_state.TmpVideoRamAddr = _state.VideoRamAddr;
 
 			if(_scanline >= 240 || !IsRenderingEnabled()) {
-				//Only set the VRAM address on the bus if the PPU is rendering
+				//Only set the VRAM address on the bus if the PPU is not rendering
 				//More info here: https://forums.nesdev.com/viewtopic.php?p=132145#p132145
 				//Trigger bus address change when setting the vram address - needed by MMC3 IRQ counter
 				//"4) Should be clocked when A12 changes to 1 via $2006 write"
@@ -1290,31 +1324,6 @@ void PPU::UpdateState()
 		_ignoreVramRead--;
 		if(_ignoreVramRead > 0) {
 			_needStateUpdate = true;
-		}
-	}
-}
-
-void PPU::ProcessCpuClock()
-{
-	if(!_settings->HasOverclock()) {
-		Exec();
-		Exec();
-		Exec();
-		if(_nesModel == NesModel::PAL && _console->GetCpu()->GetCycleCount() % 5 == 0) {
-			//PAL PPU runs 3.2 clocks for every CPU clock, so we need to run an extra clock every 5 CPU clocks
-			Exec();
-		}
-	} else {
-		if(_nesModel == NesModel::PAL) {
-			//PAL PPU runs 3.2 clocks for every CPU clock, so we need to run an extra clock every 5 CPU clocks
-			_cyclesNeeded += 3.2 / (_settings->GetOverclockRate() / 100.0);
-		} else {
-			_cyclesNeeded += 3.0 / (_settings->GetOverclockRate() / 100.0);
-		}
-
-		while(_cyclesNeeded >= 1.0) {
-			Exec();
-			_cyclesNeeded--;
 		}
 	}
 }
@@ -1366,8 +1375,8 @@ void PPU::StreamState(bool saving)
 		_nextTile.PaletteOffset, _nextTile.TileAddr, _previousTile.LowByte, _previousTile.HighByte, _previousTile.PaletteOffset, _spriteIndex, _spriteCount,
 		_secondaryOAMAddr, _sprite0Visible, _oamCopybuffer, _spriteInRange, _sprite0Added, _spriteAddrH, _spriteAddrL, _oamCopyDone, _nesModel,
 		_prevRenderingEnabled, _renderingEnabled, _openBus, _ignoreVramRead, paletteRam, spriteRam, secondarySpriteRam,
-		openBusDecayStamp, _cyclesNeeded, disablePpu2004Reads, disablePaletteRead, disableOamAddrBug, _overflowBugCounter, _updateVramAddr, _updateVramAddrDelay,
-		_needStateUpdate, _ppuBusAddress);
+		openBusDecayStamp, disablePpu2004Reads, disablePaletteRead, disableOamAddrBug, _overflowBugCounter, _updateVramAddr, _updateVramAddrDelay,
+		_needStateUpdate, _ppuBusAddress, _preventVblFlag, _masterClock);
 
 	for(int i = 0; i < 64; i++) {
 		Stream(_spriteTiles[i].SpriteX, _spriteTiles[i].LowByte, _spriteTiles[i].HighByte, _spriteTiles[i].PaletteOffset, _spriteTiles[i].HorizontalMirror, _spriteTiles[i].BackgroundPriority);

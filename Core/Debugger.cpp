@@ -98,9 +98,9 @@ Debugger::Debugger(shared_ptr<Console> console, shared_ptr<CPU> cpu, shared_ptr<
 
 	_flags = 0;
 
-	_runToCycle = 0;
-	_prevInstructionCycle = 0;
-	_curInstructionCycle = 0;
+	_runToCycle = -1;
+	_prevInstructionCycle = -1;
+	_curInstructionCycle = -1;
 	_needRewind = false;
 
 	//Only enable break on uninitialized reads when debugger is opened at power on/reset
@@ -334,7 +334,7 @@ bool Debugger::ProcessBreakpoints(BreakpointType type, OperationInfo &operationI
 	//Disable breakpoints if debugger window is closed
 	allowBreak &= _console->GetSettings()->CheckFlag(EmulationFlags::DebuggerWindowEnabled);
 
-	if(_runToCycle != 0) {
+	if(_runToCycle != -1) {
 		//Disable all breakpoints while stepping backwards
 		return false;
 	} else if(!allowBreak && !allowMark) {
@@ -428,7 +428,7 @@ bool Debugger::ProcessBreakpoints(BreakpointType type, OperationInfo &operationI
 
 void Debugger::ProcessAllBreakpoints(OperationInfo &operationInfo)
 {
-	if(_runToCycle != 0) {
+	if(_runToCycle != -1) {
 		//Disable all breakpoints while stepping backwards
 		return;
 	}
@@ -707,7 +707,7 @@ bool Debugger::ProcessRamOperation(MemoryOperationType type, uint16_t &addr, uin
 	if(type == MemoryOperationType::ExecOpCode) {
 		_cpu->SetDebugPC(addr);
 
-		if(_runToCycle == 0) {
+		if(_runToCycle == -1) {
 			_rewindCache.clear();
 			_rewindPrevInstructionCycleCache.clear();
 		}
@@ -734,10 +734,17 @@ bool Debugger::ProcessRamOperation(MemoryOperationType type, uint16_t &addr, uin
 				_rewindPrevInstructionCycleCache.pop_back();
 				
 				//This state is for the instruction we want to stop on, break here.
-				_runToCycle = 0;
+				_runToCycle = -1;
 				Step(1);
 			} else {
 				_console->GetRewindManager()->StartRewinding(true);
+				
+				//Adjust the cycle counter by 1 because the state was taken before the instruction started
+				//whereas the CPU already read the first byte of the instruction by the time we get here
+				State cpuState;
+				_cpu->GetState(cpuState);
+				cpuState.CycleCount++;
+				_cpu->SetState(cpuState);
 			}
 			UpdateProgramCounter(addr, value);
 			_needRewind = false;
@@ -755,7 +762,7 @@ bool Debugger::ProcessRamOperation(MemoryOperationType type, uint16_t &addr, uin
 	int32_t absoluteAddr = addressInfo.Type == AddressType::PrgRom ? addressInfo.Address : -1;
 	int32_t absoluteRamAddr = addressInfo.Type == AddressType::WorkRam ? addressInfo.Address : -1;
 
-	if(addressInfo.Address >= 0 && type != MemoryOperationType::DummyRead && type != MemoryOperationType::DummyWrite && _runToCycle == 0) {
+	if(addressInfo.Address >= 0 && type != MemoryOperationType::DummyRead && type != MemoryOperationType::DummyWrite && _runToCycle == -1) {
 		//Ignore dummy read/writes and do not change counters while using the step back feature
 		if(type == MemoryOperationType::Write && CheckFlag(DebuggerFlags::IgnoreRedundantWrites)) {
 			if(_memoryManager->DebugRead(addr) != value) {
@@ -790,7 +797,7 @@ bool Debugger::ProcessRamOperation(MemoryOperationType type, uint16_t &addr, uin
 	if(type == MemoryOperationType::ExecOpCode) {
 		_opCodeCycle = 0;
 		_prevInstructionCycle = _curInstructionCycle;
-		_curInstructionCycle = _cpu->GetCycleCount();
+		_curInstructionCycle = (int64_t)_cpu->GetCycleCount();
 
 		_disassembler->BuildCache(addressInfo, addr, false, true);
 		
@@ -829,13 +836,13 @@ bool Debugger::ProcessRamOperation(MemoryOperationType type, uint16_t &addr, uin
 			breakSource = BreakSource::BreakOnUnofficialOpCode;
 		}
 
-		if(_runToCycle != 0) {
-			if(_cpu->GetCycleCount() >= _runToCycle) {
+		if(_runToCycle != -1) {
+			if((int64_t)_cpu->GetCycleCount() >= _runToCycle) {
 				//Step back operation is done, revert RewindManager's state & break debugger
 				_console->GetRewindManager()->StopRewinding(true);
-				_runToCycle = 0;
+				_runToCycle = -1;
 				Step(1);
-			} else if(_runToCycle - _cpu->GetCycleCount() < 500) {
+			} else if(_runToCycle - (int64_t)_cpu->GetCycleCount() < 500) {
 				_rewindCache.push_back(stringstream());
 				_console->SaveState(_rewindCache.back());
 				_rewindPrevInstructionCycleCache.push_back(_prevInstructionCycle);
@@ -922,7 +929,9 @@ bool Debugger::ProcessRamOperation(MemoryOperationType type, uint16_t &addr, uin
 			AddDebugEvent(DebugEventType::MapperRegisterRead, addr, value);
 		}
 	} else if(type == MemoryOperationType::ExecOpCode) {
-		UpdateCallstack(_lastInstruction, addr);
+		if(!_needRewind) {
+			UpdateCallstack(_lastInstruction, addr);
+		}
 	}
 
 	return true;
@@ -1123,7 +1132,7 @@ void Debugger::StepOver()
 
 void Debugger::StepBack()
 {
-	if(_runToCycle == 0) {
+	if(_runToCycle == -1 && _prevInstructionCycle < _curInstructionCycle) {
 		_runToCycle = _prevInstructionCycle;
 		_needRewind = true;
 		Run();
@@ -1524,7 +1533,7 @@ void Debugger::ResetCounters()
 {
 	//This is called when loading a state (among other things)
 	//Prevent counter reset when using step back (_runToCycle != 0), because step back will load a state
-	if(_runToCycle == 0) {
+	if(_runToCycle == -1) {
 		_memoryAccessCounter->ResetCounts();
 	}
 	_profiler->Reset();

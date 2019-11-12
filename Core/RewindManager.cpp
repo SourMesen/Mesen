@@ -133,7 +133,12 @@ void RewindManager::Start(bool forDebugger)
 		_audioHistory.clear();
 		_historyBackup.clear();
 		
-		PopHistory();
+		if(_history.empty()) {
+			_currentHistory.LoadState(_console);
+		} else {
+			PopHistory();
+		}
+
 		_console->GetSoundMixer()->StopAudio(true);
 		_settings->SetFlags(EmulationFlags::ForceMaxSpeed);
 		_settings->SetFlags(EmulationFlags::Rewind);
@@ -149,7 +154,9 @@ void RewindManager::ForceStop()
 			_history.push_back(_historyBackup.front());
 			_historyBackup.pop_front();
 		}
-		_currentHistory = _historyBackup.front();
+		if(!_historyBackup.empty()) {
+			_currentHistory = _historyBackup.front();
+		}
 		_historyBackup.clear();
 		_rewindState = RewindState::Stopped;
 		_settings->ClearFlags(EmulationFlags::ForceMaxSpeed);

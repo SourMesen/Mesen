@@ -33,11 +33,7 @@ namespace Mesen.GUI.Forms.Cheats
 
 				ctrlCheatFinder.OnAddCheat += CtrlCheatFinder_OnAddCheat;
 
-				if(!ConfigManager.Config.CheatWindowSize.IsEmpty) {
-					this.StartPosition = FormStartPosition.Manual;
-					this.Size = ConfigManager.Config.CheatWindowSize;
-					this.Location = ConfigManager.Config.CheatWindowLocation;
-				}
+				RestoreLocation(ConfigManager.Config.CheatWindowLocation, ConfigManager.Config.CheatWindowSize);
 			}
 		}
 

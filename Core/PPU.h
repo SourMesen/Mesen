@@ -36,6 +36,8 @@ class PPU : public IMemoryHandler, public Snapshotable
 		int32_t _scanline;
 		uint32_t _cycle;
 		uint32_t _frameCount;
+		uint64_t _masterClock;
+		uint8_t _masterClockDivider;
 		uint8_t _memoryReadBuffer;
 
 		uint8_t _paletteRAM[0x20];
@@ -53,7 +55,7 @@ class PPU : public IMemoryHandler, public Snapshotable
 		uint16_t _vblankEnd;
 		uint16_t _nmiScanline;
 		uint16_t _palSpriteEvalScanline;
-		
+
 		PPUControlFlags _flags;
 		PPUStatusFlags _statusFlags;
 
@@ -91,8 +93,7 @@ class PPU : public IMemoryHandler, public Snapshotable
 		bool _needStateUpdate;
 		bool _renderingEnabled;
 		bool _prevRenderingEnabled;
-
-		double _cyclesNeeded;
+		bool _preventVblFlag;
 
 		uint16_t _updateVramAddr;
 		uint8_t _updateVramAddrDelay;
@@ -199,7 +200,7 @@ class PPU : public IMemoryHandler, public Snapshotable
 		double GetOverclockRate();
 		
 		void Exec();
-		void ProcessCpuClock();
+		__forceinline void Run(uint64_t runTo);
 
 		uint32_t GetFrameCount()
 		{
@@ -240,3 +241,11 @@ class PPU : public IMemoryHandler, public Snapshotable
 			return _currentOutputBuffer[y << 8 | x];
 		}
 };
+
+void PPU::Run(uint64_t runTo)
+{
+	while(_masterClock + _masterClockDivider <= runTo) {
+		Exec();
+		_masterClock += _masterClockDivider;
+	}
+}

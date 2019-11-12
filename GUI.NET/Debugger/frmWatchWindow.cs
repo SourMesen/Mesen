@@ -21,12 +21,7 @@ namespace Mesen.GUI.Debugger
 			InitializeComponent();
 
 			if(!DesignMode) {
-				if(!ConfigManager.Config.DebugInfo.WatchWindowSize.IsEmpty) {
-					this.StartPosition = FormStartPosition.Manual;
-					this.Size = ConfigManager.Config.DebugInfo.WatchWindowSize;
-					this.Location = ConfigManager.Config.DebugInfo.WatchWindowLocation;
-				}
-
+				RestoreLocation(ConfigManager.Config.DebugInfo.WatchWindowLocation, ConfigManager.Config.DebugInfo.WatchWindowSize);
 				this.toolTip.SetToolTip(picWatchHelp, ctrlWatch.GetTooltipText());
 			}
 		}

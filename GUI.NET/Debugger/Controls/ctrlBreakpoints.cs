@@ -92,6 +92,7 @@ namespace Mesen.GUI.Debugger.Controls
 			}
 
 			lstBreakpoints.ItemChecked += new ItemCheckedEventHandler(lstBreakpoints_ItemChecked);
+			UpdateContextMenu();
 		}
 
 		private void lstBreakpoints_ItemChecked(object sender, ItemCheckedEventArgs e)
@@ -142,15 +143,21 @@ namespace Mesen.GUI.Debugger.Controls
 
 		private void lstBreakpoints_SelectedIndexChanged(object sender, EventArgs e)
 		{
+			UpdateContextMenu();
+		}
+
+		private void UpdateContextMenu()
+		{
 			mnuRemoveBreakpoint.Enabled = (lstBreakpoints.SelectedItems.Count > 0);
 			mnuEditBreakpoint.Enabled = (lstBreakpoints.SelectedItems.Count == 1);
 			if(lstBreakpoints.SelectedItems.Count == 1) {
 				Breakpoint bp = lstBreakpoints.SelectedItems[0].Tag as Breakpoint;
 				mnuGoToLocation.Enabled = bp.IsCpuBreakpoint && bp.GetRelativeAddress() >= 0;
+			} else {
+				mnuGoToLocation.Enabled = false;
 			}
-			
 		}
-		
+
 		private void mnuShowLabels_CheckedChanged(object sender, EventArgs e)
 		{
 			ConfigManager.Config.DebugInfo.ShowBreakpointLabels = mnuShowLabels.Checked;

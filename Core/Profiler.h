@@ -11,6 +11,8 @@ enum class ProfilerDataType
 	FunctionInclusive = 1,
 	Instructions = 2,
 	FunctionCallCount = 3,
+	MinCycles = 4,
+	MaxCycles = 5,
 };
 
 class Profiler
@@ -22,6 +24,8 @@ private:
 	vector<uint64_t> _cyclesByFunction;
 	vector<uint64_t> _cyclesByFunctionInclusive;
 	vector<uint64_t> _functionCallCount;
+	vector<uint64_t> _minCycles;
+	vector<uint64_t> _maxCycles;
 	
 	std::stack<int32_t> _functionStack;
 	std::stack<int32_t> _jsrStack;
@@ -47,5 +51,5 @@ public:
 	void UnstackFunction();
 
 	void Reset();
-	void GetProfilerData(int64_t* profilerData, ProfilerDataType type);
+	void GetProfilerData(uint64_t* profilerData, ProfilerDataType type);
 };

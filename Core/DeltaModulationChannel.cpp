@@ -58,10 +58,15 @@ void DeltaModulationChannel::StartDmcTransfer()
 	}
 }
 
-void DeltaModulationChannel::FillReadBuffer()
+uint16_t DeltaModulationChannel::GetDmcReadAddress()
+{
+	return _currentAddr;
+}
+
+void DeltaModulationChannel::SetDmcReadBuffer(uint8_t value)
 {
 	if(_bytesRemaining > 0) {
-		_readBuffer = _console->GetMemoryManager()->Read(_currentAddr, MemoryOperationType::DmcRead);
+		_readBuffer = value;
 		_bufferEmpty = false;
 
 		//"The address is incremented; if it exceeds $FFFF, it is wrapped around to $8000."
@@ -204,12 +209,16 @@ void DeltaModulationChannel::SetEnabled(bool enabled)
 		_needToRun = false;
 	} else if(_bytesRemaining == 0) {
 		InitSample();
-		StartDmcTransfer();
+		_needInit = true;
 	}
 }
 
 bool DeltaModulationChannel::NeedToRun()
 {
+	if(_needInit && (_console->GetCpu()->GetCycleCount() & 0x01) == 0) {
+		StartDmcTransfer();
+		_needInit = false;
+	}
 	return _needToRun;
 }
 

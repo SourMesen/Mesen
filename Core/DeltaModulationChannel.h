@@ -26,6 +26,7 @@ private:
 	uint8_t _bitsRemaining = 0;
 	bool _silenceFlag = true;
 	bool _needToRun = false;
+	bool _needInit = false;
 
 	uint8_t _lastValue4011 = 0;
 
@@ -47,7 +48,8 @@ public:
 
 	void SetEnabled(bool enabled);
 	void StartDmcTransfer();
-	void FillReadBuffer();
+	uint16_t GetDmcReadAddress();
+	void SetDmcReadBuffer(uint8_t value);
 
 	ApuDmcState GetState();
 };

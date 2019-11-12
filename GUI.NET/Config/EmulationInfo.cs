@@ -22,11 +22,9 @@ namespace Mesen.GUI.Config
 		public bool EnableOamDecay = false;
 		public bool UseNes101Hvc101Behavior = false;
 		public bool EnableMapperRandomPowerOnState = false;
+		public bool RandomizeCpuPpuAlignment = false;
 
 		public bool UseAlternativeMmc3Irq = false;
-
-		[MinMax(1, 1000)] public UInt32 OverclockRate = 100;
-		public bool OverclockAdjustApu = true;
 
 		[MinMax(0, 1000)] public UInt32 PpuExtraScanlinesBeforeNmi = 0;
 		[MinMax(0, 1000)] public UInt32 PpuExtraScanlinesAfterNmi = 0;
@@ -60,8 +58,8 @@ namespace Mesen.GUI.Config
 			InteropEmu.SetFlag(EmulationFlags.EnableOamDecay, emulationInfo.EnableOamDecay);
 			InteropEmu.SetFlag(EmulationFlags.UseNes101Hvc101Behavior, emulationInfo.UseNes101Hvc101Behavior);
 			InteropEmu.SetFlag(EmulationFlags.RandomizeMapperPowerOnState, emulationInfo.EnableMapperRandomPowerOnState);
+			InteropEmu.SetFlag(EmulationFlags.RandomizeCpuPpuAlignment, emulationInfo.RandomizeCpuPpuAlignment);
 
-			InteropEmu.SetOverclockRate(emulationInfo.OverclockRate, emulationInfo.OverclockAdjustApu);
 			InteropEmu.SetPpuNmiConfig(emulationInfo.PpuExtraScanlinesBeforeNmi, emulationInfo.PpuExtraScanlinesAfterNmi);
 
 			InteropEmu.SetRamPowerOnState(emulationInfo.RamPowerOnState);

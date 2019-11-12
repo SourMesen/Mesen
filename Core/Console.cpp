@@ -421,9 +421,6 @@ bool Console::Initialize(VirtualFile &romFile, VirtualFile &patchFile)
 				string modelName = _model == NesModel::PAL ? "PAL" : (_model == NesModel::Dendy ? "Dendy" : "NTSC");
 				string messageTitle = MessageManager::Localize("GameLoaded") + " (" + modelName + ")";
 				MessageManager::DisplayMessage(messageTitle, FolderUtilities::GetFilename(GetRomInfo().RomName, false));
-				if(_settings->GetOverclockRate() != 100) {
-					MessageManager::DisplayMessage("ClockRate", std::to_string(_settings->GetOverclockRate()) + "%");
-				}
 				_settings->ClearFlags(EmulationFlags::ForceMaxSpeed);
 
 				if(_slave) {
@@ -451,7 +448,6 @@ bool Console::Initialize(VirtualFile &romFile, VirtualFile &patchFile)
 void Console::ProcessCpuClock()
 {
 	_mapper->ProcessCpuClock();
-	_ppu->ProcessCpuClock();
 	_apu->ProcessCpuClock();
 }
 
@@ -967,6 +963,7 @@ void Console::UpdateNesModel(bool sendNotification)
 		}
 	}
 
+	_cpu->SetMasterClockDivider(model);
 	_mapper->SetNesModel(model);
 	_ppu->SetNesModel(model);
 	_apu->SetNesModel(model);

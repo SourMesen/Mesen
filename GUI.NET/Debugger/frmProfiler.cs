@@ -24,11 +24,7 @@ namespace Mesen.GUI.Debugger
 				ctrlProfiler.RefreshData();
 				tmrRefresh.Start();
 
-				if(!ConfigManager.Config.DebugInfo.ProfilerSize.IsEmpty) {
-					this.StartPosition = FormStartPosition.Manual;
-					this.Size = ConfigManager.Config.DebugInfo.ProfilerSize;
-					this.Location = ConfigManager.Config.DebugInfo.ProfilerLocation;
-				}
+				RestoreLocation(ConfigManager.Config.DebugInfo.ProfilerLocation, ConfigManager.Config.DebugInfo.ProfilerSize);
 			}
 		}
 

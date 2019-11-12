@@ -197,7 +197,7 @@ void MemoryAccessCounter::GetNametableChangedData(bool ntChangedData[])
 	uint64_t cpuCycle = _debugger->GetConsole()->GetCpu()->GetCycleCount();
 	NesModel model = _debugger->GetConsole()->GetModel();
 	double frameRate = model == NesModel::NTSC ? 60.1 : 50.01;
-	double overclockRate = _debugger->GetConsole()->GetPpu()->GetOverclockRate() * (_debugger->GetConsole()->GetSettings()->GetOverclockRate() / 100);
+	double overclockRate = _debugger->GetConsole()->GetPpu()->GetOverclockRate() * 100;
 	int32_t cyclesPerFrame = (int32_t)(_debugger->GetConsole()->GetCpu()->GetClockRate(model) / frameRate * overclockRate);
 
 	for(int i = 0; i < 0x1000; i++) {

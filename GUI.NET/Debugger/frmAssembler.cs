@@ -36,11 +36,8 @@ namespace Mesen.GUI.Debugger
 
 			DebugInfo config = ConfigManager.Config.DebugInfo;
 
-			if(!config.AssemblerSize.IsEmpty) {
-				this.StartPosition = FormStartPosition.Manual;
-				this.Size = config.AssemblerSize;
-				this.Location = config.AssemblerLocation;
-			}
+			RestoreLocation(config.AssemblerLocation, config.AssemblerSize);
+
 			mnuEnableSyntaxHighlighting.Checked = config.AssemblerCodeHighlighting;
 
 			txtCode.Font = new Font(config.AssemblerFontFamily, config.AssemblerFontSize, config.AssemblerFontStyle);

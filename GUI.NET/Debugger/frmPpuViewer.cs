@@ -48,10 +48,7 @@ namespace Mesen.GUI.Debugger
 				default: startupLocation = ConfigManager.Config.DebugInfo.PpuWindowLocation; break;
 			}
 
-			if(startupLocation.HasValue) {
-				this.StartPosition = FormStartPosition.Manual;
-				this.Location = startupLocation.Value;
-			}
+			RestoreLocation(startupLocation);
 		}
 
 		public static int GetNextPpuViewerId()

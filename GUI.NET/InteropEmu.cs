@@ -75,6 +75,7 @@ namespace Mesen.GUI
 
 		[DllImport(DLLPath)] public static extern void UpdateInputDevices();
 
+		[DllImport(DLLPath)] [return: MarshalAs(UnmanagedType.I1)] public static extern bool IsKeyboardMode();
 		[DllImport(DLLPath)] public static extern ConsoleFeatures GetAvailableFeatures();
 
 		[DllImport(DLLPath, EntryPoint = "GetPressedKeys")] private static extern void GetPressedKeysWrapper(IntPtr keyBuffer);
@@ -200,7 +201,6 @@ namespace Mesen.GUI
 		[DllImport(DLLPath)] public static extern void SetTurboRewindSpeed(UInt32 turboSpeed, UInt32 rewindSpeed);
 		[DllImport(DLLPath)] public static extern void SetRewindBufferSize(UInt32 seconds);
 		[DllImport(DLLPath)] [return: MarshalAs(UnmanagedType.I1)] public static extern bool IsRewinding();
-		[DllImport(DLLPath)] public static extern void SetOverclockRate(UInt32 overclockRate, [MarshalAs(UnmanagedType.I1)]bool adjustApu);
 		[DllImport(DLLPath)] public static extern void SetPpuNmiConfig(UInt32 extraScanlinesBeforeNmi, UInt32 extraScanlineAfterNmi);
 		[DllImport(DLLPath)] public static extern void SetOverscanDimensions(UInt32 left, UInt32 right, UInt32 top, UInt32 bottom);
 		[DllImport(DLLPath)] public static extern void SetVideoScale(double scale, ConsoleId consoleId = ConsoleId.Master);
@@ -513,9 +513,9 @@ namespace Mesen.GUI
 		}
 
 		[DllImport(DLLPath, EntryPoint = "DebugGetProfilerData")] private static extern void DebugGetProfilerDataWrapper(IntPtr profilerData, ProfilerDataType dataType);
-		public static Int64[] DebugGetProfilerData(ProfilerDataType dataType)
+		public static UInt64[] DebugGetProfilerData(ProfilerDataType dataType)
 		{
-			Int64[] profileData = new Int64[InteropEmu.DebugGetMemorySize(DebugMemoryType.PrgRom) + 2];
+			UInt64[] profileData = new UInt64[InteropEmu.DebugGetMemorySize(DebugMemoryType.PrgRom) + 2];
 
 			GCHandle hProfilerData = GCHandle.Alloc(profileData, GCHandleType.Pinned);
 			try {
@@ -1591,6 +1591,8 @@ namespace Mesen.GUI
 		FunctionInclusive = 1,
 		Instructions = 2,
 		FunctionCallCount = 3,
+		MinCycles = 4,
+		MaxCycles = 5,
 	}
 
 	[Flags]
@@ -1701,6 +1703,8 @@ namespace Mesen.GUI
 		VsDualMuteMaster = 0x200000000000000,
 		VsDualMuteSlave = 0x400000000000000,
 
+		RandomizeCpuPpuAlignment = 0x800000000000000,
+
 		ForceMaxSpeed = 0x4000000000000000,
 		ConsoleMode = 0x8000000000000000,
 	}
@@ -1733,6 +1737,8 @@ namespace Mesen.GUI
 		BreakOnPlay = 0x8000,
 
 		BreakOnFirstCycle = 0x10000,
+
+		BreakOnPpu2006ScrollGlitch = 0x20000,
 	}
 
 	public struct InteropRomInfo
@@ -2353,6 +2359,7 @@ namespace Mesen.GUI
 		BreakOnCpuCrash = 9,
 		Pause = 10,
 		BreakAfterSuspend = 11,
+		BreakOnPpu2006ScrollGlitch = 12
 	}
 	
 	public enum PpuAddressType

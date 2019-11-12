@@ -640,7 +640,6 @@ namespace InteropEmu {
 			shared_ptr<RewindManager> rewindManager = _console->GetRewindManager();
 			return rewindManager ? rewindManager->IsRewinding() : false;
 		}
-		DllExport void __stdcall SetOverclockRate(uint32_t overclockRate, bool adjustApu) { _settings->SetOverclockRate(overclockRate, adjustApu); }
 		DllExport void __stdcall SetPpuNmiConfig(uint32_t extraScanlinesBeforeNmi, uint32_t extraScanlinesAfterNmi) { _settings->SetPpuNmiConfig(extraScanlinesBeforeNmi, extraScanlinesAfterNmi); }
 		DllExport void __stdcall SetVideoScale(double scale, ConsoleId consoleId) { GetConsoleById(consoleId)->GetSettings()->SetVideoScale(scale); }
 		DllExport void __stdcall SetScreenRotation(uint32_t angle) { _settings->SetScreenRotation(angle); }
@@ -673,6 +672,8 @@ namespace InteropEmu {
 		DllExport void __stdcall StartRecordingTapeFile(char *filepath) { _console->StartRecordingTapeFile(filepath); }
 		DllExport void __stdcall StopRecordingTapeFile() { _console->StopRecordingTapeFile(); }
 		DllExport bool __stdcall IsRecordingTapeFile() { return _console->IsRecordingTapeFile(); }
+
+		DllExport bool __stdcall IsKeyboardMode() { return _settings->IsKeyboardMode(); }
 
 		DllExport ConsoleFeatures __stdcall GetAvailableFeatures() { return _console->GetAvailableFeatures(); }
 

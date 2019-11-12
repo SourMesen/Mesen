@@ -40,8 +40,6 @@ class APU : public Snapshotable, public IMemoryHandler
 
 		NesModel _nesModel;
 
-		double _cyclesNeeded;
-
 	private:
 		__forceinline bool NeedToRun(uint32_t currentCycle);
 
@@ -73,6 +71,7 @@ class APU : public Snapshotable, public IMemoryHandler
 		void AddExpansionAudioDelta(AudioChannel channel, int16_t delta);
 		void SetApuStatus(bool enabled);
 		bool IsApuEnabled();
-		void FillDmcReadBuffer();
+		uint16_t GetDmcReadAddress();
+		void SetDmcReadBuffer(uint8_t value);
 		void SetNeedToRun();
 };

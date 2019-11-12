@@ -64,8 +64,7 @@ public:
 
 	void StreamState(bool saving) override
 	{
-		int32_t unusednextIrqCycle = 0;
-		Stream(unusednextIrqCycle, _previousCycle, _currentStep, _stepMode, _inhibitIRQ, _nesModel, _blockFrameCounterTick, _writeDelayCounter, _newValue);
+		Stream(_previousCycle, _currentStep, _stepMode, _inhibitIRQ, _nesModel, _blockFrameCounterTick, _writeDelayCounter, _newValue);
 
 		if(!saving) {
 			SetNesModel(_nesModel);
@@ -185,11 +184,11 @@ public:
 
 		//Reset sequence after $4017 is written to
 		if(_console->GetCpu()->GetCycleCount() & 0x01) {
-			//"If the write occurs during an APU cycle, the effects occur 3 CPU cycles after the $4017 write cycle"
-			_writeDelayCounter = 3;
-		} else {
 			//"If the write occurs between APU cycles, the effects occur 4 CPU cycles after the write cycle. "
 			_writeDelayCounter = 4;
+		} else {
+			//"If the write occurs during an APU cycle, the effects occur 3 CPU cycles after the $4017 write cycle"
+			_writeDelayCounter = 3;
 		}
 
 		_inhibitIRQ = (value & 0x40) == 0x40;

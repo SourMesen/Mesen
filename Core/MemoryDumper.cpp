@@ -165,6 +165,8 @@ void MemoryDumper::SetMemoryValues(DebugMemoryType memoryType, uint32_t address,
 		if(infoStart.Type == AddressType::PrgRom && infoEnd.Type == AddressType::PrgRom && infoEnd.Address - infoStart.Address == length) {
 			_disassembler->RebuildPrgRomCache(infoStart.Address, length);
 		}
+	} else if(memoryType == DebugMemoryType::PrgRom) {
+		_disassembler->RebuildPrgRomCache(address, length);
 	}
 
 	AddUndoHistory(originalRomData);

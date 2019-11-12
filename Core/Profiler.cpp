@@ -1,4 +1,5 @@
 #include "stdafx.h"
+#include <limits>
 #include "Profiler.h"
 #include "DebugBreakHelper.h"
 #include "Debugger.h"
@@ -30,6 +31,9 @@ void Profiler::UnstackFunction()
 {
 	if(!_functionStack.empty()) {
 		//Return to the previous function
+		_minCycles[_currentFunction] = std::min(_minCycles[_currentFunction], _currentCycleCount);
+		_maxCycles[_currentFunction] = std::max(_maxCycles[_currentFunction], _currentCycleCount);
+
 		_currentFunction = _functionStack.top();
 		_functionStack.pop();
 
@@ -96,14 +100,18 @@ void Profiler::InternalReset()
 	_cyclesByFunction.clear();
 	_cyclesByFunctionInclusive.clear();
 	_functionCallCount.clear();
+	_minCycles.clear();
+	_maxCycles.clear();
 
 	_cyclesByInstruction.insert(_cyclesByInstruction.end(), size + 2, 0);
 	_cyclesByFunction.insert(_cyclesByFunction.end(), size + 2, 0);
 	_cyclesByFunctionInclusive.insert(_cyclesByFunctionInclusive.end(), size + 2, 0);
 	_functionCallCount.insert(_functionCallCount.end(), size + 2, 0);
+	_minCycles.insert(_minCycles.end(), size + 2, std::numeric_limits<uint64_t>().max());
+	_maxCycles.insert(_maxCycles.end(), size + 2, 0);
 }
 
-void Profiler::GetProfilerData(int64_t * profilerData, ProfilerDataType type)
+void Profiler::GetProfilerData(uint64_t * profilerData, ProfilerDataType type)
 {
 	vector<uint64_t> *dataArray = nullptr;
 
@@ -113,6 +121,8 @@ void Profiler::GetProfilerData(int64_t * profilerData, ProfilerDataType type)
 		case ProfilerDataType::FunctionInclusive: dataArray = &_cyclesByFunctionInclusive; break;
 		case ProfilerDataType::Instructions: dataArray = &_cyclesByInstruction; break;
 		case ProfilerDataType::FunctionCallCount: dataArray = &_functionCallCount; break;
+		case ProfilerDataType::MinCycles: dataArray = &_minCycles; break;
+		case ProfilerDataType::MaxCycles: dataArray = &_maxCycles; break;
 	}
 
 	memcpy(profilerData, (*dataArray).data(), (*dataArray).size() * sizeof(uint64_t));

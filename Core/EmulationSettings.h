@@ -95,6 +95,8 @@ enum EmulationFlags : uint64_t
 	VsDualMuteMaster = 0x200000000000000,
 	VsDualMuteSlave = 0x400000000000000,
 	
+	RandomizeCpuPpuAlignment = 0x800000000000000,
+	
 	ForceMaxSpeed = 0x4000000000000000,	
 	ConsoleMode = 0x8000000000000000,
 };
@@ -648,13 +650,9 @@ private:
 
 	uint32_t _rewindBufferSize = 300;
 
-	bool _hasOverclock = false;
-	uint32_t _overclockRate = 100;
-	bool _overclockAdjustApu = true;
 	bool _disableOverclocking = false;
 	uint32_t _extraScanlinesBeforeNmi = 0;
 	uint32_t _extraScanlinesAfterNmi = 0;
-	double _effectiveOverclockRate = 100;
 
 	OverscanDimensions _overscan;
 	VideoFilterType _videoFilterType = VideoFilterType::None;
@@ -1041,55 +1039,11 @@ public:
 	}
 
 	uint32_t GetEmulationSpeed(bool ignoreTurbo = false);
-
-	void UpdateEffectiveOverclockRate()
-	{
-		if(_disableOverclocking) {
-			_effectiveOverclockRate = 100;
-		} else {
-			_effectiveOverclockRate = _overclockRate;
-		}
-		_hasOverclock = _effectiveOverclockRate != 100;
-		_audioSettingsChanged = true;
-	}
-
+	
 	void DisableOverclocking(bool disabled)
 	{
 		if(_disableOverclocking != disabled) {
 			_disableOverclocking = disabled;
-			UpdateEffectiveOverclockRate();
-		}
-	}
-
-	uint32_t GetOverclockRateSetting()
-	{
-		return _overclockRate;
-	}
-
-	bool HasOverclock()
-	{
-		return _hasOverclock;
-	}
-
-	double GetOverclockRate()
-	{
-		return _effectiveOverclockRate;
-	}
-
-	bool GetOverclockAdjustApu()
-	{
-		return _overclockAdjustApu;
-	}
-
-	void SetOverclockRate(uint32_t overclockRate, bool adjustApu)
-	{
-		if(_overclockRate != overclockRate || _overclockAdjustApu != adjustApu) {
-			_overclockRate = overclockRate;
-			_overclockAdjustApu = adjustApu;
-
-			UpdateEffectiveOverclockRate();
-
-			MessageManager::DisplayMessage("ClockRate", std::to_string((uint32_t)GetOverclockRate()) + "%");
 		}
 	}
 
@@ -1112,8 +1066,6 @@ public:
 
 			_extraScanlinesBeforeNmi = extraScanlinesBeforeNmi;
 			_extraScanlinesAfterNmi = extraScanlinesAfterNmi;
-
-			UpdateEffectiveOverclockRate();
 		}
 	}
 

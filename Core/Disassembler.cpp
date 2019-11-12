@@ -206,7 +206,7 @@ void Disassembler::GetInfo(AddressTypeInfo &info, uint8_t** source, uint32_t &si
 }
 
 
-uint32_t Disassembler::BuildCache(AddressTypeInfo &info, uint16_t cpuAddress, bool isSubEntryPoint, bool processJumps)
+uint32_t Disassembler::BuildCache(AddressTypeInfo &info, uint16_t cpuAddress, bool isSubEntryPoint, bool processJumps, bool forceDisassemble)
 {
 	uint32_t mask = info.Type == AddressType::InternalRam ? 0x7FF : 0xFFFFFFFF;
 
@@ -218,13 +218,16 @@ uint32_t Disassembler::BuildCache(AddressTypeInfo &info, uint16_t cpuAddress, bo
 
 	if(info.Address >= 0) {
 		DisassemblyInfo *disInfo = (*cache)[absoluteAddr].get();
-		if(!disInfo) {
-			while(absoluteAddr < (int32_t)size && !(*cache)[absoluteAddr]) {
+		if(!disInfo || forceDisassemble) {
+			while(absoluteAddr < (int32_t)size && (forceDisassemble || !(*cache)[absoluteAddr])) {
 				bool isJump = IsUnconditionalJump(source[absoluteAddr]);
-				disInfo = new DisassemblyInfo(source+absoluteAddr, isSubEntryPoint);
-				isSubEntryPoint = false;
-
-				(*cache)[absoluteAddr] = shared_ptr<DisassemblyInfo>(disInfo);
+				
+				if(!forceDisassemble) {
+					disInfo = new DisassemblyInfo(source+absoluteAddr, isSubEntryPoint);
+					isSubEntryPoint = false;
+					(*cache)[absoluteAddr] = shared_ptr<DisassemblyInfo>(disInfo);
+				}
+				forceDisassemble = false;
 
 				absoluteAddr += disInfo->GetSize();
 				if(isJump) {
@@ -246,7 +249,7 @@ uint32_t Disassembler::BuildCache(AddressTypeInfo &info, uint16_t cpuAddress, bo
 
 					constexpr uint8_t jsrCode = 0x20;
 					if(addressInfo.Address >= 0) {
-						BuildCache(addressInfo, jumpDest, opCode == jsrCode, false);
+						BuildCache(addressInfo, jumpDest, opCode == jsrCode, false, false);
 					}
 				}
 			}
@@ -301,7 +304,7 @@ void Disassembler::InvalidateCache(AddressTypeInfo &info)
 
 void Disassembler::RebuildPrgRomCache(uint32_t absoluteAddr, int32_t length)
 {
-	for(int i = 1; i <= 2; i++) {
+	for(int i = 0; i <= 2; i++) {
 		int offsetAddr = (int)absoluteAddr - i;
 		if(offsetAddr >= 0) {
 			if(_disassembleCache[offsetAddr] != nullptr) {
@@ -313,18 +316,22 @@ void Disassembler::RebuildPrgRomCache(uint32_t absoluteAddr, int32_t length)
 		}
 	}
 
-	bool isSubEntryPoint = false;
-	if(_disassembleCache[absoluteAddr]) {
-		isSubEntryPoint = _disassembleCache[absoluteAddr]->IsSubEntryPoint();
-	}
-
 	for(int i = absoluteAddr, end = absoluteAddr + length; i < end; i++) {
 		_disassembleCache[i] = nullptr;
 	}
 
-	uint16_t memoryAddr = _debugger->GetRelativeAddress(absoluteAddr, AddressType::PrgRom);
-	AddressTypeInfo info = { (int32_t)absoluteAddr, AddressType::PrgRom };
-	BuildCache(info, memoryAddr, isSubEntryPoint, false);
+	//Re-disassemble based on the previous instruction (if one exists)
+	for(int i = 0; i < 6; i++) {
+		int offsetAddr = (int)absoluteAddr - i;
+		if(offsetAddr >= 0 && _disassembleCache[offsetAddr] != nullptr) {
+			int32_t memoryAddr = _debugger->GetRelativeAddress(offsetAddr, AddressType::PrgRom);
+			if(memoryAddr >= 0) {
+				AddressTypeInfo info = { offsetAddr, AddressType::PrgRom };
+				BuildCache(info, memoryAddr, false, false, true);
+			}
+			break;
+		}
+	}
 }
 
 static const char* hexTable[256] = {

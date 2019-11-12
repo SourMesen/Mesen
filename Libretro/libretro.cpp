@@ -13,6 +13,7 @@
 #include "../Core/EmulationSettings.h"
 #include "../Core/CheatManager.h"
 #include "../Core/HdData.h"
+#include "../Core/SaveStateManager.h"
 #include "../Core/DebuggerTypes.h"
 #include "../Core/GameDatabase.h"
 #include "../Utilities/FolderUtilities.h"
@@ -658,7 +659,7 @@ extern "C" {
 	RETRO_API bool retro_serialize(void *data, size_t size)
 	{
 		std::stringstream ss;
-		_console->SaveState(ss);
+		_console->GetSaveStateManager()->SaveState(ss);
 		
 		string saveStateData = ss.str();
 		memset(data, 0, size);
@@ -669,8 +670,9 @@ extern "C" {
 
 	RETRO_API bool retro_unserialize(const void *data, size_t size)
 	{
-		_console->LoadState((uint8_t*)data, (uint32_t)size);
-		return true;
+		std::stringstream ss;
+		ss.write((char*)data, size);
+		return _console->GetSaveStateManager()->LoadState(ss, false);
 	}
 
 	RETRO_API void retro_cheat_reset()
@@ -996,7 +998,7 @@ extern "C" {
 			//Retroarch doesn't like this for netplay or rewinding - it requires the states to always be the exact same size
 			//So we need to send a large enough size to Retroarch to ensure Mesen's state will always fit within that buffer.
 			std::stringstream ss;
-			_console->SaveState(ss);
+			_console->GetSaveStateManager()->SaveState(ss);
 
 			//Round up to the next 1kb multiple
 			_saveStateSize = ((ss.str().size() * 2) + 0x400) & ~0x3FF;

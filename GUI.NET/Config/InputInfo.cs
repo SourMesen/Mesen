@@ -138,7 +138,7 @@ namespace Mesen.GUI.Config
 		public bool DisplayInputHorizontally = true;
 
 		[MinMax(0, 4)] public UInt32 ControllerDeadzoneSize = 2;
-		public bool HideMousePointerForZapper = true;
+		public bool HideMousePointerForZapper = false;
 
 		[XmlElement(ElementName = "InputDevice")]
 		public List<ControllerInfo> Controllers = new List<ControllerInfo>();

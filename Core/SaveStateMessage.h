@@ -12,7 +12,7 @@ private:
 	uint8_t* _stateData = nullptr;
 	uint32_t _dataSize = 0;
 
-	CodeInfo* _cheats;
+	CodeInfo* _cheats = nullptr;
 	uint32_t _cheatArraySize = 0;
 
 protected:

@@ -41,7 +41,7 @@ public:
 	void BuildOpCodeTables(bool useLowerCase);
 	void Reset();
 	
-	uint32_t BuildCache(AddressTypeInfo &info, uint16_t memoryAddr, bool isSubEntryPoint, bool processJumps);
+	uint32_t BuildCache(AddressTypeInfo &info, uint16_t memoryAddr, bool isSubEntryPoint, bool processJumps, bool forceDisassemble = false);
 	void InvalidateCache(AddressTypeInfo &info);
 
 	bool IsUnofficialOpCode(uint8_t opCode);

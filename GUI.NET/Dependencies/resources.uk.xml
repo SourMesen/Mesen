@@ -320,6 +320,7 @@
 			<Control ID="chkDisablePpuReset">Не перезавантажити PPU при скиданні консолі (Famicom)</Control>
 			<Control ID="chkUseNes101Hvc101Behavior">Імітувати поведінку NES/HVC-101 (Top-loader / AV Famicom) поведінку</Control>
 			<Control ID="chkMapperRandomPowerOnState">Почати гру з маппером у випадковому стані</Control>
+			<Control ID="chkRandomizeCpuPpuAlignment">Randomize power-on CPU/PPU alignment</Control>
 
 			<Control ID="tpgOverclocking">Розгін</Control>
 			<Control ID="grpOverclocking">Розгін CPU</Control>

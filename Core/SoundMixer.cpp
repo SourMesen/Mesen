@@ -203,9 +203,6 @@ void SoundMixer::SetNesModel(NesModel model)
 void SoundMixer::UpdateRates(bool forceUpdate)
 {
 	uint32_t newRate = _console->GetCpu()->GetClockRate(_model);
-	if(!_settings->GetOverclockAdjustApu()) {
-		newRate = (uint32_t)(newRate * (double)_settings->GetOverclockRate() / 100);
-	}
 
 	if(_settings->CheckFlag(EmulationFlags::IntegerFpsMode)) {
 		//Adjust sample rate when running at 60.0 fps instead of 60.1
