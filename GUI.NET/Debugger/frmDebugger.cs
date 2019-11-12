@@ -112,6 +112,7 @@ namespace Mesen.GUI.Debugger
 			this.mnuBreakOnBrk.Checked = ConfigManager.Config.DebugInfo.BreakOnBrk;
 			this.mnuBreakOnUninitMemoryRead.Checked = ConfigManager.Config.DebugInfo.BreakOnUninitMemoryRead;
 			this.mnuBreakOnDecayedOamRead.Checked = ConfigManager.Config.DebugInfo.BreakOnDecayedOamRead;
+			this.mnuBreakOnPpu2006ScrollGlitch.Checked = ConfigManager.Config.DebugInfo.BreakOnPpu2006ScrollGlitch;
 			this.mnuBreakOnCrash.Checked = ConfigManager.Config.DebugInfo.BreakOnCrash;
 			this.mnuBreakOnDebuggerFocus.Checked = ConfigManager.Config.DebugInfo.BreakOnDebuggerFocus;
 			this.mnuBringToFrontOnBreak.Checked = ConfigManager.Config.DebugInfo.BringToFrontOnBreak;
@@ -427,6 +428,7 @@ namespace Mesen.GUI.Debugger
 			SetFlag(DebuggerFlags.BreakOnBrk, config.BreakOnBrk);
 			SetFlag(DebuggerFlags.BreakOnUninitMemoryRead, config.BreakOnUninitMemoryRead);
 			SetFlag(DebuggerFlags.BreakOnDecayedOamRead, config.BreakOnDecayedOamRead);
+			SetFlag(DebuggerFlags.BreakOnPpu2006ScrollGlitch, config.BreakOnPpu2006ScrollGlitch);
 			SetFlag(DebuggerFlags.BreakOnInit, config.BreakOnInit);
 			SetFlag(DebuggerFlags.BreakOnPlay, config.BreakOnPlay);
 			SetFlag(DebuggerFlags.BreakOnFirstCycle, config.BreakOnFirstCycle);
@@ -1221,6 +1223,13 @@ namespace Mesen.GUI.Debugger
 		private void mnuBreakOnDecayedOamRead_Click(object sender, EventArgs e)
 		{
 			ConfigManager.Config.DebugInfo.BreakOnDecayedOamRead = mnuBreakOnDecayedOamRead.Checked;
+			ConfigManager.ApplyChanges();
+			UpdateDebuggerFlags();
+		}
+		
+		private void mnuBreakOnPpu2006ScrollGlitch_Click(object sender, EventArgs e)
+		{
+			ConfigManager.Config.DebugInfo.BreakOnPpu2006ScrollGlitch = mnuBreakOnPpu2006ScrollGlitch.Checked;
 			ConfigManager.ApplyChanges();
 			UpdateDebuggerFlags();
 		}

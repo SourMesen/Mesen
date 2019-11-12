@@ -1737,6 +1737,8 @@ namespace Mesen.GUI
 		BreakOnPlay = 0x8000,
 
 		BreakOnFirstCycle = 0x10000,
+
+		BreakOnPpu2006ScrollGlitch = 0x20000,
 	}
 
 	public struct InteropRomInfo
@@ -2357,6 +2359,7 @@ namespace Mesen.GUI
 		BreakOnCpuCrash = 9,
 		Pause = 10,
 		BreakAfterSuspend = 11,
+		BreakOnPpu2006ScrollGlitch = 12
 	}
 	
 	public enum PpuAddressType

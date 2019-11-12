@@ -137,6 +137,7 @@ namespace Mesen.GUI.Debugger
 			this.toolStripMenuItem26 = new System.Windows.Forms.ToolStripSeparator();
 			this.mnuBreakOnDecayedOamRead = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuBreakOnUninitMemoryRead = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuBreakOnPpu2006ScrollGlitch = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem15 = new System.Windows.Forms.ToolStripSeparator();
 			this.mnuBreakOnOpen = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuBreakOnDebuggerFocus = new System.Windows.Forms.ToolStripMenuItem();
@@ -1216,6 +1217,7 @@ namespace Mesen.GUI.Debugger
             this.toolStripMenuItem26,
             this.mnuBreakOnDecayedOamRead,
             this.mnuBreakOnUninitMemoryRead,
+            this.mnuBreakOnPpu2006ScrollGlitch,
             this.toolStripMenuItem15,
             this.mnuBreakOnOpen,
             this.mnuBreakOnDebuggerFocus,
@@ -1302,6 +1304,14 @@ namespace Mesen.GUI.Debugger
 			this.mnuBreakOnUninitMemoryRead.Size = new System.Drawing.Size(261, 22);
 			this.mnuBreakOnUninitMemoryRead.Text = "Break on uninitialized memory read";
 			this.mnuBreakOnUninitMemoryRead.Click += new System.EventHandler(this.mnuBreakOnUninitMemoryRead_Click);
+			// 
+			// mnuBreakOnPpu2006ScrollGlitch
+			// 
+			this.mnuBreakOnPpu2006ScrollGlitch.CheckOnClick = true;
+			this.mnuBreakOnPpu2006ScrollGlitch.Name = "mnuBreakOnPpu2006ScrollGlitch";
+			this.mnuBreakOnPpu2006ScrollGlitch.Size = new System.Drawing.Size(261, 22);
+			this.mnuBreakOnPpu2006ScrollGlitch.Text = "Break on PPU $2006 scroll glitch";
+			this.mnuBreakOnPpu2006ScrollGlitch.Click += new System.EventHandler(this.mnuBreakOnPpu2006ScrollGlitch_Click);
 			// 
 			// toolStripMenuItem15
 			// 
@@ -2271,5 +2281,6 @@ namespace Mesen.GUI.Debugger
 		private System.Windows.Forms.ToolStripMenuItem mnuRunCpuCycle;
 		private System.Windows.Forms.ToolStripMenuItem mnuShowSelectionLength;
 		private System.Windows.Forms.ToolStripMenuItem mnuWatchWindow;
+		private System.Windows.Forms.ToolStripMenuItem mnuBreakOnPpu2006ScrollGlitch;
 	}
 }
