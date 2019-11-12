@@ -423,7 +423,7 @@ void PPU::WriteRAM(uint16_t addr, uint8_t value)
 				//Video RAM update is apparently delayed by 2-3 PPU cycles (based on Visual NES findings)
 				//A 3-cycle delay causes issues with the scanline test.
 				_needStateUpdate = true;
-				_updateVramAddrDelay = 2;
+				_updateVramAddrDelay = 3;
 				_updateVramAddr = _state.TmpVideoRamAddr;
 				_console->DebugSetLastFramePpuScroll(_updateVramAddr, _state.XScroll, false);
 			} else {
@@ -1284,10 +1284,24 @@ void PPU::UpdateState()
 	if(_updateVramAddrDelay > 0) {
 		_updateVramAddrDelay--;
 		if(_updateVramAddrDelay == 0) {
-			_state.VideoRamAddr = _updateVramAddr;
+			if(_scanline < 240 && IsRenderingEnabled()) {
+				//When a $2006 address update lands on the Y or X increment, the written value is bugged and is ANDed with the incremented value
+				if(_cycle == 257) {
+					_state.VideoRamAddr &= _updateVramAddr;
+				} else if(_cycle > 0 && (_cycle & 0x07) == 0 && (_cycle <= 256 || _cycle > 320)) {
+					_state.VideoRamAddr = (_updateVramAddr & ~0x1F) | (_state.VideoRamAddr & _updateVramAddr & 0x1F);
+				} else {
+					_state.VideoRamAddr = _updateVramAddr;
+				}
+			} else {
+				_state.VideoRamAddr = _updateVramAddr;
+			}
+
+			//The glitches updates corrupt both V and T, so set the new value of V back into T
+			_state.TmpVideoRamAddr = _state.VideoRamAddr;
 
 			if(_scanline >= 240 || !IsRenderingEnabled()) {
-				//Only set the VRAM address on the bus if the PPU is rendering
+				//Only set the VRAM address on the bus if the PPU is not rendering
 				//More info here: https://forums.nesdev.com/viewtopic.php?p=132145#p132145
 				//Trigger bus address change when setting the vram address - needed by MMC3 IRQ counter
 				//"4) Should be clocked when A12 changes to 1 via $2006 write"
