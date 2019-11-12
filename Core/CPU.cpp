@@ -141,6 +141,10 @@ void CPU::Reset(bool softReset, NesModel model)
 			std::uniform_int_distribution<> distCpu(0, cpuDivider - 1);
 			_ppuOffset = distPpu(mt);
 			cpuOffset += distCpu(mt);
+
+			string ppuAlignment = " PPU: " + std::to_string(_ppuOffset) + "/" + std::to_string(ppuDivider - 1);
+			string cpuAlignment = " CPU: " + std::to_string(cpuOffset) + "/" + std::to_string(cpuDivider - 1);
+			MessageManager::Log("Power-on alignment -" + ppuAlignment + cpuAlignment);
 		} else {
 			_ppuOffset = 2;
 			cpuOffset = 0;
