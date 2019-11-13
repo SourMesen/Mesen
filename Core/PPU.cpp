@@ -412,7 +412,9 @@ void PPU::WriteRAM(uint16_t addr, uint8_t value)
 				_state.TmpVideoRamAddr = (_state.TmpVideoRamAddr & ~0x73E0) | ((value & 0xF8) << 2) | ((value & 0x07) << 12);
 			} else {
 				_state.XScroll = value & 0x07;
-				_state.TmpVideoRamAddr = (_state.TmpVideoRamAddr & ~0x001F) | (value >> 3);
+
+				uint16_t newAddr = (_state.TmpVideoRamAddr & ~0x001F) | (value >> 3);
+				ProcessTmpAddrScrollGlitch(newAddr, _console->GetMemoryManager()->GetOpenBus() >> 3, 0x001F);
 			}
 			_state.WriteToggle = !_state.WriteToggle;
 			break;
@@ -420,14 +422,14 @@ void PPU::WriteRAM(uint16_t addr, uint8_t value)
 			if(_state.WriteToggle) {
 				_state.TmpVideoRamAddr = (_state.TmpVideoRamAddr & ~0x00FF) | value;
 
-				//Video RAM update is apparently delayed by 2-3 PPU cycles (based on Visual NES findings)
-				//A 3-cycle delay causes issues with the scanline test.
+				//Video RAM update is apparently delayed by 3 PPU cycles (based on Visual NES findings)
 				_needStateUpdate = true;
 				_updateVramAddrDelay = 3;
 				_updateVramAddr = _state.TmpVideoRamAddr;
 				_console->DebugSetLastFramePpuScroll(_updateVramAddr, _state.XScroll, false);
 			} else {
-				_state.TmpVideoRamAddr = (_state.TmpVideoRamAddr & ~0xFF00) | ((value & 0x3F) << 8);
+				uint16_t newAddr = (_state.TmpVideoRamAddr & ~0xFF00) | ((value & 0x3F) << 8);
+				ProcessTmpAddrScrollGlitch(newAddr, _console->GetMemoryManager()->GetOpenBus() << 8, 0x0C00);
 			}
 			_state.WriteToggle = !_state.WriteToggle;
 			break;
@@ -488,13 +490,24 @@ bool PPU::IsRenderingEnabled()
 	return _renderingEnabled;
 }
 
+void PPU::ProcessTmpAddrScrollGlitch(uint16_t normalAddr, uint16_t value, uint16_t mask)
+{
+	_state.TmpVideoRamAddr = normalAddr;
+	if(_cycle == 257 && _settings->CheckFlag(EmulationFlags::EnablePpu2000ScrollGlitch)) {
+		//Use open bus to set some parts of V (glitch that occurs when writing to $2000/$2005/$2006 on cycle 257)
+		_state.VideoRamAddr = (_state.VideoRamAddr & ~mask) | (value & mask);
+	}
+}
+
 void PPU::SetControlRegister(uint8_t value)
 {
 	_state.Control = value;
 
 	uint8_t nameTable = (_state.Control & 0x03);
-	_state.TmpVideoRamAddr = (_state.TmpVideoRamAddr & ~0x0C00) | (nameTable << 10);
 
+	uint16_t normalAddr = (_state.TmpVideoRamAddr & ~0x0C00) | (nameTable << 10);
+	ProcessTmpAddrScrollGlitch(normalAddr, _console->GetMemoryManager()->GetOpenBus() << 10, 0x0C00);
+	
 	_flags.VerticalWrite = (_state.Control & 0x04) == 0x04;
 	_flags.SpritePatternAddr = ((_state.Control & 0x08) == 0x08) ? 0x1000 : 0x0000;
 	_flags.BackgroundPatternAddr = ((_state.Control & 0x10) == 0x10) ? 0x1000 : 0x0000;
@@ -1284,7 +1297,7 @@ void PPU::UpdateState()
 	if(_updateVramAddrDelay > 0) {
 		_updateVramAddrDelay--;
 		if(_updateVramAddrDelay == 0) {
-			if(_scanline < 240 && IsRenderingEnabled()) {
+			if(_settings->CheckFlag(EmulationFlags::EnablePpu2006ScrollGlitch) && _scanline < 240 && IsRenderingEnabled()) {
 				//When a $2006 address update lands on the Y or X increment, the written value is bugged and is ANDed with the incremented value
 				if(_cycle == 257) {
 					_state.VideoRamAddr &= _updateVramAddr;
@@ -1319,7 +1332,7 @@ void PPU::UpdateState()
 			_needStateUpdate = true;
 		}
 	}
-
+	
 	if(_ignoreVramRead > 0) {
 		_ignoreVramRead--;
 		if(_ignoreVramRead > 0) {

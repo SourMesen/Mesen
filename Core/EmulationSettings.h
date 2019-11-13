@@ -35,6 +35,8 @@ enum EmulationFlags : uint64_t
 	
 	SwapDutyCycles = 0x10000,
 
+	DisableGameSelectionScreen = 0x20000,
+
 	AutoConfigureInput = 0x40000,
 
 	ShowLagCounter = 0x80000,
@@ -71,7 +73,8 @@ enum EmulationFlags : uint64_t
 
 	AdaptiveSpriteLimit = 0x80000000000,
 
-	DisableGameSelectionScreen = 0x200000000000,
+	EnablePpu2006ScrollGlitch = 0x100000000000,
+	EnablePpu2000ScrollGlitch = 0x200000000000,
 
 	ConfirmExitResetPower = 0x400000000000,
 

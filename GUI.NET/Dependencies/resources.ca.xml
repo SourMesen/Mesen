@@ -321,7 +321,9 @@
 			<Control ID="chkDisablePpuReset">No reestableixis la PPU al reiniciar la consola (comportament de la Famicom)</Control>
 			<Control ID="chkUseNes101Hvc101Behavior">Simula el comportament de la NES/HVC-101 (Top-loader / AV Famicom)</Control>
 			<Control ID="chkMapperRandomPowerOnState">Randomize power-on state for mappers</Control>
-			<Control ID="chkRandomizeCpuPpuAlignment">Randomize power-on CPU/PPU alignment</Control>
+			<Control ID="chkRandomizeCpuPpuAlignment">Randomize power-on/reset CPU/PPU alignment</Control>
+			<Control ID="chkEnablePpu2006ScrollGlitch">Enable PPU $2006 scroll glitch emulation</Control>
+			<Control ID="chkEnablePpu2000ScrollGlitch">Enable PPU $2000/$2005/$2006 first-write scroll glitch emulation</Control>
 
 			<Control ID="tpgOverclocking">Forçament</Control>
 			<Control ID="grpOverclocking">Forçament de CPU</Control>

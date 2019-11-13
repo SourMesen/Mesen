@@ -321,6 +321,8 @@
 			<Control ID="chkUseNes101Hvc101Behavior">Simuler le comportement du NES/HVC-101 (Top Loader / AV Famicom)</Control>
 			<Control ID="chkMapperRandomPowerOnState">Démarrer le jeu avec le mapper dans un état aléatoire</Control>
 			<Control ID="chkRandomizeCpuPpuAlignment">Démarrer le jeu avec un alignement CPU/PPU aléatoire</Control>
+			<Control ID="chkEnablePpu2006ScrollGlitch">Simuler le bug de scrolling lors de l'écriture à $2006</Control>
+			<Control ID="chkEnablePpu2000ScrollGlitch">Simuler le bug de scrolling lors de l'écriture à $2000/$2005/$2006</Control>
 
 			<Control ID="lblRamPowerOnState">État initial de la mémoire au démarrage : </Control>
 
@@ -1088,7 +1090,7 @@
 		<Enum ID="RamPowerOnState">
 			<Value ID="AllZeros">Tous les bits à 0 (Défaut)</Value>
 			<Value ID="AllOnes">Tous les bits à 1</Value>
-			<Value ID="Random">Valeurs aléatoires</Value>
+			<Value ID="Random">Valeurs aléatoires (Recommandé pour le développement)</Value>
 		</Enum>
 		<Enum ID="CheatCurrentFilterType">
 			<Value ID="Smaller">Plus petite que</Value>

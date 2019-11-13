@@ -23,6 +23,8 @@ namespace Mesen.GUI.Config
 		public bool UseNes101Hvc101Behavior = false;
 		public bool EnableMapperRandomPowerOnState = false;
 		public bool RandomizeCpuPpuAlignment = false;
+		public bool EnablePpu2006ScrollGlitch = false;
+		public bool EnablePpu2000ScrollGlitch = false;
 
 		public bool UseAlternativeMmc3Irq = false;
 
@@ -59,6 +61,8 @@ namespace Mesen.GUI.Config
 			InteropEmu.SetFlag(EmulationFlags.UseNes101Hvc101Behavior, emulationInfo.UseNes101Hvc101Behavior);
 			InteropEmu.SetFlag(EmulationFlags.RandomizeMapperPowerOnState, emulationInfo.EnableMapperRandomPowerOnState);
 			InteropEmu.SetFlag(EmulationFlags.RandomizeCpuPpuAlignment, emulationInfo.RandomizeCpuPpuAlignment);
+			InteropEmu.SetFlag(EmulationFlags.EnablePpu2000ScrollGlitch, emulationInfo.EnablePpu2000ScrollGlitch);
+			InteropEmu.SetFlag(EmulationFlags.EnablePpu2006ScrollGlitch, emulationInfo.EnablePpu2006ScrollGlitch);
 
 			InteropEmu.SetPpuNmiConfig(emulationInfo.PpuExtraScanlinesBeforeNmi, emulationInfo.PpuExtraScanlinesAfterNmi);
 
