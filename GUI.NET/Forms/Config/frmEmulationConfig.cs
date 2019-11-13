@@ -37,7 +37,10 @@ namespace Mesen.GUI.Forms.Config
 			AddBinding("EnableOamDecay", chkEnableOamDecay);
 			AddBinding("UseNes101Hvc101Behavior", chkUseNes101Hvc101Behavior);
 			AddBinding("EnableMapperRandomPowerOnState", chkMapperRandomPowerOnState);
+
 			AddBinding("RandomizeCpuPpuAlignment", chkRandomizeCpuPpuAlignment);
+			AddBinding("EnablePpu2006ScrollGlitch", chkEnablePpu2006ScrollGlitch);
+			AddBinding("EnablePpu2000ScrollGlitch", chkEnablePpu2000ScrollGlitch);
 
 			AddBinding("PpuExtraScanlinesBeforeNmi", nudExtraScanlinesBeforeNmi);
 			AddBinding("PpuExtraScanlinesAfterNmi", nudExtraScanlinesAfterNmi);

@@ -109,49 +109,47 @@ void CPU::Reset(bool softReset, NesModel model)
 		_runIrq = false;
 	}
 
-	if(!softReset) {
-		uint8_t ppuDivider;
-		uint8_t cpuDivider;
-		switch(model) {
-			default:
-			case NesModel::NTSC:
-				ppuDivider = 4;
-				cpuDivider = 12;
-				break;
+	uint8_t ppuDivider;
+	uint8_t cpuDivider;
+	switch(model) {
+		default:
+		case NesModel::NTSC:
+			ppuDivider = 4;
+			cpuDivider = 12;
+			break;
 
-			case NesModel::PAL:
-				ppuDivider = 5;
-				cpuDivider = 16;
-				break;
+		case NesModel::PAL:
+			ppuDivider = 5;
+			cpuDivider = 16;
+			break;
 
-			case NesModel::Dendy:
-				ppuDivider = 5;
-				cpuDivider = 15;
-				break;
-		}
-
-		_cycleCount = -1;
-		_masterClock = 0;
-
-		uint8_t cpuOffset = 0;
-		if(_console->GetSettings()->CheckFlag(EmulationFlags::RandomizeCpuPpuAlignment)) {
-			std::random_device rd;
-			std::mt19937 mt(rd());
-			std::uniform_int_distribution<> distPpu(0, ppuDivider - 1);
-			std::uniform_int_distribution<> distCpu(0, cpuDivider - 1);
-			_ppuOffset = distPpu(mt);
-			cpuOffset += distCpu(mt);
-
-			string ppuAlignment = " PPU: " + std::to_string(_ppuOffset) + "/" + std::to_string(ppuDivider - 1);
-			string cpuAlignment = " CPU: " + std::to_string(cpuOffset) + "/" + std::to_string(cpuDivider - 1);
-			MessageManager::Log("Power-on alignment -" + ppuAlignment + cpuAlignment);
-		} else {
-			_ppuOffset = 2;
-			cpuOffset = 0;
-		}
-
-		_masterClock += cpuDivider + cpuOffset;
+		case NesModel::Dendy:
+			ppuDivider = 5;
+			cpuDivider = 15;
+			break;
 	}
+
+	_cycleCount = -1;
+	_masterClock = 0;
+
+	uint8_t cpuOffset = 0;
+	if(_console->GetSettings()->CheckFlag(EmulationFlags::RandomizeCpuPpuAlignment)) {
+		std::random_device rd;
+		std::mt19937 mt(rd());
+		std::uniform_int_distribution<> distPpu(0, ppuDivider - 1);
+		std::uniform_int_distribution<> distCpu(0, cpuDivider - 1);
+		_ppuOffset = distPpu(mt);
+		cpuOffset += distCpu(mt);
+
+		string ppuAlignment = " PPU: " + std::to_string(_ppuOffset) + "/" + std::to_string(ppuDivider - 1);
+		string cpuAlignment = " CPU: " + std::to_string(cpuOffset) + "/" + std::to_string(cpuDivider - 1);
+		MessageManager::Log("CPU/PPU alignment -" + ppuAlignment + cpuAlignment);
+	} else {
+		_ppuOffset = 2;
+		cpuOffset = 0;
+	}
+
+	_masterClock += cpuDivider + cpuOffset;
 
 	//The CPU takes 8 cycles before it starts executing the ROM's code after a reset/power up
 	for(int i = 0; i < 8; i++) {

@@ -112,6 +112,8 @@ class PPU : public IMemoryHandler, public Snapshotable
 
 		bool IsRenderingEnabled();
 
+		void ProcessTmpAddrScrollGlitch(uint16_t normalAddr, uint16_t value, uint16_t mask);
+
 		void SetOpenBus(uint8_t mask, uint8_t value);
 		uint8_t ApplyOpenBus(uint8_t mask, uint8_t value);
 
