@@ -124,6 +124,11 @@ void RewindManager::PopHistory()
 void RewindManager::Start(bool forDebugger)
 {
 	if(_rewindState == RewindState::Stopped && _settings->GetRewindBufferSize() > 0) {
+		if(_history.empty() && !forDebugger) {
+			//No history to rewind
+			return;
+		}
+
 		_console->Pause();
 
 		_rewindState = forDebugger ? RewindState::Debugging : RewindState::Starting;
