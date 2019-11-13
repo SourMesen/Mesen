@@ -151,6 +151,8 @@ protected:
 	void SetMirroringType(MirroringType type);
 	MirroringType GetMirroringType();
 
+	__forceinline uint8_t InternalReadVRAM(uint16_t addr);
+
 public:
 	static constexpr uint32_t NametableCount = 0x10;
 	static constexpr uint32_t NametableSize = 0x400;
@@ -178,15 +180,14 @@ public:
 	RomInfo GetRomInfo();
 	uint32_t GetMapperDipSwitchCount();
 
-	__forceinline uint8_t ReadRAM(uint16_t addr) override;
+	uint8_t ReadRAM(uint16_t addr) override;
 	uint8_t PeekRAM(uint16_t addr) override;
 	uint8_t DebugReadRAM(uint16_t addr);
-	virtual void WriteRAM(uint16_t addr, uint8_t value) override;
+	void WriteRAM(uint16_t addr, uint8_t value) override;
 	void DebugWriteRAM(uint16_t addr, uint8_t value);
 	void WritePrgRam(uint16_t addr, uint8_t value);
 
-	__forceinline uint8_t InternalReadVRAM(uint16_t addr);
-	__forceinline virtual uint8_t MapperReadVRAM(uint16_t addr, MemoryOperationType operationType);
+	virtual uint8_t MapperReadVRAM(uint16_t addr, MemoryOperationType operationType);
 	
 	__forceinline uint8_t ReadVRAM(uint16_t addr, MemoryOperationType type = MemoryOperationType::PpuRenderingRead)
 	{

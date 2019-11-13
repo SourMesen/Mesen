@@ -437,6 +437,7 @@ uint32_t CPU::GetClockRate(NesModel model)
 void CPU::SetMasterClockDivider(NesModel region)
 {
 	switch(region) {
+		default:
 		case NesModel::NTSC:
 			_startClockCount = 6;
 			_endClockCount = 6;

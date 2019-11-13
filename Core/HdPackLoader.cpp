@@ -197,7 +197,7 @@ bool HdPackLoader::LoadPack()
 		InitializeHdPack();
 
 		return true;
-	} catch(std::exception ex) {
+	} catch(std::exception &ex) {
 		MessageManager::Log(string("[HDPack] Error loading HDPack: ") + ex.what() + " on line: " + currentLine);
 		return false;
 	}

@@ -54,7 +54,7 @@ void RunEmu()
 {
 	try {
 		Run();
-	} catch(std::exception ex) {
+	} catch(std::exception&) {
 
 	}
 }

@@ -142,7 +142,7 @@ class PPU : public IMemoryHandler, public Snapshotable
 
 		void UpdateMinimumDrawCycles();
 
-		__forceinline uint8_t GetPixelColor();
+		uint8_t GetPixelColor();
 		__forceinline virtual void DrawPixel();
 		void UpdateGrayscaleAndIntensifyBits();
 		virtual void SendFrame();
@@ -191,7 +191,7 @@ class PPU : public IMemoryHandler, public Snapshotable
 			ranges.AddHandler(MemoryOperation::Write, 0x4014);
 		}
 
-		__forceinline uint8_t ReadPaletteRAM(uint16_t addr);
+		uint8_t ReadPaletteRAM(uint16_t addr);
 		void WritePaletteRAM(uint16_t addr, uint8_t value);
 
 		uint8_t ReadRAM(uint16_t addr) override;

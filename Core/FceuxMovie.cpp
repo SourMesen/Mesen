@@ -43,7 +43,7 @@ bool FceuxMovie::InitializeData(stringstream &filestream)
 			uint32_t systemAction = 0;
 			try {
 				systemAction = (uint32_t)std::atol(lineData[0].c_str());
-			} catch(std::exception ex) {
+			} catch(std::exception&) {
 			}
 			_systemActionByFrame.push_back(systemAction);
 

@@ -260,7 +260,7 @@ void SaveStateManager::LoadRecentGame(string filename, bool resetGame)
 				SaveStateManager::LoadState(stateStream, false);
 			}
 		}
-	} catch(std::exception ex) { 
+	} catch(std::exception&) { 
 		_console->Stop();
 	}
 	_console->Resume();

@@ -121,7 +121,7 @@ void TraceLogger::SetOptions(TraceLoggerOptions options)
 			if(!match.str(4).empty()) {
 				try {
 					part.MinWidth = std::stoi(match.str(4));
-				} catch(std::exception) {
+				} catch(std::exception &) {
 				}
 			}
 			part.DisplayInHex = match.str(5) == "h";

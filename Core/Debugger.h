@@ -181,7 +181,7 @@ public:
 	
 	void GetInstructionProgress(InstructionProgress &state);
 	void GetApuState(ApuState *state);
-	__forceinline void GetState(DebugState *state, bool includeMapperInfo = true);
+	void GetState(DebugState *state, bool includeMapperInfo = true);
 	void SetState(DebugState state);
 
 	void Suspend();
