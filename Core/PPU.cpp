@@ -44,6 +44,7 @@ PPU::~PPU()
 
 void PPU::Reset()
 {
+	_masterClock = 0;
 	_preventVblFlag = false;
 
 	_needStateUpdate = false;
