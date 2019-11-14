@@ -1226,6 +1226,8 @@
 			<Value ID="Nmi">NMI</Value>
 			<Value ID="Irq">IRQ</Value>
 			<Value ID="SpriteZeroHit">Sprite 0 Hit</Value>
+			<Value ID="Breakpoint">Breakpoint</Value>
+			<Value ID="DmcDmaRead">DMC DMA Read</Value>
 		</Enum>
 		<Enum ID="BreakpointType">
 			<Value ID="Global">Global</Value>

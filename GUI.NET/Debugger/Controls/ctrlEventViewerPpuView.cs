@@ -129,6 +129,7 @@ namespace Mesen.GUI.Debugger.Controls
 				case DebugEventType.Irq: return cfg.EventViewerShowIrq;
 				case DebugEventType.SpriteZeroHit: return cfg.EventViewerShowSpriteZeroHit;
 				case DebugEventType.Breakpoint: return cfg.EventViewerShowMarkedBreakpoints;
+				case DebugEventType.DmcDmaRead: return cfg.EventViewerShowDmcDmaReads;
 			}
 			return false;
 		}
@@ -164,6 +165,7 @@ namespace Mesen.GUI.Debugger.Controls
 					new List<Color> { d.EventViewerIrqColor }, //Irq
 					new List<Color> { d.EventViewerSpriteZeroHitColor }, //SpriteZeroHit
 					new List<Color> { d.EventViewerBreakpointColor }, //Breakpoint
+					new List<Color> { d.EventViewerDmcDmaReadColor }, //DMC DMA
 				};
 
 				using(Graphics g = Graphics.FromImage(_screenBitmap)) {
@@ -339,6 +341,11 @@ namespace Mesen.GUI.Debugger.Controls
 											if(debugEvent.PpuLatch >= 0) {
 												values["2nd Write"] = debugEvent.PpuLatch == 0 ? "false" : "true";
 											}
+											break;
+
+										case DebugEventType.DmcDmaRead:
+											values["Address"] = "$" + debugEvent.Address.ToString("X4");
+											values["Value"] = "$" + debugEvent.Value.ToString("X2");
 											break;
 
 										case DebugEventType.Breakpoint:

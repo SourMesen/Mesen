@@ -165,6 +165,7 @@ enum class DebugEventType : uint8_t
 	Irq,
 	SpriteZeroHit,
 	Breakpoint,
+	DmcDmaRead,
 };
 
 struct DebugEventInfo

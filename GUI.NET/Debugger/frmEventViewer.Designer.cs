@@ -37,7 +37,6 @@
 			this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
 			this.lblPpuWrites = new System.Windows.Forms.Label();
 			this.chkShowMapperRegisterWrites = new System.Windows.Forms.CheckBox();
-			this.chkShowSpriteZero = new System.Windows.Forms.CheckBox();
 			this.chkShowPreviousFrameEvents = new System.Windows.Forms.CheckBox();
 			this.chkWrite2000 = new System.Windows.Forms.CheckBox();
 			this.picWrite2000 = new Mesen.GUI.Debugger.ctrlColorPicker();
@@ -61,16 +60,19 @@
 			this.picWrite2007 = new Mesen.GUI.Debugger.ctrlColorPicker();
 			this.picWrite2006 = new Mesen.GUI.Debugger.ctrlColorPicker();
 			this.label1 = new System.Windows.Forms.Label();
-			this.picNmi = new Mesen.GUI.Debugger.ctrlColorPicker();
 			this.chkShowMapperRegisterReads = new System.Windows.Forms.CheckBox();
 			this.picMapperRead = new Mesen.GUI.Debugger.ctrlColorPicker();
 			this.picMapperWrite = new Mesen.GUI.Debugger.ctrlColorPicker();
-			this.chkBreakpoints = new System.Windows.Forms.CheckBox();
-			this.picBreakpoint = new Mesen.GUI.Debugger.ctrlColorPicker();
 			this.chkShowIrq = new System.Windows.Forms.CheckBox();
-			this.picIrq = new Mesen.GUI.Debugger.ctrlColorPicker();
 			this.chkShowNmi = new System.Windows.Forms.CheckBox();
+			this.chkShowSpriteZero = new System.Windows.Forms.CheckBox();
+			this.chkBreakpoints = new System.Windows.Forms.CheckBox();
+			this.chkShowDmcDmaRead = new System.Windows.Forms.CheckBox();
+			this.picIrq = new Mesen.GUI.Debugger.ctrlColorPicker();
+			this.picNmi = new Mesen.GUI.Debugger.ctrlColorPicker();
 			this.picSpriteZeroHit = new Mesen.GUI.Debugger.ctrlColorPicker();
+			this.picBreakpoint = new Mesen.GUI.Debugger.ctrlColorPicker();
+			this.picDmcDmaRead = new Mesen.GUI.Debugger.ctrlColorPicker();
 			this.ctrlEventViewerPpuView = new Mesen.GUI.Debugger.Controls.ctrlEventViewerPpuView();
 			this.tpgListView = new System.Windows.Forms.TabPage();
 			this.ctrlEventViewerListView = new Mesen.GUI.Debugger.Controls.ctrlEventViewerListView();
@@ -79,10 +81,10 @@
 			this.mnuClose = new System.Windows.Forms.ToolStripMenuItem();
 			this.viewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuRefreshOnBreak = new System.Windows.Forms.ToolStripMenuItem();
-			this.chkToggleZoom = new System.Windows.Forms.CheckBox();
-			this.btnToggleView = new System.Windows.Forms.Button();
 			this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
 			this.mnuResetColors = new System.Windows.Forms.ToolStripMenuItem();
+			this.chkToggleZoom = new System.Windows.Forms.CheckBox();
+			this.btnToggleView = new System.Windows.Forms.Button();
 			this.tabMain.SuspendLayout();
 			this.tpgPpuView.SuspendLayout();
 			this.grpShow.SuspendLayout();
@@ -97,12 +99,13 @@
 			((System.ComponentModel.ISupportInitialize)(this.picWrite2005)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.picWrite2007)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.picWrite2006)).BeginInit();
-			((System.ComponentModel.ISupportInitialize)(this.picNmi)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.picMapperRead)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.picMapperWrite)).BeginInit();
-			((System.ComponentModel.ISupportInitialize)(this.picBreakpoint)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.picIrq)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.picNmi)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.picSpriteZeroHit)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.picBreakpoint)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.picDmcDmaRead)).BeginInit();
 			this.tpgListView.SuspendLayout();
 			this.menuStrip1.SuspendLayout();
 			this.SuspendLayout();
@@ -148,11 +151,10 @@
 			this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
 			this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 31F));
 			this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-			this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 19F));
+			this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 25F));
 			this.tableLayoutPanel2.Controls.Add(this.lblPpuWrites, 0, 0);
 			this.tableLayoutPanel2.Controls.Add(this.chkShowMapperRegisterWrites, 0, 9);
-			this.tableLayoutPanel2.Controls.Add(this.chkShowSpriteZero, 0, 16);
-			this.tableLayoutPanel2.Controls.Add(this.chkShowPreviousFrameEvents, 0, 18);
+			this.tableLayoutPanel2.Controls.Add(this.chkShowPreviousFrameEvents, 0, 19);
 			this.tableLayoutPanel2.Controls.Add(this.chkWrite2000, 0, 1);
 			this.tableLayoutPanel2.Controls.Add(this.picWrite2000, 1, 1);
 			this.tableLayoutPanel2.Controls.Add(this.chkWrite2001, 0, 2);
@@ -175,21 +177,24 @@
 			this.tableLayoutPanel2.Controls.Add(this.picWrite2007, 3, 3);
 			this.tableLayoutPanel2.Controls.Add(this.picWrite2006, 3, 2);
 			this.tableLayoutPanel2.Controls.Add(this.label1, 0, 8);
-			this.tableLayoutPanel2.Controls.Add(this.picNmi, 3, 14);
 			this.tableLayoutPanel2.Controls.Add(this.chkShowMapperRegisterReads, 0, 10);
 			this.tableLayoutPanel2.Controls.Add(this.picMapperRead, 3, 10);
 			this.tableLayoutPanel2.Controls.Add(this.picMapperWrite, 3, 9);
-			this.tableLayoutPanel2.Controls.Add(this.chkBreakpoints, 0, 12);
-			this.tableLayoutPanel2.Controls.Add(this.picBreakpoint, 3, 12);
-			this.tableLayoutPanel2.Controls.Add(this.chkShowIrq, 0, 13);
-			this.tableLayoutPanel2.Controls.Add(this.picIrq, 3, 13);
-			this.tableLayoutPanel2.Controls.Add(this.chkShowNmi, 0, 14);
-			this.tableLayoutPanel2.Controls.Add(this.picSpriteZeroHit, 3, 16);
+			this.tableLayoutPanel2.Controls.Add(this.chkShowIrq, 0, 12);
+			this.tableLayoutPanel2.Controls.Add(this.chkShowNmi, 0, 13);
+			this.tableLayoutPanel2.Controls.Add(this.chkShowSpriteZero, 0, 14);
+			this.tableLayoutPanel2.Controls.Add(this.chkBreakpoints, 0, 18);
+			this.tableLayoutPanel2.Controls.Add(this.chkShowDmcDmaRead, 0, 16);
+			this.tableLayoutPanel2.Controls.Add(this.picIrq, 3, 12);
+			this.tableLayoutPanel2.Controls.Add(this.picNmi, 3, 13);
+			this.tableLayoutPanel2.Controls.Add(this.picSpriteZeroHit, 3, 14);
+			this.tableLayoutPanel2.Controls.Add(this.picBreakpoint, 3, 18);
+			this.tableLayoutPanel2.Controls.Add(this.picDmcDmaRead, 3, 16);
 			this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tableLayoutPanel2.Location = new System.Drawing.Point(3, 16);
 			this.tableLayoutPanel2.Margin = new System.Windows.Forms.Padding(0);
 			this.tableLayoutPanel2.Name = "tableLayoutPanel2";
-			this.tableLayoutPanel2.RowCount = 19;
+			this.tableLayoutPanel2.RowCount = 20;
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
@@ -199,6 +204,7 @@
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
+			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
@@ -237,23 +243,11 @@
 			this.chkShowMapperRegisterWrites.UseVisualStyleBackColor = true;
 			this.chkShowMapperRegisterWrites.Click += new System.EventHandler(this.chkShowHide_Click);
 			// 
-			// chkShowSpriteZero
-			// 
-			this.chkShowSpriteZero.AutoSize = true;
-			this.tableLayoutPanel2.SetColumnSpan(this.chkShowSpriteZero, 2);
-			this.chkShowSpriteZero.Location = new System.Drawing.Point(3, 336);
-			this.chkShowSpriteZero.Name = "chkShowSpriteZero";
-			this.chkShowSpriteZero.Size = new System.Drawing.Size(78, 17);
-			this.chkShowSpriteZero.TabIndex = 4;
-			this.chkShowSpriteZero.Text = "Sprite 0 Hit";
-			this.chkShowSpriteZero.UseVisualStyleBackColor = true;
-			this.chkShowSpriteZero.Click += new System.EventHandler(this.chkShowHide_Click);
-			// 
 			// chkShowPreviousFrameEvents
 			// 
 			this.chkShowPreviousFrameEvents.AutoSize = true;
 			this.tableLayoutPanel2.SetColumnSpan(this.chkShowPreviousFrameEvents, 4);
-			this.chkShowPreviousFrameEvents.Location = new System.Drawing.Point(3, 359);
+			this.chkShowPreviousFrameEvents.Location = new System.Drawing.Point(3, 382);
 			this.chkShowPreviousFrameEvents.Name = "chkShowPreviousFrameEvents";
 			this.chkShowPreviousFrameEvents.Size = new System.Drawing.Size(167, 17);
 			this.chkShowPreviousFrameEvents.TabIndex = 8;
@@ -516,17 +510,6 @@
 			this.label1.TabIndex = 58;
 			this.label1.Text = "Others";
 			// 
-			// picNmi
-			// 
-			this.picNmi.Anchor = System.Windows.Forms.AnchorStyles.Left;
-			this.picNmi.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.picNmi.Location = new System.Drawing.Point(158, 314);
-			this.picNmi.Name = "picNmi";
-			this.picNmi.Size = new System.Drawing.Size(14, 14);
-			this.picNmi.TabIndex = 63;
-			this.picNmi.TabStop = false;
-			this.picNmi.BackColorChanged += new System.EventHandler(this.picColor_BackColorChanged);
-			// 
 			// chkShowMapperRegisterReads
 			// 
 			this.chkShowMapperRegisterReads.AutoSize = true;
@@ -561,33 +544,10 @@
 			this.picMapperWrite.TabStop = false;
 			this.picMapperWrite.BackColorChanged += new System.EventHandler(this.picColor_BackColorChanged);
 			// 
-			// chkBreakpoints
-			// 
-			this.chkBreakpoints.AutoSize = true;
-			this.tableLayoutPanel2.SetColumnSpan(this.chkBreakpoints, 3);
-			this.chkBreakpoints.Location = new System.Drawing.Point(3, 267);
-			this.chkBreakpoints.Name = "chkBreakpoints";
-			this.chkBreakpoints.Size = new System.Drawing.Size(121, 17);
-			this.chkBreakpoints.TabIndex = 7;
-			this.chkBreakpoints.Text = "Marked Breakpoints";
-			this.chkBreakpoints.UseVisualStyleBackColor = true;
-			this.chkBreakpoints.Click += new System.EventHandler(this.chkShowHide_Click);
-			// 
-			// picBreakpoint
-			// 
-			this.picBreakpoint.Anchor = System.Windows.Forms.AnchorStyles.Left;
-			this.picBreakpoint.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.picBreakpoint.Location = new System.Drawing.Point(158, 268);
-			this.picBreakpoint.Name = "picBreakpoint";
-			this.picBreakpoint.Size = new System.Drawing.Size(14, 14);
-			this.picBreakpoint.TabIndex = 64;
-			this.picBreakpoint.TabStop = false;
-			this.picBreakpoint.BackColorChanged += new System.EventHandler(this.picColor_BackColorChanged);
-			// 
 			// chkShowIrq
 			// 
 			this.chkShowIrq.AutoSize = true;
-			this.chkShowIrq.Location = new System.Drawing.Point(3, 290);
+			this.chkShowIrq.Location = new System.Drawing.Point(3, 267);
 			this.chkShowIrq.Name = "chkShowIrq";
 			this.chkShowIrq.Size = new System.Drawing.Size(45, 17);
 			this.chkShowIrq.TabIndex = 2;
@@ -595,21 +555,10 @@
 			this.chkShowIrq.UseVisualStyleBackColor = true;
 			this.chkShowIrq.Click += new System.EventHandler(this.chkShowHide_Click);
 			// 
-			// picIrq
-			// 
-			this.picIrq.Anchor = System.Windows.Forms.AnchorStyles.Left;
-			this.picIrq.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.picIrq.Location = new System.Drawing.Point(158, 291);
-			this.picIrq.Name = "picIrq";
-			this.picIrq.Size = new System.Drawing.Size(14, 14);
-			this.picIrq.TabIndex = 60;
-			this.picIrq.TabStop = false;
-			this.picIrq.BackColorChanged += new System.EventHandler(this.picColor_BackColorChanged);
-			// 
 			// chkShowNmi
 			// 
 			this.chkShowNmi.AutoSize = true;
-			this.chkShowNmi.Location = new System.Drawing.Point(3, 313);
+			this.chkShowNmi.Location = new System.Drawing.Point(3, 290);
 			this.chkShowNmi.Name = "chkShowNmi";
 			this.chkShowNmi.Size = new System.Drawing.Size(46, 17);
 			this.chkShowNmi.TabIndex = 3;
@@ -617,16 +566,96 @@
 			this.chkShowNmi.UseVisualStyleBackColor = true;
 			this.chkShowNmi.Click += new System.EventHandler(this.chkShowHide_Click);
 			// 
+			// chkShowSpriteZero
+			// 
+			this.chkShowSpriteZero.AutoSize = true;
+			this.tableLayoutPanel2.SetColumnSpan(this.chkShowSpriteZero, 2);
+			this.chkShowSpriteZero.Location = new System.Drawing.Point(3, 313);
+			this.chkShowSpriteZero.Name = "chkShowSpriteZero";
+			this.chkShowSpriteZero.Size = new System.Drawing.Size(78, 17);
+			this.chkShowSpriteZero.TabIndex = 4;
+			this.chkShowSpriteZero.Text = "Sprite 0 Hit";
+			this.chkShowSpriteZero.UseVisualStyleBackColor = true;
+			this.chkShowSpriteZero.Click += new System.EventHandler(this.chkShowHide_Click);
+			// 
+			// chkBreakpoints
+			// 
+			this.chkBreakpoints.AutoSize = true;
+			this.tableLayoutPanel2.SetColumnSpan(this.chkBreakpoints, 3);
+			this.chkBreakpoints.Location = new System.Drawing.Point(3, 359);
+			this.chkBreakpoints.Name = "chkBreakpoints";
+			this.chkBreakpoints.Size = new System.Drawing.Size(121, 17);
+			this.chkBreakpoints.TabIndex = 7;
+			this.chkBreakpoints.Text = "Marked Breakpoints";
+			this.chkBreakpoints.UseVisualStyleBackColor = true;
+			this.chkBreakpoints.Click += new System.EventHandler(this.chkShowHide_Click);
+			// 
+			// chkShowDmcDmaRead
+			// 
+			this.chkShowDmcDmaRead.AutoSize = true;
+			this.tableLayoutPanel2.SetColumnSpan(this.chkShowDmcDmaRead, 3);
+			this.chkShowDmcDmaRead.Location = new System.Drawing.Point(3, 336);
+			this.chkShowDmcDmaRead.Name = "chkShowDmcDmaRead";
+			this.chkShowDmcDmaRead.Size = new System.Drawing.Size(106, 17);
+			this.chkShowDmcDmaRead.TabIndex = 65;
+			this.chkShowDmcDmaRead.Text = "DMC DMA Read";
+			this.chkShowDmcDmaRead.UseVisualStyleBackColor = true;
+			this.chkShowDmcDmaRead.Click += new System.EventHandler(this.chkShowHide_Click);
+			// 
+			// picIrq
+			// 
+			this.picIrq.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.picIrq.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this.picIrq.Location = new System.Drawing.Point(158, 268);
+			this.picIrq.Name = "picIrq";
+			this.picIrq.Size = new System.Drawing.Size(14, 14);
+			this.picIrq.TabIndex = 60;
+			this.picIrq.TabStop = false;
+			this.picIrq.BackColorChanged += new System.EventHandler(this.picColor_BackColorChanged);
+			// 
+			// picNmi
+			// 
+			this.picNmi.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.picNmi.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this.picNmi.Location = new System.Drawing.Point(158, 291);
+			this.picNmi.Name = "picNmi";
+			this.picNmi.Size = new System.Drawing.Size(14, 14);
+			this.picNmi.TabIndex = 63;
+			this.picNmi.TabStop = false;
+			this.picNmi.BackColorChanged += new System.EventHandler(this.picColor_BackColorChanged);
+			// 
 			// picSpriteZeroHit
 			// 
 			this.picSpriteZeroHit.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.picSpriteZeroHit.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.picSpriteZeroHit.Location = new System.Drawing.Point(158, 337);
+			this.picSpriteZeroHit.Location = new System.Drawing.Point(158, 314);
 			this.picSpriteZeroHit.Name = "picSpriteZeroHit";
 			this.picSpriteZeroHit.Size = new System.Drawing.Size(14, 14);
 			this.picSpriteZeroHit.TabIndex = 61;
 			this.picSpriteZeroHit.TabStop = false;
 			this.picSpriteZeroHit.BackColorChanged += new System.EventHandler(this.picColor_BackColorChanged);
+			// 
+			// picBreakpoint
+			// 
+			this.picBreakpoint.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.picBreakpoint.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this.picBreakpoint.Location = new System.Drawing.Point(158, 360);
+			this.picBreakpoint.Name = "picBreakpoint";
+			this.picBreakpoint.Size = new System.Drawing.Size(14, 14);
+			this.picBreakpoint.TabIndex = 64;
+			this.picBreakpoint.TabStop = false;
+			this.picBreakpoint.BackColorChanged += new System.EventHandler(this.picColor_BackColorChanged);
+			// 
+			// picDmcDmaRead
+			// 
+			this.picDmcDmaRead.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.picDmcDmaRead.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this.picDmcDmaRead.Location = new System.Drawing.Point(158, 337);
+			this.picDmcDmaRead.Name = "picDmcDmaRead";
+			this.picDmcDmaRead.Size = new System.Drawing.Size(14, 14);
+			this.picDmcDmaRead.TabIndex = 66;
+			this.picDmcDmaRead.TabStop = false;
+			this.picDmcDmaRead.BackColorChanged += new System.EventHandler(this.picColor_BackColorChanged);
 			// 
 			// ctrlEventViewerPpuView
 			// 
@@ -643,7 +672,7 @@
 			this.tpgListView.Location = new System.Drawing.Point(4, 22);
 			this.tpgListView.Name = "tpgListView";
 			this.tpgListView.Padding = new System.Windows.Forms.Padding(3);
-			this.tpgListView.Size = new System.Drawing.Size(921, 538);
+			this.tpgListView.Size = new System.Drawing.Size(878, 538);
 			this.tpgListView.TabIndex = 1;
 			this.tpgListView.Text = "List View";
 			this.tpgListView.UseVisualStyleBackColor = true;
@@ -653,7 +682,7 @@
 			this.ctrlEventViewerListView.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.ctrlEventViewerListView.Location = new System.Drawing.Point(3, 3);
 			this.ctrlEventViewerListView.Name = "ctrlEventViewerListView";
-			this.ctrlEventViewerListView.Size = new System.Drawing.Size(915, 532);
+			this.ctrlEventViewerListView.Size = new System.Drawing.Size(872, 532);
 			this.ctrlEventViewerListView.TabIndex = 0;
 			// 
 			// menuStrip1
@@ -701,6 +730,18 @@
 			this.mnuRefreshOnBreak.Text = "Refresh on pause/break";
 			this.mnuRefreshOnBreak.Click += new System.EventHandler(this.mnuRefreshOnBreak_Click);
 			// 
+			// toolStripMenuItem1
+			// 
+			this.toolStripMenuItem1.Name = "toolStripMenuItem1";
+			this.toolStripMenuItem1.Size = new System.Drawing.Size(195, 6);
+			// 
+			// mnuResetColors
+			// 
+			this.mnuResetColors.Name = "mnuResetColors";
+			this.mnuResetColors.Size = new System.Drawing.Size(198, 22);
+			this.mnuResetColors.Text = "Reset colors to default";
+			this.mnuResetColors.Click += new System.EventHandler(this.mnuResetColors_Click);
+			// 
 			// chkToggleZoom
 			// 
 			this.chkToggleZoom.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
@@ -724,18 +765,6 @@
 			this.btnToggleView.TabIndex = 7;
 			this.btnToggleView.UseVisualStyleBackColor = true;
 			this.btnToggleView.Click += new System.EventHandler(this.btnToggleView_Click);
-			// 
-			// toolStripMenuItem1
-			// 
-			this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-			this.toolStripMenuItem1.Size = new System.Drawing.Size(195, 6);
-			// 
-			// mnuResetColors
-			// 
-			this.mnuResetColors.Name = "mnuResetColors";
-			this.mnuResetColors.Size = new System.Drawing.Size(198, 22);
-			this.mnuResetColors.Text = "Reset colors to default";
-			this.mnuResetColors.Click += new System.EventHandler(this.mnuResetColors_Click);
 			// 
 			// frmEventViewer
 			// 
@@ -765,12 +794,13 @@
 			((System.ComponentModel.ISupportInitialize)(this.picWrite2005)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.picWrite2007)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.picWrite2006)).EndInit();
-			((System.ComponentModel.ISupportInitialize)(this.picNmi)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.picMapperRead)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.picMapperWrite)).EndInit();
-			((System.ComponentModel.ISupportInitialize)(this.picBreakpoint)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.picIrq)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.picNmi)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.picSpriteZeroHit)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.picBreakpoint)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.picDmcDmaRead)).EndInit();
 			this.tpgListView.ResumeLayout(false);
 			this.menuStrip1.ResumeLayout(false);
 			this.menuStrip1.PerformLayout();
@@ -833,5 +863,7 @@
 		private ctrlColorPicker picBreakpoint;
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem1;
 		private System.Windows.Forms.ToolStripMenuItem mnuResetColors;
+		private System.Windows.Forms.CheckBox chkShowDmcDmaRead;
+		private ctrlColorPicker picDmcDmaRead;
 	}
 }

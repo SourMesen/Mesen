@@ -170,12 +170,14 @@ namespace Mesen.GUI.Config
 		public bool EventViewerShowIrq = true;
 		public bool EventViewerShowSpriteZeroHit = true;
 		public bool EventViewerShowMarkedBreakpoints = true;
+		public bool EventViewerShowDmcDmaReads = true;
 		public bool EventViewerShowPreviousFrameEvents = true;
 
 		public XmlColor EventViewerMapperRegisterWriteColor = ColorTranslator.FromHtml("#007597");
 		public XmlColor EventViewerMapperRegisterReadColor = ColorTranslator.FromHtml("#C92929");
 		public XmlColor EventViewerNmiColor = ColorTranslator.FromHtml("#ABADAC");
 		public XmlColor EventViewerIrqColor = ColorTranslator.FromHtml("#F9FEAC");
+		public XmlColor EventViewerDmcDmaReadColor = ColorTranslator.FromHtml("#A9FEFC");
 		public XmlColor EventViewerSpriteZeroHitColor = ColorTranslator.FromHtml("#9F93C6");
 		public XmlColor EventViewerBreakpointColor = ColorTranslator.FromHtml("#1898E4");
 

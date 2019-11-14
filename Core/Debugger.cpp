@@ -700,6 +700,7 @@ bool Debugger::ProcessRamOperation(MemoryOperationType type, uint16_t &addr, uin
 		//Used to flag the data in the CDL file
 		isDmcRead = true;
 		type = MemoryOperationType::Read;
+		AddDebugEvent(DebugEventType::DmcDmaRead, addr, value);
 	}
 
 	ProcessCpuOperation(addr, value, type);

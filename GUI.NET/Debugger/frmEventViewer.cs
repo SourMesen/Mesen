@@ -55,6 +55,7 @@ namespace Mesen.GUI.Debugger
 				_binder.AddBinding(nameof(DebugInfo.EventViewerShowSpriteZeroHit), chkShowSpriteZero);
 				_binder.AddBinding(nameof(DebugInfo.EventViewerShowMapperRegisterWrites), chkShowMapperRegisterWrites);
 				_binder.AddBinding(nameof(DebugInfo.EventViewerShowMapperRegisterReads), chkShowMapperRegisterReads);
+				_binder.AddBinding(nameof(DebugInfo.EventViewerShowDmcDmaReads), chkShowDmcDmaRead);
 				_binder.AddBinding(nameof(DebugInfo.EventViewerShowMarkedBreakpoints), chkBreakpoints);
 
 				_binder.AddBinding(nameof(DebugInfo.EventViewerPpuRegisterWrite2000Color), picWrite2000);
@@ -75,6 +76,7 @@ namespace Mesen.GUI.Debugger
 				_binder.AddBinding(nameof(DebugInfo.EventViewerIrqColor), picIrq);
 				_binder.AddBinding(nameof(DebugInfo.EventViewerSpriteZeroHitColor), picSpriteZeroHit);
 				_binder.AddBinding(nameof(DebugInfo.EventViewerBreakpointColor), picBreakpoint);
+				_binder.AddBinding(nameof(DebugInfo.EventViewerDmcDmaReadColor), picDmcDmaRead);
 
 				_binder.AddBinding(nameof(DebugInfo.EventViewerShowPreviousFrameEvents), chkShowPreviousFrameEvents);
 
@@ -294,6 +296,7 @@ namespace Mesen.GUI.Debugger
 			picIrq.BackColor = ColorTranslator.FromHtml("#F9FEAC");
 			picSpriteZeroHit.BackColor = ColorTranslator.FromHtml("#9F93C6");
 			picBreakpoint.BackColor = ColorTranslator.FromHtml("#1898E4");
+			picDmcDmaRead.BackColor = ColorTranslator.FromHtml("#A9FEFC");
 		}
 	}
 }

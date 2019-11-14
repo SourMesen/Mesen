@@ -1234,7 +1234,8 @@ namespace Mesen.GUI
 		Nmi,
 		Irq,
 		SpriteZeroHit,
-		Breakpoint
+		Breakpoint,
+		DmcDmaRead,
 	}
 
 	public struct DebugEventInfo
