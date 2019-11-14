@@ -30,6 +30,18 @@ protected:
 			SetPressedState(Buttons::Y, keyMapping.TurboB);
 			SetPressedState(Buttons::L, keyMapping.LButton);
 			SetPressedState(Buttons::R, keyMapping.RButton);
+
+			if(!_console->GetSettings()->CheckFlag(EmulationFlags::AllowInvalidInput)) {
+				//If both U+D or L+R are pressed at the same time, act as if neither is pressed
+				if(IsPressed(Buttons::Up) && IsPressed(Buttons::Down)) {
+					ClearBit(Buttons::Down);
+					ClearBit(Buttons::Up);
+				}
+				if(IsPressed(Buttons::Left) && IsPressed(Buttons::Right)) {
+					ClearBit(Buttons::Left);
+					ClearBit(Buttons::Right);
+				}
+			}
 		}
 	}
 
