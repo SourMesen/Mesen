@@ -95,17 +95,40 @@ namespace Mesen.GUI.Debugger.Controls
 			_state = state;
 		}
 
-		private bool ShowEvent(DebugEventType type)
+		public static bool ShowEvent(DebugEventInfo evt)
 		{
-			switch(type) {
-				case DebugEventType.PpuRegisterWrite: return ConfigManager.Config.DebugInfo.EventViewerShowPpuRegisterWrites;
-				case DebugEventType.PpuRegisterRead: return ConfigManager.Config.DebugInfo.EventViewerShowPpuRegisterReads;
-				case DebugEventType.MapperRegisterWrite: return ConfigManager.Config.DebugInfo.EventViewerShowMapperRegisterWrites;
-				case DebugEventType.MapperRegisterRead: return ConfigManager.Config.DebugInfo.EventViewerShowMapperRegisterReads;
-				case DebugEventType.Nmi: return ConfigManager.Config.DebugInfo.EventViewerShowNmi;
-				case DebugEventType.Irq: return ConfigManager.Config.DebugInfo.EventViewerShowIrq;
-				case DebugEventType.SpriteZeroHit: return ConfigManager.Config.DebugInfo.EventViewerShowSpriteZeroHit;
-				case DebugEventType.Breakpoint: return ConfigManager.Config.DebugInfo.EventViewerShowMarkedBreakpoints;
+			DebugInfo cfg = ConfigManager.Config.DebugInfo;
+			switch(evt.Type) {
+				case DebugEventType.PpuRegisterWrite: {
+					int register = evt.Address & 0x07;
+					switch(register) {
+						case 0: return cfg.EventViewerShowPpuWrite2000;
+						case 1: return cfg.EventViewerShowPpuWrite2001;
+						case 3: return cfg.EventViewerShowPpuWrite2003;
+						case 4: return cfg.EventViewerShowPpuWrite2004;
+						case 5: return cfg.EventViewerShowPpuWrite2004;
+						case 6: return cfg.EventViewerShowPpuWrite2005;
+						case 7: return cfg.EventViewerShowPpuWrite2006;
+						default: return false;
+					}
+				}
+
+				case DebugEventType.PpuRegisterRead: {
+					int register = evt.Address & 0x07;
+					switch(register) {
+						case 2: return cfg.EventViewerShowPpuRead2002;
+						case 4: return cfg.EventViewerShowPpuRead2004;
+						case 7: return cfg.EventViewerShowPpuRead2007;
+						default: return false;
+					}
+				}
+
+				case DebugEventType.MapperRegisterWrite: return cfg.EventViewerShowMapperRegisterWrites;
+				case DebugEventType.MapperRegisterRead: return cfg.EventViewerShowMapperRegisterReads;
+				case DebugEventType.Nmi: return cfg.EventViewerShowNmi;
+				case DebugEventType.Irq: return cfg.EventViewerShowIrq;
+				case DebugEventType.SpriteZeroHit: return cfg.EventViewerShowSpriteZeroHit;
+				case DebugEventType.Breakpoint: return cfg.EventViewerShowMarkedBreakpoints;
 			}
 			return false;
 		}
@@ -133,8 +156,8 @@ namespace Mesen.GUI.Debugger.Controls
 				
 				List<List<Color>> colors = new List<List<Color>> {
 					null, //None
-					new List<Color>(d.EventViewerPpuRegisterWriteColors.Select((c) => (Color)c)), //PpuRegisterWrite
-					new List<Color>(d.EventViewerPpuRegisterReadColors.Select((c) => (Color)c)), //PpuRegisterRead
+					new List<Color> { d.EventViewerPpuRegisterWrite2000Color, d.EventViewerPpuRegisterWrite2001Color, Color.Black, d.EventViewerPpuRegisterWrite2003Color, d.EventViewerPpuRegisterWrite2004Color, d.EventViewerPpuRegisterWrite2005Color, d.EventViewerPpuRegisterWrite2006Color, d.EventViewerPpuRegisterWrite2007Color }, //PpuRegisterWrite
+					new List<Color> { Color.Black, Color.Black, d.EventViewerPpuRegisterRead2002Color, Color.Black, d.EventViewerPpuRegisterRead2004Color, Color.Black, Color.Black, d.EventViewerPpuRegisterRead2007Color }, //PpuRegisterRead
 					new List<Color> { d.EventViewerMapperRegisterWriteColor }, //MapperRegisterWrite
 					new List<Color> { d.EventViewerMapperRegisterReadColor }, //MapperRegisterRead
 					new List<Color> { d.EventViewerNmiColor }, //Nmi
@@ -248,12 +271,8 @@ namespace Mesen.GUI.Debugger.Controls
 			var enumValues = Enum.GetValues(typeof(DebugEventType));
 			IGrouping<int, DebugEventInfo>[][] groupedEvents = new IGrouping<int, DebugEventInfo>[enumValues.Length][];
 			foreach(DebugEventType eventType in Enum.GetValues(typeof(DebugEventType))) {
-				if(ShowEvent(eventType)) {
-					List<Color> colorList = colors[(int)eventType];
-					groupedEvents[(int)eventType] = _debugEvents.Where((v) => v.Type == eventType).GroupBy((v) => v.Address % colorList.Count).ToArray();
-				} else {
-					groupedEvents[(int)eventType] = null;
-				}
+				List<Color> colorList = colors[(int)eventType];
+				groupedEvents[(int)eventType] = _debugEvents.Where((v) => v.Type == eventType && ShowEvent(v)).GroupBy((v) => v.Address % colorList.Count).ToArray();
 			}
 
 			DrawEvents(g, colors, false, groupedEvents);
@@ -298,16 +317,16 @@ namespace Mesen.GUI.Debugger.Controls
 					List<DebugEventInfo> eventList;
 					if(_debugEventsByCycle.TryGetValue(key, out eventList)) {
 						foreach(DebugEventInfo debugEvent in eventList) {
-							if(ShowEvent(debugEvent.Type)) {
+							if(ShowEvent(debugEvent)) {
 								if(key != _lastKey) {
 									ResetTooltip();
 
 									Dictionary<string, string> values = new Dictionary<string, string>() {
-									{ "Type", ResourceHelper.GetEnumText(debugEvent.Type) },
-									{ "Scanline", debugEvent.Scanline.ToString() },
-									{ "Cycle", debugEvent.Cycle.ToString() },
-									{ "PC", "$" + debugEvent.ProgramCounter.ToString("X4") },
-								};
+										{ "Type", ResourceHelper.GetEnumText(debugEvent.Type) },
+										{ "Scanline", debugEvent.Scanline.ToString() },
+										{ "Cycle", debugEvent.Cycle.ToString() },
+										{ "PC", "$" + debugEvent.ProgramCounter.ToString("X4") },
+									};
 
 									switch(debugEvent.Type) {
 										case DebugEventType.MapperRegisterRead:

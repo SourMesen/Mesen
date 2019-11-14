@@ -418,6 +418,9 @@
     <Compile Include="Debugger\Controls\ctrlCodeScrollbar.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Debugger\Controls\ctrlColorPicker.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Debugger\Controls\ctrlDbgShortcuts.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -705,12 +708,6 @@
     </Compile>
     <Compile Include="Debugger\frmDbgPreferences.Designer.cs">
       <DependentUpon>frmDbgPreferences.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Debugger\frmEventViewerColors.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Debugger\frmEventViewerColors.Designer.cs">
-      <DependentUpon>frmEventViewerColors.cs</DependentUpon>
     </Compile>
     <Compile Include="Debugger\frmDebuggerColors.cs">
       <SubType>Form</SubType>
@@ -1542,9 +1539,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Debugger\frmDbgPreferences.resx">
       <DependentUpon>frmDbgPreferences.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Debugger\frmEventViewerColors.resx">
-      <DependentUpon>frmEventViewerColors.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Debugger\frmDebuggerColors.resx">
       <DependentUpon>frmDebuggerColors.cs</DependentUpon>
