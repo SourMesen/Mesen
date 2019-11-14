@@ -217,6 +217,25 @@ namespace Mesen.GUI.Forms
 			}
 		}
 
+		private ResourcePath? GetIpsFile(ResourcePath romFile)
+		{
+			string[] extensions = new string[3] { ".ips", ".ups", ".bps" };
+			foreach(string ext in extensions) {
+				//Check if [romname].ips exists
+				string file = Path.Combine(romFile.Folder, Path.GetFileNameWithoutExtension(romFile.FileName)) + ext;
+				if(File.Exists(file)) {
+					return file;
+				} else {
+					//Check if [romname].[romext].ips exists
+					file = Path.Combine(romFile.Folder, Path.GetFileName(romFile.FileName)) + ext;
+					if(File.Exists(file)) {
+						return file;
+					}
+				}
+			}
+			return null;
+		}
+
 		private void LoadROM(ResourcePath romFile, bool autoLoadPatches = false, ResourcePath? patchFileToApply = null)
 		{
 			if(romFile.Exists) {
@@ -231,14 +250,7 @@ namespace Mesen.GUI.Forms
 
 					ResourcePath? patchFile = patchFileToApply;
 					if(patchFile == null && autoLoadPatches) {
-						string[] extensions = new string[3] { ".ips", ".ups", ".bps" };
-						foreach(string ext in extensions) {
-							string file = Path.Combine(romFile.Folder, Path.GetFileNameWithoutExtension(romFile.FileName)) + ext;
-							if(File.Exists(file)) {
-								patchFile = file;
-								break;
-							}
-						}
+						patchFile = GetIpsFile(romFile);
 					}
 
 					Task loadRomTask = new Task(() => {
