@@ -786,6 +786,15 @@ void Console::Run()
 					}
 				}
 
+				//When sleeping for a long time (e.g <= 25% speed), sleep in small chunks and check to see if we need to stop sleeping between each sleep call
+				while(targetTime - clockTimer.GetElapsedMS() > 50) {
+					clockTimer.WaitUntil(clockTimer.GetElapsedMS() + 40);
+					if(delay != GetFrameDelay() || _stop || _settings->NeedsPause() || _pauseCounter > 0) {
+						targetTime = 0;
+						break;
+					}
+				}
+
 				//Sleep until we're ready to start the next frame
 				clockTimer.WaitUntil(targetTime);
 
