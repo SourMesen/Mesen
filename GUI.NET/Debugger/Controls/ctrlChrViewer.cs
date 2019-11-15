@@ -195,20 +195,16 @@ namespace Mesen.GUI.Debugger.Controls
 				if(_bottomBank == (chrBank == 1)) {
 					int tileX = _tileIndex % 16;
 					int tileY = _tileIndex / 16;
-					using(Brush brush = new SolidBrush(Color.FromArgb(192, Color.White))) {
-						g.FillRectangle(brush, tileX * 16, tileY * 16, 16, 16);
-						g.DrawRectangle(Pens.Black, tileX * 16, tileY * 16, 16, 16);
-					}
+					g.DrawRectangle(Pens.DarkRed, tileX * 16 - 2, tileY * 16 - 2, 19, 19);
+					g.DrawRectangle(Pens.Red, tileX * 16 - 1, tileY * 16 - 1, 17, 17);
 				}
 
 				if(_hoverTileIndex >= 0) {
 					int tileX = _hoverTileIndex % 16;
 					int tileY = _hoverTileIndex / 16;
 					if(_hoverBottomBank == (chrBank == 1)) {
-						using(Brush brush = new SolidBrush(Color.FromArgb(192, Color.LightBlue))) {
-							g.FillRectangle(brush, tileX * 16, tileY * 16, 16, 16);
-							g.DrawRectangle(Pens.White, tileX * 16 - 1, tileY * 16 - 1, 17, 17);
-						}
+						g.DrawRectangle(Pens.DarkGray, tileX * 16 - 2, tileY * 16 - 2, 19, 19);
+						g.DrawRectangle(Pens.Gray, tileX * 16 - 1, tileY * 16 - 1, 17, 17);
 					} else {
 						if(ConfigManager.Config.DebugInfo.PpuShowInformationOverlay) {
 							string tooltipText = (
