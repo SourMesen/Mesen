@@ -34,7 +34,7 @@ bool FceuxMovie::InitializeData(stringstream &filestream)
 			}
 		} else if(line.size() > 0 && line[0] == '|') {
 			vector<string> lineData = StringUtilities::Split(line.substr(1), '|');
-
+			
 			if(lineData.size() == 0) {
 				continue;
 			}
@@ -68,6 +68,7 @@ bool FceuxMovie::Play(VirtualFile &file)
 	std::stringstream ss;
 	file.ReadFile(ss);
 	_console->GetNotificationManager()->RegisterNotificationListener(shared_from_this());
+	_console->GetBatteryManager()->SetBatteryProvider(shared_from_this());
 	if(InitializeData(ss)) {
 		_console->Reset(false);
 		_isPlaying = true;

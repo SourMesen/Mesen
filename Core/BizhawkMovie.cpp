@@ -6,6 +6,7 @@
 #include "BizhawkMovie.h"
 #include "VsControlManager.h"
 #include "Console.h"
+#include "BatteryManager.h"
 #include "NotificationManager.h"
 
 BizhawkMovie::BizhawkMovie(shared_ptr<Console> console)
@@ -197,6 +198,7 @@ bool BizhawkMovie::Play(VirtualFile &file)
 	
 	_console->GetNotificationManager()->RegisterNotificationListener(shared_from_this());
 	_console->GetSettings()->SetRamPowerOnState(RamPowerOnState::AllOnes);
+	_console->GetBatteryManager()->SetBatteryProvider(shared_from_this());
 	if(InitializeInputData(reader) && InitializeGameData(reader)) {
 		//NesHawk initializes memory to 1s
 		_isPlaying = true;
@@ -215,4 +217,9 @@ void BizhawkMovie::ProcessNotification(ConsoleNotificationType type, void* param
 	if(type == ConsoleNotificationType::GameLoaded) {
 		_console->GetControlManager()->RegisterInputProvider(this);
 	}
+}
+
+vector<uint8_t> BizhawkMovie::LoadBattery(string extension)
+{
+	return vector<uint8_t>();
 }
