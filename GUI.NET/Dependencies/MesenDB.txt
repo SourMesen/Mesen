@@ -4,7 +4,7 @@
 #
 # Automatically generated database based on Nestopia's DB and NesCartDB
 #
-# Generated on 2019-04-26 using:
+# Generated on 2019-11-14 using:
 #     -NesCartDB (dated 2017-08-21)
 #     -Nestopia UE's latest DB (dated 2015-10-22) 
 # 
@@ -6608,6 +6608,7 @@
 6CF34FED,NesNtsc,UNK,,,4,128,128,,0,8,1,h,,,,,
 6D024DC1,NesNtsc,UNK,,,4,128,128,,0,0,0,v,,,,,
 6D09BFBB,NesNtsc,UNK,,,253,80,,,0,0,0,h,,,,,
+6D0D95FA,NesNtsc,UNL-255in1,,,65000,128,64,,0,0,0,v,,,,,
 6D10930F,NesNtsc,UNK,,,1,256,,,0,0,0,h,,,,,
 6D11B5C3,NesNtsc,UNK,,,2,128,,,0,0,0,v,,,,,
 6D156742,NesNtsc,UNK,,,0,32,,,0,8,1,h,,,,,
