@@ -9,18 +9,27 @@ AutoSaveManager::AutoSaveManager(shared_ptr<Console> console)
 	_stopThread = false;
 	_timer.Reset();
 	_autoSaveThread = std::thread([=]() {
+		bool showMessage = false;
+		double targetTime = (double)console->GetSettings()->GetAutoSaveDelay(showMessage) * 60 * 1000;
 		while(!_stopThread) {
-			bool showMessage = false;
 			uint32_t autoSaveDelay = console->GetSettings()->GetAutoSaveDelay(showMessage) * 60 * 1000;
 			if(autoSaveDelay > 0) {
-				if(_timer.GetElapsedMS() > autoSaveDelay) {
-					if(!console->IsDebuggerAttached()) {
-						console->GetSaveStateManager()->SaveState(_autoSaveSlot, showMessage);
+				if(targetTime >= 0 && !console->IsExecutionStopped()) {
+					targetTime -= _timer.GetElapsedMS();
+					_timer.Reset();
+					if(targetTime <= 0) {
+						if(!console->IsDebuggerAttached()) {
+							console->GetSaveStateManager()->SaveState(_autoSaveSlot, showMessage);
+						}
+						targetTime = (double)console->GetSettings()->GetAutoSaveDelay(showMessage) * 60 * 1000;
+						_timer.Reset();
 					}
+				} else {
 					_timer.Reset();
 				}
 			} else {
 				_timer.Reset();
+				targetTime = autoSaveDelay;
 			}
 
 			if(!_stopThread) {
