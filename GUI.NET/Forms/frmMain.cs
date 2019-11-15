@@ -343,6 +343,9 @@ namespace Mesen.GUI.Forms
 				_notifListener.Dispose();
 				_notifListener = null;
 			}
+
+			this.Resize -= frmMain_Resize;
+
 			DebugWindowManager.CloseAll();
 
 			ConfigManager.Config.EmulationInfo.EmulationSpeed = InteropEmu.GetEmulationSpeed();
