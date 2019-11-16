@@ -61,6 +61,10 @@ ifeq ($(PGO),optimize)
 	GCCOPTIONS += ${PROFILE_USE_FLAG}
 endif
 
+ifeq ($(STATICLINK),true)
+	LINKOPTIONS += -static-libgcc -static-libstdc++ 
+endif
+
 OBJFOLDER=obj.$(MESENPLATFORM)
 SHAREDLIB=libMesenCore.$(MESENPLATFORM).dll
 LIBRETROLIB=mesen_libretro.$(MESENPLATFORM).so
@@ -88,12 +92,12 @@ all: ui
 ui: InteropDLL/$(OBJFOLDER)/$(SHAREDLIB)
 	mkdir -p $(RELEASEFOLDER)/Dependencies
 	rm -fr $(RELEASEFOLDER)/Dependencies/*
-	cd UpdateHelper && msbuild /property:Configuration="Release" /property:Platform="AnyCPU"
+	cd UpdateHelper && xbuild /property:Configuration="Release" /property:Platform="AnyCPU"
 	cp "bin/Any CPU/Release/MesenUpdater.exe" $(RELEASEFOLDER)/Dependencies/
 	cp -r GUI.NET/Dependencies/* $(RELEASEFOLDER)/Dependencies/
 	cp InteropDLL/$(OBJFOLDER)/$(SHAREDLIB) $(RELEASEFOLDER)/Dependencies/$(SHAREDLIB)	
 	cd $(RELEASEFOLDER)/Dependencies && zip -r ../Dependencies.zip *	
-	cd GUI.NET && msbuild /property:Configuration="Release" /property:Platform="$(MESENPLATFORM)" /property:PreBuildEvent="" '/property:DefineConstants="HIDETESTMENU;DISABLEAUTOUPDATE"' /property:CodeAnalysisRuleSet=""
+	cd GUI.NET && xbuild /property:Configuration="Release" /property:Platform="$(MESENPLATFORM)" /property:PreBuildEvent="" /property:DefineConstants="HIDETESTMENU,DISABLEAUTOUPDATE"
 
 libretro: Libretro/$(OBJFOLDER)/$(LIBRETROLIB)
 	mkdir -p bin
@@ -139,14 +143,14 @@ Linux/$(OBJFOLDER)/%.o: Linux/libevdev/%.c
 InteropDLL/$(OBJFOLDER)/$(SHAREDLIB): $(SEVENZIPOBJ) $(LUAOBJ) $(UTILOBJ) $(COREOBJ) $(LIBEVDEVOBJ) $(LINUXOBJ) InteropDLL/ConsoleWrapper.cpp InteropDLL/DebugWrapper.cpp
 	mkdir -p bin
 	mkdir -p InteropDLL/$(OBJFOLDER)
-	$(CPPC) $(GCCOPTIONS) -Wl,-z,defs -shared -o $(SHAREDLIB) InteropDLL/*.cpp $(SEVENZIPOBJ) $(LUAOBJ) $(LINUXOBJ) $(LIBEVDEVOBJ) $(UTILOBJ) $(COREOBJ) $(SDL2INC) -pthread $(FSLIB) $(SDL2LIB) $(LIBEVDEVLIB)
+	$(CPPC) $(GCCOPTIONS) $(LINKOPTIONS) -Wl,-z,defs -shared -o $(SHAREDLIB) InteropDLL/*.cpp $(SEVENZIPOBJ) $(LUAOBJ) $(LINUXOBJ) $(LIBEVDEVOBJ) $(UTILOBJ) $(COREOBJ) $(SDL2INC) -pthread $(FSLIB) $(SDL2LIB) $(LIBEVDEVLIB)
 	cp $(SHAREDLIB) bin/pgohelperlib.so
 	mv $(SHAREDLIB) InteropDLL/$(OBJFOLDER)
 	
 Libretro/$(OBJFOLDER)/$(LIBRETROLIB): $(SEVENZIPOBJ) $(UTILOBJ) $(COREOBJ) $(LUAOBJ) Libretro/libretro.cpp
 	mkdir -p bin
 	mkdir -p Libretro/$(OBJFOLDER)
-	$(CPPC) $(GCCOPTIONS) -Wl,-z,defs -shared -o $(LIBRETROLIB) Libretro/*.cpp $(SEVENZIPOBJ) $(UTILOBJ) $(COREOBJ) $(LUAOBJ) -pthread $(FSLIB)
+	$(CPPC) $(GCCOPTIONS) $(LINKOPTIONS) -Wl,-z,defs -shared -o $(LIBRETROLIB) Libretro/*.cpp $(SEVENZIPOBJ) $(UTILOBJ) $(COREOBJ) $(LUAOBJ) -pthread $(FSLIB)
 	cp $(LIBRETROLIB) bin/pgohelperlib.so
 	mv $(LIBRETROLIB) Libretro/$(OBJFOLDER) 
 
