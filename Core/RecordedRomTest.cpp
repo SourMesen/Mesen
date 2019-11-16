@@ -61,7 +61,6 @@ void RecordedRomTest::ValidateFrame(uint16_t* ppuFrameBuffer)
 
 	if(memcmp(_screenshotHashes.front(), md5Hash, 16) != 0) {
 		_badFrameCount++;
-		_console->BreakIfDebugging();
 	} 
 	
 	if (_currentCount == 0 && _repetitionCount.empty()) {

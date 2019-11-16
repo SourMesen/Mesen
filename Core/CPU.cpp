@@ -86,7 +86,7 @@ void CPU::Reset(bool softReset, NesModel model)
 	_spriteDmaOffset = 0;
 	_needHalt = false;
 	_dmcDmaRunning = false;
-	_warnOnCrash = true;
+	_lastCrashWarning = 0;
 
 	//Used by NSF code to disable Frame Counter & DMC interrupts
 	_irqMask = 0xFF;
@@ -293,27 +293,26 @@ uint16_t CPU::FetchOperand()
 	}
 	
 #if !defined(LIBRETRO) && !defined(DUMMYCPU)
-	if(_warnOnCrash && _console->GetSettings()->CheckFlag(EmulationFlags::DeveloperMode)) {
+	if(_lastCrashWarning == 0 || _cycleCount - _lastCrashWarning > 5000000) {
 		MessageManager::DisplayMessage("Error", "GameCrash", "Invalid OP code - CPU crashed.");
-		_warnOnCrash = false;
+		_lastCrashWarning = _cycleCount;
 	}
 
-	_console->BreakIfDebugging();
+	if(_console->GetSettings()->CheckFlag(EmulationFlags::BreakOnCrash)) {
+		//When "Break on Crash" is enabled, open the debugger and break immediately if a crash occurs
+		_console->GetDebugger(true)->BreakImmediately(BreakSource::BreakOnCpuCrash);
+	}
 	
 	if(_console->IsNsf()) {
 		//Don't stop emulation on CPU crash when playing NSFs, reset cpu instead
 		_console->Reset(true);
 		return 0;
-	} else if(!_console->GetDebugger(false) && !_console->GetSettings()->CheckFlag(EmulationFlags::DeveloperMode)) {
-		//Throw an error and stop emulation core (if debugger is not enabled)
-		throw std::runtime_error("Invalid OP code - CPU crashed");
 	} else {
 		return 0;
 	}
 #else 
 	return 0;
 #endif
-
 }
 
 void CPU::EndCpuCycle(bool forRead)

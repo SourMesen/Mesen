@@ -59,7 +59,7 @@ private:
 	bool _prevRunIrq = false;
 	bool _runIrq = false;
 
-	bool _warnOnCrash = true;
+	uint64_t _lastCrashWarning = 0;
 
 #ifdef DUMMYCPU
 	uint32_t _writeCounter = 0;

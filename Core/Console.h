@@ -187,7 +187,6 @@ public:
 	//Used to resume the emu loop after calling Pause()
 	void Resume();
 
-	void BreakIfDebugging();
 	shared_ptr<Debugger> GetDebugger(bool autoStart = true);
 	void StopDebugger();
 
