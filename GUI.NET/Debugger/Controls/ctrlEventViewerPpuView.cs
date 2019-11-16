@@ -106,9 +106,9 @@ namespace Mesen.GUI.Debugger.Controls
 						case 1: return cfg.EventViewerShowPpuWrite2001;
 						case 3: return cfg.EventViewerShowPpuWrite2003;
 						case 4: return cfg.EventViewerShowPpuWrite2004;
-						case 5: return cfg.EventViewerShowPpuWrite2004;
-						case 6: return cfg.EventViewerShowPpuWrite2005;
-						case 7: return cfg.EventViewerShowPpuWrite2006;
+						case 5: return cfg.EventViewerShowPpuWrite2005;
+						case 6: return cfg.EventViewerShowPpuWrite2006;
+						case 7: return cfg.EventViewerShowPpuWrite2007;
 						default: return false;
 					}
 				}
