@@ -115,23 +115,21 @@ namespace Mesen.GUI.Debugger.Controls
 				lineNumbers.Add(relativeAddress);
 				_lineNumberNotes.Add(prgAddress >= 0 ? prgAddress.ToString("X4") : "");
 
-				string trimmed = l.TrimStart();
-				int margin = (l.Length - trimmed.Length) * 10;
-				indents.Add(margin);
+				indents.Add(0);
 
 				int commentIndex;
 				if(isC) {
-					commentIndex = trimmed.IndexOf("//");
+					commentIndex = l.IndexOf("//");
 				} else {
-					commentIndex = trimmed.IndexOfAny(new char[] { ';', '.' });
+					commentIndex = l.IndexOfAny(new char[] { ';', '.' });
 				}
 
 				if(commentIndex >= 0) {
-					comments.Add(trimmed.Substring(commentIndex));
-					codeLines.Add(trimmed.Substring(0, commentIndex));
+					comments.Add(l.Substring(commentIndex));
+					codeLines.Add(l.Substring(0, commentIndex));
 				} else {
 					comments.Add("");
-					codeLines.Add(trimmed);
+					codeLines.Add(l);
 				}
 				lineIndex++;
 			}
