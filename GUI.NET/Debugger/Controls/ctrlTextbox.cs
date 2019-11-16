@@ -890,12 +890,9 @@ namespace Mesen.GUI.Debugger
 
 		private void DrawLine(Graphics g, int currentLine, int marginLeft, int positionY, int lineHeight)
 		{
-			string codeString = _contents[currentLine];
+			string codeString = _contents[currentLine].TrimEnd();
 			string addressString = this.Addressing?[currentLine];
 			string commentString = this.Comments?[currentLine];
-
-			float codeStringLength = g.MeasureString(codeString, this.Font, int.MaxValue, StringFormat.GenericTypographic).Width;
-			float addressStringLength = g.MeasureString(addressString, this.Font, int.MaxValue, StringFormat.GenericTypographic).Width;
 
 			int originalMargin = marginLeft;
 			marginLeft += (LineIndentations != null ? LineIndentations[currentLine] : 0);
@@ -962,7 +959,7 @@ namespace Mesen.GUI.Debugger
 				}
 			}
 
-			this.DrawLineText(g, currentLine, marginLeft, positionY, codeString, addressString, commentString, codeStringLength, addressStringLength, textColor, lineHeight);
+			this.DrawLineText(g, currentLine, marginLeft, positionY, codeString, addressString, commentString, textColor, lineHeight);
 		}
 
 		private void DrawLineNumber(Graphics g, int currentLine, int marginLeft, int positionY, Color addressColor)
@@ -1005,7 +1002,7 @@ namespace Mesen.GUI.Debugger
 			}
 		}
 
-		private void DrawLineText(Graphics g, int currentLine, int marginLeft, int positionY, string codeString, string addressString, string commentString, float codeStringLength, float addressStringLength, Color? textColor, int lineHeight)
+		private void DrawLineText(Graphics g, int currentLine, int marginLeft, int positionY, string codeString, string addressString, string commentString, Color? textColor, int lineHeight)
 		{
 			DebugInfo info = ConfigManager.Config.DebugInfo;
 			
@@ -1109,13 +1106,12 @@ namespace Mesen.GUI.Debugger
 						float xOffset = 0;
 						float charWidth = g.MeasureString("A", this.Font, Point.Empty, StringFormat.GenericTypographic).Width;
 						for(int i = 0; i < parts.Count; i++) {
-							using(Brush b = new SolidBrush(textColor.HasValue && (i < codePartCount || i == parts.Count - 1) ? textColor.Value : colors[i])) {
+							using(Brush b = new SolidBrush(textColor.HasValue && (i >= 1 && (i < codePartCount || i == parts.Count - 1)) ? textColor.Value : colors[i])) {
 								g.DrawString(parts[i], this.Font, b, marginLeft + xOffset, positionY, StringFormat.GenericTypographic);
 								xOffset += charWidth * parts[i].Length;
 								characterCount += parts[i].Length;
 							}
 						}
-						codeStringLength = xOffset;
 					} else {
 						using(Brush fgBrush = new SolidBrush(codeString.EndsWith(":") ? (Color)info.AssemblerLabelDefinitionColor : (textColor ?? defaultColor))) {
 							g.DrawString(codeString, this.Font, fgBrush, marginLeft, positionY, StringFormat.GenericTypographic);
