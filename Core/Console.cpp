@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include <random>
+#include <future>
 #include <thread>
 #include "Console.h"
 #include "CPU.h"
@@ -396,7 +397,6 @@ bool Console::Initialize(VirtualFile &romFile, VirtualFile &patchFile)
 				GetDebugger();
 			}
 
-
 			ResetComponents(false);
 
 			//Reset components before creating rewindmanager, otherwise the first save state it takes will be invalid
@@ -605,7 +605,7 @@ void Console::ResetComponents(bool softReset)
 
 	_resetRunTimers = true;
 
-	KeyManager::UpdateDevices();
+	std::async(std::launch::async, KeyManager::UpdateDevices);
 
 	//This notification MUST be sent before the UpdateInputState() below to allow MovieRecorder to grab the first frame's worth of inputs
 	_notificationManager->SendNotification(softReset ? ConsoleNotificationType::GameReset : ConsoleNotificationType::GameLoaded);
