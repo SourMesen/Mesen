@@ -257,13 +257,13 @@ bool Console::Initialize(VirtualFile &romFile)
 
 bool Console::Initialize(VirtualFile &romFile, VirtualFile &patchFile)
 {
-	Pause();
-	if(!_romFilepath.empty() && _mapper) {
-		//Ensure we save any battery file before loading a new game
-		SaveBatteries();
-	}
-
 	if(romFile.IsValid()) {
+		Pause();
+		if(!_romFilepath.empty() && _mapper) {
+			//Ensure we save any battery file before loading a new game
+			SaveBatteries();
+		}
+
 		_videoDecoder->StopThread();
 
 		shared_ptr<HdPackData> originalHdPackData = _hdData;
@@ -431,17 +431,22 @@ bool Console::Initialize(VirtualFile &romFile, VirtualFile &patchFile)
 			return true;
 		} else {
 			_hdData = originalHdPackData;
+
+			//Reset battery source to current game if new game failed to load
+			_batteryManager->Initialize(FolderUtilities::GetFilename(GetRomInfo().RomName, false));
+			if(_mapper) {
+				_videoDecoder->StartThread();
+			}
+			Resume();
 		}
 	}
 
-	//Reset battery source to current game if new game failed to load
-	_batteryManager->Initialize(FolderUtilities::GetFilename(GetRomInfo().RomName, false));
-	if(_mapper) {
-		_videoDecoder->StartThread();
+	shared_ptr<Debugger> debugger = _debugger;
+	if(debugger) {
+		debugger->Resume();
 	}
 
 	MessageManager::DisplayMessage("Error", "CouldNotLoadFile", romFile.GetFileName());
-	Resume();
 	return false;
 }
 
