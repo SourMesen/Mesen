@@ -13,6 +13,7 @@
 			<Control ID="mnuPause">Pause</Control>
 			<Control ID="mnuReset">Reset</Control>
 			<Control ID="mnuPowerCycle">Arrêt &amp;&amp; redémarrage</Control>
+			<Control ID="mnuReloadRom">Recharger le ROM à partir du disque</Control>
 			<Control ID="mnuPowerOff">Arrêter le jeu</Control>
 			<Control ID="mnuSwitchDiskSide">Changer le disque de côté</Control>
 			<Control ID="mnuSelectDisk">Choisir le disque</Control>
@@ -887,6 +888,7 @@
 		<Message ID="EmulatorShortcutMappings_Pause">Pause</Message>
 		<Message ID="EmulatorShortcutMappings_Reset">Reset</Message>
 		<Message ID="EmulatorShortcutMappings_PowerCycle">Arrêt &amp; redémarrage</Message>
+		<Message ID="EmulatorShortcutMappings_ReloadRom">Recharger le ROM à partir du disque</Message>
 		<Message ID="EmulatorShortcutMappings_PowerOff">Arrêter le jeu</Message>
 		<Message ID="EmulatorShortcutMappings_Exit">Quitter</Message>
 		<Message ID="EmulatorShortcutMappings_TakeScreenshot">Capture d'écran</Message>

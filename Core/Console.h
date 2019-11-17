@@ -143,7 +143,7 @@ public:
 
 	bool Initialize(string romFile, string patchFile = "");
 	bool Initialize(VirtualFile &romFile);
-	bool Initialize(VirtualFile &romFile, VirtualFile &patchFile);
+	bool Initialize(VirtualFile &romFile, VirtualFile &patchFile, bool forPowerCycle = false);
 
 	void SaveBatteries();
 
@@ -179,6 +179,7 @@ public:
 
 	void Reset(bool softReset = true);
 	void PowerCycle();
+	void ReloadRom(bool forPowerCycle = false);
 	void ResetComponents(bool softReset);
 
 	//Used to pause the emu loop to perform thread-safe operations

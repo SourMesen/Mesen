@@ -13,6 +13,7 @@
 			<Control ID="mnuPause">ポーズ</Control>
 			<Control ID="mnuReset">リセット</Control>
 			<Control ID="mnuPowerCycle">停止と再起動</Control>
+			<Control ID="mnuReloadRom">ディスクからROMをリロードする</Control>
 			<Control ID="mnuPowerOff">ゲームを停止する</Control>
 			<Control ID="mnuSwitchDiskSide">A面B面切り替え</Control>
 			<Control ID="mnuSelectDisk">ディスク選択</Control>
@@ -875,6 +876,7 @@
 		<Message ID="EmulatorShortcutMappings_Pause">ポーズ</Message>
 		<Message ID="EmulatorShortcutMappings_Reset">リセット</Message>
 		<Message ID="EmulatorShortcutMappings_PowerCycle">停止と再起動</Message>
+		<Message ID="EmulatorShortcutMappings_ReloadRom">ディスクからROMをリロードする</Message>
 		<Message ID="EmulatorShortcutMappings_PowerOff">ゲームを停止する</Message>
 		<Message ID="EmulatorShortcutMappings_Exit">終了</Message>
 		<Message ID="EmulatorShortcutMappings_TakeScreenshot">スクリーンショットを撮る</Message>

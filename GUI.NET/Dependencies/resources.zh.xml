@@ -13,6 +13,7 @@
 			<Control ID="mnuPause">暂停</Control>
 			<Control ID="mnuReset">重设</Control>
 			<Control ID="mnuPowerCycle">电源</Control>
+			<Control ID="mnuReloadRom">Reload ROM</Control>
 			<Control ID="mnuPowerOff">关机</Control>
 			<Control ID="mnuSwitchDiskSide">磁盘换面</Control>
 			<Control ID="mnuSelectDisk">选择磁盘</Control>
@@ -893,6 +894,7 @@
 		<Message ID="EmulatorShortcutMappings_Pause">暂停</Message>
 		<Message ID="EmulatorShortcutMappings_Reset">重设</Message>
 		<Message ID="EmulatorShortcutMappings_PowerCycle">电源</Message>
+		<Message ID="EmulatorShortcutMappings_ReloadRom">Reload ROM</Message>
 		<Message ID="EmulatorShortcutMappings_PowerOff">关机</Message>
 		<Message ID="EmulatorShortcutMappings_Exit">退出</Message>
 		<Message ID="EmulatorShortcutMappings_TakeScreenshot">截图</Message>

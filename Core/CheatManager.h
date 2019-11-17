@@ -36,6 +36,7 @@ class CheatManager
 private:
 	shared_ptr<Console> _console;
 
+	bool _hasCode = false;
 	vector<unique_ptr<vector<CodeInfo>>> _relativeCheatCodes;
 	vector<CodeInfo> _absoluteCheatCodes;
 
@@ -56,6 +57,5 @@ public:
 	void SetCheats(vector<CodeInfo> &cheats);
 	void SetCheats(CheatInfo cheats[], uint32_t length);
 
-	void ApplyRamCodes(uint16_t addr, uint8_t &value);
-	void ApplyPrgCodes(uint8_t *prgRam, uint32_t prgSize);
+	void ApplyCodes(uint16_t addr, uint8_t &value);
 };

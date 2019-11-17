@@ -2,6 +2,7 @@
 
 #include "CheatManager.h"
 #include "Console.h"
+#include "BaseMapper.h"
 #include "MessageManager.h"
 #include "NotificationManager.h"
 
@@ -98,6 +99,7 @@ void CheatManager::AddCode(CodeInfo &code)
 	} else {
 		_absoluteCheatCodes.push_back(code);
 	}
+	_hasCode = true;
 	_console->GetNotificationManager()->SendNotification(ConsoleNotificationType::CheatAdded);
 }
 
@@ -137,14 +139,19 @@ void CheatManager::ClearCodes()
 
 	cheatRemoved |= _absoluteCheatCodes.size() > 0;
 	_absoluteCheatCodes.clear();
-	
+	_hasCode = false;
+
 	if(cheatRemoved) {
 		_console->GetNotificationManager()->SendNotification(ConsoleNotificationType::CheatRemoved);
 	}
 }
 
-void CheatManager::ApplyRamCodes(uint16_t addr, uint8_t &value)
+void CheatManager::ApplyCodes(uint16_t addr, uint8_t &value)
 {
+	if(!_hasCode) {
+		return;
+	}
+
 	if(_relativeCheatCodes[addr] != nullptr) {
 		for(uint32_t i = 0, len = i < _relativeCheatCodes[addr]->size(); i < len; i++) {
 			CodeInfo code = _relativeCheatCodes[addr]->at(i);
@@ -153,16 +160,14 @@ void CheatManager::ApplyRamCodes(uint16_t addr, uint8_t &value)
 				return;
 			}
 		}
-	}
-}
-
-void CheatManager::ApplyPrgCodes(uint8_t *prgRam, uint32_t prgSize)
-{
-	for(uint32_t i = 0, len = i < _absoluteCheatCodes.size(); i < len; i++) {
-		CodeInfo code = _absoluteCheatCodes[i];
-		if(code.Address < prgSize) {
-			if(code.CompareValue == -1 || code.CompareValue == prgRam[code.Address]) {
-				prgRam[code.Address] = code.Value;
+	} else if(!_absoluteCheatCodes.empty()) {
+		int32_t absAddr = _console->GetMapper()->ToAbsoluteAddress(addr);
+		if(absAddr >= 0) {
+			for(CodeInfo &code : _absoluteCheatCodes) {
+				if(code.Address == (uint32_t)absAddr && (code.CompareValue == -1 || code.CompareValue == value)) {
+					value = code.Value;
+					return;
+				}
 			}
 		}
 	}

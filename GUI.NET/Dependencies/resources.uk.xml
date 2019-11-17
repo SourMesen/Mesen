@@ -13,6 +13,7 @@
 			<Control ID="mnuPause">Пауза</Control>
 			<Control ID="mnuReset">Скидання</Control>
 			<Control ID="mnuPowerCycle">Цикл включення</Control>
+			<Control ID="mnuReloadRom">Reload ROM</Control>
 			<Control ID="mnuPowerOff">Power Off</Control>
 			<Control ID="mnuSwitchDiskSide">Змінити сторону диска</Control>
 			<Control ID="mnuSelectDisk">Вибрати диск</Control>
@@ -875,6 +876,7 @@
 		<Message ID="EmulatorShortcutMappings_Pause">Пауза</Message>
 		<Message ID="EmulatorShortcutMappings_Reset">Скидання</Message>
 		<Message ID="EmulatorShortcutMappings_PowerCycle">Цикл включення</Message>
+		<Message ID="EmulatorShortcutMappings_ReloadRom">Reload ROM</Message>
 		<Message ID="EmulatorShortcutMappings_PowerOff">Вимкнення</Message>
 		<Message ID="EmulatorShortcutMappings_Exit">Вихід</Message>
 		<Message ID="EmulatorShortcutMappings_TakeScreenshot">Скріншот</Message>

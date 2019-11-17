@@ -255,7 +255,7 @@ bool Console::Initialize(VirtualFile &romFile)
 	return Initialize(romFile, patchFile);
 }
 
-bool Console::Initialize(VirtualFile &romFile, VirtualFile &patchFile)
+bool Console::Initialize(VirtualFile &romFile, VirtualFile &patchFile, bool forPowerCycle)
 {
 	if(romFile.IsValid()) {
 		Pause();
@@ -306,6 +306,7 @@ bool Console::Initialize(VirtualFile &romFile, VirtualFile &patchFile)
 				StopRecordingHdPack();
 			}
 
+			shared_ptr<BaseMapper> previousMapper = _mapper;
 			_mapper = mapper;
 			_memoryManager.reset(new MemoryManager(shared_from_this()));
 			_cpu.reset(new CPU(shared_from_this()));
@@ -313,7 +314,9 @@ bool Console::Initialize(VirtualFile &romFile, VirtualFile &patchFile)
 
 			_mapper->SetConsole(shared_from_this());
 			_mapper->Initialize(romData);
-			GetNotificationManager()->RegisterNotificationListener(_mapper);
+			if(!isDifferentGame && forPowerCycle) {
+				_mapper->CopyPrgChrRom(previousMapper);
+			}
 
 			if(_slave) {
 				_slave->Release(false);
@@ -400,8 +403,10 @@ bool Console::Initialize(VirtualFile &romFile, VirtualFile &patchFile)
 			ResetComponents(false);
 
 			//Reset components before creating rewindmanager, otherwise the first save state it takes will be invalid
-			_rewindManager.reset(new RewindManager(shared_from_this()));
-			_notificationManager->RegisterNotificationListener(_rewindManager);
+			if(!forPowerCycle) {
+				_rewindManager.reset(new RewindManager(shared_from_this()));
+				_notificationManager->RegisterNotificationListener(_rewindManager);
+			}
 
 			//Poll controller input after creating rewind manager, to make sure it catches the first frame's input
 			_controlManager->UpdateInputState();
@@ -418,9 +423,12 @@ bool Console::Initialize(VirtualFile &romFile, VirtualFile &patchFile)
 			FolderUtilities::AddKnownGameFolder(romFile.GetFolderPath());
 
 			if(IsMaster()) {
-				string modelName = _model == NesModel::PAL ? "PAL" : (_model == NesModel::Dendy ? "Dendy" : "NTSC");
-				string messageTitle = MessageManager::Localize("GameLoaded") + " (" + modelName + ")";
-				MessageManager::DisplayMessage(messageTitle, FolderUtilities::GetFilename(GetRomInfo().RomName, false));
+				if(!forPowerCycle) {
+					string modelName = _model == NesModel::PAL ? "PAL" : (_model == NesModel::Dendy ? "Dendy" : "NTSC");
+					string messageTitle = MessageManager::Localize("GameLoaded") + " (" + modelName + ")";
+					MessageManager::DisplayMessage(messageTitle, FolderUtilities::GetFilename(GetRomInfo().RomName, false));
+				}
+
 				_settings->ClearFlags(EmulationFlags::ForceMaxSpeed);
 
 				if(_slave) {
@@ -566,10 +574,15 @@ shared_ptr<SystemActionManager> Console::GetSystemActionManager()
 
 void Console::PowerCycle()
 {
+	ReloadRom(true);
+}
+
+void Console::ReloadRom(bool forPowerCycle)
+{
 	if(_initialized && !_romFilepath.empty()) {
 		VirtualFile romFile = _romFilepath;
 		VirtualFile patchFile = _patchFilename;
-		Initialize(romFile, patchFile);
+		Initialize(romFile, patchFile, forPowerCycle);
 	}
 }
 

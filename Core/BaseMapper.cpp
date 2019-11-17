@@ -433,11 +433,6 @@ string BaseMapper::GetBatteryFilename()
 {
 	return FolderUtilities::CombinePath(FolderUtilities::GetSaveFolder(), FolderUtilities::GetFilename(_romInfo.RomName, false) + ".sav");
 }
-		
-void BaseMapper::RestoreOriginalPrgRam()
-{
-	memcpy(_prgRom, _originalPrgRom.data(), _originalPrgRom.size());
-}
 
 void BaseMapper::InitializeChrRam(int32_t chrRamSize)
 {
@@ -637,8 +632,6 @@ void BaseMapper::Initialize(RomData &romData)
 	//Load battery data if present
 	LoadBattery();
 
-	ApplyCheats();
-
 	_romInfo.HasChrRam = HasChrRam();
 }
 
@@ -650,24 +643,6 @@ BaseMapper::~BaseMapper()
 	delete[] _saveRam;
 	delete[] _workRam;
 	delete[] _nametableRam;
-}
-
-void BaseMapper::ProcessNotification(ConsoleNotificationType type, void* parameter)
-{
-	switch(type) {
-		case ConsoleNotificationType::CheatAdded:
-		case ConsoleNotificationType::CheatRemoved:
-			ApplyCheats();
-			break;
-		default:
-			break;
-	}
-}
-
-void BaseMapper::ApplyCheats()
-{
-	RestoreOriginalPrgRam();
-	_console->GetCheatManager()->ApplyPrgCodes(_prgRom, _prgSize);
 }
 
 void BaseMapper::GetMemoryRanges(MemoryRanges &ranges)
@@ -1267,4 +1242,14 @@ bool BaseMapper::HasPrgChrChanges()
 		}
 	}
 	return false;
+}
+
+void BaseMapper::CopyPrgChrRom(shared_ptr<BaseMapper> mapper)
+{
+	if(_prgSize == mapper->_prgSize && _chrRomSize == mapper->_chrRomSize) {
+		memcpy(_prgRom, mapper->_prgRom, _prgSize);
+		if(!_onlyChrRam) {
+			memcpy(_chrRom, mapper->_chrRom, _chrRomSize);
+		}
+	}
 }

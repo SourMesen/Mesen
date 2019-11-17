@@ -13,6 +13,7 @@
 			<Control ID="mnuPause">Pause</Control>
 			<Control ID="mnuReset">Reset</Control>
 			<Control ID="mnuPowerCycle">Power Cycle</Control>
+			<Control ID="mnuReloadRom">Reload ROM</Control>
 			<Control ID="mnuPowerOff">Power Off</Control>
 			<Control ID="mnuSwitchDiskSide">Switch Disk Side</Control>
 			<Control ID="mnuSelectDisk">Select Disk</Control>
@@ -888,6 +889,7 @@
 		<Message ID="EmulatorShortcutMappings_Pause">Pause</Message>
 		<Message ID="EmulatorShortcutMappings_Reset">Reset</Message>
 		<Message ID="EmulatorShortcutMappings_PowerCycle">Power Cycle</Message>
+		<Message ID="EmulatorShortcutMappings_ReloadRom">Reload ROM</Message>
 		<Message ID="EmulatorShortcutMappings_PowerOff">Power Off</Message>
 		<Message ID="EmulatorShortcutMappings_Exit">Exit</Message>
 		<Message ID="EmulatorShortcutMappings_TakeScreenshot">Take Screenshot</Message>

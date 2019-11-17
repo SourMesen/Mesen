@@ -93,6 +93,7 @@ namespace Mesen.GUI
 
 		[DllImport(DLLPath, EntryPoint = "GetRomInfo")] private static extern UInt32 GetRomInfoWrapper(ref InteropRomInfo romInfo, [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(UTF8Marshaler))]string filename = "");
 
+		[DllImport(DLLPath)] public static extern void ReloadRom();
 		[DllImport(DLLPath)] public static extern void PowerCycle();
 		[DllImport(DLLPath)] public static extern void Reset();
 		[DllImport(DLLPath)] public static extern void ResetLagCounter();
@@ -1925,6 +1926,7 @@ namespace Mesen.GUI
 		Pause,
 		Reset,
 		PowerCycle,
+		ReloadRom,
 		PowerOff,
 		Exit,
 

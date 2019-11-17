@@ -12,7 +12,7 @@
 
 class BaseControlDevice;
 
-class BaseMapper : public IMemoryHandler, public Snapshotable, public INotificationListener, public IBattery
+class BaseMapper : public IMemoryHandler, public Snapshotable, public IBattery
 {
 private:
 	MirroringType _mirroringType;
@@ -135,7 +135,6 @@ protected:
 
 	void SetupDefaultWorkRam();
 
-	void RestoreOriginalPrgRam();
 	void InitializeChrRam(int32_t chrRamSize = -1);
 
 	void AddRegisterRange(uint16_t startAddr, uint16_t endAddr, MemoryOperation operation = MemoryOperation::Any);
@@ -167,10 +166,7 @@ public:
 	virtual void SetNesModel(NesModel model) { }
 	virtual void ProcessCpuClock() { }
 	virtual void NotifyVRAMAddressChange(uint16_t addr);
-	void ProcessNotification(ConsoleNotificationType type, void* parameter) override; 
 	virtual void GetMemoryRanges(MemoryRanges &ranges) override;
-	
-	void ApplyCheats();
 	
 	virtual void SaveBattery() override;
 
@@ -240,4 +236,5 @@ public:
 	void RestorePrgChrBackup(vector<uint8_t>& backupData);
 	void RevertPrgChrChanges();
 	bool HasPrgChrChanges();
+	void CopyPrgChrRom(shared_ptr<BaseMapper> mapper);
 };

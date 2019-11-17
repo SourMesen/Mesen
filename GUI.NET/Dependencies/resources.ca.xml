@@ -13,6 +13,7 @@
 			<Control ID="mnuPause">Pausa</Control>
 			<Control ID="mnuReset">Reinicia el joc</Control>
 			<Control ID="mnuPowerCycle">Atura i reinicia el joc</Control>
+			<Control ID="mnuReloadRom">Reload ROM</Control>
 			<Control ID="mnuPowerOff">Atura el joc</Control>
 			<Control ID="mnuSwitchDiskSide">Canvia la cara del disc</Control>
 			<Control ID="mnuSelectDisk">Escull el disc</Control>
@@ -856,6 +857,7 @@
 		<Message ID="EmulatorShortcutMappings_Pause">Pausa</Message>
 		<Message ID="EmulatorShortcutMappings_Reset">Reinicia el joc</Message>
 		<Message ID="EmulatorShortcutMappings_PowerCycle">Atura i reinicia el joc</Message>
+		<Message ID="EmulatorShortcutMappings_ReloadRom">Reload ROM</Message>
 		<Message ID="EmulatorShortcutMappings_PowerOff">Atura el joc</Message>
 		<Message ID="EmulatorShortcutMappings_Exit">Surt</Message>
 		<Message ID="EmulatorShortcutMappings_TakeScreenshot">Captura de pantalla</Message>

@@ -13,6 +13,7 @@
 			<Control ID="mnuPause">Пауза</Control>
 			<Control ID="mnuReset">Сброс</Control>
 			<Control ID="mnuPowerCycle">Power Cycle</Control>
+			<Control ID="mnuReloadRom">Reload ROM</Control>
 			<Control ID="mnuPowerOff">Power Off</Control>
 			<Control ID="mnuSwitchDiskSide">Сменить сторону диска</Control>
 			<Control ID="mnuSelectDisk">Выбрать диск</Control>
@@ -875,6 +876,7 @@
 		<Message ID="EmulatorShortcutMappings_Pause">Пауза</Message>
 		<Message ID="EmulatorShortcutMappings_Reset">Сброс</Message>
 		<Message ID="EmulatorShortcutMappings_PowerCycle">Power Cycle</Message>
+		<Message ID="EmulatorShortcutMappings_ReloadRom">Reload ROM</Message>
 		<Message ID="EmulatorShortcutMappings_PowerOff">Power Off</Message>
 		<Message ID="EmulatorShortcutMappings_Exit">Exit</Message>
 		<Message ID="EmulatorShortcutMappings_TakeScreenshot">Сделать сриншот</Message>

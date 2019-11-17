@@ -431,6 +431,7 @@ enum class EmulatorShortcut
 	Pause,
 	Reset,
 	PowerCycle,
+	ReloadRom,
 	PowerOff,
 	Exit,
 

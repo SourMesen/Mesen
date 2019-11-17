@@ -690,15 +690,15 @@ namespace Mesen.GUI.Forms
 
 				case InteropEmu.ConsoleNotificationType.GameStopped:
 					this._currentGame = null;
-					CheatInfo.ClearCheats();
 					this.BeginInvoke((MethodInvoker)(() => {
 						if(_hdPackEditorWindow != null) {
 							_hdPackEditorWindow.Close();
 						}
-						if(!ConfigManager.Config.PreferenceInfo.DisableGameSelectionScreen) {
-							ctrlRecentGames.Initialize();
-						}
 						if(e.Parameter == IntPtr.Zero) {
+							if(!ConfigManager.Config.PreferenceInfo.DisableGameSelectionScreen) {
+								ctrlRecentGames.Initialize();
+							}
+
 							//We are completely stopping the emulation, close fullscreen mode
 							StopExclusiveFullscreenMode();
 						}
@@ -806,6 +806,7 @@ namespace Mesen.GUI.Forms
 			BindShortcut(mnuPause, EmulatorShortcut.Pause, runningNotClient);
 			BindShortcut(mnuReset, EmulatorShortcut.Reset, runningNotClientNotMovie);
 			BindShortcut(mnuPowerCycle, EmulatorShortcut.PowerCycle, runningNotClientNotMovie);
+			BindShortcut(mnuReloadRom, EmulatorShortcut.ReloadRom, runningNotClientNotMovie);
 			BindShortcut(mnuPowerOff, EmulatorShortcut.PowerOff, runningNotClient);
 
 			BindShortcut(mnuSwitchDiskSide, EmulatorShortcut.SwitchDiskSide, runningFdsMultipleDisks);
@@ -903,6 +904,7 @@ namespace Mesen.GUI.Forms
 				case EmulatorShortcut.Pause: PauseEmu(); break;
 				case EmulatorShortcut.Reset: this.ResetEmu(); break;
 				case EmulatorShortcut.PowerCycle: this.PowerCycleEmu(); break;
+				case EmulatorShortcut.ReloadRom: InteropEmu.ReloadRom(); break;
 				case EmulatorShortcut.PowerOff: Task.Run(() => InteropEmu.Stop()); break;
 				case EmulatorShortcut.Exit: this.Close(); break;
 
