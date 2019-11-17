@@ -59,8 +59,11 @@ vector<uint8_t> FDS::CreateIpsPatch()
 
 void FDS::SaveBattery()
 {
-	vector<uint8_t> ipsData = CreateIpsPatch();
-	_console->GetBatteryManager()->SaveBattery(".ips", ipsData.data(), (uint32_t)ipsData.size());
+	if(_needSave) {
+		vector<uint8_t> ipsData = CreateIpsPatch();
+		_console->GetBatteryManager()->SaveBattery(".ips", ipsData.data(), (uint32_t)ipsData.size());
+		_needSave = false;
+	}
 }
 
 void FDS::Reset(bool softReset)
@@ -88,7 +91,11 @@ void FDS::WriteFdsDisk(uint8_t value)
 {
 	assert(_diskNumber < _fdsDiskSides.size());
 	assert(_diskPosition < _fdsDiskSides[_diskNumber].size());
-	_fdsDiskSides[_diskNumber][_diskPosition - 2] = value;
+	uint8_t currentValue = _fdsDiskSides[_diskNumber][_diskPosition - 2];
+	if(currentValue != value) {
+		_fdsDiskSides[_diskNumber][_diskPosition - 2] = value;
+		_needSave = true;
+	}
 }
 
 void FDS::ClockIrq()
