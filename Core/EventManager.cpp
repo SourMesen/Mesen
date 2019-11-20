@@ -26,7 +26,7 @@ EventManager::~EventManager()
 void EventManager::AddSpecialEvent(DebugEventType type)
 {
 	if(type == DebugEventType::BgColorChange) {
-		AddDebugEvent(DebugEventType::BgColorChange, 0, _ppu->GetCurrentBgColor());
+		AddDebugEvent(DebugEventType::BgColorChange, _ppu->GetCurrentBgColor());
 	}
 }
 
@@ -79,7 +79,7 @@ void EventManager::ClearFrameEvents()
 {
 	_prevDebugEvents = _debugEvents;
 	_debugEvents.clear();
-	AddDebugEvent(DebugEventType::BgColorChange, 0, _ppu->ReadPaletteRAM(0));
+	AddDebugEvent(DebugEventType::BgColorChange, _ppu->GetCurrentBgColor());
 }
 
 void EventManager::DrawEvent(DebugEventInfo &evt, bool drawBackground, uint32_t *buffer, EventViewerDisplayOptions &options)
@@ -240,8 +240,8 @@ void EventManager::DrawNtscBorders(uint32_t *buffer)
 {
 	//Generate array of bg color for all pixels on the screen
 	uint32_t currentPos = 0;
-	uint8_t currentColor = 0;
-	vector<uint8_t> bgColor;
+	uint16_t currentColor = 0;
+	vector<uint16_t> bgColor;
 	bgColor.resize(341 * 243);
 	uint32_t* pal = _settings->GetRgbPalette();
 
@@ -249,13 +249,13 @@ void EventManager::DrawNtscBorders(uint32_t *buffer)
 		if(evt.Type == DebugEventType::BgColorChange) {
 			uint32_t pos = ((evt.Scanline + 1) * 341) + evt.Cycle;
 			if(pos >= currentPos && evt.Scanline < 242) {
-				memset(bgColor.data() + currentPos, currentColor, pos - currentPos);
-				currentColor = evt.Value;
+				std::fill(bgColor.begin() + currentPos, bgColor.begin() + pos, currentColor);
+				currentColor = evt.Address;
 				currentPos = pos;
 			}
 		}
 	}
-	memset(bgColor.data() + currentPos, currentColor, 341 * 243 - currentPos);
+	std::fill(bgColor.begin() + currentPos, bgColor.end(), currentColor);
 
 	for(uint32_t y = 1; y < 241; y++) {
 		//Pulse

@@ -568,6 +568,8 @@ void PPU::SetMaskRegister(uint8_t value)
 		_flags.IntensifyGreen = (_state.Mask & 0x20) == 0x20;
 		_intensifyColorBits = (_flags.IntensifyRed ? 0x40 : 0x00) | (_flags.IntensifyGreen ? 0x80 : 0x00) | (_flags.IntensifyBlue ? 0x100 : 0x00);
 	}
+
+	_console->DebugAddDebugEvent(DebugEventType::BgColorChange);
 }
 
 void PPU::UpdateStatusFlag()
@@ -876,13 +878,15 @@ void PPU::DrawPixel()
 	}
 }
 
-uint8_t PPU::GetCurrentBgColor()
+uint16_t PPU::GetCurrentBgColor()
 {
+	uint16_t color;
 	if(IsRenderingEnabled() || (_state.VideoRamAddr & 0x3F00) != 0x3F00) {
-		return _paletteRAM[0];
+		color = _paletteRAM[0];
 	} else {
-		return _paletteRAM[_state.VideoRamAddr & 0x1F];
+		color = _paletteRAM[_state.VideoRamAddr & 0x1F];
 	}
+	return (color & _paletteRamMask) | _intensifyColorBits;
 }
 
 void PPU::UpdateGrayscaleAndIntensifyBits()
@@ -1295,11 +1299,12 @@ void PPU::UpdateState()
 	_prevRenderingEnabled = _renderingEnabled;
 	if(_renderingEnabled != (_flags.BackgroundEnabled | _flags.SpritesEnabled)) {
 		_renderingEnabled = _flags.BackgroundEnabled | _flags.SpritesEnabled;
-		_console->DebugAddDebugEvent(DebugEventType::BgColorChange);
 	}
 	if(_prevRenderingEnabled != _renderingEnabled) {
 		_needStateUpdate = true;
 	}
+
+	_console->DebugAddDebugEvent(DebugEventType::BgColorChange);
 
 	if(_prevRenderingEnabled && !_renderingEnabled && _scanline < 240) {
 		//When rendering is disabled midscreen, set the vram bus back to the value of 'v'

@@ -238,7 +238,7 @@ class PPU : public IMemoryHandler, public Snapshotable
 		}
 		
 		uint32_t GetPixelBrightness(uint8_t x, uint8_t y);
-		uint8_t GetCurrentBgColor();
+		uint16_t GetCurrentBgColor();
 
 		uint16_t GetPixel(uint8_t x, uint8_t y)
 		{
