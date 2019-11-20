@@ -166,13 +166,14 @@ enum class DebugEventType : uint8_t
 	SpriteZeroHit,
 	Breakpoint,
 	DmcDmaRead,
+	BgColorChange,
 };
 
 struct DebugEventInfo
 {
 	uint16_t Cycle;
 	int16_t Scanline;
-	uint16_t ProgramCounter;
+	uint32_t ProgramCounter;
 	uint16_t Address;
 	int16_t BreakpointId;
 	DebugEventType Type;

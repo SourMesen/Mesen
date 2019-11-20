@@ -30,25 +30,30 @@ namespace Mesen.GUI.Debugger.Controls
 		private void InitializeComponent()
 		{
 			this.components = new System.ComponentModel.Container();
-			this.picPicture = new Mesen.GUI.Controls.ctrlMesenPictureBox();
+			this.picViewer = new Mesen.GUI.Debugger.ctrlImagePanel();
 			this.tmrOverlay = new System.Windows.Forms.Timer(this.components);
-			((System.ComponentModel.ISupportInitialize)(this.picPicture)).BeginInit();
 			this.SuspendLayout();
 			// 
 			// picPicture
 			// 
-			this.picPicture.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.picPicture.Cursor = System.Windows.Forms.Cursors.Default;
-			this.picPicture.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
-			this.picPicture.Location = new System.Drawing.Point(1, 1);
-			this.picPicture.Margin = new System.Windows.Forms.Padding(0);
-			this.picPicture.Name = "picPicture";
-			this.picPicture.Size = new System.Drawing.Size(684, 526);
-			this.picPicture.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-			this.picPicture.TabIndex = 0;
-			this.picPicture.TabStop = false;
-			this.picPicture.MouseLeave += new System.EventHandler(this.picPicture_MouseLeave);
-			this.picPicture.MouseMove += new System.Windows.Forms.MouseEventHandler(this.picPicture_MouseMove);
+			this.picViewer.Cursor = System.Windows.Forms.Cursors.Default;
+			this.picViewer.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.picViewer.GridSizeX = 0;
+			this.picViewer.GridSizeY = 0;
+			this.picViewer.Image = null;
+			this.picViewer.ImageScale = 1;
+			this.picViewer.ImageSize = new System.Drawing.Size(0, 0);
+			this.picViewer.Location = new System.Drawing.Point(0, 0);
+			this.picViewer.Margin = new System.Windows.Forms.Padding(0);
+			this.picViewer.Name = "picViewer";
+			this.picViewer.Overlay = new System.Drawing.Rectangle(0, 0, 0, 0);
+			this.picViewer.Selection = new System.Drawing.Rectangle(0, 0, 0, 0);
+			this.picViewer.SelectionWrapPosition = 0;
+			this.picViewer.Size = new System.Drawing.Size(481, 405);
+			this.picViewer.TabIndex = 0;
+			this.picViewer.TabStop = false;
+			this.picViewer.MouseLeave += new System.EventHandler(this.picPicture_MouseLeave);
+			this.picViewer.MouseMove += new System.Windows.Forms.MouseEventHandler(this.picViewer_MouseMove);
 			// 
 			// tmrOverlay
 			// 
@@ -59,17 +64,16 @@ namespace Mesen.GUI.Debugger.Controls
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.Controls.Add(this.picPicture);
+			this.Controls.Add(this.picViewer);
 			this.Name = "ctrlEventViewerPpuView";
-			this.Size = new System.Drawing.Size(686, 530);
-			((System.ComponentModel.ISupportInitialize)(this.picPicture)).EndInit();
+			this.Size = new System.Drawing.Size(481, 405);
 			this.ResumeLayout(false);
 
 		}
 
 		#endregion
 
-		private ctrlMesenPictureBox picPicture;
+		private ctrlImagePanel picViewer;
 		private System.Windows.Forms.Timer tmrOverlay;
 	}
 }

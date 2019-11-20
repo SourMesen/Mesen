@@ -197,6 +197,10 @@ void PPU::UpdateVideoRamAddr()
 	if(_scanline >= 240 || !IsRenderingEnabled()) {
 		_state.VideoRamAddr = (_state.VideoRamAddr + (_flags.VerticalWrite ? 32 : 1)) & 0x7FFF;
 
+		if(!_renderingEnabled) {
+			_console->DebugAddDebugEvent(DebugEventType::BgColorChange);
+		}
+
 		//Trigger memory read when setting the vram address - needed by MMC3 IRQ counter
 		//"Should be clocked when A12 changes to 1 via $2007 read/write"
 		SetBusAddress(_state.VideoRamAddr & 0x3FFF);
@@ -872,6 +876,15 @@ void PPU::DrawPixel()
 	}
 }
 
+uint8_t PPU::GetCurrentBgColor()
+{
+	if(IsRenderingEnabled() || (_state.VideoRamAddr & 0x3F00) != 0x3F00) {
+		return _paletteRAM[0];
+	} else {
+		return _paletteRAM[_state.VideoRamAddr & 0x1F];
+	}
+}
+
 void PPU::UpdateGrayscaleAndIntensifyBits()
 {
 	if(_scanline < 0 || _scanline > _nmiScanline) {
@@ -1121,7 +1134,7 @@ uint8_t PPU::ReadSpriteRam(uint8_t addr)
 					debugger->BreakImmediately(BreakSource::BreakOnDecayedOamRead);
 				}
 			}
-			//If this 8-byte row hasn't been read/written to in over 3000 cpu cycles (~1.7ms), return 0xFF to simulate decay
+			//If this 8-byte row hasn't been read/written to in over 3000 cpu cycles (~1.7ms), return 0x10 to simulate decay
 			return 0x10;
 		}
 	}
@@ -1138,6 +1151,11 @@ void PPU::WriteSpriteRam(uint8_t addr, uint8_t value)
 void PPU::DebugSendFrame()
 {
 	_console->GetVideoDecoder()->UpdateFrame(_currentOutputBuffer);
+}
+
+uint16_t* PPU::GetScreenBuffer(bool previousBuffer)
+{
+	return previousBuffer ? ((_currentOutputBuffer == _outputBuffers[0]) ? _outputBuffers[1] : _outputBuffers[0]) : _currentOutputBuffer;
 }
 
 void PPU::DebugCopyOutputBuffer(uint16_t *target)
@@ -1237,7 +1255,6 @@ void PPU::Exec()
 			SetBusAddress(_state.VideoRamAddr);
 			SendFrame();
 			_frameCount++;
-		} else if(_scanline == _nmiScanline) {
 		}
 	} else {
 		//Cycle > 0
@@ -1276,7 +1293,10 @@ void PPU::UpdateState()
 
 	//Rendering enabled flag is apparently set with a 1 cycle delay (i.e setting it at cycle 5 will render cycle 6 like cycle 5 and then take the new settings for cycle 7)
 	_prevRenderingEnabled = _renderingEnabled;
-	_renderingEnabled = _flags.BackgroundEnabled | _flags.SpritesEnabled;
+	if(_renderingEnabled != (_flags.BackgroundEnabled | _flags.SpritesEnabled)) {
+		_renderingEnabled = _flags.BackgroundEnabled | _flags.SpritesEnabled;
+		_console->DebugAddDebugEvent(DebugEventType::BgColorChange);
+	}
 	if(_prevRenderingEnabled != _renderingEnabled) {
 		_needStateUpdate = true;
 	}
@@ -1317,6 +1337,10 @@ void PPU::UpdateState()
 				}
 			} else {
 				_state.VideoRamAddr = _updateVramAddr;
+			}
+
+			if(!_renderingEnabled) {
+				_console->DebugAddDebugEvent(DebugEventType::BgColorChange);
 			}
 
 			//The glitches updates corrupt both V and T, so set the new value of V back into T

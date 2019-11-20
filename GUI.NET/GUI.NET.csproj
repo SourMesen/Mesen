@@ -297,6 +297,9 @@
     <Compile Include="Controls\ctrlNsfPlayer.Designer.cs">
       <DependentUpon>ctrlNsfPlayer.cs</DependentUpon>
     </Compile>
+    <Compile Include="Controls\ctrlPanel.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Controls\ctrlRecentGames.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -444,6 +447,15 @@
     </Compile>
     <Compile Include="Debugger\Controls\ctrlFlagStatus.Designer.cs">
       <DependentUpon>ctrlFlagStatus.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Debugger\Controls\ctrlImagePanel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Debugger\Controls\ctrlImagePanel.Designer.cs">
+      <DependentUpon>ctrlImagePanel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Debugger\Controls\ctrlImageViewer.cs">
+      <SubType>Component</SubType>
     </Compile>
     <Compile Include="Debugger\Controls\ctrlLabelList.cs">
       <SubType>UserControl</SubType>
@@ -1382,6 +1394,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Debugger\Controls\ctrlEventViewerPpuView.resx">
       <DependentUpon>ctrlEventViewerPpuView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Debugger\Controls\ctrlImagePanel.resx">
+      <DependentUpon>ctrlImagePanel.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Debugger\Controls\ctrlScanlineCycleSelect.resx">
       <DependentUpon>ctrlScanlineCycleSelect.cs</DependentUpon>

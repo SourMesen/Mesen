@@ -31,6 +31,7 @@
 #include "DebugHud.h"
 #include "DummyCpu.h"
 #include "PerformanceTracker.h"
+#include "EventManager.h"
 
 const int Debugger::BreakpointTypeCount;
 string Debugger::_disassemblerOutput = "";
@@ -57,6 +58,7 @@ Debugger::Debugger(shared_ptr<Console> console, shared_ptr<CPU> cpu, shared_ptr<
 	_memoryAccessCounter.reset(new MemoryAccessCounter(this));
 	_profiler.reset(new Profiler(this));
 	_performanceTracker.reset(new PerformanceTracker(console));
+	_eventManager.reset(new EventManager(this, cpu.get(), ppu.get(), _console->GetSettings()));
 	_traceLogger.reset(new TraceLogger(this, memoryManager, _labelManager));
 
 	_bpExpEval.reset(new ExpressionEvaluator(this));
@@ -413,7 +415,7 @@ bool Debugger::ProcessBreakpoints(BreakpointType type, OperationInfo &operationI
 	}
 
 	if(needMark && allowMark) {
-		AddDebugEvent(DebugEventType::Breakpoint, operationInfo.Address, (uint8_t)operationInfo.Value, markBreakpointId);
+		_eventManager->AddDebugEvent(DebugEventType::Breakpoint, operationInfo.Address, (uint8_t)operationInfo.Value, markBreakpointId);
 	}
 
 	if(needBreak && allowBreak) {
@@ -700,7 +702,7 @@ bool Debugger::ProcessRamOperation(MemoryOperationType type, uint16_t &addr, uin
 		//Used to flag the data in the CDL file
 		isDmcRead = true;
 		type = MemoryOperationType::Read;
-		AddDebugEvent(DebugEventType::DmcDmaRead, addr, value);
+		_eventManager->AddDebugEvent(DebugEventType::DmcDmaRead, addr, value);
 	}
 
 	ProcessCpuOperation(addr, value, type);
@@ -912,12 +914,12 @@ bool Debugger::ProcessRamOperation(MemoryOperationType type, uint16_t &addr, uin
 		if(addr >= 0x2000 && addr <= 0x3FFF) {
 			if((addr & 0x07) == 5 || (addr & 0x07) == 6) {
 				GetState(&_debugState, false);
-				AddDebugEvent(DebugEventType::PpuRegisterWrite, addr, value, -1, _debugState.PPU.State.WriteToggle ? 1 : 0);
+				_eventManager->AddDebugEvent(DebugEventType::PpuRegisterWrite, addr, value, -1, _debugState.PPU.State.WriteToggle ? 1 : 0);
 			} else {
-				AddDebugEvent(DebugEventType::PpuRegisterWrite, addr, value);
+				_eventManager->AddDebugEvent(DebugEventType::PpuRegisterWrite, addr, value);
 			}
 		} else if(addr >= 0x4018 && _mapper->IsWriteRegister(addr)) {
-			AddDebugEvent(DebugEventType::MapperRegisterWrite, addr, value);
+			_eventManager->AddDebugEvent(DebugEventType::MapperRegisterWrite, addr, value);
 		}
 
 		if(_frozenAddresses[addr]) {
@@ -925,9 +927,9 @@ bool Debugger::ProcessRamOperation(MemoryOperationType type, uint16_t &addr, uin
 		}
 	} else if(type == MemoryOperationType::Read) {
 		if(addr >= 0x2000 && addr <= 0x3FFF) {
-			AddDebugEvent(DebugEventType::PpuRegisterRead, addr, value);
+			_eventManager->AddDebugEvent(DebugEventType::PpuRegisterRead, addr, value);
 		} else if(addr >= 0x4018 && _mapper->IsReadRegister(addr)) {
-			AddDebugEvent(DebugEventType::MapperRegisterRead, addr, value);
+			_eventManager->AddDebugEvent(DebugEventType::MapperRegisterRead, addr, value);
 		}
 	} else if(type == MemoryOperationType::ExecOpCode) {
 		if(!_needRewind) {
@@ -1316,6 +1318,11 @@ shared_ptr<PerformanceTracker> Debugger::GetPerformanceTracker()
 	return _performanceTracker;
 }
 
+shared_ptr<EventManager> Debugger::GetEventManager()
+{
+	return _eventManager;
+}
+
 bool Debugger::IsExecutionStopped()
 {
 	return _executionStopped || _console->IsExecutionStopped();
@@ -1616,57 +1623,17 @@ void Debugger::ProcessEvent(EventType type)
 		if(CheckFlag(DebuggerFlags::PpuPartialDraw)) {
 			_ppu->DebugUpdateFrameBuffer(CheckFlag(DebuggerFlags::PpuShowPreviousFrame));
 		}
-		_prevDebugEvents = _debugEvents;
-		_debugEvents.clear();
+
+		_eventManager->ClearFrameEvents();
 	} else if(type == EventType::Nmi) {
-		AddDebugEvent(DebugEventType::Nmi);
+		_eventManager->AddDebugEvent(DebugEventType::Nmi);
 	} else if(type == EventType::Irq) {
-		AddDebugEvent(DebugEventType::Irq);
+		_eventManager->AddDebugEvent(DebugEventType::Irq);
 	} else if(type == EventType::SpriteZeroHit) {
-		AddDebugEvent(DebugEventType::SpriteZeroHit);
+		_eventManager->AddDebugEvent(DebugEventType::SpriteZeroHit);
 	} else if(type == EventType::Reset) {
 		_enableBreakOnUninitRead = true;
 	}
-}
-
-void Debugger::AddDebugEvent(DebugEventType type, uint16_t address, uint8_t value, int16_t breakpointId, int8_t ppuLatch)
-{
-	_debugEvents.push_back({
-		(uint16_t)_ppu->GetCurrentCycle(),
-		(int16_t)_ppu->GetCurrentScanline(),
-		_cpu->GetDebugPC(),
-		address,
-		breakpointId,
-		type,
-		value,
-		ppuLatch,
-	});
-}
-
-void Debugger::GetDebugEvents(uint32_t* pictureBuffer, DebugEventInfo *infoArray, uint32_t &maxEventCount, bool returnPreviousFrameData)
-{
-	DebugBreakHelper helper(this);
-
-	uint16_t *ppuBuffer = new uint16_t[PPU::PixelCount];
-	uint32_t *palette = _console->GetSettings()->GetRgbPalette();
-	_ppu->DebugCopyOutputBuffer(ppuBuffer);
-
-	for(int i = 0; i < PPU::PixelCount; i++) {
-		pictureBuffer[i] = palette[ppuBuffer[i] & 0x3F];
-	}
-
-	delete[] ppuBuffer;
-
-	vector<DebugEventInfo> &events = returnPreviousFrameData ? _prevDebugEvents : _debugEvents;
-	uint32_t eventCount = std::min(maxEventCount, (uint32_t)events.size());
-	memcpy(infoArray, events.data(), eventCount * sizeof(DebugEventInfo));
-	maxEventCount = eventCount;
-}
-
-uint32_t Debugger::GetDebugEventCount(bool returnPreviousFrameData)
-{
-	DebugBreakHelper helper(this);
-	return (uint32_t)(returnPreviousFrameData ? _prevDebugEvents.size() : _debugEvents.size());
 }
 
 uint32_t Debugger::GetScreenPixel(uint8_t x, uint8_t y)

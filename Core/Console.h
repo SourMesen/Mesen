@@ -39,6 +39,7 @@ enum class ScaleFilterType;
 enum class ConsoleFeatures;
 enum class DebugMemoryType;
 enum class EventType;
+enum class DebugEventType : uint8_t;
 enum class RamPowerOnState;
 
 class Console : public std::enable_shared_from_this<Console>
@@ -233,6 +234,7 @@ public:
 	void DebugProcessEvent(EventType type);
 	void DebugProcessInterrupt(uint16_t cpuAddr, uint16_t destCpuAddr, bool forNmi);
 	void DebugSetLastFramePpuScroll(uint16_t addr, uint8_t xScroll, bool updateHorizontalScrollOnly);
+	void DebugAddDebugEvent(DebugEventType type);
 	bool DebugProcessRamOperation(MemoryOperationType type, uint16_t &addr, uint8_t &value);
 	void DebugProcessVramReadOperation(MemoryOperationType type, uint16_t addr, uint8_t &value);
 	void DebugProcessVramWriteOperation(uint16_t addr, uint8_t &value);

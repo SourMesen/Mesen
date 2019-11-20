@@ -37,10 +37,8 @@ namespace Mesen.GUI.Debugger.Controls
 
 		public void GetData()
 		{
-			DebugEventInfo[] eventInfoArray;
-			byte[] pictureData;
 			_breakpoints = BreakpointManager.Breakpoints;
-			InteropEmu.DebugGetDebugEvents(false, out pictureData, out eventInfoArray);
+			DebugEventInfo[] eventInfoArray = InteropEmu.GetDebugEvents(false);
 
 			this.BeginInvoke((Action)(() => {
 				lstEvents.BeginUpdate();

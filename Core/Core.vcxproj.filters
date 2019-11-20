@@ -1487,6 +1487,9 @@
     <ClInclude Include="BaseEeprom24C0X.h">
       <Filter>Nes\Mappers\Bandai</Filter>
     </ClInclude>
+    <ClInclude Include="EventManager.h">
+      <Filter>Debugger</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -1784,6 +1787,9 @@
       <Filter>Misc</Filter>
     </ClCompile>
     <ClCompile Include="PerformanceTracker.cpp">
+      <Filter>Debugger</Filter>
+    </ClCompile>
+    <ClCompile Include="EventManager.cpp">
       <Filter>Debugger</Filter>
     </ClCompile>
   </ItemGroup>

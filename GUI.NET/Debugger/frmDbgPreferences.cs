@@ -23,6 +23,8 @@ namespace Mesen.GUI.Debugger
 				GetMember(nameof(DebuggerShortcutsConfig.IncreaseFontSize)),
 				GetMember(nameof(DebuggerShortcutsConfig.DecreaseFontSize)),
 				GetMember(nameof(DebuggerShortcutsConfig.ResetFontSize)),
+				GetMember(nameof(DebuggerShortcutsConfig.ZoomIn)),
+				GetMember(nameof(DebuggerShortcutsConfig.ZoomOut)),
 				GetMember(nameof(DebuggerShortcutsConfig.GoTo)),
 				GetMember(nameof(DebuggerShortcutsConfig.Find)),
 				GetMember(nameof(DebuggerShortcutsConfig.FindNext)),

@@ -48,6 +48,7 @@
 #include "NotificationManager.h"
 #include "HistoryViewer.h"
 #include "ConsolePauseHelper.h"
+#include "EventManager.h"
 #include "PgoUtilities.h"
 
 Console::Console(shared_ptr<Console> master, EmulationSettings* initialSettings)
@@ -1478,6 +1479,15 @@ void Console::DebugSetLastFramePpuScroll(uint16_t addr, uint8_t xScroll, bool up
 #ifndef LIBRETRO
 	if(_debugger) {
 		_debugger->SetLastFramePpuScroll(addr, xScroll, updateHorizontalScrollOnly);
+	}
+#endif
+}
+
+void Console::DebugAddDebugEvent(DebugEventType type)
+{
+#ifndef LIBRETRO
+	if(_debugger) {
+		_debugger->GetEventManager()->AddSpecialEvent(type);
 	}
 #endif
 }

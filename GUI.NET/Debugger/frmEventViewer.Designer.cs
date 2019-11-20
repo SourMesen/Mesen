@@ -33,8 +33,10 @@
 		{
 			this.tabMain = new System.Windows.Forms.TabControl();
 			this.tpgPpuView = new System.Windows.Forms.TabPage();
+			this.ctrlEventViewerPpuView = new Mesen.GUI.Debugger.Controls.ctrlEventViewerPpuView();
 			this.grpShow = new System.Windows.Forms.GroupBox();
 			this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
+			this.chkShowNtscBorders = new System.Windows.Forms.CheckBox();
 			this.lblPpuWrites = new System.Windows.Forms.Label();
 			this.chkShowMapperRegisterWrites = new System.Windows.Forms.CheckBox();
 			this.chkShowPreviousFrameEvents = new System.Windows.Forms.CheckBox();
@@ -73,7 +75,6 @@
 			this.picSpriteZeroHit = new Mesen.GUI.Debugger.ctrlColorPicker();
 			this.picBreakpoint = new Mesen.GUI.Debugger.ctrlColorPicker();
 			this.picDmcDmaRead = new Mesen.GUI.Debugger.ctrlColorPicker();
-			this.ctrlEventViewerPpuView = new Mesen.GUI.Debugger.Controls.ctrlEventViewerPpuView();
 			this.tpgListView = new System.Windows.Forms.TabPage();
 			this.ctrlEventViewerListView = new Mesen.GUI.Debugger.Controls.ctrlEventViewerListView();
 			this.menuStrip1 = new Mesen.GUI.Controls.ctrlMesenMenuStrip();
@@ -83,8 +84,9 @@
 			this.mnuRefreshOnBreak = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
 			this.mnuResetColors = new System.Windows.Forms.ToolStripMenuItem();
-			this.chkToggleZoom = new System.Windows.Forms.CheckBox();
-			this.btnToggleView = new System.Windows.Forms.Button();
+			this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripSeparator();
+			this.mnuZoomIn = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuZoomOut = new System.Windows.Forms.ToolStripMenuItem();
 			this.tabMain.SuspendLayout();
 			this.tpgPpuView.SuspendLayout();
 			this.grpShow.SuspendLayout();
@@ -124,8 +126,8 @@
 			// 
 			// tpgPpuView
 			// 
-			this.tpgPpuView.Controls.Add(this.grpShow);
 			this.tpgPpuView.Controls.Add(this.ctrlEventViewerPpuView);
+			this.tpgPpuView.Controls.Add(this.grpShow);
 			this.tpgPpuView.Location = new System.Drawing.Point(4, 22);
 			this.tpgPpuView.Name = "tpgPpuView";
 			this.tpgPpuView.Padding = new System.Windows.Forms.Padding(3);
@@ -133,6 +135,14 @@
 			this.tpgPpuView.TabIndex = 0;
 			this.tpgPpuView.Text = "PPU View";
 			this.tpgPpuView.UseVisualStyleBackColor = true;
+			// 
+			// ctrlEventViewerPpuView
+			// 
+			this.ctrlEventViewerPpuView.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.ctrlEventViewerPpuView.Location = new System.Drawing.Point(3, 3);
+			this.ctrlEventViewerPpuView.Name = "ctrlEventViewerPpuView";
+			this.ctrlEventViewerPpuView.Size = new System.Drawing.Size(686, 532);
+			this.ctrlEventViewerPpuView.TabIndex = 0;
 			// 
 			// grpShow
 			// 
@@ -152,6 +162,7 @@
 			this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 31F));
 			this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
 			this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 25F));
+			this.tableLayoutPanel2.Controls.Add(this.chkShowNtscBorders, 0, 20);
 			this.tableLayoutPanel2.Controls.Add(this.lblPpuWrites, 0, 0);
 			this.tableLayoutPanel2.Controls.Add(this.chkShowMapperRegisterWrites, 0, 9);
 			this.tableLayoutPanel2.Controls.Add(this.chkShowPreviousFrameEvents, 0, 19);
@@ -194,7 +205,7 @@
 			this.tableLayoutPanel2.Location = new System.Drawing.Point(3, 16);
 			this.tableLayoutPanel2.Margin = new System.Windows.Forms.Padding(0);
 			this.tableLayoutPanel2.Name = "tableLayoutPanel2";
-			this.tableLayoutPanel2.RowCount = 20;
+			this.tableLayoutPanel2.RowCount = 21;
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
@@ -214,9 +225,22 @@
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this.tableLayoutPanel2.Size = new System.Drawing.Size(180, 513);
 			this.tableLayoutPanel2.TabIndex = 2;
+			// 
+			// chkShowNtscBorders
+			// 
+			this.chkShowNtscBorders.AutoSize = true;
+			this.tableLayoutPanel2.SetColumnSpan(this.chkShowNtscBorders, 4);
+			this.chkShowNtscBorders.Location = new System.Drawing.Point(3, 405);
+			this.chkShowNtscBorders.Name = "chkShowNtscBorders";
+			this.chkShowNtscBorders.Size = new System.Drawing.Size(123, 17);
+			this.chkShowNtscBorders.TabIndex = 67;
+			this.chkShowNtscBorders.Text = "Show NTSC borders";
+			this.chkShowNtscBorders.UseVisualStyleBackColor = true;
+			this.chkShowNtscBorders.Click += new System.EventHandler(this.chkShowHide_Click);
 			// 
 			// lblPpuWrites
 			// 
@@ -657,15 +681,6 @@
 			this.picDmcDmaRead.TabStop = false;
 			this.picDmcDmaRead.BackColorChanged += new System.EventHandler(this.picColor_BackColorChanged);
 			// 
-			// ctrlEventViewerPpuView
-			// 
-			this.ctrlEventViewerPpuView.Location = new System.Drawing.Point(0, 0);
-			this.ctrlEventViewerPpuView.Margin = new System.Windows.Forms.Padding(0);
-			this.ctrlEventViewerPpuView.Name = "ctrlEventViewerPpuView";
-			this.ctrlEventViewerPpuView.Size = new System.Drawing.Size(685, 532);
-			this.ctrlEventViewerPpuView.TabIndex = 0;
-			this.ctrlEventViewerPpuView.OnPictureResized += new System.EventHandler(this.ctrlEventViewerPpuView_OnPictureResized);
-			// 
 			// tpgListView
 			// 
 			this.tpgListView.Controls.Add(this.ctrlEventViewerListView);
@@ -717,7 +732,10 @@
 			this.viewToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.mnuRefreshOnBreak,
             this.toolStripMenuItem1,
-            this.mnuResetColors});
+            this.mnuResetColors,
+            this.toolStripMenuItem2,
+            this.mnuZoomIn,
+            this.mnuZoomOut});
 			this.viewToolStripMenuItem.Name = "viewToolStripMenuItem";
 			this.viewToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
 			this.viewToolStripMenuItem.Text = "View";
@@ -742,41 +760,30 @@
 			this.mnuResetColors.Text = "Reset colors to default";
 			this.mnuResetColors.Click += new System.EventHandler(this.mnuResetColors_Click);
 			// 
-			// chkToggleZoom
+			// toolStripMenuItem2
 			// 
-			this.chkToggleZoom.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.chkToggleZoom.Appearance = System.Windows.Forms.Appearance.Button;
-			this.chkToggleZoom.AutoCheck = false;
-			this.chkToggleZoom.Image = global::Mesen.GUI.Properties.Resources.Zoom2x;
-			this.chkToggleZoom.Location = new System.Drawing.Point(824, 1);
-			this.chkToggleZoom.Name = "chkToggleZoom";
-			this.chkToggleZoom.Size = new System.Drawing.Size(27, 22);
-			this.chkToggleZoom.TabIndex = 8;
-			this.chkToggleZoom.UseVisualStyleBackColor = true;
-			this.chkToggleZoom.Click += new System.EventHandler(this.chkToggleZoom_Click);
+			this.toolStripMenuItem2.Name = "toolStripMenuItem2";
+			this.toolStripMenuItem2.Size = new System.Drawing.Size(195, 6);
 			// 
-			// btnToggleView
+			// mnuZoomIn
 			// 
-			this.btnToggleView.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.btnToggleView.Image = global::Mesen.GUI.Properties.Resources.Collapse;
-			this.btnToggleView.Location = new System.Drawing.Point(857, 1);
-			this.btnToggleView.Name = "btnToggleView";
-			this.btnToggleView.Size = new System.Drawing.Size(27, 22);
-			this.btnToggleView.TabIndex = 7;
-			this.btnToggleView.UseVisualStyleBackColor = true;
-			this.btnToggleView.Click += new System.EventHandler(this.btnToggleView_Click);
+			this.mnuZoomIn.Name = "mnuZoomIn";
+			this.mnuZoomIn.Size = new System.Drawing.Size(198, 22);
+			this.mnuZoomIn.Text = "Zoom In";
+			// 
+			// mnuZoomOut
+			// 
+			this.mnuZoomOut.Name = "mnuZoomOut";
+			this.mnuZoomOut.Size = new System.Drawing.Size(198, 22);
+			this.mnuZoomOut.Text = "Zoom Out";
 			// 
 			// frmEventViewer
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(886, 588);
-			this.Controls.Add(this.chkToggleZoom);
-			this.Controls.Add(this.btnToggleView);
 			this.Controls.Add(this.tabMain);
 			this.Controls.Add(this.menuStrip1);
-			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
-			this.MaximizeBox = false;
 			this.Name = "frmEventViewer";
 			this.Text = "Event Viewer";
 			this.tabMain.ResumeLayout(false);
@@ -830,8 +837,6 @@
 		private System.Windows.Forms.TabPage tpgListView;
 		private Controls.ctrlEventViewerListView ctrlEventViewerListView;
 		private System.Windows.Forms.CheckBox chkShowPreviousFrameEvents;
-		private System.Windows.Forms.CheckBox chkToggleZoom;
-		private System.Windows.Forms.Button btnToggleView;
 		private System.Windows.Forms.Label lblPpuWrites;
 		private System.Windows.Forms.CheckBox chkWrite2000;
 		private ctrlColorPicker picWrite2000;
@@ -865,5 +870,9 @@
 		private System.Windows.Forms.ToolStripMenuItem mnuResetColors;
 		private System.Windows.Forms.CheckBox chkShowDmcDmaRead;
 		private ctrlColorPicker picDmcDmaRead;
+		private System.Windows.Forms.CheckBox chkShowNtscBorders;
+		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem2;
+		private System.Windows.Forms.ToolStripMenuItem mnuZoomIn;
+		private System.Windows.Forms.ToolStripMenuItem mnuZoomOut;
 	}
 }

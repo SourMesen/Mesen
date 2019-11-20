@@ -537,6 +537,7 @@
     <ClInclude Include="DummyCpu.h" />
     <ClInclude Include="Eeprom24C01.h" />
     <ClInclude Include="Eeprom24C02.h" />
+    <ClInclude Include="EventManager.h" />
     <ClInclude Include="FaridSlrom.h" />
     <ClInclude Include="FaridUnrom.h" />
     <ClInclude Include="FdsSystemActionManager.h" />
@@ -970,6 +971,7 @@
     <ClCompile Include="BatteryManager.cpp" />
     <ClCompile Include="DebugHud.cpp" />
     <ClCompile Include="DrawRectangleCommand.h" />
+    <ClCompile Include="EventManager.cpp" />
     <ClCompile Include="FceuxMovie.cpp" />
     <ClCompile Include="FdsLoader.cpp" />
     <ClCompile Include="HdAudioDevice.cpp" />

@@ -31,6 +31,7 @@ class Breakpoint;
 class CodeDataLogger;
 class ExpressionEvaluator;
 class DummyCpu;
+class EventManager;
 struct ExpressionData;
 
 enum EvalResultType : int32_t;
@@ -53,6 +54,7 @@ private:
 	shared_ptr<TraceLogger> _traceLogger;
 	shared_ptr<Profiler> _profiler;
 	shared_ptr<PerformanceTracker> _performanceTracker;
+	shared_ptr<EventManager> _eventManager;
 	unique_ptr<CodeRunner> _codeRunner;
 
 	shared_ptr<Console> _console;
@@ -140,9 +142,6 @@ private:
 
 	uint32_t _inputOverride[4];
 
-	vector<DebugEventInfo> _prevDebugEvents;
-	vector<DebugEventInfo> _debugEvents;
-
 private:
 	bool ProcessBreakpoints(BreakpointType type, OperationInfo &operationInfo, bool allowBreak = true, bool allowMark = true);
 	void ProcessAllBreakpoints(OperationInfo &operationInfo);
@@ -152,8 +151,6 @@ private:
 
 	void ProcessStepConditions(uint16_t addr);
 	bool SleepUntilResume(BreakSource source, uint32_t breakpointId = 0, BreakpointType bpType = BreakpointType::Global, uint16_t bpAddress = 0, uint8_t bpValue = 0, MemoryOperationType bpMemOpType = MemoryOperationType::Read);
-
-	void AddDebugEvent(DebugEventType type, uint16_t address = -1, uint8_t value = 0, int16_t breakpointId = -1, int8_t ppuLatch = -1);
 
 	void UpdatePpuCyclesToProcess();
 	void ResetStepState();
@@ -236,6 +233,7 @@ public:
 	shared_ptr<MemoryDumper> GetMemoryDumper();
 	shared_ptr<MemoryAccessCounter> GetMemoryAccessCounter();
 	shared_ptr<PerformanceTracker> GetPerformanceTracker();
+	shared_ptr<EventManager> GetEventManager();
 
 	int32_t EvaluateExpression(string expression, EvalResultType &resultType, bool useCache);
 	
@@ -279,9 +277,6 @@ public:
 	void ProcessCpuOperation(uint16_t &addr, uint8_t &value, MemoryOperationType type);
 	void ProcessPpuOperation(uint16_t addr, uint8_t &value, MemoryOperationType type);
 	void ProcessEvent(EventType type);
-
-	void GetDebugEvents(uint32_t* pictureBuffer, DebugEventInfo *infoArray, uint32_t &maxEventCount, bool returnPreviousFrameData);
-	uint32_t GetDebugEventCount(bool returnPreviousFrameData);
 
 	uint32_t GetScreenPixel(uint8_t x, uint8_t y);
 };

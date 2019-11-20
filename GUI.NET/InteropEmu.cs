@@ -490,27 +490,31 @@ namespace Mesen.GUI
 			return frameData;
 		}
 
-		[DllImport(DLLPath)] private static extern UInt32 DebugGetDebugEventCount([MarshalAs(UnmanagedType.I1)]bool returnPreviousFrameData);
-		[DllImport(DLLPath, EntryPoint = "DebugGetDebugEvents")] private static extern void DebugGetDebugEventsWrapper(IntPtr frameBuffer, IntPtr infoArray, ref UInt32 maxEventCount, [MarshalAs(UnmanagedType.I1)]bool returnPreviousFrameData);
-		public static void DebugGetDebugEvents(bool returnPreviousFrameData, out byte[] pictureData, out DebugEventInfo[] debugEvents)
+		[DllImport(DLLPath)] private static extern UInt32 GetDebugEventCount([MarshalAs(UnmanagedType.I1)]bool getPreviousFrameData);
+		[DllImport(DLLPath, EntryPoint = "GetDebugEvents")] private static extern void GetDebugEventsWrapper([In, Out]DebugEventInfo[] eventArray, ref UInt32 maxEventCount, [MarshalAs(UnmanagedType.I1)]bool getPreviousFrameData);
+		public static DebugEventInfo[] GetDebugEvents(bool getPreviousFrameData)
 		{
-			pictureData = new byte[256 * 240 * 4];
-			UInt32 maxEventCount = DebugGetDebugEventCount(returnPreviousFrameData);
-			debugEvents = new DebugEventInfo[maxEventCount];
+			UInt32 maxEventCount = GetDebugEventCount(getPreviousFrameData);
+			DebugEventInfo[] debugEvents = new DebugEventInfo[maxEventCount];
 
-			GCHandle hPictureData = GCHandle.Alloc(pictureData, GCHandleType.Pinned);
-			GCHandle hDebugEvents = GCHandle.Alloc(debugEvents, GCHandleType.Pinned);
-			try {
-				InteropEmu.DebugGetDebugEventsWrapper(hPictureData.AddrOfPinnedObject(), hDebugEvents.AddrOfPinnedObject(), ref maxEventCount, returnPreviousFrameData);
-			} finally {
-				hPictureData.Free();
-				hDebugEvents.Free();
-			}
-
+			InteropEmu.GetDebugEventsWrapper(debugEvents, ref maxEventCount, getPreviousFrameData);
 			if(maxEventCount < debugEvents.Length) {
 				//Remove the excess from the array if needed
 				Array.Resize(ref debugEvents, (int)maxEventCount);
 			}
+
+			return debugEvents;
+		}
+
+		[DllImport(DLLPath)] public static extern void GetEventViewerEvent(ref DebugEventInfo evtInfo, Int16 scanline, UInt16 cycle, EventViewerDisplayOptions options);
+		[DllImport(DLLPath)] public static extern UInt32 TakeEventSnapshot(EventViewerDisplayOptions options);
+
+		[DllImport(DLLPath, EntryPoint = "GetEventViewerOutput")] private static extern void GetEventViewerOutputWrapper([In, Out]byte[] buffer, EventViewerDisplayOptions options);
+		public static byte[] GetEventViewerOutput(UInt32 scanlineCount, EventViewerDisplayOptions options)
+		{
+			byte[] buffer = new byte[341 * 2 * scanlineCount * 2 * 4];
+			InteropEmu.GetEventViewerOutputWrapper(buffer, options);
+			return buffer;
 		}
 
 		[DllImport(DLLPath, EntryPoint = "DebugGetProfilerData")] private static extern void DebugGetProfilerDataWrapper(IntPtr profilerData, ProfilerDataType dataType);
@@ -1243,7 +1247,7 @@ namespace Mesen.GUI
 	{
 		public UInt16 Cycle;
 		public Int16 Scanline;
-		public UInt16 ProgramCounter;
+		public UInt32 ProgramCounter;
 		public UInt16 Address;
 		public Int16 BreakpointId;
 		public DebugEventType Type;
@@ -2156,6 +2160,41 @@ namespace Mesen.GUI
 		public RecordMovieFrom RecordFrom;
 	}
 	
+	public struct EventViewerDisplayOptions
+	{
+		public UInt32 IrqColor;
+		public UInt32 NmiColor;
+		public UInt32 DmcDmaReadColor;
+		public UInt32 SpriteZeroHitColor;
+		public UInt32 BreakpointColor;
+		public UInt32 MapperRegisterReadColor;
+		public UInt32 MapperRegisterWriteColor;
+
+		[MarshalAs(UnmanagedType.ByValArray, SizeConst = 8)]
+		public UInt32[] PpuRegisterReadColors;
+
+		[MarshalAs(UnmanagedType.ByValArray, SizeConst = 8)]
+		public UInt32[] PpuRegisterWriteColor;
+
+		[MarshalAs(UnmanagedType.I1)] public bool ShowMapperRegisterWrites;
+		[MarshalAs(UnmanagedType.I1)] public bool ShowMapperRegisterReads;
+
+		[MarshalAs(UnmanagedType.ByValArray, SizeConst = 8)]
+		public byte[] ShowPpuRegisterWrites;
+
+		[MarshalAs(UnmanagedType.ByValArray, SizeConst = 8)]
+		public byte[] ShowPpuRegisterReads;
+
+		[MarshalAs(UnmanagedType.I1)] public bool ShowNmi;
+		[MarshalAs(UnmanagedType.I1)] public bool ShowIrq;
+		[MarshalAs(UnmanagedType.I1)] public bool ShowDmcDmaReads;
+		[MarshalAs(UnmanagedType.I1)] public bool ShowSpriteZeroHit;
+
+		[MarshalAs(UnmanagedType.I1)] public bool ShowMarkedBreakpoints;
+		[MarshalAs(UnmanagedType.I1)] public bool ShowPreviousFrameEvents;
+		[MarshalAs(UnmanagedType.I1)] public bool ShowNtscBorders;
+	}
+
 	public enum BreakpointType
 	{
 		Global = 0,

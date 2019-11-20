@@ -153,6 +153,7 @@ namespace Mesen.GUI.Config
 		public bool ShowBreakpointLabels = true;
 
 		public Point EventViewerLocation;
+		public Size EventViewerSize;
 		public bool EventViewerRefreshOnBreak = true;
 		public bool EventViewerShowPpuWrite2000 = true;
 		public bool EventViewerShowPpuWrite2001 = true;
@@ -172,6 +173,7 @@ namespace Mesen.GUI.Config
 		public bool EventViewerShowMarkedBreakpoints = true;
 		public bool EventViewerShowDmcDmaReads = true;
 		public bool EventViewerShowPreviousFrameEvents = true;
+		public bool EventViewerShowNtscBorders = true;
 
 		public XmlColor EventViewerMapperRegisterWriteColor = ColorTranslator.FromHtml("#007597");
 		public XmlColor EventViewerMapperRegisterReadColor = ColorTranslator.FromHtml("#C92929");
