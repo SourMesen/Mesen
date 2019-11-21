@@ -154,6 +154,8 @@ namespace Mesen.GUI.Config
 
 		public Point EventViewerLocation;
 		public Size EventViewerSize;
+		public bool EventViewerAutoRefresh = true;
+		public RefreshSpeed EventViewerAutoRefreshSpeed = RefreshSpeed.Normal;
 		public bool EventViewerRefreshOnBreak = true;
 		public bool EventViewerShowPpuWrite2000 = true;
 		public bool EventViewerShowPpuWrite2001 = true;

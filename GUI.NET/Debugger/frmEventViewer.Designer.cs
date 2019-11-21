@@ -16,9 +16,6 @@
 			if(disposing && (components != null)) {
 				components.Dispose();
 			}
-			if(this._notifListener != null) {
-				this._notifListener.Dispose();
-			}
 			base.Dispose(disposing);
 		}
 
@@ -81,6 +78,13 @@
 			this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuClose = new System.Windows.Forms.ToolStripMenuItem();
 			this.viewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuRefresh = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuAutoRefreshSpeed = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuAutoRefreshLow = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuAutoRefreshNormal = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuAutoRefreshHigh = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+			this.mnuAutoRefresh = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuRefreshOnBreak = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
 			this.mnuResetColors = new System.Windows.Forms.ToolStripMenuItem();
@@ -730,6 +734,10 @@
 			// viewToolStripMenuItem
 			// 
 			this.viewToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.mnuRefresh,
+            this.mnuAutoRefreshSpeed,
+            this.toolStripSeparator1,
+            this.mnuAutoRefresh,
             this.mnuRefreshOnBreak,
             this.toolStripMenuItem1,
             this.mnuResetColors,
@@ -739,6 +747,58 @@
 			this.viewToolStripMenuItem.Name = "viewToolStripMenuItem";
 			this.viewToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
 			this.viewToolStripMenuItem.Text = "View";
+			// 
+			// mnuRefresh
+			// 
+			this.mnuRefresh.Image = global::Mesen.GUI.Properties.Resources.Reset;
+			this.mnuRefresh.Name = "mnuRefresh";
+			this.mnuRefresh.Size = new System.Drawing.Size(198, 22);
+			this.mnuRefresh.Text = "Refresh";
+			this.mnuRefresh.Click += new System.EventHandler(this.mnuRefresh_Click);
+			// 
+			// mnuAutoRefreshSpeed
+			// 
+			this.mnuAutoRefreshSpeed.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.mnuAutoRefreshLow,
+            this.mnuAutoRefreshNormal,
+            this.mnuAutoRefreshHigh});
+			this.mnuAutoRefreshSpeed.Image = global::Mesen.GUI.Properties.Resources.Speed;
+			this.mnuAutoRefreshSpeed.Name = "mnuAutoRefreshSpeed";
+			this.mnuAutoRefreshSpeed.Size = new System.Drawing.Size(198, 22);
+			this.mnuAutoRefreshSpeed.Text = "Auto-refresh Speed";
+			// 
+			// mnuAutoRefreshLow
+			// 
+			this.mnuAutoRefreshLow.Name = "mnuAutoRefreshLow";
+			this.mnuAutoRefreshLow.Size = new System.Drawing.Size(159, 22);
+			this.mnuAutoRefreshLow.Text = "Low (15 FPS)";
+			// 
+			// mnuAutoRefreshNormal
+			// 
+			this.mnuAutoRefreshNormal.Name = "mnuAutoRefreshNormal";
+			this.mnuAutoRefreshNormal.Size = new System.Drawing.Size(159, 22);
+			this.mnuAutoRefreshNormal.Text = "Normal (30 FPS)";
+			// 
+			// mnuAutoRefreshHigh
+			// 
+			this.mnuAutoRefreshHigh.Name = "mnuAutoRefreshHigh";
+			this.mnuAutoRefreshHigh.Size = new System.Drawing.Size(159, 22);
+			this.mnuAutoRefreshHigh.Text = "High (60 FPS)";
+			// 
+			// toolStripSeparator1
+			// 
+			this.toolStripSeparator1.Name = "toolStripSeparator1";
+			this.toolStripSeparator1.Size = new System.Drawing.Size(195, 6);
+			// 
+			// mnuAutoRefresh
+			// 
+			this.mnuAutoRefresh.Checked = true;
+			this.mnuAutoRefresh.CheckOnClick = true;
+			this.mnuAutoRefresh.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.mnuAutoRefresh.Name = "mnuAutoRefresh";
+			this.mnuAutoRefresh.Size = new System.Drawing.Size(198, 22);
+			this.mnuAutoRefresh.Text = "Auto-refresh";
+			this.mnuAutoRefresh.CheckedChanged += new System.EventHandler(this.mnuAutoRefresh_CheckedChanged);
 			// 
 			// mnuRefreshOnBreak
 			// 
@@ -874,5 +934,12 @@
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem2;
 		private System.Windows.Forms.ToolStripMenuItem mnuZoomIn;
 		private System.Windows.Forms.ToolStripMenuItem mnuZoomOut;
+		private System.Windows.Forms.ToolStripMenuItem mnuRefresh;
+		private System.Windows.Forms.ToolStripMenuItem mnuAutoRefreshSpeed;
+		private System.Windows.Forms.ToolStripMenuItem mnuAutoRefreshLow;
+		private System.Windows.Forms.ToolStripMenuItem mnuAutoRefreshNormal;
+		private System.Windows.Forms.ToolStripMenuItem mnuAutoRefreshHigh;
+		private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
+		private System.Windows.Forms.ToolStripMenuItem mnuAutoRefresh;
 	}
 }

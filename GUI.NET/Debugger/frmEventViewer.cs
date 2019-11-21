@@ -1,4 +1,5 @@
 ﻿using Mesen.GUI.Config;
+using Mesen.GUI.Debugger.Controls;
 using Mesen.GUI.Forms;
 using System;
 using System.Collections.Generic;
@@ -12,13 +13,14 @@ using System.Windows.Forms;
 
 namespace Mesen.GUI.Debugger
 {
-	public partial class frmEventViewer : BaseForm
+	public partial class frmEventViewer : BaseForm, IRefresh
 	{
-		private DateTime _lastUpdate = DateTime.MinValue;
+		private WindowRefreshManager _refreshManager;
 		private InteropEmu.NotificationListener _notifListener;
 		private EntityBinder _binder = new EntityBinder();
 		private bool _inListViewTab = false;
-		private bool _refreshing = false;
+
+		public ctrlScanlineCycleSelect ScanlineCycleSelect => null;
 
 		public frmEventViewer()
 		{
@@ -77,12 +79,6 @@ namespace Mesen.GUI.Debugger
 				_binder.AddBinding(nameof(DebugInfo.EventViewerShowPreviousFrameEvents), chkShowPreviousFrameEvents);
 				_binder.AddBinding(nameof(DebugInfo.EventViewerShowNtscBorders), chkShowNtscBorders);
 
-				this.GetData();
-
-				_binder.UpdateUI();
-
-				this.RefreshViewer();
-
 				DebugWorkspaceManager.GetWorkspace();
 
 				RestoreLocation(ConfigManager.Config.DebugInfo.EventViewerLocation, ConfigManager.Config.DebugInfo.EventViewerSize);
@@ -90,12 +86,27 @@ namespace Mesen.GUI.Debugger
 				this._notifListener = new InteropEmu.NotificationListener(ConfigManager.Config.DebugInfo.DebugConsoleId);
 				this._notifListener.OnNotification += this._notifListener_OnNotification;
 
+				DebugInfo cfg = ConfigManager.Config.DebugInfo;
+				_refreshManager = new WindowRefreshManager(this);
+				_refreshManager.AutoRefresh = cfg.EventViewerAutoRefresh;
+				_refreshManager.AutoRefreshSpeed = cfg.EventViewerAutoRefreshSpeed;
+				mnuAutoRefresh.Checked = cfg.EventViewerAutoRefresh;
+				mnuAutoRefreshLow.Click += (s, evt) => _refreshManager.AutoRefreshSpeed = RefreshSpeed.Low;
+				mnuAutoRefreshNormal.Click += (s, evt) => _refreshManager.AutoRefreshSpeed = RefreshSpeed.Normal;
+				mnuAutoRefreshHigh.Click += (s, evt) => _refreshManager.AutoRefreshSpeed = RefreshSpeed.High;
+				mnuAutoRefreshSpeed.DropDownOpening += (s, evt) => UpdateRefreshSpeedMenu();
+
+				this.RefreshData();
+				_binder.UpdateUI();
+				this.RefreshViewer();
+
 				InitShortcuts();
 			}
 		}
 
 		private void InitShortcuts()
 		{
+			mnuRefresh.InitShortcut(this, nameof(DebuggerShortcutsConfig.Refresh));
 			mnuZoomIn.InitShortcut(this, nameof(DebuggerShortcutsConfig.ZoomIn));
 			mnuZoomOut.InitShortcut(this, nameof(DebuggerShortcutsConfig.ZoomOut));
 
@@ -108,10 +119,15 @@ namespace Mesen.GUI.Debugger
 			base.OnFormClosing(e);
 
 			this._notifListener.OnNotification -= this._notifListener_OnNotification;
+			_notifListener?.Dispose();
+			_refreshManager?.Dispose();
 
 			_binder.UpdateObject();
-			ConfigManager.Config.DebugInfo.EventViewerLocation = this.WindowState != FormWindowState.Normal ? this.RestoreBounds.Location : this.Location;
-			ConfigManager.Config.DebugInfo.EventViewerSize = this.WindowState != FormWindowState.Normal ? this.RestoreBounds.Size : this.Size;
+			DebugInfo cfg = ConfigManager.Config.DebugInfo;
+			cfg.EventViewerAutoRefresh = _refreshManager.AutoRefresh;
+			cfg.EventViewerAutoRefreshSpeed = _refreshManager.AutoRefreshSpeed;
+			cfg.EventViewerLocation = this.WindowState != FormWindowState.Normal ? this.RestoreBounds.Location : this.Location;
+			cfg.EventViewerSize = this.WindowState != FormWindowState.Normal ? this.RestoreBounds.Size : this.Size;
 			ConfigManager.ApplyChanges();
 		}
 		
@@ -121,23 +137,14 @@ namespace Mesen.GUI.Debugger
 				case InteropEmu.ConsoleNotificationType.CodeBreak:
 				case InteropEmu.ConsoleNotificationType.GamePaused:
 					if(ConfigManager.Config.DebugInfo.EventViewerRefreshOnBreak) {
-						this.GetData();
+						this.RefreshData();
 						this.BeginInvoke((MethodInvoker)(() => this.RefreshViewer()));
-					}
-					break;
-
-				case InteropEmu.ConsoleNotificationType.EventViewerDisplayFrame:
-					if(!_refreshing && (DateTime.Now - _lastUpdate).Milliseconds >= 32) {
-						//Update at ~30 fps at most
-						this.GetData();
-						this.BeginInvoke((MethodInvoker)(() => this.RefreshViewer()));
-						_lastUpdate = DateTime.Now;
 					}
 					break;
 			}
 		}
 
-		private void GetData()
+		public void RefreshData()
 		{
 			if(_inListViewTab) {
 				ctrlEventViewerListView.GetData();
@@ -146,16 +153,14 @@ namespace Mesen.GUI.Debugger
 			}
 		}
 
-		private void RefreshViewer()
+		public void RefreshViewer()
 		{
 			if(_binder.Updating) {
 				return;
 			}
 
-			_refreshing = true;
 			_binder.UpdateObject();
 			ctrlEventViewerPpuView.RefreshViewer();
-			_refreshing = false;
 		}
 
 		private void mnuClose_Click(object sender, EventArgs e)
@@ -166,7 +171,7 @@ namespace Mesen.GUI.Debugger
 		private void tabMain_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			_inListViewTab = tabMain.SelectedTab == tpgListView;
-			GetData();
+			RefreshData();
 		}
 
 		private void mnuRefreshOnBreak_Click(object sender, EventArgs e)
@@ -180,7 +185,7 @@ namespace Mesen.GUI.Debugger
 			ConfigManager.Config.DebugInfo.EventViewerShowPreviousFrameEvents = chkShowPreviousFrameEvents.Checked;
 			ConfigManager.ApplyChanges();
 			if(InteropEmu.DebugIsExecutionStopped()) {
-				this.GetData();
+				this.RefreshData();
 				this.RefreshViewer();
 			}
 		}
@@ -217,6 +222,24 @@ namespace Mesen.GUI.Debugger
 			picSpriteZeroHit.BackColor = ColorTranslator.FromHtml("#9F93C6");
 			picBreakpoint.BackColor = ColorTranslator.FromHtml("#1898E4");
 			picDmcDmaRead.BackColor = ColorTranslator.FromHtml("#A9FEFC");
+		}
+
+		private void mnuRefresh_Click(object sender, EventArgs e)
+		{
+			RefreshData();
+			RefreshViewer();
+		}
+
+		private void mnuAutoRefresh_CheckedChanged(object sender, EventArgs e)
+		{
+			_refreshManager.AutoRefresh = mnuAutoRefresh.Checked;
+		}
+
+		private void UpdateRefreshSpeedMenu()
+		{
+			mnuAutoRefreshLow.Checked = _refreshManager.AutoRefreshSpeed == RefreshSpeed.Low;
+			mnuAutoRefreshNormal.Checked = _refreshManager.AutoRefreshSpeed == RefreshSpeed.Normal;
+			mnuAutoRefreshHigh.Checked = _refreshManager.AutoRefreshSpeed == RefreshSpeed.High;
 		}
 	}
 }
