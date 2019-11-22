@@ -58,6 +58,10 @@ private:
 
 	bool _prevRunIrq = false;
 	bool _runIrq = false;
+	
+	bool _prevNmiFlag = false;
+	bool _prevNeedNmi = false;
+	bool _needNmi = false;
 
 	uint64_t _lastCrashWarning = 0;
 

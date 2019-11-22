@@ -269,7 +269,7 @@ uint8_t PPU::PeekRAM(uint16_t addr)
 	switch(GetRegisterID(addr)) {
 		case PPURegisters::Status:
 			returnValue = ((uint8_t)_statusFlags.SpriteOverflow << 5) | ((uint8_t)_statusFlags.Sprite0Hit << 6) | ((uint8_t)_statusFlags.VerticalBlank << 7);
-			if(_scanline == 241 && _cycle < 3) {
+			if(_scanline == _nmiScanline && _cycle < 3) {
 				//Clear vertical blank flag
 				returnValue &= 0x7F;
 			}
@@ -518,15 +518,13 @@ void PPU::SetControlRegister(uint8_t value)
 	_flags.BackgroundPatternAddr = ((_state.Control & 0x10) == 0x10) ? 0x1000 : 0x0000;
 	_flags.LargeSprites = (_state.Control & 0x20) == 0x20;
 
-	//"By toggling NMI_output ($2000 bit 7) during vertical blank without reading $2002, a program can cause /NMI to be pulled low multiple times, causing multiple NMIs to be generated."
-	bool originalVBlank = _flags.VBlank;
 	_flags.VBlank = (_state.Control & 0x80) == 0x80;
-
-	if(!originalVBlank && _flags.VBlank && _statusFlags.VerticalBlank && (_scanline != -1 || _cycle != 0)) {
-		_console->GetCpu()->SetNmiFlag();
-	}
-	if(_scanline == 241 && _cycle < 3 && !_flags.VBlank) {
+	
+	//"By toggling NMI_output ($2000 bit 7) during vertical blank without reading $2002, a program can cause /NMI to be pulled low multiple times, causing multiple NMIs to be generated."
+	if(!_flags.VBlank) {
 		_console->GetCpu()->ClearNmiFlag();
+	} else if(_flags.VBlank && _statusFlags.VerticalBlank) {
+		_console->GetCpu()->SetNmiFlag();
 	}
 }
 
@@ -578,15 +576,11 @@ void PPU::UpdateStatusFlag()
 		((uint8_t)_statusFlags.Sprite0Hit << 6) |
 		((uint8_t)_statusFlags.VerticalBlank << 7);
 	_statusFlags.VerticalBlank = false;
+	_console->GetCpu()->ClearNmiFlag();
 
-	if(_scanline == 241 && _cycle < 3) {
-		//"Reading on the same PPU clock or one later reads it as set, clears it, and suppresses the NMI for that frame."
-		_statusFlags.VerticalBlank = false;
-		_console->GetCpu()->ClearNmiFlag();
-
-		if(_cycle == 0) {
-			_preventVblFlag = true;
-		}
+	if(_scanline == _nmiScanline && _cycle == 0) {
+		//"Reading one PPU clock before reads it as clear and never sets the flag or generates NMI for that frame."
+		_preventVblFlag = true;
 	}
 }
 
@@ -898,10 +892,10 @@ void PPU::UpdateGrayscaleAndIntensifyBits()
 	int pixelNumber;
 	if(_scanline >= 240) {
 		pixelNumber = 61439;
-	} else if(_cycle < 4) {
+	} else if(_cycle < 3) {
 		pixelNumber = (_scanline << 8) - 1;
 	} else if(_cycle <= 258) {
-		pixelNumber = (_scanline << 8) + _cycle - 4;
+		pixelNumber = (_scanline << 8) + _cycle - 3;
 	} else {
 		pixelNumber = (_scanline << 8) + 255;
 	}
@@ -945,6 +939,7 @@ void PPU::ProcessScanline()
 			//Pre-render scanline logic
 			if(_cycle == 1) {
 				_statusFlags.VerticalBlank = false;
+				_console->GetCpu()->ClearNmiFlag();
 			}
 			if(_state.SpriteRamAddr >= 0x08 && IsRenderingEnabled() && !_settings->CheckFlag(EmulationFlags::DisableOamAddrBug)) {
 				//This should only be done if rendering is enabled (otherwise oam_stress test fails immediately)

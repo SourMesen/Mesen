@@ -145,7 +145,7 @@ void CPU::Reset(bool softReset, NesModel model)
 		string cpuAlignment = " CPU: " + std::to_string(cpuOffset) + "/" + std::to_string(cpuDivider - 1);
 		MessageManager::Log("CPU/PPU alignment -" + ppuAlignment + cpuAlignment);
 	} else {
-		_ppuOffset = 2;
+		_ppuOffset = 1;
 		cpuOffset = 0;
 	}
 
@@ -165,7 +165,7 @@ void CPU::Exec()
 	_operand = FetchOperand();
 	(this->*_opTable[opCode])();
 	
-	if(_prevRunIrq) {
+	if(_prevRunIrq || _prevNeedNmi) {
 		IRQ();
 	}
 }
@@ -180,12 +180,12 @@ void CPU::IRQ()
 	DummyRead();  //read next instruction byte (actually the same as above, since PC increment is suppressed. Also discarded.)
 	Push((uint16_t)(PC()));
 
-	if(_state.NMIFlag) {
+	if(_needNmi) {
+		_needNmi = false;
 		Push((uint8_t)(PS() | PSFlags::Reserved));
 		SetFlags(PSFlags::Interrupt);
 
 		SetPC(MemoryReadWord(CPU::NMIVector));
-		_state.NMIFlag = false;
 
 		#ifndef DUMMYCPU
 		_console->DebugAddTrace("NMI");
@@ -208,7 +208,8 @@ void CPU::BRK() {
 	Push((uint16_t)(PC() + 1));
 
 	uint8_t flags = PS() | PSFlags::Break | PSFlags::Reserved;
-	if(_state.NMIFlag) {
+	if(_needNmi) {
+		_needNmi = false;
 		Push((uint8_t)flags);
 		SetFlags(PSFlags::Interrupt);
 
@@ -228,8 +229,8 @@ void CPU::BRK() {
 		#endif
 	}
 
-	//Since we just set the flag to prevent interrupts, do not run one right away after this (fixes nmi_and_brk & nmi_and_irq tests)
-	_prevRunIrq = false;
+	//Ensure we don't start an NMI right after running a BRK instruction (first instruction in IRQ handler must run first - needed for nmi_and_brk test)
+	_prevNeedNmi = false;
 }
 
 void CPU::MemoryWrite(uint16_t addr, uint8_t value, MemoryOperationType operationType)
@@ -320,10 +321,22 @@ void CPU::EndCpuCycle(bool forRead)
 	_masterClock += forRead ? (_endClockCount + 1) : (_endClockCount - 1);
 	_console->GetPpu()->Run(_masterClock - _ppuOffset);
 
+	//"The internal signal goes high during φ1 of the cycle that follows the one where the edge is detected,
+	//and stays high until the NMI has been handled. "
+	_prevNeedNmi = _needNmi;
+
+	//"This edge detector polls the status of the NMI line during φ2 of each CPU cycle (i.e., during the 
+	//second half of each cycle) and raises an internal signal if the input goes from being high during 
+	//one cycle to being low during the next"
+	if(!_prevNmiFlag && _state.NMIFlag) {
+		_needNmi = true;
+	}
+	_prevNmiFlag = _state.NMIFlag;
+
 	//"it's really the status of the interrupt lines at the end of the second-to-last cycle that matters."
 	//Keep the irq lines values from the previous cycle.  The before-to-last cycle's values will be used
 	_prevRunIrq = _runIrq;
-	_runIrq = _state.NMIFlag || ((_state.IRQFlag & _irqMask) > 0 && !CheckFlag(PSFlags::Interrupt));
+	_runIrq = ((_state.IRQFlag & _irqMask) > 0 && !CheckFlag(PSFlags::Interrupt));
 }
 
 void CPU::StartCpuCycle(bool forRead)
@@ -464,7 +477,8 @@ void CPU::StreamState(bool saving)
 	Stream(_state.PC, _state.SP, _state.PS, _state.A, _state.X, _state.Y, _cycleCount, _state.NMIFlag, 
 			_state.IRQFlag, _dmcDmaRunning, _spriteDmaTransfer,
 			extraScanlinesBeforeNmi, extraScanlinesBeforeNmi, dipSwitches,
-			_needDummyRead, _needHalt, _startClockCount, _endClockCount, _ppuOffset, _masterClock);
+			_needDummyRead, _needHalt, _startClockCount, _endClockCount, _ppuOffset, _masterClock,
+			_prevNeedNmi, _prevNmiFlag, _needNmi);
 
 	if(!saving) {
 		settings->SetPpuNmiConfig(extraScanlinesBeforeNmi, extraScanlinesAfterNmi);
