@@ -49,6 +49,7 @@ SOURCES_CXX := $(LIBRETRO_DIR)/libretro.cpp \
                $(CORE_DIR)/Disassembler.cpp \
                $(CORE_DIR)/DisassemblyInfo.cpp \
                $(CORE_DIR)/EmulationSettings.cpp \
+               $(CORE_DIR)/EventManager.cpp \
                $(CORE_DIR)/ExpressionEvaluator.cpp \
                $(CORE_DIR)/FceuxMovie.cpp \
                $(CORE_DIR)/FDS.cpp \
