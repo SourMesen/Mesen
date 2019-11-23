@@ -98,13 +98,13 @@ namespace Mesen.GUI.Config
 		public XmlKeys OpenWatchWindow = Keys.Control | Keys.W;
 
 		[ShortcutName("Open Nametable Viewer (Compact)")]
-		public XmlKeys OpenNametableViewer;
+		public XmlKeys OpenNametableViewer = Keys.None;
 		[ShortcutName("Open CHR Viewer (Compact)")]
-		public XmlKeys OpenChrViewer;
+		public XmlKeys OpenChrViewer = Keys.None;
 		[ShortcutName("Open Sprite Viewer (Compact)")]
-		public XmlKeys OpenSpriteViewer;
+		public XmlKeys OpenSpriteViewer = Keys.None;
 		[ShortcutName("Open Palette Viewer (Compact)")]
-		public XmlKeys OpenPaletteViewer;
+		public XmlKeys OpenPaletteViewer = Keys.None;
 
 		//Debugger window
 		[ShortcutName("Reset")]
