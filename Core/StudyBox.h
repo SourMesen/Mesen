@@ -130,7 +130,7 @@ protected:
 
 				_console->GetCpu()->ClearIrqSource(IRQSource::External);
 				if(_pagePosition >= 0 && _pagePosition < _pageData.size()) {
-					MessageManager::Log("Read: " + HexUtilities::ToHex(_pageData[_pagePosition]));
+					//MessageManager::Log("Read: " + HexUtilities::ToHex(_pageData[_pagePosition]));
 					return _pageData[_pagePosition];
 				}
 				return 0;

@@ -42,7 +42,7 @@ public:
 				result = A12StateChange::Fall;
 			}
 		} else if(addr & 0x1000) {
-			if(_cyclesDown > 9) {
+			if(_cyclesDown > 10) {
 				result = A12StateChange::Rise;
 			}
 			_cyclesDown = 0;
