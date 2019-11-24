@@ -132,6 +132,7 @@ namespace Mesen.GUI.Debugger
 				UInt32 key = GetKey(i, type);
 				CodeLabel existingLabel;
 				if(_labelsByKey.TryGetValue(key, out existingLabel)) {
+					DeleteLabel(existingLabel, false);
 					_reverseLookup.Remove(existingLabel.Label);
 				}
 
