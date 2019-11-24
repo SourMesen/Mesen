@@ -4,6 +4,7 @@
 #include "MemoryManager.h"
 #include "VirtualFile.h"
 #include "../Utilities/FolderUtilities.h"
+#include "../Utilities/HexUtilities.h"
 
 class StudyBox : public BaseMapper
 {
@@ -21,12 +22,15 @@ private:
 	
 	bool _enableDecoder = false;
 
-	uint16_t _irqCounter = 3500;
+	bool _motorDisabled = false;
+	uint16_t _byteReadDelay = 0;
 	bool _irqEnabled = false;
 
 	bool _pageFound = false;
 	vector<uint8_t> _pageData;
-	uint32_t _pagePosition = 0;
+	int32_t _pagePosition = -1;
+
+	uint32_t _inDataDelay = 0;
 	bool _inDataRegion = false;
 
 protected:
@@ -69,7 +73,7 @@ protected:
 		if(_seekPage != 0) {
 			_seekPageDelay--;
 			if(_seekPageDelay == 0) {
-				_seekPageDelay = 30000;
+				_seekPageDelay = 3000000;
 				_pageFound = true;
 				if(_seekPage > 0) {
 					_currentPage++;
@@ -78,17 +82,40 @@ protected:
 					_currentPage--;
 					_seekPage++;
 				}
+
 				VirtualFile file(FolderUtilities::CombinePath("StudyBox", "Page" + std::to_string(_currentPage) + ".bin"));
 				file.ReadFile(_pageData);
-				_pagePosition = 0;
+
+				_inDataDelay = 300000;
+				_pagePosition = -1;
+				_byteReadDelay = 0;
 			}
 		}
 
-		if(_irqEnabled) {
-			_irqCounter--;
-			if(_irqCounter == 0) {
-				_irqCounter = 3500;
+		if(_inDataDelay > 0) {
+			_inDataRegion = true;
+			_inDataDelay--;
+			if(_inDataDelay == 0) {
+				_byteReadDelay = 7820;
 				_console->GetCpu()->SetIrqSource(IRQSource::External);
+			}
+		}
+
+		if(!_motorDisabled && _byteReadDelay > 0) {
+			_byteReadDelay--;
+			if(_byteReadDelay == 0) {
+				_byteReadDelay = 3355;
+				_pagePosition++;
+
+				if(_pagePosition >= _pageData.size()) {
+					_pageFound = false;
+					_inDataRegion = false;
+					//_motorDisabled = true;
+				}
+
+				if(_irqEnabled) {
+					_console->GetCpu()->SetIrqSource(IRQSource::External);
+				}
 			}
 		}
 	}
@@ -100,18 +127,11 @@ protected:
 				if(!_enableDecoder) {
 					MessageManager::Log("Error - read 4200 without decoder being enabled");
 				}
-				_console->GetCpu()->ClearIrqSource(IRQSource::External);
-				if(_pagePosition < _pageData.size()) {
-					uint8_t val = _pageData[_pagePosition++];
-					if(_pagePosition >= _pageData.size()) {
-						_inDataRegion = false;
-						_pagePosition = 0;
 
-						//Move to the next page
-						_seekPage = 1;
-						_seekPageDelay = 300000;
-					}
-					return val;
+				_console->GetCpu()->ClearIrqSource(IRQSource::External);
+				if(_pagePosition >= 0 && _pagePosition < _pageData.size()) {
+					MessageManager::Log("Read: " + HexUtilities::ToHex(_pageData[_pagePosition]));
+					return _pageData[_pagePosition];
 				}
 				return 0;
 			}
@@ -129,11 +149,8 @@ protected:
 					(_enableDecoder ? 0x80 : 0)
 				);
 
-				if(_pageFound) {
-					_pageFound = false;
-					_inDataRegion = true;
-				}			
-
+				_pageFound = false;
+				
 				return value;
 			}
 
@@ -194,19 +211,40 @@ protected:
 
 						if(_command >= 1 && _command < 0x40) {
 							_seekPage = _command;
-							_seekPageDelay = 30000;
+							_seekPageDelay = 3000000;
+							_motorDisabled = false;
 						} else if(_command > 0x40 && _command < 0x80) {
 							_seekPage = -(_command - 0x40);
-							_seekPageDelay = 30000;
-						} else if(_command == 0xFF) {
-							//???
+							_seekPageDelay = 3000000;
+							_motorDisabled = false;
+						} else if(_command == 0) {
+							_seekPage = -1;
+							_seekPageDelay = 3000000;
+							_motorDisabled = false;
+						} else if(_command == 0x86) {
+							while(_pagePosition < _pageData.size() && _pageData[_pagePosition] != 0xC5) {
+								_pagePosition++;
+							}
+							_pagePosition--;
+							_inDataDelay = 300000;
+							_motorDisabled = false;
+							_byteReadDelay = 0;
+							_pageFound = true;
 						}
+
+					/*} else if(_command == 0xFF) {
+							//???
+						}*/
 					}
 				}
 
 				if(value & 0x10) {
 					_readyForBit = false;
 					_processBitDelay = 100;
+				}
+
+				if((_reg4202 & 0x6E) != (value & 0x6E)) {
+					MessageManager::Log("Reg 4202 value changed: " + HexUtilities::ToHex(_reg4202) + " -> " + HexUtilities::ToHex(value));
 				}
 
 				if((_reg4202 & 0x20) && !(value & 0x20)) {
@@ -216,8 +254,22 @@ protected:
 					_readyForBit = true;
 				}
 
-				_reg4202 = value;
+				if((value & 0x04) != (_reg4202 & 0x04)) {
+					MessageManager::Log((value & 0x04) ? "Audio disabled" : "Audio enabled");
+				}
 
+				if((value & 0x02) != (_reg4202 & 0x02)) {
+					MessageManager::Log((value & 0x02) ? "IRQ enabled" : "IRQ disabled");
+				}
+
+				/*if((value & 0x01) != (_reg4202 & 0x01)) {
+					MessageManager::Log((value & 0x01) ? "Decoder enabled" : "Decoder disabled");
+				}*/
+
+				if(!(_reg4202 & 0x04) && (value & 0x04)) {
+					_motorDisabled = true;
+				}
+				_reg4202 = value;
 				_enableDecoder = value & 0x01;
 				_irqEnabled = value & 0x02;
 				_console->GetCpu()->ClearIrqSource(IRQSource::External);
