@@ -60,6 +60,10 @@ public:
 	{
 	}
 
+	virtual void UpdateSoundSettings() override
+	{
+	}
+
 	virtual void ProcessEndOfFrame() override
 	{
 	}

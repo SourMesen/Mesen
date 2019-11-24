@@ -92,7 +92,9 @@ void SoundMixer::Reset()
 
 	UpdateRates(true);
 	UpdateEqualizers(true);
-
+	if(_audioDevice) {
+		_audioDevice->UpdateSoundSettings();
+	}
 	_previousTargetRate = _sampleRate;
 }
 

@@ -10,14 +10,15 @@ public:
 	SdlSoundManager(shared_ptr<Console> console);
 	~SdlSoundManager();
 
-	void PlayBuffer(int16_t *soundBuffer, uint32_t bufferSize, uint32_t sampleRate, bool isStereo);
-	void Pause();
-	void Stop();
+	void PlayBuffer(int16_t *soundBuffer, uint32_t bufferSize, uint32_t sampleRate, bool isStereo) override;
+	void Pause() override;
+	void Stop() override;
 
-	void ProcessEndOfFrame();
+	void ProcessEndOfFrame() override;
+	void UpdateSoundSettings() override;
 
-	string GetAvailableDevices();
-	void SetAudioDevice(string deviceName);
+	string GetAvailableDevices() override;
+	void SetAudioDevice(string deviceName) override;
 
 private:
 	vector<string> GetAvailableDeviceInfo();

@@ -17,7 +17,8 @@ class IAudioDevice
 		virtual void Stop() = 0;
 		virtual void Pause() = 0;
 		virtual void ProcessEndOfFrame() = 0;
-		
+		virtual void UpdateSoundSettings() = 0;
+
 		virtual string GetAvailableDevices() = 0;
 		virtual void SetAudioDevice(string deviceName) = 0;
 		

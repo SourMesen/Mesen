@@ -18,16 +18,18 @@ public:
 	~SoundManager();
 
 	void Release();
-	void ProcessEndOfFrame();
-	void PlayBuffer(int16_t *soundBuffer, uint32_t bufferSize, uint32_t sampleRate, bool isStereo);
-	void Play();	
-	void Pause();
-	void Stop();
+	void ProcessEndOfFrame() override;
+	void UpdateSoundSettings() override;
+	void PlayBuffer(int16_t *soundBuffer, uint32_t bufferSize, uint32_t sampleRate, bool isStereo) override;
+	void Pause() override;
+	void Stop() override;
 
-	string GetAvailableDevices();
-	void SetAudioDevice(string deviceName);
+	string GetAvailableDevices() override;
+	void SetAudioDevice(string deviceName) override;
 
 private:
+	void Play();
+
 	vector<SoundDeviceInfo> GetAvailableDeviceInfo();
 	static bool CALLBACK DirectSoundEnumProc(LPGUID lpGUID, LPCWSTR lpszDesc, LPCSTR lpszDrvName, LPVOID lpContext);
 	bool InitializeDirectSound(uint32_t sampleRate, bool isStereo);
