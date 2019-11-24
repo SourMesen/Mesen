@@ -1330,6 +1330,7 @@ namespace Mesen.GUI
 
 		public UInt32 ChrPageCount;
 		public UInt32 ChrPageSize;
+		public UInt32 ChrRamPageSize;
 		[MarshalAs(UnmanagedType.ByValArray, SizeConst = 0x40)]
 		public Int32[] ChrMemoryOffset;
 		[MarshalAs(UnmanagedType.ByValArray, SizeConst = 0x40)]

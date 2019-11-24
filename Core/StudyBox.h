@@ -44,7 +44,12 @@ protected:
 	{
 		SelectPRGPage(1, 0);
 		SelectCHRPage(0, 0);
-		SetCpuMemoryMapping(0x4400, 0x4FFF, _workRam + 0x8400, MemoryAccessType::ReadWrite);
+
+		//First bank is mapped to 4000-4FFF, but the first 1kb is not accessible
+		SetCpuMemoryMapping(0x4000, 0x4FFF, 8, PrgMemoryType::WorkRam);
+		RemoveCpuMemoryMapping(0x4000, 0x43FF);
+
+		SetMirroringType(MirroringType::FourScreens);
 	}
 
 	void StreamState(bool saving) override
@@ -153,7 +158,8 @@ protected:
 	{
 		switch(addr) {
 			case 0x4200:
-				SetCpuMemoryMapping(0x6000, 0x7FFF, (value & 0xC0) >> 5, PrgMemoryType::WorkRam);
+				SetCpuMemoryMapping(0x6000, 0x6FFF, (value & 0xC0) >> 5, PrgMemoryType::WorkRam);
+				SetCpuMemoryMapping(0x7000, 0x7FFF, ((value & 0xC0) >> 5) + 1, PrgMemoryType::WorkRam);
 				SetCpuMemoryMapping(0x5000, 0x5FFF, (value & 0x07) + 8, PrgMemoryType::WorkRam);
 				break;
 

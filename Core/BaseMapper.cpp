@@ -1153,6 +1153,7 @@ CartridgeState BaseMapper::GetState()
 	state.PrgPageSize = InternalGetPrgPageSize();
 	state.ChrPageCount = GetCHRPageCount();
 	state.ChrPageSize = InternalGetChrPageSize();
+	state.ChrRamPageSize = _onlyChrRam ? InternalGetChrPageSize() : InternalGetChrRamPageSize();
 	for(int i = 0; i < 0x100; i++) {
 		state.PrgMemoryOffset[i] = _prgMemoryOffset[i];
 		state.PrgType[i] = _prgMemoryType[i];

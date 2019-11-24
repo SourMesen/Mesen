@@ -115,6 +115,7 @@ struct CartridgeState
 
 	uint32_t ChrPageCount;
 	uint32_t ChrPageSize;
+	uint32_t ChrRamPageSize;
 	int32_t ChrMemoryOffset[0x40];
 	ChrMemoryType ChrType[0x40];
 	MemoryAccessType ChrMemoryAccess[0x40];
