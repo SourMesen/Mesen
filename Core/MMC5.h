@@ -258,7 +258,7 @@ private:
 		for(int i = 0; i < 4; i++) {
 			uint8_t nametableId = nametables[(value >> (i * 2)) & 0x03];
 			if(nametableId == NtWorkRamIndex) {
-				SetPpuMemoryMapping(0x2000+i*0x400, 0x2000+i*0x400+0x3FF, _workRam, MemoryAccessType::ReadWrite);
+				SetPpuMemoryMapping(0x2000+i*0x400, 0x2000+i*0x400+0x3FF, _workRam+(_workRamSize-MMC5::ExRamSize), MemoryAccessType::ReadWrite);
 			} else {
 				SetNametable(i, nametableId);
 			}
