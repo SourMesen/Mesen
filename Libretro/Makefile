@@ -254,6 +254,8 @@ else
    CXX ?= g++
    TARGET := $(TARGET_NAME)_libretro.dll
    SHARED := -shared -s -Wl,--version-script=$(LIBRETRO_DIR)/link.T -Wl,--no-undefined
+   LDFLAGS += -static-libgcc -static-libstdc++
+   LDFLAGS += -lws2_32 -luser32 -lwinmm -ladvapi32 -lshlwapi -lwsock32 -lws2_32 -lpsapi -liphlpapi -lshell32 -luserenv -lmingw32 -shared -lgcc -lm -lmingw32
 endif
 
 LDFLAGS += $(LIBM)
