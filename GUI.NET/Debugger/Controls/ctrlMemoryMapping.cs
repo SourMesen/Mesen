@@ -145,12 +145,12 @@ namespace Mesen.GUI.Debugger.Controls
 					Color color = alternateColor ? Color.FromArgb(0xF4, 0xC7, 0xD4) : Color.FromArgb(0xD4, 0xA7, 0xB4);
 					alternateColor = !alternateColor;
 					regions.Add(new MemoryRegionInfo() { Name = "NT" + page.ToString(), Size = currentSize, Color = color });
-				} else if(memoryType == ChrMemoryType.ChrRom || memoryType == ChrMemoryType.Default && state.ChrRomSize > 0) {
+				} else if(memoryType == ChrMemoryType.ChrRom) {
 					int page = (int)(state.ChrMemoryOffset[startIndex] / state.ChrPageSize);
 					Color color = alternateColor ? Color.FromArgb(0xC4, 0xE7, 0xD4) : Color.FromArgb(0xA4, 0xD7, 0xB4);
 					alternateColor = !alternateColor;
 					regions.Add(new MemoryRegionInfo() { Name = "$" + page.ToString("X2"), Size = currentSize, Color = color });
-				} else if(memoryType == ChrMemoryType.ChrRam || memoryType == ChrMemoryType.Default && state.ChrRomSize == 0) {
+				} else if(memoryType == ChrMemoryType.ChrRam) {
 					int page = (int)(state.ChrMemoryOffset[startIndex] / state.ChrRamPageSize);
 					Color color = alternateColor ? Color.FromArgb(0xC4, 0xE0, 0xF4) : Color.FromArgb(0xB4, 0xD0, 0xE4);
 					alternateColor = !alternateColor;

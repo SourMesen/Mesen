@@ -253,7 +253,11 @@ void BaseMapper::SetPpuMemoryMapping(uint16_t startAddr, uint16_t endAddr, ChrMe
 	uint8_t* sourceMemory = nullptr;
 	switch(type) {
 		default:
-		case ChrMemoryType::Default: sourceMemory = _onlyChrRam ? _chrRam : _chrRom; break;
+		case ChrMemoryType::Default: 
+			sourceMemory = _onlyChrRam ? _chrRam : _chrRom; 
+			type = _onlyChrRam ? ChrMemoryType::ChrRam : ChrMemoryType::ChrRom;
+			break;
+
 		case ChrMemoryType::ChrRom: sourceMemory = _chrRom; break;
 		case ChrMemoryType::ChrRam: sourceMemory = _chrRam; break;
 		case ChrMemoryType::NametableRam: sourceMemory = _nametableRam; break;
