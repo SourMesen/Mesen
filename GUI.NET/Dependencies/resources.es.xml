@@ -225,7 +225,7 @@
 			<Control ID="lblLarge">Largo</Control>
 			<Control ID="lblDeadzone">Tamaño de la zona muerta del eje del controlador:</Control>
 
-			<Control ID="chkHideMousePointerForZapper">Ocultar el puntero del ratón cuando al usar zapper</Control>
+			<Control ID="chkHideMousePointerForZapper">Ocultar el puntero del ratón cuando se use zapper</Control>
 
 			<Control ID="lblKeyBinding">Advertencia: su configuración actual contiene asignaciones conflictivas - algunas teclas de su teclado o botones del mando se han asignado a varios botones del mando de la NES. Si esto no es intencionado, revise y corrija las asignaciones.</Control>
 		</Form>
