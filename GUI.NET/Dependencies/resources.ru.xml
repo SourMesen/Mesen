@@ -81,7 +81,7 @@
 			<Control ID="mnuSoundRecorder">Запись звука</Control>
 			<Control ID="mnuWaveRecord">Начать</Control>
 			<Control ID="mnuWaveStop">Остановить</Control>
-			<Control ID="mnuVideoRecorder">Video Recorder</Control>
+			<Control ID="mnuVideoRecorder">Запись видео</Control>
 			<Control ID="mnuAviRecord">Начать</Control>
 			<Control ID="mnuAviStop">Остановить</Control>
 			<Control ID="mnuCheats">Читы</Control>
@@ -96,15 +96,15 @@
 			<Control ID="mnuRunAllTests">Запустить все тесты</Control>
 			<Control ID="mnuDebugger">Отладчик</Control>
 			<Control ID="mnuLogWindow">Лог</Control>
-			<Control ID="mnuInstallHdPack">Install HD Pack</Control>
-			<Control ID="mnuHdPackEditor">HD Pack Builder</Control>
+			<Control ID="mnuInstallHdPack">Загрузить HD Pack</Control>
+			<Control ID="mnuHdPackEditor">Строитель HD Pack</Control>
 			<Control ID="mnuTakeScreenshot">Сделать скриншот</Control>
-			<Control ID="mnuRandomGame">Load Random Game</Control>
+			<Control ID="mnuRandomGame">Загрузить случайную игру</Control>
 			<Control ID="mnuHelp">Помощь</Control>
-			<Control ID="mnuOnlineHelp">Online Help</Control>
+			<Control ID="mnuOnlineHelp">Онлайн-помощь</Control>
 			<Control ID="mnuCheckForUpdates">Проверить обновления</Control>
 			<Control ID="mnuReportBug">Сообщить об ошибке</Control>
-			<Control ID="mnuHelpWindow">Command-line options</Control>
+			<Control ID="mnuHelpWindow">Настройки командной строки</Control>
 			<Control ID="mnuAbout">О программе</Control>
 
 			<!-- Archive Load Message -->
@@ -115,10 +115,10 @@
 			<Control ID="lblArtist">Автор</Control>
 			<Control ID="lblCopyright">Copyright</Control>
 			<Control ID="lblSoundChips">Звуковые чипы</Control>
-			<Control ID="lblRecording">REC</Control>
-			<Control ID="lblSlowMotion">Slow Motion</Control>
-			<Control ID="lblRewinding">Rewinding</Control>
-			<Control ID="lblFastForward">Fast Forward</Control>
+			<Control ID="lblRecording">ЗАПИСЬ</Control>
+			<Control ID="lblSlowMotion">Замедлить</Control>
+			<Control ID="lblRewinding">Перемотка</Control>
+			<Control ID="lblFastForward">Ускорить</Control>
 		</Form>
 		<Form ID="frmLogWindow" Title="Лог">
 			<Control ID="btnClose">Закрыть</Control>
@@ -126,11 +126,11 @@
 		<Form ID="frmAudioConfig" Title="Звук">
 			<Control ID="tpgGeneral">Общие</Control>
 			<Control ID="tpgAdvanced">Расширенные</Control>
-			<Control ID="chkDisableDynamicSampleRate">Disable dynamic sample rate</Control>
+			<Control ID="chkDisableDynamicSampleRate">Отключить динамическую частоту дискретизации</Control>
 			<Control ID="chkSwapDutyCycles">Перепутанная скважность (как на старых клонах)</Control>
 			<Control ID="chkSilenceTriangleHighFreq">Заглушать ультразвуковые частоты на канале triangle (уменьшает "треск")</Control>
-			<Control ID="chkReduceDmcPopping">Reduce popping sounds on the DMC channel</Control>
-			<Control ID="chkDisableNoiseModeFlag">Disable noise channel mode flag</Control>
+			<Control ID="chkReduceDmcPopping">Уменьшить хлопающие звуки на канале DMC</Control>
+			<Control ID="chkDisableNoiseModeFlag">Отключить флаг режима шумового канала</Control>
 			<Control ID="tpgEffects">Эффекты</Control>
 			<Control ID="grpStereo">Стерео</Control>
 			<Control ID="radStereoDisabled">Отключить</Control>
@@ -138,24 +138,24 @@
 			<Control ID="radStereoPanning">Панорамирование</Control>
 			<Control ID="lblStereoDelayMs">мс</Control>
 			<Control ID="lblStereoPanningAngle">угол в градусах</Control>
-			<Control ID="radStereoCombFilter">Comb Filter</Control>
+			<Control ID="radStereoCombFilter">Гребенчатый фильтр</Control>
 			<Control ID="lblStereoCombFilterMs">мс</Control>
 			<Control ID="lblStereoCombFilterDelay">Задержка :</Control>
 			<Control ID="lblStereoCombFilterStrength">Сила :</Control>
-			<Control ID="chkCrossFeedEnabled">Enable Crossfeed:</Control>
+			<Control ID="chkCrossFeedEnabled">Разрешить кольцевание:</Control>
 			<Control ID="grpReverb">Реверберация</Control>
 			<Control ID="chkReverbEnabled">Включена</Control>
 			<Control ID="lblReverbDelay">Задержка :</Control>
 			<Control ID="lblReverbStrength">Сила :</Control>
 			<Control ID="chkMuteSoundInBackground">Отключать звук при потере фокуса</Control>
 			<Control ID="chkReduceSoundInBackground">Приглушать звук при потере фокуса</Control>
-			<Control ID="chkReduceSoundInFastForward">Reduce volume during fast forward/rewind</Control>
-			<Control ID="trkVolumeReduction">Volume Reduction (%)</Control>
-			<Control ID="lblVolumeReductionSettings">Volume Reduction Settings</Control>
+			<Control ID="chkReduceSoundInFastForward">Приглушать звук при перемотке/ускорении</Control>
+			<Control ID="trkVolumeReduction">Снижение громкости (%)</Control>
+			<Control ID="lblVolumeReductionSettings">Настройки снижения громкости</Control>
 			<Control ID="chkEnableAudio">Включить звук</Control>
 			<Control ID="lblSampleRate">Частота дискретизации:</Control>
 			<Control ID="lblLatencyMs">мс</Control>
-			<Control ID="lblLatencyWarning">Low values may cause sound problems</Control>
+			<Control ID="lblLatencyWarning">Низкие значения могут вызвать проблемы со звуком</Control>
 			<Control ID="lblAudioLatency">Задержка:</Control>
 			<Control ID="lblAudioDevice">Устройство:</Control>
 			<Control ID="tpgVolume">Громкость</Control>
@@ -189,8 +189,8 @@
 			<Control ID="trkNamcoPan">Namco</Control>
 			<Control ID="trkSunsoftPan">Sunsoft</Control>
 
-			<Control ID="tpgEqualizer">Equalizer</Control>
-			<Control ID="chkEnableEqualizer">Enable equalizer</Control>
+			<Control ID="tpgEqualizer">Эквалайзер</Control>
+			<Control ID="chkEnableEqualizer">Разрешить эквалайзер</Control>
 		</Form>
 		<Form ID="frmInputConfig" Title="Устройства ввода">
 			<Control ID="btnOK">OK</Control>
@@ -200,7 +200,7 @@
 			<Control ID="btnSetupP3">Настроить</Control>
 			<Control ID="btnSetupExp">Настроить</Control>
 			<Control ID="btnSetupCartridge">Настроить</Control>
-			<Control ID="lblCartridge">Cartridge:</Control>
+			<Control ID="lblCartridge">Картридж:</Control>
 			<Control ID="lblPlayer1">Контроллер 1:</Control>
 			<Control ID="lblPlayer2">Контроллер 2:</Control>
 			<Control ID="lblPlayer4">Контроллер 4:</Control>
@@ -221,43 +221,43 @@
 			<Control ID="lblDisplayPosition">Позиция :</Control>
 			<Control ID="chkDisplayInputHorizontally">Отображать горизонтально</Control>
 
-			<Control ID="lblSmall">Small</Control>
-			<Control ID="lblLarge">Large</Control>
-			<Control ID="lblDeadzone">Controller axis deadzone size:</Control>
+			<Control ID="lblSmall">Маленький</Control>
+			<Control ID="lblLarge">Огромный</Control>
+			<Control ID="lblDeadzone">Размер зоны нечувствительности оси контроллера:</Control>
 			
-			<Control ID="chkHideMousePointerForZapper">Hide mouse pointer when using zapper</Control>
+			<Control ID="chkHideMousePointerForZapper">Спрятать курсор мыши при использовании заппера</Control>
 
-			<Control ID="lblKeyBinding">Warning: Your current configuration contains conflicting key bindings - some physical buttons on your keyboard or gamepad are mapped to multiple buttons on the NES controller. If this is not intentional, please review and correct your key bindings.</Control>
+			<Control ID="lblKeyBinding">Предупреждение: Ваша текущая кофигурация содержит конфликтующие клавиши - некоторые кнопки на вашей клавиатуре или геймпаде настроены на несколько кнопок контроллера NES. Если это не преднамеренно, пожалуйста исправьте ваши привязки клавиш.</Control>
 		</Form>
 		<Form ID="frmVideoConfig" Title="Настройки видео">
 			<Control ID="tpgGeneral">Общие</Control>
 			<Control ID="lblVideoScale">Размер :</Control>
 			<Control ID="lblVideoFilter">Фильтр :</Control>
-			<Control ID="chkIntegerFpsMode">Enable integer FPS mode (e.g: run at 60 fps instead of 60.1)</Control>
+			<Control ID="chkIntegerFpsMode">Включить integer режим FPS (т.е: 60 fps вместо 60.1 fps)</Control>
 			<Control ID="chkVerticalSync">Включить вертикальную синхронизацию</Control>
 			<Control ID="lblDisplayRatio">Соотношение сторон :</Control>
 			<Control ID="lblCustomRatio">Custom ratio:</Control>
 			<Control ID="chkBilinearInterpolation">Билинейная интерполяция</Control>
-			<Control ID="chkFullscreenForceIntegerScale">Use integer scale values when entering fullscreen mode</Control>
+			<Control ID="chkFullscreenForceIntegerScale">Использовать integer значения размера при входе в полноэкранный режим</Control>
 			<Control ID="chkShowFps">Показывать FPS</Control>
-			<Control ID="chkUseHdPacks">Использовать HDNes HD packs</Control>
-			<Control ID="chkUseExclusiveFullscreen">Use exclusive fullscreen mode</Control>
-			<Control ID="lblRequestedRefreshRate">Requested Refresh Rate:</Control>
-			<Control ID="tpgOverscan">Overscan</Control>
-			<Control ID="tpgOverscanGlobal">Global</Control>
-			<Control ID="tpgOverscanGameSpecific">Game-Specific</Control>
-			<Control ID="chkEnableGameSpecificOverscan">Enable game-specific overscan settings</Control>
+			<Control ID="chkUseHdPacks">Использовать HDNes HD Packs</Control>
+			<Control ID="chkUseExclusiveFullscreen">Использовать эксклюзивный полноэкранный режим</Control>
+			<Control ID="lblRequestedRefreshRate">Запрошенная частота обновления:</Control>
+			<Control ID="tpgOverscan">Вылеты развёртки</Control>
+			<Control ID="tpgOverscanGlobal">Глобальный</Control>
+			<Control ID="tpgOverscanGameSpecific">Зависит от игры</Control>
+			<Control ID="chkEnableGameSpecificOverscan">Включить зависящие от игры настройки вылетов развёртки</Control>
 			<Control ID="lblLeft">Слева</Control>
 			<Control ID="lblTop">Сверху</Control>
 			<Control ID="lblBottom">Снизу</Control>
 			<Control ID="lblRight">Справа</Control>
 			<Control ID="tpgPalette">Палитра</Control>
-			<Control ID="chkShowColorIndexes">Show color indexes</Control>
+			<Control ID="chkShowColorIndexes">Показывать индексы номеров</Control>
 			<Control ID="mnuDefaultPalette">По умолчанию (NTSC)</Control>
 			<Control ID="btnSelectPalette">Выбрать палитру</Control>
 			<Control ID="btnExportPalette">Экспорт .pal</Control>
 			<Control ID="btnLoadPalFile">Загрузить .pal</Control>
-			<Control ID="chkUseCustomVsPalette">Use this palette for VS System games</Control>
+			<Control ID="chkUseCustomVsPalette">Использовать эту палитру для VS System игр</Control>
 			<Control ID="tpgPicture">Изображение</Control>
 			<Control ID="btnSelectPreset">Шаблоны</Control>
 			<Control ID="grpCommon">Общие настройки</Control>
@@ -273,28 +273,28 @@
 			<Control ID="trkResolution">Разрешение</Control>
 			<Control ID="trkSharpness">Резкость</Control>
 			<Control ID="chkMergeFields">Слияние полей</Control>
-			<Control ID="chkVerticalBlend">Apply Vertical Blending</Control>
+			<Control ID="chkVerticalBlend">Применить вертикальное смешивание</Control>
 
-			<Control ID="trkYFilterLength">Y Filter (Horizontal Blur)</Control>
-			<Control ID="trkIFilterLength">I Filter (Horizontal Bleed)</Control>
-			<Control ID="trkQFilterLength">Q Filter (Horizontal Bleed)</Control>
+			<Control ID="trkYFilterLength">Y фильтр (Горизонтальная расплывчатость)</Control>
+			<Control ID="trkIFilterLength">I фильтр (Горизонтальный Bleed)</Control>
+			<Control ID="trkQFilterLength">Q фильтр (Горизонтальный Bleed)</Control>
 
-			<Control ID="grpScanlines">Scanlines</Control>
-			<Control ID="trkScanlines">Scanlines</Control>
+			<Control ID="grpScanlines">Линии сканирования</Control>
+			<Control ID="trkScanlines">Линии сканирования</Control>
 			<Control ID="btnResetPictureSettings">Сброс</Control>
-			<Control ID="mnuPresetComposite">Composite</Control>
+			<Control ID="mnuPresetComposite">Компоновщик</Control>
 			<Control ID="mnuPresetSVideo">S-Video</Control>
 			<Control ID="mnuPresetRgb">RGB</Control>
-			<Control ID="mnuPresetMonochrome">Monochrome</Control>
+			<Control ID="mnuPresetMonochrome">Монохром</Control>
 
-			<Control ID="tpgAdvanced">Advanced</Control>
-			<Control ID="lblScreenRotation">Screen Rotation:</Control>
+			<Control ID="tpgAdvanced">Продвинутый</Control>
+			<Control ID="lblScreenRotation">Поворот экрана:</Control>
 			<Control ID="chkRemoveSpriteLimit">Отключить лимит спрайтов (уменьшает мерцание)</Control>
-			<Control ID="chkAdaptiveSpriteLimit">Automatically re-enable sprite limit as needed to prevent graphical glitches when possible</Control>
-			<Control ID="chkDisableBackground">Disable background</Control>
-			<Control ID="chkDisableSprites">Disable sprites</Control>
-			<Control ID="chkForceBackgroundFirstColumn">Force background display in first column</Control>
-			<Control ID="chkForceSpritesFirstColumn">Force sprite display in first column</Control>
+			<Control ID="chkAdaptiveSpriteLimit">Автоматически включать лимит спрайтов при необходимости для уменьшения графических глитчей, когда возможно</Control>
+			<Control ID="chkDisableBackground">Отключить задний план</Control>
+			<Control ID="chkDisableSprites">Отключить спрайты</Control>
+			<Control ID="chkForceBackgroundFirstColumn">Форсировать дисплей заднего плана в первую колонку</Control>
+			<Control ID="chkForceSpritesFirstColumn">Форсировать дисплей спрайтов в первую колонку</Control>
 
 			<Control ID="btnOK">OK</Control>
 			<Control ID="btnCancel">Отмена</Control>
@@ -306,34 +306,34 @@
 			<Control ID="lblTurboSpeedHint">%  (0 = Максимальная скорость)</Control>
 			<Control ID="lblTurboSpeed">Перемотка:</Control>
 			<Control ID="lblRewindSpeedHint">%  (0 = Максимальная скорость)</Control>
-			<Control ID="lblRewindSpeed">Rewind Speed:</Control>
+			<Control ID="lblRewindSpeed">Скорость перемотки:</Control>
 
 			<Control ID="tpgAdvanced">Расширенные</Control>
-			<Control ID="lblDeveloperSettings">Recommended settings for developers (homebrew / ROM hacking)</Control>
-			<Control ID="lblMiscSettings">Miscellaneous Settings</Control>
+			<Control ID="lblDeveloperSettings">Рекомендованные настройки для разработчиков (homebrew / ROM hacking)</Control>
+			<Control ID="lblMiscSettings">Другие настройки</Control>
 			<Control ID="chkUseAlternativeMmc3Irq">Использовать альтернативный IRQ MMC3</Control>
 			<Control ID="chkAllowInvalidInput">Разрешить недопустимые комбинации (Вниз+Вверх и Влево+Вправо)</Control>
 			<Control ID="lblRamPowerOnState">Содержимое ОЗУ при включении : </Control>
-			<Control ID="chkEnableOamDecay">Enable OAM RAM decay</Control>
-			<Control ID="chkDisablePpu2004Reads">Disable PPU $2004 reads (Famicom behavior)</Control>
-			<Control ID="chkDisableOamAddrBug">Disable PPU OAMADDR bug emulation</Control>
-			<Control ID="chkDisablePaletteRead">Disable PPU palette reads</Control>
-			<Control ID="chkDisablePpuReset">Do not reset PPU when resetting console (Famicom behavior)</Control>
-			<Control ID="chkUseNes101Hvc101Behavior">Use NES/HVC-101 (Top-loader / AV Famicom) behavior</Control>
-			<Control ID="chkMapperRandomPowerOnState">Randomize power-on state for mappers</Control>
-			<Control ID="chkRandomizeCpuPpuAlignment">Randomize power-on/reset CPU/PPU alignment</Control>
-			<Control ID="chkEnablePpu2006ScrollGlitch">Enable PPU $2006 scroll glitch emulation</Control>
-			<Control ID="chkEnablePpu2000ScrollGlitch">Enable PPU $2000/$2005/$2006 first-write scroll glitch emulation</Control>
+			<Control ID="chkEnableOamDecay">Включить распад OAM RAM</Control>
+			<Control ID="chkDisablePpu2004Reads">Отключить PPU $2004 reads (поведение Famicom)</Control>
+			<Control ID="chkDisableOamAddrBug">Отключить PPU OAMADDR bug emulation</Control>
+			<Control ID="chkDisablePaletteRead">Отключить PPU palette reads</Control>
+			<Control ID="chkDisablePpuReset">Не перезагружать PPU при перезагрузке консоли (поведение Famicom)</Control>
+			<Control ID="chkUseNes101Hvc101Behavior">Использовать поведение NES/HVC-101 (Top-loader / AV Famicom)</Control>
+			<Control ID="chkMapperRandomPowerOnState">Рандомизировать стадию включения для мапперов</Control>
+			<Control ID="chkRandomizeCpuPpuAlignment">Рандомизировать включение/перезагрузку выравнивания CPU/PPU</Control>
+			<Control ID="chkEnablePpu2006ScrollGlitch">Включить PPU $2006 scroll glitch emulation</Control>
+			<Control ID="chkEnablePpu2000ScrollGlitch">Включить PPU $2000/$2005/$2006 first-write scroll glitch emulation</Control>
 
 			<Control ID="tpgOverclocking">Разгон</Control>
 			<Control ID="grpOverclocking">Разгон CPU</Control>
-			<Control ID="lblOverclockHint">Overclocking can help reduce or remove slowdowns in games (but it can also cause issues).&#13;The most compatible way to overclock is by increasing the "Scanline before NMI" value by a few hundred lines (e.g 400+)</Control>
+			<Control ID="lblOverclockHint">Разгон моэет помочь убрать или уменьшить замедления в играх (но также может вызвать проблемы).&#13;Наиболее совместимый способ разгона - увеличение "Сканлайн перед NMI" значение на несколько сотен линий (т.е 400+)</Control>
 			<Control ID="lblClockRate">Тактовая частота : </Control>
 			<Control ID="lblClockRatePercent">% (По умолчанию: 100%)</Control>
 
 			<Control ID="grpPpuTiming">Конфигурация PPU</Control>
-			<Control ID="lblExtraScanlinesBeforeNmi">Дополнительные scanlines до NMI : </Control>
-			<Control ID="lblExtraScanlinesAfterNmi">Дополнительные scanlines после NMI : </Control>
+			<Control ID="lblExtraScanlinesBeforeNmi">Дополнительные сканлайны до NMI : </Control>
+			<Control ID="lblExtraScanlinesAfterNmi">Дополнительные сканлайны после NMI : </Control>
 			<Control ID="lblEffectiveClockRate">Тактовая частота (NTSC) : </Control>
 			<Control ID="lblEffectiveClockRatePal">Тактовая частота (PAL) : </Control>
 			<Control ID="lblEffectiveClockRateDendy">Тактовая частота (Dendy) : </Control>
@@ -352,27 +352,27 @@
 			<Control ID="chkSingleInstance">Запускать только одну копию Mesen</Control>
 			<Control ID="chkAutomaticallyCheckForUpdates">Автоматически проверять обновления</Control>
 
-			<Control ID="chkDeveloperMode">Enable developer mode</Control>
+			<Control ID="chkDeveloperMode">Включить режим разработчика</Control>
 
-			<Control ID="lblPauseBackgroundSettings">Pause/Background Settings</Control>
-			<Control ID="lblMiscSettings">Miscellaneous Settings</Control>
-			<Control ID="chkAutoHideMenu">Automatically hide menu bar</Control>
-			<Control ID="chkDisplayTitleBarInfo">Display additional information in title bar</Control>
+			<Control ID="lblPauseBackgroundSettings">Настройки паузы/заднего плана</Control>
+			<Control ID="lblMiscSettings">Дополнительные настройки</Control>
+			<Control ID="chkAutoHideMenu">Автоматически спрятать строку меню</Control>
+			<Control ID="chkDisplayTitleBarInfo">Отоброжать дополнительную информацию в заголовке</Control>
 
-			<Control ID="chkConfirmExitResetPower">Display confirmation dialog before reset/power cycle/exit</Control>
+			<Control ID="chkConfirmExitResetPower">Отоброжать окно подтверждения перед перезагрузкой/циклом питания/выходом</Control>
 			<Control ID="chkPauseOnMovieEnd">Ставить на паузу после проигрывания записи</Control>
 			<Control ID="chkAllowBackgroundInput">Разрешить ввод в фоне</Control>
 
-			<Control ID="lblPauseIn">Pause when in:</Control>
-			<Control ID="chkPauseWhenInBackground">Background</Control>
-			<Control ID="chkPauseInMenuAndConfig">Menus and config dialogs</Control>
-			<Control ID="chkPauseInDebugger">Debugging tools</Control>
+			<Control ID="lblPauseIn">Пауза когда в:</Control>
+			<Control ID="chkPauseWhenInBackground">Задний план</Control>
+			<Control ID="chkPauseInMenuAndConfig">Меню и окна конфигурации</Control>
+			<Control ID="chkPauseInDebugger">Инструменты отладки</Control>
 
 			<Control ID="chkAutoLoadIps">Автоматически загружать IPS/BPS</Control>
-			<Control ID="chkHidePauseOverlay">Hide the pause screen</Control>
-			<Control ID="chkDisplayMovieIcons">Display play/record icon when playing or recording a movie</Control>
+			<Control ID="chkHidePauseOverlay">Спрятать экран паузы</Control>
+			<Control ID="chkDisplayMovieIcons">Отображать проиграть/записывать иконку когда играешь или записываешь фильм</Control>
 			<Control ID="btnOpenMesenFolder">Открыть папку Mesen</Control>
-			<Control ID="btnResetSettings">Reset All Settings</Control>
+			<Control ID="btnResetSettings">Сброс всех настроек</Control>
 
 			<Control ID="tpgFiles">Files/Folders</Control>
 			<Control ID="grpFileAssociations">Ассоциации файлов</Control>
@@ -382,27 +382,27 @@
 			<Control ID="chkMstFormat">.MST (Сохранения)</Control>
 
 			<Control ID="grpDataStorageLocation">Data Storage Folder</Control>
-			<Control ID="radStorageDocuments">Store Mesen's data in my user profile</Control>
-			<Control ID="radStoragePortable">Store Mesen's data in the same folder as the application</Control>
+			<Control ID="radStorageDocuments">Хранить данные Mesen в моем профиле</Control>
+			<Control ID="radStoragePortable">Хранить данные Mesen в той же папке с приложением</Control>
 			<Control ID="lblDataLocation">Folder:</Control>
 
-			<Control ID="grpPathOverrides">Folder Overrides</Control>
-			<Control ID="chkGameOverride">Games:</Control>
-			<Control ID="chkAviOverride">Videos:</Control>
-			<Control ID="chkScreenshotsOverride">Screenshots:</Control>
-			<Control ID="chkSaveDataOverride">Save Data:</Control>
-			<Control ID="chkWaveOverride">Audio:</Control>
-			<Control ID="chkSaveStatesOverride">Save States:</Control>
-			<Control ID="chkMoviesOverride">Movies:</Control>
+			<Control ID="grpPathOverrides">Переобпределение папки</Control>
+			<Control ID="chkGameOverride">Игры:</Control>
+			<Control ID="chkAviOverride">Видео:</Control>
+			<Control ID="chkScreenshotsOverride">Скриншоты:</Control>
+			<Control ID="chkSaveDataOverride">Сохранить данные:</Control>
+			<Control ID="chkWaveOverride">Аудио:</Control>
+			<Control ID="chkSaveStatesOverride">Сохранения:</Control>
+			<Control ID="chkMoviesOverride">Фильмы:</Control>
 
 			<Control ID="tpgAdvanced">Расширенные</Control>
 			<Control ID="chkFdsAutoLoadDisk">Автоматически вставлять диск 1 стороной А при загрузке FDS</Control>
 			<Control ID="chkFdsFastForwardOnLoad">Использовать быструю загрузку FDS</Control>
-			<Control ID="chkFdsAutoInsertDisk">Automatically switch disks for FDS games</Control>
+			<Control ID="chkFdsAutoInsertDisk">Автоматически сменять диски для FDS игр</Control>
 
-			<Control ID="chkShowFullPathInRecents">Show full file path in recent file list</Control>
-			<Control ID="chkShowFrameCounter">Show frame counter</Control>
-			<Control ID="chkShowGameTimer">Show game timer</Control>
+			<Control ID="chkShowFullPathInRecents">Показывать полный путь файла в недавних файлах</Control>
+			<Control ID="chkShowFrameCounter">Показывать счетчик кадров</Control>
+			<Control ID="chkShowGameTimer">Показывать игровой таймер</Control>
 			<Control ID="chkShowVsConfigOnLoad">Show game configuration dialog when loading VS System games</Control>
 
 			<Control ID="lblRewind">Keep rewind data for the last</Control>
