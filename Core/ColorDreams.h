@@ -22,7 +22,8 @@ class ColorDreams : public BaseMapper
 				value |= (ReadRAM(addr) & 0x01);
 			}
 
-			SelectPRGPage(0, value & 0x03);
+			//TODO: Re-add size restriction when adding an option to prevent oversized roms
+			SelectPRGPage(0, value & 0x0F);
 			SelectCHRPage(0, (value >> 4) & 0x0F);
 		}
 };
