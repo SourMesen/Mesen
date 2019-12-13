@@ -1253,6 +1253,7 @@
 			<Value ID="BreakOnDecayedOamRead">Decayed OAM read</Value>
 			<Value ID="BreakOnCpuCrash">CPU crashed</Value>
 			<Value ID="BreakOnPpu2006ScrollGlitch">$2006 write scroll glitch</Value>
+			<Value ID="BreakOnBusConflict">Bus conflict</Value>
 		</Enum>
 		<Enum ID="VsPpuType">
 			<Value ID="RP2C03B">RP2C03B</Value>

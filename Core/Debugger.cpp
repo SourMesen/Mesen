@@ -1595,44 +1595,52 @@ void Debugger::ProcessEvent(EventType type)
 			script->ProcessEvent(type);
 		}
 	}
-
-	if(type == EventType::InputPolled) {
-		for(int i = 0; i < 4; i++) {
-			if(_inputOverride[i] != 0) {
-				shared_ptr<StandardController> controller = std::dynamic_pointer_cast<StandardController>(_console->GetControlManager()->GetControlDevice(i));
-				if(controller) {
-					controller->SetBitValue(StandardController::Buttons::A, (_inputOverride[i] & 0x01) != 0);
-					controller->SetBitValue(StandardController::Buttons::B, (_inputOverride[i] & 0x02) != 0);
-					controller->SetBitValue(StandardController::Buttons::Select, (_inputOverride[i] & 0x04) != 0);
-					controller->SetBitValue(StandardController::Buttons::Start, (_inputOverride[i] & 0x08) != 0);
-					controller->SetBitValue(StandardController::Buttons::Up, (_inputOverride[i] & 0x10) != 0);
-					controller->SetBitValue(StandardController::Buttons::Down, (_inputOverride[i] & 0x20) != 0);
-					controller->SetBitValue(StandardController::Buttons::Left, (_inputOverride[i] & 0x40) != 0);
-					controller->SetBitValue(StandardController::Buttons::Right, (_inputOverride[i] & 0x80) != 0);
+	switch(type) {
+		case EventType::InputPolled:
+			for(int i = 0; i < 4; i++) {
+				if(_inputOverride[i] != 0) {
+					shared_ptr<StandardController> controller = std::dynamic_pointer_cast<StandardController>(_console->GetControlManager()->GetControlDevice(i));
+					if(controller) {
+						controller->SetBitValue(StandardController::Buttons::A, (_inputOverride[i] & 0x01) != 0);
+						controller->SetBitValue(StandardController::Buttons::B, (_inputOverride[i] & 0x02) != 0);
+						controller->SetBitValue(StandardController::Buttons::Select, (_inputOverride[i] & 0x04) != 0);
+						controller->SetBitValue(StandardController::Buttons::Start, (_inputOverride[i] & 0x08) != 0);
+						controller->SetBitValue(StandardController::Buttons::Up, (_inputOverride[i] & 0x10) != 0);
+						controller->SetBitValue(StandardController::Buttons::Down, (_inputOverride[i] & 0x20) != 0);
+						controller->SetBitValue(StandardController::Buttons::Left, (_inputOverride[i] & 0x40) != 0);
+						controller->SetBitValue(StandardController::Buttons::Right, (_inputOverride[i] & 0x80) != 0);
+					}
 				}
 			}
-		}
-	} else if(type == EventType::EndFrame) {
-		_performanceTracker->ProcessEndOfFrame();
-		_memoryDumper->GatherChrPaletteInfo();
-	} else if(type == EventType::StartFrame) {
-		//Update the event viewer
-		_console->GetNotificationManager()->SendNotification(ConsoleNotificationType::EventViewerDisplayFrame);
+			break;
 
-		//Clear the current frame/event log
-		if(CheckFlag(DebuggerFlags::PpuPartialDraw)) {
-			_ppu->DebugUpdateFrameBuffer(CheckFlag(DebuggerFlags::PpuShowPreviousFrame));
-		}
+		case EventType::EndFrame:
+			_performanceTracker->ProcessEndOfFrame();
+			_memoryDumper->GatherChrPaletteInfo();
+			break;
 
-		_eventManager->ClearFrameEvents();
-	} else if(type == EventType::Nmi) {
-		_eventManager->AddDebugEvent(DebugEventType::Nmi);
-	} else if(type == EventType::Irq) {
-		_eventManager->AddDebugEvent(DebugEventType::Irq);
-	} else if(type == EventType::SpriteZeroHit) {
-		_eventManager->AddDebugEvent(DebugEventType::SpriteZeroHit);
-	} else if(type == EventType::Reset) {
-		_enableBreakOnUninitRead = true;
+		case EventType::StartFrame:
+			//Update the event viewer
+			_console->GetNotificationManager()->SendNotification(ConsoleNotificationType::EventViewerDisplayFrame);
+
+			//Clear the current frame/event log
+			if(CheckFlag(DebuggerFlags::PpuPartialDraw)) {
+				_ppu->DebugUpdateFrameBuffer(CheckFlag(DebuggerFlags::PpuShowPreviousFrame));
+			}
+
+			_eventManager->ClearFrameEvents();
+			break;
+
+		case EventType::Nmi: _eventManager->AddDebugEvent(DebugEventType::Nmi); break;
+		case EventType::Irq: _eventManager->AddDebugEvent(DebugEventType::Irq); break;
+		case EventType::SpriteZeroHit: _eventManager->AddDebugEvent(DebugEventType::SpriteZeroHit); break;
+		case EventType::Reset: _enableBreakOnUninitRead = true; break;
+
+		case EventType::BusConflict: 
+			if(CheckFlag(DebuggerFlags::BreakOnBusConflict)) {
+				BreakImmediately(BreakSource::BreakOnBusConflict);
+			}
+			break;
 	}
 }
 

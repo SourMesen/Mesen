@@ -774,7 +774,11 @@ void BaseMapper::WriteRAM(uint16_t addr, uint8_t value)
 {
 	if(_isWriteRegisterAddr[addr]) {
 		if(_hasBusConflicts) {
-			value &= _prgPages[addr >> 8][(uint8_t)addr];
+			uint8_t prgValue = _prgPages[addr >> 8][(uint8_t)addr];
+			if(value != prgValue) {
+				_console->DebugProcessEvent(EventType::BusConflict);
+			}
+			value &= prgValue;
 		}
 		WriteRegister(addr, value);
 	} else {

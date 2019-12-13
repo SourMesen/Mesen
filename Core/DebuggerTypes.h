@@ -42,6 +42,7 @@ enum class DebuggerFlags
 	BreakOnFirstCycle = 0x10000,
 
 	BreakOnPpu2006ScrollGlitch = 0x20000,
+	BreakOnBusConflict = 0x40000,
 };
 
 enum class BreakSource
@@ -59,7 +60,8 @@ enum class BreakSource
 	BreakOnCpuCrash = 9,
 	Pause = 10,
 	BreakAfterSuspend = 11,
-	BreakOnPpu2006ScrollGlitch = 12
+	BreakOnPpu2006ScrollGlitch = 12,
+	BreakOnBusConflict = 13
 };
 
 enum class AddressType
@@ -194,6 +196,7 @@ enum class EventType
 	InputPolled = 8,
 	SpriteZeroHit = 9,
 	ScriptEnded = 10,
+	BusConflict = 11,
 	EventTypeSize
 };
 

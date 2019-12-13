@@ -340,6 +340,7 @@ namespace Mesen.GUI.Config
 		public bool BreakOnDecayedOamRead = false;
 		public bool BreakOnPpu2006ScrollGlitch = false;
 		public bool BreakOnUninitMemoryRead = false;
+		public bool BreakOnBusConflict = false;
 		public bool BreakOnInit = true;
 		public bool BreakOnPlay = false;
 		public bool BreakOnFirstCycle = true;

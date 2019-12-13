@@ -229,6 +229,7 @@ namespace Mesen.GUI.Debugger
 			this.ctrlPpuMemoryMapping = new Mesen.GUI.Debugger.Controls.ctrlMemoryMapping();
 			this.ctrlCpuMemoryMapping = new Mesen.GUI.Debugger.Controls.ctrlMemoryMapping();
 			this.tsToolbar = new Mesen.GUI.Controls.ctrlMesenToolStrip();
+			this.mnuBreakOnBusConflict = new System.Windows.Forms.ToolStripMenuItem();
 			((System.ComponentModel.ISupportInitialize)(this.splitContainer)).BeginInit();
 			this.splitContainer.Panel1.SuspendLayout();
 			this.splitContainer.Panel2.SuspendLayout();
@@ -1215,9 +1216,10 @@ namespace Mesen.GUI.Debugger
             this.mnuBreakOnInit,
             this.mnuBreakOnPlay,
             this.toolStripMenuItem26,
+            this.mnuBreakOnBusConflict,
             this.mnuBreakOnDecayedOamRead,
-            this.mnuBreakOnUninitMemoryRead,
             this.mnuBreakOnPpu2006ScrollGlitch,
+            this.mnuBreakOnUninitMemoryRead,
             this.toolStripMenuItem15,
             this.mnuBreakOnOpen,
             this.mnuBreakOnDebuggerFocus,
@@ -2033,6 +2035,14 @@ namespace Mesen.GUI.Debugger
 			this.tsToolbar.Text = "toolStrip1";
 			this.tsToolbar.Visible = false;
 			// 
+			// mnuBreakOnBusConflict
+			// 
+			this.mnuBreakOnBusConflict.CheckOnClick = true;
+			this.mnuBreakOnBusConflict.Name = "mnuBreakOnBusConflict";
+			this.mnuBreakOnBusConflict.Size = new System.Drawing.Size(261, 22);
+			this.mnuBreakOnBusConflict.Text = "Break on bus conflict";
+			this.mnuBreakOnBusConflict.Click += new System.EventHandler(this.mnuBreakOnBusConflict_Click);
+			// 
 			// frmDebugger
 			// 
 			this.AllowDrop = true;
@@ -2282,5 +2292,6 @@ namespace Mesen.GUI.Debugger
 		private System.Windows.Forms.ToolStripMenuItem mnuShowSelectionLength;
 		private System.Windows.Forms.ToolStripMenuItem mnuWatchWindow;
 		private System.Windows.Forms.ToolStripMenuItem mnuBreakOnPpu2006ScrollGlitch;
+		private System.Windows.Forms.ToolStripMenuItem mnuBreakOnBusConflict;
 	}
 }
