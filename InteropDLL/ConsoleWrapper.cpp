@@ -663,7 +663,7 @@ namespace InteropEmu {
 			return _returnString.c_str();
 		}
 
-		DllExport void __stdcall SetAudioDevice(char* audioDevice) { if(_soundManager) { _soundManager->SetAudioDevice(audioDevice); } }
+		DllExport void __stdcall SetAudioDevice(char* audioDevice) { if(_soundManager) { _soundManager->SetAudioDevice(audioDevice ? audioDevice : ""); } }
 
 		DllExport void __stdcall GetScreenSize(ConsoleId consoleId, ScreenSize &size, bool ignoreScale) { GetConsoleById(consoleId)->GetVideoDecoder()->GetScreenSize(size, ignoreScale); }
 
