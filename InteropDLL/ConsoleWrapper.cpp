@@ -219,7 +219,7 @@ namespace InteropEmu {
 			#endif
 		}
 
-		DllExport void __stdcall HistoryViewerRelease(void *windowHandle, void *viewerHandle)
+		DllExport void __stdcall HistoryViewerRelease()
 		{
 			_historyConsole->Stop();
 			_historyConsole->Release(true);
