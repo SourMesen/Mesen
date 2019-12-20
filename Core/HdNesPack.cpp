@@ -29,12 +29,12 @@ void HdNesPack::BlendColors(uint8_t output[4], uint8_t input[4])
 	output[3] = 0xFF;
 }
 
-uint32_t HdNesPack::AdjustBrightness(uint8_t input[4], uint16_t brightness)
+uint32_t HdNesPack::AdjustBrightness(uint8_t input[4], int brightness)
 {
 	return (
-		std::min(255, (brightness * input[0]) >> 8) |
-		(std::min(255, (brightness * input[1]) >> 8) << 8) |
-		(std::min(255, (brightness * input[2]) >> 8) << 16) |
+		std::min(255, (brightness * ((int)input[0] + 1)) >> 8) |
+		(std::min(255, (brightness * ((int)input[1] + 1)) >> 8) << 8) |
+		(std::min(255, (brightness * ((int)input[2] + 1)) >> 8) << 16) |
 		(input[3] << 24)
 	);
 }
@@ -53,9 +53,11 @@ void HdNesPack::DrawColor(uint32_t color, uint32_t *outputBuffer, uint32_t scale
 
 void HdNesPack::DrawCustomBackground(uint32_t *outputBuffer, uint32_t x, uint32_t y, uint32_t scale, uint32_t screenWidth)
 {
-	uint8_t brightness = _hdData->Backgrounds[_backgroundIndex].Brightness;
+	int brightness = _hdData->Backgrounds[_backgroundIndex].Brightness;
+	uint32_t left = _hdData->Backgrounds[_backgroundIndex].Left;
+	uint32_t top = _hdData->Backgrounds[_backgroundIndex].Top;
 	uint32_t width = _hdData->Backgrounds[_backgroundIndex].Data->Width;
-	uint32_t *pngData = _hdData->Backgrounds[_backgroundIndex].data() + (y * _hdData->Scale * width) + (x * _hdData->Scale);
+	uint32_t *pngData = _hdData->Backgrounds[_backgroundIndex].data() + ((top + y) * _hdData->Scale * width) + ((left + x) * _hdData->Scale);
 
 	if(scale == 1) {
 		if(brightness == 255) {
@@ -71,7 +73,7 @@ void HdNesPack::DrawCustomBackground(uint32_t *outputBuffer, uint32_t x, uint32_
 			pngData += width;
 		}
 
-		if(brightness < 255) {
+		if(brightness != 255) {
 			for(uint32_t i = 0; i < scale; i++) {
 				for(uint32_t j = 0; j < scale; j++) {
 					*buffer = AdjustBrightness((uint8_t*)buffer, brightness);
@@ -107,7 +109,7 @@ void HdNesPack::DrawTile(HdPpuTileInfo &tileInfo, HdPackTileInfo &hdPackTileInfo
 	}
 
 	uint32_t rgbValue;
-	if(hdPackTileInfo.HasTransparentPixels || hdPackTileInfo.Brightness < 255) {
+	if(hdPackTileInfo.HasTransparentPixels || hdPackTileInfo.Brightness != 255) {
 		for(uint32_t y = 0; y < scale; y++) {
 			for(uint32_t x = 0; x < scale; x++) {
 				if(hdPackTileInfo.Brightness == 255) {
@@ -278,6 +280,7 @@ void HdNesPack::GetPixels(uint32_t x, uint32_t y, HdPpuPixelInfo &pixelInfo, uin
 	HdPackTileInfo *hdPackSpriteInfo = nullptr;
 
 	bool hasSprite = pixelInfo.SpriteCount > 0;
+	bool renderOriginalTiles = ((_hdData->OptionFlags & (int)HdPackOptions::DontRenderOriginalTiles) == 0);
 	if(pixelInfo.Tile.TileIndex != HdPpuTileInfo::NoTile) {
 		hdPackTileInfo = GetCachedMatchingTile(x, y, &pixelInfo.Tile);
 	}
@@ -296,8 +299,8 @@ void HdNesPack::GetPixels(uint32_t x, uint32_t y, HdPpuPixelInfo &pixelInfo, uin
 		hasCustomBackground =
 			(int32_t)x >= -_bgScrollX &&
 			(int32_t)y >= -_bgScrollY &&
-			(y + _bgScrollY + 1) * _hdData->Scale <= bgInfo.Data->Height &&
-			(x + _bgScrollX + 1) * _hdData->Scale <= bgInfo.Data->Width;
+			(y + bgInfo.Top + _bgScrollY + 1) * _hdData->Scale <= bgInfo.Data->Height &&
+			(x + bgInfo.Left + _bgScrollX + 1) * _hdData->Scale <= bgInfo.Data->Width;
 
 		if(hasCustomBackground) {
 			hasNonBackgroundSurrounding = _contoursEnabled && IsNextToSprite(x, y);
@@ -331,7 +334,7 @@ void HdNesPack::GetPixels(uint32_t x, uint32_t y, HdPpuPixelInfo &pixelInfo, uin
 
 	if(hdPackTileInfo) {
 		DrawTile(pixelInfo.Tile, *hdPackTileInfo, outputBuffer, screenWidth);
-	} else {
+	} else if(renderOriginalTiles) {
 		//Draw regular SD background tile
 		bool useCustomBackground = !hasNonBackgroundSurrounding && hasCustomBackground && pixelInfo.Tile.BgColorIndex == 0;
 		if(!useCustomBackground && (pixelInfo.Tile.BgColorIndex != 0 || hasNonBackgroundSurrounding)) {
