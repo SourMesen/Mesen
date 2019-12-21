@@ -1,6 +1,5 @@
 #include "stdafx.h"
 #include <random>
-#include <future>
 #include <thread>
 #include "Console.h"
 #include "CPU.h"
@@ -624,7 +623,7 @@ void Console::ResetComponents(bool softReset)
 
 	_resetRunTimers = true;
 
-	std::async(std::launch::async, KeyManager::UpdateDevices);
+	KeyManager::UpdateDevices();
 
 	//This notification MUST be sent before the UpdateInputState() below to allow MovieRecorder to grab the first frame's worth of inputs
 	_notificationManager->SendNotification(softReset ? ConsoleNotificationType::GameReset : ConsoleNotificationType::GameLoaded);

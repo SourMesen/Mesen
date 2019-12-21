@@ -87,6 +87,10 @@ void EventManager::DrawEvent(DebugEventInfo &evt, bool drawBackground, uint32_t 
 	bool showEvent = false;
 	uint32_t color = 0;
 	switch(evt.Type) {
+		case DebugEventType::None: 
+		case DebugEventType::BgColorChange:
+			break;
+
 		case DebugEventType::Breakpoint: showEvent = options.ShowMarkedBreakpoints; color = options.BreakpointColor; break;
 		case DebugEventType::Irq: showEvent = options.ShowIrq; color = options.IrqColor; break;
 		case DebugEventType::Nmi: showEvent = options.ShowNmi; color = options.NmiColor; break;

@@ -107,7 +107,7 @@ protected:
 				_byteReadDelay = 3355;
 				_pagePosition++;
 
-				if(_pagePosition >= _pageData.size()) {
+				if(_pagePosition >= (int32_t)_pageData.size()) {
 					_pageFound = false;
 					_inDataRegion = false;
 					//_motorDisabled = true;
@@ -129,7 +129,7 @@ protected:
 				}
 
 				_console->GetCpu()->ClearIrqSource(IRQSource::External);
-				if(_pagePosition >= 0 && _pagePosition < _pageData.size()) {
+				if(_pagePosition >= 0 && _pagePosition < (int32_t)_pageData.size()) {
 					//MessageManager::Log("Read: " + HexUtilities::ToHex(_pageData[_pagePosition]));
 					return _pageData[_pagePosition];
 				}
@@ -222,7 +222,7 @@ protected:
 							_seekPageDelay = 3000000;
 							_motorDisabled = false;
 						} else if(_command == 0x86) {
-							while(_pagePosition < _pageData.size() && _pageData[_pagePosition] != 0xC5) {
+							while(_pagePosition < (int32_t)_pageData.size() && _pageData[_pagePosition] != 0xC5) {
 								_pagePosition++;
 							}
 							_pagePosition--;
