@@ -649,6 +649,7 @@
     <ClInclude Include="SuborKeyboard.h" />
     <ClInclude Include="SuborMouse.h" />
     <ClInclude Include="T230.h" />
+    <ClInclude Include="TxcChip.h" />
     <ClInclude Include="Unl158B.h" />
     <ClInclude Include="Unl8237A.h" />
     <ClInclude Include="UnlD1038.h" />
@@ -804,7 +805,6 @@
     <ClInclude Include="Rambo1.h" />
     <ClInclude Include="Rt01.h" />
     <ClInclude Include="Sachen74LS374N.h" />
-    <ClInclude Include="Sachen74LS374NB.h" />
     <ClInclude Include="Sachen8259.h" />
     <ClInclude Include="Sachen_133.h" />
     <ClInclude Include="Sachen_136.h" />

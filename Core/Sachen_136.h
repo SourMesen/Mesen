@@ -1,44 +1,56 @@
 #pragma once
 #include "stdafx.h"
 #include "BaseMapper.h"
+#include "TxcChip.h"
 
 class Sachen_136 : public BaseMapper
 {
 private:
-	uint8_t _chrReg;
+	TxcChip _txc = TxcChip(true);
 
 protected:
-	virtual uint16_t GetPRGPageSize() override { return 0x8000; }
-	virtual uint16_t GetCHRPageSize() override { return 0x2000; }
-	virtual uint16_t RegisterStartAddress() override { return 0x4100; }
-	virtual uint16_t RegisterEndAddress() override { return 0xFFFF; }
-	virtual bool AllowRegisterRead() override { return true; }
+	uint16_t GetPRGPageSize() override { return 0x8000; }
+	uint16_t GetCHRPageSize() override { return 0x2000; }
+	uint16_t RegisterStartAddress() override { return 0x8000; }
+	uint16_t RegisterEndAddress() override { return 0xFFFF; }
+	bool AllowRegisterRead() override { return true; }
 
 	void InitMapper() override
 	{
-		_chrReg = 0;
+		AddRegisterRange(0x4020, 0x5FFF, MemoryOperation::Any);
+		RemoveRegisterRange(0x8000, 0xFFFF, MemoryOperation::Read);
+
 		SelectPRGPage(0, 0);
 		SelectCHRPage(0, 0);
-
-		RemoveRegisterRange(0x4101, 0xFFFF, MemoryOperation::Read);
 	}
 
 	void StreamState(bool saving) override
 	{
 		BaseMapper::StreamState(saving);
-		Stream(_chrReg);
+		Stream(&_txc);
+	}
+
+	void UpdateState()
+	{
+		SelectCHRPage(0, _txc.GetOutput());
 	}
 
 	uint8_t ReadRegister(uint16_t addr) override
 	{
-		return (_chrReg & 0x3F) | (_console->GetMemoryManager()->GetOpenBus() & 0xC0);
+		uint8_t openBus = _console->GetMemoryManager()->GetOpenBus();
+		uint8_t value;
+		if((addr & 0x103) == 0x100) {
+			value = (openBus & 0xC0) | (_txc.Read() & 0x3F);
+		} else {
+			value = openBus;
+		}
+		UpdateState();
+		return value;
 	}
 
 	void WriteRegister(uint16_t addr, uint8_t value) override
 	{
-		if((addr & 0x0103) == 0x0102) {
-			_chrReg = value + 3;
-			SelectCHRPage(0, _chrReg & 0x03);
-		}
+		_txc.Write(addr, value & 0x3F);
+		UpdateState();
 	}
 };

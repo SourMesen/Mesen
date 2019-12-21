@@ -9,16 +9,18 @@ private:
 	uint8_t _regs[8];
 
 protected:
+	uint32_t GetDipSwitchCount() override { return _romInfo.MapperID == 150 ? 1 : 0; }
 	uint16_t RegisterStartAddress() override { return 0x4100; }
 	uint16_t RegisterEndAddress() override { return 0x7FFF; }
 	uint16_t GetPRGPageSize() override { return 0x8000; }
 	uint16_t GetCHRPageSize() override { return 0x2000; }
+	bool AllowRegisterRead() override { return true; }
 
 	void InitMapper() override
 	{
 		_currentRegister = 0;
 		memset(_regs, 0, sizeof(_regs));
-		SelectPRGPage(0, 0);
+		UpdateState();
 	}
 
 	void StreamState(bool saving) override
@@ -29,28 +31,49 @@ protected:
 		Stream(_currentRegister, regs);
 	}
 
-	virtual void UpdateState()
+	void UpdateState()
 	{
-		uint8_t chrPage = ((_regs[2] & 0x01) << 3) | ((_regs[6] & 0x03) << 1) | (_regs[4] & 0x01);
+		uint8_t chrPage;
+		if(_romInfo.MapperID == 150) {
+			chrPage = ((_regs[4] & 0x01) << 2) | (_regs[6] & 0x03);
+		} else {
+			chrPage = (_regs[2] & 0x01) | ((_regs[4] & 0x01) << 1) | ((_regs[6] & 0x03) << 2);
+		}
 		SelectCHRPage(0, chrPage);
-		SelectPRGPage(0, _regs[5] & 0x01);
+		SelectPRGPage(0, _regs[5] & 0x03);
 
-		SetMirroringType(_regs[7] & 0x01 ? MirroringType::Vertical : MirroringType::Horizontal);
+		switch((_regs[7] >> 1) & 0x03) {
+			case 0: SetNametables(0, 0, 0, 1); break;
+			case 1: SetMirroringType(MirroringType::Horizontal); break;
+			case 2: SetMirroringType(MirroringType::Vertical); break;
+			case 3: SetMirroringType(MirroringType::ScreenAOnly); break;
+		}
+	}
+
+	uint8_t ReadRegister(uint16_t addr) override
+	{
+		uint8_t openBus = _console->GetMemoryManager()->GetOpenBus();
+		if((addr & 0xC101) == 0x4101) {
+			if(GetDipSwitches() & 0x01) {
+				//"In the latter setting, the ASIC sees all writes as being OR'd with $04, while on reads, D2 is open bus."
+				return (openBus & 0xFC) | (_regs[_currentRegister] & 0x03);
+			} else {
+				return (openBus & 0xF8) | (_regs[_currentRegister] & 0x07);
+			}
+		}
+		return openBus;
 	}
 
 	void WriteRegister(uint16_t addr, uint8_t value) override
 	{
+		if(GetDipSwitches() & 0x01) {
+			//"In the latter setting, the ASIC sees all writes as being OR'd with $04, while on reads, D2 is open bus."
+			value |= 0x04;
+		}
+
 		switch(addr & 0xC101) {
 			case 0x4100: _currentRegister = value & 0x07; break;
-			case 0x4101: 
-				_regs[_currentRegister] = value; 
-				if(_currentRegister == 0) {
-					SelectCHRPage(0, 3);
-					SelectPRGPage(0, 0);
-				} else {
-					UpdateState();
-				}
-				break;
+			case 0x4101: _regs[_currentRegister] = (value & 0x07); UpdateState(); break;
 		}
 	}
 };

@@ -667,9 +667,6 @@
     <ClInclude Include="Sachen74LS374N.h">
       <Filter>Nes\Mappers\Sachen</Filter>
     </ClInclude>
-    <ClInclude Include="Sachen74LS374NB.h">
-      <Filter>Nes\Mappers\Sachen</Filter>
-    </ClInclude>
     <ClInclude Include="Mapper227.h">
       <Filter>Nes\Mappers\Unnamed</Filter>
     </ClInclude>
@@ -1489,6 +1486,9 @@
     </ClInclude>
     <ClInclude Include="EventManager.h">
       <Filter>Debugger</Filter>
+    </ClInclude>
+    <ClInclude Include="TxcChip.h">
+      <Filter>Nes\Mappers\Txc</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
