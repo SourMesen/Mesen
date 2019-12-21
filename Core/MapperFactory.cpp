@@ -145,6 +145,7 @@
 #include "Mapper244.h"
 #include "Mapper246.h"
 #include "Mapper253.h"
+#include "McAcc.h"
 #include "MMC1.h"
 #include "MMC1_105.h"
 #include "MMC1_155.h"
@@ -306,7 +307,13 @@ BaseMapper* MapperFactory::GetMapperFromID(RomData &romData)
 		case 1: return new MMC1();
 		case 2: return new UNROM();
 		case 3: return new CNROM(false);
-		case 4: return new MMC3();
+		case 4: 
+			if(romData.Info.SubMapperID == 3) {
+				return new McAcc();
+			} else {
+				return new MMC3();
+			}
+
 		case 5: return new MMC5();
 		case 6: return new FrontFareast();
 		case 7: return new AXROM();

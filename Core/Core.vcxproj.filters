@@ -1490,6 +1490,9 @@
     <ClInclude Include="TxcChip.h">
       <Filter>Nes\Mappers\Txc</Filter>
     </ClInclude>
+    <ClInclude Include="McAcc.h">
+      <Filter>Nes\Mappers\MMC</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">

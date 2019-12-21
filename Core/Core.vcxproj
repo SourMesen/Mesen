@@ -554,6 +554,7 @@
     <ClInclude Include="KeyManager.h" />
     <ClInclude Include="Lh51.h" />
     <ClInclude Include="Mapper116.h" />
+    <ClInclude Include="McAcc.h" />
     <ClInclude Include="MMC3_198.h" />
     <ClInclude Include="MMC3_208.h" />
     <ClInclude Include="MMC3_224.h" />
