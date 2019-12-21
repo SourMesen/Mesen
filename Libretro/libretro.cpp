@@ -128,7 +128,7 @@ extern "C" {
 
 		_console->GetSettings()->SetFlags(EmulationFlags::FdsAutoLoadDisk);
 		_console->GetSettings()->SetFlags(EmulationFlags::AutoConfigureInput);
-		_console->GetSettings()->SetSampleRate(96000);
+		_console->GetSettings()->SetSampleRate(_audioSampleRate);
 		_console->GetSettings()->SetAutoSaveOptions(0, false);
 		_console->GetSettings()->SetRewindBufferSize(0);
 	}
@@ -171,7 +171,7 @@ extern "C" {
 			{ MesenRamState, "Default power-on state for RAM; All 0s (Default)|All 1s|Random Values" },
 			{ MesenFdsAutoSelectDisk, "FDS: Automatically insert disks; disabled|enabled" },
 			{ MesenFdsFastForwardLoad, "FDS: Fast forward while loading; disabled|enabled" },
-			{ MesenAudioSampleRate, "Sound Output Samplerate; 11025|22050|44100|48000|96000|192000|384000" },
+			{ MesenAudioSampleRate, "Sound Output Sample Rate; 11025|22050|44100|48000|96000|192000|384000" },
 			{ NULL, NULL },
 		};
 
@@ -703,7 +703,11 @@ extern "C" {
 	{
 		std::stringstream ss;
 		ss.write((char*)data, size);
-		return _console->GetSaveStateManager()->LoadState(ss, false);
+
+		bool result = _console->GetSaveStateManager()->LoadState(ss, false);
+		if(result)
+			_console->GetSettings()->SetSampleRate(_audioSampleRate);
+		return result;
 	}
 
 	RETRO_API void retro_cheat_reset()
