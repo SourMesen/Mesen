@@ -27,7 +27,7 @@
 
 using namespace std;
 
-typedef void (__stdcall *NotificationListenerCallback)(ConsoleNotificationType);
+typedef void (__stdcall *NotificationListenerCallback)(int, void*);
 
 extern "C" {
 	void __stdcall InitDll();
@@ -59,10 +59,10 @@ void RunEmu()
 	}
 }
 
-void __stdcall OnNotificationReceived(ConsoleNotificationType type)
+void __stdcall OnNotificationReceived(int type, void* parameter)
 {
 	static int count = 0;
-	if(type == ConsoleNotificationType::GameLoaded) {
+	if(type == (int)ConsoleNotificationType::GameLoaded) {
 		count++;
 		if(count % 2 == 0) {
 			//GameLoaded is fired twice because of how the test roms are coded, we want to start running the test on the 2nd time only
