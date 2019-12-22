@@ -1230,6 +1230,10 @@ void PPU::Exec()
 		if(++_scanline > _vblankEnd) {
 			_lastUpdatedPixel = -1;
 			_scanline = -1;
+
+			//Force prerender scanline sprite fetches to load the dummy $FF tiles (fixes shaking in Ninja Gaiden 3 stage 1 after beating boss)
+			_spriteCount = 0;
+
 			UpdateMinimumDrawCycles();
 		}
 
