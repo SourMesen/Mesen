@@ -941,6 +941,18 @@
 		<Message ID="EmulatorShortcutMappings_LoadStateSlotAuto">自動クイックセーブスロットからロードする</Message>
 		<Message ID="EmulatorShortcutMappings_LoadStateFromFile">クイックセーブデータをファイルからロードする</Message>
 		<Message ID="EmulatorShortcutMappings_LoadLastSession">前セッションをロードする</Message>
+
+		<Message ID="EmulatorShortcutMappings_SelectSaveSlot1">クイックセーブスロット１を選ぶ</Message>
+		<Message ID="EmulatorShortcutMappings_SelectSaveSlot2">クイックセーブスロット２を選ぶ</Message>
+		<Message ID="EmulatorShortcutMappings_SelectSaveSlot3">クイックセーブスロット３を選ぶ</Message>
+		<Message ID="EmulatorShortcutMappings_SelectSaveSlot4">クイックセーブスロット４を選ぶ</Message>
+		<Message ID="EmulatorShortcutMappings_SelectSaveSlot5">クイックセーブスロット５を選ぶ</Message>
+		<Message ID="EmulatorShortcutMappings_SelectSaveSlot6">クイックセーブスロット６を選ぶ</Message>
+		<Message ID="EmulatorShortcutMappings_SelectSaveSlot7">クイックセーブスロット７を選ぶ</Message>
+		<Message ID="EmulatorShortcutMappings_SelectSaveSlot8">クイックセーブスロット８を選ぶ</Message>
+		<Message ID="EmulatorShortcutMappings_SelectSaveSlot9">クイックセーブスロット９を選ぶ</Message>
+		<Message ID="EmulatorShortcutMappings_SelectSaveSlot10">クイックセーブスロット１０を選ぶ</Message>
+		
 		<Message ID="EmulatorShortcutMappings_OpenFile">ファイルを開く</Message>
 		<Message ID="EmulatorShortcutMappings_OpenDebugger">デバッガを開く</Message>
 		<Message ID="EmulatorShortcutMappings_OpenAssembler">アセンブラを開く</Message>

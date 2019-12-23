@@ -1895,6 +1895,16 @@ namespace Mesen.GUI
 		RewindTenSecs,
 		RewindOneMin,
 
+		SelectSaveSlot1,
+		SelectSaveSlot2,
+		SelectSaveSlot3,
+		SelectSaveSlot4,
+		SelectSaveSlot5,
+		SelectSaveSlot6,
+		SelectSaveSlot7,
+		SelectSaveSlot8,
+		SelectSaveSlot9,
+		SelectSaveSlot10,
 		MoveToNextStateSlot,
 		MoveToPreviousStateSlot,
 		SaveState,
@@ -1982,7 +1992,6 @@ namespace Mesen.GUI
 		LoadLastSession,
 
 		OpenFile,
-
 		
 		//Deprecated shortcuts
 		OpenDebugger = 0xFFFF,
