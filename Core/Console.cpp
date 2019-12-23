@@ -264,8 +264,6 @@ bool Console::Initialize(VirtualFile &romFile, VirtualFile &patchFile, bool forP
 			SaveBatteries();
 		}
 
-		_videoDecoder->StopThread();
-
 		shared_ptr<HdPackData> originalHdPackData = _hdData;
 		LoadHdPack(romFile, patchFile);
 		if(patchFile.IsValid()) {
@@ -295,6 +293,8 @@ bool Console::Initialize(VirtualFile &romFile, VirtualFile &patchFile, bool forP
 				//Send notification only if a game was already running and we successfully loaded the new one
 				_notificationManager->SendNotification(ConsoleNotificationType::GameStopped, (void*)1);
 			}
+
+			_videoDecoder->StopThread();
 
 			if(isDifferentGame) {
 				_romFilepath = romFile;
@@ -442,9 +442,7 @@ bool Console::Initialize(VirtualFile &romFile, VirtualFile &patchFile, bool forP
 
 			//Reset battery source to current game if new game failed to load
 			_batteryManager->Initialize(FolderUtilities::GetFilename(GetRomInfo().RomName, false));
-			if(_mapper) {
-				_videoDecoder->StartThread();
-			}
+
 			Resume();
 		}
 	}

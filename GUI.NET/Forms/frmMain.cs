@@ -305,6 +305,8 @@ namespace Mesen.GUI.Forms
 			_enableResize = true;
 
 			ProcessFullscreenSwitch(CommandLineHelper.PreprocessCommandLineArguments(_commandLineArgs, true));
+
+			ctrlRecentGames.Visible = _emuThread == null;
 		}
 
 		protected override void OnClosing(CancelEventArgs e)
@@ -466,13 +468,7 @@ namespace Mesen.GUI.Forms
 
 		private void ResizeRecentGames(object sender, EventArgs e)
 		{
-			if(this.ClientSize.Height < 400 * _yFactor) {
-				ctrlRecentGames.Height = this.ClientSize.Height - (int)((125 - Math.Min(50, 400 - (int)(this.ClientSize.Height / _yFactor))) * _yFactor);
-			} else {
-				ctrlRecentGames.Height = this.ClientSize.Height - (int)(125 * _yFactor);
-			}
-			ctrlRecentGames.Width = this.ClientSize.Width;
-			ctrlRecentGames.Top = (this.HideMenuStrip && this.menuStrip.Visible) ? -menuStrip.Height : 0;
+			ctrlRecentGames.Height = this.ClientSize.Height - ctrlRecentGames.Top - 25;
 		}
 
 		private void frmMain_Resize(object sender, EventArgs e)
@@ -669,6 +665,7 @@ namespace Mesen.GUI.Forms
 
 					this.StartEmuThread();
 					this.BeginInvoke((MethodInvoker)(() => {
+						ctrlRecentGames.Visible = false;
 						UpdateViewerSize();
 						ProcessPostLoadCommandSwitches();
 					}));
@@ -686,6 +683,9 @@ namespace Mesen.GUI.Forms
 
 				case InteropEmu.ConsoleNotificationType.EmulationStopped:
 					InitializeNsfMode();
+					this.BeginInvoke((Action)(() => {
+						ctrlRecentGames.Visible = true;
+					}));
 					break;
 
 				case InteropEmu.ConsoleNotificationType.GameStopped:
@@ -1091,7 +1091,6 @@ namespace Mesen.GUI.Forms
 					mnuDebug.Visible = devMode;
 
 					panelInfo.Visible = !running;
-					ctrlRecentGames.Visible = !running;
 
 					ctrlLoading.Visible = (_romLoadCounter > 0);
 
