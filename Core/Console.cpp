@@ -406,6 +406,8 @@ bool Console::Initialize(VirtualFile &romFile, VirtualFile &patchFile, bool forP
 			if(!forPowerCycle) {
 				_rewindManager.reset(new RewindManager(shared_from_this()));
 				_notificationManager->RegisterNotificationListener(_rewindManager);
+			} else {
+				_rewindManager->Initialize();
 			}
 
 			//Poll controller input after creating rewind manager, to make sure it catches the first frame's input

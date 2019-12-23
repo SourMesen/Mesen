@@ -56,6 +56,8 @@ public:
 	RewindManager(shared_ptr<Console> console);
 	virtual ~RewindManager();
 
+	void Initialize();
+
 	void ProcessNotification(ConsoleNotificationType type, void* parameter) override;
 	void ProcessEndOfFrame();
 

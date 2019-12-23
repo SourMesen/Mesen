@@ -16,14 +16,19 @@ RewindManager::RewindManager(shared_ptr<Console> console)
 	_hasHistory = false;
 	AddHistoryBlock();
 
-	_console->GetControlManager()->RegisterInputProvider(this);
-	_console->GetControlManager()->RegisterInputRecorder(this);
+	Initialize();
 }
 
 RewindManager::~RewindManager()
 {
 	_console->GetControlManager()->UnregisterInputProvider(this);
 	_console->GetControlManager()->UnregisterInputRecorder(this);
+}
+
+void RewindManager::Initialize()
+{
+	_console->GetControlManager()->RegisterInputProvider(this);
+	_console->GetControlManager()->RegisterInputRecorder(this);
 }
 
 void RewindManager::ClearBuffer()
