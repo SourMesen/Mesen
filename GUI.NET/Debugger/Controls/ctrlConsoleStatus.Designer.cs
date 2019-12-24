@@ -123,6 +123,12 @@
 			this.mnuGoToResetHandler = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuGoToInitHandler = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuGoToPlayHandler = new System.Windows.Forms.ToolStripMenuItem();
+			this.sepFds = new System.Windows.Forms.ToolStripSeparator();
+			this.mnuFdsIrqHandler = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuFdsNmiHandler1 = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuFdsNmiHandler2 = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuFdsNmiHandler3 = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuFdsResetHandler = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
 			this.mnuGoToProgramCounter = new System.Windows.Forms.ToolStripMenuItem();
 			this.tableLayoutPanel2.SuspendLayout();
@@ -1310,56 +1316,102 @@
             this.mnuGoToResetHandler,
             this.mnuGoToInitHandler,
             this.mnuGoToPlayHandler,
+            this.sepFds,
+            this.mnuFdsIrqHandler,
+            this.mnuFdsNmiHandler1,
+            this.mnuFdsNmiHandler2,
+            this.mnuFdsNmiHandler3,
+            this.mnuFdsResetHandler,
             this.toolStripMenuItem1,
             this.mnuGoToProgramCounter});
 			this.contextGoTo.Name = "contextGoTo";
-			this.contextGoTo.Size = new System.Drawing.Size(167, 142);
+			this.contextGoTo.Size = new System.Drawing.Size(182, 280);
 			this.contextGoTo.Opening += new System.ComponentModel.CancelEventHandler(this.contextGoTo_Opening);
 			// 
 			// mnuGoToIrqHandler
 			// 
 			this.mnuGoToIrqHandler.Name = "mnuGoToIrqHandler";
-			this.mnuGoToIrqHandler.Size = new System.Drawing.Size(166, 22);
+			this.mnuGoToIrqHandler.Size = new System.Drawing.Size(181, 22);
 			this.mnuGoToIrqHandler.Text = "IRQ Handler";
-			this.mnuGoToIrqHandler.Click += new System.EventHandler(this.mnuGoToIrqHandler_Click);
+			this.mnuGoToIrqHandler.Click += new System.EventHandler(this.mnuGoToHandler_Click);
 			// 
 			// mnuGoToNmiHandler
 			// 
 			this.mnuGoToNmiHandler.Name = "mnuGoToNmiHandler";
-			this.mnuGoToNmiHandler.Size = new System.Drawing.Size(166, 22);
+			this.mnuGoToNmiHandler.Size = new System.Drawing.Size(181, 22);
 			this.mnuGoToNmiHandler.Text = "NMI Handler";
-			this.mnuGoToNmiHandler.Click += new System.EventHandler(this.mnuGoToNmiHandler_Click);
+			this.mnuGoToNmiHandler.Click += new System.EventHandler(this.mnuGoToHandler_Click);
 			// 
 			// mnuGoToResetHandler
 			// 
 			this.mnuGoToResetHandler.Name = "mnuGoToResetHandler";
-			this.mnuGoToResetHandler.Size = new System.Drawing.Size(166, 22);
+			this.mnuGoToResetHandler.Size = new System.Drawing.Size(181, 22);
 			this.mnuGoToResetHandler.Text = "Reset Handler";
-			this.mnuGoToResetHandler.Click += new System.EventHandler(this.mnuGoToResetHandler_Click);
+			this.mnuGoToResetHandler.Click += new System.EventHandler(this.mnuGoToHandler_Click);
 			// 
 			// mnuGoToInitHandler
 			// 
 			this.mnuGoToInitHandler.Name = "mnuGoToInitHandler";
-			this.mnuGoToInitHandler.Size = new System.Drawing.Size(166, 22);
+			this.mnuGoToInitHandler.Size = new System.Drawing.Size(181, 22);
 			this.mnuGoToInitHandler.Text = "Init Handler";
-			this.mnuGoToInitHandler.Click += new System.EventHandler(this.mnuGoToInitHandler_Click);
+			this.mnuGoToInitHandler.Click += new System.EventHandler(this.mnuGoToHandler_Click);
 			// 
 			// mnuGoToPlayHandler
 			// 
 			this.mnuGoToPlayHandler.Name = "mnuGoToPlayHandler";
-			this.mnuGoToPlayHandler.Size = new System.Drawing.Size(166, 22);
+			this.mnuGoToPlayHandler.Size = new System.Drawing.Size(181, 22);
 			this.mnuGoToPlayHandler.Text = "Play Handler";
-			this.mnuGoToPlayHandler.Click += new System.EventHandler(this.mnuGoToPlayHandler_Click);
+			this.mnuGoToPlayHandler.Click += new System.EventHandler(this.mnuGoToHandler_Click);
+			// 
+			// sepFds
+			// 
+			this.sepFds.Name = "sepFds";
+			this.sepFds.Size = new System.Drawing.Size(178, 6);
+			// 
+			// mnuFdsIrqHandler
+			// 
+			this.mnuFdsIrqHandler.Name = "mnuFdsIrqHandler";
+			this.mnuFdsIrqHandler.Size = new System.Drawing.Size(181, 22);
+			this.mnuFdsIrqHandler.Text = "FDS IRQ Handler";
+			this.mnuFdsIrqHandler.Click += new System.EventHandler(this.mnuGoToHandler_Click);
+			// 
+			// mnuFdsNmiHandler1
+			// 
+			this.mnuFdsNmiHandler1.Name = "mnuFdsNmiHandler1";
+			this.mnuFdsNmiHandler1.Size = new System.Drawing.Size(181, 22);
+			this.mnuFdsNmiHandler1.Text = "FDS NMI Handler #1";
+			this.mnuFdsNmiHandler1.Click += new System.EventHandler(this.mnuGoToHandler_Click);
+			// 
+			// mnuFdsNmiHandler2
+			// 
+			this.mnuFdsNmiHandler2.Name = "mnuFdsNmiHandler2";
+			this.mnuFdsNmiHandler2.Size = new System.Drawing.Size(181, 22);
+			this.mnuFdsNmiHandler2.Text = "FDS NMI Handler #2";
+			this.mnuFdsNmiHandler2.Click += new System.EventHandler(this.mnuGoToHandler_Click);
+			// 
+			// mnuFdsNmiHandler3
+			// 
+			this.mnuFdsNmiHandler3.Name = "mnuFdsNmiHandler3";
+			this.mnuFdsNmiHandler3.Size = new System.Drawing.Size(181, 22);
+			this.mnuFdsNmiHandler3.Text = "FDS NMI Handler #3";
+			this.mnuFdsNmiHandler3.Click += new System.EventHandler(this.mnuGoToHandler_Click);
+			// 
+			// mnuFdsResetHandler
+			// 
+			this.mnuFdsResetHandler.Name = "mnuFdsResetHandler";
+			this.mnuFdsResetHandler.Size = new System.Drawing.Size(181, 22);
+			this.mnuFdsResetHandler.Text = "FDS Reset Handler";
+			this.mnuFdsResetHandler.Click += new System.EventHandler(this.mnuGoToHandler_Click);
 			// 
 			// toolStripMenuItem1
 			// 
 			this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-			this.toolStripMenuItem1.Size = new System.Drawing.Size(163, 6);
+			this.toolStripMenuItem1.Size = new System.Drawing.Size(178, 6);
 			// 
 			// mnuGoToProgramCounter
 			// 
 			this.mnuGoToProgramCounter.Name = "mnuGoToProgramCounter";
-			this.mnuGoToProgramCounter.Size = new System.Drawing.Size(166, 22);
+			this.mnuGoToProgramCounter.Size = new System.Drawing.Size(181, 22);
 			this.mnuGoToProgramCounter.Text = "Program Counter";
 			this.mnuGoToProgramCounter.ToolTipText = "Alt+*";
 			this.mnuGoToProgramCounter.Click += new System.EventHandler(this.mnuGoToProgramCounter_Click);
@@ -1509,5 +1561,11 @@
 		private System.Windows.Forms.CheckBox chkReserved;
 		private System.Windows.Forms.Label lblFrameCount;
 		private System.Windows.Forms.TextBox txtFrameCount;
-	}
+	  private System.Windows.Forms.ToolStripSeparator sepFds;
+	  private System.Windows.Forms.ToolStripMenuItem mnuFdsNmiHandler3;
+	  private System.Windows.Forms.ToolStripMenuItem mnuFdsIrqHandler;
+	  private System.Windows.Forms.ToolStripMenuItem mnuFdsResetHandler;
+	  private System.Windows.Forms.ToolStripMenuItem mnuFdsNmiHandler1;
+	  private System.Windows.Forms.ToolStripMenuItem mnuFdsNmiHandler2;
+   }
 }
