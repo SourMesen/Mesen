@@ -39,9 +39,9 @@ public:
 	uint8_t ReadRAM(uint16_t addr) override
 	{
 		if(addr == 0x4017) {
+			StrobeProcessRead();
 			uint8_t value = (_stateBuffer & 0x01) << 1;
 			_stateBuffer >>= 1;
-			StrobeProcessRead();
 			return value;
 		}
 		return 0;

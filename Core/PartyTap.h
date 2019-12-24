@@ -40,10 +40,10 @@ public:
 	uint8_t ReadRAM(uint16_t addr) override
 	{
 		if(addr == 0x4017) {
+			StrobeProcessRead();
 			if(_readCount < 2) {
 				uint8_t value = (_stateBuffer & 0x7) << 2;
 				_stateBuffer >>= 3;
-				StrobeProcessRead();
 				_readCount++;
 				return value;
 			} else {

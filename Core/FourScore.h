@@ -29,6 +29,7 @@ public:
 	
 	uint8_t ReadRAM(uint16_t addr) override
 	{
+		StrobeProcessRead();
 		uint8_t output = 0;
 		if(addr == 0x4016) {
 			output = _signature4016 & 0x01;
@@ -37,7 +38,6 @@ public:
 			output = _signature4017 & 0x01;
 			_signature4017 >>= 1;
 		}
-		StrobeProcessRead();
 		return output;
 	}
 

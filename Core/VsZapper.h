@@ -27,9 +27,9 @@ public:
 	uint8_t ReadRAM(uint16_t addr) override
 	{
 		if(IsCurrentPort(addr)) {
+			StrobeProcessRead();
 			uint8_t returnValue = _stateBuffer & 0x01;
 			_stateBuffer >>= 1;
-			StrobeProcessRead();
 			return returnValue;
 		}
 
