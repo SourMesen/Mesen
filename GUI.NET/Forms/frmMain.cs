@@ -671,6 +671,12 @@ namespace Mesen.GUI.Forms
 					}));
 					break;
 
+				case InteropEmu.ConsoleNotificationType.GameResumed:
+					this.BeginInvoke((Action)(() => {
+						CursorManager.OnMouseMove(ctrlRenderer);
+					}));
+					break;
+
 				case InteropEmu.ConsoleNotificationType.GameReset:
 					InitializeNsfMode();
 					break;
