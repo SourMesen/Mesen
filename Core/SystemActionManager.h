@@ -41,11 +41,9 @@ public:
 	{
 		if(_needReset) {
 			SetBit(SystemActionManager::Buttons::ResetButton);
-			_needReset = false;
 		}
 		if(_needPowerCycle) {
 			SetBit(SystemActionManager::Buttons::PowerButton);
-			_needPowerCycle = false;
 		}		
 	}
 
@@ -72,6 +70,7 @@ public:
 		shared_ptr<Console> console = _console;
 		if(console) {
 			if(IsPressed(SystemActionManager::Buttons::ResetButton)) {
+				_needReset = false;
 				console->ResetComponents(true);
 				console->GetControlManager()->UpdateInputState();
 			}

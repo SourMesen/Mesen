@@ -307,6 +307,8 @@
 			<Control ID="lblTurboSpeed">Перемотка:</Control>
 			<Control ID="lblRewindSpeedHint">%  (0 = Максимальная скорость)</Control>
 			<Control ID="lblRewindSpeed">Скорость перемотки:</Control>
+			<Control ID="lblRunAhead">Run Ahead:</Control>
+			<Control ID="lblRunAheadFrames">frames (reduces input lag, increases CPU usage)</Control>
 
 			<Control ID="tpgAdvanced">Расширенные</Control>
 			<Control ID="lblDeveloperSettings">Рекомендованные настройки для разработчиков (homebrew / ROM hacking)</Control>

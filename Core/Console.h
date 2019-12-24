@@ -100,6 +100,8 @@ private:
 	bool _initialized = false;
 	std::thread::id _emulationThreadId;
 
+	void RunFrameWithRunAhead(std::stringstream& runAheadState);
+
 	void LoadHdPack(VirtualFile &romFile, VirtualFile &patchFile);
 
 	void UpdateNesModel(bool sendNotification);
@@ -156,6 +158,7 @@ public:
 		
 	void RunSingleFrame();
 	void RunSlaveCpu();
+	void RunFrame();
 	bool UpdateHdPackMode();
 
 	shared_ptr<SystemActionManager> GetSystemActionManager();

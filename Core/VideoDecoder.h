@@ -27,7 +27,7 @@ class VideoDecoder
 {
 private:
 	shared_ptr<Console> _console;
-
+	EmulationSettings* _settings;
 	uint16_t *_ppuOutputBuffer = nullptr;
 	HdScreenInfo *_hdScreenInfo = nullptr;
 	bool _hdFilterEnabled = false;

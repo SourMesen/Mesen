@@ -164,7 +164,7 @@ void SoundMixer::PlayAudioBuffer(uint32_t time)
 		_crossFeedFilter.ApplyFilter(_outputBuffer, sampleCount, filterSettings.CrossFadeRatio);
 	}
 
-	if(rewindManager && rewindManager->SendAudio(_outputBuffer, (uint32_t)sampleCount, _sampleRate)) {
+	if(!_settings->IsRunAheadFrame() && rewindManager && rewindManager->SendAudio(_outputBuffer, (uint32_t)sampleCount, _sampleRate)) {
 		bool isRecording = _waveRecorder || _console->GetVideoRenderer()->IsRecording();
 		if(isRecording) {
 			shared_ptr<WaveRecorder> recorder = _waveRecorder;

@@ -308,6 +308,8 @@
 			<Control ID="lblEmulationSpeed">Velocitat d'emulació:</Control>
 			<Control ID="lblRewindSpeedHint">%  (0 = Velocitat màxima)</Control>
 			<Control ID="lblRewindSpeed">Velocitat del rebobinat:</Control>
+			<Control ID="lblRunAhead">Run Ahead:</Control>
+			<Control ID="lblRunAheadFrames">frames (reduces input lag, increases CPU usage)</Control>
 
 			<Control ID="tpgAdvanced">Avançat</Control>
 			<Control ID="lblDeveloperSettings">Recommended settings for developers (homebrew / ROM hacking)</Control>

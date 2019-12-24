@@ -48,6 +48,10 @@ void RewindManager::ClearBuffer()
 
 void RewindManager::ProcessNotification(ConsoleNotificationType type, void * parameter)
 {
+	if(_settings->IsRunAheadFrame()) {
+		return;
+	}
+
 	if(type == ConsoleNotificationType::PpuFrameDone) {
 		_hasHistory = _history.size() >= 2;
 		if(_settings->GetRewindBufferSize() > 0) {

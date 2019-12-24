@@ -308,6 +308,8 @@
 			<Control ID="lblTurboSpeed">Vitesse d'avance rapide :</Control>
 			<Control ID="lblRewindSpeedHint">%  (0 = Vitesse maximale)</Control>
 			<Control ID="lblRewindSpeed">Vitesse du rembobinage :</Control>
+			<Control ID="lblRunAhead">Run Ahead:</Control>
+			<Control ID="lblRunAheadFrames">images (réduit l'input lag, au coût de la performance)</Control>
 
 			<Control ID="tpgAdvanced">Avancé</Control>
 			<Control ID="lblDeveloperSettings">Options recommandées pour les développeurs (homebrew / ROM hacking)</Control>

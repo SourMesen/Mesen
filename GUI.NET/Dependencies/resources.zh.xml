@@ -334,6 +334,8 @@
 			<Control ID="lblTurboSpeed">快进速度:</Control>
 			<Control ID="lblRewindSpeedHint">%  (0 = 最快)</Control>
 			<Control ID="lblRewindSpeed">快退速度:</Control>
+			<Control ID="lblRunAhead">Run Ahead:</Control>
+			<Control ID="lblRunAheadFrames">frames (reduces input lag, increases CPU usage)</Control>
 
 			<Control ID="tpgAdvanced">高级</Control>
 			<Control ID="lblDeveloperSettings">开发者推荐设置 (自作/修改 ROM)</Control>

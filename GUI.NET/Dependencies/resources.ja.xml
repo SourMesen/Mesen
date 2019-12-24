@@ -307,6 +307,8 @@
 			<Control ID="lblTurboSpeed">早送りの速度:</Control>
 			<Control ID="lblRewindSpeedHint">%  (0 = 最高速度)</Control>
 			<Control ID="lblRewindSpeed">巻き戻しの速度:</Control>
+			<Control ID="lblRunAhead">Run Ahead:</Control>
+			<Control ID="lblRunAheadFrames">フレーム (入力遅延低下)</Control>
 
 			<Control ID="tpgAdvanced">詳細設定</Control>
 			<Control ID="lblDeveloperSettings">開発者向け設定 (自作ソフト / ROM hacking)</Control>
