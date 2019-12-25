@@ -178,6 +178,10 @@ namespace Mesen.GUI.Controls
 
 		public void UpdateGameInfo()
 		{
+			if(!_initialized) {
+				return;
+			}
+
 			int count = _recentGames.Count;
 			int pageStart = _currentIndex / _elementsPerPage * _elementsPerPage;
 
