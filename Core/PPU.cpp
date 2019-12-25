@@ -498,7 +498,7 @@ bool PPU::IsRenderingEnabled()
 void PPU::ProcessTmpAddrScrollGlitch(uint16_t normalAddr, uint16_t value, uint16_t mask)
 {
 	_state.TmpVideoRamAddr = normalAddr;
-	if(_cycle == 257 && _settings->CheckFlag(EmulationFlags::EnablePpu2000ScrollGlitch)) {
+	if(_cycle == 257 && _settings->CheckFlag(EmulationFlags::EnablePpu2000ScrollGlitch) && _scanline < 240 && IsRenderingEnabled()) {
 		//Use open bus to set some parts of V (glitch that occurs when writing to $2000/$2005/$2006 on cycle 257)
 		_state.VideoRamAddr = (_state.VideoRamAddr & ~mask) | (value & mask);
 	}
