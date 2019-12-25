@@ -764,7 +764,7 @@ void Console::Run()
 	try {
 		while(true) {
 			stringstream runAheadState;
-			bool useRunAhead = _settings->GetRunAheadFrames() > 0 && !_debugger && !_rewindManager->IsRewinding();
+			bool useRunAhead = _settings->GetRunAheadFrames() > 0 && !_debugger && !_rewindManager->IsRewinding() && _settings->GetEmulationSpeed() > 0 && _settings->GetEmulationSpeed() <= 100;
 			if(useRunAhead) {
 				RunFrameWithRunAhead(runAheadState);
 			} else {
