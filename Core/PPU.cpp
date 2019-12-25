@@ -798,9 +798,6 @@ void PPU::LoadSpriteTileInfo()
 {
 	uint8_t *spriteAddr = _secondarySpriteRAM + _spriteIndex * 4;
 	LoadSprite(*spriteAddr, *(spriteAddr+1), *(spriteAddr+2), *(spriteAddr+3), false);
-	if(_cycle == 316) {
-		LoadExtraSprites();
-	}
 }
 
 void PPU::ShiftTileRegisters()
@@ -981,6 +978,7 @@ void PPU::ProcessScanline()
 		LoadTileInfo();
 		if(_cycle == 321) {
 			if(IsRenderingEnabled()) {
+				LoadExtraSprites();
 				_oamCopybuffer = _secondarySpriteRAM[0];
 			}
 			if(_scanline == -1) {
