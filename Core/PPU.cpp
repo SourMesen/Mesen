@@ -511,7 +511,7 @@ void PPU::SetControlRegister(uint8_t value)
 	uint8_t nameTable = (_state.Control & 0x03);
 
 	uint16_t normalAddr = (_state.TmpVideoRamAddr & ~0x0C00) | (nameTable << 10);
-	ProcessTmpAddrScrollGlitch(normalAddr, _console->GetMemoryManager()->GetOpenBus() << 10, 0x0C00);
+	ProcessTmpAddrScrollGlitch(normalAddr, _console->GetMemoryManager()->GetOpenBus() << 10, 0x0400);
 	
 	_flags.VerticalWrite = (_state.Control & 0x04) == 0x04;
 	_flags.SpritePatternAddr = ((_state.Control & 0x08) == 0x08) ? 0x1000 : 0x0000;
