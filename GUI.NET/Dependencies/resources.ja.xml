@@ -555,6 +555,16 @@
 			<Control ID="lblLink">www.mesen.ca</Control>
 			<Control ID="labelVersion">バージョン:</Control>
 			<Control ID="lblBuildDateLabel">ビルド日時:</Control>
+
+			<Control ID="grpAcknowledgements">謝辞</Control>
+			<Control ID="lblUsedSoftware">次のソフトが含まれています:</Control>
+			<Control ID="lblGeneral">全般:</Control>
+			<Control ID="lblVideo">映像:</Control>
+			<Control ID="lblAudio">音声:</Control>
+			<Control ID="lblEmulation">エミュレーション:</Control>
+			<Control ID="lblCheats">チートコード:</Control>
+			<Control ID="lblSpecialThanks">バグ報告とかで手伝ってくれた皆様にも感謝しています。</Control>
+
 			<Control ID="lblDonate">応援ありがとうございます！</Control>
 			<Control ID="okButton">&amp;OK</Control>
 		</Form>

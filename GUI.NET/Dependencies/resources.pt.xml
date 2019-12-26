@@ -567,6 +567,16 @@
 			<Control ID="lblLink">www.mesen.ca</Control>
 			<Control ID="labelVersion">Versão:</Control>
 			<Control ID="lblBuildDateLabel">Build Date:</Control>
+
+			<Control ID="grpAcknowledgements">Acknowledgements</Control>
+			<Control ID="lblUsedSoftware">This software uses the following libraries:</Control>
+			<Control ID="lblGeneral">General:</Control>
+			<Control ID="lblVideo">Video:</Control>
+			<Control ID="lblAudio">Audio:</Control>
+			<Control ID="lblEmulation">Emulation:</Control>
+			<Control ID="lblCheats">Cheats:</Control>
+			<Control ID="lblSpecialThanks">And thank you to everybody who has contributed in any way! (donations, bug reports, testing, sharing information, etc.)</Control>
+
 			<Control ID="lblDonate">Caso queira apoiar o Mesen, faça uma doação ao projeto.&#xA;Obrigado pelo seu apoio!</Control>
 			<Control ID="okButton">&amp;OK</Control>
 		</Form>

@@ -578,6 +578,16 @@
 			<Control ID="lblLink">www.mesen.ca</Control>
 			<Control ID="labelVersion">版本:</Control>
 			<Control ID="lblBuildDateLabel">构建日期:</Control>
+
+			<Control ID="grpAcknowledgements">Acknowledgements</Control>
+			<Control ID="lblUsedSoftware">This software uses the following libraries:</Control>
+			<Control ID="lblGeneral">General:</Control>
+			<Control ID="lblVideo">Video:</Control>
+			<Control ID="lblAudio">Audio:</Control>
+			<Control ID="lblEmulation">Emulation:</Control>
+			<Control ID="lblCheats">Cheats:</Control>
+			<Control ID="lblSpecialThanks">And thank you to everybody who has contributed in any way! (donations, bug reports, testing, sharing information, etc.)</Control>
+
 			<Control ID="lblDonate">如果您喜欢 Mesen 模拟器，请通过捐赠来支持我们！&#13;感谢你的支持！&#13;&#13;汉化：Licardo（albert.abdilim@foxmail.com） owomomo（ikyokyo@163.com）&#13;</Control>
 			<Control ID="okButton">确定</Control>
 		</Form>
