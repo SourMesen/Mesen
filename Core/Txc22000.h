@@ -2,13 +2,13 @@
 #include "stdafx.h"
 #include "BaseMapper.h"
 #include "MemoryManager.h"
+#include "TxcChip.h"
 
 class Txc22000 : public BaseMapper
 {
 private:
-	uint8_t _state;
-	bool _prgBankingMode;
-	uint8_t _prgBank;
+	TxcChip _txc = TxcChip(false);
+	uint8_t _chrBank;
 
 protected:
 	virtual uint16_t GetPRGPageSize() override { return 0x8000; }
@@ -22,10 +22,7 @@ protected:
 		AddRegisterRange(0x4100, 0x5FFF, MemoryOperation::Any);
 		RemoveRegisterRange(0x8000, 0xFFFF, MemoryOperation::Read);
 
-		_state = 0;
-		_prgBank = 0;
-		_prgBankingMode = 0;
-
+		_chrBank = 0;
 		SelectPRGPage(0, 0);
 		SelectCHRPage(0, 0);
 	}
@@ -33,39 +30,33 @@ protected:
 	void StreamState(bool saving) override
 	{
 		BaseMapper::StreamState(saving);
-		Stream(_state, _prgBank, _prgBankingMode);
+		Stream(&_txc);
+		Stream(_chrBank);
 	}
 
-	virtual uint8_t ReadRegister(uint16_t addr) override
+	void UpdateState()
 	{
-		return (_console->GetMemoryManager()->GetOpenBus() & 0xCF) | (_state << 4);
+		SelectPRGPage(0, _txc.GetOutput() & 0x03);
+		SelectCHRPage(0, _chrBank);
+	}
+
+	uint8_t ReadRegister(uint16_t addr) override
+	{
+		uint8_t openBus = _console->GetMemoryManager()->GetOpenBus();
+		uint8_t value = openBus;
+		if((addr & 0x103) == 0x100) {
+			value = (openBus & 0xCF) | ((_txc.Read() << 4) & 0x30);
+		}
+		UpdateState();
+		return value;
 	}
 
 	void WriteRegister(uint16_t addr, uint8_t value) override
 	{
-		if(addr < 0x8000) {
-			switch(addr & 0xE303) {
-				//"when M=0, copy PP to RR. When M=1, RR=RR+1"
-				case 0x4100:
-					if(_prgBankingMode) {
-						_state++;
-					} else {
-						_state = _prgBank;
-					}
-					break;
-
-				case 0x4101: break; //"$4101: no visible effect"
-				
-				case 0x4102: _prgBank = (value >> 4) & 0x03; break;
-				case 0x4103: _prgBankingMode = (value >> 4) & 0x01; break;
-				
-				case 0x4200: case 0x4201: case 0x4202: case 0x4203:
-					SelectCHRPage(0, value & 0x0F);
-					break;
-			}
-		} else {
-			SelectPRGPage(0, _state);
+		if((addr & 0xF200) == 0x4200) {
+			_chrBank = value;
 		}
-
+		_txc.Write(addr, (value >> 4) & 0x03);
+		UpdateState();
 	}
 };

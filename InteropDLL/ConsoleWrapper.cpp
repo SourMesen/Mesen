@@ -219,7 +219,7 @@ namespace InteropEmu {
 			#endif
 		}
 
-		DllExport void __stdcall HistoryViewerRelease(void *windowHandle, void *viewerHandle)
+		DllExport void __stdcall HistoryViewerRelease()
 		{
 			_historyConsole->Stop();
 			_historyConsole->Release(true);
@@ -441,6 +441,7 @@ namespace InteropEmu {
 
 		DllExport void __stdcall Reset() { _console->Reset(true); }
 		DllExport void __stdcall PowerCycle() { _console->Reset(false); }
+		DllExport void __stdcall ReloadRom() { _console->ReloadRom(); }
 		DllExport void __stdcall ResetLagCounter() { _console->ResetLagCounter(); }
 
 		DllExport void __stdcall StartServer(uint16_t port, char* password, char* hostPlayerName) { GameServer::StartServer(_console, port, password, hostPlayerName); }
@@ -626,6 +627,7 @@ namespace InteropEmu {
 		DllExport void __stdcall SetSampleRate(uint32_t sampleRate) { _settings->SetSampleRate(sampleRate); }
 		DllExport void __stdcall SetAudioLatency(uint32_t msLatency) { _settings->SetAudioLatency(msLatency); }
 		DllExport void __stdcall SetAudioFilterSettings(AudioFilterSettings settings) { _settings->SetAudioFilterSettings(settings); }
+		DllExport void __stdcall SetRunAheadFrames(uint32_t frameCount) { _settings->SetRunAheadFrames(frameCount); }
 
 		DllExport NesModel __stdcall GetNesModel() { return _console->GetModel(); }
 		DllExport void __stdcall SetNesModel(uint32_t model) { _settings->SetNesModel((NesModel)model); }
@@ -662,7 +664,7 @@ namespace InteropEmu {
 			return _returnString.c_str();
 		}
 
-		DllExport void __stdcall SetAudioDevice(char* audioDevice) { if(_soundManager) { _soundManager->SetAudioDevice(audioDevice); } }
+		DllExport void __stdcall SetAudioDevice(char* audioDevice) { if(_soundManager) { _soundManager->SetAudioDevice(audioDevice ? audioDevice : ""); } }
 
 		DllExport void __stdcall GetScreenSize(ConsoleId consoleId, ScreenSize &size, bool ignoreScale) { GetConsoleById(consoleId)->GetVideoDecoder()->GetScreenSize(size, ignoreScale); }
 

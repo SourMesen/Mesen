@@ -13,6 +13,7 @@
 			<Control ID="mnuPause">Pause</Control>
 			<Control ID="mnuReset">Reset</Control>
 			<Control ID="mnuPowerCycle">Arrêt &amp;&amp; redémarrage</Control>
+			<Control ID="mnuReloadRom">Recharger le ROM à partir du disque</Control>
 			<Control ID="mnuPowerOff">Arrêter le jeu</Control>
 			<Control ID="mnuSwitchDiskSide">Changer le disque de côté</Control>
 			<Control ID="mnuSelectDisk">Choisir le disque</Control>
@@ -307,6 +308,8 @@
 			<Control ID="lblTurboSpeed">Vitesse d'avance rapide :</Control>
 			<Control ID="lblRewindSpeedHint">%  (0 = Vitesse maximale)</Control>
 			<Control ID="lblRewindSpeed">Vitesse du rembobinage :</Control>
+			<Control ID="lblRunAhead">Run Ahead:</Control>
+			<Control ID="lblRunAheadFrames">images (réduit l'input lag, au coût de la performance)</Control>
 
 			<Control ID="tpgAdvanced">Avancé</Control>
 			<Control ID="lblDeveloperSettings">Options recommandées pour les développeurs (homebrew / ROM hacking)</Control>
@@ -887,6 +890,7 @@
 		<Message ID="EmulatorShortcutMappings_Pause">Pause</Message>
 		<Message ID="EmulatorShortcutMappings_Reset">Reset</Message>
 		<Message ID="EmulatorShortcutMappings_PowerCycle">Arrêt &amp; redémarrage</Message>
+		<Message ID="EmulatorShortcutMappings_ReloadRom">Recharger le ROM à partir du disque</Message>
 		<Message ID="EmulatorShortcutMappings_PowerOff">Arrêter le jeu</Message>
 		<Message ID="EmulatorShortcutMappings_Exit">Quitter</Message>
 		<Message ID="EmulatorShortcutMappings_TakeScreenshot">Capture d'écran</Message>
@@ -951,6 +955,18 @@
 		<Message ID="EmulatorShortcutMappings_LoadStateSlotAuto">Chargement d'état - Sauvegarde auto</Message>
 		<Message ID="EmulatorShortcutMappings_LoadStateFromFile">Charger l'état à partir d'un fichier</Message>
 		<Message ID="EmulatorShortcutMappings_LoadLastSession">Charger la session précédente</Message>
+
+		<Message ID="EmulatorShortcutMappings_SelectSaveSlot1">Choisir position de sauvegarde 1</Message>
+		<Message ID="EmulatorShortcutMappings_SelectSaveSlot2">Choisir position de sauvegarde 2</Message>
+		<Message ID="EmulatorShortcutMappings_SelectSaveSlot3">Choisir position de sauvegarde 3</Message>
+		<Message ID="EmulatorShortcutMappings_SelectSaveSlot4">Choisir position de sauvegarde 4</Message>
+		<Message ID="EmulatorShortcutMappings_SelectSaveSlot5">Choisir position de sauvegarde 5</Message>
+		<Message ID="EmulatorShortcutMappings_SelectSaveSlot6">Choisir position de sauvegarde 6</Message>
+		<Message ID="EmulatorShortcutMappings_SelectSaveSlot7">Choisir position de sauvegarde 7</Message>
+		<Message ID="EmulatorShortcutMappings_SelectSaveSlot8">Choisir position de sauvegarde 8</Message>
+		<Message ID="EmulatorShortcutMappings_SelectSaveSlot9">Choisir position de sauvegarde 9</Message>
+		<Message ID="EmulatorShortcutMappings_SelectSaveSlot10">Choisir position de sauvegarde 10</Message>
+		
 		<Message ID="EmulatorShortcutMappings_OpenFile">Ouvrir un fichier</Message>
 		<Message ID="EmulatorShortcutMappings_OpenDebugger">Ouvrir le débogueur</Message>
 		<Message ID="EmulatorShortcutMappings_OpenAssembler">Ouvrir l'assembleur</Message>

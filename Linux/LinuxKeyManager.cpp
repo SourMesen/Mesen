@@ -366,7 +366,7 @@ void LinuxKeyManager::CheckForGamepads(bool logInformation)
 			int deviceId = 0;
 			try {
 				deviceId = std::stoi(filename.substr(5));
-			} catch(std::exception e) {
+			} catch(std::exception &) {
 				continue;
 			}
 

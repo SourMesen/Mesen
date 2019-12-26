@@ -13,6 +13,7 @@
 			<Control ID="mnuPause">Pausa</Control>
 			<Control ID="mnuReset">Reset</Control>
 			<Control ID="mnuPowerCycle">Spegni/Riaccendi</Control>
+			<Control ID="mnuReloadRom">Reload ROM</Control>
 			<Control ID="mnuPowerOff">Spegni</Control>
 			<Control ID="mnuSwitchDiskSide">Cambia Lato Disco</Control>
 			<Control ID="mnuSelectDisk">Seleziona Disco</Control>
@@ -307,6 +308,8 @@
 			<Control ID="lblTurboSpeed">Velocità avanti veloce:</Control>
 			<Control ID="lblRewindSpeedHint">%  (0 = Velocità massima)</Control>
 			<Control ID="lblRewindSpeed">Velocità Riavvolgimento:</Control>
+			<Control ID="lblRunAhead">Run Ahead:</Control>
+			<Control ID="lblRunAheadFrames">frames (reduces input lag, increases CPU usage)</Control>
 
 			<Control ID="tpgAdvanced">Avanzato</Control>
 			<Control ID="lblDeveloperSettings">Opzioni raccomandate per sviluppatori (homebrew / ROM hacking)</Control>
@@ -888,6 +891,7 @@
 		<Message ID="EmulatorShortcutMappings_Pause">Pausa</Message>
 		<Message ID="EmulatorShortcutMappings_Reset">Reset</Message>
 		<Message ID="EmulatorShortcutMappings_PowerCycle">Spegni e Riaccendi</Message>
+		<Message ID="EmulatorShortcutMappings_ReloadRom">Reload ROM</Message>
 		<Message ID="EmulatorShortcutMappings_PowerOff">Spegni</Message>
 		<Message ID="EmulatorShortcutMappings_Exit">Esci</Message>
 		<Message ID="EmulatorShortcutMappings_TakeScreenshot">Fai uno Screenshot</Message>
@@ -953,6 +957,18 @@
 		<Message ID="EmulatorShortcutMappings_LoadStateSlotAuto">Carica Stato - Slot Salvataggio Automatico</Message>
 		<Message ID="EmulatorShortcutMappings_LoadStateFromFile">Carica Stato da File</Message>
 		<Message ID="EmulatorShortcutMappings_LoadLastSession">Carica Ultima Sessione</Message>
+
+		<Message ID="EmulatorShortcutMappings_SelectSaveSlot1">Select Save Slot 1</Message>
+		<Message ID="EmulatorShortcutMappings_SelectSaveSlot2">Select Save Slot 2</Message>
+		<Message ID="EmulatorShortcutMappings_SelectSaveSlot3">Select Save Slot 3</Message>
+		<Message ID="EmulatorShortcutMappings_SelectSaveSlot4">Select Save Slot 4</Message>
+		<Message ID="EmulatorShortcutMappings_SelectSaveSlot5">Select Save Slot 5</Message>
+		<Message ID="EmulatorShortcutMappings_SelectSaveSlot6">Select Save Slot 6</Message>
+		<Message ID="EmulatorShortcutMappings_SelectSaveSlot7">Select Save Slot 7</Message>
+		<Message ID="EmulatorShortcutMappings_SelectSaveSlot8">Select Save Slot 8</Message>
+		<Message ID="EmulatorShortcutMappings_SelectSaveSlot9">Select Save Slot 9</Message>
+		<Message ID="EmulatorShortcutMappings_SelectSaveSlot10">Select Save Slot 10</Message>
+
 		<Message ID="EmulatorShortcutMappings_OpenFile">Apri File</Message>
 		<Message ID="EmulatorShortcutMappings_OpenDebugger">Apri Debugger</Message>
 		<Message ID="EmulatorShortcutMappings_OpenAssembler">Apri Assembler</Message>

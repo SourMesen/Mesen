@@ -1,9 +1,8 @@
 #include "stdafx.h"
 
-//TODO: Use non-experimental namespace (once it is officially supported by VC & GCC)
 #ifndef LIBRETRO
-#include <experimental/filesystem>
-namespace fs = std::experimental::filesystem;
+	#include <filesystem>
+	namespace fs = std::filesystem;
 #endif
 
 #include <unordered_set>
@@ -135,13 +134,14 @@ vector<string> FolderUtilities::GetFolders(string rootFolder)
 		return folders;
 	} 
 
-	for(fs::recursive_directory_iterator i(fs::u8path(rootFolder)), end; i != end; i++) {
-		if(i.depth() > 1) {
+	fs::recursive_directory_iterator itt(fs::u8path(rootFolder));
+	for(auto path : itt) {
+		if(itt.depth() > 1) {
 			//Prevent excessive recursion
-			i.disable_recursion_pending();
+			itt.disable_recursion_pending();
 		} else {
-			if(fs::is_directory(i->path(), errorCode)) {
-				folders.push_back(i->path().u8string());
+			if(fs::is_directory(itt->path(), errorCode)) {
+				folders.push_back(itt->path().u8string());
 			}
 		}
 	}

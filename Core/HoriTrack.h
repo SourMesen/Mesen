@@ -25,9 +25,9 @@ public:
 	{
 		uint8_t output = 0;
 		if(addr == 0x4016) {
+			StrobeProcessRead();
 			output = (_stateBuffer & 0x01) << 1;
 			_stateBuffer >>= 1;
-			StrobeProcessRead();
 		}
 		return output;
 	}

@@ -297,6 +297,15 @@
     <Compile Include="Controls\ctrlNsfPlayer.Designer.cs">
       <DependentUpon>ctrlNsfPlayer.cs</DependentUpon>
     </Compile>
+    <Compile Include="Controls\ctrlPanel.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Controls\ctrlRecentGame.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\ctrlRecentGame.Designer.cs">
+      <DependentUpon>ctrlRecentGame.cs</DependentUpon>
+    </Compile>
     <Compile Include="Controls\ctrlRecentGames.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -418,6 +427,9 @@
     <Compile Include="Debugger\Controls\ctrlCodeScrollbar.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Debugger\Controls\ctrlColorPicker.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Debugger\Controls\ctrlDbgShortcuts.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -441,6 +453,15 @@
     </Compile>
     <Compile Include="Debugger\Controls\ctrlFlagStatus.Designer.cs">
       <DependentUpon>ctrlFlagStatus.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Debugger\Controls\ctrlImagePanel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Debugger\Controls\ctrlImagePanel.Designer.cs">
+      <DependentUpon>ctrlImagePanel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Debugger\Controls\ctrlImageViewer.cs">
+      <SubType>Component</SubType>
     </Compile>
     <Compile Include="Debugger\Controls\ctrlLabelList.cs">
       <SubType>UserControl</SubType>
@@ -706,12 +727,6 @@
     <Compile Include="Debugger\frmDbgPreferences.Designer.cs">
       <DependentUpon>frmDbgPreferences.cs</DependentUpon>
     </Compile>
-    <Compile Include="Debugger\frmEventViewerColors.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Debugger\frmEventViewerColors.Designer.cs">
-      <DependentUpon>frmEventViewerColors.cs</DependentUpon>
-    </Compile>
     <Compile Include="Debugger\frmDebuggerColors.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -884,6 +899,7 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Debugger\WatchManager.cs" />
+    <Compile Include="Debugger\WindowRefreshManager.cs" />
     <Compile Include="Forms\BaseConfigForm.Designer.cs">
       <DependentUpon>BaseConfigForm.cs</DependentUpon>
     </Compile>
@@ -1338,6 +1354,9 @@
     <None Include="app.manifest" />
     <None Include="Resources\Exclamation.png" />
     <None Include="Resources\Comment.png" />
+    <EmbeddedResource Include="Controls\ctrlRecentGame.resx">
+      <DependentUpon>ctrlRecentGame.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Controls\MesenNumericUpDown.resx">
       <DependentUpon>MesenNumericUpDown.cs</DependentUpon>
     </EmbeddedResource>
@@ -1385,6 +1404,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Debugger\Controls\ctrlEventViewerPpuView.resx">
       <DependentUpon>ctrlEventViewerPpuView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Debugger\Controls\ctrlImagePanel.resx">
+      <DependentUpon>ctrlImagePanel.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Debugger\Controls\ctrlScanlineCycleSelect.resx">
       <DependentUpon>ctrlScanlineCycleSelect.cs</DependentUpon>
@@ -1542,9 +1564,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Debugger\frmDbgPreferences.resx">
       <DependentUpon>frmDbgPreferences.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Debugger\frmEventViewerColors.resx">
-      <DependentUpon>frmEventViewerColors.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Debugger\frmDebuggerColors.resx">
       <DependentUpon>frmDebuggerColors.cs</DependentUpon>

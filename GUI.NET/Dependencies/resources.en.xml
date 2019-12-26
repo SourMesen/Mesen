@@ -13,6 +13,7 @@
 			<Control ID="mnuPause">Pause</Control>
 			<Control ID="mnuReset">Reset</Control>
 			<Control ID="mnuPowerCycle">Power Cycle</Control>
+			<Control ID="mnuReloadRom">Reload ROM</Control>
 			<Control ID="mnuPowerOff">Power Off</Control>
 			<Control ID="mnuSwitchDiskSide">Switch Disk Side</Control>
 			<Control ID="mnuSelectDisk">Select Disk</Control>
@@ -307,6 +308,8 @@
 			<Control ID="lblTurboSpeed">Fast Forward Speed:</Control>
 			<Control ID="lblRewindSpeedHint">%  (0 = Maximum speed)</Control>
 			<Control ID="lblRewindSpeed">Rewind Speed:</Control>
+			<Control ID="lblRunAhead">Run Ahead:</Control>
+			<Control ID="lblRunAheadFrames">frames (reduces input lag, increases CPU usage)</Control>
 
 			<Control ID="tpgAdvanced">Advanced</Control>
 			<Control ID="lblDeveloperSettings">Recommended settings for developers (homebrew / ROM hacking)</Control>
@@ -888,6 +891,7 @@
 		<Message ID="EmulatorShortcutMappings_Pause">Pause</Message>
 		<Message ID="EmulatorShortcutMappings_Reset">Reset</Message>
 		<Message ID="EmulatorShortcutMappings_PowerCycle">Power Cycle</Message>
+		<Message ID="EmulatorShortcutMappings_ReloadRom">Reload ROM</Message>
 		<Message ID="EmulatorShortcutMappings_PowerOff">Power Off</Message>
 		<Message ID="EmulatorShortcutMappings_Exit">Exit</Message>
 		<Message ID="EmulatorShortcutMappings_TakeScreenshot">Take Screenshot</Message>
@@ -953,6 +957,18 @@
 		<Message ID="EmulatorShortcutMappings_LoadStateSlotAuto">Load State - Auto Save Slot</Message>
 		<Message ID="EmulatorShortcutMappings_LoadStateFromFile">Load State from File</Message>
 		<Message ID="EmulatorShortcutMappings_LoadLastSession">Load Last Session</Message>
+
+		<Message ID="EmulatorShortcutMappings_SelectSaveSlot1">Select Save Slot 1</Message>
+		<Message ID="EmulatorShortcutMappings_SelectSaveSlot2">Select Save Slot 2</Message>
+		<Message ID="EmulatorShortcutMappings_SelectSaveSlot3">Select Save Slot 3</Message>
+		<Message ID="EmulatorShortcutMappings_SelectSaveSlot4">Select Save Slot 4</Message>
+		<Message ID="EmulatorShortcutMappings_SelectSaveSlot5">Select Save Slot 5</Message>
+		<Message ID="EmulatorShortcutMappings_SelectSaveSlot6">Select Save Slot 6</Message>
+		<Message ID="EmulatorShortcutMappings_SelectSaveSlot7">Select Save Slot 7</Message>
+		<Message ID="EmulatorShortcutMappings_SelectSaveSlot8">Select Save Slot 8</Message>
+		<Message ID="EmulatorShortcutMappings_SelectSaveSlot9">Select Save Slot 9</Message>
+		<Message ID="EmulatorShortcutMappings_SelectSaveSlot10">Select Save Slot 10</Message>
+
 		<Message ID="EmulatorShortcutMappings_OpenFile">Open File</Message>
 		<Message ID="EmulatorShortcutMappings_OpenDebugger">Open Debugger</Message>
 		<Message ID="EmulatorShortcutMappings_OpenAssembler">Open Assembler</Message>
@@ -1226,6 +1242,8 @@
 			<Value ID="Nmi">NMI</Value>
 			<Value ID="Irq">IRQ</Value>
 			<Value ID="SpriteZeroHit">Sprite 0 Hit</Value>
+			<Value ID="Breakpoint">Breakpoint</Value>
+			<Value ID="DmcDmaRead">DMC DMA Read</Value>
 		</Enum>
 		<Enum ID="BreakpointType">
 			<Value ID="Global">Global</Value>
@@ -1249,6 +1267,7 @@
 			<Value ID="BreakOnDecayedOamRead">Decayed OAM read</Value>
 			<Value ID="BreakOnCpuCrash">CPU crashed</Value>
 			<Value ID="BreakOnPpu2006ScrollGlitch">$2006 write scroll glitch</Value>
+			<Value ID="BreakOnBusConflict">Bus conflict</Value>
 		</Enum>
 		<Enum ID="VsPpuType">
 			<Value ID="RP2C03B">RP2C03B</Value>

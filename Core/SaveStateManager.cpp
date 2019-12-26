@@ -36,6 +36,12 @@ uint64_t SaveStateManager::GetStateInfo(int stateIndex)
 	return 0;
 }
 
+void SaveStateManager::SelectSaveSlot(int slotIndex)
+{
+	_lastIndex = slotIndex;
+	MessageManager::DisplayMessage("SaveStates", "SaveStateSlotSelected", std::to_string(_lastIndex));
+}
+
 void SaveStateManager::MoveToNextSlot()
 {
 	_lastIndex = (_lastIndex % MaxIndex) + 1;
@@ -260,7 +266,7 @@ void SaveStateManager::LoadRecentGame(string filename, bool resetGame)
 				SaveStateManager::LoadState(stateStream, false);
 			}
 		}
-	} catch(std::exception ex) { 
+	} catch(std::exception&) { 
 		_console->Stop();
 	}
 	_console->Resume();

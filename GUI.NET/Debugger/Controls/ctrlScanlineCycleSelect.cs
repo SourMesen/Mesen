@@ -19,6 +19,7 @@ namespace Mesen.GUI.Debugger.Controls
 
 		public int Scanline { get { return _scanline; } }
 		public int Cycle { get { return _cycle; } }
+		public int ViewerId { get { return _ppuViewerId; } }
 
 		public ctrlScanlineCycleSelect()
 		{

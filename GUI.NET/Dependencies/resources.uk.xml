@@ -13,6 +13,7 @@
 			<Control ID="mnuPause">Пауза</Control>
 			<Control ID="mnuReset">Скидання</Control>
 			<Control ID="mnuPowerCycle">Цикл включення</Control>
+			<Control ID="mnuReloadRom">Reload ROM</Control>
 			<Control ID="mnuPowerOff">Power Off</Control>
 			<Control ID="mnuSwitchDiskSide">Змінити сторону диска</Control>
 			<Control ID="mnuSelectDisk">Вибрати диск</Control>
@@ -306,6 +307,8 @@
 			<Control ID="lblTurboSpeed">Перемотка:</Control>
 			<Control ID="lblRewindSpeedHint">%  (0 = Максимальна швидкiсть)</Control>
 			<Control ID="lblRewindSpeed">Швидкість перемотування:</Control>
+			<Control ID="lblRunAhead">Run Ahead:</Control>
+			<Control ID="lblRunAheadFrames">frames (reduces input lag, increases CPU usage)</Control>
 
 			<Control ID="tpgAdvanced">Розширені</Control>
 			<Control ID="lblDeveloperSettings">Recommended settings for developers (homebrew / ROM hacking)</Control>
@@ -875,6 +878,7 @@
 		<Message ID="EmulatorShortcutMappings_Pause">Пауза</Message>
 		<Message ID="EmulatorShortcutMappings_Reset">Скидання</Message>
 		<Message ID="EmulatorShortcutMappings_PowerCycle">Цикл включення</Message>
+		<Message ID="EmulatorShortcutMappings_ReloadRom">Reload ROM</Message>
 		<Message ID="EmulatorShortcutMappings_PowerOff">Вимкнення</Message>
 		<Message ID="EmulatorShortcutMappings_Exit">Вихід</Message>
 		<Message ID="EmulatorShortcutMappings_TakeScreenshot">Скріншот</Message>
@@ -939,6 +943,18 @@
 		<Message ID="EmulatorShortcutMappings_LoadStateSlotAuto">Завантаження стану - Автозавантаження</Message>
 		<Message ID="EmulatorShortcutMappings_LoadStateFromFile">Завантажити стан з файлу</Message>
 		<Message ID="EmulatorShortcutMappings_LoadLastSession">Завантажити останню сесію</Message>
+
+		<Message ID="EmulatorShortcutMappings_SelectSaveSlot1">Select Save Slot 1</Message>
+		<Message ID="EmulatorShortcutMappings_SelectSaveSlot2">Select Save Slot 2</Message>
+		<Message ID="EmulatorShortcutMappings_SelectSaveSlot3">Select Save Slot 3</Message>
+		<Message ID="EmulatorShortcutMappings_SelectSaveSlot4">Select Save Slot 4</Message>
+		<Message ID="EmulatorShortcutMappings_SelectSaveSlot5">Select Save Slot 5</Message>
+		<Message ID="EmulatorShortcutMappings_SelectSaveSlot6">Select Save Slot 6</Message>
+		<Message ID="EmulatorShortcutMappings_SelectSaveSlot7">Select Save Slot 7</Message>
+		<Message ID="EmulatorShortcutMappings_SelectSaveSlot8">Select Save Slot 8</Message>
+		<Message ID="EmulatorShortcutMappings_SelectSaveSlot9">Select Save Slot 9</Message>
+		<Message ID="EmulatorShortcutMappings_SelectSaveSlot10">Select Save Slot 10</Message>
+		
 		<Message ID="EmulatorShortcutMappings_OpenFile">Відкрити файл</Message>
 		<Message ID="EmulatorShortcutMappings_OpenDebugger">Відкрити налагоджувач</Message>
 		<Message ID="EmulatorShortcutMappings_OpenAssembler">Відкрити асемблер</Message>

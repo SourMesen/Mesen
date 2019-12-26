@@ -185,7 +185,7 @@ struct HdPackTileInfo : public HdTileKey
 	uint32_t X;
 	uint32_t Y;
 	uint32_t BitmapIndex;
-	uint8_t Brightness;
+	int Brightness;
 	bool DefaultTile;
 	bool Blank;
 	bool HasTransparentPixels;
@@ -309,11 +309,13 @@ struct HdBackgroundFileData
 struct HdBackgroundInfo
 {
 	HdBackgroundFileData* Data;
-	uint8_t Brightness;
+	int Brightness;
 	vector<HdPackCondition*> Conditions;
 	float HorizontalScrollRatio;
 	float VerticalScrollRatio;
 	bool BehindBgPrioritySprites;
+	uint32_t Left;
+	uint32_t Top;
 
 	uint32_t* data()
 	{
@@ -377,4 +379,5 @@ enum class HdPackOptions
 	AlternateRegisterRange = 2,
 	NoContours = 4,
 	DisableCache = 8,
+	DontRenderOriginalTiles = 16
 };

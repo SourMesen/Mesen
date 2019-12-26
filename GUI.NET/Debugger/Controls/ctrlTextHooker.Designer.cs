@@ -116,6 +116,7 @@
 			this.chkAutoCopyToClipboard.TabIndex = 7;
 			this.chkAutoCopyToClipboard.Text = "Auto-copy to clipboard";
 			this.chkAutoCopyToClipboard.UseVisualStyleBackColor = true;
+			this.chkAutoCopyToClipboard.CheckedChanged += new System.EventHandler(this.chkAutoCopyToClipboard_CheckedChanged);
 			// 
 			// chkIgnoreMirroredNametables
 			// 

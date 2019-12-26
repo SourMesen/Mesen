@@ -132,6 +132,7 @@ namespace Mesen.GUI.Debugger
 				UInt32 key = GetKey(i, type);
 				CodeLabel existingLabel;
 				if(_labelsByKey.TryGetValue(key, out existingLabel)) {
+					DeleteLabel(existingLabel, false);
 					_reverseLookup.Remove(existingLabel.Label);
 				}
 
@@ -187,11 +188,32 @@ namespace Mesen.GUI.Debugger
 		{
 			byte[] cdlData = InteropEmu.DebugGetPrgCdlData();
 			List<CodeLabel> labelsToAdd = new List<CodeLabel>();
+
 			for(int i = 0; i < cdlData.Length; i++) {
-				if((cdlData[i] & (byte)CdlPrgFlags.JumpTarget) != 0 && LabelManager.GetLabel((uint)i, AddressType.PrgRom) == null) {
-					labelsToAdd.Add(new CodeLabel() { Flags = CodeLabelFlags.AutoJumpLabel, Address = (uint)i, AddressType = AddressType.PrgRom, Label = "L" + i.ToString("X4"), Comment = "" });
+				if((cdlData[i] & (byte)(CdlPrgFlags.JumpTarget | CdlPrgFlags.SubEntryPoint)) != 0) {
+					CodeLabel existingLabel = LabelManager.GetLabel((uint)i, AddressType.PrgRom);
+					if(existingLabel == null) {
+						labelsToAdd.Add(new CodeLabel() {
+							Flags = CodeLabelFlags.AutoJumpLabel,
+							Address = (uint)i,
+							AddressType = AddressType.PrgRom,
+							Label = ((cdlData[i] & (byte)CdlPrgFlags.SubEntryPoint) == 0 ? "L" : "F") + i.ToString("X4"),
+							Comment = ""
+						});
+					} else {
+						if(string.IsNullOrWhiteSpace(existingLabel.Label)) {
+							//A comment exists for this address, add the label to it, but keep the comment and don't mark it as a auto-label
+							labelsToAdd.Add(new CodeLabel() {
+								Address = (uint)i,
+								AddressType = AddressType.PrgRom,
+								Label = ((cdlData[i] & (byte)CdlPrgFlags.SubEntryPoint) == 0 ? "L" : "F") + i.ToString("X4"),
+								Comment = existingLabel.Comment
+							});
+						}
+					}
 				}
 			}
+
 			if(labelsToAdd.Count > 0) {
 				LabelManager.SetLabels(labelsToAdd, true);
 			}

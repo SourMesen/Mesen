@@ -14,7 +14,7 @@ SoundManager::SoundManager(shared_ptr<Console> console, HWND hwnd)
 
 	memset(&_audioDeviceID, 0, sizeof(_audioDeviceID));
 
-	if(InitializeDirectSound(44100, false)) {
+	if(InitializeDirectSound(48000, true)) {
 		_console->GetSoundMixer()->RegisterAudioDevice(this);
 	} else {
 		MessageManager::DisplayMessage("Error", "CouldNotInitializeAudioSystem");
@@ -279,16 +279,27 @@ void SoundManager::ProcessEndOfFrame()
 	}
 }
 
-void SoundManager::PlayBuffer(int16_t *soundBuffer, uint32_t sampleCount, uint32_t sampleRate, bool isStereo)
+void SoundManager::UpdateSoundSettings()
 {
-	uint32_t bytesPerSample = (SoundMixer::BitsPerSample / 8) * (isStereo ? 2 : 1);
+	uint32_t sampleRate = _console->GetSettings()->GetSampleRate();
 	uint32_t latency = _console->GetSettings()->GetAudioLatency();
-	if(_sampleRate != sampleRate || _isStereo != isStereo || _needReset || latency != _previousLatency) {
+	if(_sampleRate != sampleRate || _needReset || latency != _previousLatency) {
 		_previousLatency = latency;
 		Release();
-		InitializeDirectSound(sampleRate, isStereo);
+		InitializeDirectSound(sampleRate, true);
 		_secondaryBuffer->SetFrequency(sampleRate);
+		
+		//Force DirectSound to initialize fully by starting and stopping playback
+		//Otherwise the first play operation takes a little while longer and throws off the sound latency
+		Play();
+		Stop();
 	}
+}
+
+void SoundManager::PlayBuffer(int16_t *soundBuffer, uint32_t sampleCount, uint32_t sampleRate, bool isStereo)
+{
+	UpdateSoundSettings();
+	uint32_t bytesPerSample = (SoundMixer::BitsPerSample / 8) * (isStereo ? 2 : 1);
 
 	DWORD currentPlayCursor, safeWriteCursor;
 	_secondaryBuffer->GetCurrentPosition(&currentPlayCursor, &safeWriteCursor);
@@ -298,7 +309,7 @@ void SoundManager::PlayBuffer(int16_t *soundBuffer, uint32_t sampleCount, uint32
 	CopyToSecondaryBuffer((uint8_t*)soundBuffer, soundBufferSize);
 	
 	if(!_playing) {
-		DWORD byteLatency = (int32_t)((float)(sampleRate * latency) / 1000.0f * bytesPerSample);
+		DWORD byteLatency = (int32_t)((float)(sampleRate * _previousLatency) / 1000.0f * bytesPerSample);
 		if(_lastWriteOffset >= byteLatency / 2) {
 			Play();
 		}

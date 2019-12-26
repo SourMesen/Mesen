@@ -37,15 +37,13 @@ namespace Mesen.GUI.Debugger.Controls
 
 		public void GetData()
 		{
-			DebugEventInfo[] eventInfoArray;
-			byte[] pictureData;
 			_breakpoints = BreakpointManager.Breakpoints;
-			InteropEmu.DebugGetDebugEvents(false, out pictureData, out eventInfoArray);
+			DebugEventInfo[] eventInfoArray = InteropEmu.GetDebugEvents(false);
 
 			this.BeginInvoke((Action)(() => {
 				lstEvents.BeginUpdate();
 				_debugEvents.Clear();
-				_debugEvents.AddRange(eventInfoArray);
+				_debugEvents.AddRange(eventInfoArray.Where((evt) => ctrlEventViewerPpuView.ShowEvent(evt)));
 				SortData();
 				lstEvents.VirtualListSize = _debugEvents.Count;
 				lstEvents.EndUpdate();

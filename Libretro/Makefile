@@ -64,7 +64,7 @@ ifeq ($(STATIC_LINKING), 1)
 EXT := a
 endif
 
-ifeq ($(platform), unix)
+ifneq (,$(findstring unix,$(platform)))
   EXT ?= so
    TARGET := $(TARGET_NAME)_libretro.$(EXT)
    fpic := -fPIC -pthread
@@ -253,7 +253,7 @@ else
    CC ?= gcc
    CXX ?= g++
    TARGET := $(TARGET_NAME)_libretro.dll
-   SHARED := -shared -s -Wl,--version-script=$(LIBRETRO_DIR)/link.T -Wl,--no-undefined
+   SHARED := -shared -static-libgcc -static-libstdc++ -s -Wl,--version-script=$(LIBRETRO_DIR)/link.T -Wl,--no-undefined
 endif
 
 LDFLAGS += $(LIBM)

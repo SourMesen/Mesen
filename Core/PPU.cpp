@@ -197,6 +197,10 @@ void PPU::UpdateVideoRamAddr()
 	if(_scanline >= 240 || !IsRenderingEnabled()) {
 		_state.VideoRamAddr = (_state.VideoRamAddr + (_flags.VerticalWrite ? 32 : 1)) & 0x7FFF;
 
+		if(!_renderingEnabled) {
+			_console->DebugAddDebugEvent(DebugEventType::BgColorChange);
+		}
+
 		//Trigger memory read when setting the vram address - needed by MMC3 IRQ counter
 		//"Should be clocked when A12 changes to 1 via $2007 read/write"
 		SetBusAddress(_state.VideoRamAddr & 0x3FFF);
@@ -265,7 +269,7 @@ uint8_t PPU::PeekRAM(uint16_t addr)
 	switch(GetRegisterID(addr)) {
 		case PPURegisters::Status:
 			returnValue = ((uint8_t)_statusFlags.SpriteOverflow << 5) | ((uint8_t)_statusFlags.Sprite0Hit << 6) | ((uint8_t)_statusFlags.VerticalBlank << 7);
-			if(_scanline == 241 && _cycle < 3) {
+			if(_scanline == _nmiScanline && _cycle < 3) {
 				//Clear vertical blank flag
 				returnValue &= 0x7F;
 			}
@@ -494,7 +498,7 @@ bool PPU::IsRenderingEnabled()
 void PPU::ProcessTmpAddrScrollGlitch(uint16_t normalAddr, uint16_t value, uint16_t mask)
 {
 	_state.TmpVideoRamAddr = normalAddr;
-	if(_cycle == 257 && _settings->CheckFlag(EmulationFlags::EnablePpu2000ScrollGlitch)) {
+	if(_cycle == 257 && _settings->CheckFlag(EmulationFlags::EnablePpu2000ScrollGlitch) && _scanline < 240 && IsRenderingEnabled()) {
 		//Use open bus to set some parts of V (glitch that occurs when writing to $2000/$2005/$2006 on cycle 257)
 		_state.VideoRamAddr = (_state.VideoRamAddr & ~mask) | (value & mask);
 	}
@@ -507,22 +511,20 @@ void PPU::SetControlRegister(uint8_t value)
 	uint8_t nameTable = (_state.Control & 0x03);
 
 	uint16_t normalAddr = (_state.TmpVideoRamAddr & ~0x0C00) | (nameTable << 10);
-	ProcessTmpAddrScrollGlitch(normalAddr, _console->GetMemoryManager()->GetOpenBus() << 10, 0x0C00);
+	ProcessTmpAddrScrollGlitch(normalAddr, _console->GetMemoryManager()->GetOpenBus() << 10, 0x0400);
 	
 	_flags.VerticalWrite = (_state.Control & 0x04) == 0x04;
 	_flags.SpritePatternAddr = ((_state.Control & 0x08) == 0x08) ? 0x1000 : 0x0000;
 	_flags.BackgroundPatternAddr = ((_state.Control & 0x10) == 0x10) ? 0x1000 : 0x0000;
 	_flags.LargeSprites = (_state.Control & 0x20) == 0x20;
 
-	//"By toggling NMI_output ($2000 bit 7) during vertical blank without reading $2002, a program can cause /NMI to be pulled low multiple times, causing multiple NMIs to be generated."
-	bool originalVBlank = _flags.VBlank;
 	_flags.VBlank = (_state.Control & 0x80) == 0x80;
-
-	if(!originalVBlank && _flags.VBlank && _statusFlags.VerticalBlank && (_scanline != -1 || _cycle != 0)) {
-		_console->GetCpu()->SetNmiFlag();
-	}
-	if(_scanline == 241 && _cycle < 3 && !_flags.VBlank) {
+	
+	//"By toggling NMI_output ($2000 bit 7) during vertical blank without reading $2002, a program can cause /NMI to be pulled low multiple times, causing multiple NMIs to be generated."
+	if(!_flags.VBlank) {
 		_console->GetCpu()->ClearNmiFlag();
+	} else if(_flags.VBlank && _statusFlags.VerticalBlank) {
+		_console->GetCpu()->SetNmiFlag();
 	}
 }
 
@@ -564,6 +566,8 @@ void PPU::SetMaskRegister(uint8_t value)
 		_flags.IntensifyGreen = (_state.Mask & 0x20) == 0x20;
 		_intensifyColorBits = (_flags.IntensifyRed ? 0x40 : 0x00) | (_flags.IntensifyGreen ? 0x80 : 0x00) | (_flags.IntensifyBlue ? 0x100 : 0x00);
 	}
+
+	_console->DebugAddDebugEvent(DebugEventType::BgColorChange);
 }
 
 void PPU::UpdateStatusFlag()
@@ -572,15 +576,11 @@ void PPU::UpdateStatusFlag()
 		((uint8_t)_statusFlags.Sprite0Hit << 6) |
 		((uint8_t)_statusFlags.VerticalBlank << 7);
 	_statusFlags.VerticalBlank = false;
+	_console->GetCpu()->ClearNmiFlag();
 
-	if(_scanline == 241 && _cycle < 3) {
-		//"Reading on the same PPU clock or one later reads it as set, clears it, and suppresses the NMI for that frame."
-		_statusFlags.VerticalBlank = false;
-		_console->GetCpu()->ClearNmiFlag();
-
-		if(_cycle == 0) {
-			_preventVblFlag = true;
-		}
+	if(_scanline == _nmiScanline && _cycle == 0) {
+		//"Reading one PPU clock before reads it as clear and never sets the flag or generates NMI for that frame."
+		_preventVblFlag = true;
 	}
 }
 
@@ -798,9 +798,6 @@ void PPU::LoadSpriteTileInfo()
 {
 	uint8_t *spriteAddr = _secondarySpriteRAM + _spriteIndex * 4;
 	LoadSprite(*spriteAddr, *(spriteAddr+1), *(spriteAddr+2), *(spriteAddr+3), false);
-	if(_cycle == 316) {
-		LoadExtraSprites();
-	}
 }
 
 void PPU::ShiftTileRegisters()
@@ -872,6 +869,17 @@ void PPU::DrawPixel()
 	}
 }
 
+uint16_t PPU::GetCurrentBgColor()
+{
+	uint16_t color;
+	if(IsRenderingEnabled() || (_state.VideoRamAddr & 0x3F00) != 0x3F00) {
+		color = _paletteRAM[0];
+	} else {
+		color = _paletteRAM[_state.VideoRamAddr & 0x1F];
+	}
+	return (color & _paletteRamMask) | _intensifyColorBits;
+}
+
 void PPU::UpdateGrayscaleAndIntensifyBits()
 {
 	if(_scanline < 0 || _scanline > _nmiScanline) {
@@ -881,10 +889,10 @@ void PPU::UpdateGrayscaleAndIntensifyBits()
 	int pixelNumber;
 	if(_scanline >= 240) {
 		pixelNumber = 61439;
-	} else if(_cycle < 4) {
+	} else if(_cycle < 3) {
 		pixelNumber = (_scanline << 8) - 1;
 	} else if(_cycle <= 258) {
-		pixelNumber = (_scanline << 8) + _cycle - 4;
+		pixelNumber = (_scanline << 8) + _cycle - 3;
 	} else {
 		pixelNumber = (_scanline << 8) + 255;
 	}
@@ -928,6 +936,7 @@ void PPU::ProcessScanline()
 			//Pre-render scanline logic
 			if(_cycle == 1) {
 				_statusFlags.VerticalBlank = false;
+				_console->GetCpu()->ClearNmiFlag();
 			}
 			if(_state.SpriteRamAddr >= 0x08 && IsRenderingEnabled() && !_settings->CheckFlag(EmulationFlags::DisableOamAddrBug)) {
 				//This should only be done if rendering is enabled (otherwise oam_stress test fails immediately)
@@ -969,6 +978,7 @@ void PPU::ProcessScanline()
 		LoadTileInfo();
 		if(_cycle == 321) {
 			if(IsRenderingEnabled()) {
+				LoadExtraSprites();
 				_oamCopybuffer = _secondarySpriteRAM[0];
 			}
 			if(_scanline == -1) {
@@ -1121,7 +1131,7 @@ uint8_t PPU::ReadSpriteRam(uint8_t addr)
 					debugger->BreakImmediately(BreakSource::BreakOnDecayedOamRead);
 				}
 			}
-			//If this 8-byte row hasn't been read/written to in over 3000 cpu cycles (~1.7ms), return 0xFF to simulate decay
+			//If this 8-byte row hasn't been read/written to in over 3000 cpu cycles (~1.7ms), return 0x10 to simulate decay
 			return 0x10;
 		}
 	}
@@ -1138,6 +1148,11 @@ void PPU::WriteSpriteRam(uint8_t addr, uint8_t value)
 void PPU::DebugSendFrame()
 {
 	_console->GetVideoDecoder()->UpdateFrame(_currentOutputBuffer);
+}
+
+uint16_t* PPU::GetScreenBuffer(bool previousBuffer)
+{
+	return previousBuffer ? ((_currentOutputBuffer == _outputBuffers[0]) ? _outputBuffers[1] : _outputBuffers[0]) : _currentOutputBuffer;
 }
 
 void PPU::DebugCopyOutputBuffer(uint16_t *target)
@@ -1213,6 +1228,10 @@ void PPU::Exec()
 		if(++_scanline > _vblankEnd) {
 			_lastUpdatedPixel = -1;
 			_scanline = -1;
+
+			//Force prerender scanline sprite fetches to load the dummy $FF tiles (fixes shaking in Ninja Gaiden 3 stage 1 after beating boss)
+			_spriteCount = 0;
+
 			UpdateMinimumDrawCycles();
 		}
 
@@ -1237,7 +1256,6 @@ void PPU::Exec()
 			SetBusAddress(_state.VideoRamAddr);
 			SendFrame();
 			_frameCount++;
-		} else if(_scanline == _nmiScanline) {
 		}
 	} else {
 		//Cycle > 0
@@ -1276,10 +1294,14 @@ void PPU::UpdateState()
 
 	//Rendering enabled flag is apparently set with a 1 cycle delay (i.e setting it at cycle 5 will render cycle 6 like cycle 5 and then take the new settings for cycle 7)
 	_prevRenderingEnabled = _renderingEnabled;
-	_renderingEnabled = _flags.BackgroundEnabled | _flags.SpritesEnabled;
+	if(_renderingEnabled != (_flags.BackgroundEnabled | _flags.SpritesEnabled)) {
+		_renderingEnabled = _flags.BackgroundEnabled | _flags.SpritesEnabled;
+	}
 	if(_prevRenderingEnabled != _renderingEnabled) {
 		_needStateUpdate = true;
 	}
+
+	_console->DebugAddDebugEvent(DebugEventType::BgColorChange);
 
 	if(_prevRenderingEnabled && !_renderingEnabled && _scanline < 240) {
 		//When rendering is disabled midscreen, set the vram bus back to the value of 'v'
@@ -1317,6 +1339,10 @@ void PPU::UpdateState()
 				}
 			} else {
 				_state.VideoRamAddr = _updateVramAddr;
+			}
+
+			if(!_renderingEnabled) {
+				_console->DebugAddDebugEvent(DebugEventType::BgColorChange);
 			}
 
 			//The glitches updates corrupt both V and T, so set the new value of V back into T

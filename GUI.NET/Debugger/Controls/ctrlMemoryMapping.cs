@@ -98,7 +98,12 @@ namespace Mesen.GUI.Debugger.Controls
 
 			for(int i = 0x40; i < 0x100; i++) {
 				if(state.PrgMemoryAccess[i] != MemoryAccessType.NoAccess) {
-					bool forceNewBlock = memoryType == PrgMemoryType.PrgRom && (i - startIndex) << 8 >= state.PrgPageSize;
+					bool forceNewBlock = (
+						(memoryType == PrgMemoryType.PrgRom && state.PrgMemoryOffset[i] % state.PrgPageSize == 0) ||
+						(memoryType == PrgMemoryType.WorkRam && state.PrgMemoryOffset[i] % state.WorkRamPageSize == 0) ||
+						(memoryType == PrgMemoryType.SaveRam && state.PrgMemoryOffset[i] % state.SaveRamPageSize == 0)
+					);
+
 					if(forceNewBlock || memoryType != state.PrgMemoryType[i] || state.PrgMemoryOffset[i] - state.PrgMemoryOffset[i-1] != 0x100) {
 						addSection(i);
 					}
@@ -140,13 +145,13 @@ namespace Mesen.GUI.Debugger.Controls
 					Color color = alternateColor ? Color.FromArgb(0xF4, 0xC7, 0xD4) : Color.FromArgb(0xD4, 0xA7, 0xB4);
 					alternateColor = !alternateColor;
 					regions.Add(new MemoryRegionInfo() { Name = "NT" + page.ToString(), Size = currentSize, Color = color });
-				} else if(memoryType == ChrMemoryType.ChrRom || memoryType == ChrMemoryType.Default && state.ChrRomSize > 0) {
+				} else if(memoryType == ChrMemoryType.ChrRom) {
 					int page = (int)(state.ChrMemoryOffset[startIndex] / state.ChrPageSize);
 					Color color = alternateColor ? Color.FromArgb(0xC4, 0xE7, 0xD4) : Color.FromArgb(0xA4, 0xD7, 0xB4);
 					alternateColor = !alternateColor;
 					regions.Add(new MemoryRegionInfo() { Name = "$" + page.ToString("X2"), Size = currentSize, Color = color });
-				} else if(memoryType == ChrMemoryType.ChrRam || memoryType == ChrMemoryType.Default && state.ChrRomSize == 0) {
-					int page = (int)(state.ChrMemoryOffset[startIndex] / state.ChrPageSize);
+				} else if(memoryType == ChrMemoryType.ChrRam) {
+					int page = (int)(state.ChrMemoryOffset[startIndex] / state.ChrRamPageSize);
 					Color color = alternateColor ? Color.FromArgb(0xC4, 0xE0, 0xF4) : Color.FromArgb(0xB4, 0xD0, 0xE4);
 					alternateColor = !alternateColor;
 					regions.Add(new MemoryRegionInfo() { Name = "$" + page.ToString("X2"), Size = currentSize, Color = color, AccessType = accessType });
@@ -157,14 +162,12 @@ namespace Mesen.GUI.Debugger.Controls
 
 			for(int i = 0; i < 0x30; i++) {
 				if(state.ChrMemoryAccess[i] != MemoryAccessType.NoAccess) {
-					bool forceNewBlock = false;
-					int blockSize = (i - startIndex) << 8;
-					if(memoryType == ChrMemoryType.NametableRam && blockSize >= 0x400) {
-						forceNewBlock = true;
-					} else if(memoryType != ChrMemoryType.NametableRam && blockSize >= state.ChrPageSize) {
-						forceNewBlock = true;
-					}
-
+					bool forceNewBlock = (
+						(memoryType == ChrMemoryType.NametableRam && state.ChrMemoryOffset[i] % 0x400 == 0) ||
+						(memoryType == ChrMemoryType.ChrRom && state.ChrMemoryOffset[i] % state.ChrPageSize == 0) ||
+						(memoryType == ChrMemoryType.ChrRam && state.ChrMemoryOffset[i] % state.ChrRamPageSize == 0)
+					);
+					
 					if(forceNewBlock || memoryType != state.ChrMemoryType[i] || state.ChrMemoryOffset[i] - state.ChrMemoryOffset[i - 1] != 0x100) {
 						addSection(i);
 					}

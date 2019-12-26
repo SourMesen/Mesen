@@ -51,10 +51,13 @@ protected:
 			}
 
 			if(!_console->GetSettings()->CheckFlag(EmulationFlags::AllowInvalidInput)) {
+				//If both U+D or L+R are pressed at the same time, act as if neither is pressed
 				if(IsPressed(Buttons::Up) && IsPressed(Buttons::Down)) {
 					ClearBit(Buttons::Down);
+					ClearBit(Buttons::Up);
 				}
 				if(IsPressed(Buttons::Left) && IsPressed(Buttons::Right)) {
+					ClearBit(Buttons::Left);
 					ClearBit(Buttons::Right);
 				}
 			}
@@ -108,6 +111,8 @@ public:
 		uint8_t output = 0;
 
 		if((addr == 0x4016 && (_port & 0x01) == 0) || (addr == 0x4017 && (_port & 0x01) == 1)) {
+			StrobeProcessRead();
+			
 			output = _stateBuffer & 0x01;
 			if(_port >= 2 && _console->GetSettings()->GetConsoleType() == ConsoleType::Famicom) {
 				//Famicom outputs P3 & P4 on bit 1
@@ -117,8 +122,6 @@ public:
 
 			//"All subsequent reads will return D=1 on an authentic controller but may return D=0 on third party controllers."
 			_stateBuffer |= 0x80000000;
-
-			StrobeProcessRead();
 		}
 
 		if(addr == 0x4016 && IsPressed(StandardController::Buttons::Microphone)) {

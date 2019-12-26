@@ -13,6 +13,7 @@
 			<Control ID="mnuPause">ポーズ</Control>
 			<Control ID="mnuReset">リセット</Control>
 			<Control ID="mnuPowerCycle">停止と再起動</Control>
+			<Control ID="mnuReloadRom">ディスクからROMをリロードする</Control>
 			<Control ID="mnuPowerOff">ゲームを停止する</Control>
 			<Control ID="mnuSwitchDiskSide">A面B面切り替え</Control>
 			<Control ID="mnuSelectDisk">ディスク選択</Control>
@@ -306,6 +307,8 @@
 			<Control ID="lblTurboSpeed">早送りの速度:</Control>
 			<Control ID="lblRewindSpeedHint">%  (0 = 最高速度)</Control>
 			<Control ID="lblRewindSpeed">巻き戻しの速度:</Control>
+			<Control ID="lblRunAhead">Run Ahead:</Control>
+			<Control ID="lblRunAheadFrames">フレーム (入力遅延低下)</Control>
 
 			<Control ID="tpgAdvanced">詳細設定</Control>
 			<Control ID="lblDeveloperSettings">開発者向け設定 (自作ソフト / ROM hacking)</Control>
@@ -875,6 +878,7 @@
 		<Message ID="EmulatorShortcutMappings_Pause">ポーズ</Message>
 		<Message ID="EmulatorShortcutMappings_Reset">リセット</Message>
 		<Message ID="EmulatorShortcutMappings_PowerCycle">停止と再起動</Message>
+		<Message ID="EmulatorShortcutMappings_ReloadRom">ディスクからROMをリロードする</Message>
 		<Message ID="EmulatorShortcutMappings_PowerOff">ゲームを停止する</Message>
 		<Message ID="EmulatorShortcutMappings_Exit">終了</Message>
 		<Message ID="EmulatorShortcutMappings_TakeScreenshot">スクリーンショットを撮る</Message>
@@ -939,6 +943,18 @@
 		<Message ID="EmulatorShortcutMappings_LoadStateSlotAuto">自動クイックセーブスロットからロードする</Message>
 		<Message ID="EmulatorShortcutMappings_LoadStateFromFile">クイックセーブデータをファイルからロードする</Message>
 		<Message ID="EmulatorShortcutMappings_LoadLastSession">前セッションをロードする</Message>
+
+		<Message ID="EmulatorShortcutMappings_SelectSaveSlot1">クイックセーブスロット１を選ぶ</Message>
+		<Message ID="EmulatorShortcutMappings_SelectSaveSlot2">クイックセーブスロット２を選ぶ</Message>
+		<Message ID="EmulatorShortcutMappings_SelectSaveSlot3">クイックセーブスロット３を選ぶ</Message>
+		<Message ID="EmulatorShortcutMappings_SelectSaveSlot4">クイックセーブスロット４を選ぶ</Message>
+		<Message ID="EmulatorShortcutMappings_SelectSaveSlot5">クイックセーブスロット５を選ぶ</Message>
+		<Message ID="EmulatorShortcutMappings_SelectSaveSlot6">クイックセーブスロット６を選ぶ</Message>
+		<Message ID="EmulatorShortcutMappings_SelectSaveSlot7">クイックセーブスロット７を選ぶ</Message>
+		<Message ID="EmulatorShortcutMappings_SelectSaveSlot8">クイックセーブスロット８を選ぶ</Message>
+		<Message ID="EmulatorShortcutMappings_SelectSaveSlot9">クイックセーブスロット９を選ぶ</Message>
+		<Message ID="EmulatorShortcutMappings_SelectSaveSlot10">クイックセーブスロット１０を選ぶ</Message>
+		
 		<Message ID="EmulatorShortcutMappings_OpenFile">ファイルを開く</Message>
 		<Message ID="EmulatorShortcutMappings_OpenDebugger">デバッガを開く</Message>
 		<Message ID="EmulatorShortcutMappings_OpenAssembler">アセンブラを開く</Message>

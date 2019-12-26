@@ -792,6 +792,10 @@ namespace Mesen.GUI.Debugger
 						if(_segments.TryGetValue(span.SegmentID, out segment) && !segment.IsRam) {
 							for(int i = 0; i < span.Size; i++) {
 								int prgAddress = segment.FileOffset - _headerSize + span.Offset + i;
+								if(prgAddress >= state.Cartridge.PrgRomSize) {
+									//Address is outside PRG (probably CHR ROM)
+									continue;
+								}
 
 								LineInfo existingLine;
 								if(_linesByPrgAddress.TryGetValue(prgAddress, out existingLine) && existingLine.Type == LineType.External) {

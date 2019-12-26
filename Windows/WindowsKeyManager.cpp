@@ -256,12 +256,11 @@ void WindowsKeyManager::StartUpdateDeviceThread()
 		_directInput.reset(new DirectInputManager(_console, _hWnd));
 
 		while(!_stopUpdateDeviceThread) {
-			//Check for newly plugged in controllers every 5 secs (this takes ~60-70ms when no new controllers are found)
+			//Check for newly plugged in XInput controllers every 5 secs
+			//Do not check for DirectInput controllers because this takes more times and sometimes causes issues/freezes
 			if(_xInput->NeedToUpdate()) {
 				_xInput->UpdateDeviceList();
 			}
-			_directInput->UpdateDeviceList();
-
 			_stopSignal.Wait(5000);
 		}
 	});
@@ -375,10 +374,8 @@ void WindowsKeyManager::UpdateDevices()
 		return;
 	}
 
-	_console->Pause();
 	_xInput->UpdateDeviceList();
 	_directInput->UpdateDeviceList();
-	_console->Resume();
 }
 
 void WindowsKeyManager::SetKeyState(uint16_t scanCode, bool state)

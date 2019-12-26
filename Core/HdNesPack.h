@@ -22,7 +22,7 @@ private:
 	int32_t _bgScrollY = 0;
 
 	__forceinline void BlendColors(uint8_t output[4], uint8_t input[4]);
-	__forceinline uint32_t AdjustBrightness(uint8_t input[4], uint16_t brightness);
+	__forceinline uint32_t AdjustBrightness(uint8_t input[4], int brightness);
 	__forceinline void DrawColor(uint32_t color, uint32_t* outputBuffer, uint32_t scale, uint32_t screenWidth);
 	__forceinline void DrawTile(HdPpuTileInfo &tileInfo, HdPackTileInfo &hdPackTileInfo, uint32_t* outputBuffer, uint32_t screenWidth);
 	
@@ -38,7 +38,7 @@ private:
 	__forceinline void ProcessGrayscaleAndEmphasis(HdPpuPixelInfo &pixelInfo, uint32_t* outputBuffer, uint32_t hdScreenWidth);
 
 public:
-	static constexpr uint32_t CurrentVersion = 104;
+	static constexpr uint32_t CurrentVersion = 105;
 
 	HdNesPack(shared_ptr<HdPackData> hdData, EmulationSettings* settings);
 	~HdNesPack();

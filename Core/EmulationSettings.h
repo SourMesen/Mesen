@@ -394,6 +394,16 @@ enum class EmulatorShortcut
 	RewindTenSecs,
 	RewindOneMin,
 
+	SelectSaveSlot1,
+	SelectSaveSlot2,
+	SelectSaveSlot3,
+	SelectSaveSlot4,
+	SelectSaveSlot5,
+	SelectSaveSlot6,
+	SelectSaveSlot7,
+	SelectSaveSlot8,
+	SelectSaveSlot9,
+	SelectSaveSlot10,
 	MoveToNextStateSlot,
 	MoveToPreviousStateSlot,
 	SaveState,
@@ -431,6 +441,7 @@ enum class EmulatorShortcut
 	Pause,
 	Reset,
 	PowerCycle,
+	ReloadRom,
 	PowerOff,
 	Exit,
 
@@ -643,7 +654,10 @@ private:
 	double _volumeReduction = 0.75;
 	uint32_t _sampleRate = 48000;
 	AudioFilterSettings _audioFilterSettings;
-		
+
+	uint32_t _runAheadFrames = 0;
+	bool _isRunAheadFrame = false;
+
 	NesModel _model = NesModel::Auto;
 	PpuModel _ppuModel = PpuModel::Ppu2C02;
 
@@ -980,7 +994,27 @@ public:
 		}
 		return value;
 	}
-	
+
+	void SetRunAheadFrames(uint32_t frameCount)
+	{
+		_runAheadFrames = frameCount;
+	}
+
+	uint32_t GetRunAheadFrames()
+	{
+		return _runAheadFrames;
+	}
+
+	void SetRunAheadFrameFlag(bool disabled)
+	{
+		_isRunAheadFrame = disabled;
+	}
+
+	bool IsRunAheadFrame()
+	{
+		return _isRunAheadFrame;
+	}
+
 	//0: No limit, Number: % of default speed (50/60fps)
 	void SetEmulationSpeed(uint32_t emulationSpeed, bool displaySpeed = false)
 	{

@@ -667,9 +667,6 @@
     <ClInclude Include="Sachen74LS374N.h">
       <Filter>Nes\Mappers\Sachen</Filter>
     </ClInclude>
-    <ClInclude Include="Sachen74LS374NB.h">
-      <Filter>Nes\Mappers\Sachen</Filter>
-    </ClInclude>
     <ClInclude Include="Mapper227.h">
       <Filter>Nes\Mappers\Unnamed</Filter>
     </ClInclude>
@@ -1487,6 +1484,15 @@
     <ClInclude Include="BaseEeprom24C0X.h">
       <Filter>Nes\Mappers\Bandai</Filter>
     </ClInclude>
+    <ClInclude Include="EventManager.h">
+      <Filter>Debugger</Filter>
+    </ClInclude>
+    <ClInclude Include="TxcChip.h">
+      <Filter>Nes\Mappers\Txc</Filter>
+    </ClInclude>
+    <ClInclude Include="McAcc.h">
+      <Filter>Nes\Mappers\MMC</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -1784,6 +1790,9 @@
       <Filter>Misc</Filter>
     </ClCompile>
     <ClCompile Include="PerformanceTracker.cpp">
+      <Filter>Debugger</Filter>
+    </ClCompile>
+    <ClCompile Include="EventManager.cpp">
       <Filter>Debugger</Filter>
     </ClCompile>
   </ItemGroup>

@@ -253,7 +253,11 @@ void BaseMapper::SetPpuMemoryMapping(uint16_t startAddr, uint16_t endAddr, ChrMe
 	uint8_t* sourceMemory = nullptr;
 	switch(type) {
 		default:
-		case ChrMemoryType::Default: sourceMemory = _onlyChrRam ? _chrRam : _chrRom; break;
+		case ChrMemoryType::Default: 
+			sourceMemory = _onlyChrRam ? _chrRam : _chrRom; 
+			type = _onlyChrRam ? ChrMemoryType::ChrRam : ChrMemoryType::ChrRom;
+			break;
+
 		case ChrMemoryType::ChrRom: sourceMemory = _chrRom; break;
 		case ChrMemoryType::ChrRam: sourceMemory = _chrRam; break;
 		case ChrMemoryType::NametableRam: sourceMemory = _nametableRam; break;
@@ -432,11 +436,6 @@ uint32_t BaseMapper::GetCHRPageCount()
 string BaseMapper::GetBatteryFilename()
 {
 	return FolderUtilities::CombinePath(FolderUtilities::GetSaveFolder(), FolderUtilities::GetFilename(_romInfo.RomName, false) + ".sav");
-}
-		
-void BaseMapper::RestoreOriginalPrgRam()
-{
-	memcpy(_prgRom, _originalPrgRom.data(), _originalPrgRom.size());
 }
 
 void BaseMapper::InitializeChrRam(int32_t chrRamSize)
@@ -637,8 +636,6 @@ void BaseMapper::Initialize(RomData &romData)
 	//Load battery data if present
 	LoadBattery();
 
-	ApplyCheats();
-
 	_romInfo.HasChrRam = HasChrRam();
 }
 
@@ -650,24 +647,6 @@ BaseMapper::~BaseMapper()
 	delete[] _saveRam;
 	delete[] _workRam;
 	delete[] _nametableRam;
-}
-
-void BaseMapper::ProcessNotification(ConsoleNotificationType type, void* parameter)
-{
-	switch(type) {
-		case ConsoleNotificationType::CheatAdded:
-		case ConsoleNotificationType::CheatRemoved:
-			ApplyCheats();
-			break;
-		default:
-			break;
-	}
-}
-
-void BaseMapper::ApplyCheats()
-{
-	RestoreOriginalPrgRam();
-	_console->GetCheatManager()->ApplyPrgCodes(_prgRom, _prgSize);
 }
 
 void BaseMapper::GetMemoryRanges(MemoryRanges &ranges)
@@ -795,7 +774,11 @@ void BaseMapper::WriteRAM(uint16_t addr, uint8_t value)
 {
 	if(_isWriteRegisterAddr[addr]) {
 		if(_hasBusConflicts) {
-			value &= _prgPages[addr >> 8][(uint8_t)addr];
+			uint8_t prgValue = _prgPages[addr >> 8][(uint8_t)addr];
+			if(value != prgValue) {
+				_console->DebugProcessEvent(EventType::BusConflict);
+			}
+			value &= prgValue;
 		}
 		WriteRegister(addr, value);
 	} else {
@@ -1178,6 +1161,7 @@ CartridgeState BaseMapper::GetState()
 	state.PrgPageSize = InternalGetPrgPageSize();
 	state.ChrPageCount = GetCHRPageCount();
 	state.ChrPageSize = InternalGetChrPageSize();
+	state.ChrRamPageSize = _onlyChrRam ? InternalGetChrPageSize() : InternalGetChrRamPageSize();
 	for(int i = 0; i < 0x100; i++) {
 		state.PrgMemoryOffset[i] = _prgMemoryOffset[i];
 		state.PrgType[i] = _prgMemoryType[i];
@@ -1267,4 +1251,14 @@ bool BaseMapper::HasPrgChrChanges()
 		}
 	}
 	return false;
+}
+
+void BaseMapper::CopyPrgChrRom(shared_ptr<BaseMapper> mapper)
+{
+	if(_prgSize == mapper->_prgSize && _chrRomSize == mapper->_chrRomSize) {
+		memcpy(_prgRom, mapper->_prgRom, _prgSize);
+		if(!_onlyChrRam) {
+			memcpy(_chrRom, mapper->_chrRom, _chrRomSize);
+		}
+	}
 }

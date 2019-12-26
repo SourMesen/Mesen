@@ -142,7 +142,7 @@ class PPU : public IMemoryHandler, public Snapshotable
 
 		void UpdateMinimumDrawCycles();
 
-		__forceinline uint8_t GetPixelColor();
+		uint8_t GetPixelColor();
 		__forceinline virtual void DrawPixel();
 		void UpdateGrayscaleAndIntensifyBits();
 		virtual void SendFrame();
@@ -179,6 +179,7 @@ class PPU : public IMemoryHandler, public Snapshotable
 		void Reset();
 
 		void DebugSendFrame();
+		uint16_t* GetScreenBuffer(bool previousBuffer);
 		void DebugCopyOutputBuffer(uint16_t *target);
 		void DebugUpdateFrameBuffer(bool toGrayscale);
 		void GetState(PPUDebugState &state);
@@ -191,7 +192,7 @@ class PPU : public IMemoryHandler, public Snapshotable
 			ranges.AddHandler(MemoryOperation::Write, 0x4014);
 		}
 
-		__forceinline uint8_t ReadPaletteRAM(uint16_t addr);
+		uint8_t ReadPaletteRAM(uint16_t addr);
 		void WritePaletteRAM(uint16_t addr, uint8_t value);
 
 		uint8_t ReadRAM(uint16_t addr) override;
@@ -237,6 +238,7 @@ class PPU : public IMemoryHandler, public Snapshotable
 		}
 		
 		uint32_t GetPixelBrightness(uint8_t x, uint8_t y);
+		uint16_t GetCurrentBgColor();
 
 		uint16_t GetPixel(uint8_t x, uint8_t y)
 		{

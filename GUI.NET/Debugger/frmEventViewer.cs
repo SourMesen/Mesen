@@ -1,4 +1,5 @@
 ﻿using Mesen.GUI.Config;
+using Mesen.GUI.Debugger.Controls;
 using Mesen.GUI.Forms;
 using System;
 using System.Collections.Generic;
@@ -12,20 +13,20 @@ using System.Windows.Forms;
 
 namespace Mesen.GUI.Debugger
 {
-	public partial class frmEventViewer : BaseForm
+	public partial class frmEventViewer : BaseForm, IRefresh
 	{
-		private DateTime _lastUpdate = DateTime.MinValue;
+		private WindowRefreshManager _refreshManager;
 		private InteropEmu.NotificationListener _notifListener;
+		private EntityBinder _binder = new EntityBinder();
 		private bool _inListViewTab = false;
-		private bool _refreshing = false;
-		private bool _isZoomed = false;
-		private bool _isCompact = false;
-		private Size _originalSize;
-		private Size _previousPictureSize;
+		private DebugInfo _config;
+
+		public ctrlScanlineCycleSelect ScanlineCycleSelect => null;
 
 		public frmEventViewer()
 		{
 			InitializeComponent();
+			_config = ConfigManager.Config.DebugInfo;
 		}
 
 		protected override void OnLoad(EventArgs e)
@@ -33,85 +34,118 @@ namespace Mesen.GUI.Debugger
 			base.OnLoad(e);
 
 			if(!this.DesignMode) {
-				this.mnuRefreshOnBreak.Checked = ConfigManager.Config.DebugInfo.EventViewerRefreshOnBreak;
-				this.chkShowPpuRegisterWrites.Checked = ConfigManager.Config.DebugInfo.EventViewerShowPpuRegisterWrites;
-				this.chkShowPpuRegisterReads.Checked = ConfigManager.Config.DebugInfo.EventViewerShowPpuRegisterReads;
-				this.chkShowIrq.Checked = ConfigManager.Config.DebugInfo.EventViewerShowIrq;
-				this.chkShowNmi.Checked = ConfigManager.Config.DebugInfo.EventViewerShowNmi;
-				this.chkShowSpriteZero.Checked = ConfigManager.Config.DebugInfo.EventViewerShowSpriteZeroHit;
-				this.chkShowMapperRegisterWrites.Checked = ConfigManager.Config.DebugInfo.EventViewerShowMapperRegisterWrites;
-				this.chkShowMapperRegisterReads.Checked = ConfigManager.Config.DebugInfo.EventViewerShowMapperRegisterReads;
-				this.chkBreakpoints.Checked = ConfigManager.Config.DebugInfo.EventViewerShowMarkedBreakpoints;
-				this.chkShowPreviousFrameEvents.Checked = ConfigManager.Config.DebugInfo.EventViewerShowPreviousFrameEvents;
+				_binder.Entity = _config;
 
-				string toggleViewTooltip = "Toggle Compact/Normal View";
-				if(ConfigManager.Config.DebugInfo.Shortcuts.PpuViewer_ToggleView != Keys.None) {
-					toggleViewTooltip += " (" + DebuggerShortcutsConfig.GetShortcutDisplay(ConfigManager.Config.DebugInfo.Shortcuts.PpuViewer_ToggleView) + ")";
-				}
-				this.toolTip.SetToolTip(this.btnToggleView, toggleViewTooltip);
+				mnuRefreshOnBreak.Checked = _config.EventViewerRefreshOnBreak;
 
-				string toggleZoomTooltip = "Toggle 2x Zoom";
-				if(ConfigManager.Config.DebugInfo.Shortcuts.PpuViewer_ToggleZoom != Keys.None) {
-					toggleZoomTooltip += " (" + DebuggerShortcutsConfig.GetShortcutDisplay(ConfigManager.Config.DebugInfo.Shortcuts.PpuViewer_ToggleZoom) + ")";
-				}
-				this.toolTip.SetToolTip(this.chkToggleZoom, toggleZoomTooltip);
+				_binder.AddBinding(nameof(DebugInfo.EventViewerShowPpuWrite2000), chkWrite2000);
+				_binder.AddBinding(nameof(DebugInfo.EventViewerShowPpuWrite2001), chkWrite2001);
+				_binder.AddBinding(nameof(DebugInfo.EventViewerShowPpuWrite2003), chkWrite2003);
+				_binder.AddBinding(nameof(DebugInfo.EventViewerShowPpuWrite2004), chkWrite2004);
+				_binder.AddBinding(nameof(DebugInfo.EventViewerShowPpuWrite2005), chkWrite2005);
+				_binder.AddBinding(nameof(DebugInfo.EventViewerShowPpuWrite2006), chkWrite2006);
+				_binder.AddBinding(nameof(DebugInfo.EventViewerShowPpuWrite2007), chkWrite2007);
 
-				_previousPictureSize = ctrlEventViewerPpuView.Size;
+				_binder.AddBinding(nameof(DebugInfo.EventViewerShowPpuRead2002), chkRead2002);
+				_binder.AddBinding(nameof(DebugInfo.EventViewerShowPpuRead2004), chkRead2004);
+				_binder.AddBinding(nameof(DebugInfo.EventViewerShowPpuRead2007), chkRead2007);
 
-				this.GetData();
-				this.RefreshViewer();
+				_binder.AddBinding(nameof(DebugInfo.EventViewerShowIrq), chkShowIrq);
+				_binder.AddBinding(nameof(DebugInfo.EventViewerShowNmi), chkShowNmi);
+				_binder.AddBinding(nameof(DebugInfo.EventViewerShowSpriteZeroHit), chkShowSpriteZero);
+				_binder.AddBinding(nameof(DebugInfo.EventViewerShowMapperRegisterWrites), chkShowMapperRegisterWrites);
+				_binder.AddBinding(nameof(DebugInfo.EventViewerShowMapperRegisterReads), chkShowMapperRegisterReads);
+				_binder.AddBinding(nameof(DebugInfo.EventViewerShowDmcDmaReads), chkShowDmcDmaRead);
+				_binder.AddBinding(nameof(DebugInfo.EventViewerShowMarkedBreakpoints), chkBreakpoints);
+
+				_binder.AddBinding(nameof(DebugInfo.EventViewerPpuRegisterWrite2000Color), picWrite2000);
+				_binder.AddBinding(nameof(DebugInfo.EventViewerPpuRegisterWrite2001Color), picWrite2001);
+				_binder.AddBinding(nameof(DebugInfo.EventViewerPpuRegisterWrite2003Color), picWrite2003);
+				_binder.AddBinding(nameof(DebugInfo.EventViewerPpuRegisterWrite2004Color), picWrite2004);
+				_binder.AddBinding(nameof(DebugInfo.EventViewerPpuRegisterWrite2005Color), picWrite2005);
+				_binder.AddBinding(nameof(DebugInfo.EventViewerPpuRegisterWrite2006Color), picWrite2006);
+				_binder.AddBinding(nameof(DebugInfo.EventViewerPpuRegisterWrite2007Color), picWrite2007);
+
+				_binder.AddBinding(nameof(DebugInfo.EventViewerPpuRegisterRead2002Color), picRead2002);
+				_binder.AddBinding(nameof(DebugInfo.EventViewerPpuRegisterRead2004Color), picRead2004);
+				_binder.AddBinding(nameof(DebugInfo.EventViewerPpuRegisterRead2007Color), picRead2007);
+
+				_binder.AddBinding(nameof(DebugInfo.EventViewerMapperRegisterWriteColor), picMapperWrite);
+				_binder.AddBinding(nameof(DebugInfo.EventViewerMapperRegisterReadColor), picMapperRead);
+				_binder.AddBinding(nameof(DebugInfo.EventViewerNmiColor), picNmi);
+				_binder.AddBinding(nameof(DebugInfo.EventViewerIrqColor), picIrq);
+				_binder.AddBinding(nameof(DebugInfo.EventViewerSpriteZeroHitColor), picSpriteZeroHit);
+				_binder.AddBinding(nameof(DebugInfo.EventViewerBreakpointColor), picBreakpoint);
+				_binder.AddBinding(nameof(DebugInfo.EventViewerDmcDmaReadColor), picDmcDmaRead);
+
+				_binder.AddBinding(nameof(DebugInfo.EventViewerShowPreviousFrameEvents), chkShowPreviousFrameEvents);
+				_binder.AddBinding(nameof(DebugInfo.EventViewerShowNtscBorders), chkShowNtscBorders);
 
 				DebugWorkspaceManager.GetWorkspace();
 
-				RestoreLocation(ConfigManager.Config.DebugInfo.EventViewerLocation);
+				RestoreLocation(_config.EventViewerLocation, _config.EventViewerSize);
 
-				this._notifListener = new InteropEmu.NotificationListener(ConfigManager.Config.DebugInfo.DebugConsoleId);
+				this._notifListener = new InteropEmu.NotificationListener(_config.DebugConsoleId);
 				this._notifListener.OnNotification += this._notifListener_OnNotification;
+
+				_refreshManager = new WindowRefreshManager(this);
+				_refreshManager.AutoRefresh = _config.EventViewerAutoRefresh;
+				_refreshManager.AutoRefreshSpeed = _config.EventViewerAutoRefreshSpeed;
+				mnuAutoRefresh.Checked = _config.EventViewerAutoRefresh;
+				mnuAutoRefreshLow.Click += (s, evt) => _refreshManager.AutoRefreshSpeed = RefreshSpeed.Low;
+				mnuAutoRefreshNormal.Click += (s, evt) => _refreshManager.AutoRefreshSpeed = RefreshSpeed.Normal;
+				mnuAutoRefreshHigh.Click += (s, evt) => _refreshManager.AutoRefreshSpeed = RefreshSpeed.High;
+				mnuAutoRefreshSpeed.DropDownOpening += (s, evt) => UpdateRefreshSpeedMenu();
+
+				this.RefreshData();
+				_binder.UpdateUI();
+				this.RefreshViewer();
+
+				InitShortcuts();
 			}
+		}
+
+		private void InitShortcuts()
+		{
+			mnuRefresh.InitShortcut(this, nameof(DebuggerShortcutsConfig.Refresh));
+			mnuZoomIn.InitShortcut(this, nameof(DebuggerShortcutsConfig.ZoomIn));
+			mnuZoomOut.InitShortcut(this, nameof(DebuggerShortcutsConfig.ZoomOut));
+
+			mnuZoomIn.Click += (s, evt) => ctrlEventViewerPpuView.ZoomIn();
+			mnuZoomOut.Click += (s, evt) => ctrlEventViewerPpuView.ZoomOut();
 		}
 
 		protected override void OnFormClosing(FormClosingEventArgs e)
 		{
 			base.OnFormClosing(e);
+
 			this._notifListener.OnNotification -= this._notifListener_OnNotification;
-			ConfigManager.Config.DebugInfo.EventViewerLocation = this.WindowState != FormWindowState.Normal ? this.RestoreBounds.Location : this.Location;
-		}
+			_notifListener?.Dispose();
+			_refreshManager?.Dispose();
 
-		protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
-		{
-			if(keyData == ConfigManager.Config.DebugInfo.Shortcuts.PpuViewer_ToggleZoom) {
-				ToggleZoom();
-				return true;
-			} else if(keyData == ConfigManager.Config.DebugInfo.Shortcuts.PpuViewer_ToggleView) {
-				ToggleView();
-				return true;
-			}
-			return base.ProcessCmdKey(ref msg, keyData);
+			_binder.UpdateObject();
+			_config.EventViewerAutoRefresh = _refreshManager.AutoRefresh;
+			_config.EventViewerAutoRefreshSpeed = _refreshManager.AutoRefreshSpeed;
+			_config.EventViewerLocation = this.WindowState != FormWindowState.Normal ? this.RestoreBounds.Location : this.Location;
+			_config.EventViewerSize = this.WindowState != FormWindowState.Normal ? this.RestoreBounds.Size : this.Size;
+			ConfigManager.Config.DebugInfo = _config;
+			ConfigManager.ApplyChanges();
 		}
-
+		
 		private void _notifListener_OnNotification(InteropEmu.NotificationEventArgs e)
 		{
 			switch(e.NotificationType) {
 				case InteropEmu.ConsoleNotificationType.CodeBreak:
 				case InteropEmu.ConsoleNotificationType.GamePaused:
-					if(ConfigManager.Config.DebugInfo.EventViewerRefreshOnBreak) {
-						this.GetData();
+					if(_config.EventViewerRefreshOnBreak) {
+						this.RefreshData();
 						this.BeginInvoke((MethodInvoker)(() => this.RefreshViewer()));
-					}
-					break;
-
-				case InteropEmu.ConsoleNotificationType.EventViewerDisplayFrame:
-					if(!_refreshing && (DateTime.Now - _lastUpdate).Milliseconds >= 32) {
-						//Update at ~30 fps at most
-						this.GetData();
-						this.BeginInvoke((MethodInvoker)(() => this.RefreshViewer()));
-						_lastUpdate = DateTime.Now;
 					}
 					break;
 			}
 		}
 
-		private void GetData()
+		public void RefreshData()
 		{
 			if(_inListViewTab) {
 				ctrlEventViewerListView.GetData();
@@ -120,11 +154,14 @@ namespace Mesen.GUI.Debugger
 			}
 		}
 
-		private void RefreshViewer()
+		public void RefreshViewer()
 		{
-			_refreshing = true;
+			if(_binder.Updating) {
+				return;
+			}
+
+			_binder.UpdateObject();
 			ctrlEventViewerPpuView.RefreshViewer();
-			_refreshing = false;
 		}
 
 		private void mnuClose_Click(object sender, EventArgs e)
@@ -135,156 +172,73 @@ namespace Mesen.GUI.Debugger
 		private void tabMain_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			_inListViewTab = tabMain.SelectedTab == tpgListView;
-			GetData();
+			RefreshData();
 		}
 
 		private void mnuRefreshOnBreak_Click(object sender, EventArgs e)
 		{
-			ConfigManager.Config.DebugInfo.EventViewerRefreshOnBreak = this.mnuRefreshOnBreak.Checked;
-			ConfigManager.ApplyChanges();
+			_config.EventViewerRefreshOnBreak = this.mnuRefreshOnBreak.Checked;
 		}
-
-		private void chkShowPpuRegisterWrites_Click(object sender, EventArgs e)
-		{
-			ConfigManager.Config.DebugInfo.EventViewerShowPpuRegisterWrites = this.chkShowPpuRegisterWrites.Checked;
-			ConfigManager.ApplyChanges();
-			this.RefreshViewer();
-		}
-
-		private void chkShowPpuRegisterReads_Click(object sender, EventArgs e)
-		{
-			ConfigManager.Config.DebugInfo.EventViewerShowPpuRegisterReads = this.chkShowPpuRegisterReads.Checked;
-			ConfigManager.ApplyChanges();
-			this.RefreshViewer();
-		}
-
-		private void chkShowIrq_Click(object sender, EventArgs e)
-		{
-			ConfigManager.Config.DebugInfo.EventViewerShowIrq = this.chkShowIrq.Checked;
-			ConfigManager.ApplyChanges();
-			this.RefreshViewer();
-		}
-
-		private void chkShowNmi_Click(object sender, EventArgs e)
-		{
-			ConfigManager.Config.DebugInfo.EventViewerShowNmi = this.chkShowNmi.Checked;
-			ConfigManager.ApplyChanges();
-			this.RefreshViewer();
-		}
-
-		private void chkShowSpriteZero_Click(object sender, EventArgs e)
-		{
-			ConfigManager.Config.DebugInfo.EventViewerShowSpriteZeroHit = chkShowSpriteZero.Checked;
-			ConfigManager.ApplyChanges();
-			this.RefreshViewer();
-		}
-
-		private void chkShowMapperRegisterWrites_Click(object sender, EventArgs e)
-		{
-			ConfigManager.Config.DebugInfo.EventViewerShowMapperRegisterWrites = chkShowMapperRegisterWrites.Checked;
-			ConfigManager.ApplyChanges();
-			this.RefreshViewer();
-		}
-
-		private void chkShowMapperRegisterReads_Click(object sender, EventArgs e)
-		{
-			ConfigManager.Config.DebugInfo.EventViewerShowMapperRegisterReads = chkShowMapperRegisterReads.Checked;
-			ConfigManager.ApplyChanges();
-			this.RefreshViewer();
-		}
-
-		private void chkBreakpoints_Click(object sender, EventArgs e)
-		{
-			ConfigManager.Config.DebugInfo.EventViewerShowMarkedBreakpoints = chkBreakpoints.Checked;
-			ConfigManager.ApplyChanges();
-			this.RefreshViewer();
-		}
-
+		
 		private void chkShowPreviousFrameEvents_Click(object sender, EventArgs e)
 		{
-			ConfigManager.Config.DebugInfo.EventViewerShowPreviousFrameEvents = chkShowPreviousFrameEvents.Checked;
-			ConfigManager.ApplyChanges();
+			_config.EventViewerShowPreviousFrameEvents = chkShowPreviousFrameEvents.Checked;
 			if(InteropEmu.DebugIsExecutionStopped()) {
-				this.GetData();
+				this.RefreshData();
 				this.RefreshViewer();
 			}
 		}
-
-		private void mnuConfigureColors_Click(object sender, EventArgs e)
+		
+		private void picColor_BackColorChanged(object sender, EventArgs e)
 		{
-			if(frmEventViewerColors.Instance != null) {
-				frmEventViewerColors.Instance.BringToFront();
-			} else {
-				frmEventViewerColors frm = new frmEventViewerColors();
-				frm.Show(this, this);
-				frm.FormClosed += (s, evt) => {
-					this.GetData();
-					this.RefreshViewer();
-				};
-			}
-		}
-
-		private void ctrlEventViewerPpuView_OnPictureResized(object sender, EventArgs e)
-		{
-			Size picSize = ctrlEventViewerPpuView.GetCompactSize(false);
-			this.Size += (picSize - _previousPictureSize);
-			_originalSize += (picSize - _previousPictureSize);
-			ctrlEventViewerPpuView.Size += (picSize - _previousPictureSize);
-			_previousPictureSize = picSize;
-		}
-
-		private void ToggleView()
-		{
-			if(!_isCompact) {
-				_isCompact = true;
-				_originalSize = this.Size;
-
-				this.ClientSize = ctrlEventViewerPpuView.GetCompactSize(false) + new Size(3, menuStrip1.Height + 3);
-
-				this.Controls.Add(ctrlEventViewerPpuView);
-				ctrlEventViewerPpuView.BringToFront();
-				ctrlEventViewerPpuView.Dock = DockStyle.Fill;
-
-				tabMain.Visible = false;
-			} else {
-				_isCompact = false;
-				this.Size = _originalSize;
-				ctrlEventViewerPpuView.Dock = DockStyle.None;
-				ctrlEventViewerPpuView.Size = ctrlEventViewerPpuView.GetCompactSize(false);
-				tabMain.Visible = true;
-				tpgPpuView.Controls.Add(ctrlEventViewerPpuView);
-			}
-
-			btnToggleView.Image = _isCompact ? Properties.Resources.Expand : Properties.Resources.Collapse;
 			RefreshViewer();
 		}
 
-		private void ToggleZoom()
+		private void chkShowHide_Click(object sender, EventArgs e)
 		{
-			ICompactControl ctrl = ctrlEventViewerPpuView;
-
-			if(!_isZoomed) {
-				Size pictureSize = ctrl.GetCompactSize(false);
-				ctrl.ScaleImage(2);
-				_isZoomed = true;
-			} else {
-				Size pictureSize = ctrl.GetCompactSize(false);
-				Size halfSize = new Size(pictureSize.Width / 2, pictureSize.Height / 2);
-				ctrl.ScaleImage(0.5);
-				_isZoomed = false;
-			}
-			chkToggleZoom.Checked = _isZoomed;
 			RefreshViewer();
 		}
 
-		private void btnToggleView_Click(object sender, EventArgs e)
+		private void mnuResetColors_Click(object sender, EventArgs e)
 		{
-			ToggleView();
+			picWrite2000.BackColor = ColorTranslator.FromHtml("#FF5E5E");
+			picWrite2001.BackColor = ColorTranslator.FromHtml("#8E33FF");
+			picWrite2003.BackColor = ColorTranslator.FromHtml("#FF84E0");
+			picWrite2004.BackColor = ColorTranslator.FromHtml("#FAFF39");
+			picWrite2005.BackColor = ColorTranslator.FromHtml("#2EFF28");
+			picWrite2006.BackColor = ColorTranslator.FromHtml("#3D2DFF");
+			picWrite2007.BackColor = ColorTranslator.FromHtml("#FF060D");
+
+			picRead2002.BackColor = ColorTranslator.FromHtml("#FF8224");
+			picRead2004.BackColor = ColorTranslator.FromHtml("#24A672");
+			picRead2007.BackColor = ColorTranslator.FromHtml("#6AF0FF");
+
+			picMapperRead.BackColor = ColorTranslator.FromHtml("#C92929");
+			picMapperWrite.BackColor = ColorTranslator.FromHtml("#007597");
+
+			picNmi.BackColor = ColorTranslator.FromHtml("#ABADAC");
+			picIrq.BackColor = ColorTranslator.FromHtml("#F9FEAC");
+			picSpriteZeroHit.BackColor = ColorTranslator.FromHtml("#9F93C6");
+			picBreakpoint.BackColor = ColorTranslator.FromHtml("#1898E4");
+			picDmcDmaRead.BackColor = ColorTranslator.FromHtml("#A9FEFC");
 		}
 
-		private void chkToggleZoom_Click(object sender, EventArgs e)
+		private void mnuRefresh_Click(object sender, EventArgs e)
 		{
-			ToggleZoom();
+			RefreshData();
+			RefreshViewer();
+		}
+
+		private void mnuAutoRefresh_CheckedChanged(object sender, EventArgs e)
+		{
+			_refreshManager.AutoRefresh = mnuAutoRefresh.Checked;
+		}
+
+		private void UpdateRefreshSpeedMenu()
+		{
+			mnuAutoRefreshLow.Checked = _refreshManager.AutoRefreshSpeed == RefreshSpeed.Low;
+			mnuAutoRefreshNormal.Checked = _refreshManager.AutoRefreshSpeed == RefreshSpeed.Normal;
+			mnuAutoRefreshHigh.Checked = _refreshManager.AutoRefreshSpeed == RefreshSpeed.High;
 		}
 	}
 }

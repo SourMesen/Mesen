@@ -145,6 +145,7 @@
 #include "Mapper244.h"
 #include "Mapper246.h"
 #include "Mapper253.h"
+#include "McAcc.h"
 #include "MMC1.h"
 #include "MMC1_105.h"
 #include "MMC1_155.h"
@@ -220,7 +221,6 @@
 #include "Sachen_148.h"
 #include "Sachen_149.h"
 #include "Sachen74LS374N.h"
-#include "Sachen74LS374NB.h"
 #include "Sachen8259.h"
 #include "Sachen9602.h"
 #include "SealieComputing.h"
@@ -307,7 +307,13 @@ BaseMapper* MapperFactory::GetMapperFromID(RomData &romData)
 		case 1: return new MMC1();
 		case 2: return new UNROM();
 		case 3: return new CNROM(false);
-		case 4: return new MMC3();
+		case 4: 
+			if(romData.Info.SubMapperID == 3) {
+				return new McAcc();
+			} else {
+				return new MMC3();
+			}
+
 		case 5: return new MMC5();
 		case 6: return new FrontFareast();
 		case 7: return new AXROM();
@@ -441,7 +447,7 @@ BaseMapper* MapperFactory::GetMapperFromID(RomData &romData)
 		case 147: return new Sachen_147();
 		case 148: return new Sachen_148();
 		case 149: return new Sachen_149();
-		case 150: return new Sachen74LS374NB();
+		case 150: return new Sachen74LS374N();
 		case 151: return new VRC1();
 		case 152: return new Bandai74161_7432(true);
 		case 153: return new BandaiFcg();

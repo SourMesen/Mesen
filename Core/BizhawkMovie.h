@@ -3,11 +3,12 @@
 #include "MovieManager.h"
 #include "../Utilities/ZipReader.h"
 #include "INotificationListener.h"
+#include "BatteryManager.h"
 
 class VirtualFile;
 class Console;
 
-class BizhawkMovie : public IMovie, public INotificationListener, public std::enable_shared_from_this<BizhawkMovie>
+class BizhawkMovie : public IMovie, public INotificationListener, public IBatteryProvider, public std::enable_shared_from_this<BizhawkMovie>
 {
 private:
 	bool InitializeGameData(ZipReader &reader);
@@ -32,4 +33,5 @@ public:
 
 	// Inherited via INotificationListener
 	virtual void ProcessNotification(ConsoleNotificationType type, void * parameter) override;
+	virtual vector<uint8_t> LoadBattery(string extension) override;
 };

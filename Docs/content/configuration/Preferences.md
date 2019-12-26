@@ -66,8 +66,9 @@ Available shortcuts:
 * **Rewind 10 seconds**: Instantly rewinds 10 seconds of gameplay.
 * **Rewind 1 minute**: Instantly rewinds 1 minute of gameplay.
 * **Pause**: Pauses or unpauses the game.
-* **Reset**: Resets the game.
-* **Power Cycle**: Power cycles the game and reloads the file from disk.
+* **Reset**: Resets the game (equivalent to pressing the reset button on the NES.)
+* **Power Cycle**: Power cycles the game (equivalent to turning the power off and then back on.)
+* **Reload ROM**: Reloads the ROM from the disk and power cycles the console.
 * **Power Off**: Powers off the game, returning to the game selection screen.
 * **Exit**: Exits the emulator.
 * **FDS - Insert Next Disk**: Inserts face A of the next disk.

@@ -524,7 +524,7 @@ int32_t ExpressionEvaluator::Evaluate(string expression, DebugState &state, Eval
 		if(success) {
 			return result;
 		}
-	} catch(std::exception e) {
+	} catch(std::exception&) {
 	}
 	resultType = EvalResultType::Invalid;
 	return 0;
@@ -539,7 +539,7 @@ bool ExpressionEvaluator::Validate(string expression)
 		bool success;
 		PrivateEvaluate(expression, state, type, operationInfo, success);
 		return success;
-	} catch(std::exception e) {
+	} catch(std::exception&) {
 		return false;
 	}
 }
@@ -587,8 +587,8 @@ void ExpressionEvaluator::RunTests()
 	test("(1+3*3+10)/(3+4)", EvalResultType::Numeric, 2);
 	test("(1+3*3+10)/3+4", EvalResultType::Numeric, 10);
 
-	test("{$4500}", EvalResultType::Numeric, 0x4545);
-	test("[$4500]", EvalResultType::Numeric, 0x45);
+	test("{$4100}", EvalResultType::Numeric, 0x4141);
+	test("[$4100]", EvalResultType::Numeric, 0x41);
 	
 	test("[$45]3", EvalResultType::Invalid, 0);
 	test("($45)3", EvalResultType::Invalid, 0);

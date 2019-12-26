@@ -30,6 +30,7 @@ namespace Mesen.GUI.Debugger.Controls
 		private int _yScroll = 0;
 		private DebugState _state = new DebugState();
 		private ConcurrentDictionary<string, string> _charMappings;
+		private string _prevText;
 
 		public ctrlTextHooker()
 		{
@@ -158,9 +159,19 @@ namespace Mesen.GUI.Debugger.Controls
 				}
 			}
 
-			txtSelectedText.Text = output.ToString();
-			if(chkAutoCopyToClipboard.Checked && !string.IsNullOrWhiteSpace(txtSelectedText.Text)) {
-				Clipboard.SetText(txtSelectedText.Text);
+			string newText = output.ToString();
+			if(newText != _prevText) {
+				txtSelectedText.Text = newText;
+				if(chkAutoCopyToClipboard.Checked && !string.IsNullOrWhiteSpace(newText)) {
+					try {
+						Clipboard.SetText(newText);
+						_prevText = newText;
+					} catch {
+						//This can sometime fail if another program is trying to use the clipboard at the same time
+					}
+				} else {
+					_prevText = newText;
+				}
 			}
 		}
 
@@ -260,6 +271,17 @@ namespace Mesen.GUI.Debugger.Controls
 			}
 
 			outNt &= 0x03;
+		}
+
+		private void chkAutoCopyToClipboard_CheckedChanged(object sender, EventArgs e)
+		{
+			if(chkAutoCopyToClipboard.Checked && !string.IsNullOrWhiteSpace(_prevText)) {
+				try {
+					Clipboard.SetText(_prevText);
+				} catch {
+					//This can sometime fail if another program is trying to use the clipboard at the same time
+				}
+			}
 		}
 	}
 

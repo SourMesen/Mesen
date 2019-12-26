@@ -111,6 +111,7 @@ namespace Mesen.GUI.Debugger
 			this.mnuBreakOnUnofficialOpcodes.Checked = ConfigManager.Config.DebugInfo.BreakOnUnofficialOpcodes;
 			this.mnuBreakOnBrk.Checked = ConfigManager.Config.DebugInfo.BreakOnBrk;
 			this.mnuBreakOnUninitMemoryRead.Checked = ConfigManager.Config.DebugInfo.BreakOnUninitMemoryRead;
+			this.mnuBreakOnBusConflict.Checked = ConfigManager.Config.DebugInfo.BreakOnBusConflict;
 			this.mnuBreakOnDecayedOamRead.Checked = ConfigManager.Config.DebugInfo.BreakOnDecayedOamRead;
 			this.mnuBreakOnPpu2006ScrollGlitch.Checked = ConfigManager.Config.DebugInfo.BreakOnPpu2006ScrollGlitch;
 			this.mnuBreakOnCrash.Checked = ConfigManager.Config.DebugInfo.BreakOnCrash;
@@ -429,6 +430,7 @@ namespace Mesen.GUI.Debugger
 			SetFlag(DebuggerFlags.BreakOnUninitMemoryRead, config.BreakOnUninitMemoryRead);
 			SetFlag(DebuggerFlags.BreakOnDecayedOamRead, config.BreakOnDecayedOamRead);
 			SetFlag(DebuggerFlags.BreakOnPpu2006ScrollGlitch, config.BreakOnPpu2006ScrollGlitch);
+			SetFlag(DebuggerFlags.BreakOnBusConflict, config.BreakOnBusConflict);
 			SetFlag(DebuggerFlags.BreakOnInit, config.BreakOnInit);
 			SetFlag(DebuggerFlags.BreakOnPlay, config.BreakOnPlay);
 			SetFlag(DebuggerFlags.BreakOnFirstCycle, config.BreakOnFirstCycle);
@@ -579,17 +581,6 @@ namespace Mesen.GUI.Debugger
 			this.MinimumSize = new Size(minWidth, minHeight);
 		}
 
-		private void UpdateVectorAddresses()
-		{
-			int nmiHandler = InteropEmu.DebugGetMemoryValue(DebugMemoryType.CpuMemory, 0xFFFA) | (InteropEmu.DebugGetMemoryValue(DebugMemoryType.CpuMemory, 0xFFFB) << 8);
-			int resetHandler = InteropEmu.DebugGetMemoryValue(DebugMemoryType.CpuMemory, 0xFFFC) | (InteropEmu.DebugGetMemoryValue(DebugMemoryType.CpuMemory, 0xFFFD) << 8);
-			int irqHandler = InteropEmu.DebugGetMemoryValue(DebugMemoryType.CpuMemory, 0xFFFE) | (InteropEmu.DebugGetMemoryValue(DebugMemoryType.CpuMemory, 0xFFFF) << 8);
-
-			mnuGoToNmiHandler.Text = "NMI Handler ($" + nmiHandler.ToString("X4") + ")";
-			mnuGoToResetHandler.Text = "Reset Handler ($" + resetHandler.ToString("X4") + ")";
-			mnuGoToIrqHandler.Text = "IRQ Handler ($" + irqHandler.ToString("X4") + ")";
-		}
-
 		public void UpdateDebugger(bool updateActiveAddress = true, bool bringToFront = true)
 		{
 			if(!_debuggerInitialized) {
@@ -604,7 +595,6 @@ namespace Mesen.GUI.Debugger
 			ctrlLabelList.UpdateLabelListAddresses();
 			ctrlFunctionList.UpdateFunctionList(false);
 			UpdateDebuggerFlags();
-			UpdateVectorAddresses();
 
 			string newCode = InteropEmu.DebugGetCode(_firstBreak);
 			if(newCode != null) {
@@ -927,29 +917,6 @@ namespace Mesen.GUI.Debugger
 			LastCodeWindow.CodeViewer.GoToAddress();
 		}
 
-		private void mnuGoToIrqHandler_Click(object sender, EventArgs e)
-		{
-			int address = (InteropEmu.DebugGetMemoryValue(DebugMemoryType.CpuMemory, 0xFFFF) << 8) | InteropEmu.DebugGetMemoryValue(DebugMemoryType.CpuMemory, 0xFFFE);
-			LastCodeWindow.ScrollToLineNumber(address);
-		}
-
-		private void mnuGoToNmiHandler_Click(object sender, EventArgs e)
-		{
-			int address = (InteropEmu.DebugGetMemoryValue(DebugMemoryType.CpuMemory, 0xFFFB) << 8) | InteropEmu.DebugGetMemoryValue(DebugMemoryType.CpuMemory, 0xFFFA);
-			LastCodeWindow.ScrollToLineNumber(address);
-		}
-
-		private void mnuGoToResetHandler_Click(object sender, EventArgs e)
-		{
-			int address = (InteropEmu.DebugGetMemoryValue(DebugMemoryType.CpuMemory, 0xFFFD) << 8) | InteropEmu.DebugGetMemoryValue(DebugMemoryType.CpuMemory, 0xFFFC);
-			LastCodeWindow.ScrollToLineNumber(address);
-		}
-		
-		private void mnuGoToProgramCount_Click(object sender, EventArgs e)
-		{
-			LastCodeWindow.CodeViewerActions.ScrollToActiveAddress();
-		}
-
 		private void mnuIncreaseFontSize_Click(object sender, EventArgs e)
 		{
 			LastCodeWindow.CodeViewer.TextZoom += 10;
@@ -1216,6 +1183,13 @@ namespace Mesen.GUI.Debugger
 		private void mnuBreakOnUninitMemoryRead_Click(object sender, EventArgs e)
 		{
 			ConfigManager.Config.DebugInfo.BreakOnUninitMemoryRead = mnuBreakOnUninitMemoryRead.Checked;
+			ConfigManager.ApplyChanges();
+			UpdateDebuggerFlags();
+		}
+
+		private void mnuBreakOnBusConflict_Click(object sender, EventArgs e)
+		{
+			ConfigManager.Config.DebugInfo.BreakOnBusConflict = mnuBreakOnBusConflict.Checked;
 			ConfigManager.ApplyChanges();
 			UpdateDebuggerFlags();
 		}
@@ -1896,6 +1870,11 @@ namespace Mesen.GUI.Debugger
 		private void mnuWatchWindow_Click(object sender, EventArgs e)
 		{
 			DebugWindowManager.OpenDebugWindow(DebugWindow.WatchWindow);
+		}
+
+		private void mnuSearch_DropDownOpening(object sender, EventArgs e)
+		{
+			ctrlConsoleStatus.CloneGoToMenu(mnuGoTo);
 		}
 	}
 }

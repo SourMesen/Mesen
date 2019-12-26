@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using System.IO;
 using Mesen.GUI.Config;
 using System.Drawing.Text;
+using System.Drawing.Drawing2D;
 using System.IO.Compression;
 using Mesen.GUI.Forms;
 using Mesen.GUI.Controls;
@@ -18,6 +19,9 @@ namespace Mesen.GUI.Controls
 {
 	public partial class ctrlRecentGames : BaseControl
 	{
+		private int _elementsPerRow = 0;
+		private int _elementsPerPage = 0;
+
 		public delegate void RecentGameLoadedHandler(RecentGameInfo gameInfo);
 		public event RecentGameLoadedHandler OnRecentGameLoaded;
 
@@ -36,23 +40,65 @@ namespace Mesen.GUI.Controls
 		private bool _initialized = false;
 		private int _currentIndex = 0;
 		private List<RecentGameInfo> _recentGames = new List<RecentGameInfo>();
-		private PrivateFontCollection _fonts = new PrivateFontCollection();
+		private List<ctrlRecentGame> _controls = new List<ctrlRecentGame>();
 
 		public ctrlRecentGames()
 		{
 			InitializeComponent();
-			ThemeHelper.ExcludeFromTheme(this);
+			if(IsDesignMode) {
+				return;
+			}
 
 			DoubleBuffered = true;
+			picPrevGame.Image.RotateFlip(RotateFlipType.RotateNoneFlipX);
+			ThemeHelper.ExcludeFromTheme(this);
+		}
 
-			bool designMode = (LicenseManager.UsageMode == LicenseUsageMode.Designtime);
-			if(!designMode) {
-				_fonts.AddFontFile(Path.Combine(ConfigManager.HomeFolder, "Resources", "PixelFont.ttf"));
-				lblGameName.Font = new Font(_fonts.Families[0], 10);
-				lblSaveDate.Font = new Font(_fonts.Families[0], 10);
-
-				picPrevGame.Image.RotateFlip(RotateFlipType.RotateNoneFlipX);
+		private void InitGrid()
+		{
+			int elementsPerRow = 1;
+			if(ClientSize.Width > 850 && ClientSize.Height > 850) {
+				elementsPerRow = 3;
+			} else if(ClientSize.Width > 450 && ClientSize.Height > 450) {
+				elementsPerRow = 2;
 			}
+
+			if(_recentGames.Count <= 1) {
+				elementsPerRow = 1;
+			} else if(_recentGames.Count <= 4) {
+				elementsPerRow = Math.Min(2, elementsPerRow);
+			}
+
+			if(_elementsPerRow == elementsPerRow) {
+				return;
+			}
+
+			_elementsPerRow = elementsPerRow;
+			_elementsPerPage = elementsPerRow * elementsPerRow;
+
+			_controls = new List<ctrlRecentGame>();
+			tlpGrid.SuspendLayout();
+			tlpGrid.ColumnCount = _elementsPerRow;
+			tlpGrid.RowCount = _elementsPerRow;
+			tlpGrid.ColumnStyles.Clear();
+			tlpGrid.RowStyles.Clear();
+			tlpGrid.Controls.Clear();
+			for(int j = 0; j < _elementsPerRow; j++) {
+				tlpGrid.RowStyles.Add(new RowStyle(SizeType.Percent, 100F / _elementsPerRow));
+				tlpGrid.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F / _elementsPerRow));
+			}
+
+			for(int j = 0; j < _elementsPerRow; j++) {
+				for(int i = 0; i < _elementsPerRow; i++) {
+					ctrlRecentGame ctrl = new ctrlRecentGame();
+					ctrl.Dock = DockStyle.Fill;
+					ctrl.Margin = new Padding(2);
+					tlpGrid.Controls.Add(ctrl, i, j);
+					_controls.Add(ctrl);
+				}
+			}
+			tlpGrid.ResumeLayout();
+			UpdateGameInfo();
 		}
 
 		public new bool Visible
@@ -64,10 +110,14 @@ namespace Mesen.GUI.Controls
 					value = false;
 				}
 
+				if(value && !_initialized) {
+					//We just re-enabled the screen, initialize it
+					Initialize();
+				}
+
 				if(value != base.Visible) {
-					if(value && !_initialized) {
-						//We just re-enabled the screen, initialize it
-						Initialize();
+					if(value) {
+						InitGrid();
 					}
 
 					base.Visible = value;
@@ -75,7 +125,7 @@ namespace Mesen.GUI.Controls
 				}
 			}
 		}
-				
+
 		public int GameCount
 		{
 			get { return _recentGames.Count; }
@@ -108,12 +158,11 @@ namespace Mesen.GUI.Controls
 
 			_recentGames = _recentGames.OrderBy((info) => info.Timestamp).Reverse().ToList();
 
-			if(_recentGames.Count > 5) {
-				_recentGames.RemoveRange(5, _recentGames.Count - 5);
+			if(_recentGames.Count > 36) {
+				_recentGames.RemoveRange(36, _recentGames.Count - 36);
 			}
 
-			picPrevGame.Visible = _recentGames.Count > 1;
-			picNextGame.Visible = _recentGames.Count > 1;
+			InitGrid();
 
 			if(_recentGames.Count == 0) {
 				this.Visible = false;
@@ -122,55 +171,24 @@ namespace Mesen.GUI.Controls
 				UpdateGameInfo();
 				tmrInput.Enabled = true;
 			}
+
+			picPrevGame.Visible = true;
+			picNextGame.Visible = true;
 		}
 
 		public void UpdateGameInfo()
 		{
-			if(_currentIndex < _recentGames.Count) {
-				lblGameName.Text = Path.GetFileNameWithoutExtension(_recentGames[_currentIndex].RomName);
-				lblSaveDate.Text = _recentGames[_currentIndex].Timestamp.ToString();
-
-				try {
-					ZipArchive zip = new ZipArchive(new MemoryStream(File.ReadAllBytes(_recentGames[_currentIndex].FileName)));
-					ZipArchiveEntry entry = zip.GetEntry("Screenshot.png");
-					if(entry != null) {
-						using(Stream stream = entry.Open()) {
-							picPreviousState.Image = Image.FromStream(stream);
-						}
-					} else {
-						picPreviousState.Image = null;
-					}
-				} catch {
-					picPreviousState.Image = null;
-				}
-				UpdateSize();
+			if(!_initialized) {
+				return;
 			}
-		}
-		
-		float _xFactor = 1;
-		float _yFactor = 1;
-		protected override void ScaleControl(SizeF factor, BoundsSpecified specified)
-		{
-			_xFactor = factor.Width;
-			_yFactor = factor.Height;
-			base.ScaleControl(factor, specified);
-		}
 
-		private void UpdateSize()
-		{
-			tlpPreviousState.Visible = false;
-			Size maxSize = new Size(this.Size.Width - (int)(120 * _xFactor), this.Size.Height - (int)(50 * _yFactor));
+			int count = _recentGames.Count;
+			int pageStart = _currentIndex / _elementsPerPage * _elementsPerPage;
 
-			if(picPreviousState.Image != null) {
-				double xRatio = (double)picPreviousState.Image.Width / maxSize.Width;
-				double yRatio = (double)picPreviousState.Image.Height / maxSize.Height;
-				double ratio = Math.Max(xRatio, yRatio);
-
-				Size newSize = new Size((int)(picPreviousState.Image.Width / ratio), (int)(picPreviousState.Image.Height / ratio));
-				picPreviousState.Size = newSize;
-				pnlPreviousState.Size = new Size(newSize.Width+4, newSize.Height+4);
+			for(int i = 0; i < _elementsPerPage; i++) {
+				_controls[i].RecentGame = count > pageStart + i ? _recentGames[pageStart + i] : null;
+				_controls[i].Highlight = (_currentIndex % _elementsPerPage) == i;
 			}
-			tlpPreviousState.Visible = true;
 		}
 
 		protected override void OnResize(EventArgs e)
@@ -183,50 +201,41 @@ namespace Mesen.GUI.Controls
 				picPrevGame.Dock = DockStyle.Fill;
 			}
 
-			if(picPreviousState.Image != null) {
-				UpdateSize();
+			if(this._elementsPerRow > 0) {
+				InitGrid();
 			}
 			base.OnResize(e);
 		}
 
-		private void picPreviousState_MouseEnter(object sender, EventArgs e)
-		{
-			pnlPreviousState.BackColor = Color.LightBlue;
-		}
-
-		private void picPreviousState_MouseLeave(object sender, EventArgs e)
-		{
-			pnlPreviousState.BackColor = Color.Gray;
-		}
-
-		private void picPreviousState_Click(object sender, EventArgs e)
-		{
-			LoadSelectedGame();
-		}
-
 		private void picNextGame_MouseDown(object sender, MouseEventArgs e)
 		{
-			GoToNextGame();
+			GoToNextPage();
 		}
 
 		private void picPrevGame_MouseDown(object sender, MouseEventArgs e)
 		{
-			GoToPreviousGame();
+			GoToPreviousPage();
 		}
 
-		private void GoToPreviousGame()
+		private void GoToPreviousPage()
 		{
-			if(_currentIndex == 0) {
+			if(_currentIndex < _elementsPerPage) {
 				_currentIndex = _recentGames.Count - 1;
 			} else {
-				_currentIndex--;
+				_currentIndex -= _elementsPerPage;
 			}
 			UpdateGameInfo();
 		}
 
-		private void GoToNextGame()
+		private bool IsOnLastPage { get { return (_currentIndex / _elementsPerPage) == ((_recentGames.Count - 1) / _elementsPerPage); } }
+
+		private void GoToNextPage()
 		{
-			_currentIndex = (_currentIndex + 1) % _recentGames.Count;
+			if(_currentIndex + _elementsPerPage < _recentGames.Count) {
+				_currentIndex += _elementsPerPage;
+			} else {
+				_currentIndex = IsOnLastPage ? 0 : (_recentGames.Count - 1);
+			}
 			UpdateGameInfo();
 		}
 
@@ -248,11 +257,33 @@ namespace Mesen.GUI.Controls
 						foreach(KeyMappings mapping in ConfigManager.Config.InputInfo.Controllers[0].Keys) {
 							if(mapping.Left == keyCode) {
 								_waitForRelease = true;
-								GoToPreviousGame();
+								if(_currentIndex == 0) {
+									_currentIndex = _recentGames.Count - 1;
+								} else {
+									_currentIndex--;
+								}
+								UpdateGameInfo();
 							} else if(mapping.Right == keyCode) {
 								_waitForRelease = true;
-								GoToNextGame();
-							} else if(mapping.A == keyCode || mapping.B == keyCode) {
+								_currentIndex = (_currentIndex + 1) % _recentGames.Count;
+								UpdateGameInfo();
+							} else if(mapping.Down == keyCode) {
+								_waitForRelease = true;
+								if(_currentIndex + _elementsPerRow < _recentGames.Count) {
+									_currentIndex += _elementsPerRow;
+								} else {
+									_currentIndex = IsOnLastPage ? 0 : (_recentGames.Count - 1);
+								}
+								UpdateGameInfo();
+							} else if(mapping.Up == keyCode) {
+								_waitForRelease = true;
+								if(_currentIndex < _elementsPerRow) {
+									_currentIndex = _recentGames.Count - 1;
+								} else {
+									_currentIndex -= _elementsPerRow;
+								}
+								UpdateGameInfo();
+							} else if(mapping.A == keyCode || mapping.B == keyCode || mapping.Select == keyCode || mapping.Start == keyCode) {
 								_waitForRelease = true;
 								LoadSelectedGame();
 							}
@@ -275,18 +306,48 @@ namespace Mesen.GUI.Controls
 
 	public class GamePreviewBox : PictureBox
 	{
-		public System.Drawing.Drawing2D.InterpolationMode InterpolationMode { get; set; }
+		public InterpolationMode InterpolationMode { get; set; }
+		private bool _hovered = false;
+		private bool _highlight = false;
 
 		public GamePreviewBox()
 		{
 			DoubleBuffered = true;
-			InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.Default;
+			InterpolationMode = InterpolationMode.Default;
+		}
+
+		public bool Highlight
+		{
+			get { return _highlight; }
+			set
+			{
+				_highlight = value;
+				this.Invalidate();
+			}
+		}
+
+		protected override void OnMouseEnter(EventArgs e)
+		{
+			base.OnMouseEnter(e);
+			_hovered = true;
+			this.Invalidate();
+		}
+
+		protected override void OnMouseLeave(EventArgs e)
+		{
+			base.OnMouseLeave(e);
+			_hovered = false;
+			this.Invalidate();
 		}
 
 		protected override void OnPaint(PaintEventArgs pe)
 		{
-			pe.Graphics.InterpolationMode = InterpolationMode;
+			pe.Graphics.InterpolationMode = InterpolationMode.NearestNeighbor;
 			base.OnPaint(pe);
+
+			using(Pen pen = new Pen(_hovered ? Color.LightBlue : (_highlight ? Color.LightBlue : Color.Gray), 2)) {
+				pe.Graphics.DrawRectangle(pen, 1, 1, this.Width - 2, this.Height - 2);
+			}
 		}
 	}
 

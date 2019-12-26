@@ -54,6 +54,11 @@ namespace Mesen.GUI.Config
 		[ShortcutName("Go to All")]
 		public XmlKeys GoToAll = Keys.Control | Keys.Oemcomma;
 
+		[ShortcutName("Zoom In")]
+		public XmlKeys ZoomIn = Keys.Control | Keys.Oemplus;
+		[ShortcutName("Zoom Out")]
+		public XmlKeys ZoomOut = Keys.Control | Keys.OemMinus;
+
 		[ShortcutName("PPU Viewer: Toggle View")]
 		public XmlKeys PpuViewer_ToggleView = Keys.Control | Keys.Q;
 		[ShortcutName("PPU Viewer: Toggle Zoom")]
@@ -93,13 +98,13 @@ namespace Mesen.GUI.Config
 		public XmlKeys OpenWatchWindow = Keys.Control | Keys.W;
 
 		[ShortcutName("Open Nametable Viewer (Compact)")]
-		public XmlKeys OpenNametableViewer;
+		public XmlKeys OpenNametableViewer = Keys.None;
 		[ShortcutName("Open CHR Viewer (Compact)")]
-		public XmlKeys OpenChrViewer;
+		public XmlKeys OpenChrViewer = Keys.None;
 		[ShortcutName("Open Sprite Viewer (Compact)")]
-		public XmlKeys OpenSpriteViewer;
+		public XmlKeys OpenSpriteViewer = Keys.None;
 		[ShortcutName("Open Palette Viewer (Compact)")]
-		public XmlKeys OpenPaletteViewer;
+		public XmlKeys OpenPaletteViewer = Keys.None;
 
 		//Debugger window
 		[ShortcutName("Reset")]

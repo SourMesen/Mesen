@@ -27,7 +27,7 @@ else
 fi
 
 OBJ="PGOHelper/obj.${PLAT}/"
-FLAGS="LTO=true MESENPLATFORM=${PLAT}"
+FLAGS="LTO=true STATICLINK=true MESENPLATFORM=${PLAT}"
 
 eval ${FLAGS} make clean
 

@@ -233,28 +233,44 @@ namespace Mesen.GUI.Debugger
 			btnUndo.Enabled = this._dirty && InteropEmu.DebugIsExecutionStopped();
 		}
 
+		private int GetHandlerTarget(uint address)
+		{
+			return InteropEmu.DebugGetMemoryValue(DebugMemoryType.CpuMemory, address) | (InteropEmu.DebugGetMemoryValue(DebugMemoryType.CpuMemory, address+1) << 8);
+		}
+
 		private void UpdateVectorAddresses()
 		{
-			bool isNsf = InteropEmu.GetRomInfo().Format == RomFormat.Nsf;
-			if(isNsf) {
+			RomFormat format = InteropEmu.GetRomInfo().Format;
+			if(format == RomFormat.Nsf) {
 				NsfHeader header = InteropEmu.NsfGetHeader();
-				mnuGoToInitHandler.Text = "Init Handler ($" + header.InitAddress.ToString("X4") + ")";
-				mnuGoToPlayHandler.Text = "Play Handler ($" + header.PlayAddress.ToString("X4") + ")";
+				mnuGoToInitHandler.ShortcutKeyDisplayString = "$" + header.InitAddress.ToString("X4");
+				mnuGoToPlayHandler.ShortcutKeyDisplayString = "$" + header.PlayAddress.ToString("X4");
 			} else {
-				int nmiHandler = InteropEmu.DebugGetMemoryValue(DebugMemoryType.CpuMemory, 0xFFFA) | (InteropEmu.DebugGetMemoryValue(DebugMemoryType.CpuMemory, 0xFFFB) << 8);
-				int resetHandler = InteropEmu.DebugGetMemoryValue(DebugMemoryType.CpuMemory, 0xFFFC) | (InteropEmu.DebugGetMemoryValue(DebugMemoryType.CpuMemory, 0xFFFD) << 8);
-				int irqHandler = InteropEmu.DebugGetMemoryValue(DebugMemoryType.CpuMemory, 0xFFFE) | (InteropEmu.DebugGetMemoryValue(DebugMemoryType.CpuMemory, 0xFFFF) << 8);
+				mnuGoToNmiHandler.ShortcutKeyDisplayString = "$" + GetHandlerTarget(0xFFFA).ToString("X4");
+				mnuGoToResetHandler.ShortcutKeyDisplayString = "$" + GetHandlerTarget(0xFFFC).ToString("X4");
+				mnuGoToIrqHandler.ShortcutKeyDisplayString = "$" + GetHandlerTarget(0xFFFE).ToString("X4");
 
-				mnuGoToNmiHandler.Text = "NMI Handler ($" + nmiHandler.ToString("X4") + ")";
-				mnuGoToResetHandler.Text = "Reset Handler ($" + resetHandler.ToString("X4") + ")";
-				mnuGoToIrqHandler.Text = "IRQ Handler ($" + irqHandler.ToString("X4") + ")";
+				if(format == RomFormat.Fds) {
+					mnuFdsIrqHandler.ShortcutKeyDisplayString = "$" + GetHandlerTarget(0xDFFE).ToString("X4");
+					mnuFdsNmiHandler1.ShortcutKeyDisplayString = "$" + GetHandlerTarget(0xDFF6).ToString("X4");
+					mnuFdsNmiHandler2.ShortcutKeyDisplayString = "$" + GetHandlerTarget(0xDFF8).ToString("X4");
+					mnuFdsNmiHandler3.ShortcutKeyDisplayString = "$" + GetHandlerTarget(0xDFFA).ToString("X4");
+					mnuFdsResetHandler.ShortcutKeyDisplayString = "$" + GetHandlerTarget(0xDFFC).ToString("X4");
+				}
 			}
 
-			mnuGoToInitHandler.Visible = isNsf;
-			mnuGoToPlayHandler.Visible = isNsf;
-			mnuGoToIrqHandler.Visible = !isNsf;
-			mnuGoToNmiHandler.Visible = !isNsf;
-			mnuGoToResetHandler.Visible = !isNsf;
+			mnuGoToInitHandler.Tag = mnuGoToInitHandler.Visible = format == RomFormat.Nsf;
+			mnuGoToPlayHandler.Tag = mnuGoToPlayHandler.Visible = format == RomFormat.Nsf;
+			mnuGoToIrqHandler.Tag = mnuGoToIrqHandler.Visible = format != RomFormat.Nsf;
+			mnuGoToNmiHandler.Tag = mnuGoToNmiHandler.Visible = format != RomFormat.Nsf;
+			mnuGoToResetHandler.Tag = mnuGoToResetHandler.Visible = format != RomFormat.Nsf;
+
+			sepFds.Tag = sepFds.Visible = format == RomFormat.Fds;
+			mnuFdsIrqHandler.Tag = mnuFdsIrqHandler.Visible = format == RomFormat.Fds;
+			mnuFdsNmiHandler1.Tag = mnuFdsNmiHandler1.Visible = format == RomFormat.Fds;
+			mnuFdsNmiHandler2.Tag = mnuFdsNmiHandler2.Visible = format == RomFormat.Fds;
+			mnuFdsNmiHandler3.Tag = mnuFdsNmiHandler3.Visible = format == RomFormat.Fds;
+			mnuFdsResetHandler.Tag = mnuFdsResetHandler.Visible = format == RomFormat.Fds;
 		}
 
 		private void btnGoto_Click(object sender, EventArgs e)
@@ -262,34 +278,6 @@ namespace Mesen.GUI.Debugger
 			contextGoTo.Show(btnGoto.PointToScreen(new Point(0, btnGoto.Height-1)));
 		}
 
-		private void mnuGoToIrqHandler_Click(object sender, EventArgs e)
-		{
-			int address = (InteropEmu.DebugGetMemoryValue(DebugMemoryType.CpuMemory, 0xFFFF) << 8) | InteropEmu.DebugGetMemoryValue(DebugMemoryType.CpuMemory, 0xFFFE);
-			this.OnGotoLocation?.Invoke(address, null);
-		}
-
-		private void mnuGoToNmiHandler_Click(object sender, EventArgs e)
-		{
-			int address = (InteropEmu.DebugGetMemoryValue(DebugMemoryType.CpuMemory, 0xFFFB) << 8) | InteropEmu.DebugGetMemoryValue(DebugMemoryType.CpuMemory, 0xFFFA);
-			this.OnGotoLocation?.Invoke(address, null);
-		}
-
-		private void mnuGoToResetHandler_Click(object sender, EventArgs e)
-		{
-			int address = (InteropEmu.DebugGetMemoryValue(DebugMemoryType.CpuMemory, 0xFFFD) << 8) | InteropEmu.DebugGetMemoryValue(DebugMemoryType.CpuMemory, 0xFFFC);
-			this.OnGotoLocation?.Invoke(address, null);
-		}
-
-		private void mnuGoToInitHandler_Click(object sender, EventArgs e)
-		{
-			this.OnGotoLocation?.Invoke((int)InteropEmu.NsfGetHeader().InitAddress, null);
-		}
-
-		private void mnuGoToPlayHandler_Click(object sender, EventArgs e)
-		{
-			this.OnGotoLocation?.Invoke((int)InteropEmu.NsfGetHeader().PlayAddress, null);
-		}
-		
 		private void mnuGoToProgramCounter_Click(object sender, EventArgs e)
 		{
 			DebugState state = new DebugState();
@@ -300,6 +288,28 @@ namespace Mesen.GUI.Debugger
 		private void contextGoTo_Opening(object sender, CancelEventArgs e)
 		{
 			UpdateVectorAddresses();
+		}
+
+		public void CloneGoToMenu(ToolStripMenuItem parent)
+		{
+			parent.DropDownItems.Clear();
+			UpdateVectorAddresses();
+			List<ToolStripItem> items = new List<ToolStripItem>();
+			foreach(ToolStripItem item in contextGoTo.Items) {
+				if(item.Tag as bool? == false) {
+					continue;
+				}
+
+				if(item is ToolStripMenuItem) {
+					ToolStripMenuItem copy = new ToolStripMenuItem(item.Text);
+					copy.ShortcutKeyDisplayString = (item as ToolStripMenuItem).ShortcutKeyDisplayString;
+					copy.Click += (s, e) => item.PerformClick();
+					items.Add(copy);
+				} else if(item is ToolStripSeparator) {
+					items.Add(new ToolStripSeparator());
+				}
+			}
+			parent.DropDownItems.AddRange(items.ToArray());
 		}
 
 		private void OnOptionChanged(object sender, EventArgs e)
@@ -320,6 +330,12 @@ namespace Mesen.GUI.Debugger
 				this.UpdateStatus(ref _lastState);
 				this.btnUndo.Enabled = false;
 			}
+		}
+
+		private void mnuGoToHandler_Click(object sender, EventArgs e)
+		{
+			int address = int.Parse((sender as ToolStripMenuItem).ShortcutKeyDisplayString.Substring(1), System.Globalization.NumberStyles.HexNumber);
+			this.OnGotoLocation?.Invoke(address, EventArgs.Empty);
 		}
 	}
 }

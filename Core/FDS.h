@@ -71,6 +71,7 @@ private:
 	string _romFilepath;
 
 	bool _gameStarted;
+	bool _needSave = false;
 
 protected:
 	virtual uint16_t GetPRGPageSize() override { return 0x2000; }

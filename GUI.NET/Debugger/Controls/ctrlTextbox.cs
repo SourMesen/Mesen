@@ -16,7 +16,7 @@ namespace Mesen.GUI.Debugger
 {
 	public partial class ctrlTextbox : Control
 	{
-		private Regex _codeRegex = new Regex("^(\\s*)([a-z]{3})([*]{0,1})($|[ ]){1}([(]{0,1})(([$][0-9a-f]*)|(#[@$:_0-9a-z]*)|([@_a-z]([@_a-z0-9])*){0,1}(\\+(\\d+)){0,1}){0,1}([)]{0,1})(,X|,Y){0,1}([)]{0,1})(.*)", RegexOptions.IgnoreCase | RegexOptions.Compiled);
+		private Regex _codeRegex = new Regex("^(\\s*[^:]*:){0,1}(\\s*)([a-z]{3})([*]{0,1})($|[ ]){1}([(]{0,1})(([$][0-9a-f]*)|(#[@$:_0-9a-z]*)|([@_a-z]([@_a-z0-9])*){0,1}(\\+(\\d+)){0,1}){0,1}([)]{0,1})(,X|,Y){0,1}([)]{0,1})(.*)", RegexOptions.IgnoreCase | RegexOptions.Compiled);
 		public event EventHandler ScrollPositionChanged;
 		public event EventHandler SelectedLineChanged;
 		private bool _disableScrollPositionChangedEvent;
@@ -890,14 +890,10 @@ namespace Mesen.GUI.Debugger
 
 		private void DrawLine(Graphics g, int currentLine, int marginLeft, int positionY, int lineHeight)
 		{
-			string codeString = _contents[currentLine];
+			string codeString = _contents[currentLine].TrimEnd();
 			string addressString = this.Addressing?[currentLine];
 			string commentString = this.Comments?[currentLine];
 
-			float codeStringLength = g.MeasureString(codeString, this.Font, int.MaxValue, StringFormat.GenericTypographic).Width;
-			float addressStringLength = g.MeasureString(addressString, this.Font, int.MaxValue, StringFormat.GenericTypographic).Width;
-
-			//Adjust background color highlights based on number of spaces in front of content
 			int originalMargin = marginLeft;
 			marginLeft += (LineIndentations != null ? LineIndentations[currentLine] : 0);
 
@@ -938,21 +934,32 @@ namespace Mesen.GUI.Debugger
 			}
 
 			if(lineProperties != null) {
+				//Adjust background color highlights based on number of spaces in front of content
+				int highlightMargin = marginLeft;
+				int highlightLength = codeString.Length;
+				float charWidth = g.MeasureString("A", this.Font, Point.Empty, StringFormat.GenericTypographic).Width;
+				Match match = _codeRegex.Match(codeString);
+				if(match != null && match.Success && !codeString.EndsWith(":")) {
+					string margin = match.Groups[1].Value + match.Groups[2].Value;
+					highlightMargin += (int)(margin.Length * charWidth);
+					highlightLength -= margin.Length;
+				}
+
 				if(!isBlockStart && !isBlockEnd && lineProperties.TextBgColor.HasValue) {
 					using(Brush bgBrush = new SolidBrush(lineProperties.TextBgColor.Value)) {
 						int yOffset = Program.IsMono ? 2 : 1;
-						g.FillRectangle(bgBrush, marginLeft, positionY + yOffset, codeStringLength, lineHeight - 1);
+						g.FillRectangle(bgBrush, highlightMargin, positionY + yOffset, highlightLength * charWidth, lineHeight - 1);
 					}
 				}
 
 				if(!isBlockStart && !isBlockEnd && lineProperties.OutlineColor.HasValue) {
 					using(Pen outlinePen = new Pen(lineProperties.OutlineColor.Value, 1)) {
-						g.DrawRectangle(outlinePen, marginLeft, positionY + 1, codeStringLength, lineHeight - 1);
+						g.DrawRectangle(outlinePen, highlightMargin, positionY + 1, highlightLength * charWidth, lineHeight - 1);
 					}
 				}
 			}
 
-			this.DrawLineText(g, currentLine, marginLeft, positionY, codeString, addressString, commentString, codeStringLength, addressStringLength, textColor, lineHeight);
+			this.DrawLineText(g, currentLine, marginLeft, positionY, codeString, addressString, commentString, textColor, lineHeight);
 		}
 
 		private void DrawLineNumber(Graphics g, int currentLine, int marginLeft, int positionY, Color addressColor)
@@ -995,7 +1002,7 @@ namespace Mesen.GUI.Debugger
 			}
 		}
 
-		private void DrawLineText(Graphics g, int currentLine, int marginLeft, int positionY, string codeString, string addressString, string commentString, float codeStringLength, float addressStringLength, Color? textColor, int lineHeight)
+		private void DrawLineText(Graphics g, int currentLine, int marginLeft, int positionY, string codeString, string addressString, string commentString, Color? textColor, int lineHeight)
 		{
 			DebugInfo info = ConfigManager.Config.DebugInfo;
 			
@@ -1039,21 +1046,22 @@ namespace Mesen.GUI.Debugger
 				if(codeString.Length > 0) {
 					Match match = CodeHighlightingEnabled ? _codeRegex.Match(codeString) : null;
 					if(match != null && match.Success && !codeString.EndsWith(":")) {
-						string padding = match.Groups[1].Value;
-						string opcode = match.Groups[2].Value;
-						string invalidStar = match.Groups[3].Value;
-						string paren1 = match.Groups[5].Value;
-						string operand = match.Groups[6].Value;
-						string arrayPosition = match.Groups[12].Value;
-						string paren2 = match.Groups[13].Value;
-						string indirect = match.Groups[14].Value;
-						string paren3 = match.Groups[15].Value;
-						string rest = match.Groups[16].Value;
+						string lineLabel = match.Groups[1].Value;
+						string padding = match.Groups[2].Value;
+						string opcode = match.Groups[3].Value;
+						string invalidStar = match.Groups[4].Value;
+						string paren1 = match.Groups[6].Value;
+						string operand = match.Groups[7].Value;
+						string arrayPosition = match.Groups[13].Value;
+						string paren2 = match.Groups[14].Value;
+						string indirect = match.Groups[15].Value;
+						string paren3 = match.Groups[16].Value;
+						string rest = match.Groups[17].Value;
 						Color operandColor = operand.Length > 0 ? (operand[0] == '#' ? (Color)info.AssemblerImmediateColor : (operand[0] == '$' ? (Color)info.AssemblerAddressColor : (Color)info.AssemblerLabelDefinitionColor)) : Color.Black;
-						List<Color> colors = new List<Color>() { defaultColor, info.AssemblerOpcodeColor, defaultColor, defaultColor, defaultColor, operandColor, defaultColor, defaultColor, defaultColor };
+						List<Color> colors = new List<Color>() { (Color)info.AssemblerLabelDefinitionColor, defaultColor, info.AssemblerOpcodeColor, defaultColor, defaultColor, defaultColor, operandColor, defaultColor, defaultColor, defaultColor };
 						int codePartCount = colors.Count;
 
-						List<string> parts = new List<string>() { padding, opcode, invalidStar, " ", paren1, operand, paren2, indirect, paren3 };
+						List<string> parts = new List<string>() { lineLabel, padding, opcode, invalidStar, " ", paren1, operand, paren2, indirect, paren3 };
 						string memoryAddress = "";
 						if(!string.IsNullOrWhiteSpace(addressString)) {
 							colors.Add(info.CodeEffectiveAddressColor);
@@ -1096,14 +1104,14 @@ namespace Mesen.GUI.Debugger
 						parts.Add(rest);
 
 						float xOffset = 0;
+						float charWidth = g.MeasureString("A", this.Font, Point.Empty, StringFormat.GenericTypographic).Width;
 						for(int i = 0; i < parts.Count; i++) {
-							using(Brush b = new SolidBrush(textColor.HasValue && (i < codePartCount || i == parts.Count - 1) ? textColor.Value : colors[i])) {
+							using(Brush b = new SolidBrush(textColor.HasValue && (i >= 1 && (i < codePartCount || i == parts.Count - 1)) ? textColor.Value : colors[i])) {
 								g.DrawString(parts[i], this.Font, b, marginLeft + xOffset, positionY, StringFormat.GenericTypographic);
-								xOffset += g.MeasureString("".PadLeft(parts[i].Length, 'w'), this.Font, Point.Empty, StringFormat.GenericTypographic).Width;
+								xOffset += charWidth * parts[i].Length;
 								characterCount += parts[i].Length;
 							}
 						}
-						codeStringLength = xOffset;
 					} else {
 						using(Brush fgBrush = new SolidBrush(codeString.EndsWith(":") ? (Color)info.AssemblerLabelDefinitionColor : (textColor ?? defaultColor))) {
 							g.DrawString(codeString, this.Font, fgBrush, marginLeft, positionY, StringFormat.GenericTypographic);
@@ -1281,7 +1289,7 @@ namespace Mesen.GUI.Debugger
 			}
 		}
 
-		private void DrawMargin(Graphics g, int currentLine, int marginLeft, int regularMargin, int positionY, int lineHeight)
+		private void DrawMargin(Graphics g, int currentLine, int regularMargin, int positionY, int lineHeight)
 		{
 			LineProperties lineProperties = GetLineStyle(currentLine);
 
@@ -1300,9 +1308,6 @@ namespace Mesen.GUI.Debugger
 			if(this.ShowContentNotes && this.ShowSingleContentLineNotes) {
 				g.DrawString(_contentNotes[currentLine], this.Font, Brushes.Gray, regularMargin + 6, positionY, StringFormat.GenericTypographic);
 			}
-
-			//Adjust background color highlights based on number of spaces in front of content
-			marginLeft += (LineIndentations != null ? LineIndentations[currentLine] : 0);
 
 			if(lineProperties != null) {
 				this.DrawLineSymbols(g, positionY, lineProperties, lineHeight);
@@ -1400,7 +1405,7 @@ namespace Mesen.GUI.Debugger
 			currentLine = this.ScrollPosition;
 			positionY = string.IsNullOrWhiteSpace(this._header) ? 0 : lineHeight;
 			while(positionY < rect.Bottom && currentLine < _contents.Length) {
-				this.DrawMargin(pe.Graphics, currentLine, marginLeft, regularMargin, positionY, lineHeight);
+				this.DrawMargin(pe.Graphics, currentLine, regularMargin, positionY, lineHeight);
 				positionY += lineHeight;
 				currentLine++;
 			}

@@ -101,7 +101,7 @@ uint8_t MemoryManager::DebugRead(uint16_t addr, bool disableSideEffects)
 		}
 	}
 
-	_console->GetCheatManager()->ApplyRamCodes(addr, value);
+	_console->GetCheatManager()->ApplyCodes(addr, value);
 
 	return value;
 }
@@ -114,7 +114,7 @@ uint16_t MemoryManager::DebugReadWord(uint16_t addr)
 uint8_t MemoryManager::Read(uint16_t addr, MemoryOperationType operationType)
 {
 	uint8_t value = _ramReadHandlers[addr]->ReadRAM(addr);
-	_console->GetCheatManager()->ApplyRamCodes(addr, value);
+	_console->GetCheatManager()->ApplyCodes(addr, value);
 	_console->DebugProcessRamOperation(operationType, addr, value);
 
 	_openBusHandler.SetOpenBus(value);

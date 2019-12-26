@@ -153,30 +153,49 @@ namespace Mesen.GUI.Config
 		public bool ShowBreakpointLabels = true;
 
 		public Point EventViewerLocation;
+		public Size EventViewerSize;
+		public bool EventViewerAutoRefresh = true;
+		public RefreshSpeed EventViewerAutoRefreshSpeed = RefreshSpeed.Normal;
 		public bool EventViewerRefreshOnBreak = true;
-		public bool EventViewerShowPpuRegisterWrites = true;
-		public bool EventViewerShowPpuRegisterReads = true;
+		public bool EventViewerShowPpuWrite2000 = true;
+		public bool EventViewerShowPpuWrite2001 = true;
+		public bool EventViewerShowPpuWrite2003 = true;
+		public bool EventViewerShowPpuWrite2004 = true;
+		public bool EventViewerShowPpuWrite2005 = true;
+		public bool EventViewerShowPpuWrite2006 = true;
+		public bool EventViewerShowPpuWrite2007 = true;
+		public bool EventViewerShowPpuRead2002 = true;
+		public bool EventViewerShowPpuRead2004 = true;
+		public bool EventViewerShowPpuRead2007 = true;
 		public bool EventViewerShowMapperRegisterWrites = true;
 		public bool EventViewerShowMapperRegisterReads = true;
 		public bool EventViewerShowNmi = true;
 		public bool EventViewerShowIrq = true;
 		public bool EventViewerShowSpriteZeroHit = true;
 		public bool EventViewerShowMarkedBreakpoints = true;
+		public bool EventViewerShowDmcDmaReads = true;
 		public bool EventViewerShowPreviousFrameEvents = true;
+		public bool EventViewerShowNtscBorders = true;
 
 		public XmlColor EventViewerMapperRegisterWriteColor = ColorTranslator.FromHtml("#007597");
 		public XmlColor EventViewerMapperRegisterReadColor = ColorTranslator.FromHtml("#C92929");
 		public XmlColor EventViewerNmiColor = ColorTranslator.FromHtml("#ABADAC");
 		public XmlColor EventViewerIrqColor = ColorTranslator.FromHtml("#F9FEAC");
+		public XmlColor EventViewerDmcDmaReadColor = ColorTranslator.FromHtml("#A9FEFC");
 		public XmlColor EventViewerSpriteZeroHitColor = ColorTranslator.FromHtml("#9F93C6");
 		public XmlColor EventViewerBreakpointColor = ColorTranslator.FromHtml("#1898E4");
-		public XmlColor[] EventViewerPpuRegisterWriteColors = new XmlColor[8] {
-			ColorTranslator.FromHtml("#FF5E5E"), ColorTranslator.FromHtml("#8E33FF"), Color.Red, ColorTranslator.FromHtml("#FF84E0"),
-			ColorTranslator.FromHtml("#FAFF39"), ColorTranslator.FromHtml("#2EFF28"), ColorTranslator.FromHtml("#3D2DFF"), ColorTranslator.FromHtml("#FF060D")
-		};
-		public XmlColor[] EventViewerPpuRegisterReadColors = new XmlColor[8] {
-			Color.Red, Color.Red, ColorTranslator.FromHtml("#FF8224"), Color.Red, ColorTranslator.FromHtml("#24A672"), Color.Red, Color.Red, ColorTranslator.FromHtml("#6AF0FF")
-		};
+
+		public XmlColor EventViewerPpuRegisterWrite2000Color = ColorTranslator.FromHtml("#FF5E5E");
+		public XmlColor EventViewerPpuRegisterWrite2001Color = ColorTranslator.FromHtml("#8E33FF");
+		public XmlColor EventViewerPpuRegisterWrite2003Color = ColorTranslator.FromHtml("#FF84E0");
+		public XmlColor EventViewerPpuRegisterWrite2004Color = ColorTranslator.FromHtml("#FAFF39");
+		public XmlColor EventViewerPpuRegisterWrite2005Color = ColorTranslator.FromHtml("#2EFF28");
+		public XmlColor EventViewerPpuRegisterWrite2006Color = ColorTranslator.FromHtml("#3D2DFF");
+		public XmlColor EventViewerPpuRegisterWrite2007Color = ColorTranslator.FromHtml("#FF060D");
+
+		public XmlColor EventViewerPpuRegisterRead2002Color = ColorTranslator.FromHtml("#FF8224");
+		public XmlColor EventViewerPpuRegisterRead2004Color = ColorTranslator.FromHtml("#24A672");
+		public XmlColor EventViewerPpuRegisterRead2007Color = ColorTranslator.FromHtml("#6AF0FF");
 
 		public bool CopyAddresses = false;
 		public bool CopyByteCode = false;
@@ -321,6 +340,7 @@ namespace Mesen.GUI.Config
 		public bool BreakOnDecayedOamRead = false;
 		public bool BreakOnPpu2006ScrollGlitch = false;
 		public bool BreakOnUninitMemoryRead = false;
+		public bool BreakOnBusConflict = false;
 		public bool BreakOnInit = true;
 		public bool BreakOnPlay = false;
 		public bool BreakOnFirstCycle = true;

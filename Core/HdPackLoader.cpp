@@ -197,7 +197,7 @@ bool HdPackLoader::LoadPack()
 		InitializeHdPack();
 
 		return true;
-	} catch(std::exception ex) {
+	} catch(std::exception &ex) {
 		MessageManager::Log(string("[HDPack] Error loading HDPack: ") + ex.what() + " on line: " + currentLine);
 		return false;
 	}
@@ -324,7 +324,9 @@ void HdPackLoader::ProcessTileTag(vector<string> &tokens, vector<HdPackCondition
 		}
 	}
 
-	if(_data->Version > 0) {
+	if(_data->Version >= 105) {
+		tileInfo->Brightness = (int)(std::stof(tokens[index++]) * 255);
+	} else if(_data->Version > 0) {
 		tileInfo->Brightness = (uint8_t)(std::stof(tokens[index++]) * 255);
 	} else {
 		tileInfo->Brightness = 255;
@@ -381,6 +383,8 @@ void HdPackLoader::ProcessOptionTag(vector<string> &tokens)
 			_data->OptionFlags |= (int)HdPackOptions::NoContours;
 		} else if(token == "disableCache") {
 			_data->OptionFlags |= (int)HdPackOptions::DisableCache;
+		} else if(token == "disableOriginalTiles") {
+			_data->OptionFlags |= (int)HdPackOptions::DontRenderOriginalTiles;
 		} else {
 			MessageManager::Log("[HDPack] Invalid option: " + token);
 		}
@@ -551,10 +555,16 @@ void HdPackLoader::ProcessBackgroundTag(vector<string> &tokens, vector<HdPackCon
 	HdBackgroundInfo backgroundInfo;
 	if(bgFileData) {
 		backgroundInfo.Data = bgFileData;
-		backgroundInfo.Brightness = (uint8_t)(std::stof(tokens[1]) * 255);
+		if (_data->Version >= 105) {
+			backgroundInfo.Brightness = (int)(std::stof(tokens[1]) * 255);
+		} else {
+			backgroundInfo.Brightness = (uint8_t)(std::stof(tokens[1]) * 255);
+		}
 		backgroundInfo.HorizontalScrollRatio = 0;
 		backgroundInfo.VerticalScrollRatio = 0;
 		backgroundInfo.BehindBgPrioritySprites = false;
+		backgroundInfo.Left = 0;
+		backgroundInfo.Top = 0;
 
 		for(HdPackCondition* condition : conditions) {
 			if(
@@ -581,6 +591,11 @@ void HdPackLoader::ProcessBackgroundTag(vector<string> &tokens, vector<HdPackCon
 			if(tokens.size() > 4) {
 				checkConstraint(_data->Version >= 102, "[HDPack] This feature requires version 102+ of HD Packs");
 				backgroundInfo.BehindBgPrioritySprites = tokens[4] == "Y";
+			}
+			if(tokens.size() > 6) {
+				checkConstraint(_data->Version >= 105, "[HDPack] This feature requires version 105+ of HD Packs");
+				backgroundInfo.Left = std::max(0, std::stoi(tokens[5]));
+				backgroundInfo.Top = std::max(0, std::stoi(tokens[6]));
 			}
 		}
 

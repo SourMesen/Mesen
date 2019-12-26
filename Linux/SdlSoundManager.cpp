@@ -8,7 +8,7 @@ SdlSoundManager::SdlSoundManager(shared_ptr<Console> console)
 {
 	_console = console;
 
-	if(InitializeAudio(44100, false)) {
+	if(InitializeAudio(48000, true)) {
 		_console->GetSoundMixer()->RegisterAudioDevice(this);
 	}
 }
@@ -146,18 +146,25 @@ void SdlSoundManager::WriteToBuffer(uint8_t* input, uint32_t len)
 		_writePosition = len - remainingBytes;
 	}
 }
+
+void SdlSoundManager::UpdateSoundSettings()
+{
+	uint32_t sampleRate = _console->GetSettings()->GetSampleRate();
+	uint32_t latency = _console->GetSettings()->GetAudioLatency();
+	if(_sampleRate != sampleRate || _needReset || _previousLatency != latency) {
+		Release();
+		InitializeAudio(sampleRate, true);
+	}
+}
+
 void SdlSoundManager::PlayBuffer(int16_t *soundBuffer, uint32_t sampleCount, uint32_t sampleRate, bool isStereo)
 {
 	uint32_t bytesPerSample = (SoundMixer::BitsPerSample / 8) * (isStereo ? 2 : 1);
-	uint32_t latency = _console->GetSettings()->GetAudioLatency();
-	if(_sampleRate != sampleRate || _isStereo != isStereo || _needReset || _previousLatency != latency) {
-		Release();
-		InitializeAudio(sampleRate, isStereo);
-	}
+	UpdateSoundSettings();
 
 	WriteToBuffer((uint8_t*)soundBuffer, sampleCount * bytesPerSample);
 
-	int32_t byteLatency = (int32_t)((float)(sampleRate * latency) / 1000.0f * bytesPerSample);
+	int32_t byteLatency = (int32_t)((float)(sampleRate * _previousLatency) / 1000.0f * bytesPerSample);
 	int32_t playWriteByteLatency = _writePosition - _readPosition;
 	if(playWriteByteLatency < 0) {
 		playWriteByteLatency = _bufferSize - _readPosition + _writePosition;

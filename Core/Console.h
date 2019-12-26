@@ -39,6 +39,7 @@ enum class ScaleFilterType;
 enum class ConsoleFeatures;
 enum class DebugMemoryType;
 enum class EventType;
+enum class DebugEventType : uint8_t;
 enum class RamPowerOnState;
 
 class Console : public std::enable_shared_from_this<Console>
@@ -99,6 +100,8 @@ private:
 	bool _initialized = false;
 	std::thread::id _emulationThreadId;
 
+	void RunFrameWithRunAhead(std::stringstream& runAheadState);
+
 	void LoadHdPack(VirtualFile &romFile, VirtualFile &patchFile);
 
 	void UpdateNesModel(bool sendNotification);
@@ -143,7 +146,7 @@ public:
 
 	bool Initialize(string romFile, string patchFile = "");
 	bool Initialize(VirtualFile &romFile);
-	bool Initialize(VirtualFile &romFile, VirtualFile &patchFile);
+	bool Initialize(VirtualFile &romFile, VirtualFile &patchFile, bool forPowerCycle = false);
 
 	void SaveBatteries();
 
@@ -155,6 +158,7 @@ public:
 		
 	void RunSingleFrame();
 	void RunSlaveCpu();
+	void RunFrame();
 	bool UpdateHdPackMode();
 
 	shared_ptr<SystemActionManager> GetSystemActionManager();
@@ -179,6 +183,7 @@ public:
 
 	void Reset(bool softReset = true);
 	void PowerCycle();
+	void ReloadRom(bool forPowerCycle = false);
 	void ResetComponents(bool softReset);
 
 	//Used to pause the emu loop to perform thread-safe operations
@@ -187,7 +192,6 @@ public:
 	//Used to resume the emu loop after calling Pause()
 	void Resume();
 
-	void BreakIfDebugging();
 	shared_ptr<Debugger> GetDebugger(bool autoStart = true);
 	void StopDebugger();
 
@@ -233,6 +237,7 @@ public:
 	void DebugProcessEvent(EventType type);
 	void DebugProcessInterrupt(uint16_t cpuAddr, uint16_t destCpuAddr, bool forNmi);
 	void DebugSetLastFramePpuScroll(uint16_t addr, uint8_t xScroll, bool updateHorizontalScrollOnly);
+	void DebugAddDebugEvent(DebugEventType type);
 	bool DebugProcessRamOperation(MemoryOperationType type, uint16_t &addr, uint8_t &value);
 	void DebugProcessVramReadOperation(MemoryOperationType type, uint16_t addr, uint8_t &value);
 	void DebugProcessVramWriteOperation(uint16_t addr, uint8_t &value);

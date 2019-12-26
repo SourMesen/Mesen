@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "UPnPPortMapper.h"
 
-#ifdef _WIN32
+#if defined(_MSC_VER) && !defined(LIBRETRO)
 #include <winsock2.h>
 #include <natupnp.h>
 #include <ws2tcpip.h>

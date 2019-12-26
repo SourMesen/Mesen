@@ -40,6 +40,7 @@ namespace Mesen.GUI.Forms.Config
 				EmulatorShortcut.Pause,
 				EmulatorShortcut.Reset,
 				EmulatorShortcut.PowerCycle,
+				EmulatorShortcut.ReloadRom,
 				EmulatorShortcut.PowerOff,
 				EmulatorShortcut.Exit,
 
@@ -116,6 +117,18 @@ namespace Mesen.GUI.Forms.Config
 				EmulatorShortcut.LoadStateSlot10,
 				EmulatorShortcut.LoadStateSlotAuto,
 				EmulatorShortcut.LoadStateFromFile,
+
+				EmulatorShortcut.SelectSaveSlot1,
+				EmulatorShortcut.SelectSaveSlot2,
+				EmulatorShortcut.SelectSaveSlot3,
+				EmulatorShortcut.SelectSaveSlot4,
+				EmulatorShortcut.SelectSaveSlot5,
+				EmulatorShortcut.SelectSaveSlot6,
+				EmulatorShortcut.SelectSaveSlot7,
+				EmulatorShortcut.SelectSaveSlot8,
+				EmulatorShortcut.SelectSaveSlot9,
+				EmulatorShortcut.SelectSaveSlot10,
+
 				EmulatorShortcut.LoadLastSession,
 			};
 

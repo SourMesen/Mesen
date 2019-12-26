@@ -9,6 +9,7 @@
 #include "../Core/Assembler.h"
 #include "../Core/TraceLogger.h"
 #include "../Core/PerformanceTracker.h"
+#include "../Core/EventManager.h"
 #include "../Core/LuaScriptingContext.h"
 
 enum class ConsoleId;
@@ -149,6 +150,9 @@ extern "C"
 	DllExport const char* __stdcall DebugGetScriptLog(int32_t scriptId) { return GetDebugger()->GetScriptLog(scriptId); }
 	DllExport void __stdcall DebugSetScriptTimeout(uint32_t timeout) { LuaScriptingContext::SetScriptTimeout(timeout); }
 
-	DllExport void __stdcall DebugGetDebugEvents(uint32_t* pictureBuffer, DebugEventInfo *infoArray, uint32_t &maxEventCount, bool returnPreviousFrameData) { GetDebugger()->GetDebugEvents(pictureBuffer, infoArray, maxEventCount, returnPreviousFrameData); }
-	DllExport uint32_t __stdcall DebugGetDebugEventCount(bool returnPreviousFrameData) { return GetDebugger()->GetDebugEventCount(returnPreviousFrameData); }
+	DllExport void __stdcall GetDebugEvents(DebugEventInfo *infoArray, uint32_t &maxEventCount, bool getPreviousFrameData) { GetDebugger()->GetEventManager()->GetEvents(infoArray, maxEventCount, getPreviousFrameData); }
+	DllExport uint32_t __stdcall GetDebugEventCount(bool getPreviousFrameData) { return GetDebugger()->GetEventManager()->GetEventCount(getPreviousFrameData); }
+	DllExport void __stdcall GetEventViewerOutput(uint32_t *buffer, EventViewerDisplayOptions options) { GetDebugger()->GetEventManager()->GetDisplayBuffer(buffer, options); }
+	DllExport void __stdcall GetEventViewerEvent(DebugEventInfo *evtInfo, int16_t scanline, uint16_t cycle, EventViewerDisplayOptions options) { *evtInfo = GetDebugger()->GetEventManager()->GetEvent(scanline, cycle, options); }
+	DllExport uint32_t __stdcall TakeEventSnapshot(EventViewerDisplayOptions options) { return GetDebugger()->GetEventManager()->TakeEventSnapshot(options); }
 };

@@ -61,14 +61,14 @@ public:
 	{
 		uint8_t output = 0;
 		if(IsCurrentPort(addr)) {
+			StrobeProcessRead();
+
 			output = ((_stateBufferH & 0x01) << 4) | ((_stateBufferL & 0x01) << 3);
 			_stateBufferL >>= 1;
 			_stateBufferH >>= 1;
 
 			_stateBufferL |= 0x80;
 			_stateBufferH |= 0x80;
-
-			StrobeProcessRead();
 		}
 		return output;
 	}

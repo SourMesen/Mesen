@@ -44,12 +44,12 @@ public:
 	{
 		uint8_t output = 0;
 		if((addr == 0x4016 && (_port & 0x01) == 0) || (addr == 0x4017 && (_port & 0x01) == 1)) {
+			StrobeProcessRead();
 			output = (_stateBuffer & 0x80) >> 7;
 			if(_port >= 2) {
 				output <<= 1;
 			}
 			_stateBuffer <<= 1;
-			StrobeProcessRead();
 		}
 		return output;
 	}

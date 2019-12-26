@@ -13,6 +13,7 @@
 			<Control ID="mnuPause">Pausa</Control>
 			<Control ID="mnuReset">Reinicia el joc</Control>
 			<Control ID="mnuPowerCycle">Atura i reinicia el joc</Control>
+			<Control ID="mnuReloadRom">Reload ROM</Control>
 			<Control ID="mnuPowerOff">Atura el joc</Control>
 			<Control ID="mnuSwitchDiskSide">Canvia la cara del disc</Control>
 			<Control ID="mnuSelectDisk">Escull el disc</Control>
@@ -307,6 +308,8 @@
 			<Control ID="lblEmulationSpeed">Velocitat d'emulació:</Control>
 			<Control ID="lblRewindSpeedHint">%  (0 = Velocitat màxima)</Control>
 			<Control ID="lblRewindSpeed">Velocitat del rebobinat:</Control>
+			<Control ID="lblRunAhead">Run Ahead:</Control>
+			<Control ID="lblRunAheadFrames">frames (reduces input lag, increases CPU usage)</Control>
 
 			<Control ID="tpgAdvanced">Avançat</Control>
 			<Control ID="lblDeveloperSettings">Recommended settings for developers (homebrew / ROM hacking)</Control>
@@ -856,6 +859,7 @@
 		<Message ID="EmulatorShortcutMappings_Pause">Pausa</Message>
 		<Message ID="EmulatorShortcutMappings_Reset">Reinicia el joc</Message>
 		<Message ID="EmulatorShortcutMappings_PowerCycle">Atura i reinicia el joc</Message>
+		<Message ID="EmulatorShortcutMappings_ReloadRom">Reload ROM</Message>
 		<Message ID="EmulatorShortcutMappings_PowerOff">Atura el joc</Message>
 		<Message ID="EmulatorShortcutMappings_Exit">Surt</Message>
 		<Message ID="EmulatorShortcutMappings_TakeScreenshot">Captura de pantalla</Message>
@@ -920,6 +924,18 @@
 		<Message ID="EmulatorShortcutMappings_LoadStateSlotAuto">Load State - Auto Save Slot</Message>
 		<Message ID="EmulatorShortcutMappings_LoadStateFromFile">Carrega la partida des d'un fitxer</Message>
 		<Message ID="EmulatorShortcutMappings_LoadLastSession">Load Last Session</Message>
+
+		<Message ID="EmulatorShortcutMappings_SelectSaveSlot1">Select Save Slot 1</Message>
+		<Message ID="EmulatorShortcutMappings_SelectSaveSlot2">Select Save Slot 2</Message>
+		<Message ID="EmulatorShortcutMappings_SelectSaveSlot3">Select Save Slot 3</Message>
+		<Message ID="EmulatorShortcutMappings_SelectSaveSlot4">Select Save Slot 4</Message>
+		<Message ID="EmulatorShortcutMappings_SelectSaveSlot5">Select Save Slot 5</Message>
+		<Message ID="EmulatorShortcutMappings_SelectSaveSlot6">Select Save Slot 6</Message>
+		<Message ID="EmulatorShortcutMappings_SelectSaveSlot7">Select Save Slot 7</Message>
+		<Message ID="EmulatorShortcutMappings_SelectSaveSlot8">Select Save Slot 8</Message>
+		<Message ID="EmulatorShortcutMappings_SelectSaveSlot9">Select Save Slot 9</Message>
+		<Message ID="EmulatorShortcutMappings_SelectSaveSlot10">Select Save Slot 10</Message>
+		
 		<Message ID="EmulatorShortcutMappings_OpenFile">Obre un fitxer</Message>
 		<Message ID="EmulatorShortcutMappings_OpenDebugger">Obre el depurador</Message>
 		<Message ID="EmulatorShortcutMappings_OpenAssembler">Obre l'assemblador</Message>

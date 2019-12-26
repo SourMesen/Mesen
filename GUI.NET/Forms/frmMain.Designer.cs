@@ -39,12 +39,13 @@ namespace Mesen.GUI.Forms
 			this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
 			this.picIcon = new System.Windows.Forms.PictureBox();
 			this.lblVersion = new System.Windows.Forms.Label();
-			this.ctrlRecentGames = new Mesen.GUI.Controls.ctrlRecentGames();
 			this.ctrlNsfPlayer = new Mesen.GUI.Controls.ctrlNsfPlayer();
 			this.ctrlRenderer = new Mesen.GUI.Controls.ctrlRenderer();
+			this.ctrlRecentGames = new Mesen.GUI.Controls.ctrlRecentGames();
 			this.menuStrip = new Mesen.GUI.Controls.ctrlMesenMenuStrip();
 			this.mnuFile = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuOpen = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuReloadRom = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem4 = new System.Windows.Forms.ToolStripSeparator();
 			this.mnuSaveState = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuLoadState = new System.Windows.Forms.ToolStripMenuItem();
@@ -203,6 +204,7 @@ namespace Mesen.GUI.Forms
 			this.mnuScriptWindow = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuTextHooker = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuTraceLogger = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuWatchWindow = new System.Windows.Forms.ToolStripMenuItem();
 			this.sepDebugDualSystemSecondaryCpu = new System.Windows.Forms.ToolStripSeparator();
 			this.mnuDebugDualSystemSecondaryCpu = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem25 = new System.Windows.Forms.ToolStripSeparator();
@@ -222,7 +224,6 @@ namespace Mesen.GUI.Forms
 			this.mnuReportBug = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem5 = new System.Windows.Forms.ToolStripSeparator();
 			this.mnuAbout = new System.Windows.Forms.ToolStripMenuItem();
-			this.mnuWatchWindow = new System.Windows.Forms.ToolStripMenuItem();
 			this.panelRenderer.SuspendLayout();
 			this.panelInfo.SuspendLayout();
 			this.tableLayoutPanel1.SuspendLayout();
@@ -240,7 +241,6 @@ namespace Mesen.GUI.Forms
 			this.panelRenderer.Controls.Add(this.ctrlRendererDualSystem);
 			this.panelRenderer.Controls.Add(this.ctrlLoading);
 			this.panelRenderer.Controls.Add(this.panelInfo);
-			this.panelRenderer.Controls.Add(this.ctrlRecentGames);
 			this.panelRenderer.Controls.Add(this.ctrlNsfPlayer);
 			this.panelRenderer.Controls.Add(this.ctrlRenderer);
 			this.panelRenderer.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -323,18 +323,6 @@ namespace Mesen.GUI.Forms
 			this.lblVersion.TabIndex = 6;
 			this.lblVersion.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
-			// ctrlRecentGames
-			// 
-			this.ctrlRecentGames.BackColor = System.Drawing.Color.Transparent;
-			this.ctrlRecentGames.Location = new System.Drawing.Point(0, 0);
-			this.ctrlRecentGames.Name = "ctrlRecentGames";
-			this.ctrlRecentGames.Size = new System.Drawing.Size(430, 309);
-			this.ctrlRecentGames.TabIndex = 7;
-			this.ctrlRecentGames.Visible = false;
-			this.ctrlRecentGames.OnRecentGameLoaded += new Mesen.GUI.Controls.ctrlRecentGames.RecentGameLoadedHandler(this.ctrlRecentGames_OnRecentGameLoaded);
-			this.ctrlRecentGames.MouseMove += new System.Windows.Forms.MouseEventHandler(this.ctrlRenderer_MouseMove);
-			this.ctrlRecentGames.DoubleClick += new System.EventHandler(this.ctrlRenderer_DoubleClick);
-			// 
 			// ctrlNsfPlayer
 			// 
 			this.ctrlNsfPlayer.BackColor = System.Drawing.Color.Black;
@@ -359,6 +347,19 @@ namespace Mesen.GUI.Forms
 			this.ctrlRenderer.MouseClick += new System.Windows.Forms.MouseEventHandler(this.ctrlRenderer_MouseClick);
 			this.ctrlRenderer.MouseMove += new System.Windows.Forms.MouseEventHandler(this.ctrlRenderer_MouseMove);
 			// 
+			// ctrlRecentGames
+			// 
+			this.ctrlRecentGames.BackColor = System.Drawing.Color.Transparent;
+			this.ctrlRecentGames.Dock = System.Windows.Forms.DockStyle.Top;
+			this.ctrlRecentGames.Location = new System.Drawing.Point(0, 24);
+			this.ctrlRecentGames.Name = "ctrlRecentGames";
+			this.ctrlRecentGames.Size = new System.Drawing.Size(430, 309);
+			this.ctrlRecentGames.TabIndex = 7;
+			this.ctrlRecentGames.Visible = false;
+			this.ctrlRecentGames.OnRecentGameLoaded += new Mesen.GUI.Controls.ctrlRecentGames.RecentGameLoadedHandler(this.ctrlRecentGames_OnRecentGameLoaded);
+			this.ctrlRecentGames.MouseMove += new System.Windows.Forms.MouseEventHandler(this.ctrlRenderer_MouseMove);
+			this.ctrlRecentGames.DoubleClick += new System.EventHandler(this.ctrlRenderer_DoubleClick);
+			// 
 			// menuStrip
 			// 
 			this.menuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -378,6 +379,7 @@ namespace Mesen.GUI.Forms
 			// 
 			this.mnuFile.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.mnuOpen,
+            this.mnuReloadRom,
             this.toolStripMenuItem4,
             this.mnuSaveState,
             this.mnuLoadState,
@@ -400,6 +402,12 @@ namespace Mesen.GUI.Forms
 			this.mnuOpen.Name = "mnuOpen";
 			this.mnuOpen.Size = new System.Drawing.Size(166, 22);
 			this.mnuOpen.Text = "Open";
+			// 
+			// mnuReloadRom
+			// 
+			this.mnuReloadRom.Name = "mnuReloadRom";
+			this.mnuReloadRom.Size = new System.Drawing.Size(166, 22);
+			this.mnuReloadRom.Text = "Reload ROM";
 			// 
 			// toolStripMenuItem4
 			// 
@@ -1662,6 +1670,14 @@ namespace Mesen.GUI.Forms
 			this.mnuTraceLogger.Text = "Trace Logger";
 			this.mnuTraceLogger.Click += new System.EventHandler(this.mnuTraceLogger_Click);
 			// 
+			// mnuWatchWindow
+			// 
+			this.mnuWatchWindow.Image = global::Mesen.GUI.Properties.Resources.Find;
+			this.mnuWatchWindow.Name = "mnuWatchWindow";
+			this.mnuWatchWindow.Size = new System.Drawing.Size(258, 22);
+			this.mnuWatchWindow.Text = "Watch Window";
+			this.mnuWatchWindow.Click += new System.EventHandler(this.mnuWatchWindow_Click);
+			// 
 			// sepDebugDualSystemSecondaryCpu
 			// 
 			this.sepDebugDualSystemSecondaryCpu.Name = "sepDebugDualSystemSecondaryCpu";
@@ -1804,14 +1820,6 @@ namespace Mesen.GUI.Forms
 			this.mnuAbout.Text = "About";
 			this.mnuAbout.Click += new System.EventHandler(this.mnuAbout_Click);
 			// 
-			// mnuWatchWindow
-			// 
-			this.mnuWatchWindow.Image = global::Mesen.GUI.Properties.Resources.Find;
-			this.mnuWatchWindow.Name = "mnuWatchWindow";
-			this.mnuWatchWindow.Size = new System.Drawing.Size(258, 22);
-			this.mnuWatchWindow.Text = "Watch Window";
-			this.mnuWatchWindow.Click += new System.EventHandler(this.mnuWatchWindow_Click);
-			// 
 			// frmMain
 			// 
 			this.AllowDrop = true;
@@ -1819,6 +1827,7 @@ namespace Mesen.GUI.Forms
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.BackColor = System.Drawing.Color.Black;
 			this.ClientSize = new System.Drawing.Size(430, 333);
+			this.Controls.Add(this.ctrlRecentGames);
 			this.Controls.Add(this.panelRenderer);
 			this.Controls.Add(this.menuStrip);
 			this.MainMenuStrip = this.menuStrip;
@@ -2034,6 +2043,7 @@ namespace Mesen.GUI.Forms
 		private System.Windows.Forms.ToolStripMenuItem mnuProfiler;
 		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
 		private System.Windows.Forms.ToolStripMenuItem mnuWatchWindow;
+		private System.Windows.Forms.ToolStripMenuItem mnuReloadRom;
 	}
 }
 

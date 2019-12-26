@@ -62,11 +62,9 @@ namespace Mesen.GUI.Debugger
 		{
 			switch(e.NotificationType) {
 				case InteropEmu.ConsoleNotificationType.PpuFrameDone:
-					if(ConfigManager.Config.DebugInfo.RefreshWhileRunning) {
-						this.BeginInvoke((MethodInvoker)(() => {
-							ctrlWatch.UpdateWatch(false);
-						}));
-					}
+					this.BeginInvoke((MethodInvoker)(() => {
+						ctrlWatch.UpdateWatch(false);
+					}));
 					break;
 
 				case InteropEmu.ConsoleNotificationType.CodeBreak:

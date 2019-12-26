@@ -44,6 +44,11 @@ To simplify configuration, a number of presets are available -- click on the `Se
 
 You can also configure that controller's turbo buttons' speed with the `Turbo Speed` slider. *Note: setting the turbo speed to the fastest setting may cause some games to not detect the button presses at all.*
 
+## Zapper / Light Gun ##
+
+To shoot a target on the screen, target it with the mouse and use the left mouse button to shoot.  
+To shoot outside the screen (which some games need to control menus, etc.), hold down the right mouse button while you click on the left mouse button.
+
 ## Advanced Options ##
 
 <div class="imgBox"><div>

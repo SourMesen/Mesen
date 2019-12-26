@@ -7,6 +7,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Mesen.GUI.Config;
 using Mesen.GUI.Controls;
 using Mesen.GUI.Forms.Config;
 
@@ -83,6 +84,8 @@ namespace Mesen.GUI.Forms
 						((ctrlRiskyOption)kvp.Value).Checked = Convert.ToBoolean(value);
 					} else if(kvp.Value is RadioButton) {
 						((RadioButton)kvp.Value).Checked = (bool)value;
+					} else if(kvp.Value is PictureBox) {
+						((PictureBox)kvp.Value).BackColor = (XmlColor)value;
 					} else if(kvp.Value is Panel) {
 						RadioButton radio = kvp.Value.Controls.OfType<RadioButton>().FirstOrDefault(r => r.Tag.Equals(value));
 						if(radio != null) {
@@ -216,6 +219,8 @@ namespace Mesen.GUI.Forms
 							}
 						} else if(kvp.Value is RadioButton) {
 							field.SetValue(Entity, ((RadioButton)kvp.Value).Checked);
+						} else if(kvp.Value is PictureBox) {
+							field.SetValue(Entity, (XmlColor)((PictureBox)kvp.Value).BackColor);
 						} else if(kvp.Value is Panel) {
 							field.SetValue(Entity, kvp.Value.Controls.OfType<RadioButton>().FirstOrDefault(r => r.Checked).Tag);
 						} else if(kvp.Value is ctrlTrackbar) {
