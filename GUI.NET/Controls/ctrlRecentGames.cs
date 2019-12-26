@@ -345,7 +345,7 @@ namespace Mesen.GUI.Controls
 			pe.Graphics.InterpolationMode = InterpolationMode.NearestNeighbor;
 			base.OnPaint(pe);
 
-			using(Pen pen = new Pen(_hovered ? Color.LightBlue : (_highlight ? Color.LightBlue : Color.Gray), 2)) {
+			using(Pen pen = new Pen(_hovered ? Color.DeepSkyBlue : (_highlight ? Color.DodgerBlue : Color.DimGray), 2)) {
 				pe.Graphics.DrawRectangle(pen, 1, 1, this.Width - 2, this.Height - 2);
 			}
 		}
