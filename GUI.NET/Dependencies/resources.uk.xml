@@ -242,6 +242,7 @@
 			<Control ID="chkShowFps">Показувати FPS</Control>
 			<Control ID="chkUseHdPacks">Використовувати HDNes HD packs</Control>
 			<Control ID="chkUseExclusiveFullscreen">Використовувати ексклюзивний режим повного екрану</Control>
+			<Control ID="lblFullscreenResolution">Fullscreen Resolution:</Control>
 			<Control ID="lblRequestedRefreshRate">Запитувана частота оновлення:</Control>
 			<Control ID="tpgOverscan">Overscan</Control>
 			<Control ID="tpgOverscanGlobal">Global</Control>
@@ -811,6 +812,7 @@
 		<Message ID="PlayerNumber">Гравець {0}</Message>
 
 		<Message ID="PressToExitFullscreen">Натисніть {0} щоб вийти з повноекранного режиму</Message>
+		<Message ID="DefaultResolution">Default</Message>
 
 		<Message ID="RomsFound">{0} Знайдені ROM  файли</Message>
 

@@ -243,6 +243,7 @@
 			<Control ID="chkShowFps">Mostra els FPS</Control>
 			<Control ID="chkUseHdPacks">Fes servir els paquets d'alta resolució d'HDNes</Control>
 			<Control ID="chkUseExclusiveFullscreen">Fes servir el mode de pantalla completa exclusiva</Control>
+			<Control ID="lblFullscreenResolution">Fullscreen Resolution:</Control>
 			<Control ID="lblRequestedRefreshRate">Requested Refresh Rate:</Control>
 			<Control ID="tpgOverscan">Sobreescaneig</Control>
 			<Control ID="tpgOverscanGlobal">Global</Control>
@@ -796,6 +797,7 @@
 		<Message ID="CheatsImported">S'han importat {0} trucs per al joc {1}.</Message>
 
 		<Message ID="PressToExitFullscreen">Press {0} to exit fullscreen</Message>
+		<Message ID="DefaultResolution">Default</Message>
 
 		<Message ID="RomsFound">S'han trobat {0} roms</Message>
 

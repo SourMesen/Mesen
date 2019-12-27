@@ -507,11 +507,6 @@ namespace Mesen.GUI.Forms
 			SetScaleBasedOnDimensions(panelRenderer.ClientSize, true);
 		}
 
-		private void SetScaleBasedOnScreenSize()
-		{
-			SetScaleBasedOnDimensions(Screen.FromControl(this).Bounds.Size, false);
-		}
-
 		private void StopExclusiveFullscreenMode()
 		{
 			if(_frmFullscreenRenderer != null) {
@@ -519,13 +514,28 @@ namespace Mesen.GUI.Forms
 			}
 		}
 
+		private Size GetFullscreenResolution()
+		{
+			string resolution = ConfigManager.Config.VideoInfo.FullscreenResolution;
+			if(!string.IsNullOrWhiteSpace(resolution)) {
+				string[] resData = resolution.Split('x');
+				int width;
+				int height;
+				if(int.TryParse(resData[0], out width) && int.TryParse(resData[1], out height)) {
+					return new Size(width, height);
+				}
+			}
+			return Screen.FromControl(this).Bounds.Size;
+		}
+
 		private void StartExclusiveFullscreenMode()
 		{
-			Size screenSize = Screen.FromControl(this).Bounds.Size;
+			Size screenSize = GetFullscreenResolution();
+
 			_frmFullscreenRenderer = new frmFullscreenRenderer();
 			_frmFullscreenRenderer.Shown += (object sender, EventArgs e) => {
 				ctrlRenderer.Visible = false;
-				SetScaleBasedOnScreenSize();
+				SetScaleBasedOnDimensions(screenSize, false);
 				InteropEmu.SetFullscreenMode(true, _frmFullscreenRenderer.Handle, (UInt32)screenSize.Width, (UInt32)screenSize.Height);
 			};
 			_frmFullscreenRenderer.FormClosing += (object sender, FormClosingEventArgs e) => {

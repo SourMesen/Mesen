@@ -266,6 +266,7 @@
 			<Control ID="chkShowFps">显示帧率</Control>
 			<Control ID="chkUseHdPacks">使用 HDNes 包</Control>
 			<Control ID="chkUseExclusiveFullscreen">使用独占全屏模式</Control>
+			<Control ID="lblFullscreenResolution">Fullscreen Resolution:</Control>
 			<Control ID="lblRequestedRefreshRate">请求的刷新率:</Control>
 			<Control ID="tpgOverscan">过扫描</Control>
 			<Control ID="tpgOverscanGlobal">全局</Control>
@@ -836,6 +837,8 @@
 		<Message ID="ExpansionDevice">扩展设备</Message>
 
 		<Message ID="PressToExitFullscreen">按 {0} 退出全屏</Message>
+		<Message ID="DefaultResolution">默认</Message>
+		
 		<Message ID="RomsFound">已找到 {0} 个 ROM</Message>
 		<Message ID="RiskyOptionHint">(不推荐)</Message>
 		<Message ID="ResetSettingsConfirmation">警告：这将重置所有设置，无法撤消！&#xA;&#xA;继续？</Message>

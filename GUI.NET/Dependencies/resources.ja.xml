@@ -242,6 +242,7 @@
 			<Control ID="chkShowFps">フレームレート表示</Control>
 			<Control ID="chkUseHdPacks">HDNesのHDパックを使う</Control>
 			<Control ID="chkUseExclusiveFullscreen">排他的なフルスクリーンモードを使う</Control>
+			<Control ID="lblFullscreenResolution">解像度:</Control>
 			<Control ID="lblRequestedRefreshRate">リフレッシュレート:</Control>
 			<Control ID="tpgOverscan">オーバースキャン</Control>
 			<Control ID="tpgOverscanGlobal">全般</Control>
@@ -811,6 +812,7 @@
 		<Message ID="PlayerNumber">プレーヤー {0}</Message>
 
 		<Message ID="PressToExitFullscreen">全画面表示モードを終了: {0}</Message>
+		<Message ID="DefaultResolution">デフォルト</Message>
 
 		<Message ID="RomsFound">{0}個</Message>
 

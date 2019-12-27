@@ -55,6 +55,7 @@ namespace Mesen.GUI.Config
 
 		public bool FullscreenForceIntegerScale = false;
 		public bool UseExclusiveFullscreen = false;
+		public string FullscreenResolution = "";
 		public VideoRefreshRates ExclusiveFullscreenRefreshRate = VideoRefreshRates._60;
 
 		public bool UseCustomVsPalette = false;

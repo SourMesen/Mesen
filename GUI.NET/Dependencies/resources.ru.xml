@@ -242,6 +242,7 @@
 			<Control ID="chkShowFps">Показывать FPS</Control>
 			<Control ID="chkUseHdPacks">Использовать HDNes HD Packs</Control>
 			<Control ID="chkUseExclusiveFullscreen">Использовать эксклюзивный полноэкранный режим</Control>
+			<Control ID="lblFullscreenResolution">Fullscreen Resolution:</Control>
 			<Control ID="lblRequestedRefreshRate">Запрошенная частота обновления:</Control>
 			<Control ID="tpgOverscan">Вылеты развёртки</Control>
 			<Control ID="tpgOverscanGlobal">Глобальный</Control>
@@ -811,6 +812,7 @@
 		<Message ID="PlayerNumber">Игрок {0}</Message>
 
 		<Message ID="PressToExitFullscreen">Press {0} to exit fullscreen</Message>
+		<Message ID="DefaultResolution">Default</Message>
 
 		<Message ID="RomsFound">{0} Найденные ROM  файлы</Message>
 

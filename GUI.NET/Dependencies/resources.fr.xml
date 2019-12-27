@@ -243,6 +243,7 @@
 			<Control ID="chkShowFps">Afficher le FPS</Control>
 			<Control ID="chkUseHdPacks">Utiliser les packs haute-définition de HDNes</Control>
 			<Control ID="chkUseExclusiveFullscreen">Utiliser le mode plein écran exclusif</Control>
+			<Control ID="lblFullscreenResolution">Résolution plein écran :</Control>
 			<Control ID="lblRequestedRefreshRate">Taux de rafraîchissement :</Control>
 			<Control ID="tpgOverscan">Overscan</Control>
 			<Control ID="tpgOverscanGlobal">Global</Control>
@@ -823,6 +824,7 @@
 		<Message ID="PlayerNumber">Joueur {0}</Message>
 
 		<Message ID="PressToExitFullscreen">Quitter le mode plein écran: {0}</Message>
+		<Message ID="DefaultResolution">Défaut</Message>
 
 		<Message ID="RomsFound">{0} roms trouvés</Message>
 

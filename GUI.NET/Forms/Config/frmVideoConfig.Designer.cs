@@ -32,6 +32,9 @@ namespace Mesen.GUI.Forms.Config
 			this.components = new System.ComponentModel.Container();
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmVideoConfig));
 			this.tlpMain = new System.Windows.Forms.TableLayoutPanel();
+			this.flpResolution = new System.Windows.Forms.FlowLayoutPanel();
+			this.lblFullscreenResolution = new System.Windows.Forms.Label();
+			this.cboFullscreenResolution = new System.Windows.Forms.ComboBox();
 			this.chkUseExclusiveFullscreen = new System.Windows.Forms.CheckBox();
 			this.lblVideoScale = new System.Windows.Forms.Label();
 			this.chkVerticalSync = new System.Windows.Forms.CheckBox();
@@ -136,6 +139,8 @@ namespace Mesen.GUI.Forms.Config
 			this.chkForceSpritesFirstColumn = new Mesen.GUI.Controls.ctrlRiskyOption();
 			this.lblScreenRotation = new System.Windows.Forms.Label();
 			this.cboScreenRotation = new System.Windows.Forms.ComboBox();
+			this.chkRemoveSpriteLimit = new System.Windows.Forms.CheckBox();
+			this.chkAdaptiveSpriteLimit = new System.Windows.Forms.CheckBox();
 			this.contextPicturePresets = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this.mnuPresetComposite = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuPresetSVideo = new System.Windows.Forms.ToolStripMenuItem();
@@ -153,9 +158,8 @@ namespace Mesen.GUI.Forms.Config
 			this.mnuPaletteSonyCxa2025As = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuPaletteUnsaturated = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuPaletteYuv = new System.Windows.Forms.ToolStripMenuItem();
-			this.chkRemoveSpriteLimit = new System.Windows.Forms.CheckBox();
-			this.chkAdaptiveSpriteLimit = new System.Windows.Forms.CheckBox();
 			this.tlpMain.SuspendLayout();
+			this.flpResolution.SuspendLayout();
 			this.flowLayoutPanel7.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.picHdNesTooltip)).BeginInit();
 			this.flowLayoutPanel6.SuspendLayout();
@@ -209,22 +213,24 @@ namespace Mesen.GUI.Forms.Config
 			this.tlpMain.ColumnCount = 2;
 			this.tlpMain.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
 			this.tlpMain.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+			this.tlpMain.Controls.Add(this.flpResolution, 0, 5);
 			this.tlpMain.Controls.Add(this.chkUseExclusiveFullscreen, 0, 4);
 			this.tlpMain.Controls.Add(this.lblVideoScale, 0, 0);
 			this.tlpMain.Controls.Add(this.chkVerticalSync, 0, 3);
 			this.tlpMain.Controls.Add(this.lblDisplayRatio, 0, 1);
-			this.tlpMain.Controls.Add(this.flowLayoutPanel7, 0, 7);
+			this.tlpMain.Controls.Add(this.flowLayoutPanel7, 0, 8);
 			this.tlpMain.Controls.Add(this.nudScale, 1, 0);
 			this.tlpMain.Controls.Add(this.flowLayoutPanel6, 1, 1);
-			this.tlpMain.Controls.Add(this.chkFullscreenForceIntegerScale, 0, 6);
-			this.tlpMain.Controls.Add(this.chkShowFps, 0, 8);
+			this.tlpMain.Controls.Add(this.chkFullscreenForceIntegerScale, 0, 7);
+			this.tlpMain.Controls.Add(this.chkShowFps, 0, 9);
 			this.tlpMain.Controls.Add(this.chkIntegerFpsMode, 0, 2);
-			this.tlpMain.Controls.Add(this.flpRefreshRate, 0, 5);
+			this.tlpMain.Controls.Add(this.flpRefreshRate, 0, 6);
 			this.tlpMain.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tlpMain.Location = new System.Drawing.Point(3, 3);
 			this.tlpMain.Margin = new System.Windows.Forms.Padding(0);
 			this.tlpMain.Name = "tlpMain";
-			this.tlpMain.RowCount = 10;
+			this.tlpMain.RowCount = 11;
+			this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle());
@@ -237,6 +243,59 @@ namespace Mesen.GUI.Forms.Config
 			this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this.tlpMain.Size = new System.Drawing.Size(521, 396);
 			this.tlpMain.TabIndex = 1;
+			// 
+			// flpResolution
+			// 
+			this.tlpMain.SetColumnSpan(this.flpResolution, 2);
+			this.flpResolution.Controls.Add(this.lblFullscreenResolution);
+			this.flpResolution.Controls.Add(this.cboFullscreenResolution);
+			this.flpResolution.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.flpResolution.Location = new System.Drawing.Point(30, 116);
+			this.flpResolution.Margin = new System.Windows.Forms.Padding(30, 0, 0, 0);
+			this.flpResolution.Name = "flpResolution";
+			this.flpResolution.Size = new System.Drawing.Size(491, 27);
+			this.flpResolution.TabIndex = 27;
+			this.flpResolution.Visible = false;
+			// 
+			// lblFullscreenResolution
+			// 
+			this.lblFullscreenResolution.Anchor = System.Windows.Forms.AnchorStyles.Right;
+			this.lblFullscreenResolution.AutoSize = true;
+			this.lblFullscreenResolution.Location = new System.Drawing.Point(3, 7);
+			this.lblFullscreenResolution.Name = "lblFullscreenResolution";
+			this.lblFullscreenResolution.Size = new System.Drawing.Size(111, 13);
+			this.lblFullscreenResolution.TabIndex = 17;
+			this.lblFullscreenResolution.Text = "Fullscreen Resolution:";
+			// 
+			// cboFullscreenResolution
+			// 
+			this.cboFullscreenResolution.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.cboFullscreenResolution.FormattingEnabled = true;
+			this.cboFullscreenResolution.Items.AddRange(new object[] {
+            "3840x2160",
+            "2560x1440",
+            "2160x1200",
+            "1920x1440",
+            "1920x1200",
+            "1920x1080",
+            "1680x1050",
+            "1600x1200",
+            "1600x1024",
+            "1600x900",
+            "1366x768",
+            "1360x768",
+            "1280x1024",
+            "1280x960",
+            "1280x800",
+            "1280x768",
+            "1280x720",
+            "1152x864",
+            "1024x768",
+            "800x600"});
+			this.cboFullscreenResolution.Location = new System.Drawing.Point(120, 3);
+			this.cboFullscreenResolution.Name = "cboFullscreenResolution";
+			this.cboFullscreenResolution.Size = new System.Drawing.Size(85, 21);
+			this.cboFullscreenResolution.TabIndex = 25;
 			// 
 			// chkUseExclusiveFullscreen
 			// 
@@ -289,7 +348,7 @@ namespace Mesen.GUI.Forms.Config
 			this.flowLayoutPanel7.Controls.Add(this.chkUseHdPacks);
 			this.flowLayoutPanel7.Controls.Add(this.picHdNesTooltip);
 			this.flowLayoutPanel7.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.flowLayoutPanel7.Location = new System.Drawing.Point(0, 166);
+			this.flowLayoutPanel7.Location = new System.Drawing.Point(0, 193);
 			this.flowLayoutPanel7.Margin = new System.Windows.Forms.Padding(0);
 			this.flowLayoutPanel7.Name = "flowLayoutPanel7";
 			this.flowLayoutPanel7.Size = new System.Drawing.Size(521, 23);
@@ -424,7 +483,7 @@ namespace Mesen.GUI.Forms.Config
 			this.chkFullscreenForceIntegerScale.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.chkFullscreenForceIntegerScale.AutoSize = true;
 			this.tlpMain.SetColumnSpan(this.chkFullscreenForceIntegerScale, 2);
-			this.chkFullscreenForceIntegerScale.Location = new System.Drawing.Point(3, 146);
+			this.chkFullscreenForceIntegerScale.Location = new System.Drawing.Point(3, 173);
 			this.chkFullscreenForceIntegerScale.Name = "chkFullscreenForceIntegerScale";
 			this.chkFullscreenForceIntegerScale.Size = new System.Drawing.Size(289, 17);
 			this.chkFullscreenForceIntegerScale.TabIndex = 23;
@@ -436,7 +495,7 @@ namespace Mesen.GUI.Forms.Config
 			this.chkShowFps.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.chkShowFps.AutoSize = true;
 			this.tlpMain.SetColumnSpan(this.chkShowFps, 2);
-			this.chkShowFps.Location = new System.Drawing.Point(3, 192);
+			this.chkShowFps.Location = new System.Drawing.Point(3, 219);
 			this.chkShowFps.Name = "chkShowFps";
 			this.chkShowFps.Size = new System.Drawing.Size(76, 17);
 			this.chkShowFps.TabIndex = 9;
@@ -461,7 +520,7 @@ namespace Mesen.GUI.Forms.Config
 			this.flpRefreshRate.Controls.Add(this.lblRequestedRefreshRate);
 			this.flpRefreshRate.Controls.Add(this.cboRefreshRate);
 			this.flpRefreshRate.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.flpRefreshRate.Location = new System.Drawing.Point(30, 116);
+			this.flpRefreshRate.Location = new System.Drawing.Point(30, 143);
 			this.flpRefreshRate.Margin = new System.Windows.Forms.Padding(30, 0, 0, 0);
 			this.flpRefreshRate.Name = "flpRefreshRate";
 			this.flpRefreshRate.Size = new System.Drawing.Size(491, 27);
@@ -482,12 +541,6 @@ namespace Mesen.GUI.Forms.Config
 			// 
 			this.cboRefreshRate.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.cboRefreshRate.FormattingEnabled = true;
-			this.cboRefreshRate.Items.AddRange(new object[] {
-            "Auto",
-            "NTSC (8:7)",
-            "PAL (18:13)",
-            "Standard (4:3)",
-            "Widescreen (16:9)"});
 			this.cboRefreshRate.Location = new System.Drawing.Point(137, 3);
 			this.cboRefreshRate.Name = "cboRefreshRate";
 			this.cboRefreshRate.Size = new System.Drawing.Size(68, 21);
@@ -1855,6 +1908,32 @@ namespace Mesen.GUI.Forms.Config
 			this.cboScreenRotation.Size = new System.Drawing.Size(77, 21);
 			this.cboScreenRotation.TabIndex = 5;
 			// 
+			// chkRemoveSpriteLimit
+			// 
+			this.chkRemoveSpriteLimit.AutoSize = true;
+			this.tableLayoutPanel9.SetColumnSpan(this.chkRemoveSpriteLimit, 2);
+			this.chkRemoveSpriteLimit.Location = new System.Drawing.Point(3, 3);
+			this.chkRemoveSpriteLimit.Name = "chkRemoveSpriteLimit";
+			this.chkRemoveSpriteLimit.Size = new System.Drawing.Size(205, 17);
+			this.chkRemoveSpriteLimit.TabIndex = 6;
+			this.chkRemoveSpriteLimit.Text = "Remove sprite limit (Reduces flashing)";
+			this.chkRemoveSpriteLimit.UseVisualStyleBackColor = true;
+			this.chkRemoveSpriteLimit.CheckedChanged += new System.EventHandler(this.chkRemoveSpriteLimit_CheckedChanged);
+			// 
+			// chkAdaptiveSpriteLimit
+			// 
+			this.chkAdaptiveSpriteLimit.AutoSize = true;
+			this.tableLayoutPanel9.SetColumnSpan(this.chkAdaptiveSpriteLimit, 2);
+			this.chkAdaptiveSpriteLimit.Enabled = false;
+			this.chkAdaptiveSpriteLimit.Location = new System.Drawing.Point(18, 26);
+			this.chkAdaptiveSpriteLimit.Margin = new System.Windows.Forms.Padding(18, 3, 3, 3);
+			this.chkAdaptiveSpriteLimit.Name = "chkAdaptiveSpriteLimit";
+			this.chkAdaptiveSpriteLimit.Size = new System.Drawing.Size(442, 17);
+			this.chkAdaptiveSpriteLimit.TabIndex = 11;
+			this.chkAdaptiveSpriteLimit.Text = "Automatically re-enable sprite limit as needed to prevent graphical glitches when" +
+    " possible";
+			this.chkAdaptiveSpriteLimit.UseVisualStyleBackColor = true;
+			// 
 			// contextPicturePresets
 			// 
 			this.contextPicturePresets.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -1978,32 +2057,6 @@ namespace Mesen.GUI.Forms.Config
 			this.mnuPaletteYuv.Text = "YUV v3 (by FirebrandX)";
 			this.mnuPaletteYuv.Click += new System.EventHandler(this.mnuPaletteYuv_Click);
 			// 
-			// chkRemoveSpriteLimit
-			// 
-			this.chkRemoveSpriteLimit.AutoSize = true;
-			this.tableLayoutPanel9.SetColumnSpan(this.chkRemoveSpriteLimit, 2);
-			this.chkRemoveSpriteLimit.Location = new System.Drawing.Point(3, 3);
-			this.chkRemoveSpriteLimit.Name = "chkRemoveSpriteLimit";
-			this.chkRemoveSpriteLimit.Size = new System.Drawing.Size(205, 17);
-			this.chkRemoveSpriteLimit.TabIndex = 6;
-			this.chkRemoveSpriteLimit.Text = "Remove sprite limit (Reduces flashing)";
-			this.chkRemoveSpriteLimit.UseVisualStyleBackColor = true;
-			this.chkRemoveSpriteLimit.CheckedChanged += new System.EventHandler(this.chkRemoveSpriteLimit_CheckedChanged);
-			// 
-			// chkAdaptiveSpriteLimit
-			// 
-			this.chkAdaptiveSpriteLimit.AutoSize = true;
-			this.tableLayoutPanel9.SetColumnSpan(this.chkAdaptiveSpriteLimit, 2);
-			this.chkAdaptiveSpriteLimit.Enabled = false;
-			this.chkAdaptiveSpriteLimit.Location = new System.Drawing.Point(18, 26);
-			this.chkAdaptiveSpriteLimit.Margin = new System.Windows.Forms.Padding(18, 3, 3, 3);
-			this.chkAdaptiveSpriteLimit.Name = "chkAdaptiveSpriteLimit";
-			this.chkAdaptiveSpriteLimit.Size = new System.Drawing.Size(442, 17);
-			this.chkAdaptiveSpriteLimit.TabIndex = 11;
-			this.chkAdaptiveSpriteLimit.Text = "Automatically re-enable sprite limit as needed to prevent graphical glitches when" +
-    " possible";
-			this.chkAdaptiveSpriteLimit.UseVisualStyleBackColor = true;
-			// 
 			// frmVideoConfig
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -2020,6 +2073,8 @@ namespace Mesen.GUI.Forms.Config
 			this.Controls.SetChildIndex(this.tabMain, 0);
 			this.tlpMain.ResumeLayout(false);
 			this.tlpMain.PerformLayout();
+			this.flpResolution.ResumeLayout(false);
+			this.flpResolution.PerformLayout();
 			this.flowLayoutPanel7.ResumeLayout(false);
 			this.flowLayoutPanel7.PerformLayout();
 			((System.ComponentModel.ISupportInitialize)(this.picHdNesTooltip)).EndInit();
@@ -2210,5 +2265,8 @@ namespace Mesen.GUI.Forms.Config
 		private System.Windows.Forms.Label lblGameSpecificOverscanLeft;
 		private System.Windows.Forms.CheckBox chkRemoveSpriteLimit;
 		private System.Windows.Forms.CheckBox chkAdaptiveSpriteLimit;
-	}
+	  private System.Windows.Forms.FlowLayoutPanel flpResolution;
+	  private System.Windows.Forms.Label lblFullscreenResolution;
+	  private System.Windows.Forms.ComboBox cboFullscreenResolution;
+   }
 }

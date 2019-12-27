@@ -243,6 +243,7 @@
 			<Control ID="chkShowFps">Mostra FPS</Control>
 			<Control ID="chkUseHdPacks">Usa HDNes HD pack</Control>
 			<Control ID="chkUseExclusiveFullscreen">Usa schermo intero esclusivo</Control>
+			<Control ID="lblFullscreenResolution">Fullscreen Resolution:</Control>
 			<Control ID="lblRequestedRefreshRate">Frequenza di aggiornamento:</Control>
 			<Control ID="tpgOverscan">Overscan</Control>
 			<Control ID="tpgOverscanGlobal">Globale</Control>
@@ -824,6 +825,7 @@
 		<Message ID="ExpansionDevice">Dispositivo di Espansione</Message>
 
 		<Message ID="PressToExitFullscreen">Premi {0} per uscire dallo schermo intero</Message>
+		<Message ID="DefaultResolution">Predefinito</Message>
 
 		<Message ID="RomsFound">{0} rom trovate</Message>
 
