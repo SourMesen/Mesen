@@ -291,7 +291,8 @@ namespace Mesen.GUI.Forms.Config
             "1280x720",
             "1152x864",
             "1024x768",
-            "800x600"});
+            "800x600",
+            "640x480"});
 			this.cboFullscreenResolution.Location = new System.Drawing.Point(120, 3);
 			this.cboFullscreenResolution.Name = "cboFullscreenResolution";
 			this.cboFullscreenResolution.Size = new System.Drawing.Size(85, 21);
