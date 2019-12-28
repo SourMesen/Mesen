@@ -13,7 +13,7 @@
 			<Control ID="mnuPause">暂停</Control>
 			<Control ID="mnuReset">重设</Control>
 			<Control ID="mnuPowerCycle">电源</Control>
-			<Control ID="mnuReloadRom">Reload ROM</Control>
+			<Control ID="mnuReloadRom">重新载入 ROM</Control>
 			<Control ID="mnuPowerOff">关机</Control>
 			<Control ID="mnuSwitchDiskSide">磁盘换面</Control>
 			<Control ID="mnuSelectDisk">选择磁盘</Control>
@@ -335,8 +335,8 @@
 			<Control ID="lblTurboSpeed">快进速度:</Control>
 			<Control ID="lblRewindSpeedHint">%  (0 = 最快)</Control>
 			<Control ID="lblRewindSpeed">快退速度:</Control>
-			<Control ID="lblRunAhead">Run Ahead:</Control>
-			<Control ID="lblRunAheadFrames">frames (reduces input lag, increases CPU usage)</Control>
+			<Control ID="lblRunAhead">提前运行:</Control>
+			<Control ID="lblRunAheadFrames">帧 (减少输入延迟，增加 CPU 用量)</Control>
 
 			<Control ID="tpgAdvanced">高级</Control>
 			<Control ID="lblDeveloperSettings">开发者推荐设置 (自作/修改 ROM)</Control>
@@ -976,16 +976,16 @@
 		<Message ID="EmulatorShortcutMappings_LoadStateFromFile">载入进度文件</Message>
 		<Message ID="EmulatorShortcutMappings_LoadLastSession">载入上次会话</Message>
 
-		<Message ID="EmulatorShortcutMappings_SelectSaveSlot1">Select Save Slot 1</Message>
-		<Message ID="EmulatorShortcutMappings_SelectSaveSlot2">Select Save Slot 2</Message>
-		<Message ID="EmulatorShortcutMappings_SelectSaveSlot3">Select Save Slot 3</Message>
-		<Message ID="EmulatorShortcutMappings_SelectSaveSlot4">Select Save Slot 4</Message>
-		<Message ID="EmulatorShortcutMappings_SelectSaveSlot5">Select Save Slot 5</Message>
-		<Message ID="EmulatorShortcutMappings_SelectSaveSlot6">Select Save Slot 6</Message>
-		<Message ID="EmulatorShortcutMappings_SelectSaveSlot7">Select Save Slot 7</Message>
-		<Message ID="EmulatorShortcutMappings_SelectSaveSlot8">Select Save Slot 8</Message>
-		<Message ID="EmulatorShortcutMappings_SelectSaveSlot9">Select Save Slot 9</Message>
-		<Message ID="EmulatorShortcutMappings_SelectSaveSlot10">Select Save Slot 10</Message>
+		<Message ID="EmulatorShortcutMappings_SelectSaveSlot1">选择进度槽 1</Message>
+		<Message ID="EmulatorShortcutMappings_SelectSaveSlot2">选择进度槽 2</Message>
+		<Message ID="EmulatorShortcutMappings_SelectSaveSlot3">选择进度槽 3</Message>
+		<Message ID="EmulatorShortcutMappings_SelectSaveSlot4">选择进度槽 4</Message>
+		<Message ID="EmulatorShortcutMappings_SelectSaveSlot5">选择进度槽 5</Message>
+		<Message ID="EmulatorShortcutMappings_SelectSaveSlot6">选择进度槽 6</Message>
+		<Message ID="EmulatorShortcutMappings_SelectSaveSlot7">选择进度槽 7</Message>
+		<Message ID="EmulatorShortcutMappings_SelectSaveSlot8">选择进度槽 8</Message>
+		<Message ID="EmulatorShortcutMappings_SelectSaveSlot9">选择进度槽 9</Message>
+		<Message ID="EmulatorShortcutMappings_SelectSaveSlot10">选择进度槽 10</Message>
 		
 		<Message ID="EmulatorShortcutMappings_OpenFile">打开文件</Message>
 		<Message ID="EmulatorShortcutMappings_OpenDebugger">打开调试器</Message>
