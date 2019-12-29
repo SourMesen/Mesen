@@ -273,6 +273,9 @@
     <Compile Include="Controls\ctrlHorizontalTrackbar.Designer.cs">
       <DependentUpon>ctrlHorizontalTrackbar.cs</DependentUpon>
     </Compile>
+    <Compile Include="Controls\ctrlLinkLabel.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Controls\ctrlLoadingRom.cs">
       <SubType>UserControl</SubType>
     </Compile>

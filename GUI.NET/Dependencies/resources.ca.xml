@@ -243,6 +243,7 @@
 			<Control ID="chkShowFps">Mostra els FPS</Control>
 			<Control ID="chkUseHdPacks">Fes servir els paquets d'alta resolució d'HDNes</Control>
 			<Control ID="chkUseExclusiveFullscreen">Fes servir el mode de pantalla completa exclusiva</Control>
+			<Control ID="lblFullscreenResolution">Fullscreen Resolution:</Control>
 			<Control ID="lblRequestedRefreshRate">Requested Refresh Rate:</Control>
 			<Control ID="tpgOverscan">Sobreescaneig</Control>
 			<Control ID="tpgOverscanGlobal">Global</Control>
@@ -557,6 +558,16 @@
 			<Control ID="lblLink">www.mesen.ca</Control>
 			<Control ID="labelVersion">Versió:</Control>
 			<Control ID="lblBuildDateLabel">Build Date:</Control>
+
+			<Control ID="grpAcknowledgements">Acknowledgements</Control>
+			<Control ID="lblUsedSoftware">This software uses the following libraries:</Control>
+			<Control ID="lblGeneral">General:</Control>
+			<Control ID="lblVideo">Video:</Control>
+			<Control ID="lblAudio">Audio:</Control>
+			<Control ID="lblEmulation">Emulation:</Control>
+			<Control ID="lblCheats">Cheats:</Control>
+			<Control ID="lblSpecialThanks">And thank you to everybody who has contributed in any way! (donations, bug reports, testing, sharing information, etc.)</Control>
+
 			<Control ID="lblDonate">Si desitgeu col·laborar amb Mesen, si us plau, considereu fer un donatiu.&#xA;Gràcies pel vostre suport.</Control>
 			<Control ID="okButton">&amp;D'acord</Control>
 		</Form>
@@ -786,6 +797,7 @@
 		<Message ID="CheatsImported">S'han importat {0} trucs per al joc {1}.</Message>
 
 		<Message ID="PressToExitFullscreen">Press {0} to exit fullscreen</Message>
+		<Message ID="DefaultResolution">Default</Message>
 
 		<Message ID="RomsFound">S'han trobat {0} roms</Message>
 

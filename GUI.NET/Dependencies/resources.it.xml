@@ -243,6 +243,7 @@
 			<Control ID="chkShowFps">Mostra FPS</Control>
 			<Control ID="chkUseHdPacks">Usa HDNes HD pack</Control>
 			<Control ID="chkUseExclusiveFullscreen">Usa schermo intero esclusivo</Control>
+			<Control ID="lblFullscreenResolution">Fullscreen Resolution:</Control>
 			<Control ID="lblRequestedRefreshRate">Frequenza di aggiornamento:</Control>
 			<Control ID="tpgOverscan">Overscan</Control>
 			<Control ID="tpgOverscanGlobal">Globale</Control>
@@ -567,6 +568,16 @@
 			<Control ID="lblLink">www.mesen.ca</Control>
 			<Control ID="labelVersion">Versione:</Control>
 			<Control ID="lblBuildDateLabel">Data Creazione:</Control>
+
+			<Control ID="grpAcknowledgements">Acknowledgements</Control>
+			<Control ID="lblUsedSoftware">This software uses the following libraries:</Control>
+			<Control ID="lblGeneral">General:</Control>
+			<Control ID="lblVideo">Video:</Control>
+			<Control ID="lblAudio">Audio:</Control>
+			<Control ID="lblEmulation">Emulation:</Control>
+			<Control ID="lblCheats">Cheats:</Control>
+			<Control ID="lblSpecialThanks">And thank you to everybody who has contributed in any way! (donations, bug reports, testing, sharing information, etc.)</Control>
+
 			<Control ID="lblDonate">Se vuoi sostenere Mesen, ti preghiamo di considerare una donazione.&#13; Grazie per il vostro sostegno!</Control>
 			<Control ID="okButton">&amp;OK</Control>
 		</Form>
@@ -814,6 +825,7 @@
 		<Message ID="ExpansionDevice">Dispositivo di Espansione</Message>
 
 		<Message ID="PressToExitFullscreen">Premi {0} per uscire dallo schermo intero</Message>
+		<Message ID="DefaultResolution">Predefinito</Message>
 
 		<Message ID="RomsFound">{0} rom trovate</Message>
 

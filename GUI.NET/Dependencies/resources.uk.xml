@@ -242,6 +242,7 @@
 			<Control ID="chkShowFps">Показувати FPS</Control>
 			<Control ID="chkUseHdPacks">Використовувати HDNes HD packs</Control>
 			<Control ID="chkUseExclusiveFullscreen">Використовувати ексклюзивний режим повного екрану</Control>
+			<Control ID="lblFullscreenResolution">Fullscreen Resolution:</Control>
 			<Control ID="lblRequestedRefreshRate">Запитувана частота оновлення:</Control>
 			<Control ID="tpgOverscan">Overscan</Control>
 			<Control ID="tpgOverscanGlobal">Global</Control>
@@ -555,6 +556,16 @@
 			<Control ID="lblLink">www.mesen.ca</Control>
 			<Control ID="labelVersion">Версiя:</Control>
 			<Control ID="lblBuildDateLabel">Build Date:</Control>
+
+			<Control ID="grpAcknowledgements">Acknowledgements</Control>
+			<Control ID="lblUsedSoftware">This software uses the following libraries:</Control>
+			<Control ID="lblGeneral">General:</Control>
+			<Control ID="lblVideo">Video:</Control>
+			<Control ID="lblAudio">Audio:</Control>
+			<Control ID="lblEmulation">Emulation:</Control>
+			<Control ID="lblCheats">Cheats:</Control>
+			<Control ID="lblSpecialThanks">And thank you to everybody who has contributed in any way! (donations, bug reports, testing, sharing information, etc.)</Control>
+
 			<Control ID="lblDonate">Якщо ви хочете підтримати Mesen, будь ласка підтримайте.&#xA;Дякую за вашу підтримку!</Control>
 			<Control ID="okButton">&amp;OK</Control>
 		</Form>
@@ -801,6 +812,7 @@
 		<Message ID="PlayerNumber">Гравець {0}</Message>
 
 		<Message ID="PressToExitFullscreen">Натисніть {0} щоб вийти з повноекранного режиму</Message>
+		<Message ID="DefaultResolution">Default</Message>
 
 		<Message ID="RomsFound">{0} Знайдені ROM  файли</Message>
 
