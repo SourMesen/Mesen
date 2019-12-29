@@ -306,6 +306,7 @@ namespace Mesen.GUI.Forms
 
 			ProcessFullscreenSwitch(CommandLineHelper.PreprocessCommandLineArguments(_commandLineArgs, true));
 
+			ctrlRecentGames.Initialize();
 			ctrlRecentGames.Visible = _emuThread == null;
 		}
 

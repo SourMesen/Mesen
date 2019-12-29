@@ -110,16 +110,12 @@ namespace Mesen.GUI.Controls
 					value = false;
 				}
 
-				if(value && !_initialized) {
-					//We just re-enabled the screen, initialize it
-					Initialize();
-				}
-
 				if(value != base.Visible) {
-					if(value) {
-						InitGrid();
+					if(value && !_initialized) {
+						//We just re-enabled the screen, initialize it
+						Initialize();
 					}
-
+					InitGrid();
 					base.Visible = value;
 					tmrInput.Enabled = value;
 				}
