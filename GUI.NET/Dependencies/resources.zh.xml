@@ -580,14 +580,14 @@
 			<Control ID="labelVersion">版本:</Control>
 			<Control ID="lblBuildDateLabel">构建日期:</Control>
 
-			<Control ID="grpAcknowledgements">Acknowledgements</Control>
-			<Control ID="lblUsedSoftware">This software uses the following libraries:</Control>
-			<Control ID="lblGeneral">General:</Control>
-			<Control ID="lblVideo">Video:</Control>
-			<Control ID="lblAudio">Audio:</Control>
-			<Control ID="lblEmulation">Emulation:</Control>
-			<Control ID="lblCheats">Cheats:</Control>
-			<Control ID="lblSpecialThanks">And thank you to everybody who has contributed in any way! (donations, bug reports, testing, sharing information, etc.)</Control>
+			<Control ID="grpAcknowledgements">鸣谢</Control>
+			<Control ID="lblUsedSoftware">本软件使用下列库:</Control>
+			<Control ID="lblGeneral">常规:</Control>
+			<Control ID="lblVideo">视频:</Control>
+			<Control ID="lblAudio">音频:</Control>
+			<Control ID="lblEmulation">模拟:</Control>
+			<Control ID="lblCheats">作弊:</Control>
+			<Control ID="lblSpecialThanks">衷心感谢每一个捐赠、反馈、测试、分享或对本模拟器做出贡献的人！</Control>
 
 			<Control ID="lblDonate">如果您喜欢 Mesen 模拟器，请通过捐赠来支持我们！&#13;感谢你的支持！&#13;&#13;汉化：Licardo（albert.abdilim@foxmail.com） owomomo（ikyokyo@163.com）&#13;</Control>
 			<Control ID="okButton">确定</Control>
