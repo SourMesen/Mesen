@@ -68,8 +68,6 @@ namespace Mesen.GUI.Forms
 		private bool _noVideo = false;
 		private bool _noInput = false;
 
-		private PrivateFontCollection _fonts = new PrivateFontCollection();
-
 		public frmMain(string[] args)
 		{
 			ThemeHelper.InitTheme(this.BackColor);
@@ -83,10 +81,7 @@ namespace Mesen.GUI.Forms
 			Version currentVersion = new Version(InteropEmu.GetMesenVersion());
 			lblVersion.Text = currentVersion.ToString();
 
-			if(!Program.IsMono) {
-				_fonts.AddFontFile(Path.Combine(ConfigManager.HomeFolder, "Resources", "PixelFont.ttf"));
-				lblVersion.Font = new Font(_fonts.Families[0], 10);
-			} else {
+			if(Program.IsMono) {
 				lblVersion.Margin = new Padding(0, 0, 3, 0);
 				picIcon.Margin = new Padding(3, 5, 3, 3);
 			}
