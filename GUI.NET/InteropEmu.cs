@@ -33,6 +33,7 @@ namespace Mesen.GUI
 		[DllImport(DLLPath)] public static extern void HistoryViewerRelease();
 		[DllImport(DLLPath)] public static extern void HistoryViewerRun();
 		[DllImport(DLLPath)] public static extern void HistoryViewerStop();
+
 		[DllImport(DLLPath)] public static extern UInt32 HistoryViewerGetHistoryLength();
 		[DllImport(DLLPath)] [return: MarshalAs(UnmanagedType.I1)] public static extern bool HistoryViewerSaveMovie([MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(UTF8Marshaler))]string movieFile, UInt32 startPosition, UInt32 endPosition);
 		[DllImport(DLLPath)] [return: MarshalAs(UnmanagedType.I1)] public static extern bool HistoryViewerCreateSaveState([MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(UTF8Marshaler))]string outfileFile, UInt32 position);
@@ -194,6 +195,7 @@ namespace Mesen.GUI
 		[DllImport(DLLPath)] public static extern void SetSampleRate(UInt32 sampleRate);
 		[DllImport(DLLPath)] public static extern void SetAudioLatency(UInt32 msLatency);
 		[DllImport(DLLPath)] public static extern void SetAudioFilterSettings(AudioFilterSettings settings);
+		[DllImport(DLLPath)] public static extern void SetRunAheadFrames(UInt32 frameCount);
 
 		[DllImport(DLLPath)] public static extern NesModel GetNesModel();
 		[DllImport(DLLPath)] public static extern void SetNesModel(NesModel model);
@@ -1898,6 +1900,16 @@ namespace Mesen.GUI
 		RewindTenSecs,
 		RewindOneMin,
 
+		SelectSaveSlot1,
+		SelectSaveSlot2,
+		SelectSaveSlot3,
+		SelectSaveSlot4,
+		SelectSaveSlot5,
+		SelectSaveSlot6,
+		SelectSaveSlot7,
+		SelectSaveSlot8,
+		SelectSaveSlot9,
+		SelectSaveSlot10,
 		MoveToNextStateSlot,
 		MoveToPreviousStateSlot,
 		SaveState,
@@ -1985,7 +1997,6 @@ namespace Mesen.GUI
 		LoadLastSession,
 
 		OpenFile,
-
 		
 		//Deprecated shortcuts
 		OpenDebugger = 0xFFFF,

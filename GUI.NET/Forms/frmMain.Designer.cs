@@ -39,9 +39,9 @@ namespace Mesen.GUI.Forms
 			this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
 			this.picIcon = new System.Windows.Forms.PictureBox();
 			this.lblVersion = new System.Windows.Forms.Label();
-			this.ctrlRecentGames = new Mesen.GUI.Controls.ctrlRecentGames();
 			this.ctrlNsfPlayer = new Mesen.GUI.Controls.ctrlNsfPlayer();
 			this.ctrlRenderer = new Mesen.GUI.Controls.ctrlRenderer();
+			this.ctrlRecentGames = new Mesen.GUI.Controls.ctrlRecentGames();
 			this.menuStrip = new Mesen.GUI.Controls.ctrlMesenMenuStrip();
 			this.mnuFile = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuOpen = new System.Windows.Forms.ToolStripMenuItem();
@@ -241,7 +241,6 @@ namespace Mesen.GUI.Forms
 			this.panelRenderer.Controls.Add(this.ctrlRendererDualSystem);
 			this.panelRenderer.Controls.Add(this.ctrlLoading);
 			this.panelRenderer.Controls.Add(this.panelInfo);
-			this.panelRenderer.Controls.Add(this.ctrlRecentGames);
 			this.panelRenderer.Controls.Add(this.ctrlNsfPlayer);
 			this.panelRenderer.Controls.Add(this.ctrlRenderer);
 			this.panelRenderer.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -324,18 +323,6 @@ namespace Mesen.GUI.Forms
 			this.lblVersion.TabIndex = 6;
 			this.lblVersion.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
-			// ctrlRecentGames
-			// 
-			this.ctrlRecentGames.BackColor = System.Drawing.Color.Transparent;
-			this.ctrlRecentGames.Location = new System.Drawing.Point(0, 0);
-			this.ctrlRecentGames.Name = "ctrlRecentGames";
-			this.ctrlRecentGames.Size = new System.Drawing.Size(430, 309);
-			this.ctrlRecentGames.TabIndex = 7;
-			this.ctrlRecentGames.Visible = false;
-			this.ctrlRecentGames.OnRecentGameLoaded += new Mesen.GUI.Controls.ctrlRecentGames.RecentGameLoadedHandler(this.ctrlRecentGames_OnRecentGameLoaded);
-			this.ctrlRecentGames.MouseMove += new System.Windows.Forms.MouseEventHandler(this.ctrlRenderer_MouseMove);
-			this.ctrlRecentGames.DoubleClick += new System.EventHandler(this.ctrlRenderer_DoubleClick);
-			// 
 			// ctrlNsfPlayer
 			// 
 			this.ctrlNsfPlayer.BackColor = System.Drawing.Color.Black;
@@ -359,6 +346,19 @@ namespace Mesen.GUI.Forms
 			this.ctrlRenderer.Enter += new System.EventHandler(this.ctrlRenderer_Enter);
 			this.ctrlRenderer.MouseClick += new System.Windows.Forms.MouseEventHandler(this.ctrlRenderer_MouseClick);
 			this.ctrlRenderer.MouseMove += new System.Windows.Forms.MouseEventHandler(this.ctrlRenderer_MouseMove);
+			// 
+			// ctrlRecentGames
+			// 
+			this.ctrlRecentGames.BackColor = System.Drawing.Color.Transparent;
+			this.ctrlRecentGames.Dock = System.Windows.Forms.DockStyle.Top;
+			this.ctrlRecentGames.Location = new System.Drawing.Point(0, 24);
+			this.ctrlRecentGames.Name = "ctrlRecentGames";
+			this.ctrlRecentGames.Size = new System.Drawing.Size(430, 309);
+			this.ctrlRecentGames.TabIndex = 7;
+			this.ctrlRecentGames.Visible = false;
+			this.ctrlRecentGames.OnRecentGameLoaded += new Mesen.GUI.Controls.ctrlRecentGames.RecentGameLoadedHandler(this.ctrlRecentGames_OnRecentGameLoaded);
+			this.ctrlRecentGames.MouseMove += new System.Windows.Forms.MouseEventHandler(this.ctrlRenderer_MouseMove);
+			this.ctrlRecentGames.DoubleClick += new System.EventHandler(this.ctrlRenderer_DoubleClick);
 			// 
 			// menuStrip
 			// 
@@ -1827,6 +1827,7 @@ namespace Mesen.GUI.Forms
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.BackColor = System.Drawing.Color.Black;
 			this.ClientSize = new System.Drawing.Size(430, 333);
+			this.Controls.Add(this.ctrlRecentGames);
 			this.Controls.Add(this.panelRenderer);
 			this.Controls.Add(this.menuStrip);
 			this.MainMenuStrip = this.menuStrip;

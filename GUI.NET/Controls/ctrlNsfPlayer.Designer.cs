@@ -72,7 +72,6 @@
 			this.tlpRepeatShuffle = new System.Windows.Forms.TableLayoutPanel();
 			this.picRepeat = new System.Windows.Forms.PictureBox();
 			this.picShuffle = new System.Windows.Forms.PictureBox();
-			this.tmrUpdate = new System.Windows.Forms.Timer(this.components);
 			this.tlpMain.SuspendLayout();
 			this.tlpNsfInfo.SuspendLayout();
 			this.tableLayoutPanel3.SuspendLayout();
@@ -671,12 +670,6 @@
 			this.picShuffle.TabStop = false;
 			this.picShuffle.Click += new System.EventHandler(this.picShuffle_Click);
 			// 
-			// tmrUpdate
-			// 
-			this.tmrUpdate.Enabled = false;
-			this.tmrUpdate.Interval = 250;
-			this.tmrUpdate.Tick += new System.EventHandler(this.tmrUpdate_Tick);
-			// 
 			// ctrlNsfPlayer
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -759,7 +752,6 @@
 		private System.Windows.Forms.PictureBox picShuffle;
 		private System.Windows.Forms.PictureBox picRepeat;
 		private System.Windows.Forms.Panel pnlBackground;
-		private System.Windows.Forms.Timer tmrUpdate;
 		private System.Windows.Forms.Panel panel4;
 		private System.Windows.Forms.Label lblRewinding;
 		private System.Windows.Forms.Label lblRewindIcon;

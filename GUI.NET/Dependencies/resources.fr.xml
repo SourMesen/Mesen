@@ -243,6 +243,7 @@
 			<Control ID="chkShowFps">Afficher le FPS</Control>
 			<Control ID="chkUseHdPacks">Utiliser les packs haute-définition de HDNes</Control>
 			<Control ID="chkUseExclusiveFullscreen">Utiliser le mode plein écran exclusif</Control>
+			<Control ID="lblFullscreenResolution">Résolution plein écran :</Control>
 			<Control ID="lblRequestedRefreshRate">Taux de rafraîchissement :</Control>
 			<Control ID="tpgOverscan">Overscan</Control>
 			<Control ID="tpgOverscanGlobal">Global</Control>
@@ -308,6 +309,8 @@
 			<Control ID="lblTurboSpeed">Vitesse d'avance rapide :</Control>
 			<Control ID="lblRewindSpeedHint">%  (0 = Vitesse maximale)</Control>
 			<Control ID="lblRewindSpeed">Vitesse du rembobinage :</Control>
+			<Control ID="lblRunAhead">Run Ahead:</Control>
+			<Control ID="lblRunAheadFrames">images (réduit l'input lag, au coût de la performance)</Control>
 
 			<Control ID="tpgAdvanced">Avancé</Control>
 			<Control ID="lblDeveloperSettings">Options recommandées pour les développeurs (homebrew / ROM hacking)</Control>
@@ -565,6 +568,16 @@
 			<Control ID="lblLink">www.mesen.ca</Control>
 			<Control ID="labelVersion">Version:</Control>
 			<Control ID="lblBuildDateLabel">Date de compilation:</Control>
+
+			<Control ID="grpAcknowledgements">Remerciements</Control>
+			<Control ID="lblUsedSoftware">Cette application utilise les librairies suivantes :</Control>
+			<Control ID="lblGeneral">Général:</Control>
+			<Control ID="lblVideo">Vidéo:</Control>
+			<Control ID="lblAudio">Audio:</Control>
+			<Control ID="lblEmulation">Émulation:</Control>
+			<Control ID="lblCheats">Codes:</Control>
+			<Control ID="lblSpecialThanks">Et merci à tous ceux qui ont contribué au développement! (donations, tests, partage d'information, etc.)</Control>
+
 			<Control ID="lblDonate">Pour supporter le développement de Mesen, vous pouvez faire une donation.&#xA;Merci de votre support!</Control>
 			<Control ID="okButton">&amp;OK</Control>
 		</Form>
@@ -811,6 +824,7 @@
 		<Message ID="PlayerNumber">Joueur {0}</Message>
 
 		<Message ID="PressToExitFullscreen">Quitter le mode plein écran: {0}</Message>
+		<Message ID="DefaultResolution">Défaut</Message>
 
 		<Message ID="RomsFound">{0} roms trouvés</Message>
 
@@ -953,6 +967,18 @@
 		<Message ID="EmulatorShortcutMappings_LoadStateSlotAuto">Chargement d'état - Sauvegarde auto</Message>
 		<Message ID="EmulatorShortcutMappings_LoadStateFromFile">Charger l'état à partir d'un fichier</Message>
 		<Message ID="EmulatorShortcutMappings_LoadLastSession">Charger la session précédente</Message>
+
+		<Message ID="EmulatorShortcutMappings_SelectSaveSlot1">Choisir position de sauvegarde 1</Message>
+		<Message ID="EmulatorShortcutMappings_SelectSaveSlot2">Choisir position de sauvegarde 2</Message>
+		<Message ID="EmulatorShortcutMappings_SelectSaveSlot3">Choisir position de sauvegarde 3</Message>
+		<Message ID="EmulatorShortcutMappings_SelectSaveSlot4">Choisir position de sauvegarde 4</Message>
+		<Message ID="EmulatorShortcutMappings_SelectSaveSlot5">Choisir position de sauvegarde 5</Message>
+		<Message ID="EmulatorShortcutMappings_SelectSaveSlot6">Choisir position de sauvegarde 6</Message>
+		<Message ID="EmulatorShortcutMappings_SelectSaveSlot7">Choisir position de sauvegarde 7</Message>
+		<Message ID="EmulatorShortcutMappings_SelectSaveSlot8">Choisir position de sauvegarde 8</Message>
+		<Message ID="EmulatorShortcutMappings_SelectSaveSlot9">Choisir position de sauvegarde 9</Message>
+		<Message ID="EmulatorShortcutMappings_SelectSaveSlot10">Choisir position de sauvegarde 10</Message>
+		
 		<Message ID="EmulatorShortcutMappings_OpenFile">Ouvrir un fichier</Message>
 		<Message ID="EmulatorShortcutMappings_OpenDebugger">Ouvrir le débogueur</Message>
 		<Message ID="EmulatorShortcutMappings_OpenAssembler">Ouvrir l'assembleur</Message>

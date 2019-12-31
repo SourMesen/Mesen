@@ -242,6 +242,7 @@
 			<Control ID="chkShowFps">Mostrar FPS</Control>
 			<Control ID="chkUseHdPacks">Utilizar los paquetes de alta resolución de HDNes</Control>
 			<Control ID="chkUseExclusiveFullscreen">Usar modo exclusivo de pantalla completa</Control>
+			<Control ID="lblFullscreenResolution">Fullscreen Resolution:</Control>
 			<Control ID="lblRequestedRefreshRate">Frecuencia de actualización solicitada:</Control>
 			<Control ID="tpgOverscan">Overscan</Control>
 			<Control ID="tpgOverscanGlobal">Global</Control>
@@ -307,6 +308,8 @@
 			<Control ID="lblEmulationSpeed">Velocidad de emulación:</Control>
 			<Control ID="lblRewindSpeedHint">%  (0 = Velocidad máxima)</Control>
 			<Control ID="lblRewindSpeed">Velocidad de rebobinado:</Control>
+			<Control ID="lblRunAhead">Run Ahead:</Control>
+			<Control ID="lblRunAheadFrames">frames (reduces input lag, increases CPU usage)</Control>
 
 			<Control ID="tpgAdvanced">Avanzado</Control>
 			<Control ID="lblDeveloperSettings">Configuración recomendada para desarrolladores (homebrew / ROM hacking)</Control>
@@ -553,6 +556,16 @@
 			<Control ID="lblLink">www.mesen.ca</Control>
 			<Control ID="labelVersion">Versión:</Control>
 			<Control ID="lblBuildDateLabel">Fecha de creación:</Control>
+
+			<Control ID="grpAcknowledgements">Acknowledgements</Control>
+			<Control ID="lblUsedSoftware">This software uses the following libraries:</Control>
+			<Control ID="lblGeneral">General:</Control>
+			<Control ID="lblVideo">Video:</Control>
+			<Control ID="lblAudio">Audio:</Control>
+			<Control ID="lblEmulation">Emulation:</Control>
+			<Control ID="lblCheats">Cheats:</Control>
+			<Control ID="lblSpecialThanks">And thank you to everybody who has contributed in any way! (donations, bug reports, testing, sharing information, etc.)</Control>
+
 			<Control ID="lblDonate">Si deseas colaborar con Mesen, por favor considera hacer una donación.&#xA;¡Gracias por tu colaboración!</Control>
 			<Control ID="okButton">&amp;OK</Control>
 		</Form>
@@ -801,6 +814,7 @@
 		<Message ID="CheatsImported">{0} trucos se importaron para el juego {1}.</Message>
 
 		<Message ID="PressToExitFullscreen">Pulsar {0} para salir de pantalla completa</Message>
+		<Message ID="DefaultResolution">Por defecto</Message>
 
 		<Message ID="RomsFound">{0} roms encontradas</Message>
 
@@ -939,6 +953,18 @@
 		<Message ID="EmulatorShortcutMappings_LoadStateSlotAuto">Cargar partida - Hueco de auto guardado</Message>
 		<Message ID="EmulatorShortcutMappings_LoadStateFromFile">Cargar partida de archivo</Message>
 		<Message ID="EmulatorShortcutMappings_LoadLastSession">Cargar última sesión</Message>
+
+		<Message ID="EmulatorShortcutMappings_SelectSaveSlot1">Select Save Slot 1</Message>
+		<Message ID="EmulatorShortcutMappings_SelectSaveSlot2">Select Save Slot 2</Message>
+		<Message ID="EmulatorShortcutMappings_SelectSaveSlot3">Select Save Slot 3</Message>
+		<Message ID="EmulatorShortcutMappings_SelectSaveSlot4">Select Save Slot 4</Message>
+		<Message ID="EmulatorShortcutMappings_SelectSaveSlot5">Select Save Slot 5</Message>
+		<Message ID="EmulatorShortcutMappings_SelectSaveSlot6">Select Save Slot 6</Message>
+		<Message ID="EmulatorShortcutMappings_SelectSaveSlot7">Select Save Slot 7</Message>
+		<Message ID="EmulatorShortcutMappings_SelectSaveSlot8">Select Save Slot 8</Message>
+		<Message ID="EmulatorShortcutMappings_SelectSaveSlot9">Select Save Slot 9</Message>
+		<Message ID="EmulatorShortcutMappings_SelectSaveSlot10">Select Save Slot 10</Message>
+		
 		<Message ID="EmulatorShortcutMappings_OpenFile">Abrir archivo</Message>
 		<Message ID="EmulatorShortcutMappings_OpenDebugger">Abrir depurador</Message>
 		<Message ID="EmulatorShortcutMappings_OpenAssembler">Abrir ensamblador</Message>

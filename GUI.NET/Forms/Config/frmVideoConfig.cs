@@ -88,6 +88,13 @@ namespace Mesen.GUI.Forms.Config
 
 			toolTip.SetToolTip(picHdNesTooltip, ResourceHelper.GetMessage("HDNesTooltip"));
 
+			cboFullscreenResolution.Items.Insert(0, ResourceHelper.GetMessage("DefaultResolution"));
+			if(cboFullscreenResolution.Items.Contains(ConfigManager.Config.VideoInfo.FullscreenResolution)) {
+				cboFullscreenResolution.SelectedItem = ConfigManager.Config.VideoInfo.FullscreenResolution;
+			} else {
+				cboFullscreenResolution.SelectedIndex = 0;
+			}
+
 			btnSelectPreset.Image = BaseControl.DownArrow;
 			btnSelectPalette.Image = BaseControl.DownArrow;
 
@@ -184,6 +191,12 @@ namespace Mesen.GUI.Forms.Config
 		{
 			if(DialogResult == DialogResult.OK) {
 				UpdatePalette();
+
+				if(cboFullscreenResolution.SelectedIndex > 0) {
+					ConfigManager.Config.VideoInfo.FullscreenResolution = cboFullscreenResolution.SelectedItem.ToString();
+				} else {
+					ConfigManager.Config.VideoInfo.FullscreenResolution = "";
+				}
 
 				GameSpecificInfo.SetGameSpecificOverscan(
 					chkEnableGameSpecificOverscan.Checked,
@@ -477,6 +490,7 @@ namespace Mesen.GUI.Forms.Config
 		private void chkUseExclusiveFullscreen_CheckedChanged(object sender, EventArgs e)
 		{
 			flpRefreshRate.Visible = chkUseExclusiveFullscreen.Checked;
+			flpResolution.Visible = chkUseExclusiveFullscreen.Checked;
 		}
 
 		private void chkEnableGameSpecificOverscan_CheckedChanged(object sender, EventArgs e)

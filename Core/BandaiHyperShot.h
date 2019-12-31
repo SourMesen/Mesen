@@ -62,9 +62,9 @@ public:
 	uint8_t ReadRAM(uint16_t addr) override
 	{
 		if(addr == 0x4016) {
+			StrobeProcessRead();
 			uint8_t output = (_stateBuffer & 0x01) << 1;
 			_stateBuffer >>= 1;
-			StrobeProcessRead();
 			return output;
 		} else {
 			return (IsLightFound() ? 0 : 0x08) | (IsPressed(BandaiHyperShot::ZapperButtons::Fire) ? 0x10 : 0x00);

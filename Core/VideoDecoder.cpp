@@ -21,6 +21,7 @@
 VideoDecoder::VideoDecoder(shared_ptr<Console> console)
 {
 	_console = console;
+	_settings = _console->GetSettings();
 	_frameChanged = false;
 	_stopFlag = false;
 	UpdateVideoFilter();
@@ -158,6 +159,10 @@ uint32_t VideoDecoder::GetFrameCount()
 
 void VideoDecoder::UpdateFrameSync(void *ppuOutputBuffer, HdScreenInfo *hdScreenInfo)
 {
+	if(_settings->IsRunAheadFrame()) {
+		return;
+	}
+
 	_frameNumber = _console->GetFrameCount();
 	_hdScreenInfo = hdScreenInfo;
 	_ppuOutputBuffer = (uint16_t*)ppuOutputBuffer;
@@ -167,6 +172,10 @@ void VideoDecoder::UpdateFrameSync(void *ppuOutputBuffer, HdScreenInfo *hdScreen
 
 void VideoDecoder::UpdateFrame(void *ppuOutputBuffer, HdScreenInfo *hdScreenInfo)
 {
+	if(_settings->IsRunAheadFrame()) {
+		return;
+	}
+
 	if(_frameChanged) {
 		//Last frame isn't done decoding yet - sometimes Signal() introduces a 25-30ms delay
 		while(_frameChanged) {

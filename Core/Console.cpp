@@ -264,8 +264,6 @@ bool Console::Initialize(VirtualFile &romFile, VirtualFile &patchFile, bool forP
 			SaveBatteries();
 		}
 
-		_videoDecoder->StopThread();
-
 		shared_ptr<HdPackData> originalHdPackData = _hdData;
 		LoadHdPack(romFile, patchFile);
 		if(patchFile.IsValid()) {
@@ -295,6 +293,8 @@ bool Console::Initialize(VirtualFile &romFile, VirtualFile &patchFile, bool forP
 				//Send notification only if a game was already running and we successfully loaded the new one
 				_notificationManager->SendNotification(ConsoleNotificationType::GameStopped, (void*)1);
 			}
+
+			_videoDecoder->StopThread();
 
 			if(isDifferentGame) {
 				_romFilepath = romFile;
@@ -406,6 +406,8 @@ bool Console::Initialize(VirtualFile &romFile, VirtualFile &patchFile, bool forP
 			if(!forPowerCycle) {
 				_rewindManager.reset(new RewindManager(shared_from_this()));
 				_notificationManager->RegisterNotificationListener(_rewindManager);
+			} else {
+				_rewindManager->Initialize();
 			}
 
 			//Poll controller input after creating rewind manager, to make sure it catches the first frame's input
@@ -442,9 +444,7 @@ bool Console::Initialize(VirtualFile &romFile, VirtualFile &patchFile, bool forP
 
 			//Reset battery source to current game if new game failed to load
 			_batteryManager->Initialize(FolderUtilities::GetFilename(GetRomInfo().RomName, false));
-			if(_mapper) {
-				_videoDecoder->StartThread();
-			}
+
 			Resume();
 		}
 	}
@@ -720,6 +720,17 @@ void Console::RunSlaveCpu()
 	}
 }
 
+void Console::RunFrame()
+{
+	uint32_t frameCount = _ppu->GetFrameCount();
+	while(_ppu->GetFrameCount() == frameCount) {
+		_cpu->Exec();
+		if(_slave) {
+			RunSlaveCpu();
+		}
+	}
+}
+
 void Console::Run()
 {
 	Timer clockTimer;
@@ -729,7 +740,6 @@ void Console::Run()
 	double targetTime;
 	double lastFrameMin = 9999;
 	double lastFrameMax = 0;
-	uint32_t lastFrameNumber = -1;
 	double lastDelay = GetFrameDelay();
 
 	_runLock.Acquire();
@@ -753,130 +763,134 @@ void Console::Run()
 	bool crashed = false;
 	try {
 		while(true) {
-			_cpu->Exec();
-
-			if(_slave) {
-				RunSlaveCpu();
+			stringstream runAheadState;
+			bool useRunAhead = _settings->GetRunAheadFrames() > 0 && !_debugger && !_rewindManager->IsRewinding() && _settings->GetEmulationSpeed() > 0 && _settings->GetEmulationSpeed() <= 100;
+			if(useRunAhead) {
+				RunFrameWithRunAhead(runAheadState);
+			} else {
+				RunFrame();
 			}
 
-			if(_ppu->GetFrameCount() != lastFrameNumber) {
-				_soundMixer->ProcessEndOfFrame();
-				if(_slave) {
-					_slave->_soundMixer->ProcessEndOfFrame();
-				}
+			_soundMixer->ProcessEndOfFrame();
+			if(_slave) {
+				_slave->_soundMixer->ProcessEndOfFrame();
+			}
 
-				if(_historyViewer) {
-					_historyViewer->ProcessEndOfFrame();
-				}
-				_rewindManager->ProcessEndOfFrame();
-				_settings->DisableOverclocking(_disableOcNextFrame || IsNsf());
-				_disableOcNextFrame = false;
+			if(_historyViewer) {
+				_historyViewer->ProcessEndOfFrame();
+			}
+			_rewindManager->ProcessEndOfFrame();
+			_settings->DisableOverclocking(_disableOcNextFrame || IsNsf());
+			_disableOcNextFrame = false;
 
-				//Update model (ntsc/pal) and get delay for next frame
-				UpdateNesModel(true);
-				double delay = GetFrameDelay();
+			//Update model (ntsc/pal) and get delay for next frame
+			UpdateNesModel(true);
+			double delay = GetFrameDelay();
 
-				if(_resetRunTimers || delay != lastDelay || (clockTimer.GetElapsedMS() - targetTime) > 300) {
-					//Reset the timers, this can happen in 3 scenarios:
-					//1) Target frame rate changed
-					//2) The console was reset/power cycled or the emulation was paused (with or without the debugger)
-					//3) As a satefy net, if we overshoot our target by over 300 milliseconds, the timer is reset, too.
-					//   This can happen when something slows the emulator down severely (or when breaking execution in VS when debugging Mesen itself, etc.)
-					clockTimer.Reset();
-					targetTime = 0;
+			if(_resetRunTimers || delay != lastDelay || (clockTimer.GetElapsedMS() - targetTime) > 300) {
+				//Reset the timers, this can happen in 3 scenarios:
+				//1) Target frame rate changed
+				//2) The console was reset/power cycled or the emulation was paused (with or without the debugger)
+				//3) As a satefy net, if we overshoot our target by over 300 milliseconds, the timer is reset, too.
+				//   This can happen when something slows the emulator down severely (or when breaking execution in VS when debugging Mesen itself, etc.)
+				clockTimer.Reset();
+				targetTime = 0;
 
-					_resetRunTimers = false;
-					lastDelay = delay;
-				}
+				_resetRunTimers = false;
+				lastDelay = delay;
+			}
 
-				targetTime += delay;
+			targetTime += delay;
 				
-				bool displayDebugInfo = _settings->CheckFlag(EmulationFlags::DisplayDebugInfo);
-				if(displayDebugInfo) {
-					double lastFrameTime = lastFrameTimer.GetElapsedMS();
-					lastFrameTimer.Reset();
-					frameDurations[frameDurationIndex] = lastFrameTime;
-					frameDurationIndex = (frameDurationIndex + 1) % 60;
+			bool displayDebugInfo = _settings->CheckFlag(EmulationFlags::DisplayDebugInfo);
+			if(displayDebugInfo) {
+				double lastFrameTime = lastFrameTimer.GetElapsedMS();
+				lastFrameTimer.Reset();
+				frameDurations[frameDurationIndex] = lastFrameTime;
+				frameDurationIndex = (frameDurationIndex + 1) % 60;
 
-					DisplayDebugInformation(lastFrameTime, lastFrameMin, lastFrameMax, frameDurations);
-					if(_slave) {
-						_slave->DisplayDebugInformation(lastFrameTime, lastFrameMin, lastFrameMax, frameDurations);
-					}
+				DisplayDebugInformation(lastFrameTime, lastFrameMin, lastFrameMax, frameDurations);
+				if(_slave) {
+					_slave->DisplayDebugInformation(lastFrameTime, lastFrameMin, lastFrameMax, frameDurations);
 				}
+			}
 
-				//When sleeping for a long time (e.g <= 25% speed), sleep in small chunks and check to see if we need to stop sleeping between each sleep call
-				while(targetTime - clockTimer.GetElapsedMS() > 50) {
-					clockTimer.WaitUntil(clockTimer.GetElapsedMS() + 40);
-					if(delay != GetFrameDelay() || _stop || _settings->NeedsPause() || _pauseCounter > 0) {
-						targetTime = 0;
-						break;
-					}
-				}
-
-				//Sleep until we're ready to start the next frame
-				clockTimer.WaitUntil(targetTime);
-
-				if(_pauseCounter > 0) {
-					//Need to temporarely pause the emu (to save/load a state, etc.)
-					_runLock.Release();
-
-					//Spin wait until we are allowed to start again
-					while(_pauseCounter > 0) { }
-
-					_runLock.Acquire();
-				}
-
-				if(_pauseOnNextFrameRequested) {
-					//Used by "Run Single Frame" option
-					_settings->SetFlags(EmulationFlags::Paused);
-					_pauseOnNextFrameRequested = false;
-				}
-
-				bool pausedRequired = _settings->NeedsPause();
-				if(pausedRequired && !_stop && !_settings->CheckFlag(EmulationFlags::DebuggerWindowEnabled)) {
-					_notificationManager->SendNotification(ConsoleNotificationType::GamePaused);
-
-					//Prevent audio from looping endlessly while game is paused
-					_soundMixer->StopAudio();
-					if(_slave) {
-						_slave->_soundMixer->StopAudio();
-					}
-
-					_runLock.Release();
-
-					PlatformUtilities::EnableScreensaver();
-					PlatformUtilities::RestoreTimerResolution();
-					while(pausedRequired && !_stop && !_settings->CheckFlag(EmulationFlags::DebuggerWindowEnabled)) {
-						//Sleep until emulation is resumed
-						std::this_thread::sleep_for(std::chrono::duration<int, std::milli>(30));
-						pausedRequired = _settings->NeedsPause();
-						_paused = true;
-					}
-					_paused = false;
-					
-					PlatformUtilities::DisableScreensaver();
-					_runLock.Acquire();
-					_notificationManager->SendNotification(ConsoleNotificationType::GameResumed);
-					lastFrameTimer.Reset();
-
-					//Reset the timer to avoid speed up after a pause
-					_resetRunTimers = true;
-				}
-
-				if(_settings->CheckFlag(EmulationFlags::UseHighResolutionTimer)) {
-					PlatformUtilities::EnableHighResolutionTimer();
-				} else {
-					PlatformUtilities::RestoreTimerResolution();
-				}
-
-				_systemActionManager->ProcessSystemActions();
-
-				lastFrameNumber = _ppu->GetFrameCount();
-
-				if(_stop) {
-					_stop = false;
+			//When sleeping for a long time (e.g <= 25% speed), sleep in small chunks and check to see if we need to stop sleeping between each sleep call
+			while(targetTime - clockTimer.GetElapsedMS() > 50) {
+				clockTimer.WaitUntil(clockTimer.GetElapsedMS() + 40);
+				if(delay != GetFrameDelay() || _stop || _settings->NeedsPause() || _pauseCounter > 0) {
+					targetTime = 0;
 					break;
 				}
+			}
+
+			//Sleep until we're ready to start the next frame
+			clockTimer.WaitUntil(targetTime);
+
+			if(useRunAhead) {
+				_settings->SetRunAheadFrameFlag(true);
+				LoadState(runAheadState);
+				_settings->SetRunAheadFrameFlag(false);
+			}
+
+			if(_pauseCounter > 0) {
+				//Need to temporarely pause the emu (to save/load a state, etc.)
+				_runLock.Release();
+
+				//Spin wait until we are allowed to start again
+				while(_pauseCounter > 0) { }
+
+				_runLock.Acquire();
+			}
+
+			if(_pauseOnNextFrameRequested) {
+				//Used by "Run Single Frame" option
+				_settings->SetFlags(EmulationFlags::Paused);
+				_pauseOnNextFrameRequested = false;
+			}
+
+			bool pausedRequired = _settings->NeedsPause();
+			if(pausedRequired && !_stop && !_settings->CheckFlag(EmulationFlags::DebuggerWindowEnabled)) {
+				_notificationManager->SendNotification(ConsoleNotificationType::GamePaused);
+
+				//Prevent audio from looping endlessly while game is paused
+				_soundMixer->StopAudio();
+				if(_slave) {
+					_slave->_soundMixer->StopAudio();
+				}
+
+				_runLock.Release();
+
+				PlatformUtilities::EnableScreensaver();
+				PlatformUtilities::RestoreTimerResolution();
+				while(pausedRequired && !_stop && !_settings->CheckFlag(EmulationFlags::DebuggerWindowEnabled)) {
+					//Sleep until emulation is resumed
+					std::this_thread::sleep_for(std::chrono::duration<int, std::milli>(30));
+					pausedRequired = _settings->NeedsPause();
+					_paused = true;
+				}
+				_paused = false;
+					
+				PlatformUtilities::DisableScreensaver();
+				_runLock.Acquire();
+				_notificationManager->SendNotification(ConsoleNotificationType::GameResumed);
+				lastFrameTimer.Reset();
+
+				//Reset the timer to avoid speed up after a pause
+				_resetRunTimers = true;
+			}
+
+			if(_settings->CheckFlag(EmulationFlags::UseHighResolutionTimer)) {
+				PlatformUtilities::EnableHighResolutionTimer();
+			} else {
+				PlatformUtilities::RestoreTimerResolution();
+			}
+
+			_systemActionManager->ProcessSystemActions();
+
+			if(_stop) {
+				_stop = false;
+				break;
 			}
 		}
 	} catch(const std::runtime_error &ex) {
@@ -924,6 +938,26 @@ void Console::Run()
 
 	_notificationManager->SendNotification(ConsoleNotificationType::GameStopped);
 	_notificationManager->SendNotification(ConsoleNotificationType::EmulationStopped);
+}
+
+void Console::RunFrameWithRunAhead(std::stringstream& runAheadState)
+{
+	uint32_t runAheadFrames = _settings->GetRunAheadFrames();
+	_settings->SetRunAheadFrameFlag(true);
+	//Run a single frame and save the state (no audio/video)
+	RunFrame();
+	SaveState(runAheadState);
+	while(runAheadFrames > 1) {
+		//Run extra frames if the requested run ahead frame count is higher than 1
+		runAheadFrames--;
+		RunFrame();
+	}
+	_apu->EndFrame();
+	_settings->SetRunAheadFrameFlag(false);
+
+	//Run one frame normally (with audio/video output)
+	RunFrame();
+	_apu->EndFrame();
 }
 
 void Console::ResetRunTimers()
@@ -1023,6 +1057,9 @@ double Console::GetFrameDelay()
 void Console::SaveState(ostream &saveStream)
 {
 	if(_initialized) {
+		//Send any unprocessed sound to the SoundMixer - needed for rewind
+		_apu->EndFrame();
+
 		_cpu->SaveSnapshot(&saveStream);
 		_ppu->SaveSnapshot(&saveStream);
 		_memoryManager->SaveSnapshot(&saveStream);
@@ -1050,6 +1087,9 @@ void Console::LoadState(istream &loadStream)
 void Console::LoadState(istream &loadStream, uint32_t stateVersion)
 {
 	if(_initialized) {
+		//Send any unprocessed sound to the SoundMixer - needed for rewind
+		_apu->EndFrame();
+
 		_cpu->LoadSnapshot(&loadStream, stateVersion);
 		_ppu->LoadSnapshot(&loadStream, stateVersion);
 		_memoryManager->LoadSnapshot(&loadStream, stateVersion);
@@ -1080,9 +1120,6 @@ void Console::LoadState(istream &loadStream, uint32_t stateVersion)
 
 void Console::LoadState(uint8_t *buffer, uint32_t bufferSize)
 {
-	//Send any unprocessed sound to the SoundMixer - needed for rewind
-	_apu->EndFrame();
-
 	stringstream stream;
 	stream.write((char*)buffer, bufferSize);
 	stream.seekg(0, ios::beg);

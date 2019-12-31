@@ -1607,6 +1607,10 @@
     <genie>SUTTXU</genie>
     <description>Infinite health</description>
   </cheat>
+  <cheat enabled="0" game="0x72A0D9A7" gameName="Adventures of Rad Gravity, The (USA)">
+    <genie>SPNVIEEP</genie>
+    <description>Walk through walls</description>
+  </cheat>
   <cheat enabled="0" game="0x153DD212" gameName="Adventures of Rocky and Bullwinkle and Friends, The (USA)">
     <genie>SXOESKSE</genie>
     <description>Infinite health</description>
@@ -1766,6 +1770,18 @@
   <cheat enabled="0" game="0xC31ABE30" gameName="Adventures of Tom Sawyer (USA)">
     <genie>GOEXZLLE</genie>
     <description>Start in the cave - P2 (2 of 2)</description>
+  </cheat>
+  <cheat enabled="0" game="0x88F202F0" gameName="After Burner (Japan)">
+    <genie>SKNAXZVG</genie>
+    <description>Infinite Missiles</description>
+  </cheat>
+  <cheat enabled="0" game="0x88F202F0" gameName="After Burner (Japan)">
+    <genie>SZVPPZSA</genie>
+    <description>Invincibility</description>
+  </cheat>
+  <cheat enabled="0" game="0x88F202F0" gameName="After Burner (Japan)">
+    <genie>SXNTPPVG</genie>
+    <description>Infinite lives</description>
   </cheat>
   <cheat enabled="0" game="0xB938B7E9" gameName="After Burner (USA) (Unl)">
     <genie>SKXVPZVG</genie>
@@ -2463,6 +2479,26 @@
   <cheat enabled="0" game="0xE2B43A68" gameName="Amagon (USA)">
     <genie>ESNIZLEY</genie>
     <description>Invincibility</description>
+  </cheat>
+  <cheat enabled="0" game="0xE2B43A68" gameName="Amagon (USA)">
+    <genie>AEUNYTZT</genie>
+    <description>Hit anywhere</description>
+  </cheat>
+  <cheat enabled="0" game="0xE2B43A68" gameName="Amagon (USA)">
+    <genie>AESYZVTG</genie>
+    <description>One hit kills</description>
+  </cheat>
+  <cheat enabled="0" game="0xE2B43A68" gameName="Amagon (USA)">
+    <genie>AANKKTTA</genie>
+    <description>Multi-jump (1 of 3)</description>
+  </cheat>
+  <cheat enabled="0" game="0xE2B43A68" gameName="Amagon (USA)">
+    <genie>AEEKVTGA</genie>
+    <description>Multi-jump (1 of 3)</description>
+  </cheat>
+  <cheat enabled="0" game="0xE2B43A68" gameName="Amagon (USA)">
+    <genie>AEEGNTTE</genie>
+    <description>Multi-jump (1 of 3)</description>
   </cheat>
   <cheat enabled="0" game="0xE2B43A68" gameName="Amagon (USA)">
     <genie>AVOXGOOZ</genie>
@@ -5263,6 +5299,10 @@
     <description>Infinite lives</description>
   </cheat>
   <cheat enabled="0" game="0xC71C7619" gameName="Blaster Master (USA)">
+    <genie>AEEPUNYA</genie>
+    <description>Able to fight bosses when fully upgraded</description>
+  </cheat>
+  <cheat enabled="0" game="0xC71C7619" gameName="Blaster Master (USA)">
     <genie>AAEGZLZA</genie>
     <description>Start with 1 life</description>
   </cheat>
@@ -6228,6 +6268,10 @@
   <cheat enabled="0" game="0xAE286904" gameName="Bucky O'Hare (USA)">
     <genie>SLKSVUSO</genie>
     <description>One hit kills</description>
+  </cheat>
+  <cheat enabled="0" game="0xAE286904" gameName="Bucky O'Hare (USA)">
+    <genie>ATUONASZ</genie>
+    <description>Walk through walls</description>
   </cheat>
   <cheat enabled="0" game="0xAE286904" gameName="Bucky O'Hare (USA)">
     <genie>ENKEVGAP</genie>
@@ -7933,6 +7977,22 @@
     <description>Multi-jump (15 of 15)</description>
   </cheat>
   <cheat enabled="0" game="0x95CA9EC7" gameName="Castlevania III - Dracula's Curse (USA)">
+    <genie>AEVOZTTA</genie>
+    <description>Walk through most walls (1 of 4)</description>
+  </cheat>
+  <cheat enabled="0" game="0x95CA9EC7" gameName="Castlevania III - Dracula's Curse (USA)">
+    <genie>AEVPPVYA</genie>
+    <description>Walk through most walls (2 of 4)</description>
+  </cheat>
+  <cheat enabled="0" game="0x95CA9EC7" gameName="Castlevania III - Dracula's Curse (USA)">
+    <genie>AAOOIYUI</genie>
+    <description>Walk through most walls (3 of 4)</description>
+  </cheat>
+  <cheat enabled="0" game="0x95CA9EC7" gameName="Castlevania III - Dracula's Curse (USA)">
+    <genie>AAXPTNXG</genie>
+    <description>Walk through most walls (4 of 4)</description>
+  </cheat>
+  <cheat enabled="0" game="0x95CA9EC7" gameName="Castlevania III - Dracula's Curse (USA)">
     <genie>ATUEGXSA</genie>
     <description>No knock-back when hurt</description>
   </cheat>
@@ -8654,6 +8714,18 @@
   <cheat enabled="0" game="0x23A60A62" gameName="Clu Clu Land (World)">
     <genie>AASIAYGA</genie>
     <description>Enemy can go thru gold bars</description>
+  </cheat>
+  <cheat enabled="0" game="0x94CCBBBC" gameName="Cobra Command (USA)">
+    <genie>AAVIUGLA</genie>
+    <description>Invincibility (1 of 3)</description>
+  </cheat>
+  <cheat enabled="0" game="0x94CCBBBC" gameName="Cobra Command (USA)">
+    <genie>PPVIXKUL</genie>
+    <description>Invincibility (2 of 3)</description>
+  </cheat>
+  <cheat enabled="0" game="0x94CCBBBC" gameName="Cobra Command (USA)">
+    <genie>SXOISKSE</genie>
+    <description>Invincibility (3 of 3)</description>
   </cheat>
   <cheat enabled="0" game="0x94CCBBBC" gameName="Cobra Command (USA)">
     <genie>GZSSNGST</genie>
@@ -11659,6 +11731,10 @@
     <description>Enemies die after one knockdown (disable at final boss) (2 of 2)</description>
   </cheat>
   <cheat enabled="0" game="0xAC9817E3" gameName="Double Dragon III - The Sacred Stones (USA)">
+    <genie>PAXEAENY</genie>
+    <description>Invincibility</description>
+  </cheat>
+  <cheat enabled="0" game="0xAC9817E3" gameName="Double Dragon III - The Sacred Stones (USA)">
     <genie>SZUUPAAX</genie>
     <description>Infinite health - Bill, Jimmy and Chin</description>
   </cheat>
@@ -11894,6 +11970,10 @@
     <description>Multi-jump (6 of 6)</description>
   </cheat>
   <cheat enabled="0" game="0xCB02A930" gameName="Dr. Mario (Japan, USA)">
+    <genie>AONPSZGO</genie>
+    <description>Can select up to Virus Level 24</description>
+  </cheat>
+  <cheat enabled="0" game="0xCB02A930" gameName="Dr. Mario (Japan, USA)">
     <genie>GZNEVIVT</genie>
     <description>Vitamin capsules don't fall (press down)</description>
   </cheat>
@@ -12059,6 +12139,10 @@
   <cheat enabled="0" game="0x5B838CE2" gameName="Dragon Warrior (USA)">
     <genie>AEVGUIZA</genie>
     <description>Take no damage in swamp</description>
+  </cheat>
+  <cheat enabled="0" game="0x5B838CE2" gameName="Dragon Warrior (USA)">
+    <genie>AEKGKIPA</genie>
+    <description>No random battles</description>
   </cheat>
   <cheat enabled="0" game="0x5B838CE2" gameName="Dragon Warrior (USA)">
     <genie>VVOYYTSA</genie>
@@ -16018,6 +16102,10 @@
     <genie>SXVUPVSE</genie>
     <description>Infinite ammo (4 of 4)</description>
   </cheat>
+  <cheat enabled="0" game="0xEB71A6C5" gameName="G.I. Joe - The Atlantis Factor (USA)">
+    <genie>XYNXLESN</genie>
+    <description>Super moon jump</description>
+  </cheat>
   <cheat enabled="0" game="0x9160647B" gameName="Gaiapolis (Asia) (Unl)">
     <genie>SZUKVPVG</genie>
     <description>Infinite time</description>
@@ -17086,6 +17174,14 @@
   <cheat enabled="0" game="0x72725A0B" gameName="Golgo 13 - Top Secret Episode (USA)">
     <genie>ZAVKIAAA</genie>
     <description>Have a health and bullets boost</description>
+  </cheat>
+  <cheat enabled="0" game="0xEFEB0C34" gameName="Goonies (Japan)">
+    <genie>ZASZYTPA</genie>
+    <description>Walk faster (not when scrolling)</description>
+  </cheat>
+  <cheat enabled="0" game="0xEFEB0C34" gameName="Goonies (Japan)">
+    <genie>SXNPTZAX</genie>
+    <description>Walk though walls and locked gates</description>
   </cheat>
   <cheat enabled="0" game="0x999577B6" gameName="Goonies II, The (USA)">
     <genie>SESEZESX</genie>
@@ -23786,6 +23882,14 @@
     <description>Walk through walls in dungeons (2 of 2)</description>
   </cheat>
   <cheat enabled="0" game="0x3FE272FB" gameName="Legend of Zelda, The (USA)">
+    <genie>AANAUAIA</genie>
+    <description>Skip text (1 of 2)</description>
+  </cheat>
+  <cheat enabled="0" game="0x3FE272FB" gameName="Legend of Zelda, The (USA)">
+    <genie>AASESELP</genie>
+    <description>Skip text (2 of 2)</description>
+  </cheat>
+  <cheat enabled="0" game="0x3FE272FB" gameName="Legend of Zelda, The (USA)">
     <address>0x034C</address>
     <value>0xFF</value>
     <description>Enemies don't shoot anything</description>
@@ -27731,6 +27835,10 @@
     <description>Mega-jump with High Jump Boots</description>
   </cheat>
   <cheat enabled="0" game="0x70080810" gameName="Metroid (USA)">
+    <genie>AAVTTKLL</genie>
+    <description>Jump through the roof</description>
+  </cheat>
+  <cheat enabled="0" game="0x70080810" gameName="Metroid (USA)">
     <genie>EATTOU</genie>
     <description>No enemies</description>
   </cheat>
@@ -27780,7 +27888,7 @@
   </cheat>
   <cheat enabled="0" game="0x70080810" gameName="Metroid (USA)">
     <genie>IZPSTT</genie>
-    <description>Break any block</description>
+    <description>Break any block by shooting</description>
   </cheat>
   <cheat enabled="0" game="0x70080810" gameName="Metroid (USA)">
     <genie>AUZTLG</genie>
@@ -27828,6 +27936,10 @@
     <address>0x6878</address>
     <value>0x80</value>
     <description>Have Ice Beam</description>
+  </cheat>
+  <cheat enabled="0" game="0x70080810" gameName="Metroid (USA)">
+    <genie>ETTSYY</genie>
+    <description>Break any block by bombing</description>
   </cheat>
   <cheat enabled="0" game="0x2E7F0B29" gameName="Michael Andretti's World GP (USA)">
     <address>0x0565</address>
@@ -29245,6 +29357,10 @@
   <cheat enabled="0" game="0x06CAE67F" gameName="Monster in My Pocket (USA)">
     <genie>SLSAASVS</genie>
     <description>Infinite lives</description>
+  </cheat>
+  <cheat enabled="0" game="0x06CAE67F" gameName="Monster in My Pocket (USA)">
+    <genie>GESEUUAA</genie>
+    <description>Multi-jump</description>
   </cheat>
   <cheat enabled="0" game="0x1FC5740D" gameName="Monster Party (USA)">
     <genie>AVOEZYSZ</genie>
@@ -34101,7 +34217,11 @@
   </cheat>
   <cheat enabled="0" game="0xA342A5FD" gameName="Rambo (USA)">
     <genie>ATOSXISL</genie>
-    <description>Invincibility</description>
+    <description>Invincibility (1 of 2)</description>
+  </cheat>
+  <cheat enabled="0" game="0xA342A5FD" gameName="Rambo (USA)">
+    <genie>AVUSOZSL</genie>
+    <description>Invincibility (2 of 2)</description>
   </cheat>
   <cheat enabled="0" game="0xA342A5FD" gameName="Rambo (USA)">
     <genie>GOXTZXZA</genie>
@@ -35675,6 +35795,10 @@
   <cheat enabled="0" game="0xDE25B90F" gameName="Rush'n Attack (USA)">
     <genie>AENASIPA</genie>
     <description>Infinite POW</description>
+  </cheat>
+  <cheat enabled="0" game="0xDE25B90F" gameName="Rush'n Attack (USA)">
+    <genie>AIUAKIEI</genie>
+    <description>Always have grenades</description>
   </cheat>
   <cheat enabled="0" game="0xDE25B90F" gameName="Rush'n Attack (USA)">
     <genie>ASKELZEL</genie>
@@ -41414,6 +41538,10 @@
     <description>Press Start to complete level (do not use on final ship/castle level for each map) (2 of 2)</description>
   </cheat>
   <cheat enabled="0" game="0xC78D17D3" gameName="Super Mario Bros. 3 (USA)">
+    <genie>APULZPEY</genie>
+    <description>Disable auto-scroll</description>
+  </cheat>
+  <cheat enabled="0" game="0xC78D17D3" gameName="Super Mario Bros. 3 (USA)">
     <genie>PEUZUGAA</genie>
     <description>Start on World 2</description>
   </cheat>
@@ -43814,6 +43942,30 @@
     <description>Start on stage 6 - Golden Palace</description>
   </cheat>
   <cheat enabled="0" game="0xD4A70D2B" gameName="Tom &amp; Jerry - The Ultimate Game of Cat and Mouse! (USA)">
+    <genie>SXSNYEVK</genie>
+    <description>Infinite lives</description>
+  </cheat>
+  <cheat enabled="0" game="0xD4A70D2B" gameName="Tom &amp; Jerry - The Ultimate Game of Cat and Mouse! (USA)">
+    <genie>AEXYPAPA</genie>
+    <description>Infinite health</description>
+  </cheat>
+  <cheat enabled="0" game="0xD4A70D2B" gameName="Tom &amp; Jerry - The Ultimate Game of Cat and Mouse! (USA)">
+    <genie>AIUYEIEL</genie>
+    <description>Hit anywhere</description>
+  </cheat>
+  <cheat enabled="0" game="0xD4A70D2B" gameName="Tom &amp; Jerry - The Ultimate Game of Cat and Mouse! (USA)">
+    <genie>APKKENAU</genie>
+    <description>Jump through roof</description>
+  </cheat>
+  <cheat enabled="0" game="0xD4A70D2B" gameName="Tom &amp; Jerry - The Ultimate Game of Cat and Mouse! (USA)">
+    <genie>PONYILPE</genie>
+    <description>Normal weapon shots do more damage</description>
+  </cheat>
+  <cheat enabled="0" game="0xD4A70D2B" gameName="Tom &amp; Jerry - The Ultimate Game of Cat and Mouse! (USA)">
+    <genie>APVKVSAU</genie>
+    <description>Walk through walls</description>
+  </cheat>
+  <cheat enabled="0" game="0xD4A70D2B" gameName="Tom &amp; Jerry - The Ultimate Game of Cat and Mouse! (USA)">
     <genie>PASNVZLA</genie>
     <description>Start with 1 life</description>
   </cheat>
@@ -43824,14 +43976,6 @@
   <cheat enabled="0" game="0xD4A70D2B" gameName="Tom &amp; Jerry - The Ultimate Game of Cat and Mouse! (USA)">
     <genie>PASNVZLE</genie>
     <description>Start with 9 lives</description>
-  </cheat>
-  <cheat enabled="0" game="0xD4A70D2B" gameName="Tom &amp; Jerry - The Ultimate Game of Cat and Mouse! (USA)">
-    <genie>SXSNYEVK</genie>
-    <description>Infinite lives</description>
-  </cheat>
-  <cheat enabled="0" game="0xD4A70D2B" gameName="Tom &amp; Jerry - The Ultimate Game of Cat and Mouse! (USA)">
-    <genie>AEXYPAPA</genie>
-    <description>Infinite health</description>
   </cheat>
   <cheat enabled="0" game="0xD4A70D2B" gameName="Tom &amp; Jerry - The Ultimate Game of Cat and Mouse! (USA)">
     <genie>LEXYPAPA</genie>
@@ -47598,6 +47742,18 @@
   <cheat enabled="0" game="0x18D5AF7A" gameName="Xevious - The Avenger (USA)">
     <genie>SZLNZY</genie>
     <description>Infinite lives</description>
+  </cheat>
+  <cheat enabled="0" game="0x18D5AF7A" gameName="Xevious - The Avenger (USA)">
+    <genie>AVEVVUSL</genie>
+    <description>Hit anywhere (1 of 3)</description>
+  </cheat>
+  <cheat enabled="0" game="0x18D5AF7A" gameName="Xevious - The Avenger (USA)">
+    <genie>AAOIUILP</genie>
+    <description>Hit anywhere (2 of 3)</description>
+  </cheat>
+  <cheat enabled="0" game="0x18D5AF7A" gameName="Xevious - The Avenger (USA)">
+    <genie>AAXIOIIA</genie>
+    <description>Hit anywhere (3 of 3)</description>
   </cheat>
   <cheat enabled="0" game="0x18D5AF7A" gameName="Xevious - The Avenger (USA)">
     <genie>PAZYOG</genie>

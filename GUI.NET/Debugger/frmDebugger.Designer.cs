@@ -613,7 +613,7 @@ namespace Mesen.GUI.Debugger
             this.mnuFile,
             this.mnuCode,
             this.debugToolStripMenuItem,
-            this.searchToolStripMenuItem,
+            this.mnuSearch,
             this.mnuOptions,
             this.toolsToolStripMenuItem});
             this.menuStrip.Location = new System.Drawing.Point(0, 0);
@@ -963,6 +963,8 @@ namespace Mesen.GUI.Debugger
             // 
             this.searchToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.mnuGoToAll,
+            this.mnuGoToAddress,
+            this.mnuGoTo,
             this.toolStripMenuItem29,
             this.mnuFind,
             this.mnuFindNext,
@@ -1411,6 +1413,7 @@ namespace Mesen.GUI.Debugger
             // mnuShowOptions
             // 
             this.mnuShowOptions.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+			
             this.mnuShowToolbar,
             this.mnuShowCpuMemoryMapping,
             this.mnuShowPpuMemoryMapping,
@@ -1841,6 +1844,7 @@ namespace Mesen.GUI.Debugger
             // pPUViewerCompactToolStripMenuItem
             // 
             this.pPUViewerCompactToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+
             this.mnuOpenNametableViewer,
             this.mnuOpenChrViewer,
             this.mnuOpenSpriteViewer,
@@ -2137,7 +2141,7 @@ namespace Mesen.GUI.Debugger
 		private System.Windows.Forms.ToolStripMenuItem mnuStepInto;
 		private System.Windows.Forms.ToolStripMenuItem mnuStepOver;
 		private System.Windows.Forms.ToolStripMenuItem mnuStepOut;
-		private System.Windows.Forms.ToolStripMenuItem searchToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem mnuSearch;
 		private System.Windows.Forms.ToolStripMenuItem mnuFind;
 		private System.Windows.Forms.ToolStripMenuItem mnuFindNext;
 		private System.Windows.Forms.ToolStripMenuItem mnuFindPrev;
@@ -2178,10 +2182,6 @@ namespace Mesen.GUI.Debugger
 		private System.Windows.Forms.ToolStripMenuItem mnuCdlStripUsedData;
 		private System.Windows.Forms.ToolStripMenuItem mnuCdlStripUnusedData;
 		private System.Windows.Forms.ToolStripMenuItem mnuDisableEnableBreakpoint;
-		private System.Windows.Forms.ToolStripMenuItem mnuGoToAddress;
-		private System.Windows.Forms.ToolStripMenuItem mnuGoToIrqHandler;
-		private System.Windows.Forms.ToolStripMenuItem mnuGoToNmiHandler;
-		private System.Windows.Forms.ToolStripMenuItem mnuGoToResetHandler;
 		private System.Windows.Forms.ToolStripMenuItem mnuTraceLogger;
 		private System.Windows.Forms.ToolStripMenuItem mnuRunPpuCycle;
 		private System.Windows.Forms.ToolStripMenuItem mnuPpuPartialDraw;
@@ -2271,9 +2271,6 @@ namespace Mesen.GUI.Debugger
 		private ctrlSourceViewer ctrlSourceViewerSplit;
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem21;
 		private System.Windows.Forms.ToolStripMenuItem mnuSelectFont;
-		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem22;
-		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem23;
-		private System.Windows.Forms.ToolStripMenuItem mnuGoToProgramCount;
 		private System.Windows.Forms.ToolStripMenuItem mnuHidePauseIcon;
 		private System.Windows.Forms.ToolStripMenuItem mnuResetLabels;
 		private System.Windows.Forms.ToolStripMenuItem mnuShowOptions;
@@ -2325,5 +2322,6 @@ namespace Mesen.GUI.Debugger
 		private System.Windows.Forms.ToolStripMenuItem mnuWatchWindow;
 		private System.Windows.Forms.ToolStripMenuItem mnuBreakOnPpu2006ScrollGlitch;
 		private System.Windows.Forms.ToolStripMenuItem mnuBreakOnBusConflict;
-	}
+	  private System.Windows.Forms.ToolStripMenuItem mnuGoToAddress;
+   }
 }

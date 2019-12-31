@@ -627,6 +627,7 @@ namespace InteropEmu {
 		DllExport void __stdcall SetSampleRate(uint32_t sampleRate) { _settings->SetSampleRate(sampleRate); }
 		DllExport void __stdcall SetAudioLatency(uint32_t msLatency) { _settings->SetAudioLatency(msLatency); }
 		DllExport void __stdcall SetAudioFilterSettings(AudioFilterSettings settings) { _settings->SetAudioFilterSettings(settings); }
+		DllExport void __stdcall SetRunAheadFrames(uint32_t frameCount) { _settings->SetRunAheadFrames(frameCount); }
 
 		DllExport NesModel __stdcall GetNesModel() { return _console->GetModel(); }
 		DllExport void __stdcall SetNesModel(uint32_t model) { _settings->SetNesModel((NesModel)model); }

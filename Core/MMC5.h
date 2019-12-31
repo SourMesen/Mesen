@@ -88,14 +88,15 @@ private:
 			// 1x 8kb   : 0 0 0 0 - - - -
 			// 2x 8kb   : 0 0 0 0 1 1 1 1
 			// 1x 32kb  : 0 1 2 3 - - - -
-			int32_t realWorkRamSize = _workRamSize - MMC5::ExRamSize;
+			int32_t realWorkRamSize = _workRamSize - (HasBattery() ? 0 : MMC5::ExRamSize);
+			int32_t realSaveRamSize = _saveRamSize - (!HasBattery() ? 0 : MMC5::ExRamSize);
 			if(IsNes20() || _romInfo.IsInDatabase) {
 				memoryType = PrgMemoryType::WorkRam;
-				if(HasBattery() && (bankNumber <= 3 || _saveRamSize > 0x2000)) {
+				if(HasBattery() && (bankNumber <= 3 || realSaveRamSize > 0x2000)) {
 					memoryType = PrgMemoryType::SaveRam;
 				}
 
-				if(_saveRamSize + realWorkRamSize != 0x4000 && bankNumber >= 4) {
+				if(realSaveRamSize + realWorkRamSize != 0x4000 && bankNumber >= 4) {
 					//When not 2x 8kb (=16kb), banks 4/5/6/7 select the empty socket and return open bus
 					accessType = MemoryAccessType::NoAccess;
 				}
@@ -107,6 +108,12 @@ private:
 				//Properly mirror work ram (by ignoring the extra 1kb ExRAM section)
 				bankNumber &= (realWorkRamSize / 0x2000) - 1;
 				if(_workRamSize == MMC5::ExRamSize) {
+					accessType = MemoryAccessType::NoAccess;
+				}
+			} else if(memoryType == PrgMemoryType::SaveRam) {
+				//Properly mirror work ram (by ignoring the extra 1kb ExRAM section)
+				bankNumber &= (realSaveRamSize / 0x2000) - 1;
+				if(_saveRamSize == MMC5::ExRamSize) {
 					accessType = MemoryAccessType::NoAccess;
 				}
 			}
@@ -258,7 +265,8 @@ private:
 		for(int i = 0; i < 4; i++) {
 			uint8_t nametableId = nametables[(value >> (i * 2)) & 0x03];
 			if(nametableId == NtWorkRamIndex) {
-				SetPpuMemoryMapping(0x2000+i*0x400, 0x2000+i*0x400+0x3FF, _workRam+(_workRamSize-MMC5::ExRamSize), MemoryAccessType::ReadWrite);
+				uint8_t* source = HasBattery() ? (_saveRam + (_saveRamSize - MMC5::ExRamSize)) : (_workRam + (_workRamSize - MMC5::ExRamSize));
+				SetPpuMemoryMapping(0x2000+i*0x400, 0x2000+i*0x400+0x3FF, source, MemoryAccessType::ReadWrite);
 			} else {
 				SetNametable(i, nametableId);
 			}
@@ -281,7 +289,12 @@ private:
 			//"Mode 3 - Read-only"
 			accessType = MemoryAccessType::Read;
 		}
-		SetCpuMemoryMapping(0x5C00, 0x5FFF, PrgMemoryType::WorkRam, _workRamSize - MMC5::ExRamSize, accessType);
+
+		if(HasBattery()) {
+			SetCpuMemoryMapping(0x5C00, 0x5FFF, PrgMemoryType::SaveRam, _saveRamSize - MMC5::ExRamSize, accessType);
+		} else {
+			SetCpuMemoryMapping(0x5C00, 0x5FFF, PrgMemoryType::WorkRam, _workRamSize - MMC5::ExRamSize, accessType);
+		}
 
 		SetNametableMapping(_nametableMapping);
 	}
@@ -316,26 +329,40 @@ protected:
 
 	virtual uint32_t GetSaveRamSize() override
 	{
+		uint32_t size;
 		if(IsNes20()) {
-			return _romInfo.NesHeader.GetSaveRamSize();
+			size = _romInfo.NesHeader.GetSaveRamSize();
 		} else if(_romInfo.IsInDatabase) {
-			return _romInfo.DatabaseInfo.SaveRamSize;
+			size = _romInfo.DatabaseInfo.SaveRamSize;
 		} else {
 			//Emulate as if a single 64k block of work/save ram existed
-			return _romInfo.HasBattery ? 0x10000 : 0;
+			size = _romInfo.HasBattery ? 0x10000 : 0;
 		}
+
+		if(HasBattery()) {
+			//If there's a battery on the board, exram gets saved, too.
+			size += MMC5::ExRamSize;
+		}
+
+		return size;
 	}
 
 	virtual uint32_t GetWorkRamSize() override
 	{
+		uint32_t size;
 		if(IsNes20()) {
-			return _romInfo.NesHeader.GetWorkRamSize() + MMC5::ExRamSize;
+			size = _romInfo.NesHeader.GetWorkRamSize();
 		} else if(_romInfo.IsInDatabase) {
-			return _romInfo.DatabaseInfo.WorkRamSize + MMC5::ExRamSize;
+			size = _romInfo.DatabaseInfo.WorkRamSize;
 		} else {
 			//Emulate as if a single 64k block of work/save ram existed (+ 1kb of ExRAM)
-			return (_romInfo.HasBattery ? 0 : 0x10000) + MMC5::ExRamSize;
+			size = (_romInfo.HasBattery ? 0 : 0x10000);
 		}
+		if(!HasBattery()) {
+			size += MMC5::ExRamSize;
+		}
+		
+		return size;
 	}
 
 	virtual bool AllowRegisterRead() override { return true; }

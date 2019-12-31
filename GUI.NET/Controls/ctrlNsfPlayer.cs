@@ -14,12 +14,14 @@ namespace Mesen.GUI.Controls
 {
 	public partial class ctrlNsfPlayer : BaseControl
 	{
+		private InteropEmu.NotificationListener _notifListener;
 		private List<ComboboxItem> _trackList = new List<ComboboxItem>();
 		private bool _fastForwarding = false;
 		private UInt32 _originalSpeed = 100;
 		private bool _disableShortcutKeys = false;
 		private float _xFactor = 1;
 		private float _yFactor = 1;
+		private bool _isNsf = false;
 
 		public ctrlNsfPlayer()
 		{
@@ -27,12 +29,40 @@ namespace Mesen.GUI.Controls
 			ThemeHelper.ExcludeFromTheme(this);
 		}
 
+		private void notifListener_OnNotification(InteropEmu.NotificationEventArgs e)
+		{
+			switch(e.NotificationType) {
+				case InteropEmu.ConsoleNotificationType.GameLoaded:
+					_isNsf = InteropEmu.IsNsf();
+					break;
+
+				case InteropEmu.ConsoleNotificationType.PpuFrameDone:
+					if(_isNsf) {
+						UInt32 elapsedFrames = InteropEmu.NsfGetFrameCount();
+						if((elapsedFrames % 15) == 0) {
+							this.BeginInvoke((Action)(() => this.UpdateTimeDisplay()));
+						}
+					}
+					break;
+
+			}
+		}
+
+		protected override void OnHandleDestroyed(EventArgs e)
+		{
+			base.OnHandleDestroyed(e);
+			_notifListener?.Dispose();
+		}
+
 		protected override void OnLoad(EventArgs e)
 		{
 			base.OnLoad(e);
 
 			if(!IsDesignMode) {
-				this.tmrUpdate.Enabled = true;
+				_isNsf = InteropEmu.IsNsf();
+				_notifListener = new InteropEmu.NotificationListener(InteropEmu.ConsoleId.Master);
+				_notifListener.OnNotification += notifListener_OnNotification;
+
 				this.btnNext.KeyUp += Child_KeyUp;
 				this.btnPause.KeyUp += Child_KeyUp;
 				this.btnPrevious.KeyUp += Child_KeyUp;
@@ -122,7 +152,7 @@ namespace Mesen.GUI.Controls
 
 		private void UpdateTimeDisplay()
 		{
-			if(!InteropEmu.IsNsf()) {
+			if(!_isNsf) {
 				return;
 			}
 
@@ -182,6 +212,10 @@ namespace Mesen.GUI.Controls
 
 		private void UpdateTrackDisplay()
 		{
+			if(!_isNsf) {
+				return;
+			}
+
 			NsfHeader header = InteropEmu.NsfGetHeader();
 			int currentTrack = InteropEmu.NsfGetCurrentTrack();
 
@@ -212,7 +246,8 @@ namespace Mesen.GUI.Controls
 			if(this.InvokeRequired) {
 				this.BeginInvoke((MethodInvoker)(() => UpdateText()));
 			} else {
-				if(InteropEmu.IsNsf()) {
+				_isNsf = InteropEmu.IsNsf();
+				if(_isNsf) {
 					UpdateTrackDisplay();
 					UpdateTimeDisplay();
 
@@ -438,11 +473,6 @@ namespace Mesen.GUI.Controls
 				this.tlpMain.MouseMove -= value;
 				this.tlpNsfInfo.MouseMove -= value;
 			}
-		}
-
-		private void tmrUpdate_Tick(object sender, EventArgs e)
-		{
-			UpdateTimeDisplay();
 		}
 	}
 

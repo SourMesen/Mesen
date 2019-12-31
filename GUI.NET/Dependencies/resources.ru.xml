@@ -242,6 +242,7 @@
 			<Control ID="chkShowFps">Показывать FPS</Control>
 			<Control ID="chkUseHdPacks">Использовать HDNes HD Packs</Control>
 			<Control ID="chkUseExclusiveFullscreen">Использовать эксклюзивный полноэкранный режим</Control>
+			<Control ID="lblFullscreenResolution">Fullscreen Resolution:</Control>
 			<Control ID="lblRequestedRefreshRate">Запрошенная частота обновления:</Control>
 			<Control ID="tpgOverscan">Вылеты развёртки</Control>
 			<Control ID="tpgOverscanGlobal">Глобальный</Control>
@@ -307,6 +308,8 @@
 			<Control ID="lblTurboSpeed">Перемотка:</Control>
 			<Control ID="lblRewindSpeedHint">%  (0 = Максимальная скорость)</Control>
 			<Control ID="lblRewindSpeed">Скорость перемотки:</Control>
+			<Control ID="lblRunAhead">Run Ahead:</Control>
+			<Control ID="lblRunAheadFrames">frames (reduces input lag, increases CPU usage)</Control>
 
 			<Control ID="tpgAdvanced">Расширенные</Control>
 			<Control ID="lblDeveloperSettings">Рекомендованные настройки для разработчиков (homebrew / ROM hacking)</Control>
@@ -553,6 +556,16 @@
 			<Control ID="lblLink">www.mesen.ca</Control>
 			<Control ID="labelVersion">Версия:</Control>
 			<Control ID="lblBuildDateLabel">Build Date:</Control>
+
+			<Control ID="grpAcknowledgements">Acknowledgements</Control>
+			<Control ID="lblUsedSoftware">This software uses the following libraries:</Control>
+			<Control ID="lblGeneral">General:</Control>
+			<Control ID="lblVideo">Video:</Control>
+			<Control ID="lblAudio">Audio:</Control>
+			<Control ID="lblEmulation">Emulation:</Control>
+			<Control ID="lblCheats">Cheats:</Control>
+			<Control ID="lblSpecialThanks">And thank you to everybody who has contributed in any way! (donations, bug reports, testing, sharing information, etc.)</Control>
+
 			<Control ID="lblDonate">If you want to support Mesen, please consider donating.&#xA;Thank you for your support!</Control>
 			<Control ID="okButton">&amp;OK</Control>
 		</Form>
@@ -799,6 +812,7 @@
 		<Message ID="PlayerNumber">Игрок {0}</Message>
 
 		<Message ID="PressToExitFullscreen">Press {0} to exit fullscreen</Message>
+		<Message ID="DefaultResolution">Default</Message>
 
 		<Message ID="RomsFound">{0} Найденные ROM  файлы</Message>
 
@@ -941,6 +955,18 @@
 		<Message ID="EmulatorShortcutMappings_LoadStateSlotAuto">Load State - Auto Save Slot</Message>
 		<Message ID="EmulatorShortcutMappings_LoadStateFromFile">Load State from File</Message>
 		<Message ID="EmulatorShortcutMappings_LoadLastSession">Load Last Session</Message>
+
+		<Message ID="EmulatorShortcutMappings_SelectSaveSlot1">Select Save Slot 1</Message>
+		<Message ID="EmulatorShortcutMappings_SelectSaveSlot2">Select Save Slot 2</Message>
+		<Message ID="EmulatorShortcutMappings_SelectSaveSlot3">Select Save Slot 3</Message>
+		<Message ID="EmulatorShortcutMappings_SelectSaveSlot4">Select Save Slot 4</Message>
+		<Message ID="EmulatorShortcutMappings_SelectSaveSlot5">Select Save Slot 5</Message>
+		<Message ID="EmulatorShortcutMappings_SelectSaveSlot6">Select Save Slot 6</Message>
+		<Message ID="EmulatorShortcutMappings_SelectSaveSlot7">Select Save Slot 7</Message>
+		<Message ID="EmulatorShortcutMappings_SelectSaveSlot8">Select Save Slot 8</Message>
+		<Message ID="EmulatorShortcutMappings_SelectSaveSlot9">Select Save Slot 9</Message>
+		<Message ID="EmulatorShortcutMappings_SelectSaveSlot10">Select Save Slot 10</Message>
+		
 		<Message ID="EmulatorShortcutMappings_OpenFile">Open File</Message>
 		<Message ID="EmulatorShortcutMappings_OpenDebugger">Open Debugger</Message>
 		<Message ID="EmulatorShortcutMappings_OpenAssembler">Open Assembler</Message>

@@ -68,6 +68,11 @@ namespace Mesen.GUI.Debugger.Controls
 			mnuViewInMemoryType.InitShortcut(this, nameof(DebuggerShortcutsConfig.MemoryViewer_ViewInMemoryType));
 		}
 
+		public new void Focus()
+		{
+			this.ctrlHexBox.Focus();
+		}
+
 		public byte[] GetData()
 		{
 			return this._byteProvider != null ? this._byteProvider.Bytes.ToArray() : new byte[0];

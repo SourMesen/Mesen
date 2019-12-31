@@ -498,7 +498,7 @@ bool PPU::IsRenderingEnabled()
 void PPU::ProcessTmpAddrScrollGlitch(uint16_t normalAddr, uint16_t value, uint16_t mask)
 {
 	_state.TmpVideoRamAddr = normalAddr;
-	if(_cycle == 257 && _settings->CheckFlag(EmulationFlags::EnablePpu2000ScrollGlitch)) {
+	if(_cycle == 257 && _settings->CheckFlag(EmulationFlags::EnablePpu2000ScrollGlitch) && _scanline < 240 && IsRenderingEnabled()) {
 		//Use open bus to set some parts of V (glitch that occurs when writing to $2000/$2005/$2006 on cycle 257)
 		_state.VideoRamAddr = (_state.VideoRamAddr & ~mask) | (value & mask);
 	}
@@ -511,7 +511,7 @@ void PPU::SetControlRegister(uint8_t value)
 	uint8_t nameTable = (_state.Control & 0x03);
 
 	uint16_t normalAddr = (_state.TmpVideoRamAddr & ~0x0C00) | (nameTable << 10);
-	ProcessTmpAddrScrollGlitch(normalAddr, _console->GetMemoryManager()->GetOpenBus() << 10, 0x0C00);
+	ProcessTmpAddrScrollGlitch(normalAddr, _console->GetMemoryManager()->GetOpenBus() << 10, 0x0400);
 	
 	_flags.VerticalWrite = (_state.Control & 0x04) == 0x04;
 	_flags.SpritePatternAddr = ((_state.Control & 0x08) == 0x08) ? 0x1000 : 0x0000;
@@ -798,9 +798,6 @@ void PPU::LoadSpriteTileInfo()
 {
 	uint8_t *spriteAddr = _secondarySpriteRAM + _spriteIndex * 4;
 	LoadSprite(*spriteAddr, *(spriteAddr+1), *(spriteAddr+2), *(spriteAddr+3), false);
-	if(_cycle == 316) {
-		LoadExtraSprites();
-	}
 }
 
 void PPU::ShiftTileRegisters()
@@ -981,6 +978,7 @@ void PPU::ProcessScanline()
 		LoadTileInfo();
 		if(_cycle == 321) {
 			if(IsRenderingEnabled()) {
+				LoadExtraSprites();
 				_oamCopybuffer = _secondarySpriteRAM[0];
 			}
 			if(_scanline == -1) {

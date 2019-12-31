@@ -19,12 +19,14 @@ namespace Mesen.GUI.Debugger
 		private InteropEmu.NotificationListener _notifListener;
 		private EntityBinder _binder = new EntityBinder();
 		private bool _inListViewTab = false;
+		private DebugInfo _config;
 
 		public ctrlScanlineCycleSelect ScanlineCycleSelect => null;
 
 		public frmEventViewer()
 		{
 			InitializeComponent();
+			_config = ConfigManager.Config.DebugInfo;
 		}
 
 		protected override void OnLoad(EventArgs e)
@@ -32,9 +34,9 @@ namespace Mesen.GUI.Debugger
 			base.OnLoad(e);
 
 			if(!this.DesignMode) {
-				_binder.Entity = ConfigManager.Config.DebugInfo;
+				_binder.Entity = _config;
 
-				mnuRefreshOnBreak.Checked = ConfigManager.Config.DebugInfo.EventViewerRefreshOnBreak;
+				mnuRefreshOnBreak.Checked = _config.EventViewerRefreshOnBreak;
 
 				_binder.AddBinding(nameof(DebugInfo.EventViewerShowPpuWrite2000), chkWrite2000);
 				_binder.AddBinding(nameof(DebugInfo.EventViewerShowPpuWrite2001), chkWrite2001);
@@ -81,16 +83,15 @@ namespace Mesen.GUI.Debugger
 
 				DebugWorkspaceManager.GetWorkspace();
 
-				RestoreLocation(ConfigManager.Config.DebugInfo.EventViewerLocation, ConfigManager.Config.DebugInfo.EventViewerSize);
+				RestoreLocation(_config.EventViewerLocation, _config.EventViewerSize);
 
-				this._notifListener = new InteropEmu.NotificationListener(ConfigManager.Config.DebugInfo.DebugConsoleId);
+				this._notifListener = new InteropEmu.NotificationListener(_config.DebugConsoleId);
 				this._notifListener.OnNotification += this._notifListener_OnNotification;
 
-				DebugInfo cfg = ConfigManager.Config.DebugInfo;
 				_refreshManager = new WindowRefreshManager(this);
-				_refreshManager.AutoRefresh = cfg.EventViewerAutoRefresh;
-				_refreshManager.AutoRefreshSpeed = cfg.EventViewerAutoRefreshSpeed;
-				mnuAutoRefresh.Checked = cfg.EventViewerAutoRefresh;
+				_refreshManager.AutoRefresh = _config.EventViewerAutoRefresh;
+				_refreshManager.AutoRefreshSpeed = _config.EventViewerAutoRefreshSpeed;
+				mnuAutoRefresh.Checked = _config.EventViewerAutoRefresh;
 				mnuAutoRefreshLow.Click += (s, evt) => _refreshManager.AutoRefreshSpeed = RefreshSpeed.Low;
 				mnuAutoRefreshNormal.Click += (s, evt) => _refreshManager.AutoRefreshSpeed = RefreshSpeed.Normal;
 				mnuAutoRefreshHigh.Click += (s, evt) => _refreshManager.AutoRefreshSpeed = RefreshSpeed.High;
@@ -123,11 +124,11 @@ namespace Mesen.GUI.Debugger
 			_refreshManager?.Dispose();
 
 			_binder.UpdateObject();
-			DebugInfo cfg = ConfigManager.Config.DebugInfo;
-			cfg.EventViewerAutoRefresh = _refreshManager.AutoRefresh;
-			cfg.EventViewerAutoRefreshSpeed = _refreshManager.AutoRefreshSpeed;
-			cfg.EventViewerLocation = this.WindowState != FormWindowState.Normal ? this.RestoreBounds.Location : this.Location;
-			cfg.EventViewerSize = this.WindowState != FormWindowState.Normal ? this.RestoreBounds.Size : this.Size;
+			_config.EventViewerAutoRefresh = _refreshManager.AutoRefresh;
+			_config.EventViewerAutoRefreshSpeed = _refreshManager.AutoRefreshSpeed;
+			_config.EventViewerLocation = this.WindowState != FormWindowState.Normal ? this.RestoreBounds.Location : this.Location;
+			_config.EventViewerSize = this.WindowState != FormWindowState.Normal ? this.RestoreBounds.Size : this.Size;
+			ConfigManager.Config.DebugInfo = _config;
 			ConfigManager.ApplyChanges();
 		}
 		
@@ -136,7 +137,7 @@ namespace Mesen.GUI.Debugger
 			switch(e.NotificationType) {
 				case InteropEmu.ConsoleNotificationType.CodeBreak:
 				case InteropEmu.ConsoleNotificationType.GamePaused:
-					if(ConfigManager.Config.DebugInfo.EventViewerRefreshOnBreak) {
+					if(_config.EventViewerRefreshOnBreak) {
 						this.RefreshData();
 						this.BeginInvoke((MethodInvoker)(() => this.RefreshViewer()));
 					}
@@ -176,14 +177,12 @@ namespace Mesen.GUI.Debugger
 
 		private void mnuRefreshOnBreak_Click(object sender, EventArgs e)
 		{
-			ConfigManager.Config.DebugInfo.EventViewerRefreshOnBreak = this.mnuRefreshOnBreak.Checked;
-			ConfigManager.ApplyChanges();
+			_config.EventViewerRefreshOnBreak = this.mnuRefreshOnBreak.Checked;
 		}
 		
 		private void chkShowPreviousFrameEvents_Click(object sender, EventArgs e)
 		{
-			ConfigManager.Config.DebugInfo.EventViewerShowPreviousFrameEvents = chkShowPreviousFrameEvents.Checked;
-			ConfigManager.ApplyChanges();
+			_config.EventViewerShowPreviousFrameEvents = chkShowPreviousFrameEvents.Checked;
 			if(InteropEmu.DebugIsExecutionStopped()) {
 				this.RefreshData();
 				this.RefreshViewer();
