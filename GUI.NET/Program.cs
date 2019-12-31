@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml.Serialization;
 using Mesen.GUI.Config;
+using Mesen.GUI.Debugger;
 using Mesen.GUI.Forms;
 
 namespace Mesen.GUI
@@ -156,9 +157,10 @@ namespace Mesen.GUI
 								}));
 							}
 						};
-
-						Application.Run(frmMain);
-					} else {
+				  
+				  Application.Run(frmMain);
+						
+			   } else {
 						if(singleInstance.PassArgumentsToFirstInstance(args)) {
 							Process current = Process.GetCurrentProcess();
 							foreach(Process process in Process.GetProcessesByName(current.ProcessName)) {

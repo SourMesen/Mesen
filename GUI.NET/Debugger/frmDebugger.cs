@@ -14,6 +14,7 @@ using Mesen.GUI.Debugger.Controls;
 using Mesen.GUI.Forms;
 using Mesen.GUI.Controls;
 using System.Collections.ObjectModel;
+using System.Runtime.ExceptionServices;
 
 namespace Mesen.GUI.Debugger
 {
@@ -44,9 +45,14 @@ namespace Mesen.GUI.Debugger
 		{
 			InitializeComponent();
 		}
+		
+		public static int count = 0;
 
-		protected override void OnLoad(EventArgs e)
+	  protected override void OnLoad(EventArgs e)
 		{
+			if(count == 0)
+		 {
+			count++;
 			this.InitShortcuts();
 			this.InitToolbar();
 
@@ -73,19 +79,25 @@ namespace Mesen.GUI.Debugger
 			this.AutoLoadCdlFiles();
 			DebugWorkspaceManager.AutoLoadDbgFiles(true);
 
-			if(!Program.IsMono) {
-				this.mnuSplitView.Checked = ConfigManager.Config.DebugInfo.SplitView;
-			} else {
-				Task.Run(() => {
-					//Wait 2 seconds before we turn split view on (otherwise Mono tends to cause GDI-related crashes)
-					System.Threading.Thread.Sleep(500);
-					this.BeginInvoke((Action)(() => {
-						this.mnuSplitView.Checked = ConfigManager.Config.DebugInfo.SplitView;
-						if(this.mnuSplitView.Checked) {
-							this.UpdateDebugger(false, false);
-						}
-					}));
-				});
+			InteropEmu.GetRomInfo();
+
+			if (!Program.IsMono)
+			{
+			   this.mnuSplitView.Checked = ConfigManager.Config.DebugInfo.SplitView;
+			}
+			else
+			{
+			   Task.Run(() => {
+				  //Wait 2 seconds before we turn split view on (otherwise Mono tends to cause GDI-related crashes)
+				  System.Threading.Thread.Sleep(500);
+				  this.BeginInvoke((Action)(() => {
+					 this.mnuSplitView.Checked = ConfigManager.Config.DebugInfo.SplitView;
+					 if (this.mnuSplitView.Checked)
+					 {
+						this.UpdateDebugger(false, false);
+					 }
+				  }));
+			   });
 			}
 			this.mnuAutoCreateJumpLabels.Checked = ConfigManager.Config.DebugInfo.AutoCreateJumpLabels;
 			this.mnuCopyAddresses.Checked = ConfigManager.Config.DebugInfo.CopyAddresses;
@@ -135,31 +147,40 @@ namespace Mesen.GUI.Debugger
 			ctrlDebuggerCode.ShowMemoryValues = mnuShowMemoryValues.Checked;
 			ctrlDebuggerCodeSplit.ShowMemoryValues = mnuShowMemoryValues.Checked;
 
-			if(ConfigManager.Config.DebugInfo.WindowWidth > -1) {
-				RestoreLocation(ConfigManager.Config.DebugInfo.WindowLocation, new Size(ConfigManager.Config.DebugInfo.WindowWidth, ConfigManager.Config.DebugInfo.WindowHeight));
+			if (ConfigManager.Config.DebugInfo.WindowWidth > -1)
+			{
+			   RestoreLocation(ConfigManager.Config.DebugInfo.WindowLocation, new Size(ConfigManager.Config.DebugInfo.WindowWidth, ConfigManager.Config.DebugInfo.WindowHeight));
 			}
 
 			tsToolbar.Visible = mnuShowToolbar.Checked;
 			ctrlCpuMemoryMapping.Visible = mnuShowCpuMemoryMapping.Checked;
 			ctrlPpuMemoryMapping.Visible = mnuShowPpuMemoryMapping.Checked;
 
-			if(ConfigManager.Config.DebugInfo.LeftPanelWidth > 0) {
-				this.ctrlSplitContainerTop.SplitterDistance = ConfigManager.Config.DebugInfo.LeftPanelWidth;
+			if (ConfigManager.Config.DebugInfo.LeftPanelWidth > 0)
+			{
+			   this.ctrlSplitContainerTop.SplitterDistance = ConfigManager.Config.DebugInfo.LeftPanelWidth;
 			}
-			if(ConfigManager.Config.DebugInfo.TopPanelHeight > 0) {
-				this.splitContainer.SplitterDistance = ConfigManager.Config.DebugInfo.TopPanelHeight;
-			}
-
-			if(!ConfigManager.Config.DebugInfo.ShowRightPanel) {
-				ctrlSplitContainerTop.CollapsePanel();
-			} else {
-				mnuShowFunctionLabelLists.Checked = true;
+			if (ConfigManager.Config.DebugInfo.TopPanelHeight > 0)
+			{
+			   this.splitContainer.SplitterDistance = ConfigManager.Config.DebugInfo.TopPanelHeight;
 			}
 
-			if(!ConfigManager.Config.DebugInfo.ShowBottomPanel) {
-				splitContainer.CollapsePanel();
-			} else {
-				mnuShowBottomPanel.Checked = true;
+			if (!ConfigManager.Config.DebugInfo.ShowRightPanel)
+			{
+			   ctrlSplitContainerTop.CollapsePanel();
+			}
+			else
+			{
+			   mnuShowFunctionLabelLists.Checked = true;
+			}
+
+			if (!ConfigManager.Config.DebugInfo.ShowBottomPanel)
+			{
+			   splitContainer.CollapsePanel();
+			}
+			else
+			{
+			   mnuShowBottomPanel.Checked = true;
 			}
 
 			this.mnuUseVerticalLayout.Checked = ConfigManager.Config.DebugInfo.VerticalLayout;
@@ -181,18 +202,23 @@ namespace Mesen.GUI.Debugger
 
 			//Pause a few frames later to give the debugger a chance to disassemble some code
 			_firstBreak = true;
-			if(!debuggerAlreadyRunning) {
-				InteropEmu.SetFlag(EmulationFlags.ForceMaxSpeed, true);
-				InteropEmu.DebugStep((uint)(_wasPaused ? 1 : 5000));
-			} else {
-				//Break once to show code and then resume execution
-				InteropEmu.DebugStep(1);
+			if (!debuggerAlreadyRunning)
+			{
+			   InteropEmu.SetFlag(EmulationFlags.ForceMaxSpeed, true);
+			   InteropEmu.DebugStep((uint)(_wasPaused ? 1 : 5000));
+			}
+			else
+			{
+			   //Break once to show code and then resume execution
+			   InteropEmu.DebugStep(1);
 			}
 			InteropEmu.Resume();
 
 			UpdateDebuggerFlags();
 			UpdateCdlRatios();
 			UpdateFileOptions();
+		 }
+			
 		}
 
 		protected override void OnShown(EventArgs e)

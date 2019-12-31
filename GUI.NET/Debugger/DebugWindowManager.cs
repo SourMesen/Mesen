@@ -19,6 +19,7 @@ namespace Mesen.GUI.Debugger
 
 		public static bool ScriptWindowOpened { get { return _openedWindows.Any(wnd => wnd is frmScript); } }
 
+		
 		public static Form OpenDebugWindow(DebugWindow window)
 		{
 			Form existingWindow = GetExistingSingleInstanceWindow(window);
@@ -45,6 +46,7 @@ namespace Mesen.GUI.Debugger
 					case DebugWindow.Profiler: frm = new frmProfiler(); frm.Icon = Properties.Resources.Speed; break;
 					case DebugWindow.WatchWindow: frm = new frmWatchWindow(); frm.Icon = Properties.Resources.Find; break;
 				}
+				
 				_openedWindows.Add(frm);
 				frm.FormClosed += Debugger_FormClosed;
 				frm.Show();
@@ -184,5 +186,6 @@ namespace Mesen.GUI.Debugger
 		TextHooker,
 		Profiler,
 		WatchWindow,
-	}
+	   DebuggerOnStart,
+   }
 }

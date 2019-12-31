@@ -20,6 +20,8 @@ namespace Mesen.GUI.Config
 		private static Configuration _dirtyConfig;
 		public static bool DoNotSaveSettings { get; set; }
 
+		public static bool OpenDebugger { get; set; }
+		
 		public static string DefaultPortableFolder { get { return Path.GetDirectoryName(Assembly.GetEntryAssembly().Location); } }
 		public static string DefaultDocumentsFolder
 		{
@@ -255,7 +257,7 @@ namespace Mesen.GUI.Config
 			}
 		}
 
-		private static DateTime _lastSaveTime = DateTime.MinValue;
+	  private static DateTime _lastSaveTime = DateTime.MinValue;
 		public static void ApplyChanges()
 		{
 			_config.NeedToSave = false;

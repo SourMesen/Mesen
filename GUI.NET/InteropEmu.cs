@@ -9,6 +9,8 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Mesen.GUI.Config;
 using Mesen.GUI.Forms;
+using Mesen.GUI.Debugger;
+using System.Runtime.ExceptionServices;
 
 namespace Mesen.GUI
 {
@@ -1777,13 +1779,14 @@ namespace Mesen.GUI
 		Fds = 3,
 		Nsf = 4,
 	}
-
-	public class RomInfo
+   
+   public class RomInfo
 	{
 		public ResourcePath RomFile;
 		public UInt32 Crc32;
 		public UInt32 PrgCrc32;
-		public RomFormat Format;
+	   private RomFormat _format;
+	  public RomFormat Format;
 		public bool IsChrRam;
 		public UInt16 MapperId;
 		public UInt32 FilePrgOffset;
