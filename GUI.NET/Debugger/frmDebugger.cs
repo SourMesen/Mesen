@@ -50,9 +50,6 @@ namespace Mesen.GUI.Debugger
 
 	  protected override void OnLoad(EventArgs e)
 		{
-			if(count == 0)
-		 {
-			count++;
 			this.InitShortcuts();
 			this.InitToolbar();
 
@@ -217,7 +214,6 @@ namespace Mesen.GUI.Debugger
 			UpdateDebuggerFlags();
 			UpdateCdlRatios();
 			UpdateFileOptions();
-		 }
 			
 		}
 
