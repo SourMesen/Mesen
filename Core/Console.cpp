@@ -259,6 +259,8 @@ bool Console::Initialize(VirtualFile &romFile, VirtualFile &patchFile, bool forP
 {
 	if(romFile.IsValid()) {
 		Pause();
+		_soundMixer->StopAudio(true);
+
 		if(!_romFilepath.empty() && _mapper) {
 			//Ensure we save any battery file before loading a new game
 			SaveBatteries();
@@ -273,16 +275,12 @@ bool Console::Initialize(VirtualFile &romFile, VirtualFile &patchFile, bool forP
 				//Patch failed
 			}
 		}
-		vector<uint8_t> fileData;
-		romFile.ReadFile(fileData);
 
 		_batteryManager->Initialize(FolderUtilities::GetFilename(romFile.GetFileName(), false));
 
 		RomData romData;
-		shared_ptr<BaseMapper> mapper = MapperFactory::InitializeFromFile(shared_from_this(), romFile.GetFileName(), fileData, romData);
+		shared_ptr<BaseMapper> mapper = MapperFactory::InitializeFromFile(shared_from_this(), romFile, romData);
 		if(mapper) {
-			_soundMixer->StopAudio(true);
-
 			bool isDifferentGame = _romFilepath != (string)romFile || _patchFilename != (string)patchFile;
 			if(_mapper) {
 				if(isDifferentGame) {
@@ -404,6 +402,7 @@ bool Console::Initialize(VirtualFile &romFile, VirtualFile &patchFile, bool forP
 
 			//Reset components before creating rewindmanager, otherwise the first save state it takes will be invalid
 			if(!forPowerCycle) {
+				KeyManager::UpdateDevices();
 				_rewindManager.reset(new RewindManager(shared_from_this()));
 				_notificationManager->RegisterNotificationListener(_rewindManager);
 			} else {
@@ -622,8 +621,6 @@ void Console::ResetComponents(bool softReset)
 	_controlManager->Reset(softReset);
 
 	_resetRunTimers = true;
-
-	KeyManager::UpdateDevices();
 
 	//This notification MUST be sent before the UpdateInputState() below to allow MovieRecorder to grab the first frame's worth of inputs
 	_notificationManager->SendNotification(softReset ? ConsoleNotificationType::GameReset : ConsoleNotificationType::GameLoaded);

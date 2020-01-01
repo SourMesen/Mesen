@@ -8,6 +8,7 @@
 #include "WaveRecorder.h"
 #include "OggMixer.h"
 #include "Console.h"
+#include "BaseMapper.h"
 
 SoundMixer::SoundMixer(shared_ptr<Console> console)
 {
@@ -115,6 +116,8 @@ void SoundMixer::PlayAudioBuffer(uint32_t time)
 			_outputBuffer[i + 1] = _outputBuffer[i];
 		}
 	}
+
+	_console->GetMapper()->ApplySamples(_outputBuffer, sampleCount, _settings->GetMasterVolume());
 
 	if(_oggMixer) {
 		_oggMixer->ApplySamples(_outputBuffer, sampleCount, _settings->GetMasterVolume());

@@ -91,6 +91,7 @@ namespace Mesen.GUI.Controls
 			for(int j = 0; j < _elementsPerRow; j++) {
 				for(int i = 0; i < _elementsPerRow; i++) {
 					ctrlRecentGame ctrl = new ctrlRecentGame();
+					ctrl.OnRecentGameLoaded += RecentGameLoaded;
 					ctrl.Dock = DockStyle.Fill;
 					ctrl.Margin = new Padding(2);
 					tlpGrid.Controls.Add(ctrl, i, j);
@@ -239,6 +240,11 @@ namespace Mesen.GUI.Controls
 		{
 			InteropEmu.LoadRecentGame(_recentGames[_currentIndex].FileName, ConfigManager.Config.PreferenceInfo.GameSelectionScreenResetGame);
 			OnRecentGameLoaded?.Invoke(_recentGames[_currentIndex]);
+		}
+
+		private void RecentGameLoaded(RecentGameInfo gameInfo)
+		{
+			OnRecentGameLoaded?.Invoke(gameInfo);
 		}
 
 		private bool _waitForRelease = false;

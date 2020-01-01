@@ -1493,6 +1493,9 @@
     <ClInclude Include="McAcc.h">
       <Filter>Nes\Mappers\MMC</Filter>
     </ClInclude>
+    <ClInclude Include="StudyBoxLoader.h">
+      <Filter>Nes\RomLoader</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -1794,6 +1797,9 @@
     </ClCompile>
     <ClCompile Include="EventManager.cpp">
       <Filter>Debugger</Filter>
+    </ClCompile>
+    <ClCompile Include="StudyBoxLoader.cpp">
+      <Filter>Misc</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

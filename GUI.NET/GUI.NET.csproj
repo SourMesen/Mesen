@@ -238,6 +238,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BiosHelper.cs" />
     <Compile Include="CommandLineHelper.cs" />
     <Compile Include="Config\DebuggerShortcutsConfig.cs" />
     <Compile Include="Config\GameSpecificInfo.cs" />

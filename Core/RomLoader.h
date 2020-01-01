@@ -18,8 +18,7 @@ private:
 public:
 	using BaseLoader::BaseLoader;
 	
-	bool LoadFile(VirtualFile romFile);
-	bool LoadFile(string filename, vector<uint8_t> &fileData);
+	bool LoadFile(VirtualFile &romFile);
 
 	RomData GetRomData();
 	static string FindMatchingRom(vector<string> romFiles, string romFilename, HashInfo hashInfo, bool useFastSearch);

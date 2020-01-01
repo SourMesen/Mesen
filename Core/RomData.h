@@ -92,6 +92,19 @@ struct RomInfo
 	GameInfo DatabaseInfo;
 };
 
+struct PageInfo
+{
+	uint32_t AudioOffset;
+	vector<uint8_t> Data;
+};
+
+struct StudyBoxData
+{
+	string FileName;
+	vector<uint8_t> AudioFile;
+	vector<PageInfo> Pages;
+};
+
 struct RomData
 {
 	RomInfo Info;
@@ -106,10 +119,10 @@ struct RomData
 	vector<uint8_t> TrainerData;
 	vector<vector<uint8_t>> FdsDiskData;
 	vector<vector<uint8_t>> FdsDiskHeaders;
+	StudyBoxData StudyBox;
 
 	vector<uint8_t> RawData;
 
 	bool Error = false;
 	bool BiosMissing = false;
-
 };

@@ -12,29 +12,27 @@
 #include "NsfLoader.h"
 #include "NsfeLoader.h"
 #include "UnifLoader.h"
+#include "StudyBoxLoader.h"
 
-bool RomLoader::LoadFile(VirtualFile romFile)
+bool RomLoader::LoadFile(VirtualFile &romFile)
 {
-	vector<uint8_t> fileData;
-	if(romFile.IsValid()) {
-		romFile.ReadFile(fileData);
-		return LoadFile(romFile.GetFileName(), fileData);
-	} else {
+	if(!romFile.IsValid()) {
 		return false;
 	}
-}
 
-bool RomLoader::LoadFile(string filename, vector<uint8_t> &fileData)
-{
+	vector<uint8_t>& fileData = _romData.RawData;
+	romFile.ReadFile(fileData);
 	if(fileData.size() < 15) {
 		return false;
 	}
 
-	_filename = filename;
+	_filename = romFile.GetFileName();
+	string romName = FolderUtilities::GetFilename(_filename, true);
 
-	string romName = FolderUtilities::GetFilename(filename, true);
-
+	bool skipSha1Hash = false;
 	uint32_t crc = CRC32::GetCRC(fileData.data(), fileData.size());
+	_romData.Info.Hash.Crc32 = crc;
+
 	Log("");
 	Log("Loading rom: " + romName);
 	stringstream crcHex;
@@ -43,25 +41,29 @@ bool RomLoader::LoadFile(string filename, vector<uint8_t> &fileData)
 
 	if(memcmp(fileData.data(), "NES\x1a", 4) == 0) {
 		iNesLoader loader(_checkOnly);
-		_romData = loader.LoadRom(fileData, nullptr);
+		loader.LoadRom(_romData, fileData, nullptr);
 	} else if(memcmp(fileData.data(), "FDS\x1a", 4) == 0 || memcmp(fileData.data(), "\x1*NINTENDO-HVC*", 15) == 0) {
 		FdsLoader loader(_checkOnly);
-		_romData = loader.LoadRom(fileData, _filename);
+		loader.LoadRom(_romData, fileData);
 	} else if(memcmp(fileData.data(), "NESM\x1a", 5) == 0) {
 		NsfLoader loader(_checkOnly);
-		_romData = loader.LoadRom(fileData);
+		loader.LoadRom(_romData, fileData);
 	} else if(memcmp(fileData.data(), "NSFE", 4) == 0) {
 		NsfeLoader loader(_checkOnly);
-		_romData = loader.LoadRom(fileData);
+		loader.LoadRom(_romData, fileData);
 	} else if(memcmp(fileData.data(), "UNIF", 4) == 0) {
 		UnifLoader loader(_checkOnly);
-		_romData = loader.LoadRom(fileData);
+		loader.LoadRom(_romData, fileData);
+	} else if(memcmp(fileData.data(), "STBX", 4) == 0) {
+		StudyBoxLoader loader(_checkOnly);
+		loader.LoadRom(_romData, fileData, romFile.GetFilePath());
+		skipSha1Hash = true;
 	} else {
 		NESHeader header = {};
 		if(GameDatabase::GetiNesHeader(crc, header)) {
 			Log("[DB] Headerless ROM file found - using game database data.");
 			iNesLoader loader;
-			_romData = loader.LoadRom(fileData, &header);
+			loader.LoadRom(_romData, fileData, &header);
 			_romData.Info.IsHeaderlessRom = true;
 		} else {
 			Log("Invalid rom file.");
@@ -69,9 +71,10 @@ bool RomLoader::LoadFile(string filename, vector<uint8_t> &fileData)
 		}
 	}
 
-	_romData.Info.Hash.Crc32 = crc;
-	_romData.Info.Hash.Sha1 = SHA1::GetHash(fileData);
-	_romData.RawData = fileData;
+	if(!skipSha1Hash) {
+		_romData.Info.Hash.Sha1 = SHA1::GetHash(fileData);
+	}
+
 	_romData.Info.RomName = romName;
 	_romData.Info.Filename = _filename;
 
@@ -105,9 +108,10 @@ string RomLoader::FindMatchingRomInFile(string filePath, HashInfo hashInfo, int 
 		for(string file : reader->GetFileList(VirtualFile::RomExtensions)) {
 			RomLoader loader(true);
 			vector<uint8_t> fileData;
-			if(loader.LoadFile(filePath)) {
+			VirtualFile innerFile(filePath, file);
+			if(loader.LoadFile(innerFile)) {
 				if(hashInfo.Crc32 == loader._romData.Info.Hash.Crc32 || hashInfo.Sha1.compare(loader._romData.Info.Hash.Sha1) == 0) {
-					return VirtualFile(filePath, file);
+					return innerFile;
 				}
 				
 				iterationCount++;
@@ -118,8 +122,8 @@ string RomLoader::FindMatchingRomInFile(string filePath, HashInfo hashInfo, int 
 		}
 	} else {
 		RomLoader loader(true);
-		vector<uint8_t> fileData;
-		if(loader.LoadFile(filePath)) {
+		VirtualFile file = filePath;
+		if(loader.LoadFile(file)) {
 			if(hashInfo.Crc32 == loader._romData.Info.Hash.Crc32 || hashInfo.Sha1.compare(loader._romData.Info.Hash.Sha1) == 0) {
 				return filePath;
 			}

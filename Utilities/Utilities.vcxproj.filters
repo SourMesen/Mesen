@@ -164,6 +164,9 @@
     <ClInclude Include="Base64.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="WavReader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -281,6 +284,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="stb_vorbis.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="WavReader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

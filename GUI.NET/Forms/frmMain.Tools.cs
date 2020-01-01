@@ -132,6 +132,7 @@ namespace Mesen.GUI.Forms
 					gameRoms.AddRange(Directory.EnumerateFiles(folder, "*.unf", searchOptions));
 					gameRoms.AddRange(Directory.EnumerateFiles(folder, "*.unif", searchOptions));
 					gameRoms.AddRange(Directory.EnumerateFiles(folder, "*.fds", searchOptions));
+					gameRoms.AddRange(Directory.EnumerateFiles(folder, "*.studybox", searchOptions));
 
 					if(searchOptions == SearchOption.AllDirectories) {
 						//When loading from a user-specified folder, assume zip/7z files will likely contain a ROM

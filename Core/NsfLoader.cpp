@@ -116,9 +116,8 @@ void NsfLoader::InitHeader(NsfHeader & header)
 	}
 }
 
-RomData NsfLoader::LoadRom(vector<uint8_t>& romFile)
+void NsfLoader::LoadRom(RomData& romData, vector<uint8_t>& romFile)
 {
-	RomData romData;
 	NsfHeader &header = romData.Info.NsfInfo;
 
 	InitHeader(header);
@@ -167,6 +166,4 @@ RomData NsfLoader::LoadRom(vector<uint8_t>& romFile)
 	romData.Info.FilePrgOffset = 0x80;
 
 	InitializeFromHeader(romData);
-
-	return romData;
 }

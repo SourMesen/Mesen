@@ -107,6 +107,7 @@ SOURCES_CXX := $(LIBRETRO_DIR)/libretro.cpp \
                $(CORE_DIR)/StereoCombFilter.cpp \
                $(CORE_DIR)/StereoDelayFilter.cpp \
                $(CORE_DIR)/StereoPanningFilter.cpp \
+               $(CORE_DIR)/StudyBoxLoader.cpp \
                $(CORE_DIR)/TraceLogger.cpp \
                $(CORE_DIR)/UnifLoader.cpp \
                $(CORE_DIR)/VideoDecoder.cpp \
@@ -139,6 +140,7 @@ SOURCES_CXX := $(LIBRETRO_DIR)/libretro.cpp \
                $(UTIL_DIR)/Timer.cpp \
                $(UTIL_DIR)/UpsPatcher.cpp \
                $(UTIL_DIR)/UTF8Util.cpp \
+               $(UTIL_DIR)/WavReader.cpp \
                $(UTIL_DIR)/ZipReader.cpp \
                $(UTIL_DIR)/ZipWriter.cpp \
                $(UTIL_DIR)/ZmbvCodec.cpp \
