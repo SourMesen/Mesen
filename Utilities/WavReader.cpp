@@ -71,7 +71,11 @@ bool WavReader::IsPlaybackOver()
 
 void WavReader::SetSampleRate(uint32_t sampleRate)
 {
-	_sampleRate = sampleRate;
+	if(_sampleRate != sampleRate) {
+		_sampleRate = sampleRate;
+		blip_clear(_blip);
+		blip_set_rates(_blip, _fileSampleRate, _sampleRate);
+	}
 }
 
 void WavReader::LoadSamples(uint32_t samplesToLoad)
@@ -106,7 +110,11 @@ void WavReader::ApplySamples(int16_t *buffer, size_t sampleCount, double volume)
 	//Volume is set to 10 when volume is set to 100% in the UI
 	volume /= 10.0;
 
-	LoadSamples((uint32_t)sampleCount * _fileSampleRate / _sampleRate + 1 - blip_samples_avail(_blip));
+	int32_t samplesToLoad = (int32_t)sampleCount * _fileSampleRate / _sampleRate + 1 - blip_samples_avail(_blip);
+
+	if(samplesToLoad > 0) {
+		LoadSamples(samplesToLoad);
+	}
 
 	int samplesRead = blip_read_samples(_blip, _outputBuffer, (int)sampleCount, 0);
 	for(size_t i = 0, len = samplesRead; i < len; i++) {

@@ -22,7 +22,6 @@ private:
 	uint32_t _sampleRate;
 
 	void LoadSamples(uint32_t samplesToLoad);
-	int16_t ReadSample();
 
 	WavReader();
 

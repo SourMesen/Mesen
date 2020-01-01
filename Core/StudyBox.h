@@ -320,6 +320,7 @@ public:
 	{
 		if(!_motorDisabled && _wavReader) {
 			_wavReader->ApplySamples(buffer, sampleCount, _audioEnabled ? volume : 0);
+			_wavReader->SetSampleRate(_console->GetSettings()->GetSampleRate());
 		}
 	}
 };
