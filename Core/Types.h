@@ -360,6 +360,7 @@ enum class RomFormat
 	Unif = 2,
 	Fds = 3,
 	Nsf = 4,
+	StudyBox = 5
 };
 
 enum class VsSystemType

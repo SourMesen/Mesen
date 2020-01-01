@@ -98,7 +98,7 @@ protected:
 	virtual bool AllowRegisterRead() { return false; }
 
 	virtual uint32_t GetDipSwitchCount() { return 0; }
-
+	
 	virtual bool HasBusConflicts() { return false; }
 
 	uint8_t InternalReadRam(uint16_t addr);
@@ -175,6 +175,8 @@ public:
 	shared_ptr<BaseControlDevice> GetMapperControlDevice();
 	RomInfo GetRomInfo();
 	uint32_t GetMapperDipSwitchCount();
+
+	virtual void ApplySamples(int16_t* buffer, size_t sampleCount, double volume) {}
 
 	uint8_t ReadRAM(uint16_t addr) override;
 	uint8_t PeekRAM(uint16_t addr) override;

@@ -591,6 +591,7 @@
     <ClInclude Include="ServerInformationMessage.h" />
     <ClInclude Include="FamicomBox.h" />
     <ClInclude Include="StereoCombFilter.h" />
+    <ClInclude Include="StudyBoxLoader.h" />
     <ClInclude Include="SystemActionManager.h" />
     <ClInclude Include="DatachBarcodeReader.h" />
     <ClInclude Include="DebugHud.h" />
@@ -1085,6 +1086,7 @@
     <ClCompile Include="StereoCombFilter.cpp" />
     <ClCompile Include="StereoDelayFilter.cpp" />
     <ClCompile Include="StereoPanningFilter.cpp" />
+    <ClCompile Include="StudyBoxLoader.cpp" />
     <ClCompile Include="TraceLogger.cpp" />
     <ClCompile Include="UnifLoader.cpp" />
     <ClCompile Include="VideoHud.cpp" />

@@ -15,7 +15,7 @@ enum class ConsoleNotificationType
 	PpuFrameDone = 9,
 	MovieEnded = 10,
 	ResolutionChanged = 11,
-	FdsBiosNotFound = 12,
+	BiosNotFound = 12,
 	ConfigChanged = 13,
 	DisconnectedFromServer = 14,
 	PpuViewerDisplayFrame = 15,

@@ -799,8 +799,8 @@
 		<Message ID="FilterWave">波形文件 (*.wav)|*.wav|所有文件 (*.*)|*.*</Message>
 		<Message ID="FilterAvi">AVI 视频 (*.avi)|*.avi|所有文件 (*.*)|*.*</Message>
 		<Message ID="FilterPalette">调色板 (*.pal)|*.pal|所有文件 (*.*)|*.*</Message>
-		<Message ID="FilterRom">所有支持的格式 (*.nes, *.zip, *.7z, *.nsf, *.nsfe, *.fds, *.unf, *.unif)|*.NES;*.ZIP;*.7z;*.FDS;*.NSF;*.NSFE;*.UNF;*.UNIF|NES ROM (*.nes, *.unf, *.unif)|*.NES;*.UNF;*.UNIF|Famicom 磁盘 (*.fds)|*.FDS|NSF 音乐 (*.nsf, *.nsfe)|*.nsf;*.nsfe|ZIP 档案 (*.zip)|*.ZIP|7-Zip 档案 (*.7z)|*.7z|所有文件 (*.*)|*.*</Message>
-		<Message ID="FilterRomIps">所有支持的格式 (*.nes, *.zip, *.7z, *.fds, *.nsf, *.nsfe, *.unf, *.unif, *.ips, *.bps, *.ups)|*.NES;*.ZIP;*.7z;*.IPS;*.BPS;*.UPS;*.FDS;*.NSF;*.NSFE;*.UNF;*.UNIF|NES ROM (*.nes, *.unf, *.unif)|*.NES;*.UNF;*.UNIF|Famicom 磁盘 (*.fds)|*.FDS|NSF 音乐 (*.nsf, *.nsfe)|*.nsf;*.nsfe|ZIP 档案 (*.zip)|*.ZIP|7-Zip 档案 (*.7z)|*.7z|IPS/UPS/BPS 补丁 (*.ips, *.bps, *.ups)|*.IPS;*.BPS;*.UPS|所有文件 (*.*)|*.*</Message>
+		<Message ID="FilterRom">所有支持的格式 (*.nes, *.zip, *.7z, *.nsf, *.nsfe, *.fds, *.unf, *.unif, *.studybox)|*.NES;*.ZIP;*.7z;*.FDS;*.NSF;*.NSFE;*.UNF;*.UNIF;*.STUDYBOX|NES ROM (*.nes, *.unf, *.unif)|*.NES;*.UNF;*.UNIF|Famicom 磁盘 (*.fds)|*.FDS|NSF 音乐 (*.nsf, *.nsfe)|*.nsf;*.nsfe|ZIP 档案 (*.zip)|*.ZIP|7-Zip 档案 (*.7z)|*.7z|所有文件 (*.*)|*.*</Message>
+		<Message ID="FilterRomIps">所有支持的格式 (*.nes, *.zip, *.7z, *.fds, *.nsf, *.nsfe, *.unf, *.unif, *.studybox, *.ips, *.bps, *.ups)|*.NES;*.ZIP;*.7z;*.IPS;*.BPS;*.UPS;*.FDS;*.NSF;*.NSFE;*.UNF;*.UNIF;*.STUDYBOX|NES ROM (*.nes, *.unf, *.unif)|*.NES;*.UNF;*.UNIF|Famicom 磁盘 (*.fds)|*.FDS|NSF 音乐 (*.nsf, *.nsfe)|*.nsf;*.nsfe|ZIP 档案 (*.zip)|*.ZIP|7-Zip 档案 (*.7z)|*.7z|IPS/UPS/BPS 补丁 (*.ips, *.bps, *.ups)|*.IPS;*.BPS;*.UPS|所有文件 (*.*)|*.*</Message>
 		<Message ID="FilterTest">测试文件 (*.mtp)|*.mtp|所有文件 (*.*)|*.*</Message>
 		<Message ID="FilterCheat">所有支持的格式 (*.cht, *.xml)|*.cht;*.xml</Message>
 		<Message ID="FilterSavestate">Mesen 进度 (*.mst)|*.mst|所有文件 (*.*)|*.*</Message>
@@ -858,10 +858,10 @@
 		<Message ID="EmptyState">&lt;空&gt;</Message>
 		<Message ID="ErrorWhileCheckingUpdates">检查更新时出错，请确认网络通畅然后再试.&#xA;&#xA;详情:&#xA;{0}</Message>
 		<Message ID="AutoUpdateDisabledMessage">此编译版未启用自动更新，要想获得最新版 Mesen，请下载最新版源码来编译.</Message>
-		<Message ID="FdsBiosNotFound">缺少 FDS 游戏所需 BIOS.&#xA;&#xA;是否要立即手动指定？</Message>
+		<Message ID="BiosNotFound">A bios file is required to run this game.&#xA;&#xA;  Filename: {0}&#xA;  Size: {1} bytes&#xA;&#xA;Select bios file now?</Message>
+		<Message ID="BiosMismatch">The selected file does not match the bios required for this game.&#xA;&#xA;Expected SHA-256:&#xA;{0}&#xA;&#xA;Selected file's SHA-256:&#xA;{1}&#xA;&#xA;Would you like to use this file anyway?</Message>
 		<Message ID="FdsDiskSide">磁盘 {0} 的 {1} 面</Message>
 		<Message ID="FileNotFound">文件 {0} 未找到</Message>
-		<Message ID="InvalidFdsBios">所选 BIOS 无效.</Message>
 		<Message ID="HDNesTooltip">载入 HDNes 格式 HD 包.&#xA;&#xA;HD 包应放置在 "HdPacks" 文件夹下对应 ROM 名的子文件夹中.&#xA;例: MyRom.nes 对应 "HdPacks\MyRom\hires.txt".</Message>
 		<Message ID="HdPackBuilderScaleHelp">给 HD 包所用 PNG 文件选择缩放和视频过滤参数&#xA;使用【预缩放】可以创建出缩放比例更大的块，同时像素不变形.</Message>
 		<Message ID="HdPackBuilderBankSizeHelp">仅用于 CHR RAM 游戏，这类游戏的岸数据用代码动态创建，不固定.&#xA;此选项会影响 HD 包构造器给 PNG 组织块的行为，通常来说，岸越小，PNG 文件就越少.&#xA;但有些游戏可能需要把数值调高才能获得更好的效果.</Message>

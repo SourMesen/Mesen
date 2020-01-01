@@ -787,8 +787,8 @@
 		<Message ID="FilterWave">Fichiers wave (*.wav)|*.wav|Tous les fichiers (*.*)|*.*</Message>
 		<Message ID="FilterAvi">Fichiers avi (*.avi)|*.avi|Tous les fichiers (*.*)|*.*</Message>
 		<Message ID="FilterPalette">Fichier de palette (*.pal)|*.pal|Tous les fichiers (*.*)|*.*</Message>
-		<Message ID="FilterRom">Tous les formats supportés (*.nes, *.zip, *.7z, *.fds, *.nsf, *.nsfe, *.unf, *.unif)|*.NES;*.ZIP;*.7z;*.FDS;*.NSF;*.NSFE;*.UNF;*.UNIF|Roms de NES (*.nes, *.unf, *.unif)|*.NES;*.UNF;*.UNIF|Roms du Famicom Disk System (*.fds)|*.FDS|Fichiers NSF (*.nsf, *.nsfe)|*.NSF;*.NSFE|Fichiers ZIP (*.zip)|*.ZIP|Fichiers 7-Zip (*.7z)|*.7z|Tous les fichiers (*.*)|*.*</Message>
-		<Message ID="FilterRomIps">Tous les formats supportés (*.nes, *.zip, *.7z, *.fds, *.nsf, *.nsfe, *.unf, *.unif, *.ips, *.bps, *.ups)|*.NES;*.ZIP;*.7z;*.IPS;*.BPS;*.UPS;*.FDS;*.NSF;*.NSFE;*.UNF;*.UNIF|Roms de NES (*.nes, *.unf, *.unif)|*.NES;*.UNF;*.UNIF|Roms du Famicom Disk System (*.fds)|*.FDS|Fichiers NSF (*.nsf, *.nsfe)|*.NSF;*.NSFE|Fichiers ZIP (*.zip)|*.ZIP|Fichiers 7-Zip (*.7z)|*.7z|Fichiers IPS/UPS/BPS (*.ips, *.bps, *.ups)|*.IPS;*.BPS;*.UPS|Tous les fichiers (*.*)|*.*</Message>
+		<Message ID="FilterRom">Tous les formats supportés (*.nes, *.zip, *.7z, *.fds, *.nsf, *.nsfe, *.unf, *.unif, *.studybox)|*.NES;*.ZIP;*.7z;*.FDS;*.NSF;*.NSFE;*.UNF;*.UNIF;*.STUDYBOX|Roms de NES (*.nes, *.unf, *.unif)|*.NES;*.UNF;*.UNIF|Roms du Famicom Disk System (*.fds)|*.FDS|Fichiers NSF (*.nsf, *.nsfe)|*.NSF;*.NSFE|Fichiers ZIP (*.zip)|*.ZIP|Fichiers 7-Zip (*.7z)|*.7z|Tous les fichiers (*.*)|*.*</Message>
+		<Message ID="FilterRomIps">Tous les formats supportés (*.nes, *.zip, *.7z, *.fds, *.nsf, *.nsfe, *.unf, *.unif, *.studybox, *.ips, *.bps, *.ups)|*.NES;*.ZIP;*.7z;*.IPS;*.BPS;*.UPS;*.FDS;*.NSF;*.NSFE;*.UNF;*.UNIF;*.STUDYBOX|Roms de NES (*.nes, *.unf, *.unif)|*.NES;*.UNF;*.UNIF|Roms du Famicom Disk System (*.fds)|*.FDS|Fichiers NSF (*.nsf, *.nsfe)|*.NSF;*.NSFE|Fichiers ZIP (*.zip)|*.ZIP|Fichiers 7-Zip (*.7z)|*.7z|Fichiers IPS/UPS/BPS (*.ips, *.bps, *.ups)|*.IPS;*.BPS;*.UPS|Tous les fichiers (*.*)|*.*</Message>
 		<Message ID="FilterTest">Fichiers de test (*.mtp)|*.mtp|Tous les fichiers (*.*)|*.*</Message>
 		<Message ID="FilterCheat">Tous les formats supportés (*.cht, *.xml)|*.cht;*.xml</Message>
 		<Message ID="FilterSavestate">Sauvegardes d'états Mesen (*.mst)|*.mst|Tous les fichiers (*.*)|*.*</Message>
@@ -849,10 +849,10 @@
 		<Message ID="EmptyState">&lt;aucune sauvegarde&gt;</Message>
 		<Message ID="ErrorWhileCheckingUpdates">Une erreur s'est produite lors de la recherche de mises-à-jour. Vérifier votre connexion internet et essayez à nouveau.&#xA;&#xA;Détails de l'erreur :&#xA;{0}</Message>
 		<Message ID="AutoUpdateDisabledMessage">Les mises-à-jour automatiques ne sont pas disponibles avec votre build - s.v.p télécharger la dernière version du code et recompiler Mesen pour avoir accès à la version la plus récente.</Message>
-		<Message ID="FdsBiosNotFound">Un bios pour le FDS n'a pas été trouvé. Le bios est requis pour jouer à des jeux de FDS.&#xA;&#xA;Voulez-vous sélectionnez un bios maintenant?</Message>
+		<Message ID="BiosNotFound">Un bios est requis pour ce jeu.&#xA;&#xA;  Nom du fichier : {0}&#xA;  Taille : {1} octets&#xA;&#xA;Voulez-vous choisir le fichier bios maintenant?</Message>
+		<Message ID="BiosMismatch">Le fichier sélectionné ne correspond pas au bios requis pour ce jeu.&#xA;&#xA;SHA-256 requis:&#xA;{0}&#xA;&#xA;SHA-256 du fichier sélectionné:&#xA;{1}&#xA;&#xA;Voulez-vous quand même utiliser ce fichier?</Message>
 		<Message ID="FdsDiskSide">Disque {0} Côté {1}</Message>
 		<Message ID="FileNotFound">Fichier non trouvé: {0}</Message>
-		<Message ID="InvalidFdsBios">Le bios sélectionné est invalide.</Message>
 
 		<Message ID="HDNesTooltip">Cette option permet à Mesen de charger des packages de graphiques haute-résolution dans le même format que l'émulateur HDNes.&#xA;&#xA;Les packages haute-résolution doivent être placés dans le dossier "HdPacks", dans un sous-dossier correspondant au nom du ROM.&#xA;Exemple : Un package pour "MonRom.nes" doit être placé dans "HdPacks\MonRom\hires.txt".</Message>
 		<Message ID="HdPackBuilderScaleHelp">Sélectionne la taille et le filtre à utiliser lors de la génération des fichiers PNG&#xA;pour le HD Pack. Utilisez les filtres "Prescale" pour générer l'image&#xA;avec une plus grande taille sans appliquer un filtre aux pixels.</Message>

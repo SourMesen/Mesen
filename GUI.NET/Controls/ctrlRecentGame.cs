@@ -10,11 +10,13 @@ using System.Windows.Forms;
 using System.IO;
 using System.IO.Compression;
 using Mesen.GUI.Config;
+using static Mesen.GUI.Controls.ctrlRecentGames;
 
 namespace Mesen.GUI.Controls
 {
 	public partial class ctrlRecentGame : UserControl
 	{
+		public event RecentGameLoadedHandler OnRecentGameLoaded;
 		private RecentGameInfo _recentGame;
 
 		public ctrlRecentGame()
@@ -75,7 +77,7 @@ namespace Mesen.GUI.Controls
 		private void picPreviousState_Click(object sender, EventArgs e)
 		{
 			InteropEmu.LoadRecentGame(_recentGame.FileName, ConfigManager.Config.PreferenceInfo.GameSelectionScreenResetGame);
-			//OnRecentGameLoaded?.Invoke(_recentGame);
+			OnRecentGameLoaded?.Invoke(_recentGame);
 		}
 	}
 }

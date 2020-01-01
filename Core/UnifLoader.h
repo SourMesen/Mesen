@@ -160,10 +160,8 @@ public:
 		return UnifBoards::UnknownBoard;
 	}
 
-	RomData LoadRom(vector<uint8_t>& romFile)
+	void LoadRom(RomData &romData, vector<uint8_t>& romFile)
 	{
-		RomData romData;
-
 		//Skip header, version & null bytes, start reading at first chunk
 		uint8_t* data = romFile.data() + 32;
 		uint8_t* endOfFile = romFile.data() + romFile.size();
@@ -220,7 +218,5 @@ public:
 				romData.Error = true;
 			}
 		}
-
-		return romData;
 	}
 };

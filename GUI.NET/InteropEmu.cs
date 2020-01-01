@@ -972,7 +972,7 @@ namespace Mesen.GUI
 			PpuFrameDone = 9,
 			MovieEnded = 10,
 			ResolutionChanged = 11,
-			FdsBiosNotFound = 12,
+			BiosNotFound = 12,
 			ConfigChanged = 13,
 			DisconnectedFromServer = 14,
 			PpuViewerDisplayFrame = 15,
@@ -1778,6 +1778,7 @@ namespace Mesen.GUI
 		Unif = 2,
 		Fds = 3,
 		Nsf = 4,
+		StudyBox = 5
 	}
 
 	public class RomInfo

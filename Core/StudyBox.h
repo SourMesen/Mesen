@@ -2,13 +2,17 @@
 #include "stdafx.h"
 #include "BaseMapper.h"
 #include "MemoryManager.h"
-#include "VirtualFile.h"
+#include "Console.h"
+#include "../Utilities/WavReader.h"
 #include "../Utilities/FolderUtilities.h"
+#include "../Utilities/StringUtilities.h"
 #include "../Utilities/HexUtilities.h"
 
 class StudyBox : public BaseMapper
 {
 private:
+	shared_ptr<WavReader> _wavReader;
+
 	bool _readyForBit = false;
 	uint16_t _processBitDelay = 0;
 	uint8_t _reg4202 = 0;
@@ -22,12 +26,14 @@ private:
 	
 	bool _enableDecoder = false;
 
+	bool _audioEnabled = false;
 	bool _motorDisabled = false;
 	uint16_t _byteReadDelay = 0;
 	bool _irqEnabled = false;
 
 	bool _pageFound = false;
-	vector<uint8_t> _pageData;
+	StudyBoxData _tapeData;
+	int32_t _pageIndex = 0;
 	int32_t _pagePosition = -1;
 
 	uint32_t _inDataDelay = 0;
@@ -56,9 +62,28 @@ protected:
 		SetMirroringType(MirroringType::FourScreens);
 	}
 
+	void InitMapper(RomData& romData) override
+	{
+		_tapeData = romData.StudyBox;
+		_wavReader = WavReader::Create(_tapeData.AudioFile.data(), (uint32_t)_tapeData.AudioFile.size());
+		if(!_wavReader) {
+			MessageManager::Log("[Study Box] Unsupported audio file format.");
+		}
+	}
+
 	void StreamState(bool saving) override
 	{
 		BaseMapper::StreamState(saving);
+		int32_t audioPosition = _wavReader ? _wavReader->GetPosition() : -1;
+		Stream(
+			_readyForBit, _processBitDelay, _reg4202, _commandCounter, _command, _currentPage, _seekPage, _seekPageDelay, _enableDecoder,
+			_audioEnabled, _motorDisabled, _byteReadDelay, _irqEnabled, _pageFound, _pageIndex, _pagePosition, _inDataDelay, _inDataRegion, audioPosition
+		);
+
+		if(!saving && audioPosition >= 0 && _wavReader) {
+			_wavReader->SetSampleRate(_console->GetSettings()->GetSampleRate());
+			_wavReader->Play(audioPosition);
+		}
 	}
 
 	void ProcessCpuClock() override
@@ -70,47 +95,55 @@ protected:
 			}
 		}
 
-		if(_seekPage != 0) {
+		if(_motorDisabled) {
+			return;
+		}
+
+		if(_seekPage != _currentPage) {
 			_seekPageDelay--;
 			if(_seekPageDelay == 0) {
 				_seekPageDelay = 3000000;
 				_pageFound = true;
-				if(_seekPage > 0) {
+				if(_seekPage > _currentPage) {
 					_currentPage++;
-					_seekPage--;
 				} else {
 					_currentPage--;
-					_seekPage++;
 				}
 
-				VirtualFile file(FolderUtilities::CombinePath("StudyBox", "Page" + std::to_string(_currentPage) + ".bin"));
-				file.ReadFile(_pageData);
-
+				_pageIndex = 0;
+				for(size_t i = 0; i < _tapeData.Pages.size(); i++) {
+					if(_tapeData.Pages[i].Data[5] == _currentPage - 1) {
+						//Find the first page that matches the requested page number
+						_pageIndex = (int32_t)i;
+						break;
+					}
+				}
+				
 				_inDataDelay = 300000;
 				_pagePosition = -1;
 				_byteReadDelay = 0;
 			}
-		}
-
-		if(_inDataDelay > 0) {
+		} else if(_inDataDelay > 0) {
 			_inDataRegion = true;
 			_inDataDelay--;
 			if(_inDataDelay == 0) {
 				_byteReadDelay = 7820;
+				if(_wavReader) {
+					_wavReader->SetSampleRate(_console->GetSettings()->GetSampleRate());
+					_wavReader->Play(_tapeData.Pages[_pageIndex].AudioOffset);
+				}
 				_console->GetCpu()->SetIrqSource(IRQSource::External);
 			}
-		}
-
-		if(!_motorDisabled && _byteReadDelay > 0) {
+		} else if(_byteReadDelay > 0) {
 			_byteReadDelay--;
 			if(_byteReadDelay == 0) {
 				_byteReadDelay = 3355;
 				_pagePosition++;
 
-				if(_pagePosition >= (int32_t)_pageData.size()) {
+				if(_pagePosition >= (int32_t)_tapeData.Pages[_pageIndex].Data.size()) {
 					_pageFound = false;
 					_inDataRegion = false;
-					//_motorDisabled = true;
+					_motorDisabled = true;
 				}
 
 				if(_irqEnabled) {
@@ -129,11 +162,13 @@ protected:
 				}
 
 				_console->GetCpu()->ClearIrqSource(IRQSource::External);
-				if(_pagePosition >= 0 && _pagePosition < (int32_t)_pageData.size()) {
-					//MessageManager::Log("Read: " + HexUtilities::ToHex(_pageData[_pagePosition]));
-					return _pageData[_pagePosition];
+				if(_pagePosition >= 0 && _pagePosition < (int32_t)_tapeData.Pages[_pageIndex].Data.size()) {
+					//MessageManager::Log("Read: " + HexUtilities::ToHex(_tapeData.Pages[_pageIndex].Data[_pagePosition]));
+					return _tapeData.Pages[_pageIndex].Data[_pagePosition];
 				}
-				return 0;
+
+				//After command $86, games expect to read 1 $AA byte before the $C5 header
+				return 0xAA;
 			}
 			
 			case 0x4201: {
@@ -207,34 +242,35 @@ protected:
 
 					if(_commandCounter == 8) {
 						_commandCounter = 0;
-						MessageManager::Log("Command sent: " + std::to_string(_command));
+						//MessageManager::Log("Command sent: " + std::to_string(_command));
 
 						if(_command >= 1 && _command < 0x40) {
-							_seekPage = _command;
+							_seekPage = _command + _currentPage;
 							_seekPageDelay = 3000000;
 							_motorDisabled = false;
 						} else if(_command > 0x40 && _command < 0x80) {
-							_seekPage = -(_command - 0x40);
+							_seekPage = -(_command - 0x40) + _currentPage;
 							_seekPageDelay = 3000000;
 							_motorDisabled = false;
 						} else if(_command == 0) {
-							_seekPage = -1;
+							_seekPage = _currentPage;
+							_currentPage = _currentPage - 1;
 							_seekPageDelay = 3000000;
 							_motorDisabled = false;
 						} else if(_command == 0x86) {
-							while(_pagePosition < (int32_t)_pageData.size() && _pageData[_pagePosition] != 0xC5) {
-								_pagePosition++;
+							if(_pageIndex < (int32_t)_tapeData.Pages.size() - 1 && _tapeData.Pages[_pageIndex + 1].Data[5] == _currentPage - 1) {
+								_pageIndex++;
+								_pagePosition = -1;
+							} else {
+								_pagePosition = (int32_t)_tapeData.Pages[_pageIndex + 1].Data.size();
 							}
-							_pagePosition--;
 							_inDataDelay = 300000;
 							_motorDisabled = false;
 							_byteReadDelay = 0;
 							_pageFound = true;
+						} else {
+							MessageManager::Log("Unknown command sent: " + std::to_string(_command));
 						}
-
-					/*} else if(_command == 0xFF) {
-							//???
-						}*/
 					}
 				}
 
@@ -243,9 +279,9 @@ protected:
 					_processBitDelay = 100;
 				}
 
-				if((_reg4202 & 0x6E) != (value & 0x6E)) {
+				/*if((_reg4202 & 0x6E) != (value & 0x6E)) {
 					MessageManager::Log("Reg 4202 value changed: " + HexUtilities::ToHex(_reg4202) + " -> " + HexUtilities::ToHex(value));
-				}
+				}*/
 
 				if((_reg4202 & 0x20) && !(value & 0x20)) {
 					//Reset drive
@@ -255,20 +291,18 @@ protected:
 				}
 
 				if((value & 0x04) != (_reg4202 & 0x04)) {
-					MessageManager::Log((value & 0x04) ? "Audio disabled" : "Audio enabled");
+					_audioEnabled = (value & 0x04) == 0;
+					//MessageManager::Log(_audioEnabled ? "Audio enabled" : "Audio disabled");
 				}
 
 				if((value & 0x02) != (_reg4202 & 0x02)) {
-					MessageManager::Log((value & 0x02) ? "IRQ enabled" : "IRQ disabled");
+					//MessageManager::Log((value & 0x02) ? "IRQ enabled" : "IRQ disabled");
 				}
 
 				/*if((value & 0x01) != (_reg4202 & 0x01)) {
 					MessageManager::Log((value & 0x01) ? "Decoder enabled" : "Decoder disabled");
 				}*/
 
-				if(!(_reg4202 & 0x04) && (value & 0x04)) {
-					_motorDisabled = true;
-				}
 				_reg4202 = value;
 				_enableDecoder = value & 0x01;
 				_irqEnabled = value & 0x02;
@@ -278,6 +312,14 @@ protected:
 			case 0x4203:
 				//Unused?
 				break;
+		}
+	}
+
+public:
+	void ApplySamples(int16_t* buffer, size_t sampleCount, double volume) override
+	{
+		if(!_motorDisabled && _wavReader) {
+			_wavReader->ApplySamples(buffer, sampleCount, _audioEnabled ? volume : 0);
 		}
 	}
 };

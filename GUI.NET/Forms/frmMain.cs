@@ -68,8 +68,6 @@ namespace Mesen.GUI.Forms
 		private bool _noVideo = false;
 		private bool _noInput = false;
 
-		private PrivateFontCollection _fonts = new PrivateFontCollection();
-
 		public frmMain(string[] args)
 		{
 			ThemeHelper.InitTheme(this.BackColor);
@@ -83,10 +81,7 @@ namespace Mesen.GUI.Forms
 			Version currentVersion = new Version(InteropEmu.GetMesenVersion());
 			lblVersion.Text = currentVersion.ToString();
 
-			if(!Program.IsMono) {
-				_fonts.AddFontFile(Path.Combine(ConfigManager.HomeFolder, "Resources", "PixelFont.ttf"));
-				lblVersion.Font = new Font(_fonts.Families[0], 10);
-			} else {
+			if(Program.IsMono) {
 				lblVersion.Margin = new Padding(0, 0, 3, 0);
 				picIcon.Margin = new Padding(3, 5, 3, 3);
 			}
@@ -306,6 +301,7 @@ namespace Mesen.GUI.Forms
 
 			ProcessFullscreenSwitch(CommandLineHelper.PreprocessCommandLineArguments(_commandLineArgs, true));
 
+			ctrlRecentGames.Initialize();
 			ctrlRecentGames.Visible = _emuThread == null;
 		}
 
@@ -745,9 +741,14 @@ namespace Mesen.GUI.Forms
 					}));
 					break;
 
-				case InteropEmu.ConsoleNotificationType.FdsBiosNotFound:
+				case InteropEmu.ConsoleNotificationType.BiosNotFound:
 					this.BeginInvoke((MethodInvoker)(() => {
-						SelectFdsBiosPrompt();
+						RomFormat format = ((RomFormat)e.Parameter);
+						if(format == RomFormat.Fds) {
+							SelectBiosPrompt("FdsBios.bin", 0x2000, RomFormat.Fds);
+						} else if(format == RomFormat.StudyBox) {
+							SelectBiosPrompt("StudyBox.bin", 0x40000, RomFormat.StudyBox);
+						}
 					}));
 					break;
 
@@ -1356,21 +1357,10 @@ namespace Mesen.GUI.Forms
 			return base.ProcessCmdKey(ref msg, keyData);
 		}
 		
-		private void SelectFdsBiosPrompt()
+		private void SelectBiosPrompt(string fileName, int fileSize, RomFormat format)
 		{
-			if(MesenMsgBox.Show("FdsBiosNotFound", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) == DialogResult.OK) {
-				using(OpenFileDialog ofd = new OpenFileDialog()) {
-					ofd.SetFilter(ResourceHelper.GetMessage("FilterAll"));
-					if(ofd.ShowDialog(this) == DialogResult.OK) {
-						string hash = MD5Helper.GetMD5Hash(ofd.FileName).ToLowerInvariant();
-						if(hash == "ca30b50f880eb660a320674ed365ef7a" || hash == "c1a9e9415a6adde3c8563c622d4c9fce") {
-							File.Copy(ofd.FileName, Path.Combine(ConfigManager.HomeFolder, "FdsBios.bin"));
-							LoadROM(_currentRomPath.Value, ConfigManager.Config.PreferenceInfo.AutoLoadIpsPatches);
-						} else {
-							MesenMsgBox.Show("InvalidFdsBios", MessageBoxButtons.OK, MessageBoxIcon.Error);
-						}
-					}
-				}
+			if(BiosHelper.RequestBiosFile(fileName, fileSize, format)) {
+				LoadROM(_currentRomPath.Value, ConfigManager.Config.PreferenceInfo.AutoLoadIpsPatches);
 			}
 		}
 

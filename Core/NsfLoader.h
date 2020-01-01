@@ -19,5 +19,5 @@ protected:
 public:
 	using BaseLoader::BaseLoader;
 
-	RomData LoadRom(vector<uint8_t>& romFile);
+	void LoadRom(RomData& romData, vector<uint8_t>& romFile);
 };

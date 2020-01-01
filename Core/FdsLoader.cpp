@@ -132,10 +132,8 @@ void FdsLoader::LoadDiskData(vector<uint8_t>& romFile, vector<vector<uint8_t>>& 
 	}
 }
 
-RomData FdsLoader::LoadRom(vector<uint8_t>& romFile, string filename)
+void FdsLoader::LoadRom(RomData& romData, vector<uint8_t>& romFile)
 {
-	RomData romData;
-
 	romData.Info.Hash.PrgCrc32 = CRC32::GetCRC(romFile.data(), romFile.size());
 
 	romData.Info.Format = RomFormat::Fds;
@@ -148,6 +146,4 @@ RomData FdsLoader::LoadRom(vector<uint8_t>& romFile, string filename)
 		romData.Error = true;
 		romData.BiosMissing = true;
 	}
-
-	return romData;
 }

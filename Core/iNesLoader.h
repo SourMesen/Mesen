@@ -8,5 +8,5 @@ class iNesLoader : public BaseLoader
 public:
 	using BaseLoader::BaseLoader;
 
-	RomData LoadRom(vector<uint8_t>& romFile, NESHeader *preloadedHeader);
+	void LoadRom(RomData& romData, vector<uint8_t>& romFile, NESHeader *preloadedHeader);
 };

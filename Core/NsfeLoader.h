@@ -11,7 +11,7 @@ private:
 	void CopyString(char* dest, string source, int maxLength)
 	{
 		memset(dest, 0, maxLength);
-		memcpy(dest, source.c_str(), std::max(source.size(), (size_t)maxLength - 1));
+		memcpy(dest, source.c_str(), std::min(source.size(), (size_t)maxLength - 1));
 	}
 
 	void Read(uint8_t* &data, uint8_t& dest)
@@ -181,9 +181,8 @@ private:
 public:
 	using NsfLoader::NsfLoader;
 
-	RomData LoadRom(vector<uint8_t>& romFile)
+	void LoadRom(RomData& romData, vector<uint8_t>& romFile)
 	{
-		RomData romData;
 		NsfHeader &header = romData.Info.NsfInfo;
 
 		InitHeader(header);
@@ -205,7 +204,5 @@ public:
 		}
 
 		InitializeFromHeader(romData);
-
-		return romData;
 	}
 };
