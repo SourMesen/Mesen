@@ -3,6 +3,7 @@
 #include "BaseMapper.h"
 #include "MemoryManager.h"
 #include "Console.h"
+#include "Cpu.h"
 #include "../Utilities/WavReader.h"
 #include "../Utilities/FolderUtilities.h"
 #include "../Utilities/StringUtilities.h"
@@ -12,6 +13,7 @@ class StudyBox : public BaseMapper
 {
 private:
 	shared_ptr<WavReader> _wavReader;
+	uint32_t _audioSampleRate;
 
 	bool _readyForBit = false;
 	uint16_t _processBitDelay = 0;
@@ -55,7 +57,7 @@ protected:
 		SelectPRGPage(1, 0);
 		SelectCHRPage(0, 0);
 
-		//First bank is mapped to 4000-4FFF, but the first 1kb is not accessible
+		//First bank (on the 2nd RAM chip, so bank #8 in the code) is mapped to 4000-4FFF, but the first 1kb is not accessible
 		SetCpuMemoryMapping(0x4000, 0x4FFF, 8, PrgMemoryType::WorkRam);
 		RemoveCpuMemoryMapping(0x4000, 0x43FF);
 
@@ -67,7 +69,10 @@ protected:
 		_tapeData = romData.StudyBox;
 		_wavReader = WavReader::Create(_tapeData.AudioFile.data(), (uint32_t)_tapeData.AudioFile.size());
 		if(!_wavReader) {
+			_audioSampleRate = 44100;
 			MessageManager::Log("[Study Box] Unsupported audio file format.");
+		} else {
+			_audioSampleRate = _wavReader->GetSampleRate();
 		}
 	}
 
@@ -84,6 +89,16 @@ protected:
 			_wavReader->SetSampleRate(_console->GetSettings()->GetSampleRate());
 			_wavReader->Play(audioPosition);
 		}
+	}
+
+	void ReadLeadInTrack()
+	{
+		//Wait for the tape to read through the lead-in before the actual data
+		_inDataDelay = (uint64_t)(_tapeData.Pages[_pageIndex].AudioOffset - _tapeData.Pages[_pageIndex].LeadInOffset) * _console->GetCpu()->GetClockRate(_console->GetModel()) / _audioSampleRate;
+		_pagePosition = -1;
+		_byteReadDelay = 0;
+		_motorDisabled = false;
+		_pageFound = true;
 	}
 
 	void ProcessCpuClock() override
@@ -103,7 +118,6 @@ protected:
 			_seekPageDelay--;
 			if(_seekPageDelay == 0) {
 				_seekPageDelay = 3000000;
-				_pageFound = true;
 				if(_seekPage > _currentPage) {
 					_currentPage++;
 				} else {
@@ -119,9 +133,7 @@ protected:
 					}
 				}
 				
-				_inDataDelay = 300000;
-				_pagePosition = -1;
-				_byteReadDelay = 0;
+				ReadLeadInTrack();
 			}
 		} else if(_inDataDelay > 0) {
 			_inDataRegion = true;
@@ -245,29 +257,30 @@ protected:
 						//MessageManager::Log("Command sent: " + std::to_string(_command));
 
 						if(_command >= 1 && _command < 0x40) {
+							//Move forward X pages
 							_seekPage = _command + _currentPage;
 							_seekPageDelay = 3000000;
 							_motorDisabled = false;
 						} else if(_command > 0x40 && _command < 0x80) {
+							//Move back X pages
 							_seekPage = -(_command - 0x40) + _currentPage;
 							_seekPageDelay = 3000000;
 							_motorDisabled = false;
 						} else if(_command == 0) {
+							//Move back to the start of this page (based on the internal page ID, not the page "index" in the array? - to validate)
 							_seekPage = _currentPage;
 							_currentPage = _currentPage - 1;
 							_seekPageDelay = 3000000;
 							_motorDisabled = false;
 						} else if(_command == 0x86) {
-							if(_pageIndex < (int32_t)_tapeData.Pages.size() - 1 && _tapeData.Pages[_pageIndex + 1].Data[5] == _currentPage - 1) {
+							//Reenable motor (and continue to the next page)
+							if(_pageIndex < (int32_t)_tapeData.Pages.size() - 1) {
 								_pageIndex++;
-								_pagePosition = -1;
 							} else {
-								_pagePosition = (int32_t)_tapeData.Pages[_pageIndex + 1].Data.size();
+								//Pretend we go back to the start of the tape (inaccurate)
+								_pageIndex = 0;
 							}
-							_inDataDelay = 300000;
-							_motorDisabled = false;
-							_byteReadDelay = 0;
-							_pageFound = true;
+							ReadLeadInTrack();
 						} else {
 							MessageManager::Log("Unknown command sent: " + std::to_string(_command));
 						}

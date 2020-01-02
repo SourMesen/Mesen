@@ -142,3 +142,8 @@ int32_t WavReader::GetPosition()
 {
 	return _done ? -1 : (_fileOffset - _dataStartOffset) / 2;
 }
+
+uint32_t WavReader::GetSampleRate()
+{
+	return _fileSampleRate;
+}

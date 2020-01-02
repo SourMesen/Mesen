@@ -35,4 +35,5 @@ public:
 	void SetSampleRate(uint32_t sampleRate);
 	void ApplySamples(int16_t* buffer, size_t sampleCount, double volume);
 	int32_t GetPosition();
+	uint32_t GetSampleRate();
 };
