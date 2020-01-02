@@ -3,7 +3,7 @@
 #include "BaseMapper.h"
 #include "MemoryManager.h"
 #include "Console.h"
-#include "Cpu.h"
+#include "CPU.h"
 #include "../Utilities/WavReader.h"
 #include "../Utilities/FolderUtilities.h"
 #include "../Utilities/StringUtilities.h"
