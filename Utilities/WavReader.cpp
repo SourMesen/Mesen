@@ -11,6 +11,12 @@ shared_ptr<WavReader> WavReader::Create(uint8_t* wavData, uint32_t length)
 		return nullptr;
 	}
 
+	uint32_t riffSize = wavData[4] | (wavData[5] << 8) | (wavData[6] << 16) | (wavData[7] << 24);
+	if(riffSize + 8 != length) {
+		//Invalid RIFF header (length does not match file size)
+		return nullptr;
+	}
+
 	uint32_t channelCount = wavData[22] | (wavData[23] << 8);
 	if(channelCount != 1) {
 		//Only mono files are supported at the moment
@@ -20,6 +26,12 @@ shared_ptr<WavReader> WavReader::Create(uint8_t* wavData, uint32_t length)
 	uint32_t fmtSize = wavData[16] | (wavData[17] << 8) | (wavData[18] << 16) | (wavData[19] << 24);
 	if(memcmp(wavData + 20 + fmtSize, "data", 4)) {
 		//Couldn't find data chunk
+		return nullptr;
+	}
+
+	uint32_t dataSize = wavData[24 + fmtSize] | (wavData[25 + fmtSize] << 8) | (wavData[26 + fmtSize] << 16) | (wavData[27 + fmtSize] << 24);
+	if(dataSize + 28 + fmtSize > length) {
+		//data chunk is too big
 		return nullptr;
 	}
 
