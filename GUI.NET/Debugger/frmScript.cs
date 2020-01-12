@@ -50,6 +50,9 @@ namespace Mesen.GUI.Debugger
 				mnuBuiltInScripts
 			);
 
+			//Make sure labels are loaded
+			DebugWorkspaceManager.GetWorkspace();
+
 			DebugInfo config = ConfigManager.Config.DebugInfo;
 
 			_popupMenu = new AutocompleteMenu(txtScriptContent, this);
