@@ -311,7 +311,7 @@ namespace Mesen.GUI.Debugger.Controls
 			Form parentForm = this.FindForm();
 			_tooltip = new frmCodeTooltip(parentForm, values, null, null, null, 10);
 			_tooltip.FormClosed += (s, evt) => { _tooltip = null; };
-			Point location = this.PointToScreen(new Point(e.Location.X - picViewer.ScrollOffsets.X, e.Location.Y - picViewer.ScrollOffsets.Y));
+			Point location = Control.MousePosition;
 			location.Offset(10, 10);
 			_tooltip.SetFormLocation(location, this);
 		}
