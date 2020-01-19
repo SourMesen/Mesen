@@ -104,7 +104,7 @@ bool VirtualFile::IsValid()
 	if(!_innerFile.empty()) {
 		shared_ptr<ArchiveReader> reader = ArchiveReader::GetReader(_path);
 		if(reader) {
-			vector<string> filelist = reader->GetFileList(VirtualFile::RomExtensions);
+			vector<string> filelist = reader->GetFileList();
 			if(_innerFileIndex >= 0) {
 				if((int32_t)filelist.size() > _innerFileIndex) {
 					return true;
