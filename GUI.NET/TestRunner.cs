@@ -1,4 +1,5 @@
 ﻿using Mesen.GUI.Config;
+using Mesen.GUI.Debugger;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -39,6 +40,8 @@ namespace Mesen.GUI
 			InteropEmu.InitializeEmu(ConfigManager.HomeFolder, IntPtr.Zero, IntPtr.Zero, true, true, true);
 
 			InteropEmu.LoadROM(romPath, string.Empty);
+
+			DebugWorkspaceManager.GetWorkspace();
 
 			foreach(string luaScript in luaScriptsToLoad) {
 				try {
