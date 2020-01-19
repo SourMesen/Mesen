@@ -1496,6 +1496,9 @@
     <ClInclude Include="StudyBoxLoader.h">
       <Filter>Nes\RomLoader</Filter>
     </ClInclude>
+    <ClInclude Include="MMC5MemoryHandler.h">
+      <Filter>Nes\Mappers\MMC</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
