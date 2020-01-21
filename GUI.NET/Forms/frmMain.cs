@@ -877,9 +877,14 @@ namespace Mesen.GUI.Forms
 					}));
 					break;
 
-				case InteropEmu.ConsoleNotificationType.FdsBiosNotFound:
+				case InteropEmu.ConsoleNotificationType.BiosNotFound:
 					this.BeginInvoke((MethodInvoker)(() => {
-						SelectFdsBiosPrompt();
+						RomFormat format = ((RomFormat)e.Parameter);
+						if(format == RomFormat.Fds) {
+							SelectBiosPrompt("FdsBios.bin", 0x2000, RomFormat.Fds);
+						} else if(format == RomFormat.StudyBox) {
+							SelectBiosPrompt("StudyBox.bin", 0x40000, RomFormat.StudyBox);
+						}
 					}));
 					break;
 
@@ -1501,6 +1506,7 @@ namespace Mesen.GUI.Forms
 		 }
 
 #if !HIDETESTMENU
+<<<<<<< HEAD
 		 if (keyData == Keys.Pause)
 		 {
 			if (InteropEmu.RomTestRecording())
