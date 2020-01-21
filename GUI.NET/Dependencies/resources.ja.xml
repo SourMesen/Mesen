@@ -775,8 +775,8 @@
 		<Message ID="FilterWave">WAVファイル (*.wav)|*.wav|すべてのファイル (*.*)|*.*</Message>
 		<Message ID="FilterAvi">AVIファイル (*.avi)|*.avi|すべてのファイル (*.*)|*.*</Message>
 		<Message ID="FilterPalette">パレットファイル (*.pal)|*.pal|すべてのファイル (*.*)|*.*</Message>
-		<Message ID="FilterRom">対応するすべてのファイル (*.nes, *.zip, *.7z, *.fds, *.nsf, *.nsfe, *.unf, *.unif)|*.NES;*.ZIP;*.FDS;*.7z;*.NSF;*.NSFE;*.UNF;*.UNIF|ファミコンゲーム (*.nes, *.unf, *.unif)|*.NES;*.UNF;*.UNIF|ファミコンディスクシステムのゲーム (*.fds)|*.FDS|NSFファイル (*.nsf, *.nsfe)|*.NSF;*.NSFE|ZIPファイル (*.zip)|*.ZIP|7-Zipファイル (*.7z)|*.7z|すべてのファイル (*.*)|*.*</Message>
-		<Message ID="FilterRomIps">対応するすべてのファイル (*.nes, *.zip, *.7z, *.fds, *.nsf, *.nsfe, *.unf, *.unif, *.ips, *.bps, *.ups)|*.NES;*.ZIP;*.7z;*.IPS;*.BPS;*.UPS;*.FDS;*.NSF;*.NSFE;*.UNF;*.UNIF|ファミコンゲーム (*.nes, *.unf, *.unif)|*.NES;*.UNF;*.UNIF|ファミコンディスクシステムのゲーム (*.fds)|*.FDS|NSFファイル (*.nsf, *.nsfe)|*.NSF;*.NSFE|ZIPファイル (*.zip)|*.ZIP|7-Zipファイル (*.7z)|*.7z|パッチファイル (*.ips, *.bps, *.ups)|*.IPS;*.BPS;*.UPS|すべてのファイル (*.*)|*.*</Message>
+		<Message ID="FilterRom">対応するすべてのファイル (*.nes, *.zip, *.7z, *.fds, *.nsf, *.nsfe, *.unf, *.unif, *.studybox)|*.NES;*.ZIP;*.FDS;*.7z;*.NSF;*.NSFE;*.UNF;*.UNIF;*.STUDYBOX|ファミコンゲーム (*.nes, *.unf, *.unif)|*.NES;*.UNF;*.UNIF|ファミコンディスクシステムのゲーム (*.fds)|*.FDS|NSFファイル (*.nsf, *.nsfe)|*.NSF;*.NSFE|ZIPファイル (*.zip)|*.ZIP|7-Zipファイル (*.7z)|*.7z|すべてのファイル (*.*)|*.*</Message>
+		<Message ID="FilterRomIps">対応するすべてのファイル (*.nes, *.zip, *.7z, *.fds, *.nsf, *.nsfe, *.unf, *.unif, *.studybox, *.ips, *.bps, *.ups)|*.NES;*.ZIP;*.7z;*.IPS;*.BPS;*.UPS;*.FDS;*.NSF;*.NSFE;*.UNF;*.UNIF;*.STUDYBOX|ファミコンゲーム (*.nes, *.unf, *.unif)|*.NES;*.UNF;*.UNIF|ファミコンディスクシステムのゲーム (*.fds)|*.FDS|NSFファイル (*.nsf, *.nsfe)|*.NSF;*.NSFE|ZIPファイル (*.zip)|*.ZIP|7-Zipファイル (*.7z)|*.7z|パッチファイル (*.ips, *.bps, *.ups)|*.IPS;*.BPS;*.UPS|すべてのファイル (*.*)|*.*</Message>
 		<Message ID="FilterTest">テストファイル (*.mtp)|*.mtp|すべてのファイル (*.*)|*.*</Message>
 		<Message ID="FilterCheat">対応するすべてのファイル (*.cht, *.xml)|*.cht;*.xml</Message>
 		<Message ID="FilterSavestate">Mesenのクイックセーブデータ (*.mst)|*.mst|すべてのファイル (*.*)|*.*</Message>
@@ -837,10 +837,10 @@
 		<Message ID="EmptyState">&lt;なし&gt;</Message>
 		<Message ID="ErrorWhileCheckingUpdates">アップデートを確認する時にエラーが発生しました。ネット接続を確認してから、再試行してください。&#xA;&#xA;エラーの詳細:&#xA;{0}</Message>
 		<Message ID="AutoUpdateDisabledMessage">このビルドでは自動更新は出来ません。最新版を使うためにはコードの最新版をダウンロードしてビルドしてください。</Message>
-		<Message ID="FdsBiosNotFound">ファミコンディスクシステム(FDS)のゲームをロードするためにFDSのBIOSファイルは必要です。&#xA;&#xA;FDSのBIOSファイルを選びますか？</Message>
+		<Message ID="BiosNotFound">このゲームを起動するにはBIOSファイルが必要です。&#xA;&#xA;  ファイル: {0}&#xA;  容量: {1} バイト&#xA;&#xA;BIOSフィアルを選択しますか？</Message>
+		<Message ID="BiosMismatch">選んだファイルは必要なファイルと一致しませんでした.&#xA;&#xA;必要なSHA-256:&#xA;{0}&#xA;&#xA;選んだファイルのSHA-256:&#xA;{1}&#xA;&#xA;それでもこのファイルを使ってみますか？</Message>
 		<Message ID="FdsDiskSide">ディスク{0} {1}面</Message>
 		<Message ID="FileNotFound">ファイルが見つかりません: {0}</Message>
-		<Message ID="InvalidFdsBios">選んだBIOSファイルは使えません。</Message>
 
 		<Message ID="HDNesTooltip">このオプションを有効にすれば、MesenはHDNesのようにHDパックをロード出来るようになります。&#xA;&#xA;HDパックはMesenのフォルダの中にある「HdPacks」のフォルダにゲームと同じ名前のサブフォルダに置くと自動的にロードされます。&#xA;例）ゲームファイルは「MyRom.nes」なら、「HdPacks\MyRom」にHDパックを置くとロードされます。</Message>
 		<Message ID="HdPackBuilderScaleHelp">Selects the scale and video filter to use when generating the PNG files&#xA;for the HD Pack. Use the "Prescale" filters to generate the tiles&#xA;at a larger scale without applying any transformation to the pixels.</Message>

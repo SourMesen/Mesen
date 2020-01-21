@@ -757,8 +757,8 @@
 		<Message ID="FilterWave">Fitxers de so (*.wav)|*.wav|Tots els fitxers(*.*)|*.*</Message>
 		<Message ID="FilterAvi">Fitxers de vídeo (*.avi)|*.avi|Tots els fitxers (*.*)|*.*</Message>
 		<Message ID="FilterPalette">Fitxers de paleta (*.pal)|*.pal|Tots els fitxers (*.*)|*.*</Message>
-		<Message ID="FilterRom">Tots els formats suportats (*.nes, *.zip, *.7z, *.fds, *.nsf, *.nsfe, *.unf, *.unif)|*.NES;*.ZIP;*.7z;*.FDS;*.NSF;*.NSFE;*.UNF;*.UNIF|Roms de NES (*.nes, *.unf, *.unif)|*.NES;*.UNF;*.UNIF|Roms de Famicom Disk System (*.fds)|*.FDS|Fitxers NSF (*.nsf, *.nsfe)|*.NSF;*.NSFE|Arxius comprimits (*.zip)|*.ZIP|Arxius 7-Zip (*.7z)|*.7z|Tots els fitxers (*.*)|*.*</Message>
-		<Message ID="FilterRomIps">Tots els formats suportats (*.nes, *.zip, *.7z, *.fds, *.nsf, *.nsfe, *.unf, *.unif, *.ips, *.bps, *.ups)|*.NES;*.ZIP;*.7z;*.IPS;*.BPS;*.UPS;*.FDS;*.NSF;*.NSFE;*.UNF;*.UNIF|Roms de NES(*.nes, *.unf, *.unif)|*.NES;*.UNF;*.UNIF|Roms de Famicom Disk System (*.fds)|*.FDS|Fitxers NSF (*.nsf, *.nsfe)|*.NSF;*.NSFE|Arxius comprimits (*.zip)|*.ZIP|Arxius 7-Zip (*.7z)|*.7z|Pedaços IPS/UPS/BPS (*.ips, *.bps, *.ups)|*.IPS;*.BPS;*.UPS|Tots els fitxers (*.*)|*.*</Message>
+		<Message ID="FilterRom">Tots els formats suportats (*.nes, *.zip, *.7z, *.fds, *.nsf, *.nsfe, *.unf, *.unif, *.studybox)|*.NES;*.ZIP;*.7z;*.FDS;*.NSF;*.NSFE;*.UNF;*.UNIF;*.STUDYBOX|Roms de NES (*.nes, *.unf, *.unif)|*.NES;*.UNF;*.UNIF|Roms de Famicom Disk System (*.fds)|*.FDS|Fitxers NSF (*.nsf, *.nsfe)|*.NSF;*.NSFE|Arxius comprimits (*.zip)|*.ZIP|Arxius 7-Zip (*.7z)|*.7z|Tots els fitxers (*.*)|*.*</Message>
+		<Message ID="FilterRomIps">Tots els formats suportats (*.nes, *.zip, *.7z, *.fds, *.nsf, *.nsfe, *.unf, *.unif, *.studybox, *.ips, *.bps, *.ups)|*.NES;*.ZIP;*.7z;*.IPS;*.BPS;*.UPS;*.FDS;*.NSF;*.NSFE;*.UNF;*.UNIF;*.STUDYBOX|Roms de NES(*.nes, *.unf, *.unif)|*.NES;*.UNF;*.UNIF|Roms de Famicom Disk System (*.fds)|*.FDS|Fitxers NSF (*.nsf, *.nsfe)|*.NSF;*.NSFE|Arxius comprimits (*.zip)|*.ZIP|Arxius 7-Zip (*.7z)|*.7z|Pedaços IPS/UPS/BPS (*.ips, *.bps, *.ups)|*.IPS;*.BPS;*.UPS|Tots els fitxers (*.*)|*.*</Message>
 		<Message ID="FilterTest">Fitxers de proves (*.mtp)|*.mtp|Tots els fitxers (*.*)|*.*</Message>
 		<Message ID="FilterCheat">Tots els formats suportats (*.cht, *.xml)|*.cht;*.xml</Message>
 		<Message ID="FilterSavestate">Partides guardades de Mesen (*.mst)|*.mst|Tots els fitxers (*.*)|*.*</Message>
@@ -818,11 +818,11 @@
 		<Message ID="EmptyState">&lt;No hi ha còpia de seguretat&gt;</Message>
 		<Message ID="ErrorWhileCheckingUpdates">S'ha produït un error durant la cerca d'actualitzacions. Comproveu la vostra connexió a la xarxa i proveu-ho de nou.&#xA;&#xA;Detalls de l'error:&#xA;{0}</Message>
 		<Message ID="AutoUpdateDisabledMessage">Les actualitzacions automàtiques no estan activades en aquesta compilació - si us plau, descarregueu-vos la darrera versió del codi font i torneu a compilar Mesen per a obtenir les darreres actualitzacions.</Message>
-		<Message ID="FdsBiosNotFound">No s'ha trobat una bios necessària per a poder jugar a jocs de la FDS.&#xA;&#xA;Voleu seleccionar-ne una manualment?</Message>
+		<Message ID="BiosNotFound">A bios file is required to run this game.&#xA;&#xA;  Filename: {0}&#xA;  Size: {1} bytes&#xA;&#xA;Select bios file now?</Message>
+		<Message ID="BiosMismatch">The selected file does not match the bios required for this game.&#xA;&#xA;Expected SHA-256:&#xA;{0}&#xA;&#xA;Selected file's SHA-256:&#xA;{1}&#xA;&#xA;Would you like to use this file anyway?</Message>
 		<Message ID="FdsDiskSide">Disc {0} Cara {1}</Message>
 		<Message ID="FileNotFound">Fitxer no trobat: {0}</Message>
-		<Message ID="InvalidFdsBios">La bios seleccionada no és vàlida.</Message>
-
+		
 		<Message ID="HDNesTooltip">Aquesta opció permet a Mesen carregar els paquets d'alta resolució d'HDNes que trobi.&#xA;&#xA;Els paquets d'alta resolució han d'estar a la carpeta "HdPacks" dins d'una altra carpeta amb el mateix nom que la ROM.&#xA;Exemple: Posem per cas que tenim una rom anomenada "LaMevaRom.nes", el seu paquet hauria d'estar a "HdPacks\LaMevaRom\hires.txt".</Message>
 		<Message ID="HdPackBuilderScaleHelp">Tria el tipus d'escalat i filtre de vídeo que s'utilitzaran quan es generin els fitxers PNG&#xA;per al paquet d'alta resolució. Fes servir els filtres de preescalat per a generar les tiles&#xA;a una escala major sense aplicar cap transformació als píxels.</Message>
 		<Message ID="HdPackBuilderBankSizeHelp">Aquesta opció només està disponible per a jocs de RAM de tipus CHR. Els jocs de RAM de tipus CHR no tenen&#xA;"bancs" fixos - van sent creats dinàmicament pel codi del joc.&#xA;Aquesta opció altera el funcionament a l'hora d'agrupar les tiles&#xA;als fitxers PNG - un banc petit normalment donarà a lloc a menys fitxers &#xA;PNG (tot i que depenent en el codi del joc, valors més alts poden produir millors resultats).</Message>

@@ -441,6 +441,7 @@
     <ClInclude Include="nes_ntsc_impl.h" />
     <ClInclude Include="BaseCodec.h" />
     <ClInclude Include="orfanidis_eq.h" />
+    <ClInclude Include="WavReader.h" />
     <ClInclude Include="PlatformUtilities.h" />
     <ClInclude Include="PNGHelper.h" />
     <ClInclude Include="RawCodec.h" />
@@ -562,6 +563,7 @@
     <ClCompile Include="md5.cpp" />
     <ClCompile Include="miniz.cpp" />
     <ClCompile Include="nes_ntsc.cpp" />
+    <ClCompile Include="WavReader.cpp" />
     <ClCompile Include="PlatformUtilities.cpp" />
     <ClCompile Include="PNGHelper.cpp" />
     <ClCompile Include="AutoResetEvent.cpp" />

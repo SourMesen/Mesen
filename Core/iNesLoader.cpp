@@ -6,10 +6,8 @@
 #include "GameDatabase.h"
 #include "EmulationSettings.h"
 
-RomData iNesLoader::LoadRom(vector<uint8_t>& romFile, NESHeader *preloadedHeader)
+void iNesLoader::LoadRom(RomData& romData, vector<uint8_t>& romFile, NESHeader *preloadedHeader)
 {
-	RomData romData;
-
 	NESHeader header;
 	uint8_t* buffer = romFile.data();
 	uint32_t dataSize = (uint32_t)romFile.size();
@@ -52,7 +50,7 @@ RomData iNesLoader::LoadRom(vector<uint8_t>& romFile, NESHeader *preloadedHeader
 		} else {
 			romData.Error = true;
 			MessageManager::Log("[iNes] Invalid file (file length does not match header information) - load operation cancelled.");
-			return romData;
+			return;
 		}
 	}
 
@@ -75,7 +73,7 @@ RomData iNesLoader::LoadRom(vector<uint8_t>& romFile, NESHeader *preloadedHeader
 		//Invalid rom file
 		MessageManager::Log("[iNes] Invalid file (file length does not match header information) - load operation cancelled.");
 		romData.Error = true;
-		return romData;
+		return;
 	} else if(prgSize + chrSize < dataSize) {
 		MessageManager::Log("[iNes] Warning: File is larger than excepted (based on the file header).");
 	}
@@ -131,6 +129,4 @@ RomData iNesLoader::LoadRom(vector<uint8_t>& romFile, NESHeader *preloadedHeader
 	if(!_checkOnly) {
 		GameDatabase::SetGameInfo(romData.Info.Hash.PrgChrCrc32, romData, GameDatabase::IsEnabled() && header.GetRomHeaderVersion() != RomHeaderVersion::Nes2_0, preloadedHeader != nullptr);
 	}
-
-	return romData;
 }

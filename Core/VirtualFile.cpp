@@ -10,7 +10,7 @@
 #include "../Utilities/IpsPatcher.h"
 #include "../Utilities/UpsPatcher.h"
 
-const std::initializer_list<string> VirtualFile::RomExtensions = { ".nes", ".fds", ".nsf", ".nsfe", "*.unf", "*.unif" };
+const std::initializer_list<string> VirtualFile::RomExtensions = { ".nes", ".fds", ".nsf", ".nsfe", ".unf", ".unif", ".studybox" };
 
 VirtualFile::VirtualFile()
 {
@@ -97,8 +97,29 @@ void VirtualFile::LoadFile()
 
 bool VirtualFile::IsValid()
 {
-	LoadFile();
-	return _data.size() > 0;
+	if(_data.size() > 0) {
+		return true;
+	}
+
+	if(!_innerFile.empty()) {
+		shared_ptr<ArchiveReader> reader = ArchiveReader::GetReader(_path);
+		if(reader) {
+			vector<string> filelist = reader->GetFileList();
+			if(_innerFileIndex >= 0) {
+				if((int32_t)filelist.size() > _innerFileIndex) {
+					return true;
+				}
+			} else {
+				return std::find(filelist.begin(), filelist.end(), _innerFile) != filelist.end();
+			}
+		}
+	} else {
+		ifstream input(_path, std::ios::in | std::ios::binary);
+		if(input) {
+			return true;
+		}
+	}
+	return false;
 }
 
 string VirtualFile::GetFilePath()
@@ -147,20 +168,24 @@ bool VirtualFile::ApplyPatch(VirtualFile &patch)
 {
 	//Apply patch file
 	bool result = false;
-	if(patch.IsValid() && patch._data.size() >= 5) {
-		vector<uint8_t> patchedData;
-		std::stringstream ss;
-		patch.ReadFile(ss);
+	if(IsValid() && patch.IsValid()) {
+		patch.LoadFile();
+		LoadFile();
+		if(patch._data.size() >= 5) {
+			vector<uint8_t> patchedData;
+			std::stringstream ss;
+			patch.ReadFile(ss);
 
-		if(memcmp(patch._data.data(), "PATCH", 5) == 0) {
-			result = IpsPatcher::PatchBuffer(ss, _data, patchedData);
-		} else if(memcmp(patch._data.data(), "UPS1", 4) == 0) {
-			result = UpsPatcher::PatchBuffer(ss, _data, patchedData);
-		} else if(memcmp(patch._data.data(), "BPS1", 4) == 0) {
-			result = BpsPatcher::PatchBuffer(ss, _data, patchedData);
-		}
-		if(result) {
-			_data = patchedData;
+			if(memcmp(patch._data.data(), "PATCH", 5) == 0) {
+				result = IpsPatcher::PatchBuffer(ss, _data, patchedData);
+			} else if(memcmp(patch._data.data(), "UPS1", 4) == 0) {
+				result = UpsPatcher::PatchBuffer(ss, _data, patchedData);
+			} else if(memcmp(patch._data.data(), "BPS1", 4) == 0) {
+				result = BpsPatcher::PatchBuffer(ss, _data, patchedData);
+			}
+			if(result) {
+				_data = patchedData;
+			}
 		}
 	}
 	return result;

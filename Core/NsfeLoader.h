@@ -181,9 +181,8 @@ private:
 public:
 	using NsfLoader::NsfLoader;
 
-	RomData LoadRom(vector<uint8_t>& romFile)
+	void LoadRom(RomData& romData, vector<uint8_t>& romFile)
 	{
-		RomData romData;
 		NsfHeader &header = romData.Info.NsfInfo;
 
 		InitHeader(header);
@@ -205,7 +204,5 @@ public:
 		}
 
 		InitializeFromHeader(romData);
-
-		return romData;
 	}
 };

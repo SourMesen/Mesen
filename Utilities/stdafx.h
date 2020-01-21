@@ -4,6 +4,7 @@
 #include <stdint.h>
 #include <stdio.h>
 #include <iostream>
+#include <cstring>
 #include <memory>
 #include <vector>
 #include <atomic>

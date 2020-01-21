@@ -409,10 +409,13 @@ namespace InteropEmu {
 				interopRomInfo.FilePrgOffset = romInfo.FilePrgOffset;
 				if(romInfo.Hash.Sha1.size() == 40) {
 					memcpy(interopRomInfo.Sha1, romInfo.Hash.Sha1.c_str(), 40);
+				} else {
+					memset(interopRomInfo.Sha1, 0, 40);
 				}
 			} else {
 				RomLoader romLoader(true);
-				if(romLoader.LoadFile(romPath)) {
+				VirtualFile romFile = romPath;
+				if(romLoader.LoadFile(romFile)) {
 					RomData romData = romLoader.GetRomData();
 
 					_returnString = romPath;

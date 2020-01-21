@@ -89,11 +89,7 @@ namespace Mesen.GUI.Config
 
 		static private double ConvertVolume(UInt32 volume)
 		{
-			if(ConfigManager.Config.AudioInfo.EnableAudio) {
-				return ((double)volume / 100d);
-			} else {
-				return 0;
-			}
+			return ((double)volume / 100d);
 		}
 
 		static private double ConvertPanning(Int32 panning)
@@ -106,7 +102,7 @@ namespace Mesen.GUI.Config
 			AudioInfo audioInfo = ConfigManager.Config.AudioInfo;
 			InteropEmu.SetAudioDevice(audioInfo.AudioDevice);
 			InteropEmu.SetAudioLatency(audioInfo.AudioLatency);
-			InteropEmu.SetMasterVolume(audioInfo.MasterVolume / 10d, audioInfo.VolumeReduction/ 100d);
+			InteropEmu.SetMasterVolume(ConfigManager.Config.AudioInfo.EnableAudio ? audioInfo.MasterVolume / 10d : 0, audioInfo.VolumeReduction/ 100d);
 			InteropEmu.SetChannelVolume(AudioChannel.Square1, ConvertVolume(audioInfo.Square1Volume));
 			InteropEmu.SetChannelVolume(AudioChannel.Square2, ConvertVolume(audioInfo.Square2Volume));
 			InteropEmu.SetChannelVolume(AudioChannel.Triangle, ConvertVolume(audioInfo.TriangleVolume));

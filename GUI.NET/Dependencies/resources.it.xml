@@ -787,8 +787,8 @@
 		<Message ID="FilterWave">Wave files (*.wav)|*.wav|All Files (*.*)|*.*</Message>
 		<Message ID="FilterAvi">Avi files (*.avi)|*.avi|All Files (*.*)|*.*</Message>
 		<Message ID="FilterPalette">Palette Files (*.pal)|*.pal|All Files (*.*)|*.*</Message>
-		<Message ID="FilterRom">Tutti i formati supportati (*.nes, *.zip, *.7z, *.nsf, *.nsfe, *.fds, *.unf, *.unif)|*.NES;*.ZIP;*.7z;*.FDS;*.NSF;*.NSFE;*.UNF;*.UNIF|NES Roms (*.nes, *.unf, *.unif)|*.NES;*.UNF;*.UNIF|Famicom Disk System Roms (*.fds)|*.FDS|NSF files (*.nsf, *.nsfe)|*.nsf;*.nsfe|ZIP Archives (*.zip)|*.ZIP|7-Zip Archives (*.7z)|*.7z|All (*.*)|*.*</Message>
-		<Message ID="FilterRomIps">Tutti i formati supportati (*.nes, *.zip, *.7z, *.fds, *.nsf, *.nsfe, *.unf, *.unif, *.ips, *.bps, *.ups)|*.NES;*.ZIP;*.7z;*.IPS;*.BPS;*.UPS;*.FDS;*.NSF;*.NSFE;*.UNF;*.UNIF|NES Roms (*.nes, *.unf, *..unif)|*.NES;*.UNF;*.UNIF|Famicom Disk System Roms (*.fds)|*.FDS|NSF files (*.nsf, *.nsfe)|*.nsf;*.nsfe|ZIP Archives (*.zip)|*.ZIP|7-Zip Archives (*.7z)|*.7z|IPS/UPS/BPS Patches (*.ips, *.bps, *.ups)|*.IPS;*.BPS;*.UPS|All (*.*)|*.*</Message>
+		<Message ID="FilterRom">Tutti i formati supportati (*.nes, *.zip, *.7z, *.nsf, *.nsfe, *.fds, *.unf, *.unif, *.studybox)|*.NES;*.ZIP;*.7z;*.FDS;*.NSF;*.NSFE;*.UNF;*.UNIF;*.STUDYBOX|NES Roms (*.nes, *.unf, *.unif)|*.NES;*.UNF;*.UNIF|Famicom Disk System Roms (*.fds)|*.FDS|NSF files (*.nsf, *.nsfe)|*.nsf;*.nsfe|ZIP Archives (*.zip)|*.ZIP|7-Zip Archives (*.7z)|*.7z|All (*.*)|*.*</Message>
+		<Message ID="FilterRomIps">Tutti i formati supportati (*.nes, *.zip, *.7z, *.fds, *.nsf, *.nsfe, *.unf, *.unif, *.studybox, *.ips, *.bps, *.ups)|*.NES;*.ZIP;*.7z;*.IPS;*.BPS;*.UPS;*.FDS;*.NSF;*.NSFE;*.UNF;*.UNIF;*.STUDYBOX|NES Roms (*.nes, *.unf, *..unif)|*.NES;*.UNF;*.UNIF|Famicom Disk System Roms (*.fds)|*.FDS|NSF files (*.nsf, *.nsfe)|*.nsf;*.nsfe|ZIP Archives (*.zip)|*.ZIP|7-Zip Archives (*.7z)|*.7z|IPS/UPS/BPS Patches (*.ips, *.bps, *.ups)|*.IPS;*.BPS;*.UPS|All (*.*)|*.*</Message>
 		<Message ID="FilterTest">Test file (*.mtp)|*.mtp|All (*.*)|*.*</Message>
 		<Message ID="FilterCheat">Tutti i formati supportati (*.cht, *.xml)|*.cht;*.xml</Message>
 		<Message ID="FilterSavestate">Mesen Savestati (*.mst)|*.mst|All files (*.*)|*.*</Message>
@@ -850,10 +850,10 @@
 		<Message ID="EmptyState">&lt;vuoto&gt;</Message>
 		<Message ID="ErrorWhileCheckingUpdates">Si è verificato un errore durante il tentativo di verifica presenza aggiornamenti. Controlla la tua connessione Internet e riprova.&#xA;&#xA;Dettagli errore:&#xA;{0}</Message>
 		<Message ID="AutoUpdateDisabledMessage">Gli aggiornamenti automatici non sono abilitati su questa build - si prega di scaricare l'ultima versione del codice e ricompilare Mesen per ottenere gli ultimi aggiornamenti.</Message>
-		<Message ID="FdsBiosNotFound">Bios FDS non trovato. Il bios è richiesto per eseguire i giochi FDS.&#xA;&#xA;Seleziona il file bios adesso?</Message>
+		<Message ID="BiosNotFound">A bios file is required to run this game.&#xA;&#xA;  Filename: {0}&#xA;  Size: {1} bytes&#xA;&#xA;Select bios file now?</Message>
+		<Message ID="BiosMismatch">The selected file does not match the bios required for this game.&#xA;&#xA;Expected SHA-256:&#xA;{0}&#xA;&#xA;Selected file's SHA-256:&#xA;{1}&#xA;&#xA;Would you like to use this file anyway?</Message>
 		<Message ID="FdsDiskSide">Disco {0} Lato {1}</Message>
 		<Message ID="FileNotFound">File non trovato: {0}</Message>
-		<Message ID="InvalidFdsBios">Il file bios selezionato non è valido.</Message>
 
 		<Message ID="HDNesTooltip">Questa opzione consente a Mesen di caricare i pacchetti HD in formato HDNes se trovati.&#xA;&#xA;I pacchetti HD devono essere collocati nella cartella "HdPacks" in una sottocartella che corrisponde al nome della ROM.&#xA;ad es.: MyRom.nes dovrebbe avere il proprio HD Pack in "HdPacks\MyRom\hires.txt".</Message>
 		<Message ID="HdPackBuilderScaleHelp">Seleziona la dimensione e il filtro video da utilizzare durante la generazione dei file PNG&#xA;per l'HD Pack. Usa i filtri "Prescale" per generare le tile&#xA;su una scala più ampia senza applicare alcuna trasformazione ai pixel.</Message>
