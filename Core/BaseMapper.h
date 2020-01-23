@@ -150,7 +150,7 @@ protected:
 	void SetMirroringType(MirroringType type);
 	MirroringType GetMirroringType();
 
-	__forceinline uint8_t InternalReadVRAM(uint16_t addr);
+	uint8_t InternalReadVRAM(uint16_t addr);
 
 public:
 	static constexpr uint32_t NametableCount = 0x10;
