@@ -36,6 +36,7 @@ namespace Mesen.GUI.Forms.Config
 			AddBinding("AssociateNsfFiles", chkNsfFormat);
 			AddBinding("AssociateMstFiles", chkMstFormat);
 			AddBinding("AssociateUnfFiles", chkUnfFormat);
+			AddBinding("AssociateStudyBoxFiles", chkStudyBoxFormat);
 
 			AddBinding("DisableMouseResize", chkDisableMouseResize);
 

@@ -37,6 +37,7 @@ namespace Mesen.GUI.Config
 		public bool AssociateNsfFiles = false;
 		public bool AssociateMstFiles = false;
 		public bool AssociateUnfFiles = false;
+		public bool AssociateStudyBoxFiles = false;
 
 		public VsDualOutputOption VsDualVideoOutput = VsDualOutputOption.Both;
 		public VsDualOutputOption VsDualAudioOutput = VsDualOutputOption.Both;
@@ -173,6 +174,7 @@ namespace Mesen.GUI.Config
 				FileAssociationHelper.UpdateFileAssociation("nsf", preferenceInfo.AssociateNsfFiles);
 				FileAssociationHelper.UpdateFileAssociation("nsfe", preferenceInfo.AssociateNsfFiles);
 				FileAssociationHelper.UpdateFileAssociation("unf", preferenceInfo.AssociateUnfFiles);
+				FileAssociationHelper.UpdateFileAssociation("studybox", preferenceInfo.AssociateStudyBoxFiles);
 			}
 
 			InteropEmu.SetOsdState(!preferenceInfo.DisableOsd);
