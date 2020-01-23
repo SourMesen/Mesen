@@ -17,11 +17,15 @@ extern const uint32_t Crc32Lookup[MaxSlice][256];
 
 // define endianess and some integer data types
 #if defined(_MSC_VER) || defined(__MINGW32__)
-  // Windows always little endian
+	// Windows always little endian
 	#define __BYTE_ORDER __LITTLE_ENDIAN
 #else
-  // defines __BYTE_ORDER as __LITTLE_ENDIAN or __BIG_ENDIAN
-	#include <sys/param.h>
+	// defines __BYTE_ORDER as __LITTLE_ENDIAN or __BIG_ENDIAN
+	#ifdef __APPLE__
+		#include <machine/endian.h>
+	#else
+		#include <endian.h>
+	#endif
 #endif
 
 // abort if byte order is undefined
