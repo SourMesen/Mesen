@@ -503,7 +503,7 @@ protected:
 				if(addr >= 0x2000) {
 					if(isNtFetch) {
 						uint8_t tileNumber = (_splitTileNumber + 2) % 42;
-						if(tileNumber <= 32 && (_verticalSplitRightSide && tileNumber >= _verticalSplitDelimiterTile) || (!_verticalSplitRightSide && tileNumber < _verticalSplitDelimiterTile)) {
+						if(tileNumber <= 32 && ((_verticalSplitRightSide && tileNumber >= _verticalSplitDelimiterTile) || (!_verticalSplitRightSide && tileNumber < _verticalSplitDelimiterTile))) {
 							//Split region (for next 3 fetches, attribute + 2x tile data)
 							_splitInSplitRegion = true;
 							_splitTile = ((verticalSplitScroll & 0xF8) << 2) | tileNumber;
