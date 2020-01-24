@@ -16,6 +16,7 @@ protected:
 	void InitMapper() override
 	{
 		_selectedReg = 0;
+		_mirroringBit = 0;
 		memset(_regs, 0, sizeof(_regs));
 
 		AddRegisterRange(0x5000, 0x5FFF, MemoryOperation::Write);
@@ -29,10 +30,6 @@ protected:
 
 		ArrayInfo<uint8_t> regs{ _regs,4 };
 		Stream(_selectedReg, _mirroringBit, regs);
-
-		if(!saving) {
-			UpdateState();
-		}
 	}
 
 	void UpdateState()
