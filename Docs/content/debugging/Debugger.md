@@ -144,7 +144,7 @@ Additionally, the following special operators exist:
   * e.g: `[$8000]` will read the value at address $8000 and return it.
 * **{*address/label*}**: Surrounding a value/expression with curly brackets will read the corresponding memory address and return its value (2 byte).
   * e.g: `{myLabel}` will read 2 bytes of memory at the address represented by the `myLabel` label and return its value
-* **:*address/label***: Prepending a `:` before an address/label will return the offset of the corresponding address within that memory type. If an address is not mapped to any type of memory, `-1` will be returned.
+* **:address/label**: Prepending a `:` before an address/label will return the offset of the corresponding address within that memory type. If an address is not mapped to any type of memory, `-1` will be returned.
   * e.g: `:$8000` will return the offset in PRG ROM of the byte currently mapped at the CPU address $8000.
 
 #### Special values ####
@@ -392,14 +392,22 @@ The `Break Options` submenu contains a number of options to configure under whic
 * **Break on unofficial opcodes**: Break the emulation whenever an unofficial opcode is about to execute.
 * **Break on BRK**: Break the emulation whenever a BRK instruction is about to execute.
 * **Break on CPU crash**: Break the emulation whenever an instruction that will cause the CPU to freeze is about to execute.
+
+<div></div>
+   
+* **Break on bus conflict**: Break whenever a bus conflict is detected. This option only causes a break when using mappers that have bus conflicts enabled.
 * **Break on decayed OAM read**: Break whenever the code a read is performed on decayed OAM memory. **Note**: *This option is only available when the `Enable OAM RAM decay` option is enabled in the `Emulation Settings`.*
+* **Break on $2006 scroll glitch**: Break whenever the $2006 scroll glitch is triggered by a write to $2006. **Note**: *This option will only trigger a breakpoint if the option to emulate the glitch is turned on*
 * **Break on uninitialized memory read**: Break whenever the code reads from a memory address containing an uninitialized value. **Note**: *This option only works if the debugger has been opened since the last reset or power cycle.*
+
+<div></div>
+ 
 * **Break when debugger is opened**: The emulation will break when you first open the debugger.
 * **Break on debugger focus**: Whenever the debugger's window gains focus (e.g by clicking on it), the emulation will break.
 * **Break on Init (NSF)**: Break when the NSF's Init routine is called.
 * **Break on Play (NSF)**: Break when the NSF's Play routine is called.
 
-**Enable sub-instruction breakpoints**: This option allow Mesen to process breakpoints in the middle of CPU instructions.  This was the default up to version 0.9.7.  When this option is disabled, the debugger will break at the beginning of CPU instructions only (and will only break once per instruction). This is the new default as of 0.9.8.
+**Enable sub-instruction breakpoints**: This option allows Mesen to process breakpoints in the middle of CPU instructions.  This was the default up to version 0.9.7.  When this option is disabled, the debugger will break at the beginning of CPU instructions only (and will only break once per instruction). This option is disabled by default as of 0.9.8.
 
 Additionally, you can configure whether or not the debugger window gets focused when a break or pause occurs.
 

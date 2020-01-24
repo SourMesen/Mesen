@@ -41,8 +41,6 @@ chapter: false
 
 **Display play/record icon when playing or recording a movie**: When enabled, an icon will be shown on the screen whenever a movie is playing or recording.
 
-**Enable developer mode**: When enabled, all debugging tools are moved to a `Debug` menu accessible directly from the main window. This makes debugging tools more accessible as they no longer require opening the debugger before being able to open any other tool.
-
 ## Shortcut Keys ##
 
 <div class="imgBox"><div>
@@ -117,6 +115,7 @@ Available shortcuts:
 * **Load State - Auto Save Slot**: Load the game's state from the auto save slot.
 * **Save State to File**: Save the game's state to a user-specified file.
 * **Load State from File**: Load the game's state from a user-specified file.
+* **Select Save Slot X**: Select the specified save state slot.
 * **Load Last Session**: Restores the game to the state it was the last time you stopped playing it.
 
 ## FDS / VS System / NSF settings ##
