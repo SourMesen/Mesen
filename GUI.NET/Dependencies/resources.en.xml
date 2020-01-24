@@ -357,8 +357,6 @@
 			<Control ID="chkSingleInstance">Only allow one instance of Mesen at a time</Control>
 			<Control ID="chkAutomaticallyCheckForUpdates">Automatically check for updates</Control>
 
-			<Control ID="chkDeveloperMode">Enable developer mode</Control>
-
 			<Control ID="lblPauseBackgroundSettings">Pause/Background Settings</Control>
 			<Control ID="lblMiscSettings">Miscellaneous Settings</Control>
 			<Control ID="chkAutoHideMenu">Automatically hide menu bar</Control>

@@ -370,11 +370,6 @@ namespace Mesen.GUI.Forms
 			DebugWindowManager.OpenDebugWindow(DebugWindow.Debugger);
 		}
 
-		private void mnuDebugDebugger_Click(object sender, EventArgs e)
-		{
-			DebugWindowManager.OpenDebugWindow(DebugWindow.Debugger);
-		}
-
 		private void mnuMemoryViewer_Click(object sender, EventArgs e)
 		{
 			DebugWindowManager.OpenDebugWindow(DebugWindow.MemoryViewer);

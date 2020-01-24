@@ -355,8 +355,6 @@
 			<Control ID="chkSingleInstance">Дозволити лише одну копію Mesen одночасно</Control>
 			<Control ID="chkAutomaticallyCheckForUpdates">Автоматично перевіряти оновлення</Control>
 
-			<Control ID="chkDeveloperMode">Увімкнути режим розробника</Control>
-
 			<Control ID="lblPauseBackgroundSettings">Пауза/Фонові настройки</Control>
 			<Control ID="lblMiscSettings">Різнi настройки</Control>
 			<Control ID="chkAutoHideMenu">Автоматично приховувати панель меню</Control>

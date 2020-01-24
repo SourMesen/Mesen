@@ -867,7 +867,6 @@ namespace Mesen.GUI.Forms
 			BindShortcut(mnuTakeScreenshot, EmulatorShortcut.TakeScreenshot, runningNotNsf);
 			BindShortcut(mnuRandomGame, EmulatorShortcut.LoadRandomGame);
 
-			mnuDebugDebugger.InitShortcut(this, nameof(DebuggerShortcutsConfig.OpenDebugger));
 			mnuDebugger.InitShortcut(this, nameof(DebuggerShortcutsConfig.OpenDebugger));
 			mnuApuViewer.InitShortcut(this, nameof(DebuggerShortcutsConfig.OpenApuViewer));
 			mnuAssembler.InitShortcut(this, nameof(DebuggerShortcutsConfig.OpenAssembler));
@@ -1119,8 +1118,6 @@ namespace Mesen.GUI.Forms
 					this.BeginInvoke((MethodInvoker)(() => this.UpdateMenus()));
 				} else {
 					bool running = _emuThread != null;
-					bool devMode = ConfigManager.Config.PreferenceInfo.DeveloperMode;
-					mnuDebug.Visible = devMode;
 
 					panelInfo.Visible = !running;
 
@@ -1209,9 +1206,7 @@ namespace Mesen.GUI.Forms
 					mnuStartRecordTapeFile.Enabled = !tapeRecording && !isNetPlayClient;
 					mnuStopRecordTapeFile.Enabled = tapeRecording;
 
-					mnuDebugger.Visible = !devMode;
-					mnuDebugger.Enabled = !devMode && running;
-					mnuDebugDebugger.Enabled = devMode && running;
+					mnuDebugger.Enabled = running;
 					mnuApuViewer.Enabled = running;
 					mnuAssembler.Enabled = running;
 					mnuMemoryViewer.Enabled = running;

@@ -357,8 +357,6 @@
 			<Control ID="chkSingleInstance">Permitir executar apenas uma cópia do Mesen por vez</Control>
 			<Control ID="chkAutomaticallyCheckForUpdates">Verificar atualizações automaticamente</Control>
 
-			<Control ID="chkDeveloperMode">Ativar o modo desenvolvedor</Control>
-
 			<Control ID="lblPauseBackgroundSettings">Pausar/configurações em segundo plano</Control>
 			<Control ID="lblMiscSettings">Configurações diversas</Control>
 			<Control ID="chkAutoHideMenu">Ocultar automaticamente a barra de menus</Control>

@@ -380,7 +380,6 @@
 			<Control ID="lblDisplayLanguage">语言:</Control>
 			<Control ID="chkSingleInstance">单实例模式</Control>
 			<Control ID="chkAutomaticallyCheckForUpdates">自动检查更新</Control>
-			<Control ID="chkDeveloperMode">启用开发者模式</Control>
 			<Control ID="lblPauseBackgroundSettings">暂停/后台设置</Control>
 			<Control ID="lblMiscSettings">其他</Control>
 			<Control ID="chkAutoHideMenu">自动隐藏菜单</Control>

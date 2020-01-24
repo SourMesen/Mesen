@@ -79,8 +79,6 @@ namespace Mesen.GUI.Config
 
 		public bool ConfirmExitResetPower = false;
 
-		public bool DeveloperMode = false;
-
 		public UInt32 RewindBufferSize = 300;
 
 		public bool OverrideGameFolder = false;
@@ -179,8 +177,6 @@ namespace Mesen.GUI.Config
 
 			InteropEmu.SetOsdState(!preferenceInfo.DisableOsd);
 			InteropEmu.SetGameDatabaseState(!preferenceInfo.DisableGameDatabase);
-
-			InteropEmu.SetFlag(EmulationFlags.DeveloperMode, preferenceInfo.DeveloperMode);
 
 			InteropEmu.SetFlag(EmulationFlags.FdsAutoLoadDisk, preferenceInfo.FdsAutoLoadDisk);
 			InteropEmu.SetFlag(EmulationFlags.FdsFastForwardOnLoad, preferenceInfo.FdsFastForwardOnLoad);

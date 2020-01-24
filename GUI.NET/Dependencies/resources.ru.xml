@@ -355,8 +355,6 @@
 			<Control ID="chkSingleInstance">Запускать только одну копию Mesen</Control>
 			<Control ID="chkAutomaticallyCheckForUpdates">Автоматически проверять обновления</Control>
 
-			<Control ID="chkDeveloperMode">Включить режим разработчика</Control>
-
 			<Control ID="lblPauseBackgroundSettings">Настройки паузы/заднего плана</Control>
 			<Control ID="lblMiscSettings">Дополнительные настройки</Control>
 			<Control ID="chkAutoHideMenu">Автоматически спрятать строку меню</Control>

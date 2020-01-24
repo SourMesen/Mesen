@@ -28,8 +28,7 @@ namespace Mesen.GUI.Forms.Config
 			AddBinding("AutomaticallyCheckForUpdates", chkAutomaticallyCheckForUpdates);
 			AddBinding("SingleInstance", chkSingleInstance);
 			AddBinding("AutoLoadIpsPatches", chkAutoLoadIps);
-			AddBinding("DeveloperMode", chkDeveloperMode);
-
+			
 			AddBinding("AssociateNesFiles", chkNesFormat);
 			AddBinding("AssociateFdsFiles", chkFdsFormat);
 			AddBinding("AssociateMmoFiles", chkMmoFormat);

@@ -185,7 +185,6 @@ namespace Mesen.GUI.Forms
 			this.mnuRunAllTests = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuRunAllGameTests = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuRunAutomaticTest = new System.Windows.Forms.ToolStripMenuItem();
-			this.mnuDebugger = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuLogWindow = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem27 = new System.Windows.Forms.ToolStripSeparator();
 			this.mnuInstallHdPack = new System.Windows.Forms.ToolStripMenuItem();
@@ -196,7 +195,7 @@ namespace Mesen.GUI.Forms
 			this.mnuDebug = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuApuViewer = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuAssembler = new System.Windows.Forms.ToolStripMenuItem();
-			this.mnuDebugDebugger = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuDebugger = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuEventViewer = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuMemoryViewer = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuProfiler = new System.Windows.Forms.ToolStripMenuItem();
@@ -1184,7 +1183,6 @@ namespace Mesen.GUI.Forms
             this.mnuVideoRecorder,
             this.toolStripMenuItem12,
             this.mnuTests,
-            this.mnuDebugger,
             this.mnuLogWindow,
             this.toolStripMenuItem27,
             this.mnuInstallHdPack,
@@ -1507,14 +1505,6 @@ namespace Mesen.GUI.Forms
 			this.mnuRunAutomaticTest.Text = "Run automatic test";
 			this.mnuRunAutomaticTest.Click += new System.EventHandler(this.mnuRunAutomaticTest_Click);
 			// 
-			// mnuDebugger
-			// 
-			this.mnuDebugger.Image = global::Mesen.GUI.Properties.Resources.Bug;
-			this.mnuDebugger.Name = "mnuDebugger";
-			this.mnuDebugger.Size = new System.Drawing.Size(182, 22);
-			this.mnuDebugger.Text = "Debugger";
-			this.mnuDebugger.Click += new System.EventHandler(this.mnuDebugger_Click);
-			// 
 			// mnuLogWindow
 			// 
 			this.mnuLogWindow.Image = global::Mesen.GUI.Properties.Resources.LogWindow;
@@ -1568,7 +1558,7 @@ namespace Mesen.GUI.Forms
 			this.mnuDebug.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.mnuApuViewer,
             this.mnuAssembler,
-            this.mnuDebugDebugger,
+            this.mnuDebugger,
             this.mnuEventViewer,
             this.mnuMemoryViewer,
             this.mnuProfiler,
@@ -1606,13 +1596,13 @@ namespace Mesen.GUI.Forms
 			this.mnuAssembler.Text = "Assembler";
 			this.mnuAssembler.Click += new System.EventHandler(this.mnuAssembler_Click);
 			// 
-			// mnuDebugDebugger
+			// mnuDebugger
 			// 
-			this.mnuDebugDebugger.Image = global::Mesen.GUI.Properties.Resources.Bug;
-			this.mnuDebugDebugger.Name = "mnuDebugDebugger";
-			this.mnuDebugDebugger.Size = new System.Drawing.Size(258, 22);
-			this.mnuDebugDebugger.Text = "Debugger";
-			this.mnuDebugDebugger.Click += new System.EventHandler(this.mnuDebugDebugger_Click);
+			this.mnuDebugger.Image = global::Mesen.GUI.Properties.Resources.Bug;
+			this.mnuDebugger.Name = "mnuDebugger";
+			this.mnuDebugger.Size = new System.Drawing.Size(258, 22);
+			this.mnuDebugger.Text = "Debugger";
+			this.mnuDebugger.Click += new System.EventHandler(this.mnuDebugger_Click);
 			// 
 			// mnuEventViewer
 			// 
@@ -1872,7 +1862,6 @@ namespace Mesen.GUI.Forms
 		private System.Windows.Forms.ToolStripMenuItem mnuProfile;
 		private System.Windows.Forms.ToolStripMenuItem mnuMovies;
 		private System.Windows.Forms.ToolStripMenuItem mnuPlayMovie;
-		private System.Windows.Forms.ToolStripMenuItem mnuDebugger;
 		private System.Windows.Forms.ToolStripMenuItem mnuTakeScreenshot;
 		private System.Windows.Forms.ToolStripMenuItem mnuRecordMovie;
 		private System.Windows.Forms.ToolStripMenuItem mnuStopMovie;
@@ -2006,7 +1995,7 @@ namespace Mesen.GUI.Forms
 		private System.Windows.Forms.ToolStripMenuItem mnuHdPackEditor;
 		private System.Windows.Forms.ToolStripMenuItem mnuDebug;
 		private System.Windows.Forms.ToolStripMenuItem mnuAssembler;
-		private System.Windows.Forms.ToolStripMenuItem mnuDebugDebugger;
+		private System.Windows.Forms.ToolStripMenuItem mnuDebugger;
 		private System.Windows.Forms.ToolStripMenuItem mnuMemoryViewer;
 		private System.Windows.Forms.ToolStripMenuItem mnuPpuViewer;
 		private System.Windows.Forms.ToolStripMenuItem mnuTraceLogger;
