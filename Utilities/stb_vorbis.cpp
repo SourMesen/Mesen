@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "stb_vorbis.h"
+#include <alloca.h>
 // Ogg Vorbis audio decoder - v1.11 - public domain
 // http://nothings.org/stb_vorbis/
 //
