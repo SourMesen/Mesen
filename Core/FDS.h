@@ -70,6 +70,9 @@ private:
 	vector<vector<uint8_t>> _fdsDiskHeaders;
 	string _romFilepath;
 
+	vector<vector<uint8_t>> _orgDiskSides;
+	vector<vector<uint8_t>> _orgDiskHeaders;
+
 	bool _gameStarted;
 	bool _needSave = false;
 
