@@ -76,13 +76,17 @@ public:
 	void InsertCoin(uint8_t port)
 	{
 		if(port < 4) {
+			_console->Pause();
 			_needInsertCoin[port] = VsSystemActionManager::InsertCoinFrameCount;
 			MessageManager::DisplayMessage("VS System", "CoinInsertedSlot", std::to_string(port + 1));
+			_console->Resume();
 		}
 	}
 
 	void SetServiceButtonState(int consoleId, bool pressed)
 	{
+		_console->Pause();
 		_needServiceButton[consoleId] = pressed;
+		_console->Resume();
 	}
 };

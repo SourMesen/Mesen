@@ -488,7 +488,10 @@ void FDS::StreamState(bool saving)
 	
 	Stream(_irqReloadValue, _irqCounter, _irqEnabled, _irqRepeatEnabled, _diskRegEnabled, _soundRegEnabled, _writeDataReg, _motorOn, _resetTransfer,
 		_readMode, _crcControl, _diskReady, _diskIrqEnabled, _extConWriteReg, _badCrc, _endOfHead, _readWriteEnabled, _readDataReg, _diskWriteProtected,
-		_diskNumber, _diskPosition, _delay, _previousCrcControlFlag, _gapEnded, _scanningDisk, _transferComplete, audio);
+		_diskNumber, _diskPosition, _delay, _previousCrcControlFlag, _gapEnded, _scanningDisk, _transferComplete, audio,
+		_autoDiskEjectCounter, _autoDiskSwitchCounter, _restartAutoInsertCounter, _previousFrame, _lastDiskCheckFrame,
+		_successiveChecks, _previousDiskNumber, _crcAccumulator
+	);
 
 	if(saving) {
 		for(size_t i = 0; i < _fdsDiskSides.size(); i++) {

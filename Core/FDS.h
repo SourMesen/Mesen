@@ -73,7 +73,7 @@ private:
 	vector<vector<uint8_t>> _orgDiskSides;
 	vector<vector<uint8_t>> _orgDiskHeaders;
 
-	bool _gameStarted;
+	bool _gameStarted = false;
 	bool _needSave = false;
 
 protected:
