@@ -23,11 +23,11 @@ private:
 	vector<DebugEventInfo> _sentEvents;
 
 	vector<DebugEventInfo> _snapshot;
-	uint16_t _snapshotScanline;
+	uint16_t _snapshotScanline = 0;
 	SimpleLock _lock;
 
 	uint32_t _scanlineCount = 262;
-	uint16_t *_ppuBuffer;
+	uint16_t *_ppuBuffer = nullptr;
 
 	void DrawEvent(DebugEventInfo &evt, bool drawBackground, uint32_t *buffer, EventViewerDisplayOptions &options);
 	void DrawNtscBorders(uint32_t *buffer);

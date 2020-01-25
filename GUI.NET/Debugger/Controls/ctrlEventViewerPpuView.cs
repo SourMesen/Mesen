@@ -26,7 +26,7 @@ namespace Mesen.GUI.Debugger.Controls
 		private Bitmap _screenBitmap = null;
 		private Bitmap _overlayBitmap = null;
 		private Bitmap _displayBitmap = null;
-		private byte[] _pictureData = null;
+		private UInt32[] _pictureData = null;
 		private Font _overlayFont;
 		
 		public ctrlEventViewerPpuView()

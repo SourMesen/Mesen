@@ -85,12 +85,6 @@ namespace Mesen.GUI.Debugger
 
 				RestoreLocation(_config.EventViewerLocation, _config.EventViewerSize);
 
-				this._notifListener = new InteropEmu.NotificationListener(_config.DebugConsoleId);
-				this._notifListener.OnNotification += this._notifListener_OnNotification;
-
-				_refreshManager = new WindowRefreshManager(this);
-				_refreshManager.AutoRefresh = _config.EventViewerAutoRefresh;
-				_refreshManager.AutoRefreshSpeed = _config.EventViewerAutoRefreshSpeed;
 				mnuAutoRefresh.Checked = _config.EventViewerAutoRefresh;
 				mnuAutoRefreshLow.Click += (s, evt) => _refreshManager.AutoRefreshSpeed = RefreshSpeed.Low;
 				mnuAutoRefreshNormal.Click += (s, evt) => _refreshManager.AutoRefreshSpeed = RefreshSpeed.Normal;
@@ -100,6 +94,13 @@ namespace Mesen.GUI.Debugger
 				this.RefreshData();
 				_binder.UpdateUI();
 				this.RefreshViewer();
+
+				_refreshManager = new WindowRefreshManager(this);
+				_refreshManager.AutoRefresh = _config.EventViewerAutoRefresh;
+				_refreshManager.AutoRefreshSpeed = _config.EventViewerAutoRefreshSpeed;
+
+				this._notifListener = new InteropEmu.NotificationListener(_config.DebugConsoleId);
+				this._notifListener.OnNotification += this._notifListener_OnNotification;
 
 				InitShortcuts();
 			}

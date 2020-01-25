@@ -511,10 +511,10 @@ namespace Mesen.GUI
 		[DllImport(DLLPath)] public static extern void GetEventViewerEvent(ref DebugEventInfo evtInfo, Int16 scanline, UInt16 cycle, EventViewerDisplayOptions options);
 		[DllImport(DLLPath)] public static extern UInt32 TakeEventSnapshot(EventViewerDisplayOptions options);
 
-		[DllImport(DLLPath, EntryPoint = "GetEventViewerOutput")] private static extern void GetEventViewerOutputWrapper([In, Out]byte[] buffer, EventViewerDisplayOptions options);
-		public static byte[] GetEventViewerOutput(UInt32 scanlineCount, EventViewerDisplayOptions options)
+		[DllImport(DLLPath, EntryPoint = "GetEventViewerOutput")] private static extern void GetEventViewerOutputWrapper([In, Out]UInt32[] buffer, EventViewerDisplayOptions options);
+		public static UInt32[] GetEventViewerOutput(UInt32 scanlineCount, EventViewerDisplayOptions options)
 		{
-			byte[] buffer = new byte[341 * 2 * scanlineCount * 2 * 4];
+			UInt32[] buffer = new UInt32[341 * 2 * scanlineCount * 2];
 			InteropEmu.GetEventViewerOutputWrapper(buffer, options);
 			return buffer;
 		}
