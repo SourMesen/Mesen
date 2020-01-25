@@ -562,6 +562,7 @@
     <ClInclude Include="FaridSlrom.h" />
     <ClInclude Include="FaridUnrom.h" />
     <ClInclude Include="FdsSystemActionManager.h" />
+    <ClInclude Include="FlashSST39SF040.h" />
     <ClInclude Include="Gkcx1.h" />
     <ClInclude Include="HdPackConditions.h" />
     <ClInclude Include="HistoryViewer.h" />
