@@ -43,8 +43,8 @@ namespace Mesen.GUI.Controls
 
 				_recentGame = value;
 
-				lblGameName.Text = Path.GetFileNameWithoutExtension(_recentGame.RomName);
-				lblSaveDate.Text = _recentGame.Timestamp.ToString();
+				lblGameName.Text = Path.GetFileNameWithoutExtension(_recentGame.FileName);
+				lblSaveDate.Text = new FileInfo(_recentGame.FileName).LastWriteTime.ToString();
 
 				lblGameName.Visible = true;
 				lblSaveDate.Visible = true;
@@ -53,12 +53,16 @@ namespace Mesen.GUI.Controls
 				Task.Run(() => {
 					Image img = null;
 					try {
-						ZipArchive zip = new ZipArchive(new MemoryStream(File.ReadAllBytes(_recentGame.FileName)));
+						ZipArchive zip = new ZipArchive(new MemoryStream(File.ReadAllBytes(value.FileName)));
 						ZipArchiveEntry entry = zip.GetEntry("Screenshot.png");
 						if(entry != null) {
 							using(Stream stream = entry.Open()) {
 								img = Image.FromStream(stream);
 							}
+						}
+						using(StreamReader sr = new StreamReader(zip.GetEntry("RomInfo.txt").Open())) {
+							string romName = sr.ReadLine();
+							value.RomPath = sr.ReadLine();
 						}
 					} catch { }
 

@@ -100,6 +100,9 @@ namespace Mesen.GUI.Controls
 			}
 			tlpGrid.ResumeLayout();
 			UpdateGameInfo();
+
+			picPrevGame.Visible = _recentGames.Count > _elementsPerPage;
+			picNextGame.Visible = _recentGames.Count > _elementsPerPage;
 		}
 
 		public new bool Visible
@@ -134,29 +137,13 @@ namespace Mesen.GUI.Controls
 			_recentGames = new List<RecentGameInfo>();
 			_currentIndex = 0;
 
-			foreach(string file in Directory.GetFiles(ConfigManager.RecentGamesFolder, "*.rgd")) {
+			List<string> files = Directory.GetFiles(ConfigManager.RecentGamesFolder, "*.rgd").OrderByDescending((file) => new FileInfo(file).LastWriteTime).ToList();
+			for(int i = 0; i < files.Count && _recentGames.Count < 36; i++) {
 				try {
 					RecentGameInfo info = new RecentGameInfo();
-					ZipArchive zip = new ZipArchive(new MemoryStream(File.ReadAllBytes(file)));
-
-					using(StreamReader sr = new StreamReader(zip.GetEntry("RomInfo.txt").Open())) {
-						info.RomName = sr.ReadLine();
-						info.RomPath = sr.ReadLine();
-					}
-
-					info.Timestamp = new FileInfo(file).LastWriteTime;
-					info.FileName = file;
-
-					if(info.RomPath.Exists) {
-						_recentGames.Add(info);
-					}
+					info.FileName = files[i];
+					_recentGames.Add(info);
 				} catch { }
-			}
-
-			_recentGames = _recentGames.OrderBy((info) => info.Timestamp).Reverse().ToList();
-
-			if(_recentGames.Count > 36) {
-				_recentGames.RemoveRange(36, _recentGames.Count - 36);
 			}
 
 			InitGrid();
@@ -169,8 +156,8 @@ namespace Mesen.GUI.Controls
 				tmrInput.Enabled = true;
 			}
 
-			picPrevGame.Visible = true;
-			picNextGame.Visible = true;
+			picPrevGame.Visible = _recentGames.Count > _elementsPerPage;
+			picNextGame.Visible = _recentGames.Count > _elementsPerPage;
 		}
 
 		public void UpdateGameInfo()
@@ -356,8 +343,6 @@ namespace Mesen.GUI.Controls
 	public class RecentGameInfo
 	{
 		public string FileName { get; set; }
-		public string RomName { get; set; }
 		public ResourcePath RomPath { get; set; }
-		public DateTime Timestamp { get; set; }
 	}
 }
