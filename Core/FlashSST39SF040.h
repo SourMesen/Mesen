@@ -54,7 +54,7 @@ public:
 
 	void Write(uint32_t addr, uint8_t value)
 	{
-		uint16_t cmd = addr & 0xFFFF;
+		uint16_t cmd = addr & 0x7FFF;
 		if(_mode == ChipMode::WaitingForCommand) {
 			if(_cycle == 0) {
 				if(cmd == 0x5555 && value == 0xAA) {
