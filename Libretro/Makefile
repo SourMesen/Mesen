@@ -167,7 +167,7 @@ else ifeq ($(platform), vita)
 else ifeq ($(platform), libnx)
    include $(DEVKITPRO)/libnx/switch_rules
    TARGET := $(TARGET_NAME)_libretro_$(platform).a
-   DEFINES := -DSWITCH=1 -D__SWITCH__ -DARM -D_LARGEFILE_SOURCE -D__HAVE_LIBNX__ -D__BYTE_ORDER=1234
+   DEFINES := -DSWITCH=1 -D__SWITCH__ -D_LARGEFILE_SOURCE -DHAVE_LIBNX -D__aarch64__
    CFLAGS := $(DEFINES) -fPIE -I$(LIBNX)/include/ -ffunction-sections -fdata-sections -ftls-model=local-exec 
    CFLAGS += -march=armv8-a -mtune=cortex-a57 -mtp=soft -mcpu=cortex-a57+crc+fp+simd -ffast-math
    CXXFLAGS := $(ASFLAGS) $(CFLAGS)
