@@ -2,12 +2,15 @@
 #include "DefaultVideoFilter.h"
 #include "EmulationSettings.h"
 #define _USE_MATH_DEFINES
-#define M_PI  3.14159265358979323846264f
 #include <math.h>
 #include <algorithm>
 #include "PPU.h"
 #include "DebugHud.h"
 #include "Console.h"
+
+#ifdef __HAVE_LIBNX__
+	#define M_PI  3.14159265358979323846264f
+	#endif
 
 DefaultVideoFilter::DefaultVideoFilter(shared_ptr<Console> console) : BaseVideoFilter(console)
 {

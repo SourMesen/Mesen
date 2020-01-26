@@ -21,7 +21,7 @@ extern const uint32_t Crc32Lookup[MaxSlice][256];
 	#define __BYTE_ORDER __LITTLE_ENDIAN
 #else
 	// defines __BYTE_ORDER as __LITTLE_ENDIAN or __BIG_ENDIAN
-	#ifdef __APPLE__
+#if defined(__APPLE__) || defined(__HAVE_LIBNX__)
 		#include <machine/endian.h>
 	#else
 		#include <endian.h>

@@ -1,6 +1,5 @@
 #include "stdafx.h"
 #include "stb_vorbis.h"
-#include <alloca.h>
 // Ogg Vorbis audio decoder - v1.11 - public domain
 // http://nothings.org/stb_vorbis/
 //
@@ -225,7 +224,7 @@
    #if defined(_MSC_VER) || defined(__MINGW32__)
       #include <malloc.h>
    #endif
-   #if defined(__linux__) || defined(__linux) || defined(__EMSCRIPTEN__)
+   #if defined(__linux__) || defined(__linux) || defined(__EMSCRIPTEN__) || defined(__HAVE_LIBNX__)
       #include <alloca.h>
    #endif
 #else // STB_VORBIS_NO_CRT
