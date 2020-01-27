@@ -115,7 +115,7 @@ public:
 	uint8_t ReadRAM(uint16_t addr) override
 	{
 		if(addr == 0x4016 && _isPlaying) {
-			uint32_t readPos = (uint32_t)((_console->GetCpu()->GetCycleCount() / _cycle) / FamilyBasicDataRecorder::SamplingRate);
+			uint32_t readPos = (uint32_t)((_console->GetCpu()->GetCycleCount() - _cycle) / FamilyBasicDataRecorder::SamplingRate);
 
 			if((uint32_t)_data.size() > readPos / 8) {
 				uint8_t value = ((_data[readPos / 8] >> (readPos % 8)) & 0x01) << 1;
