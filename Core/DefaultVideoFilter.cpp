@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "DefaultVideoFilter.h"
 #include "EmulationSettings.h"
+#include <math.h>
 #define M_PI  3.14159265358979323846264f
 #include <algorithm>
 #include "PPU.h"
