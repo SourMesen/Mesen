@@ -224,7 +224,7 @@
    #if defined(_MSC_VER) || defined(__MINGW32__)
       #include <malloc.h>
    #endif
-   #if defined(__linux__) || defined(__linux) || defined(__EMSCRIPTEN__)
+   #if defined(__linux__) || defined(__linux) || defined(__EMSCRIPTEN__) || defined(HAVE_LIBNX)
       #include <alloca.h>
    #endif
 #else // STB_VORBIS_NO_CRT
