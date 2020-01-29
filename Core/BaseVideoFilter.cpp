@@ -69,7 +69,7 @@ uint32_t* BaseVideoFilter::GetOutputBuffer()
 	return _outputBuffer;
 }
 
-void BaseVideoFilter::TakeScreenshot(VideoFilterType filterType, string filename, std::stringstream *stream)
+void BaseVideoFilter::TakeScreenshot(VideoFilterType filterType, string filename, std::stringstream *stream, bool rawScreenshot)
 {
 	uint32_t* pngBuffer;
 	FrameInfo frameInfo;
@@ -87,22 +87,24 @@ void BaseVideoFilter::TakeScreenshot(VideoFilterType filterType, string filename
 
 	pngBuffer = frameBuffer;
 
-	uint32_t rotationAngle = _console->GetSettings()->GetScreenRotation();
-	shared_ptr<RotateFilter> rotateFilter;
-	if(rotationAngle > 0) {
-		rotateFilter.reset(new RotateFilter(rotationAngle));
-		pngBuffer = rotateFilter->ApplyFilter(pngBuffer, frameInfo.Width, frameInfo.Height);
-		frameInfo = rotateFilter->GetFrameInfo(frameInfo);
-	}
+	if(!rawScreenshot) {
+		uint32_t rotationAngle = _console->GetSettings()->GetScreenRotation();
+		shared_ptr<RotateFilter> rotateFilter;
+		if(rotationAngle > 0) {
+			rotateFilter.reset(new RotateFilter(rotationAngle));
+			pngBuffer = rotateFilter->ApplyFilter(pngBuffer, frameInfo.Width, frameInfo.Height);
+			frameInfo = rotateFilter->GetFrameInfo(frameInfo);
+		}
 
-	shared_ptr<ScaleFilter> scaleFilter = ScaleFilter::GetScaleFilter(filterType);
-	if(scaleFilter) {
-		pngBuffer = scaleFilter->ApplyFilter(pngBuffer, frameInfo.Width, frameInfo.Height, _console->GetSettings()->GetPictureSettings().ScanlineIntensity);
-		frameInfo = scaleFilter->GetFrameInfo(frameInfo);
-	}
+		shared_ptr<ScaleFilter> scaleFilter = ScaleFilter::GetScaleFilter(filterType);
+		if(scaleFilter) {
+			pngBuffer = scaleFilter->ApplyFilter(pngBuffer, frameInfo.Width, frameInfo.Height, _console->GetSettings()->GetPictureSettings().ScanlineIntensity);
+			frameInfo = scaleFilter->GetFrameInfo(frameInfo);
+		}
 
-	VideoHud hud;
-	hud.DrawHud(_console, pngBuffer, frameInfo, _console->GetSettings()->GetOverscanDimensions());
+		VideoHud hud;
+		hud.DrawHud(_console, pngBuffer, frameInfo, _console->GetSettings()->GetOverscanDimensions());
+	}
 
 	if(!filename.empty()) {
 		PNGHelper::WritePNG(filename, pngBuffer, frameInfo.Width, frameInfo.Height);

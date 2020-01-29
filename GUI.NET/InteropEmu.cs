@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
@@ -147,6 +148,21 @@ namespace Mesen.GUI
 		[DllImport(DLLPath)] public static extern void SaveStateFile([MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(UTF8Marshaler))]string filepath);
 		[DllImport(DLLPath)] public static extern void LoadStateFile([MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(UTF8Marshaler))]string filepath);
 		[DllImport(DLLPath)] public static extern Int64 GetStateInfo(UInt32 stateIndex);
+		[DllImport(DLLPath, EntryPoint = "GetSaveStatePreview")] private static extern Int32 GetSaveStatePreviewWrapper([MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(UTF8Marshaler))]string saveStatePath, [Out]byte[] imgData);
+		public static Image GetSaveStatePreview(string saveStatePath)
+		{
+			if(File.Exists(saveStatePath)) {
+				byte[] buffer = new byte[new FileInfo(saveStatePath).Length];
+				Int32 size = InteropEmu.GetSaveStatePreviewWrapper(saveStatePath, buffer);
+				if(size > 0) {
+					Array.Resize(ref buffer, size);
+					using(MemoryStream stream = new MemoryStream(buffer)) {
+						return Image.FromStream(stream);
+					}
+				}
+			}
+			return null;
+		}
 
 		[DllImport(DLLPath)] [return: MarshalAs(UnmanagedType.I1)] public static extern bool IsNsf();
 		[DllImport(DLLPath)] public static extern void NsfSelectTrack(Byte trackNumber);
@@ -1976,6 +1992,7 @@ namespace Mesen.GUI
 		SaveStateSlot9,
 		SaveStateSlot10,
 		SaveStateToFile,
+		SaveStateDialog,
 
 		LoadStateSlot1,
 		LoadStateSlot2,
@@ -1989,6 +2006,7 @@ namespace Mesen.GUI
 		LoadStateSlot10,
 		LoadStateSlotAuto,
 		LoadStateFromFile,
+		LoadStateDialog,
 
 		LoadLastSession,
 

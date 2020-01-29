@@ -14,7 +14,7 @@ private:
 	string GetStateFilepath(int stateIndex);	
 
 public:
-	static constexpr uint32_t FileFormatVersion = 12;
+	static constexpr uint32_t FileFormatVersion = 13;
 
 	SaveStateManager(shared_ptr<Console> console);
 
@@ -34,6 +34,8 @@ public:
 
 	void SaveRecentGame(string romName, string romPath, string patchPath);
 	void LoadRecentGame(string filename, bool resetGame);
+
+	int32_t GetSaveStatePreview(string saveStatePath, uint8_t* pngData);
 
 	void SelectSaveSlot(int slotIndex);
 	void MoveToNextSlot();

@@ -472,6 +472,7 @@ enum class EmulatorShortcut
 	SaveStateSlot9,
 	SaveStateSlot10,
 	SaveStateToFile,
+	SaveStateDialog,
 
 	LoadStateSlot1,
 	LoadStateSlot2,
@@ -485,6 +486,7 @@ enum class EmulatorShortcut
 	LoadStateSlot10,
 	LoadStateSlotAuto,
 	LoadStateFromFile,
+	LoadStateDialog,
 
 	LoadLastSession,
 

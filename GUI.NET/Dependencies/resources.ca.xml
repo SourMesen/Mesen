@@ -762,6 +762,12 @@
 		<Message ID="FilterSavestate">Partides guardades de Mesen (*.mst)|*.mst|Tots els fitxers (*.*)|*.*</Message>
 		<Message ID="FilterTapeFiles">Fitxers de cassets Family Basic (*.fbt)|*.fbt|Tots els fitxers (*.*)|*.*</Message>
 
+		<Message ID="LastSession">Last Session</Message>
+		<Message ID="AutoSave">Auto-save</Message>
+		<Message ID="SlotNumber">Slot #{0}</Message>
+		<Message ID="LoadStateDialog">Load State Menu</Message>
+		<Message ID="SaveStateDialog">Save State Menu</Message>
+
 		<Message ID="LoadFromFile">Carrega des d'un fitxer...</Message>
 		<Message ID="SaveToFile">Desa al fitxer...</Message>
 
@@ -921,6 +927,7 @@
 		<Message ID="EmulatorShortcutMappings_SaveStateSlot9">Desa la partida - Posició 9</Message>
 		<Message ID="EmulatorShortcutMappings_SaveStateSlot10">Desa la partida - Posició 10</Message>
 		<Message ID="EmulatorShortcutMappings_SaveStateToFile">Desa la partida a un fitxer</Message>
+		<Message ID="EmulatorShortcutMappings_SaveStateDialog">Open Save State Menu</Message>
 		<Message ID="EmulatorShortcutMappings_LoadStateSlot1">Carrega la partida - Posició 1</Message>
 		<Message ID="EmulatorShortcutMappings_LoadStateSlot2">Carrega la partida - Posició 2</Message>
 		<Message ID="EmulatorShortcutMappings_LoadStateSlot3">Carrega la partida - Posició 3</Message>
@@ -933,6 +940,7 @@
 		<Message ID="EmulatorShortcutMappings_LoadStateSlot10">Carrega la partida - Posició 10</Message>
 		<Message ID="EmulatorShortcutMappings_LoadStateSlotAuto">Load State - Auto Save Slot</Message>
 		<Message ID="EmulatorShortcutMappings_LoadStateFromFile">Carrega la partida des d'un fitxer</Message>
+		<Message ID="EmulatorShortcutMappings_LoadStateDialog">Open Load State Menu</Message>
 		<Message ID="EmulatorShortcutMappings_LoadLastSession">Load Last Session</Message>
 
 		<Message ID="EmulatorShortcutMappings_SelectSaveSlot1">Select Save Slot 1</Message>

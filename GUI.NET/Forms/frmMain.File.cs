@@ -63,14 +63,23 @@ namespace Mesen.GUI.Forms
 				menu.DropDownItems.Add("-");
 				addSaveStateInfo(NumberOfSaveSlots+1);
 				menu.DropDownItems.Add("-");
+
+				ToolStripMenuItem loadDialog = new ToolStripMenuItem(ResourceHelper.GetMessage("LoadStateDialog"), Resources.SplitView);
+				menu.DropDownItems.Add(loadDialog);
+				BindShortcut(loadDialog, EmulatorShortcut.LoadStateDialog, () => _emuThread != null && !InteropEmu.IsConnected() && !InteropEmu.IsNsf());
+
 				ToolStripMenuItem loadFromFile = new ToolStripMenuItem(ResourceHelper.GetMessage("LoadFromFile"), Resources.FolderOpen);
 				menu.DropDownItems.Add(loadFromFile);
 				BindShortcut(loadFromFile, EmulatorShortcut.LoadStateFromFile);					
 			} else {
 				menu.DropDownItems.Add("-");
+				ToolStripMenuItem saveDialog = new ToolStripMenuItem(ResourceHelper.GetMessage("SaveStateDialog"), Resources.SplitView);
+				menu.DropDownItems.Add(saveDialog);
+				BindShortcut(saveDialog, EmulatorShortcut.SaveStateDialog, () => _emuThread != null && !InteropEmu.IsConnected() && !InteropEmu.IsNsf());
+
 				ToolStripMenuItem saveToFile = new ToolStripMenuItem(ResourceHelper.GetMessage("SaveToFile"), Resources.Floppy);
 				menu.DropDownItems.Add(saveToFile);
-				BindShortcut(saveToFile, EmulatorShortcut.SaveStateToFile);					
+				BindShortcut(saveToFile, EmulatorShortcut.SaveStateToFile);
 			}
 		}
 

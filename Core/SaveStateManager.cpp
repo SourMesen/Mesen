@@ -79,6 +79,12 @@ void SaveStateManager::GetSaveStateHeader(ostream &stream)
 	string sha1Hash = romInfo.Hash.Sha1;
 	stream.write(sha1Hash.c_str(), sha1Hash.size());
 
+	std::stringstream screenshotStream;
+	_console->GetVideoDecoder()->TakeScreenshot(screenshotStream, true);
+	uint32_t screenshotLength = (uint32_t)screenshotStream.tellp();
+	stream.write((char*)&screenshotLength, sizeof(uint32_t));
+	stream.write(screenshotStream.str().c_str(), screenshotLength);
+
 	string romName = romInfo.RomName;
 	uint32_t nameLength = (uint32_t)romName.size();
 	stream.write((char*)&nameLength, sizeof(uint32_t));
@@ -150,6 +156,13 @@ bool SaveStateManager::LoadState(istream &stream, bool hashCheckRequired)
 
 			char hash[41] = {};
 			stream.read(hash, 40);
+
+			if(fileFormatVersion >= 13) {
+				//Skip screenshot data
+				uint32_t screenshotLength = 0;
+				stream.read((char*)&screenshotLength, sizeof(uint32_t));
+				stream.seekg(screenshotLength, std::ios::cur);
+			}
 
 			uint32_t nameLength = 0;
 			stream.read((char*)&nameLength, sizeof(uint32_t));
@@ -229,7 +242,7 @@ void SaveStateManager::SaveRecentGame(string romName, string romPath, string pat
 		writer.Initialize(FolderUtilities::CombinePath(FolderUtilities::GetRecentGamesFolder(), filename));
 
 		std::stringstream pngStream;
-		_console->GetVideoDecoder()->TakeScreenshot(pngStream);
+		_console->GetVideoDecoder()->TakeScreenshot(pngStream, true);
 		writer.AddFile(pngStream, "Screenshot.png");
 
 		std::stringstream stateStream;
@@ -270,4 +283,45 @@ void SaveStateManager::LoadRecentGame(string filename, bool resetGame)
 		_console->Stop();
 	}
 	_console->Resume();
+}
+
+int32_t SaveStateManager::GetSaveStatePreview(string saveStatePath, uint8_t* pngData)
+{
+	ifstream stream(saveStatePath, ios::binary);
+
+	if(!stream) {
+		return -1;
+	}
+
+	char header[3];
+	stream.read(header, 3);
+	if(memcmp(header, "MST", 3) == 0) {
+		uint32_t emuVersion = 0;
+
+		stream.read((char*)&emuVersion, sizeof(emuVersion));
+		if(emuVersion > EmulationSettings::GetMesenVersion()) {
+			return -1;
+		}
+
+		uint32_t fileFormatVersion = 0;
+		stream.read((char*)&fileFormatVersion, sizeof(fileFormatVersion));
+		if(fileFormatVersion <= 12) {
+			return -1;
+		}
+
+		//Skip some header fields
+		stream.seekg(43, ios::cur);
+
+		uint32_t screenshotLength = 0;
+		stream.read((char*)&screenshotLength, sizeof(screenshotLength));
+
+		if(screenshotLength > 0) {
+			stream.read((char*)pngData, screenshotLength);
+			return screenshotLength;
+		}
+
+		return -1;
+	}
+
+	return -1;
 }

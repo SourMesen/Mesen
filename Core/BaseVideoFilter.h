@@ -32,7 +32,7 @@ public:
 	uint32_t* GetOutputBuffer();
 	void SendFrame(uint16_t *ppuOutputBuffer, uint32_t frameNumber);
 	void TakeScreenshot(string romName, VideoFilterType filterType);
-	void TakeScreenshot(VideoFilterType filterType, string filename, std::stringstream *stream = nullptr);
+	void TakeScreenshot(VideoFilterType filterType, string filename, std::stringstream *stream = nullptr, bool rawScreenshot = false);
 
 	virtual OverscanDimensions GetOverscan();
 	virtual FrameInfo GetFrameInfo() = 0;

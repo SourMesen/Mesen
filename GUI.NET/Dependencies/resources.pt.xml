@@ -792,6 +792,12 @@
 		<Message ID="FilterSavestate">Estados salvos do Mesen (*.mst)|*.mst|Todos os arquivos (*.*)|*.*</Message>
 		<Message ID="FilterTapeFiles">Arquivos Family Basic Tape (*.fbt)|*.fbt|Todos os arquivos (*.*)|*.*</Message>
 
+		<Message ID="LastSession">Last Session</Message>
+		<Message ID="AutoSave">Auto-save</Message>
+		<Message ID="SlotNumber">Slot #{0}</Message>
+		<Message ID="LoadStateDialog">Load State Menu</Message>
+		<Message ID="SaveStateDialog">Save State Menu</Message>
+		
 		<Message ID="LoadFromFile">Carregar de um arquivo...</Message>
 		<Message ID="SaveToFile">Salvar para arquivo...</Message>
 
@@ -954,6 +960,7 @@
 		<Message ID="EmulatorShortcutMappings_SaveStateSlot9">Salvar estado - Compartimento 9</Message>
 		<Message ID="EmulatorShortcutMappings_SaveStateSlot10">Salvar estado - Compartimento 10</Message>
 		<Message ID="EmulatorShortcutMappings_SaveStateToFile">Salvar estado para arquivo</Message>
+		<Message ID="EmulatorShortcutMappings_SaveStateDialog">Open Save State Menu</Message>
 		<Message ID="EmulatorShortcutMappings_LoadStateSlot1">Carregar estado - Compartimento 1</Message>
 		<Message ID="EmulatorShortcutMappings_LoadStateSlot2">Carregar estado - Compartimento 2</Message>
 		<Message ID="EmulatorShortcutMappings_LoadStateSlot3">Carregar estado - Compartimento 3</Message>
@@ -966,6 +973,7 @@
 		<Message ID="EmulatorShortcutMappings_LoadStateSlot10">Carregar estado - Compartimento 10</Message>
 		<Message ID="EmulatorShortcutMappings_LoadStateSlotAuto">Carregar estado - Compartimento de salvamento automático</Message>
 		<Message ID="EmulatorShortcutMappings_LoadStateFromFile">Carregar estado de arquivo</Message>
+		<Message ID="EmulatorShortcutMappings_LoadStateDialog">Open Load State Menu</Message>
 		<Message ID="EmulatorShortcutMappings_LoadLastSession">Carregar a última sessão</Message>
 
 		<Message ID="EmulatorShortcutMappings_SelectSaveSlot1">Select Save Slot 1</Message>

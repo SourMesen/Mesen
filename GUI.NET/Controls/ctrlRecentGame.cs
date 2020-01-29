@@ -11,6 +11,8 @@ using System.IO;
 using System.IO.Compression;
 using Mesen.GUI.Config;
 using static Mesen.GUI.Controls.ctrlRecentGames;
+using System.Drawing.Drawing2D;
+using Mesen.GUI.Forms;
 
 namespace Mesen.GUI.Controls
 {
@@ -23,6 +25,8 @@ namespace Mesen.GUI.Controls
 		{
 			InitializeComponent();
 		}
+
+		public GameScreenMode Mode { get; set; }
 
 		public RecentGameInfo RecentGame
 		{
@@ -43,33 +47,52 @@ namespace Mesen.GUI.Controls
 
 				_recentGame = value;
 
-				lblGameName.Text = Path.GetFileNameWithoutExtension(_recentGame.FileName);
-				lblSaveDate.Text = new FileInfo(_recentGame.FileName).LastWriteTime.ToString();
+				if(this.Mode == GameScreenMode.RecentGames) {
+					lblGameName.Text = !string.IsNullOrEmpty(value.Name) ? value.Name : Path.GetFileNameWithoutExtension(_recentGame.FileName);
+					lblGameName.Visible = true;
+				} else {
+					lblGameName.Text = value.Name;
+					lblGameName.Visible = !string.IsNullOrEmpty(value.Name);
+				}
 
-				lblGameName.Visible = true;
+				bool fileExists = File.Exists(_recentGame.FileName);
+				if(fileExists) {
+					lblSaveDate.Text = new FileInfo(_recentGame.FileName).LastWriteTime.ToString();
+				} else {
+					lblSaveDate.Text = ResourceHelper.GetMessage("EmptyState");
+					picPreviousState.Image = null;
+				}
+				this.Enabled = fileExists || this.Mode == GameScreenMode.SaveState;
+
 				lblSaveDate.Visible = true;
 				picPreviousState.Visible = true;
 
-				Task.Run(() => {
-					Image img = null;
-					try {
-						ZipArchive zip = new ZipArchive(new MemoryStream(File.ReadAllBytes(value.FileName)));
-						ZipArchiveEntry entry = zip.GetEntry("Screenshot.png");
-						if(entry != null) {
-							using(Stream stream = entry.Open()) {
-								img = Image.FromStream(stream);
+				if(fileExists) {
+					Task.Run(() => {
+						Image img = null;
+						try {
+							if(this.Mode != GameScreenMode.RecentGames && Path.GetExtension(value.FileName) == ".mst") {
+								img = InteropEmu.GetSaveStatePreview(value.FileName);
+							} else {
+								ZipArchive zip = new ZipArchive(new MemoryStream(File.ReadAllBytes(value.FileName)));
+								ZipArchiveEntry entry = zip.GetEntry("Screenshot.png");
+								if(entry != null) {
+									using(Stream stream = entry.Open()) {
+										img = Image.FromStream(stream);
+									}
+								}
+								using(StreamReader sr = new StreamReader(zip.GetEntry("RomInfo.txt").Open())) {
+									sr.ReadLine(); //skip first line (rom name)
+									value.RomPath = sr.ReadLine();
+								}
 							}
-						}
-						using(StreamReader sr = new StreamReader(zip.GetEntry("RomInfo.txt").Open())) {
-							string romName = sr.ReadLine();
-							value.RomPath = sr.ReadLine();
-						}
-					} catch { }
+						} catch { }
 
-					this.BeginInvoke((Action)(() => {
-						picPreviousState.Image = img;
-					}));
-				});
+						this.BeginInvoke((Action)(() => {
+							picPreviousState.Image = img;
+						}));
+					});
+				}
 			}
 		}
 
@@ -80,8 +103,78 @@ namespace Mesen.GUI.Controls
 
 		private void picPreviousState_Click(object sender, EventArgs e)
 		{
-			InteropEmu.LoadRecentGame(_recentGame.FileName, ConfigManager.Config.PreferenceInfo.GameSelectionScreenResetGame);
+			ProcessClick();
+		}
+
+		public void ProcessClick()
+		{
+			if(!this.Enabled) {
+				return;
+			}
+
+			if(Path.GetExtension(_recentGame.FileName) == ".rgd") {
+				InteropEmu.LoadRecentGame(_recentGame.FileName, ConfigManager.Config.PreferenceInfo.GameSelectionScreenResetGame);
+			} else {
+				switch(this.Mode) {
+					case GameScreenMode.LoadState: InteropEmu.LoadStateFile(_recentGame.FileName); break;
+					case GameScreenMode.SaveState: InteropEmu.SaveStateFile(_recentGame.FileName); break;
+				}
+			}
 			OnRecentGameLoaded?.Invoke(_recentGame);
+		}
+	}
+
+	public class GamePreviewBox : PictureBox
+	{
+		public InterpolationMode InterpolationMode { get; set; }
+		private bool _hovered = false;
+		private bool _highlight = false;
+
+		public GamePreviewBox()
+		{
+			DoubleBuffered = true;
+			InterpolationMode = InterpolationMode.Default;
+		}
+
+		public bool Highlight
+		{
+			get { return _highlight; }
+			set
+			{
+				_highlight = value;
+				this.Invalidate();
+			}
+		}
+
+		protected override void OnEnabledChanged(EventArgs e)
+		{
+			base.OnEnabledChanged(e);
+			_hovered = false;
+			this.Invalidate();
+		}
+
+		protected override void OnMouseEnter(EventArgs e)
+		{
+			base.OnMouseEnter(e);
+			_hovered = true;
+			this.Invalidate();
+		}
+
+		protected override void OnMouseLeave(EventArgs e)
+		{
+			base.OnMouseLeave(e);
+			_hovered = false;
+			this.Invalidate();
+		}
+
+		protected override void OnPaint(PaintEventArgs pe)
+		{
+			pe.Graphics.InterpolationMode = InterpolationMode.NearestNeighbor;
+			base.OnPaint(pe);
+
+			using(Pen pen = new Pen(_hovered && this.Enabled ? Color.DeepSkyBlue : (_highlight ? Color.DodgerBlue : Color.DimGray), 2)) {
+				pe.Graphics.DrawRectangle(pen, 1, 1, this.Width - 2, this.Height - 2);
+			}
 		}
 	}
 }

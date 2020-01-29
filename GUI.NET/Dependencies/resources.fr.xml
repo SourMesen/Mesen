@@ -792,6 +792,12 @@
 		<Message ID="FilterSavestate">Sauvegardes d'états Mesen (*.mst)|*.mst|Tous les fichiers (*.*)|*.*</Message>
 		<Message ID="FilterTapeFiles">Fichiers de cassettes Family Basic (*.fbt)|*.fbt|Tous les fichiers (*.*)|*.*</Message>
 
+		<Message ID="LastSession">Session précédente</Message>
+		<Message ID="AutoSave">Sauvegarde auto.</Message>
+		<Message ID="SlotNumber">Position #{0}</Message>
+		<Message ID="LoadStateDialog">Menu de chargement rapide</Message>
+		<Message ID="SaveStateDialog">Menu de sauvegarde rapide</Message>
+		
 		<Message ID="LoadFromFile">Charger à partir d'un fichier...</Message>
 		<Message ID="SaveToFile">Sauvegarder dans un fichier...</Message>
 
@@ -844,7 +850,7 @@
 		<Message ID="NsfUnknownField">[inconnu]</Message>
 
 		<Message ID="CouldNotInstallRuntime">Le package Redistribuable Visual C++ pour Visual Studio 2015 n'a pas été installé correctement.</Message>
-		<Message ID="EmptyState">&lt;aucune sauvegarde&gt;</Message>
+		<Message ID="EmptyState">&lt;vide&gt;</Message>
 		<Message ID="ErrorWhileCheckingUpdates">Une erreur s'est produite lors de la recherche de mises-à-jour. Vérifier votre connexion internet et essayez à nouveau.&#xA;&#xA;Détails de l'erreur :&#xA;{0}</Message>
 		<Message ID="AutoUpdateDisabledMessage">Les mises-à-jour automatiques ne sont pas disponibles avec votre build - s.v.p télécharger la dernière version du code et recompiler Mesen pour avoir accès à la version la plus récente.</Message>
 		<Message ID="BiosNotFound">Un bios est requis pour ce jeu.&#xA;&#xA;  Nom du fichier : {0}&#xA;  Taille : {1} octets&#xA;&#xA;Voulez-vous choisir le fichier bios maintenant?</Message>
@@ -952,6 +958,7 @@
 		<Message ID="EmulatorShortcutMappings_SaveStateSlot9">Sauvegarde d'état - Position 9</Message>
 		<Message ID="EmulatorShortcutMappings_SaveStateSlot10">Sauvegarde d'état - Position 10</Message>
 		<Message ID="EmulatorShortcutMappings_SaveStateToFile">Sauvergarde l'état dans un fichier</Message>
+		<Message ID="EmulatorShortcutMappings_SaveStateDialog">Ouvrir le menu de sauvegarde rapide</Message>
 		<Message ID="EmulatorShortcutMappings_LoadStateSlot1">Chargement d'état - Position 1</Message>
 		<Message ID="EmulatorShortcutMappings_LoadStateSlot2">Chargement d'état - Position 2</Message>
 		<Message ID="EmulatorShortcutMappings_LoadStateSlot3">Chargement d'état - Position 3</Message>
@@ -964,6 +971,7 @@
 		<Message ID="EmulatorShortcutMappings_LoadStateSlot10">Chargement d'état - Position 10</Message>
 		<Message ID="EmulatorShortcutMappings_LoadStateSlotAuto">Chargement d'état - Sauvegarde auto</Message>
 		<Message ID="EmulatorShortcutMappings_LoadStateFromFile">Charger l'état à partir d'un fichier</Message>
+		<Message ID="EmulatorShortcutMappings_LoadStateDialog">Ouvrir le menu de chargement rapide</Message>
 		<Message ID="EmulatorShortcutMappings_LoadLastSession">Charger la session précédente</Message>
 
 		<Message ID="EmulatorShortcutMappings_SelectSaveSlot1">Choisir position de sauvegarde 1</Message>
