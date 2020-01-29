@@ -355,8 +355,6 @@
 			<Control ID="chkSingleInstance">Permitir una sola copia de Mesen a la vez</Control>
 			<Control ID="chkAutomaticallyCheckForUpdates">Buscar actualizaciones automáticamente</Control>
 
-			<Control ID="chkDeveloperMode">Habilitar modo desarrollador</Control>
-
 			<Control ID="lblPauseBackgroundSettings">Pausa/Configuración en segundo plano</Control>
 			<Control ID="lblMiscSettings">Configuraciones varias</Control>
 			<Control ID="chkAutoHideMenu">Ocultar barra de menú automáticamente</Control>
@@ -781,6 +779,12 @@
 		<Message ID="FilterSavestate">Partidas de juegos de Mesen (*.mst)|*.mst|Todos los archivos (*.*)|*.*</Message>
 		<Message ID="FilterTapeFiles">Archivos Family Basic Tape (*.fbt)|*.fbt|Todos los archivos (*.*)|*.*</Message>
 
+		<Message ID="LastSession">Last Session</Message>
+		<Message ID="AutoSave">Auto-save</Message>
+		<Message ID="SlotNumber">Slot #{0}</Message>
+		<Message ID="LoadStateDialog">Load State Menu</Message>
+		<Message ID="SaveStateDialog">Save State Menu</Message>
+		
 		<Message ID="LoadFromFile">Cargar desde archivo...</Message>
 		<Message ID="SaveToFile">Guardar en archivo...</Message>
 
@@ -940,6 +944,7 @@
 		<Message ID="EmulatorShortcutMappings_SaveStateSlot9">Guardar partida - Hueco 9</Message>
 		<Message ID="EmulatorShortcutMappings_SaveStateSlot10">Guardar partida - Hueco 10</Message>
 		<Message ID="EmulatorShortcutMappings_SaveStateToFile">Guardar partida en archivo</Message>
+		<Message ID="EmulatorShortcutMappings_SaveStateDialog">Open Save State Menu</Message>
 		<Message ID="EmulatorShortcutMappings_LoadStateSlot1">Cargar partida - Hueco 1</Message>
 		<Message ID="EmulatorShortcutMappings_LoadStateSlot2">Cargar partida - Hueco 2</Message>
 		<Message ID="EmulatorShortcutMappings_LoadStateSlot3">Cargar partida - Hueco 3</Message>
@@ -952,6 +957,7 @@
 		<Message ID="EmulatorShortcutMappings_LoadStateSlot10">Cargar partida - Hueco 10</Message>
 		<Message ID="EmulatorShortcutMappings_LoadStateSlotAuto">Cargar partida - Hueco de auto guardado</Message>
 		<Message ID="EmulatorShortcutMappings_LoadStateFromFile">Cargar partida de archivo</Message>
+		<Message ID="EmulatorShortcutMappings_LoadStateDialog">Open Load State Menu</Message>
 		<Message ID="EmulatorShortcutMappings_LoadLastSession">Cargar última sesión</Message>
 
 		<Message ID="EmulatorShortcutMappings_SelectSaveSlot1">Select Save Slot 1</Message>

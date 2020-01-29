@@ -37,6 +37,7 @@ namespace Mesen.GUI.Config
 		public bool AssociateNsfFiles = false;
 		public bool AssociateMstFiles = false;
 		public bool AssociateUnfFiles = false;
+		public bool AssociateStudyBoxFiles = false;
 
 		public VsDualOutputOption VsDualVideoOutput = VsDualOutputOption.Both;
 		public VsDualOutputOption VsDualAudioOutput = VsDualOutputOption.Both;
@@ -77,8 +78,6 @@ namespace Mesen.GUI.Config
 		public bool GameSelectionScreenResetGame = false;
 
 		public bool ConfirmExitResetPower = false;
-
-		public bool DeveloperMode = false;
 
 		public UInt32 RewindBufferSize = 300;
 
@@ -173,12 +172,11 @@ namespace Mesen.GUI.Config
 				FileAssociationHelper.UpdateFileAssociation("nsf", preferenceInfo.AssociateNsfFiles);
 				FileAssociationHelper.UpdateFileAssociation("nsfe", preferenceInfo.AssociateNsfFiles);
 				FileAssociationHelper.UpdateFileAssociation("unf", preferenceInfo.AssociateUnfFiles);
+				FileAssociationHelper.UpdateFileAssociation("studybox", preferenceInfo.AssociateStudyBoxFiles);
 			}
 
 			InteropEmu.SetOsdState(!preferenceInfo.DisableOsd);
 			InteropEmu.SetGameDatabaseState(!preferenceInfo.DisableGameDatabase);
-
-			InteropEmu.SetFlag(EmulationFlags.DeveloperMode, preferenceInfo.DeveloperMode);
 
 			InteropEmu.SetFlag(EmulationFlags.FdsAutoLoadDisk, preferenceInfo.FdsAutoLoadDisk);
 			InteropEmu.SetFlag(EmulationFlags.FdsFastForwardOnLoad, preferenceInfo.FdsFastForwardOnLoad);

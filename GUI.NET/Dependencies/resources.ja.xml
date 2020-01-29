@@ -355,8 +355,6 @@
 			<Control ID="chkSingleInstance">Mesenを単一インスタンスモードにする</Control>
 			<Control ID="chkAutomaticallyCheckForUpdates">自動的にアップデートを確認</Control>
 
-			<Control ID="chkDeveloperMode">開発者モードを有効にする</Control>
-
 			<Control ID="lblPauseBackgroundSettings">ポーズ・バックグラウンド設定</Control>
 			<Control ID="lblMiscSettings">その他</Control>
 			<Control ID="chkAutoHideMenu">自動的にメニューバーを隠す</Control>
@@ -782,6 +780,12 @@
 		<Message ID="FilterSavestate">Mesenのクイックセーブデータ (*.mst)|*.mst|すべてのファイル (*.*)|*.*</Message>
 		<Message ID="FilterTapeFiles">Family Basicテープファイル (*.fbt)|*.fbt|すべてのファイル (*.*)|*.*</Message>
 
+		<Message ID="LastSession">前セッション</Message>
+		<Message ID="AutoSave">オートクイックセーブ</Message>
+		<Message ID="SlotNumber">スロット {0}</Message>
+		<Message ID="LoadStateDialog">クイックロードメニュー</Message>
+		<Message ID="SaveStateDialog">クイックセーブメニュー</Message>
+		
 		<Message ID="LoadFromFile">ファイルからロードする…</Message>
 		<Message ID="SaveToFile">ファイルに保存する…</Message>
 
@@ -942,6 +946,7 @@
 		<Message ID="EmulatorShortcutMappings_SaveStateSlot9">クイックセーブスロット９に保存する</Message>
 		<Message ID="EmulatorShortcutMappings_SaveStateSlot10">クイックセーブスロット１０に保存する</Message>
 		<Message ID="EmulatorShortcutMappings_SaveStateToFile">クイックセーブデータをファイルに保存する</Message>
+		<Message ID="EmulatorShortcutMappings_SaveStateDialog">クイックセーブメニューを開く</Message>
 		<Message ID="EmulatorShortcutMappings_LoadStateSlot1">クイックセーブスロット１からロードする</Message>
 		<Message ID="EmulatorShortcutMappings_LoadStateSlot2">クイックセーブスロット２からロードする</Message>
 		<Message ID="EmulatorShortcutMappings_LoadStateSlot3">クイックセーブスロット３からロードする</Message>
@@ -954,6 +959,7 @@
 		<Message ID="EmulatorShortcutMappings_LoadStateSlot10">クイックセーブスロット１０からロードする</Message>
 		<Message ID="EmulatorShortcutMappings_LoadStateSlotAuto">自動クイックセーブスロットからロードする</Message>
 		<Message ID="EmulatorShortcutMappings_LoadStateFromFile">クイックセーブデータをファイルからロードする</Message>
+		<Message ID="EmulatorShortcutMappings_LoadStateDialog">クイックロードメニューを開く</Message>
 		<Message ID="EmulatorShortcutMappings_LoadLastSession">前セッションをロードする</Message>
 
 		<Message ID="EmulatorShortcutMappings_SelectSaveSlot1">クイックセーブスロット１を選ぶ</Message>

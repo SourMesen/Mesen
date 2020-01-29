@@ -14,6 +14,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml;
 using Mesen.GUI.Config;
+using Mesen.GUI.Controls;
 using Mesen.GUI.Debugger;
 using Mesen.GUI.Forms.Cheats;
 using Mesen.GUI.Forms.Config;
@@ -53,7 +54,6 @@ namespace Mesen.GUI.Forms
 		private object _loadRomLock = new object();
 		private int _romLoadCounter = 0;
 		private bool _showUpgradeMessage = false;
-		private float _yFactor = 1;
 		private bool _enableResize = false;
 		private bool _overrideWindowSize = false;
 		private bool _shuttingDown = false;
@@ -301,8 +301,9 @@ namespace Mesen.GUI.Forms
 
 			ProcessFullscreenSwitch(CommandLineHelper.PreprocessCommandLineArguments(_commandLineArgs, true));
 
-			ctrlRecentGames.Initialize();
-			ctrlRecentGames.Visible = _emuThread == null;
+			if(_emuThread == null) {
+				ShowRecentGames();
+			}
 		}
 
 		protected override void OnClosing(CancelEventArgs e)
@@ -460,15 +461,15 @@ namespace Mesen.GUI.Forms
 			}
 		}
 
-		protected override void ScaleControl(SizeF factor, BoundsSpecified specified)
-		{
-			_yFactor = factor.Height;
-			base.ScaleControl(factor, specified);
-		}
-
 		private void ResizeRecentGames(object sender, EventArgs e)
 		{
+			ctrlRecentGames.Height = this.ClientSize.Height - ctrlRecentGames.Top - (ctrlRecentGames.Mode == GameScreenMode.RecentGames ? 25 : 0);
+		}
+
+		private void ShowRecentGames()
+		{
 			ctrlRecentGames.Height = this.ClientSize.Height - ctrlRecentGames.Top - 25;
+			ctrlRecentGames.ShowScreen(GameScreenMode.RecentGames);
 		}
 
 		private void frmMain_Resize(object sender, EventArgs e)
@@ -707,7 +708,7 @@ namespace Mesen.GUI.Forms
 				case InteropEmu.ConsoleNotificationType.EmulationStopped:
 					InitializeNsfMode();
 					this.BeginInvoke((Action)(() => {
-						ctrlRecentGames.Visible = true;
+						ShowRecentGames();
 					}));
 					break;
 
@@ -718,10 +719,6 @@ namespace Mesen.GUI.Forms
 							_hdPackEditorWindow.Close();
 						}
 						if(e.Parameter == IntPtr.Zero) {
-							if(!ConfigManager.Config.PreferenceInfo.DisableGameSelectionScreen) {
-								ctrlRecentGames.Initialize();
-							}
-
 							//We are completely stopping the emulation, close fullscreen mode
 							StopExclusiveFullscreenMode();
 						}
@@ -867,7 +864,6 @@ namespace Mesen.GUI.Forms
 			BindShortcut(mnuTakeScreenshot, EmulatorShortcut.TakeScreenshot, runningNotNsf);
 			BindShortcut(mnuRandomGame, EmulatorShortcut.LoadRandomGame);
 
-			mnuDebugDebugger.InitShortcut(this, nameof(DebuggerShortcutsConfig.OpenDebugger));
 			mnuDebugger.InitShortcut(this, nameof(DebuggerShortcutsConfig.OpenDebugger));
 			mnuApuViewer.InitShortcut(this, nameof(DebuggerShortcutsConfig.OpenApuViewer));
 			mnuAssembler.InitShortcut(this, nameof(DebuggerShortcutsConfig.OpenAssembler));
@@ -983,6 +979,24 @@ namespace Mesen.GUI.Forms
 
 				case EmulatorShortcut.LoadStateFromFile: LoadStateFromFile(); break;
 				case EmulatorShortcut.SaveStateToFile: SaveStateToFile(); break;
+
+				case EmulatorShortcut.LoadStateDialog:
+					if(_frmFullscreenRenderer != null) {
+						this.SetFullscreenState(false);
+						restoreFullscreen = false;
+					}
+					ctrlRecentGames.ShowScreen(GameScreenMode.LoadState);
+					ctrlRecentGames.Height = this.ClientSize.Height - ctrlRecentGames.Top; 
+					break;
+
+				case EmulatorShortcut.SaveStateDialog:
+					if(_frmFullscreenRenderer != null) {
+						this.SetFullscreenState(false);
+						restoreFullscreen = false;
+					}
+					ctrlRecentGames.ShowScreen(GameScreenMode.SaveState);
+					ctrlRecentGames.Height = this.ClientSize.Height - ctrlRecentGames.Top;
+					break;
 
 				case EmulatorShortcut.SaveStateSlot1: SaveState(1); break;
 				case EmulatorShortcut.SaveStateSlot2: SaveState(2); break;
@@ -1119,8 +1133,6 @@ namespace Mesen.GUI.Forms
 					this.BeginInvoke((MethodInvoker)(() => this.UpdateMenus()));
 				} else {
 					bool running = _emuThread != null;
-					bool devMode = ConfigManager.Config.PreferenceInfo.DeveloperMode;
-					mnuDebug.Visible = devMode;
 
 					panelInfo.Visible = !running;
 
@@ -1209,9 +1221,7 @@ namespace Mesen.GUI.Forms
 					mnuStartRecordTapeFile.Enabled = !tapeRecording && !isNetPlayClient;
 					mnuStopRecordTapeFile.Enabled = tapeRecording;
 
-					mnuDebugger.Visible = !devMode;
-					mnuDebugger.Enabled = !devMode && running;
-					mnuDebugDebugger.Enabled = devMode && running;
+					mnuDebugger.Enabled = running;
 					mnuApuViewer.Enabled = running;
 					mnuAssembler.Enabled = running;
 					mnuMemoryViewer.Enabled = running;

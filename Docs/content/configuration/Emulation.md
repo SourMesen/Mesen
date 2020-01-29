@@ -11,15 +11,20 @@ chapter: false
 	<span>General Options</span>
 </div></div>
 
+{{% notice tip %}}
+Set any speed value below to 0 to make Mesen run as fast as possible.
+{{% /notice %}}
+
 **Emulation Speed**: This configures the regular speed to use when emulating. This should normally be set to `100%`.
 
 **Fast Forward Speed**: This is the alternate speed that is used when the [Fast Forward button](/configuration/preferences.html#shortcut-keys) is held down.
 
 **Rewind Speed**: This configures the speed at which to rewind the gameplay when the [Rewind button](/configuration/preferences.html#shortcut-keys) is held down.
 
-{{% notice tip %}}
-Set any speed value to 0 to make Mesen run as fast as it can.
-{{% /notice %}}
+**Run Ahead**: Run ahead allows the reduction of input lag by the number of frames specified. CPU requirements increase proportionally with the number of run ahead frames specified.  
+
+ * Run ahead is currently not compatible with movies or netplay.
+ * **Note for speedrunners:** Using features such as run ahead to reduce lag typically counts as cheating for the purposes of speed running.
 
 ## Advanced Options ##
 
@@ -37,6 +42,12 @@ When developing software for the NES, enabling these options can help you catch 
 **Enable OAM RAM decay**: On all models, OAM RAM decays whenever rendering is disabled. This causes the values in OAM RAM to decay to a specific value after a certain amount of time has elapsed since the last time the value was read or written (which may cause sprite-related glitches to appear on the screen). No known game relies on this -- the option is offered here mostly for the sake of homebrew software testing. There is a corresponding option to break on decayed OAM reads available in the debugger to help find and debug OAM decay-related bugs.
 
 **Randomize power-on state for mappers**: Cartridges often have a random state at power-on and need to be fully initialized before being used. This option causes Mesen to randomize the power-on state of the most common mappers. This is useful when developing homebrew software.
+
+**Randomize power-on/reset CPU/PPU alignment**: Each time the NES is reset, the CPU and PPU run with a slightly different and random alignment. This option simulates that behavior. When enabled, some test roms may randomily fail from one reset to another, because of the different alignments (this can also happen on the NES.)
+
+**Enable PPU $2006 scroll glitch emulation**: When enabled, a known hardware bug that occurs when the $2006 register is written at specific cycles during rendering. This glitch is known to occur in some licensed NES games and usually results in a single frame displaying with an incorrect scroll position.
+
+**Enable PPU $2000/$2005/$2006 first-write scroll glitch emulation**: When enabled, a known hardware bug that occurs on the first write to the $2005/$2006 registers (or any write to the $2000 register) when the write occurs at cycle during rendering. This glitch is known to occur in some licensed NES games and usually results in a single scanline displaying incorrectly.
 
 **Default power on state for RAM**: On a console, the RAM's state at power on is undetermined and relatively random. This option lets you select Mesen's behavior when initializing RAM - set all bits to 0, set all bits to 1, or randomize the value of each bit.
 
@@ -75,9 +86,5 @@ Overclocking can cause issues in some games. The safest way to overclock is to i
 **Additional scanlines before NMI**: Increases the number of scanlines in the PPU, *before* the NMI signal is triggered at the end of the visible frame. This effectively gives more time for games to perform calculations, which can reduce slowdowns in games. **This is the preferred option for overclocking.**
 
 **Additional scanlines after NMI**: Increases the number of scanlines in the PPU, *after* the NMI signal is triggered at the end of the visible frame. This effectively gives more time for games to perform calculations, which can reduce slowdowns in games. **This option is less compatible and should only be used if the `before NMI` variation does not work as expected.**
-
-**Clock Rate Multiplier**: Use this to overclock or underclock the CPU -- this has the same effect as physically changing the clock speed on an actual NES.  Unless you enable the `Do not overclock APU` option below, the audio output will be affected by this.  ***This is not the recommended way to overclock the CPU.***
-
-**Do not overclock APU**: When the `Clock Rate Multiplier` is not set to 100, the audio will be affected. When this option is enabled, the audio processor is not overclocked, which allows normal sound to be played despite the CPU being overclocked.
 
 **Show Lag Counter**: When enabled, the lag counter is displayed on the screen. The lag counter keeps track of frames where the game does not attempt to read the input ports -- this is usually an indication of the game running out of time to perform calculations, which usually causes slowdowns.

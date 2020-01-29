@@ -73,13 +73,14 @@ namespace Mesen.GUI.Config
 			}
 
 			List<string> mimeTypes = new List<string>();
-			CreateMimeType("x-mesen-nes", "nes", "NES Rom", mimeTypes, preferenceInfo.AssociateNesFiles);
-			CreateMimeType("x-mesen-fds", "fds", "FDS Rom", mimeTypes, preferenceInfo.AssociateFdsFiles);
+			CreateMimeType("x-mesen-nes", "nes", "NES ROM", mimeTypes, preferenceInfo.AssociateNesFiles);
+			CreateMimeType("x-mesen-fds", "fds", "FDS ROM", mimeTypes, preferenceInfo.AssociateFdsFiles);
 			CreateMimeType("x-mesen-nsf", "nsf", "Nintendo Sound File", mimeTypes, preferenceInfo.AssociateNsfFiles);
 			CreateMimeType("x-mesen-nsfe", "nsfe", "Nintendo Sound File (extended)", mimeTypes, preferenceInfo.AssociateNsfFiles);
 			CreateMimeType("x-mesen-mst", "mst", "Mesen Save State", mimeTypes, preferenceInfo.AssociateMstFiles);
 			CreateMimeType("x-mesen-mmo", "mmo", "Mesen Movie File", mimeTypes, preferenceInfo.AssociateMmoFiles);
-			CreateMimeType("x-mesen-unif", "unf", "NES Rom (UNIF)", mimeTypes, preferenceInfo.AssociateUnfFiles);
+			CreateMimeType("x-mesen-unif", "unf", "NES ROM (UNIF)", mimeTypes, preferenceInfo.AssociateUnfFiles);
+			CreateMimeType("x-mesen-studybox", "studybox", "Studybox ROM (Famicom)", mimeTypes, preferenceInfo.AssociateStudyBoxFiles);
 
 			//Icon used for shortcuts
 			Mesen.GUI.Properties.Resources.MesenLogo.Save(Path.Combine(iconFolder, "MesenIcon.png"), ImageFormat.Png);

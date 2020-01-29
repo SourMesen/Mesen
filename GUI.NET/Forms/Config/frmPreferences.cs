@@ -28,14 +28,14 @@ namespace Mesen.GUI.Forms.Config
 			AddBinding("AutomaticallyCheckForUpdates", chkAutomaticallyCheckForUpdates);
 			AddBinding("SingleInstance", chkSingleInstance);
 			AddBinding("AutoLoadIpsPatches", chkAutoLoadIps);
-			AddBinding("DeveloperMode", chkDeveloperMode);
-
+			
 			AddBinding("AssociateNesFiles", chkNesFormat);
 			AddBinding("AssociateFdsFiles", chkFdsFormat);
 			AddBinding("AssociateMmoFiles", chkMmoFormat);
 			AddBinding("AssociateNsfFiles", chkNsfFormat);
 			AddBinding("AssociateMstFiles", chkMstFormat);
 			AddBinding("AssociateUnfFiles", chkUnfFormat);
+			AddBinding("AssociateStudyBoxFiles", chkStudyBoxFormat);
 
 			AddBinding("DisableMouseResize", chkDisableMouseResize);
 

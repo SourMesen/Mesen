@@ -29,6 +29,9 @@ void FDS::InitMapper(RomData &romData)
 	_fdsDiskSides = romData.FdsDiskData;
 	_fdsDiskHeaders = romData.FdsDiskHeaders;
 	_fdsRawData = romData.RawData;
+
+	FdsLoader loader;
+	loader.LoadDiskData(_fdsRawData, _orgDiskSides, _orgDiskHeaders);
 	
 	//Apply save data (saved as an IPS file), if found
 	vector<uint8_t> ipsData = _console->GetBatteryManager()->LoadBattery(".ips");
@@ -485,19 +488,23 @@ void FDS::StreamState(bool saving)
 	
 	Stream(_irqReloadValue, _irqCounter, _irqEnabled, _irqRepeatEnabled, _diskRegEnabled, _soundRegEnabled, _writeDataReg, _motorOn, _resetTransfer,
 		_readMode, _crcControl, _diskReady, _diskIrqEnabled, _extConWriteReg, _badCrc, _endOfHead, _readWriteEnabled, _readDataReg, _diskWriteProtected,
-		_diskNumber, _diskPosition, _delay, _previousCrcControlFlag, _gapEnded, _scanningDisk, _transferComplete, audio);
+		_diskNumber, _diskPosition, _delay, _previousCrcControlFlag, _gapEnded, _scanningDisk, _transferComplete, audio,
+		_autoDiskEjectCounter, _autoDiskSwitchCounter, _restartAutoInsertCounter, _previousFrame, _lastDiskCheckFrame,
+		_successiveChecks, _previousDiskNumber, _crcAccumulator
+	);
 
 	if(saving) {
-		vector<uint8_t> ipsData = CreateIpsPatch();
-		VectorInfo<uint8_t> data{ &ipsData };
-		Stream(data);
+		for(size_t i = 0; i < _fdsDiskSides.size(); i++) {
+			vector<uint8_t> ipsData = IpsPatcher::CreatePatch(_orgDiskSides[i], _fdsDiskSides[i]);
+			VectorInfo<uint8_t> data { &ipsData };
+			Stream(data);
+		}
 	} else {
-		vector<uint8_t> ipsData;
-		VectorInfo<uint8_t> data{ &ipsData };
-		Stream(data);
-		
-		if(ipsData.size() > 0) {
-			LoadDiskData(ipsData);
+		for(size_t i = 0; i < _fdsDiskSides.size(); i++) {
+			vector<uint8_t> ipsData;
+			VectorInfo<uint8_t> data { &ipsData };
+			Stream(data);
+			IpsPatcher::PatchBuffer(ipsData, _orgDiskSides[i], _fdsDiskSides[i]);
 		}
 
 		//Make sure we disable fast forwarding when loading a state

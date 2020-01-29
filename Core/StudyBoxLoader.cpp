@@ -63,21 +63,33 @@ bool StudyBoxLoader::LoadStudyBoxTape(vector<uint8_t> studyBoxFile, StudyBoxData
 	}
 
 	uint32_t prevAudioOffset = 0;
+	uint32_t prevLeadInOffset = 0;
 	while(data < end - 4) {
 		string cc = ReadFourCC(data);
 
 		if(cc == "PAGE") {
 			uint32_t pageSize = ReadInt(data);
+			uint32_t leadInOffset = ReadInt(data);
 			uint32_t audioOffset = ReadInt(data);
-			if(audioOffset < prevAudioOffset) {
+
+			if(audioOffset < leadInOffset) {
+				//Invalid file, lead in must start before the track
+				Log("[Study Box] Track lead in must start before the first bit of data");
+				return false;
+			}
+
+			if(audioOffset < prevAudioOffset || leadInOffset < prevLeadInOffset) {
 				//Invalid file, page chunks must be in the order found on the tape
 				Log("[Study Box] PAGE chunks must be in the order found on the audio tape");
 				return false;
 			}
 
-			if((end - data) >= pageSize - 4) {
-				vector<uint8_t> pageData = ReadArray(data, pageSize - 4);
-				studyBoxData.Pages.push_back({ audioOffset, pageData });
+			prevAudioOffset = audioOffset;
+			prevLeadInOffset = leadInOffset;
+
+			if((end - data) >= pageSize - 8) {
+				vector<uint8_t> pageData = ReadArray(data, pageSize - 8);
+				studyBoxData.Pages.push_back({ leadInOffset, audioOffset, pageData });
 			} else {
 				//Invalid size value
 				Log("[Study Box] Invalid size value for PAGE chunk");
@@ -87,9 +99,14 @@ bool StudyBoxLoader::LoadStudyBoxTape(vector<uint8_t> studyBoxFile, StudyBoxData
 			uint32_t size = ReadInt(data);
 			uint32_t fileType = ReadInt(data);
 			if(fileType == 0) {
-				studyBoxData.AudioFile = ReadArray(data, size);
-				//AUDI chunk should be the last in the file
-				break;
+				if((end - data) >= size - 4) {
+					studyBoxData.AudioFile = ReadArray(data, size - 4);
+					//AUDI chunk should be the last in the file
+					break;
+				} else {
+					Log("[Study Box] Invalid size value for AUDI chunk");
+					return false;
+				}
 			} else {
 				//Unsupported audio type
 				Log("[Study Box] Unsupported audio type: " + std::to_string(fileType));

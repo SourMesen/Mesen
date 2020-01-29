@@ -355,8 +355,6 @@
 			<Control ID="chkSingleInstance">Дозволити лише одну копію Mesen одночасно</Control>
 			<Control ID="chkAutomaticallyCheckForUpdates">Автоматично перевіряти оновлення</Control>
 
-			<Control ID="chkDeveloperMode">Увімкнути режим розробника</Control>
-
 			<Control ID="lblPauseBackgroundSettings">Пауза/Фонові настройки</Control>
 			<Control ID="lblMiscSettings">Різнi настройки</Control>
 			<Control ID="chkAutoHideMenu">Автоматично приховувати панель меню</Control>
@@ -782,6 +780,12 @@
 		<Message ID="FilterSavestate">Mesen Savestates (*.mst)|*.mst|All Files (*.*)|*.*</Message>
 		<Message ID="FilterTapeFiles">Family Basic Tape files (*.fbt)|*.fbt|All Files (*.*)|*.*</Message>
 
+		<Message ID="LastSession">Last Session</Message>
+		<Message ID="AutoSave">Auto-save</Message>
+		<Message ID="SlotNumber">Slot #{0}</Message>
+		<Message ID="LoadStateDialog">Load State Menu</Message>
+		<Message ID="SaveStateDialog">Save State Menu</Message>
+		
 		<Message ID="LoadFromFile">Завантажитти з файлу...</Message>
 		<Message ID="SaveToFile">Зберегти в файл...</Message>
 
@@ -942,6 +946,7 @@
 		<Message ID="EmulatorShortcutMappings_SaveStateSlot9">Збереження стану - Слот 9</Message>
 		<Message ID="EmulatorShortcutMappings_SaveStateSlot10">Збереження стану - Слот 10</Message>
 		<Message ID="EmulatorShortcutMappings_SaveStateToFile">Зберегти стан в файл</Message>
+		<Message ID="EmulatorShortcutMappings_SaveStateDialog">Open Save State Menu</Message>
 		<Message ID="EmulatorShortcutMappings_LoadStateSlot1">Завантаження стану - Слот 1</Message>
 		<Message ID="EmulatorShortcutMappings_LoadStateSlot2">Завантаження стану - Слот 2</Message>
 		<Message ID="EmulatorShortcutMappings_LoadStateSlot3">Завантаження стану - Слот 3</Message>
@@ -954,6 +959,7 @@
 		<Message ID="EmulatorShortcutMappings_LoadStateSlot10">Завантаження стану - Слот 10</Message>
 		<Message ID="EmulatorShortcutMappings_LoadStateSlotAuto">Завантаження стану - Автозавантаження</Message>
 		<Message ID="EmulatorShortcutMappings_LoadStateFromFile">Завантажити стан з файлу</Message>
+		<Message ID="EmulatorShortcutMappings_LoadStateDialog">Open Load State Menu</Message>
 		<Message ID="EmulatorShortcutMappings_LoadLastSession">Завантажити останню сесію</Message>
 
 		<Message ID="EmulatorShortcutMappings_SelectSaveSlot1">Select Save Slot 1</Message>

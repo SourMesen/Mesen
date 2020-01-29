@@ -40,6 +40,7 @@ class MemoryManager : public Snapshotable
 		
 		void Reset(bool softReset);
 		void RegisterIODevice(IMemoryHandler *handler);
+		void RegisterWriteHandler(IMemoryHandler* handler, uint32_t start, uint32_t end);
 		void UnregisterIODevice(IMemoryHandler *handler);
 
 		uint8_t DebugRead(uint16_t addr, bool disableSideEffects = true);

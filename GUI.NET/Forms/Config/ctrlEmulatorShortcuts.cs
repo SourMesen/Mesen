@@ -104,6 +104,7 @@ namespace Mesen.GUI.Forms.Config
 				EmulatorShortcut.SaveStateSlot9,
 				EmulatorShortcut.SaveStateSlot10,
 				EmulatorShortcut.SaveStateToFile,
+				EmulatorShortcut.SaveStateDialog,
 
 				EmulatorShortcut.LoadStateSlot1,
 				EmulatorShortcut.LoadStateSlot2,
@@ -117,6 +118,7 @@ namespace Mesen.GUI.Forms.Config
 				EmulatorShortcut.LoadStateSlot10,
 				EmulatorShortcut.LoadStateSlotAuto,
 				EmulatorShortcut.LoadStateFromFile,
+				EmulatorShortcut.LoadStateDialog,
 
 				EmulatorShortcut.SelectSaveSlot1,
 				EmulatorShortcut.SelectSaveSlot2,

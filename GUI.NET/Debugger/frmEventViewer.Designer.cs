@@ -124,7 +124,7 @@
 			this.tabMain.Location = new System.Drawing.Point(0, 24);
 			this.tabMain.Name = "tabMain";
 			this.tabMain.SelectedIndex = 0;
-			this.tabMain.Size = new System.Drawing.Size(886, 564);
+			this.tabMain.Size = new System.Drawing.Size(904, 564);
 			this.tabMain.TabIndex = 0;
 			this.tabMain.SelectedIndexChanged += new System.EventHandler(this.tabMain_SelectedIndexChanged);
 			// 
@@ -135,7 +135,7 @@
 			this.tpgPpuView.Location = new System.Drawing.Point(4, 22);
 			this.tpgPpuView.Name = "tpgPpuView";
 			this.tpgPpuView.Padding = new System.Windows.Forms.Padding(3);
-			this.tpgPpuView.Size = new System.Drawing.Size(878, 538);
+			this.tpgPpuView.Size = new System.Drawing.Size(896, 538);
 			this.tpgPpuView.TabIndex = 0;
 			this.tpgPpuView.Text = "PPU View";
 			this.tpgPpuView.UseVisualStyleBackColor = true;
@@ -145,16 +145,16 @@
 			this.ctrlEventViewerPpuView.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.ctrlEventViewerPpuView.Location = new System.Drawing.Point(3, 3);
 			this.ctrlEventViewerPpuView.Name = "ctrlEventViewerPpuView";
-			this.ctrlEventViewerPpuView.Size = new System.Drawing.Size(686, 532);
+			this.ctrlEventViewerPpuView.Size = new System.Drawing.Size(685, 532);
 			this.ctrlEventViewerPpuView.TabIndex = 0;
 			// 
 			// grpShow
 			// 
 			this.grpShow.Controls.Add(this.tableLayoutPanel2);
 			this.grpShow.Dock = System.Windows.Forms.DockStyle.Right;
-			this.grpShow.Location = new System.Drawing.Point(689, 3);
+			this.grpShow.Location = new System.Drawing.Point(688, 3);
 			this.grpShow.Name = "grpShow";
-			this.grpShow.Size = new System.Drawing.Size(186, 532);
+			this.grpShow.Size = new System.Drawing.Size(205, 532);
 			this.grpShow.TabIndex = 3;
 			this.grpShow.TabStop = false;
 			this.grpShow.Text = "Show...";
@@ -231,7 +231,7 @@
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel2.Size = new System.Drawing.Size(180, 513);
+			this.tableLayoutPanel2.Size = new System.Drawing.Size(199, 513);
 			this.tableLayoutPanel2.TabIndex = 2;
 			// 
 			// chkShowNtscBorders
@@ -711,7 +711,7 @@
             this.viewToolStripMenuItem});
 			this.menuStrip1.Location = new System.Drawing.Point(0, 0);
 			this.menuStrip1.Name = "menuStrip1";
-			this.menuStrip1.Size = new System.Drawing.Size(886, 24);
+			this.menuStrip1.Size = new System.Drawing.Size(904, 24);
 			this.menuStrip1.TabIndex = 3;
 			this.menuStrip1.Text = "menuStrip1";
 			// 
@@ -841,7 +841,7 @@
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(886, 588);
+			this.ClientSize = new System.Drawing.Size(904, 588);
 			this.Controls.Add(this.tabMain);
 			this.Controls.Add(this.menuStrip1);
 			this.Name = "frmEventViewer";

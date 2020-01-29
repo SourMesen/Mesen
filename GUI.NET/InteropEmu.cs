@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
@@ -146,7 +147,22 @@ namespace Mesen.GUI
 		[DllImport(DLLPath)] public static extern void LoadState(UInt32 stateIndex);
 		[DllImport(DLLPath)] public static extern void SaveStateFile([MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(UTF8Marshaler))]string filepath);
 		[DllImport(DLLPath)] public static extern void LoadStateFile([MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(UTF8Marshaler))]string filepath);
-		[DllImport(DLLPath)] public static extern Int64 GetStateInfo(UInt32 stateIndex);
+
+		[DllImport(DLLPath, EntryPoint = "GetSaveStatePreview")] private static extern Int32 GetSaveStatePreviewWrapper([MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(UTF8Marshaler))]string saveStatePath, [Out]byte[] imgData);
+		public static Image GetSaveStatePreview(string saveStatePath)
+		{
+			if(File.Exists(saveStatePath)) {
+				byte[] buffer = new byte[128000];
+				Int32 size = InteropEmu.GetSaveStatePreviewWrapper(saveStatePath, buffer);
+				if(size > 0) {
+					Array.Resize(ref buffer, size);
+					using(MemoryStream stream = new MemoryStream(buffer)) {
+						return Image.FromStream(stream);
+					}
+				}
+			}
+			return null;
+		}
 
 		[DllImport(DLLPath)] [return: MarshalAs(UnmanagedType.I1)] public static extern bool IsNsf();
 		[DllImport(DLLPath)] public static extern void NsfSelectTrack(Byte trackNumber);
@@ -511,10 +527,10 @@ namespace Mesen.GUI
 		[DllImport(DLLPath)] public static extern void GetEventViewerEvent(ref DebugEventInfo evtInfo, Int16 scanline, UInt16 cycle, EventViewerDisplayOptions options);
 		[DllImport(DLLPath)] public static extern UInt32 TakeEventSnapshot(EventViewerDisplayOptions options);
 
-		[DllImport(DLLPath, EntryPoint = "GetEventViewerOutput")] private static extern void GetEventViewerOutputWrapper([In, Out]byte[] buffer, EventViewerDisplayOptions options);
-		public static byte[] GetEventViewerOutput(UInt32 scanlineCount, EventViewerDisplayOptions options)
+		[DllImport(DLLPath, EntryPoint = "GetEventViewerOutput")] private static extern void GetEventViewerOutputWrapper([In, Out]UInt32[] buffer, EventViewerDisplayOptions options);
+		public static UInt32[] GetEventViewerOutput(UInt32 scanlineCount, EventViewerDisplayOptions options)
 		{
-			byte[] buffer = new byte[341 * 2 * scanlineCount * 2 * 4];
+			UInt32[] buffer = new UInt32[341 * 2 * scanlineCount * 2];
 			InteropEmu.GetEventViewerOutputWrapper(buffer, options);
 			return buffer;
 		}
@@ -1640,8 +1656,6 @@ namespace Mesen.GUI
 
 		PauseOnMovieEnd = 0x0100,
 
-		DeveloperMode = 0x0200,
-
 		AllowBackgroundInput = 0x0400,
 		ReduceSoundInBackground = 0x0800,
 		MuteSoundInBackground = 0x1000,
@@ -1978,6 +1992,7 @@ namespace Mesen.GUI
 		SaveStateSlot9,
 		SaveStateSlot10,
 		SaveStateToFile,
+		SaveStateDialog,
 
 		LoadStateSlot1,
 		LoadStateSlot2,
@@ -1991,6 +2006,7 @@ namespace Mesen.GUI
 		LoadStateSlot10,
 		LoadStateSlotAuto,
 		LoadStateFromFile,
+		LoadStateDialog,
 
 		LoadLastSession,
 

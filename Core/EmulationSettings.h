@@ -23,8 +23,6 @@ enum EmulationFlags : uint64_t
 
 	PauseOnMovieEnd = 0x0100,
 
-	DeveloperMode = 0x0200,
-
 	AllowBackgroundInput = 0x0400,
 	ReduceSoundInBackground = 0x0800,
 	MuteSoundInBackground = 0x1000,
@@ -474,6 +472,7 @@ enum class EmulatorShortcut
 	SaveStateSlot9,
 	SaveStateSlot10,
 	SaveStateToFile,
+	SaveStateDialog,
 
 	LoadStateSlot1,
 	LoadStateSlot2,
@@ -487,6 +486,7 @@ enum class EmulatorShortcut
 	LoadStateSlot10,
 	LoadStateSlotAuto,
 	LoadStateFromFile,
+	LoadStateDialog,
 
 	LoadLastSession,
 

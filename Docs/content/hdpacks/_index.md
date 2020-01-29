@@ -76,7 +76,8 @@ The scale used for the replacement graphics -- this can be any integer number (m
 **Syntax**: `<overscan>[top],[right],[bottom],[left]`  
 **Example**: `<overscan>8,8,8,8`
 
-The overscan values to use when the HD Pack is loaded - this is useful for games that produce glitches on the edges of the screen.
+The overscan values to use when the HD Pack is loaded - this is useful for games that produce glitches on the edges of the screen.  
+**Note:** This feature is only available for HD Packs that contain tile replacement rules. HD Packs that only replace audio cannot use the overscan setting.
 
 ### &lt;patch&gt; tag ###
 
@@ -223,8 +224,8 @@ Album and track numbers are used to form a unique ID for each bgm, allowing up t
 
 ### &lt;sfx&gt; tag ###
 
-**Syntax**: `<sfc>[album - integer],[track - integer],[filename - ogg]`  
-**Example**: `<sfc>0,0,myBgm.ogg`
+**Syntax**: `<sfx>[album - integer],[track - integer],[filename - ogg]`  
+**Example**: `<sfx>0,0,myBgm.ogg`
 
 Used to assign a sound effect (`.ogg` audio file) to a specific album and track number.
 Album and track numbers are used to form a unique ID for each sound effect, allowing up to 64k different sound effects.

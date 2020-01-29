@@ -94,6 +94,7 @@ struct RomInfo
 
 struct PageInfo
 {
+	uint32_t LeadInOffset;
 	uint32_t AudioOffset;
 	vector<uint8_t> Data;
 };

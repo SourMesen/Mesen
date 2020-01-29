@@ -20,15 +20,15 @@ namespace Mesen.GUI.Forms
 				this.BeginInvoke((MethodInvoker)(() => this.UpdateStateMenu(menu, forSave)));
 			} else {
 				for(uint i = 1; i <= frmMain.NumberOfSaveSlots + (forSave ? 0 : 1); i++) {
-					Int64 fileTime = InteropEmu.GetStateInfo(i);
+					string statePath = Path.Combine(ConfigManager.SaveStateFolder, InteropEmu.GetRomInfo().GetRomName() + "_" + i + ".mst");
 					string label;
 					bool isAutoSaveSlot = i == NumberOfSaveSlots + 1;
 					string slotName = isAutoSaveSlot ? "Auto" : i.ToString();
 
-					if(fileTime == 0) {
+					if(!File.Exists(statePath)) {
 						label = slotName + ". " + ResourceHelper.GetMessage("EmptyState");
 					} else {
-						DateTime dateTime = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddSeconds(fileTime).ToLocalTime();
+						DateTime dateTime = new FileInfo(statePath).LastWriteTime;
 						label = slotName + ". " + dateTime.ToShortDateString() + " " + dateTime.ToShortTimeString();
 					}
 
@@ -63,14 +63,23 @@ namespace Mesen.GUI.Forms
 				menu.DropDownItems.Add("-");
 				addSaveStateInfo(NumberOfSaveSlots+1);
 				menu.DropDownItems.Add("-");
+
+				ToolStripMenuItem loadDialog = new ToolStripMenuItem(ResourceHelper.GetMessage("LoadStateDialog"), Resources.SplitView);
+				menu.DropDownItems.Add(loadDialog);
+				BindShortcut(loadDialog, EmulatorShortcut.LoadStateDialog, () => _emuThread != null && !InteropEmu.IsConnected() && !InteropEmu.IsNsf());
+
 				ToolStripMenuItem loadFromFile = new ToolStripMenuItem(ResourceHelper.GetMessage("LoadFromFile"), Resources.FolderOpen);
 				menu.DropDownItems.Add(loadFromFile);
 				BindShortcut(loadFromFile, EmulatorShortcut.LoadStateFromFile);					
 			} else {
 				menu.DropDownItems.Add("-");
+				ToolStripMenuItem saveDialog = new ToolStripMenuItem(ResourceHelper.GetMessage("SaveStateDialog"), Resources.SplitView);
+				menu.DropDownItems.Add(saveDialog);
+				BindShortcut(saveDialog, EmulatorShortcut.SaveStateDialog, () => _emuThread != null && !InteropEmu.IsConnected() && !InteropEmu.IsNsf());
+
 				ToolStripMenuItem saveToFile = new ToolStripMenuItem(ResourceHelper.GetMessage("SaveToFile"), Resources.Floppy);
 				menu.DropDownItems.Add(saveToFile);
-				BindShortcut(saveToFile, EmulatorShortcut.SaveStateToFile);					
+				BindShortcut(saveToFile, EmulatorShortcut.SaveStateToFile);
 			}
 		}
 

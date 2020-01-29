@@ -1,8 +1,13 @@
 #include "stdafx.h"
 
 #ifndef LIBRETRO
+#if __has_include(<filesystem>)
 	#include <filesystem>
 	namespace fs = std::filesystem;
+#elif __has_include(<experimental/filesystem>)
+	#include <experimental/filesystem>
+	namespace fs = std::experimental::filesystem;
+#endif
 #endif
 
 #include <unordered_set>
@@ -208,12 +213,6 @@ string FolderUtilities::CombinePath(string folder, string filename)
 		return folder + filename;
 	}
 }
-
-int64_t FolderUtilities::GetFileModificationTime(string filepath)
-{
-	std::error_code errorCode;
-	return fs::last_write_time(fs::u8path(filepath), errorCode).time_since_epoch() / std::chrono::seconds(1);
-}
 #else
 
 //Libretro: Avoid using filesystem API.
@@ -262,8 +261,4 @@ string FolderUtilities::CombinePath(string folder, string filename)
 	return folder + filename;
 }
 
-int64_t FolderUtilities::GetFileModificationTime(string filepath)
-{
-	return 0;
-}
 #endif

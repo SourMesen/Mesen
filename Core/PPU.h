@@ -75,7 +75,8 @@ class PPU : public IMemoryHandler, public Snapshotable
 		uint32_t _secondaryOAMAddr;
 		bool _sprite0Visible;
 
-		uint32_t _overflowSpriteAddr;
+		uint8_t _firstVisibleSpriteAddr;
+		uint8_t _lastVisibleSpriteAddr;
 		uint32_t _spriteIndex;
 
 		uint8_t _openBus;

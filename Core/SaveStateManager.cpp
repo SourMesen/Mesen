@@ -2,6 +2,8 @@
 #include "../Utilities/FolderUtilities.h"
 #include "../Utilities/ZipWriter.h"
 #include "../Utilities/ZipReader.h"
+#include "../Utilities/PNGHelper.h"
+#include "../Utilities/miniz.h"
 #include "SaveStateManager.h"
 #include "MessageManager.h"
 #include "Console.h"
@@ -10,6 +12,8 @@
 #include "Debugger.h"
 #include "MovieManager.h"
 #include "RomData.h"
+#include "DefaultVideoFilter.h"
+#include "PPU.h"
 
 SaveStateManager::SaveStateManager(shared_ptr<Console> console)
 {
@@ -22,18 +26,6 @@ string SaveStateManager::GetStateFilepath(int stateIndex)
 	string folder = FolderUtilities::GetSaveStateFolder();
 	string filename = FolderUtilities::GetFilename(_console->GetRomInfo().RomName, false) + "_" + std::to_string(stateIndex) + ".mst";
 	return FolderUtilities::CombinePath(folder, filename);
-}
-
-uint64_t SaveStateManager::GetStateInfo(int stateIndex)
-{
-	string filepath = SaveStateManager::GetStateFilepath(stateIndex);
-	ifstream file(filepath, ios::in | ios::binary);
-
-	if(file) {
-		file.close();
-		return FolderUtilities::GetFileModificationTime(filepath);
-	}
-	return 0;
 }
 
 void SaveStateManager::SelectSaveSlot(int slotIndex)
@@ -79,6 +71,8 @@ void SaveStateManager::GetSaveStateHeader(ostream &stream)
 	string sha1Hash = romInfo.Hash.Sha1;
 	stream.write(sha1Hash.c_str(), sha1Hash.size());
 
+	SaveScreenshotData(stream);
+
 	string romName = romInfo.RomName;
 	uint32_t nameLength = (uint32_t)romName.size();
 	stream.write((char*)&nameLength, sizeof(uint32_t));
@@ -121,6 +115,33 @@ void SaveStateManager::SaveState(int stateIndex, bool displayMessage)
 	}
 }
 
+void SaveStateManager::SaveScreenshotData(ostream &stream)
+{
+	unsigned long compressedSize = compressBound(PPU::PixelCount * 2);
+	vector<uint8_t> compressedData(compressedSize, 0);
+	compress2(compressedData.data(), &compressedSize, (const unsigned char*)_console->GetPpu()->GetScreenBuffer(true), PPU::PixelCount * 2, MZ_DEFAULT_LEVEL);
+
+	uint32_t screenshotLength = (uint32_t)compressedSize;
+	stream.write((char*)&screenshotLength, sizeof(uint32_t));
+	stream.write((char*)compressedData.data(), screenshotLength);
+}
+
+bool SaveStateManager::GetScreenshotData(vector<uint8_t>& out, istream& stream)
+{
+	uint32_t screenshotLength = 0;
+	stream.read((char*)&screenshotLength, sizeof(uint32_t));
+
+	vector<uint8_t> compressedData(screenshotLength, 0);
+	stream.read((char*)compressedData.data(), screenshotLength);
+
+	out = vector<uint8_t>(PPU::PixelCount * 2, 0);
+	unsigned long decompSize = PPU::PixelCount * 2;
+	if(uncompress(out.data(), &decompSize, compressedData.data(), (unsigned long)compressedData.size()) == MZ_OK) {
+		return true;
+	}
+	return false;
+}
+
 bool SaveStateManager::LoadState(istream &stream, bool hashCheckRequired)
 {
 	char header[3];
@@ -150,6 +171,13 @@ bool SaveStateManager::LoadState(istream &stream, bool hashCheckRequired)
 
 			char hash[41] = {};
 			stream.read(hash, 40);
+
+			if(fileFormatVersion >= 13) {
+				vector<uint8_t> frameData;
+				if(GetScreenshotData(frameData, stream)) {
+					_console->GetVideoDecoder()->UpdateFrameSync(frameData.data());
+				}
+			}
 
 			uint32_t nameLength = 0;
 			stream.read((char*)&nameLength, sizeof(uint32_t));
@@ -229,7 +257,7 @@ void SaveStateManager::SaveRecentGame(string romName, string romPath, string pat
 		writer.Initialize(FolderUtilities::CombinePath(FolderUtilities::GetRecentGamesFolder(), filename));
 
 		std::stringstream pngStream;
-		_console->GetVideoDecoder()->TakeScreenshot(pngStream);
+		_console->GetVideoDecoder()->TakeScreenshot(pngStream, true);
 		writer.AddFile(pngStream, "Screenshot.png");
 
 		std::stringstream stateStream;
@@ -270,4 +298,49 @@ void SaveStateManager::LoadRecentGame(string filename, bool resetGame)
 		_console->Stop();
 	}
 	_console->Resume();
+}
+
+int32_t SaveStateManager::GetSaveStatePreview(string saveStatePath, uint8_t* pngData)
+{
+	ifstream stream(saveStatePath, ios::binary);
+
+	if(!stream) {
+		return -1;
+	}
+
+	char header[3];
+	stream.read(header, 3);
+	if(memcmp(header, "MST", 3) == 0) {
+		uint32_t emuVersion = 0;
+
+		stream.read((char*)&emuVersion, sizeof(emuVersion));
+		if(emuVersion > EmulationSettings::GetMesenVersion()) {
+			return -1;
+		}
+
+		uint32_t fileFormatVersion = 0;
+		stream.read((char*)&fileFormatVersion, sizeof(fileFormatVersion));
+		if(fileFormatVersion <= 12) {
+			return -1;
+		}
+
+		//Skip some header fields
+		stream.seekg(43, ios::cur);
+
+		vector<uint8_t> frameData;
+		if(GetScreenshotData(frameData, stream)) {
+			DefaultVideoFilter filter(_console);
+			FrameInfo frameInfo = filter.GetFrameInfo();
+			filter.SendFrame((uint16_t*)frameData.data(), 0);
+
+			std::stringstream pngStream;
+			PNGHelper::WritePNG(pngStream, filter.GetOutputBuffer(), frameInfo.Width, frameInfo.Height);
+
+			string data = pngStream.str();
+			memcpy(pngData, data.c_str(), data.size());
+
+			return frameData.size();
+		}
+	}
+	return -1;
 }

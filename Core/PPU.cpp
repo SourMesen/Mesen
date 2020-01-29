@@ -82,7 +82,6 @@ void PPU::Reset()
 	_spriteCount = 0;
 	_secondaryOAMAddr = 0;
 	_sprite0Visible = false;
-	_overflowSpriteAddr = 0;
 	_spriteIndex = 0;
 	_openBus = 0;
 	memset(_openBusDecayStamp, 0, sizeof(_openBusDecayStamp));
@@ -783,7 +782,7 @@ void PPU::LoadExtraSprites()
 		}
 
 		if(loadExtraSprites) {
-			for(uint32_t i = _overflowSpriteAddr; i < 0x100; i += 4) {
+			for(uint32_t i = (_lastVisibleSpriteAddr + 4) & 0xFF; i != _firstVisibleSpriteAddr; i = (i + 4) & 0xFF) {
 				uint8_t spriteY = _spriteRAM[i];
 				if(_scanline >= spriteY && _scanline < spriteY + (_flags.LargeSprites ? 16 : 8)) {
 					LoadSprite(spriteY, _spriteRAM[i + 1], _spriteRAM[i + 2], _spriteRAM[i + 3], true);
@@ -975,19 +974,22 @@ void PPU::ProcessScanline()
 			}
 		}
 	} else if(_cycle >= 321 && _cycle <= 336) {
-		LoadTileInfo();
 		if(_cycle == 321) {
 			if(IsRenderingEnabled()) {
 				LoadExtraSprites();
 				_oamCopybuffer = _secondarySpriteRAM[0];
 			}
+			LoadTileInfo();
 			if(_scanline == -1) {
 				_console->DebugSetLastFramePpuScroll(_state.VideoRamAddr, _state.XScroll, false);
 			}
 		} else if(_prevRenderingEnabled && (_cycle == 328 || _cycle == 336)) {
+			LoadTileInfo();
 			_state.LowBitShift <<= 8;
 			_state.HighBitShift <<= 8;
 			IncHorizontalScrolling();
+		} else {
+			LoadTileInfo();
 		}
 	} else if(_cycle == 337 || _cycle == 339) {
 		if(IsRenderingEnabled()) {
@@ -1014,12 +1016,15 @@ void PPU::ProcessSpriteEvaluation()
 				_sprite0Added = false;
 				_spriteInRange = false;
 				_secondaryOAMAddr = 0;
-				_overflowSpriteAddr = 0;
+				
 				_overflowBugCounter = 0;
 
 				_oamCopyDone = false;
 				_spriteAddrH = (_state.SpriteRamAddr >> 2) & 0x3F;
 				_spriteAddrL = _state.SpriteRamAddr & 0x03;
+
+				_firstVisibleSpriteAddr = _spriteAddrH * 4;
+				_lastVisibleSpriteAddr = _firstVisibleSpriteAddr;
 			} else if(_cycle == 256) {
 				_sprite0Visible = _sprite0Added;
 				_spriteCount = (_secondaryOAMAddr >> 2);
@@ -1056,6 +1061,7 @@ void PPU::ProcessSpriteEvaluation()
 								//Done copying all 4 bytes
 								_spriteInRange = false;
 								_spriteAddrL = 0;
+								_lastVisibleSpriteAddr = _spriteAddrH * 4;
 								_spriteAddrH = (_spriteAddrH + 1) & 0x3F;
 								if(_spriteAddrH == 0) {
 									_oamCopyDone = true;
@@ -1073,11 +1079,6 @@ void PPU::ProcessSpriteEvaluation()
 						_oamCopybuffer = _secondarySpriteRAM[_secondaryOAMAddr & 0x1F];
 
 						//8 sprites have been found, check next sprite for overflow + emulate PPU bug
-						if(_overflowSpriteAddr == 0) {
-							//Used to remove sprite limit
-							_overflowSpriteAddr = _spriteAddrH * 4;
-						}
-
 						if(_spriteInRange) {
 							//Sprite is visible, consider this to be an overflow
 							_statusFlags.SpriteOverflow = true;

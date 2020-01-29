@@ -380,7 +380,6 @@
 			<Control ID="lblDisplayLanguage">语言:</Control>
 			<Control ID="chkSingleInstance">单实例模式</Control>
 			<Control ID="chkAutomaticallyCheckForUpdates">自动检查更新</Control>
-			<Control ID="chkDeveloperMode">启用开发者模式</Control>
 			<Control ID="lblPauseBackgroundSettings">暂停/后台设置</Control>
 			<Control ID="lblMiscSettings">其他</Control>
 			<Control ID="chkAutoHideMenu">自动隐藏菜单</Control>
@@ -806,6 +805,12 @@
 		<Message ID="FilterSavestate">Mesen 进度 (*.mst)|*.mst|所有文件 (*.*)|*.*</Message>
 		<Message ID="FilterTapeFiles">Family Basic 磁带文件 (*.fbt)|*.fbt|所有文件 (*.*)|*.*</Message>
 
+		<Message ID="LastSession">Last Session</Message>
+		<Message ID="AutoSave">Auto-save</Message>
+		<Message ID="SlotNumber">Slot #{0}</Message>
+		<Message ID="LoadStateDialog">Load State Menu</Message>
+		<Message ID="SaveStateDialog">Save State Menu</Message>
+		
 		<Message ID="LoadFromFile">从文件载入...</Message>
 		<Message ID="SaveToFile">保存到文件...</Message>
 		
@@ -962,6 +967,7 @@
 		<Message ID="EmulatorShortcutMappings_SaveStateSlot9">保存进度 9</Message>
 		<Message ID="EmulatorShortcutMappings_SaveStateSlot10">保存进度 10</Message>
 		<Message ID="EmulatorShortcutMappings_SaveStateToFile">进度另存为</Message>
+		<Message ID="EmulatorShortcutMappings_SaveStateDialog">Open Save State Menu</Message>
 		<Message ID="EmulatorShortcutMappings_LoadStateSlot1">载入进度 1</Message>
 		<Message ID="EmulatorShortcutMappings_LoadStateSlot2">载入进度 2</Message>
 		<Message ID="EmulatorShortcutMappings_LoadStateSlot3">载入进度 3</Message>
@@ -974,6 +980,7 @@
 		<Message ID="EmulatorShortcutMappings_LoadStateSlot10">载入进度 10</Message>
 		<Message ID="EmulatorShortcutMappings_LoadStateSlotAuto">载入自动进度</Message>
 		<Message ID="EmulatorShortcutMappings_LoadStateFromFile">载入进度文件</Message>
+		<Message ID="EmulatorShortcutMappings_LoadStateDialog">Open Load State Menu</Message>
 		<Message ID="EmulatorShortcutMappings_LoadLastSession">载入上次会话</Message>
 
 		<Message ID="EmulatorShortcutMappings_SelectSaveSlot1">选择进度槽 1</Message>

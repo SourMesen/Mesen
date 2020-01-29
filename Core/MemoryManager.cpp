@@ -63,6 +63,13 @@ void MemoryManager::RegisterIODevice(IMemoryHandler *handler)
 	InitializeMemoryHandlers(_ramWriteHandlers, handler, ranges.GetRAMWriteAddresses(), ranges.GetAllowOverride());
 }
 
+void MemoryManager::RegisterWriteHandler(IMemoryHandler* handler, uint32_t start, uint32_t end)
+{
+	for(uint32_t i = start; i < end; i++) {
+		_ramWriteHandlers[i] = handler;
+	}
+}
+
 void MemoryManager::UnregisterIODevice(IMemoryHandler *handler)
 {
 	MemoryRanges ranges;

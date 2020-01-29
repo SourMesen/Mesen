@@ -149,6 +149,7 @@ namespace Mesen.GUI.Debugger
 				case DebugWindow.TextHooker: return _openedWindows.ToList().Find((form) => form.GetType() == typeof(frmTextHooker));
 				case DebugWindow.Profiler: return _openedWindows.ToList().Find((form) => form.GetType() == typeof(frmProfiler));
 				case DebugWindow.WatchWindow: return _openedWindows.ToList().Find((form) => form.GetType() == typeof(frmWatchWindow));
+				case DebugWindow.EventViewer: return _openedWindows.ToList().Find((form) => form.GetType() == typeof(frmEventViewer));
 			}
 
 			return null;

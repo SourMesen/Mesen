@@ -1965,6 +1965,7 @@
     <None Include="Resources\BreakpointEnableDisable.png" />
     <None Include="Resources\ArrowKeys.png" />
     <None Include="Resources\Barcode.png" />
+    <None Include="Resources\CloseWhite.png" />
     <Content Include="Resources\coins.png" />
     <None Include="Resources\DipSwitches.png" />
     <None Include="Resources\MesenIcon.png" />

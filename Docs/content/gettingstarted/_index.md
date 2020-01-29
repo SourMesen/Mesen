@@ -15,7 +15,7 @@ chapter: false
 ### Linux ###
 
 * glibc 2.24+
-* Mono 4.2.1+
+* Mono 5.18+
 * SDL 2
 
 ## Installation ##
@@ -113,9 +113,9 @@ Additionally, the two icons at the top right allow you to toggle the repeat and 
 	<span>Game Selection Screen</span>
 </div></div>
 
-The game selection screen is shown when no games are currently loaded -- it will display the last 5 games you've played, along with a screenshot of the game at the point where you left off playing.  
+The game selection screen is shown when no game is currently loaded -- it will display the last games you've played, along with a screenshot of the game at the point where you left off playing. The number of games shown depends on the window's size.
 
-You can use this screen via the key bindings for player 1 - e.g press `Left` or `Right` on Player 1's d-pad to change game, and the `A` button to start the game.  You can also navigate the screen with your mouse -- use the arrows on each side of the screen to change game, and click on the game's screenshot to start playing.
+You can use this screen via the key bindings for player 1 - e.g press the d-pad to change selection, and the `A` button to start the game. You can also navigate the screen with your mouse -- use the arrows on each side of the screen to change game, and click on the game's screenshot to start playing.
 
 <div class="clear"></div>
 
@@ -135,7 +135,7 @@ Mesen has a number of shortcut keys that you may find useful:
 * <kbd>**Backspace**</kbd>: Hold the backspace key to rewind the emulation, frame-by-frame.
 
 {{% notice tip %}}
-If you load a state by mistake, you can use the rewind feature to undo the load state action.
+If you load a state, reset or power cycle by mistake, you can use the rewind feature to undo the action.
 {{% /notice %}}
 
 The [shortcut keys](/configuration/preferences.html#shortcut-keys) can be customized in the [preferences](/configuration/preferences.html).
