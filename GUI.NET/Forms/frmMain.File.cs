@@ -20,15 +20,15 @@ namespace Mesen.GUI.Forms
 				this.BeginInvoke((MethodInvoker)(() => this.UpdateStateMenu(menu, forSave)));
 			} else {
 				for(uint i = 1; i <= frmMain.NumberOfSaveSlots + (forSave ? 0 : 1); i++) {
-					Int64 fileTime = InteropEmu.GetStateInfo(i);
+					string statePath = Path.Combine(ConfigManager.SaveStateFolder, InteropEmu.GetRomInfo().GetRomName() + "_" + i + ".mst");
 					string label;
 					bool isAutoSaveSlot = i == NumberOfSaveSlots + 1;
 					string slotName = isAutoSaveSlot ? "Auto" : i.ToString();
 
-					if(fileTime == 0) {
+					if(!File.Exists(statePath)) {
 						label = slotName + ". " + ResourceHelper.GetMessage("EmptyState");
 					} else {
-						DateTime dateTime = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddSeconds(fileTime).ToLocalTime();
+						DateTime dateTime = new FileInfo(statePath).LastWriteTime;
 						label = slotName + ". " + dateTime.ToShortDateString() + " " + dateTime.ToShortTimeString();
 					}
 

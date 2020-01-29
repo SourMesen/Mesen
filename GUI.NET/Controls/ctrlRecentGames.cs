@@ -163,7 +163,7 @@ namespace Mesen.GUI.Controls
 
 				string romName = InteropEmu.GetRomInfo().GetRomName();
 				for(int i = 0; i < 11; i++) {
-					_recentGames.Add(new RecentGameInfo() { FileName = Path.Combine(ConfigManager.SaveStateFolder, romName + "_" + (i + 1) + ".mst"), Name = i == 10 ? ResourceHelper.GetMessage("AutoSave") : ResourceHelper.GetMessage("SlotNumber", i+1) });
+					_recentGames.Add(new RecentGameInfo() { FileName = Path.Combine(ConfigManager.SaveStateFolder, romName + "_" + (i + 1) + ".mst"), Name = i == 10 ? ResourceHelper.GetMessage("AutoSave") : ResourceHelper.GetMessage("SlotNumber", i+1), SaveSlot = (uint)i+1 });
 				}
 				_recentGames.Add(new RecentGameInfo() { FileName = Path.Combine(ConfigManager.RecentGamesFolder, romName + ".rgd"), Name = ResourceHelper.GetMessage("LastSession") });
 			}
@@ -245,7 +245,9 @@ namespace Mesen.GUI.Controls
 
 		private void RecentGameLoaded(RecentGameInfo gameInfo)
 		{
-			OnRecentGameLoaded?.Invoke(gameInfo);
+			if(this.Mode == GameScreenMode.RecentGames) {
+				OnRecentGameLoaded?.Invoke(gameInfo);
+			}
 			if(this._needResume) {
 				InteropEmu.Resume();
 			}
@@ -327,6 +329,7 @@ namespace Mesen.GUI.Controls
 	{
 		public string FileName { get; set; }
 		public string Name { get; set; }
+		public uint SaveSlot { get; set; }
 		public ResourcePath RomPath { get; set; }
 	}
 

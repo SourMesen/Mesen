@@ -12,13 +12,13 @@ private:
 	shared_ptr<Console> _console;
 
 	string GetStateFilepath(int stateIndex);	
+	void SaveScreenshotData(ostream& stream);
+	bool GetScreenshotData(vector<uint8_t>& out, istream& stream);
 
 public:
 	static constexpr uint32_t FileFormatVersion = 13;
 
 	SaveStateManager(shared_ptr<Console> console);
-
-	uint64_t GetStateInfo(int stateIndex);
 
 	void SaveState();
 	bool LoadState();

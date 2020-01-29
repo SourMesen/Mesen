@@ -116,8 +116,8 @@ namespace Mesen.GUI.Controls
 				InteropEmu.LoadRecentGame(_recentGame.FileName, ConfigManager.Config.PreferenceInfo.GameSelectionScreenResetGame);
 			} else {
 				switch(this.Mode) {
-					case GameScreenMode.LoadState: InteropEmu.LoadStateFile(_recentGame.FileName); break;
-					case GameScreenMode.SaveState: InteropEmu.SaveStateFile(_recentGame.FileName); break;
+					case GameScreenMode.LoadState: InteropEmu.LoadState(_recentGame.SaveSlot); break;
+					case GameScreenMode.SaveState: InteropEmu.SaveState(_recentGame.SaveSlot); break;
 				}
 			}
 			OnRecentGameLoaded?.Invoke(_recentGame);

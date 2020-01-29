@@ -147,12 +147,12 @@ namespace Mesen.GUI
 		[DllImport(DLLPath)] public static extern void LoadState(UInt32 stateIndex);
 		[DllImport(DLLPath)] public static extern void SaveStateFile([MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(UTF8Marshaler))]string filepath);
 		[DllImport(DLLPath)] public static extern void LoadStateFile([MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(UTF8Marshaler))]string filepath);
-		[DllImport(DLLPath)] public static extern Int64 GetStateInfo(UInt32 stateIndex);
+
 		[DllImport(DLLPath, EntryPoint = "GetSaveStatePreview")] private static extern Int32 GetSaveStatePreviewWrapper([MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(UTF8Marshaler))]string saveStatePath, [Out]byte[] imgData);
 		public static Image GetSaveStatePreview(string saveStatePath)
 		{
 			if(File.Exists(saveStatePath)) {
-				byte[] buffer = new byte[new FileInfo(saveStatePath).Length];
+				byte[] buffer = new byte[128000];
 				Int32 size = InteropEmu.GetSaveStatePreviewWrapper(saveStatePath, buffer);
 				if(size > 0) {
 					Array.Resize(ref buffer, size);
