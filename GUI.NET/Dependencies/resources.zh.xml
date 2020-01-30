@@ -805,6 +805,12 @@
 		<Message ID="FilterSavestate">Mesen 进度 (*.mst)|*.mst|所有文件 (*.*)|*.*</Message>
 		<Message ID="FilterTapeFiles">Family Basic 磁带文件 (*.fbt)|*.fbt|所有文件 (*.*)|*.*</Message>
 
+		<Message ID="LastSession">续玩</Message>
+		<Message ID="AutoSave">自动保存</Message>
+		<Message ID="SlotNumber">槽 #{0}</Message>
+		<Message ID="LoadStateDialog">载入进度菜单</Message>
+		<Message ID="SaveStateDialog">保存进度菜单</Message>
+
 		<Message ID="LastSession">Last Session</Message>
 		<Message ID="AutoSave">Auto-save</Message>
 		<Message ID="SlotNumber">Slot #{0}</Message>
@@ -863,8 +869,8 @@
 		<Message ID="EmptyState">&lt;空&gt;</Message>
 		<Message ID="ErrorWhileCheckingUpdates">检查更新时出错，请确认网络通畅然后再试.&#xA;&#xA;详情:&#xA;{0}</Message>
 		<Message ID="AutoUpdateDisabledMessage">此编译版未启用自动更新，要想获得最新版 Mesen，请下载最新版源码来编译.</Message>
-		<Message ID="BiosNotFound">A bios file is required to run this game.&#xA;&#xA;  Filename: {0}&#xA;  Size: {1} bytes&#xA;&#xA;Select bios file now?</Message>
-		<Message ID="BiosMismatch">The selected file does not match the bios required for this game.&#xA;&#xA;Expected SHA-256:&#xA;{0}&#xA;&#xA;Selected file's SHA-256:&#xA;{1}&#xA;&#xA;Would you like to use this file anyway?</Message>
+		<Message ID="BiosNotFound">缺少 FDS 游戏所需 BIOS.&#xA;&#xA;  文件名: {0}&#xA;  大小: {1} 字节&#xA;&#xA;是否要立即手动指定？</Message>
+		<Message ID="BiosMismatch">所选文件不适用于此游戏。&#xA;&#xA;期望 SHA-256:&#xA;{0}&#xA;&#xA;所选文件 SHA-256:&#xA;{1}&#xA;&#xA;是否仍要使用此文件？</Message>
 		<Message ID="FdsDiskSide">磁盘 {0} 的 {1} 面</Message>
 		<Message ID="FileNotFound">文件 {0} 未找到</Message>
 		<Message ID="HDNesTooltip">载入 HDNes 格式 HD 包.&#xA;&#xA;HD 包应放置在 "HdPacks" 文件夹下对应 ROM 名的子文件夹中.&#xA;例: MyRom.nes 对应 "HdPacks\MyRom\hires.txt".</Message>
@@ -967,7 +973,7 @@
 		<Message ID="EmulatorShortcutMappings_SaveStateSlot9">保存进度 9</Message>
 		<Message ID="EmulatorShortcutMappings_SaveStateSlot10">保存进度 10</Message>
 		<Message ID="EmulatorShortcutMappings_SaveStateToFile">进度另存为</Message>
-		<Message ID="EmulatorShortcutMappings_SaveStateDialog">Open Save State Menu</Message>
+		<Message ID="EmulatorShortcutMappings_SaveStateDialog">打开保存进度菜单</Message>
 		<Message ID="EmulatorShortcutMappings_LoadStateSlot1">载入进度 1</Message>
 		<Message ID="EmulatorShortcutMappings_LoadStateSlot2">载入进度 2</Message>
 		<Message ID="EmulatorShortcutMappings_LoadStateSlot3">载入进度 3</Message>
@@ -980,7 +986,7 @@
 		<Message ID="EmulatorShortcutMappings_LoadStateSlot10">载入进度 10</Message>
 		<Message ID="EmulatorShortcutMappings_LoadStateSlotAuto">载入自动进度</Message>
 		<Message ID="EmulatorShortcutMappings_LoadStateFromFile">载入进度文件</Message>
-		<Message ID="EmulatorShortcutMappings_LoadStateDialog">Open Load State Menu</Message>
+		<Message ID="EmulatorShortcutMappings_LoadStateDialog">打开载入进度菜单</Message>
 		<Message ID="EmulatorShortcutMappings_LoadLastSession">载入上次会话</Message>
 
 		<Message ID="EmulatorShortcutMappings_SelectSaveSlot1">选择进度槽 1</Message>
