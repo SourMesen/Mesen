@@ -306,3 +306,7 @@ nav#sidebar > div.highlightable {
 		transition: none;
 	}
 }
+
+code {
+	white-space: normal;
+}
