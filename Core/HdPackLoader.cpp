@@ -223,7 +223,7 @@ bool HdPackLoader::ProcessImgTag(string src)
 
 void HdPackLoader::PremultiplyAlpha(vector<uint32_t> &pixelData)
 {
-	for(int i = 0; i < pixelData.size(); i++) {
+	for(size_t i = 0; i < pixelData.size(); i++) {
 		if(pixelData[i] < 0xFF000000) {
 			uint8_t* output = (uint8_t*)(pixelData.data() + i);
 			uint8_t alpha = output[3] + 1;
