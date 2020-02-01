@@ -212,12 +212,25 @@ bool HdPackLoader::ProcessImgTag(string src)
 	if(PNGHelper::ReadPNG(fileData, pixelData, bitmapInfo.Width, bitmapInfo.Height)) {
 		bitmapInfo.PixelData.resize(pixelData.size() / 4);
 		memcpy(bitmapInfo.PixelData.data(), pixelData.data(), bitmapInfo.PixelData.size() * sizeof(bitmapInfo.PixelData[0]));
-
+		PremultiplyAlpha(bitmapInfo.PixelData);
 		_hdNesBitmaps.push_back(bitmapInfo);
 		return true;
 	} else {
 		MessageManager::Log("[HDPack] Error loading HDPack: PNG file " + src + " could not be read.");
 		return false;
+	}
+}
+
+void HdPackLoader::PremultiplyAlpha(vector<uint32_t> &pixelData)
+{
+	for(int i = 0; i < pixelData.size(); i++) {
+		if(pixelData[i] < 0xFF000000) {
+			uint8_t* output = (uint8_t*)(pixelData.data() + i);
+			uint8_t alpha = output[3] + 1;
+			output[0] = (uint8_t)((alpha * output[0]) >> 8);
+			output[1] = (uint8_t)((alpha * output[1]) >> 8);
+			output[2] = (uint8_t)((alpha * output[2]) >> 8);
+		}
 	}
 }
 
@@ -545,6 +558,8 @@ void HdPackLoader::ProcessBackgroundTag(vector<string> &tokens, vector<HdPackCon
 				bgFileData = _data->BackgroundFileData.back().get();
 				bgFileData->PixelData.resize(pixelData.size() / 4);
 				memcpy(bgFileData->PixelData.data(), pixelData.data(), bgFileData->PixelData.size() * sizeof(bgFileData->PixelData[0]));
+				PremultiplyAlpha(bgFileData->PixelData);
+
 				bgFileData->Width = width;
 				bgFileData->Height = height;
 				bgFileData->PngName = tokens[0];

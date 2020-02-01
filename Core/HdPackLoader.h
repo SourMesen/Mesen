@@ -32,6 +32,7 @@ private:
 
 	//Video
 	bool ProcessImgTag(string src);
+	void PremultiplyAlpha(vector<uint32_t>& pixelData);
 	void ProcessPatchTag(vector<string> &tokens);
 	void ProcessOverscanTag(vector<string> &tokens);
 	void ProcessConditionTag(vector<string> &tokens, bool createInvertedCondition);

@@ -21,11 +21,10 @@ HdNesPack::~HdNesPack()
 
 void HdNesPack::BlendColors(uint8_t output[4], uint8_t input[4])
 {
-	uint8_t alpha = input[3] + 1;
 	uint8_t invertedAlpha = 256 - input[3];
-	output[0] = (uint8_t)((alpha * input[0] + invertedAlpha * output[0]) >> 8);
-	output[1] = (uint8_t)((alpha * input[1] + invertedAlpha * output[1]) >> 8);
-	output[2] = (uint8_t)((alpha * input[2] + invertedAlpha * output[2]) >> 8);
+	output[0] = input[0] + (uint8_t)((invertedAlpha * output[0]) >> 8);
+	output[1] = input[1] + (uint8_t)((invertedAlpha * output[1]) >> 8);
+	output[2] = input[2] + (uint8_t)((invertedAlpha * output[2]) >> 8);
 	output[3] = 0xFF;
 }
 
@@ -58,30 +57,27 @@ void HdNesPack::DrawCustomBackground(uint32_t *outputBuffer, uint32_t x, uint32_
 	uint32_t top = _hdData->Backgrounds[_backgroundIndex].Top;
 	uint32_t width = _hdData->Backgrounds[_backgroundIndex].Data->Width;
 	uint32_t *pngData = _hdData->Backgrounds[_backgroundIndex].data() + ((top + y) * _hdData->Scale * width) + ((left + x) * _hdData->Scale);
+	uint32_t pixelColor;
 
-	if(scale == 1) {
-		if(brightness == 255) {
-			*outputBuffer = *pngData;
-		} else {
-			*outputBuffer = AdjustBrightness((uint8_t*)pngData, brightness);
-		}
-	} else {
-		uint32_t *buffer = outputBuffer;
-		for(uint32_t i = 0; i < scale; i++) {
-			memcpy(outputBuffer, pngData, sizeof(uint32_t) * scale);
-			outputBuffer += screenWidth;
-			pngData += width;
-		}
-
-		if(brightness != 255) {
-			for(uint32_t i = 0; i < scale; i++) {
-				for(uint32_t j = 0; j < scale; j++) {
-					*buffer = AdjustBrightness((uint8_t*)buffer, brightness);
-					buffer++;
-				}
-				buffer += screenWidth - scale;
+	for(uint32_t i = 0; i < scale; i++) {
+		for(uint32_t j = 0; j < scale; j++) {
+			if(brightness == 255) {
+				pixelColor = *pngData;
+			} else {
+				pixelColor = AdjustBrightness((uint8_t*)pngData, brightness);
 			}
+
+			if(((uint8_t*)pngData)[3] == 0xFF) {
+				*outputBuffer = pixelColor;
+			} else if(((uint8_t*)pngData)[3]) {
+				BlendColors((uint8_t*)outputBuffer, (uint8_t*)(&pixelColor));
+			}
+
+			outputBuffer++;
+			pngData++;
 		}
+		outputBuffer += screenWidth - scale;
+		pngData += width - scale;
 	}
 }
 
