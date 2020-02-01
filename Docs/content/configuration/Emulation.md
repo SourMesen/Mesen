@@ -23,7 +23,7 @@ Set any speed value below to 0 to make Mesen run as fast as possible.
 
 **Run Ahead**: Run ahead allows the reduction of input lag by the number of frames specified. CPU requirements increase proportionally with the number of run ahead frames specified.  
 
- * Run ahead is currently not compatible with movies or netplay.
+ * Run ahead is currently not compatible with movies or netplay - the movies and netplay menus will be disabled if runahead is turned on.
  * **Note for speedrunners:** Using features such as run ahead to reduce lag typically counts as cheating for the purposes of speed running.
 
 ## Advanced Options ##
