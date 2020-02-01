@@ -573,7 +573,7 @@
 		</Form>
 		<Form ID="frmAbout" Title="关于 Mesen">
 			<Control ID="labelProductName">Mesen</Control>
-			<Control ID="labelCopyright">© 2019 M. Bibaud (又名 Sour)</Control>
+			<Control ID="labelCopyright">© 2020 M. Bibaud (又名 Sour)</Control>
 			<Control ID="lblWebsite">网站:</Control>
 			<Control ID="lblLink">www.mesen.ca</Control>
 			<Control ID="labelVersion">版本:</Control>
