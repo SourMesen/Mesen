@@ -82,12 +82,12 @@ namespace Mesen.GUI
 
 		private static bool IsLightGun
 		{
-			get { return InteropEmu.HasZapper() || InteropEmu.GetExpansionDevice() == InteropEmu.ExpansionPortDevice.BandaiHyperShot; }
+			get { return InteropEmu.HasZapper() || (InteropEmu.GetConsoleType() == ConsoleType.Famicom && InteropEmu.GetExpansionDevice() == InteropEmu.ExpansionPortDevice.BandaiHyperShot); }
 		}
 
 		public static bool NeedMouseIcon
 		{
-			get { return CursorManager.IsLightGun || InteropEmu.GetExpansionDevice() == InteropEmu.ExpansionPortDevice.OekaKidsTablet; }
+			get { return CursorManager.IsLightGun || (InteropEmu.GetConsoleType() == ConsoleType.Famicom && InteropEmu.GetExpansionDevice() == InteropEmu.ExpansionPortDevice.OekaKidsTablet); }
 		}
 
 		public static void OnMouseMove(Control ctrl)
@@ -148,11 +148,14 @@ namespace Mesen.GUI
 					return false;
 				}
 
-				switch(InteropEmu.GetExpansionDevice()) {
-					case InteropEmu.ExpansionPortDevice.ArkanoidController:
-					case InteropEmu.ExpansionPortDevice.HoriTrack:
-						return true;
+				if(InteropEmu.GetConsoleType() == ConsoleType.Famicom) {
+					switch(InteropEmu.GetExpansionDevice()) {
+						case InteropEmu.ExpansionPortDevice.ArkanoidController:
+						case InteropEmu.ExpansionPortDevice.HoriTrack:
+							return true;
+					}
 				}
+
 				for(int i = 0; i < 4; i++) {
 					switch(InteropEmu.GetControllerType(i)) {
 						case InteropEmu.ControllerType.ArkanoidController:
