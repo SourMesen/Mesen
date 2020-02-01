@@ -762,8 +762,6 @@ bool Debugger::ProcessRamOperation(MemoryOperationType type, uint16_t &addr, uin
 	AddressTypeInfo addressInfo;
 	GetAbsoluteAddressAndType(addr, &addressInfo);
 	int32_t absoluteAddr = addressInfo.Type == AddressType::PrgRom ? addressInfo.Address : -1;
-	int32_t absoluteRamAddr = addressInfo.Type == AddressType::WorkRam ? addressInfo.Address : -1;
-
 	if(addressInfo.Address >= 0 && type != MemoryOperationType::DummyRead && type != MemoryOperationType::DummyWrite && _runToCycle == -1) {
 		//Ignore dummy read/writes and do not change counters while using the step back feature
 		if(type == MemoryOperationType::Write && CheckFlag(DebuggerFlags::IgnoreRedundantWrites)) {
@@ -779,20 +777,16 @@ bool Debugger::ProcessRamOperation(MemoryOperationType type, uint16_t &addr, uin
 				}
 			}
 		}
-	}
 
-	if(absoluteAddr >= 0) {
-		if(type == MemoryOperationType::ExecOperand) {
-			_codeDataLogger->SetFlag(absoluteAddr, CdlPrgFlags::Code);
-		} else if(type == MemoryOperationType::Read) {
-			_codeDataLogger->SetFlag(absoluteAddr, CdlPrgFlags::Data);
-			if(isDmcRead) {
-				_codeDataLogger->SetFlag(absoluteAddr, CdlPrgFlags::PcmData);
+		if(addressInfo.Type == AddressType::PrgRom) {
+			if(type == MemoryOperationType::ExecOperand) {
+				_codeDataLogger->SetFlag(absoluteAddr, CdlPrgFlags::Code);
+			} else if(type == MemoryOperationType::Read) {
+				_codeDataLogger->SetFlag(absoluteAddr, CdlPrgFlags::Data);
+				if(isDmcRead) {
+					_codeDataLogger->SetFlag(absoluteAddr, CdlPrgFlags::PcmData);
+				}
 			}
-		}
-	} else if(addr < 0x2000 || absoluteRamAddr >= 0) {
-		if(type == MemoryOperationType::Write) {
-			_disassembler->InvalidateCache(addressInfo);
 		}
 	}
 
@@ -910,6 +904,8 @@ bool Debugger::ProcessRamOperation(MemoryOperationType type, uint16_t &addr, uin
 	_currentReadValue = nullptr;
 
 	if(type == MemoryOperationType::Write) {
+		_disassembler->InvalidateCache(addressInfo);
+
 		if(addr >= 0x2000 && addr <= 0x3FFF) {
 			if((addr & 0x07) == 5 || (addr & 0x07) == 6) {
 				GetState(&_debugState, false);

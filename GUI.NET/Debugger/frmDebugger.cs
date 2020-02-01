@@ -338,6 +338,9 @@ namespace Mesen.GUI.Debugger
 			if(ConfigManager.Config.DebugInfo.BreakOnDebuggerFocus && !InteropEmu.DebugIsExecutionStopped()) {
 				InteropEmu.DebugStep(1, BreakSource.BreakOnFocus);
 			}
+
+			//Refresh debugger in case memory has been changed by the memory tools, etc
+			UpdateDebugger(false, false);
 		}
 
 		private void ctrlProfiler_OnFunctionSelected(object sender, EventArgs e)

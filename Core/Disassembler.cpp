@@ -262,6 +262,10 @@ uint32_t Disassembler::BuildCache(AddressTypeInfo &info, uint16_t cpuAddress, bo
 
 void Disassembler::InvalidateCache(AddressTypeInfo &info)
 {
+	if(info.Address < 0) {
+		return;
+	}
+
 	int32_t addr;
 	vector<shared_ptr<DisassemblyInfo>> *cache = nullptr;
 
