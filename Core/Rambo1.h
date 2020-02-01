@@ -157,7 +157,7 @@ public:
 	virtual void NotifyVRAMAddressChange(uint16_t addr) override
 	{
 		if(!_irqCycleMode) {
-			if(_a12Watcher.UpdateVramAddress(addr, _console->GetPpu()->GetFrameCycle()) == A12StateChange::Rise) {
+			if(_a12Watcher.UpdateVramAddress<30>(addr, _console->GetPpu()->GetFrameCycle()) == A12StateChange::Rise) {
 				ClockIrqCounter(Rambo1::PpuIrqDelay);
 			}
 		}

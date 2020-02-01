@@ -23,6 +23,7 @@ public:
 		Stream(_lastCycle, _cyclesDown);
 	}
 
+	template<uint8_t minDelay = 10>
 	A12StateChange UpdateVramAddress(uint16_t addr, uint32_t frameCycle)
 	{
 		A12StateChange result = A12StateChange::None;
@@ -42,7 +43,7 @@ public:
 				result = A12StateChange::Fall;
 			}
 		} else if(addr & 0x1000) {
-			if(_cyclesDown > 10) {
+			if(_cyclesDown > minDelay) {
 				result = A12StateChange::Rise;
 			}
 			_cyclesDown = 0;
