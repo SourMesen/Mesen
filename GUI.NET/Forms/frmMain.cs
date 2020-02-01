@@ -38,6 +38,7 @@ namespace Mesen.GUI.Forms
 		private string _movieToRecord = null;
 		private List<string> _luaScriptsToLoad = new List<string>();
 		private bool _loadLastSessionRequested = false;
+		private bool _openDebuggerRequested = false;
 
 		private Image _pauseButton = Resources.Pause;
 		private Image _playButton = Resources.Play;
@@ -119,6 +120,8 @@ namespace Mesen.GUI.Forms
 
 			if(switches.Contains("/loadlastsession")) {
 				_loadLastSessionRequested = true;
+			} else if(switches.Contains("/debugger")) {
+				_openDebuggerRequested = true;
 			}
 
 			Regex recordMovieCommand = new Regex("/recordmovie=([^\"]+)");
@@ -679,6 +682,11 @@ namespace Mesen.GUI.Forms
 						this.Invoke((MethodInvoker)(() => {
 							this.ShowGameConfig();
 						}));
+					}
+
+					if(_openDebuggerRequested) {
+						InteropEmu.DebugPpuStep(1);
+						_openDebuggerRequested = false;
 					}
 
 					this.StartEmuThread();
