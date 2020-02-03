@@ -4,7 +4,7 @@
 #
 # Automatically generated database based on Nestopia's DB and NesCartDB
 #
-# Generated on 2019-11-14 using:
+# Generated on 2020-02-03 using:
 #     -NesCartDB (dated 2017-08-21)
 #     -Nestopia UE's latest DB (dated 2015-10-22) 
 # 
@@ -11452,7 +11452,7 @@ BD4E8769,NesNtsc,UNK,,,1,128,128,,0,0,0,h,,,,,
 BD4EF356,NesNtsc,UNK,,,0,16,,,0,0,0,h,,,,,
 BD4F0718,NesNtsc,UNK,,,19,256,128,,0,0,0,h,,,,,
 BD50F230,Famicom,HVC-TLROM,HVC-TLROM-04,MMC3B,4,128,128,,0,0,0,,,,,,
-BD523011,Famicom,NAMCOT-340,ICM60-26-K,340,210,256,256,,0,0,0,h,,,,,
+BD523011,Famicom,NAMCOT-175,ICM60-26-K,175,210,256,256,,0,0,0,h,,,1,,
 BD583673,NesNtsc,UNK,,,241,512,,,0,0,0,v,,,,,
 BD590079,NesNtsc,UNK,,,4,64,32,,0,0,0,v,,,,,
 BD5932EC,NesNtsc,UNK,,,2,128,,,0,0,0,v,,,,,
