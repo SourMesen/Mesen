@@ -428,6 +428,7 @@
     <ClInclude Include="CamstudioCodec.h" />
     <ClInclude Include="CRC32.h" />
     <ClInclude Include="FolderUtilities.h" />
+    <ClInclude Include="gif.h" />
     <ClInclude Include="GifRecorder.h" />
     <ClInclude Include="HexUtilities.h" />
     <ClInclude Include="HQX\common.h" />

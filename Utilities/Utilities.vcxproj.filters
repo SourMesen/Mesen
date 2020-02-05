@@ -172,6 +172,9 @@
     <ClInclude Include="AviRecorder.h">
       <Filter>Avi</Filter>
     </ClInclude>
+    <ClInclude Include="gif.h">
+      <Filter>Misc</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="xBRZ\xbrz.cpp">

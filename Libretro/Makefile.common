@@ -118,13 +118,13 @@ SOURCES_CXX := $(LIBRETRO_DIR)/libretro.cpp \
                $(UTIL_DIR)/ArchiveReader.cpp \
                $(UTIL_DIR)/AutoResetEvent.cpp \
                $(UTIL_DIR)/AviRecorder.cpp \
-			   $(UTIL_DIR)/AviWriter.cpp \
+               $(UTIL_DIR)/AviWriter.cpp \
                $(UTIL_DIR)/blip_buf.cpp \
                $(UTIL_DIR)/BpsPatcher.cpp \
                $(UTIL_DIR)/CamstudioCodec.cpp \
                $(UTIL_DIR)/CRC32.cpp \
                $(UTIL_DIR)/FolderUtilities.cpp \
-               $(UTIL_DIR)/GifRecorder.cpp \			   
+               $(UTIL_DIR)/GifRecorder.cpp \
                $(UTIL_DIR)/HexUtilities.cpp \
                $(UTIL_DIR)/IpsPatcher.cpp \
                $(UTIL_DIR)/md5.cpp \
