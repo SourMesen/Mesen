@@ -797,6 +797,7 @@
 		<Message ID="FilterMovie">影片文件 (*.mmo)|*.mmo|所有文件 (*.*)|*.*</Message>
 		<Message ID="FilterWave">波形文件 (*.wav)|*.wav|所有文件 (*.*)|*.*</Message>
 		<Message ID="FilterAvi">AVI 视频 (*.avi)|*.avi|所有文件 (*.*)|*.*</Message>
+		<Message ID="FilterGif">GIF files (*.gif)|*.gif|All Files (*.*)|*.*</Message>
 		<Message ID="FilterPalette">调色板 (*.pal)|*.pal|所有文件 (*.*)|*.*</Message>
 		<Message ID="FilterRom">所有支持的格式 (*.nes, *.zip, *.7z, *.nsf, *.nsfe, *.fds, *.unf, *.unif, *.studybox)|*.NES;*.ZIP;*.7z;*.FDS;*.NSF;*.NSFE;*.UNF;*.UNIF;*.STUDYBOX|NES ROM (*.nes, *.unf, *.unif)|*.NES;*.UNF;*.UNIF|Famicom 磁盘 (*.fds)|*.FDS|NSF 音乐 (*.nsf, *.nsfe)|*.nsf;*.nsfe|ZIP 档案 (*.zip)|*.ZIP|7-Zip 档案 (*.7z)|*.7z|所有文件 (*.*)|*.*</Message>
 		<Message ID="FilterRomIps">所有支持的格式 (*.nes, *.zip, *.7z, *.fds, *.nsf, *.nsfe, *.unf, *.unif, *.studybox, *.ips, *.bps, *.ups)|*.NES;*.ZIP;*.7z;*.IPS;*.BPS;*.UPS;*.FDS;*.NSF;*.NSFE;*.UNF;*.UNIF;*.STUDYBOX|NES ROM (*.nes, *.unf, *.unif)|*.NES;*.UNF;*.UNIF|Famicom 磁盘 (*.fds)|*.FDS|NSF 音乐 (*.nsf, *.nsfe)|*.nsf;*.nsfe|ZIP 档案 (*.zip)|*.ZIP|7-Zip 档案 (*.7z)|*.7z|IPS/UPS/BPS 补丁 (*.ips, *.bps, *.ups)|*.IPS;*.BPS;*.UPS|所有文件 (*.*)|*.*</Message>

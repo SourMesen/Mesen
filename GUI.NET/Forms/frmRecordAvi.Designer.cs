@@ -34,15 +34,15 @@
 			this.btnBrowse = new System.Windows.Forms.Button();
 			this.cboVideoCodec = new System.Windows.Forms.ComboBox();
 			this.lblCompressionLevel = new System.Windows.Forms.Label();
-			this.lblLowCompression = new System.Windows.Forms.Label();
+			this.tlpCompressionLevel = new System.Windows.Forms.TableLayoutPanel();
+			this.lblHighCompression = new System.Windows.Forms.Label();
 			this.panel1 = new System.Windows.Forms.Panel();
 			this.trkCompressionLevel = new System.Windows.Forms.TrackBar();
-			this.lblHighCompression = new System.Windows.Forms.Label();
-			this.tlpCompressionLevel = new System.Windows.Forms.TableLayoutPanel();
+			this.lblLowCompression = new System.Windows.Forms.Label();
 			this.tableLayoutPanel1.SuspendLayout();
+			this.tlpCompressionLevel.SuspendLayout();
 			this.panel1.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.trkCompressionLevel)).BeginInit();
-			this.tlpCompressionLevel.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// baseConfigPanel
@@ -134,17 +134,35 @@
 			this.lblCompressionLevel.TabIndex = 6;
 			this.lblCompressionLevel.Text = "Compression Level:";
 			// 
-			// lblLowCompression
+			// tlpCompressionLevel
 			// 
-			this.lblLowCompression.Anchor = System.Windows.Forms.AnchorStyles.Left;
-			this.lblLowCompression.AutoSize = true;
-			this.lblLowCompression.Location = new System.Drawing.Point(3, 4);
-			this.lblLowCompression.Margin = new System.Windows.Forms.Padding(3, 0, 0, 0);
-			this.lblLowCompression.Name = "lblLowCompression";
-			this.lblLowCompression.Size = new System.Drawing.Size(30, 26);
-			this.lblLowCompression.TabIndex = 9;
-			this.lblLowCompression.Text = "low\r\n(fast)";
-			this.lblLowCompression.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+			this.tlpCompressionLevel.ColumnCount = 3;
+			this.tlpCompressionLevel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+			this.tlpCompressionLevel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+			this.tlpCompressionLevel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+			this.tlpCompressionLevel.Controls.Add(this.lblHighCompression, 2, 0);
+			this.tlpCompressionLevel.Controls.Add(this.panel1, 1, 0);
+			this.tlpCompressionLevel.Controls.Add(this.lblLowCompression, 0, 0);
+			this.tlpCompressionLevel.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.tlpCompressionLevel.Location = new System.Drawing.Point(105, 56);
+			this.tlpCompressionLevel.Margin = new System.Windows.Forms.Padding(0);
+			this.tlpCompressionLevel.Name = "tlpCompressionLevel";
+			this.tlpCompressionLevel.RowCount = 1;
+			this.tlpCompressionLevel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+			this.tlpCompressionLevel.Size = new System.Drawing.Size(211, 35);
+			this.tlpCompressionLevel.TabIndex = 9;
+			// 
+			// lblHighCompression
+			// 
+			this.lblHighCompression.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.lblHighCompression.AutoSize = true;
+			this.lblHighCompression.Location = new System.Drawing.Point(177, 4);
+			this.lblHighCompression.Margin = new System.Windows.Forms.Padding(0);
+			this.lblHighCompression.Name = "lblHighCompression";
+			this.lblHighCompression.Size = new System.Drawing.Size(34, 26);
+			this.lblHighCompression.TabIndex = 10;
+			this.lblHighCompression.Text = "high\r\n(slow)";
+			this.lblHighCompression.TextAlign = System.Drawing.ContentAlignment.TopCenter;
 			// 
 			// panel1
 			// 
@@ -166,35 +184,17 @@
 			this.trkCompressionLevel.TabIndex = 7;
 			this.trkCompressionLevel.Value = 1;
 			// 
-			// lblHighCompression
+			// lblLowCompression
 			// 
-			this.lblHighCompression.Anchor = System.Windows.Forms.AnchorStyles.Left;
-			this.lblHighCompression.AutoSize = true;
-			this.lblHighCompression.Location = new System.Drawing.Point(177, 4);
-			this.lblHighCompression.Margin = new System.Windows.Forms.Padding(0);
-			this.lblHighCompression.Name = "lblHighCompression";
-			this.lblHighCompression.Size = new System.Drawing.Size(34, 26);
-			this.lblHighCompression.TabIndex = 10;
-			this.lblHighCompression.Text = "high\r\n(slow)";
-			this.lblHighCompression.TextAlign = System.Drawing.ContentAlignment.TopCenter;
-			// 
-			// tlpCompressionLevel
-			// 
-			this.tlpCompressionLevel.ColumnCount = 3;
-			this.tlpCompressionLevel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-			this.tlpCompressionLevel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tlpCompressionLevel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-			this.tlpCompressionLevel.Controls.Add(this.lblHighCompression, 2, 0);
-			this.tlpCompressionLevel.Controls.Add(this.panel1, 1, 0);
-			this.tlpCompressionLevel.Controls.Add(this.lblLowCompression, 0, 0);
-			this.tlpCompressionLevel.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.tlpCompressionLevel.Location = new System.Drawing.Point(105, 56);
-			this.tlpCompressionLevel.Margin = new System.Windows.Forms.Padding(0, 0, 0, 0);
-			this.tlpCompressionLevel.Name = "tlpCompressionLevel";
-			this.tlpCompressionLevel.RowCount = 1;
-			this.tlpCompressionLevel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tlpCompressionLevel.Size = new System.Drawing.Size(211, 35);
-			this.tlpCompressionLevel.TabIndex = 9;
+			this.lblLowCompression.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.lblLowCompression.AutoSize = true;
+			this.lblLowCompression.Location = new System.Drawing.Point(3, 4);
+			this.lblLowCompression.Margin = new System.Windows.Forms.Padding(3, 0, 0, 0);
+			this.lblLowCompression.Name = "lblLowCompression";
+			this.lblLowCompression.Size = new System.Drawing.Size(30, 26);
+			this.lblLowCompression.TabIndex = 9;
+			this.lblLowCompression.Text = "low\r\n(fast)";
+			this.lblLowCompression.TextAlign = System.Drawing.ContentAlignment.TopCenter;
 			// 
 			// frmRecordAvi
 			// 
@@ -212,11 +212,11 @@
 			this.Controls.SetChildIndex(this.baseConfigPanel, 0);
 			this.tableLayoutPanel1.ResumeLayout(false);
 			this.tableLayoutPanel1.PerformLayout();
+			this.tlpCompressionLevel.ResumeLayout(false);
+			this.tlpCompressionLevel.PerformLayout();
 			this.panel1.ResumeLayout(false);
 			this.panel1.PerformLayout();
 			((System.ComponentModel.ISupportInitialize)(this.trkCompressionLevel)).EndInit();
-			this.tlpCompressionLevel.ResumeLayout(false);
-			this.tlpCompressionLevel.PerformLayout();
 			this.ResumeLayout(false);
 
 		}

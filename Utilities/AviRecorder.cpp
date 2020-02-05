@@ -1,17 +1,15 @@
 #include "stdafx.h"
 #include "AviRecorder.h"
-#include "MessageManager.h"
-#include "Console.h"
-#include "EmulationSettings.h"
 
-AviRecorder::AviRecorder(shared_ptr<Console> console)
+AviRecorder::AviRecorder(VideoCodec codec, uint32_t compressionLevel)
 {
-	_console = console;
 	_recording = false;
 	_stopFlag = false;
 	_frameBuffer = nullptr;
 	_frameBufferLength = 0;
 	_sampleRate = 0;
+	_codec = codec;
+	_compressionLevel = compressionLevel;
 }
 
 AviRecorder::~AviRecorder()
@@ -26,28 +24,19 @@ AviRecorder::~AviRecorder()
 	}
 }
 
-uint32_t AviRecorder::GetFps()
-{
-	if(_console->GetModel() == NesModel::NTSC) {
-		return _console->GetSettings()->CheckFlag(EmulationFlags::IntegerFpsMode) ? 60000000 : 60098812;
-	} else {
-		return _console->GetSettings()->CheckFlag(EmulationFlags::IntegerFpsMode) ? 50000000 : 50006978;
-	}
-}
-
-bool AviRecorder::StartRecording(string filename, VideoCodec codec, uint32_t width, uint32_t height, uint32_t bpp, uint32_t audioSampleRate, uint32_t compressionLevel)
+bool AviRecorder::StartRecording(string filename, uint32_t width, uint32_t height, uint32_t bpp, uint32_t audioSampleRate, double fps)
 {
 	if(!_recording) {
 		_outputFile = filename;
 		_sampleRate = audioSampleRate;
 		_width = width;
 		_height = height;
-		_fps = GetFps();
+		_fps = fps;
 		_frameBufferLength = height * width * bpp;
 		_frameBuffer = new uint8_t[_frameBufferLength];
 
 		_aviWriter.reset(new AviWriter());
-		if(!_aviWriter->StartWrite(filename, codec, width, height, bpp, _fps, audioSampleRate, compressionLevel)) {
+		if(!_aviWriter->StartWrite(filename, _codec, width, height, bpp, (uint32_t)(_fps * 1000000), audioSampleRate, _compressionLevel)) {
 			_aviWriter.reset();
 			return false;
 		}
@@ -64,7 +53,6 @@ bool AviRecorder::StartRecording(string filename, VideoCodec codec, uint32_t wid
 			}
 		});
 
-		MessageManager::DisplayMessage("VideoRecorder", "VideoRecorderStarted", _outputFile);
 		_recording = true;
 	}
 	return true;
@@ -81,15 +69,13 @@ void AviRecorder::StopRecording()
 
 		_aviWriter->EndWrite();
 		_aviWriter.reset();
-
-		MessageManager::DisplayMessage("VideoRecorder", "VideoRecorderStopped", _outputFile);
 	}
 }
 
-void AviRecorder::AddFrame(void* frameBuffer, uint32_t width, uint32_t height)
+void AviRecorder::AddFrame(void* frameBuffer, uint32_t width, uint32_t height, double fps)
 {
 	if(_recording) {
-		if(_width != width || _height != height || _fps != GetFps()) {
+		if(_width != width || _height != height || _fps != fps) {
 			StopRecording();
 		} else {
 			auto lock = _lock.AcquireSafe();
@@ -114,4 +100,9 @@ void AviRecorder::AddSound(int16_t* soundBuffer, uint32_t sampleCount, uint32_t 
 bool AviRecorder::IsRecording()
 {
 	return _recording;
+}
+
+string AviRecorder::GetOutputFile()
+{
+	return _outputFile;
 }

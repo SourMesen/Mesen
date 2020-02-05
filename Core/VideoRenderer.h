@@ -2,6 +2,7 @@
 #include "stdafx.h"
 #include <thread>
 #include "../Utilities/AutoResetEvent.h"
+#include "../Utilities/IVideoRecorder.h"
 #include "FrameInfo.h"
 
 class IRenderingDevice;
@@ -19,7 +20,7 @@ private:
 	IRenderingDevice* _renderer = nullptr;
 	atomic<bool> _stopFlag;
 
-	shared_ptr<AviRecorder> _aviRecorder;
+	shared_ptr<IVideoRecorder> _recorder;
 
 	void RenderThread();
 

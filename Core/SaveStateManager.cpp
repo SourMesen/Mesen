@@ -343,7 +343,7 @@ int32_t SaveStateManager::GetSaveStatePreview(string saveStatePath, uint8_t* png
 			string data = pngStream.str();
 			memcpy(pngData, data.c_str(), data.size());
 
-			return frameData.size();
+			return (int32_t)frameData.size();
 		}
 	}
 	return -1;

@@ -1,14 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Source Files">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
-    </Filter>
-    <Filter Include="Header Files">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
-    </Filter>
     <Filter Include="xBRZ">
       <UniqueIdentifier>{34df7dd9-5f1b-4aec-9212-1b70f1fada59}</UniqueIdentifier>
     </Filter>
@@ -27,67 +19,71 @@
     <Filter Include="Patches">
       <UniqueIdentifier>{6d519bc1-7c40-448a-95d2-9ad94cd20644}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Misc">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
-      <Filter>Header Files</Filter>
+      <Filter>Misc</Filter>
     </ClInclude>
     <ClInclude Include="targetver.h">
-      <Filter>Header Files</Filter>
+      <Filter>Misc</Filter>
     </ClInclude>
     <ClInclude Include="Timer.h">
-      <Filter>Header Files</Filter>
+      <Filter>Misc</Filter>
     </ClInclude>
     <ClInclude Include="FolderUtilities.h">
-      <Filter>Header Files</Filter>
+      <Filter>Misc</Filter>
     </ClInclude>
     <ClInclude Include="Socket.h">
-      <Filter>Header Files</Filter>
+      <Filter>Misc</Filter>
     </ClInclude>
     <ClInclude Include="SimpleLock.h">
-      <Filter>Header Files</Filter>
+      <Filter>Misc</Filter>
     </ClInclude>
     <ClInclude Include="UPnPPortMapper.h">
-      <Filter>Header Files</Filter>
+      <Filter>Misc</Filter>
     </ClInclude>
     <ClInclude Include="CRC32.h">
-      <Filter>Header Files</Filter>
+      <Filter>Misc</Filter>
     </ClInclude>
     <ClInclude Include="miniz.h">
-      <Filter>Header Files</Filter>
+      <Filter>Misc</Filter>
     </ClInclude>
     <ClInclude Include="UTF8Util.h">
-      <Filter>Header Files</Filter>
+      <Filter>Misc</Filter>
     </ClInclude>
     <ClInclude Include="PNGHelper.h">
-      <Filter>Header Files</Filter>
+      <Filter>Misc</Filter>
     </ClInclude>
     <ClInclude Include="AutoResetEvent.h">
-      <Filter>Header Files</Filter>
+      <Filter>Misc</Filter>
     </ClInclude>
     <ClInclude Include="md5.h">
-      <Filter>Header Files</Filter>
+      <Filter>Misc</Filter>
     </ClInclude>
     <ClInclude Include="ZipWriter.h">
-      <Filter>Header Files</Filter>
+      <Filter>Misc</Filter>
     </ClInclude>
     <ClInclude Include="ZipReader.h">
-      <Filter>Header Files</Filter>
+      <Filter>Misc</Filter>
     </ClInclude>
     <ClInclude Include="LowPassFilter.h">
-      <Filter>Header Files</Filter>
+      <Filter>Misc</Filter>
     </ClInclude>
     <ClInclude Include="blip_buf.h">
-      <Filter>Header Files</Filter>
+      <Filter>Misc</Filter>
     </ClInclude>
     <ClInclude Include="nes_ntsc.h">
-      <Filter>Header Files</Filter>
+      <Filter>Misc</Filter>
     </ClInclude>
     <ClInclude Include="nes_ntsc_config.h">
-      <Filter>Header Files</Filter>
+      <Filter>Misc</Filter>
     </ClInclude>
     <ClInclude Include="nes_ntsc_impl.h">
-      <Filter>Header Files</Filter>
+      <Filter>Misc</Filter>
     </ClInclude>
     <ClInclude Include="xBRZ\config.h">
       <Filter>xBRZ</Filter>
@@ -114,13 +110,13 @@
       <Filter>KreedSaiEagle</Filter>
     </ClInclude>
     <ClInclude Include="SZReader.h">
-      <Filter>Header Files</Filter>
+      <Filter>Misc</Filter>
     </ClInclude>
     <ClInclude Include="PlatformUtilities.h">
-      <Filter>Header Files</Filter>
+      <Filter>Misc</Filter>
     </ClInclude>
     <ClInclude Include="HexUtilities.h">
-      <Filter>Header Files</Filter>
+      <Filter>Misc</Filter>
     </ClInclude>
     <ClInclude Include="ZmbvCodec.h">
       <Filter>Avi</Filter>
@@ -138,7 +134,7 @@
       <Filter>Avi</Filter>
     </ClInclude>
     <ClInclude Include="StringUtilities.h">
-      <Filter>Header Files</Filter>
+      <Filter>Misc</Filter>
     </ClInclude>
     <ClInclude Include="IpsPatcher.h">
       <Filter>Patches</Filter>
@@ -150,73 +146,34 @@
       <Filter>Patches</Filter>
     </ClInclude>
     <ClInclude Include="orfanidis_eq.h">
-      <Filter>Header Files</Filter>
+      <Filter>Misc</Filter>
     </ClInclude>
     <ClInclude Include="sha1.h">
-      <Filter>Header Files</Filter>
+      <Filter>Misc</Filter>
     </ClInclude>
     <ClInclude Include="ArchiveReader.h">
-      <Filter>Header Files</Filter>
+      <Filter>Misc</Filter>
     </ClInclude>
     <ClInclude Include="stb_vorbis.h">
-      <Filter>Header Files</Filter>
+      <Filter>Misc</Filter>
     </ClInclude>
     <ClInclude Include="Base64.h">
-      <Filter>Header Files</Filter>
+      <Filter>Misc</Filter>
     </ClInclude>
     <ClInclude Include="WavReader.h">
-      <Filter>Header Files</Filter>
+      <Filter>Misc</Filter>
+    </ClInclude>
+    <ClInclude Include="GifRecorder.h">
+      <Filter>Misc</Filter>
+    </ClInclude>
+    <ClInclude Include="IVideoRecorder.h">
+      <Filter>Misc</Filter>
+    </ClInclude>
+    <ClInclude Include="AviRecorder.h">
+      <Filter>Avi</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="stdafx.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="FolderUtilities.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="miniz.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="SimpleLock.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Socket.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="UPnPPortMapper.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="UTF8Util.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Timer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="CRC32.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="PNGHelper.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="AutoResetEvent.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="md5.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ZipWriter.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ZipReader.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="blip_buf.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="nes_ntsc.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="xBRZ\xbrz.cpp">
       <Filter>xBRZ</Filter>
     </ClCompile>
@@ -250,18 +207,6 @@
     <ClCompile Include="KreedSaiEagle\2xSai.cpp">
       <Filter>KreedSaiEagle</Filter>
     </ClCompile>
-    <ClCompile Include="SZReader.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ArchiveReader.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="PlatformUtilities.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="HexUtilities.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="ZmbvCodec.cpp">
       <Filter>Avi</Filter>
     </ClCompile>
@@ -280,14 +225,80 @@
     <ClCompile Include="BpsPatcher.cpp">
       <Filter>Patches</Filter>
     </ClCompile>
+    <ClCompile Include="ArchiveReader.cpp">
+      <Filter>Misc</Filter>
+    </ClCompile>
+    <ClCompile Include="AutoResetEvent.cpp">
+      <Filter>Misc</Filter>
+    </ClCompile>
+    <ClCompile Include="blip_buf.cpp">
+      <Filter>Misc</Filter>
+    </ClCompile>
+    <ClCompile Include="CRC32.cpp">
+      <Filter>Misc</Filter>
+    </ClCompile>
+    <ClCompile Include="FolderUtilities.cpp">
+      <Filter>Misc</Filter>
+    </ClCompile>
+    <ClCompile Include="HexUtilities.cpp">
+      <Filter>Misc</Filter>
+    </ClCompile>
+    <ClCompile Include="md5.cpp">
+      <Filter>Misc</Filter>
+    </ClCompile>
+    <ClCompile Include="miniz.cpp">
+      <Filter>Misc</Filter>
+    </ClCompile>
+    <ClCompile Include="nes_ntsc.cpp">
+      <Filter>Misc</Filter>
+    </ClCompile>
+    <ClCompile Include="PlatformUtilities.cpp">
+      <Filter>Misc</Filter>
+    </ClCompile>
+    <ClCompile Include="PNGHelper.cpp">
+      <Filter>Misc</Filter>
+    </ClCompile>
     <ClCompile Include="sha1.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Misc</Filter>
+    </ClCompile>
+    <ClCompile Include="SimpleLock.cpp">
+      <Filter>Misc</Filter>
+    </ClCompile>
+    <ClCompile Include="Socket.cpp">
+      <Filter>Misc</Filter>
     </ClCompile>
     <ClCompile Include="stb_vorbis.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Misc</Filter>
+    </ClCompile>
+    <ClCompile Include="stdafx.cpp">
+      <Filter>Misc</Filter>
+    </ClCompile>
+    <ClCompile Include="SZReader.cpp">
+      <Filter>Misc</Filter>
+    </ClCompile>
+    <ClCompile Include="Timer.cpp">
+      <Filter>Misc</Filter>
+    </ClCompile>
+    <ClCompile Include="UPnPPortMapper.cpp">
+      <Filter>Misc</Filter>
+    </ClCompile>
+    <ClCompile Include="UTF8Util.cpp">
+      <Filter>Misc</Filter>
     </ClCompile>
     <ClCompile Include="WavReader.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Misc</Filter>
+    </ClCompile>
+    <ClCompile Include="ZipReader.cpp">
+      <Filter>Misc</Filter>
+    </ClCompile>
+    <ClCompile Include="ZipWriter.cpp">
+      <Filter>Misc</Filter>
+    </ClCompile>
+    <ClCompile Include="GifRecorder.cpp">
+      <Filter>Misc</Filter>
+    </ClCompile>
+    <ClCompile Include="AviRecorder.cpp">
+      <Filter>Avi</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

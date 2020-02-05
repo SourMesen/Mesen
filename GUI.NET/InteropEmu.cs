@@ -2306,6 +2306,7 @@ namespace Mesen.GUI
 		None = 0,
 		ZMBV = 1,
 		CSCD = 2,
+		GIF = 3,
 	}
 
 	public enum ScaleFilterType

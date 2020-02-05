@@ -1051,6 +1051,15 @@ double Console::GetFrameDelay()
 	return frameDelay;
 }
 
+double Console::GetFps()
+{
+	if(_model == NesModel::NTSC) {
+		return _settings->CheckFlag(EmulationFlags::IntegerFpsMode) ? 60.0 : 60.098812;
+	} else {
+		return _settings->CheckFlag(EmulationFlags::IntegerFpsMode) ? 50.0 : 50.006978;
+	}
+}
+
 void Console::SaveState(ostream &saveStream)
 {
 	if(_initialized) {

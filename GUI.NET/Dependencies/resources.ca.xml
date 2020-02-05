@@ -754,6 +754,7 @@
 		<Message ID="FilterMovie">Pel·lícules (*.mmo)|*.mmo|Tots els fitxers (*.*)|*.*</Message>
 		<Message ID="FilterWave">Fitxers de so (*.wav)|*.wav|Tots els fitxers(*.*)|*.*</Message>
 		<Message ID="FilterAvi">Fitxers de vídeo (*.avi)|*.avi|Tots els fitxers (*.*)|*.*</Message>
+		<Message ID="FilterGif">GIF files (*.gif)|*.gif|All Files (*.*)|*.*</Message>
 		<Message ID="FilterPalette">Fitxers de paleta (*.pal)|*.pal|Tots els fitxers (*.*)|*.*</Message>
 		<Message ID="FilterRom">Tots els formats suportats (*.nes, *.zip, *.7z, *.fds, *.nsf, *.nsfe, *.unf, *.unif, *.studybox)|*.NES;*.ZIP;*.7z;*.FDS;*.NSF;*.NSFE;*.UNF;*.UNIF;*.STUDYBOX|Roms de NES (*.nes, *.unf, *.unif)|*.NES;*.UNF;*.UNIF|Roms de Famicom Disk System (*.fds)|*.FDS|Fitxers NSF (*.nsf, *.nsfe)|*.NSF;*.NSFE|Arxius comprimits (*.zip)|*.ZIP|Arxius 7-Zip (*.7z)|*.7z|Tots els fitxers (*.*)|*.*</Message>
 		<Message ID="FilterRomIps">Tots els formats suportats (*.nes, *.zip, *.7z, *.fds, *.nsf, *.nsfe, *.unf, *.unif, *.studybox, *.ips, *.bps, *.ups)|*.NES;*.ZIP;*.7z;*.IPS;*.BPS;*.UPS;*.FDS;*.NSF;*.NSFE;*.UNF;*.UNIF;*.STUDYBOX|Roms de NES(*.nes, *.unf, *.unif)|*.NES;*.UNF;*.UNIF|Roms de Famicom Disk System (*.fds)|*.FDS|Fitxers NSF (*.nsf, *.nsfe)|*.NSF;*.NSFE|Arxius comprimits (*.zip)|*.ZIP|Arxius 7-Zip (*.7z)|*.7z|Pedaços IPS/UPS/BPS (*.ips, *.bps, *.ups)|*.IPS;*.BPS;*.UPS|Tots els fitxers (*.*)|*.*</Message>

@@ -219,6 +219,8 @@ public:
 
 	bool IsDebuggerAttached();
 
+	double GetFps();
+
 	void InitializeRam(void* data, uint32_t length);
 	static void InitializeRam(RamPowerOnState powerOnState, void* data, uint32_t length);
 

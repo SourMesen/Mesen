@@ -39,18 +39,21 @@ namespace Mesen.GUI.Forms
 		private void btnBrowse_Click(object sender, EventArgs e)
 		{
 			SaveFileDialog sfd = new SaveFileDialog();
-			sfd.SetFilter(ResourceHelper.GetMessage("FilterAvi"));
+			VideoCodec codec = cboVideoCodec.GetEnumValue<VideoCodec>();
+			sfd.SetFilter(ResourceHelper.GetMessage(codec == VideoCodec.GIF ? "FilterGif" : "FilterAvi"));
 			sfd.InitialDirectory = ConfigManager.AviFolder;
-			sfd.FileName = InteropEmu.GetRomInfo().GetRomName() + ".avi";
-			if(sfd.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
+			sfd.FileName = InteropEmu.GetRomInfo().GetRomName() + (codec == VideoCodec.GIF ? ".gif" : ".avi");
+			if(sfd.ShowDialog() == DialogResult.OK) {
 				txtFilename.Text = sfd.FileName;
 			}
 		}
 
 		private void cboVideoCodec_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			lblCompressionLevel.Visible = cboVideoCodec.SelectedIndex > 0;
-			tlpCompressionLevel.Visible = cboVideoCodec.SelectedIndex > 0;
+			VideoCodec codec = cboVideoCodec.GetEnumValue<VideoCodec>();
+			bool hasCompressionLevel = (codec == VideoCodec.CSCD || codec == VideoCodec.ZMBV);
+			lblCompressionLevel.Visible = hasCompressionLevel;
+			tlpCompressionLevel.Visible = hasCompressionLevel;
 		}
 	}
 }
