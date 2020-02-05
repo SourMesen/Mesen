@@ -32,8 +32,6 @@ namespace Mesen.GUI.Forms
 			_isNsf = InteropEmu.IsNsf();
 			tlpRenderer.Visible = !_isNsf;
 			picNsfIcon.Visible = _isNsf;
-
-			trkVolume.Value = ConfigManager.Config.HistoryViewerInfo.Volume;
 		}
 
 		protected override void OnClosed(EventArgs e)
@@ -56,7 +54,7 @@ namespace Mesen.GUI.Forms
 			StartEmuThread();
 			InteropEmu.Resume(InteropEmu.ConsoleId.HistoryViewer);
 			tmrUpdatePosition.Start();
-
+			trkVolume.Value = ConfigManager.Config.HistoryViewerInfo.Volume;
 			btnPausePlay.Focus();
 
 			UpdateScale();
