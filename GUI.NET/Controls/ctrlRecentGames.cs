@@ -162,10 +162,12 @@ namespace Mesen.GUI.Controls
 				tlpTitle.Visible = true;
 
 				string romName = InteropEmu.GetRomInfo().GetRomName();
-				for(int i = 0; i < 11; i++) {
+				for(int i = 0; i < (mode == GameScreenMode.LoadState ? 11 : 10); i++) {
 					_recentGames.Add(new RecentGameInfo() { FileName = Path.Combine(ConfigManager.SaveStateFolder, romName + "_" + (i + 1) + ".mst"), Name = i == 10 ? ResourceHelper.GetMessage("AutoSave") : ResourceHelper.GetMessage("SlotNumber", i+1), SaveSlot = (uint)i+1 });
 				}
-				_recentGames.Add(new RecentGameInfo() { FileName = Path.Combine(ConfigManager.RecentGamesFolder, romName + ".rgd"), Name = ResourceHelper.GetMessage("LastSession") });
+				if(mode == GameScreenMode.LoadState) {
+					_recentGames.Add(new RecentGameInfo() { FileName = Path.Combine(ConfigManager.RecentGamesFolder, romName + ".rgd"), Name = ResourceHelper.GetMessage("LastSession") });
+				}
 			}
 
 			InitGrid();
