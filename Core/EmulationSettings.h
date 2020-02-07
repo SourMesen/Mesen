@@ -267,7 +267,8 @@ enum class ControllerType
 	PowerPad = 5,
 	SnesMouse = 6,
 	SuborMouse = 7,
-	VsZapper = 8
+	VsZapper = 8,
+	VbController = 9,
 };
 
 extern const vector<string> ExpansionPortDeviceNames;
@@ -326,6 +327,7 @@ struct KeyMapping
 	uint32_t JissenMahjongButtons[21] = {};
 	uint32_t SuborKeyboardButtons[99] = {};
 	uint32_t BandaiMicrophoneButtons[3] = {};
+	uint32_t VirtualBoyButtons[14] = {};
 
 	bool HasKeySet()
 	{
@@ -342,6 +344,7 @@ struct KeyMapping
 		hasKeyBinding |= HasKeyBinding(JissenMahjongButtons, sizeof(JissenMahjongButtons) / sizeof(JissenMahjongButtons[0]));
 		hasKeyBinding |= HasKeyBinding(SuborKeyboardButtons, sizeof(SuborKeyboardButtons) / sizeof(SuborKeyboardButtons[0]));
 		hasKeyBinding |= HasKeyBinding(BandaiMicrophoneButtons, sizeof(BandaiMicrophoneButtons) / sizeof(BandaiMicrophoneButtons[0]));
+		hasKeyBinding |= HasKeyBinding(VirtualBoyButtons, sizeof(VirtualBoyButtons) / sizeof(VirtualBoyButtons[0]));
 		return hasKeyBinding;
 	}
 

@@ -37,6 +37,9 @@ namespace Mesen.GUI.Config
 		KeyMappings _bandaiMicrophone;
 		public KeyMappings BandaiMicrophone { get { return _bandaiMicrophone.Clone(); } }
 
+		KeyMappings _virtualBoy;
+		public KeyMappings VirtualBoy { get { return _virtualBoy.Clone(); } }
+
 		public KeyMappings WasdLayout { get { return _wasdLayout.Clone(); } }
 		public KeyMappings ArrowLayout { get { return _arrowLayout.Clone(); } }
 		public KeyMappings NestopiaLayout { get { return _nestopiaLayout.Clone(); } }
@@ -299,6 +302,26 @@ namespace Mesen.GUI.Config
 					InteropEmu.GetKeyCode("Up Arrow"), InteropEmu.GetKeyCode("Down Arrow"), InteropEmu.GetKeyCode("Left Arrow"), InteropEmu.GetKeyCode("Right Arrow"),
 
 					0,0,0
+				}
+			};
+
+			_virtualBoy = new KeyMappings()
+			{
+				VirtualBoyButtons = new UInt32[14] {
+					InteropEmu.GetKeyCode("K"),
+					InteropEmu.GetKeyCode("J"),
+					InteropEmu.GetKeyCode("E"),
+					InteropEmu.GetKeyCode("R"),
+					InteropEmu.GetKeyCode("W"),
+					InteropEmu.GetKeyCode("S"),
+					InteropEmu.GetKeyCode("A"),
+					InteropEmu.GetKeyCode("D"),
+					InteropEmu.GetKeyCode("L"),
+					InteropEmu.GetKeyCode("I"),
+					InteropEmu.GetKeyCode("Q"),
+					InteropEmu.GetKeyCode("O"),
+					InteropEmu.GetKeyCode("Y"),
+					InteropEmu.GetKeyCode("U"),
 				}
 			};
 		}

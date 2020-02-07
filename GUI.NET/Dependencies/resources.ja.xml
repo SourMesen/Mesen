@@ -994,6 +994,7 @@
 			<Value ID="PowerPad">パワーパッド</Value>
 			<Value ID="SnesMouse">スーパーファミコマウス</Value>
 			<Value ID="SuborMouse">Suborマウス</Value>
+			<Value ID="VbController">バーチャルボーイコントローラ</Value>
 		</Enum>
 		<Enum ID="ExpansionPortDevice">
 			<Value ID="None">なし</Value>

@@ -193,7 +193,8 @@ const vector<string> ControllerTypeNames = {
 	"PowerPad",
 	"SnesMouse",
 	"SuborMouse",
-	"VsZapper"
+	"VsZapper",
+	"VbController",
 };
 
 const vector<string> ExpansionPortDeviceNames = {

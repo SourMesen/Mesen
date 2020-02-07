@@ -1021,6 +1021,7 @@
 			<Value ID="PowerPad">Power Pad</Value>
 			<Value ID="SnesMouse">SFC 鼠标</Value>
 			<Value ID="SuborMouse">小霸王鼠标</Value>
+			<Value ID="VbController">Virtual Boy 控制器</Value>
 		</Enum>
 		<Enum ID="ExpansionPortDevice">
 			<Value ID="None">无</Value>

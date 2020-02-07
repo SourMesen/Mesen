@@ -1499,6 +1499,9 @@
     <ClInclude Include="FlashSST39SF040.h">
       <Filter>Nes\Mappers</Filter>
     </ClInclude>
+    <ClInclude Include="VbController.h">
+      <Filter>Nes\Input\Controllers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
