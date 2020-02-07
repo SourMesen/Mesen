@@ -83,6 +83,7 @@ namespace Mesen.GUI.Forms
 						}
 						ConfigManager.Config.InputInfo.Controllers[0].Keys[0].SuborKeyboardButtons = presets.SuborKeyboard.SuborKeyboardButtons;
 						ConfigManager.Config.InputInfo.Controllers[0].Keys[0].BandaiMicrophoneButtons = presets.BandaiMicrophone.BandaiMicrophoneButtons;
+						ConfigManager.Config.InputInfo.Controllers[0].Keys[0].VirtualBoyButtons = presets.VirtualBoy.VirtualBoyButtons;
 					}
 
 					//Set the audio latency setting back to a sane default (since the way the code uses the value has changed)

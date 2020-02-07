@@ -992,6 +992,7 @@
 			<Value ID="PowerPad">Power Pad</Value>
 			<Value ID="SnesMouse">Ratón SNES</Value>
 			<Value ID="SuborMouse">Ratón Subor</Value>
+			<Value ID="VbController">Control Virtual Boy</Value>
 		</Enum>
 		<Enum ID="ExpansionPortDevice">
 			<Value ID="None">Ninguno</Value>

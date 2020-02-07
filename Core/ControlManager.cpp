@@ -33,6 +33,7 @@
 #include "VsZapper.h"
 #include "AsciiTurboFile.h"
 #include "BattleBox.h"
+#include "VbController.h"
 
 ControlManager::ControlManager(shared_ptr<Console> console, shared_ptr<BaseControlDevice> systemActionManager, shared_ptr<BaseControlDevice> mapperControlDevice)
 {
@@ -128,6 +129,7 @@ shared_ptr<BaseControlDevice> ControlManager::CreateControllerDevice(ControllerT
 		case ControllerType::SnesMouse: device.reset(new SnesMouse(console, port)); break;
 		case ControllerType::SuborMouse: device.reset(new SuborMouse(console, port)); break;
 		case ControllerType::VsZapper: device.reset(new VsZapper(console, port)); break;
+		case ControllerType::VbController: device.reset(new VbController(console, port, console->GetSettings()->GetControllerKeys(port))); break;
 	}
 	
 	return device;

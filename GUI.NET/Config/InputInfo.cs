@@ -36,6 +36,7 @@ namespace Mesen.GUI.Config
 		[XmlElement("JissenMahjong")] public XmlIntArray JissenMahjongButtons = new UInt32[21];
 		[XmlElement("SuborKeyboard")] public XmlIntArray SuborKeyboardButtons = new UInt32[99];
 		[XmlElement("BandaiMicrophone")] public XmlIntArray BandaiMicrophoneButtons = new UInt32[3];
+		[XmlElement("VirtualBoy")] public XmlIntArray VirtualBoyButtons = new UInt32[14];
 
 		public KeyMappings()
 		{
@@ -50,8 +51,9 @@ namespace Mesen.GUI.Config
 			clone.PachinkoButtons = this.PachinkoButtons.Clone();
 			clone.ExcitingBoxingButtons = this.ExcitingBoxingButtons.Clone();
 			clone.JissenMahjongButtons = this.JissenMahjongButtons.Clone();
-			clone.SuborKeyboardButtons = this.SuborKeyboardButtons.Clone();			
-			clone.BandaiMicrophoneButtons = this.BandaiMicrophoneButtons.Clone();			
+			clone.SuborKeyboardButtons = this.SuborKeyboardButtons.Clone();
+			clone.BandaiMicrophoneButtons = this.BandaiMicrophoneButtons.Clone();
+			clone.VirtualBoyButtons = this.VirtualBoyButtons.Clone();
 			return clone;
 		}
 
@@ -82,6 +84,7 @@ namespace Mesen.GUI.Config
 			mapping.JissenMahjongButtons = JissenMahjongButtons;
 			mapping.SuborKeyboardButtons = SuborKeyboardButtons;
 			mapping.BandaiMicrophoneButtons = BandaiMicrophoneButtons;
+			mapping.VirtualBoyButtons = VirtualBoyButtons;
 
 			return mapping;
 		}
@@ -180,6 +183,7 @@ namespace Mesen.GUI.Config
 					controllerInfo.Keys[0].PowerPadButtons = presets.PowerPad.PowerPadButtons;
 					controllerInfo.Keys[0].SuborKeyboardButtons = presets.SuborKeyboard.SuborKeyboardButtons;
 					controllerInfo.Keys[0].BandaiMicrophoneButtons = presets.BandaiMicrophone.BandaiMicrophoneButtons;
+					controllerInfo.Keys[0].VirtualBoyButtons = presets.VirtualBoy.VirtualBoyButtons;
 				} else if(Controllers.Count == 1) {
 					if(controllerInfo.Keys.Count == 0) {
 						controllerInfo.Keys.Add(new KeyMappings());

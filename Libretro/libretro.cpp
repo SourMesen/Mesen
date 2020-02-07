@@ -28,6 +28,7 @@
 #define DEVICE_EXCITINGBOXING     RETRO_DEVICE_SUBCLASS(RETRO_DEVICE_JOYPAD, 5)
 #define DEVICE_KONAMIHYPERSHOT    RETRO_DEVICE_SUBCLASS(RETRO_DEVICE_JOYPAD, 6)
 #define DEVICE_SNESGAMEPAD        RETRO_DEVICE_SUBCLASS(RETRO_DEVICE_JOYPAD, 7)
+#define DEVICE_VBGAMEPAD          RETRO_DEVICE_SUBCLASS(RETRO_DEVICE_JOYPAD, 8)
 #define DEVICE_ZAPPER             RETRO_DEVICE_SUBCLASS(RETRO_DEVICE_POINTER, 0)
 #define DEVICE_OEKAKIDS           RETRO_DEVICE_SUBCLASS(RETRO_DEVICE_POINTER, 1)
 #define DEVICE_BANDAIHYPERSHOT    RETRO_DEVICE_SUBCLASS(RETRO_DEVICE_POINTER, 2)
@@ -183,6 +184,7 @@ extern "C" {
 			{ "Arkanoid", DEVICE_ARKANOID },
 			{ "SNES Controller", DEVICE_SNESGAMEPAD },
 			{ "SNES Mouse", DEVICE_SNESMOUSE },
+			{ "Virtual Boy Controller" ,DEVICE_VBGAMEPAD },
 			{ NULL, 0 },
 		};
 
@@ -194,6 +196,7 @@ extern "C" {
 			{ "Arkanoid", DEVICE_ARKANOID },
 			{ "SNES Controller", DEVICE_SNESGAMEPAD },
 			{ "SNES Mouse", DEVICE_SNESMOUSE },
+			{ "Virtual Boy Controller", DEVICE_VBGAMEPAD },
 			{ NULL, 0 },
 		};
 
@@ -773,6 +776,7 @@ extern "C" {
 						case ControllerType::SnesMouse: device = DEVICE_SNESMOUSE; break;
 						case ControllerType::Zapper: device = DEVICE_ZAPPER; break;
 						case ControllerType::ArkanoidController: device = DEVICE_ARKANOID; break;
+						case ControllerType::VbController: device = DEVICE_VBGAMEPAD; break;
 						default: return;
 					}
 				} else if(port == 4) {
@@ -862,6 +866,21 @@ extern "C" {
 			} else if(device == DEVICE_PACHINKO) {
 				addDesc(port, RETRO_DEVICE_ID_JOYPAD_L, "Release Trigger");
 				addDesc(port, RETRO_DEVICE_ID_JOYPAD_R, "Press Trigger");
+			} else if(device == DEVICE_VBGAMEPAD) {
+				addDesc(port, RETRO_DEVICE_ID_JOYPAD_B, "Virtual Boy D-Pad 2 Down");
+				addDesc(port, RETRO_DEVICE_ID_JOYPAD_Y, "Virtual Boy D-Pad 2 Left");
+				addDesc(port, RETRO_DEVICE_ID_JOYPAD_SELECT, "Virtual Boy Select");
+				addDesc(port, RETRO_DEVICE_ID_JOYPAD_START, "Virtual Boy Start");
+				addDesc(port, RETRO_DEVICE_ID_JOYPAD_UP, "Virtual Boy D-Pad 1 Up");
+				addDesc(port, RETRO_DEVICE_ID_JOYPAD_DOWN, "Virtual Boy D-Pad 1 Down");
+				addDesc(port, RETRO_DEVICE_ID_JOYPAD_LEFT, "Virtual Boy D-Pad 1 Left");
+				addDesc(port, RETRO_DEVICE_ID_JOYPAD_RIGHT, "Virtual Boy D-Pad 1 Right");
+				addDesc(port, RETRO_DEVICE_ID_JOYPAD_A, "Virtual Boy D-Pad 2 Right");
+				addDesc(port, RETRO_DEVICE_ID_JOYPAD_X, "Virtual Boy D-Pad 2 Up");
+				addDesc(port, RETRO_DEVICE_ID_JOYPAD_L, "Virtual Boy L");
+				addDesc(port, RETRO_DEVICE_ID_JOYPAD_R, "Virtual Boy R");
+				addDesc(port, RETRO_DEVICE_ID_JOYPAD_L2, "Virtual Boy B");
+				addDesc(port, RETRO_DEVICE_ID_JOYPAD_R2, "Virtual Boy A");
 			}
 		};
 
@@ -899,6 +918,7 @@ extern "C" {
 						case DEVICE_ARKANOID: type = ControllerType::ArkanoidController; break;
 						case DEVICE_SNESGAMEPAD: type = ControllerType::SnesController; break;
 						case DEVICE_SNESMOUSE: type = ControllerType::SnesMouse; break;
+						case DEVICE_VBGAMEPAD: type = ControllerType::VbController; break;
 					}
 					_console->GetSettings()->SetControllerType(port, type);
 				} else {

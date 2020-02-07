@@ -149,6 +149,7 @@ namespace Mesen.GUI.Forms.Config
 				controllerTypes.Add(InteropEmu.ControllerType.PowerPad);
 				controllerTypes.Add(InteropEmu.ControllerType.Zapper);
 				controllerTypes.Add(InteropEmu.ControllerType.SnesController);
+				controllerTypes.Add(InteropEmu.ControllerType.VbController);
 			}
 
 			SetAvailableControllerTypes(cboPlayer1, controllerTypes.ToArray());
@@ -277,7 +278,8 @@ namespace Mesen.GUI.Forms.Config
 											selectedItem.Equals(ResourceHelper.GetEnumText(InteropEmu.ControllerType.SnesMouse)) ||
 											selectedItem.Equals(ResourceHelper.GetEnumText(InteropEmu.ControllerType.SuborMouse)) ||
 											selectedItem.Equals(ResourceHelper.GetEnumText(InteropEmu.ControllerType.ArkanoidController)) ||
-											selectedItem.Equals(ResourceHelper.GetEnumText(InteropEmu.ControllerType.PowerPad));
+											selectedItem.Equals(ResourceHelper.GetEnumText(InteropEmu.ControllerType.PowerPad)) ||
+											selectedItem.Equals(ResourceHelper.GetEnumText(InteropEmu.ControllerType.VbController));
 
 				buttons[i].Enabled = enableButton;
 			}
@@ -355,6 +357,10 @@ namespace Mesen.GUI.Forms.Config
 
 					case InteropEmu.ControllerType.ArkanoidController:
 						frm = new frmMouseConfig(inputInfo.ArkanoidController);
+						break;
+
+					case InteropEmu.ControllerType.VbController:
+						frm = new frmVirtualBoyConfig(inputInfo.Controllers[index], index);
 						break;
 				}
 			} else if(selectedItem is InteropEmu.ExpansionPortDevice) {
@@ -502,6 +508,12 @@ namespace Mesen.GUI.Forms.Config
 								break;
 							case InteropEmu.ControllerType.PowerPad:
 								foreach(UInt32 button in mappings.PowerPadButtons.Values) {
+									countMapping(i, button);
+								}
+								break;
+							case InteropEmu.ControllerType.VbController:
+								foreach(UInt32 button in mappings.VirtualBoyButtons.Values)
+								{
 									countMapping(i, button);
 								}
 								break;

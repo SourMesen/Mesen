@@ -949,6 +949,7 @@
     <ClInclude Include="UnlDripGameAudio.h" />
     <ClInclude Include="UnlPuzzle.h" />
     <ClInclude Include="UnRom512.h" />
+    <ClInclude Include="VbController.h" />
     <ClInclude Include="VideoHud.h" />
     <ClInclude Include="VideoRenderer.h" />
     <ClInclude Include="UnlPci556.h" />

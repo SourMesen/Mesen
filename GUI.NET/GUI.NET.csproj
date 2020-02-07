@@ -961,6 +961,12 @@
     <Compile Include="Forms\Config\Controllers\ctrlBandaiMicrophone.Designer.cs">
       <DependentUpon>ctrlBandaiMicrophone.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\Config\Controllers\ctrlVirtualBoyConfig.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forms\Config\Controllers\ctrlVirtualBoyConfig.designer.cs">
+      <DependentUpon>ctrlVirtualBoyConfig.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\Config\Controllers\frmPachinkoConfig.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -978,6 +984,12 @@
     </Compile>
     <Compile Include="Forms\Config\Controllers\frmBandaiMicrophone.Designer.cs">
       <DependentUpon>frmBandaiMicrophone.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Config\Controllers\frmVirtualBoyConfig.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Config\Controllers\frmVirtualBoyConfig.designer.cs">
+      <DependentUpon>frmVirtualBoyConfig.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\Config\ctrlDipSwitch.cs">
       <SubType>UserControl</SubType>
@@ -1664,6 +1676,9 @@
     <EmbeddedResource Include="Forms\Config\Controllers\ctrlBandaiMicrophone.resx">
       <DependentUpon>ctrlBandaiMicrophone.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Config\Controllers\ctrlVirtualBoyConfig.resx">
+      <DependentUpon>ctrlVirtualBoyConfig.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\Config\Controllers\frmPachinkoConfig.resx">
       <DependentUpon>frmPachinkoConfig.cs</DependentUpon>
       <SubType>Designer</SubType>
@@ -1674,6 +1689,9 @@
     <EmbeddedResource Include="Forms\Config\Controllers\frmBandaiMicrophone.resx">
       <DependentUpon>frmBandaiMicrophone.cs</DependentUpon>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Config\Controllers\frmVirtualBoyConfig.resx">
+      <DependentUpon>frmVirtualBoyConfig.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Config\ctrlDipSwitch.resx">
       <DependentUpon>ctrlDipSwitch.cs</DependentUpon>

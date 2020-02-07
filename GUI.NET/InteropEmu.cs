@@ -1010,6 +1010,8 @@ namespace Mesen.GUI
 			PowerPad = 5,
 			SnesMouse = 6,
 			SuborMouse = 7,
+			VsZapper = 8,
+			VbController = 9,
 		}
 
 		public enum ExpansionPortDevice
@@ -1118,6 +1120,9 @@ namespace Mesen.GUI
 
 			[MarshalAs(UnmanagedType.ByValArray, SizeConst = 3)]
 			public UInt32[] BandaiMicrophoneButtons;
+
+			[MarshalAs(UnmanagedType.ByValArray, SizeConst = 14)]
+			public UInt32[] VirtualBoyButtons;
 		}
 
 		public enum StereoFilter
