@@ -63,7 +63,8 @@ protected:
 			((uint8_t)IsPressed(Buttons::L) << 10) |
 			((uint8_t)IsPressed(Buttons::R) << 11) |
 			((uint8_t)IsPressed(Buttons::B) << 12) |
-			((uint8_t)IsPressed(Buttons::A) << 13);
+			((uint8_t)IsPressed(Buttons::A) << 13) |
+			(1 << 14);
 	}
 
 	void StreamState(bool saving) override
