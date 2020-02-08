@@ -964,7 +964,7 @@
     <Compile Include="Forms\Config\Controllers\ctrlVirtualBoyConfig.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Forms\Config\Controllers\ctrlVirtualBoyConfig.designer.cs">
+    <Compile Include="Forms\Config\Controllers\ctrlVirtualBoyConfig.Designer.cs">
       <DependentUpon>ctrlVirtualBoyConfig.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\Config\Controllers\frmPachinkoConfig.cs">
@@ -988,7 +988,7 @@
     <Compile Include="Forms\Config\Controllers\frmVirtualBoyConfig.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\Config\Controllers\frmVirtualBoyConfig.designer.cs">
+    <Compile Include="Forms\Config\Controllers\frmVirtualBoyConfig.Designer.cs">
       <DependentUpon>frmVirtualBoyConfig.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\Config\ctrlDipSwitch.cs">
