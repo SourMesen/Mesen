@@ -28,9 +28,9 @@ extern const uint32_t Crc32Lookup[MaxSlice][256];
 	#endif
 #endif
 
-// abort if byte order is undefined
 #if !defined(__BYTE_ORDER)
-#error undefined byte order, compile with -D__BYTE_ORDER=1234 (if little endian) or -D__BYTE_ORDER=4321 (big endian)
+//Default to little endian when the symbol is not defined
+#define __BYTE_ORDER __LITTLE_ENDIAN
 #endif
 
 uint32_t CRC32::GetCRC(uint8_t *buffer, std::streamoff length)
