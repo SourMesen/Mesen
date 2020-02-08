@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -34,6 +35,15 @@ namespace Mesen.GUI.Forms
 			base.OnFormClosed(e);
 
 			this.Filename = txtFilename.Text;
+		}
+
+		protected override void OnShown(EventArgs e)
+		{
+			base.OnShown(e);
+
+			VideoCodec codec = cboVideoCodec.GetEnumValue<VideoCodec>();
+			string defaultFile = Path.Combine(ConfigManager.AviFolder, InteropEmu.GetRomInfo().GetRomName() + (codec == VideoCodec.GIF ? ".gif" : ".avi"));
+			txtFilename.Text = defaultFile;
 		}
 
 		private void btnBrowse_Click(object sender, EventArgs e)
