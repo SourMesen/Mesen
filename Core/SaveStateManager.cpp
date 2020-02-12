@@ -178,7 +178,9 @@ bool SaveStateManager::LoadState(istream &stream, bool hashCheckRequired)
 				#ifndef LIBRETRO
 				vector<uint8_t> frameData;
 				if(GetScreenshotData(frameData, stream)) {
-					_console->GetVideoDecoder()->UpdateFrameSync(frameData.data());
+					if(_console->IsPaused()) {
+						_console->GetVideoDecoder()->UpdateFrameSync(frameData.data());
+					}
 				}
 				#endif
 			}
