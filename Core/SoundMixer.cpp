@@ -330,7 +330,7 @@ void SoundMixer::ApplyEqualizer(orfanidis_eq::eq1* equalizer, size_t sampleCount
 			double in = _outputBuffer[i * 2 + offset];
 			double out;
 			equalizer->sbs_process(&in, &out);
-			_outputBuffer[i * 2 + offset] = (int16_t)out;
+			_outputBuffer[i * 2 + offset] = (int16_t)std::max(std::min(out, 32767.0), -32768.0);
 		}
 	}
 }
