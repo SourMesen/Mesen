@@ -468,38 +468,4 @@ namespace Mesen.GUI.Debugger
 			}
 		}
 	}
-
-	public class ZoomlessRichTextBox : RichTextBox
-	{
-		public int NumberOfVisibleLines
-		{
-			get
-			{
-				int topIndex = this.GetCharIndexFromPosition(new Point(1, 1));
-				int bottomIndex = this.GetCharIndexFromPosition(new Point(1, this.Height - 1));
-				int topLine = this.GetLineFromCharIndex(topIndex);
-				int bottomLine = this.GetLineFromCharIndex(bottomIndex);
-				return bottomLine - topLine + 1;
-			}
-		}
-
-		protected override void WndProc(ref Message m)
-		{
-			const int WM_SCROLLWHEEL = 0x20A;
-
-			bool ctrl = Control.ModifierKeys.HasFlag(Keys.Control);
-			bool wheel = m.Msg == WM_SCROLLWHEEL;
-
-			if(!ctrl || !wheel) {
-				//Block mouse wheel messages
-				base.WndProc(ref m);
-			}
-		}
-
-		protected override void OnKeyDown(KeyEventArgs e)
-		{
-			e.SuppressKeyPress = e.Control && e.Shift && (e.KeyValue == (int)Keys.Oemcomma || e.KeyValue == (int)Keys.OemPeriod);
-			base.OnKeyDown(e);
-		}
-	}
 }

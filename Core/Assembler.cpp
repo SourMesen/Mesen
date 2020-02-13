@@ -324,7 +324,7 @@ void Assembler::AssembleInstruction(LineData &lineData, uint16_t &instructionAdd
 		instructionAddress++;
 		foundMatch = true;
 	} else {
-		for(uint8_t i = 0; i < 255; i++) {
+		for(int i = 0; i < 256; i++) {
 			AddrMode opMode = DisassemblyInfo::OPMode[i];
 			if(lineData.OpCode.compare(opName[i]) == 0) {
 				bool modeMatch = opMode == lineData.Mode;
