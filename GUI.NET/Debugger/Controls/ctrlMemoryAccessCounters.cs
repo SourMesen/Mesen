@@ -15,15 +15,16 @@ namespace Mesen.GUI.Debugger.Controls
 {
 	public partial class ctrlMemoryAccessCounters : BaseControl
 	{
-		private MemoryCountData[] _data;
+		private bool _sorting = false;
+		private UInt64 _cycleCount = 0;
+		private AddressCounters[] _counts = new AddressCounters[0];
+		private AddressCounters[] _newCounts = new AddressCounters[0];
 		private DebugMemoryType _memoryType = DebugMemoryType.InternalRam;
 		private SortType _sortType = SortType.Address;
 
 		public ctrlMemoryAccessCounters()
 		{
 			InitializeComponent();
-			
-			this.toolTip.SetToolTip(chkHighlightUninitRead, "The uninitialized memory reads highlight will only be accurate if the debugger was active when the game was loaded (or if the game has been power cycled since)");
 		}
 
 		protected override void OnLoad(EventArgs e)
@@ -31,15 +32,7 @@ namespace Mesen.GUI.Debugger.Controls
 			base.OnLoad(e);
 			if(!IsDesignMode) {
 				InitMemoryTypeDropdown();
-				cboSort.SelectedIndex = 0;
-				InitShortcuts();
 			}
-		}
-
-		private void InitShortcuts()
-		{
-			mnuCopy.InitShortcut(this, nameof(DebuggerShortcutsConfig.Copy));
-			mnuSelectAll.InitShortcut(this, nameof(DebuggerShortcutsConfig.SelectAll));
 		}
 
 		public void InitMemoryTypeDropdown()
@@ -79,97 +72,43 @@ namespace Mesen.GUI.Debugger.Controls
 			UpdateMemoryType();
 		}
 
-		public Font BaseFont { get { return ctrlScrollableTextbox.BaseFont; } set { ctrlScrollableTextbox.BaseFont = value; } }
-		public int TextZoom { get { return ctrlScrollableTextbox.TextZoom; } set { ctrlScrollableTextbox.TextZoom = value; } }
-
 		public void RefreshData()
 		{
-			bool isPpu = (
-				_memoryType == DebugMemoryType.ChrRom ||
-				_memoryType == DebugMemoryType.ChrRam ||
-				_memoryType == DebugMemoryType.PaletteMemory ||
-				_memoryType == DebugMemoryType.NametableRam
-			);
+			if(_sorting) {
+				return;
+			}
+			
+			InteropEmu.DebugGetMemoryAccessCounts(_memoryType, ref _counts);
 
-			int[] readCounts = InteropEmu.DebugGetMemoryAccessCounts(_memoryType, MemoryOperationType.Read);
-			int[] writeCounts = InteropEmu.DebugGetMemoryAccessCounts(_memoryType, MemoryOperationType.Write);
-			int[] execCounts = isPpu ? new int[readCounts.Length] : InteropEmu.DebugGetMemoryAccessCounts(_memoryType, MemoryOperationType.Exec);
+			DebugState state = new DebugState();
+			InteropEmu.DebugGetState(ref state);
+			_cycleCount = state.CPU.CycleCount;
 
-			int[] uninitReads = isPpu ? new int[readCounts.Length] : InteropEmu.DebugGetUninitMemoryReads(_memoryType);
-
-			List<int> addresses = new List<int>(readCounts.Length);
-			List<string> content = new List<string>(readCounts.Length);
-
-			if(_data == null || _data.Length != readCounts.Length) {
-				_data = new MemoryCountData[readCounts.Length];
-				for(int i = 0; i < readCounts.Length; i++) {
-					_data[i] = new MemoryCountData();
+			_sorting = true;
+			Task.Run(() => {
+				switch(_sortType) {
+					case SortType.Address: break;
+					case SortType.Value: break;
+					case SortType.Read: Array.Sort(_newCounts, new SortReadComparer()); break;
+					case SortType.ReadStamp: Array.Sort(_newCounts, new SortReadStampComparer()); break;
+					case SortType.Write: Array.Sort(_newCounts, new SortWriteComparer()); break;
+					case SortType.WriteStamp: Array.Sort(_newCounts, new SortWriteStampComparer()); break;
+					case SortType.Exec: Array.Sort(_newCounts, new SortExecComparer()); break;
+					case SortType.ExecStamp: Array.Sort(_newCounts, new SortExecStampComparer()); break;
+					case SortType.UninitRead: Array.Sort(_newCounts, new SortUninitComparer()); break;
 				}
-			}
 
-			for(int i = 0; i < readCounts.Length; i++) {
-				_data[i].Address = i;
-				_data[i].ReadCount = readCounts[i];
-				_data[i].WriteCount = writeCounts[i];
-				_data[i].ExecCount = execCounts[i];
-				_data[i].UninitRead = uninitReads[i] > 0;
-				_data[i].IsPpu = isPpu;
-			}
+				AddressCounters[] counts = _counts;
+				_counts = _newCounts;
+				_newCounts = counts;
 
-			MemoryCountData[] data = new MemoryCountData[readCounts.Length];
-			Array.Copy(_data, data, readCounts.Length);
-
-			switch(_sortType) {
-				case SortType.Address: break;
-				case SortType.Read: Array.Sort(data.Select((e) => -e.ReadCount).ToArray<int>(), data); break;
-				case SortType.Write: Array.Sort(data.Select((e) => -e.WriteCount).ToArray<int>(), data); break;
-				case SortType.Exec: Array.Sort(data.Select((e) => -e.ExecCount).ToArray<int>(), data); break;
-				case SortType.UninitRead: Array.Sort(data.Select((e) => e.UninitRead ? -e.ReadCount : (Int32.MaxValue - e.ReadCount)).ToArray<int>(), data); break;
-			}
-
-			bool hideUnusedAddresses = chkHideUnusedAddresses.Checked;
-			for(int i = 0; i < readCounts.Length; i++) {
-				if(!hideUnusedAddresses || !data[i].Empty) {
-					addresses.Add(data[i].Address);
-					content.Add(data[i].Content);
-				}
-			}
-
-			if(chkHighlightUninitRead.Checked) {
-				ctrlScrollableTextbox.StyleProvider = new LineStyleProvider(new HashSet<int>(data.Where((e) => e.UninitRead).Select((e) => e.Address)));
-			} else {
-				ctrlScrollableTextbox.StyleProvider = null;
-			}
-			if(isPpu) {
-				ctrlScrollableTextbox.Header = " " + "Read".PadRight(12) + "Write";
-			} else {
-				ctrlScrollableTextbox.Header = " " + "Read".PadRight(12) + "Write".PadRight(12) + "Execute";
-			}
-			ctrlScrollableTextbox.LineNumbers = addresses.ToArray();
-			ctrlScrollableTextbox.TextLines = content.ToArray();
-		}
-
-		private class LineStyleProvider : ctrlTextbox.ILineStyleProvider
-		{
-			HashSet<int> _addresses = new HashSet<int>();
-
-			public LineStyleProvider(HashSet<int> addresses)
-			{
-				_addresses = addresses;
-			}
-
-			public string GetLineComment(int lineIndex)
-			{
-				return null;
-			}
-
-			public LineProperties GetLineStyle(int cpuAddress, int lineIndex)
-			{
-				if(_addresses.Contains(cpuAddress)) {
-					return new LineProperties() { TextBgColor = Color.LightCoral };
-				}
-				return null;
-			}
+				this.BeginInvoke((Action)(() => {
+					_sorting = false;
+					lstCounters.BeginUpdate();
+					lstCounters.VirtualListSize = _counts.Length;
+					lstCounters.EndUpdate();
+				}));
+			});
 		}
 
 		private void cboMemoryType_SelectedIndexChanged(object sender, EventArgs e)
@@ -183,111 +122,101 @@ namespace Mesen.GUI.Debugger.Controls
 			RefreshData();
 		}
 
-		private void cboSort_SelectedIndexChanged(object sender, EventArgs e)
-		{
-			_sortType = (SortType)cboSort.SelectedIndex;
-			RefreshData();
-		}
-		
-		private void chkOption_CheckedChanged(object sender, EventArgs e)
-		{
-			RefreshData();
-		}
-
 		private void btnReset_Click(object sender, EventArgs e)
 		{
 			InteropEmu.DebugResetMemoryAccessCounts();
 			RefreshData();
 		}
 
+		private string FormatNumber(UInt64 value)
+		{
+			if(value >= 1000000000000) {
+				return ((double)value / 1000000000000).ToString("0.00") + " T";
+			} else if(value >= 1000000000) {
+				return ((double)value / 1000000000).ToString("0.00") + " G";
+			} else if(value >= 1000000) {
+				return ((double)value / 1000000).ToString("0.00") + " M";
+			} else if(value >= 1000) {
+				return ((double)value / 1000).ToString("0.00") + " K";
+			}
+			return value.ToString();
+		}
+
+		private void lstCounters_RetrieveVirtualItem(object sender, RetrieveVirtualItemEventArgs e)
+		{
+			AddressCounters counts = _counts[e.ItemIndex];
+			ListViewItem item = new ListViewItem("$" + counts.Address.ToString("X4"));
+			item.Selected = false;
+			item.Focused = false;
+
+			item.SubItems.Add("$" + InteropEmu.DebugGetMemoryValue(_memoryType, counts.Address).ToString("X2"));
+			item.SubItems.Add(FormatNumber(counts.ReadCount));
+			item.SubItems.Add(counts.ReadStamp > 0 ? FormatNumber(_cycleCount - counts.ReadStamp) : "n/a");
+			item.SubItems.Add(FormatNumber(counts.WriteCount));
+			item.SubItems.Add(counts.WriteStamp > 0 ? FormatNumber(_cycleCount - counts.WriteStamp) : "n/a");
+			item.SubItems.Add(FormatNumber(counts.ExecCount));
+			item.SubItems.Add(counts.ExecStamp > 0 ? FormatNumber(_cycleCount - counts.ExecStamp) : "n/a");
+			item.SubItems.Add(counts.UninitRead != 0 ? "☑" : "☐");
+
+			if(counts.ReadCount == 0 && counts.WriteCount == 0 && counts.ExecCount == 0) {
+				item.ForeColor = Color.Gray;
+			}
+
+			e.Item = item;
+		}
+
 		public void GoToAddress()
 		{
-			ctrlScrollableTextbox.GoToAddress();
+			GoToAddress address = new GoToAddress();
+			address.Address = 0;
+
+			using(frmGoToLine frm = new frmGoToLine(address, 8)) {
+				frm.StartPosition = FormStartPosition.Manual;
+				Point topLeft = this.PointToScreen(new Point(0, 0));
+				frm.Location = new Point(topLeft.X + (this.Width - frm.Width) / 2, topLeft.Y + (this.Height - frm.Height) / 2);
+				if(frm.ShowDialog() == DialogResult.OK) {
+					int index = -1;
+					for(int i = 0; i < _counts.Length; i++) {
+						if(_counts[i].Address == address.Address) {
+							index = i;
+							break;
+						}
+					}
+
+					if(index >= 0) {
+						lstCounters.EnsureVisible(index);
+						lstCounters.SelectedIndices.Clear();
+						lstCounters.SelectedIndices.Add(index);
+					}
+				}
+			}
 		}
+
+		private void lstCounters_ColumnClick(object sender, ColumnClickEventArgs e)
+		{
+			_sortType = (SortType)e.Column;
+			RefreshData();
+		}
+
+		private class SortReadComparer : IComparer<AddressCounters> { public int Compare(AddressCounters a, AddressCounters b) { return a.ReadCount.CompareTo(b.ReadCount) * -2 + a.Address.CompareTo(b.Address); } }
+		private class SortReadStampComparer : IComparer<AddressCounters> { public int Compare(AddressCounters a, AddressCounters b) { return a.ReadStamp.CompareTo(b.ReadStamp) * -2 + a.Address.CompareTo(b.Address); } }
+		private class SortWriteComparer : IComparer<AddressCounters> { public int Compare(AddressCounters a, AddressCounters b) { return a.WriteCount.CompareTo(b.WriteCount) * -2 + a.Address.CompareTo(b.Address); } }
+		private class SortWriteStampComparer : IComparer<AddressCounters> { public int Compare(AddressCounters a, AddressCounters b) { return a.WriteStamp.CompareTo(b.WriteStamp) * -2 + a.Address.CompareTo(b.Address); } }
+		private class SortExecComparer : IComparer<AddressCounters> { public int Compare(AddressCounters a, AddressCounters b) { return a.ExecCount.CompareTo(b.ExecCount) * -2 + a.Address.CompareTo(b.Address); } }
+		private class SortExecStampComparer : IComparer<AddressCounters> { public int Compare(AddressCounters a, AddressCounters b) { return a.ExecStamp.CompareTo(b.ExecStamp) * -2 + a.Address.CompareTo(b.Address); } }
+		private class SortUninitComparer : IComparer<AddressCounters> { public int Compare(AddressCounters a, AddressCounters b) { return a.UninitRead.CompareTo(b.UninitRead) * -2 + a.Address.CompareTo(b.Address); } }
 
 		private enum SortType
 		{
 			Address = 0,
-			Read = 1,
-			Write = 2,
-			Exec = 3,
-			UninitRead = 4,
-		}
-
-		private class MemoryCountData
-		{
-			private bool _needRecalc = true;
-			private int _readCount = 0;
-			private int _writeCount = 0;
-			private int _execCount = 0;
-			private string _content = string.Empty;
-
-			public int Address { get; set; }
-
-			public int ReadCount
-			{
-				get { return _readCount; }
-				set
-				{
-					if(this._readCount!=value) {
-						this._readCount = value;
-						this._needRecalc = true;
-					};
-				}
-			}
-
-			public int WriteCount
-			{
-				get { return _writeCount; }
-				set
-				{
-					if(this._writeCount!=value) {
-						this._writeCount = value;
-						this._needRecalc = true;
-					};
-				}
-			}
-
-			public int ExecCount
-			{
-				get { return _execCount; }
-				set
-				{
-					if(this._execCount!=value) {
-						this._execCount = value;
-						this._needRecalc = true;
-					};
-				}
-			}
-
-			public bool Empty { get { return ReadCount == 0 && WriteCount == 0 && ExecCount == 0; } }
-
-			public string Content
-			{
-				get
-				{
-					if(this._needRecalc) {
-						_content = " " + (_readCount == 0 ? "0" : _readCount.ToString()).PadRight(12) +
-									(_writeCount == 0 ? "0" : _writeCount.ToString()).PadRight(12) +
-									(IsPpu ? "" : (_execCount == 0 ? "0" : _execCount.ToString()));
-						_needRecalc = false;
-					}
-					return _content;
-				}
-			}
-
-			public bool UninitRead { get; set; }
-			public bool IsPpu { get; set; }
-		}
-
-		private void mnuCopy_Click(object sender, EventArgs e)
-		{
-			ctrlScrollableTextbox.CopySelection(true, false, false);
-		}
-
-		private void mnuSelectAll_Click(object sender, EventArgs e)
-		{
-			ctrlScrollableTextbox.SelectAll();
+			Value,
+			Read,
+			ReadStamp,
+			Write,
+			WriteStamp,
+			Exec,
+			ExecStamp,
+			UninitRead,
 		}
 	}
 }

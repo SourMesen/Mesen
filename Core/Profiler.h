@@ -1,55 +1,46 @@
 #pragma once
 #include "stdafx.h"
-#include <unordered_map>
-#include <stack>
+#include "DebuggerTypes.h"
 
 class Debugger;
+class CPU;
 
-enum class ProfilerDataType
+struct ProfiledFunction
 {
-	FunctionExclusive = 0,
-	FunctionInclusive = 1,
-	Instructions = 2,
-	FunctionCallCount = 3,
-	MinCycles = 4,
-	MaxCycles = 5,
+	uint64_t ExclusiveCycles = 0;
+	uint64_t InclusiveCycles = 0;
+	uint64_t CallCount = 0;
+	uint64_t MinCycles = UINT64_MAX;
+	uint64_t MaxCycles = 0;
+	AddressTypeInfo Address;
 };
 
 class Profiler
 {
 private:
 	Debugger* _debugger;
+	CPU* _cpu;
 
-	vector<uint64_t> _cyclesByInstruction;
-	vector<uint64_t> _cyclesByFunction;
-	vector<uint64_t> _cyclesByFunctionInclusive;
-	vector<uint64_t> _functionCallCount;
-	vector<uint64_t> _minCycles;
-	vector<uint64_t> _maxCycles;
-	
-	std::stack<int32_t> _functionStack;
-	std::stack<int32_t> _jsrStack;
-	std::stack<uint64_t> _cycleCountStack;
+	unordered_map<int32_t, ProfiledFunction> _functions;
+
+	deque<int32_t> _functionStack;
+	deque<StackFrameFlags> _stackFlags;
+	deque<uint64_t> _cycleCountStack;
 
 	uint64_t _currentCycleCount;
-
+	uint64_t _prevMasterClock;
 	int32_t _currentFunction;
-	int32_t _currentInstruction;
-	int32_t _nextFunctionAddr;
-
-	uint32_t _resetFunctionIndex;
-	uint32_t _inMemoryFunctionIndex;
 
 	void InternalReset();
+	void UpdateCycles();
 
 public:
 	Profiler(Debugger* debugger);
+	~Profiler();
 
-	void ProcessInstructionStart(int32_t absoluteAddr);
-	void ProcessCycle();
-	void StackFunction(int32_t instructionAddr, int32_t functionAddr);
+	void StackFunction(AddressTypeInfo& addr, StackFrameFlags stackFlag);
 	void UnstackFunction();
 
 	void Reset();
-	void GetProfilerData(uint64_t* profilerData, ProfilerDataType type);
+	void GetProfilerData(ProfiledFunction* profilerData, uint32_t& functionCount);
 };

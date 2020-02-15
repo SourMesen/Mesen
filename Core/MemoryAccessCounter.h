@@ -5,42 +5,39 @@
 #include <unordered_set>
 class Debugger;
 
+struct AddressCounters
+{
+	uint32_t Address;
+	uint32_t ReadCount;
+	uint64_t ReadStamp;
+	bool UninitRead;
+	uint32_t WriteCount;
+	uint64_t WriteStamp;
+	uint32_t ExecCount;
+	uint64_t ExecStamp;
+};
+
 class MemoryAccessCounter
 {
 private:
 	Debugger* _debugger;
-	vector<int32_t> _readCounts[4];
-	vector<int32_t> _writeCounts[4];
-	vector<int32_t> _execCounts[4];
-
-	vector<uint64_t> _readStamps[4];
-	vector<uint64_t> _writeStamps[4];
-	vector<uint64_t> _execStamps[4];
-
-	vector<uint8_t> _uninitReads[4];
-
-	vector<int32_t> _ppuReadCounts[4];
-	vector<int32_t> _ppuWriteCounts[4];
-	vector<uint64_t> _ppuReadStamps[4];
-	vector<uint64_t> _ppuWriteStamps[4];
-
-	vector<int32_t>& GetCountArray(MemoryOperationType operationType, AddressType addressType);
-	vector<uint64_t>& GetStampArray(MemoryOperationType operationType, AddressType addressType);
-
-	vector<int32_t>& GetPpuCountArray(MemoryOperationType operationType, PpuAddressType addressType);
-	vector<uint64_t>& GetPpuStampArray(MemoryOperationType operationType, PpuAddressType addressType);
+	
+	vector<AddressCounters> _counters[4];
+	vector<AddressCounters> _ppuCounters[4];
 
 public:
 	MemoryAccessCounter(Debugger* debugger);
 
-	void ProcessPpuMemoryAccess(PpuAddressTypeInfo &addressInfo, MemoryOperationType operation, uint64_t cpuCycle);
-	bool ProcessMemoryAccess(AddressTypeInfo &addressInfo, MemoryOperationType operation, uint64_t cpuCycle);
+	void ProcessPpuMemoryRead(PpuAddressTypeInfo& addressInfo, uint64_t cpuCycle);
+	void ProcessPpuMemoryWrite(PpuAddressTypeInfo &addressInfo, uint64_t cpuCycle);
+	bool ProcessMemoryRead(AddressTypeInfo& addressInfo, uint64_t cpuCycle);
+	void ProcessMemoryWrite(AddressTypeInfo& addressInfo, uint64_t cpuCycle);
+	void ProcessMemoryExec(AddressTypeInfo &addressInfo, uint64_t cpuCycle);
+
 	void ResetCounts();
 
 	bool IsAddressUninitialized(AddressTypeInfo &addressInfo);
 	
-	void GetUninitMemoryReads(DebugMemoryType memoryType, int32_t counts[]);
 	void GetNametableChangedData(bool ntChangedData[]);
-	void GetAccessCounts(uint32_t offset, uint32_t length, DebugMemoryType memoryType, MemoryOperationType operationType, int32_t counts[]);
-	void GetAccessStamps(uint32_t offset, uint32_t length, DebugMemoryType memoryType, MemoryOperationType operationType, uint64_t stamps[]);
+	void GetAccessCounts(uint32_t offset, uint32_t length, DebugMemoryType memoryType, AddressCounters counts[]);
 };

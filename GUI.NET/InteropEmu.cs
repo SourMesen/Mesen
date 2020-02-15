@@ -535,82 +535,30 @@ namespace Mesen.GUI
 			return buffer;
 		}
 
-		[DllImport(DLLPath, EntryPoint = "DebugGetProfilerData")] private static extern void DebugGetProfilerDataWrapper(IntPtr profilerData, ProfilerDataType dataType);
-		public static UInt64[] DebugGetProfilerData(ProfilerDataType dataType)
+		[DllImport(DLLPath, EntryPoint = "DebugGetProfilerData")] private static extern void GetProfilerDataWrapper([In, Out]ProfiledFunction[] profilerData, ref UInt32 functionCount);
+		public static ProfiledFunction[] DebugGetProfilerData()
 		{
-			UInt64[] profileData = new UInt64[InteropEmu.DebugGetMemorySize(DebugMemoryType.PrgRom) + 2];
+			ProfiledFunction[] profilerData = new ProfiledFunction[100000];
+			UInt32 functionCount = 0;
 
-			GCHandle hProfilerData = GCHandle.Alloc(profileData, GCHandleType.Pinned);
-			try {
-				InteropEmu.DebugGetProfilerDataWrapper(hProfilerData.AddrOfPinnedObject(), dataType);
-			} finally {
-				hProfilerData.Free();
-			}
+			InteropEmu.GetProfilerDataWrapper(profilerData, ref functionCount);
+			Array.Resize(ref profilerData, (int)functionCount);
 
-			return profileData;
+			return profilerData;
 		}
 
-		public static Int32[] DebugGetMemoryAccessCounts(DebugMemoryType type, MemoryOperationType operationType)
+		public static void DebugGetMemoryAccessCounts(DebugMemoryType type, ref AddressCounters[] counters)
 		{
 			int size = InteropEmu.DebugGetMemorySize(type);
-			return InteropEmu.DebugGetMemoryAccessCounts(0, (uint)size, type, operationType);
+			Array.Resize(ref counters, size);
+			InteropEmu.DebugGetMemoryAccessCountsWrapper(0, (uint)size, type, counters);
 		}
 
-		public static UInt64[] DebugGetMemoryAccessStamps(DebugMemoryType type, MemoryOperationType operationType)
+		[DllImport(DLLPath, EntryPoint = "DebugGetMemoryAccessCounts")] private static extern void DebugGetMemoryAccessCountsWrapper(UInt32 offset, UInt32 length, DebugMemoryType type, [In,Out]AddressCounters[] counts);
+		public static AddressCounters[] DebugGetMemoryAccessCounts(UInt32 offset, UInt32 length, DebugMemoryType type)
 		{
-			int size = InteropEmu.DebugGetMemorySize(type);
-			return InteropEmu.DebugGetMemoryAccessStamps(0, (uint)size, type, operationType);
-		}
-
-		[DllImport(DLLPath, EntryPoint = "DebugGetUninitMemoryReads")] private static extern void DebugGetUninitMemoryReadsWrapper(DebugMemoryType type, IntPtr counts);
-		public static Int32[] DebugGetUninitMemoryReads(DebugMemoryType type)
-		{
-			int size = InteropEmu.DebugGetMemorySize(type);
-			if(type == DebugMemoryType.InternalRam) {
-				size = 0x2000;
-			}
-
-			Int32[] counts = new Int32[size];
-
-			if(size > 0) {
-				GCHandle hCounts = GCHandle.Alloc(counts, GCHandleType.Pinned);
-				try {
-					InteropEmu.DebugGetUninitMemoryReadsWrapper(type, hCounts.AddrOfPinnedObject());
-				} finally {
-					hCounts.Free();
-				}
-			}
-
-			return counts;
-		}
-
-		[DllImport(DLLPath, EntryPoint = "DebugGetMemoryAccessStamps")] private static extern void DebugGetMemoryAccessStampsWrapper(UInt32 offset, UInt32 length, DebugMemoryType type, MemoryOperationType operationType, IntPtr stamps);
-		public static UInt64[] DebugGetMemoryAccessStamps(UInt32 offset, UInt32 length, DebugMemoryType type, MemoryOperationType operationType)
-		{
-			UInt64[] stamps = new UInt64[length];
-
-			GCHandle hStamps = GCHandle.Alloc(stamps, GCHandleType.Pinned);
-			try {
-				InteropEmu.DebugGetMemoryAccessStampsWrapper(offset, length, type, operationType, hStamps.AddrOfPinnedObject());
-			} finally {
-				hStamps.Free();
-			}
-
-			return stamps;
-		}
-
-		[DllImport(DLLPath, EntryPoint = "DebugGetMemoryAccessCounts")] private static extern void DebugGetMemoryAccessCountsWrapper(UInt32 offset, UInt32 length, DebugMemoryType type, MemoryOperationType operationType, IntPtr counts);
-		public static Int32[] DebugGetMemoryAccessCounts(UInt32 offset, UInt32 length, DebugMemoryType type, MemoryOperationType operationType)
-		{
-			Int32[] counts = new Int32[length];
-
-			GCHandle hResult = GCHandle.Alloc(counts, GCHandleType.Pinned);
-			try {
-				InteropEmu.DebugGetMemoryAccessCountsWrapper(offset, length, type, operationType, hResult.AddrOfPinnedObject());
-			} finally {
-				hResult.Free();
-			}
-
+			AddressCounters[] counts = new AddressCounters[length];
+			InteropEmu.DebugGetMemoryAccessCountsWrapper(offset, length, type, counts);
 			return counts;
 		}
 		
@@ -2151,6 +2099,29 @@ namespace Mesen.GUI
 		{
 			return Encoding.UTF8.GetString(this.TrackName, 0, Array.IndexOf(this.TrackName, (Byte)0)).Split(new string[] { "[!|!]" }, StringSplitOptions.None);
 		}
+	}
+
+	public struct ProfiledFunction
+	{
+		public UInt64 ExclusiveCycles;
+		public UInt64 InclusiveCycles;
+		public UInt64 CallCount;
+		public UInt64 MinCycles;
+		public UInt64 MaxCycles;
+		public AddressTypeInfo Address;
+	}
+
+	[StructLayout(LayoutKind.Sequential)]
+	public struct AddressCounters
+	{
+		public UInt32 Address;
+		public UInt32 ReadCount;
+		public UInt64 ReadStamp;
+		public byte UninitRead;
+		public UInt32 WriteCount;
+		public UInt64 WriteStamp;
+		public UInt32 ExecCount;
+		public UInt64 ExecStamp;
 	}
 
 	public enum RecordMovieFrom

@@ -3,79 +3,87 @@
 #include "Profiler.h"
 #include "DebugBreakHelper.h"
 #include "Debugger.h"
+#include "Console.h"
+#include "MemoryManager.h"
 #include "MemoryDumper.h"
+#include "DebuggerTypes.h"
+#include "Cpu.h"
 
-Profiler::Profiler(Debugger * debugger)
+static constexpr int32_t ResetFunctionIndex = -1;
+
+Profiler::Profiler(Debugger* debugger)
 {
 	_debugger = debugger;
+	_cpu = debugger->GetConsole()->GetCpu();
 	InternalReset();
 }
 
-void Profiler::ProcessCycle()
+Profiler::~Profiler()
 {
-	_cyclesByFunction[_currentFunction]++;
-	_cyclesByFunctionInclusive[_currentFunction]++;
-	_cyclesByInstruction[_currentInstruction]++;
-	_currentCycleCount++;
 }
 
-void Profiler::StackFunction(int32_t instructionAddr, int32_t functionAddr)
+void Profiler::StackFunction(AddressTypeInfo& addr, StackFrameFlags stackFlag)
 {
-	if(functionAddr >= 0) {
-		_nextFunctionAddr = functionAddr;
-		_jsrStack.push(instructionAddr);
+	if(addr.Address >= 0) {
+		uint32_t key = addr.Address | ((uint8_t)addr.Type << 24);
+		if(_functions.find(key) == _functions.end()) {
+			_functions[key] = ProfiledFunction();
+			_functions[key].Address = addr;
+		}
+
+		UpdateCycles();
+
+		_stackFlags.push_back(stackFlag);
+		_cycleCountStack.push_back(_currentCycleCount);
+		_functionStack.push_back(_currentFunction);
+
+		ProfiledFunction& func = _functions[key];
+		func.CallCount++;
+
+		_currentFunction = key;
+		_currentCycleCount = 0;
 	}
+}
+
+void Profiler::UpdateCycles()
+{
+	uint64_t masterClock = _cpu->GetCycleCount();
+
+	ProfiledFunction& func = _functions[_currentFunction];
+	uint64_t clockGap = masterClock - _prevMasterClock;
+	func.ExclusiveCycles += clockGap;
+	func.InclusiveCycles += clockGap;
+
+	int32_t len = (int32_t)_functionStack.size();
+	for(int32_t i = len - 1; i >= 0; i--) {
+		_functions[_functionStack[i]].InclusiveCycles += clockGap;
+		if(_stackFlags[i] != StackFrameFlags::None) {
+			//Don't apply inclusive times to stack frames before an IRQ/NMI
+			break;
+		}
+	}
+
+	_currentCycleCount += clockGap;
+	_prevMasterClock = masterClock;
 }
 
 void Profiler::UnstackFunction()
 {
 	if(!_functionStack.empty()) {
+		UpdateCycles();
+
 		//Return to the previous function
-		_minCycles[_currentFunction] = std::min(_minCycles[_currentFunction], _currentCycleCount);
-		_maxCycles[_currentFunction] = std::max(_maxCycles[_currentFunction], _currentCycleCount);
+		ProfiledFunction& func = _functions[_currentFunction];
+		func.MinCycles = std::min(func.MinCycles, _currentCycleCount);
+		func.MaxCycles = std::max(func.MaxCycles, _currentCycleCount);
 
-		_currentFunction = _functionStack.top();
-		_functionStack.pop();
-
-		int32_t jsrAddr = _jsrStack.top();
-		_jsrStack.pop();
-
-		if(jsrAddr >= 0) {
-			//Prevent IRQ/NMI from adding cycles to the calling function
-
-			//Add the subroutine's cycle count to the JSR instruction
-			_cyclesByInstruction[jsrAddr] += _currentCycleCount;
-
-			if(_currentFunction >= 0) {
-				//Add the subroutine's cycle count to the function's inclusive cycle count
-				_cyclesByFunctionInclusive[_currentFunction] += _currentCycleCount;
-			}
-		}
+		_currentFunction = _functionStack.back();
+		_functionStack.pop_back();
+		_stackFlags.pop_back();
 
 		//Add the subroutine's cycle count to the current routine's cycle count
-		_currentCycleCount = _cycleCountStack.top() + _currentCycleCount;
-		_cycleCountStack.pop();
-	}
-}
-
-void Profiler::ProcessInstructionStart(int32_t absoluteAddr)
-{
-	if(_nextFunctionAddr >= 0) {
-		_cycleCountStack.push(_currentCycleCount);
-		_functionStack.push(_currentFunction);
-
-		_currentFunction = _nextFunctionAddr;
-		_currentCycleCount = 0;
-		_functionCallCount[_nextFunctionAddr]++;
-
-		_nextFunctionAddr = -1;
-	}
-
-	if(absoluteAddr >= 0) {
-		_currentInstruction = absoluteAddr;
-		ProcessCycle();
-	} else {
-		_currentFunction = _inMemoryFunctionIndex;
+		_currentCycleCount = _cycleCountStack.back() + _currentCycleCount;
+		_cycleCountStack.pop_back();
 	}
 }
 
@@ -87,43 +95,31 @@ void Profiler::Reset()
 
 void Profiler::InternalReset()
 {
-	_nextFunctionAddr = -1;
+	_prevMasterClock = _cpu->GetCycleCount();
 	_currentCycleCount = 0;
-	_currentInstruction = 0;
+	_currentFunction = ResetFunctionIndex;
+	_functionStack.clear();
+	_stackFlags.clear();
+	_cycleCountStack.clear();
 
-	int size = _debugger->GetMemoryDumper()->GetMemorySize(DebugMemoryType::PrgRom);
-	_resetFunctionIndex = size;
-	_inMemoryFunctionIndex = size + 1;
-	_currentFunction = _resetFunctionIndex;
-
-	_cyclesByInstruction.clear();
-	_cyclesByFunction.clear();
-	_cyclesByFunctionInclusive.clear();
-	_functionCallCount.clear();
-	_minCycles.clear();
-	_maxCycles.clear();
-
-	_cyclesByInstruction.insert(_cyclesByInstruction.end(), size + 2, 0);
-	_cyclesByFunction.insert(_cyclesByFunction.end(), size + 2, 0);
-	_cyclesByFunctionInclusive.insert(_cyclesByFunctionInclusive.end(), size + 2, 0);
-	_functionCallCount.insert(_functionCallCount.end(), size + 2, 0);
-	_minCycles.insert(_minCycles.end(), size + 2, std::numeric_limits<uint64_t>().max());
-	_maxCycles.insert(_maxCycles.end(), size + 2, 0);
+	_functions.clear();
+	_functions[ResetFunctionIndex] = ProfiledFunction();
+	_functions[ResetFunctionIndex].Address = { ResetFunctionIndex, AddressType::Register };
 }
 
-void Profiler::GetProfilerData(uint64_t * profilerData, ProfilerDataType type)
+void Profiler::GetProfilerData(ProfiledFunction* profilerData, uint32_t& functionCount)
 {
-	vector<uint64_t> *dataArray = nullptr;
+	DebugBreakHelper helper(_debugger);
 
-	switch(type) {
-		default:
-		case ProfilerDataType::FunctionExclusive: dataArray = &_cyclesByFunction; break;
-		case ProfilerDataType::FunctionInclusive: dataArray = &_cyclesByFunctionInclusive; break;
-		case ProfilerDataType::Instructions: dataArray = &_cyclesByInstruction; break;
-		case ProfilerDataType::FunctionCallCount: dataArray = &_functionCallCount; break;
-		case ProfilerDataType::MinCycles: dataArray = &_minCycles; break;
-		case ProfilerDataType::MaxCycles: dataArray = &_maxCycles; break;
+	UpdateCycles();
+
+	functionCount = 0;
+	for(auto func : _functions) {
+		profilerData[functionCount] = func.second;
+		functionCount++;
+
+		if(functionCount >= 100000) {
+			break;
+		}
 	}
-
-	memcpy(profilerData, (*dataArray).data(), (*dataArray).size() * sizeof(uint64_t));
 }

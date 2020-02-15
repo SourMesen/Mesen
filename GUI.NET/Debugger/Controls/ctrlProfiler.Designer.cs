@@ -95,7 +95,9 @@
 			this.lstFunctions.TabIndex = 7;
 			this.lstFunctions.UseCompatibleStateImageBehavior = false;
 			this.lstFunctions.View = System.Windows.Forms.View.Details;
+			this.lstFunctions.VirtualMode = true;
 			this.lstFunctions.ColumnClick += new System.Windows.Forms.ColumnClickEventHandler(this.lstFunctions_ColumnClick);
+			this.lstFunctions.RetrieveVirtualItem += new System.Windows.Forms.RetrieveVirtualItemEventHandler(this.lstFunctions_RetrieveVirtualItem);
 			this.lstFunctions.DoubleClick += new System.EventHandler(this.lstFunctions_DoubleClick);
 			// 
 			// colFunction

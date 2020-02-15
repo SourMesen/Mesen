@@ -343,13 +343,10 @@ namespace Mesen.GUI.Debugger
 			UpdateDebugger(false, false);
 		}
 
-		private void ctrlProfiler_OnFunctionSelected(object sender, EventArgs e)
+		private void ctrlProfiler_OnFunctionSelected(object relativeAddress, EventArgs e)
 		{
-			int relativeAddress = InteropEmu.DebugGetRelativeAddress((UInt32)sender, AddressType.PrgRom);
-			if(relativeAddress >= 0) {
-				BringToFront();
-				LastCodeWindow.ScrollToLineNumber(relativeAddress);
-			}
+			BringToFront();
+			LastCodeWindow.ScrollToLineNumber((int)relativeAddress);
 		}
 
 		private void mnuFile_DropDownOpening(object sender, EventArgs e)

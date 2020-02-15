@@ -9,10 +9,7 @@ namespace Mesen.GUI.Debugger
 	public class ChrByteColorProvider : IByteColorProvider
 	{
 		DebugMemoryType _memoryType;
-		UInt64[] _readStamps;
-		UInt64[] _writeStamps;
-		Int32[] _readCounts;
-		Int32[] _writeCounts;
+		AddressCounters[] _counts;
 		DebugState _state = new DebugState();
 		bool _showWrite;
 		bool _showRead;
@@ -65,10 +62,7 @@ namespace Mesen.GUI.Debugger
 
 			InteropEmu.DebugGetState(ref _state);
 
-			_readStamps = InteropEmu.DebugGetMemoryAccessStamps((UInt32)firstByteIndex, (UInt32)visibleByteCount, _memoryType, MemoryOperationType.Read);
-			_writeStamps = InteropEmu.DebugGetMemoryAccessStamps((UInt32)firstByteIndex, (UInt32)visibleByteCount, _memoryType, MemoryOperationType.Write);
-			_readCounts = InteropEmu.DebugGetMemoryAccessCounts((UInt32)firstByteIndex, (UInt32)visibleByteCount, _memoryType, MemoryOperationType.Read);
-			_writeCounts = InteropEmu.DebugGetMemoryAccessCounts((UInt32)firstByteIndex, (UInt32)visibleByteCount, _memoryType, MemoryOperationType.Write);
+			_counts = InteropEmu.DebugGetMemoryAccessCounts((UInt32)firstByteIndex, (UInt32)visibleByteCount, _memoryType);
 
 			if(_memoryType == DebugMemoryType.ChrRom && (_highlightDrawnBytes || _highlightReadBytes)) {
 				_cdlData = InteropEmu.DebugGetCdlData((UInt32)firstByteIndex, (UInt32)visibleByteCount, _memoryType);
@@ -81,11 +75,11 @@ namespace Mesen.GUI.Debugger
 		{
 			const int CyclesPerFrame = 29780;
 			long index = byteIndex - firstByteIndex;
-			double framesSinceWrite = (double)(_state.CPU.CycleCount - _writeStamps[index]) / CyclesPerFrame;
-			double framesSinceRead = (double)(_state.CPU.CycleCount - _readStamps[index]) / CyclesPerFrame;
+			double framesSinceWrite = (double)(_state.CPU.CycleCount - _counts[index].WriteStamp) / CyclesPerFrame;
+			double framesSinceRead = (double)(_state.CPU.CycleCount - _counts[index].ReadStamp) / CyclesPerFrame;
 
-			bool isRead = _readCounts[index] > 0;
-			bool isWritten = _writeCounts[index] > 0;
+			bool isRead = _counts[index].ReadCount > 0;
+			bool isWritten = _counts[index].WriteCount > 0;
 			bool isUnused = !isRead && !isWritten;
 
 			int alpha = 0;
@@ -115,9 +109,9 @@ namespace Mesen.GUI.Debugger
 				}
 			}
 
-			if(_showWrite && _writeStamps[index] != 0 && framesSinceWrite >= 0 && (framesSinceWrite < _framesToFade || _framesToFade == 0)) {
+			if(_showWrite && _counts[index].WriteStamp != 0 && framesSinceWrite >= 0 && (framesSinceWrite < _framesToFade || _framesToFade == 0)) {
 				_colors.ForeColor = Color.FromArgb(alpha, ByteColorProvider.DarkerColor(ConfigManager.Config.DebugInfo.RamWriteColor, (_framesToFade - framesSinceWrite) / _framesToFade));
-			} else if(_showRead && _readStamps[index] != 0 && framesSinceRead >= 0 && (framesSinceRead < _framesToFade || _framesToFade == 0)) {
+			} else if(_showRead && _counts[index].ReadStamp != 0 && framesSinceRead >= 0 && (framesSinceRead < _framesToFade || _framesToFade == 0)) {
 				_colors.ForeColor = Color.FromArgb(alpha, ByteColorProvider.DarkerColor(ConfigManager.Config.DebugInfo.RamReadColor, (_framesToFade - framesSinceRead) / _framesToFade));
 			} else {
 				_colors.ForeColor = Color.FromArgb(alpha, Color.Black);

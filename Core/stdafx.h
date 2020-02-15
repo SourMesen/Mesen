@@ -16,6 +16,8 @@
 #include <sstream>
 #include <list>
 #include <atomic>
+#include <unordered_map>
+#include <deque>
 
 #include "../Utilities/UTF8Util.h"
 
@@ -37,6 +39,8 @@ using std::ios;
 using std::istream;
 using std::ostream;
 using std::stringstream;
+using std::unordered_map;
+using std::deque;
 using utf8::ifstream;
 using utf8::ofstream;
 using std::list;

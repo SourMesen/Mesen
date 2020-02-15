@@ -59,9 +59,6 @@ namespace Mesen.GUI.Debugger
 			this.ctrlHexViewer.TextZoom = config.RamTextZoom;
 			this.ctrlHexViewer.BaseFont = new Font(config.RamFontFamily, config.RamFontSize, config.RamFontStyle);
 
-			this.ctrlMemoryAccessCounters.BaseFont = new Font(config.RamFontFamily, config.RamFontSize, config.RamFontStyle);
-			this.ctrlMemoryAccessCounters.TextZoom = config.RamTextZoom;
-
 			this.mnuHighlightExecution.Checked = config.RamHighlightExecution;
 			this.mnuHightlightReads.Checked = config.RamHighlightReads;
 			this.mnuHighlightWrites.Checked = config.RamHighlightWrites;
@@ -400,9 +397,9 @@ namespace Mesen.GUI.Debugger
 		private void mnuGoTo_Click(object sender, EventArgs e)
 		{
 			if(_selectedTab == tpgMemoryViewer) {
-				this.ctrlHexViewer.GoToAddress();
+				ctrlHexViewer.GoToAddress();
 			} else if(_selectedTab == tpgAccessCounters) {
-				this.ctrlMemoryAccessCounters.GoToAddress();
+				ctrlMemoryAccessCounters.GoToAddress();
 			}
 		}
 
@@ -414,21 +411,18 @@ namespace Mesen.GUI.Debugger
 		private void mnuIncreaseFontSize_Click(object sender, EventArgs e)
 		{
 			this.ctrlHexViewer.TextZoom += 10;
-			this.ctrlMemoryAccessCounters.TextZoom += 10;
 			this.UpdateConfig();
 		}
 
 		private void mnuDecreaseFontSize_Click(object sender, EventArgs e)
 		{
 			this.ctrlHexViewer.TextZoom -= 10;
-			this.ctrlMemoryAccessCounters.TextZoom -= 10;
 			this.UpdateConfig();
 		}
 
 		private void mnuResetFontSize_Click(object sender, EventArgs e)
 		{
 			this.ctrlHexViewer.TextZoom = 100;
-			this.ctrlMemoryAccessCounters.TextZoom = 100;
 			this.UpdateConfig();
 		}
 
@@ -739,7 +733,6 @@ namespace Mesen.GUI.Debugger
 		private void mnuSelectFont_Click(object sender, EventArgs e)
 		{
 			ctrlHexViewer.BaseFont = FontDialogHelper.SelectFont(ctrlHexViewer.BaseFont);
-			ctrlMemoryAccessCounters.BaseFont = ctrlHexViewer.BaseFont;
 		}
 
 		private void mnuByteEditingMode_CheckedChanged(object sender, EventArgs e)

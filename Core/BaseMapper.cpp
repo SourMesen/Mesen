@@ -973,7 +973,7 @@ void BaseMapper::SetMemoryValue(DebugMemoryType memoryType, uint32_t address, ui
 void BaseMapper::GetAbsoluteAddressAndType(uint32_t relativeAddr, AddressTypeInfo* info)
 {
 	if(relativeAddr < 0x2000) {
-		info->Address = relativeAddr;
+		info->Address = relativeAddr & 0x7FF;
 		info->Type = AddressType::InternalRam;
 	} else {
 		uint8_t *prgAddr = _prgPages[relativeAddr >> 8] + (uint8_t)relativeAddr;

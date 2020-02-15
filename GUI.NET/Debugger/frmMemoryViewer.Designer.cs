@@ -775,14 +775,12 @@
 			// 
 			// ctrlMemoryAccessCounters
 			// 
-			this.ctrlMemoryAccessCounters.BaseFont = new System.Drawing.Font("Consolas", 12F);
 			this.ctrlMemoryAccessCounters.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.ctrlMemoryAccessCounters.Location = new System.Drawing.Point(0, 0);
 			this.ctrlMemoryAccessCounters.Margin = new System.Windows.Forms.Padding(0);
 			this.ctrlMemoryAccessCounters.Name = "ctrlMemoryAccessCounters";
 			this.ctrlMemoryAccessCounters.Size = new System.Drawing.Size(606, 343);
 			this.ctrlMemoryAccessCounters.TabIndex = 0;
-			this.ctrlMemoryAccessCounters.TextZoom = 100;
 			// 
 			// frmMemoryViewer
 			// 

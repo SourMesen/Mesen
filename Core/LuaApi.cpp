@@ -775,7 +775,7 @@ int LuaApi::GetAccessCounters(lua_State *lua)
 
 		case AddressType::InternalRam:
 			debugMemoryType = DebugMemoryType::InternalRam;
-			size = 0x2000;
+			size = 0x800;
 			break;
 
 		case AddressType::PrgRom:
@@ -794,14 +794,32 @@ int LuaApi::GetAccessCounters(lua_State *lua)
 			break;
 	}
 
-	vector<int32_t> counts;
-	counts.resize(size, 0);
-	_debugger->GetMemoryAccessCounter()->GetAccessCounts(0, size, debugMemoryType, operationType, counts.data());
+	vector<AddressCounters> counts;
+	counts.resize(size, {});
+	_debugger->GetMemoryAccessCounter()->GetAccessCounts(0, size, debugMemoryType, counts.data());
 
 	lua_newtable(lua);
-	for(uint32_t i = 0; i < size; i++) {
-		lua_pushinteger(lua, counts[i]);
-		lua_rawseti(lua, -2, i);
+	switch(operationType) {
+		case MemoryOperationType::Read:
+			for(uint32_t i = 0; i < size; i++) {
+				lua_pushinteger(lua, counts[i].ReadCount);
+				lua_rawseti(lua, -2, i);
+			}
+			break;
+
+		case MemoryOperationType::Write:
+			for(uint32_t i = 0; i < size; i++) {
+				lua_pushinteger(lua, counts[i].WriteCount);
+				lua_rawseti(lua, -2, i);
+			}
+			break;
+
+		case MemoryOperationType::ExecOpCode:
+			for(uint32_t i = 0; i < size; i++) {
+				lua_pushinteger(lua, counts[i].ExecCount);
+				lua_rawseti(lua, -2, i);
+			}
+			break;
 	}
 
 	return 1;
