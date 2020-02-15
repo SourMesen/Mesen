@@ -7,7 +7,7 @@
 #include "MemoryManager.h"
 #include "MemoryDumper.h"
 #include "DebuggerTypes.h"
-#include "Cpu.h"
+#include "CPU.h"
 
 static constexpr int32_t ResetFunctionIndex = -1;
 
