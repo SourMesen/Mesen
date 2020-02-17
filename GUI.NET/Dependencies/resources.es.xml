@@ -309,7 +309,7 @@
 			<Control ID="lblRewindSpeedHint">%  (0 = Velocidad máxima)</Control>
 			<Control ID="lblRewindSpeed">Velocidad de rebobinado:</Control>
 			<Control ID="lblRunAhead">Run Ahead:</Control>
-			<Control ID="lblRunAheadFrames">frames (reduces input lag, increases CPU usage)</Control>
+			<Control ID="lblRunAheadFrames">frames (reduce el input lag, incrementa el uso de la CPU)</Control>
 
 			<Control ID="tpgAdvanced">Avanzado</Control>
 			<Control ID="lblDeveloperSettings">Configuración recomendada para desarrolladores (homebrew / ROM hacking)</Control>
@@ -555,14 +555,14 @@
 			<Control ID="labelVersion">Versión:</Control>
 			<Control ID="lblBuildDateLabel">Fecha de creación:</Control>
 
-			<Control ID="grpAcknowledgements">Acknowledgements</Control>
-			<Control ID="lblUsedSoftware">This software uses the following libraries:</Control>
+			<Control ID="grpAcknowledgements">Agradecimientos</Control>
+			<Control ID="lblUsedSoftware">Este software usa las siguientes librerías:</Control>
 			<Control ID="lblGeneral">General:</Control>
 			<Control ID="lblVideo">Video:</Control>
 			<Control ID="lblAudio">Audio:</Control>
-			<Control ID="lblEmulation">Emulation:</Control>
-			<Control ID="lblCheats">Cheats:</Control>
-			<Control ID="lblSpecialThanks">And thank you to everybody who has contributed in any way! (donations, bug reports, testing, sharing information, etc.)</Control>
+			<Control ID="lblEmulation">Emulación:</Control>
+			<Control ID="lblCheats">Trucos:</Control>
+			<Control ID="lblSpecialThanks">¡Y gracias a todos los que han contribuido de alguna manera! (donaciones, informes de errores, pruebas, compartir información, etc.)</Control>
 
 			<Control ID="lblDonate">Si deseas colaborar con Mesen, por favor considera hacer una donación.&#xA;¡Gracias por tu colaboración!</Control>
 			<Control ID="okButton">&amp;OK</Control>
@@ -771,7 +771,7 @@
 		<Message ID="FilterMovie">Videos (*.mmo)|*.mmo|Todos los archivos (*.*)|*.*</Message>
 		<Message ID="FilterWave">Archivos wave (*.wav)|*.wav|Todos los archivos (*.*)|*.*</Message>
 		<Message ID="FilterAvi">Archivos avi (*.avi)|*.avi|Todos los archivos (*.*)|*.*</Message>
-		<Message ID="FilterGif">GIF files (*.gif)|*.gif|All Files (*.*)|*.*</Message>
+		<Message ID="FilterGif">Archivos GIF (*.gif)|*.gif|Todos los archivos (*.*)|*.*</Message>
 		<Message ID="FilterPalette">Archivos pal (*.pal)|*.pal|Todos los archivos (*.*)|*.*</Message>
 		<Message ID="FilterRom">Todos los formatos soportados (*.nes, *.zip, *.7z, *.fds, *.nsf, *.nsfe, *.unf, *.unif, *.studybox)|*.NES;*.ZIP;*.7z;*.FDS;*.NSF;*.NSFE;*.UNF;*.UNIF;*.STUDYBOX|Roms de NES (*.nes, *.unf, *.unif)|*.NES;*.UNF;*.UNIF|Roms de Famicom Disk System (*.fds)|*.FDS|Archivos NSF (*.nsf, *.nsfe)|*.NSF;*.NSFE|Archivos ZIP (*.zip)|*.ZIP|Archivos 7-Zip (*.7z)|*.7z|Todos los archivos (*.*)|*.*</Message>
 		<Message ID="FilterRomIps">Todos los formatos soportados (*.nes, *.zip, *.7z, *.fds, *.nsf, *.nsfe, *.unf, *.unif, *.studybox, *.ips, *.bps, *.ups)|*.NES;*.ZIP;*.7z;*.IPS;*.BPS;*.UPS;*.FDS;*.NSF;*.NSFE;*.UNF;*.UNIF;*.STUDYBOX|Roms de NES(*.nes, *.unf, *.unif)|*.NES;*.UNF;*.UNIF|Roms de Famicom Disk System (*.fds)|*.FDS|Archivos NSF (*.nsf, *.nsfe)|*.NSF;*.NSFE|Archivos ZIP (*.zip)|*.ZIP|Archivos 7-Zip (*.7z)|*.7z|Archivos IPS/UPS/BPS (*.ips, *.bps, *.ups)|*.IPS;*.BPS;*.UPS|Todos los archivos (*.*)|*.*</Message>
@@ -780,11 +780,11 @@
 		<Message ID="FilterSavestate">Partidas de juegos de Mesen (*.mst)|*.mst|Todos los archivos (*.*)|*.*</Message>
 		<Message ID="FilterTapeFiles">Archivos Family Basic Tape (*.fbt)|*.fbt|Todos los archivos (*.*)|*.*</Message>
 
-		<Message ID="LastSession">Last Session</Message>
-		<Message ID="AutoSave">Auto-save</Message>
-		<Message ID="SlotNumber">Slot #{0}</Message>
-		<Message ID="LoadStateDialog">Load State Menu</Message>
-		<Message ID="SaveStateDialog">Save State Menu</Message>
+		<Message ID="LastSession">Última sesión</Message>
+		<Message ID="AutoSave">Auto-guardado</Message>
+		<Message ID="SlotNumber">Ranura #{0}</Message>
+		<Message ID="LoadStateDialog">Menú cargar estado</Message>
+		<Message ID="SaveStateDialog">Menú guardar estado</Message>
 		
 		<Message ID="LoadFromFile">Cargar desde archivo...</Message>
 		<Message ID="SaveToFile">Guardar en archivo...</Message>
@@ -840,8 +840,8 @@
 		<Message ID="EmptyState">&lt;No hay copia de seguridad&gt;</Message>
 		<Message ID="ErrorWhileCheckingUpdates">Se ha producido un error en la búsqueda de actualizaciones. Compruebe su conexión a Internet e inténtelo de nuevo.&#xA;&#xA;Detalles del error:&#xA;{0}</Message>
 		<Message ID="AutoUpdateDisabledMessage">Las actualizaciones automáticas no están habilitadas en esta compilación - por favor descarga la última versión del código y vuelve a compilar Mesen para obtener las últimas actualizaciones.</Message>
-		<Message ID="BiosNotFound">A bios file is required to run this game.&#xA;&#xA;  Filename: {0}&#xA;  Size: {1} bytes&#xA;&#xA;Select bios file now?</Message>
-		<Message ID="BiosMismatch">The selected file does not match the bios required for this game.&#xA;&#xA;Expected SHA-256:&#xA;{0}&#xA;&#xA;Selected file's SHA-256:&#xA;{1}&#xA;&#xA;Would you like to use this file anyway?</Message>
+		<Message ID="BiosNotFound">Se requiere un archivo bios para ejecutar el juego.&#xA;&#xA;  Nombre de archivo: {0}&#xA;  Tamaño: {1} bytes&#xA;&#xA;¿Elegir archivo de bios ahora?</Message>
+		<Message ID="BiosMismatch">El archivo seleccionado no coincide con la bios requerida para este juego.&#xA;&#xA;Esperado SHA-256:&#xA;{0}&#xA;&#xA;Archivo seleccionado con SHA-256:&#xA;{1}&#xA;&#xA;¿Desea utilizar este archivo de todas formas?</Message>
 		<Message ID="FdsDiskSide">Disco {0} Cara {1}</Message>
 		<Message ID="FileNotFound">Archivo no encontrado: {0}</Message>
 
@@ -945,7 +945,7 @@
 		<Message ID="EmulatorShortcutMappings_SaveStateSlot9">Guardar partida - Hueco 9</Message>
 		<Message ID="EmulatorShortcutMappings_SaveStateSlot10">Guardar partida - Hueco 10</Message>
 		<Message ID="EmulatorShortcutMappings_SaveStateToFile">Guardar partida en archivo</Message>
-		<Message ID="EmulatorShortcutMappings_SaveStateDialog">Open Save State Menu</Message>
+		<Message ID="EmulatorShortcutMappings_SaveStateDialog">Abrir menú de estado de guardado</Message>
 		<Message ID="EmulatorShortcutMappings_LoadStateSlot1">Cargar partida - Hueco 1</Message>
 		<Message ID="EmulatorShortcutMappings_LoadStateSlot2">Cargar partida - Hueco 2</Message>
 		<Message ID="EmulatorShortcutMappings_LoadStateSlot3">Cargar partida - Hueco 3</Message>
@@ -958,19 +958,19 @@
 		<Message ID="EmulatorShortcutMappings_LoadStateSlot10">Cargar partida - Hueco 10</Message>
 		<Message ID="EmulatorShortcutMappings_LoadStateSlotAuto">Cargar partida - Hueco de auto guardado</Message>
 		<Message ID="EmulatorShortcutMappings_LoadStateFromFile">Cargar partida de archivo</Message>
-		<Message ID="EmulatorShortcutMappings_LoadStateDialog">Open Load State Menu</Message>
+		<Message ID="EmulatorShortcutMappings_LoadStateDialog">Abrir menú de estado de carga</Message>
 		<Message ID="EmulatorShortcutMappings_LoadLastSession">Cargar última sesión</Message>
 
-		<Message ID="EmulatorShortcutMappings_SelectSaveSlot1">Select Save Slot 1</Message>
-		<Message ID="EmulatorShortcutMappings_SelectSaveSlot2">Select Save Slot 2</Message>
-		<Message ID="EmulatorShortcutMappings_SelectSaveSlot3">Select Save Slot 3</Message>
-		<Message ID="EmulatorShortcutMappings_SelectSaveSlot4">Select Save Slot 4</Message>
-		<Message ID="EmulatorShortcutMappings_SelectSaveSlot5">Select Save Slot 5</Message>
-		<Message ID="EmulatorShortcutMappings_SelectSaveSlot6">Select Save Slot 6</Message>
-		<Message ID="EmulatorShortcutMappings_SelectSaveSlot7">Select Save Slot 7</Message>
-		<Message ID="EmulatorShortcutMappings_SelectSaveSlot8">Select Save Slot 8</Message>
-		<Message ID="EmulatorShortcutMappings_SelectSaveSlot9">Select Save Slot 9</Message>
-		<Message ID="EmulatorShortcutMappings_SelectSaveSlot10">Select Save Slot 10</Message>
+		<Message ID="EmulatorShortcutMappings_SelectSaveSlot1">Elegir posición de guardado 1</Message>
+		<Message ID="EmulatorShortcutMappings_SelectSaveSlot2">Elegir posición de guardado 2</Message>
+		<Message ID="EmulatorShortcutMappings_SelectSaveSlot3">Elegir posición de guardado 3</Message>
+		<Message ID="EmulatorShortcutMappings_SelectSaveSlot4">Elegir posición de guardado 4</Message>
+		<Message ID="EmulatorShortcutMappings_SelectSaveSlot5">Elegir posición de guardado 5</Message>
+		<Message ID="EmulatorShortcutMappings_SelectSaveSlot6">Elegir posición de guardado 6</Message>
+		<Message ID="EmulatorShortcutMappings_SelectSaveSlot7">Elegir posición de guardado 7</Message>
+		<Message ID="EmulatorShortcutMappings_SelectSaveSlot8">Elegir posición de guardado 8</Message>
+		<Message ID="EmulatorShortcutMappings_SelectSaveSlot9">Elegir posición de guardado 9</Message>
+		<Message ID="EmulatorShortcutMappings_SelectSaveSlot10">Elegir posición de guardado 10</Message>
 		
 		<Message ID="EmulatorShortcutMappings_OpenFile">Abrir archivo</Message>
 		<Message ID="EmulatorShortcutMappings_OpenDebugger">Abrir depurador</Message>
