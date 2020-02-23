@@ -1724,6 +1724,7 @@ namespace Mesen.GUI.Debugger
 		private void mnuBreakOptions_DropDownOpening(object sender, EventArgs e)
 		{
 			this.mnuBreakOnDecayedOamRead.Enabled = ConfigManager.Config.EmulationInfo.EnableOamDecay;
+			this.mnuBreakOnBusConflict.Enabled = InteropEmu.GetRomInfo().HasBusConflicts;
 
 			bool isNsf = InteropEmu.IsNsf();
 			mnuBreakOnInit.Visible = isNsf;

@@ -581,6 +581,10 @@ void BaseMapper::Initialize(RomData &romData)
 		case BusConflictType::No: _hasBusConflicts = false; break;
 	}	
 
+	if(_hasBusConflicts) {
+		MessageManager::Log("[iNes] Bus conflicts enabled");
+	}
+
 	_saveRam = new uint8_t[_saveRamSize];
 	_workRam = new uint8_t[_workRamSize];
 
@@ -728,7 +732,9 @@ shared_ptr<BaseControlDevice> BaseMapper::GetMapperControlDevice()
 
 RomInfo BaseMapper::GetRomInfo()
 {
-	return _romInfo;
+	RomInfo romInfo = _romInfo;
+	romInfo.BusConflicts = _hasBusConflicts ? BusConflictType::Yes : BusConflictType::No;
+	return romInfo;
 }
 
 uint32_t BaseMapper::GetMapperDipSwitchCount()

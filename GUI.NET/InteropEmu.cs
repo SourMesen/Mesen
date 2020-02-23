@@ -1731,6 +1731,9 @@ namespace Mesen.GUI
 		[MarshalAs(UnmanagedType.I1)]
 		public bool IsChrRam;
 
+		[MarshalAs(UnmanagedType.I1)]
+		public bool HasBusConflicts;
+
 		public UInt16 MapperId;
 		public UInt32 FilePrgOffset;
 
@@ -1755,6 +1758,7 @@ namespace Mesen.GUI
 		public UInt32 PrgCrc32;
 		public RomFormat Format;
 		public bool IsChrRam;
+		public bool HasBusConflicts;
 		public UInt16 MapperId;
 		public UInt32 FilePrgOffset;
 		public string Sha1;
@@ -1766,6 +1770,7 @@ namespace Mesen.GUI
 			this.PrgCrc32 = romInfo.PrgCrc32;
 			this.Format = romInfo.Format;
 			this.IsChrRam = romInfo.IsChrRam;
+			this.HasBusConflicts = romInfo.HasBusConflicts;
 			this.MapperId = romInfo.MapperId;
 			this.FilePrgOffset = romInfo.FilePrgOffset;
 			this.Sha1 = Encoding.UTF8.GetString(romInfo.Sha1);

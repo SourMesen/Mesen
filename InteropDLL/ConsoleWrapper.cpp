@@ -111,6 +111,7 @@ namespace InteropEmu {
 		uint32_t PrgCrc32;
 		RomFormat Format;
 		bool IsChrRam;
+		bool HasBusConflicts;
 		uint16_t MapperId;
 		uint32_t FilePrgOffset;
 		char Sha1[40];
@@ -405,6 +406,7 @@ namespace InteropEmu {
 				interopRomInfo.PrgCrc32 = romInfo.Hash.PrgCrc32;
 				interopRomInfo.Format = romInfo.Format;
 				interopRomInfo.IsChrRam = romInfo.HasChrRam;
+				interopRomInfo.HasBusConflicts = romInfo.BusConflicts == BusConflictType::Yes;
 				interopRomInfo.MapperId = romInfo.MapperID;
 				interopRomInfo.FilePrgOffset = romInfo.FilePrgOffset;
 				if(romInfo.Hash.Sha1.size() == 40) {
