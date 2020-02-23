@@ -92,6 +92,13 @@ namespace Mesen.GUI.Config
 
 		public void InitializeDefaults()
 		{
+			if(!Program.IsMono && PreferenceInfo.NeedWindowsShortcutReset) {
+				//TODO: Temporary code to reset shortcuts in 0.9.9 dev builds, will need to be moved to upgrade process for next release
+				InputInfo.Controllers = new List<ControllerInfo>();
+				PreferenceInfo.DefaultsInitialized = false;
+				PreferenceInfo.NeedWindowsShortcutReset = false;
+			}
+
 			InputInfo.InitializeDefaults();
 			PreferenceInfo.InitializeDefaults();
 		}

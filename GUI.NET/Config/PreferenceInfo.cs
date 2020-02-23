@@ -59,6 +59,7 @@ namespace Mesen.GUI.Config
 		public DateTime CloudLastSync = DateTime.MinValue;
 
 		public bool DefaultsInitialized = false;
+		public bool NeedWindowsShortcutReset = true;
 		public List<ShortcutKeyInfo> ShortcutKeys1;
 		public List<ShortcutKeyInfo> ShortcutKeys2;
 
