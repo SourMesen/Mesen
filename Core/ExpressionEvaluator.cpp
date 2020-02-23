@@ -603,7 +603,7 @@ void ExpressionEvaluator::RunTests()
 	test(":50", EvalResultType::Numeric, 50);
 	test(":$50", EvalResultType::Numeric, 0x50);
 	test(":($1FFF+1)", EvalResultType::Numeric, -1);
-	test(":$1FFF+1", EvalResultType::Numeric, 0x2000);
+	test(":$1FFF+1", EvalResultType::Numeric, 0x800);
 	test("1+:$100", EvalResultType::Numeric, 0x101);
 }
 #endif
