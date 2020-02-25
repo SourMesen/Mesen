@@ -87,16 +87,16 @@ void BaseVideoFilter::TakeScreenshot(VideoFilterType filterType, string filename
 
 	pngBuffer = frameBuffer;
 
+	shared_ptr<RotateFilter> rotateFilter;
+	shared_ptr<ScaleFilter> scaleFilter = ScaleFilter::GetScaleFilter(filterType);
 	if(!rawScreenshot) {
 		uint32_t rotationAngle = _console->GetSettings()->GetScreenRotation();
-		shared_ptr<RotateFilter> rotateFilter;
 		if(rotationAngle > 0) {
 			rotateFilter.reset(new RotateFilter(rotationAngle));
 			pngBuffer = rotateFilter->ApplyFilter(pngBuffer, frameInfo.Width, frameInfo.Height);
 			frameInfo = rotateFilter->GetFrameInfo(frameInfo);
 		}
 
-		shared_ptr<ScaleFilter> scaleFilter = ScaleFilter::GetScaleFilter(filterType);
 		if(scaleFilter) {
 			pngBuffer = scaleFilter->ApplyFilter(pngBuffer, frameInfo.Width, frameInfo.Height, _console->GetSettings()->GetPictureSettings().ScanlineIntensity);
 			frameInfo = scaleFilter->GetFrameInfo(frameInfo);
