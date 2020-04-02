@@ -129,12 +129,17 @@ void EventManager::DrawEvent(DebugEventInfo &evt, bool drawBackground, uint32_t 
 		color |= 0xFF000000;
 	}
 
+	uint32_t y = std::min<uint32_t>((evt.Scanline + 1) * 2, _scanlineCount * 2);
+	uint32_t x = evt.Cycle * 2;
+	DrawDot(x, y, color, drawBackground, buffer);
+}
+
+void EventManager::DrawDot(uint32_t x, uint32_t y, uint32_t color, bool drawBackground, uint32_t* buffer)
+{
 	int iMin = drawBackground ? -2 : 0;
 	int iMax = drawBackground ? 3 : 1;
 	int jMin = drawBackground ? -2 : 0;
 	int jMax = drawBackground ? 3 : 1;
-	uint32_t y = std::min<uint32_t>((evt.Scanline + 1) * 2, _scanlineCount * 2);
-	uint32_t x = evt.Cycle * 2;
 
 	for(int i = iMin; i <= iMax; i++) {
 		for(int j = jMin; j <= jMax; j++) {
@@ -168,6 +173,7 @@ uint32_t EventManager::TakeEventSnapshot(EventViewerDisplayOptions options)
 
 	_snapshot = _debugEvents;
 	_snapshotScanline = scanline;
+	_snapshotCycle = cycle;
 	if(options.ShowPreviousFrameEvents && scanline != 0) {
 		for(DebugEventInfo &evt : _prevDebugEvents) {
 			uint32_t evtKey = (evt.Scanline << 9) + evt.Cycle;
@@ -222,6 +228,10 @@ void EventManager::GetDisplayBuffer(uint32_t *buffer, EventViewerDisplayOptions 
 	for(DebugEventInfo &evt : _snapshot) {
 		DrawEvent(evt, false, buffer, options);
 	}
+
+	//Draw dot over current pixel
+	DrawDot(_snapshotCycle * 2, _snapshotScanline * 2, 0xFF990099, true, buffer);
+	DrawDot(_snapshotCycle * 2, _snapshotScanline * 2, 0xFFFF00FF, false, buffer);
 }
 
 void EventManager::DrawPixel(uint32_t *buffer, int32_t x, uint32_t y, uint32_t color)
