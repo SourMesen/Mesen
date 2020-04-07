@@ -24,7 +24,11 @@ protected:
 		
 		uint8_t subBank = value >> 7;
 		uint8_t bank = (value & 0x7F) << 1;
-		switch(addr & 0x03) {
+		uint8_t mode = addr & 0x03;
+		
+		SetPpuMemoryMapping(0, 0x1FFF, 0, ChrMemoryType::Default, (mode == 0 || mode == 3) ? MemoryAccessType::Read : MemoryAccessType::ReadWrite);
+		
+		switch(mode) {
 			case 0:
 				SelectPRGPage(0, bank  ^ subBank);
 				SelectPRGPage(1, (bank + 1) ^ subBank);
@@ -37,7 +41,7 @@ protected:
 				bank |= subBank;
 				SelectPRGPage(0, bank);
 				SelectPRGPage(1, bank + 1);
-				bank = ((addr & 0x02) ? bank : 0xFE) | subBank;
+				bank = ((addr & 0x02) ? bank : bank | 0x14) | subBank;
 				SelectPRGPage(2, bank + 0);
 				SelectPRGPage(3, bank + 1);
 				break;
