@@ -41,7 +41,7 @@ protected:
 				bank |= subBank;
 				SelectPRGPage(0, bank);
 				SelectPRGPage(1, bank + 1);
-				bank = ((mode == 3) ? bank : (bank | 0x14)) | subBank;
+				bank = ((mode == 3) ? bank : (bank | 0x0E)) | subBank;
 				SelectPRGPage(2, bank + 0);
 				SelectPRGPage(3, bank + 1);
 				break;
