@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Mesen.GUI.Utilities;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
@@ -61,7 +62,7 @@ namespace Mesen.GUI.Controls
 			_repeatCount++;
 			_preventClick = true;
 		}
-		
+
 		private void btn_MouseDown(object sender, MouseEventArgs e)
 		{
 			_repeatCount = 0;
@@ -93,20 +94,26 @@ namespace Mesen.GUI.Controls
 		private void txtValue_TextChanged(object sender, EventArgs e)
 		{
 			decimal val;
+			int hexVal;
 			if(string.IsNullOrWhiteSpace(txtValue.Text)) {
 				SetValue(0, false);
-			} else if(decimal.TryParse(txtValue.Text, out val)) {
+			} else if(!IsHex && decimal.TryParse(txtValue.Text, out val)) {
 				SetValue(val, false);
+			} else if(IsHex && int.TryParse(txtValue.Text, System.Globalization.NumberStyles.HexNumber, null, out hexVal)) {
+				SetValue(hexVal, false);
 			}
 		}
 
 		private void txtValue_Validated(object sender, EventArgs e)
 		{
 			decimal val;
+			int hexVal;
 			if(string.IsNullOrWhiteSpace(txtValue.Text)) {
 				SetValue(0, true);
-			} else if(decimal.TryParse(txtValue.Text, out val)) {
+			} else if(!IsHex && decimal.TryParse(txtValue.Text, out val)) {
 				SetValue(val, true);
+			} else if(IsHex && int.TryParse(txtValue.Text, System.Globalization.NumberStyles.HexNumber, null, out hexVal)) {
+				SetValue(hexVal, true);
 			} else {
 				SetValue(this.Value, true);
 			}
@@ -128,7 +135,13 @@ namespace Mesen.GUI.Controls
 				ValueChanged?.Invoke(this, EventArgs.Empty);
 			}
 			if(updateText) {
-				txtValue.Text = value.ToString("0" + (this.DecimalPlaces > 0 ? "." : "") + new string('0', this.DecimalPlaces));
+				txtValue.TextChanged -= txtValue_TextChanged;
+				if(IsHex) {
+					txtValue.Text = ((int)_value).ToString("X");
+				} else {
+					txtValue.Text = _value.ToString("0" + (this.DecimalPlaces > 0 ? "." : "") + new string('0', this.DecimalPlaces));
+				}
+				txtValue.TextChanged += txtValue_TextChanged;
 			}
 		}
 
@@ -141,6 +154,8 @@ namespace Mesen.GUI.Controls
 				SetValue(value, true);
 			}
 		}
+
+		public bool IsHex { get; set; } = false;
 
 		public new string Text
 		{
@@ -177,6 +192,12 @@ namespace Mesen.GUI.Controls
 			if(this.Height < 21) {
 				this.Height = 21;
 			}
+
+			double scale = (double)this.Height / 21;
+			if(scale > 1) {
+				btnDown.Image = Properties.Resources.NudDownArrow.GetScaledImage(scale);
+				btnUp.Image = Properties.Resources.NudUpArrow.GetScaledImage(scale);
+			}
 		}
 
 		private void txtValue_KeyDown(object sender, KeyEventArgs e)
@@ -190,11 +211,16 @@ namespace Mesen.GUI.Controls
 			} else if(
 				!((e.KeyCode >= Keys.D0 && e.KeyCode <= Keys.D9) ||
 				(e.KeyCode >= Keys.NumPad0 && e.KeyCode <= Keys.NumPad9) ||
-				e.KeyCode == Keys.OemPeriod || e.KeyCode == Keys.Oemcomma || 
+				e.KeyCode == Keys.OemPeriod || e.KeyCode == Keys.Oemcomma ||
 				e.KeyCode == Keys.Delete || e.KeyCode == Keys.Left ||
-				e.KeyCode == Keys.Right || e.KeyCode == Keys.Home || 
+				e.KeyCode == Keys.Right || e.KeyCode == Keys.Home ||
 				e.KeyCode == Keys.End || e.KeyCode == Keys.Back)
 			) {
+				if(IsHex && e.KeyCode >= Keys.A && e.KeyCode <= Keys.F) {
+					//Allow A-F when in hex mode
+					return;
+				}
+
 				e.SuppressKeyPress = true;
 			}
 		}
