@@ -52,11 +52,11 @@ protected:
 			//"One game, Battle Rush: Build up Robot Tournament, has an additional external 128-byte serial EEPROM (24C01) on the game cartridge."
 			//"The NES 2.0 header's PRG-NVRAM field will only denote whether the game cartridge has an additional 128-byte serial EEPROM"
 			if(!IsNes20() || _romInfo.NesHeader.GetSaveRamSize() == 128) {
-				_extraEeprom.reset(new Eeprom24C02(_console));
+				_extraEeprom.reset(new Eeprom24C01(_console));
 			}
 			
 			//All mapper 157 games have an internal 256-byte EEPROM
-			_standardEeprom.reset(new Eeprom24C01(_console));
+			_standardEeprom.reset(new Eeprom24C02(_console));
 		} else if(_romInfo.MapperID == 159) {
 			//LZ93D50 with 128 byte serial EEPROM (24C01)
 			_standardEeprom.reset(new Eeprom24C01(_console));
@@ -110,12 +110,14 @@ protected:
 
 	void SaveBattery() override
 	{
-		BaseMapper::SaveBattery();
 		if(_standardEeprom) {
 			_standardEeprom->SaveBattery();
 		}
 		if(_extraEeprom) {
 			_extraEeprom->SaveBattery();
+		} else {
+			//Do not call BaseMapper::SaveBattery when the extra EEPROM exists (prevent unused .sav file from being created)
+			BaseMapper::SaveBattery();
 		}
 	}
 
