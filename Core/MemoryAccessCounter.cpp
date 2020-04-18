@@ -21,7 +21,7 @@ MemoryAccessCounter::MemoryAccessCounter(Debugger* debugger)
 
 	for(int i = 0; i < 4; i++) {
 		_counters[i].reserve(memorySizes[i]);
-		for(int j = 0; j < memorySizes[i]; j++) {
+		for(uint32_t j = 0; j < memorySizes[i]; j++) {
 			_counters[i].push_back({ (uint32_t)j });
 		}
 	}
@@ -35,7 +35,7 @@ MemoryAccessCounter::MemoryAccessCounter(Debugger* debugger)
 
 	for(int i = 0; i < 4; i++) {
 		_ppuCounters[i].reserve(ppuMemorySizes[i]);
-		for(int j = 0; j < ppuMemorySizes[i]; j++) {
+		for(uint32_t j = 0; j < ppuMemorySizes[i]; j++) {
 			_ppuCounters[i].push_back({ (uint32_t)j });
 		}
 	}
