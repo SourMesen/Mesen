@@ -626,6 +626,8 @@ BaseMapper* MapperFactory::GetMapperFromID(RomData &romData)
 		case 349: return new BmcG146();
 		case 350: break; //891227
 
+		case 366: return new BmcGn45();
+
 		case 513: return new Sachen9602();
 		//514-517
 		case 518: return new Dance2000();
@@ -643,7 +645,6 @@ BaseMapper* MapperFactory::GetMapperFromID(RomData &romData)
 		case 530: return new Ax5705();
 
 		case UnifBoards::Ac08: return new Ac08(); //mapper 42?
-		case UnifBoards::BmcGn45: return new BmcGn45();
 		case UnifBoards::Cc21: return new Cc21();
 		case UnifBoards::Ghostbusters63in1: return new Ghostbusters63in1(); //mapper 226?
 		case UnifBoards::Gs2013: return new Gs2013();

@@ -40,18 +40,14 @@ void GameDatabase::LoadGameDb(vector<string> data)
 			gameInfo.SaveRamSize = ToInt<uint32_t>(values[10]) * 1024;
 			gameInfo.HasBattery = ToInt<uint32_t>(values[11]) == 0 ? false : true;
 			gameInfo.Mirroring = values[12];
-			gameInfo.InputType = values[13];
+			gameInfo.InputType = (GameInputType)ToInt<uint32_t>(values[13]);
 			gameInfo.BusConflicts = values[14];
 			gameInfo.SubmapperID = values[15];
-			gameInfo.VsSystemType = values[16];
-			gameInfo.PpuModel = values[17];
+			gameInfo.VsType = (VsSystemType)ToInt<uint32_t>(values[16]);
+			gameInfo.VsPpuModel = (PpuModel)ToInt<uint32_t>(values[17]);
 
 			if(gameInfo.MapperID == 65000) {
 				gameInfo.MapperID = UnifLoader::GetMapperID(gameInfo.Board);
-			}
-
-			if(!gameInfo.InputType.empty() && gameInfo.InputType[gameInfo.InputType.size() - 1] == '\r') {
-				gameInfo.InputType = gameInfo.InputType.substr(0, gameInfo.InputType.size() - 1);
 			}
 
 			_gameDatabase[gameInfo.Crc] = gameInfo;
@@ -117,112 +113,6 @@ GameSystem GameDatabase::GetGameSystem(string system)
 	return GameSystem::NesNtsc;
 }
 
-VsSystemType GameDatabase::GetVsSystemType(string system)
-{
-	if(system.compare("IceClimber") == 0) {
-		return VsSystemType::IceClimberProtection;
-	} else if(system.compare("RaidOnBungelingBay") == 0) {
-		return VsSystemType::RaidOnBungelingBayProtection;
-	} else if(system.compare("RbiBaseball") == 0) {
-		return VsSystemType::RbiBaseballProtection;
-	} else if(system.compare("SuperXevious") == 0) {
-		return VsSystemType::SuperXeviousProtection;
-	} else if(system.compare("TkoBoxing") == 0) {
-		return VsSystemType::TkoBoxingProtection;
-	} else if(system.compare("VsDualSystem") == 0) {
-		return VsSystemType::VsDualSystem;
-	}
-
-	return VsSystemType::Default;
-}
-
-PpuModel GameDatabase::GetPpuModel(string model)
-{
-	if(model.compare("RP2C04-0001") == 0) {
-		return PpuModel::Ppu2C04A;
-	} else if(model.compare("RP2C04-0002") == 0) {
-		return PpuModel::Ppu2C04B;
-	} else if(model.compare("RP2C04-0003") == 0) {
-		return PpuModel::Ppu2C04C;
-	} else if(model.compare("RP2C04-0004") == 0) {
-		return PpuModel::Ppu2C04D;
-	} else if(model.compare("RC2C05-01") == 0) {
-		return PpuModel::Ppu2C05A;
-	} else if(model.compare("RC2C05-02") == 0) {
-		return PpuModel::Ppu2C05B;
-	} else if(model.compare("RC2C05-03") == 0) {
-		return PpuModel::Ppu2C05C;
-	} else if(model.compare("RC2C05-04") == 0) {
-		return PpuModel::Ppu2C05D;
-	} else if(model.compare("RC2C05-05") == 0) {
-		return PpuModel::Ppu2C05E;
-	} else if(model.compare("RP2C03B") == 0 || model.compare("RP2C03G") == 0) {
-		return PpuModel::Ppu2C03;
-	}
-
-	return PpuModel::Ppu2C02;
-}
-
-GameInputType GameDatabase::GetInputType(GameSystem system, string inputType)
-{
-	bool isVsSystem = system == GameSystem::VsSystem;
-	bool isFamicom = (system == GameSystem::Famicom || system == GameSystem::FDS || system == GameSystem::Dendy);
-
-	if(inputType.compare("Zapper") == 0) {
-		if(isVsSystem) {
-			return GameInputType::VsZapper;
-		} else {
-			return GameInputType::Zapper;
-		}
-	} else if(inputType.compare("FourPlayer") == 0) {
-		if(isFamicom) {
-			return GameInputType::FourPlayerAdapter;
-		} else {
-			return GameInputType::FourScore;
-		}
-	} else if(inputType.compare("Arkanoid") == 0) {
-		if(isFamicom) {
-			return GameInputType::ArkanoidControllerFamicom;
-		} else {
-			return GameInputType::ArkanoidControllerNes;
-		}
-	} else if(inputType.compare("OekaKidsTablet") == 0) {
-		return GameInputType::OekaKidsTablet;
-	} else if(inputType.compare("KonamiHypershot") == 0) {
-		return GameInputType::KonamiHyperShot;
-	} else if(inputType.compare("FamilyKeyboard") == 0) {
-		return GameInputType::FamilyBasicKeyboard;
-	} else if(inputType.compare("PartyTap") == 0) {
-		return GameInputType::PartyTap;
-	} else if(inputType.compare("Pachinko") == 0) {
-		return GameInputType::PachinkoController;
-	} else if(inputType.compare("ExcitingBoxing") == 0) {
-		return GameInputType::ExcitingBoxing;
-	} else if(inputType.compare("SuborKeyboard") == 0) {
-		return GameInputType::SuborKeyboardMouse1;
-	} else if(inputType.compare("Mahjong") == 0) {
-		return GameInputType::JissenMahjong;
-	} else if(inputType.compare("BarCodeWorld") == 0) {
-		return GameInputType::BarcodeBattler;
-	} else if(inputType.compare("BandaiHypershot") == 0) {
-		return GameInputType::BandaiHypershot;
-	} else if(inputType.compare("BattleBox") == 0) {
-		return GameInputType::BattleBox;
-	} else if(inputType.compare("TurboFile") == 0) {
-		return GameInputType::TurboFile;
-	} else if(inputType.compare("FamilyTrainer") == 0) {
-		return GameInputType::FamilyTrainerSideA;
-	} else if(inputType.compare("PowerPad") == 0 || inputType.compare("FamilyFunFitness") == 0) {
-		return GameInputType::PowerPadSideA;
-	} else if(inputType.compare("VsSwapped") == 0) {
-		return GameInputType::VsSystemSwapped;
-	} else if(inputType.compare("VsSwapAB") == 0) {
-		return GameInputType::VsSystemSwapAB;
-	} else {
-		return GameInputType::StandardControllers;
-	}
-}
-
 void GameDatabase::SetGameDatabaseState(bool enabled)
 {
 	_enabled = enabled;
@@ -237,89 +127,6 @@ uint8_t GameDatabase::GetSubMapper(GameInfo &info)
 {
 	if(!info.SubmapperID.empty()) {
 		return ToInt<uint8_t>(info.SubmapperID);
-	} else {
-		switch(info.MapperID) {
-			case 1:
-				if(info.Board.find("SEROM") != string::npos ||
-					info.Board.find("SHROM") != string::npos ||
-					info.Board.find("SH1ROM") != string::npos) {
-					//SEROM, SHROM, SH1ROM have fixed PRG banking
-					return 5;
-				}
-				break;
-
-			case 3:
-				if(info.Board.compare("NES-CNROM") == 0) {
-					//Enable bus conflicts for CNROM games
-					//Fixes "Cybernoid - The Fighting Machine" which requires open bus behavior to work properly
-					return 2;
-				}
-				break;
-			case 4:
-				if(info.Board.compare("ACCLAIM-MC-ACC") == 0) {
-					return 3; //Acclaim MC-ACC (MMC3 clone)
-				} else if(info.Chip.compare("MMC6B") == 0) {
-					return 1; //MMC6 (Star Tropics)
-				}
-				break;
-
-			case 21:
-				if(info.Pcb.compare("352398") == 0) {
-					return 1; //VRC4a
-				} else if(info.Pcb.compare("352889") == 0) {
-					return 2; //VRC4c
-				}
-				break;
-
-			case 23:
-				if(info.Pcb.compare("352396") == 0) {
-					return 2; //VRC4e
-				} else if(info.Pcb.compare("350603") == 0 || info.Pcb.compare("350636") == 0 || info.Pcb.compare("350926") == 0 || info.Pcb.compare("351179") == 0 || info.Pcb.compare("LROG009-00") == 0) {
-					return 3; //VRC2b
-				}
-				break;
-
-			case 25:
-				if(info.Pcb.compare("351406") == 0) {
-					return 1; //VRC4b
-				} else if(info.Pcb.compare("352400") == 0) {
-					return 2; //VRC4d	
-				} else if(info.Pcb.compare("351948") == 0) {
-					return 3; //VRC2c	
-				}
-				break;
-
-			case 32:
-				if(info.Board.compare("IREM-G101-B") == 0) {
-					return 1; //Major League
-				}
-				break;
-			case 71:
-				if(info.Board.compare("CAMERICA-BF9097") == 0) {
-					return 1; //Fire Hawk
-				}
-				break;
-			case 78:
-				if(info.Board.compare("IREM-HOLYDIVER") == 0) {
-					return 3; //Holy Diver
-				}
-				break;
-			case 185:
-				if(info.Crc == 0x0F05FF0A) {
-					//Seicross (v2)
-					//Not a real submapper, used to alter behavior specifically for this game
-					//This is equivalent to FCEUX's mapper 181
-					return 16;
-				}
-				break;
-			case 210:
-				if(info.Board.compare("NAMCOT-175") == 0) {
-					return 1; //Namco 175
-				} else if(info.Board.compare("NAMCOT-340") == 0) {
-					return 2; //Namco 340
-				}
-				break;
-		}
 	}
 	return 0;
 }
@@ -432,7 +239,7 @@ void GameDatabase::SetGameInfo(uint32_t romCrc, RomData &romData, bool updateRom
 
 		if(GetGameSystem(info.System) == GameSystem::VsSystem) {
 			string type = "VS-UniSystem";
-			switch(GetVsSystemType(info.VsSystemType)) {
+			switch(info.VsType) {
 				case VsSystemType::Default: break;
 				case VsSystemType::IceClimberProtection: type = "VS-UniSystem (Ice Climbers)"; break;
 				case VsSystemType::RaidOnBungelingBayProtection: type = "VS-DualSystem (Raid on Bungeling Bay)"; break;
@@ -462,7 +269,6 @@ void GameDatabase::SetGameInfo(uint32_t romCrc, RomData &romData, bool updateRom
 				case 'h': msg += "Horizontal"; break;
 				case 'v': msg += "Vertical"; break;
 				case '4': msg += "4 Screens"; break;
-				case 'a': msg += "Single screen"; break;
 			}
 			MessageManager::Log(msg);
 		}
@@ -500,29 +306,35 @@ void GameDatabase::UpdateRomData(GameInfo &info, RomData &romData)
 	romData.Info.MapperID = info.MapperID;
 	romData.Info.System = GetGameSystem(info.System);
 	if(romData.Info.System == GameSystem::VsSystem) {
-		romData.Info.VsType = GetVsSystemType(info.VsSystemType);
-		romData.Info.VsPpuModel = GetPpuModel(info.PpuModel);
+		romData.Info.VsType = info.VsType;
+		romData.Info.VsPpuModel = info.VsPpuModel;
 	}
-	romData.Info.InputType = GetInputType(romData.Info.System, info.InputType);
+	romData.Info.InputType = info.InputType;
 	romData.Info.SubMapperID = GetSubMapper(info);
 	romData.Info.BusConflicts = GetBusConflictType(info.BusConflicts);
-	if(info.ChrRamSize > 0) {
+
+	bool isValidatedEntry = !info.SubmapperID.empty();
+	if(isValidatedEntry || info.ChrRamSize > 0) {
 		romData.ChrRamSize = info.ChrRamSize;
 	}
-	if(info.WorkRamSize > 0) {
+	if(isValidatedEntry || info.WorkRamSize > 0) {
 		romData.WorkRamSize = info.WorkRamSize;
 	}
-	if(info.SaveRamSize > 0) {
+	if(isValidatedEntry || info.SaveRamSize > 0) {
 		romData.SaveRamSize = info.SaveRamSize;
 	}
-	romData.Info.HasBattery |= info.HasBattery;
+
+	if(isValidatedEntry) {
+		romData.Info.HasBattery = info.HasBattery;
+	} else {
+		romData.Info.HasBattery |= info.HasBattery;
+	}
 
 	if(!info.Mirroring.empty()) {
 		switch(info.Mirroring[0]) {
 			case 'h': romData.Info.Mirroring = MirroringType::Horizontal; break;
 			case 'v': romData.Info.Mirroring = MirroringType::Vertical; break;
 			case '4': romData.Info.Mirroring = MirroringType::FourScreens; break;
-			case 'a': romData.Info.Mirroring = MirroringType::ScreenAOnly; break;
 		}
 	}
 }

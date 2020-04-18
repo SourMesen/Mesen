@@ -17,7 +17,6 @@ namespace UnifBoards {
 		Unl255in1,
 		UnlVrc7,
 		Unl8237A,
-		BmcGn45,
 		SssNrom256,
 	};
 }

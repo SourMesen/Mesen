@@ -52,11 +52,11 @@ struct GameInfo
 	uint32_t SaveRamSize;
 	bool HasBattery;
 	string Mirroring;
-	string InputType;
+	GameInputType InputType;
 	string BusConflicts;
 	string SubmapperID;
-	string VsSystemType;
-	string PpuModel;
+	VsSystemType VsType;
+	PpuModel VsPpuModel;
 };
 
 struct RomInfo
