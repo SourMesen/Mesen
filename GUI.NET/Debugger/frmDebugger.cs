@@ -451,19 +451,24 @@ namespace Mesen.GUI.Debugger
 					BreakpointType bpType = (BreakpointType)(byte)((param >> 8) & 0x0F);
 					UInt16 bpAddress = (UInt16)(param >> 16);
 
-					ReadOnlyCollection<Breakpoint> breakpoints = BreakpointManager.Breakpoints;
+					int regularBpCount = BreakpointManager.Breakpoints.Count;
+					List<Breakpoint> breakpoints = BreakpointManager.GetAllBreakpoints();
 					if(breakpointId >= 0 && breakpointId < breakpoints.Count) {
 						Breakpoint bp = breakpoints[breakpointId];
-						if(bpType != BreakpointType.Global) {
-							message += ": " + ResourceHelper.GetEnumText(bpType) + " ($" + bpAddress.ToString("X4") + ":$" + bpValue.ToString("X2") + ")";
-						}
-						if(!string.IsNullOrWhiteSpace(bp.Condition)) {
-							string cond = bp.Condition.Trim();
-							if(cond.Length > 27) {
-								message += Environment.NewLine + cond.Substring(0, 24) + "...";
-							} else {
-								message += Environment.NewLine + cond;
+						if(breakpointId < regularBpCount) {
+							if(bpType != BreakpointType.Global) {
+								message += ": " + ResourceHelper.GetEnumText(bpType) + " ($" + bpAddress.ToString("X4") + ":$" + bpValue.ToString("X2") + ")";
 							}
+							if(!string.IsNullOrWhiteSpace(bp.Condition)) {
+								string cond = bp.Condition.Trim();
+								if(cond.Length > 27) {
+									message += Environment.NewLine + cond.Substring(0, 24) + "...";
+								} else {
+									message += Environment.NewLine + cond;
+								}
+							}
+						} else {
+							message = "Assert failed: " + bp.Condition.Substring(2, bp.Condition.Length - 3);
 						}
 					}
 				} else if(source == BreakSource.BreakOnUninitMemoryRead) {

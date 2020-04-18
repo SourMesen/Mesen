@@ -410,7 +410,7 @@ namespace Mesen.GUI.Debugger
 				_scopes.Add(scope.ID, scope);
 				return true;
 			} else if(row.StartsWith("scope")) {
-				System.Diagnostics.Debug.Fail("Regex doesn't match scope");
+				//System.Diagnostics.Debug.Fail("Regex doesn't match scope");
 			}
 
 			return false;
@@ -559,8 +559,12 @@ namespace Mesen.GUI.Debugger
 			}
 		}
 
+		private string[] _splitOnNewLine = { Environment.NewLine };
+
 		private void LoadComments()
 		{
+			SortedDictionary<string, int> constants = GetConstants();
+
 			foreach(KeyValuePair<int, LineInfo> kvp in _lines) {
 				try {
 					LineInfo line = kvp.Value;
@@ -622,7 +626,18 @@ namespace Mesen.GUI.Debugger
 						if(address >= 0 && addressType != null) {
 							CodeLabel label = this.CreateLabel(address, addressType.Value, 1);
 							if(label != null) {
-								label.Comment = comment;
+								//Parse and replace content of asserts as needed
+								string[] commentLines = comment.Split(_splitOnNewLine, StringSplitOptions.None);
+								for(int i = 0; i < commentLines.Length; i++) {
+									Match m = LabelManager.AssertRegex.Match(commentLines[i]);
+									if(m.Success) {
+										foreach(KeyValuePair<string, int> entry in constants) {
+											commentLines[i] = commentLines[i].Replace(entry.Key, entry.Value.ToString());
+										}
+									}
+								}
+
+								label.Comment = string.Join(Environment.NewLine, commentLines);
 							}
 						}
 					}
@@ -630,6 +645,26 @@ namespace Mesen.GUI.Debugger
 					_errorCount++;
 				}
 			}
+		}
+
+		private SortedDictionary<string, int> GetConstants()
+		{
+			SortedDictionary<string, int> constants = new SortedDictionary<string, int>(Comparer<string>.Create((string a, string b) => {
+				if(a.Length == b.Length) {
+					return a.CompareTo(b);
+				}
+				return b.Length - a.Length;
+			}));
+
+			foreach(Ld65DbgImporter.SymbolInfo symbol in GetSymbols()) {
+				AddressTypeInfo addressInfo = GetSymbolAddressInfo(symbol);
+				bool isConstant = addressInfo == null;
+				if(isConstant && symbol.Address.HasValue) {
+					constants[symbol.Name] = symbol.Address.Value;
+				}
+			}
+
+			return constants;
 		}
 
 		private void LoadFileData(string path)

@@ -292,7 +292,7 @@ bool ExpressionEvaluator::ToRpn(string expression, ExpressionData &data)
 			if(!ProcessSpecialOperator(EvalOperators::Parenthesis, opStack, precedenceStack, data.RpnQueue)) {
 				return false;
 			}
-			operatorExpected = true;
+			operatorOrEndTokenExpected = true;
 		} else if(token[0] == '[') {
 			bracketCount++;
 			opStack.push(EvalOperators::Bracket);
@@ -302,7 +302,7 @@ bool ExpressionEvaluator::ToRpn(string expression, ExpressionData &data)
 			if(!ProcessSpecialOperator(EvalOperators::Bracket, opStack, precedenceStack, data.RpnQueue)) {
 				return false;
 			}
-			operatorExpected = true;
+			operatorOrEndTokenExpected = true;
 		} else if(token[0] == '{') {
 			braceCount++;
 			opStack.push(EvalOperators::Braces);
@@ -312,7 +312,7 @@ bool ExpressionEvaluator::ToRpn(string expression, ExpressionData &data)
 			if(!ProcessSpecialOperator(EvalOperators::Braces, opStack, precedenceStack, data.RpnQueue)){
 				return false;
 			}
-			operatorExpected = true;
+			operatorOrEndTokenExpected = true;
 		} else {
 			if(token[0] < '0' || token[0] > '9') {
 				return false;
@@ -605,5 +605,8 @@ void ExpressionEvaluator::RunTests()
 	test(":($1FFF+1)", EvalResultType::Numeric, -1);
 	test(":$1FFF+1", EvalResultType::Numeric, 0x800);
 	test("1+:$100", EvalResultType::Numeric, 0x101);
+
+	test("[$4100+[$4100]]", EvalResultType::Numeric, 0x41);
+	test("-($10+[$4100])", EvalResultType::Numeric, -0x51);
 }
 #endif

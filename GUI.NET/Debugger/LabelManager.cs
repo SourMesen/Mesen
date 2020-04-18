@@ -55,6 +55,7 @@ namespace Mesen.GUI.Debugger
 	public class LabelManager
 	{
 		public static Regex LabelRegex { get; } = new Regex("^[@_a-zA-Z]+[@_a-zA-Z0-9]*$", RegexOptions.Compiled);
+		public static Regex AssertRegex { get; } = new Regex(@"assert\((.*)\)", RegexOptions.Compiled);
 
 		private static Dictionary<UInt32, CodeLabel> _labelsByKey = new Dictionary<UInt32, CodeLabel>();
 		private static HashSet<CodeLabel> _labels = new HashSet<CodeLabel>();
@@ -98,8 +99,35 @@ namespace Mesen.GUI.Debugger
 				SetLabel(label.Address, label.AddressType, label.Label, label.Comment, false, label.Flags, label.Length);
 			}
 			if(raiseEvents) {
-				OnLabelUpdated?.Invoke(null, null);
+				ProcessLabelUpdate();
 			}
+		}
+
+		private static void ProcessLabelUpdate()
+		{
+			OnLabelUpdated?.Invoke(null, null);
+			UpdateAssertBreakpoints();
+		}
+
+		private static void UpdateAssertBreakpoints()
+		{
+			List<Breakpoint> asserts = new List<Breakpoint>();
+			foreach(CodeLabel label in LabelManager.GetLabels()) {
+				foreach(string commentLine in label.Comment.Split('\n')) {
+					Match m = LabelManager.AssertRegex.Match(commentLine);
+					if(m.Success) {
+						asserts.Add(new Breakpoint() {
+							BreakOnExec = true,
+							MemoryType = label.AddressType.ToMemoryType(),
+							Address = label.Address,
+							Condition = "!(" + m.Groups[1].Value + ")"
+						});
+					}
+				}
+			}
+
+			BreakpointManager.Asserts = asserts;
+			BreakpointManager.SetBreakpoints();
 		}
 
 		public static List<CodeLabel> GetLabels()
@@ -154,7 +182,7 @@ namespace Mesen.GUI.Debugger
 			}
 
 			if(raiseEvent) {
-				OnLabelUpdated?.Invoke(null, null);
+				ProcessLabelUpdate();
 			}
 
 			return true;
@@ -180,7 +208,7 @@ namespace Mesen.GUI.Debugger
 			}
 
 			if(needEvent) {
-				OnLabelUpdated?.Invoke(null, null);
+				ProcessLabelUpdate();
 			}
 		}
 

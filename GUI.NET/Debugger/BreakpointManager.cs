@@ -22,6 +22,15 @@ namespace Mesen.GUI.Debugger
 			}
 		}
 
+		public static List<Breakpoint> Asserts { internal get; set; } = new List<Breakpoint>();
+
+		public static List<Breakpoint> GetAllBreakpoints()
+		{
+			List<Breakpoint> breakpoints = new List<Breakpoint>(BreakpointManager.Breakpoints);
+			breakpoints.AddRange(BreakpointManager.Asserts);
+			return breakpoints;
+		}
+
 		public static void RefreshBreakpoints(Breakpoint bp = null)
 		{
 			if(BreakpointsChanged != null) {
@@ -124,8 +133,15 @@ namespace Mesen.GUI.Debugger
 		public static void SetBreakpoints()
 		{
 			List<InteropBreakpoint> breakpoints = new List<InteropBreakpoint>();
-			for(int i = 0; i < Breakpoints.Count; i++) {
-				breakpoints.Add(Breakpoints[i].ToInteropBreakpoint(i));
+
+			ReadOnlyCollection<Breakpoint> userBreakpoints = BreakpointManager.Breakpoints;
+			for(int i = 0; i < userBreakpoints.Count; i++) {
+				breakpoints.Add(userBreakpoints[i].ToInteropBreakpoint(breakpoints.Count));
+			}
+
+			List<Breakpoint> assertBreakpoints = BreakpointManager.Asserts;
+			for(int i = 0; i < assertBreakpoints.Count; i++) {
+				breakpoints.Add(assertBreakpoints[i].ToInteropBreakpoint(breakpoints.Count));
 			}
 			InteropEmu.DebugSetBreakpoints(breakpoints.ToArray(), (UInt32)breakpoints.Count);
 		}
