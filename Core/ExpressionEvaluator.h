@@ -69,6 +69,13 @@ enum EvalValues : int64_t
 	SpriteOverflow = 20000000119,
 	VerticalBlank = 20000000120,
 	Branched = 20000000121,
+	
+	RegPS_Carry = 20000000122,
+	RegPS_Zero = 20000000123,
+	RegPS_Interrupt = 20000000124,
+	RegPS_Decimal = 20000000125,
+	RegPS_Overflow = 20000000126,
+	RegPS_Negative = 20000000127,
 
 	FirstLabelIndex = 20000002000,
 };

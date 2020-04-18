@@ -77,6 +77,18 @@ bool ExpressionEvaluator::CheckSpecialTokens(string expression, size_t &pos, str
 		output += std::to_string((int64_t)EvalValues::RegY);
 	} else if(token == "ps") {
 		output += std::to_string((int64_t)EvalValues::RegPS);
+	} else if(token == "pscarry") {
+		output += std::to_string((int64_t)EvalValues::RegPS_Carry);
+	} else if(token == "pszero") {
+		output += std::to_string((int64_t)EvalValues::RegPS_Zero);
+	} else if(token == "psinterrupt") {
+		output += std::to_string((int64_t)EvalValues::RegPS_Interrupt);
+	} else if(token == "psdecimal") {
+		output += std::to_string((int64_t)EvalValues::RegPS_Decimal);
+	} else if(token == "psoverflow") {
+		output += std::to_string((int64_t)EvalValues::RegPS_Overflow);
+	} else if(token == "psnegative") {
+		output += std::to_string((int64_t)EvalValues::RegPS_Negative);
 	} else if(token == "sp") {
 		output += std::to_string((int64_t)EvalValues::RegSP);
 	} else if(token == "pc") {
@@ -393,6 +405,12 @@ int32_t ExpressionEvaluator::Evaluate(ExpressionData &data, DebugState &state, E
 					case EvalValues::SpriteOverflow: token = state.PPU.StatusFlags.SpriteOverflow; resultType = EvalResultType::Boolean; break;
 					case EvalValues::VerticalBlank: token = state.PPU.StatusFlags.VerticalBlank; resultType = EvalResultType::Boolean; break;
 					case EvalValues::Branched: token = Disassembler::IsJump(_debugger->GetMemoryDumper()->GetMemoryValue(DebugMemoryType::CpuMemory, state.CPU.PreviousDebugPC, true)); resultType = EvalResultType::Boolean; break;
+					case EvalValues::RegPS_Carry: token = (state.CPU.PS & PSFlags::Carry) != 0; resultType = EvalResultType::Boolean; break;
+					case EvalValues::RegPS_Zero: token = (state.CPU.PS & PSFlags::Zero) != 0; resultType = EvalResultType::Boolean; break;
+					case EvalValues::RegPS_Interrupt: token = (state.CPU.PS & PSFlags::Interrupt) != 0; resultType = EvalResultType::Boolean; break;
+					case EvalValues::RegPS_Decimal: token = (state.CPU.PS & PSFlags::Decimal) != 0; resultType = EvalResultType::Boolean; break;
+					case EvalValues::RegPS_Overflow: token = (state.CPU.PS & PSFlags::Overflow) != 0; resultType = EvalResultType::Boolean; break;
+					case EvalValues::RegPS_Negative: token = (state.CPU.PS & PSFlags::Negative) != 0; resultType = EvalResultType::Boolean; break;
 				}
 			}
 		} else if(token >= EvalOperators::Multiplication) {
