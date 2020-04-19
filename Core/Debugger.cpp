@@ -783,32 +783,35 @@ bool Debugger::ProcessRamOperation(MemoryOperationType type, uint16_t &addr, uin
 		_prevInstructionCycle = _curInstructionCycle;
 		_curInstructionCycle = (int64_t)_cpu->GetCycleCount();
 
-		_disassembler->BuildCache(addressInfo, addr, false, true);
-		
 		if(absoluteAddr >= 0) {
 			_codeDataLogger->SetFlag(absoluteAddr, CdlPrgFlags::Code);
 		}
 
-		if(_disassembler->IsJump(value)) {
-			uint16_t targetPc = _disassembler->GetDisassemblyInfo(addressInfo).GetJumpDestination(_cpu->GetPC(), _memoryManager.get());
-			AddressTypeInfo addressInfo;
-			GetAbsoluteAddressAndType(targetPc, &addressInfo);
-			if(addressInfo.Address >= 0 && addressInfo.Type == AddressType::PrgRom) {
-				if(value == 0x20) {
-					//JSR, mark target as a sub entry point
-					_disassembler->BuildCache(addressInfo, targetPc, true, false);
-					_functionEntryPoints.emplace(addressInfo.Address);
-					_codeDataLogger->SetFlag(addressInfo.Address, CdlPrgFlags::SubEntryPoint);
-				} else {
-					//Only mark as jump target if not marked as sub entry point
-					_codeDataLogger->SetFlag(addressInfo.Address, CdlPrgFlags::JumpTarget);
+		if(addressInfo.Address >= 0) {
+			_disassembler->BuildCache(addressInfo, addr, false, true);
+
+			if(_disassembler->IsJump(value)) {
+				uint16_t targetPc = _disassembler->GetDisassemblyInfo(addressInfo).GetJumpDestination(_cpu->GetPC(), _memoryManager.get());
+
+				AddressTypeInfo targetAddr;
+				GetAbsoluteAddressAndType(targetPc, &targetAddr);
+				if(targetAddr.Address >= 0 && targetAddr.Type == AddressType::PrgRom) {
+					if(value == 0x20) {
+						//JSR, mark target as a sub entry point
+						_disassembler->BuildCache(targetAddr, targetPc, true, false);
+						_functionEntryPoints.emplace(targetAddr.Address);
+						_codeDataLogger->SetFlag(targetAddr.Address, CdlPrgFlags::SubEntryPoint);
+					} else {
+						//Only mark as jump target if not marked as sub entry point
+						_codeDataLogger->SetFlag(targetAddr.Address, CdlPrgFlags::JumpTarget);
+					}
 				}
 			}
+
+			_performanceTracker->ProcessCpuExec(addressInfo);
 		}
 
 		ProcessStepConditions(addr);
-
-		_performanceTracker->ProcessCpuExec(addressInfo);
 
 		BreakSource breakSource = BreakSource::Unspecified;
 		if(value == 0 && CheckFlag(DebuggerFlags::BreakOnBrk)) {
@@ -845,7 +848,11 @@ bool Debugger::ProcessRamOperation(MemoryOperationType type, uint16_t &addr, uin
 		if(_codeRunner && _codeRunner->IsRunning() && addr >= 0x3000 && addr < 0x4000) {
 			disassemblyInfo = _codeRunner->GetDisassemblyInfo(addr);
 		} else {
-			disassemblyInfo = _disassembler->GetDisassemblyInfo(addressInfo);
+			if(addressInfo.Address >= 0) {
+				disassemblyInfo = _disassembler->GetDisassemblyInfo(addressInfo);
+			} else {
+				disassemblyInfo.Initialize(addr, _memoryManager.get(), false);
+			}
 		}
 		_traceLogger->Log(_debugState, disassemblyInfo, operationInfo);
 	} else {

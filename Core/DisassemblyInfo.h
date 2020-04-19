@@ -1,11 +1,10 @@
 #pragma once
 #include "stdafx.h"
 #include <unordered_map>
+#include "Types.h"
 
 class MemoryManager;
 class LabelManager;
-struct State;
-enum class AddrMode;
 
 class DisassemblyInfo
 {
@@ -16,17 +15,18 @@ public:
 	static bool IsUnofficialCode[256];
 
 private:
-	uint8_t _byteCode[3];
+	uint8_t _byteCode[3] = {};
 	bool _isSubEntryPoint = false;
 	bool _isSubExitPoint = false;
 	uint32_t _opSize = 0;
-	AddrMode _opMode;
+	AddrMode _opMode = AddrMode::None;
 	
 public:
 	DisassemblyInfo();
 	DisassemblyInfo(uint8_t* opPointer, bool isSubEntryPoint);
 
 	void Initialize(uint8_t * opPointer, bool isSubEntryPoint);
+	void Initialize(uint16_t addr, MemoryManager* memoryManager, bool isSubEntryPoint);
 
 	void SetSubEntryPoint();
 

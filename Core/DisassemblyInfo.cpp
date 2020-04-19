@@ -163,6 +163,21 @@ void DisassemblyInfo::Initialize(uint8_t* opPointer, bool isSubEntryPoint)
 	_isSubExitPoint = opCode == 0x40 || opCode == 0x60;
 }
 
+void DisassemblyInfo::Initialize(uint16_t addr, MemoryManager* memoryManager, bool isSubEntryPoint)
+{
+	_isSubEntryPoint = isSubEntryPoint;
+	
+	uint8_t opCode = memoryManager->DebugRead(addr);
+	_opSize = DisassemblyInfo::OPSize[opCode];
+	_opMode = DisassemblyInfo::OPMode[opCode];
+
+	for(uint32_t i = 0; i < _opSize; i++) {
+		_byteCode[i] = memoryManager->DebugRead(addr + i);
+	}
+
+	_isSubExitPoint = opCode == 0x40 || opCode == 0x60;
+}
+
 void DisassemblyInfo::SetSubEntryPoint()
 {
 	_isSubEntryPoint = true;
