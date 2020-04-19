@@ -505,6 +505,11 @@ namespace Mesen.GUI
 				hFrameData.Free();
 			}
 
+			for(int i = 4; i < 4*8; i += 4) {
+				//Override color 0 in each palette with the background color
+				frameData[i] = frameData[0];
+			}
+
 			return frameData;
 		}
 

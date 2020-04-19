@@ -24,6 +24,11 @@ namespace Mesen.GUI.Debugger
 				}
 			}
 			_paletteRam = InteropEmu.DebugGetMemoryState(DebugMemoryType.PaletteMemory);
+			
+			for(int i = 4; i < 4 * 8; i += 4) {
+				//Override color 0 in each palette with the background color
+				_paletteRam[i] = _paletteRam[0];
+			}
 		}
 
 		public string ToHdPackFormat(int tileAddr, int palette, bool forSprite, bool isAbsoluteAddress)
