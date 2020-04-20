@@ -64,8 +64,10 @@ static constexpr const char* MesenPalette = "mesen_palette";
 static constexpr const char* MesenNoSpriteLimit = "mesen_nospritelimit";
 static constexpr const char* MesenOverclock = "mesen_overclock";
 static constexpr const char* MesenOverclockType = "mesen_overclock_type";
-static constexpr const char* MesenOverscanVertical = "mesen_overscan_vertical";
-static constexpr const char* MesenOverscanHorizontal = "mesen_overscan_horizontal";
+static constexpr const char* MesenOverscanLeft = "mesen_overscan_left";
+static constexpr const char* MesenOverscanRight = "mesen_overscan_right";
+static constexpr const char* MesenOverscanTop = "mesen_overscan_up";
+static constexpr const char* MesenOverscanBottom = "mesen_overscan_down";
 static constexpr const char* MesenAspectRatio = "mesen_aspect_ratio";
 static constexpr const char* MesenRegion = "mesen_region";
 static constexpr const char* MesenRamState = "mesen_ramstate";
@@ -156,13 +158,15 @@ extern "C" {
 			{ MesenOverclock, "Overclock; None|Low|Medium|High|Very High" },
 			{ MesenOverclockType, "Overclock Type; Before NMI (Recommended)|After NMI" },
 			{ MesenRegion, "Region; Auto|NTSC|PAL|Dendy" },
-			{ MesenOverscanVertical, "Vertical Overscan; None|8px|16px" },
-			{ MesenOverscanHorizontal, "Horizontal Overscan; None|8px|16px" },
+			{ MesenOverscanLeft, "Left Overscan; None|4px|8px|12px|16px" },
+			{ MesenOverscanRight, "Right Overscan; None|4px|8px|12px|16px" },
+			{ MesenOverscanTop, "Top Overscan; None|4px|8px|12px|16px" },
+			{ MesenOverscanBottom, "Bottom Overscan; None|4px|8px|12px|16px" },
 			{ MesenAspectRatio, "Aspect Ratio; Auto|No Stretching|NTSC|PAL|4:3|16:9" },
 			{ MesenControllerTurboSpeed, "Controller Turbo Speed; Fast|Very Fast|Disabled|Slow|Normal" },
 			{ MesenShiftButtonsClockwise, u8"Shift A/B/X/Y clockwise; disabled|enabled" },
 			{ MesenHdPacks, "Enable HD Packs; enabled|disabled" },
-			{ MesenNoSpriteLimit, "Remove sprite limit; enabled|disabled" },
+			{ MesenNoSpriteLimit, "Remove sprite limit; disabled|enabled" },
 			{ MesenFakeStereo, u8"Enable fake stereo effect; disabled|enabled" },
 			{ MesenMuteTriangleUltrasonic, u8"Reduce popping on Triangle channel; enabled|disabled" },
 			{ MesenReduceDmcPopping, u8"Reduce popping on DMC channel; enabled|disabled" },
@@ -279,6 +283,24 @@ extern "C" {
 			return true;
 		}
 		return false;
+	}
+
+	uint8_t readOverscanValue(const char* key)
+	{
+		retro_variable var = {};
+		if(readVariable(key, var)) {
+			string value = string(var.value);
+			if(value == "4px") {
+				return 4;
+			} else if(value == "8px") {
+				return 8;
+			} else if(value == "12px") {
+				return 12;
+			} else if(value == "16px") {
+				return 16;
+			}
+		}
+		return 0;
 	}
 
 	void set_flag(const char* flagName, uint64_t flagValue)
@@ -436,26 +458,12 @@ extern "C" {
 			}
 		}
 
-		int overscanHorizontal = 0;
-		int overscanVertical = 0;		
-		if(readVariable(MesenOverscanHorizontal, var)) {
-			string value = string(var.value);
-			if(value == "8px") {
-				overscanHorizontal = 8;
-			} else if(value == "16px") {
-				overscanHorizontal = 16;
-			}
-		}
-
-		if(readVariable(MesenOverscanVertical, var)) {
-			string value = string(var.value);
-			if(value == "8px") {
-				overscanVertical = 8;
-			} else if(value == "16px") {
-				overscanVertical = 16;
-			}
-		}
-		_console->GetSettings()->SetOverscanDimensions(overscanHorizontal, overscanHorizontal, overscanVertical, overscanVertical);
+		_console->GetSettings()->SetOverscanDimensions(
+			readOverscanValue(MesenOverscanLeft),
+			readOverscanValue(MesenOverscanRight),
+			readOverscanValue(MesenOverscanTop),
+			readOverscanValue(MesenOverscanBottom)
+		);
 
 		if(readVariable(MesenAspectRatio, var)) {
 			string value = string(var.value);
