@@ -12,7 +12,7 @@ namespace Mesen.GUI.Debugger
 		AddressCounters[] _counts;
 		bool[] _freezeState;
 		byte[] _cdlData;
-		bool[] _hasLabel;
+		ByteLabelState[] _hasLabel;
 		DebugState _state = new DebugState();
 		bool _showExec;
 		bool _showWrite;
@@ -86,18 +86,32 @@ namespace Mesen.GUI.Debugger
 				}
 			}
 
-			_hasLabel = new bool[visibleByteCount];
+			_hasLabel = new ByteLabelState[visibleByteCount];
 			if(_highlightLabelledBytes) {
 				if(_memoryType == DebugMemoryType.CpuMemory) {
 					for(long i = 0; i < _hasLabel.Length; i++) {
-						_hasLabel[i] = (
-							!string.IsNullOrWhiteSpace(LabelManager.GetLabel((UInt16)(i + firstByteIndex))?.Label) ||
-							!string.IsNullOrWhiteSpace(LabelManager.GetLabel((uint)(i + firstByteIndex), AddressType.Register)?.Label)
-						);
+						UInt16 addr = (UInt16)(i + firstByteIndex);
+						CodeLabel label = LabelManager.GetLabel(addr);
+						if(label == null) {
+							label = LabelManager.GetLabel(addr, AddressType.Register);
+						}
+
+						if(label != null && !string.IsNullOrWhiteSpace(label.Label)) {
+							if(label.Length > 1) {
+								int relAddress = label.GetRelativeAddress();
+								_hasLabel[i] = relAddress == addr ? ByteLabelState.LabelFirstByte : ByteLabelState.LabelExtraByte;
+							} else {
+								_hasLabel[i] = ByteLabelState.LabelFirstByte;
+							}
+						}
 					}
 				} else if(_memoryType == DebugMemoryType.PrgRom || _memoryType == DebugMemoryType.WorkRam || _memoryType == DebugMemoryType.SaveRam) {
 					for(long i = 0; i < _hasLabel.Length; i++) {
-						_hasLabel[i] = !string.IsNullOrWhiteSpace(LabelManager.GetLabel((uint)(firstByteIndex  + i), _memoryType.ToAddressType())?.Label);
+						UInt32 addr = (UInt32)(i + firstByteIndex);
+						CodeLabel label = LabelManager.GetLabel(addr, _memoryType.ToAddressType());
+						if(label != null && !string.IsNullOrWhiteSpace(label.Label)) {
+							_hasLabel[i] = label.Length == 1 || label.Address == addr ? ByteLabelState.LabelFirstByte : ByteLabelState.LabelExtraByte;
+						}
 					}
 				}
 			}
@@ -153,9 +167,10 @@ namespace Mesen.GUI.Debugger
 				}
 			}
 
-			if(_hasLabel[index]) {
-				//Labels/comments
-				_colors.BackColor = ConfigManager.Config.DebugInfo.RamLabelledByteColor;
+			//Labels/comments
+			switch(_hasLabel[index]) {
+				case ByteLabelState.LabelFirstByte: _colors.BackColor = ConfigManager.Config.DebugInfo.RamLabelledByteColor; break;
+				case ByteLabelState.LabelExtraByte: _colors.BackColor = Color.FromArgb(180, ConfigManager.Config.DebugInfo.RamLabelledByteColor); break;
 			}
 
 			_colors.BorderColor = Color.Empty;
@@ -181,5 +196,12 @@ namespace Mesen.GUI.Debugger
 
 			return _colors;
 		}
+	}
+
+	enum ByteLabelState
+	{
+		NoLabel,
+		LabelFirstByte,
+		LabelExtraByte,
 	}
 }
