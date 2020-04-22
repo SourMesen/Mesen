@@ -55,7 +55,13 @@ namespace Mesen.GUI.Debugger.Controls
 		public static void EditLabel(UInt32 address, AddressType type)
 		{
 			CodeLabel existingLabel = LabelManager.GetLabel(address, type);
-			CodeLabel newLabel = new CodeLabel() { Address = address, AddressType = type, Label = existingLabel?.Label, Comment = existingLabel?.Comment, Length = existingLabel?.Length ?? 1 };
+			CodeLabel newLabel = new CodeLabel() {
+				Address = existingLabel?.Address ?? address,
+				AddressType = existingLabel?.AddressType ?? type,
+				Label = existingLabel?.Label,
+				Comment = existingLabel?.Comment,
+				Length = existingLabel?.Length ?? 1 
+			};
 
 			frmEditLabel frm = new frmEditLabel(newLabel, existingLabel);
 			if(frm.ShowDialog() == DialogResult.OK) {
