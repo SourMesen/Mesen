@@ -83,6 +83,7 @@ bool LuaScriptingContext::LoadScript(string scriptName, string scriptContent, De
 		if((iErr = lua_pcall(_lua, 0, LUA_MULTRET, 0)) == 0) {
 			//Script loaded properly
 			Log("Script loaded successfully.");
+			_initDone = true;
 			return true;
 		}
 	}
@@ -90,6 +91,7 @@ bool LuaScriptingContext::LoadScript(string scriptName, string scriptContent, De
 	if(lua_isstring(_lua, -1)) {
 		Log(lua_tostring(_lua, -1));
 	}
+
 	return false;
 }
 

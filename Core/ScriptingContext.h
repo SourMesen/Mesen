@@ -36,6 +36,7 @@ private:
 
 protected:
 	string _scriptName;
+	bool _initDone = false;
 
 	vector<int> _callbacks[5][0x10000];
 	vector<int> _eventCallbacks[(int)EventType::EventTypeSize];
@@ -65,6 +66,7 @@ public:
 
 	void CallMemoryCallback(uint16_t addr, uint8_t &value, CallbackType type);
 	int CallEventCallback(EventType type);
+	bool CheckInitDone();
 	bool CheckInStartFrameEvent();
 	bool CheckInExecOpEvent();
 	bool CheckStateLoadedFlag();
