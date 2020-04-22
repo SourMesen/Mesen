@@ -914,6 +914,8 @@
 		<Message ID="EmulatorShortcutMappings_LoadState">Завантажити</Message>
 		<Message ID="EmulatorShortcutMappings_ToggleCheats">Увімкнути/Вимкнути всі коди</Message>
 		<Message ID="EmulatorShortcutMappings_ToggleAudio">Увімкнути/Вимкнути звук</Message>
+		<Message ID="EmulatorShortcutMappings_IncreaseVolume">Increase Volume</Message>
+		<Message ID="EmulatorShortcutMappings_DecreaseVolume">Decrease Volume</Message>
 		<Message ID="EmulatorShortcutMappings_RunSingleFrame">Перемістити вперед один кадр</Message>
 
 		<Message ID="EmulatorShortcutMappings_EjectDisk">FDS - Витягти диск</Message>

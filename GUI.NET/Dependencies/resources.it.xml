@@ -927,6 +927,8 @@
 		<Message ID="EmulatorShortcutMappings_LoadState">Carica Stato</Message>
 		<Message ID="EmulatorShortcutMappings_ToggleCheats">Attiva/Disattiva Cheat</Message>
 		<Message ID="EmulatorShortcutMappings_ToggleAudio">Attiva/Disattiva Audio</Message>
+		<Message ID="EmulatorShortcutMappings_IncreaseVolume">Increase Volume</Message>
+		<Message ID="EmulatorShortcutMappings_DecreaseVolume">Decrease Volume</Message>
 		<Message ID="EmulatorShortcutMappings_RunSingleFrame">Avanti Singolo Frame</Message>
 
 		<Message ID="EmulatorShortcutMappings_EjectDisk">FDS - Espelli Disco</Message>

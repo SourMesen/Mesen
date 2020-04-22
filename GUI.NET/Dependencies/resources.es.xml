@@ -912,6 +912,8 @@
 		<Message ID="EmulatorShortcutMappings_LoadState">Cargar partida en la posición actual</Message>
 		<Message ID="EmulatorShortcutMappings_ToggleCheats">Habilitar/Deshabilitar códigos de trucos</Message>
 		<Message ID="EmulatorShortcutMappings_ToggleAudio">Habilitar/Deshabilitar sonido</Message>
+		<Message ID="EmulatorShortcutMappings_IncreaseVolume">Increase Volume</Message>
+		<Message ID="EmulatorShortcutMappings_DecreaseVolume">Decrease Volume</Message>
 		<Message ID="EmulatorShortcutMappings_RunSingleFrame">Ejecutar un solo fotograma</Message>
 
 		<Message ID="EmulatorShortcutMappings_EjectDisk">FDS - Expulsar disco</Message>

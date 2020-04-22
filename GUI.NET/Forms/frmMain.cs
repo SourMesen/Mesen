@@ -945,7 +945,6 @@ namespace Mesen.GUI.Forms
 				case EmulatorShortcut.Exit: this.Close(); break;
 
 				case EmulatorShortcut.ToggleCheats: ToggleCheats(); break;
-				case EmulatorShortcut.ToggleAudio: ToggleAudio(); break;
 				case EmulatorShortcut.ToggleFps: ToggleFps(); break;
 				case EmulatorShortcut.ToggleBackground: ToggleBackground(); break;
 				case EmulatorShortcut.ToggleSprites: ToggleSprites(); break;
@@ -957,6 +956,10 @@ namespace Mesen.GUI.Forms
 				case EmulatorShortcut.ToggleDebugInfo: ToggleDebugInfo(); break;
 				case EmulatorShortcut.MaxSpeed: ToggleMaxSpeed(); break;
 				case EmulatorShortcut.ToggleFullscreen: ToggleFullscreen(); restoreFullscreen = false; break;
+				
+				case EmulatorShortcut.ToggleAudio: ToggleAudio(); break;
+				case EmulatorShortcut.IncreaseVolume: IncreaseVolume(); break;
+				case EmulatorShortcut.DecreaseVolume: DecreaseVolume(); break;
 
 				case EmulatorShortcut.OpenFile: OpenFile(); break;
 				case EmulatorShortcut.IncreaseSpeed: InteropEmu.IncreaseEmulationSpeed(); break;
@@ -1060,6 +1063,20 @@ namespace Mesen.GUI.Forms
 		private void ToggleAudio()
 		{
 			ConfigManager.Config.AudioInfo.EnableAudio = !ConfigManager.Config.AudioInfo.EnableAudio;
+			AudioInfo.ApplyConfig();
+			ConfigManager.ApplyChanges();
+		}
+
+		private void IncreaseVolume()
+		{
+			ConfigManager.Config.AudioInfo.MasterVolume = (uint)Math.Min(100, (int)ConfigManager.Config.AudioInfo.MasterVolume + 10);
+			AudioInfo.ApplyConfig();
+			ConfigManager.ApplyChanges();
+		}
+
+		private void DecreaseVolume()
+		{
+			ConfigManager.Config.AudioInfo.MasterVolume = (uint)Math.Max(0, (int)ConfigManager.Config.AudioInfo.MasterVolume - 10);
 			AudioInfo.ApplyConfig();
 			ConfigManager.ApplyChanges();
 		}

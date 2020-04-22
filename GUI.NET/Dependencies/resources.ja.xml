@@ -914,6 +914,8 @@
 		<Message ID="EmulatorShortcutMappings_LoadState">選択中スロットからクイックロード</Message>
 		<Message ID="EmulatorShortcutMappings_ToggleCheats">チートコードを無効・有効にする</Message>
 		<Message ID="EmulatorShortcutMappings_ToggleAudio">音声を無効・有効にする</Message>
+		<Message ID="EmulatorShortcutMappings_IncreaseVolume">音量を上げる</Message>
+		<Message ID="EmulatorShortcutMappings_DecreaseVolume">音量を下げる</Message>
 		<Message ID="EmulatorShortcutMappings_RunSingleFrame">次のフレームを表す</Message>
 
 		<Message ID="EmulatorShortcutMappings_EjectDisk">FDS - ディスクを取り出す</Message>

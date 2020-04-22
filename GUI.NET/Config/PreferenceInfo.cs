@@ -112,6 +112,9 @@ namespace Mesen.GUI.Config
 				ShortcutKeys1.Add(new ShortcutKeyInfo(EmulatorShortcut.DecreaseSpeed, new KeyCombination() { Key1 = InteropEmu.GetKeyCode("-") }));
 				ShortcutKeys1.Add(new ShortcutKeyInfo(EmulatorShortcut.MaxSpeed, new KeyCombination() { Key1 = InteropEmu.GetKeyCode("F9") }));
 
+				ShortcutKeys1.Add(new ShortcutKeyInfo(EmulatorShortcut.IncreaseVolume, new KeyCombination() { Key1 = InteropEmu.GetKeyCode("Ctrl"), Key2 = InteropEmu.GetKeyCode("=") }));
+				ShortcutKeys1.Add(new ShortcutKeyInfo(EmulatorShortcut.DecreaseVolume, new KeyCombination() { Key1 = InteropEmu.GetKeyCode("Ctrl"), Key2 = InteropEmu.GetKeyCode("-") }));
+
 				ShortcutKeys1.Add(new ShortcutKeyInfo(EmulatorShortcut.ToggleFps, new KeyCombination() { Key1 = InteropEmu.GetKeyCode("F10") }));
 				ShortcutKeys1.Add(new ShortcutKeyInfo(EmulatorShortcut.ToggleFullscreen, new KeyCombination() { Key1 = InteropEmu.GetKeyCode("F11") }));
 				ShortcutKeys1.Add(new ShortcutKeyInfo(EmulatorShortcut.ToggleKeyboardMode, new KeyCombination() { Key1 = InteropEmu.GetKeyCode("Scroll Lock") }));

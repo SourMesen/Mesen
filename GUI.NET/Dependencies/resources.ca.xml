@@ -895,6 +895,8 @@
 		<Message ID="EmulatorShortcutMappings_LoadState">Carrega la partida guardada seleccionada</Message>
 		<Message ID="EmulatorShortcutMappings_ToggleCheats">Activa/Desactiva els trucs</Message>
 		<Message ID="EmulatorShortcutMappings_ToggleAudio">Activa/Desactiva el so</Message>
+		<Message ID="EmulatorShortcutMappings_IncreaseVolume">Increase Volume</Message>
+		<Message ID="EmulatorShortcutMappings_DecreaseVolume">Decrease Volume</Message>
 		<Message ID="EmulatorShortcutMappings_RunSingleFrame">Avança un sol fotograma</Message>
 
 		<Message ID="EmulatorShortcutMappings_EjectDisk">FDS - Expulsa el disc</Message>

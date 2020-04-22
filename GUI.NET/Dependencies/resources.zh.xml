@@ -940,6 +940,8 @@
 		<Message ID="EmulatorShortcutMappings_LoadState">载入进度</Message>
 		<Message ID="EmulatorShortcutMappings_ToggleCheats">启用/禁用作弊码</Message>
 		<Message ID="EmulatorShortcutMappings_ToggleAudio">静音</Message>
+		<Message ID="EmulatorShortcutMappings_IncreaseVolume">Increase Volume</Message>
+		<Message ID="EmulatorShortcutMappings_DecreaseVolume">Decrease Volume</Message>
 		<Message ID="EmulatorShortcutMappings_RunSingleFrame">帧进</Message>
 
 		<Message ID="EmulatorShortcutMappings_EjectDisk">弹出磁盘</Message>

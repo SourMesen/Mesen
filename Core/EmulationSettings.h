@@ -415,7 +415,6 @@ enum class EmulatorShortcut
 	VsServiceButton2,
 
 	ToggleCheats,
-	ToggleAudio,
 	ToggleFastForward,
 	ToggleRewind,
 	ToggleKeyboardMode,
@@ -462,6 +461,9 @@ enum class EmulatorShortcut
 	ToggleSprites,
 	ToggleBackground,
 	ToggleDebugInfo,
+	ToggleAudio,
+	IncreaseVolume,
+	DecreaseVolume,
 
 	LoadRandomGame,
 	SaveStateSlot1,

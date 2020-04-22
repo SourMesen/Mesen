@@ -79,8 +79,11 @@ namespace Mesen.GUI.Forms.Config
 				EmulatorShortcut.ToggleBackground,
 				EmulatorShortcut.ToggleSprites,
 				EmulatorShortcut.ToggleCheats,
-				EmulatorShortcut.ToggleAudio,
 				EmulatorShortcut.ToggleKeyboardMode,
+				
+				EmulatorShortcut.ToggleAudio,
+				EmulatorShortcut.IncreaseVolume,
+				EmulatorShortcut.DecreaseVolume,
 
 				EmulatorShortcut.MaxSpeed,
 				EmulatorShortcut.IncreaseSpeed,

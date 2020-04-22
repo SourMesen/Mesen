@@ -191,6 +191,8 @@ namespace Mesen.GUI.Controls
 			lblSlowMotion.Visible = lblSlowMotionIcon.Visible = InteropEmu.GetEmulationSpeed() < 100 && InteropEmu.GetEmulationSpeed() > 0 && !InteropEmu.CheckFlag(EmulationFlags.Turbo) && !rewinding;
 
 			lblTime.Text = label;
+
+			trkVolume.Value = (int)ConfigManager.Config.AudioInfo.MasterVolume;
 		}
 
 		private TimeSpan GetTrackLength(NsfHeader header, int track)

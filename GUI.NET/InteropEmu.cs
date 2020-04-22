@@ -1895,7 +1895,6 @@ namespace Mesen.GUI
 		VsServiceButton2,
 		
 		ToggleCheats,
-		ToggleAudio,
 		ToggleFastForward,
 		ToggleRewind,
 		ToggleKeyboardMode,
@@ -1942,6 +1941,9 @@ namespace Mesen.GUI
 		ToggleSprites,
 		ToggleBackground,
 		ToggleDebugInfo,
+		ToggleAudio,
+		IncreaseVolume,
+		DecreaseVolume,
 
 		LoadRandomGame,
 		SaveStateSlot1,

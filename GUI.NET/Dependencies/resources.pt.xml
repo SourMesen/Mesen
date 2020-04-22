@@ -928,6 +928,8 @@
 		<Message ID="EmulatorShortcutMappings_LoadState">Carregar estado</Message>
 		<Message ID="EmulatorShortcutMappings_ToggleCheats">Ativar/desativar códigos de trapaça</Message>
 		<Message ID="EmulatorShortcutMappings_ToggleAudio">Ativar/desativar áudio</Message>
+		<Message ID="EmulatorShortcutMappings_IncreaseVolume">Increase Volume</Message>
+		<Message ID="EmulatorShortcutMappings_DecreaseVolume">Decrease Volume</Message>
 		<Message ID="EmulatorShortcutMappings_RunSingleFrame">Executar um só quadro</Message>
 
 		<Message ID="EmulatorShortcutMappings_EjectDisk">FDS - Ejetar disco</Message>

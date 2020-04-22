@@ -206,10 +206,6 @@ void ShortcutKeyHandler::CheckMappedKeys()
 		_console->GetNotificationManager()->SendNotification(ConsoleNotificationType::ExecuteShortcut, (void*)EmulatorShortcut::ToggleCheats);
 	}
 
-	if(DetectKeyPress(EmulatorShortcut::ToggleAudio)) {
-		_console->GetNotificationManager()->SendNotification(ConsoleNotificationType::ExecuteShortcut, (void*)EmulatorShortcut::ToggleAudio);
-	}
-
 	if(DetectKeyPress(EmulatorShortcut::RunSingleFrame)) {
 		ProcessRunSingleFrame();
 	}
