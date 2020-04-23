@@ -191,12 +191,12 @@ void GameServerConnection::ProcessNotification(ConsoleNotificationType type, voi
 {
 	switch(type) {
 		case ConsoleNotificationType::GamePaused:
-		case ConsoleNotificationType::GameLoaded:
 		case ConsoleNotificationType::GameResumed:
 		case ConsoleNotificationType::GameReset:
 		case ConsoleNotificationType::StateLoaded:
 		case ConsoleNotificationType::CheatAdded:
 		case ConsoleNotificationType::ConfigChanged:
+		case ConsoleNotificationType::GameInitCompleted:
 			SendGameInformation();
 			break;
 		default:

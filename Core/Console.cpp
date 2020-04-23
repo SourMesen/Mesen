@@ -436,6 +436,10 @@ bool Console::Initialize(VirtualFile &romFile, VirtualFile &patchFile, bool forP
 					_notificationManager->SendNotification(ConsoleNotificationType::VsDualSystemStarted);
 				}
 			}
+
+			//Used by netplay to take save state after UpdateInputState() is called above, to ensure client+server are in sync
+			_notificationManager->SendNotification(ConsoleNotificationType::GameInitCompleted);
+
 			Resume();
 			return true;
 		} else {
