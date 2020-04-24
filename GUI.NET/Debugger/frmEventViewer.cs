@@ -161,6 +161,9 @@ namespace Mesen.GUI.Debugger
 				return;
 			}
 
+			//Update target for entitybinder (to prevent issues after rejecting changes in another form)
+			_config = ConfigManager.Config.DebugInfo;
+			_binder.Entity = _config;
 			_binder.UpdateObject();
 			ctrlEventViewerPpuView.RefreshViewer();
 		}
