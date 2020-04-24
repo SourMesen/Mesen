@@ -176,7 +176,7 @@ uint32_t EventManager::TakeEventSnapshot(EventViewerDisplayOptions options)
 	_snapshotCycle = cycle;
 	if(options.ShowPreviousFrameEvents && scanline != 0) {
 		for(DebugEventInfo &evt : _prevDebugEvents) {
-			uint32_t evtKey = (evt.Scanline << 9) + evt.Cycle;
+			uint32_t evtKey = ((evt.Scanline + 1) << 9) + evt.Cycle;
 			if(evtKey > key) {
 				_snapshot.push_back(evt);
 			}
