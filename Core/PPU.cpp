@@ -1330,7 +1330,7 @@ void PPU::UpdateState()
 						debugger->BreakImmediately(BreakSource::BreakOnPpu2006ScrollGlitch);
 					}
 				} else if(_cycle > 0 && (_cycle & 0x07) == 0 && (_cycle <= 256 || _cycle > 320)) {
-					_state.VideoRamAddr = (_updateVramAddr & ~0x1F) | (_state.VideoRamAddr & _updateVramAddr & 0x1F);
+					_state.VideoRamAddr = (_updateVramAddr & ~0x41F) | (_state.VideoRamAddr & _updateVramAddr & 0x41F);
 					shared_ptr<Debugger> debugger = _console->GetDebugger(false);
 					if(debugger && debugger->CheckFlag(DebuggerFlags::BreakOnPpu2006ScrollGlitch)) {
 						debugger->BreakImmediately(BreakSource::BreakOnPpu2006ScrollGlitch);
