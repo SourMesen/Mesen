@@ -912,6 +912,10 @@ bool Debugger::ProcessRamOperation(MemoryOperationType type, uint16_t &addr, uin
 			}
 		} else if(addr >= 0x4018 && _mapper->IsWriteRegister(addr)) {
 			_eventManager->AddDebugEvent(DebugEventType::MapperRegisterWrite, addr, value);
+		} else if(addr >= 0x4000 && addr <= 0x4015 || addr == 0x4017) {
+			_eventManager->AddDebugEvent(DebugEventType::ApuRegisterWrite, addr, value);
+		} else if(addr == 0x4016) {
+			_eventManager->AddDebugEvent(DebugEventType::ControlRegisterWrite, addr, value);
 		}
 
 		if(_frozenAddresses[addr]) {
@@ -922,6 +926,10 @@ bool Debugger::ProcessRamOperation(MemoryOperationType type, uint16_t &addr, uin
 			_eventManager->AddDebugEvent(DebugEventType::PpuRegisterRead, addr, value);
 		} else if(addr >= 0x4018 && _mapper->IsReadRegister(addr)) {
 			_eventManager->AddDebugEvent(DebugEventType::MapperRegisterRead, addr, value);
+		} else if(addr >= 0x4000 && addr <= 0x4015) {
+			_eventManager->AddDebugEvent(DebugEventType::ApuRegisterRead, addr, value);
+		} else if(addr == 0x4016 || addr == 0x4017) {
+			_eventManager->AddDebugEvent(DebugEventType::ControlRegisterRead, addr, value);
 		}
 
 		//Ignore dummy read/writes and do not change counters while using the step back feature

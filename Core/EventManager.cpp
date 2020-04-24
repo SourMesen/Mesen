@@ -107,6 +107,26 @@ void EventManager::DrawEvent(DebugEventInfo &evt, bool drawBackground, uint32_t 
 			color = options.MapperRegisterReadColor;
 			break;
 
+		case DebugEventType::ApuRegisterWrite:
+			showEvent = options.ShowApuRegisterWrites;
+			color = options.ApuRegisterWriteColor;
+			break;
+
+		case DebugEventType::ApuRegisterRead:
+			showEvent = options.ShowApuRegisterReads;
+			color = options.ApuRegisterReadColor;
+			break;
+
+		case DebugEventType::ControlRegisterWrite:
+			showEvent = options.ShowControlRegisterWrites;
+			color = options.ControlRegisterWriteColor;
+			break;
+
+		case DebugEventType::ControlRegisterRead:
+			showEvent = options.ShowControlRegisterReads;
+			color = options.ControlRegisterReadColor;
+			break;
+
 		case DebugEventType::PpuRegisterWrite:
 			showEvent = options.ShowPpuRegisterWrites[evt.Address & 0x07];
 			color = options.PpuRegisterWriteColors[evt.Address & 0x07];

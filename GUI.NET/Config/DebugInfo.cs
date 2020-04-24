@@ -169,6 +169,10 @@ namespace Mesen.GUI.Config
 		public bool EventViewerShowPpuRead2007 = true;
 		public bool EventViewerShowMapperRegisterWrites = true;
 		public bool EventViewerShowMapperRegisterReads = true;
+		public bool EventViewerShowApuRegisterWrites = true;
+		public bool EventViewerShowApuRegisterReads = true;
+		public bool EventViewerShowControlRegisterWrites = true;
+		public bool EventViewerShowControlRegisterReads = true;
 		public bool EventViewerShowNmi = true;
 		public bool EventViewerShowIrq = true;
 		public bool EventViewerShowSpriteZeroHit = true;
@@ -179,6 +183,10 @@ namespace Mesen.GUI.Config
 
 		public XmlColor EventViewerMapperRegisterWriteColor = ColorTranslator.FromHtml("#007597");
 		public XmlColor EventViewerMapperRegisterReadColor = ColorTranslator.FromHtml("#C92929");
+		public XmlColor EventViewerApuRegisterWriteColor = ColorTranslator.FromHtml("#977500");
+		public XmlColor EventViewerApuRegisterReadColor = ColorTranslator.FromHtml("#F47522");
+		public XmlColor EventViewerControlRegisterWriteColor = ColorTranslator.FromHtml("#009775");
+		public XmlColor EventViewerControlRegisterReadColor = ColorTranslator.FromHtml("#29F929");
 		public XmlColor EventViewerNmiColor = ColorTranslator.FromHtml("#ABADAC");
 		public XmlColor EventViewerIrqColor = ColorTranslator.FromHtml("#F9FEAC");
 		public XmlColor EventViewerDmcDmaReadColor = ColorTranslator.FromHtml("#A9FEFC");

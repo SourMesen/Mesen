@@ -55,6 +55,10 @@ namespace Mesen.GUI.Debugger
 				_binder.AddBinding(nameof(DebugInfo.EventViewerShowSpriteZeroHit), chkShowSpriteZero);
 				_binder.AddBinding(nameof(DebugInfo.EventViewerShowMapperRegisterWrites), chkShowMapperRegisterWrites);
 				_binder.AddBinding(nameof(DebugInfo.EventViewerShowMapperRegisterReads), chkShowMapperRegisterReads);
+				_binder.AddBinding(nameof(DebugInfo.EventViewerShowApuRegisterWrites), chkShowApuRegisterWrites);
+				_binder.AddBinding(nameof(DebugInfo.EventViewerShowApuRegisterReads), chkShowApuRegisterReads);
+				_binder.AddBinding(nameof(DebugInfo.EventViewerShowControlRegisterWrites), chkShowControlRegisterWrites);
+				_binder.AddBinding(nameof(DebugInfo.EventViewerShowControlRegisterReads), chkShowControlRegisterReads);
 				_binder.AddBinding(nameof(DebugInfo.EventViewerShowDmcDmaReads), chkShowDmcDmaRead);
 				_binder.AddBinding(nameof(DebugInfo.EventViewerShowMarkedBreakpoints), chkBreakpoints);
 
@@ -72,6 +76,10 @@ namespace Mesen.GUI.Debugger
 
 				_binder.AddBinding(nameof(DebugInfo.EventViewerMapperRegisterWriteColor), picMapperWrite);
 				_binder.AddBinding(nameof(DebugInfo.EventViewerMapperRegisterReadColor), picMapperRead);
+				_binder.AddBinding(nameof(DebugInfo.EventViewerApuRegisterWriteColor), picApuWrite);
+				_binder.AddBinding(nameof(DebugInfo.EventViewerApuRegisterReadColor), picApuRead);
+				_binder.AddBinding(nameof(DebugInfo.EventViewerControlRegisterWriteColor), picControlWrite);
+				_binder.AddBinding(nameof(DebugInfo.EventViewerControlRegisterReadColor), picControlRead);
 				_binder.AddBinding(nameof(DebugInfo.EventViewerNmiColor), picNmi);
 				_binder.AddBinding(nameof(DebugInfo.EventViewerIrqColor), picIrq);
 				_binder.AddBinding(nameof(DebugInfo.EventViewerSpriteZeroHitColor), picSpriteZeroHit);
@@ -219,6 +227,11 @@ namespace Mesen.GUI.Debugger
 
 			picMapperRead.BackColor = ColorTranslator.FromHtml("#C92929");
 			picMapperWrite.BackColor = ColorTranslator.FromHtml("#007597");
+
+			picApuWrite.BackColor = ColorTranslator.FromHtml("#977500");
+			picApuRead.BackColor = ColorTranslator.FromHtml("#F47522");
+			picControlWrite.BackColor = ColorTranslator.FromHtml("#009775");
+			picControlRead.BackColor = ColorTranslator.FromHtml("#29F929");
 
 			picNmi.BackColor = ColorTranslator.FromHtml("#ABADAC");
 			picIrq.BackColor = ColorTranslator.FromHtml("#F9FEAC");

@@ -1212,6 +1212,10 @@ namespace Mesen.GUI
 		PpuRegisterRead,
 		MapperRegisterWrite,
 		MapperRegisterRead,
+		ApuRegisterWrite,
+		ApuRegisterRead,
+		ControlRegisterWrite,
+		ControlRegisterRead,
 		Nmi,
 		Irq,
 		SpriteZeroHit,
@@ -2187,6 +2191,10 @@ namespace Mesen.GUI
 		public UInt32 BreakpointColor;
 		public UInt32 MapperRegisterReadColor;
 		public UInt32 MapperRegisterWriteColor;
+		public UInt32 ApuRegisterReadColor;
+		public UInt32 ApuRegisterWriteColor;
+		public UInt32 ControlRegisterReadColor;
+		public UInt32 ControlRegisterWriteColor;
 
 		[MarshalAs(UnmanagedType.ByValArray, SizeConst = 8)]
 		public UInt32[] PpuRegisterReadColors;
@@ -2196,6 +2204,10 @@ namespace Mesen.GUI
 
 		[MarshalAs(UnmanagedType.I1)] public bool ShowMapperRegisterWrites;
 		[MarshalAs(UnmanagedType.I1)] public bool ShowMapperRegisterReads;
+		[MarshalAs(UnmanagedType.I1)] public bool ShowApuRegisterWrites;
+		[MarshalAs(UnmanagedType.I1)] public bool ShowApuRegisterReads;
+		[MarshalAs(UnmanagedType.I1)] public bool ShowControlRegisterWrites;
+		[MarshalAs(UnmanagedType.I1)] public bool ShowControlRegisterReads;
 
 		[MarshalAs(UnmanagedType.ByValArray, SizeConst = 8)]
 		public byte[] ShowPpuRegisterWrites;
