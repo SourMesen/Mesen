@@ -54,7 +54,7 @@
 			<Control ID="mnuAudioConfig">Áudio</Control>
 			<Control ID="mnuInput">Controles</Control>
 			<Control ID="mnuRegion">Região</Control>
-			<Control ID="mnuRegionAuto">Auto</Control>
+			<Control ID="mnuRegionAuto">Automática</Control>
 			<Control ID="mnuRegionNtsc">NTSC</Control>
 			<Control ID="mnuRegionPal">PAL</Control>
 			<Control ID="mnuRegionDendy">Dendy</Control>
@@ -226,7 +226,7 @@
 			<Control ID="lblLarge">Longa</Control>
 			<Control ID="lblDeadzone">Tamanho da zona morta do eixo do controle:</Control>
 
-			<Control ID="chkHideMousePointerForZapper">Esconder o ponteiro do mouse ao usar a pistola zapper</Control>
+			<Control ID="chkHideMousePointerForZapper">Ocultar ponteiro do mouse ao usar pistola zapper</Control>
 
 			<Control ID="lblKeyBinding">Aviso: a configuração atual contém atribuições conflitantes - alguns botões físicos no seu teclado ou gamepad são mapeados para vários botões no controle NES. Se isso não for intencional, reveja e corrija suas atribuições.</Control>
 		</Form>
@@ -524,10 +524,10 @@
 			<Control ID="mnuExportGame">Exportar</Control>
 			<Control ID="btnExportSelectedCheats">Trapaças selecionadas</Control>
 			<Control ID="mnuExportSelectedCheats">Exportar</Control>
-			<Control ID="chkDisableCheats">Desativar toas as trapaças</Control>
+			<Control ID="chkDisableCheats">Desativar todas as trapaças</Control>
 
 			<Control ID="tpgCheatFinder">Pesquisa de trapaças</Control>
-			<Control ID="grpFilters">Filters</Control>
+			<Control ID="grpFilters">Filtros</Control>
 			<Control ID="btnReset">Reiniciar</Control>
 			<Control ID="btnUndo">Desfazer</Control>
 			<Control ID="lblCurrentValue">O valor atual é</Control>
@@ -565,9 +565,9 @@
 			<Control ID="lblWebsite">Site:</Control>
 			<Control ID="lblLink">www.mesen.ca</Control>
 			<Control ID="labelVersion">Versão:</Control>
-			<Control ID="lblBuildDateLabel">Build Date:</Control>
+			<Control ID="lblBuildDateLabel">Compilado em:</Control>
 			
-			<Control ID="grpAcknowledgements">Acknowledgements</Control>
+			<Control ID="grpAcknowledgements">Agradecimentos</Control>
 			<Control ID="lblUsedSoftware">Este software usa as seguintes bibliotecas:</Control>
 			<Control ID="lblGeneral">Geral:</Control>
 			<Control ID="lblVideo">Vídeo:</Control>
@@ -928,8 +928,8 @@
 		<Message ID="EmulatorShortcutMappings_LoadState">Carregar estado</Message>
 		<Message ID="EmulatorShortcutMappings_ToggleCheats">Ativar/desativar códigos de trapaça</Message>
 		<Message ID="EmulatorShortcutMappings_ToggleAudio">Ativar/desativar áudio</Message>
-		<Message ID="EmulatorShortcutMappings_IncreaseVolume">Increase Volume</Message>
-		<Message ID="EmulatorShortcutMappings_DecreaseVolume">Decrease Volume</Message>
+		<Message ID="EmulatorShortcutMappings_IncreaseVolume">Aumentar volume</Message>
+		<Message ID="EmulatorShortcutMappings_DecreaseVolume">Diminuir volume</Message>
 		<Message ID="EmulatorShortcutMappings_RunSingleFrame">Executar um só quadro</Message>
 
 		<Message ID="EmulatorShortcutMappings_EjectDisk">FDS - Ejetar disco</Message>
@@ -964,7 +964,7 @@
 		<Message ID="EmulatorShortcutMappings_SaveStateSlot9">Salvar estado - Compartimento 9</Message>
 		<Message ID="EmulatorShortcutMappings_SaveStateSlot10">Salvar estado - Compartimento 10</Message>
 		<Message ID="EmulatorShortcutMappings_SaveStateToFile">Salvar estado para arquivo</Message>
-		<Message ID="EmulatorShortcutMappings_SaveStateDialog">Abrir menu de salvar estado</Message>
+		<Message ID="EmulatorShortcutMappings_SaveStateDialog">Abrir menu de salvamento de estado</Message>
 		<Message ID="EmulatorShortcutMappings_LoadStateSlot1">Carregar estado - Compartimento 1</Message>
 		<Message ID="EmulatorShortcutMappings_LoadStateSlot2">Carregar estado - Compartimento 2</Message>
 		<Message ID="EmulatorShortcutMappings_LoadStateSlot3">Carregar estado - Compartimento 3</Message>
