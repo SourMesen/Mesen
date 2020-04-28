@@ -1069,14 +1069,14 @@ namespace Mesen.GUI.Forms
 
 		private void IncreaseVolume()
 		{
-			ConfigManager.Config.AudioInfo.MasterVolume = (uint)Math.Min(100, (int)ConfigManager.Config.AudioInfo.MasterVolume + 10);
+			ConfigManager.Config.AudioInfo.MasterVolume = (uint)Math.Min(100, (int)ConfigManager.Config.AudioInfo.MasterVolume + 5);
 			AudioInfo.ApplyConfig();
 			ConfigManager.ApplyChanges();
 		}
 
 		private void DecreaseVolume()
 		{
-			ConfigManager.Config.AudioInfo.MasterVolume = (uint)Math.Max(0, (int)ConfigManager.Config.AudioInfo.MasterVolume - 10);
+			ConfigManager.Config.AudioInfo.MasterVolume = (uint)Math.Max(0, (int)ConfigManager.Config.AudioInfo.MasterVolume - 5);
 			AudioInfo.ApplyConfig();
 			ConfigManager.ApplyChanges();
 		}
