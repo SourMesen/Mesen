@@ -669,7 +669,7 @@ namespace Mesen.GUI.Forms
 		private void _notifListener_OnNotification(InteropEmu.NotificationEventArgs e)
 		{
 			switch(e.NotificationType) {
-				case InteropEmu.ConsoleNotificationType.GameLoaded:
+				case InteropEmu.ConsoleNotificationType.GameInitCompleted:
 					VideoInfo.ApplyOverscanConfig();
 					_currentGame = InteropEmu.GetRomInfo().GetRomName();
 					InteropEmu.SetNesModel(ConfigManager.Config.Region);

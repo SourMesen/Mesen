@@ -438,7 +438,9 @@ bool Console::Initialize(VirtualFile &romFile, VirtualFile &patchFile, bool forP
 			}
 
 			//Used by netplay to take save state after UpdateInputState() is called above, to ensure client+server are in sync
-			_notificationManager->SendNotification(ConsoleNotificationType::GameInitCompleted);
+			if(!_master) {
+				_notificationManager->SendNotification(ConsoleNotificationType::GameInitCompleted);
+			}
 
 			Resume();
 			return true;
@@ -627,7 +629,9 @@ void Console::ResetComponents(bool softReset)
 	_resetRunTimers = true;
 
 	//This notification MUST be sent before the UpdateInputState() below to allow MovieRecorder to grab the first frame's worth of inputs
-	_notificationManager->SendNotification(softReset ? ConsoleNotificationType::GameReset : ConsoleNotificationType::GameLoaded);
+	if(!_master) {
+		_notificationManager->SendNotification(softReset ? ConsoleNotificationType::GameReset : ConsoleNotificationType::GameLoaded);
+	}
 
 	if(softReset) {
 		shared_ptr<Debugger> debugger = _debugger;

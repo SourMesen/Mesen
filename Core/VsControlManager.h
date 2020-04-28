@@ -52,6 +52,7 @@ protected:
 
 public:
 	using ControlManager::ControlManager;
+	~VsControlManager();
 
 	void StreamState(bool saving) override;
 	void Reset(bool softReset) override;

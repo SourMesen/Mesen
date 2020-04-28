@@ -951,6 +951,7 @@ namespace Mesen.GUI
 			BeforeEmulationStop = 19,
 			VsDualSystemStarted = 20,
 			VsDualSystemStopped = 21,
+			GameInitCompleted = 22
 		}
 
 		public enum ControllerType

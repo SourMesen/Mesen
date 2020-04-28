@@ -99,9 +99,14 @@ public:
 			VsSystem* otherMapper = dynamic_cast<VsSystem*>(dualConsole->GetMapper());
 
 			//Give memory access to master CPU or slave CPU, based on "slaveMasterBit"
+			if(_saveRamSize == 0 && _workRamSize == 0) {
+				RemoveCpuMemoryMapping(0x6000, 0x7FFF);
+				otherMapper->RemoveCpuMemoryMapping(0x6000, 0x7FFF);
+			}
+
 			for(int i = 0; i < 4; i++) {
-				SetCpuMemoryMapping(0x6000 + i * 0x800, 0x67FF + i * 0x800, _workRam, slaveMasterBit ? MemoryAccessType::ReadWrite : MemoryAccessType::NoAccess);
-				otherMapper->SetCpuMemoryMapping(0x6000 + i * 0x800, 0x67FF + i * 0x800, _workRam, slaveMasterBit ? MemoryAccessType::NoAccess : MemoryAccessType::ReadWrite);
+				SetCpuMemoryMapping(0x6000 + i * 0x800, 0x67FF + i * 0x800, HasBattery() ? _saveRam : _workRam, slaveMasterBit ? MemoryAccessType::ReadWrite : MemoryAccessType::NoAccess);
+				otherMapper->SetCpuMemoryMapping(0x6000 + i * 0x800, 0x67FF + i * 0x800, HasBattery() ? _saveRam : _workRam, slaveMasterBit ? MemoryAccessType::NoAccess : MemoryAccessType::ReadWrite);
 			}
 		}
 	}

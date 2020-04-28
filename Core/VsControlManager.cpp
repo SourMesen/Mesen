@@ -24,8 +24,14 @@ void VsControlManager::Reset(bool softReset)
 	_vsSystemType = _console->GetRomInfo().VsType;
 
 	if(!softReset && !_console->IsMaster() && _console->GetDualConsole()) {
+		UnregisterInputProvider(this);
 		RegisterInputProvider(this);
 	}
+}
+
+VsControlManager::~VsControlManager()
+{
+	UnregisterInputProvider(this);
 }
 
 void VsControlManager::StreamState(bool saving)
