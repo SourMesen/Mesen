@@ -524,7 +524,7 @@
 			<Control ID="mnuExportGame">Exportar</Control>
 			<Control ID="btnExportSelectedCheats">Trapaças selecionadas</Control>
 			<Control ID="mnuExportSelectedCheats">Exportar</Control>
-			<Control ID="chkDisableCheats">Desativar toas as trapaças</Control>
+			<Control ID="chkDisableCheats">Desativar todas as trapaças</Control>
 
 			<Control ID="tpgCheatFinder">Pesquisa de trapaças</Control>
 			<Control ID="grpFilters">Filtros</Control>
