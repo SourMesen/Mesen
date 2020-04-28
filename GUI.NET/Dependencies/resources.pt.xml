@@ -565,9 +565,9 @@
 			<Control ID="lblWebsite">Site:</Control>
 			<Control ID="lblLink">www.mesen.ca</Control>
 			<Control ID="labelVersion">Versão:</Control>
-			<Control ID="lblBuildDateLabel">Build Date:</Control>
+			<Control ID="lblBuildDateLabel">Compilado em:</Control>
 			
-			<Control ID="grpAcknowledgements">Acknowledgements</Control>
+			<Control ID="grpAcknowledgements">Agradecimentos</Control>
 			<Control ID="lblUsedSoftware">Este software usa as seguintes bibliotecas:</Control>
 			<Control ID="lblGeneral">Geral:</Control>
 			<Control ID="lblVideo">Vídeo:</Control>
