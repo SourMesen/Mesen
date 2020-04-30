@@ -327,6 +327,7 @@
 			<Control ID="chkRandomizeCpuPpuAlignment">Démarrer le jeu avec un alignement CPU/PPU aléatoire</Control>
 			<Control ID="chkEnablePpu2006ScrollGlitch">Simuler le bug de scrolling lors de l'écriture à $2006</Control>
 			<Control ID="chkEnablePpu2000ScrollGlitch">Simuler le bug de scrolling lors de l'écriture à $2000/$2005/$2006</Control>
+			<Control ID="chkEnablePpuOamRowCorruption">Simuler le bug de corruption de la rangée OAM</Control>
 
 			<Control ID="lblRamPowerOnState">État initial de la mémoire au démarrage : </Control>
 

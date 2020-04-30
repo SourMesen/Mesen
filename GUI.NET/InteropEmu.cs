@@ -1619,6 +1619,8 @@ namespace Mesen.GUI
 
 		PauseOnMovieEnd = 0x0100,
 
+		EnablePpuOamRowCorruption = 0x0200,
+
 		AllowBackgroundInput = 0x0400,
 		ReduceSoundInBackground = 0x0800,
 		MuteSoundInBackground = 0x1000,

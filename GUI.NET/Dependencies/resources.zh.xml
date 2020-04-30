@@ -353,6 +353,7 @@
 			<Control ID="chkRandomizeCpuPpuAlignment">随机 CPU/PPU 开机对齐</Control>
 			<Control ID="chkEnablePpu2006ScrollGlitch">模拟 PPU $2006 卷轴故障</Control>
 			<Control ID="chkEnablePpu2000ScrollGlitch">模拟首次写入 PPU $2000/$2005/$2006 卷轴故障</Control>
+			<Control ID="chkEnablePpuOamRowCorruption">Enable PPU OAM row corruption emulation</Control>
 
 			<Control ID="lblRamPowerOnState">默认开机 RAM 状态:</Control>
 			<Control ID="tpgOverclocking">超频</Control>

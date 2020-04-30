@@ -42,6 +42,7 @@ namespace Mesen.GUI.Forms.Config
 			AddBinding("RandomizeCpuPpuAlignment", chkRandomizeCpuPpuAlignment);
 			AddBinding("EnablePpu2006ScrollGlitch", chkEnablePpu2006ScrollGlitch);
 			AddBinding("EnablePpu2000ScrollGlitch", chkEnablePpu2000ScrollGlitch);
+			AddBinding("EnablePpuOamRowCorruption", chkEnablePpuOamRowCorruption);
 
 			AddBinding("PpuExtraScanlinesBeforeNmi", nudExtraScanlinesBeforeNmi);
 			AddBinding("PpuExtraScanlinesAfterNmi", nudExtraScanlinesAfterNmi);

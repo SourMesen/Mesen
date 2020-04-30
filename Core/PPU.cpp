@@ -30,6 +30,9 @@ PPU::PPU(shared_ptr<Console> console)
 		0x09, 0x01, 0x34, 0x03, 0x00, 0x04, 0x00, 0x14, 0x08, 0x3A, 0x00, 0x02, 0x00, 0x20, 0x2C, 0x08 };
 	memcpy(_paletteRAM, paletteRamBootValues, sizeof(_paletteRAM));
 
+	//This should (presumably) persist across resets
+	memset(_corruptOamRow, 0, sizeof(_corruptOamRow));
+
 	_console->InitializeRam(_spriteRAM, 0x100);
 	_console->InitializeRam(_secondarySpriteRAM, 0x20);
 
@@ -546,6 +549,11 @@ void PPU::SetMaskRegister(uint8_t value)
 
 	if(_renderingEnabled != (_flags.BackgroundEnabled | _flags.SpritesEnabled)) {
 		_needStateUpdate = true;
+
+		if(_renderingEnabled && _scanline < 240) {
+			//Rendering was just disabled by the write
+			SetOamCorruptionFlags();
+		}
 	}
 
 	UpdateMinimumDrawCycles();
@@ -1222,6 +1230,49 @@ void PPU::DebugUpdateFrameBuffer(bool toGrayscale)
 	}
 }
 
+void PPU::SetOamCorruptionFlags()
+{
+	if(!_settings->CheckFlag(EmulationFlags::EnablePpuOamRowCorruption)) {
+		return;
+	}
+
+	//Note: Still pending more research, but this currently matches a portion of the issues that have been observed
+	//When rendering is disabled in some sections of the screen, either:
+	// A- During Secondary OAM clear (first ~64 cycles)
+	// B- During OAM tile fetching (cycle ~256 to cycle ~320)
+	//then OAM memory gets corrupted the next time the PPU starts rendering again (usually at the start of the next frame)
+	//This usually causes the first "row" of OAM (the first 8 bytes) to get copied over another, causing some sprites to be missing
+	//and causing an extra set of the first 2 sprites to appear on the screen (not possible to see them except via any overflow they may cause)
+
+	if(_cycle >= 1 && _cycle < 65) {
+		//Every 2 dots causes the corruption to shift down 1 OAM row (8 bytes)
+		_corruptOamRow[(_cycle - 1) >> 1] = true;
+	} else if(_cycle >= 257 && _cycle < 321) {
+		//This section is in 8-dot segments.
+		//The first 3 dot increment the corrupted row by 1, and then the last 5 dots corrupt the next row for 5 dots.
+		uint8_t base = (_cycle - 257) >> 3;
+		uint8_t offset = std::min<uint8_t>(3, (_cycle - 257) & 0x07);
+		_corruptOamRow[base * 4 + offset] = true;
+	}
+}
+
+void PPU::ProcessOamCorruption()
+{
+	if(!_settings->CheckFlag(EmulationFlags::EnablePpuOamRowCorruption)) {
+		return;
+	}
+
+	//Copy first OAM row over another row, as needed by corruption flags (can be over itself, which causes no actual harm)
+	for(int i = 0; i < 32; i++) {
+		if(_corruptOamRow[i]) {
+			if(i > 0) {
+				memcpy(_spriteRAM + i * 8, _spriteRAM, 8);
+			}
+			_corruptOamRow[i] = false;
+		}
+	}
+}
+
 void PPU::Exec()
 {
 	if(_cycle > 339) {
@@ -1232,6 +1283,10 @@ void PPU::Exec()
 
 			//Force prerender scanline sprite fetches to load the dummy $FF tiles (fixes shaking in Ninja Gaiden 3 stage 1 after beating boss)
 			_spriteCount = 0;
+
+			if(_renderingEnabled) {
+				ProcessOamCorruption();
+			}
 
 			UpdateMinimumDrawCycles();
 		}
@@ -1297,6 +1352,9 @@ void PPU::UpdateState()
 	_prevRenderingEnabled = _renderingEnabled;
 	if(_renderingEnabled != (_flags.BackgroundEnabled | _flags.SpritesEnabled)) {
 		_renderingEnabled = _flags.BackgroundEnabled | _flags.SpritesEnabled;
+		if(_renderingEnabled) {
+			ProcessOamCorruption();
+		}
 	}
 	if(_prevRenderingEnabled != _renderingEnabled) {
 		_needStateUpdate = true;
@@ -1435,6 +1493,8 @@ void PPU::StreamState(bool saving)
 			//Set oam decay cycle to the current cycle to ensure it doesn't decay when loading a state
 			_oamDecayCycles[i] = _console->GetCpu()->GetCycleCount();
 		}
+
+		memset(_corruptOamRow, 0, sizeof(_corruptOamRow));
 
 		for(int i = 0; i < 257; i++) {
 			_hasSprite[i] = true;

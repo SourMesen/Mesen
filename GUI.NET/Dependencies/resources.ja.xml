@@ -326,6 +326,7 @@
 			<Control ID="chkRandomizeCpuPpuAlignment">ランダムなCPU/PPUアラインメントでゲームを起動する</Control>
 			<Control ID="chkEnablePpu2006ScrollGlitch">$2006に書き込む時に発生するスクロールバグを再現する</Control>
 			<Control ID="chkEnablePpu2000ScrollGlitch">$2000・$2005・$2006に書き込む時に発生するスクロールバグを再現する</Control>
+			<Control ID="chkEnablePpuOamRowCorruption">OAM行のデータの汚染を再現する</Control>
 
 			<Control ID="lblRamPowerOnState">起動時のメモリの状態 : </Control>
 

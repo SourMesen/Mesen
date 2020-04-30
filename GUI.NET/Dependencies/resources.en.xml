@@ -317,7 +317,7 @@
 			<Control ID="lblMiscSettings">Miscellaneous Settings</Control>
 			<Control ID="chkUseAlternativeMmc3Irq">Use alternative MMC3 IRQ behavior</Control>
 			<Control ID="chkAllowInvalidInput">Allow invalid input (e.g Down + Up or Left + Right at the same time)</Control>
-			<Control ID="chkEnableOamDecay">Enable OAM RAM decay</Control>
+			<Control ID="chkEnableOamDecay">Enable PPU OAM decay</Control>
 			<Control ID="chkDisablePpu2004Reads">Disable PPU $2004 reads (Famicom behavior)</Control>
 			<Control ID="chkDisableOamAddrBug">Disable PPU OAMADDR bug emulation</Control>
 			<Control ID="chkDisablePaletteRead">Disable PPU palette reads</Control>
@@ -327,7 +327,8 @@
 			<Control ID="chkRandomizeCpuPpuAlignment">Randomize power-on/reset CPU/PPU alignment</Control>
 			<Control ID="chkEnablePpu2006ScrollGlitch">Enable PPU $2006 scroll glitch emulation</Control>
 			<Control ID="chkEnablePpu2000ScrollGlitch">Enable PPU $2000/$2005/$2006 first-write scroll glitch emulation</Control>
-
+			<Control ID="chkEnablePpuOamRowCorruption">Enable PPU OAM row corruption emulation</Control>
+			
 			<Control ID="lblRamPowerOnState">Default power on state for RAM:</Control>
 
 			<Control ID="tpgOverclocking">Overclocking</Control>

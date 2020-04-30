@@ -327,6 +327,7 @@
 			<Control ID="chkRandomizeCpuPpuAlignment">Рандомизировать включение/перезагрузку выравнивания CPU/PPU</Control>
 			<Control ID="chkEnablePpu2006ScrollGlitch">Включить PPU $2006 scroll glitch emulation</Control>
 			<Control ID="chkEnablePpu2000ScrollGlitch">Включить PPU $2000/$2005/$2006 first-write scroll glitch emulation</Control>
+			<Control ID="chkEnablePpuOamRowCorruption">Enable PPU OAM row corruption emulation</Control>
 
 			<Control ID="tpgOverclocking">Разгон</Control>
 			<Control ID="grpOverclocking">Разгон CPU</Control>

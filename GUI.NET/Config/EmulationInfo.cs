@@ -25,6 +25,7 @@ namespace Mesen.GUI.Config
 		public bool RandomizeCpuPpuAlignment = false;
 		public bool EnablePpu2006ScrollGlitch = false;
 		public bool EnablePpu2000ScrollGlitch = false;
+		public bool EnablePpuOamRowCorruption = false;
 
 		public bool UseAlternativeMmc3Irq = false;
 
@@ -65,6 +66,7 @@ namespace Mesen.GUI.Config
 			InteropEmu.SetFlag(EmulationFlags.RandomizeCpuPpuAlignment, emulationInfo.RandomizeCpuPpuAlignment);
 			InteropEmu.SetFlag(EmulationFlags.EnablePpu2000ScrollGlitch, emulationInfo.EnablePpu2000ScrollGlitch);
 			InteropEmu.SetFlag(EmulationFlags.EnablePpu2006ScrollGlitch, emulationInfo.EnablePpu2006ScrollGlitch);
+			InteropEmu.SetFlag(EmulationFlags.EnablePpuOamRowCorruption, emulationInfo.EnablePpuOamRowCorruption);
 
 			InteropEmu.SetPpuNmiConfig(emulationInfo.PpuExtraScanlinesBeforeNmi, emulationInfo.PpuExtraScanlinesAfterNmi);
 

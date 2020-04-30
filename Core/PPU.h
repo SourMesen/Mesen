@@ -105,6 +105,7 @@ class PPU : public IMemoryHandler, public Snapshotable
 
 		uint64_t _oamDecayCycles[0x40];
 		bool _enableOamDecay;
+		bool _corruptOamRow[32];
 
 		void UpdateStatusFlag();
 
@@ -140,6 +141,9 @@ class PPU : public IMemoryHandler, public Snapshotable
 
 		__forceinline uint8_t ReadSpriteRam(uint8_t addr);
 		__forceinline void WriteSpriteRam(uint8_t addr, uint8_t value);
+		
+		void SetOamCorruptionFlags();
+		void ProcessOamCorruption();
 
 		void UpdateMinimumDrawCycles();
 

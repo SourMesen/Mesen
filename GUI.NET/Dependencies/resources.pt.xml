@@ -327,6 +327,7 @@
 			<Control ID="chkRandomizeCpuPpuAlignment">Aleatorizar o ligar/reiniciar do alinhamento da CPU/PPU</Control>
 			<Control ID="chkEnablePpu2006ScrollGlitch">Ativar emulação do erro gráfico PPU $2006 na rolagem</Control>
 			<Control ID="chkEnablePpu2000ScrollGlitch">Ativar emulação do erro gráfico PPU $2000/$2005/$2006 na rolagem na primeira escrita</Control>
+			<Control ID="chkEnablePpuOamRowCorruption">Enable PPU OAM row corruption emulation</Control>
 
 			<Control ID="lblRamPowerOnState">Estado inicial da RAM durante o início:</Control>
 
