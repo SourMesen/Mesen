@@ -31,9 +31,9 @@ namespace Mesen.GUI.Debugger.Controls
 		{
 			this.components = new System.ComponentModel.Container();
 			this.tlpMain = new System.Windows.Forms.TableLayoutPanel();
+			this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
 			this.grpSpriteInfo = new System.Windows.Forms.GroupBox();
 			this.tlpInfo = new System.Windows.Forms.TableLayoutPanel();
-			this.lblPalette = new System.Windows.Forms.Label();
 			this.txtSpriteIndex = new System.Windows.Forms.TextBox();
 			this.lblSpriteIndex = new System.Windows.Forms.Label();
 			this.picPreview = new Mesen.GUI.Controls.ctrlMesenPictureBox();
@@ -49,28 +49,37 @@ namespace Mesen.GUI.Debugger.Controls
 			this.lblScreenPreview = new System.Windows.Forms.Label();
 			this.lblTileIndex = new System.Windows.Forms.Label();
 			this.txtTileIndex = new System.Windows.Forms.TextBox();
-			this.lblPaletteAddr = new System.Windows.Forms.Label();
-			this.lblTileAddress = new System.Windows.Forms.Label();
-			this.txtPaletteAddress = new System.Windows.Forms.TextBox();
-			this.txtTileAddress = new System.Windows.Forms.TextBox();
+			this.lblTile = new System.Windows.Forms.Label();
+			this.picTile = new System.Windows.Forms.PictureBox();
+			this.chkDisplaySpriteOutlines = new System.Windows.Forms.CheckBox();
 			this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
 			this.chkHorizontalMirroring = new System.Windows.Forms.CheckBox();
 			this.chkVerticalMirroring = new System.Windows.Forms.CheckBox();
 			this.chkBackgroundPriority = new System.Windows.Forms.CheckBox();
-			this.ctrlTilePalette = new Mesen.GUI.Debugger.Controls.ctrlTilePalette();
 			this.lblPosition = new System.Windows.Forms.Label();
+			this.lblPalette = new System.Windows.Forms.Label();
 			this.txtPosition = new System.Windows.Forms.TextBox();
-			this.lblTile = new System.Windows.Forms.Label();
-			this.picTile = new System.Windows.Forms.PictureBox();
-			this.chkDisplaySpriteOutlines = new System.Windows.Forms.CheckBox();
+			this.ctrlTilePalette = new Mesen.GUI.Debugger.Controls.ctrlTilePalette();
+			this.lblTileAddress = new System.Windows.Forms.Label();
+			this.lblPaletteAddr = new System.Windows.Forms.Label();
+			this.txtTileAddress = new System.Windows.Forms.TextBox();
+			this.txtPaletteAddress = new System.Windows.Forms.TextBox();
+			this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
+			this.radCpuPage = new System.Windows.Forms.RadioButton();
+			this.label1 = new System.Windows.Forms.Label();
+			this.radSpriteRam = new System.Windows.Forms.RadioButton();
+			this.nudCpuPage = new System.Windows.Forms.NumericUpDown();
 			this.picSprites = new Mesen.GUI.Controls.ctrlMesenPictureBox();
 			this.tlpMain.SuspendLayout();
+			this.tableLayoutPanel2.SuspendLayout();
 			this.grpSpriteInfo.SuspendLayout();
 			this.tlpInfo.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.picPreview)).BeginInit();
 			this.ctxMenu.SuspendLayout();
-			this.tableLayoutPanel1.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.picTile)).BeginInit();
+			this.tableLayoutPanel1.SuspendLayout();
+			this.tableLayoutPanel3.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.nudCpuPage)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.picSprites)).BeginInit();
 			this.SuspendLayout();
 			// 
@@ -79,7 +88,7 @@ namespace Mesen.GUI.Debugger.Controls
 			this.tlpMain.ColumnCount = 2;
 			this.tlpMain.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
 			this.tlpMain.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tlpMain.Controls.Add(this.grpSpriteInfo, 1, 0);
+			this.tlpMain.Controls.Add(this.tableLayoutPanel2, 1, 0);
 			this.tlpMain.Controls.Add(this.picSprites, 0, 0);
 			this.tlpMain.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tlpMain.Location = new System.Drawing.Point(0, 0);
@@ -91,14 +100,31 @@ namespace Mesen.GUI.Debugger.Controls
 			this.tlpMain.Size = new System.Drawing.Size(682, 527);
 			this.tlpMain.TabIndex = 3;
 			// 
+			// tableLayoutPanel2
+			// 
+			this.tableLayoutPanel2.ColumnCount = 1;
+			this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+			this.tableLayoutPanel2.Controls.Add(this.grpSpriteInfo, 0, 1);
+			this.tableLayoutPanel2.Controls.Add(this.tableLayoutPanel3, 0, 0);
+			this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.tableLayoutPanel2.Location = new System.Drawing.Point(266, 0);
+			this.tableLayoutPanel2.Margin = new System.Windows.Forms.Padding(0);
+			this.tableLayoutPanel2.Name = "tableLayoutPanel2";
+			this.tableLayoutPanel2.RowCount = 2;
+			this.tlpMain.SetRowSpan(this.tableLayoutPanel2, 3);
+			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+			this.tableLayoutPanel2.Size = new System.Drawing.Size(416, 527);
+			this.tableLayoutPanel2.TabIndex = 28;
+			// 
 			// grpSpriteInfo
 			// 
 			this.grpSpriteInfo.Controls.Add(this.tlpInfo);
-			this.grpSpriteInfo.Dock = System.Windows.Forms.DockStyle.Top;
-			this.grpSpriteInfo.Location = new System.Drawing.Point(269, 3);
+			this.grpSpriteInfo.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.grpSpriteInfo.Location = new System.Drawing.Point(3, 28);
 			this.grpSpriteInfo.Name = "grpSpriteInfo";
-			this.tlpMain.SetRowSpan(this.grpSpriteInfo, 2);
-			this.grpSpriteInfo.Size = new System.Drawing.Size(410, 521);
+			this.grpSpriteInfo.Size = new System.Drawing.Size(410, 496);
 			this.grpSpriteInfo.TabIndex = 4;
 			this.grpSpriteInfo.TabStop = false;
 			this.grpSpriteInfo.Text = "Sprite Info";
@@ -111,24 +137,24 @@ namespace Mesen.GUI.Debugger.Controls
 			this.tlpInfo.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
 			this.tlpInfo.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
 			this.tlpInfo.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tlpInfo.Controls.Add(this.lblPalette, 0, 4);
 			this.tlpInfo.Controls.Add(this.txtSpriteIndex, 1, 0);
 			this.tlpInfo.Controls.Add(this.lblSpriteIndex, 0, 0);
 			this.tlpInfo.Controls.Add(this.picPreview, 1, 5);
 			this.tlpInfo.Controls.Add(this.lblScreenPreview, 0, 5);
 			this.tlpInfo.Controls.Add(this.lblTileIndex, 0, 1);
 			this.tlpInfo.Controls.Add(this.txtTileIndex, 1, 1);
-			this.tlpInfo.Controls.Add(this.lblPaletteAddr, 2, 0);
-			this.tlpInfo.Controls.Add(this.lblTileAddress, 2, 1);
-			this.tlpInfo.Controls.Add(this.txtPaletteAddress, 3, 0);
-			this.tlpInfo.Controls.Add(this.txtTileAddress, 3, 1);
-			this.tlpInfo.Controls.Add(this.tableLayoutPanel1, 2, 3);
-			this.tlpInfo.Controls.Add(this.ctrlTilePalette, 1, 4);
-			this.tlpInfo.Controls.Add(this.lblPosition, 2, 2);
-			this.tlpInfo.Controls.Add(this.txtPosition, 3, 2);
 			this.tlpInfo.Controls.Add(this.lblTile, 0, 2);
 			this.tlpInfo.Controls.Add(this.picTile, 1, 2);
 			this.tlpInfo.Controls.Add(this.chkDisplaySpriteOutlines, 0, 6);
+			this.tlpInfo.Controls.Add(this.tableLayoutPanel1, 2, 4);
+			this.tlpInfo.Controls.Add(this.lblPosition, 2, 3);
+			this.tlpInfo.Controls.Add(this.lblPalette, 2, 2);
+			this.tlpInfo.Controls.Add(this.txtPosition, 3, 3);
+			this.tlpInfo.Controls.Add(this.ctrlTilePalette, 3, 2);
+			this.tlpInfo.Controls.Add(this.lblTileAddress, 2, 0);
+			this.tlpInfo.Controls.Add(this.lblPaletteAddr, 2, 1);
+			this.tlpInfo.Controls.Add(this.txtTileAddress, 3, 0);
+			this.tlpInfo.Controls.Add(this.txtPaletteAddress, 3, 1);
 			this.tlpInfo.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tlpInfo.Location = new System.Drawing.Point(3, 16);
 			this.tlpInfo.Name = "tlpInfo";
@@ -140,19 +166,9 @@ namespace Mesen.GUI.Debugger.Controls
 			this.tlpInfo.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tlpInfo.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tlpInfo.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tlpInfo.Size = new System.Drawing.Size(404, 502);
+			this.tlpInfo.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+			this.tlpInfo.Size = new System.Drawing.Size(404, 477);
 			this.tlpInfo.TabIndex = 0;
-			// 
-			// lblPalette
-			// 
-			this.lblPalette.Anchor = System.Windows.Forms.AnchorStyles.Left;
-			this.lblPalette.AutoSize = true;
-			this.lblPalette.Location = new System.Drawing.Point(3, 204);
-			this.lblPalette.Margin = new System.Windows.Forms.Padding(3, 5, 3, 0);
-			this.lblPalette.Name = "lblPalette";
-			this.lblPalette.Size = new System.Drawing.Size(43, 13);
-			this.lblPalette.TabIndex = 26;
-			this.lblPalette.Text = "Palette:";
 			// 
 			// txtSpriteIndex
 			// 
@@ -180,7 +196,7 @@ namespace Mesen.GUI.Debugger.Controls
 			this.tlpInfo.SetColumnSpan(this.picPreview, 4);
 			this.picPreview.ContextMenuStrip = this.ctxMenu;
 			this.picPreview.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.Default;
-			this.picPreview.Location = new System.Drawing.Point(76, 232);
+			this.picPreview.Location = new System.Drawing.Point(76, 192);
 			this.picPreview.Margin = new System.Windows.Forms.Padding(4);
 			this.picPreview.Name = "picPreview";
 			this.picPreview.Size = new System.Drawing.Size(258, 242);
@@ -267,7 +283,7 @@ namespace Mesen.GUI.Debugger.Controls
 			// lblScreenPreview
 			// 
 			this.lblScreenPreview.AutoSize = true;
-			this.lblScreenPreview.Location = new System.Drawing.Point(3, 233);
+			this.lblScreenPreview.Location = new System.Drawing.Point(3, 193);
 			this.lblScreenPreview.Margin = new System.Windows.Forms.Padding(3, 5, 3, 0);
 			this.lblScreenPreview.Name = "lblScreenPreview";
 			this.lblScreenPreview.Size = new System.Drawing.Size(48, 13);
@@ -293,128 +309,6 @@ namespace Mesen.GUI.Debugger.Controls
 			this.txtTileIndex.Size = new System.Drawing.Size(26, 20);
 			this.txtTileIndex.TabIndex = 7;
 			// 
-			// lblPaletteAddr
-			// 
-			this.lblPaletteAddr.Anchor = System.Windows.Forms.AnchorStyles.Left;
-			this.lblPaletteAddr.AutoSize = true;
-			this.lblPaletteAddr.Location = new System.Drawing.Point(147, 6);
-			this.lblPaletteAddr.Name = "lblPaletteAddr";
-			this.lblPaletteAddr.Size = new System.Drawing.Size(84, 13);
-			this.lblPaletteAddr.TabIndex = 15;
-			this.lblPaletteAddr.Text = "Palette Address:";
-			// 
-			// lblTileAddress
-			// 
-			this.lblTileAddress.Anchor = System.Windows.Forms.AnchorStyles.Left;
-			this.lblTileAddress.AutoSize = true;
-			this.lblTileAddress.Location = new System.Drawing.Point(147, 32);
-			this.lblTileAddress.Name = "lblTileAddress";
-			this.lblTileAddress.Size = new System.Drawing.Size(68, 13);
-			this.lblTileAddress.TabIndex = 1;
-			this.lblTileAddress.Text = "Tile Address:";
-			// 
-			// txtPaletteAddress
-			// 
-			this.txtPaletteAddress.BackColor = System.Drawing.SystemColors.Window;
-			this.txtPaletteAddress.Location = new System.Drawing.Point(237, 3);
-			this.txtPaletteAddress.Name = "txtPaletteAddress";
-			this.txtPaletteAddress.ReadOnly = true;
-			this.txtPaletteAddress.Size = new System.Drawing.Size(42, 20);
-			this.txtPaletteAddress.TabIndex = 17;
-			// 
-			// txtTileAddress
-			// 
-			this.txtTileAddress.BackColor = System.Drawing.SystemColors.Window;
-			this.txtTileAddress.Location = new System.Drawing.Point(237, 29);
-			this.txtTileAddress.Name = "txtTileAddress";
-			this.txtTileAddress.ReadOnly = true;
-			this.txtTileAddress.Size = new System.Drawing.Size(42, 20);
-			this.txtTileAddress.TabIndex = 8;
-			// 
-			// tableLayoutPanel1
-			// 
-			this.tableLayoutPanel1.AutoSize = true;
-			this.tableLayoutPanel1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-			this.tableLayoutPanel1.ColumnCount = 1;
-			this.tlpInfo.SetColumnSpan(this.tableLayoutPanel1, 2);
-			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel1.Controls.Add(this.chkHorizontalMirroring, 0, 0);
-			this.tableLayoutPanel1.Controls.Add(this.chkVerticalMirroring, 0, 1);
-			this.tableLayoutPanel1.Controls.Add(this.chkBackgroundPriority, 0, 2);
-			this.tableLayoutPanel1.Location = new System.Drawing.Point(144, 78);
-			this.tableLayoutPanel1.Margin = new System.Windows.Forms.Padding(0);
-			this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-			this.tableLayoutPanel1.Padding = new System.Windows.Forms.Padding(3);
-			this.tableLayoutPanel1.RowCount = 3;
-			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this.tableLayoutPanel1.Size = new System.Drawing.Size(130, 75);
-			this.tableLayoutPanel1.TabIndex = 24;
-			// 
-			// chkHorizontalMirroring
-			// 
-			this.chkHorizontalMirroring.AutoCheck = false;
-			this.chkHorizontalMirroring.AutoSize = true;
-			this.chkHorizontalMirroring.Location = new System.Drawing.Point(6, 6);
-			this.chkHorizontalMirroring.Name = "chkHorizontalMirroring";
-			this.chkHorizontalMirroring.Size = new System.Drawing.Size(89, 17);
-			this.chkHorizontalMirroring.TabIndex = 13;
-			this.chkHorizontalMirroring.Text = "Horizontal flip";
-			this.chkHorizontalMirroring.UseVisualStyleBackColor = true;
-			// 
-			// chkVerticalMirroring
-			// 
-			this.chkVerticalMirroring.AutoCheck = false;
-			this.chkVerticalMirroring.AutoSize = true;
-			this.chkVerticalMirroring.Location = new System.Drawing.Point(6, 29);
-			this.chkVerticalMirroring.Name = "chkVerticalMirroring";
-			this.chkVerticalMirroring.Size = new System.Drawing.Size(77, 17);
-			this.chkVerticalMirroring.TabIndex = 14;
-			this.chkVerticalMirroring.Text = "Vertical flip";
-			this.chkVerticalMirroring.UseVisualStyleBackColor = true;
-			// 
-			// chkBackgroundPriority
-			// 
-			this.chkBackgroundPriority.AutoCheck = false;
-			this.chkBackgroundPriority.AutoSize = true;
-			this.chkBackgroundPriority.Location = new System.Drawing.Point(6, 52);
-			this.chkBackgroundPriority.Name = "chkBackgroundPriority";
-			this.chkBackgroundPriority.Size = new System.Drawing.Size(118, 17);
-			this.chkBackgroundPriority.TabIndex = 19;
-			this.chkBackgroundPriority.Text = "Background Priority";
-			this.chkBackgroundPriority.UseVisualStyleBackColor = true;
-			// 
-			// ctrlTilePalette
-			// 
-			this.ctrlTilePalette.Anchor = System.Windows.Forms.AnchorStyles.Left;
-			this.tlpInfo.SetColumnSpan(this.ctrlTilePalette, 2);
-			this.ctrlTilePalette.DisplayIndexes = false;
-			this.ctrlTilePalette.HighlightMouseOver = false;
-			this.ctrlTilePalette.Location = new System.Drawing.Point(75, 191);
-			this.ctrlTilePalette.Name = "ctrlTilePalette";
-			this.ctrlTilePalette.Size = new System.Drawing.Size(130, 34);
-			this.ctrlTilePalette.TabIndex = 25;
-			// 
-			// lblPosition
-			// 
-			this.lblPosition.Anchor = System.Windows.Forms.AnchorStyles.Left;
-			this.lblPosition.AutoSize = true;
-			this.lblPosition.Location = new System.Drawing.Point(147, 58);
-			this.lblPosition.Name = "lblPosition";
-			this.lblPosition.Size = new System.Drawing.Size(73, 13);
-			this.lblPosition.TabIndex = 16;
-			this.lblPosition.Text = "Position (X,Y):";
-			// 
-			// txtPosition
-			// 
-			this.txtPosition.BackColor = System.Drawing.SystemColors.Window;
-			this.txtPosition.Location = new System.Drawing.Point(237, 55);
-			this.txtPosition.Name = "txtPosition";
-			this.txtPosition.ReadOnly = true;
-			this.txtPosition.Size = new System.Drawing.Size(66, 20);
-			this.txtPosition.TabIndex = 18;
-			// 
 			// lblTile
 			// 
 			this.lblTile.AutoSize = true;
@@ -431,7 +325,7 @@ namespace Mesen.GUI.Debugger.Controls
 			this.picTile.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.picTile.Location = new System.Drawing.Point(75, 55);
 			this.picTile.Name = "picTile";
-			this.tlpInfo.SetRowSpan(this.picTile, 2);
+			this.tlpInfo.SetRowSpan(this.picTile, 3);
 			this.picTile.Size = new System.Drawing.Size(66, 130);
 			this.picTile.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
 			this.picTile.TabIndex = 12;
@@ -441,13 +335,216 @@ namespace Mesen.GUI.Debugger.Controls
 			// 
 			this.chkDisplaySpriteOutlines.AutoSize = true;
 			this.tlpInfo.SetColumnSpan(this.chkDisplaySpriteOutlines, 4);
-			this.chkDisplaySpriteOutlines.Location = new System.Drawing.Point(3, 481);
+			this.chkDisplaySpriteOutlines.Location = new System.Drawing.Point(3, 441);
 			this.chkDisplaySpriteOutlines.Name = "chkDisplaySpriteOutlines";
 			this.chkDisplaySpriteOutlines.Size = new System.Drawing.Size(227, 17);
 			this.chkDisplaySpriteOutlines.TabIndex = 27;
 			this.chkDisplaySpriteOutlines.Text = "Display outline around all sprites in preview";
 			this.chkDisplaySpriteOutlines.UseVisualStyleBackColor = true;
 			this.chkDisplaySpriteOutlines.Click += new System.EventHandler(this.chkDisplaySpriteOutlines_Click);
+			// 
+			// tableLayoutPanel1
+			// 
+			this.tableLayoutPanel1.AutoSize = true;
+			this.tableLayoutPanel1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+			this.tableLayoutPanel1.ColumnCount = 1;
+			this.tlpInfo.SetColumnSpan(this.tableLayoutPanel1, 2);
+			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+			this.tableLayoutPanel1.Controls.Add(this.chkHorizontalMirroring, 0, 0);
+			this.tableLayoutPanel1.Controls.Add(this.chkVerticalMirroring, 0, 1);
+			this.tableLayoutPanel1.Controls.Add(this.chkBackgroundPriority, 0, 2);
+			this.tableLayoutPanel1.Location = new System.Drawing.Point(144, 118);
+			this.tableLayoutPanel1.Margin = new System.Windows.Forms.Padding(0);
+			this.tableLayoutPanel1.Name = "tableLayoutPanel1";
+			this.tableLayoutPanel1.Padding = new System.Windows.Forms.Padding(3);
+			this.tableLayoutPanel1.RowCount = 3;
+			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this.tableLayoutPanel1.Size = new System.Drawing.Size(130, 57);
+			this.tableLayoutPanel1.TabIndex = 24;
+			// 
+			// chkHorizontalMirroring
+			// 
+			this.chkHorizontalMirroring.AutoCheck = false;
+			this.chkHorizontalMirroring.AutoSize = true;
+			this.chkHorizontalMirroring.Location = new System.Drawing.Point(6, 3);
+			this.chkHorizontalMirroring.Margin = new System.Windows.Forms.Padding(3, 0, 3, 0);
+			this.chkHorizontalMirroring.Name = "chkHorizontalMirroring";
+			this.chkHorizontalMirroring.Size = new System.Drawing.Size(89, 17);
+			this.chkHorizontalMirroring.TabIndex = 13;
+			this.chkHorizontalMirroring.Text = "Horizontal flip";
+			this.chkHorizontalMirroring.UseVisualStyleBackColor = true;
+			// 
+			// chkVerticalMirroring
+			// 
+			this.chkVerticalMirroring.AutoCheck = false;
+			this.chkVerticalMirroring.AutoSize = true;
+			this.chkVerticalMirroring.Location = new System.Drawing.Point(6, 20);
+			this.chkVerticalMirroring.Margin = new System.Windows.Forms.Padding(3, 0, 3, 0);
+			this.chkVerticalMirroring.Name = "chkVerticalMirroring";
+			this.chkVerticalMirroring.Size = new System.Drawing.Size(77, 17);
+			this.chkVerticalMirroring.TabIndex = 14;
+			this.chkVerticalMirroring.Text = "Vertical flip";
+			this.chkVerticalMirroring.UseVisualStyleBackColor = true;
+			// 
+			// chkBackgroundPriority
+			// 
+			this.chkBackgroundPriority.AutoCheck = false;
+			this.chkBackgroundPriority.AutoSize = true;
+			this.chkBackgroundPriority.Location = new System.Drawing.Point(6, 37);
+			this.chkBackgroundPriority.Margin = new System.Windows.Forms.Padding(3, 0, 3, 0);
+			this.chkBackgroundPriority.Name = "chkBackgroundPriority";
+			this.chkBackgroundPriority.Size = new System.Drawing.Size(118, 17);
+			this.chkBackgroundPriority.TabIndex = 19;
+			this.chkBackgroundPriority.Text = "Background Priority";
+			this.chkBackgroundPriority.UseVisualStyleBackColor = true;
+			// 
+			// lblPosition
+			// 
+			this.lblPosition.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.lblPosition.AutoSize = true;
+			this.lblPosition.Location = new System.Drawing.Point(147, 98);
+			this.lblPosition.Name = "lblPosition";
+			this.lblPosition.Size = new System.Drawing.Size(73, 13);
+			this.lblPosition.TabIndex = 16;
+			this.lblPosition.Text = "Position (X,Y):";
+			// 
+			// lblPalette
+			// 
+			this.lblPalette.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.lblPalette.AutoSize = true;
+			this.lblPalette.Location = new System.Drawing.Point(147, 68);
+			this.lblPalette.Margin = new System.Windows.Forms.Padding(3, 5, 3, 0);
+			this.lblPalette.Name = "lblPalette";
+			this.lblPalette.Size = new System.Drawing.Size(43, 13);
+			this.lblPalette.TabIndex = 26;
+			this.lblPalette.Text = "Palette:";
+			// 
+			// txtPosition
+			// 
+			this.txtPosition.BackColor = System.Drawing.SystemColors.Window;
+			this.txtPosition.Location = new System.Drawing.Point(237, 95);
+			this.txtPosition.Name = "txtPosition";
+			this.txtPosition.ReadOnly = true;
+			this.txtPosition.Size = new System.Drawing.Size(66, 20);
+			this.txtPosition.TabIndex = 18;
+			// 
+			// ctrlTilePalette
+			// 
+			this.ctrlTilePalette.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.tlpInfo.SetColumnSpan(this.ctrlTilePalette, 2);
+			this.ctrlTilePalette.DisplayIndexes = false;
+			this.ctrlTilePalette.HighlightMouseOver = false;
+			this.ctrlTilePalette.Location = new System.Drawing.Point(237, 55);
+			this.ctrlTilePalette.Name = "ctrlTilePalette";
+			this.ctrlTilePalette.Size = new System.Drawing.Size(130, 34);
+			this.ctrlTilePalette.TabIndex = 25;
+			// 
+			// lblTileAddress
+			// 
+			this.lblTileAddress.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.lblTileAddress.AutoSize = true;
+			this.lblTileAddress.Location = new System.Drawing.Point(147, 6);
+			this.lblTileAddress.Name = "lblTileAddress";
+			this.lblTileAddress.Size = new System.Drawing.Size(68, 13);
+			this.lblTileAddress.TabIndex = 1;
+			this.lblTileAddress.Text = "Tile Address:";
+			// 
+			// lblPaletteAddr
+			// 
+			this.lblPaletteAddr.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.lblPaletteAddr.AutoSize = true;
+			this.lblPaletteAddr.Location = new System.Drawing.Point(147, 32);
+			this.lblPaletteAddr.Name = "lblPaletteAddr";
+			this.lblPaletteAddr.Size = new System.Drawing.Size(84, 13);
+			this.lblPaletteAddr.TabIndex = 15;
+			this.lblPaletteAddr.Text = "Palette Address:";
+			// 
+			// txtTileAddress
+			// 
+			this.txtTileAddress.BackColor = System.Drawing.SystemColors.Window;
+			this.txtTileAddress.Location = new System.Drawing.Point(237, 3);
+			this.txtTileAddress.Name = "txtTileAddress";
+			this.txtTileAddress.ReadOnly = true;
+			this.txtTileAddress.Size = new System.Drawing.Size(42, 20);
+			this.txtTileAddress.TabIndex = 8;
+			// 
+			// txtPaletteAddress
+			// 
+			this.txtPaletteAddress.BackColor = System.Drawing.SystemColors.Window;
+			this.txtPaletteAddress.Location = new System.Drawing.Point(237, 29);
+			this.txtPaletteAddress.Name = "txtPaletteAddress";
+			this.txtPaletteAddress.ReadOnly = true;
+			this.txtPaletteAddress.Size = new System.Drawing.Size(42, 20);
+			this.txtPaletteAddress.TabIndex = 17;
+			// 
+			// tableLayoutPanel3
+			// 
+			this.tableLayoutPanel3.ColumnCount = 5;
+			this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+			this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+			this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+			this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+			this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+			this.tableLayoutPanel3.Controls.Add(this.radCpuPage, 2, 0);
+			this.tableLayoutPanel3.Controls.Add(this.label1, 0, 0);
+			this.tableLayoutPanel3.Controls.Add(this.radSpriteRam, 1, 0);
+			this.tableLayoutPanel3.Controls.Add(this.nudCpuPage, 3, 0);
+			this.tableLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.tableLayoutPanel3.Location = new System.Drawing.Point(0, 0);
+			this.tableLayoutPanel3.Margin = new System.Windows.Forms.Padding(0);
+			this.tableLayoutPanel3.Name = "tableLayoutPanel3";
+			this.tableLayoutPanel3.RowCount = 1;
+			this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+			this.tableLayoutPanel3.Size = new System.Drawing.Size(416, 25);
+			this.tableLayoutPanel3.TabIndex = 5;
+			// 
+			// radCpuPage
+			// 
+			this.radCpuPage.AutoSize = true;
+			this.radCpuPage.Location = new System.Drawing.Point(164, 3);
+			this.radCpuPage.Name = "radCpuPage";
+			this.radCpuPage.Size = new System.Drawing.Size(85, 17);
+			this.radCpuPage.TabIndex = 2;
+			this.radCpuPage.Text = "CPU Page #";
+			this.radCpuPage.UseVisualStyleBackColor = true;
+			// 
+			// label1
+			// 
+			this.label1.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.label1.AutoSize = true;
+			this.label1.Location = new System.Drawing.Point(3, 6);
+			this.label1.Name = "label1";
+			this.label1.Size = new System.Drawing.Size(70, 13);
+			this.label1.TabIndex = 0;
+			this.label1.Text = "Data Source:";
+			// 
+			// radSpriteRam
+			// 
+			this.radSpriteRam.AutoSize = true;
+			this.radSpriteRam.Checked = true;
+			this.radSpriteRam.Location = new System.Drawing.Point(79, 3);
+			this.radSpriteRam.Name = "radSpriteRam";
+			this.radSpriteRam.Size = new System.Drawing.Size(79, 17);
+			this.radSpriteRam.TabIndex = 1;
+			this.radSpriteRam.TabStop = true;
+			this.radSpriteRam.Text = "Sprite RAM";
+			this.radSpriteRam.UseVisualStyleBackColor = true;
+			// 
+			// nudCpuPage
+			// 
+			this.nudCpuPage.Hexadecimal = true;
+			this.nudCpuPage.Location = new System.Drawing.Point(255, 3);
+			this.nudCpuPage.Maximum = new decimal(new int[] {
+            255,
+            0,
+            0,
+            0});
+			this.nudCpuPage.Name = "nudCpuPage";
+			this.nudCpuPage.Size = new System.Drawing.Size(42, 20);
+			this.nudCpuPage.TabIndex = 3;
+			this.nudCpuPage.Click += new System.EventHandler(this.nudCpuPage_Click);
 			// 
 			// picSprites
 			// 
@@ -475,14 +572,18 @@ namespace Mesen.GUI.Debugger.Controls
 			this.Name = "ctrlSpriteViewer";
 			this.Size = new System.Drawing.Size(682, 527);
 			this.tlpMain.ResumeLayout(false);
+			this.tableLayoutPanel2.ResumeLayout(false);
 			this.grpSpriteInfo.ResumeLayout(false);
 			this.tlpInfo.ResumeLayout(false);
 			this.tlpInfo.PerformLayout();
 			((System.ComponentModel.ISupportInitialize)(this.picPreview)).EndInit();
 			this.ctxMenu.ResumeLayout(false);
+			((System.ComponentModel.ISupportInitialize)(this.picTile)).EndInit();
 			this.tableLayoutPanel1.ResumeLayout(false);
 			this.tableLayoutPanel1.PerformLayout();
-			((System.ComponentModel.ISupportInitialize)(this.picTile)).EndInit();
+			this.tableLayoutPanel3.ResumeLayout(false);
+			this.tableLayoutPanel3.PerformLayout();
+			((System.ComponentModel.ISupportInitialize)(this.nudCpuPage)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.picSprites)).EndInit();
 			this.ResumeLayout(false);
 
@@ -524,5 +625,11 @@ namespace Mesen.GUI.Debugger.Controls
 		private System.Windows.Forms.ToolStripMenuItem mnuExportToPng;
 		private System.Windows.Forms.ToolStripMenuItem mnuEditInMemoryViewer;
 		private System.Windows.Forms.CheckBox chkDisplaySpriteOutlines;
-	}
+	  private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
+	  private System.Windows.Forms.TableLayoutPanel tableLayoutPanel3;
+	  private System.Windows.Forms.RadioButton radCpuPage;
+	  private System.Windows.Forms.Label label1;
+	  private System.Windows.Forms.RadioButton radSpriteRam;
+	  private System.Windows.Forms.NumericUpDown nudCpuPage;
+   }
 }

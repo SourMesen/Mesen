@@ -478,14 +478,14 @@ namespace Mesen.GUI
 			return frameData;
 		}
 
-		[DllImport(DLLPath, EntryPoint = "DebugGetSprites")] private static extern void DebugGetSpritesWrapper(IntPtr frameBuffer);
-		public static byte[] DebugGetSprites()
+		[DllImport(DLLPath, EntryPoint = "DebugGetSprites")] private static extern void DebugGetSpritesWrapper(IntPtr frameBuffer, Int16 sourcePage);
+		public static byte[] DebugGetSprites(Int16 sourcePage = -1)
 		{
 			byte[] frameData = new byte[64*128*4];
 
 			GCHandle hFrameData = GCHandle.Alloc(frameData, GCHandleType.Pinned);
 			try {
-				InteropEmu.DebugGetSpritesWrapper(hFrameData.AddrOfPinnedObject());
+				InteropEmu.DebugGetSpritesWrapper(hFrameData.AddrOfPinnedObject(), sourcePage);
 			} finally {
 				hFrameData.Free();
 			}

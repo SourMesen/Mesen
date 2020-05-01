@@ -104,8 +104,18 @@ namespace Mesen.GUI.Debugger.Controls
 			_largeSprites = state.PPU.ControlFlags.LargeSprites != 0;
 			_spritePatternAddr = state.PPU.ControlFlags.SpritePatternAddr;
 
-			_spriteRam = InteropEmu.DebugGetMemoryState(DebugMemoryType.SpriteMemory);
-			_spritePixelData = InteropEmu.DebugGetSprites();
+			Int16 sourcePage = (Int16)(radSpriteRam.Checked ? -1 : nudCpuPage.Value);
+
+			if(sourcePage == -1) {
+				_spriteRam = InteropEmu.DebugGetMemoryState(DebugMemoryType.SpriteMemory);
+			} else {
+				byte[] cpuMemory = InteropEmu.DebugGetMemoryState(DebugMemoryType.CpuMemory);
+				byte[] spriteRam = new byte[256];
+				Array.Copy(cpuMemory, sourcePage << 8, spriteRam, 0, 256);
+				_spriteRam = spriteRam;
+			}
+
+			_spritePixelData = InteropEmu.DebugGetSprites(sourcePage);
 
 			_hdCopyHelper.RefreshData();
 		}
@@ -571,6 +581,11 @@ namespace Mesen.GUI.Debugger.Controls
 			ConfigManager.Config.DebugInfo.SpriteViewerDisplaySpriteOutlines = chkDisplaySpriteOutlines.Checked;
 			ConfigManager.ApplyChanges();
 			RefreshViewer();
+		}
+
+		private void nudCpuPage_Click(object sender, EventArgs e)
+		{
+			radCpuPage.Checked = true;
 		}
 
 		private class SpriteInfo

@@ -528,11 +528,19 @@ void MemoryDumper::GetChrBank(int bankIndex, uint32_t* frameBuffer, uint8_t pale
 	}
 }
 
-void MemoryDumper::GetSprites(uint32_t* frameBuffer)
+void MemoryDumper::GetSprites(uint32_t* frameBuffer, int16_t sourcePage)
 {
 	memset(frameBuffer, 0, 64*128*sizeof(uint32_t));
 
-	uint8_t *spriteRam = _ppu->GetSpriteRam();
+	uint8_t src[256];
+	if(sourcePage < 0) {
+		memcpy(src, _ppu->GetSpriteRam(), 256);
+	} else {
+		for(int i = (sourcePage << 8); i < (sourcePage+1) << 8; i++) {
+			src[i & 0xFF] = _memoryManager->DebugRead(i);
+		}
+	}
+
 	uint32_t *rgbPalette = _debugger->GetConsole()->GetSettings()->GetRgbPalette();
 
 	PPUDebugState state;
@@ -544,8 +552,8 @@ void MemoryDumper::GetSprites(uint32_t* frameBuffer)
 	for(uint8_t y = 0; y < 8; y++) {
 		for(uint8_t x = 0; x < 8; x++) {
 			uint8_t ramAddr = ((y << 3) + x) << 2;
-			uint8_t tileIndex = spriteRam[ramAddr + 1];
-			uint8_t attributes = spriteRam[ramAddr + 2];
+			uint8_t tileIndex = src[ramAddr + 1];
+			uint8_t attributes = src[ramAddr + 2];
 
 			bool verticalMirror = (attributes & 0x80) == 0x80;
 			bool horizontalMirror = (attributes & 0x40) == 0x40;
