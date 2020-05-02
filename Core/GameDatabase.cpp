@@ -269,6 +269,8 @@ void GameDatabase::SetGameInfo(uint32_t romCrc, RomData &romData, bool updateRom
 				case 'h': msg += "Horizontal"; break;
 				case 'v': msg += "Vertical"; break;
 				case '4': msg += "4 Screens"; break;
+				case '0': msg += "Screen A only"; break;
+				case '1': msg += "Screen B only"; break;
 			}
 			MessageManager::Log(msg);
 		}
@@ -335,6 +337,8 @@ void GameDatabase::UpdateRomData(GameInfo &info, RomData &romData)
 			case 'h': romData.Info.Mirroring = MirroringType::Horizontal; break;
 			case 'v': romData.Info.Mirroring = MirroringType::Vertical; break;
 			case '4': romData.Info.Mirroring = MirroringType::FourScreens; break;
+			case '0': romData.Info.Mirroring = MirroringType::ScreenAOnly; break;
+			case '1': romData.Info.Mirroring = MirroringType::ScreenBOnly; break;
 		}
 	}
 }
