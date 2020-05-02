@@ -127,6 +127,6 @@ void iNesLoader::LoadRom(RomData& romData, vector<uint8_t>& romFile, NESHeader *
 	}
 
 	if(!_checkOnly) {
-		GameDatabase::SetGameInfo(romData.Info.Hash.PrgChrCrc32, romData, GameDatabase::IsEnabled() && header.GetRomHeaderVersion() != RomHeaderVersion::Nes2_0, preloadedHeader != nullptr);
+		GameDatabase::SetGameInfo(romData.Info.Hash.PrgChrCrc32, romData, GameDatabase::IsEnabled(), preloadedHeader != nullptr);
 	}
 }
