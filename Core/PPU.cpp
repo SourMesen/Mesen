@@ -1065,7 +1065,10 @@ void PPU::ProcessSpriteEvaluation()
 								_sprite0Added = true;
 							}
 
-							if(_spriteAddrL == 4) {
+							//Note: Using "(_secondaryOAMAddr & 0x03) == 0" instead of "_spriteAddrL == 0" is required
+							//to replicate a hardware bug noticed in oam_flicker_test_reenable when disabling & re-enabling
+							//rendering on a single scanline
+							if((_secondaryOAMAddr & 0x03) == 0) {
 								//Done copying all 4 bytes
 								_spriteInRange = false;
 								_spriteAddrL = 0;
@@ -1373,6 +1376,12 @@ void PPU::UpdateState()
 			//     if rendering is disabled on an odd cycle, the increment will wait until the next odd cycle (at which point it will be incremented by 1)
 			//In practice, there is no way to see the difference, so we just increment by 1 at the end of the next cycle after rendering was disabled
 			_state.SpriteRamAddr++;
+
+			//Also corrupt H/L to replicate a bug found in oam_flicker_test_reenable when rendering is disabled around scanlines 128-136
+			//Reenabling the causes the OAM evaluation to restart misaligned, and ends up generating a single sprite that's offset by 1
+			//such that it's Y=tile index, index = attributes, attributes = x, and X = the next sprite's Y value
+			_spriteAddrH = (_state.SpriteRamAddr >> 2) & 0x3F;
+			_spriteAddrL = _state.SpriteRamAddr & 0x03;
 		}
 	}
 
