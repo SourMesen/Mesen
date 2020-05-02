@@ -283,7 +283,7 @@ bool Console::Initialize(VirtualFile &romFile, VirtualFile &patchFile, bool forP
 		if(mapper) {
 			bool isDifferentGame = _romFilepath != (string)romFile || _patchFilename != (string)patchFile;
 			if(_mapper) {
-				if(isDifferentGame) {
+				if(isDifferentGame && _ppu->GetFrameCount() > 1) {
 					//Save current game state before loading another one
 					_saveStateManager->SaveRecentGame(GetRomInfo().RomName, _romFilepath, _patchFilename);
 				}

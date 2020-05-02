@@ -255,6 +255,10 @@ void VideoDecoder::TakeScreenshot()
 
 void VideoDecoder::TakeScreenshot(std::stringstream &stream, bool rawScreenshot)
 {
+	if(!_ppuOutputBuffer) {
+		return;
+	}
+
 	if(rawScreenshot) {
 		//Take screenshot without NTSC filter on
 		DefaultVideoFilter filter(_console);
