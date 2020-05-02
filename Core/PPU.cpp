@@ -549,11 +549,6 @@ void PPU::SetMaskRegister(uint8_t value)
 
 	if(_renderingEnabled != (_flags.BackgroundEnabled | _flags.SpritesEnabled)) {
 		_needStateUpdate = true;
-
-		if(_renderingEnabled && _scanline < 240) {
-			//Rendering was just disabled by the write
-			SetOamCorruptionFlags();
-		}
 	}
 
 	UpdateMinimumDrawCycles();
@@ -1247,14 +1242,14 @@ void PPU::SetOamCorruptionFlags()
 	//This usually causes the first "row" of OAM (the first 8 bytes) to get copied over another, causing some sprites to be missing
 	//and causing an extra set of the first 2 sprites to appear on the screen (not possible to see them except via any overflow they may cause)
 
-	if(_cycle >= 1 && _cycle < 65) {
+	if(_cycle >= 0 && _cycle < 64) {
 		//Every 2 dots causes the corruption to shift down 1 OAM row (8 bytes)
-		_corruptOamRow[(_cycle - 1) >> 1] = true;
-	} else if(_cycle >= 257 && _cycle < 321) {
+		_corruptOamRow[_cycle >> 1] = true;
+	} else if(_cycle >= 256 && _cycle < 320) {
 		//This section is in 8-dot segments.
 		//The first 3 dot increment the corrupted row by 1, and then the last 5 dots corrupt the next row for 5 dots.
-		uint8_t base = (_cycle - 257) >> 3;
-		uint8_t offset = std::min<uint8_t>(3, (_cycle - 257) & 0x07);
+		uint8_t base = (_cycle - 256) >> 3;
+		uint8_t offset = std::min<uint8_t>(3, (_cycle - 256) & 0x07);
 		_corruptOamRow[base * 4 + offset] = true;
 	}
 }
@@ -1352,38 +1347,43 @@ void PPU::UpdateState()
 	_needStateUpdate = false;
 
 	//Rendering enabled flag is apparently set with a 1 cycle delay (i.e setting it at cycle 5 will render cycle 6 like cycle 5 and then take the new settings for cycle 7)
-	_prevRenderingEnabled = _renderingEnabled;
-	if(_renderingEnabled != (_flags.BackgroundEnabled | _flags.SpritesEnabled)) {
-		_renderingEnabled = _flags.BackgroundEnabled | _flags.SpritesEnabled;
-		if(_renderingEnabled) {
-			ProcessOamCorruption();
+	if(_prevRenderingEnabled != _renderingEnabled) {
+		_prevRenderingEnabled = _renderingEnabled;
+		if(_scanline < 240) {
+			if(_prevRenderingEnabled) {
+				//Rendering was just enabled, perform oam corruption if any is pending
+				ProcessOamCorruption();
+			} else if(!_prevRenderingEnabled) {
+				//Rendering was just disabled by a write to $2001, check for oam row corruption glitch
+				SetOamCorruptionFlags();
+
+				//When rendering is disabled midscreen, set the vram bus back to the value of 'v'
+				SetBusAddress(_state.VideoRamAddr & 0x3FFF);
+
+				if(_cycle >= 65 && _cycle <= 256) {
+					//Disabling rendering during OAM evaluation will trigger a glitch causing the current address to be incremented by 1
+					//The increment can be "delayed" by 1 PPU cycle depending on whether or not rendering is disabled on an even/odd cycle
+					//e.g, if rendering is disabled on an even cycle, the following PPU cycle will increment the address by 5 (instead of 4)
+					//     if rendering is disabled on an odd cycle, the increment will wait until the next odd cycle (at which point it will be incremented by 1)
+					//In practice, there is no way to see the difference, so we just increment by 1 at the end of the next cycle after rendering was disabled
+					_state.SpriteRamAddr++;
+
+					//Also corrupt H/L to replicate a bug found in oam_flicker_test_reenable when rendering is disabled around scanlines 128-136
+					//Reenabling the causes the OAM evaluation to restart misaligned, and ends up generating a single sprite that's offset by 1
+					//such that it's Y=tile index, index = attributes, attributes = x, and X = the next sprite's Y value
+					_spriteAddrH = (_state.SpriteRamAddr >> 2) & 0x3F;
+					_spriteAddrL = _state.SpriteRamAddr & 0x03;
+				}
+			}
 		}
 	}
-	if(_prevRenderingEnabled != _renderingEnabled) {
+
+	if(_renderingEnabled != (_flags.BackgroundEnabled | _flags.SpritesEnabled)) {
+		_renderingEnabled = _flags.BackgroundEnabled | _flags.SpritesEnabled;
 		_needStateUpdate = true;
 	}
 
 	_console->DebugAddDebugEvent(DebugEventType::BgColorChange);
-
-	if(_prevRenderingEnabled && !_renderingEnabled && _scanline < 240) {
-		//When rendering is disabled midscreen, set the vram bus back to the value of 'v'
-		SetBusAddress(_state.VideoRamAddr & 0x3FFF);
-
-		if(_cycle >= 65 && _cycle <= 256) {
-			//Disabling rendering during OAM evaluation will trigger a glitch causing the current address to be incremented by 1
-			//The increment can be "delayed" by 1 PPU cycle depending on whether or not rendering is disabled on an even/odd cycle
-			//e.g, if rendering is disabled on an even cycle, the following PPU cycle will increment the address by 5 (instead of 4)
-			//     if rendering is disabled on an odd cycle, the increment will wait until the next odd cycle (at which point it will be incremented by 1)
-			//In practice, there is no way to see the difference, so we just increment by 1 at the end of the next cycle after rendering was disabled
-			_state.SpriteRamAddr++;
-
-			//Also corrupt H/L to replicate a bug found in oam_flicker_test_reenable when rendering is disabled around scanlines 128-136
-			//Reenabling the causes the OAM evaluation to restart misaligned, and ends up generating a single sprite that's offset by 1
-			//such that it's Y=tile index, index = attributes, attributes = x, and X = the next sprite's Y value
-			_spriteAddrH = (_state.SpriteRamAddr >> 2) & 0x3F;
-			_spriteAddrL = _state.SpriteRamAddr & 0x03;
-		}
-	}
 
 	if(_updateVramAddrDelay > 0) {
 		_updateVramAddrDelay--;
