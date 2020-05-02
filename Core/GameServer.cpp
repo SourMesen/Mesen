@@ -32,8 +32,11 @@ GameServer::~GameServer()
 
 	Stop();
 
-	_console->GetControlManager()->UnregisterInputRecorder(this);
-	_console->GetControlManager()->UnregisterInputProvider(this);
+	ControlManager* controlManager = _console->GetControlManager();
+	if(controlManager) {
+		controlManager->UnregisterInputRecorder(this);
+		controlManager->UnregisterInputProvider(this);
+	}
 }
 
 void GameServer::RegisterServerInput()

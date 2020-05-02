@@ -40,7 +40,10 @@ void GameClientConnection::Shutdown()
 		_shutdown = true;
 		DisableControllers();
 
-		_console->GetControlManager()->UnregisterInputProvider(this);
+		ControlManager* controlManager = _console->GetControlManager();
+		if(controlManager) {
+			controlManager->UnregisterInputProvider(this);
+		}
 		_console->GetNotificationManager()->SendNotification(ConsoleNotificationType::DisconnectedFromServer);
 		MessageManager::DisplayMessage("NetPlay", "ConnectionLost");
 		_console->GetSettings()->ClearFlags(EmulationFlags::ForceMaxSpeed);
