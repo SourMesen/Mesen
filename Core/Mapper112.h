@@ -43,10 +43,10 @@ protected:
 
 		SelectChrPage2x(0, _registers[2]);
 		SelectChrPage2x(1, _registers[3]);
-		SelectCHRPage(4, _registers[4]);
-		SelectCHRPage(5, _registers[5]);
-		SelectCHRPage(6, _registers[6]);
-		SelectCHRPage(7, _registers[7]);
+		SelectCHRPage(4, _registers[4] | ((_outerChrBank & 0x10) << 4));
+		SelectCHRPage(5, _registers[5] | ((_outerChrBank & 0x20) << 3));
+		SelectCHRPage(6, _registers[6] | ((_outerChrBank & 0x40) << 2));
+		SelectCHRPage(7, _registers[7] | ((_outerChrBank & 0x80) << 1));
 	}
 
 	void WriteRegister(uint16_t addr, uint8_t value) override
