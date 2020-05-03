@@ -372,6 +372,7 @@ namespace Mesen.GUI.Config
 		public int ScriptCodeWindowHeight = 0;
 		public List<string> RecentScripts = new List<string>();
 		public bool SaveScriptBeforeRun = true;
+		public bool AutoRestartScript = true;
 		public ScriptStartupBehavior ScriptStartupBehavior = ScriptStartupBehavior.ShowTutorial;
 		public bool AutoLoadLastScript = true;
 		public string ScriptFontFamily = BaseControl.MonospaceFontFamily;

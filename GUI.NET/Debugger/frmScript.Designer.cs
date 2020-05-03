@@ -80,6 +80,7 @@
 			this.statusStrip1 = new System.Windows.Forms.StatusStrip();
 			this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
 			this.lblScriptActive = new System.Windows.Forms.ToolStripStatusLabel();
+			this.mnuAutoRestart = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuMain.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.txtScriptContent)).BeginInit();
 			this.contextMenu.SuspendLayout();
@@ -263,6 +264,7 @@
             this.mnuSetScriptTimeout,
             this.toolStripMenuItem3,
             this.mnuSaveBeforeRun,
+            this.mnuAutoRestart,
             this.mnuAutoReload,
             this.onStartupToolStripMenuItem});
 			this.scriptToolStripMenuItem.Name = "scriptToolStripMenuItem";
@@ -401,6 +403,7 @@
 			this.txtScriptContent.Cursor = System.Windows.Forms.Cursors.IBeam;
 			this.txtScriptContent.DisabledColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
 			this.txtScriptContent.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.txtScriptContent.Font = new System.Drawing.Font("Courier New", 9.75F);
 			this.txtScriptContent.IsReplaceMode = false;
 			this.txtScriptContent.Language = FastColoredTextBoxNS.Language.Lua;
 			this.txtScriptContent.LeftBracket = '(';
@@ -426,13 +429,13 @@
             this.toolStripMenuItem5,
             this.mnuSelectAll});
 			this.contextMenu.Name = "contextMenu";
-			this.contextMenu.Size = new System.Drawing.Size(153, 120);
+			this.contextMenu.Size = new System.Drawing.Size(123, 98);
 			// 
 			// mnuCopy
 			// 
 			this.mnuCopy.Image = global::Mesen.GUI.Properties.Resources.Copy;
 			this.mnuCopy.Name = "mnuCopy";
-			this.mnuCopy.Size = new System.Drawing.Size(152, 22);
+			this.mnuCopy.Size = new System.Drawing.Size(122, 22);
 			this.mnuCopy.Text = "Copy";
 			this.mnuCopy.Click += new System.EventHandler(this.mnuCopy_Click);
 			// 
@@ -440,7 +443,7 @@
 			// 
 			this.mnuCut.Image = global::Mesen.GUI.Properties.Resources.Cut;
 			this.mnuCut.Name = "mnuCut";
-			this.mnuCut.Size = new System.Drawing.Size(152, 22);
+			this.mnuCut.Size = new System.Drawing.Size(122, 22);
 			this.mnuCut.Text = "Cut";
 			this.mnuCut.Click += new System.EventHandler(this.mnuCut_Click);
 			// 
@@ -448,20 +451,20 @@
 			// 
 			this.mnuPaste.Image = global::Mesen.GUI.Properties.Resources.Paste;
 			this.mnuPaste.Name = "mnuPaste";
-			this.mnuPaste.Size = new System.Drawing.Size(152, 22);
+			this.mnuPaste.Size = new System.Drawing.Size(122, 22);
 			this.mnuPaste.Text = "Paste";
 			this.mnuPaste.Click += new System.EventHandler(this.mnuPaste_Click);
 			// 
 			// toolStripMenuItem5
 			// 
 			this.toolStripMenuItem5.Name = "toolStripMenuItem5";
-			this.toolStripMenuItem5.Size = new System.Drawing.Size(149, 6);
+			this.toolStripMenuItem5.Size = new System.Drawing.Size(119, 6);
 			// 
 			// mnuSelectAll
 			// 
 			this.mnuSelectAll.Image = global::Mesen.GUI.Properties.Resources.SelectAll;
 			this.mnuSelectAll.Name = "mnuSelectAll";
-			this.mnuSelectAll.Size = new System.Drawing.Size(152, 22);
+			this.mnuSelectAll.Size = new System.Drawing.Size(122, 22);
 			this.mnuSelectAll.Text = "Select All";
 			this.mnuSelectAll.Click += new System.EventHandler(this.mnuSelectAll_Click);
 			// 
@@ -531,6 +534,13 @@
 			this.lblScriptActive.Size = new System.Drawing.Size(109, 17);
 			this.lblScriptActive.Text = "Script is running";
 			this.lblScriptActive.Visible = false;
+			// 
+			// mnuAutoRestart
+			// 
+			this.mnuAutoRestart.CheckOnClick = true;
+			this.mnuAutoRestart.Name = "mnuAutoRestart";
+			this.mnuAutoRestart.Size = new System.Drawing.Size(258, 22);
+			this.mnuAutoRestart.Text = "Auto-restart after reload";
 			// 
 			// frmScript
 			// 
@@ -611,5 +621,6 @@
 		private System.Windows.Forms.ToolStripMenuItem mnuApiReference;
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem7;
 		private System.Windows.Forms.ToolStripMenuItem mnuSetScriptTimeout;
-	}
+	  private System.Windows.Forms.ToolStripMenuItem mnuAutoRestart;
+   }
 }
