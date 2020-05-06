@@ -35,8 +35,6 @@ namespace Mesen.GUI.Debugger
 		{
 			base.OnLoad(e);
 
-			DebugWorkspaceManager.AutoLoadDbgFiles(true);
-
 			this._selectedTab = this.tabMain.SelectedTab;
 
 			DebugInfo config = ConfigManager.Config.DebugInfo;

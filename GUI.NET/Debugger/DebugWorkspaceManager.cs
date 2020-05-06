@@ -87,22 +87,18 @@ namespace Mesen.GUI.Debugger
 						//Load watch entries
 						WatchManager.WatchEntries = _workspace.WatchValues;
 
-						//Load breakpoints
-						BreakpointManager.SetBreakpoints(_workspace.Breakpoints);
-
 						//Setup labels
-						if(_workspace.Labels.Count == 0) {
-							LabelManager.ResetLabels();
-							if(!ConfigManager.Config.DebugInfo.DisableDefaultLabels) {
-								LabelManager.SetDefaultLabels(InteropEmu.GetRomInfo().MapperId);
-							}
-						} else {
-							LabelManager.ResetLabels();
-							LabelManager.SetLabels(_workspace.Labels, true);
+						if(_workspace.Labels.Count == 0 && !ConfigManager.Config.DebugInfo.DisableDefaultLabels) {
+							LabelManager.SetDefaultLabels(InteropEmu.GetRomInfo().MapperId);
 						}
 					}
 				}
 			}
+
+			//Send breakpoints & labels to emulation core (even if the same game is running)
+			BreakpointManager.SetBreakpoints(_workspace.Breakpoints);
+			LabelManager.RefreshLabels();
+
 			return _workspace;
 		}
 		

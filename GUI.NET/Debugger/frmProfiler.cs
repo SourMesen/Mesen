@@ -19,8 +19,6 @@ namespace Mesen.GUI.Debugger
 			InitializeComponent();
 
 			if(!DesignMode) {
-				DebugWorkspaceManager.AutoLoadDbgFiles(true);
-
 				ctrlProfiler.RefreshData();
 				ctrlProfiler.RefreshList();
 				tmrRefresh.Start();

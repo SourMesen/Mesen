@@ -691,6 +691,10 @@ namespace Mesen.GUI.Forms
 
 					this.StartEmuThread();
 					this.BeginInvoke((MethodInvoker)(() => {
+						if(DebugWindowManager.HasOpenedWindow) {
+							DebugWorkspaceManager.GetWorkspace();
+							DebugWorkspaceManager.AutoLoadDbgFiles(true);
+						}
 						ctrlRecentGames.Visible = false;
 						UpdateViewerSize();
 						ProcessPostLoadCommandSwitches();

@@ -262,9 +262,6 @@ namespace Mesen.GUI.Debugger
 				return;
 			}
 
-			//Make sure labels are up to date
-			DebugWorkspaceManager.GetWorkspace();
-
 			_refreshRunning = true;
 			SetOptions();
 			Task.Run(() => {

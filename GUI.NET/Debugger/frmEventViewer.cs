@@ -89,8 +89,6 @@ namespace Mesen.GUI.Debugger
 				_binder.AddBinding(nameof(DebugInfo.EventViewerShowPreviousFrameEvents), chkShowPreviousFrameEvents);
 				_binder.AddBinding(nameof(DebugInfo.EventViewerShowNtscBorders), chkShowNtscBorders);
 
-				DebugWorkspaceManager.GetWorkspace();
-
 				RestoreLocation(_config.EventViewerLocation, _config.EventViewerSize);
 
 				mnuAutoRefresh.Checked = _config.EventViewerAutoRefresh;

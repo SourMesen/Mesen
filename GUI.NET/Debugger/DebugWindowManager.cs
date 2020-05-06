@@ -45,6 +45,12 @@ namespace Mesen.GUI.Debugger
 					case DebugWindow.Profiler: frm = new frmProfiler(); frm.Icon = Properties.Resources.Speed; break;
 					case DebugWindow.WatchWindow: frm = new frmWatchWindow(); frm.Icon = Properties.Resources.Find; break;
 				}
+
+				if(_openedWindows.Count == 0) {
+					DebugWorkspaceManager.GetWorkspace();
+					DebugWorkspaceManager.AutoLoadDbgFiles(true);
+				}
+
 				_openedWindows.Add(frm);
 				frm.FormClosed += Debugger_FormClosed;
 				frm.Show();

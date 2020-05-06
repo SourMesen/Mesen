@@ -31,8 +31,6 @@ namespace Mesen.GUI.Debugger
 			base.OnLoad(e);
 
 			if(!DesignMode) {
-				DebugWorkspaceManager.GetWorkspace();
-				DebugWorkspaceManager.AutoLoadDbgFiles(true);
 				_notifListener = new InteropEmu.NotificationListener(ConfigManager.Config.DebugInfo.DebugConsoleId);
 				_notifListener.OnNotification += _notifListener_OnNotification;
 				ctrlWatch.UpdateWatch(true);

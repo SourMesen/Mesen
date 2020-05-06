@@ -71,7 +71,6 @@ namespace Mesen.GUI.Debugger
 
 			this.UpdateWorkspace();
 			this.AutoLoadCdlFiles();
-			DebugWorkspaceManager.AutoLoadDbgFiles(true);
 
 			if(!Program.IsMono) {
 				this.mnuSplitView.Checked = ConfigManager.Config.DebugInfo.SplitView;
