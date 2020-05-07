@@ -208,8 +208,8 @@ namespace Mesen.GUI.Debugger.Controls
 					0,
 					(byte)(cfg.EventViewerShowPpuRead2004 ? 1 : 0),
 					0,
-					(byte)(cfg.EventViewerShowPpuRead2007 ? 1 : 0),
-					0
+					0,
+					(byte)(cfg.EventViewerShowPpuRead2007 ? 1 : 0)
 				},
 				ShowMapperRegisterWrites = cfg.EventViewerShowMapperRegisterWrites,
 				ShowMapperRegisterReads = cfg.EventViewerShowMapperRegisterReads,
@@ -252,8 +252,8 @@ namespace Mesen.GUI.Debugger.Controls
 					0,
 					(uint)cfg.EventViewerPpuRegisterRead2004Color.Color.ToArgb(),
 					0,
-					(uint)cfg.EventViewerPpuRegisterRead2007Color.Color.ToArgb(),
-					0
+					0,
+					(uint)cfg.EventViewerPpuRegisterRead2007Color.Color.ToArgb()
 				},
 			};
 		}
