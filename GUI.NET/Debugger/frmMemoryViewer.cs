@@ -239,7 +239,7 @@ namespace Mesen.GUI.Debugger
 
 		private void InitTblMappings()
 		{
-			DebugWorkspace workspace = DebugWorkspaceManager.GetWorkspace();
+			DebugWorkspace workspace = DebugWorkspaceManager.GetWorkspace(false);
 			if(workspace.TblMappings != null && workspace.TblMappings.Count > 0) {
 				var tblDict = TblLoader.ToDictionary(workspace.TblMappings.ToArray());
 				if(tblDict != null) {
@@ -364,9 +364,10 @@ namespace Mesen.GUI.Debugger
 				return;
 			}
 
-			if(DebugWorkspaceManager.GetWorkspace() != this._previousWorkspace) {
+			DebugWorkspace workspace = DebugWorkspaceManager.GetWorkspace(false);
+			if(workspace != this._previousWorkspace) {
 				this.InitTblMappings();
-				_previousWorkspace = DebugWorkspaceManager.GetWorkspace();
+				_previousWorkspace = workspace;
 			}
 
 			if(this.tabMain.SelectedTab == this.tpgAccessCounters) {
