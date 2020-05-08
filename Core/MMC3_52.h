@@ -50,9 +50,13 @@ protected:
 	void WriteRegister(uint16_t addr, uint8_t value) override
 	{
 		if(addr < 0x8000) {
-			if(CanWriteToWorkRam() && (_extraReg & 0x80) == 0) {
-				_extraReg = value;
-				UpdateState();
+			if(CanWriteToWorkRam()) {
+				if((_extraReg & 0x80) == 0) {
+					_extraReg = value;
+					UpdateState();
+				} else {
+					BaseMapper::WritePrgRam(addr, value);
+				}
 			}
 		} else {
 			MMC3::WriteRegister(addr, value);
