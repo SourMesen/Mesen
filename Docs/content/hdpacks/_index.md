@@ -55,14 +55,14 @@ Before you start recording, select the options you want to use and the location 
 
 ## File Format (hires.txt) ##
 
-The following are the specifications for the hires.txt file, as of version "105".
+The following are the specifications for the hires.txt file, as of version "106".
 
 ### &lt;ver&gt; tag ###
 
 **Syntax**: `<ver>[integer]`  
-**Example**: `<ver>105`
+**Example**: `<ver>106`
 
-The format's version number (currently 105).
+The format's version number (currently 106).
 
 ### &lt;scale&gt; tag ###
 
@@ -191,10 +191,10 @@ When `default tile` is enabled (with `Y`), the tile is marked as the `default ti
 
 ### &lt;background&gt; tag ###
 
-**Syntax**: `<background>[name - text], [brightness level - float (default: 1.0)], [horizontal scroll ratio (optional) - float], [vertical scroll ratio (optional) - float], [showBehindBackgroundPrioritySprites (optional) - Y or N], [image left offset (optional) - int], [image top offset (optional) - int]`  
-**Example**: `<background>myBackground.png,1.0,0,0,N,0,0`
+**Syntax**: `<background>[name - text], [brightness level - float (default: 1.0)], [horizontal scroll ratio (optional) - float], [vertical scroll ratio (optional) - float], [priority level (optional) - int, 0 to 39 (default 10)], [image left offset (optional) - int], [image top offset (optional) - int]`  
+**Example**: `<background>myBackground.png,1.0,0,0,10,0,0`
 
-`<background>` tags meant to be used alongside conditions to add a background image under certain conditions (e.g on a specific screen, for example).
+`<background>` tags are meant to be used alongside conditions to add a background image under certain conditions (e.g on a specific screen, for example).
 
 The `Horizontal Scroll Ratio` and `Vertical Scroll Ratio` parameters are optional (their default value is `0.0`) and can be used to specify at what speed the background picture should scroll compared to the NES' scrolling.  
 This can be used to create simple parallax scrolling effects.
@@ -202,7 +202,20 @@ This can be used to create simple parallax scrolling effects.
 The `Image Left Offset` and `Image Top Offset` parameters are optional (their default value is `0`) and can be used to offset the position of the background image within the PNG file. e.g: Specifying 100 for the left offset will cause the background to be scrolled 100 pixels to the left by default.
 With conditions, this can be used to create scrolling effects that are based on something other than the PPU's current scroll offset.
 
-When the `Show Behind Background Priority Sprites` parameter is enabled (`Y`), the background priority sprites will be shown in front of the background image.
+The `Priority Level` parameter determines where the background is inserted compared to the NES' 3 "layers" (background sprites -> background tiles -> foreground sprites).  
+The screen is drawn in this order:
+
+* Priority 0 to 9 HD backgrounds (priority 0 is below priority 1, etc.)
+* Background-priority sprites
+* Priority 10 to 19 HD backgrounds
+* Background tiles
+* Priority 20 to 29 HD backgrounds
+* Foreground-priority sprites
+* Priority 30 to 39 HD backgrounds
+
+Note: Only a single background can be active per priority level.
+
+Backgrounds can use a PNG's alpha channel to allow the graphics below to show through them (this can be used to add a fog effect to the screen, etc.)
 
 ### &lt;options&gt; tag ###
 
@@ -211,7 +224,6 @@ When the `Show Behind Background Priority Sprites` parameter is enabled (`Y`), t
 
 **Available options**:  
 `disableSpriteLimit`: Forces the emulator to disable the sprite limit when the HD pack is loaded.  
-`disableContours`: Disables the outline effect that appears around sprites/tiles when using the `<background>` feature.  
 `disableOriginalTiles`: Normally, when a replacement for a tile is not found, the original tile is drawn. When this option is enabled, the original tiles are never drawn, only their HD replacements.
 
 ### &lt;bgm&gt; tag ###
@@ -308,6 +320,11 @@ Returns the current revision of the HD Audio API.  This value is currently set t
 These registers return the ASCII string `NEA` (NES Enhanced Audio) - this can be used to detect whether or not the audio API is available.
 
 ## File Format Changelog ##
+
+### Version 106 ###
+
+* Replaced `Show Behind Background Priority Sprites` flag for `<background>` tags by a 0 to 39 priority level value.
+* Removed contour feature for backgrounds, and removed `disableContours` option.
 
 ### Version 105 ###
 

@@ -371,9 +371,6 @@ void HdPackBuilder::SaveHdPack()
 		if(_hdData.OptionFlags & (int)HdPackOptions::AlternateRegisterRange) {
 			ss << "alternateRegisterRange,";
 		}
-		if(_hdData.OptionFlags & (int)HdPackOptions::NoContours) {
-			ss << "disableContours,";
-		}
 		if(_hdData.OptionFlags & (int)HdPackOptions::DisableCache) {
 			ss << "disableCache,";
 		}

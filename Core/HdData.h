@@ -313,7 +313,8 @@ struct HdBackgroundInfo
 	vector<HdPackCondition*> Conditions;
 	float HorizontalScrollRatio;
 	float VerticalScrollRatio;
-	bool BehindBgPrioritySprites;
+	uint8_t Priority;
+
 	uint32_t Left;
 	uint32_t Top;
 
@@ -377,7 +378,6 @@ enum class HdPackOptions
 	None = 0,
 	NoSpriteLimit = 1,
 	AlternateRegisterRange = 2,
-	NoContours = 4,
 	DisableCache = 8,
 	DontRenderOriginalTiles = 16
 };

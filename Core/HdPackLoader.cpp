@@ -392,8 +392,6 @@ void HdPackLoader::ProcessOptionTag(vector<string> &tokens)
 			_data->OptionFlags |= (int)HdPackOptions::NoSpriteLimit;
 		} else if(token == "alternateRegisterRange") {
 			_data->OptionFlags |= (int)HdPackOptions::AlternateRegisterRange;
-		} else if(token == "disableContours") {
-			_data->OptionFlags |= (int)HdPackOptions::NoContours;
 		} else if(token == "disableCache") {
 			_data->OptionFlags |= (int)HdPackOptions::DisableCache;
 		} else if(token == "disableOriginalTiles") {
@@ -577,7 +575,7 @@ void HdPackLoader::ProcessBackgroundTag(vector<string> &tokens, vector<HdPackCon
 		}
 		backgroundInfo.HorizontalScrollRatio = 0;
 		backgroundInfo.VerticalScrollRatio = 0;
-		backgroundInfo.BehindBgPrioritySprites = false;
+		backgroundInfo.Priority = 10;
 		backgroundInfo.Left = 0;
 		backgroundInfo.Top = 0;
 
@@ -605,7 +603,12 @@ void HdPackLoader::ProcessBackgroundTag(vector<string> &tokens, vector<HdPackCon
 			}
 			if(tokens.size() > 4) {
 				checkConstraint(_data->Version >= 102, "[HDPack] This feature requires version 102+ of HD Packs");
-				backgroundInfo.BehindBgPrioritySprites = tokens[4] == "Y";
+				if(_data->Version >= 106) {
+					backgroundInfo.Priority = std::stoi(tokens[4]);
+					checkConstraint(backgroundInfo.Priority >= 0 && backgroundInfo.Priority < 40, "[HDPack] Invalid background priority value");
+				} else {
+					backgroundInfo.Priority = tokens[4] == "Y" ? 0 : 10;
+				}
 			}
 			if(tokens.size() > 6) {
 				checkConstraint(_data->Version >= 105, "[HDPack] This feature requires version 105+ of HD Packs");
