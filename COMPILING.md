@@ -3,8 +3,12 @@
 #### *Standalone*
 
 1) Open the solution in Visual Studio 2019
-2) Compile as Release/x64 or Release/x86
-3) Run
+2) Set "GUI.NET" as the Startup Project
+3) Compile as Release/x64 or Release/x86
+4) Run Mesen.exe
+
+Note: When loading the the solution in Visual Studio make sure all the projects are loaded successfully.
+Note: If you get an error about the project targeted .NET Framework 4.5 chose to download the missing packages then install ".NET Framework 4.5 targeting pack" from the Visual Studio Installer.
 
 #### *Libretro*
 
