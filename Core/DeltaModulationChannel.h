@@ -26,7 +26,7 @@ private:
 	uint8_t _bitsRemaining = 0;
 	bool _silenceFlag = true;
 	bool _needToRun = false;
-	bool _needInit = false;
+	uint8_t _needInit = 0;
 
 	uint8_t _lastValue4011 = 0;
 

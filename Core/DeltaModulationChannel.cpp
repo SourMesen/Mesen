@@ -209,15 +209,24 @@ void DeltaModulationChannel::SetEnabled(bool enabled)
 		_needToRun = false;
 	} else if(_bytesRemaining == 0) {
 		InitSample();
-		_needInit = true;
+		
+		//Delay a number of cycles based on odd/even cycles
+		//Allows behavior to match dmc_dma_start_test
+		if((_console->GetCpu()->GetCycleCount() & 0x01) == 0) {
+			_needInit = 2;
+		} else {
+			_needInit = 3;
+		}
 	}
 }
 
 bool DeltaModulationChannel::NeedToRun()
 {
-	if(_needInit && (_console->GetCpu()->GetCycleCount() & 0x01) == 0) {
-		StartDmcTransfer();
-		_needInit = false;
+	if(_needInit > 0) {
+		_needInit--;
+		if(_needInit == 0) {
+			StartDmcTransfer();
+		}
 	}
 	return _needToRun;
 }
