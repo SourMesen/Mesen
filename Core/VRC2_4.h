@@ -32,7 +32,7 @@ class VRC2_4 : public BaseMapper
 		uint8_t _hiCHRRegs[8];
 		uint8_t _loCHRRegs[8];
 
-		bool _hasIRQ;
+		uint8_t _latch = 0;
 
 		void DetectVariant()
 		{
@@ -78,18 +78,21 @@ class VRC2_4 : public BaseMapper
 		}
 
 	protected:
-		virtual uint16_t GetPRGPageSize() override { return 0x2000; }
-		virtual uint16_t GetCHRPageSize() override {	return 0x0400; }
+		uint16_t GetPRGPageSize() override { return 0x2000; }
+		uint16_t GetCHRPageSize() override { return 0x0400; }
+		bool AllowRegisterRead() override { return true; }
 
 		void InitMapper() override 
 		{
 			_irq.reset(new VrcIrq(_console));
 			DetectVariant();
 
-			_prgMode = GetPowerOnByte() & 0x01;
+			//PRG mode only exists for VRC4+ (so keep it as 0 at all times for VRC2)
+			_prgMode = _variant >= VRCVariant::VRC4a ? (GetPowerOnByte() & 0x01) : 0;
+
 			_prgReg0 = GetPowerOnByte() & 0x1F;
 			_prgReg1 = GetPowerOnByte() & 0x1F;
-			_hasIRQ = false;
+			_latch = false;
 
 			for(int i = 0; i < 8; i++) {
 				_loCHRRegs[i] = GetPowerOnByte() & 0x0F;
@@ -97,6 +100,11 @@ class VRC2_4 : public BaseMapper
 			}
 
 			UpdateState();
+
+			RemoveRegisterRange(0, 0xFFFF, MemoryOperation::Read);
+			if(!_useHeuristics && _variant <= VRCVariant::VRC2c && _workRamSize == 0 && _saveRamSize == 0) {
+				AddRegisterRange(0x6000, 0x7FFF, MemoryOperation::Any);
+			}
 		}
 		
 		void ProcessCpuClock() override
@@ -131,8 +139,20 @@ class VRC2_4 : public BaseMapper
 			}
 		}
 
+		uint8_t ReadRegister(uint16_t addr) override
+		{
+			//Microwire interface ($6000-$6FFF) (VRC2 only)
+			return _latch | (_console->GetMemoryManager()->GetOpenBus() & 0xFE);
+		}
+
 		void WriteRegister(uint16_t addr, uint8_t value) override
 		{
+			if(addr < 0x8000) {
+				//Microwire interface ($6000-$6FFF) (VRC2 only)
+				_latch = value & 0x01;
+				return;
+			}
+
 			addr = TranslateAddress(addr) & 0xF00F;
 
 			if(addr >= 0x8000 && addr <= 0x8006) {
@@ -291,6 +311,6 @@ class VRC2_4 : public BaseMapper
 			ArrayInfo<uint8_t> loChrRegs = { _loCHRRegs, 8 };
 			ArrayInfo<uint8_t> hiChrRegs = { _hiCHRRegs, 8 };
 			SnapshotInfo irq{ _irq.get() };
-			Stream(_prgReg0, _prgReg1, _prgMode, loChrRegs, hiChrRegs, _hasIRQ, irq);
+			Stream(_prgReg0, _prgReg1, _prgMode, loChrRegs, hiChrRegs, _latch, irq);
 		}
 };
