@@ -242,7 +242,7 @@
 			<Control ID="chkShowFps">Mostrar FPS</Control>
 			<Control ID="chkUseHdPacks">Utilizar los paquetes de alta resolución de HDNes</Control>
 			<Control ID="chkUseExclusiveFullscreen">Usar modo exclusivo de pantalla completa</Control>
-			<Control ID="lblFullscreenResolution">Fullscreen Resolution:</Control>
+			<Control ID="lblFullscreenResolution">Resolución de pantalla completa:</Control>
 			<Control ID="lblRequestedRefreshRate">Frecuencia de actualización solicitada:</Control>
 			<Control ID="tpgOverscan">Overscan</Control>
 			<Control ID="tpgOverscanGlobal">Global</Control>
@@ -308,7 +308,7 @@
 			<Control ID="lblEmulationSpeed">Velocidad de emulación:</Control>
 			<Control ID="lblRewindSpeedHint">%  (0 = Velocidad máxima)</Control>
 			<Control ID="lblRewindSpeed">Velocidad de rebobinado:</Control>
-			<Control ID="lblRunAhead">Run Ahead:</Control>
+			<Control ID="lblRunAhead">Avanzar:</Control>
 			<Control ID="lblRunAheadFrames">frames (reduce el input lag, incrementa el uso de la CPU)</Control>
 
 			<Control ID="tpgAdvanced">Avanzado</Control>
@@ -327,7 +327,7 @@
 			<Control ID="chkRandomizeCpuPpuAlignment">Aleatorizar el encendido/reinicio de la alineación CPU/PPU</Control>
 			<Control ID="chkEnablePpu2006ScrollGlitch">Habilitar el fallo de emulación de scroll PPU $2006</Control>
 			<Control ID="chkEnablePpu2000ScrollGlitch">Habilitar el fallo de emulación de scroll de primera escritura PPU $2000/$2005/$2006</Control>
-			<Control ID="chkEnablePpuOamRowCorruption">Enable PPU OAM row corruption emulation</Control>
+			<Control ID="chkEnablePpuOamRowCorruption">Habilitar la emulación de corrupción de filas PPU OAM</Control>
 
 			<Control ID="tpgOverclocking">Overclocking</Control>
 			<Control ID="grpOverclocking">Overclocking de CPU</Control>
@@ -913,8 +913,8 @@
 		<Message ID="EmulatorShortcutMappings_LoadState">Cargar partida en la posición actual</Message>
 		<Message ID="EmulatorShortcutMappings_ToggleCheats">Habilitar/Deshabilitar códigos de trucos</Message>
 		<Message ID="EmulatorShortcutMappings_ToggleAudio">Habilitar/Deshabilitar sonido</Message>
-		<Message ID="EmulatorShortcutMappings_IncreaseVolume">Increase Volume</Message>
-		<Message ID="EmulatorShortcutMappings_DecreaseVolume">Decrease Volume</Message>
+		<Message ID="EmulatorShortcutMappings_IncreaseVolume">Aumentar volumen</Message>
+		<Message ID="EmulatorShortcutMappings_DecreaseVolume">Reducir volumen</Message>
 		<Message ID="EmulatorShortcutMappings_RunSingleFrame">Ejecutar un solo fotograma</Message>
 
 		<Message ID="EmulatorShortcutMappings_EjectDisk">FDS - Expulsar disco</Message>
