@@ -71,7 +71,7 @@ namespace Mesen.GUI.Debugger
 			}
 		}
 
-		public static DebugWorkspace GetWorkspace(bool refreshState = true)
+		public static DebugWorkspace GetWorkspace()
 		{
 			string romName = InteropEmu.GetRomInfo().GetRomName();
 			if(_workspace != null) {
@@ -96,11 +96,9 @@ namespace Mesen.GUI.Debugger
 				}
 			}
 
-			if(refreshState) {
-				//Send breakpoints & labels to emulation core (even if the same game is running)
-				BreakpointManager.SetBreakpoints(_workspace.Breakpoints);
-				LabelManager.RefreshLabels();
-			}
+			//Send breakpoints & labels to emulation core (even if the same game is running)
+			BreakpointManager.SetBreakpoints(_workspace.Breakpoints);
+			LabelManager.RefreshLabels();
 
 			return _workspace;
 		}

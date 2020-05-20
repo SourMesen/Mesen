@@ -238,7 +238,7 @@ namespace Mesen.GUI.Debugger
 
 		private void InitTblMappings()
 		{
-			DebugWorkspace workspace = DebugWorkspaceManager.GetWorkspace(false);
+			DebugWorkspace workspace = DebugWorkspaceManager.GetWorkspace();
 			if(workspace.TblMappings != null && workspace.TblMappings.Count > 0) {
 				var tblDict = TblLoader.ToDictionary(workspace.TblMappings.ToArray());
 				if(tblDict != null) {
