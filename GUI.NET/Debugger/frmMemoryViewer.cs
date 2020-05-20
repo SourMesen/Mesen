@@ -20,7 +20,6 @@ namespace Mesen.GUI.Debugger
 	{
 		private InteropEmu.NotificationListener _notifListener;
 		private DebugMemoryType _memoryType = DebugMemoryType.CpuMemory;
-		private DebugWorkspace _previousWorkspace;
 		private bool _updating = false;
 		private DateTime _lastUpdate = DateTime.MinValue;
 		private TabPage _selectedTab;
@@ -263,6 +262,7 @@ namespace Mesen.GUI.Debugger
 						if(_formClosed) {
 							return;
 						}
+						this.InitTblMappings();
 						this.InitMemoryTypeDropdown(false);
 						ctrlMemoryAccessCounters.InitMemoryTypeDropdown();
 					}));
@@ -362,12 +362,6 @@ namespace Mesen.GUI.Debugger
 		{
 			if(_formClosed) {
 				return;
-			}
-
-			DebugWorkspace workspace = DebugWorkspaceManager.GetWorkspace(false);
-			if(workspace != this._previousWorkspace) {
-				this.InitTblMappings();
-				_previousWorkspace = workspace;
 			}
 
 			if(this.tabMain.SelectedTab == this.tpgAccessCounters) {

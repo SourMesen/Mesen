@@ -74,13 +74,14 @@ namespace Mesen.GUI.Debugger
 		public static DebugWorkspace GetWorkspace(bool refreshState = true)
 		{
 			string romName = InteropEmu.GetRomInfo().GetRomName();
+			if(_workspace != null) {
+				SaveWorkspace();
+			}
+
 			if(_workspace == null || _romName != romName) {
 				SymbolProvider = null;
 				lock(_lock) {
 					if(_workspace == null || _romName != romName) {
-						if(_workspace != null) {
-							SaveWorkspace();
-						}
 						_romName = InteropEmu.GetRomInfo().GetRomName();
 						_workspace = DebugWorkspace.GetWorkspace();
 
