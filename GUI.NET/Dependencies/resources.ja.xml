@@ -74,7 +74,7 @@
 			<Control ID="mnuNetPlaySpectator">観客</Control>
 			<Control ID="mnuFindServer">公開セーバリストを見る</Control>
 			<Control ID="mnuProfile">プロファイル設定</Control>
-			<Control ID="mnuMovies">動画</Control>
+			<Control ID="mnuMovies">映画</Control>
 			<Control ID="mnuPlayMovie">再生</Control>
 			<Control ID="mnuRecordMovie">録画</Control>
 			<Control ID="mnuStopMovie">停止</Control>
@@ -937,6 +937,11 @@
 		<Message ID="EmulatorShortcutMappings_ToggleBackground">バックグラウンドレイヤー表示</Message>
 		<Message ID="EmulatorShortcutMappings_ToggleSprites">スプライトレイヤー表示</Message>
 		<Message ID="EmulatorShortcutMappings_ToggleKeyboardMode">キーボードモードを無効・有効にする</Message>
+
+		<Message ID="EmulatorShortcutMappings_ToggleRecordVideo">動画を録画する・録画を停止する</Message>
+		<Message ID="EmulatorShortcutMappings_ToggleRecordAudio">録音する・録音を停止する</Message>
+		<Message ID="EmulatorShortcutMappings_ToggleRecordMovie">映画を録画する・録画を停止する</Message>
+		
 		<Message ID="EmulatorShortcutMappings_MaxSpeed">最高速度を無効・有効にする</Message>
 		<Message ID="EmulatorShortcutMappings_LoadRandomGame">ランダムゲームを開く</Message>
 		<Message ID="EmulatorShortcutMappings_SaveStateSlot1">クイックセーブスロット１に保存する</Message>

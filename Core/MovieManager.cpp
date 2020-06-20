@@ -54,7 +54,6 @@ void MovieManager::Stop()
 	_player.reset();
 
 	if(_recorder) {
-		_recorder->Stop();
 		_recorder.reset();
 	}
 }

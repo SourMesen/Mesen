@@ -937,6 +937,11 @@
 		<Message ID="EmulatorShortcutMappings_ToggleBackground">Увімкнути/вимкнути фон</Message>
 		<Message ID="EmulatorShortcutMappings_ToggleSprites">Увімкнути/вимкнути спрайти</Message>
 		<Message ID="EmulatorShortcutMappings_ToggleKeyboardMode">Увімкнути/вимкнути максимальну швидкість</Message>
+
+		<Message ID="EmulatorShortcutMappings_ToggleRecordVideo">Start/Stop Recording Video</Message>
+		<Message ID="EmulatorShortcutMappings_ToggleRecordAudio">Start/Stop Recording Audio</Message>
+		<Message ID="EmulatorShortcutMappings_ToggleRecordMovie">Start/Stop Recording Movie</Message>
+		
 		<Message ID="EmulatorShortcutMappings_MaxSpeed">Увімкнути/вимкнути максимальну швидкість</Message>
 		<Message ID="EmulatorShortcutMappings_LoadRandomGame">Завантажити випадкову гру</Message>
 		<Message ID="EmulatorShortcutMappings_SaveStateSlot1">Збереження стану - Слот 1</Message>

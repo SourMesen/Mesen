@@ -57,6 +57,10 @@ namespace Mesen.GUI.Forms.Config
 
 				EmulatorShortcut.InputBarcode,
 
+				EmulatorShortcut.ToggleRecordVideo,
+				EmulatorShortcut.ToggleRecordAudio,
+				EmulatorShortcut.ToggleRecordMovie,
+
 				EmulatorShortcut.TakeScreenshot,
 				EmulatorShortcut.LoadRandomGame,
 				EmulatorShortcut.RunSingleFrame,

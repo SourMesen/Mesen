@@ -113,8 +113,7 @@ void VideoRenderer::AddRecordingSound(int16_t* soundBuffer, uint32_t sampleCount
 void VideoRenderer::StopRecording()
 {
 	shared_ptr<IVideoRecorder> recorder = _recorder;
-	if(recorder) { 
-		recorder->StopRecording();
+	if(recorder) {
 		MessageManager::DisplayMessage("VideoRecorder", "VideoRecorderStopped", recorder->GetOutputFile());
 	}
 	_recorder.reset();

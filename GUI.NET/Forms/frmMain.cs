@@ -989,6 +989,40 @@ namespace Mesen.GUI.Forms
 					}
 					break;
 
+				case EmulatorShortcut.ToggleRecordVideo:
+					if(InteropEmu.AviIsRecording()) {
+						InteropEmu.AviStop();
+					} else {
+						string filename = GetOutputFilename(ConfigManager.AviFolder, ConfigManager.Config.AviRecordInfo.Codec == VideoCodec.GIF ? ".gif" : ".avi");
+						InteropEmu.AviRecord(filename, ConfigManager.Config.AviRecordInfo.Codec, ConfigManager.Config.AviRecordInfo.CompressionLevel);
+					}
+					break;
+				
+				case EmulatorShortcut.ToggleRecordAudio:
+					if(InteropEmu.WaveIsRecording()) {
+						InteropEmu.WaveStop();
+					} else {
+						string filename = GetOutputFilename(ConfigManager.WaveFolder, ".wav");
+						InteropEmu.WaveRecord(filename);
+					}
+					break;
+				
+				case EmulatorShortcut.ToggleRecordMovie:
+					if(!InteropEmu.MoviePlaying() && !InteropEmu.IsConnected()) {
+						if(InteropEmu.MovieRecording()) {
+							InteropEmu.MovieStop();
+						} else {
+							RecordMovieOptions options = new RecordMovieOptions(
+								GetOutputFilename(ConfigManager.MovieFolder, ".mmo"),
+								ConfigManager.Config.MovieRecordInfo.Author,
+								ConfigManager.Config.MovieRecordInfo.Description,
+								ConfigManager.Config.MovieRecordInfo.RecordFrom
+							);
+							InteropEmu.MovieRecord(ref options);
+						}
+					}
+					break;
+
 				case EmulatorShortcut.TakeScreenshot: InteropEmu.TakeScreenshot(); break;
 				case EmulatorShortcut.LoadRandomGame: LoadRandomGame(); break;
 
@@ -1042,6 +1076,19 @@ namespace Mesen.GUI.Forms
 				//Need to restore fullscreen mode after showing a dialog
 				this.SetFullscreenState(true);
 			}
+		}
+
+		private string GetOutputFilename(string folder, string ext)
+		{
+			DateTime now = DateTime.Now;
+			string baseName = InteropEmu.GetRomInfo().GetRomName();
+			string dateTime = " " + now.ToShortDateString() + " " + now.ToLongTimeString();
+			string filename = baseName + dateTime + ext;
+			
+			//Replace any illegal chars with _
+			filename = string.Join("_", filename.Split(Path.GetInvalidFileNameChars()));
+
+			return Path.Combine(folder, filename);
 		}
 
 		private void ToggleFullscreen()

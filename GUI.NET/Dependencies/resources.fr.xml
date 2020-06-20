@@ -949,6 +949,11 @@
 		<Message ID="EmulatorShortcutMappings_ToggleBackground">Activer/désactiver l'arrière-plan</Message>
 		<Message ID="EmulatorShortcutMappings_ToggleSprites">Activer/désactiver les sprites</Message>
 		<Message ID="EmulatorShortcutMappings_ToggleKeyboardMode">Activer/désactiver le mode clavier</Message>
+
+		<Message ID="EmulatorShortcutMappings_ToggleRecordVideo">Démarrer/arrêter enregistrement vidéo</Message>
+		<Message ID="EmulatorShortcutMappings_ToggleRecordAudio">Démarrer/arrêter enregistrement audio</Message>
+		<Message ID="EmulatorShortcutMappings_ToggleRecordMovie">Démarrer/arrêter enregistrement du film</Message>
+		
 		<Message ID="EmulatorShortcutMappings_MaxSpeed">Activer/désactiver la vitesse maximale</Message>
 		<Message ID="EmulatorShortcutMappings_LoadRandomGame">Ouvrir un jeu aléatoire</Message>
 		<Message ID="EmulatorShortcutMappings_SaveStateSlot1">Sauvegarde d'état - Position 1</Message>

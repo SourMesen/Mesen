@@ -1920,6 +1920,10 @@ namespace Mesen.GUI
 		InputBarcode,
 
 		TakeScreenshot,
+		
+		ToggleRecordVideo,
+		ToggleRecordAudio,
+		ToggleRecordMovie,
 
 		IncreaseSpeed,
 		DecreaseSpeed,

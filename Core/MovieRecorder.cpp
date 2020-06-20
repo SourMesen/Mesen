@@ -21,6 +21,7 @@ MovieRecorder::MovieRecorder(shared_ptr<Console> console)
 
 MovieRecorder::~MovieRecorder()
 {
+	Stop();
 }
 
 bool MovieRecorder::Record(RecordMovieOptions options)

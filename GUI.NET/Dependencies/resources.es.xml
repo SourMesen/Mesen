@@ -935,6 +935,11 @@
 		<Message ID="EmulatorShortcutMappings_ToggleBackground">Alternar capa de fondo</Message>
 		<Message ID="EmulatorShortcutMappings_ToggleSprites">Alternar capa de sprite</Message>
 		<Message ID="EmulatorShortcutMappings_ToggleKeyboardMode">Alternar modo teclado</Message>
+
+		<Message ID="EmulatorShortcutMappings_ToggleRecordVideo">Start/Stop Recording Video</Message>
+		<Message ID="EmulatorShortcutMappings_ToggleRecordAudio">Start/Stop Recording Audio</Message>
+		<Message ID="EmulatorShortcutMappings_ToggleRecordMovie">Start/Stop Recording Movie</Message>
+		
 		<Message ID="EmulatorShortcutMappings_MaxSpeed">Alternar velocidad máxima</Message>
 		<Message ID="EmulatorShortcutMappings_LoadRandomGame">Cargar juego aleatorio</Message>
 		<Message ID="EmulatorShortcutMappings_SaveStateSlot1">Guardar partida - Hueco 1</Message>
