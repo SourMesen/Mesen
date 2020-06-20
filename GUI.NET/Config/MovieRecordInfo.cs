@@ -8,8 +8,8 @@ namespace Mesen.GUI.Config
 {
 	public class MovieRecordInfo
 	{
-		public RecordMovieFrom RecordFrom;
-		public string Author;
-		public string Description;
+		public RecordMovieFrom RecordFrom = RecordMovieFrom.CurrentState;
+		public string Author = "";
+		public string Description = "";
 	}
 }
