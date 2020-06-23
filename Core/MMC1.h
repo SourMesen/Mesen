@@ -119,24 +119,22 @@ class MMC1 : public BaseMapper
 				prgBankSelect = extraReg & 0x10;
 			} 
 
-			if(_wramDisable && !_forceWramOn) {
-				RemoveCpuMemoryMapping(0x6000, 0x7FFF);
-			} else {
-				if(_saveRamSize + _workRamSize > 0x4000) {
-					//SXROM, 32kb of save ram
-					SetCpuMemoryMapping(0x6000, 0x7FFF, (extraReg >> 2) & 0x03, HasBattery() ? PrgMemoryType::SaveRam : PrgMemoryType::WorkRam);
-				} else if(_saveRamSize + _workRamSize > 0x2000) {
-					if(_saveRamSize == 0x2000 && _workRamSize == 0x2000) {
-						//SOROM, half of the 16kb ram is battery backed
-						SetCpuMemoryMapping(0x6000, 0x7FFF, 0, (extraReg >> 3) & 0x01 ? PrgMemoryType::WorkRam : PrgMemoryType::SaveRam);
-					} else {
-						//Unknown, shouldn't happen
-						SetCpuMemoryMapping(0x6000, 0x7FFF, (extraReg >> 2) & 0x01, HasBattery() ? PrgMemoryType::SaveRam : PrgMemoryType::WorkRam);
-					}
+			MemoryAccessType access = _wramDisable && !_forceWramOn ? MemoryAccessType::NoAccess : MemoryAccessType::ReadWrite;
+			PrgMemoryType memType = HasBattery() ? PrgMemoryType::SaveRam : PrgMemoryType::WorkRam;
+			if(_saveRamSize + _workRamSize > 0x4000) {
+				//SXROM, 32kb of save ram
+				SetCpuMemoryMapping(0x6000, 0x7FFF, (extraReg >> 2) & 0x03, memType, access);
+			} else if(_saveRamSize + _workRamSize > 0x2000) {
+				if(_saveRamSize == 0x2000 && _workRamSize == 0x2000) {
+					//SOROM, half of the 16kb ram is battery backed
+					SetCpuMemoryMapping(0x6000, 0x7FFF, 0, (extraReg >> 3) & 0x01 ? PrgMemoryType::WorkRam : PrgMemoryType::SaveRam, access);
 				} else {
-					//Everything else - 8kb of work or save ram
-					SetCpuMemoryMapping(0x6000, 0x7FFF, 0, HasBattery() ? PrgMemoryType::SaveRam : PrgMemoryType::WorkRam);
+					//Unknown, shouldn't happen
+					SetCpuMemoryMapping(0x6000, 0x7FFF, (extraReg >> 2) & 0x01, memType, access);
 				}
+			} else {
+				//Everything else - 8kb of work or save ram
+				SetCpuMemoryMapping(0x6000, 0x7FFF, 0, memType, access);
 			}
 
 			if(_romInfo.SubMapperID == 5) {

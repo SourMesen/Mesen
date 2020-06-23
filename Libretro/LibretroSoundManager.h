@@ -28,7 +28,7 @@ public:
 	{
 		if(!_skipMode && _sendAudioSample) {
 			for(uint32_t total = 0; total < sampleCount; ) {
-				total += _sendAudioSample(soundBuffer + total*2, sampleCount - total);
+				total += (uint32_t)_sendAudioSample(soundBuffer + total*2, sampleCount - total);
 			}
 		}
 	}

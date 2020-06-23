@@ -232,7 +232,7 @@ public:
 	
 	void CopyRewindData(shared_ptr<Console> sourceConsole);
 
-	uint8_t* GetRamBuffer(DebugMemoryType memoryType, uint32_t &size, int32_t &startAddr);
+	uint8_t* GetRamBuffer(uint16_t address);
 		
 	void DebugAddTrace(const char *log);
 	void DebugProcessPpuCycle();

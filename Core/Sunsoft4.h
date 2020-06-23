@@ -63,11 +63,8 @@ protected:
 
 	void UpdateState()
 	{
-		if(!_prgRamEnabled) {
-			RemoveCpuMemoryMapping(0x6000, 0x7FFF);
-		} else {
-			SetupDefaultWorkRam();
-		}
+		MemoryAccessType access = _prgRamEnabled ? MemoryAccessType::ReadWrite : MemoryAccessType::NoAccess;
+		SetCpuMemoryMapping(0x6000, 0x7FFF, 0, HasBattery() ? PrgMemoryType::SaveRam : PrgMemoryType::WorkRam);
 		
 		if(_usingExternalRom) { 
 			if(_licensingTimer == 0) {

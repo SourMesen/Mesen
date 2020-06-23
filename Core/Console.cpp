@@ -1463,29 +1463,22 @@ void Console::CopyRewindData(shared_ptr<Console> sourceConsole)
 	sourceConsole->Resume();
 }
 
-uint8_t* Console::GetRamBuffer(DebugMemoryType memoryType, uint32_t &size, int32_t &startAddr)
+uint8_t* Console::GetRamBuffer(uint16_t address)
 {
 	//Only used by libretro port for achievements - should not be used by anything else.
-	switch(memoryType) {
-		default: break;
-
-		case DebugMemoryType::InternalRam:
-			size = MemoryManager::InternalRAMSize;
-			startAddr = 0;
-			return _memoryManager->GetInternalRAM();
-
-		case DebugMemoryType::SaveRam:
-			size = _mapper->GetMemorySize(DebugMemoryType::SaveRam);
-			startAddr = _mapper->FromAbsoluteAddress(0, AddressType::SaveRam);
-			return _mapper->GetSaveRam();
-
-		case DebugMemoryType::WorkRam:
-			size = _mapper->GetMemorySize(DebugMemoryType::WorkRam);
-			startAddr = _mapper->FromAbsoluteAddress(0, AddressType::WorkRam);
-			return _mapper->GetWorkRam();
+	AddressTypeInfo addrInfo;
+	_mapper->GetAbsoluteAddressAndType(address, &addrInfo);
+	
+	if(addrInfo.Address >= 0) {
+		if(addrInfo.Type == AddressType::InternalRam) {
+			return _memoryManager->GetInternalRAM() + addrInfo.Address;
+		} else if(addrInfo.Type == AddressType::WorkRam) {
+			return _mapper->GetWorkRam() + addrInfo.Address;
+		} else if(addrInfo.Type == AddressType::SaveRam) {
+			return _mapper->GetSaveRam() + addrInfo.Address;
+		}
 	}
-
-	throw std::runtime_error("unsupported memory type");
+	return nullptr;
 }
 
 void Console::DebugAddTrace(const char * log)

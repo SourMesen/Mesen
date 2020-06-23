@@ -150,11 +150,15 @@ class MMC3 : public BaseMapper
 			_prgMode = (_state.Reg8000 & 0x40) >> 6;
 
 			if(_romInfo.MapperID == 4 && _romInfo.SubMapperID == 1) {
-				//bool wramEnabled = (_state.Reg8000 & 0x20) == 0x20;
-				RemoveCpuMemoryMapping(0x6000, 0x7000);
+				//MMC6
+				bool wramEnabled = (_state.Reg8000 & 0x20) == 0x20;
 				
 				uint8_t firstBankAccess = (_state.RegA001 & 0x10 ? MemoryAccessType::Write : 0) | (_state.RegA001 & 0x20 ? MemoryAccessType::Read : 0);
 				uint8_t lastBankAccess = (_state.RegA001 & 0x40 ? MemoryAccessType::Write : 0) | (_state.RegA001 & 0x80 ? MemoryAccessType::Read : 0);
+				if(!wramEnabled) {
+					firstBankAccess = MemoryAccessType::NoAccess;
+					lastBankAccess = MemoryAccessType::NoAccess;
+				}
 
 				for(int i = 0; i < 4; i++) {
 					SetCpuMemoryMapping(0x7000 + i * 0x400, 0x71FF + i * 0x400, 0, PrgMemoryType::SaveRam, firstBankAccess);
@@ -165,11 +169,13 @@ class MMC3 : public BaseMapper
 				_wramWriteProtected = (_state.RegA001 & 0x40) == 0x40;
 
 				if(_romInfo.SubMapperID == 0) {
+					MemoryAccessType access;
 					if(_wramEnabled) {
-						SetCpuMemoryMapping(0x6000, 0x7FFF, 0, HasBattery() ? PrgMemoryType::SaveRam : PrgMemoryType::WorkRam, CanWriteToWorkRam() ? MemoryAccessType::ReadWrite : MemoryAccessType::Read);
+						access = CanWriteToWorkRam() ? MemoryAccessType::ReadWrite : MemoryAccessType::Read;
 					} else {
-						RemoveCpuMemoryMapping(0x6000, 0x7FFF);
+						access = MemoryAccessType::NoAccess;
 					}
+					SetCpuMemoryMapping(0x6000, 0x7FFF, 0, HasBattery() ? PrgMemoryType::SaveRam : PrgMemoryType::WorkRam, access);
 				}
 			}
 

@@ -62,11 +62,8 @@ protected:
 			case 3: SetMirroringType(MirroringType::Horizontal); break;
 		}
 
-		if(_state.RegE000 & 0x10) {
-			RemoveCpuMemoryMapping(0x6000, 0x7FFF);
-		} else {
-			SetCpuMemoryMapping(0x6000, 0x7FFF, 0, HasBattery() ? PrgMemoryType::SaveRam : PrgMemoryType::WorkRam);
-		}
+		MemoryAccessType access = (_state.RegE000 & 0x10) ? MemoryAccessType::NoAccess : MemoryAccessType::ReadWrite;
+		SetCpuMemoryMapping(0x6000, 0x7FFF, 0, HasBattery() ? PrgMemoryType::SaveRam : PrgMemoryType::WorkRam, access);
 
 		if(_initState == 2) {
 			if(_state.RegA000 & 0x08) {

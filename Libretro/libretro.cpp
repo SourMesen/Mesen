@@ -10,6 +10,8 @@
 #include "../Core/Console.h"
 #include "../Core/VideoDecoder.h"
 #include "../Core/VideoRenderer.h"
+#include "../Core/MemoryManager.h"
+#include "../Core/BaseMapper.h"
 #include "../Core/EmulationSettings.h"
 #include "../Core/CheatManager.h"
 #include "../Core/HdData.h"
@@ -45,8 +47,6 @@ static unsigned _inputDevices[5] = { DEVICE_AUTO, DEVICE_AUTO, DEVICE_AUTO, DEVI
 static bool _hdPacksEnabled = false;
 static string _mesenVersion = "";
 static int32_t _saveStateSize = -1;
-static struct retro_memory_descriptor _descriptors[3];
-static struct retro_memory_map _memoryMap;
 static bool _shiftButtonsClockwise = false;
 static int32_t _audioSampleRate = 44100;
 
@@ -971,40 +971,24 @@ extern "C" {
 	void retro_set_memory_maps()
 	{
 		//Expose internal RAM and work/save RAM for retroachievements
-		memset(_descriptors, 0, sizeof(_descriptors));
-		memset(&_memoryMap, 0, sizeof(_memoryMap));
+		retro_memory_descriptor descriptors[256] = {};
+		retro_memory_map memoryMap = {};
 
-		uint32_t i = 0;
-		uint32_t size = 0;
-		int32_t startAddr = 0;
-		uint8_t* internalRam = _console->GetRamBuffer(DebugMemoryType::InternalRam, size, startAddr);
-		_descriptors[i].ptr = internalRam;
-		_descriptors[i].start = startAddr;
-		_descriptors[i].len = size;
-		_descriptors[i].select = 0;
-		i++;
-
-		uint8_t* saveRam = _console->GetRamBuffer(DebugMemoryType::SaveRam, size, startAddr);
-		if(size > 0 && startAddr > 0) {
-			_descriptors[i].ptr = saveRam;
-			_descriptors[i].start = startAddr;
-			_descriptors[i].len = size;
-			_descriptors[i].select = 0;
-			i++;
+		int count = 0;
+		for(int i = 0; i <= 0xFFFF; i += 0x100) {
+			uint8_t* ram = _console->GetRamBuffer(i);
+			if(ram) {
+				descriptors[count].ptr = ram;
+				descriptors[count].start = i;
+				descriptors[count].len = 0x100;
+				count++;
+			}
 		}
 
-		uint8_t* workRam = _console->GetRamBuffer(DebugMemoryType::WorkRam, size, startAddr);
-		if(size > 0 && startAddr > 0) {
-			_descriptors[i].ptr = workRam;
-			_descriptors[i].start = startAddr;
-			_descriptors[i].len = size;
-			_descriptors[i].select = 0;
-			i++;
-		}
+		memoryMap.descriptors = descriptors;
+		memoryMap.num_descriptors = count;
 
-		_memoryMap.descriptors = _descriptors;
-		_memoryMap.num_descriptors = i;
-		retroEnv(RETRO_ENVIRONMENT_SET_MEMORY_MAPS, &_memoryMap);
+		retroEnv(RETRO_ENVIRONMENT_SET_MEMORY_MAPS, &memoryMap);
 	}
 
 	RETRO_API void retro_set_controller_port_device(unsigned port, unsigned device)
@@ -1132,23 +1116,21 @@ extern "C" {
 
 	RETRO_API void *retro_get_memory_data(unsigned id)
 	{
-		uint32_t size;
-		int32_t startAddr;
+		BaseMapper* mapper = _console->GetMapper();
 		switch(id) {
-			case RETRO_MEMORY_SAVE_RAM: return _console->GetRamBuffer(DebugMemoryType::SaveRam, size, startAddr);
-			case RETRO_MEMORY_SYSTEM_RAM: return _console->GetRamBuffer(DebugMemoryType::InternalRam, size, startAddr);
+			case RETRO_MEMORY_SAVE_RAM: return mapper->GetSaveRam();
+			case RETRO_MEMORY_SYSTEM_RAM: return _console->GetMemoryManager()->GetInternalRAM();
 		}
 		return nullptr;
 	}
 
 	RETRO_API size_t retro_get_memory_size(unsigned id)
 	{
-		uint32_t size = 0;
-		int32_t startAddr;
+		BaseMapper* mapper = _console->GetMapper();
 		switch(id) {
-			case RETRO_MEMORY_SAVE_RAM: _console->GetRamBuffer(DebugMemoryType::SaveRam, size, startAddr); break;
-			case RETRO_MEMORY_SYSTEM_RAM: _console->GetRamBuffer(DebugMemoryType::InternalRam, size, startAddr); break;
+			case RETRO_MEMORY_SAVE_RAM: return mapper->GetMemorySize(DebugMemoryType::SaveRam);
+			case RETRO_MEMORY_SYSTEM_RAM: return MemoryManager::InternalRAMSize;
 		}
-		return size;
+		return 0;
 	}
 }
