@@ -117,6 +117,7 @@ namespace Mesen.GUI
 						case Language.Ukrainian: message = "Microsoft .NET Framework 4.5 не знайдений. Будь ласка завантажте і встановіть останню версію .NET Framework з сайту Microsoft і спробуйте знову."; break;
 						case Language.Portuguese: message = "Microsoft .NET Framework 4.5 não foi encontrado. Por favor, baixe a versão mais recente de .NET Framework do site da Microsoft e tente novamente."; break;
 						case Language.Chinese: message = "找不到 Microsoft .NET Framework 4.5，请访问 Microsoft 官网下载安装之后再试。"; break;
+						case Language.Italian: message = "Impossibile trovare Microsoft .NET Framework 4.5. Scaricare e installare la versione più recente di .NET Framework dal sito Web di Microsoft e riprovare."; break;
 					}
 					MessageBox.Show(message + Environment.NewLine + Environment.NewLine + e.ToString(), "Mesen", MessageBoxButtons.OK, MessageBoxIcon.Error);
 					return;
@@ -130,6 +131,7 @@ namespace Mesen.GUI
 						case Language.Ukrainian: message = "Невідома помилка.&#xA;&#xA;Детально:&#xA;{0}"; break;
 						case Language.Portuguese: message = "Houve um erro inesperado.&#xA;&#xA;Detalhes do erro:&#xA;{0}"; break;
 						case Language.Chinese: message = "发生意外错误。\n\n详情:\n{0}"; break;
+						case Language.Italian: message = "Si è verificato un errore imprevisto.\n\nDettagli dell'errore:\n{0}"; break;
 					}
 					MessageBox.Show(string.Format(message, e.ToString()), "Mesen", MessageBoxButtons.OK, MessageBoxIcon.Error);
 				}
