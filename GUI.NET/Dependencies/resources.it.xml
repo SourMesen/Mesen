@@ -13,7 +13,7 @@
 			<Control ID="mnuPause">Pausa</Control>
 			<Control ID="mnuReset">Reset</Control>
 			<Control ID="mnuPowerCycle">Spegni/Riaccendi</Control>
-			<Control ID="mnuReloadRom">Reload ROM</Control>
+			<Control ID="mnuReloadRom">Ricarica ROM</Control>
 			<Control ID="mnuPowerOff">Spegni</Control>
 			<Control ID="mnuSwitchDiskSide">Cambia Lato Disco</Control>
 			<Control ID="mnuSelectDisk">Seleziona Disco</Control>
@@ -121,16 +121,16 @@
 			<Control ID="lblRewinding">Riavvolgi</Control>
 			<Control ID="lblFastForward">Avanti Veloce</Control>
 		</Form>
-		<Form ID="frmLogWindow" Title="Log Window">
+		<Form ID="frmLogWindow" Title="Finestra Log">
 			<Control ID="btnClose">Chiudi</Control>
 		</Form>
-		<Form ID="frmAudioConfig" Title="Audio Options">
+		<Form ID="frmAudioConfig" Title="Opzioni Audio">
 			<Control ID="tpgGeneral">Generale</Control>
 			<Control ID="tpgAdvanced">Avanzato</Control>
 			<Control ID="chkDisableDynamicSampleRate">Disabilita frequenza di campionamento dinamica</Control>
-			<Control ID="chkSwapDutyCycles">Scambia i duty cycle dei canali square (Imita i vecchi cloni)</Control>
-			<Control ID="chkSilenceTriangleHighFreq">Silenzia frequenze ultrasoniche su canale triangle (riduce scoppiettio)</Control>
-			<Control ID="chkReduceDmcPopping">Ridurre scoppiettio nei suoni sul canale DMC</Control>
+			<Control ID="chkSwapDutyCycles">Scambia i duty cycle dei canali square (imita i vecchi cloni)</Control>
+			<Control ID="chkSilenceTriangleHighFreq">Silenzia frequenze ultrasoniche su canale triangle (riduce crepitio)</Control>
+			<Control ID="chkReduceDmcPopping">Riduci crepitio nei suoni sul canale DMC</Control>
 			<Control ID="chkDisableNoiseModeFlag">Disabilita il canale noise</Control>
 			<Control ID="tpgEffects">Effetti</Control>
 			<Control ID="grpStereo">Stereo</Control>
@@ -193,7 +193,7 @@
 			<Control ID="tpgEqualizer">Equalizzatore</Control>
 			<Control ID="chkEnableEqualizer">Abilita Equalizzatore</Control>
 		</Form>
-		<Form ID="frmInputConfig" Title="Input Settings">
+		<Form ID="frmInputConfig" Title="Impostazioni di input">
 			<Control ID="btnOK">OK</Control>
 			<Control ID="btnCancel">Annulla</Control>
 			<Control ID="tpgControllers">Controller</Control>
@@ -211,7 +211,7 @@
 			<Control ID="lblNesType">Tipo di Console:</Control>
 			<Control ID="lblExpansionPort">Porta Espansione:</Control>
 			<Control ID="chkFourScore">Usa accessorio Four Score</Control>
-			<Control ID="chkAutoConfigureInput">Autoconfigura i controller quando carichi un gioco</Control>
+			<Control ID="chkAutoConfigureInput">Autoconfigura i controller quando viene caricato un gioco</Control>
 
 			<Control ID="tpgAdvanced">Avanzato</Control>
 			<Control ID="grpDisplayInput">Visualizza Input del Controller</Control>
@@ -226,11 +226,11 @@
 			<Control ID="lblLarge">Grande</Control>
 			<Control ID="lblDeadzone">Zona morta dell'asse del controller:</Control>
 
-			<Control ID="chkHideMousePointerForZapper">Nascondi puntatore del mouse quando usi lo zapper</Control>
+			<Control ID="chkHideMousePointerForZapper">Nascondi cursore del mouse quando usi lo zapper</Control>
 
 			<Control ID="lblKeyBinding">Attenzione: La configurazione attuale ha dei conflitti tra i tasti - alcuni pulsanti nella tua tastiera o gamepad sono mappati su più pulsanti del controller NES. Se questo non è intenzionale, rivedi la tua configurazione tasti.</Control>
 		</Form>
-		<Form ID="frmVideoConfig" Title="Video Options">
+		<Form ID="frmVideoConfig" Title="Opzioni Video">
 			<Control ID="tpgGeneral">Generale</Control>
 			<Control ID="lblVideoScale">Scala:</Control>
 			<Control ID="lblVideoFilter">Filtri:</Control>
@@ -243,7 +243,7 @@
 			<Control ID="chkShowFps">Mostra FPS</Control>
 			<Control ID="chkUseHdPacks">Usa HDNes HD pack</Control>
 			<Control ID="chkUseExclusiveFullscreen">Usa schermo intero esclusivo</Control>
-			<Control ID="lblFullscreenResolution">Fullscreen Resolution:</Control>
+			<Control ID="lblFullscreenResolution">Risoluzione Schermo Intero:</Control>
 			<Control ID="lblRequestedRefreshRate">Frequenza di aggiornamento:</Control>
 			<Control ID="tpgOverscan">Overscan</Control>
 			<Control ID="tpgOverscanGlobal">Globale</Control>
@@ -301,7 +301,7 @@
 			<Control ID="btnOK">OK</Control>
 			<Control ID="btnCancel">Annulla</Control>
 		</Form>
-		<Form ID="frmEmulationConfig" Title="Emulation Settings">
+		<Form ID="frmEmulationConfig" Title="Impostazioni Emulazione">
 			<Control ID="tpgGeneral">Generale</Control>
 			<Control ID="lblEmuSpeedHint">%  (0 = Velocità massima)</Control>
 			<Control ID="lblEmulationSpeed">Velocità Emulazione:</Control>
@@ -310,7 +310,7 @@
 			<Control ID="lblRewindSpeedHint">%  (0 = Velocità massima)</Control>
 			<Control ID="lblRewindSpeed">Velocità Riavvolgimento:</Control>
 			<Control ID="lblRunAhead">Run Ahead:</Control>
-			<Control ID="lblRunAheadFrames">frames (reduces input lag, increases CPU usage)</Control>
+			<Control ID="lblRunAheadFrames">frame (riduce latenza input, aumenta uso CPU)</Control>
 
 			<Control ID="tpgAdvanced">Avanzato</Control>
 			<Control ID="lblDeveloperSettings">Opzioni raccomandate per sviluppatori (homebrew / ROM hacking)</Control>
@@ -324,10 +324,10 @@
 			<Control ID="chkDisablePpuReset">Non resettare la PPU quando resetti la console (Famicom)</Control>
 			<Control ID="chkUseNes101Hvc101Behavior">Usa NES/HVC-101 (Top-loader / AV Famicom)</Control>
 			<Control ID="chkMapperRandomPowerOnState">Valori casuali durante accensione per i mapper</Control>
-			<Control ID="chkRandomizeCpuPpuAlignment">Randomize power-on/reset CPU/PPU alignment</Control>
-			<Control ID="chkEnablePpu2006ScrollGlitch">Enable PPU $2006 scroll glitch emulation</Control>
-			<Control ID="chkEnablePpu2000ScrollGlitch">Enable PPU $2000/$2005/$2006 first-write scroll glitch emulation</Control>
-			<Control ID="chkEnablePpuOamRowCorruption">Enable PPU OAM row corruption emulation</Control>
+			<Control ID="chkRandomizeCpuPpuAlignment">Allineamento casuale CPU/PPU all'accensione/reset</Control>
+			<Control ID="chkEnablePpu2006ScrollGlitch">Abilita emulazione glitch scorrimento PPU $2006</Control>
+			<Control ID="chkEnablePpu2000ScrollGlitch">Abilita emulazione glitch scorrimento prima scrittura PPU $2000/$2005/$2006</Control>
+			<Control ID="chkEnablePpuOamRowCorruption">Abilita emulazione corruzione riga PPU OAM</Control>
 
 			<Control ID="lblRamPowerOnState">Stato di accensione predefinito per la RAM:</Control>
 
@@ -352,15 +352,15 @@
 			<Control ID="btnOK">OK</Control>
 			<Control ID="btnCancel">Annulla</Control>
 		</Form>
-		<Form ID="frmPreferences" Title="Preferences">
+		<Form ID="frmPreferences" Title="Preferenze">
 			<Control ID="tpgGeneral">Generale</Control>
 			<Control ID="lblDisplayLanguage">Linguaggio Visualizzato:</Control>
-			<Control ID="chkSingleInstance">Permetti solo un'instanza di Mesen alla volta</Control>
+			<Control ID="chkSingleInstance">Permetti solo un'istanza di Mesen alla volta</Control>
 			<Control ID="chkAutomaticallyCheckForUpdates">Cerca aggiornamenti automaticamente</Control>
 
 			<Control ID="lblPauseBackgroundSettings">Opzioni Pausa/Background</Control>
 			<Control ID="lblMiscSettings">Opzioni Varie</Control>
-			<Control ID="chkAutoHideMenu">Nascondi barra dei menù automaticamente</Control>
+			<Control ID="chkAutoHideMenu">Nascondi barra dei menu automaticamente</Control>
 			<Control ID="chkDisplayTitleBarInfo">Mostra informazioni aggiuntive nella barra del titolo</Control>
 
 			<Control ID="chkConfirmExitResetPower">Mostra conferma prima del reset/accensione o riaccensione/uscita</Control>
@@ -369,7 +369,7 @@
 
 			<Control ID="lblPauseIn">Pausa durante:</Control>
 			<Control ID="chkPauseWhenInBackground">Background</Control>
-			<Control ID="chkPauseInMenuAndConfig">Menù e Configurazione</Control>
+			<Control ID="chkPauseInMenuAndConfig">Menu e Configurazione</Control>
 			<Control ID="chkPauseInDebugger">Strumenti di Debug</Control>
 
 			<Control ID="chkPauseWhenInBackground">Background</Control>
@@ -408,7 +408,7 @@
 			<Control ID="chkShowFullPathInRecents">Mostra il percorso completo nei file recenti</Control>
 			<Control ID="chkShowFrameCounter">Mostra contatore frame</Control>
 			<Control ID="chkShowGameTimer">Mostra tempo di gioco</Control>
-			<Control ID="chkShowVsConfigOnLoad">Mostra messaggio configurazione gioco quando carichi giochi VS System</Control>
+			<Control ID="chkShowVsConfigOnLoad">Mostra messaggio di configurazione di gioco quando carichi giochi VS System</Control>
 
 			<Control ID="lblRewind">Mantieni dati di riavvolgimento per </Control>
 			<Control ID="lblRewindMinutes">minuti (Memoria Usata ≈1MB/min)</Control>
@@ -421,7 +421,7 @@
 
 			<Control ID="tpgSaveData">Salvataggi</Control>
 			<Control ID="grpAutomaticSaves">Salva Stato</Control>
-			<Control ID="chkAutoSave">Crea automaticamente un stato ogni</Control>
+			<Control ID="chkAutoSave">Crea automaticamente uno stato ogni</Control>
 			<Control ID="lblAutoSave">minuti</Control>
 			<Control ID="chkAutoSaveNotify">Notifica quando uno stato viene salvato</Control>
 			<Control ID="chkAllowMismatchingSaveStates">Consenti carica stato su ROM modificate (es. patch IPS)</Control>
@@ -463,7 +463,7 @@
 			<Control ID="btnOK">OK</Control>
 			<Control ID="btnCancel">Annulla</Control>
 		</Form>
-		<Form ID="frmServerConfig" Title="Server Configuration">
+		<Form ID="frmServerConfig" Title="Configurazione Server">
 			<Control ID="lblPort">Porta:</Control>
 			<Control ID="chkPublicServer">Server pubblico</Control>
 			<Control ID="lblServerName">Nome server:</Control>
@@ -473,7 +473,7 @@
 			<Control ID="btnOK">OK</Control>
 			<Control ID="btnCancel">Annulla</Control>
 		</Form>
-		<Form ID="frmClientConfig" Title="Connect...">
+		<Form ID="frmClientConfig" Title="Connetti...">
 			<Control ID="lblHost">Host:</Control>
 			<Control ID="lblPort">Porta:</Control>
 			<Control ID="lblPassword">Password:</Control>
@@ -481,7 +481,7 @@
 			<Control ID="btnOK">OK</Control>
 			<Control ID="btnCancel">Annulla</Control>
 		</Form>
-		<Form ID="frmCheatImport" Title="Import Cheats">
+		<Form ID="frmCheatImport" Title="Importa Cheat">
 			<Control ID="grpImportOptions">Importa Opzioni</Control>
 			<Control ID="lblCheatFile">File Cheat:</Control>
 			<Control ID="lblGame">Gioco:</Control>
@@ -490,7 +490,7 @@
 			<Control ID="btnImport">Importa</Control>
 			<Control ID="btnCancel">Annulla</Control>
 		</Form>
-		<Form ID="frmCheatImport" Title="Import Cheats">
+		<Form ID="frmCheatImport" Title="Importa Cheat">
 			<Control ID="grpImportOptions">Importa Opzioni</Control>
 			<Control ID="lblCheatFile">File Cheat:</Control>
 			<Control ID="lblGame">Gioco:</Control>
@@ -499,12 +499,12 @@
 			<Control ID="btnImport">Importa</Control>
 			<Control ID="btnCancel">Annulla</Control>
 		</Form>
-		<Form ID="frmCheatImportFromDb" Title="Select Game...">
+		<Form ID="frmCheatImportFromDb" Title="Seleziona Gioco...">
 			<Control ID="lblSearch">Cerca:</Control>
 			<Control ID="btnOK">Importa</Control>
 			<Control ID="btnCancel">Annulla</Control>
 		</Form>
-		<Form ID="frmCheatList" Title="Cheats">
+		<Form ID="frmCheatList" Title="Cheat">
 			<Control ID="tabCheats">Cheat</Control>
 			<Control ID="btnAddCheat">Aggiungi Cheat</Control>
 			<Control ID="btnDelete">Cancella</Control>
@@ -543,7 +543,7 @@
 			<Control ID="btnOK">OK</Control>
 			<Control ID="btnCancel">Annulla</Control>
 		</Form>
-		<Form ID="frmCheat" Title="Edit Cheat">
+		<Form ID="frmCheat" Title="Modifica Cheat">
 			<Control ID="label2">Gioco:</Control>
 			<Control ID="label1">Nome Cheat:</Control>
 			<Control ID="grpCode">Codice</Control>
@@ -560,7 +560,7 @@
 			<Control ID="btnOK">OK</Control>
 			<Control ID="btnCancel">Annulla</Control>
 		</Form>
-		<Form ID="frmAbout" Title="About - Mesen">
+		<Form ID="frmAbout" Title="Riguardo a Mesen">
 			<Control ID="labelProductName">Mesen</Control>
 			<Control ID="labelCopyright">© 2020 M. Bibaud (aka Sour)</Control>
 			<Control ID="lblWebsite">Sito:</Control>
@@ -568,22 +568,22 @@
 			<Control ID="labelVersion">Versione:</Control>
 			<Control ID="lblBuildDateLabel">Data Creazione:</Control>
 
-			<Control ID="grpAcknowledgements">Acknowledgements</Control>
-			<Control ID="lblUsedSoftware">This software uses the following libraries:</Control>
-			<Control ID="lblGeneral">General:</Control>
+			<Control ID="grpAcknowledgements">Ringraziamenti</Control>
+			<Control ID="lblUsedSoftware">Questo software utilizza le seguenti librerie:</Control>
+			<Control ID="lblGeneral">Generale:</Control>
 			<Control ID="lblVideo">Video:</Control>
 			<Control ID="lblAudio">Audio:</Control>
-			<Control ID="lblEmulation">Emulation:</Control>
-			<Control ID="lblCheats">Cheats:</Control>
-			<Control ID="lblSpecialThanks">And thank you to everybody who has contributed in any way! (donations, bug reports, testing, sharing information, etc.)</Control>
+			<Control ID="lblEmulation">Emulazione:</Control>
+			<Control ID="lblCheats">Cheat:</Control>
+			<Control ID="lblSpecialThanks">E grazie a tutti quelli che hanno contribuito in qualche modo! (donazioni, segnalazioni bug, test, condivisione informazioni, ecc.)</Control>
 
 			<Control ID="lblDonate">Se vuoi sostenere Mesen, ti preghiamo di considerare una donazione.&#13; Grazie per il vostro sostegno!</Control>
 			<Control ID="okButton">&amp;OK</Control>
 		</Form>
-		<Form ID="frmGameConfig" Title="Game Configuration">
-			<Control ID="grpDipSwitches">DIP Switches</Control>
+		<Form ID="frmGameConfig" Title="Configurazione Gioco">
+			<Control ID="grpDipSwitches">DIP Switch</Control>
 		</Form>
-		<Form ID="frmUpdatePrompt" Title="Mesen - Update Available">
+		<Form ID="frmUpdatePrompt" Title="Mesen - Aggiornamento Disponibile">
 			<Control ID="lblLatestVersion">Ultima Versione:</Control>
 			<Control ID="lblCurrentVersion">Versione Attuale:</Control>
 			<Control ID="lblChangeLog">Changelog:</Control>
@@ -591,20 +591,20 @@
 			<Control ID="btnUpdate">Aggiorna</Control>
 			<Control ID="btnCancel">Annulla</Control>
 		</Form>
-		<Form ID="frmSelectRom" Title="Select Rom...">
+		<Form ID="frmSelectRom" Title="Seleziona Rom...">
 			<Control ID="lblSearch">Cerca:</Control>
 			<Control ID="btnOK">OK</Control>
 			<Control ID="btnCancel">Annulla</Control>
 		</Form>
-		<Form ID="frmGetKey" Title="Set key binding...">
+		<Form ID="frmGetKey" Title="Imposta associazione tasti...">
 			<Control ID="lblSetKeyMessage">Premere un tasto qualsiasi della tastiera o del controller per impostare una nuova associazione.</Control>
 		</Form>
-		<Form ID="frmPlayerProfile" Title="Profile">
+		<Form ID="frmPlayerProfile" Title="Profilo">
 			<Control ID="lblName">Nome Giocatore:</Control>
 			<Control ID="btnOK">OK</Control>
 			<Control ID="btnCancel">Annulla</Control>
 		</Form>
-		<Form ID="frmRecordAvi" Title="Video Recording Options">
+		<Form ID="frmRecordAvi" Title="Opzioni registrazione video">
 			<Control ID="lblAviFile">Salva:</Control>
 			<Control ID="lblCodec">Codec Video:</Control>
 			<Control ID="lblCompressionLevel">Livello Compressione:</Control>
@@ -630,7 +630,7 @@
 			<Control ID="btnStopRecording">Ferma registrazione</Control>
 			<Control ID="btnOpenFolder">Apri Cartella di Salvataggio</Control>
 		</Form>
-		<Form ID="frmHistoryViewer" Title="History Viewer">
+		<Form ID="frmHistoryViewer" Title="Visualizzatore cronologia">
 			<Control ID="lblVolume">Volume</Control>
 			<Control ID="mnuFile">File</Control>
 			<Control ID="mnuImportMovie">Importa Filmato</Control>
@@ -648,13 +648,13 @@
 			<Control ID="mnuScale5x">5x</Control>
 			<Control ID="mnuScale6x">6x</Control>
 		</Form>
-		<Form ID="frmSelectExportRange" Title="Export specific range...">
+		<Form ID="frmSelectExportRange" Title="Esporta intervallo specifico...">
 			<Control ID="lblStartTime">Inizio:</Control>
 			<Control ID="lblEndTime">Fine:</Control>
 			<Control ID="btnOK">OK</Control>
 			<Control ID="btnCancel">Annulla</Control>
 		</Form>
-		<Form ID="frmHelp" Title="Command-line options">
+		<Form ID="frmHelp" Title="Opzioni riga di comando">
 			<Control ID="grpExample">Esempio di utilizzo</Control>
 			<Control ID="tpgGeneralOptions">Generale</Control>
 			<Control ID="tpgVideoOptions">Opzioni Video</Control>
@@ -662,10 +662,10 @@
 			<Control ID="tpgEmulationOptions">Opzioni Emulazione</Control>
 			<Control ID="lblExplanation">Questo avvierà Mesen in modalità a schermo intero con la ROM "MyGame.nes" caricata. Utilizzerà anche il filtro NTSC, impostato su una scala 2x e configurerà le impostazioni di Overscan. Il flag "DoNotSaveSettings" è utilizzato per prevenire alle opzioni della riga di comando di alterare in modo permanente le impostazioni di Mesen.</Control>
 		</Form>
-		<Form ID="frmCopyFiles" Title="Please wait...">
+		<Form ID="frmCopyFiles" Title="Attendi...">
 			<Control ID="lblCopying">Copia:</Control>
 		</Form>
-		<Form ID="frmConfigWizard" Title="Mesen - Configuration">
+		<Form ID="frmConfigWizard" Title="Mesen - Configurazione">
 			<Control ID="lblMesen">Mesen - Emulatore NES</Control>
 			<Control ID="lblConfigWizard">Configurazione Guidata</Control>
 			<Control ID="lblInitialSetup">Si prega di attendere un momento per eseguire la configurazione iniziale di Mesen.</Control>
@@ -681,7 +681,7 @@
 			<Control ID="btnOk">CONFERMA</Control>
 			<Control ID="lblCancel">Annulla</Control>
 		</Form>
-		<Form ID="frmRecordMovie" Title="Movie Recording Options">
+		<Form ID="frmRecordMovie" Title="Opzioni di registrazione dei filmati">
 			<Control ID="lblSaveTo">Salva in:</Control>
 			<Control ID="lblRecordFrom">Registra da:</Control>
 			<Control ID="lblMovieInformation">Informazioni Video (facoltativo)</Control>
@@ -691,7 +691,7 @@
 			<Control ID="btnOK">OK</Control>
 			<Control ID="btnCancel">Annulla</Control>
 		</Form>
-		<Form ID="frmInputBarCode" Title="Input Barcode...">
+		<Form ID="frmInputBarCode" Title="Inserisci Codice a Barre...">
 			<Control ID="lblBarcode">Codice a Barre:</Control>
 			<Control ID="btnOK">OK</Control>
 			<Control ID="btnCancel">Annulla</Control>
@@ -783,22 +783,22 @@
 		<Message ID="FilterAll">Tutti i file (*.*)|*.*</Message>
 		<Message ID="FilterZipFiles">Zip file (*.zip)|*.zip</Message>
 		<Message ID="FilterMovie">Video file (*.mmo)|*.mmo|All Files (*.*)|*.*</Message>
-		<Message ID="FilterWave">Wave files (*.wav)|*.wav|All Files (*.*)|*.*</Message>
-		<Message ID="FilterAvi">Avi files (*.avi)|*.avi|All Files (*.*)|*.*</Message>
-		<Message ID="FilterGif">GIF files (*.gif)|*.gif|All Files (*.*)|*.*</Message>
-		<Message ID="FilterPalette">Palette Files (*.pal)|*.pal|All Files (*.*)|*.*</Message>
+		<Message ID="FilterWave">Wave file (*.wav)|*.wav|All Files (*.*)|*.*</Message>
+		<Message ID="FilterAvi">Avi file (*.avi)|*.avi|All Files (*.*)|*.*</Message>
+		<Message ID="FilterGif">GIF file (*.gif)|*.gif|All Files (*.*)|*.*</Message>
+		<Message ID="FilterPalette">Palette File (*.pal)|*.pal|All Files (*.*)|*.*</Message>
 		<Message ID="FilterRom">Tutti i formati supportati (*.nes, *.zip, *.7z, *.nsf, *.nsfe, *.fds, *.unf, *.unif, *.studybox)|*.NES;*.ZIP;*.7z;*.FDS;*.NSF;*.NSFE;*.UNF;*.UNIF;*.STUDYBOX|NES Roms (*.nes, *.unf, *.unif)|*.NES;*.UNF;*.UNIF|Famicom Disk System Roms (*.fds)|*.FDS|NSF files (*.nsf, *.nsfe)|*.nsf;*.nsfe|ZIP Archives (*.zip)|*.ZIP|7-Zip Archives (*.7z)|*.7z|All (*.*)|*.*</Message>
 		<Message ID="FilterRomIps">Tutti i formati supportati (*.nes, *.zip, *.7z, *.fds, *.nsf, *.nsfe, *.unf, *.unif, *.studybox, *.ips, *.bps, *.ups)|*.NES;*.ZIP;*.7z;*.IPS;*.BPS;*.UPS;*.FDS;*.NSF;*.NSFE;*.UNF;*.UNIF;*.STUDYBOX|NES Roms (*.nes, *.unf, *..unif)|*.NES;*.UNF;*.UNIF|Famicom Disk System Roms (*.fds)|*.FDS|NSF files (*.nsf, *.nsfe)|*.nsf;*.nsfe|ZIP Archives (*.zip)|*.ZIP|7-Zip Archives (*.7z)|*.7z|IPS/UPS/BPS Patches (*.ips, *.bps, *.ups)|*.IPS;*.BPS;*.UPS|All (*.*)|*.*</Message>
 		<Message ID="FilterTest">Test file (*.mtp)|*.mtp|All (*.*)|*.*</Message>
 		<Message ID="FilterCheat">Tutti i formati supportati (*.cht, *.xml)|*.cht;*.xml</Message>
-		<Message ID="FilterSavestate">Mesen Savestati (*.mst)|*.mst|All files (*.*)|*.*</Message>
+		<Message ID="FilterSavestate">Mesen Salvastato (*.mst)|*.mst|All files (*.*)|*.*</Message>
 		<Message ID="FilterTapeFiles">Family Basic Tape file (*.fbt)|*.fbt|All Files (*.*)|*.*</Message>
 
-		<Message ID="LastSession">Last Session</Message>
-		<Message ID="AutoSave">Auto-save</Message>
+		<Message ID="LastSession">Ultima sessione</Message>
+		<Message ID="AutoSave">Auto-salvataggio</Message>
 		<Message ID="SlotNumber">Slot #{0}</Message>
-		<Message ID="LoadStateDialog">Load State Menu</Message>
-		<Message ID="SaveStateDialog">Save State Menu</Message>
+		<Message ID="LoadStateDialog">Menu Carica Stato</Message>
+		<Message ID="SaveStateDialog">Menu Salva Stato</Message>
 		
 		<Message ID="LoadFromFile">Carica da file...</Message>
 		<Message ID="SaveToFile">Salva su file...</Message>
@@ -856,8 +856,9 @@
 		<Message ID="EmptyState">&lt;vuoto&gt;</Message>
 		<Message ID="ErrorWhileCheckingUpdates">Si è verificato un errore durante il tentativo di verifica presenza aggiornamenti. Controlla la tua connessione Internet e riprova.&#xA;&#xA;Dettagli errore:&#xA;{0}</Message>
 		<Message ID="AutoUpdateDisabledMessage">Gli aggiornamenti automatici non sono abilitati su questa build - si prega di scaricare l'ultima versione del codice e ricompilare Mesen per ottenere gli ultimi aggiornamenti.</Message>
-		<Message ID="BiosNotFound">A bios file is required to run this game.&#xA;&#xA;  Filename: {0}&#xA;  Size: {1} bytes&#xA;&#xA;Select bios file now?</Message>
-		<Message ID="BiosMismatch">The selected file does not match the bios required for this game.&#xA;&#xA;Expected SHA-256:&#xA;{0}&#xA;&#xA;Selected file's SHA-256:&#xA;{1}&#xA;&#xA;Would you like to use this file anyway?</Message>
+		<Message ID="BiosNotFound">Per eseguire questo gioco è necessario un file BIOS.&#xA;&#xA;  Nome File: {0}&#xA;  Dimensione: {1} bytes&#xA;&#xA;Seleziona il file bios ora?</Message>
+		<Message ID="BiosMismatch">Il file selezionato non corrisponde al BIOS richiesto per questo gioco.&#xA;&#xA;SHA-256 Previsto:&#xA;{0}&#xA;&#xA;SHA-256 File scelti:&#xA;{1}&#xA;&#xA;Volete utilizzare questo file comunque?</Message>
+		
 		<Message ID="FdsDiskSide">Disco {0} Lato {1}</Message>
 		<Message ID="FileNotFound">File non trovato: {0}</Message>
 
@@ -909,7 +910,7 @@
 		<Message ID="EmulatorShortcutMappings_Pause">Pausa</Message>
 		<Message ID="EmulatorShortcutMappings_Reset">Reset</Message>
 		<Message ID="EmulatorShortcutMappings_PowerCycle">Spegni e Riaccendi</Message>
-		<Message ID="EmulatorShortcutMappings_ReloadRom">Reload ROM</Message>
+		<Message ID="EmulatorShortcutMappings_ReloadRom">Ricarica ROM</Message>
 		<Message ID="EmulatorShortcutMappings_PowerOff">Spegni</Message>
 		<Message ID="EmulatorShortcutMappings_Exit">Esci</Message>
 		<Message ID="EmulatorShortcutMappings_TakeScreenshot">Fai uno Screenshot</Message>
@@ -923,20 +924,20 @@
 		<Message ID="EmulatorShortcutMappings_VsServiceButton">VS - Service Button</Message>
 		<Message ID="EmulatorShortcutMappings_VsServiceButton2">VS - Service Button 2 (DualSystem)</Message>
 		<Message ID="EmulatorShortcutMappings_MoveToNextStateSlot">Seleziona Prossimo Slot Salvataggio</Message>
-		<Message ID="EmulatorShortcutMappings_MoveToPreviousStateSlot">Seleziona Precendente Slot Salvataggio</Message>
+		<Message ID="EmulatorShortcutMappings_MoveToPreviousStateSlot">Seleziona Precedente Slot Salvataggio</Message>
 		<Message ID="EmulatorShortcutMappings_SaveState">Salva Stato</Message>
 		<Message ID="EmulatorShortcutMappings_LoadState">Carica Stato</Message>
 		<Message ID="EmulatorShortcutMappings_ToggleCheats">Attiva/Disattiva Cheat</Message>
 		<Message ID="EmulatorShortcutMappings_ToggleAudio">Attiva/Disattiva Audio</Message>
-		<Message ID="EmulatorShortcutMappings_IncreaseVolume">Increase Volume</Message>
-		<Message ID="EmulatorShortcutMappings_DecreaseVolume">Decrease Volume</Message>
+		<Message ID="EmulatorShortcutMappings_IncreaseVolume">Aumenta Volume</Message>
+		<Message ID="EmulatorShortcutMappings_DecreaseVolume">Diminuisci Volume</Message>
 		<Message ID="EmulatorShortcutMappings_RunSingleFrame">Avanti Singolo Frame</Message>
 
 		<Message ID="EmulatorShortcutMappings_EjectDisk">FDS - Espelli Disco</Message>
 		<Message ID="EmulatorShortcutMappings_SetScale1x">Imposta Scala 1x</Message>
 		<Message ID="EmulatorShortcutMappings_SetScale2x">Imposta Scala 2x</Message>
 		<Message ID="EmulatorShortcutMappings_SetScale3x">Imposta Scala 3x</Message>
-		<Message ID="EmulatorShortcutMappings_SetScale4x">imposta Scala 4x</Message>
+		<Message ID="EmulatorShortcutMappings_SetScale4x">Imposta Scala 4x</Message>
 		<Message ID="EmulatorShortcutMappings_SetScale5x">Imposta Scala 5x</Message>
 		<Message ID="EmulatorShortcutMappings_SetScale6x">Imposta Scala 6x</Message>
 		<Message ID="EmulatorShortcutMappings_ToggleFullscreen">Modalità Schermo Intero</Message>
@@ -951,9 +952,9 @@
 		<Message ID="EmulatorShortcutMappings_ToggleSprites">Attiva/Disattiva Sprite</Message>
 		<Message ID="EmulatorShortcutMappings_ToggleKeyboardMode">Attiva/Disattiva Modalità Tastiera</Message>
 
-		<Message ID="EmulatorShortcutMappings_ToggleRecordVideo">Start/Stop Recording Video</Message>
-		<Message ID="EmulatorShortcutMappings_ToggleRecordAudio">Start/Stop Recording Audio</Message>
-		<Message ID="EmulatorShortcutMappings_ToggleRecordMovie">Start/Stop Recording Movie</Message>
+		<Message ID="EmulatorShortcutMappings_ToggleRecordVideo">Avvia/Ferma Registrazione Video</Message>
+		<Message ID="EmulatorShortcutMappings_ToggleRecordAudio">Avvia/Ferma Registrazione Audio</Message>
+		<Message ID="EmulatorShortcutMappings_ToggleRecordMovie">Avvia/Ferma Registrazione Filmato</Message>
 		
 		<Message ID="EmulatorShortcutMappings_MaxSpeed">Attiva/Disattiva Velocità Massima</Message>
 		<Message ID="EmulatorShortcutMappings_LoadRandomGame">Carica Gioco Casuale</Message>
@@ -968,7 +969,7 @@
 		<Message ID="EmulatorShortcutMappings_SaveStateSlot9">Salva Stato - Slot 9</Message>
 		<Message ID="EmulatorShortcutMappings_SaveStateSlot10">Salva Stato - Slot 10</Message>
 		<Message ID="EmulatorShortcutMappings_SaveStateToFile">Salva Stato su File</Message>
-		<Message ID="EmulatorShortcutMappings_SaveStateDialog">Open Save State Menu</Message>
+		<Message ID="EmulatorShortcutMappings_SaveStateDialog">Apri Menu Salva Stato</Message>
 		<Message ID="EmulatorShortcutMappings_LoadStateSlot1">Carica Stato - Slot 1</Message>
 		<Message ID="EmulatorShortcutMappings_LoadStateSlot2">Carica Stato - Slot 2</Message>
 		<Message ID="EmulatorShortcutMappings_LoadStateSlot3">Carica Stato - Slot 3</Message>
@@ -981,19 +982,19 @@
 		<Message ID="EmulatorShortcutMappings_LoadStateSlot10">Carica Stato - Slot 10</Message>
 		<Message ID="EmulatorShortcutMappings_LoadStateSlotAuto">Carica Stato - Slot Salvataggio Automatico</Message>
 		<Message ID="EmulatorShortcutMappings_LoadStateFromFile">Carica Stato da File</Message>
-		<Message ID="EmulatorShortcutMappings_LoadStateDialog">Open Load State Menu</Message>
+		<Message ID="EmulatorShortcutMappings_LoadStateDialog">Apri Menu Carica Stato</Message>
 		<Message ID="EmulatorShortcutMappings_LoadLastSession">Carica Ultima Sessione</Message>
 
-		<Message ID="EmulatorShortcutMappings_SelectSaveSlot1">Select Save Slot 1</Message>
-		<Message ID="EmulatorShortcutMappings_SelectSaveSlot2">Select Save Slot 2</Message>
-		<Message ID="EmulatorShortcutMappings_SelectSaveSlot3">Select Save Slot 3</Message>
-		<Message ID="EmulatorShortcutMappings_SelectSaveSlot4">Select Save Slot 4</Message>
-		<Message ID="EmulatorShortcutMappings_SelectSaveSlot5">Select Save Slot 5</Message>
-		<Message ID="EmulatorShortcutMappings_SelectSaveSlot6">Select Save Slot 6</Message>
-		<Message ID="EmulatorShortcutMappings_SelectSaveSlot7">Select Save Slot 7</Message>
-		<Message ID="EmulatorShortcutMappings_SelectSaveSlot8">Select Save Slot 8</Message>
-		<Message ID="EmulatorShortcutMappings_SelectSaveSlot9">Select Save Slot 9</Message>
-		<Message ID="EmulatorShortcutMappings_SelectSaveSlot10">Select Save Slot 10</Message>
+		<Message ID="EmulatorShortcutMappings_SelectSaveSlot1">Seleziona Slot Salvataggio 1</Message>
+		<Message ID="EmulatorShortcutMappings_SelectSaveSlot2">Seleziona Slot Salvataggio 2</Message>
+		<Message ID="EmulatorShortcutMappings_SelectSaveSlot3">Seleziona Slot Salvataggio 3</Message>
+		<Message ID="EmulatorShortcutMappings_SelectSaveSlot4">Seleziona Slot Salvataggio 4</Message>
+		<Message ID="EmulatorShortcutMappings_SelectSaveSlot5">Seleziona Slot Salvataggio 5</Message>
+		<Message ID="EmulatorShortcutMappings_SelectSaveSlot6">Seleziona Slot Salvataggio 6</Message>
+		<Message ID="EmulatorShortcutMappings_SelectSaveSlot7">Seleziona Slot Salvataggio 7</Message>
+		<Message ID="EmulatorShortcutMappings_SelectSaveSlot8">Seleziona Slot Salvataggio 8</Message>
+		<Message ID="EmulatorShortcutMappings_SelectSaveSlot9">Seleziona Slot Salvataggio 9</Message>
+		<Message ID="EmulatorShortcutMappings_SelectSaveSlot10">Seleziona Slot Salvataggio 10</Message>
 
 		<Message ID="EmulatorShortcutMappings_OpenFile">Apri File</Message>
 		<Message ID="EmulatorShortcutMappings_OpenDebugger">Apri Debugger</Message>
@@ -1089,8 +1090,8 @@
 		</Enum>
 		<Enum ID="VsDualOutputOption">
 			<Value ID="Both">Entrambi</Value>
-			<Value ID="MasterOnly">Solo Master </Value>
-			<Value ID="SlaveOnly">Solo Slave</Value>
+			<Value ID="MasterOnly">Solo Primario</Value>
+			<Value ID="SlaveOnly">Solo Secondario</Value>
 		</Enum>
 		<Enum ID="ConsoleType">
 			<Value ID="Nes">NES</Value>
@@ -1269,6 +1270,8 @@
 			<Value ID="Nmi">NMI</Value>
 			<Value ID="Irq">IRQ</Value>
 			<Value ID="SpriteZeroHit">Sprite 0 Hit</Value>
+			<Value ID="Breakpoint">Breakpoint</Value>
+			<Value ID="DmcDmaRead">DMC DMA Read</Value>
 		</Enum>
 		<Enum ID="BreakpointType">
 			<Value ID="Global">Global</Value>
@@ -1291,6 +1294,8 @@
 			<Value ID="BreakOnUninitMemoryRead">Uninitialized memory read</Value>
 			<Value ID="BreakOnDecayedOamRead">Decayed OAM read</Value>
 			<Value ID="BreakOnCpuCrash">CPU crashed</Value>
+			<Value ID="BreakOnPpu2006ScrollGlitch">$2006 write scroll glitch</Value>
+			<Value ID="BreakOnBusConflict">Bus conflict</Value>
 		</Enum>
 		<Enum ID="VsPpuType">
 			<Value ID="RP2C03B">RP2C03B</Value>
