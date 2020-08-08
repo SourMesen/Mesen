@@ -753,6 +753,81 @@ std::unordered_map<string, string> MessageManager::_itResources = {
 	{ "SynchronizationCompleted", u8"Sincronizzazione completata." },
 };
 
+std::unordered_map<string, string> MessageManager::_deResources = {
+	{ "Cheats", u8"Cheats" },
+	{ "Debug", u8"Debug" },
+	{ "EmulationSpeed", u8"Geschwindigkeit" },
+	{ "ClockRate", u8"Taktfrequenz" },
+	{ "Error", u8"Fehler" },
+	{ "GameInfo", u8"Spielinfo" },
+	{ "GameLoaded", u8"Spiel geladen" },
+	{ "Input", u8"Eingabegeräte" },
+	{ "Patch", u8"Patch" },
+	{ "Movies", u8"Filme" },
+	{ "NetPlay", u8"Netplay" },
+	{ "Region", u8"Region" },
+	{ "SaveStates", u8"Spielstände" },
+	{ "ScreenshotSaved", u8"Screenshot gespeichert" },
+	{ "SoundRecorder", u8"Tonaufnahmegerät" },
+	{ "Test", u8"Test" },
+	{ "VideoRecorder", u8"Videoaufnahmegerät" },
+
+	{ "ApplyingPatch", u8"Patch wird angewendet: %1" },
+	{ "CheatApplied", u8"1 Cheat hinzugefügt." },
+	{ "CheatsApplied", u8"%1 Cheats wurden hinzugefügt." },
+	{ "CheatsDisabled", u8"Alle Cheats deaktiviert." },
+	{ "CoinInsertedSlot", u8"Münze eingeworfen (Slot %1)" },
+	{ "ConnectedToServer", u8"Verbindung zum Server hergestellt." },
+	{ "ConnectedAsPlayer", u8"Als Spieler %1 verbunden" },
+	{ "ConnectedAsSpectator", u8"Als Zuschauer verbunden." },
+	{ "ConnectionLost", u8"Verbindung zum Server verloren." },
+	{ "CouldNotConnect", u8"Es konnte keine Verbindung zum Server hergestellt werden." },
+	{ "CouldNotInitializeAudioSystem", u8"Audio-System konnte nicht initialisiert werden" },
+	{ "CouldNotFindRom", u8"Es konnte keine übereinstimmende ROM-Datei gefunden werden." },
+	{ "CouldNotLoadFile", u8"Die Datei %1 konnte nicht geladen werden" },
+	{ "EmulationMaximumSpeed", u8"Maximal-Geschwindigkeit" },
+	{ "EmulationSpeedPercent", u8"%1%" },
+	{ "FdsDiskInserted", u8"Diskette %1, Seite %2 eingelegt." },
+	{ "Frame", u8"Frame" },
+	{ "GameCrash", u8"Das Spiel ist abgestürzt (%1)" },
+	{ "KeyboardModeDisabled", u8"Tastaturmodus deaktiviert." },
+	{ "KeyboardModeEnabled", u8"Tastaturmodus aktiviert." },
+	{ "Lag", u8"Lag" },
+	{ "Mapper", u8"Mapper: %1, Sub-Mapper: %2" },
+	{ "MovieEnded", u8"Film gestoppt." },
+	{ "MovieInvalid", u8"Film-Datei ungültig." },
+	{ "MovieMissingRom", u8"Fehlende ROM-Datei wird benötigt (%1), um den Film abzuspielen." },
+	{ "MovieNewerVersion", u8"Filme, die von einer neueren Mesen-Version erstellt wurden, können nicht geladen werden. Bitte die aktuellste Version herunterladen." },
+	{ "MovieIncompatibleVersion", u8"Film ist mit dieser Mesen-Version nicht kompatibel." },
+	{ "MoviePlaying", u8"Folgender Film wird abgespielt: %1" },
+	{ "MovieRecordingTo", u8"Aufnahme erfolgt unter: %1" },
+	{ "MovieSaved", u8"Film-Datei gespeichert unter: %1" },
+	{ "NetplayVersionMismatch", u8"%1 verwendet nicht die gleiche Mesen-Version und wurde deshalb vom Server getrennt." },
+	{ "PrgSizeWarning", u8"PRG-Größe ist kleiner als 32kb" },
+	{ "SaveStateEmpty", u8"Slot ist leer." },
+	{ "SaveStateIncompatibleVersion", u8"Spielstand ist mit dieser Mesen-Version nicht kompatibel." },
+	{ "SaveStateInvalidFile", u8"Spielstand-Datei ungültig." },
+	{ "SaveStateLoaded", u8"Spielstand #%1 geladen." },
+	{ "SaveStateMissingRom", u8"Fehlende ROM-Datei wird benötigt (%1), um den Spielstand zu laden." },
+	{ "SaveStateNewerVersion", u8"Spielstände, die von einer neueren Mesen-Version erstellt wurden, können nicht geladen werden. Bitte die aktuellste Version herunterladen." },
+	{ "SaveStateSaved", u8"Spielstand #%1 gespeichert." },
+	{ "SaveStateSlotSelected", u8"Slot #%1 ausgewählt." },
+	{ "ScanlineTimingWarning", u8"PPU-Timing wurde geändert." },
+	{ "ServerStarted", u8"Server gestartet (Port: %1)" },
+	{ "ServerStopped", u8"Server gestoppt" },
+	{ "SoundRecorderStarted", u8"Aufnahme erfolgt unter: %1" },
+	{ "SoundRecorderStopped", u8"Aufnahme gespeichert unter: %1" },
+	{ "TestFileSavedTo", u8"Test-Datei gespeichert unter: %1" },
+	{ "UnsupportedMapper", u8"Mapper nicht unterstützt (%1), Spiel kann nicht geladen werden." },
+	{ "VideoRecorderStarted", u8"Aufnahme erfolgt unter: %1" },
+	{ "VideoRecorderStopped", u8"Aufnahme gespeichert unter: %1" },
+
+	{ "GoogleDrive", u8"Google Drive" },
+	{ "SynchronizationStarted", u8"Synchronisation gestartet." },
+	{ "SynchronizationFailed", u8"Synchronisation fehlgeschlagen." },
+	{ "SynchronizationCompleted", u8"Synchronisation abgeschlossen." },
+};
+
 std::list<string> MessageManager::_log;
 SimpleLock MessageManager::_logLock;
 SimpleLock MessageManager::_messageLock;
@@ -792,6 +867,7 @@ string MessageManager::Localize(string key)
 		case Language::Catalan: resources = &_caResources; break;
 		case Language::Chinese: resources = &_zhResources; break;
 		case Language::Italian: resources = &_itResources; break;
+		case Language::German: resources = &_deResources; break;	
 	}
 	if(resources) {
 		if(resources->find(key) != resources->end()) {
