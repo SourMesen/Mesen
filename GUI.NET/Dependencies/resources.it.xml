@@ -1131,6 +1131,7 @@
 			<Value ID="Catalan">Català</Value>
 			<Value ID="Chinese">中文</Value>
 			<Value ID="Italian">Italiano</Value>
+			<Value ID="German">Deutsch</Value>
 		</Enum>
 		<Enum ID="RamPowerOnState">
 			<Value ID="AllZeros">Tutto a 0 (Predefinito)</Value>
