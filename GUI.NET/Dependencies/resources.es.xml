@@ -1133,6 +1133,7 @@
 			<Value ID="Catalan">Català</Value>
 			<Value ID="Chinese">中文</Value>
 			<Value ID="Italian">Italiano</Value>
+			<Value ID="German">Deutsch</Value>
 		</Enum>
 		<Enum ID="VideoCodec">
 			<Value ID="None">Ninguno (Sin comprimir)</Value>
