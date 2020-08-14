@@ -60,7 +60,7 @@
 			<Control ID="mnuRegionDendy">Dendy</Control>
 			<Control ID="mnuVideoConfig">Video</Control>
 			<Control ID="mnuEmulationConfig">Emulation</Control>
-			<Control ID="mnuPreferences">Voreinstellungen</Control>
+			<Control ID="mnuPreferences">Einstellungen</Control>
 			<Control ID="mnuTools">Werkzeuge</Control>
 			<Control ID="mnuHistoryViewer">Verlaufsbetrachter</Control>
 			<Control ID="mnuNetPlay">Netplay</Control>
@@ -352,7 +352,7 @@
 			<Control ID="btnOK">OK</Control>
 			<Control ID="btnCancel">Abbrechen</Control>
 		</Form>
-		<Form ID="frmPreferences" Title="Voreinstellungen">
+		<Form ID="frmPreferences" Title="Einstellungen">
 			<Control ID="tpgGeneral">Allgemein</Control>
 			<Control ID="lblDisplayLanguage">Systemsprache:</Control>
 			<Control ID="chkSingleInstance">Immer nur eine Instanz von Mesen erlauben</Control>
