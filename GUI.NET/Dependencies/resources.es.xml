@@ -565,7 +565,7 @@
 			<Control ID="lblCheats">Trucos:</Control>
 			<Control ID="lblSpecialThanks">¡Y gracias a todos los que han contribuido de alguna manera! (donaciones, informes de errores, pruebas, compartir información, etc.)</Control>
 
-			<Control ID="lblDonate">Si deseas colaborar con Mesen, por favor considera hacer una donación.&#xA;¡Gracias por tu colaboración!</Control>
+			<Control ID="lblDonate">Si desea colaborar con Mesen, por favor considere hacer una donación.&#xA;¡Gracias por su colaboración!</Control>
 			<Control ID="okButton">&amp;OK</Control>
 		</Form>
 		<Form ID="frmGameConfig" Title="Configuración de juego">
@@ -575,7 +575,7 @@
 			<Control ID="lblLatestVersion">Última versión: </Control>
 			<Control ID="lblCurrentVersion">Versión actual: </Control>
 			<Control ID="lblChangeLog">Historial de cambios</Control>
-			<Control ID="lblDonate">Si deseas colaborar con Mesen, por favor considera hacer una donación. ¡Gracias!</Control>
+			<Control ID="lblDonate">Si desea colaborar con Mesen, por favor considere hacer una donación. ¡Gracias!</Control>
 			<Control ID="btnUpdate">Actualizar</Control>
 			<Control ID="btnCancel">Cancelar</Control>
 		</Form>
@@ -826,7 +826,7 @@
 
 		<Message ID="RiskyOptionHint">(no recomendado)</Message>
 
-		<Message ID="ResetSettingsConfirmation">ATENCIÓN: ¡Estás a punto restablecer TODA la configuración y no se podrá revertir!&#xA;&#xA;Continuar?</Message>
+		<Message ID="ResetSettingsConfirmation">ATENCIÓN: ¡Está a punto restablecer TODA la configuración y no se podrá revertir!&#xA;&#xA;Continuar?</Message>
 
 		<Message ID="RandomGameNoGameFound">Mesen no puede encontrar ningún juego para cargar.</Message>
 
@@ -936,9 +936,9 @@
 		<Message ID="EmulatorShortcutMappings_ToggleSprites">Alternar capa de sprite</Message>
 		<Message ID="EmulatorShortcutMappings_ToggleKeyboardMode">Alternar modo teclado</Message>
 
-		<Message ID="EmulatorShortcutMappings_ToggleRecordVideo">Start/Stop Recording Video</Message>
-		<Message ID="EmulatorShortcutMappings_ToggleRecordAudio">Start/Stop Recording Audio</Message>
-		<Message ID="EmulatorShortcutMappings_ToggleRecordMovie">Start/Stop Recording Movie</Message>
+		<Message ID="EmulatorShortcutMappings_ToggleRecordVideo">Iniciar/Detener grabación de Video</Message>
+		<Message ID="EmulatorShortcutMappings_ToggleRecordAudio">Iniciar/Detener grabación de Audio</Message>
+		<Message ID="EmulatorShortcutMappings_ToggleRecordMovie">Iniciar/Detener grabación de Película</Message>
 		
 		<Message ID="EmulatorShortcutMappings_MaxSpeed">Alternar velocidad máxima</Message>
 		<Message ID="EmulatorShortcutMappings_LoadRandomGame">Cargar juego aleatorio</Message>
