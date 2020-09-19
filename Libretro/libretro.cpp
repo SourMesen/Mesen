@@ -83,6 +83,12 @@ static constexpr const char* MesenSwapDutyCycle = "mesen_swap_duty_cycle";
 static constexpr const char* MesenDisableNoiseModeFlag = "mesen_disable_noise_mode_flag";
 static constexpr const char* MesenShiftButtonsClockwise = "mesen_shift_buttons_clockwise";
 static constexpr const char* MesenAudioSampleRate = "mesen_audio_sample_rate";
+static constexpr const char* MesenAudioSquare1Volume = "mesen_audio_square1_volume";
+static constexpr const char* MesenAudioSquare2Volume = "mesen_audio_square2_volume";
+static constexpr const char* MesenAudioTriangleVolume = "mesen_audio_triangle_volume";
+static constexpr const char* MesenAudioNoiseVolume = "mesen_audio_noise_volume";
+static constexpr const char* MesenAudioDMCVolume = "mesen_audio_dmc_volume";
+static constexpr const char* MesenAudioExternalVolume = "mesen_audio_external_volume";
 
 uint32_t defaultPalette[0x40] { 0xFF666666, 0xFF002A88, 0xFF1412A7, 0xFF3B00A4, 0xFF5C007E, 0xFF6E0040, 0xFF6C0600, 0xFF561D00, 0xFF333500, 0xFF0B4800, 0xFF005200, 0xFF004F08, 0xFF00404D, 0xFF000000, 0xFF000000, 0xFF000000, 0xFFADADAD, 0xFF155FD9, 0xFF4240FF, 0xFF7527FE, 0xFFA01ACC, 0xFFB71E7B, 0xFFB53120, 0xFF994E00, 0xFF6B6D00, 0xFF388700, 0xFF0C9300, 0xFF008F32, 0xFF007C8D, 0xFF000000, 0xFF000000, 0xFF000000, 0xFFFFFEFF, 0xFF64B0FF, 0xFF9290FF, 0xFFC676FF, 0xFFF36AFF, 0xFFFE6ECC, 0xFFFE8170, 0xFFEA9E22, 0xFFBCBE00, 0xFF88D800, 0xFF5CE430, 0xFF45E082, 0xFF48CDDE, 0xFF4F4F4F, 0xFF000000, 0xFF000000, 0xFFFFFEFF, 0xFFC0DFFF, 0xFFD3D2FF, 0xFFE8C8FF, 0xFFFBC2FF, 0xFFFEC4EA, 0xFFFECCC5, 0xFFF7D8A5, 0xFFE4E594, 0xFFCFEF96, 0xFFBDF4AB, 0xFFB3F3CC, 0xFFB5EBF2, 0xFFB8B8B8, 0xFF000000, 0xFF000000 };
 uint32_t unsaturatedPalette[0x40] { 0xFF6B6B6B, 0xFF001E87, 0xFF1F0B96, 0xFF3B0C87, 0xFF590D61, 0xFF5E0528, 0xFF551100, 0xFF461B00, 0xFF303200, 0xFF0A4800, 0xFF004E00, 0xFF004619, 0xFF003A58, 0xFF000000, 0xFF000000, 0xFF000000, 0xFFB2B2B2, 0xFF1A53D1, 0xFF4835EE, 0xFF7123EC, 0xFF9A1EB7, 0xFFA51E62, 0xFFA52D19, 0xFF874B00, 0xFF676900, 0xFF298400, 0xFF038B00, 0xFF008240, 0xFF007891, 0xFF000000, 0xFF000000, 0xFF000000, 0xFFFFFFFF, 0xFF63ADFD, 0xFF908AFE, 0xFFB977FC, 0xFFE771FE, 0xFFF76FC9, 0xFFF5836A, 0xFFDD9C29, 0xFFBDB807, 0xFF84D107, 0xFF5BDC3B, 0xFF48D77D, 0xFF48CCCE, 0xFF555555, 0xFF000000, 0xFF000000, 0xFFFFFFFF, 0xFFC4E3FE, 0xFFD7D5FE, 0xFFE6CDFE, 0xFFF9CAFE, 0xFFFEC9F0, 0xFFFED1C7, 0xFFF7DCAC, 0xFFE8E89C, 0xFFD1F29D, 0xFFBFF4B1, 0xFFB7F5CD, 0xFFB7F0EE, 0xFFBEBEBE, 0xFF000000, 0xFF000000 };
@@ -177,6 +183,12 @@ extern "C" {
 			{ MesenFdsAutoSelectDisk, "FDS: Automatically insert disks; disabled|enabled" },
 			{ MesenFdsFastForwardLoad, "FDS: Fast forward while loading; disabled|enabled" },
 			{ MesenAudioSampleRate, "Sound Output Sample Rate; 96000|192000|384000|11025|22050|44100|48000" },
+			{ MesenAudioSquare1Volume, "Sound Square 1 volume; 100|0|10|20|30|40|50|60|70|80|90" },
+			{ MesenAudioSquare2Volume, "Sound Square 2 volume; 100|0|10|20|30|40|50|60|70|80|90" },
+			{ MesenAudioTriangleVolume, "Sound Triangle volume; 100|0|10|20|30|40|50|60|70|80|90" },
+			{ MesenAudioNoiseVolume, "Sound Noise volume; 100|0|10|20|30|40|50|60|70|80|90" },
+			{ MesenAudioDMCVolume, "Sound DMC volume; 100|0|10|20|30|40|50|60|70|80|90" },
+			{ MesenAudioExternalVolume, "Sound External volume; 100|0|10|20|30|40|50|60|70|80|90" },
 			{ NULL, NULL },
 		};
 
@@ -559,6 +571,35 @@ extern "C" {
 					retroEnv(RETRO_ENVIRONMENT_SET_SYSTEM_AV_INFO, &system_av_info);
 				}
 			}
+		}
+
+		if(readVariable(MesenAudioSquare1Volume, var)) {
+			_console->GetSettings()->SetChannelVolume(AudioChannel::Square1, (double) atoi(var.value) / 100.0);
+		}
+
+		if(readVariable(MesenAudioSquare2Volume, var)) {
+			_console->GetSettings()->SetChannelVolume(AudioChannel::Square2, (double) atoi(var.value) / 100.0);
+		}
+
+		if(readVariable(MesenAudioTriangleVolume, var)) {
+			_console->GetSettings()->SetChannelVolume(AudioChannel::Triangle, (double) atoi(var.value) / 100.0);
+		}
+
+		if(readVariable(MesenAudioNoiseVolume, var)) {
+			_console->GetSettings()->SetChannelVolume(AudioChannel::Noise, (double) atoi(var.value) / 100.0);
+		}
+
+		if(readVariable(MesenAudioDMCVolume, var)) {
+			_console->GetSettings()->SetChannelVolume(AudioChannel::DMC, (double) atoi(var.value) / 100.0);
+		}
+
+		if(readVariable(MesenAudioExternalVolume, var)) {
+			_console->GetSettings()->SetChannelVolume(AudioChannel::FDS, (double) atoi(var.value) / 100.0);
+			_console->GetSettings()->SetChannelVolume(AudioChannel::Namco163, (double) atoi(var.value) / 100.0);
+			_console->GetSettings()->SetChannelVolume(AudioChannel::VRC6, (double) atoi(var.value) / 100.0);
+			_console->GetSettings()->SetChannelVolume(AudioChannel::VRC7, (double) atoi(var.value) / 100.0);
+			_console->GetSettings()->SetChannelVolume(AudioChannel::MMC5, (double) atoi(var.value) / 100.0);
+			_console->GetSettings()->SetChannelVolume(AudioChannel::Sunsoft5B, (double) atoi(var.value) / 100.0);
 		}
 
 		auto getKeyCode = [=](int port, int retroKey) {
