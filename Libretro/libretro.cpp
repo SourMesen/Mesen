@@ -134,6 +134,7 @@ extern "C" {
 		_console->GetSettings()->SetSampleRate(_audioSampleRate);
 		_console->GetSettings()->SetAutoSaveOptions(0, false);
 		_console->GetSettings()->SetRewindBufferSize(0);
+		_console->GetSettings()->SetFlags(EmulationFlags::AllowMismatchingSaveState);
 	}
 
 	RETRO_API void retro_deinit()
