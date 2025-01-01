@@ -27,6 +27,7 @@ namespace Mesen.GUI.Forms
 		Catalan = 8,
 		Chinese = 9,
 		Italian = 10,
+		Polish = 11,
 	}
 
 	class ResourceHelper
@@ -57,6 +58,7 @@ namespace Mesen.GUI.Forms
 				case Language.Catalan: return "ca";
 				case Language.Chinese: return "zh";
 				case Language.Italian: return "it";
+				case Language.Polish: return "pl";
 			}
 
 			return "";
@@ -87,6 +89,7 @@ namespace Mesen.GUI.Forms
 				case Language.Catalan: filename = "resources.ca.xml"; break;
 				case Language.Chinese: filename = "resources.zh.xml"; break;
 				case Language.Italian: filename = "resources.it.xml"; break;
+				case Language.Polish: filename = "resources.pl.xml"; break;
 			}
 
 			_language = language;
@@ -115,6 +118,7 @@ namespace Mesen.GUI.Forms
 				case "pt": language = Language.Portuguese; break;
 				case "zh": language = Language.Chinese; break;
 				case "it": language = Language.Italian; break;
+				case "pl": language = Language.Polish; break;
 			}
 			return language;
 		}
