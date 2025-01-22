@@ -164,10 +164,10 @@ bool LinuxGameController::IsButtonPressed(int buttonNumber)
 		case 24: return CheckAxis(ABS_RZ, true);
 		case 25: return CheckAxis(ABS_RZ, false);		
 
-		case 26: return CheckAxis(ABS_HAT0X, true);
-		case 27: return CheckAxis(ABS_HAT0X, false);		
-		case 28: return CheckAxis(ABS_HAT0Y, true);
-		case 29: return CheckAxis(ABS_HAT0Y, false);				
+		case 26: return CheckAxis(ABS_HAT0X, true) || (libevdev_get_event_value(_device, EV_KEY, BTN_DPAD_RIGHT) == 1);
+		case 27: return CheckAxis(ABS_HAT0X, false) || (libevdev_get_event_value(_device, EV_KEY, BTN_DPAD_LEFT) == 1);		
+		case 28: return CheckAxis(ABS_HAT0Y, true) || (libevdev_get_event_value(_device, EV_KEY, BTN_DPAD_DOWN) == 1);
+		case 29: return CheckAxis(ABS_HAT0Y, false) || (libevdev_get_event_value(_device, EV_KEY, BTN_DPAD_UP) == 1);				
 		case 30: return CheckAxis(ABS_HAT1X, true);
 		case 31: return CheckAxis(ABS_HAT1X, false);		
 		case 32: return CheckAxis(ABS_HAT1Y, true);
